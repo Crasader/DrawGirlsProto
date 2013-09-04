@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "GameData.h"
 #include "AudioEngine.h"
+#include "SilhouetteData.h"
 
 USING_NS_CC;
 
@@ -69,6 +70,8 @@ private:
 	GameData* myGD;
 	
 	int frame_cnt;
+	
+	int silType;
 	
 //	float scaleFactor;
 //	float device_rate;
@@ -149,7 +152,7 @@ private:
 	
 	void loadedBack()
 	{
-		showtime_img = CCSprite::create("hard_visible.png");
+		showtime_img = CCSprite::create(CCString::createWithFormat("hard%d_visible.png", silType)->getCString());
 		showtime_img->setPosition(ccp(160,215));
 		addChild(showtime_img, kCST_Z_showtime);
 		
@@ -188,12 +191,14 @@ private:
 		
 		view_rect = CCRectMake(0, 160+DataStorageHub::sharedInstance()->bottom_base, 480, 0);
 		
+		silType = SilhouetteData::sharedSilhouetteData()->getSilType();
+		
 		string ttt;
 		
 		if(t_exchanged)
-			ttt = "change_visible.png";
+			ttt = CCString::createWithFormat("change%d_visible.png", silType)->getCString();
 		else
-			ttt = "normal_visible.png";
+			ttt = CCString::createWithFormat("normal%d_visible.png", silType)->getCString();
 		
 		clear_img = CCSprite::create(ttt.c_str());
 		clear_img->setPosition(ccp(160,215));

@@ -185,7 +185,7 @@ void MainCumber::moving()
 			d_p.x = 1.f;
 			d_p.y = tanf(dash_angle/180.f*M_PI);
 			
-			if(dash_angle > 90 && dash_angle < 270)
+			if((dash_angle >= 90 && dash_angle <= 270) || dash_angle <= -90)
 			{
 				d_p.x *= -1.f;
 				d_p.y *= -1.f;
