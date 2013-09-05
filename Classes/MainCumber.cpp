@@ -185,7 +185,7 @@ void MainCumber::moving()
 			d_p.x = 1.f;
 			d_p.y = tanf(dash_angle/180.f*M_PI);
 			
-			if(dash_angle > 90 && dash_angle < 270)
+			if((dash_angle >= 90 && dash_angle <= 270) || dash_angle <= -90)
 			{
 				d_p.x *= -1.f;
 				d_p.y *= -1.f;
@@ -545,27 +545,23 @@ void MainCumber::furyModeOn()
 		b_c_p = getPosition();
 		isFuryMode = true;
 		
-		int t_angle = directionAngle;
-		t_angle += 90;
-		if(t_angle>180)		t_angle -= 360;
-		
 		CCPoint dv;
 		dv.x = 1;
-		dv.y = tanf(directionAngle/180.f*M_PI);
+		dv.y = tanf(dash_angle/180.f*M_PI);
 		
 		float div_value = sqrtf(powf(dv.x, 2.f) + powf(dv.y, 2.f));
 		
 		dv = ccpMult(dv, 1.f/div_value);
 		
-		if((directionAngle <= 90 && directionAngle >= -90) || directionAngle >= 270)
+		if((dash_angle >= 90 && dash_angle <= 270) || dash_angle <= -90)
 			dv = ccpMult(dv, -1.f);
 		
 		furyMode = CCParticleSystemQuad::createWithTotalParticles(100);
-		furyMode->setPositionType(kCCPositionTypeGrouped);
+		furyMode->setPositionType(kCCPositionTypeFree);
 		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("furyMode.png");
 		furyMode->setTexture(texture);
 		furyMode->setEmissionRate(500.00);
-		furyMode->setAngle(t_angle);
+		furyMode->setAngle(dash_angle+90);
 		furyMode->setAngleVar(0.0);
 		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
 		furyMode->setBlendFunc(blendFunc);

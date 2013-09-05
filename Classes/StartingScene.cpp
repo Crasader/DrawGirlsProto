@@ -14,7 +14,8 @@
 #include "ScreenSide.h"
 
 typedef enum tMenuTagStartingScene{
-	kMT_SS_start = 1
+	kMT_SS_start = 1,
+	kMT_SS_event
 }MenuTagStartingScene;
 
 typedef enum tZorderStartingScene{
@@ -60,8 +61,17 @@ bool StartingScene::init()
 	start_item->setTag(kMT_SS_start);
 	
 	CCMenu* start_menu = CCMenu::createWithItem(start_item);
-	start_menu->setPosition(ccp(240,80));
+	start_menu->setPosition(ccp(240,120));
 	addChild(start_menu, kZ_SS_menu);
+	
+	
+	CCMenuItem* event_item = CCMenuItemImage::create("start_event.png", "start_event.png", this, menu_selector(StartingScene::menuAction));
+	event_item->setTag(kMT_SS_event);
+	
+	CCMenu* event_menu = CCMenu::createWithItem(event_item);
+	event_menu->setPosition(ccp(240,45));
+	addChild(event_menu, kZ_SS_menu);
+	
 	
 	is_menu_enable = true;
 	
@@ -100,6 +110,20 @@ void StartingScene::menuAction(CCObject* pSender)
 	if(tag == kMT_SS_start)
 	{
 		is_menu_enable = false;
+		
+		SilhouetteData::sharedSilhouetteData()->setSilType(1);
+		
+		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+		
+		StarGoldData::sharedInstance()->setGameStart();
+		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+	}
+	else if(tag == kMT_SS_event)
+	{
+		is_menu_enable = false;
+		
+		SilhouetteData::sharedSilhouetteData()->setSilType(2);
 		
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);

@@ -32,9 +32,14 @@ public:
 		return mySD;
 	}
 	
-	void setType(int t1)
+	void setSilType(int t1)
 	{
 		myType = t1;
+	}
+	
+	int getSilType()
+	{
+		return myType;
 	}
 	
 	void startSetting();

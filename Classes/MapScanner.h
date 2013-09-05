@@ -620,7 +620,7 @@ public:
 			invisibleImg = NULL;
 		}
 		
-		invisibleImg = InvisibleSprite::create("change_invisible.png", false);
+		invisibleImg = InvisibleSprite::create(CCString::createWithFormat("change%d_invisible.png",silType)->getCString(), false);
 		invisibleImg->setPosition(CCPointZero);
 		addChild(invisibleImg, invisibleZorder);
 		
@@ -633,7 +633,7 @@ public:
 			visibleImg = NULL;
 		}
 		
-		visibleImg = VisibleParent::create("change_visible.png", false);
+		visibleImg = VisibleParent::create(CCString::createWithFormat("change%d_visible.png",silType)->getCString(), false);
 		visibleImg->setPosition(CCPointZero);
 		addChild(visibleImg, visibleZorder);
 		
@@ -651,6 +651,7 @@ private:
 	CCNode* blockParent;
 	GameData* myGD;
 	DataStorageHub* myDSH;
+	int silType;
 	
 	CCObject* start_target;
 	SEL_CallFunc start_delegate;
@@ -688,7 +689,7 @@ private:
 	{
 		BackFilename r_value;
 		
-		r_value.filename = "normal_visible.png";
+		r_value.filename = CCString::createWithFormat("normal%d_visible.png", silType)->getCString();
 		r_value.isPattern = false;
 		
 //		if(worldMap <= 20)
@@ -760,7 +761,7 @@ private:
 	{
 		BackFilename r_value;
 		
-		r_value.filename = "normal_invisible.png";
+		r_value.filename = CCString::createWithFormat("normal%d_invisible.png", silType)->getCString();
 		r_value.isPattern = false;
 		
 //		if(worldMap <= 20)
@@ -897,6 +898,8 @@ private:
 		myGD = GameData::sharedGameData();
 		myDSH = DataStorageHub::sharedInstance();
 		mySD = SilhouetteData::sharedSilhouetteData();
+		
+		silType = mySD->getSilType();
 		
 		invisibleImg = NULL;
 		visibleImg = NULL;
