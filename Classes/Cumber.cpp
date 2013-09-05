@@ -10,39 +10,54 @@
 
 void CumberParent::setMainCumberState(int t_cs)
 {
-	mainCumber->setCumberState(t_cs);
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	for(auto i : mainCumbers)
+		i->setCumberState(t_cs);
 }
 
 void CumberParent::allStopSchedule()
 {
-	cumberState mainCumberState = mainCumber->getCumberState();
-	if(mainCumberState == cumberStateMoving)
-		mainCumber->stopMoving();
-	else
-		myMP->pauseSchedulerAndActions();
+	
+	for(auto i : mainCumbers)
+	{
+		cumberState mainCumberState = i->getCumberState();
+		if(mainCumberState == cumberStateMoving)
+			i->stopMoving();
+		else
+			myMP->pauseSchedulerAndActions();
+	}
 }
 
 
 
 void CumberParent::tickingOn()
 {
-	mainCumber->tickingOn();
+	for(auto i : mainCumbers)
+	{
+		i->tickingOn();
+	}
 }
 
 void CumberParent::movingMainCumber()
 {
 	if(!isGameover)
-		mainCumber->startMoving();
+	{
+		for(auto i : mainCumbers)
+			i->startMoving();
+	}
 }
 
 void CumberParent::stopMovingMainCumber()
 {
-	mainCumber->stopMoving();
+	for(auto mainCumber : mainCumbers)
+		mainCumber->stopMoving();
 }
 
 CCNode* CumberParent::getMainCumberPointer()
 {
-	return mainCumber;
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	return *mainCumbers.begin();
+//	return mainCumber;
 }
 
 CCArray* CumberParent::getSubCumberArrayPointer()
@@ -52,6 +67,8 @@ CCArray* CumberParent::getSubCumberArrayPointer()
 
 void CumberParent::decreaseLifeForSubCumber(CCObject* target, float t_damage, float t_directionAngle)
 {
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 	if(target == mainCumber)
 	{
 		if(mainCumber->isSheild == 1)
@@ -77,7 +94,8 @@ void CumberParent::decreaseLifeForSubCumber(CCObject* target, float t_damage, fl
 
 void CumberParent::createAllCumberSheild()
 {
-	mainCumber->createSheild();
+	for(auto mainCumber : mainCumbers)
+		mainCumber->createSheild();
 	for(int i = 0;i<subCumberArray->count();i++)
 	{
 		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
@@ -114,7 +132,8 @@ void CumberParent::setGameover()
 	myEP->setGameover();
 	myGD->communication("MP_stopAutoAttacker");
 	isGameover = true;
-	mainCumber->setGameover();
+	for(auto mainCumber : mainCumbers)
+		mainCumber->setGameover();
 	
 	int loop_cnt = subCumberArray->count();
 	for(int i=0;i<loop_cnt;i++)
@@ -127,21 +146,34 @@ void CumberParent::setGameover()
 
 void CumberParent::startTeleport()
 {
-	mainCumber->startTeleport();
+	//##
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	for(auto mainCumber : mainCumbers)
+		mainCumber->startTeleport();
 }
 
 int CumberParent::getMainCumberSheild()
 {
-	return mainCumber->isSheild;
+	//##
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	return (*mainCumbers.begin())->isSheild; // 첫번 째 포인터
+//	return (mainCumbers->begin()->isSh);
+//	return mainCumber->isSheild;
 }
 
 void CumberParent::mainCumberInvisibleOn()
 {
+	//##
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 	mainCumber->startInvisible();
 }
 
 void CumberParent::mainCumberInvisibleOff()
 {
+	//##
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 	mainCumber->stopInvisible();
 }
 
@@ -162,7 +194,8 @@ void CumberParent::startAutoAttacker()
 
 void CumberParent::jackCrashDie()
 {
-	mainCumber->showEmotion(kEmotionType_fun);
+	for(auto mainCumber : mainCumbers)
+		mainCumber->showEmotion(kEmotionType_fun);
 }
 
 void CumberParent::setUI_forEP(CCObject* t_ui, SEL_CallFunc k_ui, SEL_CallFunc c_ui)
@@ -172,6 +205,9 @@ void CumberParent::setUI_forEP(CCObject* t_ui, SEL_CallFunc k_ui, SEL_CallFunc c
 
 void CumberParent::mainCumberShowEmotion(int t_e)
 {
+	//##
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 	mainCumber->showEmotion(EmotionType(t_e));
 }
 
@@ -186,7 +222,8 @@ void CumberParent::startDieAnimation()
 		if(!(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1) && rand()%CAUGHT_RATE == 0)
 		{
 			StarGoldData::sharedInstance()->caughtBoss();
-			mainCumber->caughtBoss(this, callfunc_selector(CumberParent::realStartDieAnimation));
+			for(auto mainCumber : mainCumbers)
+				mainCumber->caughtBoss(this, callfunc_selector(CumberParent::realStartDieAnimation));
 		}
 		else
 			realStartDieAnimation();
@@ -195,7 +232,8 @@ void CumberParent::startDieAnimation()
 
 void CumberParent::changeMaxSize(float t_p)
 {
-	mainCumber->changeMaxSize(t_p);
+	for(auto mainCumber : mainCumbers)
+		mainCumber->changeMaxSize(t_p);
 	
 	int loop_cnt = subCumberArray->count();
 	for(int i=0;i<loop_cnt;i++)
@@ -207,7 +245,8 @@ void CumberParent::changeMaxSize(float t_p)
 
 void CumberParent::checkingJackCrash()
 {
-	mainCumber->checkingJackCrash();
+	for(auto mainCumber : mainCumbers)
+		mainCumber->checkingJackCrash();
 }
 
 void CumberParent::realStartDieAnimation()
@@ -222,10 +261,15 @@ void CumberParent::realStartDieAnimation()
 	else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
 	else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
 	
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 	myGD->communication("MP_explosion", mainCumber->getPosition(), myColor);
 	
-	mainCumber->setScale(die_animation_rate/40.f);
-	mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
+	for(auto mainCumber : mainCumbers)
+	{
+		mainCumber->setScale(die_animation_rate/40.f);
+		mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
+	}
 	schedule(schedule_selector(CumberParent::dieAnimation));
 }
 
@@ -237,7 +281,8 @@ void CumberParent::dieAnimation()
 	{
 		die_animation_cnt = 0;
 		die_animation_rate -= 5;
-		mainCumber->setScale(die_animation_rate/40.f);
+		for(auto mainCumber : mainCumbers)
+			mainCumber->setScale(die_animation_rate/40.f);
 		
 		if(die_animation_rate <= 0)
 		{
@@ -252,10 +297,11 @@ void CumberParent::dieAnimation()
 		else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
 		else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
 		else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
-		
+		//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+		auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 		myGD->communication("MP_explosion", mainCumber->getPosition(), myColor);
-		
-		mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
+		for(auto mainCumber : mainCumbers)
+			mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
 	}
 }
 
@@ -286,7 +332,8 @@ void CumberParent::initSubCumber()
 
 void CumberParent::slowItem(bool t_b)
 {
-	mainCumber->changeSpeed(t_b);
+	for(auto mainCumber : mainCumbers)
+		mainCumber->changeSpeed(t_b);
 	for(int i=0;i<subCumberArray->count();i++)
 	{
 		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
@@ -298,11 +345,16 @@ void CumberParent::silenceItem(bool t_b)
 {
 	if(t_b)		myMP->stopAutoAttacker();
 	else		myMP->startAutoAttacker();
-	mainCumber->silenceItem(t_b);
+	
+	for(auto mainCumber : mainCumbers)
+		mainCumber->silenceItem(t_b);
 }
 
 void CumberParent::setCasting(bool t_b)
 {
+	//##
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 	mainCumber->setCasting(t_b);
 }
 
@@ -326,10 +378,7 @@ void CumberParent::myInit()
 	myGD->CCN_V["CP_getMainCumberPointer"] = std::bind(&CumberParent::getMainCumberPointer, this);
 	myGD->CCA_V["CP_getSubCumberArrayPointer"] = std::bind(&CumberParent::getSubCumberArrayPointer, this);
 	myGD->V_CCOFF["CP_decreaseLifeForSubCumber"] = std::bind(&CumberParent::decreaseLifeForSubCumber, this, _1, _2, _3);
-
 	myGD->V_V["CP_setGameover"] = std::bind(&CumberParent::setGameover, this);
-	
-
 	myGD->V_V["CP_tickingOn"] = std::bind(&CumberParent::tickingOn, this);
 	myGD->V_V["CP_subCumberBomb"] = std::bind(&CumberParent::subCumberBomb, this);
 	myGD->V_V["CP_startTeleport"] = std::bind(&CumberParent::startTeleport, this);
@@ -385,8 +434,8 @@ void CumberParent::myInit()
 	//					callfunc_selector(CumberParent::startDieAnimation),
 	//					callfuncF_selector(CumberParent::changeMaxSize),
 	//					callfunc_selector(CumberParent::checkingJackCrash));
-	
-	mainCumber = MainCumberKS::create();
+	auto mainCumber = MainCumber::create();
+	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	
 	initSubCumber();

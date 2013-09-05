@@ -20,6 +20,7 @@
 #include "SubCumber.h"
 #include "MapFragment.h"
 #include "MainCumberKS.h"
+#include <vector>
 
 
 using namespace cocos2d;
@@ -77,7 +78,8 @@ private:
 	MapFragmentParent* myMFP;
 	
 //	MainCumber* mainCumber;
-	MainCumberKS* mainCumber;
+	std::vector<MainCumber*> mainCumbers;
+//	MainCumberKS* mainCumber;
 	
 	EmotionParent* myEP;
 	
