@@ -28,7 +28,12 @@ void CumberParent::allStopSchedule()
 	}
 }
 
-
+void CumberParent::furyModeOn()
+{
+	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
+	mainCumber->furyModeOn();
+}
 
 void CumberParent::tickingOn()
 {
