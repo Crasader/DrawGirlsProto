@@ -395,7 +395,7 @@ void CumberParent::myInit()
 	myGD->V_V["CP_mainCumberInvisibleOff"] = std::bind(&CumberParent::mainCumberInvisibleOff, this);
 	myGD->V_B["CP_slowItem"] = std::bind(&CumberParent::slowItem, this, _1);
 	myGD->V_B["CP_silenceItem"] = std::bind(&CumberParent::silenceItem, this, _1);
-
+	myGD->V_V["CP_furyModeOn"] = std::bind(&CumberParent::furyModeOn, this);
 	myGD->V_B["CP_setCasting"] = std::bind(&CumberParent::setCasting, this, _1);
 	myGD->V_V["CP_stopMovingMainCumber"] = std::bind(&CumberParent::stopMovingMainCumber, this);
 	myGD->V_V["CP_jackCrashDie"] = std::bind(&CumberParent::jackCrashDie, this);
