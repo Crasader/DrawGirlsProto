@@ -23,64 +23,6 @@
 using namespace cocos2d;
 using namespace std;
 
-class SilenceEffect : public CCSprite
-{
-public:
-	static SilenceEffect* create()
-	{
-		SilenceEffect* t_se = new SilenceEffect();
-		if(t_se)
-		{
-			t_se->myInit();
-			t_se->autorelease();
-			return t_se;
-		}
-		CC_SAFE_DELETE(t_se);
-		return NULL;
-	}
-	
-	void startAction()
-	{
-		action_frame = 0;
-		schedule(schedule_selector(SilenceEffect::myAction));
-	}
-	
-private:
-	int action_frame;
-	
-	void myAction()
-	{
-		action_frame++;
-		if(action_frame == 20)
-		{
-			CCSprite* t_d1 = CCSprite::create("silence_effect_dot.png");
-			t_d1->setPosition(ccp(7,11));
-			addChild(t_d1, 1, 1);
-		}
-		else if(action_frame == 40)
-		{
-			CCSprite* t_d2 = CCSprite::create("silence_effect_dot.png");
-			t_d2->setPosition(ccp(14,11));
-			addChild(t_d2, 1, 2);
-		}
-		else if(action_frame == 60)
-		{
-			CCSprite* t_d3 = CCSprite::create("silence_effect_dot.png");
-			t_d3->setPosition(ccp(21,11));
-			addChild(t_d3, 1, 3);
-		}
-		else if(action_frame == 110)
-		{
-			removeAllChildrenWithCleanup(true);
-			action_frame = 0;
-		}
-	}
-	
-	void myInit()
-	{
-		initWithFile("silence_effect_main.png");
-	}
-};
 
 class MainCumber : public Cumber
 {
