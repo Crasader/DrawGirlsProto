@@ -491,6 +491,19 @@ void Maingame::backTracking()
 	if(afterJackPoint.isNull())
 	{
 		stopBackTracking();
+		return;
+	}
+	else
+	{
+		myJack->backTrackingAtAfterMoving(afterJackPoint);
+	}
+	
+	afterJackPoint = myPM->pathBackTracking();
+	
+	if(afterJackPoint.isNull())
+	{
+		stopBackTracking();
+		return;
 	}
 	else
 	{

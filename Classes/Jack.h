@@ -719,7 +719,7 @@ public:
 	
 	void changeSpeed(float t_s)
 	{
-		if(t_s > 2.f)			t_s = 2.f;
+		if(t_s > 4.f)			t_s = 4.f;
 		else if(t_s < 0.8f)		t_s = 0.8f;
 		
 		after_speed = t_s;
@@ -943,7 +943,7 @@ public:
 	
 	void takeSpeedUpItem()
 	{
-		if(speed_up_value >= 0.45f)
+		if(speed_up_value >= 0.5f)
 		{
 			myGD->communication("MP_createJackMissile", rand()%(kElementCode_plasma+1), 1, 0.7f);
 		}
@@ -999,6 +999,8 @@ private:
 	float test_speed;
 	float after_speed;
 	bool is_end_turn;
+	
+	bool is_double_moving;
 	
 	bool is_hard; // is_noShield
 	
@@ -1167,6 +1169,7 @@ private:
 		t_chaos = NULL;
 		isStun = false;
 		isDie = false;
+		is_double_moving = false;
 		myGD = GameData::sharedGameData();
 //		myGD->regJack(this, schedule_selector(Jack::changeSpeed),
 //					  callfunc_selector(Jack::startDieEffect),

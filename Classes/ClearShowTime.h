@@ -13,6 +13,7 @@
 #include "GameData.h"
 #include "AudioEngine.h"
 #include "SilhouetteData.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 
@@ -120,6 +121,9 @@ private:
 			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
 			CCMoveTo* t_move3 = CCMoveTo::create(1.f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-(430-102+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f))*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
 			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
+			
+//			StarGoldData::sharedInstance()->is_showtime = is_showtime;
+			
 			CCCallFunc* t_call;
 			if(is_showtime)
 				t_call = CCCallFunc::create(this, callfunc_selector(ClearShowTime::startShowTime));

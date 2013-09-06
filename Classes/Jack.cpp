@@ -130,9 +130,18 @@ void Jack::moveTest()
 	IntVector s_dv = IntVector::directionVector(secondDirection);
 	IntVector c_dv = IntVector::directionVector(no_draw_direction);
 	IntVector c_s_dv = IntVector::directionVector(no_draw_secondDirection);
-//	IntVector c_s_dv_reverse = IntVector::reverseDirectionVector(no_draw_secondDirection);
 	
 	if(jp.isNull())		return;
+	
+	if(test_speed >= 4.f)
+	{
+		if(is_double_moving == false)
+			is_double_moving = true;
+		else
+			is_double_moving = false;
+	}
+	else
+		is_double_moving = false;
 	
 	IntPoint checkPoint;
 	IntPoint s_checkPoint;
@@ -246,178 +255,431 @@ void Jack::moveTest()
 	
 	IntPoint c_checkPoint = IntPoint(jp.x+c_dv.dx, jp.y+c_dv.dy);
 	IntPoint c_s_checkPoint = IntPoint(jp.x+c_s_dv.dx, jp.y+c_s_dv.dy);
-//	IntPoint c_s_checkPoint_reverse = IntPoint(jp.x+c_s_dv_reverse.dx, jp.y+c_s_dv_reverse.dy);
+	
+	float t_speed = test_speed > 2.f ? 2.f : test_speed;
 	
 	if(myState == jackStateNormal)
 	{
-		// main direction moving
-		if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldline) // moving
-		{
-//			keepDirectionAction(jp, direction); // rotary
-			afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
-			
-			CCPoint turnPosition = ccpAdd(getPosition(), ccp(test_speed*c_dv.dx,test_speed*c_dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-//			CCLog("%.1f, %.1f", turnPosition.x, turnPosition.y);
-			
-			setPosition(turnPosition);
-		}
-		
-		// main direction drawing
-		else if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty && isDrawingOn) // main drawing start
-		{
-			// path add
-			if(is_end_turn)
-			{
-				is_end_turn = false;
-				IntPointVector t_pv = IntPointVector(myGD->getJackPoint().x, myGD->getJackPoint().y, c_dv.dx, c_dv.dy);
-				myGD->communication("PM_addPath", t_pv);
-			}
-			
-			// jack drawing
-			setJackState(jackStateDrawing);
-			afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
-			
-			CCPoint turnPosition = ccpAdd(getPosition(), ccp(test_speed*c_dv.dx,test_speed*c_dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-//			CCLog("%.1f, %.1f", turnPosition.x, turnPosition.y);
-			
-			setPosition(turnPosition);
-		}
-		
-		else if(c_checkPoint.isInnerMap() && (myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty || myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldget) &&
-				c_s_checkPoint.isInnerMap() && myGD->mapState[c_s_checkPoint.x][c_s_checkPoint.y] == mapOldline)
-		{
-//			keepDirectionAction(jp, secondDirection); // rotary
-			afterPoint = IntPoint(c_s_checkPoint.x, c_s_checkPoint.y);
-			
-			CCPoint turnPosition = ccpAdd(getPosition(), ccp(test_speed*c_s_dv.dx,test_speed*c_s_dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			//			CCLog("%.1f, %.1f", turnPosition.x, turnPosition.y);
-			
-			setPosition(turnPosition);
-		}
-		
-//		else if(c_checkPoint.isInnerMap() && (myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty || myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldget) &&
-//				c_s_checkPoint_reverse.isInnerMap() && myGD->mapState[c_s_checkPoint_reverse.x][c_s_checkPoint_reverse.y] == mapOldline)
+//		if(test_speed == 4.f)
 //		{
-//			afterPoint = IntPoint(c_s_checkPoint_reverse.x, c_s_checkPoint_reverse.y);
+//			IntPoint c_checkPoint2 = IntPoint(c_checkPoint.x+c_dv.dx,c_checkPoint.y+c_dv.dy);// c -> c
+//			IntPoint c_s_checkPoint2 = IntPoint(c_s_checkPoint.x+c_s_dv.dx, c_s_checkPoint.y+c_s_dv.dy);// c_s -> c_s
+//			IntPoint c_as_checkPoint = IntPoint(c_checkPoint.x+c_s_dv.dx, c_checkPoint.y+c_s_dv.dy);// c -> c_s
+//			IntPoint c_s_ac_checkPoint = IntPoint(c_s_checkPoint.x+c_dv.dx, c_s_checkPoint.y+c_dv.dx);// c_s -> c
 //			
-//			CCPoint turnPosition = ccpAdd(getPosition(), ccp(test_speed*c_s_dv_reverse.dx,test_speed*c_s_dv_reverse.dy));
+//			IntPoint checkPoint2 = IntPoint(c_checkPoint.x+dv.dx, c_checkPoint.y+dv.dy);// c -> a
+//			IntPoint as_checkPoint = IntPoint(c_checkPoint.x+s_dv.dx, c_checkPoint.y+s_dv.dy);// c -> s
+//			IntPoint asr_checkPoint = IntPoint(c_checkPoint.x+s_dv_reverse.dx, c_checkPoint.y+s_dv_reverse.dy);// c -> sr
+//			IntPoint s_checkPoint2 = IntPoint(c_s_checkPoint.x+s_dv.dx, c_s_checkPoint.y+s_dv.dy);// c_s -> s
+//			IntPoint s_a_checkPoint = IntPoint(c_s_checkPoint.x+dv.dx, c_s_checkPoint.y+dv.dy);// c_s -> a
 //			
-//			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-//			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-//			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-//			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-//			//			CCLog("%.1f, %.1f", turnPosition.x, turnPosition.y);
-//			
-//			setPosition(turnPosition);
+//			// main direction moving
+//			if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldline) // moving
+//			{
+//				CCPoint turnPosition;
+//				if(c_checkPoint2.isInnerMap() && myGD->mapState[c_checkPoint2.x][c_checkPoint2.y] == mapOldline)
+//				{
+//					afterPoint = IntPoint(c_checkPoint2.x, c_checkPoint2.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(test_speed*c_dv.dx,test_speed*c_dv.dy)); // test_speed == 4.f // 1turn is 2.f
+//				}
+//				else if(c_checkPoint2.isInnerMap() && myGD->mapState[c_checkPoint2.x][c_checkPoint2.y] == mapEmpty && isDrawingOn)
+//				{
+//					IntPointVector t_pv = IntPointVector(c_checkPoint.x,c_checkPoint.y, c_dv.dx, c_dv.dy);
+//					myGD->communication("PM_addPath", t_pv);
+//					afterPoint = IntPoint(c_checkPoint2.x, c_checkPoint2.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(test_speed*c_dv.dx, test_speed*c_dv.dy));
+//				}
+//				else if(c_checkPoint2.isInnerMap() && (myGD->mapState[c_checkPoint2.x][c_checkPoint2.y] == mapEmpty || myGD->mapState[c_checkPoint2.x][c_checkPoint2.y] == mapOldget) && c_as_checkPoint.isInnerMap() && myGD->mapState[c_as_checkPoint.x][c_as_checkPoint.y] == mapOldline)
+//				{
+//					afterPoint = IntPoint(c_checkPoint.x+c_s_dv.dx, c_checkPoint.y+c_s_dv.dy);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*c_dv.dx, 2.f*c_dv.dy), ccp(2.f*c_s_dv.dx, 2.f*c_s_dv.dy)));
+//				}
+//				else
+//				{
+//					afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(2.f*c_dv.dx,2.f*c_dv.dy));
+//				}
+//				
+//				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+//				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+//				
+//				setPosition(turnPosition);
+//			}
+//			// main direction drawing
+//			else if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty && isDrawingOn) // main drawing start
+//			{
+//				CCPoint turnPosition;
+//				IntPointVector t_pv = IntPointVector(jp.x, jp.y, c_dv.dx, c_dv.dy);
+//				myGD->communication("PM_addPath", t_pv);
+//				
+//				if(checkPoint2.isInnerMap() && (myGD->mapState[checkPoint2.x][checkPoint2.y] == mapEmpty || myGD->mapState[checkPoint2.x][checkPoint2.y] == mapOldline))
+//				{
+//					myGD->mapState[c_checkPoint.x][c_checkPoint.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(c_checkPoint.x, c_checkPoint.y, dv.dx, dv.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(checkPoint2.x, checkPoint2.y);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*c_dv.dx, 2.f*c_dv.dy), ccp(2.f*dv.dx, 2.f*dv.dy)));
+//				}
+//				else if(checkPoint2.isInnerMap() && myGD->mapState[checkPoint2.x][checkPoint2.y] == mapNewline && as_checkPoint.isInnerMap() &&
+//						(myGD->mapState[as_checkPoint.x][as_checkPoint.y] == mapEmpty || myGD->mapState[as_checkPoint.x][as_checkPoint.y] == mapOldline))
+//				{
+//					myGD->mapState[c_checkPoint.x][c_checkPoint.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(c_checkPoint.x, c_checkPoint.y, s_dv.dx, s_dv.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(as_checkPoint.x, as_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*c_dv.dx,2.f*c_dv.dy), ccp(2.f*s_dv.dx, 2.f*s_dv.dy)));
+//				}
+//				else if(checkPoint2.isInnerMap() && myGD->mapState[checkPoint2.x][checkPoint2.y] == mapNewline && asr_checkPoint.isInnerMap() &&
+//						(myGD->mapState[asr_checkPoint.x][asr_checkPoint.y] == mapEmpty || myGD->mapState[asr_checkPoint.x][asr_checkPoint.y] == mapOldline))
+//				{
+//					myGD->mapState[c_checkPoint.x][c_checkPoint.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(c_checkPoint.x, c_checkPoint.y, s_dv_reverse.dx, s_dv_reverse.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(asr_checkPoint.x, asr_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*c_dv.dx,2.f*c_dv.dy), ccp(2.f*s_dv_reverse.dx, 2.f*s_dv_reverse.dy)));
+//				}
+//				else
+//				{
+//					afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(2.f*c_dv.dx,2.f*c_dv.dy));
+//				}
+//				
+//				// jack drawing
+//				setJackState(jackStateDrawing);
+//				
+//				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+//				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+//				
+//				setPosition(turnPosition);
+//			}
+//			else if(c_checkPoint.isInnerMap() && (myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty || myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldget) &&
+//					c_s_checkPoint.isInnerMap() && myGD->mapState[c_s_checkPoint.x][c_s_checkPoint.y] == mapOldline)
+//			{
+//				CCPoint turnPosition;
+//				if(c_s_ac_checkPoint.isInnerMap() && myGD->mapState[c_s_ac_checkPoint.x][c_s_ac_checkPoint.y] == mapOldline)
+//				{
+//					afterPoint = IntPoint(c_s_ac_checkPoint.x, c_s_ac_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*c_s_dv.dx,2.f*c_s_dv.dy), ccp(2.f*c_dv.dx, 2.f*c_dv.dy)));
+//				}
+//				else if(c_s_ac_checkPoint.isInnerMap() && myGD->mapState[c_s_ac_checkPoint.x][c_s_ac_checkPoint.y] == mapEmpty && isDrawingOn)
+//				{
+//					IntPointVector t_pv = IntPointVector(c_s_checkPoint.x,c_s_checkPoint.y, c_dv.dx, c_dv.dy);
+//					myGD->communication("PM_addPath", t_pv);
+//					afterPoint = IntPoint(c_s_ac_checkPoint.x, c_s_ac_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*c_s_dv.dx, 2.f*c_s_dv.dy), ccp(2.f*c_dv.dx, 2.f*c_dv.dy)));
+//				}
+//				else if(c_s_ac_checkPoint.isInnerMap() && (myGD->mapState[c_s_ac_checkPoint.x][c_s_ac_checkPoint.y] == mapEmpty || myGD->mapState[c_s_ac_checkPoint.x][c_s_ac_checkPoint.y] == mapOldget) && c_s_checkPoint2.isInnerMap() && myGD->mapState[c_s_checkPoint2.x][c_s_checkPoint2.y] == mapOldline)
+//				{
+//					afterPoint = IntPoint(c_s_checkPoint2.x, c_s_checkPoint2.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(test_speed*c_s_dv.dx, test_speed*c_s_dv.dy));
+//				}
+//				else
+//				{
+//					afterPoint = IntPoint(c_s_checkPoint.x, c_s_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(2.f*c_s_dv.dx,2.f*c_s_dv.dy));
+//				}
+//				
+//				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+//				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+//				
+//				setPosition(turnPosition);
+//			}
+//			else // don't move
+//			{
+//				stopMove();
+//			}
 //		}
-		
-		else // don't move
-		{
-			stopMove();
-		}
+//		else
+//		{
+			// main direction moving
+			if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldline) // moving
+			{
+				afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
+				
+				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_dv.dx,t_speed*c_dv.dy));
+				
+				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+				
+				setPosition(turnPosition);
+			}
+			// main direction drawing
+			else if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty && isDrawingOn) // main drawing start
+			{
+				// path add
+				if(is_end_turn)
+				{
+					is_end_turn = false;
+					IntPointVector t_pv = IntPointVector(jp.x, jp.y, c_dv.dx, c_dv.dy);
+					myGD->communication("PM_addPath", t_pv);
+				}
+				
+				// jack drawing
+				setJackState(jackStateDrawing);
+				afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
+				
+				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_dv.dx,t_speed*c_dv.dy));
+				
+				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+				
+				setPosition(turnPosition);
+			}
+			else if(c_checkPoint.isInnerMap() && (myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty || myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldget) &&
+					c_s_checkPoint.isInnerMap() && myGD->mapState[c_s_checkPoint.x][c_s_checkPoint.y] == mapOldline)
+			{
+				afterPoint = IntPoint(c_s_checkPoint.x, c_s_checkPoint.y);
+				
+				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_s_dv.dx,t_speed*c_s_dv.dy));
+				
+				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+				
+				setPosition(turnPosition);
+			}
+			else // don't move
+			{
+				stopMove();
+			}
+//		}
 	}
 	else // myState == jackStateDrawing
 	{
-		// main direction drawing
-		if(checkPoint.isInnerMap() && (myGD->mapState[checkPoint.x][checkPoint.y] == mapOldline ||
-									   myGD->mapState[checkPoint.x][checkPoint.y] == mapEmpty) && isDrawingOn)	//
-		{
-			// path add
-			if(is_end_turn)
+//		if(test_speed == 4.f)
+//		{
+//			IntPoint checkPoint2 = IntPoint(checkPoint.x+dv.dx, checkPoint.y+dv.dy);// a -> a
+//			IntPoint as_checkPoint = IntPoint(checkPoint.x+s_dv.dx, checkPoint.y+s_dv.dy);// a -> s
+//			IntPoint asr_checkPoint = IntPoint(checkPoint.x+s_dv_reverse.dx, checkPoint.y+s_dv_reverse.dy);// a -> sr
+//			IntPoint s_checkPoint2 = IntPoint(s_checkPoint.x+s_dv.dx, s_checkPoint.y+s_dv.dy);// s -> s
+//			IntPoint s_a_checkPoint = IntPoint(s_checkPoint.x+dv.dx, s_checkPoint.y+dv.dy);// s -> a
+//			IntPoint s_r_checkPoint = IntPoint(s_checkPoint.x+s_dv_reverse.dx, s_checkPoint.y+s_dv_reverse.dy);// s -> r
+//			IntPoint r_a_checkPoint = IntPoint(s_checkPoint_reverse.x+dv.dx, s_checkPoint_reverse.y+dv.dy);// r -> a
+//			IntPoint r_checkPoint2 = IntPoint(s_checkPoint_reverse.x+s_dv_reverse.dx, s_checkPoint_reverse.y+s_dv_reverse.dy);// r -> r
+//			
+//			// main direction drawing
+//			if(checkPoint.isInnerMap() && (myGD->mapState[checkPoint.x][checkPoint.y] == mapOldline ||
+//										   myGD->mapState[checkPoint.x][checkPoint.y] == mapEmpty) && isDrawingOn)	//
+//			{
+//				CCPoint turnPosition;
+//				IntPointVector t_pv = IntPointVector(jp.x, jp.y, dv.dx, dv.dy);
+//				myGD->communication("PM_addPath", t_pv);
+//				
+//				if(checkPoint2.isInnerMap() && (myGD->mapState[checkPoint2.x][checkPoint2.y] == mapOldline || myGD->mapState[checkPoint2.x][checkPoint2.y] == mapEmpty))
+//				{
+//					myGD->mapState[checkPoint.x][checkPoint.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(checkPoint.x, checkPoint.y, dv.dx, dv.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(checkPoint2.x, checkPoint2.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(test_speed*dv.dx,test_speed*dv.dy));
+//				}
+//				else if(checkPoint2.isInnerMap() && myGD->mapState[checkPoint2.x][checkPoint2.y] == mapNewline && as_checkPoint.isInnerMap() &&
+//						(myGD->mapState[as_checkPoint.x][as_checkPoint.y] == mapOldline || myGD->mapState[as_checkPoint.x][as_checkPoint.y] == mapEmpty))
+//				{
+//					myGD->mapState[checkPoint.x][checkPoint.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(checkPoint.x, checkPoint.y, s_dv.dx, s_dv.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(as_checkPoint.x, as_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*dv.dx, 2.f*dv.dy), ccp(2.f*s_dv.dx, 2.f*s_dv.dy)));
+//				}
+//				else if(checkPoint2.isInnerMap() && myGD->mapState[checkPoint2.x][checkPoint2.y] == mapNewline && asr_checkPoint.isInnerMap() &&
+//						(myGD->mapState[asr_checkPoint.x][asr_checkPoint.y] == mapOldline || myGD->mapState[asr_checkPoint.x][asr_checkPoint.y] == mapEmpty))
+//				{
+//					myGD->mapState[checkPoint.x][checkPoint.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(checkPoint.x, checkPoint.y, s_dv_reverse.dx, s_dv_reverse.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(asr_checkPoint.x, asr_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*dv.dx, 2.f*dv.dy), ccp(2.f*s_dv_reverse.dx, 2.f*s_dv_reverse.dy)));
+//				}
+//				else
+//				{
+//					afterPoint = IntPoint(checkPoint.x, checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(2.f*dv.dx,2.f*dv.dy));
+//				}
+//				
+//				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+//				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+//				
+//				setPosition(turnPosition);
+//			}
+//			else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
+//					s_checkPoint.isInnerMap() && (myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapEmpty || myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapOldline))
+//			{
+//				CCPoint turnPosition;
+//				IntPointVector t_pv = IntPointVector(jp.x, jp.y, s_dv.dx, s_dv.dy);
+//				myGD->communication("PM_addPath", t_pv);
+//				
+//				if(s_a_checkPoint.isInnerMap() && (myGD->mapState[s_a_checkPoint.x][s_a_checkPoint.y] == mapEmpty || myGD->mapState[s_a_checkPoint.x][s_a_checkPoint.y] == mapOldline))
+//				{
+//					myGD->mapState[s_checkPoint.x][s_checkPoint.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(s_checkPoint.x, s_checkPoint.y, dv.dx, dv.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(s_a_checkPoint.x, s_a_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*s_dv.dx,2.f*s_dv.dy), ccp(2.f*dv.dx, 2.f*dv.dy)));
+//				}
+//				else if(s_a_checkPoint.isInnerMap() && myGD->mapState[s_a_checkPoint.x][s_a_checkPoint.y] == mapNewline && s_checkPoint2.isInnerMap() &&
+//						(myGD->mapState[s_checkPoint2.x][s_checkPoint2.y] == mapEmpty || myGD->mapState[s_checkPoint2.x][s_checkPoint2.y] == mapOldline))
+//				{
+//					myGD->mapState[s_checkPoint.x][s_checkPoint.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(s_checkPoint.x, s_checkPoint.y, s_dv.dx, s_dv.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(s_checkPoint2.x, s_checkPoint2.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(test_speed*s_dv.dx,test_speed*s_dv.dy));
+//				}
+//				else
+//				{
+//					afterPoint = IntPoint(s_checkPoint.x, s_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(2.f*s_dv.dx,2.f*s_dv.dy));
+//				}
+//				
+//				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+//				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+//				
+//				setPosition(turnPosition);
+//			}
+//			else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
+//					s_checkPoint_reverse.isInnerMap() && (myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapEmpty || myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapOldline))
+//			{
+//				CCPoint turnPosition;
+//				IntPointVector t_pv = IntPointVector(jp.x, jp.y, s_dv_reverse.dx, s_dv_reverse.dy);
+//				myGD->communication("PM_addPath", t_pv);
+//				
+//				if(r_a_checkPoint.isInnerMap() && (myGD->mapState[r_a_checkPoint.x][r_a_checkPoint.y] == mapEmpty || myGD->mapState[r_a_checkPoint.x][r_a_checkPoint.y] == mapOldline))
+//				{
+//					myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(s_checkPoint_reverse.x, s_checkPoint_reverse.y, dv.dx, dv.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(r_a_checkPoint.x, r_a_checkPoint.y);
+//					turnPosition = ccpAdd(getPosition(), ccpAdd(ccp(2.f*s_dv_reverse.dx,2.f*s_dv_reverse.dy), ccp(2.f*dv.dx, 2.f*dv.dy)));
+//				}
+//				else if(r_a_checkPoint.isInnerMap() && myGD->mapState[r_a_checkPoint.x][r_a_checkPoint.y] == mapNewline && r_checkPoint2.isInnerMap() &&
+//						(myGD->mapState[r_checkPoint2.x][r_checkPoint2.y] == mapEmpty || myGD->mapState[r_checkPoint2.x][r_checkPoint2.y] == mapOldline))
+//				{
+//					myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] = mapNewline;
+//					IntPointVector t_pv2 = IntPointVector(s_checkPoint_reverse.x, s_checkPoint_reverse.y, s_dv_reverse.dx, s_dv_reverse.dy);
+//					myGD->communication("PM_addPath", t_pv2);
+//					
+//					afterPoint = IntPoint(r_checkPoint2.x, r_checkPoint2.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(test_speed*s_dv_reverse.dx,test_speed*s_dv_reverse.dy));
+//				}
+//				
+//				else
+//				{
+//					afterPoint = IntPoint(s_checkPoint_reverse.x, s_checkPoint_reverse.y);
+//					turnPosition = ccpAdd(getPosition(), ccp(2.f*s_dv_reverse.dx,2.f*s_dv_reverse.dy));
+//				}
+//				
+//				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+//				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+//				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+//				
+//				setPosition(turnPosition);
+//			}
+//			else // don't move
+//			{
+//				stopMove();
+//			}
+//		}
+//		else
+//		{
+			// main direction drawing
+			if(checkPoint.isInnerMap() && (myGD->mapState[checkPoint.x][checkPoint.y] == mapOldline ||
+										   myGD->mapState[checkPoint.x][checkPoint.y] == mapEmpty) && isDrawingOn)	//
 			{
-				is_end_turn = false;
-				IntPointVector t_pv = IntPointVector(myGD->getJackPoint().x, myGD->getJackPoint().y, dv.dx, dv.dy);
-				myGD->communication("PM_addPath", t_pv);
+				// path add
+				if(is_end_turn)
+				{
+					is_end_turn = false;
+					IntPointVector t_pv = IntPointVector(jp.x, jp.y, dv.dx, dv.dy);
+					myGD->communication("PM_addPath", t_pv);
+				}
+				
+				// jack drawing
+				afterPoint = IntPoint(checkPoint.x, checkPoint.y);
+				
+				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*dv.dx,t_speed*dv.dy));
+				
+				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+				
+				setPosition(turnPosition);
 			}
-			
-			// jack drawing
-			afterPoint = IntPoint(checkPoint.x, checkPoint.y);
-			
-			CCPoint turnPosition = ccpAdd(getPosition(), ccp(test_speed*dv.dx,test_speed*dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			//			CCLog("%.1f, %.1f", turnPosition.x, turnPosition.y);
-			
-			setPosition(turnPosition);
-		}
-		else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
-				s_checkPoint.isInnerMap() && (myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapEmpty || myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapOldline))
-		{
-			if(is_end_turn)
+			else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
+					s_checkPoint.isInnerMap() && (myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapEmpty || myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapOldline))
 			{
-				is_end_turn = false;
-				IntPointVector t_pv = IntPointVector(myGD->getJackPoint().x, myGD->getJackPoint().y, s_dv.dx, s_dv.dy);
-				myGD->communication("PM_addPath", t_pv);
+				if(is_end_turn)
+				{
+					is_end_turn = false;
+					IntPointVector t_pv = IntPointVector(jp.x, jp.y, s_dv.dx, s_dv.dy);
+					myGD->communication("PM_addPath", t_pv);
+				}
+				
+				// jack drawing
+				afterPoint = IntPoint(s_checkPoint.x, s_checkPoint.y);
+				
+				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv.dx,t_speed*s_dv.dy));
+				
+				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+				
+				setPosition(turnPosition);
 			}
-			
-			// jack drawing
-			afterPoint = IntPoint(s_checkPoint.x, s_checkPoint.y);
-			
-			CCPoint turnPosition = ccpAdd(getPosition(), ccp(test_speed*s_dv.dx,test_speed*s_dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			//			CCLog("%.1f, %.1f", turnPosition.x, turnPosition.y);
-			
-			setPosition(turnPosition);
-		}
-		else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
-				s_checkPoint_reverse.isInnerMap() && (myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapEmpty || myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapOldline))
-		{
-			if(is_end_turn)
+			else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
+					s_checkPoint_reverse.isInnerMap() && (myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapEmpty || myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapOldline))
 			{
-				is_end_turn = false;
-				IntPointVector t_pv = IntPointVector(myGD->getJackPoint().x, myGD->getJackPoint().y, s_dv_reverse.dx, s_dv_reverse.dy);
-				myGD->communication("PM_addPath", t_pv);
+				if(is_end_turn)
+				{
+					is_end_turn = false;
+					IntPointVector t_pv = IntPointVector(jp.x, jp.y, s_dv_reverse.dx, s_dv_reverse.dy);
+					myGD->communication("PM_addPath", t_pv);
+				}
+				
+				// jack drawing
+				afterPoint = IntPoint(s_checkPoint_reverse.x, s_checkPoint_reverse.y);
+				
+				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv_reverse.dx,t_speed*s_dv_reverse.dy));
+				
+				if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
+				if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+				
+				setPosition(turnPosition);
 			}
-			
-			// jack drawing
-			afterPoint = IntPoint(s_checkPoint_reverse.x, s_checkPoint_reverse.y);
-			
-			CCPoint turnPosition = ccpAdd(getPosition(), ccp(test_speed*s_dv_reverse.dx,test_speed*s_dv_reverse.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			//			CCLog("%.1f, %.1f", turnPosition.x, turnPosition.y);
-			
-			setPosition(turnPosition);
-		}
-		else // don't move
-		{
-//			CCLog("direction : %d", direction);
-//			CCLog("before x direction : %d", before_x_direction);
-//			CCLog("dv : %d,%d", dv.dx, dv.dy);
-//			CCLog("checkPoint : %d", myGD->mapState[checkPoint.x][checkPoint.y]);
-//			CCLog("secondDirection : %d", secondDirection);
-//			CCLog("s_dv : %d,%d", s_dv.dx, s_dv.dy);
-//			CCLog("s_checkPoint : %d", myGD->mapState[s_checkPoint.x][s_checkPoint.y]);
-//			CCLog("s_dv_reverse : %d,%d", s_dv_reverse.dx, s_dv_reverse.dy);
-//			CCLog("s_checkPoint_reverse : %d", myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y]);
-//
-			stopMove();
-		}
+			else // don't move
+			{
+				stopMove();
+			}
+//		}
 	}
 	
 	float t_distance = sqrtf(powf(beforePosition.x-getPositionX(), 2.f) + powf(beforePosition.y-getPositionY(), 2.f));
@@ -641,5 +903,10 @@ void Jack::moveTest()
 			myGD->communication("Main_startBackTracking");
 		else
 			myGD->communication("Main_stunBackTracking");
+	}
+	
+	if(is_double_moving)
+	{
+		moveTest();
 	}
 }

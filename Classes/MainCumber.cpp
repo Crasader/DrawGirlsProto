@@ -19,7 +19,7 @@ void MainCumber::moving()
 		
 		showEmotion(kEmotionType_joy);
 		
-		myGD->communication("MP_startFire", getPosition(), false);
+		myGD->communication("MP_startFire", getPosition(), false); 
 		return;
 	}
 	

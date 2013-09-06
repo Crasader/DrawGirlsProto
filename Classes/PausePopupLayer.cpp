@@ -121,6 +121,12 @@ void PausePopupLayer::resetControlMenu()
 		button_filename = "speed2_gray_";
 		joystick_filename = "speed3_color_";
 	}
+	else
+	{
+		gesture_filename = "speed1_gray_";
+		button_filename = "speed2_gray_";
+		joystick_filename = "speed3_gray_";
+	}
 	
 	CCMenuItem* gesture_item = CCMenuItemImage::create((gesture_filename+"normal.png").c_str(), (gesture_filename+"selected.png").c_str(), this, menu_selector(PausePopupLayer::menuAction));
 	gesture_item->setTag(kMenuTagPPL_slow);

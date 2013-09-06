@@ -24,6 +24,7 @@
 #include "ControlType.h"
 #include "ClearShowTime.h"
 #include "GameItemManager.h"
+//#include "ZoomScriptScene.h"
 
 using namespace cocos2d;
 

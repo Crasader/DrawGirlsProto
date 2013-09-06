@@ -467,6 +467,8 @@ public:
 	
 	bool is_before_title;
 	
+	bool is_showtime;
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;

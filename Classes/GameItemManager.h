@@ -296,7 +296,7 @@ private:
 	
 	virtual void acting()
 	{
-		myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 0.9f);
+		myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 10.f);
 		
 		CCDelayTime* t_delay = CCDelayTime::create(5.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemFast::ending));
@@ -307,7 +307,7 @@ private:
 	
 	void ending()
 	{
-		myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 0.9f);
+		myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 10.f);
 		removeFromParentAndCleanup(true);
 	}
 	
