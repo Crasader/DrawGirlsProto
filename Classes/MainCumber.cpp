@@ -76,9 +76,7 @@ void MainCumber::moving()
 				d_p = ccpMult(d_p, 1.f/2.f);
 			
 			afterPosition = ccpAdd(getPosition(), d_p);
-			afterPoint.x = (afterPosition.x-1)/pixelSize + 1.f;
-			afterPoint.y = (afterPosition.y-1)/pixelSize + 1.f;
-			
+			afterPoint = IntPoint::convertToIntPoint(afterPosition);
 			
 			if(afterPosition.x < 20.f*myScale || afterPosition.x > 320.f-20.f*myScale || afterPosition.y < 20.f*myScale || afterPosition.y > 430.f-20.f*myScale)
 			{
@@ -98,26 +96,26 @@ void MainCumber::moving()
 				
 				// side check (up, down, left, right)
 				
-				check_position = IntPoint(afterPoint.x-half_distance/2,afterPoint.y); // left
+				check_position = IntPoint(afterPoint.x-roundf(half_distance/2),afterPoint.y); // left
 				if(checkingFunc(check_position, is_not_position, notEmotion, before_areacrash_cnt, is_map_visited))
 					return;
 				
-				check_position = IntPoint(afterPoint.x+half_distance/2,afterPoint.y); // right
+				check_position = IntPoint(afterPoint.x+roundf(half_distance/2),afterPoint.y); // right
 				if(checkingFunc(check_position, is_not_position, notEmotion, before_areacrash_cnt, is_map_visited))
 					return;
 				
-				check_position = IntPoint(afterPoint.x,afterPoint.y+half_distance/2); // up
+				check_position = IntPoint(afterPoint.x,afterPoint.y+roundf(half_distance/2)); // up
 				if(checkingFunc(check_position, is_not_position, notEmotion, before_areacrash_cnt, is_map_visited))
 					return;
 				
-				check_position = IntPoint(afterPoint.x,afterPoint.y-half_distance/2); // down
+				check_position = IntPoint(afterPoint.x,afterPoint.y-roundf(half_distance/2)); // down
 				if(checkingFunc(check_position, is_not_position, notEmotion, before_areacrash_cnt, is_map_visited))
 					return;
 				
 				// inner check
-				for(int i=afterPoint.x-half_distance/2;i<=afterPoint.x+half_distance/2 && !is_not_position;i++)
+				for(int i=afterPoint.x-roundf(half_distance/2);i<=afterPoint.x+roundf(half_distance/2) && !is_not_position;i++)
 				{
-					for(int j=afterPoint.y-half_distance/2;j<=afterPoint.y+half_distance/2 && !is_not_position;j++)
+					for(int j=afterPoint.y-roundf(half_distance/2);j<=afterPoint.y+roundf(half_distance/2) && !is_not_position;j++)
 					{
 						calc_distance = sqrtf(powf((afterPoint.x - i)*pixelSize,2) + powf((afterPoint.y - j)*pixelSize, 2));
 						if(calc_distance < half_distance)
@@ -198,9 +196,7 @@ void MainCumber::moving()
 				d_p = ccpMult(d_p, 1.f/2.f);
 			
 			afterPosition = ccpAdd(getPosition(), d_p);
-			afterPoint.x = (afterPosition.x-1)/pixelSize + 1.f;
-			afterPoint.y = (afterPosition.y-1)/pixelSize + 1.f;
-			
+			afterPoint = IntPoint::convertToIntPoint(afterPosition);
 			
 			if(afterPosition.x < 20.f*myScale || afterPosition.x > 320.f-20.f*myScale || afterPosition.y < 20.f*myScale || afterPosition.y > 430.f-20.f*myScale)
 			{
@@ -220,36 +216,36 @@ void MainCumber::moving()
 				
 				bool is_not_position = false;
 				
-				check_position = IntPoint(afterPoint.x-half_distance/2,afterPoint.y); // left
+				check_position = IntPoint(afterPoint.x-roundf(half_distance/2),afterPoint.y); // left
 				if(!check_position.isInnerMap())
 					is_not_position = true;
 				
 				if(!is_not_position)
 				{
-					check_position = IntPoint(afterPoint.x+half_distance/2,afterPoint.y); // right
+					check_position = IntPoint(afterPoint.x+roundf(half_distance/2),afterPoint.y); // right
 					if(!check_position.isInnerMap())
 						is_not_position = true;
 				}
 				
 				if(!is_not_position)
 				{
-					check_position = IntPoint(afterPoint.x,afterPoint.y+half_distance/2); // up
+					check_position = IntPoint(afterPoint.x,afterPoint.y+roundf(half_distance/2)); // up
 					if(!check_position.isInnerMap())
 						is_not_position = true;
 				}
 				
 				if(!is_not_position)
 				{
-					check_position = IntPoint(afterPoint.x,afterPoint.y-half_distance/2); // down
+					check_position = IntPoint(afterPoint.x,afterPoint.y-roundf(half_distance/2)); // down
 					if(!check_position.isInnerMap())
 						is_not_position = true;
 				}
 				
 				if(!is_not_position)
 				{
-					for(int i=afterPoint.x-half_distance/2;i<=afterPoint.x+half_distance/2 && !is_not_position;i++)
+					for(int i=afterPoint.x-roundf(half_distance/2);i<=afterPoint.x+roundf(half_distance/2) && !is_not_position;i++)
 					{
-						for(int j=afterPoint.y-half_distance/2;j<=afterPoint.y+half_distance/2 && !is_not_position;j++)
+						for(int j=afterPoint.y-roundf(half_distance/2);j<=afterPoint.y+roundf(half_distance/2) && !is_not_position;j++)
 						{
 							calc_distance = sqrtf(powf((afterPoint.x - i)*pixelSize,2) + powf((afterPoint.y - j)*pixelSize, 2));
 							if(calc_distance < half_distance)
@@ -416,9 +412,9 @@ void MainCumber::checkingJackCrash()
 	float calc_distance;
 	IntPoint check_position;
 	
-	for(int i= mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2;i++)
+	for(int i= mapPoint.x-roundf(half_distance/2);i<=mapPoint.x+roundf(half_distance/2);i++)
 	{
-		for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2;j++)
+		for(int j=mapPoint.y-roundf(half_distance/2);j<=mapPoint.y+roundf(half_distance/2);j++)
 		{
 			calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
 			if(calc_distance < half_distance)
@@ -499,7 +495,7 @@ void MainCumber::stopSpringCumber()
 	//		if(t_chapter_number == 1 && t_stage_number == 1)		((CCSprite*)cumberImg->getChildren()->objectAtIndex(0))->setColor(ccWHITE);
 	//		else if(t_chapter_number == 11)							((CCSprite*)cumberImg->getChildren()->objectAtIndex(0))->setColor(ccWHITE);
 	//		else if(t_chapter_number == 16)							my_eye->setColor(ccWHITE);
-	myGD->setMainCumberPoint(IntPoint((getPositionX()-1)/pixelSize+1,(getPositionY()-1)/pixelSize+1));
+	myGD->setMainCumberPoint(IntPoint::convertToIntPoint(getPosition()));
 	unschedule(schedule_selector(MainCumber::springCumber));
 }
 
@@ -536,7 +532,7 @@ void MainCumber::furyModeOn()
 	if(!isFuryMode)
 	{
 		IntPoint jackPoint = myGD->getJackPoint();
-		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
+		CCPoint jackPosition = jackPoint.convertToCCP();
 		CCPoint subPosition = ccpSub(jackPosition, getPosition());
 		
 		dash_angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
@@ -668,71 +664,63 @@ void MainCumber::smaller()
 
 void MainCumber::changePosition()
 {
-	//		bool changable_map[162][217] = {0,};
-	//
-	//		queue<IntMoveState> checking_queue;
-	//
-	//		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
-	//		{
-	//			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
-	//			{
-	//
-	//			}
-	//		}
-	//
-	//
-	//
-	//
-	
 	IntPoint afterPoint;
 	bool isFound = false;
-	for(int i=0;i<before_points.size() && !isFound;i++)
-	{
-		afterPoint = before_points[i];
+	
+	int check_loop_cnt = 0;
 		
-		if(afterPoint.isInnerMap())
+	while(!isFound)
+	{
+		check_loop_cnt++;
+		if(check_loop_cnt > 100)
 		{
-			float half_distance = 20.f*myScale; // 20.f : radius for base scale 1.f
-			float calc_distance;
-			IntPoint check_position;
-			
-			bool is_not_position = false;
-			
-			for(int i=afterPoint.x-half_distance/2;i<=afterPoint.x+half_distance/2 && !is_not_position;i++)
+			myScale -= 0.05f;
+			if(myScale < minScale)
 			{
-				for(int j=afterPoint.y-half_distance/2;j<=afterPoint.y+half_distance/2 && !is_not_position;j++)
+				myScale = minScale;
+				
+				int key_array[100] = {0,};
+				for(int i=0;i<before_points.size();i++)
+					key_array[i] = i;
+				
+				random_shuffle(key_array, key_array+before_points.size());
+				
+				for(int i=0;i<before_points.size() && !isFound;i++)
 				{
-					calc_distance = sqrtf(powf((afterPoint.x - i)*pixelSize,2) + powf((afterPoint.y - j)*pixelSize, 2));
-					if(calc_distance < half_distance)
+					afterPoint = before_points[key_array[i]];
+					
+					if(afterPoint.isInnerMap())
 					{
-						check_position = IntPoint(i,j);
-						if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
+						float half_distance = 20.f*myScale; // 20.f : radius for base scale 1.f
+						float calc_distance;
+						IntPoint check_position;
+						
+						bool is_not_position = false;
+						
+						for(int i=afterPoint.x-roundf(half_distance/2);i<=afterPoint.x+roundf(half_distance/2) && !is_not_position;i++)
 						{
-							is_not_position = true;
+							for(int j=afterPoint.y-roundf(half_distance/2);j<=afterPoint.y+roundf(half_distance/2) && !is_not_position;j++)
+							{
+								calc_distance = sqrtf(powf((afterPoint.x - i)*pixelSize,2) + powf((afterPoint.y - j)*pixelSize, 2));
+								if(calc_distance < half_distance)
+								{
+									check_position = IntPoint(i,j);
+									if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
+									{
+										is_not_position = true;
+									}
+								}
+							}
+						}
+						if(!is_not_position)
+						{
+							isFound = true;
 						}
 					}
 				}
-			}
-			if(!is_not_position)
-			{
-				isFound = true;
-			}
-		}
-	}
-	
-	if(!isFound)
-	{
-		int check_loop_cnt = 0;
-		
-		while(!isFound)
-		{
-			check_loop_cnt++;
-			if(check_loop_cnt > 100)
-			{
-				myScale -= 0.05f;
-				if(myScale < minScale)
+				
+				if(!isFound)
 				{
-					myScale = minScale;
 					vector<IntPoint> searched_points;
 					
 					float calc_distance;
@@ -741,21 +729,21 @@ void MainCumber::changePosition()
 					
 					int searched_cnt = 0;
 					int loop_cnt = 0;
-					for(int i=mapWidthInnerBegin+10.f*myScale;i<mapWidthInnerEnd-10.f*myScale;i++)
+					for(int i=mapWidthInnerBegin+roundf(10.f*myScale);i<mapWidthInnerEnd-roundf(10.f*myScale);i++)
 					{
-						for(int j=mapHeightInnerBegin+10.f*myScale;j<mapHeightInnerEnd-10.f*myScale;j++)
+						for(int j=mapHeightInnerBegin+roundf(10.f*myScale);j<mapHeightInnerEnd-roundf(10.f*myScale);j++)
 						{
 							IntPoint target_point = IntPoint(i,j);
 							if(myGD->mapState[target_point.x][target_point.y] == mapEmpty &&
-							   myGD->mapState[int(target_point.x-10.f*myScale)][target_point.y] == mapEmpty &&
-							   myGD->mapState[int(target_point.x+10.f*myScale)][target_point.y] == mapEmpty &&
-							   myGD->mapState[target_point.x][int(target_point.y-10.f*myScale)] == mapEmpty &&
-							   myGD->mapState[target_point.x][int(target_point.y+10.f*myScale)] == mapEmpty)
+							   myGD->mapState[int(target_point.x-roundf(10.f*myScale))][target_point.y] == mapEmpty &&
+							   myGD->mapState[int(target_point.x+roundf(10.f*myScale))][target_point.y] == mapEmpty &&
+							   myGD->mapState[target_point.x][int(target_point.y-roundf(10.f*myScale))] == mapEmpty &&
+							   myGD->mapState[target_point.x][int(target_point.y+roundf(10.f*myScale))] == mapEmpty)
 							{
 								is_not_position = false;
-								for(int k=target_point.x-10.f*myScale;k<=target_point.x+10.f*myScale && !is_not_position;k++)
+								for(int k=target_point.x-roundf(10.f*myScale);k<=target_point.x+roundf(10.f*myScale) && !is_not_position;k++)
 								{
-									for(int l=target_point.y-10.f*myScale;l<=target_point.y+10.f*myScale && !is_not_position;l++)
+									for(int l=target_point.y-roundf(10.f*myScale);l<=target_point.y+roundf(10.f*myScale) && !is_not_position;l++)
 									{
 										loop_cnt++;
 										calc_distance = sqrtf(powf((target_point.x - k)*pixelSize,2) + powf((target_point.y - l)*pixelSize, 2));
@@ -777,50 +765,50 @@ void MainCumber::changePosition()
 					afterPoint.x = searched_points[random_value].x;
 					afterPoint.y = searched_points[random_value].y;
 					isFound = true;
-					
-					CCScaleTo* t_scale = CCScaleTo::create(0.5f, myScale);
-					cumberImg->runAction(t_scale);
-					
-					break;
 				}
 				
 				CCScaleTo* t_scale = CCScaleTo::create(0.5f, myScale);
 				cumberImg->runAction(t_scale);
 				
-				check_loop_cnt = 0;
-				//				AlertEngine::sharedInstance()->addSingleAlert("error", "changePosition infinity loop", "ok", 1, this, alertfuncII_selector(MainCumber::alertAction));
+				break;
 			}
 			
-			afterPoint.x = rand()%int(mapWidthInnerEnd-1-10.f*myScale)+1+10.f*myScale;
-			afterPoint.y = rand()%int(mapHeightInnerEnd-1-10.f*myScale)+1+10.f*myScale;
+			CCScaleTo* t_scale = CCScaleTo::create(0.5f, myScale);
+			cumberImg->runAction(t_scale);
 			
-			if(afterPoint.isInnerMap())
+			check_loop_cnt = 0;
+			//				AlertEngine::sharedInstance()->addSingleAlert("error", "changePosition infinity loop", "ok", 1, this, alertfuncII_selector(MainCumber::alertAction));
+		}
+		
+		afterPoint.x = rand()%int(mapWidthInnerEnd-1-roundf(10.f*myScale))+1+roundf(10.f*myScale);
+		afterPoint.y = rand()%int(mapHeightInnerEnd-1-roundf(10.f*myScale))+1+roundf(10.f*myScale);
+		
+		if(afterPoint.isInnerMap())
+		{
+			float half_distance = 20.f*myScale; // 20.f : radius for base scale 1.f
+			float calc_distance;
+			IntPoint check_position;
+			
+			bool is_not_position = false;
+			
+			for(int i=afterPoint.x-roundf(half_distance/2);i<=afterPoint.x+roundf(half_distance/2) && !is_not_position;i++)
 			{
-				float half_distance = 20.f*myScale; // 20.f : radius for base scale 1.f
-				float calc_distance;
-				IntPoint check_position;
-				
-				bool is_not_position = false;
-				
-				for(int i=afterPoint.x-half_distance/2;i<=afterPoint.x+half_distance/2 && !is_not_position;i++)
+				for(int j=afterPoint.y-roundf(half_distance/2);j<=afterPoint.y+roundf(half_distance/2) && !is_not_position;j++)
 				{
-					for(int j=afterPoint.y-half_distance/2;j<=afterPoint.y+half_distance/2 && !is_not_position;j++)
+					calc_distance = sqrtf(powf((afterPoint.x - i)*pixelSize,2) + powf((afterPoint.y - j)*pixelSize, 2));
+					if(calc_distance < half_distance)
 					{
-						calc_distance = sqrtf(powf((afterPoint.x - i)*pixelSize,2) + powf((afterPoint.y - j)*pixelSize, 2));
-						if(calc_distance < half_distance)
+						check_position = IntPoint(i,j);
+						if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
 						{
-							check_position = IntPoint(i,j);
-							if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
-							{
-								is_not_position = true;
-							}
+							is_not_position = true;
 						}
 					}
 				}
-				if(!is_not_position)
-				{
-					isFound = true;
-				}
+			}
+			if(!is_not_position)
+			{
+				isFound = true;
 			}
 		}
 	}
@@ -842,8 +830,8 @@ void MainCumber::lightSmaller()
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainCumber::endTeleport));
 	
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-	
-	teleportImg->runAction(t_seq);
+	if(teleportImg)
+		teleportImg->runAction(t_seq);
 }
 
 void MainCumber::endTeleport()
@@ -1057,13 +1045,8 @@ void MainCumber::springCumber()
 	
 	movePosition = ccpAdd(getPosition(), movePosition);
 	
-	IntPoint movePoint;
-	movePoint.x = int(roundf((movePosition.x-1)/pixelSize + 1.f));
-	movePoint.y = int(roundf((movePosition.y-1)/pixelSize + 1.f));
-	
-	IntPoint half_movePoint;
-	half_movePoint.x = int(roundf(((movePosition.x-getPositionX())/2.f+getPositionX()-1)/pixelSize + 1.f));
-	half_movePoint.y = int(roundf(((movePosition.y-getPositionY())/2.f+getPositionY()-1)/pixelSize + 1.f));
+	IntPoint movePoint = IntPoint::convertToIntPoint(movePosition);
+	IntPoint half_movePoint = IntPoint::convertToIntPoint(ccpSub(movePosition, getPosition()));
 	
 	if(movePosition.x < 20.f*myScale || movePosition.x > 320-20.f*myScale || movePosition.y < 20.f*myScale || movePosition.y > 430-20.f*myScale || !movePoint.isInnerMap() ||
 	   myGD->mapState[movePoint.x][movePoint.y] != mapEmpty || myGD->mapState[half_movePoint.x][half_movePoint.y] != mapEmpty)
@@ -1081,9 +1064,9 @@ void MainCumber::springCumber()
 		
 		bool is_not_position = false;
 		
-		for(int i=movePoint.x-half_distance/2;i<=movePoint.x+half_distance/2 && !is_not_position;i++)
+		for(int i=movePoint.x-roundf(half_distance/2);i<=movePoint.x+roundf(half_distance/2) && !is_not_position;i++)
 		{
-			for(int j=movePoint.y-half_distance/2;j<=movePoint.y+half_distance/2 && !is_not_position;j++)
+			for(int j=movePoint.y-roundf(half_distance/2);j<=movePoint.y+roundf(half_distance/2) && !is_not_position;j++)
 			{
 				calc_distance = sqrtf(powf((movePoint.x - i)*pixelSize,2) + powf((movePoint.y - j)*pixelSize, 2));
 				if(calc_distance < half_distance)
@@ -1289,9 +1272,9 @@ void MainCumber::myInit()
 			
 			bool is_not_position = false;
 			
-			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
+			for(int i=mapPoint.x-roundf(half_distance/2);i<=mapPoint.x+roundf(half_distance/2) && !is_not_position;i++)
 			{
-				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
+				for(int j=mapPoint.y-roundf(half_distance/2);j<=mapPoint.y+roundf(half_distance/2) && !is_not_position;j++)
 				{
 					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
 					if(calc_distance < half_distance)
@@ -1313,7 +1296,7 @@ void MainCumber::myInit()
 	
 	myGD->setMainCumberPoint(mapPoint);
 	
-	setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
+	setPosition(mapPoint.convertToCCP());
 	
 	int input_change_angle = -10;
 	for(int i=0;i<360;i++)

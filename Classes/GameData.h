@@ -187,6 +187,16 @@ public:
 		y = t_y;
 	}
 	
+	static IntPoint convertToIntPoint(CCPoint t_p)
+	{
+		return IntPoint(roundf((t_p.x-1)/pixelSize+1), roundf((t_p.y-1)/pixelSize+1));
+	}
+	
+	CCPoint convertToCCP()
+	{
+		return ccp((x-1.f)*pixelSize+1.f, (y-1.f)*pixelSize+1.f);
+	}
+	
 	bool isInnerMap()
 	{
 		if(x >= mapWidthInnerBegin && x < mapWidthInnerEnd && y >= mapHeightInnerBegin && y < mapHeightInnerEnd)
@@ -403,12 +413,6 @@ public:
 		otherTargetPoints->removeAllObjects();
 		
 		target_Main = NULL;
-
-
-		
-		
-		
-		
 		
 		for(int i=mapWidthOutlineBegin;i<mapWidthOutlineEnd;i++)
 		{
@@ -424,7 +428,6 @@ public:
 	
 	void changeJackBaseSpeed(float t_s)
 	{
-		
 		jack_base_speed = t_s;
 		F_V["Jack_getSpeedUpValue"]();
 		F_V["Jack_getAlphaSpeed"]();
@@ -911,6 +914,11 @@ public:
 	}
 	
 	float jack_base_speed;
+	
+	void initUserSelectedStartRect(IntRect t_rect)
+	{
+		setInitRect(t_rect.origin, t_rect.size);
+	}
 	
 private:
 	

@@ -35,37 +35,12 @@ bool Maingame::init()
 	
 	setKeypadEnabled(true);
 	
-//	TempAd* temp_ad = TempAd::create();
-//	addChild(temp_ad, 9999);
-	
-//	resetTouchBeganPoint();
-	
-//	isStun = false;
 	isCheckingBacking = false;
+	
+	init_state = kMIS_beforeInit;
 	
 	myGD = GameData::sharedGameData();
 	myDSH = DataStorageHub::sharedInstance();
-	
-//	device_rate = myDSH->getDeviceRate();
-	
-//	myGD->regMain(this, callfunc_selector(Maingame::startBackTracking),
-//				  callfunc_selector(Maingame::allStopSchedule),
-//				  callfunc_selector(Maingame::gameover),
-//				  callfunc_selector(Maingame::touchEnd),
-//				  callfunc_selector(Maingame::touchOn),
-//				  callfunc_selector(Maingame::stunBackTracking),
-//				  callfunc_selector(Maingame::startSpecialAttack),
-//				  callfunc_selector(Maingame::stopSpecialAttack),
-//				  callfuncCCp_selector(Maingame::moveGamePosition),
-//				  callfuncCCpI_selector(Maingame::goldGettingEffect),
-//				  callfuncFBCCp_selector(Maingame::percentageGettingEffect),
-//				  callfuncIp_selector(Maingame::showLineDiePosition),
-//				  callfunc_selector(Maingame::resetIsLineDie),
-//				  callfuncI_selector(Maingame::showWarning),
-//				  callfunc_selector(Maingame::showCoin),
-//				  callfunc_selector(Maingame::startExchange),
-//				  callfunc_selector(Maingame::showTakeCoin),
-//				  callfunc_selector(Maingame::showChangeCard));
 	
 	myGD->V_V["Main_startBackTracking"] = std::bind(&Maingame::startBackTracking, this);
 	myGD->V_V["Main_allStopSchedule"] = std::bind(&Maingame::allStopSchedule, this);
@@ -87,9 +62,8 @@ bool Maingame::init()
 	myGD->V_V["Main_showTakeCoin"] = std::bind(&Maingame::showTakeCoin, this);
 	myGD->V_V["Main_showChangeCard"] = std::bind(&Maingame::showChangeCard, this);
 	
-	
-	myGD->initStartRect();
-
+	mControl = NULL;
+	is_line_die = false;
 	
 	game_node = CCNode::create();
 	game_node->setScale(1.5f);
@@ -98,50 +72,74 @@ bool Maingame::init()
 	myMS = MapScanner::create();
 	game_node->addChild(myMS, myMSZorder);
 	
+	return true;
+}
+
+void Maingame::onEnter()
+{
+	init_state = kMIS_movingGameNode;
+	
+	setTouchEnabled(true);
+	
+	CCLayer::onEnter();
+	
+	gamenode_moving_direction = kGNMD_up;
+	
+	touch_img = CCSprite::create("touch_before_start.png");
+	touch_img->setPosition(ccp(240,160+myDSH->ui_height_center_control));
+	addChild(touch_img, myPMZorder);
+	
+	CCFadeTo* fade1 = CCFadeTo::create(1.f, 0);
+	CCFadeTo* fade2 = CCFadeTo::create(1.f, 255);
+	CCDelayTime* delay1 = CCDelayTime::create(0.3f);
+	CCRepeatForever* repeat1 = CCRepeatForever::create(CCSequence::create(fade1, fade2, delay1, NULL));
+	
+	touch_img->runAction(repeat1);
+	
+	schedule(schedule_selector(Maingame::movingGameNode));
+}
+
+void Maingame::movingGameNode()
+{
+	CCPoint after_position = ccpAdd(game_node->getPosition(), ccp(0,gamenode_moving_direction*4));
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	
+	if(after_position.y < -430*game_node->getScale()+480*screen_size.height/screen_size.width)
+	{
+		after_position.y = -430*game_node->getScale()+480*screen_size.height/screen_size.width;
+		gamenode_moving_direction = kGNMD_down;
+	}
+	else if(after_position.y > 0)
+	{
+		after_position.y = 0;
+		gamenode_moving_direction = kGNMD_up;
+	}
+	game_node->setPosition(after_position);
+}
+
+void Maingame::randomingRectView()
+{
+	if(ignore_cnt < 10)
+		ignore_cnt++;
+	
+	myMS->randomingRectView(game_node->getPosition());
+	
+	if(ignore_cnt >= 10 && ignore_cnt <= 15)
+	{
+		setTouchEnabled(true);
+		ignore_cnt = 20;
+	}
+}
+
+void Maingame::finalSetting()
+{
+	init_state = kMIS_startGame;
+	
+//	myGD->initStartRect();
+	
 	myPM = PathManager::create();
 	game_node->addChild(myPM, myPMZorder);
-	
-//	int missile_type = myDSH->getIntegerForKey(kDSH_Key_lastSelectedElement);
-//	if(missile_type == kMyElementalWind)
-//	{
-//		WindItem* t_wi = WindItem::create();
-//		game_node->addChild(t_wi, attackItemZorder);
-//		t_wi->startCast();
-//	}
-//	else if(missile_type == kMyElementalLightning)
-//	{
-//		LightningItem* t_li = LightningItem::create();
-//		game_node->addChild(t_li, attackItemZorder);
-//		t_li->startCast();
-//	}
-//	else if(missile_type == kMyElementalLife)
-//	{
-//		LifeItem* t_li = LifeItem::create();
-//		game_node->addChild(t_li, attackItemZorder);
-//		t_li->startCast();
-//	}
-//	else if(missile_type == kMyElementalWater)
-//	{
-//		IceItem* t_ii = IceItem::create();
-//		game_node->addChild(t_ii, attackItemZorder);
-//		t_ii->startCast();
-//	}
-//	else if(missile_type == kMyElementalFire)
-//	{
-//		FireItem* t_fi = FireItem::create();
-//		game_node->addChild(t_fi, attackItemZorder);
-//		t_fi->startCast();
-//	}
-//	else if(missile_type == kMyElementalPlasma)
-//	{
-//		PlasmaItem* t_pi = PlasmaItem::create();
-//		game_node->addChild(t_pi, attackItemZorder);
-//		t_pi->startCast();
-//	}
-//	
-//	FastItem* fast_i = FastItem::create();
-//	game_node->addChild(fast_i, attackItemZorder);
-//	fast_i->startCast();
 	
 	myGIM = GameItemManager::create();
 	game_node->addChild(myGIM, attackItemZorder);
@@ -151,6 +149,7 @@ bool Maingame::init()
 	
 	myJack = Jack::create();
 	game_node->addChild(myJack, myJackZorder);
+	myJack->initStartPosition(game_node->getPosition());
 	
 	myUI = PlayUI::create();
 	addChild(myUI, myUIZorder);
@@ -161,78 +160,17 @@ bool Maingame::init()
 	
 	myMS->scanMap();
 	
-	mControl = NULL;
-	
-	is_line_die = false;
-	
 	myUI->setControlTD(this, callfunc_selector(Maingame::setControlGesture), callfunc_selector(Maingame::setControlButton), callfunc_selector(Maingame::setControlJoystick), callfunc_selector(Maingame::startControl));
-	
-//	setScale(MY_SCALE_RATE);
-	
-//	ScreenSide* t_screen = ScreenSide::create();
-//	addChild(t_screen, 99999);
-
-	return true;
-}
-
-void Maingame::onEnter()
-{
-//	setTouchEnabled(false);
-	CCLayer::onEnter();
-	
-//	AudioEngine::sharedInstance()->playEffect("sound_shuttermove_start.m4a", false);
-	
-	
-//	top_shutter = CCSprite::create("loading_top.png");
-//	top_shutter->setAnchorPoint(ccp(0.5,0));
-//	top_shutter->setPosition(ccp(160,240));
-//	addChild(top_shutter, shutterZorder);
-//	
-//	CCMoveTo* bottom_move = CCMoveTo::create(0.5f, ccp(160,-10));
-//	CCMoveTo* top_move = CCMoveTo::create(0.5f, ccp(160,490));
-//	CCCallFunc* top_call = CCCallFunc::create(this, callfunc_selector(Maingame::startScene));
-//	CCSequence* top_seq = CCSequence::createWithTwoActions(top_move, top_call);
-//	
-//	bottom_shutter->runAction(bottom_move);
-//	top_shutter->runAction(top_seq);
 	
 	startScene();
 }
 
 void Maingame::startScene()
 {
-//	bottom_shutter->removeFromParentAndCleanup(true);
-//	top_shutter->removeFromParentAndCleanup(true);
-	
 	AudioEngine::sharedInstance()->playSound("sound_back_maingame.mp3", true);
 	AudioEngine::sharedInstance()->preloadEffectScene("Maingame");
 	
-//	ControlType recent_type = ControlType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedControler));
-//	if(recent_type == kControlType_unsetted)
-//	{
-//		recent_type = kControlType_joystick_button;
-//		myDSH->setIntegerForKey(kDSH_Key_lastSelectedControler, kControlType_joystick_button);
-//		myDSH->setIntegerForKey(kDSH_Key_controlOriginX, 280);
-//		myDSH->setIntegerForKey(kDSH_Key_controlOriginY, 160);
-//		myUI->showPause();
-//	}
-//	else if(!myDSH->getBoolForKey(kDSH_Key_checkedNewControlJoystick))
-//	{
-//		myUI->showPause();
-//	}
-//	
-//	if(recent_type == kControlType_gesture)
-//	{
-//		setControlGesture();
-//	}
-//	else if(recent_type == kControlType_button)
-//	{
-//		setControlButton();
-//	}
-//	else if(recent_type == kControlType_joystick_button)
-//	{
-		setControlJoystickButton();
-//	}
+	setControlJoystickButton();
 	
 	startCounting();
 }
@@ -308,181 +246,44 @@ void Maingame::counting()
 	}
 }
 
-//#define minimumDistance	30.f
-//bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
-//{
-//	CCPoint location = pTouch->getLocationInView();
-//	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
-//	
-//	if(!myJack->willBackTracking &&
-//	   convertedLocation.y < 430 &&
-//	   convertedLocation.y > 0 &&
-//	   convertedLocation.x > 0 &&
-//	   convertedLocation.x < 320)
-//	{
-//		touch_began_point = convertedLocation;
-//	}
-//	
-//	return true;
-//}
-//
-//void Maingame::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
-//{
-//	if(!isSetTouchBeganPoint())
-//		return;
-//	
-//	CCPoint location = pTouch->getLocationInView();
-//	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
-//	
-//	// calc direction
-//	CCSize distanceSize = CCSizeMake(convertedLocation.x - touch_began_point.x, convertedLocation.y - touch_began_point.y);
-//	float distanceValue = sqrt(pow(distanceSize.width, 2.0) + pow(distanceSize.height, 2.0));
-//	float angle = atan2(distanceSize.height, distanceSize.width)/M_PI*180.0; // -180 ~ 180
-//	
-//	if(distanceValue > minimumDistance/device_rate*((is_gestured || (myJack->isDrawingOn && myJack->getRecentDirection() == directionStop)) ? 2 : 1.3))
-//	{
-//		IntDirection angleDirection;
-//		IntDirection secondDirection;
-//		
-//		IntPoint jackPoint = myGD->getJackPoint();
-//		
-//		if(angle < -135.f)
-//		{
-//			angleDirection = directionLeft;
-//			
-//			if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
-//			else												secondDirection = directionDown;
-//		}
-//		else if(angle < -90.f)
-//		{
-//			angleDirection = directionDown;
-//			
-//			if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
-//			else												secondDirection = directionLeft;
-//		}
-//		else if(angle < -45.f)
-//		{
-//			angleDirection = directionDown;
-//			
-//			if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
-//			else												secondDirection = directionRight;
-//		}
-//		else if(angle < 0.f)
-//		{
-//			angleDirection = directionRight;
-//			
-//			if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
-//			else												secondDirection = directionDown;
-//		}
-//		else if(angle < 45.f)
-//		{
-//			angleDirection = directionRight;
-//			
-//			if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
-//			else												secondDirection = directionUp;
-//		}
-//		else if(angle < 90.f)
-//		{
-//			angleDirection = directionUp;
-//			
-//			if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
-//			else												secondDirection = directionRight;
-//		}
-//		else if(angle < 135.f)
-//		{
-//			angleDirection = directionUp;
-//			
-//			if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
-//			else												secondDirection = directionLeft;
-//		}
-//		else
-//		{
-//			angleDirection = directionLeft;
-//			
-//			if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
-//			else												secondDirection = directionUp;
-//		}
-//		
-//		myJack->changeDirection(angleDirection, secondDirection);
-//		touch_began_point = convertedLocation;
-//		if(angleDirection != beforeGesture)
-//		{
-//			AudioEngine::sharedInstance()->playEffect("sound_jack_drawing.mp3", false);
-//			beforeGesture = angleDirection;
-//			if(is_gestured)
-//				gesture_cnt++;
-//		}
-//		is_gestured = true;
-////		resetTouchBeganPoint();
-//	}
-//}
+bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
+{
+	if(init_state == kMIS_movingGameNode)
+	{
+		unschedule(schedule_selector(Maingame::movingGameNode));
+		setTouchEnabled(false);
+		init_state = kMIS_randomRectView;
+		ignore_cnt = 0;
+		randomingRectView();
+		schedule(schedule_selector(Maingame::randomingRectView), 1.f/30.f);
+	}
+	else if(init_state == kMIS_randomRectView)
+	{
+		unschedule(schedule_selector(Maingame::randomingRectView));
+		myMS->stopRandomingRectView();
+		touch_img->removeFromParent();
+		init_state = kMIS_startGame;
+		setTouchEnabled(false);
+		finalSetting();
+	}
+	
+	return true;
+}
 
-//void Maingame::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
-//{
-//	if(!isSetTouchBeganPoint())
-//		return;
-//	
-//	if(!isStun)
-//	{
-//		if(!is_gestured)
-//		{
-//			if(myJack->isDrawingOn && myJack->getJackState() == jackStateDrawing)
-//			{
-//				if(myJack->getRecentDirection() == directionStop)
-//				{
-//					readyBackTracking();
-//				}
-//				else
-//				{
-//					myJack->changeDirection(directionStop, directionStop);
-//				}
-//			}
-//			else
-//			{
-//				myJack->changeDirection(directionStop, directionStop);
-//			}
-//		}
-//		else if(gesture_cnt > 0)
-//		{
-//			myJack->changeDirection(directionStop, directionStop);
-//		}
-//		
-//	}
-//	resetTouchBeganPoint();
-//}
-//
-//void Maingame::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
-//{
-//	if(!isSetTouchBeganPoint())
-//		return;
-//	
-//	if(!isStun)
-//	{
-//		if(!is_gestured)
-//		{
-//			if(myJack->isDrawingOn && myJack->getJackState() == jackStateDrawing)
-//			{
-//				if(myJack->getRecentDirection() == directionStop)
-//				{
-//					readyBackTracking();
-//				}
-//				else
-//				{
-//					myJack->changeDirection(directionStop, directionStop);
-//				}
-//			}
-//			else
-//			{
-//				myJack->changeDirection(directionStop, directionStop);
-//			}
-//		}
-//		else if(gesture_cnt > 0)
-//		{
-//			myJack->changeDirection(directionStop, directionStop);
-//		}
-//	}
-//	resetTouchBeganPoint();
-//}
+void Maingame::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
+{
+	
+}
+
+void Maingame::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+{
+	
+}
+
+void Maingame::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
+{
+	
+}
 
 void Maingame::backTracking()
 {
@@ -517,10 +318,10 @@ void Maingame::onExit()
 	CCLayer::onExit();
 }
 
-//void Maingame::registerWithTouchDispatcher()
-//{
-//	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -110, true);
-//}
+void Maingame::registerWithTouchDispatcher()
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -110, true);
+}
 
 void Maingame::alertAction(int t1, int t2)
 {

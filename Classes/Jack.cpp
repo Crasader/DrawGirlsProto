@@ -722,8 +722,8 @@ void Jack::moveTest()
 			{
 				if(before_x_cnt > 0)
 				{
-					if(before_x_direction == directionLeft)					before_x_direction = directionDown;
-					else if(before_x_direction == directionDown)			before_x_direction = directionLeft;
+					if(before_x_direction == directionLeft && afterPoint.y > mapHeightInnerBegin)		before_x_direction = directionDown;
+					else if(before_x_direction == directionDown && afterPoint.x > mapWidthInnerBegin)	before_x_direction = directionLeft;
 					
 					before_x_cnt = 0;
 				}
@@ -742,8 +742,8 @@ void Jack::moveTest()
 			{
 				if(before_x_cnt > 0)
 				{
-					if(before_x_direction == directionRight)				before_x_direction = directionDown;
-					else if(before_x_direction == directionDown)			before_x_direction = directionRight;
+					if(before_x_direction == directionRight && afterPoint.y > mapHeightInnerBegin)		before_x_direction = directionDown;
+					else if(before_x_direction == directionDown && afterPoint.x < mapWidthInnerEnd-1)	before_x_direction = directionRight;
 				
 					before_x_cnt = 0;
 				}
@@ -762,8 +762,8 @@ void Jack::moveTest()
 			{
 				if(before_x_cnt > 0)
 				{
-					if(before_x_direction == directionRight)				before_x_direction = directionUp;
-					else if(before_x_direction == directionUp)				before_x_direction = directionRight;
+					if(before_x_direction == directionRight && afterPoint.y < mapHeightInnerEnd-1)		before_x_direction = directionUp;
+					else if(before_x_direction == directionUp && afterPoint.x < mapWidthInnerEnd-1)				before_x_direction = directionRight;
 					
 					before_x_cnt = 0;
 				}
@@ -782,8 +782,8 @@ void Jack::moveTest()
 			{
 				if(before_x_cnt > 0)
 				{
-					if(before_x_direction == directionLeft)					before_x_direction = directionUp;
-					else if(before_x_direction == directionUp)				before_x_direction = directionLeft;
+					if(before_x_direction == directionLeft && afterPoint.y < mapHeightInnerEnd-1)		before_x_direction = directionUp;
+					else if(before_x_direction == directionUp && afterPoint.x > mapWidthInnerBegin)		before_x_direction = directionLeft;
 					
 					before_x_cnt = 0;
 				}

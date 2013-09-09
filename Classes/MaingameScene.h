@@ -24,7 +24,7 @@
 #include "ControlType.h"
 #include "ClearShowTime.h"
 #include "GameItemManager.h"
-//#include "ZoomScriptScene.h"
+#include "ZoomScriptScene.h"
 
 using namespace cocos2d;
 
@@ -43,6 +43,18 @@ enum Mainzorder{
 	mControlZorder,
 	particleZorder,
 	shutterZorder
+};
+
+enum MainInitState{
+	kMIS_beforeInit = 1,
+	kMIS_movingGameNode,
+	kMIS_randomRectView,
+	kMIS_startGame
+};
+
+enum GameNodeMovingDirection{
+	kGNMD_up = -1,
+	kGNMD_down = 1
 };
 
 class Maingame : public CCLayer
@@ -100,6 +112,7 @@ private:
 	CCSprite* keepTexture;
 	CCSprite* countingLabel;
 	CCSprite* condition_spr;
+	CCSprite* touch_img;
 	
 	GameItemManager* myGIM;
 	
@@ -108,33 +121,28 @@ private:
 	
 	ControlCommon* mControl;
 	
+	MainInitState init_state;
+	GameNodeMovingDirection gamenode_moving_direction;
+	
+	void movingGameNode();
+	int ignore_cnt;
+	void randomingRectView();
+	void finalSetting();
 	void startScene();
 	
 	void setControlGesture()
 	{
 		myGD->changeJackBaseSpeed(1.2f);
-		
-//		if(mControl)		mControl->removeFromParentAndCleanup(true);
-//		mControl = ControlOriginalGesture::create(this, callfunc_selector(Maingame::readyBackTracking), myJack);
-//		addChild(mControl, mControlZorder);
 	}
 	
 	void setControlButton()
 	{
 		myGD->changeJackBaseSpeed(1.5f);
-		
-//		if(mControl)		mControl->removeFromParentAndCleanup(true);
-//		mControl = ControlButtonSide::create(this, callfunc_selector(Maingame::readyBackTracking), myJack);
-//		addChild(mControl, mControlZorder);
 	}
 	
 	void setControlJoystick()
 	{
 		myGD->changeJackBaseSpeed(2.f);
-		
-//		if(mControl)		mControl->removeFromParentAndCleanup(true);
-//		mControl = ControlJoystick::create(this, callfunc_selector(Maingame::readyBackTracking), myJack);
-//		addChild(mControl, mControlZorder);
 	}
 	
 	void setControlJoystickButton()
@@ -167,47 +175,23 @@ private:
 	
 	int countingCnt;
 	
-//	float device_rate;
-	
 	void startCounting();
 	void counting();
 	
 	virtual void onEnter();
     virtual void onExit();
 	
-//	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
-//    virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
-//    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
-//    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent);
-//	
-//	virtual void registerWithTouchDispatcher(void);
+	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent);
+	
+	virtual void registerWithTouchDispatcher(void);
 	
 	virtual void keyBackClicked();
 	void alertAction(int t1, int t2);
 	
 	bool isCheckingBacking;
-//	bool isStun;
-//	
-//	CCPoint touch_began_point;
-//	bool is_gestured;
-//	int gesture_cnt;
-//	IntDirection beforeGesture;
-//	
-//	void resetTouchBeganPoint()
-//	{
-//		touch_began_point = ccp(-1.f, -1.f);
-//		is_gestured = false;
-//		gesture_cnt = 0;
-//		beforeGesture = directionStop;
-//	}
-//	
-//	bool isSetTouchBeganPoint()
-//	{
-//		if(touch_began_point.x < 0 || touch_began_point.y < 0)
-//			return false;
-//		else
-//			return true;
-//	}
 	
 	void checkingBacking()
 	{
@@ -372,28 +356,6 @@ private:
 	
 	void closeShutter()
 	{
-//		AudioEngine::sharedInstance()->playEffect("sound_shuttermove_start.m4a", false);
-		
-//		bottom_shutter = CCSprite::create("loading_bottom.png");
-//		bottom_shutter->setAnchorPoint(ccp(0.5,1));
-//		bottom_shutter->setPosition(ccp(160,-10));
-//		addChild(bottom_shutter, shutterZorder);
-		
-//		top_shutter = CCSprite::create("loading_top.png");
-//		top_shutter->setAnchorPoint(ccp(0.5,0));
-//		top_shutter->setPosition(ccp(160,490));
-//		addChild(top_shutter, shutterZorder);
-		
-//		CCMoveTo* bottom_move = CCMoveTo::create(0.5f, ccp(160,240));
-//		CCMoveTo* top_move = CCMoveTo::create(0.5f, ccp(160,240));
-//		CCCallFunc* top_sound = CCCallFunc::create(this, callfunc_selector(Maingame::shutterClosedSound));
-//		CCDelayTime* top_delay = CCDelayTime::create(0.1f);
-//		CCCallFunc* top_call = CCCallFunc::create(this, callfunc_selector(Maingame::endCloseShutter));
-//		CCAction* top_seq = CCSequence::create(top_move, top_sound, top_delay, top_call, NULL);
-//		
-//		bottom_shutter->runAction(bottom_move);
-//		top_shutter->runAction(top_seq);
-		
 		endCloseShutter();
 	}
 	
@@ -404,32 +366,24 @@ private:
 	
 	void endCloseShutter()
 	{
-//		bottom_shutter->removeFromParentAndCleanup(true);
-//		top_shutter->removeFromParentAndCleanup(true);
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionNoBorder);
-		
 		if(StarGoldData::sharedInstance()->getIsCleared())
-			CCDirector::sharedDirector()->replaceScene(ClearScene::scene());
+		{
+			CCDirector::sharedDirector()->replaceScene(ZoomScript::scene());
+		}
 		else
+		{
+			CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+			pEGLView->setDesignResolutionSize(480, 320, kResolutionNoBorder);
+			
 			CCDirector::sharedDirector()->replaceScene(FailScene::scene());
+		}
 	}
-	
-//	void changeJackSpeed()
-//	{
-////		int randValue = rand()%3;
-////		if(randValue == 0)			myJack->changeSpeed(jackSpeedSlow);
-////		else if(randValue == 1)		myJack->changeSpeed(jackSpeedNormal);
-////		else						myJack->changeSpeed(jackSpeedFast);
-//	}
 	
 	void moveGamePosition(CCPoint t_p)
 	{
-//		game_node->setPosition(ccp((280-t_p.x)*1.25f-70.f,(160-t_p.y)*1.25f-43.f));
-		
 		if(t_p.y < 70+DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f)
 			t_p.y = 70+DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f;
-		else if(t_p.y > 430-65+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f)//430-65
+		else if(t_p.y > 430-65+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f)
 			t_p.y = 430-65+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f;
 		game_node->setPosition(ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-t_p.y)*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base-DataStorageHub::sharedInstance()->ui_jack_center_control));
 	}

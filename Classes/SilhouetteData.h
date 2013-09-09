@@ -42,12 +42,12 @@ public:
 		return myType;
 	}
 	
+	string getScriptString(int level);
+	
 	void startSetting();
-	void startSetting1();
-	void startSetting2();
+	
 	void exchangeSilhouette();
-	void exchangeSilhouette1();
-	void exchangeSilhouette2();
+	
 	
 private:
 	int myType;
@@ -56,6 +56,14 @@ private:
 	{
 		
 	}
+	
+	void startSetting1();
+	void startSetting2();
+	void startSetting3();
+	
+	void exchangeSilhouette1();
+	void exchangeSilhouette2();
+	void exchangeSilhouette3();
 };
 
 #endif /* defined(__galsprototype__SilhouetteData__) */

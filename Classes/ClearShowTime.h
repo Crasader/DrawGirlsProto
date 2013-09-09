@@ -122,12 +122,10 @@ private:
 			CCMoveTo* t_move3 = CCMoveTo::create(1.f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-(430-102+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f))*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
 			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
 			
-//			StarGoldData::sharedInstance()->is_showtime = is_showtime;
-			
 			CCCallFunc* t_call;
-			if(is_showtime)
-				t_call = CCCallFunc::create(this, callfunc_selector(ClearShowTime::startShowTime));
-			else
+//			if(is_showtime)
+//				t_call = CCCallFunc::create(this, callfunc_selector(ClearShowTime::startShowTime));
+//			else
 				t_call = CCCallFunc::create(this, callfunc_selector(ClearShowTime::changeScene));
 			
 			CCAction* t_seq = CCSequence::create(t_move1, t_delay, t_move2, t_delay1, t_move3, t_delay2, t_call, NULL);
@@ -156,7 +154,7 @@ private:
 	
 	void loadedBack()
 	{
-		showtime_img = CCSprite::create(CCString::createWithFormat("hard%d_visible.png", silType)->getCString());
+		showtime_img = CCSprite::create(CCString::createWithFormat("stage%d_level3_visible.png", silType)->getCString());
 		showtime_img->setPosition(ccp(160,215));
 		addChild(showtime_img, kCST_Z_showtime);
 		
@@ -193,6 +191,9 @@ private:
 		target_changeScene = t_changeScene;
 		delegate_changeScene = d_changeScene;
 		
+		StarGoldData::sharedInstance()->is_exchanged = t_exchanged;
+		StarGoldData::sharedInstance()->is_showtime = is_showtime;
+		
 		view_rect = CCRectMake(0, 160+DataStorageHub::sharedInstance()->bottom_base, 480, 0);
 		
 		silType = SilhouetteData::sharedSilhouetteData()->getSilType();
@@ -200,9 +201,9 @@ private:
 		string ttt;
 		
 		if(t_exchanged)
-			ttt = CCString::createWithFormat("change%d_visible.png", silType)->getCString();
+			ttt = CCString::createWithFormat("stage%d_level2_visible.png", silType)->getCString();
 		else
-			ttt = CCString::createWithFormat("normal%d_visible.png", silType)->getCString();
+			ttt = CCString::createWithFormat("stage%d_level1_visible.png", silType)->getCString();
 		
 		clear_img = CCSprite::create(ttt.c_str());
 		clear_img->setPosition(ccp(160,215));

@@ -1121,7 +1121,7 @@ private:
 		
 		for(int i=0;i<jack_life;i++)
 		{
-			CCSprite* jack_img = CCSprite::create("jack.png");
+			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
 			jack_img->setPosition(ccp(100+i*20, 300+DataStorageHub::sharedInstance()->ui_top_control));
 			addChild(jack_img);
 			

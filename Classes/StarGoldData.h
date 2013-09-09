@@ -468,6 +468,7 @@ public:
 	bool is_before_title;
 	
 	bool is_showtime;
+	bool is_exchanged;
 	
 private:
 	CCLabelBMFont* star_label;

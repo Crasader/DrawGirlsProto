@@ -15,7 +15,8 @@
 
 typedef enum tMenuTagStartingScene{
 	kMT_SS_start = 1,
-	kMT_SS_event
+	kMT_SS_christmas,
+	kMT_SS_hospital
 }MenuTagStartingScene;
 
 typedef enum tZorderStartingScene{
@@ -61,16 +62,24 @@ bool StartingScene::init()
 	start_item->setTag(kMT_SS_start);
 	
 	CCMenu* start_menu = CCMenu::createWithItem(start_item);
-	start_menu->setPosition(ccp(240,120));
+	start_menu->setPosition(ccp(240,190));
 	addChild(start_menu, kZ_SS_menu);
 	
 	
-	CCMenuItem* event_item = CCMenuItemImage::create("start_event.png", "start_event.png", this, menu_selector(StartingScene::menuAction));
-	event_item->setTag(kMT_SS_event);
+	CCMenuItem* christmas_item = CCMenuItemImage::create("start_christmas.png", "start_chrestmas.png", this, menu_selector(StartingScene::menuAction));
+	christmas_item->setTag(kMT_SS_christmas);
 	
-	CCMenu* event_menu = CCMenu::createWithItem(event_item);
-	event_menu->setPosition(ccp(240,45));
-	addChild(event_menu, kZ_SS_menu);
+	CCMenu* christmas_menu = CCMenu::createWithItem(christmas_item);
+	christmas_menu->setPosition(ccp(240,120));
+	addChild(christmas_menu, kZ_SS_menu);
+	
+	
+	CCMenuItem* hospital_item = CCMenuItemImage::create("start_hospital.png", "start_hospital.png", this, menu_selector(StartingScene::menuAction));
+	hospital_item->setTag(kMT_SS_hospital);
+	
+	CCMenu* hospital_menu = CCMenu::createWithItem(hospital_item);
+	hospital_menu->setPosition(ccp(240,50));
+	addChild(hospital_menu, kZ_SS_menu);
 	
 	
 	is_menu_enable = true;
@@ -119,11 +128,23 @@ void StartingScene::menuAction(CCObject* pSender)
 		StarGoldData::sharedInstance()->setGameStart();
 		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 	}
-	else if(tag == kMT_SS_event)
+	else if(tag == kMT_SS_christmas)
 	{
 		is_menu_enable = false;
 		
 		SilhouetteData::sharedSilhouetteData()->setSilType(2);
+		
+		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+		
+		StarGoldData::sharedInstance()->setGameStart();
+		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+	}
+	else if(tag == kMT_SS_hospital)
+	{
+		is_menu_enable = false;
+		
+		SilhouetteData::sharedSilhouetteData()->setSilType(3);
 		
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);

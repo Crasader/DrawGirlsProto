@@ -970,6 +970,44 @@ public:
 		changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 	}
 	
+	void initStartPosition(CCPoint t_p)
+	{
+		int base_value = roundf(-t_p.y/3.f);
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_height = roundf(480*screen_size.height/screen_size.width/2.f);
+		
+		IntPoint checking_point = IntPoint(80,base_value+roundf(screen_height/3));
+		
+		int map_end_check_cnt = 0;
+		bool is_found = false;
+		for(int i=0;!is_found && map_end_check_cnt < 2;i++)
+		{
+			if(i%2 == 0)
+				checking_point.x -= i;
+			else
+				checking_point.x += i;
+			
+			if(!checking_point.isInnerMap())
+			{
+				map_end_check_cnt++;
+				continue;
+			}
+			
+			if(myGD->mapState[checking_point.x][checking_point.y] == mapOldline)
+			{
+				is_found = true;
+				myGD->setJackPoint(checking_point);
+				setPosition(ccp((checking_point.x-1)*pixelSize+1, (checking_point.y-1)*pixelSize+1));
+				break;
+			}
+		}
+		
+		if(!is_found)
+		{
+			CCLog("faskdhfn;asjbfv;kjqdhbf;kvuhqasdk;cn");
+		}
+	}
+	
 private:
 	CCSprite* touchPointSpr_byJoystick;
 	CCSprite* directionSpr_byJoystick;
@@ -1061,9 +1099,23 @@ private:
 				
 				isDie = false;
 				jackImg->removeFromParentAndCleanup(true);
-				jackImg = CCSprite::create("jack.png");
+				
+				CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+				
+				jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
 				jackImg->setScale(0.8f);
 				addChild(jackImg, kJackZ_main);
+				
+				CCAnimation* jack_animation = CCAnimation::create();
+				jack_animation->setDelayPerUnit(0.1f);
+				jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+				jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+				jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+				
+				CCAnimate* jack_animate = CCAnimate::create(jack_animation);
+				CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
+				jackImg->runAction(jack_repeat);
+
 				
 				setTouchPointByJoystick(CCPointZero, directionStop, true);
 				
@@ -1216,11 +1268,25 @@ private:
 		
 		myState = jackStateNormal;
 		afterState = jackStateNormal;
-		jackImg = CCSprite::create("jack.png");
+		
+		CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+		
+		jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
 		jackImg->setScale(0.8f);
 		addChild(jackImg, kJackZ_main);
 		
-		jack_drawing = CCSprite::create("jack_drawing.png");
+		CCAnimation* jack_animation = CCAnimation::create();
+		jack_animation->setDelayPerUnit(0.1f);
+		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+		
+		CCAnimate* jack_animate = CCAnimate::create(jack_animation);
+		CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
+		jackImg->runAction(jack_repeat);
+		
+		
+		jack_drawing = CCSprite::create("jack.png"); // jack_drawing.png
 		jack_drawing->setScale(0.8f);
 		jack_drawing->setVisible(false);
 		addChild(jack_drawing, kJackZ_defaultBarrier);
@@ -1246,7 +1312,7 @@ private:
 			jack_barrier->runAction(t_repeat);
 //		}
 		
-		setStartPosition();
+//		setStartPosition();
 	}
 	
 	void setStartPosition()

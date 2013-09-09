@@ -620,7 +620,7 @@ public:
 			invisibleImg = NULL;
 		}
 		
-		invisibleImg = InvisibleSprite::create(CCString::createWithFormat("change%d_invisible.png",silType)->getCString(), false);
+		invisibleImg = InvisibleSprite::create(CCString::createWithFormat("stage%d_level2_invisible.png",silType)->getCString(), false);
 		invisibleImg->setPosition(CCPointZero);
 		addChild(invisibleImg, invisibleZorder);
 		
@@ -633,7 +633,7 @@ public:
 			visibleImg = NULL;
 		}
 		
-		visibleImg = VisibleParent::create(CCString::createWithFormat("change%d_visible.png",silType)->getCString(), false);
+		visibleImg = VisibleParent::create(CCString::createWithFormat("stage%d_level2_visible.png",silType)->getCString(), false);
 		visibleImg->setPosition(CCPointZero);
 		addChild(visibleImg, visibleZorder);
 		
@@ -644,14 +644,57 @@ public:
 		scanMap();
 	}
 	
+	void randomingRectView(CCPoint t_p)
+	{
+		if(my_tic_toc)
+			AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", false);
+		
+		my_tic_toc = !my_tic_toc;
+		
+		int base_value = roundf(-t_p.y/3.f);
+		
+		init_rect.size.width = rand()%(50-20 + 1) + 20;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
+		init_rect.size.height = rand()%(50-20 + 1) + 20;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
+		
+		IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
+		
+		init_rect.origin.x = rand()%maxPoint.x+10;//mapWidthInnerBegin+10;
+		init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/3)-init_rect.size.height+1;
+		
+		if(!random_rect_img)
+		{
+			random_rect_img = CCSprite::create("whitePaper.png");
+			random_rect_img->setColor(ccGRAY);
+			addChild(random_rect_img, blockZorder);
+		}
+		
+		random_rect_img->setTextureRect(CCRectMake(0, 0, init_rect.size.width*2.f, init_rect.size.height*2.f));
+		random_rect_img->setPosition(ccp(init_rect.origin.x*pixelSize + init_rect.size.width, init_rect.origin.y*pixelSize-1 + init_rect.size.height));
+	}
+	
+	void stopRandomingRectView()
+	{
+		random_rect_img->removeFromParentAndCleanup(true);
+//		init_rect.origin.x -= mapWidthInnerBegin;
+//		init_rect.origin.y -= mapHeightInnerBegin;
+		myGD->initUserSelectedStartRect(init_rect);
+	}
+	
 private:
 	InvisibleSprite* invisibleImg;
 	VisibleParent* visibleImg;
+	CCSprite* random_rect_img;
 //	VisibleSprite* visibleImg;
 	CCNode* blockParent;
 	GameData* myGD;
 	DataStorageHub* myDSH;
 	int silType;
+	
+	IntRect init_rect;
+	CCSize screen_size;
+	int screen_height;
+	
+	bool my_tic_toc;
 	
 	CCObject* start_target;
 	SEL_CallFunc start_delegate;
@@ -689,7 +732,7 @@ private:
 	{
 		BackFilename r_value;
 		
-		r_value.filename = CCString::createWithFormat("normal%d_visible.png", silType)->getCString();
+		r_value.filename = CCString::createWithFormat("stage%d_level1_visible.png", silType)->getCString();
 		r_value.isPattern = false;
 		
 //		if(worldMap <= 20)
@@ -761,7 +804,7 @@ private:
 	{
 		BackFilename r_value;
 		
-		r_value.filename = CCString::createWithFormat("normal%d_invisible.png", silType)->getCString();
+		r_value.filename = CCString::createWithFormat("stage%d_level1_invisible.png", silType)->getCString();
 		r_value.isPattern = false;
 		
 //		if(worldMap <= 20)
@@ -899,8 +942,12 @@ private:
 		myDSH = DataStorageHub::sharedInstance();
 		mySD = SilhouetteData::sharedSilhouetteData();
 		
+		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		screen_height = roundf(480*screen_size.height/screen_size.width/2.f);
+		
 		silType = mySD->getSilType();
 		
+		random_rect_img = NULL;
 		invisibleImg = NULL;
 		visibleImg = NULL;
 		blockParent = NULL;
