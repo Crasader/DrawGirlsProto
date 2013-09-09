@@ -60,10 +60,12 @@ private:
 	void startSetting1();
 	void startSetting2();
 	void startSetting3();
+	void startSetting4();
 	
 	void exchangeSilhouette1();
 	void exchangeSilhouette2();
 	void exchangeSilhouette3();
+	void exchangeSilhouette4();
 };
 
 #endif /* defined(__galsprototype__SilhouetteData__) */

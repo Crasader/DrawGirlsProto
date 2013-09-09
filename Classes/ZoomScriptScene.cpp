@@ -214,9 +214,9 @@ void ZoomScript::showtimeSecondAction()
 	showtime_back->removeFromParentAndCleanup(true);
 	
 	CCDelayTime* delay1 = CCDelayTime::create(0.5f);
-	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
+	CCMoveTo* move1 = CCMoveTo::create(1.3f, ccp(0,0));
 	CCDelayTime* delay2 = CCDelayTime::create(1.f);
-	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+	CCMoveTo* move2 = CCMoveTo::create(1.3f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
 	CCDelayTime* delay3 = CCDelayTime::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeThirdAction));
 	
@@ -265,22 +265,39 @@ void ZoomScript::moveListXY(CCPoint t_p)
 	script_label->setVisible(false);
 	script_case->setVisible(false);
 	
+	if(t_p.x > ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale())		t_p.x = ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale();
+	if(t_p.x < -ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale())		t_p.x = -ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale();
+	
 	if(t_p.y > ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale())		t_p.y = ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale();
 	if(t_p.y < -ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale())		t_p.y = -ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale();
 	
 	CCPoint a_p = ccpSub(game_node->getPosition(), t_p);
+	
+	if(game_node->getScale() <= 1.5f)
+		a_p.x = (480.f-320.f*game_node->getScale())/2.f;
+	else
+	{
+		if(a_p.x > 0)
+			a_p.x = 0;
+		else if(a_p.x < 480-320*game_node->getScale())
+			a_p.x = 480-320*game_node->getScale();
+	}
 	
 	if(a_p.y > 0)
 		a_p.y = 0;
 	if(a_p.y < -430*game_node->getScale()+480*screen_size.height/screen_size.width)
 		a_p.y = -430*game_node->getScale()+480*screen_size.height/screen_size.width;
 	
-	game_node->setPositionY(a_p.y);
+	game_node->setPosition(a_p);
 }
 
 void ZoomScript::moveAnimation()
 {
 	isAnimated = true;
+	
+	if(moveSpeed_p.x >= ZS_SCROLL_SPEED_DECEASE_BASE/game_node->getScale())			moveSpeed_p.x -= ZS_SCROLL_SPEED_DECEASE_BASE/game_node->getScale();
+	else if(moveSpeed_p.x <= -ZS_SCROLL_SPEED_DECEASE_BASE/game_node->getScale())	moveSpeed_p.x += ZS_SCROLL_SPEED_DECEASE_BASE/game_node->getScale();
+	else							moveSpeed_p.x = 0;
 	
 	if(moveSpeed_p.y >= ZS_SCROLL_SPEED_DECEASE_BASE/game_node->getScale())			moveSpeed_p.y -= ZS_SCROLL_SPEED_DECEASE_BASE/game_node->getScale();
 	else if(moveSpeed_p.y <= ZS_SCROLL_SPEED_DECEASE_BASE/game_node->getScale())	moveSpeed_p.y += ZS_SCROLL_SPEED_DECEASE_BASE/game_node->getScale();

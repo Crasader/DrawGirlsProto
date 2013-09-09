@@ -221,18 +221,38 @@ private:
 					script_label->setVisible(false);
 					script_case->setVisible(false);
 					
+					float before_scale = game_node->getScale();
+					
 					float changed_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
 					float after_scale = game_node->getScale()*changed_distance/zoom_base_distance;
-					if(after_scale > 1.5f)			after_scale = 1.5f;
+					if(after_scale > 2.f)			after_scale = 2.f;
 					else if(after_scale < minimum_scale)		after_scale = minimum_scale;
 					zoom_base_distance = changed_distance;
 					game_node->setScale(after_scale);
 					
-					game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f);
+					if(game_node->getScale() <= 1.5f)
+						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f);
+					else
+					{
+						float comp_scale = before_scale < 1.5f ? 1.5f : before_scale;
+						comp_scale = game_node->getScale() - comp_scale;
+						
+						game_node->setPositionX(game_node->getPositionX() - 320*comp_scale/2.f);
+						
+						if(game_node->getPositionX() > 0)
+							game_node->setPositionX(0);
+						else if(game_node->getPositionX() < 480-320*game_node->getScale())
+							game_node->setPositionX(480-320*game_node->getScale());
+					}
+					
+					float comp_scale = before_scale;
+					comp_scale = game_node->getScale() - comp_scale;
+					
+					game_node->setPositionY(game_node->getPositionY() - 430*comp_scale/2.f);
 					
 					if(game_node->getPositionY() > 0)
 						game_node->setPositionY(0);
-					if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width)
+					else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width)
 						game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width);
 				}
 			}

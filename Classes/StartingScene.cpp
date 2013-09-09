@@ -14,9 +14,10 @@
 #include "ScreenSide.h"
 
 typedef enum tMenuTagStartingScene{
-	kMT_SS_start = 1,
+	kMT_SS_summer = 1,
 	kMT_SS_christmas,
-	kMT_SS_hospital
+	kMT_SS_hospital,
+	kMT_SS_sports
 }MenuTagStartingScene;
 
 typedef enum tZorderStartingScene{
@@ -58,19 +59,19 @@ bool StartingScene::init()
 	addChild(start_back, kZ_SS_back);
 	
 	
-	CCMenuItem* start_item = CCMenuItemImage::create("start_start.png", "start_start.png", this, menu_selector(StartingScene::menuAction));
-	start_item->setTag(kMT_SS_start);
+	CCMenuItem* summer_item = CCMenuItemImage::create("start_summer.png", "start_summer.png", this, menu_selector(StartingScene::menuAction));
+	summer_item->setTag(kMT_SS_summer);
 	
-	CCMenu* start_menu = CCMenu::createWithItem(start_item);
-	start_menu->setPosition(ccp(240,190));
-	addChild(start_menu, kZ_SS_menu);
+	CCMenu* summer_menu = CCMenu::createWithItem(summer_item);
+	summer_menu->setPosition(ccp(75,170));
+	addChild(summer_menu, kZ_SS_menu);
 	
 	
 	CCMenuItem* christmas_item = CCMenuItemImage::create("start_christmas.png", "start_chrestmas.png", this, menu_selector(StartingScene::menuAction));
 	christmas_item->setTag(kMT_SS_christmas);
 	
 	CCMenu* christmas_menu = CCMenu::createWithItem(christmas_item);
-	christmas_menu->setPosition(ccp(240,120));
+	christmas_menu->setPosition(ccp(175,170));
 	addChild(christmas_menu, kZ_SS_menu);
 	
 	
@@ -78,8 +79,25 @@ bool StartingScene::init()
 	hospital_item->setTag(kMT_SS_hospital);
 	
 	CCMenu* hospital_menu = CCMenu::createWithItem(hospital_item);
-	hospital_menu->setPosition(ccp(240,50));
+	hospital_menu->setPosition(ccp(275,170));
 	addChild(hospital_menu, kZ_SS_menu);
+	
+	
+	CCMenuItem* sports_item = CCMenuItemImage::create("start_sports.png", "start_sports.png", this, menu_selector(StartingScene::menuAction));
+	sports_item->setTag(kMT_SS_sports);
+	
+	CCMenu* sports_menu = CCMenu::createWithItem(sports_item);
+	sports_menu->setPosition(ccp(75,65));
+	addChild(sports_menu, kZ_SS_menu);
+	
+	
+	CCSprite* update1 = CCSprite::create("start_update.png");
+	update1->setPosition(ccp(175,65));
+	addChild(update1, kZ_SS_menu);
+	
+	CCSprite* update2 = CCSprite::create("start_update.png");
+	update2->setPosition(ccp(275,65));
+	addChild(update2, kZ_SS_menu);
 	
 	
 	is_menu_enable = true;
@@ -116,7 +134,7 @@ void StartingScene::menuAction(CCObject* pSender)
 	
 	int tag = ((CCNode*)pSender)->getTag();
 	
-	if(tag == kMT_SS_start)
+	if(tag == kMT_SS_summer)
 	{
 		is_menu_enable = false;
 		
@@ -145,6 +163,18 @@ void StartingScene::menuAction(CCObject* pSender)
 		is_menu_enable = false;
 		
 		SilhouetteData::sharedSilhouetteData()->setSilType(3);
+		
+		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+		
+		StarGoldData::sharedInstance()->setGameStart();
+		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+	}
+	else if(tag == kMT_SS_sports)
+	{
+		is_menu_enable = false;
+		
+		SilhouetteData::sharedSilhouetteData()->setSilType(4);
 		
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);

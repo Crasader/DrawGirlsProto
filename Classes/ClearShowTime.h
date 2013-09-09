@@ -117,9 +117,9 @@ private:
 			
 			CCMoveTo* t_move1 = CCMoveTo::create(0.5f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-(430-102+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f))*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
 			CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-			CCMoveTo* t_move2 = CCMoveTo::create(1.f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-111-DataStorageHub::sharedInstance()->bottom_base/1.5f)*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
+			CCMoveTo* t_move2 = CCMoveTo::create(1.3f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-111-DataStorageHub::sharedInstance()->bottom_base/1.5f)*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
 			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
-			CCMoveTo* t_move3 = CCMoveTo::create(1.f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-(430-102+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f))*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
+			CCMoveTo* t_move3 = CCMoveTo::create(1.3f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-(430-102+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f))*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
 			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
 			
 			CCCallFunc* t_call;
@@ -171,9 +171,9 @@ private:
 	{
 		clear_img->removeFromParentAndCleanup(true);
 		
-		CCMoveTo* t_move1 = CCMoveTo::create(1.f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-111-DataStorageHub::sharedInstance()->bottom_base/1.5f)*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
+		CCMoveTo* t_move1 = CCMoveTo::create(1.3f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-111-DataStorageHub::sharedInstance()->bottom_base/1.5f)*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
 		CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
-		CCMoveTo* t_move2 = CCMoveTo::create(1.f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-(430-102+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f))*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
+		CCMoveTo* t_move2 = CCMoveTo::create(1.3f, ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-(430-102+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f))*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base));
 		CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearShowTime::changeScene));
 		
