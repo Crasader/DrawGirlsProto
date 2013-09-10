@@ -1837,37 +1837,37 @@ private:
 				}
 				else
 				{
-					int random_value2 = rand()%6;
-					if(random_value2 == 0)
-					{
-						GameItemWind* t_gif = GameItemWind::create(rand()%2 == 0);
-						addChild(t_gif);
-					}
-					else if(random_value2 == 1)
-					{
-						GameItemLightning* t_gif = GameItemLightning::create(rand()%2 == 0);
-						addChild(t_gif);
-					}
-					else if(random_value2 == 2)
-					{
-						GameItemLife* t_gif = GameItemLife::create(rand()%2 == 0);
-						addChild(t_gif);
-					}
-					else if(random_value2 == 3)
-					{
-						GameItemIce* t_gif = GameItemIce::create(rand()%2 == 0);
-						addChild(t_gif);
-					}
-					else if(random_value2 == 4)
-					{
+//					int random_value2 = rand()%6;
+//					if(random_value2 == 0)
+//					{
+//						GameItemWind* t_gif = GameItemWind::create(rand()%2 == 0);
+//						addChild(t_gif);
+//					}
+//					else if(random_value2 == 1)
+//					{
+//						GameItemLightning* t_gif = GameItemLightning::create(rand()%2 == 0);
+//						addChild(t_gif);
+//					}
+//					else if(random_value2 == 2)
+//					{
+//						GameItemLife* t_gif = GameItemLife::create(rand()%2 == 0);
+//						addChild(t_gif);
+//					}
+//					else if(random_value2 == 3)
+//					{
+//						GameItemIce* t_gif = GameItemIce::create(rand()%2 == 0);
+//						addChild(t_gif);
+//					}
+//					else if(random_value2 == 4)
+//					{
 						GameItemFire* t_gif = GameItemFire::create(rand()%2 == 0);
 						addChild(t_gif);
-					}
-					else
-					{
-						GameItemPlasma* t_gif = GameItemPlasma::create(rand()%2 == 0);
-						addChild(t_gif);
-					}
+//					}
+//					else
+//					{
+//						GameItemPlasma* t_gif = GameItemPlasma::create(rand()%2 == 0);
+//						addChild(t_gif);
+//					}
 				}
 			}
 			

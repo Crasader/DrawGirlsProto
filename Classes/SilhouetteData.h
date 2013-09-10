@@ -61,11 +61,13 @@ private:
 	void startSetting2();
 	void startSetting3();
 	void startSetting4();
+	void startSetting5();
 	
 	void exchangeSilhouette1();
 	void exchangeSilhouette2();
 	void exchangeSilhouette3();
 	void exchangeSilhouette4();
+	void exchangeSilhouette5();
 };
 
 #endif /* defined(__galsprototype__SilhouetteData__) */

@@ -17,7 +17,8 @@ typedef enum tMenuTagStartingScene{
 	kMT_SS_summer = 1,
 	kMT_SS_christmas,
 	kMT_SS_hospital,
-	kMT_SS_sports
+	kMT_SS_sports,
+	kMT_SS_idol
 }MenuTagStartingScene;
 
 typedef enum tZorderStartingScene{
@@ -91,9 +92,12 @@ bool StartingScene::init()
 	addChild(sports_menu, kZ_SS_menu);
 	
 	
-	CCSprite* update1 = CCSprite::create("start_update.png");
-	update1->setPosition(ccp(175,65));
-	addChild(update1, kZ_SS_menu);
+	CCMenuItem* idol_item = CCMenuItemImage::create("start_idol.png", "start_idol.png", this, menu_selector(StartingScene::menuAction));
+	idol_item->setTag(kMT_SS_idol);
+	
+	CCMenu* idol_menu = CCMenu::createWithItem(idol_item);
+	idol_menu->setPosition(ccp(175,65));
+	addChild(idol_menu, kZ_SS_menu);
 	
 	CCSprite* update2 = CCSprite::create("start_update.png");
 	update2->setPosition(ccp(275,65));
@@ -175,6 +179,18 @@ void StartingScene::menuAction(CCObject* pSender)
 		is_menu_enable = false;
 		
 		SilhouetteData::sharedSilhouetteData()->setSilType(4);
+		
+		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+		
+		StarGoldData::sharedInstance()->setGameStart();
+		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+	}
+	else if(tag == kMT_SS_idol)
+	{
+		is_menu_enable = false;
+		
+		SilhouetteData::sharedSilhouetteData()->setSilType(5);
 		
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
