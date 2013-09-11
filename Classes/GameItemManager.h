@@ -536,7 +536,7 @@ private:
 				{
 					myGD->communication("UI_subBossLife", total_damage/10.f);
 					sum_damage += total_damage/10.f;
-					myGD->communication("CP_startSpringMainCumber", rand()%360-180.f);
+					myGD->communication("CP_startAttackReaction", rand()%360-180.f);
 				}
 				
 				
@@ -580,7 +580,7 @@ private:
 			if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 			{
 				myGD->communication("UI_subBossLife", total_damage-sum_damage);
-				myGD->communication("CP_startSpringMainCumber", rand()%360-180.f);
+				myGD->communication("CP_startAttackReaction", rand()%360-180.f);
 			}
 			
 			
@@ -782,7 +782,7 @@ private:
 			{
 				myGD->communication("UI_subBossLife", total_damage/23.f);
 				sum_damage += total_damage/23.f;
-				myGD->communication("CP_startSpringMainCumber", rand()%360-180.f);
+				myGD->communication("CP_startAttackReaction", rand()%360-180.f);
 			}
 			
 			
@@ -834,7 +834,7 @@ private:
 			if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 			{
 				myGD->communication("UI_subBossLife", total_damage-sum_damage);
-				myGD->communication("CP_startSpringMainCumber", rand()%360-180.f);
+				myGD->communication("CP_startAttackReaction", rand()%360-180.f);
 			}
 			
 			
@@ -982,7 +982,7 @@ private:
 		if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 		{
 			myGD->communication("UI_subBossLife", t_damage);
-			myGD->communication("CP_startSpringMainCumber", rand()%360-180.f);
+			myGD->communication("CP_startAttackReaction", rand()%360-180.f);
 		}
 		
 		
@@ -1150,7 +1150,7 @@ private:
 		{
 			myGD->communication("UI_subBossLife", t_damage);
 			CCLog("ice : %.1f", t_damage);
-			myGD->communication("CP_startSpringMainCumber", rand()%360-180.f);
+			myGD->communication("CP_startAttackReaction", rand()%360-180.f);
 		}
 		
 		
@@ -1310,7 +1310,7 @@ private:
 		if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 		{
 			myGD->communication("UI_subBossLife", t_damage);
-			myGD->communication("CP_startSpringMainCumber", rand()%360-180.f);
+			myGD->communication("CP_startAttackReaction", rand()%360-180.f);
 		}
 		
 		
@@ -1467,7 +1467,7 @@ private:
 		if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 		{
 			myGD->communication("UI_subBossLife", t_damage);
-			myGD->communication("CP_startSpringMainCumber", rand()%360-180.f);
+			myGD->communication("CP_startAttackReaction", rand()%360-180.f);
 		}
 		
 		

@@ -53,7 +53,7 @@ public:
 	CCArray* getSubCumberArrayPointer();
 	void decreaseLifeForSubCumber(CCObject* target, float t_damage, float t_directionAngle);
 	void createAllCumberSheild();
-	void startSpringMainCumber(float springAngle);
+	void startAttackReaction(float userdata);
 	void subCumberBomb();
 	void subCumberReplication();
 	void setGameover();

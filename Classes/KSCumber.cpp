@@ -179,7 +179,7 @@ void KSCumber::movingAndCrash(float dt)
 	setPosition(afterPosition);
 }
 
-void KSCumber::startAttackReaction(int userdata)
+void KSCumber::startAttackReaction(float userdata)
 {
 	
 }

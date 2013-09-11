@@ -65,7 +65,7 @@ public:
 	{
 		mEmotion = NULL;
 	}
-	void startAttackReaction(int userdata);
+	void startAttackReaction(float userdata);
 protected:
 	bool isGameover;
 	float m_scale;

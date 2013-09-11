@@ -438,6 +438,11 @@ void MainCumber::checkingJackCrash()
 	}
 }
 
+void MainCumber::startAttackReaction(float userdata)
+{
+	startSpringCumber(userdata);
+}
+
 void MainCumber::startSpringCumber(float t_springAngle)
 {
 	if(is_moving_shoot)

@@ -107,7 +107,7 @@ public:
 		mEmotion = NULL;
 	}
 	void setHeadAndBodies();
-	virtual void startAttackReaction(int userdata);
+	virtual void startAttackReaction(float userdata);
 protected:
 	bool isGameover;
 	float m_scale;

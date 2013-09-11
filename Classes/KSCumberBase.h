@@ -66,7 +66,7 @@ public:
 		
 	}
 	virtual void movingAndCrash(float dt) = 0;
-	virtual void startAttackReaction(int userdata) = 0;
+	virtual void startAttackReaction(float userdata) = 0;
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
 	void setCumberState(int e)

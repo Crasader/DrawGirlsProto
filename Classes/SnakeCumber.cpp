@@ -137,7 +137,7 @@ void SnakeCumber::setHeadAndBodies()
 //	m_headImg->setScale(tt / 360);
 }
 
-void SnakeCumber::startAttackReaction(int userdata)
+void SnakeCumber::startAttackReaction(float userdata)
 {
 	CCLog("attack reaction!");
 }
