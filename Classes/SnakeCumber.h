@@ -40,6 +40,7 @@ public:
 	virtual void onStopMoving()
 	{
 		m_state = CUMBERSTATESTOP;
+		CCLog("stop!!");
 	}
 	virtual void movingAndCrash(float dt);
 	void attack(float dt);
@@ -107,7 +108,13 @@ public:
 		mEmotion = NULL;
 	}
 	void setHeadAndBodies();
-	virtual void startAttackReaction(int userdata);
+	virtual void startDamageReaction(float userdata);
+	
+	virtual void startSpringCumber(float userdata)
+	{
+		startDamageReaction(userdata);
+	}
+	void damageReaction(float dt);
 protected:
 	bool isGameover;
 	float m_scale;
@@ -124,6 +131,14 @@ protected:
 	Emotion* mEmotion;
 	
 	deque< Trace > m_cumberTrace; // back 은 항상 머리를 가르킴.
+	
+	struct DamageData
+	{
+		float m_damageX;
+		float m_damageY;
+		float timer;
+	}damageData;
+	
 };
 
 #endif /* defined(__DGproto__SnakeCumber__) */

@@ -25,6 +25,7 @@ SnakeCumber::~SnakeCumber()
 bool SnakeCumber::init()
 {
 	KSCumberBase::init();
+
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	m_speed = 2.f;
@@ -137,9 +138,41 @@ void SnakeCumber::setHeadAndBodies()
 //	m_headImg->setScale(tt / 360);
 }
 
-void SnakeCumber::startAttackReaction(int userdata)
+void SnakeCumber::startDamageReaction(float userdata)
 {
 	CCLog("attack reaction!");
+	float rad = deg2Rad(userdata);
+	damageData.m_damageX = cos(rad);
+	damageData.m_damageY = sin(rad);
+//	CCLog("%f %f", dx, dy);
+	m_state = CUMBERSTATEDAMAGING;
+	
+	damageData.timer = 0;
+	schedule(schedule_selector(SnakeCumber::damageReaction));
+	
+}
+
+void SnakeCumber::damageReaction(float)
+{
+	damageData.timer += 1 / 60.f;
+	if(damageData.timer < 2)
+	{
+		m_headImg->setColor(ccc3(255, 0, 0));
+		for(auto i : m_Bodies)
+		{
+			i->setColor(ccc3(255, 0, 0));
+		}
+	}
+	else
+	{
+		m_headImg->setColor(ccc3(255, 255, 255));
+		for(auto i : m_Bodies)
+		{
+			i->setColor(ccc3(255, 255, 255));
+		}
+		m_state = CUMBERSTATEMOVING;
+		unschedule(schedule_selector(SnakeCumber::damageReaction));
+	}
 }
 void SnakeCumber::movingAndCrash(float dt)
 {
@@ -148,7 +181,7 @@ void SnakeCumber::movingAndCrash(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if(m_state != CUMBERSTATESTOP)
+	if(m_state == CUMBERSTATEMOVING)
 	{
 		int changeDirection = ProbSelector::sel(0.05, 1.0 - 0.05, 0.0);
 		if(changeDirection == 0)
@@ -241,7 +274,7 @@ void SnakeCumber::movingAndCrash(float dt)
 	
 //	CCLog("cnt outer !! = %d", cnt);
 	
-	if(m_state != CUMBERSTATESTOP)
+	if(m_state == CUMBERSTATEMOVING)
 		setPosition(afterPosition);
 }
 

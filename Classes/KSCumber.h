@@ -65,7 +65,8 @@ public:
 	{
 		mEmotion = NULL;
 	}
-	void startAttackReaction(int userdata);
+	void startDamageReaction(float userdata);
+	virtual void startSpringCumber(float userdata){}
 protected:
 	bool isGameover;
 	float m_scale;
