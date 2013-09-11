@@ -19,6 +19,7 @@
 #include "AudioEngine.h"
 #include "AutoAttacker.h"
 #include "ShockWave.h"
+#include "KSCumberBase.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -1299,7 +1300,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern6)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			ChargeNode* t_cn = ChargeNode::create(startPosition, 60*4,
 												  this, NULL,			// ing
 												  this, callfunc_selector(MissileParent::actionAP6),			// after
@@ -1317,7 +1318,7 @@ public:
 			
 			keepAP7 = t_m7;
 			
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			ChargeNode* t_cn = ChargeNode::create(startPosition, 60*6,
 												  this, callfunc_selector(MissileParent::ingAP7),			// ing
 												  this, callfunc_selector(MissileParent::actionAP7),			// after
@@ -1331,7 +1332,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern8)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			ChargeNode* t_cn = ChargeNode::create(startPosition, 90,
 												  this, NULL,			// ing
 												  this, callfunc_selector(MissileParent::actionAP8),			// after
@@ -1344,7 +1345,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern9)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			ChargeNode* t_cn = ChargeNode::create(startPosition, 60*3,
 												  this, NULL,
 												  this, callfunc_selector(MissileParent::actionAP9),
@@ -1358,7 +1359,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern10)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			ChargeNode* t_cn = ChargeNode::create(startPosition, 60,
 												  this, NULL,
 												  this, callfunc_selector(MissileParent::actionAP10),
@@ -1371,7 +1372,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern11)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*4,
 															 this, NULL,
 															 this, callfunc_selector(MissileParent::actionAP11),
@@ -1386,7 +1387,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern12)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 70*2,
 															 this, NULL,
 															 this, callfunc_selector(MissileParent::actionAP12),
@@ -1401,7 +1402,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern13)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 150,
 															 this, callfunc_selector(MissileParent::ingAP13),
 															 this, callfunc_selector(MissileParent::actionAP13),
@@ -1416,7 +1417,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern14)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*4,
 															 this, NULL,
 															 this, callfunc_selector(MissileParent::actionAP14),
@@ -1431,7 +1432,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern15)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*2,
 															 this, NULL,
 															 this, callfunc_selector(MissileParent::actionAP15),
@@ -1446,7 +1447,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern16)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*6,
 															 this, NULL,
 															 this, callfunc_selector(MissileParent::actionAP16),
@@ -1461,7 +1462,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern17)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 90,
 															 this, callfunc_selector(MissileParent::ingAP17),
 															 this, callfunc_selector(MissileParent::actionAP17),
@@ -1476,7 +1477,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern18)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*2,
 															 this, NULL,
 															 this, callfunc_selector(MissileParent::actionAP18),
@@ -1491,7 +1492,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern19)
 		{
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*2,
 															 this, NULL,
 															 this, callfunc_selector(MissileParent::actionAP19),
@@ -1508,7 +1509,7 @@ public:
 		{
 			if(myGD->getCommunication("CP_getSubCumberCount") > 1)
 			{
-				myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+				myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 				CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*2,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP20),
@@ -1529,7 +1530,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern21)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP21),
@@ -1543,7 +1544,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern22)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 90,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP22),
@@ -1557,7 +1558,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern23)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP23),
@@ -1571,7 +1572,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern24)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*2,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP24),
@@ -1585,7 +1586,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern25)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP25),
@@ -1599,7 +1600,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern26)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP26),
@@ -1613,7 +1614,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern27)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP27),
@@ -1627,7 +1628,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern28)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP28),
@@ -1641,7 +1642,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern29)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 90,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP29),
@@ -1655,7 +1656,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern30)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
 															 this, NULL,
 															 this, callfunc_selector(MissileParent::actionAP30),
@@ -1671,7 +1672,7 @@ public:
 			if(myGD->getCommunication("CP_getSubCumberCount") > 1)
 			{
 				startFirePosition = startPosition;
-				myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+				myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 				SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*5,
 																	 this, NULL,
 																	 this, callfunc_selector(MissileParent::actionAP31),
@@ -1690,7 +1691,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern32)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP32),
@@ -1704,7 +1705,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern33)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP33),
@@ -1718,7 +1719,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern34)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
 																 this, NULL,
 																 this, callfunc_selector(MissileParent::actionAP34),
@@ -1741,7 +1742,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern101)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			ChargeNode* t_cn = ChargeNode::create(startPosition, 60,
 												  this, NULL,			// ing
 												  this, callfunc_selector(MissileParent::actionAP101),			// after
@@ -1755,7 +1756,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern102)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			ChargeNode* t_cn = ChargeNode::create(startPosition, 60,
 												  this, NULL,			// ing
 												  this, callfunc_selector(MissileParent::actionAP102),			// after
@@ -1769,7 +1770,7 @@ public:
 		else if(pattern_code == kAP_CODE_pattern103)
 		{
 			startFirePosition = startPosition;
-			myGD->communication("CP_setMainCumberState", 2); // cumberStateAttackReady
+			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			ChargeNode* t_cn = ChargeNode::create(startPosition, 60,
 												  this, NULL,			// ing
 												  this, callfunc_selector(MissileParent::actionAP103),			// after

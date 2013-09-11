@@ -24,12 +24,13 @@ enum COLLISION_CODE
 
 
 enum CUMBER_STATE{
-	CUMBERSTATESTOP = 0,
-	CUMBERSTATEMOVING,		// 1
-	CUMBERSTATEATTACKREADY,	// 2
-	CUMBERSTATEATTACK,		// 3
-	CUMBERSTATECRASHREADY,	// 4
-	CUMBERSTATECRASH		// 5
+	CUMBERSTATESTOP = 1,
+	CUMBERSTATEMOVING = 1 << 1,		// 1
+	CUMBERSTATEATTACKREADY = 1 << 2,	// 2
+	CUMBERSTATEATTACK = 1 << 3,		// 3
+	CUMBERSTATECRASHREADY = 1 << 4,	// 4
+	CUMBERSTATECRASH = 1 << 5,		// 5
+	CUMBERSTATEDAMAGING = 1 << 6,    // 6 맞고 있을 때...
 };
 
 class KSCumberBase : public MainCumber//CCNode
@@ -43,9 +44,40 @@ public:
 	
 	virtual ~KSCumberBase()
 	{
-	
+
 	}
-	
+	virtual bool init()
+	{
+		MainCumber::init();
+		my_eye = NULL;
+		mEmotion = NULL;
+		map_visit_cnt = 0;
+		myGD = GameData::sharedGameData();
+		is_silenced = false;
+		is_casting = false;
+		is_slowed = false;
+		noattack_cnt = 0;
+		isSheild = 0;
+		myState = cumberStateStop;
+		isGameover = false;
+		isFuryMode = false;
+		ableTickingTimeBomb = false;
+		is_moving_shoot = false;
+		teleportImg = NULL;
+		move_speed = 1.6f;
+
+		before_keep_frame_cnt = 0;
+		keep_number = 0;
+		attack_rate = 400.f;
+		is_attackOn = true;
+		max_visit_cnt = 8;
+		myScale = 1.5f;
+		maxScale = 1.7f;
+		minScale = 0.7f;
+		move_frame = 0;
+		areacrash_frame_cnt = 0;
+		return true;
+	}
 	
 	void startMoving()
 	{
@@ -63,10 +95,10 @@ public:
 //		schedule(schedule_selector(KSCumberBase::processCrash));
 //		schedule(crash)
 		onStopMoving();
-		
 	}
 	virtual void movingAndCrash(float dt) = 0;
-	virtual void startAttackReaction(float userdata) = 0;
+	virtual void startDamageReaction(float userdata) = 0;
+	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
 	void setCumberState(int e)
