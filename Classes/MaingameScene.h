@@ -68,7 +68,8 @@ public:
 	{
 		myJack->isStun = true;
 		mControl->isStun = true;
-		mControl->setTouchEnabled(false);
+//		mControl->setTouchEnabled(false);
+		((ControlJoystickButton*)mControl)->stopMySchedule();
 		if(mControl->mType == kCT_Type_Joystick_button)
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
 		myJack->changeDirection(directionStop, directionStop);
@@ -93,7 +94,7 @@ public:
 				myJack->t_se->selfRemove();
 			}
 			myJack->t_se = NULL;
-			mControl->setTouchEnabled(true);
+//			mControl->setTouchEnabled(true);
 		}
 	}
 	
@@ -149,6 +150,7 @@ private:
 	{
 		if(mControl)		mControl->removeFromParentAndCleanup(true);
 		mControl = ControlJoystickButton::create(this, callfunc_selector(Maingame::readyBackTracking), myJack);
+		((ControlJoystickButton*)mControl)->pauseBackTracking = callfunc_selector(Maingame::pauseBackTracking);
 		addChild(mControl, mControlZorder);
 	}
 	
@@ -205,7 +207,7 @@ private:
 				myJack->t_se->selfRemove();
 			}
 			myJack->t_se = NULL;
-			mControl->setTouchEnabled(true);
+//			mControl->setTouchEnabled(true);
 		}
 	}
 	
@@ -238,7 +240,8 @@ private:
 	
 	void readyBackTracking()
 	{
-		mControl->setTouchEnabled(false);
+//		mControl->setTouchEnabled(false);
+		((ControlJoystickButton*)mControl)->stopMySchedule();
 		myJack->willBackTracking = true;
 		if(!myJack->isMoving)
 			startBackTracking();
@@ -246,17 +249,26 @@ private:
 	void startBackTracking()
 	{
 		AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
+		((ControlJoystickButton*)mControl)->isBacking = true;
 		schedule(schedule_selector(Maingame::backTracking));
 	}
 	void stopBackTracking()
 	{
 		unschedule(schedule_selector(Maingame::backTracking));
+		((ControlJoystickButton*)mControl)->isBacking = false;
 		myJack->endBackTracking();
 		myJack->willBackTracking = false;
-		if(!mControl->isStun)
-			mControl->setTouchEnabled(true);
+//		if(!mControl->isStun)
+//			mControl->setTouchEnabled(true);
 	}
 	void backTracking();
+	
+	void pauseBackTracking()
+	{
+		unschedule(schedule_selector(Maingame::backTracking));
+		((ControlJoystickButton*)mControl)->isBacking = false;
+		myJack->willBackTracking = false;
+	}
 	
 	void allStopSchedule()
 	{
@@ -271,12 +283,12 @@ private:
 	void startSpecialAttack()
 	{
 		myJack->changeDirection(directionStop, directionStop);
-		mControl->setTouchEnabled(false);
+//		mControl->setTouchEnabled(false);
 	}
 	
 	void stopSpecialAttack()
 	{
-		mControl->setTouchEnabled(true);
+//		mControl->setTouchEnabled(true);
 	}
 	
 	void gameover()
@@ -293,6 +305,13 @@ private:
 		
 		if(mySGD->getIsCleared())
 		{
+			int cleared_number = myDSH->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
+			
+			if(SilhouetteData::sharedSilhouetteData()->getSilType() > cleared_number)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1, SilhouetteData::sharedSilhouetteData()->getSilType());
+			}
+			
 			AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
 			AudioEngine::sharedInstance()->playEffect("sound_clear_ment.mp3", false);
 			ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 0.9f, game_node, this, callfunc_selector(Maingame::closeShutter));
@@ -470,7 +489,6 @@ private:
 		SilhouetteData::sharedSilhouetteData()->exchangeSilhouette();
 		myMS->exchangeMS();
 	}
-	
 };
 
 #endif

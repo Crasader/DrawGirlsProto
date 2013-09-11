@@ -854,6 +854,8 @@ public:
 			myGD->removeMapNewline();
 			myGD->communication("PM_cleanPath");
 			
+			isStun = true;
+			
 			myGD->communication("Main_startSpecialAttack");
 //			AudioEngine::sharedInstance()->playEffect("sound_jack_die.mp3", false);
 			AudioEngine::sharedInstance()->playEffect("sound_die_jack.mp3", false);
@@ -1008,6 +1010,33 @@ public:
 		}
 	}
 	
+	void setJackState(jackState t_s)
+	{
+		myState = t_s;
+		myGD->setJackState(myState);
+		if(myState == jackStateNormal)
+		{
+			jackImg->setColor(ccWHITE);
+			jackImg->setVisible(true);
+			jack_drawing->setVisible(false);
+			if(!is_hard && !jack_barrier->isVisible())
+				jack_barrier->setVisible(true);
+		}
+		else if(myState == jackStateDrawing)
+		{
+			jack_drawing->setVisible(true);
+			jackImg->setVisible(false);
+			if(!is_hard && jack_barrier->isVisible())
+				jack_barrier->setVisible(false);
+		}
+		else if(myState == jackStateBackTracking)
+		{
+			jackImg->setColor(ccGRAY);
+			if(!is_hard && jack_barrier->isVisible())
+				jack_barrier->setVisible(false);
+		}
+	}
+	
 private:
 	CCSprite* touchPointSpr_byJoystick;
 	CCSprite* directionSpr_byJoystick;
@@ -1098,6 +1127,7 @@ private:
 				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 				
 				isDie = false;
+				isStun = false;
 				jackImg->removeFromParentAndCleanup(true);
 				
 				CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
@@ -1131,38 +1161,55 @@ private:
 			}
 			else
 			{
-				myGD->setIsGameover(true);
-				myGD->communication("Main_allStopSchedule");
-				myGD->communication("Main_gameover");
+				myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
 			}
 		}
 	}
 	
-	void setJackState(jackState t_s)
+	void continueGame()
 	{
-		myState = t_s;
-		myGD->setJackState(myState);
-		if(myState == jackStateNormal)
-		{
-			jackImg->setColor(ccWHITE);
-			jackImg->setVisible(true);
-			jack_drawing->setVisible(false);
-			if(!is_hard && !jack_barrier->isVisible())
-				jack_barrier->setVisible(true);
-		}
-		else if(myState == jackStateDrawing)
-		{
-			jack_drawing->setVisible(true);
-			jackImg->setVisible(false);
-			if(!is_hard && jack_barrier->isVisible())
-				jack_barrier->setVisible(false);
-		}
-		else if(myState == jackStateBackTracking)
-		{
-			jackImg->setColor(ccGRAY);
-			if(!is_hard && jack_barrier->isVisible())
-				jack_barrier->setVisible(false);
-		}
+		speed_up_value = 0.f;
+		changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
+		
+		isDie = false;
+		isStun = false;
+		jackImg->removeFromParentAndCleanup(true);
+		
+		CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+		
+		jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+		jackImg->setScale(0.8f);
+		addChild(jackImg, kJackZ_main);
+		
+		CCAnimation* jack_animation = CCAnimation::create();
+		jack_animation->setDelayPerUnit(0.1f);
+		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+		
+		CCAnimate* jack_animate = CCAnimate::create(jack_animation);
+		CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
+		jackImg->runAction(jack_repeat);
+		
+		
+		setTouchPointByJoystick(CCPointZero, directionStop, true);
+		
+		setJackState(jackStateNormal);
+		
+		dieEscapeJack();
+		
+		myGD->communication("GIM_dieCreateItem");
+		
+		myGD->communication("Main_resetIsLineDie");
+		
+		myGD->communication("Main_stopSpecialAttack");
+	}
+	
+	void endGame()
+	{
+		myGD->setIsGameover(true);
+		myGD->communication("Main_allStopSchedule");
+		myGD->communication("Main_gameover");
 	}
 	
 	void searchAndMoveOldline(IntMoveState searchFirstMoveState);

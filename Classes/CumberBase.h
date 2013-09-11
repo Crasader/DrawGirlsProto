@@ -104,6 +104,11 @@ public:
 		is_slowed = is_down;
 	}
 	
+	virtual ~Cumber()
+	{
+		
+	}
+	
 protected:
 	cumberState myState;
 	CCSprite* cumberImg;

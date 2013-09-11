@@ -565,10 +565,10 @@ public:
 		myRS->setNumerator(15, kAP_CODE_pattern102);
 		myRS->setNumerator(20, kAP_CODE_pattern103);
 		myRS->setNumerator(10, kAP_CODE_pattern10);
-		myRS->setNumerator(5, kAP_CODE_pattern13);
+//		myRS->setNumerator(5, kAP_CODE_pattern13);
 		myRS->setNumerator(10, kAP_CODE_pattern17);
 		myRS->setNumerator(10, kAP_CODE_pattern23);
-		myRS->setNumerator(10, kAP_CODE_pattern32);
+//		myRS->setNumerator(10, kAP_CODE_pattern32);
 		
 //		if(worldmap <= 20)
 //		{

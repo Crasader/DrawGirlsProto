@@ -256,6 +256,16 @@
 		A71A516017D6E96C004B9F01 /* res_img in Resources */ = {isa = PBXBuildFile; fileRef = A71A515E17D6E96C004B9F01 /* res_img */; };
 		A71A516117D6E96C004B9F01 /* res_sound in Resources */ = {isa = PBXBuildFile; fileRef = A71A515F17D6E96C004B9F01 /* res_sound */; };
 		A71A516317D6EBD0004B9F01 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = A71A516217D6EBD0004B9F01 /* Icon-72.png */; };
+		A71A516717D9B3BC004B9F01 /* ZoomScriptScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A516517D9B3BA004B9F01 /* ZoomScriptScene.cpp */; };
+		A71A516A17DEE078004B9F01 /* WorldMapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A516817DEE070004B9F01 /* WorldMapScene.cpp */; };
+		A71A516D17DEF37E004B9F01 /* StageSettingPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A516B17DEF37A004B9F01 /* StageSettingPopup.cpp */; };
+		A71A517017DF00A7004B9F01 /* ContinuePopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A516E17DF00A3004B9F01 /* ContinuePopup.cpp */; };
+		A71A517A17DFF6D9004B9F01 /* KSCumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517117DFF6C2004B9F01 /* KSCumber.cpp */; };
+		A71A517B17DFF6D9004B9F01 /* KSCumberBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517317DFF6C7004B9F01 /* KSCumberBase.cpp */; };
+		A71A517C17DFF6D9004B9F01 /* SnakeCumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517617DFF6CE004B9F01 /* SnakeCumber.cpp */; };
+		A71A517D17DFF6D9004B9F01 /* Well512.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517817DFF6D5004B9F01 /* Well512.cpp */; };
+		A71A517F17DFF7E6004B9F01 /* GameData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517E17DFF7E3004B9F01 /* GameData.cpp */; };
+		A71A518217DFF868004B9F01 /* ProbSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A518017DFF863004B9F01 /* ProbSelector.cpp */; };
 		F293B3CD15EB7BE500256477 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3CC15EB7BE500256477 /* QuartzCore.framework */; };
 		F293B3CF15EB7BE500256477 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3CE15EB7BE500256477 /* OpenGLES.framework */; };
 		F293B3D115EB7BE500256477 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3D015EB7BE500256477 /* OpenAL.framework */; };
@@ -795,6 +805,26 @@
 		A71A515E17D6E96C004B9F01 /* res_img */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res_img; sourceTree = "<group>"; };
 		A71A515F17D6E96C004B9F01 /* res_sound */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res_sound; sourceTree = "<group>"; };
 		A71A516217D6EBD0004B9F01 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = SOURCE_ROOT; };
+		A71A516517D9B3BA004B9F01 /* ZoomScriptScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ZoomScriptScene.cpp; path = ../Classes/ZoomScriptScene.cpp; sourceTree = "<group>"; };
+		A71A516617D9B3BB004B9F01 /* ZoomScriptScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZoomScriptScene.h; path = ../Classes/ZoomScriptScene.h; sourceTree = "<group>"; };
+		A71A516817DEE070004B9F01 /* WorldMapScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WorldMapScene.cpp; path = ../Classes/WorldMapScene.cpp; sourceTree = "<group>"; };
+		A71A516917DEE072004B9F01 /* WorldMapScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WorldMapScene.h; path = ../Classes/WorldMapScene.h; sourceTree = "<group>"; };
+		A71A516B17DEF37A004B9F01 /* StageSettingPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StageSettingPopup.cpp; path = ../Classes/StageSettingPopup.cpp; sourceTree = "<group>"; };
+		A71A516C17DEF37B004B9F01 /* StageSettingPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StageSettingPopup.h; path = ../Classes/StageSettingPopup.h; sourceTree = "<group>"; };
+		A71A516E17DF00A3004B9F01 /* ContinuePopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ContinuePopup.cpp; path = ../Classes/ContinuePopup.cpp; sourceTree = "<group>"; };
+		A71A516F17DF00A5004B9F01 /* ContinuePopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContinuePopup.h; path = ../Classes/ContinuePopup.h; sourceTree = "<group>"; };
+		A71A517117DFF6C2004B9F01 /* KSCumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KSCumber.cpp; path = ../Classes/KSCumber.cpp; sourceTree = "<group>"; };
+		A71A517217DFF6C5004B9F01 /* KSCumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KSCumber.h; path = ../Classes/KSCumber.h; sourceTree = "<group>"; };
+		A71A517317DFF6C7004B9F01 /* KSCumberBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KSCumberBase.cpp; path = ../Classes/KSCumberBase.cpp; sourceTree = "<group>"; };
+		A71A517417DFF6CA004B9F01 /* KSCumberBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KSCumberBase.h; path = ../Classes/KSCumberBase.h; sourceTree = "<group>"; };
+		A71A517517DFF6CC004B9F01 /* KSGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KSGeometry.h; path = ../Classes/KSGeometry.h; sourceTree = "<group>"; };
+		A71A517617DFF6CE004B9F01 /* SnakeCumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SnakeCumber.cpp; path = ../Classes/SnakeCumber.cpp; sourceTree = "<group>"; };
+		A71A517717DFF6D1004B9F01 /* SnakeCumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SnakeCumber.h; path = ../Classes/SnakeCumber.h; sourceTree = "<group>"; };
+		A71A517817DFF6D5004B9F01 /* Well512.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Well512.cpp; path = ../Classes/Well512.cpp; sourceTree = "<group>"; };
+		A71A517917DFF6D6004B9F01 /* Well512.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Well512.h; path = ../Classes/Well512.h; sourceTree = "<group>"; };
+		A71A517E17DFF7E3004B9F01 /* GameData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameData.cpp; path = ../Classes/GameData.cpp; sourceTree = "<group>"; };
+		A71A518017DFF863004B9F01 /* ProbSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ProbSelector.cpp; path = ../Classes/ProbSelector.cpp; sourceTree = "<group>"; };
+		A71A518117DFF865004B9F01 /* ProbSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProbSelector.h; path = ../Classes/ProbSelector.h; sourceTree = "<group>"; };
 		F293B3C815EB7BE500256477 /* DGproto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DGproto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F293B3CC15EB7BE500256477 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F293B3CE15EB7BE500256477 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1633,6 +1663,17 @@
 				A71A435F17D57E81004B9F01 /* CountingBMLabel.h */,
 				A71A436017D57E81004B9F01 /* Cumber.cpp */,
 				A71A436117D57E81004B9F01 /* Cumber.h */,
+				A71A517117DFF6C2004B9F01 /* KSCumber.cpp */,
+				A71A517217DFF6C5004B9F01 /* KSCumber.h */,
+				A71A517317DFF6C7004B9F01 /* KSCumberBase.cpp */,
+				A71A517417DFF6CA004B9F01 /* KSCumberBase.h */,
+				A71A517517DFF6CC004B9F01 /* KSGeometry.h */,
+				A71A517617DFF6CE004B9F01 /* SnakeCumber.cpp */,
+				A71A517717DFF6D1004B9F01 /* SnakeCumber.h */,
+				A71A517817DFF6D5004B9F01 /* Well512.cpp */,
+				A71A517917DFF6D6004B9F01 /* Well512.h */,
+				A71A518017DFF863004B9F01 /* ProbSelector.cpp */,
+				A71A518117DFF865004B9F01 /* ProbSelector.h */,
 				A71A436217D57E81004B9F01 /* CumberBase.cpp */,
 				A71A436317D57E81004B9F01 /* CumberBase.h */,
 				A71A436417D57E81004B9F01 /* CumberEmotion.cpp */,
@@ -1647,6 +1688,7 @@
 				A71A436D17D57E81004B9F01 /* GageBar.cpp */,
 				A71A436E17D57E81004B9F01 /* GageBar.h */,
 				A71A436F17D57E81004B9F01 /* GameData.h */,
+				A71A517E17DFF7E3004B9F01 /* GameData.cpp */,
 				A71A437017D57E81004B9F01 /* GameItemManager.cpp */,
 				A71A437117D57E81004B9F01 /* GameItemManager.h */,
 				A71A437217D57E81004B9F01 /* InApp.h */,
@@ -1657,6 +1699,8 @@
 				A71A437717D57E81004B9F01 /* Indenter.cpp */,
 				A71A437817D57E81004B9F01 /* Jack.cpp */,
 				A71A437917D57E81004B9F01 /* Jack.h */,
+				A71A516E17DF00A3004B9F01 /* ContinuePopup.cpp */,
+				A71A516F17DF00A5004B9F01 /* ContinuePopup.h */,
 				A71A437A17D57E81004B9F01 /* JackMissile.h */,
 				A71A437B17D57E81004B9F01 /* JNIKelper.cpp */,
 				A71A437C17D57E81004B9F01 /* JNIKelper.h */,
@@ -1708,6 +1752,10 @@
 				A71A43B417D57E81004B9F01 /* StarGoldData.h */,
 				A71A43B517D57E81004B9F01 /* StartingScene.cpp */,
 				A71A43B617D57E81004B9F01 /* StartingScene.h */,
+				A71A516817DEE070004B9F01 /* WorldMapScene.cpp */,
+				A71A516917DEE072004B9F01 /* WorldMapScene.h */,
+				A71A516B17DEF37A004B9F01 /* StageSettingPopup.cpp */,
+				A71A516C17DEF37B004B9F01 /* StageSettingPopup.h */,
 				A71A43C017D57E81004B9F01 /* Str2Token.cpp */,
 				A71A43C117D57E81004B9F01 /* Str2Token.h */,
 				A71A43C217D57E81004B9F01 /* StringCodec.cpp */,
@@ -1723,6 +1771,8 @@
 				A71A43CC17D57E81004B9F01 /* VerificationController.m */,
 				F293BB7E15EB831F00256477 /* AppDelegate.cpp */,
 				F293BB7F15EB831F00256477 /* AppDelegate.h */,
+				A71A516517D9B3BA004B9F01 /* ZoomScriptScene.cpp */,
+				A71A516617D9B3BB004B9F01 /* ZoomScriptScene.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -2071,6 +2121,16 @@
 				A71A443817D59BAE004B9F01 /* GraphDog.cpp in Sources */,
 				A71A443917D59BAE004B9F01 /* KSDes.cpp in Sources */,
 				A71A443A17D59BAE004B9F01 /* OpenUDID.m in Sources */,
+				A71A516717D9B3BC004B9F01 /* ZoomScriptScene.cpp in Sources */,
+				A71A516A17DEE078004B9F01 /* WorldMapScene.cpp in Sources */,
+				A71A516D17DEF37E004B9F01 /* StageSettingPopup.cpp in Sources */,
+				A71A517017DF00A7004B9F01 /* ContinuePopup.cpp in Sources */,
+				A71A517A17DFF6D9004B9F01 /* KSCumber.cpp in Sources */,
+				A71A517B17DFF6D9004B9F01 /* KSCumberBase.cpp in Sources */,
+				A71A517C17DFF6D9004B9F01 /* SnakeCumber.cpp in Sources */,
+				A71A517D17DFF6D9004B9F01 /* Well512.cpp in Sources */,
+				A71A517F17DFF7E6004B9F01 /* GameData.cpp in Sources */,
+				A71A518217DFF868004B9F01 /* ProbSelector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -35,39 +35,45 @@ public:
 		return t_MC;
 	}
 	
-	void cumberImgStartRotating(float speed);
-	void checkingJackCrash();
-	void startSpringCumber(float t_springAngle);
-	void stopSpringCumber();
-	void startMoving();
-	void stopMoving();
-	void setCumberState(int t_cs);
-	cumberState getCumberState();
-	void setGameover();
-	void furyModeOn();
-	void furyModeOff();
-	void tickingOn();
-	void tickingOff();
-	void startTeleport();
-	void smaller();
-	void changePosition();
-	void lightSmaller();
-	void endTeleport();
-	void createSheild();
-	void crashSheild();
-	void startInvisible();
-	void stopInvisible();
-	void silenceItem(bool t_b);
-	void setMovingShoot(bool t_b);
-	void setCasting(bool t_b);
-	void showEmotion(EmotionType t_type);
-	void nullmEmotion();
-	CCNode* getBossEye();
-	void caughtBoss(CCObject* t_setCaught, SEL_CallFunc d_setCaught);
-	void endCaughtBoss();
-	void changeMaxSize(float t_p);
+	virtual ~MainCumber()
+	{
+		
+	}
 	
-private:
+	virtual void cumberImgStartRotating(float speed);
+	virtual void checkingJackCrash();
+	virtual void startSpringCumber(float t_springAngle);
+	virtual void stopSpringCumber();
+	virtual void startMoving();
+	virtual void stopMoving();
+	virtual void setCumberState(int t_cs);
+	virtual cumberState getCumberState();
+	virtual void setGameover();
+	virtual void furyModeOn();
+	virtual void furyModeOff();
+	virtual void tickingOn();
+	virtual void tickingOff();
+	virtual void startTeleport();
+	virtual void smaller();
+	virtual void changePosition();
+	virtual void lightSmaller();
+	virtual void endTeleport();
+	virtual void createSheild();
+	virtual void crashSheild();
+	virtual void startInvisible();
+	virtual void stopInvisible();
+	virtual void silenceItem(bool t_b);
+	virtual void setMovingShoot(bool t_b);
+	virtual void setCasting(bool t_b);
+	virtual void showEmotion(EmotionType t_type);
+	virtual void nullmEmotion();
+	virtual CCNode* getBossEye();
+	virtual void caughtBoss(CCObject* t_setCaught, SEL_CallFunc d_setCaught);
+	virtual void endCaughtBoss();
+	virtual void changeMaxSize(float t_p);
+	
+//private:
+protected:
 	CCObject* target_setCaught;
 	SEL_CallFunc delegate_setCaught;
 	
@@ -114,16 +120,16 @@ private:
 	int checking_array[360];
 	
 	void alertAction(int t1, int t2);
-	void moving();
+	virtual void moving();
 	
 	void invisibling();
 	
-	void springCumber();
+	virtual void springCumber();
 	
-	void crashMapForIntPoint(IntPoint t_p);
-	void myInit();
-	void randomShuffle();
-	bool checkingFunc(IntPoint check_position, bool& is_not_position, bool& notEmotion, int& before_areacrash_cnt, bool& is_map_visited);
+	virtual void crashMapForIntPoint(IntPoint t_p);
+	virtual void myInit();
+	virtual void randomShuffle();
+	virtual bool checkingFunc(IntPoint check_position, bool& is_not_position, bool& notEmotion, int& before_areacrash_cnt, bool& is_map_visited);
 };
 
 

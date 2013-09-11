@@ -57,7 +57,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2,
 	kDSH_Key_hasGottenPet_int1,
 	kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2,
-	kDSH_Key_checkedNewControlJoystick
+	kDSH_Key_checkedNewControlJoystick,
+	kDSH_Key_theme_int1_clearednumber
 }DSH_Key;
 
 class DataStorageHub : public CCObject
@@ -242,6 +243,7 @@ private:
 		else if(t_name == kDSH_Key_hasGottenPet_int1)							return_value = "hgp%d";
 		else if(t_name == kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2)	return_value = "hcmc%db%d";
 		else if(t_name == kDSH_Key_checkedNewControlJoystick)					return_value = "cncj";
+		else if(t_name == kDSH_Key_theme_int1_clearednumber)			return_value = "theme%dclrn";
 		
 		return return_value;
 	}

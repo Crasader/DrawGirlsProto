@@ -7,7 +7,8 @@
 //
 
 #include "ClearScene.h"
-#include "StartingScene.h"
+//#include "StartingScene.h"
+#include "WorldMapScene.h"
 #include "ScreenSide.h"
 
 typedef enum tMenuTagClearScene{
@@ -78,7 +79,8 @@ void ClearScene::menuAction(CCObject* pSender)
 	if(tag == kMT_CS_ok)
 	{
 		is_menu_enable = false;
-		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
+//		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
+		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
 	}
 }
 

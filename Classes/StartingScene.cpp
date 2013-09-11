@@ -68,7 +68,7 @@ bool StartingScene::init()
 	addChild(summer_menu, kZ_SS_menu);
 	
 	
-	CCMenuItem* christmas_item = CCMenuItemImage::create("start_christmas.png", "start_chrestmas.png", this, menu_selector(StartingScene::menuAction));
+	CCMenuItem* christmas_item = CCMenuItemImage::create("start_christmas.png", "start_christmas.png", this, menu_selector(StartingScene::menuAction));
 	christmas_item->setTag(kMT_SS_christmas);
 	
 	CCMenu* christmas_menu = CCMenu::createWithItem(christmas_item);

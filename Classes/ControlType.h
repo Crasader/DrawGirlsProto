@@ -245,6 +245,11 @@ public:
 		}
 	}
 	
+	void stopMySchedule();
+	bool isBacking;
+	
+	SEL_CallFunc pauseBackTracking;
+	
 private:
 	IntDirection beforeDirection;
 	IntDirection beforeSecondDirection;
@@ -265,6 +270,7 @@ private:
 		isButtonAction = false;
 		button_touch = NULL;
 		joystick_touch = NULL;
+		isBacking = false;
 		
 		ControlCommon::myInit(t_main, d_readyBack, t_jack);
 		beforeDirection = directionStop;

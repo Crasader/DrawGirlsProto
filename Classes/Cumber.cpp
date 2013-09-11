@@ -7,6 +7,7 @@
 //
 
 #include "Cumber.h"
+#include "SnakeCumber.h"
 
 void CumberParent::setMainCumberState(int t_cs)
 {
@@ -409,42 +410,8 @@ void CumberParent::myInit()
 	myGD->V_F["CP_changeMaxSize"] = std::bind(&CumberParent::changeMaxSize, this, _1);
 	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
 	
-	
-	
-	
-	
-	//std::function<void(int)>(&CumberParent::mainCumberShowEmotion);
-	//		myGD->regCP(this, callfunc_selector(CumberParent::movingMainCumber),
-	//					callfuncO_selector(CumberParent::removeSubCumber),
-	//					icallfunc_selector(CumberParent::getSubCumberCount),
-	//					callfuncIp_selector(CumberParent::createSubCumber),
-	//					callfuncI_selector(CumberParent::setMainCumberState),
-	//					ncallfunc_selector(CumberParent::getMainCumberPointer),
-	//					acallfunc_selector(CumberParent::getSubCumberArrayPointer),
-	//					callfuncOFF_selector(CumberParent::decreaseLifeForSubCumber),
-	//					schedule_selector(CumberParent::startSpringMainCumber),
-	//					callfunc_selector(CumberParent::setGameover),
-	//					callfunc_selector(CumberParent::furyModeOn),
-	//					callfunc_selector(CumberParent::tickingOn),
-	//					callfunc_selector(CumberParent::subCumberBomb),
-	//
-	//					callfunc_selector(CumberParent::startTeleport),
-	//					callfunc_selector(CumberParent::subCumberReplication),
-	//					icallfunc_selector(CumberParent::getMainCumberSheild),
-	//					callfunc_selector(CumberParent::createAllCumberSheild),
-	//					callfunc_selector(CumberParent::mainCumberInvisibleOn),
-	//					callfunc_selector(CumberParent::mainCumberInvisibleOff),
-	//					callfuncB_selector(CumberParent::slowItem),
-	//					callfuncB_selector(CumberParent::silenceItem),
-	//					callfuncB_selector(CumberParent::setMovingShoot),
-	//					callfuncB_selector(CumberParent::setCasting),
-	//					callfunc_selector(CumberParent::stopMovingMainCumber),
-	//					callfunc_selector(CumberParent::jackCrashDie),
-	//					callfuncI_selector(CumberParent::mainCumberShowEmotion),
-	//					callfunc_selector(CumberParent::startDieAnimation),
-	//					callfuncF_selector(CumberParent::changeMaxSize),
-	//					callfunc_selector(CumberParent::checkingJackCrash));
-	auto mainCumber = MainCumber::create();
+//	auto mainCumber = MainCumber::create();
+	auto mainCumber = SnakeCumber::create();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	

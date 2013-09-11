@@ -21,6 +21,9 @@ using namespace std;
 #define pixelSize 2
 #define MY_SCALE_RATE	1.5
 
+float deg2Rad(float x) ;
+float rad2Deg(float x);
+
 enum SetMapType{
 	kSMT_side = 1,
 	kSMT_randRect,
@@ -214,6 +217,9 @@ public:
 	}
 };
 
+CCPoint ip2ccp(const IntPoint& ip);
+IntPoint ccp2ip(const CCPoint& cc);
+
 typedef void (CCObject::*SEL_CallFuncIp)(IntPoint);
 #define callfuncIp_selector(_SELECTOR) (SEL_CallFuncIp)(&_SELECTOR)
 
@@ -346,7 +352,8 @@ typedef void (CCObject::*SEL_CallFuncIpIII)(IntPoint, int, int, int);
 typedef void (CCObject::*SEL_CallFuncFBCCp)(float, bool, CCPoint);
 #define callfuncFBCCp_selector(_SELECTOR) (SEL_CallFuncFBCCp)(&_SELECTOR)
 
-
+typedef void (CCObject::*SEL_CallFuncTDTD)(CCObject*, SEL_CallFunc, CCObject*, SEL_CallFunc);
+#define callfuncTDTD_selector(_SELECTOR) (SEL_CallFuncTDTD)(&_SELECTOR)
 
 #include <functional>
 #include <map>
@@ -381,6 +388,7 @@ public:
 	std::map<std::string, std::function<void(IntPoint, CCObject*, SEL_CallFuncI)>> V_IpCCOCallfunci;
 	std::map<std::string, std::function<void(IntPoint, int, int, int)>> V_IpIII;
 	std::map<std::string, std::function<void(float, bool, CCPoint)>> V_FBCCP;
+	std::map<std::string, std::function<void(CCObject*, SEL_CallFunc, CCObject*, SEL_CallFunc)>> V_TDTD;
 
 	
 	mapType mapState[162][217];
@@ -878,6 +886,13 @@ public:
 	{
 		CCAssert(V_CCP.find(funcName) != V_CCP.end(), "Assert");
 		V_CCP[funcName](t_p);
+		return;
+	}
+	
+	void communication(string funcName, CCObject* t_t1, SEL_CallFunc t_d1, CCObject* t_t2, SEL_CallFunc t_d2)
+	{
+		CCAssert(V_TDTD.find(funcName) != V_TDTD.end(), "Assert");
+		V_TDTD[funcName](t_t1, t_d1, t_t2, t_d2);
 		return;
 	}
 	
@@ -1458,5 +1473,7 @@ private:
 //	SEL_CallFuncF delegate_Jack_setAlphaSpeed;
 //	SEL_FCallFunc delegate_Jack_getSpeedUpValue;
 };
+
+extern GameData* gameData;
 
 #endif

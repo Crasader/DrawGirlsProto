@@ -22,6 +22,8 @@
 #include "BossLifeGage.h"
 #include "AreaGage.h"
 #include "StartingScene.h"
+#include "ContinuePopup.h"
+#include "WorldMapScene.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -876,6 +878,15 @@ public:
 		addChild(t_ppl);
 	}
 	
+	void showContinuePopup(CCObject* t_end, SEL_CallFunc d_end, CCObject* t_continue, SEL_CallFunc d_continue)
+	{
+		target_continue = t_continue;
+		delegate_continue = d_continue;
+		
+		ContinuePopup* t_cpl = ContinuePopup::create(t_end, d_end, this, callfunc_selector(PlayUI::continueAction));
+		addChild(t_cpl);
+	}
+	
 	bool beRevivedJack()
 	{
 		if(jack_life > 0)
@@ -908,6 +919,9 @@ private:
 	SEL_CallFunc delegate_button;
 	SEL_CallFunc delegate_joystick;
 	SEL_CallFunc delegate_startControl;
+	
+	CCObject* target_continue;
+	SEL_CallFunc delegate_continue;
 	
 	GameData* myGD;
 	SilhouetteData* mySD;
@@ -1115,10 +1129,10 @@ private:
 		home_menu->setPosition(ccp(40,280+DataStorageHub::sharedInstance()->ui_top_control));
 		addChild(home_menu);
 		
-		jack_life = 3;
 		
 		jack_array = new CCArray(1);
 		
+		jack_life = 3;
 		for(int i=0;i<jack_life;i++)
 		{
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
@@ -1153,6 +1167,22 @@ private:
 		myGD->V_F["UI_subBossLife"] = std::bind(&PlayUI::subBossLife, this, _1);
 		myGD->V_V["UI_decreasePercentage"] = std::bind(&PlayUI::decreasePercentage, this);
 		myGD->B_V["UI_beRevivedJack"] = std::bind(&PlayUI::beRevivedJack, this);
+		myGD->V_TDTD["UI_showContinuePopup"] = std::bind(&PlayUI::showContinuePopup, this, _1, _2, _3, _4);
+	}
+	
+	void continueAction()
+	{
+		jack_life = 3;
+		for(int i=0;i<jack_life;i++)
+		{
+			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
+			jack_img->setPosition(ccp(100+i*20, 300+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(jack_img);
+			
+			jack_array->addObject(jack_img);
+		}
+		
+		(target_continue->*delegate_continue)();
 	}
 	
 	void menuAction(CCObject* sender)
@@ -1214,7 +1244,8 @@ private:
 		StarGoldData::sharedInstance()->gameOver(0, 0, 0);
 		StarGoldData::sharedInstance()->resetLabels();
 		GameData::sharedGameData()->resetGameData();
-		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
+//		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
+		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
 	}
 	
 	void goHome()

@@ -324,14 +324,14 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 	float distanceValue = sqrt(pow(distancePoint.x, 2.0) + pow(distancePoint.y, 2.0));
 	float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 	
-	if(myJack->isStun || myJack->willBackTracking || myJack->getJackState() == jackStateBackTracking)
+	if(myJack->isStun)// || myJack->willBackTracking || myJack->getJackState() == jackStateBackTracking)
 	{
 		myJack->changeDirection(directionStop, directionStop);
 		beforeDirection = directionStop;
 		beforeSecondDirection = directionStop;
 		unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
 		myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
-		joystick_touch = NULL;
+//		joystick_touch = NULL;
 		return;
 	}
 	
@@ -351,63 +351,6 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 	if(distanceValue > minimumDistanceJ)
 	{
 		IntPoint jackPoint = myGD->getJackPoint();
-		
-//		if(angle < -135.f)
-//		{
-//			angleDirection = directionLeft;
-//			
-//			if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
-//			else												secondDirection = directionDown;
-//		}
-//		else if(angle < -90.f)
-//		{
-//			angleDirection = directionDown;
-//			
-//			if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
-//			else												secondDirection = directionLeft;
-//		}
-//		else if(angle < -45.f)
-//		{
-//			angleDirection = directionDown;
-//			
-//			if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
-//			else												secondDirection = directionRight;
-//		}
-//		else if(angle < 0.f)
-//		{
-//			angleDirection = directionRight;
-//			
-//			if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
-//			else												secondDirection = directionDown;
-//		}
-//		else if(angle < 45.f)
-//		{
-//			angleDirection = directionRight;
-//			
-//			if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
-//			else												secondDirection = directionUp;
-//		}
-//		else if(angle < 90.f)
-//		{
-//			angleDirection = directionUp;
-//			
-//			if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
-//			else												secondDirection = directionRight;
-//		}
-//		else if(angle < 135.f)
-//		{
-//			angleDirection = directionUp;
-//			
-//			if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
-//			else												secondDirection = directionLeft;
-//		}
-//		else
-//		{
-//			angleDirection = directionLeft;
-//			
-//			if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
-//			else												secondDirection = directionUp;
-//		}
 		
 		if(angle < -148.f)
 		{
@@ -556,21 +499,36 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 
 void ControlJoystickButton::directionKeeping()
 {
-	if(myJack->isStun || myJack->willBackTracking || myJack->getJackState() == jackStateBackTracking)
+	if(myJack->isStun)// || myJack->willBackTracking || myJack->getJackState() == jackStateBackTracking)
 	{
 		myJack->changeDirection(directionStop, directionStop);
 		beforeDirection = directionStop;
 		beforeSecondDirection = directionStop;
 		unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
 		myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
-		joystick_touch = NULL;
+//		joystick_touch = NULL;
 		return;
 	}
 	myJack->changeDirection(beforeDirection, beforeSecondDirection);
 }
 
+void ControlJoystickButton::stopMySchedule()
+{
+	myJack->changeDirection(directionStop, directionStop);
+	beforeDirection = directionStop;
+	beforeSecondDirection = directionStop;
+	unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
+	myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
+//	joystick_touch = NULL;
+}
+
 void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 {
+	if(isStun)
+	{
+		return;
+	}
+	
 	CCSetIterator iter;
 	CCTouch* touch;
 	
@@ -589,6 +547,23 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				button_touch = touch;
 				myJack->isDrawingOn = true;
 				draw_button->setColor(ccGRAY);
+				
+				if(isBacking)
+				{
+					(target_main->*pauseBackTracking)();
+					
+					myJack->setJackState(jackStateDrawing);
+					
+					if(joystick_touch)
+					{
+						isButtonAction = true;
+						IntPoint jackPoint = myGD->getJackPoint();
+						if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
+							myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
+						touchAction(convertToNodeSpace(CCDirector::sharedDirector()->convertToGL(joystick_touch->getLocationInView())), false);
+						continue;
+					}
+				}
 				
 				if(joystick_touch && !myJack->isMoving)
 				{
@@ -630,6 +605,9 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 
 void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
+	if(isStun)
+		return;
+	
 	CCSetIterator iter;
 	CCTouch* touch;
 	
@@ -696,6 +674,9 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 
 void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 {
+//	if(isStun)
+//		return;
+	
 	CCSetIterator iter;
 	CCTouch* touch;
 	
