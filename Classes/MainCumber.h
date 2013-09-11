@@ -42,7 +42,7 @@ public:
 	
 	virtual void cumberImgStartRotating(float speed);
 	virtual void checkingJackCrash();
-	virtual void startAttackReaction(float userdata);
+	virtual void startDamageReaction(float userdata);
 	virtual void startMoving();
 	virtual void stopMoving();
 	virtual void setCumberState(int t_cs);

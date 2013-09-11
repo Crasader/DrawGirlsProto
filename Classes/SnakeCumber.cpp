@@ -26,7 +26,6 @@ bool SnakeCumber::init()
 {
 	KSCumberBase::init();
 
-	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	m_speed = 2.f;
 	m_headImg = CCSprite::create("boss1_head.png");

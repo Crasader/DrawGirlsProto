@@ -98,7 +98,7 @@ public:
 	}
 	virtual void movingAndCrash(float dt) = 0;
 	virtual void startDamageReaction(float userdata) = 0;
-	virtual void startSpringCumber(float userdata) = 0;
+//	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
 	void setCumberState(int e)

@@ -238,7 +238,7 @@ private:
 					if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 					{
 						myGD->communication("UI_subBossLife", damage);
-						myGD->communication("CP_startAttackReaction", -shootImg->getRotation());
+						myGD->communication("CP_startDamageReaction", -shootImg->getRotation());
 					}
 				}
 				myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)targetNode, damage, -shootImg->getRotation());
@@ -691,7 +691,7 @@ private:
 					if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 					{
 						myGD->communication("UI_subBossLife", damage);
-						myGD->communication("CP_startAttackReaction", directionAngle);
+						myGD->communication("CP_startDamageReaction", directionAngle);
 					}
 				}
 				myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)targetNode, damage, directionAngle);

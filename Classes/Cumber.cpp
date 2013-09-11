@@ -109,11 +109,11 @@ void CumberParent::createAllCumberSheild()
 	}
 }
 
-void CumberParent::startAttackReaction(float userdata)
+void CumberParent::startDamageReaction(float userdata)
 {
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
 	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	mainCumber->startAttackReaction(userdata);
+	mainCumber->startDamageReaction(userdata);
 }
 void CumberParent::subCumberBomb()
 {
@@ -394,7 +394,7 @@ void CumberParent::myInit()
 	myGD->V_V["CP_subCumberBomb"] = std::bind(&CumberParent::subCumberBomb, this);
 	myGD->V_V["CP_startTeleport"] = std::bind(&CumberParent::startTeleport, this);
 	myGD->V_V["CP_subCumberReplication"] = std::bind(&CumberParent::subCumberReplication, this);
-	myGD->V_F["CP_startAttackReaction"] = std::bind(&CumberParent::startAttackReaction, this, _1);
+	myGD->V_F["CP_startDamageReaction"] = std::bind(&CumberParent::startDamageReaction, this, _1);
 	myGD->I_V["CP_getMainCumberSheild"] = std::bind(&CumberParent::getMainCumberSheild, this);
 	myGD->V_V["CP_createAllCumberSheild"] = std::bind(&CumberParent::createAllCumberSheild, this);
 	myGD->V_V["CP_mainCumberInvisibleOn"] = std::bind(&CumberParent::mainCumberInvisibleOn, this);

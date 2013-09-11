@@ -438,7 +438,7 @@ void MainCumber::checkingJackCrash()
 	}
 }
 
-void MainCumber::startAttackReaction(float userdata)
+void MainCumber::startDamageReaction(float userdata)
 {
 	startSpringCumber(userdata);
 }

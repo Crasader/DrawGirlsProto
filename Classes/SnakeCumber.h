@@ -100,7 +100,7 @@ public:
 		if(mEmotion)
 			mEmotion->selfRemove();
 		mEmotion = Emotion::create(t_type, this, callfunc_selector(SnakeCumber::nullmEmotion));
-		mEmotion->setPosition(ccp(30,20));
+		mEmotion->setPosition(ccpAdd(getPosition(), ccp(30,20)));
 		addChild(mEmotion);
 	}
 	void nullmEmotion()
@@ -110,10 +110,10 @@ public:
 	void setHeadAndBodies();
 	virtual void startDamageReaction(float userdata);
 	
-	virtual void startSpringCumber(float userdata)
-	{
-		startDamageReaction(userdata);
-	}
+//	virtual void startSpringCumber(float userdata)
+//	{
+//		startDamageReaction(userdata);
+//	}
 	void damageReaction(float dt);
 protected:
 	bool isGameover;
