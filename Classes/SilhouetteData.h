@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "GameData.h"
+#include "EnumDefine.h"
 
 USING_NS_CC;
 using namespace std;
@@ -35,11 +36,77 @@ public:
 	void setSilType(int t1)
 	{
 		myType = t1;
+		if(myType == 1)
+		{
+			my_clear_condition = kCLEAR_bossLifeZero;
+		}
+		else
+		{
+			my_clear_condition = kCLEAR_default;
+		}
 	}
 	
 	int getSilType()
 	{
 		return myType;
+	}
+	
+	CLEAR_CONDITION getClearCondition()
+	{
+		return my_clear_condition;
+	}
+	
+	float getBossMaxLife()
+	{
+		float return_value;
+		if(my_clear_condition == kCLEAR_bossLifeZero)
+		{
+			if(myType == 1)
+			{
+				return_value = 500;
+			}
+			else
+			{
+				return_value = 100000;
+			}
+		}
+		else
+		{
+			return_value = 100000;
+		}
+		return return_value;
+	}
+	
+	string getConditionTitle()
+	{
+		string return_value;
+		
+		if(my_clear_condition == kCLEAR_bossLifeZero)
+		{
+			return_value = "용감한 기사";
+		}
+		else
+		{
+			return_value = "";
+		}
+		
+		return return_value;
+	}
+	
+	string getConditionContent()
+	{
+		string return_value;
+		
+		if(my_clear_condition == kCLEAR_bossLifeZero)
+		{
+			return_value = "보스의 에너지를 모두 소진시켜라!";
+		}
+		else
+		{
+			return_value = "";
+		}
+		
+		return return_value;
 	}
 	
 	string getScriptString(int level);
@@ -51,6 +118,7 @@ public:
 	
 private:
 	int myType;
+	CLEAR_CONDITION my_clear_condition;
 	
 	void myInit()
 	{

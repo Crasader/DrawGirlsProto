@@ -57,6 +57,19 @@ private:
 		sspl_back->setPosition(ccp(240,160));
 		addChild(sspl_back, kSSPL_Z_back);
 		
+		CCSprite* clr_cdt = CCSprite::create("whitePaper.png", CCRectMake(0,0,30,30));
+		clr_cdt->setPosition(ccp(70,260));
+		addChild(clr_cdt, kSSPL_Z_menu);
+		
+		if(stage == 1)
+		{
+			clr_cdt->setColor(ccRED);
+		}
+		else
+		{
+			clr_cdt->setColor(ccWHITE);
+		}
+		
 		CCSprite* n_start = CCSprite::create("sspl_start.png");
 		CCSprite* s_start = CCSprite::create("sspl_start.png");
 		s_start->setColor(ccGRAY);

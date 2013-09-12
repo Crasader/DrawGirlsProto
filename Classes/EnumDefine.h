@@ -177,6 +177,11 @@ typedef enum t_ShopCode{
 	kShopCode_brush
 }ShopCode;
 
+typedef enum t_CLEAR_CONDITION{
+	kCLEAR_default = 0,
+	kCLEAR_bossLifeZero
+}CLEAR_CONDITION;
+
 #define SHOP_KEY	0xD9
 
 #endif

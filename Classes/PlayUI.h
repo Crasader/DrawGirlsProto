@@ -24,6 +24,7 @@
 #include "StartingScene.h"
 #include "ContinuePopup.h"
 #include "WorldMapScene.h"
+#include "ConditionPopup.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -480,11 +481,17 @@ private:
 };
 
 enum MenuTagUI{
-	kMenuTagUI_home = 1
+	kMenuTagUI_home = 1,
+	kMenuTagUI_condition
 };
 
 enum AlertTagUI{
 	kAlertTagUI_home = 1
+};
+
+enum ChildTagInPlayUI{
+	kCT_UI_clrCdtLabel = 100,
+	kCT_UI_clrCdtIcon
 };
 
 #define t_tta	0xD9
@@ -635,70 +642,86 @@ public:
 		
 		if(!isGameover && t_p > clearPercentage) // clear 80%
 		{
-			myGD->communication("MP_bombCumber", myGD->getCommunicationNode("CP_getMainCumberPointer"));
-			isGameover = true;
-			myGD->setIsGameover(true);
-			myGD->communication("CP_setGameover");
-			stopCounting();
-			myGD->communication("Main_allStopSchedule");
-			myGD->communication("CP_startDieAnimation");
-			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-			result_sprite = CCSprite::create("game_clear.png");
-			result_sprite->setRotation(-25);
-			result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
-			addChild(result_sprite);
-			
-			int star_cnt = 1;
-			if(t_p >= clearPercentage + 0.1f || countingCnt <= 50)				star_cnt = 3;
-			else if(t_p >= clearPercentage + 0.05f || countingCnt <= 100)		star_cnt = 2;
-			
-			int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
-			int stage_number = SelectedMapData::sharedInstance()->getSelectedStage();
-			
-			int before_star_cnt = myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number);
-			if(before_star_cnt < star_cnt)
+			if(is_cleared_cdt)
 			{
-				int brush_cnt = StarGoldData::sharedInstance()->getBrushCnt();
+				myGD->communication("MP_bombCumber", myGD->getCommunicationNode("CP_getMainCumberPointer"));
+				isGameover = true;
+				myGD->setIsGameover(true);
+				myGD->communication("CP_setGameover");
+				stopCounting();
+				myGD->communication("Main_allStopSchedule");
+				myGD->communication("CP_startDieAnimation");
+				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+				result_sprite = CCSprite::create("game_clear.png");
+				result_sprite->setRotation(-25);
+				result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+				addChild(result_sprite);
 				
-				if(brush_cnt + star_cnt-before_star_cnt >= 5)
-				{
-					if(brush_cnt < 5)
-						StarGoldData::sharedInstance()->setBrushCnt(5);
-					StarGoldData::sharedInstance()->setBrushTime(-1);
-				}
-				else
-				{
-					StarGoldData::sharedInstance()->setBrushCnt(brush_cnt+star_cnt-before_star_cnt);
-				}
+				int star_cnt = 1;
+				if(t_p >= clearPercentage + 0.1f || countingCnt <= 50)				star_cnt = 3;
+				else if(t_p >= clearPercentage + 0.05f || countingCnt <= 100)		star_cnt = 2;
 				
-				if(stage_number == 5)
-				{
-					StarGoldData::sharedInstance()->setIsAfterSceneChapter(true);
-					if(chapter_number >= 10 && chapter_number < 20)
-					{
-						if(chapter_number == 10 && myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, 10, 5) == 0)
-						{
-							StarGoldData::sharedInstance()->setOpenHard(true);
-						}
-					}
-					else
-					{
-						myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, SelectedMapData::sharedInstance()->getNextChapterNumber(), true);
-						myDSH->setIntegerForKey(kDSH_Key_lastSelectedChapter, SelectedMapData::sharedInstance()->getNextChapterNumber());
-					}
-				}
-				else
-				{
-					myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1_Stage_int2, chapter_number, stage_number+1, true);
-					myDSH->setIntegerForKey(kDSH_Key_chapter_int1_LastSelectedStage, chapter_number, stage_number+1);
-				}
+				//			int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
+				//			int stage_number = SelectedMapData::sharedInstance()->getSelectedStage();
+				//
+				//			int before_star_cnt = myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number);
+				//			if(before_star_cnt < star_cnt)
+				//			{
+				//				int brush_cnt = StarGoldData::sharedInstance()->getBrushCnt();
+				//
+				//				if(brush_cnt + star_cnt-before_star_cnt >= 5)
+				//				{
+				//					if(brush_cnt < 5)
+				//						StarGoldData::sharedInstance()->setBrushCnt(5);
+				//					StarGoldData::sharedInstance()->setBrushTime(-1);
+				//				}
+				//				else
+				//				{
+				//					StarGoldData::sharedInstance()->setBrushCnt(brush_cnt+star_cnt-before_star_cnt);
+				//				}
+				//
+				//				if(stage_number == 5)
+				//				{
+				//					StarGoldData::sharedInstance()->setIsAfterSceneChapter(true);
+				//					if(chapter_number >= 10 && chapter_number < 20)
+				//					{
+				//						if(chapter_number == 10 && myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, 10, 5) == 0)
+				//						{
+				//							StarGoldData::sharedInstance()->setOpenHard(true);
+				//						}
+				//					}
+				//					else
+				//					{
+				//						myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, SelectedMapData::sharedInstance()->getNextChapterNumber(), true);
+				//						myDSH->setIntegerForKey(kDSH_Key_lastSelectedChapter, SelectedMapData::sharedInstance()->getNextChapterNumber());
+				//					}
+				//				}
+				//				else
+				//				{
+				//					myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1_Stage_int2, chapter_number, stage_number+1, true);
+				//					myDSH->setIntegerForKey(kDSH_Key_chapter_int1_LastSelectedStage, chapter_number, stage_number+1);
+				//				}
+				//
+				//				myDSH->setIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number, star_cnt);
+				//			}
 				
-				myDSH->setIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number, star_cnt);
+				StarGoldData::sharedInstance()->gameClear(star_cnt, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt);
+				
+				endGame();
 			}
-			
-			StarGoldData::sharedInstance()->gameClear(star_cnt, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt);
-			
-			endGame();
+			else
+			{
+				stopCounting();
+				// timeover
+				isGameover = true;
+				myGD->communication("Main_allStopSchedule");
+				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+				result_sprite = CCSprite::create("game_timeover.png");
+				result_sprite->setRotation(-25);
+				result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+				addChild(result_sprite);
+				endGame();
+			}
 		}
 	}
 	
@@ -727,6 +750,9 @@ public:
 	
 	void subBossLife(float t_life)
 	{
+		if(clr_cdt_type != kCLEAR_bossLifeZero || is_cleared_cdt)
+			return;
+		
 		t_life = MissileDamageData::getCorrelationDamage(t_life, main_cumber_element);
 		
 		if(bossLife < t_life)
@@ -742,75 +768,81 @@ public:
 //		bossLifeGage->runAction(t_spawn);
 		
 		m_bossLifeGage->setPercentage(bossLife/maxBossLife);
+		if(!is_cleared_cdt)
+			((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%.1f%%", bossLife/maxBossLife*100.f)->getCString());
 		
 //		bossLifeGage->setScaleY(bossLife/maxBossLife);
-		if(!isGameover && bossLife == 0.f)
+		if(!isGameover && bossLife == 0.f && !is_cleared_cdt)
 		{
-			isGameover = true;
-			myGD->setIsGameover(true);
-			myGD->communication("CP_setGameover");
-			stopCounting();
-			myGD->communication("Main_allStopSchedule");
-			myGD->communication("CP_startDieAnimation");
-			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-			result_sprite = CCSprite::create("game_clear.png");
-			result_sprite->setRotation(-25);
-			result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
-			addChild(result_sprite);
+			is_cleared_cdt = true;
+			removeChildByTag(kCT_UI_clrCdtIcon);
+			removeChildByTag(kCT_UI_clrCdtLabel);
 			
-			int star_cnt = 1;
-			
-			if(countingCnt <= 50)				star_cnt = 3;
-			else if(countingCnt <= 100)			star_cnt = 2;
-			
-			int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
-			int stage_number = SelectedMapData::sharedInstance()->getSelectedStage();
-			
-			int before_star_cnt = myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number);
-			if(before_star_cnt < star_cnt)
-			{
-				int brush_cnt = StarGoldData::sharedInstance()->getBrushCnt();
-				
-				if(brush_cnt + star_cnt-before_star_cnt >= 5)
-				{
-					if(brush_cnt < 5)
-						StarGoldData::sharedInstance()->setBrushCnt(5);
-					StarGoldData::sharedInstance()->setBrushTime(-1);
-				}
-				else
-				{
-					StarGoldData::sharedInstance()->setBrushCnt(brush_cnt+star_cnt-before_star_cnt);
-				}
-				
-				if(stage_number == 5)
-				{
-					StarGoldData::sharedInstance()->setIsAfterSceneChapter(true);
-					if(chapter_number >= 10 && chapter_number < 20)
-					{
-						if(chapter_number == 10 && myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, 10, 5) == 0)
-						{
-							StarGoldData::sharedInstance()->setOpenHard(true);
-						}
-					}
-					else
-					{
-						myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, SelectedMapData::sharedInstance()->getNextChapterNumber(), true);
-						myDSH->setIntegerForKey(kDSH_Key_lastSelectedChapter, SelectedMapData::sharedInstance()->getNextChapterNumber());
-					}
-				}
-				else
-				{
-					myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1_Stage_int2, chapter_number, stage_number+1, true);
-					myDSH->setIntegerForKey(kDSH_Key_chapter_int1_LastSelectedStage, chapter_number, stage_number+1);
-				}
-				
-				myDSH->setIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number, star_cnt);
-				
-			}
-			
-			StarGoldData::sharedInstance()->gameClear(star_cnt, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt);
-			
-			endGame();
+//			isGameover = true;
+//			myGD->setIsGameover(true);
+//			myGD->communication("CP_setGameover");
+//			stopCounting();
+//			myGD->communication("Main_allStopSchedule");
+//			myGD->communication("CP_startDieAnimation");
+//			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+//			result_sprite = CCSprite::create("game_clear.png");
+//			result_sprite->setRotation(-25);
+//			result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+//			addChild(result_sprite);
+//			
+//			int star_cnt = 1;
+//			
+//			if(countingCnt <= 50)				star_cnt = 3;
+//			else if(countingCnt <= 100)			star_cnt = 2;
+//			
+//			int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
+//			int stage_number = SelectedMapData::sharedInstance()->getSelectedStage();
+//			
+//			int before_star_cnt = myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number);
+//			if(before_star_cnt < star_cnt)
+//			{
+//				int brush_cnt = StarGoldData::sharedInstance()->getBrushCnt();
+//				
+//				if(brush_cnt + star_cnt-before_star_cnt >= 5)
+//				{
+//					if(brush_cnt < 5)
+//						StarGoldData::sharedInstance()->setBrushCnt(5);
+//					StarGoldData::sharedInstance()->setBrushTime(-1);
+//				}
+//				else
+//				{
+//					StarGoldData::sharedInstance()->setBrushCnt(brush_cnt+star_cnt-before_star_cnt);
+//				}
+//				
+//				if(stage_number == 5)
+//				{
+//					StarGoldData::sharedInstance()->setIsAfterSceneChapter(true);
+//					if(chapter_number >= 10 && chapter_number < 20)
+//					{
+//						if(chapter_number == 10 && myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, 10, 5) == 0)
+//						{
+//							StarGoldData::sharedInstance()->setOpenHard(true);
+//						}
+//					}
+//					else
+//					{
+//						myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, SelectedMapData::sharedInstance()->getNextChapterNumber(), true);
+//						myDSH->setIntegerForKey(kDSH_Key_lastSelectedChapter, SelectedMapData::sharedInstance()->getNextChapterNumber());
+//					}
+//				}
+//				else
+//				{
+//					myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1_Stage_int2, chapter_number, stage_number+1, true);
+//					myDSH->setIntegerForKey(kDSH_Key_chapter_int1_LastSelectedStage, chapter_number, stage_number+1);
+//				}
+//				
+//				myDSH->setIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number, star_cnt);
+//				
+//			}
+//			
+//			StarGoldData::sharedInstance()->gameClear(star_cnt, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt);
+//			
+//			endGame();
 		}
 	}
 	
@@ -964,6 +996,9 @@ private:
 	
 	int jack_life;
 	CCArray* jack_array;
+	
+	bool is_cleared_cdt; // cdt => condition
+	CLEAR_CONDITION clr_cdt_type;
 	
 	void counting()
 	{
@@ -1155,12 +1190,32 @@ private:
 			exchange_dic->setObject(exchange_spr, i);
 		}
 		
-//		myGD->regUI(this,
-//					callfuncI_selector(PlayUI::addScore),
-//					schedule_selector(PlayUI::setPercentage),
-//					schedule_selector(PlayUI::subBossLife),
-//					callfunc_selector(PlayUI::decreasePercentage),
-//					bcallfunc_selector(PlayUI::beRevivedJack));
+		clr_cdt_type = SilhouetteData::sharedSilhouetteData()->getClearCondition();
+		if(clr_cdt_type == kCLEAR_bossLifeZero)
+		{
+			is_cleared_cdt = false;
+			
+			CCSprite* n_icon = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 20, 20));
+			n_icon->setColor(ccRED);
+			CCSprite* s_icon = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 20, 20));
+			s_icon->setColor(ccc3(255, 120, 120));
+			
+			CCMenuItem* icon_item = CCMenuItemSprite::create(n_icon, s_icon, this, menu_selector(PlayUI::menuAction));
+			icon_item->setTag(kMenuTagUI_condition);
+			
+			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
+			icon_menu->setPosition(ccp(430,270+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
+			
+			
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create("100%", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+			clr_cdt_label->setPosition(ccp(460,270+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+		}
+		else if(clr_cdt_type == kCLEAR_default)
+		{
+			is_cleared_cdt = true;
+		}
 		
 		myGD->V_I["UI_addScore"] = std::bind(&PlayUI::addScore, this, _1);
 		myGD->V_F["UI_setPercentage"] = std::bind(&PlayUI::setPercentage, this, _1);
@@ -1189,13 +1244,28 @@ private:
 	{
 		AudioEngine::sharedInstance()->playEffect("sound_buttonClick_Low.mp3", false);
 		int tag = ((CCNode*)sender)->getTag();
-		if(tag == kMenuTagUI_home)
+		if(tag == kMenuTagUI_home && !isGameover)
 		{
 			showPause();
 //			StarGoldData::sharedInstance()->is_paused = true;
 //			GoHomePopupLayer* t_ghpl = GoHomePopupLayer::create(this, callfunc_selector(PlayUI::goHome), this, callfunc_selector(PlayUI::cancelHome));
 //			addChild(t_ghpl);
 		}
+		else if(tag == kMenuTagUI_condition && !isGameover)
+		{
+			showCondition();
+		}
+	}
+	
+	void showCondition()
+	{
+		ConditionPopup* t_cdt = ConditionPopup::create(this, callfunc_selector(PlayUI::closeCondition));
+		addChild(t_cdt);
+	}
+	
+	void closeCondition()
+	{
+		(target_main->*delegate_startControl)();
 	}
 	
 	CCSprite* bottom_shutter;

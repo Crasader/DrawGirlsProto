@@ -13,6 +13,7 @@
 #include "GameData.h"
 #include "AlertEngine.h"
 #include "AttackItem.h"
+#include "SilhouetteData.h"
 
 USING_NS_CC;
 
@@ -1808,12 +1809,22 @@ private:
 	
 	int counting_value;
 	int create_counting_value;
+	CLEAR_CONDITION clr_cdt_type;
 	
 	CCNode* coin_parent;
 	
 	void counting()
 	{
 		counting_value++;
+		
+		if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount() < 3)
+		{
+			GameItemAttack* t_gia = GameItemAttack::create(false);
+			addChild(t_gia);
+			
+			create_counting_value = rand()%5 + 10;
+			counting_value = 0;
+		}
 		
 		if(counting_value >= create_counting_value)
 		{
@@ -1879,6 +1890,8 @@ private:
 	void myInit()
 	{
 		myGD = GameData::sharedGameData();
+		
+		clr_cdt_type = SilhouetteData::sharedSilhouetteData()->getClearCondition();
 		
 		coin_parent = CCNode::create();
 		addChild(coin_parent);

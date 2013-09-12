@@ -153,7 +153,7 @@ void Maingame::finalSetting()
 	
 	myUI = PlayUI::create();
 	addChild(myUI, myUIZorder);
-	myUI->setMaxBossLife(SelectedMapData::sharedInstance()->getMaxBossLife());
+	myUI->setMaxBossLife(SilhouetteData::sharedSilhouetteData()->getBossMaxLife());//SelectedMapData::sharedInstance()->getMaxBossLife());
 	myUI->setClearPercentage(SelectedMapData::sharedInstance()->getClearPercentage());
 	
 	myCP->setUI_forEP(myUI, callfunc_selector(PlayUI::keepBossLife), callfunc_selector(PlayUI::checkBossLife));
