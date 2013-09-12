@@ -67,6 +67,14 @@ public:
 	}
 	void startDamageReaction(float userdata);
 	virtual void startSpringCumber(float userdata){}
+	virtual void startAnimationNoDirection()
+	{
+		
+	}
+	virtual void startAnimationDirection()
+	{
+		
+	}
 protected:
 	bool isGameover;
 	float m_scale;

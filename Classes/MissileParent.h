@@ -1187,37 +1187,8 @@ public:
 		savedAP = true;
 	}
 	void cancelAP103(){	movingMainCumber();	}
-	
-	void startFire(CCPoint startPosition, bool crash_attack = false)
+	void attackWithCode(int pattern_code, CCPoint startPosition)
 	{
-		int pattern_code;
-		
-		if(!crash_attack)
-		{
-			if(myGD->getCommunication("CP_getSubCumberCount") > 40)
-				pattern_code = kAP_CODE_pattern20;
-			else
-			{
-				pattern_code = myRS->getNotCrashCode();
-				
-				IntPoint jackPoint = myGD->getJackPoint();
-				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
-				IntPoint cumberPoint = myGD->getMainCumberPoint();
-				CCPoint cumberPosition = ccp((cumberPoint.x-1)*pixelSize+1,(cumberPoint.y-1)*pixelSize+1);
-				CCPoint subPosition = ccpSub(jackPosition, cumberPosition);
-				
-				float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
-				if(distance <= 150.f)
-				{
-					myGD->communication("CP_movingMainCumber");
-					return;
-				}
-			}
-		}
-		else
-		{
-			pattern_code = myRS->getCrashCode();
-		}
 		
 		if(pattern_code == kAP_CODE_pattern0)
 		{
@@ -1413,7 +1384,7 @@ public:
 			t_ccn->startCharge();
 			chargeArray->addObject(t_ccn);
 			
-//			movingMainCumber();
+			//			movingMainCumber();
 		}
 		else if(pattern_code == kAP_CODE_pattern14)
 		{
@@ -1473,7 +1444,7 @@ public:
 			t_ccn->startCharge();
 			chargeArray->addObject(t_ccn);
 			
-//			movingMainCumber();
+			//			movingMainCumber();
 		}
 		else if(pattern_code == kAP_CODE_pattern18)
 		{
@@ -1658,10 +1629,10 @@ public:
 			startFirePosition = startPosition;
 			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
-															 this, NULL,
-															 this, callfunc_selector(MissileParent::actionAP30),
-															 this, callfunc_selector(MissileParent::cancelAP30),
-															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+																 this, NULL,
+																 this, callfunc_selector(MissileParent::actionAP30),
+																 this, callfunc_selector(MissileParent::cancelAP30),
+																 myGD->getCommunicationNode("CP_getMainCumberPointer"));
 			t_ccn->setChargeColor(ccc4f(0.00, 0.00, 1.00, 1.00));
 			addChild(t_ccn);
 			t_ccn->startCharge();
@@ -1781,6 +1752,40 @@ public:
 			t_cn->startCharge();
 			chargeArray->addObject(t_cn);
 		}
+
+	}
+	void startFire(CCPoint startPosition, bool crash_attack = false)
+	{
+		int pattern_code;
+		
+		if(!crash_attack)
+		{
+			if(myGD->getCommunication("CP_getSubCumberCount") > 40)
+				pattern_code = kAP_CODE_pattern20;
+			else
+			{
+				pattern_code = myRS->getNotCrashCode();
+				
+				IntPoint jackPoint = myGD->getJackPoint();
+				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
+				IntPoint cumberPoint = myGD->getMainCumberPoint();
+				CCPoint cumberPosition = ccp((cumberPoint.x-1)*pixelSize+1,(cumberPoint.y-1)*pixelSize+1);
+				CCPoint subPosition = ccpSub(jackPosition, cumberPosition);
+				
+				float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
+				if(distance <= 150.f)
+				{
+					myGD->communication("CP_movingMainCumber");
+					return;
+				}
+			}
+		}
+		else
+		{
+			pattern_code = myRS->getCrashCode();
+		}
+		
+		attackWithCode(pattern_code, startPosition);
 	}
 	
 	void createSubCumberReplication(CCPoint s_p, CCObject* sender, SEL_CallFunc d_startMoving)

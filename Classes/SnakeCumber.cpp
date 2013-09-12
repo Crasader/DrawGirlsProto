@@ -14,7 +14,7 @@
 #include <cmath>
 #include "ProbSelector.h"
 #include "CumberEmotion.h"
-
+#include "Jack.h"
 SnakeCumber::~SnakeCumber()
 {
 	
@@ -54,7 +54,7 @@ bool SnakeCumber::init()
 		mapPoint.x = m_well512.GetValue(1, mapLoopRange::mapWidthInnerEnd - 1);
 		mapPoint.y = m_well512.GetValue(1, mapLoopRange::mapHeightInnerEnd - 1);
 		
-		float myScale = m_scale;
+		float myScale = getCumberScale();
 		if(mapPoint.isInnerMap() && gameData->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
 		{
 			float half_distance = RADIUS*myScale; // 20.f : radius for base scale 1.f
@@ -86,6 +86,8 @@ bool SnakeCumber::init()
 	gameData->setMainCumberPoint(mapPoint);
 	setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
 //	startMoving();
+	schedule(schedule_selector(SnakeCumber::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(SnakeCumber::attack));
 	return true;
 }
@@ -113,7 +115,7 @@ void SnakeCumber::setHeadAndBodies()
 			
 			// traceIndex + 1 위치와 traceIndex 위치의 누적
 			distance += ccpLength(m_cumberTrace[traceIndex + 1].position - t.position);
-			if(distance >= 20)
+			if(distance >= 20 * getCumberScale())
 			{
 				lastTraceIndex = traceIndex;
 				lastTrace = t;
@@ -135,6 +137,79 @@ void SnakeCumber::setHeadAndBodies()
 	}
 	
 //	m_headImg->setScale(tt / 360);
+}
+
+void SnakeCumber::startAnimationNoDirection()
+{
+	// 돌자...
+	CCLog("Lets rotate");
+	if(m_state != CUMBERSTATENODIRECTION)
+	{
+		m_state = CUMBERSTATENODIRECTION;
+		noDirection.distance = 0;
+		noDirection.rotationDeg = 0;
+		noDirection.timer = 0;
+		noDirection.startingPoint = getPosition();
+		noDirection.rotationCnt = 0;
+		noDirection.state = 1;
+		schedule(schedule_selector(SnakeCumber::animationNoDirection));
+	}
+}
+
+void SnakeCumber::animationNoDirection(float dt)
+{
+	noDirection.timer += 1.f/60.f;
+	
+	if(noDirection.state == 1)
+	{
+		noDirection.rotationDeg += 6.f;
+		if(noDirection.rotationDeg >= 360)
+		{
+			noDirection.rotationDeg -= 360;
+			noDirection.rotationCnt++;
+			/// 좀 돌았으면 돌아감.
+			if(noDirection.rotationCnt >= 5)
+			{
+				noDirection.state = 2;
+				return;
+			}
+		}
+		noDirection.distance += 0.5f;
+		noDirection.distance = MIN(noDirection.distance, 30);
+		float dx = cos(deg2Rad(noDirection.rotationDeg)) * noDirection.distance;
+		float dy = sin(deg2Rad(noDirection.rotationDeg)) * noDirection.distance * 1.2f; // 약간 타원
+		
+		//	float speed = 2.f;
+		//	dx *= speed;
+		//	dy *= speed;
+		
+		setPosition(noDirection.startingPoint + ccp(dx, dy));
+	}
+	else if(noDirection.state == 2)
+	{
+		CCPoint dir = noDirection.startingPoint - getPosition();
+		float rad = atan2(dir.y, dir.x);
+		float dx = cos(rad);
+		float dy = sin(rad);
+		
+		
+		if(ccpLength(noDirection.startingPoint - getPosition()) <= 0.5f)
+		{
+			m_state = CUMBERSTATEMOVING;
+			unschedule(schedule_selector(SnakeCumber::animationNoDirection));
+			setPosition(noDirection.startingPoint);
+		}
+		else
+			setPosition(getPosition() + ccp(dx, dy));
+	}
+}
+
+
+
+void SnakeCumber::startAnimationDirection()
+{
+	// 잭을 바라보자.
+	m_state = CUMBERSTATEDIRECTION;
 }
 
 void SnakeCumber::startDamageReaction(float userdata)
@@ -173,9 +248,36 @@ void SnakeCumber::damageReaction(float)
 		unschedule(schedule_selector(SnakeCumber::damageReaction));
 	}
 }
+
+void SnakeCumber::scaleAdjustment(float dt)
+{
+	scale.autoIncreaseTimer += 1/60.f;
+	
+	if(scale.increaseTime + 2.f < scale.autoIncreaseTimer )
+	{
+		CCLog("upSize!");
+		scale.increaseTime = scale.autoIncreaseTimer;
+		setCumberScale(MIN(1.5f, getCumberScale() + scale.SCALE_ADDER));
+	}
+	
+	scale.scale.step();
+
+	m_headImg->setScale(getCumberScale());
+	for(auto i : m_Bodies)
+	{
+		i->setScale(getCumberScale());
+	}
+
+}
 void SnakeCumber::movingAndCrash(float dt)
 {
-	bool isFindedAfterPoint = false, is_map_visited = false;
+	scale.timer += 1/60.f;
+	if(scale.collisionStartTime + 1 < scale.timer)
+	{
+		scale.collisionCount = 0;
+		scale.collisionStartTime = scale.timer;
+//		setCumberSize(MIN(1.0, getCumberSize() + scale.SCALE_ADDER));
+	}
 	CCPoint afterPosition;
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
@@ -199,20 +301,22 @@ void SnakeCumber::movingAndCrash(float dt)
 	
 	bool validPosition = false;
 	int cnt = 0;
+	bool onceOutlineAndMapCollision = false;
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = m_speed * sin(deg2Rad(m_directionAngleDegree));
-		float speedY = m_speed * cos(deg2Rad(m_directionAngleDegree));
+		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
+		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
 		
 		CCPoint cumberPosition = getPosition();
 		afterPosition = cumberPosition + ccp(speedX, speedY);
 		afterPoint = ccp2ip(afterPosition);
 		
-		float half_distance = RADIUS*m_scale; // 20.f : radius for base scale 1.f
+		float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
 		int ip_half_distance = half_distance / 2;
 		IntPoint checkPosition;
-		vector<IntPoint> ips;
+		set<IntPoint> ips;
+
 		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
 		{
 			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
@@ -220,7 +324,7 @@ void SnakeCumber::movingAndCrash(float dt)
 				float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
 				if(calc_distance < ip_half_distance)
 				{
-					ips.push_back(IntPoint(i, j));
+					ips.insert(IntPoint(i, j));
 				}
 			}
 		}
@@ -233,6 +337,16 @@ void SnakeCumber::movingAndCrash(float dt)
 		}
 		else if(collisionCode == kCOLLISION_MAP)
 		{
+			onceOutlineAndMapCollision = true;
+			m_directionAngleDegree += m_well512.GetValue(90, 270);
+			
+			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
+			else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
+		}
+		else if(collisionCode == kCOLLISION_OUTLINE)
+		{
+			CCLog("collision!!");
+			onceOutlineAndMapCollision = true;
 			m_directionAngleDegree += m_well512.GetValue(90, 270);
 			
 			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
@@ -240,6 +354,7 @@ void SnakeCumber::movingAndCrash(float dt)
 		}
 		else if(collisionCode == kCOLLISION_NEWLINE)
 		{
+			CCLog("collision!!");
 //			gameData->communication("Jack_startDieEffect");
 			gameData->communication("SW_createSW", checkPosition, 0, 0);
 			//									callfuncI_selector(SnakeCumber::showEmotion)); //##
@@ -249,52 +364,150 @@ void SnakeCumber::movingAndCrash(float dt)
 			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
 			else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
 		}
-		else if(collisionCode == kCOLLISION_OUTLINE)
-		{
-			m_directionAngleDegree += m_well512.GetValue(90, 270);
-			
-			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
-			else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
-		}
+		
 		else if(collisionCode == kCOLLISION_NONE)
 		{
 			validPosition = true;
+			
+			
+			
+#if 0 // 몸통에 대해 충돌처리. ver1 : 정직한 버전.
+			
+			set<IntPoint> ips;
+			for(auto body : m_Bodies)
+			{
+				CCPoint cumberPosition = body->getPosition();
+				CCPoint bodyPosition = cumberPosition;
+				IntPoint afterPoint = ccp2ip(bodyPosition);
+				IntPoint checkPosition;
+				float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+				int ip_half_distance = half_distance / 2;
+				
+				for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+				{
+					for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+					{
+						float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+						if(calc_distance < ip_half_distance)
+						{
+							ips.insert(IntPoint(i, j));
+						}
+					}
+				}	
+			}
+			
+			COLLISION_CODE collisionCode = crashLooper(ips, &checkPosition);
+			if(collisionCode == kCOLLISION_JACK)
+			{
+				// 즉사 시킴.
+				gameData->communication("Jack_startDieEffect");
+				break;
+			}
+			else if(collisionCode == kCOLLISION_NEWLINE)
+			{
+				gameData->communication("SW_createSW", checkPosition, 0, 0);
+				break;
+			}
+#endif
+#if 1
+			// 몸통에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
+			if(gameData->getJackState() != jackStateNormal)
+			{
+				for(auto body : m_Bodies)
+				{
+					CCPoint cumberPosition = body->getPosition();
+					CCPoint bodyPosition = cumberPosition;
+					IntPoint afterPoint = ccp2ip(bodyPosition);
+					IntPoint checkPosition;
+					float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+					int ip_half_distance = half_distance / 2;
+					
+					
+					IntPoint jackPoint = gameData->getJackPoint();
+					float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
+					if(calc_distance < ip_half_distance)
+					{
+						// 즉사 시킴.
+						
+						break;
+					}
+				}
+			}
+#endif
 		}
 		else if(afterPoint.isInnerMap())
 		{
+			CCAssert(false, "");
 			validPosition = true;
 		}
-		//		setPosition(afterPosition);
 		if(cnt % 100 == 0)
 		{
-//			CCLog("cnt !! = %d", cnt);
+			CCLog("cnt !! = %d", cnt);
+		}
+		if(m_state != CUMBERSTATEMOVING)
+		{
+			validPosition = true;
 		}
 	}
 	
 //	CCLog("cnt outer !! = %d", cnt);
 	
+	
 	if(m_state == CUMBERSTATEMOVING)
 		setPosition(afterPosition);
+	
+	if(onceOutlineAndMapCollision)
+	{
+		
+		if(scale.collisionCount == 0)
+		{
+			scale.collisionStartTime = scale.timer;
+			
+		}
+		scale.collisionCount++;
+		if(scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
+		{
+			CCLog("decrese Size !!");
+			setCumberScale(MAX(0.3, getCumberScale() - scale.SCALE_SUBER));
+		}
+	}
 }
 
 void SnakeCumber::attack(float dt)
 {
-	float w = ProbSelector::sel(0.01, 1.0 - 0.01, 0.0);
+	float w = ProbSelector::sel(0.003, 1.0 - 0.003, 0.0);
 	
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
-		stopMoving();
+//		stopMoving();
 		
 		showEmotion(kEmotionType_joy);
 //		m_speed = m_well512.GetValue(2, 4);
+//		startAnimationNoDirection();
+//		gameData->communication("MP_startFire", getPosition(), false);
+//		gameData->comm("MP_attackWithCode", 33);
+		if(m_well512.GetValue(0, 1))
+		{
+			
+		}
+		else{
+			
+		}
 		
-		gameData->communication("MP_startFire", getPosition(), false);
 	}
 }
 COLLISION_CODE SnakeCumber::crashWithX(IntPoint check_position)
 {
-	// 이미 그려진 곳에 충돌했을 경우.
+	/// 나갔을 시.
+	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
+	   check_position.y < mapLoopRange::mapHeightInnerBegin || check_position.y >= mapLoopRange::mapHeightInnerEnd )
+	{
+		
+		return COLLISION_CODE::kCOLLISION_OUTLINE;
+	}
+	
+	/// 이미 그려진 곳에 충돌했을 경우.
 	if(gameData->mapState[check_position.x][check_position.y] == mapOldline ||
 	   gameData->mapState[check_position.x][check_position.y] == mapOldget)
 	{
@@ -312,25 +525,21 @@ COLLISION_CODE SnakeCumber::crashWithX(IntPoint check_position)
 	}
 	
 	
-	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
-	   check_position.y < mapLoopRange::mapHeightInnerBegin || check_position.y >= mapLoopRange::mapHeightInnerEnd )
-	{
-		// 나갔을 시.
-		return COLLISION_CODE::kCOLLISION_OUTLINE;
-	}
+	
 	
 	
 	return COLLISION_CODE::kCOLLISION_NONE;
 	
 }
-COLLISION_CODE SnakeCumber::crashLooper(const vector<IntPoint> v, IntPoint* cp)
+COLLISION_CODE SnakeCumber::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
-	for(auto i : v)
+	for(const auto& i : v)
 	{
 		auto result = crashWithX(i);
 		if(result != kCOLLISION_NONE)
 		{
-			*cp = i;
+			if(cp)
+				*cp = i;
 			return result;
 		}
 	}

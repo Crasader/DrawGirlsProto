@@ -190,6 +190,13 @@ public:
 		y = t_y;
 	}
 	
+	bool operator<(const IntPoint& ip) const
+	{
+		if(x == ip.x)
+			return y < ip.y;
+		else
+			return x < ip.x;
+	}
 	static IntPoint convertToIntPoint(CCPoint t_p)
 	{
 		return IntPoint(roundf((t_p.x-1)/pixelSize+1), roundf((t_p.y-1)/pixelSize+1));
