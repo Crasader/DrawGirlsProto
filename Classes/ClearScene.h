@@ -30,9 +30,38 @@ public:
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(ClearScene);
 	
+	virtual void onEnter();
+	
 private:
 	
 	bool is_menu_enable;
+	
+	CCLabelBMFont* score_label;
+	CCLabelBMFont* percentage_label;
+	CCLabelBMFont* time_label;
+	
+	float keep_percentage;
+	float decrease_percentage;
+	float increase_percentage;
+	void startPercentageAnimation();
+	void percentageAnimation(float dt);
+	void stopPercentageAnimation();
+	
+	float keep_score;
+	float decrease_score;
+	float increase_score;
+	void startScoreAnimation();
+	void scoreAnimation(float dt);
+	void stopScoreAnimation();
+	
+	float keep_time;
+	float decrease_time;
+	float increase_time;
+	void startTimeAnimation();
+	void timeAnimation(float dt);
+	void stopTimeAnimation();
+	
+	void startCalcAnimation();
 	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);

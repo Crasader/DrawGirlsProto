@@ -115,6 +115,8 @@ public:
 //		startDamageReaction(userdata);
 //	}
 	void damageReaction(float dt);
+	
+	virtual void cumberImgStartRotating(float speed){};
 protected:
 	bool isGameover;
 	float m_scale;

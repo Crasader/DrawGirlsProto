@@ -17,6 +17,7 @@ typedef enum tMenuTagFailScene{
 
 typedef enum tZorderFailScene{
 	kZ_FS_back = 1,
+	kZ_FS_img,
 	kZ_FS_menu
 }ZorderFailScene;
 
@@ -47,16 +48,46 @@ bool FailScene::init()
     
 	setKeypadEnabled(true);
 	
-	CCSprite* fail_back = CCSprite::create("fail_back.png");
+	CCSprite* fail_back = CCSprite::create("ending_back.png");
 	fail_back->setPosition(ccp(240,160));
 	addChild(fail_back, kZ_FS_back);
 	
 	
-	CCMenuItem* ok_item = CCMenuItemImage::create("ending_ok.png", "ending_ok.png", this, menu_selector(FailScene::menuAction));
+	CCSprite* title = CCSprite::create("ending_fail.png");
+	title->setPosition(ccp(360,280));
+	addChild(title, kZ_FS_img);
+	
+	
+	score_label = CCLabelBMFont::create("0", "bb_white_font.fnt");
+	score_label->setAnchorPoint(ccp(1.0,0.5));
+	score_label->setPosition(ccp(450,171));
+	score_label->setAlignment(kCCTextAlignmentRight);
+	addChild(score_label, kZ_FS_img);
+	
+	
+	percentage_label = CCLabelBMFont::create("0.0", "bb_white_font.fnt");
+	percentage_label->setAnchorPoint(ccp(1.0,0.5));
+	percentage_label->setPosition(ccp(450,138));
+	percentage_label->setAlignment(kCCTextAlignmentRight);
+	addChild(percentage_label, kZ_FS_img);
+	
+	
+	time_label = CCLabelBMFont::create("0", "bb_white_font.fnt");
+	time_label->setAnchorPoint(ccp(1.0,0.5));
+	time_label->setPosition(ccp(450,105));
+	time_label->setAlignment(kCCTextAlignmentRight);
+	addChild(time_label, kZ_FS_img);
+	
+	
+	CCSprite* n_ok = CCSprite::create("ending_ok.png");
+	CCSprite* s_ok = CCSprite::create("ending_ok.png");
+	s_ok->setColor(ccGRAY);
+	
+	CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(FailScene::menuAction));
 	ok_item->setTag(kMT_FS_ok);
 	
 	CCMenu* ok_menu = CCMenu::createWithItem(ok_item);
-	ok_menu->setPosition(ccp(240,80));
+	ok_menu->setPosition(ccp(360,50));
 	addChild(ok_menu, kZ_FS_menu);
 	
 	is_menu_enable = true;
@@ -65,6 +96,148 @@ bool FailScene::init()
 	addChild(t_screen, 99999);
 	
     return true;
+}
+
+void FailScene::onEnter()
+{
+	CCLayer::onEnter();
+	
+	startCalcAnimation();
+}
+
+void FailScene::startCalcAnimation()
+{
+	AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
+	startScoreAnimation();
+}
+
+void FailScene::startScoreAnimation()
+{
+	keep_score = StarGoldData::sharedInstance()->getScore();
+	decrease_score = keep_score;
+	increase_score = 0.f;
+	schedule(schedule_selector(FailScene::scoreAnimation));
+}
+
+void FailScene::scoreAnimation(float dt)
+{
+	if(decrease_score > 0)
+	{
+		int decreaseUnit = keep_score / 1.f * dt;
+		
+		if(decrease_score < decreaseUnit)
+		{
+			increase_score += decrease_score;
+			decrease_score = 0;
+		}
+		else {
+			if(decreaseUnit <= 0)
+			{
+				increase_score += decrease_score;
+				decrease_score = 0;
+			}
+			else {
+				decrease_score -= decreaseUnit;
+				increase_score += decreaseUnit;
+			}
+		}
+		score_label->setString(CCString::createWithFormat("%.0f",increase_score)->getCString());
+	}
+	else
+		stopScoreAnimation();
+}
+
+void FailScene::stopScoreAnimation()
+{
+	unschedule(schedule_selector(FailScene::scoreAnimation));
+	score_label->setString(CCString::createWithFormat("%.0f", StarGoldData::sharedInstance()->getScore())->getCString());
+	startPercentageAnimation();
+}
+
+void FailScene::startPercentageAnimation()
+{
+	keep_percentage = StarGoldData::sharedInstance()->getPercentage()*100.f;
+	decrease_percentage = keep_percentage;
+	increase_percentage = 0.f;
+	schedule(schedule_selector(FailScene::percentageAnimation));
+}
+
+void FailScene::percentageAnimation(float dt)
+{
+	if(decrease_percentage > 0)
+	{
+		int decreaseUnit = keep_percentage / 0.5f * dt;
+		
+		if(decrease_percentage < decreaseUnit)
+		{
+			increase_percentage += decrease_percentage;
+			decrease_percentage = 0;
+		}
+		else {
+			if(decreaseUnit <= 0)
+			{
+				increase_percentage	+= decrease_percentage;
+				decrease_percentage = 0;
+			}
+			else {
+				decrease_percentage -= decreaseUnit;
+				increase_percentage	+= decreaseUnit;
+			}
+		}
+		percentage_label->setString(CCString::createWithFormat("%.1f",increase_percentage)->getCString());
+	}
+	else
+		stopPercentageAnimation();
+}
+
+void FailScene::stopPercentageAnimation()
+{
+	unschedule(schedule_selector(FailScene::percentageAnimation));
+	percentage_label->setString(CCString::createWithFormat("%.1f", StarGoldData::sharedInstance()->getPercentage()*100.f)->getCString());
+	startTimeAnimation();
+}
+
+void FailScene::startTimeAnimation()
+{
+	keep_time = StarGoldData::sharedInstance()->getGameTime();
+	decrease_time = keep_time;
+	increase_time = 0.f;
+	schedule(schedule_selector(FailScene::timeAnimation));
+}
+
+void FailScene::timeAnimation(float dt)
+{
+	if(decrease_time > 0)
+	{
+		int decreaseUnit = keep_time / 0.5f * dt;
+		
+		if(decrease_time < decreaseUnit)
+		{
+			increase_time += decrease_time;
+			decrease_time = 0;
+		}
+		else {
+			if(decreaseUnit <= 0)
+			{
+				increase_time += decrease_time;
+				decrease_time = 0;
+			}
+			else {
+				decrease_time -= decreaseUnit;
+				increase_time	+= decreaseUnit;
+			}
+		}
+		time_label->setString(CCString::createWithFormat("%.0f",increase_time)->getCString());
+	}
+	else
+		stopTimeAnimation();
+}
+
+void FailScene::stopTimeAnimation()
+{
+	unschedule(schedule_selector(FailScene::timeAnimation));
+	time_label->setString(CCString::createWithFormat("%d", StarGoldData::sharedInstance()->getGameTime())->getCString());
+	AudioEngine::sharedInstance()->stopAllEffects();
 }
 
 void FailScene::menuAction(CCObject* pSender)
@@ -78,6 +251,7 @@ void FailScene::menuAction(CCObject* pSender)
 	
 	if(tag == kMT_FS_ok)
 	{
+		AudioEngine::sharedInstance()->stopAllEffects();
 		is_menu_enable = false;
 //		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
 		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
