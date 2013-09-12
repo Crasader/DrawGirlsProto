@@ -70,7 +70,10 @@ public:
 	virtual void caughtBoss(CCObject* t_setCaught, SEL_CallFunc d_setCaught);
 	virtual void endCaughtBoss();
 	virtual void changeMaxSize(float t_p);
-	
+	virtual CCPoint getMissilePoint()
+	{
+		return getPosition();
+	}
 //private:
 protected:
 	CCObject* target_setCaught;

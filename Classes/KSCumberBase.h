@@ -31,13 +31,15 @@ enum CUMBER_STATE{
 	CUMBERSTATECRASHREADY = 1 << 4,	// 4
 	CUMBERSTATECRASH = 1 << 5,		// 5
 	CUMBERSTATEDAMAGING = 1 << 6,    // 6 맞고 있을 때...
+	CUMBERSTATENODIRECTION = 1 << 7,  // 빙글 빙글...
+	CUMBERSTATEDIRECTION = 1 << 8  //   잭만 바라봐~
 };
 
 class KSCumberBase : public MainCumber//CCNode
 {
 public:
-	KSCumberBase() :
-		m_state(CUMBERSTATESTOP)
+	KSCumberBase()
+//		m_state(CUMBERSTATESTOP)
 	{
 		
 	}
@@ -96,6 +98,9 @@ public:
 //		schedule(crash)
 		onStopMoving();
 	}
+	virtual void cumberImgStartRotating(float gabage){} //## 임시.
+	virtual void startAnimationNoDirection() = 0;
+	virtual void startAnimationDirection() = 0;
 	virtual void movingAndCrash(float dt) = 0;
 	virtual void startDamageReaction(float userdata) = 0;
 //	virtual void startSpringCumber(float userdata) = 0;

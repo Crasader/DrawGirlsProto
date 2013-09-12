@@ -67,6 +67,18 @@ public:
 	}
 	void startDamageReaction(float userdata);
 	virtual void startSpringCumber(float userdata){}
+	virtual void startAnimationNoDirection()
+	{
+		
+	}
+	virtual void startAnimationDirection()
+	{
+		
+	}
+	CCPoint getMissilePoint()
+	{
+		return getPosition() + ccp(0, 0);
+	}
 protected:
 	bool isGameover;
 	float m_scale;
