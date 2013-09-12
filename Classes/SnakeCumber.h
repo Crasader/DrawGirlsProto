@@ -30,7 +30,9 @@ class SnakeCumber : public KSCumberBase
 public:
 	SnakeCumber() :
 	m_speed(2.f), RADIUS(15.f), mEmotion(nullptr),
-		LIMIT_COLLISION_PER_SEC(3)
+		LIMIT_COLLISION_PER_SEC(3),
+		ATTACK_POINT_X(0),
+		ATTACK_POINT_Y(0)
 		
 	{
 		m_state = (CUMBERSTATEMOVING);
@@ -141,8 +143,18 @@ public:
 		return scale.scale.getValue();
 	}
 	void scaleAdjustment(float dt);
+	CCPoint getMissilePoint()
+	{
+		float theta = deg2Rad(-m_headImg->getRotation());
+		float x = ATTACK_POINT_X;
+		float y = ATTACK_POINT_Y;
+		return m_headImg->getPosition() +
+			ccp(x*cos(theta) - y*sin(theta), x*sin(theta) + y * cos(theta));
+	}
 protected:
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
+	const float ATTACK_POINT_X;
+	const float ATTACK_POINT_Y;
 	bool isGameover;
 	float m_speed;
 	CCSprite* m_headImg;

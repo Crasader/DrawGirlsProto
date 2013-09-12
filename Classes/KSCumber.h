@@ -75,6 +75,10 @@ public:
 	{
 		
 	}
+	CCPoint getMissilePoint()
+	{
+		return getPosition() + ccp(0, 0);
+	}
 protected:
 	bool isGameover;
 	float m_scale;
