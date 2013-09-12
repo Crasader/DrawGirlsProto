@@ -225,7 +225,7 @@ private:
 					
 					float changed_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
 					float after_scale = game_node->getScale()*changed_distance/zoom_base_distance;
-					if(after_scale > 2.f)			after_scale = 2.f;
+					if(after_scale > 2.5f)			after_scale = 2.5f;
 					else if(after_scale < minimum_scale)		after_scale = minimum_scale;
 					zoom_base_distance = changed_distance;
 					game_node->setScale(after_scale);

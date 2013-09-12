@@ -81,9 +81,9 @@ bool WorldMapScene::init()
 	int cleared_number = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
 	int updated_stage = 5;
 	
-	for(int i=2;i<10;i++)
+	for(int i=2;i<=10;i++)
 	{
-		if(i-1 <= cleared_number)
+		if(updated_stage >= i && i-1 <= cleared_number)
 		{
 			CCSprite* n_stage = CCSprite::create("worldmap_stage.png");
 			CCLabelTTF* n_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), StarGoldData::sharedInstance()->getFont().c_str(), 10);
@@ -132,60 +132,60 @@ bool WorldMapScene::init()
 		}
 	}
 	
-	if(updated_stage >= 10 && 8 <= cleared_number)
-	{
-		if(9 <= cleared_number)
-		{
-			CCSprite* n_stage = CCSprite::create("worldmap_boss.png");
-			CCLabelTTF* n_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
-			n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
-			n_stage->addChild(n_stage_label);
-			
-			CCSprite* s_stage = CCSprite::create("worldmap_boss.png");
-			s_stage->setColor(ccGRAY);
-			CCLabelTTF* s_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
-			s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
-			s_stage->addChild(s_stage_label);
-			
-			
-			CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(WorldMapScene::menuAction));
-			stage_item->setTag(kWMS_MT_stageBase+10);
-			
-			CCMenu* stage_menu = CCMenu::createWithItem(stage_item);
-			stage_menu->setPosition(getStagePosition(10));
-			addChild(stage_menu, kWMS_Z_stage);
-			
-			
-			CCSprite* stage_thumbnail = CCSprite::create(CCString::createWithFormat("stage%d_thumbnail.png", 10)->getCString());
-			stage_thumbnail->setPosition(ccpAdd(getStagePosition(10), ccp(0,40)));
-			addChild(stage_thumbnail, kWMS_Z_stage);
-		}
-		else
-		{
-			CCSprite* d_stage = CCSprite::create("worldmap_boss.png");
-			CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
-			d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
-			d_stage->addChild(d_stage_label);
-			
-			d_stage->setPosition(getStagePosition(10));
-			addChild(d_stage, kWMS_Z_stage);
-			
-			
-			CCSprite* stage_thumbnail = CCSprite::create("question_thumbnail.png");
-			stage_thumbnail->setPosition(ccpAdd(getStagePosition(10), ccp(0,40)));
-			addChild(stage_thumbnail, kWMS_Z_stage);
-		}
-	}
-	else
-	{
-		CCSprite* d_stage = CCSprite::create("worldmap_boss.png");
-		CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
-		d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
-		d_stage->addChild(d_stage_label);
-		
-		d_stage->setPosition(getStagePosition(10));
-		addChild(d_stage, kWMS_Z_stage);
-	}
+//	if(updated_stage >= 10 && 8 <= cleared_number)
+//	{
+//		if(9 <= cleared_number)
+//		{
+//			CCSprite* n_stage = CCSprite::create("worldmap_boss.png");
+//			CCLabelTTF* n_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+//			n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
+//			n_stage->addChild(n_stage_label);
+//			
+//			CCSprite* s_stage = CCSprite::create("worldmap_boss.png");
+//			s_stage->setColor(ccGRAY);
+//			CCLabelTTF* s_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+//			s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
+//			s_stage->addChild(s_stage_label);
+//			
+//			
+//			CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(WorldMapScene::menuAction));
+//			stage_item->setTag(kWMS_MT_stageBase+10);
+//			
+//			CCMenu* stage_menu = CCMenu::createWithItem(stage_item);
+//			stage_menu->setPosition(getStagePosition(10));
+//			addChild(stage_menu, kWMS_Z_stage);
+//			
+//			
+//			CCSprite* stage_thumbnail = CCSprite::create(CCString::createWithFormat("stage%d_thumbnail.png", 10)->getCString());
+//			stage_thumbnail->setPosition(ccpAdd(getStagePosition(10), ccp(0,40)));
+//			addChild(stage_thumbnail, kWMS_Z_stage);
+//		}
+//		else
+//		{
+//			CCSprite* d_stage = CCSprite::create("worldmap_boss.png");
+//			CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+//			d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
+//			d_stage->addChild(d_stage_label);
+//			
+//			d_stage->setPosition(getStagePosition(10));
+//			addChild(d_stage, kWMS_Z_stage);
+//			
+//			
+//			CCSprite* stage_thumbnail = CCSprite::create("question_thumbnail.png");
+//			stage_thumbnail->setPosition(ccpAdd(getStagePosition(10), ccp(0,40)));
+//			addChild(stage_thumbnail, kWMS_Z_stage);
+//		}
+//	}
+//	else
+//	{
+//		CCSprite* d_stage = CCSprite::create("worldmap_boss.png");
+//		CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+//		d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
+//		d_stage->addChild(d_stage_label);
+//		
+//		d_stage->setPosition(getStagePosition(10));
+//		addChild(d_stage, kWMS_Z_stage);
+//	}
 		
 	is_menu_enable = true;
 	

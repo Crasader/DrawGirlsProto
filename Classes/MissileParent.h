@@ -2028,8 +2028,8 @@ private:
 		tickingArray = new CCArray(1);
 		myRS = new RandomSelector();
 		
-//		myRS->myInit(100);
-		myRS->myInit(85);
+		myRS->myInit(100);
+//		myRS->myInit(85);
 		
 //		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 //		
