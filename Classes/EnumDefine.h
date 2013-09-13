@@ -188,6 +188,26 @@ typedef enum t_CLEAR_CONDITION{
 	kCLEAR_timeLimit
 }CLEAR_CONDITION;
 
+typedef enum t_ITEM_CODE{
+	kIC_attack = 0,
+	kIC_speedUp,
+	kIC_addTime,
+	kIC_fast,
+	kIC_critical,
+	kIC_subOneDie,
+	kIC_doubleItem,
+	kIC_silence,
+	kIC_timeStop,
+	kIC_subNothing,
+	kIC_longTime,
+	kIC_bossLittleEnergy,
+	kIC_subSmallSize,
+	kIC_smallArea,
+	kIC_widePerfect,
+	kIC_randomChange,
+	kIC_removeMission
+}ITEM_CODE;
+
 #define SHOP_KEY	0xD9
 
 #endif

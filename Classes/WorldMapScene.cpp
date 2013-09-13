@@ -77,7 +77,7 @@ bool WorldMapScene::init()
 	addChild(stage1_thumbnail, kWMS_Z_stage);
 	
 	int cleared_number = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
-	int updated_stage = 5;
+	int updated_stage = mySD->getLastUpdateStageNumber();
 	
 	for(int i=2;i<=10;i++)
 	{

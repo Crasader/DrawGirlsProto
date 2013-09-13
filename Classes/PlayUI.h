@@ -714,6 +714,39 @@ public:
 	
 	void takeExchangeCoin(int t_coin_number)
 	{
+		if(clr_cdt_type == kCLEAR_sequenceChange && !isGameover)
+		{
+			if(t_coin_number != ing_cdt_cnt)
+			{
+				conditionFail();
+				
+				mySGD->fail_code = kFC_missionfail;
+				
+				stopCounting();
+				// timeover
+				isGameover = true;
+				myGD->communication("Main_allStopSchedule");
+				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+				result_sprite = CCSprite::create("game_fail.png");
+				result_sprite->setRotation(-25);
+				result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+				addChild(result_sprite);
+				endGame();
+				return;
+			}
+			else
+			{
+				ing_cdt_cnt++;
+				removeChildByTag(kCT_UI_clrCdtLabel);
+				if(ing_cdt_cnt <= 6)
+				{
+					CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+					clr_cdt_img->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+					addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
+				}
+			}
+		}
+		
 		taked_coin_cnt++;
 		
 		CCSprite* t_coin_spr = (CCSprite*)exchange_dic->objectForKey(t_coin_number);
@@ -728,6 +761,11 @@ public:
 		
 		if(taked_coin_cnt >= 6 && !isGameover && getPercentage() < clearPercentage)
 		{
+			if(clr_cdt_type == kCLEAR_sequenceChange)
+			{
+				conditionClear();
+			}
+			
 			isFirst = true;
 			is_exchanged = true;
 			myGD->communication("Main_startExchange");
@@ -1234,6 +1272,27 @@ private:
 			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", clr_cdt_per*100.f)->getCString(), mySGD->getFont().c_str(), 12);
 			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
 			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+		}
+		else if(clr_cdt_type == kCLEAR_sequenceChange)
+		{
+			is_cleared_cdt = false;
+			
+			CCSprite* n_icon = CCSprite::create("condition6_menu.png");
+			CCSprite* s_icon = CCSprite::create("condition6_menu.png");
+			s_icon->setColor(ccGRAY);
+			
+			CCMenuItem* icon_item = CCMenuItemSprite::create(n_icon, s_icon, this, menu_selector(PlayUI::menuAction));
+			icon_item->setTag(kMenuTagUI_condition);
+			
+			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
+			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
+			
+			ing_cdt_cnt = 1;
+			
+			CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+			clr_cdt_img->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
 		}
 		else if(clr_cdt_type == kCLEAR_default)
 		{
