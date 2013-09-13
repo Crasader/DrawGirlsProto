@@ -122,6 +122,14 @@ bool FailScene::init()
 			c_coin->setPosition(ccp(240,165));
 			addChild(c_coin, kZ_FS_img);
 		}
+		else if(clr_cdt == kCLEAR_timeLimit)
+		{
+			int clr_time = mySD->getClearConditionTimeLimit();
+			
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", clr_time)->getCString(), mySGD->getFont().c_str(), 12);
+			clr_cdt_label->setPosition(ccp(240,165));
+			addChild(clr_cdt_label, kZ_FS_img);
+		}
 	}
 	
 	CCSprite* n_main = CCSprite::create("ending_main.png");

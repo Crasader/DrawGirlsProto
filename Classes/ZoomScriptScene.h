@@ -73,6 +73,7 @@ private:
 	
 	map<int, CCPoint> multiTouchData;
 	
+	CCSize eye_ani_size;
 	
 	void randomFlicker()
 	{
@@ -111,17 +112,17 @@ private:
 	
 	void halfFlicker()
 	{
-		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(80, 0, 80, 30));
+		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(eye_ani_size.width, 0, eye_ani_size.width, eye_ani_size.height));
 	}
 	
 	void fullFlicker()
 	{
-		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(160, 0, 80, 30));
+		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(eye_ani_size.width*2, 0, eye_ani_size.width, eye_ani_size.height));
 	}
 	
 	void recoveryFlicker()
 	{
-		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(0, 0, 80, 30));
+		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
 		randomFlicker();
 	}
 	

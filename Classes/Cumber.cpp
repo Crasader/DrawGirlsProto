@@ -246,13 +246,13 @@ void CumberParent::startDieAnimation()
 		die_animation_cnt = 0;
 		die_animation_rate = 40;
 		
-		if(!(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1) && rand()%CAUGHT_RATE == 0)
-		{
-			mySGD->caughtBoss();
-			for(auto mainCumber : mainCumbers)
-				mainCumber->caughtBoss(this, callfunc_selector(CumberParent::realStartDieAnimation));
-		}
-		else
+//		if(!(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1) && rand()%CAUGHT_RATE == 0)
+//		{
+//			mySGD->caughtBoss();
+//			for(auto mainCumber : mainCumbers)
+//				mainCumber->caughtBoss(this, callfunc_selector(CumberParent::realStartDieAnimation));
+//		}
+//		else
 			realStartDieAnimation();
 	}
 }

@@ -1125,34 +1125,35 @@ private:
 				isStun = false;
 				jackImg->removeFromParentAndCleanup(true);
 				
-				CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
-				
-				jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-				jackImg->setScale(0.8f);
-				addChild(jackImg, kJackZ_main);
-				
-				CCAnimation* jack_animation = CCAnimation::create();
-				jack_animation->setDelayPerUnit(0.1f);
-				jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-				jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-				jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
-				
-				CCAnimate* jack_animate = CCAnimate::create(jack_animation);
-				CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
-				jackImg->runAction(jack_repeat);
-
-				
-				setTouchPointByJoystick(CCPointZero, directionStop, true);
-				
-				setJackState(jackStateNormal);
-				
 				dieEscapeJack();
 				
-				myGD->communication("GIM_dieCreateItem");
-				
-				myGD->communication("Main_resetIsLineDie");
-				
-				myGD->communication("Main_stopSpecialAttack");
+				if(myGD->getIsGameover())
+					endGame();
+				else
+				{
+					CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+					
+					jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+					jackImg->setScale(0.8f);
+					addChild(jackImg, kJackZ_main);
+					
+					CCAnimation* jack_animation = CCAnimation::create();
+					jack_animation->setDelayPerUnit(0.1f);
+					jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+					jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+					jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+					
+					CCAnimate* jack_animate = CCAnimate::create(jack_animation);
+					CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
+					jackImg->runAction(jack_repeat);
+					
+					setTouchPointByJoystick(CCPointZero, directionStop, true);
+					setJackState(jackStateNormal);
+					
+					myGD->communication("GIM_dieCreateItem");
+					myGD->communication("Main_resetIsLineDie");
+					myGD->communication("Main_stopSpecialAttack");
+				}
 			}
 			else
 			{

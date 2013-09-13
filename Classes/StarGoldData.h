@@ -34,12 +34,6 @@ typedef enum tImgType{
 	kImgType_option,
 	kImgType_pet,
 	kImgType_petbuff,
-//	kImgType_item1, // 공격조건완화 : 기존의 1.5%이상 영역 획득시 미사일 공격의 제한을 1%로 낮춥니다.
-//	kImgType_item2, // 시작영역증가 : 시작시 주어지는 영역을 확대 합니다.
-//	kImgType_item3, // 상태이상방어 : 보스의 상태이상 공격을 방어합니다. 방어되는 상태이상 공격 : 기절, 수면, 빙결, 혼란
-//	kImgType_item4, // 속도증가 : 아이템을 획득시 캐릭터의 이동속도가 5초 동안 두배로 빨라집니다.
-//	kImgType_item5, // 침묵 : 아이템을 획득시 20초 동안 보스가 공격을 못하도록 합니다.
-//	kImgType_item6, // 속도감소 : 아이템을 획득시 20초 동안 적들의 이동속도를 절반으로 낮춥니다.
 	kImgType_elementalPresentation1, // 속성을 선택하면 해당 속성에 맞는 공격 스킬이 게임중에 나옵니다.
 	kImgType_elemental, // 속성상관관계
 	kImgType_facebookLoginReward
@@ -123,43 +117,11 @@ public:
 	{
 		mySD->startSetting();
 		is_cleared = false;
-		is_subCumberType_this = false;
 		score = 0.f;
 		percentage = 0.f;
 		keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
 		stage_star = 0;
 		game_time = 0;
-		
-		caughtMainTypeSubCumber = 0;
-		caughtSubTypeSubCumber = 0;
-		caughtMainCumber = false;
-		
-		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
-		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
-		
-		is_hard = SelectedMapData::sharedInstance()->getIsNoShield();
-		
-		if((SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && selected_stage == 1) || selected_stage == 5)
-		{
-			int rating = myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, selected_chapter, selected_stage);
-			if(rating < 3)
-			{
-				will_regi_gallery = true;
-				regi_condition = 3;
-			}
-			else
-			{
-				will_regi_gallery = false;
-				regi_condition = -1;
-			}
-		}
-	}
-	
-	int getRegiCondition()
-	{
-		int return_value = regi_condition;
-		regi_condition = -1;
-		return return_value;
 	}
 	
 	void gameClear(int t_star, float t_score, float t_percentage, int t_game_time)
@@ -213,17 +175,6 @@ public:
 	void setIsAfterSceneChapter(bool t_b)
 	{
 		is_after_scene_chapter = t_b;
-	}
-	
-	bool getIsSubType()
-	{
-		is_subCumberType_this = !is_subCumberType_this;
-		return is_subCumberType_this;
-	}
-	
-	bool getIsHard()
-	{
-		return is_hard;
 	}
 	
 	bool getTutorialCleared()
@@ -307,38 +258,6 @@ public:
 //		GraphDog::get()->removeCommand(this);
 	}
 	
-	void setReged(int t_reged_chapter, int t_reged_stage)
-	{
-		reged_chapter = t_reged_chapter;
-		reged_stage = t_reged_stage;
-	}
-	
-	int getRegedChapter()
-	{
-		int return_value = reged_chapter;
-		reged_chapter = 0;
-		return return_value;
-	}
-	
-	int getRegedStage()
-	{
-		int return_value = reged_stage;
-		reged_stage = 0;
-		return return_value;
-	}
-	
-	void setOpenHard(bool t_b)
-	{
-		open_hard = t_b;
-	}
-	
-	bool getOpenHard()
-	{
-		bool return_value = open_hard;
-		open_hard = false;
-		return return_value;
-	}
-	
 	int getGameTime()
 	{
 		return game_time;
@@ -378,42 +297,6 @@ public:
 		CollectionStarterType r_value = collection_starter;
 		collection_starter = kCST_basic;
 		return r_value;
-	}
-	
-	int getCaughtMainTypeSubCumber()
-	{
-		return caughtMainTypeSubCumber;
-	}
-	void increaseCaughtMainTypeSubCumber()
-	{
-		caughtMainTypeSubCumber++;
-		int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
-		myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, chapter_number, 0, myDSH->getIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, chapter_number, 0)+1);
-		myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, chapter_number, 0, true);
-	}
-	
-	int getCaughtSubTypeSubCumber()
-	{
-		return caughtSubTypeSubCumber;
-	}
-	void increaseCaughtSubTypeSubCumber()
-	{
-		caughtSubTypeSubCumber++;
-		int chapter_number = SelectedMapData::sharedInstance()->getSecondSubCumberType();
-		myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, chapter_number, 0, myDSH->getIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, chapter_number, 0)+1);
-		myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, chapter_number, 0, true);
-	}
-	
-	bool isCaughtMainCumber()
-	{
-		return caughtMainCumber;
-	}
-	void caughtBoss()
-	{
-		caughtMainCumber = true;
-		int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
-		myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, chapter_number, 1, myDSH->getIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, chapter_number, 1)+1);
-		myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, chapter_number, 1, true);
 	}
 	
 	void resetData()
@@ -491,12 +374,7 @@ private:
 	int keep_gold;
 	int game_time;
 	
-	int caughtMainTypeSubCumber;
-	int caughtSubTypeSubCumber;
-	bool caughtMainCumber;
 	
-	bool is_subCumberType_this;
-	bool is_hard;
 	bool is_tutorial_cleared;
 	ImgType after_loading;
 	SceneCode after_scene;
@@ -506,13 +384,7 @@ private:
 	bool is_credit_servertime;
 	time_t client_time;
 	
-	bool open_hard;
 	
-	bool will_regi_gallery;
-	int regi_condition;
-	
-	int reged_chapter;
-	int reged_stage;
 	CollectionStarterType collection_starter;
 	
 	CCObject* graphDog_target;
@@ -583,18 +455,12 @@ private:
 	{
 		is_paused = false;
 		is_credit_servertime = false;
-		open_hard = false;
 		server_time = -1;
 		login_getted = false;
 		serverTime_getted = false;
 		is_before_title = true;
 		
-		reged_chapter = 0;
-		reged_stage = 0;
 		collection_starter = kCST_basic;//kCST_basic;
-		
-		will_regi_gallery = false;
-		regi_condition = -1;
 		
 		setTargetDelegate(NULL, NULL);
 		
@@ -631,13 +497,10 @@ private:
 		{
 			myDSH->setBoolForKey(kDSH_Key_notFirstExe, true);
 			is_tutorial_cleared = false;
-//			AudioEngine::sharedInstance()->initMusicOnOff(0);
-//			myDSH->setIntegerForKey(kDSH_Key_musicOn, 0);
 			myDSH->setBoolForKey(kDSH_Key_bgmOff, false);
 			myDSH->setBoolForKey(kDSH_Key_effectOff, false);
 			AudioEngine::sharedInstance()->setSoundOnOff(true);
 			AudioEngine::sharedInstance()->setEffectOnOff(true);
-//			myDSH->setBoolForKey(kDSH_Key_checkedNewControlJoystick, true);
 			
 			int cmp_value1 = 0xD8;
 			int cmp_value2 = 0x331;
@@ -652,37 +515,6 @@ private:
 			getServerTime();
 			
 			myDSH->setIntegerForKey(kDSH_Key_lastSelectedChapter, 1);
-			
-			
-//			myDSH->setBoolForKey(kDSH_Key_isBrushInf, true);
-//			myDSH->setIntegerForKey(kDSH_Key_savedStar, 9999);
-//			myDSH->setIntegerForKey(kDSH_Key_savedGold, 999999);
-//			
-//			for(int i=1;i<=20;i++)
-//			{
-//				myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, i, true);
-//				for(int k=1;k<=5;k++)
-//				{
-//					myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1_Stage_int2, i, k, true);
-//					myDSH->setIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, i, k, 3);
-//				}
-//				myDSH->setIntegerForKey(kDSH_Key_chapter_int1_LastSelectedStage, i, 5);
-//			}
-//			
-//			for(int i=1;i<=6;i++)
-//			{
-//				for(int j=20;j<=40;j+=10)
-//				{
-//					myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, i+j, true);
-//					for(int k=1;k<=5;k++)
-//					{
-//						myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1_Stage_int2, i+j, k, true);
-//						myDSH->setIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, i+j, k, 3);
-//					}
-//					myDSH->setIntegerForKey(kDSH_Key_chapter_int1_LastSelectedStage, i+j, 5);
-//				}
-//			}
-			
 		}
 		else
 		{
