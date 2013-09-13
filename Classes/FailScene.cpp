@@ -116,6 +116,12 @@ bool FailScene::init()
 			clr_cdt_label->setPosition(ccp(240,165));
 			addChild(clr_cdt_label, kZ_FS_img);
 		}
+		else if(clr_cdt == kCLEAR_sequenceChange)
+		{
+			CCSprite* c_coin = CCSprite::create("exchange_1_act.png");
+			c_coin->setPosition(ccp(240,165));
+			addChild(c_coin, kZ_FS_img);
+		}
 	}
 	
 	CCSprite* n_main = CCSprite::create("ending_main.png");

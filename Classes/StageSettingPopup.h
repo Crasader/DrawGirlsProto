@@ -136,6 +136,12 @@ private:
 				clr_cdt_label->setPosition(ccp(163,170));
 				addChild(clr_cdt_label, kSSPL_Z_menu);
 			}
+			else if(clr_condition == kCLEAR_sequenceChange)
+			{
+				CCSprite* c_coin = CCSprite::create("exchange_1_act.png");
+				c_coin->setPosition(ccp(163,170));
+				addChild(c_coin, kSSPL_Z_menu);
+			}
 			
 			CCLabelTTF* content = CCLabelTTF::create(mySD->getConditionContent(stage).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(140, 60), kCCTextAlignmentCenter);
 			content->setColor(ccBLACK);

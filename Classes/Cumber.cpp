@@ -449,8 +449,8 @@ void CumberParent::myInit()
 	
 	void onStartGame();
 	void onPatternEnd();
-//	auto mainCumber = MainCumber::create();
-	auto mainCumber = KSCumber::create();
+	auto mainCumber = MainCumber::create();
+//	auto mainCumber = KSCumber::create();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	

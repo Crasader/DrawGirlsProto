@@ -35,6 +35,11 @@ public:
 		return t_SD;
 	}
 	
+	int getLastUpdateStageNumber()
+	{
+		return 7;
+	}
+	
 	void setSilType(int t1)
 	{
 		myType = t1;
@@ -55,6 +60,7 @@ public:
 		else if(t_type == 3)		return_value = kCLEAR_bigArea;
 		else if(t_type == 4)		return_value = kCLEAR_itemCollect;
 		else if(t_type == 5)		return_value = kCLEAR_perfect;
+		else if(t_type == 6)		return_value = kCLEAR_sequenceChange;
 		else						return_value = kCLEAR_default;
 		
 		return return_value;
@@ -197,12 +203,18 @@ private:
 	void startSetting3();
 	void startSetting4();
 	void startSetting5();
+	void startSetting6();
+	void startSetting7();
+	void startSetting8();
 	
 	void exchangeSilhouette1();
 	void exchangeSilhouette2();
 	void exchangeSilhouette3();
 	void exchangeSilhouette4();
 	void exchangeSilhouette5();
+	void exchangeSilhouette6();
+	void exchangeSilhouette7();
+	void exchangeSilhouette8();
 };
 
 #endif /* defined(__galsprototype__SilhouetteData__) */
