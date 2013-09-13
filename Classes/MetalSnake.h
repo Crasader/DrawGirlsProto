@@ -31,7 +31,7 @@ class MetalSnake : public KSCumberBase
 public:
 	MetalSnake() :
 	m_speed(2.f),
-	RADIUS(90.f / 4.f), // 머리에 대한 충돌 반지름
+	RADIUS(80.f / 4.f), // 머리에 대한 충돌 반지름
 	BODY_RADIUS(70/4.f), // 몸통에 대한 충돌 반지름
 	TAIL_RADIUS(50/4.f), // 꼬리에 대한 충돌 반지름
 	mEmotion(nullptr),
@@ -39,7 +39,8 @@ public:
 	ATTACK_POINT_X(-18), // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
 	ATTACK_POINT_Y(0),   // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
 	BODY_MARGIN(20),     // 몸통 사이의 거리.
-	TAIL_MARGIN(40)      // 몸통과 꼬리사이의 거리.
+	TAIL_MARGIN(40),      // 몸통과 꼬리사이의 거리.
+	FURY_DURATION(2.f) // 분노모드 초.
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
@@ -63,8 +64,10 @@ public:
 	{
 		CCLog("onStartGame!!");
 	}
-
+	void crashMapForPosition(CCPoint targetPt);
 	virtual void movingAndCrash(float dt);
+	void normalMoving(float dt);
+	void furyMoving(float dt);
 	void attack(float dt);
 	virtual bool init();
 	CREATE_FUNC(MetalSnake);
@@ -161,8 +164,12 @@ public:
 	
 	virtual void startInvisible();
 	void invisibling(float dt);
-
+	
+	virtual void furyModeOn();
+	void furyModeScheduler(float dt);
+	virtual void furyModeOff();
 protected:
+	const float FURY_DURATION;
 	const float RADIUS;
 	const float BODY_RADIUS;
 	const float TAIL_RADIUS;
@@ -212,7 +219,7 @@ protected:
 	
 	struct Scale
 	{
-		Scale() : SCALE_ADDER(0.1f), SCALE_SUBER(0.1f), scale(1.f, 1.f, 0.f),
+		Scale() : SCALE_ADDER(0.1f), SCALE_SUBER(0.2f), scale(1.f, 1.f, 0.f),
 		timer(0), autoIncreaseTimer(0), collisionStartTime(0), increaseTime(0),
 		collisionCount(0){}
 		const float SCALE_ADDER;
@@ -235,6 +242,18 @@ protected:
 		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
 	}m_invisible;
 
+	struct FuryMode
+	{
+
+		float furyTimer;
+		int furyFrameCount;
+		void startFury()
+		{
+
+			furyTimer = 0.f;
+			furyFrameCount = 0;
+		}
+	}m_furyMode;
 };
 
 
