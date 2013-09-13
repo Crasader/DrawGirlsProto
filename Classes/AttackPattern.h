@@ -394,6 +394,7 @@ public:
 		if (beamImg)
 		{
 			beamImg->removeFromParentAndCleanup(true);
+			beamImg = 0;
 		}
 		
 		myGD->communication("MP_endIngActionAP");
@@ -421,7 +422,8 @@ private:
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile6::selfRemove));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
 		
-		beamImg->runAction(t_seq);
+		if(beamImg)
+			beamImg->runAction(t_seq);
 	}
 	
 	void selfRemove()
@@ -464,11 +466,12 @@ private:
 			}
 		}
 		
-		beamImg->setRotation(-(beamBaseAngle-10 + 2*ingFrame));
+		if(beamImg)
+			beamImg->setRotation(-(beamBaseAngle-10 + 2*ingFrame));
 		
 		if(ingFrame >= 10)
 		{
-			beamImg->removeFromParentAndCleanup(true);
+//			beamImg->removeFromParentAndCleanup(true);
 			stopMyAction();
 		}
 	}
@@ -534,14 +537,24 @@ public:
 	{
 		myGD->communication("CP_jackCrashDie");
 		myGD->communication("Jack_startDieEffect");
-		stopCut();
+//		stopCut(); // 가만보면 이게 두번 호출됨. 그래서 지워줘도 됨.
 	}
 	
 	void stopCut()
 	{
 		unschedule(schedule_selector(AP_Missile7::cuting));
-		background->removeFromParentAndCleanup(true);
-		death_side->removeFromParentAndCleanup(true);
+		if(background)
+		{
+			background->removeFromParentAndCleanup(true);
+			background = 0;
+		}
+		if(death_side)
+		{
+			death_side->removeFromParentAndCleanup(true);
+			death_side = 0;
+		}
+		
+		myGD->communication("CP_onPatternEnd");
 		startSelfRemoveSchedule();
 	}
 	
@@ -611,7 +624,6 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_mCnt, float t_distance, string imgFilename, CCSize t_mSize)
 	{
-		
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
 		CCPoint subPosition = ccpSub(jackPosition, t_sp);
@@ -2573,7 +2585,6 @@ private:
 	
 	void myInit(int t_ing_frame, int t_shoot_frame, int t_d_angle, float t_distance, string t_imgFilename, CCSize t_mSize)
 	{
-		
 		myGD->communication("CP_setMovingShoot", true);
 		ing_frame = t_ing_frame;
 		shoot_frame = t_shoot_frame;

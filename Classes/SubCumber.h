@@ -520,6 +520,13 @@ private:
 			else if(last_p == 6)		my_element = kElementCode_water;
 		}
 		
+		myScale = 1.f;
+		maxScale = 1.2f;
+		minScale = 0.4f;
+		
+		areacrash_frame_cnt = 0;
+		move_frame = 0;
+		
 		cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_monster.png", resultType)->getCString());
 		addChild(cumberImg);
 		

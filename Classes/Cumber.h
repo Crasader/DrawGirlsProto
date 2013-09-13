@@ -61,7 +61,6 @@ public:
 	void startTeleport();
 	int getMainCumberSheild();
 	void mainCumberInvisibleOn();
-	void mainCumberInvisibleOff();
 	void movingSubCumbers();
 	void startAutoAttacker();
 	void jackCrashDie();
