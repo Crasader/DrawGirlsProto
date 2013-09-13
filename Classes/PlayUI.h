@@ -641,7 +641,7 @@ public:
 		
 		percentageLabel->setString(CCString::createWithFormat("%.1f", floorf(t_p*10000.f)/10000.f*100.f)->getCString());
 		
-		if(clr_cdt_type == kCLEAR_perfect && !is_cleared_cdt && t_p - t_beforePercentage > 0 && atof(percentageLabel->getString()) >= clr_cdt_per && atof(percentageLabel->getString()) <= clr_cdt_per+clr_cdt_range)
+		if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && atof(percentageLabel->getString()) >= clr_cdt_per*100.f && atof(percentageLabel->getString()) <= (clr_cdt_per+clr_cdt_range)*100.f)
 			conditionClear();
 		
 		m_areaGage->setPercentage(t_p);
