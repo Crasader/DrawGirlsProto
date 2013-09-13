@@ -43,7 +43,8 @@ public:
 	}
 	
 	void setMainCumberState(int t_cs); // no used
-	
+	void onStartGame();
+	void onPatternEnd();
 	void allStopSchedule(); //  used
 	void furyModeOn(); 
 	void tickingOn();

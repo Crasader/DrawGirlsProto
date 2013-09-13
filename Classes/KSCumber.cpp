@@ -78,9 +78,11 @@ bool KSCumber::init()
 	
 	setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
 	
-	startMoving();
+//	startMoving();
 	
+	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(KSCumber::attack));
+	
 	return true;
 }
 
@@ -88,7 +90,7 @@ void KSCumber::movingAndCrash(float dt)
 {
 	m_directionAngleDegree += m_well512.GetValue(-4, +4);
 	
-	if(m_state != CUMBERSTATESTOP)
+	if(m_state == CUMBERSTATEMOVING)
 	{
 		int sela = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
 		if(sela == 0)
@@ -175,26 +177,142 @@ void KSCumber::movingAndCrash(float dt)
 	
 	CCLog("cnt outer !! = %d", cnt);
 	
-	
-	setPosition(afterPosition);
+	if(m_state == CUMBERSTATEMOVING)
+		setPosition(afterPosition);
 }
 
 void KSCumber::startDamageReaction(float userdata)
 {
+	// 방사형으로 돌아가고 있는 중이라면
+	if(m_state == CUMBERSTATENODIRECTION)
+	{
+		CCLog("m_state == CUMBERSTATENODIRECTION");
+		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
+	}
+	else if(m_state == CUMBERSTATEMOVING)
+	{
+		CCLog("m_state == CUMBERSTATEMOVING");
+		float rad = deg2Rad(userdata);
+		m_damageData.m_damageX = cos(rad);
+		m_damageData.m_damageY = sin(rad);
+		//	CCLog("%f %f", dx, dy);
+		m_state = CUMBERSTATEDAMAGING;
+		
+		m_damageData.timer = 0;
+		schedule(schedule_selector(KSCumber::damageReaction));
+	}
+
 	
+	
+}
+
+
+void KSCumber::damageReaction(float)
+{
+	m_damageData.timer += 1 / 60.f;
+	if(m_damageData.timer < 1)
+	{
+		m_headImg->setColor(ccc3(255, 0, 0));
+	}
+	else
+	{
+		m_headImg->setColor(ccc3(255, 255, 255));
+		m_state = CUMBERSTATEMOVING;
+		unschedule(schedule_selector(KSCumber::damageReaction));
+	}
+}
+
+
+void KSCumber::animationNoDirection(float dt)
+{
+	m_noDirection.timer += 1.f/60.f;
+	
+	if(m_noDirection.state == 1)
+	{
+		m_noDirection.rotationDeg += 6.f;
+		if(m_noDirection.rotationDeg >= 360)
+		{
+			m_noDirection.rotationDeg -= 360;
+			m_noDirection.rotationCnt++;
+			/// 좀 돌았으면 돌아감.
+			if(m_noDirection.rotationCnt >= 5)
+			{
+				m_noDirection.state = 2;
+				return;
+			}
+		}
+		m_noDirection.distance += 0.5f;
+		m_noDirection.distance = MIN(m_noDirection.distance, 30);
+		float dx = cos(deg2Rad(m_noDirection.rotationDeg)) * m_noDirection.distance;
+		float dy = sin(deg2Rad(m_noDirection.rotationDeg)) * m_noDirection.distance * 1.2f; // 약간 타원
+		
+		
+		dx = dy = 0.f; // 안돔.
+		//	float speed = 2.f;
+		//	dx *= speed;
+		//	dy *= speed;
+		
+		setPosition(m_noDirection.startingPoint + ccp(dx, dy));
+	}
+	else if(m_noDirection.state == 2)
+	{
+		CCPoint dir = m_noDirection.startingPoint - getPosition();
+		float rad = atan2(dir.y, dir.x);
+		float dx = cos(rad);
+		float dy = sin(rad);
+		
+		
+		if(ccpLength(m_noDirection.startingPoint - getPosition()) <= 0.5f)
+		{
+			m_state = CUMBERSTATEMOVING;
+			unschedule(schedule_selector(KSCumber::animationNoDirection));
+			setPosition(m_noDirection.startingPoint);
+		}
+		else
+			setPosition(getPosition() + ccp(dx, dy));
+	}
 }
 void KSCumber::attack(float dt)
 {
-	float w = ProbSelector::sel(0.01, 1.0 - 0.01, 0.0);
+	float w = ProbSelector::sel(0.003, 1.0 - 0.003, 0.0);
 	
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
-//		stopMoving();
+		//		stopMoving();
+		startAnimationNoDirection();
 		
-		showEmotion(kEmotionType_joy);
+		int attackCode = 0;
 		
-//		gameData->communication("MP_startFire", getPosition(), false);
+		bool searched = false;
+		while(!searched)
+		{
+			attackCode = m_well512.GetValue(0, 38);
+			if(attackCode == 6 || attackCode == 7 || attackCode == 13 || attackCode == 19 ||
+			   attackCode == 20 || attackCode == 31 || attackCode == 32 || attackCode == 34 ||
+			   attackCode == 35)
+			{
+				searched = false;
+			}
+			else
+				searched = true;
+			
+		}
+		
+		
+		gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+		//		showEmotion(kEmotionType_joy);
+		//		m_speed = m_well512.GetValue(2, 4);
+		//		startAnimationNoDirection();
+		//		gameData->communication("MP_startFire", getPosition(), false);
+		//		gameData->comm("MP_attackWithCode", 33);
+		if(m_well512.GetValue(0, 1))
+		{
+			
+		}
+		else{
+			
+		}		
 	}
 }
 COLLISION_CODE KSCumber::crashWithX(IntPoint check_position)

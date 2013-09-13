@@ -227,7 +227,8 @@ void Maingame::counting()
 		unschedule(schedule_selector(Maingame::counting));
 //		setTouchEnabled(true);
 		startControl();
-		myCP->movingMainCumber();
+//		myCP->movingMainCumber();
+		myCP->onStartGame();
 		myCP->movingSubCumbers();
 		myCP->startAutoAttacker();
 		myUI->startCounting();

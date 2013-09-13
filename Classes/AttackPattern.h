@@ -204,7 +204,7 @@ public:
 		unschedule(schedule_selector(AP_Missile3::myAction));
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		startSelfRemoveSchedule();
 	}
@@ -278,7 +278,7 @@ public:
 		unschedule(schedule_selector(AP_Missile4::myAction));
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		startSelfRemoveSchedule();
 	}
@@ -397,7 +397,7 @@ public:
 		}
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		startSelfRemoveSchedule();
 	}
@@ -415,7 +415,7 @@ private:
 		unschedule(schedule_selector(AP_Missile6::myAction));
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile6::selfRemove));
@@ -677,7 +677,7 @@ public:
 		unschedule(schedule_selector(AP_Missile9::myAction));
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		startSelfRemoveSchedule();
 	}
@@ -690,7 +690,7 @@ public:
 			unschedule(schedule_selector(AP_Missile9::myAction));
 			
 			myGD->communication("MP_endIngActionAP");
-			myGD->communication("CP_movingMainCumber");
+			myGD->communication("CP_onPatternEnd");
 			
 			CCDelayTime* t_delay = CCDelayTime::create(1.f);
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile9::selfRemove));
@@ -780,7 +780,7 @@ public:
 		}
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		startSelfRemoveSchedule();
 	}
@@ -792,7 +792,7 @@ public:
 			isRemoveEffect = true;
 			unschedule(schedule_selector(AP_Missile10::myAction));
 			myGD->communication("MP_endIngActionAP");
-			myGD->communication("CP_movingMainCumber");
+			myGD->communication("CP_onPatternEnd");
 			
 			CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile10::selfRemove));
@@ -971,7 +971,7 @@ public:
 		if(myBeam)			myBeam->removeFromParentAndCleanup(true);
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		startSelfRemoveSchedule();
 	}
 	
@@ -979,7 +979,7 @@ public:
 	{
 		unschedule(schedule_selector(AP_Missile12::myAction));
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile12::selfRemove));
@@ -1221,7 +1221,7 @@ public:
 			myParticle->setDuration(0);
 			
 			myGD->communication("MP_endIngActionAP");
-			myGD->communication("CP_movingMainCumber");
+			myGD->communication("CP_onPatternEnd");
 			
 			CCDelayTime* t_delay = CCDelayTime::create(1.2f);
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile15::particleRemove));
@@ -1243,7 +1243,7 @@ public:
 			myParticle->setDuration(0);
 			
 			myGD->communication("MP_endIngActionAP");
-			myGD->communication("CP_movingMainCumber");
+			myGD->communication("CP_onPatternEnd");
 			
 			CCDelayTime* t_delay = CCDelayTime::create(1.2f);
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile15::selfRemove));
@@ -1584,7 +1584,7 @@ public:
 		unschedule(schedule_selector(AP_Missile17::myAction));
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile17::selfRemove));
@@ -1633,7 +1633,7 @@ private:
 		unschedule(schedule_selector(AP_Missile17::myAction));
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		startSelfRemoveSchedule();
 	}
@@ -2602,7 +2602,7 @@ public:
 		unschedule(schedule_selector(AP_Missile101::myAction));
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		startSelfRemove();
 	}
@@ -2698,7 +2698,7 @@ public:
 		unschedule(schedule_selector(AP_Missile102::myAction));
 		
 		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_movingMainCumber");
+		myGD->communication("CP_onPatternEnd");
 		
 		startSelfRemove();
 	}
