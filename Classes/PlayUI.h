@@ -59,7 +59,6 @@ private:
 	float decrease_gold;
 	float increase_gold;
 	string keep_gold_string;
-	StarGoldData* mySGD;
 	
 	void startIncreasing()
 	{
@@ -116,13 +115,12 @@ private:
 	
 	void myInit()
 	{
-		mySGD = StarGoldData::sharedInstance();
 		is_incresing = false;
-		CCLabelBMFont::initWithString(CCString::createWithFormat("%d", StarGoldData::sharedInstance()->getStageGold())->getCString(), "etc_font.fnt", kCCLabelAutomaticWidth, kCCTextAlignmentRight, CCPointZero);
+		CCLabelBMFont::initWithString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString(), "etc_font.fnt", kCCLabelAutomaticWidth, kCCTextAlignmentRight, CCPointZero);
 		stopIncreasing();
 		setAnchorPoint(ccp(1,0.5));
 		setPosition(ccp(112,464));
-		StarGoldData::sharedInstance()->setGoldLabel(this);
+		mySGD->setGoldLabel(this);
 	}
 };
 
@@ -273,7 +271,7 @@ private:
 	{
 		AudioEngine::sharedInstance()->playEffect("sound_get_coin.mp3", false);
 		duration_frame = t_duration_frame;
-		StarGoldData::sharedInstance()->setGold(StarGoldData::sharedInstance()->getGold() + duration_frame);
+		mySGD->setGold(mySGD->getGold() + duration_frame);
 		
 		create_frame = duration_frame/60 + 1;
 		
@@ -491,7 +489,8 @@ enum AlertTagUI{
 
 enum ChildTagInPlayUI{
 	kCT_UI_clrCdtLabel = 100,
-	kCT_UI_clrCdtIcon
+	kCT_UI_clrCdtIcon,
+	kCT_UI_clrCdtPopup
 };
 
 #define t_tta	0xD9
@@ -557,6 +556,12 @@ public:
 			
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
+			
+			if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per)
+				takeBigArea();
+			else if(clr_cdt_type == kCLEAR_perfect && !is_cleared_cdt && t_p - t_beforePercentage > 0 && t_p >= clr_cdt_per && t_p <= clr_cdt_per+clr_cdt_range)
+				conditionClear();
+			
 			if(t_p >= t_beforePercentage + JM_CONDITION)
 			{
 				int cmCnt = (t_p - t_beforePercentage)/JM_CONDITION;
@@ -661,68 +666,48 @@ public:
 				if(t_p >= clearPercentage + 0.1f || countingCnt <= 50)				star_cnt = 3;
 				else if(t_p >= clearPercentage + 0.05f || countingCnt <= 100)		star_cnt = 2;
 				
-				//			int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
-				//			int stage_number = SelectedMapData::sharedInstance()->getSelectedStage();
-				//
-				//			int before_star_cnt = myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number);
-				//			if(before_star_cnt < star_cnt)
-				//			{
-				//				int brush_cnt = StarGoldData::sharedInstance()->getBrushCnt();
-				//
-				//				if(brush_cnt + star_cnt-before_star_cnt >= 5)
-				//				{
-				//					if(brush_cnt < 5)
-				//						StarGoldData::sharedInstance()->setBrushCnt(5);
-				//					StarGoldData::sharedInstance()->setBrushTime(-1);
-				//				}
-				//				else
-				//				{
-				//					StarGoldData::sharedInstance()->setBrushCnt(brush_cnt+star_cnt-before_star_cnt);
-				//				}
-				//
-				//				if(stage_number == 5)
-				//				{
-				//					StarGoldData::sharedInstance()->setIsAfterSceneChapter(true);
-				//					if(chapter_number >= 10 && chapter_number < 20)
-				//					{
-				//						if(chapter_number == 10 && myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, 10, 5) == 0)
-				//						{
-				//							StarGoldData::sharedInstance()->setOpenHard(true);
-				//						}
-				//					}
-				//					else
-				//					{
-				//						myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, SelectedMapData::sharedInstance()->getNextChapterNumber(), true);
-				//						myDSH->setIntegerForKey(kDSH_Key_lastSelectedChapter, SelectedMapData::sharedInstance()->getNextChapterNumber());
-				//					}
-				//				}
-				//				else
-				//				{
-				//					myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1_Stage_int2, chapter_number, stage_number+1, true);
-				//					myDSH->setIntegerForKey(kDSH_Key_chapter_int1_LastSelectedStage, chapter_number, stage_number+1);
-				//				}
-				//
-				//				myDSH->setIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number, star_cnt);
-				//			}
-				
-				StarGoldData::sharedInstance()->gameClear(star_cnt, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt);
+				mySGD->gameClear(star_cnt, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt);
 				
 				endGame();
 			}
 			else
 			{
+				conditionFail();
+				
+				mySGD->fail_code = kFC_missionfail;
+				
 				stopCounting();
 				// timeover
 				isGameover = true;
 				myGD->communication("Main_allStopSchedule");
 				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-				result_sprite = CCSprite::create("game_timeover.png");
+				result_sprite = CCSprite::create("game_fail.png");
 				result_sprite->setRotation(-25);
 				result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
 				addChild(result_sprite);
 				endGame();
 			}
 		}
+	}
+	
+	void conditionClear()
+	{
+		removeChildByTag(kCT_UI_clrCdtLabel);
+		is_cleared_cdt = true;
+		((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
+		
+		CCSprite* condition_clear = CCSprite::create("condition_clear.png");
+		condition_clear->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+		addChild(condition_clear);
+	}
+	
+	void conditionFail()
+	{
+		((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
+		
+		CCSprite* condition_fail = CCSprite::create("condition_fail.png");
+		condition_fail->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+		addChild(condition_fail);
 	}
 	
 	void takeExchangeCoin(int t_coin_number)
@@ -750,7 +735,7 @@ public:
 	
 	void subBossLife(float t_life)
 	{
-		if(clr_cdt_type != kCLEAR_bossLifeZero || is_cleared_cdt)
+		if(clr_cdt_type != kCLEAR_bossLifeZero || is_cleared_cdt || isGameover)
 			return;
 		
 		t_life = MissileDamageData::getCorrelationDamage(t_life, main_cumber_element);
@@ -760,89 +745,13 @@ public:
 		else
 			bossLife -= t_life;
 		
-//		bossLifeGage->setOpacity(255);
-//		CCScaleTo* t_scale = CCScaleTo::create(0.5, 1, bossLife/maxBossLife);
-//		CCEaseOut* t_easeout = CCEaseOut::create(t_scale, 3.0);
-//		CCFadeTo* t_fade = CCFadeTo::create(0.5, 65);
-//		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_easeout, t_fade);
-//		bossLifeGage->runAction(t_spawn);
-		
 		m_bossLifeGage->setPercentage(bossLife/maxBossLife);
 		if(!is_cleared_cdt)
 			((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%.1f%%", bossLife/maxBossLife*100.f)->getCString());
 		
-//		bossLifeGage->setScaleY(bossLife/maxBossLife);
-		if(!isGameover && bossLife == 0.f && !is_cleared_cdt)
+		if(bossLife == 0.f && !is_cleared_cdt)
 		{
-			is_cleared_cdt = true;
-			removeChildByTag(kCT_UI_clrCdtIcon);
-			removeChildByTag(kCT_UI_clrCdtLabel);
-			
-//			isGameover = true;
-//			myGD->setIsGameover(true);
-//			myGD->communication("CP_setGameover");
-//			stopCounting();
-//			myGD->communication("Main_allStopSchedule");
-//			myGD->communication("CP_startDieAnimation");
-//			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-//			result_sprite = CCSprite::create("game_clear.png");
-//			result_sprite->setRotation(-25);
-//			result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
-//			addChild(result_sprite);
-//			
-//			int star_cnt = 1;
-//			
-//			if(countingCnt <= 50)				star_cnt = 3;
-//			else if(countingCnt <= 100)			star_cnt = 2;
-//			
-//			int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
-//			int stage_number = SelectedMapData::sharedInstance()->getSelectedStage();
-//			
-//			int before_star_cnt = myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number);
-//			if(before_star_cnt < star_cnt)
-//			{
-//				int brush_cnt = StarGoldData::sharedInstance()->getBrushCnt();
-//				
-//				if(brush_cnt + star_cnt-before_star_cnt >= 5)
-//				{
-//					if(brush_cnt < 5)
-//						StarGoldData::sharedInstance()->setBrushCnt(5);
-//					StarGoldData::sharedInstance()->setBrushTime(-1);
-//				}
-//				else
-//				{
-//					StarGoldData::sharedInstance()->setBrushCnt(brush_cnt+star_cnt-before_star_cnt);
-//				}
-//				
-//				if(stage_number == 5)
-//				{
-//					StarGoldData::sharedInstance()->setIsAfterSceneChapter(true);
-//					if(chapter_number >= 10 && chapter_number < 20)
-//					{
-//						if(chapter_number == 10 && myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, 10, 5) == 0)
-//						{
-//							StarGoldData::sharedInstance()->setOpenHard(true);
-//						}
-//					}
-//					else
-//					{
-//						myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, SelectedMapData::sharedInstance()->getNextChapterNumber(), true);
-//						myDSH->setIntegerForKey(kDSH_Key_lastSelectedChapter, SelectedMapData::sharedInstance()->getNextChapterNumber());
-//					}
-//				}
-//				else
-//				{
-//					myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1_Stage_int2, chapter_number, stage_number+1, true);
-//					myDSH->setIntegerForKey(kDSH_Key_chapter_int1_LastSelectedStage, chapter_number, stage_number+1);
-//				}
-//				
-//				myDSH->setIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating, chapter_number, stage_number, star_cnt);
-//				
-//			}
-//			
-//			StarGoldData::sharedInstance()->gameClear(star_cnt, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt);
-//			
-//			endGame();
+			conditionClear();
 		}
 	}
 	
@@ -905,7 +814,7 @@ public:
 	
 	void showPause()
 	{
-		StarGoldData::sharedInstance()->is_paused = true;
+		mySGD->is_paused = true;
 		PausePopupLayer* t_ppl = PausePopupLayer::create(this, callfunc_selector(PlayUI::goHome), this, callfunc_selector(PlayUI::cancelHome), target_main, delegate_gesture, delegate_button, delegate_joystick);
 		addChild(t_ppl);
 	}
@@ -955,9 +864,6 @@ private:
 	CCObject* target_continue;
 	SEL_CallFunc delegate_continue;
 	
-	GameData* myGD;
-	SilhouetteData* mySD;
-	
 	float bossLife;
 	float keepLife;
 	float maxBossLife;
@@ -985,8 +891,6 @@ private:
 	bool is_show_exchange_coin;
 	int taked_coin_cnt;
 	
-	DataStorageHub* myDSH;
-	
 	bool isFirst;
 	bool isGameover;
 	bool is_hard;
@@ -999,6 +903,11 @@ private:
 	
 	bool is_cleared_cdt; // cdt => condition
 	CLEAR_CONDITION clr_cdt_type;
+	bool is_show_condition;
+	int clr_cdt_cnt;
+	int ing_cdt_cnt;
+	float clr_cdt_per;
+	float clr_cdt_range;
 	
 	void counting()
 	{
@@ -1040,12 +949,16 @@ private:
 		{
 			stopCounting();
 			// timeover
+			
+			mySGD->fail_code = kFC_timeover;
+			
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			result_sprite = CCSprite::create("game_timeover.png");
 			result_sprite->setRotation(-25);
 			result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
 			addChild(result_sprite);
+			
 			endGame();
 		}
 	}
@@ -1066,6 +979,37 @@ private:
 	{
 		result_sprite->setVisible(false);
 		myGD->communication("Main_gameover");
+	}
+	
+	void catchSubCumber()
+	{
+		if(is_cleared_cdt || clr_cdt_type != kCLEAR_subCumberCatch || isGameover)
+			return;
+		
+		ing_cdt_cnt++;
+		
+		((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
+	}
+	
+	void takeBigArea()
+	{
+		if(is_cleared_cdt || clr_cdt_type != kCLEAR_bigArea || isGameover)
+			return;
+		
+		ing_cdt_cnt++;
+		((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
+	}
+	
+	void takeItemCollect()
+	{
+		if(is_cleared_cdt || clr_cdt_type != kCLEAR_itemCollect || isGameover)
+			return;
+		
+		ing_cdt_cnt++;
+		((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 	}
 	
 	void myInit()
@@ -1089,11 +1033,7 @@ private:
 		else if(re_chapter_number == 16)		main_cumber_element = kElementCode_water;
 		
 		percentage_decrease_cnt = 0;
-		myDSH = DataStorageHub::sharedInstance();
 		
-		mySD = SilhouetteData::sharedSilhouetteData();
-		
-		myGD = GameData::sharedGameData();
 		clearPercentage = 1;
 		
 		ui_case = CCSprite::create("ui_back.png");
@@ -1101,16 +1041,8 @@ private:
 		ui_case->setOpacity(0);
 		addChild(ui_case);
 		
-//		CCSprite* gold_p = CCSprite::create("maingame_gold.png");
-//		gold_p->setPosition(ccp(15,410));
-//		addChild(gold_p);
-		
 		gold_label = GoldLabel::create();
 		addChild(gold_label);
-		
-//		CCSprite* score_p = CCSprite::create("maingame_score.png");
-//		score_p->setPosition(ccp(310,410));
-//		addChild(score_p);
 		
 		score_label = CountingBMLabel::create("0", "etc_font.fnt", 2.f);
 		score_label->setAnchorPoint(ccp(1.0,0.5));
@@ -1190,26 +1122,115 @@ private:
 			exchange_dic->setObject(exchange_spr, i);
 		}
 		
-		clr_cdt_type = SilhouetteData::sharedSilhouetteData()->getClearCondition();
+		is_show_condition = false;
+		clr_cdt_type = mySD->getClearCondition();
 		if(clr_cdt_type == kCLEAR_bossLifeZero)
 		{
 			is_cleared_cdt = false;
 			
-			CCSprite* n_icon = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 20, 20));
-			n_icon->setColor(ccRED);
-			CCSprite* s_icon = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 20, 20));
-			s_icon->setColor(ccc3(255, 120, 120));
+			CCSprite* n_icon = CCSprite::create("condition1_menu.png");
+			CCSprite* s_icon = CCSprite::create("condition1_menu.png");
+			s_icon->setColor(ccGRAY);
 			
 			CCMenuItem* icon_item = CCMenuItemSprite::create(n_icon, s_icon, this, menu_selector(PlayUI::menuAction));
 			icon_item->setTag(kMenuTagUI_condition);
 			
 			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
-			icon_menu->setPosition(ccp(430,270+DataStorageHub::sharedInstance()->ui_top_control));
+			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
 			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 			
 			
-			CCLabelTTF* clr_cdt_label = CCLabelTTF::create("100%", StarGoldData::sharedInstance()->getFont().c_str(), 10);
-			clr_cdt_label->setPosition(ccp(460,270+DataStorageHub::sharedInstance()->ui_top_control));
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create("100%", mySGD->getFont().c_str(), 12);
+			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+		}
+		else if(clr_cdt_type == kCLEAR_subCumberCatch)
+		{
+			is_cleared_cdt = false;
+			
+			CCSprite* n_icon = CCSprite::create("condition2_menu.png");
+			CCSprite* s_icon = CCSprite::create("condition2_menu.png");
+			s_icon->setColor(ccGRAY);
+			
+			CCMenuItem* icon_item = CCMenuItemSprite::create(n_icon, s_icon, this, menu_selector(PlayUI::menuAction));
+			icon_item->setTag(kMenuTagUI_condition);
+			
+			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
+			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
+			
+			clr_cdt_cnt = mySD->getClearConditionCatchSubCumber();
+			ing_cdt_cnt = 0;
+			
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
+			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+		}
+		else if(clr_cdt_type == kCLEAR_bigArea)
+		{
+			is_cleared_cdt = false;
+			
+			CCSprite* n_icon = CCSprite::create("condition3_menu.png");
+			CCSprite* s_icon = CCSprite::create("condition3_menu.png");
+			s_icon->setColor(ccGRAY);
+			
+			CCMenuItem* icon_item = CCMenuItemSprite::create(n_icon, s_icon, this, menu_selector(PlayUI::menuAction));
+			icon_item->setTag(kMenuTagUI_condition);
+			
+			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
+			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
+			
+			clr_cdt_per = mySD->getClearConditionBigAreaPer();
+			clr_cdt_cnt = mySD->getClearConditionBigAreaCnt();
+			ing_cdt_cnt = 0;
+			
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
+			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+		}
+		else if(clr_cdt_type == kCLEAR_itemCollect)
+		{
+			is_cleared_cdt = false;
+			
+			CCSprite* n_icon = CCSprite::create("condition4_menu.png");
+			CCSprite* s_icon = CCSprite::create("condition4_menu.png");
+			s_icon->setColor(ccGRAY);
+			
+			CCMenuItem* icon_item = CCMenuItemSprite::create(n_icon, s_icon, this, menu_selector(PlayUI::menuAction));
+			icon_item->setTag(kMenuTagUI_condition);
+			
+			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
+			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
+			
+			clr_cdt_cnt = mySD->getClearConditionItemCollect();
+			ing_cdt_cnt = 0;
+			
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
+			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+		}
+		else if(clr_cdt_type == kCLEAR_perfect)
+		{
+			is_cleared_cdt = false;
+			
+			CCSprite* n_icon = CCSprite::create("condition5_menu.png");
+			CCSprite* s_icon = CCSprite::create("condition5_menu.png");
+			s_icon->setColor(ccGRAY);
+			
+			CCMenuItem* icon_item = CCMenuItemSprite::create(n_icon, s_icon, this, menu_selector(PlayUI::menuAction));
+			icon_item->setTag(kMenuTagUI_condition);
+			
+			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
+			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
+			
+			clr_cdt_per = mySD->getClearConditionPerfectBase();
+			clr_cdt_range = mySD->getClearConditionPerfectRange();
+			
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", clr_cdt_per*100.f)->getCString(), mySGD->getFont().c_str(), 12);
+			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
 			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
 		}
 		else if(clr_cdt_type == kCLEAR_default)
@@ -1223,6 +1244,8 @@ private:
 		myGD->V_V["UI_decreasePercentage"] = std::bind(&PlayUI::decreasePercentage, this);
 		myGD->B_V["UI_beRevivedJack"] = std::bind(&PlayUI::beRevivedJack, this);
 		myGD->V_TDTD["UI_showContinuePopup"] = std::bind(&PlayUI::showContinuePopup, this, _1, _2, _3, _4);
+		myGD->V_V["UI_catchSubCumber"] = std::bind(&PlayUI::catchSubCumber, this);
+		myGD->V_V["UI_takeItemCollect"] = std::bind(&PlayUI::takeItemCollect, this);
 	}
 	
 	void continueAction()
@@ -1247,9 +1270,6 @@ private:
 		if(tag == kMenuTagUI_home && !isGameover)
 		{
 			showPause();
-//			StarGoldData::sharedInstance()->is_paused = true;
-//			GoHomePopupLayer* t_ghpl = GoHomePopupLayer::create(this, callfunc_selector(PlayUI::goHome), this, callfunc_selector(PlayUI::cancelHome));
-//			addChild(t_ghpl);
 		}
 		else if(tag == kMenuTagUI_condition && !isGameover)
 		{
@@ -1259,51 +1279,29 @@ private:
 	
 	void showCondition()
 	{
-		ConditionPopup* t_cdt = ConditionPopup::create(this, callfunc_selector(PlayUI::closeCondition));
-		addChild(t_cdt);
+		if(is_show_condition)
+		{
+			((ConditionPopup*)getChildByTag(kCT_UI_clrCdtPopup))->holdingPopup();
+		}
+		else
+		{
+			is_show_condition = true;
+			ConditionPopup* t_cdt = ConditionPopup::create(this, callfunc_selector(PlayUI::closeCondition));
+			addChild(t_cdt, 0, kCT_UI_clrCdtPopup);
+		}
 	}
 	
 	void closeCondition()
 	{
-		(target_main->*delegate_startControl)();
+		is_show_condition = false;
 	}
-	
-	CCSprite* bottom_shutter;
-	CCSprite* top_shutter;
 	
 	void closeShutter()
 	{
-		StarGoldData::sharedInstance()->is_paused = false;
+		mySGD->is_paused = false;
 		CCDirector::sharedDirector()->resume();
 		
-//		AudioEngine::sharedInstance()->playEffect("sound_shuttermove_start.m4a", false);
-//		
-//		bottom_shutter = CCSprite::create("loading_bottom.png");
-//		bottom_shutter->setAnchorPoint(ccp(0.5,1));
-//		bottom_shutter->setPosition(ccp(160,-10));
-//		addChild(bottom_shutter);
-//		
-//		top_shutter = CCSprite::create("loading_top.png");
-//		top_shutter->setAnchorPoint(ccp(0.5,0));
-//		top_shutter->setPosition(ccp(160,490));
-//		addChild(top_shutter);
-//		
-//		CCMoveTo* bottom_move = CCMoveTo::create(0.5, ccp(160,240));
-//		CCMoveTo* top_move = CCMoveTo::create(0.5, ccp(160,240));
-//		CCCallFunc* top_sound = CCCallFunc::create(this, callfunc_selector(PlayUI::shutterClosedSound));
-//		CCDelayTime* top_delay = CCDelayTime::create(0.5);
-//		CCCallFunc* top_call = CCCallFunc::create(this, callfunc_selector(PlayUI::endCloseShutter));
-//		CCAction* top_action = CCSequence::create(top_move, top_sound, top_delay, top_call, NULL);
-//		
-//		bottom_shutter->runAction(bottom_move);
-//		top_shutter->runAction(top_action);
-		
 		endCloseShutter();
-	}
-	
-	void shutterClosedSound()
-	{
-		AudioEngine::sharedInstance()->playEffect("sound_shutter_closed.m4a", false);
 	}
 	
 	void endCloseShutter()
@@ -1311,10 +1309,9 @@ private:
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionNoBorder);
 		
-		StarGoldData::sharedInstance()->gameOver(0, 0, 0);
-		StarGoldData::sharedInstance()->resetLabels();
-		GameData::sharedGameData()->resetGameData();
-//		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
+		mySGD->gameOver(0, 0, 0);
+		mySGD->resetLabels();
+		myGD->resetGameData();
 		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
 	}
 	
@@ -1326,7 +1323,7 @@ private:
 	void cancelHome()
 	{
 		(target_main->*delegate_startControl)();
-		StarGoldData::sharedInstance()->is_paused = false;
+		mySGD->is_paused = false;
 		CCDirector::sharedDirector()->resume();
 	}
 	

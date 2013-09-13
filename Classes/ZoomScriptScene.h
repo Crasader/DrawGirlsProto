@@ -35,9 +35,8 @@ private:
 	int text_length;
 	string save_text;
 	int typing_frame;
-	SilhouetteData* mySD;
 	
-	DataStorageHub* myDSH;
+	
 	
 	bool is_touched_menu;
 	bool is_actioned;

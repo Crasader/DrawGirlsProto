@@ -118,7 +118,7 @@ void ClearScene::startCalcAnimation()
 
 void ClearScene::startScoreAnimation()
 {
-	keep_score = StarGoldData::sharedInstance()->getScore();
+	keep_score = mySGD->getScore();
 	decrease_score = keep_score;
 	increase_score = 0.f;
 	schedule(schedule_selector(ClearScene::scoreAnimation));
@@ -155,13 +155,13 @@ void ClearScene::scoreAnimation(float dt)
 void ClearScene::stopScoreAnimation()
 {
 	unschedule(schedule_selector(ClearScene::scoreAnimation));
-	score_label->setString(CCString::createWithFormat("%.0f", StarGoldData::sharedInstance()->getScore())->getCString());
+	score_label->setString(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString());
 	startPercentageAnimation();
 }
 
 void ClearScene::startPercentageAnimation()
 {
-	keep_percentage = StarGoldData::sharedInstance()->getPercentage()*100.f;
+	keep_percentage = mySGD->getPercentage()*100.f;
 	decrease_percentage = keep_percentage;
 	increase_percentage = 0.f;
 	schedule(schedule_selector(ClearScene::percentageAnimation));
@@ -198,13 +198,13 @@ void ClearScene::percentageAnimation(float dt)
 void ClearScene::stopPercentageAnimation()
 {
 	unschedule(schedule_selector(ClearScene::percentageAnimation));
-	percentage_label->setString(CCString::createWithFormat("%.1f", StarGoldData::sharedInstance()->getPercentage()*100.f)->getCString());
+	percentage_label->setString(CCString::createWithFormat("%.1f", mySGD->getPercentage()*100.f)->getCString());
 	startTimeAnimation();
 }
 
 void ClearScene::startTimeAnimation()
 {
-	keep_time = StarGoldData::sharedInstance()->getGameTime();
+	keep_time = mySGD->getGameTime();
 	decrease_time = keep_time;
 	increase_time = 0.f;
 	schedule(schedule_selector(ClearScene::timeAnimation));
@@ -241,7 +241,7 @@ void ClearScene::timeAnimation(float dt)
 void ClearScene::stopTimeAnimation()
 {
 	unschedule(schedule_selector(ClearScene::timeAnimation));
-	time_label->setString(CCString::createWithFormat("%d", StarGoldData::sharedInstance()->getGameTime())->getCString());
+	time_label->setString(CCString::createWithFormat("%d", mySGD->getGameTime())->getCString());
 	AudioEngine::sharedInstance()->stopAllEffects();
 }
 

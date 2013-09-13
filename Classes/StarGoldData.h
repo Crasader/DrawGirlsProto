@@ -53,7 +53,14 @@ typedef enum tSceneCode{
 	kSceneCode_WorldMapScene
 }SceneCode;
 
+enum FailCode{
+	kFC_gameover = 0,
+	kFC_timeover,
+	kFC_missionfail
+};
+
 #define SGD_KEY	0xD9
+#define mySGD StarGoldData::sharedInstance()
 
 class StarGoldData : public CCObject
 {
@@ -114,7 +121,7 @@ public:
 	
 	void setGameStart()
 	{
-		SilhouetteData::sharedSilhouetteData()->startSetting();
+		mySD->startSetting();
 		is_cleared = false;
 		is_subCumberType_this = false;
 		score = 0.f;
@@ -162,7 +169,7 @@ public:
 		percentage = t_percentage;
 		score = t_score*(1.f+percentage)*(1.f+stage_star/10.f);
 		game_time = t_game_time;
-		GameData::sharedGameData()->setIsGameover(true);
+		myGD->setIsGameover(true);
 	}
 	
 	void gameOver(float t_score, float t_percentage, int t_game_time)
@@ -170,7 +177,7 @@ public:
 		score = t_score;
 		percentage = t_percentage;
 		game_time = t_game_time;
-		GameData::sharedGameData()->setIsGameover(true);
+		myGD->setIsGameover(true);
 	}
 	
 	bool getIsCleared()
@@ -470,10 +477,12 @@ public:
 	bool is_showtime;
 	bool is_exchanged;
 	
+	FailCode fail_code;
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
-	DataStorageHub* myDSH;
+	
 	bool is_after_scene_chapter;
 	bool is_cleared;
 	float score;
@@ -592,7 +601,7 @@ private:
 		after_loading = kImgType_Empty;
 		is_after_scene_chapter = false;
 		resetLabels();
-		myDSH = DataStorageHub::sharedInstance();
+		
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating,10,5) > 0 && !myDSH->getBoolForKey(kDSH_Key_isOpendChapter_int1, 21))
 			myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, 21, true);

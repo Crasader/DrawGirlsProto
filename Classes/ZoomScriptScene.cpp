@@ -41,8 +41,7 @@ bool ZoomScript::init()
         return false;
     }
 	
-	myDSH = DataStorageHub::sharedInstance();
-	mySD = SilhouetteData::sharedSilhouetteData();
+	
 	
 	game_node = CCNode::create();
 	game_node->setScale(1.5f);
@@ -51,11 +50,11 @@ bool ZoomScript::init()
 	
 	silType = mySD->getSilType();
 	
-	is_showtime = StarGoldData::sharedInstance()->is_showtime;
-	is_exchanged = StarGoldData::sharedInstance()->is_exchanged;
+	is_showtime = mySGD->is_showtime;
+	is_exchanged = mySGD->is_exchanged;
 	
-	StarGoldData::sharedInstance()->is_showtime = false;
-	StarGoldData::sharedInstance()->is_exchanged = false;
+	mySGD->is_showtime = false;
+	mySGD->is_exchanged = false;
 	
 	string first_filename;
 	
@@ -66,7 +65,7 @@ bool ZoomScript::init()
 	first_img->setPosition(ccp(160,215));
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
-	script_label = CCLabelTTF::create("", StarGoldData::sharedInstance()->getFont().c_str(), 18);
+	script_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 18);
 	script_label->setPosition(ccp(210,30));
 	addChild(script_label, kZS_Z_script_label);
 	
@@ -101,7 +100,7 @@ void ZoomScript::onEnter()
 {
 	CCLayer::onEnter();
 	
-	save_text = SilhouetteData::sharedSilhouetteData()->getScriptString(is_exchanged ? 2 : 1);
+	save_text = mySD->getScriptString(is_exchanged ? 2 : 1);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -234,7 +233,7 @@ void ZoomScript::showtimeThirdAction()
 	script_label->setVisible(true);
 	script_case->setVisible(true);
 	
-	save_text = SilhouetteData::sharedSilhouetteData()->getScriptString(is_exchanged ? 3 : 2);
+	save_text = mySD->getScriptString(is_exchanged ? 3 : 2);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));

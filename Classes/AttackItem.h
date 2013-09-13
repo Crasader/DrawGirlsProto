@@ -39,7 +39,7 @@ public:
 		cast_cnt = 0;
 		schedule(schedule_selector(AttackItem::casting));
 	}
-	DataStorageHub* myDSH;
+	
 	int hide_cnt;
 	int base_cast_time;
 	int base_hide_time;
@@ -221,7 +221,6 @@ public:
 	}
 	
 private:
-	GameData* myGD;
 	IntPoint myPoint;
 	CCSprite* itemImg;
 	int damage_frame;
@@ -423,8 +422,7 @@ private:
 	void myInit()
 	{
 		base_hide_time = AttackItemBaseHideTime;
-		myGD = GameData::sharedGameData();
-		myDSH = DataStorageHub::sharedInstance();
+		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*AttackItemBaseSubValue;
 		damage = MissileDamageData::getElementDamage(kElementCode_wind, myDSH->getIntegerForKey(kDSH_Key_elementLevelWind));
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*AttackItemBaseUpRate);
@@ -543,7 +541,6 @@ public:
 	}
 	
 private:
-	GameData* myGD;
 	IntPoint myPoint;
 	CCSprite* itemImg;
 	
@@ -756,9 +753,8 @@ private:
 	void myInit()
 	{
 		base_hide_time = AttackItemBaseHideTime;
-		myGD = GameData::sharedGameData();
 		
-		myDSH = DataStorageHub::sharedInstance();
+		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*AttackItemBaseSubValue;
 		damage = MissileDamageData::getElementDamage(kElementCode_lightning, myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning));
 		total_damage = damage * (AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*AttackItemBaseUpRate);;
@@ -950,7 +946,6 @@ public:
 	}
 	
 private:
-	GameData* myGD;
 	IntPoint myPoint;
 	CCSprite* itemImg;
 	int damage_frame;
@@ -1066,8 +1061,7 @@ private:
 	void myInit()
 	{
 		base_hide_time = AttackItemBaseHideTime;
-		myGD = GameData::sharedGameData();
-		myDSH = DataStorageHub::sharedInstance();
+		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelLife)-1)*AttackItemBaseSubValue;
 		damage = MissileDamageData::getElementDamage(kElementCode_life, myDSH->getIntegerForKey(kDSH_Key_elementLevelLife));
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelLife)-1)*AttackItemBaseUpRate);;
@@ -1293,7 +1287,6 @@ public:
 	}
 	
 private:
-	GameData* myGD;
 	IntPoint myPoint;
 	CCSprite* itemImg;
 	int damage_frame;
@@ -1413,8 +1406,7 @@ private:
 	void myInit()
 	{
 		base_hide_time = AttackItemBaseHideTime;
-		myGD = GameData::sharedGameData();
-		myDSH = DataStorageHub::sharedInstance();
+		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*AttackItemBaseSubValue;
 		damage = MissileDamageData::getElementDamage(kElementCode_water, myDSH->getIntegerForKey(kDSH_Key_elementLevelWater));
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*AttackItemBaseUpRate);;
@@ -1600,7 +1592,6 @@ public:
 	}
 	
 private:
-	GameData* myGD;
 	IntPoint myPoint;
 	CCSprite* itemImg;
 	int damage_frame;
@@ -1719,8 +1710,7 @@ private:
 	void myInit()
 	{
 		base_hide_time = AttackItemBaseHideTime;
-		myGD = GameData::sharedGameData();
-		myDSH = DataStorageHub::sharedInstance();
+		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*AttackItemBaseSubValue;
 		damage = MissileDamageData::getElementDamage(kElementCode_fire, myDSH->getIntegerForKey(kDSH_Key_elementLevelFire));
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*AttackItemBaseUpRate);;
@@ -1869,7 +1859,6 @@ public:
 	}
 	
 private:
-	GameData* myGD;
 	IntPoint myPoint;
 	CCSprite* itemImg;
 	int damage_frame;
@@ -1985,8 +1974,7 @@ private:
 	void myInit()
 	{
 		base_hide_time = AttackItemBaseHideTime;
-		myGD = GameData::sharedGameData();
-		myDSH = DataStorageHub::sharedInstance();
+		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*AttackItemBaseSubValue;
 		damage = MissileDamageData::getElementDamage(kElementCode_plasma, myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma));
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*AttackItemBaseUpRate);;
@@ -2041,7 +2029,6 @@ public:
 	}
 	
 private:
-	GameData* myGD;
 	IntPoint myPoint;
 	CCSprite* itemImg;
 	int ing_frame;
@@ -2109,8 +2096,7 @@ private:
 	void myInit()
 	{
 		base_hide_time = 3000 + rand()%601;
-		myGD = GameData::sharedGameData();
-		myDSH = DataStorageHub::sharedInstance();
+		
 		base_cast_time = 60;
 	}
 };

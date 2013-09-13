@@ -43,7 +43,7 @@ private:
 	CCPoint create_position;
 	float radius;
 	int ing_frame;
-	GameData* myGD;
+	
 	bool is_removing;
 	CCObject* emotion_target;
 	SEL_CallFuncI emotion_delegate;
@@ -115,7 +115,7 @@ private:
 		emotion_target = t_emotion;
 		emotion_delegate = d_emotion;
 		is_removing = false;
-		myGD = GameData::sharedGameData();
+		
 		CCSprite* texture_spr = CCSprite::create("shock_wave.png");
 		initWithTexture(texture_spr->getTexture(), kDefaultSpriteBatchCapacity);
 		radius = 0;
@@ -166,13 +166,13 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	bool is_justDie;
 	
 	void myInit()
 	{
 		is_justDie = false;
-		myGD = GameData::sharedGameData();
+		
 		
 //		myGD->regSW(this,
 //					callfuncIpOC_selector(SW_Parent::createSW),

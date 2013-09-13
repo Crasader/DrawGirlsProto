@@ -210,7 +210,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCPoint sp;
 	int keepFrame;
 	int shootFrame;
@@ -250,7 +250,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_keepFrame, int t_shootFrame, float t_distance, string t_imgFilename, CCSize t_mSize)
 	{
-		myGD = GameData::sharedGameData();
+		
 		sp = t_sp;
 		keepFrame = t_keepFrame;
 		shootFrame = t_shootFrame;
@@ -284,7 +284,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCPoint sp;
 	float shootBaseAngle;
 	int keepFrame;
@@ -327,7 +327,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_keepFrame, int t_shootFrame, int t_tmCnt, float t_shootAngle, float t_distance, string t_imgFilename, CCSize t_mSize)
 	{
-		myGD = GameData::sharedGameData();
+		
 		sp = t_sp;
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
@@ -403,7 +403,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int type;
 	CCSprite* beamImg;
 	float beamBaseAngle;
@@ -475,7 +475,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_type)
 	{
-		myGD = GameData::sharedGameData();
+		
 		type = t_type;
 		startPosition = t_sp;
 		
@@ -546,7 +546,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCSprite* background;
 	CCSprite* death_side;
 	int castFrame;
@@ -577,7 +577,7 @@ private:
 	
 	void myInit(int t_castFrame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		castFrame = t_castFrame;
 		totalCutCnt = 6;
 		
@@ -611,7 +611,6 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_mCnt, float t_distance, string imgFilename, CCSize t_mSize)
 	{
-		GameData* myGD = GameData::sharedGameData();
 		
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
@@ -702,7 +701,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int keepFrame;
 	int shootFrame;
 	int ingFrame;
@@ -742,7 +741,7 @@ private:
 	
 	void myInit(int t_keepFrame, int t_shootFrame, float t_distance, CCSize t_mSize, int t_type)
 	{
-		myGD = GameData::sharedGameData();
+		
 		keepFrame = t_keepFrame;
 		shootFrame = t_shootFrame;
 		distance = t_distance;
@@ -804,7 +803,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCPoint sp;
 	int tmCnt;
 	int targetingFrame;
@@ -884,7 +883,7 @@ private:
 	void myInit(CCPoint t_sp, int t_tmCnt, int t_targetingFrame, int t_shootFrame, CCSize t_mSize)
 	{
 		isRemoveEffect = false;
-		myGD = GameData::sharedGameData();
+		
 		mSize = t_mSize;
 		sp = t_sp;
 		tmCnt = t_tmCnt;
@@ -916,7 +915,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	
 	virtual void selfRemoveSchedule()
 	{
@@ -930,7 +929,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize)
 	{
-		myGD = GameData::sharedGameData();
+		
 		myGD->communication("EP_startCrashAction");
 		
 		IntPoint jackPoint = myGD->getJackPoint();
@@ -993,7 +992,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int type;
 	int targetingFrame;
 	int shootFrame;
@@ -1091,7 +1090,7 @@ private:
 		targetingFrame = t_targetingFrame;
 		shootFrame = t_shootFrame;
 		
-		myGD = GameData::sharedGameData();
+		
 		
 		myGD->communication("EP_startCrashAction");
 		
@@ -1158,7 +1157,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	
 	virtual void selfRemoveSchedule()
 	{
@@ -1172,7 +1171,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, IntSize t_mSize)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		myGD->communication("EP_startCrashAction");
 		
@@ -1256,7 +1255,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int mType;
 	int tmCnt;
 	float baseAngle;
@@ -1416,7 +1415,7 @@ private:
 		burnFrame = t_burnFrame;
 		createBurnFrame = burnFrame/tmCnt;
 		
-		myGD = GameData::sharedGameData();
+		
 		
 		myGD->communication("EP_startCrashAction");
 		
@@ -1485,7 +1484,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int type;
 	int tmCnt;
 	int mRate;
@@ -1543,7 +1542,7 @@ private:
 	void myInit(int t_type, int t_tmCnt, int t_totalFrame)
 	{
 		isRemoveEffect = false;
-		myGD = GameData::sharedGameData();
+		
 		myGD->communication("EP_startCrashAction");
 		type = t_type;
 		tmCnt = t_tmCnt;
@@ -1598,7 +1597,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int type;
 	CCPoint sp;
 	int createRingFrame;
@@ -1816,7 +1815,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_type, int t_createRingFrame, int t_chargeFrame, int t_crashFrame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		myGD->communication("EP_startCrashAction");
 		sp = t_sp;
 		type = t_type;
@@ -1899,8 +1898,8 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
-			GameData::sharedGameData()->communication("EP_stopCrashAction");
-			GameData::sharedGameData()->communication("MS_resetRects");
+			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects");
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -1908,7 +1907,7 @@ private:
 	void myInit(CCPoint t_sp, float t_move_speed, int t_tmCnt, int t_cushion_cnt, bool t_is_big_bomb)
 	{
 		isRemoveEffect = false;
-		GameData::sharedGameData()->communication("EP_startCrashAction");
+		myGD->communication("EP_startCrashAction");
 		for(int i=0;i<t_tmCnt;i++)
 		{
 			// create
@@ -1942,11 +1941,11 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	
 	void myInit(CCPoint t_sp)
 	{
-		myGD = GameData::sharedGameData();
+		
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
 		
@@ -1970,12 +1969,12 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	
 	
 	void myInit(CCPoint t_sp)
 	{
-		myGD = GameData::sharedGameData();
+		
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
 		
@@ -2004,7 +2003,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int slowFrame;
 	int ingFrame;
 	CCSprite* cobwebImg;
@@ -2040,7 +2039,7 @@ private:
 	
 	void myInit(int t_frame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		slowFrame = t_frame;
 		
 		cobwebImg = CCSprite::create("cobweb.png");
@@ -2080,7 +2079,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int sightOutFrame;
 	int ingFrame;
 	
@@ -2110,7 +2109,7 @@ private:
 	
 	void myInit(int t_frame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		sightOutFrame = t_frame;
 		
 		SightOut* t_so = SightOut::create();
@@ -2147,7 +2146,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int stunFrame;
 	int ingFrame;
 	
@@ -2170,7 +2169,7 @@ private:
 	
 	void myInit(int t_frame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		stunFrame = t_frame;
 		
 		myGD->communication("Jack_createHammer");
@@ -2203,7 +2202,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int freezingFrame;
 	int ingFrame;
 	
@@ -2226,7 +2225,7 @@ private:
 	
 	void myInit(int t_frame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		freezingFrame = t_frame;
 		
 		myGD->communication("Jack_createFog");
@@ -2259,7 +2258,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int sleepFrame;
 	int ingFrame;
 	
@@ -2282,7 +2281,7 @@ private:
 	
 	void myInit(int t_frame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		sleepFrame = t_frame;
 		
 		myGD->communication("Jack_createSleep");
@@ -2308,7 +2307,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCPoint jackPosition;
 	CCPoint sp;
 	int type;
@@ -2368,7 +2367,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_type, int t_distance, int t_tmCnt) // create 0.5 second
 	{
-		myGD = GameData::sharedGameData();
+		
 		IntPoint jackPoint = myGD->getJackPoint();
 		jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
 		sp = t_sp;
@@ -2396,11 +2395,11 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		myGD->communication("CP_startTeleport");
 		startSelfRemoveSchedule();
 	}
@@ -2430,7 +2429,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int chaosFrame;
 	int ingFrame;
 	
@@ -2453,7 +2452,7 @@ private:
 	
 	void myInit(int t_frame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		chaosFrame = t_frame;
 		
 		myGD->communication("Jack_createChaos");
@@ -2478,7 +2477,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int invisibleFrame;
 	int ingFrame;
 	
@@ -2509,7 +2508,7 @@ private:
 	
 	void myInit(int t_frame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		invisibleFrame = t_frame;
 		
 		myGD->communication("CP_mainCumberInvisibleOn");
@@ -2536,7 +2535,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int ing_frame;
 	int shoot_frame;
 	int recent_frame;
@@ -2574,7 +2573,7 @@ private:
 	
 	void myInit(int t_ing_frame, int t_shoot_frame, int t_d_angle, float t_distance, string t_imgFilename, CCSize t_mSize)
 	{
-		myGD = GameData::sharedGameData();
+		
 		myGD->communication("CP_setMovingShoot", true);
 		ing_frame = t_ing_frame;
 		shoot_frame = t_shoot_frame;
@@ -2609,7 +2608,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCPoint sp;
 	int keepFrame;
 	int shootFrame;
@@ -2666,7 +2665,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_keepFrame, int t_shootFrame, float t_distance, string t_imgFilename, CCSize t_mSize)
 	{
-		myGD = GameData::sharedGameData();
+		
 		sp = t_sp;
 		keepFrame = t_keepFrame;
 		shootFrame = t_shootFrame;
@@ -2705,7 +2704,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCPoint sp;
 	float shootBaseAngle;
 	int keepFrame;
@@ -2770,7 +2769,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_keepFrame, int t_shootFrame, int t_tmCnt, float t_shootAngle, float t_distance, string t_imgFilename, CCSize t_mSize)
 	{
-		myGD = GameData::sharedGameData();
+		
 		sp = t_sp;
 		
 		keepFrame = t_keepFrame;

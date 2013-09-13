@@ -114,8 +114,8 @@ public:
 	
 	void selfRemove()
 	{
-		GameData::sharedGameData()->communication("Jack_resetStopEffects");
-		GameData::sharedGameData()->communication("Main_touchOn");
+		myGD->communication("Jack_resetStopEffects");
+		myGD->communication("Main_touchOn");
 		removeFromParentAndCleanup(true);
 	}
 	
@@ -209,13 +209,12 @@ public:
 	
 	void selfRemove()
 	{
-		GameData::sharedGameData()->communication("Jack_resetStopEffects");
-		GameData::sharedGameData()->communication("Main_touchOn");
+		myGD->communication("Jack_resetStopEffects");
+		myGD->communication("Main_touchOn");
 		removeFromParentAndCleanup(true);
 	}
 	
 private:
-	GameData* myGD;
 	CCObject* target_jack;
 	SEL_CallFunc delegate_freeze;
 	
@@ -239,7 +238,6 @@ private:
 	
 	void myInit(CCObject* t_jack, SEL_CallFunc d_freeze)
 	{
-		myGD = GameData::sharedGameData();
 		target_jack = t_jack;
 		delegate_freeze = d_freeze;
 		
@@ -286,13 +284,12 @@ public:
 	
 	void selfRemove()
 	{
-		GameData::sharedGameData()->communication("Jack_resetStopEffects");
-		GameData::sharedGameData()->communication("Main_touchOn");
+		myGD->communication("Jack_resetStopEffects");
+		myGD->communication("Main_touchOn");
 		removeFromParentAndCleanup(true);
 	}
 	
 private:
-	GameData* myGD;
 	CCObject* target_jack;
 	SEL_CallFunc delegate_sleep;
 	CircleCreater* my_cc;
@@ -331,7 +328,6 @@ private:
 	
 	void myInit(CCObject* t_jack, SEL_CallFunc d_sleep)
 	{
-		myGD = GameData::sharedGameData();
 		target_jack = t_jack;
 		delegate_sleep = d_sleep;
 		
@@ -376,7 +372,7 @@ public:
 	
 	void selfRemove()
 	{
-		GameData::sharedGameData()->communication("Jack_resetStopEffects");
+		myGD->communication("Jack_resetStopEffects");
 		removeFromParentAndCleanup(true);
 	}
 	
@@ -1075,7 +1071,6 @@ private:
 	
 	Chaos* t_chaos;
 	
-	GameData* myGD;
 	CCSprite* jackImg;
 	CCSprite* jack_drawing;
 	CCSprite* jack_barrier;
@@ -1207,6 +1202,7 @@ private:
 	
 	void endGame()
 	{
+		mySGD->fail_code = kFC_gameover;
 		myGD->setIsGameover(true);
 		myGD->communication("Main_allStopSchedule");
 		myGD->communication("Main_gameover");
@@ -1269,20 +1265,6 @@ private:
 		isStun = false;
 		isDie = false;
 		is_double_moving = false;
-		myGD = GameData::sharedGameData();
-//		myGD->regJack(this, schedule_selector(Jack::changeSpeed),
-//					  callfunc_selector(Jack::startDieEffect),
-//					  callfunc_selector(Jack::createHammer),
-//					  callfunc_selector(Jack::createFog),
-//					  callfunc_selector(Jack::createSleep),
-//					  callfunc_selector(Jack::createChaos),
-//					  callfunc_selector(Jack::reverseOff),
-//					  callfunc_selector(Jack::resetStopEffects),
-//					  callfunc_selector(Jack::showMB),
-//					  callfunc_selector(Jack::takeSpeedUpItem),
-//					  fcallfunc_selector(Jack::getAlphaSpeed),
-//					  callfuncF_selector(Jack::setAlphaSpeed),
-//					  fcallfunc_selector(Jack::getSpeedUpValue));
 		
 		myGD->V_F["Jack_changeSpeed"] = std::bind(&Jack::changeSpeed, this, _1);
 		myGD->V_V["Jack_startDieEffect"] = std::bind(&Jack::startDieEffect, this);

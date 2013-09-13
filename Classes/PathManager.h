@@ -164,11 +164,11 @@ public:
 private:
 	queue<IntPoint*> chainBombArray;
 	CCArray* beforeArray;
-	GameData* myGD;
+	
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		beforeArray = new CCArray(1);
 	}
 	
@@ -301,7 +301,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	list<PathNode*> myList;
 	
 	void addPathBreaking(IntPoint start)
@@ -332,7 +332,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 //		myGD->regPM(this, callfuncIpv_selector(PathManager::addPath),
 //					callfunc_selector(PathManager::cleanPath),
 //					callfuncIp_selector(PathManager::addPathBreaking));

@@ -41,7 +41,7 @@ public:
 	}
 	
 protected:
-	GameData* myGD;
+	
 	CCParticleSystem* particle;
 	CCPoint particlePosition;
 	CCNode* targetNode;
@@ -283,7 +283,7 @@ private:
 	
 	void myInit(CCNode* t_target, int jm_type, float damage_per, CCPoint s_p)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		particlePosition = s_p;
 		
@@ -292,7 +292,7 @@ private:
 	
 	void myInit(CCNode* t_target, int jm_type, float damage_per)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		IntPoint jackPoint = myGD->getJackPoint();
 		particlePosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
@@ -708,7 +708,7 @@ private:
 	
 	void myInit(CCNode* t_target, int jm_type, float damage_per, CCPoint s_p)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		setStartPosition(s_p);
 		realInit(t_target, jm_type, damage_per);
@@ -721,7 +721,7 @@ private:
 	
 	void myInit(CCNode* t_target, int jm_type, float damage_per)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		IntPoint jackPoint = myGD->getJackPoint();
 		setStartPosition(ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1));

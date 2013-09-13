@@ -180,7 +180,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 //	float scaleFactor;
 //	float device_rate;
 //	float visit_factor;
@@ -191,7 +191,7 @@ private:
 	{
 		initWithFile(filename, t_rect);
 		
-		myGD = GameData::sharedGameData();
+		
 		drawRects = t_drawRects;
 //		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
 //		device_rate = DataStorageHub::sharedInstance()->device_rate;
@@ -222,7 +222,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 //	float scaleFactor;
 //	float device_rate;
 //	float visit_factor;
@@ -320,7 +320,7 @@ private:
 			}
 		}
 		
-		myGD = GameData::sharedGameData();
+		
 		drawRects = t_drawRects;
 //		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
 //		device_rate = DataStorageHub::sharedInstance()->device_rate;
@@ -348,7 +348,7 @@ private:
 //	CCArray* innerObjs;
 //	
 //private:
-//	GameData* myGD;
+//	
 //	float scaleFactor;
 //	float device_rate;
 //	float visit_factor;
@@ -385,7 +385,7 @@ private:
 //	
 //	void myInit(CCArray* t_drawRects)
 //	{
-//		myGD = GameData::sharedGameData();
+//		
 //		drawRects = t_drawRects;
 //		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
 //		device_rate = DataStorageHub::sharedInstance()->device_rate;
@@ -470,9 +470,6 @@ public:
 private:
 	VisibleSprite* myVS;
 //	ObjParent* myOP;
-	
-	GameData* myGD;
-	SilhouetteData* mySD;
 	
 	CCArray* drawRects;
 	
@@ -561,9 +558,6 @@ private:
 		drawRects = new CCArray(1);
 		setPosition(CCPointZero);
 		
-		mySD = SilhouetteData::sharedSilhouetteData();
-		
-		myGD = GameData::sharedGameData();
 //		myGD->regVS(this, callfuncIp_selector(VisibleParent::divideRect),
 //					callfuncCCp_selector(VisibleParent::setMoveGamePosition));
 		myGD->V_Ip["VS_divideRect"] = std::bind(&VisibleParent::divideRect, this, _1);
@@ -686,8 +680,8 @@ private:
 	CCSprite* random_rect_img;
 //	VisibleSprite* visibleImg;
 	CCNode* blockParent;
-	GameData* myGD;
-	DataStorageHub* myDSH;
+	
+	
 	int silType;
 	
 	IntRect init_rect;
@@ -934,13 +928,10 @@ private:
 	}
 	
 	
-	SilhouetteData* mySD;
-	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
-		myDSH = DataStorageHub::sharedInstance();
-		mySD = SilhouetteData::sharedSilhouetteData();
+		
+		
 		
 		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		screen_height = roundf(480*screen_size.height/screen_size.width/2.f);

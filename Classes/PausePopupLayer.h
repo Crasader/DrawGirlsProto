@@ -46,7 +46,7 @@ private:
 	
 	int touched_number;
 	
-	DataStorageHub* myDSH;
+	
 	
 	bool is_action;
 	

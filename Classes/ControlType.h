@@ -50,16 +50,14 @@ protected:
 	SEL_CallFunc delegate_readyBack;
 	float device_rate;
 	
-	DataStorageHub* myDSH;
-	GameData* myGD;
+	
 	
 	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack)
 	{
 		myJack = t_jack;
 		isStun = false;
 		is_control = false;
-		myDSH = DataStorageHub::sharedInstance();
-		myGD = GameData::sharedGameData();
+		
 //		device_rate = myDSH->getDeviceRate();
 		target_main = t_main;
 		delegate_readyBack = d_readyBack;
@@ -102,7 +100,7 @@ private:
 	CBS_State myState;
 	
 	CCPoint origin_position;
-	DataStorageHub* myDSH;
+	
 	
 	CCPoint beforePosition;
 	IntDirection beforeDirection;
@@ -121,7 +119,7 @@ private:
 		mType = kCT_Type_button_side;
 		beforeDirection = directionStop;
 		
-		myDSH = DataStorageHub::sharedInstance();
+		
 		origin_position = ccp(myDSH->getIntegerForKey(kDSH_Key_controlOriginX),myDSH->getIntegerForKey(kDSH_Key_controlOriginY));
 		
 		control_node = CCNode::create();

@@ -64,7 +64,7 @@ void PausePopupLayer::myInit(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_
 	continue_menu->setPosition(ccp(main_case->getContentSize().width/2.f,40));
 	main_case->addChild(continue_menu);
 	
-	myDSH = DataStorageHub::sharedInstance();
+	
 	
 //	gesture_menu = NULL;
 //	button_menu = NULL;
@@ -92,7 +92,7 @@ void PausePopupLayer::resetControlMenu()
 	string button_filename;
 	string joystick_filename;
 //	ControlType recent_type = ControlType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedControler));
-	float jack_base_speed = GameData::sharedGameData()->jack_base_speed;
+	float jack_base_speed = myGD->jack_base_speed;
 	
 //	if(recent_type == kControlType_unsetted)
 //	{

@@ -21,6 +21,8 @@ using namespace std;
 #define pixelSize 2
 #define MY_SCALE_RATE	1.5
 
+#define myGD GameData::sharedGameData()
+
 float deg2Rad(float x) ;
 float rad2Deg(float x);
 
@@ -402,13 +404,13 @@ public:
 	
 	static GameData* sharedGameData()
 	{
-		static GameData* myGD = NULL;
-		if(myGD == NULL)
+		static GameData* t_GD = NULL;
+		if(t_GD == NULL)
 		{
-			myGD = new GameData();
-			myGD->myInit();
+			t_GD = new GameData();
+			t_GD->myInit();
 		}
-		return myGD;
+		return t_GD;
 	}
 	
 	virtual ~GameData()
@@ -454,7 +456,6 @@ public:
 	{
 		int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
 		int stage_number = SelectedMapData::sharedInstance()->getSelectedStage();
-		DataStorageHub* myDSH = DataStorageHub::sharedInstance();
 		
 		float rate_arg;
 		
@@ -978,7 +979,6 @@ private:
 	void setStartMap(SetMapType set_map_type)
 	{
 		recent_map_type = set_map_type;
-		DataStorageHub* myDSH = DataStorageHub::sharedInstance();
 		if(set_map_type == kSMT_side)
 		{
 			myDSH->setGoldGetRate(0.5f);

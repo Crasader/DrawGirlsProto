@@ -95,7 +95,7 @@ bool ShowTime::init()
 		addChild(bonus_img);
 	}
 	
-//	touch_label = CCLabelTTF::create(MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_touchPlease), StarGoldData::sharedInstance()->getFont().c_str(), 20);
+//	touch_label = CCLabelTTF::create(MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_touchPlease), mySGD->getFont().c_str(), 20);
 //	touch_label->setPosition(ccp(160,150));
 //	touch_label->setVisible(false);
 //	addChild(touch_label);

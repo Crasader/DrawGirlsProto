@@ -48,21 +48,19 @@ bool WorldMapScene::init()
     
 	setKeypadEnabled(true);
 	
-	GameData::sharedGameData()->resetGameData();
-	
 	CCSprite* worldmap_back = CCSprite::create("worldmap_back.png");
 	worldmap_back->setPosition(ccp(240,160));
 	addChild(worldmap_back, kWMS_Z_back);
 	
 	
 	CCSprite* n_stage1 = CCSprite::create("worldmap_stage.png");
-	CCLabelTTF* n_stage1_label = CCLabelTTF::create("1", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+	CCLabelTTF* n_stage1_label = CCLabelTTF::create("1", mySGD->getFont().c_str(), 10);
 	n_stage1_label->setPosition(ccp(n_stage1->getContentSize().width/2.f, n_stage1->getContentSize().height/2.f));
 	n_stage1->addChild(n_stage1_label);
 	
 	CCSprite* s_stage1 = CCSprite::create("worldmap_stage.png");
 	s_stage1->setColor(ccGRAY);
-	CCLabelTTF* s_stage1_label = CCLabelTTF::create("1", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+	CCLabelTTF* s_stage1_label = CCLabelTTF::create("1", mySGD->getFont().c_str(), 10);
 	s_stage1_label->setPosition(ccp(s_stage1->getContentSize().width/2.f, s_stage1->getContentSize().height/2.f));
 	s_stage1->addChild(s_stage1_label);
 	
@@ -86,13 +84,13 @@ bool WorldMapScene::init()
 		if(updated_stage >= i && i-1 <= cleared_number)
 		{
 			CCSprite* n_stage = CCSprite::create("worldmap_stage.png");
-			CCLabelTTF* n_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), StarGoldData::sharedInstance()->getFont().c_str(), 10);
+			CCLabelTTF* n_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
 			n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
 			n_stage->addChild(n_stage_label);
 			
 			CCSprite* s_stage = CCSprite::create("worldmap_stage.png");
 			s_stage->setColor(ccGRAY);
-			CCLabelTTF* s_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), StarGoldData::sharedInstance()->getFont().c_str(), 10);
+			CCLabelTTF* s_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
 			s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
 			s_stage->addChild(s_stage_label);
 			
@@ -107,7 +105,7 @@ bool WorldMapScene::init()
 		else
 		{
 			CCSprite* d_stage = CCSprite::create("worldmap_gray.png");
-			CCLabelTTF* d_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), StarGoldData::sharedInstance()->getFont().c_str(), 10);
+			CCLabelTTF* d_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
 			d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
 			d_stage->addChild(d_stage_label);
 			
@@ -137,13 +135,13 @@ bool WorldMapScene::init()
 //		if(9 <= cleared_number)
 //		{
 //			CCSprite* n_stage = CCSprite::create("worldmap_boss.png");
-//			CCLabelTTF* n_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+//			CCLabelTTF* n_stage_label = CCLabelTTF::create("Boss", mySGD->getFont().c_str(), 10);
 //			n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
 //			n_stage->addChild(n_stage_label);
 //			
 //			CCSprite* s_stage = CCSprite::create("worldmap_boss.png");
 //			s_stage->setColor(ccGRAY);
-//			CCLabelTTF* s_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+//			CCLabelTTF* s_stage_label = CCLabelTTF::create("Boss", mySGD->getFont().c_str(), 10);
 //			s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
 //			s_stage->addChild(s_stage_label);
 //			
@@ -163,7 +161,7 @@ bool WorldMapScene::init()
 //		else
 //		{
 //			CCSprite* d_stage = CCSprite::create("worldmap_boss.png");
-//			CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+//			CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", mySGD->getFont().c_str(), 10);
 //			d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
 //			d_stage->addChild(d_stage_label);
 //			
@@ -179,7 +177,7 @@ bool WorldMapScene::init()
 //	else
 //	{
 //		CCSprite* d_stage = CCSprite::create("worldmap_boss.png");
-//		CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", StarGoldData::sharedInstance()->getFont().c_str(), 10);
+//		CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", mySGD->getFont().c_str(), 10);
 //		d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
 //		d_stage->addChild(d_stage_label);
 //		

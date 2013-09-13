@@ -84,7 +84,7 @@ private:
 		
 		setTouchEnabled(true);
 		
-		StarGoldData::sharedInstance()->is_paused = true;
+		mySGD->is_paused = true;
 		CCDirector::sharedDirector()->pause();
 	}
 	
@@ -106,7 +106,7 @@ private:
 			(target_continue->*delegate_continue)();
 		}
 		
-		StarGoldData::sharedInstance()->is_paused = false;
+		mySGD->is_paused = false;
 		CCDirector::sharedDirector()->resume();
 		removeFromParent();
 	}

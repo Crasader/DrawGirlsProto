@@ -267,7 +267,7 @@ public:
 private:
 	BalanceData* myBD;
 	
-	DataStorageHub* myDSH;
+	
 	
 	int selected_chapter;
 	int selected_stage;
@@ -275,7 +275,7 @@ private:
 	
 	void myInit()
 	{
-		myDSH = DataStorageHub::sharedInstance();
+		
 		
 		selected_chapter = 0;
 		selected_stage = 0;
