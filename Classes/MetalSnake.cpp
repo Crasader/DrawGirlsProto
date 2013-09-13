@@ -16,6 +16,8 @@
 #include "ProbSelector.h"
 #include "CumberEmotion.h"
 #include "Jack.h"
+
+
 MetalSnake::~MetalSnake()
 {
 	
@@ -194,9 +196,8 @@ void MetalSnake::animationNoDirection(float dt)
 		}
 		m_noDirection.distance += 0.5f;
 		m_noDirection.distance = MIN(m_noDirection.distance, 30);
-		m_noDirection.distance *= getCumberScale();
-		float dx = cos(deg2Rad(m_noDirection.rotationDeg)) * m_noDirection.distance;
-		float dy = sin(deg2Rad(m_noDirection.rotationDeg)) * m_noDirection.distance * 1.2f; // 약간 타원
+		float dx = cos(deg2Rad(m_noDirection.rotationDeg)) * m_noDirection.distance * getCumberScale();
+		float dy = sin(deg2Rad(m_noDirection.rotationDeg)) * m_noDirection.distance * getCumberScale() * 1.2f; // 약간 타원
 		
 		//	float speed = 2.f;
 		//	dx *= speed;
@@ -235,6 +236,8 @@ void MetalSnake::startDamageReaction(float userdata)
 {
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 
+	setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
+	
 	
 	// 방사형으로 돌아가고 있는 중이라면
 	if(m_state == CUMBERSTATENODIRECTION)
@@ -254,8 +257,32 @@ void MetalSnake::startDamageReaction(float userdata)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(MetalSnake::damageReaction));
 	}
-	
-	
+	else if(m_state == CUMBERSTATESTOP)
+	{
+		CCLog("m_state == CUMBERSTATESTOP");
+		float rad = deg2Rad(userdata);
+		m_damageData.m_damageX = cos(rad);
+		m_damageData.m_damageY = sin(rad);
+		//	CCLog("%f %f", dx, dy);
+		m_state = CUMBERSTATEDAMAGING;
+		
+		m_damageData.timer = 0;
+		schedule(schedule_selector(MetalSnake::damageReaction));
+	}
+	else if(m_state == CUMBERSTATEFURY)
+	{
+		CCLog("m_state == CUMBERSTATEMOVING");
+		float rad = deg2Rad(userdata);
+		m_damageData.m_damageX = cos(rad);
+		m_damageData.m_damageY = sin(rad);
+		//	CCLog("%f %f", dx, dy);
+		m_state = CUMBERSTATEDAMAGING;
+		
+		m_damageData.timer = 0;
+		schedule(schedule_selector(MetalSnake::damageReaction));
+		crashMapForPosition(getPosition());
+		myGD->communication("MS_resetRects");
+	}
 }
 
 void MetalSnake::damageReaction(float)
@@ -321,7 +348,7 @@ void MetalSnake::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	
-	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer )
+	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && m_state != CUMBERSTATENODIRECTION)
 	{
 		CCLog("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
@@ -338,9 +365,12 @@ void MetalSnake::scaleAdjustment(float dt)
 	}
 	
 }
-void MetalSnake::movingAndCrash(float dt)
+
+void MetalSnake::normalMoving(float dt)
 {
 	m_scale.timer += 1/60.f;
+	
+	
 	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
 	{
 		m_scale.collisionCount = 0;
@@ -399,6 +429,7 @@ void MetalSnake::movingAndCrash(float dt)
 		}
 		
 		COLLISION_CODE collisionCode = crashLooper(ips, &checkPosition);
+		
 		if(collisionCode == kCOLLISION_JACK)
 		{
 			// 즉사 시킴.
@@ -414,7 +445,7 @@ void MetalSnake::movingAndCrash(float dt)
 		}
 		else if(collisionCode == kCOLLISION_OUTLINE)
 		{
-//			CCLog("collision!!");
+			//			CCLog("collision!!");
 			onceOutlineAndMapCollision = true;
 			m_directionAngleDegree += m_well512.GetValue(90, 270);
 			
@@ -423,7 +454,7 @@ void MetalSnake::movingAndCrash(float dt)
 		}
 		else if(collisionCode == kCOLLISION_NEWLINE)
 		{
-//			CCLog("collision!!");
+			//			CCLog("collision!!");
 			//			gameData->communication("Jack_startDieEffect");
 			gameData->communication("SW_createSW", checkPosition, 0, 0);
 			//									callfuncI_selector(MetalSnake::showEmotion)); //##
@@ -561,6 +592,128 @@ void MetalSnake::movingAndCrash(float dt)
 		}
 	}
 }
+void MetalSnake::furyMoving(float dt)
+{
+	m_furyMode.furyFrameCount++;
+	CCPoint afterPosition;
+	IntPoint afterPoint;
+	//	int check_loop_cnt = 0;
+	
+	bool validPosition = false;
+	int cnt = 0;
+
+	while(!validPosition)
+	{
+		cnt++;
+		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
+		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
+		
+		CCPoint cumberPosition = getPosition();
+		afterPosition = cumberPosition + ccp(speedX, speedY);
+		afterPoint = ccp2ip(afterPosition);
+		
+		float half_distance = RADIUS*getCumberScale();
+		int ip_half_distance = half_distance / 2;
+		IntPoint checkPosition;
+		set<IntPoint> ips;
+		
+		// 충돌 영역에 대한 포인트 추가.
+		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+		{
+			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+			{
+				float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+				if(calc_distance < ip_half_distance)
+				{
+					ips.insert(IntPoint(i, j));
+				}
+			}
+		}
+		
+		COLLISION_CODE collisionCode = crashLooper(ips, &checkPosition);
+		if(collisionCode == kCOLLISION_OUTLINE)
+		{
+			//			CCLog("collision!!");
+			m_directionAngleDegree += m_well512.GetValue(90, 270);
+			
+			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
+			else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
+		}
+		else
+		{
+			validPosition = true;
+		}
+		if(m_furyMode.furyFrameCount % 12 == 0) // n 프레임당 한번 깎음.
+		{
+			crashMapForPosition(afterPosition);
+		}
+		
+		// 몸통에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
+		if(gameData->getJackState() != jackStateNormal)
+		{
+			for(auto body : m_Bodies)
+			{
+				CCPoint cumberPosition = body->getPosition();
+				CCPoint bodyPosition = cumberPosition;
+				IntPoint afterPoint = ccp2ip(bodyPosition);
+				IntPoint checkPosition;
+				float half_distance = BODY_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+				int ip_half_distance = half_distance / 2;
+				
+				
+				IntPoint jackPoint = gameData->getJackPoint();
+				float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
+				if(calc_distance < ip_half_distance)
+				{
+					// 즉사 시킴.
+					gameData->communication("Jack_startDieEffect");
+					break;
+				}
+			}
+		}
+		// 몸통에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
+		if(gameData->getJackState() != jackStateNormal)
+		{
+			CCPoint cumberPosition = m_tailImg->getPosition();
+			CCPoint bodyPosition = cumberPosition;
+			IntPoint afterPoint = ccp2ip(bodyPosition);
+			IntPoint checkPosition;
+			float half_distance = TAIL_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+			int ip_half_distance = half_distance / 2;
+			
+			
+			IntPoint jackPoint = gameData->getJackPoint();
+			float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
+			if(calc_distance < ip_half_distance)
+			{
+				// 즉사 시킴.
+				gameData->communication("Jack_startDieEffect");
+				break;
+			}
+		}
+
+		
+		
+	}
+	
+	//	CCLog("cnt outer !! = %d", cnt);
+	
+	
+
+	setPosition(afterPosition);
+	
+
+}
+void MetalSnake::movingAndCrash(float dt)
+{
+	if(m_state == CUMBERSTATEFURY)
+	{
+		furyMoving(dt);
+	}
+	else
+		normalMoving(dt);
+
+}
 
 void MetalSnake::attack(float dt)
 {
@@ -570,7 +723,7 @@ void MetalSnake::attack(float dt)
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
 //		stopMoving();
-		startAnimationNoDirection();
+//		startAnimationNoDirection();
 		
 		int attackCode = 0;
 		
@@ -587,11 +740,16 @@ void MetalSnake::attack(float dt)
 			
 			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
 				searched = false;
+			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
+				searched = false;
 			
 		}
-
-
-		gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+		if(m_state != CUMBERSTATEFURY)
+		{
+			m_state = CUMBERSTATESTOP;
+			gameData->communication("MP_attackWithCode", getPosition(), 13);
+		}
+		
 //		showEmotion(kEmotionType_joy);
 		//		m_speed = m_well512.GetValue(2, 4);
 		//		startAnimationNoDirection();
@@ -656,3 +814,76 @@ COLLISION_CODE MetalSnake::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
+void MetalSnake::furyModeOn()
+{
+	m_furyMode.startFury();
+	m_noDirection.state = 2;
+	m_state = CUMBERSTATEFURY;
+	
+	m_headImg->setColor(ccc3(0, 255, 0));
+	m_tailImg->setColor(ccc3(0, 255, 0));
+	for(auto i : m_Bodies)
+	{
+		i->setColor(ccc3(0, 255, 0));
+	}
+	
+	schedule(schedule_selector(ThisClassType::furyModeScheduler));
+}
+
+
+void MetalSnake::crashMapForPosition(CCPoint targetPt)
+{
+	CCPoint afterPosition = targetPt;
+	IntPoint afterPoint = ccp2ip(afterPosition);
+	set<IntPoint> crashArea;
+	float half_distance = RADIUS*getCumberScale() * 1.2f; // 깎을 영역은 충돌 영역크기보다 1.2 배.
+	int ip_half_distance = half_distance / 2;
+	// 충돌 영역에 대한 포인트 추가.
+	for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+	{
+		for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+		{
+			float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+			if(calc_distance < ip_half_distance)
+			{
+				if(i >= mapLoopRange::mapWidthInnerBegin && i < mapLoopRange::mapWidthInnerEnd &&
+				   j >= mapLoopRange::mapHeightInnerBegin && j < mapLoopRange::mapHeightInnerEnd )
+					crashArea.insert(IntPoint(i, j));
+			}
+		}
+	}
+	for(auto& i : crashArea)
+	{
+		crashMapForIntPoint(i);
+	}
+	
+}
+void MetalSnake::furyModeScheduler(float dt)
+{
+	m_furyMode.furyTimer += 1.f / 60.f;
+	
+	if(m_furyMode.furyTimer >= FURY_DURATION)
+	{
+		crashMapForPosition(getPosition());
+		
+		m_state = CUMBERSTATEMOVING;
+		m_headImg->setColor(ccc3(255, 255, 255));
+		m_tailImg->setColor(ccc3(255, 255, 255));
+		for(auto i : m_Bodies)
+		{
+			i->setColor(ccc3(255, 255, 255));
+		}
+		myGD->communication("MS_resetRects");
+		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
+	}
+}
+void MetalSnake::furyModeOff()
+{
+	if(isFuryMode)
+	{
+		myGD->communication("EP_stopCrashAction");
+		myGD->communication("MS_resetRects");
+		isFuryMode = false;
+		furyMode->removeFromParentAndCleanup(true);
+	}
+}

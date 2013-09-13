@@ -978,9 +978,22 @@ public:
 	{
 		unschedule(schedule_selector(AP_Missile12::myAction));
 		
-		if(wifiImg)			wifiImg->removeFromParentAndCleanup(true);
-		if(targetingImg)	targetingImg->removeFromParentAndCleanup(true);
-		if(myBeam)			myBeam->removeFromParentAndCleanup(true);
+		if(wifiImg)
+		{
+			wifiImg->removeFromParentAndCleanup(true);
+			wifiImg = NULL;
+			
+		}
+		if(targetingImg)
+		{
+			targetingImg->removeFromParentAndCleanup(true);
+			targetingImg = NULL;
+		}
+		if(myBeam)
+		{
+			myBeam->removeFromParentAndCleanup(true);
+			myBeam = NULL;
+		}
 		
 		myGD->communication("MP_endIngActionAP");
 		myGD->communication("CP_onPatternEnd");
@@ -993,14 +1006,18 @@ public:
 		myGD->communication("MP_endIngActionAP");
 		myGD->communication("CP_onPatternEnd");
 		
-		CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile12::selfRemove));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call);
-		
-		CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
-		
-		wifiImg->runAction(t_seq);
-		targetingImg->runAction(t_fade2);
+		if(wifiImg)
+		{
+			CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile12::selfRemove));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call);
+			wifiImg->runAction(t_seq);
+		}
+		if(targetingImg)
+		{
+			CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
+			targetingImg->runAction(t_fade2);
+		}
 	}
 	
 private:
@@ -1095,14 +1112,11 @@ private:
 			}
 		}
 	}
-	
 	void myInit(CCPoint t_sp, int t_type, int t_targetingFrame, int t_shootFrame)
 	{
 		type = t_type;
 		targetingFrame = t_targetingFrame;
 		shootFrame = t_shootFrame;
-		
-		
 		
 		myGD->communication("EP_startCrashAction");
 		

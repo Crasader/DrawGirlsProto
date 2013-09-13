@@ -10,6 +10,7 @@
 #define __DGproto__KSCumberBase__
 #include "cocos2d.h"
 #include "MainCumber.h"
+#include "KSUtil.h"
 USING_NS_CC;
 
 
@@ -32,7 +33,8 @@ enum CUMBER_STATE{
 	CUMBERSTATECRASH = 1 << 5,		// 5
 	CUMBERSTATEDAMAGING = 1 << 6,    // 6 맞고 있을 때...
 	CUMBERSTATENODIRECTION = 1 << 7,  // 빙글 빙글...
-	CUMBERSTATEDIRECTION = 1 << 8  //   잭만 바라봐~
+	CUMBERSTATEDIRECTION = 1 << 8,  //   잭만 바라봐~
+	CUMBERSTATEFURY = 1 << 9 // 분노모드.
 };
 
 class KSCumberBase : public MainCumber//CCNode
