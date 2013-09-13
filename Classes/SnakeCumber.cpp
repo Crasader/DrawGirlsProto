@@ -296,8 +296,8 @@ void SnakeCumber::movingAndCrash(float dt)
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
-		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
+		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.1f*cnt);
+		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.1f*cnt);
 		
 		CCPoint cumberPosition = getPosition();
 		afterPosition = cumberPosition + ccp(speedX, speedY);

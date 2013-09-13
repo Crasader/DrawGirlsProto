@@ -57,16 +57,13 @@ public:
 	}
 	virtual void onPatternEnd()
 	{
-		
+		CCLog("onPatternEnd!!");
 	}
 	virtual void onStartGame()
 	{
-		
+		CCLog("onStartGame!!");
 	}
-	virtual void onEndGame()
-	{
-		
-	}
+
 	virtual void movingAndCrash(float dt);
 	void attack(float dt);
 	virtual bool init();
@@ -161,6 +158,10 @@ public:
 		return m_headImg->getPosition() +
 		ccp(x*cos(theta) - y*sin(theta), x*sin(theta) + y * cos(theta));
 	}
+	
+	virtual void startInvisible();
+	void invisibling(float dt);
+
 protected:
 	const float RADIUS;
 	const float BODY_RADIUS;
@@ -225,6 +226,14 @@ protected:
 		FromTo<float> scale; // 서서히 변하는것을 구현하기 위해.
 	}m_scale;
 	
+	struct Invisible
+	{
+		int invisibleFrame;
+		const int VISIBLE_FRAME;
+		bool startInvisibleScheduler;
+		float invisibleValue;
+		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
+	}m_invisible;
 
 };
 

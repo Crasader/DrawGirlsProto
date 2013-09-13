@@ -107,10 +107,11 @@ public:
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
 	virtual void onStartGame(){} // = 0;
-	virtual void onEndGame(){} // = 0;
+//	virtual void onEndGame(){} // = 0;
 	virtual void onPatternEnd() // = 0;
 	{
 	}
+	virtual void startInvisible(){} // = 0;
 	void setCumberState(int e)
 	{
 		m_state = (CUMBER_STATE)e;

@@ -106,8 +106,8 @@ void KSCumber::movingAndCrash(float dt)
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = m_speed * sin(deg2Rad(m_directionAngleDegree));
-		float speedY = m_speed * cos(deg2Rad(m_directionAngleDegree));
+		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.1f*cnt);
+		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.1f*cnt);
 		
 		CCPoint cumberPosition = getPosition();
 		afterPosition = cumberPosition + ccp(speedX, speedY);
@@ -175,7 +175,7 @@ void KSCumber::movingAndCrash(float dt)
 		}
 	}
 	
-	CCLog("cnt outer !! = %d", cnt);
+//	CCLog("cnt outer !! = %d", cnt);
 	
 	if(m_state == CUMBERSTATEMOVING)
 		setPosition(afterPosition);
@@ -184,6 +184,8 @@ void KSCumber::movingAndCrash(float dt)
 void KSCumber::startDamageReaction(float userdata)
 {
 	// 방사형으로 돌아가고 있는 중이라면
+	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
+	
 	if(m_state == CUMBERSTATENODIRECTION)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
@@ -201,11 +203,23 @@ void KSCumber::startDamageReaction(float userdata)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSCumber::damageReaction));
 	}
-
-	
-	
 }
 
+void KSCumber::startAnimationNoDirection()
+{
+	CCLog("Lets rotate");
+	if(m_state != CUMBERSTATENODIRECTION)
+	{
+		m_state = CUMBERSTATENODIRECTION;
+		m_noDirection.distance = 0;
+		m_noDirection.rotationDeg = 0;
+		m_noDirection.timer = 0;
+		m_noDirection.startingPoint = getPosition();
+		m_noDirection.rotationCnt = 0;
+		m_noDirection.state = 1;
+		schedule(schedule_selector(KSCumber::animationNoDirection));
+	}
+}
 
 void KSCumber::damageReaction(float)
 {
@@ -234,12 +248,15 @@ void KSCumber::animationNoDirection(float dt)
 		{
 			m_noDirection.rotationDeg -= 360;
 			m_noDirection.rotationCnt++;
+			
+#if 0
 			/// 좀 돌았으면 돌아감.
 			if(m_noDirection.rotationCnt >= 5)
 			{
 				m_noDirection.state = 2;
 				return;
 			}
+#endif
 		}
 		m_noDirection.distance += 0.5f;
 		m_noDirection.distance = MIN(m_noDirection.distance, 30);
@@ -272,6 +289,17 @@ void KSCumber::animationNoDirection(float dt)
 			setPosition(getPosition() + ccp(dx, dy));
 	}
 }
+
+void KSCumber::onPatternEnd()
+{
+	CCLog("onPatternEnd!!");
+	m_noDirection.state = 2;
+}
+
+void KSCumber::onStartGame()
+{
+	CCLog("onStartGame!!");
+}
 void KSCumber::attack(float dt)
 {
 	float w = ProbSelector::sel(0.003, 1.0 - 0.003, 0.0);
@@ -288,19 +316,22 @@ void KSCumber::attack(float dt)
 		while(!searched)
 		{
 			attackCode = m_well512.GetValue(0, 38);
-			if(attackCode == 6 || attackCode == 7 || attackCode == 13 || attackCode == 19 ||
-			   attackCode == 20 || attackCode == 31 || attackCode == 32 || attackCode == 34 ||
-			   attackCode == 35)
+			if(attackCode == 13 || attackCode == 19 || attackCode == 32 || attackCode == 35)
 			{
 				searched = false;
 			}
 			else
 				searched = true;
 			
+			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
+				searched = false;		
 		}
 		
 		
-		gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+//		gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+		
+		gameData->communication("MP_attackWithCode", getPosition(), 34);
+		
 		//		showEmotion(kEmotionType_joy);
 		//		m_speed = m_well512.GetValue(2, 4);
 		//		startAnimationNoDirection();
@@ -359,4 +390,41 @@ COLLISION_CODE KSCumber::crashLooper(const vector<IntPoint> v, IntPoint* cp)
 	}
 	return kCOLLISION_NONE;
 }
+
+void KSCumber::startInvisible()
+{
+//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
+	if(m_invisible.startInvisibleScheduler == false)
+	{
+		m_invisible.invisibleFrame = 0;
+		m_invisible.invisibleValue = 0;
+		schedule(schedule_selector(KSCumber::invisibling));
+		m_invisible.startInvisibleScheduler = true;
+	}
+}
+
+void KSCumber::invisibling(float dt)
+{
+	m_invisible.invisibleFrame++;
+	
+	if(m_invisible.invisibleFrame < m_invisible.VISIBLE_FRAME)
+	{
+		m_headImg->setOpacity(MAX(0, 255 - m_invisible.invisibleFrame*5));
+	}
+	else
+	{
+		// 최소 1 최대 255
+		m_invisible.invisibleValue = MIN(255, MAX(1, m_invisible.invisibleValue * 1.2f));
+		
+		m_headImg->setOpacity(m_invisible.invisibleValue);
+		if(m_invisible.invisibleValue == 255)
+		{
+			m_invisible.startInvisibleScheduler = false;
+			unschedule(schedule_selector(KSCumber::invisibling));
+		}
+	}
+
+}
+
+
 

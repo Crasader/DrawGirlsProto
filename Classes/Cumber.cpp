@@ -202,13 +202,7 @@ void CumberParent::mainCumberInvisibleOn()
 	mainCumber->startInvisible();
 }
 
-void CumberParent::mainCumberInvisibleOff()
-{
-	//##
-	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	mainCumber->stopInvisible();
-}
+
 
 void CumberParent::movingSubCumbers()
 {
@@ -432,7 +426,6 @@ void CumberParent::myInit()
 	myGD->I_V["CP_getMainCumberSheild"] = std::bind(&CumberParent::getMainCumberSheild, this);
 	myGD->V_V["CP_createAllCumberSheild"] = std::bind(&CumberParent::createAllCumberSheild, this);
 	myGD->V_V["CP_mainCumberInvisibleOn"] = std::bind(&CumberParent::mainCumberInvisibleOn, this);
-	myGD->V_V["CP_mainCumberInvisibleOff"] = std::bind(&CumberParent::mainCumberInvisibleOff, this);
 	myGD->V_B["CP_slowItem"] = std::bind(&CumberParent::slowItem, this, _1);
 	myGD->V_B["CP_silenceItem"] = std::bind(&CumberParent::silenceItem, this, _1);
 	myGD->V_V["CP_furyModeOn"] = std::bind(&CumberParent::furyModeOn, this);

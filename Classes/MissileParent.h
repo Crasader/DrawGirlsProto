@@ -814,7 +814,9 @@ public:
 	}
 	void cancelAP6(){		}
 	
-	void ingAP7(){		keepAP7->myClock();	}
+	void ingAP7(){
+		keepAP7->myClock();
+	}
 	void actionAP7()
 	{
 		myGD->communication("Main_allStopSchedule");
@@ -969,6 +971,7 @@ public:
 	void actionAP20()
 	{
 		myGD->communication("CP_subCumberBomb");
+		myGD->communication("CP_onPatternEnd");
 	}
 	void cancelAP20(){		}
 	
@@ -1098,13 +1101,14 @@ public:
 	{
 		myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
 		
+		
 	}
 	void cancelAP30(){	}
 	
 	void actionAP31()
 	{
 		myGD->communication("CP_subCumberReplication");
-		
+		myGD->communication("CP_onPatternEnd");
 	}
 	void cancelAP31(){		}
 	
@@ -1112,6 +1116,7 @@ public:
 	{
 		AP_Missile32* t_m32 = AP_Missile32::create();
 		addChild(t_m32);
+		myGD->communication("CP_onPatternEnd");
 	}
 	void cancelAP32(){		}
 	
@@ -1134,18 +1139,8 @@ public:
 	
 	void actionAP34()
 	{
-		if(keepAP34)
-		{
-			keepAP34->updateInvisible();
-		}
-		else
-		{
-			AP_Missile34* t_m34 = AP_Missile34::create(60*5);
-			addChild(t_m34);
-			keepAP34 = t_m34;
-		}
-		
-		
+		myGD->communication("CP_mainCumberInvisibleOn");
+		myGD->communication("CP_onPatternEnd");
 	}
 	void cancelAP34(){	}
 	
@@ -1492,7 +1487,7 @@ public:
 			}
 			else
 			{
-
+				myGD->communication("CP_onPatternEnd");
 			}
 		}
 		else if(pattern_code == kAP_CODE_pattern21)
@@ -1637,7 +1632,7 @@ public:
 		}
 		else if(pattern_code == kAP_CODE_pattern31)
 		{
-			if(myGD->getCommunication("CP_getSubCumberCount") > 1)
+			if(myGD->getCommunication("CP_getSubCumberCount") >= 1)
 			{
 				startFirePosition = startPosition;
 //				myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
@@ -1653,7 +1648,7 @@ public:
 			}
 			else
 			{
-
+				myGD->communication("CP_onPatternEnd");
 			}
 		}
 		else if(pattern_code == kAP_CODE_pattern32)

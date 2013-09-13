@@ -67,24 +67,15 @@ public:
 	}
 	void startDamageReaction(float userdata);
 	virtual void startSpringCumber(float userdata){}
-	virtual void startAnimationNoDirection()
-	{
-		CCLog("Lets rotate");
-		if(m_state != CUMBERSTATENODIRECTION)
-		{
-			m_state = CUMBERSTATENODIRECTION;
-			m_noDirection.distance = 0;
-			m_noDirection.rotationDeg = 0;
-			m_noDirection.timer = 0;
-			m_noDirection.startingPoint = getPosition();
-			m_noDirection.rotationCnt = 0;
-			m_noDirection.state = 1;
-			schedule(schedule_selector(KSCumber::animationNoDirection));
-		}
-	}
+	virtual void startAnimationNoDirection();
 	void damageReaction(float dt);
 	void animationNoDirection(float dt);
 	virtual void startAnimationDirection(){}
+	virtual void onStartGame();
+//	virtual void onEndGame();
+	virtual void onPatternEnd();
+	virtual void startInvisible();
+	void invisibling(float dt);
 	CCPoint getMissilePoint()
 	{
 		return getPosition() + ccp(0, 0);
@@ -119,6 +110,15 @@ protected:
 		float m_damageY;
 		float timer;
 	}m_damageData;
+	
+	struct Invisible
+	{
+		int invisibleFrame;
+		const int VISIBLE_FRAME;
+		bool startInvisibleScheduler;
+		float invisibleValue;
+		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
+	}m_invisible;
 };
 
 #endif /* defined(__DGproto__KSCumber__) */
