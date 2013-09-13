@@ -20,20 +20,20 @@
 class KSCumber : public KSCumberBase
 {
 public:
-	KSCumber() : m_speed(2.f), m_scale(1.f), RADIUS(22.f), mEmotion(nullptr){}
+	KSCumber() : m_speed(2.f), m_scale(1.f), RADIUS(22.f), mEmotion(nullptr){
+		m_state = (CUMBERSTATEMOVING);
+	}
 	virtual ~KSCumber(){}
 
 	virtual void movingAndCrash(float dt);
 	virtual void onStartMoving()
 	{
 		m_state = CUMBERSTATEMOVING;
-		m_speed = 2.f;
 		schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	}
 	virtual void onStopMoving()
 	{
 		m_state = CUMBERSTATESTOP;
-		m_speed = 0;
 	}
 	void attack(float dt);
 	virtual bool init();
@@ -69,12 +69,22 @@ public:
 	virtual void startSpringCumber(float userdata){}
 	virtual void startAnimationNoDirection()
 	{
-		
+		CCLog("Lets rotate");
+		if(m_state != CUMBERSTATENODIRECTION)
+		{
+			m_state = CUMBERSTATENODIRECTION;
+			m_noDirection.distance = 0;
+			m_noDirection.rotationDeg = 0;
+			m_noDirection.timer = 0;
+			m_noDirection.startingPoint = getPosition();
+			m_noDirection.rotationCnt = 0;
+			m_noDirection.state = 1;
+			schedule(schedule_selector(KSCumber::animationNoDirection));
+		}
 	}
-	virtual void startAnimationDirection()
-	{
-		
-	}
+	void damageReaction(float dt);
+	void animationNoDirection(float dt);
+	virtual void startAnimationDirection(){}
 	CCPoint getMissilePoint()
 	{
 		return getPosition() + ccp(0, 0);
@@ -92,6 +102,23 @@ protected:
 	
 	Well512 m_well512;
 	Emotion* mEmotion;
+	/// 방사형 에니메이션 용.
+	struct NoDirection
+	{
+		float rotationDeg;
+		float distance;
+		float timer;
+		CCPoint startingPoint;
+		int rotationCnt;
+		int state; // 1 : 도는상태, 2 : 다시 제 위치로 돌아가는 상태
+	}m_noDirection;
+	
+	struct DamageData
+	{
+		float m_damageX;
+		float m_damageY;
+		float timer;
+	}m_damageData;
 };
 
 #endif /* defined(__DGproto__KSCumber__) */

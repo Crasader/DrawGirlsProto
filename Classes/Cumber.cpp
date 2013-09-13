@@ -9,6 +9,21 @@
 #include "Cumber.h"
 #include "SnakeCumber.h"
 #include "MetalSnake.h"
+#include "KSCumber.h"
+void CumberParent::onStartGame()
+{
+	for(auto i : mainCumbers)
+	{
+		i->onStartGame();
+	}
+}
+void CumberParent::onPatternEnd()
+{
+	for(auto i : mainCumbers)
+	{
+		i->onPatternEnd();
+	}
+}
 void CumberParent::setMainCumberState(int t_cs)
 {
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
@@ -428,9 +443,14 @@ void CumberParent::myInit()
 	myGD->V_V["CP_startDieAnimation"] = std::bind(&CumberParent::startDieAnimation, this);
 	myGD->V_F["CP_changeMaxSize"] = std::bind(&CumberParent::changeMaxSize, this, _1);
 	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
+	myGD->V_V["CP_onStartGame"] = std::bind(&CumberParent::onStartGame, this);
+	myGD->V_V["CP_onPatternEnd"] = std::bind(&CumberParent::onPatternEnd, this);
 	
-	auto mainCumber = MainCumber::create();
-//	auto mainCumber = MetalSnake::create();
+	
+	void onStartGame();
+	void onPatternEnd();
+//	auto mainCumber = MainCumber::create();
+	auto mainCumber = KSCumber::create();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	

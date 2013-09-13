@@ -55,6 +55,18 @@ public:
 		m_state = CUMBERSTATESTOP;
 		CCLog("stop!!");
 	}
+	virtual void onPatternEnd()
+	{
+		
+	}
+	virtual void onStartGame()
+	{
+		
+	}
+	virtual void onEndGame()
+	{
+		
+	}
 	virtual void movingAndCrash(float dt);
 	void attack(float dt);
 	virtual bool init();
