@@ -46,7 +46,7 @@ enum GameItemBombType{
 class GameItemBase : public CCNode
 {
 public:
-	void selfRemove()
+	virtual void selfRemove()
 	{
 		removeFromParentAndCleanup(true);
 	}
@@ -208,6 +208,71 @@ protected:
 	}
 };
 
+class GameItemAddTime : public GameItemBase
+{
+public:
+	static GameItemAddTime* create(bool is_near)
+	{
+		GameItemAddTime* t_giat = new GameItemAddTime();
+		t_giat->myInit(is_near);
+		t_giat->autorelease();
+		return t_giat;
+	}
+	
+	virtual void selfRemove()
+	{
+		GameItemAddTime* recreate = GameItemAddTime::create(false);
+		getParent()->addChild(recreate);
+		
+		GameItemBase::selfRemove();
+	}
+	
+private:
+	
+	virtual void acting()
+	{
+		myGD->communication("UI_takeAddTimeItem");
+		
+		GameItemAddTime* recreate = GameItemAddTime::create(false);
+		getParent()->addChild(recreate);
+		
+		removeFromParent();
+	}
+	
+	void myInit(bool is_near)
+	{
+		holding_time = rand()%10 + 20;
+		holding_time *= 60;
+		
+		setMyPoint(is_near);
+		
+		if(myPoint.isNull())
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(1.f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemBase::selfRemove));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			
+			runAction(t_seq);
+			
+			return;
+		}
+		
+		item_img = CCSprite::create("addtime_item.png");
+		item_img->setScale(0.f);
+		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
+		item_img->setPosition(item_point);
+		addChild(item_img);
+		
+		starting_side_cnt = getSideCount();
+		
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemAddTime::startFraming));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		
+		item_img->runAction(t_seq);
+	}
+};
+
 class GameItemSpeedUp : public GameItemBase
 {
 public:
@@ -229,8 +294,6 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		
-		
 		holding_time = rand()%10 + 20;
 		holding_time *= 60;
 		
@@ -1612,6 +1675,12 @@ public:
 				addChild(t_gia);
 			}
 		}
+		
+		if(mySD->getClearCondition() == kCLEAR_timeLimit)
+		{
+			GameItemAddTime* t_giat = GameItemAddTime::create(false);
+			addChild(t_giat);
+		}
 	}
 	
 	void startCounting()
@@ -1655,7 +1724,6 @@ public:
 	}
 	
 private:
-	
 	
 	int counting_value;
 	int create_counting_value;

@@ -178,18 +178,18 @@ void Maingame::startScene()
 void Maingame::startCounting()
 {
 	CCTexture2D* t_texture;
-	if(SelectedMapData::sharedInstance()->getIsNoShield())
-	{
+//	if(SelectedMapData::sharedInstance()->getIsNoShield())
+//	{
 		t_texture = CCTextureCache::sharedTextureCache()->addImage("hard_condition.png");
 		condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
 		addChild(condition_spr, conditionLabelZorder);
-	}
-	else
-	{
-		t_texture = CCTextureCache::sharedTextureCache()->addImage("easy_condition.png");
-		condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
-		addChild(condition_spr, conditionLabelZorder);
-	}
+//	}
+//	else
+//	{
+//		t_texture = CCTextureCache::sharedTextureCache()->addImage("easy_condition.png");
+//		condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
+//		addChild(condition_spr, conditionLabelZorder);
+//	}
 	condition_spr->setPosition(ccp(240,220+DataStorageHub::sharedInstance()->ui_height_center_control));
 	
 	CCAnimation* t_animation = CCAnimation::create();

@@ -230,7 +230,7 @@ private:
 			if(missile_rect.containsPoint(jackPosition))
 			{
 				is_checking = false;
-				if(mySGD->getIsHard() || myGD->getJackState())
+				if(myGD->getJackState())
 				{
 					myGD->communication("CP_jackCrashDie");
 					myGD->communication("Jack_startDieEffect");

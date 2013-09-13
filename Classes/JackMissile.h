@@ -313,7 +313,7 @@ private:
 		else if(my_type == kMyElementalLightning)		type_name = "jm_lightning";
 		else if(my_type == kMyElementalWind)			type_name = "jm_wind";
 		
-		int selected_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
+//		int selected_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
 		
 		element_level = rand()%9 + 1;
 		
@@ -746,7 +746,7 @@ private:
 		else if(jm_type == kMyElementalWater)			type_name = "jm_water";
 		else if(jm_type == kMyElementalLife)			type_name = "jm_life";
 		
-		int selected_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
+//		int selected_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
 		
 		element_level = rand()%9 + 1;
 		

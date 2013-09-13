@@ -117,6 +117,7 @@ void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 	else // escape point not found
 	{
 		CCLog("escape point not found!");
+		endGame();
 	}
 }
 

@@ -313,7 +313,7 @@ private:
 			
 			AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
 			AudioEngine::sharedInstance()->playEffect("sound_clear_ment.mp3", false);
-			ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 0.9f, game_node, this, callfunc_selector(Maingame::closeShutter));
+			ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 0.895f, game_node, this, callfunc_selector(Maingame::closeShutter));
 			game_node->addChild(t_cst, clearshowtimeZorder);
 			
 			t_cst->startClearView();

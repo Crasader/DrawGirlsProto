@@ -156,7 +156,7 @@ public:
 		{
 			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
 			
-			CCRect r_rect = CCRectMake(t_rect->origin.x, t_rect->origin.y, t_rect->size.width, t_rect->size.height);
+//			CCRect r_rect = CCRectMake(t_rect->origin.x, t_rect->origin.y, t_rect->size.width, t_rect->size.height);
 			
 			glEnable(GL_SCISSOR_TEST);
 			

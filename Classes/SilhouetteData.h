@@ -37,7 +37,7 @@ public:
 	
 	int getLastUpdateStageNumber()
 	{
-		return 7;
+		return 8;
 	}
 	
 	void setSilType(int t1)
@@ -61,6 +61,7 @@ public:
 		else if(t_type == 4)		return_value = kCLEAR_itemCollect;
 		else if(t_type == 5)		return_value = kCLEAR_perfect;
 		else if(t_type == 6)		return_value = kCLEAR_sequenceChange;
+		else if(t_type == 7)		return_value = kCLEAR_timeLimit;
 		else						return_value = kCLEAR_default;
 		
 		return return_value;
@@ -112,7 +113,7 @@ public:
 		else if(t_type == kCLEAR_perfect)				return_value = "정해진 목표로 정확하게 영역을 획득하세요!";
 		else if(t_type == kCLEAR_sequenceChange)		return_value = "CHANGE를 순서대로 획득하세요!";
 		else if(t_type == kCLEAR_timeLimit)				return_value = "목표시간 내에 클리어하세요!";
-		else											return_value = "";
+		else											return_value = "85%이상 획득하라!";
 		
 		return return_value;
 	}
@@ -178,6 +179,17 @@ public:
 		float return_value;
 		
 		if(t_type == 5)		return_value = 0.01f;
+		else				return_value = 0;
+		
+		return return_value;
+	}
+	
+	int getClearConditionTimeLimit(){	return getClearConditionTimeLimit(myType);	}
+	int getClearConditionTimeLimit(int t_type)
+	{
+		int return_value;
+		
+		if(t_type == 7)		return_value = 100;
 		else				return_value = 0;
 		
 		return return_value;

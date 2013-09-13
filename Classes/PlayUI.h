@@ -649,6 +649,14 @@ public:
 		
 		if(!isGameover && t_p > clearPercentage) // clear 80%
 		{
+			if(clr_cdt_type == kCLEAR_timeLimit)
+			{
+				if(150 - countingCnt >= ing_cdt_cnt)
+					conditionClear();
+				else
+					conditionFail();
+			}
+			
 			if(is_cleared_cdt)
 			{
 				myGD->communication("MP_bombCumber", myGD->getCommunicationNode("CP_getMainCumberPointer"));
@@ -875,6 +883,7 @@ public:
 			countingCnt -= 30;
 			if(countingCnt < 0)
 				countingCnt = 0;
+			countingLabel->setString(CCString::createWithFormat("%d", 150-countingCnt)->getCString());
 			
 			jack_life--;
 			removeChild((CCNode*)jack_array->lastObject(), true);
@@ -885,6 +894,14 @@ public:
 		{
 			return false;
 		}
+	}
+	
+	void takeAddTimeItem()
+	{
+		countingCnt -= 10;
+		if(countingCnt < 0)
+			countingCnt = 0;
+		countingLabel->setString(CCString::createWithFormat("%d", 150-countingCnt)->getCString());
 	}
 	
 	bool getIsExchanged()
@@ -1294,6 +1311,27 @@ private:
 			clr_cdt_img->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
 			addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
 		}
+		else if(clr_cdt_type == kCLEAR_timeLimit)
+		{
+			is_cleared_cdt = false;
+			
+			CCSprite* n_icon = CCSprite::create("condition7_menu.png");
+			CCSprite* s_icon = CCSprite::create("condition7_menu.png");
+			s_icon->setColor(ccGRAY);
+			
+			CCMenuItem* icon_item = CCMenuItemSprite::create(n_icon, s_icon, this, menu_selector(PlayUI::menuAction));
+			icon_item->setTag(kMenuTagUI_condition);
+			
+			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
+			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
+			
+			ing_cdt_cnt = mySD->getClearConditionTimeLimit();
+			
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
+			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+		}
 		else if(clr_cdt_type == kCLEAR_default)
 		{
 			is_cleared_cdt = true;
@@ -1307,6 +1345,7 @@ private:
 		myGD->V_TDTD["UI_showContinuePopup"] = std::bind(&PlayUI::showContinuePopup, this, _1, _2, _3, _4);
 		myGD->V_V["UI_catchSubCumber"] = std::bind(&PlayUI::catchSubCumber, this);
 		myGD->V_V["UI_takeItemCollect"] = std::bind(&PlayUI::takeItemCollect, this);
+		myGD->V_V["UI_takeAddTimeItem"] = std::bind(&PlayUI::takeAddTimeItem, this);
 	}
 	
 	void continueAction()
