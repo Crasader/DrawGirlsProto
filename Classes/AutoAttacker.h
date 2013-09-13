@@ -64,7 +64,7 @@ private:
 	int shoot_frame;
 	int ing_frame;
 	int chapter_missile_number;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -95,7 +95,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		my_balance = new BD_P2(1.f, 10, CCSize(6.f,6.f));
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
@@ -153,7 +153,7 @@ private:
 	int ing_frame;
 	int ing_angle;
 	int chapter_missile_number;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -186,7 +186,7 @@ private:
 
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		my_balance = new BD_P2(1.f, 36, CCSize(6.f,6.f));
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
@@ -242,7 +242,7 @@ private:
 	int shoot_frame;
 	int ing_frame;
 	int chapter_missile_number;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -276,7 +276,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		my_balance = new BD_P2(1.2f, 0, CCSize(6.f,6.f));
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
@@ -332,7 +332,7 @@ private:
 	int shoot_frame;
 	int ing_frame;
 	int chapter_missile_number;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -363,7 +363,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		my_balance = new BD_P2(1.f, 10, CCSize(6.f,6.f));
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
@@ -419,7 +419,7 @@ private:
 	int shoot_frame;
 	int ing_frame;
 	int chapter_missile_number;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -451,7 +451,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		my_balance = new BD_P2(1.f, 3, CCSize(6.f,6.f));
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
@@ -500,7 +500,7 @@ public:
 private:
 	int shoot_frame;
 	int ing_frame;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -529,7 +529,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
 		if(selected_chapter == 21)
@@ -587,7 +587,7 @@ private:
 	int rangeCode;
 	int bombFrameOneTime;
 	int bombTimes;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -605,7 +605,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
 		
@@ -669,7 +669,7 @@ private:
 	int shoot_frame;
 	int ing_frame;
 	int create_subCumber_number;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -686,7 +686,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
 		if(selected_chapter == 23)
@@ -743,7 +743,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int thornsFrame;
 	int ingFrame;
 	bool is_action;
@@ -819,7 +819,7 @@ private:
 	
 	void myInit(IntPoint t_sp, int t_thornsFrame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		myPoint = t_sp;
 		is_action = false;
 		thornsFrame = t_thornsFrame;
@@ -857,7 +857,7 @@ private:
 	int shoot_frame;
 	int ing_frame;
 	int create_thorns_number;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -906,7 +906,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
 		if(selected_chapter == 24)
@@ -965,7 +965,7 @@ private:
 	int shoot_frame;
 	int ing_frame;
 	int create_shoot_number;
-	GameData* myGD;
+	
 	
 	void framing()
 	{
@@ -985,7 +985,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
 		if(selected_chapter == 25)
@@ -1041,7 +1041,7 @@ private:
 	CCSprite* rightup;		// 3
 	CCSprite* rightdown;	// 3
 	
-	GameData* myGD;
+	
 	
 	float speed;
 	
@@ -1194,7 +1194,7 @@ private:
 	
 	void myInit(int type, CCPoint s_p)
 	{
-		myGD = GameData::sharedGameData();
+		
 		setPosition(s_p);
 		if(type == 1)
 		{
@@ -1258,7 +1258,7 @@ private:
 	int ing_frame;
 	int step;
 	int type;
-	GameData* myGD;
+	
 	BossEye* my_eye;
 	
 	void framing()
@@ -1288,7 +1288,7 @@ private:
 	{
 		my_eye = (BossEye*)boss_eye;
 		
-		myGD = GameData::sharedGameData();
+		
 		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
 		

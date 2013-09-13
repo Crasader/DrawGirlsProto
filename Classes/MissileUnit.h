@@ -34,7 +34,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	float angle;
 	float distance;
 	CCSize crashSize;
@@ -107,7 +107,7 @@ private:
 			if(missile_rect.containsPoint(jackPosition)) //  && myGD->getJackState()
 			{
 				is_checking = false;
-//				if(StarGoldData::sharedInstance()->getIsHard() || myGD->getJackState())
+//				if(mySGD->getIsHard() || myGD->getJackState())
 				if(myGD->getJackState())
 				{
 					myGD->communication("CP_jackCrashDie");
@@ -128,7 +128,7 @@ private:
 	void myInit(CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, float t_da, float t_reduce_da)
 	{
 		is_checking = true;
-		myGD = GameData::sharedGameData();
+		
 		crashSize = t_cs;
 		angle = t_angle;
 		distance = t_distance;
@@ -157,7 +157,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	float angle;
 	float distance;
 	CCSize crashSize;
@@ -230,7 +230,7 @@ private:
 			if(missile_rect.containsPoint(jackPosition))
 			{
 				is_checking = false;
-				if(StarGoldData::sharedInstance()->getIsHard() || myGD->getJackState())
+				if(mySGD->getIsHard() || myGD->getJackState())
 				{
 					myGD->communication("CP_jackCrashDie");
 					myGD->communication("Jack_startDieEffect");
@@ -250,7 +250,7 @@ private:
 	void myInit(CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, float t_da, float t_reduce_da)
 	{
 		is_checking = true;
-		myGD = GameData::sharedGameData();
+		
 		crashSize = t_cs;
 		angle = t_angle;
 		distance = t_distance;
@@ -277,7 +277,7 @@ private:
 	int myType;
 	float distance;
 	CCSize mSize;
-	GameData* myGD;
+	
 	
 	CCObject* target_removeEffect;
 	SEL_CallFunc delegate_removeEffect;
@@ -334,7 +334,7 @@ private:
 	{
 		target_removeEffect = t_removeEffect;
 		delegate_removeEffect = d_removeEffect;
-		myGD = GameData::sharedGameData();
+		
 		myType = t_type;
 		distance = t_distance;
 		mSize = t_mSize;
@@ -421,7 +421,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	Targeting* remove_targeting;
 	CCSize mSize;
 	
@@ -574,7 +574,7 @@ private:
 	{
 		target_removeEffect = t_removeEffect;
 		delegate_removeEffect = d_removeEffect;
-		myGD = GameData::sharedGameData();
+		
 		remove_targeting = t_targeting;
 		mSize = t_mSize;
 		type = t_type;
@@ -671,7 +671,6 @@ class CrashMapObject : public CCNode
 public:
 	void crashMapForIntPoint(IntPoint t_p)
 	{
-		GameData* myGD = GameData::sharedGameData();
 		IntPoint jackPoint = myGD->getJackPoint();
 		
 		if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
@@ -729,7 +728,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int type;
 	int random_spin;
 	IntSize mSize;
@@ -801,7 +800,7 @@ private:
 	void myInit(CCPoint t_sp, int t_type, float t_speed, float t_angle, IntSize t_mSize)
 	{
 		setPosition(t_sp);
-		myGD = GameData::sharedGameData();
+		
 		type = t_type;
 		random_spin = rand()%11 - 5;
 		mSize = t_mSize;
@@ -950,7 +949,7 @@ private:
 	void lineDie(IntPoint t_p)
 	{
 		unschedule(schedule_selector(SatelliteBeam::fallingStar));
-		GameData::sharedGameData()->communication("Main_showLineDiePosition", t_p);
+		myGD->communication("Main_showLineDiePosition", t_p);
 		removeEffect();
 	}
 	
@@ -1083,7 +1082,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCSprite* meteor;
 	string imgFilename;
 	
@@ -1281,7 +1280,7 @@ private:
 	{
 		target_removeEffect = t_removeEffect;
 		delegate_removeEffect = d_removeEffect;
-		myGD = GameData::sharedGameData();
+		
 		imgFilename = t_imgFilename;
 		fp = t_fp;
 		fallFrame = t_fallFrame;
@@ -1414,7 +1413,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	float speed;
 	int angle;
 	CCSprite* baseNode;
@@ -1689,7 +1688,7 @@ private:
 		target_removeEffect = t_removeEffect;
 		delegate_removeEffect = d_removeEffect;
 		
-		myGD = GameData::sharedGameData();
+		
 		cushionCnt = t_cushion_cnt;
 		speed = t_speed;
 		angle = 0;
@@ -1777,7 +1776,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	IntPoint setPoint;
 	int bombFrameOneTime;
 	int bombTimes;
@@ -1899,7 +1898,7 @@ private:
 	{
 		target_resetTickingTimeBomb = t_resetTickingTimeBomb;
 		delegate_resetTickingTimeBomb = d_resetTickingTimeBomb;
-		myGD = GameData::sharedGameData();
+		
 		tickingArray = t_tickingArray;
 		setPoint = t_setPoint;
 		bombFrameOneTime = t_bombFrameOneTime;
@@ -2142,7 +2141,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int prisonFrame;
 	int ingFrame;
 	
@@ -2188,7 +2187,7 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_type, int t_prisonFrame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		prisonFrame = t_prisonFrame;
 		if(t_type == 1) // fire
@@ -2218,7 +2217,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	IntPoint myPoint;
 	int myLife;
 	CCSprite* fragmentImg;
@@ -2371,7 +2370,7 @@ private:
 		setPosition(ccp((t_sp.x-1)*pixelSize+1, (t_sp.y-1)*pixelSize+1));
 		mType = t_mType;
 		myParent = t_parent;
-		myGD = GameData::sharedGameData();
+		
 		myPoint = t_sp;
 		myLife = t_life;
 		
@@ -2417,7 +2416,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCPoint movingDv;
 	int ingFrame;
 	bool positionSetted;
@@ -2582,7 +2581,7 @@ private:
 		delegate_removeEffect = d_removeEffect;
 		
 		positionSetted = false;
-		myGD = GameData::sharedGameData();
+		
 		mType = t_mType;
 		
 		setPosition(t_sp);
@@ -2621,7 +2620,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	IntPoint mapPoint;
 	int ingFrame;
 	
@@ -2672,7 +2671,7 @@ private:
 	void myInit(IntPoint t_sp)
 	{
 		mapPoint = t_sp;
-		myGD = GameData::sharedGameData();
+		
 		initWithFile("poison_line.png");
 		CCPoint myPosition = ccp((t_sp.x-1)*pixelSize+1, (t_sp.y-1)*pixelSize+1);
 		setPosition(myPosition);
@@ -2700,7 +2699,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCPoint subPosition;
 	int movingFrame;
 	int ingFrame;
@@ -2811,7 +2810,7 @@ private:
 	
 	void myInit(CCPoint t_sp, CCPoint t_fp, int t_movingFrame)
 	{
-		myGD = GameData::sharedGameData();
+		
 		subPosition = ccpSub(t_fp, t_sp);
 		subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
 		movingFrame = t_movingFrame;
@@ -3051,13 +3050,13 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCParticleSystemQuad* inner_fire_particle;
 	CCParticleSystemQuad* outer_fire_particle;
 	
 	void myInit(CCPoint t_sp, CCPoint t_fp, int t_moving_frame)
 	{
-		myGD = GameData::sharedGameData();
+		
 
 		inner_fire_particle = CCParticleSystemQuad::create("meteor_storm.plist");
 		inner_fire_particle->setPositionType(kCCPositionTypeRelative);

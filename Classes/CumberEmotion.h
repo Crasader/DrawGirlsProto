@@ -161,13 +161,12 @@ private:
 		mainCumber = t_mainCumber;
 		main_showEmotion = t_main_showEmotion;
 		
-//		GameData::sharedGameData()->regEP(this, callfunc_selector(EmotionParent::startCrashAction),
+//		myGD->regEP(this, callfunc_selector(EmotionParent::startCrashAction),
 //										  callfunc_selector(EmotionParent::crashed),
 //										  callfunc_selector(EmotionParent::stopCrashAction),
 //										  callfunc_selector(EmotionParent::addJackAttack),
 //										  callfunc_selector(EmotionParent::subJackAttack));
 		
-		GameData* myGD = GameData::sharedGameData();
 		myGD->V_V["EP_startCrashAction"] = std::bind(&EmotionParent::startCrashAction, this);
 		myGD->V_V["EP_crashed"] = std::bind(&EmotionParent::crashed, this);
 		myGD->V_V["EP_stopCrashAction"] = std::bind(&EmotionParent::stopCrashAction, this);

@@ -39,8 +39,8 @@ enum Mainzorder{
 	conditionLabelZorder,
 	goldZorder,
 	clearshowtimeZorder,
-	myUIZorder,
 	mControlZorder,
+	myUIZorder,
 	particleZorder,
 	shutterZorder
 };
@@ -108,8 +108,8 @@ private:
 	MapScanner* myMS;
 	PathManager* myPM;
 	CumberParent* myCP;
-	GameData* myGD;
-	DataStorageHub* myDSH;
+	
+	
 	CCSprite* keepTexture;
 	CCSprite* countingLabel;
 	CCSprite* condition_spr;
@@ -293,7 +293,6 @@ private:
 	
 	void gameover()
 	{
-		StarGoldData* mySGD = StarGoldData::sharedInstance();
 		mySGD->resetLabels();
 		
 		if(!mySGD->getIsCleared())
@@ -307,9 +306,9 @@ private:
 		{
 			int cleared_number = myDSH->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
 			
-			if(SilhouetteData::sharedSilhouetteData()->getSilType() > cleared_number)
+			if(mySD->getSilType() > cleared_number)
 			{
-				myDSH->setIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1, SilhouetteData::sharedSilhouetteData()->getSilType());
+				myDSH->setIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1, mySD->getSilType());
 			}
 			
 			AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
@@ -385,7 +384,7 @@ private:
 	
 	void endCloseShutter()
 	{
-		if(StarGoldData::sharedInstance()->getIsCleared())
+		if(mySGD->getIsCleared())
 		{
 			CCDirector::sharedDirector()->replaceScene(ZoomScript::scene());
 		}
@@ -486,7 +485,7 @@ private:
 	
 	void startExchange()
 	{
-		SilhouetteData::sharedSilhouetteData()->exchangeSilhouette();
+		mySD->exchangeSilhouette();
 		myMS->exchangeMS();
 	}
 };

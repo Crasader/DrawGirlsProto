@@ -79,7 +79,7 @@ protected:
 	CCObject* target_setCaught;
 	SEL_CallFunc delegate_setCaught;
 	
-	GameData* myGD;
+	
 	float springAngle;
 	float springPower;
 	int springCnt;

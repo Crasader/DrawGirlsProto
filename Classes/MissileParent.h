@@ -75,7 +75,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	
 	CCPoint create_position;
 	int charge_frame;
@@ -117,7 +117,7 @@ private:
 	
 	void myInit(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		real_target = t_rt;
 		create_position = t_position;
@@ -212,7 +212,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	
 	CCPoint create_position;
 	int charge_frame;
@@ -256,7 +256,7 @@ private:
 	
 	void myInit(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		real_target = t_rt;
 		create_position = t_position;
@@ -459,7 +459,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	
 	CCPoint create_position;
 	int charge_frame;
@@ -513,7 +513,7 @@ private:
 	
 	void myInit(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		real_target = t_rt;
 		create_position = t_position;
@@ -554,7 +554,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	CCObject* after_target;
 	SEL_CallFunc after_delegate;
 	CCObject* cancel_target;
@@ -563,7 +563,7 @@ private:
 	
 	void myInit(IntPoint c_p, CCObject* t_after, SEL_CallFunc d_after, CCObject* t_cancel, SEL_CallFunc d_cancel)
 	{
-		myGD = GameData::sharedGameData();
+		
 		createPoint = c_p;
 		after_target = t_after;
 		after_delegate = d_after;
@@ -606,7 +606,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int ing_frame;
 	int um_tcnt;
 	int ing_um_cnt;
@@ -711,7 +711,7 @@ private:
 	
 	void myInit(int t_um_tcnt, int t_create_type, float t_damage_per)
 	{
-		myGD = GameData::sharedGameData();
+		
 		damage_per = t_damage_per;
 		um_tcnt = t_um_tcnt;
 		create_type = t_create_type;
@@ -1926,7 +1926,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	AutoAttacker* myAA;
 	SW_Parent* mySW;
 	
@@ -2034,7 +2034,7 @@ private:
 //		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 //		
 //		if(selected_chapter == 1)								myRS->myInit(0);
-//		else if(StarGoldData::sharedInstance()->getIsHard() || selected_chapter > 30)	myRS->myInit(140);
+//		else if(mySGD->getIsHard() || selected_chapter > 30)	myRS->myInit(140);
 //		else													myRS->myInit(120);
 		setBalance();
 		
@@ -2108,7 +2108,7 @@ private:
 		mySW = SW_Parent::create();
 		addChild(mySW);
 		
-		myGD = GameData::sharedGameData();
+		
 //		myGD->regMP(this, callfuncCCpB_selector(MissileParent::startFire),
 //					callfuncCCpODv_selector(MissileParent::createSubCumberReplication),
 //					callfuncO_selector(MissileParent::removeChargeInArray),

@@ -63,7 +63,6 @@ private:
 	CCObject* target_setCaught;
 	SEL_CallFunc delegate_setCaught;
 	
-	GameData* myGD;
 	bool m_isGameover;
 	int m_furyFrame;
 	CCParticleSystemQuad* m_furyMode;

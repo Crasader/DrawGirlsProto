@@ -10,6 +10,9 @@
 
 void SubCumber::caughtAnimation()
 {
+	myGD->communication("UI_catchSubCumber");
+	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
+	
 	CCSprite* prison_bottom = CCSprite::create("subCumber_prison_bottom.png");
 	prison_bottom->setOpacity(0);
 	prison_bottom->setAnchorPoint(ccp(0.5,0.f));
@@ -66,15 +69,14 @@ void SubCumber::easyMoving()
 		
 		myGD->communication("CP_removeSubCumber", this);
 		
-		if(!(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1) && rand()%CAUGHT_RATE == 0)
+		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
 		{
-			if(isMainType)				StarGoldData::sharedInstance()->increaseCaughtMainTypeSubCumber();
-			else						StarGoldData::sharedInstance()->increaseCaughtSubTypeSubCumber();
-			
 			caughtAnimation();
 		}
 		else
+		{
 			removeFromParentAndCleanup(true);
+		}
 		return;
 	}
 	
@@ -344,15 +346,14 @@ void SubCumber::moving()
 		
 		myGD->communication("CP_removeSubCumber", this);
 		
-		if(!(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1) && rand()%CAUGHT_RATE == 0)
+		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
 		{
-			if(isMainType)				StarGoldData::sharedInstance()->increaseCaughtMainTypeSubCumber();
-			else						StarGoldData::sharedInstance()->increaseCaughtSubTypeSubCumber();
-			
 			caughtAnimation();
 		}
 		else
+		{
 			removeFromParentAndCleanup(true);
+		}
 		return;
 	}
 	

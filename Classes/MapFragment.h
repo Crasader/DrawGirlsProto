@@ -101,7 +101,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	bool isCreateNewFragment;
 	IntPoint createPoint;
 	bool createFragmenting;
@@ -131,7 +131,7 @@ private:
 		initWithTexture(t_texture->getTexture(), kDefaultSpriteBatchCapacity);
 		isCreateNewFragment = false;
 		createFragmenting = false;
-		myGD = GameData::sharedGameData();
+		
 //		myGD->regMFP(this, callfuncIp_selector(MapFragmentParent::createNewFragment));
 		myGD->V_Ip["MFP_createNewFragment"] = std::bind(&MapFragmentParent::createNewFragment, this, _1);
 	}

@@ -54,7 +54,7 @@ public:
 		my_eye = NULL;
 		mEmotion = NULL;
 		map_visit_cnt = 0;
-		myGD = GameData::sharedGameData();
+		
 		is_silenced = false;
 		is_casting = false;
 		is_slowed = false;

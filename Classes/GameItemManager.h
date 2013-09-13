@@ -60,7 +60,7 @@ protected:
 	
 	CCSprite* item_img;
 	IntPoint myPoint;
-	GameData* myGD;
+	
 	
 	virtual void framing()
 	{
@@ -68,6 +68,9 @@ protected:
 		
 		if(getSideCount() > starting_side_cnt)
 		{
+			if(mySD->getClearCondition() == kCLEAR_itemCollect)
+				myGD->communication("UI_takeItemCollect");
+			
 			item_img->removeFromParentAndCleanup(true);
 			unschedule(schedule_selector(GameItemBase::framing));
 			
@@ -226,7 +229,7 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		holding_time = rand()%10 + 20;
 		holding_time *= 60;
@@ -273,28 +276,6 @@ public:
 	
 private:
 	
-	virtual void framing()
-	{
-		frame_cnt++;
-		
-		if(getSideCount() > starting_side_cnt)
-		{
-			item_img->removeFromParentAndCleanup(true);
-			unschedule(schedule_selector(GameItemFast::framing));
-			
-			acting();
-			unschedule(schedule_selector(GameItemFast::framing));
-			return;
-		}
-		
-		
-		if(holding_time <= frame_cnt)
-		{
-			unschedule(schedule_selector(GameItemFast::framing));
-			startHide();
-		}
-	}
-	
 	virtual void acting()
 	{
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 10.f);
@@ -314,7 +295,7 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		holding_time = rand()%10 + 20;
 		holding_time *= 60;
@@ -369,7 +350,7 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		my_elemental = rand()%kElementCode_plasma + 1;
 		
@@ -436,28 +417,6 @@ private:
 	float damage;
 	float total_damage;
 	float sum_damage;
-	
-	virtual void framing()
-	{
-		frame_cnt++;
-		
-		if(getSideCount() > starting_side_cnt)
-		{
-			item_img->removeFromParentAndCleanup(true);
-			unschedule(schedule_selector(GameItemWind::framing));
-			
-			acting();
-			unschedule(schedule_selector(GameItemWind::framing));
-			return;
-		}
-		
-		
-		if(holding_time <= frame_cnt)
-		{
-			unschedule(schedule_selector(GameItemWind::framing));
-			startHide();
-		}
-	}
 	
 	virtual void acting()
 	{
@@ -611,7 +570,7 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		my_elemental = kElementCode_wind;
 		
@@ -682,28 +641,6 @@ private:
 	float damage;
 	float total_damage;
 	float sum_damage;
-	
-	virtual void framing()
-	{
-		frame_cnt++;
-		
-		if(getSideCount() > starting_side_cnt)
-		{
-			item_img->removeFromParentAndCleanup(true);
-			unschedule(schedule_selector(GameItemLightning::framing));
-			
-			acting();
-			unschedule(schedule_selector(GameItemLightning::framing));
-			return;
-		}
-		
-		
-		if(holding_time <= frame_cnt)
-		{
-			unschedule(schedule_selector(GameItemLightning::framing));
-			startHide();
-		}
-	}
 	
 	virtual void acting()
 	{
@@ -863,7 +800,7 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		my_elemental = kElementCode_lightning;
 		
@@ -936,28 +873,6 @@ private:
 	float total_damage;
 	float sum_damage;
 	
-	virtual void framing()
-	{
-		frame_cnt++;
-		
-		if(getSideCount() > starting_side_cnt)
-		{
-			item_img->removeFromParentAndCleanup(true);
-			unschedule(schedule_selector(GameItemLife::framing));
-			
-			acting();
-			unschedule(schedule_selector(GameItemLife::framing));
-			return;
-		}
-		
-		
-		if(holding_time <= frame_cnt)
-		{
-			unschedule(schedule_selector(GameItemLife::framing));
-			startHide();
-		}
-	}
-	
 	virtual void acting()
 	{
 		myGD->communication("EP_addJackAttack");
@@ -1026,7 +941,7 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		my_elemental = kElementCode_life;
 		
@@ -1103,28 +1018,6 @@ private:
 	float total_damage;
 	float sum_damage;
 	
-	virtual void framing()
-	{
-		frame_cnt++;
-		
-		if(getSideCount() > starting_side_cnt)
-		{
-			item_img->removeFromParentAndCleanup(true);
-			unschedule(schedule_selector(GameItemIce::framing));
-			
-			acting();
-			unschedule(schedule_selector(GameItemIce::framing));
-			return;
-		}
-		
-		
-		if(holding_time <= frame_cnt)
-		{
-			unschedule(schedule_selector(GameItemIce::framing));
-			startHide();
-		}
-	}
-	
 	virtual void acting()
 	{
 		myGD->communication("EP_addJackAttack");
@@ -1197,7 +1090,7 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		my_elemental = kElementCode_water;
 		
@@ -1263,28 +1156,6 @@ private:
 	float damage;
 	float total_damage;
 	float sum_damage;
-	
-	virtual void framing()
-	{
-		frame_cnt++;
-		
-		if(getSideCount() > starting_side_cnt)
-		{
-			item_img->removeFromParentAndCleanup(true);
-			unschedule(schedule_selector(GameItemFire::framing));
-			
-			acting();
-			unschedule(schedule_selector(GameItemFire::framing));
-			return;
-		}
-		
-		
-		if(holding_time <= frame_cnt)
-		{
-			unschedule(schedule_selector(GameItemFire::framing));
-			startHide();
-		}
-	}
 	
 	virtual void acting()
 	{
@@ -1358,7 +1229,7 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		my_elemental = kElementCode_fire;
 		
@@ -1420,28 +1291,6 @@ private:
 	float damage;
 	float total_damage;
 	float sum_damage;
-	
-	virtual void framing()
-	{
-		frame_cnt++;
-		
-		if(getSideCount() > starting_side_cnt)
-		{
-			item_img->removeFromParentAndCleanup(true);
-			unschedule(schedule_selector(GameItemPlasma::framing));
-			
-			acting();
-			unschedule(schedule_selector(GameItemPlasma::framing));
-			return;
-		}
-		
-		
-		if(holding_time <= frame_cnt)
-		{
-			unschedule(schedule_selector(GameItemPlasma::framing));
-			startHide();
-		}
-	}
 	
 	virtual void acting()
 	{
@@ -1511,7 +1360,7 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		myGD = GameData::sharedGameData();
+		
 		
 		my_elemental = kElementCode_plasma;
 		
@@ -1614,7 +1463,7 @@ private:
 	CCObject* target_ui;
 	SEL_CallFuncI delegate_takeExchangeCoin;
 	CCSprite* coin_img;
-	GameData* myGD;
+	
 	IntPoint myPoint;
 	int directionAngle;
 	float move_speed;
@@ -1727,7 +1576,7 @@ private:
 		myType = t_type;
 		target_ui = t_ui;
 		delegate_takeExchangeCoin = d_takeExchangeCoin;
-		myGD = GameData::sharedGameData();
+		
 		
 		coin_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", myType)->getCString());
 		coin_img->setScale(0);
@@ -1805,7 +1654,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	
 	int counting_value;
 	int create_counting_value;
@@ -1821,6 +1670,33 @@ private:
 		{
 			GameItemAttack* t_gia = GameItemAttack::create(false);
 			addChild(t_gia);
+			
+			create_counting_value = rand()%5 + 10;
+			counting_value = 0;
+		}
+		else if(clr_cdt_type == kCLEAR_itemCollect && getChildrenCount() < 2)
+		{
+			int random_value = rand()%10;
+			if(random_value <= 3)
+			{
+				GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(false);
+				addChild(t_gisu);
+			}
+			else if(random_value <= 7)
+			{
+				GameItemAttack* t_gia = GameItemAttack::create(false);
+				addChild(t_gia);
+			}
+			else if(random_value <= 8)
+			{
+				GameItemFast* t_gif = GameItemFast::create(false);
+				addChild(t_gif);
+			}
+			else
+			{
+				GameItemFire* t_gif = GameItemFire::create(false);
+				addChild(t_gif);
+			}
 			
 			create_counting_value = rand()%5 + 10;
 			counting_value = 0;
@@ -1889,9 +1765,7 @@ private:
 	
 	void myInit()
 	{
-		myGD = GameData::sharedGameData();
-		
-		clr_cdt_type = SilhouetteData::sharedSilhouetteData()->getClearCondition();
+		clr_cdt_type = mySD->getClearCondition();
 		
 		coin_parent = CCNode::create();
 		addChild(coin_parent);

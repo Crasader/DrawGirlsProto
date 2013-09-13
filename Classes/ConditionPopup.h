@@ -20,7 +20,7 @@ enum CDT_Zorder{
 	kCDT_Z_content
 };
 
-class ConditionPopup : public CCLayer
+class ConditionPopup : public CCNode
 {
 public:
 	static ConditionPopup* create(CCObject* t_close, SEL_CallFunc d_close)
@@ -31,69 +31,75 @@ public:
 		return t_cdt;
 	}
 	
+	void holdingPopup()
+	{
+		unschedule(schedule_selector(ConditionPopup::hiding));
+		cdt_back->stopAllActions();
+		content->stopAllActions();
+		
+		cdt_back->setOpacity(255);
+		content->setOpacity(255);
+		
+		startHiding();
+	}
+	
 private:
-	bool is_touch_enable;
 	
 	CCObject* target_close;
 	SEL_CallFunc delegate_close;
+	
+	int ing_frame;
+	int end_frame;
+	
+	CCSprite* cdt_back;
+	CCLabelTTF* content;
+	
+	void startHiding()
+	{
+		ing_frame = 0;
+		end_frame = 60;
+		schedule(schedule_selector(ConditionPopup::hiding));
+	}
+	
+	void hiding()
+	{
+		ing_frame++;
+		
+		if(ing_frame >= end_frame)
+		{
+			unschedule(schedule_selector(ConditionPopup::hiding));
+			CCFadeTo* fade1 = CCFadeTo::create(1.f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ConditionPopup::endCall));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(fade1, t_call);
+			
+			CCFadeTo* fade2 = CCFadeTo::create(0.9f, 0);
+			
+			cdt_back->runAction(t_seq);
+			content->runAction(fade2);
+		}
+	}
+	
+	void endCall()
+	{
+		(target_close->*delegate_close)();
+		removeFromParent();
+	}
 	
 	void myInit(CCObject* t_close, SEL_CallFunc d_close)
 	{
 		target_close = t_close;
 		delegate_close = d_close;
 		
-		CCSprite* cdt_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320, 240));
-		cdt_back->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		cdt_back = CCSprite::create("condition_box.png");
+		cdt_back->setPosition(ccp(350,245+DataStorageHub::sharedInstance()->ui_height_center_control));
 		addChild(cdt_back, kCDT_Z_back);
 		
-		CCLabelTTF* title = CCLabelTTF::create(SilhouetteData::sharedSilhouetteData()->getConditionTitle().c_str(), StarGoldData::sharedInstance()->getFont().c_str(), 20);
-		title->setColor(ccBLACK);
-		title->setPosition(ccp(240,200+DataStorageHub::sharedInstance()->ui_height_center_control));
-		addChild(title, kCDT_Z_content);
-		
-		CCLabelTTF* content = CCLabelTTF::create(SilhouetteData::sharedSilhouetteData()->getConditionContent().c_str(), StarGoldData::sharedInstance()->getFont().c_str(), 10, CCSizeMake(240, 160), kCCTextAlignmentCenter);
+		content = CCLabelTTF::create(mySD->getConditionContent().c_str(), mySGD->getFont().c_str(), 15, CCSizeMake(170, 50), kCCTextAlignmentCenter);
 		content->setColor(ccBLACK);
-		content->setPosition(ccp(240,60+DataStorageHub::sharedInstance()->ui_height_center_control));
-		addChild(content, kCDT_Z_content);
+		content->setPosition(ccp(cdt_back->getContentSize().width/2.f,(cdt_back->getContentSize().height-30)/2.f));
+		cdt_back->addChild(content, kCDT_Z_content);
 		
-		is_touch_enable = true;
-		
-		setTouchEnabled(true);
-		
-		StarGoldData::sharedInstance()->is_paused = true;
-		CCDirector::sharedDirector()->pause();
-	}
-	
-	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
-	{
-		is_touch_enable = false;
-		setTouchEnabled(false);
-		
-		(target_close->*delegate_close)();
-		
-		StarGoldData::sharedInstance()->is_paused = false;
-		CCDirector::sharedDirector()->resume();
-		removeFromParent();
-		return true;
-	}
-	
-	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
-	{
-		
-	}
-    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
-	{
-		
-	}
-    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
-	{
-		
-	}
-	
-	virtual void registerWithTouchDispatcher()
-	{
-		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-		pDispatcher->addTargetedDelegate(this, -150, true);
+		startHiding();
 	}
 };
 

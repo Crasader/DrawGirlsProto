@@ -179,7 +179,13 @@ typedef enum t_ShopCode{
 
 typedef enum t_CLEAR_CONDITION{
 	kCLEAR_default = 0,
-	kCLEAR_bossLifeZero
+	kCLEAR_bossLifeZero,
+	kCLEAR_subCumberCatch,
+	kCLEAR_bigArea,
+	kCLEAR_itemCollect,
+	kCLEAR_perfect,
+	kCLEAR_sequenceChange,
+	kCLEAR_timeLimit
 }CLEAR_CONDITION;
 
 #define SHOP_KEY	0xD9

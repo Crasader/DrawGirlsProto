@@ -139,7 +139,6 @@ bool AppDelegate::applicationDidFinishLaunching()
 //	
 //	CCSize imgSize = CCSizeMake(960, 640);
 //	
-//	DataStorageHub* myDSH = DataStorageHub::sharedInstance();
 //	if(basicRate < frameRate) // height long, calc : width
 //	{
 //		myDSH->device_rate = frameSize.height/imgSize.height;

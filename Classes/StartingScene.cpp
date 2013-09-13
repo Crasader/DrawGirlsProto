@@ -53,7 +53,7 @@ bool StartingScene::init()
     
 	setKeypadEnabled(true);
 	
-	GameData::sharedGameData()->resetGameData();
+	myGD->resetGameData();
 	
 	CCSprite* start_back = CCSprite::create("start_back.png");
 	start_back->setPosition(ccp(240,160));
@@ -142,60 +142,60 @@ void StartingScene::menuAction(CCObject* pSender)
 	{
 		is_menu_enable = false;
 		
-		SilhouetteData::sharedSilhouetteData()->setSilType(1);
+		mySD->setSilType(1);
 		
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
 		
-		StarGoldData::sharedInstance()->setGameStart();
+		mySGD->setGameStart();
 		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 	}
 	else if(tag == kMT_SS_christmas)
 	{
 		is_menu_enable = false;
 		
-		SilhouetteData::sharedSilhouetteData()->setSilType(2);
+		mySD->setSilType(2);
 		
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
 		
-		StarGoldData::sharedInstance()->setGameStart();
+		mySGD->setGameStart();
 		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 	}
 	else if(tag == kMT_SS_hospital)
 	{
 		is_menu_enable = false;
 		
-		SilhouetteData::sharedSilhouetteData()->setSilType(3);
+		mySD->setSilType(3);
 		
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
 		
-		StarGoldData::sharedInstance()->setGameStart();
+		mySGD->setGameStart();
 		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 	}
 	else if(tag == kMT_SS_sports)
 	{
 		is_menu_enable = false;
 		
-		SilhouetteData::sharedSilhouetteData()->setSilType(4);
+		mySD->setSilType(4);
 		
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
 		
-		StarGoldData::sharedInstance()->setGameStart();
+		mySGD->setGameStart();
 		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 	}
 	else if(tag == kMT_SS_idol)
 	{
 		is_menu_enable = false;
 		
-		SilhouetteData::sharedSilhouetteData()->setSilType(5);
+		mySD->setSilType(5);
 		
 		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
 		
-		StarGoldData::sharedInstance()->setGameStart();
+		mySGD->setGameStart();
 		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 	}
 }

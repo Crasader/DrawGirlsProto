@@ -68,7 +68,6 @@ private:
 	CCRect view_rect;
 	bool is_showtime;
 	CCNode* game_node;
-	GameData* myGD;
 	
 	int frame_cnt;
 	
@@ -191,12 +190,12 @@ private:
 		target_changeScene = t_changeScene;
 		delegate_changeScene = d_changeScene;
 		
-		StarGoldData::sharedInstance()->is_exchanged = t_exchanged;
-		StarGoldData::sharedInstance()->is_showtime = is_showtime;
+		mySGD->is_exchanged = t_exchanged;
+		mySGD->is_showtime = is_showtime;
 		
 		view_rect = CCRectMake(0, 160+DataStorageHub::sharedInstance()->bottom_base, 480, 0);
 		
-		silType = SilhouetteData::sharedSilhouetteData()->getSilType();
+		silType = mySD->getSilType();
 		
 		string ttt;
 		
@@ -209,7 +208,6 @@ private:
 		clear_img->setPosition(ccp(160,215));
 		addChild(clear_img, kCST_Z_clear);
 		
-		myGD = GameData::sharedGameData();
 //		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
 //		device_rate = DataStorageHub::sharedInstance()->device_rate;
 //		visit_factor = scaleFactor*device_rate;

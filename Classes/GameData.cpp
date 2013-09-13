@@ -25,4 +25,4 @@ IntPoint ccp2ip(const CCPoint& cc)
 	return ip;
 }
 
-GameData* gameData = GameData::sharedGameData();
+GameData* gameData = myGD;

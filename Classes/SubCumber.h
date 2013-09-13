@@ -194,7 +194,7 @@ public:
 	}
 	
 private:
-	GameData* myGD;
+	
 	int life;
 	int ingFrame;
 	bool isSelfBomb;
@@ -435,16 +435,10 @@ private:
 		isSheild = 0;
 		life = SelectedMapData::sharedInstance()->getMaxBossLife()/10.f;
 		isSelfBomb = false;
-		myGD = GameData::sharedGameData();
+		
 		myState = cumberStateStop;
-//		move_speed = SelectedMapData::sharedInstance()->getSubCumberSpeed();
 		move_speed = 1.f;
 		
-//		int worldMap = SelectedMapData::sharedInstance()->getSelectedChapter();
-//		int secondType = SelectedMapData::sharedInstance()->getSecondSubCumberType();
-//		
-//		isMainType = StarGoldData::sharedInstance()->getIsSubType();
-//		int resultType = isMainType ? worldMap : secondType;
 		int resultType = 20;
 		
 		if(resultType <= 20)
@@ -466,17 +460,8 @@ private:
 			else if(last_p == 6)		my_element = kElementCode_water;
 		}
 		
-//		if(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1)
-//		{
-//			cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_1_monster.png", worldMap)->getCString());
-//			addChild(cumberImg);
-//			my_element = kElementCode_empty;
-//		}
-//		else
-//		{
-			cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_monster.png", resultType)->getCString());
-			addChild(cumberImg);
-//		}
+		cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_monster.png", resultType)->getCString());
+		addChild(cumberImg);
 		
 		myScale = 1.f;
 		maxScale = 1.2f;
@@ -510,15 +495,11 @@ private:
 		isSheild = 0;
 		life = SelectedMapData::sharedInstance()->getMaxBossLife()/10.f;
 		isSelfBomb = false;
-		myGD = GameData::sharedGameData();
+		
 		myState = cumberStateStop;
-		move_speed = SelectedMapData::sharedInstance()->getSubCumberSpeed();
+		move_speed = 1.f;
 		
-		int worldMap = SelectedMapData::sharedInstance()->getSelectedChapter();
-		int secondType = SelectedMapData::sharedInstance()->getSecondSubCumberType();
-		
-		isMainType = StarGoldData::sharedInstance()->getIsSubType();
-		int resultType = isMainType ? worldMap : secondType;
+		int resultType = 20;
 		
 		if(resultType <= 20)
 		{
@@ -539,17 +520,8 @@ private:
 			else if(last_p == 6)		my_element = kElementCode_water;
 		}
 		
-		if(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1)
-		{
-			cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_1_monster.png", worldMap)->getCString());
-			addChild(cumberImg);
-			my_element = kElementCode_empty;
-		}
-		else
-		{
-			cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_monster.png", resultType)->getCString());
-			addChild(cumberImg);
-		}
+		cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_monster.png", resultType)->getCString());
+		addChild(cumberImg);
 		
 		mapPoint = s_p;
 		

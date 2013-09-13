@@ -74,7 +74,7 @@ private:
 	int die_animation_cnt;
 	int die_animation_rate;
 	
-	GameData* myGD;
+	
 	MissileParent* myMP;
 	MapFragmentParent* myMFP;
 	

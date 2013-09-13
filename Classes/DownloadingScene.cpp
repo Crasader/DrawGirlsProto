@@ -152,13 +152,13 @@ void Downloading::ingFrame()
 void Downloading::myReplaceScene(DownAfterScene a_code)
 {
 //	if(a_code == kDAS_ChapterSetting)
-//		StarGoldData::sharedInstance()->setAfterScene(kSceneCode_ChapterSetting);
+//		mySGD->setAfterScene(kSceneCode_ChapterSetting);
 //	else if(a_code == kDAS_StageSetting)
-//		StarGoldData::sharedInstance()->setAfterScene(kSceneCode_StageSetting);
+//		mySGD->setAfterScene(kSceneCode_StageSetting);
 //	else if(a_code == kDAS_Gallery)
-//		StarGoldData::sharedInstance()->setAfterScene(kSceneCode_Gallery);
+//		mySGD->setAfterScene(kSceneCode_Gallery);
 //	else if(a_code == kDAS_WorldMapScene)
-//		StarGoldData::sharedInstance()->setAfterScene(kSceneCode_WorldMapScene);
+//		mySGD->setAfterScene(kSceneCode_WorldMapScene);
 //	
 //	CCDirector::sharedDirector()->replaceScene(NewLoading::scene());
 }

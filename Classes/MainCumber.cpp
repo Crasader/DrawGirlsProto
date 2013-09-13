@@ -1111,7 +1111,6 @@ void MainCumber::springCumber()
 
 void MainCumber::crashMapForIntPoint(IntPoint t_p)
 {
-	GameData* myGD = GameData::sharedGameData();
 	IntPoint jackPoint = myGD->getJackPoint();
 	
 	if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
@@ -1154,7 +1153,7 @@ void MainCumber::myInit()
 	my_eye = NULL;
 	mEmotion = NULL;
 	map_visit_cnt = 0;
-	myGD = GameData::sharedGameData();
+	
 	is_silenced = false;
 	is_casting = false;
 	is_slowed = false;

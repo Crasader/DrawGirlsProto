@@ -39,8 +39,8 @@ bool Maingame::init()
 	
 	init_state = kMIS_beforeInit;
 	
-	myGD = GameData::sharedGameData();
-	myDSH = DataStorageHub::sharedInstance();
+	
+	
 	
 	myGD->V_V["Main_startBackTracking"] = std::bind(&Maingame::startBackTracking, this);
 	myGD->V_V["Main_allStopSchedule"] = std::bind(&Maingame::allStopSchedule, this);
@@ -153,7 +153,7 @@ void Maingame::finalSetting()
 	
 	myUI = PlayUI::create();
 	addChild(myUI, myUIZorder);
-	myUI->setMaxBossLife(SilhouetteData::sharedSilhouetteData()->getBossMaxLife());//SelectedMapData::sharedInstance()->getMaxBossLife());
+	myUI->setMaxBossLife(mySD->getBossMaxLife());//SelectedMapData::sharedInstance()->getMaxBossLife());
 	myUI->setClearPercentage(SelectedMapData::sharedInstance()->getClearPercentage());
 	
 	myCP->setUI_forEP(myUI, callfunc_selector(PlayUI::keepBossLife), callfunc_selector(PlayUI::checkBossLife));

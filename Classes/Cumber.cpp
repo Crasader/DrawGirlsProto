@@ -232,7 +232,7 @@ void CumberParent::startDieAnimation()
 		
 		if(!(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1) && rand()%CAUGHT_RATE == 0)
 		{
-			StarGoldData::sharedInstance()->caughtBoss();
+			mySGD->caughtBoss();
 			for(auto mainCumber : mainCumbers)
 				mainCumber->caughtBoss(this, callfunc_selector(CumberParent::realStartDieAnimation));
 		}
@@ -332,12 +332,24 @@ void CumberParent::createSubCumber(IntPoint s_p)
 void CumberParent::initSubCumber()
 {
 	//		int create_cnt = SelectedMapData::sharedInstance()->getSubCumberCnt();
-	int create_cnt = rand()%2+1;
-	for(int i=0;i<create_cnt;i++)
+	if(mySD->getClearCondition() != kCLEAR_subCumberCatch)
 	{
-		SubCumber* t_SC = SubCumber::create();
-		addChild(t_SC);
-		subCumberArray->addObject(t_SC);
+		int create_cnt = rand()%2+1;
+		for(int i=0;i<create_cnt;i++)
+		{
+			SubCumber* t_SC = SubCumber::create();
+			addChild(t_SC);
+			subCumberArray->addObject(t_SC);
+		}
+	}
+	else
+	{
+		for(int i=0;i<2;i++)
+		{
+			SubCumber* t_SC = SubCumber::create();
+			addChild(t_SC);
+			subCumberArray->addObject(t_SC);
+		}
 	}
 }
 
@@ -379,7 +391,7 @@ void CumberParent::myInit()
 	is_die_animationing = false;
 	subCumberArray = new CCArray(1);
 	isGameover = false;
-	myGD = GameData::sharedGameData();
+	
 	
 	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
 	myGD->V_CCO["CP_removeSubCumber"] = std::bind(&CumberParent::removeSubCumber, this, _1);

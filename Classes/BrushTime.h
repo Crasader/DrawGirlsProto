@@ -297,7 +297,7 @@ private:
 		is_running = false;
 		over_brush = NULL;
 		brush_array = new CCArray(1);
-		mySGD = StarGoldData::sharedInstance();
+		mySGD = mySGD;
 		mySGD->setBrushTimeInstance(this);
 		
 		if(is_brush_inf)

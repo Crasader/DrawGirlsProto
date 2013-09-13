@@ -61,6 +61,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_theme_int1_clearednumber
 }DSH_Key;
 
+#define myDSH DataStorageHub::sharedInstance()
+
 class DataStorageHub : public CCObject
 {
 public:
