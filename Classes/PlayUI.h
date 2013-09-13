@@ -559,8 +559,6 @@ public:
 			
 			if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per)
 				takeBigArea();
-			else if(clr_cdt_type == kCLEAR_perfect && !is_cleared_cdt && t_p - t_beforePercentage > 0 && t_p >= clr_cdt_per && t_p <= clr_cdt_per+clr_cdt_range)
-				conditionClear();
 			
 			if(t_p >= t_beforePercentage + JM_CONDITION)
 			{
@@ -642,6 +640,10 @@ public:
 		}
 		
 		percentageLabel->setString(CCString::createWithFormat("%.1f", floorf(t_p*10000.f)/10000.f*100.f)->getCString());
+		
+		if(clr_cdt_type == kCLEAR_perfect && !is_cleared_cdt && t_p - t_beforePercentage > 0 && atof(percentageLabel->getString()) >= clr_cdt_per && atof(percentageLabel->getString()) <= clr_cdt_per+clr_cdt_range)
+			conditionClear();
+		
 		m_areaGage->setPercentage(t_p);
 		percentage_decrease_cnt = 0;
 		

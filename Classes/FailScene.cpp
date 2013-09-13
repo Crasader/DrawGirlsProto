@@ -112,7 +112,7 @@ bool FailScene::init()
 		{
 			float perfect_per = mySD->getClearConditionPerfectBase();
 			
-			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", perfect_per)->getCString(), mySGD->getFont().c_str(), 12);
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", perfect_per*100.f)->getCString(), mySGD->getFont().c_str(), 12);
 			clr_cdt_label->setPosition(ccp(240,165));
 			addChild(clr_cdt_label, kZ_FS_img);
 		}

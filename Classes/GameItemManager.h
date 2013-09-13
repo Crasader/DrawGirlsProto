@@ -75,7 +75,6 @@ protected:
 			unschedule(schedule_selector(GameItemBase::framing));
 			
 			acting();
-			removeFromParentAndCleanup(true);
 		}
 		
 		
@@ -225,6 +224,7 @@ private:
 	virtual void acting()
 	{
 		myGD->communication("Jack_takeSpeedUpItem");
+		removeFromParent();
 	}
 	
 	void myInit(bool is_near)
@@ -346,6 +346,7 @@ private:
 	virtual void acting()
 	{
 		myGD->communication("MP_createJackMissile", my_elemental, rand()%3 + 1, 0.7f);
+		removeFromParent();
 	}
 	
 	void myInit(bool is_near)

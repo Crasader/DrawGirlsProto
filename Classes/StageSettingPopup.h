@@ -132,7 +132,7 @@ private:
 			{
 				float perfect_per = mySD->getClearConditionPerfectBase(stage);
 				
-				CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", perfect_per)->getCString(), mySGD->getFont().c_str(), 12);
+				CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", perfect_per*100.f)->getCString(), mySGD->getFont().c_str(), 12);
 				clr_cdt_label->setPosition(ccp(163,170));
 				addChild(clr_cdt_label, kSSPL_Z_menu);
 			}

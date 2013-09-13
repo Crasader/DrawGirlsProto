@@ -429,8 +429,8 @@ void CumberParent::myInit()
 	myGD->V_F["CP_changeMaxSize"] = std::bind(&CumberParent::changeMaxSize, this, _1);
 	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
 	
-//	auto mainCumber = MainCumber::create();
-	auto mainCumber = MetalSnake::create();
+	auto mainCumber = MainCumber::create();
+//	auto mainCumber = MetalSnake::create();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	
