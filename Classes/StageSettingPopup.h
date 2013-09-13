@@ -117,8 +117,9 @@ private:
 		}
 		
 		CCLabelTTF* content = CCLabelTTF::create(mySD->getConditionContent(stage).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(140, 60), kCCTextAlignmentCenter);
+		content->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
 		content->setColor(ccBLACK);
-		content->setPosition(ccpAdd(clr_cdt_img->getPosition(), ccp(0,-68)));
+		content->setPosition(ccpAdd(clr_cdt_img->getPosition(), ccp(0,-55)));
 		addChild(content, kSSPL_Z_menu);
 		
 		CCSprite* n_start = CCSprite::create("sspl_start.png");
