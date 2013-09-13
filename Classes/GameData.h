@@ -754,98 +754,98 @@ public:
 	
 	CCNode* getCommunicationNode(string funcName)
 	{
-		CCAssert(CCN_V.find(funcName) != CCN_V.end(), "Assert");
+		CCAssert(CCN_V.find(funcName) != CCN_V.end(), funcName.c_str());
 		return CCN_V[funcName]();
 
 	}
 	
 	CCArray* getCommunicationArray(string funcName)
 	{
-		CCAssert(CCA_V.find(funcName) != CCA_V.end(), "Assert");
+		CCAssert(CCA_V.find(funcName) != CCA_V.end(), funcName.c_str());
 		return CCA_V[funcName]();
 		
 	}
 	
 	void communication(string funcName)
 	{
-		CCAssert(V_V.find(funcName) != V_V.end(), "Assert");
+		CCAssert(V_V.find(funcName) != V_V.end(), funcName.c_str());
 		V_V[funcName]();
 		return;
 	}
 	
 	void communication(string funcName, CCPoint t_p, int t_i)
 	{
-		CCAssert(V_CCPI.find(funcName) != V_CCPI.end(), "Assert");
+		CCAssert(V_CCPI.find(funcName) != V_CCPI.end(), funcName.c_str());
 		V_CCPI[funcName](t_p, t_i);
 		return;
 	}
 	
 	void communication(string funcName, float t_f, bool t_b, CCPoint t_p)
 	{
-		CCAssert(V_FBCCP.find(funcName) != V_FBCCP.end(), "Assert");
+		CCAssert(V_FBCCP.find(funcName) != V_FBCCP.end(), funcName.c_str());
 		V_FBCCP[funcName](t_f, t_b, t_p);
 		return;
 	}
 	
 	void communication(string funcName, bool t_b)
 	{
-		CCAssert(V_B.find(funcName) != V_B.end(), "Assert");
+		CCAssert(V_B.find(funcName) != V_B.end(), funcName.c_str());
 		V_B[funcName](t_b);
 		return;
 	}
 	
 	void communication(string funcName, CCObject* t_obj)
 	{
-		CCAssert(V_CCO.find(funcName) != V_CCO.end(), "Assert");
+		CCAssert(V_CCO.find(funcName) != V_CCO.end(), funcName.c_str());
 		V_CCO[funcName](t_obj);
 		return;
 	}
 	
 	void communication(string funcName, CCObject* t_obj, float f_val, float f_val2)
 	{
-		CCAssert(V_CCOFF.find(funcName) != V_CCOFF.end(), "Assert");
+		CCAssert(V_CCOFF.find(funcName) != V_CCOFF.end(), funcName.c_str());
 		V_CCOFF[funcName](t_obj, f_val, f_val2);
 		return;
 	}
 	
 	void communication(string funcName, IntPointVector t_addPath)
 	{
-		CCAssert(V_Ipv.find(funcName) != V_Ipv.end(), "Assert");
+		CCAssert(V_Ipv.find(funcName) != V_Ipv.end(), funcName.c_str());
 		V_Ipv[funcName](t_addPath);
 		return;
 	}
 	
 	void communication(string funcName, IntPoint t_p)
 	{
-		CCAssert(V_Ip.find(funcName) != V_Ip.end(), "Assert");
+		CCAssert(V_Ip.find(funcName) != V_Ip.end(), funcName.c_str());
 		V_Ip[funcName](t_p);
 		return;
 	}
 	
 	void communication(string funcName, IntPoint t_p, int t_i1, int t_i2, int t_i3)
 	{
-		CCAssert(V_IpIII.find(funcName) != V_IpIII.end(), "Assert");
+		CCAssert(V_IpIII.find(funcName) != V_IpIII.end(), funcName.c_str());
 		V_IpIII[funcName](t_p, t_i1, t_i2, t_i3);
 		return;
 	}
 	
 	void communication(string funcName, IntPoint t_p, CCObject* t_t, SEL_CallFuncI t_d)
 	{
-		CCAssert(V_IpCCOCallfunci.find(funcName) != V_IpCCOCallfunci.end(), "Assert");
+		CCAssert(V_IpCCOCallfunci.find(funcName) != V_IpCCOCallfunci.end(), funcName.c_str());
 		V_IpCCOCallfunci[funcName](t_p, t_t, t_d);
 		return;
 	}
 	
 	void communication(string funcName, CCPoint t_p, CCObject* t_target, SEL_CallFunc d_func)
 	{
-		CCAssert(V_CCPCCOCallfunc.find(funcName) != V_CCPCCOCallfunc.end(), "Assert");
+		CCAssert(V_CCPCCOCallfunc.find(funcName) != V_CCPCCOCallfunc.end(), funcName.c_str());
 		V_CCPCCOCallfunc[funcName](t_p, t_target, d_func);
 		return;
 	}
 	
 	void communication(string funcName, CCPoint t_startFire, ccColor4F t_color)
 	{
-		CCAssert(V_CCPCOLOR.find(funcName) != V_CCPCOLOR.end(), "Assert");
+		CCAssert(V_CCPCOLOR.find(funcName) != V_CCPCOLOR.end(), funcName.c_str());
 		V_CCPCOLOR[funcName](t_startFire, t_color);
 		return;
 //		else if(funcName == "Main_movePosition" && target_Main)
@@ -856,49 +856,49 @@ public:
 	
 	void communication(string funcName, CCPoint t_startFire, bool t_b)
 	{
-		CCAssert(V_CCPB.find(funcName) != V_CCPB.end(), "Assert");
+		CCAssert(V_CCPB.find(funcName) != V_CCPB.end(), funcName.c_str());
 		V_CCPB[funcName](t_startFire, t_b);
 		return;
 	}
 	
 	void communication(string funcName, int t_int)
 	{
-		CCAssert(V_I.find(funcName) != V_I.end(), "Assert");
+		CCAssert(V_I.find(funcName) != V_I.end(), funcName.c_str());
 		V_I[funcName](t_int);
 		return;
 	}
 	
 	void communication(string funcName, int t_int1, int t_int2, float t_float)
 	{
-		CCAssert(V_IIF.find(funcName) != V_IIF.end(), "Assert");
+		CCAssert(V_IIF.find(funcName) != V_IIF.end(), funcName.c_str());
 		V_IIF[funcName](t_int1, t_int2, t_float);
 		return;
 	}
 	
 	void communication(string funcName, int t_int1, int t_int2, float t_float, CCPoint t_p)
 	{
-		CCAssert(V_IIFCCP.find(funcName) != V_IIFCCP.end(), "Assert");
+		CCAssert(V_IIFCCP.find(funcName) != V_IIFCCP.end(), funcName.c_str());
 		V_IIFCCP[funcName](t_int1, t_int2, t_float, t_p);
 		return;
 	}
 	
 	void communication(string funcName, float t_float)
 	{
-		CCAssert(V_F.find(funcName) != V_F.end(), "Assert");
+		CCAssert(V_F.find(funcName) != V_F.end(), funcName.c_str());
 		V_F[funcName](t_float);
 		return;
 	}
 	
 	void communication(string funcName, CCPoint t_p)
 	{
-		CCAssert(V_CCP.find(funcName) != V_CCP.end(), "Assert");
+		CCAssert(V_CCP.find(funcName) != V_CCP.end(), funcName.c_str());
 		V_CCP[funcName](t_p);
 		return;
 	}
 	
 	void communication(string funcName, CCObject* t_t1, SEL_CallFunc t_d1, CCObject* t_t2, SEL_CallFunc t_d2)
 	{
-		CCAssert(V_TDTD.find(funcName) != V_TDTD.end(), "Assert");
+		CCAssert(V_TDTD.find(funcName) != V_TDTD.end(), funcName.c_str());
 		V_TDTD[funcName](t_t1, t_d1, t_t2, t_d2);
 		return;
 	}

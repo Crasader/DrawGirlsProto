@@ -2135,7 +2135,7 @@ public:
 	
 	void updateStun()
 	{
-		myGD->communication("Jack_createStunHammer");
+		myGD->communication("Jack_createHammer");
 		ingFrame = 0;
 	}
 	
@@ -2173,7 +2173,7 @@ private:
 		myGD = GameData::sharedGameData();
 		stunFrame = t_frame;
 		
-		myGD->communication("Jack_createStunHammer");
+		myGD->communication("Jack_createHammer");
 		startFrame();
 	}
 };

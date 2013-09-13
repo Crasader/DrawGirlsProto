@@ -87,7 +87,7 @@ public:
 		{
 			
 			
-			onStartMoving();
+//			onStartMoving();
 		}
 	}
 	void stopMoving()

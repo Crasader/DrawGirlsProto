@@ -1300,6 +1300,21 @@ private:
 		
 		
 		
+		//	SEL_SCHEDULE delegate_Jack_setJackSpeed;
+		//	SEL_CallFunc delegate_Jack_startDieEffect;
+		//	SEL_CallFunc delegate_Jack_createStunHammer;
+		//	SEL_CallFunc delegate_Jack_createFog;
+		//	SEL_CallFunc delegate_Jack_createSleep;
+		//	SEL_CallFunc delegate_Jack_createChaos;
+		//	SEL_CallFunc delegate_Jack_reverseOff;
+		//	SEL_CallFunc delegate_Jack_resetStopEffects;
+		//	SEL_CallFunc delegate_Jack_showMB;
+		//	SEL_CallFunc delegate_Jack_takeSpeedUpItem;
+		//	SEL_FCallFunc delegate_Jack_getAlphaSpeed;
+		//	SEL_CallFuncF delegate_Jack_setAlphaSpeed;
+		//	SEL_FCallFunc delegate_Jack_getSpeedUpValue;
+		
+		
 		isMoving = false;
 		willBackTracking = false;
 		btPoint = IntPoint();

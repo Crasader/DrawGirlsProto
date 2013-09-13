@@ -8,17 +8,24 @@
 
 #include "Cumber.h"
 #include "SnakeCumber.h"
-
+#include "MetalSnake.h"
 void CumberParent::setMainCumberState(int t_cs)
 {
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	for(auto i : mainCumbers)
-		i->setCumberState(t_cs);
+	
+	// 일단 제거 시키자.
+	// 근본적으로 "CP_setMainCumberState" 자체를 없애야 하겠지만,
+	// 몬스터의 상태 변화는 몬스터 클래스가 정하자.
+	// 이렇게 하는 쪽이 구조상 유연하지 않을까 생각해본다.
+	
+	
+//	for(auto i : mainCumbers)
+//		i->setCumberState(t_cs);
 }
 
 void CumberParent::allStopSchedule()
 {
-	
+	//##
 	for(auto i : mainCumbers)
 	{
 		cumberState mainCumberState = i->getCumberState();
@@ -410,8 +417,8 @@ void CumberParent::myInit()
 	myGD->V_F["CP_changeMaxSize"] = std::bind(&CumberParent::changeMaxSize, this, _1);
 	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
 	
-	auto mainCumber = MainCumber::create();
-//	auto mainCumber = SnakeCumber::create();
+//	auto mainCumber = MainCumber::create();
+	auto mainCumber = MetalSnake::create();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	
