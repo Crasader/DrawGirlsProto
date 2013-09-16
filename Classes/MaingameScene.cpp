@@ -39,9 +39,6 @@ bool Maingame::init()
 	
 	init_state = kMIS_beforeInit;
 	
-	
-	
-	
 	myGD->V_V["Main_startBackTracking"] = std::bind(&Maingame::startBackTracking, this);
 	myGD->V_V["Main_allStopSchedule"] = std::bind(&Maingame::allStopSchedule, this);
 	myGD->V_V["Main_gameover"] = std::bind(&Maingame::gameover, this);
@@ -66,7 +63,10 @@ bool Maingame::init()
 	is_line_die = false;
 	
 	game_node = CCNode::create();
-	game_node->setScale(1.5f);
+	game_node->setScale(MY_SCALE);
+	if(GAMESCREEN_TYPE == LEFTUI)		game_node->setPosition(ccp(50+BOARDER_VALUE,0));
+	else if(GAMESCREEN_TYPE == RIGHTUI)	game_node->setPosition(ccp(BOARDER_VALUE, 0));
+	else								game_node->setPosition(ccp(0,0));
 	addChild(game_node, myMSZorder);
 	
 	myMS = MapScanner::create();
@@ -86,7 +86,7 @@ void Maingame::onEnter()
 	gamenode_moving_direction = kGNMD_up;
 	
 	touch_img = CCSprite::create("touch_before_start.png");
-	touch_img->setPosition(ccp(240,160+myDSH->ui_height_center_control));
+	touch_img->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(touch_img, myPMZorder);
 	
 	CCFadeTo* fade1 = CCFadeTo::create(1.f, 0);
@@ -190,7 +190,7 @@ void Maingame::startCounting()
 //		condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
 //		addChild(condition_spr, conditionLabelZorder);
 //	}
-	condition_spr->setPosition(ccp(240,220+DataStorageHub::sharedInstance()->ui_height_center_control));
+	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+50));
 	
 	CCAnimation* t_animation = CCAnimation::create();
 	t_animation->setDelayPerUnit(0.15);
@@ -242,7 +242,7 @@ void Maingame::counting()
 		countingLabel->removeFromParentAndCleanup(true);
 		countingLabel = CCSprite::createWithTexture(keepTexture->getTexture(), CCRectMake(0, 80, 200, 80));
 		countingLabel->setScale(0.5);
-		countingLabel->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
 		addChild(countingLabel, countingLabelZorder);
 	}
 }

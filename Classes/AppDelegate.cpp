@@ -55,28 +55,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 //	CCFileUtils::sharedFileUtils()->setResourceDirectory(sharedResourceDirectory);
 	
 	CCSize screen_size = pEGLView->getFrameSize();
-	float base_value = 320.f-480.f*screen_size.height/screen_size.width;
-	
-	float upper_limit = base_value/1.5f; // height wide
-	DataStorageHub::sharedInstance()->upper_limit = upper_limit > 0.f ? upper_limit : 0.f;
-	float bottom_base = -base_value/2.f; // bottom up
-	DataStorageHub::sharedInstance()->bottom_base = bottom_base > 0.f ? bottom_base : 0.f;
-	float ui_top_control = -base_value; // ui top up
-	DataStorageHub::sharedInstance()->ui_top_control = ui_top_control;
-	
-	float ui_height_center_control;
-	if(screen_size.width/screen_size.height > 1.5f)
-		ui_height_center_control = -base_value/4.f;
-	else
-		ui_height_center_control = -base_value/2.f;
-	DataStorageHub::sharedInstance()->ui_height_center_control = ui_height_center_control;
-	
-	float ui_jack_center_control;
-	if(screen_size.width/screen_size.height > 1.5f)
-		ui_jack_center_control = base_value/1.5f;
-	else
-		ui_jack_center_control = -base_value/4.f;
-	DataStorageHub::sharedInstance()->ui_jack_center_control = ui_jack_center_control;
+	myDSH->ui_top = 480.f*screen_size.height/screen_size.width;
+	myDSH->ui_bottom = 0;
+	myDSH->ui_center_y = myDSH->ui_top/2.f;
 	
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_flow");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ingame/ingame_jack");

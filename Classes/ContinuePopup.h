@@ -55,7 +55,7 @@ private:
 		delegate_continue = d_continue;
 		
 		CCSprite* cpl_back = CCSprite::create("cpl_back.png");
-		cpl_back->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		cpl_back->setPosition(ccp(240,myDSH->ui_center_y));
 		addChild(cpl_back, kCPL_Z_back);
 		
 		CCSprite* n_end = CCSprite::create("cpl_end.png");
@@ -66,7 +66,7 @@ private:
 		end_item->setTag(kCPL_MT_end);
 		
 		end_menu = CCMenu::createWithItem(end_item);
-		end_menu->setPosition(ccp(158,91+DataStorageHub::sharedInstance()->ui_height_center_control));
+		end_menu->setPosition(ccp(158,myDSH->ui_center_y-60));
 		addChild(end_menu, kCPL_Z_menu);
 		
 		CCSprite* n_continue = CCSprite::create("cpl_continue.png");
@@ -77,7 +77,7 @@ private:
 		continue_item->setTag(kCPL_MT_continue);
 		
 		continue_menu = CCMenu::createWithItem(continue_item);
-		continue_menu->setPosition(ccp(330,91+DataStorageHub::sharedInstance()->ui_height_center_control));
+		continue_menu->setPosition(ccp(330,myDSH->ui_center_y-60));
 		addChild(continue_menu, kCPL_Z_menu);
 		
 		is_menu_enable = true;

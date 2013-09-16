@@ -482,7 +482,7 @@ string SilhouetteData::getScriptString(int level)
 	else if(myType == 7)
 	{
 		if(level == 1)			return_value = "내년 봄에는 나갈 수 있을까?";
-		else if(level == 2)		return_value = "너 뭐야! 왜 남의 병신을 기웃거리는거야?";
+		else if(level == 2)		return_value = "너 뭐야! 왜 남의 병실을 기웃거리는거야?";
 		else if(level == 3)		return_value = "이거 나 주는거야? 고마워, 잘 어울려?";
 	}
 	else if(myType == 8)

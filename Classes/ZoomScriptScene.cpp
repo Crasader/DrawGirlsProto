@@ -41,11 +41,8 @@ bool ZoomScript::init()
         return false;
     }
 	
-	
-	
 	game_node = CCNode::create();
 	game_node->setScale(1.5f);
-	game_node->setPosition(ccp(0,(160-(430-102+myDSH->upper_limit-myDSH->bottom_base/1.5f))*1.5f-73.f+myDSH->bottom_base));
 	addChild(game_node, kZS_Z_first_img);
 	
 	silType = mySD->getSilType();
@@ -93,13 +90,23 @@ bool ZoomScript::init()
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.5f;
 	
+	game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+	
 	return true;
 }
 
-void ZoomScript::onEnter()
+void ZoomScript::onEnterTransitionDidFinish()
 {
-	CCLayer::onEnter();
-	
+	CCMoveTo* move1 = CCMoveTo::create(1.3f, ccp(0,0));
+	CCDelayTime* delay1 = CCDelayTime::create(1.f);
+	CCMoveTo* move2 = CCMoveTo::create(1.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+	CCDelayTime* delay2 = CCDelayTime::create(1.f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::startScript));
+	game_node->runAction(CCSequence::create(move1, delay1, move2, delay2, t_call, NULL));
+}
+
+void ZoomScript::startScript()
+{
 	save_text = mySD->getScriptString(is_exchanged ? 2 : 1);
 	
 	basic_string<wchar_t> result;
@@ -152,7 +159,7 @@ void ZoomScript::menuAction(CCObject *sender)
 		{
 			showtime_back = CCSprite::create("showtime_back.png");
 			showtime_back->setScale(1.5f);
-			showtime_back->setPosition(ccp(240,160+myDSH->ui_height_center_control));
+			showtime_back->setPosition(ccp(240,myDSH->ui_center_y));
 			showtime_back->setOpacity(0);
 			addChild(showtime_back, kZS_Z_showtime_back);
 			

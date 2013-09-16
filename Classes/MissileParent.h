@@ -798,6 +798,18 @@ public:
 		}
 	}
 	
+	void subOneDie()
+	{
+		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
+		
+		if(subCumberArray->count() > 0)
+		{
+			JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->randomObject(), kElementCode_life, 999999.f);
+			addChild(t_jm);
+			t_jm->startMoving();
+		}
+	}
+	
 	void endIngActionAP()
 	{
 		saveAP = NULL;
@@ -891,7 +903,7 @@ public:
 	
 	void ingAP13()
 	{
-		myGD->communication("CP_checkingJackCrash");
+//		myGD->communication("CP_checkingJackCrash");
 	}
 	void actionAP13()
 	{
@@ -937,7 +949,7 @@ public:
 	
 	void ingAP17()
 	{
-		myGD->communication("CP_checkingJackCrash");
+//		myGD->communication("CP_checkingJackCrash");
 	}
 	void actionAP17()
 	{
@@ -2149,7 +2161,8 @@ private:
 		myGD->V_V["MP_deleteKeepAP35"] = std::bind(&MissileParent::deleteKeepAP35, this);
 		myGD->V_V["MP_stopAutoAttacker"] = std::bind(&MissileParent::stopAutoAttacker, this);
 		myGD->V_IIFCCP["MP_shootPetMissile"] = std::bind(&MissileParent::shootPetMissile, this, _1, _2, _3, _4);
-		myGD->V_V["MP_resetTickingTimeBomb"] = std::bind(&MissileParent::resetTickingTimeBomb, this);		
+		myGD->V_V["MP_resetTickingTimeBomb"] = std::bind(&MissileParent::resetTickingTimeBomb, this);
+		myGD->V_V["MP_subOneDie"] = std::bind(&MissileParent::subOneDie, this);
 	}
 };
 

@@ -91,12 +91,15 @@ private:
 		delegate_close = d_close;
 		
 		cdt_back = CCSprite::create("condition_box.png");
-		cdt_back->setPosition(ccp(350,245+DataStorageHub::sharedInstance()->ui_height_center_control));
+		if(GAMESCREEN_TYPE == LEFTUI)		cdt_back->setPosition(ccp(140,myDSH->ui_center_y));
+		else if(GAMESCREEN_TYPE == RIGHTUI)	cdt_back->setPosition(ccp(480-140,myDSH->ui_center_y));
+		else								cdt_back->setPosition(ccp(350,myDSH->ui_top-30));
 		addChild(cdt_back, kCDT_Z_back);
 		
-		content = CCLabelTTF::create(mySD->getConditionContent().c_str(), mySGD->getFont().c_str(), 15, CCSizeMake(170, 50), kCCTextAlignmentCenter);
+		content = CCLabelTTF::create(mySD->getConditionContent().c_str(), mySGD->getFont().c_str(), 14, CCSizeMake(150, 45), kCCTextAlignmentCenter);
+		content->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
 		content->setColor(ccBLACK);
-		content->setPosition(ccp(cdt_back->getContentSize().width/2.f,(cdt_back->getContentSize().height-30)/2.f));
+		content->setPosition(ccp(cdt_back->getContentSize().width/2.f,cdt_back->getContentSize().height/2.f));
 		cdt_back->addChild(content, kCDT_Z_content);
 		
 		startHiding();

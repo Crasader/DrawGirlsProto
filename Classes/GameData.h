@@ -19,9 +19,26 @@ using namespace cocos2d;
 using namespace std;
 
 #define pixelSize 2
-#define MY_SCALE_RATE	1.5
 
 #define myGD GameData::sharedGameData()
+
+#define BOARDER_VALUE		10.f
+
+#define FULLSCREEN_SCALE	1.5f
+#define LRUI_SCALE		(215-BOARDER_VALUE)/160.f
+
+#define LEFTUI		-1
+#define RIGHTUI		1
+#define FULLUI		0
+
+#define GAMESCREEN_TYPE		LEFTUI
+
+#if GAMESCREEN_TYPE != FULLUI
+#define MY_SCALE	LRUI_SCALE
+#else
+#define MY_SCALE	FULLSCREEN_SCALE
+#endif
+
 
 float deg2Rad(float x) ;
 float rad2Deg(float x);
@@ -363,6 +380,9 @@ typedef void (CCObject::*SEL_CallFuncFBCCp)(float, bool, CCPoint);
 
 typedef void (CCObject::*SEL_CallFuncTDTD)(CCObject*, SEL_CallFunc, CCObject*, SEL_CallFunc);
 #define callfuncTDTD_selector(_SELECTOR) (SEL_CallFuncTDTD)(&_SELECTOR)
+			
+typedef void (CCObject::*SEL_CallFuncII)(int, int);
+#define callfuncII_selector(_SELECTOR) (SEL_CallFuncII)(&_SELECTOR)
 
 #include <functional>
 #include <map>

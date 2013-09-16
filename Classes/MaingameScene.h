@@ -39,8 +39,8 @@ enum Mainzorder{
 	conditionLabelZorder,
 	goldZorder,
 	clearshowtimeZorder,
-	mControlZorder,
 	myUIZorder,
+	mControlZorder,
 	particleZorder,
 	shutterZorder
 };
@@ -166,7 +166,7 @@ private:
 		AudioEngine::sharedInstance()->playEffect("sound_gamestart.mp3", false);
 		countingLabel = CCSprite::createWithTexture(keepTexture->getTexture(), CCRectMake(0, 0, 200, 80));
 		countingLabel->setScale(0.5);
-		countingLabel->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
 		addChild(countingLabel, countingLabelZorder);
 		
 		myGIM->startItemSetting();
@@ -386,7 +386,8 @@ private:
 	{
 		if(mySGD->getIsCleared())
 		{
-			CCDirector::sharedDirector()->replaceScene(ZoomScript::scene());
+			CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
+			CCDirector::sharedDirector()->replaceScene(t_trans);
 		}
 		else
 		{
@@ -399,11 +400,14 @@ private:
 	
 	void moveGamePosition(CCPoint t_p)
 	{
-		if(t_p.y < 70+DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f)
-			t_p.y = 70+DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f;
-		else if(t_p.y > 430-65+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f)
-			t_p.y = 430-65+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f;
-		game_node->setPosition(ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-t_p.y)*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base-DataStorageHub::sharedInstance()->ui_jack_center_control));
+		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float y_value = -t_p.y*MY_SCALE+480.f*frame_size.height/frame_size.width/2.f;
+		if(y_value > 60)															y_value = 60;
+		else if(y_value < -490*MY_SCALE+480*frame_size.height/frame_size.width)		y_value = -490*MY_SCALE+480*frame_size.height/frame_size.width;
+		
+		if(GAMESCREEN_TYPE == FULLUI)				game_node->setPosition(ccp(0,y_value));
+		else if(GAMESCREEN_TYPE == LEFTUI)			game_node->setPosition(ccp(50+BOARDER_VALUE,y_value));
+		else if(GAMESCREEN_TYPE == RIGHTUI)			game_node->setPosition(ccp(BOARDER_VALUE,y_value));
 	}
 	
 	void goldGettingEffect(CCPoint t_p, int t_i)

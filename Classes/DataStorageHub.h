@@ -58,7 +58,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_hasGottenPet_int1,
 	kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2,
 	kDSH_Key_checkedNewControlJoystick,
-	kDSH_Key_theme_int1_clearednumber
+	kDSH_Key_theme_int1_clearednumber,
+	kDSH_Key_haveItemCnt_int1
 }DSH_Key;
 
 #define myDSH DataStorageHub::sharedInstance()
@@ -165,20 +166,6 @@ public:
 		myDefault->setKeyValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), val1);
 	}
 	
-//	float device_rate;
-//	CCSize device_margine;
-//	
-//	float getDeviceRate()
-//	{
-//		if(is_notRetinaIpad)			return device_rate*2.f;
-//		else							return device_rate;
-//	}
-//	
-//	void setIsNotRetinaIpad(bool t_b)
-//	{
-//		is_notRetinaIpad = t_b;
-//	}
-	
 	void setGoldGetRate(float t_rate)
 	{
 		gold_get_rate = t_rate;
@@ -189,11 +176,9 @@ public:
 		return gold_get_rate;
 	}
 	
-	float upper_limit;
-	float bottom_base;
-	float ui_top_control;
-	float ui_height_center_control;
-	float ui_jack_center_control;
+	float ui_top;
+	float ui_center_y;
+	float ui_bottom;
 	
 private:
 	SaveData* myDefault;
@@ -246,6 +231,7 @@ private:
 		else if(t_name == kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2)	return_value = "hcmc%db%d";
 		else if(t_name == kDSH_Key_checkedNewControlJoystick)					return_value = "cncj";
 		else if(t_name == kDSH_Key_theme_int1_clearednumber)			return_value = "theme%dclrn";
+		else if(t_name == kDSH_Key_haveItemCnt_int1)					return_value = "hic%d";
 		
 		return return_value;
 	}

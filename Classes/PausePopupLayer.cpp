@@ -46,10 +46,12 @@ void PausePopupLayer::myInit(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_
 	delegate_normal = d_button;
 	delegate_fast = d_joystick;
 	
+	touched_number = 0;
+	
 	setTouchEnabled(true);
 	
 	main_case = CCSprite::create("pause_popup_case.png");
-	main_case->setPosition(ccp(40,280+DataStorageHub::sharedInstance()->ui_top_control));
+	main_case->setPosition(ccp(40,myDSH->ui_top-25));
 	addChild(main_case);
 	
 	CCMenuItem* home_item = CCMenuItemImage::create("pause_popup_home_normal.png", "pause_popup_home_selected.png", this, menu_selector(PausePopupLayer::menuAction));

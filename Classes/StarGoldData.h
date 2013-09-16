@@ -17,6 +17,7 @@
 #include "JsonBox.h"
 #include "EnumDefine.h"
 #include "SilhouetteData.h"
+#include <deque>
 
 using namespace cocos2d;
 using namespace std;
@@ -126,6 +127,12 @@ public:
 	
 	void gameClear(int t_star, float t_score, float t_percentage, int t_game_time)
 	{
+		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		{
+			before_use_item[i] = is_using_item[i];
+			is_using_item[i] = false;
+		}
+		
 		is_cleared = true;
 		stage_star = t_star;
 		percentage = t_percentage;
@@ -136,6 +143,12 @@ public:
 	
 	void gameOver(float t_score, float t_percentage, int t_game_time)
 	{
+		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		{
+			before_use_item[i] = is_using_item[i];
+			is_using_item[i] = false;
+		}
+		
 		score = t_score;
 		percentage = t_percentage;
 		game_time = t_game_time;
@@ -362,6 +375,20 @@ public:
 	
 	FailCode fail_code;
 	
+	bool isBeforeUseItem(ITEM_CODE t_i)
+	{
+		return before_use_item[t_i];
+	}
+	bool isUsingItem(ITEM_CODE t_i)
+	{
+		return is_using_item[t_i];
+	}
+	
+	void setIsUsingItem(ITEM_CODE t_i, bool t_b)
+	{
+		is_using_item[t_i] = t_b;
+	}
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
@@ -373,6 +400,9 @@ private:
 	int stage_star;
 	int keep_gold;
 	int game_time;
+	
+	deque<bool> before_use_item;
+	deque<bool> is_using_item;
 	
 	
 	bool is_tutorial_cleared;
@@ -468,6 +498,11 @@ private:
 		is_after_scene_chapter = false;
 		resetLabels();
 		
+		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		{
+			before_use_item.push_back(false);
+			is_using_item.push_back(false);
+		}
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating,10,5) > 0 && !myDSH->getBoolForKey(kDSH_Key_isOpendChapter_int1, 21))
 			myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, 21, true);
