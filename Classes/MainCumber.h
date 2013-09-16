@@ -43,9 +43,9 @@ public:
 	virtual void cumberImgStartRotating(float speed);
 	virtual void checkingJackCrash();
 	virtual void startDamageReaction(float userdata);
-	virtual void onStartGame(){}
+	virtual void onStartGame(){startMoving();}
 //	virtual void onEndGame(){}
-	virtual void onPatternEnd(){}
+	virtual void onPatternEnd(){startMoving();}
 	virtual void startMoving();
 	virtual void stopMoving();
 	virtual void setCumberState(int t_cs);

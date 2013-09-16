@@ -363,13 +363,13 @@ public:
 	
 	void startAction()
 	{
-		CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
 		CCHide* t_hide = CCHide::create();
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
 		CCShow* t_show = CCShow::create();
 		CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
 		CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
-		CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Warning::selfRemove));
 		
 		runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
@@ -394,7 +394,7 @@ private:
 		{
 			setColor(ccRED);
 		}
-		setPosition(ccp(640,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		setPosition(ccp(640,myDSH->ui_center_y));
 	}
 };
 
@@ -411,13 +411,13 @@ public:
 	
 	void startAction()
 	{
-		CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
 		CCHide* t_hide = CCHide::create();
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
 		CCShow* t_show = CCShow::create();
 		CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
 		CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
-		CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TakeCoin::selfRemove));
 		
 		runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
@@ -434,7 +434,7 @@ private:
 	{
 		initWithFile("show_take_change.png");
 		
-		setPosition(ccp(640,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		setPosition(ccp(640,myDSH->ui_center_y));
 	}
 };
 
@@ -451,13 +451,13 @@ public:
 	
 	void startAction()
 	{
-		CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
 		CCHide* t_hide = CCHide::create();
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
 		CCShow* t_show = CCShow::create();
 		CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
 		CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
-		CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ChangeCard::selfRemove));
 		
 		runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
@@ -474,7 +474,7 @@ private:
 	{
 		initWithFile("card_change.png");
 		
-		setPosition(ccp(640,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+		setPosition(ccp(640,myDSH->ui_center_y));
 	}
 };
 
@@ -557,7 +557,11 @@ public:
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
 			
-			if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per)
+			int item_value = 0;
+			if(mySGD->isUsingItem(kIC_smallArea))
+				item_value = mySD->getSmallAreaItemOption();
+			
+			if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per-item_value/100.f)
 				takeBigArea();
 			
 			if(t_p >= t_beforePercentage + JM_CONDITION)
@@ -641,7 +645,12 @@ public:
 		
 		percentageLabel->setString(CCString::createWithFormat("%.1f", floorf(t_p*10000.f)/10000.f*100.f)->getCString());
 		
-		if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && atof(percentageLabel->getString()) >= clr_cdt_per*100.f && atof(percentageLabel->getString()) <= (clr_cdt_per+clr_cdt_range)*100.f)
+		int item_value = 0;
+		
+		if(mySGD->isUsingItem(kIC_widePerfect))
+			item_value = mySD->getWidePerfectItemOption();
+		
+		if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && atof(percentageLabel->getString()) >= (clr_cdt_per-item_value/200.f)*100.f && atof(percentageLabel->getString()) <= (clr_cdt_per+clr_cdt_range+item_value/200.f)*100.f)
 			conditionClear();
 		
 		m_areaGage->setPercentage(t_p);
@@ -669,7 +678,7 @@ public:
 				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 				result_sprite = CCSprite::create("game_clear.png");
 				result_sprite->setRotation(-25);
-				result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(result_sprite);
 				
 				int star_cnt = 1;
@@ -693,7 +702,7 @@ public:
 				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 				result_sprite = CCSprite::create("game_fail.png");
 				result_sprite->setRotation(-25);
-				result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(result_sprite);
 				endGame();
 			}
@@ -707,7 +716,7 @@ public:
 		((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
 		
 		CCSprite* condition_clear = CCSprite::create("condition_clear.png");
-		condition_clear->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+		condition_clear->setPosition(getChildByTag(kCT_UI_clrCdtIcon)->getPosition());
 		addChild(condition_clear);
 	}
 	
@@ -716,7 +725,7 @@ public:
 		((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
 		
 		CCSprite* condition_fail = CCSprite::create("condition_fail.png");
-		condition_fail->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+		condition_fail->setPosition(getChildByTag(kCT_UI_clrCdtIcon)->getPosition());
 		addChild(condition_fail);
 	}
 	
@@ -724,7 +733,7 @@ public:
 	{
 		if(clr_cdt_type == kCLEAR_sequenceChange && !isGameover)
 		{
-			if(t_coin_number != ing_cdt_cnt)
+			if(!mySGD->isUsingItem(kIC_randomChange) && t_coin_number != ing_cdt_cnt)
 			{
 				conditionFail();
 				
@@ -737,7 +746,7 @@ public:
 				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 				result_sprite = CCSprite::create("game_fail.png");
 				result_sprite->setRotation(-25);
-				result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(result_sprite);
 				endGame();
 				return;
@@ -745,12 +754,20 @@ public:
 			else
 			{
 				ing_cdt_cnt++;
-				removeChildByTag(kCT_UI_clrCdtLabel);
-				if(ing_cdt_cnt <= 6)
+				
+				if(mySGD->isUsingItem(kIC_randomChange))
 				{
-					CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
-					clr_cdt_img->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
-					addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
+					((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString());
+				}
+				else
+				{
+					removeChildByTag(kCT_UI_clrCdtLabel);
+					if(ing_cdt_cnt <= 6)
+					{
+						CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+						clr_cdt_img->setPosition(ccpAdd(getChildByTag(kCT_UI_clrCdtIcon)->getPosition(), ccp(0,-5)));
+						addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
+					}
 				}
 			}
 		}
@@ -762,7 +779,9 @@ public:
 		exchange_dic->removeObjectForKey(t_coin_number);
 		
 		CCSprite* new_coin_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", t_coin_number)->getCString());
-		new_coin_spr->setPosition(ccp(260-32*3-16+t_coin_number*32,25));
+		if(GAMESCREEN_TYPE == LEFTUI)			new_coin_spr->setPosition(ccp(260-32*3-16+t_coin_number*32,25));
+		else if(GAMESCREEN_TYPE == RIGHTUI)		new_coin_spr->setPosition(ccp(220-32*3-16+t_coin_number*32,25));
+		else									new_coin_spr->setPosition(ccp(260-32*3-16+t_coin_number*32,25));
 		addChild(new_coin_spr);
 		
 		exchange_dic->setObject(new_coin_spr, t_coin_number);
@@ -778,6 +797,7 @@ public:
 			is_exchanged = true;
 			myGD->communication("Main_startExchange");
 			myGD->communication("Main_showChangeCard");
+			myGD->communication("Jack_positionRefresh");
 		}
 	}
 	
@@ -806,7 +826,10 @@ public:
 	void setMaxBossLife(float t_life)
 	{
 		maxBossLife = t_life;
-		bossLife = maxBossLife;
+		if(mySGD->isUsingItem(kIC_bossLittleEnergy))
+			bossLife = maxBossLife*(100.f - mySD->getBossLittleEnergyItemOption())/100.f;
+		else
+			bossLife = maxBossLife;
 	}
 	
 	void setClearPercentage(float t_p)
@@ -816,7 +839,11 @@ public:
 	
 	void startCounting()
 	{
-		countingCnt = 0;
+		schedule(schedule_selector(PlayUI::counting), 1.f);
+	}
+	
+	void resumeCounting()
+	{
 		schedule(schedule_selector(PlayUI::counting), 1.f);
 	}
 	
@@ -881,8 +908,16 @@ public:
 		if(jack_life > 0)
 		{
 			countingCnt -= 30;
-			if(countingCnt < 0)
-				countingCnt = 0;
+			if(mySGD->isUsingItem(kIC_longTime))
+			{
+				if(countingCnt < -mySD->getLongTimeItemOption())
+					countingCnt = -mySD->getLongTimeItemOption();
+			}
+			else
+			{
+				if(countingCnt < 0)
+					countingCnt = 0;
+			}
 			countingLabel->setString(CCString::createWithFormat("%d", 150-countingCnt)->getCString());
 			
 			jack_life--;
@@ -899,8 +934,17 @@ public:
 	void takeAddTimeItem()
 	{
 		countingCnt -= 10;
-		if(countingCnt < 0)
-			countingCnt = 0;
+		
+		if(mySGD->isUsingItem(kIC_longTime))
+		{
+			if(countingCnt < -mySD->getLongTimeItemOption())
+				countingCnt = -mySD->getLongTimeItemOption();
+		}
+		else
+		{
+			if(countingCnt < 0)
+				countingCnt = 0;
+		}
 		countingLabel->setString(CCString::createWithFormat("%d", 150-countingCnt)->getCString());
 	}
 	
@@ -1013,7 +1057,7 @@ private:
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			result_sprite = CCSprite::create("game_timeover.png");
 			result_sprite->setRotation(-25);
-			result_sprite->setPosition(ccp(240,160+DataStorageHub::sharedInstance()->ui_height_center_control));
+			result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 			addChild(result_sprite);
 			
 			endGame();
@@ -1055,7 +1099,12 @@ private:
 			return;
 		
 		ing_cdt_cnt++;
-		((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		
+		int item_value = 0;
+		if(mySGD->isUsingItem(kIC_smallArea))
+			item_value = mySD->getSmallAreaItemOption();
+		
+		((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
 		if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 	}
 	
@@ -1094,8 +1143,13 @@ private:
 		clearPercentage = 1;
 		
 		ui_case = CCSprite::create("ui_back.png");
-		ui_case->setPosition(ccp(40,160));
-		ui_case->setOpacity(0);
+		if(GAMESCREEN_TYPE == LEFTUI)			ui_case->setPosition(ccp(25,myDSH->ui_center_y));
+		else if(GAMESCREEN_TYPE == RIGHTUI)		ui_case->setPosition(ccp(480-25,myDSH->ui_center_y));
+		else
+		{
+			ui_case->setPosition(ccp(25,myDSH->ui_center_y));
+			ui_case->setOpacity(0);
+		}
 		addChild(ui_case);
 		
 		gold_label = GoldLabel::create();
@@ -1116,7 +1170,10 @@ private:
 		
 		percentageLabel = CCLabelBMFont::create("0", "etc_font.fnt");
 		percentageLabel->setAnchorPoint(ccp(1.0, 0.5));
-		percentageLabel->setPosition(ccp(470,300+DataStorageHub::sharedInstance()->ui_top_control));
+		if(GAMESCREEN_TYPE == LEFTUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
+		else if(GAMESCREEN_TYPE == RIGHTUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
+		else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-20));
+		
 		addChild(percentageLabel);
 		
 		
@@ -1128,9 +1185,16 @@ private:
 		sand_clock->setPosition(ccp(147,463));
 		addChild(sand_clock);
 		
-		countingLabel = CCLabelBMFont::create("150", "etc_font.fnt");
+		if(mySGD->isUsingItem(kIC_longTime))
+			countingCnt = -mySD->getLongTimeItemOption();
+		else
+			countingCnt = 0;
+		
+		countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", 150-countingCnt)->getCString(), "etc_font.fnt");
 		countingLabel->setScale(1.3);
-		countingLabel->setPosition(ccp(240,300+DataStorageHub::sharedInstance()->ui_top_control));
+		if(GAMESCREEN_TYPE == LEFTUI)			countingLabel->setPosition(ccp((480-50-BOARDER_VALUE*2)/2.f+50+BOARDER_VALUE,myDSH->ui_top-20));
+		else if(GAMESCREEN_TYPE == RIGHTUI)		countingLabel->setPosition(ccp((480-50-BOARDER_VALUE*2)/2.f+BOARDER_VALUE,myDSH->ui_top-20));
+		else									countingLabel->setPosition(ccp(240,myDSH->ui_top-20));
 		addChild(countingLabel);
 		
 		isFirst = true;
@@ -1150,7 +1214,9 @@ private:
 		home_item->setTag(kMenuTagUI_home);
 		
 		CCMenu* home_menu = CCMenu::createWithItem(home_item);
-		home_menu->setPosition(ccp(40,280+DataStorageHub::sharedInstance()->ui_top_control));
+		if(GAMESCREEN_TYPE == LEFTUI)			home_menu->setPosition(ccp(25,myDSH->ui_top-25));
+		else if(GAMESCREEN_TYPE == RIGHTUI)		home_menu->setPosition(ccp(480-25,myDSH->ui_top-25));
+		else									home_menu->setPosition(ccp(25,myDSH->ui_top-25));
 		addChild(home_menu);
 		
 		
@@ -1160,7 +1226,9 @@ private:
 		for(int i=0;i<jack_life;i++)
 		{
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
-			jack_img->setPosition(ccp(100+i*20, 300+DataStorageHub::sharedInstance()->ui_top_control));
+			if(GAMESCREEN_TYPE == LEFTUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
+			else if(GAMESCREEN_TYPE == RIGHTUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
+			else									jack_img->setPosition(ccp(100+i*20, myDSH->ui_top-20));
 			addChild(jack_img);
 			
 			jack_array->addObject(jack_img);
@@ -1173,7 +1241,9 @@ private:
 		for(int i=1;i<=6;i++)
 		{
 			CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-			exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
+			if(GAMESCREEN_TYPE == LEFTUI)			exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
+			else if(GAMESCREEN_TYPE == RIGHTUI)		exchange_spr->setPosition(ccp(220-32*3-16+i*32,25));
+			else									exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
 			addChild(exchange_spr);
 			
 			exchange_dic->setObject(exchange_spr, i);
@@ -1181,6 +1251,12 @@ private:
 		
 		is_show_condition = false;
 		clr_cdt_type = mySD->getClearCondition();
+		
+		CCPoint icon_menu_position;
+		if(GAMESCREEN_TYPE == LEFTUI)			icon_menu_position = ccp(25,myDSH->ui_center_y+43);
+		else if(GAMESCREEN_TYPE == RIGHTUI)		icon_menu_position = ccp(480-25,myDSH->ui_center_y+43);
+		else									icon_menu_position = ccp(390,myDSH->ui_top-25);
+		
 		if(clr_cdt_type == kCLEAR_bossLifeZero)
 		{
 			is_cleared_cdt = false;
@@ -1193,12 +1269,16 @@ private:
 			icon_item->setTag(kMenuTagUI_condition);
 			
 			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
-			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			icon_menu->setPosition(icon_menu_position);
 			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 			
+			int start_percentage = 100;
 			
-			CCLabelTTF* clr_cdt_label = CCLabelTTF::create("100%", mySGD->getFont().c_str(), 12);
-			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			if(mySGD->isUsingItem(kIC_bossLittleEnergy))
+				start_percentage -= mySD->getBossLittleEnergyItemOption();
+			
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d%%", start_percentage)->getCString(), mySGD->getFont().c_str(), 12);
+			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
 		}
 		else if(clr_cdt_type == kCLEAR_subCumberCatch)
@@ -1213,14 +1293,14 @@ private:
 			icon_item->setTag(kMenuTagUI_condition);
 			
 			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
-			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			icon_menu->setPosition(icon_menu_position);
 			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 			
 			clr_cdt_cnt = mySD->getClearConditionCatchSubCumber();
 			ing_cdt_cnt = 0;
 			
 			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
 		}
 		else if(clr_cdt_type == kCLEAR_bigArea)
@@ -1235,15 +1315,19 @@ private:
 			icon_item->setTag(kMenuTagUI_condition);
 			
 			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
-			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			icon_menu->setPosition(icon_menu_position);
 			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 			
 			clr_cdt_per = mySD->getClearConditionBigAreaPer();
 			clr_cdt_cnt = mySD->getClearConditionBigAreaCnt();
 			ing_cdt_cnt = 0;
 			
-			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			int item_value = 0;
+			if(mySGD->isUsingItem(kIC_smallArea))
+				item_value = mySD->getSmallAreaItemOption();
+			
+			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
+			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
 		}
 		else if(clr_cdt_type == kCLEAR_itemCollect)
@@ -1258,14 +1342,14 @@ private:
 			icon_item->setTag(kMenuTagUI_condition);
 			
 			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
-			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			icon_menu->setPosition(icon_menu_position);
 			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 			
 			clr_cdt_cnt = mySD->getClearConditionItemCollect();
 			ing_cdt_cnt = 0;
 			
 			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
 		}
 		else if(clr_cdt_type == kCLEAR_perfect)
@@ -1280,14 +1364,14 @@ private:
 			icon_item->setTag(kMenuTagUI_condition);
 			
 			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
-			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			icon_menu->setPosition(icon_menu_position);
 			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 			
 			clr_cdt_per = mySD->getClearConditionPerfectBase();
 			clr_cdt_range = mySD->getClearConditionPerfectRange();
 			
 			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", clr_cdt_per*100.f)->getCString(), mySGD->getFont().c_str(), 12);
-			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
 		}
 		else if(clr_cdt_type == kCLEAR_sequenceChange)
@@ -1302,14 +1386,23 @@ private:
 			icon_item->setTag(kMenuTagUI_condition);
 			
 			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
-			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			icon_menu->setPosition(icon_menu_position);
 			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 			
 			ing_cdt_cnt = 1;
 			
-			CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
-			clr_cdt_img->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
-			addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
+			if(mySGD->isUsingItem(kIC_randomChange))
+			{
+				CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), mySGD->getFont().c_str(), 12);
+				clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
+				addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+			}
+			else
+			{
+				CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+				clr_cdt_img->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
+				addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
+			}
 		}
 		else if(clr_cdt_type == kCLEAR_timeLimit)
 		{
@@ -1323,13 +1416,13 @@ private:
 			icon_item->setTag(kMenuTagUI_condition);
 			
 			CCMenu* icon_menu = CCMenu::createWithItem(icon_item);
-			icon_menu->setPosition(ccp(390,290+DataStorageHub::sharedInstance()->ui_top_control));
+			icon_menu->setPosition(icon_menu_position);
 			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 			
 			ing_cdt_cnt = mySD->getClearConditionTimeLimit();
 			
 			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			clr_cdt_label->setPosition(ccp(390,285+DataStorageHub::sharedInstance()->ui_top_control));
+			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
 		}
 		else if(clr_cdt_type == kCLEAR_default)
@@ -1346,6 +1439,8 @@ private:
 		myGD->V_V["UI_catchSubCumber"] = std::bind(&PlayUI::catchSubCumber, this);
 		myGD->V_V["UI_takeItemCollect"] = std::bind(&PlayUI::takeItemCollect, this);
 		myGD->V_V["UI_takeAddTimeItem"] = std::bind(&PlayUI::takeAddTimeItem, this);
+		myGD->V_V["UI_stopCounting"] = std::bind(&PlayUI::stopCounting, this);
+		myGD->V_V["UI_resumeCounting"] = std::bind(&PlayUI::resumeCounting, this);
 	}
 	
 	void continueAction()
@@ -1354,7 +1449,9 @@ private:
 		for(int i=0;i<jack_life;i++)
 		{
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
-			jack_img->setPosition(ccp(100+i*20, 300+DataStorageHub::sharedInstance()->ui_top_control));
+			if(GAMESCREEN_TYPE == LEFTUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
+			else if(GAMESCREEN_TYPE == RIGHTUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
+			else									jack_img->setPosition(ccp(100+i*20,myDSH->ui_top-20));
 			addChild(jack_img);
 			
 			jack_array->addObject(jack_img);

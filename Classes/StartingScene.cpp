@@ -138,66 +138,66 @@ void StartingScene::menuAction(CCObject* pSender)
 	
 	int tag = ((CCNode*)pSender)->getTag();
 	
-	if(tag == kMT_SS_summer)
-	{
-		is_menu_enable = false;
-		
-		mySD->setSilType(1);
-		
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-		
-		mySGD->setGameStart();
-		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-	}
-	else if(tag == kMT_SS_christmas)
-	{
-		is_menu_enable = false;
-		
-		mySD->setSilType(2);
-		
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-		
-		mySGD->setGameStart();
-		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-	}
-	else if(tag == kMT_SS_hospital)
-	{
-		is_menu_enable = false;
-		
-		mySD->setSilType(3);
-		
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-		
-		mySGD->setGameStart();
-		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-	}
-	else if(tag == kMT_SS_sports)
-	{
-		is_menu_enable = false;
-		
-		mySD->setSilType(4);
-		
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-		
-		mySGD->setGameStart();
-		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-	}
-	else if(tag == kMT_SS_idol)
-	{
-		is_menu_enable = false;
-		
-		mySD->setSilType(5);
-		
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-		
-		mySGD->setGameStart();
-		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-	}
+//	if(tag == kMT_SS_summer)
+//	{
+//		is_menu_enable = false;
+//		
+//		mySD->setSilType(1);
+//		
+//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+//		
+//		mySGD->setGameStart();
+//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+//	}
+//	else if(tag == kMT_SS_christmas)
+//	{
+//		is_menu_enable = false;
+//		
+//		mySD->setSilType(2);
+//		
+//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+//		
+//		mySGD->setGameStart();
+//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+//	}
+//	else if(tag == kMT_SS_hospital)
+//	{
+//		is_menu_enable = false;
+//		
+//		mySD->setSilType(3);
+//		
+//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+//		
+//		mySGD->setGameStart();
+//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+//	}
+//	else if(tag == kMT_SS_sports)
+//	{
+//		is_menu_enable = false;
+//		
+//		mySD->setSilType(4);
+//		
+//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+//		
+//		mySGD->setGameStart();
+//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+//	}
+//	else if(tag == kMT_SS_idol)
+//	{
+//		is_menu_enable = false;
+//		
+//		mySD->setSilType(5);
+//		
+//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+//		
+//		mySGD->setGameStart();
+//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+//	}
 }
 
 void StartingScene::alertAction(int t1, int t2)

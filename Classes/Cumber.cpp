@@ -122,8 +122,8 @@ void CumberParent::decreaseLifeForSubCumber(CCObject* target, float t_damage, fl
 
 void CumberParent::createAllCumberSheild()
 {
-	for(auto mainCumber : mainCumbers)
-		mainCumber->createSheild();
+//	for(auto mainCumber : mainCumbers)
+//		mainCumber->createSheild();
 	for(int i = 0;i<subCumberArray->count();i++)
 	{
 		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
@@ -202,7 +202,15 @@ void CumberParent::mainCumberInvisibleOn()
 	mainCumber->startInvisible();
 }
 
-
+void CumberParent::stopSubCumbers()
+{
+	int loop_cnt = subCumberArray->count();
+	for(int i=0;i<loop_cnt;i++)
+	{
+		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
+		t_sc->stopMoving();
+	}
+}
 
 void CumberParent::movingSubCumbers()
 {
@@ -348,6 +356,9 @@ void CumberParent::createSubCumber(IntPoint s_p)
 void CumberParent::initSubCumber()
 {
 	//		int create_cnt = SelectedMapData::sharedInstance()->getSubCumberCnt();
+	if(mySGD->isUsingItem(kIC_subNothing))
+		return;
+	
 	if(mySD->getClearCondition() != kCLEAR_subCumberCatch)
 	{
 		int create_cnt = rand()%2+1;
@@ -435,15 +446,16 @@ void CumberParent::myInit()
 	myGD->V_I["CP_mainCumberShowEmotion"] = std::bind(&CumberParent::mainCumberShowEmotion, this, _1);
 	myGD->V_V["CP_startDieAnimation"] = std::bind(&CumberParent::startDieAnimation, this);
 	myGD->V_F["CP_changeMaxSize"] = std::bind(&CumberParent::changeMaxSize, this, _1);
-	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
+//	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
 	myGD->V_V["CP_onStartGame"] = std::bind(&CumberParent::onStartGame, this);
 	myGD->V_V["CP_onPatternEnd"] = std::bind(&CumberParent::onPatternEnd, this);
+	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
 	
 	
 	void onStartGame();
 	void onPatternEnd();
-//	auto mainCumber = MainCumber::create();
-	auto mainCumber = MetalSnake::create();
+	auto mainCumber = MainCumber::create();
+//	auto mainCumber = MetalSnake::create();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	

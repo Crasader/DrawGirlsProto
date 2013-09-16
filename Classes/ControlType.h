@@ -284,7 +284,9 @@ private:
 		addChild(control_ball);
 		
 		draw_button = CCSprite::create("ui_draw.png");
-		draw_button->setPosition(ccp(30,30));
+		if(GAMESCREEN_TYPE == RIGHTUI)		draw_button->setPosition(ccp(480-25,25));
+		else if(GAMESCREEN_TYPE == LEFTUI)	draw_button->setPosition(ccp(25,25));
+		else								draw_button->setPosition(ccp(25,25));
 		addChild(draw_button);
 		
 		mType = kCT_Type_Joystick_button;

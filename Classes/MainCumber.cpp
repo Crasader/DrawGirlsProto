@@ -506,6 +506,7 @@ void MainCumber::stopSpringCumber()
 
 void MainCumber::startMoving()
 {
+	unschedule(schedule_selector(MainCumber::checkingJackCrash));
 	if(!isGameover)
 	{
 		myState = cumberStateMoving;
@@ -517,6 +518,7 @@ void MainCumber::stopMoving()
 {
 	unschedule(schedule_selector(MainCumber::moving));
 	myState = cumberStateStop;
+	schedule(schedule_selector(MainCumber::checkingJackCrash));
 }
 void MainCumber::setCumberState(int t_cs)
 {

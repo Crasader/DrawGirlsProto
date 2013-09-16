@@ -892,7 +892,8 @@ void Jack::moveTest()
 		//			direction = afterDirection = directionStop;
 		stopMove();
 		setPosition(ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1));
-		myGD->mapState[afterPoint.x][afterPoint.y] = mapEmpty;
+		if(myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
+			myGD->mapState[afterPoint.x][afterPoint.y] = mapEmpty;
 		setJackState(jackStateBackTracking);
 		if(!btPoint.isNull())
 		{

@@ -24,7 +24,7 @@ public:
     static cocos2d::CCScene* scene();
     CREATE_FUNC(ZoomScript);
 	
-	virtual void onEnter();
+	virtual void onEnterTransitionDidFinish();
 	
 private:
 	CCNode* game_node;
@@ -53,6 +53,8 @@ private:
 	CCSize screen_size;
 	
 	void menuAction(CCObject* sender);
+	
+	void startScript();
 	
 	SEL_CallFunc delegate_typing_after;
 	void typingAnimation();

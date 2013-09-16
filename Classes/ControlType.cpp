@@ -538,7 +538,25 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
 		convertedLocation = convertToNodeSpace(convertedLocation);
 	
-		if(convertedLocation.x < 100)
+		bool is_button_x;
+		
+		if(GAMESCREEN_TYPE == RIGHTUI)
+		{
+			if(convertedLocation.x > 480-100)
+				is_button_x = true;
+			else
+				is_button_x = false;
+		}
+		else
+		{
+			if(convertedLocation.x < 100)
+				is_button_x = true;
+			else
+				is_button_x = false;
+		}
+		
+		
+		if(is_button_x)
 		{
 			// button or ui
 			if(!button_touch && convertedLocation.y < 100)
@@ -582,14 +600,29 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 			{
 				joystick_touch = touch;
 				CCPoint after_circle_position = convertedLocation;
-				if(after_circle_position.x < 90)
-					after_circle_position.x = 90;
-				else if(after_circle_position.x > 470)
-					after_circle_position.x = 470;
-				if(after_circle_position.y < 10)
-					after_circle_position.y = 10;
-				else if(after_circle_position.y > 310)
-					after_circle_position.y = 310;
+				
+				if(GAMESCREEN_TYPE != RIGHTUI)
+				{
+					if(after_circle_position.x < 90)
+						after_circle_position.x = 90;
+					else if(after_circle_position.x > 470)
+						after_circle_position.x = 470;
+					if(after_circle_position.y < 10)
+						after_circle_position.y = 10;
+					else if(after_circle_position.y > 310)
+						after_circle_position.y = 310;
+				}
+				else
+				{
+					if(after_circle_position.x < 10)
+						after_circle_position.x = 10;
+					else if(after_circle_position.x > 390)
+						after_circle_position.x = 390;
+					if(after_circle_position.y < 10)
+						after_circle_position.y = 10;
+					else if(after_circle_position.y > 310)
+						after_circle_position.y = 310;
+				}
 				
 				control_circle->setPosition(after_circle_position);
 				control_circle->setVisible(true);
@@ -654,14 +687,28 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 				
 				after_circle_position = ccpAdd(after_circle_position, control_circle->getPosition());
 				
-				if(after_circle_position.x < 90)
-					after_circle_position.x = 90;
-				else if(after_circle_position.x > 470)
-					after_circle_position.x = 470;
-				if(after_circle_position.y < 10)
-					after_circle_position.y = 10;
-				else if(after_circle_position.y > 310)
-					after_circle_position.y = 310;
+				if(GAMESCREEN_TYPE != RIGHTUI)
+				{
+					if(after_circle_position.x < 90)
+						after_circle_position.x = 90;
+					else if(after_circle_position.x > 470)
+						after_circle_position.x = 470;
+					if(after_circle_position.y < 10)
+						after_circle_position.y = 10;
+					else if(after_circle_position.y > 310)
+						after_circle_position.y = 310;
+				}
+				else
+				{
+					if(after_circle_position.x < 10)
+						after_circle_position.x = 10;
+					else if(after_circle_position.x > 390)
+						after_circle_position.x = 390;
+					if(after_circle_position.y < 10)
+						after_circle_position.y = 10;
+					else if(after_circle_position.y > 310)
+						after_circle_position.y = 310;
+				}
 				
 				control_circle->setPosition(after_circle_position);
 				
@@ -705,7 +752,7 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			CCPoint after_circle_position = CCPointZero;
 			if(distanceValue > 37)
 			{
-				float sub_value = distanceValue - 37;
+//				float sub_value = distanceValue - 37;
 				after_circle_position.x = 1;
 				after_circle_position.y = tanf(angle/180.f*M_PI);
 				
@@ -717,14 +764,28 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			}
 			after_circle_position = ccpAdd(after_circle_position, control_circle->getPosition());
 			
-			if(after_circle_position.x < 90)
-				after_circle_position.x = 90;
-			else if(after_circle_position.x > 470)
-				after_circle_position.x = 470;
-			if(after_circle_position.y < 10)
-				after_circle_position.y = 10;
-			else if(after_circle_position.y > 310)
-				after_circle_position.y = 310;
+			if(GAMESCREEN_TYPE != RIGHTUI)
+			{
+				if(after_circle_position.x < 90)
+					after_circle_position.x = 90;
+				else if(after_circle_position.x > 470)
+					after_circle_position.x = 470;
+				if(after_circle_position.y < 10)
+					after_circle_position.y = 10;
+				else if(after_circle_position.y > 310)
+					after_circle_position.y = 310;
+			}
+			else
+			{
+				if(after_circle_position.x < 10)
+					after_circle_position.x = 10;
+				else if(after_circle_position.x > 390)
+					after_circle_position.x = 390;
+				if(after_circle_position.y < 10)
+					after_circle_position.y = 10;
+				else if(after_circle_position.y > 310)
+					after_circle_position.y = 310;
+			}
 			
 			control_circle->setPosition(after_circle_position);
 			
@@ -981,7 +1042,7 @@ void ControlJoystick::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	CCPoint after_circle_position = CCPointZero;
 	if(distanceValue > 37)
 	{
-		float sub_value = distanceValue - 37;
+//		float sub_value = distanceValue - 37;
 		after_circle_position.x = 1;
 		after_circle_position.y = tanf(angle/180.f*M_PI);
 		
@@ -1022,7 +1083,7 @@ void ControlJoystick::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	CCPoint after_circle_position = CCPointZero;
 	if(distanceValue > 37)
 	{
-		float sub_value = distanceValue - 37;
+//		float sub_value = distanceValue - 37;
 		after_circle_position.x = 1;
 		after_circle_position.y = tanf(angle/180.f*M_PI);
 		

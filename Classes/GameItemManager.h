@@ -14,6 +14,7 @@
 #include "AlertEngine.h"
 #include "AttackItem.h"
 #include "SilhouetteData.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 
@@ -49,6 +50,12 @@ public:
 	virtual void selfRemove()
 	{
 		removeFromParentAndCleanup(true);
+	}
+	
+	virtual void startFraming()
+	{
+		frame_cnt = 0;
+		schedule(schedule_selector(GameItemBase::framing));
 	}
 	
 protected:
@@ -133,12 +140,6 @@ protected:
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
 		item_img->runAction(t_seq);
-	}
-	
-	void startFraming()
-	{
-		frame_cnt = 0;
-		schedule(schedule_selector(GameItemBase::framing));
 	}
 	
 	void alertAction(int t1, int t2)
@@ -376,7 +377,7 @@ private:
 			return;
 		}
 		
-		item_img = CCSprite::create("item_dash.png");
+		item_img = CCSprite::create("item3.png");
 		item_img->setScale(0.f);
 		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 		item_img->setPosition(item_point);
@@ -384,7 +385,7 @@ private:
 		
 		starting_side_cnt = getSideCount();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemFast::startFraming));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -414,8 +415,6 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		
-		
 		my_elemental = rand()%kElementCode_plasma + 1;
 		
 		holding_time = rand()%10 + 20;
@@ -453,6 +452,123 @@ private:
 		
 		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemAttack::startFraming));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		
+		item_img->runAction(t_seq);
+	}
+};
+
+class GameItemSubOneDie : public GameItemBase
+{
+public:
+	static GameItemSubOneDie* create(bool is_near)
+	{
+		GameItemSubOneDie* t_gisod = new GameItemSubOneDie();
+		t_gisod->myInit(is_near);
+		t_gisod->autorelease();
+		return t_gisod;
+	}
+	
+private:
+	
+	virtual void acting()
+	{
+		myGD->communication("MP_subOneDie");
+		removeFromParent();
+	}
+	
+	void myInit(bool is_near)
+	{
+		holding_time = rand()%10 + 20;
+		holding_time *= 60;
+		
+		setMyPoint(is_near);
+		
+		if(myPoint.isNull())
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(1.f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemBase::selfRemove));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			
+			runAction(t_seq);
+			
+			return;
+		}
+		
+		item_img = CCSprite::create("item5.png");
+		item_img->setScale(0.f);
+		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
+		item_img->setPosition(item_point);
+		addChild(item_img);
+		
+		starting_side_cnt = getSideCount();
+		
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemBase::startFraming));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		
+		item_img->runAction(t_seq);
+	}
+};
+
+class GameItemSilence : public GameItemBase
+{
+public:
+	static GameItemSilence* create(bool is_near)
+	{
+		GameItemSilence* t_gisod = new GameItemSilence();
+		t_gisod->myInit(is_near);
+		t_gisod->autorelease();
+		return t_gisod;
+	}
+	
+private:
+	
+	virtual void acting()
+	{
+		myGD->communication("CP_silenceItem", true);
+		CCDelayTime* t_delay = CCDelayTime::create(mySD->getSilenceItemOption());
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemSilence::finalAction));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+		
+		runAction(t_seq);
+//		removeFromParent();
+	}
+	
+	void finalAction()
+	{
+		myGD->communication("CP_silenceItem", false);
+		removeFromParent();
+	}
+	
+	void myInit(bool is_near)
+	{
+		holding_time = rand()%10 + 20;
+		holding_time *= 60;
+		
+		setMyPoint(is_near);
+		
+		if(myPoint.isNull())
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(1.f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemBase::selfRemove));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			
+			runAction(t_seq);
+			
+			return;
+		}
+		
+		item_img = CCSprite::create("item7.png");
+		item_img->setScale(0.f);
+		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
+		item_img->setPosition(item_point);
+		addChild(item_img);
+		
+		starting_side_cnt = getSideCount();
+		
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemBase::startFraming));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
 		item_img->runAction(t_seq);
@@ -634,8 +750,6 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		
-		
 		my_elemental = kElementCode_wind;
 		
 		holding_time = rand()%10 + 20;
@@ -864,8 +978,6 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		
-		
 		my_elemental = kElementCode_lightning;
 		
 		holding_time = rand()%10 + 20;
@@ -1293,8 +1405,6 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		
-		
 		my_elemental = kElementCode_fire;
 		
 		holding_time = rand()%10 + 20;
@@ -1313,7 +1423,7 @@ private:
 			return;
 		}
 		
-		item_img = CCSprite::create("item_bomb.png");
+		item_img = CCSprite::create("item4.png");
 		item_img->setScale(0.f);
 		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 		item_img->setPosition(item_point);
@@ -1321,7 +1431,7 @@ private:
 		
 		starting_side_cnt = getSideCount();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemFire::startFraming));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -1666,13 +1776,13 @@ public:
 		{
 			if(rand()%2 == 0)
 			{
-				GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
-				addChild(t_gisu);
+				GameItemAttack* t_gia = GameItemAttack::create(true);
+				addChild(t_gia);
 			}
 			else
 			{
-				GameItemAttack* t_gia = GameItemAttack::create(true);
-				addChild(t_gia);
+				GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
+				addChild(t_gisu);
 			}
 		}
 		
@@ -1681,11 +1791,35 @@ public:
 			GameItemAddTime* t_giat = GameItemAddTime::create(false);
 			addChild(t_giat);
 		}
+		
+		if(mySGD->isUsingItem(kIC_fast))
+		{
+			GameItemFast* t_fast = GameItemFast::create(false);
+			addChild(t_fast);
+		}
+		
+		if(mySGD->isUsingItem(kIC_critical))
+		{
+			GameItemFire* t_fire = GameItemFire::create(false);
+			addChild(t_fire);
+		}
+		
+		if(mySGD->isUsingItem(kIC_subOneDie))
+		{
+			GameItemSubOneDie* t_sod = GameItemSubOneDie::create(false);
+			addChild(t_sod);
+		}
+	
+		if(mySGD->isUsingItem(kIC_silence))
+		{
+			GameItemSilence* t_silence = GameItemSilence::create(false);
+			addChild(t_silence);
+		}
 	}
 	
 	void startCounting()
 	{
-		create_counting_value = rand()%5 + 10;
+		create_counting_value = rand()%5 +  10-selected_item_cnt-double_item_cnt;
 		counting_value = 0;
 		schedule(schedule_selector(GameItemManager::counting), 1.f);
 	}
@@ -1694,19 +1828,9 @@ public:
 	{
 		for(int i=0;i<5;i++)
 		{
-			if(getChildrenCount() < 8)
+			if(getChildrenCount() < 7)
 			{
-				int random_value = rand()%2;
-				if(random_value == 0)
-				{
-					GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(rand()%2 == 0);
-					addChild(t_gisu);
-				}
-				else
-				{
-					GameItemAttack* t_gia = GameItemAttack::create(rand()%2 == 0);
-					addChild(t_gia);
-				}
+				addItem();
 			}
 			else
 				return;
@@ -1730,7 +1854,12 @@ private:
 	CLEAR_CONDITION clr_cdt_type;
 	
 	CCNode* coin_parent;
+
+	vector<ITEM_CODE> creatable_list;
+	int selected_item_cnt;
 	
+	int double_item_cnt;
+
 	void counting()
 	{
 		counting_value++;
@@ -1740,95 +1869,61 @@ private:
 			GameItemAttack* t_gia = GameItemAttack::create(false);
 			addChild(t_gia);
 			
-			create_counting_value = rand()%5 + 10;
+			create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
 			counting_value = 0;
 		}
 		else if(clr_cdt_type == kCLEAR_itemCollect && getChildrenCount() < 2)
 		{
-			int random_value = rand()%10;
-			if(random_value <= 3)
-			{
-				GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(false);
-				addChild(t_gisu);
-			}
-			else if(random_value <= 7)
-			{
-				GameItemAttack* t_gia = GameItemAttack::create(false);
-				addChild(t_gia);
-			}
-			else if(random_value <= 8)
-			{
-				GameItemFast* t_gif = GameItemFast::create(false);
-				addChild(t_gif);
-			}
-			else
-			{
-				GameItemFire* t_gif = GameItemFire::create(false);
-				addChild(t_gif);
-			}
+			addItem();
 			
-			create_counting_value = rand()%5 + 10;
+			create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
 			counting_value = 0;
 		}
 		
 		if(counting_value >= create_counting_value)
 		{
-			if(getChildrenCount() < 8)
-			{
-				int random_value = rand()%10;
-				if(random_value <= 3)
-				{
-					GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(rand()%2 == 0);
-					addChild(t_gisu);
-				}
-				else if(random_value <= 7)
-				{
-					GameItemAttack* t_gia = GameItemAttack::create(rand()%2 == 0);
-					addChild(t_gia);
-				}
-				else if(random_value <= 8)
-				{
-					GameItemFast* t_gif = GameItemFast::create(rand()%2 == 0);
-					addChild(t_gif);
-				}
-				else
-				{
-//					int random_value2 = rand()%6;
-//					if(random_value2 == 0)
-//					{
-//						GameItemWind* t_gif = GameItemWind::create(rand()%2 == 0);
-//						addChild(t_gif);
-//					}
-//					else if(random_value2 == 1)
-//					{
-//						GameItemLightning* t_gif = GameItemLightning::create(rand()%2 == 0);
-//						addChild(t_gif);
-//					}
-//					else if(random_value2 == 2)
-//					{
-//						GameItemLife* t_gif = GameItemLife::create(rand()%2 == 0);
-//						addChild(t_gif);
-//					}
-//					else if(random_value2 == 3)
-//					{
-//						GameItemIce* t_gif = GameItemIce::create(rand()%2 == 0);
-//						addChild(t_gif);
-//					}
-//					else if(random_value2 == 4)
-//					{
-						GameItemFire* t_gif = GameItemFire::create(rand()%2 == 0);
-						addChild(t_gif);
-//					}
-//					else
-//					{
-//						GameItemPlasma* t_gif = GameItemPlasma::create(rand()%2 == 0);
-//						addChild(t_gif);
-//					}
-				}
-			}
+			if(getChildrenCount() < 7)
+				addItem();
 			
-			create_counting_value = rand()%5 + 10;
+			create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
 			counting_value = 0;
+		}
+	}
+
+	void addItem()
+	{
+		int random_value = rand()%creatable_list.size();
+		ITEM_CODE create_item = creatable_list[random_value];
+		
+		if(create_item == kIC_attack)
+		{
+			GameItemAttack* t_gia = GameItemAttack::create(rand()%2 == 0);
+			addChild(t_gia);
+		}
+		else if(create_item == kIC_speedUp)
+		{
+			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(rand()%2 == 0);
+			addChild(t_gisu);
+		}
+		else if(create_item == kIC_fast)
+		{
+			GameItemFast* t_fast = GameItemFast::create(false);
+			addChild(t_fast);
+		}
+		else if(create_item == kIC_critical)
+		{
+			GameItemFire* t_fire = GameItemFire::create(false);
+			addChild(t_fire);
+		}
+		else if(create_item == kIC_subOneDie)
+		{
+			GameItemSubOneDie* t_sod = GameItemSubOneDie::create(false);
+			addChild(t_sod);
+		}
+		else if(create_item == kIC_silence)
+		{
+			GameItemSilence* t_silence = GameItemSilence::create(false);
+			addChild(t_silence);
 		}
 	}
 	
@@ -1838,6 +1933,24 @@ private:
 		
 		coin_parent = CCNode::create();
 		addChild(coin_parent);
+		
+		creatable_list.push_back(kIC_attack);
+		creatable_list.push_back(kIC_speedUp);
+		
+		selected_item_cnt = 0;
+		
+		if(mySGD->isUsingItem(kIC_doubleItem))
+			double_item_cnt = mySD->getDoubleItemOption();
+		else
+			double_item_cnt = 0;
+		
+		if(mySGD->isUsingItem(kIC_fast)){		creatable_list.push_back(kIC_fast);			selected_item_cnt++;	}
+		if(mySGD->isUsingItem(kIC_critical)){	creatable_list.push_back(kIC_critical);		selected_item_cnt++;	}
+		if(mySGD->isUsingItem(kIC_subOneDie)){	creatable_list.push_back(kIC_subOneDie);	selected_item_cnt++;	}
+		if(mySGD->isUsingItem(kIC_silence)){	creatable_list.push_back(kIC_silence);		selected_item_cnt++;	}
+		
+		if(selected_item_cnt+double_item_cnt > 10)
+			double_item_cnt = 10 - selected_item_cnt;
 		
 //		myGD->regGIM(this, callfunc_selector(GameItemManager::dieCreateItem));
 		myGD->V_V["GIM_dieCreateItem"] = std::bind(&GameItemManager::dieCreateItem, this);

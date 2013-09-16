@@ -109,9 +109,18 @@ public:
 		life -= MissileDamageData::getCorrelationDamage(t_damage, my_element);
 		if(life <= 0)
 		{
-			stopMoving();
-			myGD->communication("CP_removeSubCumber", this);
-			removeFromParentAndCleanup(true);
+			if(mySD->getClearCondition() == kCLEAR_subCumberCatch && t_damage >= 999999.f)
+			{
+				myGD->communication("CP_removeSubCumber", this);
+				stopMoving();
+				caughtAnimation();
+			}
+			else
+			{
+				stopMoving();
+				myGD->communication("CP_removeSubCumber", this);
+				removeFromParentAndCleanup(true);
+			}
 		}
 		else
 		{
@@ -463,9 +472,19 @@ private:
 		cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_monster.png", resultType)->getCString());
 		addChild(cumberImg);
 		
-		myScale = 1.f;
-		maxScale = 1.2f;
-		minScale = 0.4f;
+		if(mySGD->isUsingItem(kIC_subSmallSize))
+		{
+			int option_value = mySD->getSubSmallSizeItemOption();
+			myScale = 1.f - option_value/100.f;
+			maxScale = 1.2f - option_value/100.f;
+			minScale = 0.4f;
+		}
+		else
+		{
+			myScale = 1.f;
+			maxScale = 1.2f;
+			minScale = 0.4f;
+		}
 		
 		areacrash_frame_cnt = 0;
 		move_frame = 0;
@@ -520,9 +539,19 @@ private:
 			else if(last_p == 6)		my_element = kElementCode_water;
 		}
 		
-		myScale = 1.f;
-		maxScale = 1.2f;
-		minScale = 0.4f;
+		if(mySGD->isUsingItem(kIC_subSmallSize))
+		{
+			int option_value = mySD->getSubSmallSizeItemOption();
+			myScale = 1.f - option_value/100.f;
+			maxScale = 1.2f - option_value/100.f;
+			minScale = 0.4f;
+		}
+		else
+		{
+			myScale = 1.f;
+			maxScale = 1.2f;
+			minScale = 0.4f;
+		}
 		
 		areacrash_frame_cnt = 0;
 		move_frame = 0;

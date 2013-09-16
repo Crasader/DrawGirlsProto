@@ -277,8 +277,9 @@ public:
 			{
 				b_node->changeScaleImg(-1);
 				IntPointVector b_pv = b_node->myPointVector;
-				IntPoint r_p = IntPoint(b_pv.origin.x + b_pv.distance.dx*b_node->pathScale, b_pv.origin.y + b_pv.distance.dy*b_node->pathScale);
-				myGD->mapState[r_p.x][r_p.y] = mapEmpty;
+				IntPoint r_p = IntPoint(roundf(b_pv.origin.x + b_pv.distance.dx*b_node->pathScale), roundf(b_pv.origin.y + b_pv.distance.dy*b_node->pathScale));
+				if(myGD->mapState[r_p.x][r_p.y] == mapNewline)
+					myGD->mapState[r_p.x][r_p.y] = mapEmpty;
 				return r_p;
 			}
 			else // pop back

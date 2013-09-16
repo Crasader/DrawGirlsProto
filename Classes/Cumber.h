@@ -62,6 +62,7 @@ public:
 	int getMainCumberSheild();
 	void mainCumberInvisibleOn();
 	void movingSubCumbers();
+	void stopSubCumbers();
 	void startAutoAttacker();
 	void jackCrashDie();
 	void setUI_forEP(CCObject* t_ui, SEL_CallFunc k_ui, SEL_CallFunc c_ui);
@@ -69,6 +70,7 @@ public:
 	void startDieAnimation();
 	void changeMaxSize(float t_p);
 	void checkingJackCrash();
+	
 private:
 	bool is_die_animationing;
 	int die_animation_cnt;

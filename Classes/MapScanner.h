@@ -194,9 +194,9 @@ private:
 		
 		drawRects = t_drawRects;
 //		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
-//		device_rate = DataStorageHub::sharedInstance()->device_rate;
+//		device_rate = myDSH->device_rate;
 //		visit_factor = scaleFactor*device_rate;
-//		device_margine = DataStorageHub::sharedInstance()->device_margine;
+//		device_margine = myDSH->device_margine;
 	}
 };
 
@@ -253,10 +253,10 @@ private:
 //			CCLog("viewport3 : %d , rSize.height : %.2f", viewport[3], rSize.height);
 			
 //			CCPoint convert_origin = convertToNodeSpace(ccp(t_rect->origin.x, t_rect->origin.y));
-			float x = (t_rect->origin.x*1.5f)*wScale + viewport[0]-1;
-			float y = (t_rect->origin.y*1.5f+jack_position.y)*hScale + viewport[1]-1;
-			float w = (t_rect->size.width*1.5f)*wScale+2;
-			float h = (t_rect->size.height*1.5f)*hScale+2;
+			float x = (t_rect->origin.x*MY_SCALE+jack_position.x)*wScale + viewport[0]-1;
+			float y = (t_rect->origin.y*MY_SCALE+jack_position.y)*hScale + viewport[1]-1;
+			float w = (t_rect->size.width*MY_SCALE)*wScale+2;
+			float h = (t_rect->size.height*MY_SCALE)*hScale+2;
 			
 			glScissor(x,y,w,h);
 			
@@ -323,9 +323,9 @@ private:
 		
 		drawRects = t_drawRects;
 //		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
-//		device_rate = DataStorageHub::sharedInstance()->device_rate;
+//		device_rate = myDSH->device_rate;
 //		visit_factor = scaleFactor*device_rate;
-//		device_margine = DataStorageHub::sharedInstance()->device_margine;
+//		device_margine = myDSH->device_margine;
 	}
 };
 
@@ -388,9 +388,9 @@ private:
 //		
 //		drawRects = t_drawRects;
 //		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
-//		device_rate = DataStorageHub::sharedInstance()->device_rate;
+//		device_rate = myDSH->device_rate;
 //		visit_factor = scaleFactor*device_rate;
-//		device_margine = DataStorageHub::sharedInstance()->device_margine;
+//		device_margine = myDSH->device_margine;
 //		
 //		innerObjs = new CCArray(1);
 //		
@@ -546,11 +546,14 @@ private:
 	{
 //		myVS->setMoveGamePosition(ccp((280-t_p.x)*1.25f-70.f,(160-t_p.y)*1.25f-43.f));
 		
-		if(t_p.y < 70+DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f)
-			t_p.y = 70+DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f;
-		else if(t_p.y > 430-65+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f)//430-65
-			t_p.y = 430-65+DataStorageHub::sharedInstance()->upper_limit-DataStorageHub::sharedInstance()->bottom_base/1.5f-DataStorageHub::sharedInstance()->ui_jack_center_control*1.5f/2.f;
-		myVS->setMoveGamePosition(ccp((199-160)*1.5f-70.f/1.5f*1.25f,(160-t_p.y)*1.5f-73.f+DataStorageHub::sharedInstance()->bottom_base-DataStorageHub::sharedInstance()->ui_jack_center_control));
+		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float y_value = -t_p.y*MY_SCALE+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
+		if(y_value > 60)															y_value = 60;
+		else if(y_value < -490*MY_SCALE+480*frame_size.height/frame_size.width)		y_value = -490*MY_SCALE+480*frame_size.height/frame_size.width;
+		
+		if(GAMESCREEN_TYPE == FULLUI)				myVS->setMoveGamePosition(ccp(0,y_value));
+		else if(GAMESCREEN_TYPE == LEFTUI)			myVS->setMoveGamePosition(ccp(50+BOARDER_VALUE,y_value));
+		else if(GAMESCREEN_TYPE == RIGHTUI)			myVS->setMoveGamePosition(ccp(BOARDER_VALUE,y_value));
 	}
 	
 	void myInit(const char* filename, bool isPattern)
@@ -583,7 +586,8 @@ private:
 enum MSzorder{
 	invisibleZorder = 1,
 	visibleZorder,
-	blockZorder
+	blockZorder,
+	boarderZorder
 };
 
 class BackFilename
@@ -645,7 +649,8 @@ public:
 		
 		my_tic_toc = !my_tic_toc;
 		
-		int base_value = roundf(-t_p.y/3.f);
+		float scale_value = MY_SCALE;
+		int base_value = roundf(-t_p.y/scale_value/2.f);
 		
 		init_rect.size.width = rand()%(50-20 + 1) + 20;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
 		init_rect.size.height = rand()%(50-20 + 1) + 20;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
@@ -653,7 +658,7 @@ public:
 		IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
 		
 		init_rect.origin.x = rand()%maxPoint.x+10;//mapWidthInnerBegin+10;
-		init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/3)-init_rect.size.height+1;
+		init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/scale_value/2.f)-init_rect.size.height+1;
 		
 		if(!random_rect_img)
 		{
@@ -919,20 +924,43 @@ private:
 		CCSprite* top_back = CCSprite::create("top_back.png");
 		top_back->setAnchorPoint(ccp(0.5,0));
 		top_back->setPosition(ccp(160,430));
+		top_back->setScaleX(340.f/320.f);
 		addChild(top_back);
 		
 		CCSprite* bottom_back = CCSprite::create("top_back.png");
 		bottom_back->setAnchorPoint(ccp(0.5,1));
 		bottom_back->setPosition(ccp(160,0));
+		bottom_back->setScaleX(340.f/320.f);
 		addChild(bottom_back);
+		
+		CCSprite* top_boarder = CCSprite::create("screen_boarder.png");
+		top_boarder->setAnchorPoint(ccp(0.5,0));
+		top_boarder->setPosition(ccp(160,430));
+		top_boarder->setScaleX(34.f);
+		addChild(top_boarder, boarderZorder);
+		
+		CCSprite* bottom_boarder = CCSprite::create("screen_boarder.png");
+		bottom_boarder->setAnchorPoint(ccp(0.5,1));
+		bottom_boarder->setPosition(ccp(160,0));
+		bottom_boarder->setScaleX(34.f);
+		addChild(bottom_boarder, boarderZorder);
+		
+		CCSprite* left_boarder = CCSprite::create("screen_boarder.png");
+		left_boarder->setAnchorPoint(ccp(1,0.5));
+		left_boarder->setPosition(ccp(0,215));
+		left_boarder->setScaleY(45.f);
+		addChild(left_boarder, boarderZorder);
+		
+		CCSprite* right_boarder = CCSprite::create("screen_boarder.png");
+		right_boarder->setAnchorPoint(ccp(0,0.5));
+		right_boarder->setPosition(ccp(320,215));
+		right_boarder->setScaleY(45.f);
+		addChild(right_boarder, boarderZorder);
 	}
 	
 	
 	void myInit()
 	{
-		
-		
-		
 		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		screen_height = roundf(480*screen_size.height/screen_size.width/2.f);
 		

@@ -197,15 +197,13 @@ typedef enum t_ITEM_CODE{
 	kIC_subOneDie,
 	kIC_doubleItem,
 	kIC_silence,
-	kIC_timeStop,
 	kIC_subNothing,
 	kIC_longTime,
 	kIC_bossLittleEnergy,
 	kIC_subSmallSize,
 	kIC_smallArea,
 	kIC_widePerfect,
-	kIC_randomChange,
-	kIC_removeMission
+	kIC_randomChange
 }ITEM_CODE;
 
 #define SHOP_KEY	0xD9

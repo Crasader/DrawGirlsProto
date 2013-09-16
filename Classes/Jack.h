@@ -970,11 +970,12 @@ public:
 	
 	void initStartPosition(CCPoint t_p)
 	{
-		int base_value = roundf(-t_p.y/3.f);
+		float scale_value = MY_SCALE;
+		int base_value = roundf(-t_p.y/scale_value/2.f);
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_height = roundf(480*screen_size.height/screen_size.width/2.f);
 		
-		IntPoint checking_point = IntPoint(80,base_value+roundf(screen_height/3));
+		IntPoint checking_point = IntPoint(80,base_value+roundf(screen_height/scale_value/2.f));
 		
 		int map_end_check_cnt = 0;
 		bool is_found = false;
@@ -995,6 +996,7 @@ public:
 			{
 				is_found = true;
 				myGD->setJackPoint(checking_point);
+				afterPoint = checking_point;
 				setPosition(ccp((checking_point.x-1)*pixelSize+1, (checking_point.y-1)*pixelSize+1));
 				break;
 			}
@@ -1253,6 +1255,11 @@ private:
 		t_chaos = NULL;
 	}
 	
+	void positionRefresh()
+	{
+		setPosition(getPosition());
+	}
+	
 	void myInit()
 	{
 		before_x_direction = directionStop;
@@ -1280,22 +1287,8 @@ private:
 		myGD->F_V["Jack_getAlphaSpeed"] = std::bind(&Jack::getAlphaSpeed, this);
 		myGD->V_F["Jack_setAlphaSpeed"] = std::bind(&Jack::setAlphaSpeed, this, _1);
 		myGD->F_V["Jack_getSpeedUpValue"] = std::bind(&Jack::getSpeedUpValue, this);
+		myGD->V_V["Jack_positionRefresh"] = std::bind(&Jack::positionRefresh, this);
 		
-		
-		
-		//	SEL_SCHEDULE delegate_Jack_setJackSpeed;
-		//	SEL_CallFunc delegate_Jack_startDieEffect;
-		//	SEL_CallFunc delegate_Jack_createStunHammer;
-		//	SEL_CallFunc delegate_Jack_createFog;
-		//	SEL_CallFunc delegate_Jack_createSleep;
-		//	SEL_CallFunc delegate_Jack_createChaos;
-		//	SEL_CallFunc delegate_Jack_reverseOff;
-		//	SEL_CallFunc delegate_Jack_resetStopEffects;
-		//	SEL_CallFunc delegate_Jack_showMB;
-		//	SEL_CallFunc delegate_Jack_takeSpeedUpItem;
-		//	SEL_FCallFunc delegate_Jack_getAlphaSpeed;
-		//	SEL_CallFuncF delegate_Jack_setAlphaSpeed;
-		//	SEL_FCallFunc delegate_Jack_getSpeedUpValue;
 		
 		
 		isMoving = false;

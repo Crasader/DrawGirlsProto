@@ -10,6 +10,19 @@
 
 void MapScanner::scanMap()
 {
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	{
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		{
+			if(myGD->mapState[i][j] == mapNewline)
+			{
+				if(myGD->mapState[i-1][j] == mapEmpty && myGD->mapState[i+1][j] == mapEmpty &&
+				   myGD->mapState[i][j-1] == mapEmpty && myGD->mapState[i][j+1] == mapEmpty)
+					myGD->mapState[i][j] = mapEmpty;
+			}
+		}
+	}
+	
 	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
 	
 	if(!mainCumberPoint.isNull())
