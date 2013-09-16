@@ -19,7 +19,6 @@
 #include "MainCumber.h"
 #include "SubCumber.h"
 #include "MapFragment.h"
-#include "MainCumberKS.h"
 #include <vector>
 
 
