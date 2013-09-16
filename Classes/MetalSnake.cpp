@@ -723,7 +723,7 @@ void MetalSnake::attack(float dt)
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
 //		stopMoving();
-//		startAnimationNoDirection();
+//		startAnimationNoDirection(); // 몬스터 빙글빙글..
 		
 		int attackCode = 0;
 		

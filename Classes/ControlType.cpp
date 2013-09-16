@@ -538,10 +538,10 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
 		convertedLocation = convertToNodeSpace(convertedLocation);
 	
-		if(convertedLocation.x < 100)
+		if(convertedLocation.x < 200)
 		{
 			// button or ui
-			if(!button_touch && convertedLocation.y < 100)
+			if(!button_touch && convertedLocation.y < 200)
 			{
 				// button
 				button_touch = touch;
