@@ -198,26 +198,14 @@ void ZoomScript::showtimeFirstAction()
 	game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
 	first_img->removeFromParentAndCleanup(true);
 	
-	if(is_exchanged)
+	if(is_exchanged && mySD->isAnimationStage())
 	{
-		if(silType == 3)
-		{
-			eye_ani_size = CCSizeMake(80, 30);
-			CCTexture2D* eye_texture = CCTextureCache::sharedTextureCache()->addImage("stage3_level3_eye.png");
-			
-			CCSprite* eye = CCSprite::createWithTexture(eye_texture, CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
-			eye->setPosition(ccp(163,324));
-			second_img->addChild(eye, 1, 1);
-		}
-		else if(silType == 8)
-		{
-			eye_ani_size = CCSizeMake(85, 75);
-			CCTexture2D* eye_texture = CCTextureCache::sharedTextureCache()->addImage("stage8_level3_eye.png");
-			
-			CCSprite* eye = CCSprite::createWithTexture(eye_texture, CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
-			eye->setPosition(ccp(158,292)); // 159,
-			second_img->addChild(eye, 1, 1);
-		}
+		eye_ani_size = mySD->getAnimationCutSize();
+		CCTexture2D* eye_texture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat("stage%d_level3_animation.png", silType)->getCString());
+		
+		CCSprite* eye = CCSprite::createWithTexture(eye_texture, CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
+		eye->setPosition(mySD->getAnimationPosition());
+		second_img->addChild(eye, 1, 1);
 	}
 	
 	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
@@ -246,12 +234,9 @@ void ZoomScript::showtimeSecondAction()
 
 void ZoomScript::showtimeThirdAction()
 {
-	if(is_exchanged)
+	if(is_exchanged && mySD->isAnimationStage())
 	{
-		if(silType == 3)
-			randomFlicker();
-		else if(silType == 8)
-			randomFlicker();
+		startStageAnimation();
 	}
 	script_label->setVisible(true);
 	script_case->setVisible(true);

@@ -779,8 +779,8 @@ public:
 		exchange_dic->removeObjectForKey(t_coin_number);
 		
 		CCSprite* new_coin_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", t_coin_number)->getCString());
-		if(GAMESCREEN_TYPE == LEFTUI)			new_coin_spr->setPosition(ccp(260-32*3-16+t_coin_number*32,25));
-		else if(GAMESCREEN_TYPE == RIGHTUI)		new_coin_spr->setPosition(ccp(220-32*3-16+t_coin_number*32,25));
+		if(myGD->gamescreen_type == kGT_leftUI)			new_coin_spr->setPosition(ccp(260-32*3-16+t_coin_number*32,25));
+		else if(myGD->gamescreen_type == kGT_rightUI)		new_coin_spr->setPosition(ccp(220-32*3-16+t_coin_number*32,25));
 		else									new_coin_spr->setPosition(ccp(260-32*3-16+t_coin_number*32,25));
 		addChild(new_coin_spr);
 		
@@ -1143,8 +1143,8 @@ private:
 		clearPercentage = 1;
 		
 		ui_case = CCSprite::create("ui_back.png");
-		if(GAMESCREEN_TYPE == LEFTUI)			ui_case->setPosition(ccp(25,myDSH->ui_center_y));
-		else if(GAMESCREEN_TYPE == RIGHTUI)		ui_case->setPosition(ccp(480-25,myDSH->ui_center_y));
+		if(myGD->gamescreen_type == kGT_leftUI)			ui_case->setPosition(ccp(25,myDSH->ui_center_y));
+		else if(myGD->gamescreen_type == kGT_rightUI)		ui_case->setPosition(ccp(480-25,myDSH->ui_center_y));
 		else
 		{
 			ui_case->setPosition(ccp(25,myDSH->ui_center_y));
@@ -1170,8 +1170,8 @@ private:
 		
 		percentageLabel = CCLabelBMFont::create("0", "etc_font.fnt");
 		percentageLabel->setAnchorPoint(ccp(1.0, 0.5));
-		if(GAMESCREEN_TYPE == LEFTUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
-		else if(GAMESCREEN_TYPE == RIGHTUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
+		if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
+		else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 		else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-20));
 		
 		addChild(percentageLabel);
@@ -1192,9 +1192,9 @@ private:
 		
 		countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", 150-countingCnt)->getCString(), "etc_font.fnt");
 		countingLabel->setScale(1.3);
-		if(GAMESCREEN_TYPE == LEFTUI)			countingLabel->setPosition(ccp((480-50-BOARDER_VALUE*2)/2.f+50+BOARDER_VALUE,myDSH->ui_top-20));
-		else if(GAMESCREEN_TYPE == RIGHTUI)		countingLabel->setPosition(ccp((480-50-BOARDER_VALUE*2)/2.f+BOARDER_VALUE,myDSH->ui_top-20));
-		else									countingLabel->setPosition(ccp(240,myDSH->ui_top-20));
+		if(myGD->gamescreen_type == kGT_leftUI)			countingLabel->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-20));
+		else if(myGD->gamescreen_type == kGT_rightUI)	countingLabel->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-20));
+		else											countingLabel->setPosition(ccp(240,myDSH->ui_top-20));
 		addChild(countingLabel);
 		
 		isFirst = true;
@@ -1214,8 +1214,8 @@ private:
 		home_item->setTag(kMenuTagUI_home);
 		
 		CCMenu* home_menu = CCMenu::createWithItem(home_item);
-		if(GAMESCREEN_TYPE == LEFTUI)			home_menu->setPosition(ccp(25,myDSH->ui_top-25));
-		else if(GAMESCREEN_TYPE == RIGHTUI)		home_menu->setPosition(ccp(480-25,myDSH->ui_top-25));
+		if(myGD->gamescreen_type == kGT_leftUI)			home_menu->setPosition(ccp(25,myDSH->ui_top-25));
+		else if(myGD->gamescreen_type == kGT_rightUI)		home_menu->setPosition(ccp(480-25,myDSH->ui_top-25));
 		else									home_menu->setPosition(ccp(25,myDSH->ui_top-25));
 		addChild(home_menu);
 		
@@ -1226,8 +1226,8 @@ private:
 		for(int i=0;i<jack_life;i++)
 		{
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
-			if(GAMESCREEN_TYPE == LEFTUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
-			else if(GAMESCREEN_TYPE == RIGHTUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
+			if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
+			else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 			else									jack_img->setPosition(ccp(100+i*20, myDSH->ui_top-20));
 			addChild(jack_img);
 			
@@ -1241,8 +1241,8 @@ private:
 		for(int i=1;i<=6;i++)
 		{
 			CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-			if(GAMESCREEN_TYPE == LEFTUI)			exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
-			else if(GAMESCREEN_TYPE == RIGHTUI)		exchange_spr->setPosition(ccp(220-32*3-16+i*32,25));
+			if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
+			else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(220-32*3-16+i*32,25));
 			else									exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
 			addChild(exchange_spr);
 			
@@ -1253,8 +1253,8 @@ private:
 		clr_cdt_type = mySD->getClearCondition();
 		
 		CCPoint icon_menu_position;
-		if(GAMESCREEN_TYPE == LEFTUI)			icon_menu_position = ccp(25,myDSH->ui_center_y+43);
-		else if(GAMESCREEN_TYPE == RIGHTUI)		icon_menu_position = ccp(480-25,myDSH->ui_center_y+43);
+		if(myGD->gamescreen_type == kGT_leftUI)			icon_menu_position = ccp(25,myDSH->ui_center_y+43);
+		else if(myGD->gamescreen_type == kGT_rightUI)		icon_menu_position = ccp(480-25,myDSH->ui_center_y+43);
 		else									icon_menu_position = ccp(390,myDSH->ui_top-25);
 		
 		if(clr_cdt_type == kCLEAR_bossLifeZero)
@@ -1428,6 +1428,10 @@ private:
 		else if(clr_cdt_type == kCLEAR_default)
 		{
 			is_cleared_cdt = true;
+			
+			CCSprite* icon_img = CCSprite::create("condition0_menu.png");
+			icon_img->setPosition(icon_menu_position);
+			addChild(icon_img, 0, kCT_UI_clrCdtIcon);
 		}
 		
 		myGD->V_I["UI_addScore"] = std::bind(&PlayUI::addScore, this, _1);
@@ -1449,8 +1453,8 @@ private:
 		for(int i=0;i<jack_life;i++)
 		{
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
-			if(GAMESCREEN_TYPE == LEFTUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
-			else if(GAMESCREEN_TYPE == RIGHTUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
+			if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
+			else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 			else									jack_img->setPosition(ccp(100+i*20,myDSH->ui_top-20));
 			addChild(jack_img);
 			

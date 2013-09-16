@@ -540,7 +540,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 	
 		bool is_button_x;
 		
-		if(GAMESCREEN_TYPE == RIGHTUI)
+		if(myGD->gamescreen_type == kGT_rightUI)
 		{
 			if(convertedLocation.x > 480-100)
 				is_button_x = true;
@@ -601,7 +601,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				joystick_touch = touch;
 				CCPoint after_circle_position = convertedLocation;
 				
-				if(GAMESCREEN_TYPE != RIGHTUI)
+				if(myGD->gamescreen_type != kGT_rightUI)
 				{
 					if(after_circle_position.x < 90)
 						after_circle_position.x = 90;
@@ -687,7 +687,7 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 				
 				after_circle_position = ccpAdd(after_circle_position, control_circle->getPosition());
 				
-				if(GAMESCREEN_TYPE != RIGHTUI)
+				if(myGD->gamescreen_type != kGT_rightUI)
 				{
 					if(after_circle_position.x < 90)
 						after_circle_position.x = 90;
@@ -764,7 +764,7 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			}
 			after_circle_position = ccpAdd(after_circle_position, control_circle->getPosition());
 			
-			if(GAMESCREEN_TYPE != RIGHTUI)
+			if(myGD->gamescreen_type != kGT_rightUI)
 			{
 				if(after_circle_position.x < 90)
 					after_circle_position.x = 90;

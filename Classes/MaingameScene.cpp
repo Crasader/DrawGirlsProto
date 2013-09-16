@@ -63,10 +63,10 @@ bool Maingame::init()
 	is_line_die = false;
 	
 	game_node = CCNode::create();
-	game_node->setScale(MY_SCALE);
-	if(GAMESCREEN_TYPE == LEFTUI)		game_node->setPosition(ccp(50+BOARDER_VALUE,0));
-	else if(GAMESCREEN_TYPE == RIGHTUI)	game_node->setPosition(ccp(BOARDER_VALUE, 0));
-	else								game_node->setPosition(ccp(0,0));
+	game_node->setScale(myGD->game_scale);
+	if(myGD->gamescreen_type == kGT_leftUI)			game_node->setPosition(ccp(50+myGD->boarder_value,0));
+	else if(myGD->gamescreen_type == kGT_rightUI)	game_node->setPosition(ccp(myGD->boarder_value, 0));
+	else											game_node->setPosition(ccp(0,0));
 	addChild(game_node, myMSZorder);
 	
 	myMS = MapScanner::create();

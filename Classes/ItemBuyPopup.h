@@ -128,33 +128,26 @@ private:
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)
-		{
-			if(buy_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kIBP_MT_buy;
-			else if(close_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kIBP_MT_close;
-		}
+		touched_number = 0;
+		if(buy_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kIBP_MT_buy;
+		else if(close_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kIBP_MT_close;
 		return true;
 	}
 	
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)		return;
 		if(touched_number == kIBP_MT_buy)							buy_menu->ccTouchMoved(pTouch, pEvent);
 		else if(touched_number == kIBP_MT_close)					close_menu->ccTouchMoved(pTouch, pEvent);
 	}
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)		return;
 		if(touched_number == kIBP_MT_buy)							buy_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kIBP_MT_close)					close_menu->ccTouchEnded(pTouch, pEvent);
-		touched_number = 0;
 	}
     virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)		return;
 		if(touched_number == kIBP_MT_buy)							buy_menu->ccTouchCancelled(pTouch, pEvent);
 		else if(touched_number == kIBP_MT_close)					close_menu->ccTouchCancelled(pTouch, pEvent);
-		touched_number = 0;
 	}
 	
 	virtual void registerWithTouchDispatcher()

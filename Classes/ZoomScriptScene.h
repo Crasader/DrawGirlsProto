@@ -36,7 +36,7 @@ private:
 	string save_text;
 	int typing_frame;
 	
-	
+	int ing_animation_frame;
 	
 	bool is_touched_menu;
 	bool is_actioned;
@@ -76,6 +76,47 @@ private:
 	map<int, CCPoint> multiTouchData;
 	
 	CCSize eye_ani_size;
+	
+	void startStageAnimation()
+	{
+		ing_animation_frame = 0;
+		
+		int random_value = rand()%16;
+		
+		if(random_value >= 2 && random_value <= 4)
+			random_value = 7;
+		else if(random_value >= 5 && random_value <= 10)
+			random_value = 10;
+		else if(random_value >= 11 && random_value <= 13)
+			random_value = 13;
+		else if(random_value == 14 || random_value == 15)
+			random_value = 16;
+		else
+			random_value++;
+		
+		CCDelayTime* t_delay = CCDelayTime::create(random_value*0.1f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::frameAnimation));
+		CCAction* t_seq = CCSequence::create(t_delay, t_call, NULL);
+		second_img->getChildByTag(1)->runAction(t_seq);
+	}
+	
+	void frameAnimation()
+	{
+		int loop_point = mySD->getAnimationLoopPoint(ing_animation_frame);
+		CCSize animation_cut_size = mySD->getAnimationCutSize();
+		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(loop_point*animation_cut_size.width, 0, animation_cut_size.width, animation_cut_size.height));
+		
+		ing_animation_frame++;
+		if(ing_animation_frame >= mySD->getAnimationLoopLength())
+			startStageAnimation();
+		else
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(0.1f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::frameAnimation));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			second_img->getChildByTag(1)->runAction(t_seq);
+		}
+	}
 	
 	void randomFlicker()
 	{

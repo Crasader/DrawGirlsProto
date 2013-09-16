@@ -22,22 +22,11 @@ using namespace std;
 
 #define myGD GameData::sharedGameData()
 
-#define BOARDER_VALUE		10.f
-
-#define FULLSCREEN_SCALE	1.5f
-#define LRUI_SCALE		(215-BOARDER_VALUE)/160.f
-
-#define LEFTUI		-1
-#define RIGHTUI		1
-#define FULLUI		0
-
-#define GAMESCREEN_TYPE		LEFTUI
-
-#if GAMESCREEN_TYPE != FULLUI
-#define MY_SCALE	LRUI_SCALE
-#else
-#define MY_SCALE	FULLSCREEN_SCALE
-#endif
+enum GAMESCREEN_TYPE{
+	kGT_leftUI = -1,
+	kGT_full,
+	kGT_rightUI
+};
 
 
 float deg2Rad(float x) ;
@@ -963,6 +952,20 @@ public:
 		setInitRect(t_rect.origin, t_rect.size);
 	}
 	
+	float boarder_value;
+	GAMESCREEN_TYPE gamescreen_type;
+	float game_scale;
+	
+	void setUItype(GAMESCREEN_TYPE t_type)
+	{
+		gamescreen_type = t_type;
+		
+		if(gamescreen_type != kGT_full)
+			game_scale = (215-boarder_value)/160.f;
+		else
+			game_scale = 1.5f;
+	}
+	
 private:
 	
 	SetMapType recent_map_type;
@@ -978,6 +981,9 @@ private:
 	
 	void myInit()
 	{
+		boarder_value = 10.f;
+		setUItype(kGT_leftUI);
+		
 		// init map
 		for(int i=mapWidthOutlineBegin;i<mapWidthOutlineEnd;i++)
 		{
@@ -1484,21 +1490,6 @@ private:
 			setInitRect(initPoint, initSize);
 		}
 	}
-	
-//	CCObject* target_Jack;
-//	SEL_SCHEDULE delegate_Jack_setJackSpeed;
-//	SEL_CallFunc delegate_Jack_startDieEffect;
-//	SEL_CallFunc delegate_Jack_createStunHammer;
-//	SEL_CallFunc delegate_Jack_createFog;
-//	SEL_CallFunc delegate_Jack_createSleep;
-//	SEL_CallFunc delegate_Jack_createChaos;
-//	SEL_CallFunc delegate_Jack_reverseOff;
-//	SEL_CallFunc delegate_Jack_resetStopEffects;
-//	SEL_CallFunc delegate_Jack_showMB;
-//	SEL_CallFunc delegate_Jack_takeSpeedUpItem;
-//	SEL_FCallFunc delegate_Jack_getAlphaSpeed;
-//	SEL_CallFuncF delegate_Jack_setAlphaSpeed;
-//	SEL_FCallFunc delegate_Jack_getSpeedUpValue;
 };
 
 extern GameData* gameData;
