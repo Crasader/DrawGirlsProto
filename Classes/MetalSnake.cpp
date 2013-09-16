@@ -719,6 +719,7 @@ void MetalSnake::attack(float dt)
 			
 		}
 		
+		attackCode = 13;
 		if(attackCode == 13) // fury
 		{
 			m_state = CUMBERSTATESTOP;
@@ -998,3 +999,7 @@ void MetalSnake::setupRandomPosition()
 	}
 }
 
+void MetalSnake::setGameover()
+{
+	m_state = CUMBERSTATESTOP;
+}

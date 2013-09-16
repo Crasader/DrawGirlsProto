@@ -300,11 +300,11 @@ void CumberParent::realStartDieAnimation()
 	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 	myGD->communication("MP_explosion", mainCumber->getPosition(), myColor);
 	
-	for(auto mainCumber : mainCumbers)
-	{
-		mainCumber->setScale(die_animation_rate/40.f);
-		mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
-	}
+//	for(auto mainCumber : mainCumbers)
+//	{
+////		mainCumber->setScale(die_animation_rate/40.f);
+//		mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
+//	}
 	schedule(schedule_selector(CumberParent::dieAnimation));
 }
 
@@ -316,8 +316,8 @@ void CumberParent::dieAnimation()
 	{
 		die_animation_cnt = 0;
 		die_animation_rate -= 5;
-		for(auto mainCumber : mainCumbers)
-			mainCumber->setScale(die_animation_rate/40.f);
+//		for(auto mainCumber : mainCumbers)
+//			mainCumber->setScale(die_animation_rate/40.f);
 		
 		if(die_animation_rate <= 0)
 		{
@@ -335,8 +335,8 @@ void CumberParent::dieAnimation()
 		//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
 		auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 		myGD->communication("MP_explosion", mainCumber->getPosition(), myColor);
-		for(auto mainCumber : mainCumbers)
-			mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
+//		for(auto mainCumber : mainCumbers)
+//			mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
 	}
 }
 

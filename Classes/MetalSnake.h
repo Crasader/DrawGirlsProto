@@ -59,6 +59,7 @@ public:
 	virtual void onPatternEnd()
 	{
 		CCLog("onPatternEnd!!");
+		m_noDirection.state = 2;
 	}
 	virtual void onStartGame()
 	{
@@ -172,7 +173,7 @@ public:
 	virtual void furyModeOff();
 	void setupRandomPosition();
 	virtual void getRandomPosition(IntPoint* ip, bool* finded);
-
+	virtual void setGameover();
 protected:
 	const float FURY_DURATION;
 	const float RADIUS;
