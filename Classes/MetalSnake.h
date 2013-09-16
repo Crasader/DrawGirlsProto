@@ -62,7 +62,9 @@ public:
 	}
 	virtual void onStartGame()
 	{
-		CCLog("onStartGame!!");
+		m_noDirection.state = 2;
+		
+
 	}
 	void crashMapForPosition(CCPoint targetPt);
 	virtual void movingAndCrash(float dt);
@@ -169,6 +171,8 @@ public:
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
 	void setupRandomPosition();
+	virtual void getRandomPosition(IntPoint* ip, bool* finded);
+
 protected:
 	const float FURY_DURATION;
 	const float RADIUS;
