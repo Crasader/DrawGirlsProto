@@ -40,7 +40,7 @@ public:
 	ATTACK_POINT_Y(0),   // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
 	BODY_MARGIN(20),     // 몸통 사이의 거리.
 	TAIL_MARGIN(40),      // 몸통과 꼬리사이의 거리.
-	FURY_DURATION(2.f) // 분노모드 초.
+	FURY_DURATION(4.f) // 분노모드 초.
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
@@ -168,6 +168,7 @@ public:
 	virtual void furyModeOn();
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
+	void setupRandomPosition();
 protected:
 	const float FURY_DURATION;
 	const float RADIUS;

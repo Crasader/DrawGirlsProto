@@ -14,7 +14,7 @@
 #include <cmath>
 #include "ProbSelector.h"
 #include "CumberEmotion.h"
-
+#include <algorithm>
 
 
 bool KSCumber::init()
@@ -27,57 +27,11 @@ bool KSCumber::init()
 	
 	addChild(m_headImg);
 	
-	bool isGoodPointed = false;
-	int check_loop_cnt = 0;
 	IntPoint mapPoint;
-	while(!isGoodPointed)
-	{
-		check_loop_cnt++;
-		if(check_loop_cnt > 3000)
-		{
-			CCAssert(false, "");
-		}
-//			AlertEngine::sharedInstance()->addSingleAlert("error", "maincumber init infinity loop", "ok", 1, this, alertfuncII_selector(MainCumber::alertAction));
-		
-		
-		mapPoint.x = m_well512.GetValue(1, mapLoopRange::mapWidthInnerEnd - 1);
-		mapPoint.y = m_well512.GetValue(1, mapLoopRange::mapHeightInnerEnd - 1);
-		
-		float myScale = m_scale;
-		if(mapPoint.isInnerMap() && gameData->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
-		{
-			float half_distance = RADIUS*myScale; // 20.f : radius for base scale 1.f
-			float calc_distance;
-			IntPoint check_position;
-			
-			bool is_not_position = false;
-			
-			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
-			{
-				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
-				{
-					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
-					if(calc_distance < half_distance)
-					{
-						check_position = IntPoint(i,j);
-						if(!check_position.isInnerMap() || gameData->mapState[check_position.x][check_position.y] != mapEmpty)
-						{
-							is_not_position = true;
-						}
-					}
-				}
-			}
-			if(!is_not_position)
-			{
-				isGoodPointed = true;
-			}
-		}
-	}
-	
-	gameData->setMainCumberPoint(mapPoint);
-	
-	setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
-	
+	bool finded;
+	getRandomPosition(&mapPoint, &finded);
+//	gameData->setMainCumberPoint(mapPoint);
+	setPosition(ip2ccp(mapPoint));
 //	startMoving();
 	
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
@@ -110,6 +64,7 @@ void KSCumber::movingAndCrash(float dt)
 		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.1f*cnt);
 		
 		CCPoint cumberPosition = getPosition();
+		CCLog("ss : %f %f", cumberPosition.x, cumberPosition.y);
 		afterPosition = cumberPosition + ccp(speedX, speedY);
 		IntPoint afterPoint = ccp2ip(afterPosition);
 		
@@ -243,50 +198,17 @@ void KSCumber::animationNoDirection(float dt)
 	
 	if(m_noDirection.state == 1)
 	{
-		m_noDirection.rotationDeg += 6.f;
-		if(m_noDirection.rotationDeg >= 360)
+		/// 좀 돌았으면 돌아감.
+		if(m_noDirection.rotationCnt >= 5)
 		{
-			m_noDirection.rotationDeg -= 360;
-			m_noDirection.rotationCnt++;
-			
-#if 0
-			/// 좀 돌았으면 돌아감.
-			if(m_noDirection.rotationCnt >= 5)
-			{
-				m_noDirection.state = 2;
-				return;
-			}
-#endif
+			m_noDirection.state = 2;
+			return;
 		}
-		m_noDirection.distance += 0.5f;
-		m_noDirection.distance = MIN(m_noDirection.distance, 30);
-		float dx = cos(deg2Rad(m_noDirection.rotationDeg)) * m_noDirection.distance;
-		float dy = sin(deg2Rad(m_noDirection.rotationDeg)) * m_noDirection.distance * 1.2f; // 약간 타원
-		
-		
-		dx = dy = 0.f; // 안돔.
-		//	float speed = 2.f;
-		//	dx *= speed;
-		//	dy *= speed;
-		
-		setPosition(m_noDirection.startingPoint + ccp(dx, dy));
 	}
 	else if(m_noDirection.state == 2)
 	{
-		CCPoint dir = m_noDirection.startingPoint - getPosition();
-		float rad = atan2(dir.y, dir.x);
-		float dx = cos(rad);
-		float dy = sin(rad);
-		
-		
-		if(ccpLength(m_noDirection.startingPoint - getPosition()) <= 0.5f)
-		{
-			m_state = CUMBERSTATEMOVING;
-			unschedule(schedule_selector(KSCumber::animationNoDirection));
-			setPosition(m_noDirection.startingPoint);
-		}
-		else
-			setPosition(getPosition() + ccp(dx, dy));
+		m_state = CUMBERSTATEMOVING;
+		unschedule(schedule_selector(KSCumber::animationNoDirection));
 	}
 }
 
@@ -330,7 +252,7 @@ void KSCumber::attack(float dt)
 		
 //		gameData->communication("MP_attackWithCode", getPosition(), attackCode);
 		
-		gameData->communication("MP_attackWithCode", getPosition(), 34);
+		gameData->communication("MP_attackWithCode", getPosition(), 23);
 		
 		//		showEmotion(kEmotionType_joy);
 		//		m_speed = m_well512.GetValue(2, 4);
@@ -426,5 +348,97 @@ void KSCumber::invisibling(float dt)
 
 }
 
+void KSCumber::getRandomPosition(IntPoint* ip, bool* finded)
+{
+	bool isGoodPointed = false;
+	
+	IntPoint mapPoint;
+	vector<IntPoint> shuffledPositions;
+	for(int x = 1; x <= mapLoopRange::mapWidthInnerEnd - 1; x++)
+	{
+		for(int y = 1; y <= mapLoopRange::mapHeightInnerEnd - 1; y++)
+		{
+			shuffledPositions.push_back(IntPoint(x, y));
+		}
+	}
+	
+	random_shuffle(shuffledPositions.begin(), shuffledPositions.end());
+	for(auto& mp : shuffledPositions)
+	{
+		mapPoint = mp;
+		
+		float myScale = m_scale;
+		if(mapPoint.isInnerMap() && gameData->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
+		{
+			float half_distance = RADIUS*myScale; // 20.f : radius for base scale 1.f
+			float calc_distance;
+			IntPoint check_position;
+			
+			bool is_not_position = false;
+			
+			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
+			{
+				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
+				{
+					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
+					if(calc_distance < half_distance)
+					{
+						check_position = IntPoint(i,j);
+						if(!check_position.isInnerMap() || gameData->mapState[check_position.x][check_position.y] != mapEmpty)
+						{
+							is_not_position = true;
+						}
+					}
+				}
+			}
+			if(!is_not_position)
+			{
+				isGoodPointed = true;
+				break;
+			}
+		}
+	}
+	
+	if(isGoodPointed == true)
+	{
+		*ip = mapPoint;
+		*finded = true;
+//		CCLog("map point %d %d", mapPoint.x, mapPoint.y);
+//		CCLog("scale %f", m_headImg->getScale());
+//		CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
+//		m_headImg->runAction(t_scale);
+//		gameData->setMainCumberPoint(mapPoint);
+//		
+//		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
+	}
+	else
+	{
+		*finded = false;
+		// nothing.
+		CCAssert(false, "");
+	}
+}
 
-
+void KSCumber::randomPosition()
+{
+	IntPoint mapPoint;
+	bool finded;
+	getRandomPosition(&mapPoint, &finded);
+	
+//	gameData->setMainCumberPoint(mapPoint);
+	setPosition(ip2ccp(mapPoint));
+	
+	CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
+	m_headImg->runAction(t_scale);
+	
+	
+	{
+		CCScaleTo* t_scale = CCScaleTo::create(0.2, 1.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainCumber::lightSmaller));
+		
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		
+		runAction(t_seq);
+	}
+	
+}

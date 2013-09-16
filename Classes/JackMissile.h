@@ -15,7 +15,7 @@
 #include "MissileDamageData.h"
 #include "DataStorageHub.h"
 
-#define JM_SPEED 3.f
+#define JM_SPEED 5.f
 #define JM_CHANGE_DIRECTION_VAL	10.f
 
 using namespace cocos2d;

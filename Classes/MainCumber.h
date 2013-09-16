@@ -77,6 +77,8 @@ public:
 	{
 		return getPosition();
 	}
+	virtual void getRandomPosition(IntPoint* ip, bool* finded){}
+	virtual void randomPosition(){}
 //private:
 protected:
 	CCObject* target_setCaught;

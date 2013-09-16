@@ -1125,7 +1125,6 @@ private:
 				
 				isDie = false;
 				isStun = false;
-				jackImg->removeFromParentAndCleanup(true);
 				
 				dieEscapeJack();
 				
@@ -1133,6 +1132,8 @@ private:
 					endGame();
 				else
 				{
+					jackImg->removeFromParentAndCleanup(true);
+					
 					CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
 					
 					jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
