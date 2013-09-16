@@ -662,7 +662,7 @@ void MainCumber::startTeleport()
 void MainCumber::smaller()
 {
 	CCScaleTo* t_scale = CCScaleTo::create(0.2, 0.f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainCumber::changePosition));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainCumber::randomPosition));
 	
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 	
@@ -846,6 +846,7 @@ void MainCumber::endTeleport()
 	teleportImg->removeFromParentAndCleanup(true);
 	teleportImg = NULL;
 	startMoving();
+	myGD->communication("CP_onPatternEnd");
 }
 
 void MainCumber::createSheild()

@@ -1018,7 +1018,7 @@ public:
 			keepAP23 = t_m23;
 		}
 		
-		
+		myGD->communication("CP_onPatternEnd");
 	}
 	void cancelAP23(){		}
 	
@@ -1128,7 +1128,7 @@ public:
 	{
 		AP_Missile32* t_m32 = AP_Missile32::create();
 		addChild(t_m32);
-		myGD->communication("CP_onPatternEnd");
+		
 	}
 	void cancelAP32(){		}
 	

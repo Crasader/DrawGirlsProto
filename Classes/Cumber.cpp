@@ -454,7 +454,7 @@ void CumberParent::myInit()
 	
 	void onStartGame();
 	void onPatternEnd();
-	auto mainCumber = MainCumber::create();
+	auto mainCumber = MetalSnake::create();
 //	auto mainCumber = MetalSnake::create();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);

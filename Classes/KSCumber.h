@@ -16,6 +16,7 @@
 #include "CumberEmotion.h"
 
 
+
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
 class KSCumber : public KSCumberBase
 {
@@ -80,6 +81,20 @@ public:
 	{
 		return getPosition() + ccp(0, 0);
 	}
+	virtual void getRandomPosition(IntPoint* ip, bool* finded);
+	virtual void setScale(float scale)
+	{
+		m_headImg->setScale(scale);
+	}
+	virtual void setScaleX(float x)
+	{
+		m_headImg->setScaleX(x);
+	}
+	virtual void setScaleY(float y)
+	{
+		m_headImg->setScaleY(y);
+	}
+	virtual void randomPosition();
 protected:
 	bool isGameover;
 	float m_scale;

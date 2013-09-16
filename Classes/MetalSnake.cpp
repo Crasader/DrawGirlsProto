@@ -16,8 +16,7 @@
 #include "ProbSelector.h"
 #include "CumberEmotion.h"
 #include "Jack.h"
-
-
+#include "RandomSelector.h"
 MetalSnake::~MetalSnake()
 {
 	
@@ -46,52 +45,13 @@ bool MetalSnake::init()
 	m_tailImg = CCSprite::create("metalsnake_tail.png");
 	addChild(m_tailImg, lastZ - 1);
 	
-	bool isGoodPointed = false;
-	int check_loop_cnt = 0;
 	IntPoint mapPoint;
-	while(!isGoodPointed)
-	{
-		check_loop_cnt++;
-		if(check_loop_cnt > 3000)
-		{
-			CCAssert(false, "");
-		}
-		//			AlertEngine::sharedInstance()->addSingleAlert("error", "maincumber init infinity loop", "ok", 1, this, alertfuncII_selector(MainCumber::alertAction));
-		
-		mapPoint.x = m_well512.GetValue(1, mapLoopRange::mapWidthInnerEnd - 1);
-		mapPoint.y = m_well512.GetValue(1, mapLoopRange::mapHeightInnerEnd - 1);
-		
-		float myScale = getCumberScale();
-		if(mapPoint.isInnerMap() && gameData->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
-		{
-			float half_distance = RADIUS*myScale; // 20.f : radius for base scale 1.f
-			float calc_distance;
-			IntPoint check_position;
-			bool is_not_position = false;
-			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
-			{
-				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
-				{
-					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
-					if(calc_distance < half_distance)
-					{
-						check_position = IntPoint(i,j);
-						if(!check_position.isInnerMap() || gameData->mapState[check_position.x][check_position.y] != mapEmpty)
-						{
-							is_not_position = true;
-						}
-					}
-				}
-			}
-			if(!is_not_position)
-			{
-				isGoodPointed = true;
-			}
-		}
-	}
-	
+	bool finded;
+	getRandomPosition(&mapPoint, &finded);
 	gameData->setMainCumberPoint(mapPoint);
-	setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
+	setPosition(ip2ccp(mapPoint));
+	
+	
 	//	startMoving();
 	schedule(schedule_selector(MetalSnake::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
@@ -643,7 +603,7 @@ void MetalSnake::furyMoving(float dt)
 		{
 			validPosition = true;
 		}
-		if(m_furyMode.furyFrameCount % 12 == 0) // n 프레임당 한번 깎음.
+		if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
 		{
 			crashMapForPosition(afterPosition);
 		}
@@ -723,33 +683,49 @@ void MetalSnake::attack(float dt)
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
 //		stopMoving();
-//		startAnimationNoDirection();
+//		startAnimationNoDirection(); // 몬스터 빙글빙글..
 		
 		int attackCode = 0;
+		// 101, 102, 103, 13, 17, 23, 10,
+		/*
+		 myRS->setNumerator(2, kAP_CODE_pattern101);
+		 myRS->setNumerator(2, kAP_CODE_pattern102);
+		 myRS->setNumerator(2, kAP_CODE_pattern103);
+		 myRS->setNumerator(1, kAP_CODE_pattern10);
+		 myRS->setNumerator(1, kAP_CODE_pattern13);
+		 myRS->setNumerator(1, kAP_CODE_pattern17);
+		 myRS->setNumerator(1, kAP_CODE_pattern23);
+		 */
+		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
+			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102, 
+			kAP_CODE_pattern103, kAP_CODE_pattern103};
+		
+		
 		
 		bool searched = false;
 		while(!searched)
 		{
-			attackCode = m_well512.GetValue(0, 38);
-			if(attackCode == 13 || attackCode == 19 || attackCode == 32 || attackCode == 35)
-			{
-				searched = false;
-			}
-			else
-				searched = true;
-			
+			random_shuffle(attacks.begin(), attacks.end());
+			attackCode = attacks[0];
+			searched = true;
 			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
 				searched = false;
 			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
 				searched = false;
 			
-		}
-		if(m_state != CUMBERSTATEFURY)
-		{
-			m_state = CUMBERSTATESTOP;
-			gameData->communication("MP_attackWithCode", getPosition(), 13);
+			
 		}
 		
+		if(attackCode == 13) // fury
+		{
+			m_state = CUMBERSTATESTOP;
+			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+		}
+		else
+		{
+			startAnimationNoDirection();
+			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+		}
 //		showEmotion(kEmotionType_joy);
 		//		m_speed = m_well512.GetValue(2, 4);
 		//		startAnimationNoDirection();
@@ -843,6 +819,8 @@ void MetalSnake::crashMapForPosition(CCPoint targetPt)
 	{
 		for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
 		{
+			crashArea.insert(IntPoint(i, j));
+#if 0 // 원 형태로 부숨.
 			float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
 			if(calc_distance < ip_half_distance)
 			{
@@ -850,6 +828,7 @@ void MetalSnake::crashMapForPosition(CCPoint targetPt)
 				   j >= mapLoopRange::mapHeightInnerBegin && j < mapLoopRange::mapHeightInnerEnd )
 					crashArea.insert(IntPoint(i, j));
 			}
+#endif
 		}
 	}
 	for(auto& i : crashArea)
@@ -887,3 +866,69 @@ void MetalSnake::furyModeOff()
 		furyMode->removeFromParentAndCleanup(true);
 	}
 }
+
+
+void MetalSnake::setupRandomPosition()
+{
+	bool isGoodPointed = false;
+	
+	IntPoint mapPoint;
+	vector<IntPoint> shuffledPositions;
+	for(int x = 1; x <= mapLoopRange::mapWidthInnerEnd - 1; x++)
+	{
+		for(int y = 1; y <= mapLoopRange::mapHeightInnerEnd - 1; y++)
+		{
+			shuffledPositions.push_back(IntPoint(x, y));
+		}
+	}
+	
+	random_shuffle(shuffledPositions.begin(), shuffledPositions.end());
+	for(auto& mp : shuffledPositions)
+	{
+		mapPoint = mp;
+		
+		float myScale = getCumberScale();
+		if(mapPoint.isInnerMap() && gameData->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
+		{
+			float half_distance = RADIUS*myScale; // 20.f : radius for base scale 1.f
+			float calc_distance;
+			IntPoint check_position;
+			
+			bool is_not_position = false;
+			
+			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
+			{
+				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
+				{
+					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
+					if(calc_distance < half_distance)
+					{
+						check_position = IntPoint(i,j);
+						if(!check_position.isInnerMap() || gameData->mapState[check_position.x][check_position.y] != mapEmpty)
+						{
+							is_not_position = true;
+						}
+					}
+				}
+			}
+			if(!is_not_position)
+			{
+				isGoodPointed = true;
+				break;
+			}
+		}
+	}
+	
+	if(isGoodPointed == true)
+	{
+		gameData->setMainCumberPoint(mapPoint);
+		
+		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
+	}
+	else
+	{
+		// nothing.
+		CCAssert(false, "");
+	}
+}
+
