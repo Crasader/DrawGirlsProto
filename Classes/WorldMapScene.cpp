@@ -33,7 +33,10 @@ enum WMS_Zorder{
 };
 
 enum WMS_MenuTag{
-	kWMS_MT_stageBase = 0
+	kWMS_MT_stageBase = 0,
+	kWMS_MT_uiSettingLeft = 1001,
+	kWMS_MT_uiSettingFull = 1002,
+	kWMS_MT_uiSettingRight = 1003
 };
 
 // on "init" you need to initialize your instance
@@ -130,61 +133,41 @@ bool WorldMapScene::init()
 		}
 	}
 	
-//	if(updated_stage >= 10 && 8 <= cleared_number)
-//	{
-//		if(9 <= cleared_number)
-//		{
-//			CCSprite* n_stage = CCSprite::create("worldmap_boss.png");
-//			CCLabelTTF* n_stage_label = CCLabelTTF::create("Boss", mySGD->getFont().c_str(), 10);
-//			n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
-//			n_stage->addChild(n_stage_label);
-//			
-//			CCSprite* s_stage = CCSprite::create("worldmap_boss.png");
-//			s_stage->setColor(ccGRAY);
-//			CCLabelTTF* s_stage_label = CCLabelTTF::create("Boss", mySGD->getFont().c_str(), 10);
-//			s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
-//			s_stage->addChild(s_stage_label);
-//			
-//			
-//			CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(WorldMapScene::menuAction));
-//			stage_item->setTag(kWMS_MT_stageBase+10);
-//			
-//			CCMenu* stage_menu = CCMenu::createWithItem(stage_item);
-//			stage_menu->setPosition(getStagePosition(10));
-//			addChild(stage_menu, kWMS_Z_stage);
-//			
-//			
-//			CCSprite* stage_thumbnail = CCSprite::create(CCString::createWithFormat("stage%d_thumbnail.png", 10)->getCString());
-//			stage_thumbnail->setPosition(ccpAdd(getStagePosition(10), ccp(0,40)));
-//			addChild(stage_thumbnail, kWMS_Z_stage);
-//		}
-//		else
-//		{
-//			CCSprite* d_stage = CCSprite::create("worldmap_boss.png");
-//			CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", mySGD->getFont().c_str(), 10);
-//			d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
-//			d_stage->addChild(d_stage_label);
-//			
-//			d_stage->setPosition(getStagePosition(10));
-//			addChild(d_stage, kWMS_Z_stage);
-//			
-//			
-//			CCSprite* stage_thumbnail = CCSprite::create("question_thumbnail.png");
-//			stage_thumbnail->setPosition(ccpAdd(getStagePosition(10), ccp(0,40)));
-//			addChild(stage_thumbnail, kWMS_Z_stage);
-//		}
-//	}
-//	else
-//	{
-//		CCSprite* d_stage = CCSprite::create("worldmap_boss.png");
-//		CCLabelTTF* d_stage_label = CCLabelTTF::create("Boss", mySGD->getFont().c_str(), 10);
-//		d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
-//		d_stage->addChild(d_stage_label);
-//		
-//		d_stage->setPosition(getStagePosition(10));
-//		addChild(d_stage, kWMS_Z_stage);
-//	}
-		
+	CCSprite* n_left = CCSprite::create("ui_setting_left.png");
+	CCSprite* s_left = CCSprite::create("ui_setting_left.png");
+	s_left->setColor(ccGRAY);
+	
+	CCMenuItem* left_item = CCMenuItemSprite::create(n_left, s_left, this, menu_selector(WorldMapScene::menuAction));
+	left_item->setTag(kWMS_MT_uiSettingLeft);
+	
+	CCMenu* left_menu = CCMenu::createWithItem(left_item);
+	left_menu->setPosition(ccp(320,40));
+	addChild(left_menu, kWMS_Z_stage);
+	
+	
+	CCSprite* n_full = CCSprite::create("ui_setting_full.png");
+	CCSprite* s_full = CCSprite::create("ui_setting_full.png");
+	s_full->setColor(ccGRAY);
+	
+	CCMenuItem* full_item = CCMenuItemSprite::create(n_full, s_full, this, menu_selector(WorldMapScene::menuAction));
+	full_item->setTag(kWMS_MT_uiSettingFull);
+	
+	CCMenu* full_menu = CCMenu::createWithItem(full_item);
+	full_menu->setPosition(ccp(377,40));
+	addChild(full_menu, kWMS_Z_stage);
+	
+	
+	CCSprite* n_right = CCSprite::create("ui_setting_right.png");
+	CCSprite* s_right = CCSprite::create("ui_setting_right.png");
+	s_right->setColor(ccGRAY);
+	
+	CCMenuItem* right_item = CCMenuItemSprite::create(n_right, s_right, this, menu_selector(WorldMapScene::menuAction));
+	right_item->setTag(kWMS_MT_uiSettingRight);
+	
+	CCMenu* right_menu = CCMenu::createWithItem(right_item);
+	right_menu->setPosition(ccp(434,40));
+	addChild(right_menu, kWMS_Z_stage);
+	
 	is_menu_enable = true;
 	
 	srand(time(NULL));
@@ -217,9 +200,27 @@ void WorldMapScene::menuAction(CCObject* pSender)
 	
 	is_menu_enable = false;
 	int tag = ((CCNode*)pSender)->getTag();
-	tag -= kWMS_MT_stageBase;
 	
-	showPopup(tag);
+	if(tag < kWMS_MT_uiSettingLeft)
+	{
+		tag -= kWMS_MT_stageBase;
+		showPopup(tag);
+	}
+	else if(tag == kWMS_MT_uiSettingLeft)
+	{
+		myGD->setUItype(kGT_leftUI);
+		is_menu_enable = true;
+	}
+	else if(tag == kWMS_MT_uiSettingFull)
+	{
+		myGD->setUItype(kGT_full);
+		is_menu_enable = true;
+	}
+	else if(tag == kWMS_MT_uiSettingRight)
+	{
+		myGD->setUItype(kGT_rightUI);
+		is_menu_enable = true;
+	}
 }
 
 void WorldMapScene::showPopup(int stage)

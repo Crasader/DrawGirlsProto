@@ -970,12 +970,11 @@ public:
 	
 	void initStartPosition(CCPoint t_p)
 	{
-		float scale_value = MY_SCALE;
-		int base_value = roundf(-t_p.y/scale_value/2.f);
+		int base_value = roundf(-t_p.y/myGD->game_scale/2.f);
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_height = roundf(480*screen_size.height/screen_size.width/2.f);
 		
-		IntPoint checking_point = IntPoint(80,base_value+roundf(screen_height/scale_value/2.f));
+		IntPoint checking_point = IntPoint(80,base_value+roundf(screen_height/myGD->game_scale/2.f));
 		
 		int map_end_check_cnt = 0;
 		bool is_found = false;

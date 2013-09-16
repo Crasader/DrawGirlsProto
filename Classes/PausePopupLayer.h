@@ -19,9 +19,6 @@ using namespace std;
 enum MenuTagPPL{
 	kMenuTagPPL_home = 1,
 	kMenuTagPPL_continue,
-	kMenuTagPPL_gesture,
-	kMenuTagPPL_button,
-	kMenuTagPPL_joystick,
 	kMenuTagPPL_slow,
 	kMenuTagPPL_normal,
 	kMenuTagPPL_fast
@@ -85,7 +82,7 @@ private:
 		is_ing = true;
 		CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.1f);
 		float x_value;
-		if(GAMESCREEN_TYPE == RIGHTUI)		x_value = 480-25;
+		if(myGD->gamescreen_type == kGT_rightUI)		x_value = 480-25;
 		else								x_value = 25;
 		CCMoveTo* t_move = CCMoveTo::create(0.2f, ccp(x_value,myDSH->ui_top-25));
 		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_move);
@@ -103,54 +100,38 @@ private:
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)
-		{
-			if(home_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kMenuTagPPL_home;
-			else if(continue_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kMenuTagPPL_continue;
-			else if(slow_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_slow;
-			else if(normal_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_normal;
-			else if(fast_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_fast;
-		}
+		touched_number = 0;
+		if(home_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kMenuTagPPL_home;
+		else if(continue_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kMenuTagPPL_continue;
+		else if(slow_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_slow;
+		else if(normal_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_normal;
+		else if(fast_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_fast;
 		return true;
 	}
 	
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)		return;
 		if(touched_number == kMenuTagPPL_home)						home_menu->ccTouchMoved(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_continue)				continue_menu->ccTouchMoved(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_gesture)				gesture_menu->ccTouchMoved(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_button)				button_menu->ccTouchMoved(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_joystick)				joystick_menu->ccTouchMoved(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchMoved(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchMoved(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchMoved(pTouch, pEvent);
 	}
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)		return;
 		if(touched_number == kMenuTagPPL_home)						home_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_continue)				continue_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_gesture)				gesture_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_button)				button_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_joystick)				joystick_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchEnded(pTouch, pEvent);
-		touched_number = 0;
 	}
     virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)		return;
 		if(touched_number == kMenuTagPPL_home)						home_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_continue)				continue_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_gesture)				gesture_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_button)				button_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_joystick)				joystick_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchEnded(pTouch, pEvent);
-		touched_number = 0;
 	}
 	
 	void resetControlMenu();

@@ -195,7 +195,7 @@ public:
 			mySAE->unloadEffect("sound_attackpattern_base.mp3");
 			mySAE->unloadEffect("sound_attackpattern_crash.mp3");
 			mySAE->unloadEffect("sound_bomb_common.mp3");
-			mySAE->unloadEffect("sound_clear_bgm.mp3");
+//			mySAE->unloadEffect("sound_clear_bgm.mp3");
 			mySAE->unloadEffect("sound_clear_ment.mp3");
 			mySAE->unloadEffect("sound_die_jack.mp3");
 			mySAE->unloadEffect("sound_gameover_bgm.mp3");

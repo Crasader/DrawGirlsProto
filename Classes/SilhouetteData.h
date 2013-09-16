@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "GameData.h"
 #include "EnumDefine.h"
+#include <deque>
 
 USING_NS_CC;
 using namespace std;
@@ -43,6 +44,36 @@ public:
 	void setSilType(int t1)
 	{
 		myType = t1;
+		
+		if(isAnimationStage())
+		{
+			animation_frame.clear();
+			
+			deque<int> t_que;
+			if(myType == 3)
+			{
+				t_que.push_back(0);
+				t_que.push_back(1);
+				t_que.push_back(2);
+				t_que.push_back(0);
+			}
+			else if(myType == 8)
+			{
+				t_que.push_back(0);
+				t_que.push_back(0);
+				t_que.push_back(1);
+				t_que.push_back(1);
+				t_que.push_back(2);
+				t_que.push_back(2);
+				t_que.push_back(3);
+				t_que.push_back(0);
+			}
+			
+			for(int i=0;i<getAnimationLoopLength();i++)
+			{
+				animation_frame.push_back(t_que[i]);
+			}
+		}
 	}
 	
 	int getSilType()
@@ -362,6 +393,68 @@ public:
 		return return_value;
 	}
 	
+	bool isAnimationStage(){	return isAnimationStage(myType);	}
+	bool isAnimationStage(int t_type)
+	{
+		bool return_value;
+		
+		if(t_type == 3)			return_value = true;
+		else if(t_type == 8)	return_value = true;
+		else					return_value = false;
+		
+		return return_value;
+	}
+	
+	CCSize getAnimationCutSize(){	return getAnimationCutSize(myType);	}
+	CCSize getAnimationCutSize(int t_type)
+	{
+		CCSize return_value;
+		
+		if(t_type == 3)			return_value = CCSizeMake(80, 30);
+		else if(t_type == 8)	return_value = CCSizeMake(85, 75);
+		else					return_value = CCSizeMake(0, 0);
+		
+		return return_value;
+	}
+	
+	int getAnimationCutLength(){	return getAnimationCutLength(myType);	}
+	int getAnimationCutLength(int t_type)
+	{
+		int return_value;
+		
+		if(t_type == 3)			return_value = 3;
+		else if(t_type == 8)	return_value = 4;
+		else					return_value = 0;
+		
+		return return_value;
+	}
+	
+	CCPoint getAnimationPosition(){	return getAnimationPosition(myType);	}
+	CCPoint getAnimationPosition(int t_type)
+	{
+		CCPoint return_value;
+		
+		if(t_type == 3)			return_value = ccp(163,324);
+		else if(t_type == 8)	return_value = ccp(157,289);
+		else					return_value = ccp(0,0);
+		
+		return return_value;
+	}
+	
+	int getAnimationLoopLength(){	return getAnimationLoopLength(myType);	}
+	int getAnimationLoopLength(int t_type)
+	{
+		int return_value;
+		
+		if(t_type == 3)			return_value = 4;
+		else if(t_type == 8)	return_value = 8;
+		else					return_value = 0;
+		
+		return return_value;
+	}
+	
+	int getAnimationLoopPoint(int t_frame){	return animation_frame[t_frame];	}
+	
 	string getScriptString(int level);
 	
 	void startSetting();
@@ -371,6 +464,7 @@ public:
 	
 private:
 	int myType;
+	deque<int> animation_frame;
 	
 	void myInit()
 	{

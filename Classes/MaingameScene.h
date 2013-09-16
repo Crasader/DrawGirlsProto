@@ -401,13 +401,13 @@ private:
 	void moveGamePosition(CCPoint t_p)
 	{
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float y_value = -t_p.y*MY_SCALE+480.f*frame_size.height/frame_size.width/2.f;
-		if(y_value > 60)															y_value = 60;
-		else if(y_value < -490*MY_SCALE+480*frame_size.height/frame_size.width)		y_value = -490*MY_SCALE+480*frame_size.height/frame_size.width;
+		float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;
+		if(y_value > 60)																	y_value = 60;
+		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
 		
-		if(GAMESCREEN_TYPE == FULLUI)				game_node->setPosition(ccp(0,y_value));
-		else if(GAMESCREEN_TYPE == LEFTUI)			game_node->setPosition(ccp(50+BOARDER_VALUE,y_value));
-		else if(GAMESCREEN_TYPE == RIGHTUI)			game_node->setPosition(ccp(BOARDER_VALUE,y_value));
+		if(myGD->gamescreen_type == kGT_full)					game_node->setPosition(ccp(0,y_value));
+		else if(myGD->gamescreen_type == kGT_leftUI)			game_node->setPosition(ccp(50+myGD->boarder_value,y_value));
+		else if(myGD->gamescreen_type == kGT_rightUI)			game_node->setPosition(ccp(myGD->boarder_value,y_value));
 	}
 	
 	void goldGettingEffect(CCPoint t_p, int t_i)

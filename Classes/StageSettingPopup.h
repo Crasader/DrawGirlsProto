@@ -332,18 +332,16 @@ private:
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)
+		touched_number = 0;
+		if(start_menu->ccTouchBegan(pTouch, pEvent))				touched_number = kSSPL_MT_start;
+		else if(cancel_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kSSPL_MT_cancel;
+		else
 		{
-			if(start_menu->ccTouchBegan(pTouch, pEvent))				touched_number = kSSPL_MT_start;
-			else if(cancel_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kSSPL_MT_cancel;
-			else
+			int item_list_cnt = item_list.size();
+			for(int i=0;i<item_list_cnt && touched_number == 0;i++)
 			{
-				int item_list_cnt = item_list.size();
-				for(int i=0;i<item_list_cnt && touched_number == 0;i++)
-				{
-					if(((CCMenu*)getChildByTag(kSSPL_CT_menuBase+i))->ccTouchBegan(pTouch, pEvent))
-						touched_number = kSSPL_MT_itemBase+i;
-				}
+				if(((CCMenu*)getChildByTag(kSSPL_CT_menuBase+i))->ccTouchBegan(pTouch, pEvent))
+					touched_number = kSSPL_MT_itemBase+i;
 			}
 		}
 		return true;
@@ -351,7 +349,6 @@ private:
 	
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)		return;
 		if(touched_number == kSSPL_MT_start)						start_menu->ccTouchMoved(pTouch, pEvent);
 		else if(touched_number == kSSPL_MT_cancel)					cancel_menu->ccTouchMoved(pTouch, pEvent);
 		else if(touched_number >= kSSPL_MT_itemBase)
@@ -361,21 +358,17 @@ private:
 	}
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)		return;
 		if(touched_number == kSSPL_MT_start)						start_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number == kSSPL_MT_cancel)					cancel_menu->ccTouchEnded(pTouch, pEvent);
 		else if(touched_number >= kSSPL_MT_itemBase)
 			((CCMenu*)getChildByTag(kSSPL_CT_menuBase+(touched_number-kSSPL_MT_itemBase)))->ccTouchEnded(pTouch, pEvent);
-		touched_number = 0;
 	}
     virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == 0)		return;
 		if(touched_number == kSSPL_MT_start)						start_menu->ccTouchCancelled(pTouch, pEvent);
 		else if(touched_number == kSSPL_MT_cancel)					cancel_menu->ccTouchCancelled(pTouch, pEvent);
 		else if(touched_number >= kSSPL_MT_itemBase)
 			((CCMenu*)getChildByTag(kSSPL_CT_menuBase+(touched_number-kSSPL_MT_itemBase)))->ccTouchCancelled(pTouch, pEvent);
-		touched_number = 0;
 	}
 	
 	virtual void registerWithTouchDispatcher()

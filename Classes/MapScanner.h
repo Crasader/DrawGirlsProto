@@ -253,10 +253,10 @@ private:
 //			CCLog("viewport3 : %d , rSize.height : %.2f", viewport[3], rSize.height);
 			
 //			CCPoint convert_origin = convertToNodeSpace(ccp(t_rect->origin.x, t_rect->origin.y));
-			float x = (t_rect->origin.x*MY_SCALE+jack_position.x)*wScale + viewport[0]-1;
-			float y = (t_rect->origin.y*MY_SCALE+jack_position.y)*hScale + viewport[1]-1;
-			float w = (t_rect->size.width*MY_SCALE)*wScale+2;
-			float h = (t_rect->size.height*MY_SCALE)*hScale+2;
+			float x = (t_rect->origin.x*myGD->game_scale+jack_position.x)*wScale + viewport[0]-1;
+			float y = (t_rect->origin.y*myGD->game_scale+jack_position.y)*hScale + viewport[1]-1;
+			float w = (t_rect->size.width*myGD->game_scale)*wScale+2;
+			float h = (t_rect->size.height*myGD->game_scale)*hScale+2;
 			
 			glScissor(x,y,w,h);
 			
@@ -547,13 +547,13 @@ private:
 //		myVS->setMoveGamePosition(ccp((280-t_p.x)*1.25f-70.f,(160-t_p.y)*1.25f-43.f));
 		
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float y_value = -t_p.y*MY_SCALE+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
-		if(y_value > 60)															y_value = 60;
-		else if(y_value < -490*MY_SCALE+480*frame_size.height/frame_size.width)		y_value = -490*MY_SCALE+480*frame_size.height/frame_size.width;
+		float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
+		if(y_value > 60)																	y_value = 60;
+		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
 		
-		if(GAMESCREEN_TYPE == FULLUI)				myVS->setMoveGamePosition(ccp(0,y_value));
-		else if(GAMESCREEN_TYPE == LEFTUI)			myVS->setMoveGamePosition(ccp(50+BOARDER_VALUE,y_value));
-		else if(GAMESCREEN_TYPE == RIGHTUI)			myVS->setMoveGamePosition(ccp(BOARDER_VALUE,y_value));
+		if(myGD->gamescreen_type == kGT_full)				myVS->setMoveGamePosition(ccp(0,y_value));
+		else if(myGD->gamescreen_type == kGT_leftUI)		myVS->setMoveGamePosition(ccp(50+myGD->boarder_value,y_value));
+		else if(myGD->gamescreen_type == kGT_rightUI)		myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
 	}
 	
 	void myInit(const char* filename, bool isPattern)
@@ -649,8 +649,7 @@ public:
 		
 		my_tic_toc = !my_tic_toc;
 		
-		float scale_value = MY_SCALE;
-		int base_value = roundf(-t_p.y/scale_value/2.f);
+		int base_value = roundf(-t_p.y/myGD->game_scale/2.f);
 		
 		init_rect.size.width = rand()%(50-20 + 1) + 20;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
 		init_rect.size.height = rand()%(50-20 + 1) + 20;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
@@ -658,7 +657,7 @@ public:
 		IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
 		
 		init_rect.origin.x = rand()%maxPoint.x+10;//mapWidthInnerBegin+10;
-		init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/scale_value/2.f)-init_rect.size.height+1;
+		init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/myGD->game_scale/2.f)-init_rect.size.height+1;
 		
 		if(!random_rect_img)
 		{

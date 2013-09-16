@@ -91,8 +91,8 @@ private:
 		delegate_close = d_close;
 		
 		cdt_back = CCSprite::create("condition_box.png");
-		if(GAMESCREEN_TYPE == LEFTUI)		cdt_back->setPosition(ccp(140,myDSH->ui_center_y));
-		else if(GAMESCREEN_TYPE == RIGHTUI)	cdt_back->setPosition(ccp(480-140,myDSH->ui_center_y));
+		if(myGD->gamescreen_type == kGT_leftUI)		cdt_back->setPosition(ccp(140,myDSH->ui_center_y));
+		else if(myGD->gamescreen_type == kGT_rightUI)	cdt_back->setPosition(ccp(480-140,myDSH->ui_center_y));
 		else								cdt_back->setPosition(ccp(350,myDSH->ui_top-30));
 		addChild(cdt_back, kCDT_Z_back);
 		
