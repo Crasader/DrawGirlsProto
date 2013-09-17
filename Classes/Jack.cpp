@@ -689,8 +689,10 @@ void Jack::moveTest()
 		is_end_turn = true;
 		check_turn_cnt++;
 		
+		IntPoint beforePoint = myGD->getJackPoint();
+		
 		myGD->setJackPoint(afterPoint);
-		if(myGD->mapState[afterPoint.x][afterPoint.y] == mapOldline)
+		if(myGD->mapState[afterPoint.x][afterPoint.y] == mapOldline && myGD->mapState[beforePoint.x][beforePoint.y] == mapNewline) // != mapOldline 
 		{
 			if(myState == jackStateDrawing)
 			{
