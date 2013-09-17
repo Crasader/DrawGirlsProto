@@ -17,15 +17,26 @@
 #include <algorithm>
 
 
+
 bool KSCumber::init()
 {
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	m_speed = 2.f;
-	m_headImg = CCSprite::create("chapter10_boss.png");
 	
-	addChild(m_headImg);
+	std::string ccbiName = "boss1.ccbi";
+    CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+    CCBReader* reader = new CCBReader(nodeLoader);
+    m_headImg = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
+    mAnimationManager = reader->getAnimationManager();
+    reader->release();
+    if(m_headImg != NULL) {
+        this->addChild(m_headImg);
+    }
+	
+//	m_headImg = CCSprite::create("chapter10_boss.png");
+//	addChild(m_headImg);
 	
 	IntPoint mapPoint;
 	bool finded;
@@ -34,6 +45,7 @@ bool KSCumber::init()
 	setPosition(ip2ccp(mapPoint));
 //	startMoving();
 	
+	schedule(schedule_selector(KSCumber::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(KSCumber::attack));
 	
@@ -42,6 +54,32 @@ bool KSCumber::init()
 
 void KSCumber::movingAndCrash(float dt)
 {
+	
+	if(m_state == CUMBERSTATEFURY)
+	{
+		furyMoving(dt);
+	}
+	else
+		normalMoving(dt);
+	
+	
+		
+}
+
+void KSCumber::normalMoving(float dt)
+{
+	m_scale.timer += 1 / 60.f;
+	
+	
+	
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	{
+		m_scale.collisionCount = 0;
+		m_scale.collisionStartTime = m_scale.timer;
+		//		setCumberSize(MIN(1.0, getCumberSize() + scale.SCALE_ADDER));
+	}
+	
+	
 	m_directionAngleDegree += m_well512.GetValue(-4, +4);
 	
 	if(m_state == CUMBERSTATEMOVING)
@@ -57,6 +95,9 @@ void KSCumber::movingAndCrash(float dt)
 	
 	bool validPosition = false;
 	int cnt = 0;
+	bool onceOutlineAndMapCollision = false;
+	
+	
 	while(!validPosition)
 	{
 		cnt++;
@@ -64,14 +105,13 @@ void KSCumber::movingAndCrash(float dt)
 		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.1f*cnt);
 		
 		CCPoint cumberPosition = getPosition();
-		CCLog("ss : %f %f", cumberPosition.x, cumberPosition.y);
 		afterPosition = cumberPosition + ccp(speedX, speedY);
 		IntPoint afterPoint = ccp2ip(afterPosition);
 		
-		float half_distance = RADIUS*m_scale; // 20.f : radius for base scale 1.f
+		float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
 		int ip_half_distance = half_distance / 2;
 		IntPoint checkPosition;
-		vector<IntPoint> ips;
+		set<IntPoint> ips;
 		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
 		{
 			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
@@ -79,8 +119,8 @@ void KSCumber::movingAndCrash(float dt)
 				float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
 				if(calc_distance < ip_half_distance)
 				{
-					ips.push_back(IntPoint(i, j));
-				}				
+					ips.insert(IntPoint(i, j));
+				}
 			}
 		}
 		
@@ -92,6 +132,7 @@ void KSCumber::movingAndCrash(float dt)
 		}
 		else if(collisionCode == kCOLLISION_MAP)
 		{
+			onceOutlineAndMapCollision = true;
 			m_directionAngleDegree += m_well512.GetValue(90, 270);
 			
 			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
@@ -99,10 +140,10 @@ void KSCumber::movingAndCrash(float dt)
 		}
 		else if(collisionCode == kCOLLISION_NEWLINE)
 		{
-//			gameData->communication("Jack_startDieEffect");
-//			gameData->communication("SW_createSW", checkPosition, 0, 0);
-//									callfuncI_selector(KSCumber::showEmotion)); //##
-			
+			//			gameData->communication("Jack_startDieEffect");
+			//			gameData->communication("SW_createSW", checkPosition, 0, 0);
+			//									callfuncI_selector(KSCumber::showEmotion)); //##
+			gameData->communication("SW_createSW", checkPosition, 0, 0);
 			m_directionAngleDegree += m_well512.GetValue(90, 270);
 			
 			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
@@ -110,6 +151,7 @@ void KSCumber::movingAndCrash(float dt)
 		}
 		else if(collisionCode == kCOLLISION_OUTLINE)
 		{
+			onceOutlineAndMapCollision = true;
 			m_directionAngleDegree += m_well512.GetValue(90, 270);
 			
 			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
@@ -122,24 +164,111 @@ void KSCumber::movingAndCrash(float dt)
 		else if(afterPoint.isInnerMap())
 		{
 			validPosition = true;
-		}		
-//		setPosition(afterPosition);
+		}
+		//		setPosition(afterPosition);
 		if(cnt % 100 == 0)
 		{
 			CCLog("cnt !! = %d", cnt);
 		}
 	}
 	
-//	CCLog("cnt outer !! = %d", cnt);
+	//	CCLog("cnt outer !! = %d", cnt);
 	
 	if(m_state == CUMBERSTATEMOVING)
 		setPosition(afterPosition);
+	
+	if(onceOutlineAndMapCollision)
+	{
+		
+		if(m_scale.collisionCount == 0)
+		{
+			m_scale.collisionStartTime = m_scale.timer;
+			
+		}
+		m_scale.collisionCount++;
+		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
+		{
+			CCLog("decrese Size !!");
+			setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER));
+		}
+	}
+
 }
+
+
+void KSCumber::furyMoving(float dt)
+{
+	m_furyMode.furyFrameCount++;
+	CCPoint afterPosition;
+	IntPoint afterPoint;
+	//	int check_loop_cnt = 0;
+	
+	bool validPosition = false;
+	int cnt = 0;
+	
+	while(!validPosition)
+	{
+		cnt++;
+		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
+		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
+		
+		CCPoint cumberPosition = getPosition();
+		afterPosition = cumberPosition + ccp(speedX, speedY);
+		afterPoint = ccp2ip(afterPosition);
+		
+		float half_distance = RADIUS*getCumberScale();
+		int ip_half_distance = half_distance / 2;
+		IntPoint checkPosition;
+		set<IntPoint> ips;
+		
+		// 충돌 영역에 대한 포인트 추가.
+		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+		{
+			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+			{
+				float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+				if(calc_distance < ip_half_distance)
+				{
+					ips.insert(IntPoint(i, j));
+				}
+			}
+		}
+		
+		COLLISION_CODE collisionCode = crashLooper(ips, &checkPosition);
+		if(collisionCode == kCOLLISION_OUTLINE)
+		{
+			//			CCLog("collision!!");
+			m_directionAngleDegree += m_well512.GetValue(90, 270);
+			
+			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
+			else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
+		}
+		else
+		{
+			validPosition = true;
+		}
+		if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
+		{
+			crashMapForPosition(afterPosition);
+		}		
+	}
+	
+	//	CCLog("cnt outer !! = %d", cnt);
+	
+	
+	
+	setPosition(afterPosition);
+	
+	
+}
+
 
 void KSCumber::startDamageReaction(float userdata)
 {
 	// 방사형으로 돌아가고 있는 중이라면
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
+	setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
+	
 	
 	if(m_state == CUMBERSTATENODIRECTION)
 	{
@@ -157,6 +286,32 @@ void KSCumber::startDamageReaction(float userdata)
 		
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSCumber::damageReaction));
+	}
+	else if(m_state == CUMBERSTATESTOP)
+	{
+		CCLog("m_state == CUMBERSTATESTOP");
+		float rad = deg2Rad(userdata);
+		m_damageData.m_damageX = cos(rad);
+		m_damageData.m_damageY = sin(rad);
+		//	CCLog("%f %f", dx, dy);
+		m_state = CUMBERSTATEDAMAGING;
+		
+		m_damageData.timer = 0;
+		schedule(schedule_selector(KSCumber::damageReaction));
+	}
+	else if(m_state == CUMBERSTATEFURY)
+	{
+		CCLog("m_state == CUMBERSTATEMOVING");
+		float rad = deg2Rad(userdata);
+		m_damageData.m_damageX = cos(rad);
+		m_damageData.m_damageY = sin(rad);
+		//	CCLog("%f %f", dx, dy);
+		m_state = CUMBERSTATEDAMAGING;
+		
+		m_damageData.timer = 0;
+		schedule(schedule_selector(KSCumber::damageReaction));
+		crashMapForPosition(getPosition());
+		myGD->communication("MS_resetRects");
 	}
 }
 
@@ -181,13 +336,14 @@ void KSCumber::damageReaction(float)
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
 	{
-		m_headImg->setColor(ccc3(255, 0, 0));
+//		m_headImg->setColor(ccc3(255, 0, 0)); //##
 	}
 	else
 	{
-		m_headImg->setColor(ccc3(255, 255, 255));
+//		m_headImg->setColor(ccc3(255, 255, 255));
 		m_state = CUMBERSTATEMOVING;
 		unschedule(schedule_selector(KSCumber::damageReaction));
+		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
 
@@ -209,6 +365,7 @@ void KSCumber::animationNoDirection(float dt)
 	{
 		m_state = CUMBERSTATEMOVING;
 		unschedule(schedule_selector(KSCumber::animationNoDirection));
+		mAnimationManager->runAnimationsForSequenceNamed("3_3cast");
 	}
 }
 
@@ -230,42 +387,41 @@ void KSCumber::attack(float dt)
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
 		//		stopMoving();
-		startAnimationNoDirection();
+		//		startAnimationNoDirection(); // 몬스터 빙글빙글..
 		
 		int attackCode = 0;
+		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
+			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
+			kAP_CODE_pattern103, kAP_CODE_pattern103};
+		
+		
 		
 		bool searched = false;
 		while(!searched)
 		{
-			attackCode = m_well512.GetValue(0, 38);
-			if(attackCode == 13 || attackCode == 19 || attackCode == 32 || attackCode == 35)
-			{
-				searched = false;
-			}
-			else
-				searched = true;
-			
+			random_shuffle(attacks.begin(), attacks.end());
+			attackCode = attacks[0];
+			searched = true;
 			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
-				searched = false;		
+				searched = false;
+			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
+				searched = false;
+			
+			
 		}
 		
-		
-//		gameData->communication("MP_attackWithCode", getPosition(), attackCode);
-		
-		gameData->communication("MP_attackWithCode", getPosition(), 23);
-		
-		//		showEmotion(kEmotionType_joy);
-		//		m_speed = m_well512.GetValue(2, 4);
-		//		startAnimationNoDirection();
-		//		gameData->communication("MP_startFire", getPosition(), false);
-		//		gameData->comm("MP_attackWithCode", 33);
-		if(m_well512.GetValue(0, 1))
+//		attackCode = 13;
+		if(attackCode == 13) // fury
 		{
-			
+			m_state = CUMBERSTATESTOP;
+			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
 		}
-		else{
-			
-		}		
+		else
+		{
+			mAnimationManager->runAnimationsForSequenceNamed("3_1cast");
+			startAnimationNoDirection();
+			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+		}
 	}
 }
 COLLISION_CODE KSCumber::crashWithX(IntPoint check_position)
@@ -299,14 +455,15 @@ COLLISION_CODE KSCumber::crashWithX(IntPoint check_position)
 	return COLLISION_CODE::kCOLLISION_NONE;
 
 }
-COLLISION_CODE KSCumber::crashLooper(const vector<IntPoint> v, IntPoint* cp)
+COLLISION_CODE KSCumber::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
-	for(auto i : v)
+	for(const auto& i : v)
 	{
 		auto result = crashWithX(i);
 		if(result != kCOLLISION_NONE)
 		{
-			*cp = i;
+			if(cp)
+				*cp = i;
 			return result;
 		}
 	}
@@ -331,14 +488,14 @@ void KSCumber::invisibling(float dt)
 	
 	if(m_invisible.invisibleFrame < m_invisible.VISIBLE_FRAME)
 	{
-		m_headImg->setOpacity(MAX(0, 255 - m_invisible.invisibleFrame*5));
+//		m_headImg->setOpacity(MAX(0, 255 - m_invisible.invisibleFrame*5));
 	}
 	else
 	{
 		// 최소 1 최대 255
 		m_invisible.invisibleValue = MIN(255, MAX(1, m_invisible.invisibleValue * 1.2f));
 		
-		m_headImg->setOpacity(m_invisible.invisibleValue);
+//		m_headImg->setOpacity(m_invisible.invisibleValue);
 		if(m_invisible.invisibleValue == 255)
 		{
 			m_invisible.startInvisibleScheduler = false;
@@ -367,7 +524,7 @@ void KSCumber::getRandomPosition(IntPoint* ip, bool* finded)
 	{
 		mapPoint = mp;
 		
-		float myScale = m_scale;
+		float myScale = getCumberScale();
 		if(mapPoint.isInnerMap() && gameData->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
 		{
 			float half_distance = RADIUS*myScale; // 20.f : radius for base scale 1.f
@@ -428,13 +585,14 @@ void KSCumber::randomPosition()
 //	gameData->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	
-	CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
+	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##
 	m_headImg->runAction(t_scale);
 	
 	
 	{
 		CCScaleTo* t_scale = CCScaleTo::create(0.2, 1.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainCumber::lightSmaller));
+		CCCallFunc* t_call = CCCallFunc::create(this,
+												callfunc_selector(KSCumberBase::lightSmaller));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -442,3 +600,89 @@ void KSCumber::randomPosition()
 	}
 	
 }
+
+void KSCumber::crashMapForPosition(CCPoint targetPt)
+{
+	CCPoint afterPosition = targetPt;
+	IntPoint afterPoint = ccp2ip(afterPosition);
+	set<IntPoint> crashArea;
+	float half_distance = RADIUS*getCumberScale() * 1.2f; // 깎을 영역은 충돌 영역크기보다 1.2 배.
+	int ip_half_distance = half_distance / 2;
+	// 충돌 영역에 대한 포인트 추가.
+	for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+	{
+		for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+		{
+			crashArea.insert(IntPoint(i, j));
+#if 0 // 원 형태로 부숨.
+			float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+			if(calc_distance < ip_half_distance)
+			{
+				if(i >= mapLoopRange::mapWidthInnerBegin && i < mapLoopRange::mapWidthInnerEnd &&
+				   j >= mapLoopRange::mapHeightInnerBegin && j < mapLoopRange::mapHeightInnerEnd )
+					crashArea.insert(IntPoint(i, j));
+			}
+#endif
+		}
+	}
+	for(auto& i : crashArea)
+	{
+		crashMapForIntPoint(i);
+	}
+	
+}
+
+void KSCumber::furyModeOn()
+{
+	m_furyMode.startFury();
+	m_noDirection.state = 2;
+	m_state = CUMBERSTATEFURY;
+	
+//	m_headImg->setColor(ccc3(0, 255, 0));
+	
+	schedule(schedule_selector(ThisClassType::furyModeScheduler));
+}
+
+void KSCumber::furyModeScheduler(float dt)
+{
+	m_furyMode.furyTimer += 1.f / 60.f;
+	
+	if(m_furyMode.furyTimer >= FURY_DURATION)
+	{
+		crashMapForPosition(getPosition());
+		
+		m_state = CUMBERSTATEMOVING;
+//		m_headImg->setColor(ccc3(255, 255, 255));
+		myGD->communication("MS_resetRects");
+		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
+	}
+}
+void KSCumber::furyModeOff()
+{
+	myGD->communication("EP_stopCrashAction");
+	myGD->communication("MS_resetRects");
+}
+
+void KSCumber::setGameover()
+{
+	m_state = CUMBERSTATESTOP;
+}
+
+
+void KSCumber::scaleAdjustment(float dt)
+{
+	m_scale.autoIncreaseTimer += 1/60.f;
+	
+	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && m_state != CUMBERSTATENODIRECTION)
+	{
+		CCLog("upSize!");
+		m_scale.increaseTime = m_scale.autoIncreaseTimer;
+		setCumberScale(MIN(1.5f, getCumberScale() + m_scale.SCALE_ADDER));
+	}
+	
+	m_scale.scale.step();
+	
+	m_headImg->setScale(getCumberScale());
+
+}
+

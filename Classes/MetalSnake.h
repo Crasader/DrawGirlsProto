@@ -171,9 +171,16 @@ public:
 	virtual void furyModeOn();
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
-	void setupRandomPosition();
+
 	virtual void getRandomPosition(IntPoint* ip, bool* finded);
 	virtual void setGameover();
+	
+	virtual void lightSmaller(){}
+	
+	virtual void endTeleport(){}
+	virtual void startTeleport(){}
+	virtual void smaller() {}
+	
 protected:
 	const float FURY_DURATION;
 	const float RADIUS;

@@ -141,6 +141,7 @@ void MetalSnake::startAnimationNoDirection()
 
 void MetalSnake::animationNoDirection(float dt)
 {
+	CCLog("animationNoDirection");
 	m_noDirection.timer += 1.f/60.f;
 	
 	if(m_noDirection.state == 1)
@@ -719,7 +720,7 @@ void MetalSnake::attack(float dt)
 			
 		}
 		
-		attackCode = 13;
+		attackCode = kAP_CODE_pattern10;
 		if(attackCode == 13) // fury
 		{
 			m_state = CUMBERSTATESTOP;
@@ -862,13 +863,14 @@ void MetalSnake::furyModeScheduler(float dt)
 }
 void MetalSnake::furyModeOff()
 {
-	if(isFuryMode)
-	{
-		myGD->communication("EP_stopCrashAction");
-		myGD->communication("MS_resetRects");
-		isFuryMode = false;
-		furyMode->removeFromParentAndCleanup(true);
-	}
+	//##
+//	if(isFuryMode)
+//	{
+//		myGD->communication("EP_stopCrashAction");
+//		myGD->communication("MS_resetRects");
+//		isFuryMode = false;
+//		furyMode->removeFromParentAndCleanup(true);
+//	}
 }
 
 void MetalSnake::getRandomPosition(IntPoint* ip, bool* finded)
@@ -934,69 +936,6 @@ void MetalSnake::getRandomPosition(IntPoint* ip, bool* finded)
 		CCAssert(false, "");
 	}
 
-}
-void MetalSnake::setupRandomPosition()
-{
-	bool isGoodPointed = false;
-	
-	IntPoint mapPoint;
-	vector<IntPoint> shuffledPositions;
-	for(int x = 1; x <= mapLoopRange::mapWidthInnerEnd - 1; x++)
-	{
-		for(int y = 1; y <= mapLoopRange::mapHeightInnerEnd - 1; y++)
-		{
-			shuffledPositions.push_back(IntPoint(x, y));
-		}
-	}
-	
-	random_shuffle(shuffledPositions.begin(), shuffledPositions.end());
-	for(auto& mp : shuffledPositions)
-	{
-		mapPoint = mp;
-		
-		float myScale = getCumberScale();
-		if(mapPoint.isInnerMap() && gameData->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
-		{
-			float half_distance = RADIUS*myScale; // 20.f : radius for base scale 1.f
-			float calc_distance;
-			IntPoint check_position;
-			
-			bool is_not_position = false;
-			
-			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
-			{
-				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
-				{
-					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
-					if(calc_distance < half_distance)
-					{
-						check_position = IntPoint(i,j);
-						if(!check_position.isInnerMap() || gameData->mapState[check_position.x][check_position.y] != mapEmpty)
-						{
-							is_not_position = true;
-						}
-					}
-				}
-			}
-			if(!is_not_position)
-			{
-				isGoodPointed = true;
-				break;
-			}
-		}
-	}
-	
-	if(isGoodPointed == true)
-	{
-		gameData->setMainCumberPoint(mapPoint);
-		
-		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
-	}
-	else
-	{
-		// nothing.
-		CCAssert(false, "");
-	}
 }
 
 void MetalSnake::setGameover()

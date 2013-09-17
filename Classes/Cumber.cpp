@@ -43,12 +43,14 @@ void CumberParent::allStopSchedule()
 	//##
 	for(auto i : mainCumbers)
 	{
-		cumberState mainCumberState = i->getCumberState();
-		if(mainCumberState == cumberStateMoving)
+		auto mainCumberState = i->getCumberState();
+		if(mainCumberState == CUMBER_STATE::CUMBERSTATEMOVING)
+		{
 			i->stopMoving();
-		else
-			myMP->pauseSchedulerAndActions();
+		}
 	}
+	
+	myMP->pauseSchedulerAndActions();
 }
 
 void CumberParent::furyModeOn()
@@ -62,7 +64,7 @@ void CumberParent::tickingOn()
 {
 	for(auto i : mainCumbers)
 	{
-		i->tickingOn();
+//		i->tickingOn(); //##
 	}
 }
 
@@ -99,8 +101,8 @@ void CumberParent::decreaseLifeForSubCumber(CCObject* target, float t_damage, fl
 	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 	if(target == mainCumber)
 	{
-		if(mainCumber->isSheild == 1)
-			mainCumber->crashSheild();
+//		if(mainCumber->isSheild == 1)
+//			mainCumber->crashSheild();
 	}
 	else
 	{
@@ -181,15 +183,16 @@ void CumberParent::startTeleport()
 {
 	//##
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	for(auto mainCumber : mainCumbers)
-		mainCumber->startTeleport();
+//	for(auto mainCumber : mainCumbers)
+//		mainCumber->startTeleport();
 }
 
 int CumberParent::getMainCumberSheild()
 {
+	return 0;
 	//##
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	return (*mainCumbers.begin())->isSheild; // 첫번 째 포인터
+//	return (*mainCumbers.begin())->isSheild; // 첫번 째 포인터
 //	return (mainCumbers->begin()->isSh);
 //	return mainCumber->isSheild;
 }
@@ -267,8 +270,8 @@ void CumberParent::startDieAnimation()
 
 void CumberParent::changeMaxSize(float t_p)
 {
-	for(auto mainCumber : mainCumbers)
-		mainCumber->changeMaxSize(t_p);
+//	for(auto mainCumber : mainCumbers)
+//		mainCumber->changeMaxSize(t_p);
 	
 	int loop_cnt = subCumberArray->count();
 	for(int i=0;i<loop_cnt;i++)
@@ -278,11 +281,7 @@ void CumberParent::changeMaxSize(float t_p)
 	}
 }
 
-void CumberParent::checkingJackCrash()
-{
-	for(auto mainCumber : mainCumbers)
-		mainCumber->checkingJackCrash();
-}
+
 
 void CumberParent::realStartDieAnimation()
 {
@@ -382,8 +381,9 @@ void CumberParent::initSubCumber()
 
 void CumberParent::slowItem(bool t_b)
 {
-	for(auto mainCumber : mainCumbers)
-		mainCumber->changeSpeed(t_b);
+	
+//	for(auto mainCumber : mainCumbers)
+//		mainCumber->changeSpeed(t_b);
 	for(int i=0;i<subCumberArray->count();i++)
 	{
 		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
@@ -396,16 +396,16 @@ void CumberParent::silenceItem(bool t_b)
 	if(t_b)		myMP->stopAutoAttacker();
 	else		myMP->startAutoAttacker();
 	
-	for(auto mainCumber : mainCumbers)
-		mainCumber->silenceItem(t_b);
+//	for(auto mainCumber : mainCumbers)
+//		mainCumber->silenceItem(t_b);
 }
 
 void CumberParent::setCasting(bool t_b)
 {
 	//##
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	mainCumber->setCasting(t_b);
+//	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
+//	mainCumber->setCasting(t_b);
 }
 
 void CumberParent::removeSubCumber(CCObject* r_sc)
@@ -454,7 +454,7 @@ void CumberParent::myInit()
 	
 	void onStartGame();
 	void onPatternEnd();
-	auto mainCumber = MetalSnake::create();
+	auto mainCumber = KSCumber::create();
 //	auto mainCumber = MetalSnake::create();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
@@ -467,7 +467,7 @@ void CumberParent::myInit()
 	myMFP = MapFragmentParent::create();
 	addChild(myMFP);
 	
-	myEP = EmotionParent::create(mainCumber, callfuncI_selector(MainCumber::showEmotion));
+	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
 	addChild(myEP);
 }
 

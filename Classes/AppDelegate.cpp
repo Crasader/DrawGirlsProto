@@ -58,7 +58,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	myDSH->ui_top = 480.f*screen_size.height/screen_size.width;
 	myDSH->ui_bottom = 0;
 	myDSH->ui_center_y = myDSH->ui_top/2.f;
-	
+	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_flow");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ingame/ingame_jack");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ingame/ingame_jmissile");

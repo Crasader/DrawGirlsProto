@@ -16,10 +16,10 @@
 #include "SelectedMapData.h"
 #include "StarGoldData.h"
 #include "AlertEngine.h"
-#include "MainCumber.h"
+//#include "MainCumber.h"
 #include "SubCumber.h"
 #include "MapFragment.h"
-#include "MainCumberKS.h"
+
 #include <vector>
 
 
@@ -69,7 +69,6 @@ public:
 	void mainCumberShowEmotion(int t_e);
 	void startDieAnimation();
 	void changeMaxSize(float t_p);
-	void checkingJackCrash();
 	
 private:
 	bool is_die_animationing;
@@ -81,7 +80,7 @@ private:
 	MapFragmentParent* myMFP;
 	
 //	MainCumber* mainCumber;
-	std::vector<MainCumber*> mainCumbers;
+	std::vector<KSCumberBase*> mainCumbers;
 //	MainCumberKS* mainCumber;
 	
 	EmotionParent* myEP;
