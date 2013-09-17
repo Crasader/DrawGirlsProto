@@ -194,8 +194,31 @@ void MetalSnake::startAnimationDirection()
 {
 	// 잭을 바라보자.
 	m_state = CUMBERSTATEDIRECTION;
+	m_direction.initVars();
+	schedule(schedule_selector(MetalSnake::animationDirection));
 }
 
+void MetalSnake::animationDirection(float dt)
+{
+	m_direction.timer += 1 / 60.f;
+	if(m_direction.state == 1)
+	{
+		if(m_direction.timer >= 5.f)
+		{
+			m_direction.state = 2; //
+		}
+		IntPoint jackPoint = myGD->getJackPoint();
+		IntPoint headPoint = ccp2ip(getPosition());
+		float rot = rad2Deg(atan2(jackPoint.x - headPoint.x, jackPoint.y - headPoint.y));
+		rot -= 90;
+		m_headImg->setRotation(rot);
+	}
+	else if(m_direction.state == 2)
+	{
+		m_state = CUMBERSTATEMOVING;
+		unschedule(schedule_selector(MetalSnake::animationDirection));
+	}
+}
 void MetalSnake::startDamageReaction(float userdata)
 {
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
@@ -208,6 +231,11 @@ void MetalSnake::startDamageReaction(float userdata)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
+	}
+	else if(m_state == CUMBERSTATEDIRECTION)
+	{
+		CCLog("m_state == CUMBERSTATEDIRECTION");
+		m_direction.state = 2; // 돌아가라고 상태 변경때림.
 	}
 	else if(m_state == CUMBERSTATEMOVING)
 	{
@@ -720,7 +748,7 @@ void MetalSnake::attack(float dt)
 			
 		}
 		
-		attackCode = kAP_CODE_pattern10;
+//		attackCode = kAP_CODE_pattern10;
 		if(attackCode == 13) // fury
 		{
 			m_state = CUMBERSTATESTOP;
@@ -728,7 +756,8 @@ void MetalSnake::attack(float dt)
 		}
 		else
 		{
-			startAnimationNoDirection();
+//			startAnimationNoDirection();
+			startAnimationDirection();
 			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
 		}
 //		showEmotion(kEmotionType_joy);

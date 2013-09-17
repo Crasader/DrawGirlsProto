@@ -60,6 +60,7 @@ public:
 	{
 		CCLog("onPatternEnd!!");
 		m_noDirection.state = 2;
+		m_direction.state = 2; // 돌아가라고 상태 변경때림.
 	}
 	virtual void onStartGame()
 	{
@@ -147,6 +148,7 @@ public:
 	//	}
 	void damageReaction(float dt);
 	void animationNoDirection(float dt);
+	void animationDirection(float dt);
 	void setCumberScale(float r)
 	{
 		m_scale.scale.init(m_scale.scale.getValue(), r, 0.005f);
@@ -228,6 +230,14 @@ protected:
 	/// 지향형 에니메이션 용.
 	struct Direction
 	{
+		float lastDirectionDeg;
+		int state; // 1 : 바라보는 상태, 2 : 다시 제 방향 보는 상태.
+		float timer;
+		void initVars(){
+			state = 1;
+			lastDirectionDeg = 0.f;
+			timer = 0.f;
+		}
 	}m_direction;
 	
 	struct Scale
