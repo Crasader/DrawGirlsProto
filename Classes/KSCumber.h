@@ -172,7 +172,7 @@ protected:
 	bool isGameover;
 	float m_speed;
 //	CCSprite* m_headImg;
-	CCNode* m_headImg;
+	CCSprite* m_headImg;
 	CCBAnimationManager *mAnimationManager;
 	int m_directionAngleDegree;
 	IntPoint getMapPoint(CCPoint c){

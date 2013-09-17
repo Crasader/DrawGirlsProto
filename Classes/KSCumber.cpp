@@ -25,10 +25,14 @@ bool KSCumber::init()
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	m_speed = 2.f;
 	
-	std::string ccbiName = "boss1.ccbi";
+	std::string ccbiName = "boss2.ccbi";
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
     CCBReader* reader = new CCBReader(nodeLoader);
-    m_headImg = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
+	CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
+	m_headImg = dynamic_cast<CCSprite*>(p);
+    
+	
+
     mAnimationManager = reader->getAnimationManager();
     reader->release();
     if(m_headImg != NULL) {
@@ -365,7 +369,7 @@ void KSCumber::animationNoDirection(float dt)
 	{
 		m_state = CUMBERSTATEMOVING;
 		unschedule(schedule_selector(KSCumber::animationNoDirection));
-		mAnimationManager->runAnimationsForSequenceNamed("3_3cast");
+		mAnimationManager->runAnimationsForSequenceNamed("cast2stop");
 	}
 }
 
@@ -418,7 +422,7 @@ void KSCumber::attack(float dt)
 		}
 		else
 		{
-			mAnimationManager->runAnimationsForSequenceNamed("3_1cast");
+			mAnimationManager->runAnimationsForSequenceNamed("cast2start");
 			startAnimationNoDirection();
 			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
 		}

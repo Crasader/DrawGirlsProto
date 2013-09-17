@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>0</integer>
+	<integer>5</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -19,7 +19,7 @@
 	<key>nodeGraph</key>
 	<dict>
 		<key>baseClass</key>
-		<string>CCNode</string>
+		<string>CCSprite</string>
 		<key>children</key>
 		<array>
 			<dict>
@@ -2643,7 +2643,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>355</real>
+								<real>0.0</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -3502,7 +3502,7 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>255</integer>
+								<integer>0</integer>
 							</dict>
 						</array>
 					</dict>
@@ -3804,8 +3804,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
-							<real>1</real>
+							<real>0.5</real>
+							<real>0.5</real>
 							<false/>
 							<integer>0</integer>
 						</array>
@@ -3853,18 +3853,6 @@
 		<array>
 			<dict>
 				<key>name</key>
-				<string>contentSize</string>
-				<key>type</key>
-				<string>Size</string>
-				<key>value</key>
-				<array>
-					<real>100</real>
-					<real>100</real>
-					<integer>1</integer>
-				</array>
-			</dict>
-			<dict>
-				<key>name</key>
 				<string>anchorPoint</string>
 				<key>type</key>
 				<string>Point</string>
@@ -3895,6 +3883,17 @@
 				<key>value</key>
 				<false/>
 			</dict>
+			<dict>
+				<key>name</key>
+				<string>displayFrame</string>
+				<key>type</key>
+				<string>SpriteFrame</string>
+				<key>value</key>
+				<array>
+					<string></string>
+					<string></string>
+				</array>
+			</dict>
 		</array>
 	</dict>
 	<key>notes</key>
@@ -3907,13 +3906,13 @@
 			<key>ext</key>
 			<string>iphone</string>
 			<key>height</key>
-			<integer>320</integer>
+			<integer>0</integer>
 			<key>name</key>
 			<string>iPhone Landscape</string>
 			<key>scale</key>
 			<real>1</real>
 			<key>width</key>
-			<integer>480</integer>
+			<integer>0</integer>
 		</dict>
 	</array>
 	<key>sequences</key>
@@ -3967,7 +3966,7 @@
 			<key>length</key>
 			<real>1</real>
 			<key>name</key>
-			<string>1cast</string>
+			<string>cast1start</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
@@ -4001,7 +4000,7 @@
 			<key>length</key>
 			<real>1</real>
 			<key>name</key>
-			<string>2cast</string>
+			<string>cast2start</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
@@ -4035,7 +4034,7 @@
 			<key>length</key>
 			<real>1</real>
 			<key>name</key>
-			<string>3_1cast</string>
+			<string>cast3start</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
@@ -4069,7 +4068,7 @@
 			<key>length</key>
 			<real>1</real>
 			<key>name</key>
-			<string>3_2cast</string>
+			<string>start3middle</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
@@ -4103,7 +4102,7 @@
 			<key>length</key>
 			<real>1</real>
 			<key>name</key>
-			<string>3_3cast</string>
+			<string>start3stop</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
@@ -4124,6 +4123,6 @@
 		</dict>
 	</array>
 	<key>stageBorder</key>
-	<integer>0</integer>
+	<integer>3</integer>
 </dict>
 </plist>
