@@ -47,38 +47,61 @@ public:
 		
 		if(isAnimationStage())
 		{
-			animation_frame.clear();
-			
-			deque<int> t_que;
-			if(myType == 3)
-			{
-				t_que.push_back(0);
-				t_que.push_back(1);
-				t_que.push_back(2);
-				t_que.push_back(0);
-			}
-			else if(myType == 8)
-			{
-				t_que.push_back(0);
-				t_que.push_back(0);
-				t_que.push_back(1);
-				t_que.push_back(1);
-				t_que.push_back(2);
-				t_que.push_back(2);
-				t_que.push_back(3);
-				t_que.push_back(0);
-			}
-			
-			for(int i=0;i<getAnimationLoopLength();i++)
-			{
-				animation_frame.push_back(t_que[i]);
-			}
+			setAnimationLoop(myType);
+		}
+	}
+	
+	void setAnimationLoop(int t_type)
+	{
+		animation_frame.clear();
+		
+		deque<int> t_que;
+		if(t_type == 3)
+		{
+			t_que.push_back(0);
+			t_que.push_back(1);
+			t_que.push_back(2);
+			t_que.push_back(0);
+		}
+		else if(t_type == 8)
+		{
+			t_que.push_back(0);
+			t_que.push_back(0);
+			t_que.push_back(1);
+			t_que.push_back(1);
+			t_que.push_back(2);
+			t_que.push_back(2);
+			t_que.push_back(3);
+			t_que.push_back(0);
+		}
+		
+		for(int i=0;i<getAnimationLoopLength(t_type);i++)
+		{
+			animation_frame.push_back(t_que[i]);
 		}
 	}
 	
 	int getSilType()
 	{
 		return myType;
+	}
+	
+	int getCardDurability(int stage, int level)
+	{
+		int return_value;
+		
+		return_value = 10;
+		
+		return return_value;
+	}
+	
+	string getCardOptionScript(int stage, int level)
+	{
+		string return_value;
+		
+		return_value = "ㅁ니우라ㅓㅁ";
+		
+		return return_value;
 	}
 	
 	CLEAR_CONDITION getClearCondition(){	return getClearCondition(myType);	}
@@ -456,6 +479,7 @@ public:
 	int getAnimationLoopPoint(int t_frame){	return animation_frame[t_frame];	}
 	
 	string getScriptString(int level);
+	string getScriptString(int t_type, int level);
 	
 	void startSetting();
 	

@@ -12,7 +12,8 @@
 #include "ScreenSide.h"
 #include "StarGoldData.h"
 #include "EnumDefine.h"
-#include "StageSettingPopup.h"
+//#include "StageSettingPopup.h"
+#include "StageSettingScene.h"
 
 typedef enum tMenuTagFailScene{
 	kMT_FS_main = 1,
@@ -52,6 +53,33 @@ bool FailScene::init()
     }
     
 	setKeypadEnabled(true);
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
+	{
+		int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_haveCardCnt);
+		int found_number = 1;
+		for(int i=1;i<=loop_cnt;i++)
+		{
+			int search_number = myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i);
+			if(search_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
+			{
+				found_number = i;
+				break;
+			}
+		}
+		
+		int durability = myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, found_number);
+		if(durability <= 0)
+		{
+			for(int i=loop_cnt;i>found_number;i--)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i-1, myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, i));
+				myDSH->setIntegerForKey(kDSH_Key_haveCardNumber_int1, i-1, myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i));
+			}
+			myDSH->setIntegerForKey(kDSH_Key_haveCardCnt, loop_cnt-1);
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+		}
+	}
 	
 	CCSprite* fail_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
 	fail_back->setPosition(ccp(240,160));
@@ -182,8 +210,9 @@ void FailScene::menuAction(CCObject* pSender)
 	else if(tag == kMT_FS_replay)
 	{
 		is_menu_enable = false;
-		StageSettingPopupLayer* t_sspl = StageSettingPopupLayer::create(mySD->getSilType(), this, callfunc_selector(FailScene::closeReplayPopup));
-		addChild(t_sspl, kZ_FS_popup);
+//		StageSettingPopupLayer* t_sspl = StageSettingPopupLayer::create(mySD->getSilType(), this, callfunc_selector(FailScene::closeReplayPopup));
+//		addChild(t_sspl, kZ_FS_popup);
+		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
 }
 

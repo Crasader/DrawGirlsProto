@@ -4,7 +4,7 @@
 //
 //  Created by 사원3 on 13. 9. 10..
 //
-//
+//  안씀
 
 #ifndef __DGproto__StageSettingPopup__
 #define __DGproto__StageSettingPopup__

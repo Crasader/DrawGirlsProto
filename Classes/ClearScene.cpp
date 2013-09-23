@@ -10,6 +10,7 @@
 //#include "StartingScene.h"
 #include "WorldMapScene.h"
 #include "ScreenSide.h"
+#include "CardFullPopup.h"
 
 typedef enum tMenuTagClearScene{
 	kMT_CS_ok = 1
@@ -18,7 +19,8 @@ typedef enum tMenuTagClearScene{
 typedef enum tZorderClearScene{
 	kZ_CS_back = 1,
 	kZ_CS_img,
-	kZ_CS_menu
+	kZ_CS_menu,
+	kZ_CS_popup
 }ZorderClearScene;
 
 CCScene* ClearScene::scene()
@@ -47,6 +49,35 @@ bool ClearScene::init()
     }
 	
 	setKeypadEnabled(true);
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
+	{
+		int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_haveCardCnt);
+		int found_number = 1;
+		for(int i=1;i<=loop_cnt;i++)
+		{
+			int search_number = myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i);
+			if(search_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
+			{
+				found_number = i;
+				break;
+			}
+		}
+		
+		int durability = myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, found_number) + 1;
+		if(durability > 0)
+			myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, found_number, durability);
+		else
+		{
+			for(int i=loop_cnt;i>found_number;i--)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i-1, myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, i));
+				myDSH->setIntegerForKey(kDSH_Key_haveCardNumber_int1, i-1, myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i));
+			}
+			myDSH->setIntegerForKey(kDSH_Key_haveCardCnt, loop_cnt-1);
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+		}
+	}
     
 	CCSprite* clear_back = CCSprite::create("ending_back.png");
 	clear_back->setPosition(ccp(240,160));
@@ -56,7 +87,30 @@ bool ClearScene::init()
 	title->setPosition(ccp(360,280));
 	addChild(title, kZ_CS_img);
 	
-	for(int i=0;i<3;i++)
+	int stage_number = mySD->getSilType();
+	int take_level;
+	if(mySGD->is_exchanged && mySGD->is_showtime)
+		take_level = 3;
+	else if(mySGD->is_exchanged || mySGD->is_showtime)
+		take_level = 2;
+	else
+		take_level = 1;
+	
+	CCSprite* take_card = CCSprite::create(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, take_level)->getCString());
+	take_card->setScale(0.65);
+	take_card->setPosition(ccp(130,160));
+	addChild(take_card, kZ_CS_img);
+	
+	if(take_level == 3 && mySD->isAnimationStage())
+	{
+		CCSize ani_size = mySD->getAnimationCutSize();
+		CCSprite* take_ani = CCSprite::create(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, take_level)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
+		take_ani->setPosition(mySD->getAnimationPosition());
+		take_card->addChild(take_ani);
+	}
+	
+	
+	for(int i=0;i<take_level;i++)
 	{
 		CCSprite* star = CCSprite::create("ending_star.png");
 		star->setPosition(ccp(308+i*46,228));
@@ -251,16 +305,78 @@ void ClearScene::menuAction(CCObject* pSender)
 	{
 		return;
 	}
-	
+	is_menu_enable = false;
+	AudioEngine::sharedInstance()->stopAllEffects();
 	int tag = ((CCNode*)pSender)->getTag();
 	
 	if(tag == kMT_CS_ok)
 	{
-		AudioEngine::sharedInstance()->stopAllEffects();
-		is_menu_enable = false;
-//		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
-		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
+		int take_level;
+		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
+		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
+		else												take_level = 1;
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, mySD->getSilType()*10+take_level-1))
+		{
+			myDSH->setBoolForKey(kDSH_Key_hasGottenCard_int1, mySD->getSilType()*10+take_level-1, true);
+			mySGD->addHasGottenCardNumber(mySD->getSilType()*10+take_level-1);
+		}
+		
+		bool is_have_kind_card = false;
+		int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_haveCardCnt);
+		for(int i=1;i<loop_cnt;i++)
+		{
+			int card_number = myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i);
+			int card_stage = card_number/10;
+			int card_level = card_number%10 + 1;
+			if(mySD->getSilType() == card_stage)
+			{
+				if(card_level > take_level)
+				{
+					int durability = myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, i);
+					int max_durability = mySD->getCardDurability(mySD->getSilType(), card_level);
+					durability += card_level-take_level;
+					if(durability > max_durability)
+						durability = max_durability;
+					myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i, durability);
+				}
+				else if(card_level == take_level)
+				{
+					myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i, mySD->getCardDurability(mySD->getSilType(), take_level));
+				}
+				else // card_level < take_level
+				{
+					myDSH->setIntegerForKey(kDSH_Key_haveCardNumber_int1, i, mySD->getSilType()*10+take_level-1);
+					myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i, mySD->getCardDurability(mySD->getSilType(), take_level));
+				}
+				is_have_kind_card = true;
+				break;
+			}
+		}
+		
+		if(!is_have_kind_card)
+		{
+			if(loop_cnt >= 5) // card full
+			{
+				CardFullPopup* t_cfp = CardFullPopup::create(this, callfunc_selector(ClearScene::realEnd));
+				addChild(t_cfp, kZ_CS_popup);
+			}
+			else
+			{
+				myDSH->setIntegerForKey(kDSH_Key_haveCardCnt, loop_cnt+1);
+				myDSH->setIntegerForKey(kDSH_Key_haveCardNumber_int1, loop_cnt+1, mySD->getSilType()*10+take_level-1);
+				myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, loop_cnt+1, mySD->getCardDurability(mySD->getSilType(), take_level));
+				realEnd();
+			}
+		}
+		else
+			realEnd();
 	}
+}
+
+void ClearScene::realEnd()
+{
+	CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
 }
 
 void ClearScene::alertAction(int t1, int t2)

@@ -10,7 +10,6 @@
 #define __galsprototype__StartingScene__
 
 #include "cocos2d.h"
-#include "AlertEngine.h"
 
 USING_NS_CC;
 
@@ -22,18 +21,47 @@ public:
 	
     // there's no 'id' in cpp, so we recommend to return the class instance pointer
     static cocos2d::CCScene* scene();
-    
-    // a selector callback
-    void menuAction(CCObject* pSender);
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(StartingScene);
 	
 private:
+	CCSprite* recent_left_img;
+	CCSprite* recent_right_img;
+	CCSprite* after_left_img;
+	CCSprite* after_right_img;
 	
-	bool is_menu_enable;
-	void alertAction(int t1, int t2);
-	virtual void keyBackClicked(void);
+	CCSprite* covered_left_img;
+	CCSprite* covered_right_img;
+	
+	CCSprite* animation_img;
+	SEL_CallFunc end_animation_delegate;
+	
+	CCPoint begin_point;
+	
+	int touch_end_direction;
+	
+	int touch_direction;
+	
+	bool is_touch_enable;
+	
+	float animation_angle;
+	
+	void startNextPage();
+	void startPrePage();
+	
+	void ingPage();
+	
+	void endNextPage();
+	void endPrePage();
+	
+	void endPage();
+	
+	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void registerWithTouchDispatcher();
 };
 
 #endif /* defined(__galsprototype__StartingScene__) */

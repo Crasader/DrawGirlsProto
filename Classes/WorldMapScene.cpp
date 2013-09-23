@@ -9,7 +9,8 @@
 #include "WorldMapScene.h"
 #include "ScreenSide.h"
 #include "MyLocalization.h"
-#include "StageSettingPopup.h"
+#include "StageSettingScene.h"
+#include "CollectionListScene.h"
 
 CCScene* WorldMapScene::scene()
 {
@@ -29,11 +30,13 @@ CCScene* WorldMapScene::scene()
 enum WMS_Zorder{
 	kWMS_Z_back = 1,
 	kWMS_Z_stage,
+	kWMS_Z_collection,
 	kWMS_Z_popup
 };
 
 enum WMS_MenuTag{
 	kWMS_MT_stageBase = 0,
+	kWMS_MT_collection = 501,
 	kWMS_MT_uiSettingLeft = 1001,
 	kWMS_MT_uiSettingFull = 1002,
 	kWMS_MT_uiSettingRight = 1003
@@ -133,6 +136,19 @@ bool WorldMapScene::init()
 		}
 	}
 	
+	
+	CCSprite* n_collection = CCSprite::create("worldmap_collection.png");
+	CCSprite* s_collection = CCSprite::create("worldmap_collection.png");
+	s_collection->setColor(ccGRAY);
+	
+	CCMenuItem* collection_item = CCMenuItemSprite::create(n_collection, s_collection, this, menu_selector(WorldMapScene::menuAction));
+	collection_item->setTag(kWMS_MT_collection);
+	
+	CCMenu* collection_menu = CCMenu::createWithItem(collection_item);
+	collection_menu->setPosition(ccp(120,34));
+	addChild(collection_menu, kWMS_Z_collection);
+	
+	
 	CCSprite* n_left = CCSprite::create("ui_setting_left.png");
 	CCSprite* s_left = CCSprite::create("ui_setting_left.png");
 	s_left->setColor(ccGRAY);
@@ -201,10 +217,15 @@ void WorldMapScene::menuAction(CCObject* pSender)
 	is_menu_enable = false;
 	int tag = ((CCNode*)pSender)->getTag();
 	
-	if(tag < kWMS_MT_uiSettingLeft)
+	if(tag < kWMS_MT_collection)
 	{
 		tag -= kWMS_MT_stageBase;
-		showPopup(tag);
+		mySD->setSilType(tag);
+		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
+	}
+	else if(tag == kWMS_MT_collection)
+	{
+		CCDirector::sharedDirector()->replaceScene(CollectionListScene::scene());
 	}
 	else if(tag == kWMS_MT_uiSettingLeft)
 	{
@@ -221,12 +242,6 @@ void WorldMapScene::menuAction(CCObject* pSender)
 		myGD->setUItype(kGT_rightUI);
 		is_menu_enable = true;
 	}
-}
-
-void WorldMapScene::showPopup(int stage)
-{
-	StageSettingPopupLayer* t_sspl = StageSettingPopupLayer::create(stage, this, callfunc_selector(WorldMapScene::stageCancel));
-	addChild(t_sspl, kWMS_Z_popup);
 }
 
 void WorldMapScene::stageCancel()

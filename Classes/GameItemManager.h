@@ -415,7 +415,8 @@ private:
 	
 	void myInit(bool is_near)
 	{
-		my_elemental = rand()%kElementCode_plasma + 1;
+//		my_elemental = rand()%kElementCode_plasma + 1;
+		my_elemental = kElementCode_fire;
 		
 		holding_time = rand()%10 + 20;
 		holding_time *= 60;
@@ -435,12 +436,13 @@ private:
 		
 		string item_string;
 
-		if(my_elemental == kElementCode_life)			item_string = "life";
-		else if(my_elemental == kElementCode_fire)		item_string = "fire";
-		else if(my_elemental == kElementCode_water)		item_string = "ice";
-		else if(my_elemental == kElementCode_wind)		item_string = "wind";
-		else if(my_elemental == kElementCode_lightning)	item_string = "lightning";
-		else if(my_elemental == kElementCode_plasma)	item_string = "plasma";
+//		if(my_elemental == kElementCode_life)			item_string = "life";
+//		else if(my_elemental == kElementCode_fire)
+			item_string = "fire";
+//		else if(my_elemental == kElementCode_water)		item_string = "ice";
+//		else if(my_elemental == kElementCode_wind)		item_string = "wind";
+//		else if(my_elemental == kElementCode_lightning)	item_string = "lightning";
+//		else if(my_elemental == kElementCode_plasma)	item_string = "plasma";
 		
 		item_img = CCSprite::create(CCString::createWithFormat("%s_item.png", item_string.c_str())->getCString());
 		item_img->setScale(0.f);

@@ -118,57 +118,6 @@ private:
 		}
 	}
 	
-	void randomFlicker()
-	{
-		int random_value = rand()%16;
-		
-		if(random_value >= 2 && random_value <= 4)
-			random_value = 7;
-		else if(random_value >= 5 && random_value <= 10)
-			random_value = 10;
-		else if(random_value >= 11 && random_value <= 13)
-			random_value = 13;
-		else if(random_value == 14 || random_value == 15)
-			random_value = 16;
-		else
-			random_value++;
-		
-		CCDelayTime* t_delay = CCDelayTime::create(random_value*0.1f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::flicking));
-		CCAction* t_seq = CCSequence::create(t_delay, t_call, NULL);
-		second_img->getChildByTag(1)->runAction(t_seq);
-	}
-	
-	void flicking()
-	{
-		CCCallFunc* half_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::halfFlicker));
-		CCDelayTime* half_delay = CCDelayTime::create(0.1);
-		CCCallFunc* full_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::fullFlicker));
-		CCDelayTime* full_delay = CCDelayTime::create(0.1);
-		CCCallFunc* half2_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::halfFlicker));
-		CCDelayTime* half2_delay = CCDelayTime::create(0.1);
-		CCCallFunc* recovery_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::recoveryFlicker));
-		
-		CCAction* t_seq = CCSequence::create(half_call, half_delay, full_call, full_delay, half2_call, half2_delay, recovery_call, NULL);
-		second_img->getChildByTag(1)->runAction(t_seq);
-	}
-	
-	void halfFlicker()
-	{
-		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(eye_ani_size.width, 0, eye_ani_size.width, eye_ani_size.height));
-	}
-	
-	void fullFlicker()
-	{
-		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(eye_ani_size.width*2, 0, eye_ani_size.width, eye_ani_size.height));
-	}
-	
-	void recoveryFlicker()
-	{
-		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
-		randomFlicker();
-	}
-	
 	
 	void moveListXY(CCPoint t_p);
 	void moveAnimation();

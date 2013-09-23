@@ -1,23 +1,25 @@
 //
-//  WorldMapScene.h
+//  StageSettingScene.h
 //  DGproto
 //
-//  Created by 사원3 on 13. 9. 10..
+//  Created by 사원3 on 13. 9. 18..
 //
 //
 
-#ifndef __DGproto__WorldMapScene__
-#define __DGproto__WorldMapScene__
+#ifndef __DGproto__StageSettingScene__
+#define __DGproto__StageSettingScene__
 
 #include "cocos2d.h"
 #include "AlertEngine.h"
 #include "GameData.h"
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
+#include <deque>
 
 USING_NS_CC;
+using namespace std;
 
-class WorldMapScene : public cocos2d::CCLayer
+class StageSettingScene : public cocos2d::CCLayer
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -30,17 +32,20 @@ public:
     void menuAction(CCObject* pSender);
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
-    CREATE_FUNC(WorldMapScene);
+    CREATE_FUNC(StageSettingScene);
 	
 private:
+	int selected_stage;
+	vector<ITEM_CODE> item_list;
+	deque<bool> is_selected_item;
+	CCLabelTTF* item_script;
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
 	
-	CCPoint getStagePosition(int stage);
+	void itemSetting();
 	
-//	void showPopup(int stage);
-	void stageCancel();
+	void buySuccessItem(int t_clicked_item_number, int cnt);
 };
 
-#endif /* defined(__DGproto__WorldMapScene__) */
+#endif /* defined(__DGproto__StageSettingScene__) */

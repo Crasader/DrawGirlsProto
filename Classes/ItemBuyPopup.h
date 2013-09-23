@@ -63,15 +63,15 @@ private:
 		
 		
 		CCSprite* buy_case = CCSprite::create("buy_item_case.png");
-		buy_case->setPosition(ccpAdd(ccp(102+(clicked_item_number%2)*80, 186-(clicked_item_number/2)*65), ccp(138,-26)));
+		buy_case->setPosition(ccpAdd(ccp(270+(clicked_item_number%2)*104, 226-(clicked_item_number/2)*70), ccp(-45,-70)));
 		addChild(buy_case, kIBP_Z_case);
 		
 		CCSprite* item_img = CCSprite::create(CCString::createWithFormat("item%d.png", item_type)->getCString());
-		item_img->setPosition(ccp(70,85));
+		item_img->setPosition(ccp(50,85));
 		buy_case->addChild(item_img);
 		
 		CCLabelTTF* item_price = CCLabelTTF::create(CCString::createWithFormat("%.0f원", mySD->getItemPrice(item_type))->getCString(), mySGD->getFont().c_str(), 25);
-		item_price->setPosition(ccp(160,83));
+		item_price->setPosition(ccp(140,83));
 		buy_case->addChild(item_price);
 		
 		
@@ -83,7 +83,7 @@ private:
 		buy_item->setTag(kIBP_MT_buy);
 		
 		buy_menu = CCMenu::createWithItem(buy_item);
-		buy_menu->setPosition(ccp(125,32));
+		buy_menu->setPosition(ccp(105,32));
 		buy_case->addChild(buy_menu);
 		
 		CCSprite* n_close = CCSprite::create("sspl_cancel.png");
@@ -94,7 +94,7 @@ private:
 		close_item->setTag(kIBP_MT_close);
 		
 		close_menu = CCMenu::createWithItem(close_item);
-		close_menu->setPosition(ccp(213,120));
+		close_menu->setPosition(ccp(193,115));
 		buy_case->addChild(close_menu);
 		
 		is_menu_enable = true;
@@ -128,7 +128,7 @@ private:
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		touched_number = 0;
+		if(touched_number != 0)		return true;
 		if(buy_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kIBP_MT_buy;
 		else if(close_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kIBP_MT_close;
 		return true;
@@ -141,13 +141,13 @@ private:
 	}
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == kIBP_MT_buy)							buy_menu->ccTouchEnded(pTouch, pEvent);
-		else if(touched_number == kIBP_MT_close)					close_menu->ccTouchEnded(pTouch, pEvent);
+		if(touched_number == kIBP_MT_buy){			buy_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
+		else if(touched_number == kIBP_MT_close){	close_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
 	}
     virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == kIBP_MT_buy)							buy_menu->ccTouchCancelled(pTouch, pEvent);
-		else if(touched_number == kIBP_MT_close)					close_menu->ccTouchCancelled(pTouch, pEvent);
+		if(touched_number == kIBP_MT_buy){			buy_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
+		else if(touched_number == kIBP_MT_close){	close_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
 	}
 	
 	virtual void registerWithTouchDispatcher()

@@ -50,9 +50,6 @@ bool ZoomScript::init()
 	is_showtime = mySGD->is_showtime;
 	is_exchanged = mySGD->is_exchanged;
 	
-	mySGD->is_showtime = false;
-	mySGD->is_exchanged = false;
-	
 	string first_filename;
 	
 	if(is_exchanged)			first_filename = CCString::createWithFormat("stage%d_level2_visible.png", silType)->getCString();

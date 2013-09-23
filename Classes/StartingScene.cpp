@@ -7,24 +7,13 @@
 //
 
 #include "StartingScene.h"
-#include "MaingameScene.h"
-#include "StarGoldData.h"
-#include "GameData.h"
-#include "AudioEngine.h"
 #include "ScreenSide.h"
 
-typedef enum tMenuTagStartingScene{
-	kMT_SS_summer = 1,
-	kMT_SS_christmas,
-	kMT_SS_hospital,
-	kMT_SS_sports,
-	kMT_SS_idol
-}MenuTagStartingScene;
-
-typedef enum tZorderStartingScene{
-	kZ_SS_back = 1,
-	kZ_SS_menu
-}ZorderStartingScene;
+enum t_zorder{
+	tZ_after = 1,
+	tZ_recent,
+	tZ_cover
+};
 
 CCScene* StartingScene::scene()
 {
@@ -51,164 +40,263 @@ bool StartingScene::init()
         return false;
     }
     
-	setKeypadEnabled(true);
+	setTouchEnabled(true);
 	
-	myGD->resetGameData();
+	recent_left_img = CCSprite::create("collectionbook_back.png", CCRectMake(0, 0, 240, 320));
+	recent_left_img->setAnchorPoint(ccp(1.f,0.5f));
+	recent_left_img->setPosition(ccp(240,160));
+	addChild(recent_left_img, tZ_recent);
 	
-	CCSprite* start_back = CCSprite::create("start_back.png");
-	start_back->setPosition(ccp(240,160));
-	addChild(start_back, kZ_SS_back);
+	recent_right_img = CCSprite::create("collectionbook_back.png", CCRectMake(240, 0, 240, 320));
+	recent_right_img->setAnchorPoint(ccp(0.f,0.5f));
+	recent_right_img->setPosition(ccp(240,160));
+	addChild(recent_right_img, tZ_recent);
 	
+	after_left_img = CCSprite::create("collectionbook_back.png", CCRectMake(0, 0, 240, 320));
+	after_left_img->setAnchorPoint(ccp(1.f,0.5f));
+	after_left_img->setPosition(ccp(240,160));
+	addChild(after_left_img, tZ_after);
 	
-	CCMenuItem* summer_item = CCMenuItemImage::create("start_summer.png", "start_summer.png", this, menu_selector(StartingScene::menuAction));
-	summer_item->setTag(kMT_SS_summer);
+	after_right_img = CCSprite::create("collectionbook_back.png", CCRectMake(240, 0, 240, 320));
+	after_right_img->setAnchorPoint(ccp(0.f,0.5f));
+	after_right_img->setPosition(ccp(240,160));
+	addChild(after_right_img, tZ_after);
 	
-	CCMenu* summer_menu = CCMenu::createWithItem(summer_item);
-	summer_menu->setPosition(ccp(75,170));
-	addChild(summer_menu, kZ_SS_menu);
+	is_touch_enable = true;
 	
-	
-	CCMenuItem* christmas_item = CCMenuItemImage::create("start_christmas.png", "start_christmas.png", this, menu_selector(StartingScene::menuAction));
-	christmas_item->setTag(kMT_SS_christmas);
-	
-	CCMenu* christmas_menu = CCMenu::createWithItem(christmas_item);
-	christmas_menu->setPosition(ccp(175,170));
-	addChild(christmas_menu, kZ_SS_menu);
-	
-	
-	CCMenuItem* hospital_item = CCMenuItemImage::create("start_hospital.png", "start_hospital.png", this, menu_selector(StartingScene::menuAction));
-	hospital_item->setTag(kMT_SS_hospital);
-	
-	CCMenu* hospital_menu = CCMenu::createWithItem(hospital_item);
-	hospital_menu->setPosition(ccp(275,170));
-	addChild(hospital_menu, kZ_SS_menu);
-	
-	
-	CCMenuItem* sports_item = CCMenuItemImage::create("start_sports.png", "start_sports.png", this, menu_selector(StartingScene::menuAction));
-	sports_item->setTag(kMT_SS_sports);
-	
-	CCMenu* sports_menu = CCMenu::createWithItem(sports_item);
-	sports_menu->setPosition(ccp(75,65));
-	addChild(sports_menu, kZ_SS_menu);
-	
-	
-	CCMenuItem* idol_item = CCMenuItemImage::create("start_idol.png", "start_idol.png", this, menu_selector(StartingScene::menuAction));
-	idol_item->setTag(kMT_SS_idol);
-	
-	CCMenu* idol_menu = CCMenu::createWithItem(idol_item);
-	idol_menu->setPosition(ccp(175,65));
-	addChild(idol_menu, kZ_SS_menu);
-	
-	CCSprite* update2 = CCSprite::create("start_update.png");
-	update2->setPosition(ccp(275,65));
-	addChild(update2, kZ_SS_menu);
-	
-	
-	is_menu_enable = true;
-	
-	srand(time(NULL));
-	
-	int selected_chapter = rand()%38+1;
-	if(selected_chapter > 26)
-	{
-		selected_chapter += 4;
-	}
-	if(selected_chapter > 36)
-	{
-		selected_chapter += 4;
-	}
-	
-	SelectedMapData::sharedInstance()->setSelectedChapter(selected_chapter);
-	SelectedMapData::sharedInstance()->setSelectedStage(5);
-	
-	AudioEngine::sharedInstance()->preloadEffectScene("Title");
-	
-	ScreenSide* t_screen = ScreenSide::create();
-	addChild(t_screen, 99999);
+//	ScreenSide* t_screen = ScreenSide::create();
+//	addChild(t_screen, 99999); 
 	
     return true;
 }
 
-void StartingScene::menuAction(CCObject* pSender)
+bool StartingScene::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 {
-	if(!is_menu_enable)
+	if(!is_touch_enable)
+		return true;
+	
+	CCPoint location = pTouch->getLocationInView();
+	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	
+	begin_point = convertedLocation;
+	
+	if(begin_point.x > 240)
 	{
+		touch_direction = 1;
+	}
+	else
+	{
+		touch_direction = -1;
+	}
+	
+	return true;
+}
+void StartingScene::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	if(!is_touch_enable)
 		return;
-	}
 	
-	int tag = ((CCNode*)pSender)->getTag();
+	CCPoint location = pTouch->getLocationInView();
+	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
 	
-//	if(tag == kMT_SS_summer)
-//	{
-//		is_menu_enable = false;
-//		
-//		mySD->setSilType(1);
-//		
-//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-//		
-//		mySGD->setGameStart();
-//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-//	}
-//	else if(tag == kMT_SS_christmas)
-//	{
-//		is_menu_enable = false;
-//		
-//		mySD->setSilType(2);
-//		
-//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-//		
-//		mySGD->setGameStart();
-//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-//	}
-//	else if(tag == kMT_SS_hospital)
-//	{
-//		is_menu_enable = false;
-//		
-//		mySD->setSilType(3);
-//		
-//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-//		
-//		mySGD->setGameStart();
-//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-//	}
-//	else if(tag == kMT_SS_sports)
-//	{
-//		is_menu_enable = false;
-//		
-//		mySD->setSilType(4);
-//		
-//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-//		
-//		mySGD->setGameStart();
-//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-//	}
-//	else if(tag == kMT_SS_idol)
-//	{
-//		is_menu_enable = false;
-//		
-//		mySD->setSilType(5);
-//		
-//		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-//		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-//		
-//		mySGD->setGameStart();
-//		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-//	}
-}
-
-void StartingScene::alertAction(int t1, int t2)
-{
-	if(t1 == 1 && t2 == 0)
+	float x_distance = begin_point.x - convertedLocation.x;
+	
+	if(touch_direction == 1)
 	{
-		CCDirector::sharedDirector()->end();
+		if(x_distance < 0)
+			return;
+		
+		animation_angle = 9.f/10.f*x_distance;
+		
+		if(animation_angle > 90)
+		{
+			setTouchEnabled(false);
+			is_touch_enable = false;
+			startNextPage();
+			return;
+		}
+		
+		float skewY_value = animation_angle / 4.f;
+		float scaleX_value = cosf(animation_angle/180.f*M_PI);
+		
+		recent_right_img->setSkewY(skewY_value);
+		recent_right_img->setScaleX(scaleX_value);
+		
+	}
+	else if(touch_direction == -1)
+	{
+		if(x_distance > 0)
+			return;
+		x_distance *= -1.f;
+		
+		animation_angle = 9.f/10.f*x_distance;
+		
+		if(animation_angle > 90)
+		{
+			setTouchEnabled(false);
+			is_touch_enable = false;
+			startPrePage();
+			return;
+		}
+		
+		float skewY_value = -animation_angle / 4.f;
+		float scaleX_value = cosf(animation_angle/180.f*M_PI);
+		
+		recent_left_img->setSkewY(skewY_value);
+		recent_left_img->setScaleX(scaleX_value);
 	}
 }
 
-void StartingScene::keyBackClicked()
+void StartingScene::startNextPage()
 {
-	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(StartingScene::alertAction));
+	recent_right_img->removeFromParent();
+	recent_right_img = after_right_img;
+	after_right_img = NULL;
+	
+	reorderChild(recent_right_img, tZ_recent);
+	
+	covered_left_img = CCSprite::create("collectionbook_back.png", CCRectMake(0, 0, 240, 320));
+	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
+	covered_left_img->setPosition(ccp(240,160));
+	addChild(covered_left_img, tZ_cover);
+	
+	animation_angle = 90.f;
+	
+	covered_left_img->setSkewY(animation_angle/4.f);
+	covered_left_img->setScaleX(cosf(animation_angle/180.f*M_PI));
+	
+	animation_img = covered_left_img;
+	end_animation_delegate = callfunc_selector(StartingScene::endNextPage);
+	
+	touch_end_direction = 1;
+	
+	schedule(schedule_selector(StartingScene::ingPage));
+}
+
+void StartingScene::ingPage()
+{
+	animation_angle -= 3.f;
+	
+	if(animation_angle < 0.f)
+		animation_angle = 0.f;
+	
+	animation_img->setSkewY(-touch_direction*touch_end_direction*animation_angle/4.f);
+	animation_img->setScaleX(cosf(animation_angle/180.f*M_PI));
+	
+	if(animation_angle <= 0.f)
+	{
+		unschedule(schedule_selector(StartingScene::ingPage));
+		animation_img = NULL;
+		(this->*end_animation_delegate)();
+	}
+}
+
+void StartingScene::endNextPage()
+{
+	after_left_img->removeFromParent();
+	after_left_img = recent_left_img;
+	recent_left_img = covered_left_img;
+	covered_left_img = NULL;
+	
+	reorderChild(recent_left_img, tZ_recent);
+	
+	after_right_img = CCSprite::create("collectionbook_back.png", CCRectMake(240, 0, 240, 320));
+	after_right_img->setAnchorPoint(ccp(0.f, 0.5f));
+	after_right_img->setPosition(ccp(240,160));
+	addChild(after_right_img, tZ_after);
+	
+	endPage();
+}
+
+void StartingScene::startPrePage()
+{
+	recent_left_img->removeFromParent();
+	recent_left_img = after_left_img;
+	after_left_img = NULL;
+	
+	reorderChild(recent_left_img, tZ_recent);
+	
+	covered_right_img = CCSprite::create("collectionbook_back.png", CCRectMake(240, 0, 240, 320));
+	covered_right_img->setAnchorPoint(ccp(0.f,0.5f));
+	covered_right_img->setPosition(ccp(240,160));
+	addChild(covered_right_img, tZ_cover);
+	
+	animation_angle = 90.f;
+	
+	covered_right_img->setSkewY(animation_angle/4.f);
+	covered_right_img->setScaleX(cosf(animation_angle/180.f*M_PI));
+	
+	animation_img = covered_right_img;
+	end_animation_delegate = callfunc_selector(StartingScene::endPrePage);
+	
+	touch_end_direction = 1;
+	
+	schedule(schedule_selector(StartingScene::ingPage));
+}
+
+void StartingScene::endPrePage()
+{
+	after_right_img->removeFromParent();
+	after_right_img = recent_right_img;
+	recent_right_img = covered_right_img;
+	covered_right_img = NULL;
+	
+	reorderChild(recent_right_img, tZ_recent);
+	
+	after_left_img = CCSprite::create("collectionbook_back.png", CCRectMake(0, 0, 240, 320));
+	after_left_img->setAnchorPoint(ccp(1.f, 0.5f));
+	after_left_img->setPosition(ccp(240,160));
+	addChild(after_left_img, tZ_after);
+	
+	endPage();
+}
+
+void StartingScene::endPage()
+{
+	is_touch_enable = true;
+	setTouchEnabled(true);
+}
+
+void StartingScene::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	if(!is_touch_enable)
+		return;
+	
+	is_touch_enable = false;
+	setTouchEnabled(false);
+	
+	if(touch_direction == 1)
+		animation_img = recent_right_img;
+	else if(touch_direction == -1)
+		animation_img = recent_left_img;
+	
+	end_animation_delegate = callfunc_selector(StartingScene::endPage);
+	
+	touch_end_direction = -1;
+	
+	schedule(schedule_selector(StartingScene::ingPage));
+}
+void StartingScene::ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	if(!is_touch_enable)
+		return;
+	
+	is_touch_enable = false;
+	setTouchEnabled(false);
+	
+	if(touch_direction == 1)
+		animation_img = recent_right_img;
+	else if(touch_direction == -1)
+		animation_img = recent_left_img;
+	
+	end_animation_delegate = callfunc_selector(StartingScene::endPage);
+	
+	touch_end_direction = -1;
+	
+	schedule(schedule_selector(StartingScene::ingPage));
+}
+
+void StartingScene::registerWithTouchDispatcher()
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority-1, false);
 }

@@ -63,6 +63,8 @@ private:
 	
 	void startCalcAnimation();
 	
+	void realEnd();
+	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
 };

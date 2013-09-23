@@ -1,23 +1,24 @@
 //
-//  WorldMapScene.h
+//  CollectionListScene.h
 //  DGproto
 //
-//  Created by 사원3 on 13. 9. 10..
+//  Created by 사원3 on 13. 9. 20..
 //
 //
 
-#ifndef __DGproto__WorldMapScene__
-#define __DGproto__WorldMapScene__
+#ifndef __DGproto__CollectionListScene__
+#define __DGproto__CollectionListScene__
 
 #include "cocos2d.h"
 #include "AlertEngine.h"
 #include "GameData.h"
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
+#include "CollectionView.h"
 
 USING_NS_CC;
 
-class WorldMapScene : public cocos2d::CCLayer
+class CollectionListScene : public cocos2d::CCLayer
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -30,17 +31,15 @@ public:
     void menuAction(CCObject* pSender);
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
-    CREATE_FUNC(WorldMapScene);
+    CREATE_FUNC(CollectionListScene);
 	
 private:
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
 	
-	CCPoint getStagePosition(int stage);
-	
-//	void showPopup(int stage);
-	void stageCancel();
+	CCMenu* close_menu;
+	CollectionView* collection_view;
 };
 
-#endif /* defined(__DGproto__WorldMapScene__) */
+#endif /* defined(__DGproto__CollectionListScene__) */

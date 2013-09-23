@@ -18,6 +18,7 @@
 #include "EnumDefine.h"
 #include "SilhouetteData.h"
 #include <deque>
+#include <algorithm>
 
 using namespace cocos2d;
 using namespace std;
@@ -117,6 +118,8 @@ public:
 	void setGameStart()
 	{
 		mySD->startSetting();
+		is_showtime = false;
+		is_exchanged = false;
 		is_cleared = false;
 		score = 0.f;
 		percentage = 0.f;
@@ -389,6 +392,71 @@ public:
 		is_using_item[t_i] = t_b;
 	}
 	
+	int selected_collectionbook;
+	
+	int getNextCardNumber(int recent_card_number)
+	{
+		int t_size = has_gotten_cards.size();
+		
+		if(t_size == 1)
+			return -1;
+		
+		int found_number = -1;
+		for(int i=0;i<t_size;i++)
+		{
+			if(recent_card_number == has_gotten_cards[i])
+			{
+				found_number = i;
+				break;
+			}
+		}
+		
+		if(found_number == -1) // not found
+			return -1;
+
+		if(found_number >= t_size-1)
+			return has_gotten_cards[0];
+		else
+			return has_gotten_cards[found_number+1];
+	}
+	
+	int getPreCardNumber(int recent_card_number)
+	{
+		int t_size = has_gotten_cards.size();
+		
+		if(t_size == 1)
+			return -1;
+		
+		int found_number = -1;
+		for(int i=0;i<t_size;i++)
+		{
+			if(recent_card_number == has_gotten_cards[i])
+			{
+				found_number = i;
+				break;
+			}
+		}
+		
+		if(found_number == -1) // not found
+			return -1;
+		
+		if(found_number <= 0)
+			return has_gotten_cards[t_size-1];
+		else
+			return has_gotten_cards[found_number-1];
+	}
+	
+	void addHasGottenCardNumber(int card_number)
+	{
+		has_gotten_cards.push_back(card_number);
+		sort(has_gotten_cards.begin(), has_gotten_cards.end());
+		CCLog("input %d, sort", card_number);
+		for(int i=0;i<has_gotten_cards.size();i++)
+		{
+			CCLog("%d", has_gotten_cards[i]);
+		}
+	}
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
@@ -403,7 +471,7 @@ private:
 	
 	deque<bool> before_use_item;
 	deque<bool> is_using_item;
-	
+	deque<int> has_gotten_cards;
 	
 	bool is_tutorial_cleared;
 	ImgType after_loading;
@@ -489,6 +557,15 @@ private:
 		login_getted = false;
 		serverTime_getted = false;
 		is_before_title = true;
+		
+		for(int i=1;i<=mySD->getLastUpdateStageNumber();i++)
+		{
+			for(int j=0;j<3;j++)
+			{
+				if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, i*10+j))
+					has_gotten_cards.push_back(i*10+j);
+			}
+		}
 		
 		collection_starter = kCST_basic;//kCST_basic;
 		
