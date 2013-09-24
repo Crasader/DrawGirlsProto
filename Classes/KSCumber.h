@@ -22,8 +22,8 @@ using namespace cocos2d::extension;
 class KSCumber : public KSCumberBase
 {
 public:
-	KSCumber() : m_speed(2.f), RADIUS(15.f), mEmotion(nullptr),
-	LIMIT_COLLISION_PER_SEC(3), /// 초당 변수만큼 충돌시 스케일 줄임.
+	KSCumber() : RADIUS(15.f), mEmotion(nullptr),
+	
 		FURY_DURATION(4.f), // 분노모드 초.
 		teleportImg(NULL) // 텔레포트 이미지
 	{
@@ -31,9 +31,9 @@ public:
 	}
 	virtual ~KSCumber(){}
 
-	virtual void movingAndCrash(float dt);
 	void normalMoving(float dt);
-	void furyMoving(float dt);
+
+	
 	virtual void onStartMoving()
 	{
 		m_state = CUMBERSTATEMOVING;
@@ -46,7 +46,7 @@ public:
 	void attack(float dt);
 	virtual bool init();
 	CREATE_FUNC(KSCumber);
-	virtual void setPosition(CCPoint t_sp)
+	virtual void setPosition(const CCPoint& t_sp)
 	{
 		KSCumberBase::setPosition(t_sp);
 		gameData->setMainCumberPoint(ccp2ip(t_sp));
@@ -107,15 +107,9 @@ public:
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
 	virtual void setGameover();
-	void crashMapForPosition(CCPoint targetPt);
-	void setCumberScale(float r)
-	{
-		m_scale.scale.init(m_scale.scale.getValue(), r, 0.005f);
-	}
-	float getCumberScale()
-	{
-		return m_scale.scale.getValue();
-	}
+	virtual void crashMapForPosition(CCPoint targetPt);
+	
+
 	void scaleAdjustment(float dt);
 
 	virtual void lightSmaller()
@@ -164,23 +158,39 @@ public:
 		
 		runAction(t_seq);
 	}
-
+	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition){
+		IntPoint afterPoint = point;
+		float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+		int ip_half_distance = half_distance / 2;
+		set<IntPoint> ips;
+		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+		{
+			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+			{
+				float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+				if(calc_distance < ip_half_distance)
+				{
+					ips.insert(IntPoint(i, j));
+				}
+			}
+		}
+		
+		COLLISION_CODE collisionCode = crashLooper(ips, checkPosition);
+		return collisionCode;
+	}
 protected:
 	CCSprite* teleportImg;
 	const float FURY_DURATION;
-	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
+	
 	bool isGameover;
-	float m_speed;
 //	CCSprite* m_headImg;
 	CCSprite* m_headImg;
 	CCBAnimationManager *mAnimationManager;
-	int m_directionAngleDegree;
 	IntPoint getMapPoint(CCPoint c){
 		return IntPoint(round((c.x - 1) / pixelSize + 1.f),
 						round((c.y - 1) / pixelSize + 1.f));
 	}
 	
-	Well512 m_well512;
 	Emotion* mEmotion;
 	/// 방사형 에니메이션 용.
 	struct NoDirection
@@ -209,35 +219,10 @@ protected:
 		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
 	}m_invisible;
 	
-	struct Scale
-	{
-		Scale() : SCALE_ADDER(0.1f), SCALE_SUBER(0.2f), scale(1.f, 1.f, 0.f),
-		timer(0), autoIncreaseTimer(0), collisionStartTime(0), increaseTime(0),
-		collisionCount(0){}
-		const float SCALE_ADDER;
-		const float SCALE_SUBER;
-		int collisionCount; // 초당 충돌횟수 세기 위해
-		float collisionStartTime;
-		float timer; //
-		
-		float increaseTime;
-		float autoIncreaseTimer;
-		FromTo<float> scale; // 서서히 변하는것을 구현하기 위해.
-	}m_scale;
 	
 	
-	struct FuryMode
-	{
-		
-		float furyTimer;
-		int furyFrameCount;
-		void startFury()
-		{
-			
-			furyTimer = 0.f;
-			furyFrameCount = 0;
-		}
-	}m_furyMode;
+	
+	
 };
 
 #endif /* defined(__DGproto__KSCumber__) */

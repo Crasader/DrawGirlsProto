@@ -16,7 +16,7 @@
 #include <set>
 #include "CumberEmotion.h"
 #include <deque>
-#include "FromTo.h"
+#include "Jack.h"
 
 struct MetalSnakeTrace
 {
@@ -30,8 +30,8 @@ class MetalSnake : public KSCumberBase
 {
 public:
 	MetalSnake() :
-	m_speed(2.f),
-	RADIUS(80.f / 4.f), // 머리에 대한 충돌 반지름
+	
+	RADIUS(110.f / 4.f), // 머리에 대한 충돌 반지름
 	BODY_RADIUS(70/4.f), // 몸통에 대한 충돌 반지름
 	TAIL_RADIUS(50/4.f), // 꼬리에 대한 충돌 반지름
 	mEmotion(nullptr),
@@ -68,14 +68,14 @@ public:
 		
 
 	}
-	void crashMapForPosition(CCPoint targetPt);
-	virtual void movingAndCrash(float dt);
+	virtual void crashMapForPosition(CCPoint targetPt);
+//	virtual void movingAndCrash(float dt);
 	void normalMoving(float dt);
 	void furyMoving(float dt);
 	void attack(float dt);
 	virtual bool init();
 	CREATE_FUNC(MetalSnake);
-	virtual void setPosition(CCPoint t_sp)
+	virtual void setPosition(const CCPoint& t_sp)
 	{
 		CCPoint prevPosition = getPosition();
 		MetalSnakeTrace tr;
@@ -149,14 +149,8 @@ public:
 	void damageReaction(float dt);
 	void animationNoDirection(float dt);
 	void animationDirection(float dt);
-	void setCumberScale(float r)
-	{
-		m_scale.scale.init(m_scale.scale.getValue(), r, 0.005f);
-	}
-	float getCumberScale()
-	{
-		return m_scale.scale.getValue();
-	}
+
+	
 	void scaleAdjustment(float dt);
 	CCPoint getMissilePoint()
 	{
@@ -183,6 +177,74 @@ public:
 	virtual void startTeleport(){}
 	virtual void smaller() {}
 	
+	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition){
+		float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+		int ip_half_distance = half_distance / 2;
+		IntPoint afterPoint = point;
+		
+		set<IntPoint> ips;
+		
+		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+		{
+			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+			{
+				float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+				if(calc_distance < ip_half_distance)
+				{
+					ips.insert(IntPoint(i, j));
+				}
+			}
+		}
+		
+		COLLISION_CODE collisionCode = crashLooper(ips, checkPosition);
+		
+		if(collisionCode == kCOLLISION_NONE)
+		{
+			// 몸통에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
+			if(gameData->getJackState() != jackStateNormal)
+			{
+				for(auto body : m_Bodies)
+				{
+					CCPoint cumberPosition = body->getPosition();
+					CCPoint bodyPosition = cumberPosition;
+					IntPoint afterPoint = ccp2ip(bodyPosition);
+					IntPoint checkPosition;
+					float half_distance = BODY_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+					int ip_half_distance = half_distance / 2;
+					
+					
+					IntPoint jackPoint = gameData->getJackPoint();
+					float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
+					if(calc_distance < ip_half_distance)
+					{
+						collisionCode = COLLISION_CODE::kCOLLISION_JACK;
+						break;
+					}
+				}
+			}
+
+			// 꼬리에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
+			if(gameData->getJackState() != jackStateNormal)
+			{
+				CCPoint cumberPosition = m_tailImg->getPosition();
+				CCPoint bodyPosition = cumberPosition;
+				IntPoint afterPoint = ccp2ip(bodyPosition);
+				IntPoint checkPosition;
+				float half_distance = TAIL_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+				int ip_half_distance = half_distance / 2;
+				
+				
+				IntPoint jackPoint = gameData->getJackPoint();
+				float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
+				if(calc_distance < ip_half_distance)
+				{
+					collisionCode = COLLISION_CODE::kCOLLISION_JACK;
+				}
+			}
+		}
+		
+		return collisionCode;
+	}
 protected:
 	const float FURY_DURATION;
 	const float RADIUS;
@@ -194,17 +256,15 @@ protected:
 	const float ATTACK_POINT_X;
 	const float ATTACK_POINT_Y;
 	bool isGameover;
-	float m_speed;
 	CCSprite* m_headImg;
 	vector<CCSprite*> m_Bodies;
 	CCSprite* m_tailImg;
-	int m_directionAngleDegree;
 	IntPoint getMapPoint(CCPoint c){
 		return IntPoint(round((c.x - 1) / pixelSize + 1.f),
 						round((c.y - 1) / pixelSize + 1.f));
 	}
 	
-	Well512 m_well512;
+	
 	Emotion* mEmotion;
 	
 	deque< MetalSnakeTrace > m_cumberTrace; // back 은 항상 머리를 가르킴.
@@ -240,21 +300,7 @@ protected:
 		}
 	}m_direction;
 	
-	struct Scale
-	{
-		Scale() : SCALE_ADDER(0.1f), SCALE_SUBER(0.2f), scale(1.f, 1.f, 0.f),
-		timer(0), autoIncreaseTimer(0), collisionStartTime(0), increaseTime(0),
-		collisionCount(0){}
-		const float SCALE_ADDER;
-		const float SCALE_SUBER;
-		int collisionCount; // 초당 충돌횟수 세기 위해
-		float collisionStartTime;
-		float timer; //
-		
-		float increaseTime;
-		float autoIncreaseTimer;
-		FromTo<float> scale; // 서서히 변하는것을 구현하기 위해.
-	}m_scale;
+	
 	
 	struct Invisible
 	{
@@ -264,19 +310,6 @@ protected:
 		float invisibleValue;
 		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
 	}m_invisible;
-
-	struct FuryMode
-	{
-
-		float furyTimer;
-		int furyFrameCount;
-		void startFury()
-		{
-
-			furyTimer = 0.f;
-			furyFrameCount = 0;
-		}
-	}m_furyMode;
 };
 
 
