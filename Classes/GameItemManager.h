@@ -1941,10 +1941,7 @@ private:
 		
 		selected_item_cnt = 0;
 		
-		if(mySGD->isUsingItem(kIC_doubleItem))
-			double_item_cnt = mySD->getDoubleItemOption();
-		else
-			double_item_cnt = 0;
+		double_item_cnt = mySGD->getDoubleItemValue();
 		
 		if(mySGD->isUsingItem(kIC_fast)){		creatable_list.push_back(kIC_fast);			selected_item_cnt++;	}
 		if(mySGD->isUsingItem(kIC_critical)){	creatable_list.push_back(kIC_critical);		selected_item_cnt++;	}

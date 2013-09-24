@@ -557,9 +557,7 @@ public:
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
 			
-			int item_value = 0;
-			if(mySGD->isUsingItem(kIC_smallArea))
-				item_value = mySD->getSmallAreaItemOption();
+			int item_value = mySGD->getSmallAreaValue();
 			
 			if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per-item_value/100.f)
 				takeBigArea();
@@ -645,10 +643,7 @@ public:
 		
 		percentageLabel->setString(CCString::createWithFormat("%.1f", floorf(t_p*10000.f)/10000.f*100.f)->getCString());
 		
-		int item_value = 0;
-		
-		if(mySGD->isUsingItem(kIC_widePerfect))
-			item_value = mySD->getWidePerfectItemOption();
+		int item_value = mySGD->getWidePerfectValue();
 		
 		if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && atof(percentageLabel->getString()) >= (clr_cdt_per-item_value/200.f)*100.f && atof(percentageLabel->getString()) <= (clr_cdt_per+clr_cdt_range+item_value/200.f)*100.f)
 			conditionClear();
@@ -826,10 +821,7 @@ public:
 	void setMaxBossLife(float t_life)
 	{
 		maxBossLife = t_life;
-		if(mySGD->isUsingItem(kIC_bossLittleEnergy))
-			bossLife = maxBossLife*(100.f - mySD->getBossLittleEnergyItemOption())/100.f;
-		else
-			bossLife = maxBossLife;
+		bossLife = maxBossLife*(100.f - mySGD->getBossLittleEnergyValue())/100.f;
 	}
 	
 	void setClearPercentage(float t_p)
@@ -910,8 +902,8 @@ public:
 			countingCnt -= 30;
 			if(mySGD->isUsingItem(kIC_longTime))
 			{
-				if(countingCnt < -mySD->getLongTimeItemOption())
-					countingCnt = -mySD->getLongTimeItemOption();
+				if(countingCnt < -mySGD->getLongTimeValue())
+					countingCnt = -mySGD->getLongTimeValue();
 			}
 			else
 			{
@@ -935,16 +927,9 @@ public:
 	{
 		countingCnt -= 10;
 		
-		if(mySGD->isUsingItem(kIC_longTime))
-		{
-			if(countingCnt < -mySD->getLongTimeItemOption())
-				countingCnt = -mySD->getLongTimeItemOption();
-		}
-		else
-		{
-			if(countingCnt < 0)
-				countingCnt = 0;
-		}
+		if(countingCnt < -mySGD->getLongTimeValue())
+			countingCnt = -mySGD->getLongTimeValue();
+		
 		countingLabel->setString(CCString::createWithFormat("%d", 150-countingCnt)->getCString());
 	}
 	
@@ -1100,9 +1085,7 @@ private:
 		
 		ing_cdt_cnt++;
 		
-		int item_value = 0;
-		if(mySGD->isUsingItem(kIC_smallArea))
-			item_value = mySD->getSmallAreaItemOption();
+		int item_value = mySGD->getSmallAreaValue();
 		
 		((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
 		if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
@@ -1185,10 +1168,7 @@ private:
 		sand_clock->setPosition(ccp(147,463));
 		addChild(sand_clock);
 		
-		if(mySGD->isUsingItem(kIC_longTime))
-			countingCnt = -mySD->getLongTimeItemOption();
-		else
-			countingCnt = 0;
+		countingCnt = -mySGD->getLongTimeValue();
 		
 		countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", 150-countingCnt)->getCString(), "etc_font.fnt");
 		countingLabel->setScale(1.3);
@@ -1272,10 +1252,7 @@ private:
 			icon_menu->setPosition(icon_menu_position);
 			addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 			
-			int start_percentage = 100;
-			
-			if(mySGD->isUsingItem(kIC_bossLittleEnergy))
-				start_percentage -= mySD->getBossLittleEnergyItemOption();
+			int start_percentage = 100 - mySGD->getBossLittleEnergyValue();
 			
 			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d%%", start_percentage)->getCString(), mySGD->getFont().c_str(), 12);
 			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -1322,9 +1299,7 @@ private:
 			clr_cdt_cnt = mySD->getClearConditionBigAreaCnt();
 			ing_cdt_cnt = 0;
 			
-			int item_value = 0;
-			if(mySGD->isUsingItem(kIC_smallArea))
-				item_value = mySD->getSmallAreaItemOption();
+			int item_value = mySGD->getSmallAreaValue();
 			
 			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));

@@ -12,7 +12,7 @@
 #include "cocos2d.h"
 #include "DataStorageHub.h"
 #include "AudioEngine.h"
-//#include "GraphDog.h"
+#include "GraphDog.h"
 #include "GameData.h"
 #include "JsonBox.h"
 #include "EnumDefine.h"
@@ -126,6 +126,41 @@ public:
 		keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
 		stage_star = 0;
 		game_time = 0;
+		
+		deque<int> card_options;
+		deque<int>::iterator iter;
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		mySD->setCardOptions(card_options, selected_card_number);
+		
+		doubleItem_value = 0;
+		if(isUsingItem(kIC_doubleItem))		doubleItem_value += mySD->getDoubleItemOption();
+		iter = find(card_options.begin(), card_options.end(), kIC_doubleItem);
+		if(iter != card_options.end())		doubleItem_value += mySD->getCardDoubleItemOption(selected_card_number);
+		
+		longTime_value = 0;
+		if(isUsingItem(kIC_longTime))		longTime_value += mySD->getLongTimeItemOption();
+		iter = find(card_options.begin(), card_options.end(), kIC_longTime);
+		if(iter != card_options.end())		longTime_value += mySD->getCardLongTimeItemOption(selected_card_number);
+		
+		bossLittleEnergy_value = 0;
+		if(isUsingItem(kIC_bossLittleEnergy))	bossLittleEnergy_value += mySD->getBossLittleEnergyItemOption();
+		iter = find(card_options.begin(), card_options.end(), kIC_bossLittleEnergy);
+		if(iter != card_options.end())			bossLittleEnergy_value += mySD->getCardBossLittleEnergyItemOption(selected_card_number);
+		
+		subSmallSize_value = 0;
+		if(isUsingItem(kIC_subSmallSize))	subSmallSize_value += mySD->getSubSmallSizeItemOption();
+		iter = find(card_options.begin(), card_options.end(), kIC_subSmallSize);
+		if(iter != card_options.end())		subSmallSize_value += mySD->getCardSubSmallSizeItemOption(selected_card_number);
+		
+		smallArea_value = 0;
+		if(isUsingItem(kIC_smallArea))		smallArea_value += mySD->getSmallAreaItemOption();
+		iter = find(card_options.begin(), card_options.end(), kIC_smallArea);
+		if(iter != card_options.end())		smallArea_value += mySD->getCardSmallAreaItemOption(selected_card_number);
+		
+		widePerfect_value = 0;
+		if(isUsingItem(kIC_widePerfect))	widePerfect_value += mySD->getWidePerfectItemOption();
+		iter = find(card_options.begin(), card_options.end(), kIC_widePerfect);
+		if(iter != card_options.end())		widePerfect_value += mySD->getCardWidePerfectItemOption(selected_card_number);
 	}
 	
 	void gameClear(int t_star, float t_score, float t_percentage, int t_game_time)
@@ -259,7 +294,7 @@ public:
 		}
 		else
 		{
-//			GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogRefreshServerTime));
+			GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogRefreshServerTime));
 		}
 	}
 	
@@ -457,6 +492,13 @@ public:
 		}
 	}
 	
+	int getDoubleItemValue(){	return doubleItem_value;	}
+	int getLongTimeValue(){		return longTime_value;		}
+	int getBossLittleEnergyValue(){		return bossLittleEnergy_value;	}
+	int getSubSmallSizeValue(){	return subSmallSize_value;	}
+	int getSmallAreaValue(){	return smallArea_value;		}
+	int getWidePerfectValue(){	return widePerfect_value;	}
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
@@ -468,6 +510,13 @@ private:
 	int stage_star;
 	int keep_gold;
 	int game_time;
+		   
+	int doubleItem_value;
+	int longTime_value;
+	int bossLittleEnergy_value;
+	int subSmallSize_value;
+	int smallArea_value;
+	int widePerfect_value;
 	
 	deque<bool> before_use_item;
 	deque<bool> is_using_item;
@@ -515,7 +564,7 @@ private:
 	
 	void getServerTime()
 	{
-//		GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogGetServerTime));
+		GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogGetServerTime));
 	}
 	
 	void loadServerTime()

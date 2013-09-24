@@ -9,7 +9,7 @@
 #endif
 
 #include "GameData.h"
-#include "StartingScene.h"
+//#include "StartingScene.h"
 #include "WorldMapScene.h"
 
 using namespace CocosDenshion;
@@ -19,7 +19,6 @@ USING_NS_CC;
 #include <functional>
 #include <map>
 #include "KSUtil.h"
-
 AppDelegate::AppDelegate()
 {
 	

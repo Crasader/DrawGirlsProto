@@ -104,6 +104,27 @@ public:
 		return return_value;
 	}
 	
+	void setCardOptions(deque<int>& t_list, int card_number)
+	{
+		if(card_number == 10)
+		{
+			t_list.push_back(kIC_longTime);
+			t_list.push_back(kIC_fast);
+		}
+		else if(card_number == 20)
+		{
+			t_list.push_back(kIC_silence);
+		}
+		else if(card_number == 30)
+		{
+			t_list.push_back(kIC_critical);
+		}
+		else
+		{
+			
+		}
+	}
+	
 	CLEAR_CONDITION getClearCondition(){	return getClearCondition(myType);	}
 	CLEAR_CONDITION getClearCondition(int t_type) // stage
 	{
@@ -365,12 +386,28 @@ public:
 		
 		return return_value;
 	}
+	int getCardDoubleItemOption(int card_number)
+	{
+		int return_value;
+		
+			return_value = 2;
+		
+		return return_value;
+	}
 	
 	int getLongTimeItemOption()
 	{
 		int return_value;
 		
 //		if(myType == 1)
+			return_value = 30;
+		
+		return return_value;
+	}
+	int getCardLongTimeItemOption(int card_number)
+	{
+		int return_value;
+		
 			return_value = 30;
 		
 		return return_value;
@@ -385,12 +422,28 @@ public:
 		
 		return return_value;
 	}
+	int getCardBossLittleEnergyItemOption(int card_number)
+	{
+		int return_value;
+		
+			return_value = 20;
+		
+		return return_value;
+	}
 	
 	int getSubSmallSizeItemOption()
 	{
 		int return_value;
 		
 //		if(myType == 1)
+			return_value = 20;
+		
+		return return_value;
+	}
+	int getCardSubSmallSizeItemOption(int card_number)
+	{
+		int return_value;
+		
 			return_value = 20;
 		
 		return return_value;
@@ -405,12 +458,28 @@ public:
 		
 		return return_value;
 	}
+	int getCardSmallAreaItemOption(int card_number)
+	{
+		int return_value;
+		
+			return_value = 2;
+		
+		return return_value;
+	}
 	
 	int getWidePerfectItemOption()
 	{
 		int return_value;
 		
 //		if(myType == 1)
+			return_value = 1;
+		
+		return return_value;
+	}
+	int getCardWidePerfectItemOption(int card_number)
+	{
+		int return_value;
+		
 			return_value = 1;
 		
 		return return_value;
@@ -494,24 +563,6 @@ private:
 	{
 		
 	}
-	
-	void startSetting1();
-	void startSetting2();
-	void startSetting3();
-	void startSetting4();
-	void startSetting5();
-	void startSetting6();
-	void startSetting7();
-	void startSetting8();
-	
-	void exchangeSilhouette1();
-	void exchangeSilhouette2();
-	void exchangeSilhouette3();
-	void exchangeSilhouette4();
-	void exchangeSilhouette5();
-	void exchangeSilhouette6();
-	void exchangeSilhouette7();
-	void exchangeSilhouette8();
 };
 
 #endif /* defined(__galsprototype__SilhouetteData__) */

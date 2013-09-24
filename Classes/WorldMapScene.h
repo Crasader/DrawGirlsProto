@@ -41,6 +41,8 @@ private:
 	
 //	void showPopup(int stage);
 	void stageCancel();
+	
+	void showConvertSildata(string filename);
 };
 
 #endif /* defined(__DGproto__WorldMapScene__) */

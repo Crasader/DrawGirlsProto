@@ -572,12 +572,13 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					
 					myJack->setJackState(jackStateDrawing);
 					
+					IntPoint jackPoint = myGD->getJackPoint();
+					if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
+						myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
+					
 					if(joystick_touch)
 					{
 						isButtonAction = true;
-						IntPoint jackPoint = myGD->getJackPoint();
-						if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
-							myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
 						touchAction(convertToNodeSpace(CCDirector::sharedDirector()->convertToGL(joystick_touch->getLocationInView())), false);
 						continue;
 					}

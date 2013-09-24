@@ -38,6 +38,7 @@ private:
 	int selected_stage;
 	vector<ITEM_CODE> item_list;
 	deque<bool> is_selected_item;
+	deque<int> card_options;
 	CCLabelTTF* item_script;
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);

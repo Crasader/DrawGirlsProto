@@ -88,7 +88,7 @@ private:
 		CCPoint p_p = getParent()->getPosition(); // parent
 		p_p = ccpAdd(r_p, p_p);
 		
-		if(p_p.x < 0.f - 40.f || p_p.x > 320.f + 40.f || p_p.y < 0.f - 40.f || p_p.y > 430.f + 40.f) // fixed 40.f
+		if(p_p.x < 0.f - 40.f || p_p.x > 320.f + 40.f || p_p.y < -60.f - 40.f || p_p.y > 490.f + 40.f) // fixed 40.f
 		{
 			stopMove();
 			removeFromParentAndCleanup(true);
@@ -211,7 +211,7 @@ private:
 		CCPoint p_p = getParent()->getPosition(); // parent
 		p_p = ccpAdd(r_p, p_p);
 		
-		if(p_p.x < 0.f - 40.f || p_p.x > 320.f + 40.f || p_p.y < 0.f - 40.f || p_p.y > 430.f + 40.f) // fixed 40.f
+		if(p_p.x < 0.f - 40.f || p_p.x > 320.f + 40.f || p_p.y < -60.f - 40.f || p_p.y > 490.f + 40.f) // fixed 40.f
 		{
 			stopMove();
 			removeFromParentAndCleanup(true);
@@ -323,7 +323,7 @@ private:
 			removeEffect();
 		}
 		
-		if(afterPosition.y < -mSize.height)
+		if(afterPosition.y < -mSize.height-60.f)
 		{
 			stopMove();
 			removeFromParentAndCleanup(true);
