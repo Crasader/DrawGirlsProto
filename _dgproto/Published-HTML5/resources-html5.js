@@ -1,5 +1,6 @@
 var ccb_resources = [
     {type:'image', src:"boss_melon_tail1.png"},
+    {type:'image', src:"pattern_saw1_2.png"},
     {type:'image', src:"pattern_energyball1_5.png"},
     {type:'image', src:"boss_apple_head_rubyon.png"},
     {type:'image', src:"ccbResources/ccbParticleSmoke.png"},
