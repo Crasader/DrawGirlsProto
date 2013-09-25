@@ -23,15 +23,25 @@ enum AP_CODE{
 	kNonTargetAttack6,
 	kNonTargetAttack7,
 	kNonTargetAttack8,
-	kNonTargetAttack9,
-	kNonTargetAttack10,
+	kNonTargetAttack9, // 당구공 // ok
+	kNonTargetAttack10, //
+	
 	kTargetAttack1=101,
 	kTargetAttack2,
 	kTargetAttack3,
 	kTargetAttack4,
-	kTargetAttack5,
-	kTargetAttack6,
-	kTargetAttack7,
+	kTargetAttack5, // 나무 토막 // ok
+	kTargetAttack6, // 사과 던지기 // 14 번... // ok
+	
+	kTargetAttack7,// 태양 광선 // ok
+	kCrashAttack1, // 몸통박치기
+	kSpecialAttack1 = 1001, // 먹물 // 21
+	kSpecialAttack2, // 태양권 // 24
+	kSpecialAttack3, // 거미줄 // 23
+	kSpecialAttack4, // 감옥   // 28
+	kSpecialAttack5, // 빙결   // 26
+	kSpecialAttack6, // 혼란, 반대 컨트롤. // 33
+	kSpecialAttack7, // 텔레포트.          // 32
 	kAP_CODE_pattern0 =999990,
 	kAP_CODE_pattern1,
 	kAP_CODE_pattern2,

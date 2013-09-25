@@ -138,10 +138,10 @@ public:
 		}
 		
 		teleportImg = CCSprite::create("teleport_light.png");
-		teleportImg->setScale(0);
+		teleportImg->setScale(0.01f);
 		addChild(teleportImg);
 		
-		CCScaleTo* t_scale = CCScaleTo::create(0.2, 2.f);
+		CCBlink* t_scale = CCBlink::create(0.5, 0);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Coconut::smaller));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
@@ -151,7 +151,7 @@ public:
 	}
 	virtual void smaller()
 	{
-		CCScaleTo* t_scale = CCScaleTo::create(0.2, 0.f);
+		CCBlink* t_scale = CCBlink::create(0.5, 8);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Coconut::randomPosition));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
