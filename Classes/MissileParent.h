@@ -33,6 +33,53 @@ public:
 	}
 };
 
+
+class NoChargeNode : public ChargeParent
+{
+public:
+	static NoChargeNode* create(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	{
+		NoChargeNode* n_charge = new NoChargeNode();
+		n_charge->init(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
+		
+		n_charge->autorelease();
+		return n_charge;
+	}
+	bool init(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	{
+		real_target = t_rt;
+		create_position = t_position;
+		charge_frame = t_frame;
+		charging_target = t_ing_t;
+		charging_delegate = t_ing_d;
+		after_target = t_a_t;
+		after_delegate = t_a_d;
+		cancel_target = t_c_t;
+		cancel_delegate = t_c_d;
+
+		return true;
+	}
+	void update(float dt)
+	{
+		if(getParent())
+		{
+			if(after_target && after_delegate)
+				(after_target->*after_delegate)();
+			
+			removeFromParentAndCleanup(true);
+		}
+	}
+protected:
+	int charge_frame;
+	CCObject* real_target;
+	CCObject* charging_target;
+	CCObject* after_target;
+	CCObject* cancel_target;
+	SEL_CallFunc charging_delegate;
+	SEL_CallFunc after_delegate;
+	SEL_CallFunc cancel_delegate;
+	CCPoint create_position;
+};
 class ChargeNode : public ChargeParent
 {
 public:
@@ -848,6 +895,10 @@ public:
 	
 	void actionAP103();
 	void cancelAP103(){	}
+	
+	
+	
+	
 	void attackWithCode(CCPoint startPosition, int pattern_code);
 	void startFire(CCPoint startPosition, bool crash_attack = false);
 	
@@ -896,6 +947,105 @@ public:
 	
 	void shootPetMissile(int jm_type, int cmCnt, float damage_per, CCPoint s_p);
 	
+	
+	
+	void actionKSAP1()
+	{
+		{
+			KSAttackPattern1* t = KSAttackPattern1::create(startFirePosition);
+			addChild(t);
+			saveAP = t;
+			savedAP = true;
+		}
+		
+		
+	}
+	void cancelKSAP1(){		}
+	void actionKSAP2()
+	{
+		{
+			KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition);
+			addChild(t);
+			saveAP = t;
+			savedAP = true;
+		}
+		
+		
+	}
+	void cancelKSAP2(){		}
+	
+	void actionKSAP3()
+	{
+		{
+			KSAttackPattern3* t = KSAttackPattern3::create(startFirePosition);
+			addChild(t);
+			saveAP = t;
+			savedAP = true;
+		}	
+	}
+	void cancelKSAP3(){		}
+	void actionKSAP4()
+	{
+		{
+			KSAttackPattern4* t = KSAttackPattern4::create(startFirePosition);
+			addChild(t);
+			saveAP = t;
+			savedAP = true;
+		}
+		
+		
+	}
+	void cancelKSAP4(){		}
+	void actionKSAP5()
+	{
+		KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelKSAP5(){		}
+	void actionKSAP6()
+	{
+		KSAttackPattern6* t = KSAttackPattern6::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelKSAP6(){		}
+	void actionKSAP7()
+	{
+		KSAttackPattern7* t = KSAttackPattern7::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelKSAP7(){		}
+	void actionKSAP8()
+	{
+		KSAttackPattern8* t = KSAttackPattern8::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelKSAP8(){		}
+	void actionKSAP9()
+	{
+		KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelKSAP9(){		}
+	void actionKSAP10()
+	{
+		KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelKSAP10(){		}
+	
+	void attackWithKSCode(CCPoint startPosition, int pattern);
 private:
 	
 	AutoAttacker* myAA;
@@ -917,7 +1067,6 @@ private:
 	AP_Missile24* keepAP24;
 	AP_Missile34* keepAP34;
 	AP_Missile35* keepAP35;
-	
 	CCArray* chargeArray;
 	CCArray* tickingArray;
 	
