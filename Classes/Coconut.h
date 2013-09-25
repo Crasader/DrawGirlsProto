@@ -1,5 +1,5 @@
 //
-//  KSCumber.h
+//  Coconut.h
 //  DGproto
 //
 //  Created by ksoo k on 13. 9. 6..
@@ -19,17 +19,17 @@
 using namespace cocos2d::extension;
 
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class KSCumber : public KSCumberBase
+class Coconut : public KSCumberBase
 {
 public:
-	KSCumber() : RADIUS(15.f), mEmotion(nullptr),
+	Coconut() : RADIUS(15.f), mEmotion(nullptr),
 	
 		FURY_DURATION(4.f), // 분노모드 초.
 		teleportImg(NULL) // 텔레포트 이미지
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
-	virtual ~KSCumber(){}
+	virtual ~Coconut(){}
 
 	void normalMoving(float dt);
 
@@ -45,7 +45,7 @@ public:
 	}
 	void cumberAttack(float dt);
 	virtual bool init();
-	CREATE_FUNC(KSCumber);
+	CREATE_FUNC(Coconut);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
 		KSCumberBase::setPosition(t_sp);
@@ -65,7 +65,7 @@ public:
 	{
 		if(mEmotion)
 			mEmotion->selfRemove();
-		mEmotion = Emotion::create(t_type, this, callfunc_selector(KSCumber::nullmEmotion));
+		mEmotion = Emotion::create(t_type, this, callfunc_selector(Coconut::nullmEmotion));
 		mEmotion->setPosition(ccp(30,20));
 		addChild(mEmotion);
 	}
@@ -142,7 +142,7 @@ public:
 		addChild(teleportImg);
 		
 		CCScaleTo* t_scale = CCScaleTo::create(0.2, 2.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSCumber::smaller));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Coconut::smaller));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -152,7 +152,7 @@ public:
 	virtual void smaller()
 	{
 		CCScaleTo* t_scale = CCScaleTo::create(0.2, 0.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSCumber::randomPosition));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Coconut::randomPosition));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -183,6 +183,7 @@ protected:
 	const float FURY_DURATION;
 	
 	bool isGameover;
+	int lastCastNum;
 //	CCSprite* m_headImg;
 	CCSprite* m_headImg;
 	CCBAnimationManager *mAnimationManager;

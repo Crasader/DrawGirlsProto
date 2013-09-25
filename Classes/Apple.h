@@ -1,13 +1,13 @@
 //
-//  MetalSnake.h
+//  Apple.h
 //  DGproto
 //
 //  Created by ksoo k on 13. 9. 12..
 //
 //
 
-#ifndef __DGproto__MetalSnake__
-#define __DGproto__MetalSnake__
+#ifndef __DGproto__Apple__
+#define __DGproto__Apple__
 
 
 #include "KSCumberBase.h"
@@ -17,8 +17,10 @@
 #include "CumberEmotion.h"
 #include <deque>
 #include "Jack.h"
+#include "cocos-ext.h"
+using namespace cocos2d::extension;
 
-struct MetalSnakeTrace
+struct AppleTrace
 {
 	CCPoint position; // 자취의 위치와
 	float directionRad; // 자취의 방향.
@@ -26,10 +28,10 @@ struct MetalSnakeTrace
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
 
 
-class MetalSnake : public KSCumberBase
+class Apple : public KSCumberBase
 {
 public:
-	MetalSnake() :
+	Apple() :
 	
 	RADIUS(110.f / 4.f), // 머리에 대한 충돌 반지름
 	BODY_RADIUS(70/4.f), // 몸통에 대한 충돌 반지름
@@ -45,7 +47,7 @@ public:
 		m_state = (CUMBERSTATEMOVING);
 	}
 	
-	virtual ~MetalSnake();
+	virtual ~Apple();
 	
 	virtual void onStartMoving()
 	{
@@ -72,13 +74,13 @@ public:
 //	virtual void movingAndCrash(float dt);
 	void normalMoving(float dt);
 	void furyMoving(float dt);
-	void attack(float dt);
+	void cumberAttack(float dt);
 	virtual bool init();
-	CREATE_FUNC(MetalSnake);
+	CREATE_FUNC(Apple);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
 		CCPoint prevPosition = getPosition();
-		MetalSnakeTrace tr;
+		AppleTrace tr;
 		tr.position = t_sp;
 		tr.directionRad = atan2f(t_sp.y - prevPosition.y, t_sp.x - prevPosition.x);
 		
@@ -130,7 +132,7 @@ public:
 	{
 		if(mEmotion)
 			mEmotion->selfRemove();
-		mEmotion = Emotion::create(t_type, this, callfunc_selector(MetalSnake::nullmEmotion));
+		mEmotion = Emotion::create(t_type, this, callfunc_selector(Apple::nullmEmotion));
 		mEmotion->setPosition(ccpAdd(getPosition(), ccp(30,20)));
 		addChild(mEmotion, 11);
 	}
@@ -256,6 +258,10 @@ protected:
 	const float ATTACK_POINT_X;
 	const float ATTACK_POINT_Y;
 	bool isGameover;
+	CCBAnimationManager* m_headAnimationManager;
+	vector<CCBAnimationManager*> m_bodyAnimationManagers;
+	CCBAnimationManager* m_tailAnimationManager;
+	
 	CCSprite* m_headImg;
 	vector<CCSprite*> m_Bodies;
 	CCSprite* m_tailImg;
@@ -267,7 +273,7 @@ protected:
 	
 	Emotion* mEmotion;
 	
-	deque< MetalSnakeTrace > m_cumberTrace; // back 은 항상 머리를 가르킴.
+	deque< AppleTrace > m_cumberTrace; // back 은 항상 머리를 가르킴.
 	
 	struct DamageData
 	{
