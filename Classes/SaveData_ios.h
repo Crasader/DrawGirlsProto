@@ -9,6 +9,7 @@
 
 #include <string>
 using namespace std;
-void testF(string tt);
-string readF();
-
+//void testF(string tt);
+//string readF();
+void testF(string filePath, string tt);
+string readF(string filePath);

@@ -61,10 +61,50 @@
 
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-void testF(string tt)
+//void testF(string tt)
+//{
+//	
+//	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + "KSDATA";
+//	FILE* fp = fopen( path.c_str(), "w" );
+//	if(!fp)
+//	{
+//		CCLog("file failure");
+//	}
+//	fprintf(fp, "%s", tt.c_str());
+//	fclose(fp);
+//}
+//string readF()
+//{
+//	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + "KSDATA";
+//	FILE* fp = fopen( path.c_str(), "r" );
+//	string result;
+//	if(fp)
+//	{
+//		fseek(fp, 0L, SEEK_END);
+//		int s = ftell(fp);
+//		fseek(fp, 0L, SEEK_SET);
+//		char* buffer = new char[s+1];
+//		memset(buffer, 0, sizeof(s+1));
+//		fread(buffer, sizeof(char), s, fp);
+//		fclose(fp);
+//		
+//		
+//		result = buffer;
+//		delete [] buffer;
+//	}
+//	else
+//	{
+//		CCLog("read fail");
+//		return "";
+//	}
+//	
+//	return result;
+//}
+
+void testF(string filePath, string tt)
 {
 	
-	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + "KSDATA";
+	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
 	FILE* fp = fopen( path.c_str(), "w" );
 	if(!fp)
 	{
@@ -73,9 +113,9 @@ void testF(string tt)
 	fprintf(fp, "%s", tt.c_str());
 	fclose(fp);
 }
-string readF()
+string readF(string filePath)
 {
-	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + "KSDATA";
+	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
 	FILE* fp = fopen( path.c_str(), "r" );
 	string result;
 	if(fp)
@@ -100,6 +140,5 @@ string readF()
 	
 	return result;
 }
-
 
 #endif

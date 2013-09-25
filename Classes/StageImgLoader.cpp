@@ -12,15 +12,15 @@
 #import <Foundation/Foundation.h>
 #endif
 
-CCSprite* StageImgLoader::getLoadedImg(int t_i1, int t_i2)
+CCSprite* StageImgLoader::getLoadedImg(string filename)
 {
-	CCTexture2D* texture = addImage(CCString::createWithFormat("c%d_s%d_visible.png", t_i1, t_i2)->getCString());
+	CCTexture2D* texture = addImage(filename.c_str());
 	
 	CCSprite* t_spr = CCSprite::createWithTexture(texture);
 	t_spr->setAnchorPoint(ccp(0.5,0.5));
 	CCSize t_size = t_spr->getContentSize();
 	t_spr->setScaleX(320.f/t_size.width);
-	t_spr->setScaleY(480.f/t_size.height);
+	t_spr->setScaleY(430.f/t_size.height);
 	return t_spr;
 }
 
@@ -98,7 +98,7 @@ void* StageImgLoader::t_function(void *data)
 {
 	string document_path = StageImgLoader::sharedInstance()->writeable_path;
 	lchunk.size = 0;
-	lchunk.filename = CCString::createWithFormat((document_path+"c%d_s%d_visible.png").c_str(), StageImgLoader::sharedInstance()->loading_chapter, StageImgLoader::sharedInstance()->loading_stage)->getCString();
+	lchunk.filename = (document_path+StageImgLoader::sharedInstance()->down_filename).c_str();
 	lchunk.stream = NULL;
 	
 	do{
@@ -116,6 +116,7 @@ void* StageImgLoader::t_function(void *data)
 		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&lchunk);
 		curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
 //		curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
+		
 		if(curl_easy_perform(curl_handle) != CURLE_OK)
 		{
 			StageImgLoader::sharedInstance()->isFail = true;
@@ -128,7 +129,7 @@ void* StageImgLoader::t_function(void *data)
 		
 		curl_global_cleanup();
 		
-		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successAction), StageImgLoader::sharedInstance(), 0, false, 0, 0);
+		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successAction), StageImgLoader::sharedInstance(), 0, 0, 0, false);
 		
 		while (lchunk.size!=0) {
 			usleep(10000);
@@ -137,7 +138,7 @@ void* StageImgLoader::t_function(void *data)
 	
 	if(StageImgLoader::sharedInstance()->isFail)
 	{
-		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failAction), StageImgLoader::sharedInstance(), 0, false, 0, 0);
+		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failAction), StageImgLoader::sharedInstance(), 0, 0, 0, false);
 	}
 	
 	return NULL;
@@ -145,7 +146,7 @@ void* StageImgLoader::t_function(void *data)
 
 float StageImgLoader::getDownloadPercentage()
 {
-	if(isSetted && lchunk.size != 0)
+	if(lchunk.size != 0)
 		return 1.f*lchunk.size/total_size;
 	else
 		return 0;
@@ -157,10 +158,10 @@ void StageImgLoader::successAction()
 	
 	lchunk.size = 0;
 	
-	myUD->setBoolForKey(CCString::createWithFormat(getRealKey(kSIL_Key_isLoadedGirlChapter_int1_Stage_int2).c_str(), loading_chapter, loading_stage)->getCString(), true);
-	myUD->flush();
+	my_savedata->setKeyValue(kSDF_downloadedInfo, down_filename, 1);
 	
-	(target_success->*delegate_success)();
+	if(target_success)
+		(target_success->*delegate_success)();
 }
 
 void StageImgLoader::failAction()
@@ -168,5 +169,6 @@ void StageImgLoader::failAction()
 	unschedule(schedule_selector(StageImgLoader::failAction));
 	lchunk.size = 0;
 	
-	(target_fail->*delegate_fail)();
+	if(target_fail)
+		(target_fail->*delegate_fail)();
 }

@@ -29,7 +29,7 @@ void WorldMapScene::showConvertSildata(string filename)
 	remove(convert_data.begin(), convert_data.end(), '\t');
 	remove(convert_data.begin(), convert_data.end(), '\n');
 	
-	convert_data = convert_data.substr(0,convert_data.find(":::"));
+	convert_data = convert_data.substr(0,convert_data.find(":::")); // ,buff);
 	
 	bool is_zero = true;
 	int cmp_cnt = 0;
@@ -312,6 +312,9 @@ void WorldMapScene::menuAction(CCObject* pSender)
 	{
 		tag -= kWMS_MT_stageBase;
 		mySD->setSilType(tag);
+		
+		
+		
 		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
 	else if(tag == kWMS_MT_collection)

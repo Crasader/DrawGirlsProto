@@ -12,7 +12,7 @@
 #include "cocos2d.h"
 #include <pthread.h>
 #include "curl/curl.h"
-#include "GraphDog.h"
+#include "SaveData.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #include "platform/CCFileUtils.h"
@@ -26,18 +26,6 @@ struct LMemoryStruct {
 	string filename;
 	FILE* stream;
 	string writeable_path;
-};
-
-enum DownAfterScene{
-	kDAS_Empty = 0,
-	kDAS_ChapterSetting,
-	kDAS_StageSetting,
-	kDAS_Gallery,
-	kDAS_WorldMapScene
-};
-
-enum SIL_Key{
-	kSIL_Key_isLoadedGirlChapter_int1_Stage_int2 = 1
 };
 
 class StageImgLoader : public CCNode
@@ -54,110 +42,64 @@ public:
 		return t_loader;
 	}
 	
-	CCSprite* getLoadedImg(int t_i1, int t_i2);
+	CCSprite* getLoadedImg(string filename);
 	
-	void downloadImgForCS(int t_i1, int t_i2, CCObject* t_success, SEL_CallFunc d_success, CCObject* t_fail, SEL_CallFunc d_fail)
+	void downloadImg(string t_url, int t_size, string t_down_filename, CCObject* t_success, SEL_CallFunc d_success, CCObject* t_fail, SEL_CallFunc d_fail)
 	{
-		loading_chapter = t_i1;
-		loading_stage = t_i2;
 		target_success = t_success;
 		delegate_success = d_success;
 		target_fail = t_fail;
 		delegate_fail = d_fail;
+		down_filename = t_down_filename;
 		
-		JsonBox::Object param;
-		
-		param["limit"] = JsonBox::Value(1);
-		param["category"] = JsonBox::Value("colorgirl");
-		param["stage"] = JsonBox::Value(CCString::createWithFormat("%d-%d", t_i1, t_i2)->getCString());
-		
-		graphdog->command("getstages", &param, this, gd_selector(StageImgLoader::resultGetStages));
+		startDownload(t_url, t_size);
 	}
 	
-	bool isLoadedForKey(SIL_Key t_key, int t_i1, int t_i2)
+	void removeTD()
 	{
-		return myUD->getBoolForKey(CCString::createWithFormat(getRealKey(t_key).c_str(), t_i1, t_i2)->getCString());
+		target_success = NULL;
+		target_fail = NULL;
+	}
+	
+	bool isLoadedImg(string filename)
+	{
+		return my_savedata->getValue(kSDF_downloadedInfo, filename, 0) == 1;
 	}
 	
 	float getDownloadPercentage();
 	
-	DownAfterScene getSuccessSceneCode()
-	{
-		DownAfterScene r_value = success_scene_code;
-		success_scene_code = kDAS_Empty;
-		fail_scene_code = kDAS_Empty;
-		return r_value;
-	}
-	
-	DownAfterScene getFailSceneCode()
-	{
-		DownAfterScene r_value = fail_scene_code;
-		fail_scene_code = kDAS_Empty;
-		success_scene_code = kDAS_Empty;
-		return r_value;
-	}
-	
-	void setAfterSceneCode(DownAfterScene t_success, DownAfterScene t_fail)
-	{
-		success_scene_code = t_success;
-		fail_scene_code = t_fail;
-	}
-	
 	string writeable_path;
+	string down_filename;
 	
 private:
-	CCUserDefault* myUD;
-	int loading_chapter;
-	int loading_stage;
+	SaveData* my_savedata;
+	
 	CCObject* target_success;
 	SEL_CallFunc delegate_success;
 	CCObject* target_fail;
 	SEL_CallFunc delegate_fail;
-	bool isSetted;
-	
-	DownAfterScene success_scene_code;
-	DownAfterScene fail_scene_code;
 	
 	string p_url;
 	size_t total_size;
 	bool isFail;
 	
-	string getRealKey(SIL_Key t_key)
-	{
-		string r_key;
-		if(t_key == kSIL_Key_isLoadedGirlChapter_int1_Stage_int2)		r_key = "bc%ds%d";
-		
-		return r_key;
-	}
-	
 	void successAction();
 	void failAction();
 	
-	void resultGetStages(JsonBox::Object result_data)
+	void startDownload(string t_url, int t_size)
 	{
-		if(result_data["state"].getString() == "ok")
+		p_url = t_url;
+		total_size = t_size*1024;
+		
+		isFail = false;
+		pthread_t p_thread;
+		int thr_id;
+		// 쓰레드 생성 아규먼트로 1 을 넘긴다.
+		thr_id = pthread_create(&p_thread, NULL, t_function, NULL);
+		if (thr_id < 0)
 		{
-			JsonBox::Array result_list = result_data["list"].getArray();
-			JsonBox::Object t_data = result_list[0].getObject();
-			JsonBox::Object recent_data = t_data["userdata"].getObject();
-			p_url = recent_data["image"].getString();
-			total_size = recent_data["size"].getInt()*1024;
-
-			isFail = false;
-			pthread_t p_thread;
-			int thr_id;
-			// 쓰레드 생성 아규먼트로 1 을 넘긴다.
-			thr_id = pthread_create(&p_thread, NULL, t_function, NULL);
-			if (thr_id < 0)
-			{
-				perror("thread create error : ");
-				exit(0);
-			}
-			isSetted = true;
-		}
-		else
-		{
-			(target_fail->*delegate_fail)();
+			perror("thread create error : ");
+			exit(0);
 		}
 	}
 	
@@ -170,8 +112,8 @@ private:
 	
 	void myInit()
 	{
-		myUD = CCUserDefault::sharedUserDefault();
-		isSetted = false;
+		my_savedata = SaveData::sharedObject();
+		my_savedata->createJSON(kSDF_downloadedInfo);
 		writeable_path = getDocumentPath();
 	}
 };
