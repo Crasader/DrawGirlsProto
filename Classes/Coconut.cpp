@@ -6,7 +6,7 @@
 //
 //
 
-#include "KSCumber.h"
+#include "Coconut.h"
 #include "GameData.h"
 
 #include "AlertEngine.h"
@@ -18,14 +18,14 @@
 
 
 
-bool KSCumber::init()
+bool Coconut::init()
 {
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	m_speed = 2.f;
 	
-	std::string ccbiName = "boss2.ccbi";
+	std::string ccbiName = "coconut.ccbi";
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
     CCBReader* reader = new CCBReader(nodeLoader);
 	CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
@@ -49,15 +49,15 @@ bool KSCumber::init()
 	setPosition(ip2ccp(mapPoint));
 	//	startMoving();
 	
-	schedule(schedule_selector(KSCumber::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(Coconut::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(KSCumber::cumberAttack));
+	schedule(schedule_selector(Coconut::cumberAttack));
 	
 	return true;
 }
 
 
-void KSCumber::normalMoving(float dt)
+void Coconut::normalMoving(float dt)
 {
 	m_scale.timer += 1 / 60.f;
 	
@@ -197,8 +197,9 @@ void KSCumber::normalMoving(float dt)
 
 
 
-void KSCumber::startDamageReaction(float userdata)
+void Coconut::startDamageReaction(float userdata)
 {
+	CCLog("damaga!!!");
 	// 방사형으로 돌아가고 있는 중이라면
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
@@ -219,7 +220,7 @@ void KSCumber::startDamageReaction(float userdata)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(KSCumber::damageReaction));
+		schedule(schedule_selector(Coconut::damageReaction));
 	}
 	else if(m_state == CUMBERSTATESTOP)
 	{
@@ -231,7 +232,7 @@ void KSCumber::startDamageReaction(float userdata)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(KSCumber::damageReaction));
+		schedule(schedule_selector(Coconut::damageReaction));
 	}
 	else if(m_state == CUMBERSTATEFURY)
 	{
@@ -243,13 +244,13 @@ void KSCumber::startDamageReaction(float userdata)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(KSCumber::damageReaction));
+		schedule(schedule_selector(Coconut::damageReaction));
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
 }
 
-void KSCumber::startAnimationNoDirection()
+void Coconut::startAnimationNoDirection()
 {
 	CCLog("Lets rotate");
 	if(m_state != CUMBERSTATENODIRECTION)
@@ -261,11 +262,11 @@ void KSCumber::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
-		schedule(schedule_selector(KSCumber::animationNoDirection));
+		schedule(schedule_selector(Coconut::animationNoDirection));
 	}
 }
 
-void KSCumber::damageReaction(float)
+void Coconut::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
@@ -276,13 +277,13 @@ void KSCumber::damageReaction(float)
 	{
 		//		m_headImg->setColor(ccc3(255, 255, 255));
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(KSCumber::damageReaction));
+		unschedule(schedule_selector(Coconut::damageReaction));
 		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
 
 
-void KSCumber::animationNoDirection(float dt)
+void Coconut::animationNoDirection(float dt)
 {
 	m_noDirection.timer += 1.f/60.f;
 	
@@ -298,23 +299,24 @@ void KSCumber::animationNoDirection(float dt)
 	else if(m_noDirection.state == 2)
 	{
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(KSCumber::animationNoDirection));
-		mAnimationManager->runAnimationsForSequenceNamed("cast2stop");
+		unschedule(schedule_selector(Coconut::animationNoDirection));
+		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 	}
 }
 
-void KSCumber::onPatternEnd()
+void Coconut::onPatternEnd()
 {
 	CCLog("onPatternEnd!!");
 	m_noDirection.state = 2;
 }
 
-void KSCumber::onStartGame()
+void Coconut::onStartGame()
 {
 	CCLog("onStartGame!!");
 }
 
-void KSCumber::cumberAttack(float dt)
+
+void Coconut::cumberAttack(float dt)
 {
 	float w = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
 
@@ -325,10 +327,10 @@ void KSCumber::cumberAttack(float dt)
 //		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
 //			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
 //			kAP_CODE_pattern103, kAP_CODE_pattern103};
-		std::vector<int> attacks = {kNonTargetAttack8};
+		std::vector<int> attacks = {kTargetAttack3, kTargetAttack4};
 //		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
 //		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
-//		kNonTargetAttack8};
+//		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
 
 
 
@@ -342,8 +344,6 @@ void KSCumber::cumberAttack(float dt)
 				searched = false;
 			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
 				searched = false;
-
-
 		}
 
 //		attackCode = 13;
@@ -355,13 +355,14 @@ void KSCumber::cumberAttack(float dt)
 		}
 		else
 		{
-			mAnimationManager->runAnimationsForSequenceNamed("cast2start");
+			lastCastNum = m_well512.GetValue(1, 3);
+			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 			startAnimationNoDirection();
 			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode);
 		}
 	}
 }
-COLLISION_CODE KSCumber::crashWithX(IntPoint check_position)
+COLLISION_CODE Coconut::crashWithX(IntPoint check_position)
 {
 	// 이미 그려진 곳에 충돌했을 경우.
 	if(gameData->mapState[check_position.x][check_position.y] == mapOldline ||
@@ -392,7 +393,7 @@ COLLISION_CODE KSCumber::crashWithX(IntPoint check_position)
 	return COLLISION_CODE::kCOLLISION_NONE;
 	
 }
-COLLISION_CODE KSCumber::crashLooper(const set<IntPoint>& v, IntPoint* cp)
+COLLISION_CODE Coconut::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)
 	{
@@ -407,19 +408,19 @@ COLLISION_CODE KSCumber::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void KSCumber::startInvisible()
+void Coconut::startInvisible()
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
 	{
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
-		schedule(schedule_selector(KSCumber::invisibling));
+		schedule(schedule_selector(Coconut::invisibling));
 		m_invisible.startInvisibleScheduler = true;
 	}
 }
 
-void KSCumber::invisibling(float dt)
+void Coconut::invisibling(float dt)
 {
 	m_invisible.invisibleFrame++;
 	
@@ -436,13 +437,13 @@ void KSCumber::invisibling(float dt)
 		if(m_invisible.invisibleValue == 255)
 		{
 			m_invisible.startInvisibleScheduler = false;
-			unschedule(schedule_selector(KSCumber::invisibling));
+			unschedule(schedule_selector(Coconut::invisibling));
 		}
 	}
 	
 }
 
-void KSCumber::getRandomPosition(IntPoint* ip, bool* finded)
+void Coconut::getRandomPosition(IntPoint* ip, bool* finded)
 {
 	bool isGoodPointed = false;
 	
@@ -513,7 +514,7 @@ void KSCumber::getRandomPosition(IntPoint* ip, bool* finded)
 	}
 }
 
-void KSCumber::randomPosition()
+void Coconut::randomPosition()
 {
 	IntPoint mapPoint;
 	bool finded;
@@ -538,7 +539,7 @@ void KSCumber::randomPosition()
 	
 }
 
-void KSCumber::crashMapForPosition(CCPoint targetPt)
+void Coconut::crashMapForPosition(CCPoint targetPt)
 {
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
@@ -569,7 +570,7 @@ void KSCumber::crashMapForPosition(CCPoint targetPt)
 	
 }
 
-void KSCumber::furyModeOn()
+void Coconut::furyModeOn()
 {
 	m_furyMode.startFury();
 	m_noDirection.state = 2;
@@ -580,7 +581,7 @@ void KSCumber::furyModeOn()
 	schedule(schedule_selector(ThisClassType::furyModeScheduler));
 }
 
-void KSCumber::furyModeScheduler(float dt)
+void Coconut::furyModeScheduler(float dt)
 {
 	m_furyMode.furyTimer += 1.f / 60.f;
 	
@@ -594,19 +595,19 @@ void KSCumber::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
-void KSCumber::furyModeOff()
+void Coconut::furyModeOff()
 {
 	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects");
 }
 
-void KSCumber::setGameover()
+void Coconut::setGameover()
 {
 	m_state = CUMBERSTATESTOP;
 }
 
 
-void KSCumber::scaleAdjustment(float dt)
+void Coconut::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	

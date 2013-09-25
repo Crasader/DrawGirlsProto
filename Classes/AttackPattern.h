@@ -126,8 +126,18 @@ class KSAttackPattern1 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSAttackPattern1);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
 	void myInit(CCPoint t_sp)
 	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
 		m_frameTerm = 5;
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -145,7 +155,7 @@ public:
 		{
 			int t_mCnt = 5;
 			float t_distance = 1.8f;
-			std::string imgFilename = "chapter1_basic_missile_1.png";
+			std::string imgFilename = "cumber_missile1.png";
 			
 			CCSize t_mSize = CCSize(6.f,6.f);
 			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
@@ -157,7 +167,7 @@ public:
 				
 				MissileUnit* t_mu = MissileUnit::create(m_position, temp_angle, t_distance,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
-				addChild(t_mu);
+				batchNode->addChild(t_mu);
 			}
 		}
 	}
@@ -174,14 +184,25 @@ protected:
 	int m_frameTerm;
 	int m_frameCnt;
 	CCPoint m_position;
+	CCSpriteBatchNode* batchNode;
 };
 
 class KSAttackPattern2 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSAttackPattern2);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
 	void myInit(CCPoint t_sp)
 	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
 		m_frameTerm = 5;
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -205,11 +226,11 @@ public:
 			
 			int t_mCnt = 5;
 			float t_distance = 1.8f;
-			std::string imgFilename = "chapter1_basic_missile_1.png";
+			std::string imgFilename = "cumber_missile1.png";
 			CCSize t_mSize = CCSize(6.f,6.f);
 			MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
 													imgFilename.c_str(), t_mSize, 0.f, 0.f);
-			addChild(t_mu);
+			batchNode->addChild(t_mu);
 			
 			
 			
@@ -242,6 +263,7 @@ protected:
 	CCPoint m_position;
 	int angle;
 	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
 };
 
 // 해바라기 패턴.
@@ -249,30 +271,44 @@ class KSAttackPattern3 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSAttackPattern3);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
 	void myInit(CCPoint t_sp)
 	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
 		m_frameTerm = 5;
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
 		
+		
+		scheduleUpdate();
+	}
+	void update(float dt)
+	{
 		float angle = m_well512.GetValue(360);
 		for(int i=0; i<10;i++)
 		{
 			int t_mCnt = 5;
 			float t_distance = 1.8f;
-			std::string imgFilename = "chapter1_basic_missile_1.png";
+			std::string imgFilename = "cumber_missile1.png";
 			CCSize t_mSize = CCSize(6.f,6.f);
 			MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
 													imgFilename.c_str(), t_mSize, 0.f, 0.f);
-			addChild(t_mu);
+			batchNode->addChild(t_mu);
 			angle += 360 / 10; // 10 개라면
 			if(angle >= 360)
 				angle -= 360;
 		}
 		angle = m_well512.GetValue(360);
 		stopMyAction();
-//		scheduleUpdate();
 	}
 	virtual void stopMyAction()
 	{
@@ -289,6 +325,7 @@ protected:
 	CCPoint m_position;
 	int angle;
 	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
 };
 
 // 해바라기 패턴의 연속. 각도 변경 없음.
@@ -296,8 +333,18 @@ class KSAttackPattern4 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSAttackPattern4);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
 	void myInit(CCPoint t_sp)
 	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
 		m_frameTerm = 5;
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -331,11 +378,11 @@ public:
 			{
 				int t_mCnt = 5;
 				float t_distance = 1.8f;
-				std::string imgFilename = "chapter1_basic_missile_1.png";
+				std::string imgFilename = "cumber_missile1.png";
 				CCSize t_mSize = CCSize(6.f,6.f);
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
-				addChild(t_mu);
+				batchNode->addChild(t_mu);
 				startAngle += 360 / 10; // 10 개라면
 			}
 		}
@@ -351,6 +398,7 @@ protected:
 	CCPoint m_position;
 	float angle;
 	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
 };
 
 /// 해바라기 패턴인데 각도가 바뀜.
@@ -358,8 +406,18 @@ class KSAttackPattern5 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSAttackPattern5);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
 	void myInit(CCPoint t_sp)
 	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
 		m_frameTerm = 5;
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -393,11 +451,11 @@ public:
 			{
 				int t_mCnt = 5;
 				float t_distance = 1.8f;
-				std::string imgFilename = "chapter1_basic_missile_1.png";
+				std::string imgFilename = "cumber_missile1.png";
 				CCSize t_mSize = CCSize(6.f,6.f);
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
-				addChild(t_mu);
+				batchNode->addChild(t_mu);
 				startAngle += 360 / 10; // 10 개라면
 			}
 			angle += 6;
@@ -414,6 +472,7 @@ protected:
 	CCPoint m_position;
 	float angle;
 	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
 };
 
 
@@ -423,6 +482,9 @@ public:
 	CREATE_FUNC_CCP(KSAttackPattern6);
 	void myInit(CCPoint t_sp)
 	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
 		m_frameTerm = 5;
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -456,11 +518,11 @@ public:
 			{
 				int t_mCnt = 5;
 				float t_distance = 1.8f;
-				std::string imgFilename = "chapter1_basic_missile_1.png";
+				std::string imgFilename = "cumber_missile1.png";
 				CCSize t_mSize = CCSize(6.f,6.f);
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
-				addChild(t_mu);
+				batchNode->addChild(t_mu);
 				startAngle += 360 / 10; // 10 개라면
 			}
 			angle += 6;
@@ -478,6 +540,7 @@ protected:
 	CCPoint m_position;
 	float angle;
 	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
 };
 
 /// 해바라긴데 각도를 달리하면서 쏨, 드르륵 쏘고 좀 쉬다가 드르륵...
@@ -494,7 +557,7 @@ public:
 	CREATE_FUNC_CCP(KSAttackPattern7);
 	void myInit(CCPoint t_sp)
 	{
-		batchNode = CCSpriteBatchNode::create("chapter1_basic_missile_1.png", 300);
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
 		
@@ -535,7 +598,7 @@ public:
 				{
 					int t_mCnt = 5;
 					float t_distance = 1.8f;
-					std::string imgFilename = "chapter1_basic_missile_1.png";
+					std::string imgFilename = "cumber_missile1.png";
 					CCSize t_mSize = CCSize(6.f,6.f);
 					MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
 															imgFilename.c_str(), t_mSize, 0.f, 0.f);
@@ -590,7 +653,7 @@ public:
 	
 	void myInit(CCPoint t_sp)
 	{
-		batchNode = CCSpriteBatchNode::create("chapter1_basic_missile_1.png", 300);
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
 		m_frameTerm = 5;
@@ -626,7 +689,7 @@ public:
 			{
 				int t_mCnt = 5;
 				float t_distance = 1.8f;
-				std::string imgFilename = "chapter1_basic_missile_1.png";
+				std::string imgFilename = "cumber_missile1.png";
 				CCSize t_mSize = CCSize(6.f,6.f);
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
@@ -639,7 +702,7 @@ public:
 			{
 				int t_mCnt = 5;
 				float t_distance = 1.8f;
-				std::string imgFilename = "chapter1_basic_missile_1.png";
+				std::string imgFilename = "cumber_missile1.png";
 				CCSize t_mSize = CCSize(6.f,6.f);
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle2, t_distance,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
@@ -666,6 +729,429 @@ protected:
 	CCSpriteBatchNode* batchNode;
 };
 
+
+// 조준형1 : 부채꼴.
+class KSTargetAttackPattern1 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern1);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp)
+	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+		float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
+		float angle = rad2Deg(rad);
+		float angle2 = rad2Deg(rad);
+		
+		for(int i=0; i<5;i++)
+		{
+			int t_mCnt = 5;
+			float t_distance = 1.8f;
+			std::string imgFilename = "cumber_missile1.png";
+			CCSize t_mSize = CCSize(6.f,6.f);
+			if(angle == angle2)
+			{
+				MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+			}
+			else
+			{
+				MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+				
+				MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, t_distance,
+														 imgFilename.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu2);
+			}
+			
+			angle += 35 / 5; // 10 개라면
+			angle2 -= 35 / 5;
+			
+			if(angle >= 360)
+				angle -= 360;
+			if(angle2 < 0)
+				angle2 += 360;
+		}
+
+		stopMyAction();
+	}
+protected:
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+
+// 조준형 : 부채꼴의 연속, 캐릭터를 따라감.
+class KSTargetAttackPattern2 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern2);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp)
+	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 150)
+		{
+			stopMyAction();
+		}
+		else
+		{
+			if(m_frameCnt % 4 == 0)
+			{
+				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
+				float angle = rad2Deg(rad);
+				float angle2 = rad2Deg(rad);
+				
+				for(int i=0; i<5;i++)
+				{
+					int t_mCnt = 5;
+					float t_distance = 1.8f;
+					std::string imgFilename = "cumber_missile1.png";
+					CCSize t_mSize = CCSize(6.f,6.f);
+					if(angle == angle2)
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+					}
+					else
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+						
+						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, t_distance,
+																 imgFilename.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu2);
+					}
+					
+					angle += 35 / 5; // 10 개라면
+					angle2 -= 35 / 5;
+					
+					if(angle >= 360)
+						angle -= 360;
+					if(angle2 < 0)
+						angle2 += 360;
+				}
+
+			}
+		}
+	}
+protected:
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+// 조준형 : 부채꼴의 연속, 캐릭터를 안 따라감.
+class KSTargetAttackPattern3 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern3);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp)
+	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		firstJackPosition = ip2ccp(myGD->getJackPoint());
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 150)
+		{
+			stopMyAction();
+		}
+		else
+		{
+			if(m_frameCnt % 4 == 0)
+			{
+				CCPoint jackPoint = firstJackPosition;
+				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
+				float angle = rad2Deg(rad);
+				float angle2 = rad2Deg(rad);
+				
+				for(int i=0; i<5;i++)
+				{
+					int t_mCnt = 5;
+					float t_distance = 1.8f;
+					std::string imgFilename = "cumber_missile1.png";
+					CCSize t_mSize = CCSize(6.f,6.f);
+					if(angle == angle2)
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+					}
+					else
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+						
+						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, t_distance,
+																 imgFilename.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu2);
+					}
+					
+					angle += 35 / 5; // 10 개라면
+					angle2 -= 35 / 5;
+					
+					if(angle >= 360)
+						angle -= 360;
+					if(angle2 < 0)
+						angle2 += 360;
+				}
+				
+			}
+		}
+	}
+protected:
+	CCPoint firstJackPosition;
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+// 조준형 : 부채꼴의 연속, 중심각의 랜덤성을 부여.
+class KSTargetAttackPattern4 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern4);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp)
+	{
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		firstJackPosition = ip2ccp(myGD->getJackPoint());
+		fireCount = 0;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 150)
+		{
+			stopMyAction();
+		}
+		else
+		{
+			if(m_frameCnt % 4 == 0)
+			{
+				
+				CCPoint jackPoint = firstJackPosition;
+				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
+				rad += m_well512.GetFloatValue(-5 * M_PI / 180.f, +5 * M_PI / 180.f);
+				float angle = rad2Deg(rad);
+				float angle2 = rad2Deg(rad);
+				
+				for(int i=0; i<5;i++)
+				{
+					int t_mCnt = 5;
+					float t_distance = 1.8f;
+					std::string imgFilename = "cumber_missile1.png";
+					CCSize t_mSize = CCSize(6.f,6.f);
+					if(angle == angle2)
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+					}
+					else
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+						
+						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, t_distance,
+																 imgFilename.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu2);
+					}
+					
+					angle += 35 / 5; // 10 개라면
+					angle2 -= 35 / 5;
+					
+					if(angle >= 360)
+						angle -= 360;
+					if(angle2 < 0)
+						angle2 += 360;
+				}
+				fireCount++;
+			}
+		}
+	}
+protected:
+	CCPoint firstJackPosition;
+	int fireCount;
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+class KSTargetAttackPattern5 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern5);
+	void myInit(CCPoint t_sp)
+	{
+		
+	}
+};
+class KSTargetAttackPattern6 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern6);
+	void myInit(CCPoint t_sp)
+	{
+		
+	}
+};
+class KSTargetAttackPattern7 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern7);
+	void myInit(CCPoint t_sp)
+	{
+		
+	}
+};
+class KSTargetAttackPattern8 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern8);
+	void myInit(CCPoint t_sp)
+	{
+		
+	}
+};
+class KSTargetAttackPattern9 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern9);
+	void myInit(CCPoint t_sp)
+	{
+		
+	}
+};
+class KSTargetAttackPattern10 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern10);
+	void myInit(CCPoint t_sp)
+	{
+		
+	}
+};
 
 class AP_Missile0 : public AttackPattern
 {

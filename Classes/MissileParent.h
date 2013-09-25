@@ -1045,6 +1045,73 @@ public:
 	}
 	void cancelKSAP10(){		}
 	
+	void actionTargetAP1()
+	{
+		KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelTargetAP1(){		}
+	void actionTargetAP2()
+	{
+		KSTargetAttackPattern2* t = KSTargetAttackPattern2::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelTargetAP2(){		}
+	void actionTargetAP3()
+	{
+		KSTargetAttackPattern3* t = KSTargetAttackPattern3::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelTargetAP3(){		}
+	void actionTargetAP4()
+	{
+		KSTargetAttackPattern4* t = KSTargetAttackPattern4::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelTargetAP4(){		}
+	
+	void actionTargetAP5()
+	{
+		KSTargetAttackPattern5* t = KSTargetAttackPattern5::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelTargetAP5(){		}
+	void actionTargetAP6()
+	{
+		KSTargetAttackPattern6* t = KSTargetAttackPattern6::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelTargetAP6(){		}
+	
+	void actionTargetAP7()
+	{
+		KSTargetAttackPattern7* t = KSTargetAttackPattern7::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelTargetAP7(){		}
+	void actionTargetAP8()
+	{
+		KSTargetAttackPattern8* t = KSTargetAttackPattern8::create(startFirePosition);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+	}
+	void cancelTargetAP8(){		}
+	
 	void attackWithKSCode(CCPoint startPosition, int pattern);
 private:
 	

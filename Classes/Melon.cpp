@@ -1,13 +1,12 @@
 //
-//  MetalSnake.cpp
+//  Melon.cpp
 //  DGproto
 //
-//  Created by ksoo k on 13. 9. 12..
+//  Created by ksoo k on 13. 9. 25..
 //
 //
 
-#include "MetalSnake.h"
-
+#include "Melon.h"
 #include "GameData.h"
 
 #include "AlertEngine.h"
@@ -17,33 +16,52 @@
 #include "CumberEmotion.h"
 #include "Jack.h"
 #include "RandomSelector.h"
-MetalSnake::~MetalSnake()
+Melon::~Melon()
 {
 	
 }
 
 
 
-bool MetalSnake::init()
+bool Melon::init()
 {
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	m_speed = 2.f;
-	m_headImg = CCSprite::create("metalsnake_head.png");
-	//	m_headImg->setVisible(false);
-	addChild(m_headImg, 10);
 	
-	int lastZ;
-	for(int i=0; i<7; i++)
+    CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	{
-		CCSprite* body = CCSprite::create("metalsnake_body.png");
-		addChild(body, 9 - i);
-		lastZ = 9 - i;
-		m_Bodies.push_back(body);
+		CCBReader* reader = new CCBReader(nodeLoader);
+		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("melon_head.ccbi",this));
+		m_headAnimationManager = reader->getAnimationManager();
+		this->addChild(m_headImg, 10);
+		reader->release();
+    }
+	int lastZ=-1;
+	{
+		
+		for(int i=0; i<7; i++)
+		{
+			CCBReader* reader = new CCBReader(nodeLoader);
+			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("melon_body.ccbi",this));
+			m_bodyAnimationManagers.push_back(reader->getAnimationManager());
+			addChild(body, 9 - i);
+			lastZ = 9 - i;
+			m_Bodies.push_back(body);
+			reader->release();
+		}
 	}
-	m_tailImg = CCSprite::create("metalsnake_tail.png");
-	addChild(m_tailImg, lastZ - 1);
+	
+	
+	{
+		CCBReader* reader = new CCBReader(nodeLoader);
+		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("melon_tail.ccbi",this));
+		m_tailAnimationManager = reader->getAnimationManager();
+		this->addChild(m_tailImg, lastZ - 1);
+		reader->release();
+	}
+	
 	
 	IntPoint mapPoint;
 	bool finded;
@@ -53,32 +71,32 @@ bool MetalSnake::init()
 	
 	
 	//	startMoving();
-	schedule(schedule_selector(MetalSnake::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(Melon::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(MetalSnake::attack));
+	schedule(schedule_selector(Melon::cumberAttack));
 	
 	startAnimationNoDirection();
 	return true;
 }
 
-void MetalSnake::setHeadAndBodies()
+void Melon::setHeadAndBodies()
 {
-	MetalSnakeTrace lastTrace = m_cumberTrace.back();
+	SnakeTrace lastTrace = m_cumberTrace.back();
 	float tt = rad2Deg( lastTrace.directionRad );
 	//	CCLog("deg %f", tt);
 	//	m_headImg->setVisible(false);
 	m_headImg->setRotation(-rad2Deg( lastTrace.directionRad ));
 	
 	int lastTraceIndex = m_cumberTrace.size() - 1; // to 0
-//	int bodyIndex = 0;
-//	for(auto i : m_cumberTrace)
+	//	int bodyIndex = 0;
+	//	for(auto i : m_cumberTrace)
 	for(int bodyIndex = 0; bodyIndex < m_Bodies.size(); ++bodyIndex)
 	{
 		// 순서대로 머리에 가까운 몸통처리.
 		float distance = 0;
 		for(int traceIndex = lastTraceIndex - 1; traceIndex >= 0; traceIndex--)
 		{
-			MetalSnakeTrace t = m_cumberTrace[traceIndex];
+			SnakeTrace t = m_cumberTrace[traceIndex];
 			// t 와 tr 의 거리차이.
 			//			float distance = ccpLength(lastTrace.position - t.position);
 			//			int distance = lastTraceIndex - traceIndex;
@@ -99,7 +117,7 @@ void MetalSnake::setHeadAndBodies()
 		float distance = 0;
 		for(int traceIndex = lastTraceIndex - 1; traceIndex >= 0; traceIndex--)
 		{
-			MetalSnakeTrace t = m_cumberTrace[traceIndex];
+			SnakeTrace t = m_cumberTrace[traceIndex];
 			// t 와 tr 의 거리차이.
 			//			float distance = ccpLength(lastTrace.position - t.position);
 			//			int distance = lastTraceIndex - traceIndex;
@@ -115,14 +133,14 @@ void MetalSnake::setHeadAndBodies()
 		}
 		m_tailImg->setRotation(-rad2Deg(lastTrace.directionRad));
 		m_tailImg->setPosition(lastTrace.position);
-//		m_tailImg->setScale(3.f);
+		//		m_tailImg->setScale(3.f);
 	}
 	
 	//	m_headImg->setScale(tt / 360);
 	
 }
 
-void MetalSnake::startAnimationNoDirection()
+void Melon::startAnimationNoDirection()
 {
 	// 돌자...
 	CCLog("Lets rotate");
@@ -135,11 +153,11 @@ void MetalSnake::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
-		schedule(schedule_selector(MetalSnake::animationNoDirection));
+		schedule(schedule_selector(Melon::animationNoDirection));
 	}
 }
 
-void MetalSnake::animationNoDirection(float dt)
+void Melon::animationNoDirection(float dt)
 {
 	CCLog("animationNoDirection");
 	m_noDirection.timer += 1.f/60.f;
@@ -180,8 +198,10 @@ void MetalSnake::animationNoDirection(float dt)
 		if(ccpLength(m_noDirection.startingPoint - getPosition()) <= 0.5f)
 		{
 			m_state = CUMBERSTATEMOVING;
-			unschedule(schedule_selector(MetalSnake::animationNoDirection));
+			unschedule(schedule_selector(Melon::animationNoDirection));
 			setPosition(m_noDirection.startingPoint);
+			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 		}
 		else
 			setPosition(getPosition() + ccp(dx, dy));
@@ -190,15 +210,15 @@ void MetalSnake::animationNoDirection(float dt)
 
 
 
-void MetalSnake::startAnimationDirection()
+void Melon::startAnimationDirection()
 {
 	// 잭을 바라보자.
 	m_state = CUMBERSTATEDIRECTION;
 	m_direction.initVars();
-	schedule(schedule_selector(MetalSnake::animationDirection));
+	schedule(schedule_selector(Melon::animationDirection));
 }
 
-void MetalSnake::animationDirection(float dt)
+void Melon::animationDirection(float dt)
 {
 	m_direction.timer += 1 / 60.f;
 	if(m_direction.state == 1)
@@ -216,13 +236,13 @@ void MetalSnake::animationDirection(float dt)
 	else if(m_direction.state == 2)
 	{
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(MetalSnake::animationDirection));
+		unschedule(schedule_selector(Melon::animationDirection));
 	}
 }
-void MetalSnake::startDamageReaction(float userdata)
+void Melon::startDamageReaction(float userdata)
 {
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
-
+	
 	setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
 	
 	
@@ -247,7 +267,7 @@ void MetalSnake::startDamageReaction(float userdata)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(MetalSnake::damageReaction));
+		schedule(schedule_selector(Melon::damageReaction));
 	}
 	else if(m_state == CUMBERSTATESTOP)
 	{
@@ -259,7 +279,7 @@ void MetalSnake::startDamageReaction(float userdata)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(MetalSnake::damageReaction));
+		schedule(schedule_selector(Melon::damageReaction));
 	}
 	else if(m_state == CUMBERSTATEFURY)
 	{
@@ -271,13 +291,13 @@ void MetalSnake::startDamageReaction(float userdata)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(MetalSnake::damageReaction));
+		schedule(schedule_selector(Melon::damageReaction));
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
 }
 
-void MetalSnake::damageReaction(float)
+void Melon::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
@@ -298,22 +318,24 @@ void MetalSnake::damageReaction(float)
 			i->setColor(ccc3(255, 255, 255));
 		}
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(MetalSnake::damageReaction));
+		unschedule(schedule_selector(Melon::damageReaction));
+		m_headAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+		m_tailAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
-void MetalSnake::startInvisible()
+void Melon::startInvisible()
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
 	{
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
-		schedule(schedule_selector(MetalSnake::invisibling));
+		schedule(schedule_selector(Melon::invisibling));
 		m_invisible.startInvisibleScheduler = true;
 	}
 }
 
-void MetalSnake::invisibling(float dt)
+void Melon::invisibling(float dt)
 {
 	m_invisible.invisibleFrame++;
 	
@@ -330,13 +352,13 @@ void MetalSnake::invisibling(float dt)
 		if(m_invisible.invisibleValue == 255)
 		{
 			m_invisible.startInvisibleScheduler = false;
-			unschedule(schedule_selector(MetalSnake::invisibling));
+			unschedule(schedule_selector(Melon::invisibling));
 		}
 	}
 	
 }
 
-void MetalSnake::scaleAdjustment(float dt)
+void Melon::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	
@@ -358,7 +380,7 @@ void MetalSnake::scaleAdjustment(float dt)
 	
 }
 
-void MetalSnake::normalMoving(float dt)
+void Melon::normalMoving(float dt)
 {
 	m_scale.timer += 1/60.f;
 	
@@ -584,7 +606,7 @@ void MetalSnake::normalMoving(float dt)
 		}
 	}
 }
-void MetalSnake::furyMoving(float dt)
+void Melon::furyMoving(float dt)
 {
 	m_furyMode.furyFrameCount++;
 	CCPoint afterPosition;
@@ -593,7 +615,7 @@ void MetalSnake::furyMoving(float dt)
 	
 	bool validPosition = false;
 	int cnt = 0;
-
+	
 	while(!validPosition)
 	{
 		cnt++;
@@ -683,7 +705,7 @@ void MetalSnake::furyMoving(float dt)
 				break;
 			}
 		}
-
+		
 		
 		
 	}
@@ -691,10 +713,10 @@ void MetalSnake::furyMoving(float dt)
 	//	CCLog("cnt outer !! = %d", cnt);
 	
 	
-
+	
 	setPosition(afterPosition);
 	
-
+	
 }
 //void MetalSnake::movingAndCrash(float dt)
 //{
@@ -707,30 +729,21 @@ void MetalSnake::furyMoving(float dt)
 //
 //}
 
-void MetalSnake::attack(float dt)
+void Melon::cumberAttack(float dt)
 {
-	float w = ProbSelector::sel(0.003, 1.0 - 0.003, 0.0);
+	float w = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
 	
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
-//		stopMoving();
-//		startAnimationNoDirection(); // 몬스터 빙글빙글..
-		
 		int attackCode = 0;
-		// 101, 102, 103, 13, 17, 23, 10,
-		/*
-		 myRS->setNumerator(2, kAP_CODE_pattern101);
-		 myRS->setNumerator(2, kAP_CODE_pattern102);
-		 myRS->setNumerator(2, kAP_CODE_pattern103);
-		 myRS->setNumerator(1, kAP_CODE_pattern10);
-		 myRS->setNumerator(1, kAP_CODE_pattern13);
-		 myRS->setNumerator(1, kAP_CODE_pattern17);
-		 myRS->setNumerator(1, kAP_CODE_pattern23);
-		 */
-		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
-			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102, 
-			kAP_CODE_pattern103, kAP_CODE_pattern103};
+		//		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
+		//			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
+		//			kAP_CODE_pattern103, kAP_CODE_pattern103};
+		std::vector<int> attacks = {kTargetAttack3, kTargetAttack4};
+		//		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
+		//		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
+		//		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
 		
 		
 		
@@ -744,38 +757,26 @@ void MetalSnake::attack(float dt)
 				searched = false;
 			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
 				searched = false;
-			
-			
 		}
 		
-//		attackCode = kAP_CODE_pattern10;
+		//		attackCode = 13;
 		if(attackCode == 13) // fury
 		{
+			CCLog("aaa %f %f", getPosition().x, getPosition().y);
 			m_state = CUMBERSTATESTOP;
 			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
 		}
 		else
 		{
-//			startAnimationNoDirection();
-			startAnimationDirection();
-			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			startAnimationNoDirection();
+			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode);
 		}
-//		showEmotion(kEmotionType_joy);
-		//		m_speed = m_well512.GetValue(2, 4);
-		//		startAnimationNoDirection();
-		//		gameData->communication("MP_startFire", getPosition(), false);
-		//		gameData->comm("MP_attackWithCode", 33);
-		if(m_well512.GetValue(0, 1))
-		{
-			
-		}
-		else{
-			
-		}
-		
 	}
+	
 }
-COLLISION_CODE MetalSnake::crashWithX(IntPoint check_position)
+COLLISION_CODE Melon::crashWithX(IntPoint check_position)
 {
 	/// 나갔을 시.
 	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
@@ -809,7 +810,7 @@ COLLISION_CODE MetalSnake::crashWithX(IntPoint check_position)
 	return COLLISION_CODE::kCOLLISION_NONE;
 	
 }
-COLLISION_CODE MetalSnake::crashLooper(const set<IntPoint>& v, IntPoint* cp)
+COLLISION_CODE Melon::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)
 	{
@@ -824,7 +825,7 @@ COLLISION_CODE MetalSnake::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void MetalSnake::furyModeOn()
+void Melon::furyModeOn()
 {
 	m_furyMode.startFury();
 	m_noDirection.state = 2;
@@ -841,7 +842,7 @@ void MetalSnake::furyModeOn()
 }
 
 
-void MetalSnake::crashMapForPosition(CCPoint targetPt)
+void Melon::crashMapForPosition(CCPoint targetPt)
 {
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
@@ -871,7 +872,7 @@ void MetalSnake::crashMapForPosition(CCPoint targetPt)
 	}
 	
 }
-void MetalSnake::furyModeScheduler(float dt)
+void Melon::furyModeScheduler(float dt)
 {
 	m_furyMode.furyTimer += 1.f / 60.f;
 	
@@ -890,19 +891,19 @@ void MetalSnake::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
-void MetalSnake::furyModeOff()
+void Melon::furyModeOff()
 {
 	//##
-//	if(isFuryMode)
-//	{
-//		myGD->communication("EP_stopCrashAction");
-//		myGD->communication("MS_resetRects");
-//		isFuryMode = false;
-//		furyMode->removeFromParentAndCleanup(true);
-//	}
+	//	if(isFuryMode)
+	//	{
+	//		myGD->communication("EP_stopCrashAction");
+	//		myGD->communication("MS_resetRects");
+	//		isFuryMode = false;
+	//		furyMode->removeFromParentAndCleanup(true);
+	//	}
 }
 
-void MetalSnake::getRandomPosition(IntPoint* ip, bool* finded)
+void Melon::getRandomPosition(IntPoint* ip, bool* finded)
 {
 	bool isGoodPointed = false;
 	
@@ -964,10 +965,10 @@ void MetalSnake::getRandomPosition(IntPoint* ip, bool* finded)
 		// nothing.
 		CCAssert(false, "");
 	}
-
+	
 }
 
-void MetalSnake::setGameover()
+void Melon::setGameover()
 {
 	m_state = CUMBERSTATESTOP;
 }
