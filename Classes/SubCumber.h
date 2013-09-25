@@ -472,19 +472,10 @@ private:
 		cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_monster.png", resultType)->getCString());
 		addChild(cumberImg);
 		
-		if(mySGD->isUsingItem(kIC_subSmallSize))
-		{
-			int option_value = mySD->getSubSmallSizeItemOption();
-			myScale = 1.f - option_value/100.f;
-			maxScale = 1.2f - option_value/100.f;
-			minScale = 0.4f;
-		}
-		else
-		{
-			myScale = 1.f;
-			maxScale = 1.2f;
-			minScale = 0.4f;
-		}
+		int option_value = mySGD->getSubSmallSizeValue();
+		myScale = 1.f - option_value/100.f;
+		maxScale = 1.2f - option_value/100.f;
+		minScale = 0.4f;
 		
 		areacrash_frame_cnt = 0;
 		move_frame = 0;
@@ -539,19 +530,10 @@ private:
 			else if(last_p == 6)		my_element = kElementCode_water;
 		}
 		
-		if(mySGD->isUsingItem(kIC_subSmallSize))
-		{
-			int option_value = mySD->getSubSmallSizeItemOption();
-			myScale = 1.f - option_value/100.f;
-			maxScale = 1.2f - option_value/100.f;
-			minScale = 0.4f;
-		}
-		else
-		{
-			myScale = 1.f;
-			maxScale = 1.2f;
-			minScale = 0.4f;
-		}
+		int option_value = mySGD->getSubSmallSizeValue();
+		myScale = 1.f - option_value/100.f;
+		maxScale = 1.2f - option_value/100.f;
+		minScale = 0.4f;
 		
 		areacrash_frame_cnt = 0;
 		move_frame = 0;

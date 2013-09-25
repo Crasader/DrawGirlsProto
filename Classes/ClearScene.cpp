@@ -348,6 +348,12 @@ void ClearScene::menuAction(CCObject* pSender)
 				{
 					myDSH->setIntegerForKey(kDSH_Key_haveCardNumber_int1, i, mySD->getSilType()*10+take_level-1);
 					myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i, mySD->getCardDurability(mySD->getSilType(), take_level));
+					
+					int selected_card_stage = myDSH->getIntegerForKey(kDSH_Key_selectedCard) / 10;
+					if(mySD->getSilType() == selected_card_stage)
+					{
+						myDSH->setIntegerForKey(kDSH_Key_selectedCard, mySD->getSilType()*10+take_level-1);
+					}
 				}
 				is_have_kind_card = true;
 				break;

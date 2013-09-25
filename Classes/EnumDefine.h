@@ -189,7 +189,7 @@ typedef enum t_CLEAR_CONDITION{
 }CLEAR_CONDITION;
 
 typedef enum t_ITEM_CODE{
-	kIC_attack = 0,
+	kIC_attack = 1,
 	kIC_speedUp,
 	kIC_addTime,
 	kIC_fast,

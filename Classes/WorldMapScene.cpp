@@ -12,6 +12,86 @@
 #include "StageSettingScene.h"
 #include "CollectionListScene.h"
 
+#include <algorithm>
+
+using namespace std;
+
+void WorldMapScene::showConvertSildata(string filename)
+{
+	CCLog("%s", (filename+"_sildata.txt").c_str());
+	string path = CCFileUtils::sharedFileUtils()->fullPathForFilename((filename+".txt").c_str());
+	
+	unsigned long buff = 0;
+	unsigned char* pBuffer = CCFileUtils::sharedFileUtils()->getFileData(path.c_str(), "rt", &buff);
+	
+	string convert_data((char*)pBuffer);
+	
+	remove(convert_data.begin(), convert_data.end(), '\t');
+	remove(convert_data.begin(), convert_data.end(), '\n');
+	
+	convert_data = convert_data.substr(0,convert_data.find(":::"));
+	
+	bool is_zero = true;
+	int cmp_cnt = 0;
+	string result_data = "";
+	for(int i=0;i<convert_data.size();i++)
+	{
+		if(is_zero)
+		{
+			if(convert_data[i] == '0')
+			{
+				cmp_cnt++;
+			}
+			else if(convert_data[i] == '1')
+			{
+				if(cmp_cnt >= 10000)		result_data.append("D");
+				else if(cmp_cnt >= 1000)	result_data.append("C");
+				else if(cmp_cnt >= 100)		result_data.append("B");
+				else if(cmp_cnt >= 10)		result_data.append("A");
+				
+				result_data.append(to_string(cmp_cnt));
+				cmp_cnt = 1;
+				is_zero = false;
+			}
+			else
+			{
+				CCLog("invalid data %s", convert_data.substr(i,1).c_str());
+			}
+		}
+		else
+		{
+			if(convert_data[i] == '1')
+			{
+				cmp_cnt++;
+			}
+			else if(convert_data[i] == '0')
+			{
+				if(cmp_cnt >= 10000)		result_data.append("D");
+				else if(cmp_cnt >= 1000)	result_data.append("C");
+				else if(cmp_cnt >= 100)		result_data.append("B");
+				else if(cmp_cnt >= 10)		result_data.append("A");
+				result_data.append(to_string(cmp_cnt));
+				cmp_cnt = 1;
+				is_zero = true;
+			}
+			else
+			{
+				CCLog("invalid data %s", convert_data.substr(i,1).c_str());
+			}
+		}
+	}
+	
+	if(cmp_cnt >= 10000)		result_data.append("D");
+	else if(cmp_cnt >= 1000)	result_data.append("C");
+	else if(cmp_cnt >= 100)		result_data.append("B");
+	else if(cmp_cnt >= 10)		result_data.append("A");
+	result_data.append(to_string(cmp_cnt));
+	
+	CCLog("result size : %d", (int)result_data.size());
+	CCLog("%s", result_data.c_str());
+	CCLog("!!!");
+}
+
 CCScene* WorldMapScene::scene()
 {
     // 'scene' is an autorelease object
@@ -51,7 +131,18 @@ bool WorldMapScene::init()
     {
         return false;
     }
-    
+	
+//	showConvertSildata("stage3_level1");
+//	showConvertSildata("stage3_level2");
+//	showConvertSildata("stage5_level1");
+//	showConvertSildata("stage5_level2");
+//	showConvertSildata("stage6_level1");
+//	showConvertSildata("stage6_level2");
+//	showConvertSildata("stage7_level1");
+//	showConvertSildata("stage7_level2");
+//	showConvertSildata("stage8_level1");
+//	showConvertSildata("stage8_level2");
+	
 	setKeypadEnabled(true);
 	
 	CCSprite* worldmap_back = CCSprite::create("worldmap_back.png");

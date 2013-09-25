@@ -696,16 +696,16 @@ void MetalSnake::furyMoving(float dt)
 	
 
 }
-void MetalSnake::movingAndCrash(float dt)
-{
-	if(m_state == CUMBERSTATEFURY)
-	{
-		furyMoving(dt);
-	}
-	else
-		normalMoving(dt);
-
-}
+//void MetalSnake::movingAndCrash(float dt)
+//{
+//	if(m_state == CUMBERSTATEFURY)
+//	{
+//		furyMoving(dt);
+//	}
+//	else
+//		normalMoving(dt);
+//
+//}
 
 void MetalSnake::attack(float dt)
 {

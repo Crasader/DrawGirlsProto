@@ -71,7 +71,7 @@ public:
 		param["category"] = JsonBox::Value("colorgirl");
 		param["stage"] = JsonBox::Value(CCString::createWithFormat("%d-%d", t_i1, t_i2)->getCString());
 		
-//		graphdog->command("getstages", &param, this, gd_selector(StageImgLoader::resultGetStages));
+		graphdog->command("getstages", &param, this, gd_selector(StageImgLoader::resultGetStages));
 	}
 	
 	bool isLoadedForKey(SIL_Key t_key, int t_i1, int t_i2)

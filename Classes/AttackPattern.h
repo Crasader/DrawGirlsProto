@@ -74,7 +74,7 @@ private:
 		
 		setPosition(r_p);
 		
-		if(r_p.x < 0.f - r || r_p.x > 320.f + r || r_p.y < 0.f - r || r_p.y > 430.f + r)
+		if(r_p.x < 0.f - r || r_p.x > 320.f + r || r_p.y < -60.f - r || r_p.y > 490.f + r)
 		{
 			stopMove();
 			removeFromParentAndCleanup(true);

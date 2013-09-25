@@ -19,6 +19,7 @@ USING_NS_CC;
 
 enum ClearShowTimeZorder{
 	kCST_Z_clear = 1,
+	kCST_Z_boader,
 	kCST_Z_showtime,
 	kCST_Z_showtime_back
 };
@@ -137,6 +138,42 @@ private:
 		clear_img = CCSprite::create(ttt.c_str());
 		clear_img->setPosition(ccp(160,215));
 		addChild(clear_img, kCST_Z_clear);
+		
+		CCSprite* top_back = CCSprite::create("top_back.png");
+		top_back->setAnchorPoint(ccp(0.5,0));
+		top_back->setPosition(ccp(160,430));
+		top_back->setScaleX(340.f/320.f);
+		addChild(top_back);
+		
+		CCSprite* bottom_back = CCSprite::create("top_back.png");
+		bottom_back->setAnchorPoint(ccp(0.5,1));
+		bottom_back->setPosition(ccp(160,0));
+		bottom_back->setScaleX(340.f/320.f);
+		addChild(bottom_back);
+		
+		CCSprite* top_boarder = CCSprite::create("screen_boarder.png");
+		top_boarder->setAnchorPoint(ccp(0.5,0));
+		top_boarder->setPosition(ccp(160,430));
+		top_boarder->setScaleX(34.f);
+		addChild(top_boarder, kCST_Z_boader);
+		
+		CCSprite* bottom_boarder = CCSprite::create("screen_boarder.png");
+		bottom_boarder->setAnchorPoint(ccp(0.5,1));
+		bottom_boarder->setPosition(ccp(160,0));
+		bottom_boarder->setScaleX(34.f);
+		addChild(bottom_boarder, kCST_Z_boader);
+		
+		CCSprite* left_boarder = CCSprite::create("screen_boarder.png");
+		left_boarder->setAnchorPoint(ccp(1,0.5));
+		left_boarder->setPosition(ccp(0,215));
+		left_boarder->setScaleY(45.f);
+		addChild(left_boarder, kCST_Z_boader);
+		
+		CCSprite* right_boarder = CCSprite::create("screen_boarder.png");
+		right_boarder->setAnchorPoint(ccp(0,0.5));
+		right_boarder->setPosition(ccp(320,215));
+		right_boarder->setScaleY(45.f);
+		addChild(right_boarder, kCST_Z_boader);
 		
 //		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
 //		device_rate = DataStorageHub::sharedInstance()->device_rate;
