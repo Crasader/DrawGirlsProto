@@ -300,7 +300,7 @@ void Coconut::animationNoDirection(float dt)
 	{
 		m_state = CUMBERSTATEMOVING;
 		unschedule(schedule_selector(Coconut::animationNoDirection));
-		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
+		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
 	}
 }
 
@@ -327,7 +327,10 @@ void Coconut::cumberAttack(float dt)
 //		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
 //			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
 //			kAP_CODE_pattern103, kAP_CODE_pattern103};
-		std::vector<int> attacks = {kTargetAttack3, kTargetAttack4};
+		std::vector<int> attacks = {
+//			kCrashAttack1,
+			kSpecialAttack7, // 텔레포트.          // 32
+		};
 //		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
 //		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
 //		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
@@ -355,6 +358,7 @@ void Coconut::cumberAttack(float dt)
 		}
 		else
 		{
+			CCLog("acode %d", attackCode);
 			lastCastNum = m_well512.GetValue(1, 3);
 			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 			startAnimationNoDirection();
@@ -615,7 +619,7 @@ void Coconut::scaleAdjustment(float dt)
 	{
 		CCLog("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
-		setCumberScale(MIN(1.5f, getCumberScale() + m_scale.SCALE_ADDER));
+		setCumberScale(MIN(1.2f, getCumberScale() + m_scale.SCALE_ADDER));
 	}
 	
 	m_scale.scale.step();

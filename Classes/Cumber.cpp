@@ -185,8 +185,8 @@ void CumberParent::startTeleport()
 {
 	//##
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-//	for(auto mainCumber : mainCumbers)
-//		mainCumber->startTeleport();
+	for(auto mainCumber : mainCumbers)
+		mainCumber->startTeleport();
 }
 
 int CumberParent::getMainCumberSheild()

@@ -153,6 +153,8 @@ void MissileParent::actionAP11()
 	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 	AP_Missile11* t_m11 = AP_Missile11::create(mainCumberPosition, t_bd.mType, t_bd.move_speed, IntSize(round(t_bd.crash_area.width),round(t_bd.crash_area.height)));
 	addChild(t_m11);
+	
+	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP12()
@@ -180,6 +182,7 @@ void MissileParent::actionAP14()
 	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 	AP_Missile14* t_m14 = AP_Missile14::create(mainCumberPosition, t_bd.mType, t_bd.move_speed, t_bd.mCnt, IntSize(round(t_bd.crash_area.width),round(t_bd.crash_area.height)));
 	addChild(t_m14);
+	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP15()
@@ -242,6 +245,8 @@ void MissileParent::actionAP21()
 {
 	AP_Missile21* t_m21 = AP_Missile21::create(startFirePosition);
 	addChild(t_m21);
+	
+	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP22()
@@ -277,7 +282,7 @@ void MissileParent::actionAP24()
 		AP_Missile24* t_m24 = AP_Missile24::create(60*5);
 		addChild(t_m24);
 		keepAP24 = t_m24;
-	}
+	}myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP25()
@@ -306,6 +311,7 @@ void MissileParent::actionAP26()
 		addChild(t_m26);
 		keepAP26 = t_m26;
 	}
+	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP27()
@@ -329,6 +335,8 @@ void MissileParent::actionAP28()
 	AP_Missile28* t_m28 = AP_Missile28::create(startFirePosition, random_value, t_bd.size_radius, t_bd.obj_cnt);
 	addChild(t_m28);
 	t_m28->startMyAction();
+	
+	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP29()
@@ -365,6 +373,7 @@ void MissileParent::actionAP33()
 		addChild(t_m33);
 		keepAP33 = t_m33;
 	}
+	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP34()
@@ -522,17 +531,28 @@ void MissileParent::attackWithKSCode(CCPoint startPosition, int pattern)
 	}
 	else if(pattern == kNonTargetAttack9)
 	{
-		startFirePosition = startPosition;
-		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-		SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
-															 this, NULL,
-															 this, callfunc_selector(MissileParent::actionKSAP9),
-															 this, callfunc_selector(MissileParent::cancelKSAP9),
-															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
-		t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
+//		startFirePosition = startPosition;
+//		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+//		SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+//															 this, NULL,
+//															 this, callfunc_selector(MissileParent::actionKSAP9),
+//															 this, callfunc_selector(MissileParent::cancelKSAP9),
+//															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+//		t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
+//		addChild(t_ccn);
+//		t_ccn->startCharge();
+//		chargeArray->addObject(t_ccn);
+		
+		CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*2,
+														 this, NULL,
+														 this, callfunc_selector(MissileParent::actionAP18),
+														 this, callfunc_selector(MissileParent::cancelAP18),
+														 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
 		addChild(t_ccn);
 		t_ccn->startCharge();
 		chargeArray->addObject(t_ccn);
+		
 	}
 	
 	else if(pattern == kTargetAttack1)
@@ -591,6 +611,146 @@ void MissileParent::attackWithKSCode(CCPoint startPosition, int pattern)
 		t_ccn->startCharge();
 		chargeArray->addObject(t_ccn);
 	}
+	else if(pattern == kTargetAttack5) // 나무 토막
+	{
+		CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*4,
+														 this, NULL,
+														 this, callfunc_selector(MissileParent::actionAP11),
+														 this, callfunc_selector(MissileParent::cancelAP11),
+														 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(0.00, 0.00, 1.00, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+	}
+	else if(pattern == kTargetAttack6) // 사과 던지기.
+	{
+		CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*4,
+														 this, NULL,
+														 this, callfunc_selector(MissileParent::actionAP14),
+														 this, callfunc_selector(MissileParent::cancelAP14),
+														 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(0.00, 0.00, 1.00, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+	}
+	else if(pattern == kTargetAttack7) // 태양광선.
+	{
+		CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 90,
+														 this, callfunc_selector(MissileParent::ingAP17),
+														 this, callfunc_selector(MissileParent::actionAP17),
+														 this, callfunc_selector(MissileParent::cancelAP17),
+														 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(1.00, 0.00, 0.00, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+	}
+	else if(pattern == kSpecialAttack1)
+	{
+		startFirePosition = startPosition;
+		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+		SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+															 this, NULL,
+															 this, callfunc_selector(MissileParent::actionAP21),
+															 this, callfunc_selector(MissileParent::cancelAP21),
+															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(0.00, 1.00, 0.00, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+	}
+	else if(pattern == kSpecialAttack2)
+	{
+		startFirePosition = startPosition;
+		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+		SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*2,
+															 this, NULL,
+															 this, callfunc_selector(MissileParent::actionAP24),
+															 this, callfunc_selector(MissileParent::cancelAP24),
+															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(1.00, 1.00, 1.00, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+	}
+	else if(pattern == kSpecialAttack3)
+	{
+		startFirePosition = startPosition;
+		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+		SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+															 this, NULL,
+															 this, callfunc_selector(MissileParent::actionAP23),
+															 this, callfunc_selector(MissileParent::cancelAP23),
+															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+	}
+	else if(pattern == kSpecialAttack4)
+	{
+		startFirePosition = startPosition;
+		myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+		SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
+															 this, NULL,
+															 this, callfunc_selector(MissileParent::actionAP28),
+															 this, callfunc_selector(MissileParent::cancelAP28),
+															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(0.30, 0.30, 0.30, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+	}
+	else if(pattern == kSpecialAttack5)
+	{
+		
+		
+		startFirePosition = startPosition;
+		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+		SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
+															 this, NULL,
+															 this, callfunc_selector(MissileParent::actionAP26),
+															 this, callfunc_selector(MissileParent::cancelAP26),
+															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(0.20, 0.80, 1.00, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+
+	}
+	else if(pattern == kSpecialAttack6)
+	{
+		startFirePosition = startPosition;
+		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+		SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
+															 this, NULL,
+															 this, callfunc_selector(MissileParent::actionAP33),
+															 this, callfunc_selector(MissileParent::cancelAP33),
+															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(0.00, 0.20, 0.30, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+		
+	}
+	else if(pattern == kSpecialAttack7)
+	{
+		startFirePosition = startPosition;
+		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+		SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+															 this, NULL,
+															 this, callfunc_selector(MissileParent::actionAP32),
+															 this, callfunc_selector(MissileParent::cancelAP32),
+															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+		t_ccn->setChargeColor(ccc4f(1.00, 0.00, 0.00, 1.00));
+		addChild(t_ccn);
+		t_ccn->startCharge();
+		chargeArray->addObject(t_ccn);
+		
+	}
+	
 }
 
 void MissileParent::attackWithCode( CCPoint startPosition, int pattern_code )
