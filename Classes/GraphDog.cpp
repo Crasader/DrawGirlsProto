@@ -1,3 +1,4 @@
+
 //
 //  Created by LitQoo on 13. 2. 14..
 //  www.graphdog.net
@@ -61,14 +62,18 @@ string GraphDog::getGraphDogVersion(){
     return this->gdVersion;
 }
 
+void GraphDog::setup(string secretKey,int _appVersion){
+    this->setup("", secretKey, "", _appVersion);
+    
+}
 void GraphDog::setup(string appID,string secretKey,string _packageName,int _appVersion){
 	
     aID=appID;
     sKey=secretKey;
 
 	this->packageName=_packageName;
-    string deviceId = getDeviceID();
-	this->setUdid(deviceId);
+    //string deviceId = getDeviceID();
+	//this->setUdid(deviceId);
     std::ostringstream ostr;
     ostr << _appVersion;
     this->appVersion=ostr.str();
@@ -78,7 +83,8 @@ void GraphDog::setup(string appID,string secretKey,string _packageName,int _appV
 	CCScheduler::sharedScheduler()->scheduleSelector(schedule_selector(GraphDog::receivedCommand), this, 0,false);
 #else
 	// in cocos2d-x 2.x
-	CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GraphDog::receivedCommand), this, 0.f, false, kCCRepeatForever, 0);
+    CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GraphDog::receivedCommand), this, 0.f, kCCRepeatForever, 0.f, false);
+//	CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GraphDog::receivedCommand), this, 0.f, false, kCCRepeatForever, 0);
 #endif
 //	setLanguage(GraphDogLib::getLocalCode());
 }
@@ -274,6 +280,8 @@ bool GraphDog::test(string action, const JsonBox::Object* const param,CCObject *
 void* GraphDog::t_function(void *_insertIndex)
 {	
 	int insertIndex = (int)_insertIndex;
+    
+    
 //	std::map<int, CommandType>& commands = graphdog->commands;
 //	pthread_mutex_lock(&graphdog->cmdsMutex);
 	CommandsType& command = graphdog->commandQueue[insertIndex];
@@ -282,10 +290,10 @@ void* GraphDog::t_function(void *_insertIndex)
 	string paramStr = toBase64(desEncryption(graphdog->sKey, command.commandStr));
 	string dataset = "&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString();
 	
-    string commandurl = "http://www.graphdog.net/command/";
-    commandurl=commandurl.append(GraphDog::get()->getGraphDogVersion());
-    commandurl=commandurl.append("/");
-    commandurl=commandurl.append(GraphDog::get()->aID);
+    string commandurl = "http://litqoo.com/dgproto/data.php";
+    //commandurl=commandurl.append(GraphDog::get()->getGraphDogVersion());
+    //commandurl=commandurl.append("/");
+    //commandurl=commandurl.append(GraphDog::get()->aID);
     
 	// << "&param=" << paramStr
 	//curl으로 명령을 날리고 겨로가를 얻는다.
@@ -304,13 +312,13 @@ void* GraphDog::t_function(void *_insertIndex)
 	if(resultCode == CURLE_OK)
 	{
 		resultStr = command.chunk.memory;// gdchunk.memory;
-		if(*resultStr.rbegin() == '#') // success
+        if(*resultStr.rbegin() == '#') // success
 		{
 			try
 			{
 				vector<char> encText = base64To(std::string(resultStr.begin(), resultStr.end() - 1) ); // unbase64
 				resultStr = desDecryption(graphdog->sKey, std::string(encText.begin(), encText.end())); // des Decryption
-				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
+                resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
 			}
 			catch(const std::string& msg)
 			{
@@ -337,40 +345,41 @@ void* GraphDog::t_function(void *_insertIndex)
 		}
 	}
 	
-	bool newToken = false;
-	// 새토큰발급일 경우
-	if(resultobj["tokenUpdate"].getString()=="ok"){
-		//정상결과시 AuID,Token 다시 세팅
-		if(resultobj["state"].getString()=="ok"){
-			command.caller->setAuID(resultobj["auID"].getString());
-			command.caller->setCTime(resultobj["createTime"].getString());
-			command.caller->isLogin=true;
-		}else{
-			command.caller->setCTime("9999");
-		}
-		//첫실행일경우 받아온 nick,flag 저장.
-//		if(resultobj["isFirst"].getBoolean()==true){
-//			command.caller->setNick(resultobj["nick"].getString());
-//			command.caller->setFlag(resultobj["flag"].getString());
+//	bool newToken = false;
+//	// 새토큰발급일 경우
+//	//if(resultobj["tokenUpdate"].getString()=="ok"){
+//		//정상결과시 AuID,Token 다시 세팅
+//		if(resultobj["state"].getString()=="ok"){
+//			command.caller->setAuID(resultobj["auID"].getString());
+//			command.caller->setCTime(resultobj["createTime"].getString());
+//			command.caller->isLogin=true;
+//		}else{
+//			command.caller->setCTime("9999");
 //		}
-		//기존명령 다시 등록
-		std::vector<CommandParam> vcp;
-		for(std::map<string, CommandType>::const_iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
-		{
-			JsonBox::Value param;
-			param.loadFromString(iter->second.paramStr);
-			vcp.push_back(CommandParam(iter->second.action, param.getObject(), iter->second.target, iter->second.selector ));
-		}
-		command.caller->command(vcp);
-		
-		for(std::map<string, CommandType>::iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
-		{
-			iter->second.target = 0;
-			iter->second.selector = 0;
-		}
-		newToken = true;
-	}
+//		//첫실행일경우 받아온 nick,flag 저장.
+////		if(resultobj["isFirst"].getBoolean()==true){
+////			command.caller->setNick(resultobj["nick"].getString());
+////			command.caller->setFlag(resultobj["flag"].getString());
+////		}
+//		//기존명령 다시 등록
+//		std::vector<CommandParam> vcp;
+//		for(std::map<string, CommandType>::const_iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
+//		{
+//			JsonBox::Value param;
+//			param.loadFromString(iter->second.paramStr);
+//			vcp.push_back(CommandParam(iter->second.action, param.getObject(), iter->second.target, iter->second.selector ));
+//		}
+//		command.caller->command(vcp);
+//		
+//		for(std::map<string, CommandType>::iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
+//		{
+//			iter->second.target = 0;
+//			iter->second.selector = 0;
+//		}
+//		newToken = true;
+//	}
 	
+    
 	if(resultobj["errorcode"].getInt()==9999){
 		command.caller->setCTime("9999");
 		command.caller->errorCount++;
@@ -394,11 +403,11 @@ void* GraphDog::t_function(void *_insertIndex)
 				iter->second.selector = 0;
 			}
 		}
-		newToken = true;
+		//newToken = true;
 	}
 	
-	if(newToken == false) // 새토큰 발급이 아닌 경우.
-	{
+//	if(newToken == false) // 새토큰 발급이 아닌 경우.
+//	{
 //		for(auto iter = command.commands.begin(); iter != command.commands.end(); ++iter)
 //		{
 //			CommandType test = iter->second;
@@ -407,9 +416,17 @@ void* GraphDog::t_function(void *_insertIndex)
 		if(resultobj["state"].getString()=="ok"){
 			command.caller->errorCount=0;
 		}
+    
+        if(resultobj["timestamp"].getInt()<GraphDog::get()->timestamp){
+            resultCode=CURLE_CHUNK_FAILED;
+            resultobj["state"]="error";
+            resultobj["errorMsg"]="hack!!";
+            GraphDog::get()->timestamp=resultobj["timestamp"].getInt();
+        }
+    
 		command.result = resultobj;
 		command.chunk.resultCode = resultCode;
-	}
+//	}
 	pthread_mutex_unlock(&command.caller->t_functionMutex);
 	
 	return NULL;
@@ -455,7 +472,6 @@ void GraphDog::receivedCommand(float dt)
 					resultobj["state"] = JsonBox::Value("error");
 					resultobj["errorMsg"] = JsonBox::Value("check your network state");
 					resultobj["errorCode"] = JsonBox::Value(1002);
-					CCLog("ssiba resultCode(report me!!!) : %d", commands.chunk.resultCode);
 					
 					//callbackparam
 					if(command.paramStr!=""){

@@ -66,6 +66,7 @@ struct CommandParam
 class GraphDog: public CCObject{
 public:
     //시작설정
+    void setup(string secretKey,int _appVersion); //nhn용 새로추가
     void setup(string appID,string secretKey,string _packageName,int _appVersion);
     //명령날리기 - 이 함수로 모든 통신을 할수있다. 쓰레드생성 실패시 false 그외 true
     bool command(string action, const JsonBox::Object* const param,CCObject *target,GDSelType selector);
@@ -87,6 +88,8 @@ public:
     void setGraphDogVersion(int version);
     
     bool isLogin;
+    
+    int timestamp;
     
     string getNick();
     string getFlag();
@@ -171,6 +174,7 @@ private:
         errorCount=0;
         this->gdVersion = GRAPHDOG_VERSION;
 		this->deviceInfo = "";
+        this->timestamp = 9;
     }
     
     ~GraphDog(){
