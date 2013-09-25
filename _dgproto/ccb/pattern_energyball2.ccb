@@ -60,7 +60,7 @@
 											<key>name</key>
 											<string>rotation</string>
 											<key>time</key>
-											<real>0.66666668653488159</real>
+											<real>0.3333333432674408</real>
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
@@ -120,7 +120,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>-360</real>
+								<real>0.0</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -298,15 +298,15 @@
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>-1</integer>
+			<integer>0</integer>
 			<key>length</key>
-			<real>0.66666668653488159</real>
+			<real>0.3333333432674408</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.66666668653488159</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
