@@ -165,7 +165,7 @@ void KSCumberBase::randomMoving(float dt)
 		{
 			CCLog("cnt !! = %d", cnt);
 		}
-		if(m_state != CUMBERSTATEMOVING || m_state != CUMBERSTATEFURY)
+		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
 			validPosition = true;
 		}
@@ -335,7 +335,7 @@ void KSCumberBase::straightMoving(float dt)
 		{
 			CCLog("cnt !! = %d", cnt);
 		}
-		if(m_state != CUMBERSTATEMOVING || m_state != CUMBERSTATEFURY)
+		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
 			validPosition = true;
 		}
@@ -487,7 +487,7 @@ void KSCumberBase::followMoving(float dt)
 		{
 			CCLog("cnt !! = %d", cnt);
 		}
-		if(m_state != CUMBERSTATEMOVING || m_state != CUMBERSTATEFURY)
+		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
 			validPosition = true;
 		}
@@ -664,7 +664,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		{
 			CCLog("cnt !! = %d", cnt);
 		}
-		if(m_state != CUMBERSTATEMOVING || m_state != CUMBERSTATEFURY)
+		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
 			validPosition = true;
 		}
@@ -799,7 +799,7 @@ void KSCumberBase::circleMoving(float dt)
 		{
 			CCLog("cnt !! = %d", cnt);
 		}
-		if(m_state != CUMBERSTATEMOVING || m_state != CUMBERSTATEFURY)
+		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
 			validPosition = true;
 		}

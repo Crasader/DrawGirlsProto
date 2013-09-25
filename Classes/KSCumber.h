@@ -43,7 +43,7 @@ public:
 	{
 		m_state = CUMBERSTATESTOP;
 	}
-	void attack(float dt);
+	void cumberAttack(float dt);
 	virtual bool init();
 	CREATE_FUNC(KSCumber);
 	virtual void setPosition(const CCPoint& t_sp)

@@ -14,9 +14,19 @@
 #include "GameData.h"
 #include <deque>
 #include "AudioEngine.h"
+#include "KSUtil.h"
+#include "Well512.h"
 
 using namespace cocos2d;
 using namespace std;
+
+#define CREATE_FUNC_CCP(A) static A* create(CCPoint t_sp) \
+{ \
+	A* t_m0 = new A(); \
+	t_m0->myInit(t_sp); \
+	t_m0->autorelease(); \
+	return t_m0; \
+} \
 
 class AttackPattern : public CCNode
 {
@@ -27,10 +37,7 @@ public:
 		schedule(schedule_selector(AttackPattern::selfRemoveSchedule));
 	}
 	
-	virtual void stopMyAction()
-	{
-		
-	}
+	virtual void stopMyAction(){}
 	
 protected:
 	
@@ -114,6 +121,551 @@ private:
 		startMove();
 	}
 };
+
+class KSAttackPattern1 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern1);
+	void myInit(CCPoint t_sp)
+	{
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		scheduleUpdate();		
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 300)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % 5 == 0)
+		{
+			int t_mCnt = 5;
+			float t_distance = 1.8f;
+			std::string imgFilename = "chapter1_basic_missile_1.png";
+			
+			CCSize t_mSize = CCSize(6.f,6.f);
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+			int start_angle = rand()%(360/t_mCnt);
+			
+			for(int i=0;i<t_mCnt;i++)
+			{
+				float temp_angle = start_angle+(360.f/t_mCnt)*i;
+				
+				MissileUnit* t_mu = MissileUnit::create(m_position, temp_angle, t_distance,
+														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+				addChild(t_mu);
+			}
+		}
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+protected:
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+};
+
+class KSAttackPattern2 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern2);
+	void myInit(CCPoint t_sp)
+	{
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		angle = m_well512.GetValue(360);
+		scheduleUpdate();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 300)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % 1 == 0)
+		{
+			
+			angle += 19;
+			if(angle >= 360)
+				angle -= 360;
+			
+			int t_mCnt = 5;
+			float t_distance = 1.8f;
+			std::string imgFilename = "chapter1_basic_missile_1.png";
+			CCSize t_mSize = CCSize(6.f,6.f);
+			MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+													imgFilename.c_str(), t_mSize, 0.f, 0.f);
+			addChild(t_mu);
+			
+			
+			
+//			int start_angle = rand()%(360/t_mCnt);
+//			
+//			for(int i=0;i<t_mCnt;i++)
+//			{
+//				float temp_angle = start_angle+(360.f/t_mCnt)*i;
+//				
+//				
+//			}
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+protected:
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	int angle;
+	Well512 m_well512;
+};
+
+// 해바라기 패턴.
+class KSAttackPattern3 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern3);
+	void myInit(CCPoint t_sp)
+	{
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		
+		float angle = m_well512.GetValue(360);
+		for(int i=0; i<10;i++)
+		{
+			int t_mCnt = 5;
+			float t_distance = 1.8f;
+			std::string imgFilename = "chapter1_basic_missile_1.png";
+			CCSize t_mSize = CCSize(6.f,6.f);
+			MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+													imgFilename.c_str(), t_mSize, 0.f, 0.f);
+			addChild(t_mu);
+			angle += 360 / 10; // 10 개라면
+			if(angle >= 360)
+				angle -= 360;
+		}
+		angle = m_well512.GetValue(360);
+		stopMyAction();
+//		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+protected:
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	int angle;
+	Well512 m_well512;
+};
+
+// 해바라기 패턴의 연속. 각도 변경 없음.
+class KSAttackPattern4 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern4);
+	void myInit(CCPoint t_sp)
+	{
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		angle = m_well512.GetValue(360);
+//		angle = m_well512.GetValue(360);
+		
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 300)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % 4 == 0)
+		{
+			float startAngle = angle;
+			for(int i=0; i<10; i++)
+			{
+				int t_mCnt = 5;
+				float t_distance = 1.8f;
+				std::string imgFilename = "chapter1_basic_missile_1.png";
+				CCSize t_mSize = CCSize(6.f,6.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+				addChild(t_mu);
+				startAngle += 360 / 10; // 10 개라면
+			}
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	Well512 m_well512;
+};
+
+/// 해바라기 패턴인데 각도가 바뀜.
+class KSAttackPattern5 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern5);
+	void myInit(CCPoint t_sp)
+	{
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		angle = m_well512.GetValue(360);
+		//		angle = m_well512.GetValue(360);
+		
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 300)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % 4 == 0)
+		{
+			float startAngle = angle;
+			for(int i=0; i<10; i++)
+			{
+				int t_mCnt = 5;
+				float t_distance = 1.8f;
+				std::string imgFilename = "chapter1_basic_missile_1.png";
+				CCSize t_mSize = CCSize(6.f,6.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+				addChild(t_mu);
+				startAngle += 360 / 10; // 10 개라면
+			}
+			angle += 6;
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	Well512 m_well512;
+};
+
+
+class KSAttackPattern6 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern6);
+	void myInit(CCPoint t_sp)
+	{
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		angle = m_well512.GetValue(360);
+		//		angle = m_well512.GetValue(360);
+		
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 1*8)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % 1 == 0)
+		{
+			float startAngle = angle;
+			for(int i=0; i<10; i++)
+			{
+				int t_mCnt = 5;
+				float t_distance = 1.8f;
+				std::string imgFilename = "chapter1_basic_missile_1.png";
+				CCSize t_mSize = CCSize(6.f,6.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+				addChild(t_mu);
+				startAngle += 360 / 10; // 10 개라면
+			}
+			angle += 6;
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	int term;
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	Well512 m_well512;
+};
+
+/// 해바라긴데 각도를 달리하면서 쏨, 드르륵 쏘고 좀 쉬다가 드르륵...
+class KSAttackPattern7 : public AttackPattern
+{
+public:
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	CREATE_FUNC_CCP(KSAttackPattern7);
+	void myInit(CCPoint t_sp)
+	{
+		batchNode = CCSpriteBatchNode::create("chapter1_basic_missile_1.png", 300);
+		
+		addChild(batchNode);
+		
+		
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		fireCount = 0;
+		angle = m_well512.GetValue(360);
+		//		angle = m_well512.GetValue(360);
+		
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 1*150)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % 1 == 0)
+		{
+			if(idleValue <= 0)
+			{
+				fireCount++;
+				float startAngle = angle;
+				for(int i=0; i<20; i++)
+				{
+					int t_mCnt = 5;
+					float t_distance = 1.8f;
+					std::string imgFilename = "chapter1_basic_missile_1.png";
+					CCSize t_mSize = CCSize(6.f,6.f);
+					MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+															imgFilename.c_str(), t_mSize, 0.f, 0.f);
+					batchNode->addChild(t_mu);
+					startAngle += 20; // 10 개라면
+				}
+				angle += 2;
+				
+				// 다섯번 쐈으면 15프레임 쉰다.
+				if(fireCount == 5)
+				{
+					fireCount = 0;
+					idleValue = 15;
+				}
+			}
+			else
+			{
+				angle += 2;
+				idleValue--;
+			}
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	int idleValue;
+	int fireCount;
+	int term;
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	Well512 m_well512;
+	
+	CCSpriteBatchNode* batchNode;
+};
+
+class KSAttackPattern8 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern8);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void myInit(CCPoint t_sp)
+	{
+		batchNode = CCSpriteBatchNode::create("chapter1_basic_missile_1.png", 300);
+		
+		addChild(batchNode);
+		m_frameTerm = 5;
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		angle2 = angle = m_well512.GetValue(360);
+		//		angle = m_well512.GetValue(360);
+		
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 300)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % 4 == 0)
+		{
+			float startAngle = angle;
+			for(int i=0; i<10; i++)
+			{
+				int t_mCnt = 5;
+				float t_distance = 1.8f;
+				std::string imgFilename = "chapter1_basic_missile_1.png";
+				CCSize t_mSize = CCSize(6.f,6.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+				startAngle += 360 / 10; // 10 개라면
+			}
+			
+			float startAngle2 = angle2;
+			for(int i=0; i<10; i++)
+			{
+				int t_mCnt = 5;
+				float t_distance = 1.8f;
+				std::string imgFilename = "chapter1_basic_missile_1.png";
+				CCSize t_mSize = CCSize(6.f,6.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle2, t_distance,
+														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+				startAngle2 += 360 / 10; // 10 개라면
+			}
+			
+			angle += 3;
+			angle2 -= 3;
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	int m_frameTerm;
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	float angle2;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
 
 class AP_Missile0 : public AttackPattern
 {

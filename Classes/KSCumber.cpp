@@ -51,7 +51,7 @@ bool KSCumber::init()
 	
 	schedule(schedule_selector(KSCumber::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(KSCumber::attack));
+	schedule(schedule_selector(KSCumber::cumberAttack));
 	
 	return true;
 }
@@ -313,51 +313,52 @@ void KSCumber::onStartGame()
 {
 	CCLog("onStartGame!!");
 }
-void KSCumber::attack(float dt)
+
+void KSCumber::cumberAttack(float dt)
 {
-	float w = ProbSelector::sel(0.003, 1.0 - 0.003, 0.0);
+	float w = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
 
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
-//		int attackCode = 0;
+		int attackCode = 0;
 //		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
 //			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
 //			kAP_CODE_pattern103, kAP_CODE_pattern103};
-//
-//
-//
-//		bool searched = false;
-//		while(!searched)
-//		{
-//			random_shuffle(attacks.begin(), attacks.end());
-//			attackCode = attacks[0];
-//			searched = true;
-//			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
-//				searched = false;
-//			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
-//				searched = false;
-//
-//
-//		}
-//
+		std::vector<int> attacks = {kNonTargetAttack8};
+//		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
+//		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
+//		kNonTargetAttack8};
+
+
+
+		bool searched = false;
+		while(!searched)
+		{
+			random_shuffle(attacks.begin(), attacks.end());
+			attackCode = attacks[0];
+			searched = true;
+			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
+				searched = false;
+			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
+				searched = false;
+
+
+		}
+
 //		attackCode = 13;
-//		if(attackCode == 13) // fury
-//		{
-//			CCLog("aaa %f %f", getPosition().x, getPosition().y);
-//			m_state = CUMBERSTATESTOP;
-//			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
-//		}
-//		else
-//		{
-//			mAnimationManager->runAnimationsForSequenceNamed("cast2start");
-//			startAnimationNoDirection();
-//			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
-//		}
-		
-		int ac = 0;
-		m_state = CUMBERSTATESTOP;
-		gameData->communication("MP_attackWithCode", getPosition(), ac);
+		if(attackCode == 13) // fury
+		{
+			CCLog("aaa %f %f", getPosition().x, getPosition().y);
+			m_state = CUMBERSTATESTOP;
+			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+		}
+		else
+		{
+			mAnimationManager->runAnimationsForSequenceNamed("cast2start");
+			startAnimationNoDirection();
+			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode);
+		}
 	}
 }
 COLLISION_CODE KSCumber::crashWithX(IntPoint check_position)
