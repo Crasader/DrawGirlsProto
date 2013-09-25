@@ -63,6 +63,7 @@ private:
 	float ing_download_per;
 	
 	bool is_downloading;
+	int download_version;
 	
 	vector<DownloadFile> df_list;
 	
@@ -82,7 +83,7 @@ private:
 		cancel_menu->setPosition(ccp(350, 240));
 		addChild(cancel_menu, kSID_Z_content);
 		
-		state_ment = CCLabelTTF::create("스테이지 정보를 받아오는 ing...", mySGD->getFont().c_str(), 30);
+		state_ment = CCLabelTTF::create("스테이지 정보를 받아오는 ing...", mySGD->getFont().c_str(), 20);
 		state_ment->setAnchorPoint(ccp(0.5,0.5));
 		state_ment->setPosition(ccp(240,160));
 		state_ment->setHorizontalAlignment(kCCTextAlignmentCenter);
@@ -104,7 +105,10 @@ private:
 	
 	void startGetStageInfo()
 	{
-//		graphdog->command(string action, const JsonBox::Object *const param, this, gd_selector(StageInfoDown::resultGetStageInfo));
+		JsonBox::Object param;
+		param["no"] = 1;
+		
+		graphdog->command("getstageinfo", &param, this, gd_selector(StageInfoDown::resultGetStageInfo));
 	}
 	
 	void resultGetStageInfo(JsonBox::Object result_data);

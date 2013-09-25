@@ -424,7 +424,7 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getElementDamage(kElementCode_wind, myDSH->getIntegerForKey(kDSH_Key_elementLevelWind));
+		damage = MissileDamageData::getJMDamage();
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*AttackItemBaseUpRate);
 		sum_damage = 0;
 		
@@ -756,7 +756,7 @@ private:
 		
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getElementDamage(kElementCode_lightning, myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning));
+		damage = MissileDamageData::getJMDamage();
 		total_damage = damage * (AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
@@ -1063,7 +1063,7 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelLife)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getElementDamage(kElementCode_life, myDSH->getIntegerForKey(kDSH_Key_elementLevelLife));
+		damage = MissileDamageData::getJMDamage();
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelLife)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
@@ -1408,7 +1408,7 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getElementDamage(kElementCode_water, myDSH->getIntegerForKey(kDSH_Key_elementLevelWater));
+		damage = MissileDamageData::getJMDamage();
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
@@ -1712,7 +1712,7 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getElementDamage(kElementCode_fire, myDSH->getIntegerForKey(kDSH_Key_elementLevelFire));
+		damage = MissileDamageData::getJMDamage();
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
@@ -1976,7 +1976,7 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getElementDamage(kElementCode_plasma, myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma));
+		damage = MissileDamageData::getJMDamage();
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		

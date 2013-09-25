@@ -34,10 +34,55 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("shopItems_%d_type", i)->getCString(), t_item["type"].getInt());
 				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("shopItems_%d_price", i)->getCString(), t_item["price"].getInt());
 				
-				if(t_item["type"].getInt() == kIC_fast)
+				if(t_item["type"].getInt() == kIC_attack)
 				{
 					JsonBox::Object t_option = t_item["option"].getObject();
-					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("shopItems_%d_sec", i)->getCString(), t_option["sec"].getInt());
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_attack_power", t_option["power"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_addTime)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_addTime_sec", t_option["sec"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_fast)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_fast_sec", t_option["sec"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_silence)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_silence_sec", t_option["sec"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_doubleItem)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_doubleItem_percent", t_option["percent"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_longTime)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_longTime_sec", t_option["sec"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_bossLittleEnergy)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_bossLittleEnergy_percent", t_option["percent"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_subSmallSize)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_subSmallSize_percent", t_option["percent"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_smallArea)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_smallArea_percent", t_option["percent"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_widePerfect)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_widePerfect_percent", t_option["percent"].getInt());
 				}
 			}
 			
@@ -51,7 +96,52 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 				if(t_item["type"].getInt() == kIC_attack)
 				{
 					JsonBox::Object t_option = t_item["option"].getObject();
-					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("defItems_%d_power", i)->getCString(), t_item["power"].getInt());
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_attack_power", t_option["power"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_addTime)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_addTime_sec", t_option["sec"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_fast)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_fast_sec", t_option["sec"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_silence)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_silence_sec", t_option["sec"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_doubleItem)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_doubleItem_percent", t_option["percent"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_longTime)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_longTime_sec", t_option["sec"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_bossLittleEnergy)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_bossLittleEnergy_percent", t_option["percent"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_subSmallSize)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_subSmallSize_percent", t_option["percent"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_smallArea)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_smallArea_percent", t_option["percent"].getInt());
+				}
+				else if(t_item["type"].getInt() == kIC_widePerfect)
+				{
+					JsonBox::Object t_option = t_item["option"].getObject();
+					SDS_SI(kSDF_stageInfo, mySD->getSilType(), "itemOption_widePerfect_percent", t_option["percent"].getInt());
 				}
 			}
 			
@@ -163,6 +253,7 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 				
 				JsonBox::Object t_pattern = t_boss["pattern"].getObject();
 				JsonBox::Array t_missile = t_pattern["missile"].getArray();
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_missile_cnt", i)->getCString(), t_missile.size());
 				for(int j=0;j<t_missile.size();j++)
 				{
 					JsonBox::Object t_m = t_missile[j].getObject();
@@ -176,6 +267,7 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 				}
 				
 				JsonBox::Array t_destroy = t_pattern["destroy"].getArray();
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_destroy_cnt", i)->getCString(), t_destroy.size());
 				for(int j=0;j<t_destroy.size();j++)
 				{
 					JsonBox::Object t_d = t_destroy[j].getObject();
@@ -189,6 +281,7 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 				}
 				
 				JsonBox::Array t_special = t_pattern["special"].getArray();
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_spacial_cnt", i)->getCString(), t_special.size());
 				for(int j=0;j<t_special.size();j++)
 				{
 					JsonBox::Object t_s = t_destroy[j].getObject();
@@ -243,10 +336,9 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_hp", i)->getCString(), t_junior["hp"].getInt());
 			}
 			
-			SDS_SI(kSDF_stageInfo, mySD->getSilType(), "version", result_data["version"].getInt());
-			
 			if(df_list.size() > 0) // need download
 			{
+				download_version = result_data["version"].getInt();
 				state_ment->setString("이미지 정보를 다운로드 합니다.");
 				ing_download_cnt = 1;
 				ing_download_per = 0;
@@ -258,6 +350,7 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 			}
 			else
 			{
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), "version", result_data["version"].getInt());
 				state_ment->setString("스테이지 정보 확인 완료.");
 				
 				CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
@@ -280,7 +373,8 @@ void StageInfoDown::successAction()
 {
 	if(ing_download_cnt >= df_list.size())
 	{
-		download_state->setString(CCSTR_CWF("%.0f\t%d/%d", 1.f*100.f, ing_download_cnt, int(df_list.size()))->getCString());
+		SDS_SI(kSDF_stageInfo, mySD->getSilType(), "version", download_version);
+		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		state_ment->setString("이미지 정보 다운로드 완료.");
 		
 		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
@@ -289,7 +383,7 @@ void StageInfoDown::successAction()
 	{
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		startDownload();
 	}
 }
@@ -308,12 +402,49 @@ void StageInfoDown::downloadingAction()
 	
 	ing_download_per = t_per;
 	
-	download_state->setString(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
+	download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 }
 
 void StageInfoDown::startDownload()
 {
+	CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+	
 	StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename, this, callfunc_selector(StageInfoDown::successAction), this, callfunc_selector(StageInfoDown::failAction));
 	
 	schedule(schedule_selector(StageInfoDown::downloadingAction));
+}
+
+
+bool StageInfoDown::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	if(touch_number != 0)	return true;
+	
+	if(cancel_menu->ccTouchBegan(pTouch, pEvent))	touch_number = kSID_MT_cancel;
+	
+	return true;
+}
+void StageInfoDown::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	if(touch_number == kSID_MT_cancel)		cancel_menu->ccTouchMoved(pTouch, pEvent);
+}
+void StageInfoDown::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	if(touch_number == kSID_MT_cancel)
+	{
+		cancel_menu->ccTouchEnded(pTouch, pEvent);
+		touch_number = 0;
+	}
+}
+void StageInfoDown::ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	if(touch_number == kSID_MT_cancel)
+	{
+		cancel_menu->ccTouchCancelled(pTouch, pEvent);
+		touch_number = 0;
+	}
+}
+
+void StageInfoDown::registerWithTouchDispatcher()
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority-1, false);
 }
