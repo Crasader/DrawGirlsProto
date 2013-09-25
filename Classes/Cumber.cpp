@@ -8,8 +8,10 @@
 
 #include "Cumber.h"
 #include "SnakeCumber.h"
-#include "MetalSnake.h"
-#include "KSCumber.h"
+#include "Apple.h"
+#include "Coconut.h"
+#include "Melon.h"
+
 void CumberParent::onStartGame()
 {
 	for(auto i : mainCumbers)
@@ -183,8 +185,8 @@ void CumberParent::startTeleport()
 {
 	//##
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-//	for(auto mainCumber : mainCumbers)
-//		mainCumber->startTeleport();
+	for(auto mainCumber : mainCumbers)
+		mainCumber->startTeleport();
 }
 
 int CumberParent::getMainCumberSheild()
@@ -454,7 +456,10 @@ void CumberParent::myInit()
 	
 	void onStartGame();
 	void onPatternEnd();
-	auto mainCumber = KSCumber::create();
+	auto mainCumber = Coconut::create();
+//	auto mainCumber = Melon::create();
+//	auto mainCumber = Apple::create();
+//	auto mainCumber = KSCumber::create();
 //	auto mainCumber = MetalSnake::create();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);

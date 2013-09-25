@@ -17,6 +17,11 @@
 #include "Well512.h"
 USING_NS_CC;
 
+struct SnakeTrace
+{
+	CCPoint position; // 자취의 위치와
+	float directionRad; // 자취의 방향.
+};
 
 enum COLLISION_CODE
 {
