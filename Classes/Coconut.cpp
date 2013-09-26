@@ -329,7 +329,8 @@ void Coconut::cumberAttack(float dt)
 //			kAP_CODE_pattern103, kAP_CODE_pattern103};
 		std::vector<int> attacks = {
 //			kCrashAttack1,
-			kSpecialAttack7, // 텔레포트.          // 32
+			kTargetAttack4
+//			kSpecialAttack7, // 텔레포트.          // 32
 		};
 //		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
 //		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,

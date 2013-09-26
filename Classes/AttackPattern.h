@@ -122,6 +122,7 @@ private:
 	}
 };
 
+// 무작위 원형 던지기.
 class KSAttackPattern1 : public AttackPattern
 {
 public:
@@ -138,34 +139,37 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		
 		m_frameCnt = 0;
 		m_position = t_sp;
+		
+		m_perFrame = 5;
+		m_totalFrame = 300;
+		m_bulletSpeed = 1.8f;
+		m_numberPerFrame = 10;
+		
 		scheduleUpdate();		
 	}
 	void update(float dt)
 	{
 		m_frameCnt++;
 		
-		if(m_frameCnt == 300)
+		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
 		}
-		else if(m_frameCnt % 5 == 0)
+		else if(m_frameCnt % m_perFrame == 0)
 		{
-			int t_mCnt = 5;
-			float t_distance = 1.8f;
-			std::string imgFilename = "cumber_missile1.png";
-			
-			CCSize t_mSize = CCSize(6.f,6.f);
 			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
-			int start_angle = rand()%(360/t_mCnt);
+			std::string imgFilename = "cumber_missile1.png";
+			CCSize t_mSize = CCSize(4.f, 4.f);
+			int start_angle = m_well512.GetFloatValue(360);
 			
-			for(int i=0;i<t_mCnt;i++)
+			for(int i=0;i<m_numberPerFrame;i++)
 			{
-				float temp_angle = start_angle+(360.f/t_mCnt)*i;
+				float temp_angle = start_angle+(360.f/m_numberPerFrame)*i;
 				
-				MissileUnit* t_mu = MissileUnit::create(m_position, temp_angle, t_distance,
+				MissileUnit* t_mu = MissileUnit::create(m_position, temp_angle, m_bulletSpeed,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 			}
@@ -181,12 +185,18 @@ public:
 		startSelfRemoveSchedule();
 	}
 protected:
-	int m_frameTerm;
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	
 	int m_frameCnt;
 	CCPoint m_position;
 	CCSpriteBatchNode* batchNode;
+	Well512 m_well512;
 };
 
+/// 골뱅이 패턴.
 class KSAttackPattern2 : public AttackPattern
 {
 public:
@@ -203,7 +213,12 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		
+		m_perFrame = 1;
+		m_totalFrame = 300;
+		m_bulletSpeed = 1.8f;
+		
+		
 		m_frameCnt = 0;
 		m_position = t_sp;
 		angle = m_well512.GetValue(360);
@@ -213,22 +228,20 @@ public:
 	{
 		m_frameCnt++;
 		
-		if(m_frameCnt == 300)
+		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
 		}
-		else if(m_frameCnt % 1 == 0)
+		else if(m_frameCnt % m_perFrame == 0)
 		{
 			
-			angle += 19;
+			angle += 11 * m_perFrame;
 			if(angle >= 360)
 				angle -= 360;
 			
-			int t_mCnt = 5;
-			float t_distance = 1.8f;
 			std::string imgFilename = "cumber_missile1.png";
-			CCSize t_mSize = CCSize(6.f,6.f);
-			MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+			CCSize t_mSize = CCSize(4.f, 4.f);
+			MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 													imgFilename.c_str(), t_mSize, 0.f, 0.f);
 			batchNode->addChild(t_mu);
 			
@@ -258,7 +271,11 @@ public:
 		startSelfRemoveSchedule();
 	}
 protected:
-	int m_frameTerm;
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	
+
 	int m_frameCnt;
 	CCPoint m_position;
 	int angle;
@@ -283,7 +300,9 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		
+		m_bulletSpeed = 3.6f;
+		m_bulletNumber = 10;
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -294,16 +313,14 @@ public:
 	void update(float dt)
 	{
 		float angle = m_well512.GetValue(360);
-		for(int i=0; i<10;i++)
+		for(int i=0; i<m_bulletNumber;i++)
 		{
-			int t_mCnt = 5;
-			float t_distance = 1.8f;
 			std::string imgFilename = "cumber_missile1.png";
-			CCSize t_mSize = CCSize(6.f,6.f);
-			MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+			CCSize t_mSize = CCSize(4.f,4.f);
+			MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 													imgFilename.c_str(), t_mSize, 0.f, 0.f);
 			batchNode->addChild(t_mu);
-			angle += 360 / 10; // 10 개라면
+			angle += 360 / m_bulletNumber;
 			if(angle >= 360)
 				angle -= 360;
 		}
@@ -320,7 +337,9 @@ public:
 		startSelfRemoveSchedule();
 	}
 protected:
-	int m_frameTerm;
+	int m_bulletNumber;
+	float m_bulletSpeed;
+	
 	int m_frameCnt;
 	CCPoint m_position;
 	int angle;
@@ -345,7 +364,13 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		
+		m_perFrame = 8;
+		m_totalFrame = 300;
+		m_bulletSpeed = 5.f;
+		m_numberPerFrame = 15;
+		
+
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -367,23 +392,21 @@ public:
 	{
 		m_frameCnt++;
 		
-		if(m_frameCnt == 300)
+		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
 		}
-		else if(m_frameCnt % 4 == 0)
+		else if(m_frameCnt % m_perFrame == 0)
 		{
 			float startAngle = angle;
-			for(int i=0; i<10; i++)
+			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				int t_mCnt = 5;
-				float t_distance = 1.8f;
 				std::string imgFilename = "cumber_missile1.png";
-				CCSize t_mSize = CCSize(6.f,6.f);
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+				CCSize t_mSize = CCSize(4.f, 4.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
-				startAngle += 360 / 10; // 10 개라면
+				startAngle += 360 / m_numberPerFrame; // 10 개라면
 			}
 		}
 		if(m_frameCnt % 5 == 0)
@@ -393,7 +416,10 @@ public:
 		
 	}
 protected:
-	int m_frameTerm;
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
 	int m_frameCnt;
 	CCPoint m_position;
 	float angle;
@@ -418,7 +444,12 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		m_perFrame = 6;        // p
+		m_totalFrame = 300;    // p
+		m_bulletSpeed = 2.5f;  // p
+		m_numberPerFrame = 10; // p
+		
+		
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -440,23 +471,21 @@ public:
 	{
 		m_frameCnt++;
 		
-		if(m_frameCnt == 300)
+		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
 		}
-		else if(m_frameCnt % 4 == 0)
+		else if(m_frameCnt % m_perFrame == 0)
 		{
 			float startAngle = angle;
-			for(int i=0; i<10; i++)
+			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				int t_mCnt = 5;
-				float t_distance = 1.8f;
 				std::string imgFilename = "cumber_missile1.png";
-				CCSize t_mSize = CCSize(6.f,6.f);
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+				CCSize t_mSize = CCSize(4.f,4.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
-				startAngle += 360 / 10; // 10 개라면
+				startAngle += 360 / m_numberPerFrame; // 10 개라면
 			}
 			angle += 6;
 		}
@@ -467,7 +496,11 @@ public:
 		
 	}
 protected:
-	int m_frameTerm;
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	
 	int m_frameCnt;
 	CCPoint m_position;
 	float angle;
@@ -485,7 +518,10 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		
+		m_bulletSpeed = 1.8f;  // p
+		m_numberPerFrame = 10; // p
+		
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -514,18 +550,16 @@ public:
 		else if(m_frameCnt % 1 == 0)
 		{
 			float startAngle = angle;
-			for(int i=0; i<10; i++)
+			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				int t_mCnt = 5;
-				float t_distance = 1.8f;
 				std::string imgFilename = "cumber_missile1.png";
-				CCSize t_mSize = CCSize(6.f,6.f);
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+				CCSize t_mSize = CCSize(4.f, 4.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
-				startAngle += 360 / 10; // 10 개라면
+				startAngle += 360 / m_numberPerFrame; // 10 개라면
 			}
-			angle += 6;
+			angle += 3;
 		}
 		if(m_frameCnt % 5 == 0)
 		{
@@ -534,8 +568,10 @@ public:
 		
 	}
 protected:
-	int term;
-	int m_frameTerm;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	
+	
 	int m_frameCnt;
 	CCPoint m_position;
 	float angle;
@@ -560,12 +596,15 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
+		m_perFrame = 1;
+		m_totalFrame = 150;   // p
+		m_bulletSpeed = 1.8f; // p
+		m_numberPerFrame = 20;
+		m_term = 6; // p
 		
-		
-		m_frameTerm = 5;
 		m_frameCnt = 0;
 		m_position = t_sp;
-		fireCount = 0;
+		m_fireCount = 0;
 		angle = m_well512.GetValue(360);
 		//		angle = m_well512.GetValue(360);
 		
@@ -584,40 +623,38 @@ public:
 	{
 		m_frameCnt++;
 		
-		if(m_frameCnt == 1*150)
+		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
 		}
-		else if(m_frameCnt % 1 == 0)
+		else if(m_frameCnt % m_perFrame == 0)
 		{
-			if(idleValue <= 0)
+			if(m_idleValue <= 0)
 			{
-				fireCount++;
+				m_fireCount++;
 				float startAngle = angle;
-				for(int i=0; i<20; i++)
+				for(int i=0; i<m_numberPerFrame; i++)
 				{
-					int t_mCnt = 5;
-					float t_distance = 1.8f;
 					std::string imgFilename = "cumber_missile1.png";
-					CCSize t_mSize = CCSize(6.f,6.f);
-					MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+					CCSize t_mSize = CCSize(4.f, 4.f);
+					MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
 															imgFilename.c_str(), t_mSize, 0.f, 0.f);
 					batchNode->addChild(t_mu);
-					startAngle += 20; // 10 개라면
+					startAngle += m_numberPerFrame; // 10 개라면
 				}
 				angle += 2;
 				
 				// 다섯번 쐈으면 15프레임 쉰다.
-				if(fireCount == 5)
+				if(m_fireCount == 5)
 				{
-					fireCount = 0;
-					idleValue = 15;
+					m_fireCount = 0;
+					m_idleValue = 5 * m_term;
 				}
 			}
 			else
 			{
 				angle += 2;
-				idleValue--;
+				m_idleValue--;
 			}
 		}
 		if(m_frameCnt % 5 == 0)
@@ -627,10 +664,13 @@ public:
 		
 	}
 protected:
-	int idleValue;
-	int fireCount;
-	int term;
-	int m_frameTerm;
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_term;
+	int m_idleValue;
+	int m_fireCount;
 	int m_frameCnt;
 	CCPoint m_position;
 	float angle;
@@ -639,6 +679,7 @@ protected:
 	CCSpriteBatchNode* batchNode;
 };
 
+// 무궁화 패턴
 class KSAttackPattern8 : public AttackPattern
 {
 public:
@@ -656,7 +697,11 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		m_perFrame = 12;		// p
+		m_totalFrame = 300;		// p
+		m_bulletSpeed = 2.f;		// p
+		m_numberPerFrame = 10;	// p
+		
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -677,41 +722,36 @@ public:
 	void update(float dt)
 	{
 		m_frameCnt++;
-		
-		if(m_frameCnt == 300)
+		CCSize t_mSize = CCSize(4.f,4.f);
+		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
 		}
-		else if(m_frameCnt % 4 == 0)
+		else if(m_frameCnt % m_perFrame == 0)
 		{
 			float startAngle = angle;
-			for(int i=0; i<10; i++)
+			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				int t_mCnt = 5;
-				float t_distance = 1.8f;
 				std::string imgFilename = "cumber_missile1.png";
-				CCSize t_mSize = CCSize(6.f,6.f);
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, t_distance,
+				
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
-				startAngle += 360 / 10; // 10 개라면
+				startAngle += 360 / m_numberPerFrame; // 10 개라면
 			}
 			
 			float startAngle2 = angle2;
-			for(int i=0; i<10; i++)
+			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				int t_mCnt = 5;
-				float t_distance = 1.8f;
 				std::string imgFilename = "cumber_missile1.png";
-				CCSize t_mSize = CCSize(6.f,6.f);
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle2, t_distance,
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle2, m_bulletSpeed,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
-				startAngle2 += 360 / 10; // 10 개라면
+				startAngle2 += 360 / m_numberPerFrame; // 10 개라면
 			}
 			
-			angle += 3;
-			angle2 -= 3;
+			angle += m_perFrame / 3;
+			angle2 -= m_perFrame / 3;
 		}
 		if(m_frameCnt % 5 == 0)
 		{
@@ -720,7 +760,11 @@ public:
 		
 	}
 protected:
-	int m_frameTerm;
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	
 	int m_frameCnt;
 	CCPoint m_position;
 	float angle;
@@ -747,7 +791,11 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		
+		m_bulletSpeed = 2.f;
+		m_numberPerFrame = 5;
+		
+
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -770,31 +818,29 @@ public:
 		float angle = rad2Deg(rad);
 		float angle2 = rad2Deg(rad);
 		
-		for(int i=0; i<5;i++)
+		for(int i=0; i<m_numberPerFrame;i++)
 		{
-			int t_mCnt = 5;
-			float t_distance = 1.8f;
 			std::string imgFilename = "cumber_missile1.png";
-			CCSize t_mSize = CCSize(6.f,6.f);
+			CCSize t_mSize = CCSize(4.f, 4.f);
 			if(angle == angle2)
 			{
-				MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+				MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 			}
 			else
 			{
-				MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+				MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 														imgFilename.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 				
-				MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, t_distance,
+				MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
 														 imgFilename.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu2);
 			}
 			
-			angle += 35 / 5; // 10 개라면
-			angle2 -= 35 / 5;
+			angle += 35 / m_numberPerFrame; // 10 개라면
+			angle2 -= 35 / m_numberPerFrame;
 			
 			if(angle >= 360)
 				angle -= 360;
@@ -805,7 +851,9 @@ public:
 		stopMyAction();
 	}
 protected:
-	int m_frameTerm;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+
 	int m_frameCnt;
 	CCPoint m_position;
 	Well512 m_well512;
@@ -830,7 +878,11 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		m_perFrame = 4;
+		m_totalFrame = 150;
+		m_bulletSpeed = 2.5f;
+		m_numberPerFrame = 5;
+		
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -850,44 +902,43 @@ public:
 	{
 		m_frameCnt++;
 		
-		if(m_frameCnt == 150)
+		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
 		}
 		else
 		{
-			if(m_frameCnt % 4 == 0)
+			if(m_frameCnt % m_perFrame == 0)
 			{
 				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
 				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
 				float angle = rad2Deg(rad);
 				float angle2 = rad2Deg(rad);
 				
-				for(int i=0; i<5;i++)
+				for(int i=0; i<m_numberPerFrame;i++)
 				{
-					int t_mCnt = 5;
-					float t_distance = 1.8f;
+					int t_mCnt = m_numberPerFrame;
 					std::string imgFilename = "cumber_missile1.png";
-					CCSize t_mSize = CCSize(6.f,6.f);
+					CCSize t_mSize = CCSize(4.f, 4.f);
 					if(angle == angle2)
 					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 																imgFilename.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 					}
 					else
 					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 																imgFilename.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 						
-						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, t_distance,
+						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
 																 imgFilename.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu2);
 					}
 					
-					angle += 35 / 5; // 10 개라면
-					angle2 -= 35 / 5;
+					angle += 35 / m_numberPerFrame; // 10 개라면
+					angle2 -= 35 / m_numberPerFrame;
 					
 					if(angle >= 360)
 						angle -= 360;
@@ -899,7 +950,11 @@ public:
 		}
 	}
 protected:
-	int m_frameTerm;
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	
 	int m_frameCnt;
 	CCPoint m_position;
 	Well512 m_well512;
@@ -923,7 +978,11 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		m_perFrame = 4;
+		m_totalFrame = 150;
+		m_bulletSpeed = 2.f;
+		m_numberPerFrame = 5;
+		
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -943,44 +1002,43 @@ public:
 	{
 		m_frameCnt++;
 		
-		if(m_frameCnt == 150)
+		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
 		}
 		else
 		{
-			if(m_frameCnt % 4 == 0)
+			if(m_frameCnt % m_perFrame == 0)
 			{
 				CCPoint jackPoint = firstJackPosition;
 				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
 				float angle = rad2Deg(rad);
 				float angle2 = rad2Deg(rad);
 				
-				for(int i=0; i<5;i++)
+				for(int i=0; i<m_numberPerFrame;i++)
 				{
 					int t_mCnt = 5;
-					float t_distance = 1.8f;
 					std::string imgFilename = "cumber_missile1.png";
-					CCSize t_mSize = CCSize(6.f,6.f);
+					CCSize t_mSize = CCSize(4.f, 4.f);
 					if(angle == angle2)
 					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 																imgFilename.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 					}
 					else
 					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 																imgFilename.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 						
-						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, t_distance,
+						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
 																 imgFilename.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu2);
 					}
 					
-					angle += 35 / 5; // 10 개라면
-					angle2 -= 35 / 5;
+					angle += 35 / m_numberPerFrame; // 10 개라면
+					angle2 -= 35 / m_numberPerFrame;
 					
 					if(angle >= 360)
 						angle -= 360;
@@ -992,8 +1050,12 @@ public:
 		}
 	}
 protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	
 	CCPoint firstJackPosition;
-	int m_frameTerm;
 	int m_frameCnt;
 	CCPoint m_position;
 	Well512 m_well512;
@@ -1017,7 +1079,11 @@ public:
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_frameTerm = 5;
+		m_perFrame = 4;
+		m_totalFrame = 150;
+		m_bulletSpeed = 2.f;
+		m_numberPerFrame = 5;
+		
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -1038,13 +1104,13 @@ public:
 	{
 		m_frameCnt++;
 		
-		if(m_frameCnt == 150)
+		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
 		}
 		else
 		{
-			if(m_frameCnt % 4 == 0)
+			if(m_frameCnt % m_perFrame == 0)
 			{
 				
 				CCPoint jackPoint = firstJackPosition;
@@ -1053,31 +1119,30 @@ public:
 				float angle = rad2Deg(rad);
 				float angle2 = rad2Deg(rad);
 				
-				for(int i=0; i<5;i++)
+				for(int i=0; i<m_numberPerFrame;i++)
 				{
-					int t_mCnt = 5;
-					float t_distance = 1.8f;
+					int t_mCnt = m_numberPerFrame;
 					std::string imgFilename = "cumber_missile1.png";
-					CCSize t_mSize = CCSize(6.f,6.f);
+					CCSize t_mSize = CCSize(4.f, 4.f);
 					if(angle == angle2)
 					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 																imgFilename.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 					}
 					else
 					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, t_distance,
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 																imgFilename.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 						
-						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, t_distance,
+						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
 																 imgFilename.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu2);
 					}
 					
-					angle += 35 / 5; // 10 개라면
-					angle2 -= 35 / 5;
+					angle += 35 / m_numberPerFrame; // 10 개라면
+					angle2 -= 35 / m_numberPerFrame;
 					
 					if(angle >= 360)
 						angle -= 360;
@@ -1089,9 +1154,13 @@ public:
 		}
 	}
 protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	
 	CCPoint firstJackPosition;
 	int fireCount;
-	int m_frameTerm;
 	int m_frameCnt;
 	CCPoint m_position;
 	Well512 m_well512;

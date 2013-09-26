@@ -13,7 +13,8 @@
 #include "GameData.h"
 #include <queue>
 #include "StarGoldData.h"
-
+#include "cocos-ext.h"
+USING_NS_CC_EXT;
 using namespace cocos2d;
 using namespace std;
 
@@ -709,6 +710,7 @@ public:
 	virtual void lineDie(IntPoint t_p) = 0;
 };
 
+
 class ThrowObject : public CrashMapObject
 {
 public:
@@ -751,7 +753,9 @@ private:
 	
 	void removeEffect()
 	{
-		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+//		objImg->unscheduleAllSelectors();
+		objImg->stopAllActions();
+		CCScaleTo* t_fade = CCScaleTo::create(1.f, 0);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThrowObject::selfRemove));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
 		
@@ -805,10 +809,18 @@ private:
 		random_spin = rand()%11 - 5;
 		mSize = t_mSize;
 		
+		type = 1;
 		if(type == 1)
 		{
-			int randomValue = rand()%2 + 1;
-			objImg = CCSprite::create(CCString::createWithFormat("chapter1_throw_%d.png", randomValue)->getCString());
+//			objImg = CCSprite::create(CCString::createWithFormat("chapter1_throw_%d.png", randomValue)->getCString());
+//			int randomValue = rand()%2 + 1;
+//
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			CCBReader* reader = new CCBReader(nodeLoader);
+			objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw1.ccbi",this));
+//			m_headAnimationManager = reader->getAnimationManager();
+//			this->addChild(m_headImg, 10);
+			reader->release();
 			addChild(objImg);
 		}
 		else if(type == 2) // ice
