@@ -375,6 +375,13 @@ void Coconut::cumberAttack(float dt)
 }
 COLLISION_CODE Coconut::crashWithX(IntPoint check_position)
 {
+	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
+	   check_position.y < mapLoopRange::mapHeightInnerBegin || check_position.y >= mapLoopRange::mapHeightInnerEnd )
+	{
+		// 나갔을 시.
+		return COLLISION_CODE::kCOLLISION_OUTLINE;
+	}
+	
 	// 이미 그려진 곳에 충돌했을 경우.
 	if(gameData->mapState[check_position.x][check_position.y] == mapOldline ||
 	   gameData->mapState[check_position.x][check_position.y] == mapOldget)
@@ -393,12 +400,7 @@ COLLISION_CODE Coconut::crashWithX(IntPoint check_position)
 	}
 	
 	
-	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
-	   check_position.y < mapLoopRange::mapHeightInnerBegin || check_position.y >= mapLoopRange::mapHeightInnerEnd )
-	{
-		// 나갔을 시.
-		return COLLISION_CODE::kCOLLISION_OUTLINE;
-	}
+	
 	
 	
 	return COLLISION_CODE::kCOLLISION_NONE;
