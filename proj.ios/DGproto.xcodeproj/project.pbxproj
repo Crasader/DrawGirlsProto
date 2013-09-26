@@ -194,7 +194,6 @@
 		A71A43D717D57E81004B9F01 /* Cumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A436017D57E81004B9F01 /* Cumber.cpp */; };
 		A71A43D817D57E81004B9F01 /* CumberBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A436217D57E81004B9F01 /* CumberBase.cpp */; };
 		A71A43D917D57E81004B9F01 /* CumberEmotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A436417D57E81004B9F01 /* CumberEmotion.cpp */; };
-		A71A43DA17D57E81004B9F01 /* DownloadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A436717D57E81004B9F01 /* DownloadingScene.cpp */; };
 		A71A43DB17D57E81004B9F01 /* Escaper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A436A17D57E81004B9F01 /* Escaper.cpp */; };
 		A71A43DC17D57E81004B9F01 /* FailScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A436B17D57E81004B9F01 /* FailScene.cpp */; };
 		A71A43DD17D57E81004B9F01 /* GageBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A436D17D57E81004B9F01 /* GageBar.cpp */; };
@@ -260,12 +259,27 @@
 		A71A516A17DEE078004B9F01 /* WorldMapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A516817DEE070004B9F01 /* WorldMapScene.cpp */; };
 		A71A516D17DEF37E004B9F01 /* StageSettingPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A516B17DEF37A004B9F01 /* StageSettingPopup.cpp */; };
 		A71A517017DF00A7004B9F01 /* ContinuePopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A516E17DF00A3004B9F01 /* ContinuePopup.cpp */; };
-		A71A517A17DFF6D9004B9F01 /* KSCumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517117DFF6C2004B9F01 /* KSCumber.cpp */; };
 		A71A517B17DFF6D9004B9F01 /* KSCumberBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517317DFF6C7004B9F01 /* KSCumberBase.cpp */; };
 		A71A517C17DFF6D9004B9F01 /* SnakeCumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517617DFF6CE004B9F01 /* SnakeCumber.cpp */; };
 		A71A517D17DFF6D9004B9F01 /* Well512.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517817DFF6D5004B9F01 /* Well512.cpp */; };
 		A71A517F17DFF7E6004B9F01 /* GameData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A517E17DFF7E3004B9F01 /* GameData.cpp */; };
 		A71A518217DFF868004B9F01 /* ProbSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A518017DFF863004B9F01 /* ProbSelector.cpp */; };
+		A71A518617E17555004B9F01 /* ConditionPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A518417E17552004B9F01 /* ConditionPopup.cpp */; };
+		A71A518917E18C6A004B9F01 /* FromTo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A518717E18C67004B9F01 /* FromTo.cpp */; };
+		A71A518F17E36B4C004B9F01 /* KSUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A518D17E36B44004B9F01 /* KSUtil.cpp */; };
+		A71A519217E40AA6004B9F01 /* ItemBuyPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A71A519017E40A9E004B9F01 /* ItemBuyPopup.cpp */; };
+		A764FCBF17E8B60300FB9D92 /* StageSettingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A764FCBD17E8B60100FB9D92 /* StageSettingScene.cpp */; };
+		A764FCC217E96A8700FB9D92 /* CardSettingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A764FCC017E96A8600FB9D92 /* CardSettingScene.cpp */; };
+		A764FCC517EB314300FB9D92 /* CardFullPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A764FCC317EB314100FB9D92 /* CardFullPopup.cpp */; };
+		A795419D17EBE266002C7D93 /* CollectionListScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A795419B17EBE266002C7D93 /* CollectionListScene.cpp */; };
+		A79541A017EBEE6D002C7D93 /* CollectionView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A795419E17EBEE6D002C7D93 /* CollectionView.cpp */; };
+		A79541A317EC4383002C7D93 /* CollectionBook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A79541A117EC4382002C7D93 /* CollectionBook.cpp */; };
+		A79541A617F1BCD5002C7D93 /* StageInfoDown.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A79541A417F1BCD3002C7D93 /* StageInfoDown.cpp */; };
+		A79541A917F1F1AE002C7D93 /* ServerDataSave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A79541A717F1F1AA002C7D93 /* ServerDataSave.cpp */; };
+		A79541B117F35C58002C7D93 /* Apple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A79541AA17F35C4C002C7D93 /* Apple.cpp */; };
+		A79541B217F35C58002C7D93 /* AttackPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A79541AC17F35C4F002C7D93 /* AttackPattern.cpp */; };
+		A79541B317F35C58002C7D93 /* Coconut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A79541AD17F35C52002C7D93 /* Coconut.cpp */; };
+		A79541B417F35C58002C7D93 /* Melon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A79541AF17F35C55002C7D93 /* Melon.cpp */; };
 		F293B3CD15EB7BE500256477 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3CC15EB7BE500256477 /* QuartzCore.framework */; };
 		F293B3CF15EB7BE500256477 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3CE15EB7BE500256477 /* OpenGLES.framework */; };
 		F293B3D115EB7BE500256477 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3D015EB7BE500256477 /* OpenAL.framework */; };
@@ -681,8 +695,6 @@
 		A71A436417D57E81004B9F01 /* CumberEmotion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CumberEmotion.cpp; path = ../Classes/CumberEmotion.cpp; sourceTree = "<group>"; };
 		A71A436517D57E81004B9F01 /* CumberEmotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CumberEmotion.h; path = ../Classes/CumberEmotion.h; sourceTree = "<group>"; };
 		A71A436617D57E81004B9F01 /* DataStorageHub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataStorageHub.h; path = ../Classes/DataStorageHub.h; sourceTree = "<group>"; };
-		A71A436717D57E81004B9F01 /* DownloadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DownloadingScene.cpp; path = ../Classes/DownloadingScene.cpp; sourceTree = "<group>"; };
-		A71A436817D57E81004B9F01 /* DownloadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DownloadingScene.h; path = ../Classes/DownloadingScene.h; sourceTree = "<group>"; };
 		A71A436917D57E81004B9F01 /* EnumDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnumDefine.h; path = ../Classes/EnumDefine.h; sourceTree = "<group>"; };
 		A71A436A17D57E81004B9F01 /* Escaper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Escaper.cpp; path = ../Classes/Escaper.cpp; sourceTree = "<group>"; };
 		A71A436B17D57E81004B9F01 /* FailScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FailScene.cpp; path = ../Classes/FailScene.cpp; sourceTree = "<group>"; };
@@ -813,8 +825,6 @@
 		A71A516C17DEF37B004B9F01 /* StageSettingPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StageSettingPopup.h; path = ../Classes/StageSettingPopup.h; sourceTree = "<group>"; };
 		A71A516E17DF00A3004B9F01 /* ContinuePopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ContinuePopup.cpp; path = ../Classes/ContinuePopup.cpp; sourceTree = "<group>"; };
 		A71A516F17DF00A5004B9F01 /* ContinuePopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContinuePopup.h; path = ../Classes/ContinuePopup.h; sourceTree = "<group>"; };
-		A71A517117DFF6C2004B9F01 /* KSCumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KSCumber.cpp; path = ../Classes/KSCumber.cpp; sourceTree = "<group>"; };
-		A71A517217DFF6C5004B9F01 /* KSCumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KSCumber.h; path = ../Classes/KSCumber.h; sourceTree = "<group>"; };
 		A71A517317DFF6C7004B9F01 /* KSCumberBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = KSCumberBase.cpp; path = ../Classes/KSCumberBase.cpp; sourceTree = "<group>"; };
 		A71A517417DFF6CA004B9F01 /* KSCumberBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KSCumberBase.h; path = ../Classes/KSCumberBase.h; sourceTree = "<group>"; };
 		A71A517517DFF6CC004B9F01 /* KSGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KSGeometry.h; path = ../Classes/KSGeometry.h; sourceTree = "<group>"; };
@@ -825,6 +835,37 @@
 		A71A517E17DFF7E3004B9F01 /* GameData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameData.cpp; path = ../Classes/GameData.cpp; sourceTree = "<group>"; };
 		A71A518017DFF863004B9F01 /* ProbSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ProbSelector.cpp; path = ../Classes/ProbSelector.cpp; sourceTree = "<group>"; };
 		A71A518117DFF865004B9F01 /* ProbSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProbSelector.h; path = ../Classes/ProbSelector.h; sourceTree = "<group>"; };
+		A71A518417E17552004B9F01 /* ConditionPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ConditionPopup.cpp; path = ../Classes/ConditionPopup.cpp; sourceTree = "<group>"; };
+		A71A518517E17553004B9F01 /* ConditionPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConditionPopup.h; path = ../Classes/ConditionPopup.h; sourceTree = "<group>"; };
+		A71A518717E18C67004B9F01 /* FromTo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FromTo.cpp; path = ../Classes/FromTo.cpp; sourceTree = "<group>"; };
+		A71A518817E18C69004B9F01 /* FromTo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FromTo.h; path = ../Classes/FromTo.h; sourceTree = "<group>"; };
+		A71A518D17E36B44004B9F01 /* KSUtil.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = KSUtil.cpp; path = ../Classes/KSUtil.cpp; sourceTree = "<group>"; };
+		A71A518E17E36B48004B9F01 /* KSUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KSUtil.h; path = ../Classes/KSUtil.h; sourceTree = "<group>"; };
+		A71A519017E40A9E004B9F01 /* ItemBuyPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ItemBuyPopup.cpp; path = ../Classes/ItemBuyPopup.cpp; sourceTree = "<group>"; };
+		A71A519117E40AA1004B9F01 /* ItemBuyPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ItemBuyPopup.h; path = ../Classes/ItemBuyPopup.h; sourceTree = "<group>"; };
+		A764FCBD17E8B60100FB9D92 /* StageSettingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StageSettingScene.cpp; path = ../Classes/StageSettingScene.cpp; sourceTree = "<group>"; };
+		A764FCBE17E8B60200FB9D92 /* StageSettingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StageSettingScene.h; path = ../Classes/StageSettingScene.h; sourceTree = "<group>"; };
+		A764FCC017E96A8600FB9D92 /* CardSettingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CardSettingScene.cpp; path = ../Classes/CardSettingScene.cpp; sourceTree = "<group>"; };
+		A764FCC117E96A8700FB9D92 /* CardSettingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardSettingScene.h; path = ../Classes/CardSettingScene.h; sourceTree = "<group>"; };
+		A764FCC317EB314100FB9D92 /* CardFullPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CardFullPopup.cpp; path = ../Classes/CardFullPopup.cpp; sourceTree = "<group>"; };
+		A764FCC417EB314200FB9D92 /* CardFullPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardFullPopup.h; path = ../Classes/CardFullPopup.h; sourceTree = "<group>"; };
+		A795419B17EBE266002C7D93 /* CollectionListScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CollectionListScene.cpp; path = ../Classes/CollectionListScene.cpp; sourceTree = "<group>"; };
+		A795419C17EBE266002C7D93 /* CollectionListScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CollectionListScene.h; path = ../Classes/CollectionListScene.h; sourceTree = "<group>"; };
+		A795419E17EBEE6D002C7D93 /* CollectionView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CollectionView.cpp; path = ../Classes/CollectionView.cpp; sourceTree = "<group>"; };
+		A795419F17EBEE6D002C7D93 /* CollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CollectionView.h; path = ../Classes/CollectionView.h; sourceTree = "<group>"; };
+		A79541A117EC4382002C7D93 /* CollectionBook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CollectionBook.cpp; path = ../Classes/CollectionBook.cpp; sourceTree = "<group>"; };
+		A79541A217EC4382002C7D93 /* CollectionBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CollectionBook.h; path = ../Classes/CollectionBook.h; sourceTree = "<group>"; };
+		A79541A417F1BCD3002C7D93 /* StageInfoDown.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = StageInfoDown.cpp; path = ../Classes/StageInfoDown.cpp; sourceTree = "<group>"; };
+		A79541A517F1BCD4002C7D93 /* StageInfoDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StageInfoDown.h; path = ../Classes/StageInfoDown.h; sourceTree = "<group>"; };
+		A79541A717F1F1AA002C7D93 /* ServerDataSave.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ServerDataSave.cpp; path = ../Classes/ServerDataSave.cpp; sourceTree = "<group>"; };
+		A79541A817F1F1AB002C7D93 /* ServerDataSave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerDataSave.h; path = ../Classes/ServerDataSave.h; sourceTree = "<group>"; };
+		A79541AA17F35C4C002C7D93 /* Apple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Apple.cpp; path = ../Classes/Apple.cpp; sourceTree = "<group>"; };
+		A79541AB17F35C4D002C7D93 /* Apple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Apple.h; path = ../Classes/Apple.h; sourceTree = "<group>"; };
+		A79541AC17F35C4F002C7D93 /* AttackPattern.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AttackPattern.cpp; path = ../Classes/AttackPattern.cpp; sourceTree = "<group>"; };
+		A79541AD17F35C52002C7D93 /* Coconut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Coconut.cpp; path = ../Classes/Coconut.cpp; sourceTree = "<group>"; };
+		A79541AE17F35C53002C7D93 /* Coconut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Coconut.h; path = ../Classes/Coconut.h; sourceTree = "<group>"; };
+		A79541AF17F35C55002C7D93 /* Melon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Melon.cpp; path = ../Classes/Melon.cpp; sourceTree = "<group>"; };
+		A79541B017F35C57002C7D93 /* Melon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Melon.h; path = ../Classes/Melon.h; sourceTree = "<group>"; };
 		F293B3C815EB7BE500256477 /* DGproto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DGproto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F293B3CC15EB7BE500256477 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F293B3CE15EB7BE500256477 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1623,20 +1664,19 @@
 		F293BB7C15EB830F00256477 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A71A442917D59BAD004B9F01 /* BaseXX.cpp */,
-				A71A442A17D59BAD004B9F01 /* BaseXX.h */,
-				A71A442B17D59BAD004B9F01 /* CoreDes.cpp */,
-				A71A442C17D59BAD004B9F01 /* CoreDes.h */,
-				A71A442D17D59BAD004B9F01 /* GDLib.cpp */,
-				A71A442E17D59BAD004B9F01 /* GDLib.h */,
-				A71A442F17D59BAD004B9F01 /* GraphDog.cpp */,
-				A71A443017D59BAD004B9F01 /* GraphDog.h */,
-				A71A443117D59BAD004B9F01 /* KSDes.cpp */,
-				A71A443217D59BAD004B9F01 /* KSDes.h */,
-				A71A443317D59BAE004B9F01 /* OpenUDID.h */,
-				A71A443417D59BAE004B9F01 /* OpenUDID.m */,
+				A79541AA17F35C4C002C7D93 /* Apple.cpp */,
+				A79541AB17F35C4D002C7D93 /* Apple.h */,
+				A79541AC17F35C4F002C7D93 /* AttackPattern.cpp */,
+				A79541AD17F35C52002C7D93 /* Coconut.cpp */,
+				A79541AE17F35C53002C7D93 /* Coconut.h */,
+				A79541AF17F35C55002C7D93 /* Melon.cpp */,
+				A79541B017F35C57002C7D93 /* Melon.h */,
+				A71A518D17E36B44004B9F01 /* KSUtil.cpp */,
+				A71A518E17E36B48004B9F01 /* KSUtil.h */,
 				A71A434617D57E81004B9F01 /* AlertEngine.cpp */,
 				A71A434717D57E81004B9F01 /* AlertEngine.h */,
+				F293BB7E15EB831F00256477 /* AppDelegate.cpp */,
+				F293BB7F15EB831F00256477 /* AppDelegate.h */,
 				A71A434817D57E81004B9F01 /* AreaGage.cpp */,
 				A71A434917D57E81004B9F01 /* AreaGage.h */,
 				A71A434A17D57E81004B9F01 /* Array.cpp */,
@@ -1645,6 +1685,8 @@
 				A71A434D17D57E81004B9F01 /* AudioEngine.h */,
 				A71A434E17D57E81004B9F01 /* AutoAttacker.h */,
 				A71A434F17D57E81004B9F01 /* BalanceData.h */,
+				A71A442917D59BAD004B9F01 /* BaseXX.cpp */,
+				A71A442A17D59BAD004B9F01 /* BaseXX.h */,
 				A71A435017D57E81004B9F01 /* BossEye.cpp */,
 				A71A435117D57E81004B9F01 /* BossEye.h */,
 				A71A435217D57E81004B9F01 /* BossLifeGage.cpp */,
@@ -1653,44 +1695,45 @@
 				A71A435517D57E81004B9F01 /* checked.h */,
 				A71A435617D57E81004B9F01 /* ClearScene.cpp */,
 				A71A435717D57E81004B9F01 /* ClearScene.h */,
+				A764FCC317EB314100FB9D92 /* CardFullPopup.cpp */,
+				A764FCC417EB314200FB9D92 /* CardFullPopup.h */,
 				A71A435817D57E81004B9F01 /* ClearShowTime.cpp */,
 				A71A435917D57E81004B9F01 /* ClearShowTime.h */,
+				A71A518417E17552004B9F01 /* ConditionPopup.cpp */,
+				A71A518517E17553004B9F01 /* ConditionPopup.h */,
+				A71A516E17DF00A3004B9F01 /* ContinuePopup.cpp */,
+				A71A516F17DF00A5004B9F01 /* ContinuePopup.h */,
 				A71A435A17D57E81004B9F01 /* ControlType.cpp */,
 				A71A435B17D57E81004B9F01 /* ControlType.h */,
 				A71A435C17D57E81004B9F01 /* Convert.cpp */,
 				A71A435D17D57E81004B9F01 /* core.h */,
+				A71A442B17D59BAD004B9F01 /* CoreDes.cpp */,
+				A71A442C17D59BAD004B9F01 /* CoreDes.h */,
 				A71A435E17D57E81004B9F01 /* CountingBMLabel.cpp */,
 				A71A435F17D57E81004B9F01 /* CountingBMLabel.h */,
 				A71A436017D57E81004B9F01 /* Cumber.cpp */,
 				A71A436117D57E81004B9F01 /* Cumber.h */,
-				A71A517117DFF6C2004B9F01 /* KSCumber.cpp */,
-				A71A517217DFF6C5004B9F01 /* KSCumber.h */,
-				A71A517317DFF6C7004B9F01 /* KSCumberBase.cpp */,
-				A71A517417DFF6CA004B9F01 /* KSCumberBase.h */,
-				A71A517517DFF6CC004B9F01 /* KSGeometry.h */,
-				A71A517617DFF6CE004B9F01 /* SnakeCumber.cpp */,
-				A71A517717DFF6D1004B9F01 /* SnakeCumber.h */,
-				A71A517817DFF6D5004B9F01 /* Well512.cpp */,
-				A71A517917DFF6D6004B9F01 /* Well512.h */,
-				A71A518017DFF863004B9F01 /* ProbSelector.cpp */,
-				A71A518117DFF865004B9F01 /* ProbSelector.h */,
 				A71A436217D57E81004B9F01 /* CumberBase.cpp */,
 				A71A436317D57E81004B9F01 /* CumberBase.h */,
 				A71A436417D57E81004B9F01 /* CumberEmotion.cpp */,
 				A71A436517D57E81004B9F01 /* CumberEmotion.h */,
 				A71A436617D57E81004B9F01 /* DataStorageHub.h */,
-				A71A436717D57E81004B9F01 /* DownloadingScene.cpp */,
-				A71A436817D57E81004B9F01 /* DownloadingScene.h */,
 				A71A436917D57E81004B9F01 /* EnumDefine.h */,
 				A71A436A17D57E81004B9F01 /* Escaper.cpp */,
 				A71A436B17D57E81004B9F01 /* FailScene.cpp */,
 				A71A436C17D57E81004B9F01 /* FailScene.h */,
+				A71A518717E18C67004B9F01 /* FromTo.cpp */,
+				A71A518817E18C69004B9F01 /* FromTo.h */,
 				A71A436D17D57E81004B9F01 /* GageBar.cpp */,
 				A71A436E17D57E81004B9F01 /* GageBar.h */,
-				A71A436F17D57E81004B9F01 /* GameData.h */,
 				A71A517E17DFF7E3004B9F01 /* GameData.cpp */,
+				A71A436F17D57E81004B9F01 /* GameData.h */,
 				A71A437017D57E81004B9F01 /* GameItemManager.cpp */,
 				A71A437117D57E81004B9F01 /* GameItemManager.h */,
+				A71A442D17D59BAD004B9F01 /* GDLib.cpp */,
+				A71A442E17D59BAD004B9F01 /* GDLib.h */,
+				A71A442F17D59BAD004B9F01 /* GraphDog.cpp */,
+				A71A443017D59BAD004B9F01 /* GraphDog.h */,
 				A71A437217D57E81004B9F01 /* InApp.h */,
 				A71A437317D57E81004B9F01 /* InApp.mm */,
 				A71A437417D57E81004B9F01 /* InAppDelegator.cpp */,
@@ -1699,13 +1742,16 @@
 				A71A437717D57E81004B9F01 /* Indenter.cpp */,
 				A71A437817D57E81004B9F01 /* Jack.cpp */,
 				A71A437917D57E81004B9F01 /* Jack.h */,
-				A71A516E17DF00A3004B9F01 /* ContinuePopup.cpp */,
-				A71A516F17DF00A5004B9F01 /* ContinuePopup.h */,
 				A71A437A17D57E81004B9F01 /* JackMissile.h */,
 				A71A437B17D57E81004B9F01 /* JNIKelper.cpp */,
 				A71A437C17D57E81004B9F01 /* JNIKelper.h */,
 				A71A437D17D57E81004B9F01 /* JsonBox */,
 				A71A438817D57E81004B9F01 /* JsonBox.h */,
+				A71A517317DFF6C7004B9F01 /* KSCumberBase.cpp */,
+				A71A517417DFF6CA004B9F01 /* KSCumberBase.h */,
+				A71A443117D59BAD004B9F01 /* KSDes.cpp */,
+				A71A443217D59BAD004B9F01 /* KSDes.h */,
+				A71A517517DFF6CC004B9F01 /* KSGeometry.h */,
 				A71A438917D57E81004B9F01 /* MainCumber.cpp */,
 				A71A438A17D57E81004B9F01 /* MainCumber.h */,
 				A71A438B17D57E81004B9F01 /* MaingameScene.cpp */,
@@ -1724,18 +1770,22 @@
 				A71A439817D57E81004B9F01 /* MyLocalization.cpp */,
 				A71A439917D57E81004B9F01 /* MyLocalization.h */,
 				A71A439A17D57E81004B9F01 /* Object.cpp */,
+				A71A443317D59BAE004B9F01 /* OpenUDID.h */,
+				A71A443417D59BAE004B9F01 /* OpenUDID.m */,
 				A71A439B17D57E81004B9F01 /* OtherEffect.h */,
 				A71A439C17D57E81004B9F01 /* PathManager.h */,
 				A71A439D17D57E81004B9F01 /* PausePopupLayer.cpp */,
 				A71A439E17D57E81004B9F01 /* PausePopupLayer.h */,
 				A71A439F17D57E81004B9F01 /* PlayUI.h */,
+				A71A518017DFF863004B9F01 /* ProbSelector.cpp */,
+				A71A518117DFF865004B9F01 /* ProbSelector.h */,
 				A71A43A017D57E81004B9F01 /* RandomSelector.h */,
+				A71A43A517D57E81004B9F01 /* SaveData.cpp */,
+				A71A43A617D57E81004B9F01 /* SaveData.h */,
 				A71A43A117D57E81004B9F01 /* SaveData_android.cpp */,
 				A71A43A217D57E81004B9F01 /* SaveData_android.h */,
 				A71A43A317D57E81004B9F01 /* SaveData_ios.h */,
 				A71A43A417D57E81004B9F01 /* SaveData_ios.mm */,
-				A71A43A517D57E81004B9F01 /* SaveData.cpp */,
-				A71A43A617D57E81004B9F01 /* SaveData.h */,
 				A71A43A717D57E81004B9F01 /* ScreenSide.cpp */,
 				A71A43A817D57E81004B9F01 /* ScreenSide.h */,
 				A71A43A917D57E81004B9F01 /* SelectedMapData.h */,
@@ -1745,17 +1795,19 @@
 				A71A43AD17D57E81004B9F01 /* ShowTimeScene.h */,
 				A71A43AE17D57E81004B9F01 /* SilhouetteData.cpp */,
 				A71A43AF17D57E81004B9F01 /* SilhouetteData.h */,
+				A71A517617DFF6CE004B9F01 /* SnakeCumber.cpp */,
+				A71A517717DFF6D1004B9F01 /* SnakeCumber.h */,
 				A71A43B017D57E81004B9F01 /* SolidusEscaper.cpp */,
 				A71A43B117D57E81004B9F01 /* StageImgLoader.cpp */,
 				A71A43B217D57E81004B9F01 /* StageImgLoader.h */,
+				A71A516B17DEF37A004B9F01 /* StageSettingPopup.cpp */,
+				A71A516C17DEF37B004B9F01 /* StageSettingPopup.h */,
+				A71A519017E40A9E004B9F01 /* ItemBuyPopup.cpp */,
+				A71A519117E40AA1004B9F01 /* ItemBuyPopup.h */,
 				A71A43B317D57E81004B9F01 /* StarGoldData.cpp */,
 				A71A43B417D57E81004B9F01 /* StarGoldData.h */,
 				A71A43B517D57E81004B9F01 /* StartingScene.cpp */,
 				A71A43B617D57E81004B9F01 /* StartingScene.h */,
-				A71A516817DEE070004B9F01 /* WorldMapScene.cpp */,
-				A71A516917DEE072004B9F01 /* WorldMapScene.h */,
-				A71A516B17DEF37A004B9F01 /* StageSettingPopup.cpp */,
-				A71A516C17DEF37B004B9F01 /* StageSettingPopup.h */,
 				A71A43C017D57E81004B9F01 /* Str2Token.cpp */,
 				A71A43C117D57E81004B9F01 /* Str2Token.h */,
 				A71A43C217D57E81004B9F01 /* StringCodec.cpp */,
@@ -1769,8 +1821,24 @@
 				A71A43CA17D57E81004B9F01 /* Value.cpp */,
 				A71A43CB17D57E81004B9F01 /* VerificationController.h */,
 				A71A43CC17D57E81004B9F01 /* VerificationController.m */,
-				F293BB7E15EB831F00256477 /* AppDelegate.cpp */,
-				F293BB7F15EB831F00256477 /* AppDelegate.h */,
+				A71A517817DFF6D5004B9F01 /* Well512.cpp */,
+				A71A517917DFF6D6004B9F01 /* Well512.h */,
+				A71A516817DEE070004B9F01 /* WorldMapScene.cpp */,
+				A71A516917DEE072004B9F01 /* WorldMapScene.h */,
+				A79541A417F1BCD3002C7D93 /* StageInfoDown.cpp */,
+				A79541A517F1BCD4002C7D93 /* StageInfoDown.h */,
+				A79541A717F1F1AA002C7D93 /* ServerDataSave.cpp */,
+				A79541A817F1F1AB002C7D93 /* ServerDataSave.h */,
+				A795419B17EBE266002C7D93 /* CollectionListScene.cpp */,
+				A795419C17EBE266002C7D93 /* CollectionListScene.h */,
+				A795419E17EBEE6D002C7D93 /* CollectionView.cpp */,
+				A795419F17EBEE6D002C7D93 /* CollectionView.h */,
+				A79541A117EC4382002C7D93 /* CollectionBook.cpp */,
+				A79541A217EC4382002C7D93 /* CollectionBook.h */,
+				A764FCBD17E8B60100FB9D92 /* StageSettingScene.cpp */,
+				A764FCBE17E8B60200FB9D92 /* StageSettingScene.h */,
+				A764FCC017E96A8600FB9D92 /* CardSettingScene.cpp */,
+				A764FCC117E96A8700FB9D92 /* CardSettingScene.h */,
 				A71A516517D9B3BA004B9F01 /* ZoomScriptScene.cpp */,
 				A71A516617D9B3BB004B9F01 /* ZoomScriptScene.h */,
 			);
@@ -2079,7 +2147,6 @@
 				A71A43D717D57E81004B9F01 /* Cumber.cpp in Sources */,
 				A71A43D817D57E81004B9F01 /* CumberBase.cpp in Sources */,
 				A71A43D917D57E81004B9F01 /* CumberEmotion.cpp in Sources */,
-				A71A43DA17D57E81004B9F01 /* DownloadingScene.cpp in Sources */,
 				A71A43DB17D57E81004B9F01 /* Escaper.cpp in Sources */,
 				A71A43DC17D57E81004B9F01 /* FailScene.cpp in Sources */,
 				A71A43DD17D57E81004B9F01 /* GageBar.cpp in Sources */,
@@ -2125,12 +2192,27 @@
 				A71A516A17DEE078004B9F01 /* WorldMapScene.cpp in Sources */,
 				A71A516D17DEF37E004B9F01 /* StageSettingPopup.cpp in Sources */,
 				A71A517017DF00A7004B9F01 /* ContinuePopup.cpp in Sources */,
-				A71A517A17DFF6D9004B9F01 /* KSCumber.cpp in Sources */,
 				A71A517B17DFF6D9004B9F01 /* KSCumberBase.cpp in Sources */,
 				A71A517C17DFF6D9004B9F01 /* SnakeCumber.cpp in Sources */,
 				A71A517D17DFF6D9004B9F01 /* Well512.cpp in Sources */,
 				A71A517F17DFF7E6004B9F01 /* GameData.cpp in Sources */,
 				A71A518217DFF868004B9F01 /* ProbSelector.cpp in Sources */,
+				A71A518617E17555004B9F01 /* ConditionPopup.cpp in Sources */,
+				A71A518917E18C6A004B9F01 /* FromTo.cpp in Sources */,
+				A71A518F17E36B4C004B9F01 /* KSUtil.cpp in Sources */,
+				A71A519217E40AA6004B9F01 /* ItemBuyPopup.cpp in Sources */,
+				A764FCBF17E8B60300FB9D92 /* StageSettingScene.cpp in Sources */,
+				A764FCC217E96A8700FB9D92 /* CardSettingScene.cpp in Sources */,
+				A764FCC517EB314300FB9D92 /* CardFullPopup.cpp in Sources */,
+				A795419D17EBE266002C7D93 /* CollectionListScene.cpp in Sources */,
+				A79541A017EBEE6D002C7D93 /* CollectionView.cpp in Sources */,
+				A79541A317EC4383002C7D93 /* CollectionBook.cpp in Sources */,
+				A79541A617F1BCD5002C7D93 /* StageInfoDown.cpp in Sources */,
+				A79541A917F1F1AE002C7D93 /* ServerDataSave.cpp in Sources */,
+				A79541B117F35C58002C7D93 /* Apple.cpp in Sources */,
+				A79541B217F35C58002C7D93 /* AttackPattern.cpp in Sources */,
+				A79541B317F35C58002C7D93 /* Coconut.cpp in Sources */,
+				A79541B417F35C58002C7D93 /* Melon.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
