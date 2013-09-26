@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "SilhouetteData.h"
+#include "StageImgLoader.h"
 
 USING_NS_CC;
 
@@ -21,8 +22,7 @@ public:
 	{
 		CollectionAnimation* t_ca = new CollectionAnimation();
 		t_ca->setAnimation(t_card_number);
-		t_ca->initWithFile(CCString::createWithFormat("stage%d_level%d_animation.png", t_ca->stage_number, t_ca->level_number)->getCString(),
-						   CCRectMake(0, 0, t_ca->ani_size.width, t_ca->ani_size.height));
+		t_ca->initWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_animation.png", t_ca->stage_number, t_ca->level_number)->getCString()), CCRectMake(0, 0, t_ca->ani_size.width, t_ca->ani_size.height));
 		t_ca->setPosition(mySD->getAnimationPosition(t_ca->stage_number));
 		t_ca->autorelease();
 		t_ca->startAnimation();

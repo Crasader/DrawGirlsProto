@@ -74,7 +74,7 @@ bool StageSettingScene::init()
 		int card_stage = selected_card_number/10;
 		int card_level = selected_card_number%10 + 1;
 		
-		CCSprite* card_img = CCSprite::create(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
+		CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
 		card_img->setScale(0.29);
 		card_img->setPosition(ccp(110, 188));
 		addChild(card_img, kSSS_Z_content);
@@ -82,7 +82,7 @@ bool StageSettingScene::init()
 		if(card_level == 3 && mySD->isAnimationStage(card_stage))
 		{
 			CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-			CCSprite* card_ani = CCSprite::create(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
+			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
 												  CCRectMake(0, 0, ani_size.width, ani_size.height));
 			card_ani->setPosition(mySD->getAnimationPosition(card_stage));
 			card_img->addChild(card_ani);

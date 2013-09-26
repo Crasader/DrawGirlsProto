@@ -15,13 +15,12 @@
 CCSprite* StageImgLoader::getLoadedImg(string filename)
 {
 	CCTexture2D* texture = addImage(filename.c_str());
-	
-	CCSprite* t_spr = CCSprite::createWithTexture(texture);
-	t_spr->setAnchorPoint(ccp(0.5,0.5));
-	CCSize t_size = t_spr->getContentSize();
-	t_spr->setScaleX(320.f/t_size.width);
-	t_spr->setScaleY(430.f/t_size.height);
-	return t_spr;
+	return CCSprite::createWithTexture(texture);
+}
+CCSprite* StageImgLoader::getLoadedImg(string filename, CCRect t_rect)
+{
+	CCTexture2D* texture = addImage(filename.c_str());
+	return CCSprite::createWithTexture(texture, t_rect);
 }
 
 CCTexture2D * StageImgLoader::addImage(const char * path)

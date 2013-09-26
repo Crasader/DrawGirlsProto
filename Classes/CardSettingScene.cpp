@@ -10,6 +10,7 @@
 #include "ScreenSide.h"
 #include "MyLocalization.h"
 #include "StageSettingScene.h"
+#include "StageImgLoader.h"
 
 CCScene* CardSettingScene::scene()
 {
@@ -113,7 +114,7 @@ bool CardSettingScene::init()
 		int card_stage = card_number/10;
 		int card_level = card_number%10+1;
 		
-		CCSprite* t_card = CCSprite::create(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
+		CCSprite* t_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
 		t_card->setScale(0.18);
 		t_card->setPosition(ccp(242+((i-1)%3)*84, 218-((i-1)/3)*98));
 		addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+i);
@@ -121,7 +122,7 @@ bool CardSettingScene::init()
 		if(card_level == 3 && mySD->isAnimationStage(card_stage))
 		{
 			CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-			CCSprite* t_ani = CCSprite::create(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
+			CCSprite* t_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
 											   CCRectMake(0, 0, ani_size.width, ani_size.height));
 			t_ani->setPosition(mySD->getAnimationPosition(card_stage));
 			t_card->addChild(t_ani);
@@ -260,7 +261,7 @@ void CardSettingScene::removeMountingCard()
 
 void CardSettingScene::mountingCard(int card_stage, int card_level)
 {
-	selected_card_img = CCSprite::create(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
+	selected_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
 	selected_card_img->setScale(0.45);
 	selected_card_img->setPosition(ccp(113,168));
 	addChild(selected_card_img, kCSS_Z_content);
@@ -268,7 +269,7 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 	if(card_level == 3 && mySD->isAnimationStage(card_stage))
 	{
 		CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-		CCSprite* t_ani = CCSprite::create(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
+		CCSprite* t_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
 										   CCRectMake(0, 0, ani_size.width, ani_size.height));
 		t_ani->setPosition(mySD->getAnimationPosition(card_stage));
 		selected_card_img->addChild(t_ani);

@@ -13,6 +13,8 @@
 #include "Jack.h"
 #include "DataStorageHub.h"
 #include "GameData.h"
+#include "cocos-ext.h"
+USING_NS_CC_EXT;
 
 using namespace cocos2d;
 using namespace std;
@@ -229,7 +231,8 @@ public:
 			unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
 			if(button_touch)
 			{
-				draw_button->setColor(ccWHITE);
+//				draw_button->setColor(ccWHITE);
+				offButton();
 				button_touch = NULL;
 			}
 			
@@ -283,13 +286,27 @@ private:
 		control_ball->setVisible(false);
 		addChild(control_ball);
 		
-		draw_button = CCSprite::create("ui_draw.png");
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("button.ccbi",this));
+		
+//		draw_button = CCSprite::create("ui_draw.png");
 		if(myGD->gamescreen_type == kGT_rightUI)		draw_button->setPosition(ccp(480-25,25));
 		else if(myGD->gamescreen_type == kGT_leftUI)	draw_button->setPosition(ccp(25,25));
 		else								draw_button->setPosition(ccp(25,25));
 		addChild(draw_button);
 		
 		mType = kCT_Type_Joystick_button;
+	}
+	
+	void onButton()
+	{
+		
+	}
+	
+	void offButton()
+	{
+		
 	}
 	
 	void touchAction(CCPoint t_p, bool t_b);

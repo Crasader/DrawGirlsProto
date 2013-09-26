@@ -76,7 +76,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
 
 void CollectionBook::setLeftPage(CCNode *target, int card_number)
 {
-	CCSprite* r_card_img = CCSprite::create(CCString::createWithFormat("stage%d_level%d_visible.png", card_number/10, card_number%10 + 1)->getCString());
+	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_number/10, card_number%10 + 1)->getCString());
 	r_card_img->setScale(0.65);
 	r_card_img->setPosition(ccp(120,160));
 	target->addChild(r_card_img);

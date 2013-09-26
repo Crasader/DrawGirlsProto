@@ -24,13 +24,13 @@
 		<array>
 			<dict>
 				<key>baseClass</key>
-				<string>CCBFile</string>
+				<string>CCSprite</string>
 				<key>children</key>
 				<array/>
 				<key>customClass</key>
 				<string></string>
 				<key>displayName</key>
-				<string>CCBFile</string>
+				<string>_back</string>
 				<key>memberVarAssignmentName</key>
 				<string></string>
 				<key>memberVarAssignmentType</key>
@@ -51,6 +51,17 @@
 					</dict>
 					<dict>
 						<key>name</key>
+						<string>anchorPoint</string>
+						<key>type</key>
+						<string>Point</string>
+						<key>value</key>
+						<array>
+							<real>0.5</real>
+							<real>0.5</real>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
 						<string>scale</string>
 						<key>type</key>
 						<string>ScaleLock</string>
@@ -64,11 +75,22 @@
 					</dict>
 					<dict>
 						<key>name</key>
-						<string>ccbFile</string>
+						<string>ignoreAnchorPointForPosition</string>
 						<key>type</key>
-						<string>CCBFile</string>
+						<string>Check</string>
 						<key>value</key>
-						<string>pattern_energyball1.ccb</string>
+						<false/>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>displayFrame</string>
+						<key>type</key>
+						<string>SpriteFrame</string>
+						<key>value</key>
+						<array>
+							<string></string>
+							<string>_back.png</string>
+						</array>
 					</dict>
 				</array>
 			</dict>
@@ -94,8 +116,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>162</real>
-							<real>133</real>
+							<real>337</real>
+							<real>128</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -118,7 +140,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>pattern_saw1.ccb</string>
+						<string>pattern_saw4.ccb</string>
 					</dict>
 				</array>
 			</dict>

@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "SilhouetteData.h"
 #include "StarGoldData.h"
+#include "StageImgLoader.h"
 
 USING_NS_CC;
 using namespace std;
@@ -68,7 +69,7 @@ private:
 		else
 			take_level = 1;
 		
-		CCSprite* take_card = CCSprite::create(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, take_level)->getCString());
+		CCSprite* take_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, take_level)->getCString());
 		take_card->setScale(0.18);
 		take_card->setPosition(ccp(58, 143));
 		addChild(take_card, kCFP_Z_content);
@@ -76,7 +77,7 @@ private:
 		if(take_level == 3 && mySD->isAnimationStage())
 		{
 			CCSize ani_size = mySD->getAnimationCutSize();
-			CCSprite* take_ani = CCSprite::create(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, take_level)->getCString(),
+			CCSprite* take_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, take_level)->getCString(),
 												  CCRectMake(0, 0, ani_size.width, ani_size.height));
 			take_ani->setPosition(mySD->getAnimationPosition());
 			take_card->addChild(take_ani);
@@ -109,7 +110,7 @@ private:
 			int card_stage = card_number/10;
 			int card_level = card_number%10 + 1;
 			
-			CCSprite* have_card = CCSprite::create(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
+			CCSprite* have_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
 			have_card->setScale(0.18);
 			have_card->setPosition(ccp(58+i*73, 143));
 			addChild(have_card, kCFP_Z_content);
@@ -117,7 +118,7 @@ private:
 			if(card_level == 3 && mySD->isAnimationStage(card_stage))
 			{
 				CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-				CCSprite* card_ani = CCSprite::create(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
+				CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
 													  CCRectMake(0, 0, ani_size.width, ani_size.height));
 				card_ani->setPosition(mySD->getAnimationPosition(card_stage));
 				have_card->addChild(card_ani);

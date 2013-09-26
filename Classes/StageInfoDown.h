@@ -106,7 +106,7 @@ private:
 	void startGetStageInfo()
 	{
 		JsonBox::Object param;
-		param["no"] = 1;
+		param["no"] = mySD->getSilType();
 		
 		graphdog->command("getstageinfo", &param, this, gd_selector(StageInfoDown::resultGetStageInfo));
 	}

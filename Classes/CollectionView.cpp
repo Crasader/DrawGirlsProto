@@ -10,6 +10,7 @@
 #include "SilhouetteData.h"
 #include "CollectionBook.h"
 #include "StarGoldData.h"
+#include "StageImgLoader.h"
 
 CollectionInnerLine* CollectionInnerLine::create(int t_line_number)
 {
@@ -70,7 +71,7 @@ void CollectionInnerLine::myInit(int t_line_number)
 
 void CollectionInnerLine::createCard(int t_stage, int t_level, int index)
 {
-	CCSprite* card_img = CCSprite::create(CCString::createWithFormat("stage%d_level%d_visible.png", t_stage, t_level)->getCString());
+	CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", t_stage, t_level)->getCString());
 	card_img->setScale(0.17);
 	card_img->setPosition(ccp(index*69,0));
 	addChild(card_img);
@@ -78,7 +79,7 @@ void CollectionInnerLine::createCard(int t_stage, int t_level, int index)
 	if(t_level == 3 && mySD->isAnimationStage(t_stage))
 	{
 		CCSize ani_size = mySD->getAnimationCutSize(t_stage);
-		CCSprite* ani_img = CCSprite::create(CCString::createWithFormat("stage%d_level%d_animation.png", t_stage, t_level)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
+		CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", t_stage, t_level)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
 		ani_img->setPosition(mySD->getAnimationPosition(t_stage));
 		card_img->addChild(ani_img);
 	}
