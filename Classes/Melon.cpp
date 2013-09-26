@@ -243,7 +243,7 @@ void Melon::startDamageReaction(float userdata)
 {
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	
-	setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
+	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
 	
 	
 	// 방사형으로 돌아가고 있는 중이라면
@@ -366,7 +366,7 @@ void Melon::scaleAdjustment(float dt)
 	{
 		CCLog("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
-		setCumberScale(MIN(1.5f, getCumberScale() + m_scale.SCALE_ADDER));
+		setCumberScale(MIN(m_maxScale, getCumberScale() + m_scale.SCALE_ADDER));
 	}
 	
 	m_scale.scale.step();
@@ -602,7 +602,7 @@ void Melon::normalMoving(float dt)
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
 			CCLog("decrese Size !!");
-			setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER));
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
 }
@@ -731,7 +731,7 @@ void Melon::furyMoving(float dt)
 
 void Melon::cumberAttack(float dt)
 {
-	float w = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
+	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
 	
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
@@ -740,7 +740,7 @@ void Melon::cumberAttack(float dt)
 		//		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
 		//			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
 		//			kAP_CODE_pattern103, kAP_CODE_pattern103};
-		std::vector<int> attacks = {kTargetAttack3, kTargetAttack4};
+//		std::vector<int> attacks = {kTargetAttack3, kTargetAttack4};
 		//		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
 		//		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
 		//		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
@@ -750,8 +750,8 @@ void Melon::cumberAttack(float dt)
 		bool searched = false;
 		while(!searched)
 		{
-			random_shuffle(attacks.begin(), attacks.end());
-			attackCode = attacks[0];
+			random_shuffle(m_attacks.begin(), m_attacks.end());
+			attackCode = m_attacks[0];
 			searched = true;
 			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
 				searched = false;

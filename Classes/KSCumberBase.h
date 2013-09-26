@@ -15,6 +15,9 @@
 #include "FromTo.h"
 #include "ProbSelector.h"
 #include "Well512.h"
+#include "Jack.h"
+#include "JsonBox.h"
+
 USING_NS_CC;
 
 struct SnakeTrace
@@ -58,9 +61,8 @@ enum MOVEMENT
 class KSCumberBase : public CCNode
 {
 public:
-	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(RANDOM_TYPE),
-	LIMIT_COLLISION_PER_SEC(3), /// 초당 변수만큼 충돌시 스케일 줄임.
-	m_speed(2.f)
+	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
+	LIMIT_COLLISION_PER_SEC(3) /// 초당 변수만큼 충돌시 스케일 줄임.
 //		m_state(CUMBERSTATESTOP)
 	{
 		
@@ -131,33 +133,48 @@ public:
 		{
 			m_furyMode.furyFrameCount++;
 		}
-		if(1) // 평상시...
+		
+		if(gameData->getJackState() == jackStateNormal)
 		{
-//			switch(m_normalMovement)
-//			{
-//				case RANDOM_TYPE:
-//					randomMoving(dt);
-//					break;
-//				case STRAIGHT_TYPE:
-//					straightMoving(dt);
-//					break;
-//				case FOLLOW_TYPE:
-//					followMoving(dt);
-//					break;
-//				case RIGHTANGLE_TYPE:
-//					rightAngleMoving(dt);
-//					break;
-//			}
-			if(m_normalMovement == MOVEMENT::RANDOM_TYPE)
+			switch(m_normalMovement)
 			{
-				randomMoving(dt);
-//				rightAngleMoving(dt);
+				case STRAIGHT_TYPE:
+					straightMoving(dt);
+					break;
+				case RANDOM_TYPE:
+					randomMoving(dt);
+					break;
+				case FOLLOW_TYPE:
+					followMoving(dt);
+					break;
+				case RIGHTANGLE_TYPE:
+					rightAngleMoving(dt);
+					break;
+				case CIRCLE_TYPE:
+					circleMoving(dt);
+					break;
 			}
-//				straightMoving(dt);
 		}
 		else
 		{
-			
+			switch(m_drawMovement)
+			{
+				case STRAIGHT_TYPE:
+					straightMoving(dt);
+					break;
+				case RANDOM_TYPE:
+					randomMoving(dt);
+					break;
+				case FOLLOW_TYPE:
+					followMoving(dt);
+					break;
+				case RIGHTANGLE_TYPE:
+					rightAngleMoving(dt);
+					break;
+				case CIRCLE_TYPE:
+					circleMoving(dt);
+					break;
+			}
 		}
 	}
 	virtual void startDamageReaction(float userdata) = 0;
@@ -191,7 +208,44 @@ public:
 	void rightAngleMoving(float dt); /// 직각 움직임.
 	void circleMoving(float dt); /// 원형 움직임.
 	virtual void crashMapForPosition(CCPoint targetPt) = 0;
+	void settingScale(float startScale, float minScale, float maxScale)
+	{
+		m_startScale = startScale;
+		m_minScale = minScale;
+		m_maxScale = maxScale;
+		
+		m_scale.SCALE_ADDER = m_scale.SCALE_SUBER = (m_maxScale - m_minScale) / 5.f;
+		m_scale.scale.init(m_startScale, m_startScale, 0.f);
+	}
+	void settingSpeed(float startSpeed, float minSpeed, float maxSpeed)
+	{
+		m_speed = m_startSpeed = startSpeed;
+		m_minSpeed = minSpeed;
+		m_maxSpeed = maxSpeed;
+	}
+	void settingMovement(enum MOVEMENT normal, enum MOVEMENT draw)
+	{
+		m_normalMovement = normal;
+		m_drawMovement = draw;
+	}
+	void settingPattern(JsonBox::Object pattern)
+	{
+		for(auto i : pattern)
+		{
+			int patternNumber = atoi(i.first.c_str()); // 패턴 넘버
+			int ratio = i.second["percent"].getInt();  // 빈번도
+			for(int j = 0; j<ratio; j++)
+			{
+				m_attacks.push_back(patternNumber);
+			}			
+		}
+	}
+	void settingAttackPercent(float ap)
+	{
+		m_attackPercent = ap;
+	}
 protected:
+	std::vector<int> m_attacks; // 공격할 패턴의 번호를 가지고 있음. 많이 가질 수 있을 수록 해당 패턴 쓸 확률 높음.
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	CUMBER_STATE m_state;
 	MOVEMENT m_normalMovement; // 평상시 움직임.
@@ -200,7 +254,10 @@ protected:
 	Well512 m_well512;
 	int m_directionAngleDegree;
 	float m_speed;
-	
+	float m_attackPercent;
+	float m_startScale, m_minScale, m_maxScale;
+	float m_startSpeed, m_minSpeed, m_maxSpeed;
+//	enum MOVEMENT m_normalMode, m_drawMode;
 	
 	struct FuryMode
 	{
@@ -220,8 +277,8 @@ protected:
 		Scale() : SCALE_ADDER(0.1f), SCALE_SUBER(0.2f), scale(0.6f, 0.6f, 0.f),
 		timer(0), autoIncreaseTimer(0), collisionStartTime(0), increaseTime(0),
 		collisionCount(0){}
-		const float SCALE_ADDER;
-		const float SCALE_SUBER;
+		float SCALE_ADDER;
+		float SCALE_SUBER;
 		int collisionCount; // 초당 충돌횟수 세기 위해
 		float collisionStartTime;
 		float timer; //
