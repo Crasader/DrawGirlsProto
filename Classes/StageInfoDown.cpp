@@ -246,6 +246,7 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 			}
 			
 			JsonBox::Array bosss = result_data["boss"].getArray();
+			SDS_SI(kSDF_stageInfo, mySD->getSilType(), "boss_cnt", bosss.size());
 			for(int i=0;i<bosss.size();i++)
 			{
 				JsonBox::Object t_boss = bosss[i].getObject();
