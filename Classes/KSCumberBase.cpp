@@ -189,7 +189,7 @@ void KSCumberBase::randomMoving(float dt)
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
 			CCLog("decrese Size !!");
-			setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER));
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
 
@@ -360,7 +360,7 @@ void KSCumberBase::straightMoving(float dt)
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
 			CCLog("decrese Size !!");
-			setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER));
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
 	
@@ -512,7 +512,7 @@ void KSCumberBase::followMoving(float dt)
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
 			CCLog("decrese Size !!");
-			setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER));
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
 }
@@ -688,7 +688,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
 			CCLog("decrese Size !!");
-			setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER));
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
 	
@@ -828,7 +828,7 @@ void KSCumberBase::circleMoving(float dt)
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
 			CCLog("decrese Size !!");
-			setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER));
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
 

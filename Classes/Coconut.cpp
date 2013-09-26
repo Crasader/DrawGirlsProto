@@ -23,7 +23,6 @@ bool Coconut::init()
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
-	m_speed = 2.f;
 	
 	std::string ccbiName = "coconut.ccbi";
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -48,6 +47,10 @@ bool Coconut::init()
 	//	gameData->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	//	startMoving();
+	
+	lastCastNum = m_well512.GetValue(1, 3);
+	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
+	startAnimationNoDirection();
 	
 	schedule(schedule_selector(Coconut::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
@@ -188,7 +191,7 @@ void Coconut::normalMoving(float dt)
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
 			CCLog("decrese Size !!");
-			setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER));
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
 }
@@ -202,7 +205,7 @@ void Coconut::startDamageReaction(float userdata)
 	CCLog("damaga!!!");
 	// 방사형으로 돌아가고 있는 중이라면
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
-	setCumberScale(MAX(0.3, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
+	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
 	
 	
 	if(m_state == CUMBERSTATENODIRECTION)
@@ -312,13 +315,14 @@ void Coconut::onPatternEnd()
 
 void Coconut::onStartGame()
 {
+	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }
 
 
 void Coconut::cumberAttack(float dt)
 {
-	float w = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
+	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
 
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
@@ -327,22 +331,24 @@ void Coconut::cumberAttack(float dt)
 //		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
 //			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
 //			kAP_CODE_pattern103, kAP_CODE_pattern103};
-		std::vector<int> attacks = {
-//			kCrashAttack1,
-			kTargetAttack4
+//		std::vector<int> attacks = {
+////			kCrashAttack1,
+//			kNonTargetAttack1,
+//			kTargetAttack4
 //			kSpecialAttack7, // 텔레포트.          // 32
-		};
+//		};
 //		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
 //		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
 //		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
 
-
+		
+		
 
 		bool searched = false;
 		while(!searched)
 		{
-			random_shuffle(attacks.begin(), attacks.end());
-			attackCode = attacks[0];
+			random_shuffle(m_attacks.begin(), m_attacks.end());
+			attackCode = m_attacks[0];
 			searched = true;
 			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
 				searched = false;
@@ -363,7 +369,7 @@ void Coconut::cumberAttack(float dt)
 			lastCastNum = m_well512.GetValue(1, 3);
 			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 			startAnimationNoDirection();
-			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode);
+			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this);
 		}
 	}
 }
@@ -620,7 +626,7 @@ void Coconut::scaleAdjustment(float dt)
 	{
 		CCLog("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
-		setCumberScale(MIN(1.2f, getCumberScale() + m_scale.SCALE_ADDER));
+		setCumberScale(MIN(m_maxScale, getCumberScale() + m_scale.SCALE_ADDER));
 	}
 	
 	m_scale.scale.step();

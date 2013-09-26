@@ -16,14 +16,17 @@
 #include "AudioEngine.h"
 #include "KSUtil.h"
 #include "Well512.h"
+#include "ServerDataSave.h"
+#include "KSCumberBase.h"
+#include "JsonBox.h"
 
 using namespace cocos2d;
 using namespace std;
 
-#define CREATE_FUNC_CCP(A) static A* create(CCPoint t_sp) \
+#define CREATE_FUNC_CCP(A) static A* create(CCPoint t_sp, KSCumberBase* cb) \
 { \
 	A* t_m0 = new A(); \
-	t_m0->myInit(t_sp); \
+	t_m0->myInit(t_sp, cb); \
 	t_m0->autorelease(); \
 	return t_m0; \
 } \
@@ -134,7 +137,7 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
@@ -143,10 +146,16 @@ public:
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
-		m_perFrame = 5;
-		m_totalFrame = 300;
-		m_bulletSpeed = 1.8f;
-		m_numberPerFrame = 10;
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["1"].getObject();
+		m_perFrame = pattern["perframe"].getInt();
+		m_totalFrame = pattern["totalframe"].getInt();
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
+		m_numberPerFrame = pattern["numberperframe"].getInt();
 		
 		scheduleUpdate();		
 	}
@@ -208,15 +217,22 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
 		
-		m_perFrame = 1;
-		m_totalFrame = 300;
-		m_bulletSpeed = 1.8f;
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["2"].getObject();
+		
+		m_perFrame = pattern["perframe"].getInt();
+		m_totalFrame = pattern["totalframe"].getInt();
+		m_bulletSpeed = pattern["speed"].getInt();
 		
 		
 		m_frameCnt = 0;
@@ -295,14 +311,20 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
-		m_bulletSpeed = 3.6f;
-		m_bulletNumber = 10;
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["3"].getObject();
+		
+		m_bulletSpeed = pattern["speed"].getInt();
+		m_numberPerFrame = pattern["numberperframe"].getInt();
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
@@ -313,14 +335,14 @@ public:
 	void update(float dt)
 	{
 		float angle = m_well512.GetValue(360);
-		for(int i=0; i<m_bulletNumber;i++)
+		for(int i=0; i<m_numberPerFrame;i++)
 		{
 			std::string imgFilename = "cumber_missile1.png";
 			CCSize t_mSize = CCSize(4.f,4.f);
 			MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
 													imgFilename.c_str(), t_mSize, 0.f, 0.f);
 			batchNode->addChild(t_mu);
-			angle += 360 / m_bulletNumber;
+			angle += 360 / m_numberPerFrame;
 			if(angle >= 360)
 				angle -= 360;
 		}
@@ -337,7 +359,7 @@ public:
 		startSelfRemoveSchedule();
 	}
 protected:
-	int m_bulletNumber;
+	int m_numberPerFrame;
 	float m_bulletSpeed;
 	
 	int m_frameCnt;
@@ -359,16 +381,21 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
-		m_perFrame = 8;
-		m_totalFrame = 300;
-		m_bulletSpeed = 5.f;
-		m_numberPerFrame = 15;
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["4"].getObject();
+		m_perFrame = pattern["perframe"].getInt();;
+		m_totalFrame = pattern["totalframe"].getInt();;
+		m_bulletSpeed = pattern["speed"].getInt();;
+		m_numberPerFrame = pattern["numberperframe"].getInt();;
 		
 
 		m_frameCnt = 0;
@@ -439,15 +466,22 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_perFrame = 6;        // p
-		m_totalFrame = 300;    // p
-		m_bulletSpeed = 2.5f;  // p
-		m_numberPerFrame = 10; // p
+		
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["5"].getObject();
+		m_perFrame = pattern["perframe"].getInt();;        // p
+		m_totalFrame = pattern["totalframe"].getInt();;    // p
+		m_bulletSpeed = pattern["speed"].getInt();  // p
+		m_numberPerFrame = pattern["numberperframe"].getInt(); // p
 		
 		
 		m_frameCnt = 0;
@@ -513,14 +547,19 @@ class KSAttackPattern6 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSAttackPattern6);
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
-		m_bulletSpeed = 1.8f;  // p
-		m_numberPerFrame = 10; // p
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["6"].getObject();
+		m_bulletSpeed = pattern["speed"].getInt();  // p
+		m_numberPerFrame = pattern["numberperframe"].getInt(); // p
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -591,15 +630,21 @@ public:
 		}
 	}
 	CREATE_FUNC_CCP(KSAttackPattern7);
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_perFrame = 1;
-		m_totalFrame = 150;   // p
-		m_bulletSpeed = 1.8f; // p
-		m_numberPerFrame = 20;
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["7"].getObject();
+		m_perFrame = pattern["perframe"].getInt();;
+		m_totalFrame = pattern["totalframe"].getInt();;   // p
+		m_bulletSpeed = pattern["speed"].getInt(); // p
+		m_numberPerFrame = pattern["numberperframe"].getInt();
 		m_term = 6; // p
 		
 		m_frameCnt = 0;
@@ -692,15 +737,22 @@ public:
 		}
 	}
 	
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_perFrame = 12;		// p
-		m_totalFrame = 300;		// p
-		m_bulletSpeed = 2.f;		// p
-		m_numberPerFrame = 10;	// p
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["8"].getObject();
+		
+		m_perFrame = pattern["perframe"].getInt();;		// p
+		m_totalFrame = pattern["totalframe"].getInt();;		// p
+		m_bulletSpeed = pattern["speed"].getInt();	// p
+		m_numberPerFrame =pattern["numberperframe"].getInt();	// p
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -786,14 +838,21 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
 		
-		m_bulletSpeed = 2.f;
-		m_numberPerFrame = 5;
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["101"].getObject();
+		
+		m_bulletSpeed = pattern["speed"].getInt();
+		m_numberPerFrame = pattern["numberperframe"].getInt();
 		
 
 		m_frameCnt = 0;
@@ -873,15 +932,22 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_perFrame = 4;
-		m_totalFrame = 150;
-		m_bulletSpeed = 2.5f;
-		m_numberPerFrame = 5;
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["102"].getObject();
+		
+		m_perFrame = pattern["perframe"].getInt();;
+		m_totalFrame = pattern["totalframe"].getInt();;
+		m_bulletSpeed = pattern["speed"].getInt();;
+		m_numberPerFrame = pattern["numberperframe"].getInt();;
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -973,15 +1039,22 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_perFrame = 4;
-		m_totalFrame = 150;
-		m_bulletSpeed = 2.f;
-		m_numberPerFrame = 5;
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["103"].getObject();
+		
+		m_perFrame = pattern["perframe"].getInt();;
+		m_totalFrame = pattern["totalframe"].getInt();
+		m_bulletSpeed = pattern["speed"].getInt();
+		m_numberPerFrame = pattern["numberperframe"].getInt();
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -1074,15 +1147,22 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
 		addChild(batchNode);
-		m_perFrame = 4;
-		m_totalFrame = 150;
-		m_bulletSpeed = 2.f;
-		m_numberPerFrame = 5;
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["104"].getObject();
+		
+		m_perFrame = pattern["perframe"].getInt();
+		m_totalFrame = pattern["totalframe"].getInt();
+		m_bulletSpeed = pattern["speed"].getInt();
+		m_numberPerFrame = pattern["numberperframe"].getInt();
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -1171,7 +1251,7 @@ class KSTargetAttackPattern5 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern5);
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		
 	}
@@ -1180,7 +1260,7 @@ class KSTargetAttackPattern6 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern6);
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		
 	}
@@ -1189,7 +1269,7 @@ class KSTargetAttackPattern7 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern7);
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		
 	}
@@ -1198,7 +1278,7 @@ class KSTargetAttackPattern8 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern8);
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		
 	}
@@ -1207,7 +1287,7 @@ class KSTargetAttackPattern9 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern9);
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		
 	}
@@ -1216,7 +1296,7 @@ class KSTargetAttackPattern10 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern10);
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
 		
 	}

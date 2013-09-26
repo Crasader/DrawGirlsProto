@@ -415,8 +415,9 @@ void MissileParent::actionAP103()
 	savedAP = true;
 }
 
-void MissileParent::attackWithKSCode(CCPoint startPosition, int pattern)
+void MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb)
 {
+	CCLog("%x %x", cb, myGD->getCommunicationNode("CP_getMainCumberPointer"));
 	if(pattern == kNonTargetAttack1)
 	{	
 		startFirePosition = startPosition;
@@ -1625,8 +1626,8 @@ void MissileParent::myInit( CCNode* boss_eye )
 
 	myGD->V_CCPB["MP_startFire"] = std::bind(&MissileParent::startFire, this, _1, _2);
 	myGD->V_CCPI["MP_attackWithCode"] = std::bind(&MissileParent::attackWithCode, this, _1, _2);
-	myGD->V_CCPI["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2);
-
+//	myGD->V_CCPI["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2);
+	myGD->V_CCPICumberBase["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3);
 	myGD->V_CCPCCOCallfunc["MP_createSubCumberReplication"] = std::bind(&MissileParent::createSubCumberReplication, this, _1, _2, _3);
 	myGD->V_CCO["MP_removeChargeInArray"] = std::bind(&MissileParent::removeChargeInArray, this, _1);
 	myGD->V_IIF["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3);

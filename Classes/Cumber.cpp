@@ -11,6 +11,7 @@
 #include "Apple.h"
 #include "Coconut.h"
 #include "Melon.h"
+#include "ServerDataSave.h"
 
 void CumberParent::onStartGame()
 {
@@ -456,11 +457,46 @@ void CumberParent::myInit()
 	
 	void onStartGame();
 	void onPatternEnd();
-	auto mainCumber = Coconut::create();
-//	auto mainCumber = Melon::create();
-//	auto mainCumber = Apple::create();
-//	auto mainCumber = KSCumber::create();
-//	auto mainCumber = MetalSnake::create();
+	
+	JsonBox::Value v;
+	v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+	KS::KSLog("%d", v);
+	JsonBox::Object boss = v.getArray()[0].getObject();
+	JsonBox::Object speed = boss["speed"].getObject();
+	JsonBox::Object scale = boss["scale"].getObject();
+	JsonBox::Object movement = boss["movement"].getObject();
+	
+	int bossType = boss["type"].getInt();
+	float minSpeed = speed["max"].getDouble();
+	float startSpeed = speed["start"].getDouble();
+	float maxSpeed = speed["min"].getDouble();
+	
+	float minScale = scale["min"].getDouble();
+	float startScale = scale["start"].getDouble();
+	float maxScale = scale["max"].getDouble();
+	
+	int normalMovement = movement["normal"].getInt();
+	int drawMovement = movement["draw"].getInt();	
+	
+	KSCumberBase* mainCumber;
+	switch(bossType)
+	{
+		case 1:
+			mainCumber = Apple::create();
+			break;
+		case 2:
+			mainCumber = Coconut::create();
+			break;
+		case 3:
+			mainCumber = Melon::create();
+			break;
+	}
+	
+	mainCumber->settingScale(startScale, minScale, maxScale);
+	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
+	mainCumber->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement);
+	mainCumber->settingPattern(boss["pattern"].getObject());
+	mainCumber->settingAttackPercent(boss["attackpercent"].getDouble());
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	
