@@ -12,107 +12,17 @@
 #include "cocos2d.h"
 #include "EnumDefine.h"
 #include "DataStorageHub.h"
+#include "ServerDataSave.h"
+#include "SilhouetteData.h"
 
 using namespace cocos2d;
 
 class MissileDamageData : public CCObject
 {
 public:
-	static int getElementDamage(int element_code, int level)
+	static int getJMDamage()
 	{
-		int return_value;
-		if(element_code == kElementCode_empty)
-		{
-			if(level == 0)			return_value = 0;
-			else if(level == 1)		return_value = 12;
-			else if(level == 2)		return_value = 15;
-			else if(level == 3)		return_value = 20;
-			else if(level == 4)		return_value = 25;
-			else if(level == 5)		return_value = 32;
-			else if(level == 6)		return_value = 40;
-			else if(level == 7)		return_value = 49;
-			else if(level == 8)		return_value = 60;
-			else if(level == 9)		return_value = 71;
-		}
-		else if(element_code == kElementCode_life)
-		{
-			if(level == 0)			return_value = 0;
-			else if(level == 1)		return_value = 10;
-			else if(level == 2)		return_value = 13;
-			else if(level == 3)		return_value = 17;
-			else if(level == 4)		return_value = 22;
-			else if(level == 5)		return_value = 28;
-			else if(level == 6)		return_value = 35;
-			else if(level == 7)		return_value = 43;
-			else if(level == 8)		return_value = 52;
-			else if(level == 9)		return_value = 62;
-		}
-		else if(element_code == kElementCode_fire)
-		{
-			if(level == 0)			return_value = 0;
-			else if(level == 1)		return_value = 10;
-			else if(level == 2)		return_value = 13;
-			else if(level == 3)		return_value = 17;
-			else if(level == 4)		return_value = 22;
-			else if(level == 5)		return_value = 28;
-			else if(level == 6)		return_value = 35;
-			else if(level == 7)		return_value = 43;
-			else if(level == 8)		return_value = 52;
-			else if(level == 9)		return_value = 62;
-		}
-		else if(element_code == kElementCode_water)
-		{
-			if(level == 0)			return_value = 0;
-			else if(level == 1)		return_value = 10;
-			else if(level == 2)		return_value = 13;
-			else if(level == 3)		return_value = 17;
-			else if(level == 4)		return_value = 22;
-			else if(level == 5)		return_value = 28;
-			else if(level == 6)		return_value = 35;
-			else if(level == 7)		return_value = 43;
-			else if(level == 8)		return_value = 52;
-			else if(level == 9)		return_value = 62;
-		}
-		else if(element_code == kElementCode_wind)
-		{
-			if(level == 0)			return_value = 0;
-			else if(level == 1)		return_value = 10;
-			else if(level == 2)		return_value = 13;
-			else if(level == 3)		return_value = 17;
-			else if(level == 4)		return_value = 22;
-			else if(level == 5)		return_value = 28;
-			else if(level == 6)		return_value = 35;
-			else if(level == 7)		return_value = 43;
-			else if(level == 8)		return_value = 52;
-			else if(level == 9)		return_value = 62;
-		}
-		else if(element_code == kElementCode_lightning)
-		{
-			if(level == 0)			return_value = 0;
-			else if(level == 1)		return_value = 10;
-			else if(level == 2)		return_value = 13;
-			else if(level == 3)		return_value = 17;
-			else if(level == 4)		return_value = 22;
-			else if(level == 5)		return_value = 28;
-			else if(level == 6)		return_value = 35;
-			else if(level == 7)		return_value = 43;
-			else if(level == 8)		return_value = 52;
-			else if(level == 9)		return_value = 62;
-		}
-		else if(element_code == kElementCode_plasma)
-		{
-			if(level == 0)			return_value = 0;
-			else if(level == 1)		return_value = 10;
-			else if(level == 2)		return_value = 13;
-			else if(level == 3)		return_value = 17;
-			else if(level == 4)		return_value = 22;
-			else if(level == 5)		return_value = 28;
-			else if(level == 6)		return_value = 35;
-			else if(level == 7)		return_value = 43;
-			else if(level == 8)		return_value = 52;
-			else if(level == 9)		return_value = 62;
-		}
-		return return_value;
+		return SDS_GI(kSDF_stageInfo, mySD->getSilType(), "itemOption_attack_power");
 	}
 	
 	static float getCorrelationDamage(float t_damage, int cumber_elemental)

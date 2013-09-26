@@ -11,6 +11,8 @@
 #include "MyLocalization.h"
 #include "StageSettingScene.h"
 #include "CollectionListScene.h"
+#include "StageInfoDown.h"
+#include "GraphDog.h"
 
 #include <algorithm>
 
@@ -29,7 +31,7 @@ void WorldMapScene::showConvertSildata(string filename)
 	remove(convert_data.begin(), convert_data.end(), '\t');
 	remove(convert_data.begin(), convert_data.end(), '\n');
 	
-	convert_data = convert_data.substr(0,convert_data.find(":::"));
+	convert_data = convert_data.substr(0,convert_data.find(":::")); // ,buff);
 	
 	bool is_zero = true;
 	int cmp_cnt = 0;
@@ -131,6 +133,8 @@ bool WorldMapScene::init()
     {
         return false;
     }
+	
+	graphdog->setup("12345678", 1);
 	
 //	showConvertSildata("stage3_level1");
 //	showConvertSildata("stage3_level2");
@@ -312,7 +316,11 @@ void WorldMapScene::menuAction(CCObject* pSender)
 	{
 		tag -= kWMS_MT_stageBase;
 		mySD->setSilType(tag);
-		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
+		
+		StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(WorldMapScene::stageCancel));
+		addChild(t_sid, kWMS_Z_popup);
+		
+//		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
 	else if(tag == kWMS_MT_collection)
 	{

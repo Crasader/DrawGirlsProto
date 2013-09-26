@@ -15,6 +15,7 @@
 #include "AttackItem.h"
 #include "SilhouetteData.h"
 #include "StarGoldData.h"
+#include "ServerDataSave.h"
 
 USING_NS_CC;
 
@@ -344,7 +345,7 @@ private:
 	{
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 10.f);
 		
-		CCDelayTime* t_delay = CCDelayTime::create(5.f);
+		CCDelayTime* t_delay = CCDelayTime::create(SDS_GI(kSDF_stageInfo, mySD->getSilType(), "itemOption_fast_sec"));
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemFast::ending));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 		
@@ -1936,8 +1937,9 @@ private:
 		coin_parent = CCNode::create();
 		addChild(coin_parent);
 		
-		creatable_list.push_back(kIC_attack);
-		creatable_list.push_back(kIC_speedUp);
+		int defItems_cnt = SDS_GI(kSDF_stageInfo, mySD->getSilType(), "defItems_cnt");
+		for(int i=0;i<defItems_cnt;i++)
+			creatable_list.push_back(ITEM_CODE(SDS_GI(kSDF_stageInfo, mySD->getSilType(), CCString::createWithFormat("defItems_%d_type", i)->getCString())));
 		
 		selected_item_cnt = 0;
 		

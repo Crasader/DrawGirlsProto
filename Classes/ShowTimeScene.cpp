@@ -90,7 +90,7 @@ bool ShowTime::init()
 	{
 		if(selected_stage == 5)				filename = CCString::createWithFormat("c%d_s5_visible.png",chapter_bonusImg_number)->getCString();
 		
-		bonus_img = StageImgLoader::sharedInstance()->getLoadedImg(chapter_bonusImg_number, selected_stage);
+//		bonus_img = StageImgLoader::sharedInstance()->getLoadedImg(chapter_bonusImg_number, selected_stage);
 		bonus_img->setPosition(ccp(160,240));
 		addChild(bonus_img);
 	}
