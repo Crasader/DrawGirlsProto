@@ -417,7 +417,6 @@ void MissileParent::actionAP103()
 
 void MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb)
 {
-	CCLog("%x %x", cb, myGD->getCommunicationNode("CP_getMainCumberPointer"));
 	if(pattern == kNonTargetAttack1)
 	{	
 		startFirePosition = startPosition;
@@ -552,8 +551,7 @@ void MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
 		addChild(t_ccn);
 		t_ccn->startCharge();
-		chargeArray->addObject(t_ccn);
-		
+		chargeArray->addObject(t_ccn);		
 	}
 	
 	else if(pattern == kTargetAttack1)

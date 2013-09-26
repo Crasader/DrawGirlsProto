@@ -771,7 +771,7 @@ void Melon::cumberAttack(float dt)
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
 			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
 			startAnimationNoDirection();
-			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode);
+			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this);
 		}
 	}
 	
