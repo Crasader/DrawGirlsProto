@@ -564,7 +564,8 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				// button
 				button_touch = touch;
 				myJack->isDrawingOn = true;
-				draw_button->setColor(ccGRAY);
+				onButton();
+//				draw_button->setColor(ccGRAY);
 				
 				if(isBacking)
 				{
@@ -737,7 +738,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 		if(touch == button_touch)
 		{
 			myJack->isDrawingOn = false;
-			draw_button->setColor(ccWHITE);
+			offButton();
+//			draw_button->setColor(ccWHITE);
 			if(myJack->getJackState() == jackStateDrawing && !myJack->isStun)
 			{
 				(target_main->*delegate_readyBack)();
