@@ -14,6 +14,7 @@
 #include "AudioEngine.h"
 #include "SilhouetteData.h"
 #include "StarGoldData.h"
+#include "StageImgLoader.h"
 
 USING_NS_CC;
 
@@ -135,7 +136,7 @@ private:
 		else
 			ttt = CCString::createWithFormat("stage%d_level1_visible.png", silType)->getCString();
 		
-		clear_img = CCSprite::create(ttt.c_str());
+		clear_img = mySIL->getLoadedImg(ttt.c_str());
 		clear_img->setPosition(ccp(160,215));
 		addChild(clear_img, kCST_Z_clear);
 		

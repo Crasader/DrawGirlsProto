@@ -21,10 +21,38 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 			JsonBox::Object t_mission = result_data["mission"].getObject();
 			SDS_SI(kSDF_stageInfo, mySD->getSilType(), "mission_type", t_mission["type"].getInt());
 			
-			if(t_mission["type"].getInt() == kCLEAR_itemCollect)
+			if(t_mission["type"].getInt() == kCLEAR_bossLifeZero)
 			{
-				//
+				JsonBox::Object t_option = t_mission["option"].getObject();
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), "mission_option_energy", t_option["energy"].getInt());
 			}
+			else if(t_mission["type"].getInt() == kCLEAR_subCumberCatch)
+			{
+				JsonBox::Object t_option = t_mission["option"].getObject();
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), "mission_option_count", t_option["count"].getInt());
+			}
+			else if(t_mission["type"].getInt() == kCLEAR_bigArea)
+			{
+				JsonBox::Object t_option = t_mission["option"].getObject();
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), "mission_option_percent", t_option["percent"].getInt());
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), "mission_option_count", t_option["count"].getInt());
+			}
+			else if(t_mission["type"].getInt() == kCLEAR_itemCollect)
+			{
+				JsonBox::Object t_option = t_mission["option"].getObject();
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), "mission_option_count", t_option["count"].getInt());
+			}
+			else if(t_mission["type"].getInt() == kCLEAR_perfect)
+			{
+				JsonBox::Object t_option = t_mission["option"].getObject();
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), "mission_option_percent", t_option["percent"].getInt());
+			}
+			else if(t_mission["type"].getInt() == kCLEAR_timeLimit)
+			{
+				JsonBox::Object t_option = t_mission["option"].getObject();
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), "mission_option_sec", t_option["sec"].getInt());
+			}
+			
 			
 			JsonBox::Array shopItems = result_data["shopItems"].getArray();
 			SDS_SI(kSDF_stageInfo, mySD->getSilType(), "shopItems_cnt", shopItems.size());
@@ -150,12 +178,65 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 			{
 				JsonBox::Object t_card = cards[i].getObject();
 				SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_rank", t_card["no"].getInt())->getCString(), t_card["rank"].getInt());
+				SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_durability", t_card["no"].getInt())->getCString(), t_card["durability"].getInt());
 				
 				JsonBox::Array t_ability = t_card["ability"].getArray();
 				SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_cnt", t_card["no"].getInt())->getCString(), t_ability.size());
 				for(int j=0;j<t_ability.size();j++)
 				{
+					JsonBox::Object t_abil = t_ability[j].getObject();
+					SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_%d_type", t_card["no"].getInt(), t_abil["type"].getInt())->getCString(), t_abil["type"].getInt());
 					
+					if(t_abil["type"].getInt() == kIC_attack)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_attack_option_power", t_card["no"].getInt(), j)->getCString(), t_option["power"].getInt());
+					}
+					else if(t_abil["type"].getInt() == kIC_addTime)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_addTime_option_sec", t_card["no"].getInt(), j)->getCString(), t_option["sec"].getInt());
+					}
+					else if(t_abil["type"].getInt() == kIC_fast)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_fast_option_sec", t_card["no"].getInt(), j)->getCString(), t_option["sec"].getInt());
+					}
+					else if(t_abil["type"].getInt() == kIC_silence)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_silence_option_sec", t_card["no"].getInt(), j)->getCString(), t_option["sec"].getInt());
+					}
+					else if(t_abil["type"].getInt() == kIC_doubleItem)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_doubleItem_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+					}
+					else if(t_abil["type"].getInt() == kIC_longTime)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_longTime_option_sec", t_card["no"].getInt(), j)->getCString(), t_option["sec"].getInt());
+					}
+					else if(t_abil["type"].getInt() == kIC_bossLittleEnergy)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_bossLittleEnergy_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+					}
+					else if(t_abil["type"].getInt() == kIC_subSmallSize)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_subSmallSize_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+					}
+					else if(t_abil["type"].getInt() == kIC_smallArea)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_smallArea_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+					}
+					else if(t_abil["type"].getInt() == kIC_widePerfect)
+					{
+						JsonBox::Object t_option = t_abil["option"].getObject();
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_widePerfect_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+					}
 				}
 				
 				JsonBox::Object t_imgInfo = t_card["imgInfo"].getObject();

@@ -9,7 +9,7 @@
 #include "ZoomScriptScene.h"
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
-#include "StarGoldData.h"
+#include "StageImgLoader.h"
 #include "ClearScene.h"
 #include "utf8.h"
 
@@ -55,7 +55,7 @@ bool ZoomScript::init()
 	if(is_exchanged)			first_filename = CCString::createWithFormat("stage%d_level2_visible.png", silType)->getCString();
 	else						first_filename = CCString::createWithFormat("stage%d_level1_visible.png", silType)->getCString();
 	
-	first_img = CCSprite::create(first_filename.c_str());
+	first_img = mySIL->getLoadedImg(first_filename.c_str());
 	first_img->setPosition(ccp(160,215));
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
@@ -188,7 +188,7 @@ void ZoomScript::showtimeFirstAction()
 	else
 		second_filename = CCString::createWithFormat("stage%d_level2_visible.png", silType)->getCString();
 	
-	second_img = CCSprite::create(second_filename.c_str());
+	second_img = mySIL->getLoadedImg(second_filename.c_str());
 	second_img->setPosition(ccp(160,215));
 	game_node->addChild(second_img, kZS_Z_second_img);
 	game_node->setScale(1.5f);
@@ -198,7 +198,7 @@ void ZoomScript::showtimeFirstAction()
 	if(is_exchanged && mySD->isAnimationStage())
 	{
 		eye_ani_size = mySD->getAnimationCutSize();
-		CCTexture2D* eye_texture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat("stage%d_level3_animation.png", silType)->getCString());
+		CCTexture2D* eye_texture = mySIL->addImage(CCString::createWithFormat("stage%d_level3_animation.png", silType)->getCString());
 		
 		CCSprite* eye = CCSprite::createWithTexture(eye_texture, CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
 		eye->setPosition(mySD->getAnimationPosition());

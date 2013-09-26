@@ -11,6 +11,7 @@
 #include "WorldMapScene.h"
 #include "ScreenSide.h"
 #include "CardFullPopup.h"
+#include "StageImgLoader.h"
 
 typedef enum tMenuTagClearScene{
 	kMT_CS_ok = 1
@@ -96,7 +97,7 @@ bool ClearScene::init()
 	else
 		take_level = 1;
 	
-	CCSprite* take_card = CCSprite::create(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, take_level)->getCString());
+	CCSprite* take_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, take_level)->getCString());
 	take_card->setScale(0.65);
 	take_card->setPosition(ccp(130,160));
 	addChild(take_card, kZ_CS_img);
@@ -104,7 +105,7 @@ bool ClearScene::init()
 	if(take_level == 3 && mySD->isAnimationStage())
 	{
 		CCSize ani_size = mySD->getAnimationCutSize();
-		CCSprite* take_ani = CCSprite::create(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, take_level)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
+		CCSprite* take_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, take_level)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
 		take_ani->setPosition(mySD->getAnimationPosition());
 		take_card->addChild(take_ani);
 	}

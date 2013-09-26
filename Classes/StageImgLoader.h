@@ -28,6 +28,8 @@ struct LMemoryStruct {
 	string writeable_path;
 };
 
+#define mySIL StageImgLoader::sharedInstance()
+
 class StageImgLoader : public CCNode
 {
 public:
@@ -43,6 +45,7 @@ public:
 	}
 	
 	CCSprite* getLoadedImg(string filename);
+	CCSprite* getLoadedImg(string filename, CCRect t_rect);
 	
 	void downloadImg(string t_url, int t_size, string t_down_filename, CCObject* t_success, SEL_CallFunc d_success, CCObject* t_fail, SEL_CallFunc d_fail)
 	{
@@ -70,6 +73,8 @@ public:
 	
 	string writeable_path;
 	string down_filename;
+	
+	CCTexture2D* addImage(const char * path);
 	
 private:
 	SaveData* my_savedata;
@@ -102,8 +107,6 @@ private:
 			exit(0);
 		}
 	}
-	
-	CCTexture2D* addImage(const char * path);
 	
 	static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp);
 	static void* t_function(void *data);

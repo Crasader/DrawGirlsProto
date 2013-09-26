@@ -60,20 +60,15 @@ private:
 	}
 };
 
-class InvisibleSprite : public CCSpriteBatchNode
+class InvisibleSprite : public CCNode
 {
 public:
 	static InvisibleSprite* create(const char* filename, bool isPattern)
 	{
 		InvisibleSprite* t_iv = new InvisibleSprite();
-		if(t_iv && t_iv->initWithFile(filename, isPattern ? kDefaultSpriteBatchCapacity : 1))
-		{
-			t_iv->myInit(filename, isPattern);
-			t_iv->autorelease();
-			return t_iv;
-		}
-		CC_SAFE_DELETE(t_iv);
-		return NULL;
+		t_iv->myInit(filename, isPattern);
+		t_iv->autorelease();
+		return t_iv;
 	}
 	
 	virtual ~InvisibleSprite()
@@ -85,25 +80,9 @@ private:
 	
 	void myInit(const char* filename, bool isPattern)
 	{
-		if(isPattern)
-		{
-			for(int i=0;i<4;i++)
-			{
-				for(int j=0;j<6;j++)
-				{
-					CCSprite* t_spr = CCSprite::create(filename);
-					t_spr->setColor(ccc3(50, 50, 50));
-					t_spr->setPosition(ccp(40+i*80, 40+j*80));
-					addChild(t_spr);
-				}
-			}
-		}
-		else
-		{
-			CCSprite* t_spr = CCSprite::create(filename);
-			t_spr->setPosition(ccp(160,215));
-			addChild(t_spr);
-		}
+		CCSprite* t_spr = mySIL->getLoadedImg(filename);
+		t_spr->setPosition(ccp(160,215));
+		addChild(t_spr);
 	}
 };
 
@@ -200,20 +179,15 @@ private:
 	}
 };
 
-class VisibleSprite : public CCSpriteBatchNode
+class VisibleSprite : public CCSprite
 {
 public:
 	static VisibleSprite* create(const char* filename, bool isPattern, CCArray* t_drawRects)
 	{
 		VisibleSprite* t_v = new VisibleSprite();
-		if (t_v)
-		{
-			t_v->myInit(filename, isPattern, t_drawRects);
-			t_v->autorelease();
-			return t_v;
-		}
-		CC_SAFE_DELETE(t_v);
-		return NULL;
+		t_v->myInit(filename, isPattern, t_drawRects);
+		t_v->autorelease();
+		return t_v;
 	}
 	
 	void setMoveGamePosition(CCPoint t_p)
@@ -271,7 +245,7 @@ private:
 	
 	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects)
 	{
-		CCSprite* t_texture = NULL;
+//		CCSprite* t_texture = NULL;
 //		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 //		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
 		
@@ -285,40 +259,43 @@ private:
 //			initWithTexture(t_texture->getTexture(), 1);
 //		}
 //		else
-			initWithFile(filename, isPattern ? kDefaultSpriteBatchCapacity : 1);
+//			initWithFile(filename, isPattern ? kDefaultSpriteBatchCapacity : 1);
 		
-		if(isPattern)
-		{
-			for(int i=0;i<4;i++)
-			{
-				for(int j=0;j<6;j++)
-				{
-					CCSprite* t_spr = CCSprite::create(filename);
-					t_spr->setPosition(ccp(40+i*80, 40+j*80));
-					addChild(t_spr);
-				}
-			}
-		}
-		else
-		{
-			if(t_texture)
-			{
-				CCSprite* t_spr = CCSprite::createWithTexture(t_texture->getTexture());
-				CCSize t_size = t_spr->getContentSize();
-				t_spr->setScaleX(320.f/t_size.width);
-				t_spr->setScaleY(480.f/t_size.height);
-				t_spr->setPosition(ccp(160,240));
-				addChild(t_spr);
-				
-				t_texture->release();
-			}
-			else
-			{
-				CCSprite* t_spr = CCSprite::create(filename);
-				t_spr->setPosition(ccp(160,215));
-				addChild(t_spr);
-			}
-		}
+//		if(isPattern)
+//		{
+//			for(int i=0;i<4;i++)
+//			{
+//				for(int j=0;j<6;j++)
+//				{
+//					CCSprite* t_spr = CCSprite::create(filename);
+//					t_spr->setPosition(ccp(40+i*80, 40+j*80));
+//					addChild(t_spr);
+//				}
+//			}
+//		}
+//		else
+//		{
+//			if(t_texture)
+//			{
+//				CCSprite* t_spr = CCSprite::createWithTexture(t_texture->getTexture());
+//				CCSize t_size = t_spr->getContentSize();
+//				t_spr->setScaleX(320.f/t_size.width);
+//				t_spr->setScaleY(480.f/t_size.height);
+//				t_spr->setPosition(ccp(160,240));
+//				addChild(t_spr);
+//				
+//				t_texture->release();
+//			}
+//			else
+//			{
+		
+		initWithTexture(mySIL->addImage(filename));
+		setPosition(ccp(160,215));
+//				CCSprite* t_spr = mySIL->getLoadedImg(filename);
+//				t_spr->setPosition(ccp(160,215));
+//				addChild(t_spr);
+//			}
+//		}
 		
 		
 		drawRects = t_drawRects;

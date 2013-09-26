@@ -57,28 +57,10 @@ public:
 		animation_frame.clear();
 		
 		deque<int> t_que;
-		if(t_type == 3)
+		int loop_length = SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_detail_loopLength", t_type*10+2)->getCString());
+		for(int i=0;i<loop_length;i++)
 		{
-			t_que.push_back(0);
-			t_que.push_back(1);
-			t_que.push_back(2);
-			t_que.push_back(0);
-		}
-		else if(t_type == 8)
-		{
-			t_que.push_back(0);
-			t_que.push_back(0);
-			t_que.push_back(1);
-			t_que.push_back(1);
-			t_que.push_back(2);
-			t_que.push_back(2);
-			t_que.push_back(3);
-			t_que.push_back(0);
-		}
-		
-		for(int i=0;i<getAnimationLoopLength(t_type);i++)
-		{
-			animation_frame.push_back(t_que[i]);
+			animation_frame.push_back(SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_detail_loopSeq_%d", t_type*10+2, i)->getCString()));
 		}
 	}
 	
@@ -89,11 +71,7 @@ public:
 	
 	int getCardDurability(int stage, int level)
 	{
-		int return_value;
-		
-		return_value = 10;
-		
-		return return_value;
+		return SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_durability", stage*10+level-1)->getCString());
 	}
 	
 	string getCardOptionScript(int stage, int level)
@@ -107,56 +85,27 @@ public:
 	
 	void setCardOptions(deque<int>& t_list, int card_number)
 	{
-		if(card_number == 10)
+		int ability_cnt = SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_ability_cnt", card_number)->getCString());
+		
+		for(int i=0;i<ability_cnt;i++)
 		{
-			t_list.push_back(kIC_longTime);
-			t_list.push_back(kIC_fast);
-		}
-		else if(card_number == 20)
-		{
-			t_list.push_back(kIC_silence);
-		}
-		else if(card_number == 30)
-		{
-			t_list.push_back(kIC_critical);
-		}
-		else
-		{
-			
+			t_list.push_back(SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_ability_%d_type", card_number, i)->getCString()));
 		}
 	}
 	
 	CLEAR_CONDITION getClearCondition(){	return getClearCondition(myType);	}
 	CLEAR_CONDITION getClearCondition(int t_type) // stage
 	{
-		CLEAR_CONDITION return_value;
-		
-		if(t_type == 1)				return_value = kCLEAR_bossLifeZero;
-		else if(t_type == 2)		return_value = kCLEAR_subCumberCatch;
-		else if(t_type == 3)		return_value = kCLEAR_bigArea;
-		else if(t_type == 4)		return_value = kCLEAR_itemCollect;
-		else if(t_type == 5)		return_value = kCLEAR_perfect;
-		else if(t_type == 6)		return_value = kCLEAR_sequenceChange;
-		else if(t_type == 7)		return_value = kCLEAR_timeLimit;
-		else						return_value = kCLEAR_default;
-		
-		return return_value;
+		return CLEAR_CONDITION(SDS_GI(kSDF_stageInfo, t_type, "mission_type"));
 	}
 	
 	float getBossMaxLife()
 	{
-		float return_value;
-		
-		CLEAR_CONDITION my_clear_condition = getClearCondition();
-		
-		if(my_clear_condition == kCLEAR_bossLifeZero)
-		{
-			if(myType == 1)				return_value = 500;
-			else						return_value = 100000;
-		}
-		else	return_value = 100000;
-		
-		return return_value;
+		JsonBox::Value t_json;
+		t_json.loadFromString(SDS_GS(kSDF_stageInfo, myType, "boss"));
+		JsonBox::Array t_array = t_json.getArray();
+		JsonBox::Object t_boss = t_array[0].getObject();
+		return float(t_boss["hp"].getInt());
 	}
 	
 	string getConditionTitle()
@@ -182,6 +131,8 @@ public:
 	{
 		string return_value;
 		
+		t_type = getClearCondition(t_type);
+		
 		if(t_type == kCLEAR_bossLifeZero)				return_value = "보스의 에너지를 모두 소진시켜라!";
 		else if(t_type == kCLEAR_subCumberCatch)		return_value = "부하 몬스터를 가두어 잡으세요!";
 		else if(t_type == kCLEAR_bigArea)				return_value = "정해진 횟수만큼 한번에 많이 먹으세요!";
@@ -195,81 +146,25 @@ public:
 	}
 	
 	int getClearConditionCatchSubCumber(){	return getClearConditionCatchSubCumber(myType);	}
-	int getClearConditionCatchSubCumber(int t_type)
-	{
-		int return_value;
-		
-		if(t_type == 2)		return_value = 5;
-		else				return_value = 0;
-		
-		return return_value;
-	}
+	int getClearConditionCatchSubCumber(int t_type){	return SDS_GI(kSDF_stageInfo, t_type, "mission_option_count");	}
 	
 	float getClearConditionBigAreaPer(){	return getClearConditionBigAreaPer(myType);	}
-	float getClearConditionBigAreaPer(int t_type)
-	{
-		float return_value;
-		
-		if(t_type == 3)		return_value = 0.1f;
-		else				return_value = 0;
-		
-		return return_value;
-	}
+	float getClearConditionBigAreaPer(int t_type){		return SDS_GI(kSDF_stageInfo, t_type, "mission_option_percent")/100.f;	}
 	
 	int getClearConditionBigAreaCnt(){	return getClearConditionBigAreaCnt(myType);	}
-	int getClearConditionBigAreaCnt(int t_type)
-	{
-		int return_value;
-		
-		if(t_type == 3)		return_value = 3;
-		else				return_value = 0;
-		
-		return return_value;
-	}
+	int getClearConditionBigAreaCnt(int t_type){	return SDS_GI(kSDF_stageInfo, t_type, "mission_option_count");	}
 	
 	int getClearConditionItemCollect(){	return getClearConditionItemCollect(myType);	}
-	int getClearConditionItemCollect(int t_type)
-	{
-		int return_value;
-		
-		if(t_type == 4)		return_value = 10;
-		else				return_value = 0;
-		
-		return return_value;
-	}
+	int getClearConditionItemCollect(int t_type){	return SDS_GI(kSDF_stageInfo, t_type, "mission_option_count");	}
 	
 	float getClearConditionPerfectBase(){	return getClearConditionPerfectBase(myType);	}
-	float getClearConditionPerfectBase(int t_type)
-	{
-		float return_value;
-		
-		if(t_type == 5)		return_value = 0.87f;
-		else				return_value = 0;
-		
-		return return_value;
-	}
+	float getClearConditionPerfectBase(int t_type){		return SDS_GI(kSDF_stageInfo, t_type, "mission_option_percent")/100.f;	}
 	
 	float getClearConditionPerfectRange(){	return getClearConditionPerfectRange(myType);	}
-	float getClearConditionPerfectRange(int t_type)
-	{
-		float return_value;
-		
-		if(t_type == 5)		return_value = 0.01f;
-		else				return_value = 0;
-		
-		return return_value;
-	}
+	float getClearConditionPerfectRange(int t_type){	return 0.01f;	}
 	
 	int getClearConditionTimeLimit(){	return getClearConditionTimeLimit(myType);	}
-	int getClearConditionTimeLimit(int t_type)
-	{
-		int return_value;
-		
-		if(t_type == 7)		return_value = 100;
-		else				return_value = 0;
-		
-		return return_value;
-	}
+	int getClearConditionTimeLimit(int t_type){		return SDS_GI(kSDF_stageInfo, t_type, "mission_option_sec");	}
 	
 	vector<ITEM_CODE> getStageItemList(){	return getStageItemList(myType);	}
 	vector<ITEM_CODE> getStageItemList(int t_type)
@@ -335,124 +230,53 @@ public:
 	int getSilenceItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_silence_sec");	}
 	int getDoubleItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_doubleItem_percent");	}
 	
-	int getCardDoubleItemOption(int card_number)
-	{
-		int return_value;
-		
-			return_value = 2;
-		
-		return return_value;
-	}
+	int getCardDoubleItemOption(int card_number){	return SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_ability_doubleItem_option_percent", card_number)->getCString());	}
 	
 	int getLongTimeItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_longTime_sec");	}
-	int getCardLongTimeItemOption(int card_number)
-	{
-		int return_value;
-		
-			return_value = 30;
-		
-		return return_value;
-	}
+	int getCardLongTimeItemOption(int card_number){	return SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_ability_longTime_option_sec", card_number)->getCString());	}
 	
 	int getBossLittleEnergyItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_bossLittleEnergy_percent");	}
-	int getCardBossLittleEnergyItemOption(int card_number)
-	{
-		int return_value;
-		
-			return_value = 20;
-		
-		return return_value;
-	}
+	int getCardBossLittleEnergyItemOption(int card_number){		return SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_ability_bossLittleEnergy_percent", card_number)->getCString());	}
 	
 	int getSubSmallSizeItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_subSmallSize_percent");	}
-	int getCardSubSmallSizeItemOption(int card_number)
-	{
-		int return_value;
-		
-			return_value = 20;
-		
-		return return_value;
-	}
+	int getCardSubSmallSizeItemOption(int card_number){		return SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_ability_subSmallSize_percent", card_number)->getCString());	}
 	
 	int getSmallAreaItemOption(){		return SDS_GI(kSDF_stageInfo, myType, "itemOption_smallArea_percent");	}
-	int getCardSmallAreaItemOption(int card_number)
-	{
-		int return_value;
-		
-			return_value = 2;
-		
-		return return_value;
-	}
+	int getCardSmallAreaItemOption(int card_number){	return SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_ability_smallArea_percent", card_number)->getCString());	}
 	
 	int getWidePerfectItemOption(){		return SDS_GI(kSDF_stageInfo, myType, "itemOption_widePerfect_percent");	}
-	int getCardWidePerfectItemOption(int card_number)
-	{
-		int return_value;
-		
-			return_value = 1;
-		
-		return return_value;
-	}
+	int getCardWidePerfectItemOption(int card_number){	return SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_ability_widePerfect_percent", card_number)->getCString());	}
 	
 	bool isAnimationStage(){	return isAnimationStage(myType);	}
-	bool isAnimationStage(int t_type)
-	{
-		bool return_value;
-		
-		if(t_type == 3)			return_value = true;
-		else if(t_type == 8)	return_value = true;
-		else					return_value = false;
-		
-		return return_value;
-	}
+	bool isAnimationStage(int t_type){	return SDS_GB(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_isAni", t_type*10+2)->getCString());	}
 	
 	CCSize getAnimationCutSize(){	return getAnimationCutSize(myType);	}
 	CCSize getAnimationCutSize(int t_type)
 	{
 		CCSize return_value;
 		
-		if(t_type == 3)			return_value = CCSizeMake(80, 30);
-		else if(t_type == 8)	return_value = CCSizeMake(85, 75);
-		else					return_value = CCSizeMake(0, 0);
+		return_value.width = SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_detail_cutWidth", t_type*10+2)->getCString());
+		return_value.height = SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_detail_cutHeight", t_type*10+2)->getCString());
 		
 		return return_value;
 	}
 	
 	int getAnimationCutLength(){	return getAnimationCutLength(myType);	}
-	int getAnimationCutLength(int t_type)
-	{
-		int return_value;
-		
-		if(t_type == 3)			return_value = 3;
-		else if(t_type == 8)	return_value = 4;
-		else					return_value = 0;
-		
-		return return_value;
-	}
+	int getAnimationCutLength(int t_type){	return SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_detail_cutLength", t_type*10+2)->getCString());	}
 	
 	CCPoint getAnimationPosition(){	return getAnimationPosition(myType);	}
 	CCPoint getAnimationPosition(int t_type)
 	{
 		CCPoint return_value;
 		
-		if(t_type == 3)			return_value = ccp(163,324);
-		else if(t_type == 8)	return_value = ccp(157,289);
-		else					return_value = ccp(0,0);
+		return_value.x = SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_detail_positionX", t_type*10+2)->getCString());
+		return_value.y = SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_detail_positionY", t_type*10+2)->getCString());
 		
 		return return_value;
 	}
 	
 	int getAnimationLoopLength(){	return getAnimationLoopLength(myType);	}
-	int getAnimationLoopLength(int t_type)
-	{
-		int return_value;
-		
-		if(t_type == 3)			return_value = 4;
-		else if(t_type == 8)	return_value = 8;
-		else					return_value = 0;
-		
-		return return_value;
-	}
+	int getAnimationLoopLength(int t_type){	return SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_detail_loopLength", t_type*10+2)->getCString());	}
 	
 	int getAnimationLoopPoint(int t_frame){	return animation_frame[t_frame];	}
 	
