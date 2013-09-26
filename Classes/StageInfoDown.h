@@ -24,6 +24,7 @@ public:
 	int size;
 	string img;
 	string filename;
+	string key;
 };
 
 #define CCSTR_CWF CCString::createWithFormat
@@ -128,6 +129,7 @@ private:
 			graphdog->removeCommand(this);
 			if(is_downloading)
 				StageImgLoader::sharedInstance()->removeTD();
+			(target_cancel->*delegate_cancel)();
 			removeFromParent();
 		}
 	}

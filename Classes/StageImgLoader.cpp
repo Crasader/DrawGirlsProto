@@ -157,10 +157,11 @@ void StageImgLoader::successAction()
 	
 	lchunk.size = 0;
 	
-	my_savedata->setKeyValue(kSDF_downloadedInfo, down_filename, 1);
-	
 	if(target_success)
+	{
+		my_savedata->setKeyValue(kSDF_downloadedInfo, down_filename, 1);
 		(target_success->*delegate_success)();
+	}
 }
 
 void StageImgLoader::failAction()

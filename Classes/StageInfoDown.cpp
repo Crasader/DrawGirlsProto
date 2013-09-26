@@ -190,52 +190,52 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 					if(t_abil["type"].getInt() == kIC_attack)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_attack_option_power", t_card["no"].getInt(), j)->getCString(), t_option["power"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_attack_option_power", t_card["no"].getInt())->getCString(), t_option["power"].getInt());
 					}
 					else if(t_abil["type"].getInt() == kIC_addTime)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_addTime_option_sec", t_card["no"].getInt(), j)->getCString(), t_option["sec"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_addTime_option_sec", t_card["no"].getInt())->getCString(), t_option["sec"].getInt());
 					}
 					else if(t_abil["type"].getInt() == kIC_fast)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_fast_option_sec", t_card["no"].getInt(), j)->getCString(), t_option["sec"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_fast_option_sec", t_card["no"].getInt())->getCString(), t_option["sec"].getInt());
 					}
 					else if(t_abil["type"].getInt() == kIC_silence)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_silence_option_sec", t_card["no"].getInt(), j)->getCString(), t_option["sec"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_silence_option_sec", t_card["no"].getInt())->getCString(), t_option["sec"].getInt());
 					}
 					else if(t_abil["type"].getInt() == kIC_doubleItem)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_doubleItem_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_doubleItem_option_percent", t_card["no"].getInt())->getCString(), t_option["percent"].getInt());
 					}
 					else if(t_abil["type"].getInt() == kIC_longTime)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_longTime_option_sec", t_card["no"].getInt(), j)->getCString(), t_option["sec"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_longTime_option_sec", t_card["no"].getInt())->getCString(), t_option["sec"].getInt());
 					}
 					else if(t_abil["type"].getInt() == kIC_bossLittleEnergy)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_bossLittleEnergy_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_bossLittleEnergy_option_percent", t_card["no"].getInt())->getCString(), t_option["percent"].getInt());
 					}
 					else if(t_abil["type"].getInt() == kIC_subSmallSize)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_subSmallSize_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_subSmallSize_option_percent", t_card["no"].getInt())->getCString(), t_option["percent"].getInt());
 					}
 					else if(t_abil["type"].getInt() == kIC_smallArea)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_smallArea_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_smallArea_option_percent", t_card["no"].getInt())->getCString(), t_option["percent"].getInt());
 					}
 					else if(t_abil["type"].getInt() == kIC_widePerfect)
 					{
 						JsonBox::Object t_option = t_abil["option"].getObject();
-						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_widePerfect_option_percent", t_card["no"].getInt(), j)->getCString(), t_option["percent"].getInt());
+						SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_widePerfect_option_percent", t_card["no"].getInt())->getCString(), t_option["percent"].getInt());
 					}
 				}
 				
@@ -249,10 +249,9 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 					t_df.size = t_imgInfo["size"].getInt();
 					t_df.img = t_imgInfo["img"].getString().c_str();
 					t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", mySD->getSilType(), i+1)->getCString();
+					t_df.key = CCSTR_CWF("%d_imgInfo_img", t_card["no"].getInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
-					
-					SDS_SS(kSDF_cardInfo, CCSTR_CWF("%d_imgInfo_img", t_card["no"].getInt())->getCString(), t_imgInfo["img"].getString());
 				}
 				
 				JsonBox::Object t_thumbnailInfo = t_card["thumbnailInfo"].getObject();
@@ -265,10 +264,9 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 					t_df.size = t_thumbnailInfo["size"].getInt();
 					t_df.img = t_thumbnailInfo["img"].getString().c_str();
 					t_df.filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", mySD->getSilType(), i+1)->getCString();
+					t_df.key = CCSTR_CWF("%d_thumbnailInfo_img", t_card["no"].getInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
-					
-					SDS_SS(kSDF_cardInfo, CCSTR_CWF("%d_thumbnailInfo_img", t_card["no"].getInt())->getCString(), t_thumbnailInfo["img"].getString());
 				}
 				
 				JsonBox::Object t_aniInfo = t_card["aniInfo"].getObject();
@@ -296,10 +294,9 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 						t_df.size = t_detail["size"].getInt();
 						t_df.img = t_detail["img"].getString().c_str();
 						t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", mySD->getSilType(), i+1)->getCString();
+						t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].getInt())->getCString();
 						df_list.push_back(t_df);
 						// ================================
-						
-						SDS_SS(kSDF_cardInfo, CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].getInt())->getCString(), t_detail["img"].getString());
 					}
 				}
 				
@@ -317,12 +314,11 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 						t_df.size = t_silImgInfo["size"].getInt();
 						t_df.img = t_silImgInfo["img"].getString().c_str();
 						t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", mySD->getSilType(), i+1)->getCString();
+						t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].getInt())->getCString();
 						df_list.push_back(t_df);
 						// ================================
-						
-						SDS_SS(kSDF_cardInfo, CCSTR_CWF("%d_silImgInfo_img", t_card["no"].getInt())->getCString(), t_silImgInfo["img"].getString());
-						SDS_SS(kSDF_cardInfo, CCSTR_CWF("%d_silImgInfo_silData", t_card["no"].getInt())->getCString(), t_silImgInfo["silData"].getString());
 					}
+					SDS_SS(kSDF_cardInfo, CCSTR_CWF("%d_silImgInfo_silData", t_card["no"].getInt())->getCString(), t_silImgInfo["silData"].getString());
 				}
 			}
 			
@@ -456,6 +452,8 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 
 void StageInfoDown::successAction()
 {
+	SDS_SS(kSDF_cardInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
+	
 	if(ing_download_cnt >= df_list.size())
 	{
 		SDS_SI(kSDF_stageInfo, mySD->getSilType(), "version", download_version);
