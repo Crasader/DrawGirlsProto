@@ -232,7 +232,7 @@ public:
 		
 		m_perFrame = pattern["perframe"].getInt();
 		m_totalFrame = pattern["totalframe"].getInt();
-		m_bulletSpeed = pattern["speed"].getInt();
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		
 		
 		m_frameCnt = 0;
@@ -323,7 +323,7 @@ public:
 		JsonBox::Object patterns = boss["pattern"].getObject();
 		JsonBox::Object pattern = patterns["3"].getObject();
 		
-		m_bulletSpeed = pattern["speed"].getInt();
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -394,7 +394,7 @@ public:
 		JsonBox::Object pattern = patterns["4"].getObject();
 		m_perFrame = pattern["perframe"].getInt();;
 		m_totalFrame = pattern["totalframe"].getInt();;
-		m_bulletSpeed = pattern["speed"].getInt();;
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();;
 		
 
@@ -480,7 +480,7 @@ public:
 		JsonBox::Object pattern = patterns["5"].getObject();
 		m_perFrame = pattern["perframe"].getInt();;        // p
 		m_totalFrame = pattern["totalframe"].getInt();;    // p
-		m_bulletSpeed = pattern["speed"].getInt();  // p
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;  // p
 		m_numberPerFrame = pattern["numberperframe"].getInt(); // p
 		
 		
@@ -558,7 +558,7 @@ public:
 		JsonBox::Object boss = v.getArray()[0].getObject();
 		JsonBox::Object patterns = boss["pattern"].getObject();
 		JsonBox::Object pattern = patterns["6"].getObject();
-		m_bulletSpeed = pattern["speed"].getInt();  // p
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;  // p
 		m_numberPerFrame = pattern["numberperframe"].getInt(); // p
 		
 		m_frameCnt = 0;
@@ -643,7 +643,7 @@ public:
 		JsonBox::Object pattern = patterns["7"].getObject();
 		m_perFrame = pattern["perframe"].getInt();;
 		m_totalFrame = pattern["totalframe"].getInt();;   // p
-		m_bulletSpeed = pattern["speed"].getInt(); // p
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f; // p
 		m_numberPerFrame = pattern["numberperframe"].getInt();
 		m_term = 6; // p
 		
@@ -751,7 +751,7 @@ public:
 		
 		m_perFrame = pattern["perframe"].getInt();;		// p
 		m_totalFrame = pattern["totalframe"].getInt();;		// p
-		m_bulletSpeed = pattern["speed"].getInt();	// p
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;	// p
 		m_numberPerFrame =pattern["numberperframe"].getInt();	// p
 		
 		m_frameCnt = 0;
@@ -825,6 +825,61 @@ protected:
 	CCSpriteBatchNode* batchNode;
 };
 
+// 당구공.
+class KSAttackPattern9 : public AttackPattern
+{
+public:
+	static KSAttackPattern9* create(CCPoint t_sp, float t_move_speed, int t_tmCnt, int t_cushion_cnt, bool t_is_big_bomb)
+	{
+		KSAttackPattern9* t_m18 = new KSAttackPattern9();
+		t_m18->myInit(t_sp, t_move_speed, t_tmCnt, t_cushion_cnt, t_is_big_bomb);
+		t_m18->autorelease();
+		return t_m18;
+	}
+	
+	void removeEffect()
+	{
+		if(!isRemoveEffect)
+		{
+			isRemoveEffect = true;
+			int loop_cnt = getChildrenCount();
+			for(int i=0;i<loop_cnt;i++)
+			{
+				((ThreeCushion*)getChildren()->objectAtIndex(i))->removeEffect();
+			}
+		}
+	}
+	
+private:
+	
+	bool isRemoveEffect;
+	
+	virtual void selfRemoveSchedule()
+	{
+		if(getChildrenCount() == 0)
+		{
+			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects");
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void myInit(CCPoint t_sp, float t_move_speed, int t_tmCnt, int t_cushion_cnt, bool t_is_big_bomb)
+	{
+		isRemoveEffect = false;
+		myGD->communication("EP_startCrashAction");
+		for(int i=0;i<t_tmCnt;i++)
+		{
+			// create
+			ThreeCushion* t_tc = ThreeCushion::create(t_sp, t_move_speed, t_cushion_cnt, t_is_big_bomb,
+						this, callfunc_selector(ThisClassType::removeEffect));
+			addChild(t_tc);
+		}
+		
+		startSelfRemoveSchedule();
+	}
+};
+
 
 // 조준형1 : 부채꼴.
 class KSTargetAttackPattern1 : public AttackPattern
@@ -851,7 +906,7 @@ public:
 		JsonBox::Object patterns = boss["pattern"].getObject();
 		JsonBox::Object pattern = patterns["101"].getObject();
 		
-		m_bulletSpeed = pattern["speed"].getInt();
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();
 		
 
@@ -946,7 +1001,7 @@ public:
 		
 		m_perFrame = pattern["perframe"].getInt();;
 		m_totalFrame = pattern["totalframe"].getInt();;
-		m_bulletSpeed = pattern["speed"].getInt();;
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();;
 		
 		m_frameCnt = 0;
@@ -1053,7 +1108,7 @@ public:
 		
 		m_perFrame = pattern["perframe"].getInt();;
 		m_totalFrame = pattern["totalframe"].getInt();
-		m_bulletSpeed = pattern["speed"].getInt();
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();
 		
 		m_frameCnt = 0;
@@ -1161,7 +1216,7 @@ public:
 		
 		m_perFrame = pattern["perframe"].getInt();
 		m_totalFrame = pattern["totalframe"].getInt();
-		m_bulletSpeed = pattern["speed"].getInt();
+		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();
 		
 		m_frameCnt = 0;
@@ -1301,6 +1356,8 @@ public:
 		
 	}
 };
+
+
 
 class AP_Missile0 : public AttackPattern
 {
