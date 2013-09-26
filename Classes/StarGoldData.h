@@ -294,7 +294,7 @@ public:
 		}
 		else
 		{
-			GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogRefreshServerTime));
+//			GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogRefreshServerTime));
 		}
 	}
 	
@@ -564,7 +564,7 @@ private:
 	
 	void getServerTime()
 	{
-		GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogGetServerTime));
+//		GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogGetServerTime));
 	}
 	
 	void loadServerTime()

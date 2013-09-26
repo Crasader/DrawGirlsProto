@@ -25,6 +25,7 @@
 #include "ContinuePopup.h"
 #include "WorldMapScene.h"
 #include "ConditionPopup.h"
+#include "ServerDataSave.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -655,7 +656,7 @@ public:
 		{
 			if(clr_cdt_type == kCLEAR_timeLimit)
 			{
-				if(150 - countingCnt >= ing_cdt_cnt)
+				if(playtime_limit - countingCnt >= ing_cdt_cnt)
 					conditionClear();
 				else
 					conditionFail();
@@ -910,7 +911,7 @@ public:
 				if(countingCnt < 0)
 					countingCnt = 0;
 			}
-			countingLabel->setString(CCString::createWithFormat("%d", 150-countingCnt)->getCString());
+			countingLabel->setString(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString());
 			
 			jack_life--;
 			removeChild((CCNode*)jack_array->lastObject(), true);
@@ -925,12 +926,12 @@ public:
 	
 	void takeAddTimeItem()
 	{
-		countingCnt -= 10;
+		countingCnt -= SDS_GI(kSDF_stageInfo, mySD->getSilType(), "itemOption_addTime_sec");
 		
 		if(countingCnt < -mySGD->getLongTimeValue())
 			countingCnt = -mySGD->getLongTimeValue();
 		
-		countingLabel->setString(CCString::createWithFormat("%d", 150-countingCnt)->getCString());
+		countingLabel->setString(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString());
 	}
 	
 	bool getIsExchanged()
@@ -982,6 +983,7 @@ private:
 	bool is_hard;
 	int beforePercentage;
 	
+	int playtime_limit;
 	int countingCnt;
 	
 	int jack_life;
@@ -999,7 +1001,7 @@ private:
 	{
 		countingCnt++;
 		
-		countingLabel->setString(CCString::createWithFormat("%d", 150-countingCnt)->getCString());
+		countingLabel->setString(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString());
 		CCRotateBy* t_rotate = CCRotateBy::create(0.5, -180);
 		sand_clock->runAction(t_rotate);
 		
@@ -1031,7 +1033,7 @@ private:
 			countingLabel->runAction(t_seq);
 		}
 		
-		if(countingCnt >= 150)
+		if(countingCnt >= playtime_limit)
 		{
 			stopCounting();
 			// timeover
@@ -1169,8 +1171,9 @@ private:
 		addChild(sand_clock);
 		
 		countingCnt = -mySGD->getLongTimeValue();
+		playtime_limit = mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime");
 		
-		countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", 150-countingCnt)->getCString(), "etc_font.fnt");
+		countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString(), "etc_font.fnt");
 		countingLabel->setScale(1.3);
 		if(myGD->gamescreen_type == kGT_leftUI)			countingLabel->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-20));
 		else if(myGD->gamescreen_type == kGT_rightUI)	countingLabel->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-20));

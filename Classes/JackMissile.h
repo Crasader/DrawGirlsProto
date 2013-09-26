@@ -326,7 +326,7 @@ private:
 //		else if(selected_type == kMyElementalPlasma)	element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelPlasma);
 		
 		
-		damage = MissileDamageData::getElementDamage(jm_type, element_level) * damage_per;
+		damage = MissileDamageData::getJMDamage() * damage_per;
 		
 		load_removing = false;
 		shoot_removing = false;
@@ -763,7 +763,7 @@ private:
 		
 		particle_string = type_name + ".png";
 		
-		damage = MissileDamageData::getElementDamage(jm_type, element_level) * damage_per;
+		damage = MissileDamageData::getJMDamage() * damage_per;
 		myJM_SPEED = JM_SPEED * ((rand()%5 - 2)/10.f + 1.f);
 		myJM_CHANGE_DIRECTION_VAL = JM_CHANGE_DIRECTION_VAL;
 		

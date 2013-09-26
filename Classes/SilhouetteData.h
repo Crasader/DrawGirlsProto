@@ -13,6 +13,7 @@
 #include "GameData.h"
 #include "EnumDefine.h"
 #include <deque>
+#include "ServerDataSave.h"
 
 USING_NS_CC;
 using namespace std;
@@ -275,46 +276,10 @@ public:
 	{
 		vector<ITEM_CODE> return_value;
 		
-		if(t_type == 1)
-		{
-			return_value.push_back(kIC_bossLittleEnergy);
-			return_value.push_back(kIC_critical);
-			return_value.push_back(kIC_doubleItem);
-		}
-		else if(t_type == 2)
-		{
-			return_value.push_back(kIC_subSmallSize);
-			return_value.push_back(kIC_subOneDie);
-			return_value.push_back(kIC_subNothing);
-		}
-		else if(t_type == 3)
-		{
-			return_value.push_back(kIC_fast);
-			return_value.push_back(kIC_smallArea);
-		}
-		else if(t_type == 4)
-		{
-			return_value.push_back(kIC_doubleItem);
-		}
-		else if(t_type == 5)
-		{
-			return_value.push_back(kIC_widePerfect);
-			return_value.push_back(kIC_silence);
-		}
-		else if(t_type == 6)
-		{
-			return_value.push_back(kIC_randomChange);
-		}
-		else if(t_type == 7)
-		{
-			return_value.push_back(kIC_longTime);
-		}
-		else
-		{
-			return_value.push_back(kIC_fast);
-			return_value.push_back(kIC_critical);
-			return_value.push_back(kIC_doubleItem);
-		}
+		int item_cnt = SDS_GI(kSDF_stageInfo, t_type, "shopItems_cnt");
+		
+		for(int i=0;i<item_cnt;i++)
+			return_value.push_back(ITEM_CODE(SDS_GI(kSDF_stageInfo, t_type, CCString::createWithFormat("shopItems_%d_type", i)->getCString())));
 		
 		return return_value;
 	}
@@ -367,25 +332,9 @@ public:
 		return return_value;
 	}
 	
-	int getSilenceItemOption()
-	{
-		int return_value;
-		
-//		if(myType == 1)
-			return_value = 10;
-		
-		return return_value;
-	}
+	int getSilenceItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_silence_sec");	}
+	int getDoubleItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_doubleItem_percent");	}
 	
-	int getDoubleItemOption()
-	{
-		int return_value;
-		
-//		if(myType == 1)
-			return_value = 2;
-		
-		return return_value;
-	}
 	int getCardDoubleItemOption(int card_number)
 	{
 		int return_value;
@@ -395,15 +344,7 @@ public:
 		return return_value;
 	}
 	
-	int getLongTimeItemOption()
-	{
-		int return_value;
-		
-//		if(myType == 1)
-			return_value = 30;
-		
-		return return_value;
-	}
+	int getLongTimeItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_longTime_sec");	}
 	int getCardLongTimeItemOption(int card_number)
 	{
 		int return_value;
@@ -413,15 +354,7 @@ public:
 		return return_value;
 	}
 	
-	int getBossLittleEnergyItemOption()
-	{
-		int return_value;
-		
-//		if(myType == 1)
-			return_value = 20;
-		
-		return return_value;
-	}
+	int getBossLittleEnergyItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_bossLittleEnergy_percent");	}
 	int getCardBossLittleEnergyItemOption(int card_number)
 	{
 		int return_value;
@@ -431,15 +364,7 @@ public:
 		return return_value;
 	}
 	
-	int getSubSmallSizeItemOption()
-	{
-		int return_value;
-		
-//		if(myType == 1)
-			return_value = 20;
-		
-		return return_value;
-	}
+	int getSubSmallSizeItemOption(){	return SDS_GI(kSDF_stageInfo, myType, "itemOption_subSmallSize_percent");	}
 	int getCardSubSmallSizeItemOption(int card_number)
 	{
 		int return_value;
@@ -449,15 +374,7 @@ public:
 		return return_value;
 	}
 	
-	int getSmallAreaItemOption()
-	{
-		int return_value;
-		
-//		if(myType == 1)
-			return_value = 2;
-		
-		return return_value;
-	}
+	int getSmallAreaItemOption(){		return SDS_GI(kSDF_stageInfo, myType, "itemOption_smallArea_percent");	}
 	int getCardSmallAreaItemOption(int card_number)
 	{
 		int return_value;
@@ -467,15 +384,7 @@ public:
 		return return_value;
 	}
 	
-	int getWidePerfectItemOption()
-	{
-		int return_value;
-		
-//		if(myType == 1)
-			return_value = 1;
-		
-		return return_value;
-	}
+	int getWidePerfectItemOption(){		return SDS_GI(kSDF_stageInfo, myType, "itemOption_widePerfect_percent");	}
 	int getCardWidePerfectItemOption(int card_number)
 	{
 		int return_value;

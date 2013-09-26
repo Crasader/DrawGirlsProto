@@ -77,7 +77,6 @@ public:
 		static DataStorageHub* t_dsh = NULL;
 		if(t_dsh == NULL)
 		{
-			SaveData::sharedObject()->createJSON();
 			t_dsh = new DataStorageHub();
 			t_dsh->myInit();
 		}
@@ -92,20 +91,20 @@ public:
 //			return true;
 //		else
 //		{
-			string bool_string = myDefault->getValue(getKey(t_key), "false");
+			string bool_string = myDefault->getValue(kSDF_myDSH, getKey(t_key), "false");
 			if(bool_string == "false")		return false;
 			else							return true;
 //		}
 	}
 	bool getBoolForKey(DSH_Key t_key, int key_val1)
 	{
-		string bool_string = myDefault->getValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), "false");
+		string bool_string = myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), "false");
 		if(bool_string == "false")		return false;
 		else							return true;
 	}
 	bool getBoolForKey(DSH_Key t_key, int key_val1, int key_val2)
 	{
-		string bool_string = myDefault->getValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), "false");
+		string bool_string = myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), "false");
 		if(bool_string == "false")		return false;
 		else							return true;
 	}
@@ -115,60 +114,60 @@ public:
 		string bool_string;
 		if(t_b)			bool_string = "true";
 		else			bool_string = "false";
-		myDefault->setKeyValue(getKey(t_key), bool_string);
+		myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), bool_string);
 	}
 	void setBoolForKey(DSH_Key t_key, int key_val1, bool t_b)
 	{
 		string bool_string;
 		if(t_b)			bool_string = "true";
 		else			bool_string = "false";
-		myDefault->setKeyValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), bool_string);
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), bool_string);
 	}
 	void setBoolForKey(DSH_Key t_key, int key_val1, int key_val2, bool t_b)
 	{
 		string bool_string;
 		if(t_b)			bool_string = "true";
 		else			bool_string = "false";
-		myDefault->setKeyValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), bool_string);
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), bool_string);
 	}
 	
 	int getIntegerForKey(DSH_Key t_key)
 	{
 		if(t_key == kDSH_Key_elementLevelEmpty)
-			return myDefault->getValue(getKey(t_key), 1);
+			return myDefault->getValue(kSDF_myDSH, getKey(t_key), 1);
 		
-		return myDefault->getValue(getKey(t_key), 0);
+		return myDefault->getValue(kSDF_myDSH, getKey(t_key), 0);
 	}
 	int getIntegerForKey(DSH_Key t_key, int key_val1)
 	{
-		return myDefault->getValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), 0);
+		return myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), 0);
 	}
 	int getIntegerForKey(DSH_Key t_key, int key_val1, int key_val2)
 	{
-		return myDefault->getValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), 0);
+		return myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), 0);
 	}
 	
 	void setIntegerForKey(DSH_Key t_key, int val1)
 	{
-		myDefault->setKeyValue(getKey(t_key), val1);
+		myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), val1);
 	}
 	void setIntegerForKey(DSH_Key t_key, int key_val1, int val1)
 	{
-		myDefault->setKeyValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1);
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1);
 	}
 	
 	string getStringForKey(DSH_Key t_key, int key_val1)
 	{
-		return myDefault->getValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), "");
+		return myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), "");
 	}
 	void setStringForKey(DSH_Key t_key, int key_val1, string val1)
 	{
-		myDefault->setKeyValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1.c_str());
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1.c_str());
 	}
 	
 	void setIntegerForKey(DSH_Key t_key, int key_val1, int key_val2, int val1)
 	{
-		myDefault->setKeyValue(CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), val1);
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), val1);
 	}
 	
 	void setGoldGetRate(float t_rate)
