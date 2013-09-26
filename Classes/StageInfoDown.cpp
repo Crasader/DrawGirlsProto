@@ -245,97 +245,100 @@ void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 				}
 			}
 			
-			JsonBox::Array bosss = result_data["boss"].getArray();
-			SDS_SI(kSDF_stageInfo, mySD->getSilType(), "boss_cnt", bosss.size());
-			for(int i=0;i<bosss.size();i++)
-			{
-				JsonBox::Object t_boss = bosss[i].getObject();
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_type", i)->getCString(), t_boss["type"].getInt());
-				
-				JsonBox::Object t_pattern = t_boss["pattern"].getObject();
-				JsonBox::Array t_missile = t_pattern["missile"].getArray();
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_missile_cnt", i)->getCString(), t_missile.size());
-				for(int j=0;j<t_missile.size();j++)
-				{
-					JsonBox::Object t_m = t_missile[j].getObject();
-					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_missile_%d_type", i, j)->getCString(), t_m["type"].getInt());
-					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_missile_%d_percent", i, j)->getCString(), t_m["percent"].getInt());
-					
-					if(t_m["type"] == 0) // enum
-					{
-						// option
-					}
-				}
-				
-				JsonBox::Array t_destroy = t_pattern["destroy"].getArray();
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_destroy_cnt", i)->getCString(), t_destroy.size());
-				for(int j=0;j<t_destroy.size();j++)
-				{
-					JsonBox::Object t_d = t_destroy[j].getObject();
-					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_destroy_%d_type", i, j)->getCString(), t_d["type"].getInt());
-					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_destroy_%d_percent", i, j)->getCString(), t_d["percent"].getInt());
-					
-					if(t_d["type"] == 0) // enum
-					{
-						// option
-					}
-				}
-				
-				JsonBox::Array t_special = t_pattern["special"].getArray();
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_spacial_cnt", i)->getCString(), t_special.size());
-				for(int j=0;j<t_special.size();j++)
-				{
-					JsonBox::Object t_s = t_destroy[j].getObject();
-					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_special_%d_type", i, j)->getCString(), t_s["type"].getInt());
-					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_special_%d_percent", i, j)->getCString(), t_s["percent"].getInt());
-					
-					if(t_s["type"] == 0) // enum
-					{
-						// option
-					}
-				}
-				
-				JsonBox::Object t_speed = t_boss["speed"].getObject();
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_speed_max", i)->getCString(), t_speed["max"].getDouble());
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_speed_start", i)->getCString(), t_speed["start"].getDouble());
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_speed_min", i)->getCString(), t_speed["min"].getDouble());
-				
-				JsonBox::Object t_scale = t_boss["scale"].getObject();
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_scale_max", i)->getCString(), t_scale["max"].getDouble());
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_scale_start", i)->getCString(), t_scale["start"].getDouble());
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_scale_min", i)->getCString(), t_scale["min"].getDouble());
-				
-				JsonBox::Object t_movement = t_boss["movement"].getObject();
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_movement_normal", i)->getCString(), t_movement["normal"].getInt());
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_movement_draw", i)->getCString(), t_movement["draw"].getInt());
-				
-				
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_attackTerm", i)->getCString(), t_boss["attackTerm"].getInt());
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_hp", i)->getCString(), t_boss["hp"].getInt());
-			}
+			SDS_SS(kSDF_stageInfo, mySD->getSilType(), "boss", result_data["boss"].getString());
+			SDS_SS(kSDF_stageInfo, mySD->getSilType(), "junior", result_data["junior"].getString());
 			
-			JsonBox::Array juniors = result_data["junior"].getArray();
-			for(int i=0;i<juniors.size();i++)
-			{
-				JsonBox::Object t_junior = juniors[i].getObject();
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_type", i)->getCString(), t_junior["type"].getInt());
-				
-				JsonBox::Object t_speed = t_junior["speed"].getObject();
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_speed_max", i)->getCString(), t_speed["max"].getDouble());
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_speed_start", i)->getCString(), t_speed["start"].getDouble());
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_speed_min", i)->getCString(), t_speed["min"].getDouble());
-				
-				JsonBox::Object t_scale = t_junior["scale"].getObject();
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_scale_max", i)->getCString(), t_scale["max"].getDouble());
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_scale_start", i)->getCString(), t_scale["start"].getDouble());
-				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_scale_min", i)->getCString(), t_scale["min"].getDouble());
-				
-				JsonBox::Object t_movement = t_junior["movement"].getObject();
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_movement_normal", i)->getCString(), t_movement["normal"].getInt());
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_movement_draw", i)->getCString(), t_movement["draw"].getInt());
-				
-				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_hp", i)->getCString(), t_junior["hp"].getInt());
-			}
+//			JsonBox::Array bosss = result_data["boss"].getArray();
+//			SDS_SI(kSDF_stageInfo, mySD->getSilType(), "boss_cnt", bosss.size());
+//			for(int i=0;i<bosss.size();i++)
+//			{
+//				JsonBox::Object t_boss = bosss[i].getObject();
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_type", i)->getCString(), t_boss["type"].getInt());
+//				
+//				JsonBox::Object t_pattern = t_boss["pattern"].getObject();
+//				JsonBox::Array t_missile = t_pattern["missile"].getArray();
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_missile_cnt", i)->getCString(), t_missile.size());
+//				for(int j=0;j<t_missile.size();j++)
+//				{
+//					JsonBox::Object t_m = t_missile[j].getObject();
+//					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_missile_%d_type", i, j)->getCString(), t_m["type"].getInt());
+//					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_missile_%d_percent", i, j)->getCString(), t_m["percent"].getInt());
+//					
+//					if(t_m["type"] == 0) // enum
+//					{
+//						// option
+//					}
+//				}
+//				
+//				JsonBox::Array t_destroy = t_pattern["destroy"].getArray();
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_destroy_cnt", i)->getCString(), t_destroy.size());
+//				for(int j=0;j<t_destroy.size();j++)
+//				{
+//					JsonBox::Object t_d = t_destroy[j].getObject();
+//					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_destroy_%d_type", i, j)->getCString(), t_d["type"].getInt());
+//					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_destroy_%d_percent", i, j)->getCString(), t_d["percent"].getInt());
+//					
+//					if(t_d["type"] == 0) // enum
+//					{
+//						// option
+//					}
+//				}
+//				
+//				JsonBox::Array t_special = t_pattern["special"].getArray();
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_spacial_cnt", i)->getCString(), t_special.size());
+//				for(int j=0;j<t_special.size();j++)
+//				{
+//					JsonBox::Object t_s = t_destroy[j].getObject();
+//					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_special_%d_type", i, j)->getCString(), t_s["type"].getInt());
+//					SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_pattern_special_%d_percent", i, j)->getCString(), t_s["percent"].getInt());
+//					
+//					if(t_s["type"] == 0) // enum
+//					{
+//						// option
+//					}
+//				}
+//				
+//				JsonBox::Object t_speed = t_boss["speed"].getObject();
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_speed_max", i)->getCString(), t_speed["max"].getDouble());
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_speed_start", i)->getCString(), t_speed["start"].getDouble());
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_speed_min", i)->getCString(), t_speed["min"].getDouble());
+//				
+//				JsonBox::Object t_scale = t_boss["scale"].getObject();
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_scale_max", i)->getCString(), t_scale["max"].getDouble());
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_scale_start", i)->getCString(), t_scale["start"].getDouble());
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_scale_min", i)->getCString(), t_scale["min"].getDouble());
+//				
+//				JsonBox::Object t_movement = t_boss["movement"].getObject();
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_movement_normal", i)->getCString(), t_movement["normal"].getInt());
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_movement_draw", i)->getCString(), t_movement["draw"].getInt());
+//				
+//				
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_attackTerm", i)->getCString(), t_boss["attackTerm"].getInt());
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("boss_%d_hp", i)->getCString(), t_boss["hp"].getInt());
+//			}
+			
+//			JsonBox::Array juniors = result_data["junior"].getArray();
+//			for(int i=0;i<juniors.size();i++)
+//			{
+//				JsonBox::Object t_junior = juniors[i].getObject();
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_type", i)->getCString(), t_junior["type"].getInt());
+//				
+//				JsonBox::Object t_speed = t_junior["speed"].getObject();
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_speed_max", i)->getCString(), t_speed["max"].getDouble());
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_speed_start", i)->getCString(), t_speed["start"].getDouble());
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_speed_min", i)->getCString(), t_speed["min"].getDouble());
+//				
+//				JsonBox::Object t_scale = t_junior["scale"].getObject();
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_scale_max", i)->getCString(), t_scale["max"].getDouble());
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_scale_start", i)->getCString(), t_scale["start"].getDouble());
+//				SDS_SD(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_scale_min", i)->getCString(), t_scale["min"].getDouble());
+//				
+//				JsonBox::Object t_movement = t_junior["movement"].getObject();
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_movement_normal", i)->getCString(), t_movement["normal"].getInt());
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_movement_draw", i)->getCString(), t_movement["draw"].getInt());
+//				
+//				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("junior_%d_hp", i)->getCString(), t_junior["hp"].getInt());
+//			}
 			
 			if(df_list.size() > 0) // need download
 			{
