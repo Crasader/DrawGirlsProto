@@ -264,6 +264,8 @@ private:
 	
 	bool isButtonAction;
 	
+	CCBAnimationManager* button_ani;
+	
 	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack)
 	{
 		CCLayer::init();
@@ -288,8 +290,8 @@ private:
 		
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
-		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("button.ccbi",this));
-		
+		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("gameui_button.ccbi",this));
+		button_ani = reader->getAnimationManager();
 //		draw_button = CCSprite::create("ui_draw.png");
 		if(myGD->gamescreen_type == kGT_rightUI)		draw_button->setPosition(ccp(480-25,25));
 		else if(myGD->gamescreen_type == kGT_leftUI)	draw_button->setPosition(ccp(25,25));
@@ -301,12 +303,12 @@ private:
 	
 	void onButton()
 	{
-		
+		button_ani->runAnimationsForSequenceNamed("cast1start");
 	}
 	
 	void offButton()
 	{
-		
+		button_ani->runAnimationsForSequenceNamed("cast1stop");
 	}
 	
 	void touchAction(CCPoint t_p, bool t_b);
