@@ -459,6 +459,13 @@ private:
 	
 	void myInit(IntPoint s_p)
 	{
+		JsonBox::Value t_json;
+		
+		t_json.loadFromString(SDS_GS(kSDF_stageInfo, mySD->getSilType(), "junior"));
+		
+		JsonBox::Array junior = t_json.getArray();
+		JsonBox::Object first_junior = junior[0].getObject();
+		
 		mEmotion = NULL;
 		is_slowed = false;
 		isSheild = 0;
@@ -466,7 +473,8 @@ private:
 		isSelfBomb = false;
 		
 		myState = cumberStateStop;
-		move_speed = 1.f;
+		JsonBox::Object j_speed = first_junior["speed"].getObject();
+		move_speed = j_speed["start"].getDouble();
 		
 		int resultType = 20;
 		
@@ -490,9 +498,11 @@ private:
 		}
 		
 		int option_value = mySGD->getSubSmallSizeValue();
-		myScale = 1.f - option_value/100.f;
-		maxScale = 1.2f - option_value/100.f;
-		minScale = 0.4f;
+		JsonBox::Object j_scale = first_junior["scale"].getObject();
+		
+		myScale =  j_scale["start"].getDouble() - option_value/100.f;
+		maxScale = j_scale["max"].getDouble() - option_value/100.f;
+		minScale = j_scale["min"].getDouble();
 		
 		areacrash_frame_cnt = 0;
 		move_frame = 0;
