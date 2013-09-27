@@ -190,20 +190,20 @@ typedef enum t_CLEAR_CONDITION{
 
 typedef enum t_ITEM_CODE{
 	kIC_attack = 1,
-	kIC_speedUp,
-	kIC_addTime,
-	kIC_fast,
-	kIC_critical,
-	kIC_subOneDie,
-	kIC_doubleItem,
-	kIC_silence,
-	kIC_subNothing,
-	kIC_longTime,
-	kIC_bossLittleEnergy,
-	kIC_subSmallSize,
-	kIC_smallArea,
-	kIC_widePerfect,
-	kIC_randomChange
+	kIC_speedUp,	// 2
+	kIC_addTime,	// 3
+	kIC_fast,		// 4
+	kIC_critical,	// 5
+	kIC_subOneDie,	// 6
+	kIC_doubleItem,	// 7
+	kIC_silence,	// 8
+	kIC_subNothing,	// 9
+	kIC_longTime,	// 10
+	kIC_bossLittleEnergy,	// 11
+	kIC_subSmallSize,	// 12
+	kIC_smallArea,		// 13
+	kIC_widePerfect,	// 14
+	kIC_randomChange	// 15
 }ITEM_CODE;
 
 #define SHOP_KEY	0xD9

@@ -55,8 +55,6 @@ public:
 	void setAnimationLoop(int t_type)
 	{
 		animation_frame.clear();
-		
-		deque<int> t_que;
 		int loop_length = SDS_GI(kSDF_cardInfo, CCString::createWithFormat("%d_aniInfo_detail_loopLength", t_type*10+2)->getCString());
 		for(int i=0;i<loop_length;i++)
 		{

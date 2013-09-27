@@ -259,7 +259,7 @@ private:
 			return;
 		}
 		
-		item_img = CCSprite::create("addtime_item.png");
+		item_img = CCSprite::create("item3.png");
 		item_img->setScale(0.f);
 		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 		item_img->setPosition(item_point);
@@ -312,7 +312,7 @@ private:
 			return;
 		}
 		
-		item_img = CCSprite::create("fast_item.png");
+		item_img = CCSprite::create("item2.png");
 		item_img->setScale(0.f);
 		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 		item_img->setPosition(item_point);
@@ -378,7 +378,7 @@ private:
 			return;
 		}
 		
-		item_img = CCSprite::create("item3.png");
+		item_img = CCSprite::create("item4.png");
 		item_img->setScale(0.f);
 		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 		item_img->setPosition(item_point);
@@ -435,17 +435,7 @@ private:
 			return;
 		}
 		
-		string item_string;
-
-//		if(my_elemental == kElementCode_life)			item_string = "life";
-//		else if(my_elemental == kElementCode_fire)
-			item_string = "fire";
-//		else if(my_elemental == kElementCode_water)		item_string = "ice";
-//		else if(my_elemental == kElementCode_wind)		item_string = "wind";
-//		else if(my_elemental == kElementCode_lightning)	item_string = "lightning";
-//		else if(my_elemental == kElementCode_plasma)	item_string = "plasma";
-		
-		item_img = CCSprite::create(CCString::createWithFormat("%s_item.png", item_string.c_str())->getCString());
+		item_img = CCSprite::create("item1.png");
 		item_img->setScale(0.f);
 		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 		item_img->setPosition(item_point);
@@ -498,7 +488,7 @@ private:
 			return;
 		}
 		
-		item_img = CCSprite::create("item5.png");
+		item_img = CCSprite::create("item6.png");
 		item_img->setScale(0.f);
 		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 		item_img->setPosition(item_point);
@@ -562,7 +552,7 @@ private:
 			return;
 		}
 		
-		item_img = CCSprite::create("item7.png");
+		item_img = CCSprite::create("item8.png");
 		item_img->setScale(0.f);
 		CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 		item_img->setPosition(item_point);
