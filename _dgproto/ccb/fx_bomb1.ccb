@@ -189,12 +189,48 @@
 											<key>name</key>
 											<string>displayFrame</string>
 											<key>time</key>
+											<real>0.53333336114883423</real>
+											<key>type</key>
+											<integer>7</integer>
+											<key>value</key>
+											<array>
+												<string>fx_bomb1_9.png</string>
+												<string>Use regular file</string>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>displayFrame</string>
+											<key>time</key>
 											<real>0.60000002384185791</real>
 											<key>type</key>
 											<integer>7</integer>
 											<key>value</key>
 											<array>
-												<string>fx_bomb1_8.png</string>
+												<string>fx_bomb1_10.png</string>
+												<string>Use regular file</string>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>displayFrame</string>
+											<key>time</key>
+											<real>0.66666668653488159</real>
+											<key>type</key>
+											<integer>7</integer>
+											<key>value</key>
+											<array>
+												<string>fx_bomb1_11.png</string>
 												<string>Use regular file</string>
 											</array>
 										</dict>
@@ -217,7 +253,7 @@
 											<key>name</key>
 											<string>opacity</string>
 											<key>time</key>
-											<real>0.46666666865348816</real>
+											<real>0.53333336114883423</real>
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
@@ -232,7 +268,7 @@
 											<key>name</key>
 											<string>opacity</string>
 											<key>time</key>
-											<real>0.60000002384185791</real>
+											<real>0.66666668653488159</real>
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
@@ -305,7 +341,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>fx_bomb1_8.png</string>
+									<string>fx_bomb1_11.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -316,7 +352,7 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>255</integer>
+								<integer>0</integer>
 							</dict>
 						</array>
 						<key>seqExpanded</key>
@@ -477,13 +513,13 @@
 			<key>chainedSequenceId</key>
 			<integer>-1</integer>
 			<key>length</key>
-			<real>0.60000002384185791</real>
+			<real>0.66666668653488159</real>
 			<key>name</key>
 			<string>bomb</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.46666666865348816</real>
+			<real>0.66666668653488159</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
