@@ -145,5 +145,10 @@ namespace KS
 			
 		}
 	}
+	
+	bool isExistFile(const std::string& fileName)
+	{
+		return CCFileUtils::sharedFileUtils()->isFileExist(CCFileUtils::sharedFileUtils()->fullPathForFilename(fileName.c_str()));
+	}
 }
 

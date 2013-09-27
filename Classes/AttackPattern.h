@@ -51,6 +51,8 @@ protected:
 			removeFromParentAndCleanup(true);
 		}
 	}
+	
+	
 };
 
 class SelfSpinMissile : public CCNode
@@ -139,9 +141,6 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -156,6 +155,16 @@ public:
 		m_totalFrame = pattern["totalframe"].getInt();
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();
+		m_color = pattern["color"].getInt();
+		
+
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
 		
 		scheduleUpdate();		
 	}
@@ -170,7 +179,14 @@ public:
 		else if(m_frameCnt % m_perFrame == 0)
 		{
 			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
-			std::string imgFilename = "cumber_missile1.png";
+			
+			std::string imgFileName;
+			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+			if(KS::isExistFile(fileName))
+				imgFileName = fileName;
+			else
+				imgFileName = "cumber_missile1.png";
+			
 			CCSize t_mSize = CCSize(4.f, 4.f);
 			int start_angle = m_well512.GetFloatValue(360);
 			
@@ -179,7 +195,7 @@ public:
 				float temp_angle = start_angle+(360.f/m_numberPerFrame)*i;
 				
 				MissileUnit* t_mu = MissileUnit::create(m_position, temp_angle, m_bulletSpeed,
-														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 			}
 		}
@@ -198,8 +214,10 @@ protected:
 	int m_totalFrame;
 	float m_bulletSpeed;
 	int m_numberPerFrame;
+	int m_color;
 	
 	int m_frameCnt;
+	
 	CCPoint m_position;
 	CCSpriteBatchNode* batchNode;
 	Well512 m_well512;
@@ -219,10 +237,7 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		
+	
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -233,7 +248,15 @@ public:
 		m_perFrame = pattern["perframe"].getInt();
 		m_totalFrame = pattern["totalframe"].getInt();
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
+		m_color = pattern["color"].getInt();
 		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
@@ -255,10 +278,15 @@ public:
 			if(angle >= 360)
 				angle -= 360;
 			
-			std::string imgFilename = "cumber_missile1.png";
+			std::string imgFileName;
+			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+			if(KS::isExistFile(fileName))
+				imgFileName = fileName;
+			else
+				imgFileName = "cumber_missile1.png";
 			CCSize t_mSize = CCSize(4.f, 4.f);
 			MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-													imgFilename.c_str(), t_mSize, 0.f, 0.f);
+													imgFileName.c_str(), t_mSize, 0.f, 0.f);
 			batchNode->addChild(t_mu);
 			
 			
@@ -290,7 +318,7 @@ protected:
 	int m_perFrame;
 	int m_totalFrame;
 	float m_bulletSpeed;
-	
+	int m_color;
 
 	int m_frameCnt;
 	CCPoint m_position;
@@ -313,9 +341,6 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -325,10 +350,17 @@ public:
 		
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();
+		m_color = pattern["color"].getInt();
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
+		addChild(batchNode);
 		
 		scheduleUpdate();
 	}
@@ -337,10 +369,15 @@ public:
 		float angle = m_well512.GetValue(360);
 		for(int i=0; i<m_numberPerFrame;i++)
 		{
-			std::string imgFilename = "cumber_missile1.png";
+			std::string imgFileName;
+			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+			if(KS::isExistFile(fileName))
+				imgFileName = fileName;
+			else
+				imgFileName = "cumber_missile1.png";
 			CCSize t_mSize = CCSize(4.f,4.f);
 			MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-													imgFilename.c_str(), t_mSize, 0.f, 0.f);
+													imgFileName.c_str(), t_mSize, 0.f, 0.f);
 			batchNode->addChild(t_mu);
 			angle += 360 / m_numberPerFrame;
 			if(angle >= 360)
@@ -361,6 +398,7 @@ public:
 protected:
 	int m_numberPerFrame;
 	float m_bulletSpeed;
+	int m_color;
 	
 	int m_frameCnt;
 	CCPoint m_position;
@@ -383,9 +421,6 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -396,14 +431,20 @@ public:
 		m_totalFrame = pattern["totalframe"].getInt();;
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();;
-		
+		m_color = pattern["color"].getInt();
 
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
 		angle = m_well512.GetValue(360);
 //		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
+		addChild(batchNode);
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -428,10 +469,15 @@ public:
 			float startAngle = angle;
 			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				std::string imgFilename = "cumber_missile1.png";
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
 				CCSize t_mSize = CCSize(4.f, 4.f);
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 				startAngle += 360 / m_numberPerFrame; // 10 개라면
 			}
@@ -447,6 +493,8 @@ protected:
 	int m_totalFrame;
 	float m_bulletSpeed;
 	int m_numberPerFrame;
+	int m_color;
+	
 	int m_frameCnt;
 	CCPoint m_position;
 	float angle;
@@ -468,9 +516,6 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
@@ -482,14 +527,20 @@ public:
 		m_totalFrame = pattern["totalframe"].getInt();;    // p
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;  // p
 		m_numberPerFrame = pattern["numberperframe"].getInt(); // p
-		
+		m_color = pattern["color"].getInt();
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
 		angle = m_well512.GetValue(360);
 		//		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
+		addChild(batchNode);
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -514,10 +565,15 @@ public:
 			float startAngle = angle;
 			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				std::string imgFilename = "cumber_missile1.png";
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
 				CCSize t_mSize = CCSize(4.f,4.f);
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 				startAngle += 360 / m_numberPerFrame; // 10 개라면
 			}
@@ -534,6 +590,7 @@ protected:
 	int m_totalFrame;
 	float m_bulletSpeed;
 	int m_numberPerFrame;
+	int m_color;
 	
 	int m_frameCnt;
 	CCPoint m_position;
@@ -549,9 +606,6 @@ public:
 	CREATE_FUNC_CCP(KSAttackPattern6);
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -560,13 +614,19 @@ public:
 		JsonBox::Object pattern = patterns["6"].getObject();
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;  // p
 		m_numberPerFrame = pattern["numberperframe"].getInt(); // p
-		
+		m_color = pattern["color"].getInt();
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
 		angle = m_well512.GetValue(360);
 		//		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
+		addChild(batchNode);
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -591,10 +651,15 @@ public:
 			float startAngle = angle;
 			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				std::string imgFilename = "cumber_missile1.png";
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
 				CCSize t_mSize = CCSize(4.f, 4.f);
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 				startAngle += 360 / m_numberPerFrame; // 10 개라면
 			}
@@ -609,7 +674,7 @@ public:
 protected:
 	float m_bulletSpeed;
 	int m_numberPerFrame;
-	
+	int m_color;
 	
 	int m_frameCnt;
 	CCPoint m_position;
@@ -632,9 +697,6 @@ public:
 	CREATE_FUNC_CCP(KSAttackPattern7);
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -645,6 +707,7 @@ public:
 		m_totalFrame = pattern["totalframe"].getInt();;   // p
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f; // p
 		m_numberPerFrame = pattern["numberperframe"].getInt();
+		m_color = pattern["color"].getInt();
 		m_term = 6; // p
 		
 		m_frameCnt = 0;
@@ -652,7 +715,13 @@ public:
 		m_fireCount = 0;
 		angle = m_well512.GetValue(360);
 		//		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
+		addChild(batchNode);
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -680,10 +749,15 @@ public:
 				float startAngle = angle;
 				for(int i=0; i<m_numberPerFrame; i++)
 				{
-					std::string imgFilename = "cumber_missile1.png";
+					std::string imgFileName;
+					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+					if(KS::isExistFile(fileName))
+						imgFileName = fileName;
+					else
+						imgFileName = "cumber_missile1.png";
 					CCSize t_mSize = CCSize(4.f, 4.f);
 					MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-															imgFilename.c_str(), t_mSize, 0.f, 0.f);
+															imgFileName.c_str(), t_mSize, 0.f, 0.f);
 					batchNode->addChild(t_mu);
 					startAngle += m_numberPerFrame; // 10 개라면
 				}
@@ -713,6 +787,7 @@ protected:
 	int m_totalFrame;
 	float m_bulletSpeed;
 	int m_numberPerFrame;
+	int m_color;
 	int m_term;
 	int m_idleValue;
 	int m_fireCount;
@@ -739,9 +814,6 @@ public:
 	
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -753,13 +825,19 @@ public:
 		m_totalFrame = pattern["totalframe"].getInt();;		// p
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;	// p
 		m_numberPerFrame =pattern["numberperframe"].getInt();	// p
-		
+		m_color = pattern["color"].getInt();
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
 		angle2 = angle = m_well512.GetValue(360);
 		//		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
+		addChild(batchNode);
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -784,10 +862,15 @@ public:
 			float startAngle = angle;
 			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				std::string imgFilename = "cumber_missile1.png";
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
 				
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 				startAngle += 360 / m_numberPerFrame; // 10 개라면
 			}
@@ -795,9 +878,14 @@ public:
 			float startAngle2 = angle2;
 			for(int i=0; i<m_numberPerFrame; i++)
 			{
-				std::string imgFilename = "cumber_missile1.png";
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
 				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle2, m_bulletSpeed,
-														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 				startAngle2 += 360 / m_numberPerFrame; // 10 개라면
 			}
@@ -816,6 +904,7 @@ protected:
 	int m_totalFrame;
 	float m_bulletSpeed;
 	int m_numberPerFrame;
+	int m_color;
 	
 	int m_frameCnt;
 	CCPoint m_position;
@@ -895,9 +984,6 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
@@ -908,12 +994,18 @@ public:
 		
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();
+		m_color = pattern["color"].getInt();
 		
-
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
+		addChild(batchNode);
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -934,22 +1026,27 @@ public:
 		
 		for(int i=0; i<m_numberPerFrame;i++)
 		{
-			std::string imgFilename = "cumber_missile1.png";
+			std::string imgFileName;
+			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+			if(KS::isExistFile(fileName))
+				imgFileName = fileName;
+			else
+				imgFileName = "cumber_missile1.png";
 			CCSize t_mSize = CCSize(4.f, 4.f);
 			if(angle == angle2)
 			{
 				MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 			}
 			else
 			{
 				MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-														imgFilename.c_str(), t_mSize, 0.f, 0.f);
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu);
 				
 				MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
-														 imgFilename.c_str(), t_mSize, 0.f, 0.f);
+														 imgFileName.c_str(), t_mSize, 0.f, 0.f);
 				batchNode->addChild(t_mu2);
 			}
 			
@@ -967,7 +1064,8 @@ public:
 protected:
 	float m_bulletSpeed;
 	int m_numberPerFrame;
-
+	int m_color;
+	
 	int m_frameCnt;
 	CCPoint m_position;
 	Well512 m_well512;
@@ -989,9 +1087,6 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1003,11 +1098,17 @@ public:
 		m_totalFrame = pattern["totalframe"].getInt();;
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();;
-		
+		m_color = pattern["color"].getInt();
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
+		addChild(batchNode);
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -1038,23 +1139,27 @@ public:
 				
 				for(int i=0; i<m_numberPerFrame;i++)
 				{
-					int t_mCnt = m_numberPerFrame;
-					std::string imgFilename = "cumber_missile1.png";
+					std::string imgFileName;
+					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+					if(KS::isExistFile(fileName))
+						imgFileName = fileName;
+					else
+						imgFileName = "cumber_missile1.png";
 					CCSize t_mSize = CCSize(4.f, 4.f);
 					if(angle == angle2)
 					{
 						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 					}
 					else
 					{
 						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 						
 						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
-																 imgFilename.c_str(), t_mSize, 0.f, 0.f);
+																 imgFileName.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu2);
 					}
 					
@@ -1075,6 +1180,7 @@ protected:
 	int m_totalFrame;
 	float m_bulletSpeed;
 	int m_numberPerFrame;
+	int m_color;
 	
 	int m_frameCnt;
 	CCPoint m_position;
@@ -1096,9 +1202,6 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1110,11 +1213,18 @@ public:
 		m_totalFrame = pattern["totalframe"].getInt();
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();
-		
+		m_color = pattern["color"].getInt();
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
 		firstJackPosition = ip2ccp(myGD->getJackPoint());
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -1145,23 +1255,27 @@ public:
 				
 				for(int i=0; i<m_numberPerFrame;i++)
 				{
-					int t_mCnt = 5;
-					std::string imgFilename = "cumber_missile1.png";
+					std::string imgFileName;
+					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+					if(KS::isExistFile(fileName))
+						imgFileName = fileName;
+					else
+						imgFileName = "cumber_missile1.png";
 					CCSize t_mSize = CCSize(4.f, 4.f);
 					if(angle == angle2)
 					{
 						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 					}
 					else
 					{
 						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 						
 						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
-																 imgFilename.c_str(), t_mSize, 0.f, 0.f);
+																 imgFileName.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu2);
 					}
 					
@@ -1182,6 +1296,7 @@ protected:
 	int m_totalFrame;
 	float m_bulletSpeed;
 	int m_numberPerFrame;
+	int m_color;
 	
 	CCPoint firstJackPosition;
 	int m_frameCnt;
@@ -1204,9 +1319,6 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1218,12 +1330,21 @@ public:
 		m_totalFrame = pattern["totalframe"].getInt();
 		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].getInt();
-		
+		m_color = pattern["color"].getInt();
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
 		firstJackPosition = ip2ccp(myGD->getJackPoint());
 		fireCount = 0;
+		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -1256,23 +1377,27 @@ public:
 				
 				for(int i=0; i<m_numberPerFrame;i++)
 				{
-					int t_mCnt = m_numberPerFrame;
-					std::string imgFilename = "cumber_missile1.png";
+					std::string imgFileName;
+					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+					if(KS::isExistFile(fileName))
+						imgFileName = fileName;
+					else
+						imgFileName = "cumber_missile1.png";
 					CCSize t_mSize = CCSize(4.f, 4.f);
 					if(angle == angle2)
 					{
 						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 					}
 					else
 					{
 						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFilename.c_str(), t_mSize, 0.f, 0.f);
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu);
 						
 						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
-																 imgFilename.c_str(), t_mSize, 0.f, 0.f);
+																 imgFileName.c_str(), t_mSize, 0.f, 0.f);
 						batchNode->addChild(t_mu2);
 					}
 					
@@ -1293,6 +1418,7 @@ protected:
 	int m_totalFrame;
 	float m_bulletSpeed;
 	int m_numberPerFrame;
+	int m_color;
 	
 	CCPoint firstJackPosition;
 	int fireCount;
