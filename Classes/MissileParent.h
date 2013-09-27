@@ -405,24 +405,20 @@ public:
 	
 	void actionKSAP1()
 	{
-		{
-			KSAttackPattern1* t = KSAttackPattern1::create(startFirePosition, 0);
-			addChild(t);
-			saveAP = t;
-			savedAP = true;
-		}
 		
-		
+		KSAttackPattern1* t = KSAttackPattern1::create(startFirePosition, 0);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+
 	}
 	void cancelKSAP1(){		}
 	void actionKSAP2()
 	{
-		{
-			KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition, 0);
-			addChild(t);
-			saveAP = t;
-			savedAP = true;
-		}
+		KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition, 0);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
 		
 		
 	}
@@ -430,24 +426,18 @@ public:
 	
 	void actionKSAP3()
 	{
-		{
-			KSAttackPattern3* t = KSAttackPattern3::create(startFirePosition, 0);
-			addChild(t);
-			saveAP = t;
-			savedAP = true;
-		}	
+		KSAttackPattern3* t = KSAttackPattern3::create(startFirePosition, 0);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
 	}
 	void cancelKSAP3(){		}
 	void actionKSAP4()
 	{
-		{
-			KSAttackPattern4* t = KSAttackPattern4::create(startFirePosition, 0);
-			addChild(t);
-			saveAP = t;
-			savedAP = true;
-		}
-		
-		
+		KSAttackPattern4* t = KSAttackPattern4::create(startFirePosition, 0);
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
 	}
 	void cancelKSAP4(){		}
 	void actionKSAP5()

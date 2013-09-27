@@ -347,7 +347,9 @@ void Coconut::cumberAttack(float dt)
 		bool searched = false;
 		while(!searched)
 		{
-			random_shuffle(m_attacks.begin(), m_attacks.end());
+			random_shuffle(m_attacks.begin(), m_attacks.end(), [=](int n){
+				return this->m_well512.GetValue(n-1);
+			});
 			attackCode = m_attacks[0];
 			searched = true;
 			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
@@ -470,7 +472,9 @@ void Coconut::getRandomPosition(IntPoint* ip, bool* finded)
 		}
 	}
 	
-	random_shuffle(shuffledPositions.begin(), shuffledPositions.end());
+	random_shuffle(shuffledPositions.begin(), shuffledPositions.end(), [=](int n){
+		return this->m_well512.GetValue(n-1);
+	});
 	for(auto& mp : shuffledPositions)
 	{
 		mapPoint = mp;

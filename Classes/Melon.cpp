@@ -750,7 +750,9 @@ void Melon::cumberAttack(float dt)
 		bool searched = false;
 		while(!searched)
 		{
-			random_shuffle(m_attacks.begin(), m_attacks.end());
+			random_shuffle(m_attacks.begin(), m_attacks.end(), [=](int n){
+				return this->m_well512.GetValue(n-1);
+			} );
 			attackCode = m_attacks[0];
 			searched = true;
 			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
@@ -770,11 +772,13 @@ void Melon::cumberAttack(float dt)
 		{
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
 			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
-			startAnimationNoDirection();
+			if(1 <= attackCode && attackCode <= 100)
+				startAnimationNoDirection();
+			else
+				startAnimationDirection();
 			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this);
 		}
 	}
-	
 }
 COLLISION_CODE Melon::crashWithX(IntPoint check_position)
 {
@@ -917,7 +921,9 @@ void Melon::getRandomPosition(IntPoint* ip, bool* finded)
 		}
 	}
 	
-	random_shuffle(shuffledPositions.begin(), shuffledPositions.end());
+	random_shuffle(shuffledPositions.begin(), shuffledPositions.end(), [=](int n){
+		return this->m_well512.GetValue(n-1);
+	} );
 	for(auto& mp : shuffledPositions)
 	{
 		mapPoint = mp;
