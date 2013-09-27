@@ -24,7 +24,7 @@ bool Coconut::init()
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
-	std::string ccbiName = "coconut.ccbi";
+	std::string ccbiName = "boss_coconut.ccbi";
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
     CCBReader* reader = new CCBReader(nodeLoader);
 	CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);

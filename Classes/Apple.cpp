@@ -34,7 +34,7 @@ bool Apple::init()
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("apple_head.ccbi",this));
+		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_apple_head.ccbi",this));
 		m_headAnimationManager = reader->getAnimationManager();
 		this->addChild(m_headImg, 10);
 		reader->release();	
@@ -45,7 +45,7 @@ bool Apple::init()
 		for(int i=0; i<7; i++)
 		{
 			CCBReader* reader = new CCBReader(nodeLoader);
-			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("apple_body.ccbi",this));
+			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_apple_body.ccbi",this));
 			m_bodyAnimationManagers.push_back(reader->getAnimationManager());
 			addChild(body, 9 - i);
 			lastZ = 9 - i;
@@ -57,7 +57,7 @@ bool Apple::init()
 	
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("apple_tail.ccbi",this));
+		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_apple_tail.ccbi",this));
 		m_tailAnimationManager = reader->getAnimationManager();
 		this->addChild(m_tailImg, lastZ - 1);
 		reader->release();
