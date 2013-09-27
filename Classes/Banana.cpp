@@ -6,7 +6,7 @@
 //
 //
 
-#include "Coconut.h"
+#include "Banana.h"
 #include "GameData.h"
 
 #include "AlertEngine.h"
@@ -18,13 +18,13 @@
 
 
 
-bool Coconut::init()
+bool Banana::init()
 {
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
-	std::string ccbiName = "boss_coconut.ccbi";
+	std::string ccbiName = "boss_banana.ccbi";
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
     CCBReader* reader = new CCBReader(nodeLoader);
 	CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
@@ -52,15 +52,15 @@ bool Coconut::init()
 	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 	startAnimationNoDirection();
 	
-	schedule(schedule_selector(Coconut::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(Banana::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Coconut::cumberAttack));
+	schedule(schedule_selector(Banana::cumberAttack));
 	
 	return true;
 }
 
 
-void Coconut::normalMoving(float dt)
+void Banana::normalMoving(float dt)
 {
 	m_scale.timer += 1 / 60.f;
 	
@@ -200,7 +200,7 @@ void Coconut::normalMoving(float dt)
 
 
 
-void Coconut::startDamageReaction(float userdata)
+void Banana::startDamageReaction(float userdata)
 {
 	CCLog("damaga!!!");
 	// 방사형으로 돌아가고 있는 중이라면
@@ -223,7 +223,7 @@ void Coconut::startDamageReaction(float userdata)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Coconut::damageReaction));
+		schedule(schedule_selector(Banana::damageReaction));
 	}
 	else if(m_state == CUMBERSTATESTOP)
 	{
@@ -235,7 +235,7 @@ void Coconut::startDamageReaction(float userdata)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Coconut::damageReaction));
+		schedule(schedule_selector(Banana::damageReaction));
 	}
 	else if(m_state == CUMBERSTATEFURY)
 	{
@@ -247,13 +247,13 @@ void Coconut::startDamageReaction(float userdata)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Coconut::damageReaction));
+		schedule(schedule_selector(Banana::damageReaction));
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
 }
 
-void Coconut::startAnimationNoDirection()
+void Banana::startAnimationNoDirection()
 {
 	CCLog("Lets rotate");
 	if(m_state != CUMBERSTATENODIRECTION)
@@ -265,11 +265,11 @@ void Coconut::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
-		schedule(schedule_selector(Coconut::animationNoDirection));
+		schedule(schedule_selector(Banana::animationNoDirection));
 	}
 }
 
-void Coconut::damageReaction(float)
+void Banana::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
@@ -280,13 +280,13 @@ void Coconut::damageReaction(float)
 	{
 		//		m_headImg->setColor(ccc3(255, 255, 255));
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Coconut::damageReaction));
+		unschedule(schedule_selector(Banana::damageReaction));
 		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
 
 
-void Coconut::animationNoDirection(float dt)
+void Banana::animationNoDirection(float dt)
 {
 	m_noDirection.timer += 1.f/60.f;
 	
@@ -302,48 +302,48 @@ void Coconut::animationNoDirection(float dt)
 	else if(m_noDirection.state == 2)
 	{
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Coconut::animationNoDirection));
+		unschedule(schedule_selector(Banana::animationNoDirection));
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
 	}
 }
 
-void Coconut::onPatternEnd()
+void Banana::onPatternEnd()
 {
 	CCLog("onPatternEnd!!");
 	m_noDirection.state = 2;
 }
 
-void Coconut::onStartGame()
+void Banana::onStartGame()
 {
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }
 
 
-void Coconut::cumberAttack(float dt)
+void Banana::cumberAttack(float dt)
 {
 	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
-
+	
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
 		int attackCode = 0;
-//		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
-//			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
-//			kAP_CODE_pattern103, kAP_CODE_pattern103};
-//		std::vector<int> attacks = {
-////			kCrashAttack1,
-//			kNonTargetAttack1,
-//			kTargetAttack4
-//			kSpecialAttack7, // 텔레포트.          // 32
-//		};
-//		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
-//		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
-//		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
-
+		//		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
+		//			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
+		//			kAP_CODE_pattern103, kAP_CODE_pattern103};
+		//		std::vector<int> attacks = {
+		////			kCrashAttack1,
+		//			kNonTargetAttack1,
+		//			kTargetAttack4
+		//			kSpecialAttack7, // 텔레포트.          // 32
+		//		};
+		//		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
+		//		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
+		//		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
 		
 		
-
+		
+		
 		bool searched = false;
 		while(!searched)
 		{
@@ -357,8 +357,8 @@ void Coconut::cumberAttack(float dt)
 			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
 				searched = false;
 		}
-
-//		attackCode = 13;
+		
+		//		attackCode = 13;
 		if(attackCode == 13) // fury
 		{
 			CCLog("aaa %f %f", getPosition().x, getPosition().y);
@@ -375,7 +375,7 @@ void Coconut::cumberAttack(float dt)
 		}
 	}
 }
-COLLISION_CODE Coconut::crashWithX(IntPoint check_position)
+COLLISION_CODE Banana::crashWithX(IntPoint check_position)
 {
 	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
 	   check_position.y < mapLoopRange::mapHeightInnerBegin || check_position.y >= mapLoopRange::mapHeightInnerEnd )
@@ -408,7 +408,7 @@ COLLISION_CODE Coconut::crashWithX(IntPoint check_position)
 	return COLLISION_CODE::kCOLLISION_NONE;
 	
 }
-COLLISION_CODE Coconut::crashLooper(const set<IntPoint>& v, IntPoint* cp)
+COLLISION_CODE Banana::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)
 	{
@@ -423,19 +423,19 @@ COLLISION_CODE Coconut::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Coconut::startInvisible()
+void Banana::startInvisible()
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
 	{
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
-		schedule(schedule_selector(Coconut::invisibling));
+		schedule(schedule_selector(Banana::invisibling));
 		m_invisible.startInvisibleScheduler = true;
 	}
 }
 
-void Coconut::invisibling(float dt)
+void Banana::invisibling(float dt)
 {
 	m_invisible.invisibleFrame++;
 	
@@ -452,13 +452,13 @@ void Coconut::invisibling(float dt)
 		if(m_invisible.invisibleValue == 255)
 		{
 			m_invisible.startInvisibleScheduler = false;
-			unschedule(schedule_selector(Coconut::invisibling));
+			unschedule(schedule_selector(Banana::invisibling));
 		}
 	}
 	
 }
 
-void Coconut::getRandomPosition(IntPoint* ip, bool* finded)
+void Banana::getRandomPosition(IntPoint* ip, bool* finded)
 {
 	bool isGoodPointed = false;
 	
@@ -531,7 +531,7 @@ void Coconut::getRandomPosition(IntPoint* ip, bool* finded)
 	}
 }
 
-void Coconut::randomPosition()
+void Banana::randomPosition()
 {
 	IntPoint mapPoint;
 	bool finded;
@@ -556,7 +556,7 @@ void Coconut::randomPosition()
 	
 }
 
-void Coconut::crashMapForPosition(CCPoint targetPt)
+void Banana::crashMapForPosition(CCPoint targetPt)
 {
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
@@ -587,7 +587,7 @@ void Coconut::crashMapForPosition(CCPoint targetPt)
 	
 }
 
-void Coconut::furyModeOn()
+void Banana::furyModeOn()
 {
 	m_furyMode.startFury();
 	m_noDirection.state = 2;
@@ -598,7 +598,7 @@ void Coconut::furyModeOn()
 	schedule(schedule_selector(ThisClassType::furyModeScheduler));
 }
 
-void Coconut::furyModeScheduler(float dt)
+void Banana::furyModeScheduler(float dt)
 {
 	m_furyMode.furyTimer += 1.f / 60.f;
 	
@@ -612,19 +612,19 @@ void Coconut::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
-void Coconut::furyModeOff()
+void Banana::furyModeOff()
 {
 	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects");
 }
 
-void Coconut::setGameover()
+void Banana::setGameover()
 {
 	m_state = CUMBERSTATESTOP;
 }
 
 
-void Coconut::scaleAdjustment(float dt)
+void Banana::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	

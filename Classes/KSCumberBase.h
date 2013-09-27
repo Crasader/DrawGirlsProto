@@ -244,6 +244,7 @@ public:
 	{
 		m_attackPercent = ap;
 	}
+	
 protected:
 	std::vector<int> m_attacks; // 공격할 패턴의 번호를 가지고 있음. 많이 가질 수 있을 수록 해당 패턴 쓸 확률 높음.
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.

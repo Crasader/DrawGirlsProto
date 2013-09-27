@@ -69,7 +69,15 @@ public:
 	void mainCumberShowEmotion(int t_e);
 	void startDieAnimation();
 	void changeMaxSize(float t_p);
-	
+	float getNumberFromJsonValue(JsonBox::Value v)
+	{
+		if(v.getType() == JsonBox::Value::DOUBLE)
+			return v.getDouble();
+		else if(v.getType() == JsonBox::Value::INTEGER)
+			return v.getInt();
+		else
+			return 0.f;
+	}
 private:
 	bool is_die_animationing;
 	int die_animation_cnt;

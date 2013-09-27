@@ -11,6 +11,10 @@
 #include "Apple.h"
 #include "Coconut.h"
 #include "Melon.h"
+#include "Banana.h"
+#include "Blueberry.h"
+#include "Cherry.h"
+#include "Mango.h"
 #include "ServerDataSave.h"
 
 void CumberParent::onStartGame()
@@ -467,13 +471,14 @@ void CumberParent::myInit()
 	JsonBox::Object movement = boss["movement"].getObject();
 	
 	int bossType = boss["type"].getInt();
-	float minSpeed = speed["max"].getDouble();
-	float startSpeed = speed["start"].getDouble();
-	float maxSpeed = speed["min"].getDouble();
+
+	float minSpeed = getNumberFromJsonValue(speed["max"]);
+	float startSpeed = getNumberFromJsonValue(speed["start"]);
+	float maxSpeed = getNumberFromJsonValue(speed["min"]);
 	
-	float minScale = scale["min"].getDouble();
-	float startScale = scale["start"].getDouble();
-	float maxScale = scale["max"].getDouble();
+	float minScale = getNumberFromJsonValue(scale["min"]);
+	float startScale = getNumberFromJsonValue(scale["start"]);
+	float maxScale = getNumberFromJsonValue(scale["max"]);
 	
 	int normalMovement = movement["normal"].getInt();
 	int drawMovement = movement["draw"].getInt();	
@@ -489,6 +494,18 @@ void CumberParent::myInit()
 			break;
 		case 3:
 			mainCumber = Melon::create();
+			break;
+		case 4:
+			mainCumber = Banana::create();
+			break;
+		case 5:
+			mainCumber = Blueberry::create();
+			break;
+		case 6:
+			mainCumber = Cherry::create();
+			break;
+		case 7:
+			mainCumber = Mango::create();
 			break;
 	}
 	
