@@ -1736,46 +1736,53 @@ private:
 	
 	void initParticle()
 	{
-		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
-		particle->setPositionType(kCCPositionTypeRelative);
-		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("threeCushion_bomb.png");
-		particle->setTexture(texture);
-		particle->setEmissionRate(250.00);
-		particle->setAngle(90.0);
-		particle->setAngleVar(360.0);
-		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-		particle->setBlendFunc(blendFunc);
-		particle->setDuration(0.20);
-		particle->setEmitterMode(kCCParticleModeGravity);
-		ccColor4F startColor = {0.87,0.81,0.12,1.00}; // 0.76 0.25 0.12
-		particle->setStartColor(startColor);
-		ccColor4F startColorVar = {0,0,0,0};
-		particle->setStartColorVar(startColorVar);
-		ccColor4F endColor = {0.68,0.16,0.00,1.00};
-		particle->setEndColor(endColor);
-		ccColor4F endColorVar = {0,0,0,0};
-		particle->setEndColorVar(endColorVar);
-		particle->setStartSize(20.00);
-		particle->setStartSizeVar(10.0);
-		particle->setEndSize(40.0);
-		particle->setEndSizeVar(10.0);
-		particle->setGravity(ccp(0,0));
-		particle->setRadialAccel(0.0);
-		particle->setRadialAccelVar(0.0);
-		particle->setSpeed(170);
-		particle->setSpeedVar(60.0);
-		particle->setTangentialAccel(0);
-		particle->setTangentialAccelVar(0);
-		particle->setTotalParticles(50);
-		particle->setLife(0.20);
-		particle->setLifeVar(0.0);
-		particle->setStartSpin(0.0);
-		particle->setStartSpinVar(0.0);
-		particle->setEndSpin(0.0);
-		particle->setEndSpinVar(0.0);
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_bomb1.ccbi",this));
+		reader->release();
 		particle->setPosition(baseNode->getPosition());
-		particle->setPosVar(CCPointZero);
 		addChild(particle);
+		
+//		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
+//		particle->setPositionType(kCCPositionTypeRelative);
+//		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("threeCushion_bomb.png");
+//		particle->setTexture(texture);
+//		particle->setEmissionRate(250.00);
+//		particle->setAngle(90.0);
+//		particle->setAngleVar(360.0);
+//		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+//		particle->setBlendFunc(blendFunc);
+//		particle->setDuration(0.20);
+//		particle->setEmitterMode(kCCParticleModeGravity);
+//		ccColor4F startColor = {0.87,0.81,0.12,1.00}; // 0.76 0.25 0.12
+//		particle->setStartColor(startColor);
+//		ccColor4F startColorVar = {0,0,0,0};
+//		particle->setStartColorVar(startColorVar);
+//		ccColor4F endColor = {0.68,0.16,0.00,1.00};
+//		particle->setEndColor(endColor);
+//		ccColor4F endColorVar = {0,0,0,0};
+//		particle->setEndColorVar(endColorVar);
+//		particle->setStartSize(20.00);
+//		particle->setStartSizeVar(10.0);
+//		particle->setEndSize(40.0);
+//		particle->setEndSizeVar(10.0);
+//		particle->setGravity(ccp(0,0));
+//		particle->setRadialAccel(0.0);
+//		particle->setRadialAccelVar(0.0);
+//		particle->setSpeed(170);
+//		particle->setSpeedVar(60.0);
+//		particle->setTangentialAccel(0);
+//		particle->setTangentialAccelVar(0);
+//		particle->setTotalParticles(50);
+//		particle->setLife(0.20);
+//		particle->setLifeVar(0.0);
+//		particle->setStartSpin(0.0);
+//		particle->setStartSpinVar(0.0);
+//		particle->setEndSpin(0.0);
+//		particle->setEndSpinVar(0.0);
+//		particle->setPosition(baseNode->getPosition());
+//		particle->setPosVar(CCPointZero);
+//		addChild(particle);
 	}
 };
 

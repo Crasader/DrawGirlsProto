@@ -3425,12 +3425,15 @@ private:
 	void removeCobweb()
 	{
 		cobwebImg->removeFromParent();
+		startSelfRemoveSchedule();
 	}
 	
 	void stopFrame()
 	{
 		is_stop = true;
 		unschedule(schedule_selector(AP_Missile23::framing));
+		
+		cobwebImg->stopAllActions();
 		
 		CCScaleTo* t_scale = CCScaleTo::create(0.3, 0.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile23::removeCobweb));
@@ -3439,8 +3442,6 @@ private:
 		
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
 		myGD->communication("MP_deleteKeepAP23");
-		
-		startSelfRemoveSchedule();
 	}
 	
 	void myInit(int t_frame)

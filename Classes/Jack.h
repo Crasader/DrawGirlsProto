@@ -839,7 +839,7 @@ public:
 	
 	void startDieEffect() // after coding
 	{
-		return;
+//		return;
 		if(!isDie)
 		{
 			if(getJackState() == jackStateDrawing)
