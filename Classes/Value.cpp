@@ -443,7 +443,12 @@ namespace JsonBox {
 	}
 
 	double Value::getDouble() const {
-		return (type == DOUBLE) ? (*data.doubleValue) : (EMPTY_DOUBLE);
+		if(type == JsonBox::Value::DOUBLE)
+			return *data.doubleValue;
+		else if(type == JsonBox::Value::INTEGER)
+			return *data.intValue;
+		else
+			return EMPTY_DOUBLE;
 	}
 
 	void Value::setDouble(double newDouble) {

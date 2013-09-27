@@ -16,7 +16,8 @@
 #include "CumberEmotion.h"
 #include "StarGoldData.h"
 #include "AlertEngine.h"
-
+#include "cocos-ext.h"
+USING_NS_CC_EXT;
 using namespace cocos2d;
 
 class SubCumber : public Cumber
@@ -438,48 +439,6 @@ private:
 	
 	void myInit()
 	{
-		mEmotion = NULL;
-		isGameover = false;
-		is_slowed = false;
-		isSheild = 0;
-		life = SelectedMapData::sharedInstance()->getMaxBossLife()/10.f;
-		isSelfBomb = false;
-		
-		myState = cumberStateStop;
-		move_speed = 1.f;
-		
-		int resultType = 20;
-		
-		if(resultType <= 20)
-		{
-			if((resultType-1)%10/2+1 == 1)				my_element = kElementCode_life;
-			else if((resultType-1)%10/2+1 == 2)			my_element = kElementCode_fire;
-			else if((resultType-1)%10/2+1 == 3)			my_element = kElementCode_water;
-			else if((resultType-1)%10/2+1 == 4)			my_element = kElementCode_water;
-			else if((resultType-1)%10/2+1 == 5)			my_element = kElementCode_fire;
-		}
-		else
-		{
-			int last_p = resultType%10;
-			if(last_p == 1)				my_element = kElementCode_empty;
-			else if(last_p == 2)		my_element = kElementCode_water;
-			else if(last_p == 3)		my_element = kElementCode_life;
-			else if(last_p == 4)		my_element = kElementCode_life;
-			else if(last_p == 5)		my_element = kElementCode_fire;
-			else if(last_p == 6)		my_element = kElementCode_water;
-		}
-		
-		cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_monster.png", resultType)->getCString());
-		addChild(cumberImg);
-		
-		int option_value = mySGD->getSubSmallSizeValue();
-		myScale = 1.f - option_value/100.f;
-		maxScale = 1.2f - option_value/100.f;
-		minScale = 0.4f;
-		
-		areacrash_frame_cnt = 0;
-		move_frame = 0;
-		
 		bool isGoodPointed = false;
 		int check_loop_cnt = 0;
 		while(!isGoodPointed)
@@ -495,7 +454,7 @@ private:
 				isGoodPointed = true;
 		}
 		
-		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
+		myInit(mapPoint);
 	}
 	
 	void myInit(IntPoint s_p)
@@ -538,7 +497,13 @@ private:
 		areacrash_frame_cnt = 0;
 		move_frame = 0;
 		
-		cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_monster.png", resultType)->getCString());
+		
+		std::string ccbiName = "mob_bear.ccbi";
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
+		cumberImg = dynamic_cast<CCSprite*>(p);
+		
 		addChild(cumberImg);
 		
 		mapPoint = s_p;

@@ -103,6 +103,8 @@ namespace KS
 	}
 	
 	void setAllVisible(CCNode* n, bool b);
+	
+	bool isExistFile(const std::string& fileName);
 }
 
 class KS_Util
