@@ -1741,6 +1741,7 @@ private:
 		CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_bomb1.ccbi",this));
 		reader->release();
 		particle->setPosition(baseNode->getPosition());
+		particle->setRotation(rand()%360);
 		addChild(particle);
 		
 //		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
