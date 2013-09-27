@@ -3227,8 +3227,8 @@ private:
 		CCPoint subPosition = ccpSub(jackPosition, t_sp);
 		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
 		
-		if(distance < 200)			angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%91 - 45;
-		else						angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%31 - 15;
+		if(distance < 200)			angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
+		else						angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
 		
 		CCPoint beadPosition;
 		beadPosition.x = 1;

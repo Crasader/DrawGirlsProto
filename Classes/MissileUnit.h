@@ -1741,6 +1741,7 @@ private:
 		CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_bomb1.ccbi",this));
 		reader->release();
 		particle->setPosition(baseNode->getPosition());
+		particle->setRotation(rand()%360);
 		addChild(particle);
 		
 //		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
@@ -2063,7 +2064,7 @@ private:
 	}
 };
 
-class BlindDrop : public CCNode
+class BlindDrop : public CCNode, public CCBAnimationManagerDelegate
 {
 public:
 	static BlindDrop* create(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame)
@@ -2081,49 +2082,36 @@ public:
 		schedule(schedule_selector(BlindDrop::myAction));
 	}
 	
+	virtual void completedAnimationSequenceNamed(const char *name)
+	{
+		string t_name = name;
+		if(t_name == "end_cast1stop")
+		{
+			reader->release();
+			oilImg->removeFromParentAndCleanup(true);
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
 private:
 	CCPoint subPosition;
 	int movingFrame;
 	int blindFrame;
 	int ingFrame;
 	
-	CCSprite* dropImg;
+//	CCSprite* dropImg;
 	CCSprite* oilImg;
-	
+	CCBReader* reader;
 	
 	void myAction()
 	{
 		ingFrame++;
 		
-		if(ingFrame <= movingFrame)
-		{
-			setPosition(ccpAdd(getPosition(), subPosition));
-			
-			if(ingFrame == movingFrame)
-			{
-				int rand_value = rand()%3 + 1;
-				oilImg = CCSprite::create(CCString::createWithFormat("blind_oil%d.png", rand_value)->getCString());
-				oilImg->setScale(0.2);
-				addChild(oilImg);
-				
-				CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.f);
-				
-				oilImg->runAction(t_scale);
-				
-				dropImg->removeFromParentAndCleanup(true);
-			}
-		}
-		else if(ingFrame <= movingFrame+(blindFrame/2))
-		{
-			
-		}
-		else if(ingFrame <= movingFrame+blindFrame)
+		if(ingFrame <= blindFrame)
 		{
 			oilImg->setOpacity(oilImg->getOpacity()-(200/(blindFrame/2)));
 		}
-		
-		
-		if(ingFrame >= movingFrame+blindFrame)
+		if(ingFrame >= blindFrame)
 		{
 			stopAction();
 		}
@@ -2132,21 +2120,25 @@ private:
 	void stopAction()
 	{
 		unschedule(schedule_selector(BlindDrop::myAction));
-		oilImg->removeFromParentAndCleanup(true);
-		removeFromParentAndCleanup(true);
+		reader->getAnimationManager()->runAnimationsForSequenceNamed("cast1stop");
 	}
 	
 	void myInit(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame)
 	{
-		subPosition = ccpSub(t_fp, t_sp);
-		subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
+//		subPosition = ccpSub(t_fp, t_sp);
+//		subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
 		movingFrame = t_movingFrame;
 		blindFrame = t_blindFrame;
+
+//		dropImg = CCSprite::create("blind_drop.png");
+//		addChild(dropImg);
 		
-		dropImg = CCSprite::create("blind_drop.png");
-		addChild(dropImg);
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		reader = new CCBReader(nodeLoader);
+		oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi",this));
+		addChild(oilImg);
 		
-		setPosition(t_sp);
+		setPosition(t_fp); // t_sp
 	}
 };
 
