@@ -365,24 +365,17 @@ void CumberParent::initSubCumber()
 	if(mySGD->isUsingItem(kIC_subNothing))
 		return;
 	
-	if(mySD->getClearCondition() != kCLEAR_subCumberCatch)
+	JsonBox::Value t_json;
+	t_json.loadFromString(SDS_GS(kSDF_stageInfo, mySD->getSilType(), "junior"));
+	
+	JsonBox::Array junior = t_json.getArray();
+	
+	int create_cnt = junior.size();
+	for(int i=0;i<create_cnt;i++)
 	{
-		int create_cnt = rand()%2+1;
-		for(int i=0;i<create_cnt;i++)
-		{
-			SubCumber* t_SC = SubCumber::create();
-			addChild(t_SC);
-			subCumberArray->addObject(t_SC);
-		}
-	}
-	else
-	{
-		for(int i=0;i<2;i++)
-		{
-			SubCumber* t_SC = SubCumber::create();
-			addChild(t_SC);
-			subCumberArray->addObject(t_SC);
-		}
+		SubCumber* t_SC = SubCumber::create();
+		addChild(t_SC);
+		subCumberArray->addObject(t_SC);
 	}
 }
 

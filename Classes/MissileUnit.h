@@ -774,7 +774,7 @@ private:
 	}
 	void myAction()
 	{
-		objImg->setRotation(objImg->getRotation() + random_spin);
+//		objImg->setRotation(objImg->getRotation() + random_spin);
 		setPosition(ccpAdd(getPosition(), dv));
 		
 		CCPoint myPosition = getPosition();
@@ -806,11 +806,11 @@ private:
 		setPosition(t_sp);
 		
 		type = t_type;
-		random_spin = rand()%11 - 5;
+//		random_spin = rand()%11 - 5;
 		mSize = t_mSize;
 		
-		type = 1;
-		if(type == 1)
+//		type = 1;
+		if(type == 11)
 		{
 //			objImg = CCSprite::create(CCString::createWithFormat("chapter1_throw_%d.png", randomValue)->getCString());
 //			int randomValue = rand()%2 + 1;
@@ -823,31 +823,39 @@ private:
 			reader->release();
 			addChild(objImg);
 		}
-		else if(type == 2) // ice
+		else if(type == 14)
 		{
-			objImg = CCSprite::create("chapter2_throw_1.png");
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			CCBReader* reader = new CCBReader(nodeLoader);
+			objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw4.ccbi",this));
+			reader->release();
 			addChild(objImg);
 		}
-		else if(type == 3) // wood
-		{
-			objImg = CCSprite::create("chapter2_throw_2.png");
-			addChild(objImg);
-		}
-		else if(type == 11)
-		{
-			objImg = CCSprite::create("chapter1_multiThrow_1.png");
-			addChild(objImg);
-		}
-		else if(type == 12)
-		{
-			objImg = CCSprite::create("chapter2_multiThrow_1.png");
-			addChild(objImg);
-		}
-		else if(type == 13)
-		{
-			objImg = CCSprite::create("chapter2_multiThrow_2.png");
-			addChild(objImg);
-		}
+//		else if(type == 2) // ice
+//		{
+//			objImg = CCSprite::create("chapter2_throw_1.png");
+//			addChild(objImg);
+//		}
+//		else if(type == 3) // wood
+//		{
+//			objImg = CCSprite::create("chapter2_throw_2.png");
+//			addChild(objImg);
+//		}
+//		else if(type == 11)
+//		{
+//			objImg = CCSprite::create("chapter1_multiThrow_1.png");
+//			addChild(objImg);
+//		}
+//		else if(type == 12)
+//		{
+//			objImg = CCSprite::create("chapter2_multiThrow_1.png");
+//			addChild(objImg);
+//		}
+//		else if(type == 13)
+//		{
+//			objImg = CCSprite::create("chapter2_multiThrow_2.png");
+//			addChild(objImg);
+//		}
 		
 		dv.x = 1;
 		dv.y = tanf(t_angle/180.f*M_PI);

@@ -3269,13 +3269,15 @@ public:
 	
 	void updateCobweb()
 	{
-		ingFrame = 0;
+		if(!is_stop)
+			ingFrame = 0;
 	}
 	
 private:
 	
 	int slowFrame;
 	int ingFrame;
+	bool is_stop;
 	CCSprite* cobwebImg;
 	
 	void startFrame()
@@ -3294,12 +3296,20 @@ private:
 		}
 	}
 	
+	void removeCobweb()
+	{
+		cobwebImg->removeFromParent();
+	}
+	
 	void stopFrame()
 	{
+		is_stop = true;
 		unschedule(schedule_selector(AP_Missile23::framing));
 		
 		CCScaleTo* t_scale = CCScaleTo::create(0.3, 0.f);
-		cobwebImg->runAction(t_scale);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile23::removeCobweb));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		cobwebImg->runAction(t_seq);
 		
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
 		myGD->communication("MP_deleteKeepAP23");
@@ -3309,10 +3319,15 @@ private:
 	
 	void myInit(int t_frame)
 	{
+		is_stop = false;
 		
 		slowFrame = t_frame;
 		
-		cobwebImg = CCSprite::create("cobweb.png");
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		cobwebImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
+		reader->release();
+		
 		cobwebImg->setPosition(ccp(160,215));
 		cobwebImg->setScale(0);
 		
