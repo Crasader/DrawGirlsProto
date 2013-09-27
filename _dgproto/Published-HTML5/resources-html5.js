@@ -1,5 +1,6 @@
 var ccb_resources = [
     {type:'image', src:"pattern_energyball1_10.png"},
+    {type:'image', src:"fx_bomb1_10.png"},
     {type:'image', src:"fx_tornado1_8.png"},
     {type:'image', src:"pattern_saw3_1.png"},
     {type:'image', src:"fx_tornado1_5.png"},
@@ -17,6 +18,7 @@ var ccb_resources = [
     {type:'image', src:"boss_coconut_sun.png"},
     {type:'image', src:"pattern_slowzone_beam.png"},
     {type:'ccbi', src:"mob_cat.ccbi"},
+    {type:'image', src:"fx_bomb1_9.png"},
     {type:'image', src:"boss_cherry_sun.png"},
     {type:'ccbi', src:"fx_bomb1.ccbi"},
     {type:'ccbi', src:"mob_bear.ccbi"},
@@ -97,6 +99,7 @@ var ccb_resources = [
     {type:'image', src:"fx_tornado1_1.png"},
     {type:'ccbi', src:"boss_apple_head.ccbi"},
     {type:'image', src:"ccbResources/ccbParticleStars.png"},
+    {type:'image', src:"fx_bomb1_11.png"},
     {type:'image', src:"boss_orange_body.png"},
     {type:'image', src:"gameui_button_right.png"},
     {type:'image', src:"boss_apple_body.png"},
