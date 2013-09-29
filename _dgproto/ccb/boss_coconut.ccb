@@ -663,7 +663,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>22.5</real>
+								<real>382.5</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -1510,12 +1510,10 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>boss_bluebery_rubyback.png</string>
+									<string>boss_blueberry_rubyback.png</string>
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -2471,7 +2469,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>boss_bluebery_rubylight.png</string>
+									<string>boss_blueberry_rubylight.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -2752,7 +2750,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>boss_bluebery_ruby.png</string>
+									<string>boss_blueberry_ruby.png</string>
 								</array>
 							</dict>
 						</array>
@@ -2823,8 +2821,6 @@
 						<true/>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -2922,7 +2918,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>3</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
