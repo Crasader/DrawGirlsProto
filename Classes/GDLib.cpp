@@ -108,8 +108,9 @@ string getLocalCode()
 	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	{
-		string tempCode = getCurrentLanguageJNI();
-		return tempCode;
+//		string tempCode = getCurrentLanguageJNI();
+//		return tempCode;
+		return "";
 	}
 #endif
 	

@@ -144,7 +144,7 @@ string GraphDog::getToken(){
     string lang=getLanguage();
     string platform=getPlatform();
     string cTime=getCTime();
-    string dInfo=getDeviceInfo();
+    string dInfo="";//getDeviceInfo();
     string token=GraphDogLib::GDCreateToken(auid,udid,flag,lang,nick,email,platform,cTime,sKey,dInfo);
 //	CCLog("%s", token.c_str());
 //	CCLog("%s", unBase64NextUnDes("GDSK3388", token).c_str());
@@ -281,15 +281,17 @@ void* GraphDog::t_function(void *_insertIndex)
 {	
 	int insertIndex = (int)_insertIndex;
     
-    
+    CCLog("t_function1");
 //	std::map<int, CommandType>& commands = graphdog->commands;
 //	pthread_mutex_lock(&graphdog->cmdsMutex);
 	CommandsType& command = graphdog->commandQueue[insertIndex];
 	pthread_mutex_lock(&command.caller->t_functionMutex);
-	string token=GraphDog::get()->getToken();
+	CCLog("t_function2");
+	string token="";
+	CCLog("t_function2");
 	string paramStr = toBase64(desEncryption(graphdog->sKey, command.commandStr));
 	string dataset = "&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString();
-	
+	CCLog("t_function3");
     string commandurl = "http://litqoo.com/dgproto/data.php";
     //commandurl=commandurl.append(GraphDog::get()->getGraphDogVersion());
     //commandurl=commandurl.append("/");
@@ -301,16 +303,17 @@ void* GraphDog::t_function(void *_insertIndex)
     curl_easy_setopt(handle, CURLOPT_URL, commandurl.c_str());
 	curl_easy_setopt(handle, CURLOPT_POSTFIELDS,dataset.c_str());
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void *)&command.chunk);
-	
+	CCLog("t_function4");
 	//		curl_setopt($ch,CURLOPT_TIMEOUT,1000);
 //	pthread_mutex_unlock(&graphdog->cmdsMutex);
 	CURLcode resultCode = curl_easy_perform(handle);
-	
+	CCLog("result code is %d",resultCode);
 	//##
 	JsonBox::Object resultobj;
 	string resultStr;
 	if(resultCode == CURLE_OK)
 	{
+		CCLog("t_function OK1");
 		resultStr = command.chunk.memory;// gdchunk.memory;
         if(*resultStr.rbegin() == '#') // success
 		{
@@ -319,14 +322,20 @@ void* GraphDog::t_function(void *_insertIndex)
 				vector<char> encText = base64To(std::string(resultStr.begin(), resultStr.end() - 1) ); // unbase64
 				resultStr = desDecryption(graphdog->sKey, std::string(encText.begin(), encText.end())); // des Decryption
                 resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
+				
+				CCLog("t_function OK2 %s",resultStr.c_str());
 			}
 			catch(const std::string& msg)
 			{
+				
+				CCLog("t_function FAILED1");
 				resultCode = CURLE_CHUNK_FAILED;
 			}
 		}
 		else
 		{
+			CCLog("t_function FAILED2");
+
 			resultCode = CURLE_CHUNK_FAILED;
 		}
 	}
@@ -379,8 +388,10 @@ void* GraphDog::t_function(void *_insertIndex)
 //		newToken = true;
 //	}
 	
-    
+	CCLog("t_function 11");
+
 	if(resultobj["errorcode"].getInt()==9999){
+		CCLog("t_function errorcode");
 		command.caller->setCTime("9999");
 		command.caller->errorCount++;
 		if(command.caller->errorCount<5){
@@ -413,12 +424,21 @@ void* GraphDog::t_function(void *_insertIndex)
 //			CommandType test = iter->second;
 //			CCLog("dummy");
 //		}
+	
+	
+		CCLog("t_function 12");
 		if(resultobj["state"].getString()=="ok"){
+			
+			CCLog("t_function 13");
 			command.caller->errorCount=0;
 		}
-    
+		
+	
+	CCLog("t_function 14");
         if(resultobj["timestamp"].getInt()<GraphDog::get()->timestamp){
-            resultCode=CURLE_CHUNK_FAILED;
+            
+			CCLog("t_function error hack!!!",resultobj["timestamp"].getInt(),GraphDog::get()->timestamp);
+			resultCode=CURLE_CHUNK_FAILED;
             resultobj["state"]="error";
             resultobj["errorMsg"]="hack!!";
             GraphDog::get()->timestamp=resultobj["timestamp"].getInt();
@@ -455,6 +475,7 @@ void GraphDog::removeCommand(cocos2d::CCObject *target)
 void GraphDog::receivedCommand(float dt)
 {
 	//##
+	
 	for(std::map<int, CommandsType>::iterator commandQueueIter = commandQueue.begin(); commandQueueIter != commandQueue.end();)
 	{
 		CommandsType commands = commandQueueIter->second;
@@ -467,6 +488,7 @@ void GraphDog::receivedCommand(float dt)
 			{
 				for(std::map<string, CommandType>::iterator commandTypeIter = commandQueueIter->second.commands.begin(); commandTypeIter != commandQueueIter->second.commands.end(); ++commandTypeIter)
 				{
+					CCLog("receivedCommand error");
 					JsonBox::Object resultobj;
 					CommandType command = commandTypeIter->second;
 					resultobj["state"] = JsonBox::Value("error");

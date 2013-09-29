@@ -35,6 +35,9 @@ private:
 	bool is_menu_enable;
 	
 	void closeReplayPopup();
+	void popupClose();
+	
+	CCPoint getContentPosition(int t_tag);
 	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);

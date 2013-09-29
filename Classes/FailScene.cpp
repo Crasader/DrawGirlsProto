@@ -14,10 +14,12 @@
 #include "EnumDefine.h"
 //#include "StageSettingPopup.h"
 #include "StageSettingScene.h"
+#include "FailHelpPopup.h"
 
 typedef enum tMenuTagFailScene{
 	kMT_FS_main = 1,
-	kMT_FS_replay
+	kMT_FS_replay,
+	kMT_FS_help
 }MenuTagFailScene;
 
 typedef enum tZorderFailScene{
@@ -168,7 +170,7 @@ bool FailScene::init()
 	main_item->setTag(kMT_FS_main);
 	
 	CCMenu* main_menu = CCMenu::createWithItem(main_item);
-	main_menu->setPosition(ccp(130,70));
+	main_menu->setPosition(getContentPosition(kMT_FS_main));
 	addChild(main_menu, kZ_FS_menu);
 	
 	
@@ -180,8 +182,20 @@ bool FailScene::init()
 	replay_item->setTag(kMT_FS_replay);
 	
 	CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
-	replay_menu->setPosition(ccp(350,70));
+	replay_menu->setPosition(getContentPosition(kMT_FS_replay));
 	addChild(replay_menu, kZ_FS_menu);
+	
+	
+	CCSprite* n_help = CCSprite::create("ending_help.png");
+	CCSprite* s_help = CCSprite::create("ending_help.png");
+	s_help->setColor(ccGRAY);
+	
+	CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailScene::menuAction));
+	help_item->setTag(kMT_FS_help);
+	
+	CCMenu* help_menu = CCMenu::createWithItem(help_item);
+	help_menu->setPosition(getContentPosition(kMT_FS_help));
+	addChild(help_menu, kZ_FS_menu);
 	
 	
 	is_menu_enable = true;
@@ -190,6 +204,17 @@ bool FailScene::init()
 	addChild(t_screen, 99999);
 	
     return true;
+}
+
+CCPoint FailScene::getContentPosition(int t_tag)
+{
+	CCPoint return_value;
+	
+	if(t_tag == kMT_FS_main)			return_value = ccp(100,70);
+	else if(t_tag == kMT_FS_replay)		return_value = ccp(240,70);
+	else if(t_tag == kMT_FS_help)		return_value = ccp(380,70);
+	
+	return return_value;
 }
 
 void FailScene::menuAction(CCObject* pSender)
@@ -214,6 +239,17 @@ void FailScene::menuAction(CCObject* pSender)
 //		addChild(t_sspl, kZ_FS_popup);
 		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
+	else if(tag == kMT_FS_help)
+	{
+		is_menu_enable = false;
+		FailHelpPopup* t_fhp = FailHelpPopup::create(this, callfunc_selector(FailScene::popupClose));
+		addChild(t_fhp, kZ_FS_popup);
+	}
+}
+
+void FailScene::popupClose()
+{
+	is_menu_enable = true;
 }
 
 void FailScene::closeReplayPopup()
