@@ -272,7 +272,7 @@ private:
 		
 		if(side_cnt == 4)
 		{
-			myGD->communication("EP_addJackAttack");
+//			myGD->communication("EP_addJackAttack");
 			AudioEngine::sharedInstance()->playEffect("sound_pil_wind.mp3",false);
 			itemImg->removeFromParentAndCleanup(true);
 			unschedule(schedule_selector(WindItem::checkItemSide));
@@ -414,7 +414,7 @@ private:
 			}
 			unschedule(schedule_selector(WindItem::resetChecking));
 			sum_damage = 0;
-			myGD->communication("EP_subJackAttack");
+//			myGD->communication("EP_subJackAttack");
 			startCast();
 		}
 	}
@@ -593,7 +593,7 @@ private:
 		
 		if(side_cnt == 4)
 		{
-			myGD->communication("EP_addJackAttack");
+//			myGD->communication("EP_addJackAttack");
 			AudioEngine::sharedInstance()->playEffect("sound_pil_lightning.mp3",false);
 			itemImg->removeFromParentAndCleanup(true);
 			unschedule(schedule_selector(LightningItem::checkItemSide));
@@ -744,7 +744,7 @@ private:
 			}
 			unschedule(schedule_selector(LightningItem::resetChecking));
 			sum_damage = 0;
-			myGD->communication("EP_subJackAttack");
+//			myGD->communication("EP_subJackAttack");
 			startCast();
 		}
 	}
@@ -992,7 +992,7 @@ private:
 		
 		if(side_cnt == 4)
 		{
-			myGD->communication("EP_addJackAttack");
+//			myGD->communication("EP_addJackAttack");
 			AudioEngine::sharedInstance()->playEffect("sound_pil_life.mp3",false);
 			itemImg->removeFromParentAndCleanup(true);
 			unschedule(schedule_selector(LifeItem::checkItemSide));
@@ -1053,7 +1053,7 @@ private:
 			//			myGD->communication("Main_stopSpecialAttack");
 			unschedule(schedule_selector(LifeItem::resetChecking));
 			sum_damage = 0;
-			myGD->communication("EP_subJackAttack");
+//			myGD->communication("EP_subJackAttack");
 			startCast();
 		}
 	}
@@ -1333,7 +1333,7 @@ private:
 		
 		if(side_cnt == 4)
 		{
-			myGD->communication("EP_addJackAttack");
+//			myGD->communication("EP_addJackAttack");
 			AudioEngine::sharedInstance()->playEffect("sound_pil_ice.mp3",false);
 			itemImg->removeFromParentAndCleanup(true);
 			unschedule(schedule_selector(IceItem::checkItemSide));
@@ -1398,7 +1398,7 @@ private:
 			//			myGD->communication("Main_stopSpecialAttack");
 			unschedule(schedule_selector(IceItem::resetChecking));
 			sum_damage = 0;
-			myGD->communication("EP_subJackAttack");
+//			myGD->communication("EP_subJackAttack");
 			startCast();
 		}
 	}
@@ -1638,7 +1638,7 @@ private:
 		
 		if(side_cnt == 4)
 		{
-			myGD->communication("EP_addJackAttack");
+//			myGD->communication("EP_addJackAttack");
 			AudioEngine::sharedInstance()->playEffect("sound_pil_fire.mp3",false);
 			itemImg->removeFromParentAndCleanup(true);
 			unschedule(schedule_selector(FireItem::checkItemSide));
@@ -1702,7 +1702,7 @@ private:
 			//			myGD->communication("Main_stopSpecialAttack");
 			unschedule(schedule_selector(FireItem::resetChecking));
 			sum_damage = 0;
-			myGD->communication("EP_subJackAttack");
+//			myGD->communication("EP_subJackAttack");
 			startCast();
 		}
 	}
@@ -1905,7 +1905,7 @@ private:
 		
 		if(side_cnt == 4)
 		{
-			myGD->communication("EP_addJackAttack");
+//			myGD->communication("EP_addJackAttack");
 			AudioEngine::sharedInstance()->playEffect("sound_pil_plasma.mp3",false);
 			itemImg->removeFromParentAndCleanup(true);
 			unschedule(schedule_selector(PlasmaItem::checkItemSide));
@@ -1966,7 +1966,7 @@ private:
 			//			myGD->communication("Main_stopSpecialAttack");
 			unschedule(schedule_selector(PlasmaItem::resetChecking));
 			sum_damage = 0;
-			myGD->communication("EP_subJackAttack");
+//			myGD->communication("EP_subJackAttack");
 			startCast();
 		}
 	}

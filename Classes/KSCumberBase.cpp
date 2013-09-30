@@ -23,7 +23,7 @@ void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 				if(myGD->mapState[t_p.x+k][t_p.y+l] == mapOldget)		myGD->mapState[t_p.x+k][t_p.y+l] = mapOldline;
 			}
 		}
-		myGD->communication("EP_crashed");
+//		myGD->communication("EP_crashed");
 		myGD->communication("MFP_createNewFragment", t_p);
 		myGD->communication("VS_divideRect", t_p);
 	}

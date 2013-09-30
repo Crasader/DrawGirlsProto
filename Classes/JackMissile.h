@@ -79,7 +79,7 @@ public:
 	
 	virtual ~JM_UpgradeMissile()
 	{
-		myGD->communication("EP_subJackAttack");
+//		myGD->communication("EP_subJackAttack");
 	}
 	
 	virtual void startMoving()
@@ -294,7 +294,7 @@ private:
 	
 	void realInit(CCNode* t_target, int jm_type, float damage_per)
 	{
-		myGD->communication("EP_addJackAttack");
+//		myGD->communication("EP_addJackAttack");
 		
 		targetNode = t_target;
 		my_type = (MyElemental)jm_type;
@@ -448,7 +448,7 @@ public:
 	
 	virtual ~JM_BasicMissile()
 	{
-		myGD->communication("EP_subJackAttack");
+//		myGD->communication("EP_subJackAttack");
 	}
 	
 	virtual void startMoving()
@@ -713,7 +713,7 @@ private:
 	
 	void realInit(CCNode* t_target, int jm_type, float damage_per)
 	{
-		myGD->communication("EP_addJackAttack");
+//		myGD->communication("EP_addJackAttack");
 		
 		targetNode = t_target;
 		particle = new CCParticleSystemQuad();

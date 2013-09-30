@@ -84,7 +84,7 @@ void SubCumber::easyMoving()
 	CCPoint afterPosition;
 	IntPoint afterPoint;
 	int check_loop_cnt = 0;
-	bool notEmotion = true;
+//	bool notEmotion = true;
 	
 	int before_areacrash_cnt = areacrash_frame_cnt;
 	do
@@ -133,23 +133,23 @@ void SubCumber::easyMoving()
 			{
 //				stopMoving();
 				
-				if(notEmotion)
-				{
-					notEmotion = false;
-					showEmotion(kEmotionType_fun);
-				}
+//				if(notEmotion)
+//				{
+//					notEmotion = false;
+//					showEmotion(kEmotionType_fun);
+//				}
 				
 				myGD->communication("Jack_startDieEffect");
 				return;
 			}
 			else
 			{
-				if(notEmotion)
-				{
-					notEmotion = false;
-					showEmotion(kEmotionType_joy);
-				}
-				myGD->communication("SW_createSW", afterPoint, this, callfuncI_selector(SubCumber::showEmotion));
+//				if(notEmotion)
+//				{
+//					notEmotion = false;
+//					showEmotion(kEmotionType_joy);
+//				}
+				myGD->communication("SW_createSW", afterPoint);
 			}
 		}
 		else if(afterPoint.isInnerMap() && myGD->mapState[afterPoint.x][afterPoint.y] != mapEmpty)
@@ -368,7 +368,7 @@ void SubCumber::moving()
 	CCPoint afterPosition;
 	IntPoint afterPoint;
 	int check_loop_cnt = 0;
-	bool notEmotion = true;
+//	bool notEmotion = true;
 	
 	int before_areacrash_cnt = areacrash_frame_cnt;
 	
@@ -426,23 +426,23 @@ void SubCumber::moving()
 			{
 //				stopMoving();
 				
-				if(notEmotion)
-				{
-					notEmotion = false;
-					showEmotion(kEmotionType_fun);
-				}
+//				if(notEmotion)
+//				{
+//					notEmotion = false;
+//					showEmotion(kEmotionType_fun);
+//				}
 				
 				myGD->communication("Jack_startDieEffect");
 				return;
 			}
 			else
 			{
-				if(notEmotion)
-				{
-					notEmotion = false;
-					showEmotion(kEmotionType_joy);
-				}
-				myGD->communication("SW_createSW", afterPoint, this, callfuncI_selector(SubCumber::showEmotion));
+//				if(notEmotion)
+//				{
+//					notEmotion = false;
+//					showEmotion(kEmotionType_joy);
+//				}
+				myGD->communication("SW_createSW", afterPoint);
 			}
 		}
 		else if(afterPoint.isInnerMap() && (myGD->mapState[afterPoint.x][afterPoint.y] == mapOldline || myGD->mapState[afterPoint.x][afterPoint.y] == mapOldget))

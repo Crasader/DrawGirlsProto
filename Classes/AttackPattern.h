@@ -947,7 +947,7 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
-			myGD->communication("EP_stopCrashAction");
+//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
 			removeFromParentAndCleanup(true);
 		}
@@ -956,7 +956,7 @@ private:
 	void myInit(CCPoint t_sp, float t_move_speed, int t_tmCnt, int t_cushion_cnt, bool t_is_big_bomb)
 	{
 		isRemoveEffect = false;
-		myGD->communication("EP_startCrashAction");
+//		myGD->communication("EP_startCrashAction");
 		for(int i=0;i<t_tmCnt;i++)
 		{
 			// create
@@ -2303,7 +2303,7 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
-			myGD->communication("EP_stopCrashAction");
+//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
 			removeFromParentAndCleanup(true);
 		}
@@ -2312,7 +2312,7 @@ private:
 	void myInit(CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize)
 	{
 		
-		myGD->communication("EP_startCrashAction");
+//		myGD->communication("EP_startCrashAction");
 		
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
@@ -2412,7 +2412,7 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
-			myGD->communication("EP_stopCrashAction");
+//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
 			removeFromParentAndCleanup(true);
 		}
@@ -2488,7 +2488,7 @@ private:
 		targetingFrame = t_targetingFrame;
 		shootFrame = t_shootFrame;
 		
-		myGD->communication("EP_startCrashAction");
+//		myGD->communication("EP_startCrashAction");
 		
 		wifiImg = CCSprite::create("satelliteBeam_wifi.png", CCRectMake(0, 0, 30, 22));
 		CCPoint wifiPosition = ccpAdd(t_sp, ccp(0,40));
@@ -2559,7 +2559,7 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
-			myGD->communication("EP_stopCrashAction");
+//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
 			removeFromParentAndCleanup(true);
 		}
@@ -2569,7 +2569,7 @@ private:
 	{
 		
 		
-		myGD->communication("EP_startCrashAction");
+//		myGD->communication("EP_startCrashAction");
 		
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
@@ -2676,7 +2676,7 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
-			myGD->communication("EP_stopCrashAction");
+//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
 			removeFromParentAndCleanup(true);
 		}
@@ -2813,7 +2813,7 @@ private:
 		
 		
 		
-		myGD->communication("EP_startCrashAction");
+//		myGD->communication("EP_startCrashAction");
 		
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
@@ -2899,7 +2899,7 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
-			myGD->communication("EP_stopCrashAction");
+//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
 			removeFromParentAndCleanup(true);
 		}
@@ -2939,7 +2939,7 @@ private:
 	{
 		isRemoveEffect = false;
 		
-		myGD->communication("EP_startCrashAction");
+//		myGD->communication("EP_startCrashAction");
 		type = t_type;
 		tmCnt = t_tmCnt;
 		totalFrame = t_totalFrame;
@@ -3018,7 +3018,7 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
-			myGD->communication("EP_stopCrashAction");
+//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
 			removeFromParentAndCleanup(true);
 		}
@@ -3159,7 +3159,7 @@ private:
 					if(myGD->mapState[t_p.x+k][t_p.y+l] == mapOldget)		myGD->mapState[t_p.x+k][t_p.y+l] = mapOldline;
 				}
 			}
-			myGD->communication("EP_crashed");
+//			myGD->communication("EP_crashed");
 			myGD->communication("MFP_createNewFragment", t_p);
 			myGD->communication("VS_divideRect", t_p);
 		}
@@ -3212,7 +3212,7 @@ private:
 	void myInit(CCPoint t_sp, int t_type, int t_createRingFrame, int t_chargeFrame, int t_crashFrame)
 	{
 		
-		myGD->communication("EP_startCrashAction");
+//		myGD->communication("EP_startCrashAction");
 		sp = t_sp;
 		type = t_type;
 		createRingFrame = t_createRingFrame;
@@ -3294,7 +3294,7 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
-			myGD->communication("EP_stopCrashAction");
+//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
 			removeFromParentAndCleanup(true);
 		}
@@ -3303,7 +3303,7 @@ private:
 	void myInit(CCPoint t_sp, float t_move_speed, int t_tmCnt, int t_cushion_cnt, bool t_is_big_bomb)
 	{
 		isRemoveEffect = false;
-		myGD->communication("EP_startCrashAction");
+//		myGD->communication("EP_startCrashAction");
 		for(int i=0;i<t_tmCnt;i++)
 		{
 			// create

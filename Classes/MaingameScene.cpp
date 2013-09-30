@@ -157,7 +157,7 @@ void Maingame::finalSetting()
 	myUI->setMaxBossLife(mySD->getBossMaxLife());//SelectedMapData::sharedInstance()->getMaxBossLife());
 	myUI->setClearPercentage(SelectedMapData::sharedInstance()->getClearPercentage());
 	
-	myCP->setUI_forEP(myUI, callfunc_selector(PlayUI::keepBossLife), callfunc_selector(PlayUI::checkBossLife));
+//	myCP->setUI_forEP(myUI, callfunc_selector(PlayUI::keepBossLife), callfunc_selector(PlayUI::checkBossLife));
 	
 	myMS->scanMap();
 	

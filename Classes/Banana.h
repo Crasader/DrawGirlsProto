@@ -12,7 +12,7 @@
 #include "GameData.h"
 #include "Well512.h"
 #include <vector>
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include "FromTo.h"
 #include "cocos-ext.h"
 using namespace cocos2d::extension;
@@ -21,7 +21,7 @@ using namespace cocos2d::extension;
 class Banana : public KSCumberBase
 {
 public:
-	Banana() : RADIUS(15.f), mEmotion(nullptr),
+	Banana() : RADIUS(15.f),// mEmotion(nullptr),
 	
 	FURY_DURATION(4.f), // 분노모드 초.
 	teleportImg(NULL) // 텔레포트 이미지
@@ -61,18 +61,18 @@ public:
 	COLLISION_CODE crashWithX(IntPoint check_position);
 	COLLISION_CODE crashLooper(const set<IntPoint>& v, IntPoint* cp);
 	const float RADIUS;
-	void showEmotion(EmotionType t_type)
-	{
-		if(mEmotion)
-			mEmotion->selfRemove();
-		mEmotion = Emotion::create(t_type, this, callfunc_selector(Banana::nullmEmotion));
-		mEmotion->setPosition(ccp(30,20));
-		addChild(mEmotion);
-	}
-	void nullmEmotion()
-	{
-		mEmotion = NULL;
-	}
+//	void showEmotion(EmotionType t_type)
+//	{
+//		if(mEmotion)
+//			mEmotion->selfRemove();
+//		mEmotion = Emotion::create(t_type, this, callfunc_selector(Banana::nullmEmotion));
+//		mEmotion->setPosition(ccp(30,20));
+//		addChild(mEmotion);
+//	}
+//	void nullmEmotion()
+//	{
+//		mEmotion = NULL;
+//	}
 	bool startDamageReaction(float damage, float angle);
 	virtual void startSpringCumber(float userdata){}
 	virtual void startAnimationNoDirection();
@@ -192,7 +192,7 @@ protected:
 						round((c.y - 1) / pixelSize + 1.f));
 	}
 	
-	Emotion* mEmotion;
+//	Emotion* mEmotion;
 	/// 방사형 에니메이션 용.
 	struct NoDirection
 	{

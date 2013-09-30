@@ -17,7 +17,7 @@ void MainCumber::moving()
 		noattack_cnt = 0;
 		stopMoving();
 		
-		showEmotion(kEmotionType_joy);
+//		showEmotion(kEmotionType_joy);
 		
 		myGD->communication("MP_startFire", getPosition(), false); 
 		return;
@@ -27,7 +27,7 @@ void MainCumber::moving()
 	CCPoint afterPosition;
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
-	bool notEmotion = true;
+//	bool notEmotion = true;
 	
 	int before_areacrash_cnt = areacrash_frame_cnt;
 	
@@ -97,19 +97,19 @@ void MainCumber::moving()
 				// side check (up, down, left, right)
 				
 				check_position = IntPoint(afterPoint.x-roundf(half_distance/2),afterPoint.y); // left
-				if(checkingFunc(check_position, is_not_position, notEmotion, before_areacrash_cnt, is_map_visited))
+				if(checkingFunc(check_position, is_not_position, before_areacrash_cnt, is_map_visited))
 					return;
 				
 				check_position = IntPoint(afterPoint.x+roundf(half_distance/2),afterPoint.y); // right
-				if(checkingFunc(check_position, is_not_position, notEmotion, before_areacrash_cnt, is_map_visited))
+				if(checkingFunc(check_position, is_not_position, before_areacrash_cnt, is_map_visited))
 					return;
 				
 				check_position = IntPoint(afterPoint.x,afterPoint.y+roundf(half_distance/2)); // up
-				if(checkingFunc(check_position, is_not_position, notEmotion, before_areacrash_cnt, is_map_visited))
+				if(checkingFunc(check_position, is_not_position, before_areacrash_cnt, is_map_visited))
 					return;
 				
 				check_position = IntPoint(afterPoint.x,afterPoint.y-roundf(half_distance/2)); // down
-				if(checkingFunc(check_position, is_not_position, notEmotion, before_areacrash_cnt, is_map_visited))
+				if(checkingFunc(check_position, is_not_position, before_areacrash_cnt, is_map_visited))
 					return;
 				
 				// inner check
@@ -121,7 +121,7 @@ void MainCumber::moving()
 						if(calc_distance < half_distance)
 						{
 							check_position = IntPoint(i,j);
-							if(checkingFunc(check_position, is_not_position, notEmotion, before_areacrash_cnt, is_map_visited))
+							if(checkingFunc(check_position, is_not_position, before_areacrash_cnt, is_map_visited))
 								return;
 							
 							
@@ -430,7 +430,7 @@ void MainCumber::checkingJackCrash()
 					}
 					else
 					{
-						myGD->communication("SW_createSW", check_position, this, callfuncI_selector(MainCumber::showEmotion));
+//						myGD->communication("SW_createSW", check_position, this, callfuncI_selector(MainCumber::showEmotion));
 					}
 				}
 			}
@@ -544,7 +544,7 @@ void MainCumber::furyModeOn()
 		
 		dash_angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
 		
-		myGD->communication("EP_startCrashAction");
+//		myGD->communication("EP_startCrashAction");
 		b_c_p = getPosition();
 		isFuryMode = true;
 		
@@ -607,7 +607,7 @@ void MainCumber::furyModeOff()
 {
 	if(isFuryMode)
 	{
-		myGD->communication("EP_stopCrashAction");
+//		myGD->communication("EP_stopCrashAction");
 		myGD->communication("MS_resetRects");
 		isFuryMode = false;
 		furyMode->removeFromParentAndCleanup(true);
@@ -925,18 +925,18 @@ void MainCumber::setCasting(bool t_b)
 	is_casting = t_b;
 }
 
-void MainCumber::showEmotion(EmotionType t_type)
-{
-	if(mEmotion)	mEmotion->selfRemove();
-	mEmotion = Emotion::create(t_type, this, callfunc_selector(MainCumber::nullmEmotion));
-	mEmotion->setPosition(ccp(30,20));
-	addChild(mEmotion);
-}
+//void MainCumber::showEmotion(EmotionType t_type)
+//{
+//	if(mEmotion)	mEmotion->selfRemove();
+//	mEmotion = Emotion::create(t_type, this, callfunc_selector(MainCumber::nullmEmotion));
+//	mEmotion->setPosition(ccp(30,20));
+//	addChild(mEmotion);
+//}
 
-void MainCumber::nullmEmotion()
-{
-	mEmotion = NULL;
-}
+//void MainCumber::nullmEmotion()
+//{
+//	mEmotion = NULL;
+//}
 
 CCNode* MainCumber::getBossEye()
 {
@@ -1127,14 +1127,14 @@ void MainCumber::crashMapForIntPoint(IntPoint t_p)
 				if(myGD->mapState[t_p.x+k][t_p.y+l] == mapOldget)		myGD->mapState[t_p.x+k][t_p.y+l] = mapOldline;
 			}
 		}
-		myGD->communication("EP_crashed");
+//		myGD->communication("EP_crashed");
 		myGD->communication("MFP_createNewFragment", t_p);
 		myGD->communication("VS_divideRect", t_p);
 	}
 	
 	if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
 	{
-		showEmotion(kEmotionType_fun);
+//		showEmotion(kEmotionType_fun);
 		myGD->communication("Jack_startDieEffect");
 		if(isFuryMode)
 			furyModeOff();
@@ -1143,7 +1143,7 @@ void MainCumber::crashMapForIntPoint(IntPoint t_p)
 	if(t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
 	{
 		//					myGD->communication("PM_pathChainBomb", t_p);
-		showEmotion(kEmotionType_fun);
+//		showEmotion(kEmotionType_fun);
 		myGD->communication("Jack_startDieEffect");
 		myGD->communication("Main_showLineDiePosition", t_p);
 		if(isFuryMode)
@@ -1154,7 +1154,7 @@ void MainCumber::crashMapForIntPoint(IntPoint t_p)
 void MainCumber::myInit()
 {
 	my_eye = NULL;
-	mEmotion = NULL;
+//	mEmotion = NULL;
 	map_visit_cnt = 0;
 	
 	is_silenced = false;
@@ -1369,7 +1369,7 @@ void MainCumber::randomShuffle()
 	random_shuffle(checking_array+341, checking_array+360);
 }
 
-bool MainCumber::checkingFunc(IntPoint check_position, bool& is_not_position, bool& notEmotion, int& before_areacrash_cnt, bool& is_map_visited)
+bool MainCumber::checkingFunc(IntPoint check_position, bool& is_not_position, int& before_areacrash_cnt, bool& is_map_visited)
 {
 	if(!check_position.isInnerMap())
 	{
@@ -1383,23 +1383,23 @@ bool MainCumber::checkingFunc(IntPoint check_position, bool& is_not_position, bo
 		{
 			//				stopMoving();
 			
-			if(notEmotion)
-			{
-				notEmotion = false;
-				showEmotion(kEmotionType_fun);
-			}
+//			if(notEmotion)
+//			{
+//				notEmotion = false;
+//				showEmotion(kEmotionType_fun);
+//			}
 			
 			myGD->communication("Jack_startDieEffect");
 			return true;
 		}
 		else
 		{
-			if(notEmotion)
-			{
-				notEmotion = false;
-				showEmotion(kEmotionType_joy);
-			}
-			myGD->communication("SW_createSW", check_position, this, callfuncI_selector(MainCumber::showEmotion));
+//			if(notEmotion)
+//			{
+//				notEmotion = false;
+//				showEmotion(kEmotionType_joy);
+//			}
+//			myGD->communication("SW_createSW", check_position, this, callfuncI_selector(MainCumber::showEmotion));
 		}
 	}
 	else if(myGD->mapState[check_position.x][check_position.y] == mapOldline || myGD->mapState[check_position.x][check_position.y] == mapOldget)
@@ -1418,11 +1418,11 @@ bool MainCumber::checkingFunc(IntPoint check_position, bool& is_not_position, bo
 			noattack_cnt = 0;
 			map_visit_cnt = 0;
 			
-			if(notEmotion)
-			{
-				notEmotion = false;
-				showEmotion(kEmotionType_angry);
-			}
+//			if(notEmotion)
+//			{
+//				notEmotion = false;
+//				showEmotion(kEmotionType_angry);
+//			}
 			
 			myGD->communication("MP_startFire", getPosition(), true);
 			return true;
