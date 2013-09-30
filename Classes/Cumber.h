@@ -66,8 +66,8 @@ public:
 	void stopSubCumbers();
 	void startAutoAttacker();
 	void jackCrashDie();
-	void setUI_forEP(CCObject* t_ui, SEL_CallFunc k_ui, SEL_CallFunc c_ui);
-	void mainCumberShowEmotion(int t_e);
+//	void setUI_forEP(CCObject* t_ui, SEL_CallFunc k_ui, SEL_CallFunc c_ui);
+//	void mainCumberShowEmotion(int t_e);
 	void startDieAnimation();
 	void changeMaxSize(float t_p);
 	float getNumberFromJsonValue(JsonBox::Value v)
@@ -128,7 +128,7 @@ private:
 	std::vector<KSCumberBase*> mainCumbers;
 //	MainCumberKS* mainCumber;
 	
-	EmotionParent* myEP;
+//	EmotionParent* myEP;
 	
 	CCArray* subCumberArray;
 	

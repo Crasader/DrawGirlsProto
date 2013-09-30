@@ -19,10 +19,10 @@ using namespace placeholders;
 class ShockWave : public CCSpriteBatchNode
 {
 public:
-	static ShockWave* create(IntPoint t_createPoint, CCObject* t_emotion, SEL_CallFuncI d_emotion)
+	static ShockWave* create(IntPoint t_createPoint)
 	{
 		ShockWave* t_sw = new ShockWave();
-		t_sw->myInit(t_createPoint, t_emotion, d_emotion);
+		t_sw->myInit(t_createPoint);
 		t_sw->autorelease();
 		return t_sw;
 	}
@@ -45,8 +45,8 @@ private:
 	int ing_frame;
 	
 	bool is_removing;
-	CCObject* emotion_target;
-	SEL_CallFuncI emotion_delegate;
+//	CCObject* emotion_target;
+//	SEL_CallFuncI emotion_delegate;
 	
 	
 	void removeProcess()
@@ -100,8 +100,8 @@ private:
 		
 		if(radius > distance)
 		{
-			if(emotion_target && emotion_delegate)
-				(emotion_target->*emotion_delegate)(6);
+//			if(emotion_target && emotion_delegate)
+//				(emotion_target->*emotion_delegate)(6);
 			myGD->communication("Jack_startDieEffect");
 			myGD->communication("MP_resetTickingTimeBomb");
 			stopSW();
@@ -110,10 +110,10 @@ private:
 		ing_frame++;
 	}
 	
-	void myInit(IntPoint t_createPoint, CCObject* t_emotion, SEL_CallFuncI d_emotion)
+	void myInit(IntPoint t_createPoint)
 	{
-		emotion_target = t_emotion;
-		emotion_delegate = d_emotion;
+//		emotion_target = t_emotion;
+//		emotion_delegate = d_emotion;
 		is_removing = false;
 		
 		CCSprite* texture_spr = CCSprite::create("shock_wave.png");
@@ -135,20 +135,20 @@ public:
 		return t_mySW;
 	}
 	
-	void createSW(IntPoint t_create_point, CCObject* t_emotion, SEL_CallFuncI d_emotion)
+	void createSW(IntPoint t_create_point)
 	{
 		if(getChildrenCount() == 0)
 		{
 			AudioEngine::sharedInstance()->playEffect("sound_bomb_wave.mp3", true);
-			ShockWave* t_sw = ShockWave::create(t_create_point, t_emotion, d_emotion);
+			ShockWave* t_sw = ShockWave::create(t_create_point);
 			addChild(t_sw);
 		}
 	}
 	
-	void createJDSW(IntPoint t_create_point, CCObject* t_emotion, SEL_CallFuncI d_emotion)
+	void createJDSW(IntPoint t_create_point)
 	{
 		is_justDie = true;
-		createSW(t_create_point, t_emotion, d_emotion);
+		createSW(t_create_point);
 	}
 	
 	void stopAllSW()
@@ -179,9 +179,9 @@ private:
 //					callfunc_selector(SW_Parent::stopAllSW),
 //					callfuncIpOC_selector(SW_Parent::createJDSW));
 		
-		myGD->V_IpCCOCallfunci["SW_createSW"] = std::bind(&SW_Parent::createSW, this, _1, _2, _3);
+		myGD->V_IpCCOCallfunci["SW_createSW"] = std::bind(&SW_Parent::createSW, this, _1);
 		myGD->V_V["SW_stopAllSW"] = std::bind(&SW_Parent::stopAllSW, this);
-		myGD->V_IpCCOCallfunci["SW_createJDSW"] = std::bind(&SW_Parent::createJDSW, this, _1, _2, _3);
+		myGD->V_IpCCOCallfunci["SW_createJDSW"] = std::bind(&SW_Parent::createJDSW, this, _1);
 	}
 };
 

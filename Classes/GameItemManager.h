@@ -1328,7 +1328,7 @@ private:
 	
 	virtual void acting()
 	{
-		myGD->communication("EP_addJackAttack");
+//		myGD->communication("EP_addJackAttack");
 		AudioEngine::sharedInstance()->playEffect("sound_pil_fire.mp3",false);
 		AudioEngine::sharedInstance()->playEffect("sound_bomb_common.mp3",false);
 		unschedule(schedule_selector(GameItemFire::framing));
@@ -1414,7 +1414,7 @@ private:
 			//			myGD->communication("Main_stopSpecialAttack");
 			unschedule(schedule_selector(GameItemFire::resetChecking));
 			sum_damage = 0;
-			myGD->communication("EP_subJackAttack");
+//			myGD->communication("EP_subJackAttack");
 		}
 	}
 

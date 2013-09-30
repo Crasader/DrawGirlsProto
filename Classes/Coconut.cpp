@@ -13,7 +13,7 @@
 #include "KSGeometry.h"
 #include <cmath>
 #include "ProbSelector.h"
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include <algorithm>
 
 
@@ -625,7 +625,7 @@ void Coconut::furyModeScheduler(float dt)
 }
 void Coconut::furyModeOff()
 {
-	myGD->communication("EP_stopCrashAction");
+//	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects");
 }
 

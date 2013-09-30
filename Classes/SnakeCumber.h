@@ -13,7 +13,7 @@
 #include "GameData.h"
 #include "Well512.h"
 #include <set>
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include <deque>
 #include "FromTo.h"
 

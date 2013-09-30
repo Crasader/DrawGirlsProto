@@ -856,18 +856,18 @@ public:
 	
 	void checkBossLife()
 	{
-		if((keepLife - bossLife)/maxBossLife > 0.1)
-		{
-			myGD->communication("CP_mainCumberShowEmotion", 2);
-		}
-		else if((keepLife - bossLife)/maxBossLife < 0.02)
-		{
-			myGD->communication("CP_mainCumberShowEmotion", 3);
-		}
-		else
-		{
-			myGD->communication("CP_mainCumberShowEmotion", 1);
-		}
+//		if((keepLife - bossLife)/maxBossLife > 0.1)
+//		{
+//			myGD->communication("CP_mainCumberShowEmotion", 2);
+//		}
+//		else if((keepLife - bossLife)/maxBossLife < 0.02)
+//		{
+//			myGD->communication("CP_mainCumberShowEmotion", 3);
+//		}
+//		else
+//		{
+//			myGD->communication("CP_mainCumberShowEmotion", 1);
+//		}
 	}
 	
 	int getGameTime()
