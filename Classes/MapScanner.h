@@ -664,8 +664,27 @@ public:
 		
 		int base_value = roundf(-t_p.y/myGD->game_scale/2.f);
 		
-		init_rect.size.width = rand()%(50-20 + 1) + 20;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
-		init_rect.size.height = rand()%(50-20 + 1) + 20;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
+		int gacha_cnt = mySGD->getStartMapGachaCnt();
+		if(gacha_cnt > 1)
+			gacha_cnt = 1;
+		
+		gacha_cnt = rand()%(gacha_cnt*5+1);
+		
+		if(gacha_cnt <= 3)
+		{
+			init_rect.size.width = rand()%(30-16 + 1) + 16;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
+			init_rect.size.height = rand()%(30-16 + 1) + 16;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
+		}
+		else if(gacha_cnt <= 5)
+		{
+			init_rect.size.width = rand()%(60-36 + 1) + 36;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
+			init_rect.size.height = rand()%(60-36 + 1) + 36;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
+		}
+//		else if(gacha_cnt <= 10)
+//		{
+//			init_rect.size.width = rand()%(100-60 + 1) + 60;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
+//			init_rect.size.height = rand()%(100-60 + 1) + 60;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
+//		}
 		
 		IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
 		

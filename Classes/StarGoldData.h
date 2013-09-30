@@ -126,6 +126,7 @@ public:
 		keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
 		stage_star = 0;
 		game_time = 0;
+		start_map_gacha_cnt = 0;
 		
 		deque<int> card_options;
 		deque<int>::iterator iter;
@@ -498,6 +499,9 @@ public:
 	int getSubSmallSizeValue(){	return subSmallSize_value;	}
 	int getSmallAreaValue(){	return smallArea_value;		}
 	int getWidePerfectValue(){	return widePerfect_value;	}
+	int getStartMapGachaCnt(){	return start_map_gacha_cnt;	}
+	
+	void startMapGachaOn(){	start_map_gacha_cnt++;	}
 	
 private:
 	CCLabelBMFont* star_label;
@@ -510,6 +514,8 @@ private:
 	int stage_star;
 	int keep_gold;
 	int game_time;
+	
+	int start_map_gacha_cnt;
 		   
 	int doubleItem_value;
 	int longTime_value;

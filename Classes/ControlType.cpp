@@ -794,8 +794,9 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			
 			control_ball->setPosition(convertedLocation);
 			touchAction(convertedLocation, true);
-			if(myGD->gamescreen_type == kGT_rightUI)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-			else										control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));;
+			control_circle->setVisible(false);
+//			if(myGD->gamescreen_type == kGT_rightUI)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
+//			else										control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));;
 			control_ball->setVisible(false);
 			joystick_touch = NULL;
 		}
