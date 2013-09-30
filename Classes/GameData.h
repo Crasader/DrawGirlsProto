@@ -386,11 +386,12 @@ public:
 	std::map<std::string, std::function<void(bool)>> V_B;
 	std::map<std::string, std::function<void(int)>> V_I;
 	std::map<std::string, std::function<void(float)>> V_F;
+//	std::map<std::string, std::function<bool(KSCumberBase*, float, float)>> B_CumberBaseFF;
 	std::map<std::string, std::function<void(IntPoint)>> V_Ip;
 	std::map<std::string, std::function<void(CCObject*)>> V_CCO;
 	std::map<std::string, std::function<void(CCPoint)>> V_CCP;
 	std::map<std::string, std::function<void(CCPoint, ccColor4F)>> V_CCPCOLOR;
-	std::map<std::string, std::function<void(CCPoint, int, KSCumberBase*)>> V_CCPICumberBase;
+	std::map<std::string, std::function<bool(CCPoint, int, KSCumberBase*, bool)>> B_CCPICumberBaseB;
 	std::map<std::string, std::function<void(CCPoint, int)>> V_CCPI;
 	
 	std::map<std::string, std::function<void(CCPoint, bool)>> V_CCPB;
@@ -405,7 +406,7 @@ public:
 	std::map<std::string, std::function<bool(void)>> B_V;
 	std::map<std::string, std::function<CCNode*(void)>> CCN_V;
 	std::map<std::string, std::function<CCArray*(void)>> CCA_V;
-	std::map<std::string, std::function<void(CCObject*, float, float)>> V_CCOFF;
+	std::map<std::string, std::function<bool(CCObject*, float, float)>> B_CCOFF;
 	std::map<std::string, std::function<void(IntPoint, CCObject*, SEL_CallFuncI)>> V_IpCCOCallfunci;
 	std::map<std::string, std::function<void(IntPoint, int, int, int)>> V_IpIII;
 	std::map<std::string, std::function<void(float, bool, CCPoint)>> V_FBCCP;
@@ -478,7 +479,12 @@ public:
 		V_V[funcName]();
 		return;
 	}
-	
+//	bool communication(string funcName, KSCumberBase* cb, float a, float b)
+//	{
+//		CCAssert(B_CumberBaseFF.find(funcName) != B_CumberBaseFF.end(), funcName.c_str());
+//		return B_CumberBaseFF[funcName](cb, a, b); // 지워지면  true 반환.
+////		return;
+//	}
 	void communication(string funcName, CCPoint t_p, int t_i)
 	{
 		CCAssert(V_CCPI.find(funcName) != V_CCPI.end(), funcName.c_str());
@@ -486,11 +492,10 @@ public:
 		return;
 	}
 	
-	void communication(string funcName, CCPoint t_p, int t_i, KSCumberBase* cb)
+	bool communication(string funcName, CCPoint t_p, int t_i, KSCumberBase* cb, bool t_b)
 	{
-		CCAssert(V_CCPICumberBase.find(funcName) != V_CCPICumberBase.end(), funcName.c_str());
-		V_CCPICumberBase[funcName](t_p, t_i, cb);
-		return;
+		CCAssert(B_CCPICumberBaseB.find(funcName) != B_CCPICumberBaseB.end(), funcName.c_str());
+		return B_CCPICumberBaseB[funcName](t_p, t_i, cb, t_b);
 	}
 	
 	void communication(string funcName, float t_f, bool t_b, CCPoint t_p)
@@ -514,11 +519,10 @@ public:
 		return;
 	}
 	
-	void communication(string funcName, CCObject* t_obj, float f_val, float f_val2)
+	bool communication(string funcName, CCObject* t_obj, float f_val, float f_val2)
 	{
-		CCAssert(V_CCOFF.find(funcName) != V_CCOFF.end(), funcName.c_str());
-		V_CCOFF[funcName](t_obj, f_val, f_val2);
-		return;
+		CCAssert(B_CCOFF.find(funcName) != B_CCOFF.end(), funcName.c_str());
+		return B_CCOFF[funcName](t_obj, f_val, f_val2);
 	}
 	
 	void communication(string funcName, IntPointVector t_addPath)

@@ -180,6 +180,8 @@ private:
 	void startCounting();
 	void counting();
 	
+	void gachaOn();
+	
 	virtual void onEnter();
     virtual void onExit();
 	

@@ -92,9 +92,11 @@ public:
 			m_cumberTrace.pop_front();
 		}
 		
-		if(m_state != CUMBERSTATENODIRECTION)
+		if(m_state != CUMBERSTATENODIRECTION) // 도는것이 아니라면
+		{
 			gameData->setMainCumberPoint(ccp2ip(t_sp));
-		
+			m_mapPoint = ccp2ip(t_sp);
+		}
 		setHeadAndBodies();
 		//		gameData->communication("Main_moveGamePosition", t_sp);
 		//		gameData->communication("VS_setMoveGamePosition", t_sp);
@@ -141,7 +143,7 @@ public:
 		mEmotion = NULL;
 	}
 	void setHeadAndBodies();
-	virtual void startDamageReaction(float userdata);
+	virtual bool startDamageReaction(float damage, float angle);
 	virtual void startAnimationNoDirection();
 	virtual void startAnimationDirection();
 	//	virtual void startSpringCumber(float userdata)

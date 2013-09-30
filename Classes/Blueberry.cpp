@@ -192,9 +192,11 @@ void Blueberry::normalMoving(float dt)
 
 
 
-void Blueberry::startDamageReaction(float userdata)
+bool Blueberry::startDamageReaction(float damage, float angle)
 {
 	CCLog("damaga!!!");
+	m_remainHp -= damage;
+	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
 	// 방사형으로 돌아가고 있는 중이라면
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
@@ -208,7 +210,7 @@ void Blueberry::startDamageReaction(float userdata)
 	else if(m_state == CUMBERSTATEMOVING)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
-		float rad = deg2Rad(userdata);
+		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
 		//	CCLog("%f %f", dx, dy);
@@ -220,7 +222,7 @@ void Blueberry::startDamageReaction(float userdata)
 	else if(m_state == CUMBERSTATESTOP)
 	{
 		CCLog("m_state == CUMBERSTATESTOP");
-		float rad = deg2Rad(userdata);
+		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
 		//	CCLog("%f %f", dx, dy);
@@ -232,7 +234,7 @@ void Blueberry::startDamageReaction(float userdata)
 	else if(m_state == CUMBERSTATEFURY)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
-		float rad = deg2Rad(userdata);
+		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
 		//	CCLog("%f %f", dx, dy);
@@ -243,6 +245,11 @@ void Blueberry::startDamageReaction(float userdata)
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
+	
+	if(m_remainHp <= 0)
+		return true;
+	else
+		return false;
 }
 
 void Blueberry::startAnimationNoDirection()
@@ -339,10 +346,9 @@ void Blueberry::cumberAttack(float dt)
 		bool searched = false;
 		while(!searched)
 		{
-			random_shuffle(m_attacks.begin(), m_attacks.end(), [=](int n){
-				return this->m_well512.GetValue(n-1);
-			});
-			attackCode = m_attacks[0];
+			int idx = m_well512.GetValue(m_attacks.size() - 1);
+			
+			attackCode = m_attacks[idx];
 			searched = true;
 			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
 				searched = false;
@@ -355,7 +361,9 @@ void Blueberry::cumberAttack(float dt)
 		{
 			CCLog("aaa %f %f", getPosition().x, getPosition().y);
 			m_state = CUMBERSTATESTOP;
-			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+			lastCastNum = m_well512.GetValue(1, 3);
+			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
+			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
 		}
 		else
 		{
@@ -363,7 +371,7 @@ void Blueberry::cumberAttack(float dt)
 			lastCastNum = m_well512.GetValue(1, 3);
 			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 			startAnimationNoDirection();
-			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this);
+			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
 		}
 	}
 }

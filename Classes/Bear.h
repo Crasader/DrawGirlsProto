@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "KSCumberBase.h"
 #include "GameData.h"
 #include "Well512.h"
@@ -11,17 +10,17 @@
 using namespace cocos2d::extension;
 
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Blueberry : public KSCumberBase
+class Bear : public KSCumberBase
 {
 public:
-	Blueberry() : RADIUS(15.f), mEmotion(nullptr),
+	Bear() : RADIUS(15.f), mEmotion(nullptr),
 	
 	FURY_DURATION(4.f), // 분노모드 초.
 	teleportImg(NULL) // 텔레포트 이미지
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
-	virtual ~Blueberry(){}
+	virtual ~Bear(){}
 	
 	void normalMoving(float dt);
 	
@@ -37,12 +36,12 @@ public:
 	}
 	void cumberAttack(float dt);
 	virtual bool init();
-	CREATE_FUNC(Blueberry);
+	CREATE_FUNC(Bear);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
 		KSCumberBase::setPosition(t_sp);
-		gameData->setMainCumberPoint(ccp2ip(t_sp));
 		m_mapPoint = ccp2ip(t_sp);
+//		gameData->setMainCumberPoint(ccp2ip(t_sp));
 		//		gameData->communication("Main_moveGamePosition", t_sp);
 		//		gameData->communication("VS_setMoveGamePosition", t_sp);
 		//		gameData->communication("Main_moveGamePosition", t_sp);
@@ -58,7 +57,7 @@ public:
 	{
 		if(mEmotion)
 			mEmotion->selfRemove();
-		mEmotion = Emotion::create(t_type, this, callfunc_selector(Blueberry::nullmEmotion));
+		mEmotion = Emotion::create(t_type, this, callfunc_selector(Bear::nullmEmotion));
 		mEmotion->setPosition(ccp(30,20));
 		addChild(mEmotion);
 	}
@@ -135,7 +134,7 @@ public:
 		addChild(teleportImg);
 		
 		CCBlink* t_scale = CCBlink::create(0.5, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Blueberry::smaller));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Bear::smaller));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -145,7 +144,7 @@ public:
 	virtual void smaller()
 	{
 		CCBlink* t_scale = CCBlink::create(0.5, 8);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Blueberry::randomPosition));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Bear::randomPosition));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		

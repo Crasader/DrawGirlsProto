@@ -12,6 +12,7 @@
 #include "MyLocalization.h"
 #include "StarGoldData.h"
 #include "PausePopupLayer.h"
+#include "StartMapGacha.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -229,7 +230,7 @@ void Maingame::counting()
 		startControl();
 //		myCP->movingMainCumber();
 		myCP->onStartGame();
-		myCP->movingSubCumbers();
+//		myCP->movingSubCumbers();
 		myCP->startAutoAttacker();
 		myUI->startCounting();
 		myGD->setIsGameover(false);
@@ -244,7 +245,17 @@ void Maingame::counting()
 		countingLabel->setScale(0.5);
 		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
 		addChild(countingLabel, countingLabelZorder);
+		
+		StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
+		addChild(t_smg, mControlZorder);
 	}
+}
+
+void Maingame::gachaOn()
+{
+	myGD->resetGameData();
+	mySGD->startMapGachaOn();
+	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 }
 
 bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
