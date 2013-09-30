@@ -64,7 +64,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>365</real>
+											<real>360</real>
 										</dict>
 									</array>
 									<key>name</key>
@@ -197,7 +197,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>365</real>
+											<real>360</real>
 										</dict>
 									</array>
 									<key>name</key>
@@ -240,7 +240,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>365</real>
+											<real>360</real>
 										</dict>
 									</array>
 									<key>name</key>
@@ -2729,7 +2729,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>365</real>
+								<real>360</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -2760,7 +2760,7 @@
 								<true/>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
+						<key>selected</key>
 						<true/>
 					</dict>
 					<dict>
@@ -3031,8 +3031,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>

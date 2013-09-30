@@ -159,7 +159,7 @@ void Melon::startAnimationNoDirection()
 
 void Melon::animationNoDirection(float dt)
 {
-	CCLog("animationNoDirection");
+//	CCLog("animationNoDirection");
 	m_noDirection.timer += 1.f/60.f;
 	
 	if(m_noDirection.state == 1)
@@ -239,8 +239,11 @@ void Melon::animationDirection(float dt)
 		unschedule(schedule_selector(Melon::animationDirection));
 	}
 }
-void Melon::startDamageReaction(float userdata)
+bool Melon::startDamageReaction(float damage, float angle)
 {
+	m_remainHp -= damage;
+	CCLog("Melon Hp %f", m_remainHp);
+	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
@@ -260,7 +263,7 @@ void Melon::startDamageReaction(float userdata)
 	else if(m_state == CUMBERSTATEMOVING)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
-		float rad = deg2Rad(userdata);
+		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
 		//	CCLog("%f %f", dx, dy);
@@ -272,7 +275,7 @@ void Melon::startDamageReaction(float userdata)
 	else if(m_state == CUMBERSTATESTOP)
 	{
 		CCLog("m_state == CUMBERSTATESTOP");
-		float rad = deg2Rad(userdata);
+		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
 		//	CCLog("%f %f", dx, dy);
@@ -284,7 +287,7 @@ void Melon::startDamageReaction(float userdata)
 	else if(m_state == CUMBERSTATEFURY)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
-		float rad = deg2Rad(userdata);
+		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
 		//	CCLog("%f %f", dx, dy);
@@ -295,6 +298,11 @@ void Melon::startDamageReaction(float userdata)
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
+	
+	if(m_remainHp <= 0)
+		return true;
+	else
+		return false;
 }
 
 void Melon::damageReaction(float)
@@ -750,10 +758,9 @@ void Melon::cumberAttack(float dt)
 		bool searched = false;
 		while(!searched)
 		{
-			random_shuffle(m_attacks.begin(), m_attacks.end(), [=](int n){
-				return this->m_well512.GetValue(n-1);
-			} );
-			attackCode = m_attacks[0];
+			int idx = m_well512.GetValue(m_attacks.size() - 1);
+			
+			attackCode = m_attacks[idx];
 			searched = true;
 			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
 				searched = false;
@@ -766,7 +773,9 @@ void Melon::cumberAttack(float dt)
 		{
 			CCLog("aaa %f %f", getPosition().x, getPosition().y);
 			m_state = CUMBERSTATESTOP;
-			gameData->communication("MP_attackWithCode", getPosition(), attackCode);
+			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
 		}
 		else
 		{
@@ -776,7 +785,7 @@ void Melon::cumberAttack(float dt)
 				startAnimationNoDirection();
 			else
 				startAnimationDirection();
-			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this);
+			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
 		}
 	}
 }

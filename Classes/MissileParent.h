@@ -556,7 +556,7 @@ public:
 	}
 	void cancelTargetAP8(){		}
 	
-	void attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb);
+	bool attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb, bool exe);
 private:
 	
 	AutoAttacker* myAA;

@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>0</integer>
+	<integer>7</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -64,7 +64,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>355</real>
+											<real>360</real>
 										</dict>
 									</array>
 									<key>name</key>
@@ -240,7 +240,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>355</real>
+											<real>360</real>
 										</dict>
 									</array>
 									<key>name</key>
@@ -2729,7 +2729,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>355</real>
+								<real>360</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -2760,6 +2760,8 @@
 								<true/>
 							</dict>
 						</array>
+						<key>seqExpanded</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -3877,8 +3879,8 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
-							<real>0.5</real>
+							<real>0.0</real>
+							<real>0.0</real>
 						</array>
 					</dict>
 					<dict>
@@ -4190,7 +4192,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>1</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

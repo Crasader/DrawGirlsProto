@@ -42,6 +42,7 @@ public:
 	{
 		KSCumberBase::setPosition(t_sp);
 		gameData->setMainCumberPoint(ccp2ip(t_sp));
+		m_mapPoint = ccp2ip(t_sp);
 		//		gameData->communication("Main_moveGamePosition", t_sp);
 		//		gameData->communication("VS_setMoveGamePosition", t_sp);
 		//		gameData->communication("Main_moveGamePosition", t_sp);
@@ -65,7 +66,7 @@ public:
 	{
 		mEmotion = NULL;
 	}
-	void startDamageReaction(float userdata);
+	bool startDamageReaction(float damage, float angle);
 	virtual void startSpringCumber(float userdata){}
 	virtual void startAnimationNoDirection();
 	void damageReaction(float dt);

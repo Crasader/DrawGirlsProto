@@ -230,7 +230,7 @@ void Maingame::counting()
 		startControl();
 //		myCP->movingMainCumber();
 		myCP->onStartGame();
-		myCP->movingSubCumbers();
+//		myCP->movingSubCumbers();
 		myCP->startAutoAttacker();
 		myUI->startCounting();
 		myGD->setIsGameover(false);

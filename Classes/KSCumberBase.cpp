@@ -50,6 +50,9 @@ void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 
 void KSCumberBase::randomMoving(float dt)
 {
+	
+
+	
 	m_scale.timer += 1/60.f;
 	
 	
@@ -226,8 +229,8 @@ void KSCumberBase::straightMoving(float dt)
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = m_speed * cos(deg2Rad(degree)) * (1 + 0.01f*cnt);
-		float speedY = m_speed * sin(deg2Rad(degree)) * (1 + 0.01f*cnt);
+		float speedX = m_speed * cos(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
+		float speedY = m_speed * sin(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
 		
 		CCPoint cumberPosition = getPosition();
 		afterPosition = cumberPosition + ccp(speedX, speedY);
@@ -235,17 +238,31 @@ void KSCumberBase::straightMoving(float dt)
 		
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != CUMBERSTATEFURY)
-		{
-			if(collisionCode == kCOLLISION_JACK)
+		auto degreeSelector = [&](int cnt, float degree)->float {
+			if(cnt >= 10)
 			{
-				// 즉사 시킴.
-				if(gameData->getJackState() != jackStateNormal)
-					gameData->communication("Jack_startDieEffect");
+				degree = m_well512.GetValue(360);
 			}
-			else if(collisionCode == kCOLLISION_MAP)
+			else if(cnt >= 5)
 			{
-				onceOutlineAndMapCollision = true;
+				if(m_well512.GetValue(1))
+				{
+					degree = -degree;
+				}
+				else
+				{
+					if(m_well512.GetValue(1) == 1)
+					{
+						degree = m_directionAngleDegree + 90;
+					}
+					else
+					{
+						degree = m_directionAngleDegree - 90;
+					}
+				}
+			}
+			else
+			{
 				if(m_well512.GetValue(1) == 1)
 				{
 					degree = m_directionAngleDegree + 90;
@@ -254,6 +271,23 @@ void KSCumberBase::straightMoving(float dt)
 				{
 					degree = m_directionAngleDegree - 90;
 				}
+			}
+			return degree;
+		};
+		if(m_state != CUMBERSTATEFURY)
+		{
+			if(collisionCode == kCOLLISION_JACK)
+			{
+				// 즉사 시킴.
+				validPosition = true;
+				if(gameData->getJackState() != jackStateNormal)
+					gameData->communication("Jack_startDieEffect");
+			}
+			else if(collisionCode == kCOLLISION_MAP)
+			{
+				onceOutlineAndMapCollision = true;
+				degree = degreeSelector(cnt, degree);
+				
 				
 				if(degree < 0)			degree += 360;
 				else if(degree > 360)	degree -= 360;
@@ -263,15 +297,9 @@ void KSCumberBase::straightMoving(float dt)
 				//			CCLog("collision!!");
 				onceOutlineAndMapCollision = true;
 
-
-				if(m_well512.GetValue(1) == 1)
-				{
-					degree = m_directionAngleDegree + 90;
-				}
-				else
-				{
-					degree = m_directionAngleDegree - 90;
-				}
+				degree = degreeSelector(cnt, degree);
+				
+				
 				if(degree < 0)			degree += 360;
 				else if(degree > 360)	degree -= 360;
 			}
@@ -281,15 +309,7 @@ void KSCumberBase::straightMoving(float dt)
 				//			gameData->communication("Jack_startDieEffect");
 				gameData->communication("SW_createSW", checkPosition, 0, 0);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
-				
-				if(m_well512.GetValue(1) == 1)
-				{
-					degree = m_directionAngleDegree + 90;
-				}
-				else
-				{
-					degree = m_directionAngleDegree - 90;
-				}
+				degree = degreeSelector(cnt, degree);
 				
 				if(degree < 0)			degree += 360;
 				else if(degree > 360)	degree -= 360;
@@ -309,16 +329,7 @@ void KSCumberBase::straightMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
-				//			CCLog("collision!!");
-				if(m_well512.GetValue(1) == 1)
-				{
-					degree = m_directionAngleDegree + 90;
-				}
-				else
-				{
-					degree = m_directionAngleDegree - 90;
-				}
-				
+				degree = degreeSelector(cnt, degree);				
 				if(degree < 0)			degree += 360;
 				else if(degree > 360)	degree -= 360;
 			}
@@ -331,9 +342,9 @@ void KSCumberBase::straightMoving(float dt)
 				crashMapForPosition(afterPosition);
 			}
 		}
-		if(cnt % 100 == 0)
+		if(cnt >= 2)
 		{
-			CCLog("cnt !! = %d", cnt);
+			CCLog("straightMoving cnt !! = %d", cnt);
 		}
 		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
@@ -485,7 +496,7 @@ void KSCumberBase::followMoving(float dt)
 		}
 		if(cnt % 100 == 0)
 		{
-			CCLog("cnt !! = %d", cnt);
+			CCLog("followMoving cnt !! = %d", cnt);
 		}
 		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
@@ -662,7 +673,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		}
 		if(cnt % 100 == 0)
 		{
-			CCLog("cnt !! = %d", cnt);
+			CCLog("rightAngleMoving cnt !! = %d", cnt);
 		}
 		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
@@ -797,7 +808,7 @@ void KSCumberBase::circleMoving(float dt)
 		}
 		if(cnt % 100 == 0)
 		{
-			CCLog("cnt !! = %d", cnt);
+			CCLog("circleMoving cnt !! = %d", cnt);
 		}
 		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{

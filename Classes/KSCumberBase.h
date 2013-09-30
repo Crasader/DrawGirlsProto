@@ -129,10 +129,35 @@ public:
 	virtual void startAnimationDirection() = 0;
 	virtual void movingAndCrash(float dt)
 	{
+		IntPoint mapPoint = m_mapPoint;
+		
+		// 갇혀있는지 검사함. 갇혀있으면 없앰.
+		if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
+		   myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
+		   myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
+		   myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
+		   myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty)
+		{
+			
+			
+			myGD->communication("CP_removeSubCumber", this);
+			
+			if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
+			{
+				caughtAnimation();
+			}
+			else
+			{
+				removeFromParentAndCleanup(true);
+			}
+			return;
+		}
+		
 		if(m_state == CUMBERSTATEFURY)
 		{
 			m_furyMode.furyFrameCount++;
-		}
+		}	
+
 		
 		if(gameData->getJackState() == jackStateNormal)
 		{
@@ -176,8 +201,10 @@ public:
 					break;
 			}
 		}
+		
+		
 	}
-	virtual void startDamageReaction(float userdata) = 0;
+	virtual bool startDamageReaction(float damage, float angle) = 0;
 	//	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
@@ -240,11 +267,51 @@ public:
 			}			
 		}
 	}
+	void settingHp(float hp)
+	{
+		m_remainHp = m_totalHp = hp;
+	}
 	void settingAttackPercent(float ap)
 	{
 		m_attackPercent = ap;
 	}
-	
+	void decreaseLife(float damage)
+	{
+		m_remainHp -= damage;
+		if(m_remainHp <= 0)
+		{
+			myGD->communication("CP_removeSubCumber", this);
+		}
+	}
+	float getLife()
+	{
+		return m_remainHp;
+	}
+	void setLife(float t)
+	{
+		m_remainHp = t;
+	}
+	float getTotalLife()
+	{
+		return m_totalHp;
+	}
+	void setTotalLife(float t)
+	{
+		m_totalHp = t;
+	}
+	void setSpeedRatio(float sr)
+	{
+		m_speedRatio = sr;
+	}
+	void setSlience(bool s)
+	{
+		m_slience = s;
+	}
+	void caughtAnimation()
+	{
+		myGD->communication("UI_catchSubCumber");
+		myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
+	}
 protected:
 	std::vector<int> m_attacks; // 공격할 패턴의 번호를 가지고 있음. 많이 가질 수 있을 수록 해당 패턴 쓸 확률 높음.
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
@@ -258,6 +325,13 @@ protected:
 	float m_attackPercent;
 	float m_startScale, m_minScale, m_maxScale;
 	float m_startSpeed, m_minSpeed, m_maxSpeed;
+	
+	float m_remainHp;
+	float m_totalHp;
+	float m_speedRatio;
+	bool m_slience;
+	
+	IntPoint m_mapPoint; // 자기 자신의 맵포인트를 저장함. setPosition 할 때 마다 수정해줘야함.
 //	enum MOVEMENT m_normalMode, m_drawMode;
 	
 	struct FuryMode
