@@ -116,8 +116,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>268</real>
-							<real>178</real>
+							<real>26</real>
+							<real>26</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -140,7 +140,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>boss_peach.ccb</string>
+						<string>gameui_button.ccb</string>
 					</dict>
 				</array>
 			</dict>
