@@ -774,7 +774,7 @@ private:
 	}
 	void myAction()
 	{
-		objImg->setRotation(objImg->getRotation() + random_spin);
+//		objImg->setRotation(objImg->getRotation() + random_spin);
 		setPosition(ccpAdd(getPosition(), dv));
 		
 		CCPoint myPosition = getPosition();
@@ -806,11 +806,11 @@ private:
 		setPosition(t_sp);
 		
 		type = t_type;
-		random_spin = rand()%11 - 5;
+//		random_spin = rand()%11 - 5;
 		mSize = t_mSize;
 		
-		type = 1;
-		if(type == 1)
+//		type = 1;
+		if(type == 11)
 		{
 //			objImg = CCSprite::create(CCString::createWithFormat("chapter1_throw_%d.png", randomValue)->getCString());
 //			int randomValue = rand()%2 + 1;
@@ -823,31 +823,39 @@ private:
 			reader->release();
 			addChild(objImg);
 		}
-		else if(type == 2) // ice
+		else if(type == 14)
 		{
-			objImg = CCSprite::create("chapter2_throw_1.png");
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			CCBReader* reader = new CCBReader(nodeLoader);
+			objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw4.ccbi",this));
+			reader->release();
 			addChild(objImg);
 		}
-		else if(type == 3) // wood
-		{
-			objImg = CCSprite::create("chapter2_throw_2.png");
-			addChild(objImg);
-		}
-		else if(type == 11)
-		{
-			objImg = CCSprite::create("chapter1_multiThrow_1.png");
-			addChild(objImg);
-		}
-		else if(type == 12)
-		{
-			objImg = CCSprite::create("chapter2_multiThrow_1.png");
-			addChild(objImg);
-		}
-		else if(type == 13)
-		{
-			objImg = CCSprite::create("chapter2_multiThrow_2.png");
-			addChild(objImg);
-		}
+//		else if(type == 2) // ice
+//		{
+//			objImg = CCSprite::create("chapter2_throw_1.png");
+//			addChild(objImg);
+//		}
+//		else if(type == 3) // wood
+//		{
+//			objImg = CCSprite::create("chapter2_throw_2.png");
+//			addChild(objImg);
+//		}
+//		else if(type == 11)
+//		{
+//			objImg = CCSprite::create("chapter1_multiThrow_1.png");
+//			addChild(objImg);
+//		}
+//		else if(type == 12)
+//		{
+//			objImg = CCSprite::create("chapter2_multiThrow_1.png");
+//			addChild(objImg);
+//		}
+//		else if(type == 13)
+//		{
+//			objImg = CCSprite::create("chapter2_multiThrow_2.png");
+//			addChild(objImg);
+//		}
 		
 		dv.x = 1;
 		dv.y = tanf(t_angle/180.f*M_PI);
@@ -1414,14 +1422,23 @@ public:
 		CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
 		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(ThreeCushion::selfRemove));
 		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call2);
-		baseNode->runAction(t_seq);
+		if(baseNode)
+		{
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call2);
+			baseNode->runAction(t_seq);
+		}
 		
-		CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
-		colorControl->runAction(t_fade2);
+		if(colorControl)
+		{
+			CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
+			colorControl->runAction(t_fade2);
+		}
 		
-		CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
-		cntLabel->runAction(t_fade3);
+		if(cntLabel)
+		{
+			CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+			cntLabel->runAction(t_fade3);
+		}
 	}
 	
 private:
@@ -1460,6 +1477,9 @@ private:
 		initParticle();
 		crashMap();
 		baseNode->removeFromParentAndCleanup(true);
+		baseNode = NULL;
+		colorControl = NULL;
+		cntLabel = NULL;
 		
 		CCDelayTime* t_delay = CCDelayTime::create(0.5);
 		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(ThreeCushion::selfRemove));
@@ -1728,46 +1748,54 @@ private:
 	
 	void initParticle()
 	{
-		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
-		particle->setPositionType(kCCPositionTypeRelative);
-		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("threeCushion_bomb.png");
-		particle->setTexture(texture);
-		particle->setEmissionRate(250.00);
-		particle->setAngle(90.0);
-		particle->setAngleVar(360.0);
-		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-		particle->setBlendFunc(blendFunc);
-		particle->setDuration(0.20);
-		particle->setEmitterMode(kCCParticleModeGravity);
-		ccColor4F startColor = {0.87,0.81,0.12,1.00}; // 0.76 0.25 0.12
-		particle->setStartColor(startColor);
-		ccColor4F startColorVar = {0,0,0,0};
-		particle->setStartColorVar(startColorVar);
-		ccColor4F endColor = {0.68,0.16,0.00,1.00};
-		particle->setEndColor(endColor);
-		ccColor4F endColorVar = {0,0,0,0};
-		particle->setEndColorVar(endColorVar);
-		particle->setStartSize(20.00);
-		particle->setStartSizeVar(10.0);
-		particle->setEndSize(40.0);
-		particle->setEndSizeVar(10.0);
-		particle->setGravity(ccp(0,0));
-		particle->setRadialAccel(0.0);
-		particle->setRadialAccelVar(0.0);
-		particle->setSpeed(170);
-		particle->setSpeedVar(60.0);
-		particle->setTangentialAccel(0);
-		particle->setTangentialAccelVar(0);
-		particle->setTotalParticles(50);
-		particle->setLife(0.20);
-		particle->setLifeVar(0.0);
-		particle->setStartSpin(0.0);
-		particle->setStartSpinVar(0.0);
-		particle->setEndSpin(0.0);
-		particle->setEndSpinVar(0.0);
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_bomb1.ccbi",this));
+		reader->release();
 		particle->setPosition(baseNode->getPosition());
-		particle->setPosVar(CCPointZero);
+		particle->setRotation(rand()%360);
 		addChild(particle);
+		
+//		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
+//		particle->setPositionType(kCCPositionTypeRelative);
+//		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("threeCushion_bomb.png");
+//		particle->setTexture(texture);
+//		particle->setEmissionRate(250.00);
+//		particle->setAngle(90.0);
+//		particle->setAngleVar(360.0);
+//		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+//		particle->setBlendFunc(blendFunc);
+//		particle->setDuration(0.20);
+//		particle->setEmitterMode(kCCParticleModeGravity);
+//		ccColor4F startColor = {0.87,0.81,0.12,1.00}; // 0.76 0.25 0.12
+//		particle->setStartColor(startColor);
+//		ccColor4F startColorVar = {0,0,0,0};
+//		particle->setStartColorVar(startColorVar);
+//		ccColor4F endColor = {0.68,0.16,0.00,1.00};
+//		particle->setEndColor(endColor);
+//		ccColor4F endColorVar = {0,0,0,0};
+//		particle->setEndColorVar(endColorVar);
+//		particle->setStartSize(20.00);
+//		particle->setStartSizeVar(10.0);
+//		particle->setEndSize(40.0);
+//		particle->setEndSizeVar(10.0);
+//		particle->setGravity(ccp(0,0));
+//		particle->setRadialAccel(0.0);
+//		particle->setRadialAccelVar(0.0);
+//		particle->setSpeed(170);
+//		particle->setSpeedVar(60.0);
+//		particle->setTangentialAccel(0);
+//		particle->setTangentialAccelVar(0);
+//		particle->setTotalParticles(50);
+//		particle->setLife(0.20);
+//		particle->setLifeVar(0.0);
+//		particle->setStartSpin(0.0);
+//		particle->setStartSpinVar(0.0);
+//		particle->setEndSpin(0.0);
+//		particle->setEndSpinVar(0.0);
+//		particle->setPosition(baseNode->getPosition());
+//		particle->setPosVar(CCPointZero);
+//		addChild(particle);
 	}
 };
 
@@ -2048,7 +2076,7 @@ private:
 	}
 };
 
-class BlindDrop : public CCNode
+class BlindDrop : public CCNode, public CCBAnimationManagerDelegate
 {
 public:
 	static BlindDrop* create(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame)
@@ -2066,49 +2094,36 @@ public:
 		schedule(schedule_selector(BlindDrop::myAction));
 	}
 	
+	virtual void completedAnimationSequenceNamed(const char *name)
+	{
+		string t_name = name;
+		if(t_name == "end_cast1stop")
+		{
+			reader->release();
+			oilImg->removeFromParentAndCleanup(true);
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
 private:
 	CCPoint subPosition;
 	int movingFrame;
 	int blindFrame;
 	int ingFrame;
 	
-	CCSprite* dropImg;
+//	CCSprite* dropImg;
 	CCSprite* oilImg;
-	
+	CCBReader* reader;
 	
 	void myAction()
 	{
 		ingFrame++;
 		
-		if(ingFrame <= movingFrame)
-		{
-			setPosition(ccpAdd(getPosition(), subPosition));
-			
-			if(ingFrame == movingFrame)
-			{
-				int rand_value = rand()%3 + 1;
-				oilImg = CCSprite::create(CCString::createWithFormat("blind_oil%d.png", rand_value)->getCString());
-				oilImg->setScale(0.2);
-				addChild(oilImg);
-				
-				CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.f);
-				
-				oilImg->runAction(t_scale);
-				
-				dropImg->removeFromParentAndCleanup(true);
-			}
-		}
-		else if(ingFrame <= movingFrame+(blindFrame/2))
-		{
-			
-		}
-		else if(ingFrame <= movingFrame+blindFrame)
+		if(ingFrame <= blindFrame)
 		{
 			oilImg->setOpacity(oilImg->getOpacity()-(200/(blindFrame/2)));
 		}
-		
-		
-		if(ingFrame >= movingFrame+blindFrame)
+		if(ingFrame >= blindFrame)
 		{
 			stopAction();
 		}
@@ -2117,21 +2132,25 @@ private:
 	void stopAction()
 	{
 		unschedule(schedule_selector(BlindDrop::myAction));
-		oilImg->removeFromParentAndCleanup(true);
-		removeFromParentAndCleanup(true);
+		reader->getAnimationManager()->runAnimationsForSequenceNamed("cast1stop");
 	}
 	
 	void myInit(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame)
 	{
-		subPosition = ccpSub(t_fp, t_sp);
-		subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
+//		subPosition = ccpSub(t_fp, t_sp);
+//		subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
 		movingFrame = t_movingFrame;
 		blindFrame = t_blindFrame;
+
+//		dropImg = CCSprite::create("blind_drop.png");
+//		addChild(dropImg);
 		
-		dropImg = CCSprite::create("blind_drop.png");
-		addChild(dropImg);
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		reader = new CCBReader(nodeLoader);
+		oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi",this));
+		addChild(oilImg);
 		
-		setPosition(t_sp);
+		setPosition(t_fp); // t_sp
 	}
 };
 
@@ -2172,6 +2191,13 @@ private:
 		{
 			myGD->communication("CP_jackCrashDie");
 			myGD->communication("Jack_startDieEffect");
+			
+			unschedule(schedule_selector(PrisonObject::myAction));
+			CCFadeTo* t_fade = CCFadeTo::create(getOpacity()/255.f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PrisonObject::removeFromParent));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+			runAction(t_seq);
+			return;
 		}
 		
 		if(ingFrame <= 51)
@@ -2199,8 +2225,6 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_type, int t_prisonFrame)
 	{
-		
-		
 		prisonFrame = t_prisonFrame;
 		if(t_type == 1) // fire
 		{

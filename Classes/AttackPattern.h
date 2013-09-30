@@ -3227,8 +3227,8 @@ private:
 		CCPoint subPosition = ccpSub(jackPosition, t_sp);
 		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
 		
-		if(distance < 200)			angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%91 - 45;
-		else						angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%31 - 15;
+		if(distance < 200)			angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
+		else						angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
 		
 		CCPoint beadPosition;
 		beadPosition.x = 1;
@@ -3395,13 +3395,15 @@ public:
 	
 	void updateCobweb()
 	{
-		ingFrame = 0;
+		if(!is_stop)
+			ingFrame = 0;
 	}
 	
 private:
 	
 	int slowFrame;
 	int ingFrame;
+	bool is_stop;
 	CCSprite* cobwebImg;
 	
 	void startFrame()
@@ -3420,25 +3422,39 @@ private:
 		}
 	}
 	
+	void removeCobweb()
+	{
+		cobwebImg->removeFromParent();
+		startSelfRemoveSchedule();
+	}
+	
 	void stopFrame()
 	{
+		is_stop = true;
 		unschedule(schedule_selector(AP_Missile23::framing));
 		
+		cobwebImg->stopAllActions();
+		
 		CCScaleTo* t_scale = CCScaleTo::create(0.3, 0.f);
-		cobwebImg->runAction(t_scale);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile23::removeCobweb));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		cobwebImg->runAction(t_seq);
 		
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
 		myGD->communication("MP_deleteKeepAP23");
-		
-		startSelfRemoveSchedule();
 	}
 	
 	void myInit(int t_frame)
 	{
+		is_stop = false;
 		
 		slowFrame = t_frame;
 		
-		cobwebImg = CCSprite::create("cobweb.png");
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		cobwebImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
+		reader->release();
+		
 		cobwebImg->setPosition(ccp(160,215));
 		cobwebImg->setScale(0);
 		

@@ -51,7 +51,10 @@ void SaveData::createJSON(string filename)
 	string rawData = readF(filename);
 	string key = stringEnc(filename);
 	if(rawData == "")
+	{
 		file_sync[key].loadFromString("{}");
+		cocos2d::CCLog("create json : %s", filename.c_str());
+	}
 	else
 		file_sync[key].loadFromString(rawData);
 	

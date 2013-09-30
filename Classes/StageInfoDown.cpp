@@ -12,6 +12,10 @@
 
 void StageInfoDown::resultGetStageInfo(JsonBox::Object result_data)
 {
+	ostringstream oss;
+	oss<<result_data;
+	CCLog("result data : %s", oss.str().c_str());
+	
 	if(result_data["state"].getString() == "ok")
 	{
 		if(SDS_GI(kSDF_stageInfo, mySD->getSilType(), "version") < result_data["version"].getInt())

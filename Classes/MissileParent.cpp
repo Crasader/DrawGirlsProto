@@ -148,10 +148,10 @@ void MissileParent::actionAP10()
 
 void MissileParent::actionAP11()
 {
-	BD_P11 t_bd = SelectedMapData::sharedInstance()->getValuePattern11();
+//	BD_P11 t_bd = SelectedMapData::sharedInstance()->getValuePattern11();
 	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
 	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-	AP_Missile11* t_m11 = AP_Missile11::create(mainCumberPosition, t_bd.mType, t_bd.move_speed, IntSize(round(t_bd.crash_area.width),round(t_bd.crash_area.height)));
+	AP_Missile11* t_m11 = AP_Missile11::create(mainCumberPosition, 11, 1.6f, IntSize(round(14.f),round(14.f)));
 	addChild(t_m11);
 	
 	myGD->communication("CP_onPatternEnd");
@@ -177,10 +177,10 @@ void MissileParent::actionAP13()
 
 void MissileParent::actionAP14()
 {
-	BD_P14 t_bd = SelectedMapData::sharedInstance()->getValuePattern14();
+//	BD_P14 t_bd = SelectedMapData::sharedInstance()->getValuePattern14();
 	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
 	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-	AP_Missile14* t_m14 = AP_Missile14::create(mainCumberPosition, t_bd.mType, t_bd.move_speed, t_bd.mCnt, IntSize(round(t_bd.crash_area.width),round(t_bd.crash_area.height)));
+	AP_Missile14* t_m14 = AP_Missile14::create(mainCumberPosition, 14, 2.f, 4, IntSize(round(10.f),round(10.f)));
 	addChild(t_m14);
 	myGD->communication("CP_onPatternEnd");
 }

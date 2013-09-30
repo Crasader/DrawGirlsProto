@@ -15,6 +15,7 @@
 #include "AudioEngine.h"
 #include "OtherEffect.h"
 #include "StarGoldData.h"
+#include "Well512.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -839,8 +840,11 @@ public:
 	
 	void startDieEffect() // after coding
 	{
+//		return;
 		if(!isDie)
 		{
+			Well512 t_well512;
+			myGD->setJackPoint(IntPoint(t_well512.GetValue(mapWidthInnerBegin, mapWidthInnerEnd),t_well512.GetValue(mapHeightInnerBegin, mapHeightInnerEnd)));
 			if(getJackState() == jackStateDrawing)
 			{
 				jack_drawing->setVisible(false);
@@ -1112,56 +1116,120 @@ private:
 		if(dieEffectCnt < 45)
 		{
 			jackImg->setScale(0.2f + dieEffectCnt*0.02f);
+			jackImg->setOpacity(255-dieEffectCnt*5);
 		}
-		else if(dieEffectCnt > 80)
+		else if(dieEffectCnt == 45)
 		{
 			unschedule(schedule_selector(Jack::dieEffect));
 			
-			if(myGD->getCommunicationBool("UI_beRevivedJack"))
+			dieEscapeJack();
+			
+			if(myGD->getIsGameover())
+				endGame();
+			else
 			{
-				speed_up_value = 0.f;
-				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
-				
-				isDie = false;
-				isStun = false;
-				
-				dieEscapeJack();
-				
-				if(myGD->getIsGameover())
-					endGame();
-				else
+				if(myGD->getCommunicationBool("UI_beRevivedJack"))
 				{
+					speed_up_value = 0.f;
+					changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
+					
+					isDie = false;
+					isStun = false;
+					
 					jackImg->removeFromParentAndCleanup(true);
 					
 					CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
 					
 					jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-					jackImg->setScale(0.8f);
+					jackImg->setScale(2.8f);
+					jackImg->setPosition(ccp(-300,100));
 					addChild(jackImg, kJackZ_main);
 					
-					CCAnimation* jack_animation = CCAnimation::create();
-					jack_animation->setDelayPerUnit(0.1f);
-					jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-					jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-					jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+					CCMoveTo* t_move = CCMoveTo::create(0.5f, CCPointZero);
+					CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.8f);
+					CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_move, t_scale);
+					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Jack::endReviveJack));
+					CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
 					
-					CCAnimate* jack_animate = CCAnimate::create(jack_animation);
-					CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
-					jackImg->runAction(jack_repeat);
-					
-					setTouchPointByJoystick(CCPointZero, directionStop, true);
-					setJackState(jackStateNormal);
-					
-					myGD->communication("GIM_dieCreateItem");
-					myGD->communication("Main_resetIsLineDie");
-					myGD->communication("Main_stopSpecialAttack");
+					jackImg->runAction(t_seq);
+				}
+				else
+				{
+					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
 				}
 			}
-			else
-			{
-				myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
-			}
 		}
+//		else if(dieEffectCnt > 80)
+//		{
+//			unschedule(schedule_selector(Jack::dieEffect));
+//			
+//			if(myGD->getCommunicationBool("UI_beRevivedJack"))
+//			{
+//				speed_up_value = 0.f;
+//				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
+//				
+//				isDie = false;
+//				isStun = false;
+//				
+//				dieEscapeJack();
+//				
+//				if(myGD->getIsGameover())
+//					endGame();
+//				else
+//				{
+//					jackImg->removeFromParentAndCleanup(true);
+//					
+//					CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+//					
+//					jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//					jackImg->setScale(0.8f);
+//					addChild(jackImg, kJackZ_main);
+//					
+//					CCAnimation* jack_animation = CCAnimation::create();
+//					jack_animation->setDelayPerUnit(0.1f);
+//					jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//					jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//					jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+//					
+//					CCAnimate* jack_animate = CCAnimate::create(jack_animation);
+//					CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
+//					jackImg->runAction(jack_repeat);
+//					
+//					setTouchPointByJoystick(CCPointZero, directionStop, true);
+//					setJackState(jackStateNormal);
+//					
+//					myGD->communication("GIM_dieCreateItem");
+//					myGD->communication("Main_resetIsLineDie");
+//					myGD->communication("Main_stopSpecialAttack");
+//				}
+//			}
+//			else
+//			{
+//				myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
+//			}
+//		}
+	}
+	
+	void endReviveJack()
+	{
+		CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+		
+		CCAnimation* jack_animation = CCAnimation::create();
+		jack_animation->setDelayPerUnit(0.1f);
+		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+		
+		CCAnimate* jack_animate = CCAnimate::create(jack_animation);
+		CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
+		jackImg->runAction(jack_repeat);
+		
+		setTouchPointByJoystick(CCPointZero, directionStop, true);
+		setJackState(jackStateNormal);
+		
+		myGD->communication("GIM_dieCreateItem");
+		myGD->communication("Main_resetIsLineDie");
+		myGD->communication("Main_stopSpecialAttack");
 	}
 	
 	void continueGame()
@@ -1176,31 +1244,17 @@ private:
 		CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
 		
 		jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-		jackImg->setScale(0.8f);
+		jackImg->setScale(2.8f);
+		jackImg->setPosition(ccp(-300,100));
 		addChild(jackImg, kJackZ_main);
 		
-		CCAnimation* jack_animation = CCAnimation::create();
-		jack_animation->setDelayPerUnit(0.1f);
-		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+		CCMoveTo* t_move = CCMoveTo::create(0.5f, CCPointZero);
+		CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.8f);
+		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_move, t_scale);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Jack::endReviveJack));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
 		
-		CCAnimate* jack_animate = CCAnimate::create(jack_animation);
-		CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
-		jackImg->runAction(jack_repeat);
-		
-		
-		setTouchPointByJoystick(CCPointZero, directionStop, true);
-		
-		setJackState(jackStateNormal);
-		
-		dieEscapeJack();
-		
-		myGD->communication("GIM_dieCreateItem");
-		
-		myGD->communication("Main_resetIsLineDie");
-		
-		myGD->communication("Main_stopSpecialAttack");
+		jackImg->runAction(t_seq);
 	}
 	
 	void endGame()

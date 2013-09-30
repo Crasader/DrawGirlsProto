@@ -406,7 +406,7 @@ void GameData::setUItype( GAMESCREEN_TYPE t_type )
 
 void GameData::myInit()
 {
-	boarder_value = 5.f;
+	boarder_value = 7.f;
 	setUItype(kGT_leftUI);
 
 	// init map

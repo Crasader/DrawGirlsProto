@@ -38,9 +38,11 @@ private:
 	virtual void keyBackClicked(void);
 	
 	CCPoint getStagePosition(int stage);
+	CCPoint getUiButtonPosition(int t_tag);
 	
 //	void showPopup(int stage);
 	void stageCancel();
+	void popupClose();
 	
 	void showConvertSildata(string filename);
 };

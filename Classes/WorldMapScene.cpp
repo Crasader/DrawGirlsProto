@@ -13,8 +13,14 @@
 #include "CollectionListScene.h"
 #include "StageInfoDown.h"
 #include "GraphDog.h"
+#include "OptionScene.h"
+#include "GachaPopup.h"
+#include "RankPopup.h"
+#include "PostboxPopup.h"
+#include "EventPopup.h"
 
 #include <algorithm>
+#include <ostream>
 
 using namespace std;
 
@@ -51,7 +57,10 @@ void WorldMapScene::showConvertSildata(string filename)
 				else if(cmp_cnt >= 100)		result_data.append("B");
 				else if(cmp_cnt >= 10)		result_data.append("A");
 				
-				result_data.append(to_string(cmp_cnt));
+				ostringstream oss;
+				oss<<cmp_cnt;
+				
+				result_data.append(oss.str().c_str());
 				cmp_cnt = 1;
 				is_zero = false;
 			}
@@ -72,7 +81,11 @@ void WorldMapScene::showConvertSildata(string filename)
 				else if(cmp_cnt >= 1000)	result_data.append("C");
 				else if(cmp_cnt >= 100)		result_data.append("B");
 				else if(cmp_cnt >= 10)		result_data.append("A");
-				result_data.append(to_string(cmp_cnt));
+				
+				ostringstream oss;
+				oss<<cmp_cnt;
+				
+				result_data.append(oss.str().c_str());
 				cmp_cnt = 1;
 				is_zero = true;
 			}
@@ -87,7 +100,11 @@ void WorldMapScene::showConvertSildata(string filename)
 	else if(cmp_cnt >= 1000)	result_data.append("C");
 	else if(cmp_cnt >= 100)		result_data.append("B");
 	else if(cmp_cnt >= 10)		result_data.append("A");
-	result_data.append(to_string(cmp_cnt));
+	
+	ostringstream oss;
+	oss<<cmp_cnt;
+	
+	result_data.append(oss.str().c_str());
 	
 	CCLog("result size : %d", (int)result_data.size());
 	CCLog("%s", result_data.c_str());
@@ -112,16 +129,18 @@ CCScene* WorldMapScene::scene()
 enum WMS_Zorder{
 	kWMS_Z_back = 1,
 	kWMS_Z_stage,
-	kWMS_Z_collection,
+	kWMS_Z_ui_button,
 	kWMS_Z_popup
 };
 
 enum WMS_MenuTag{
 	kWMS_MT_stageBase = 0,
 	kWMS_MT_collection = 501,
-	kWMS_MT_uiSettingLeft = 1001,
-	kWMS_MT_uiSettingFull = 1002,
-	kWMS_MT_uiSettingRight = 1003
+	kWMS_MT_option = 502,
+	kWMS_MT_gacha = 503,
+	kWMS_MT_rank = 504,
+	kWMS_MT_postbox = 505,
+	kWMS_MT_event = 506
 };
 
 // on "init" you need to initialize your instance
@@ -240,49 +259,74 @@ bool WorldMapScene::init()
 	collection_item->setTag(kWMS_MT_collection);
 	
 	CCMenu* collection_menu = CCMenu::createWithItem(collection_item);
-	collection_menu->setPosition(ccp(120,34));
-	addChild(collection_menu, kWMS_Z_collection);
+	collection_menu->setPosition(getUiButtonPosition(kWMS_MT_collection));
+	addChild(collection_menu, kWMS_Z_ui_button);
 	
 	
-	CCSprite* n_left = CCSprite::create("ui_setting_left.png");
-	CCSprite* s_left = CCSprite::create("ui_setting_left.png");
-	s_left->setColor(ccGRAY);
+	CCSprite* n_option = CCSprite::create("worldmap_option.png");
+	CCSprite* s_option = CCSprite::create("worldmap_option.png");
+	s_option->setColor(ccGRAY);
 	
-	CCMenuItem* left_item = CCMenuItemSprite::create(n_left, s_left, this, menu_selector(WorldMapScene::menuAction));
-	left_item->setTag(kWMS_MT_uiSettingLeft);
+	CCMenuItem* option_item = CCMenuItemSprite::create(n_option, s_option, this, menu_selector(WorldMapScene::menuAction));
+	option_item->setTag(kWMS_MT_option);
 	
-	CCMenu* left_menu = CCMenu::createWithItem(left_item);
-	left_menu->setPosition(ccp(320,40));
-	addChild(left_menu, kWMS_Z_stage);
-	
-	
-	CCSprite* n_full = CCSprite::create("ui_setting_full.png");
-	CCSprite* s_full = CCSprite::create("ui_setting_full.png");
-	s_full->setColor(ccGRAY);
-	
-	CCMenuItem* full_item = CCMenuItemSprite::create(n_full, s_full, this, menu_selector(WorldMapScene::menuAction));
-	full_item->setTag(kWMS_MT_uiSettingFull);
-	
-	CCMenu* full_menu = CCMenu::createWithItem(full_item);
-	full_menu->setPosition(ccp(377,40));
-	addChild(full_menu, kWMS_Z_stage);
+	CCMenu* option_menu = CCMenu::createWithItem(option_item);
+	option_menu->setPosition(getUiButtonPosition(kWMS_MT_option));
+	addChild(option_menu, kWMS_Z_ui_button);
 	
 	
-	CCSprite* n_right = CCSprite::create("ui_setting_right.png");
-	CCSprite* s_right = CCSprite::create("ui_setting_right.png");
-	s_right->setColor(ccGRAY);
+	CCSprite* n_gacha = CCSprite::create("worldmap_gacha.png");
+	CCSprite* s_gacha = CCSprite::create("worldmap_gacha.png");
+	s_gacha->setColor(ccGRAY);
 	
-	CCMenuItem* right_item = CCMenuItemSprite::create(n_right, s_right, this, menu_selector(WorldMapScene::menuAction));
-	right_item->setTag(kWMS_MT_uiSettingRight);
+	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(WorldMapScene::menuAction));
+	gacha_item->setTag(kWMS_MT_gacha);
 	
-	CCMenu* right_menu = CCMenu::createWithItem(right_item);
-	right_menu->setPosition(ccp(434,40));
-	addChild(right_menu, kWMS_Z_stage);
+	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
+	gacha_menu->setPosition(getUiButtonPosition(kWMS_MT_gacha));
+	addChild(gacha_menu, kWMS_Z_ui_button);
+	
+	
+	CCSprite* n_rank = CCSprite::create("worldmap_rank.png");
+	CCSprite* s_rank = CCSprite::create("worldmap_rank.png");
+	s_rank->setColor(ccGRAY);
+	
+	CCMenuItem* rank_item = CCMenuItemSprite::create(n_rank, s_rank, this, menu_selector(WorldMapScene::menuAction));
+	rank_item->setTag(kWMS_MT_rank);
+	
+	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
+	rank_menu->setPosition(getUiButtonPosition(kWMS_MT_rank));
+	addChild(rank_menu, kWMS_Z_ui_button);
+	
+	
+	CCSprite* n_postbox = CCSprite::create("worldmap_postbox.png");
+	CCSprite* s_postbox = CCSprite::create("worldmap_postbox.png");
+	s_postbox->setColor(ccGRAY);
+	
+	CCMenuItem* postbox_item = CCMenuItemSprite::create(n_postbox, s_postbox, this, menu_selector(WorldMapScene::menuAction));
+	postbox_item->setTag(kWMS_MT_postbox);
+	
+	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
+	postbox_menu->setPosition(getUiButtonPosition(kWMS_MT_postbox));
+	addChild(postbox_menu, kWMS_Z_ui_button);
+	
+	
+	CCSprite* n_event = CCSprite::create("worldmap_event.png");
+	CCSprite* s_event = CCSprite::create("worldmap_event.png");
+	s_event->setColor(ccGRAY);
+	
+	CCMenuItem* event_item = CCMenuItemSprite::create(n_event, s_event, this, menu_selector(WorldMapScene::menuAction));
+	event_item->setTag(kWMS_MT_event);
+	
+	CCMenu* event_menu = CCMenu::createWithItem(event_item);
+	event_menu->setPosition(getUiButtonPosition(kWMS_MT_event));
+	addChild(event_menu, kWMS_Z_ui_button);
 	
 	is_menu_enable = true;
 	
 	srand(time(NULL));
 	
+	//////////////////////////////////////////////////////////////////////////////////////////////
 	int selected_chapter = rand()%38+1;
 	if(selected_chapter > 26)
 	{
@@ -295,11 +339,28 @@ bool WorldMapScene::init()
 	
 	SelectedMapData::sharedInstance()->setSelectedChapter(selected_chapter);
 	SelectedMapData::sharedInstance()->setSelectedStage(5);
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	ScreenSide* t_screen = ScreenSide::create();
 	addChild(t_screen, 99999);
 	
     return true;
+}
+
+CCPoint WorldMapScene::getUiButtonPosition(int t_tag)
+{
+	CCPoint return_value;
+	
+	if(t_tag == kWMS_MT_option)				return_value = ccp(100,34);
+	else if(t_tag == kWMS_MT_gacha)			return_value = ccp(155,34);
+	else if(t_tag == kWMS_MT_rank)			return_value = ccp(210,34);
+	else if(t_tag == kWMS_MT_postbox)		return_value = ccp(265,34);
+	else if(t_tag == kWMS_MT_event)			return_value = ccp(420,34);
+	
+	else if(t_tag == kWMS_MT_collection)	return_value = ccp(100,100);
+//	else if(t_tag == )				return_value = ;
+	
+	return return_value;
 }
 
 void WorldMapScene::menuAction(CCObject* pSender)
@@ -326,21 +387,35 @@ void WorldMapScene::menuAction(CCObject* pSender)
 	{
 		CCDirector::sharedDirector()->replaceScene(CollectionListScene::scene());
 	}
-	else if(tag == kWMS_MT_uiSettingLeft)
+	else if(tag == kWMS_MT_option)
 	{
-		myGD->setUItype(kGT_leftUI);
-		is_menu_enable = true;
+		CCDirector::sharedDirector()->replaceScene(OptionScene::scene());
 	}
-	else if(tag == kWMS_MT_uiSettingFull)
+	else if(tag == kWMS_MT_gacha)
 	{
-		myGD->setUItype(kGT_full);
-		is_menu_enable = true;
+		GachaPopup* t_gp = GachaPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
+		addChild(t_gp, kWMS_Z_popup);
 	}
-	else if(tag == kWMS_MT_uiSettingRight)
+	else if(tag == kWMS_MT_rank)
 	{
-		myGD->setUItype(kGT_rightUI);
-		is_menu_enable = true;
+		RankPopup* t_rp = RankPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
+		addChild(t_rp, kWMS_Z_popup);
 	}
+	else if(tag == kWMS_MT_postbox)
+	{
+		PostboxPopup* t_pp = PostboxPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
+		addChild(t_pp, kWMS_Z_popup);
+	}
+	else if(tag == kWMS_MT_event)
+	{
+		EventPopup* t_ep = EventPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
+		addChild(t_ep, kWMS_Z_popup);
+	}
+}
+
+void WorldMapScene::popupClose()
+{
+	is_menu_enable = true;
 }
 
 void WorldMapScene::stageCancel()

@@ -553,7 +553,7 @@
 										<key>value</key>
 										<array>
 											<string></string>
-											<string>boss_bluebery_arrow.png</string>
+											<string>boss_blueberry_arrow.png</string>
 										</array>
 									</dict>
 								</array>
@@ -857,7 +857,7 @@
 										<key>value</key>
 										<array>
 											<string></string>
-											<string>boss_bluebery_arrow.png</string>
+											<string>boss_blueberry_arrow.png</string>
 										</array>
 									</dict>
 								</array>
@@ -1161,7 +1161,7 @@
 										<key>value</key>
 										<array>
 											<string></string>
-											<string>boss_bluebery_arrow.png</string>
+											<string>boss_blueberry_arrow.png</string>
 										</array>
 									</dict>
 								</array>
@@ -1465,7 +1465,7 @@
 										<key>value</key>
 										<array>
 											<string></string>
-											<string>boss_bluebery_arrow.png</string>
+											<string>boss_blueberry_arrow.png</string>
 										</array>
 									</dict>
 								</array>
@@ -1769,7 +1769,7 @@
 										<key>value</key>
 										<array>
 											<string></string>
-											<string>boss_bluebery_arrow.png</string>
+											<string>boss_blueberry_arrow.png</string>
 										</array>
 									</dict>
 								</array>
@@ -2073,7 +2073,7 @@
 										<key>value</key>
 										<array>
 											<string></string>
-											<string>boss_bluebery_arrow.png</string>
+											<string>boss_blueberry_arrow.png</string>
 										</array>
 									</dict>
 								</array>
@@ -2377,7 +2377,7 @@
 										<key>value</key>
 										<array>
 											<string></string>
-											<string>boss_bluebery_arrow.png</string>
+											<string>boss_blueberry_arrow.png</string>
 										</array>
 									</dict>
 								</array>
@@ -2681,7 +2681,7 @@
 										<key>value</key>
 										<array>
 											<string></string>
-											<string>boss_bluebery_arrow.png</string>
+											<string>boss_blueberry_arrow.png</string>
 										</array>
 									</dict>
 								</array>
@@ -2760,6 +2760,8 @@
 								<true/>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -3025,7 +3027,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>boss_bluebery_rubyback.png</string>
+									<string>boss_blueberry_rubyback.png</string>
 								</array>
 							</dict>
 						</array>
@@ -3575,7 +3577,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>boss_bluebery_rubylight.png</string>
+									<string>boss_blueberry_rubylight.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -3854,7 +3856,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>boss_bluebery_ruby.png</string>
+									<string>boss_blueberry_ruby.png</string>
 								</array>
 							</dict>
 						</array>
@@ -3877,8 +3879,8 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
-							<real>0.5</real>
+							<real>0.0</real>
+							<real>0.0</real>
 						</array>
 					</dict>
 					<dict>
@@ -3900,7 +3902,7 @@
 						<key>type</key>
 						<string>Check</string>
 						<key>value</key>
-						<true/>
+						<false/>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -4186,7 +4188,7 @@
 			<key>length</key>
 			<real>1</real>
 			<key>name</key>
-			<string>start3stop</string>
+			<string>cast3stop</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
