@@ -1422,14 +1422,23 @@ public:
 		CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
 		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(ThreeCushion::selfRemove));
 		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call2);
-		baseNode->runAction(t_seq);
+		if(baseNode)
+		{
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call2);
+			baseNode->runAction(t_seq);
+		}
 		
-		CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
-		colorControl->runAction(t_fade2);
+		if(colorControl)
+		{
+			CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
+			colorControl->runAction(t_fade2);
+		}
 		
-		CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
-		cntLabel->runAction(t_fade3);
+		if(cntLabel)
+		{
+			CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+			cntLabel->runAction(t_fade3);
+		}
 	}
 	
 private:
@@ -1468,6 +1477,9 @@ private:
 		initParticle();
 		crashMap();
 		baseNode->removeFromParentAndCleanup(true);
+		baseNode = NULL;
+		colorControl = NULL;
+		cntLabel = NULL;
 		
 		CCDelayTime* t_delay = CCDelayTime::create(0.5);
 		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(ThreeCushion::selfRemove));
@@ -2179,6 +2191,13 @@ private:
 		{
 			myGD->communication("CP_jackCrashDie");
 			myGD->communication("Jack_startDieEffect");
+			
+			unschedule(schedule_selector(PrisonObject::myAction));
+			CCFadeTo* t_fade = CCFadeTo::create(getOpacity()/255.f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PrisonObject::removeFromParent));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+			runAction(t_seq);
+			return;
 		}
 		
 		if(ingFrame <= 51)
@@ -2206,8 +2225,6 @@ private:
 	
 	void myInit(CCPoint t_sp, int t_type, int t_prisonFrame)
 	{
-		
-		
 		prisonFrame = t_prisonFrame;
 		if(t_type == 1) // fire
 		{

@@ -1,23 +1,23 @@
 //
-//  WorldMapScene.h
+//  OptionScene.h
 //  DGproto
 //
-//  Created by 사원3 on 13. 9. 10..
+//  Created by 사원3 on 13. 9. 29..
 //
 //
 
-#ifndef __DGproto__WorldMapScene__
-#define __DGproto__WorldMapScene__
+#ifndef __DGproto__OptionScene__
+#define __DGproto__OptionScene__
 
 #include "cocos2d.h"
 #include "AlertEngine.h"
 #include "GameData.h"
 #include "DataStorageHub.h"
-#include "StarGoldData.h"
 
 USING_NS_CC;
+using namespace std;
 
-class WorldMapScene : public cocos2d::CCLayer
+class OptionScene : public cocos2d::CCLayer
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -25,26 +25,25 @@ public:
 	
     // there's no 'id' in cpp, so we recommend to return the class instance pointer
     static cocos2d::CCScene* scene();
-    
-    // a selector callback
-    void menuAction(CCObject* pSender);
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
-    CREATE_FUNC(WorldMapScene);
+    CREATE_FUNC(OptionScene);
 	
 private:
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
+
+	CCMenu* bgm_menu;
+	CCMenu* effect_menu;
 	
-	CCPoint getStagePosition(int stage);
-	CCPoint getUiButtonPosition(int t_tag);
+	CCPoint getContentPosition(int t_tag);
 	
-//	void showPopup(int stage);
-	void stageCancel();
+	void resetBgmMenu();
+	void resetEffectMenu();
+
+	void menuAction(CCObject* sender);
 	void popupClose();
-	
-	void showConvertSildata(string filename);
 };
 
-#endif /* defined(__DGproto__WorldMapScene__) */
+#endif /* defined(__DGproto__OptionScene__) */
