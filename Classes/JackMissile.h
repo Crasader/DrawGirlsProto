@@ -233,15 +233,7 @@ private:
 				
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 				
-				if(targetNode == myGD->getCommunicationNode("CP_getMainCumberPointer"))
-				{
-					if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
-					{
-						myGD->communication("UI_subBossLife", damage);
-						myGD->communication("CP_startDamageReaction", -shootImg->getRotation());
-					}
-				}
-				myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)targetNode, damage, -shootImg->getRotation());
+				myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
 			}
 			
 			if(load_removing)
@@ -685,16 +677,7 @@ private:
 				myGD->communication("MP_explosion", particlePosition, myColor);
 				
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
-				
-				if(targetNode == myGD->getCommunicationNode("CP_getMainCumberPointer"))
-				{
-					if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
-					{
-						myGD->communication("UI_subBossLife", damage);
-						myGD->communication("CP_startDamageReaction", directionAngle);
-					}
-				}
-				myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)targetNode, damage, directionAngle);
+				myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
 				
 				removeFromParentAndCleanup(true);
 			}

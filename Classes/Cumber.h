@@ -22,6 +22,7 @@
 
 #include <vector>
 
+#include "Well512.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -54,7 +55,7 @@ public:
 	CCArray* getSubCumberArrayPointer();
 	void decreaseLifeForSubCumber(CCObject* target, float t_damage, float t_directionAngle);
 	void createAllCumberSheild();
-	void startDamageReaction(float userdata);
+	bool startDamageReaction(CCObject* cb, float damage, float angle);
 	void subCumberBomb();
 	void subCumberReplication();
 	void setGameover();
@@ -79,10 +80,46 @@ public:
 			return 0.f;
 	}
 private:
+	struct jrType
+	{
+		
+		int m_jrType;
+		
+		float m_jrMinSpeed;
+		float m_jrStartSpeed;
+		float m_jrMaxSpeed;
+		
+		float m_jrMinScale;
+		float m_jrStartScale;
+		float m_jrMaxScale;
+		
+		int m_jrNormalMovement;
+		int m_jrDrawMovement;
+		float m_jrHp;
+		jrType(int type, float minv, float startv, float maxv,
+			   float mins, float starts, float maxs, int nm, int dr,
+			   float hp)
+		{
+			m_jrType = type;
+			m_jrMinSpeed = minv;
+			m_jrStartSpeed = startv;
+			m_jrMaxSpeed = maxv;
+			
+			m_jrMinScale = mins;
+			m_jrStartScale = starts;
+			m_jrMaxScale = maxs;
+			
+			m_jrNormalMovement = nm;
+			m_jrDrawMovement = dr;
+			m_jrHp = hp;
+		}
+	};
+	vector<jrType> m_juniors; // 생성할 때 참고하려고 저장함.
+	
 	bool is_die_animationing;
 	int die_animation_cnt;
 	int die_animation_rate;
-	
+	Well512 m_well512;
 	
 	MissileParent* myMP;
 	MapFragmentParent* myMFP;
@@ -103,7 +140,7 @@ private:
 	int getSubCumberCount();
 	void createSubCumber(IntPoint s_p);
 	void initSubCumber();
-	void slowItem(bool t_b);
+	void slowItem(float ratio);
 	void silenceItem(bool t_b);
 	void setCasting(bool t_b);
 	void removeSubCumber(CCObject* r_sc);

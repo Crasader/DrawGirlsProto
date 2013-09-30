@@ -799,21 +799,25 @@ public:
 	
 	void subBossLife(float t_life)
 	{
+		//##
+		// gamedata 로부터 boss pointer 받아서 해결.
 		if(clr_cdt_type != kCLEAR_bossLifeZero || is_cleared_cdt || isGameover)
 			return;
 		
-		t_life = MissileDamageData::getCorrelationDamage(t_life, main_cumber_element);
+//		t_life = MissileDamageData::getCorrelationDamage(t_life, main_cumber_element);
 		
-		if(bossLife < t_life)
-			bossLife = 0;
-		else
-			bossLife -= t_life;
+//		if(bossLife < t_life)
+//			bossLife = 0;
+//		else
+//			bossLife -= t_life;
 		
-		m_bossLifeGage->setPercentage(bossLife/maxBossLife);
+//		m_bossLifeGage->setPercentage(bossLife/maxBossLife);
+		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(myGD->getCommunicationNode("CP_getMainCumberPointer"));
 		if(!is_cleared_cdt)
-			((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%.1f%%", bossLife/maxBossLife*100.f)->getCString());
+			((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%.1f%%",
+						cb->getLife()/cb->getTotalLife()*100.f)->getCString());
 		
-		if(bossLife == 0.f && !is_cleared_cdt)
+		if(cb->getLife() == 0.f && !is_cleared_cdt)
 		{
 			conditionClear();
 		}

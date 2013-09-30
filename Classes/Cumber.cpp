@@ -15,6 +15,7 @@
 #include "Blueberry.h"
 #include "Cherry.h"
 #include "Mango.h"
+#include "Bear.h"
 #include "ServerDataSave.h"
 
 void CumberParent::onStartGame()
@@ -22,6 +23,13 @@ void CumberParent::onStartGame()
 	for(auto i : mainCumbers)
 	{
 		i->onStartGame();
+	}
+	
+	int loop_cnt = subCumberArray->count();
+	for(int i=0;i<loop_cnt;i++)
+	{
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+		t_sc->onStartGame();
 	}
 }
 void CumberParent::onPatternEnd()
@@ -113,6 +121,7 @@ void CumberParent::decreaseLifeForSubCumber(CCObject* target, float t_damage, fl
 	}
 	else
 	{
+		// RTTI
 		for(int i=0;i<subCumberArray->count();i++)
 		{
 			SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
@@ -140,11 +149,13 @@ void CumberParent::createAllCumberSheild()
 	}
 }
 
-void CumberParent::startDamageReaction(float userdata)
+bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle)
 {
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	mainCumber->startDamageReaction(userdata);
+//	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
+//	mainCumber->startDamageReaction(userdata);
+	KSCumberBase* cbp = dynamic_cast<KSCumberBase*>(cb);
+	return cbp->startDamageReaction(damage, angle);
 }
 void CumberParent::subCumberBomb()
 {
@@ -160,11 +171,11 @@ void CumberParent::subCumberReplication()
 	int cnt = subCumberArray->count();
 	for(int i = 0;i<cnt;i++)
 	{
-		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
-		IntPoint t_mp = t_sc->getMapPoint();
-		SubCumber* t_sc2 = SubCumber::create(t_mp);
+		Bear* t_sc = (Bear*)subCumberArray->objectAtIndex(i);
+		CCPoint t_p = t_sc->getPosition();
+		Bear* t_sc2 = Bear::create();
 		addChild(t_sc2);
-		t_sc2->startMoving();
+		t_sc2->setPosition(t_p);
 		subCumberArray->addObject(t_sc2);
 	}
 }
@@ -180,9 +191,9 @@ void CumberParent::setGameover()
 	int loop_cnt = subCumberArray->count();
 	for(int i=0;i<loop_cnt;i++)
 	{
-		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
 		t_sc->setGameover();
-		t_sc->stopMoving();
+//		t_sc->stopMoving();
 	}
 }
 
@@ -277,15 +288,7 @@ void CumberParent::startDieAnimation()
 
 void CumberParent::changeMaxSize(float t_p)
 {
-//	for(auto mainCumber : mainCumbers)
-//		mainCumber->changeMaxSize(t_p);
 	
-	int loop_cnt = subCumberArray->count();
-	for(int i=0;i<loop_cnt;i++)
-	{
-		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
-		t_sc->changeMaxSize(t_p);
-	}
 }
 
 
@@ -353,58 +356,56 @@ int CumberParent::getSubCumberCount()
 
 void CumberParent::createSubCumber(IntPoint s_p)
 {
-	SubCumber* t_SC = SubCumber::create(s_p);
+	int index = m_well512.GetValue(m_juniors.size() - 1);
+	jrType junior = m_juniors[index];
+	//## if(junior.m_jrType)
+	//## 에 따라 분기 해야됨.
+	
+	
+	Bear* t_SC = Bear::create();
+	t_SC->settingHp(junior.m_jrHp);
+	t_SC->settingScale(junior.m_jrStartScale, junior.m_jrMinScale, junior.m_jrMaxScale);
+	t_SC->settingSpeed(junior.m_jrStartSpeed, junior.m_jrMinSpeed, junior.m_jrMaxSpeed);
+	t_SC->settingMovement((enum MOVEMENT)junior.m_jrNormalMovement, (enum MOVEMENT)junior.m_jrDrawMovement);
 	addChild(t_SC);
-	t_SC->startMoving();
 	subCumberArray->addObject(t_SC);
+	t_SC->setPosition(ip2ccp(s_p));
 }
 
 void CumberParent::initSubCumber()
 {
 	//		int create_cnt = SelectedMapData::sharedInstance()->getSubCumberCnt();
-	if(mySGD->isUsingItem(kIC_subNothing))
-		return;
 	
-	if(mySD->getClearCondition() != kCLEAR_subCumberCatch)
-	{
-		int create_cnt = rand()%2+1;
-		for(int i=0;i<create_cnt;i++)
-		{
-			SubCumber* t_SC = SubCumber::create();
-			addChild(t_SC);
-			subCumberArray->addObject(t_SC);
-		}
-	}
-	else
-	{
-		for(int i=0;i<2;i++)
-		{
-			SubCumber* t_SC = SubCumber::create();
-			addChild(t_SC);
-			subCumberArray->addObject(t_SC);
-		}
-	}
 }
 
-void CumberParent::slowItem(bool t_b)
+void CumberParent::slowItem(float ratio)
 {
+	for(auto mainCumber : mainCumbers)
+		mainCumber->setSpeedRatio(ratio);
+	
 	
 //	for(auto mainCumber : mainCumbers)
 //		mainCumber->changeSpeed(t_b);
 	for(int i=0;i<subCumberArray->count();i++)
 	{
-		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
-		t_sc->changeSpeed(t_b);
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+		t_sc->setSpeedRatio(ratio);
 	}
 }
 
 void CumberParent::silenceItem(bool t_b)
 {
-	if(t_b)		myMP->stopAutoAttacker();
-	else		myMP->startAutoAttacker();
+	// 닥치라고 들어오면 true, else false;
+	for(auto mainCumber : mainCumbers)
+	{
+		mainCumber->setSlience(t_b);
+	}
 	
-//	for(auto mainCumber : mainCumbers)
-//		mainCumber->silenceItem(t_b);
+	for(int i=0;i<subCumberArray->count();i++)
+	{
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+		t_sc->setSlience(t_b);
+	}
 }
 
 void CumberParent::setCasting(bool t_b)
@@ -434,13 +435,16 @@ void CumberParent::myInit()
 	myGD->V_I["CP_setMainCumberState"] = std::bind(&CumberParent::setMainCumberState, this, _1);
 	myGD->CCN_V["CP_getMainCumberPointer"] = std::bind(&CumberParent::getMainCumberPointer, this);
 	myGD->CCA_V["CP_getSubCumberArrayPointer"] = std::bind(&CumberParent::getSubCumberArrayPointer, this);
-	myGD->V_CCOFF["CP_decreaseLifeForSubCumber"] = std::bind(&CumberParent::decreaseLifeForSubCumber, this, _1, _2, _3);
+	
+//	myGD->B_CCOFF["CP_decreaseLifeForSubCumber"] = std::bind(&CumberParent::decreaseLifeForSubCumber, this, _1, _2, _3);
+	
 	myGD->V_V["CP_setGameover"] = std::bind(&CumberParent::setGameover, this);
 	myGD->V_V["CP_tickingOn"] = std::bind(&CumberParent::tickingOn, this);
 	myGD->V_V["CP_subCumberBomb"] = std::bind(&CumberParent::subCumberBomb, this);
 	myGD->V_V["CP_startTeleport"] = std::bind(&CumberParent::startTeleport, this);
 	myGD->V_V["CP_subCumberReplication"] = std::bind(&CumberParent::subCumberReplication, this);
-	myGD->V_F["CP_startDamageReaction"] = std::bind(&CumberParent::startDamageReaction, this, _1);
+	myGD->B_CCOFF["CP_startDamageReaction"] =
+		std::bind(&CumberParent::startDamageReaction, this, _1, _2, _3);
 	myGD->I_V["CP_getMainCumberSheild"] = std::bind(&CumberParent::getMainCumberSheild, this);
 	myGD->V_V["CP_createAllCumberSheild"] = std::bind(&CumberParent::createAllCumberSheild, this);
 	myGD->V_V["CP_mainCumberInvisibleOn"] = std::bind(&CumberParent::mainCumberInvisibleOn, this);
@@ -471,7 +475,8 @@ void CumberParent::myInit()
 	JsonBox::Object movement = boss["movement"].getObject();
 	
 	int bossType = boss["type"].getInt();
-
+	
+	float hp = boss["hp"].getInt();
 	float minSpeed = getNumberFromJsonValue(speed["max"]);
 	float startSpeed = getNumberFromJsonValue(speed["start"]);
 	float maxSpeed = getNumberFromJsonValue(speed["min"]);
@@ -508,7 +513,7 @@ void CumberParent::myInit()
 			mainCumber = Mango::create();
 			break;
 	}
-	
+	mainCumber->settingHp(hp);
 	mainCumber->settingScale(startScale, minScale, maxScale);
 	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
 	mainCumber->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement);
@@ -517,7 +522,60 @@ void CumberParent::myInit()
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	
-	initSubCumber();
+	int create_cnt;
+	if(mySGD->isUsingItem(kIC_subNothing))
+		return;
+	if(mySD->getClearCondition() != kCLEAR_subCumberCatch)
+	{
+		 create_cnt = m_well512.GetValue(1, 2);
+	}
+	else
+	{
+		create_cnt = 2;
+	}
+	for(int i=0;i<create_cnt;i++)
+	{
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"));
+		
+		for(int i=0; i<v.getArray().size(); i++)
+		{
+			JsonBox::Object mob = v.getArray()[i].getObject();
+			JsonBox::Object speed = mob["speed"].getObject();
+			JsonBox::Object scale = mob["scale"].getObject();
+			JsonBox::Object movement = mob["movement"].getObject();
+			
+			int bossType = mob["type"].getInt();
+			float hp = mob["hp"].getInt();
+			float minSpeed = getNumberFromJsonValue(speed["max"]);
+			float startSpeed = getNumberFromJsonValue(speed["start"]);
+			float maxSpeed = getNumberFromJsonValue(speed["min"]);
+			
+			float minScale = getNumberFromJsonValue(scale["min"]);
+			float startScale = getNumberFromJsonValue(scale["start"]);
+			float maxScale = getNumberFromJsonValue(scale["max"]);
+			
+			int normalMovement = movement["normal"].getInt();
+			int drawMovement = movement["draw"].getInt();
+			
+			//## 여기서 부하몹 분기가 들어감...
+			//## 지금은 그냥 Bear 가 부하임.
+			jrType jt(bossType, minSpeed, startSpeed, maxSpeed, minScale, startScale, maxScale, normalMovement,
+					  drawMovement, hp);
+			m_juniors.push_back(jt);
+			
+			Bear* t_SC = Bear::create();
+			t_SC->settingHp(hp);
+			t_SC->settingScale(startScale, minScale, maxScale);
+			t_SC->settingSpeed(startSpeed, minSpeed, maxSpeed);
+			t_SC->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement);
+			addChild(t_SC);
+			
+			subCumberArray->addObject(t_SC);
+
+		}
+	}
+//	initSubCumber();
 	
 	myMP = MissileParent::create(mainCumber->getBossEye());
 	addChild(myMP);
