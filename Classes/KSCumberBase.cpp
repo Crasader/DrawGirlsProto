@@ -101,6 +101,7 @@ void KSCumberBase::randomMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
+				validPosition = true;
 				// 즉사 시킴.
 				if(gameData->getJackState() != jackStateNormal)
 					gameData->communication("Jack_startDieEffect");
@@ -430,6 +431,7 @@ void KSCumberBase::followMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
+				validPosition = true;
 				if(gameData->getJackState() != jackStateNormal)
 					gameData->communication("Jack_startDieEffect");
 				m_follow.lastMapCollisionTime = m_follow.timer;
@@ -586,6 +588,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
+				validPosition = true;
 				if(gameData->getJackState() != jackStateNormal)
 					gameData->communication("Jack_startDieEffect");
 			}
@@ -709,7 +712,10 @@ void KSCumberBase::rightAngleMoving(float dt)
 void KSCumberBase::circleMoving(float dt)
 {
 	m_scale.timer += 1/60.f;
-	
+	if(m_scale.timer - m_circle.lastMovingTime >= 3/60.f) // 3 프레임 이상 차이 나면 다시 설정.
+	{
+		m_circle.setRelocation(getPosition(), m_well512);
+	}
 	
 	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
 	{
@@ -738,13 +744,13 @@ void KSCumberBase::circleMoving(float dt)
 	{
 		cnt++;
 
-		float circleRadius = sqrt(pow((m_circle.centerPoint.x - m_circle.relocationPoint.x), 2) +
-								  pow((m_circle.centerPoint.y - m_circle.relocationPoint.y), 2));
+		float circleRadius = sqrt(pow((m_circle.centerPosition.x - m_circle.relocationPosition.x), 2) +
+								  pow((m_circle.centerPosition.y - m_circle.relocationPosition.y), 2));
 		
-		afterPoint = IntPoint(m_circle.centerPoint.x + circleRadius * (1) * cos(m_circle.angleRad),
-							  m_circle.centerPoint.y + circleRadius * (1) * sin(m_circle.angleRad));
-		afterPosition = ip2ccp(afterPoint);
 		
+		afterPosition = ccp(m_circle.centerPosition.x + circleRadius * (1) * cos(m_circle.angleRad),
+							m_circle.centerPosition.y + circleRadius * (1) * sin(m_circle.angleRad));
+		afterPoint = ccp2ip(afterPosition);
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
 		if(m_state != CUMBERSTATEFURY)
@@ -752,6 +758,7 @@ void KSCumberBase::circleMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
+				validPosition = true;
 				if(gameData->getJackState() != jackStateNormal)
 					gameData->communication("Jack_startDieEffect");
 			}
@@ -806,10 +813,8 @@ void KSCumberBase::circleMoving(float dt)
 				crashMapForPosition(afterPosition);
 			}
 		}
-		if(cnt % 100 == 0)
-		{
+		if(cnt >= 3)
 			CCLog("circleMoving cnt !! = %d", cnt);
-		}
 		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
 			validPosition = true;
@@ -822,9 +827,10 @@ void KSCumberBase::circleMoving(float dt)
 	
  	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
 	{
-		float circleRadius = sqrt(pow((m_circle.centerPoint.x - m_circle.relocationPoint.x), 2) +
-								  pow((m_circle.centerPoint.y - m_circle.relocationPoint.y), 2));
-		m_circle.angleRad += m_speed * m_circle.sign / circleRadius / 2.f;
+		float circleRadius = sqrt(pow((m_circle.centerPosition.x - m_circle.relocationPosition.x), 2) +
+								  pow((m_circle.centerPosition.y - m_circle.relocationPosition.y), 2));
+		m_circle.angleRad += m_speed * m_circle.sign / circleRadius;
+//		CCLog("%f %f", afterPosition.x, afterPosition.y);
 		setPosition(afterPosition);
 	}
 	if(onceOutlineAndMapCollision)
@@ -843,4 +849,5 @@ void KSCumberBase::circleMoving(float dt)
 		}
 	}
 
+	m_circle.lastMovingTime = m_scale.timer;
 }

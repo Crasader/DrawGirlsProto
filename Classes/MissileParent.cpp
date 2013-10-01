@@ -135,6 +135,7 @@ void MissileParent::actionAP9()
 
 	saveAP = t_m9;
 	savedAP = true;
+//	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP10()
@@ -219,6 +220,7 @@ void MissileParent::actionAP17()
 
 	saveAP = t_m17;
 	savedAP = true;
+	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP18()
@@ -228,6 +230,8 @@ void MissileParent::actionAP18()
 	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 	AP_Missile18* t_m18 = AP_Missile18::create(mainCumberPosition, t_bd.move_speed, t_bd.mCnt, t_bd.bomb_cnt, t_bd.crash_area.width > 10.f);
 	addChild(t_m18);
+	
+	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP19()
@@ -687,6 +691,22 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 															 this, callfunc_selector(MissileParent::ingAP17),
 															 this, callfunc_selector(MissileParent::actionAP17),
 															 this, callfunc_selector(MissileParent::cancelAP17),
+															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
+			t_ccn->setChargeColor(ccc4f(1.00, 0.00, 0.00, 1.00));
+			addChild(t_ccn);
+			t_ccn->startCharge();
+			chargeArray->addObject(t_ccn);
+		}
+	}
+	else if(pattern == kTargetAttack8) // 다용도
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 90,
+															 this, NULL,
+															 this, callfunc_selector(MissileParent::actionTargetAP8),
+															 this, callfunc_selector(MissileParent::cancelTargetAP8),
 															 myGD->getCommunicationNode("CP_getMainCumberPointer"));
 			t_ccn->setChargeColor(ccc4f(1.00, 0.00, 0.00, 1.00));
 			addChild(t_ccn);

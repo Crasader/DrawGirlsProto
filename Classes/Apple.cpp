@@ -170,12 +170,12 @@ void Apple::animationNoDirection(float dt)
 		{
 			m_noDirection.rotationDeg -= 360;
 			m_noDirection.rotationCnt++;
-			/// 좀 돌았으면 돌아감.
-			if(m_noDirection.rotationCnt >= 5)
-			{
-				m_noDirection.state = 2;
-				return;
-			}
+//			/// 좀 돌았으면 돌아감.
+//			if(m_noDirection.rotationCnt >= 5)
+//			{
+//				m_noDirection.state = 2;
+//				return;
+//			}
 		}
 		m_noDirection.distance += 0.5f;
 		m_noDirection.distance = MIN(m_noDirection.distance, 30);
@@ -735,7 +735,7 @@ void Apple::furyMoving(float dt)
 void Apple::cumberAttack(float dt)
 {
 	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
-	
+//	float w = ProbSelector::sel(0.01f, 1.0 - 0.01f / 100.f, 0.0);
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
@@ -764,6 +764,8 @@ void Apple::cumberAttack(float dt)
 		}
 		
 		//		attackCode = 13;
+		
+//		attackCode = kTargetAttack8;
 		if(attackCode == 13) // fury
 		{
 			m_state = CUMBERSTATESTOP;

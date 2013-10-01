@@ -257,6 +257,7 @@ public:
 	}
 	void settingPattern(JsonBox::Object pattern)
 	{
+		KS::KSLog("%", pattern);
 		for(auto i : pattern)
 		{
 			int patternNumber = atoi(i.first.c_str()); // 패턴 넘버
@@ -372,9 +373,11 @@ protected:
 	
 	struct CircleMoving
 	{
-		CircleMoving() : MIN_RADIUS(20.f), MAX_RADIUS(100.f){}
-		IntPoint centerPoint;
-		IntPoint relocationPoint;
+		CircleMoving() : MIN_RADIUS(20.f), MAX_RADIUS(100.f), lastMovingTime(0){}
+		
+		float lastMovingTime; // 마지막으로 움직인 시간을 기억함. 오랜만이라면 변수 재 설정.
+		CCPoint centerPosition;
+		CCPoint relocationPosition;
 		int sign;
 //		float goalAngleRad; // 돌아야 하는 총 각도.
 		float angleRad; // 현재 돈 각도
@@ -388,9 +391,11 @@ protected:
 			{
 				float r = m_well512.GetFloatValue(MIN_RADIUS, MAX_RADIUS);
 				float rad = m_well512.GetFloatValue(0, 2*M_PI);
-				relocationPoint = ccp2ip(cumberP);
-				centerPoint = IntPoint(r * cos(rad) + relocationPoint.x, r * sin(rad) + relocationPoint.y);
-				angleRad = atan2(relocationPoint.y - centerPoint.y, relocationPoint.x - centerPoint.x);
+				relocationPosition = cumberP;
+				centerPosition = ccp(r * cos(rad) + relocationPosition.x, r * sin(rad) + relocationPosition.y);
+				angleRad = atan2(relocationPosition.y - centerPosition.y, relocationPosition.x - centerPosition.x);
+				
+				IntPoint centerPoint = ccp2ip(centerPosition);
 				if(mapLoopRange::mapWidthInnerBegin <= centerPoint.x &&
 				   centerPoint.y < mapLoopRange::mapWidthInnerEnd &&
 				   mapLoopRange::mapHeightOutlineBegin <= centerPoint.y &&

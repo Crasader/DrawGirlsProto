@@ -294,11 +294,11 @@ void Bear::animationNoDirection(float dt)
 	if(m_noDirection.state == 1)
 	{
 		/// 좀 돌았으면 돌아감.
-		if(m_noDirection.rotationCnt >= 5)
-		{
-			m_noDirection.state = 2;
-			return;
-		}
+//		if(m_noDirection.timer >= 5)
+//		{
+//			m_noDirection.state = 2;
+//			return;
+//		}
 	}
 	else if(m_noDirection.state == 2)
 	{

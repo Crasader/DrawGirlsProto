@@ -169,12 +169,12 @@ void Melon::animationNoDirection(float dt)
 		{
 			m_noDirection.rotationDeg -= 360;
 			m_noDirection.rotationCnt++;
-			/// 좀 돌았으면 돌아감.
-			if(m_noDirection.rotationCnt >= 5)
-			{
-				m_noDirection.state = 2;
-				return;
-			}
+//			/// 좀 돌았으면 돌아감.
+//			if(m_noDirection.rotationCnt >= 5)
+//			{
+//				m_noDirection.state = 2;
+//				return;
+//			}
 		}
 		m_noDirection.distance += 0.5f;
 		m_noDirection.distance = MIN(m_noDirection.distance, 30);

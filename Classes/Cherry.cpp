@@ -293,12 +293,12 @@ void Cherry::animationNoDirection(float dt)
 	
 	if(m_noDirection.state == 1)
 	{
-		/// 좀 돌았으면 돌아감.
-		if(m_noDirection.rotationCnt >= 5)
-		{
-			m_noDirection.state = 2;
-			return;
-		}
+//		/// 좀 돌았으면 돌아감.
+//		if(m_noDirection.timer >= 5)
+//		{
+//			m_noDirection.state = 2;
+//			return;
+//		}
 	}
 	else if(m_noDirection.state == 2)
 	{
@@ -312,6 +312,7 @@ void Cherry::onPatternEnd()
 {
 	CCLog("onPatternEnd!!");
 	m_noDirection.state = 2;
+//	m_direction.state = 2; // 돌아가라고 상태 변경때림.
 }
 
 void Cherry::onStartGame()
