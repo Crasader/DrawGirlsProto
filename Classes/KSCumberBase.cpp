@@ -227,11 +227,13 @@ void KSCumberBase::straightMoving(float dt)
 	int cnt = 0;
 	bool onceOutlineAndMapCollision = false;
 	float degree = m_directionAngleDegree;
+    float tempSpeed = m_speed;
+    bool ignoreNewLine = false;
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = m_speed * cos(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
-		float speedY = m_speed * sin(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
+		float speedX = tempSpeed * cos(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
+		float speedY = tempSpeed * sin(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
 		
 		CCPoint cumberPosition = getPosition();
 		afterPosition = cumberPosition + ccp(speedX, speedY);
@@ -243,6 +245,7 @@ void KSCumberBase::straightMoving(float dt)
 			if(cnt >= 10)
 			{
 				degree = m_well512.GetValue(360);
+                ignoreNewLine = true;
 			}
 			else if(cnt >= 5)
 			{
@@ -304,11 +307,12 @@ void KSCumberBase::straightMoving(float dt)
 				if(degree < 0)			degree += 360;
 				else if(degree > 360)	degree -= 360;
 			}
-			else if(collisionCode == kCOLLISION_NEWLINE)
+			else if(collisionCode == kCOLLISION_NEWLINE && ignoreNewLine == false)
 			{
 				//			CCLog("collision!!");
 				//			gameData->communication("Jack_startDieEffect");
 				gameData->communication("SW_createSW", checkPosition, 0, 0);
+                tempSpeed = 2.f; // 임시로 스피드를 올려줌.
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				degree = degreeSelector(cnt, degree);
 				
@@ -320,9 +324,9 @@ void KSCumberBase::straightMoving(float dt)
 			{
 				validPosition = true;
 			}
-			else if(afterPoint.isInnerMap())
+			else
 			{
-				CCAssert(false, "");
+				CCLog("what!?");
 				validPosition = true;
 			}
 		}
@@ -354,6 +358,7 @@ void KSCumberBase::straightMoving(float dt)
 	}
 	
 	m_directionAngleDegree = degree;
+
 	//	CCLog("cnt outer !! = %d", cnt);
 	
 	
