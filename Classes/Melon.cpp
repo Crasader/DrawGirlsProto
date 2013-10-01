@@ -13,7 +13,7 @@
 #include "KSGeometry.h"
 #include <cmath>
 #include "ProbSelector.h"
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include "Jack.h"
 #include "RandomSelector.h"
 Melon::~Melon()

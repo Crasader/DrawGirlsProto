@@ -5,7 +5,7 @@
 #include "KSGeometry.h"
 #include <cmath>
 #include "ProbSelector.h"
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include <algorithm>
 
 
@@ -616,7 +616,7 @@ void Mango::furyModeScheduler(float dt)
 }
 void Mango::furyModeOff()
 {
-	myGD->communication("EP_stopCrashAction");
+//	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects");
 }
 

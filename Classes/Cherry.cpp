@@ -6,7 +6,7 @@
 #include "KSGeometry.h"
 #include <cmath>
 #include "ProbSelector.h"
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include <algorithm>
 
 
@@ -617,7 +617,7 @@ void Cherry::furyModeScheduler(float dt)
 }
 void Cherry::furyModeOff()
 {
-	myGD->communication("EP_stopCrashAction");
+//	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects");
 }
 

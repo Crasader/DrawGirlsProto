@@ -10,7 +10,7 @@
 #define __DGproto__KSCumberBase__
 #include "cocos2d.h"
 #include "KSUtil.h"
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include "AudioEngine.h"
 #include "FromTo.h"
 #include "ProbSelector.h"
@@ -75,7 +75,7 @@ public:
 	virtual bool init()
 	{
 		CCNode::init();
-		mEmotion = NULL;
+//		mEmotion = NULL;
 		return true;
 	}
 	
@@ -108,18 +108,18 @@ public:
 	}
 	
 	
-	void showEmotion(EmotionType t_type)
-	{
-		if(mEmotion)
-			mEmotion->selfRemove();
-		mEmotion = Emotion::create(t_type, this, callfunc_selector(KSCumberBase::nullmEmotion));
-		mEmotion->setPosition(ccp(30,20));
-		addChild(mEmotion);
-	}
-	void nullmEmotion()
-	{
-		mEmotion = NULL;
-	}
+//	void showEmotion(EmotionType t_type)
+//	{
+//		if(mEmotion)
+//			mEmotion->selfRemove();
+//		mEmotion = Emotion::create(t_type, this, callfunc_selector(KSCumberBase::nullmEmotion));
+//		mEmotion->setPosition(ccp(30,20));
+//		addChild(mEmotion);
+//	}
+//	void nullmEmotion()
+//	{
+//		mEmotion = NULL;
+//	}
 	CCNode* getBossEye() { return NULL; }
 	
 	virtual void furyModeOn() = 0;
@@ -319,7 +319,7 @@ protected:
 	CUMBER_STATE m_state;
 	MOVEMENT m_normalMovement; // 평상시 움직임.
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
-	Emotion* mEmotion;
+//	Emotion* mEmotion;
 	Well512 m_well512;
 	int m_directionAngleDegree;
 	float m_speed;

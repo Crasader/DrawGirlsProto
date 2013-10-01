@@ -1133,9 +1133,6 @@ private:
 					speed_up_value = 0.f;
 					changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 					
-					isDie = false;
-					isStun = false;
-					
 					jackImg->removeFromParentAndCleanup(true);
 					
 					CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
@@ -1212,6 +1209,9 @@ private:
 	
 	void endReviveJack()
 	{
+		isDie = false;
+		isStun = false;
+		
 		CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
 		
 		CCAnimation* jack_animation = CCAnimation::create();
@@ -1237,8 +1237,6 @@ private:
 		speed_up_value = 0.f;
 		changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 		
-		isDie = false;
-		isStun = false;
 		jackImg->removeFromParentAndCleanup(true);
 		
 		CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");

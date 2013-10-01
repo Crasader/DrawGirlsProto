@@ -13,7 +13,7 @@
 #include "CumberBase.h"
 #include "AudioEngine.h"
 #include "AlertEngine.h"
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include "BossEye.h"
 #include <algorithm>
 #include <vector>
@@ -67,8 +67,8 @@ public:
 	virtual void silenceItem(bool t_b);
 	virtual void setMovingShoot(bool t_b);
 	virtual void setCasting(bool t_b);
-	virtual void showEmotion(EmotionType t_type);
-	virtual void nullmEmotion();
+//	virtual void showEmotion(EmotionType t_type);
+//	virtual void nullmEmotion();
 	virtual CCNode* getBossEye();
 	virtual void caughtBoss(CCObject* t_setCaught, SEL_CallFunc d_setCaught);
 	virtual void endCaughtBoss();
@@ -121,7 +121,7 @@ protected:
 	int map_visit_cnt;
 	int max_visit_cnt;
 	
-	Emotion* mEmotion;
+//	Emotion* mEmotion;
 	
 	float dash_angle;
 	int checking_array[360];
@@ -139,7 +139,7 @@ protected:
 	virtual void crashMapForIntPoint(IntPoint t_p);
 	virtual void myInit();
 	virtual void randomShuffle();
-	virtual bool checkingFunc(IntPoint check_position, bool& is_not_position, bool& notEmotion, int& before_areacrash_cnt, bool& is_map_visited);
+	virtual bool checkingFunc(IntPoint check_position, bool& is_not_position, int& before_areacrash_cnt, bool& is_map_visited);
 };
 
 

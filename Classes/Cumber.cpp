@@ -182,7 +182,7 @@ void CumberParent::subCumberReplication()
 
 void CumberParent::setGameover()
 {
-	myEP->setGameover();
+//	myEP->setGameover();
 	myGD->communication("MP_stopAutoAttacker");
 	isGameover = true;
 	for(auto mainCumber : mainCumbers)
@@ -250,22 +250,22 @@ void CumberParent::startAutoAttacker()
 
 void CumberParent::jackCrashDie()
 {
-	for(auto mainCumber : mainCumbers)
-		mainCumber->showEmotion(kEmotionType_fun);
+//	for(auto mainCumber : mainCumbers)
+//		mainCumber->showEmotion(kEmotionType_fun);
 }
 
-void CumberParent::setUI_forEP(CCObject* t_ui, SEL_CallFunc k_ui, SEL_CallFunc c_ui)
-{
-	myEP->set_UI(t_ui, k_ui, c_ui);
-}
+//void CumberParent::setUI_forEP(CCObject* t_ui, SEL_CallFunc k_ui, SEL_CallFunc c_ui)
+//{
+//	myEP->set_UI(t_ui, k_ui, c_ui);
+//}
 
-void CumberParent::mainCumberShowEmotion(int t_e)
-{
-	//##
-	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	mainCumber->showEmotion(EmotionType(t_e));
-}
+//void CumberParent::mainCumberShowEmotion(int t_e)
+//{
+//	//##
+//	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+//	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
+//	mainCumber->showEmotion(EmotionType(t_e));
+//}
 
 void CumberParent::startDieAnimation()
 {
@@ -454,7 +454,7 @@ void CumberParent::myInit()
 	myGD->V_B["CP_setCasting"] = std::bind(&CumberParent::setCasting, this, _1);
 	myGD->V_V["CP_stopMovingMainCumber"] = std::bind(&CumberParent::stopMovingMainCumber, this);
 	myGD->V_V["CP_jackCrashDie"] = std::bind(&CumberParent::jackCrashDie, this);
-	myGD->V_I["CP_mainCumberShowEmotion"] = std::bind(&CumberParent::mainCumberShowEmotion, this, _1);
+//	myGD->V_I["CP_mainCumberShowEmotion"] = std::bind(&CumberParent::mainCumberShowEmotion, this, _1);
 	myGD->V_V["CP_startDieAnimation"] = std::bind(&CumberParent::startDieAnimation, this);
 	myGD->V_F["CP_changeMaxSize"] = std::bind(&CumberParent::changeMaxSize, this, _1);
 //	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
@@ -583,7 +583,7 @@ void CumberParent::myInit()
 	myMFP = MapFragmentParent::create();
 	addChild(myMFP);
 	
-	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
-	addChild(myEP);
+//	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
+//	addChild(myEP);
 }
 

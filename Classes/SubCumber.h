@@ -13,7 +13,7 @@
 #include "CumberBase.h"
 #include "GameData.h"
 #include "MissileDamageData.h"
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include "StarGoldData.h"
 #include "AlertEngine.h"
 #include "cocos-ext.h"
@@ -178,18 +178,18 @@ public:
 		}
 	}
 	
-	void showEmotion(EmotionType t_type)
-	{
-		if(mEmotion)	mEmotion->selfRemove();
-		mEmotion = Emotion::create(t_type, this, callfunc_selector(SubCumber::nullmEmotion));
-		mEmotion->setPosition(ccp(20,15));
-		addChild(mEmotion);
-	}
-	
-	void nullmEmotion()
-	{
-		mEmotion = NULL;
-	}
+//	void showEmotion(EmotionType t_type)
+//	{
+//		if(mEmotion)	mEmotion->selfRemove();
+//		mEmotion = Emotion::create(t_type, this, callfunc_selector(SubCumber::nullmEmotion));
+//		mEmotion->setPosition(ccp(20,15));
+//		addChild(mEmotion);
+//	}
+//	
+//	void nullmEmotion()
+//	{
+//		mEmotion = NULL;
+//	}
 	
 	void changeMaxSize(float t_p)
 	{
@@ -217,7 +217,7 @@ private:
 	
 	bool isMainType;
 	
-	Emotion* mEmotion;
+//	Emotion* mEmotion;
 	
 	void alertAction(int t1, int t2)
 	{
@@ -466,7 +466,7 @@ private:
 		JsonBox::Array junior = t_json.getArray();
 		JsonBox::Object first_junior = junior[0].getObject();
 		
-		mEmotion = NULL;
+//		mEmotion = NULL;
 		is_slowed = false;
 		isSheild = 0;
 		life = SelectedMapData::sharedInstance()->getMaxBossLife()/10.f;

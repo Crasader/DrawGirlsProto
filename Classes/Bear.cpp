@@ -5,7 +5,7 @@
 #include "KSGeometry.h"
 #include <cmath>
 #include "ProbSelector.h"
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include <algorithm>
 
 
@@ -564,7 +564,7 @@ void Bear::furyModeScheduler(float dt)
 }
 void Bear::furyModeOff()
 {
-	myGD->communication("EP_stopCrashAction");
+//	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects");
 }
 

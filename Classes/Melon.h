@@ -14,7 +14,7 @@
 #include "GameData.h"
 #include "Well512.h"
 #include <set>
-#include "CumberEmotion.h"
+//#include "CumberEmotion.h"
 #include <deque>
 #include "Jack.h"
 #include "cocos-ext.h"
@@ -32,7 +32,7 @@ public:
 	RADIUS(110.f / 4.f), // 머리에 대한 충돌 반지름
 	BODY_RADIUS(70/4.f), // 몸통에 대한 충돌 반지름
 	TAIL_RADIUS(50/4.f), // 꼬리에 대한 충돌 반지름
-	mEmotion(nullptr),
+//	mEmotion(nullptr),
 	LIMIT_COLLISION_PER_SEC(3), /// 초당 변수만큼 충돌시 스케일 줄임.
 	ATTACK_POINT_X(-18), // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
 	ATTACK_POINT_Y(0),   // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
@@ -126,19 +126,19 @@ public:
 	COLLISION_CODE crashWithX(IntPoint check_position);
 	COLLISION_CODE crashLooper(const set<IntPoint>& v, IntPoint* cp);
 	
-	void showEmotion(EmotionType t_type)
-	{
-		if(mEmotion)
-			mEmotion->selfRemove();
-		mEmotion = Emotion::create(t_type, this,
-								   callfunc_selector(Melon::nullmEmotion));
-		mEmotion->setPosition(ccpAdd(getPosition(), ccp(30,20)));
-		addChild(mEmotion, 11);
-	}
-	void nullmEmotion()
-	{
-		mEmotion = NULL;
-	}
+//	void showEmotion(EmotionType t_type)
+//	{
+//		if(mEmotion)
+//			mEmotion->selfRemove();
+//		mEmotion = Emotion::create(t_type, this,
+//								   callfunc_selector(Melon::nullmEmotion));
+//		mEmotion->setPosition(ccpAdd(getPosition(), ccp(30,20)));
+//		addChild(mEmotion, 11);
+//	}
+//	void nullmEmotion()
+//	{
+//		mEmotion = NULL;
+//	}
 	void setHeadAndBodies();
 	virtual bool startDamageReaction(float damage, float angle);
 	virtual void startAnimationNoDirection();
@@ -270,7 +270,7 @@ protected:
 	}
 	
 	
-	Emotion* mEmotion;
+//	Emotion* mEmotion;
 	
 	deque< SnakeTrace > m_cumberTrace; // back 은 항상 머리를 가르킴.
 	
