@@ -23,7 +23,7 @@ class Banana : public KSCumberBase
 public:
 	Banana() : RADIUS(15.f),// mEmotion(nullptr),
 	
-	FURY_DURATION(4.f), // 분노모드 초.
+
 	teleportImg(NULL) // 텔레포트 이미지
 	{
 		m_state = (CUMBERSTATEMOVING);
@@ -187,7 +187,7 @@ public:
 	}
 protected:
 	CCSprite* teleportImg;
-	const float FURY_DURATION;
+
 	
 	bool isGameover;
 	int lastCastNum;

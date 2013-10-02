@@ -382,134 +382,11 @@ void Apple::scaleAdjustment(float dt)
 	
 }
 
-void Apple::furyMoving(float dt)
-{
-	m_furyMode.furyFrameCount++;
-	CCPoint afterPosition;
-	IntPoint afterPoint;
-	//	int check_loop_cnt = 0;
-	
-	bool validPosition = false;
-	int cnt = 0;
-
-	while(!validPosition)
-	{
-		cnt++;
-		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
-		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
-		
-		CCPoint cumberPosition = getPosition();
-		afterPosition = cumberPosition + ccp(speedX, speedY);
-		afterPoint = ccp2ip(afterPosition);
-		
-		float half_distance = RADIUS*getCumberScale();
-		int ip_half_distance = half_distance / 2;
-		IntPoint checkPosition;
-		set<IntPoint> ips;
-		
-		// 충돌 영역에 대한 포인트 추가.
-		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
-		{
-			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
-			{
-				float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
-				if(calc_distance < ip_half_distance)
-				{
-					ips.insert(IntPoint(i, j));
-				}
-			}
-		}
-		
-		COLLISION_CODE collisionCode = crashLooper(ips, &checkPosition);
-		if(collisionCode == kCOLLISION_OUTLINE)
-		{
-			//			CCLog("collision!!");
-			m_directionAngleDegree += m_well512.GetValue(90, 270);
-			
-			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
-			else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
-		}
-		else
-		{
-			validPosition = true;
-		}
-		if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
-		{
-			crashMapForPosition(afterPosition);
-		}
-		
-		// 몸통에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
-		if(gameData->getJackState() != jackStateNormal)
-		{
-			for(auto body : m_Bodies)
-			{
-				CCPoint cumberPosition = body->getPosition();
-				CCPoint bodyPosition = cumberPosition;
-				IntPoint afterPoint = ccp2ip(bodyPosition);
-				IntPoint checkPosition;
-				float half_distance = BODY_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
-				int ip_half_distance = half_distance / 2;
-				
-				
-				IntPoint jackPoint = gameData->getJackPoint();
-				float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
-				if(calc_distance < ip_half_distance)
-				{
-					// 즉사 시킴.
-					gameData->communication("Jack_startDieEffect");
-					break;
-				}
-			}
-		}
-		// 몸통에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
-		if(gameData->getJackState() != jackStateNormal)
-		{
-			CCPoint cumberPosition = m_tailImg->getPosition();
-			CCPoint bodyPosition = cumberPosition;
-			IntPoint afterPoint = ccp2ip(bodyPosition);
-			IntPoint checkPosition;
-			float half_distance = TAIL_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
-			int ip_half_distance = half_distance / 2;
-			
-			
-			IntPoint jackPoint = gameData->getJackPoint();
-			float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
-			if(calc_distance < ip_half_distance)
-			{
-				// 즉사 시킴.
-				gameData->communication("Jack_startDieEffect");
-				break;
-			}
-		}
-
-		
-		
-	}
-	
-	//	CCLog("cnt outer !! = %d", cnt);
-	
-	
-
-	setPosition(afterPosition);
-	
-
-}
-//void MetalSnake::movingAndCrash(float dt)
-//{
-//	if(m_state == CUMBERSTATEFURY)
-//	{
-//		furyMoving(dt);
-//	}
-//	else
-//		normalMoving(dt);
-//
-//}
 
 void Apple::cumberAttack(float dt)
 {
-//	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
-	float w = ProbSelector::sel(0.01f, 1.0 - 0.01f, 0.0);
-	w = 1;
+	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
+
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
@@ -529,14 +406,15 @@ void Apple::cumberAttack(float dt)
 			
 			attackCode = m_attacks[idx];
 			searched = true;
-			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
+			if(attackCode == kSpecialAttack8 && m_invisible.startInvisibleScheduler)
 				searched = false;
-			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
+			if(attackCode == kTargetAttack9 && m_state == CUMBERSTATEFURY)
 				searched = false;
 		}
 		
 //		attackCode = kTargetAttack7;
-		if(attackCode == 13) // fury
+
+		if(attackCode == kTargetAttack9) // fury
 		{
 			m_state = CUMBERSTATESTOP;
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
@@ -608,7 +486,6 @@ COLLISION_CODE Apple::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 void Apple::furyModeOn()
 {
 	m_furyMode.startFury();
-	m_noDirection.state = 2;
 	m_state = CUMBERSTATEFURY;
 	
 	m_headImg->setColor(ccc3(0, 255, 0));
@@ -654,9 +531,7 @@ void Apple::crashMapForPosition(CCPoint targetPt)
 }
 void Apple::furyModeScheduler(float dt)
 {
-	m_furyMode.furyTimer += 1.f / 60.f;
-	
-	if(m_furyMode.furyTimer >= FURY_DURATION)
+	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
 		crashMapForPosition(getPosition());
 		

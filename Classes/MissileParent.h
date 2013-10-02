@@ -550,6 +550,7 @@ public:
 		
 	}
 	void cancelTargetAP7(CCObject* cb){		}
+	
 	void actionTargetAP8(CCObject* cb)
 	{
 		KSTargetAttackPattern8* t = KSTargetAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
@@ -558,6 +559,17 @@ public:
 		savedAP = true;
 	}
 	void cancelTargetAP8(CCObject* cb){		}
+	
+	void actionTargetAP9(CCObject* cb)
+	{
+		KSCumberBase* t = dynamic_cast<KSCumberBase*>(cb);
+		t->furyModeOn();
+//		KSTargetAttackPattern9* t = KSTargetAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+//		addChild(t);
+//		saveAP = t;
+//		savedAP = true;
+	}
+	void cancelTargetAP9(CCObject* cb){		}
 	
 	bool attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb, bool exe);
 private:

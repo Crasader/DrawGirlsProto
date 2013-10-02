@@ -95,9 +95,10 @@ private:
 		
 		int m_jrNormalMovement;
 		int m_jrDrawMovement;
+		int m_jrFuryMovement;
 		float m_jrHp;
 		jrType(int type, float minv, float startv, float maxv,
-			   float mins, float starts, float maxs, int nm, int dr,
+			   float mins, float starts, float maxs, int nm, int dr, int fury,
 			   float hp)
 		{
 			m_jrType = type;
@@ -111,6 +112,7 @@ private:
 			
 			m_jrNormalMovement = nm;
 			m_jrDrawMovement = dr;
+			m_jrFuryMovement = fury;
 			m_jrHp = hp;
 		}
 	};
