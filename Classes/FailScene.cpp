@@ -56,31 +56,13 @@ bool FailScene::init()
     
 	setKeypadEnabled(true);
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
+	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	
+	if(selected_card_number > 0)
 	{
-		int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_haveCardCnt);
-		int found_number = 1;
-		for(int i=1;i<=loop_cnt;i++)
-		{
-			int search_number = myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i);
-			if(search_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
-			{
-				found_number = i;
-				break;
-			}
-		}
-		
-		int durability = myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, found_number);
+		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number);
 		if(durability <= 0)
-		{
-			for(int i=loop_cnt;i>found_number;i--)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i-1, myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, i));
-				myDSH->setIntegerForKey(kDSH_Key_haveCardNumber_int1, i-1, myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i));
-			}
-			myDSH->setIntegerForKey(kDSH_Key_haveCardCnt, loop_cnt-1);
 			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
-		}
 	}
 	
 	CCSprite* fail_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));

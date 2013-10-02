@@ -42,11 +42,8 @@ typedef enum tImgType{
 }ImgType;
 
 typedef enum tSceneCode{
-	kSceneCode_ChapterSetting = 1,
-	kSceneCode_Maingame,
-	kSceneCode_StageSetting,
-	kSceneCode_Gallery,
-	kSceneCode_WorldMapScene
+	kSceneCode_WorldMapScene = 1,
+	kSceneCode_StageSetting
 }SceneCode;
 
 enum FailCode{
@@ -429,6 +426,7 @@ public:
 	}
 	
 	int selected_collectionbook;
+	SceneCode before_cardsetting;
 	
 	int getNextCardNumber(int recent_card_number)
 	{

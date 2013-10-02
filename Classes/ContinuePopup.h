@@ -105,7 +105,7 @@ private:
 		{
 			(target_continue->*delegate_continue)();
 		}
-		
+		touched_number = -1;
 		mySGD->is_paused = false;
 		CCDirector::sharedDirector()->resume();
 		removeFromParent();

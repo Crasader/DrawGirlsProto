@@ -13,6 +13,9 @@
 #include "MaingameScene.h"
 #include "ItemBuyPopup.h"
 #include "CardSettingScene.h"
+#include "ListViewerScroll.h"
+#include "ChallengePopup.h"
+#include "GachaPopup.h"
 
 CCScene* StageSettingScene::scene()
 {
@@ -40,6 +43,8 @@ enum SSS_MenuTag{
 	kSSS_MT_start = 1,
 	kSSS_MT_back = 2,
 	kSSS_MT_changeCard = 3,
+	kSSS_MT_challenge = 4,
+	kSSS_MT_gacha = 5,
 	kSSS_MT_itemBase = 100,
 	kSSS_MT_selectedBase = 200,
 	kSSS_MT_itemCntBase = 300
@@ -63,7 +68,7 @@ bool StageSettingScene::init()
 	stagesetting_back->setPosition(ccp(240,160));
 	addChild(stagesetting_back, kSSS_Z_back);
 	
-	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", selected_stage)->getCString(), mySGD->getFont().c_str(), 25);
+	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", selected_stage)->getCString(), mySGD->getFont().c_str(), 27);
 	stage_label->setColor(ccBLACK);
 	stage_label->setPosition(ccp(300,290));
 	addChild(stage_label, kSSS_Z_content);
@@ -75,8 +80,8 @@ bool StageSettingScene::init()
 		int card_level = selected_card_number%10 + 1;
 		
 		CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
-		card_img->setScale(0.29);
-		card_img->setPosition(ccp(110, 188));
+		card_img->setScale(0.45);
+		card_img->setPosition(getContentPosition(kSSS_MT_changeCard));
 		addChild(card_img, kSSS_Z_content);
 		
 		if(card_level == 3 && mySD->isAnimationStage(card_stage))
@@ -91,38 +96,74 @@ bool StageSettingScene::init()
 	
 	mySD->setCardOptions(card_options, selected_card_number);
 	
+	CCSprite* n_gacha = CCSprite::create("stagesetting_item_gacha_on.png");
+	CCSprite* s_gacha = CCSprite::create("stagesetting_item_gacha_on.png");
+	s_gacha->setColor(ccGRAY);
+	
+	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(StageSettingScene::menuAction));
+	gacha_item->setTag(kSSS_MT_gacha);
+	
+	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
+	gacha_menu->setPosition(getContentPosition(kSSS_MT_gacha));
+	addChild(gacha_menu, kSSS_Z_content);
+	
+	
+	my_ilv = ItemListViewer::create();
+	addChild(my_ilv, kSSS_Z_content);
+	
 	item_list = mySD->getStageItemList(selected_stage);
 	itemSetting();
 	
-	CCSprite* n_changeCard = CCSprite::create("change_card.png");
-	CCSprite* s_changeCard = CCSprite::create("change_card.png");
-	s_changeCard->setColor(ccGRAY);
+	my_ilv->setMaxPositionY();
 	
-	CCMenuItem* changeCard_item = CCMenuItemSprite::create(n_changeCard, s_changeCard, this, menu_selector(StageSettingScene::menuAction));
+	ListViewerScroll* t_lvs = ListViewerScroll::create(CCRectMake(432, 60, 27, 156), my_ilv, "stagesetting_scroll.png", ccp(443,80), ccp(443,195));
+	t_lvs->setTouchEnabled(true);
+	addChild(t_lvs, kSSS_Z_content);
+	
+	my_ilv->setScroll(t_lvs);
+	my_ilv->setTouchEnabled(true);
+	
+	CCMenuItem* changeCard_item = CCMenuItemImage::create("stagesetting_card_button.png", "stagesetting_card_button.png", this, menu_selector(StageSettingScene::menuAction));
 	changeCard_item->setTag(kSSS_MT_changeCard);
 	
 	CCMenu* change_menu = CCMenu::createWithItem(changeCard_item);
-	change_menu->setPosition(ccp(110,96));
+	change_menu->setPosition(getContentPosition(kSSS_MT_changeCard));
 	addChild(change_menu, kSSS_Z_content);
 	
 	
-	CCMenuItem* backward_item = CCMenuItemImage::create("stagesetting_backward.png", "stagesetting_backward.png", this, menu_selector(StageSettingScene::menuAction));
+	CCSprite* n_backward = CCSprite::create("stagesetting_backward.png");
+	CCSprite* s_backward = CCSprite::create("stagesetting_backward.png");
+	s_backward->setColor(ccGRAY);
+	
+	CCMenuItem* backward_item = CCMenuItemSprite::create(n_backward, s_backward, this, menu_selector(StageSettingScene::menuAction));
 	backward_item->setTag(kSSS_MT_back);
 	
 	CCMenu* backward_menu = CCMenu::createWithItem(backward_item);
-	backward_menu->setPosition(ccp(90,37));
+	backward_menu->setPosition(getContentPosition(kSSS_MT_back));
 	addChild(backward_menu, kSSS_Z_content);
 	
 	
-	CCSprite* n_start = CCSprite::create("sspl_start.png");
-	CCSprite* s_start = CCSprite::create("sspl_start.png");
+	CCSprite* n_challenge = CCSprite::create("stagesetting_challenge.png");
+	CCSprite* s_challenge = CCSprite::create("stagesetting_challenge.png");
+	s_challenge->setColor(ccGRAY);
+	
+	CCMenuItem* challenge_item = CCMenuItemSprite::create(n_challenge, s_challenge, this, menu_selector(StageSettingScene::menuAction));
+	challenge_item->setTag(kSSS_MT_challenge);
+	
+	CCMenu* challenge_menu = CCMenu::createWithItem(challenge_item);
+	challenge_menu->setPosition(getContentPosition(kSSS_MT_challenge));
+	addChild(challenge_menu, kSSS_Z_content);
+	
+	
+	CCSprite* n_start = CCSprite::create("stagesetting_start.png");
+	CCSprite* s_start = CCSprite::create("stagesetting_start.png");
 	s_start->setColor(ccGRAY);
 	
 	CCMenuItem* start_item = CCMenuItemSprite::create(n_start, s_start, this, menu_selector(StageSettingScene::menuAction));
 	start_item->setTag(kSSS_MT_start);
 	
 	CCMenu* start_menu = CCMenu::createWithItem(start_item);
-	start_menu->setPosition(ccp(347,37));
+	start_menu->setPosition(getContentPosition(kSSS_MT_start));
 	addChild(start_menu, kSSS_Z_content);
 	
 	is_menu_enable = true;
@@ -135,6 +176,21 @@ bool StageSettingScene::init()
     return true;
 }
 
+CCPoint StageSettingScene::getContentPosition(int t_tag)
+{
+	CCPoint return_value;
+	
+	if(t_tag == kSSS_MT_changeCard)				return_value = ccp(103,161);
+	else if(t_tag == kSSS_MT_back)				return_value = ccp(70,27);
+	else if(t_tag == kSSS_MT_challenge)			return_value = ccp(240,27);
+	else if(t_tag == kSSS_MT_start)				return_value = ccp(387,27);
+	else if(t_tag == kSSS_MT_gacha)				return_value = ccp(323,250);
+	else if(t_tag == kSSS_MT_itemBase)			return_value = ccp(314,190);
+	else if(t_tag == kSSS_MT_selectedBase)		return_value = ccp(95,1);
+	
+	return return_value;
+}
+
 void StageSettingScene::itemSetting()
 {
 	for(int i=0;i<item_list.size();i++)
@@ -142,94 +198,72 @@ void StageSettingScene::itemSetting()
 		ITEM_CODE t_ic = item_list[i];
 		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);
-		if(iter == card_options.end())
+		if(iter == card_options.end()) // not same option card // enable item
 		{
-			CCSprite* n_item = CCSprite::create("button_item_normal.png");
-			CCSprite* s_item = CCSprite::create("button_item_normal.png");
+			CCNode* item_parent = CCNode::create();
+			item_parent->setPosition(ccpAdd(getContentPosition(kSSS_MT_itemBase), ccpMult(ccp(0,-43), i)));
+			my_ilv->addChild(item_parent, kSSS_Z_content, kSSS_MT_itemBase+i);
+			
+			CCSprite* n_item = CCSprite::create("stagesetting_item_normal_back.png");
+			CCSprite* s_item = CCSprite::create("stagesetting_item_normal_back.png");
 			s_item->setColor(ccGRAY);
 			
 			CCMenuItem* item_item = CCMenuItemSprite::create(n_item, s_item, this, menu_selector(StageSettingScene::menuAction));
 			item_item->setTag(kSSS_MT_itemBase+i);
 			
 			CCMenu* item_menu = CCMenu::createWithItem(item_item);
-			item_menu->setPosition(ccp(270+(i%2)*104, 226-(i/2)*70));
-			addChild(item_menu, kSSS_Z_content, kSSS_MT_itemBase+i);
+			item_menu->setPosition(CCPointZero);
+			item_parent->addChild(item_menu, kSSS_Z_content, kSSS_MT_itemBase+i);
 			
 			CCSprite* item_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			item_img->setPosition(item_menu->getPosition());
-			addChild(item_img, kSSS_Z_content);
+			item_img->setScale(0.53);
+			item_img->setPosition(ccp(-91,1));
+			item_parent->addChild(item_img, kSSS_Z_content);
+			
+			int price_value = mySD->getItemPrice(t_ic);
+			CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", price_value)->getCString(), mySGD->getFont().c_str(), 18);
+			price_label->setColor(ccBLACK);
+			price_label->setAnchorPoint(ccp(0,0.5));
+			price_label->setPosition(ccp(-65,5));
+			item_parent->addChild(price_label, kSSS_Z_content);
+			
+			CCLabelTTF* option_label = CCLabelTTF::create(mySD->getItemScript(t_ic).c_str(), mySGD->getFont().c_str(), 8);
+			option_label->setColor(ccBLACK);
+			option_label->setAnchorPoint(ccp(0,0.5));
+			option_label->setPosition(ccp(-67,-11));
+			item_parent->addChild(option_label, kSSS_Z_content);
 			
 			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
 			if(item_cnt > 0)
 			{
-				CCSprite* cnt_img = CCSprite::create("item_cnt_label.png");
-				cnt_img->setPosition(ccpAdd(item_menu->getPosition(), ccp(-25,17)));
-				addChild(cnt_img, kSSS_Z_content, kSSS_MT_itemCntBase+i);
+				CCSprite* cnt_img = CCSprite::create("stagesetting_item_count.png");
+				cnt_img->setPosition(ccp(-100,16));
+				item_parent->addChild(cnt_img, kSSS_Z_content, kSSS_MT_itemCntBase + i);
 				
 				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 				cnt_label->setPosition(ccp(cnt_img->getContentSize().width/2.f, cnt_img->getContentSize().height/2.f));
 				cnt_img->addChild(cnt_label);
 				
-				if(mySGD->isBeforeUseItem(item_list[i]))
-				{
-					is_selected_item.push_back(true);
-					CCSprite* selected_img = CCSprite::create("button_item_selected.png");
-					selected_img->setPosition(item_menu->getPosition());
-					addChild(selected_img, kSSS_Z_selectedImg, kSSS_MT_selectedBase+i);
-				}
-				else
-					is_selected_item.push_back(false);
+//				if(mySGD->isBeforeUseItem(item_list[i]))
+//				{
+//					is_selected_item.push_back(true);
+//					CCSprite* selected_img = CCSprite::create("button_item_selected.png");
+//					selected_img->setPosition(item_menu->getPosition());
+//					addChild(selected_img, kSSS_Z_selectedImg, kSSS_MT_selectedBase+i);
+//				}
+//				else
 			}
-			else
-			{
-				CCSprite* cnt_img = CCSprite::create("item_cnt_plus.png");
-				cnt_img->setPosition(ccpAdd(item_menu->getPosition(), ccp(25,-17)));
-				addChild(cnt_img, kSSS_Z_content, kSSS_MT_itemCntBase+i);
-				
-				is_selected_item.push_back(false);
-			}
-		}
-		else
-		{
-			CCSprite* item_button = CCSprite::create("button_item_normal.png");
-			item_button->setColor(ccGRAY);
-			item_button->setPosition(ccp(270+(i%2)*104, 226-(i/2)*70));
-			addChild(item_button, kSSS_Z_content);
 			
-			CCSprite* item_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			item_img->setColor(ccGRAY);
-			item_img->setPosition(item_button->getPosition());
-			addChild(item_img, kSSS_Z_content);
-			
-			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
-			if(item_cnt > 0)
-			{
-				CCSprite* cnt_img = CCSprite::create("item_cnt_label.png");
-				cnt_img->setPosition(ccpAdd(item_button->getPosition(), ccp(-25,17)));
-				addChild(cnt_img, kSSS_Z_content, kSSS_MT_itemCntBase+i);
-				
-				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-				cnt_label->setPosition(ccp(cnt_img->getContentSize().width/2.f, cnt_img->getContentSize().height/2.f));
-				cnt_img->addChild(cnt_label);
-			}
-			else
-			{
-				CCSprite* cnt_img = CCSprite::create("item_cnt_plus.png");
-				cnt_img->setPosition(ccpAdd(item_button->getPosition(), ccp(25,-17)));
-				addChild(cnt_img, kSSS_Z_content, kSSS_MT_itemCntBase+i);
-			}
+			CCSprite* selected_img = CCSprite::create("stagesetting_item_unselected.png");
+			selected_img->setPosition(getContentPosition(kSSS_MT_selectedBase));
+			item_parent->addChild(selected_img, kSSS_Z_content, kSSS_MT_selectedBase+i);
 			
 			is_selected_item.push_back(false);
 		}
-	}
-	
-	if(item_list.size() > 0)
-	{
-		item_script = CCLabelTTF::create(mySD->getItemScript(ITEM_CODE(-1)).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(170, 60), kCCTextAlignmentCenter);
-		item_script->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-		item_script->setColor(ccBLACK);
-		item_script->setPosition(ccp(322,96));
-		addChild(item_script, kSSS_Z_content);
+		else
+		{
+			is_selected_item.push_back(false);
+		}
 	}
 }
 
@@ -245,22 +279,11 @@ void StageSettingScene::menuAction(CCObject* pSender)
 	
 	if(tag == kSSS_MT_start)
 	{
-		if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(selected_card_number > 0)
 		{
-			int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_haveCardCnt);
-			int found_number = 1;
-			for(int i=1;i<=loop_cnt;i++)
-			{
-				int search_number = myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i);
-				if(search_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
-				{
-					found_number = i;
-					break;
-				}
-			}
-			
-			int durability = myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, found_number) - 1;
-			myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, found_number, durability);
+			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) - 1;
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
 		}
 		
 		myGD->resetGameData();
@@ -293,9 +316,22 @@ void StageSettingScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSSS_MT_changeCard)
 	{
+		mySGD->before_cardsetting = kSceneCode_StageSetting;
 		CCDirector::sharedDirector()->replaceScene(CardSettingScene::scene());
 	}
-	else if(tag >= kSSS_MT_itemBase)
+	else if(tag == kSSS_MT_challenge)
+	{
+		is_menu_enable = false;
+		ChallengePopup* t_cp = ChallengePopup::create(this, callfunc_selector(StageSettingScene::popupClose));
+		addChild(t_cp, kSSS_Z_popup);
+	}
+	else if(tag == kSSS_MT_gacha)
+	{
+		is_menu_enable = false;
+		GachaPopup* t_gp = GachaPopup::create(this, callfunc_selector(StageSettingScene::popupClose));
+		addChild(t_gp, kSSS_Z_popup);
+	}
+	else if(tag >= kSSS_MT_itemBase && tag < kSSS_MT_selectedBase)
 	{
 		int clicked_item_number = tag-kSSS_MT_itemBase;
 		
@@ -304,14 +340,24 @@ void StageSettingScene::menuAction(CCObject* pSender)
 			if(is_selected_item[clicked_item_number])
 			{
 				is_selected_item[clicked_item_number] = false;
-				removeChildByTag(kSSS_MT_selectedBase+clicked_item_number);
+				
+				CCNode* t_item = getChildByTag(kSSS_MT_itemBase+clicked_item_number);
+				t_item->removeChildByTag(kSSS_MT_selectedBase+clicked_item_number);
+				
+				CCSprite* selected_img = CCSprite::create("stagesetting_item_unselected.png");
+				selected_img->setPosition(getContentPosition(kSSS_MT_selectedBase));
+				t_item->addChild(selected_img, kSSS_Z_content, kSSS_MT_selectedBase+clicked_item_number);
 			}
 			else
 			{
 				is_selected_item[clicked_item_number] = true;
-				CCSprite* selected_img = CCSprite::create("button_item_selected.png");
-				selected_img->setPosition(ccp(270+(clicked_item_number%2)*104, 226-(clicked_item_number/2)*70));
-				addChild(selected_img, kSSS_Z_selectedImg, kSSS_MT_selectedBase+clicked_item_number);
+				
+				CCNode* t_item = getChildByTag(kSSS_MT_itemBase+clicked_item_number);
+				t_item->removeChildByTag(kSSS_MT_selectedBase+clicked_item_number);
+				
+				CCSprite* selected_img = CCSprite::create("stagesetting_item_selected.png");
+				selected_img->setPosition(getContentPosition(kSSS_MT_selectedBase));
+				t_item->addChild(selected_img, kSSS_Z_content, kSSS_MT_selectedBase+clicked_item_number);
 			}
 		}
 		else
@@ -320,31 +366,34 @@ void StageSettingScene::menuAction(CCObject* pSender)
 			addChild(t_ibp, kSSS_Z_popup);
 		}
 		
-		item_script->setString(mySD->getItemScript(item_list[clicked_item_number]).c_str());
-		
 		is_menu_enable = true;
 	}
 }
 
+void StageSettingScene::popupClose()
+{
+	is_menu_enable = true;
+}
+
 void StageSettingScene::buySuccessItem(int t_clicked_item_number, int cnt)
 {
-	removeChildByTag(kSSS_MT_itemCntBase+t_clicked_item_number);
 	myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_number], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_number])+cnt);
-	
 	int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_number]);
+	is_selected_item[t_clicked_item_number] = true;
 	
-	CCSprite* cnt_img = CCSprite::create("item_cnt_label.png");
-	cnt_img->setPosition(ccpAdd(ccp(270+(t_clicked_item_number%2)*104, 226-(t_clicked_item_number/2)*70), ccp(-25,17)));
-	addChild(cnt_img, kSSS_Z_content, kSSS_MT_itemCntBase+t_clicked_item_number);
+	CCNode* item_parent = getChildByTag(kSSS_MT_itemBase+t_clicked_item_number);
+	
+	CCSprite* cnt_img = CCSprite::create("stagesetting_item_count.png");
+	cnt_img->setPosition(ccp(-100,16));
+	item_parent->addChild(cnt_img, kSSS_Z_content, kSSS_MT_itemCntBase + t_clicked_item_number);
 	
 	CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 	cnt_label->setPosition(ccp(cnt_img->getContentSize().width/2.f, cnt_img->getContentSize().height/2.f));
 	cnt_img->addChild(cnt_label);
 	
-	is_selected_item[t_clicked_item_number] = true;
-	CCSprite* selected_img = CCSprite::create("button_item_selected.png");
-	selected_img->setPosition(ccp(270+(t_clicked_item_number%2)*104, 226-(t_clicked_item_number/2)*70));
-	addChild(selected_img, kSSS_Z_selectedImg, kSSS_MT_selectedBase+t_clicked_item_number);
+	CCSprite* selected_img = CCSprite::create("stagesetting_item_selected.png");
+	selected_img->setPosition(getContentPosition(kSSS_MT_selectedBase));
+	item_parent->addChild(selected_img, kSSS_Z_content, kSSS_MT_selectedBase+t_clicked_item_number);
 }
 
 void StageSettingScene::alertAction(int t1, int t2)

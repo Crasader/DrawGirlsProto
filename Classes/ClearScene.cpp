@@ -51,33 +51,11 @@ bool ClearScene::init()
 	
 	setKeypadEnabled(true);
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
+	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	if(selected_card_number > 0)
 	{
-		int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_haveCardCnt);
-		int found_number = 1;
-		for(int i=1;i<=loop_cnt;i++)
-		{
-			int search_number = myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i);
-			if(search_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
-			{
-				found_number = i;
-				break;
-			}
-		}
-		
-		int durability = myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, found_number) + 1;
-		if(durability > 0)
-			myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, found_number, durability);
-		else
-		{
-			for(int i=loop_cnt;i>found_number;i--)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i-1, myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, i));
-				myDSH->setIntegerForKey(kDSH_Key_haveCardNumber_int1, i-1, myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i));
-			}
-			myDSH->setIntegerForKey(kDSH_Key_haveCardCnt, loop_cnt-1);
-			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
-		}
+		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
 	}
     
 	CCSprite* clear_back = CCSprite::create("ending_back.png");
@@ -322,62 +300,38 @@ void ClearScene::menuAction(CCObject* pSender)
 			myDSH->setBoolForKey(kDSH_Key_hasGottenCard_int1, mySD->getSilType()*10+take_level-1, true);
 			mySGD->addHasGottenCardNumber(mySD->getSilType()*10+take_level-1);
 		}
+
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		int selected_card_stage = selected_card_number/10;
+		int selected_card_level = selected_card_number%10 + 1;
 		
-		bool is_have_kind_card = false;
-		int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_haveCardCnt);
-		for(int i=1;i<loop_cnt;i++)
+		if(selected_card_stage == mySD->getSilType())
 		{
-			int card_number = myDSH->getIntegerForKey(kDSH_Key_haveCardNumber_int1, i);
-			int card_stage = card_number/10;
-			int card_level = card_number%10 + 1;
-			if(mySD->getSilType() == card_stage)
+			if(selected_card_level > take_level)
 			{
-				if(card_level > take_level)
-				{
-					int durability = myDSH->getIntegerForKey(kDSH_Key_haveCardDurability_int1, i);
-					int max_durability = mySD->getCardDurability(mySD->getSilType(), card_level);
-					durability += card_level-take_level;
-					if(durability > max_durability)
-						durability = max_durability;
-					myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i, durability);
-				}
-				else if(card_level == take_level)
-				{
-					myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i, mySD->getCardDurability(mySD->getSilType(), take_level));
-				}
-				else // card_level < take_level
-				{
-					myDSH->setIntegerForKey(kDSH_Key_haveCardNumber_int1, i, mySD->getSilType()*10+take_level-1);
-					myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, i, mySD->getCardDurability(mySD->getSilType(), take_level));
-					
-					int selected_card_stage = myDSH->getIntegerForKey(kDSH_Key_selectedCard) / 10;
-					if(mySD->getSilType() == selected_card_stage)
-					{
-						myDSH->setIntegerForKey(kDSH_Key_selectedCard, mySD->getSilType()*10+take_level-1);
-					}
-				}
-				is_have_kind_card = true;
-				break;
+				int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number);
+				int max_durability = mySD->getCardDurability(mySD->getSilType(), selected_card_level);
+				durability += selected_card_level-take_level;
+				if(durability > max_durability)
+					durability = max_durability;
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
 			}
-		}
-		
-		if(!is_have_kind_card)
-		{
-			if(loop_cnt >= 5) // card full
+			else if(selected_card_level == take_level)
 			{
-				CardFullPopup* t_cfp = CardFullPopup::create(this, callfunc_selector(ClearScene::realEnd));
-				addChild(t_cfp, kZ_CS_popup);
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, mySD->getCardDurability(mySD->getSilType(), take_level));
 			}
 			else
 			{
-				myDSH->setIntegerForKey(kDSH_Key_haveCardCnt, loop_cnt+1);
-				myDSH->setIntegerForKey(kDSH_Key_haveCardNumber_int1, loop_cnt+1, mySD->getSilType()*10+take_level-1);
-				myDSH->setIntegerForKey(kDSH_Key_haveCardDurability_int1, loop_cnt+1, mySD->getCardDurability(mySD->getSilType(), take_level));
-				realEnd();
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, mySD->getCardDurability(mySD->getSilType(), take_level));
+				myDSH->setIntegerForKey(kDSH_Key_selectedCard, mySD->getSilType()*10+take_level-1);
 			}
 		}
 		else
-			realEnd();
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, mySD->getSilType()*10+take_level-1, mySD->getCardDurability(mySD->getSilType(), take_level));
+		}
+		
+		realEnd();
 	}
 }
 

@@ -130,7 +130,7 @@ private:
 		for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 		{
 			touch = (CCTouch*)(*iter);
-			CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+			CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 			
 			multiTouchData[(int)touch] = location;
 			
@@ -183,7 +183,7 @@ private:
 		for(iter = pTouches->begin();iter != pTouches->end();++iter)
 		{
 			touch = (CCTouch*)(*iter);
-			CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+			CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 			
 			map<int, CCPoint>::iterator o_it;
 			o_it = multiTouchData.find((int)touch);
@@ -259,7 +259,7 @@ private:
 		for(iter = pTouches->begin();iter != pTouches->end();++iter)
 		{
 			touch = (CCTouch*)(*iter);
-			CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+			CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 			
 			map<int, CCPoint>::iterator o_it;
 			o_it = multiTouchData.find((int)touch);
