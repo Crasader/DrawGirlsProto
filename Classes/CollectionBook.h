@@ -14,6 +14,7 @@
 #include "StageImgLoader.h"
 
 USING_NS_CC;
+using namespace std;
 
 class CollectionAnimation : public CCSprite
 {
@@ -97,7 +98,7 @@ private:
 	}
 };
 
-class CollectionBook : public cocos2d::CCLayer
+class CollectionBook : public cocos2d::CCLayer, public CCTextFieldDelegate
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -132,6 +133,13 @@ private:
 	SEL_CallFunc end_animation_delegate;
 	
 	CCPoint begin_point;
+	
+	CCTextFieldTTF* input_text;
+    bool was_open_text;
+	
+	virtual bool onTextFieldInsertText(CCTextFieldTTF* sender, const char* text, int nLen);
+	virtual bool onTextFieldDetachWithIME(CCTextFieldTTF * sender);
+	virtual bool onTextFieldAttachWithIME(CCTextFieldTTF * sender);
 	
 	void setRightPage(CCNode* target, int card_number);
 	void setLeftPage(CCNode* target, int card_number);

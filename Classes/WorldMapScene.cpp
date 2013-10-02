@@ -18,6 +18,8 @@
 #include "RankPopup.h"
 #include "PostboxPopup.h"
 #include "EventPopup.h"
+#include "RubyShopPopup.h"
+#include "CardSettingScene.h"
 
 #include <algorithm>
 #include <ostream>
@@ -40,6 +42,7 @@ void WorldMapScene::showConvertSildata(string filename)
 	convert_data = convert_data.substr(0,convert_data.find(":::")); // ,buff);
 	
 	bool is_zero = true;
+	int error_cnt = 0;
 	int cmp_cnt = 0;
 	string result_data = "";
 	for(int i=0;i<convert_data.size();i++)
@@ -66,7 +69,10 @@ void WorldMapScene::showConvertSildata(string filename)
 			}
 			else
 			{
-				CCLog("invalid data %s", convert_data.substr(i,1).c_str());
+//				CCLog("invalid data %s", convert_data.substr(i,1).c_str());
+				if(error_cnt == 0)
+					CCLog("error data : %d", convert_data[i]);
+				error_cnt++;
 			}
 		}
 		else
@@ -91,10 +97,15 @@ void WorldMapScene::showConvertSildata(string filename)
 			}
 			else
 			{
-				CCLog("invalid data %s", convert_data.substr(i,1).c_str());
+//				CCLog("invalid data %s", convert_data.substr(i,1).c_str());
+				if(error_cnt == 0)
+					CCLog("error data : %d", convert_data[i]);
+				error_cnt++;
 			}
 		}
 	}
+	
+	CCLog("error cnt : %d", error_cnt);
 	
 	if(cmp_cnt >= 10000)		result_data.append("D");
 	else if(cmp_cnt >= 1000)	result_data.append("C");
@@ -140,7 +151,11 @@ enum WMS_MenuTag{
 	kWMS_MT_gacha = 503,
 	kWMS_MT_rank = 504,
 	kWMS_MT_postbox = 505,
-	kWMS_MT_event = 506
+	kWMS_MT_event = 506,
+	kWMS_MT_cardSetting = 507,
+	kWMS_MT_rubyShop = 508,
+	kWMS_MT_goldShop = 509,
+	kWMS_MT_lifeShop = 510
 };
 
 // on "init" you need to initialize your instance
@@ -155,16 +170,8 @@ bool WorldMapScene::init()
 	
 	graphdog->setup("12345678", 1);
 	
-//	showConvertSildata("stage3_level1");
-//	showConvertSildata("stage3_level2");
-//	showConvertSildata("stage5_level1");
-//	showConvertSildata("stage5_level2");
-//	showConvertSildata("stage6_level1");
-//	showConvertSildata("stage6_level2");
-//	showConvertSildata("stage7_level1");
-//	showConvertSildata("stage7_level2");
-//	showConvertSildata("stage8_level1");
-//	showConvertSildata("stage8_level2");
+//	showConvertSildata("intun1");
+//	showConvertSildata("intun2");
 	
 	setKeypadEnabled(true);
 	
@@ -250,6 +257,38 @@ bool WorldMapScene::init()
 		}
 	}
 	
+	CCSprite* n_card = CCSprite::create("worldmap_card.png");
+	CCSprite* s_card = CCSprite::create("worldmap_card.png");
+	s_card->setColor(ccGRAY);
+	
+	CCMenuItem* card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(WorldMapScene::menuAction));
+	card_item->setTag(kWMS_MT_cardSetting);
+	
+	CCMenu* card_menu = CCMenu::createWithItem(card_item);
+	card_menu->setPosition(getUiButtonPosition(kWMS_MT_cardSetting));
+	addChild(card_menu, kWMS_Z_stage);
+	
+	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	
+	if(selected_card_number > 0)
+	{
+		int selected_card_stage = selected_card_number/10;
+		int selected_card_level = selected_card_number%10 + 1;
+		
+		CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", selected_card_stage, selected_card_level)->getCString());
+		card_img->setScale(0.21f);
+		card_img->setPosition(getUiButtonPosition(kWMS_MT_cardSetting));
+		addChild(card_img, kWMS_Z_ui_button);
+		
+		if(selected_card_level == 3 && mySD->isAnimationStage(selected_card_stage))
+		{
+			CCSize ani_size = mySD->getAnimationCutSize(selected_card_stage);
+			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", selected_card_stage, selected_card_level)->getCString(),
+												  CCRectMake(0, 0, ani_size.width, ani_size.height));
+			card_ani->setPosition(mySD->getAnimationPosition(selected_card_stage));
+			card_img->addChild(card_ani);
+		}
+	}
 	
 	CCSprite* n_collection = CCSprite::create("worldmap_collection.png");
 	CCSprite* s_collection = CCSprite::create("worldmap_collection.png");
@@ -322,6 +361,42 @@ bool WorldMapScene::init()
 	event_menu->setPosition(getUiButtonPosition(kWMS_MT_event));
 	addChild(event_menu, kWMS_Z_ui_button);
 	
+	
+	CCSprite* n_ruby_shop = CCSprite::create("worldmap_shop.png");
+	CCSprite* s_ruby_shop = CCSprite::create("worldmap_shop.png");
+	s_ruby_shop->setColor(ccGRAY);
+	
+	CCMenuItem* ruby_shop_item = CCMenuItemSprite::create(n_ruby_shop, s_ruby_shop, this, menu_selector(WorldMapScene::menuAction));
+	ruby_shop_item->setTag(kWMS_MT_rubyShop);
+	
+	CCMenu* ruby_shop_menu = CCMenu::createWithItem(ruby_shop_item);
+	ruby_shop_menu->setPosition(getUiButtonPosition(kWMS_MT_rubyShop));
+	addChild(ruby_shop_menu, kWMS_Z_ui_button);
+	
+	
+	CCSprite* n_gold_shop = CCSprite::create("worldmap_shop.png");
+	CCSprite* s_gold_shop = CCSprite::create("worldmap_shop.png");
+	s_gold_shop->setColor(ccGRAY);
+	
+	CCMenuItem* gold_shop_item = CCMenuItemSprite::create(n_gold_shop, s_gold_shop, this, menu_selector(WorldMapScene::menuAction));
+	gold_shop_item->setTag(kWMS_MT_goldShop);
+	
+	CCMenu* gold_shop_menu = CCMenu::createWithItem(gold_shop_item);
+	gold_shop_menu->setPosition(getUiButtonPosition(kWMS_MT_goldShop));
+	addChild(gold_shop_menu, kWMS_Z_ui_button);
+	
+	
+	CCSprite* n_life_shop = CCSprite::create("worldmap_shop.png");
+	CCSprite* s_life_shop = CCSprite::create("worldmap_shop.png");
+	s_life_shop->setColor(ccGRAY);
+	
+	CCMenuItem* life_shop_item = CCMenuItemSprite::create(n_life_shop, s_life_shop, this, menu_selector(WorldMapScene::menuAction));
+	life_shop_item->setTag(kWMS_MT_lifeShop);
+	
+	CCMenu* life_shop_menu = CCMenu::createWithItem(life_shop_item);
+	life_shop_menu->setPosition(getUiButtonPosition(kWMS_MT_lifeShop));
+	addChild(life_shop_menu, kWMS_Z_ui_button);
+	
 	is_menu_enable = true;
 	
 	srand(time(NULL));
@@ -351,13 +426,17 @@ CCPoint WorldMapScene::getUiButtonPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kWMS_MT_option)				return_value = ccp(100,34);
-	else if(t_tag == kWMS_MT_gacha)			return_value = ccp(155,34);
-	else if(t_tag == kWMS_MT_rank)			return_value = ccp(210,34);
-	else if(t_tag == kWMS_MT_postbox)		return_value = ccp(265,34);
+	if(t_tag == kWMS_MT_cardSetting)		return_value = ccp(50,63);
+	else if(t_tag == kWMS_MT_option)		return_value = ccp(120,34);
+	else if(t_tag == kWMS_MT_gacha)			return_value = ccp(175,34);
+	else if(t_tag == kWMS_MT_rank)			return_value = ccp(230,34);
+	else if(t_tag == kWMS_MT_postbox)		return_value = ccp(285,34);
 	else if(t_tag == kWMS_MT_event)			return_value = ccp(420,34);
+	else if(t_tag == kWMS_MT_rubyShop)		return_value = ccp(140,297);
+	else if(t_tag == kWMS_MT_goldShop)		return_value = ccp(294,297);
+	else if(t_tag == kWMS_MT_lifeShop)		return_value = ccp(448,297);
 	
-	else if(t_tag == kWMS_MT_collection)	return_value = ccp(100,100);
+	else if(t_tag == kWMS_MT_collection)	return_value = ccp(120,92);
 //	else if(t_tag == )				return_value = ;
 	
 	return return_value;
@@ -382,6 +461,11 @@ void WorldMapScene::menuAction(CCObject* pSender)
 		addChild(t_sid, kWMS_Z_popup);
 		
 //		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
+	}
+	else if(tag == kWMS_MT_cardSetting)
+	{
+		mySGD->before_cardsetting = kSceneCode_WorldMapScene;
+		CCDirector::sharedDirector()->replaceScene(CardSettingScene::scene());
 	}
 	else if(tag == kWMS_MT_collection)
 	{
@@ -410,6 +494,21 @@ void WorldMapScene::menuAction(CCObject* pSender)
 	{
 		EventPopup* t_ep = EventPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
 		addChild(t_ep, kWMS_Z_popup);
+	}
+	else if(tag == kWMS_MT_rubyShop)
+	{
+		RubyShopPopup* t_rsp = RubyShopPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
+		addChild(t_rsp, kWMS_Z_popup);
+	}
+	else if(tag == kWMS_MT_goldShop)
+	{
+		RubyShopPopup* t_rsp = RubyShopPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
+		addChild(t_rsp, kWMS_Z_popup);
+	}
+	else if(tag == kWMS_MT_lifeShop)
+	{
+		RubyShopPopup* t_rsp = RubyShopPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
+		addChild(t_rsp, kWMS_Z_popup);
 	}
 }
 
