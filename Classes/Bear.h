@@ -150,6 +150,14 @@ public:
 		
 		runAction(t_seq);
 	}
+	virtual void stopAnimationNoDirection()
+	{
+		m_noDirection.state = 2;
+	}
+	virtual void stopAnimationDirection()
+	{
+//		m_direction.state = 2;
+	}
 	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition){
 		IntPoint afterPoint = point;
 		float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f

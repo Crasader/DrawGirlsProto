@@ -198,6 +198,7 @@ void Melon::animationNoDirection(float dt)
 		if(ccpLength(m_noDirection.startingPoint - getPosition()) <= 0.5f)
 		{
 			m_state = CUMBERSTATEMOVING;
+			m_noDirection.state = 0;
 			unschedule(schedule_selector(Melon::animationNoDirection));
 			setPosition(m_noDirection.startingPoint);
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
@@ -223,10 +224,6 @@ void Melon::animationDirection(float dt)
 	m_direction.timer += 1 / 60.f;
 	if(m_direction.state == 1)
 	{
-		if(m_direction.timer >= 5.f)
-		{
-			m_direction.state = 2; //
-		}
 		IntPoint jackPoint = myGD->getJackPoint();
 		IntPoint headPoint = ccp2ip(getPosition());
 		float rot = rad2Deg(atan2(jackPoint.x - headPoint.x, jackPoint.y - headPoint.y));
@@ -235,7 +232,8 @@ void Melon::animationDirection(float dt)
 	}
 	else if(m_direction.state == 2)
 	{
-		m_state = CUMBERSTATEMOVING;
+//		m_state = CUMBERSTATEMOVING; //#!
+		m_direction.state = 0;
 		unschedule(schedule_selector(Melon::animationDirection));
 	}
 }
@@ -259,6 +257,7 @@ bool Melon::startDamageReaction(float damage, float angle)
 	{
 		CCLog("m_state == CUMBERSTATEDIRECTION");
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
+		m_state = CUMBERSTATEMOVING;
 	}
 	else if(m_state == CUMBERSTATEMOVING)
 	{
