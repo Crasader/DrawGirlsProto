@@ -72,7 +72,7 @@ public:
 	}
 	virtual void crashMapForPosition(CCPoint targetPt);
 	//	virtual void movingAndCrash(float dt);
-	void normalMoving(float dt);
+
 	void furyMoving(float dt);
 	void cumberAttack(float dt);
 	virtual bool init();
@@ -181,6 +181,12 @@ public:
 	virtual void endTeleport(){}
 	virtual void startTeleport(){}
 	virtual void smaller() {}
+	virtual void onTargetingJack(CCPoint jackPosition)
+	{
+		CCPoint cumberPosition = getPosition();
+		float deg = rad2Deg(atan2(jackPosition.y - cumberPosition.y, jackPosition.x - cumberPosition.x));
+		m_headImg->setRotation(-deg);
+	}
 	virtual void stopAnimationNoDirection()
 	{
 		m_noDirection.state = 2;

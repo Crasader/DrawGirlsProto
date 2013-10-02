@@ -22,7 +22,7 @@ public:
 	}
 	virtual ~Bear(){}
 	
-	void normalMoving(float dt);
+
 	
 	
 	virtual void onStartMoving()

@@ -53,7 +53,7 @@ protected:
 		}
 	}
 	
-	
+	KSCumberBase* m_cumber;
 };
 
 class SelfSpinMissile : public CCNode
@@ -985,7 +985,7 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		
+		m_cumber = cb;
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1008,6 +1008,7 @@ public:
 		
 		addChild(batchNode);
 		scheduleUpdate();
+		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
@@ -1059,10 +1060,12 @@ public:
 			if(angle2 < 0)
 				angle2 += 360;
 		}
-
+		
 		stopMyAction();
+		m_cumber->onTargetingJack(jackPoint);
 	}
 protected:
+	
 	float m_bulletSpeed;
 	int m_numberPerFrame;
 	int m_color;
@@ -1088,6 +1091,7 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
+		m_cumber = cb;
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1111,6 +1115,7 @@ public:
 		
 		addChild(batchNode);
 		scheduleUpdate();
+		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
@@ -1124,7 +1129,7 @@ public:
 	void update(float dt)
 	{
 		m_frameCnt++;
-		
+		CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
 		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
@@ -1133,7 +1138,7 @@ public:
 		{
 			if(m_frameCnt % m_perFrame == 0)
 			{
-				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+				
 				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
 				float angle = rad2Deg(rad);
 				float angle2 = rad2Deg(rad);
@@ -1175,6 +1180,7 @@ public:
 
 			}
 		}
+		m_cumber->onTargetingJack(jackPoint);
 	}
 protected:
 	int m_perFrame;
@@ -1203,6 +1209,7 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
+		m_cumber = cb;
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1227,6 +1234,7 @@ public:
 		
 		addChild(batchNode);
 		scheduleUpdate();
+		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
@@ -1240,7 +1248,7 @@ public:
 	void update(float dt)
 	{
 		m_frameCnt++;
-		
+		CCPoint jackPoint = firstJackPosition;
 		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
@@ -1249,7 +1257,7 @@ public:
 		{
 			if(m_frameCnt % m_perFrame == 0)
 			{
-				CCPoint jackPoint = firstJackPosition;
+				
 				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
 				float angle = rad2Deg(rad);
 				float angle2 = rad2Deg(rad);
@@ -1291,6 +1299,7 @@ public:
 				
 			}
 		}
+		m_cumber->onTargetingJack(jackPoint);
 	}
 protected:
 	int m_perFrame;
@@ -1320,6 +1329,7 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
+		m_cumber = cb;
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1347,6 +1357,7 @@ public:
 		addChild(batchNode);
 		
 		scheduleUpdate();
+		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
@@ -1360,7 +1371,7 @@ public:
 	void update(float dt)
 	{
 		m_frameCnt++;
-		
+		CCPoint jackPoint = firstJackPosition;
 		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
@@ -1370,7 +1381,7 @@ public:
 			if(m_frameCnt % m_perFrame == 0)
 			{
 				
-				CCPoint jackPoint = firstJackPosition;
+				
 				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
 				rad += m_well512.GetFloatValue(-5 * M_PI / 180.f, +5 * M_PI / 180.f);
 				float angle = rad2Deg(rad);
@@ -1413,6 +1424,7 @@ public:
 				fireCount++;
 			}
 		}
+		m_cumber->onTargetingJack(jackPoint);
 	}
 protected:
 	int m_perFrame;
@@ -1790,6 +1802,7 @@ public:
 		m_color = pattern["color"].getInt();
 		m_totalDegree = pattern["totaldegree"].getInt();
 		m_totalFrame = pattern["totalframe"].getInt(); // 200 프레임 동안
+		m_randomDegree = pattern["randomdegree"].getInt(); // 랜덤각.
 		m_frame = 0;
 
 		for(int i=0; i<m_gunNumber; i++)
@@ -1843,6 +1856,7 @@ public:
 				float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
 				
 				float deg = rad2Deg(rad);
+				deg += m_well512.GetFloatValue(-m_randomDegree, +m_randomDegree);
 				gun.degree.init(gun.degree.getValue() + deg - m_totalDegree / 2.f, gun.degree.getValue() + deg - m_totalDegree / 2.f, 0);
 //				if(gun.degree.getValue() >= 360)
 //				{
@@ -1879,14 +1893,6 @@ public:
 									gun.degree.getValue() - m_rotationDegreeVelocity,
 									0);
 					
-					if(gun.degree.getValue() >= 360)
-					{
-						gun.degree.init(gun.degree.getValue() - 360, gun.degree.getValue() - 360, 0);
-					}
-					if(gun.degree.getValue() < 0)
-					{
-						gun.degree.init(gun.degree.getValue() + 360, gun.degree.getValue() + 360, 0);
-					}
 				}
 			}
 			else if(m_targetingType == kCW)
@@ -1897,14 +1903,7 @@ public:
 									gun.degree.getValue() + m_rotationDegreeVelocity,
 									0);
 					
-					if(gun.degree.getValue() >= 360)
-					{
-						gun.degree.init(gun.degree.getValue() - 360, gun.degree.getValue() - 360, 0);
-					}
-					if(gun.degree.getValue() < 0)
-					{
-						gun.degree.init(gun.degree.getValue() + 360, gun.degree.getValue() + 360, 0);
-					}
+					
 				}
 			}
 			else
@@ -1916,6 +1915,7 @@ public:
 					float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
 					
 					float deg = rad2Deg(rad);
+					deg += m_well512.GetFloatValue(-m_randomDegree, +m_randomDegree);
 					gun.degree.init(gun.degree.getValue(), gun.initDegree + deg - m_totalDegree / 2.f, m_rotationDegreeVelocity);
 					
 //					if(gun.degree.getValue() >= 360)
@@ -1928,6 +1928,7 @@ public:
 //					}
 					
 					gun.degree.step();
+					m_cumber->onTargetingJack(jackPoint);
 					CCLog("gun degree %f", gun.degree.getValue());
 				}
 			}
@@ -1967,8 +1968,7 @@ public:
 			}
 		}
 	}
-	KSCumberBase* m_cumber;
-	
+	float m_randomDegree; // 랜덤각.
 	int m_oneShotNumber; // 쉬지 않고 쏘는 개수.
 	int m_oneShotTerm; // 쐈다가 쉬는 프레임수.
 	int m_gunNumber; // 총의 개수.

@@ -23,7 +23,7 @@ public:
 	}
 	virtual ~Mango(){}
 	
-	void normalMoving(float dt);
+
 	
 	
 	virtual void onStartMoving()

@@ -31,8 +31,6 @@ public:
 	}
 	virtual ~Coconut(){}
 
-	void normalMoving(float dt);
-
 	
 	virtual void onStartMoving()
 	{

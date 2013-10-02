@@ -85,6 +85,7 @@ void KSCumberBase::randomMoving(float dt)
 	bool validPosition = false;
 	int cnt = 0;
 	bool onceOutlineAndMapCollision = false;
+	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
 	while(!validPosition)
 	{
 		cnt++;
@@ -140,9 +141,9 @@ void KSCumberBase::randomMoving(float dt)
 			{
 				validPosition = true;
 			}
-			else if(afterPoint.isInnerMap())
+			else
 			{
-				CCAssert(false, "");
+				CCLog("what!?");
 				validPosition = true;
 			}
 		}
@@ -165,9 +166,14 @@ void KSCumberBase::randomMoving(float dt)
 				crashMapForPosition(afterPosition);
 			}
 		}
-				if(cnt % 100 == 0)
+		if(cnt >= 2)
 		{
-			CCLog("cnt !! = %d", cnt);
+			CCLog("random cnt !! = %d", cnt);
+		}
+		if(cnt >= 30)
+		{
+			pathFound = false;
+			validPosition = true;
 		}
 		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
@@ -179,8 +185,10 @@ void KSCumberBase::randomMoving(float dt)
 	
 	
  	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
-		setPosition(afterPosition);
-	
+	{
+		if(pathFound)
+			setPosition(afterPosition);
+	}
 	if(onceOutlineAndMapCollision)
 	{
 		
@@ -227,13 +235,12 @@ void KSCumberBase::straightMoving(float dt)
 	int cnt = 0;
 	bool onceOutlineAndMapCollision = false;
 	float degree = m_directionAngleDegree;
-    float tempSpeed = m_speed;
-    bool ignoreNewLine = false;
+	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = tempSpeed * cos(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
-		float speedY = tempSpeed * sin(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
+		float speedX = m_speed * cos(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
+		float speedY = m_speed * sin(deg2Rad(degree)) * (1 + MIN(2, 0.01f*cnt));
 		
 		CCPoint cumberPosition = getPosition();
 		afterPosition = cumberPosition + ccp(speedX, speedY);
@@ -241,43 +248,49 @@ void KSCumberBase::straightMoving(float dt)
 		
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		auto degreeSelector = [&](int cnt, float degree)->float {
-			if(cnt >= 10)
-			{
-				degree = m_well512.GetValue(360);
-                ignoreNewLine = true;
-			}
-			else if(cnt >= 5)
-			{
-				if(m_well512.GetValue(1))
-				{
-					degree = -degree;
-				}
-				else
-				{
-					if(m_well512.GetValue(1) == 1)
+				auto degreeSelector = [&](int cnt, float degree)->float {
+					if(cnt >= 30)
 					{
-						degree = m_directionAngleDegree + 90;
+						validPosition = true;
+						pathFound = false;
+					}
+					else if(cnt >= 10)
+					{
+						degree = m_well512.GetValue(360);
+					}
+					else if(cnt >= 5)
+					{
+						if(m_well512.GetValue(1))
+						{
+							degree = -degree;
+						}
+						else
+						{
+							if(m_well512.GetValue(1) == 1)
+							{
+								degree = m_directionAngleDegree + 90;
+							}
+							else
+							{
+								degree = m_directionAngleDegree - 90;
+							}
+						}
 					}
 					else
 					{
-						degree = m_directionAngleDegree - 90;
+						if(m_well512.GetValue(1) == 1)
+						{
+							degree = m_directionAngleDegree + 90;
+						}
+						else
+						{
+							degree = m_directionAngleDegree - 90;
+						}
 					}
-				}
-			}
-			else
-			{
-				if(m_well512.GetValue(1) == 1)
-				{
-					degree = m_directionAngleDegree + 90;
-				}
-				else
-				{
-					degree = m_directionAngleDegree - 90;
-				}
-			}
-			return degree;
-		};
+					return degree;
+				};
+		
+		
 		if(m_state != CUMBERSTATEFURY)
 		{
 			if(collisionCode == kCOLLISION_JACK)
@@ -307,13 +320,11 @@ void KSCumberBase::straightMoving(float dt)
 				if(degree < 0)			degree += 360;
 				else if(degree > 360)	degree -= 360;
 			}
-			else if(collisionCode == kCOLLISION_NEWLINE && ignoreNewLine == false)
+			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
 				//			gameData->communication("Jack_startDieEffect");
 				gameData->communication("SW_createSW", checkPosition, 0, 0);
-                tempSpeed = 2.f; // 임시로 스피드를 올려줌.
-				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				degree = degreeSelector(cnt, degree);
 				
 				if(degree < 0)			degree += 360;
@@ -363,8 +374,10 @@ void KSCumberBase::straightMoving(float dt)
 	
 	
 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
-		setPosition(afterPosition);
-	
+	{
+		if(pathFound)
+			setPosition(afterPosition);
+	}
 	if(onceOutlineAndMapCollision)
 	{
 		
@@ -419,6 +432,7 @@ void KSCumberBase::followMoving(float dt)
 	bool validPosition = false;
 	int cnt = 0;
 	bool onceOutlineAndMapCollision = false;
+	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
 	while(!validPosition)
 	{
 		cnt++;
@@ -480,9 +494,9 @@ void KSCumberBase::followMoving(float dt)
 			{
 				validPosition = true;
 			}
-			else if(afterPoint.isInnerMap())
+			else
 			{
-				CCAssert(false, "");
+				CCLog("what!?");
 				validPosition = true;
 			}
 		}
@@ -501,9 +515,14 @@ void KSCumberBase::followMoving(float dt)
 				crashMapForPosition(afterPosition);
 			}
 		}
-		if(cnt % 100 == 0)
+		if(cnt >= 2)
 		{
 			CCLog("followMoving cnt !! = %d", cnt);
+		}
+		if(cnt >= 30)
+		{
+			pathFound = false;
+			validPosition = true;
 		}
 		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
@@ -516,8 +535,10 @@ void KSCumberBase::followMoving(float dt)
 	
 	
 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
-		setPosition(afterPosition);
-	
+	{
+		if(pathFound)
+			setPosition(afterPosition);
+	}
 	if(onceOutlineAndMapCollision)
 	{
 		
@@ -576,11 +597,12 @@ void KSCumberBase::rightAngleMoving(float dt)
 	bool validPosition = false;
 	int cnt = 0;
 	bool onceOutlineAndMapCollision = false;
+	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
-		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
+		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + MIN(2, 0.01f*cnt));
+		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + MIN(2, 0.01f*cnt));
 		
 		CCPoint cumberPosition = getPosition();
 		afterPosition = cumberPosition + ccp(speedX, speedY);
@@ -657,9 +679,8 @@ void KSCumberBase::rightAngleMoving(float dt)
 			{
 				validPosition = true;
 			}
-			else if(afterPoint.isInnerMap())
-			{
-				CCAssert(false, "");
+			else
+			{				
 				validPosition = true;
 			}
 		}
@@ -679,9 +700,14 @@ void KSCumberBase::rightAngleMoving(float dt)
 				crashMapForPosition(afterPosition);
 			}
 		}
-		if(cnt % 100 == 0)
+		if(cnt >= 2)
 		{
 			CCLog("rightAngleMoving cnt !! = %d", cnt);
+		}
+		if(cnt >= 30)
+		{
+			pathFound = false;
+			validPosition = true;
 		}
 		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
@@ -693,8 +719,10 @@ void KSCumberBase::rightAngleMoving(float dt)
 	
 	
  	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
-		setPosition(afterPosition);
-	
+	{
+		if(pathFound)
+			setPosition(afterPosition);
+	}
 	if(onceOutlineAndMapCollision)
 	{
 		
@@ -745,6 +773,7 @@ void KSCumberBase::circleMoving(float dt)
 	bool validPosition = false;
 	int cnt = 0;
 	bool onceOutlineAndMapCollision = false;
+	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
 	while(!validPosition)
 	{
 		cnt++;
@@ -795,9 +824,8 @@ void KSCumberBase::circleMoving(float dt)
 			{
 				validPosition = true;
 			}
-			else if(afterPoint.isInnerMap())
+			else
 			{
-				CCAssert(false, "");
 				validPosition = true;
 			}
 		}
@@ -820,6 +848,11 @@ void KSCumberBase::circleMoving(float dt)
 		}
 		if(cnt >= 3)
 			CCLog("circleMoving cnt !! = %d", cnt);
+		if(cnt >= 30)
+		{
+			pathFound = false;
+			validPosition = true;
+		}
 		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
 		{
 			validPosition = true;
@@ -832,11 +865,15 @@ void KSCumberBase::circleMoving(float dt)
 	
  	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
 	{
-		float circleRadius = sqrt(pow((m_circle.centerPosition.x - m_circle.relocationPosition.x), 2) +
-								  pow((m_circle.centerPosition.y - m_circle.relocationPosition.y), 2));
-		m_circle.angleRad += m_speed * m_circle.sign / circleRadius;
-//		CCLog("%f %f", afterPosition.x, afterPosition.y);
-		setPosition(afterPosition);
+		if(pathFound)
+		{
+			float circleRadius = sqrt(pow((m_circle.centerPosition.x - m_circle.relocationPosition.x), 2) +
+									  pow((m_circle.centerPosition.y - m_circle.relocationPosition.y), 2));
+			m_circle.angleRad += m_speed * m_circle.sign / circleRadius;
+			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
+			setPosition(afterPosition);
+		}
+		
 	}
 	if(onceOutlineAndMapCollision)
 	{

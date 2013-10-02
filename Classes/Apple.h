@@ -75,8 +75,6 @@ public:
 
 	}
 	virtual void crashMapForPosition(CCPoint targetPt);
-//	virtual void movingAndCrash(float dt);
-	void normalMoving(float dt);
 	void furyMoving(float dt);
 	void cumberAttack(float dt);
 	virtual bool init();

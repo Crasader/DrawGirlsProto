@@ -421,14 +421,26 @@ void MissileParent::actionAP103(CCObject* cb)
 
 bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb, bool exe)
 {
+	JsonBox::Value v;
+	v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+	JsonBox::Object boss = v.getArray()[0].getObject();
+	JsonBox::Object patterns = boss["pattern"].getObject();
+	char buf[256];
+	
+	sprintf(buf, "%d", pattern);
+	JsonBox::Object patternData = patterns[buf].getObject();
+	int castFrame = patternData["castframe"].getInt();
+	if(castFrame == 0)
+		castFrame = 120;
 	bool valid = true;
 	if(pattern == kNonTargetAttack1)
 	{
 		if(exe)
 		{
 			startFirePosition = startPosition;
+			
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionKSAP1),
 																 this, callfuncO_selector(MissileParent::cancelKSAP1),
@@ -445,7 +457,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionKSAP2),
 																 this, callfuncO_selector(MissileParent::cancelKSAP2),
@@ -462,7 +474,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionKSAP3),
 																 this, callfuncO_selector(MissileParent::cancelKSAP3),
@@ -479,7 +491,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionKSAP4),
 																 this, callfuncO_selector(MissileParent::cancelKSAP4),
@@ -496,7 +508,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionKSAP5),
 																 this, callfuncO_selector(MissileParent::cancelKSAP5),
@@ -513,7 +525,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionKSAP6),
 																 this, callfuncO_selector(MissileParent::cancelKSAP6),
@@ -530,7 +542,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionKSAP7),
 																 this, callfuncO_selector(MissileParent::cancelKSAP7),
@@ -547,7 +559,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionKSAP8),
 																 this, callfuncO_selector(MissileParent::cancelKSAP8),
@@ -573,7 +585,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		//		chargeArray->addObject(t_ccn);
 		if(exe)
 		{
-			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*2,
+			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, castFrame,
 															 this, NULL,
 															 this, callfuncO_selector(MissileParent::actionAP18),
 															 this, callfuncO_selector(MissileParent::cancelAP18),
@@ -591,7 +603,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionTargetAP1),
 																 this, callfuncO_selector(MissileParent::cancelTargetAP1),
@@ -608,7 +620,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionTargetAP2),
 																 this, callfuncO_selector(MissileParent::cancelTargetAP2),
@@ -625,7 +637,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionTargetAP3),
 																 this, callfuncO_selector(MissileParent::cancelTargetAP3),
@@ -642,7 +654,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionTargetAP4),
 																 this, callfuncO_selector(MissileParent::cancelTargetAP4),
@@ -657,7 +669,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 	{
 		if(exe)
 		{
-			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*4,
+			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, castFrame,
 															 this, NULL,
 															 this, callfuncO_selector(MissileParent::actionAP11),
 															 this, callfuncO_selector(MissileParent::cancelAP11),
@@ -672,7 +684,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 	{
 		if(exe)
 		{
-			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 60*4,
+			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, castFrame,
 															 this, NULL,
 															 this, callfuncO_selector(MissileParent::actionAP14),
 															 this, callfuncO_selector(MissileParent::cancelAP14),
@@ -689,7 +701,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 120,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionTargetAP7),
 																 this, callfuncO_selector(MissileParent::cancelTargetAP7),
@@ -715,7 +727,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		if(exe)
 		{
 			startFirePosition = startPosition;
-			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, 90,
+			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, castFrame,
 															 this, NULL,
 															 this, callfuncO_selector(MissileParent::actionTargetAP8),
 															 this, callfuncO_selector(MissileParent::cancelTargetAP8),
@@ -732,7 +744,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionAP21),
 																 this, callfuncO_selector(MissileParent::cancelAP21),
@@ -749,7 +761,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*2,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionAP24),
 																 this, callfuncO_selector(MissileParent::cancelAP24),
@@ -766,7 +778,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionAP23),
 																 this, callfuncO_selector(MissileParent::cancelAP23),
@@ -783,7 +795,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionAP28),
 																 this, callfuncO_selector(MissileParent::cancelAP28),
@@ -801,7 +813,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionAP26),
 																 this, callfuncO_selector(MissileParent::cancelAP26),
@@ -819,7 +831,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60*3,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionAP33),
 																 this, callfuncO_selector(MissileParent::cancelAP33),
@@ -836,7 +848,7 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 		{
 			startFirePosition = startPosition;
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, 60,
+			SpecialChargeNode* t_ccn = SpecialChargeNode::create(startPosition, castFrame,
 																 this, NULL,
 																 this, callfuncO_selector(MissileParent::actionAP32),
 																 this, callfuncO_selector(MissileParent::cancelAP32),

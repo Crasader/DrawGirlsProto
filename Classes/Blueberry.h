@@ -23,9 +23,6 @@ public:
 	}
 	virtual ~Blueberry(){}
 	
-	void normalMoving(float dt);
-	
-	
 	virtual void onStartMoving()
 	{
 		m_state = CUMBERSTATEMOVING;

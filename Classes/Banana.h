@@ -30,7 +30,6 @@ public:
 	}
 	virtual ~Banana(){}
 	
-	void normalMoving(float dt);
 	
 	
 	virtual void onStartMoving()

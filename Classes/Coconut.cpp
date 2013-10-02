@@ -60,143 +60,6 @@ bool Coconut::init()
 }
 
 
-void Coconut::normalMoving(float dt)
-{
-	m_scale.timer += 1 / 60.f;
-	
-	
-	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
-	{
-		m_scale.collisionCount = 0;
-		m_scale.collisionStartTime = m_scale.timer;
-		//		setCumberSize(MIN(1.0, getCumberSize() + scale.SCALE_ADDER));
-	}
-	
-	
-	m_directionAngleDegree += m_well512.GetValue(-4, +4);
-	
-	if(m_state == CUMBERSTATEMOVING)
-	{
-		int sela = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
-		if(sela == 0)
-		{
-			m_directionAngleDegree += m_well512.GetValue(90, 270);
-		}
-	}
-	
-	CCPoint afterPosition;
-	
-	bool validPosition = false;
-	int cnt = 0;
-	bool onceOutlineAndMapCollision = false;
-	
-	
-	while(!validPosition)
-	{
-		cnt++;
-		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.1f*cnt);
-		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.1f*cnt);
-		
-		CCPoint cumberPosition = getPosition();
-		afterPosition = cumberPosition + ccp(speedX, speedY);
-		IntPoint afterPoint = ccp2ip(afterPosition);
-		IntPoint checkPosition;
-		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != CUMBERSTATEFURY)
-		{
-			if(collisionCode == kCOLLISION_JACK)
-			{
-				// 즉사 시킴.
-				gameData->communication("Jack_startDieEffect");
-			}
-			else if(collisionCode == kCOLLISION_MAP)
-			{
-				onceOutlineAndMapCollision = true;
-				m_directionAngleDegree += m_well512.GetValue(90, 270);
-				
-				if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
-				else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
-			}
-			else if(collisionCode == kCOLLISION_NEWLINE)
-			{
-				//			gameData->communication("Jack_startDieEffect");
-				//			gameData->communication("SW_createSW", checkPosition, 0, 0);
-				//									callfuncI_selector(KSCumber::showEmotion)); //##
-				gameData->communication("SW_createSW", checkPosition, 0, 0);
-				m_directionAngleDegree += m_well512.GetValue(90, 270);
-				
-				if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
-				else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
-			}
-			else if(collisionCode == kCOLLISION_OUTLINE)
-			{
-				onceOutlineAndMapCollision = true;
-				m_directionAngleDegree += m_well512.GetValue(90, 270);
-				
-				if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
-				else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
-			}
-			else if(collisionCode == kCOLLISION_NONE)
-			{
-				validPosition = true;
-			}
-			else if(afterPoint.isInnerMap())
-			{
-				validPosition = true;
-			}
-		}
-		else
-		{
-			if(collisionCode == kCOLLISION_OUTLINE)
-			{
-				//			CCLog("collision!!");
-				m_directionAngleDegree += m_well512.GetValue(90, 270);
-				
-				if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
-				else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
-			}
-			else
-			{
-				validPosition = true;
-			}
-			if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
-			{
-				crashMapForPosition(afterPosition);
-			}
-		}
-		
-		
-		//		setPosition(afterPosition);
-		if(cnt % 100 == 0)
-		{
-			CCLog("cnt !! = %d", cnt);
-		}
-	}
-	
-	//	CCLog("cnt outer !! = %d", cnt);
-	
-	if(m_state == CUMBERSTATEMOVING)
-		setPosition(afterPosition);
-	
-	if(onceOutlineAndMapCollision)
-	{
-		
-		if(m_scale.collisionCount == 0)
-		{
-			m_scale.collisionStartTime = m_scale.timer;
-			
-		}
-		m_scale.collisionCount++;
-		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
-		{
-			CCLog("decrese Size !!");
-			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
-		}
-	}
-}
-
-
 
 
 
@@ -333,7 +196,7 @@ void Coconut::onStartGame()
 void Coconut::cumberAttack(float dt)
 {
 	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
-
+//	float w = ProbSelector::sel(0.01f, 1.0 - 0.01f, 0.0);
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
@@ -369,6 +232,7 @@ void Coconut::cumberAttack(float dt)
 
 //		attackCode = 13;
 //		attackCode = 9;
+		
 		if(attackCode == 13) // fury
 		{
 			CCLog("aaa %f %f", getPosition().x, getPosition().y);

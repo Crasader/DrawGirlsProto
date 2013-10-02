@@ -22,8 +22,6 @@ public:
 	}
 	virtual ~Cherry(){}
 	
-	void normalMoving(float dt);
-	
 	
 	virtual void onStartMoving()
 	{
