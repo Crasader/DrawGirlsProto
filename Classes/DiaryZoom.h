@@ -1,40 +1,31 @@
 //
-//  ZoomScriptScene.h
+//  DiaryZoom.h
 //  DGproto
 //
-//  Created by 사원3 on 13. 9. 6..
+//  Created by 사원3 on 13. 10. 2..
 //
 //
 
-#ifndef __DGproto__ZoomScriptScene__
-#define __DGproto__ZoomScriptScene__
+#ifndef __DGproto__DiaryZoom__
+#define __DGproto__DiaryZoom__
 
 #include "cocos2d.h"
-#include "DataStorageHub.h"
-#include "SilhouetteData.h"
-#include <map>
+#include <deque>
 
 USING_NS_CC;
 using namespace std;
 
-class ZoomScript : public CCLayer
+class DiaryZoom : public CCLayer
 {
 public:
 	virtual bool init();
     static cocos2d::CCScene* scene();
-    CREATE_FUNC(ZoomScript);
+    CREATE_FUNC(DiaryZoom);
 	
 	virtual void onEnterTransitionDidFinish();
 	
 private:
 	CCNode* game_node;
-	int silType;
-	bool is_showtime;
-	bool is_exchanged;
-	
-	int text_length;
-	string save_text;
-	int typing_frame;
 	
 	int ing_animation_frame;
 	
@@ -42,29 +33,16 @@ private:
 	bool is_actioned;
 	
 	CCSprite* first_img;
-	CCLabelTTF* script_label;
-	CCSprite* script_case;
 	CCMenu* next_button;
-	CCSprite* showtime_back;
-	CCSprite* second_img;
 	
+	bool is_animation;
 	
 	float minimum_scale;
 	CCSize screen_size;
 	
 	void menuAction(CCObject* sender);
 	
-	void startScript();
-	
-	SEL_CallFunc delegate_typing_after;
-	void typingAnimation();
-	
 	void startTouchAction();
-	
-	void showtimeFirstAction();
-	void showtimeSecondAction();
-	void showtimeThirdAction();
-	void showtimeForthAction();
 	
 	bool isAnimated;
 	CCPoint touch_p;
@@ -97,15 +75,15 @@ private:
 			random_value++;
 		
 		CCDelayTime* t_delay = CCDelayTime::create(random_value*0.1f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::frameAnimation));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(DiaryZoom::frameAnimation));
 		CCAction* t_seq = CCSequence::create(t_delay, t_call, NULL);
-		second_img->getChildByTag(1)->runAction(t_seq);
+		first_img->getChildByTag(1)->runAction(t_seq);
 	}
 	
 	void frameAnimation()
 	{
 		int loop_point = animation_frame[ing_animation_frame];
-		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(loop_point*eye_ani_size.width, 0, eye_ani_size.width, eye_ani_size.height));
+		((CCSprite*)first_img->getChildByTag(1))->setTextureRect(CCRectMake(loop_point*eye_ani_size.width, 0, eye_ani_size.width, eye_ani_size.height));
 		
 		ing_animation_frame++;
 		if(ing_animation_frame >= loop_length)
@@ -113,9 +91,9 @@ private:
 		else
 		{
 			CCDelayTime* t_delay = CCDelayTime::create(0.1f);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::frameAnimation));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(DiaryZoom::frameAnimation));
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-			second_img->getChildByTag(1)->runAction(t_seq);
+			first_img->getChildByTag(1)->runAction(t_seq);
 		}
 	}
 	
@@ -142,7 +120,7 @@ private:
 			touchStartTime = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec;
 			touchStart_p = location;
 			
-			this->unschedule(schedule_selector(ZoomScript::moveAnimation));
+			this->unschedule(schedule_selector(DiaryZoom::moveAnimation));
 			
 			isAnimated=false;
 			
@@ -210,9 +188,6 @@ private:
 						sub_point = ccpMult(sub_point, -1);
 						sub_point = ccpAdd(sub_point, it->second);
 					}
-					
-					script_label->setVisible(false);
-					script_case->setVisible(false);
 					
 					float before_scale = game_node->getScale();
 					
@@ -285,7 +260,7 @@ private:
 					if(isAnimated == false && fabsf(spd_value) > 2)
 					{
 						moveSpeed_p = _spd;
-						this->schedule(schedule_selector(ZoomScript::moveAnimation));
+						this->schedule(schedule_selector(DiaryZoom::moveAnimation));
 					}
 				}
 			}
@@ -298,7 +273,7 @@ private:
 	}
 	
 	virtual void registerWithTouchDispatcher(void);
-	
+
 };
 
-#endif /* defined(__DGproto__ZoomScriptScene__) */
+#endif /* defined(__DGproto__DiaryZoom__) */

@@ -182,7 +182,17 @@ public:
 	
 	virtual void visit();
 	virtual void setPositionY(float t_y);
-	void setPercentage(float t_p){		setPosition(ccp(getPositionX(),max_positionY*t_p));	}
+	void setPercentage(float t_p)
+	{
+		setPosition(ccp(getPositionX(),max_positionY*t_p));
+		for(int i=0;i<getChildrenCount();i++)
+		{
+			CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(i);
+			int tag = t_child->getTag();
+			if(tag == kCSS_MT_selectedCheck || tag == kCSS_MT_checkMark)		continue;
+			((CLV_Node*)t_child)->viewCheck();
+		}
+	}
 	void setMaxPositionY();
 	void setScroll(ScrollingObject* t_link);
 	

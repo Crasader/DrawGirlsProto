@@ -198,6 +198,11 @@ void ZoomScript::showtimeFirstAction()
 	if(is_exchanged && mySD->isAnimationStage())
 	{
 		eye_ani_size = mySD->getAnimationCutSize();
+		loop_length = mySD->getAnimationLoopLength();
+		
+		for(int i=0;i<loop_length;i++)
+			animation_frame.push_back(mySD->getAnimationLoopPoint(i));
+		
 		CCTexture2D* eye_texture = mySIL->addImage(CCString::createWithFormat("stage%d_level3_animation.png", silType)->getCString());
 		
 		CCSprite* eye = CCSprite::createWithTexture(eye_texture, CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
