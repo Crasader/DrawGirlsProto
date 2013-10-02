@@ -402,7 +402,7 @@ public:
 	std::map<std::string, std::function<int(void)>> I_V;
 	std::map<std::string, std::function<float(void)>> F_V;
 	
-	std::map<std::string, std::function<void(CCPoint, CCObject*, SEL_CallFunc)>> V_CCPCCOCallfunc;
+	std::map<std::string, std::function<void(CCPoint, CCObject*, SEL_CallFuncO)>> V_CCPCCOCallfuncO;
 	std::map<std::string, std::function<bool(void)>> B_V;
 	std::map<std::string, std::function<CCNode*(void)>> CCN_V;
 	std::map<std::string, std::function<CCArray*(void)>> CCA_V;
@@ -553,10 +553,10 @@ public:
 		return;
 	}
 	
-	void communication(string funcName, CCPoint t_p, CCObject* t_target, SEL_CallFunc d_func)
+	void communication(string funcName, CCPoint t_p, CCObject* t_target, SEL_CallFuncO d_func)
 	{
-		CCAssert(V_CCPCCOCallfunc.find(funcName) != V_CCPCCOCallfunc.end(), funcName.c_str());
-		V_CCPCCOCallfunc[funcName](t_p, t_target, d_func);
+		CCAssert(V_CCPCCOCallfuncO.find(funcName) != V_CCPCCOCallfuncO.end(), funcName.c_str());
+		V_CCPCCOCallfuncO[funcName](t_p, t_target, d_func);
 		return;
 	}
 	

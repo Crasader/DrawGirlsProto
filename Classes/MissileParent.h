@@ -33,7 +33,9 @@ using namespace std;
 class CreateSubCumberOtherAction : public CCNode
 {
 public:
-	static CreateSubCumberOtherAction* create(IntPoint c_p, CCObject* t_after, SEL_CallFunc d_after, CCObject* t_cancel, SEL_CallFunc d_cancel)
+	static CreateSubCumberOtherAction* create(IntPoint c_p,
+											  CCObject* t_after, SEL_CallFuncO d_after,
+											  CCObject* t_cancel, SEL_CallFuncO d_cancel)
 	{
 		CreateSubCumberOtherAction* t_CSCAA = new CreateSubCumberOtherAction();
 		t_CSCAA->myInit(c_p, t_after, d_after, t_cancel, d_cancel);
@@ -41,28 +43,28 @@ public:
 		return t_CSCAA;
 	}
 	
-	void afterAction()
+	void afterAction(CCObject* cb)
 	{
 		myGD->communication("CP_createSubCumber", createPoint);
-		(after_target->*after_delegate)();
+		(after_target->*after_delegate)(cb);
 		removeFromParentAndCleanup(true);
 	}
 	
-	void cancelAction()
+	void cancelAction(CCObject* cb)
 	{
-		(cancel_target->*cancel_delegate)();
+		(cancel_target->*cancel_delegate)(cb);
 		removeFromParentAndCleanup(true);
 	}
 	
 private:
 	
 	CCObject* after_target;
-	SEL_CallFunc after_delegate;
+	SEL_CallFuncO after_delegate;
 	CCObject* cancel_target;
-	SEL_CallFunc cancel_delegate;
+	SEL_CallFuncO cancel_delegate;
 	IntPoint createPoint;
 	
-	void myInit(IntPoint c_p, CCObject* t_after, SEL_CallFunc d_after, CCObject* t_cancel, SEL_CallFunc d_cancel)
+	void myInit(IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel)
 	{
 		
 		createPoint = c_p;
@@ -244,119 +246,118 @@ public:
 	
 	void endIngActionAP();
 	
-	void actionAP6();
-	void cancelAP6(){		}
+	void actionAP6(CCObject* cb);
+	void cancelAP6(CCObject* cb){		}
 	
-	void ingAP7();
-	void actionAP7();
-	void cancelAP7();
+	void ingAP7(CCObject* cb);
+	void actionAP7(CCObject* cb);
+	void cancelAP7(CCObject* cb);
 	
-	void actionAP8();
-	void cancelAP8(){		}
+	void actionAP8(CCObject* cb);
+	void cancelAP8(CCObject* cb){		}
 	
-	void actionAP9();
-	void cancelAP9(){		}
+	void actionAP9(CCObject* cb);
+	void cancelAP9(CCObject* cb){		}
 	
-	void actionAP10();
-	void cancelAP10(){		}
+	void actionAP10(CCObject* cb);
+	void cancelAP10(CCObject* cb){		}
 	
-	void actionAP11();
-	void cancelAP11(){		}
+	void actionAP11(CCObject* cb);
+	void cancelAP11(CCObject* cb){		}
 	
-	void actionAP12();
-	void cancelAP12(){		}
+	void actionAP12(CCObject* cb);
+	void cancelAP12(CCObject* cb){		}
 	
 	
 	void ingAP13()
 	{
 //		myGD->communication("CP_checkingJackCrash");
 	}
-	void actionAP13();
-	void cancelAP13(){		}
+	void actionAP13(CCObject* cb);
+	void cancelAP13(CCObject* cb){		}
 	
-	void actionAP14();
-	void cancelAP14(){		}
+	void actionAP14(CCObject* cb);
+	void cancelAP14(CCObject* cb){		}
 	
-	void actionAP15();
-	void cancelAP15(){		}
+	void actionAP15(CCObject* cb);
+	void cancelAP15(CCObject* cb){		}
 	
-	void actionAP16();
-	void cancelAP16(){		}
+	void actionAP16(CCObject* cb);
+	void cancelAP16(CCObject* cb){		}
 	
-	void ingAP17()
+	void ingAP17(CCObject* cb)
 	{
 //		myGD->communication("CP_checkingJackCrash");
 	}
-	void actionAP17();
-	void cancelAP17(){		}
+	void actionAP17(CCObject* cb);
+	void cancelAP17(CCObject* cb){		}
 	
-	void actionAP18();
-	void cancelAP18(){		}
+	void actionAP18(CCObject* cb);
+	void cancelAP18(CCObject* cb){		}
 	
-	void actionAP19();
-	void cancelAP19(){		}
+	void actionAP19(CCObject* cb);
+	void cancelAP19(CCObject* cb){		}
 	
-	void actionAP20();
-	void cancelAP20(){		}
+	void actionAP20(CCObject* cb);
+	void cancelAP20(CCObject* cb){		}
 	
-	void actionAP21();
-	void cancelAP21(){		}
+	void actionAP21(CCObject* cb);
+	void cancelAP21(CCObject* cb){		}
 	
-	void actionAP22();
-	void cancelAP22(){		}
+	void actionAP22(CCObject* cb);
+	void cancelAP22(CCObject* cb){		}
 	
-	void actionAP23();
-	void cancelAP23(){		}
+	void actionAP23(CCObject* cb);
+	void cancelAP23(CCObject* cb){		}
 	
-	void actionAP24();
-	void cancelAP24(){	}
+	void actionAP24(CCObject* cb);
+	void cancelAP24(CCObject* cb){	}
 	
-	void actionAP25();
-	void cancelAP25(){		}
+	void actionAP25(CCObject* cb);
+	void cancelAP25(CCObject* cb){		}
 	
-	void actionAP26();
-	void cancelAP26(){		}
+	void actionAP26(CCObject* cb);
+	void cancelAP26(CCObject* cb){		}
 	
-	void actionAP27();
-	void cancelAP27(){	}
+	void actionAP27(CCObject* cb);
+	void cancelAP27(CCObject* cb){	}
 	
-	void actionAP28();
-	void cancelAP28(){	}
+	void actionAP28(CCObject* cb);
+	void cancelAP28(CCObject* cb){	}
 	
-	void actionAP29();
-	void cancelAP29(){	}
+	void actionAP29(CCObject* cb);
+	void cancelAP29(CCObject* cb){	}
 	
-	void actionAP30();
-	void cancelAP30(){	}
+	void actionAP30(CCObject* cb);
+	void cancelAP30(CCObject* cb){	}
 	
-	void actionAP31();
-	void cancelAP31(){		}
+	void actionAP31(CCObject* cb);
+	void cancelAP31(CCObject* cb){		}
 	
-	void actionAP32();
-	void cancelAP32(){		}
+	void actionAP32(CCObject* cb);
+	void cancelAP32(CCObject* cb){		}
 	
-	void actionAP33();
-	void cancelAP33(){		}
+	void actionAP33(CCObject* cb);
+	void cancelAP33(CCObject* cb){		}
 	
-	void actionAP34();
-	void cancelAP34(){	}
+	void actionAP34(CCObject* cb);
+	void cancelAP34(CCObject* cb){	}
 	
-	void actionAP101();
-	void cancelAP101(){		}
+	void actionAP101(CCObject* cb);
+	void cancelAP101(CCObject* cb){		}
 	
-	void actionAP102();
-	void cancelAP102(){		}
+	void actionAP102(CCObject* cb);
+	void cancelAP102(CCObject* cb){		}
 	
-	void actionAP103();
-	void cancelAP103(){	}
-	
-	
+	void actionAP103(CCObject* cb);
+	void cancelAP103(CCObject* cb){	}
 	
 	
-	void attackWithCode(CCPoint startPosition, int pattern_code);
-	void startFire(CCPoint startPosition, bool crash_attack = false);
 	
-	void createSubCumberReplication(CCPoint s_p, CCObject* sender, SEL_CallFunc d_startMoving);
+	
+
+	
+	void createSubCumberReplication(CCPoint s_p, CCObject* sender, SEL_CallFuncO d_startMoving);
 	
 	void explosion(CCPoint bombPosition, ccColor4F t_color);
 	
@@ -403,158 +404,160 @@ public:
 	
 	
 	
-	void actionKSAP1()
+	void actionKSAP1(CCObject* cb)
 	{
 		
-		KSAttackPattern1* t = KSAttackPattern1::create(startFirePosition, 0);
+		KSAttackPattern1* t = KSAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 
 	}
-	void cancelKSAP1(){		}
-	void actionKSAP2()
+	void cancelKSAP1(CCObject* cb){		}
+	void actionKSAP2(CCObject* cb)
 	{
-		KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition, 0);
+		KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 		
 		
 	}
-	void cancelKSAP2(){		}
+	void cancelKSAP2(CCObject* cb){		}
 	
-	void actionKSAP3()
+	void actionKSAP3(CCObject* cb)
 	{
-		KSAttackPattern3* t = KSAttackPattern3::create(startFirePosition, 0);
+		KSAttackPattern3* t = KSAttackPattern3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelKSAP3(){		}
-	void actionKSAP4()
+	void cancelKSAP3(CCObject* cb){		}
+	void actionKSAP4(CCObject* cb)
 	{
-		KSAttackPattern4* t = KSAttackPattern4::create(startFirePosition, 0);
+		KSAttackPattern4* t = KSAttackPattern4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelKSAP4(){		}
-	void actionKSAP5()
+	void cancelKSAP4(CCObject* cb){		}
+	void actionKSAP5(CCObject* cb)
 	{
-		KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition, 0);
+		KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelKSAP5(){		}
-	void actionKSAP6()
+	void cancelKSAP5(CCObject* cb){		}
+	void actionKSAP6(CCObject* cb)
 	{
-		KSAttackPattern6* t = KSAttackPattern6::create(startFirePosition, 0);
+		KSAttackPattern6* t = KSAttackPattern6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelKSAP6(){		}
-	void actionKSAP7()
+	void cancelKSAP6(CCObject* cb){		}
+	void actionKSAP7(CCObject* cb)
 	{
-		KSAttackPattern7* t = KSAttackPattern7::create(startFirePosition, 0);
+		KSAttackPattern7* t = KSAttackPattern7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelKSAP7(){		}
-	void actionKSAP8()
+	void cancelKSAP7(CCObject* cb){		}
+	void actionKSAP8(CCObject* cb)
 	{
-		KSAttackPattern8* t = KSAttackPattern8::create(startFirePosition, 0);
+		KSAttackPattern8* t = KSAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelKSAP8(){		}
-	void actionKSAP9()
+	void cancelKSAP8(CCObject* cb){		}
+	void actionKSAP9(CCObject* cb)
 	{
-		KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition, 0);
+		KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelKSAP9(){		}
-	void actionKSAP10()
+	void cancelKSAP9(CCObject* cb){		}
+	void actionKSAP10(CCObject* cb)
 	{
-		KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition, 0);
+		KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelKSAP10(){		}
+	void cancelKSAP10(CCObject* cb){		}
 	
-	void actionTargetAP1()
+	void actionTargetAP1(CCObject* cb)
 	{
-		KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, 0);
+		KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelTargetAP1(){		}
-	void actionTargetAP2()
+	void cancelTargetAP1(CCObject* cb){		}
+	void actionTargetAP2(CCObject* cb)
 	{
-		KSTargetAttackPattern2* t = KSTargetAttackPattern2::create(startFirePosition, 0);
+		KSTargetAttackPattern2* t = KSTargetAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelTargetAP2(){		}
-	void actionTargetAP3()
+	void cancelTargetAP2(CCObject* cb){		}
+	void actionTargetAP3(CCObject* cb)
 	{
-		KSTargetAttackPattern3* t = KSTargetAttackPattern3::create(startFirePosition, 0);
+		KSTargetAttackPattern3* t = KSTargetAttackPattern3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelTargetAP3(){		}
-	void actionTargetAP4()
+	void cancelTargetAP3(CCObject* cb){		}
+	void actionTargetAP4(CCObject* cb)
 	{
-		KSTargetAttackPattern4* t = KSTargetAttackPattern4::create(startFirePosition, 0);
+		KSTargetAttackPattern4* t = KSTargetAttackPattern4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelTargetAP4(){		}
+	void cancelTargetAP4(CCObject* cb){		}
 	
-	void actionTargetAP5()
+	void actionTargetAP5(CCObject* cb)
 	{
-		KSTargetAttackPattern5* t = KSTargetAttackPattern5::create(startFirePosition, 0);
+		KSTargetAttackPattern5* t = KSTargetAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelTargetAP5(){		}
-	void actionTargetAP6()
+	void cancelTargetAP5(CCObject* cb){		}
+	void actionTargetAP6(CCObject* cb)
 	{
-		KSTargetAttackPattern6* t = KSTargetAttackPattern6::create(startFirePosition, 0);
+		KSTargetAttackPattern6* t = KSTargetAttackPattern6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelTargetAP6(){		}
+	void cancelTargetAP6(CCObject* cb){		}
 	
-	void actionTargetAP7()
+	void actionTargetAP7(CCObject* cb)
 	{
-		KSTargetAttackPattern7* t = KSTargetAttackPattern7::create(startFirePosition, 0);
+		KSTargetAttackPattern7* t = KSTargetAttackPattern7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+		addChild(t);
+		saveAP = t;
+		savedAP = true;
+		
+		
+	}
+	void cancelTargetAP7(CCObject* cb){		}
+	void actionTargetAP8(CCObject* cb)
+	{
+		KSTargetAttackPattern8* t = KSTargetAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 		addChild(t);
 		saveAP = t;
 		savedAP = true;
 	}
-	void cancelTargetAP7(){		}
-	void actionTargetAP8()
-	{
-		KSTargetAttackPattern8* t = KSTargetAttackPattern8::create(startFirePosition, 0);
-		addChild(t);
-		saveAP = t;
-		savedAP = true;
-	}
-	void cancelTargetAP8(){		}
+	void cancelTargetAP8(CCObject* cb){		}
 	
 	bool attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb, bool exe);
 private:
