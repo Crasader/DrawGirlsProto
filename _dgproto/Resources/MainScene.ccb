@@ -44,7 +44,7 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>243</real>
+							<real>240</real>
 							<real>160</real>
 							<integer>0</integer>
 						</array>
@@ -93,6 +93,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>baseClass</key>
@@ -116,8 +118,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>26</real>
-							<real>26</real>
+							<real>274.55999755859375</real>
+							<real>149.92001342773438</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -140,7 +142,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>gameui_button.ccb</string>
+						<string>pattern_marble1.ccb</string>
 					</dict>
 				</array>
 			</dict>
@@ -271,13 +273,13 @@
 			<key>chainedSequenceId</key>
 			<integer>-1</integer>
 			<key>length</key>
-			<real>10</real>
+			<real>2</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>9.3000001907348633</real>
+			<real>2</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

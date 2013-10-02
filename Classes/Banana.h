@@ -30,7 +30,6 @@ public:
 	}
 	virtual ~Banana(){}
 	
-	void normalMoving(float dt);
 	
 	
 	virtual void onStartMoving()
@@ -157,6 +156,14 @@ public:
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
 		runAction(t_seq);
+	}
+	virtual void stopAnimationNoDirection()
+	{
+		m_noDirection.state = 2;
+	}
+	virtual void stopAnimationDirection()
+	{
+//		m_direction.state = 2;
 	}
 	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition){
 		IntPoint afterPoint = point;

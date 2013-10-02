@@ -19,6 +19,7 @@
 #include "ServerDataSave.h"
 #include "KSCumberBase.h"
 #include "JsonBox.h"
+#include "FromTo.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -52,7 +53,7 @@ protected:
 		}
 	}
 	
-	
+	KSCumberBase* m_cumber;
 };
 
 class SelfSpinMissile : public CCNode
@@ -984,7 +985,7 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
-		
+		m_cumber = cb;
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1007,6 +1008,7 @@ public:
 		
 		addChild(batchNode);
 		scheduleUpdate();
+		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
@@ -1058,10 +1060,12 @@ public:
 			if(angle2 < 0)
 				angle2 += 360;
 		}
-
+		
 		stopMyAction();
+		m_cumber->onTargetingJack(jackPoint);
 	}
 protected:
+	
 	float m_bulletSpeed;
 	int m_numberPerFrame;
 	int m_color;
@@ -1087,6 +1091,7 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
+		m_cumber = cb;
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1110,6 +1115,7 @@ public:
 		
 		addChild(batchNode);
 		scheduleUpdate();
+		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
@@ -1123,7 +1129,7 @@ public:
 	void update(float dt)
 	{
 		m_frameCnt++;
-		
+		CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
 		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
@@ -1132,7 +1138,7 @@ public:
 		{
 			if(m_frameCnt % m_perFrame == 0)
 			{
-				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+				
 				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
 				float angle = rad2Deg(rad);
 				float angle2 = rad2Deg(rad);
@@ -1174,6 +1180,7 @@ public:
 
 			}
 		}
+		m_cumber->onTargetingJack(jackPoint);
 	}
 protected:
 	int m_perFrame;
@@ -1202,6 +1209,7 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
+		m_cumber = cb;
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1226,6 +1234,7 @@ public:
 		
 		addChild(batchNode);
 		scheduleUpdate();
+		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
@@ -1239,7 +1248,7 @@ public:
 	void update(float dt)
 	{
 		m_frameCnt++;
-		
+		CCPoint jackPoint = firstJackPosition;
 		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
@@ -1248,7 +1257,7 @@ public:
 		{
 			if(m_frameCnt % m_perFrame == 0)
 			{
-				CCPoint jackPoint = firstJackPosition;
+				
 				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
 				float angle = rad2Deg(rad);
 				float angle2 = rad2Deg(rad);
@@ -1290,6 +1299,7 @@ public:
 				
 			}
 		}
+		m_cumber->onTargetingJack(jackPoint);
 	}
 protected:
 	int m_perFrame;
@@ -1319,6 +1329,7 @@ public:
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
+		m_cumber = cb;
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
 		
@@ -1346,6 +1357,7 @@ public:
 		addChild(batchNode);
 		
 		scheduleUpdate();
+		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
@@ -1359,7 +1371,7 @@ public:
 	void update(float dt)
 	{
 		m_frameCnt++;
-		
+		CCPoint jackPoint = firstJackPosition;
 		if(m_frameCnt == m_totalFrame)
 		{
 			stopMyAction();
@@ -1369,7 +1381,7 @@ public:
 			if(m_frameCnt % m_perFrame == 0)
 			{
 				
-				CCPoint jackPoint = firstJackPosition;
+				
 				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
 				rad += m_well512.GetFloatValue(-5 * M_PI / 180.f, +5 * M_PI / 180.f);
 				float angle = rad2Deg(rad);
@@ -1412,6 +1424,7 @@ public:
 				fireCount++;
 			}
 		}
+		m_cumber->onTargetingJack(jackPoint);
 	}
 protected:
 	int m_perFrame;
@@ -1446,23 +1459,547 @@ public:
 		
 	}
 };
+
+// 태양 광선이 나에게로 ... ㅎㅎ
 class KSTargetAttackPattern7 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern7);
+	virtual void stopMyAction()
+	{
+		stopMySchedule();
+		removeObject();
+	}
+	
+	void removeEffect()
+	{
+		unschedule(schedule_selector(ThisClassType::myAction));
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::selfRemove));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+		
+		CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
+		
+		lazer_main->runAction(t_seq);
+		lazer_sub->runAction(t_fade2);
+	}
+	
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
+		m_cumber = cb;
 		
+		type = 1;
+		createRingFrame = 10;
+		chargeFrame = 120;
+		crashFrame = 180;
+		
+		///////////////////////////////////////////////////////////////////
+		sp = t_sp;
+		dcolor = 255.f/chargeFrame;
+		dscale = 0.7f/chargeFrame;
+		IntPoint jackPoint = myGD->getJackPoint();
+		jackPosition = ip2ccp(jackPoint);
+		CCPoint subPosition = ccpSub(jackPosition, t_sp);
+		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
+		
+		if(distance < 200)			angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
+		else						angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
+		
+		CCPoint beadPosition;
+		beadPosition.x = 1;
+		beadPosition.y = tanf(angle/180.f*M_PI);
+		
+		if((angle > 90.f && angle < 270.f) || angle < -90.f)
+		{
+			beadPosition = ccpMult(beadPosition, -1.f);
+		}
+		
+		float div_value = sqrtf(powf(beadPosition.x, 2.f) + powf(beadPosition.y, 2.f));
+		dv = ccpMult(beadPosition, 1.f/div_value);
+		beadPosition = ccpMult(dv, 20.f);
+		
+		beadPosition = ccpAdd(beadPosition, t_sp);
+		
+		t_bead = CCSprite::create("lazer_bead.png");
+		t_bead->setPosition(beadPosition);
+		addChild(t_bead);
+		
+		lazer_sub = CCSprite::create("lazer_sub.png");
+		lazer_sub->setAnchorPoint(ccp(0,0.5));
+		lazer_sub->setRotation(-angle);
+		
+		CCPoint subP = ccpMult(dv, 5);
+		subP = ccpAdd(beadPosition, subP);
+		lazer_sub->setPosition(subP);
+		addChild(lazer_sub);
+		
+		startMyAction();
+		
+		cb->stopAnimationDirection();
 	}
+	void selfRemove()
+	{
+		removeFromParentAndCleanup(true);
+	}
+	
+	virtual void selfRemoveSchedule()
+	{
+		if(getChildrenCount() == 0)
+		{
+			//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects");
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void stopMySchedule()
+	{
+		unschedule(schedule_selector(ThisClassType::myAction));
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	
+	void removeObject()
+	{
+		if(lazer_sub)		lazer_sub->removeFromParentAndCleanup(true);
+		if(lazer_main)		lazer_main->removeFromParentAndCleanup(true);
+		if(t_bead)			t_bead->removeFromParentAndCleanup(true);
+	}
+	
+	void startMyAction()
+	{
+		AudioEngine::sharedInstance()->playEffect("sound_angle_beem.mp3", false);
+		ingFrame = 0;
+		schedule(schedule_selector(ThisClassType::myAction));
+	}
+	
+	void myAction()
+	{
+		if(ingFrame <= chargeFrame)
+		{
+			ccColor3B tcolor = t_bead->getColor();
+			tcolor.g -= dcolor;
+			tcolor.b -= dcolor;
+			t_bead->setColor(tcolor);
+			lazer_sub->setScaleY(lazer_sub->getScaleY()-dscale);
+			lazer_sub->setColor(tcolor);
+			if(ingFrame%createRingFrame == 0)
+			{
+				int random_sp = rand()%21-10;
+				CCPoint r_sp = ccpMult(dv, 60 + random_sp);
+				r_sp = ccpAdd(sp, r_sp);
+				CCPoint r_fp = ccpMult(dv, 20);
+				r_fp = ccpAdd(sp, r_fp);
+				
+				int random_frame = rand()%20 + 20;
+				float random_s = (rand()%3)/10.f;
+				
+				Lazer_Ring* t_lr = Lazer_Ring::create(angle, r_sp, r_fp, 1.f-random_s, 0.3f-random_s, random_frame, tcolor);
+				addChild(t_lr);
+			}
+			
+			
+			if(ingFrame == chargeFrame)
+			{
+				lazer_main = CCSprite::create("lazer_main.png", CCRectMake(0, 0, 460, 50));
+				lazer_main->setAnchorPoint(ccp(0,0.5));
+				lazer_main->setRotation(-angle);
+				
+				CCPoint mp = ccpMult(dv, 30);
+				mp = ccpAdd(sp, mp);
+				lazer_main->setPosition(mp);
+				
+				addChild(lazer_main);
+				
+				CCSprite* t_texture = CCSprite::create("lazer_main.png");
+				CCAnimation* t_animation = CCAnimation::create();
+				t_animation->setDelayPerUnit(0.1);
+				for(int i=0;i<3;i++)
+				{
+					t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(0, i*50, 460, 50));
+				}
+				
+				CCAnimate* t_animate = CCAnimate::create(t_animation);
+				CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+				
+				lazer_main->runAction(t_repeat);
+				
+				CCPoint c_sp = ccpMult(dv, 30);
+				c_sp = ccpAdd(sp, c_sp);
+				
+				crashRect = CCRectMake(0, -60/2.f+10, 460, 60/2.f+10);
+				
+				lineCrashMap(c_sp, angle, 460, 60);
+			}
+		}
+		else if(ingFrame <= chargeFrame+crashFrame)
+		{
+			IntPoint jackPoint = myGD->getJackPoint();
+			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+			
+			CCPoint t_jp = spinTransform(jackPosition, sp, angle);
+			
+			if(crashRect.containsPoint(t_jp))
+			{
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect");
+				//				stopMySchedule();
+				removeEffect();
+			}
+		}
+		
+		if(ingFrame >= chargeFrame+crashFrame)
+		{
+			stopMyAction();
+		}
+		ingFrame++;
+		
+		m_cumber->onTargetingJack(jackPosition);
+	}
+	
+	void lineCrashMap(CCPoint t_sp, float t_angle, int t_width, int t_height)
+	{
+		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+		{
+			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+			{
+				CCPoint t_tp = ccp((i-1)*pixelSize+1,(j-1)*pixelSize+1);
+				CCPoint a_tp = spinTransform(t_tp, t_sp, t_angle);
+				if(crashRect.containsPoint(a_tp))
+				{
+					crashMapForIntPoint(IntPoint(i,j));
+				}
+			}
+		}
+	}
+	
+	void crashMapForIntPoint(IntPoint t_p)
+	{
+		if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
+		{
+			myGD->mapState[t_p.x][t_p.y] = mapEmpty;
+			for(int k = -1;k<=1;k++)
+			{
+				for(int l = -1;l<=1;l++)
+				{
+					if(k == 0 && l == 0)	continue;
+					if(myGD->mapState[t_p.x+k][t_p.y+l] == mapOldget)		myGD->mapState[t_p.x+k][t_p.y+l] = mapOldline;
+				}
+			}
+			//			myGD->communication("EP_crashed");
+			myGD->communication("MFP_createNewFragment", t_p);
+			myGD->communication("VS_divideRect", t_p);
+		}
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		
+		if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
+		{
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect");
+			removeEffect();
+		}
+		
+		if(t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
+		{
+			//					myGD->communication("PM_pathChainBomb", t_p);
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Main_showLineDiePosition", t_p);
+			removeEffect();
+		}
+	}
+	
+	CCPoint spinTransform(CCPoint t_tp, CCPoint t_bp, float t_angle)
+	{
+		CCPoint a_tp = ccpSub(t_tp, t_bp);
+		float b_angle = atan2f(a_tp.y, a_tp.x)/M_PI*180.f;
+		float a_angle = b_angle - t_angle;
+		
+		if(a_angle >= 180.f)	a_angle -= 360.f;
+		if(a_angle < -180.f)	a_angle += 360.f;
+		
+		float distance = sqrtf(powf(a_tp.x, 2.f) + powf(a_tp.y, 2.f));
+		
+		a_tp.x = 1;
+		a_tp.y = tanf(a_angle/180.f*M_PI);
+		
+		float div_value = sqrtf(powf(a_tp.x, 2.f) + powf(a_tp.y, 2.f));
+		
+		if(a_angle > 90 || a_angle < -90)
+			a_tp = ccpMult(a_tp, -1.f);
+		
+		a_tp = ccpMult(a_tp, 1.f/div_value);
+		
+		a_tp = ccpMult(a_tp, distance);
+		
+		return a_tp;
+	}
+protected:
+	int type;
+	CCPoint sp;
+	int createRingFrame;
+	int chargeFrame;
+	int crashFrame;
+	int ingFrame;
+	float angle;
+	CCPoint dv;
+	CCSprite* lazer_main;
+	int dcolor;
+	CCSprite* t_bead;
+	CCRect crashRect;
+	CCSprite* lazer_sub;
+	float dscale;
+	KSCumberBase* m_cumber;
+						
+	CCPoint jackPosition;
+
 };
 class KSTargetAttackPattern8 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern8);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
+		m_cumber = cb;
+//		m_position = t_sp;
+//		firstJackPosition = ip2ccp(myGD->getJackPoint());
 		
+		JsonBox::Value v;
+		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+		JsonBox::Object boss = v.getArray()[0].getObject();
+		JsonBox::Object patterns = boss["pattern"].getObject();
+		JsonBox::Object pattern = patterns["108"].getObject();
+		m_oneShotNumber = pattern["oneshot"].getInt();
+		m_oneShotTerm = pattern["oneshotterm"].getInt();
+		m_gunNumber = pattern["gunnumber"].getInt();
+		m_targetingType = (TargetType)pattern["targettype"].getInt();
+		m_rotationDegreeVelocity = pattern["degreev"].getInt();
+		m_color = pattern["color"].getInt();
+		m_totalDegree = pattern["totaldegree"].getInt();
+		m_totalFrame = pattern["totalframe"].getInt(); // 200 프레임 동안
+		m_randomDegree = pattern["randomdegree"].getInt(); // 랜덤각.
+		m_frame = 0;
+
+		for(int i=0; i<m_gunNumber; i++)
+		{
+			Gun g;
+			g.bulletSpeed = 1.8f;
+			g.fireTerm = 1;
+			g.fireCount = 0;
+			g.idleCount = 0;
+			pan.push_back(g);
+		}
+		
+		initGuns();
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
+		scheduleUpdate();
 	}
+	
+	void initGuns()
+	{
+		// 여기서 총의 개수와 m_totalDegree 를 통해 총을 배치함.
+		
+		int counter = 0;
+		float termDegree;
+		if(m_totalDegree == 360)
+			termDegree = m_totalDegree / (m_gunNumber);
+		else
+			termDegree = m_totalDegree / (m_gunNumber - 1);
+		if(pan.size() == 1)
+		{
+			pan[0].degree.init(0, 0, 0);
+		}
+		else for(auto iter = pan.begin(); iter != pan.end(); ++iter, ++counter)
+		{
+			iter->degree.init(counter * termDegree, counter * termDegree, 0);
+			iter->initDegree = counter * termDegree;
+		}
+		
+		if(m_targetingType == kToUser)
+		{
+			for(auto& gun : pan)
+			{
+				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+				CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
+				float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
+				
+				float deg = rad2Deg(rad);
+				deg += m_well512.GetFloatValue(-m_randomDegree, +m_randomDegree);
+				gun.degree.init(gun.degree.getValue() + deg - m_totalDegree / 2.f, gun.degree.getValue() + deg - m_totalDegree / 2.f, 0);
+//				if(gun.degree.getValue() >= 360)
+//				{
+//					gun.degree.init(gun.degree.getValue() - 360, gun.degree.getValue() - 360, 0);
+//				}
+//				if(gun.degree.getValue() < 0)
+//				{
+//					gun.degree.init(gun.degree.getValue() + 360, gun.degree.getValue() + 360, 0);
+//				}
+			}
+		}
+
+		// 전체를 조금씩 회전 시킴.
+	}
+	void update(float dt)
+	{
+		m_frame++;
+		// 중간각 기준으로 onTargetingJack 호출해야하는 작업을 아침에 해야함!
+		
+		
+		if(m_frame >= m_totalFrame)
+		{
+			// 종료 조건
+			stopMyAction();
+		}
+		else
+		{
+			
+			if(m_targetingType == kCCW)
+			{
+				for(auto& gun : pan)
+				{
+					gun.degree.init(gun.degree.getValue() - m_rotationDegreeVelocity,
+									gun.degree.getValue() - m_rotationDegreeVelocity,
+									0);
+					
+				}
+			}
+			else if(m_targetingType == kCW)
+			{
+				for(auto& gun : pan)
+				{
+					gun.degree.init(gun.degree.getValue() + m_rotationDegreeVelocity,
+									gun.degree.getValue() + m_rotationDegreeVelocity,
+									0);
+					
+					
+				}
+			}
+			else
+			{
+				for(auto& gun : pan)
+				{
+					CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+					CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
+					float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
+					
+					float deg = rad2Deg(rad);
+					deg += m_well512.GetFloatValue(-m_randomDegree, +m_randomDegree);
+					gun.degree.init(gun.degree.getValue(), gun.initDegree + deg - m_totalDegree / 2.f, m_rotationDegreeVelocity);
+					
+//					if(gun.degree.getValue() >= 360)
+//					{
+//						gun.degree.init(gun.degree.getValue() - 360, gun.degree.getValue() - 360, m_rotationDegreeVelocity);
+//					}
+//					if(gun.degree.getValue() < 0)
+//					{
+//						gun.degree.init(gun.degree.getValue() + 360, gun.degree.getValue() + 360, m_rotationDegreeVelocity);
+//					}
+					
+					gun.degree.step();
+					m_cumber->onTargetingJack(jackPoint);
+					CCLog("gun degree %f", gun.degree.getValue());
+				}
+			}
+			for(auto& gun : pan)
+			{			
+				if(m_frame % gun.fireTerm == 0)
+				{
+					if(m_oneShotNumber > gun.fireCount)
+					{
+						// 빵.
+						std::string imgFileName;
+						std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+						if(KS::isExistFile(fileName))
+							imgFileName = fileName;
+						else
+							imgFileName = "cumber_missile1.png";
+						CCSize t_mSize = CCSize(4.f, 4.f);
+						MissileUnit* t_mu = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint()), gun.degree.getValue(), gun.bulletSpeed,
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);						
+						gun.fireCount++;
+					}
+					else
+					{
+						if(gun.idleCount >= m_oneShotTerm)
+						{
+							// 다 쉬었다.
+							
+							//,, 중간각을 기준으로
+							
+							gun.fireCount = 0;
+							gun.idleCount = 0;
+						}
+						gun.idleCount++;
+					}
+				}
+			}
+		}
+	}
+	float m_randomDegree; // 랜덤각.
+	int m_oneShotNumber; // 쉬지 않고 쏘는 개수.
+	int m_oneShotTerm; // 쐈다가 쉬는 프레임수.
+	int m_gunNumber; // 총의 개수.
+	int m_frame;
+	int m_totalFrame;
+	enum TargetType
+	{
+		kToUser = 1,
+		kCCW = 2,
+		kCW = 3
+	}m_targetingType;
+	float m_rotationDegreeVelocity; // 회전각 속도.
+	int m_color;
+	float m_totalDegree; // 전체 각도.
+	struct Gun
+	{
+		float bulletSpeed;	// 총알 속도
+		int fireTerm;		// 자체 쏘는 텀.
+		float initDegree;	// 초기화된 각도
+		FromTo<float> degree; // 현재 각도
+		int fireCount;		// oneShot 을 세기 위한 변수.
+		int idleCount;		// 쐈다가 쉬는 프레임수를 세기위함.
+	};
+	
+	vector<Gun> pan; // 판은 총들을 가짐.
+	
+//	CCPoint firstJackPosition; // 잭의 초기 위치.
+//	CCPoint m_position; // 공격 당시의 보스의 위치
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+	
 };
 class KSTargetAttackPattern9 : public AttackPattern
 {

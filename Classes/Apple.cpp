@@ -170,12 +170,12 @@ void Apple::animationNoDirection(float dt)
 		{
 			m_noDirection.rotationDeg -= 360;
 			m_noDirection.rotationCnt++;
-			/// 좀 돌았으면 돌아감.
-			if(m_noDirection.rotationCnt >= 5)
-			{
-				m_noDirection.state = 2;
-				return;
-			}
+//			/// 좀 돌았으면 돌아감.
+//			if(m_noDirection.rotationCnt >= 5)
+//			{
+//				m_noDirection.state = 2;
+//				return;
+//			}
 		}
 		m_noDirection.distance += 0.5f;
 		m_noDirection.distance = MIN(m_noDirection.distance, 30);
@@ -199,6 +199,7 @@ void Apple::animationNoDirection(float dt)
 		if(ccpLength(m_noDirection.startingPoint - getPosition()) <= 0.5f)
 		{
 			m_state = CUMBERSTATEMOVING;
+			m_noDirection.state = 0;
 			unschedule(schedule_selector(Apple::animationNoDirection));
 			setPosition(m_noDirection.startingPoint);
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
@@ -224,10 +225,6 @@ void Apple::animationDirection(float dt)
 	m_direction.timer += 1 / 60.f;
 	if(m_direction.state == 1)
 	{
-		if(m_direction.timer >= 5.f)
-		{
-			m_direction.state = 2; //
-		}
 		IntPoint jackPoint = myGD->getJackPoint();
 		IntPoint headPoint = ccp2ip(getPosition());
 		float rot = rad2Deg(atan2(jackPoint.x - headPoint.x, jackPoint.y - headPoint.y));
@@ -236,7 +233,8 @@ void Apple::animationDirection(float dt)
 	}
 	else if(m_direction.state == 2)
 	{
-		m_state = CUMBERSTATEMOVING;
+//		m_state = CUMBERSTATEMOVING; //#!
+		m_direction.state = 0;
 		unschedule(schedule_selector(Apple::animationDirection));
 	}
 }
@@ -259,6 +257,7 @@ bool Apple::startDamageReaction(float damage, float angle)
 	{
 		CCLog("m_state == CUMBERSTATEDIRECTION");
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
+		m_state = CUMBERSTATEMOVING; //#!
 	}
 	else if(m_state == CUMBERSTATEMOVING)
 	{
@@ -383,232 +382,6 @@ void Apple::scaleAdjustment(float dt)
 	
 }
 
-void Apple::normalMoving(float dt)
-{
-	m_scale.timer += 1/60.f;
-	
-	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
-	{
-		m_scale.collisionCount = 0;
-		m_scale.collisionStartTime = m_scale.timer;
-		//		setCumberSize(MIN(1.0, getCumberSize() + scale.SCALE_ADDER));
-	}
-	CCPoint afterPosition;
-	IntPoint afterPoint;
-	//	int check_loop_cnt = 0;
-	
-	if(m_state == CUMBERSTATEMOVING)
-	{
-		int changeDirection = ProbSelector::sel(0.05, 1.0 - 0.05, 0.0);
-		if(changeDirection == 0)
-		{
-			m_directionAngleDegree += m_well512.GetValue(-4, +4);
-		}
-		
-		
-		int sela = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
-		if(sela == 0)
-		{
-			m_directionAngleDegree += m_well512.GetValue(90, 270);
-		}
-	}
-	
-	
-	bool validPosition = false;
-	int cnt = 0;
-	bool onceOutlineAndMapCollision = false;
-	while(!validPosition)
-	{
-		cnt++;
-		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
-		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
-		
-		CCPoint cumberPosition = getPosition();
-		afterPosition = cumberPosition + ccp(speedX, speedY);
-		afterPoint = ccp2ip(afterPosition);
-		
-		float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
-		int ip_half_distance = half_distance / 2;
-		IntPoint checkPosition;
-		set<IntPoint> ips;
-		
-		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
-		{
-			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
-			{
-				float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
-				if(calc_distance < ip_half_distance)
-				{
-					ips.insert(IntPoint(i, j));
-				}
-			}
-		}
-		
-		COLLISION_CODE collisionCode = crashLooper(ips, &checkPosition);
-		
-		if(collisionCode == kCOLLISION_JACK)
-		{
-			// 즉사 시킴.
-			gameData->communication("Jack_startDieEffect");
-		}
-		else if(collisionCode == kCOLLISION_MAP)
-		{
-			onceOutlineAndMapCollision = true;
-			m_directionAngleDegree += m_well512.GetValue(90, 270);
-			
-			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
-			else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
-		}
-		else if(collisionCode == kCOLLISION_OUTLINE)
-		{
-			//			CCLog("collision!!");
-			onceOutlineAndMapCollision = true;
-			m_directionAngleDegree += m_well512.GetValue(90, 270);
-			
-			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
-			else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
-		}
-		else if(collisionCode == kCOLLISION_NEWLINE)
-		{
-			//			CCLog("collision!!");
-			//			gameData->communication("Jack_startDieEffect");
-			gameData->communication("SW_createSW", checkPosition, 0, 0);
-			//									callfuncI_selector(MetalSnake::showEmotion)); //##
-			
-			m_directionAngleDegree += m_well512.GetValue(90, 270);
-			
-			if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
-			else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
-		}
-		
-		else if(collisionCode == kCOLLISION_NONE)
-		{
-			validPosition = true;
-			
-			
-			
-#if 0 // 몸통에 대해 충돌처리. ver1 : 정직한 버전.
-			
-			set<IntPoint> ips;
-			for(auto body : m_Bodies)
-			{
-				CCPoint cumberPosition = body->getPosition();
-				CCPoint bodyPosition = cumberPosition;
-				IntPoint afterPoint = ccp2ip(bodyPosition);
-				IntPoint checkPosition;
-				float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
-				int ip_half_distance = half_distance / 2;
-				
-				for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
-				{
-					for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
-					{
-						float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
-						if(calc_distance < ip_half_distance)
-						{
-							ips.insert(IntPoint(i, j));
-						}
-					}
-				}
-			}
-			
-			COLLISION_CODE collisionCode = crashLooper(ips, &checkPosition);
-			if(collisionCode == kCOLLISION_JACK)
-			{
-				// 즉사 시킴.
-				gameData->communication("Jack_startDieEffect");
-				break;
-			}
-			else if(collisionCode == kCOLLISION_NEWLINE)
-			{
-				gameData->communication("SW_createSW", checkPosition, 0, 0);
-				break;
-			}
-#endif
-#if 1
-			// 몸통에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
-			if(gameData->getJackState() != jackStateNormal)
-			{
-				for(auto body : m_Bodies)
-				{
-					CCPoint cumberPosition = body->getPosition();
-					CCPoint bodyPosition = cumberPosition;
-					IntPoint afterPoint = ccp2ip(bodyPosition);
-					IntPoint checkPosition;
-					float half_distance = BODY_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
-					int ip_half_distance = half_distance / 2;
-					
-					
-					IntPoint jackPoint = gameData->getJackPoint();
-					float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
-					if(calc_distance < ip_half_distance)
-					{
-						// 즉사 시킴.
-						gameData->communication("Jack_startDieEffect");
-						break;
-					}
-				}
-			}
-#endif
-			// 꼬리에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
-			if(gameData->getJackState() != jackStateNormal)
-			{
-				CCPoint cumberPosition = m_tailImg->getPosition();
-				CCPoint bodyPosition = cumberPosition;
-				IntPoint afterPoint = ccp2ip(bodyPosition);
-				IntPoint checkPosition;
-				float half_distance = TAIL_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
-				int ip_half_distance = half_distance / 2;
-				
-				
-				IntPoint jackPoint = gameData->getJackPoint();
-				float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
-				if(calc_distance < ip_half_distance)
-				{
-					// 즉사 시킴.
-					gameData->communication("Jack_startDieEffect");
-					break;
-				}
-			}
-		}
-		else if(afterPoint.isInnerMap())
-		{
-			CCAssert(false, "");
-			validPosition = true;
-		}
-		if(cnt % 100 == 0)
-		{
-			CCLog("cnt !! = %d", cnt);
-		}
-		if(m_state != CUMBERSTATEMOVING)
-		{
-			validPosition = true;
-		}
-	}
-	
-	//	CCLog("cnt outer !! = %d", cnt);
-	
-	
-	if(m_state == CUMBERSTATEMOVING)
-		setPosition(afterPosition);
-	
-	if(onceOutlineAndMapCollision)
-	{
-		
-		if(m_scale.collisionCount == 0)
-		{
-			m_scale.collisionStartTime = m_scale.timer;
-			
-		}
-		m_scale.collisionCount++;
-		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
-		{
-			CCLog("decrese Size !!");
-			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
-		}
-	}
-}
 void Apple::furyMoving(float dt)
 {
 	m_furyMode.furyFrameCount++;
@@ -734,8 +507,9 @@ void Apple::furyMoving(float dt)
 
 void Apple::cumberAttack(float dt)
 {
-	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
-	
+//	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
+	float w = ProbSelector::sel(0.01f, 1.0 - 0.01f, 0.0);
+	w = 1;
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING)
 	{
@@ -747,8 +521,6 @@ void Apple::cumberAttack(float dt)
 		//		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
 		//		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
 		//		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
-		
-		
 		
 		bool searched = false;
 		while(!searched)
@@ -763,7 +535,7 @@ void Apple::cumberAttack(float dt)
 				searched = false;
 		}
 		
-		//		attackCode = 13;
+//		attackCode = kTargetAttack7;
 		if(attackCode == 13) // fury
 		{
 			m_state = CUMBERSTATESTOP;

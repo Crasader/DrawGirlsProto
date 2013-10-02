@@ -133,7 +133,11 @@ public:
 class NoChargeNode : public ChargeParent
 {
 public:
-	static NoChargeNode* create(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	static NoChargeNode* create(CCPoint t_position, int t_frame,
+								CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+								CCObject* t_a_t, SEL_CallFuncO t_a_d,
+								CCObject* t_c_t, SEL_CallFuncO t_c_d,
+								CCObject* t_rt)
 	{
 		NoChargeNode* n_charge = new NoChargeNode();
 		n_charge->init(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
@@ -141,7 +145,11 @@ public:
 		n_charge->autorelease();
 		return n_charge;
 	}
-	bool init(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	bool init(CCPoint t_position, int t_frame,
+			  CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+			  CCObject* t_a_t, SEL_CallFuncO t_a_d,
+			  CCObject* t_c_t, SEL_CallFuncO t_c_d,
+			  CCObject* t_rt)
 	{
 		real_target = t_rt;
 		create_position = t_position;
@@ -160,7 +168,7 @@ public:
 		if(getParent())
 		{
 			if(after_target && after_delegate)
-				(after_target->*after_delegate)();
+				(after_target->*after_delegate)(real_target);
 			
 			removeFromParentAndCleanup(true);
 		}
@@ -171,16 +179,20 @@ protected:
 	CCObject* charging_target;
 	CCObject* after_target;
 	CCObject* cancel_target;
-	SEL_CallFunc charging_delegate;
-	SEL_CallFunc after_delegate;
-	SEL_CallFunc cancel_delegate;
+	SEL_CallFuncO charging_delegate;
+	SEL_CallFuncO after_delegate;
+	SEL_CallFuncO cancel_delegate;
 	CCPoint create_position;
 };
 
 class ChargeNode : public ChargeParent
 {
 public:
-	static ChargeNode* create(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	static ChargeNode* create(CCPoint t_position, int t_frame,
+							  CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+							  CCObject* t_a_t, SEL_CallFuncO t_a_d,
+							  CCObject* t_c_t, SEL_CallFuncO t_c_d,
+							  CCObject* t_rt)
 	{
 		ChargeNode* n_charge = new ChargeNode();
 		n_charge->myInit(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
@@ -209,7 +221,7 @@ public:
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 		if(cancel_target && cancel_delegate)
-			(cancel_target->*cancel_delegate)();
+			(cancel_target->*cancel_delegate)(real_target);
 		removeSelf();
 	}
 	
@@ -227,9 +239,9 @@ private:
 	CCObject* charging_target;
 	CCObject* after_target;
 	CCObject* cancel_target;
-	SEL_CallFunc charging_delegate;
-	SEL_CallFunc after_delegate;
-	SEL_CallFunc cancel_delegate;
+	SEL_CallFuncO charging_delegate;
+	SEL_CallFuncO after_delegate;
+	SEL_CallFuncO cancel_delegate;
 	
 	int charge_cnt;
 	
@@ -241,13 +253,13 @@ private:
 		
 		particle->setStartRadius((charge_frame/3.0)*(charge_frame-charge_cnt)/charge_frame);
 		if(charging_target && charging_delegate)
-			(charging_target->*charging_delegate)();
+			(charging_target->*charging_delegate)(real_target);
 		
 		if(charge_cnt >= charge_frame)
 		{
 			AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 			if(after_target && after_delegate)
-				(after_target->*after_delegate)();
+				(after_target->*after_delegate)(real_target);
 			removeSelf();
 		}
 	}
@@ -259,7 +271,11 @@ private:
 		removeFromParentAndCleanup(true);
 	}
 	
-	void myInit(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	void myInit(CCPoint t_position, int t_frame,
+				CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+				CCObject* t_a_t, SEL_CallFuncO t_a_d,
+				CCObject* t_c_t, SEL_CallFuncO t_c_d,
+				CCObject* t_rt)
 	{
 		
 		
@@ -319,7 +335,11 @@ private:
 class SpecialChargeNode : public ChargeParent
 {
 public:
-	static SpecialChargeNode* create(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	static SpecialChargeNode* create(CCPoint t_position, int t_frame,
+									 CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+									 CCObject* t_a_t,	SEL_CallFuncO t_a_d,
+									 CCObject* t_c_t,	SEL_CallFuncO t_c_d,
+									 CCObject* t_rt)
 	{
 		SpecialChargeNode* n_charge = new SpecialChargeNode();
 		n_charge->myInit(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
@@ -346,7 +366,7 @@ public:
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 		if(cancel_target && cancel_delegate)
-			(cancel_target->*cancel_delegate)();
+			(cancel_target->*cancel_delegate)(real_target);
 		removeSelf();
 	}
 	
@@ -356,17 +376,15 @@ public:
 	}
 	
 private:
-	
-	
 	CCPoint create_position;
 	int charge_frame;
 	CCObject* real_target;
 	CCObject* charging_target;
 	CCObject* after_target;
 	CCObject* cancel_target;
-	SEL_CallFunc charging_delegate;
-	SEL_CallFunc after_delegate;
-	SEL_CallFunc cancel_delegate;
+	SEL_CallFuncO charging_delegate;
+	SEL_CallFuncO after_delegate;
+	SEL_CallFuncO cancel_delegate;
 	float ing_rps;
 	float chargeRate;
 	
@@ -380,13 +398,13 @@ private:
 		
 		particle->setRotatePerSecond(particle->getRotatePerSecond() + chargeRate);
 		if(charging_target && charging_delegate)
-			(charging_target->*charging_delegate)();
+			(charging_target->*charging_delegate)(real_target);
 		
 		if(charge_cnt >= charge_frame)
 		{
 			AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 			if(after_target && after_delegate)
-				(after_target->*after_delegate)();
+				(after_target->*after_delegate)(real_target);
 			removeSelf();
 		}
 	}
@@ -398,7 +416,11 @@ private:
 		removeFromParentAndCleanup(true);
 	}
 	
-	void myInit(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	void myInit(CCPoint t_position, int t_frame,
+				CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+				CCObject* t_a_t, SEL_CallFuncO t_a_d,
+				CCObject* t_c_t, SEL_CallFuncO t_c_d,
+				CCObject* t_rt)
 	{
 		
 		
@@ -461,7 +483,11 @@ private:
 class CrashChargeNode : public ChargeParent
 {
 public:
-	static CrashChargeNode* create(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	static CrashChargeNode* create(CCPoint t_position, int t_frame,
+								   CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+								   CCObject* t_a_t, SEL_CallFuncO t_a_d,
+								   CCObject* t_c_t, SEL_CallFuncO t_c_d,
+								   CCObject* t_rt)
 	{
 		CrashChargeNode* n_charge = new CrashChargeNode();
 		n_charge->myInit(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
@@ -488,7 +514,7 @@ public:
 		myGD->communication("CP_setCasting", false);
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 		if(cancel_target && cancel_delegate)
-			(cancel_target->*cancel_delegate)();
+			(cancel_target->*cancel_delegate)(real_target);
 		removeSelf();
 	}
 	
@@ -506,9 +532,9 @@ private:
 	CCObject* charging_target;
 	CCObject* after_target;
 	CCObject* cancel_target;
-	SEL_CallFunc charging_delegate;
-	SEL_CallFunc after_delegate;
-	SEL_CallFunc cancel_delegate;
+	SEL_CallFuncO charging_delegate;
+	SEL_CallFuncO after_delegate;
+	SEL_CallFuncO cancel_delegate;
 	
 	int charge_cnt;
 	
@@ -530,7 +556,7 @@ private:
 		}
 		
 		if(charging_target && charging_delegate)
-			(charging_target->*charging_delegate)();
+			(charging_target->*charging_delegate)(real_target);
 		
 		if(charge_cnt >= charge_frame)
 		{
@@ -538,7 +564,7 @@ private:
 			AudioEngine::sharedInstance()->stopAllEffects();
 			AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 			if(after_target && after_delegate)
-				(after_target->*after_delegate)();
+				(after_target->*after_delegate)(real_target);
 			removeSelf();
 		}
 	}
@@ -550,7 +576,11 @@ private:
 		removeFromParentAndCleanup(true);
 	}
 	
-	void myInit(CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFunc t_ing_d, CCObject* t_a_t, SEL_CallFunc t_a_d, CCObject* t_c_t, SEL_CallFunc t_c_d, CCObject* t_rt)
+	void myInit(CCPoint t_position, int t_frame,
+				CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+				CCObject* t_a_t, SEL_CallFuncO t_a_d,
+				CCObject* t_c_t, SEL_CallFuncO t_c_d,
+				CCObject* t_rt)
 	{
 		real_target = t_rt;
 		create_position = t_position;
