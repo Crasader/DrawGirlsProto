@@ -52,6 +52,20 @@ enum FailCode{
 	kFC_missionfail
 };
 
+enum CardSortType{
+	kCST_default = 0,
+	kCST_take,
+	kCST_gradeUp,
+	kCST_gradeDown
+};
+
+class CardSortInfo{
+public:
+	int card_number;
+	int take_number;
+	int grade;
+};
+
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
 
@@ -438,7 +452,7 @@ public:
 		int found_number = -1;
 		for(int i=0;i<t_size;i++)
 		{
-			if(recent_card_number == has_gotten_cards[i])
+			if(recent_card_number == has_gotten_cards[i].card_number)
 			{
 				found_number = i;
 				break;
@@ -449,9 +463,9 @@ public:
 			return -1;
 
 		if(found_number >= t_size-1)
-			return has_gotten_cards[0];
+			return has_gotten_cards[0].card_number;
 		else
-			return has_gotten_cards[found_number+1];
+			return has_gotten_cards[found_number+1].card_number;
 	}
 	
 	int getPreCardNumber(int recent_card_number)
@@ -464,7 +478,7 @@ public:
 		int found_number = -1;
 		for(int i=0;i<t_size;i++)
 		{
-			if(recent_card_number == has_gotten_cards[i])
+			if(recent_card_number == has_gotten_cards[i].card_number)
 			{
 				found_number = i;
 				break;
@@ -475,19 +489,32 @@ public:
 			return -1;
 		
 		if(found_number <= 0)
-			return has_gotten_cards[t_size-1];
+			return has_gotten_cards[t_size-1].card_number;
 		else
-			return has_gotten_cards[found_number-1];
+			return has_gotten_cards[found_number-1].card_number;
 	}
 	
 	void addHasGottenCardNumber(int card_number)
 	{
-		has_gotten_cards.push_back(card_number);
-		sort(has_gotten_cards.begin(), has_gotten_cards.end());
+		int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number);
+		CardSortInfo t_info;
+		t_info.card_number = card_number;
+		t_info.take_number = take_number;
+		t_info.grade = t_info.card_number%10+1;
+		has_gotten_cards.push_back(t_info);
+		
+		struct t_CardSort{
+			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+			{
+				return a.card_number < b.card_number;
+			}
+		} pred;
+		
+		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 		CCLog("input %d, sort", card_number);
 		for(int i=0;i<has_gotten_cards.size();i++)
 		{
-			CCLog("%d", has_gotten_cards[i]);
+			CCLog("%d", has_gotten_cards[i].card_number);
 		}
 	}
 	
@@ -524,7 +551,7 @@ private:
 	
 	deque<bool> before_use_item;
 	deque<bool> is_using_item;
-	deque<int> has_gotten_cards;
+	deque<CardSortInfo> has_gotten_cards;
 	
 	bool is_tutorial_cleared;
 	ImgType after_loading;
@@ -615,8 +642,15 @@ private:
 		{
 			for(int j=0;j<3;j++)
 			{
-				if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, i*10+j))
-					has_gotten_cards.push_back(i*10+j);
+				int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, i*10+j);
+				if(take_number != 0)
+				{
+					CardSortInfo t_info;
+					t_info.card_number = i*10+j;
+					t_info.take_number = take_number;
+					t_info.grade = t_info.card_number%10+1;
+					has_gotten_cards.push_back(t_info);
+				}
 			}
 		}
 		
@@ -634,27 +668,27 @@ private:
 			is_using_item.push_back(false);
 		}
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating,10,5) > 0 && !myDSH->getBoolForKey(kDSH_Key_isOpendChapter_int1, 21))
-			myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, 21, true);
-		
-		if(myDSH->getIntegerForKey(kDSH_Key_totalSelfPetCount) <= 0)
-		{
-			myDSH->setIntegerForKey(kDSH_Key_openSlotCount, 1);
-			myDSH->setIntegerForKey(kDSH_Key_totalSelfPetCount, 1);
-			myDSH->setIntegerForKey(kDSH_Key_selfPetCode_int1, 1, kPetCode_empty_ladybug);
-			myDSH->setIntegerForKey(kDSH_Key_lastSelectedPet, 1);
-		}
-		
-		if(!myDSH->getBoolForKey(kDSH_Key_hasGottenPet_int1, kPetCode_empty_ladybug))
-		{
-			int total_self_pet_cnt = myDSH->getIntegerForKey(kDSH_Key_totalSelfPetCount);
-			for(int i=1;i<=total_self_pet_cnt;i++)
-			{
-				int pet_code = myDSH->getIntegerForKey(kDSH_Key_selfPetCode_int1, i);
-				myDSH->setBoolForKey(kDSH_Key_hasGottenPet_int1, pet_code, true);
-			}
-		}
-		
+//		if(myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating,10,5) > 0 && !myDSH->getBoolForKey(kDSH_Key_isOpendChapter_int1, 21))
+//			myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, 21, true);
+//		
+//		if(myDSH->getIntegerForKey(kDSH_Key_totalSelfPetCount) <= 0)
+//		{
+//			myDSH->setIntegerForKey(kDSH_Key_openSlotCount, 1);
+//			myDSH->setIntegerForKey(kDSH_Key_totalSelfPetCount, 1);
+//			myDSH->setIntegerForKey(kDSH_Key_selfPetCode_int1, 1, kPetCode_empty_ladybug);
+//			myDSH->setIntegerForKey(kDSH_Key_lastSelectedPet, 1);
+//		}
+//		
+//		if(!myDSH->getBoolForKey(kDSH_Key_hasGottenPet_int1, kPetCode_empty_ladybug))
+//		{
+//			int total_self_pet_cnt = myDSH->getIntegerForKey(kDSH_Key_totalSelfPetCount);
+//			for(int i=1;i<=total_self_pet_cnt;i++)
+//			{
+//				int pet_code = myDSH->getIntegerForKey(kDSH_Key_selfPetCode_int1, i);
+//				myDSH->setBoolForKey(kDSH_Key_hasGottenPet_int1, pet_code, true);
+//			}
+//		}
+//		
 //		GraphDog::get()->setup("drawingjack", "GDSK8052", "com.litqoo.lib.FBConnectorBase", 20);
 //		graphdog->setGraphDogVersion(5);
 		

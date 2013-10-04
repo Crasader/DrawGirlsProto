@@ -295,41 +295,16 @@ void ClearScene::menuAction(CCObject* pSender)
 		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
 		else												take_level = 1;
 		
-		if(!myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, mySD->getSilType()*10+take_level-1))
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, mySD->getSilType()*10+take_level-1) == 0)
 		{
-			myDSH->setBoolForKey(kDSH_Key_hasGottenCard_int1, mySD->getSilType()*10+take_level-1, true);
+			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, mySD->getSilType()*10+take_level-1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+			
 			mySGD->addHasGottenCardNumber(mySD->getSilType()*10+take_level-1);
 		}
-
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int selected_card_stage = selected_card_number/10;
-		int selected_card_level = selected_card_number%10 + 1;
 		
-		if(selected_card_stage == mySD->getSilType())
-		{
-			if(selected_card_level > take_level)
-			{
-				int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number);
-				int max_durability = mySD->getCardDurability(mySD->getSilType(), selected_card_level);
-				durability += selected_card_level-take_level;
-				if(durability > max_durability)
-					durability = max_durability;
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-			}
-			else if(selected_card_level == take_level)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, mySD->getCardDurability(mySD->getSilType(), take_level));
-			}
-			else
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, mySD->getCardDurability(mySD->getSilType(), take_level));
-				myDSH->setIntegerForKey(kDSH_Key_selectedCard, mySD->getSilType()*10+take_level-1);
-			}
-		}
-		else
-		{
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, mySD->getSilType()*10+take_level-1, mySD->getCardDurability(mySD->getSilType(), take_level));
-		}
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, mySD->getSilType()*10+take_level-1, mySD->getCardDurability(mySD->getSilType(), take_level));
+			
 		
 		realEnd();
 	}

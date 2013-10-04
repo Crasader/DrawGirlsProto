@@ -143,7 +143,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
     int level_number = card_number%10 + 1;
     if(level_number == 1)
     {
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number+1))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number+1) != 0)
         {
             CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number+1)->getCString());
             second_img->setScale(mul_value);
@@ -151,7 +151,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             target->addChild(second_img);
         }
         
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number+2))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number+2) != 0)
         {
             CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number+2)->getCString());
             third_img->setScale(mul_value);
@@ -169,7 +169,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
     }
     else if(level_number == 2)
     {
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number-1))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number-1) != 0)
         {
             CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number-1)->getCString());
             first_img->setScale(mul_value);
@@ -177,7 +177,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             target->addChild(first_img);
         }
         
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number+1))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number+1) != 0)
         {
             CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number+1)->getCString());
             third_img->setScale(mul_value);
@@ -195,7 +195,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
     }
     else if(level_number == 3)
     {
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number-2))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number-2) != 0)
         {
             CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number-2)->getCString());
             first_img->setScale(mul_value);
@@ -203,7 +203,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             target->addChild(first_img);
         }
         
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number-1))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number-1) != 0)
         {
             CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number-1)->getCString());
             second_img->setScale(mul_value);

@@ -86,7 +86,7 @@ private:
 	
 	void setChild()
 	{
-		if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_stage*10 + card_level-1))
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_stage*10 + card_level-1) != 0)
 		{
 			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_stage*10 + card_level-1) > 0;
 			
@@ -156,7 +156,7 @@ private:
 		my_size = CCSizeMake(60, 78);
 		is_setted = false;
 		
-		if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_stage*10 + card_level-1))
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_stage*10 + card_level-1) != 0)
 			my_tag = kCSS_MT_cardMenuBase+card_stage*10+card_level-1;
 		else
 			my_tag = kCSS_MT_noCardBase+card_stage*10+card_level-1;
