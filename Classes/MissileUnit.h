@@ -14,6 +14,8 @@
 #include <queue>
 #include "StarGoldData.h"
 #include "cocos-ext.h"
+#include "FromTo.h"
+#include "KSUtil.h"
 USING_NS_CC_EXT;
 using namespace cocos2d;
 using namespace std;
@@ -1074,6 +1076,7 @@ private:
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor3_targeting.ccbi",this));
+		reader->release();
 		targetingImg->setPosition(t_sp);
 		
 		targetingImg->setScale(t_sSize);
@@ -1096,15 +1099,23 @@ public:
 	
 	void removeEffect()
 	{
-		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(FallMeteor::selfRemove));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-		
-		meteor->runAction(t_seq);
+		fadeFromToDuration.init(255, 0, 1.f);
+		schedule(schedule_selector(FallMeteor::hidingAnimation));
 	}
 	
+	void hidingAnimation(float dt)
+	{
+		if(fadeFromToDuration.step(1.f/60.f) == false)
+		{
+			selfRemove();
+		}
+		else
+		{
+			KS::setOpacity(this, fadeFromToDuration.getValue());
+		}
+	}
 private:
-	
+	FromToWithDuration<float> fadeFromToDuration;
 	CCSprite* meteor;
 	string imgFilename;
 	
@@ -1312,19 +1323,15 @@ private:
 		fall_dv = ccpSub(fp, t_sp);
 		fall_dv = ccpMult(fall_dv, 1.f/fallFrame);
 		
-		meteor = CCSprite::create(("meteor_stone_test" + imgFilename).c_str(), CCRectMake(0, 0, imgFrameSize.width, imgFrameSize.height));
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		meteor = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor3.ccbi",this));
+		meteor->setRotation(90 + 45);
+		reader->release();
+		
+		
+//		 = CCSprite::create(("meteor_stone_test" + imgFilename).c_str(), CCRectMake(0, 0, imgFrameSize.width, imgFrameSize.height));
 		meteor->setPosition(t_sp);
-		
-		CCSprite* t_t = CCSprite::create(("meteor_stone_test" + imgFilename).c_str());
-		CCAnimation* t_animation = CCAnimation::create();
-		t_animation->setDelayPerUnit(0.1);
-		for(int i=0;i<imgFrameCnt;i++)
-			t_animation->addSpriteFrameWithTexture(t_t->getTexture(), CCRectMake(i*imgFrameSize.width, 0, imgFrameSize.width, imgFrameSize.height));
-		CCAnimate* t_animate = CCAnimate::create(t_animation);
-		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-		
-		meteor->runAction(t_repeat);
-		
 		addChild(meteor);
 		
 		int random_sign;

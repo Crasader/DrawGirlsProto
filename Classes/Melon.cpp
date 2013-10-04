@@ -239,6 +239,12 @@ void Melon::animationDirection(float dt)
 //		m_state = CUMBERSTATEMOVING; //#!
 		m_direction.state = 0;
 		unschedule(schedule_selector(Melon::animationDirection));
+		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+		for(auto bodyAniManager : m_bodyAnimationManagers)
+		{
+			bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
+		}
+		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 	}
 }
 bool Melon::startDamageReaction(float damage, float angle)
