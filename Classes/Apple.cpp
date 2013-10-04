@@ -236,6 +236,8 @@ void Apple::animationDirection(float dt)
 //		m_state = CUMBERSTATEMOVING; //#!
 		m_direction.state = 0;
 		unschedule(schedule_selector(Apple::animationDirection));
+		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 	}
 }
 bool Apple::startDamageReaction(float damage, float angle)
