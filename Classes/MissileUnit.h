@@ -1071,7 +1071,9 @@ private:
 		fSize = t_fSize;
 		rotateValue = t_fAngle - t_sAngle;
 		
-		targetingImg = CCSprite::create(("meteor_targeting" + imgFilename).c_str());
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor3_targeting.ccbi",this));
 		targetingImg->setPosition(t_sp);
 		
 		targetingImg->setScale(t_sSize);
@@ -1119,7 +1121,7 @@ private:
 	void jackDie()
 	{
 		unschedule(schedule_selector(FallMeteor::fall));
-		(target_removeEffect->*delegate_removeEffect)();
+//		(target_removeEffect->*delegate_removeEffect)();
 		removeEffect();
 	}
 	
@@ -1127,7 +1129,7 @@ private:
 	{
 		myGD->communication("Main_showLineDiePosition", t_p);
 		unschedule(schedule_selector(FallMeteor::fall));
-		(target_removeEffect->*delegate_removeEffect)();
+//		(target_removeEffect->*delegate_removeEffect)();
 		removeEffect();
 	}
 	
@@ -2267,8 +2269,10 @@ private:
 	void jackDie()
 	{
 		unschedule(schedule_selector(BurnFragment::myAction));
+		CCLog("call %x", target_removeEffect);
 		(target_removeEffect->*delegate_removeEffect)();
 		removeFromParentAndCleanup(true);
+		CCLog("%x dest", this);
 	}
 	
 	void lineDie(IntPoint t_p)
@@ -2449,6 +2453,7 @@ public:
 		unschedule(schedule_selector(Burn::myAction));
 		(target_removeEffect->*delegate_removeEffect)();
 		removeFromParentAndCleanup(true);
+		CCLog("%x destroy", this);
 	}
 	
 private:
@@ -2474,7 +2479,7 @@ private:
 			if(mapPoint.isInnerMap() && myGD->mapState[mapPoint.x][mapPoint.y] == mapOldline)
 			{
 				positionSetted = true;
-				BurnFragment* t_bf = BurnFragment::create(mapPoint, 5, getParent(), mType, this, callfunc_selector(Burn::removeEffect));
+				BurnFragment* t_bf = BurnFragment::create(mapPoint, 5, getParent(), mType, target_removeEffect, delegate_removeEffect);
 				getParent()->addChild(t_bf);
 				stopMyAction();
 			}

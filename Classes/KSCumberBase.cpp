@@ -762,9 +762,9 @@ void KSCumberBase::circleMoving(float dt)
 	
 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
 	{
-		if(ProbSelector::sel(0.005, 1.0 - 0.005, 0.0) == 0)
+		if(ProbSelector::sel(0.003, 1.0 - 0.003, 0.0) == 0)
 		{
-			// m_circle 변수를 재지정 ...
+			// m_snake 변수를 재지정 ...
 			
 			m_circle.setRelocation(getPosition(), m_well512);
 		}
@@ -781,9 +781,15 @@ void KSCumberBase::circleMoving(float dt)
 		float circleRadius = sqrt(pow((m_circle.centerPosition.x - m_circle.relocationPosition.x), 2) +
 								  pow((m_circle.centerPosition.y - m_circle.relocationPosition.y), 2));
 		
+		// 쿰버위치에서 센터 위치까지의 각도.
 		
-		afterPosition = ccp(m_circle.centerPosition.x + circleRadius * (1) * cos(m_circle.angleRad),
-							m_circle.centerPosition.y + circleRadius * (1) * sin(m_circle.angleRad));
+		float theta = atan2f(m_circle.relocationPosition.y - m_circle.centerPosition.y,
+							 m_circle.relocationPosition.x - m_circle.centerPosition.x);
+		
+		float a = circleRadius;
+		float b = circleRadius;
+		afterPosition = ccp(m_circle.centerPosition.x + a * cos(theta) * cos(m_circle.angleRad) - b * sin(theta) * sin(m_circle.angleRad),
+							m_circle.centerPosition.y + a * cos(m_circle.angleRad) * sin(theta) + b * sin(m_circle.angleRad) * cos(theta));
 		afterPoint = ccp2ip(afterPosition);
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
@@ -847,7 +853,7 @@ void KSCumberBase::circleMoving(float dt)
 			}
 		}
 		if(cnt >= 3)
-			CCLog("circleMoving cnt !! = %d", cnt);
+			CCLog("snakeMoving cnt !! = %d", cnt);
 		if(cnt >= 30)
 		{
 			pathFound = false;
@@ -870,6 +876,7 @@ void KSCumberBase::circleMoving(float dt)
 			float circleRadius = sqrt(pow((m_circle.centerPosition.x - m_circle.relocationPosition.x), 2) +
 									  pow((m_circle.centerPosition.y - m_circle.relocationPosition.y), 2));
 			m_circle.angleRad += m_speed * m_circle.sign / circleRadius;
+			
 			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
 			setPosition(afterPosition);
 		}
@@ -892,4 +899,163 @@ void KSCumberBase::circleMoving(float dt)
 	}
 
 	m_circle.lastMovingTime = m_scale.timer;
+}
+
+void KSCumberBase::snakeMoving(float dt)
+{
+	m_scale.timer += 1/60.f;
+	if(m_scale.timer - m_snake.lastMovingTime >= 3/60.f) // 3 프레임 이상 차이 나면 다시 설정.
+	{
+		m_snake.setRelocation(getPosition(), m_well512);
+	}
+	
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	{
+		m_scale.collisionCount = 0;
+		m_scale.collisionStartTime = m_scale.timer;
+		//		setCumberSize(MIN(1.0, getCumberSize() + scale.SCALE_ADDER));
+	}
+	CCPoint afterPosition;
+	IntPoint afterPoint;
+	//	int check_loop_cnt = 0;
+	
+	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	{
+		if(ProbSelector::sel(0.005, 1.0 - 0.005, 0.0) == 0)
+		{
+			// m_snake 변수를 재지정 ...
+			
+			m_snake.setRelocation(getPosition(), m_well512);
+		}
+	}
+	
+	bool validPosition = false;
+	int cnt = 0;
+	bool onceOutlineAndMapCollision = false;
+	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
+	while(!validPosition)
+	{
+		cnt++;
+		
+		float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
+								  pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
+		
+		// 쿰버위치에서 센터 위치까지의 각도.
+		
+		float theta = atan2f(m_snake.relocationPosition.y - m_snake.centerPosition.y,
+							 m_snake.relocationPosition.x - m_snake.centerPosition.x);
+		
+		float a = circleRadius;
+		float b = a * m_snake.shortRadianRatio;
+		afterPosition = ccp(m_snake.centerPosition.x + a * cos(theta) * cos(m_snake.angleRad) - b * sin(theta) * sin(m_snake.angleRad),
+							m_snake.centerPosition.y + a * cos(m_snake.angleRad) * sin(theta) + b * sin(m_snake.angleRad) * cos(theta));
+		afterPoint = ccp2ip(afterPosition);
+		IntPoint checkPosition;
+		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
+		if(m_state != CUMBERSTATEFURY)
+		{
+			if(collisionCode == kCOLLISION_JACK)
+			{
+				// 즉사 시킴.
+				validPosition = true;
+				if(gameData->getJackState() != jackStateNormal)
+					gameData->communication("Jack_startDieEffect");
+			}
+			else if(collisionCode == kCOLLISION_MAP)
+			{
+				onceOutlineAndMapCollision = true;
+				m_snake.setRelocation(getPosition(), m_well512);
+			}
+			else if(collisionCode == kCOLLISION_OUTLINE)
+			{
+				//			CCLog("collision!!");
+				onceOutlineAndMapCollision = true;
+				// m_snake 변수를 재지정 ...
+				m_snake.setRelocation(getPosition(), m_well512);
+				
+			}
+			else if(collisionCode == kCOLLISION_NEWLINE)
+			{
+				//			CCLog("collision!!");
+				//			gameData->communication("Jack_startDieEffect");
+				gameData->communication("SW_createSW", checkPosition, 0, 0);
+				//									callfuncI_selector(MetalSnake::showEmotion)); //##
+				
+				// m_snake 변수를 재지정 ...
+				m_snake.setRelocation(getPosition(), m_well512);
+			}
+			
+			else if(collisionCode == kCOLLISION_NONE)
+			{
+				validPosition = true;
+			}
+			else
+			{
+				validPosition = true;
+			}
+		}
+		else
+		{
+			if(collisionCode == kCOLLISION_OUTLINE)
+			{
+				// m_snake 변수를 재지정 ...
+				m_snake.setRelocation(getPosition(), m_well512);
+			}
+			else
+			{
+				validPosition = true;
+			}
+			
+			if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
+			{
+				crashMapForPosition(afterPosition);
+			}
+		}
+		if(cnt >= 3)
+			CCLog("circleMoving cnt !! = %d", cnt);
+		if(cnt >= 30)
+		{
+			pathFound = false;
+			validPosition = true;
+		}
+		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
+		{
+			validPosition = true;
+		}
+	}
+	
+	//	CCLog("cnt outer !! = %d", cnt);
+	
+	
+	
+ 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	{
+		if(pathFound)
+		{
+			float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
+									  pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
+			m_snake.angleRad += m_speed * m_snake.sign / circleRadius;
+			
+			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
+			setPosition(afterPosition);
+		}
+		
+	}
+	if(onceOutlineAndMapCollision)
+	{
+		
+		if(m_scale.collisionCount == 0)
+		{
+			m_scale.collisionStartTime = m_scale.timer;
+			
+		}
+		m_scale.collisionCount++;
+		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
+		{
+			CCLog("decrese Size !!");
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
+		}
+	}
+	
+	m_snake.lastMovingTime = m_scale.timer;
 }

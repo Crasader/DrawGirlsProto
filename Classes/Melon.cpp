@@ -202,6 +202,10 @@ void Melon::animationNoDirection(float dt)
 			unschedule(schedule_selector(Melon::animationNoDirection));
 			setPosition(m_noDirection.startingPoint);
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+			for(auto bodyAniManager : m_bodyAnimationManagers)
+			{
+				bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
+			}
 			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 		}
 		else
@@ -327,6 +331,10 @@ void Melon::damageReaction(float)
 		m_state = CUMBERSTATEMOVING;
 		unschedule(schedule_selector(Melon::damageReaction));
 		m_headAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+		for(auto bodyAniManager : m_bodyAnimationManagers)
+		{
+			bodyAniManager->runAnimationsForSequenceNamed("Default Timeline");
+		}
 		m_tailAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
@@ -348,21 +356,31 @@ void Melon::invisibling(float dt)
 	
 	if(m_invisible.invisibleFrame < m_invisible.VISIBLE_FRAME)
 	{
-		m_headImg->setOpacity(MAX(0, 255 - m_invisible.invisibleFrame*5));
+		KS::setOpacity(m_headImg, MAX(0, 255 - m_invisible.invisibleFrame*5));
+		for(auto body : m_Bodies)
+		{
+			KS::setOpacity(body, MAX(0, 255 - m_invisible.invisibleFrame*5));
+		}
+		KS::setOpacity(m_tailImg, MAX(0, 255 - m_invisible.invisibleFrame*5));
 	}
 	else
 	{
 		// 최소 1 최대 255
+		
 		m_invisible.invisibleValue = MIN(255, MAX(1, m_invisible.invisibleValue * 1.2f));
 		
-		m_headImg->setOpacity(m_invisible.invisibleValue);
+		KS::setOpacity(m_headImg, m_invisible.invisibleValue);
+		for(auto body : m_Bodies)
+		{
+			KS::setOpacity(body, m_invisible.invisibleValue);
+		}
+		KS::setOpacity(m_tailImg, m_invisible.invisibleValue);
 		if(m_invisible.invisibleValue == 255)
 		{
 			m_invisible.startInvisibleScheduler = false;
-			unschedule(schedule_selector(Melon::invisibling));
+			unschedule(schedule_selector(ThisClassType::invisibling));
 		}
 	}
-	
 }
 
 void Melon::scaleAdjustment(float dt)
@@ -407,8 +425,10 @@ void Melon::cumberAttack(float dt)
 		
 		
 		bool searched = false;
+		int searchCount = 0;
 		while(!searched)
 		{
+			searchCount++;
 			int idx = m_well512.GetValue(m_attacks.size() - 1);
 			
 			attackCode = m_attacks[idx];
@@ -417,27 +437,43 @@ void Melon::cumberAttack(float dt)
 				searched = false;
 			if(attackCode == kTargetAttack9 && m_state == CUMBERSTATEFURY)
 				searched = false;
+			if(searchCount >= 30)
+			{
+				searched = false;
+				break;
+			}
+		}
+
+		if(searched)
+		{
+			if(attackCode == kTargetAttack9) // fury
+			{
+				m_state = CUMBERSTATESTOP;
+				m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+				for(auto bodyAniManager : m_bodyAnimationManagers)
+				{
+					bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+				}
+				m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+				
+				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
+			}
+			else
+			{
+				m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+				for(auto bodyAniManager : m_bodyAnimationManagers)
+				{
+					bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+				}
+				m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+				if(1 <= attackCode && attackCode <= 100)
+					startAnimationNoDirection();
+				else
+					startAnimationDirection();
+				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
+			}
 		}
 		
-		//		attackCode = 13;
-		if(attackCode == kTargetAttack9) // fury
-		{
-			CCLog("aaa %f %f", getPosition().x, getPosition().y);
-			m_state = CUMBERSTATESTOP;
-			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
-			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
-			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
-		}
-		else
-		{
-			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
-			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
-			if(1 <= attackCode && attackCode <= 100)
-				startAnimationNoDirection();
-			else
-				startAnimationDirection();
-			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
-		}
 	}
 }
 COLLISION_CODE Melon::crashWithX(IntPoint check_position)

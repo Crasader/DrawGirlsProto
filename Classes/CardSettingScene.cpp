@@ -68,6 +68,8 @@ bool CardSettingScene::init()
 	my_clv = CardListViewer::create();
 	addChild(my_clv, kCSS_Z_content);
 	
+	int sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)
 	{
@@ -150,6 +152,8 @@ bool CardSettingScene::init()
 	diary_menu->setPosition(getContentPosition(kCSS_MT_diary));
 	addChild(diary_menu, kCSS_Z_content);
 	
+	align_list_img = NULL;
+	
 	is_menu_enable = true;
 	
 	ScreenSide* t_screen = ScreenSide::create();
@@ -189,7 +193,19 @@ void CardSettingScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCSS_MT_align)
 	{
-		//
+		if(align_list_img)
+		{
+			align_list_img->removeFromParent();
+			align_list_img = NULL;
+		}
+		else
+		{
+			align_list_img = CCSprite::create("cardsetting_alignback.png");
+			align_list_img->setAnchorPoint(ccp(0.5f,1.f));
+			align_list_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_align), ccp(0,-15)));
+			addChild(align_list_img, kCSS_Z_alignList);
+		}
+		
 		is_menu_enable = true;
 	}
 	else if(tag == kCSS_MT_diary)

@@ -19,6 +19,17 @@ USING_NS_CC;
 #include <functional>
 #include <map>
 #include "KSUtil.h"
+
+/*
+ 메테오 : AP_Missile16
+ AP_Missile15 불지르기
+ AP_Missile34 인비지블
+ 
+ AP_Missile12 위성빔
+ AP_Missile6  레이저 스캔
+ AP_Missile22 방사능.
+ 
+ */
 AppDelegate::AppDelegate()
 {
 	

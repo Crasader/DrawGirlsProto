@@ -63,7 +63,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_selectedCard,
 	kDSH_Key_cardDurability_int1,
 	kDSH_Key_hasGottenCard_int1,
-	kDSH_Key_inputTextCard_int1
+	kDSH_Key_inputTextCard_int1,
+	kDSH_Key_cardTakeCnt,
+	kDSH_Key_cardSortType
 }DSH_Key;
 
 #define myDSH DataStorageHub::sharedInstance()
@@ -239,6 +241,8 @@ private:
 		else if(t_name == kDSH_Key_cardDurability_int1)					return_value = "cd%d";
 		else if(t_name == kDSH_Key_hasGottenCard_int1)					return_value = "hgcard%d";
 		else if(t_name == kDSH_Key_inputTextCard_int1)					return_value = "itc%d";
+		else if(t_name == kDSH_Key_cardTakeCnt)							return_value = "ctc";
+		else if(t_name == kDSH_Key_cardSortType)						return_value = "cst";
 		
 		return return_value;
 	}

@@ -218,8 +218,10 @@ void Coconut::cumberAttack(float dt)
 		
 
 		bool searched = false;
+		int searchCount = 0;
 		while(!searched)
 		{
+			searchCount++;
 			int idx = m_well512.GetValue(m_attacks.size() - 1);
 			
 			attackCode = m_attacks[idx];
@@ -228,7 +230,13 @@ void Coconut::cumberAttack(float dt)
 				searched = false;
 			if(attackCode == kTargetAttack9 && m_state == CUMBERSTATEFURY)
 				searched = false;
+			if(searchCount >= 30)
+			{
+				searched = false;
+				break;
+			}
 		}
+
 
 //		attackCode = 13;
 //		attackCode = 9;
@@ -317,18 +325,18 @@ void Coconut::invisibling(float dt)
 	
 	if(m_invisible.invisibleFrame < m_invisible.VISIBLE_FRAME)
 	{
-		//		m_headImg->setOpacity(MAX(0, 255 - m_invisible.invisibleFrame*5));
+		KS::setOpacity(m_headImg, MAX(0, 255 - m_invisible.invisibleFrame*5));
 	}
 	else
 	{
 		// 최소 1 최대 255
 		m_invisible.invisibleValue = MIN(255, MAX(1, m_invisible.invisibleValue * 1.2f));
 		
-		//		m_headImg->setOpacity(m_invisible.invisibleValue);
+		KS::setOpacity(m_headImg, m_invisible.invisibleValue);
 		if(m_invisible.invisibleValue == 255)
 		{
 			m_invisible.startInvisibleScheduler = false;
-			unschedule(schedule_selector(Coconut::invisibling));
+			unschedule(schedule_selector(ThisClassType::invisibling));
 		}
 	}
 	

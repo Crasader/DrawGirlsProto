@@ -61,7 +61,7 @@ void CollectionInnerLine::myInit(int t_line_number)
 	{
 		for(int j=1;j<=3;j++)
 		{
-			if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, i*10+j-1))
+			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, i*10+j-1) != 0)
 				createCard(i, j, index++);
 			else
 				createUncover(index++);

@@ -42,7 +42,13 @@ enum AP_CODE{
 	kSpecialAttack5, // 빙결   // 26
 	kSpecialAttack6, // 혼란, 반대 컨트롤. // 33
 	kSpecialAttack7, // 텔레포트.          // 32
+	
 	kSpecialAttack8, // 인비지블
+	kSpecialAttack9, // 불지르기
+	kSpecialAttack10, // 위성빔
+	kSpecialAttack11, // 레이저 스캔
+	kSpecialAttack12, // 방사능 라인
+	kSpecialAttack13, // 메테오.
 	kAP_CODE_pattern0 =999990,
 	kAP_CODE_pattern1,
 	kAP_CODE_pattern2,
