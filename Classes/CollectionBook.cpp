@@ -11,6 +11,7 @@
 #include "MyLocalization.h"
 #include "CardSettingScene.h"
 #include "utf8.h"
+#include "DiaryZoom.h"
 
 CCScene* CollectionBook::scene()
 {
@@ -35,6 +36,7 @@ enum CB_Zorder{
 
 enum CB_MenuTag{
 	kCB_MT_close = 1,
+	kCB_MT_zoom,
 	kCB_MT_pre,
 	kCB_MT_next
 };
@@ -125,12 +127,23 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
 	r_close_menu->setPosition(ccp(210, 290));
 	target->addChild(r_close_menu, 1, kCB_MT_close);
 	
+	CCSprite* n_zoom = CCSprite::create("collectionbook_list.png");
+	CCSprite* s_zoom = CCSprite::create("collectionbook_list.png");
+	s_zoom->setColor(ccGRAY);
+	
+	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBook::menuAction));
+	zoom_item->setTag(kCB_MT_zoom);
+	
+	CCMenu* zoom_menu = CCMenu::createWithItem(zoom_item);
+	zoom_menu->setPosition(ccp(45,35));
+	target->addChild(zoom_menu, 1, kCB_MT_zoom);
+	
 	float mul_value = 0.16f;
     int stage_number = card_number/10;
     int level_number = card_number%10 + 1;
     if(level_number == 1)
     {
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number+1))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number+1) != 0)
         {
             CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number+1)->getCString());
             second_img->setScale(mul_value);
@@ -138,7 +151,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             target->addChild(second_img);
         }
         
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number+2))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number+2) != 0)
         {
             CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number+2)->getCString());
             third_img->setScale(mul_value);
@@ -156,7 +169,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
     }
     else if(level_number == 2)
     {
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number-1))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number-1) != 0)
         {
             CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number-1)->getCString());
             first_img->setScale(mul_value);
@@ -164,7 +177,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             target->addChild(first_img);
         }
         
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number+1))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number+1) != 0)
         {
             CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number+1)->getCString());
             third_img->setScale(mul_value);
@@ -182,7 +195,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
     }
     else if(level_number == 3)
     {
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number-2))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number-2) != 0)
         {
             CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number-2)->getCString());
             first_img->setScale(mul_value);
@@ -190,7 +203,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             target->addChild(first_img);
         }
         
-        if(myDSH->getBoolForKey(kDSH_Key_hasGottenCard_int1, card_number-1))
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number-1) != 0)
         {
             CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number-1)->getCString());
             second_img->setScale(mul_value);
@@ -311,6 +324,7 @@ bool CollectionBook::init()
 		setRightPage(after_right_img, next_number);
 		
 		((CCMenu*)after_right_img->getChildByTag(kCB_MT_close))->setEnabled(false);
+		((CCMenu*)after_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(false);
 		
 		CCMenuItem* a_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
 		a_pre_item->setTag(kCB_MT_pre);
@@ -487,6 +501,7 @@ void CollectionBook::startNextPage()
 	
 	reorderChild(recent_right_img, kCB_Z_recent);
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_close))->setEnabled(true);
+	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_next))->setEnabled(true);
 	
@@ -563,6 +578,7 @@ void CollectionBook::endNextPage()
 	setRightPage(after_right_img, mySGD->getNextCardNumber(recent_card_number));
 	
 	((CCMenu*)after_right_img->getChildByTag(kCB_MT_close))->setEnabled(false);
+	((CCMenu*)after_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(false);
 	
 	
 	CCMenuItem* a_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
@@ -616,6 +632,7 @@ void CollectionBook::startPrePage()
     input_text->setDelegate(this);
 	
 	((CCMenu*)covered_right_img->getChildByTag(kCB_MT_close))->setEnabled(false);
+	((CCMenu*)covered_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(false);
 	
 		
 	CCMenuItem* a_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
@@ -657,6 +674,7 @@ void CollectionBook::endPrePage()
 	
 	reorderChild(recent_right_img, kCB_Z_recent);
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_close))->setEnabled(true);
+	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_next))->setEnabled(true);
 	
@@ -741,6 +759,14 @@ void CollectionBook::menuAction(CCObject* pSender)
 	if(tag == kCB_MT_close)
 	{
 		CCDirector::sharedDirector()->replaceScene(CardSettingScene::scene());
+	}
+	else if(tag == kCB_MT_zoom)
+	{
+		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
+		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
+		
+		mySGD->selected_collectionbook = recent_card_number;
+		CCDirector::sharedDirector()->replaceScene(DiaryZoom::scene());
 	}
 	else if(tag == kCB_MT_pre)
 	{
