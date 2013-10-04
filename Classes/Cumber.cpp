@@ -366,7 +366,8 @@ void CumberParent::createSubCumber(IntPoint s_p)
 	t_SC->settingHp(junior.m_jrHp);
 	t_SC->settingScale(junior.m_jrStartScale, junior.m_jrMinScale, junior.m_jrMaxScale);
 	t_SC->settingSpeed(junior.m_jrStartSpeed, junior.m_jrMinSpeed, junior.m_jrMaxSpeed);
-	t_SC->settingMovement((enum MOVEMENT)junior.m_jrNormalMovement, (enum MOVEMENT)junior.m_jrDrawMovement);
+	t_SC->settingMovement((enum MOVEMENT)junior.m_jrNormalMovement, (enum MOVEMENT)junior.m_jrDrawMovement,
+						  (enum MOVEMENT)junior.m_jrFuryMovement);
 	addChild(t_SC);
 	subCumberArray->addObject(t_SC);
 	t_SC->setPosition(ip2ccp(s_p));
@@ -487,7 +488,11 @@ void CumberParent::myInit()
 	
 	int normalMovement = movement["normal"].getInt();
 	int drawMovement = movement["draw"].getInt();	
-	
+	int furyMovement = movement["fury"].getInt();
+	if(furyMovement == 0)
+	{
+		furyMovement = normalMovement;
+	}
 	KSCumberBase* mainCumber;
 	switch(bossType)
 	{
@@ -516,7 +521,8 @@ void CumberParent::myInit()
 	mainCumber->settingHp(hp);
 	mainCumber->settingScale(startScale, minScale, maxScale);
 	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
-	mainCumber->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement);
+	mainCumber->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement,
+								(enum MOVEMENT)furyMovement);
 	mainCumber->settingPattern(boss["pattern"].getObject());
 	mainCumber->settingAttackPercent(boss["attackpercent"].getDouble());
 	mainCumbers.push_back(mainCumber);
@@ -557,18 +563,23 @@ void CumberParent::myInit()
 			
 			int normalMovement = movement["normal"].getInt();
 			int drawMovement = movement["draw"].getInt();
-			
+			int furyMovement = movement["fury"].getInt();
+			if(furyMovement == 0)
+			{
+				furyMovement = normalMovement;
+			}
 			//## 여기서 부하몹 분기가 들어감...
 			//## 지금은 그냥 Bear 가 부하임.
 			jrType jt(bossType, minSpeed, startSpeed, maxSpeed, minScale, startScale, maxScale, normalMovement,
-					  drawMovement, hp);
+					  drawMovement, furyMovement, hp);
 			m_juniors.push_back(jt);
 			
 			Bear* t_SC = Bear::create();
 			t_SC->settingHp(hp);
 			t_SC->settingScale(startScale, minScale, maxScale);
 			t_SC->settingSpeed(startSpeed, minSpeed, maxSpeed);
-			t_SC->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement);
+			t_SC->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement
+								  , (enum MOVEMENT)furyMovement);
 			addChild(t_SC);
 			
 			subCumberArray->addObject(t_SC);

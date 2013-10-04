@@ -41,8 +41,8 @@ public:
 	ATTACK_POINT_X(-18), // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
 	ATTACK_POINT_Y(0),   // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
 	BODY_MARGIN(20),     // 몸통 사이의 거리.
-	TAIL_MARGIN(40),      // 몸통과 꼬리사이의 거리.
-	FURY_DURATION(4.f) // 분노모드 초.
+	TAIL_MARGIN(40)      // 몸통과 꼬리사이의 거리.
+
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
@@ -75,7 +75,6 @@ public:
 
 	}
 	virtual void crashMapForPosition(CCPoint targetPt);
-	void furyMoving(float dt);
 	void cumberAttack(float dt);
 	virtual bool init();
 	CREATE_FUNC(Apple);
@@ -265,7 +264,6 @@ public:
 		return collisionCode;
 	}
 protected:
-	const float FURY_DURATION;
 	const float RADIUS;
 	const float BODY_RADIUS;
 	const float TAIL_RADIUS;

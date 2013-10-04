@@ -738,6 +738,22 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 			chargeArray->addObject(t_ccn);
 		}
 	}
+	else if(pattern == kTargetAttack9) // 개돌
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			CrashChargeNode* t_ccn = CrashChargeNode::create(startPosition, castFrame,
+															 this, NULL,
+															 this, callfuncO_selector(MissileParent::actionTargetAP9),
+															 this, callfuncO_selector(MissileParent::cancelTargetAP9),
+															 cb);
+			t_ccn->setChargeColor(ccc4f(1.00, 0.00, 0.00, 1.00));
+			addChild(t_ccn);
+			t_ccn->startCharge();
+			chargeArray->addObject(t_ccn);
+		}
+	}
 	else if(pattern == kSpecialAttack1)
 	{
 		if(exe)

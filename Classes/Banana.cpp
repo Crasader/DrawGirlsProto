@@ -227,14 +227,14 @@ void Banana::cumberAttack(float dt)
 			
 			attackCode = m_attacks[idx];
 			searched = true;
-			if(attackCode == 34 && m_invisible.startInvisibleScheduler)
+			if(attackCode == kSpecialAttack8 && m_invisible.startInvisibleScheduler)
 				searched = false;
-			if(attackCode == 13 && m_state == CUMBERSTATEFURY)
+			if(attackCode == kTargetAttack9 && m_state == CUMBERSTATEFURY)
 				searched = false;
 		}
 		
 		//		attackCode = 13;
-		if(attackCode == 13) // fury
+		if(attackCode == kTargetAttack9) // fury
 		{
 			CCLog("aaa %f %f", getPosition().x, getPosition().y);
 			m_state = CUMBERSTATESTOP;
@@ -477,9 +477,7 @@ void Banana::furyModeOn()
 
 void Banana::furyModeScheduler(float dt)
 {
-	m_furyMode.furyTimer += 1.f / 60.f;
-	
-	if(m_furyMode.furyTimer >= FURY_DURATION)
+	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
 		crashMapForPosition(getPosition());
 		

@@ -14,6 +14,7 @@
 #include "GameData.h"
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
+#include "CardListViewer.h"
 //#include <deque>
 
 USING_NS_CC;
@@ -35,18 +36,20 @@ public:
     CREATE_FUNC(CardSettingScene);
 	
 private:
-	CCSprite* selected_card_img; // big
-	CCMenu* selected_card_menu; // big
-	CCSprite* card_option_case; // big
-	CCLabelTTF* card_option_script; // big
-	CCNode* star_parent; // big
+	CCSprite* selected_card_img;
+	CCMenu* selected_card_menu;
+	CCSprite* card_option_case;
+	CCLabelTTF* card_option_script;
+	CCNode* star_parent;
 	
-	CCSprite* selected_img; // small
+	CCSprite* selected_img;
+	CCSprite* check_img;
 	
-	int selected_img_number;
+	CardListViewer* my_clv;
 	
-	CCMenuItemSprite* remove_card_item;
+	int recent_mounted_number;
 	
+	CCPoint getContentPosition(int t_tag);
 	void removeMountingCard();
 	void mountingCard(int card_stage, int card_level);
 	

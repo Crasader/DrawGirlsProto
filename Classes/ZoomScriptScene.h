@@ -76,6 +76,8 @@ private:
 	map<int, CCPoint> multiTouchData;
 	
 	CCSize eye_ani_size;
+	int loop_length;
+	deque<int> animation_frame;
 	
 	void startStageAnimation()
 	{
@@ -102,12 +104,11 @@ private:
 	
 	void frameAnimation()
 	{
-		int loop_point = mySD->getAnimationLoopPoint(ing_animation_frame);
-		CCSize animation_cut_size = mySD->getAnimationCutSize();
-		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(loop_point*animation_cut_size.width, 0, animation_cut_size.width, animation_cut_size.height));
+		int loop_point = animation_frame[ing_animation_frame];
+		((CCSprite*)second_img->getChildByTag(1))->setTextureRect(CCRectMake(loop_point*eye_ani_size.width, 0, eye_ani_size.width, eye_ani_size.height));
 		
 		ing_animation_frame++;
-		if(ing_animation_frame >= mySD->getAnimationLoopLength())
+		if(ing_animation_frame >= loop_length)
 			startStageAnimation();
 		else
 		{
@@ -130,7 +131,7 @@ private:
 		for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 		{
 			touch = (CCTouch*)(*iter);
-			CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+			CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 			
 			multiTouchData[(int)touch] = location;
 			
@@ -183,7 +184,7 @@ private:
 		for(iter = pTouches->begin();iter != pTouches->end();++iter)
 		{
 			touch = (CCTouch*)(*iter);
-			CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+			CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 			
 			map<int, CCPoint>::iterator o_it;
 			o_it = multiTouchData.find((int)touch);
@@ -259,7 +260,7 @@ private:
 		for(iter = pTouches->begin();iter != pTouches->end();++iter)
 		{
 			touch = (CCTouch*)(*iter);
-			CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+			CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 			
 			map<int, CCPoint>::iterator o_it;
 			o_it = multiTouchData.find((int)touch);

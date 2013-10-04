@@ -414,9 +414,7 @@ void Bear::furyModeOn()
 
 void Bear::furyModeScheduler(float dt)
 {
-	m_furyMode.furyTimer += 1.f / 60.f;
-	
-	if(m_furyMode.furyTimer >= FURY_DURATION)
+	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
 		crashMapForPosition(getPosition());
 		

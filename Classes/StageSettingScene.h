@@ -15,6 +15,7 @@
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
 #include <deque>
+#include "ItemListViewer.h"
 
 USING_NS_CC;
 using namespace std;
@@ -39,10 +40,15 @@ private:
 	vector<ITEM_CODE> item_list;
 	deque<bool> is_selected_item;
 	deque<int> card_options;
-	CCLabelTTF* item_script;
 	bool is_menu_enable;
+	
+	ItemListViewer* my_ilv;
+	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
+	
+	CCPoint getContentPosition(int t_tag);
+	void popupClose();
 	
 	void itemSetting();
 	

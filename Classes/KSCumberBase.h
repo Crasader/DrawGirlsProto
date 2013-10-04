@@ -129,6 +129,7 @@ public:
 	virtual void startAnimationDirection() = 0;
 	virtual void stopAnimationNoDirection() = 0;
 	virtual void stopAnimationDirection() = 0;
+	
 	virtual void movingAndCrash(float dt)
 	{
 		IntPoint mapPoint = m_mapPoint;
@@ -161,9 +162,9 @@ public:
 		}	
 
 		
-		if(gameData->getJackState() == jackStateNormal)
+		if(m_state == CUMBERSTATEFURY)
 		{
-			switch(m_normalMovement)
+			switch(m_furyMovement)
 			{
 				case STRAIGHT_TYPE:
 					straightMoving(dt);
@@ -184,25 +185,50 @@ public:
 		}
 		else
 		{
-			switch(m_drawMovement)
+			if(gameData->getJackState() == jackStateNormal)
 			{
-				case STRAIGHT_TYPE:
-					straightMoving(dt);
-					break;
-				case RANDOM_TYPE:
-					randomMoving(dt);
-					break;
-				case FOLLOW_TYPE:
-					followMoving(dt);
-					break;
-				case RIGHTANGLE_TYPE:
-					rightAngleMoving(dt);
-					break;
-				case CIRCLE_TYPE:
-					circleMoving(dt);
-					break;
+				switch(m_normalMovement)
+				{
+					case STRAIGHT_TYPE:
+						straightMoving(dt);
+						break;
+					case RANDOM_TYPE:
+						randomMoving(dt);
+						break;
+					case FOLLOW_TYPE:
+						followMoving(dt);
+						break;
+					case RIGHTANGLE_TYPE:
+						rightAngleMoving(dt);
+						break;
+					case CIRCLE_TYPE:
+						circleMoving(dt);
+						break;
+				}
+			}
+			else
+			{
+				switch(m_drawMovement)
+				{
+					case STRAIGHT_TYPE:
+						straightMoving(dt);
+						break;
+					case RANDOM_TYPE:
+						randomMoving(dt);
+						break;
+					case FOLLOW_TYPE:
+						followMoving(dt);
+						break;
+					case RIGHTANGLE_TYPE:
+						rightAngleMoving(dt);
+						break;
+					case CIRCLE_TYPE:
+						circleMoving(dt);
+						break;
+				}
 			}
 		}
+		
 		
 		
 	}
@@ -253,10 +279,11 @@ public:
 		m_minSpeed = minSpeed;
 		m_maxSpeed = maxSpeed;
 	}
-	void settingMovement(enum MOVEMENT normal, enum MOVEMENT draw)
+	void settingMovement(enum MOVEMENT normal, enum MOVEMENT draw, enum MOVEMENT fury)
 	{
 		m_normalMovement = normal;
 		m_drawMovement = draw;
+		m_furyMovement = fury;
 	}
 	void settingPattern(JsonBox::Object pattern)
 	{
@@ -323,6 +350,7 @@ protected:
 	CUMBER_STATE m_state;
 	MOVEMENT m_normalMovement; // 평상시 움직임.
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
+	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
 //	Emotion* mEmotion;
 	Well512 m_well512;
 	int m_directionAngleDegree;
@@ -341,14 +369,20 @@ protected:
 	
 	struct FuryMode
 	{
-		
-		float furyTimer;
 		int furyFrameCount;
+		int totalFrame;
 		void startFury()
 		{
-			
-			furyTimer = 0.f;
 			furyFrameCount = 0;
+			JsonBox::Value v;
+			v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
+			
+			JsonBox::Object boss = v.getArray()[0].getObject();
+			JsonBox::Object patterns = boss["pattern"].getObject();
+			JsonBox::Object pattern = patterns["109"].getObject();
+			
+			totalFrame = pattern["totalframe"].getInt();    // p
+
 		}
 	}m_furyMode;
 
