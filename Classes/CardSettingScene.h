@@ -55,6 +55,9 @@ private:
 	void removeMountingCard();
 	void mountingCard(int card_stage, int card_level);
 	
+	void createCardList();
+	void alignChange();
+	
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
