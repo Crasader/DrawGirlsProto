@@ -474,6 +474,7 @@ public:
 		bool is_found = false;
 		do{
 			ing_card_number = getNextCardNumber(ing_card_number);
+			if(ing_card_number == -1)		break;
 			if(ing_card_number/10 != recent_card_number/10)
 				is_found = true;
 		}while(!is_found && ing_card_number != recent_card_number);
@@ -483,9 +484,9 @@ public:
 		else
 		{
 			int ing_card_stage = ing_card_number/10;
-			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 2) >= 0)
+			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 2) > 0)
 				return ing_card_stage*10 + 2;
-			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 1) >= 0)
+			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 1) > 0)
 				return ing_card_stage*10 + 1;
 			else
 				return ing_card_stage*10;
@@ -524,6 +525,7 @@ public:
 		bool is_found = false;
 		do{
 			ing_card_number = getPreCardNumber(ing_card_number);
+			if(ing_card_number == -1)		break;
 			if(ing_card_number/10 != recent_card_number/10)
 				is_found = true;
 		}while(!is_found && ing_card_number != recent_card_number);
@@ -533,9 +535,9 @@ public:
 		else
 		{
 			int ing_card_stage = ing_card_number/10;
-			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 2) >= 0)
+			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 2) > 0)
 				return ing_card_stage*10 + 2;
-			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 1) >= 0)
+			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 1) > 0)
 				return ing_card_stage*10 + 1;
 			else
 				return ing_card_stage*10;

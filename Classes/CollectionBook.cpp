@@ -38,7 +38,10 @@ enum CB_MenuTag{
 	kCB_MT_close = 1,
 	kCB_MT_zoom,
 	kCB_MT_pre,
-	kCB_MT_next
+	kCB_MT_next,
+	kCB_MT_second,
+	kCB_MT_third,
+	kCB_MT_cardBase = 10000
 };
 
 bool CollectionBook::onTextFieldInsertText(cocos2d::CCTextFieldTTF *sender, const char *text, int nLen)
@@ -127,8 +130,8 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
 	r_close_menu->setPosition(ccp(210, 290));
 	target->addChild(r_close_menu, 1, kCB_MT_close);
 	
-	CCSprite* n_zoom = CCSprite::create("collectionbook_list.png");
-	CCSprite* s_zoom = CCSprite::create("collectionbook_list.png");
+	CCSprite* n_zoom = CCSprite::create("cardsetting_zoom.png");
+	CCSprite* s_zoom = CCSprite::create("cardsetting_zoom.png");
 	s_zoom->setColor(ccGRAY);
 	
 	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBook::menuAction));
@@ -149,6 +152,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             second_img->setScale(mul_value);
             second_img->setPosition(ccp(44,235));
             target->addChild(second_img);
+			
+			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
+			second_item->setTag(kCB_MT_cardBase + card_number+1);
+			
+			CCMenu* second_menu = CCMenu::createWithItem(second_item);
+			second_menu->setPosition(second_img->getPosition());
+			target->addChild(second_menu, 1, kCB_MT_second);
         }
         
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number+2) != 0)
@@ -165,6 +175,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
                 ani_img->setPosition(mySD->getAnimationPosition(stage_number));
                 third_img->addChild(ani_img);
             }
+			
+			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
+			third_item->setTag(kCB_MT_cardBase + card_number+2);
+			
+			CCMenu* third_menu = CCMenu::createWithItem(third_item);
+			third_menu->setPosition(third_img->getPosition());
+			target->addChild(third_menu, 1, kCB_MT_third);
         }
     }
     else if(level_number == 2)
@@ -175,6 +192,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             first_img->setScale(mul_value);
             first_img->setPosition(ccp(44,235));
             target->addChild(first_img);
+			
+			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
+			second_item->setTag(kCB_MT_cardBase + card_number-1);
+			
+			CCMenu* second_menu = CCMenu::createWithItem(second_item);
+			second_menu->setPosition(first_img->getPosition());
+			target->addChild(second_menu, 1, kCB_MT_second);
         }
         
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number+1) != 0)
@@ -191,6 +215,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
                 ani_img->setPosition(mySD->getAnimationPosition(stage_number));
                 third_img->addChild(ani_img);
             }
+			
+			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
+			third_item->setTag(kCB_MT_cardBase + card_number+1);
+			
+			CCMenu* third_menu = CCMenu::createWithItem(third_item);
+			third_menu->setPosition(third_img->getPosition());
+			target->addChild(third_menu, 1, kCB_MT_third);
         }
     }
     else if(level_number == 3)
@@ -201,6 +232,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             first_img->setScale(mul_value);
             first_img->setPosition(ccp(44,235));
             target->addChild(first_img);
+			
+			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
+			second_item->setTag(kCB_MT_cardBase + card_number-2);
+			
+			CCMenu* second_menu = CCMenu::createWithItem(second_item);
+			second_menu->setPosition(first_img->getPosition());
+			target->addChild(second_menu, 1, kCB_MT_second);
         }
         
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number-1) != 0)
@@ -209,6 +247,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
             second_img->setScale(mul_value);
             second_img->setPosition(ccp(116,235));
             target->addChild(second_img);
+			
+			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
+			third_item->setTag(kCB_MT_cardBase + card_number-1);
+			
+			CCMenu* third_menu = CCMenu::createWithItem(third_item);
+			third_menu->setPosition(second_img->getPosition());
+			target->addChild(third_menu, 1, kCB_MT_third);
         }
     }
 }
@@ -253,8 +298,8 @@ bool CollectionBook::init()
 	
 	recent_card_number = mySGD->selected_collectionbook;
 	
-	int next_number = mySGD->getNextCardNumber(recent_card_number);
-	int pre_number = mySGD->getPreCardNumber(recent_card_number);
+	int next_number = mySGD->getNextStageCardNumber(recent_card_number);
+	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
 	if(next_number == -1 || pre_number == -1)
 		is_enable_pageturn = false;
@@ -325,6 +370,10 @@ bool CollectionBook::init()
 		
 		((CCMenu*)after_right_img->getChildByTag(kCB_MT_close))->setEnabled(false);
 		((CCMenu*)after_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(false);
+		if(after_right_img->getChildByTag(kCB_MT_second))
+			((CCMenu*)after_right_img->getChildByTag(kCB_MT_second))->setEnabled(false);
+		if(after_right_img->getChildByTag(kCB_MT_third))
+			((CCMenu*)after_right_img->getChildByTag(kCB_MT_third))->setEnabled(false);
 		
 		CCMenuItem* a_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
 		a_pre_item->setTag(kCB_MT_pre);
@@ -505,12 +554,18 @@ void CollectionBook::startNextPage()
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_next))->setEnabled(true);
 	
+	if(recent_right_img->getChildByTag(kCB_MT_second))
+		((CCMenu*)recent_right_img->getChildByTag(kCB_MT_second))->setEnabled(true);
+	if(recent_right_img->getChildByTag(kCB_MT_third))
+		((CCMenu*)recent_right_img->getChildByTag(kCB_MT_third))->setEnabled(true);
+	
+	
 	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
 	covered_left_img->setPosition(ccp(240,160));
 	addChild(covered_left_img, kCB_Z_cover);
 	
-	int next_number = mySGD->getNextCardNumber(recent_card_number);
+	int next_number = mySGD->getNextStageCardNumber(recent_card_number);
 	recent_card_number = next_number;
 	
 	string input_data = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number).c_str();
@@ -568,6 +623,17 @@ void CollectionBook::endNextPage()
 	recent_left_img = covered_left_img;
 	covered_left_img = NULL;
 	
+	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
+	after_left_img->removeFromParent();
+	
+	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
+	after_left_img->setAnchorPoint(ccp(1.f,0.5f));
+	after_left_img->setPosition(ccp(240,160));
+	addChild(after_left_img, kCB_Z_after);
+	
+	setLeftPage(after_left_img, pre_number);
+	
+	
 	reorderChild(recent_left_img, kCB_Z_recent);
 	
 	after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
@@ -575,10 +641,16 @@ void CollectionBook::endNextPage()
 	after_right_img->setPosition(ccp(240,160));
 	addChild(after_right_img, kCB_Z_after);
 	
-	setRightPage(after_right_img, mySGD->getNextCardNumber(recent_card_number));
+	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CCMenu*)after_right_img->getChildByTag(kCB_MT_close))->setEnabled(false);
 	((CCMenu*)after_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(false);
+	
+	
+	if(after_right_img->getChildByTag(kCB_MT_second))
+		((CCMenu*)after_right_img->getChildByTag(kCB_MT_second))->setEnabled(false);
+	if(after_right_img->getChildByTag(kCB_MT_third))
+		((CCMenu*)after_right_img->getChildByTag(kCB_MT_third))->setEnabled(false);
 	
 	
 	CCMenuItem* a_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
@@ -608,7 +680,7 @@ void CollectionBook::startPrePage()
 	
 	reorderChild(recent_left_img, kCB_Z_recent);
 	
-	recent_card_number = mySGD->getPreCardNumber(recent_card_number);
+	recent_card_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
 	covered_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 	covered_right_img->setAnchorPoint(ccp(0.f,0.5f));
@@ -633,6 +705,11 @@ void CollectionBook::startPrePage()
 	
 	((CCMenu*)covered_right_img->getChildByTag(kCB_MT_close))->setEnabled(false);
 	((CCMenu*)covered_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(false);
+	
+	if(covered_right_img->getChildByTag(kCB_MT_second))
+		((CCMenu*)covered_right_img->getChildByTag(kCB_MT_second))->setEnabled(false);
+	if(covered_right_img->getChildByTag(kCB_MT_third))
+		((CCMenu*)covered_right_img->getChildByTag(kCB_MT_third))->setEnabled(false);
 	
 		
 	CCMenuItem* a_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
@@ -678,12 +755,17 @@ void CollectionBook::endPrePage()
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCB_MT_next))->setEnabled(true);
 	
+	if(recent_right_img->getChildByTag(kCB_MT_second))
+		((CCMenu*)recent_right_img->getChildByTag(kCB_MT_second))->setEnabled(true);
+	if(recent_right_img->getChildByTag(kCB_MT_third))
+		((CCMenu*)recent_right_img->getChildByTag(kCB_MT_third))->setEnabled(true);
+	
 	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	after_left_img->setAnchorPoint(ccp(1.f, 0.5f));
 	after_left_img->setPosition(ccp(240,160));
 	addChild(after_left_img, kCB_Z_after);
 	
-	int pre_number = mySGD->getPreCardNumber(recent_card_number);
+	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
 	setLeftPage(after_left_img, pre_number);
 	
@@ -775,6 +857,13 @@ void CollectionBook::menuAction(CCObject* pSender)
 	else if(tag == kCB_MT_next)
 	{
 		startNextPageFull();
+	}
+	else if(tag >= kCB_MT_cardBase)
+	{
+		int t_tag = tag - kCB_MT_cardBase;
+		
+		mySGD->selected_collectionbook = t_tag;
+		CCDirector::sharedDirector()->replaceScene(CollectionBook::scene());
 	}
 }
 
