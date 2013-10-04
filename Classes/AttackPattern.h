@@ -3240,7 +3240,8 @@ private:
 		
 		if(ingFrame%createBurnFrame == 0)
 		{
-			Burn* t_b = Burn::create(myPosition, baseDistance, shootAngle, mType, this, callfunc_selector(AP_Missile15::removeEffect));
+			Burn* t_b = Burn::create(myPosition, baseDistance, shootAngle, mType,
+									 this, callfunc_selector(AP_Missile15::removeEffect));
 			addChild(t_b);
 			t_b->startMyAction();
 		}
@@ -3490,7 +3491,7 @@ private:
 		{
 			imgFilename = "2.png";
 		}
-		
+		imgFilename = "1.png"; // 불돌타입.
 		startMyAction();
 	}
 };
@@ -3986,6 +3987,7 @@ private:
 		is_stop = false;
 		
 		slowFrame = t_frame;
+		
 		
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);

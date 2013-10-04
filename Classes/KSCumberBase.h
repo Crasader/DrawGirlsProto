@@ -55,7 +55,8 @@ enum MOVEMENT
 	RANDOM_TYPE = 2,
 	FOLLOW_TYPE = 3,
 	RIGHTANGLE_TYPE = 4,
-	CIRCLE_TYPE = 5
+	CIRCLE_TYPE = 5,
+	SNAKE_TYPE = 6
 };
 
 class KSCumberBase : public CCNode
@@ -161,10 +162,9 @@ public:
 			m_furyMode.furyFrameCount++;
 		}	
 
-		
-		if(m_state == CUMBERSTATEFURY)
+		auto movingBranch = [&](MOVEMENT movement)
 		{
-			switch(m_furyMovement)
+			switch(movement)
 			{
 				case STRAIGHT_TYPE:
 					straightMoving(dt);
@@ -181,51 +181,24 @@ public:
 				case CIRCLE_TYPE:
 					circleMoving(dt);
 					break;
+				case SNAKE_TYPE:
+					snakeMoving(dt);
 			}
+		};
+		
+		if(m_state == CUMBERSTATEFURY)
+		{
+			movingBranch(m_furyMovement);
 		}
 		else
 		{
 			if(gameData->getJackState() == jackStateNormal)
 			{
-				switch(m_normalMovement)
-				{
-					case STRAIGHT_TYPE:
-						straightMoving(dt);
-						break;
-					case RANDOM_TYPE:
-						randomMoving(dt);
-						break;
-					case FOLLOW_TYPE:
-						followMoving(dt);
-						break;
-					case RIGHTANGLE_TYPE:
-						rightAngleMoving(dt);
-						break;
-					case CIRCLE_TYPE:
-						circleMoving(dt);
-						break;
-				}
+				movingBranch(m_normalMovement);
 			}
 			else
 			{
-				switch(m_drawMovement)
-				{
-					case STRAIGHT_TYPE:
-						straightMoving(dt);
-						break;
-					case RANDOM_TYPE:
-						randomMoving(dt);
-						break;
-					case FOLLOW_TYPE:
-						followMoving(dt);
-						break;
-					case RIGHTANGLE_TYPE:
-						rightAngleMoving(dt);
-						break;
-					case CIRCLE_TYPE:
-						circleMoving(dt);
-						break;
-				}
+				movingBranch(m_drawMovement);
 			}
 		}
 		
@@ -263,6 +236,7 @@ public:
 	void followMoving(float dt); /// 따라가는 움직임.
 	void rightAngleMoving(float dt); /// 직각 움직임.
 	void circleMoving(float dt); /// 원형 움직임.
+	void snakeMoving(float dt);  /// 뱀형 움직임
 	virtual void crashMapForPosition(CCPoint targetPt) = 0;
 	void settingScale(float startScale, float minScale, float maxScale)
 	{
@@ -431,7 +405,7 @@ protected:
 				float rad = m_well512.GetFloatValue(0, 2*M_PI);
 				relocationPosition = cumberP;
 				centerPosition = ccp(r * cos(rad) + relocationPosition.x, r * sin(rad) + relocationPosition.y);
-				angleRad = atan2(relocationPosition.y - centerPosition.y, relocationPosition.x - centerPosition.x);
+				angleRad = 0;//atan2(relocationPosition.y - centerPosition.y, relocationPosition.x - centerPosition.x);
 				
 				IntPoint centerPoint = ccp2ip(centerPosition);
 				if(mapLoopRange::mapWidthInnerBegin <= centerPoint.x &&
@@ -445,6 +419,45 @@ protected:
 			}			
 		}
 	}m_circle;
+	
+	struct SnakeMoving
+	{
+		SnakeMoving() : MIN_RADIUS(50.f), MAX_RADIUS(100.f), lastMovingTime(0){}
+		
+		float lastMovingTime; // 마지막으로 움직인 시간을 기억함. 오랜만이라면 변수 재 설정.
+		CCPoint centerPosition;
+		CCPoint relocationPosition;
+		int sign;
+		//		float goalAngleRad; // 돌아야 하는 총 각도.
+		float angleRad; // 현재 돈 각도
+		float shortRadianRatio; // 짧은 반지름 비율 : (0, 1]
+		const float MIN_RADIUS; // 최소 반지름
+		const float MAX_RADIUS; // 최대 반지름
+		void setRelocation(const CCPoint& cumberP, Well512& m_well512)
+		{
+			sign = m_well512.GetPlusMinus();
+			bool valid = false;
+			while(!valid)
+			{
+				float r = m_well512.GetFloatValue(MIN_RADIUS, MAX_RADIUS);
+				float rad = m_well512.GetFloatValue(0, 2*M_PI);
+				shortRadianRatio = m_well512.GetFloatValue(0.0001f, 1.f);
+				relocationPosition = cumberP;
+				centerPosition = ccp(r * cos(rad) + relocationPosition.x, r * sin(rad) + relocationPosition.y);
+				angleRad = 0;//atan2(relocationPosition.y - centerPosition.y, relocationPosition.x - centerPosition.x);
+				
+				IntPoint centerPoint = ccp2ip(centerPosition);
+				if(mapLoopRange::mapWidthInnerBegin <= centerPoint.x &&
+				   centerPoint.y < mapLoopRange::mapWidthInnerEnd &&
+				   mapLoopRange::mapHeightOutlineBegin <= centerPoint.y &&
+				   centerPoint.y < mapLoopRange::mapHeightOutlineEnd)
+				{
+					valid = true;
+				}
+				
+			}
+		}
+	}m_snake;
 };
 
 #endif /* defined(__DGproto__KSCumberBase__) */

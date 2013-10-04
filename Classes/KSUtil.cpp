@@ -9,6 +9,29 @@
 #endif
 namespace KS
 {
+	void setOpacity(CCObject* object, GLubyte opaque)
+	{
+		CCArray* childs = NULL;
+		CCObject* child = NULL;
+		CCNode* nodeObject = (CCNode*)object;
+		if (nodeObject) {
+			childs = nodeObject->getChildren();
+		}
+		if (childs) {
+			CCARRAY_FOREACH(childs, child){
+				CCRGBAProtocol *pRGBAProtocol = dynamic_cast<CCRGBAProtocol*>(child);
+				if (pRGBAProtocol)
+				{
+					pRGBAProtocol->setOpacity(opaque);
+					// pRGBAProtocol->setColor(ccc3(opaque, opaque, opaque));
+				}
+				CCNode* singleObject = (CCNode*)child;
+				if (singleObject && singleObject->getChildrenCount()>0) {
+					setOpacity(singleObject, opaque);
+				}
+			}
+		}
+	}
 	//	CCSprite* spriteWithSpriteFrameName(const char *pszSpriteFrameName)
 	//	{
 	//		CCSpriteFrame *pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(pszSpriteFrameName);
