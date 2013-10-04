@@ -2479,7 +2479,7 @@ private:
 			if(mapPoint.isInnerMap() && myGD->mapState[mapPoint.x][mapPoint.y] == mapOldline)
 			{
 				positionSetted = true;
-				BurnFragment* t_bf = BurnFragment::create(mapPoint, 5, getParent(), mType, this, callfunc_selector(Burn::removeEffect));
+				BurnFragment* t_bf = BurnFragment::create(mapPoint, 5, getParent(), mType, target_removeEffect, delegate_removeEffect);
 				getParent()->addChild(t_bf);
 				stopMyAction();
 			}

@@ -45,6 +45,8 @@ private:
 	CCSprite* selected_img;
 	CCSprite* check_img;
 	
+	CCSprite* align_list_img;
+	
 	CardListViewer* my_clv;
 	
 	int recent_mounted_number;

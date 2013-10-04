@@ -24,7 +24,8 @@ enum CSS_Zorder{
 	kCSS_Z_back = 1,
 	kCSS_Z_selectedImg,
 	kCSS_Z_content,
-	kCSS_Z_check
+	kCSS_Z_check,
+	kCSS_Z_alignList
 };
 
 enum CSS_MenuTag{
