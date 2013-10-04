@@ -90,7 +90,7 @@ typedef enum tCollectionStarterType{
 
 typedef enum tWMS_MenuTagBase{
 	kWMS_MTB_ui = 0,
-	kWMS_MTB_stage = 1000
+	kWMS_MTB_stage = 10000
 }WMS_MenuTagBase;
 
 enum MainUI_MenuTag{

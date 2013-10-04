@@ -41,9 +41,9 @@ enum CSS_MenuTag{
 	kCSS_MT_alignGradeUp = 9,
 	kCSS_MT_alignGradeDown = 10,
 	kCSS_MT_alignDefault = 11,
-	kCSS_MT_cardBase = 1000,
-	kCSS_MT_cardMenuBase = 2000,
-	kCSS_MT_noCardBase = 3000
+	kCSS_MT_cardBase = 10000,
+	kCSS_MT_cardMenuBase = 20000,
+	kCSS_MT_noCardBase = 30000
 };
 
 class CLV_Node : public CCNode
