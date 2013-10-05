@@ -63,6 +63,7 @@ string GraphDog::getGraphDogVersion(){
 }
 
 void GraphDog::setup(string secretKey,int _appVersion){
+    
     this->setup("", secretKey, "", _appVersion);
     
 }
@@ -281,18 +282,18 @@ void* GraphDog::t_function(void *_insertIndex)
 {	
 	int insertIndex = (int)_insertIndex;
     
-    CCLog("t_function1");
+ //   CCLog("t_function1");
 //	std::map<int, CommandType>& commands = graphdog->commands;
 //	pthread_mutex_lock(&graphdog->cmdsMutex);
 	CommandsType& command = graphdog->commandQueue[insertIndex];
 	pthread_mutex_lock(&command.caller->t_functionMutex);
-	CCLog("t_function2");
+	//CCLog("t_function2");
 	string token="";
-	CCLog("t_function2");
+	//CCLog("t_function2");
 	string paramStr = toBase64(desEncryption(graphdog->sKey, command.commandStr));
 	string dataset = "&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString();
-	CCLog("t_function3");
-	string commandurl = "http://litqoo.com/dgproto/data.php"; //"http://182.162.201.147:10010/data.php"; //
+	//CCLog("t_function3");
+	string commandurl = "http://182.162.201.147:10010/data.php"; //"http://litqoo.com/dgproto/data.php"; //"http://182.162.201.147:10010/data.php"; //
     //commandurl=commandurl.append(GraphDog::get()->getGraphDogVersion());
     //commandurl=commandurl.append("/");
     //commandurl=commandurl.append(GraphDog::get()->aID);
@@ -303,17 +304,17 @@ void* GraphDog::t_function(void *_insertIndex)
     curl_easy_setopt(handle, CURLOPT_URL, commandurl.c_str());
 	curl_easy_setopt(handle, CURLOPT_POSTFIELDS,dataset.c_str());
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void *)&command.chunk);
-	CCLog("t_function4");
+	//CCLog("t_function4");
 	//		curl_setopt($ch,CURLOPT_TIMEOUT,1000);
 //	pthread_mutex_unlock(&graphdog->cmdsMutex);
 	CURLcode resultCode = curl_easy_perform(handle);
-	CCLog("result code is %d",resultCode);
+	//CCLog("result code is %d",resultCode);
 	//##
 	JsonBox::Object resultobj;
 	string resultStr;
 	if(resultCode == CURLE_OK)
 	{
-		CCLog("t_function OK1");
+		//CCLog("t_function OK1");
 		resultStr = command.chunk.memory;// gdchunk.memory;
         if(*resultStr.rbegin() == '#') // success
 		{
@@ -328,13 +329,13 @@ void* GraphDog::t_function(void *_insertIndex)
 			catch(const std::string& msg)
 			{
 				
-				CCLog("t_function FAILED1");
+				//CCLog("t_function FAILED1");
 				resultCode = CURLE_CHUNK_FAILED;
 			}
 		}
 		else
 		{
-			CCLog("t_function FAILED2");
+			//CCLog("t_function FAILED2");
 
 			resultCode = CURLE_CHUNK_FAILED;
 		}
@@ -388,10 +389,10 @@ void* GraphDog::t_function(void *_insertIndex)
 //		newToken = true;
 //	}
 	
-	CCLog("t_function 11");
+	//CCLog("t_function 11");
 
 	if(resultobj["errorcode"].getInt()==9999){
-		CCLog("t_function errorcode");
+		//CCLog("t_function errorcode");
 		command.caller->setCTime("9999");
 		command.caller->errorCount++;
 		if(command.caller->errorCount<5){
@@ -426,15 +427,15 @@ void* GraphDog::t_function(void *_insertIndex)
 //		}
 	
 	
-		CCLog("t_function 12");
+		//CCLog("t_function 12");
 		if(resultobj["state"].getString()=="ok"){
 			
-			CCLog("t_function 13");
+			//CCLog("t_function 13");
 			command.caller->errorCount=0;
 		}
 		
 	
-	CCLog("t_function 14");
+        //CCLog("t_function 14");
         if(resultobj["timestamp"].getInt()<GraphDog::get()->timestamp){
             
 			CCLog("t_function error hack!!!",resultobj["timestamp"].getInt(),GraphDog::get()->timestamp);
@@ -538,143 +539,150 @@ void GraphDog::receivedCommand(float dt)
 	}
 }
 std::string GraphDog::getDeviceID() {
-    string _id;
-    
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-//    char* macAddress=(char*)malloc(18);
-//	std::string ifName="en0";
-//	int  success;
-//	struct ifaddrs * addrs;
-//	struct ifaddrs * cursor;
-//	const struct sockaddr_dl * dlAddr;
-//	const unsigned char* base;
-//	int i;
+//    string _id;
 //    
-//	success = getifaddrs(&addrs) == 0;
-//	if (success) {
-//		cursor = addrs;
-//		while (cursor != 0) {
-//			if ( (cursor->ifa_addr->sa_family == AF_LINK)
-//				&& (((const struct sockaddr_dl *) cursor->ifa_addr)->sdl_type == 0x06) && strcmp(ifName.c_str(),  cursor->ifa_name)==0 ) {
-//				dlAddr = (const struct sockaddr_dl *) cursor->ifa_addr;
-//				base = (const unsigned char*) &dlAddr->sdl_data[dlAddr->sdl_nlen];
-//				strcpy(macAddress, "");
-//				for (i = 0; i < dlAddr->sdl_alen; i++) {
-//					if (i != 0) {
-//						strcat(macAddress, ":");
-//					}
-//					char partialAddr[3];
-//					sprintf(partialAddr, "%02X", base[i]);
-//					strcat(macAddress, partialAddr);
-//					
-//				}
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+////    char* macAddress=(char*)malloc(18);
+////	std::string ifName="en0";
+////	int  success;
+////	struct ifaddrs * addrs;
+////	struct ifaddrs * cursor;
+////	const struct sockaddr_dl * dlAddr;
+////	const unsigned char* base;
+////	int i;
+////    
+////	success = getifaddrs(&addrs) == 0;
+////	if (success) {
+////		cursor = addrs;
+////		while (cursor != 0) {
+////			if ( (cursor->ifa_addr->sa_family == AF_LINK)
+////				&& (((const struct sockaddr_dl *) cursor->ifa_addr)->sdl_type == 0x06) && strcmp(ifName.c_str(),  cursor->ifa_name)==0 ) {
+////				dlAddr = (const struct sockaddr_dl *) cursor->ifa_addr;
+////				base = (const unsigned char*) &dlAddr->sdl_data[dlAddr->sdl_nlen];
+////				strcpy(macAddress, "");
+////				for (i = 0; i < dlAddr->sdl_alen; i++) {
+////					if (i != 0) {
+////						strcat(macAddress, ":");
+////					}
+////					char partialAddr[3];
+////					sprintf(partialAddr, "%02X", base[i]);
+////					strcat(macAddress, partialAddr);
+////					
+////				}
+////			}
+////			cursor = cursor->ifa_next;
+////		}
+////		
+////		freeifaddrs(addrs);
+////	}
+////    _id = macAddress;
+//    _id = [[OpenUDID value] UTF8String];
+//
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	//_id = JNIKelper::getInstance()->callJava_getUDID();
+//	JniMethodInfo minfo;
+//	jobject jobj;
+//
+//	CCLog("call getdeviceid");
+//
+//	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()Ljava/lang/Object;"))
+//	{
+//		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
+//		JniMethodInfo __minfo;
+//		__minfo.classID = 0;
+//		__minfo.env = 0;
+//		__minfo.methodID = 0;
+//		if(JniHelper::getMethodInfo(__minfo, packageName.c_str(), "getUDID", "()Ljava/lang/String;"))
+//		{
+//			jstring jstrTitle = (jstring) __minfo.env->CallObjectMethod(jobj, __minfo.methodID);
+//			
+//			if(jstrTitle)
+//			{
+//				char* pszTitle = (char*)__minfo.env->GetStringUTFChars(jstrTitle, JNI_FALSE);
+//				
+//				_id = pszTitle;
+//				__minfo.env->ReleaseStringUTFChars(jstrTitle, pszTitle);
+//				__minfo.env->DeleteLocalRef(jstrTitle);
+//				
 //			}
-//			cursor = cursor->ifa_next;
+//			__minfo.env->DeleteLocalRef(__minfo.classID);
 //		}
 //		
-//		freeifaddrs(addrs);
+//		minfo.env->DeleteGlobalRef(jobj);
+//		minfo.env->DeleteLocalRef(minfo.classID);
 //	}
-//    _id = macAddress;
-    _id = [[OpenUDID value] UTF8String];
-
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	//_id = JNIKelper::getInstance()->callJava_getUDID();
-	JniMethodInfo minfo;
-	jobject jobj;
-
-	CCLog("call getdeviceid");
-
-	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()Ljava/lang/Object;"))
-	{
-		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
-		JniMethodInfo __minfo;
-		__minfo.classID = 0;
-		__minfo.env = 0;
-		__minfo.methodID = 0;
-		if(JniHelper::getMethodInfo(__minfo, packageName.c_str(), "getUDID", "()Ljava/lang/String;"))
-		{
-			jstring jstrTitle = (jstring) __minfo.env->CallObjectMethod(jobj, __minfo.methodID);
-			
-			if(jstrTitle)
-			{
-				char* pszTitle = (char*)__minfo.env->GetStringUTFChars(jstrTitle, JNI_FALSE);
-				
-				_id = pszTitle;
-				__minfo.env->ReleaseStringUTFChars(jstrTitle, pszTitle);
-				__minfo.env->DeleteLocalRef(jstrTitle);
-				
-			}
-			__minfo.env->DeleteLocalRef(__minfo.classID);
-		}
-		
-		minfo.env->DeleteGlobalRef(jobj);
-		minfo.env->DeleteLocalRef(minfo.classID);
-	}
-	
-#endif
-    //string _id = base64_decode(macAddress);
-	return toBase64(_id);
+//	
+//#endif
+//    //string _id = base64_decode(macAddress);
+//	return toBase64(_id);
+    CCAssert(true, "assert");
+    CCAssert(false, "assert");
+    return "none";
 }
 std::string	GraphDog::getDeviceInfo()
 {
 
-	if(this->deviceInfo!="")return deviceInfo;
-	string ret = "unknown";
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	size_t size;
-	string _h = "h";
-	string _w = "w";
-	string _dot = ".";
-	string _m = "m";
-	string _a = "a";
-	string _c = "c";
-	string _i = "i";
-	string _n = "n";
-	string _e = "e";
-	string hw_machine = _h + _w + _dot + _m + _a + _c + _h + _i + _n + _e;
-	
-	sysctlbyname(hw_machine.c_str(), NULL, &size, NULL, 0);
-	char *machine = (char*)malloc(size);
-	sysctlbyname(hw_machine.c_str(), machine, &size, NULL, 0);
-	ret = machine;
-	free(machine);
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	JniMethodInfo minfo;
-	jobject jobj;
-	
-	CCLog("call getdeviceinfo");
-
-	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()Ljava/lang/Object;"))
-	{
-		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
-		JniMethodInfo __minfo;
-		__minfo.classID = 0;
-		__minfo.env = 0;
-		__minfo.methodID = 0;
-		
-		if(JniHelper::getMethodInfo(__minfo, packageName.c_str(), "getDeviceInfo", "()Ljava/lang/String;"))
-		{
-			jstring jstrTitle = (jstring) __minfo.env->CallObjectMethod(jobj, __minfo.methodID);
-			
-			if(jstrTitle)
-			{
-				char* pszTitle = (char*)__minfo.env->GetStringUTFChars(jstrTitle, JNI_FALSE);
-				
-				ret = pszTitle;
-				__minfo.env->ReleaseStringUTFChars(jstrTitle, pszTitle);
-				__minfo.env->DeleteLocalRef(jstrTitle);
-				
-			}
-			__minfo.env->DeleteLocalRef(__minfo.classID);
-		}
-		minfo.env->DeleteGlobalRef(jobj);
-		minfo.env->DeleteLocalRef(minfo.classID);
-	}
-	
-#endif
-	return ret;
+//	if(this->deviceInfo!="")return deviceInfo;
+//	string ret = "unknown";
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//	size_t size;
+//	string _h = "h";
+//	string _w = "w";
+//	string _dot = ".";
+//	string _m = "m";
+//	string _a = "a";
+//	string _c = "c";
+//	string _i = "i";
+//	string _n = "n";
+//	string _e = "e";
+//	string hw_machine = _h + _w + _dot + _m + _a + _c + _h + _i + _n + _e;
+//	
+//	sysctlbyname(hw_machine.c_str(), NULL, &size, NULL, 0);
+//	char *machine = (char*)malloc(size);
+//	sysctlbyname(hw_machine.c_str(), machine, &size, NULL, 0);
+//	ret = machine;
+//	free(machine);
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	JniMethodInfo minfo;
+//	jobject jobj;
+//	
+//	CCLog("call getdeviceinfo");
+//
+//	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()Ljava/lang/Object;"))
+//	{
+//		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
+//		JniMethodInfo __minfo;
+//		__minfo.classID = 0;
+//		__minfo.env = 0;
+//		__minfo.methodID = 0;
+//		
+//		if(JniHelper::getMethodInfo(__minfo, packageName.c_str(), "getDeviceInfo", "()Ljava/lang/String;"))
+//		{
+//			jstring jstrTitle = (jstring) __minfo.env->CallObjectMethod(jobj, __minfo.methodID);
+//			
+//			if(jstrTitle)
+//			{
+//				char* pszTitle = (char*)__minfo.env->GetStringUTFChars(jstrTitle, JNI_FALSE);
+//				
+//				ret = pszTitle;
+//				__minfo.env->ReleaseStringUTFChars(jstrTitle, pszTitle);
+//				__minfo.env->DeleteLocalRef(jstrTitle);
+//				
+//			}
+//			__minfo.env->DeleteLocalRef(__minfo.classID);
+//		}
+//		minfo.env->DeleteGlobalRef(jobj);
+//		minfo.env->DeleteLocalRef(minfo.classID);
+//	}
+//	
+//#endif
+//	return ret;
 //	return toBase64( desEncryption(sKey, ret) );
 //	return GraphDogLib::gdkeyEnc(ret, sKey);
+
+    CCAssert(true, "assert");
+    CCAssert(false, "assert");
+    return "none";
 }
 
 GraphDog* graphdog = GraphDog::get();
