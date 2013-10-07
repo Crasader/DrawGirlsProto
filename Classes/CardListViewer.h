@@ -25,7 +25,8 @@ enum CSS_Zorder{
 	kCSS_Z_selectedImg,
 	kCSS_Z_content,
 	kCSS_Z_check,
-	kCSS_Z_alignList
+	kCSS_Z_alignList,
+	kCSS_Z_alignButton
 };
 
 enum CSS_MenuTag{
@@ -35,9 +36,14 @@ enum CSS_MenuTag{
 	kCSS_MT_selectedCard = 4,
 	kCSS_MT_selectedCheck = 5,
 	kCSS_MT_checkMark = 6,
-	kCSS_MT_cardBase = 1000,
-	kCSS_MT_cardMenuBase = 2000,
-	kCSS_MT_noCardBase = 3000
+	kCSS_MT_alignClose = 7,
+	kCSS_MT_alignTake = 8,
+	kCSS_MT_alignGradeUp = 9,
+	kCSS_MT_alignGradeDown = 10,
+	kCSS_MT_alignDefault = 11,
+	kCSS_MT_cardBase = 10000,
+	kCSS_MT_cardMenuBase = 20000,
+	kCSS_MT_noCardBase = 30000
 };
 
 class CLV_Node : public CCNode

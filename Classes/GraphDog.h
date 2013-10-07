@@ -16,6 +16,8 @@
 #include <queue>
 #include <list>
 #define GRAPHDOG_VERSION    "5"
+#include "json.h"
+
 struct GDStruct {
     char *memory;
     size_t size;

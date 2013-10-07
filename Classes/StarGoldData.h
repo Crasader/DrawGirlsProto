@@ -468,6 +468,31 @@ public:
 			return has_gotten_cards[found_number+1].card_number;
 	}
 	
+	int getNextStageCardNumber(int recent_card_number)
+	{
+		int ing_card_number = recent_card_number;
+		bool is_found = false;
+		do{
+			ing_card_number = getNextCardNumber(ing_card_number);
+			if(ing_card_number == -1)		break;
+			if(ing_card_number/10 != recent_card_number/10)
+				is_found = true;
+		}while(!is_found && ing_card_number != recent_card_number);
+		
+		if(!is_found)
+			return -1;
+		else
+		{
+			int ing_card_stage = ing_card_number/10;
+			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 2) > 0)
+				return ing_card_stage*10 + 2;
+			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 1) > 0)
+				return ing_card_stage*10 + 1;
+			else
+				return ing_card_stage*10;
+		}
+	}
+	
 	int getPreCardNumber(int recent_card_number)
 	{
 		int t_size = has_gotten_cards.size();
@@ -494,6 +519,81 @@ public:
 			return has_gotten_cards[found_number-1].card_number;
 	}
 	
+	int getPreStageCardNumber(int recent_card_number)
+	{
+		int ing_card_number = recent_card_number;
+		bool is_found = false;
+		do{
+			ing_card_number = getPreCardNumber(ing_card_number);
+			if(ing_card_number == -1)		break;
+			if(ing_card_number/10 != recent_card_number/10)
+				is_found = true;
+		}while(!is_found && ing_card_number != recent_card_number);
+		
+		if(!is_found)
+			return -1;
+		else
+		{
+			int ing_card_stage = ing_card_number/10;
+			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 2) > 0)
+				return ing_card_stage*10 + 2;
+			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 1) > 0)
+				return ing_card_stage*10 + 1;
+			else
+				return ing_card_stage*10;
+		}
+	}
+	
+	void changeSortType(CardSortType t_type)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_cardSortType, t_type);
+		
+		if(t_type == kCST_default)
+		{
+			struct t_CardSortDefault{
+				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+				{
+					return a.card_number < b.card_number;
+				}
+			} pred;
+			
+			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		}
+		else if(t_type == kCST_take)
+		{
+			struct t_CardSortTake{
+				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+				{
+					return a.take_number > b.take_number;
+				}
+			} pred;
+			
+			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		}
+		else if(t_type == kCST_gradeUp)
+		{
+			struct t_CardSortGradeUp{
+				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+				{
+					return a.grade > b.grade;
+				}
+			} pred;
+			
+			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		}
+		else if(t_type == kCST_gradeDown)
+		{
+			struct t_CardSortGradeDown{
+				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+				{
+					return a.grade < b.grade;
+				}
+			} pred;
+			
+			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		}
+	}
+	
 	void addHasGottenCardNumber(int card_number)
 	{
 		int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number);
@@ -503,19 +603,23 @@ public:
 		t_info.grade = t_info.card_number%10+1;
 		has_gotten_cards.push_back(t_info);
 		
-		struct t_CardSort{
-			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
-			{
-				return a.card_number < b.card_number;
-			}
-		} pred;
+		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
 		
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 		CCLog("input %d, sort", card_number);
 		for(int i=0;i<has_gotten_cards.size();i++)
 		{
 			CCLog("%d", has_gotten_cards[i].card_number);
 		}
+	}
+	
+	int getHasGottenCardsDataCardNumber(int index)
+	{
+		return has_gotten_cards[index].card_number;
+	}
+	
+	int getHasGottenCardsSize()
+	{
+		return int(has_gotten_cards.size());
 	}
 	
 	int getDoubleItemValue(){	return doubleItem_value;	}
@@ -653,8 +757,9 @@ private:
 				}
 			}
 		}
+		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
 		
-		collection_starter = kCST_basic;//kCST_basic;
+//		collection_starter = kCST_basic;//kCST_basic;
 		
 		setTargetDelegate(NULL, NULL);
 		
