@@ -63,6 +63,7 @@ string GraphDog::getGraphDogVersion(){
 }
 
 void GraphDog::setup(string secretKey,int _appVersion){
+  
     
     this->setup("", secretKey, "", _appVersion);
     
@@ -199,21 +200,22 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	std::vector<CommandType> cmdCollect;
 	CommandsType cmdQueue;
 	// cmdQueue 에 명령 추가하고...
-	JsonBox::Object jsonTotalCmd;
-	cmdQueue.chunk = GDStruct((char*)malloc(1), 0, CURLE_AGAIN);
+	//@ JsonBox::Object jsonTotalCmd;
+	Json::Value jsonTotalCmd;
+    cmdQueue.chunk = GDStruct((char*)malloc(1), 0, CURLE_AGAIN);
 	int i=0;
 	for(std::vector<CommandParam>::const_iterator iter = params.begin(); iter != params.end(); ++iter, i++)
 	{
-		ostringstream oss;
-		oss << (iter->param);
-		
+//		ostringstream oss;
+//		oss << (iter->param);
 		char buf[20];
 		sprintf(buf, "%d", i);
-		JsonBox::Object param;
-		param["p"] = iter->param;
+		//@ JsonBox::Object param;
+        Json::Value param;
+        param["p"] = iter->param;
 		param["a"] = iter->action;
 		jsonTotalCmd[buf] = param; // dict 로
-		CommandType cmd = {iter->target, iter->selector, oss.str(), iter->action};
+		CommandType cmd = {iter->target, iter->selector, GraphDogLib::JsonObjectToString(iter->param), iter->action};
 		cmdQueue.commands[buf] = cmd;
 		cmdCollect.push_back(cmd);
 	}
@@ -230,11 +232,15 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	if (thr_id < 0)
 	{
 		//쓰레드생성오류시
-		JsonBox::Object resultobj;
-		resultobj["state"]= JsonBox::Value("error");
-		resultobj["errorMsg"]=JsonBox::Value("don't create thread");
-		resultobj["errorCode"]=JsonBox::Value(1001);
-		
+		//@ JsonBox::Object resultobj;
+        Json::Value resultobj;
+//@		resultobj["state"]= JsonBox::Value("error");
+//@		resultobj["errorMsg"]=JsonBox::Value("don't create thread");
+//@		resultobj["errorCode"]=JsonBox::Value(1001);
+        resultobj["state"]= "error";
+		resultobj["errorMsg"]="don't create thread";
+		resultobj["errorCode"]=1001;
+	
 		for(std::vector<CommandType>::const_iterator iter = cmdCollect.begin(); iter != cmdCollect.end(); ++iter)
 		{
 			if( iter->target != 0 && iter->selector != 0)
@@ -249,12 +255,14 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	
     return true;
 }
-bool GraphDog::command(string action, const JsonBox::Object* const param,CCObject *target,GDSelType selector){
-    
+//@ bool GraphDog::command(string action, const JsonBox::Object* const param,CCObject *target,GDSelType selector){
+bool GraphDog::command(string action, const Json::Value param,CCObject *target,GDSelType selector){
 	CommandParam cp;
 	cp.action = action;
-	if(param != 0)
-		cp.param = *param;
+	if(param != 0){
+        cp.param = param;
+		//@ cp.param = *param;        
+    }
 	cp.target = target;
 	cp.selector = selector;
 	
@@ -264,14 +272,17 @@ bool GraphDog::command(string action, const JsonBox::Object* const param,CCObjec
     return true;
 }
 
-bool GraphDog::test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, JsonBox::Object result){
-    result["param"] = *param;
+//@ bool GraphDog::test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, JsonBox::Object result){
+bool GraphDog::test(string action, const Json::Value param,CCObject *target, GDSelType selector, Json::Value result){
+    //@ result["param"] = *param;
+    result["param"]=param;
     if(target!=0 && selector!=0) ((target)->*(selector))(result);
     return true;
 }
 
-bool GraphDog::test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, string result){
-    JsonBox::Object resultObj = GraphDogLib::StringToJsonObject(result);
+//@ bool GraphDog::test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, string result){
+bool GraphDog::test(string action, const Json::Value param,CCObject *target, GDSelType selector, string result){
+    Json::Value resultObj = GraphDogLib::StringToJsonObject(result);
     
     this->test(action,param,target,selector,resultObj);
     return true;
@@ -290,6 +301,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	//CCLog("t_function2");
 	string token="";
 	//CCLog("t_function2");
+    CCLog("command %s",command.commandStr.c_str());
 	string paramStr = toBase64(desEncryption(graphdog->sKey, command.commandStr));
 	string dataset = "&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString();
 	//CCLog("t_function3");
@@ -310,12 +322,14 @@ void* GraphDog::t_function(void *_insertIndex)
 	CURLcode resultCode = curl_easy_perform(handle);
 	//CCLog("result code is %d",resultCode);
 	//##
-	JsonBox::Object resultobj;
-	string resultStr;
+	//@ JsonBox::Object resultobj;
+    Json::Value resultobj;
+    string resultStr;
 	if(resultCode == CURLE_OK)
 	{
 		//CCLog("t_function OK1");
 		resultStr = command.chunk.memory;// gdchunk.memory;
+        CCLog("get str %s",resultStr.c_str());
         if(*resultStr.rbegin() == '#') // success
 		{
 			try
@@ -350,8 +364,10 @@ void* GraphDog::t_function(void *_insertIndex)
 	{
 		if(iter->second.paramStr != "")
 		{
-			JsonBox::Object param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
-			resultobj[iter->first]["param"] = JsonBox::Value(param);
+			//@ JsonBox::Object param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
+			Json::Value param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
+            //@ resultobj[iter->first]["param"] = JsonBox::Value(param);
+            resultobj[iter->first]["param"] = param;
 		}
 	}
 	
@@ -391,7 +407,8 @@ void* GraphDog::t_function(void *_insertIndex)
 	
 	//CCLog("t_function 11");
 
-	if(resultobj["errorcode"].getInt()==9999){
+	//@ if(resultobj["errorcode"].getInt()==9999){
+    if(resultobj["errorcode"].asInt()==9999){
 		//CCLog("t_function errorcode");
 		command.caller->setCTime("9999");
 		command.caller->errorCount++;
@@ -399,11 +416,15 @@ void* GraphDog::t_function(void *_insertIndex)
 			std::vector<CommandParam> vcp;
 			for(std::map<string, CommandType>::const_iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
 			{
-				JsonBox::Value param;
-				param.loadFromString(iter->second.paramStr);
-				CommandParam cp;
+				//@ JsonBox::Value param;
+				Json::Value param;
+                
+                //@param.loadFromString(iter->second.paramStr);
+				param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
+                CommandParam cp;
 				cp.action = iter->second.action;
-				cp.param = param.getObject();
+				//@ cp.param = param.getObject();
+                cp.param = param;
 				cp.selector = iter->second.selector;
 				cp.target = iter->second.target;
 				vcp.push_back(cp);
@@ -428,21 +449,24 @@ void* GraphDog::t_function(void *_insertIndex)
 	
 	
 		//CCLog("t_function 12");
-		if(resultobj["state"].getString()=="ok"){
-			
+		//@if(resultobj["state"].getString()=="ok"){
+        if(resultobj["state"].asString()=="ok"){
+        
 			//CCLog("t_function 13");
 			command.caller->errorCount=0;
 		}
 		
 	
         //CCLog("t_function 14");
-        if(resultobj["timestamp"].getInt()<GraphDog::get()->timestamp){
+       //@ if(resultobj["timestamp"].getInt()<GraphDog::get()->timestamp){
+        if(resultobj["timestamp"].asInt()<GraphDog::get()->timestamp){
             
-			CCLog("t_function error hack!!!",resultobj["timestamp"].getInt(),GraphDog::get()->timestamp);
+			CCLog("t_function error hack!!! %d,%d",resultobj["timestamp"].asInt(),GraphDog::get()->timestamp);
 			resultCode=CURLE_CHUNK_FAILED;
             resultobj["state"]="error";
             resultobj["errorMsg"]="hack!!";
-            GraphDog::get()->timestamp=resultobj["timestamp"].getInt();
+            //@ GraphDog::get()->timestamp=resultobj["timestamp"].getInt();
+            GraphDog::get()->timestamp=resultobj["timestamp"].asInt();
         }
     
 		command.result = resultobj;
@@ -490,16 +514,19 @@ void GraphDog::receivedCommand(float dt)
 				for(std::map<string, CommandType>::iterator commandTypeIter = commandQueueIter->second.commands.begin(); commandTypeIter != commandQueueIter->second.commands.end(); ++commandTypeIter)
 				{
 					CCLog("receivedCommand error");
-					JsonBox::Object resultobj;
-					CommandType command = commandTypeIter->second;
-					resultobj["state"] = JsonBox::Value("error");
-					resultobj["errorMsg"] = JsonBox::Value("check your network state");
-					resultobj["errorCode"] = JsonBox::Value(1002);
+					//@ JsonBox::Object resultobj;
+                    Json::Value resultobj;
+                    CommandType command = commandTypeIter->second;
+					resultobj["state"] = "error";
+					resultobj["errorMsg"] = "check your network state";
+					resultobj["errorCode"] = 1002;
 					
 					//callbackparam
 					if(command.paramStr!=""){
-						JsonBox::Object param =  GraphDogLib::StringToJsonObject(command.paramStr);
-						resultobj["param"]=JsonBox::Value(param);
+						//@ JsonBox::Object param =  GraphDogLib::StringToJsonObject(command.paramStr);
+						Json::Value param =  GraphDogLib::StringToJsonObject(command.paramStr);
+						//@ resultobj["param"]=JsonBox::Value(param);
+                        resultobj["param"]=param;
 					}
 					if(command.target!=0 && command.selector!=0)
 						((command.target)->*(command.selector))(resultobj);
@@ -507,13 +534,21 @@ void GraphDog::receivedCommand(float dt)
 				throw commands.chunk.resultCode;
 			}
 			
-			JsonBox::Object resultobj = commands.result; //GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
-			for(JsonBox::Object::iterator iter2 = resultobj.begin(); iter2 != resultobj.end(); ++iter2)
+			//@ JsonBox::Object resultobj = commands.result; //GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
+            
+            Json::Value resultobj = commands.result;
+
+                
+			for(std::map<string, CommandType>::iterator iter2 = commands.commands.begin(); iter2 != commands.commands.end(); ++iter2)
 			{
-				CommandType ct = commandQueueIter->second.commands[iter2->first];
-				if(ct.target != 0 && ct.selector != 0)
+				//@ CommandType ct = commandQueueIter->second.commands[iter2->first];
+                CommandType ct = iter2->second;
+				//CommandType ct = commandQueueIter->second.commands[iter2.memberName()];
+                if(ct.target != 0 && ct.selector != 0)
 				{
-					((ct.target)->*(ct.selector))(iter2->second.getObject());
+                  //  CCLog("%s,%s", iter2.memberName(),GraphDogLib::JsonObjectToString(commands.result));
+					//((ct.target)->*(ct.selector))(iter2);
+					((ct.target)->*(ct.selector))(resultobj[iter2->first.c_str()]);
 				}				
 			}
 			

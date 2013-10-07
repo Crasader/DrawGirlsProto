@@ -16,7 +16,7 @@
 #include <queue>
 #include <list>
 #define GRAPHDOG_VERSION    "5"
-#include "json.h"
+#include "jsoncpp/json.h"
 
 struct GDStruct {
     char *memory;
@@ -41,10 +41,12 @@ struct AutoIncrease
 struct CommandParam
 {
 	string action;
-	JsonBox::Object param;
-	const CCObject* target;
+	//@ JsonBox::Object param;
+	Json::Value param;
+    const CCObject* target;
 	GDSelType selector;
-	CommandParam(const string& _action, const JsonBox::Object& _param, const CCObject* _target, GDSelType _selector)
+    //@ CommandParam(const string& _action, const JsonBox::Object& _param, const CCObject* _target, GDSelType _selector)
+	CommandParam(const string& _action, const Json::Value _param, const CCObject* _target, GDSelType _selector)
 	{
 		action = _action;
 		param = _param;
@@ -55,9 +57,10 @@ struct CommandParam
 	{
 		CCAssert(_param == 0, "_param == 0");
 		action = _action;
-		JsonBox::Object _p;
-		param = _p;
-		target = _target;
+		//@ JsonBox::Object _p;
+        Json::Value _p;
+        param = _p;
+        target = _target;
 		selector = _selector;
 	}
 	CommandParam(){}
@@ -71,11 +74,17 @@ public:
     void setup(string secretKey,int _appVersion); //nhn용 새로추가
     void setup(string appID,string secretKey,string _packageName,int _appVersion);
     //명령날리기 - 이 함수로 모든 통신을 할수있다. 쓰레드생성 실패시 false 그외 true
-    bool command(string action, const JsonBox::Object* const param,CCObject *target,GDSelType selector);
-	bool command(const std::vector<CommandParam>& params);
     
-    bool test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, JsonBox::Object result);
-    bool test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, string result);
+    bool command(const std::vector<CommandParam>& params);
+    
+//@    bool command(string action, const JsonBox::Object* const param,CCObject *target,GDSelType selector);
+    
+//@    bool test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, JsonBox::Object result);
+//@    bool test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, string result);
+    
+    bool command(string action, const Json::Value param,CCObject *target,GDSelType selector);
+    bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, Json::Value result);
+    bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, string result);
     
     //닉네임저장
     void setNick(string nick);
@@ -127,12 +136,14 @@ public:
 		string commandStr;
 		GraphDog* caller;
 		GDStruct chunk;
-		JsonBox::Object result;
+		//@ JsonBox::Object result;
+        Json::Value result;
 	};
 	std::map<int, CommandsType> commandQueue;
     void removeCommand(cocos2d::CCObject *target);
 
-	JsonBox::Object dictParam;
+	//@ JsonBox::Object dictParam;
+    Json::Value dictParam;
 private:
 //    GDStruct gdchunk;
 	pthread_mutex_t t_functionMutex;
