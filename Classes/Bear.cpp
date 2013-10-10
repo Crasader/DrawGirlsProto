@@ -429,11 +429,6 @@ void Bear::furyModeOff()
 	myGD->communication("MS_resetRects");
 }
 
-void Bear::setGameover()
-{
-	m_state = CUMBERSTATESTOP;
-}
-
 
 void Bear::scaleAdjustment(float dt)
 {

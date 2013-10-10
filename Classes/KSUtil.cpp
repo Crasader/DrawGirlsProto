@@ -173,5 +173,6 @@ namespace KS
 	{
 		return CCFileUtils::sharedFileUtils()->isFileExist(CCFileUtils::sharedFileUtils()->fullPathForFilename(fileName.c_str()));
 	}
+	
 }
 

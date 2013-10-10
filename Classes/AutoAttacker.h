@@ -475,89 +475,89 @@ private:
 	}
 };
 
-class AutoATK6 : public AutoAttacker // line poison
-{
-public:
-	static AutoATK6* create()
-	{
-		AutoATK6* t_atk6 = new AutoATK6();
-		t_atk6->myInit();
-		t_atk6->autorelease();
-		return t_atk6;
-	}
-	
-	void stopFraming()
-	{
-		unschedule(schedule_selector(AutoATK6::framing));
-	}
-	
-	void startFraming()
-	{
-		ing_frame = 0;
-		schedule(schedule_selector(AutoATK6::framing));
-	}
-	
-private:
-	int shoot_frame;
-	int ing_frame;
-	
-	
-	void framing()
-	{
-		ing_frame++;
-		
-		if(ing_frame >= shoot_frame)
-		{
-			IntPoint jackPoint = myGD->getJackPoint();
-			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
-			
-			IntPoint mainCumberPoint = myGD->getMainCumberPoint();
-			CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-			
-			CCPoint subPosition = ccpSub(jackPosition, mainCumberPosition);
-			
-			float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
-			if(distance >= 80)
-			{
-				AP_Missile22* t_m22 = AP_Missile22::create(mainCumberPosition);
-				addChild(t_m22);
-			}
-			
-			ing_frame = 0;
-		}
-	}
-	
-	void myInit()
-	{
-		
-		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
-		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
-		if(selected_chapter == 21)
-		{
-			if(selected_stage == 1)			shoot_frame = 260;
-			else if(selected_stage == 2)	shoot_frame = 250;
-			else if(selected_stage == 3)	shoot_frame = 240;
-			else if(selected_stage == 4)	shoot_frame = 230;
-			else if(selected_stage == 5)	shoot_frame = 220;
-		}
-		else if(selected_chapter == 31)
-		{
-			if(selected_stage == 1)			shoot_frame = 210;
-			else if(selected_stage == 2)	shoot_frame = 200;
-			else if(selected_stage == 3)	shoot_frame = 190;
-			else if(selected_stage == 4)	shoot_frame = 180;
-			else if(selected_stage == 5)	shoot_frame = 170;
-		}
-		else if(selected_chapter == 41)
-		{
-			if(selected_stage == 1)			shoot_frame = 260;
-			else if(selected_stage == 2)	shoot_frame = 240;
-			else if(selected_stage == 3)	shoot_frame = 220;
-			else if(selected_stage == 4)	shoot_frame = 200;
-			else if(selected_stage == 5)	shoot_frame = 180;
-		}
-	}
-};
+//class AutoATK6 : public AutoAttacker // line poison
+//{
+//public:
+//	static AutoATK6* create()
+//	{
+//		AutoATK6* t_atk6 = new AutoATK6();
+//		t_atk6->myInit();
+//		t_atk6->autorelease();
+//		return t_atk6;
+//	}
+//	
+//	void stopFraming()
+//	{
+//		unschedule(schedule_selector(AutoATK6::framing));
+//	}
+//	
+//	void startFraming()
+//	{
+//		ing_frame = 0;
+//		schedule(schedule_selector(AutoATK6::framing));
+//	}
+//	
+//private:
+//	int shoot_frame;
+//	int ing_frame;
+//	
+//	
+//	void framing()
+//	{
+//		ing_frame++;
+//		
+//		if(ing_frame >= shoot_frame)
+//		{
+//			IntPoint jackPoint = myGD->getJackPoint();
+//			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
+//			
+//			IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+//			CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
+//			
+//			CCPoint subPosition = ccpSub(jackPosition, mainCumberPosition);
+//			
+//			float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
+//			if(distance >= 80)
+//			{
+//				AP_Missile22* t_m22 = AP_Missile22::create(mainCumberPosition);
+//				addChild(t_m22);
+//			}
+//			
+//			ing_frame = 0;
+//		}
+//	}
+//	
+//	void myInit()
+//	{
+//		
+//		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
+//		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
+//		if(selected_chapter == 21)
+//		{
+//			if(selected_stage == 1)			shoot_frame = 260;
+//			else if(selected_stage == 2)	shoot_frame = 250;
+//			else if(selected_stage == 3)	shoot_frame = 240;
+//			else if(selected_stage == 4)	shoot_frame = 230;
+//			else if(selected_stage == 5)	shoot_frame = 220;
+//		}
+//		else if(selected_chapter == 31)
+//		{
+//			if(selected_stage == 1)			shoot_frame = 210;
+//			else if(selected_stage == 2)	shoot_frame = 200;
+//			else if(selected_stage == 3)	shoot_frame = 190;
+//			else if(selected_stage == 4)	shoot_frame = 180;
+//			else if(selected_stage == 5)	shoot_frame = 170;
+//		}
+//		else if(selected_chapter == 41)
+//		{
+//			if(selected_stage == 1)			shoot_frame = 260;
+//			else if(selected_stage == 2)	shoot_frame = 240;
+//			else if(selected_stage == 3)	shoot_frame = 220;
+//			else if(selected_stage == 4)	shoot_frame = 200;
+//			else if(selected_stage == 5)	shoot_frame = 180;
+//		}
+//	}
+//};
 
 class AutoATK7 : public AutoAttacker // tick bomb
 {
