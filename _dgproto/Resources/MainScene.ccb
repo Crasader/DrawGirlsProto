@@ -127,7 +127,7 @@
 									<key>name</key>
 									<string>visible</string>
 									<key>time</key>
-									<real>1.2999999523162842</real>
+									<real>1</real>
 									<key>type</key>
 									<integer>1</integer>
 									<key>value</key>
@@ -172,8 +172,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>300</real>
-							<real>160</real>
+							<real>348</real>
+							<real>82</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -196,7 +196,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>pattern_meteor3_targeting.ccb</string>
+						<string>pattern_targeting1.ccb</string>
 					</dict>
 				</array>
 			</dict>
@@ -205,52 +205,6 @@
 				<dict>
 					<key>0</key>
 					<dict>
-						<key>position</key>
-						<dict>
-							<key>keyframes</key>
-							<array>
-								<dict>
-									<key>easing</key>
-									<dict>
-										<key>type</key>
-										<integer>1</integer>
-									</dict>
-									<key>name</key>
-									<string>position</string>
-									<key>time</key>
-									<real>1</real>
-									<key>type</key>
-									<integer>3</integer>
-									<key>value</key>
-									<array>
-										<real>503</real>
-										<real>345</real>
-									</array>
-								</dict>
-								<dict>
-									<key>easing</key>
-									<dict>
-										<key>type</key>
-										<integer>1</integer>
-									</dict>
-									<key>name</key>
-									<string>position</string>
-									<key>time</key>
-									<real>2</real>
-									<key>type</key>
-									<integer>3</integer>
-									<key>value</key>
-									<array>
-										<real>300</real>
-										<real>160</real>
-									</array>
-								</dict>
-							</array>
-							<key>name</key>
-							<string>position</string>
-							<key>type</key>
-							<integer>3</integer>
-						</dict>
 						<key>visible</key>
 						<dict>
 							<key>keyframes</key>
@@ -264,7 +218,7 @@
 									<key>name</key>
 									<string>visible</string>
 									<key>time</key>
-									<real>1</real>
+									<real>0.83333331346511841</real>
 									<key>type</key>
 									<integer>1</integer>
 									<key>value</key>
@@ -279,7 +233,7 @@
 									<key>name</key>
 									<string>visible</string>
 									<key>time</key>
-									<real>2</real>
+									<real>2.3666665554046631</real>
 									<key>type</key>
 									<integer>1</integer>
 									<key>value</key>
@@ -318,19 +272,14 @@
 						<false/>
 					</dict>
 					<dict>
-						<key>baseValue</key>
-						<array>
-							<real>503</real>
-							<real>345</real>
-						</array>
 						<key>name</key>
 						<string>position</string>
 						<key>type</key>
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>300</real>
-							<real>160</real>
+							<real>347</real>
+							<real>87</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -349,11 +298,109 @@
 					</dict>
 					<dict>
 						<key>name</key>
-						<string>rotation</string>
+						<string>ccbFile</string>
 						<key>type</key>
-						<string>Degrees</string>
+						<string>CCBFile</string>
 						<key>value</key>
-						<real>135</real>
+						<string>pattern_lightning_targeting.ccb</string>
+					</dict>
+				</array>
+			</dict>
+			<dict>
+				<key>animatedProperties</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>visible</key>
+						<dict>
+							<key>keyframes</key>
+							<array>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>0</integer>
+									</dict>
+									<key>name</key>
+									<string>visible</string>
+									<key>time</key>
+									<real>0.83333331346511841</real>
+									<key>type</key>
+									<integer>1</integer>
+									<key>value</key>
+									<true/>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>0</integer>
+									</dict>
+									<key>name</key>
+									<string>visible</string>
+									<key>time</key>
+									<real>2.4000000953674316</real>
+									<key>type</key>
+									<integer>1</integer>
+									<key>value</key>
+									<true/>
+								</dict>
+							</array>
+							<key>name</key>
+							<string>visible</string>
+							<key>type</key>
+							<integer>1</integer>
+						</dict>
+					</dict>
+				</dict>
+				<key>baseClass</key>
+				<string>CCBFile</string>
+				<key>children</key>
+				<array/>
+				<key>customClass</key>
+				<string></string>
+				<key>displayName</key>
+				<string>CCBFile</string>
+				<key>memberVarAssignmentName</key>
+				<string></string>
+				<key>memberVarAssignmentType</key>
+				<integer>0</integer>
+				<key>properties</key>
+				<array>
+					<dict>
+						<key>baseValue</key>
+						<integer>1</integer>
+						<key>name</key>
+						<string>visible</string>
+						<key>type</key>
+						<string>Check</string>
+						<key>value</key>
+						<false/>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>position</string>
+						<key>type</key>
+						<string>Position</string>
+						<key>value</key>
+						<array>
+							<real>347</real>
+							<real>86</real>
+							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>scale</string>
+						<key>type</key>
+						<string>ScaleLock</string>
+						<key>value</key>
+						<array>
+							<real>1</real>
+							<real>1</real>
+							<false/>
+							<integer>0</integer>
+						</array>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -361,11 +408,9 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>pattern_meteor3.ccb</string>
+						<string>pattern_lightning.ccb</string>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
