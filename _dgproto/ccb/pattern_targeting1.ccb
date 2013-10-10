@@ -50,7 +50,25 @@
 											<integer>7</integer>
 											<key>value</key>
 											<array>
-												<string>fx_bomb1_1.png</string>
+												<string>pattern_targeting1_1.png</string>
+												<string>Use regular file</string>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>displayFrame</string>
+											<key>time</key>
+											<real>0.033333335071802139</real>
+											<key>type</key>
+											<integer>7</integer>
+											<key>value</key>
+											<array>
+												<string>pattern_targeting1_2.png</string>
 												<string>Use regular file</string>
 											</array>
 										</dict>
@@ -68,7 +86,25 @@
 											<integer>7</integer>
 											<key>value</key>
 											<array>
-												<string>fx_bomb1_2.png</string>
+												<string>pattern_targeting1_3.png</string>
+												<string>Use regular file</string>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>displayFrame</string>
+											<key>time</key>
+											<real>0.10000000149011612</real>
+											<key>type</key>
+											<integer>7</integer>
+											<key>value</key>
+											<array>
+												<string>pattern_targeting1_4.png</string>
 												<string>Use regular file</string>
 											</array>
 										</dict>
@@ -86,7 +122,25 @@
 											<integer>7</integer>
 											<key>value</key>
 											<array>
-												<string>fx_bomb1_3.png</string>
+												<string>pattern_targeting1_5.png</string>
+												<string>Use regular file</string>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>displayFrame</string>
+											<key>time</key>
+											<real>0.1666666716337204</real>
+											<key>type</key>
+											<integer>7</integer>
+											<key>value</key>
+											<array>
+												<string>pattern_targeting1_6.png</string>
 												<string>Use regular file</string>
 											</array>
 										</dict>
@@ -104,7 +158,7 @@
 											<integer>7</integer>
 											<key>value</key>
 											<array>
-												<string>fx_bomb1_4.png</string>
+												<string>pattern_targeting1_7.png</string>
 												<string>Use regular file</string>
 											</array>
 										</dict>
@@ -117,120 +171,12 @@
 											<key>name</key>
 											<string>displayFrame</string>
 											<key>time</key>
-											<real>0.26666668057441711</real>
+											<real>0.23333333432674408</real>
 											<key>type</key>
 											<integer>7</integer>
 											<key>value</key>
 											<array>
-												<string>fx_bomb1_5.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.3333333432674408</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>fx_bomb1_6.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.40000000596046448</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>fx_bomb1_7.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.46666666865348816</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>fx_bomb1_8.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.53333336114883423</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>fx_bomb1_9.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.60000002384185791</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>fx_bomb1_10.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.66666668653488159</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>fx_bomb1_11.png</string>
+												<string>pattern_targeting1_7.png</string>
 												<string>Use regular file</string>
 											</array>
 										</dict>
@@ -253,7 +199,22 @@
 											<key>name</key>
 											<string>opacity</string>
 											<key>time</key>
-											<real>0.53333336114883423</real>
+											<real>0.0</real>
+											<key>type</key>
+											<integer>5</integer>
+											<key>value</key>
+											<integer>0</integer>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>opacity</string>
+											<key>time</key>
+											<real>0.033333335071802139</real>
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
@@ -268,7 +229,22 @@
 											<key>name</key>
 											<string>opacity</string>
 											<key>time</key>
-											<real>0.66666668653488159</real>
+											<real>0.1666666716337204</real>
+											<key>type</key>
+											<integer>5</integer>
+											<key>value</key>
+											<integer>255</integer>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>opacity</string>
+											<key>time</key>
+											<real>0.36666667461395264</real>
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
@@ -280,6 +256,88 @@
 									<key>type</key>
 									<integer>5</integer>
 								</dict>
+								<key>scale</key>
+								<dict>
+									<key>keyframes</key>
+									<array>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.0</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>0.5</real>
+												<real>0.5</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.033333335071802139</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>1</real>
+												<real>1</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.1666666716337204</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>1</real>
+												<real>1</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.36666667461395264</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>2</real>
+												<real>2</real>
+											</array>
+										</dict>
+									</array>
+									<key>name</key>
+									<string>scale</string>
+									<key>type</key>
+									<integer>4</integer>
+								</dict>
 							</dict>
 						</dict>
 						<key>baseClass</key>
@@ -289,7 +347,7 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>fx_bomb1_1</string>
+						<string>pattern_meteor3_1</string>
 						<key>memberVarAssignmentName</key>
 						<string></string>
 						<key>memberVarAssignmentType</key>
@@ -308,15 +366,20 @@
 								</array>
 							</dict>
 							<dict>
+								<key>baseValue</key>
+								<array>
+									<real>0.69999998807907104</real>
+									<real>0.69999998807907104</real>
+								</array>
 								<key>name</key>
 								<string>scale</string>
 								<key>type</key>
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1</real>
-									<real>1</real>
-									<false/>
+									<real>2</real>
+									<real>2</real>
+									<true/>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -331,7 +394,7 @@
 							<dict>
 								<key>baseValue</key>
 								<array>
-									<string>fx_bomb1_1.png</string>
+									<string>pattern_meteor3_1.png</string>
 									<string>Use regular file</string>
 								</array>
 								<key>name</key>
@@ -341,7 +404,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>fx_bomb1_11.png</string>
+									<string>pattern_targeting1_7.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -511,19 +574,19 @@
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>-1</integer>
+			<integer>0</integer>
 			<key>length</key>
-			<real>0.66666668653488159</real>
+			<real>0.36666667461395264</real>
 			<key>name</key>
-			<string>bomb</string>
+			<string>Default Timeline</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.66666668653488159</real>
+			<real>0.36666667461395264</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>281.1221923828125</real>
+			<real>389.55618286132812</real>
 			<key>sequenceId</key>
 			<integer>0</integer>
 			<key>soundChannel</key>
