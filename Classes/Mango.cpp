@@ -489,11 +489,6 @@ void Mango::furyModeOff()
 	myGD->communication("MS_resetRects");
 }
 
-void Mango::setGameover()
-{
-	m_state = CUMBERSTATESTOP;
-}
-
 
 void Mango::scaleAdjustment(float dt)
 {

@@ -673,7 +673,3 @@ void Melon::getRandomPosition(IntPoint* ip, bool* finded)
 	
 }
 
-void Melon::setGameover()
-{
-	m_state = CUMBERSTATESTOP;
-}

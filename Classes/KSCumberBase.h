@@ -124,7 +124,10 @@ public:
 	CCNode* getBossEye() { return NULL; }
 	
 	virtual void furyModeOn() = 0;
-	virtual void setGameover() = 0;
+	virtual void setGameover()
+	{
+		m_state = CUMBERSTATESTOP;
+	}
 	virtual void cumberImgStartRotating(float gabage){} //## 임시.
 	virtual void startAnimationNoDirection() = 0;
 	virtual void startAnimationDirection() = 0;
@@ -259,18 +262,28 @@ public:
 		m_drawMovement = draw;
 		m_furyMovement = fury;
 	}
-	void settingPattern(JsonBox::Object pattern)
+	void settingPattern(Json::Value pattern)
 	{
 		KS::KSLog("%", pattern);
-		for(auto i : pattern)
+		for(auto iter = pattern.begin(); iter != pattern.end(); ++iter)
 		{
-			int patternNumber = atoi(i.first.c_str()); // 패턴 넘버
-			int ratio = i.second["percent"].getInt();  // 빈번도
+			int patternNumber = atoi(iter.key().asCString()); // 패턴 넘버
+			int ratio = pattern[iter.key().asString()]["percent"].asInt();  // 빈번도
 			for(int j = 0; j<ratio; j++)
 			{
 				m_attacks.push_back(patternNumber);
-			}			
+			}
 		}
+//		for(auto i : pattern)
+//		{
+//			//i.asCString()
+//			int patternNumber = atoi(i.first.c_str()); // 패턴 넘버
+//			int ratio = i.second["percent"].getInt();  // 빈번도
+//			for(int j = 0; j<ratio; j++)
+//			{
+//				m_attacks.push_back(patternNumber);
+//			}			
+//		}
 	}
 	void settingHp(float hp)
 	{

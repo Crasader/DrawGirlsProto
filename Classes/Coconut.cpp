@@ -500,10 +500,6 @@ void Coconut::furyModeOff()
 	myGD->communication("MS_resetRects");
 }
 
-void Coconut::setGameover()
-{
-	m_state = CUMBERSTATESTOP;
-}
 
 
 void Coconut::scaleAdjustment(float dt)

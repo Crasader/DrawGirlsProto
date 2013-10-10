@@ -20,6 +20,8 @@
 #include "KSCumberBase.h"
 #include "JsonBox.h"
 #include "FromTo.h"
+#include "jsoncpp/json.h"
+#include "AttackPattern.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -128,1897 +130,6 @@ private:
 	}
 };
 
-// 무작위 원형 던지기.
-class KSAttackPattern1 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSAttackPattern1);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["1"].getObject();
-		m_perFrame = pattern["perframe"].getInt();
-		m_totalFrame = pattern["totalframe"].getInt();
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
-		m_numberPerFrame = pattern["numberperframe"].getInt();
-		m_color = pattern["color"].getInt();
-		
-
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		
-		scheduleUpdate();		
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		
-		if(m_frameCnt == m_totalFrame)
-		{
-			stopMyAction();
-		}
-		else if(m_frameCnt % m_perFrame == 0)
-		{
-			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
-			
-			std::string imgFileName;
-			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-			if(KS::isExistFile(fileName))
-				imgFileName = fileName;
-			else
-				imgFileName = "cumber_missile1.png";
-			
-			CCSize t_mSize = CCSize(4.f, 4.f);
-			int start_angle = m_well512.GetFloatValue(360);
-			
-			for(int i=0;i<m_numberPerFrame;i++)
-			{
-				float temp_angle = start_angle+(360.f/m_numberPerFrame)*i;
-				
-				MissileUnit* t_mu = MissileUnit::create(m_position, temp_angle, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize, 0.f, 0.f);
-				batchNode->addChild(t_mu);
-			}
-		}
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-protected:
-	int m_perFrame;
-	int m_totalFrame;
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	
-	int m_frameCnt;
-	
-	CCPoint m_position;
-	CCSpriteBatchNode* batchNode;
-	Well512 m_well512;
-};
-
-/// 골뱅이 패턴.
-class KSAttackPattern2 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSAttackPattern2);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-	
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["2"].getObject();
-		
-		m_perFrame = pattern["perframe"].getInt();
-		m_totalFrame = pattern["totalframe"].getInt();
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
-		m_color = pattern["color"].getInt();
-		
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		
-		m_frameCnt = 0;
-		m_position = t_sp;
-		angle = m_well512.GetValue(360);
-		scheduleUpdate();
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		
-		if(m_frameCnt == m_totalFrame)
-		{
-			stopMyAction();
-		}
-		else if(m_frameCnt % m_perFrame == 0)
-		{
-			
-			angle += 11 * m_perFrame;
-			if(angle >= 360)
-				angle -= 360;
-			
-			std::string imgFileName;
-			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-			if(KS::isExistFile(fileName))
-				imgFileName = fileName;
-			else
-				imgFileName = "cumber_missile1.png";
-			CCSize t_mSize = CCSize(4.f, 4.f);
-			MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-													imgFileName.c_str(), t_mSize, 0.f, 0.f);
-			batchNode->addChild(t_mu);
-			
-			
-			
-//			int start_angle = rand()%(360/t_mCnt);
-//			
-//			for(int i=0;i<t_mCnt;i++)
-//			{
-//				float temp_angle = start_angle+(360.f/t_mCnt)*i;
-//				
-//				
-//			}
-		}
-		if(m_frameCnt % 5 == 0)
-		{
-			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
-		}
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-protected:
-	int m_perFrame;
-	int m_totalFrame;
-	float m_bulletSpeed;
-	int m_color;
-
-	int m_frameCnt;
-	CCPoint m_position;
-	int angle;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-// 해바라기 패턴.
-class KSAttackPattern3 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSAttackPattern3);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["3"].getObject();
-		
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
-		m_numberPerFrame = pattern["numberperframe"].getInt();
-		m_color = pattern["color"].getInt();
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		
-		scheduleUpdate();
-	}
-	void update(float dt)
-	{
-		float angle = m_well512.GetValue(360);
-		for(int i=0; i<m_numberPerFrame;i++)
-		{
-			std::string imgFileName;
-			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-			if(KS::isExistFile(fileName))
-				imgFileName = fileName;
-			else
-				imgFileName = "cumber_missile1.png";
-			CCSize t_mSize = CCSize(4.f,4.f);
-			MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-													imgFileName.c_str(), t_mSize, 0.f, 0.f);
-			batchNode->addChild(t_mu);
-			angle += 360 / m_numberPerFrame;
-			if(angle >= 360)
-				angle -= 360;
-		}
-		angle = m_well512.GetValue(360);
-		stopMyAction();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-protected:
-	int m_numberPerFrame;
-	float m_bulletSpeed;
-	int m_color;
-	
-	int m_frameCnt;
-	CCPoint m_position;
-	int angle;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-// 해바라기 패턴의 연속. 각도 변경 없음.
-class KSAttackPattern4 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSAttackPattern4);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["4"].getObject();
-		m_perFrame = pattern["perframe"].getInt();;
-		m_totalFrame = pattern["totalframe"].getInt();;
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
-		m_numberPerFrame = pattern["numberperframe"].getInt();;
-		m_color = pattern["color"].getInt();
-
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		angle = m_well512.GetValue(360);
-//		angle = m_well512.GetValue(360);
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		scheduleUpdate();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		
-		if(m_frameCnt == m_totalFrame)
-		{
-			stopMyAction();
-		}
-		else if(m_frameCnt % m_perFrame == 0)
-		{
-			float startAngle = angle;
-			for(int i=0; i<m_numberPerFrame; i++)
-			{
-				std::string imgFileName;
-				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-				if(KS::isExistFile(fileName))
-					imgFileName = fileName;
-				else
-					imgFileName = "cumber_missile1.png";
-				CCSize t_mSize = CCSize(4.f, 4.f);
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize, 0.f, 0.f);
-				batchNode->addChild(t_mu);
-				startAngle += 360 / m_numberPerFrame; // 10 개라면
-			}
-		}
-		if(m_frameCnt % 5 == 0)
-		{
-			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
-		}
-		
-	}
-protected:
-	int m_perFrame;
-	int m_totalFrame;
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	
-	int m_frameCnt;
-	CCPoint m_position;
-	float angle;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-/// 해바라기 패턴인데 각도가 바뀜.
-class KSAttackPattern5 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSAttackPattern5);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["5"].getObject();
-		m_perFrame = pattern["perframe"].getInt();;        // p
-		m_totalFrame = pattern["totalframe"].getInt();;    // p
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;  // p
-		m_numberPerFrame = pattern["numberperframe"].getInt(); // p
-		m_color = pattern["color"].getInt();
-		
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		angle = m_well512.GetValue(360);
-		//		angle = m_well512.GetValue(360);
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		scheduleUpdate();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		
-		if(m_frameCnt == m_totalFrame)
-		{
-			stopMyAction();
-		}
-		else if(m_frameCnt % m_perFrame == 0)
-		{
-			float startAngle = angle;
-			for(int i=0; i<m_numberPerFrame; i++)
-			{
-				std::string imgFileName;
-				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-				if(KS::isExistFile(fileName))
-					imgFileName = fileName;
-				else
-					imgFileName = "cumber_missile1.png";
-				CCSize t_mSize = CCSize(4.f,4.f);
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize, 0.f, 0.f);
-				batchNode->addChild(t_mu);
-				startAngle += 360 / m_numberPerFrame; // 10 개라면
-			}
-			angle += 6;
-		}
-		if(m_frameCnt % 5 == 0)
-		{
-			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
-		}
-		
-	}
-protected:
-	int m_perFrame;
-	int m_totalFrame;
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	
-	int m_frameCnt;
-	CCPoint m_position;
-	float angle;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-
-class KSAttackPattern6 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSAttackPattern6);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["6"].getObject();
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;  // p
-		m_numberPerFrame = pattern["numberperframe"].getInt(); // p
-		m_color = pattern["color"].getInt();
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		angle = m_well512.GetValue(360);
-		//		angle = m_well512.GetValue(360);
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		scheduleUpdate();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		
-		if(m_frameCnt == 1*8)
-		{
-			stopMyAction();
-		}
-		else if(m_frameCnt % 1 == 0)
-		{
-			float startAngle = angle;
-			for(int i=0; i<m_numberPerFrame; i++)
-			{
-				std::string imgFileName;
-				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-				if(KS::isExistFile(fileName))
-					imgFileName = fileName;
-				else
-					imgFileName = "cumber_missile1.png";
-				CCSize t_mSize = CCSize(4.f, 4.f);
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize, 0.f, 0.f);
-				batchNode->addChild(t_mu);
-				startAngle += 360 / m_numberPerFrame; // 10 개라면
-			}
-			angle += 3;
-		}
-		if(m_frameCnt % 5 == 0)
-		{
-			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
-		}
-		
-	}
-protected:
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	
-	int m_frameCnt;
-	CCPoint m_position;
-	float angle;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-/// 해바라긴데 각도를 달리하면서 쏨, 드르륵 쏘고 좀 쉬다가 드르륵...
-class KSAttackPattern7 : public AttackPattern
-{
-public:
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	CREATE_FUNC_CCP(KSAttackPattern7);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["7"].getObject();
-		m_perFrame = pattern["perframe"].getInt();;
-		m_totalFrame = pattern["totalframe"].getInt();;   // p
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f; // p
-		m_numberPerFrame = pattern["numberperframe"].getInt();
-		m_color = pattern["color"].getInt();
-		m_term = 6; // p
-		
-		m_frameCnt = 0;
-		m_position = t_sp;
-		m_fireCount = 0;
-		angle = m_well512.GetValue(360);
-		//		angle = m_well512.GetValue(360);
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		scheduleUpdate();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		
-		if(m_frameCnt == m_totalFrame)
-		{
-			stopMyAction();
-		}
-		else if(m_frameCnt % m_perFrame == 0)
-		{
-			if(m_idleValue <= 0)
-			{
-				m_fireCount++;
-				float startAngle = angle;
-				for(int i=0; i<m_numberPerFrame; i++)
-				{
-					std::string imgFileName;
-					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-					if(KS::isExistFile(fileName))
-						imgFileName = fileName;
-					else
-						imgFileName = "cumber_missile1.png";
-					CCSize t_mSize = CCSize(4.f, 4.f);
-					MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-															imgFileName.c_str(), t_mSize, 0.f, 0.f);
-					batchNode->addChild(t_mu);
-					startAngle += m_numberPerFrame; // 10 개라면
-				}
-				angle += 2;
-				
-				// 다섯번 쐈으면 15프레임 쉰다.
-				if(m_fireCount == 5)
-				{
-					m_fireCount = 0;
-					m_idleValue = 5 * m_term;
-				}
-			}
-			else
-			{
-				angle += 2;
-				m_idleValue--;
-			}
-		}
-		if(m_frameCnt % 5 == 0)
-		{
-			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
-		}
-		
-	}
-protected:
-	int m_perFrame;
-	int m_totalFrame;
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	int m_term;
-	int m_idleValue;
-	int m_fireCount;
-	int m_frameCnt;
-	CCPoint m_position;
-	float angle;
-	Well512 m_well512;
-	
-	CCSpriteBatchNode* batchNode;
-};
-
-// 무궁화 패턴
-class KSAttackPattern8 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSAttackPattern8);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["8"].getObject();
-		
-		m_perFrame = pattern["perframe"].getInt();;		// p
-		m_totalFrame = pattern["totalframe"].getInt();;		// p
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;	// p
-		m_numberPerFrame =pattern["numberperframe"].getInt();	// p
-		m_color = pattern["color"].getInt();
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		angle2 = angle = m_well512.GetValue(360);
-		//		angle = m_well512.GetValue(360);
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		scheduleUpdate();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		CCSize t_mSize = CCSize(4.f,4.f);
-		if(m_frameCnt == m_totalFrame)
-		{
-			stopMyAction();
-		}
-		else if(m_frameCnt % m_perFrame == 0)
-		{
-			float startAngle = angle;
-			for(int i=0; i<m_numberPerFrame; i++)
-			{
-				std::string imgFileName;
-				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-				if(KS::isExistFile(fileName))
-					imgFileName = fileName;
-				else
-					imgFileName = "cumber_missile1.png";
-				
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize, 0.f, 0.f);
-				batchNode->addChild(t_mu);
-				startAngle += 360 / m_numberPerFrame; // 10 개라면
-			}
-			
-			float startAngle2 = angle2;
-			for(int i=0; i<m_numberPerFrame; i++)
-			{
-				std::string imgFileName;
-				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-				if(KS::isExistFile(fileName))
-					imgFileName = fileName;
-				else
-					imgFileName = "cumber_missile1.png";
-				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle2, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize, 0.f, 0.f);
-				batchNode->addChild(t_mu);
-				startAngle2 += 360 / m_numberPerFrame; // 10 개라면
-			}
-			
-			angle += m_perFrame / 3;
-			angle2 -= m_perFrame / 3;
-		}
-		if(m_frameCnt % 5 == 0)
-		{
-			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
-		}
-		
-	}
-protected:
-	int m_perFrame;
-	int m_totalFrame;
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	
-	int m_frameCnt;
-	CCPoint m_position;
-	float angle;
-	float angle2;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-// 당구공.
-class KSAttackPattern9 : public AttackPattern
-{
-public:
-	static KSAttackPattern9* create(CCPoint t_sp, float t_move_speed, int t_tmCnt, int t_cushion_cnt, bool t_is_big_bomb)
-	{
-		KSAttackPattern9* t_m18 = new KSAttackPattern9();
-		t_m18->myInit(t_sp, t_move_speed, t_tmCnt, t_cushion_cnt, t_is_big_bomb);
-		t_m18->autorelease();
-		return t_m18;
-	}
-	
-	void removeEffect()
-	{
-		if(!isRemoveEffect)
-		{
-			isRemoveEffect = true;
-			int loop_cnt = getChildrenCount();
-			for(int i=0;i<loop_cnt;i++)
-			{
-				((ThreeCushion*)getChildren()->objectAtIndex(i))->removeEffect();
-			}
-		}
-	}
-	
-private:
-	
-	bool isRemoveEffect;
-	
-	virtual void selfRemoveSchedule()
-	{
-		if(getChildrenCount() == 0)
-		{
-//			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
-			removeFromParentAndCleanup(true);
-		}
-	}
-	
-	void myInit(CCPoint t_sp, float t_move_speed, int t_tmCnt, int t_cushion_cnt, bool t_is_big_bomb)
-	{
-		isRemoveEffect = false;
-//		myGD->communication("EP_startCrashAction");
-		for(int i=0;i<t_tmCnt;i++)
-		{
-			// create
-			ThreeCushion* t_tc = ThreeCushion::create(t_sp, t_move_speed, t_cushion_cnt, t_is_big_bomb,
-						this, callfunc_selector(ThisClassType::removeEffect));
-			addChild(t_tc);
-		}
-		
-		startSelfRemoveSchedule();
-	}
-};
-
-
-// 조준형1 : 부채꼴.
-class KSTargetAttackPattern1 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern1);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		m_cumber = cb;
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["101"].getObject();
-		
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
-		m_numberPerFrame = pattern["numberperframe"].getInt();
-		m_color = pattern["color"].getInt();
-		
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		scheduleUpdate();
-		cb->stopAnimationDirection();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
-		float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
-		float angle = rad2Deg(rad);
-		float angle2 = rad2Deg(rad);
-		
-		for(int i=0; i<m_numberPerFrame;i++)
-		{
-			std::string imgFileName;
-			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-			if(KS::isExistFile(fileName))
-				imgFileName = fileName;
-			else
-				imgFileName = "cumber_missile1.png";
-			CCSize t_mSize = CCSize(4.f, 4.f);
-			if(angle == angle2)
-			{
-				MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize, 0.f, 0.f);
-				batchNode->addChild(t_mu);
-			}
-			else
-			{
-				MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize, 0.f, 0.f);
-				batchNode->addChild(t_mu);
-				
-				MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
-														 imgFileName.c_str(), t_mSize, 0.f, 0.f);
-				batchNode->addChild(t_mu2);
-			}
-			
-			angle += 35 / m_numberPerFrame; // 10 개라면
-			angle2 -= 35 / m_numberPerFrame;
-			
-			if(angle >= 360)
-				angle -= 360;
-			if(angle2 < 0)
-				angle2 += 360;
-		}
-		
-		stopMyAction();
-		m_cumber->onTargetingJack(jackPoint);
-	}
-protected:
-	
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	
-	int m_frameCnt;
-	CCPoint m_position;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-
-// 조준형 : 부채꼴의 연속, 캐릭터를 따라감.
-class KSTargetAttackPattern2 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern2);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		m_cumber = cb;
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["102"].getObject();
-		
-		m_perFrame = pattern["perframe"].getInt();;
-		m_totalFrame = pattern["totalframe"].getInt();;
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
-		m_numberPerFrame = pattern["numberperframe"].getInt();;
-		m_color = pattern["color"].getInt();
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		scheduleUpdate();
-		cb->stopAnimationDirection();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
-		if(m_frameCnt == m_totalFrame)
-		{
-			stopMyAction();
-		}
-		else
-		{
-			if(m_frameCnt % m_perFrame == 0)
-			{
-				
-				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
-				float angle = rad2Deg(rad);
-				float angle2 = rad2Deg(rad);
-				
-				for(int i=0; i<m_numberPerFrame;i++)
-				{
-					std::string imgFileName;
-					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-					if(KS::isExistFile(fileName))
-						imgFileName = fileName;
-					else
-						imgFileName = "cumber_missile1.png";
-					CCSize t_mSize = CCSize(4.f, 4.f);
-					if(angle == angle2)
-					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu);
-					}
-					else
-					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu);
-						
-						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
-																 imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu2);
-					}
-					
-					angle += 35 / m_numberPerFrame; // 10 개라면
-					angle2 -= 35 / m_numberPerFrame;
-					
-					if(angle >= 360)
-						angle -= 360;
-					if(angle2 < 0)
-						angle2 += 360;
-				}
-
-			}
-		}
-		m_cumber->onTargetingJack(jackPoint);
-	}
-protected:
-	int m_perFrame;
-	int m_totalFrame;
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	
-	int m_frameCnt;
-	CCPoint m_position;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-// 조준형 : 부채꼴의 연속, 캐릭터를 안 따라감.
-class KSTargetAttackPattern3 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern3);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		m_cumber = cb;
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["103"].getObject();
-		
-		m_perFrame = pattern["perframe"].getInt();;
-		m_totalFrame = pattern["totalframe"].getInt();
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
-		m_numberPerFrame = pattern["numberperframe"].getInt();
-		m_color = pattern["color"].getInt();
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		firstJackPosition = ip2ccp(myGD->getJackPoint());
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		scheduleUpdate();
-		cb->stopAnimationDirection();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		CCPoint jackPoint = firstJackPosition;
-		if(m_frameCnt == m_totalFrame)
-		{
-			stopMyAction();
-		}
-		else
-		{
-			if(m_frameCnt % m_perFrame == 0)
-			{
-				
-				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
-				float angle = rad2Deg(rad);
-				float angle2 = rad2Deg(rad);
-				
-				for(int i=0; i<m_numberPerFrame;i++)
-				{
-					std::string imgFileName;
-					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-					if(KS::isExistFile(fileName))
-						imgFileName = fileName;
-					else
-						imgFileName = "cumber_missile1.png";
-					CCSize t_mSize = CCSize(4.f, 4.f);
-					if(angle == angle2)
-					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu);
-					}
-					else
-					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu);
-						
-						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
-																 imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu2);
-					}
-					
-					angle += 35 / m_numberPerFrame; // 10 개라면
-					angle2 -= 35 / m_numberPerFrame;
-					
-					if(angle >= 360)
-						angle -= 360;
-					if(angle2 < 0)
-						angle2 += 360;
-				}
-				
-			}
-		}
-		m_cumber->onTargetingJack(jackPoint);
-	}
-protected:
-	int m_perFrame;
-	int m_totalFrame;
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	
-	CCPoint firstJackPosition;
-	int m_frameCnt;
-	CCPoint m_position;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-// 조준형 : 부채꼴의 연속, 중심각의 랜덤성을 부여.
-class KSTargetAttackPattern4 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern4);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		m_cumber = cb;
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["104"].getObject();
-		
-		m_perFrame = pattern["perframe"].getInt();
-		m_totalFrame = pattern["totalframe"].getInt();
-		m_bulletSpeed = pattern["speed"].getInt() / 100.f;
-		m_numberPerFrame = pattern["numberperframe"].getInt();
-		m_color = pattern["color"].getInt();
-		m_frameCnt = 0;
-		m_position = t_sp;
-		
-		firstJackPosition = ip2ccp(myGD->getJackPoint());
-		fireCount = 0;
-		
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		
-		scheduleUpdate();
-		cb->stopAnimationDirection();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		m_frameCnt++;
-		CCPoint jackPoint = firstJackPosition;
-		if(m_frameCnt == m_totalFrame)
-		{
-			stopMyAction();
-		}
-		else
-		{
-			if(m_frameCnt % m_perFrame == 0)
-			{
-				
-				
-				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
-				rad += m_well512.GetFloatValue(-5 * M_PI / 180.f, +5 * M_PI / 180.f);
-				float angle = rad2Deg(rad);
-				float angle2 = rad2Deg(rad);
-				
-				for(int i=0; i<m_numberPerFrame;i++)
-				{
-					std::string imgFileName;
-					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-					if(KS::isExistFile(fileName))
-						imgFileName = fileName;
-					else
-						imgFileName = "cumber_missile1.png";
-					CCSize t_mSize = CCSize(4.f, 4.f);
-					if(angle == angle2)
-					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu);
-					}
-					else
-					{
-						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
-																imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu);
-						
-						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
-																 imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu2);
-					}
-					
-					angle += 35 / m_numberPerFrame; // 10 개라면
-					angle2 -= 35 / m_numberPerFrame;
-					
-					if(angle >= 360)
-						angle -= 360;
-					if(angle2 < 0)
-						angle2 += 360;
-				}
-				fireCount++;
-			}
-		}
-		m_cumber->onTargetingJack(jackPoint);
-	}
-protected:
-	int m_perFrame;
-	int m_totalFrame;
-	float m_bulletSpeed;
-	int m_numberPerFrame;
-	int m_color;
-	
-	CCPoint firstJackPosition;
-	int fireCount;
-	int m_frameCnt;
-	CCPoint m_position;
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-};
-
-class KSTargetAttackPattern5 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern5);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		
-	}
-};
-class KSTargetAttackPattern6 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern6);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		
-	}
-};
-
-// 태양 광선이 나에게로 ... ㅎㅎ
-class KSTargetAttackPattern7 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern7);
-	virtual void stopMyAction()
-	{
-		stopMySchedule();
-		removeObject();
-	}
-	
-	void removeEffect()
-	{
-		unschedule(schedule_selector(ThisClassType::myAction));
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::selfRemove));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-		
-		CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
-		
-		lazer_main->runAction(t_seq);
-		lazer_sub->runAction(t_fade2);
-	}
-	
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		m_cumber = cb;
-		
-		type = 1;
-		createRingFrame = 10;
-		chargeFrame = 120;
-		crashFrame = 180;
-		
-		///////////////////////////////////////////////////////////////////
-		sp = t_sp;
-		dcolor = 255.f/chargeFrame;
-		dscale = 0.7f/chargeFrame;
-		IntPoint jackPoint = myGD->getJackPoint();
-		jackPosition = ip2ccp(jackPoint);
-		CCPoint subPosition = ccpSub(jackPosition, t_sp);
-		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
-		
-		if(distance < 200)			angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
-		else						angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
-		
-		CCPoint beadPosition;
-		beadPosition.x = 1;
-		beadPosition.y = tanf(angle/180.f*M_PI);
-		
-		if((angle > 90.f && angle < 270.f) || angle < -90.f)
-		{
-			beadPosition = ccpMult(beadPosition, -1.f);
-		}
-		
-		float div_value = sqrtf(powf(beadPosition.x, 2.f) + powf(beadPosition.y, 2.f));
-		dv = ccpMult(beadPosition, 1.f/div_value);
-		beadPosition = ccpMult(dv, 20.f);
-		
-		beadPosition = ccpAdd(beadPosition, t_sp);
-		
-		t_bead = CCSprite::create("lazer_bead.png");
-		t_bead->setPosition(beadPosition);
-		addChild(t_bead);
-		
-		lazer_sub = CCSprite::create("lazer_sub.png");
-		lazer_sub->setAnchorPoint(ccp(0,0.5));
-		lazer_sub->setRotation(-angle);
-		
-		CCPoint subP = ccpMult(dv, 5);
-		subP = ccpAdd(beadPosition, subP);
-		lazer_sub->setPosition(subP);
-		addChild(lazer_sub);
-		
-		startMyAction();
-		
-		cb->stopAnimationDirection();
-	}
-	void selfRemove()
-	{
-		removeFromParentAndCleanup(true);
-	}
-	
-	virtual void selfRemoveSchedule()
-	{
-		if(getChildrenCount() == 0)
-		{
-			//			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
-			removeFromParentAndCleanup(true);
-		}
-	}
-	
-	void stopMySchedule()
-	{
-		unschedule(schedule_selector(ThisClassType::myAction));
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	
-	void removeObject()
-	{
-		if(lazer_sub)		lazer_sub->removeFromParentAndCleanup(true);
-		if(lazer_main)		lazer_main->removeFromParentAndCleanup(true);
-		if(t_bead)			t_bead->removeFromParentAndCleanup(true);
-	}
-	
-	void startMyAction()
-	{
-		AudioEngine::sharedInstance()->playEffect("sound_angle_beem.mp3", false);
-		ingFrame = 0;
-		schedule(schedule_selector(ThisClassType::myAction));
-	}
-	
-	void myAction()
-	{
-		if(ingFrame <= chargeFrame)
-		{
-			ccColor3B tcolor = t_bead->getColor();
-			tcolor.g -= dcolor;
-			tcolor.b -= dcolor;
-			t_bead->setColor(tcolor);
-			lazer_sub->setScaleY(lazer_sub->getScaleY()-dscale);
-			lazer_sub->setColor(tcolor);
-			if(ingFrame%createRingFrame == 0)
-			{
-				int random_sp = rand()%21-10;
-				CCPoint r_sp = ccpMult(dv, 60 + random_sp);
-				r_sp = ccpAdd(sp, r_sp);
-				CCPoint r_fp = ccpMult(dv, 20);
-				r_fp = ccpAdd(sp, r_fp);
-				
-				int random_frame = rand()%20 + 20;
-				float random_s = (rand()%3)/10.f;
-				
-				Lazer_Ring* t_lr = Lazer_Ring::create(angle, r_sp, r_fp, 1.f-random_s, 0.3f-random_s, random_frame, tcolor);
-				addChild(t_lr);
-			}
-			
-			
-			if(ingFrame == chargeFrame)
-			{
-				lazer_main = CCSprite::create("lazer_main.png", CCRectMake(0, 0, 460, 50));
-				lazer_main->setAnchorPoint(ccp(0,0.5));
-				lazer_main->setRotation(-angle);
-				
-				CCPoint mp = ccpMult(dv, 30);
-				mp = ccpAdd(sp, mp);
-				lazer_main->setPosition(mp);
-				
-				addChild(lazer_main);
-				
-				CCSprite* t_texture = CCSprite::create("lazer_main.png");
-				CCAnimation* t_animation = CCAnimation::create();
-				t_animation->setDelayPerUnit(0.1);
-				for(int i=0;i<3;i++)
-				{
-					t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(0, i*50, 460, 50));
-				}
-				
-				CCAnimate* t_animate = CCAnimate::create(t_animation);
-				CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-				
-				lazer_main->runAction(t_repeat);
-				
-				CCPoint c_sp = ccpMult(dv, 30);
-				c_sp = ccpAdd(sp, c_sp);
-				
-				crashRect = CCRectMake(0, -60/2.f+10, 460, 60/2.f+10);
-				
-				lineCrashMap(c_sp, angle, 460, 60);
-			}
-		}
-		else if(ingFrame <= chargeFrame+crashFrame)
-		{
-			IntPoint jackPoint = myGD->getJackPoint();
-			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
-			
-			CCPoint t_jp = spinTransform(jackPosition, sp, angle);
-			
-			if(crashRect.containsPoint(t_jp))
-			{
-				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
-				//				stopMySchedule();
-				removeEffect();
-			}
-		}
-		
-		if(ingFrame >= chargeFrame+crashFrame)
-		{
-			stopMyAction();
-		}
-		ingFrame++;
-		
-		m_cumber->onTargetingJack(jackPosition);
-	}
-	
-	void lineCrashMap(CCPoint t_sp, float t_angle, int t_width, int t_height)
-	{
-		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
-		{
-			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
-			{
-				CCPoint t_tp = ccp((i-1)*pixelSize+1,(j-1)*pixelSize+1);
-				CCPoint a_tp = spinTransform(t_tp, t_sp, t_angle);
-				if(crashRect.containsPoint(a_tp))
-				{
-					crashMapForIntPoint(IntPoint(i,j));
-				}
-			}
-		}
-	}
-	
-	void crashMapForIntPoint(IntPoint t_p)
-	{
-		if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
-		{
-			myGD->mapState[t_p.x][t_p.y] = mapEmpty;
-			for(int k = -1;k<=1;k++)
-			{
-				for(int l = -1;l<=1;l++)
-				{
-					if(k == 0 && l == 0)	continue;
-					if(myGD->mapState[t_p.x+k][t_p.y+l] == mapOldget)		myGD->mapState[t_p.x+k][t_p.y+l] = mapOldline;
-				}
-			}
-			//			myGD->communication("EP_crashed");
-			myGD->communication("MFP_createNewFragment", t_p);
-			myGD->communication("VS_divideRect", t_p);
-		}
-		
-		IntPoint jackPoint = myGD->getJackPoint();
-		
-		if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
-		{
-			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
-			removeEffect();
-		}
-		
-		if(t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
-		{
-			//					myGD->communication("PM_pathChainBomb", t_p);
-			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
-			myGD->communication("Main_showLineDiePosition", t_p);
-			removeEffect();
-		}
-	}
-	
-	CCPoint spinTransform(CCPoint t_tp, CCPoint t_bp, float t_angle)
-	{
-		CCPoint a_tp = ccpSub(t_tp, t_bp);
-		float b_angle = atan2f(a_tp.y, a_tp.x)/M_PI*180.f;
-		float a_angle = b_angle - t_angle;
-		
-		if(a_angle >= 180.f)	a_angle -= 360.f;
-		if(a_angle < -180.f)	a_angle += 360.f;
-		
-		float distance = sqrtf(powf(a_tp.x, 2.f) + powf(a_tp.y, 2.f));
-		
-		a_tp.x = 1;
-		a_tp.y = tanf(a_angle/180.f*M_PI);
-		
-		float div_value = sqrtf(powf(a_tp.x, 2.f) + powf(a_tp.y, 2.f));
-		
-		if(a_angle > 90 || a_angle < -90)
-			a_tp = ccpMult(a_tp, -1.f);
-		
-		a_tp = ccpMult(a_tp, 1.f/div_value);
-		
-		a_tp = ccpMult(a_tp, distance);
-		
-		return a_tp;
-	}
-protected:
-	int type;
-	CCPoint sp;
-	int createRingFrame;
-	int chargeFrame;
-	int crashFrame;
-	int ingFrame;
-	float angle;
-	CCPoint dv;
-	CCSprite* lazer_main;
-	int dcolor;
-	CCSprite* t_bead;
-	CCRect crashRect;
-	CCSprite* lazer_sub;
-	float dscale;
-	KSCumberBase* m_cumber;
-						
-	CCPoint jackPosition;
-
-};
-class KSTargetAttackPattern8 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern8);
-	virtual void selfRemoveSchedule()
-	{
-		if(batchNode->getChildrenCount() == 0)
-		{
-			removeFromParentAndCleanup(true);
-		}
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		m_cumber = cb;
-//		m_position = t_sp;
-//		firstJackPosition = ip2ccp(myGD->getJackPoint());
-		
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-		JsonBox::Object boss = v.getArray()[0].getObject();
-		JsonBox::Object patterns = boss["pattern"].getObject();
-		JsonBox::Object pattern = patterns["108"].getObject();
-		m_oneShotNumber = pattern["oneshot"].getInt();
-		m_oneShotTerm = pattern["oneshotterm"].getInt();
-		m_gunNumber = pattern["gunnumber"].getInt();
-		m_targetingType = (TargetType)pattern["targettype"].getInt();
-		m_rotationDegreeVelocity = pattern["degreev"].getInt();
-		m_color = pattern["color"].getInt();
-		m_totalDegree = pattern["totaldegree"].getInt();
-		m_totalFrame = pattern["totalframe"].getInt(); // 200 프레임 동안
-		m_randomDegree = pattern["randomdegree"].getInt(); // 랜덤각.
-		m_frame = 0;
-
-		for(int i=0; i<m_gunNumber; i++)
-		{
-			Gun g;
-			g.bulletSpeed = 1.8f;
-			g.fireTerm = 1;
-			g.fireCount = 0;
-			g.idleCount = 0;
-			pan.push_back(g);
-		}
-		
-		initGuns();
-		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-		if(KS::isExistFile(fileName))
-			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
-		else
-			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-		
-		addChild(batchNode);
-		
-		scheduleUpdate();
-	}
-	
-	void initGuns()
-	{
-		// 여기서 총의 개수와 m_totalDegree 를 통해 총을 배치함.
-		
-		int counter = 0;
-		float termDegree;
-		if(m_totalDegree == 360)
-			termDegree = m_totalDegree / (m_gunNumber);
-		else
-			termDegree = m_totalDegree / (m_gunNumber - 1);
-		if(pan.size() == 1)
-		{
-			pan[0].degree.init(0, 0, 0);
-		}
-		else for(auto iter = pan.begin(); iter != pan.end(); ++iter, ++counter)
-		{
-			iter->degree.init(counter * termDegree, counter * termDegree, 0);
-			iter->initDegree = counter * termDegree;
-		}
-		
-		if(m_targetingType == kToUser)
-		{
-			for(auto& gun : pan)
-			{
-				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
-				CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
-				float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
-				
-				float deg = rad2Deg(rad);
-				deg += m_well512.GetFloatValue(-m_randomDegree, +m_randomDegree);
-				gun.degree.init(gun.degree.getValue() + deg - m_totalDegree / 2.f, gun.degree.getValue() + deg - m_totalDegree / 2.f, 0);
-//				if(gun.degree.getValue() >= 360)
-//				{
-//					gun.degree.init(gun.degree.getValue() - 360, gun.degree.getValue() - 360, 0);
-//				}
-//				if(gun.degree.getValue() < 0)
-//				{
-//					gun.degree.init(gun.degree.getValue() + 360, gun.degree.getValue() + 360, 0);
-//				}
-			}
-		}
-
-		// 전체를 조금씩 회전 시킴.
-	}
-	void update(float dt)
-	{
-		m_frame++;
-		// 중간각 기준으로 onTargetingJack 호출해야하는 작업을 아침에 해야함!
-		
-		
-		if(m_frame >= m_totalFrame)
-		{
-			// 종료 조건
-			stopMyAction();
-		}
-		else
-		{
-			
-			if(m_targetingType == kCCW)
-			{
-				for(auto& gun : pan)
-				{
-					gun.degree.init(gun.degree.getValue() - m_rotationDegreeVelocity,
-									gun.degree.getValue() - m_rotationDegreeVelocity,
-									0);
-					
-				}
-			}
-			else if(m_targetingType == kCW)
-			{
-				for(auto& gun : pan)
-				{
-					gun.degree.init(gun.degree.getValue() + m_rotationDegreeVelocity,
-									gun.degree.getValue() + m_rotationDegreeVelocity,
-									0);
-					
-					
-				}
-			}
-			else
-			{
-				for(auto& gun : pan)
-				{
-					CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
-					CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
-					float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
-					
-					float deg = rad2Deg(rad);
-					deg += m_well512.GetFloatValue(-m_randomDegree, +m_randomDegree);
-					gun.degree.init(gun.degree.getValue(), gun.initDegree + deg - m_totalDegree / 2.f, m_rotationDegreeVelocity);
-					
-//					if(gun.degree.getValue() >= 360)
-//					{
-//						gun.degree.init(gun.degree.getValue() - 360, gun.degree.getValue() - 360, m_rotationDegreeVelocity);
-//					}
-//					if(gun.degree.getValue() < 0)
-//					{
-//						gun.degree.init(gun.degree.getValue() + 360, gun.degree.getValue() + 360, m_rotationDegreeVelocity);
-//					}
-					
-					gun.degree.step();
-					m_cumber->onTargetingJack(jackPoint);
-					CCLog("gun degree %f", gun.degree.getValue());
-				}
-			}
-			for(auto& gun : pan)
-			{			
-				if(m_frame % gun.fireTerm == 0)
-				{
-					if(m_oneShotNumber > gun.fireCount)
-					{
-						// 빵.
-						std::string imgFileName;
-						std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
-						if(KS::isExistFile(fileName))
-							imgFileName = fileName;
-						else
-							imgFileName = "cumber_missile1.png";
-						CCSize t_mSize = CCSize(4.f, 4.f);
-						MissileUnit* t_mu = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint()), gun.degree.getValue(), gun.bulletSpeed,
-																imgFileName.c_str(), t_mSize, 0.f, 0.f);
-						batchNode->addChild(t_mu);						
-						gun.fireCount++;
-					}
-					else
-					{
-						if(gun.idleCount >= m_oneShotTerm)
-						{
-							// 다 쉬었다.
-							
-							//,, 중간각을 기준으로
-							
-							gun.fireCount = 0;
-							gun.idleCount = 0;
-						}
-						gun.idleCount++;
-					}
-				}
-			}
-		}
-	}
-	float m_randomDegree; // 랜덤각.
-	int m_oneShotNumber; // 쉬지 않고 쏘는 개수.
-	int m_oneShotTerm; // 쐈다가 쉬는 프레임수.
-	int m_gunNumber; // 총의 개수.
-	int m_frame;
-	int m_totalFrame;
-	enum TargetType
-	{
-		kToUser = 1,
-		kCCW = 2,
-		kCW = 3
-	}m_targetingType;
-	float m_rotationDegreeVelocity; // 회전각 속도.
-	int m_color;
-	float m_totalDegree; // 전체 각도.
-	struct Gun
-	{
-		float bulletSpeed;	// 총알 속도
-		int fireTerm;		// 자체 쏘는 텀.
-		float initDegree;	// 초기화된 각도
-		FromTo<float> degree; // 현재 각도
-		int fireCount;		// oneShot 을 세기 위한 변수.
-		int idleCount;		// 쐈다가 쉬는 프레임수를 세기위함.
-	};
-	
-	vector<Gun> pan; // 판은 총들을 가짐.
-	
-//	CCPoint firstJackPosition; // 잭의 초기 위치.
-//	CCPoint m_position; // 공격 당시의 보스의 위치
-	Well512 m_well512;
-	CCSpriteBatchNode* batchNode;
-	
-};
-class KSTargetAttackPattern9 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern9);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		
-	}
-};
-class KSTargetAttackPattern10 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern10);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		
-	}
-};
 
 
 
@@ -2376,7 +487,13 @@ private:
 		if(beamImg)
 			beamImg->setRotation(-(beamBaseAngle-10 + 2*ingFrame));
 		
-		if(ingFrame >= 10)
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["1011"];
+		
+		int totalFrame = pattern.get("totalframe", 10).asInt();
+		if(ingFrame >= totalFrame)
 		{
 //			beamImg->removeFromParentAndCleanup(true);
 			stopMyAction();
@@ -2885,50 +1002,66 @@ public:
 	{
 		unschedule(schedule_selector(AP_Missile12::myAction));
 		
-		if(wifiImg)
-		{
-			wifiImg->removeFromParentAndCleanup(true);
-			wifiImg = NULL;
-			
-		}
-		if(targetingImg)
-		{
-			targetingImg->removeFromParentAndCleanup(true);
-			targetingImg = NULL;
-		}
-		if(myBeam)
-		{
-			myBeam->removeFromParentAndCleanup(true);
-			myBeam = NULL;
-		}
+		
 		
 		myGD->communication("MP_endIngActionAP");
 		myGD->communication("CP_onPatternEnd");
 		startSelfRemoveSchedule();
+		fadeFromToDuration.init(255, 0, 1.f);
+		schedule(schedule_selector(ThisClassType::hidingAnimation));
 	}
 	
-	void removeEffect()
+	
+	
+	
+
+	
+	void hidingAnimation(float dt)
 	{
-		unschedule(schedule_selector(AP_Missile12::myAction));
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		if(wifiImg)
+		if(fadeFromToDuration.step(1.f/60.f) == false)
 		{
-			CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile12::selfRemove));
-			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call);
-			wifiImg->runAction(t_seq);
+			if(wifiImg)
+			{
+				wifiImg->removeFromParentAndCleanup(true);
+				wifiImg = NULL;
+				
+			}
+			if(targetingImg)
+			{
+				targetingImg->removeFromParentAndCleanup(true);
+				targetingImg = NULL;
+			}
+			if(myBeam)
+			{
+				myBeam->removeFromParentAndCleanup(true);
+				myBeam = NULL;
+			}
 		}
-		if(targetingImg)
+		else
 		{
-			CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
-			targetingImg->runAction(t_fade2);
+			KS::setOpacity(wifiImg, fadeFromToDuration.getValue());
+			KS::setOpacity(targetingImg, fadeFromToDuration.getValue());
+			KS::setOpacity(myBeam, fadeFromToDuration.getValue());
 		}
 	}
+//	void removeEffect()
+//	{
+//		unschedule(schedule_selector(AP_Missile12::myAction));
+//		myGD->communication("MP_endIngActionAP");
+//		myGD->communication("CP_onPatternEnd");
+//		
+//		if(targetingImg)
+//		{
+//			CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+//			CCCallFunc* t_call = CCCallFunc::create(this,
+//													callfunc_selector(AP_Missile12::removeFromParent));
+//			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call);
+//			targetingImg->runAction(t_seq);
+//		}
+//	}
 	
 private:
-	
+	FromToWithDuration<float> fadeFromToDuration;
 	int type;
 	int targetingFrame;
 	int shootFrame;
@@ -2939,11 +1072,6 @@ private:
 	CCSprite* wifiImg;
 	
 	SatelliteBeam* myBeam;
-	
-	void selfRemove()
-	{
-		removeFromParentAndCleanup(true);
-	}
 	
 	virtual void selfRemoveSchedule()
 	{
@@ -2976,7 +1104,7 @@ private:
 			
 			if(ingFrame == targetingFrame)
 			{
-				myBeam = SatelliteBeam::create(pJackArray.front(), type, this, callfunc_selector(AP_Missile12::removeEffect));
+				myBeam = SatelliteBeam::create(pJackArray.front(), type, this, callfunc_selector(AP_Missile12::stopMyAction));
 				addChild(myBeam);
 			}
 		}
@@ -3050,7 +1178,10 @@ private:
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
 		
-		targetingImg = CCSprite::create("satelliteBeam_targeting.png");
+//		auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_lightning_targeting.ccbi");
+		auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_meteor3_targeting.ccbi");
+		
+		targetingImg = ret.first;
 		targetingImg->setScale(2.7);
 		
 		targetingImg->setPosition(jackPosition);
@@ -3119,9 +1250,22 @@ private:
 		if(distance < 200)			baseAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%91 - 45;
 		else						baseAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%31 - 15;
 		
-		for(int i=0;i<t_tmCnt;i++)
+
+		int left = t_tmCnt / 2;
+		int right = t_tmCnt - left;
+		int unitDegree = 20;
+		for(int i=1; i<=left; i++)
 		{
-			float t_angle = baseAngle + rand()%61 - 30;
+			float t_angle = baseAngle - i*unitDegree;
+			if(t_angle >= 180)		t_angle -= 360;
+			if(t_angle < -180)		t_angle += 360;
+			
+			ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, t_angle, t_mSize);
+			addChild(t_to);
+			t_to->startMyAction();
+		}
+		for (int i=0; i<right; i++) {
+			float t_angle = baseAngle + i*unitDegree;
 			if(t_angle >= 180)		t_angle -= 360;
 			if(t_angle < -180)		t_angle += 360;
 			
@@ -3428,6 +1572,7 @@ private:
 	
 	bool isRemoveEffect;
 	
+	Well512 m_well512;
 	void selfRemove()
 	{
 		removeFromParentAndCleanup(true);
@@ -3456,14 +1601,14 @@ private:
 		if(ingFrame%mRate == 0)
 		{
 			CCPoint random_fp;
-			random_fp.x = rand()%240;
-			random_fp.y = rand()%320;
+			random_fp.x = m_well512.GetValue(240);
+			random_fp.y = m_well512.GetValue(320);
 			
 			CCPoint random_sp;
-			random_sp.x = random_fp.x + 320;
-			random_sp.y = random_fp.y + 320;
+			random_sp.x = random_fp.x + 500;
+			random_sp.y = random_fp.y + 500;
 			
-			FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(90, 109), random_sp, random_fp, 60, 20, IntSize(15, 15), this, callfunc_selector(AP_Missile16::removeEffect)); // imgSize, crashSize
+			FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(90, 109), random_sp, random_fp, 220, 20, IntSize(15, 15), this, callfunc_selector(AP_Missile16::removeEffect)); // imgSize, crashSize
 			addChild(t_fm);
 		}
 		
@@ -3879,11 +2024,17 @@ private:
 	
 	void myInit(CCPoint t_sp)
 	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["1001"];
 		
+		int totalFrame = pattern.get("totalframe", 300).asInt();
+		float scale = pattern.get("scale", 1.5).asDouble();
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
 		
-		BlindDrop* t_bd = BlindDrop::create(t_sp, jackPosition, 20, 300);
+		BlindDrop* t_bd = BlindDrop::create(t_sp, jackPosition, 20, totalFrame, scale);
 		addChild(t_bd);
 		t_bd->startAction();
 		
@@ -3891,34 +2042,34 @@ private:
 	}
 };
 
-class AP_Missile22 : public AttackPattern // poison line
-{
-public:
-	static AP_Missile22* create(CCPoint t_sp)
-	{
-		AP_Missile22* t_m22 = new AP_Missile22();
-		t_m22->myInit(t_sp);
-		t_m22->autorelease();
-		return t_m22;
-	}
-	
-private:
-	
-	
-	
-	void myInit(CCPoint t_sp)
-	{
-		
-		IntPoint jackPoint = myGD->getJackPoint();
-		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
-		
-		PoisonDrop* t_pd = PoisonDrop::create(t_sp, jackPosition, 120);
-		addChild(t_pd);
-		t_pd->startAction();
-		
-		startSelfRemoveSchedule();
-	}
-};
+//class AP_Missile22 : public AttackPattern // poison line
+//{
+//public:
+//	static AP_Missile22* create(CCPoint t_sp)
+//	{
+//		AP_Missile22* t_m22 = new AP_Missile22();
+//		t_m22->myInit(t_sp);
+//		t_m22->autorelease();
+//		return t_m22;
+//	}
+//	
+//private:
+//	
+//	
+//	
+//	void myInit(CCPoint t_sp)
+//	{
+//		
+//		IntPoint jackPoint = myGD->getJackPoint();
+//		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+//		
+//		PoisonDrop* t_pd = PoisonDrop::create(t_sp, jackPosition, 120, 20);
+//		addChild(t_pd);
+//		t_pd->startAction();
+//		
+//		startSelfRemoveSchedule();
+//	}
+//};
 
 class AP_Missile23 : public AttackPattern // cobweb
 {
@@ -3943,7 +2094,7 @@ private:
 	int ingFrame;
 	bool is_stop;
 	CCSprite* cobwebImg;
-	
+	FromToWithDuration<float> m_scaleFromTo;
 	void startFrame()
 	{
 		ingFrame = 0;
@@ -3954,6 +2105,8 @@ private:
 	{
 		ingFrame++;
 		
+		m_scaleFromTo.step(1/60.f);
+		cobwebImg->setScale(m_scaleFromTo.getValue());
 		if(ingFrame >= slowFrame)
 		{
 			stopFrame();
@@ -3995,12 +2148,12 @@ private:
 		reader->release();
 		
 		cobwebImg->setPosition(ccp(160,215));
-		cobwebImg->setScale(0);
+		cobwebImg->setScale(0.f);
 		
 		addChild(cobwebImg);
-		
-		CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.f);
-		cobwebImg->runAction(t_scale);
+		m_scaleFromTo.init(0.0f, 1.0f, 0.3f);
+//		CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.f);
+//		cobwebImg->runAction(t_scale); // 나중에 수동으로 구현해야함.
 		
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()-0.5f);
 		
@@ -4736,5 +2889,2600 @@ private:
 		startMyAction();
 	}
 };
+
+// 무작위 원형 던지기.
+class KSAttackPattern1 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern1);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["1"];
+		m_perFrame = pattern["perframe"].asInt();
+		m_totalFrame = pattern["totalframe"].asInt();
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
+		m_numberPerFrame = pattern["numberperframe"].asInt();
+		m_color = pattern["color"].asInt();
+		
+		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
+		scheduleUpdate();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % m_perFrame == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+			
+			std::string imgFileName;
+			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+			if(KS::isExistFile(fileName))
+				imgFileName = fileName;
+			else
+				imgFileName = "cumber_missile1.png";
+			
+			CCSize t_mSize = CCSize(4.f, 4.f);
+			int start_angle = m_well512.GetFloatValue(360);
+			
+			for(int i=0;i<m_numberPerFrame;i++)
+			{
+				float temp_angle = start_angle+(360.f/m_numberPerFrame)*i;
+				
+				MissileUnit* t_mu = MissileUnit::create(m_position, temp_angle, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+			}
+		}
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	
+	int m_frameCnt;
+	
+	CCPoint m_position;
+	CCSpriteBatchNode* batchNode;
+	Well512 m_well512;
+};
+
+/// 골뱅이 패턴.
+class KSAttackPattern2 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern2);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["2"];
+		
+		m_perFrame = pattern["perframe"].asInt();
+		m_totalFrame = pattern["totalframe"].asInt();
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
+		m_color = pattern["color"].asInt();
+		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
+		m_frameCnt = 0;
+		m_position = t_sp;
+		angle = m_well512.GetValue(360);
+		scheduleUpdate();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % m_perFrame == 0)
+		{
+			
+			angle += 11 * m_perFrame;
+			if(angle >= 360)
+				angle -= 360;
+			
+			std::string imgFileName;
+			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+			if(KS::isExistFile(fileName))
+				imgFileName = fileName;
+			else
+				imgFileName = "cumber_missile1.png";
+			CCSize t_mSize = CCSize(4.f, 4.f);
+			MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+													imgFileName.c_str(), t_mSize, 0.f, 0.f);
+			batchNode->addChild(t_mu);
+			
+			
+			
+			//			int start_angle = rand()%(360/t_mCnt);
+			//
+			//			for(int i=0;i<t_mCnt;i++)
+			//			{
+			//				float temp_angle = start_angle+(360.f/t_mCnt)*i;
+			//
+			//
+			//			}
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_color;
+	
+	int m_frameCnt;
+	CCPoint m_position;
+	int angle;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+// 해바라기 패턴.
+class KSAttackPattern3 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern3);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["3"];
+		
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
+		m_numberPerFrame = pattern["numberperframe"].asInt();
+		m_color = pattern["color"].asInt();
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
+		scheduleUpdate();
+	}
+	void update(float dt)
+	{
+		float angle = m_well512.GetValue(360);
+		for(int i=0; i<m_numberPerFrame;i++)
+		{
+			std::string imgFileName;
+			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+			if(KS::isExistFile(fileName))
+				imgFileName = fileName;
+			else
+				imgFileName = "cumber_missile1.png";
+			CCSize t_mSize = CCSize(4.f,4.f);
+			MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+													imgFileName.c_str(), t_mSize, 0.f, 0.f);
+			batchNode->addChild(t_mu);
+			angle += 360 / m_numberPerFrame;
+			if(angle >= 360)
+				angle -= 360;
+		}
+		angle = m_well512.GetValue(360);
+		stopMyAction();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+protected:
+	int m_numberPerFrame;
+	float m_bulletSpeed;
+	int m_color;
+	
+	int m_frameCnt;
+	CCPoint m_position;
+	int angle;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+// 해바라기 패턴의 연속. 각도 변경 없음.
+class KSAttackPattern4 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern4);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["4"];
+		m_perFrame = pattern["perframe"].asInt();;
+		m_totalFrame = pattern["totalframe"].asInt();;
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
+		m_numberPerFrame = pattern["numberperframe"].asInt();;
+		m_color = pattern["color"].asInt();
+		
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		angle = m_well512.GetValue(360);
+		//		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % m_perFrame == 0)
+		{
+			float startAngle = angle;
+			for(int i=0; i<m_numberPerFrame; i++)
+			{
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
+				CCSize t_mSize = CCSize(4.f, 4.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+				startAngle += 360 / m_numberPerFrame; // 10 개라면
+			}
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+/// 해바라기 패턴인데 각도가 바뀜.
+class KSAttackPattern5 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern5);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["5"];
+		m_perFrame = pattern["perframe"].asInt();;        // p
+		m_totalFrame = pattern["totalframe"].asInt();;    // p
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;  // p
+		m_numberPerFrame = pattern["numberperframe"].asInt(); // p
+		m_color = pattern["color"].asInt();
+		
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		angle = m_well512.GetValue(360);
+		//		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % m_perFrame == 0)
+		{
+			float startAngle = angle;
+			for(int i=0; i<m_numberPerFrame; i++)
+			{
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
+				CCSize t_mSize = CCSize(4.f,4.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+				startAngle += 360 / m_numberPerFrame; // 10 개라면
+			}
+			angle += 6;
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+
+class KSAttackPattern6 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern6);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["6"];
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;  // p
+		m_numberPerFrame = pattern["numberperframe"].asInt(); // p
+		m_color = pattern["color"].asInt();
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		angle = m_well512.GetValue(360);
+		//		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == 1*8)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % 1 == 0)
+		{
+			float startAngle = angle;
+			for(int i=0; i<m_numberPerFrame; i++)
+			{
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
+				CCSize t_mSize = CCSize(4.f, 4.f);
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+				startAngle += 360 / m_numberPerFrame; // 10 개라면
+			}
+			angle += 3;
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+/// 해바라긴데 각도를 달리하면서 쏨, 드르륵 쏘고 좀 쉬다가 드르륵...
+class KSAttackPattern7 : public AttackPattern
+{
+public:
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	CREATE_FUNC_CCP(KSAttackPattern7);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["7"];
+		m_perFrame = pattern["perframe"].asInt();;
+		m_totalFrame = pattern["totalframe"].asInt();;   // p
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f; // p
+		m_numberPerFrame = pattern["numberperframe"].asInt();
+		m_color = pattern["color"].asInt();
+		m_term = 6; // p
+		
+		m_frameCnt = 0;
+		m_position = t_sp;
+		m_fireCount = 0;
+		angle = m_well512.GetValue(360);
+		//		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		
+		if(m_frameCnt == m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % m_perFrame == 0)
+		{
+			if(m_idleValue <= 0)
+			{
+				m_fireCount++;
+				float startAngle = angle;
+				for(int i=0; i<m_numberPerFrame; i++)
+				{
+					std::string imgFileName;
+					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+					if(KS::isExistFile(fileName))
+						imgFileName = fileName;
+					else
+						imgFileName = "cumber_missile1.png";
+					CCSize t_mSize = CCSize(4.f, 4.f);
+					MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
+															imgFileName.c_str(), t_mSize, 0.f, 0.f);
+					batchNode->addChild(t_mu);
+					startAngle += m_numberPerFrame; // 10 개라면
+				}
+				angle += 2;
+				
+				// 다섯번 쐈으면 15프레임 쉰다.
+				if(m_fireCount == 5)
+				{
+					m_fireCount = 0;
+					m_idleValue = 5 * m_term;
+				}
+			}
+			else
+			{
+				angle += 2;
+				m_idleValue--;
+			}
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	int m_term;
+	int m_idleValue;
+	int m_fireCount;
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	Well512 m_well512;
+	
+	CCSpriteBatchNode* batchNode;
+};
+
+// 무궁화 패턴
+class KSAttackPattern8 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern8);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["8"];
+		
+		m_perFrame = pattern["perframe"].asInt();;		// p
+		m_totalFrame = pattern["totalframe"].asInt();;		// p
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;	// p
+		m_numberPerFrame =pattern["numberperframe"].asInt();	// p
+		m_color = pattern["color"].asInt();
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		angle2 = angle = m_well512.GetValue(360);
+		//		angle = m_well512.GetValue(360);
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		CCSize t_mSize = CCSize(4.f,4.f);
+		if(m_frameCnt == m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else if(m_frameCnt % m_perFrame == 0)
+		{
+			float startAngle = angle;
+			for(int i=0; i<m_numberPerFrame; i++)
+			{
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
+				
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+				startAngle += 360 / m_numberPerFrame; // 10 개라면
+			}
+			
+			float startAngle2 = angle2;
+			for(int i=0; i<m_numberPerFrame; i++)
+			{
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
+				MissileUnit* t_mu = MissileUnit::create(m_position, startAngle2, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize, 0.f, 0.f);
+				batchNode->addChild(t_mu);
+				startAngle2 += 360 / m_numberPerFrame; // 10 개라면
+			}
+			
+			angle += m_perFrame / 3;
+			angle2 -= m_perFrame / 3;
+		}
+		if(m_frameCnt % 5 == 0)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_basic_missile_shoot.mp3", false);
+		}
+		
+	}
+protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	
+	int m_frameCnt;
+	CCPoint m_position;
+	float angle;
+	float angle2;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+// 당구공.
+class KSAttackPattern9 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSAttackPattern9);
+	
+	void removeEffect()
+	{
+		if(!isRemoveEffect)
+		{
+			isRemoveEffect = true;
+			int loop_cnt = getChildrenCount();
+			for(int i=0;i<loop_cnt;i++)
+			{
+				((ThreeCushion*)getChildren()->objectAtIndex(i))->removeEffect();
+			}
+		}
+	}
+	
+private:
+	
+	bool isRemoveEffect;
+	
+	virtual void selfRemoveSchedule()
+	{
+		if(getChildrenCount() == 0)
+		{
+			//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects");
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		isRemoveEffect = false;
+		//		myGD->communication("EP_startCrashAction");
+		
+		//		CCPoint t_sp = cb->getPosition();
+		
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["9"];
+		
+		
+		float t_move_speed = pattern.get("speed", 200.0).asDouble() / 100.f;
+		float t_cushion_cnt = pattern.get("cushioncount", 4).asInt();
+		bool t_is_big_bomb = pattern.get("big", false).asBool();
+		int t_tmCnt = pattern.get("number", 10).asInt();
+		///////////////////////////////////////////
+		for(int i=0;i<t_tmCnt;i++)
+		{
+			// create
+			ThreeCushion* t_tc = ThreeCushion::create(t_sp, t_move_speed, t_cushion_cnt, t_is_big_bomb,
+													  this, callfunc_selector(ThisClassType::removeEffect));
+			addChild(t_tc);
+		}
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		startSelfRemoveSchedule();
+	}
+};
+
+
+// 조준형1 : 부채꼴.
+class KSTargetAttackPattern1 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern1);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["101"];
+		
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
+		m_numberPerFrame = pattern["numberperframe"].asInt();
+		m_color = pattern["color"].asInt();
+		
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		scheduleUpdate();
+		cb->stopAnimationDirection();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+		float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
+		float angle = rad2Deg(rad);
+		float angle2 = rad2Deg(rad);
+		
+		for(int i=0; i<m_numberPerFrame;i++)
+		{
+			std::string imgFileName;
+			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+			if(KS::isExistFile(fileName))
+				imgFileName = fileName;
+			else
+				imgFileName = "cumber_missile1.png";
+			CCSize t_mSize = CCSize(4.f, 4.f);
+			if(angle == angle2)
+			{
+				MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(m_position, angle, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize);
+				batchNode->addChild(t_mu);
+			}
+			else
+			{
+				MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(m_position, angle, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize);
+				batchNode->addChild(t_mu);
+				
+				MathmaticalMissileUnit* t_mu2 = MathmaticalMissileUnit::create(m_position, angle2, m_bulletSpeed,
+														 imgFileName.c_str(), t_mSize);
+				batchNode->addChild(t_mu2);
+			}
+			
+			angle += 35 / m_numberPerFrame; // 10 개라면
+			angle2 -= 35 / m_numberPerFrame;
+			
+			if(angle >= 360)
+				angle -= 360;
+			if(angle2 < 0)
+				angle2 += 360;
+		}
+		
+		stopMyAction();
+		m_cumber->onTargetingJack(jackPoint);
+	}
+protected:
+	
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	
+	int m_frameCnt;
+	CCPoint m_position;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+
+// 조준형 : 부채꼴의 연속, 캐릭터를 따라감.
+class KSTargetAttackPattern2 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern2);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["102"];
+		
+		m_perFrame = pattern["perframe"].asInt();;
+		m_totalFrame = pattern["totalframe"].asInt();;
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
+		m_numberPerFrame = pattern["numberperframe"].asInt();;
+		m_color = pattern["color"].asInt();
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		scheduleUpdate();
+		cb->stopAnimationDirection();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+		if(m_frameCnt == m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else
+		{
+			if(m_frameCnt % m_perFrame == 0)
+			{
+				
+				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
+				float angle = rad2Deg(rad);
+				float angle2 = rad2Deg(rad);
+				
+				for(int i=0; i<m_numberPerFrame;i++)
+				{
+					std::string imgFileName;
+					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+					if(KS::isExistFile(fileName))
+						imgFileName = fileName;
+					else
+						imgFileName = "cumber_missile1.png";
+					CCSize t_mSize = CCSize(4.f, 4.f);
+					if(angle == angle2)
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+					}
+					else
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+						
+						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
+																 imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu2);
+					}
+					
+					angle += 35 / m_numberPerFrame; // 10 개라면
+					angle2 -= 35 / m_numberPerFrame;
+					
+					if(angle >= 360)
+						angle -= 360;
+					if(angle2 < 0)
+						angle2 += 360;
+				}
+				
+			}
+		}
+		m_cumber->onTargetingJack(jackPoint);
+	}
+protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	
+	int m_frameCnt;
+	CCPoint m_position;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+// 조준형 : 부채꼴의 연속, 캐릭터를 안 따라감.
+class KSTargetAttackPattern3 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern3);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["103"];
+		
+		m_perFrame = pattern["perframe"].asInt();;
+		m_totalFrame = pattern["totalframe"].asInt();
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
+		m_numberPerFrame = pattern["numberperframe"].asInt();
+		m_color = pattern["color"].asInt();
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		firstJackPosition = ip2ccp(myGD->getJackPoint());
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		scheduleUpdate();
+		cb->stopAnimationDirection();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		CCPoint jackPoint = firstJackPosition;
+		if(m_frameCnt == m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else
+		{
+			if(m_frameCnt % m_perFrame == 0)
+			{
+				
+				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
+				float angle = rad2Deg(rad);
+				float angle2 = rad2Deg(rad);
+				
+				for(int i=0; i<m_numberPerFrame;i++)
+				{
+					std::string imgFileName;
+					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+					if(KS::isExistFile(fileName))
+						imgFileName = fileName;
+					else
+						imgFileName = "cumber_missile1.png";
+					CCSize t_mSize = CCSize(4.f, 4.f);
+					if(angle == angle2)
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+					}
+					else
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+						
+						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
+																 imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu2);
+					}
+					
+					angle += 35 / m_numberPerFrame; // 10 개라면
+					angle2 -= 35 / m_numberPerFrame;
+					
+					if(angle >= 360)
+						angle -= 360;
+					if(angle2 < 0)
+						angle2 += 360;
+				}
+				
+			}
+		}
+		m_cumber->onTargetingJack(jackPoint);
+	}
+protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	
+	CCPoint firstJackPosition;
+	int m_frameCnt;
+	CCPoint m_position;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+// 조준형 : 부채꼴의 연속, 중심각의 랜덤성을 부여.
+class KSTargetAttackPattern4 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern4);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["104"];
+		
+		m_perFrame = pattern["perframe"].asInt();
+		m_totalFrame = pattern["totalframe"].asInt();
+		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
+		m_numberPerFrame = pattern["numberperframe"].asInt();
+		m_color = pattern["color"].asInt();
+		m_frameCnt = 0;
+		m_position = t_sp;
+		
+		firstJackPosition = ip2ccp(myGD->getJackPoint());
+		fireCount = 0;
+		
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
+		scheduleUpdate();
+		cb->stopAnimationDirection();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frameCnt++;
+		CCPoint jackPoint = firstJackPosition;
+		if(m_frameCnt == m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else
+		{
+			if(m_frameCnt % m_perFrame == 0)
+			{
+				
+				
+				float rad = atan2(jackPoint.y - m_position.y, jackPoint.x - m_position.x);
+				rad += m_well512.GetFloatValue(-5 * M_PI / 180.f, +5 * M_PI / 180.f);
+				float angle = rad2Deg(rad);
+				float angle2 = rad2Deg(rad);
+				
+				for(int i=0; i<m_numberPerFrame;i++)
+				{
+					std::string imgFileName;
+					std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+					if(KS::isExistFile(fileName))
+						imgFileName = fileName;
+					else
+						imgFileName = "cumber_missile1.png";
+					CCSize t_mSize = CCSize(4.f, 4.f);
+					if(angle == angle2)
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+					}
+					else
+					{
+						MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+																imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu);
+						
+						MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
+																 imgFileName.c_str(), t_mSize, 0.f, 0.f);
+						batchNode->addChild(t_mu2);
+					}
+					
+					angle += 35 / m_numberPerFrame; // 10 개라면
+					angle2 -= 35 / m_numberPerFrame;
+					
+					if(angle >= 360)
+						angle -= 360;
+					if(angle2 < 0)
+						angle2 += 360;
+				}
+				fireCount++;
+			}
+		}
+		m_cumber->onTargetingJack(jackPoint);
+	}
+protected:
+	int m_perFrame;
+	int m_totalFrame;
+	float m_bulletSpeed;
+	int m_numberPerFrame;
+	int m_color;
+	
+	CCPoint firstJackPosition;
+	int fireCount;
+	int m_frameCnt;
+	CCPoint m_position;
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+};
+
+class KSTargetAttackPattern5 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern5);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	
+	void update(float dt)
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["105"];
+		float speed = pattern.get("speed", 150.f).asDouble() / 100.f;
+		float crashsize = pattern.get("crashsize", 20.f).asDouble();
+		
+		IntPoint mainCumberPoint = ccp2ip(m_cumber->getPosition());
+		CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
+		AP_Missile11* t_m11 = AP_Missile11::create(mainCumberPosition, 11, speed, IntSize(round(crashsize),round(crashsize)));
+		addChild(t_m11);
+		
+//		myGD->communication("CP_onPatternEnd");
+		
+		stopMyAction();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	
+protected:
+	Well512 m_well512;
+};
+class KSTargetAttackPattern6 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern6);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["106"];
+		int number = pattern.get("number", 4).asInt();
+		float speed = pattern.get("speed", 200.0).asDouble() / 100.f;
+		float crashsize = pattern.get("crashsize", 10).asInt();
+		IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+		CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
+		AP_Missile14* t_m14 = AP_Missile14::create(mainCumberPosition, 14, speed, number, IntSize(round(crashsize),round(crashsize)));
+		addChild(t_m14);
+		
+		
+		stopMyAction();
+	}
+	
+protected:
+	Well512 m_well512;
+};
+
+// 태양 광선이 나에게로 ... ㅎㅎ
+class KSTargetAttackPattern7 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern7);
+	virtual void stopMyAction()
+	{
+		unschedule(schedule_selector(ThisClassType::myAction));
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		
+		
+		startSelfRemoveSchedule();
+		fadeFromToDuration.init(1, 0, 0.2f);
+		schedule(schedule_selector(ThisClassType::hidingAnimation));
+	}
+	
+	
+	
+	
+	
+	
+	void hidingAnimation(float dt)
+	{
+		if(fadeFromToDuration.step(1.f/60.f) == false)
+		{
+			if(lazer_sub)
+			{
+				lazer_sub->removeFromParentAndCleanup(true);
+				lazer_sub = NULL;
+				
+			}
+			if(lazer_main)
+			{
+				lazer_main->removeFromParentAndCleanup(true);
+				lazer_main = NULL;
+			}
+			if(t_bead)
+			{
+				t_bead->removeFromParentAndCleanup(true);
+				t_bead = NULL;
+			}
+		}
+		else
+		{
+//			KS::setOpacity(lazer_sub, fadeFromToDuration.getValue());
+			lazer_main->setScaleY(fadeFromToDuration.getValue());
+			t_bead->setScaleY(fadeFromToDuration.getValue());
+//			KS::setOpacity(lazer_main, fadeFromToDuration.getValue());
+//			KS::setOpacity(t_bead, fadeFromToDuration.getValue());
+		}
+	}
+	
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["107"];
+		
+		
+		type = 1;
+		createRingFrame = 10;
+		chargeFrame = 120;
+		crashFrame = pattern.get("crashframe", 180).asInt();
+		m_crashSize = pattern.get("crashsize", 40).asInt();
+		///////////////////////////////////////////////////////////////////
+		sp = t_sp;
+		dcolor = 255.f/chargeFrame;
+		dscale = 0.7f/chargeFrame;
+		IntPoint jackPoint = myGD->getJackPoint();
+		jackPosition = ip2ccp(jackPoint);
+		CCPoint subPosition = ccpSub(jackPosition, t_sp);
+		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
+		
+		if(distance < 200)			angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
+		else						angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
+		
+		CCPoint beadPosition;
+		beadPosition.x = 1;
+		beadPosition.y = tanf(angle/180.f*M_PI);
+		
+		if((angle > 90.f && angle < 270.f) || angle < -90.f)
+		{
+			beadPosition = ccpMult(beadPosition, -1.f);
+		}
+		
+		float div_value = sqrtf(powf(beadPosition.x, 2.f) + powf(beadPosition.y, 2.f));
+		dv = ccpMult(beadPosition, 1.f/div_value);
+		beadPosition = ccpMult(dv, 20.f);
+		
+		beadPosition = ccpAdd(beadPosition, t_sp);
+		
+		t_bead = CCSprite::create("lazer_bead.png");
+		t_bead->setPosition(beadPosition);
+		addChild(t_bead);
+		
+		lazer_sub = CCSprite::create("lazer_sub.png");
+		lazer_sub->setAnchorPoint(ccp(0,0.5));
+		lazer_sub->setRotation(-angle);
+		
+		CCPoint subP = ccpMult(dv, 5);
+		subP = ccpAdd(beadPosition, subP);
+		lazer_sub->setPosition(subP);
+		addChild(lazer_sub);
+		
+		startMyAction();
+		
+		cb->stopAnimationDirection();
+	}
+	void selfRemove()
+	{
+		removeFromParentAndCleanup(true);
+	}
+	
+	virtual void selfRemoveSchedule()
+	{
+		if(getChildrenCount() == 0)
+		{
+			//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects");
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	
+	void startMyAction()
+	{
+		AudioEngine::sharedInstance()->playEffect("sound_angle_beem.mp3", false);
+		ingFrame = 0;
+		schedule(schedule_selector(ThisClassType::myAction));
+	}
+	
+	void myAction()
+	{
+		if(ingFrame <= chargeFrame)
+		{
+			ccColor3B tcolor = t_bead->getColor();
+			tcolor.g -= dcolor;
+			tcolor.b -= dcolor;
+			t_bead->setColor(tcolor);
+			lazer_sub->setScaleY(lazer_sub->getScaleY()-dscale);
+			lazer_sub->setColor(tcolor);
+			if(ingFrame%createRingFrame == 0)
+			{
+				int random_sp = rand()%21-10;
+				CCPoint r_sp = ccpMult(dv, 60 + random_sp);
+				r_sp = ccpAdd(sp, r_sp);
+				CCPoint r_fp = ccpMult(dv, 20);
+				r_fp = ccpAdd(sp, r_fp);
+				
+				int random_frame = rand()%20 + 20;
+				float random_s = (rand()%3)/10.f;
+				
+				Lazer_Ring* t_lr = Lazer_Ring::create(angle, r_sp, r_fp, 1.f-random_s, 0.3f-random_s, random_frame, tcolor);
+				addChild(t_lr);
+			}
+			
+			
+			if(ingFrame == chargeFrame)
+			{
+				auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_head.ccbi");
+				lazer_main = ret.first;
+				
+				lazer_main->setAnchorPoint(ccp(0,0.5));
+				lazer_main->setRotation(-angle);
+				
+				
+				CCPoint mp = ccpMult(dv, 30);
+				mp = ccpAdd(sp, mp);
+				lazer_main->setPosition(mp);
+				
+				addChild(lazer_main);
+				
+				
+				//				CCSprite* prev = ret2.first;
+				for(int i=0; i<10; i++)
+				{
+					auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_body.ccbi");
+					CCSprite* laser3 = ret2.first;
+					laser3->setPosition(ccp(74 + 44 * i, 0));
+					lazer_main->addChild(laser3);
+					//					prev = laser3;
+				}
+				
+				
+				
+				CCPoint c_sp = ccpMult(dv, 30);
+				c_sp = ccpAdd(sp, c_sp);
+				
+				float t_scale = m_crashSize/30.f;
+				
+				crashRect = CCRectMake(0, (-m_crashSize + 10*t_scale), 460, (m_crashSize + 10*t_scale));
+				//				crashRect = CCRectMake(0, -60/2 + 10, 460, +60/2 + 10);
+				lineCrashMap(c_sp, angle, 460, 60);
+			}
+		}
+		else if(ingFrame <= chargeFrame+crashFrame)
+		{
+			IntPoint jackPoint = myGD->getJackPoint();
+			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+			
+			CCPoint t_jp = spinTransform(jackPosition, sp, angle);
+			
+			if(crashRect.containsPoint(t_jp))
+			{
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect");
+				//				stopMySchedule();
+				stopMyAction();
+			}
+		}
+		
+		if(ingFrame >= chargeFrame+crashFrame)
+		{
+			stopMyAction();
+		}
+		ingFrame++;
+		
+		m_cumber->onTargetingJack(jackPosition);
+	}
+	
+	void lineCrashMap(CCPoint t_sp, float t_angle, int t_width, int t_height)
+	{
+		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+		{
+			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+			{
+				CCPoint t_tp = ccp((i-1)*pixelSize+1,(j-1)*pixelSize+1);
+				CCPoint a_tp = spinTransform(t_tp, t_sp, t_angle);
+				if(crashRect.containsPoint(a_tp))
+				{
+					crashMapForIntPoint(IntPoint(i,j));
+				}
+			}
+		}
+	}
+	
+	void crashMapForIntPoint(IntPoint t_p)
+	{
+		if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
+		{
+			myGD->mapState[t_p.x][t_p.y] = mapEmpty;
+			for(int k = -1;k<=1;k++)
+			{
+				for(int l = -1;l<=1;l++)
+				{
+					if(k == 0 && l == 0)	continue;
+					if(myGD->mapState[t_p.x+k][t_p.y+l] == mapOldget)		myGD->mapState[t_p.x+k][t_p.y+l] = mapOldline;
+				}
+			}
+			//			myGD->communication("EP_crashed");
+			myGD->communication("MFP_createNewFragment", t_p);
+			myGD->communication("VS_divideRect", t_p);
+		}
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		
+		if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
+		{
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect");
+			stopMyAction();
+		}
+		
+		if(t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
+		{
+			//					myGD->communication("PM_pathChainBomb", t_p);
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Main_showLineDiePosition", t_p);
+			stopMyAction();
+		}
+	}
+	
+	CCPoint spinTransform(CCPoint t_tp, CCPoint t_bp, float t_angle) // jack, boss, angle
+	{
+		CCPoint a_tp = ccpSub(t_tp, t_bp);
+		float b_angle = atan2f(a_tp.y, a_tp.x)/M_PI*180.f;
+		float a_angle = b_angle - t_angle;
+		
+		if(a_angle >= 180.f)	a_angle -= 360.f;
+		if(a_angle < -180.f)	a_angle += 360.f;
+		
+		float distance = sqrtf(powf(a_tp.x, 2.f) + powf(a_tp.y, 2.f));
+		
+		a_tp.x = 1;
+		a_tp.y = tanf(a_angle/180.f*M_PI);
+		
+		float div_value = sqrtf(powf(a_tp.x, 2.f) + powf(a_tp.y, 2.f));
+		
+		if(a_angle > 90 || a_angle < -90)
+			a_tp = ccpMult(a_tp, -1.f);
+		
+		a_tp = ccpMult(a_tp, 1.f/div_value);
+		
+		a_tp = ccpMult(a_tp, distance);
+		
+		return a_tp;
+	}
+protected:
+	float m_crashSize;
+	FromToWithDuration<float> fadeFromToDuration;
+	int type;
+	CCPoint sp;
+	int createRingFrame;
+	int chargeFrame;
+	int crashFrame;
+	int ingFrame;
+	float angle;
+	CCPoint dv;
+	CCSprite* lazer_main;
+	int dcolor;
+	CCSprite* t_bead;
+	CCRect crashRect;
+	CCSprite* lazer_sub;
+	float dscale;
+	KSCumberBase* m_cumber;
+	
+	CCPoint jackPosition;
+	
+};
+class KSTargetAttackPattern8 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern8);
+	virtual void selfRemoveSchedule()
+	{
+		if(batchNode->getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		//		m_position = t_sp;
+		//		firstJackPosition = ip2ccp(myGD->getJackPoint());
+		
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["108"];
+		
+		m_oneShotNumber = pattern["oneshot"].asInt();
+		m_oneShotTerm = pattern["oneshotterm"].asInt();
+		m_gunNumber = pattern["gunnumber"].asInt();
+		m_targetingType = (TargetType)pattern["targettype"].asInt();
+		m_rotationDegreeVelocity = pattern["degreev"].asInt();
+		m_color = pattern["color"].asInt();
+		m_totalDegree = pattern["totaldegree"].asInt();
+		m_totalFrame = pattern["totalframe"].asInt(); // 200 프레임 동안
+		m_randomDegree = pattern["randomdegree"].asInt(); // 랜덤각.
+		m_frame = 0;
+		
+		for(int i=0; i<m_gunNumber; i++)
+		{
+			Gun g;
+			g.bulletSpeed = 1.8f;
+			g.fireTerm = 1;
+			g.fireCount = 0;
+			g.idleCount = 0;
+			pan.push_back(g);
+		}
+		
+		initGuns();
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
+		scheduleUpdate();
+	}
+	
+	void initGuns()
+	{
+		// 여기서 총의 개수와 m_totalDegree 를 통해 총을 배치함.
+		
+		int counter = 0;
+		float termDegree;
+		if(m_totalDegree == 360)
+			termDegree = m_totalDegree / (m_gunNumber);
+		else
+			termDegree = m_totalDegree / (m_gunNumber - 1);
+		if(pan.size() == 1)
+		{
+			pan[0].degree.init(0, 0, 0);
+		}
+		else for(auto iter = pan.begin(); iter != pan.end(); ++iter, ++counter)
+		{
+			iter->degree.init(counter * termDegree, counter * termDegree, 0);
+			iter->initDegree = counter * termDegree;
+		}
+		
+		if(m_targetingType == kToUser)
+		{
+			for(auto& gun : pan)
+			{
+				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+				CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
+				float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
+				
+				float deg = rad2Deg(rad);
+				deg += m_well512.GetFloatValue(-m_randomDegree, +m_randomDegree);
+				gun.degree.init(gun.degree.getValue() + deg - m_totalDegree / 2.f, gun.degree.getValue() + deg - m_totalDegree / 2.f, 0);
+				//				if(gun.degree.getValue() >= 360)
+				//				{
+				//					gun.degree.init(gun.degree.getValue() - 360, gun.degree.getValue() - 360, 0);
+				//				}
+				//				if(gun.degree.getValue() < 0)
+				//				{
+				//					gun.degree.init(gun.degree.getValue() + 360, gun.degree.getValue() + 360, 0);
+				//				}
+			}
+		}
+		
+		// 전체를 조금씩 회전 시킴.
+	}
+	void update(float dt)
+	{
+		m_frame++;
+		// 중간각 기준으로 onTargetingJack 호출해야하는 작업을 아침에 해야함!
+		
+		
+		if(m_frame >= m_totalFrame)
+		{
+			// 종료 조건
+			stopMyAction();
+		}
+		else
+		{
+			
+			if(m_targetingType == kCCW)
+			{
+				for(auto& gun : pan)
+				{
+					gun.degree.init(gun.degree.getValue() - m_rotationDegreeVelocity,
+									gun.degree.getValue() - m_rotationDegreeVelocity,
+									0);
+					
+				}
+			}
+			else if(m_targetingType == kCW)
+			{
+				for(auto& gun : pan)
+				{
+					gun.degree.init(gun.degree.getValue() + m_rotationDegreeVelocity,
+									gun.degree.getValue() + m_rotationDegreeVelocity,
+									0);
+					
+					
+				}
+			}
+			else
+			{
+				for(auto& gun : pan)
+				{
+					CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
+					CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
+					float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
+					
+					float deg = rad2Deg(rad);
+					deg += m_well512.GetFloatValue(-m_randomDegree, +m_randomDegree);
+					gun.degree.init(gun.degree.getValue(), gun.initDegree + deg - m_totalDegree / 2.f, m_rotationDegreeVelocity);
+					
+					//					if(gun.degree.getValue() >= 360)
+					//					{
+					//						gun.degree.init(gun.degree.getValue() - 360, gun.degree.getValue() - 360, m_rotationDegreeVelocity);
+					//					}
+					//					if(gun.degree.getValue() < 0)
+					//					{
+					//						gun.degree.init(gun.degree.getValue() + 360, gun.degree.getValue() + 360, m_rotationDegreeVelocity);
+					//					}
+					
+					gun.degree.step();
+					m_cumber->onTargetingJack(jackPoint);
+					CCLog("gun degree %f", gun.degree.getValue());
+				}
+			}
+			for(auto& gun : pan)
+			{
+				if(m_frame % gun.fireTerm == 0)
+				{
+					if(m_oneShotNumber > gun.fireCount)
+					{
+						// 빵.
+						std::string imgFileName;
+						std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+						if(KS::isExistFile(fileName))
+							imgFileName = fileName;
+						else
+							imgFileName = "cumber_missile1.png";
+						CCSize t_mSize = CCSize(4.f, 4.f);
+//						MissileUnit* t_mu = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint()), gun.degree.getValue(), gun.bulletSpeed,
+//																																					imgFileName.c_str(), t_mSize, 0, 0);
+						MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(ip2ccp(myGD->getMainCumberPoint()), gun.degree.getValue(), gun.bulletSpeed,
+																imgFileName.c_str(), t_mSize);
+						batchNode->addChild(t_mu);
+						gun.fireCount++;
+					}
+					else
+					{
+						if(gun.idleCount >= m_oneShotTerm)
+						{
+							// 다 쉬었다.
+							
+							//,, 중간각을 기준으로
+							
+							gun.fireCount = 0;
+							gun.idleCount = 0;
+						}
+						gun.idleCount++;
+					}
+				}
+			}
+		}
+	}
+	float m_randomDegree; // 랜덤각.
+	int m_oneShotNumber; // 쉬지 않고 쏘는 개수.
+	int m_oneShotTerm; // 쐈다가 쉬는 프레임수.
+	int m_gunNumber; // 총의 개수.
+	int m_frame;
+	int m_totalFrame;
+	enum TargetType
+	{
+		kToUser = 1,
+		kCCW = 2,
+		kCW = 3
+	}m_targetingType;
+	float m_rotationDegreeVelocity; // 회전각 속도.
+	int m_color;
+	float m_totalDegree; // 전체 각도.
+	struct Gun
+	{
+		float bulletSpeed;	// 총알 속도
+		int fireTerm;		// 자체 쏘는 텀.
+		float initDegree;	// 초기화된 각도
+		FromTo<float> degree; // 현재 각도
+		int fireCount;		// oneShot 을 세기 위한 변수.
+		int idleCount;		// 쐈다가 쉬는 프레임수를 세기위함.
+	};
+	
+	vector<Gun> pan; // 판은 총들을 가짐.
+	
+	//	CCPoint firstJackPosition; // 잭의 초기 위치.
+	//	CCPoint m_position; // 공격 당시의 보스의 위치
+	Well512 m_well512;
+	CCSpriteBatchNode* batchNode;
+	
+};
+
+class KSTargetAttackPattern9 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern9);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSTargetAttackPattern10 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern10);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern1 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern1);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		m_position = t_sp;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		AP_Missile21* t_m21 = AP_Missile21::create(m_position);
+		addChild(t_m21);
+		
+		stopMyAction();
+	}
+protected:
+	CCPoint m_position;
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern2 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern2);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern3 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern3);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern4 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern4);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern5 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern5);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern6 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern6);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern7 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern7);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern8 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern8);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern9 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern9);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern10 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern10);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern11 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern11);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern12 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern12);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_position = t_sp;
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value pattern = root[0u]["pattern"]["1012"];
+		
+		int area = pattern.get("area", 10).asInt();
+		int totalFrame = pattern.get("totalframe", 300).asInt();
+		IntPoint jackPoint = myGD->getJackPoint();
+		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+		
+		PoisonDrop* t_pd = PoisonDrop::create(m_position, jackPosition, 120, area, totalFrame);
+		addChild(t_pd);
+		t_pd->startAction();
+		
+		stopMyAction();
+	}
+protected:
+	CCPoint m_position;
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern13 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern13);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern14 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern14);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern15 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern15);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern16 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern16);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern17 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern17);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern18 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern18);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern19 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern19);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern20 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern20);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+class KSSpecialAttackPattern21 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSSpecialAttackPattern21);
+	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		
+	}
+protected:
+	KSCumberBase* m_cumber;
+};
+
+
+/*
+ class KSSpecialAttackPattern1 : public AttackPattern
+ {
+ public:
+ CREATE_FUNC_CCP(KSSpecialAttackPattern1);
+ void myInit(CCPoint t_sp, KSCumberBase* cb)
+ {
+ m_cumber = cb;
+ scheduleUpdate();
+ }
+ virtual void stopMyAction()
+ {
+ unscheduleUpdate();
+ 
+ myGD->communication("MP_endIngActionAP");
+ myGD->communication("CP_onPatternEnd");
+ 
+ startSelfRemoveSchedule();
+ }
+ void update(float dt)
+ {
+ 
+ }
+ protected:
+ KSCumberBase* m_cumber;
+ };
+ */
 
 #endif

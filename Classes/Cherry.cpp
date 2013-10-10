@@ -490,10 +490,6 @@ void Cherry::furyModeOff()
 	myGD->communication("MS_resetRects");
 }
 
-void Cherry::setGameover()
-{
-	m_state = CUMBERSTATESTOP;
-}
 
 
 void Cherry::scaleAdjustment(float dt)

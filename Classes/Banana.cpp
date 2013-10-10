@@ -500,11 +500,6 @@ void Banana::furyModeOff()
 	myGD->communication("MS_resetRects");
 }
 
-void Banana::setGameover()
-{
-	m_state = CUMBERSTATESTOP;
-}
-
 
 void Banana::scaleAdjustment(float dt)
 {

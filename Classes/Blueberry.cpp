@@ -488,10 +488,6 @@ void Blueberry::furyModeOff()
 	myGD->communication("MS_resetRects");
 }
 
-void Blueberry::setGameover()
-{
-	m_state = CUMBERSTATESTOP;
-}
 
 
 void Blueberry::scaleAdjustment(float dt)

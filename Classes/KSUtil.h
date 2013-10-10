@@ -19,9 +19,11 @@
 
 #include "utf8.h"
 #include "cocos2d.h"
+#include "cocos-ext.h"
 
 #define ThisClassType remove_pointer<decltype(this)>::type
 using namespace cocos2d;
+USING_NS_CC_EXT;
 using namespace std;
 
 #ifndef nil
@@ -106,6 +108,21 @@ namespace KS
 	
 	bool isExistFile(const std::string& fileName);
 	void setOpacity(CCObject* object, GLubyte opaque);
+	
+	template <typename NodeT>
+	pair<NodeT, CCBAnimationManager*> loadCCBI(CCObject* thiz, const std::string& fn)
+	{
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		CCNode* p = reader->readNodeGraphFromFile(fn.c_str(), thiz);
+		pair<NodeT, CCBAnimationManager*> ret;
+		ret.first = dynamic_cast<NodeT>(p);
+		ret.second = reader->getAnimationManager();
+		reader->release();
+		
+		return ret;
+	}
+	
 }
 
 class KS_Util

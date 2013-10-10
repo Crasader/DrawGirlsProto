@@ -105,7 +105,7 @@ public:
 	virtual void furyModeOn();
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
-	virtual void setGameover();
+
 	virtual void crashMapForPosition(CCPoint targetPt);
 	
 

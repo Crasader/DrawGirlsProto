@@ -12,6 +12,61 @@
 
 #include <cmath>
 
+
+template <typename T>
+class FromToWithDuration2
+{
+private:
+	T originFrom;
+	T from;
+	T to;
+	float duration;
+	T dx;
+	//	bool positive;
+	
+	float flowTime;
+public:
+	FromToWithDuration2(){}
+	FromToWithDuration2(T _from, T _to, float _duration) : originFrom(_from)
+	{
+		flowTime = 0.f;
+		from = _from;
+		to = _to;
+		duration = _duration;
+		dx = (to - from) / duration;
+		// positive
+	}
+	void init(T _from, T _to, float _duration)
+	{
+		flowTime = 0.f;
+		originFrom = _from;
+		from = _from;
+		to = _to;
+		duration = _duration;
+		if(duration != 0)
+			dx = (to - from) / duration;
+		// positive
+		
+	}
+	bool step(float dt)
+	{
+		flowTime += dt;
+		if(duration)
+			from = from + dx * dt;
+		else
+			from = to;
+		if(duration <= flowTime)
+		{
+			from = to;
+			return false; // finish
+		}
+		else
+			return true;
+	}
+	T getValue(){return from;}
+	T getTo(){return to;}
+};
+
 /// duration 동안에 from 에서 to 로 변수를 변화시킴.
 
 

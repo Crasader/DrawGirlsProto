@@ -19,7 +19,7 @@
 USING_NS_CC_EXT;
 using namespace cocos2d;
 using namespace std;
-
+using namespace placeholders;
 class MissileUnit : public CCSprite
 {
 public:
@@ -936,28 +936,38 @@ public:
 		
 		IntPoint beamPoint = IntPoint((t_p.x-1)/pixelSize+1, (t_p.y-1)/pixelSize+1); // center
 		
-		for(int i=beamPoint.y-10;i<=beamPoint.y+10;i++)
+		int crashSize = 3;
+		for(int x=beamPoint.x-crashSize; x<=beamPoint.x+crashSize; x++)
 		{
-			int up_down_value;
-			if(i == beamPoint.y-10 || i == beamPoint.y+10)			up_down_value = 6;
-			else if(i == beamPoint.y-9 || i == beamPoint.y+9)		up_down_value = 11;
-			else if(i == beamPoint.y-8 || i == beamPoint.y+8)		up_down_value = 13;
-			else if(i == beamPoint.y-7 || i == beamPoint.y+7)		up_down_value = 15;
-			else if(i == beamPoint.y-6 || i == beamPoint.y+6)		up_down_value = 17;
-			else if(i == beamPoint.y-5 || i == beamPoint.y+5)		up_down_value = 18;
-			else if(i == beamPoint.y-4 || i == beamPoint.y+4 || i == beamPoint.y-3 || i == beamPoint.y+3)		up_down_value = 19;
-			else if(i >= beamPoint.y-2 && i <= beamPoint.y+2)		up_down_value = 20;
-			
-			for(int j=beamPoint.x-up_down_value;j<=beamPoint.x+up_down_value;j++)
+			for(int y=beamPoint.y-crashSize; y<=beamPoint.y+crashSize; y++)
 			{
-				crashMapForIntPoint(IntPoint(j,i));
+				crashMapForIntPoint(IntPoint(x, y));
 			}
 		}
+		
+//		for(int i=beamPoint.y-10;i<=beamPoint.y+10;i++)
+//		{
+//			int up_down_value;
+//			if(i == beamPoint.y-10 || i == beamPoint.y+10)			up_down_value = 6;
+//			else if(i == beamPoint.y-9 || i == beamPoint.y+9)		up_down_value = 11;
+//			else if(i == beamPoint.y-8 || i == beamPoint.y+8)		up_down_value = 13;
+//			else if(i == beamPoint.y-7 || i == beamPoint.y+7)		up_down_value = 15;
+//			else if(i == beamPoint.y-6 || i == beamPoint.y+6)		up_down_value = 17;
+//			else if(i == beamPoint.y-5 || i == beamPoint.y+5)		up_down_value = 18;
+//			else if(i == beamPoint.y-4 || i == beamPoint.y+4 || i == beamPoint.y-3 || i == beamPoint.y+3)		up_down_value = 19;
+//			else if(i >= beamPoint.y-2 && i <= beamPoint.y+2)		up_down_value = 20;
+//			
+//			for(int j=beamPoint.x-up_down_value;j<=beamPoint.x+up_down_value;j++)
+//			{
+//				crashMapForIntPoint(IntPoint(j,i));
+//			}
+//		}
 	}
 	
 private:
 	CCSprite* beam_main;
-	CCSprite* beam_wave;
+	FromToWithDuration<float> fadeFromToDuration;
+//	CCSprite* beam_wave;
 	int type;
 	
 	CCObject* target_removeEffect;
@@ -966,33 +976,16 @@ private:
 	void jackDie()
 	{
 		unschedule(schedule_selector(SatelliteBeam::fallingStar));
-		removeEffect();
+		(target_removeEffect->*delegate_removeEffect)();
 	}
 	void lineDie(IntPoint t_p)
 	{
 		unschedule(schedule_selector(SatelliteBeam::fallingStar));
 		myGD->communication("Main_showLineDiePosition", t_p);
-		removeEffect();
-	}
-	
-	void removeEffect()
-	{
 		(target_removeEffect->*delegate_removeEffect)();
-		
-		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(SatelliteBeam::selfRemove));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-		
-		CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
-		
-		beam_main->runAction(t_seq);
-		beam_wave->runAction(t_fade2);
 	}
 	
-	void selfRemove()
-	{
-		removeFromParentAndCleanup(true);
-	}
+
 	
 	void startFallingStar()
 	{
@@ -1017,24 +1010,17 @@ private:
 		
 		type = t_type;
 		setPosition(t_sp);
-		beam_main = CCSprite::create(CCString::createWithFormat("satelliteBeam_main%d.png", type)->getCString());
-		beam_main->setAnchorPoint(ccp(0.5,0.036));
+		auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_lightning.ccbi");
+		
+		beam_main = ret.first;
+//		beam_main->setAnchorPoint(ccp(0.5,0.036));
 		addChild(beam_main);
-		
-		beam_wave = CCSprite::create(CCString::createWithFormat("satelliteBeam_wave%d.png", type)->getCString(), CCRectMake(0, 0, 80, 40));
-		
-		CCSprite* t_texture = CCSprite::create(CCString::createWithFormat("satelliteBeam_wave%d.png", type)->getCString());
-		CCAnimation* t_animation = CCAnimation::create();
-		t_animation->setDelayPerUnit(0.1);
-		for(int i=0;i<3;i++)
 		{
-			t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(i*80, 0, 80, 40));
+			auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_lightning_targeting.ccbi");
+			beam_main->addChild(ret2.first, -1);
 		}
-		CCAnimate* t_animate = CCAnimate::create(t_animation);
-		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-		beam_wave->runAction(t_repeat);
-		
-		addChild(beam_wave);
+//		beam_main->setVisible(false);
+
 		startFallingStar();
 	}
 };
@@ -1099,7 +1085,7 @@ public:
 	
 	void removeEffect()
 	{
-		fadeFromToDuration.init(255, 0, 1.f);
+		fadeFromToDuration.init(255, 0, 0.3f);
 		schedule(schedule_selector(FallMeteor::hidingAnimation));
 	}
 	
@@ -1118,7 +1104,8 @@ private:
 	FromToWithDuration<float> fadeFromToDuration;
 	CCSprite* meteor;
 	string imgFilename;
-	
+
+	FromToWithDuration2<CCPoint> meteorChanger;
 	CCPoint fp;
 	int fallFrame;
 	int explosionFrame;
@@ -1133,23 +1120,72 @@ private:
 	{
 		unschedule(schedule_selector(FallMeteor::fall));
 //		(target_removeEffect->*delegate_removeEffect)();
-		removeEffect();
+		AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
+		IntPoint rightUpPoint = IntPoint((meteor->getPositionX()-1)/pixelSize+1,(meteor->getPositionY()-1)/pixelSize+1); // right up
+		IntPoint leftDownPoint = IntPoint(rightUpPoint.x-mSize.width,rightUpPoint.y-mSize.height);		// left down point
+		
+		IntSize size = IntSize(rightUpPoint.x - leftDownPoint.x + 1, rightUpPoint.y - leftDownPoint.y + 1); // size
+		
+		for(int i=0;i<11;i++)
+		{
+			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
+		}
+		for(int i=0;i<7;i++)
+		{
+			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
+		}
+		crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
+		
+		for(int i=0;i<11;i++)
+		{
+			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
+		}
+		for(int i=0;i<7;i++)
+		{
+			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
+		}
+		crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
+		
+		stopFall();
+//		removeEffect();
 	}
 	
 	void lineDie(IntPoint t_p)
 	{
 		myGD->communication("Main_showLineDiePosition", t_p);
 		unschedule(schedule_selector(FallMeteor::fall));
+		AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
+		IntPoint rightUpPoint = IntPoint((meteor->getPositionX()-1)/pixelSize+1,(meteor->getPositionY()-1)/pixelSize+1); // right up
+		IntPoint leftDownPoint = IntPoint(rightUpPoint.x-mSize.width,rightUpPoint.y-mSize.height);		// left down point
+		
+		IntSize size = IntSize(rightUpPoint.x - leftDownPoint.x + 1, rightUpPoint.y - leftDownPoint.y + 1); // size
+		
+		for(int i=0;i<11;i++)
+		{
+			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
+		}
+		for(int i=0;i<7;i++)
+		{
+			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
+		}
+		crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
+		
+		for(int i=0;i<11;i++)
+		{
+			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
+		}
+		for(int i=0;i<7;i++)
+		{
+			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
+		}
+		crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
+		
+		stopFall();
 //		(target_removeEffect->*delegate_removeEffect)();
-		removeEffect();
+//		removeEffect();
 	}
 	
-	void startFall()
-	{
-		ingFrame = 0;
-		AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
-		schedule(schedule_selector(FallMeteor::fall));
-	}
+
 	void stopFall()
 	{
 		unschedule(schedule_selector(FallMeteor::fall));
@@ -1189,8 +1225,10 @@ private:
 	void fall()
 	{
 		ingFrame++;
+		bool notFinish = meteorChanger.step(1/60.f);
 		
-		meteor->setPosition(ccpAdd(meteor->getPosition(),fall_dv));
+//		meteor->setPosition(ccpAdd(meteor->getPosition(),fall_dv));
+		meteor->setPosition(meteorChanger.getValue());
 		
 		IntPoint rightUpPoint = IntPoint((meteor->getPositionX()-1)/pixelSize+1,(meteor->getPositionY()-1)/pixelSize+1); // right up
 		IntPoint leftDownPoint = IntPoint(rightUpPoint.x-mSize.width,rightUpPoint.y-mSize.height);		// left down point
@@ -1204,10 +1242,9 @@ private:
 				crashMapForIntPoint(IntPoint(i, j));
 			}
 		}
-		
-		
-		if(ingFrame >= fallFrame)
+		if(!notFinish)
 		{
+			AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
 			for(int i=0;i<11;i++)
 			{
 				crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
@@ -1230,6 +1267,31 @@ private:
 			
 			stopFall();
 		}
+		
+//		if(ingFrame >= fallFrame)
+//		{
+//			for(int i=0;i<11;i++)
+//			{
+//				crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
+//			}
+//			for(int i=0;i<7;i++)
+//			{
+//				crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
+//			}
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
+//			
+//			for(int i=0;i<11;i++)
+//			{
+//				crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
+//			}
+//			for(int i=0;i<7;i++)
+//			{
+//				crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
+//			}
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
+//			
+//			stopFall();
+//		}
 	}
 	
 	void selfRemove()
@@ -1239,73 +1301,12 @@ private:
 	
 	void initParticle()
 	{
-		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
-		particle->setPositionType(kCCPositionTypeRelative);
-		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("meteor_bomb.png");
-		particle->setTexture(texture);
-		particle->setEmissionRate(250.00);
-		particle->setAngle(90.0);
-		particle->setAngleVar(360.0);
-		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-		particle->setBlendFunc(blendFunc);
-		particle->setDuration(0.20);
-		particle->setEmitterMode(kCCParticleModeGravity);
-		ccColor4F startColor;
-		if(imgFilename == "1.png")
-		{
-			startColor.r = 0.87;
-			startColor.g = 0.81;
-			startColor.b = 0.12;
-			startColor.a = 1.00;
-		}
-		else
-		{
-			startColor.r = 0.4;
-			startColor.g = 0.8;
-			startColor.b = 1.0;
-			startColor.a = 1.0;
-		}
-		particle->setStartColor(startColor);
-		ccColor4F startColorVar = {0,0,0,0};
-		particle->setStartColorVar(startColorVar);
-		ccColor4F endColor;
-		if(imgFilename == "2.png")
-		{
-			endColor.r = 0.68;
-			endColor.g = 0.16;
-			endColor.b = 0.00;
-			endColor.a = 1.00;
-		}
-		else
-		{
-			endColor.r = 0.00;
-			endColor.g = 0.50;
-			endColor.b = 1.00;
-			endColor.a = 1.00;
-		}
-		particle->setEndColor(endColor);
-		ccColor4F endColorVar = {0,0,0,0};
-		particle->setEndColorVar(endColorVar);
-		particle->setStartSize(20.00);
-		particle->setStartSizeVar(10.0);
-		particle->setEndSize(50.0);
-		particle->setEndSizeVar(10.0);
-		particle->setGravity(ccp(0,0));
-		particle->setRadialAccel(0.0);
-		particle->setRadialAccelVar(0.0);
-		particle->setSpeed(200);
-		particle->setSpeedVar(60.0);
-		particle->setTangentialAccel(0);
-		particle->setTangentialAccelVar(0);
-		particle->setTotalParticles(50);
-		particle->setLife(0.20);
-		particle->setLifeVar(0.0);
-		particle->setStartSpin(0.0);
-		particle->setStartSpinVar(0.0);
-		particle->setEndSpin(0.0);
-		particle->setEndSpinVar(0.0);
+		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb1.ccbi");
+		CCSprite* particle = ret.first;
+		
+		
 		particle->setPosition(meteor->getPosition());
-		particle->setPosVar(CCPointZero);
+//		particle->setPosVar(CCPointZero);
 		addChild(particle);
 	}
 	
@@ -1319,9 +1320,11 @@ private:
 		fallFrame = t_fallFrame;
 		explosionFrame = t_explosionFrame;
 		mSize = t_mSize;
-		
-		fall_dv = ccpSub(fp, t_sp);
-		fall_dv = ccpMult(fall_dv, 1.f/fallFrame);
+
+		meteorChanger.init(t_sp, fp, 0.75f);
+//		fall_dv = ccpSub(fp, t_sp);
+////		fall_dv = (fall_dv / ccpLength(fall_dv)) * 10.f;
+//		fall_dv = ccpMult(fall_dv, 1.f/fallFrame);
 		
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
@@ -1345,7 +1348,10 @@ private:
 		
 		t_fmt->startAction();
 		
-		startFall();
+		ingFrame = 0;
+		
+//		schedule(schedule_selector(FallMeteor::fall));
+		schedule(schedule_selector(FallMeteor::fall), 0, kCCRepeatForever, fallFrame / 60.f);
 	}
 };
 
@@ -2088,10 +2094,10 @@ private:
 class BlindDrop : public CCNode, public CCBAnimationManagerDelegate
 {
 public:
-	static BlindDrop* create(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame)
+	static BlindDrop* create(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame, float sc)
 	{
 		BlindDrop* t_bd = new BlindDrop();
-		t_bd->myInit(t_sp, t_fp, t_movingFrame, t_blindFrame);
+		t_bd->myInit(t_sp, t_fp, t_movingFrame, t_blindFrame, sc);
 		t_bd->autorelease();
 		return t_bd;
 	}
@@ -2115,6 +2121,7 @@ public:
 	}
 	
 private:
+	float m_scale;
 	CCPoint subPosition;
 	int movingFrame;
 	int blindFrame;
@@ -2144,13 +2151,13 @@ private:
 		reader->getAnimationManager()->runAnimationsForSequenceNamed("cast1stop");
 	}
 	
-	void myInit(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame)
+	void myInit(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame, float sc)
 	{
 //		subPosition = ccpSub(t_fp, t_sp);
 //		subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
 		movingFrame = t_movingFrame;
 		blindFrame = t_blindFrame;
-
+		m_scale = sc;
 //		dropImg = CCSprite::create("blind_drop.png");
 //		addChild(dropImg);
 		
@@ -2158,7 +2165,7 @@ private:
 		reader = new CCBReader(nodeLoader);
 		oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi",this));
 		addChild(oilImg);
-		
+		oilImg->setScale(m_scale);
 		setPosition(t_fp); // t_sp
 	}
 };
@@ -2650,13 +2657,13 @@ private:
 	}
 };
 
-class PoisonLine : public CCSprite
+class PoisonLine : public CCNode
 {
 public:
-	static PoisonLine* create(IntPoint t_sp)
+	static PoisonLine* create(IntPoint t_sp, int frame)
 	{
 		PoisonLine* t_pl = new PoisonLine();
-		t_pl->myInit(t_sp);
+		t_pl->myInit(t_sp, frame);
 		t_pl->autorelease();
 		return t_pl;
 	}
@@ -2671,17 +2678,17 @@ private:
 	
 	IntPoint mapPoint;
 	int ingFrame;
-	
+	int totalFrame;
 	void myAction()
 	{
 		ingFrame++;
 		
-		ccColor3B t_color = getColor();
-		t_color.r += rand()%3-1;
-		t_color.g += rand()%3-1;
-		t_color.b += rand()%3-1;
-		
-		setColor(t_color);
+//		ccColor3B t_color = getColor();
+//		t_color.r += rand()%3-1;
+//		t_color.g += rand()%3-1;
+//		t_color.b += rand()%3-1;
+//		
+//		setColor(t_color);
 		
 		int emptyCnt = 0;
 		if(myGD->mapState[mapPoint.x-1][mapPoint.y] == mapEmpty)	emptyCnt++;
@@ -2691,7 +2698,8 @@ private:
 		
 		if(emptyCnt == 0)
 		{
-			stopMyAction();
+			unschedule(schedule_selector(PoisonLine::myAction));
+			removeFromParentAndCleanup(true);
 			return;
 		}
 		
@@ -2701,10 +2709,11 @@ private:
 			myGD->communication("CP_jackCrashDie");
 			myGD->communication("Jack_startDieEffect");
 			stopMyAction();
+			
 			return;
 		}
 		
-		if(ingFrame >= 300)
+		if(ingFrame >= totalFrame)
 		{
 			stopMyAction();
 		}
@@ -2713,28 +2722,33 @@ private:
 	void stopMyAction()
 	{
 		unschedule(schedule_selector(PoisonLine::myAction));
-		removeFromParentAndCleanup(true);
+		getParent()->removeFromParentAndCleanup(true);
+//		removeFromParentAndCleanup(true);
 	}
 	
-	void myInit(IntPoint t_sp)
+	void myInit(IntPoint t_sp, int frame)
 	{
+		totalFrame = frame;
 		mapPoint = t_sp;
 		
-		initWithFile("poison_line.png");
+//		initWithFile("poison_line.png");
+		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_pollution2.ccbi");
+		CCSprite* line = ret.first;
+		addChild(line);
 		CCPoint myPosition = ccp((t_sp.x-1)*pixelSize+1, (t_sp.y-1)*pixelSize+1);
 		setPosition(myPosition);
 		
-		setColor(ccc3(0, 66, 75));
+//		setColor(ccc3(0, 66, 75));
 	}
 };
 
 class PoisonDrop : public CCNode
 {
 public:
-	static PoisonDrop* create(CCPoint t_sp, CCPoint t_fp, int t_movingFrame)
+	static PoisonDrop* create(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe)
 	{
 		PoisonDrop* t_bd = new PoisonDrop();
-		t_bd->myInit(t_sp, t_fp, t_movingFrame);
+		t_bd->myInit(t_sp, t_fp, t_movingFrame, area, totalframe);
 		t_bd->autorelease();
 		return t_bd;
 	}
@@ -2747,7 +2761,8 @@ public:
 	}
 	
 private:
-	
+	int m_area;
+	int m_totalFrame;
 	CCPoint subPosition;
 	int movingFrame;
 	int ingFrame;
@@ -2772,14 +2787,14 @@ private:
 				
 				IntPoint basePoint = IntPoint((afterPosition.x-1)/pixelSize + 1, (afterPosition.y-1)/pixelSize + 1);
 				
-				for(int i=-10;i<=10;i++)
+				for(int i=-m_area;i<=m_area;i++)
 				{
-					for(int j=-10;j<=10;j++)
+					for(int j=-m_area;j<=m_area;j++)
 					{
 						IntPoint checkPoint = IntPoint(basePoint.x+i,basePoint.y+j);
 						if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapOldline)
 						{
-							PoisonLine* t_pl = PoisonLine::create(IntPoint(checkPoint.x, checkPoint.y));
+							PoisonLine* t_pl = PoisonLine::create(IntPoint(checkPoint.x, checkPoint.y), m_totalFrame);
 							getParent()->addChild(t_pl);
 							t_pl->startMyAction();
 						}
@@ -2856,9 +2871,10 @@ private:
 		removeFromParentAndCleanup(true);
 	}
 	
-	void myInit(CCPoint t_sp, CCPoint t_fp, int t_movingFrame)
+	void myInit(CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe)
 	{
-		
+		m_area = area;
+		m_totalFrame = totalframe;
 		subPosition = ccpSub(t_fp, t_sp);
 		subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
 		movingFrame = t_movingFrame;
@@ -3154,6 +3170,222 @@ private:
 	}
 };
 
+class MathmaticalMissileUnit : public CCSprite
+{
+public:
+	enum CurveDisposition{CURVE = 1, RIGHTLINE = 0};
+	static MathmaticalMissileUnit* create(CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs)
+	{
+		MathmaticalMissileUnit* t_mu = new MathmaticalMissileUnit();
+		if(t_mu && t_mu->initWithFile(imgFilename.c_str()))
+		{
+			t_mu->myInit(t_sp, t_angle, t_speed, t_cs);
+			t_mu->autorelease();
+			return t_mu;
+		}
+		CC_SAFE_DELETE(t_mu);
+		return NULL;
+	}
 
+	// CatMull-rom spine ... t = [0, 1]  일때 P1 과 P2 사이의 위치를 반환하는 함수.
+	CCPoint CatMull(CCPoint P0, CCPoint P1, CCPoint P2, CCPoint P3, float t, CurveDisposition curve)
+	{
+		
+		if(curve == CurveDisposition::CURVE)
+		{
+			float x = CatMullFunction(2 * P1.x, (-P0.x + P2.x), (2*P0.x - 5*P1.x + 4*P2.x - P3.x), (-P0.x + 3*P1.x- 3*P2.x + P3.x), t, curve);
+			float y = CatMullFunction(2 * P1.y, (-P0.y + P2.y), (2*P0.y - 5*P1.y + 4*P2.y - P3.y), (-P0.y + 3*P1.y- 3*P2.y + P3.y), t, curve);
+			
+			return ccp(x, y);
+		}
+		else if(curve == CurveDisposition::RIGHTLINE)
+		{
+			CCPoint ret = P1 + (P2 - P1)*t;
+			return ret;
+		}
+		
+		return ccp(0, 0);
+	}
+	double CatMullLength(CCPoint P0, CCPoint P1, CCPoint P2, CCPoint P3, CurveDisposition curve)
+	{
+		if(curve == CurveDisposition::CURVE)
+		{
+			return smps(bind(&ThisClassType::IntegralTarget, this, _1, _2, _3, _4, _5),
+									P0, P1, P2, P3, 0.0, 1.0, 100);
+		}
+		else if(curve == CurveDisposition::RIGHTLINE)
+		{
+			return ccpLength(P1 - P2);
+		}
+		
+		return -1;
+	}
+	double IntegralTarget(CCPoint P0, CCPoint P1, CCPoint P2, CCPoint P3, double t)
+	{
+		double dx = CatMullDerivativeFunction(2 * P1.x, (-P0.x + P2.x), (2*P0.x - 5*P1.x + 4*P2.x - P3.x), (-P0.x + 3*P1.x- 3*P2.x + P3.x), t);
+		double dy = CatMullDerivativeFunction(2 * P1.y, (-P0.y + P2.y), (2*P0.y - 5*P1.y + 4*P2.y - P3.y), (-P0.y + 3*P1.y- 3*P2.y + P3.y), t);
+		
+		double dx2 = dx * dx;
+		double dy2 = dy * dy;
+		return sqrt(dx2 + dy2);
+	}
+	double CatMullFunction(double a, double b, double c, double d, double t, CurveDisposition curve)
+	{
+		// a + bt + ct2 + dt3;
+		return 0.5 * (a + b*t + c*t*t + d*t*t*t);
+	}
+	double CatMullDerivativeFunction(double a, double b, double c, double d, double t)
+	{
+		return 0.5 * (b + 2*c*t + 3*d*t*t);
+	}
+	
+	double smps(std::function<double(CCPoint, CCPoint, CCPoint, CCPoint, double)> f,
+							CCPoint A, CCPoint B, CCPoint C, CCPoint D,
+							double a, double b, int n)
+	{
+		double h = (b-a)/n, sum = 0;
+		for(int i=0; i<n; i++)
+		{
+			sum += (f(A,B,C,D,a+i*h)+4*f(A,B,C,D,a+i*h + h/2) + f(A,B,C,D,a+(i+1)*h)) * h / 6;
+		}
+		return sum;
+	}
+	
+	
+	double smps(double (*f)(double), double a, double b, int n)
+	{
+		double h = (b-a)/n, sum = 0;
+		for(int i=0; i<n; i++)
+		{
+			sum += (f(a+i*h)+4*f(a+i*h + h/2) + f(a+(i+1)*h)) * h / 6;
+		}
+		return sum;
+	}
+	void removeEffect()
+	{
+		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::removeFromParent));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+		
+		runAction(t_seq);
+	}
+	
+	void selfRemove()
+	{
+		removeFromParentAndCleanup(true);
+	}
+	void myInit(CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs)
+	{
+		m_frameCount = 0;
+		m_isChecking = true;
+		m_angle = t_angle;
+		m_speed = t_distance;
+		m_crashSize = t_cs;
+		firePosition = t_sp;
+		setPosition(t_sp);
+		
+		m_catmullIndex = 0;
+		m_catmullvar = 0.0;
+		
+		m_catmullPath = {ccp(-50, -50), ccp(0,0), ccp(50, 50), ccp(100, 0), ccp(150, 50),
+			ccp(200, 0), ccp(250, 50), ccp(300, 0), ccp(350, 50), ccp(400, 50),
+			ccp( 450, 0), ccp(500, 50)};
+//		m_catmullPath = {ccp(-25, 0), ccp(0,0), ccp(25, 0), ccp(50, 0),
+//			ccp(75, 0), ccp(100, 0), ccp(125, 0), ccp(150, 0), ccp(175, 0),
+//			ccp(200, 0), ccp(250, 0)};
+		schedule(schedule_selector(ThisClassType::move));
+	}
+	CCPoint myFunction(float fc)
+	{
+		// 120 프레임에 한 싸이클...
+		return ccp(fc, sinf(fc * 2*M_PI/60) * 30); // 120 이 주기이고 10이 높이.
+//		return ccp(fc, 0);
+	}
+	void move(float dt)
+	{
+		setRotation(getRotation()-2);
+		
+		CCPoint r_p = getPosition(); // recent
+		
+		
+		CCPoint dv = CatMull(m_catmullPath[m_catmullIndex], m_catmullPath[m_catmullIndex+1],
+												 m_catmullPath[m_catmullIndex+2], m_catmullPath[m_catmullIndex+3],
+												 MIN(1.0, m_catmullvar), CurveDisposition::RIGHTLINE);
+		float len = CatMullLength(m_catmullPath[m_catmullIndex], m_catmullPath[m_catmullIndex+1],
+															m_catmullPath[m_catmullIndex+2], m_catmullPath[m_catmullIndex+3],
+															CurveDisposition::RIGHTLINE);
+		
+//		CCLog("dis %f - %d, len = %f, u %f", ccpLength(prevPosition - dv), m_catmullIndex, len, m_catmullvar);
+		
+		m_catmullvar += m_speed / len;
+		if(m_catmullvar > 1.0)
+		{
+			if(m_catmullIndex + 4 < m_catmullPath.size())
+			{
+				m_catmullvar = 0.0;
+				m_catmullIndex++;
+			}
+		}
+
+		float angleRad = deg2Rad(m_angle);
+		dv = ccp(dv.x * cosf(angleRad) - dv.y * sinf(angleRad), dv.x * sinf(angleRad) + dv.y * cosf(angleRad));
+
+//		if(ccpLength(dv) != 0)
+//			dv = dv / ccpLength(dv);
+//		dv = dv * m_speed;
+//		CCLog("Dv = %f %f", dv.x, dv.y);
+		r_p = firePosition + dv;
+		CCPoint p_p = getParent()->getPosition() + r_p; // parent
+		
+		if(p_p.x < 0.f - 40.f || p_p.x > 320.f + 40.f || p_p.y < -60.f - 40.f || p_p.y > 490.f + 40.f) // fixed 40.f
+		{
+			unschedule(schedule_selector(ThisClassType::move));
+			removeFromParentAndCleanup(true);
+		}	
+		
+		if(m_isChecking)
+		{
+			IntPoint jackPoint = myGD->getJackPoint();
+			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
+			
+			CCRect missile_rect = CCRectMake(p_p.x - m_crashSize.width/2.f, p_p.y - m_crashSize.height/2.f,
+																			 m_crashSize.width, m_crashSize.height);
+			
+			if(missile_rect.containsPoint(jackPosition)) //  && myGD->getJackState()
+			{
+				m_isChecking = false;
+				//				if(mySGD->getIsHard() || myGD->getJackState())
+				if(myGD->getJackState())
+				{
+					myGD->communication("CP_jackCrashDie");
+					myGD->communication("Jack_startDieEffect");
+					unschedule(schedule_selector(ThisClassType::move));
+					removeEffect();
+				}
+				else
+				{
+					myGD->communication("Jack_showMB");
+				}
+			}
+		}
+		
+		setPosition(r_p);
+		m_frameCount++;
+		
+		
+	}
+
+protected:
+	vector<CCPoint> m_catmullPath;
+	int m_catmullIndex;
+	double m_catmullvar;
+
+	CCPoint firePosition;
+	float m_angle;
+	float m_speed;
+	CCSize m_crashSize;
+	float m_isChecking;
+	int m_frameCount;
+};
 
 #endif
