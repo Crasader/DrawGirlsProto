@@ -467,28 +467,26 @@ void CumberParent::myInit()
 	void onStartGame();
 	void onPatternEnd();
 	
-	JsonBox::Value v;
-	v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-	KS::KSLog("%d", v);
-	JsonBox::Object boss = v.getArray()[0].getObject();
-	JsonBox::Object speed = boss["speed"].getObject();
-	JsonBox::Object scale = boss["scale"].getObject();
-	JsonBox::Object movement = boss["movement"].getObject();
+	Json::Reader reader;
+	Json::Value root;
+	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+	Json::Value boss = root[0u];
+
+	int bossType = boss["type"].asInt();
 	
-	int bossType = boss["type"].getInt();
+	float hp = boss["hp"].asInt();
+	float minSpeed = boss["speed"]["min"].asDouble();// getNumberFromJsonValue(speed["max"]);
+	float startSpeed = boss["speed"]["start"].asDouble(); //getNumberFromJsonValue(speed["start"]);
+	float maxSpeed = boss["speed"]["max"].asDouble();// getNumberFromJsonValue(speed["min"]);
 	
-	float hp = boss["hp"].getInt();
-	float minSpeed = getNumberFromJsonValue(speed["max"]);
-	float startSpeed = getNumberFromJsonValue(speed["start"]);
-	float maxSpeed = getNumberFromJsonValue(speed["min"]);
+	float minScale = boss["scale"]["min"].asDouble(); // getNumberFromJsonValue(scale["min"]);
+	float startScale = boss["scale"]["start"].asDouble(); // getNumberFromJsonValue(scale["start"]);
+	float maxScale = boss["scale"]["max"].asDouble(); // getNumberFromJsonValue(scale["max"]);
 	
-	float minScale = getNumberFromJsonValue(scale["min"]);
-	float startScale = getNumberFromJsonValue(scale["start"]);
-	float maxScale = getNumberFromJsonValue(scale["max"]);
+	int normalMovement = boss["movement"]["normal"].asInt();
+	int drawMovement = boss["movement"]["draw"].asInt();
+	int furyMovement = boss["movement"]["fury"].asInt();
 	
-	int normalMovement = movement["normal"].getInt();
-	int drawMovement = movement["draw"].getInt();	
-	int furyMovement = movement["fury"].getInt();
 	if(furyMovement == 0)
 	{
 		furyMovement = normalMovement;
@@ -523,8 +521,8 @@ void CumberParent::myInit()
 	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
 	mainCumber->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement,
 								(enum MOVEMENT)furyMovement);
-	mainCumber->settingPattern(boss["pattern"].getObject());
-	mainCumber->settingAttackPercent(boss["attackpercent"].getDouble());
+	mainCumber->settingPattern(boss["pattern"]);
+	mainCumber->settingAttackPercent(boss["attackpercent"].asDouble());
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	
@@ -541,29 +539,34 @@ void CumberParent::myInit()
 	}
 	for(int i=0;i<create_cnt;i++)
 	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		
+		
+		
 		JsonBox::Value v;
 		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"));
 		
 		for(int i=0; i<v.getArray().size(); i++)
 		{
-			JsonBox::Object mob = v.getArray()[i].getObject();
-			JsonBox::Object speed = mob["speed"].getObject();
-			JsonBox::Object scale = mob["scale"].getObject();
-			JsonBox::Object movement = mob["movement"].getObject();
+			Json::Value boss = root[i];
 			
-			int bossType = mob["type"].getInt();
-			float hp = mob["hp"].getInt();
-			float minSpeed = getNumberFromJsonValue(speed["max"]);
-			float startSpeed = getNumberFromJsonValue(speed["start"]);
-			float maxSpeed = getNumberFromJsonValue(speed["min"]);
+			int bossType = boss["type"].asInt();
 			
-			float minScale = getNumberFromJsonValue(scale["min"]);
-			float startScale = getNumberFromJsonValue(scale["start"]);
-			float maxScale = getNumberFromJsonValue(scale["max"]);
+			float hp = boss["hp"].asInt();
+			float minSpeed = boss["speed"]["min"].asDouble();// getNumberFromJsonValue(speed["max"]);
+			float startSpeed = boss["speed"]["start"].asDouble(); //getNumberFromJsonValue(speed["start"]);
+			float maxSpeed = boss["speed"]["max"].asDouble();// getNumberFromJsonValue(speed["min"]);
 			
-			int normalMovement = movement["normal"].getInt();
-			int drawMovement = movement["draw"].getInt();
-			int furyMovement = movement["fury"].getInt();
+			float minScale = boss["scale"]["min"].asDouble(); // getNumberFromJsonValue(scale["min"]);
+			float startScale = boss["scale"]["start"].asDouble(); // getNumberFromJsonValue(scale["start"]);
+			float maxScale = boss["scale"]["max"].asDouble(); // getNumberFromJsonValue(scale["max"]);
+			
+			int normalMovement = boss["movement"]["normal"].asInt();
+			int drawMovement = boss["movement"]["draw"].asInt();
+			int furyMovement = boss["movement"]["fury"].asInt();
+			
 			if(furyMovement == 0)
 			{
 				furyMovement = normalMovement;

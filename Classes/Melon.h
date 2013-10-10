@@ -63,6 +63,10 @@ public:
 			m_direction.state = 2; // 돌아가라고 상태 변경때림.
 			m_state = CUMBERSTATEMOVING;
 		}
+		else if(m_state == CUMBERSTATEDIRECTION)
+		{
+			m_state = CUMBERSTATEMOVING;
+		}
 	}
 	virtual void onStartGame()
 	{
@@ -173,7 +177,6 @@ public:
 	virtual void furyModeOff();
 	
 	virtual void getRandomPosition(IntPoint* ip, bool* finded);
-	virtual void setGameover();
 	
 	virtual void lightSmaller(){}
 	

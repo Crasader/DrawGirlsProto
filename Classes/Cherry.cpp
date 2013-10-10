@@ -191,7 +191,7 @@ void Cherry::cumberAttack(float dt)
 	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
 	
 	// 1% 확률로.
-	if(w == 0 && m_state == CUMBERSTATEMOVING)
+	if(w == 0 && m_state == CUMBERSTATEMOVING && !m_attacks.empty())
 	{
 		int attackCode = 0;
 		//		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
@@ -490,10 +490,6 @@ void Cherry::furyModeOff()
 	myGD->communication("MS_resetRects");
 }
 
-void Cherry::setGameover()
-{
-	m_state = CUMBERSTATESTOP;
-}
 
 
 void Cherry::scaleAdjustment(float dt)

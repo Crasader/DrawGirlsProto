@@ -184,6 +184,8 @@ void ControlButtonSide::touchAction(CCPoint t_p, CBS_Touch t_t)
 	}
 	else
 	{
+
+		
 		center_spr->setColor(ccWHITE);
 		if(myState == kCBS_State_moving)
 		{
@@ -554,11 +556,18 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 			else
 				is_button_x = false;
 		}
-		
+//#if CC_TARGET_PLATFORM == CC_TARGET_OS_IPHONE
+////		button_touch = touch;
+//		myJack->isDrawingOn = true;
+//		onButton();
+//		myJack->setJackState(jackStateDrawing); //## 컴터로 임시.
+//#endif
 		
 		if(is_button_x)
 		{
 			// button or ui
+
+			
 			if(!button_touch && convertedLocation.y < 100)
 			{
 				// button

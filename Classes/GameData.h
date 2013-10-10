@@ -494,6 +494,10 @@ public:
 	
 	bool communication(string funcName, CCPoint t_p, int t_i, KSCumberBase* cb, bool t_b)
 	{
+		for(auto i : B_CCPICumberBaseB)
+		{
+			CCLog("%s : %x", i.first.c_str(), &i.second);
+		}
 		CCAssert(B_CCPICumberBaseB.find(funcName) != B_CCPICumberBaseB.end(), funcName.c_str());
 		return B_CCPICumberBaseB[funcName](t_p, t_i, cb, t_b);
 	}
