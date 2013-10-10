@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>0</integer>
+	<integer>4</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -276,7 +276,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>9.4017019271850586</real>
+									<real>16.153244018554688</real>
 									<real>0.0</real>
 									<integer>0</integer>
 								</array>
@@ -325,8 +325,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -505,7 +503,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>0.48225307464599609</real>
+									<real>-9</real>
 									<real>0.0</real>
 									<integer>0</integer>
 								</array>
@@ -554,8 +552,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -806,7 +802,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-18</real>
+									<real>-13</real>
 									<real>20</real>
 									<integer>0</integer>
 								</array>
@@ -855,8 +851,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -1107,7 +1101,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-18</real>
+									<real>-13</real>
 									<real>-20</real>
 									<integer>0</integer>
 								</array>
@@ -1156,8 +1150,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -1423,7 +1415,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>0.0</real>
+								<real>30</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -1456,8 +1448,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -1723,7 +1713,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>0.0</real>
+								<real>-30</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -1745,8 +1735,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -1979,7 +1967,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-29</real>
+									<real>-24</real>
 									<real>0.0</real>
 									<integer>0</integer>
 								</array>
@@ -2028,8 +2016,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -2404,8 +2390,6 @@
 								<integer>0</integer>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
