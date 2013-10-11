@@ -50,8 +50,8 @@ enum AP_CODE{
 	kSpecialAttack12, // 방사능 라인
 	kSpecialAttack13, // 메테오.
 	kSpecialAttack14, // 떨어지는 돌.
-	kSpecialAttack15, //
-	kSpecialAttack16, //
+	kSpecialAttack15, // 풍차
+	kSpecialAttack16, // 다이너마이트
 	kAP_CODE_pattern0 =999990,
 	kAP_CODE_pattern1,
 	kAP_CODE_pattern2,

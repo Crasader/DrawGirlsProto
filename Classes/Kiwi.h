@@ -90,7 +90,7 @@ public:
 		//		KSCumberBase::setPosition(t_sp);
 		m_headImg->setPosition(t_sp);
 		m_cumberTrace.push_back(tr); //
-		if(m_cumberTrace.size() >= 200)
+		if(m_cumberTrace.size() >= 350)
 		{
 			m_cumberTrace.pop_front();
 		}

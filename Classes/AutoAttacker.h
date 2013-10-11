@@ -819,12 +819,13 @@ private:
 	
 	void myInit(IntPoint t_sp, int t_thornsFrame)
 	{
-		
+		CCSprite::init();
 		myPoint = t_sp;
 		is_action = false;
 		thornsFrame = t_thornsFrame;
 		initWithFile("thorns_wall.png");
-		setScale(0.01);
+		
+		setScale(0.01f);
 		setPosition(ccp((myPoint.x-1)*pixelSize+1,(myPoint.y-1)*pixelSize+1));
 		
 		startMyAction();

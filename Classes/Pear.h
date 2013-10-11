@@ -20,6 +20,7 @@
 #include "cocos-ext.h"
 using namespace cocos2d::extension;
 
+#include <chrono>
 
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
 
@@ -30,14 +31,14 @@ public:
 	Pear() :
 	
 	RADIUS(110.f / 4.f), // 머리에 대한 충돌 반지름
-	BODY_RADIUS(70/4.f), // 몸통에 대한 충돌 반지름
+	BODY_RADIUS(80/4.f), // 몸통에 대한 충돌 반지름
 	TAIL_RADIUS(50/4.f), // 꼬리에 대한 충돌 반지름
 //	mEmotion(nullptr),
 	LIMIT_COLLISION_PER_SEC(3), /// 초당 변수만큼 충돌시 스케일 줄임.
 	ATTACK_POINT_X(-18), // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
 	ATTACK_POINT_Y(0),   // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
-	BODY_MARGIN(20),     // 몸통 사이의 거리.
-	TAIL_MARGIN(40)      // 몸통과 꼬리사이의 거리.
+	BODY_MARGIN(55),     // 몸통 사이의 거리.
+	TAIL_MARGIN(50)      // 몸통과 꼬리사이의 거리.
 
 	{
 		m_state = (CUMBERSTATEMOVING);
@@ -71,8 +72,6 @@ public:
 	virtual void onStartGame()
 	{
 		m_noDirection.state = 2;
-		
-		
 	}
 	virtual void crashMapForPosition(CCPoint targetPt);
 	//	virtual void movingAndCrash(float dt);
@@ -90,7 +89,7 @@ public:
 		//		KSCumberBase::setPosition(t_sp);
 		m_headImg->setPosition(t_sp);
 		m_cumberTrace.push_back(tr); //
-		if(m_cumberTrace.size() >= 200)
+		if(m_cumberTrace.size() >= 350)
 		{
 			m_cumberTrace.pop_front();
 		}

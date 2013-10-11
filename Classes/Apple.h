@@ -85,6 +85,10 @@ public:
 	virtual void setPosition(const CCPoint& t_sp)
 	{
 		CCPoint prevPosition = getPosition();
+		if(isnan(prevPosition.x))
+		{
+			CCLog("hg!!!!");
+		}
 		AppleTrace tr;
 		tr.position = t_sp;
 		tr.directionRad = atan2f(t_sp.y - prevPosition.y, t_sp.x - prevPosition.x);
@@ -92,7 +96,7 @@ public:
 		//		KSCumberBase::setPosition(t_sp);
 		m_headImg->setPosition(t_sp);
 		m_cumberTrace.push_back(tr); //
-		if(m_cumberTrace.size() >= 200)
+		if(m_cumberTrace.size() >= 350)
 		{
 			m_cumberTrace.pop_front();
 		}
