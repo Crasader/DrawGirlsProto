@@ -265,7 +265,7 @@ private:
 	}
 };
 
-class MissileUnit3 : public CCSprite
+class MissileUnit3 : public CCNode
 {
 public:
 	static MissileUnit3* create(int t_type, float t_distance, CCSize t_mSize, CCObject* t_removeEffect, SEL_CallFunc d_removeEffect)
@@ -344,19 +344,11 @@ private:
 		
 		if(myType == 1) // stone
 		{
-			initWithFile("fallingStone.png", CCRectMake(0, 0, 35, 35));
+//			initWithFile("fallingStone.png", CCRectMake(0, 0, 35, 35));
 			
-			CCSprite* animation_sprite = CCSprite::create("fallingStone.png");
-			CCAnimation* t_animation = CCAnimation::create();
-			t_animation->setDelayPerUnit(0.1);
-			for(int i=0;i<3;i++)
-			{
-				t_animation->addSpriteFrameWithTexture(animation_sprite->getTexture(), CCRectMake(i*35, 0, 35, 35));
-			}
-			CCAnimate* t_animate = CCAnimate::create(t_animation);
-			CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-			
-			runAction(t_repeat);
+			auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_marble1.ccbi");
+			CCSprite* stone = ret.first;
+			addChild(stone);
 		}
 		else
 		{

@@ -69,20 +69,35 @@ void replaceString( std::string & strCallId, const char * pszBefore, const char 
             iPos = strCallId.find( pszBefore, iPos );
     }
 }
-string JsonObjectToString(JsonBox::Object _obj){
-    ostringstream oss;
-    oss << _obj;
-    return oss.str();
+    
+    
+//@ string JsonObjectToString(JsonBox::Object _obj){
+//    ostringstream oss;
+//    oss << _obj;
+//    return oss.str();
+//}
+    
+//@ JsonBox::Object StringToJsonObject(string _str){
+//    //명령문자열 json::value 로 변환
+//    JsonBox::Value result;
+//    result.loadFromString(_str.c_str());
+//    
+//    //명령문자열 json::object 로 변환
+//    JsonBox::Object resultobj = result.getObject();
+//    return resultobj;
+//}
+    
+string JsonObjectToString(Json::Value _obj){
+    Json::FastWriter writer;
+    return writer.write(_obj);
 }
     
-JsonBox::Object StringToJsonObject(string _str){
+Json::Value StringToJsonObject(string _str){
     //명령문자열 json::value 로 변환
-    JsonBox::Value result;
-    result.loadFromString(_str.c_str());
-    
-    //명령문자열 json::object 로 변환
-    JsonBox::Object resultobj = result.getObject();
-    return resultobj;
+    Json::Value root;
+    Json::Reader reader;
+    reader.parse(_str, root);
+    return root;
 }
 
 	
