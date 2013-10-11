@@ -1,4 +1,4 @@
-#include "Mango.h"
+#include "Peach.h"
 #include "GameData.h"
 
 #include "AlertEngine.h"
@@ -10,13 +10,13 @@
 
 
 
-bool Mango::init()
+bool Peach::init()
 {
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
-	std::string ccbiName = "boss_mango.ccbi";
+	std::string ccbiName = "boss_peach.ccbi";
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
     CCBReader* reader = new CCBReader(nodeLoader);
 	CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
@@ -44,9 +44,9 @@ bool Mango::init()
 	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 	startAnimationNoDirection();
 	
-	schedule(schedule_selector(Mango::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(Peach::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Mango::cumberAttack));
+	schedule(schedule_selector(Peach::cumberAttack));
 	
 	return true;
 }
@@ -55,7 +55,8 @@ bool Mango::init()
 
 
 
-bool Mango::startDamageReaction(float damage, float angle)
+
+bool Peach::startDamageReaction(float damage, float angle)
 {
 	CCLog("damaga!!!");
 	m_remainHp -= damage;
@@ -80,7 +81,7 @@ bool Mango::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Mango::damageReaction));
+		schedule(schedule_selector(Peach::damageReaction));
 	}
 	else if(m_state == CUMBERSTATESTOP)
 	{
@@ -92,7 +93,7 @@ bool Mango::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Mango::damageReaction));
+		schedule(schedule_selector(Peach::damageReaction));
 	}
 	else if(m_state == CUMBERSTATEFURY)
 	{
@@ -104,7 +105,7 @@ bool Mango::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Mango::damageReaction));
+		schedule(schedule_selector(Peach::damageReaction));
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
@@ -113,11 +114,9 @@ bool Mango::startDamageReaction(float damage, float angle)
 		return true;
 	else
 		return false;
-	
-
 }
 
-void Mango::startAnimationNoDirection()
+void Peach::startAnimationNoDirection()
 {
 	CCLog("Lets rotate");
 	if(m_state != CUMBERSTATENODIRECTION)
@@ -129,11 +128,11 @@ void Mango::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
-		schedule(schedule_selector(Mango::animationNoDirection));
+		schedule(schedule_selector(Peach::animationNoDirection));
 	}
 }
 
-void Mango::damageReaction(float)
+void Peach::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
@@ -144,13 +143,13 @@ void Mango::damageReaction(float)
 	{
 		//		m_headImg->setColor(ccc3(255, 255, 255));
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Mango::damageReaction));
+		unschedule(schedule_selector(Peach::damageReaction));
 		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
 
 
-void Mango::animationNoDirection(float dt)
+void Peach::animationNoDirection(float dt)
 {
 	m_noDirection.timer += 1.f/60.f;
 	
@@ -166,25 +165,25 @@ void Mango::animationNoDirection(float dt)
 	else if(m_noDirection.state == 2)
 	{
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Mango::animationNoDirection));
+		unschedule(schedule_selector(Peach::animationNoDirection));
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
 	}
 }
 
-void Mango::onPatternEnd()
+void Peach::onPatternEnd()
 {
 	CCLog("onPatternEnd!!");
 	m_noDirection.state = 2;
 }
 
-void Mango::onStartGame()
+void Peach::onStartGame()
 {
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }
 
 
-void Mango::cumberAttack(float dt)
+void Peach::cumberAttack(float dt)
 {
 	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
 	
@@ -248,7 +247,7 @@ void Mango::cumberAttack(float dt)
 		}
 	}
 }
-COLLISION_CODE Mango::crashWithX(IntPoint check_position)
+COLLISION_CODE Peach::crashWithX(IntPoint check_position)
 {
 	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
 	   check_position.y < mapLoopRange::mapHeightInnerBegin || check_position.y >= mapLoopRange::mapHeightInnerEnd )
@@ -281,7 +280,7 @@ COLLISION_CODE Mango::crashWithX(IntPoint check_position)
 	return COLLISION_CODE::kCOLLISION_NONE;
 	
 }
-COLLISION_CODE Mango::crashLooper(const set<IntPoint>& v, IntPoint* cp)
+COLLISION_CODE Peach::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)
 	{
@@ -296,7 +295,7 @@ COLLISION_CODE Mango::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Mango::startInvisible(int totalframe)
+void Peach::startInvisible(int totalframe)
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
@@ -304,12 +303,12 @@ void Mango::startInvisible(int totalframe)
 		m_invisible.VISIBLE_FRAME = totalframe;
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
-		schedule(schedule_selector(Mango::invisibling));
+		schedule(schedule_selector(Peach::invisibling));
 		m_invisible.startInvisibleScheduler = true;
 	}
 }
 
-void Mango::invisibling(float dt)
+void Peach::invisibling(float dt)
 {
 	m_invisible.invisibleFrame++;
 	
@@ -332,7 +331,7 @@ void Mango::invisibling(float dt)
 	
 }
 
-void Mango::getRandomPosition(IntPoint* ip, bool* finded)
+void Peach::getRandomPosition(IntPoint* ip, bool* finded)
 {
 	bool isGoodPointed = false;
 	
@@ -405,7 +404,7 @@ void Mango::getRandomPosition(IntPoint* ip, bool* finded)
 	}
 }
 
-void Mango::randomPosition()
+void Peach::randomPosition()
 {
 	IntPoint mapPoint;
 	bool finded;
@@ -430,7 +429,7 @@ void Mango::randomPosition()
 	
 }
 
-void Mango::crashMapForPosition(CCPoint targetPt)
+void Peach::crashMapForPosition(CCPoint targetPt)
 {
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
@@ -461,7 +460,7 @@ void Mango::crashMapForPosition(CCPoint targetPt)
 	
 }
 
-void Mango::furyModeOn()
+void Peach::furyModeOn()
 {
 	m_furyMode.startFury();
 	m_noDirection.state = 2;
@@ -472,7 +471,7 @@ void Mango::furyModeOn()
 	schedule(schedule_selector(ThisClassType::furyModeScheduler));
 }
 
-void Mango::furyModeScheduler(float dt)
+void Peach::furyModeScheduler(float dt)
 {
 	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
@@ -484,14 +483,15 @@ void Mango::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
-void Mango::furyModeOff()
+void Peach::furyModeOff()
 {
 //	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects");
 }
 
 
-void Mango::scaleAdjustment(float dt)
+
+void Peach::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	

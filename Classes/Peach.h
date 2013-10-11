@@ -11,20 +11,17 @@
 using namespace cocos2d::extension;
 
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Mango : public KSCumberBase
+class Peach : public KSCumberBase
 {
 public:
-	Mango() : RADIUS(15.f),// mEmotion(nullptr),
+	Peach() : RADIUS(15.f),// mEmotion(nullptr),
 	
 
 	teleportImg(NULL) // 텔레포트 이미지
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
-	virtual ~Mango(){}
-	
-
-	
+	virtual ~Peach(){}
 	
 	virtual void onStartMoving()
 	{
@@ -37,7 +34,7 @@ public:
 	}
 	void cumberAttack(float dt);
 	virtual bool init();
-	CREATE_FUNC(Mango);
+	CREATE_FUNC(Peach);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
 		KSCumberBase::setPosition(t_sp);
@@ -58,7 +55,7 @@ public:
 //	{
 //		if(mEmotion)
 //			mEmotion->selfRemove();
-//		mEmotion = Emotion::create(t_type, this, callfunc_selector(Mango::nullmEmotion));
+//		mEmotion = Emotion::create(t_type, this, callfunc_selector(Peach::nullmEmotion));
 //		mEmotion->setPosition(ccp(30,20));
 //		addChild(mEmotion);
 //	}
@@ -135,7 +132,7 @@ public:
 		addChild(teleportImg);
 		
 		CCBlink* t_scale = CCBlink::create(0.5, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Mango::smaller));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Peach::smaller));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -145,7 +142,7 @@ public:
 	virtual void smaller()
 	{
 		CCBlink* t_scale = CCBlink::create(0.5, 8);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Mango::randomPosition));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Peach::randomPosition));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -226,5 +223,4 @@ protected:
 	
 	
 };
-
 

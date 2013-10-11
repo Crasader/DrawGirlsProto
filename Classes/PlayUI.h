@@ -553,6 +553,7 @@ public:
 		}
 		else
 		{
+//			t_p = 0.99f;
 			myGD->communication("CP_changeMaxSize", t_p);
 			
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
@@ -817,7 +818,7 @@ public:
 			((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%.1f%%",
 						cb->getLife()/cb->getTotalLife()*100.f)->getCString());
 		
-		if(cb->getLife() == 0.f && !is_cleared_cdt)
+		if(cb->getLife() <= 0.f && !is_cleared_cdt)
 		{
 			conditionClear();
 		}

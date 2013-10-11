@@ -1491,7 +1491,7 @@ private:
 		myPosition = t_sp;
 		tmCnt = t_tmCnt;
 		burnFrame = t_burnFrame;
-		createBurnFrame = burnFrame/tmCnt;
+		createBurnFrame = burnFrame/tmCnt + 1;
 		
 		
 		

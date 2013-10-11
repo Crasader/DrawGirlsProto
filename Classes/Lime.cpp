@@ -1,12 +1,12 @@
 //
-//  Melon.cpp
+//  Lime.cpp
 //  DGproto
 //
 //  Created by ksoo k on 13. 9. 25..
 //
 //
 
-#include "Melon.h"
+#include "Lime.h"
 #include "GameData.h"
 
 #include "AlertEngine.h"
@@ -16,14 +16,14 @@
 //#include "CumberEmotion.h"
 #include "Jack.h"
 #include "RandomSelector.h"
-Melon::~Melon()
+Lime::~Lime()
 {
 	
 }
 
 
 
-bool Melon::init()
+bool Lime::init()
 {
 	KSCumberBase::init();
 	
@@ -33,7 +33,7 @@ bool Melon::init()
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_melon_head.ccbi",this));
+		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_lime_head.ccbi",this));
 		m_headAnimationManager = reader->getAnimationManager();
 		this->addChild(m_headImg, 10);
 		reader->release();
@@ -44,7 +44,7 @@ bool Melon::init()
 		for(int i=0; i<7; i++)
 		{
 			CCBReader* reader = new CCBReader(nodeLoader);
-			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_melon_body.ccbi",this));
+			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_lime_body.ccbi",this));
 			m_bodyAnimationManagers.push_back(reader->getAnimationManager());
 			addChild(body, 9 - i);
 			lastZ = 9 - i;
@@ -56,7 +56,7 @@ bool Melon::init()
 	
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_melon_tail.ccbi",this));
+		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_lime_tail.ccbi",this));
 		m_tailAnimationManager = reader->getAnimationManager();
 		this->addChild(m_tailImg, lastZ - 1);
 		reader->release();
@@ -71,15 +71,15 @@ bool Melon::init()
 	
 	
 	//	startMoving();
-	schedule(schedule_selector(Melon::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(Lime::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Melon::cumberAttack));
+	schedule(schedule_selector(Lime::cumberAttack));
 	
 	startAnimationNoDirection();
 	return true;
 }
 
-void Melon::setHeadAndBodies()
+void Lime::setHeadAndBodies()
 {
 	SnakeTrace lastTrace = m_cumberTrace.back();
 	float tt = rad2Deg( lastTrace.directionRad );
@@ -140,7 +140,7 @@ void Melon::setHeadAndBodies()
 	
 }
 
-void Melon::startAnimationNoDirection()
+void Lime::startAnimationNoDirection()
 {
 	// 돌자...
 	CCLog("Lets rotate");
@@ -153,11 +153,11 @@ void Melon::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
-		schedule(schedule_selector(Melon::animationNoDirection));
+		schedule(schedule_selector(Lime::animationNoDirection));
 	}
 }
 
-void Melon::animationNoDirection(float dt)
+void Lime::animationNoDirection(float dt)
 {
 //	CCLog("animationNoDirection");
 	m_noDirection.timer += 1.f/60.f;
@@ -199,14 +199,14 @@ void Melon::animationNoDirection(float dt)
 		{
 			m_state = CUMBERSTATEMOVING;
 			m_noDirection.state = 0;
-			unschedule(schedule_selector(Melon::animationNoDirection));
+			unschedule(schedule_selector(Lime::animationNoDirection));
 			setPosition(m_noDirection.startingPoint);
-			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
-			for(auto bodyAniManager : m_bodyAnimationManagers)
-			{
-				bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
-			}
-			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+//			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+//			for(auto bodyAniManager : m_bodyAnimationManagers)
+//			{
+//				bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
+//			}
+//			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 		}
 		else
 			setPosition(getPosition() + ccp(dx, dy));
@@ -215,15 +215,15 @@ void Melon::animationNoDirection(float dt)
 
 
 
-void Melon::startAnimationDirection()
+void Lime::startAnimationDirection()
 {
 	// 잭을 바라보자.
 	m_state = CUMBERSTATEDIRECTION;
 	m_direction.initVars();
-	schedule(schedule_selector(Melon::animationDirection));
+	schedule(schedule_selector(Lime::animationDirection));
 }
 
-void Melon::animationDirection(float dt)
+void Lime::animationDirection(float dt)
 {
 	m_direction.timer += 1 / 60.f;
 	if(m_direction.state == 1)
@@ -238,19 +238,19 @@ void Melon::animationDirection(float dt)
 	{
 //		m_state = CUMBERSTATEMOVING; //#!
 		m_direction.state = 0;
-		unschedule(schedule_selector(Melon::animationDirection));
-		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
-		for(auto bodyAniManager : m_bodyAnimationManagers)
-		{
-			bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
-		}
-		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+		unschedule(schedule_selector(Lime::animationDirection));
+//		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+//		for(auto bodyAniManager : m_bodyAnimationManagers)
+//		{
+//			bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
+//		}
+//		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 	}
 }
-bool Melon::startDamageReaction(float damage, float angle)
+bool Lime::startDamageReaction(float damage, float angle)
 {
 	m_remainHp -= damage;
-	CCLog("Melon Hp %f", m_remainHp);
+	CCLog("Lime Hp %f", m_remainHp);
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	
@@ -279,7 +279,7 @@ bool Melon::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Melon::damageReaction));
+		schedule(schedule_selector(Lime::damageReaction));
 	}
 	else if(m_state == CUMBERSTATESTOP)
 	{
@@ -291,7 +291,7 @@ bool Melon::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Melon::damageReaction));
+		schedule(schedule_selector(Lime::damageReaction));
 	}
 	else if(m_state == CUMBERSTATEFURY)
 	{
@@ -303,7 +303,7 @@ bool Melon::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Melon::damageReaction));
+		schedule(schedule_selector(Lime::damageReaction));
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
@@ -314,7 +314,7 @@ bool Melon::startDamageReaction(float damage, float angle)
 		return false;
 }
 
-void Melon::damageReaction(float)
+void Lime::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
@@ -335,7 +335,7 @@ void Melon::damageReaction(float)
 			i->setColor(ccc3(255, 255, 255));
 		}
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Melon::damageReaction));
+		unschedule(schedule_selector(Lime::damageReaction));
 		m_headAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 		for(auto bodyAniManager : m_bodyAnimationManagers)
 		{
@@ -344,7 +344,7 @@ void Melon::damageReaction(float)
 		m_tailAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
-void Melon::startInvisible(int totalframe)
+void Lime::startInvisible(int totalframe)
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
@@ -352,12 +352,12 @@ void Melon::startInvisible(int totalframe)
 		m_invisible.VISIBLE_FRAME = totalframe;
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
-		schedule(schedule_selector(Melon::invisibling));
+		schedule(schedule_selector(Lime::invisibling));
 		m_invisible.startInvisibleScheduler = true;
 	}
 }
 
-void Melon::invisibling(float dt)
+void Lime::invisibling(float dt)
 {
 	m_invisible.invisibleFrame++;
 	
@@ -390,7 +390,7 @@ void Melon::invisibling(float dt)
 	}
 }
 
-void Melon::scaleAdjustment(float dt)
+void Lime::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	
@@ -413,7 +413,7 @@ void Melon::scaleAdjustment(float dt)
 }
 
 
-void Melon::cumberAttack(float dt)
+void Lime::cumberAttack(float dt)
 {
 	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
 	
@@ -483,7 +483,7 @@ void Melon::cumberAttack(float dt)
 		
 	}
 }
-COLLISION_CODE Melon::crashWithX(IntPoint check_position)
+COLLISION_CODE Lime::crashWithX(IntPoint check_position)
 {
 	/// 나갔을 시.
 	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
@@ -517,7 +517,7 @@ COLLISION_CODE Melon::crashWithX(IntPoint check_position)
 	return COLLISION_CODE::kCOLLISION_NONE;
 	
 }
-COLLISION_CODE Melon::crashLooper(const set<IntPoint>& v, IntPoint* cp)
+COLLISION_CODE Lime::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)
 	{
@@ -532,7 +532,7 @@ COLLISION_CODE Melon::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Melon::furyModeOn()
+void Lime::furyModeOn()
 {
 	m_furyMode.startFury();
 	m_state = CUMBERSTATEFURY;
@@ -548,7 +548,7 @@ void Melon::furyModeOn()
 }
 
 
-void Melon::crashMapForPosition(CCPoint targetPt)
+void Lime::crashMapForPosition(CCPoint targetPt)
 {
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
@@ -578,7 +578,7 @@ void Melon::crashMapForPosition(CCPoint targetPt)
 	}
 	
 }
-void Melon::furyModeScheduler(float dt)
+void Lime::furyModeScheduler(float dt)
 {
 	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
@@ -595,7 +595,7 @@ void Melon::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
-void Melon::furyModeOff()
+void Lime::furyModeOff()
 {
 	//##
 	//	if(isFuryMode)
@@ -607,7 +607,7 @@ void Melon::furyModeOff()
 	//	}
 }
 
-void Melon::getRandomPosition(IntPoint* ip, bool* finded)
+void Lime::getRandomPosition(IntPoint* ip, bool* finded)
 {
 	bool isGoodPointed = false;
 	

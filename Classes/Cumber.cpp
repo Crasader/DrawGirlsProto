@@ -16,6 +16,13 @@
 #include "Cherry.h"
 #include "Mango.h"
 #include "Bear.h"
+#include "Apricot.h"
+#include "Grape.h"
+#include "Kiwi.h"
+#include "Lime.h"
+#include "Orange.h"
+#include "Peach.h"
+#include "Pear.h"
 #include "ServerDataSave.h"
 
 void CumberParent::onStartGame()
@@ -215,13 +222,6 @@ int CumberParent::getMainCumberSheild()
 //	return mainCumber->isSheild;
 }
 
-void CumberParent::mainCumberInvisibleOn()
-{
-	//##
-	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	mainCumber->startInvisible();
-}
 
 void CumberParent::stopSubCumbers()
 {
@@ -448,7 +448,6 @@ void CumberParent::myInit()
 		std::bind(&CumberParent::startDamageReaction, this, _1, _2, _3);
 	myGD->I_V["CP_getMainCumberSheild"] = std::bind(&CumberParent::getMainCumberSheild, this);
 	myGD->V_V["CP_createAllCumberSheild"] = std::bind(&CumberParent::createAllCumberSheild, this);
-	myGD->V_V["CP_mainCumberInvisibleOn"] = std::bind(&CumberParent::mainCumberInvisibleOn, this);
 	myGD->V_B["CP_slowItem"] = std::bind(&CumberParent::slowItem, this, _1);
 	myGD->V_B["CP_silenceItem"] = std::bind(&CumberParent::silenceItem, this, _1);
 	myGD->V_V["CP_furyModeOn"] = std::bind(&CumberParent::furyModeOn, this);
@@ -515,6 +514,27 @@ void CumberParent::myInit()
 		case 7:
 			mainCumber = Mango::create();
 			break;
+		case 8:
+			mainCumber = Apricot::create();
+			break;
+		case 9:
+			mainCumber = Grape::create();
+			break;
+		case 10:
+			mainCumber = Kiwi::create();
+			break;
+		case 11:
+			mainCumber = Lime::create();
+			break;
+		case 12:
+			mainCumber = Orange::create();
+			break;
+		case 13:
+			mainCumber = Peach::create();
+			break;
+		case 14:
+			mainCumber = Pear::create();
+			break;
 	}
 	mainCumber->settingHp(hp);
 	mainCumber->settingScale(startScale, minScale, maxScale);
@@ -541,17 +561,13 @@ void CumberParent::myInit()
 	{
 		Json::Reader reader;
 		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"), root);
 		
 		
-		
-		JsonBox::Value v;
-		v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"));
-		
-		for(int i=0; i<v.getArray().size(); i++)
+		for(int i=0; i<root.size(); i++)
 		{
 			Json::Value boss = root[i];
-			
+			KS::KSLog("%", boss);
 			int bossType = boss["type"].asInt();
 			
 			float hp = boss["hp"].asInt();

@@ -81,7 +81,7 @@ public:
 	virtual void onStartGame();
 //	virtual void onEndGame();
 	virtual void onPatternEnd();
-	virtual void startInvisible();
+	virtual void startInvisible(int totalframe);
 	void invisibling(float dt);
 	CCPoint getMissilePoint()
 	{
@@ -221,7 +221,7 @@ protected:
 	struct Invisible
 	{
 		int invisibleFrame;
-		const int VISIBLE_FRAME;
+		int VISIBLE_FRAME;
 		bool startInvisibleScheduler;
 		float invisibleValue;
 		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}

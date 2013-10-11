@@ -46,7 +46,8 @@ enum CUMBER_STATE{
 	CUMBERSTATEDAMAGING = 1 << 6,    // 6 맞고 있을 때...
 	CUMBERSTATENODIRECTION = 1 << 7,  // 빙글 빙글...
 	CUMBERSTATEDIRECTION = 1 << 8,  //   잭만 바라봐~
-	CUMBERSTATEFURY = 1 << 9 // 분노모드.
+	CUMBERSTATEFURY = 1 << 9, // 분노모드.
+	CUMBERSTATEGAMEOVER = 1 << 10 // 게임오버.
 };
 
 enum MOVEMENT
@@ -126,7 +127,48 @@ public:
 	virtual void furyModeOn() = 0;
 	virtual void setGameover()
 	{
-		m_state = CUMBERSTATESTOP;
+		m_state = CUMBERSTATEGAMEOVER;
+		
+//		setCumberScale(0.f); // 맞으면 작게 함.
+		m_scale.scale.init(m_scale.scale.getValue(), 0.f, 0.03f);
+		m_minScale = 0.f;
+		m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(0, 30));
+		m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(30, 60));
+		m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(60, 90));
+		m_bossDie.m_bossDieFrameCount = 0;
+		schedule(schedule_selector(ThisClassType::bossDieBomb));
+//		int number = m_well512.GetValue(3, 4);
+//		for(int i=0; i<number; i++)
+//		{
+//			scheduleOnce(schedule_selector(ThisClassType::bossDieBomb), m_well512.GetFloatValue(0.3f, 1.f));
+//		}	
+	}
+	void bossDieBomb(float dt)
+	{
+		m_bossDie.m_bossDieFrameCount++;
+		int maxValue = *max_element(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end());
+		if(find(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end(), m_bossDie.m_bossDieFrameCount)
+			 != m_bossDie.m_bossDieBombFrameNumbers.end())
+		{
+			auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
+			
+			CCPoint t = getPosition();
+			t.x += m_well512.GetValue(-100, 100);
+			t.y += m_well512.GetValue(-100, 100);
+			ret.first->setPosition(t);
+			addChild(ret.first, 11);
+			
+			if(maxValue == m_bossDie.m_bossDieFrameCount)
+			{
+				auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossdie.ccbi");
+				
+				CCPoint t = getPosition();
+				ret.first->setPosition(t);
+				addChild(ret.first, 11);
+
+			}
+
+		}
 	}
 	virtual void cumberImgStartRotating(float gabage){} //## 임시.
 	virtual void startAnimationNoDirection() = 0;
@@ -217,7 +259,7 @@ public:
 	virtual void onPatternEnd() // = 0;
 	{
 	}
-	virtual void startInvisible(){} // = 0;
+	virtual void startInvisible(int totalframe){} // = 0;
 	
 	virtual void lightSmaller() = 0;
 	
@@ -332,6 +374,12 @@ public:
 	}
 	
 protected:
+	struct BossDie
+	{
+		std::vector<int> m_bossDieBombFrameNumbers;
+		int m_bossDieFrameCount;
+	}m_bossDie;
+	
 	std::vector<int> m_attacks; // 공격할 패턴의 번호를 가지고 있음. 많이 가질 수 있을 수록 해당 패턴 쓸 확률 높음.
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	CUMBER_STATE m_state;

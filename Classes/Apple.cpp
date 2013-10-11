@@ -244,6 +244,7 @@ bool Apple::startDamageReaction(float damage, float angle)
 {
 	m_remainHp -= damage;
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
+	CCLog("remain hp %f", m_remainHp);
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
@@ -299,6 +300,16 @@ bool Apple::startDamageReaction(float damage, float angle)
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
+	
+	if(m_remainHp <= 0)
+	{
+		
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void Apple::damageReaction(float)
@@ -327,11 +338,12 @@ void Apple::damageReaction(float)
 		m_tailAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
-void Apple::startInvisible()
+void Apple::startInvisible(int totalframe)
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
 	{
+		m_invisible.VISIBLE_FRAME = totalframe;
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
 //		m_headImg->stopAllActions();
