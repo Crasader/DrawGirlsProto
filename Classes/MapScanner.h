@@ -587,6 +587,30 @@ public:
 
 	void scanMap();
 	
+	virtual void visit()
+	{
+		glEnable(GL_SCISSOR_TEST);
+		
+		int viewport [4];
+		glGetIntegerv (GL_VIEWPORT, viewport);
+		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float rate = frame_size.height/frame_size.width;
+		CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
+		float wScale = viewport[2] / rSize.width;
+		float hScale = viewport[3] / rSize.height;
+		
+		float x = 0*wScale + viewport[0];
+		float y = 0*hScale + viewport[1];
+		float w = 480*wScale;
+		float h = 320*(rate/(320.f/480.f))*hScale;
+		
+		glScissor(x,y,w,h);
+		
+		CCNode::visit();
+		
+		glDisable(GL_SCISSOR_TEST);
+	}
+	
 	void exchangeMS()
 	{
 		CCTexture2D* top_texture = CCTextureCache::sharedTextureCache()->addImage("frame_top.png");

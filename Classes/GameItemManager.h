@@ -1687,13 +1687,17 @@ private:
 		while(!isFindedAfterPoint)
 		{
 			check_loop_cnt++;
-			if(check_loop_cnt > 3000)
+			if(check_loop_cnt >= 100 && check_loop_cnt%100 == 0)
 			{
-				stopMoving();
-				(target_ui->*delegate_takeExchangeCoin)(myType);
-				removeFromParentAndCleanup(true);
-				
-				return;
+				if(check_loop_cnt > 3000)
+				{
+					stopMoving();
+					(target_ui->*delegate_takeExchangeCoin)(myType);
+					removeFromParentAndCleanup(true);
+					
+					return;
+				}
+				move_speed += 0.2f;
 			}
 			
 			int changeAngleValue = rand()%5 - 2;
@@ -1754,6 +1758,7 @@ private:
 		
 		myPoint = afterPoint;
 		setPosition(afterPosition);
+		move_speed = 1.f;
 	}
 	
 	void stopMoving()

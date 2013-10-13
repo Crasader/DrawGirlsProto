@@ -14,20 +14,10 @@
 #include "StarGoldData.h"
 #include "ServerDataSave.h"
 #include "StageImgLoader.h"
+#include "DownloadFile.h"
 
 USING_NS_CC;
 using namespace std;
-
-class DownloadFile
-{
-public:
-	int size;
-	string img;
-	string filename;
-	string key;
-};
-
-#define CCSTR_CWF CCString::createWithFormat
 
 enum SID_Zorder{
 	kSID_Z_back = 1,
@@ -108,6 +98,7 @@ private:
 	{
 		Json::Value param;
 		param["no"] = mySD->getSilType();
+		param["version"] = SDS_GI(kSDF_stageInfo, mySD->getSilType(), "version");
 		graphdog->command("getstageinfo", param, this, gd_selector(StageInfoDown::resultGetStageInfo));
 	}
 	

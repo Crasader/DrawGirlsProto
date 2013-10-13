@@ -88,7 +88,7 @@ void replaceString( std::string & strCallId, const char * pszBefore, const char 
 //}
     
 string JsonObjectToString(Json::Value _obj){
-    Json::FastWriter writer;
+    Json::StyledWriter writer;
     return writer.write(_obj);
 }
     

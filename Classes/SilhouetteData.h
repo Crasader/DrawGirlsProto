@@ -39,7 +39,7 @@ public:
 	
 	int getLastUpdateStageNumber()
 	{
-		return 8;
+		return SDS_GI(kSDF_gameInfo, "stage_count");
 	}
 	
 	void setSilType(int t1)
