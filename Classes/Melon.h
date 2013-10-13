@@ -90,7 +90,7 @@ public:
 		//		KSCumberBase::setPosition(t_sp);
 		m_headImg->setPosition(t_sp);
 		m_cumberTrace.push_back(tr); //
-		if(m_cumberTrace.size() >= 200)
+		if(m_cumberTrace.size() >= 350)
 		{
 			m_cumberTrace.pop_front();
 		}
@@ -169,7 +169,7 @@ public:
 		ccp(x*cos(theta) - y*sin(theta), x*sin(theta) + y * cos(theta));
 	}
 	
-	virtual void startInvisible();
+	virtual void startInvisible(int totalframe);
 	void invisibling(float dt);
 	
 	virtual void furyModeOn();
@@ -329,7 +329,7 @@ protected:
 	struct Invisible
 	{
 		int invisibleFrame;
-		const int VISIBLE_FRAME;
+		int VISIBLE_FRAME;
 		bool startInvisibleScheduler;
 		float invisibleValue;
 		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}

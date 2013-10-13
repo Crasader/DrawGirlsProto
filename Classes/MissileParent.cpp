@@ -31,6 +31,7 @@ void MissileParent::bombCumber( CCObject* target )
 
 void MissileParent::createJackMissile( int jm_type, int cmCnt, float damage_per )
 {
+	cmCnt *= 3.f;
 	if(jm_type >= 0 && jm_type <= 3)
 	{
 		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
@@ -1013,12 +1014,9 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 																				reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
 																				Json::Value pattern = root[0u]["pattern"]["1004"];
 																				
-																				int radius = pattern.get("radius", 70).asInt();
-																				int objcnt = pattern.get("number", 30).asInt();
-																				
-																				BD_P28 t_bd(radius, objcnt);// = SelectedMapData::sharedInstance()->getValuePattern28();
-																				
-																				AP_Missile28* t_m28 = AP_Missile28::create(startFirePosition, random_value, t_bd.size_radius, t_bd.obj_cnt);
+																				int radius = 80;//pattern.get("radius", 100).asInt();
+																				int objcnt = pattern.get("totalframe", 400).asInt();
+																				PrisonPattern* t_m28 = PrisonPattern::create(startFirePosition, radius, objcnt);
 																				addChild(t_m28);
 																				t_m28->startMyAction();
 																				
@@ -1172,12 +1170,19 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 //			t_ccn->startCharge();
 //			chargeArray->addObject(t_ccn);
 			startFirePosition = startPosition;
+			Json::Reader reader;
+			Json::Value root;
+			reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+			Json::Value pattern = root[0u]["pattern"]["1008"];
+			
+			int totalFrame = pattern.get("totalframe", 300).asInt();
+
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
 																			[&](CCObject* cb)
 																			{
-																				((KSCumberBase*)cb)->startInvisible();
+																				((KSCumberBase*)cb)->startInvisible(totalFrame);
 																				myGD->communication("CP_onPatternEnd");
 																			}, cb);
 			
@@ -1203,15 +1208,24 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 //			t_ccn->startCharge();
 //			chargeArray->addObject(t_ccn);
 			startFirePosition = startPosition;
+			
+			
+
+			
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn = SpecialChargeNodeLambda::create(startPosition, castFrame,
 																			 
 																			 [&](CCObject* cb)
 																			 {
+																				 Json::Reader reader;
+																				 Json::Value root;
+																				 reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+																				 Json::Value pattern = root[0u]["pattern"]["1009"];
+																				 int totalFrame = pattern.get("totalframe", 600).asInt();
 																				 myGD->communication("CP_stopMovingMainCumber");
 																				 IntPoint mainCumberPoint = myGD->getMainCumberPoint();
 																				 CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-																				 AP_Missile15* t_m15 = AP_Missile15::create(mainCumberPosition, 10, 180);
+																				 AP_Missile15* t_m15 = AP_Missile15::create(mainCumberPosition, 10, totalFrame);
 																				 addChild(t_m15);
 																				 
 																				 saveAP = t_m15;
@@ -1361,6 +1375,71 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 			chargeArray->addObject(t_ccn);
 		}
 	}
+	else if(pattern == kSpecialAttack14) // 떨어지는 돌
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			SpecialChargeNodeLambda* t_ccn =
+			SpecialChargeNodeLambda::create(startPosition, castFrame,
+																			
+																			[&](CCObject* cb)
+																			{
+																				Json::Reader reader;
+																				Json::Value root;
+																				reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+																				Json::Value pattern = root[0u]["pattern"]["1014"];
+																				int totalframe = pattern.get("totalframe", 300).asInt();
+																				int shootframe = pattern.get("shootframe", 30).asInt();
+																				float speed = pattern.get("speed", 250.f).asDouble() / 100.f;
+																				AP_Missile9* t_m9 = AP_Missile9::create(totalframe, shootframe, speed, CCSizeMake(30, 30), 1);
+																				addChild(t_m9);
+																				saveAP = t_m9;
+																				savedAP = true;
+																				
+																				myGD->communication("MP_endIngActionAP");
+																				myGD->communication("CP_onPatternEnd");
+																			}, cb);
+			
+			t_ccn->setChargeColor(ccc4f(1.00, 0.00, 0.00, 1.00));
+			addChild(t_ccn);
+			t_ccn->startCharge();
+			chargeArray->addObject(t_ccn);
+			
+			
+		}
+	}
+	else if(pattern == kSpecialAttack15) // 풍차벽.
+	{
+		if(exe)
+		{
+			Json::Reader reader;
+			Json::Value root;
+			reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+			Json::Value pattern = root[0u]["pattern"]["1015"];
+			int totalframe = pattern.get("totalframe", 800).asInt();
+			
+			startFirePosition = startPosition;
+			WindmillObject* t_to = WindmillObject::create(ccp2ip(startPosition), totalframe);
+			addChild(t_to);
+		}
+	}
+	else if(pattern == kSpecialAttack16) // 다이너마이트.
+	{
+		if(exe)
+		{
+			Json::Reader reader;
+			Json::Value root;
+			reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+			Json::Value pattern = root[0u]["pattern"]["1016"];
+			int remainSecond = pattern.get("remainsecond", 9).asInt();
+			
+			TickingTimeBomb* t_ttb = TickingTimeBomb::create(ccp2ip(startPosition), 120, remainSecond, 1, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
+			addChild(t_ttb);
+		}
+	}
+	
+	
 	else
 		valid = false;
 	

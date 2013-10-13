@@ -1,13 +1,12 @@
 //
-//  Apple.cpp
+//  Kiwi.cpp
 //  DGproto
 //
-//  Created by ksoo k on 13. 9. 12..
+//  Created by ksoo k on 13. 9. 25..
 //
 //
 
-#include "Apple.h"
-
+#include "Kiwi.h"
 #include "GameData.h"
 
 #include "AlertEngine.h"
@@ -17,14 +16,14 @@
 //#include "CumberEmotion.h"
 #include "Jack.h"
 #include "RandomSelector.h"
-Apple::~Apple()
+Kiwi::~Kiwi()
 {
 	
 }
 
 
 
-bool Apple::init()
+bool Kiwi::init()
 {
 	KSCumberBase::init();
 	
@@ -34,10 +33,10 @@ bool Apple::init()
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_apple_head.ccbi",this));
+		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_kiwi_head.ccbi",this));
 		m_headAnimationManager = reader->getAnimationManager();
 		this->addChild(m_headImg, 10);
-		reader->release();	
+		reader->release();
     }
 	int lastZ=-1;
 	{
@@ -45,24 +44,24 @@ bool Apple::init()
 		for(int i=0; i<7; i++)
 		{
 			CCBReader* reader = new CCBReader(nodeLoader);
-			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_apple_body.ccbi",this));
+			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_kiwi_body.ccbi",this));
 			m_bodyAnimationManagers.push_back(reader->getAnimationManager());
 			addChild(body, 9 - i);
 			lastZ = 9 - i;
 			m_Bodies.push_back(body);
-			reader->release();			
-		}	
+			reader->release();
+		}
 	}
 	
 	
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_apple_tail.ccbi",this));
+		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_kiwi_tail.ccbi",this));
 		m_tailAnimationManager = reader->getAnimationManager();
 		this->addChild(m_tailImg, lastZ - 1);
 		reader->release();
 	}
-
+	
 	
 	IntPoint mapPoint;
 	bool finded;
@@ -72,32 +71,32 @@ bool Apple::init()
 	
 	
 	//	startMoving();
-	schedule(schedule_selector(Apple::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(Kiwi::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Apple::cumberAttack));
+	schedule(schedule_selector(Kiwi::cumberAttack));
 	
 	startAnimationNoDirection();
 	return true;
 }
 
-void Apple::setHeadAndBodies()
+void Kiwi::setHeadAndBodies()
 {
-	AppleTrace lastTrace = m_cumberTrace.back();
+	SnakeTrace lastTrace = m_cumberTrace.back();
 	float tt = rad2Deg( lastTrace.directionRad );
 	//	CCLog("deg %f", tt);
 	//	m_headImg->setVisible(false);
 	m_headImg->setRotation(-rad2Deg( lastTrace.directionRad ));
 	
 	int lastTraceIndex = m_cumberTrace.size() - 1; // to 0
-//	int bodyIndex = 0;
-//	for(auto i : m_cumberTrace)
+	//	int bodyIndex = 0;
+	//	for(auto i : m_cumberTrace)
 	for(int bodyIndex = 0; bodyIndex < m_Bodies.size(); ++bodyIndex)
 	{
 		// 순서대로 머리에 가까운 몸통처리.
 		float distance = 0;
 		for(int traceIndex = lastTraceIndex - 1; traceIndex >= 0; traceIndex--)
 		{
-			AppleTrace t = m_cumberTrace[traceIndex];
+			SnakeTrace t = m_cumberTrace[traceIndex];
 			// t 와 tr 의 거리차이.
 			//			float distance = ccpLength(lastTrace.position - t.position);
 			//			int distance = lastTraceIndex - traceIndex;
@@ -118,7 +117,7 @@ void Apple::setHeadAndBodies()
 		float distance = 0;
 		for(int traceIndex = lastTraceIndex - 1; traceIndex >= 0; traceIndex--)
 		{
-			AppleTrace t = m_cumberTrace[traceIndex];
+			SnakeTrace t = m_cumberTrace[traceIndex];
 			// t 와 tr 의 거리차이.
 			//			float distance = ccpLength(lastTrace.position - t.position);
 			//			int distance = lastTraceIndex - traceIndex;
@@ -134,14 +133,14 @@ void Apple::setHeadAndBodies()
 		}
 		m_tailImg->setRotation(-rad2Deg(lastTrace.directionRad));
 		m_tailImg->setPosition(lastTrace.position);
-//		m_tailImg->setScale(3.f);
+		//		m_tailImg->setScale(3.f);
 	}
 	
 	//	m_headImg->setScale(tt / 360);
 	
 }
 
-void Apple::startAnimationNoDirection()
+void Kiwi::startAnimationNoDirection()
 {
 	// 돌자...
 	CCLog("Lets rotate");
@@ -154,11 +153,11 @@ void Apple::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
-		schedule(schedule_selector(Apple::animationNoDirection));
+		schedule(schedule_selector(Kiwi::animationNoDirection));
 	}
 }
 
-void Apple::animationNoDirection(float dt)
+void Kiwi::animationNoDirection(float dt)
 {
 //	CCLog("animationNoDirection");
 	m_noDirection.timer += 1.f/60.f;
@@ -200,9 +199,13 @@ void Apple::animationNoDirection(float dt)
 		{
 			m_state = CUMBERSTATEMOVING;
 			m_noDirection.state = 0;
-			unschedule(schedule_selector(Apple::animationNoDirection));
+			unschedule(schedule_selector(Kiwi::animationNoDirection));
 			setPosition(m_noDirection.startingPoint);
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+			for(auto bodyAniManager : m_bodyAnimationManagers)
+			{
+				bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
+			}
 			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 		}
 		else
@@ -212,15 +215,15 @@ void Apple::animationNoDirection(float dt)
 
 
 
-void Apple::startAnimationDirection()
+void Kiwi::startAnimationDirection()
 {
 	// 잭을 바라보자.
 	m_state = CUMBERSTATEDIRECTION;
 	m_direction.initVars();
-	schedule(schedule_selector(Apple::animationDirection));
+	schedule(schedule_selector(Kiwi::animationDirection));
 }
 
-void Apple::animationDirection(float dt)
+void Kiwi::animationDirection(float dt)
 {
 	m_direction.timer += 1 / 60.f;
 	if(m_direction.state == 1)
@@ -235,18 +238,22 @@ void Apple::animationDirection(float dt)
 	{
 //		m_state = CUMBERSTATEMOVING; //#!
 		m_direction.state = 0;
-		unschedule(schedule_selector(Apple::animationDirection));
+		unschedule(schedule_selector(Kiwi::animationDirection));
 		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+		for(auto bodyAniManager : m_bodyAnimationManagers)
+		{
+			bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
+		}
 		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 	}
 }
-bool Apple::startDamageReaction(float damage, float angle)
+bool Kiwi::startDamageReaction(float damage, float angle)
 {
 	m_remainHp -= damage;
+	CCLog("Kiwi Hp %f", m_remainHp);
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
-	CCLog("remain hp %f", m_remainHp);
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
-
+	
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
 	
 	
@@ -260,7 +267,7 @@ bool Apple::startDamageReaction(float damage, float angle)
 	{
 		CCLog("m_state == CUMBERSTATEDIRECTION");
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
-		m_state = CUMBERSTATEMOVING; //#!
+		m_state = CUMBERSTATEMOVING;
 	}
 	else if(m_state == CUMBERSTATEMOVING)
 	{
@@ -272,7 +279,7 @@ bool Apple::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Apple::damageReaction));
+		schedule(schedule_selector(Kiwi::damageReaction));
 	}
 	else if(m_state == CUMBERSTATESTOP)
 	{
@@ -284,7 +291,7 @@ bool Apple::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Apple::damageReaction));
+		schedule(schedule_selector(Kiwi::damageReaction));
 	}
 	else if(m_state == CUMBERSTATEFURY)
 	{
@@ -296,23 +303,18 @@ bool Apple::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Apple::damageReaction));
+		schedule(schedule_selector(Kiwi::damageReaction));
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
 	
 	if(m_remainHp <= 0)
-	{
-		
 		return true;
-	}
 	else
-	{
 		return false;
-	}
 }
 
-void Apple::damageReaction(float)
+void Kiwi::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
@@ -333,12 +335,16 @@ void Apple::damageReaction(float)
 			i->setColor(ccc3(255, 255, 255));
 		}
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Apple::damageReaction));
+		unschedule(schedule_selector(Kiwi::damageReaction));
 		m_headAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+		for(auto bodyAniManager : m_bodyAnimationManagers)
+		{
+			bodyAniManager->runAnimationsForSequenceNamed("Default Timeline");
+		}
 		m_tailAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
-void Apple::startInvisible(int totalframe)
+void Kiwi::startInvisible(int totalframe)
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
@@ -346,13 +352,12 @@ void Apple::startInvisible(int totalframe)
 		m_invisible.VISIBLE_FRAME = totalframe;
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
-//		m_headImg->stopAllActions();
-		schedule(schedule_selector(Apple::invisibling));
+		schedule(schedule_selector(Kiwi::invisibling));
 		m_invisible.startInvisibleScheduler = true;
 	}
 }
 
-void Apple::invisibling(float dt)
+void Kiwi::invisibling(float dt)
 {
 	m_invisible.invisibleFrame++;
 	
@@ -383,10 +388,9 @@ void Apple::invisibling(float dt)
 			unschedule(schedule_selector(ThisClassType::invisibling));
 		}
 	}
-	
 }
 
-void Apple::scaleAdjustment(float dt)
+void Kiwi::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	
@@ -409,9 +413,10 @@ void Apple::scaleAdjustment(float dt)
 }
 
 
-void Apple::cumberAttack(float dt)
+void Kiwi::cumberAttack(float dt)
 {
 	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
+	
 	// 1% 확률로.
 	if(w == 0 && m_state == CUMBERSTATEMOVING && !m_attacks.empty())
 	{
@@ -423,6 +428,8 @@ void Apple::cumberAttack(float dt)
 		//		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
 		//		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
 		//		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
+		
+		
 		
 		bool searched = false;
 		int searchCount = 0;
@@ -443,14 +450,17 @@ void Apple::cumberAttack(float dt)
 				break;
 			}
 		}
-		
-//		attackCode = kTargetAttack7;
+
 		if(searched)
 		{
 			if(attackCode == kTargetAttack9) // fury
 			{
 				m_state = CUMBERSTATESTOP;
 				m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+				for(auto bodyAniManager : m_bodyAnimationManagers)
+				{
+					bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+				}
 				m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
 				
 				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
@@ -458,23 +468,24 @@ void Apple::cumberAttack(float dt)
 			else
 			{
 				m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+				for(auto bodyAniManager : m_bodyAnimationManagers)
+				{
+					bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+				}
 				m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
-				
 				if(kSpecialAttack1 <= attackCode) // 특수공격이면 돌아라.
 					startAnimationNoDirection();
 				else if(1 <= attackCode && attackCode <= 100) // 방사형이면 돌아라.
 					startAnimationNoDirection();
 				else if(kTargetAttack1 <= attackCode && attackCode < kSpecialAttack1) // 조준형이면 돌지마라
 					startAnimationDirection();
-
 				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
 			}
 		}
 		
 	}
-
 }
-COLLISION_CODE Apple::crashWithX(IntPoint check_position)
+COLLISION_CODE Kiwi::crashWithX(IntPoint check_position)
 {
 	/// 나갔을 시.
 	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
@@ -508,7 +519,7 @@ COLLISION_CODE Apple::crashWithX(IntPoint check_position)
 	return COLLISION_CODE::kCOLLISION_NONE;
 	
 }
-COLLISION_CODE Apple::crashLooper(const set<IntPoint>& v, IntPoint* cp)
+COLLISION_CODE Kiwi::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)
 	{
@@ -523,7 +534,7 @@ COLLISION_CODE Apple::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Apple::furyModeOn()
+void Kiwi::furyModeOn()
 {
 	m_furyMode.startFury();
 	m_state = CUMBERSTATEFURY;
@@ -539,7 +550,7 @@ void Apple::furyModeOn()
 }
 
 
-void Apple::crashMapForPosition(CCPoint targetPt)
+void Kiwi::crashMapForPosition(CCPoint targetPt)
 {
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
@@ -569,7 +580,7 @@ void Apple::crashMapForPosition(CCPoint targetPt)
 	}
 	
 }
-void Apple::furyModeScheduler(float dt)
+void Kiwi::furyModeScheduler(float dt)
 {
 	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
@@ -586,19 +597,19 @@ void Apple::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
-void Apple::furyModeOff()
+void Kiwi::furyModeOff()
 {
 	//##
-//	if(isFuryMode)
-//	{
-//		myGD->communication("EP_stopCrashAction");
-//		myGD->communication("MS_resetRects");
-//		isFuryMode = false;
-//		furyMode->removeFromParentAndCleanup(true);
-//	}
+	//	if(isFuryMode)
+	//	{
+	//		myGD->communication("EP_stopCrashAction");
+	//		myGD->communication("MS_resetRects");
+	//		isFuryMode = false;
+	//		furyMode->removeFromParentAndCleanup(true);
+	//	}
 }
 
-void Apple::getRandomPosition(IntPoint* ip, bool* finded)
+void Kiwi::getRandomPosition(IntPoint* ip, bool* finded)
 {
 	bool isGoodPointed = false;
 	
@@ -614,7 +625,7 @@ void Apple::getRandomPosition(IntPoint* ip, bool* finded)
 	
 	random_shuffle(shuffledPositions.begin(), shuffledPositions.end(), [=](int n){
 		return this->m_well512.GetValue(n-1);
-	});
+	} );
 	for(auto& mp : shuffledPositions)
 	{
 		mapPoint = mp;
@@ -662,42 +673,6 @@ void Apple::getRandomPosition(IntPoint* ip, bool* finded)
 		// nothing.
 		CCAssert(false, "");
 	}
-
+	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

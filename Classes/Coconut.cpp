@@ -307,11 +307,12 @@ COLLISION_CODE Coconut::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Coconut::startInvisible()
+void Coconut::startInvisible(int totalframe)
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
 	{
+		m_invisible.VISIBLE_FRAME = totalframe;
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
 		schedule(schedule_selector(Coconut::invisibling));

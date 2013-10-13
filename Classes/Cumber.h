@@ -61,7 +61,6 @@ public:
 	void setGameover();
 	void startTeleport();
 	int getMainCumberSheild();
-	void mainCumberInvisibleOn();
 	void movingSubCumbers();
 	void stopSubCumbers();
 	void startAutoAttacker();

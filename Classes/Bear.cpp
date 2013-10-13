@@ -112,6 +112,14 @@ bool Bear::startDamageReaction(float damage, float angle)
 	if(m_remainHp <= 0)
 	{
 		myGD->communication("CP_removeSubCumber", this);
+		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
+		
+//		CCPoint t = getPosition();
+//		ret.first->setPosition(t);
+		addChild(ret.first, 11);
+		
+		scheduleOnce(schedule_selector(ThisClassType::removeFromParent), 1.f);
+//		removeFromParentAndCleanup(true);
 		return true;
 	}
 	else
@@ -237,11 +245,12 @@ COLLISION_CODE Bear::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Bear::startInvisible()
+void Bear::startInvisible(int totalframe)
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
 	{
+		m_invisible.VISIBLE_FRAME = totalframe;
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
 		schedule(schedule_selector(Bear::invisibling));

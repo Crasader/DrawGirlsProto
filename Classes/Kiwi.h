@@ -1,13 +1,13 @@
 //
-//  Apple.h
+//  Kiwi.h
 //  DGproto
 //
-//  Created by ksoo k on 13. 9. 12..
+//  Created by ksoo k on 13. 9. 25..
 //
 //
 
-#ifndef __DGproto__Apple__
-#define __DGproto__Apple__
+#ifndef __DGproto__Kiwi__
+#define __DGproto__Kiwi__
 
 
 #include "KSCumberBase.h"
@@ -20,18 +20,14 @@
 #include "cocos-ext.h"
 using namespace cocos2d::extension;
 
-struct AppleTrace
-{
-	CCPoint position; // 자취의 위치와
-	float directionRad; // 자취의 방향.
-};
+
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
 
 
-class Apple : public KSCumberBase
+class Kiwi : public KSCumberBase
 {
 public:
-	Apple() :
+	Kiwi() :
 	
 	RADIUS(110.f / 4.f), // 머리에 대한 충돌 반지름
 	BODY_RADIUS(70/4.f), // 몸통에 대한 충돌 반지름
@@ -47,7 +43,7 @@ public:
 		m_state = (CUMBERSTATEMOVING);
 	}
 	
-	virtual ~Apple();
+	virtual ~Kiwi();
 	
 	virtual void onStartMoving()
 	{
@@ -76,20 +72,18 @@ public:
 	{
 		m_noDirection.state = 2;
 		
-
+		
 	}
 	virtual void crashMapForPosition(CCPoint targetPt);
+	//	virtual void movingAndCrash(float dt);
+
 	void cumberAttack(float dt);
 	virtual bool init();
-	CREATE_FUNC(Apple);
+	CREATE_FUNC(Kiwi);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
 		CCPoint prevPosition = getPosition();
-		if(isnan(prevPosition.x))
-		{
-			CCLog("hg!!!!");
-		}
-		AppleTrace tr;
+		SnakeTrace tr;
 		tr.position = t_sp;
 		tr.directionRad = atan2f(t_sp.y - prevPosition.y, t_sp.x - prevPosition.x);
 		
@@ -101,7 +95,7 @@ public:
 			m_cumberTrace.pop_front();
 		}
 		
-		if(m_state != CUMBERSTATENODIRECTION) // 도는것이 아니라면
+		if(m_state != CUMBERSTATENODIRECTION)
 		{
 			gameData->setMainCumberPoint(ccp2ip(t_sp));
 			m_mapPoint = ccp2ip(t_sp);
@@ -143,7 +137,8 @@ public:
 //	{
 //		if(mEmotion)
 //			mEmotion->selfRemove();
-//		mEmotion = Emotion::create(t_type, this, callfunc_selector(Apple::nullmEmotion));
+//		mEmotion = Emotion::create(t_type, this,
+//								   callfunc_selector(Kiwi::nullmEmotion));
 //		mEmotion->setPosition(ccpAdd(getPosition(), ccp(30,20)));
 //		addChild(mEmotion, 11);
 //	}
@@ -155,14 +150,6 @@ public:
 	virtual bool startDamageReaction(float damage, float angle);
 	virtual void startAnimationNoDirection();
 	virtual void startAnimationDirection();
-	virtual void stopAnimationNoDirection()
-	{
-		m_noDirection.state = 2;
-	}
-	virtual void stopAnimationDirection()
-	{
-		m_direction.state = 2;
-	}
 	//	virtual void startSpringCumber(float userdata)
 	//	{
 	//		startDamageReaction(userdata);
@@ -170,7 +157,7 @@ public:
 	void damageReaction(float dt);
 	void animationNoDirection(float dt);
 	void animationDirection(float dt);
-
+	
 	
 	void scaleAdjustment(float dt);
 	CCPoint getMissilePoint()
@@ -188,9 +175,8 @@ public:
 	virtual void furyModeOn();
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
-
+	
 	virtual void getRandomPosition(IntPoint* ip, bool* finded);
-
 	
 	virtual void lightSmaller(){}
 	
@@ -202,6 +188,14 @@ public:
 		CCPoint cumberPosition = getPosition();
 		float deg = rad2Deg(atan2(jackPosition.y - cumberPosition.y, jackPosition.x - cumberPosition.x));
 		m_headImg->setRotation(-deg);
+	}
+	virtual void stopAnimationNoDirection()
+	{
+		m_noDirection.state = 2;
+	}
+	virtual void stopAnimationDirection()
+	{
+		m_direction.state = 2;
 	}
 	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition){
 		float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
@@ -248,7 +242,7 @@ public:
 					}
 				}
 			}
-
+			
 			// 꼬리에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
 			if(gameData->getJackState() != jackStateNormal)
 			{
@@ -272,6 +266,7 @@ public:
 		return collisionCode;
 	}
 protected:
+
 	const float RADIUS;
 	const float BODY_RADIUS;
 	const float TAIL_RADIUS;
@@ -296,7 +291,7 @@ protected:
 	
 //	Emotion* mEmotion;
 	
-	deque< AppleTrace > m_cumberTrace; // back 은 항상 머리를 가르킴.
+	deque< SnakeTrace > m_cumberTrace; // back 은 항상 머리를 가르킴.
 	
 	struct DamageData
 	{
@@ -342,4 +337,5 @@ protected:
 };
 
 
-#endif /* defined(__DGproto__MetalSnake__) */
+
+#endif /* defined(__DGproto__Kiwi__) */

@@ -1491,7 +1491,7 @@ private:
 		myPosition = t_sp;
 		tmCnt = t_tmCnt;
 		burnFrame = t_burnFrame;
-		createBurnFrame = burnFrame/tmCnt;
+		createBurnFrame = burnFrame/tmCnt + 1;
 		
 		
 		
@@ -5484,5 +5484,90 @@ protected:
  KSCumberBase* m_cumber;
  };
  */
+
+class PrisonPattern : public AttackPattern // prison
+{
+public:
+	static PrisonPattern* create(CCPoint t_sp, float radius, int totalFrame)
+	{
+		PrisonPattern* t_m28 = new PrisonPattern();
+		t_m28->myInit(t_sp, radius, totalFrame);
+		t_m28->autorelease();
+		return t_m28;
+	}
+	
+	void startMyAction()
+	{
+		m_frameCount = 0;
+		schedule(schedule_selector(PrisonPattern::myAction));
+	}
+	void hidingAnimation(float dt)
+	{
+		if(m_fadeFromToDuration.step(1.f/60.f) == false)
+		{
+			m_prisonSprite->removeFromParent();
+		}
+		else
+		{
+			KS::setOpacity(m_prisonSprite, m_fadeFromToDuration.getValue());
+		}
+	}
+	
+	void myAction()
+	{
+		m_frameCount++;
+		// 종료조건
+		if(m_frameCount >= m_totalFrame)
+		{
+			stopMyAction();
+		}
+		else
+		{
+			IntPoint jackPoint = myGD->getJackPoint();
+			CCPoint jackPosition = ip2ccp(jackPoint);
+			// initialJackPosition 와 jackPosition 거리가 radius 이상이면 죽임.
+			if(ccpLength(m_initialJackPosition - jackPosition) >= m_radius)
+			{
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect");
+				stopMyAction();
+			}
+		}
+		
+		// PrisonObject
+	}
+	
+	void stopMyAction()
+	{
+		//		m_prisonSprite->removeFromParent();
+		m_fadeFromToDuration.init(255, 0.f, 1.f);
+		schedule(schedule_selector(PrisonPattern::hidingAnimation));
+		unschedule(schedule_selector(PrisonPattern::myAction));
+		startSelfRemoveSchedule();
+	}
+	
+	void myInit(CCPoint t_sp, float radius, int totalFrame) // create 0.5 second
+	{
+		IntPoint jackPoint = myGD->getJackPoint();
+		m_initialJackPosition = ip2ccp(jackPoint);
+		m_radius = radius;
+		m_totalFrame = totalFrame;
+		auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_prison.ccbi");
+		m_prisonSprite = ret.first;
+		m_prisonSprite->setPosition(m_initialJackPosition);
+		addChild(m_prisonSprite);
+		
+	}
+
+private:
+	CCSprite* m_prisonSprite;
+	CCPoint m_initialJackPosition;
+	float m_radius;
+	
+	int m_totalFrame;
+	int m_frameCount;
+	
+	FromToWithDuration<float> m_fadeFromToDuration;
+	};
 
 #endif
