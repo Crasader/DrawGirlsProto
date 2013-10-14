@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <queue>
 #include <list>
-#define GRAPHDOG_VERSION    "5"
+#define GRAPHDOG_VERSION    "2"
 #include "jsoncpp/json.h"
 
 struct GDStruct {
@@ -43,25 +43,31 @@ struct CommandParam
 	string action;
 	//@ JsonBox::Object param;
 	Json::Value param;
-    const CCObject* target;
-	GDSelType selector;
+    //@@const CCObject* target;
+	//@@GDSelType selector;
+    function<void(Json::Value)> func;
+    
     //@ CommandParam(const string& _action, const JsonBox::Object& _param, const CCObject* _target, GDSelType _selector)
-	CommandParam(const string& _action, const Json::Value _param, const CCObject* _target, GDSelType _selector)
-	{
+	//@@CommandParam(const string& _action, const Json::Value _param, const CCObject* _target, GDSelType _selector, )
+	CommandParam(const string& _action, const Json::Value _param, function<void(Json::Value)> _func)
+    {
 		action = _action;
 		param = _param;
-		target = _target;
-		selector = _selector;
+//@@		target = _target;
+//@@		selector = _selector;
+        func = _func;
 	}
-	CommandParam(const string& _action, int _param, const CCObject* _target, GDSelType _selector)
+	//@@CommandParam(const string& _action, int _param, const CCObject* _target, GDSelType _selector)
+    CommandParam(const string& _action, int _param, function<void(Json::Value)> _func)
 	{
 		CCAssert(_param == 0, "_param == 0");
 		action = _action;
 		//@ JsonBox::Object _p;
         Json::Value _p;
         param = _p;
-        target = _target;
-		selector = _selector;
+        //@@target = _target;
+		//@@selector = _selector;
+        func=_func;
 	}
 	CommandParam(){}
 //	CommandParam(string a, const JsonBox::Object* p, const CCObject* t, GDSelType& s) : action(a),
@@ -71,8 +77,8 @@ struct CommandParam
 class GraphDog: public CCObject{
 public:
     //시작설정
-    void setup(string secretKey,int _appVersion); //nhn용 새로추가
-    void setup(string appID,string secretKey,string _packageName,int _appVersion);
+    void setup(string secretKey,string _appVersion); //nhn용 새로추가
+    void setup(string appID,string secretKey,string _packageName,string _appVersion);
     //명령날리기 - 이 함수로 모든 통신을 할수있다. 쓰레드생성 실패시 false 그외 true
     
     bool command(const std::vector<CommandParam>& params);
@@ -82,7 +88,8 @@ public:
 //@    bool test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, JsonBox::Object result);
 //@    bool test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, string result);
     
-    bool command(string action, const Json::Value param,CCObject *target,GDSelType selector);
+//@@    bool command(string action, const Json::Value param,CCObject *target,GDSelType selector);
+    bool command(string action, const Json::Value param,function<void(Json::Value)> func);
     bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, Json::Value result);
     bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, string result);
     
@@ -125,8 +132,9 @@ public:
 	
     struct CommandType
 	{
-		const CCObject* target;
-		GDSelType selector;
+        function<void(Json::Value)> func;
+		//@@ const CCObject* target;
+		//@@ GDSelType selector;
 		string paramStr;
 		string action;
 	};

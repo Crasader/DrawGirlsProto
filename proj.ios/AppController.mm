@@ -28,7 +28,7 @@
 #import "AppDelegate.h"
 
 #import "RootViewController.h"
-
+#import "hspConnector.h"
 @implementation AppController
 
 //@synthesize window;
@@ -43,7 +43,7 @@ static AppDelegate s_sharedApplication;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     // Override point for customization after application launch.
-
+    hspConnector::get()->setup("SKDRAWGIRLS", 10226, "1.0.0");
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
     EAGLView *__glView = [EAGLView viewWithFrame: [window bounds]

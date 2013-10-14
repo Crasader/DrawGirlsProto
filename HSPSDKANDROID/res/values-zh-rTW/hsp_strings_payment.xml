@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- HSP Payment Start -->
+    <!-- Error Messages -->
+    <string name="hsp.payment.err.msg.lib.init">購買庫初始化失敗</string>
+    <string name="hsp.payment.err.msg.shopserver">商店伺服器出現錯誤</string>
+    
+    <!-- User Messages -->
+    <string name="hsp.payment.err.msg.purchase.canceled">購買被取消</string>
+    <string name="hsp.payment.err.msg.exist.purchase">進行中的支付視窗存在.(若問題持續，請關閉應用後，再試)</string>
+    <string name="hsp.payment.err.msg.not.login">賬號不正常地連線，不可進行支付.\n請完全關閉應用後，再試一次。</string>
+    <string name="hsp.payment.err.msg.exception">發生了一個臨時錯誤。請稍後再試。</string>
+    <string name="hsp.payment.err.msg.give.item.fail">發放道具上出現錯誤。請詢問到顧客中心.</string>
+	<string name="hsp.payment.err.msg.network.timeout">網絡是不穩定的。請稍後再試。</string>
+	
+    <string name="hsp.payment.err.msg.unsupported.device">對不起.\n不支持此設備\n不可進行支付.</string>
+	<string name="hsp.payment.err.msg.unsupported.google.checkout">次市場不支持支付。請確認市場信息。</string>
+	
+	<!-- TStore Messages -->
+	<string name="hsp.payment.tstore.purchase.confirm">${productName} (${price})元的\n支付要進行嗎?</string>
+	       
+	<!-- General Strings -->
+    <string name="hsp.payment.title.dialog.purchase">支付</string>
+    <string name="hsp.payment.msg.confirm.purchase">要購買你所選擇的産品嗎?\n\n請等到交易完成。這可能需要一段時間。</string>
+    <string name="hsp.payment.btn.yes">是</string>
+    <string name="hsp.payment.btn.no">不是</string>
+    <string name="hsp.payment.btn.confirm">確認</string>
+    <string name="hsp.payment.btn.cancel">取消</string>
+    <string name="hsp.payment.msg.processing">處理中.</string>
+	
+</resources>

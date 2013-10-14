@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.litmus.find.rooting">因爲對該裝置進行非正常使用，所以服務被停止.</string>
+    <string name="hsp.litmus.find.cheating">幹預遊戲正常運作的工具壹旦被發現, 如果不刪除遊戲將被終止. </string>
+    <string name="hsp.litmus.find.bluestack">幹預遊戲正常運作的工具壹旦被發現, 如果不刪除遊戲將被終止. </string>
+    <string name="hsp.litmus.find.integrity">幹預遊戲正常運作的工具壹旦被發現, 如果不刪除遊戲將被終止. </string>
+    <string name="hsp.litmus.log.agreement.title">注意事項!</string>
+    <string name="hsp.litmus.log.agreement.message">幹預遊戲正常運作的工具壹旦被發現, 如果不刪除遊戲將被終止. 裝置內存在幹預遊戲的工具時, 工具信息會被獲取.</string>
+    <string name="hsp.litmus.log.agreement.permit">同意</string>
+    <string name="hsp.litmus.log.agreement.refuse">不同意</string>
+
+</resources>

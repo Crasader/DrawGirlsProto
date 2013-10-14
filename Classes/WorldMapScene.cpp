@@ -171,7 +171,7 @@ bool WorldMapScene::init()
         return false;
     }
 	
-	graphdog->setup("12345678", 1);
+	//graphdog->setup("12345678", 1);
 	
 //	showConvertSildata("intun1");
 //	showConvertSildata("intun2");

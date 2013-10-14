@@ -6,7 +6,6 @@
 #include <vector>
 #include <string>
 #include "cocos2d.h"
-#include "JsonBox.h"
 #include "jsoncpp/json.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -47,6 +46,8 @@ using namespace std;
 typedef void (CCObject::*GDSelType)(Json::Value) const;
 
 
+#define jsonSelType std::function<void(Json::Value)>
+#define json_selector(_target,_method) std::bind(&_method,_target,std::placeholders::_1)
 
 
 #define gd_selector(_SELECTOR) (GDSelType)(&_SELECTOR)

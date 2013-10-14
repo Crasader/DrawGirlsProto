@@ -80,7 +80,7 @@ private:
 	{
 		Json::Value param;
 		param["version"] = SDS_GI(kSDF_gameInfo, "version");
-		graphdog->command("getstagelist", param, this, gd_selector(StageListDown::resultGetStageList));
+		graphdog->command("getstagelist", param, json_selector(this, StageListDown::resultGetStageList));
 	}
 	
 	void resultGetStageList(Json::Value result_data);

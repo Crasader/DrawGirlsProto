@@ -1,0 +1,15 @@
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+<key>HSPSDK_VERSION</key>
+<string>2.5.3</string>
+<key>HSPCORE_VERSION</key>
+<string>2.5.8956</string>
+<key>HSPPAYMENT_VERSION</key>
+<string>3.3.8889</string>
+<key>HSPITEMDELIVERY_VERSION</key>
+<string>2.3.6222</string>
+<key>HSPCGP_VERSION</key>
+<string>2.3.8751</string>
+</dict>
+</plist>

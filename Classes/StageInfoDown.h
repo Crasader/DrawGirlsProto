@@ -99,7 +99,7 @@ private:
 		Json::Value param;
 		param["no"] = mySD->getSilType();
 		param["version"] = SDS_GI(kSDF_stageInfo, mySD->getSilType(), "version");
-		graphdog->command("getstageinfo", param, this, gd_selector(StageInfoDown::resultGetStageInfo));
+		graphdog->command("getstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
 	}
 	
 	void resultGetStageInfo(Json::Value result_data);

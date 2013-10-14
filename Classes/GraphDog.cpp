@@ -8,7 +8,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <unistd.h>
-#include "JNIKelper.h"
+//#include "JNIKelper.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #include "jni.h"
@@ -23,7 +23,7 @@
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #include <sys/types.h>
 #include <sys/sysctl.h>
-#include "OpenUDID.h"
+//#include "OpenUDID.h"
 #endif
 #include "BaseXX.h"
 #include "KSDes.h"
@@ -62,13 +62,13 @@ string GraphDog::getGraphDogVersion(){
     return this->gdVersion;
 }
 
-void GraphDog::setup(string secretKey,int _appVersion){
+void GraphDog::setup(string secretKey,string _appVersion){
   
     
     this->setup("", secretKey, "", _appVersion);
     
 }
-void GraphDog::setup(string appID,string secretKey,string _packageName,int _appVersion){
+void GraphDog::setup(string appID,string secretKey,string _packageName,string _appVersion){
 	
     aID=appID;
     sKey=secretKey;
@@ -76,9 +76,9 @@ void GraphDog::setup(string appID,string secretKey,string _packageName,int _appV
 	this->packageName=_packageName;
     //string deviceId = getDeviceID();
 	//this->setUdid(deviceId);
-    std::ostringstream ostr;
-    ostr << _appVersion;
-    this->appVersion=ostr.str();
+  //  std::ostringstream ostr;
+  //  ostr << _appVersion;
+    this->appVersion=_appVersion;
 
 #if COCOS2D_VERSION<0x00020000
 	// in cocos2d-x 1.x
@@ -215,7 +215,9 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
         param["p"] = iter->param;
 		param["a"] = iter->action;
 		jsonTotalCmd[buf] = param; // dict 로
-		CommandType cmd = {iter->target, iter->selector, GraphDogLib::JsonObjectToString(iter->param), iter->action};
+		//@@ CommandType cmd = {iter->target, iter->selector, GraphDogLib::JsonObjectToString(iter->param), iter->action};
+        //@@ CommandType cmd = {iter->target, iter->selector, GraphDogLib::JsonObjectToString(iter->param), iter->action};
+        CommandType cmd = {iter->func, GraphDogLib::JsonObjectToString(iter->param), iter->action};
 		cmdQueue.commands[buf] = cmd;
 		cmdCollect.push_back(cmd);
 	}
@@ -243,8 +245,9 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	
 		for(std::vector<CommandType>::const_iterator iter = cmdCollect.begin(); iter != cmdCollect.end(); ++iter)
 		{
-			if( iter->target != 0 && iter->selector != 0)
-				((iter->target)->*(iter->selector))(resultobj);	
+			//@@if( iter->target != 0 && iter->selector != 0)
+			//@@	((iter->target)->*(iter->selector))(resultobj);
+            if(iter->func!=NULL)iter->func(resultobj);
 		}
 		
 		if( cmdQueue.chunk.memory )
@@ -256,16 +259,17 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
     return true;
 }
 //@ bool GraphDog::command(string action, const JsonBox::Object* const param,CCObject *target,GDSelType selector){
-bool GraphDog::command(string action, const Json::Value param,CCObject *target,GDSelType selector){
+//@@bool GraphDog::command(string action, const Json::Value param,CCObject *target,GDSelType selector){
+bool GraphDog::command(string action, const Json::Value param,function<void(Json::Value)> func){
 	CommandParam cp;
 	cp.action = action;
 	if(param != 0){
         cp.param = param;
 		//@ cp.param = *param;        
     }
-	cp.target = target;
-	cp.selector = selector;
-	
+//@@	cp.target = target;
+//@@	cp.selector = selector;
+    cp.func=func;
     std::vector<CommandParam> p;
 	p.push_back(cp);
 	this->command(p);
@@ -303,14 +307,15 @@ void* GraphDog::t_function(void *_insertIndex)
 	//CCLog("t_function2");
     CCLog("command %s",command.commandStr.c_str());
 	string paramStr = toBase64(desEncryption(graphdog->sKey, command.commandStr));
-	string dataset = "&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString();
+	string dataset = "&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
 	//CCLog("t_function3");
 	string commandurl = "http://litqoo.com/dgserver/data.php";
-	//"http://litqoo.com/dgproto/data.php"; //"http://182.162.201.147:10010/data.php"; //
+//	string commandurl = "http://182.162.201.147:10010/data.php"; //"http://182.162.201.147:10010/data.php"; //
     //commandurl=commandurl.append(GraphDog::get()->getGraphDogVersion());
     //commandurl=commandurl.append("/");
     //commandurl=commandurl.append(GraphDog::get()->aID);
     
+    CCLog("graphdog command : %s",command.commandStr.c_str());
 	// << "&param=" << paramStr
 	//curl으로 명령을 날리고 겨로가를 얻는다.
 	CURL *handle = GraphDog::get()->getCURL();
@@ -426,15 +431,17 @@ void* GraphDog::t_function(void *_insertIndex)
 				cp.action = iter->second.action;
 				//@ cp.param = param.getObject();
                 cp.param = param;
-				cp.selector = iter->second.selector;
-				cp.target = iter->second.target;
+				//@@cp.selector = iter->second.selector;
+				//@@cp.target = iter->second.target;
+                cp.func=iter->second.func;
 				vcp.push_back(cp);
 			}
 			command.caller->command(vcp);
 			for(std::map<string, CommandType>::iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
 			{
-				iter->second.target = 0;
-				iter->second.selector = 0;
+				//@@iter->second.target = 0;
+				//@@iter->second.selector = 0;
+                iter->second.func=NULL;
 			}
 		}
 		//newToken = true;
@@ -480,9 +487,13 @@ void* GraphDog::t_function(void *_insertIndex)
 
 void GraphDog::removeCommand(cocos2d::CCObject *target)
 {
+    
+    return;
 	//GDDelegator::getInstance()->removeCommand(target);
 //	pthread_mutex_lock(&cmdsMutex);
-	for(std::map<int, CommandsType>::iterator iter = commandQueue.begin(); iter != commandQueue.end(); ++iter)
+
+	/* //@@
+    for(std::map<int, CommandsType>::iterator iter = commandQueue.begin(); iter != commandQueue.end(); ++iter)
 	{
 		for(std::map<string, CommandType>::iterator iter2 = iter->second.commands.begin(); iter2 != iter->second.commands.end(); ++iter2)
 		{
@@ -494,6 +505,8 @@ void GraphDog::removeCommand(cocos2d::CCObject *target)
 			}
 		}
 	}
+     */
+    
 //	pthread_mutex_unlock(&cmdsMutex);
 }
 
@@ -529,8 +542,9 @@ void GraphDog::receivedCommand(float dt)
 						//@ resultobj["param"]=JsonBox::Value(param);
                         resultobj["param"]=param;
 					}
-					if(command.target!=0 && command.selector!=0)
-						((command.target)->*(command.selector))(resultobj);
+					//@@if(command.target!=0 && command.selector!=0)
+						//@@((command.target)->*(command.selector))(resultobj);
+                    if(command.func!=NULL)command.func(resultobj);
 				}
 				throw commands.chunk.resultCode;
 			}
@@ -545,12 +559,13 @@ void GraphDog::receivedCommand(float dt)
 				//@ CommandType ct = commandQueueIter->second.commands[iter2->first];
                 CommandType ct = iter2->second;
 				//CommandType ct = commandQueueIter->second.commands[iter2.memberName()];
-                if(ct.target != 0 && ct.selector != 0)
+                /* //@@ if(ct.target != 0 && ct.selector != 0)
 				{
                   //  CCLog("%s,%s", iter2.memberName(),GraphDogLib::JsonObjectToString(commands.result));
 					//((ct.target)->*(ct.selector))(iter2);
 					((ct.target)->*(ct.selector))(resultobj[iter2->first.c_str()]);
-				}				
+				}		*/
+                if(ct.func!=NULL)ct.func(resultobj[iter2->first.c_str()]);
 			}
 			
 			//메모리도 해제

@@ -19,16 +19,16 @@
 #import <StoreKit/SKStoreProductViewController.h>
 #import "AppController.h"
 
-@interface AppController(GraphDog) <SKStoreProductViewControllerDelegate>
--(void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController;
-@end
-
-@implementation AppController(GraphDog)
--(void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController
-{
-    [viewController dismissViewControllerAnimated:YES completion:nil];
-}
-@end
+//@interface AppController(GraphDog) <SKStoreProductViewControllerDelegate>
+//-(void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController;
+//@end
+//
+//@implementation AppController(GraphDog)
+//-(void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController
+//{
+//    [viewController dismissViewControllerAnimated:YES completion:nil];
+//}
+//@end
 
 #endif
 
@@ -88,7 +88,7 @@ void replaceString( std::string & strCallId, const char * pszBefore, const char 
 //}
     
 string JsonObjectToString(Json::Value _obj){
-    Json::StyledWriter writer;
+    Json::FastWriter writer;
     return writer.write(_obj);
 }
     
@@ -149,26 +149,26 @@ string getLocalCode()
 	}
 
     void openAppStore(string appid){
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-        if(NSClassFromString(@"SKStoreProductViewController")) { // iOS6 이상인지 체크
-            AppController *appDelegate = (AppController *)[[UIApplication sharedApplication]delegate];
-			
-            SKStoreProductViewController *storeViewController = [[SKStoreProductViewController alloc] init];
-            storeViewController.delegate = appDelegate;
-			
-            NSDictionary *parameters = @{SKStoreProductParameterITunesItemIdentifier:[NSNumber numberWithInt:atoi(appid.c_str())]};
-            
-            [storeViewController loadProductWithParameters:parameters completionBlock:^(BOOL result, NSError *error) {
-                if (result){
-					[appDelegate.viewController presentViewController:storeViewController animated:YES completion:nil];
-                }
-			}];
-        }else{
-            NSString *urlstring = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%s",appid.c_str()];
-            NSURL *url = [NSURL URLWithString:urlstring];
-            [[UIApplication sharedApplication] openURL:url];
-        }
-#endif
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//        if(NSClassFromString(@"SKStoreProductViewController")) { // iOS6 이상인지 체크
+//            AppController *appDelegate = (AppController *)[[UIApplication sharedApplication]delegate];
+//			
+//            SKStoreProductViewController *storeViewController = [[SKStoreProductViewController alloc] init];
+//            storeViewController.delegate = appDelegate;
+//			
+//            NSDictionary *parameters = @{SKStoreProductParameterITunesItemIdentifier:[NSNumber numberWithInt:atoi(appid.c_str())]};
+//            
+//            [storeViewController loadProductWithParameters:parameters completionBlock:^(BOOL result, NSError *error) {
+//                if (result){
+//					[appDelegate.viewController presentViewController:storeViewController animated:YES completion:nil];
+//                }
+//			}];
+//        }else{
+//            NSString *urlstring = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%s",appid.c_str()];
+//            NSURL *url = [NSURL URLWithString:urlstring];
+//            [[UIApplication sharedApplication] openURL:url];
+//        }
+//#endif
     }
 
     
