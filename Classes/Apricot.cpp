@@ -240,9 +240,14 @@ void Apricot::cumberAttack(float dt)
 		else
 		{
 			CCLog("acode %d", attackCode);
-			lastCastNum = m_well512.GetValue(1, 3);
-			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
-			startAnimationNoDirection();
+			
+			int ret = gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
+			if(ret == 1)
+			{
+				lastCastNum = m_well512.GetValue(1, 3);
+				mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
+				startAnimationNoDirection();
+			}
 			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
 		}
 	}

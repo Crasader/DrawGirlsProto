@@ -378,6 +378,7 @@ typedef void (CCObject::*SEL_CallFuncII)(int, int);
 #include <string>
 
 class KSCumberBase;
+
 class GameData : public CCObject
 {
 public:
@@ -391,7 +392,7 @@ public:
 	std::map<std::string, std::function<void(CCObject*)>> V_CCO;
 	std::map<std::string, std::function<void(CCPoint)>> V_CCP;
 	std::map<std::string, std::function<void(CCPoint, ccColor4F)>> V_CCPCOLOR;
-	std::map<std::string, std::function<bool(CCPoint, int, KSCumberBase*, bool)>> B_CCPICumberBaseB;
+	std::map<std::string, std::function<int(CCPoint, int, KSCumberBase*, bool)>> I_CCPICumberBaseB;
 	std::map<std::string, std::function<void(CCPoint, int)>> V_CCPI;
 	
 	std::map<std::string, std::function<void(CCPoint, bool)>> V_CCPB;
@@ -492,14 +493,14 @@ public:
 		return;
 	}
 	
-	bool communication(string funcName, CCPoint t_p, int t_i, KSCumberBase* cb, bool t_b)
+	int communication(string funcName, CCPoint t_p, int t_i, KSCumberBase* cb, bool t_b)
 	{
-		for(auto i : B_CCPICumberBaseB)
+		for(auto i : I_CCPICumberBaseB)
 		{
 			CCLog("%s : %x", i.first.c_str(), &i.second);
 		}
-		CCAssert(B_CCPICumberBaseB.find(funcName) != B_CCPICumberBaseB.end(), funcName.c_str());
-		return B_CCPICumberBaseB[funcName](t_p, t_i, cb, t_b);
+		CCAssert(I_CCPICumberBaseB.find(funcName) != I_CCPICumberBaseB.end(), funcName.c_str());
+		return I_CCPICumberBaseB[funcName](t_p, t_i, cb, t_b);
 	}
 	
 	void communication(string funcName, float t_f, bool t_b, CCPoint t_p)

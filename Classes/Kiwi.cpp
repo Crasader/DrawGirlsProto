@@ -467,19 +467,22 @@ void Kiwi::cumberAttack(float dt)
 			}
 			else
 			{
-				m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
-				for(auto bodyAniManager : m_bodyAnimationManagers)
+				int ret = gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
+				if(ret == 1)
 				{
-					bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+					m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+					for(auto bodyAniManager : m_bodyAnimationManagers)
+					{
+						bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+					}
+					m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+					if(kSpecialAttack1 <= attackCode) // 특수공격이면 돌아라.
+						startAnimationNoDirection();
+					else if(1 <= attackCode && attackCode <= 100) // 방사형이면 돌아라.
+						startAnimationNoDirection();
+					else if(kTargetAttack1 <= attackCode && attackCode < kSpecialAttack1) // 조준형이면 돌지마라
+						startAnimationDirection();
 				}
-				m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
-				if(kSpecialAttack1 <= attackCode) // 특수공격이면 돌아라.
-					startAnimationNoDirection();
-				else if(1 <= attackCode && attackCode <= 100) // 방사형이면 돌아라.
-					startAnimationNoDirection();
-				else if(kTargetAttack1 <= attackCode && attackCode < kSpecialAttack1) // 조준형이면 돌지마라
-					startAnimationDirection();
-				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
 			}
 		}
 		

@@ -426,7 +426,7 @@ void MissileParent::actionAP103(CCObject* cb)
 	savedAP = true;
 }
 
-bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb, bool exe)
+int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb, bool exe)
 {
 	JsonBox::Value v;
 	v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
@@ -439,7 +439,10 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 	int castFrame = patternData["castframe"].getInt();
 	if(castFrame == 0)
 		castFrame = 120;
-	bool valid = true;
+	int valid = 1;
+	int invalid = 0;
+	int nocast = 2;
+
 	if(pattern == kNonTargetAttack1)
 	{
 		if(exe)
@@ -1441,9 +1444,17 @@ bool MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumbe
 	
 	
 	else
-		valid = false;
+	{
+		return invalid;
+	}
+//		valid = false;
 	
-	return valid; 	
+	if(pattern == kSpecialAttack15 || pattern == kSpecialAttack16)
+	{
+		return nocast;
+	}
+	
+	return valid;
 }
 
 
@@ -1727,7 +1738,8 @@ void MissileParent::myInit( CCNode* boss_eye )
 //	myGD->V_CCPI["MP_attackWithCode"] = std::bind(&MissileParent::attackWithCode, this, _1, _2);
 	
 //	myGD->V_CCPI["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2);
-	myGD->B_CCPICumberBaseB["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
+	myGD->I_CCPICumberBaseB["MP_attackWithKSCode"] =
+		std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
 	myGD->V_CCPCCOCallfuncO["MP_createSubCumberReplication"] = std::bind(&MissileParent::createSubCumberReplication, this, _1, _2, _3);
 	myGD->V_CCO["MP_removeChargeInArray"] = std::bind(&MissileParent::removeChargeInArray, this, _1);
 	myGD->V_IIF["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3);
