@@ -28,7 +28,7 @@ bool Pear::init()
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
-	m_speed = 2.f;
+
 	
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	{
@@ -249,6 +249,7 @@ void Pear::animationDirection(float dt)
 }
 bool Pear::startDamageReaction(float damage, float angle)
 {
+	KSCumberBase::startDamageReaction(damage, angle);
 	m_remainHp -= damage;
 	CCLog("Pear Hp %f", m_remainHp);
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출

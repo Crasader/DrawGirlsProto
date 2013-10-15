@@ -59,6 +59,7 @@ bool Cherry::init()
 
 bool Cherry::startDamageReaction(float damage, float angle)
 {
+	KSCumberBase::startDamageReaction(damage, angle);
 	CCLog("damaga!!!");
 	m_remainHp -= damage;
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
@@ -350,7 +351,7 @@ void Cherry::randomPosition()
 	
 	//	gameData->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
-	
+	m_circle.setRelocation(getPosition(), m_well512);
 	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##
 	m_headImg->runAction(t_scale);
 	

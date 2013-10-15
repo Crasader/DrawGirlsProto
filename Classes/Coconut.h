@@ -46,6 +46,7 @@ public:
 	CREATE_FUNC(Coconut);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
+		CCLog("setPos %f %f", t_sp.x, t_sp.y);
 		KSCumberBase::setPosition(t_sp);
 		gameData->setMainCumberPoint(ccp2ip(t_sp));
 		m_mapPoint = ccp2ip(t_sp);

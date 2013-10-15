@@ -29,7 +29,6 @@ bool Apple::init()
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
-	m_speed = 2.f;
 	
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	{
@@ -242,6 +241,7 @@ void Apple::animationDirection(float dt)
 }
 bool Apple::startDamageReaction(float damage, float angle)
 {
+	KSCumberBase::startDamageReaction(damage, angle);
 	m_remainHp -= damage;
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
 	CCLog("remain hp %f", m_remainHp);
