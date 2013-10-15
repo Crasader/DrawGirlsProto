@@ -2070,8 +2070,8 @@ private:
 		setPosition(myPosition);
 		
 		ticking_main = KS::loadCCBI<CCSprite*>(this, "pattern_timebomb1.ccbi").first;
-		ticking_main->setVisible(false);
-//		ticking_main->setAnchorPoint(ccp(0.5f, 0.5f));
+//		ticking_main->setVisible(false);
+		ticking_main->setAnchorPoint(ccp(0.5f, 0.5f));
 		addChild(ticking_main);
 		
 		if(rangeCode == 1)
@@ -2081,8 +2081,9 @@ private:
 //			ticking_main->addChild(ticking_pad);
 			
 			ticking_label = CCLabelAtlas::create(CCString::createWithFormat("%d",bombTimes)->getCString(), "tickingTimeBomb_number.png", 9, 11, '1');
+			ticking_label->setAnchorPoint(ccp(0.5f, 0.5f));
 			ticking_label->setPosition(ccp(0, 0));
-			ticking_main->addChild(ticking_label);
+			addChild(ticking_label);
 		}
 		else if(rangeCode == 2)
 		{

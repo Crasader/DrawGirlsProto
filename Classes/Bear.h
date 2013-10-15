@@ -66,6 +66,10 @@ public:
 //		mEmotion = NULL;
 //	}
 	bool startDamageReaction(float damage, float angle);
+	virtual void attackBehavior(AP_CODE attackCode)
+	{
+		// nothing.
+	}
 	virtual void startSpringCumber(float userdata){}
 	virtual void startAnimationNoDirection();
 	void damageReaction(float dt);
@@ -211,15 +215,7 @@ protected:
 		float timer;
 	}m_damageData;
 	
-	struct Invisible
-	{
-		int invisibleFrame;
-		int VISIBLE_FRAME;
-		bool startInvisibleScheduler;
-		float invisibleValue;
-		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
-	}m_invisible;
-	
+
 	
 	
 	

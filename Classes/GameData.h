@@ -480,6 +480,12 @@ public:
 		V_V[funcName]();
 		return;
 	}
+	
+	float Fcommunication(string funcName)
+	{
+		CCAssert(F_V.find(funcName) != F_V.end(), funcName.c_str());
+		return F_V[funcName]();
+	}
 //	bool communication(string funcName, KSCumberBase* cb, float a, float b)
 //	{
 //		CCAssert(B_CumberBaseFF.find(funcName) != B_CumberBaseFF.end(), funcName.c_str());

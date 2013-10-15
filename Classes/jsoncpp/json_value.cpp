@@ -705,6 +705,11 @@ Value::asInt() const
    case booleanValue:
       return value_.bool_ ? 1 : 0;
    case stringValue:
+		 {
+			 char* endP;
+			 auto t = strtol(value_.string_, &endP, 10);
+			 return Int(t);
+		 }
    case arrayValue:
    case objectValue:
       JSON_FAIL_MESSAGE( "Type is not convertible to int" );
@@ -735,6 +740,11 @@ Value::asUInt() const
    case booleanValue:
       return value_.bool_ ? 1 : 0;
    case stringValue:
+		 {
+			 char* endP;
+			 auto t = strtoul(value_.string_, &endP, 10);
+			 return Int(t);
+		 }
    case arrayValue:
    case objectValue:
       JSON_FAIL_MESSAGE( "Type is not convertible to uint" );
@@ -765,6 +775,11 @@ Value::asInt64() const
    case booleanValue:
       return value_.bool_ ? 1 : 0;
    case stringValue:
+		 {
+			 char* endP;
+			 auto t = strtoll(value_.string_, &endP, 10);
+			 return Int64(t);
+		 }
    case arrayValue:
    case objectValue:
       JSON_FAIL_MESSAGE( "Type is not convertible to Int64" );
@@ -793,6 +808,13 @@ Value::asUInt64() const
    case booleanValue:
       return value_.bool_ ? 1 : 0;
    case stringValue:
+		 {
+			 {
+				 char* endP;
+				 auto t = strtoull(value_.string_, &endP, 10);
+				 return UInt64(t);
+			 }
+		 }
    case arrayValue:
    case objectValue:
       JSON_FAIL_MESSAGE( "Type is not convertible to UInt64" );
