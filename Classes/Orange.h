@@ -77,7 +77,7 @@ public:
 	virtual void crashMapForPosition(CCPoint targetPt);
 	//	virtual void movingAndCrash(float dt);
 
-	void cumberAttack(float dt);
+
 	virtual bool init();
 	CREATE_FUNC(Orange);
 	virtual void setPosition(const CCPoint& t_sp)
@@ -148,6 +148,15 @@ public:
 //	}
 	void setHeadAndBodies();
 	virtual bool startDamageReaction(float damage, float angle);
+	virtual void attackBehavior(AP_CODE attackCode)
+	{
+//		lastCastNum = m_well512.GetValue(1, 3);
+//		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
+		if(attackCode != kTargetAttack9)
+		{
+			startAnimationNoDirection();
+		}
+	}
 	virtual void startAnimationNoDirection();
 	virtual void startAnimationDirection();
 	//	virtual void startSpringCumber(float userdata)
@@ -323,17 +332,7 @@ protected:
 			timer = 0.f;
 		}
 	}m_direction;
-	
-	
-	
-	struct Invisible
-	{
-		int invisibleFrame;
-		int VISIBLE_FRAME;
-		bool startInvisibleScheduler;
-		float invisibleValue;
-		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
-	}m_invisible;
+
 };
 
 

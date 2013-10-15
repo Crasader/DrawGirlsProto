@@ -256,13 +256,11 @@ public:
 		schedule(schedule_selector(ChargeNodeLambda::charging));
 	}
 	
-//	void cancelCharge()
-//	{
-//		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
-//		if(cancel_target && cancel_delegate)
-//			(cancel_target->*cancel_delegate)(real_target);
-//		removeSelf();
-//	}
+	void cancelCharge()
+	{
+		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
+		removeSelf();
+	}
 	
 	CCObject* getRealTarget()
 	{
@@ -533,13 +531,13 @@ public:
 		schedule(schedule_selector(SpecialChargeNodeLambda::charging));
 	}
 	
-//	void cancelCharge()
-//	{
-//		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
+	void cancelCharge()
+	{
+		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 //		if(cancel_target && cancel_delegate)
 //			(cancel_target->*cancel_delegate)(real_target);
-//		removeSelf();
-//	}
+		removeSelf();
+	}
 	
 	CCObject* getRealTarget()
 	{
@@ -811,14 +809,14 @@ public:
 		schedule(schedule_selector(CrashChargeNodeLambda::charging));
 	}
 	
-//	void cancelCharge()
-//	{
+	void cancelCharge()
+	{
 //		myGD->communication("CP_setCasting", false);
-//		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
+		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 //		if(cancel_target && cancel_delegate)
 //			(cancel_target->*cancel_delegate)(real_target);
-//		removeSelf();
-//	}
+		removeSelf();
+	}
 	
 	CCObject* getRealTarget()
 	{
@@ -856,7 +854,7 @@ private:
 		
 		if(charge_cnt >= charge_frame)
 		{
-			myGD->communication("CP_setCasting", false);
+//			myGD->communication("CP_setCasting", false);
 			AudioEngine::sharedInstance()->stopAllEffects();
 			AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 			actionFunction(real_target);
@@ -915,7 +913,7 @@ public:
 	
 	void cancelCharge()
 	{
-		myGD->communication("CP_setCasting", false);
+//		myGD->communication("CP_setCasting", false);
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 		if(cancel_target && cancel_delegate)
 			(cancel_target->*cancel_delegate)(real_target);

@@ -77,7 +77,7 @@ public:
 	virtual void crashMapForPosition(CCPoint targetPt);
 	//	virtual void movingAndCrash(float dt);
 
-	void cumberAttack(float dt);
+
 	virtual bool init();
 	CREATE_FUNC(Kiwi);
 	virtual void setPosition(const CCPoint& t_sp)
@@ -148,6 +148,33 @@ public:
 //	}
 	void setHeadAndBodies();
 	virtual bool startDamageReaction(float damage, float angle);
+	virtual void attackBehavior(AP_CODE attackCode)
+	{
+		if(attackCode == kTargetAttack9)
+		{
+			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			for(auto bodyAniManager : m_bodyAnimationManagers)
+			{
+				bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+			}
+			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+		}
+		else
+		{
+			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			for(auto bodyAniManager : m_bodyAnimationManagers)
+			{
+				bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+			}
+			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			if(kSpecialAttack1 <= attackCode) // 특수공격이면 돌아라.
+				startAnimationNoDirection();
+			else if(1 <= attackCode && attackCode <= 100) // 방사형이면 돌아라.
+				startAnimationNoDirection();
+			else if(kTargetAttack1 <= attackCode && attackCode < kSpecialAttack1) // 조준형이면 돌지마라
+				startAnimationDirection();
+		}
+	}
 	virtual void startAnimationNoDirection();
 	virtual void startAnimationDirection();
 	//	virtual void startSpringCumber(float userdata)
@@ -325,15 +352,7 @@ protected:
 	}m_direction;
 	
 	
-	
-	struct Invisible
-	{
-		int invisibleFrame;
-		int VISIBLE_FRAME;
-		bool startInvisibleScheduler;
-		float invisibleValue;
-		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
-	}m_invisible;
+
 };
 
 
