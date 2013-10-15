@@ -433,5 +433,5 @@ void StageInfoDown::ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent 
 
 void StageInfoDown::registerWithTouchDispatcher()
 {
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority-1, false);
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -180, true);
 }

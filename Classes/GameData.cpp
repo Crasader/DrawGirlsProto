@@ -396,6 +396,8 @@ void GameData::initUserSelectedStartRect( IntRect t_rect )
 
 void GameData::setUItype( GAMESCREEN_TYPE t_type )
 {
+	if(t_type != myDSH->getIntegerForKey(kDSH_Key_uiType))
+		myDSH->setIntegerForKey(kDSH_Key_uiType, t_type);
 	gamescreen_type = t_type;
 
 	if(gamescreen_type != kGT_full)
@@ -407,7 +409,7 @@ void GameData::setUItype( GAMESCREEN_TYPE t_type )
 void GameData::myInit()
 {
 	boarder_value = 7.f;
-	setUItype(kGT_leftUI);
+	setUItype( GAMESCREEN_TYPE( myDSH->getIntegerForKey(kDSH_Key_uiType) ) );
 
 	// init map
 	for(int i=mapWidthOutlineBegin;i<mapWidthOutlineEnd;i++)

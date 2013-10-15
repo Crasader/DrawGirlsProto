@@ -17,12 +17,12 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		{
 			state_ment->setString("스테이지 목록을 받아오는ing...");
 			
-			int loop_cnt = result_data["count"].asInt();
-			SDS_SI(kSDF_gameInfo, "stage_count", loop_cnt);
-			
 			int top_y, bottom_y, left_x, right_x;
 			
 			Json::Value stage_list = result_data["list"];
+			int loop_cnt = stage_list.size();
+			SDS_SI(kSDF_gameInfo, "stage_count", loop_cnt);
+			
 			for(int i=0;i<loop_cnt;i++)
 			{
 				int stage_number = stage_list[i]["no"].asInt();
@@ -126,6 +126,28 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			SDS_SI(kSDF_gameInfo, "right_x", right_x);
 			SDS_SI(kSDF_gameInfo, "top_y", top_y);
 			SDS_SI(kSDF_gameInfo, "bottom_y", bottom_y);
+			
+			Json::Value event_list = result_data["eventList"];
+			int el_length = event_list.size();
+			SDS_SI(kSDF_gameInfo, "event_count", el_length);
+			for(int i=0;i<el_length;i++)
+			{
+				int event_code = event_list[i]["no"].asInt();
+				SDS_SI(kSDF_gameInfo, CCSTR_CWF("event%d_code", i)->getCString(), event_code);
+				Json::Value thumbnail = event_list[i]["thumbnail"];
+				SDS_SI(kSDF_gameInfo, CCSTR_CWF("event%d_thumbnail_size", i)->getCString(), thumbnail["size"].asInt());
+				if(SDS_GS(kSDF_gameInfo, CCSTR_CWF("event%d_thumbnail_image", i)->getCString()) != thumbnail["image"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df;
+					t_df.size = thumbnail["size"].asInt();
+					t_df.img = thumbnail["image"].asCString();
+					t_df.filename = CCSTR_CWF("event%d_thumbnail.png", i)->getCString();
+					t_df.key = CCSTR_CWF("event%d_thumbnail_image", i)->getCString();
+					df_list.push_back(t_df);
+					// ================================
+				}
+			}
 			
 			if(df_list.size() > 0) // need download
 			{
