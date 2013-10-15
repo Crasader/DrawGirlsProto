@@ -40,6 +40,7 @@ private:
 	
 	CCNode* map_node;
 	
+	CCPoint getCouponPosition(int stage);
 	CCPoint getStagePosition(int stage);
 	CCPoint getUiButtonPosition(int t_tag);
 	

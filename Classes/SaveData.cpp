@@ -135,7 +135,7 @@ string SaveData::getValue(string filename, string _key, string _defaultValue)
 	string file_key = stringEnc(filename);
 	string key = stringEnc(_key);
 	string v = (file_sync[file_key])[key].getString();
-	string v2 = stringDecode(v);
+	string v2 = v;//stringDecode(v);
 	if(v2 == "")
 		return _defaultValue;
 	else
@@ -154,7 +154,7 @@ int SaveData::getValue(string filename, string _key, int _defaultValue)
 	string file_key = stringEnc(filename);
 	string key = stringEnc(_key);
 	string v = (file_sync[file_key])[key].getString();
-	string v2 = stringDecode(v);
+	string v2 = v;//stringDecode(v);
 	int _v2 = atoi(v2.c_str());
 	if(v2 == "")
 		return _defaultValue;
@@ -174,7 +174,7 @@ double SaveData::getValue(string filename, string _key, double _defaultValue)
 	string file_key = stringEnc(filename);
 	string key = stringEnc(_key);
 	string v = (file_sync[file_key])[key].getString();
-	string v2 = stringDecode(v);
+	string v2 = v;//stringDecode(v);
 	int _v2 = atoi(v2.c_str());
 	if(v2 == "")
 		return _defaultValue;
