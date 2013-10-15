@@ -943,27 +943,15 @@ void hspConnector::loadFriendsProfile(Json::Value param,Json::Value callbackPara
         hspConnector::get()->command("httpgateway", p, [=](Json::Value hspNoList){
             Json::Value appFriends2=appFriends;
             Json::Value p2;
-            p2["api"]="GetMemberNoListByOauthIdList";
-            p2["gameNo"]=this->hspNo;
-            p2["serviceDomain"]="KAKAOGAME";
-            p2["oauthProvider"]="kakao";
-            //p2["MemberNo"] = this->getHSPMemberNo();
+            p2["api"]="GetProfileList";
+            p2["requesterMemberNo"]=hspConnector::get()->getHSPMemberNo();
 
             Json::Value::Members m=hspNoList["memberNoMap"].getMemberNames();
             
             for(auto iter = m.begin();iter!=m.end();++iter){
                 appFriends2[*iter]["hNo"]=hspNoList["memberNoMap"][*iter].asInt64();
-                p2["oauthIdList"].append(hspNoList["memberNoMap"][*iter].asInt64());
+                p2["memberNoList"].append(hspNoList["memberNoMap"][*iter].asInt64());
             }
-            
-            Json::Value p3;
-            p3["api"]="SetGameFollowers";
-            p3["opponentList"] = p2["memberNoList"];
-            p3["memberNo"]=this->getHSPMemberNo();
-            
-            hspConnector::get()->command("httpgateway",p3,[](Json::Value obj){
-                    jsonLog("addfirned", obj);
-            });
             
              //hsp번호목록으로 hsp정보 가져와서 카카오친구에 붙인다.
              hspConnector::get()->command("httpgateway", p2, [=](Json::Value hMembers){

@@ -12,7 +12,6 @@
 #include "StageSettingScene.h"
 #include "CollectionListScene.h"
 #include "StageInfoDown.h"
-#include "GraphDog.h"
 #include "OptionScene.h"
 #include "GachaPopup.h"
 #include "RankPopup.h"
@@ -181,13 +180,23 @@ bool WorldMapScene::init()
 	
 	////////////////////////////////////////////////////
 	
-	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(WorldMapScene::setWorldMapScene));
-	addChild(t_sld);
+	Json::Value param;
+	param["ManualLogin"] = true;
+	
+	hspConnector::get()->login(param, param, std::bind(&WorldMapScene::resultLogin, this, std::placeholders::_1));
 	
 	ScreenSide* t_screen = ScreenSide::create();
 	addChild(t_screen, 99999);
 	
     return true;
+}
+
+void WorldMapScene::resultLogin(Json::Value result_data)
+{
+	CCLog("result data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
+	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(WorldMapScene::setWorldMapScene));
+	addChild(t_sld);
 }
 
 void WorldMapScene::setWorldMapScene()

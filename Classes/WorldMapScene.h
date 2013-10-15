@@ -14,6 +14,8 @@
 #include "GameData.h"
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
+#include "GraphDog.h"
+#include "hspConnector.h"
 
 USING_NS_CC;
 using namespace std;
@@ -43,6 +45,8 @@ private:
 	CCPoint getCouponPosition(int stage);
 	CCPoint getStagePosition(int stage);
 	CCPoint getUiButtonPosition(int t_tag);
+	
+	void resultLogin(Json::Value result_data);
 	
 	void setWorldMapScene();
 	CCPoint getTrackPositionMove(string d);
