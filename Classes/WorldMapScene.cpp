@@ -514,6 +514,7 @@ void WorldMapScene::setMapNode()
 	init_position = ccpAdd(init_position, ccp(240,160));
 	
 	map_node->setPosition(init_position);
+	is_menu_enable = true;
 }
 
 void WorldMapScene::setUIs()
