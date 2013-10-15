@@ -48,7 +48,13 @@ private:
 	
 	void resultLogin(Json::Value result_data);
 	
+	int pass_target_stage;
+	
+	void passTicketStage();
+	void resetWorldMapScene();
 	void setWorldMapScene();
+	void setMapNode();
+	void setUIs();
 	CCPoint getTrackPositionMove(string d);
 	int getRotateValue(string d);
 	int getTurnRotateValue(string d, string a_d);

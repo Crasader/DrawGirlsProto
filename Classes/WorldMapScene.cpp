@@ -21,6 +21,7 @@
 #include "CardSettingScene.h"
 #include "StageListDown.h"
 #include "GradationBGI.h"
+#include "TicketNeedPopup.h"
 
 #include <algorithm>
 #include <ostream>
@@ -199,12 +200,26 @@ void WorldMapScene::resultLogin(Json::Value result_data)
 	addChild(t_sld);
 }
 
+void WorldMapScene::passTicketStage()
+{
+	myDSH->setBoolForKey(kDSH_Key_isPassCoupon_int1, pass_target_stage, true);
+	resetWorldMapScene();
+}
+
+void WorldMapScene::resetWorldMapScene()
+{
+	map_node->removeFromParent();
+	setMapNode();
+}
+
 void WorldMapScene::setWorldMapScene()
 {
-//	CCSprite* worldmap_back = CCSprite::create("worldmap_back.png");
-//	worldmap_back->setPosition(ccp(240,160));
-//	addChild(worldmap_back, kWMS_Z_back);
-	
+	setMapNode();
+	setUIs();
+}
+
+void WorldMapScene::setMapNode()
+{
 	map_node = CCNode::create();
 	addChild(map_node, kWMS_Z_track);
 	
@@ -445,7 +460,7 @@ void WorldMapScene::setWorldMapScene()
 				}
 			}
 		}
-			
+		
 		if(!is_coupon)
 		{
 			if(updated_stage >= i && i-2 <= cleared_number)
@@ -478,6 +493,34 @@ void WorldMapScene::setWorldMapScene()
 	GradationBGI* t_gra = GradationBGI::create(left_x, right_x, bottom_y, top_y);
 	t_gra->setPosition(CCPointZero);
 	map_node->addChild(t_gra, kWMS_Z_back);
+	
+	maximum_scale = 1.f;
+	minimum_scale = maximum_scale/3.f;
+	
+	int last_selected_stage = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage);
+	if(last_selected_stage == 0)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, 1);
+		last_selected_stage = 1;
+	}
+	
+	CCPoint init_position;
+	
+	init_position.x = SDS_GI(kSDF_gameInfo, CCSTR_CWF("stage%d_x", last_selected_stage)->getCString());
+	init_position.y = SDS_GI(kSDF_gameInfo, CCSTR_CWF("stage%d_y", last_selected_stage)->getCString());
+	
+	init_position = ccpMult(init_position, -40.f);
+	init_position = ccpAdd(init_position, ccp(-20.f,-20.f));
+	init_position = ccpAdd(init_position, ccp(240,160));
+	
+	map_node->setPosition(init_position);
+}
+
+void WorldMapScene::setUIs()
+{
+	CCSprite* worldmap_shopback = CCSprite::create("worldmap_shopback.png");
+	worldmap_shopback->setPosition(ccp(240,295));
+	addChild(worldmap_shopback, kWMS_Z_ui_button);
 	
 	CCSprite* n_card = CCSprite::create("worldmap_card.png");
 	CCSprite* s_card = CCSprite::create("worldmap_card.png");
@@ -512,16 +555,16 @@ void WorldMapScene::setWorldMapScene()
 		}
 	}
 	
-//	CCSprite* n_collection = CCSprite::create("worldmap_collection.png");
-//	CCSprite* s_collection = CCSprite::create("worldmap_collection.png");
-//	s_collection->setColor(ccGRAY);
-//	
-//	CCMenuItem* collection_item = CCMenuItemSprite::create(n_collection, s_collection, this, menu_selector(WorldMapScene::menuAction));
-//	collection_item->setTag(kWMS_MT_collection);
-//	
-//	CCMenu* collection_menu = CCMenu::createWithItem(collection_item);
-//	collection_menu->setPosition(getUiButtonPosition(kWMS_MT_collection));
-//	addChild(collection_menu, kWMS_Z_ui_button);
+	//	CCSprite* n_collection = CCSprite::create("worldmap_collection.png");
+	//	CCSprite* s_collection = CCSprite::create("worldmap_collection.png");
+	//	s_collection->setColor(ccGRAY);
+	//
+	//	CCMenuItem* collection_item = CCMenuItemSprite::create(n_collection, s_collection, this, menu_selector(WorldMapScene::menuAction));
+	//	collection_item->setTag(kWMS_MT_collection);
+	//
+	//	CCMenu* collection_menu = CCMenu::createWithItem(collection_item);
+	//	collection_menu->setPosition(getUiButtonPosition(kWMS_MT_collection));
+	//	addChild(collection_menu, kWMS_Z_ui_button);
 	
 	
 	CCSprite* n_option = CCSprite::create("worldmap_option.png");
@@ -618,27 +661,6 @@ void WorldMapScene::setWorldMapScene()
 	CCMenu* life_shop_menu = CCMenu::createWithItem(life_shop_item);
 	life_shop_menu->setPosition(getUiButtonPosition(kWMS_MT_lifeShop));
 	addChild(life_shop_menu, kWMS_Z_ui_button);
-	
-	maximum_scale = 1.f;
-	minimum_scale = maximum_scale/3.f;
-	
-	int last_selected_stage = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage);
-	if(last_selected_stage == 0)
-	{
-		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, 1);
-		last_selected_stage = 1;
-	}
-	
-	CCPoint init_position;
-	
-	init_position.x = SDS_GI(kSDF_gameInfo, CCSTR_CWF("stage%d_x", last_selected_stage)->getCString());
-	init_position.y = SDS_GI(kSDF_gameInfo, CCSTR_CWF("stage%d_y", last_selected_stage)->getCString());
-	
-	init_position = ccpMult(init_position, -40.f);
-	init_position = ccpAdd(init_position, ccp(-20.f,-20.f));
-	init_position = ccpAdd(init_position, ccp(240,160));
-	
-	map_node->setPosition(init_position);
 	
 	setTouchEnabled(true);
 	is_menu_enable = true;
@@ -752,8 +774,10 @@ void WorldMapScene::menuAction(CCObject* pSender)
 	else if(tag < kWMS_MT_option)
 	{
 		tag -= kWMS_MT_couponBase;
-		// popup
-		is_menu_enable = true;
+		pass_target_stage = tag;
+		
+		TicketNeedPopup* t_tnp = TicketNeedPopup::create(this, callfunc_selector(WorldMapScene::popupClose), this, callfunc_selector(WorldMapScene::passTicketStage));
+		addChild(t_tnp, kWMS_Z_popup);
 	}
 	else if(tag == kWMS_MT_cardSetting)
 	{
