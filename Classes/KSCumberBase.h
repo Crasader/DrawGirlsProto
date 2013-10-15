@@ -78,6 +78,9 @@ public:
 	{
 		CCNode::init();
 //		mEmotion = NULL;
+		schedule(schedule_selector(ThisClassType::speedAdjustment));
+		
+		
 		return true;
 	}
 	
@@ -130,7 +133,7 @@ public:
 		m_state = CUMBERSTATEGAMEOVER;
 		
 //		m_scale.scale.init(m_scale.scale.getValue(), 0.f, 0.03f);
-		runAction(CCScaleTo::create(2.f, 0.01f));
+//		runAction(CCScaleTo::create(2.f, 0.01f));
 		m_minScale = 0.f;
 		m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(0, 30));
 		m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(30, 60));
@@ -252,7 +255,8 @@ public:
 	}
 	
 	virtual void cumberAttack(float dt);
-	virtual bool startDamageReaction(float damage, float angle) = 0;
+	void speedAdjustment(float dt);
+	virtual bool startDamageReaction(float damage, float angle);
 	//	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
@@ -319,6 +323,8 @@ public:
 	void settingSpeed(float startSpeed, float minSpeed, float maxSpeed)
 	{
 		m_speed = m_startSpeed = startSpeed;
+//		m_speed.init(m_startSpeed, m_startSpeed, 0.1f);
+
 		m_minSpeed = minSpeed;
 		m_maxSpeed = maxSpeed;
 	}
@@ -413,11 +419,12 @@ protected:
 //	Emotion* mEmotion;
 	Well512 m_well512;
 	int m_directionAngleDegree;
-	float m_speed;
+
 	float m_attackPercent;
 	float m_startScale, m_minScale, m_maxScale;
 	float m_startSpeed, m_minSpeed, m_maxSpeed;
-	
+//	FromTo<float> m_speed;
+	float m_speed;
 	float m_remainHp;
 	float m_totalHp;
 	float m_speedRatio;
@@ -476,6 +483,7 @@ protected:
 		float lastMapCollisionTime;
 		float timer;
 	}m_follow;
+	
 	
 	struct CircleMoving
 	{

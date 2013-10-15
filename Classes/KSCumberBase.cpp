@@ -209,6 +209,7 @@ void KSCumberBase::randomMoving(float dt)
 
 void KSCumberBase::straightMoving(float dt)
 {
+	CCLog("%f %f", getPosition().x, getPosition().y);
 	m_scale.timer += 1/60.f;
 	
 	
@@ -1079,7 +1080,7 @@ void KSCumberBase::cumberAttack(float dt)
 //	myJack->get
 	float gainPercent = myGD->Fcommunication("UI_getMapPercentage") * 100.f;
 	float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
-	CCLog("%f %f %d", distance, gainPercent, m_crashCount);
+//	CCLog("%f %f %d", distance, gainPercent, m_crashCount);
 	bool crashAttack = false;
 	
 	
@@ -1153,8 +1154,6 @@ void KSCumberBase::cumberAttack(float dt)
 			{
 				m_state = CUMBERSTATESTOP;
 				attackBehavior((AP_CODE)attackCode);
-				
-				
 				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
 			}
 			else
@@ -1171,3 +1170,17 @@ void KSCumberBase::cumberAttack(float dt)
 
 }
 
+void KSCumberBase::speedAdjustment(float dt)
+{
+//	m_speed.step();
+	float t = (m_maxSpeed - m_minSpeed) * 0.0005f;
+	m_speed = MIN(m_maxSpeed, m_speed + t);
+}
+
+bool KSCumberBase::startDamageReaction(float damage, float angle)
+{
+	float t = (m_maxSpeed - m_minSpeed) * 0.3f;
+	m_speed = MAX(m_speed - t, m_minSpeed);
+//	m_speed.init(m_speed, to, 0.1f);
+	return true; // 의미없음.
+}

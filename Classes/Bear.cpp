@@ -58,6 +58,7 @@ bool Bear::init()
 
 bool Bear::startDamageReaction(float damage, float angle)
 {
+	KSCumberBase::startDamageReaction(damage, angle);
 	m_remainHp -= damage;
 	CCLog("Bear Hp %f", m_remainHp);
 	CCLog("damaga!!!");
@@ -361,7 +362,7 @@ void Bear::randomPosition()
 	
 	//	gameData->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
-	
+	m_circle.setRelocation(getPosition(), m_well512);
 	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##
 	m_headImg->runAction(t_scale);
 	

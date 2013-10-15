@@ -36,6 +36,7 @@ public:
 		dx = (to - from) / duration;
 		// positive
 	}
+	
 	void init(T _from, T _to, float _duration)
 	{
 		flowTime = 0.f;
@@ -177,6 +178,7 @@ public:
 		}
 		
 	}
+	T getTo(){return to;}
 	void init(T _from, T _to, T _dx)
 	{
 		originFrom = _from;
