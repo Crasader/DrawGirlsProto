@@ -10,6 +10,8 @@
 #  include "json_batchallocator.h"
 # endif // #ifndef JSON_USE_SIMPLE_INTERNAL_ALLOCATOR
 #endif // if !defined(JSON_IS_AMALGAMATION)
+
+#include <sstream>
 #include <iostream>
 #include <utility>
 #include <stdexcept>
@@ -646,12 +648,6 @@ Value::operator !=( const Value &other ) const
    return !( *this == other );
 }
 
-const char *
-Value::asCString() const
-{
-   JSON_ASSERT( type_ == stringValue );
-   return value_.string_;
-}
 
 
 std::string 
@@ -666,7 +662,17 @@ Value::asString() const
    case booleanValue:
       return value_.bool_ ? "true" : "false";
    case intValue:
+		 {
+			 std::ostringstream oss;
+			 oss << value_.int_;
+			 return oss.str();
+		 }
    case uintValue:
+		 {
+			 std::ostringstream oss;
+			 oss << value_.uint_;
+			 return oss.str();
+		 }
    case realValue:
    case arrayValue:
    case objectValue:
@@ -868,6 +874,12 @@ Value::asDouble() const
    case booleanValue:
       return value_.bool_ ? 1.0 : 0.0;
    case stringValue:
+		 {
+			 char* endP;
+			 
+			 auto t = strtod(value_.string_, &endP);
+			 return (t);
+		 }
    case arrayValue:
    case objectValue:
       JSON_FAIL_MESSAGE( "Type is not convertible to double" );
@@ -897,6 +909,12 @@ Value::asFloat() const
    case booleanValue:
       return value_.bool_ ? 1.0f : 0.0f;
    case stringValue:
+		 {
+			 char* endP;
+			 
+			 auto t = strtof(value_.string_, &endP);
+			 return (t);
+		 }
    case arrayValue:
    case objectValue:
       JSON_FAIL_MESSAGE( "Type is not convertible to float" );

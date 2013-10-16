@@ -165,12 +165,11 @@ public:
 			{
 				auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossdie.ccbi");
 				
+				
 				CCPoint t = getPosition();
 				ret.first->setPosition(t);
 				addChild(ret.first, 11);
-
 			}
-
 		}
 	}
 	virtual void cumberImgStartRotating(float gabage){} //## 임시.
@@ -339,7 +338,7 @@ public:
 		KS::KSLog("%", pattern);
 		for(auto iter = pattern.begin(); iter != pattern.end(); ++iter)
 		{
-			int patternNumber = atoi(iter.key().asCString()); // 패턴 넘버
+			int patternNumber = atoi(iter.key().asString().c_str()); // 패턴 넘버
 			int ratio = pattern[iter.key().asString()]["percent"].asInt();  // 빈번도
 			for(int j = 0; j<ratio; j++)
 			{
@@ -348,7 +347,7 @@ public:
 		}
 //		for(auto i : pattern)
 //		{
-//			//i.asCString()
+//			//i.asString().c_str()
 //			int patternNumber = atoi(i.first.c_str()); // 패턴 넘버
 //			int ratio = i.second["percent"].getInt();  // 빈번도
 //			for(int j = 0; j<ratio; j++)

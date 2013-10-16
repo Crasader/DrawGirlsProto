@@ -37,7 +37,9 @@ public:
 	CREATE_FUNC(Apricot);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
-		KSCumberBase::setPosition(t_sp);
+		//		CCLog("setPos %f %f", t_sp.x, t_sp.y);
+		//		KSCumberBase::setPosition(t_sp);
+		m_headImg->setPosition(t_sp);
 		gameData->setMainCumberPoint(ccp2ip(t_sp));
 		m_mapPoint = ccp2ip(t_sp);
 		//		gameData->communication("Main_moveGamePosition", t_sp);
@@ -46,6 +48,18 @@ public:
 		//		gameData->communication("Main_moveGamePosition", t_sp);
 		//		std::thread t1([](){;});
 		
+	}
+	virtual void setPositionX(float t_x)
+	{
+		setPosition(ccp(t_x, getPositionY()));
+	}
+	virtual void setPositionY(float t_y)
+	{
+		setPosition(ccp(getPositionX(), t_y));
+	}
+	virtual const CCPoint& getPosition()
+	{
+		return m_headImg->getPosition();
 	}
 	
 	COLLISION_CODE crashWithX(IntPoint check_position);

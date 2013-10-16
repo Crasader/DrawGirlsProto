@@ -45,7 +45,16 @@ static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(480, 320);
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
+	Json::Reader reader;
+	Json::Value root;
 
+	reader.parse(R"({"ABC":"1.23", "ABCDE":"21474836470001", "ABCDEF":3434} )", root);
+	KS::KSLog("% % % % % % %", root["ABC"].asBool(), root["ABCDE"].asInt64(),
+						root["ABC"].asFloat(), root["ABC"].asDouble(),
+						root["ABCDE"].asInt(), root["ABCDE"].asUInt(),
+						root["ABCDEF"].asString());
+	
+	
 	
     // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
