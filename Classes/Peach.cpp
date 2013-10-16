@@ -363,7 +363,6 @@ void Peach::randomPosition()
 		
 		runAction(t_seq);
 	}
-	
 }
 
 void Peach::crashMapForPosition(CCPoint targetPt)
