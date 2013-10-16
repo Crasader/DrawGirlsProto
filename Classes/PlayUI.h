@@ -1059,7 +1059,7 @@ private:
 	void endGame()
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
-		myGD->communication("CP_setGameover");
+//		myGD->communication("CP_setGameover");
 		CCDelayTime* n_d = CCDelayTime::create(3.f);
 		CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 		
