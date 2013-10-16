@@ -80,6 +80,7 @@ public:
 //		mEmotion = NULL;
 		schedule(schedule_selector(ThisClassType::speedAdjustment));
 		
+		
 		return true;
 	}
 	
@@ -149,20 +150,18 @@ public:
 	{
 		m_bossDie.m_bossDieFrameCount++;
 		int maxValue = *max_element(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end());
-//		if(find(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end(), m_bossDie.m_bossDieFrameCount)
-//			 != m_bossDie.m_bossDieBombFrameNumbers.end())
-		if(m_bossDie.m_bossDieFrameCount % 60 == 0)
+		if(find(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end(), m_bossDie.m_bossDieFrameCount)
+			 != m_bossDie.m_bossDieBombFrameNumbers.end())
 		{
 			auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
-			ret.first->setScale(1.f);
+			
 			CCPoint t = getPosition();
 			t.x += m_well512.GetValue(-100, 100);
 			t.y += m_well512.GetValue(-100, 100);
 			ret.first->setPosition(t);
 			addChild(ret.first, 11);
 			
-//			if(maxValue == m_bossDie.m_bossDieFrameCount)
-			
+			if(maxValue == m_bossDie.m_bossDieFrameCount)
 			{
 				auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossdie.ccbi");
 				
