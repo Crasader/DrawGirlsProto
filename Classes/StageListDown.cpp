@@ -33,7 +33,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					// check, after download ----------
 					DownloadFile t_df;
 					t_df.size = thumbnail["size"].asInt();
-					t_df.img = thumbnail["image"].asCString();
+					t_df.img = thumbnail["image"].asString().c_str();
 					t_df.filename = CCSTR_CWF("stage%d_thumbnail.png", stage_number)->getCString();
 					t_df.key = CCSTR_CWF("stage%d_thumbnail_image", stage_number)->getCString();
 					df_list.push_back(t_df);
@@ -45,7 +45,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				SDS_SI(kSDF_gameInfo, CCSTR_CWF("stage%d_path_length", stage_number)->getCString(), path_length);
 				for(int j=0;j<path_length;j++)
 				{
-					SDS_SS(kSDF_gameInfo, CCSTR_CWF("stage%d_path_direction%d", stage_number, j)->getCString(), path[j]["d"].asCString());
+					SDS_SS(kSDF_gameInfo, CCSTR_CWF("stage%d_path_direction%d", stage_number, j)->getCString(), path[j]["d"].asString().c_str());
 					SDS_SI(kSDF_gameInfo, CCSTR_CWF("stage%d_path_count%d", stage_number, j)->getCString(), path[j]["c"].asInt());
 				}
 				
@@ -93,7 +93,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					// check, after download ----------
 					DownloadFile t_df;
 					t_df.size = thumbnail["size"].asInt();
-					t_df.img = thumbnail["image"].asCString();
+					t_df.img = thumbnail["image"].asString().c_str();
 					t_df.filename = CCSTR_CWF("coupon%d_thumbnail.png", stage_number)->getCString();
 					t_df.key = CCSTR_CWF("coupon%d_thumbnail_image", stage_number)->getCString();
 					df_list.push_back(t_df);
@@ -105,7 +105,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				SDS_SI(kSDF_gameInfo, CCSTR_CWF("coupon%d_path_length", stage_number)->getCString(), path_length);
 				for(int j=0;j<path_length;j++)
 				{
-					SDS_SS(kSDF_gameInfo, CCSTR_CWF("coupon%d_path_direction%d", stage_number, j)->getCString(), path[j]["d"].asCString());
+					SDS_SS(kSDF_gameInfo, CCSTR_CWF("coupon%d_path_direction%d", stage_number, j)->getCString(), path[j]["d"].asString().c_str());
 					SDS_SI(kSDF_gameInfo, CCSTR_CWF("coupon%d_path_count%d", stage_number, j)->getCString(), path[j]["c"].asInt());
 				}
 				
@@ -141,7 +141,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					// check, after download ----------
 					DownloadFile t_df;
 					t_df.size = thumbnail["size"].asInt();
-					t_df.img = thumbnail["image"].asCString();
+					t_df.img = thumbnail["image"].asString().c_str();
 					t_df.filename = CCSTR_CWF("event%d_thumbnail.png", i)->getCString();
 					t_df.key = CCSTR_CWF("event%d_thumbnail_image", i)->getCString();
 					df_list.push_back(t_df);
