@@ -1080,9 +1080,9 @@ void hspConnector::kLoadFriends(jsonSelType func){
 void hspConnector::kSendMessage(Json::Value param,Json::Value callbackParam,jsonSelType func){
     
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-    NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asCString()];
-    NSString* message =  [NSString stringWithUTF8String:param["message"].asCString()];
-    NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asCString()];
+    NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+    NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+    NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
     
     KALinkMessageRequest *request = nil;
     

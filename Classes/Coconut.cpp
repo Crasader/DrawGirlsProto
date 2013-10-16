@@ -452,6 +452,5 @@ void Coconut::scaleAdjustment(float dt)
 	m_scale.scale.step();
 	
 	m_headImg->setScale(getCumberScale());
-	
 }
 
