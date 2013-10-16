@@ -843,12 +843,13 @@ public:
 //		return;
 		if(!isDie)
 		{
-			Well512 t_well512;
-			myGD->setJackPoint(IntPoint(t_well512.GetValue(mapWidthInnerBegin, mapWidthInnerEnd),t_well512.GetValue(mapHeightInnerBegin, mapHeightInnerEnd)));
-			if(getJackState() == jackStateDrawing)
-			{
-				jack_drawing->setVisible(false);
-			}
+//			Well512 t_well512;
+//			myGD->setJackPoint(IntPoint(t_well512.GetValue(mapWidthInnerBegin, mapWidthInnerEnd),t_well512.GetValue(mapHeightInnerBegin, mapHeightInnerEnd)));
+//			if(getJackState() == jackStateDrawing)
+//			{
+//				jack_drawing->setVisible(false);
+//			}
+			setJackState(jackStateNormal);
 			isDrawingOn = false;
 			
 			myGD->removeMapNewline();

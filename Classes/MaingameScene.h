@@ -306,11 +306,14 @@ private:
 		
 		if(mySGD->getIsCleared())
 		{
-			int cleared_number = myDSH->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
-			
-			if(mySD->getSilType() > cleared_number)
+			if(mySD->getSilType() < 10000)
 			{
-				myDSH->setIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1, mySD->getSilType());
+				int cleared_number = myDSH->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
+				
+				if(mySD->getSilType() > cleared_number)
+				{
+					myDSH->setIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1, mySD->getSilType());
+				}
 			}
 			
 			AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);

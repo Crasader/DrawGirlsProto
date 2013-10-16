@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:background="@color/hsp.auth.kakao.welcome.background.land"
+            android:scaleType="centerInside"
+            android:tag="hsp.auth.kakao.welcome.background" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25.31dp"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7.32dp"
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:button="@drawable/hsp_auth_kakao_welcome_terms_checkbox"
+                android:tag="hsp.auth.kakao.welcome.terms.checkbox" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8.00dp"
+                android:tag="hsp.auth.kakao.welcome.terms.text"
+                android:text="@string/hsp.auth.kakao.welcome.terms"
+                android:textColor="@color/hsp.auth.kakao.welcome.terms.text"
+                android:textSize="13.33dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="299.81dp"
+            android:layout_height="48.00dp"
+            android:background="@drawable/hsp_auth_kakao_welcome_login_button"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="0dp"
+            android:tag="hsp.auth.kakao.welcome.login.button" >
+
+            <ImageView
+                android:layout_width="21.32dp"
+                android:layout_height="20.00dp"
+                android:layout_marginLeft="18.00dp"
+                android:gravity="center"
+                android:src="@drawable/hsp_auth_kakao_icon" />
+
+            <ImageView
+                android:layout_width="2.00dp"
+                android:layout_height="17.32dp"
+                android:layout_marginLeft="14.00dp"
+                android:gravity="center"
+                android:src="@drawable/hsp_auth_kakao_welcome_login_button_div" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:shadowColor="@color/hsp.auth.kakao.welcome.login.button.text.shadow"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:tag="hsp.auth.kakao.welcome.login.button.text"
+                android:text="@string/hsp.auth.kakao.welcome.login.button"
+                android:textColor="@color/hsp.auth.kakao.welcome.login.button.text"
+                android:textSize="18.66dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

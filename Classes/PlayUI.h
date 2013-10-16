@@ -1428,6 +1428,7 @@ private:
 		myGD->V_V["UI_takeAddTimeItem"] = std::bind(&PlayUI::takeAddTimeItem, this);
 		myGD->V_V["UI_stopCounting"] = std::bind(&PlayUI::stopCounting, this);
 		myGD->V_V["UI_resumeCounting"] = std::bind(&PlayUI::resumeCounting, this);
+		myGD->F_V["UI_getMapPercentage"] = std::bind(&PlayUI::getPercentage, this);
 	}
 	
 	void continueAction()

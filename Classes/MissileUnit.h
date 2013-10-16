@@ -704,7 +704,120 @@ public:
 	virtual void lineDie(IntPoint t_p) = 0;
 };
 
-
+class WindmillObject : public CCSprite
+{
+public:
+	static WindmillObject* create(IntPoint t_sp, int t_thornsFrame)
+	{
+		WindmillObject* t_to = new WindmillObject();
+		t_to->myInit(t_sp, t_thornsFrame);
+		t_to->autorelease();
+		return t_to;
+	}
+	
+	void startMyAction()
+	{
+		ingFrame = -30;
+		
+		CCRotateBy* t_rotate = CCRotateBy::create(1.f, 240);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_rotate);
+		
+		runAction(t_repeat);
+		
+		schedule(schedule_selector(WindmillObject::myAction));
+	}
+	
+private:
+	
+	int thornsFrame;
+	int ingFrame;
+	bool is_action;
+	IntPoint myPoint;
+	
+	void myAction()
+	{
+		ingFrame++;
+		
+		int surroundCnt = 0;
+		IntPoint checkPoint = IntPoint(myPoint.x-1, myPoint.y);
+		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapEmpty)		surroundCnt++;
+		checkPoint = IntPoint(myPoint.x+1, myPoint.y);
+		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapEmpty)		surroundCnt++;
+		checkPoint = IntPoint(myPoint.x, myPoint.y-1);
+		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapEmpty)		surroundCnt++;
+		checkPoint = IntPoint(myPoint.x, myPoint.y+1);
+		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapEmpty)		surroundCnt++;
+		
+		if(surroundCnt == 0)
+		{
+			stopMyAction();
+			return;
+		}
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+		
+		CCPoint subPosition = ccpSub(jackPosition, getPosition());
+		
+		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
+		
+		if(distance < 16*getScale())
+		{
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect");
+		}
+		
+		if(!is_action)
+		{
+			if(ingFrame < 0)
+				setScale((30+ingFrame)*0.033);
+			else if(ingFrame == 0)
+			{
+				setScale((30+ingFrame)*0.033);
+				is_action = true;
+			}
+			else if(ingFrame > 0)
+			{
+				setScale((30-ingFrame)*0.033);
+				if(ingFrame >= 30)
+				{
+					stopMyAction();
+					return;
+				}
+			}
+		}
+		else
+		{
+			if(ingFrame >= thornsFrame)
+			{
+				is_action = false;
+				ingFrame = 0;
+			}
+		}
+	}
+	
+	void stopMyAction()
+	{
+		unschedule(schedule_selector(WindmillObject::myAction));
+		removeFromParentAndCleanup(true);
+	}
+	
+	void myInit(IntPoint t_sp, int t_thornsFrame)
+	{
+		CCSprite::init();
+		myPoint = t_sp;
+		is_action = false;
+		thornsFrame = t_thornsFrame;
+//		initWithFile("thorns_wall.png");
+		
+		auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_thornswall1.ccbi");
+		addChild(ret.first);
+		setScale(0.01f);
+		setPosition(ccp((myPoint.x-1)*pixelSize+1,(myPoint.y-1)*pixelSize+1));
+		
+		startMyAction();
+	}
+};
 class ThrowObject : public CrashMapObject
 {
 public:
@@ -1806,6 +1919,7 @@ private:
 	}
 };
 
+
 class TickingTimeBomb : public CrashMapObject
 {
 public:
@@ -1955,18 +2069,21 @@ private:
 		CCPoint myPosition = ccp((setPoint.x-1)*pixelSize+1, (setPoint.y-1)*pixelSize+1);
 		setPosition(myPosition);
 		
-		ticking_main = CCSprite::create(CCString::createWithFormat("tickingTimeBomb_main_%d.png", rangeCode)->getCString());
+		ticking_main = KS::loadCCBI<CCSprite*>(this, "pattern_timebomb1.ccbi").first;
+//		ticking_main->setVisible(false);
+		ticking_main->setAnchorPoint(ccp(0.5f, 0.5f));
 		addChild(ticking_main);
 		
 		if(rangeCode == 1)
 		{
-			CCSprite* ticking_pad = CCSprite::create("tickingTimeBomb_pad.png");
-			ticking_pad->setPosition(ccp(17,12));
-			ticking_main->addChild(ticking_pad);
+//			CCSprite* ticking_pad = CCSprite::create("tickingTimeBomb_pad.png");
+////			ticking_pad->setPosition(ccp(17,12));
+//			ticking_main->addChild(ticking_pad);
 			
 			ticking_label = CCLabelAtlas::create(CCString::createWithFormat("%d",bombTimes)->getCString(), "tickingTimeBomb_number.png", 9, 11, '1');
-			ticking_label->setPosition(ccp(1,3));
-			ticking_pad->addChild(ticking_label);
+			ticking_label->setAnchorPoint(ccp(0.5f, 0.5f));
+			ticking_label->setPosition(ccp(0, 0));
+			addChild(ticking_label);
 		}
 		else if(rangeCode == 2)
 		{
@@ -2022,6 +2139,7 @@ private:
 		addChild(particle);
 	}
 };
+
 
 class SightOut : public CCSprite
 {

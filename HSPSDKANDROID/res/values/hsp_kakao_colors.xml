@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <color name="hsp.auth.kakao.welcome.background.port">#FFFFFF</color>
+    <color name="hsp.auth.kakao.welcome.background.land">#FFFFFF</color>
+    <color name="hsp.auth.kakao.welcome.terms.text">#333333</color>
+    <color name="hsp.auth.kakao.welcome.login.button.text">#000000</color>
+    <color name="hsp.auth.kakao.welcome.login.button.text.shadow">#f8f68C</color>
+
+</resources>

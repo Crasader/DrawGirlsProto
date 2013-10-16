@@ -20,6 +20,7 @@
 #include "cocos-ext.h"
 using namespace cocos2d::extension;
 
+#include <chrono>
 
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
 
@@ -30,14 +31,14 @@ public:
 	Pear() :
 	
 	RADIUS(110.f / 4.f), // 머리에 대한 충돌 반지름
-	BODY_RADIUS(70/4.f), // 몸통에 대한 충돌 반지름
+	BODY_RADIUS(80/4.f), // 몸통에 대한 충돌 반지름
 	TAIL_RADIUS(50/4.f), // 꼬리에 대한 충돌 반지름
 //	mEmotion(nullptr),
 	LIMIT_COLLISION_PER_SEC(3), /// 초당 변수만큼 충돌시 스케일 줄임.
 	ATTACK_POINT_X(-18), // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
 	ATTACK_POINT_Y(0),   // 가운데 위치로부터 떨어진 공격포인턴데, 축소한 그림에서의 기준.
-	BODY_MARGIN(20),     // 몸통 사이의 거리.
-	TAIL_MARGIN(40)      // 몸통과 꼬리사이의 거리.
+	BODY_MARGIN(55),     // 몸통 사이의 거리.
+	TAIL_MARGIN(50)      // 몸통과 꼬리사이의 거리.
 
 	{
 		m_state = (CUMBERSTATEMOVING);
@@ -71,13 +72,11 @@ public:
 	virtual void onStartGame()
 	{
 		m_noDirection.state = 2;
-		
-		
 	}
 	virtual void crashMapForPosition(CCPoint targetPt);
 	//	virtual void movingAndCrash(float dt);
 
-	void cumberAttack(float dt);
+
 	virtual bool init();
 	CREATE_FUNC(Pear);
 	virtual void setPosition(const CCPoint& t_sp)
@@ -90,7 +89,7 @@ public:
 		//		KSCumberBase::setPosition(t_sp);
 		m_headImg->setPosition(t_sp);
 		m_cumberTrace.push_back(tr); //
-		if(m_cumberTrace.size() >= 200)
+		if(m_cumberTrace.size() >= 350)
 		{
 			m_cumberTrace.pop_front();
 		}
@@ -148,6 +147,33 @@ public:
 //	}
 	void setHeadAndBodies();
 	virtual bool startDamageReaction(float damage, float angle);
+	virtual void attackBehavior(AP_CODE attackCode)
+	{
+		if(attackCode == kTargetAttack9)
+		{
+			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			for(auto bodyAniManager : m_bodyAnimationManagers)
+			{
+				bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+			}
+			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+		}
+		else
+		{
+			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			for(auto bodyAniManager : m_bodyAnimationManagers)
+			{
+				bodyAniManager->runAnimationsForSequenceNamed("cast101start");
+			}
+			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+			if(kSpecialAttack1 <= attackCode) // 특수공격이면 돌아라.
+				startAnimationNoDirection();
+			else if(1 <= attackCode && attackCode <= 100) // 방사형이면 돌아라.
+				startAnimationNoDirection();
+			else if(kTargetAttack1 <= attackCode && attackCode < kSpecialAttack1) // 조준형이면 돌지마라
+				startAnimationDirection();
+		}
+	}
 	virtual void startAnimationNoDirection();
 	virtual void startAnimationDirection();
 	//	virtual void startSpringCumber(float userdata)
@@ -325,15 +351,7 @@ protected:
 	}m_direction;
 	
 	
-	
-	struct Invisible
-	{
-		int invisibleFrame;
-		int VISIBLE_FRAME;
-		bool startInvisibleScheduler;
-		float invisibleValue;
-		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
-	}m_invisible;
+
 };
 
 

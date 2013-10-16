@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.litmus.find.rooting">If your device is not a genuine product, game will not start.\nPlease let us know from an inquiry form at application download page if you are not aware of this issue.</string>
+    <string name="hsp.litmus.find.cheating">Iniquitous tool(s) has been found. You cannot access the service unless you delete it.</string>
+    <string name="hsp.litmus.find.bluestack">Iniquitous tool(s) has been found. You cannot access the service unless you delete it.</string>
+    <string name="hsp.litmus.find.integrity">Iniquitous tool(s) has been found. You cannot access the service unless you delete it.</string>
+    <string name="hsp.litmus.log.agreement.title">Alert</string>
+    <string name="hsp.litmus.log.agreement.message">Devices with iniquitous tools are denied access to this service.\nWhen such tools are detected, willl you permit us to collect App data of the tools?</string>
+    <string name="hsp.litmus.log.agreement.permit">Permit</string>
+    <string name="hsp.litmus.log.agreement.refuse">Refuse</string>
+
+</resources>

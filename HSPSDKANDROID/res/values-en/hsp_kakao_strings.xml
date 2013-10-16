@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.auth.kakao.welcome.login.button">Login with Kakao</string>
+    <string name="hsp.auth.kakao.welcome.terms">Agree to the game <u>Terms of use.</u></string>
+    <string name="hsp.auth.kakao.welcome.terms.alert">Please agree to the game Terms of use.</string>
+
+</resources>

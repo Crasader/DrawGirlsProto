@@ -58,6 +58,7 @@ bool Peach::init()
 
 bool Peach::startDamageReaction(float damage, float angle)
 {
+	KSCumberBase::startDamageReaction(damage, angle);
 	CCLog("damaga!!!");
 	m_remainHp -= damage;
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
@@ -183,70 +184,6 @@ void Peach::onStartGame()
 }
 
 
-void Peach::cumberAttack(float dt)
-{
-	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
-	
-	// 1% 확률로.
-	if(w == 0 && m_state == CUMBERSTATEMOVING && !m_attacks.empty())
-	{
-		int attackCode = 0;
-		//		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
-		//			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
-		//			kAP_CODE_pattern103, kAP_CODE_pattern103};
-		//		std::vector<int> attacks = {
-		////			kCrashAttack1,
-		//			kNonTargetAttack1,
-		//			kTargetAttack4
-		//			kSpecialAttack7, // 텔레포트.          // 32
-		//		};
-		//		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
-		//		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
-		//		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
-		
-		
-		
-		
-		bool searched = false;
-		int searchCount = 0;
-		while(!searched)
-		{
-			searchCount++;
-			int idx = m_well512.GetValue(m_attacks.size() - 1);
-			
-			attackCode = m_attacks[idx];
-			searched = true;
-			if(attackCode == kSpecialAttack8 && m_invisible.startInvisibleScheduler)
-				searched = false;
-			if(attackCode == kTargetAttack9 && m_state == CUMBERSTATEFURY)
-				searched = false;
-			if(searchCount >= 30)
-			{
-				searched = false;
-				break;
-			}
-		}
-
-		
-		//		attackCode = 13;
-		if(attackCode == kTargetAttack9) // fury
-		{
-			CCLog("aaa %f %f", getPosition().x, getPosition().y);
-			m_state = CUMBERSTATESTOP;
-			lastCastNum = m_well512.GetValue(1, 3);
-			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
-			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
-		}
-		else
-		{
-			CCLog("acode %d", attackCode);
-			lastCastNum = m_well512.GetValue(1, 3);
-			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
-			startAnimationNoDirection();
-			gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
-		}
-	}
-}
 COLLISION_CODE Peach::crashWithX(IntPoint check_position)
 {
 	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
@@ -412,7 +349,7 @@ void Peach::randomPosition()
 	
 	//	gameData->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
-	
+	m_circle.setRelocation(getPosition(), m_well512);
 	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##
 	m_headImg->runAction(t_scale);
 	

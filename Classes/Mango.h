@@ -35,7 +35,7 @@ public:
 	{
 		m_state = CUMBERSTATESTOP;
 	}
-	void cumberAttack(float dt);
+
 	virtual bool init();
 	CREATE_FUNC(Mango);
 	virtual void setPosition(const CCPoint& t_sp)
@@ -67,6 +67,15 @@ public:
 //		mEmotion = NULL;
 //	}
 	bool startDamageReaction(float damage, float angle);
+	virtual void attackBehavior(AP_CODE attackCode)
+	{
+		lastCastNum = m_well512.GetValue(1, 3);
+		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
+		if(attackCode != kTargetAttack9)
+		{
+			startAnimationNoDirection();
+		}
+	}
 	virtual void startSpringCumber(float userdata){}
 	virtual void startAnimationNoDirection();
 	void damageReaction(float dt);
@@ -212,14 +221,7 @@ protected:
 		float timer;
 	}m_damageData;
 	
-	struct Invisible
-	{
-		int invisibleFrame;
-		int VISIBLE_FRAME;
-		bool startInvisibleScheduler;
-		float invisibleValue;
-		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
-	}m_invisible;
+
 	
 	
 	

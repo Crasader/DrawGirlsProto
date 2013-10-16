@@ -163,7 +163,7 @@ void PausePopupLayer::menuAction(CCObject* sender)
 		if(tag == kMenuTagPPL_home)
 		{
 			is_action = true;
-			AudioEngine::sharedInstance()->playSound("sound_background.mp3", true);
+//			AudioEngine::sharedInstance()->playSound("sound_background.mp3", true);
 			(target_home->*delegate_home)();
 			startPopdownAnimation();
 		}

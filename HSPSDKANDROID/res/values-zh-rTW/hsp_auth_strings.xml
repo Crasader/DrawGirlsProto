@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.lnc.status.alert.guide.check">維修公告</string>
+    <string name="hsp.lnc.status.alert.update.now">立即更新</string>
+    <string name="hsp.lnc.status.alert.later">下次</string>
+    <string name="hsp.lnc.status.alert.01">是不注冊的遊戲.</string>
+    <string name="hsp.lnc.status.alert.02">爲了利用更好的穩定服務\n必須更新爲最新版本.</string>
+    <string name="hsp.lnc.status.alert.03">爲了利用更好的穩定服務\n必須更新爲最新版本.</string>
+    <string name="hsp.lnc.status.alert.04">修中，會暫時限制使用服務.</string>
+    <string name="hsp.lnc.status.alert.08">在維修中，會暫時限制使用服務.</string>
+    <string name="hsp.lnc.status.alert.10.playable">在維修中，會限制使用一些服務.</string>
+    <string name="hsp.lnc.status.alert.10.not.playable">在維修中，會暫時限制使用服務.</string>
+    <string name="hsp.lnc.status.alert.20">客戶端信息不正確，無法更新資源.請詢問到顧客中心.</string>
+    <string name="hsp.lnc.status.alert.91">是使用服務限制的設備.</string>
+    <string name="hsp.lnc.status.alert.92">一些已注冊的設備才可以使用服務.</string>
+    <string name="hsp.lnc.status.alert.98">服務結束\n謝謝你的支持.</string>
+    <string name="hsp.lnc.status.alert.99">伺服器發生錯誤，無法連線到遊戲。\n請先關閉遊戲後，再運行.</string>
+    <string name="hsp.auth.bridge.description.main">你好. %1$s</string>
+    <string name="hsp.auth.login.hid.alert.punish">這個賬號是暫停的。請登入以不同的賬號。</string>
+    <string name="hsp.auth.login.hid.alert.withdraw">這個賬號是不存在的.以別的賬號來登入.</string>
+    <string name="hsp.auth.login.hid.alert.alreadymapped">這個賬號已跟別的智能Hangame記錄連接中.請用別的賬號來連接.</string>
+    <string name="hsp.auth.punished.member.alert">由于不正常的行爲，受到使用限制.\n會員號碼 : </string>
+
+</resources>

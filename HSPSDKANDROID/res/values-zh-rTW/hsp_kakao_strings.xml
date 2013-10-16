@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.auth.kakao.welcome.login.button">以KAKAO賬號登入</string>
+    <string name="hsp.auth.kakao.welcome.terms">同意<u>遊戲利用條款.</u></string>
+    <string name="hsp.auth.kakao.welcome.terms.alert">請同意遊戲利用條款.</string>
+
+</resources>

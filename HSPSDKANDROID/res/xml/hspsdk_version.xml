@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<version-list>
+  <module name="HSPSDK" version="2.6.0" />
+  <module name="HSPJavadoc" version="2.6.0" /> 
+  <module name="HSPGuide" version="2.6.0" /> 
+  <module name="HSPSampleApp" version="2.6.0.8989" /> 
+  <module name="HSPCore" version="2.6.0.8971" />
+  <module name="HSPCore_Hangame" version="2.6.0.8933" />
+  <module name="HSPCore_Linegame" version="2.6.0.8878" />
+  <module name="HSPCore_Kakaogame" version="2.6.0.8963" />
+  <module name="HSPCore_Globalgame" version="2.6.0.8963" />
+  <module name="HSPCore_Greegame" version="2.6.0.8878" />
+  <module name="FacebookSDK" version="2.5.0.8826" />
+  <module name="HSPView_Global" version="2.6.0.8969" />
+  <module name="HSPView_JP" version="2.5.0.8831" />
+  <module name="HSPPayment" version="3.8.1.8998" />
+  <module name="HSPPromotion" version="2.5.0.8842" />
+  <module name="HSPItemDelivery" version="2.5.0.8836" />
+  <module name="HSPCoin" version="2.5.0.8826" />
+  <module name="HSPSns" version="2.5.0.8825" />
+  <module name="HSPNPush_Hangame" version="12" />
+  <module name="HSPNPush_Line" version="12" />
+  <module name="HSPNPush_Global" version="2.6.0.8926" />
+  <module name="HSPPayment_Google" version="3.3.0" />
+  <module name="HSPPayment_TStore" version="12.09.17" />
+  <module name="HSPPayment_Naver" version="1.0" />
+  <module name="HSPPayment_Gree" version="2.3.0" />
+</version-list>

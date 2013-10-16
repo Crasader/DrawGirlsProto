@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.auth.kakao.welcome.login.button">Kakaoで始める</string>
+    <string name="hsp.auth.kakao.welcome.terms"><u>ゲーム利用規約</u>に同意の上、ご利用ください。 </string>
+    <string name="hsp.auth.kakao.welcome.terms.alert">同意の上チェックボックスを選択してください。</string>
+
+</resources>

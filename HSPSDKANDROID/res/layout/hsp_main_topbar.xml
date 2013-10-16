@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="40dp"
+    android:background="@color/hsp.topbar.background"
+    android:orientation="vertical"
+    android:tag="hsp.topbar" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="35.33dp"
+        android:layout_marginLeft="10dp" >
+
+        <ImageView
+            android:id="@+id/hsp.topbar.logo"
+            android:layout_width="18.67dp"
+            android:layout_height="24.67dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/hsp_topbar_logo"
+            android:tag="hsp.topbar.logo" />
+
+        <FrameLayout
+            android:id="@+id/hsp.topbar.button"
+            android:layout_width="60.3dp"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:tag="hsp.topbar.button" />
+
+        <TextView
+            android:id="@+id/hsp.topbar.title"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/hsp.topbar.button"
+            android:layout_toRightOf="@id/hsp.topbar.logo"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:tag="hsp.topbar.title"
+            android:textColor="@color/hsp.topbar.title"
+            android:textSize="17dp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="4.67dp"
+        android:background="@color/hsp.topbar.bottomline.hangame"
+        android:tag="hsp.topbar.bottomline" />
+
+</LinearLayout>

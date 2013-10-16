@@ -209,6 +209,7 @@ void KSCumberBase::randomMoving(float dt)
 
 void KSCumberBase::straightMoving(float dt)
 {
+	CCLog("%f %f", getPosition().x, getPosition().y);
 	m_scale.timer += 1/60.f;
 	
 	
@@ -302,6 +303,7 @@ void KSCumberBase::straightMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
+				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 				degree = degreeSelector(cnt, degree);
 				
@@ -312,6 +314,7 @@ void KSCumberBase::straightMoving(float dt)
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
 				//			CCLog("collision!!");
+				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 
 				degree = degreeSelector(cnt, degree);
@@ -345,6 +348,7 @@ void KSCumberBase::straightMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
+				m_crashCount++;
 				degree = degreeSelector(cnt, degree);				
 				if(degree < 0)			degree += 360;
 				else if(degree > 360)	degree -= 360;
@@ -460,6 +464,7 @@ void KSCumberBase::followMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
+				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 				m_follow.lastMapCollisionTime = m_follow.timer;
 				m_directionAngleDegree += m_well512.GetValue(90, 360);
@@ -468,6 +473,7 @@ void KSCumberBase::followMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
+				m_crashCount++;
 				//			CCLog("collision!!");
 				onceOutlineAndMapCollision = true;
 				m_follow.lastMapCollisionTime = m_follow.timer;
@@ -504,6 +510,7 @@ void KSCumberBase::followMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
+				m_crashCount++;
 				//			CCLog("collision!!");
 			}
 			else
@@ -621,6 +628,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
+				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 				int changeDirection = m_well512.GetValue(3);
 
@@ -644,6 +652,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
 				//			CCLog("collision!!");
+				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 				m_directionAngleDegree += 180;
 				
@@ -689,6 +698,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
 				//			CCLog("collision!!");
+				m_crashCount++;
 				m_directionAngleDegree += 180;
 			}
 			else
@@ -804,11 +814,13 @@ void KSCumberBase::circleMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
+				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 				m_circle.setRelocation(getPosition(), m_well512);
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
+				m_crashCount++;
 				//			CCLog("collision!!");
 				onceOutlineAndMapCollision = true;
 				// m_circle 변수를 재지정 ...
@@ -839,6 +851,7 @@ void KSCumberBase::circleMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
+				m_crashCount++;
 				// m_circle 변수를 재지정 ...
 				m_circle.setRelocation(getPosition(), m_well512);
 			}
@@ -963,11 +976,13 @@ void KSCumberBase::snakeMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
+				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 				m_snake.setRelocation(getPosition(), m_well512);
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
+				m_crashCount++;
 				//			CCLog("collision!!");
 				onceOutlineAndMapCollision = true;
 				// m_snake 변수를 재지정 ...
@@ -998,6 +1013,7 @@ void KSCumberBase::snakeMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
+				m_crashCount++;
 				// m_snake 변수를 재지정 ...
 				m_snake.setRelocation(getPosition(), m_well512);
 			}
@@ -1043,7 +1059,6 @@ void KSCumberBase::snakeMoving(float dt)
 	}
 	if(onceOutlineAndMapCollision)
 	{
-		
 		if(m_scale.collisionCount == 0)
 		{
 			m_scale.collisionStartTime = m_scale.timer;
@@ -1058,4 +1073,114 @@ void KSCumberBase::snakeMoving(float dt)
 	}
 	
 	m_snake.lastMovingTime = m_scale.timer;
+}
+
+void KSCumberBase::cumberAttack(float dt)
+{
+//	myJack->get
+	float gainPercent = myGD->Fcommunication("UI_getMapPercentage") * 100.f;
+	float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
+//	CCLog("%f %f %d", distance, gainPercent, m_crashCount);
+	bool crashAttack = false;
+	
+	
+	
+	if(m_furyRule.gainPercent <= gainPercent && distance >= m_furyRule.userDistance)
+	{
+		float w = ProbSelector::sel(m_furyRule.percent / 100.f, 1.0 - m_furyRule.percent / 100.f, 0.0);
+		if(w == 0)
+		{
+			crashAttack = true;
+		}
+	}
+	
+	if(m_crashCount >= m_furyRule.gtCount && m_furyRule.ltPercent >= gainPercent)
+	{
+		m_crashCount = 0;
+		crashAttack = true;
+	}
+	
+	std::vector<int> selectedAttacks;
+	float exeProb;
+	if(crashAttack)
+	{
+		// m_attacks 와 crashAttacks 의 교집합중에 택함...
+		vector<AP_CODE> crashAttacks = {kNonTargetAttack9, kTargetAttack5, kTargetAttack6, kTargetAttack7, kTargetAttack9, kSpecialAttack10, kSpecialAttack13};
+		
+		std::set_intersection(crashAttacks.begin(), crashAttacks.end(),
+													m_attacks.begin(), m_attacks.end(), back_inserter(selectedAttacks));
+	}
+	else
+	{
+		selectedAttacks.assign(m_attacks.begin(), m_attacks.end());
+	}
+	
+	
+	if(crashAttack)
+	{
+		exeProb = 0;
+	}
+	else
+	{
+		exeProb = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
+	}
+	
+	// 1% 확률로.
+	if(exeProb == 0 && m_state == CUMBERSTATEMOVING && !selectedAttacks.empty())
+	{
+		int attackCode = 0;
+		bool searched = false;
+		int searchCount = 0;
+		while(!searched)
+		{
+			searchCount++;
+			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
+			
+			attackCode = selectedAttacks[idx];
+			searched = true;
+			if(attackCode == kSpecialAttack8 && m_invisible.startInvisibleScheduler)
+				searched = false;
+			if(attackCode == kTargetAttack9 && m_state == CUMBERSTATEFURY)
+				searched = false;
+			if(searchCount >= 30)
+			{
+				searched = false;
+				break;
+			}
+		}
+		if(searched)
+		{
+			if(attackCode == kTargetAttack9) // fury
+			{
+				m_state = CUMBERSTATESTOP;
+				attackBehavior((AP_CODE)attackCode);
+				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
+			}
+			else
+			{
+				int ret = gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
+				if(ret == 1)
+				{
+					attackBehavior((AP_CODE)attackCode);
+				}
+			}
+		}
+		
+	}
+
+}
+
+void KSCumberBase::speedAdjustment(float dt)
+{
+//	m_speed.step();
+	float t = (m_maxSpeed - m_minSpeed) * 0.0005f;
+	m_speed = MIN(m_maxSpeed, m_speed + t);
+}
+
+bool KSCumberBase::startDamageReaction(float damage, float angle)
+{
+	float t = (m_maxSpeed - m_minSpeed) * 0.3f;
+	m_speed = MAX(m_speed - t, m_minSpeed);
+//	m_speed.init(m_speed, to, 0.1f);
+	return true; // 의미없음.
 }

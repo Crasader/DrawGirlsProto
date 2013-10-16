@@ -12,7 +12,6 @@
 #include "StageSettingScene.h"
 #include "CollectionListScene.h"
 #include "StageInfoDown.h"
-#include "GraphDog.h"
 #include "OptionScene.h"
 #include "GachaPopup.h"
 #include "RankPopup.h"
@@ -20,6 +19,9 @@
 #include "EventPopup.h"
 #include "RubyShopPopup.h"
 #include "CardSettingScene.h"
+#include "StageListDown.h"
+#include "GradationBGI.h"
+#include "TicketNeedPopup.h"
 
 #include <algorithm>
 #include <ostream>
@@ -139,6 +141,7 @@ CCScene* WorldMapScene::scene()
 
 enum WMS_Zorder{
 	kWMS_Z_back = 1,
+	kWMS_Z_track,
 	kWMS_Z_stage,
 	kWMS_Z_ui_button,
 	kWMS_Z_popup
@@ -146,16 +149,17 @@ enum WMS_Zorder{
 
 enum WMS_MenuTag{
 	kWMS_MT_stageBase = 0,
-	kWMS_MT_collection = 501,
-	kWMS_MT_option = 502,
-	kWMS_MT_gacha = 503,
-	kWMS_MT_rank = 504,
-	kWMS_MT_postbox = 505,
-	kWMS_MT_event = 506,
-	kWMS_MT_cardSetting = 507,
-	kWMS_MT_rubyShop = 508,
-	kWMS_MT_goldShop = 509,
-	kWMS_MT_lifeShop = 510
+	kWMS_MT_couponBase = 2000,
+	kWMS_MT_collection = 5001,
+	kWMS_MT_option = 5002,
+	kWMS_MT_gacha = 5003,
+	kWMS_MT_rank = 5004,
+	kWMS_MT_postbox = 5005,
+	kWMS_MT_event = 5006,
+	kWMS_MT_cardSetting = 5007,
+	kWMS_MT_rubyShop = 5008,
+	kWMS_MT_goldShop = 5009,
+	kWMS_MT_lifeShop = 5010
 };
 
 // on "init" you need to initialize your instance
@@ -168,17 +172,59 @@ bool WorldMapScene::init()
         return false;
     }
 	
-	graphdog->setup("12345678", 1);
+	//graphdog->setup("12345678", 1);
 	
 //	showConvertSildata("intun1");
 //	showConvertSildata("intun2");
 	
 	setKeypadEnabled(true);
 	
-	CCSprite* worldmap_back = CCSprite::create("worldmap_back.png");
-	worldmap_back->setPosition(ccp(240,160));
-	addChild(worldmap_back, kWMS_Z_back);
+	////////////////////////////////////////////////////
 	
+	Json::Value param;
+	param["ManualLogin"] = true;
+	
+	hspConnector::get()->login(param, param, std::bind(&WorldMapScene::resultLogin, this, std::placeholders::_1));
+	
+	ScreenSide* t_screen = ScreenSide::create();
+	addChild(t_screen, 99999);
+	
+    return true;
+}
+
+void WorldMapScene::resultLogin(Json::Value result_data)
+{
+	CCLog("result data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
+	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(WorldMapScene::setWorldMapScene));
+	addChild(t_sld);
+}
+
+void WorldMapScene::passTicketStage()
+{
+	myDSH->setBoolForKey(kDSH_Key_isPassCoupon_int1, pass_target_stage, true);
+	resetWorldMapScene();
+}
+
+void WorldMapScene::resetWorldMapScene()
+{
+	map_node->removeFromParent();
+	setMapNode();
+}
+
+void WorldMapScene::setWorldMapScene()
+{
+	setMapNode();
+	setUIs();
+}
+
+void WorldMapScene::setMapNode()
+{
+	map_node = CCNode::create();
+	addChild(map_node, kWMS_Z_track);
+	
+	CCSpriteBatchNode* track_batch_node = CCSpriteBatchNode::create("worldmap_track.png");
+	map_node->addChild(track_batch_node, kWMS_Z_track);
 	
 	CCSprite* n_stage1 = CCSprite::create("worldmap_stage.png");
 	CCLabelTTF* n_stage1_label = CCLabelTTF::create("1", mySGD->getFont().c_str(), 10);
@@ -197,37 +243,87 @@ bool WorldMapScene::init()
 	
 	CCMenu* stage1_menu = CCMenu::createWithItem(stage1_item);
 	stage1_menu->setPosition(getStagePosition(1));
-	addChild(stage1_menu, kWMS_Z_stage);
+	map_node->addChild(stage1_menu, kWMS_Z_stage);
 	
-	CCSprite* stage1_thumbnail = CCSprite::create("stage1_thumbnail.png");
+	CCSprite* stage1_thumbnail = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", 1)->getCString());// CCSprite::create("stage1_thumbnail.png");
 	stage1_thumbnail->setPosition(ccpAdd(getStagePosition(1), ccp(0,40)));
-	addChild(stage1_thumbnail, kWMS_Z_stage);
+	map_node->addChild(stage1_thumbnail, kWMS_Z_stage);
 	
 	int cleared_number = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
 	int updated_stage = mySD->getLastUpdateStageNumber();
 	
-	for(int i=2;i<=10;i++)
+	for(int i=2;i<=updated_stage;i++)
 	{
-		if(updated_stage >= i && i-1 <= cleared_number)
+		bool is_coupon = false;
+		bool is_pass = false;
+		if(i-1 <= cleared_number)
 		{
-			CCSprite* n_stage = CCSprite::create("worldmap_stage.png");
-			CCLabelTTF* n_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-			n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
-			n_stage->addChild(n_stage_label);
-			
-			CCSprite* s_stage = CCSprite::create("worldmap_stage.png");
-			s_stage->setColor(ccGRAY);
-			CCLabelTTF* s_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-			s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
-			s_stage->addChild(s_stage_label);
-			
-			
-			CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(WorldMapScene::menuAction));
-			stage_item->setTag(kWMS_MT_stageBase+i);
-			
-			CCMenu* stage_menu = CCMenu::createWithItem(stage_item);
-			stage_menu->setPosition(getStagePosition(i));
-			addChild(stage_menu, kWMS_Z_stage);
+			if(SDS_GB(kSDF_gameInfo, CCSTR_CWF("is_coupon%d", i)->getCString()))
+			{
+				is_coupon = true;
+				if(myDSH->getBoolForKey(kDSH_Key_isPassCoupon_int1, i))
+				{
+					is_pass = true;
+					CCSprite* pass_img = CCSprite::create("worldmap_ticket_open.png");
+					pass_img->setPosition(getCouponPosition(i));
+					map_node->addChild(pass_img, kWMS_Z_stage);
+					
+					
+					
+					CCSprite* n_stage = CCSprite::create("worldmap_stage.png");
+					CCLabelTTF* n_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+					n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
+					n_stage->addChild(n_stage_label);
+					
+					CCSprite* s_stage = CCSprite::create("worldmap_stage.png");
+					s_stage->setColor(ccGRAY);
+					CCLabelTTF* s_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+					s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
+					s_stage->addChild(s_stage_label);
+					
+					
+					CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(WorldMapScene::menuAction));
+					stage_item->setTag(kWMS_MT_stageBase+i);
+					
+					CCMenu* stage_menu = CCMenu::createWithItem(stage_item);
+					stage_menu->setPosition(getStagePosition(i));
+					map_node->addChild(stage_menu, kWMS_Z_stage);
+				}
+				else
+				{
+					CCSprite* n_coupon = mySIL->getLoadedImg(CCSTR_CWF("coupon%d_thumbnail.png", i)->getCString());
+					CCSprite* s_coupon = mySIL->getLoadedImg(CCSTR_CWF("coupon%d_thumbnail.png", i)->getCString());
+					s_coupon->setColor(ccGRAY);
+					
+					CCMenuItem* coupon_item = CCMenuItemSprite::create(n_coupon, s_coupon, this, menu_selector(WorldMapScene::menuAction));
+					coupon_item->setTag(kWMS_MT_couponBase+i);
+					
+					CCMenu* coupon_menu = CCMenu::createWithItem(coupon_item);
+					coupon_menu->setPosition(getCouponPosition(i));
+					map_node->addChild(coupon_menu, kWMS_Z_stage);
+				}
+			}
+			else
+			{
+				CCSprite* n_stage = CCSprite::create("worldmap_stage.png");
+				CCLabelTTF* n_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
+				n_stage->addChild(n_stage_label);
+				
+				CCSprite* s_stage = CCSprite::create("worldmap_stage.png");
+				s_stage->setColor(ccGRAY);
+				CCLabelTTF* s_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
+				s_stage->addChild(s_stage_label);
+				
+				
+				CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(WorldMapScene::menuAction));
+				stage_item->setTag(kWMS_MT_stageBase+i);
+				
+				CCMenu* stage_menu = CCMenu::createWithItem(stage_item);
+				stage_menu->setPosition(getStagePosition(i));
+				map_node->addChild(stage_menu, kWMS_Z_stage);
+			}
 		}
 		else
 		{
@@ -237,25 +333,195 @@ bool WorldMapScene::init()
 			d_stage->addChild(d_stage_label);
 			
 			d_stage->setPosition(getStagePosition(i));
-			addChild(d_stage, kWMS_Z_stage);
+			map_node->addChild(d_stage, kWMS_Z_stage);
+			break;
 		}
 		
-		if(updated_stage >= i && i-2 <= cleared_number)
+		string sub_value = "";
+		CCPoint track_position;
+		if(!is_coupon)
 		{
-			if(i-1 <= cleared_number)
+			sub_value = "stage";
+			track_position = getStagePosition(i);
+		}
+		else
+		{
+			sub_value = "coupon";
+			track_position = getCouponPosition(i);
+		}
+		
+		
+		int loop_cnt_j = SDS_GI(kSDF_gameInfo, CCSTR_CWF("%s%d_path_length", sub_value.c_str(), i)->getCString());
+		
+		string direction = SDS_GS(kSDF_gameInfo, CCSTR_CWF("%s%d_path_direction%d", sub_value.c_str(), i, 0)->getCString());
+		CCSprite* t_track1 = CCSprite::create("worldmap_track.png", CCRectMake(0, 0, 40, 40));
+		t_track1->setPosition(track_position);
+		t_track1->setRotation(getRotateValue(direction));
+		track_batch_node->addChild(t_track1, kWMS_Z_track);
+		
+		track_position = ccpAdd(track_position, getTrackPositionMove(direction));
+		
+		for(int j=0;j<loop_cnt_j;j++)
+		{
+			string direction = SDS_GS(kSDF_gameInfo, CCSTR_CWF("%s%d_path_direction%d", sub_value.c_str(), i, j)->getCString());
+			int d_count = SDS_GI(kSDF_gameInfo, CCSTR_CWF("%s%d_path_count%d", sub_value.c_str(), i, j)->getCString());
+			for(int k=0;k<d_count;k++)
 			{
-				CCSprite* stage_thumbnail = CCSprite::create(CCString::createWithFormat("stage%d_thumbnail.png", i)->getCString());
-				stage_thumbnail->setPosition(ccpAdd(getStagePosition(i), ccp(0,40)));
-				addChild(stage_thumbnail, kWMS_Z_stage);
+				if(k < d_count-1)
+				{
+					CCSprite* t_track = CCSprite::create("worldmap_track.png", CCRectMake(40, 0, 40, 40));
+					t_track->setPosition(track_position);
+					t_track->setRotation(getRotateValue(direction));
+					track_batch_node->addChild(t_track, kWMS_Z_track);
+					track_position = ccpAdd(track_position, getTrackPositionMove(direction));
+				}
+				else if(j == loop_cnt_j-1)
+				{
+					CCSprite* t_track = CCSprite::create("worldmap_track.png", CCRectMake(40, 0, 40, 40));
+					t_track->setPosition(track_position);
+					t_track->setRotation(getRotateValue(direction));
+					track_batch_node->addChild(t_track, kWMS_Z_track);
+					track_position = ccpAdd(track_position, getTrackPositionMove(direction));
+				}
+				else if(j < loop_cnt_j-1)
+				{
+					string a_direction = SDS_GS(kSDF_gameInfo, CCSTR_CWF("%s%d_path_direction%d", sub_value.c_str(), i, j+1)->getCString());
+					CCSprite* t_track = CCSprite::create("worldmap_track.png", CCRectMake(80, 0, 40, 40));
+					t_track->setPosition(track_position);
+					t_track->setRotation(getTurnRotateValue(direction, a_direction));
+					track_batch_node->addChild(t_track, kWMS_Z_track);
+					track_position = ccpAdd(track_position, getTrackPositionMove(a_direction));
+				}
 			}
-			else
+			
+			if(i == 2 && j == loop_cnt_j-1)
 			{
-				CCSprite* stage_thumbnail = CCSprite::create("question_thumbnail.png");
-				stage_thumbnail->setPosition(ccpAdd(getStagePosition(i), ccp(0,40)));
-				addChild(stage_thumbnail, kWMS_Z_stage);
+				CCSprite* t_track = CCSprite::create("worldmap_track.png", CCRectMake(0, 0, 40, 40));
+				t_track->setPosition(getStagePosition(1));
+				t_track->setRotation(getRotateValue(direction) + 180);
+				track_batch_node->addChild(t_track, kWMS_Z_track);
 			}
 		}
+		
+		if(is_coupon && is_pass)
+		{
+			sub_value = "stage";
+			
+			track_position = getStagePosition(i);
+			int loop_cnt_j = SDS_GI(kSDF_gameInfo, CCSTR_CWF("%s%d_path_length", sub_value.c_str(), i)->getCString());
+			
+			string direction = SDS_GS(kSDF_gameInfo, CCSTR_CWF("%s%d_path_direction%d", sub_value.c_str(), i, 0)->getCString());
+			CCSprite* t_track1 = CCSprite::create("worldmap_track.png", CCRectMake(0, 0, 40, 40));
+			t_track1->setPosition(track_position);
+			t_track1->setRotation(getRotateValue(direction));
+			track_batch_node->addChild(t_track1, kWMS_Z_track);
+			
+			track_position = ccpAdd(track_position, getTrackPositionMove(direction));
+			
+			for(int j=0;j<loop_cnt_j;j++)
+			{
+				string direction = SDS_GS(kSDF_gameInfo, CCSTR_CWF("%s%d_path_direction%d", sub_value.c_str(), i, j)->getCString());
+				int d_count = SDS_GI(kSDF_gameInfo, CCSTR_CWF("%s%d_path_count%d", sub_value.c_str(), i, j)->getCString());
+				for(int k=0;k<d_count;k++)
+				{
+					if(k < d_count-1)
+					{
+						CCSprite* t_track = CCSprite::create("worldmap_track.png", CCRectMake(40, 0, 40, 40));
+						t_track->setPosition(track_position);
+						t_track->setRotation(getRotateValue(direction));
+						track_batch_node->addChild(t_track, kWMS_Z_track);
+						track_position = ccpAdd(track_position, getTrackPositionMove(direction));
+					}
+					else if(j == loop_cnt_j-1)
+					{
+						CCSprite* t_track = CCSprite::create("worldmap_track.png", CCRectMake(40, 0, 40, 40));
+						t_track->setPosition(track_position);
+						t_track->setRotation(getRotateValue(direction));
+						track_batch_node->addChild(t_track, kWMS_Z_track);
+						track_position = ccpAdd(track_position, getTrackPositionMove(direction));
+					}
+					else if(j < loop_cnt_j-1)
+					{
+						string a_direction = SDS_GS(kSDF_gameInfo, CCSTR_CWF("%s%d_path_direction%d", sub_value.c_str(), i, j+1)->getCString());
+						CCSprite* t_track = CCSprite::create("worldmap_track.png", CCRectMake(80, 0, 40, 40));
+						t_track->setPosition(track_position);
+						t_track->setRotation(getTurnRotateValue(direction, a_direction));
+						track_batch_node->addChild(t_track, kWMS_Z_track);
+						track_position = ccpAdd(track_position, getTrackPositionMove(a_direction));
+					}
+				}
+				
+				if(i == 2 && j == loop_cnt_j-1)
+				{
+					CCSprite* t_track = CCSprite::create("worldmap_track.png", CCRectMake(0, 0, 40, 40));
+					t_track->setPosition(getStagePosition(1));
+					t_track->setRotation(getRotateValue(direction) + 180);
+					track_batch_node->addChild(t_track, kWMS_Z_track);
+				}
+			}
+		}
+		
+		if(!is_coupon)
+		{
+			if(updated_stage >= i && i-2 <= cleared_number)
+			{
+				if(i-1 <= cleared_number)
+				{
+					CCSprite* stage_thumbnail = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", i)->getCString());
+					stage_thumbnail->setPosition(ccpAdd(getStagePosition(i), ccp(0,40)));
+					map_node->addChild(stage_thumbnail, kWMS_Z_stage);
+				}
+				else
+				{
+					CCSprite* stage_thumbnail = CCSprite::create("question_thumbnail.png");
+					stage_thumbnail->setPosition(ccpAdd(getStagePosition(i), ccp(0,40)));
+					map_node->addChild(stage_thumbnail, kWMS_Z_stage);
+				}
+			}
+		}
+		else if(!is_pass)
+		{
+			break;
+		}
 	}
+	
+	left_x = SDS_GI(kSDF_gameInfo, "left_x")*40.f+20.f;
+	right_x = SDS_GI(kSDF_gameInfo, "right_x")*40.f+20.f;
+	top_y = SDS_GI(kSDF_gameInfo, "top_y")*40.f+20.f;
+	bottom_y = SDS_GI(kSDF_gameInfo, "bottom_y")*40.f+20.f;
+	
+	GradationBGI* t_gra = GradationBGI::create(left_x, right_x, bottom_y, top_y);
+	t_gra->setPosition(CCPointZero);
+	map_node->addChild(t_gra, kWMS_Z_back);
+	
+	maximum_scale = 1.f;
+	minimum_scale = maximum_scale/3.f;
+	
+	int last_selected_stage = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage);
+	if(last_selected_stage == 0)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, 1);
+		last_selected_stage = 1;
+	}
+	
+	CCPoint init_position;
+	
+	init_position.x = SDS_GI(kSDF_gameInfo, CCSTR_CWF("stage%d_x", last_selected_stage)->getCString());
+	init_position.y = SDS_GI(kSDF_gameInfo, CCSTR_CWF("stage%d_y", last_selected_stage)->getCString());
+	
+	init_position = ccpMult(init_position, -40.f);
+	init_position = ccpAdd(init_position, ccp(-20.f,-20.f));
+	init_position = ccpAdd(init_position, ccp(240,160));
+	
+	map_node->setPosition(init_position);
+	is_menu_enable = true;
+}
+
+void WorldMapScene::setUIs()
+{
+	CCSprite* worldmap_shopback = CCSprite::create("worldmap_shopback.png");
+	worldmap_shopback->setPosition(ccp(240,295));
+	addChild(worldmap_shopback, kWMS_Z_ui_button);
 	
 	CCSprite* n_card = CCSprite::create("worldmap_card.png");
 	CCSprite* s_card = CCSprite::create("worldmap_card.png");
@@ -284,22 +550,22 @@ bool WorldMapScene::init()
 		{
 			CCSize ani_size = mySD->getAnimationCutSize(selected_card_stage);
 			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", selected_card_stage, selected_card_level)->getCString(),
-												  CCRectMake(0, 0, ani_size.width, ani_size.height));
+													 CCRectMake(0, 0, ani_size.width, ani_size.height));
 			card_ani->setPosition(mySD->getAnimationPosition(selected_card_stage));
 			card_img->addChild(card_ani);
 		}
 	}
 	
-	CCSprite* n_collection = CCSprite::create("worldmap_collection.png");
-	CCSprite* s_collection = CCSprite::create("worldmap_collection.png");
-	s_collection->setColor(ccGRAY);
-	
-	CCMenuItem* collection_item = CCMenuItemSprite::create(n_collection, s_collection, this, menu_selector(WorldMapScene::menuAction));
-	collection_item->setTag(kWMS_MT_collection);
-	
-	CCMenu* collection_menu = CCMenu::createWithItem(collection_item);
-	collection_menu->setPosition(getUiButtonPosition(kWMS_MT_collection));
-	addChild(collection_menu, kWMS_Z_ui_button);
+	//	CCSprite* n_collection = CCSprite::create("worldmap_collection.png");
+	//	CCSprite* s_collection = CCSprite::create("worldmap_collection.png");
+	//	s_collection->setColor(ccGRAY);
+	//
+	//	CCMenuItem* collection_item = CCMenuItemSprite::create(n_collection, s_collection, this, menu_selector(WorldMapScene::menuAction));
+	//	collection_item->setTag(kWMS_MT_collection);
+	//
+	//	CCMenu* collection_menu = CCMenu::createWithItem(collection_item);
+	//	collection_menu->setPosition(getUiButtonPosition(kWMS_MT_collection));
+	//	addChild(collection_menu, kWMS_Z_ui_button);
 	
 	
 	CCSprite* n_option = CCSprite::create("worldmap_option.png");
@@ -397,6 +663,7 @@ bool WorldMapScene::init()
 	life_shop_menu->setPosition(getUiButtonPosition(kWMS_MT_lifeShop));
 	addChild(life_shop_menu, kWMS_Z_ui_button);
 	
+	setTouchEnabled(true);
 	is_menu_enable = true;
 	
 	srand(time(NULL));
@@ -415,11 +682,53 @@ bool WorldMapScene::init()
 	SelectedMapData::sharedInstance()->setSelectedChapter(selected_chapter);
 	SelectedMapData::sharedInstance()->setSelectedStage(5);
 	////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+CCPoint WorldMapScene::getTrackPositionMove(string d)
+{
+	CCPoint return_value = CCPointZero;
+	if(d == "R")		return_value = ccp(40.f,0.f);
+	else if(d == "U")	return_value = ccp(0.f,40.f);
+	else if(d == "L")	return_value = ccp(-40.f,0.f);
+	else if(d == "D")	return_value = ccp(0.f,-40.f);
+	return return_value;
+}
+
+int WorldMapScene::getRotateValue(string d)
+{
+	int return_value = 0;
+	if(d == "R")		return_value = 0;
+	else if(d == "U")	return_value = -90;
+	else if(d == "L")	return_value = -180;
+	else if(d == "D")	return_value = 90;
+	return return_value;
+}
+
+int WorldMapScene::getTurnRotateValue(string d, string a_d)
+{
+	int return_value = 0;
+	if(d == "R")
+	{
+		if(a_d == "U")		return_value = -180;
+		else if(a_d == "D")	return_value = 90;
+	}
+	else if(d == "U")
+	{
+		if(a_d == "L")		return_value = 90;
+		else if(a_d == "R")	return_value = 0;
+	}
+	else if(d == "L")
+	{
+		if(a_d == "U")		return_value = -90;
+		else if(a_d == "D")	return_value = 0;
+	}
+	else if(d == "D")
+	{
+		if(a_d == "L")		return_value = -180;
+		else if(a_d == "R")	return_value = -90;
+	}
 	
-	ScreenSide* t_screen = ScreenSide::create();
-	addChild(t_screen, 99999);
-	
-    return true;
+	return return_value;
 }
 
 CCPoint WorldMapScene::getUiButtonPosition(int t_tag)
@@ -452,25 +761,34 @@ void WorldMapScene::menuAction(CCObject* pSender)
 	is_menu_enable = false;
 	int tag = ((CCNode*)pSender)->getTag();
 	
-	if(tag < kWMS_MT_collection)
+	if(tag < kWMS_MT_couponBase)
 	{
 		tag -= kWMS_MT_stageBase;
 		mySD->setSilType(tag);
+		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, tag);
 		
 		StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(WorldMapScene::stageCancel));
 		addChild(t_sid, kWMS_Z_popup);
 		
 //		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
+	else if(tag < kWMS_MT_option)
+	{
+		tag -= kWMS_MT_couponBase;
+		pass_target_stage = tag;
+		
+		TicketNeedPopup* t_tnp = TicketNeedPopup::create(this, callfunc_selector(WorldMapScene::popupClose), this, callfunc_selector(WorldMapScene::passTicketStage));
+		addChild(t_tnp, kWMS_Z_popup);
+	}
 	else if(tag == kWMS_MT_cardSetting)
 	{
 		mySGD->before_cardsetting = kSceneCode_WorldMapScene;
 		CCDirector::sharedDirector()->replaceScene(CardSettingScene::scene());
 	}
-	else if(tag == kWMS_MT_collection)
-	{
-		CCDirector::sharedDirector()->replaceScene(CollectionListScene::scene());
-	}
+//	else if(tag == kWMS_MT_collection)
+//	{
+//		CCDirector::sharedDirector()->replaceScene(CollectionListScene::scene());
+//	}
 	else if(tag == kWMS_MT_option)
 	{
 		CCDirector::sharedDirector()->replaceScene(OptionScene::scene());
@@ -522,21 +840,100 @@ void WorldMapScene::stageCancel()
 	is_menu_enable = true;
 }
 
+CCPoint WorldMapScene::getCouponPosition(int stage)
+{
+	CCPoint return_value;
+	
+	return_value.x = SDS_GI(kSDF_gameInfo, CCSTR_CWF("coupon%d_x", stage)->getCString());
+	return_value.y = SDS_GI(kSDF_gameInfo, CCSTR_CWF("coupon%d_y", stage)->getCString());
+	
+	return_value = ccpMult(return_value, 40.f);
+	return_value = ccpAdd(return_value, ccp(20.f,20.f));
+	
+	return return_value;
+}
+
 CCPoint WorldMapScene::getStagePosition(int stage)
 {
 	CCPoint return_value;
-	if(stage == 1)			return_value = ccp(40,179);
-	else if(stage == 2)		return_value = ccp(84,232);
-	else if(stage == 3)		return_value = ccp(128,179);
-	else if(stage == 4)		return_value = ccp(172,124);
-	else if(stage == 5)		return_value = ccp(217,179);
-	else if(stage == 6)		return_value = ccp(261,232);
-	else if(stage == 7)		return_value = ccp(305,179);
-	else if(stage == 8)		return_value = ccp(349,124);
-	else if(stage == 9)		return_value = ccp(393,179);
-	else if(stage == 10)	return_value = ccp(439,232);
+	
+	return_value.x = SDS_GI(kSDF_gameInfo, CCSTR_CWF("stage%d_x", stage)->getCString());
+	return_value.y = SDS_GI(kSDF_gameInfo, CCSTR_CWF("stage%d_y", stage)->getCString());
+	
+	return_value = ccpMult(return_value, 40.f);
+	return_value = ccpAdd(return_value, ccp(20.f,20.f));
+	
+//	if(stage == 1)			return_value = ccp(40,179);
+//	else if(stage == 2)		return_value = ccp(84,232);
+//	else if(stage == 3)		return_value = ccp(128,179);
+//	else if(stage == 4)		return_value = ccp(172,124);
+//	else if(stage == 5)		return_value = ccp(217,179);
+//	else if(stage == 6)		return_value = ccp(261,232);
+//	else if(stage == 7)		return_value = ccp(305,179);
+//	else if(stage == 8)		return_value = ccp(349,124);
+//	else if(stage == 9)		return_value = ccp(393,179);
+//	else if(stage == 10)	return_value = ccp(439,232);
 	
 	return return_value;
+}
+
+
+void WorldMapScene::registerWithTouchDispatcher()
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this, kCCMenuHandlerPriority+1);
+}
+
+#define WMS_SCROLL_SPEED_MAX_BASE	20
+#define WMS_SCROLL_SPEED_DECEASE_BASE	0.2f
+
+void WorldMapScene::moveListXY(CCPoint t_p)
+{
+	if(t_p.x > WMS_SCROLL_SPEED_MAX_BASE/map_node->getScale())		t_p.x = WMS_SCROLL_SPEED_MAX_BASE/map_node->getScale();
+	if(t_p.x < -WMS_SCROLL_SPEED_MAX_BASE/map_node->getScale())		t_p.x = -WMS_SCROLL_SPEED_MAX_BASE/map_node->getScale();
+	
+	if(t_p.y > WMS_SCROLL_SPEED_MAX_BASE/map_node->getScale())		t_p.y = WMS_SCROLL_SPEED_MAX_BASE/map_node->getScale();
+	if(t_p.y < -WMS_SCROLL_SPEED_MAX_BASE/map_node->getScale())		t_p.y = -WMS_SCROLL_SPEED_MAX_BASE/map_node->getScale();
+	
+	CCPoint a_p = ccpSub(map_node->getPosition(), t_p);
+	
+//	if(map_node->getScale() <= maximum_scale)
+//		a_p.x = (480.f*maximum_scale-480.f*map_node->getScale())/2.f;
+//	else
+//	{
+		if(a_p.x > -(left_x*map_node->getScale() - 240.f))
+			a_p.x = -(left_x*map_node->getScale() - 240.f);
+		else if(a_p.x < -(right_x*map_node->getScale() - 240.f))
+			a_p.x = -(right_x*map_node->getScale() - 240.f);
+//	}
+	
+	if(a_p.y > -(bottom_y*map_node->getScale() - 160.f))
+		a_p.y = -(bottom_y*map_node->getScale() - 160.f);
+	if(a_p.y < -(top_y*map_node->getScale() - 160.f))
+		a_p.y = -(top_y*map_node->getScale() - 160.f);
+	
+	map_node->setPosition(a_p);
+}
+
+void WorldMapScene::moveAnimation()
+{
+	isAnimated = true;
+	
+	if(moveSpeed_p.x >= WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale())			moveSpeed_p.x -= WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale();
+	else if(moveSpeed_p.x <= -WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale())	moveSpeed_p.x += WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale();
+	else							moveSpeed_p.x = 0;
+	
+	if(moveSpeed_p.y >= WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale())			moveSpeed_p.y -= WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale();
+	else if(moveSpeed_p.y <= WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale())	moveSpeed_p.y += WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale();
+	else							moveSpeed_p.y = 0;
+	
+	if((moveSpeed_p.x < WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale() && moveSpeed_p.x > -WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale() &&
+		moveSpeed_p.y < WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale() && moveSpeed_p.y > -WMS_SCROLL_SPEED_DECEASE_BASE/map_node->getScale()) || isAnimated == false)
+	{
+		this->unschedule(schedule_selector(WorldMapScene::moveAnimation));
+		moveSpeed_p = CCPointZero;
+		isAnimated = false;
+	}
+	this->moveListXY(ccpMult(moveSpeed_p, -1));
 }
 
 void WorldMapScene::alertAction(int t1, int t2)

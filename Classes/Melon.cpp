@@ -28,7 +28,7 @@ bool Melon::init()
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
-	m_speed = 2.f;
+
 	
     CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	{
@@ -249,6 +249,7 @@ void Melon::animationDirection(float dt)
 }
 bool Melon::startDamageReaction(float damage, float angle)
 {
+	KSCumberBase::startDamageReaction(damage, angle);
 	m_remainHp -= damage;
 	CCLog("Melon Hp %f", m_remainHp);
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
@@ -413,76 +414,7 @@ void Melon::scaleAdjustment(float dt)
 }
 
 
-void Melon::cumberAttack(float dt)
-{
-	float w = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
-	
-	// 1% 확률로.
-	if(w == 0 && m_state == CUMBERSTATEMOVING && !m_attacks.empty())
-	{
-		int attackCode = 0;
-		//		std::vector<int> attacks = {kAP_CODE_pattern10, kAP_CODE_pattern13, kAP_CODE_pattern17, kAP_CODE_pattern23,
-		//			kAP_CODE_pattern101, kAP_CODE_pattern101, kAP_CODE_pattern102, kAP_CODE_pattern102,
-		//			kAP_CODE_pattern103, kAP_CODE_pattern103};
-//		std::vector<int> attacks = {kTargetAttack3, kTargetAttack4};
-		//		std::vector<int> attacks = {kNonTargetAttack1, kNonTargetAttack2,
-		//		kNonTargetAttack3, kNonTargetAttack4, kNonTargetAttack5, kNonTargetAttack6, kNonTargetAttack7,
-		//		kNonTargetAttack8, kTargetAttack1, kTargetAttack2, kTargetAttack3, kTargetAttack4};
-		
-		
-		
-		bool searched = false;
-		int searchCount = 0;
-		while(!searched)
-		{
-			searchCount++;
-			int idx = m_well512.GetValue(m_attacks.size() - 1);
-			
-			attackCode = m_attacks[idx];
-			searched = true;
-			if(attackCode == kSpecialAttack8 && m_invisible.startInvisibleScheduler)
-				searched = false;
-			if(attackCode == kTargetAttack9 && m_state == CUMBERSTATEFURY)
-				searched = false;
-			if(searchCount >= 30)
-			{
-				searched = false;
-				break;
-			}
-		}
 
-		if(searched)
-		{
-			if(attackCode == kTargetAttack9) // fury
-			{
-				m_state = CUMBERSTATESTOP;
-				m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
-				for(auto bodyAniManager : m_bodyAnimationManagers)
-				{
-					bodyAniManager->runAnimationsForSequenceNamed("cast101start");
-				}
-				m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
-				
-				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
-			}
-			else
-			{
-				m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
-				for(auto bodyAniManager : m_bodyAnimationManagers)
-				{
-					bodyAniManager->runAnimationsForSequenceNamed("cast101start");
-				}
-				m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
-				if(1 <= attackCode && attackCode <= 100)
-					startAnimationNoDirection();
-				else
-					startAnimationDirection();
-				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
-			}
-		}
-		
-	}
-}
 COLLISION_CODE Melon::crashWithX(IntPoint check_position)
 {
 	/// 나갔을 시.

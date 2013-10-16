@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.auth.kakao.welcome.login.button">카카오계정으로 로그인</string>
+    <string name="hsp.auth.kakao.welcome.terms"><u>게임이용약관</u>에 동의합니다.</string>
+    <string name="hsp.auth.kakao.welcome.terms.alert">게임이용약관에 동의해주세요.</string>
+
+</resources>

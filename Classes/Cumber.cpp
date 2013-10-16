@@ -451,7 +451,7 @@ void CumberParent::myInit()
 	myGD->V_B["CP_slowItem"] = std::bind(&CumberParent::slowItem, this, _1);
 	myGD->V_B["CP_silenceItem"] = std::bind(&CumberParent::silenceItem, this, _1);
 	myGD->V_V["CP_furyModeOn"] = std::bind(&CumberParent::furyModeOn, this);
-	myGD->V_B["CP_setCasting"] = std::bind(&CumberParent::setCasting, this, _1);
+//	myGD->V_B["CP_setCasting"] = std::bind(&CumberParent::setCasting, this, _1);
 	myGD->V_V["CP_stopMovingMainCumber"] = std::bind(&CumberParent::stopMovingMainCumber, this);
 	myGD->V_V["CP_jackCrashDie"] = std::bind(&CumberParent::jackCrashDie, this);
 //	myGD->V_I["CP_mainCumberShowEmotion"] = std::bind(&CumberParent::mainCumberShowEmotion, this, _1);
@@ -537,6 +537,8 @@ void CumberParent::myInit()
 			break;
 	}
 	mainCumber->settingHp(hp);
+	KS::KSLog("%", boss);
+	mainCumber->settingFuryRule(boss["fury"]);
 	mainCumber->settingScale(startScale, minScale, maxScale);
 	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
 	mainCumber->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement,

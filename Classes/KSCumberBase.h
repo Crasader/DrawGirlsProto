@@ -64,7 +64,7 @@ class KSCumberBase : public CCNode
 {
 public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
-	LIMIT_COLLISION_PER_SEC(3) /// 초당 변수만큼 충돌시 스케일 줄임.
+	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0) /// 초당 변수만큼 충돌시 스케일 줄임.
 //		m_state(CUMBERSTATESTOP)
 	{
 		
@@ -78,6 +78,9 @@ public:
 	{
 		CCNode::init();
 //		mEmotion = NULL;
+		schedule(schedule_selector(ThisClassType::speedAdjustment));
+		
+		
 		return true;
 	}
 	
@@ -129,8 +132,8 @@ public:
 	{
 		m_state = CUMBERSTATEGAMEOVER;
 		
-//		setCumberScale(0.f); // 맞으면 작게 함.
-		m_scale.scale.init(m_scale.scale.getValue(), 0.f, 0.03f);
+//		m_scale.scale.init(m_scale.scale.getValue(), 0.f, 0.03f);
+//		runAction(CCScaleTo::create(2.f, 0.01f));
 		m_minScale = 0.f;
 		m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(0, 30));
 		m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(30, 60));
@@ -250,10 +253,14 @@ public:
 		
 		
 	}
-	virtual bool startDamageReaction(float damage, float angle) = 0;
+	
+	virtual void cumberAttack(float dt);
+	void speedAdjustment(float dt);
+	virtual bool startDamageReaction(float damage, float angle);
 	//	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
+	virtual void attackBehavior(AP_CODE attack) = 0;
 	virtual void onStartGame(){} // = 0;
 	//	virtual void onEndGame(){} // = 0;
 	virtual void onPatternEnd() // = 0;
@@ -292,9 +299,32 @@ public:
 		m_scale.SCALE_ADDER = m_scale.SCALE_SUBER = (m_maxScale - m_minScale) / 5.f;
 		m_scale.scale.init(m_startScale, m_startScale, 0.f);
 	}
+	struct FuryRule
+	{
+		// gainPercent 이상이고, 유저와의 거리가 userDistance 이상일 때
+		// 매 프레임 percent 확률로 분노함.
+		float gainPercent;
+		float userDistance;
+		float percent;
+		
+		// ltPercent 보다 작고 gtCount 보다 클 때 분노함.
+		float ltPercent;
+		float gtCount;
+	}m_furyRule;
+	void settingFuryRule(Json::Value fury)
+	{
+		m_furyRule.gainPercent = fury["gainpercent"].asDouble();
+		m_furyRule.userDistance = fury["userdistance"].asDouble();
+		m_furyRule.percent = fury["percent"].asDouble();
+		m_furyRule.ltPercent = fury["ltpercent"].asDouble();
+		m_furyRule.gtCount = fury["gtcount"].asDouble();
+//		m_furyRule
+	}
 	void settingSpeed(float startSpeed, float minSpeed, float maxSpeed)
 	{
 		m_speed = m_startSpeed = startSpeed;
+//		m_speed.init(m_startSpeed, m_startSpeed, 0.1f);
+
 		m_minSpeed = minSpeed;
 		m_maxSpeed = maxSpeed;
 	}
@@ -389,16 +419,17 @@ protected:
 //	Emotion* mEmotion;
 	Well512 m_well512;
 	int m_directionAngleDegree;
-	float m_speed;
+
 	float m_attackPercent;
 	float m_startScale, m_minScale, m_maxScale;
 	float m_startSpeed, m_minSpeed, m_maxSpeed;
-	
+//	FromTo<float> m_speed;
+	float m_speed;
 	float m_remainHp;
 	float m_totalHp;
 	float m_speedRatio;
 	bool m_slience;
-	
+	int m_crashCount;
 	IntPoint m_mapPoint; // 자기 자신의 맵포인트를 저장함. setPosition 할 때 마다 수정해줘야함.
 //	enum MOVEMENT m_normalMode, m_drawMode;
 	
@@ -421,6 +452,15 @@ protected:
 		}
 	}m_furyMode;
 
+	struct Invisible
+	{
+		int invisibleFrame;
+		int VISIBLE_FRAME;
+		bool startInvisibleScheduler;
+		float invisibleValue;
+		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
+	}m_invisible;
+	
 	struct Scale
 	{
 		Scale() : SCALE_ADDER(0.1f), SCALE_SUBER(0.2f), scale(0.6f, 0.6f, 0.f),
@@ -443,6 +483,7 @@ protected:
 		float lastMapCollisionTime;
 		float timer;
 	}m_follow;
+	
 	
 	struct CircleMoving
 	{
