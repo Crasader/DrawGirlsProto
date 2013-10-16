@@ -4317,8 +4317,10 @@ public:
 		else
 		{
 //			KS::setOpacity(lazer_sub, fadeFromToDuration.getValue());
-			lazer_main->setScaleY(fadeFromToDuration.getValue());
-			t_bead->setScaleY(fadeFromToDuration.getValue());
+            if(lazer_main)
+                lazer_main->setScaleY(fadeFromToDuration.getValue());
+            if(t_bead)
+                t_bead->setScaleY(fadeFromToDuration.getValue());
 //			KS::setOpacity(lazer_main, fadeFromToDuration.getValue());
 //			KS::setOpacity(t_bead, fadeFromToDuration.getValue());
 		}
@@ -4326,6 +4328,7 @@ public:
 	
 	void myInit(CCPoint t_sp, KSCumberBase* cb)
 	{
+        lazer_main = t_bead = NULL;
 		m_cumber = cb;
 		
 		Json::Reader reader;
