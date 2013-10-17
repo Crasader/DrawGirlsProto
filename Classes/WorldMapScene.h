@@ -47,6 +47,7 @@ private:
 	CCPoint getUiButtonPosition(int t_tag);
 	
 	void resultLogin(Json::Value result_data);
+	void resultFriendList(Json::Value result_data);
 	
 	int pass_target_stage;
 	

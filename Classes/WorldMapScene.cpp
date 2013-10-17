@@ -195,10 +195,17 @@ bool WorldMapScene::init()
 
 void WorldMapScene::resultLogin(Json::Value result_data)
 {
-	CCLog("result data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLog("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
+//	hspConnector::get()->kLoadFriends(std::bind(&WorldMapScene::resultFriendList, this, std::placeholders::_1));
 	
 	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(WorldMapScene::setWorldMapScene));
 	addChild(t_sld);
+}
+
+void WorldMapScene::resultFriendList(Json::Value result_data)
+{
+	CCLog("resultFriendList data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 }
 
 void WorldMapScene::passTicketStage()
@@ -227,17 +234,31 @@ void WorldMapScene::setMapNode()
 	CCSpriteBatchNode* track_batch_node = CCSpriteBatchNode::create("worldmap_track.png");
 	map_node->addChild(track_batch_node, kWMS_Z_track);
 	
-	CCSprite* n_stage1 = CCSprite::create("worldmap_stage.png");
+	CCSprite* n_stage1 = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", 1)->getCString());
+	
+	CCSize tb_size = n_stage1->getContentSize();
+	tb_size.width /= 2.f;
+	tb_size.height /= 2.f;
+	CCPoint tb_point = ccp(tb_size.width, tb_size.height);
+	
+	CCSprite* n_case1 = CCSprite::create("worldmap_normal_on.png");
+	n_case1->setPosition(tb_point);
+	n_stage1->addChild(n_case1);
 	CCLabelTTF* n_stage1_label = CCLabelTTF::create("1", mySGD->getFont().c_str(), 10);
-	n_stage1_label->setPosition(ccp(n_stage1->getContentSize().width/2.f, n_stage1->getContentSize().height/2.f));
+	n_stage1_label->setColor(ccBLACK);
+	n_stage1_label->setPosition(ccpAdd(tb_point, ccp(0,-30)));
 	n_stage1->addChild(n_stage1_label);
 	
-	CCSprite* s_stage1 = CCSprite::create("worldmap_stage.png");
+	CCSprite* s_stage1 = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", 1)->getCString());
 	s_stage1->setColor(ccGRAY);
+	CCSprite* s_case1 = CCSprite::create("worldmap_normal_on.png");
+	s_case1->setPosition(tb_point);
+	s_case1->setColor(ccGRAY);
+	s_stage1->addChild(s_case1);
 	CCLabelTTF* s_stage1_label = CCLabelTTF::create("1", mySGD->getFont().c_str(), 10);
-	s_stage1_label->setPosition(ccp(s_stage1->getContentSize().width/2.f, s_stage1->getContentSize().height/2.f));
+	s_stage1_label->setColor(ccBLACK);
+	s_stage1_label->setPosition(ccpAdd(tb_point, ccp(0,-30)));
 	s_stage1->addChild(s_stage1_label);
-	
 	
 	CCMenuItem* stage1_item = CCMenuItemSprite::create(n_stage1, s_stage1, this, menu_selector(WorldMapScene::menuAction));
 	stage1_item->setTag(kWMS_MT_stageBase + 1);
@@ -245,10 +266,6 @@ void WorldMapScene::setMapNode()
 	CCMenu* stage1_menu = CCMenu::createWithItem(stage1_item);
 	stage1_menu->setPosition(getStagePosition(1));
 	map_node->addChild(stage1_menu, kWMS_Z_stage);
-	
-	CCSprite* stage1_thumbnail = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", 1)->getCString());// CCSprite::create("stage1_thumbnail.png");
-	stage1_thumbnail->setPosition(ccpAdd(getStagePosition(1), ccp(0,40)));
-	map_node->addChild(stage1_thumbnail, kWMS_Z_stage);
 	
 	int cleared_number = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
 	int updated_stage = mySD->getLastUpdateStageNumber();
@@ -270,18 +287,25 @@ void WorldMapScene::setMapNode()
 					map_node->addChild(pass_img, kWMS_Z_stage);
 					
 					
-					
-					CCSprite* n_stage = CCSprite::create("worldmap_stage.png");
-					CCLabelTTF* n_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-					n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
+					CCSprite* n_stage = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", i)->getCString());
+					CCSprite* n_case = CCSprite::create("worldmap_normal_on.png");
+					n_case->setPosition(tb_point);
+					n_stage->addChild(n_case);
+					CCLabelTTF* n_stage_label = CCLabelTTF::create(CCSTR_CWF("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+					n_stage_label->setColor(ccBLACK);
+					n_stage_label->setPosition(ccpAdd(tb_point, ccp(0,-30)));
 					n_stage->addChild(n_stage_label);
 					
-					CCSprite* s_stage = CCSprite::create("worldmap_stage.png");
+					CCSprite* s_stage = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", i)->getCString());
 					s_stage->setColor(ccGRAY);
-					CCLabelTTF* s_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-					s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
+					CCSprite* s_case = CCSprite::create("worldmap_normal_on.png");
+					s_case->setPosition(tb_point);
+					s_case->setColor(ccGRAY);
+					s_stage->addChild(s_case);
+					CCLabelTTF* s_stage_label = CCLabelTTF::create(CCSTR_CWF("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+					s_stage_label->setColor(ccBLACK);
+					s_stage_label->setPosition(ccpAdd(tb_point, ccp(0,-30)));
 					s_stage->addChild(s_stage_label);
-					
 					
 					CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(WorldMapScene::menuAction));
 					stage_item->setTag(kWMS_MT_stageBase+i);
@@ -306,15 +330,24 @@ void WorldMapScene::setMapNode()
 			}
 			else
 			{
-				CCSprite* n_stage = CCSprite::create("worldmap_stage.png");
-				CCLabelTTF* n_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-				n_stage_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
+				CCSprite* n_stage = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", i)->getCString());
+				CCSprite* n_case = CCSprite::create("worldmap_normal_on.png");
+				n_case->setPosition(tb_point);
+				n_stage->addChild(n_case);
+				CCLabelTTF* n_stage_label = CCLabelTTF::create(CCSTR_CWF("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				n_stage_label->setColor(ccBLACK);
+				n_stage_label->setPosition(ccpAdd(tb_point, ccp(0,-30)));
 				n_stage->addChild(n_stage_label);
 				
-				CCSprite* s_stage = CCSprite::create("worldmap_stage.png");
+				CCSprite* s_stage = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", i)->getCString());
 				s_stage->setColor(ccGRAY);
-				CCLabelTTF* s_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-				s_stage_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
+				CCSprite* s_case = CCSprite::create("worldmap_normal_on.png");
+				s_case->setPosition(tb_point);
+				s_case->setColor(ccGRAY);
+				s_stage->addChild(s_case);
+				CCLabelTTF* s_stage_label = CCLabelTTF::create(CCSTR_CWF("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				s_stage_label->setColor(ccBLACK);
+				s_stage_label->setPosition(ccpAdd(tb_point, ccp(0,-30)));
 				s_stage->addChild(s_stage_label);
 				
 				
@@ -328,9 +361,10 @@ void WorldMapScene::setMapNode()
 		}
 		else
 		{
-			CCSprite* d_stage = CCSprite::create("worldmap_gray.png");
+			CCSprite* d_stage = CCSprite::create("worldmap_normal_off.png");
 			CCLabelTTF* d_stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-			d_stage_label->setPosition(ccp(d_stage->getContentSize().width/2.f, d_stage->getContentSize().height/2.f));
+			d_stage_label->setColor(ccBLACK);
+			d_stage_label->setPosition(ccpAdd(tb_point, ccp(0,-30)));
 			d_stage->addChild(d_stage_label);
 			
 			d_stage->setPosition(getStagePosition(i));
@@ -462,25 +496,7 @@ void WorldMapScene::setMapNode()
 			}
 		}
 		
-		if(!is_coupon)
-		{
-			if(updated_stage >= i && i-2 <= cleared_number)
-			{
-				if(i-1 <= cleared_number)
-				{
-					CCSprite* stage_thumbnail = mySIL->getLoadedImg(CCSTR_CWF("stage%d_thumbnail.png", i)->getCString());
-					stage_thumbnail->setPosition(ccpAdd(getStagePosition(i), ccp(0,40)));
-					map_node->addChild(stage_thumbnail, kWMS_Z_stage);
-				}
-				else
-				{
-					CCSprite* stage_thumbnail = CCSprite::create("question_thumbnail.png");
-					stage_thumbnail->setPosition(ccpAdd(getStagePosition(i), ccp(0,40)));
-					map_node->addChild(stage_thumbnail, kWMS_Z_stage);
-				}
-			}
-		}
-		else if(!is_pass)
+		if(is_coupon && !is_pass)
 		{
 			break;
 		}

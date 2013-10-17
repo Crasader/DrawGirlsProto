@@ -140,7 +140,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>boss_apricot_1.ccb</string>
+						<string>boss_tomato.ccb</string>
 					</dict>
 				</array>
 			</dict>
@@ -277,7 +277,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>3</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
