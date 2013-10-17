@@ -162,6 +162,7 @@ enum WMS_MenuTag{
 	kWMS_MT_lifeShop = 5010
 };
 
+
 // on "init" you need to initialize your instance
 bool WorldMapScene::init()
 {
