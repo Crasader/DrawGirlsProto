@@ -256,6 +256,7 @@ var ccb_resources = [
     {type:'image', src:"pattern_lightning_targeting5.png"},
     {type:'image', src:"boss_grape_rubylight.png"},
     {type:'image', src:"pattern_lightning_back1.png"},
+    {type:'image', src:"_guide.png"},
     {type:'image', src:"pattern_timebomb1_back2.png"},
     {type:'ccbi', src:"boss_apple_head.ccbi"},
     {type:'ccbi', src:"boss_kiwi_body.ccbi"},
