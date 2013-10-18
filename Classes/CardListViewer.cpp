@@ -13,10 +13,10 @@ void CardListViewer::visit()
 {
 	glEnable(GL_SCISSOR_TEST);
 	
-//	int viewport [4];
-//	glGetIntegerv (GL_VIEWPORT, viewport);
+	int viewport [4];
+	glGetIntegerv (GL_VIEWPORT, viewport);
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
+	CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
 	
 	float wScale = frame_size.width / rSize.width;
 	float hScale = frame_size.height / rSize.height;

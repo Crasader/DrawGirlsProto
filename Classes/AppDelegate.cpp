@@ -53,13 +53,33 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 //	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionShowAll);
-	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionNoBorder);
+	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionFixedWidth);// kResolutionNoBorder);
 //	CCFileUtils::sharedFileUtils()->setResourceDirectory(sharedResourceDirectory);
 	
 	CCSize screen_size = pEGLView->getFrameSize();
 	myDSH->ui_top = 480.f*screen_size.height/screen_size.width;
 	myDSH->ui_bottom = 0;
 	myDSH->ui_center_y = myDSH->ui_top/2.f;
+	
+	float screen_rate = screen_size.width/screen_size.height;
+	
+	if(screen_rate > 1.5f)
+	{
+		myDSH->screen_convert_rate = (designResolutionSize.width/designResolutionSize.height)/screen_rate;
+		myDSH->ui_zero_point = CCPointZero;
+	}
+	else if(screen_rate < 1.5f)
+	{
+		myDSH->screen_convert_rate = 1.f;
+		myDSH->ui_zero_point = ccp(0,(screen_size.height*(designResolutionSize.width/screen_size.width) - designResolutionSize.height)/2.f);
+	}
+	else
+	{
+		myDSH->screen_convert_rate = 1.f;
+		myDSH->ui_zero_point = CCPointZero;
+	}
+	
+	
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb/resources-iphonehd");

@@ -18,6 +18,10 @@ CCScene* DiaryZoom::scene()
 {
     CCScene *scene = CCScene::create();
     DiaryZoom *layer = DiaryZoom::create();
+	
+	layer->setAnchorPoint(ccp(0.5,0));
+	layer->setScale(myDSH->screen_convert_rate);
+	layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
     scene->addChild(layer);
 	
     return scene;
@@ -110,9 +114,6 @@ void DiaryZoom::menuAction(CCObject *sender)
 		next_button->setVisible(false);
 		setTouchEnabled(false);
 		unschedule(schedule_selector(DiaryZoom::moveAnimation));
-		
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionNoBorder);
 		
 		CCDirector::sharedDirector()->replaceScene(CollectionBook::scene());
 	}

@@ -26,6 +26,7 @@
 #import "cocos2d.h"
 #import "EAGLView.h"
 #import "AppDelegate.h"
+#include "StarGoldData.h"
 
 #import "RootViewController.h"
 #import "hspConnector.h"
@@ -87,13 +88,16 @@ static AppDelegate s_sharedApplication;
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
     cocos2d::CCDirector::sharedDirector()->pause();
+	cocos2d::CCDirector::sharedDirector()->stopAnimation();
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-    cocos2d::CCDirector::sharedDirector()->resume();
+	cocos2d::CCDirector::sharedDirector()->startAnimation();
+	if(!StarGoldData::sharedInstance()->is_paused)
+		cocos2d::CCDirector::sharedDirector()->resume();
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {

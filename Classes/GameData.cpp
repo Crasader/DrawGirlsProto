@@ -401,9 +401,9 @@ void GameData::setUItype( GAMESCREEN_TYPE t_type )
 	gamescreen_type = t_type;
 
 	if(gamescreen_type != kGT_full)
-		game_scale = (215-boarder_value)/160.f;
+		game_scale = (215-boarder_value)/(160.f);
 	else
-		game_scale = 1.5f;
+		game_scale = (480.f-boarder_value*2)/(320.f);
 }
 
 void GameData::myInit()

@@ -169,8 +169,6 @@ void ZoomScript::menuAction(CCObject *sender)
 		}
 		else
 		{
-			CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-			pEGLView->setDesignResolutionSize(480, 320, kResolutionNoBorder);
 			
 			CCDirector::sharedDirector()->replaceScene(ClearScene::scene());
 		}

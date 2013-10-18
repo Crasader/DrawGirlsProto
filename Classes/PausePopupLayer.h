@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "DataStorageHub.h"
 #include "GameData.h"
+#include "AudioEngine.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -95,6 +96,7 @@ private:
 	void endPopAnimation()
 	{
 		is_ing = false;
+		AudioEngine::sharedInstance()->setAppBack();
 		CCDirector::sharedDirector()->pause();
 	}
 	
