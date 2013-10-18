@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui_theme>
+
+    <login>
+
+        <kakao_welcome_view>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_BACKGROUND_IMAGE_PORT"
+                value="kakao_welcome_bg_port"/>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_BACKGROUND_IMAGE_LAND"
+                value="kakao_welcome_bg_land"/>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_BACKGROUND_IMAGE_SCALE_TYPE_PORT"
+                value="centerInside"/>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_BACKGROUND_IMAGE_SCALE_TYPE_LAND"
+                value="centerInside"/>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_BACKGROUND_COLOR_PORT"
+                value="#FFFFFF"/>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_BACKGROUND_COLOR_LAND"
+                value="#FFFFFF"/>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_TERMS_TEXT_COLOR"
+                value="#333333"/>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_LOGIN_BUTTON_BACKGROUND_IMAGE"
+                value="hsp_auth_kakao_welcome_login_button"/>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_LOGIN_BUTTON_TEXT_COLOR"
+                value="#000000"/>
+
+            <item
+                key="KAKAO_WELCOME_VIEW_LOGIN_BUTTON_TEXT_SHADOW_COLOR"
+                value="#f5fcf2"/>
+        </kakao_welcome_view>
+    </login>
+
+</ui_theme>
