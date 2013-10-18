@@ -131,19 +131,19 @@ public class hspConnector{
 			e.printStackTrace();
 		}
 		
-		// 배포시, Release로 변경.
+		// 諛고��� Release濡�蹂�꼍.
 		kakao.setLogLevel(LogLevel.Debug);
 		
 		final SharedPreferences pref = context.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
 
         KakaoTokenListener tokenListener = new KakaoTokenListener() {
             public void onSetTokens(String accessToken, String refreshToken) {
-                // 실제 적용시에는 보안이 보장되는 곳에 저장해야 합니다. 
-                if(TextUtils.isEmpty(accessToken) || TextUtils.isEmpty(refreshToken)) { // accessToken이 null이거나 빈스트링("")이면 로그아웃
-                	// 저장해놓은 토큰을 지운다.
+                // �ㅼ� ��������蹂댁���蹂댁���� 怨녹� ����댁� �⑸��� 
+                if(TextUtils.isEmpty(accessToken) || TextUtils.isEmpty(refreshToken)) { // accessToken��null�닿굅��鍮���몃�("")�대㈃ 濡�렇���
+                	// ����대��������吏����
                     pref.edit().remove("access_token").remove("refresh_token").commit();
 
-                    // TODO kakaoStatus가 STATUS_INVALID_GRANT 이거나, KakaoTokenListener에 access token이 null 또는 빈문자열로 오는경우 logout | 어플 재시작 | 종료
+                    // TODO kakaoStatus媛�STATUS_INVALID_GRANT �닿굅�� KakaoTokenListener��access token��null ��� 鍮�Ц���濡��ㅻ�寃쎌� logout | �댄� �ъ���| 醫��
                 } else {
                     pref.edit().putString("access_token", accessToken).putString("refresh_token", refreshToken).commit();
                 }
@@ -372,7 +372,7 @@ public class hspConnector{
 					@Override
 					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
 						
-						// 카카오톡 친구 중 해당 앱을 사용하는 친구 목록
+						// 移댁뭅�ㅽ� 移�뎄 以��대� �깆� �ъ���� 移�뎄 紐⑸�
 						JSONArray appFriendArray = result.optJSONArray(StringKeySet.app_friends_info);
 						JSONArray friendArray = result.optJSONArray(StringKeySet.friends_info);
 
@@ -445,8 +445,8 @@ public class hspConnector{
 				
 				ArrayList<Map<String, String>> metaInfo = new ArrayList<Map<String, String>>();
 				
-				// excute url은 kakao + client_id + :// 과 같은 형식으로 만들어집니다.
-				// 카카오톡에서 이 앱을 실행시키기 위해서 AndroidManifest.xml에 custom scheme을 설정해줍니다.
+				// excute url��kakao + client_id + :// 怨�媛�� ����쇰� 留���댁����.
+				// 移댁뭅�ㅽ���� ���깆� �ㅽ����湲������AndroidManifest.xml��custom scheme���ㅼ��댁����.
 				Map<String, String> metaInfoAndroid = new HashMap<String, String>();
 				metaInfoAndroid.put("os", "android");
 				metaInfoAndroid.put("executeurl", "");
@@ -711,7 +711,7 @@ public class hspConnector{
 //					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
 //
 //								
-//						// 카카오톡 친구 중 해당 앱을 사용하는 친구 목록
+//						// 移댁뭅�ㅽ� 移�뎄 以��대� �깆� �ъ���� 移�뎄 紐⑸�
 //						JSONArray appFriendArray = result.optJSONArray(StringKeySet.app_friends);
 //						JSONArray friendArray = result.optJSONArray(StringKeySet.friends);
 //
@@ -992,8 +992,8 @@ public class hspConnector{
 //				//Log.i("litqoo","data:"+data.toString());
 //				ArrayList<Map<String, String>> metaInfo = new ArrayList<Map<String,String>>();
 //				
-//				// excute url은 kakao + client_id + :// 과 같은 형식으로 만들어집니다.
-//				// 카카오톡에서 이 앱을 실행시키기 위해서 AndroidManifest.xml에 custom scheme을 설정해줍니다.
+//				// excute url��kakao + client_id + :// 怨�媛�� ����쇰� 留���댁����.
+//				// 移댁뭅�ㅽ���� ���깆� �ㅽ����湲������AndroidManifest.xml��custom scheme���ㅼ��댁����.
 //				Map<String, String> metaInfoAndroid = new HashMap<String, String>();
 //				metaInfoAndroid.put("os", "android");
 //				metaInfoAndroid.put("executeurl", "");
@@ -1263,8 +1263,8 @@ public class hspConnector{
 //				String message = param.optString("msg");
 //				ArrayList<Map<String, String>> metaInfo = new ArrayList<Map<String,String>>();
 //				
-//				// excute url은 kakao + client_id + :// 과 같은 형식으로 만들어집니다.
-//				// 카카오톡에서 이 앱을 실행시키기 위해서 AndroidManifest.xml에 custom scheme을 설정해줍니다.
+//				// excute url��kakao + client_id + :// 怨�媛�� ����쇰� 留���댁����.
+//				// 移댁뭅�ㅽ���� ���깆� �ㅽ����湲������AndroidManifest.xml��custom scheme���ㅼ��댁����.
 //				Map<String, String> metaInfoAndroid = new HashMap<String, String>();
 //				metaInfoAndroid.put("os", "android");
 //				metaInfoAndroid.put("executeurl", "");

@@ -44,7 +44,7 @@ bool Coconut::init()
 	IntPoint mapPoint;
 	bool finded;
 	getRandomPosition(&mapPoint, &finded);
-	//	gameData->setMainCumberPoint(mapPoint);
+	//	myGD->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	//	startMoving();
 	
@@ -204,17 +204,17 @@ COLLISION_CODE Coconut::crashWithX(IntPoint check_position)
 	}
 	
 	// 이미 그려진 곳에 충돌했을 경우.
-	if(gameData->mapState[check_position.x][check_position.y] == mapOldline ||
-	   gameData->mapState[check_position.x][check_position.y] == mapOldget)
+	if(myGD->mapState[check_position.x][check_position.y] == mapOldline ||
+	   myGD->mapState[check_position.x][check_position.y] == mapOldget)
 	{
 		return COLLISION_CODE::kCOLLISION_MAP;
 	}
 	
-	if(gameData->mapState[check_position.x][check_position.y] == mapNewline)
+	if(myGD->mapState[check_position.x][check_position.y] == mapNewline)
 	{
 		return COLLISION_CODE::kCOLLISION_NEWLINE;
 	}
-	IntPoint jackPoint = gameData->getJackPoint();
+	IntPoint jackPoint = myGD->getJackPoint();
 	if(jackPoint.x == check_position.x && jackPoint.y == check_position.y)
 	{
 		return COLLISION_CODE::kCOLLISION_JACK;
@@ -300,7 +300,7 @@ void Coconut::getRandomPosition(IntPoint* ip, bool* finded)
 		mapPoint = mp;
 		
 		float myScale = getCumberScale();
-		if(mapPoint.isInnerMap() && gameData->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
+		if(mapPoint.isInnerMap() && myGD->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
 		{
 			float half_distance = RADIUS*myScale; // 20.f : radius for base scale 1.f
 			float calc_distance;
@@ -316,7 +316,7 @@ void Coconut::getRandomPosition(IntPoint* ip, bool* finded)
 					if(calc_distance < half_distance)
 					{
 						check_position = IntPoint(i,j);
-						if(!check_position.isInnerMap() || gameData->mapState[check_position.x][check_position.y] != mapEmpty)
+						if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
 						{
 							is_not_position = true;
 						}
@@ -339,7 +339,7 @@ void Coconut::getRandomPosition(IntPoint* ip, bool* finded)
 		//		CCLog("scale %f", m_headImg->getScale());
 		//		CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
 		//		m_headImg->runAction(t_scale);
-		//		gameData->setMainCumberPoint(mapPoint);
+		//		myGD->setMainCumberPoint(mapPoint);
 		//
 		//		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
 	}
@@ -357,7 +357,7 @@ void Coconut::randomPosition()
 	bool finded;
 	getRandomPosition(&mapPoint, &finded);
 	
-	//	gameData->setMainCumberPoint(mapPoint);
+	//	myGD->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	m_circle.setRelocation(getPosition(), m_well512);
 	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##

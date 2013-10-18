@@ -14,6 +14,14 @@
 using namespace cocos2d;
 using namespace std;
 
+
+enum class StateType : unsigned short
+{
+	ABC = 1,
+};
+	
+
+//typedef AP_CODE std::string;
 enum AP_CODE{
 	kNonTargetAttack1=1,
 	kNonTargetAttack2,

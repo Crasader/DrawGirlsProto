@@ -426,7 +426,7 @@ void MissileParent::actionAP103(CCObject* cb)
 	savedAP = true;
 }
 
-int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb, bool exe)
+int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, KSCumberBase* cb, bool exe)
 {
 	JsonBox::Value v;
 	v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
@@ -434,7 +434,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 	JsonBox::Object patterns = boss["pattern"].getObject();
 	char buf[256];
 	
-	sprintf(buf, "%d", pattern);
+//	sprintf(buf, "%d", pattern);
 	JsonBox::Object patternData = patterns[buf].getObject();
 	int castFrame = patternData["castframe"].getInt();
 	if(castFrame == 0)
@@ -443,7 +443,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 	int invalid = 0;
 	int nocast = 2;
 
-	if(pattern == kNonTargetAttack1)
+	if(pattern == cb->AP_CODE_["kNonTargetAttack1"].attackCode)
 	{
 		if(exe)
 		{
@@ -467,7 +467,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kNonTargetAttack2)
+	else if(pattern == cb->AP_CODE_["kNonTargetAttack2"].attackCode)
 	{
 		if(exe)
 		{
@@ -488,7 +488,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kNonTargetAttack3)
+	else if(pattern == cb->AP_CODE_["kNonTargetAttack3"].attackCode)
 	{
 		if(exe)
 		{
@@ -509,7 +509,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kNonTargetAttack4)
+	else if(pattern == cb->AP_CODE_["kNonTargetAttack4"].attackCode)
 	{
 		if(exe)
 		{
@@ -530,7 +530,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kNonTargetAttack5)
+	else if(pattern == cb->AP_CODE_["kNonTargetAttack5"].attackCode)
 	{
 		if(exe)
 		{
@@ -551,7 +551,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kNonTargetAttack6)
+	else if(pattern == cb->AP_CODE_["kNonTargetAttack6"].attackCode)
 	{
 		if(exe)
 		{
@@ -572,7 +572,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kNonTargetAttack7)
+	else if(pattern == cb->AP_CODE_["kNonTargetAttack7"].attackCode)
 	{
 		if(exe)
 		{
@@ -593,7 +593,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kNonTargetAttack8)
+	else if(pattern == cb->AP_CODE_["kNonTargetAttack8"].attackCode)
 	{
 		if(exe)
 		{
@@ -614,7 +614,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kNonTargetAttack9)
+	else if(pattern == cb->AP_CODE_["kNonTargetAttack9"].attackCode)
 	{
 		//		startFirePosition = startPosition;
 		//		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
@@ -655,7 +655,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 		}
 	}
 	
-	else if(pattern == kTargetAttack1)
+	else if(pattern == cb->AP_CODE_["kTargetAttack1"].attackCode)
 	{
 		if(exe)
 		{
@@ -677,7 +677,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kTargetAttack2)
+	else if(pattern == cb->AP_CODE_["kTargetAttack2"].attackCode)
 	{
 		if(exe)
 		{
@@ -698,7 +698,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kTargetAttack3)
+	else if(pattern == cb->AP_CODE_["kTargetAttack3"].attackCode)
 	{
 		if(exe)
 		{
@@ -719,7 +719,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kTargetAttack4)
+	else if(pattern == cb->AP_CODE_["kTargetAttack4"].attackCode)
 	{
 		if(exe)
 		{
@@ -740,7 +740,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kTargetAttack5) // 나무 토막
+	else if(pattern == cb->AP_CODE_["kTargetAttack5"].attackCode) // 나무 토막
 	{
 		if(exe)
 		{
@@ -772,7 +772,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 //			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kTargetAttack6) // 사과 던지기.
+	else if(pattern == cb->AP_CODE_["kTargetAttack6"].attackCode) // 사과 던지기.
 	{
 		if(exe)
 		{
@@ -803,7 +803,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kTargetAttack7) // 태양광선.
+	else if(pattern == cb->AP_CODE_["kTargetAttack7"].attackCode) // 태양광선.
 	{
 		if(exe)
 		{
@@ -835,7 +835,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 //			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kTargetAttack8) // 다용도
+	else if(pattern == cb->AP_CODE_["kTargetAttack8"].attackCode) // 다용도
 	{
 		if(exe)
 		{
@@ -856,7 +856,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kTargetAttack9) // 개돌
+	else if(pattern == cb->AP_CODE_["kTargetAttack9"].attackCode) // 개돌
 	{
 		if(exe)
 		{
@@ -875,7 +875,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack1) // 먹물
+	else if(pattern == cb->AP_CODE_["kSpecialAttack1"].attackCode) // 먹물
 	{
 		if(exe)
 		{
@@ -896,7 +896,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack2)
+	else if(pattern == cb->AP_CODE_["kSpecialAttack2"].attackCode)
 	{
 		if(exe)
 		{
@@ -945,7 +945,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack3)
+	else if(pattern == cb->AP_CODE_["kSpecialAttack3"].attackCode)
 	{
 		if(exe)
 		{
@@ -992,7 +992,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack4)
+	else if(pattern == cb->AP_CODE_["kSpecialAttack4"].attackCode)
 	{
 		if(exe)
 		{
@@ -1032,7 +1032,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack5)
+	else if(pattern == cb->AP_CODE_["kSpecialAttack5"].attackCode)
 	{
 		
 		if(exe)
@@ -1079,7 +1079,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 		}
 		
 	}
-	else if(pattern == kSpecialAttack6) // 혼란
+	else if(pattern == cb->AP_CODE_["kSpecialAttack6"].attackCode) // 혼란
 	{
 		if(exe)
 		{
@@ -1126,7 +1126,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 
 		}
 	}
-	else if(pattern == kSpecialAttack7) // 텔포.
+	else if(pattern == cb->AP_CODE_["kSpecialAttack7"].attackCode) // 텔포.
 	{
 		if(exe)
 		{
@@ -1157,7 +1157,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack8) // 인비지블
+	else if(pattern == cb->AP_CODE_["kSpecialAttack8"].attackCode) // 인비지블
 	{
 		if(exe)
 		{
@@ -1195,7 +1195,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack9) // 불지르기
+	else if(pattern == cb->AP_CODE_["kSpecialAttack9"].attackCode) // 불지르기
 	{
 		if(exe)
 		{
@@ -1242,7 +1242,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack10) // 위성빔.
+	else if(pattern == cb->AP_CODE_["kSpecialAttack10"].attackCode) // 위성빔.
 	{
 		if(exe)
 		{
@@ -1292,7 +1292,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack11) // 레이저 스캔.
+	else if(pattern == cb->AP_CODE_["kSpecialAttack11"].attackCode) // 레이저 스캔.
 	{
 		if(exe)
 		{			
@@ -1313,7 +1313,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack12) // 방사능 라인
+	else if(pattern == cb->AP_CODE_["kSpecialAttack12"].attackCode) // 방사능 라인
 	{
 		if(exe)
 		{
@@ -1333,7 +1333,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack13) // 메테오
+	else if(pattern == cb->AP_CODE_["kSpecialAttack13"].attackCode) // 메테오
 	{
 		if(exe)
 		{
@@ -1378,7 +1378,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == kSpecialAttack14) // 떨어지는 돌
+	else if(pattern == cb->AP_CODE_["kSpecialAttack14"].attackCode) // 떨어지는 돌
 	{
 		if(exe)
 		{
@@ -1412,7 +1412,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			
 		}
 	}
-	else if(pattern == kSpecialAttack15) // 풍차벽.
+	else if(pattern == cb->AP_CODE_["kSpecialAttack15"].attackCode) // 풍차벽.
 	{
 		if(exe)
 		{
@@ -1427,7 +1427,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 			addChild(t_to);
 		}
 	}
-	else if(pattern == kSpecialAttack16) // 다이너마이트.
+	else if(pattern == cb->AP_CODE_["kSpecialAttack16"].attackCode) // 다이너마이트.
 	{
 		if(exe)
 		{
@@ -1449,7 +1449,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, int pattern, KSCumber
 	}
 //		valid = false;
 	
-	if(pattern == kSpecialAttack15 || pattern == kSpecialAttack16)
+	if(pattern == cb->AP_CODE_["kSpecialAttack15"].attackCode || pattern == cb->AP_CODE_["kSpecialAttack16"].attackCode)
 	{
 		return nocast;
 	}
@@ -1738,7 +1738,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 //	myGD->V_CCPI["MP_attackWithCode"] = std::bind(&MissileParent::attackWithCode, this, _1, _2);
 	
 //	myGD->V_CCPI["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2);
-	myGD->I_CCPICumberBaseB["MP_attackWithKSCode"] =
+	myGD->I_CCPStrCumberBaseB["MP_attackWithKSCode"] =
 		std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
 	myGD->V_CCPCCOCallfuncO["MP_createSubCumberReplication"] = std::bind(&MissileParent::createSubCumberReplication, this, _1, _2, _3);
 	myGD->V_CCO["MP_removeChargeInArray"] = std::bind(&MissileParent::removeChargeInArray, this, _1);

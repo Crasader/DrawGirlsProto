@@ -479,7 +479,10 @@ private:
 		addChild(t_w, goldZorder);
 		t_w->startAction();
 	}
-	
+	CCNode* gameNodePointer()
+	{
+		return game_node;
+	}
 	void showChangeCard()
 	{
 		ChangeCard* t_w = ChangeCard::create();

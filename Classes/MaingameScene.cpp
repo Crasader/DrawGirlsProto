@@ -59,7 +59,7 @@ bool Maingame::init()
 	myGD->V_V["Main_startExchange"] = std::bind(&Maingame::startExchange, this);
 	myGD->V_V["Main_showTakeCoin"] = std::bind(&Maingame::showTakeCoin, this);
 	myGD->V_V["Main_showChangeCard"] = std::bind(&Maingame::showChangeCard, this);
-	
+	myGD->CCN_V["Main_gameNodePointer"] = std::bind(&Maingame::gameNodePointer, this);
 	mControl = NULL;
 	is_line_die = false;
 	

@@ -45,17 +45,7 @@ static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(480, 320);
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-	Json::Reader reader;
-	Json::Value root;
-
-	reader.parse(R"({"ABC":"1.23", "ABCDE":"21474836470001", "ABCDEF":3434} )", root);
-	KS::KSLog("% % % % % % %", root["ABC"].asBool(), root["ABCDE"].asInt64(),
-						root["ABC"].asFloat(), root["ABC"].asDouble(),
-						root["ABCDE"].asInt(), root["ABCDE"].asUInt(),
-						root["ABCDEF"].asString());
-	
-	
-	
+	CCLog("!!ZZ");
     // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
     pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
@@ -70,6 +60,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	myDSH->ui_top = 480.f*screen_size.height/screen_size.width;
 	myDSH->ui_bottom = 0;
 	myDSH->ui_center_y = myDSH->ui_top/2.f;
+	CCFileUtils::sharedFileUtils()->addSearchPath("res_img");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb/resources-iphonehd");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_flow");

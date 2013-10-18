@@ -16,13 +16,21 @@ bool Apricot::init()
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
-	std::string ccbiName = "boss_apricot.ccbi";
-    CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-    CCBReader* reader = new CCBReader(nodeLoader);
-	CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
-	m_headImg = dynamic_cast<CCSprite*>(p);
-    
+	CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
+	ccNodeLoaderLibrary->registerCCNodeLoader("ApricotCCB", ApricotLoader::loader());
 	
+	
+	cocos2d::extension::CCBReader * reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	
+	CCNode * node = reader->readNodeGraphFromFile("boss_apricot.ccbi", this);
+	
+	m_headImg = dynamic_cast<ApricotCCB*>(node);
+	
+//	std::string ccbiName = "img_ccb_test/boss_apricot_1.ccbi";
+//    CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//    CCBReader* reader = new CCBReader(nodeLoader);
+//	CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
+//	m_headImg = dynamic_cast<CCSprite*>(p);
 	
     mAnimationManager = reader->getAnimationManager();
     reader->release();
@@ -36,18 +44,19 @@ bool Apricot::init()
 	IntPoint mapPoint;
 	bool finded;
 	getRandomPosition(&mapPoint, &finded);
-	//	gameData->setMainCumberPoint(mapPoint);
+	//	myGD->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	//	startMoving();
-	
-	lastCastNum = m_well512.GetValue(1, 3);
+	CCLog("start Position!!!!!! : %d %d", mapPoint.x, mapPoint.y);
+	lastCastNum = m_well512.GetValue(1, 1);
 	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 	startAnimationNoDirection();
 	
 	schedule(schedule_selector(Apricot::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Apricot::cumberAttack));
-	
+	scheduleUpdate();
+//	m_headImg->m_7->setColor(ccc3(255, 0, 0));
 	return true;
 }
 
@@ -167,7 +176,7 @@ void Apricot::animationNoDirection(float dt)
 	{
 		m_state = CUMBERSTATEMOVING;
 		unschedule(schedule_selector(Apricot::animationNoDirection));
-		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
+//		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
 	}
 }
 
@@ -194,17 +203,17 @@ COLLISION_CODE Apricot::crashWithX(IntPoint check_position)
 	}
 	
 	// 이미 그려진 곳에 충돌했을 경우.
-	if(gameData->mapState[check_position.x][check_position.y] == mapOldline ||
-	   gameData->mapState[check_position.x][check_position.y] == mapOldget)
+	if(myGD->mapState[check_position.x][check_position.y] == mapOldline ||
+	   myGD->mapState[check_position.x][check_position.y] == mapOldget)
 	{
 		return COLLISION_CODE::kCOLLISION_MAP;
 	}
 	
-	if(gameData->mapState[check_position.x][check_position.y] == mapNewline)
+	if(myGD->mapState[check_position.x][check_position.y] == mapNewline)
 	{
 		return COLLISION_CODE::kCOLLISION_NEWLINE;
 	}
-	IntPoint jackPoint = gameData->getJackPoint();
+	IntPoint jackPoint = myGD->getJackPoint();
 	if(jackPoint.x == check_position.x && jackPoint.y == check_position.y)
 	{
 		return COLLISION_CODE::kCOLLISION_JACK;
@@ -290,7 +299,7 @@ void Apricot::getRandomPosition(IntPoint* ip, bool* finded)
 		mapPoint = mp;
 		
 		float myScale = getCumberScale();
-		if(mapPoint.isInnerMap() && gameData->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
+		if(mapPoint.isInnerMap() && myGD->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
 		{
 			float half_distance = RADIUS*myScale; // 20.f : radius for base scale 1.f
 			float calc_distance;
@@ -306,7 +315,7 @@ void Apricot::getRandomPosition(IntPoint* ip, bool* finded)
 					if(calc_distance < half_distance)
 					{
 						check_position = IntPoint(i,j);
-						if(!check_position.isInnerMap() || gameData->mapState[check_position.x][check_position.y] != mapEmpty)
+						if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
 						{
 							is_not_position = true;
 						}
@@ -329,7 +338,7 @@ void Apricot::getRandomPosition(IntPoint* ip, bool* finded)
 		//		CCLog("scale %f", m_headImg->getScale());
 		//		CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
 		//		m_headImg->runAction(t_scale);
-		//		gameData->setMainCumberPoint(mapPoint);
+		//		myGD->setMainCumberPoint(mapPoint);
 		//
 		//		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
 	}
@@ -347,7 +356,7 @@ void Apricot::randomPosition()
 	bool finded;
 	getRandomPosition(&mapPoint, &finded);
 	
-	//	gameData->setMainCumberPoint(mapPoint);
+	//	myGD->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	m_circle.setRelocation(getPosition(), m_well512);
 	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##

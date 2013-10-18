@@ -407,7 +407,7 @@ public:
 	
 	enum PATTERN_RET_CODE{INVALID=0, VALID=1, NOCAST=2};
 	
-	int attackWithKSCode(CCPoint startPosition, int pattern, KSCumberBase* cb, bool exe);
+	int attackWithKSCode(CCPoint startPosition, std::string pattern, KSCumberBase* cb, bool exe);
 private:
 	
 	AutoAttacker* myAA;
