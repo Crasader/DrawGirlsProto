@@ -47,7 +47,6 @@ public:
 	void onStartGame();
 	void onPatternEnd();
 	void allStopSchedule(); //  used
-	void furyModeOn(); 
 	void tickingOn();
 	void movingMainCumber();
 	void stopMovingMainCumber();

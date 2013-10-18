@@ -8,16 +8,15 @@
 #include "AttackPattern.h"
 
 
-void KSTargetAttackPattern8::myInit(CCPoint t_sp, KSCumberBase* cb)
+void KSTargetAttackPattern8::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
 	m_cumber = cb;
 	//		m_position = t_sp;
 	//		firstJackPosition = ip2ccp(myGD->getJackPoint());
 	
 	Json::Reader reader;
-	Json::Value root;
-	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-	Json::Value pattern = root[0u]["pattern"]["108"];
+	Json::Value pattern;
+	reader.parse(patternData, pattern);
 	
 	m_oneShotNumber = pattern["oneshot"].asInt();
 	m_oneShotTerm = pattern["oneshotterm"].asInt();

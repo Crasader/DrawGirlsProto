@@ -32,17 +32,20 @@ struct AttackProperty
 	{
 		SPECIAL, NODIR, DIR
 	}category;
-	std::string attackCode;
+	std::string property; // 속성들... json 형태로 저장될거임.
 	
 	bool operator==(const AttackProperty& ap)
 	{
-		return this->category == ap.category && this->attackCode == ap.attackCode;
+		return this->category == ap.category && this->property == ap.property;
 	}
 	
 	bool operator<(const AttackProperty& ap) const
 	{
-		return this->attackCode < ap.attackCode;
+		return this->property < ap.property;
 	}
+	AttackProperty(enum AttackDisposition ad, const std::string& ac) : category(ad), property(ac)
+	{}
+	AttackProperty(){}
 };
 
 
@@ -85,48 +88,48 @@ class KSCumberBase : public CCNode
 public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
 	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0),/// 초당 변수만큼 충돌시 스케일 줄임.
-	AP_CODE_({
-		{"kNonTargetAttack1", {AttackProperty::NODIR ,"1"}},
-//		{"kNonTargetAttack2", "2"},
-//		{"kNonTargetAttack3", "3"},
-//		{"kNonTargetAttack4", "4"},
-//		{"kNonTargetAttack5", "5"},
-//		{"kNonTargetAttack6", "6"},
-//		{"kNonTargetAttack7", "7"},
-//		{"kNonTargetAttack8", "8"},
-//		{"kNonTargetAttack9", "9"},
-//		{"kNonTargetAttack10", "10"},
-//		{"kTargetAttack1", "101"},
-//		{"kTargetAttack2", "102"},
-//		{"kTargetAttack3", "103"},
-//		{"kTargetAttack4", "104"},
-//		{"kTargetAttack5", "105"},
-//		{"kTargetAttack6", "106"},
-//		{"kTargetAttack7", "107"},
-//		{"kTargetAttack8", "108"},
-//		{"kTargetAttack9", "109"},
-//		{"kSpecialAttack1", "1001"},
-//		{"kSpecialAttack2", "1002"},
-//		{"kSpecialAttack3", "1003"},
-//		{"kSpecialAttack4", "1004"},
-//		{"kSpecialAttack5", "1005"},
-//		{"kSpecialAttack6", "1006"},
-//		{"kSpecialAttack7", "1007"},
-//		{"kSpecialAttack8", "1008"},
-//		{"kSpecialAttack9", "1009"},
-//		{"kSpecialAttack10", "1010"},
-//		{"kSpecialAttack11", "1011"},
-//		{"kSpecialAttack12", "1012"},
-//		{"kSpecialAttack13", "1013"},
-//		{"kSpecialAttack14", "1014"},
-//		{"kSpecialAttack15", "1015"},
-//		{"kSpecialAttack16", "1016"},
-//		{"kSpecialAttack17", "1017"},
-//		{"kSpecialAttack18", "1018"},
-//		{"kSpecialAttack19", "1019"},
+	AP_CODE_
+	{
+		{"1", {AttackProperty::NODIR ,"1"}},
+		{"2", {AttackProperty::NODIR ,"2"}},
+		{"3", {AttackProperty::NODIR ,"3"}},
+		{"4", {AttackProperty::NODIR ,"4"}},
+		{"5", {AttackProperty::NODIR ,"5"}},
+		{"6", {AttackProperty::NODIR ,"6"}},
+		{"7", {AttackProperty::NODIR ,"7"}},
+		{"8", {AttackProperty::NODIR ,"8"}},
+		{"9", {AttackProperty::NODIR ,"9"}},
+		{"10", {AttackProperty::NODIR ,"10"}},
+		{"101", {AttackProperty::DIR ,"101"}},
+		{"102", {AttackProperty::DIR ,"102"}},
+		{"103", {AttackProperty::DIR ,"103"}},
+		{"104", {AttackProperty::DIR ,"104"}},
+		{"105", {AttackProperty::DIR ,"105"}},
+		{"106", {AttackProperty::DIR ,"106"}},
+		{"107", {AttackProperty::DIR ,"107"}},
+		{"108", {AttackProperty::DIR ,"108"}},
+		{"109", {AttackProperty::DIR ,"109"}},
 		
-	
-	}    )
+		{"1001", {AttackProperty::SPECIAL ,"1001"}},
+		{"1002", {AttackProperty::SPECIAL ,"1002"}},
+		{"1003", {AttackProperty::SPECIAL ,"1003"}},
+		{"1004", {AttackProperty::SPECIAL ,"1004"}},
+		{"1005", {AttackProperty::SPECIAL ,"1005"}},
+		{"1006", {AttackProperty::SPECIAL ,"1006"}},
+		{"1007", {AttackProperty::SPECIAL ,"1007"}},
+		{"1008", {AttackProperty::SPECIAL ,"1008"}},
+		{"1009", {AttackProperty::SPECIAL ,"1009"}},
+		{"1010", {AttackProperty::SPECIAL ,"1010"}},
+		{"1011", {AttackProperty::SPECIAL ,"1011"}},
+		{"1012", {AttackProperty::SPECIAL ,"1012"}},
+		{"1013", {AttackProperty::SPECIAL ,"1013"}},
+		{"1014", {AttackProperty::SPECIAL ,"1014"}},
+		{"1015", {AttackProperty::SPECIAL ,"1015"}},
+		{"1016", {AttackProperty::SPECIAL ,"1016"}},
+		{"1017", {AttackProperty::SPECIAL ,"1017"}},
+		{"1018", {AttackProperty::SPECIAL,"1018"}},
+		{"1019", {AttackProperty::SPECIAL,"1019"}}
+	}
 //		m_state(CUMBERSTATESTOP)
 	{
 		
@@ -190,7 +193,7 @@ public:
 //	}
 	CCNode* getBossEye() { return NULL; }
 	
-	virtual void furyModeOn() = 0;
+	virtual void furyModeOn(int tf) = 0;
 	virtual void setGameover()
 	{
 		m_state = CUMBERSTATEGAMEOVER;
@@ -322,7 +325,7 @@ public:
 	//	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
-	virtual void attackBehavior(AttackProperty attack) = 0;
+	virtual void attackBehavior(Json::Value pattern) = 0;
 	virtual void onStartGame(){} // = 0;
 	//	virtual void onEndGame(){} // = 0;
 	virtual void onPatternEnd() // = 0;
@@ -398,14 +401,12 @@ public:
 	}
 	void settingPattern(Json::Value pattern)
 	{
-		KS::KSLog("%", pattern);
 		for(auto iter = pattern.begin(); iter != pattern.end(); ++iter)
 		{
-			auto patternNumber = iter.key().asString(); // 패턴 넘버
-			int ratio = pattern[iter.key().asString()]["percent"].asInt();  // 빈번도
+			int ratio = (*iter)["percent"].asInt(); // 빈번도
 			for(int j = 0; j<ratio; j++)
 			{
-				m_attacks.push_back(AP_CODE_[patternNumber]);
+				m_attacks.push_back(pattern[iter.index()]);
 			}
 		}
 //		for(auto i : pattern)
@@ -473,7 +474,7 @@ protected:
 		int m_bossDieFrameCount;
 	}m_bossDie;
 	
-	std::vector<AttackProperty> m_attacks; // 공격할 패턴의 번호를 가지고 있음. 많이 가질 수 있을 수록 해당 패턴 쓸 확률 높음.
+	std::vector<Json::Value> m_attacks; // 공격할 패턴의 번호를 가지고 있음. 많이 가질 수 있을 수록 해당 패턴 쓸 확률 높음.
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	CUMBER_STATE m_state;
 	MOVEMENT m_normalMovement; // 평상시 움직임.
@@ -500,18 +501,9 @@ protected:
 	{
 		int furyFrameCount;
 		int totalFrame;
-		void startFury()
+		void startFury(int tf)
 		{
-			furyFrameCount = 0;
-			JsonBox::Value v;
-			v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-			
-			JsonBox::Object boss = v.getArray()[0].getObject();
-			JsonBox::Object patterns = boss["pattern"].getObject();
-			JsonBox::Object pattern = patterns["109"].getObject();
-			
-			totalFrame = pattern["totalframe"].getInt();    // p
-
+			totalFrame = tf;
 		}
 	}m_furyMode;
 

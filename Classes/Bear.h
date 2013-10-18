@@ -80,7 +80,7 @@ public:
 //		mEmotion = NULL;
 //	}
 	bool startDamageReaction(float damage, float angle);
-	virtual void attackBehavior(AttackProperty attackCode)
+	virtual void attackBehavior(Json::Value pattern)
 	{
 		// nothing.
 	}
@@ -113,7 +113,7 @@ public:
 	}
 	virtual void randomPosition();
 	
-	virtual void furyModeOn();
+	virtual void furyModeOn(int tf);
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
 

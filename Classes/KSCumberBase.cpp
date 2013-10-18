@@ -1100,32 +1100,25 @@ void KSCumberBase::cumberAttack(float dt)
 		crashAttack = true;
 	}
 	
-	std::vector<AttackProperty> selectedAttacks;
+	std::vector<Json::Value> selectedAttacks;
 	float exeProb;
 	if(crashAttack)
 	{
-		// m_attacks 와 crashAttacks 의 교집합중에 택함...
-		vector<AttackProperty> crashAttacks = {
-			AP_CODE_["kNonTargetAttack9"],
-			AP_CODE_["kTargetAttack5"],
-			AP_CODE_["kTargetAttack6"],
-			AP_CODE_["kTargetAttack7"],
-			AP_CODE_["kTargetAttack9"],
-			AP_CODE_["kSpecialAttack10"],
-			AP_CODE_["kSpecialAttack13"]};
-		
-		std::set_intersection(crashAttacks.begin(), crashAttacks.end(),
-													m_attacks.begin(), m_attacks.end(), back_inserter(selectedAttacks));
+		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
+		{
+			if( (*iter)["atype"].asString() == "crash" )
+			{
+				selectedAttacks.push_back(*iter);
+			}
+		}
 	}
 	else
 	{
 		selectedAttacks.assign(m_attacks.begin(), m_attacks.end());
 	}
-	
-	
 	if(crashAttack)
 	{
-		exeProb = 0;
+		exeProb = 0; // 무조건 실행.
 	}
 	else
 	{
@@ -1135,7 +1128,7 @@ void KSCumberBase::cumberAttack(float dt)
 	// 1% 확률로.
 	if(exeProb == 0 && m_state == CUMBERSTATEMOVING && !selectedAttacks.empty())
 	{
-		AttackProperty attackCode;
+		Json::Value attackCode;
 		bool searched = false;
 		int searchCount = 0;
 		while(!searched)
@@ -1144,10 +1137,12 @@ void KSCumberBase::cumberAttack(float dt)
 			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
 			
 			attackCode = selectedAttacks[idx];
+			
 			searched = true;
-			if(attackCode == AP_CODE_["kSpecialAttack8"] && m_invisible.startInvisibleScheduler)
+			
+			if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
 				searched = false;
-			if(attackCode == AP_CODE_["kTargetAttack9"] && m_state == CUMBERSTATEFURY)
+			if(attackCode["pattern"].asString() == "109" && m_state == CUMBERSTATEFURY)
 				searched = false;
 			if(searchCount >= 30)
 			{
@@ -1158,15 +1153,19 @@ void KSCumberBase::cumberAttack(float dt)
 		
 		if(searched)
 		{
-			if(attackCode == AP_CODE_["kTargetAttack9"]) // fury
+			KS::KSLog("%", attackCode);
+			Json::FastWriter fw;
+			std::string patternData = fw.write(attackCode);
+			if(attackCode["pattern"].asString() == "109") // fury
 			{
 				m_state = CUMBERSTATESTOP;
 				attackBehavior(attackCode);
-				myGD->communication("MP_attackWithKSCode", getPosition(), attackCode.attackCode, this, true);
+				
+				myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
 			}
 			else
 			{
-				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), attackCode.attackCode, this, true);
+				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
 				if(ret == 1)
 				{
 					attackBehavior(attackCode);

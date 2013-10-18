@@ -399,9 +399,9 @@ void Cherry::crashMapForPosition(CCPoint targetPt)
 	
 }
 
-void Cherry::furyModeOn()
+void Cherry::furyModeOn(int tf)
 {
-	m_furyMode.startFury();
+	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
 	m_state = CUMBERSTATEFURY;
 	

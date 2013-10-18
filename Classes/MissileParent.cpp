@@ -251,10 +251,10 @@ void MissileParent::actionAP20(CCObject* cb)
 
 void MissileParent::actionAP21(CCObject* cb)
 {
-	AP_Missile21* t_m21 = AP_Missile21::create(startFirePosition);
-	addChild(t_m21);
-	
-	myGD->communication("CP_onPatternEnd");
+//	AP_Missile21* t_m21 = AP_Missile21::create(startFirePosition);
+//	addChild(t_m21);
+//	
+//	myGD->communication("CP_onPatternEnd");
 }
 
 void MissileParent::actionAP22(CCObject* cb)
@@ -426,24 +426,19 @@ void MissileParent::actionAP103(CCObject* cb)
 	savedAP = true;
 }
 
-int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, KSCumberBase* cb, bool exe)
+int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD, KSCumberBase* cb, bool exe)
 {
-	JsonBox::Value v;
-	v.loadFromString(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"));
-	JsonBox::Object boss = v.getArray()[0].getObject();
-	JsonBox::Object patterns = boss["pattern"].getObject();
-	char buf[256];
-	
-//	sprintf(buf, "%d", pattern);
-	JsonBox::Object patternData = patterns[buf].getObject();
-	int castFrame = patternData["castframe"].getInt();
-	if(castFrame == 0)
-		castFrame = 120;
+	Json::Value patternData;
+	Json::Reader reader;
+	reader.parse(patternD, patternData);
+
+	int castFrame = patternData.get("castframe", 120).asInt();
 	int valid = 1;
 	int invalid = 0;
 	int nocast = 2;
 
-	if(pattern == cb->AP_CODE_["kNonTargetAttack1"].attackCode)
+	std::string pattern = patternData["pattern"].asString();
+	if(pattern == "1")
 	{
 		if(exe)
 		{
@@ -452,14 +447,13 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
 																			}, cb);
-			
 
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			addChild(t_ccn);
@@ -467,7 +461,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kNonTargetAttack2"].attackCode)
+	else if(pattern == "2")
 	{
 		if(exe)
 		{
@@ -475,9 +469,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -488,7 +482,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kNonTargetAttack3"].attackCode)
+	else if(pattern == "3")
 	{
 		if(exe)
 		{
@@ -496,9 +490,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSAttackPattern3* t = KSAttackPattern3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSAttackPattern3* t = KSAttackPattern3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -509,7 +503,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kNonTargetAttack4"].attackCode)
+	else if(pattern == "4")
 	{
 		if(exe)
 		{
@@ -517,9 +511,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSAttackPattern4* t = KSAttackPattern4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSAttackPattern4* t = KSAttackPattern4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -530,7 +524,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kNonTargetAttack5"].attackCode)
+	else if(pattern == "5")
 	{
 		if(exe)
 		{
@@ -538,9 +532,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -551,7 +545,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kNonTargetAttack6"].attackCode)
+	else if(pattern == "6")
 	{
 		if(exe)
 		{
@@ -559,9 +553,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSAttackPattern6* t = KSAttackPattern6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSAttackPattern6* t = KSAttackPattern6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -572,7 +566,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kNonTargetAttack7"].attackCode)
+	else if(pattern == "7")
 	{
 		if(exe)
 		{
@@ -580,9 +574,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSAttackPattern7* t = KSAttackPattern7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSAttackPattern7* t = KSAttackPattern7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -593,7 +587,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kNonTargetAttack8"].attackCode)
+	else if(pattern == "8")
 	{
 		if(exe)
 		{
@@ -601,9 +595,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSAttackPattern8* t = KSAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSAttackPattern8* t = KSAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -614,7 +608,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kNonTargetAttack9"].attackCode)
+	else if(pattern == "9")
 	{
 		//		startFirePosition = startPosition;
 		//		//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
@@ -641,9 +635,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			startFirePosition = startPosition;
 			CrashChargeNodeLambda* t_ccn =
 			CrashChargeNodeLambda::create(startPosition, castFrame,
-																		[&](CCObject* cb)
+																		[=](CCObject* cb)
 																		{
-																			KSAttackPattern9* t = KSAttackPattern9::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																			KSAttackPattern9* t = KSAttackPattern9::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																			addChild(t);
 																			saveAP = t;
 																			savedAP = true;
@@ -655,7 +649,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 		}
 	}
 	
-	else if(pattern == cb->AP_CODE_["kTargetAttack1"].attackCode)
+	else if(pattern == "101")
 	{
 		if(exe)
 		{
@@ -663,9 +657,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -677,7 +671,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kTargetAttack2"].attackCode)
+	else if(pattern == "102")
 	{
 		if(exe)
 		{
@@ -685,9 +679,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSTargetAttackPattern2* t = KSTargetAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSTargetAttackPattern2* t = KSTargetAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -698,7 +692,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kTargetAttack3"].attackCode)
+	else if(pattern == "103")
 	{
 		if(exe)
 		{
@@ -706,9 +700,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSTargetAttackPattern3* t = KSTargetAttackPattern3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSTargetAttackPattern3* t = KSTargetAttackPattern3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -719,7 +713,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kTargetAttack4"].attackCode)
+	else if(pattern == "104")
 	{
 		if(exe)
 		{
@@ -727,9 +721,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSTargetAttackPattern4* t = KSTargetAttackPattern4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSTargetAttackPattern4* t = KSTargetAttackPattern4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -740,7 +734,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kTargetAttack5"].attackCode) // 나무 토막
+	else if(pattern == "105") // 나무 토막
 	{
 		if(exe)
 		{
@@ -748,9 +742,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSTargetAttackPattern5* t = KSTargetAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSTargetAttackPattern5* t = KSTargetAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -772,7 +766,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 //			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kTargetAttack6"].attackCode) // 사과 던지기.
+	else if(pattern == "106") // 사과 던지기.
 	{
 		if(exe)
 		{
@@ -790,9 +784,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSTargetAttackPattern6* t = KSTargetAttackPattern6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSTargetAttackPattern6* t = KSTargetAttackPattern6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -803,7 +797,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kTargetAttack7"].attackCode) // 태양광선.
+	else if(pattern == "107") // 태양광선.
 	{
 		if(exe)
 		{
@@ -811,9 +805,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSTargetAttackPattern7* t = KSTargetAttackPattern7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSTargetAttackPattern7* t = KSTargetAttackPattern7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -835,16 +829,16 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 //			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kTargetAttack8"].attackCode) // 다용도
+	else if(pattern == "108") // 다용도
 	{
 		if(exe)
 		{
 			startFirePosition = startPosition;
 			CrashChargeNodeLambda* t_ccn =
 			CrashChargeNodeLambda::create(startPosition, castFrame,
-																		[&](CCObject* cb)
+																		[=](CCObject* cb)
 																		{
-																			KSTargetAttackPattern8* t = KSTargetAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																			KSTargetAttackPattern8* t = KSTargetAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																			addChild(t);
 																			saveAP = t;
 																			savedAP = true;
@@ -856,17 +850,19 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kTargetAttack9"].attackCode) // 개돌
+	else if(pattern == "109") // 개돌
 	{
 		if(exe)
 		{
 			startFirePosition = startPosition;
 			CrashChargeNodeLambda* t_ccn =
 			CrashChargeNodeLambda::create(startPosition, castFrame,
-															[&](CCObject* cb)
+															[=](CCObject* cb)
 															{
 																KSCumberBase* t = dynamic_cast<KSCumberBase*>(cb);
-																t->furyModeOn();
+																
+																int totalFrame = patternData.get("totalframe", 300).asInt();
+																t->furyModeOn(totalFrame);
 															}, cb);
 															
 			t_ccn->setChargeColor(ccc4f(1.00, 0.00, 0.00, 1.00));
@@ -875,7 +871,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack1"].attackCode) // 먹물
+	else if(pattern == "1001") // 먹물
 	{
 		if(exe)
 		{
@@ -883,9 +879,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				KSSpecialAttackPattern1* t = KSSpecialAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+																				KSSpecialAttackPattern1* t = KSSpecialAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;
@@ -896,7 +892,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack2"].attackCode)
+	else if(pattern == "1002")
 	{
 		if(exe)
 		{
@@ -915,7 +911,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
 																				if(keepAP24)
 																				{
@@ -923,11 +919,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 																				}
 																				else
 																				{
-																					Json::Reader reader;
-																					Json::Value root;
-																					reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-																					Json::Value pattern = root[0u]["pattern"]["1002"];
-																					int totalFrame = pattern.get("totalframe", 300).asInt();
+																					int totalFrame = patternData.get("totalframe", 300).asInt();
 																					AP_Missile24* t_m24 = AP_Missile24::create(totalFrame);
 																					addChild(t_m24);
 																					keepAP24 = t_m24;
@@ -945,7 +937,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack3"].attackCode)
+	else if(pattern == "1003")
 	{
 		if(exe)
 		{
@@ -964,7 +956,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
 																				if(keepAP23)
 																				{
@@ -972,11 +964,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 																				}
 																				else
 																				{
-																					Json::Reader reader;
-																					Json::Value root;
-																					reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-																					Json::Value pattern = root[0u]["pattern"]["1003"];
-																					int totalFrame = pattern.get("totalframe", 300).asInt();
+																					int totalFrame = patternData.get("totalframe", 300).asInt();
 																					
 																					AP_Missile23* t_m23 = AP_Missile23::create(totalFrame);
 																					addChild(t_m23);
@@ -992,7 +980,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack4"].attackCode)
+	else if(pattern == "1004")
 	{
 		if(exe)
 		{
@@ -1009,16 +997,11 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			startFirePosition = startPosition;
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
 																				int random_value = rand()%2 + 1;
-																				Json::Reader reader;
-																				Json::Value root;
-																				reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-																				Json::Value pattern = root[0u]["pattern"]["1004"];
-																				
 																				int radius = 80;//pattern.get("radius", 100).asInt();
-																				int objcnt = pattern.get("totalframe", 400).asInt();
+																				int objcnt = patternData.get("totalframe", 400).asInt();
 																				PrisonPattern* t_m28 = PrisonPattern::create(startFirePosition, radius, objcnt);
 																				addChild(t_m28);
 																				t_m28->startMyAction();
@@ -1032,7 +1015,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack5"].attackCode)
+	else if(pattern == "1005")
 	{
 		
 		if(exe)
@@ -1052,20 +1035,15 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
 																				if(keepAP26)
 																				{
 																					keepAP26->updateFreeze();
 																				}
 																				else
-																				{
-																					Json::Reader reader;
-																					Json::Value root;
-																					reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-																					Json::Value pattern = root[0u]["pattern"]["1005"];
-																					
-																					int totalFrame = pattern.get("totalframe", 200).asInt();
+																				{																					
+																					int totalFrame = patternData.get("totalframe", 200).asInt();
 																					AP_Missile26* t_m26 = AP_Missile26::create(totalFrame);
 																					addChild(t_m26);
 																					keepAP26 = t_m26;
@@ -1079,7 +1057,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 		}
 		
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack6"].attackCode) // 혼란
+	else if(pattern == "1006") // 혼란
 	{
 		if(exe)
 		{
@@ -1098,7 +1076,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
 																				if(keepAP33)
 																				{
@@ -1106,12 +1084,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 																				}
 																				else
 																				{
-																					Json::Reader reader;
-																					Json::Value root;
-																					reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-																					Json::Value pattern = root[0u]["pattern"]["1006"];
-																					
-																					int totalFrame = pattern.get("totalframe", 300).asInt();
+																					int totalFrame = patternData.get("totalframe", 300).asInt();
 																					AP_Missile33* t_m33 = AP_Missile33::create(totalFrame);
 																					addChild(t_m33);
 																					keepAP33 = t_m33;
@@ -1126,7 +1099,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack7"].attackCode) // 텔포.
+	else if(pattern == "1007") // 텔포.
 	{
 		if(exe)
 		{
@@ -1145,7 +1118,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
 																				AP_Missile32* t_m32 = AP_Missile32::create();
 																				addChild(t_m32);
@@ -1157,7 +1130,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack8"].attackCode) // 인비지블
+	else if(pattern == "1008") // 인비지블
 	{
 		if(exe)
 		{
@@ -1173,18 +1146,14 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 //			t_ccn->startCharge();
 //			chargeArray->addObject(t_ccn);
 			startFirePosition = startPosition;
-			Json::Reader reader;
-			Json::Value root;
-			reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-			Json::Value pattern = root[0u]["pattern"]["1008"];
-			
-			int totalFrame = pattern.get("totalframe", 300).asInt();
+		
 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
+																				int totalFrame = patternData.get("totalframe", 300).asInt();
 																				((KSCumberBase*)cb)->startInvisible(totalFrame);
 																				myGD->communication("CP_onPatternEnd");
 																			}, cb);
@@ -1195,7 +1164,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack9"].attackCode) // 불지르기
+	else if(pattern == "1009") // 불지르기
 	{
 		if(exe)
 		{
@@ -1218,13 +1187,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn = SpecialChargeNodeLambda::create(startPosition, castFrame,
 																			 
-																			 [&](CCObject* cb)
+																			 [=](CCObject* cb)
 																			 {
-																				 Json::Reader reader;
-																				 Json::Value root;
-																				 reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-																				 Json::Value pattern = root[0u]["pattern"]["1009"];
-																				 int totalFrame = pattern.get("totalframe", 600).asInt();
+																				 int totalFrame = patternData.get("totalframe", 600).asInt();
 																				 myGD->communication("CP_stopMovingMainCumber");
 																				 IntPoint mainCumberPoint = myGD->getMainCumberPoint();
 																				 CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
@@ -1242,7 +1207,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack10"].attackCode) // 위성빔.
+	else if(pattern == "1010") // 위성빔.
 	{
 		if(exe)
 		{
@@ -1263,15 +1228,11 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			SpecialChargeNodeLambda* t_ccn = SpecialChargeNodeLambda::create(startPosition, castFrame,
 																			 
-				 [&](CCObject* cb)
+				 [=](CCObject* cb)
 				 {
-					 Json::Reader reader;
-					 Json::Value root;
-					 reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-					 Json::Value pattern = root[0u]["pattern"]["1010"];
-					 
-					 int targetingFrame = pattern.get("targetingframe", 120).asInt();
-					 int shootFrame = pattern.get("shootframe", 180).asInt();
+				 
+					 int targetingFrame = patternData.get("targetingframe", 120).asInt();
+					 int shootFrame = patternData.get("shootframe", 180).asInt();
 					 int random_value = rand()%2 + 1;
 					 
 					 IntPoint mainCumberPoint = myGD->getMainCumberPoint();
@@ -1292,16 +1253,21 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack11"].attackCode) // 레이저 스캔.
+	else if(pattern == "1011") // 레이저 스캔.
 	{
 		if(exe)
 		{			
 			startFirePosition = startPosition;
 			SpecialChargeNodeLambda* t_ccn = SpecialChargeNodeLambda::create(startPosition, castFrame,
 																			 
-																			 [&](CCObject* cb)
+																			 [=](CCObject* cb)
 																			 {
-																				 AP_Missile6* t_m6 = AP_Missile6::create(startFirePosition, 1);
+//																				 AP_Missile6* t_m6 = AP_Missile6::create(startFirePosition, 1);
+//																				 addChild(t_m6);
+//																				 
+//																				 saveAP = t_m6;
+//																				 savedAP = true;
+																				 KSSpecialAttackPattern11* t_m6 = KSSpecialAttackPattern11::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				 addChild(t_m6);
 																				 
 																				 saveAP = t_m6;
@@ -1313,16 +1279,16 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack12"].attackCode) // 방사능 라인
+	else if(pattern == "1012") // 방사능 라인
 	{
 		if(exe)
 		{
 			startFirePosition = startPosition;
 			SpecialChargeNodeLambda* t_ccn = SpecialChargeNodeLambda::create(startPosition, castFrame,
 																			 
-					[&](CCObject* cb)
+					[=](CCObject* cb)
 					{
-						KSSpecialAttackPattern12* t = KSSpecialAttackPattern12::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+						KSSpecialAttackPattern12* t = KSSpecialAttackPattern12::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 						addChild(t);
 						saveAP = t;
 						savedAP = true;
@@ -1333,7 +1299,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack13"].attackCode) // 메테오
+	else if(pattern == "1013") // 메테오
 	{
 		if(exe)
 		{
@@ -1352,16 +1318,12 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
 																			
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
 																				int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
 																				selected_chapter = selected_chapter%10;
 																				int mType = (selected_chapter == 5 ? 1 : 2);
-																				Json::Reader reader;
-																				Json::Value root;
-																				reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-																				Json::Value pattern = root[0u]["pattern"]["1013"];
-																				int number = pattern.get("number", 3).asInt();
+																				int number = patternData.get("number", 3).asInt();
 																				AP_Missile16* t_m16 = AP_Missile16::create(mType, number, 60);
 																				addChild(t_m16);
 																				
@@ -1378,7 +1340,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack14"].attackCode) // 떨어지는 돌
+	else if(pattern == "1014") // 떨어지는 돌
 	{
 		if(exe)
 		{
@@ -1386,15 +1348,11 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
 																			
-																			[&](CCObject* cb)
+																			[=](CCObject* cb)
 																			{
-																				Json::Reader reader;
-																				Json::Value root;
-																				reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-																				Json::Value pattern = root[0u]["pattern"]["1014"];
-																				int totalframe = pattern.get("totalframe", 300).asInt();
-																				int shootframe = pattern.get("shootframe", 30).asInt();
-																				float speed = pattern.get("speed", 250.f).asDouble() / 100.f;
+																				int totalframe = patternData.get("totalframe", 300).asInt();
+																				int shootframe = patternData.get("shootframe", 30).asInt();
+																				float speed = patternData.get("speed", 250.f).asDouble() / 100.f;
 																				AP_Missile9* t_m9 = AP_Missile9::create(totalframe, shootframe, speed, CCSizeMake(30, 30), 1);
 																				addChild(t_m9);
 																				saveAP = t_m9;
@@ -1412,44 +1370,34 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string pattern, 
 			
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack15"].attackCode) // 풍차벽.
+	else if(pattern == "1015") // 풍차벽.
 	{
 		if(exe)
 		{
-			Json::Reader reader;
-			Json::Value root;
-			reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-			Json::Value pattern = root[0u]["pattern"]["1015"];
-			int totalframe = pattern.get("totalframe", 800).asInt();
+			int totalframe = patternData.get("totalframe", 800).asInt();
 			
 			startFirePosition = startPosition;
 			WindmillObject* t_to = WindmillObject::create(ccp2ip(startPosition), totalframe);
 			addChild(t_to);
 		}
 	}
-	else if(pattern == cb->AP_CODE_["kSpecialAttack16"].attackCode) // 다이너마이트.
+	else if(pattern == "1016") // 다이너마이트.
 	{
 		if(exe)
 		{
-			Json::Reader reader;
-			Json::Value root;
-			reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-			Json::Value pattern = root[0u]["pattern"]["1016"];
-			int remainSecond = pattern.get("remainsecond", 9).asInt();
+			int remainSecond = patternData.get("remainsecond", 9).asInt();
 			
 			TickingTimeBomb* t_ttb = TickingTimeBomb::create(ccp2ip(startPosition), 120, remainSecond, 1, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
 			addChild(t_ttb);
 		}
 	}
-	
-	
 	else
 	{
 		return invalid;
 	}
 //		valid = false;
 	
-	if(pattern == cb->AP_CODE_["kSpecialAttack15"].attackCode || pattern == cb->AP_CODE_["kSpecialAttack16"].attackCode)
+	if(pattern == "1015" || pattern == "1016")
 	{
 		return nocast;
 	}

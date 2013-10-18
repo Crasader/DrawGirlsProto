@@ -397,9 +397,9 @@ void Blueberry::crashMapForPosition(CCPoint targetPt)
 	
 }
 
-void Blueberry::furyModeOn()
+void Blueberry::furyModeOn(int tf)
 {
-	m_furyMode.startFury();
+	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
 	m_state = CUMBERSTATEFURY;
 	

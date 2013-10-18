@@ -407,9 +407,9 @@ void Coconut::crashMapForPosition(CCPoint targetPt)
 	
 }
 
-void Coconut::furyModeOn()
+void Coconut::furyModeOn(int tf)
 {
-	m_furyMode.startFury();
+	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
 	m_state = CUMBERSTATEFURY;
 	
