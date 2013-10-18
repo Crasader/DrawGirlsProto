@@ -42,12 +42,12 @@ public:
 		//		CCLog("setPos %f %f", t_sp.x, t_sp.y);
 		//		KSCumberBase::setPosition(t_sp);
 		m_headImg->setPosition(t_sp);
-		gameData->setMainCumberPoint(ccp2ip(t_sp));
+		myGD->setMainCumberPoint(ccp2ip(t_sp));
 		m_mapPoint = ccp2ip(t_sp);
-		//		gameData->communication("Main_moveGamePosition", t_sp);
-		//		gameData->communication("VS_setMoveGamePosition", t_sp);
-		//		gameData->communication("Main_moveGamePosition", t_sp);
-		//		gameData->communication("Main_moveGamePosition", t_sp);
+		//		myGD->communication("Main_moveGamePosition", t_sp);
+		//		myGD->communication("VS_setMoveGamePosition", t_sp);
+		//		myGD->communication("Main_moveGamePosition", t_sp);
+		//		myGD->communication("Main_moveGamePosition", t_sp);
 		//		std::thread t1([](){;});
 		
 	}
@@ -80,7 +80,7 @@ public:
 //		mEmotion = NULL;
 //	}
 	bool startDamageReaction(float damage, float angle);
-	virtual void attackBehavior(AP_CODE attackCode)
+	virtual void attackBehavior(AttackProperty attackCode)
 	{
 		// nothing.
 	}

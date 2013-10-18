@@ -123,6 +123,7 @@ public:
     
     static GraphDog* get()
 	{
+		CCLog("5zdfsfdsfufdgdfskgjfdskgjdfslgjfdlg");
 		static GraphDog* _ins = 0;
 		if(_ins == 0)
 			_ins = new GraphDog();
@@ -178,6 +179,7 @@ private:
     void receivedCommand(float dt);
 
     GraphDog(){
+			
 		pthread_mutex_init(&t_functionMutex, NULL);
 //		pthread_mutex_init(&cmdsMutex, NULL);
 		//pthread_mutex_lock(&authMutex);

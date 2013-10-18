@@ -45,17 +45,7 @@ static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(480, 320);
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-	Json::Reader reader;
-	Json::Value root;
-
-	reader.parse(R"({"ABC":"1.23", "ABCDE":"21474836470001", "ABCDEF":3434} )", root);
-	KS::KSLog("% % % % % % %", root["ABC"].asBool(), root["ABCDE"].asInt64(),
-						root["ABC"].asFloat(), root["ABC"].asDouble(),
-						root["ABCDE"].asInt(), root["ABCDE"].asUInt(),
-						root["ABCDEF"].asString());
-	
-	
-	
+	CCLog("!!ZZ");
     // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
     pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
@@ -63,31 +53,14 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 //	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionShowAll);
-	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionFixedWidth);//kResolutionNoBorder);
+	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionNoBorder);
 //	CCFileUtils::sharedFileUtils()->setResourceDirectory(sharedResourceDirectory);
 	
 	CCSize screen_size = pEGLView->getFrameSize();
 	myDSH->ui_top = 480.f*screen_size.height/screen_size.width;
 	myDSH->ui_bottom = 0;
 	myDSH->ui_center_y = myDSH->ui_top/2.f;
-	
-	float screen_rate = screen_size.width/screen_size.height;
-	if(screen_rate > 1.5f)
-	{
-		myDSH->screen_convert_rate = (designResolutionSize.width/designResolutionSize.height)/screen_rate;
-		myDSH->ui_zero_point = CCPointZero;
-	}
-	else if(screen_rate < 1.5f)
-	{
-		myDSH->screen_convert_rate = 1.f;
-		myDSH->ui_zero_point = ccp(0,(screen_size.height*(designResolutionSize.width/screen_size.width) - designResolutionSize.height)/2.f);
-	}
-	else
-	{
-		myDSH->screen_convert_rate = 1.f;
-		myDSH->ui_zero_point = CCPointZero;
-	}
-	
+	CCFileUtils::sharedFileUtils()->addSearchPath("res_img");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb/resources-iphonehd");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_flow");

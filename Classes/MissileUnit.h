@@ -3284,6 +3284,19 @@ class MathmaticalMissileUnit : public CCSprite
 {
 public:
 	enum CurveDisposition{CURVE = 1, RIGHTLINE = 0};
+	static MathmaticalMissileUnit* create(CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs,
+																				const vector<CCPoint>& path, enum CurveDisposition curve)
+	{
+		MathmaticalMissileUnit* t_mu = new MathmaticalMissileUnit();
+		if(t_mu && t_mu->initWithFile(imgFilename.c_str()))
+		{
+			t_mu->myInit(t_sp, t_angle, t_speed, t_cs, path, curve);
+			t_mu->autorelease();
+			return t_mu;
+		}
+		CC_SAFE_DELETE(t_mu);
+		return NULL;
+	}
 	static MathmaticalMissileUnit* create(CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs)
 	{
 		MathmaticalMissileUnit* t_mu = new MathmaticalMissileUnit();
@@ -3397,14 +3410,36 @@ public:
 		m_catmullIndex = 0;
 		m_catmullvar = 0.0;
 		
-		m_catmullPath = {ccp(-50, -50), ccp(0,0), ccp(50, 50), ccp(100, 0), ccp(150, 50),
-			ccp(200, 0), ccp(250, 50), ccp(300, 0), ccp(350, 50), ccp(400, 50),
-			ccp( 450, 0), ccp(500, 50)};
+		
 //		m_catmullPath = {ccp(-25, 0), ccp(0,0), ccp(25, 0), ccp(50, 0),
 //			ccp(75, 0), ccp(100, 0), ccp(125, 0), ccp(150, 0), ccp(175, 0),
 //			ccp(200, 0), ccp(250, 0)};
 		schedule(schedule_selector(ThisClassType::move));
 	}
+	void myInit(CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, const vector<CCPoint>& path, enum CurveDisposition curve)
+	{
+		m_frameCount = 0;
+		m_isChecking = true;
+		m_angle = t_angle;
+		m_speed = t_distance;
+		m_crashSize = t_cs;
+		firePosition = t_sp;
+		setPosition(t_sp);
+		
+		m_catmullIndex = 0;
+		m_catmullvar = 0.0;
+		
+//		m_catmullPath = {ccp(-50, -50), ccp(0,0), ccp(50, 50), ccp(100, 0), ccp(150, 50),
+//			ccp(200, 0), ccp(250, 50), ccp(300, 0), ccp(350, 50), ccp(400, 50),
+//			ccp( 450, 0), ccp(500, 50)};
+		m_catmullPath = path;
+		m_curve = curve;
+		//		m_catmullPath = {ccp(-25, 0), ccp(0,0), ccp(25, 0), ccp(50, 0),
+		//			ccp(75, 0), ccp(100, 0), ccp(125, 0), ccp(150, 0), ccp(175, 0),
+		//			ccp(200, 0), ccp(250, 0)};
+		schedule(schedule_selector(ThisClassType::move));
+	}
+
 	CCPoint myFunction(float fc)
 	{
 		// 120 프레임에 한 싸이클...
@@ -3420,10 +3455,10 @@ public:
 		
 		CCPoint dv = CatMull(m_catmullPath[m_catmullIndex], m_catmullPath[m_catmullIndex+1],
 												 m_catmullPath[m_catmullIndex+2], m_catmullPath[m_catmullIndex+3],
-												 MIN(1.0, m_catmullvar), CurveDisposition::RIGHTLINE);
+												 MIN(1.0, m_catmullvar), m_curve);
 		float len = CatMullLength(m_catmullPath[m_catmullIndex], m_catmullPath[m_catmullIndex+1],
 															m_catmullPath[m_catmullIndex+2], m_catmullPath[m_catmullIndex+3],
-															CurveDisposition::RIGHTLINE);
+															m_curve);
 		
 //		CCLog("dis %f - %d, len = %f, u %f", ccpLength(prevPosition - dv), m_catmullIndex, len, m_catmullvar);
 		
@@ -3434,6 +3469,12 @@ public:
 			{
 				m_catmullvar = 0.0;
 				m_catmullIndex++;
+			}
+			else
+			{
+				unschedule(schedule_selector(ThisClassType::move));
+				removeFromParentAndCleanup(true);
+				return;
 			}
 		}
 
@@ -3451,6 +3492,7 @@ public:
 		{
 			unschedule(schedule_selector(ThisClassType::move));
 			removeFromParentAndCleanup(true);
+			return;
 		}	
 		
 		if(m_isChecking)
@@ -3489,7 +3531,7 @@ protected:
 	vector<CCPoint> m_catmullPath;
 	int m_catmullIndex;
 	double m_catmullvar;
-
+	CurveDisposition m_curve;
 	CCPoint firePosition;
 	float m_angle;
 	float m_speed;

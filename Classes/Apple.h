@@ -102,14 +102,14 @@ public:
 		
 		if(m_state != CUMBERSTATENODIRECTION) // 도는것이 아니라면
 		{
-			gameData->setMainCumberPoint(ccp2ip(t_sp));
+			myGD->setMainCumberPoint(ccp2ip(t_sp));
 			m_mapPoint = ccp2ip(t_sp);
 		}
 		setHeadAndBodies();
-		//		gameData->communication("Main_moveGamePosition", t_sp);
-		//		gameData->communication("VS_setMoveGamePosition", t_sp);
-		//		gameData->communication("Main_moveGamePosition", t_sp);
-		//		gameData->communication("Main_moveGamePosition", t_sp);
+		//		myGD->communication("Main_moveGamePosition", t_sp);
+		//		myGD->communication("VS_setMoveGamePosition", t_sp);
+		//		myGD->communication("Main_moveGamePosition", t_sp);
+		//		myGD->communication("Main_moveGamePosition", t_sp);
 	}
 	virtual void setPositionX(float t_x)
 	{
@@ -151,9 +151,9 @@ public:
 //		mEmotion = NULL;
 //	}
 	void setHeadAndBodies();
-	virtual void attackBehavior(AP_CODE attackCode)
+	virtual void attackBehavior(AttackProperty attackCode)
 	{
-		if(attackCode == kTargetAttack9)
+		if(attackCode == AP_CODE_["kTargetAttack9"])
 		{
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
 			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
@@ -162,11 +162,11 @@ public:
 		{
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
 			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
-			if(kSpecialAttack1 <= attackCode) // 특수공격이면 돌아라.
+			if(attackCode.category == attackCode.SPECIAL) // 특수공격이면 돌아라.
 				startAnimationNoDirection();
-			else if(1 <= attackCode && attackCode <= 100) // 방사형이면 돌아라.
+			else if(attackCode.category == attackCode.NODIR) // 방사형이면 돌아라.
 				startAnimationNoDirection();
-			else if(kTargetAttack1 <= attackCode && attackCode < kSpecialAttack1) // 조준형이면 돌지마라
+			else if(attackCode.category == attackCode.DIR) // 조준형이면 돌지마라
 				startAnimationDirection();
 		}
 	}
@@ -245,7 +245,7 @@ public:
 		if(collisionCode == kCOLLISION_NONE)
 		{
 			// 몸통에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
-			if(gameData->getJackState() != jackStateNormal)
+			if(myGD->getJackState() != jackStateNormal)
 			{
 				for(auto body : m_Bodies)
 				{
@@ -257,7 +257,7 @@ public:
 					int ip_half_distance = half_distance / 2;
 					
 					
-					IntPoint jackPoint = gameData->getJackPoint();
+					IntPoint jackPoint = myGD->getJackPoint();
 					float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
 					if(calc_distance < ip_half_distance)
 					{
@@ -268,7 +268,7 @@ public:
 			}
 
 			// 꼬리에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
-			if(gameData->getJackState() != jackStateNormal)
+			if(myGD->getJackState() != jackStateNormal)
 			{
 				CCPoint cumberPosition = m_tailImg->getPosition();
 				CCPoint bodyPosition = cumberPosition;
@@ -278,7 +278,7 @@ public:
 				int ip_half_distance = half_distance / 2;
 				
 				
-				IntPoint jackPoint = gameData->getJackPoint();
+				IntPoint jackPoint = myGD->getJackPoint();
 				float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
 				if(calc_distance < ip_half_distance)
 				{

@@ -26,6 +26,26 @@ struct SnakeTrace
 	float directionRad; // 자취의 방향.
 };
 
+struct AttackProperty
+{
+	enum AttackDisposition
+	{
+		SPECIAL, NODIR, DIR
+	}category;
+	std::string attackCode;
+	
+	bool operator==(const AttackProperty& ap)
+	{
+		return this->category == ap.category && this->attackCode == ap.attackCode;
+	}
+	
+	bool operator<(const AttackProperty& ap) const
+	{
+		return this->attackCode < ap.attackCode;
+	}
+};
+
+
 enum COLLISION_CODE
 {
 	kCOLLISION_NONE = 0,
@@ -64,7 +84,49 @@ class KSCumberBase : public CCNode
 {
 public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
-	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0) /// 초당 변수만큼 충돌시 스케일 줄임.
+	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0),/// 초당 변수만큼 충돌시 스케일 줄임.
+	AP_CODE_({
+		{"kNonTargetAttack1", {AttackProperty::NODIR ,"1"}},
+//		{"kNonTargetAttack2", "2"},
+//		{"kNonTargetAttack3", "3"},
+//		{"kNonTargetAttack4", "4"},
+//		{"kNonTargetAttack5", "5"},
+//		{"kNonTargetAttack6", "6"},
+//		{"kNonTargetAttack7", "7"},
+//		{"kNonTargetAttack8", "8"},
+//		{"kNonTargetAttack9", "9"},
+//		{"kNonTargetAttack10", "10"},
+//		{"kTargetAttack1", "101"},
+//		{"kTargetAttack2", "102"},
+//		{"kTargetAttack3", "103"},
+//		{"kTargetAttack4", "104"},
+//		{"kTargetAttack5", "105"},
+//		{"kTargetAttack6", "106"},
+//		{"kTargetAttack7", "107"},
+//		{"kTargetAttack8", "108"},
+//		{"kTargetAttack9", "109"},
+//		{"kSpecialAttack1", "1001"},
+//		{"kSpecialAttack2", "1002"},
+//		{"kSpecialAttack3", "1003"},
+//		{"kSpecialAttack4", "1004"},
+//		{"kSpecialAttack5", "1005"},
+//		{"kSpecialAttack6", "1006"},
+//		{"kSpecialAttack7", "1007"},
+//		{"kSpecialAttack8", "1008"},
+//		{"kSpecialAttack9", "1009"},
+//		{"kSpecialAttack10", "1010"},
+//		{"kSpecialAttack11", "1011"},
+//		{"kSpecialAttack12", "1012"},
+//		{"kSpecialAttack13", "1013"},
+//		{"kSpecialAttack14", "1014"},
+//		{"kSpecialAttack15", "1015"},
+//		{"kSpecialAttack16", "1016"},
+//		{"kSpecialAttack17", "1017"},
+//		{"kSpecialAttack18", "1018"},
+//		{"kSpecialAttack19", "1019"},
+		
+	
+	}    )
 //		m_state(CUMBERSTATESTOP)
 	{
 		
@@ -80,6 +142,7 @@ public:
 //		mEmotion = NULL;
 		schedule(schedule_selector(ThisClassType::speedAdjustment));
 		
+	
 		
 		return true;
 	}
@@ -239,7 +302,7 @@ public:
 		}
 		else
 		{
-			if(gameData->getJackState() == jackStateNormal)
+			if(myGD->getJackState() == jackStateNormal)
 			{
 				movingBranch(m_normalMovement);
 			}
@@ -259,7 +322,7 @@ public:
 	//	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
-	virtual void attackBehavior(AP_CODE attack) = 0;
+	virtual void attackBehavior(AttackProperty attack) = 0;
 	virtual void onStartGame(){} // = 0;
 	//	virtual void onEndGame(){} // = 0;
 	virtual void onPatternEnd() // = 0;
@@ -338,11 +401,11 @@ public:
 		KS::KSLog("%", pattern);
 		for(auto iter = pattern.begin(); iter != pattern.end(); ++iter)
 		{
-			int patternNumber = atoi(iter.key().asString().c_str()); // 패턴 넘버
+			auto patternNumber = iter.key().asString(); // 패턴 넘버
 			int ratio = pattern[iter.key().asString()]["percent"].asInt();  // 빈번도
 			for(int j = 0; j<ratio; j++)
 			{
-				m_attacks.push_back(patternNumber);
+				m_attacks.push_back(AP_CODE_[patternNumber]);
 			}
 		}
 //		for(auto i : pattern)
@@ -401,15 +464,16 @@ public:
 		myGD->communication("UI_catchSubCumber");
 		myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
 	}
-	
+	std::map<std::string, AttackProperty> AP_CODE_;
 protected:
+		
 	struct BossDie
 	{
 		std::vector<int> m_bossDieBombFrameNumbers;
 		int m_bossDieFrameCount;
 	}m_bossDie;
 	
-	std::vector<int> m_attacks; // 공격할 패턴의 번호를 가지고 있음. 많이 가질 수 있을 수록 해당 패턴 쓸 확률 높음.
+	std::vector<AttackProperty> m_attacks; // 공격할 패턴의 번호를 가지고 있음. 많이 가질 수 있을 수록 해당 패턴 쓸 확률 높음.
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	CUMBER_STATE m_state;
 	MOVEMENT m_normalMovement; // 평상시 움직임.

@@ -104,8 +104,8 @@ void KSCumberBase::randomMoving(float dt)
 			{
 				validPosition = true;
 				// 즉사 시킴.
-				if(gameData->getJackState() != jackStateNormal)
-					gameData->communication("Jack_startDieEffect");
+				if(myGD->getJackState() != jackStateNormal)
+					myGD->communication("Jack_startDieEffect");
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -127,8 +127,8 @@ void KSCumberBase::randomMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			gameData->communication("Jack_startDieEffect");
-				gameData->communication("SW_createSW", checkPosition, 0, 0);
+				//			myGD->communication("Jack_startDieEffect");
+				myGD->communication("SW_createSW", checkPosition, 0, 0);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				m_directionAngleDegree += m_well512.GetValue(90, 270);
@@ -298,8 +298,8 @@ void KSCumberBase::straightMoving(float dt)
 			{
 				// 즉사 시킴.
 				validPosition = true;
-				if(gameData->getJackState() != jackStateNormal)
-					gameData->communication("Jack_startDieEffect");
+				if(myGD->getJackState() != jackStateNormal)
+					myGD->communication("Jack_startDieEffect");
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -326,8 +326,8 @@ void KSCumberBase::straightMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			gameData->communication("Jack_startDieEffect");
-				gameData->communication("SW_createSW", checkPosition, 0, 0);
+				//			myGD->communication("Jack_startDieEffect");
+				myGD->communication("SW_createSW", checkPosition, 0, 0);
 				degree = degreeSelector(cnt, degree);
 				
 				if(degree < 0)			degree += 360;
@@ -455,8 +455,8 @@ void KSCumberBase::followMoving(float dt)
 			{
 				// 즉사 시킴.
 				validPosition = true;
-				if(gameData->getJackState() != jackStateNormal)
-					gameData->communication("Jack_startDieEffect");
+				if(myGD->getJackState() != jackStateNormal)
+					myGD->communication("Jack_startDieEffect");
 				m_follow.lastMapCollisionTime = m_follow.timer;
 				m_directionAngleDegree += m_well512.GetValue(90, 360);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
@@ -490,8 +490,8 @@ void KSCumberBase::followMoving(float dt)
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
 				//			CCLog("collision!!");
-				//			gameData->communication("Jack_startDieEffect");
-				gameData->communication("SW_createSW", checkPosition, 0, 0);
+				//			myGD->communication("Jack_startDieEffect");
+				myGD->communication("SW_createSW", checkPosition, 0, 0);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 			}
@@ -623,8 +623,8 @@ void KSCumberBase::rightAngleMoving(float dt)
 			{
 				// 즉사 시킴.
 				validPosition = true;
-				if(gameData->getJackState() != jackStateNormal)
-					gameData->communication("Jack_startDieEffect");
+				if(myGD->getJackState() != jackStateNormal)
+					myGD->communication("Jack_startDieEffect");
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -660,8 +660,8 @@ void KSCumberBase::rightAngleMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			gameData->communication("Jack_startDieEffect");
-				gameData->communication("SW_createSW", checkPosition, 0, 0);
+				//			myGD->communication("Jack_startDieEffect");
+				myGD->communication("SW_createSW", checkPosition, 0, 0);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				int changeDirection = m_well512.GetValue(3);
@@ -809,8 +809,8 @@ void KSCumberBase::circleMoving(float dt)
 			{
 				// 즉사 시킴.
 				validPosition = true;
-				if(gameData->getJackState() != jackStateNormal)
-					gameData->communication("Jack_startDieEffect");
+				if(myGD->getJackState() != jackStateNormal)
+					myGD->communication("Jack_startDieEffect");
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -830,8 +830,8 @@ void KSCumberBase::circleMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			gameData->communication("Jack_startDieEffect");
-				gameData->communication("SW_createSW", checkPosition, 0, 0);
+				//			myGD->communication("Jack_startDieEffect");
+				myGD->communication("SW_createSW", checkPosition, 0, 0);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				// m_circle 변수를 재지정 ...
@@ -971,8 +971,8 @@ void KSCumberBase::snakeMoving(float dt)
 			{
 				// 즉사 시킴.
 				validPosition = true;
-				if(gameData->getJackState() != jackStateNormal)
-					gameData->communication("Jack_startDieEffect");
+				if(myGD->getJackState() != jackStateNormal)
+					myGD->communication("Jack_startDieEffect");
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -992,8 +992,8 @@ void KSCumberBase::snakeMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			gameData->communication("Jack_startDieEffect");
-				gameData->communication("SW_createSW", checkPosition, 0, 0);
+				//			myGD->communication("Jack_startDieEffect");
+				myGD->communication("SW_createSW", checkPosition, 0, 0);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				// m_snake 변수를 재지정 ...
@@ -1100,12 +1100,19 @@ void KSCumberBase::cumberAttack(float dt)
 		crashAttack = true;
 	}
 	
-	std::vector<int> selectedAttacks;
+	std::vector<AttackProperty> selectedAttacks;
 	float exeProb;
 	if(crashAttack)
 	{
 		// m_attacks 와 crashAttacks 의 교집합중에 택함...
-		vector<AP_CODE> crashAttacks = {kNonTargetAttack9, kTargetAttack5, kTargetAttack6, kTargetAttack7, kTargetAttack9, kSpecialAttack10, kSpecialAttack13};
+		vector<AttackProperty> crashAttacks = {
+			AP_CODE_["kNonTargetAttack9"],
+			AP_CODE_["kTargetAttack5"],
+			AP_CODE_["kTargetAttack6"],
+			AP_CODE_["kTargetAttack7"],
+			AP_CODE_["kTargetAttack9"],
+			AP_CODE_["kSpecialAttack10"],
+			AP_CODE_["kSpecialAttack13"]};
 		
 		std::set_intersection(crashAttacks.begin(), crashAttacks.end(),
 													m_attacks.begin(), m_attacks.end(), back_inserter(selectedAttacks));
@@ -1128,7 +1135,7 @@ void KSCumberBase::cumberAttack(float dt)
 	// 1% 확률로.
 	if(exeProb == 0 && m_state == CUMBERSTATEMOVING && !selectedAttacks.empty())
 	{
-		int attackCode = 0;
+		AttackProperty attackCode;
 		bool searched = false;
 		int searchCount = 0;
 		while(!searched)
@@ -1138,9 +1145,9 @@ void KSCumberBase::cumberAttack(float dt)
 			
 			attackCode = selectedAttacks[idx];
 			searched = true;
-			if(attackCode == kSpecialAttack8 && m_invisible.startInvisibleScheduler)
+			if(attackCode == AP_CODE_["kSpecialAttack8"] && m_invisible.startInvisibleScheduler)
 				searched = false;
-			if(attackCode == kTargetAttack9 && m_state == CUMBERSTATEFURY)
+			if(attackCode == AP_CODE_["kTargetAttack9"] && m_state == CUMBERSTATEFURY)
 				searched = false;
 			if(searchCount >= 30)
 			{
@@ -1148,20 +1155,21 @@ void KSCumberBase::cumberAttack(float dt)
 				break;
 			}
 		}
+		
 		if(searched)
 		{
-			if(attackCode == kTargetAttack9) // fury
+			if(attackCode == AP_CODE_["kTargetAttack9"]) // fury
 			{
 				m_state = CUMBERSTATESTOP;
-				attackBehavior((AP_CODE)attackCode);
-				gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
+				attackBehavior(attackCode);
+				myGD->communication("MP_attackWithKSCode", getPosition(), attackCode.attackCode, this, true);
 			}
 			else
 			{
-				int ret = gameData->communication("MP_attackWithKSCode", getPosition(), attackCode, this, true);
+				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), attackCode.attackCode, this, true);
 				if(ret == 1)
 				{
-					attackBehavior((AP_CODE)attackCode);
+					attackBehavior(attackCode);
 				}
 			}
 		}
