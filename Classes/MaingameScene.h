@@ -396,23 +396,54 @@ private:
 		}
 		else
 		{
-			CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-			pEGLView->setDesignResolutionSize(480, 320, kResolutionNoBorder);
 			
 			CCDirector::sharedDirector()->replaceScene(FailScene::scene());
 		}
 	}
 	
-	void moveGamePosition(CCPoint t_p)
+	int move_to_boss_position_frame;
+	CCPoint move_to_boss_position_ds;
+	void startMoveToBossPosition()
+	{
+		move_to_boss_position_frame = 0;
+		CCPoint after_position = getObjectToGameNodePosition(myGD->getMainCumberPoint().convertToCCP());
+		CCPoint sub_position = ccpSub(after_position, game_node->getPosition());
+		move_to_boss_position_ds = ccpMult(sub_position, 1.f/30.f);
+		schedule(schedule_selector(Maingame::moveToBossPosition));
+	}
+	void moveToBossPosition()
+	{
+		move_to_boss_position_frame++;
+		
+		CCPoint after_position = ccpAdd(game_node->getPosition(), move_to_boss_position_ds);
+		moveGamePosition(after_position);
+		myGD->communication("VS_setMoveGamePosition", after_position);
+		
+		if(move_to_boss_position_frame >= 30)
+		{
+			unschedule(schedule_selector(Maingame::moveToBossPosition));
+		}
+	}
+	
+	CCPoint getObjectToGameNodePosition(CCPoint t_p)
 	{
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;
 		if(y_value > 60)																	y_value = 60;
 		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
 		
-		if(myGD->gamescreen_type == kGT_full)					game_node->setPosition(ccp(0,y_value));
-		else if(myGD->gamescreen_type == kGT_leftUI)			game_node->setPosition(ccp(50+myGD->boarder_value,y_value));
-		else if(myGD->gamescreen_type == kGT_rightUI)			game_node->setPosition(ccp(myGD->boarder_value,y_value));
+		CCPoint after_position;
+		
+		if(myGD->gamescreen_type == kGT_full)					after_position = ccp(myGD->boarder_value,y_value);
+		else if(myGD->gamescreen_type == kGT_leftUI)			after_position = ccp(50+myGD->boarder_value,y_value);
+		else if(myGD->gamescreen_type == kGT_rightUI)			after_position = ccp(myGD->boarder_value,y_value);
+		
+		return after_position;
+	}
+	
+	void moveGamePosition(CCPoint t_p)
+	{
+		game_node->setPosition(getObjectToGameNodePosition(t_p));
 	}
 	
 	void goldGettingEffect(CCPoint t_p, int t_i)

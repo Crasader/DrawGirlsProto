@@ -84,6 +84,7 @@ private:
 		
 		setTouchEnabled(true);
 		
+		AudioEngine::sharedInstance()->setAppBack();
 		mySGD->is_paused = true;
 		CCDirector::sharedDirector()->pause();
 	}
@@ -107,6 +108,7 @@ private:
 		}
 		touched_number = -1;
 		mySGD->is_paused = false;
+		AudioEngine::sharedInstance()->setAppFore();
 		CCDirector::sharedDirector()->resume();
 		removeFromParent();
 	}

@@ -115,7 +115,7 @@ void CollectionView::visit()
 	
 	int viewport [4];
 	glGetIntegerv (GL_VIEWPORT, viewport);
-	CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
+	CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
 	float wScale = viewport[2] / rSize.width;
 	float hScale = viewport[3] / rSize.height;
 	float x = view_rect.origin.x*wScale + viewport[0];

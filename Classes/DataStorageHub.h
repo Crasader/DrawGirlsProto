@@ -184,9 +184,16 @@ public:
 		return gold_get_rate;
 	}
 	
+	CCSize getDesignResolutionSize()
+	{
+		return CCSizeMake(480, 320);
+	}
+	
 	float ui_top;
 	float ui_center_y;
 	float ui_bottom;
+	CCPoint ui_zero_point;
+	float screen_convert_rate;
 	
 private:
 	SaveData* myDefault;

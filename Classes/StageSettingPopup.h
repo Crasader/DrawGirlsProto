@@ -144,8 +144,6 @@ private:
 			for(int i=kIC_attack;i<=kIC_randomChange;i++)
 				mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
 			
-			CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-			pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
 			
 			mySGD->setGameStart();
 			CCDirector::sharedDirector()->replaceScene(Maingame::scene());

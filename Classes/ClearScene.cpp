@@ -32,6 +32,9 @@ CCScene* ClearScene::scene()
     // 'layer' is an autorelease object
     ClearScene *layer = ClearScene::create();
 	
+	layer->setAnchorPoint(ccp(0.5,0));
+	layer->setScale(myDSH->screen_convert_rate);
+	layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
     // add layer as a child to scene
     scene->addChild(layer);
 	

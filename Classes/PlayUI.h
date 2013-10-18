@@ -671,6 +671,7 @@ public:
 				myGD->communication("CP_setGameover");
 				stopCounting();
 				myGD->communication("Main_allStopSchedule");
+				myGD->communication("Main_startMoveToBossPosition");
 				myGD->communication("CP_startDieAnimation");
 				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 				result_sprite = CCSprite::create("game_clear.png");
@@ -901,22 +902,41 @@ public:
 		addChild(t_cpl);
 	}
 	
+	void addGameTime30Sec()
+	{
+		if(countingCnt >= 50 && countingCnt < 100)
+		{
+			countingLabel->setColor(ccWHITE);
+		}
+		else if(countingCnt >= 100 && countingCnt < 130)
+		{
+			countingLabel->setColor(ccYELLOW);
+		}
+		else if(countingCnt >= 130)
+		{
+			AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+			countingLabel->setColor(ccORANGE);
+		}
+		
+		countingCnt -= 30;
+		if(mySGD->isUsingItem(kIC_longTime))
+		{
+			if(countingCnt < -mySGD->getLongTimeValue())
+				countingCnt = -mySGD->getLongTimeValue();
+		}
+		else
+		{
+			if(countingCnt < 0)
+				countingCnt = 0;
+		}
+		countingLabel->setString(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString());
+	}
+	
 	bool beRevivedJack()
 	{
 		if(jack_life > 0)
 		{
-			countingCnt -= 30;
-			if(mySGD->isUsingItem(kIC_longTime))
-			{
-				if(countingCnt < -mySGD->getLongTimeValue())
-					countingCnt = -mySGD->getLongTimeValue();
-			}
-			else
-			{
-				if(countingCnt < 0)
-					countingCnt = 0;
-			}
-			countingLabel->setString(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString());
+			addGameTime30Sec();
 			
 			jack_life--;
 			removeChild((CCNode*)jack_array->lastObject(), true);
@@ -1433,6 +1453,7 @@ private:
 	
 	void continueAction()
 	{
+		addGameTime30Sec();
 		jack_life = 3;
 		for(int i=0;i<jack_life;i++)
 		{
@@ -1484,6 +1505,7 @@ private:
 	void closeShutter()
 	{
 		mySGD->is_paused = false;
+		AudioEngine::sharedInstance()->setAppFore();
 		CCDirector::sharedDirector()->resume();
 		
 		endCloseShutter();
@@ -1491,8 +1513,6 @@ private:
 	
 	void endCloseShutter()
 	{
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionNoBorder);
 		
 		mySGD->gameOver(0, 0, 0);
 		mySGD->resetLabels();
@@ -1509,6 +1529,7 @@ private:
 	{
 		(target_main->*delegate_startControl)();
 		mySGD->is_paused = false;
+		AudioEngine::sharedInstance()->setAppFore();
 		CCDirector::sharedDirector()->resume();
 	}
 	

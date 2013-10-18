@@ -59,6 +59,7 @@ bool Maingame::init()
 	myGD->V_V["Main_startExchange"] = std::bind(&Maingame::startExchange, this);
 	myGD->V_V["Main_showTakeCoin"] = std::bind(&Maingame::showTakeCoin, this);
 	myGD->V_V["Main_showChangeCard"] = std::bind(&Maingame::showChangeCard, this);
+	myGD->V_V["Main_startMoveToBossPosition"] = std::bind(&Maingame::startMoveToBossPosition, this);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -67,7 +68,7 @@ bool Maingame::init()
 	game_node->setScale(myGD->game_scale);
 	if(myGD->gamescreen_type == kGT_leftUI)			game_node->setPosition(ccp(50+myGD->boarder_value,0));
 	else if(myGD->gamescreen_type == kGT_rightUI)	game_node->setPosition(ccp(myGD->boarder_value, 0));
-	else											game_node->setPosition(ccp(0,0));
+	else											game_node->setPosition(ccp(myGD->boarder_value,0));
 	addChild(game_node, myMSZorder);
 	
 	myMS = MapScanner::create();

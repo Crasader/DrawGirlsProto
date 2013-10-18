@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "ListViewerScroll.h"
+#include "DataStorageHub.h"
 
 USING_NS_CC;
 using namespace std;
@@ -30,10 +31,10 @@ public:
 	{
 		glEnable(GL_SCISSOR_TEST);
 		
-		//	int viewport [4];
-		//	glGetIntegerv (GL_VIEWPORT, viewport);
+		int viewport [4];
+		glGetIntegerv (GL_VIEWPORT, viewport);
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
+		CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
 		
 		float wScale = frame_size.width / rSize.width;
 		float hScale = frame_size.height / rSize.height;
@@ -51,12 +52,12 @@ public:
 			yMargine = (frame_size.height - rSize.height*hScale)/2.f;
 		}
 		
-		//	float wScale = viewport[2] / rSize.width;
-		//	float hScale = viewport[3] / rSize.height;
-		//	float x = view_rect.origin.x*wScale + viewport[0];
-		//	float y = view_rect.origin.y*hScale + viewport[1];
-		//	float w = view_rect.size.width*wScale;
-		//	float h = view_rect.size.height*hScale;
+//		float wScale = viewport[2] / rSize.width;
+//		float hScale = viewport[3] / rSize.height;
+//		float x = view_rect.origin.x*wScale + viewport[0];
+//		float y = view_rect.origin.y*hScale + viewport[1];
+//		float w = view_rect.size.width*wScale;
+//		float h = view_rect.size.height*hScale;
 		
 		float x = view_rect.origin.x*wScale + xMargine;
 		float y = view_rect.origin.y*hScale + yMargine;

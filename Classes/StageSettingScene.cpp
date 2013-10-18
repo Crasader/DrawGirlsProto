@@ -25,6 +25,10 @@ CCScene* StageSettingScene::scene()
     // 'layer' is an autorelease object
     StageSettingScene *layer = StageSettingScene::create();
 	
+	layer->setAnchorPoint(ccp(0.5,0));
+	layer->setScale(myDSH->screen_convert_rate);
+	layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
+	
     // add layer as a child to scene
     scene->addChild(layer);
 	
@@ -303,9 +307,6 @@ void StageSettingScene::menuAction(CCObject* pSender)
 		
 		for(int i=kIC_attack;i<=kIC_randomChange;i++)
 			mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
-		
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
 		
 		mySGD->setGameStart();
 		CCDirector::sharedDirector()->replaceScene(Maingame::scene());

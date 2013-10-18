@@ -21,6 +21,9 @@ CCScene* CollectionBook::scene()
     // 'layer' is an autorelease object
     CollectionBook *layer = CollectionBook::create();
 	
+	layer->setAnchorPoint(ccp(0.5,0));
+	layer->setScale(myDSH->screen_convert_rate);
+	layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
     // add layer as a child to scene
     scene->addChild(layer);
 	
@@ -844,9 +847,6 @@ void CollectionBook::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCB_MT_zoom)
 	{
-		CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-		pEGLView->setDesignResolutionSize(480, 320, kResolutionFixedWidth);
-		
 		mySGD->selected_collectionbook = recent_card_number;
 		CCDirector::sharedDirector()->replaceScene(DiaryZoom::scene());
 	}
