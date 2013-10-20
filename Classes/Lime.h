@@ -148,19 +148,18 @@ public:
 //	}
 	void setHeadAndBodies();
 	virtual bool startDamageReaction(float damage, float angle);
-	virtual void attackBehavior(AttackProperty attackCode)
+	virtual void attackBehavior(Json::Value pattern)
 	{
-		if(attackCode == AP_CODE_["kTargetAttack9"])
+		if(pattern["pattern"].asString() == "109")
 		{
 		}
 		else
 		{
-			if(attackCode.category == attackCode.SPECIAL) // 특수공격이면 돌아라.
-				startAnimationNoDirection();
-			else if(attackCode.category == attackCode.NODIR) // 방사형이면 돌아라.
-				startAnimationNoDirection();
-			else if(attackCode.category == attackCode.DIR) // 조준형이면 돌지마라
+			std::string target = pattern.get("target", "no").asString();
+			if( target == "yes") // 타게팅이라면 조준하라
 				startAnimationDirection();
+			else if(target == "no") // 타게팅이 아니면 돌아라
+				startAnimationNoDirection();
 		}
 	}
 	virtual void startAnimationNoDirection();
@@ -187,7 +186,7 @@ public:
 	virtual void startInvisible(int totalframe);
 	void invisibling(float dt);
 	
-	virtual void furyModeOn();
+	virtual void furyModeOn(int tf);
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
 	

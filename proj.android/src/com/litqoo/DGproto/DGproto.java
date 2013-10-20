@@ -30,13 +30,20 @@ import org.cocos2dx.lib.Cocos2dxRenderer;
 import com.litqoo.lib.KSActivityBase;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		if(com.litqoo.lib.hspConnector.setup(10226, "SKDRAWGIRLS", "1.0.0.KG")){
+			Log.i("com.litqoo.dgproto", "hspcore create ok");
+		}else{
+			Log.i("com.litqoo.dgproto","hspcore create fail");
+		}
 		
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
@@ -48,11 +55,25 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	}
 	
 	public Cocos2dxGLSurfaceView onCreateGLSurfaceView() {
-    	return new LuaGLSurfaceView(this);
+		
+		return new LuaGLSurfaceView(this);
     }
 
     static {
         System.loadLibrary("cocos2dlua");
+    }
+    
+    public Cocos2dxGLSurfaceView onCreateView() {
+    	Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
+    	// hspConnector should create stencil buffer
+    	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
+    	
+    	com.litqoo.lib.hspConnector.kInit(this,glSurfaceView,getApplicationContext());
+    	
+    	return glSurfaceView;
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    	com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);
     }
 }
 
@@ -70,3 +91,5 @@ class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
         return super.onKeyDown(keyCode, event);
     }
 }
+
+

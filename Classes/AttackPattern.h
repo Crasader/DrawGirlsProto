@@ -26,10 +26,10 @@
 using namespace cocos2d;
 using namespace std;
 
-#define CREATE_FUNC_CCP(A) static A* create(CCPoint t_sp, KSCumberBase* cb) \
+#define CREATE_FUNC_CCP(A) static A* create(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData ) \
 { \
 	A* t_m0 = new A(); \
-	t_m0->myInit(t_sp, cb); \
+	t_m0->myInit(t_sp, cb, patternData); \
 	t_m0->autorelease(); \
 	return t_m0; \
 } \
@@ -2011,10 +2011,10 @@ private:
 class AP_Missile21 : public AttackPattern // blind
 {
 public:
-	static AP_Missile21* create(CCPoint t_sp)
+	static AP_Missile21* create(CCPoint t_sp, int tf, int sc)
 	{
 		AP_Missile21* t_m21 = new AP_Missile21();
-		t_m21->myInit(t_sp);
+		t_m21->myInit(t_sp, tf, sc);
 		t_m21->autorelease();
 		return t_m21;
 	}
@@ -2022,15 +2022,10 @@ public:
 private:
 	
 	
-	void myInit(CCPoint t_sp)
+	void myInit(CCPoint t_sp, int tf, int sc)
 	{
-		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["1001"];
-		
-		int totalFrame = pattern.get("totalframe", 300).asInt();
-		float scale = pattern.get("scale", 1.5).asDouble();
+		int totalFrame = tf;
+		float scale = sc;
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
 		
@@ -2902,16 +2897,15 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
 		
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["1"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_perFrame = pattern["perframe"].asInt();
 		m_totalFrame = pattern["totalframe"].asInt();
 		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
@@ -2996,13 +2990,12 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["2"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		
 		m_perFrame = pattern["perframe"].asInt();
 		m_totalFrame = pattern["totalframe"].asInt();
@@ -3098,12 +3091,11 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["3"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		
 		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].asInt();
@@ -3176,12 +3168,11 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["4"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_perFrame = pattern["perframe"].asInt();;
 		m_totalFrame = pattern["totalframe"].asInt();;
 		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
@@ -3269,13 +3260,12 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["5"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_perFrame = pattern["perframe"].asInt();;        // p
 		m_totalFrame = pattern["totalframe"].asInt();;    // p
 		m_bulletSpeed = pattern["speed"].asInt() / 100.f;  // p
@@ -3357,12 +3347,12 @@ class KSAttackPattern6 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSAttackPattern6);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["6"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
+		
 		m_bulletSpeed = pattern["speed"].asInt() / 100.f;  // p
 		m_numberPerFrame = pattern["numberperframe"].asInt(); // p
 		m_color = pattern["color"].asInt();
@@ -3446,12 +3436,12 @@ public:
 		}
 	}
 	CREATE_FUNC_CCP(KSAttackPattern7);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["7"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
+		
 		m_perFrame = pattern["perframe"].asInt();;
 		m_totalFrame = pattern["totalframe"].asInt();;   // p
 		m_bulletSpeed = pattern["speed"].asInt() / 100.f; // p
@@ -3561,12 +3551,11 @@ public:
 		}
 	}
 	
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["8"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		
 		m_perFrame = pattern["perframe"].asInt();;		// p
 		m_totalFrame = pattern["totalframe"].asInt();;		// p
@@ -3694,7 +3683,7 @@ private:
 		}
 	}
 	
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		isRemoveEffect = false;
 		//		myGD->communication("EP_startCrashAction");
@@ -3702,9 +3691,8 @@ private:
 		//		CCPoint t_sp = cb->getPosition();
 		
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["9"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		
 		
 		float t_move_speed = pattern.get("speed", 200.0).asDouble() / 100.f;
@@ -3738,13 +3726,12 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		m_cumber = cb;
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["101"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		
 		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].asInt();
@@ -3842,13 +3829,12 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		m_cumber = cb;
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["102"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		
 		m_perFrame = pattern["perframe"].asInt();;
 		m_totalFrame = pattern["totalframe"].asInt();;
@@ -3958,13 +3944,12 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		m_cumber = cb;
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["103"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		
 		m_perFrame = pattern["perframe"].asInt();;
 		m_totalFrame = pattern["totalframe"].asInt();
@@ -4076,13 +4061,12 @@ public:
 			removeFromParentAndCleanup(true);
 		}
 	}
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		m_cumber = cb;
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["104"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		
 		m_perFrame = pattern["perframe"].asInt();
 		m_totalFrame = pattern["totalframe"].asInt();
@@ -4192,20 +4176,20 @@ class KSTargetAttackPattern5 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern5);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
+		speed = pattern.get("speed", 150.f).asDouble() / 100.f;
+		crashsize = pattern.get("crashsize", 20.f).asDouble();
 		m_cumber = cb;
 		scheduleUpdate();
 	}
 	
 	void update(float dt)
 	{
-		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["105"];
-		float speed = pattern.get("speed", 150.f).asDouble() / 100.f;
-		float crashsize = pattern.get("crashsize", 20.f).asDouble();
+		
 		
 		IntPoint mainCumberPoint = ccp2ip(m_cumber->getPosition());
 		CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
@@ -4227,14 +4211,22 @@ public:
 	}
 	
 protected:
+	float speed;
+	float crashsize;
 	Well512 m_well512;
 };
 class KSTargetAttackPattern6 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern6);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
+		number = pattern.get("number", 4).asInt();
+		speed = pattern.get("speed", 200.0).asDouble() / 100.f;
+		crashsize = pattern.get("crashsize", 10).asInt();
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4249,13 +4241,7 @@ public:
 	}
 	void update(float dt)
 	{
-		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["106"];
-		int number = pattern.get("number", 4).asInt();
-		float speed = pattern.get("speed", 200.0).asDouble() / 100.f;
-		float crashsize = pattern.get("crashsize", 10).asInt();
+		
 		IntPoint mainCumberPoint = myGD->getMainCumberPoint();
 		CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 		AP_Missile14* t_m14 = AP_Missile14::create(mainCumberPosition, 14, speed, number, IntSize(round(crashsize),round(crashsize)));
@@ -4267,6 +4253,9 @@ public:
 	
 protected:
 	Well512 m_well512;
+	int number;
+	float speed;
+	float crashsize;
 };
 
 // 태양 광선이 나에게로 ... ㅎㅎ
@@ -4326,15 +4315,14 @@ public:
 		}
 	}
 	
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
         lazer_main = t_bead = NULL;
 		m_cumber = cb;
 		
 		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["107"];
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		
 		
 		type = 1;
@@ -4619,7 +4607,7 @@ public:
 		startSelfRemoveSchedule();
 	}
 	
-	void myInit(CCPoint t_sp, KSCumberBase* cb);
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	
 	void initGuns()
 	{
@@ -4706,7 +4694,7 @@ class KSTargetAttackPattern9 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern9);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		m_cumber = cb;
 		scheduleUpdate();
@@ -4732,8 +4720,11 @@ class KSTargetAttackPattern10 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern10);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4758,8 +4749,13 @@ class KSSpecialAttackPattern1 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern1);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
+		m_totalFrame = pattern.get("totalframe", 300).asInt();
+		m_scale = pattern.get("scale", 1.5f).asDouble();
 		m_cumber = cb;
 		m_position = t_sp;
 		scheduleUpdate();
@@ -4775,7 +4771,7 @@ public:
 	}
 	void update(float dt)
 	{
-		AP_Missile21* t_m21 = AP_Missile21::create(m_position);
+		AP_Missile21* t_m21 = AP_Missile21::create(m_position, m_totalFrame, m_scale);
 		addChild(t_m21);
 		
 		stopMyAction();
@@ -4783,14 +4779,19 @@ public:
 protected:
 	CCPoint m_position;
 	KSCumberBase* m_cumber;
+	int m_totalFrame;
+	int m_scale;
 };
 
 class KSSpecialAttackPattern2 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern2);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4815,8 +4816,11 @@ class KSSpecialAttackPattern3 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern3);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4841,8 +4845,11 @@ class KSSpecialAttackPattern4 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern4);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4867,8 +4874,11 @@ class KSSpecialAttackPattern5 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern5);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4893,8 +4903,11 @@ class KSSpecialAttackPattern6 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern6);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4919,8 +4932,11 @@ class KSSpecialAttackPattern7 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern7);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4945,8 +4961,11 @@ class KSSpecialAttackPattern8 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern8);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4971,8 +4990,11 @@ class KSSpecialAttackPattern9 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern9);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -4997,8 +5019,11 @@ class KSSpecialAttackPattern10 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern10);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5019,38 +5044,162 @@ protected:
 	KSCumberBase* m_cumber;
 };
 
+
 class KSSpecialAttackPattern11 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern11);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
-	{
-		m_cumber = cb;
-		scheduleUpdate();
-	}
+//	virtual void stopMyAction()
+//	{
+//		unscheduleUpdate();
+//		
+//		myGD->communication("MP_endIngActionAP");
+//		myGD->communication("CP_onPatternEnd");
+//		
+//		startSelfRemoveSchedule();
+//	}
 	virtual void stopMyAction()
 	{
-		unscheduleUpdate();
+		unschedule(schedule_selector(ThisClassType::myAction));
+		if (beamImg)
+		{
+			beamImg->removeFromParentAndCleanup(true);
+			beamImg = 0;
+		}
 		
 		myGD->communication("MP_endIngActionAP");
 		myGD->communication("CP_onPatternEnd");
 		
 		startSelfRemoveSchedule();
 	}
+	
+	void removeEffect()
+	{
+		unschedule(schedule_selector(ThisClassType::myAction));
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::selfRemove));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+		
+		if(beamImg)
+			beamImg->runAction(t_seq);
+	}
+	
+	void selfRemove()
+	{
+		removeFromParentAndCleanup(true);
+	}
+	
+	void startMyAction()
+	{
+		ingFrame = 0;
+		schedule(schedule_selector(ThisClassType::myAction));
+	}
+	void myAction()
+	{
+		ingFrame++;
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+		CCPoint subPosition = ccpSub(jackPosition, startPosition);
+		
+		if(myGD->getJackState())
+		{
+			float jackAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180;
+			float beforeAngle = -beamImg->getRotation();
+			float afterAngle = beamBaseAngle-10 + 2*ingFrame;
+			
+			if(beforeAngle <= afterAngle && jackAngle >= beforeAngle && jackAngle <= afterAngle)
+			{
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect");
+				unschedule(schedule_selector(ThisClassType::myAction));
+				removeEffect();
+			}
+			else if(beforeAngle > afterAngle && (jackAngle >= beforeAngle || jackAngle <= afterAngle))
+			{
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect");
+				unschedule(schedule_selector(ThisClassType::myAction));
+				removeEffect();
+			}
+		}
+		
+		if(beamImg)
+			beamImg->setRotation(-(beamBaseAngle-10 + 2*ingFrame));
+		
+		
+		if(ingFrame >= totalFrame)
+		{
+			//			beamImg->removeFromParentAndCleanup(true);
+			stopMyAction();
+		}
+	}
+	
+	
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
+	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
+		m_cumber = cb;
+		scheduleUpdate();
+		
+		totalFrame = pattern.get("totalframe", 10).asInt();
+				
+		type = 1;
+		startPosition = t_sp;
+		
+		if(type == 1) // lazer
+		{
+			beamImg = CCSprite::create("beam.png");
+			beamImg->setAnchorPoint(ccp(0,0.5));
+			beamImg->setPosition(startPosition);
+			beamImg->setColor(ccRED);
+		}
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
+		
+		CCPoint subPosition = ccpSub(jackPosition, startPosition);
+		beamBaseAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
+		beamImg->setRotation(-(beamBaseAngle-10));
+		
+		addChild(beamImg);
+		
+		startMyAction();
+
+		
+	}
+	
 	void update(float dt)
 	{
 		
 	}
 protected:
 	KSCumberBase* m_cumber;
+	int totalFrame;
+	int type;
+	CCSprite* beamImg;
+	float beamBaseAngle;
+	int ingFrame;
+	CCPoint startPosition;
 };
 
 class KSSpecialAttackPattern12 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern12);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
+		area = pattern.get("area", 10).asInt();
+		totalFrame = pattern.get("totalframe", 300).asInt();
 		m_position = t_sp;
 		m_cumber = cb;
 		scheduleUpdate();
@@ -5066,13 +5215,6 @@ public:
 	}
 	void update(float dt)
 	{
-		Json::Reader reader;
-		Json::Value root;
-		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-		Json::Value pattern = root[0u]["pattern"]["1012"];
-		
-		int area = pattern.get("area", 10).asInt();
-		int totalFrame = pattern.get("totalframe", 300).asInt();
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
 		
@@ -5085,14 +5227,19 @@ public:
 protected:
 	CCPoint m_position;
 	KSCumberBase* m_cumber;
+	int area;
+	int totalFrame;
 };
 
 class KSSpecialAttackPattern13 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern13);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5117,8 +5264,11 @@ class KSSpecialAttackPattern14 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern14);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5143,8 +5293,11 @@ class KSSpecialAttackPattern15 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern15);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5169,8 +5322,11 @@ class KSSpecialAttackPattern16 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern16);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5195,8 +5351,11 @@ class KSSpecialAttackPattern17 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern17);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5221,8 +5380,11 @@ class KSSpecialAttackPattern18 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern18);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5247,8 +5409,11 @@ class KSSpecialAttackPattern19 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern19);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5273,8 +5438,11 @@ class KSSpecialAttackPattern20 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern20);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5299,8 +5467,11 @@ class KSSpecialAttackPattern21 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern21);
-	void myInit(CCPoint t_sp, KSCumberBase* cb)
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
 		m_cumber = cb;
 		scheduleUpdate();
 	}
@@ -5327,7 +5498,7 @@ protected:
  {
  public:
  CREATE_FUNC_CCP(KSSpecialAttackPattern1);
- void myInit(CCPoint t_sp, KSCumberBase* cb)
+ void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
  {
  m_cumber = cb;
  scheduleUpdate();

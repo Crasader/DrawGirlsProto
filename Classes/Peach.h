@@ -78,13 +78,17 @@ public:
 //		mEmotion = NULL;
 //	}
 	bool startDamageReaction(float damage, float angle);
-	virtual void attackBehavior(AttackProperty attackCode)
+	virtual void attackBehavior(Json::Value pattern)
 	{
 		lastCastNum = m_well512.GetValue(1, 3);
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
-		if(!(attackCode == AP_CODE_["kTargetAttack9"]))
+		if(!(pattern["pattern"].asString() == "109"))
 		{
-			startAnimationNoDirection();
+			std::string target = pattern.get("target", "no").asString();
+			if( target == "yes") // 타게팅이라면 조준하라
+				startAnimationDirection();
+			else if(target == "no") // 타게팅이 아니면 돌아라
+				startAnimationNoDirection();
 		}
 	}
 	virtual void startSpringCumber(float userdata){}
@@ -116,7 +120,7 @@ public:
 	}
 	virtual void randomPosition();
 	
-	virtual void furyModeOn();
+	virtual void furyModeOn(int tf);
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
 

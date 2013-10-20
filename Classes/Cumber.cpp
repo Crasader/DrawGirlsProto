@@ -75,12 +75,7 @@ void CumberParent::allStopSchedule()
 	myMP->pauseSchedulerAndActions();
 }
 
-void CumberParent::furyModeOn()
-{
-	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	mainCumber->furyModeOn();
-}
+
 
 void CumberParent::tickingOn()
 {
@@ -450,7 +445,7 @@ void CumberParent::myInit()
 	myGD->V_V["CP_createAllCumberSheild"] = std::bind(&CumberParent::createAllCumberSheild, this);
 	myGD->V_B["CP_slowItem"] = std::bind(&CumberParent::slowItem, this, _1);
 	myGD->V_B["CP_silenceItem"] = std::bind(&CumberParent::silenceItem, this, _1);
-	myGD->V_V["CP_furyModeOn"] = std::bind(&CumberParent::furyModeOn, this);
+//	myGD->V_V["CP_furyModeOn"] = std::bind(&CumberParent::furyModeOn, this);
 //	myGD->V_B["CP_setCasting"] = std::bind(&CumberParent::setCasting, this, _1);
 	myGD->V_V["CP_stopMovingMainCumber"] = std::bind(&CumberParent::stopMovingMainCumber, this);
 	myGD->V_V["CP_jackCrashDie"] = std::bind(&CumberParent::jackCrashDie, this);
@@ -547,7 +542,16 @@ void CumberParent::myInit()
 	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
 	mainCumber->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement,
 								(enum MOVEMENT)furyMovement);
-	mainCumber->settingPattern(boss["pattern"]);
+//	mainCumber->settingPattern(boss["pattern"]);
+//	mainCumber->settingPattern("{\"test\":123");
+	Json::Reader temp_reader;
+	Json::Value temp_root;
+	temp_reader.parse(R"(     [{"pattern":"5", "atype":"normal","percent":2,"perframe":10,"totalframe":60,"speed":250,"numberperframe":5,"color":5},
+							 {"pattern":"103", "atype":"crash", "percent":2,"perframe":10,"totalframe":60,"speed":200,"numberperframe":5},
+							 {"pattern":"105", "atype":"special", "percent":1}]           )", temp_root);
+	mainCumber->settingPattern(temp_root);
+		
+//	);
 	mainCumber->settingAttackPercent(boss["attackpercent"].asDouble());
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);

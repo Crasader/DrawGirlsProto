@@ -463,9 +463,9 @@ COLLISION_CODE Pear::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Pear::furyModeOn()
+void Pear::furyModeOn(int tf)
 {
-	m_furyMode.startFury();
+	m_furyMode.startFury(tf);
 	m_state = CUMBERSTATEFURY;
 	
 	m_headImg->setColor(ccc3(0, 255, 0));
