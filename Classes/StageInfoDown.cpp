@@ -8,6 +8,7 @@
 
 #include "StageInfoDown.h"
 #include "StageSettingScene.h"
+#include "DataStorageHub.h"
 
 
 void StageInfoDown::resultGetStageInfo(Json::Value result_data)
@@ -177,6 +178,10 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				Json::Value t_card = cards[i];
 				SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_rank", t_card["no"].asInt())->getCString(), t_card["rank"].asInt());
 				SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_durability", t_card["no"].asInt())->getCString(), t_card["durability"].asInt());
+				
+				SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_theme", t_card["no"].asInt())->getCString(), 1);
+				SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_stage", t_card["no"].asInt())->getCString(), mySD->getSilType());
+				SDS_SI(kSDF_stageInfo, mySD->getSilType(), CCSTR_CWF("level%d_card", i+1)->getCString(), t_card["no"].asInt());
 				
 				Json::Value t_ability = t_card["ability"];
 				SDS_SI(kSDF_cardInfo, CCSTR_CWF("%d_ability_cnt", t_card["no"].asInt())->getCString(), t_ability.size());
@@ -363,6 +368,8 @@ void StageInfoDown::successAction()
 		SDS_SI(kSDF_stageInfo, mySD->getSilType(), "version", download_version);
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		state_ment->setString("이미지 정보 다운로드 완료.");
+		
+		myDSH->setBoolForKey(kDSH_Key_isOpenTheme_int1_Stage_int2, 1, mySD->getSilType(), true);
 		
 		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}

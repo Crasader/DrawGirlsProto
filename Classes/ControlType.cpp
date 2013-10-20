@@ -233,18 +233,18 @@ void ControlButtonSide::touchAction(CCPoint t_p, CBS_Touch t_t)
 
 bool ControlButtonSide::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	if(!myJack->willBackTracking &&
-	   convertedLocation.y < 320 &&
-	   convertedLocation.y > 0 &&
-	   convertedLocation.x > 0 &&
-	   convertedLocation.x < 480)
+	   location.y < 320 &&
+	   location.y > 0 &&
+	   location.x > 0 &&
+	   location.x < 480)
 	{
 		isTouched = true;
-		beforePosition = convertedLocation;
-		touchAction(convertedLocation, kCBS_Touch_began);
+		beforePosition = location;
+		touchAction(location, kCBS_Touch_began);
 	}
 	
 	return true;
@@ -252,33 +252,33 @@ bool ControlButtonSide::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 
 void ControlButtonSide::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	if(!myJack->willBackTracking &&
-	   convertedLocation.y < 320 &&
-	   convertedLocation.y > 0 &&
-	   convertedLocation.x > 0 &&
-	   convertedLocation.x < 480)
+	   location.y < 320 &&
+	   location.y > 0 &&
+	   location.x > 0 &&
+	   location.x < 480)
 	{
 		isTouched = true;
-		beforePosition = convertedLocation;
-		touchAction(convertedLocation, kCBS_Touch_move);
+		beforePosition = location;
+		touchAction(location, kCBS_Touch_move);
 	}
 }
 
 void ControlButtonSide::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	if(!myJack->willBackTracking &&
-	   convertedLocation.y < 320 &&
-	   convertedLocation.y > 0 &&
-	   convertedLocation.x > 0 &&
-	   convertedLocation.x < 480)
+	   location.y < 320 &&
+	   location.y > 0 &&
+	   location.x > 0 &&
+	   location.x < 480)
 	{
-		touchAction(convertedLocation, kCBS_Touch_end);
+		touchAction(location, kCBS_Touch_end);
 	}
 	
 	left_spr->setColor(ccGRAY);
@@ -291,16 +291,16 @@ void ControlButtonSide::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 
 void ControlButtonSide::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	if(!myJack->willBackTracking &&
-	   convertedLocation.y < 320 &&
-	   convertedLocation.y > 0 &&
-	   convertedLocation.x > 0 &&
-	   convertedLocation.x < 480)
+	   location.y < 320 &&
+	   location.y > 0 &&
+	   location.x > 0 &&
+	   location.x < 480)
 	{
-		touchAction(convertedLocation, kCBS_Touch_end);
+		touchAction(location, kCBS_Touch_end);
 	}
 	
 	left_spr->setColor(ccGRAY);
@@ -537,21 +537,20 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 	for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 	{
 		touch = (CCTouch*)(*iter);
-		CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
-		convertedLocation = convertToNodeSpace(convertedLocation);
+		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 		bool is_button_x;
 		
 		if(myGD->gamescreen_type == kGT_rightUI)
 		{
-			if(convertedLocation.x > 480-100)
+			if(location.x > 480-100)
 				is_button_x = true;
 			else
 				is_button_x = false;
 		}
 		else
 		{
-			if(convertedLocation.x < 100)
+			if(location.x < 100)
 				is_button_x = true;
 			else
 				is_button_x = false;
@@ -568,7 +567,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 			// button or ui
 
 			
-			if(!button_touch && convertedLocation.y < 100)
+			if(!button_touch && location.y < 100)
 			{
 				// button
 				button_touch = touch;
@@ -589,7 +588,8 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					if(joystick_touch)
 					{
 						isButtonAction = true;
-						touchAction(convertToNodeSpace(CCDirector::sharedDirector()->convertToGL(joystick_touch->getLocationInView())), false);
+						CCPoint joystick_location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(joystick_touch->getLocationInView()));
+						touchAction(joystick_location, false);
 						continue;
 					}
 				}
@@ -597,7 +597,8 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				if(joystick_touch && !myJack->isMoving)
 				{
 					isButtonAction = true;
-					touchAction(convertToNodeSpace(CCDirector::sharedDirector()->convertToGL(joystick_touch->getLocationInView())), false);
+					CCPoint joystick_location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(joystick_touch->getLocationInView()));
+					touchAction(joystick_location, false);
 				}
 			}
 			else
@@ -610,7 +611,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 			if(!joystick_touch && !myJack->willBackTracking && !isStun)
 			{
 				joystick_touch = touch;
-				CCPoint after_circle_position = convertedLocation;
+				CCPoint after_circle_position = location;
 				
 				if(myGD->gamescreen_type != kGT_rightUI)
 				{
@@ -638,10 +639,10 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				control_circle->setPosition(after_circle_position);
 				control_circle->setVisible(true);
 				
-				control_ball->setPosition(convertedLocation);
+				control_ball->setPosition(location);
 				control_ball->setVisible(true);
 				
-				touchAction(convertedLocation, false);
+				touchAction(location, false);
 			}
 		}
 	}
@@ -658,8 +659,7 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 	for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 	{
 		touch = (CCTouch*)(*iter);
-		CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
-		convertedLocation = convertToNodeSpace(convertedLocation);
+		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 		
 		if(touch == button_touch)
 		{
@@ -669,7 +669,7 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 		{
 			if(!myJack->willBackTracking && !isStun)
 			{
-				CCPoint distancePoint = ccp(convertedLocation.x - control_circle->getPositionX(), convertedLocation.y - control_circle->getPositionY());
+				CCPoint distancePoint = ccp(location.x - control_circle->getPositionX(), location.y - control_circle->getPositionY());
 				float distanceValue = sqrt(pow(distancePoint.x, 2.0) + pow(distancePoint.y, 2.0));
 				float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 				
@@ -723,8 +723,8 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 				
 				control_circle->setPosition(after_circle_position);
 				
-				control_ball->setPosition(convertedLocation);
-				touchAction(convertedLocation, false);
+				control_ball->setPosition(location);
+				touchAction(location, false);
 			}
 		}
 	}
@@ -741,8 +741,7 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 	for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 	{
 		touch = (CCTouch*)(*iter);
-		CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
-		convertedLocation = convertToNodeSpace(convertedLocation);
+		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 		
 		if(touch == button_touch)
 		{
@@ -757,7 +756,7 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 		}
 		else if(touch == joystick_touch)
 		{
-			CCPoint distancePoint = ccp(convertedLocation.x - control_circle->getPositionX(), convertedLocation.y - control_circle->getPositionY());
+			CCPoint distancePoint = ccp(location.x - control_circle->getPositionX(), location.y - control_circle->getPositionY());
 			float distanceValue = sqrt(pow(distancePoint.x, 2.0) + pow(distancePoint.y, 2.0));
 			float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 			
@@ -801,8 +800,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			
 			control_circle->setPosition(after_circle_position);
 			
-			control_ball->setPosition(convertedLocation);
-			touchAction(convertedLocation, true);
+			control_ball->setPosition(location);
+			touchAction(location, true);
 			control_circle->setVisible(false);
 //			if(myGD->gamescreen_type == kGT_rightUI)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
 //			else										control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));;
@@ -967,16 +966,16 @@ void ControlJoystick::directionKeeping()
 
 bool ControlJoystick::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	if(!myJack->willBackTracking && !isStun &&
-	   convertedLocation.y < 320 &&
-	   convertedLocation.y > 0 &&
-	   convertedLocation.x > 0 &&
-	   convertedLocation.x < 480)
+	   location.y < 320 &&
+	   location.y > 0 &&
+	   location.x > 0 &&
+	   location.x < 480)
 	{
-		CCPoint after_circle_position = convertedLocation;
+		CCPoint after_circle_position = location;
 		if(after_circle_position.x < 37)
 			after_circle_position.x = 37;
 		else if(after_circle_position.x > 443)
@@ -989,10 +988,10 @@ bool ControlJoystick::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 		control_circle->setPosition(after_circle_position);
 		control_circle->setVisible(true);
 		
-		control_ball->setPosition(convertedLocation);
+		control_ball->setPosition(location);
 		control_ball->setVisible(true);
 		
-		touchAction(convertedLocation, false);
+		touchAction(location, false);
 	}
 	
 	return true;
@@ -1000,16 +999,16 @@ bool ControlJoystick::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 
 void ControlJoystick::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	if(!myJack->willBackTracking && !isStun &&
-	   convertedLocation.y < 320 &&
-	   convertedLocation.y > 0 &&
-	   convertedLocation.x > 0 &&
-	   convertedLocation.x < 480)
+	   location.y < 320 &&
+	   location.y > 0 &&
+	   location.x > 0 &&
+	   location.x < 480)
 	{
-		CCPoint distancePoint = ccp(convertedLocation.x - control_circle->getPositionX(), convertedLocation.y - control_circle->getPositionY());
+		CCPoint distancePoint = ccp(location.x - control_circle->getPositionX(), location.y - control_circle->getPositionY());
 		float distanceValue = sqrt(pow(distancePoint.x, 2.0) + pow(distancePoint.y, 2.0));
 		float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 		
@@ -1039,17 +1038,17 @@ void ControlJoystick::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 		
 		control_circle->setPosition(after_circle_position);
 		
-		control_ball->setPosition(convertedLocation);
-		touchAction(convertedLocation, false);
+		control_ball->setPosition(location);
+		touchAction(location, false);
 	}
 }
 
 void ControlJoystick::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
-	CCPoint distancePoint = ccp(convertedLocation.x - control_circle->getPositionX(), convertedLocation.y - control_circle->getPositionY());
+	CCPoint distancePoint = ccp(location.x - control_circle->getPositionX(), location.y - control_circle->getPositionY());
 	float distanceValue = sqrt(pow(distancePoint.x, 2.0) + pow(distancePoint.y, 2.0));
 	float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 	
@@ -1079,18 +1078,18 @@ void ControlJoystick::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	
 	control_circle->setPosition(after_circle_position);
 	
-	control_ball->setPosition(convertedLocation);
-	touchAction(convertedLocation, true);
+	control_ball->setPosition(location);
+	touchAction(location, true);
 	control_circle->setVisible(false);
 	control_ball->setVisible(false);
 }
 
 void ControlJoystick::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
-	CCPoint distancePoint = ccp(convertedLocation.x - control_circle->getPositionX(), convertedLocation.y - control_circle->getPositionY());
+	CCPoint distancePoint = ccp(location.x - control_circle->getPositionX(), location.y - control_circle->getPositionY());
 	float distanceValue = sqrt(pow(distancePoint.x, 2.0) + pow(distancePoint.y, 2.0));
 	float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 	
@@ -1120,8 +1119,8 @@ void ControlJoystick::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	
 	control_circle->setPosition(after_circle_position);
 	
-	control_ball->setPosition(convertedLocation);
-	touchAction(convertedLocation, true);
+	control_ball->setPosition(location);
+	touchAction(location, true);
 	control_circle->setVisible(false);
 	control_ball->setVisible(false);
 }
@@ -1242,16 +1241,16 @@ void ControlJoystickFix::touchAction(CCPoint t_p, bool t_b)
 
 bool ControlJoystickFix::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	if(!myJack->willBackTracking && !isStun &&
-	   convertedLocation.y < 320 &&
-	   convertedLocation.y > 0 &&
-	   convertedLocation.x > 0 &&
-	   convertedLocation.x < 480)
+	   location.y < 320 &&
+	   location.y > 0 &&
+	   location.x > 0 &&
+	   location.x < 480)
 	{
-		touchAction(convertedLocation, false);
+		touchAction(location, false);
 	}
 	
 	return true;
@@ -1259,33 +1258,33 @@ bool ControlJoystickFix::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 
 void ControlJoystickFix::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	if(!myJack->willBackTracking && !isStun &&
-	   convertedLocation.y < 320 &&
-	   convertedLocation.y > 0 &&
-	   convertedLocation.x > 0 &&
-	   convertedLocation.x < 480)
+	   location.y < 320 &&
+	   location.y > 0 &&
+	   location.x > 0 &&
+	   location.x < 480)
 	{
-		touchAction(convertedLocation, false);
+		touchAction(location, false);
 	}
 }
 
 void ControlJoystickFix::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
-	touchAction(convertedLocation, true);
+	touchAction(location, true);
 }
 
 void ControlJoystickFix::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
-	touchAction(convertedLocation, true);
+	touchAction(location, true);
 }
 
 void ControlJoystickFix::registerWithTouchDispatcher()
@@ -1315,16 +1314,16 @@ bool ControlOriginalGesture::isSetTouchBeganPoint()
 
 bool ControlOriginalGesture::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	if(!myJack->willBackTracking &&
-	   convertedLocation.y < 320 &&
-	   convertedLocation.y > 0 &&
-	   convertedLocation.x > 0 &&
-	   convertedLocation.x < 480)
+	   location.y < 320 &&
+	   location.y > 0 &&
+	   location.x > 0 &&
+	   location.x < 480)
 	{
-		touch_began_point = convertedLocation;
+		touch_began_point = location;
 	}
 	
 	return true;
@@ -1335,11 +1334,11 @@ void ControlOriginalGesture::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	if(!isSetTouchBeganPoint())
 		return;
 	
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	
 	// calc direction
-	CCSize distanceSize = CCSizeMake(convertedLocation.x - touch_began_point.x, convertedLocation.y - touch_began_point.y);
+	CCSize distanceSize = CCSizeMake(location.x - touch_began_point.x, location.y - touch_began_point.y);
 	float distanceValue = sqrt(pow(distanceSize.width, 2.0) + pow(distanceSize.height, 2.0));
 	float angle = atan2(distanceSize.height, distanceSize.width)/M_PI*180.0; // -180 ~ 180
 	
@@ -1410,7 +1409,7 @@ void ControlOriginalGesture::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 		if(angleDirection != beforeGesture)
 		{
 			myJack->changeDirection(angleDirection, secondDirection);
-			touch_began_point = convertedLocation;
+			touch_began_point = location;
 			
 //			AudioEngine::sharedInstance()->playEffect("sound_jack_drawing.mp3", false);
 			beforeGesture = angleDirection;

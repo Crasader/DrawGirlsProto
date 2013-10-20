@@ -9,7 +9,8 @@
 #include "OptionScene.h"
 #include "ScreenSide.h"
 #include "MyLocalization.h"
-#include "WorldMapScene.h"
+//#include "WorldMapScene.h"
+#include "PuzzleMapScene.h"
 #include "HelpPopup.h"
 #include "LogoutPopup.h"
 #include "NotiPopup.h"
@@ -188,7 +189,7 @@ void OptionScene::menuAction(CCObject* pSender)
 	
 	if(tag == kO_MT_close)
 	{
-		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
+		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	else if(tag == kO_MT_bgm)
 	{

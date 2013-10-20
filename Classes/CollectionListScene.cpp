@@ -9,7 +9,8 @@
 #include "CollectionListScene.h"
 #include "ScreenSide.h"
 #include "MyLocalization.h"
-#include "WorldMapScene.h"
+//#include "WorldMapScene.h"
+#include "PuzzleMapScene.h"
 
 
 CCScene* CollectionListScene::scene()
@@ -88,7 +89,7 @@ void CollectionListScene::menuAction(CCObject* pSender)
 	
 	if(tag == kCLS_MT_close)
 	{
-		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
+		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 }
 

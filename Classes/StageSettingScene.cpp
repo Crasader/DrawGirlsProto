@@ -9,7 +9,8 @@
 #include "StageSettingScene.h"
 #include "ScreenSide.h"
 #include "MyLocalization.h"
-#include "WorldMapScene.h"
+//#include "WorldMapScene.h"
+#include "PuzzleMapScene.h"
 #include "MaingameScene.h"
 #include "ItemBuyPopup.h"
 #include "CardSettingScene.h"
@@ -313,7 +314,7 @@ void StageSettingScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSSS_MT_back)
 	{
-		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
+		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	else if(tag == kSSS_MT_changeCard)
 	{

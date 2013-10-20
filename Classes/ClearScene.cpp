@@ -8,10 +8,13 @@
 
 #include "ClearScene.h"
 //#include "StartingScene.h"
-#include "WorldMapScene.h"
+//#include "WorldMapScene.h"
+#include "PuzzleMapScene.h"
 #include "ScreenSide.h"
 #include "CardFullPopup.h"
 #include "StageImgLoader.h"
+#include "StarGoldData.h"
+#include "SilhouetteData.h"
 
 typedef enum tMenuTagClearScene{
 	kMT_CS_ok = 1
@@ -315,7 +318,7 @@ void ClearScene::menuAction(CCObject* pSender)
 
 void ClearScene::realEnd()
 {
-	CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
+	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 }
 
 void ClearScene::alertAction(int t1, int t2)

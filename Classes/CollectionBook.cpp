@@ -413,13 +413,14 @@ bool CollectionBook::init()
 
 bool CollectionBook::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 {
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(location));
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
 	
     CCRect textFieldRect = CCRectMake(0, 0, input_text->getContentSize().width, input_text->getContentSize().height);
     textFieldRect = CCRectApplyAffineTransform(textFieldRect, input_text->nodeToWorldTransform());
     
-    if(!was_open_text && textFieldRect.containsPoint(convertedLocation))
+    if(!was_open_text && textFieldRect.containsPoint(location))
     {
         input_text->attachWithIME();
         touch_direction = 0;
@@ -429,7 +430,7 @@ bool CollectionBook::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
         if(!is_touch_enable)
 			return true;
         
-        begin_point = convertedLocation;
+        begin_point = location;
         
         if(begin_point.x > 240)
         {
@@ -494,10 +495,11 @@ void CollectionBook::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	
 	if(was_open_text)	return;
 	
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(location));
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
 	
-	float x_distance = begin_point.x - convertedLocation.x;
+	float x_distance = begin_point.x - location.x;
 	
 	if(touch_direction == 1)
 	{

@@ -13,7 +13,7 @@
 #include "StageImgLoader.h"
 #include "CollectionListScene.h"
 #include "CollectionBook.h"
-#include "WorldMapScene.h"
+#include "PuzzleMapScene.h"
 
 CCScene* CardSettingScene::scene()
 {
@@ -224,8 +224,8 @@ void CardSettingScene::menuAction(CCObject* pSender)
 	
 	if(tag == kCSS_MT_close)
 	{
-		if(mySGD->before_cardsetting == kSceneCode_WorldMapScene)
-			CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
+		if(mySGD->before_cardsetting == kSceneCode_PuzzleMapScene)
+			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 		else if(mySGD->before_cardsetting == kSceneCode_StageSetting)
 			CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}

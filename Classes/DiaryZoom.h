@@ -10,6 +10,7 @@
 #define __DGproto__DiaryZoom__
 
 #include "cocos2d.h"
+#include "DataStorageHub.h"
 #include <deque>
 
 USING_NS_CC;
@@ -110,6 +111,7 @@ private:
 		{
 			touch = (CCTouch*)(*iter);
 			CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+			location = ccpSub(location, myDSH->ui_zero_point);
 			
 			multiTouchData[(int)touch] = location;
 			
@@ -163,6 +165,7 @@ private:
 		{
 			touch = (CCTouch*)(*iter);
 			CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+			location = ccpSub(location, myDSH->ui_zero_point);
 			
 			map<int, CCPoint>::iterator o_it;
 			o_it = multiTouchData.find((int)touch);
@@ -236,6 +239,7 @@ private:
 		{
 			touch = (CCTouch*)(*iter);
 			CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+			location = ccpSub(location, myDSH->ui_zero_point);
 			
 			map<int, CCPoint>::iterator o_it;
 			o_it = multiTouchData.find((int)touch);

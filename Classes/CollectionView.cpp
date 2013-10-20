@@ -258,7 +258,8 @@ bool CollectionView::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	}
 	
     CCTouch* touch = pTouch;
-    CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
 	
 	bool return_value;
 	if(view_rect.containsPoint(location) && isVisible())
@@ -292,7 +293,8 @@ void CollectionView::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	}
 	
     CCTouch* touch = pTouch;
-    CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
     
 	if(view_rect.containsPoint(location) && isVisible())
 	{
@@ -344,7 +346,8 @@ void CollectionView::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	}
 	
     CCTouch* touch = pTouch;
-    CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
     
 	if(view_rect.containsPoint(location) && isVisible())
 	{

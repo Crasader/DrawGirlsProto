@@ -23,7 +23,8 @@
 #include "AreaGage.h"
 #include "StartingScene.h"
 #include "ContinuePopup.h"
-#include "WorldMapScene.h"
+//#include "WorldMapScene.h"
+#include "PuzzleMapScene.h"
 #include "ConditionPopup.h"
 #include "ServerDataSave.h"
 
@@ -1517,7 +1518,7 @@ private:
 		mySGD->gameOver(0, 0, 0);
 		mySGD->resetLabels();
 		myGD->resetGameData();
-		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
+		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	
 	void goHome()

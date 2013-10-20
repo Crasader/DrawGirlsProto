@@ -8,7 +8,8 @@
 
 #include "FailScene.h"
 //#include "StartingScene.h"
-#include "WorldMapScene.h"
+//#include "WorldMapScene.h"
+#include "PuzzleMapScene.h"
 #include "ScreenSide.h"
 #include "StarGoldData.h"
 #include "EnumDefine.h"
@@ -215,7 +216,7 @@ void FailScene::menuAction(CCObject* pSender)
 	{
 		is_menu_enable = false;
 //		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
-		CCDirector::sharedDirector()->replaceScene(WorldMapScene::scene());
+		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	else if(tag == kMT_FS_replay)
 	{

@@ -9,7 +9,7 @@
 #endif
 
 #include "GameData.h"
-//#include "StartingScene.h"
+#include "PuzzleMapScene.h"
 #include "WorldMapScene.h"
 
 using namespace CocosDenshion;
@@ -198,8 +198,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 	
-//	CCScene *pScene = StartingScene::scene();
-	CCScene* pScene = WorldMapScene::scene();
+	CCScene *pScene = PuzzleMapScene::scene();
+//	CCScene* pScene = WorldMapScene::scene();
     pDirector->runWithScene(pScene);
 
     return true;

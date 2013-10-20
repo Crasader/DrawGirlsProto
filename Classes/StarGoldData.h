@@ -43,6 +43,7 @@ typedef enum tImgType{
 
 typedef enum tSceneCode{
 	kSceneCode_WorldMapScene = 1,
+	kSceneCode_PuzzleMapScene,
 	kSceneCode_StageSetting
 }SceneCode;
 
