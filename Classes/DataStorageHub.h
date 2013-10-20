@@ -191,6 +191,7 @@ public:
 	}
 	
 	float ui_top;
+	float puzzle_ui_top;
 	float ui_center_y;
 	float ui_bottom;
 	CCPoint ui_zero_point;

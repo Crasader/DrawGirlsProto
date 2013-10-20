@@ -103,8 +103,9 @@ void PuzzleMapScene::startSceneSetting()
 	setMapNode();
 	setUIs();
 	
+	is_menu_enable = false;
+	startChangeUiMode();
 	setTouchEnabled(true);
-	is_menu_enable = true;
 }
 
 void PuzzleMapScene::setMapNode()
@@ -336,7 +337,7 @@ void PuzzleMapScene::setUIs()
 		event_close_menu->setPosition(getUiButtonPosition(kPMS_MT_eventClose));
 		addChild(event_close_menu, kPMS_Z_ui_button, kPMS_MT_eventClose);
 		
-		showEventButton();
+//		showEventButton();
 	}
 }
 
@@ -345,8 +346,8 @@ void PuzzleMapScene::showEventButton()
 	CCMenu* event_menu = (CCMenu*)getChildByTag(kPMS_MT_event);
 	CCMenu* event_close_menu = (CCMenu*)getChildByTag(kPMS_MT_eventClose);
 	
-	CCMoveTo* t_move1 = CCMoveTo::create(0.5f, ccp(420,-(myDSH->ui_top-320.f)/2.f + 52.f));
-	CCMoveTo* t_move2 = CCMoveTo::create(0.5f, ccp(450,-(myDSH->ui_top-320.f)/2.f + 102.f));
+	CCMoveTo* t_move1 = CCMoveTo::create(0.5f, ccp(420,-(myDSH->puzzle_ui_top-320.f)/2.f + 52.f));
+	CCMoveTo* t_move2 = CCMoveTo::create(0.5f, ccp(450,-(myDSH->puzzle_ui_top-320.f)/2.f + 102.f));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::onEventButton));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
 	
@@ -384,12 +385,12 @@ CCPoint PuzzleMapScene::getUiButtonPosition(int t_tag)
 //	else if(t_tag == kWMS_MT_gacha)			return_value = ccp(175,34);
 //	else if(t_tag == kWMS_MT_rank)			return_value = ccp(230,34);
 //	else if(t_tag == kWMS_MT_postbox)		return_value = ccp(285,34);
-	if(t_tag == kPMS_MT_event)				return_value = ccp(420,-(myDSH->ui_top-320.f)/2.f - 100.f); // after move animation
-	else if(t_tag == kPMS_MT_eventClose)	return_value = ccp(450,-(myDSH->ui_top-320.f)/2.f - 50.f); // after move animation
-	else if(t_tag == kPMS_MT_screen)		return_value = ccp(455,(myDSH->ui_top-320.f)/2.f + 320.f - 19.f);
+	if(t_tag == kPMS_MT_event)				return_value = ccp(420,-(myDSH->puzzle_ui_top-320.f)/2.f - 100.f); // after move animation
+	else if(t_tag == kPMS_MT_eventClose)	return_value = ccp(450,-(myDSH->puzzle_ui_top-320.f)/2.f - 50.f); // after move animation
+	else if(t_tag == kPMS_MT_screen)		return_value = ccp(455,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f - 19.f);
 	else if(t_tag == kPMS_MT_showui)		return_value = ccp(240,-10);
-	else if(t_tag == kPMS_MT_top)			return_value = ccp(240,(myDSH->ui_top-320.f)/2.f + 320.f + 33.f); // after_move_animation
-	else if(t_tag == kPMS_MT_bottom)		return_value = ccp(145,-(myDSH->ui_top-320.f)/2.f - 65.f); // after_move_animation
+	else if(t_tag == kPMS_MT_top)			return_value = ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f); // after_move_animation
+	else if(t_tag == kPMS_MT_bottom)		return_value = ccp(145,-(myDSH->puzzle_ui_top-320.f)/2.f - 65.f); // after_move_animation
 //	else if(t_tag == kWMS_MT_rubyShop)		return_value = ccp(140,297);
 //	else if(t_tag == kWMS_MT_goldShop)		return_value = ccp(294,297);
 //	else if(t_tag == kWMS_MT_lifeShop)		return_value = ccp(448,297);
@@ -418,7 +419,7 @@ void PuzzleMapScene::startChangeUiMode()
 	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
 	((CCMenu*)getChildByTag(kPMS_MT_eventClose))->setVisible(false);
 	
-	if(((CCMenu*)getChildByTag(kPMS_MT_event))->getPositionY() < -(myDSH->ui_top-320.f)/2.f - 24.f)
+	if(((CCMenu*)getChildByTag(kPMS_MT_event))->getPositionY() < -(myDSH->puzzle_ui_top-320.f)/2.f - 24.f)
 		showEventButton();
 	
 	change_frame = 0;

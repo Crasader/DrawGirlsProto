@@ -60,9 +60,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 	myDSH->ui_top = 480.f*screen_size.height/screen_size.width;
 	myDSH->ui_bottom = 0;
 	myDSH->ui_center_y = myDSH->ui_top/2.f;
+	myDSH->puzzle_ui_top = 320.f;
 	
 	float screen_rate = screen_size.width/screen_size.height;
-	
 	if(screen_rate > 1.5f)
 	{
 		myDSH->screen_convert_rate = (designResolutionSize.width/designResolutionSize.height)/screen_rate;
@@ -72,6 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	{
 		myDSH->screen_convert_rate = 1.f;
 		myDSH->ui_zero_point = ccp(0,(screen_size.height*(designResolutionSize.width/screen_size.width) - designResolutionSize.height)/2.f);
+		myDSH->puzzle_ui_top = myDSH->ui_top;
 	}
 	else
 	{
