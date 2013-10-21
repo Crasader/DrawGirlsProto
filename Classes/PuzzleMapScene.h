@@ -17,54 +17,137 @@
 USING_NS_CC;
 using namespace std;
 
-class StagePiece : public GraySprite
+enum PuzzleMode{
+	kPM_default = 0,
+	kPM_thumb
+};
+
+class StagePiece : public CCNode
 {
 public:
-	static StagePiece* create(string filename, int t_number, int t_level, CCPoint t_p, CCRect t_rect, bool t_gray, bool t_boarder)
+	static StagePiece* create(string t_piece, int t_number, int t_level, CCPoint t_p, CCRect t_rect, bool t_gray, bool t_boarder)
 	{
 		StagePiece* t_sp = new StagePiece();
-		t_sp->myInit(filename, t_number, t_level, t_p, t_rect, t_gray, t_boarder);
+		t_sp->myInit(t_piece, t_number, t_level, t_p, t_rect, t_gray, t_boarder);
 		t_sp->autorelease();
 		return t_sp;
 	}
 	
 	bool isInnerRect(CCPoint t_p)
 	{
-		auto function = [&](CCNode* node)->CCAffineTransform
-		{
-			CCAffineTransform t = node->nodeToParentTransform();
-			for (CCNode *p = node->getParent(); p != NULL; p = p->getParent())
-				t = CCAffineTransformConcat(t, p->nodeToParentTransform());
-			return t;
-		};
+		CCPoint location = convertToNodeSpace(t_p);
 		
-		CCRect check_rect = CCRectApplyAffineTransform(touch_rect, function(this));
-		return check_rect.containsPoint(t_p);
+		return touch_rect.containsPoint(location);
+	}
+	
+	void setChangable(string t_thumb, bool t_card1, bool t_card2, bool t_card3)
+	{
+		is_changable = true;
+		thumb_name = t_thumb.c_str();
+		is_have_card[0] = t_card1;
+		is_have_card[1] = t_card2;
+		is_have_card[2] = t_card3;
+	}
+	
+	bool isChangable(){		return is_changable;	}
+	void setPuzzleMode(PuzzleMode t_mode)
+	{
+		if(!is_changable)		return;
+		piece_img->removeFromParent();
+		piece_img = NULL;
+		
+		if(t_mode == kPM_default)
+		{
+			piece_img = GraySprite::create(piece_name.c_str());
+			piece_img->setGray(is_gray);
+			addChild(piece_img);
+			
+			if(is_boarder)
+			{
+				string boarder_filename;
+				bool is_long = stage_number%2 == 1 ? true : false;
+				if((stage_number-1)/6%2 == 1)	is_long = !is_long;
+				
+				if(is_long)			boarder_filename = "test_map_boarder_long.png";
+				else				boarder_filename = "test_map_boarder_wide.png";
+				
+				CCSprite* boarder = CCSprite::create(boarder_filename.c_str());
+				boarder->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
+				piece_img->addChild(boarder);
+			}
+		}
+		else if(t_mode == kPM_thumb)
+		{
+			piece_img = GraySprite::create(thumb_name.c_str());
+			addChild(piece_img);
+			
+//			if(is_boarder)
+//			{
+				string boarder_filename;
+				bool is_long = stage_number%2 == 1 ? true : false;
+				if((stage_number-1)/6%2 == 1)	is_long = !is_long;
+				
+				if(is_long)			boarder_filename = "test_map_boarder_long.png";
+				else				boarder_filename = "test_map_boarder_wide.png";
+				
+				CCSprite* boarder = CCSprite::create(boarder_filename.c_str());
+				boarder->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
+				piece_img->addChild(boarder);
+//			}
+			
+			CCSprite* card_base = CCSprite::create("test_map_card_base.png");
+			card_base->setPosition(ccp(piece_img->getContentSize().width*1.f/3.f, piece_img->getContentSize().height/2.f));
+			piece_img->addChild(card_base);
+			
+			for(int i=0;i<3;i++)
+			{
+				if(is_have_card[i])
+				{
+					CCSprite* card_on = CCSprite::create(CCString::createWithFormat("test_map_card%d.png", i+1)->getCString());
+					card_on->setPosition(ccpAdd(card_base->getPosition(), ccp(0,18.f+i*(-18.f))));
+					piece_img->addChild(card_on);
+				}
+			}
+		}
 	}
 	
 	int getStageNumber(){	return stage_number;	}
 	
-	void setTouchBegin(){	setColor(ccGRAY);	}
-	void setTouchCancel(){	setColor(ccWHITE);	}
+	void setTouchBegin(){	piece_img->setColor(ccGRAY);	}
+	void setTouchCancel(){	piece_img->setColor(ccWHITE);	}
+	
+	CCSprite* shadow_node;
 	
 private:
+	GraySprite* piece_img;
+	
+	string piece_name;
 	int stage_number;
 	int stage_level;
 	CCRect touch_rect;
 	bool is_gray;
 	bool is_boarder;
 	
-	void myInit(string filename, int t_number, int t_level, CCPoint t_p, CCRect t_rect, bool t_gray, bool t_boarder)
+	bool is_changable;
+	string thumb_name;
+	bool is_have_card[3];
+	
+	void myInit(string t_piece, int t_number, int t_level, CCPoint t_p, CCRect t_rect, bool t_gray, bool t_boarder)
 	{
+		piece_name = t_piece.c_str();
 		stage_number = t_number;
 		stage_level = t_level;
 		touch_rect = t_rect;
 		is_gray = t_gray;
 		is_boarder = t_boarder;
+		is_changable = false;
 		
-		initWithFile(filename.c_str());
 		setPosition(t_p);
-		setGray(is_gray);
+		
+		piece_img = GraySprite::create(piece_name.c_str());
+		piece_img->setGray(is_gray);
+		addChild(piece_img);
+		
 		if(is_boarder)
 		{
 			string boarder_filename;
@@ -75,8 +158,15 @@ private:
 			else				boarder_filename = "test_map_boarder_wide.png";
 			
 			CCSprite* boarder = CCSprite::create(boarder_filename.c_str());
-			boarder->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
-			addChild(boarder);
+			boarder->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
+			piece_img->addChild(boarder);
+		}
+		
+		if(piece_name == "test_puzzle_empty.png")
+		{
+			CCSprite* level_img = CCSprite::create(CCString::createWithFormat("test_map_level%d.png", stage_level)->getCString());
+			level_img->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
+			piece_img->addChild(level_img);
 		}
 	}
 };
@@ -120,11 +210,13 @@ private:
 	CCPoint getStagePosition(int stage);
 	CCPoint getUiButtonPosition(int t_tag);
 	
+	PuzzleMode my_puzzle_mode;
+	
 	int stage_count;
 	void setMapNode();
 	void setUIs();
 	
-	void addShadow(int i, int j, CCPoint base_position);
+	CCSprite* addShadow(int i, int j, CCPoint base_position);
 	
 	int change_frame;
 	float change_dy;
@@ -370,6 +462,69 @@ private:
 	}
 	
 	void stageAction(int t_number);
+	
+	MapModeState before_map_mode_state;
+	int ing_check_puzzle;
+	void startPuzzleModeChange(PuzzleMode t_mode)
+	{
+		before_map_mode_state = map_mode_state;
+		map_mode_state = kMMS_changeMode;
+		my_puzzle_mode = t_mode;
+		ing_check_puzzle = 1;
+		schedule(schedule_selector(PuzzleMapScene::ingPuzzleModeChange), 2.f/60.f);
+	}
+	void ingPuzzleModeChange()
+	{
+		bool is_found = false;
+		CCNode* found_node;
+		
+		while(!is_found && ing_check_puzzle <= stage_count)
+		{
+			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(ing_check_puzzle);
+			if(t_sp->isChangable())
+			{
+				t_sp->shadow_node->stopAllActions();
+				t_sp->shadow_node->setOpacity(0);
+				found_node = t_sp;
+				is_found = true;
+			}
+			ing_check_puzzle++;
+		}
+		
+		if(is_found)
+		{
+			CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.2f, 1.f, 0, 0, 90, 0, 0);
+			CCCallFuncO* t_call1 = CCCallFuncO::create(this, callfuncO_selector(PuzzleMapScene::changePiece), found_node);
+			CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.2f, 1.f, 0, -90, 90, 0, 0);
+			CCCallFuncO* t_call2 = CCCallFuncO::create(this, callfuncO_selector(PuzzleMapScene::endChangePiece), found_node);
+			CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, t_call2, NULL);
+			found_node->runAction(t_seq);
+		}
+		
+		if(ing_check_puzzle > stage_count)
+		{
+			stopPuzzleModeChange();
+		}
+	}
+	void stopPuzzleModeChange()
+	{
+		unschedule(schedule_selector(PuzzleMapScene::ingPuzzleModeChange));
+		
+		is_menu_enable = true;
+		map_mode_state = before_map_mode_state;
+	}
+	
+	void changePiece(CCObject* sender)
+	{
+		StagePiece* t_sp = (StagePiece*)sender;
+		t_sp->setPuzzleMode(my_puzzle_mode);
+	}
+	
+	void endChangePiece(CCObject* sender)
+	{
+		CCFadeTo* t_fade = CCFadeTo::create(0.3f, 255);
+		((StagePiece*)sender)->shadow_node->runAction(t_fade);
+	}
 	
 	void resetStagePiece()
 	{

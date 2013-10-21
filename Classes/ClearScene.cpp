@@ -308,8 +308,8 @@ void ClearScene::menuAction(CCObject* pSender)
 			
 			mySGD->addHasGottenCardNumber(mySD->getSilType()*10+take_level-1);
 		}
-		
-		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, mySD->getSilType()*10+take_level-1, mySD->getCardDurability(mySD->getSilType(), take_level));
+		int card_number = SDS_GI(kSDF_stageInfo, mySD->getSilType(), CCString::createWithFormat("level%d_card", take_level)->getCString());
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, mySD->getCardDurability(mySD->getSilType(), take_level));
 			
 		
 		realEnd();

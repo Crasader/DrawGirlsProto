@@ -100,6 +100,8 @@ void PuzzleMapScene::startSceneSetting()
 {
 	map_mode_state = kMMS_default;
 	
+	my_puzzle_mode = kPM_default;
+	
 	setMapNode();
 	setUIs();
 	
@@ -123,25 +125,25 @@ void PuzzleMapScene::setMapNode()
 	map_back_center->setPosition(CCPointZero);
 	map_node->addChild(map_back_center, kPMS_Z_puzzle_back_side);
 	
-	CCSize center_size = map_back_center->getContentSize();
+	CCSize center_size = CCSizeMake(520.f, 340.f);
 	
 	CCSprite* map_back_left = CCSprite::create("test_map_back_left.png");
-	map_back_left->setAnchorPoint(ccp(1.f,0.5f));
+	map_back_left->setAnchorPoint(ccp(0.f,0.5f));
 	map_back_left->setPosition(ccp(-center_size.width/2.f, 0));
 	map_node->addChild(map_back_left, kPMS_Z_puzzle_back);
 	
 	CCSprite* map_back_right = CCSprite::create("test_map_back_right.png");
-	map_back_right->setAnchorPoint(ccp(0.f,0.5f));
+	map_back_right->setAnchorPoint(ccp(1.f,0.5f));
 	map_back_right->setPosition(ccp(center_size.width/2.f, 0));
 	map_node->addChild(map_back_right, kPMS_Z_puzzle_back);
 	
 	CCSprite* map_back_top = CCSprite::create("test_map_back_top.png");
-	map_back_top->setAnchorPoint(ccp(0.5f,0.f));
+	map_back_top->setAnchorPoint(ccp(0.5f,1.f));
 	map_back_top->setPosition(ccp(0, center_size.height/2.f));
 	map_node->addChild(map_back_top, kPMS_Z_puzzle_back);
 	
 	CCSprite* map_back_bottom = CCSprite::create("test_map_back_bottom.png");
-	map_back_bottom->setAnchorPoint(ccp(0.5f,1.f));
+	map_back_bottom->setAnchorPoint(ccp(0.5f,0.f));
 	map_back_bottom->setPosition(ccp(0,-center_size.height/2.f));
 	map_node->addChild(map_back_bottom, kPMS_Z_puzzle_back);
 	
@@ -149,7 +151,7 @@ void PuzzleMapScene::setMapNode()
 	shadow_batchnode->setPosition(CCPointZero);
 	map_node->addChild(shadow_batchnode, kPMS_Z_puzzle_shadow);
 	
-	CCRect stage_rect = CCRectMake(32.5f, 32.5f, 55.f, 55.f);
+	CCRect stage_rect = CCRectMake(-25.f, -25.f, 50.f, 50.f);
 	int theme_code = 1;
 	
 	CCPoint base_position = ccp(-171.25f, 102.75f);
@@ -164,14 +166,19 @@ void PuzzleMapScene::setMapNode()
 			{
 				bool is_found = false;
 				int found_number = 0;
-				for(int k=3;k>=1 && !is_found;k--)
+				bool is_have_card[3] = {0,};
+				for(int k=3;k>=1;k--)
 				{
 					int card_number = SDS_GI(kSDF_stageInfo, (i-1)*6 + j, CCString::createWithFormat("level%d_card", k)->getCString());
 					int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
 					if(card_durability > 0)
 					{
-						is_found = true;
-						found_number = k;
+						if(!is_found)
+						{
+							is_found = true;
+							found_number = k;
+						}
+						is_have_card[k-1] = true;
 					}
 				}
 				
@@ -180,22 +187,24 @@ void PuzzleMapScene::setMapNode()
 					StagePiece* t_sp = StagePiece::create(CCString::createWithFormat("test_puzzle%d_%d.png", i, j)->getCString(),
 														  (i-1)*6 + j, stage_level, ccpAdd(base_position, ccp((j-1)*68.5f, -(i-1)*68.5f)), stage_rect, false, false);
 					map_node->addChild(t_sp, kPMS_Z_stage, t_sp->getStageNumber());
-					addShadow(i, j, base_position);
-					
+					t_sp->setChangable(CCString::createWithFormat("test_thumb%d_%d.png", i, j)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_sp->shadow_node = addShadow(i, j, base_position);
 				}
 				else if(found_number == 2)
 				{
 					StagePiece* t_sp = StagePiece::create(CCString::createWithFormat("test_puzzle%d_%d.png", i, j)->getCString(),
 														  (i-1)*6 + j, stage_level, ccpAdd(base_position, ccp((j-1)*68.5f, -(i-1)*68.5f)), stage_rect, false, true);
 					map_node->addChild(t_sp, kPMS_Z_stage, t_sp->getStageNumber());
-					addShadow(i, j, base_position);
+					t_sp->setChangable(CCString::createWithFormat("test_thumb%d_%d.png", i, j)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_sp->shadow_node = addShadow(i, j, base_position);
 				}
 				else if(found_number == 1)
 				{
 					StagePiece* t_sp = StagePiece::create(CCString::createWithFormat("test_puzzle%d_%d.png", i, j)->getCString(),
 														  (i-1)*6 + j, stage_level, ccpAdd(base_position, ccp((j-1)*68.5f, -(i-1)*68.5f)), stage_rect, true, true);
 					map_node->addChild(t_sp, kPMS_Z_stage, t_sp->getStageNumber());
-					addShadow(i, j, base_position);
+					t_sp->setChangable(CCString::createWithFormat("test_thumb%d_%d.png", i, j)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_sp->shadow_node = addShadow(i, j, base_position);
 				}
 				else
 				{
@@ -217,7 +226,7 @@ void PuzzleMapScene::setMapNode()
 	touched_stage_number = 0;
 }
 
-void PuzzleMapScene::addShadow(int i, int j, CCPoint base_position)
+CCSprite* PuzzleMapScene::addShadow(int i, int j, CCPoint base_position)
 {
 	bool is_long = ((i-1)*6+j)%2 == 1 ? true : false;
 	if(((i-1)*6+j-1)/6%2 == 1)	is_long = !is_long;
@@ -225,6 +234,8 @@ void PuzzleMapScene::addShadow(int i, int j, CCPoint base_position)
 	CCSprite* t_shadow = CCSprite::create("test_map_shadow.png", CCRectMake(is_long ? 0 : 120, 0, 120, 120));
 	t_shadow->setPosition(ccpAdd(base_position, ccp((j-1)*68.5f, -(i-1)*68.5f)));
 	shadow_batchnode->addChild(t_shadow);
+	
+	return t_shadow;
 }
 
 void PuzzleMapScene::setUIs()
@@ -521,7 +532,15 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	else if(tag == kPMS_MT_screen)
 	{
 		//////////////
-		is_menu_enable = true;
+//		is_menu_enable = true;
+		if(my_puzzle_mode == kPM_default)
+		{
+			startPuzzleModeChange(kPM_thumb);
+		}
+		else if(my_puzzle_mode == kPM_thumb)
+		{
+			startPuzzleModeChange(kPM_default);
+		}
 	}
 	else if(tag == kPMS_MT_showui)
 	{
