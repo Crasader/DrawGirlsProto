@@ -26,8 +26,6 @@
 #include <algorithm>
 #include <ostream>
 
-using namespace std;
-
 void WorldMapScene::showConvertSildata(string filename)
 {
 	CCLog("%s", (filename+"_sildata.txt").c_str());

@@ -103,6 +103,7 @@ bool CardListViewer::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 {
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
 	location.y -= getPositionY();
 	
 	bool return_value = false;
@@ -145,6 +146,7 @@ void CardListViewer::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
 	location.y -= getPositionY();
 	
 	if(isVisible() && view_rect.containsPoint(location))
@@ -197,6 +199,7 @@ void CardListViewer::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
 	location.y -= getPositionY();
 	
 	if(isVisible() && view_rect.containsPoint(location))
@@ -236,6 +239,7 @@ void CardListViewer::ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
 	location.y -= getPositionY();
 	
 	if(isVisible() && view_rect.containsPoint(location))

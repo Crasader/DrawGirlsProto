@@ -8,6 +8,7 @@
 
 #include "StartingScene.h"
 #include "ScreenSide.h"
+#include "DataStorageHub.h"
 
 enum t_zorder{
 	tZ_after = 1,
@@ -75,10 +76,11 @@ bool StartingScene::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEv
 	if(!is_touch_enable)
 		return true;
 	
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
 	
-	begin_point = convertedLocation;
+	begin_point = location;
 	
 	if(begin_point.x > 240)
 	{
@@ -96,10 +98,11 @@ void StartingScene::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEv
 	if(!is_touch_enable)
 		return;
 	
-	CCPoint location = pTouch->getLocationInView();
-	CCPoint convertedLocation = CCDirector::sharedDirector()->convertToGL(location);
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = ccpSub(location, myDSH->ui_zero_point);
 	
-	float x_distance = begin_point.x - convertedLocation.x;
+	float x_distance = begin_point.x - location.x;
 	
 	if(touch_direction == 1)
 	{

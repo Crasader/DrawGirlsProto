@@ -10,6 +10,7 @@
 #define __DGproto__ListViewerScroll__
 
 #include "cocos2d.h"
+#include "DataStorageHub.h"
 
 USING_NS_CC;
 using namespace std;
@@ -64,6 +65,7 @@ private:
 	{
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+		location = ccpSub(location, myDSH->ui_zero_point);
 		
 		bool return_value = false;
 		
@@ -86,6 +88,7 @@ private:
 		
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+		location = ccpSub(location, myDSH->ui_zero_point);
 		
 		float distance = location.y - touch_begin_point.y;
 		setPositionScrollY(scroll_img->getPositionY() + distance);
@@ -97,6 +100,7 @@ private:
 		
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+		location = ccpSub(location, myDSH->ui_zero_point);
 		
 		if(isVisible() && my_rect.containsPoint(location))
 		{
@@ -113,6 +117,7 @@ private:
 		
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+		location = ccpSub(location, myDSH->ui_zero_point);
 		
 		if(isVisible() && my_rect.containsPoint(location))
 		{

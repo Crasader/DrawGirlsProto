@@ -68,7 +68,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_cardSortType,
 	kDSH_Key_lastSelectedStage,
 	kDSH_Key_isPassCoupon_int1,
-	kDSH_Key_uiType
+	kDSH_Key_uiType,
+	kDSH_Key_isOpenTheme_int1_Stage_int2
 }DSH_Key;
 
 #define myDSH DataStorageHub::sharedInstance()
@@ -190,6 +191,7 @@ public:
 	}
 	
 	float ui_top;
+	float puzzle_ui_top;
 	float ui_center_y;
 	float ui_bottom;
 	CCPoint ui_zero_point;
@@ -256,6 +258,7 @@ private:
 		else if(t_name == kDSH_Key_lastSelectedStage)					return_value = "lss";
 		else if(t_name == kDSH_Key_isPassCoupon_int1)					return_value = "ipcp%d";
 		else if(t_name == kDSH_Key_uiType)								return_value = "uitype";
+		else if(t_name == kDSH_Key_isOpenTheme_int1_Stage_int2)			return_value = "iot%ds%d";
 		
 		return return_value;
 	}
