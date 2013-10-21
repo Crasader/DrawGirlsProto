@@ -409,6 +409,11 @@ public:
 				m_attacks.push_back(pattern[iter.index()]);
 			}
 		}
+		
+		for(auto i : m_attacks)
+		{
+			KS::KSLog("%", i);
+		}
 //		for(auto i : pattern)
 //		{
 //			//i.asString().c_str()

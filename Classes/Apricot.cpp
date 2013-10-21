@@ -17,14 +17,14 @@ bool Apricot::init()
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
 	CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
-	ccNodeLoaderLibrary->registerCCNodeLoader("ApricotCCB", ApricotLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("BossCCB", ApricotLoader::loader());
 	
 	
 	cocos2d::extension::CCBReader * reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	
 	CCNode * node = reader->readNodeGraphFromFile("boss_apricot.ccbi", this);
 	
-	m_headImg = dynamic_cast<ApricotCCB*>(node);
+	m_headImg = dynamic_cast<BossCCB*>(node);
 	
 //	std::string ccbiName = "img_ccb_test/boss_apricot_1.ccbi";
 //    CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();

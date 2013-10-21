@@ -115,8 +115,8 @@ bool Bear::startDamageReaction(float damage, float angle)
 		myGD->communication("CP_removeSubCumber", this);
 		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
 		
-//		CCPoint t = getPosition();
-//		ret.first->setPosition(t);
+		CCPoint t = getPosition();
+		ret.first->setPosition(t);
 		addChild(ret.first, 11);
 		
 		scheduleOnce(schedule_selector(ThisClassType::removeFromParent), 1.f);

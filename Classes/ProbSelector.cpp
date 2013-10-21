@@ -7,13 +7,6 @@
 //
 
 #include "ProbSelector.h"
-#include <vector>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-
-#include <assert.h>
-#include "Well512.h"
 int ProbSelector::sel(double args, ...)
 {
 	va_list argptr;
