@@ -20,7 +20,8 @@
 #include "PostboxPopup.h"
 
 enum PMS_Zorder{
-	kPMS_Z_back = 1,
+	kPMS_Z_wall = 1,
+	kPMS_Z_main,
 	kPMS_Z_puzzle_back_side,
 	kPMS_Z_puzzle_shadow,
 	kPMS_Z_puzzle_back,
@@ -99,9 +100,17 @@ void PuzzleMapScene::resultLogin(Json::Value result_data)
 
 void PuzzleMapScene::startSceneSetting()
 {
+	is_gesturable_map_mode = false;
 	map_mode_state = kMMS_default;
 	
 	my_puzzle_mode = kPM_default;
+	
+	CCSprite* ui_wall = CCSprite::create("test_ui_back_wall.png");
+	ui_wall->setPosition(ccp(240,160));
+	addChild(ui_wall, kPMS_Z_wall);
+	
+	main_node = CCNode::create();
+	addChild(main_node, kPMS_Z_main);
 	
 	setMapNode();
 	setUIs();
@@ -118,7 +127,7 @@ void PuzzleMapScene::setMapNode()
 	
 	map_node = CCNode::create();
 	map_node->setPosition(ccp(240,160));
-	addChild(map_node, kPMS_Z_puzzle_back_side);
+	main_node->addChild(map_node, kPMS_Z_puzzle_back_side);
 	
 	map_node->getCamera()->setEyeXYZ(0, 0, 2.f);
 	
@@ -152,7 +161,7 @@ void PuzzleMapScene::setMapNode()
 	shadow_batchnode->setPosition(CCPointZero);
 	map_node->addChild(shadow_batchnode, kPMS_Z_puzzle_shadow);
 	
-	CCRect stage_rect = CCRectMake(-25.f, -25.f, 50.f, 50.f);
+	CCRect stage_rect = CCRectMake(-30.f, -30.f, 60.f, 60.f);
 	int theme_code = 1;
 	
 	CCPoint base_position = ccp(-171.25f, 102.75f);
@@ -254,9 +263,13 @@ CCSprite* PuzzleMapScene::addShadow(int i, int j, CCPoint base_position)
 
 void PuzzleMapScene::setUIs()
 {
-	CCSprite* ui_back = CCSprite::create("test_ui_back.png");
+	CCSprite* ui_frame = CCSprite::create("test_ui_back_frame.png");
+	ui_frame->setPosition(ccp(240,160+340));
+	main_node->addChild(ui_frame, kPMS_Z_main);
+	
+	CCSprite* ui_back = CCSprite::create("test_ui_back_table.png");
 	ui_back->setPosition(ccp(240,160));
-	addChild(ui_back, kPMS_Z_back);
+	main_node->addChild(ui_back, kPMS_Z_main);
 	
 	
 	CCSprite* top_case = CCSprite::create("test_ui_top.png");
@@ -268,7 +281,7 @@ void PuzzleMapScene::setUIs()
 	CCSprite* bottom_case = CCSprite::create("test_ui_bottom.png");
 	bottom_case->setAnchorPoint(ccp(0.5f,0.f));
 	bottom_case->setPosition(getUiButtonPosition(kPMS_MT_bottom));
-	addChild(bottom_case, kPMS_Z_ui_button, kPMS_MT_bottom);
+	main_node->addChild(bottom_case, kPMS_Z_ui_button, kPMS_MT_bottom);
 	
 	CCSize bottom_size = bottom_case->getContentSize();
 	
@@ -347,7 +360,7 @@ void PuzzleMapScene::setUIs()
 		CCMenu* event_menu = CCMenu::createWithItem(event_item);
 		event_menu->setEnabled(false);
 		event_menu->setPosition(getUiButtonPosition(kPMS_MT_event));
-		addChild(event_menu, kPMS_Z_ui_button, kPMS_MT_event);
+		main_node->addChild(event_menu, kPMS_Z_ui_button, kPMS_MT_event);
 		
 		
 		CCSprite* n_event_close = CCSprite::create("test_ui_event_close.png");
@@ -360,7 +373,7 @@ void PuzzleMapScene::setUIs()
 		CCMenu* event_close_menu = CCMenu::createWithItem(event_close_item);
 		event_close_menu->setEnabled(false);
 		event_close_menu->setPosition(getUiButtonPosition(kPMS_MT_eventClose));
-		addChild(event_close_menu, kPMS_Z_ui_button, kPMS_MT_eventClose);
+		main_node->addChild(event_close_menu, kPMS_Z_ui_button, kPMS_MT_eventClose);
 		
 //		showEventButton();
 	}
@@ -368,8 +381,8 @@ void PuzzleMapScene::setUIs()
 
 void PuzzleMapScene::showEventButton()
 {
-	CCMenu* event_menu = (CCMenu*)getChildByTag(kPMS_MT_event);
-	CCMenu* event_close_menu = (CCMenu*)getChildByTag(kPMS_MT_eventClose);
+	CCMenu* event_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_event);
+	CCMenu* event_close_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose);
 	
 	CCMoveTo* t_move1 = CCMoveTo::create(0.5f, ccp(420,-(myDSH->puzzle_ui_top-320.f)/2.f + 52.f));
 	CCMoveTo* t_move2 = CCMoveTo::create(0.5f, ccp(450,-(myDSH->puzzle_ui_top-320.f)/2.f + 102.f));
@@ -381,16 +394,16 @@ void PuzzleMapScene::showEventButton()
 }
 void PuzzleMapScene::onEventButton()
 {
-	((CCMenu*)getChildByTag(kPMS_MT_event))->setEnabled(true);
-	((CCMenu*)getChildByTag(kPMS_MT_eventClose))->setEnabled(true);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setEnabled(true);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose))->setEnabled(true);
 }
 void PuzzleMapScene::hideEventButton()
 {
-	((CCMenu*)getChildByTag(kPMS_MT_event))->setEnabled(false);
-	((CCMenu*)getChildByTag(kPMS_MT_eventClose))->setEnabled(false);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setEnabled(false);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose))->setEnabled(false);
 	
-	CCMenu* event_menu = (CCMenu*)getChildByTag(kPMS_MT_event);
-	CCMenu* event_close_menu = (CCMenu*)getChildByTag(kPMS_MT_eventClose);
+	CCMenu* event_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_event);
+	CCMenu* event_close_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose);
 	
 	CCMoveTo* t_move1 = CCMoveTo::create(0.5f, getUiButtonPosition(kPMS_MT_event));
 	CCMoveTo* t_move2 = CCMoveTo::create(0.5f, getUiButtonPosition(kPMS_MT_eventClose));
@@ -439,12 +452,13 @@ void PuzzleMapScene::stageAction(int t_number)
 
 void PuzzleMapScene::startChangeUiMode()
 {
+	is_gesturable_map_mode = false;
 	map_mode_state = kMMS_changeMode;
 	
 	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
-	((CCMenu*)getChildByTag(kPMS_MT_eventClose))->setVisible(false);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose))->setVisible(false);
 	
-	if(((CCMenu*)getChildByTag(kPMS_MT_event))->getPositionY() < -(myDSH->puzzle_ui_top-320.f)/2.f - 24.f)
+	if(((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->getPositionY() < -(myDSH->puzzle_ui_top-320.f)/2.f - 24.f)
 		showEventButton();
 	
 	change_frame = 0;
@@ -468,7 +482,7 @@ void PuzzleMapScene::changeUiMode()
 	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
 	top_case->setPositionY(top_case->getPositionY() + change_top_dy);
 	
-	CCSprite* bottom_case = (CCSprite*)getChildByTag(kPMS_MT_bottom);
+	CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
 	bottom_case->setPositionY(bottom_case->getPositionY() + change_bottom_dy);
 	
 	if(change_frame >= 30)
@@ -507,7 +521,7 @@ void PuzzleMapScene::changeMapMode()
 	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
 	top_case->setPositionY(top_case->getPositionY() + change_top_dy);
 	
-	CCSprite* bottom_case = (CCSprite*)getChildByTag(kPMS_MT_bottom);
+	CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
 	bottom_case->setPositionY(bottom_case->getPositionY() + change_bottom_dy);
 	
 	if(change_frame >= 30)
@@ -518,7 +532,60 @@ void PuzzleMapScene::stopChangeMapMode()
 	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 	
 	unschedule(schedule_selector(PuzzleMapScene::changeMapMode));
+	is_gesturable_map_mode = true;
 	map_mode_state = kMMS_default;
+	is_menu_enable = true;
+}
+
+void PuzzleMapScene::startChangeFrameMode()
+{
+	is_gesturable_map_mode = false;
+	map_mode_state = kMMS_changeMode;
+	is_menu_enable = false;
+	
+	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(false);
+	
+	CCScaleTo* t_scale = CCScaleTo::create(0.45f, map_node->getScaleX(), map_node->getScaleY()-0.55f);
+	map_node->runAction(t_scale);
+	
+	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(0,-340));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::stopChangeFrameMode));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+	main_node->runAction(t_seq);
+	
+	hideEventButton();
+}
+void PuzzleMapScene::stopChangeFrameMode()
+{
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	
+	map_mode_state = kMMS_frameMode;
+	is_menu_enable = true;
+}
+
+void PuzzleMapScene::startReturnUiMode()
+{
+	is_gesturable_map_mode = false;
+	map_mode_state = kMMS_changeMode;
+	is_menu_enable = false;
+	
+	showEventButton();
+	
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
+	
+	CCScaleTo* t_scale = CCScaleTo::create(0.45f, map_node->getScaleX(), map_node->getScaleX());
+	map_node->runAction(t_scale);
+	
+	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(0,0));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::stopReturnUiMode));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+	main_node->runAction(t_seq);
+}
+void PuzzleMapScene::stopReturnUiMode()
+{
+	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(true);
+	
+	map_mode_state = kMMS_uiMode;
 	is_menu_enable = true;
 }
 
@@ -568,7 +635,10 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_showui)
 	{
-		startChangeUiMode();
+		if(map_mode_state == kMMS_frameMode)
+			startReturnUiMode();
+		else
+			startChangeUiMode();
 	}
 	else if(tag == kPMS_MT_diary)
 	{
@@ -581,18 +651,21 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_gacha)
 	{
-		GachaPopup* t_gp = GachaPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
-		addChild(t_gp, kPMS_Z_popup);
+		is_menu_enable = true;
+//		GachaPopup* t_gp = GachaPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
+//		addChild(t_gp, kPMS_Z_popup);
 	}
 	else if(tag == kPMS_MT_rank)
 	{
-		RankPopup* t_rp = RankPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
-		addChild(t_rp, kPMS_Z_popup);
+		is_menu_enable = true;
+//		RankPopup* t_rp = RankPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
+//		addChild(t_rp, kPMS_Z_popup);
 	}
 	else if(tag == kPMS_MT_postbox)
 	{
-		PostboxPopup* t_pp = PostboxPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
-		addChild(t_pp, kPMS_Z_popup);
+		is_menu_enable = true;
+//		PostboxPopup* t_pp = PostboxPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
+//		addChild(t_pp, kPMS_Z_popup);
 	}
 //	else if(tag == kWMS_MT_rubyShop)
 //	{

@@ -180,7 +180,8 @@ enum MapModeState
 	kMMS_firstTouchStage,
 	kMMS_multiTouchZoom,
 	kMMS_changeMode,
-	kMMS_uiMode
+	kMMS_uiMode,
+	kMMS_frameMode
 };
 
 class PuzzleMapScene : public cocos2d::CCLayer
@@ -198,12 +199,19 @@ public:
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(PuzzleMapScene);
 	
+	virtual void visit()
+	{
+		CCLayer::visit();
+	}
+	
 private:
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
 	
 	MapModeState map_mode_state;
+	
+	CCNode* main_node;
 	
 	CCNode* map_node;
 	CCSpriteBatchNode* shadow_batchnode;
@@ -229,9 +237,16 @@ private:
 	void startChangeUiMode();
 	void changeUiMode();
 	void stopChangeUiMode();
+	
 	void startChangeMapMode();
 	void changeMapMode();
 	void stopChangeMapMode();
+	
+	void startChangeFrameMode();
+	void stopChangeFrameMode();
+	
+	void startReturnUiMode();
+	void stopReturnUiMode();
 	
 	void resultLogin(Json::Value result_data);
 	void startSceneSetting();
@@ -259,13 +274,49 @@ private:
 	void moveListXY(CCPoint t_p);
 	void moveAnimation();
 	
+	bool is_gesturable_map_mode;
+	
 	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 	{
 		if(map_mode_state == kMMS_changeMode)
 			return;
 		else if(map_mode_state == kMMS_uiMode)
 		{
-			startChangeMapMode();
+			CCSetIterator iter;
+			CCTouch *touch;
+			
+			for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
+			{
+				touch = (CCTouch*)(*iter);
+				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+				location = ccpSub(location, myDSH->ui_zero_point);
+				
+				multiTouchData[(int)touch] = location;
+				
+				if(multiTouchData.size() == 1)
+				{
+					touchStart_p = location;
+				}
+			}
+		}
+		else if(map_mode_state == kMMS_frameMode)
+		{
+			CCSetIterator iter;
+			CCTouch *touch;
+			
+			for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
+			{
+				touch = (CCTouch*)(*iter);
+				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+				location = ccpSub(location, myDSH->ui_zero_point);
+				
+				multiTouchData[(int)touch] = location;
+				
+				if(multiTouchData.size() == 1)
+				{
+					touchStart_p = location;
+				}
+			}
 		}
 		else
 		{
@@ -296,7 +347,7 @@ private:
 					for(int i=1;i<=stage_count && touched_stage_number == 0;i++)
 					{
 						StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-						if(t_sp->isInnerRect(location))
+						if(t_sp->isInnerRect(convertToWorldSpace(location)))
 						{
 							touched_stage_number = t_sp->getStageNumber();
 							t_sp->setTouchBegin();
@@ -306,6 +357,7 @@ private:
 				}
 				else if(multiTouchData.size() == 2)
 				{
+					is_gesturable_map_mode = false;
 					if(map_mode_state == kMMS_firstTouchStage)
 						resetStagePiece();
 					
@@ -322,7 +374,7 @@ private:
 				}
 				else
 				{
-					
+					is_gesturable_map_mode = false;
 				}
 			}
 		}
@@ -334,7 +386,57 @@ private:
 			return;
 		else if(map_mode_state == kMMS_uiMode)
 		{
+			CCSetIterator iter;
+			CCTouch* touch;
 			
+			for(iter = pTouches->begin();iter != pTouches->end();++iter)
+			{
+				touch = (CCTouch*)(*iter);
+				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+				location = ccpSub(location, myDSH->ui_zero_point);
+				
+				map<int, CCPoint>::iterator o_it;
+				o_it = multiTouchData.find((int)touch);
+				if(o_it != multiTouchData.end())
+				{
+					o_it->second = location;
+					if(multiTouchData.size() == 1)
+					{
+						if(location.y < touchStart_p.y - 50.f)
+						{
+							startChangeFrameMode();
+							multiTouchData.erase((int)touch);
+						}
+					}
+				}
+			}
+		}
+		else if(map_mode_state == kMMS_frameMode)
+		{
+			CCSetIterator iter;
+			CCTouch* touch;
+			
+			for(iter = pTouches->begin();iter != pTouches->end();++iter)
+			{
+				touch = (CCTouch*)(*iter);
+				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+				location = ccpSub(location, myDSH->ui_zero_point);
+				
+				map<int, CCPoint>::iterator o_it;
+				o_it = multiTouchData.find((int)touch);
+				if(o_it != multiTouchData.end())
+				{
+					o_it->second = location;
+					if(multiTouchData.size() == 1)
+					{
+						if(location.y > touchStart_p.y + 50.f)
+						{
+							startReturnUiMode();
+							multiTouchData.erase((int)touch);
+						}
+					}
+				}
+			}
 		}
 		else
 		{
@@ -366,6 +468,10 @@ private:
 								resetStagePiece();
 								map_mode_state = kMMS_firstTouchDefault;
 							}
+						}
+						else if(is_gesturable_map_mode && location.y < touchStart_p.y - 50.f)
+						{
+							startChangeUiMode();
 						}
 					}
 					else if(multiTouchData.size() == 2)
@@ -405,10 +511,63 @@ private:
 	virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 	{
 		if(map_mode_state == kMMS_changeMode)
-			return;
+		{
+			CCSetIterator iter;
+			CCTouch* touch;
+			
+			for(iter = pTouches->begin();iter != pTouches->end();++iter)
+			{
+				touch = (CCTouch*)(*iter);
+				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+				location = ccpSub(location, myDSH->ui_zero_point);
+				
+				map<int, CCPoint>::iterator o_it;
+				o_it = multiTouchData.find((int)touch);
+				if(o_it != multiTouchData.end())
+				{
+					multiTouchData.erase((int)touch);
+				}
+			}
+		}
 		else if(map_mode_state == kMMS_uiMode)
 		{
+			CCSetIterator iter;
+			CCTouch* touch;
 			
+			for(iter = pTouches->begin();iter != pTouches->end();++iter)
+			{
+				touch = (CCTouch*)(*iter);
+				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+				location = ccpSub(location, myDSH->ui_zero_point);
+				
+				map<int, CCPoint>::iterator o_it;
+				o_it = multiTouchData.find((int)touch);
+				if(o_it != multiTouchData.end())
+				{
+					multiTouchData.erase((int)touch);
+				}
+			}
+			
+			startChangeMapMode();
+		}
+		else if(map_mode_state == kMMS_frameMode)
+		{
+			CCSetIterator iter;
+			CCTouch* touch;
+			
+			for(iter = pTouches->begin();iter != pTouches->end();++iter)
+			{
+				touch = (CCTouch*)(*iter);
+				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+				location = ccpSub(location, myDSH->ui_zero_point);
+				
+				map<int, CCPoint>::iterator o_it;
+				o_it = multiTouchData.find((int)touch);
+				if(o_it != multiTouchData.end())
+				{
+					multiTouchData.erase((int)touch);
+				}
+			}
 		}
 		else
 		{
