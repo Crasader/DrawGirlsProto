@@ -408,6 +408,7 @@ private:
 		move_to_boss_position_frame = 0;
 		CCPoint after_position = getObjectToGameNodePosition(myGD->getMainCumberPoint().convertToCCP());
 		CCPoint sub_position = ccpSub(after_position, game_node->getPosition());
+		CCLog("boss : %.2f\t recent : %.2f", after_position.y, game_node->getPositionY());
 		move_to_boss_position_ds = ccpMult(sub_position, 1.f/30.f);
 		schedule(schedule_selector(Maingame::moveToBossPosition));
 	}
@@ -416,8 +417,8 @@ private:
 		move_to_boss_position_frame++;
 		
 		CCPoint after_position = ccpAdd(game_node->getPosition(), move_to_boss_position_ds);
-		moveGamePosition(after_position);
-		myGD->communication("VS_setMoveGamePosition", after_position);
+		game_node->setPosition(after_position);
+		myGD->communication("VS_setMoveGamePosition", getGameNodeToObjectPosition(after_position));
 		
 		if(move_to_boss_position_frame >= 30)
 		{
@@ -437,6 +438,16 @@ private:
 		if(myGD->gamescreen_type == kGT_full)					after_position = ccp(myGD->boarder_value,y_value);
 		else if(myGD->gamescreen_type == kGT_leftUI)			after_position = ccp(50+myGD->boarder_value,y_value);
 		else if(myGD->gamescreen_type == kGT_rightUI)			after_position = ccp(myGD->boarder_value,y_value);
+		
+		return after_position;
+	}
+	
+	CCPoint getGameNodeToObjectPosition(CCPoint t_p)
+	{
+		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float y_value = -(t_p.y - 480.f*frame_size.height/frame_size.width/2.f)/myGD->game_scale;
+		CCPoint after_position;
+		after_position = ccp(160,y_value);
 		
 		return after_position;
 	}
