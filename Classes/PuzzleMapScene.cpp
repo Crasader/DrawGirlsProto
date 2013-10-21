@@ -24,8 +24,9 @@ enum PMS_Zorder{
 	kPMS_Z_puzzle_back_side,
 	kPMS_Z_puzzle_shadow,
 	kPMS_Z_puzzle_back,
-	kPMS_Z_stage,
-	kPMS_Z_ui_button,
+	kPMS_Z_stage = 1000,
+	kPMS_Z_boarderStage = 2000,
+	kPMS_Z_ui_button = 3000,
 	kPMS_Z_popup
 };
 
@@ -186,7 +187,10 @@ void PuzzleMapScene::setMapNode()
 				{
 					StagePiece* t_sp = StagePiece::create(CCString::createWithFormat("test_puzzle%d_%d.png", i, j)->getCString(),
 														  (i-1)*6 + j, stage_level, ccpAdd(base_position, ccp((j-1)*68.5f, -(i-1)*68.5f)), stage_rect, false, false);
-					map_node->addChild(t_sp, kPMS_Z_stage, t_sp->getStageNumber());
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else if(my_puzzle_mode == kPM_thumb)						map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					
 					t_sp->setChangable(CCString::createWithFormat("test_thumb%d_%d.png", i, j)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
 					t_sp->shadow_node = addShadow(i, j, base_position);
 				}
@@ -194,7 +198,10 @@ void PuzzleMapScene::setMapNode()
 				{
 					StagePiece* t_sp = StagePiece::create(CCString::createWithFormat("test_puzzle%d_%d.png", i, j)->getCString(),
 														  (i-1)*6 + j, stage_level, ccpAdd(base_position, ccp((j-1)*68.5f, -(i-1)*68.5f)), stage_rect, false, true);
-					map_node->addChild(t_sp, kPMS_Z_stage, t_sp->getStageNumber());
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else if(my_puzzle_mode == kPM_thumb)						map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					
 					t_sp->setChangable(CCString::createWithFormat("test_thumb%d_%d.png", i, j)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
 					t_sp->shadow_node = addShadow(i, j, base_position);
 				}
@@ -202,7 +209,10 @@ void PuzzleMapScene::setMapNode()
 				{
 					StagePiece* t_sp = StagePiece::create(CCString::createWithFormat("test_puzzle%d_%d.png", i, j)->getCString(),
 														  (i-1)*6 + j, stage_level, ccpAdd(base_position, ccp((j-1)*68.5f, -(i-1)*68.5f)), stage_rect, true, true);
-					map_node->addChild(t_sp, kPMS_Z_stage, t_sp->getStageNumber());
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else if(my_puzzle_mode == kPM_thumb)						map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					
 					t_sp->setChangable(CCString::createWithFormat("test_thumb%d_%d.png", i, j)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
 					t_sp->shadow_node = addShadow(i, j, base_position);
 				}
@@ -210,14 +220,18 @@ void PuzzleMapScene::setMapNode()
 				{
 					StagePiece* t_sp = StagePiece::create("test_puzzle_empty.png",
 														  (i-1)*6 + j, stage_level, ccpAdd(base_position, ccp((j-1)*68.5f, -(i-1)*68.5f)), stage_rect, false, false);
-					map_node->addChild(t_sp, kPMS_Z_stage, t_sp->getStageNumber());
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else if(my_puzzle_mode == kPM_thumb)						map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
 				}
 			}
 			else
 			{
 				StagePiece* t_sp = StagePiece::create("test_puzzle_empty.png",
 													  (i-1)*6 + j, stage_level, ccpAdd(base_position, ccp((j-1)*68.5f, -(i-1)*68.5f)), stage_rect, false, false);
-				map_node->addChild(t_sp, kPMS_Z_stage, t_sp->getStageNumber());
+				
+				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				else if(my_puzzle_mode == kPM_thumb)						map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
 			}
 		}
 	}
@@ -399,7 +413,7 @@ CCPoint PuzzleMapScene::getUiButtonPosition(int t_tag)
 	if(t_tag == kPMS_MT_event)				return_value = ccp(420,-(myDSH->puzzle_ui_top-320.f)/2.f - 100.f); // after move animation
 	else if(t_tag == kPMS_MT_eventClose)	return_value = ccp(450,-(myDSH->puzzle_ui_top-320.f)/2.f - 50.f); // after move animation
 	else if(t_tag == kPMS_MT_screen)		return_value = ccp(455,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f - 19.f);
-	else if(t_tag == kPMS_MT_showui)		return_value = ccp(240,-10);
+	else if(t_tag == kPMS_MT_showui)		return_value = ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f + 10.f);
 	else if(t_tag == kPMS_MT_top)			return_value = ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f); // after_move_animation
 	else if(t_tag == kPMS_MT_bottom)		return_value = ccp(145,-(myDSH->puzzle_ui_top-320.f)/2.f - 65.f); // after_move_animation
 //	else if(t_tag == kWMS_MT_rubyShop)		return_value = ccp(140,297);
@@ -506,6 +520,16 @@ void PuzzleMapScene::stopChangeMapMode()
 	unschedule(schedule_selector(PuzzleMapScene::changeMapMode));
 	map_mode_state = kMMS_default;
 	is_menu_enable = true;
+}
+
+void PuzzleMapScene::changePiece(CCObject* sender)
+{
+	StagePiece* t_sp = (StagePiece*)sender;
+	t_sp->setPuzzleMode(my_puzzle_mode);
+	if(my_puzzle_mode == kPM_default && t_sp->isBoarder())
+		map_node->reorderChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber());
+	else
+		map_node->reorderChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber());
 }
 
 void PuzzleMapScene::menuAction(CCObject* pSender)

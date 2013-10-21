@@ -116,6 +116,8 @@ public:
 	void setTouchBegin(){	piece_img->setColor(ccGRAY);	}
 	void setTouchCancel(){	piece_img->setColor(ccWHITE);	}
 	
+	bool isBoarder(){	return is_boarder;	}
+	
 	CCSprite* shadow_node;
 	
 private:
@@ -514,11 +516,7 @@ private:
 		map_mode_state = before_map_mode_state;
 	}
 	
-	void changePiece(CCObject* sender)
-	{
-		StagePiece* t_sp = (StagePiece*)sender;
-		t_sp->setPuzzleMode(my_puzzle_mode);
-	}
+	void changePiece(CCObject* sender);
 	
 	void endChangePiece(CCObject* sender)
 	{
