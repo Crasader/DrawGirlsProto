@@ -209,7 +209,7 @@ void KSCumberBase::randomMoving(float dt)
 
 void KSCumberBase::straightMoving(float dt)
 {
-	CCLog("%f %f", getPosition().x, getPosition().y);
+//	CCLog("%f %f", getPosition().x, getPosition().y);
 	m_scale.timer += 1/60.f;
 	
 	
@@ -1085,7 +1085,7 @@ void KSCumberBase::cumberAttack(float dt)
 	
 	
 	
-	if(m_furyRule.gainPercent <= gainPercent && distance >= m_furyRule.userDistance)
+	if(m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance)
 	{
 		float w = ProbSelector::sel(m_furyRule.percent / 100.f, 1.0 - m_furyRule.percent / 100.f, 0.0);
 		if(w == 0)
@@ -1094,7 +1094,7 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 	}
 	
-	if(m_crashCount >= m_furyRule.gtCount && m_furyRule.ltPercent >= gainPercent)
+	if(m_crashCount > m_furyRule.gtCount && m_furyRule.ltPercent > gainPercent)
 	{
 		m_crashCount = 0;
 		crashAttack = true;
@@ -1122,9 +1122,11 @@ void KSCumberBase::cumberAttack(float dt)
 	}
 	else
 	{
-		exeProb = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
+		auto ps = ProbSelector({m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f});
+//		exeProb = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
+		exeProb = ps.getResult();
 	}
-	
+
 	// 1% 확률로.
 	if(exeProb == 0 && m_state == CUMBERSTATEMOVING && !selectedAttacks.empty())
 	{
