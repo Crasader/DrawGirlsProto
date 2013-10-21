@@ -182,10 +182,13 @@ bool WorldMapScene::init()
 	
 	////////////////////////////////////////////////////
 	
-	Json::Value param;
-	param["ManualLogin"] = true;
+//	Json::Value param;
+//	param["ManualLogin"] = true;
+//	
+//	hspConnector::get()->login(param, param, std::bind(&WorldMapScene::resultLogin, this, std::placeholders::_1));
 	
-	hspConnector::get()->login(param, param, std::bind(&WorldMapScene::resultLogin, this, std::placeholders::_1));
+	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(WorldMapScene::setWorldMapScene));
+	addChild(t_sld);
 	
 	ScreenSide* t_screen = ScreenSide::create();
 	addChild(t_screen, 99999);
