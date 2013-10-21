@@ -423,8 +423,8 @@ void PuzzleMapScene::startChangeUiMode()
 		showEventButton();
 	
 	change_frame = 0;
-	change_dy = -1.5f/30.f;
-	change_dscale = (0.5f-map_node->getScale())/30.f;
+	change_dy = -1.f/30.f;
+	change_dscale = (0.53f-map_node->getScale())/30.f;
 	change_dpoint = ccpMult(ccpSub(ccp(240,180), map_node->getPosition()), 1.f/30.f);
 	change_top_dy = -33.f/30.f;
 	change_bottom_dy = 65.f/30.f;
@@ -461,7 +461,7 @@ void PuzzleMapScene::startChangeMapMode()
 	map_mode_state = kMMS_changeMode;
 	
 	change_frame = 0;
-	change_dy = 1.5f/30.f;
+	change_dy = 1.f/30.f;
 	change_dscale = (1.f-map_node->getScale())/30.f;
 	change_dpoint = ccpMult(ccpSub(ccp(240,160), map_node->getPosition()), 1.f/30.f);
 	change_top_dy = 33.f/30.f;
