@@ -663,6 +663,7 @@ private:
 		
 	bool isGameover;
 	
+	
 	void myInit();
 	
 	void setStartMap(SetMapType set_map_type);
