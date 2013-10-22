@@ -695,8 +695,8 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	else if(tag == kPMS_MT_rank)
 	{
 		is_menu_enable = true;
-//		RankPopup* t_rp = RankPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
-//		addChild(t_rp, kPMS_Z_popup);
+		RankPopup* t_rp = RankPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
+		addChild(t_rp, kPMS_Z_popup);
 	}
 	else if(tag == kPMS_MT_postbox)
 	{

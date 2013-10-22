@@ -78,45 +78,45 @@ private:
 		gray->setPosition(ccp(240,160));
 		addChild(gray, kRP_Z_gray);
 		
-		back = CCSprite::create("rank_back.png");
+		back = CCSprite::create("ranking_back.png");
 		back->setPosition(ccp(240,160));
 		addChild(back, kRP_Z_back);
 		
-		
-		CCSprite* n_close = CCSprite::create("ui_common_close.png");
-		CCSprite* s_close = CCSprite::create("ui_common_close.png");
-		s_close->setColor(ccGRAY);
-		
-		CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(RankPopup::menuAction));
-		close_item->setTag(kRP_MT_close);
-		
-		close_menu = CCMenu::createWithItem(close_item);
-		close_menu->setPosition(getContentPosition(kRP_MT_close));
-		back->addChild(close_menu);
-		
-		
-		CCSprite* n_invite = CCSprite::create("rank_invite.png");
-		CCSprite* s_invite = CCSprite::create("rank_invite.png");
-		s_invite->setColor(ccGRAY);
-		
-		CCMenuItem* invite_item = CCMenuItemSprite::create(n_invite, s_invite, this, menu_selector(RankPopup::menuAction));
-		invite_item->setTag(kRP_MT_invite);
-		
-		invite_menu = CCMenu::createWithItem(invite_item);
-		invite_menu->setPosition(getContentPosition(kRP_MT_invite));
-		back->addChild(invite_menu);
-		
-		
-		CCSprite* n_send = CCSprite::create("rank_send.png");
-		CCSprite* s_send = CCSprite::create("rank_send.png");
-		s_send->setColor(ccGRAY);
-		
-		CCMenuItem* send_item = CCMenuItemSprite::create(n_send, s_send, this, menu_selector(RankPopup::menuAction));
-		send_item->setTag(kRP_MT_send);
-		
-		send_menu = CCMenu::createWithItem(send_item);
-		send_menu->setPosition(getContentPosition(kRP_MT_send));
-		back->addChild(send_menu);
+//		
+//		CCSprite* n_close = CCSprite::create("ui_common_close.png");
+//		CCSprite* s_close = CCSprite::create("ui_common_close.png");
+//		s_close->setColor(ccGRAY);
+//		
+//		CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(RankPopup::menuAction));
+//		close_item->setTag(kRP_MT_close);
+//		
+//		close_menu = CCMenu::createWithItem(close_item);
+//		close_menu->setPosition(getContentPosition(kRP_MT_close));
+//		back->addChild(close_menu);
+//		
+//		
+//		CCSprite* n_invite = CCSprite::create("rank_invite.png");
+//		CCSprite* s_invite = CCSprite::create("rank_invite.png");
+//		s_invite->setColor(ccGRAY);
+//		
+//		CCMenuItem* invite_item = CCMenuItemSprite::create(n_invite, s_invite, this, menu_selector(RankPopup::menuAction));
+//		invite_item->setTag(kRP_MT_invite);
+//		
+//		invite_menu = CCMenu::createWithItem(invite_item);
+//		invite_menu->setPosition(getContentPosition(kRP_MT_invite));
+//		back->addChild(invite_menu);
+//		
+//		
+//		CCSprite* n_send = CCSprite::create("rank_send.png");
+//		CCSprite* s_send = CCSprite::create("rank_send.png");
+//		s_send->setColor(ccGRAY);
+//		
+//		CCMenuItem* send_item = CCMenuItemSprite::create(n_send, s_send, this, menu_selector(RankPopup::menuAction));
+//		send_item->setTag(kRP_MT_send);
+//		
+//		send_menu = CCMenu::createWithItem(send_item);
+//		send_menu->setPosition(getContentPosition(kRP_MT_send));
+//		back->addChild(send_menu);
 		
 		
 		my_state = kRP_State_rank;
@@ -406,63 +406,68 @@ private:
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number != 0)		return true;
-		if(my_state == kRP_State_rank)
-		{
-			if(close_menu->ccTouchBegan(pTouch, pEvent))				touched_number = kRP_MT_close;
-			else if(invite_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kRP_MT_invite;
-			else if(send_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kRP_MT_send;
-		}
-		else if(my_state == kRP_State_invite)
-		{
-			if(invite_close_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kRP_MT_invite_close;
-			else if(invite_rank_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kRP_MT_invite_rank;
-			else if(invite_send_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kRP_MT_invite_send;
-		}
-		else if(my_state == kRP_State_send)
-		{
-			if(send_close_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kRP_MT_send_close;
-		}
-		else if(my_state == kRP_State_invite_send)
-		{
-			if(invite_send_close_menu->ccTouchBegan(pTouch, pEvent))	touched_number = kRP_MT_invite_send_close;
-		}
+		return true;
+		
+//		if(touched_number != 0)		return true;
+//		if(my_state == kRP_State_rank)
+//		{
+//			if(close_menu->ccTouchBegan(pTouch, pEvent))				touched_number = kRP_MT_close;
+//			else if(invite_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kRP_MT_invite;
+//			else if(send_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kRP_MT_send;
+//		}
+//		else if(my_state == kRP_State_invite)
+//		{
+//			if(invite_close_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kRP_MT_invite_close;
+//			else if(invite_rank_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kRP_MT_invite_rank;
+//			else if(invite_send_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kRP_MT_invite_send;
+//		}
+//		else if(my_state == kRP_State_send)
+//		{
+//			if(send_close_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kRP_MT_send_close;
+//		}
+//		else if(my_state == kRP_State_invite_send)
+//		{
+//			if(invite_send_close_menu->ccTouchBegan(pTouch, pEvent))	touched_number = kRP_MT_invite_send_close;
+//		}
 		
 		return true;
 	}
 	
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == kRP_MT_close)							close_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kRP_MT_invite)					invite_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kRP_MT_send)						send_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kRP_MT_invite_close)				invite_close_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kRP_MT_invite_rank)				invite_rank_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kRP_MT_invite_send)				invite_send_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kRP_MT_send_close)				send_close_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kRP_MT_invite_send_close)			invite_send_close_menu->ccTouchMoved(pTouch, pEvent);
+//		if(touched_number == kRP_MT_close)							close_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kRP_MT_invite)					invite_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kRP_MT_send)						send_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kRP_MT_invite_close)				invite_close_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kRP_MT_invite_rank)				invite_rank_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kRP_MT_invite_send)				invite_send_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kRP_MT_send_close)				send_close_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kRP_MT_invite_send_close)			invite_send_close_menu->ccTouchMoved(pTouch, pEvent);
 	}
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == kRP_MT_close){							close_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite){					invite_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
-		else if(touched_number == kRP_MT_send){						send_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite_close){				invite_close_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite_rank){				invite_rank_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite_send){				invite_send_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
-		else if(touched_number == kRP_MT_send_close){				send_close_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite_send_close){		invite_send_close_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
+		(target_close->*delegate_close)();
+		removeFromParent();
+		
+//		if(touched_number == kRP_MT_close){							close_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite){					invite_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
+//		else if(touched_number == kRP_MT_send){						send_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite_close){				invite_close_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite_rank){				invite_rank_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite_send){				invite_send_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
+//		else if(touched_number == kRP_MT_send_close){				send_close_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite_send_close){		invite_send_close_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;	}
 	}
     virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == kRP_MT_close){							close_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite){					invite_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
-		else if(touched_number == kRP_MT_send){						send_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite_close){				invite_close_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite_rank){				invite_rank_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite_send){				invite_send_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
-		else if(touched_number == kRP_MT_send_close){				send_close_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
-		else if(touched_number == kRP_MT_invite_send_close){		invite_send_close_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
+//		if(touched_number == kRP_MT_close){							close_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite){					invite_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
+//		else if(touched_number == kRP_MT_send){						send_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite_close){				invite_close_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite_rank){				invite_rank_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite_send){				invite_send_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
+//		else if(touched_number == kRP_MT_send_close){				send_close_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
+//		else if(touched_number == kRP_MT_invite_send_close){		invite_send_close_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
 	}
 	
 	virtual void registerWithTouchDispatcher()

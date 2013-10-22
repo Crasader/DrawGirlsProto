@@ -125,10 +125,10 @@ private:
 				}
 			}
 			//##
-			else if(p_pPoint.isInnerMap() && myGD->mapState[p_pPoint.x][p_pPoint.y] == mapType::mapNewline)
-			{
-				myGD->communication("PM_addPathBreaking", p_pPoint);
-			}
+//			else if(p_pPoint.isInnerMap() && myGD->mapState[p_pPoint.x][p_pPoint.y] == mapType::mapNewline)
+//			{
+//				myGD->communication("PM_addPathBreaking", p_pPoint);
+//			}
 		}
 		
 		da *= reduce_da;
