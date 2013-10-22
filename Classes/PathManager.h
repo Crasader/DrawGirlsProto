@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "GameData.h"
 #include <list>
+#include <algorithm>
 
 using namespace cocos2d;
 using namespace std;
@@ -141,13 +142,18 @@ public:
 		return t_pbp;
 	}
 	
-	void pathChainBomb(IntPoint s_p)
+	void pathChainBomb(IntPoint s_p, list<PathNode*>* t_it)
 	{
 		IntPoint* start = new IntPoint(s_p.x, s_p.y);
 		start->autorelease();
 		
-		chainBombArray.push(start);
-		beforeArray->addObject(start);
+		it = t_it;
+		
+		for(auto i = it->begin();i!=it->end();i++)
+		{
+			PathNode* t_pn = *i;
+			
+		}
 		
 		PathBreaking* s_pb = PathBreaking::create(start);
 		addChild(s_pb);
@@ -156,81 +162,74 @@ public:
 		schedule(schedule_selector(PathBreakingParent::chainBombSchedule));
 	}
 	
-	virtual ~PathBreakingParent()
-	{
-		beforeArray->release();
-	}
-	
 private:
-	queue<IntPoint*> chainBombArray;
-	CCArray* beforeArray;
 	
+	list<PathNode*>* it;
 	
 	void myInit()
 	{
 		
-		beforeArray = new CCArray(1);
 	}
 	
 	void chainBombSchedule()
 	{
-		if(!chainBombArray.empty())
-		{
-			IntPoint* t_p = chainBombArray.front();
-			
-			IntPoint jackPoint = myGD->getJackPoint();
-			
-			CCPoint sub_ccp = ccpSub(t_p->convertToCCP(), jackPoint.convertToCCP());
-			float sub_value = sqrtf(powf(sub_ccp.x, 2.f) + powf(sub_ccp.y, 2.f));
-			
-			if(sub_value < 4.f) // die
-			{
-				myGD->communication("Jack_startDieEffect");
-				beforeArray->removeAllObjects();
-				getParent()->setTag(pathBreakingStateFalse);
-				unschedule(schedule_selector(PathBreakingParent::chainBombSchedule));
-				removeFromParentAndCleanup(true);
-				return;
-			}
-				
-			chainBombArray.pop();
-			
-			for(int i=directionLeft;i<=directionUp;i+=2)
-			{
-				IntVector t_v = IntVector::directionVector((IntDirection)i);
-				IntPoint* n_p = new IntPoint(t_p->x + t_v.dx, t_p->y + t_v.dy);
-				n_p->autorelease();
-				
-				bool isContains = false;
-				int loopCnt = beforeArray->count();
-				for(int j=0;j<loopCnt;j++)
-				{
-					IntPoint* c_p = (IntPoint*)beforeArray->objectAtIndex(j);
-					if(c_p->x == n_p->x && c_p->y == n_p->y)
-					{
-						isContains = true;
-						break;
-					}
-				}
-				
-				if(n_p->isInnerMap() && myGD->mapState[n_p->x][n_p->y] == mapNewline && !isContains)
-				{
-					chainBombArray.push(n_p);
-					beforeArray->addObject(n_p);
-					
-					PathBreaking* t_pb = PathBreaking::create(n_p);
-					addChild(t_pb);
-					t_pb->startBomb();
-				}
-			}
-		}
-		else
-		{
-			beforeArray->removeAllObjects();
-			getParent()->setTag(pathBreakingStateFalse);
-			unschedule(schedule_selector(PathBreakingParent::chainBombSchedule));
-			removeFromParentAndCleanup(true);
-		}
+//		if(!chainBombArray.empty())
+//		{
+//			IntPoint* t_p = chainBombArray.front();
+//			
+//			IntPoint jackPoint = myGD->getJackPoint();
+//			
+//			CCPoint sub_ccp = ccpSub(t_p->convertToCCP(), jackPoint.convertToCCP());
+//			float sub_value = sqrtf(powf(sub_ccp.x, 2.f) + powf(sub_ccp.y, 2.f));
+//			
+//			if(sub_value < 4.f) // die
+//			{
+//				myGD->communication("Jack_startDieEffect");
+//				beforeArray->removeAllObjects();
+//				getParent()->setTag(pathBreakingStateFalse);
+//				unschedule(schedule_selector(PathBreakingParent::chainBombSchedule));
+//				removeFromParentAndCleanup(true);
+//				return;
+//			}
+//				
+//			chainBombArray.pop();
+//			
+//			for(int i=directionLeft;i<=directionUp;i+=2)
+//			{
+//				IntVector t_v = IntVector::directionVector((IntDirection)i);
+//				IntPoint* n_p = new IntPoint(t_p->x + t_v.dx, t_p->y + t_v.dy);
+//				n_p->autorelease();
+//				
+//				bool isContains = false;
+//				int loopCnt = beforeArray->count();
+//				for(int j=0;j<loopCnt;j++)
+//				{
+//					IntPoint* c_p = (IntPoint*)beforeArray->objectAtIndex(j);
+//					if(c_p->x == n_p->x && c_p->y == n_p->y)
+//					{
+//						isContains = true;
+//						break;
+//					}
+//				}
+//				
+//				if(n_p->isInnerMap() && myGD->mapState[n_p->x][n_p->y] == mapNewline && !isContains)
+//				{
+//					chainBombArray.push(n_p);
+//					beforeArray->addObject(n_p);
+//					
+//					PathBreaking* t_pb = PathBreaking::create(n_p);
+//					addChild(t_pb);
+//					t_pb->startBomb();
+//				}
+//			}
+//		}
+//		else
+//		{
+//			beforeArray->removeAllObjects();
+//			getParent()->setTag(pathBreakingStateFalse);
+//			unschedule(schedule_selector(PathBreakingParent::chainBombSchedule));
+//			removeFromParentAndCleanup(true);
+//		}
 	}
 };
 
@@ -325,7 +324,7 @@ private:
 			PathBreakingParent* n_pbp = PathBreakingParent::create();
 			n_pbp->setTag(childTagInPathParentPathBreaking);
 			addChild(n_pbp);
-			n_pbp->pathChainBomb(start);
+			n_pbp->pathChainBomb(start, &myList);
 		}
 	}
 	

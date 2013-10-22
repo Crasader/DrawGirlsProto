@@ -54,8 +54,8 @@ ScrollMenu::~ScrollMenu()
 
 void ScrollMenu::registerWithTouchDispatcher()
 {
-	CCDirector* pDirector = CCDirector::sharedDirector();
-	pDirector->getTouchDispatcher()->addTargetedDelegate(this, 0, false);
+//	CCDirector* pDirector = CCDirector::sharedDirector();
+//	pDirector->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority, false);
 }
 
 bool ScrollMenu::ccTouchBegan(CCTouch* touch, CCEvent* event)
@@ -91,4 +91,9 @@ void ScrollMenu::ccTouchEnded(CCTouch *touch, CCEvent* event)
 	{
 		CCMenu::ccTouchEnded(touch, event);
 	}
+}
+
+void ScrollMenu::ccTouchCancelled(CCTouch *touch, CCEvent* event)
+{
+	CCLog("!!!!!!!!!!!!!!!!!!!!");
 }

@@ -13,6 +13,7 @@
 #include "StageImgLoader.h"
 #include "DataStorageHub.h"
 #include "GraySprite.h"
+#include "ScrollMenu.h"
 
 USING_NS_CC;
 using namespace std;
@@ -25,10 +26,10 @@ enum PuzzleMode{
 class StagePiece : public CCNode
 {
 public:
-	static StagePiece* create(string t_piece, int t_number, int t_level, CCPoint t_p, CCRect t_rect, bool t_gray, bool t_boarder, string t_type)
+	static StagePiece* create(string t_piece, int t_number, int t_level, CCPoint t_p, CCRect t_rect, bool t_gray, bool t_boarder, string t_type, CCObject* t_t, SEL_MenuHandler t_d)
 	{
 		StagePiece* t_sp = new StagePiece();
-		t_sp->myInit(t_piece, t_number, t_level, t_p, t_rect, t_gray, t_boarder, t_type);
+		t_sp->myInit(t_piece, t_number, t_level, t_p, t_rect, t_gray, t_boarder, t_type, t_t, t_d);
 		t_sp->autorelease();
 		return t_sp;
 	}
@@ -112,6 +113,33 @@ public:
 		}
 	}
 	
+	void mySetTouchEnable(bool t_b)
+	{
+		s_menu->setTouchEnabled(t_b);
+//		if(t_b)
+//			s_menu->setHandlerPriority(kCCMenuHandlerPriority+2);
+	}
+	
+	bool touchBegan(CCTouch* touch, CCEvent* event)
+	{
+		return s_menu->ccTouchBegan(touch, event);
+	}
+	
+	void touchMoved(CCTouch* touch, CCEvent* event)
+	{
+		s_menu->ccTouchMoved(touch, event);
+	}
+	
+	void touchEnded(CCTouch* touch, CCEvent* event)
+	{
+		s_menu->ccTouchEnded(touch, event);
+	}
+	
+	void touchCancelled(CCTouch* touch, CCEvent* event)
+	{
+		s_menu->ccTouchCancelled(touch, event);
+	}
+	
 	int getStageNumber(){	return stage_number;	}
 	
 	void setTouchBegin(){	piece_img->setColor(ccGRAY);	}
@@ -136,7 +164,9 @@ private:
 	string thumb_name;
 	bool is_have_card[3];
 	
-	void myInit(string t_piece, int t_number, int t_level, CCPoint t_p, CCRect t_rect, bool t_gray, bool t_boarder, string t_type)
+	ScrollMenu* s_menu;
+	
+	void myInit(string t_piece, int t_number, int t_level, CCPoint t_p, CCRect t_rect, bool t_gray, bool t_boarder, string t_type, CCObject* t_t, SEL_MenuHandler t_d)
 	{
 		piece_name = t_piece.c_str();
 		stage_number = t_number;
@@ -161,6 +191,19 @@ private:
 			level_img->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
 			piece_img->addChild(level_img);
 		}
+
+		CCSprite* n_touch = CCSprite::create("whitePaper.png", CCRectMake(0, 0, touch_rect.size.width, touch_rect.size.height));
+		n_touch->setOpacity(0);
+		CCSprite* s_touch = CCSprite::create("whitePaper.png", CCRectMake(0, 0, touch_rect.size.width, touch_rect.size.height));
+		s_touch->setOpacity(0);
+		s_touch->setColor(ccRED);
+
+		CCMenuItem* s_item = CCMenuItemSprite::create(n_touch, s_touch, t_t, t_d);
+		s_item->setTag(stage_number);
+
+		s_menu = ScrollMenu::create(s_item, NULL);
+		s_menu->setPosition(CCPointZero);
+		addChild(s_menu);
 	}
 };
 

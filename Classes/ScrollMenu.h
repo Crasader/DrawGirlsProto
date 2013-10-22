@@ -25,6 +25,7 @@ public:
 	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchEnded(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);
+	virtual void ccTouchCancelled(CCTouch *touch, CCEvent* event);
 };
 
 #endif // _ScrollMenu_H_
