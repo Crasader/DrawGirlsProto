@@ -45,19 +45,18 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 			Log.i("com.litqoo.dgproto","hspcore create fail");
 		}
 		
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		
-		setContentView(R.layout.game_demo);
-		mGLView = (Cocos2dxGLSurfaceView) findViewById(R.id.game_gl_surfaceview);
-		mGLView.setEGLContextClientVersion(2);
-		mGLView.setCocos2dxRenderer(new Cocos2dxRenderer());
-		mGLView.setCocos2dxEditText((Cocos2dxEditText)findViewById(R.id.textField));
+//		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//		
+//		setContentView(R.layout.game_demo);
+//		mGLView = (Cocos2dxGLSurfaceView) findViewById(R.id.game_gl_surfaceview);
+//		mGLView.setEGLContextClientVersion(2);
+//		mGLView.setCocos2dxRenderer(new Cocos2dxRenderer());
+//		mGLView.setCocos2dxEditText((Cocos2dxEditText)findViewById(R.id.textField));
 	}
 	
-	public Cocos2dxGLSurfaceView onCreateGLSurfaceView() {
-		
-		return new LuaGLSurfaceView(this);
-    }
+//	public Cocos2dxGLSurfaceView onCreateGLSurfaceView() {
+//		return new LuaGLSurfaceView(this);
+//    }
 
     static {
         System.loadLibrary("cocos2dlua");
@@ -66,8 +65,8 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     public Cocos2dxGLSurfaceView onCreateView() {
     	Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
     	// hspConnector should create stencil buffer
+    	mGLView = glSurfaceView;
     	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
-    	
     	com.litqoo.lib.hspConnector.kInit(this,glSurfaceView,getApplicationContext());
     	
     	return glSurfaceView;

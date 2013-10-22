@@ -183,7 +183,7 @@ public class hspConnector{
 	// ===========================================================
 	private static native void ResultLogin(int _key,String datas,boolean isFinish);
 	private static native void SendResultNative(int _key,String datas,boolean isFinish);
-	private static native void SetupOnAndroid(int gameno,String gameid,String gameVersion);
+	public static native void SetupOnAndroid(int gameno,String gameid,String gameVersion);
 
 	private static void SendResult(int _key,String datas){
 		int size = datas.length();
@@ -229,9 +229,11 @@ public class hspConnector{
 		
 		Activity activity=(Activity)hspConnector.sContext;
 		HSPCore core = HSPCore.getInstance();
+		
 		if(core!=null){
 		Log.i("com.litqoo.dgproto", "hspcore create ok2");
 		
+
 		
 		core.login(activity,manualLogin,new HSPCore.HSPLoginCB() {
 			
@@ -250,7 +252,7 @@ public class hspConnector{
 				}
 
                 
-				mGLView.queueEvent(new KRunnable(_key,r.toString()) {
+                mGLView.queueEvent(new KRunnable(_key,r.toString()) {
 	                public void run() {
 
 	                    Log.d("litqoo", "login id:"+HSPCore.getInstance().getMemberID()+"/no:"+HSPCore.getInstance().getMemberNo());
@@ -277,9 +279,80 @@ public class hspConnector{
 	public static boolean setup(int gameno,String gameid,String gameVersion){
 		if(HSPCore.getInstance()==null){
 			hspConnector.SetupOnAndroid(gameno, gameid, gameVersion);
-			return HSPCore.createInstance(hspConnector.sContext, gameno, gameid, gameVersion);
+		
+			boolean isCreate =  HSPCore.createInstance(hspConnector.sContext, gameno, gameid, gameVersion);
+			if(!isCreate)return false;
 		}
-		return false;
+		
+
+		HSPCore.HSPBeforeLogoutListener beforLogoutListener = new HSPCore.HSPBeforeLogoutListener() {
+			
+			@Override
+			public void onBeforeLogout() {
+				// TODO Auto-generated method stub
+				Log.i("litqoo","~~~~~~HSPBeforeLogoutListener");
+				
+			}
+		};
+		
+		HSPCore.HSPBeforeResetAccountListener beforeResetAccountListener = new HSPCore.HSPBeforeResetAccountListener() {
+			
+			@Override
+			public void onBeforeResetAccount() {
+				// TODO Auto-generated method stub
+				Log.i("litqoo","~~~~~~HSPBeforeResetAccountListener");
+				
+			}
+		};
+		
+		HSPCore.getInstance().addBeforeLogoutListener(beforLogoutListener);
+		HSPCore.getInstance().addBeforeResetAccountListener(beforeResetAccountListener);
+
+		HSPCore.HSPAfterLoginListener afterLoginListener = new HSPCore.HSPAfterLoginListener() {
+			
+			@Override
+			public void onAfterLogin() {
+				// TODO Auto-generated method stub
+				Log.i("litqoo","~~~~~~HSPAfterLoginListener");
+				
+			}
+		};
+		
+		HSPCore.HSPBeforeLoginListener beforeLoginListener = new HSPCore.HSPBeforeLoginListener() {
+			
+			@Override
+			public void onBeforeLogin() {
+				// TODO Auto-generated method stub
+				Log.i("litqoo","~~~~~~HSPBeforeLoginListener");
+				
+			}
+		};
+		
+		HSPCore.HSPAfterLogoutListener afterLogoutListener = new HSPCore.HSPAfterLogoutListener() {
+			
+			@Override
+			public void onAfterLogout() {
+				// TODO Auto-generated method stub
+				Log.i("litqoo","~~~~~~HSPAfterLogoutListener");
+				
+			}
+		};
+		
+		HSPCore.HSPAfterResetAccountListener afterAccountListener = new HSPCore.HSPAfterResetAccountListener() {
+			
+			@Override
+			public void onAfterResetAccount() {
+				// TODO Auto-generated method stub
+				Log.i("litqoo","~~~~~~HSPAfterResetAccountListener");
+				
+			}
+		};
+		
+		HSPCore.getInstance().addAfterLoginListener(afterLoginListener);
+		HSPCore.getInstance().addBeforeLoginListener(beforeLoginListener);
+		HSPCore.getInstance().addAfterLogoutListener(afterLogoutListener);
+		HSPCore.getInstance().addAfterResetAccountListener(afterAccountListener);
+		return true;
 	}
 	
 	public static void kLogin(final int _key){
