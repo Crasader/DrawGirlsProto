@@ -95,5 +95,5 @@ void ScrollMenu::ccTouchEnded(CCTouch *touch, CCEvent* event)
 
 void ScrollMenu::ccTouchCancelled(CCTouch *touch, CCEvent* event)
 {
-	CCLog("!!!!!!!!!!!!!!!!!!!!");
+	CCMenu::ccTouchCancelled(touch, event);
 }

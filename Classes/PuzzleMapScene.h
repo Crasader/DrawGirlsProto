@@ -328,17 +328,7 @@ private:
 						this->moveListXY(ccpSub(touch_p, location));
 						touch_p = location;
 						
-						if(map_mode_state == kMMS_firstTouchStage)
-						{
-							CCPoint sub_point = ccpSub(location, touchStart_p);
-							float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
-							if(sub_value > 20.f)
-							{
-								resetStagePiece();
-								map_mode_state = kMMS_firstTouchDefault;
-							}
-						}
-						else if(is_gesturable_map_mode && location.y < touchStart_p.y - 50.f)
+						if(map_mode_state == kMMS_firstTouchDefault && is_gesturable_map_mode && location.y < touchStart_p.y - 50.f)
 						{
 							startChangeUiMode();
 							return;
@@ -472,9 +462,19 @@ private:
 						
 						if(map_mode_state == kMMS_firstTouchStage)
 						{
-							StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
-							t_sp->touchEnded(touch, pEvent);
-							t_sp->setTouchCancel();
+							CCPoint sub_point = ccpSub(location, touchStart_p);
+							float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
+							if(sub_value > 20.f)
+							{
+								resetStagePiece();
+								map_mode_state = kMMS_firstTouchDefault;
+							}
+							else
+							{
+								StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
+								t_sp->touchEnded(touch, pEvent);
+								t_sp->setTouchCancel();
+							}
 						}
 						
 						map_mode_state = kMMS_default;

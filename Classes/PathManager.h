@@ -13,9 +13,11 @@
 #include "GameData.h"
 #include <list>
 #include <algorithm>
+#include "cocos-ext.h"
 
 using namespace cocos2d;
 using namespace std;
+using namespace extension;
 
 enum childTagInPathParent{
 	childTagInPathParentPathNode = 1,
@@ -67,62 +69,6 @@ private:
 		pathImg->setScaleX(pathScale);
 		addChild(pathImg);
 		setPosition(ccp((myPointVector.origin.x-1)*pixelSize+1, (myPointVector.origin.y-1)*pixelSize+1));
-		
-//		if(elemental_type == kElementCode_empty)			elemental_string = "path_edge_empty.png";
-//		else if(elemental_type == kElementCode_life)		elemental_string = "path_edge_life.png";
-//		else if(elemental_type == kElementCode_fire)		elemental_string = "path_edge_fire.png";
-//		else if(elemental_type == kElementCode_water)		elemental_string = "path_edge_water.png";
-//		else if(elemental_type == kElementCode_wind)		elemental_string = "path_edge_wind.png";
-//		else if(elemental_type == kElementCode_lightning)	elemental_string = "path_edge_lightning.png";
-//		else if(elemental_type == kElementCode_plasma)		elemental_string = "path_edge_plasma.png";
-//		
-//		pathEdge = CCSprite::create(elemental_string.c_str());
-//		addChild(pathEdge);
-	}
-};
-
-class PathBreaking : public CCSprite
-{
-public:
-	static PathBreaking* create(IntPoint* s_p)
-	{
-		PathBreaking* t_pb = new PathBreaking();
-		if(t_pb && t_pb->initWithFile("bomb.png", CCRectMake(0, 0, 26, 26)))
-		{
-			t_pb->myInit(s_p);
-			t_pb->autorelease();
-			return t_pb;
-		}
-		CC_SAFE_DELETE(t_pb);
-		return NULL;
-	}
-	
-	void startBomb()
-	{
-		CCSprite* texture = CCSprite::create("bomb.png");
-		CCAnimation* t_anin = CCAnimation::create();
-		t_anin->setDelayPerUnit(0.1);
-		for(int i=0;i<5;i++)
-			t_anin->addSpriteFrameWithTexture(texture->getTexture(), CCRectMake(i*26, 0, 26, 26));
-		CCAnimate* t_anit = CCAnimate::create(t_anin);
-		
-		CCCallFunc* callSelfRemove = CCCallFunc::create(this, callfunc_selector(PathBreaking::selfRemove));
-		
-		CCSequence* t_s = CCSequence::createWithTwoActions(t_anit, callSelfRemove);
-		
-		runAction(t_s);
-	}
-	
-private:
-	
-	void selfRemove()
-	{
-		removeFromParentAndCleanup(true);
-	}
-	
-	void myInit(IntPoint* s_p)
-	{
-		setPosition(ccp((s_p->x-1)*pixelSize+1, (s_p->y-1)*pixelSize+1));
 	}
 };
 
@@ -134,102 +80,120 @@ enum pathBreakingState{
 class PathBreakingParent : public CCNode
 {
 public:
-	static PathBreakingParent* create()
+	static PathBreakingParent* create(IntPoint t_start, list<IntPoint>* t_linked_list)
 	{
 		PathBreakingParent* t_pbp = new PathBreakingParent();
-		t_pbp->myInit();
+		t_pbp->myInit(t_start, t_linked_list);
 		t_pbp->autorelease();
 		return t_pbp;
 	}
 	
-	void pathChainBomb(IntPoint s_p, list<PathNode*>* t_it)
-	{
-		IntPoint* start = new IntPoint(s_p.x, s_p.y);
-		start->autorelease();
-		
-		it = t_it;
-		
-		for(auto i = it->begin();i!=it->end();i++)
-		{
-			PathNode* t_pn = *i;
-			
-		}
-		
-		PathBreaking* s_pb = PathBreaking::create(start);
-		addChild(s_pb);
-		s_pb->startBomb();
-		
-		schedule(schedule_selector(PathBreakingParent::chainBombSchedule));
-	}
+	bool isActing(){	return is_acting;	}
 	
 private:
+	list<IntPoint>* plinked_list;
+	CCSprite* pre_img;
+	CCSprite* next_img;
 	
-	list<PathNode*>* it;
+	list<IntPoint>::iterator pre_it;
+	list<IntPoint>::iterator next_it;
 	
-	void myInit()
+	bool is_acting;
+	
+	void tracing()
 	{
+		if(pre_img)
+		{
+			CCPoint sub_point = ccpSub(myGD->getJackPoint().convertToCCP(), pre_img->getPosition());
+			float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
+			if(sub_value < 4.f)
+			{
+				myGD->communication("Jack_startDieEffect");
+				unschedule(schedule_selector(PathBreakingParent::tracing));
+				getParent()->setTag(pathBreakingStateFalse);
+				removeFromParent();
+				return;
+			}
+			else
+			{
+				pre_it--;
+				if(pre_it != plinked_list->begin())
+					pre_img->setPosition((*pre_it).convertToCCP());
+				else
+				{
+					pre_img->removeFromParent();
+					pre_img = NULL;
+				}
+			}
+		}
 		
+		if(next_img)
+		{
+			CCPoint sub_point = ccpSub(myGD->getJackPoint().convertToCCP(), next_img->getPosition());
+			float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
+			if(sub_value < 4.f)
+			{
+				myGD->communication("Jack_startDieEffect");
+				unschedule(schedule_selector(PathBreakingParent::tracing));
+				getParent()->setTag(pathBreakingStateFalse);
+				removeFromParent();
+				return;
+			}
+			else
+			{
+				next_it++;
+				if(next_it != plinked_list->end())
+					next_img->setPosition((*next_it).convertToCCP());
+				else
+				{
+					next_img->removeFromParent();
+					next_img = NULL;
+				}
+			}
+		}
 	}
 	
-	void chainBombSchedule()
+	void myInit(IntPoint t_start, list<IntPoint>* t_linked_list)
 	{
-//		if(!chainBombArray.empty())
-//		{
-//			IntPoint* t_p = chainBombArray.front();
-//			
-//			IntPoint jackPoint = myGD->getJackPoint();
-//			
-//			CCPoint sub_ccp = ccpSub(t_p->convertToCCP(), jackPoint.convertToCCP());
-//			float sub_value = sqrtf(powf(sub_ccp.x, 2.f) + powf(sub_ccp.y, 2.f));
-//			
-//			if(sub_value < 4.f) // die
-//			{
-//				myGD->communication("Jack_startDieEffect");
-//				beforeArray->removeAllObjects();
-//				getParent()->setTag(pathBreakingStateFalse);
-//				unschedule(schedule_selector(PathBreakingParent::chainBombSchedule));
-//				removeFromParentAndCleanup(true);
-//				return;
-//			}
-//				
-//			chainBombArray.pop();
-//			
-//			for(int i=directionLeft;i<=directionUp;i+=2)
-//			{
-//				IntVector t_v = IntVector::directionVector((IntDirection)i);
-//				IntPoint* n_p = new IntPoint(t_p->x + t_v.dx, t_p->y + t_v.dy);
-//				n_p->autorelease();
-//				
-//				bool isContains = false;
-//				int loopCnt = beforeArray->count();
-//				for(int j=0;j<loopCnt;j++)
-//				{
-//					IntPoint* c_p = (IntPoint*)beforeArray->objectAtIndex(j);
-//					if(c_p->x == n_p->x && c_p->y == n_p->y)
-//					{
-//						isContains = true;
-//						break;
-//					}
-//				}
-//				
-//				if(n_p->isInnerMap() && myGD->mapState[n_p->x][n_p->y] == mapNewline && !isContains)
-//				{
-//					chainBombArray.push(n_p);
-//					beforeArray->addObject(n_p);
-//					
-//					PathBreaking* t_pb = PathBreaking::create(n_p);
-//					addChild(t_pb);
-//					t_pb->startBomb();
-//				}
-//			}
-//		}
-//		else
-//		{
-//			beforeArray->removeAllObjects();
-//			getParent()->setTag(pathBreakingStateFalse);
-//			unschedule(schedule_selector(PathBreakingParent::chainBombSchedule));
-//			removeFromParentAndCleanup(true);
-//		}
+		plinked_list = t_linked_list;
+		
+		pre_img = NULL;
+		next_img = NULL;
+		
+		bool is_found = false;
+		for(list<IntPoint>::iterator i = plinked_list->begin();i!=plinked_list->end() && !is_found;i++)
+		{
+			IntPoint t_p = *i;
+			if(t_p.x == t_start.x && t_p.y == t_start.y)
+			{
+				is_found = true;
+				
+				pre_it = next_it = i;
+				
+				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+				auto reader = new CCBReader(nodeLoader);
+				if(i != plinked_list->begin())
+				{
+					pre_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi",this));
+					pre_img->setPosition(t_p.convertToCCP());
+					addChild(pre_img);
+				}
+				
+				if(++i != plinked_list->end())
+				{
+					next_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi", this));
+					next_img->setPosition(t_p.convertToCCP());
+					addChild(next_img);
+				}
+				break;
+			}
+		}
+		
+		if(is_found && (pre_img || next_img))
+		{
+			is_acting = true;
+			schedule(schedule_selector(PathBreakingParent::tracing));
+		}
 	}
 };
 
@@ -247,16 +211,28 @@ public:
 	void addPath(IntPointVector t_pv) // t_ms.origin == beforePoint
 	{
 		if(myList.empty()) // first path
+		{
 			newPathAdd(t_pv);
+			linked_list.clear();
+		}
 		else if(myList.back()->myPointVector.distance.getAngle() != t_pv.distance.getAngle()) // differ last path
 			newPathAdd(t_pv);
 		else
 			originalExpansion();
+		
+		IntPoint t_p = IntPoint(t_pv.origin.x, t_pv.origin.y);
+		linked_list.push_back(t_p);
 	}
 	
 	void cleanPath()
 	{
 		myList.clear();
+		
+		PathBreakingParent* t_breaking = (PathBreakingParent*)getChildByTag(childTagInPathParentPathBreaking);
+		if(t_breaking)
+			t_breaking->removeFromParent();
+		linked_list.clear();
+		
 		
 		bool isRemoveTargetNull = false;
 		
@@ -268,7 +244,6 @@ public:
 			else
 				removeChildByTag(childTagInPathParentPathNode, true);
 		}
-//		removeAllChildrenWithCleanup(true);
 	}
 	
 	IntPoint pathBackTracking()
@@ -313,18 +288,20 @@ public:
 	}
 	
 private:
-	
 	list<PathNode*> myList;
+	list<IntPoint> linked_list;
 	
 	void addPathBreaking(IntPoint start)
 	{
 		if(getTag() == pathBreakingStateFalse)
 		{
 			setTag(pathBreakingStateTrue);
-			PathBreakingParent* n_pbp = PathBreakingParent::create();
+			PathBreakingParent* n_pbp = PathBreakingParent::create(start, &linked_list);
 			n_pbp->setTag(childTagInPathParentPathBreaking);
-			addChild(n_pbp);
-			n_pbp->pathChainBomb(start, &myList);
+			if(n_pbp->isActing())
+				addChild(n_pbp);
+			else
+				setTag(pathBreakingStateFalse);
 		}
 	}
 	
@@ -363,11 +340,6 @@ private:
 	
 	void myInit()
 	{
-		
-//		myGD->regPM(this, callfuncIpv_selector(PathManager::addPath),
-//					callfunc_selector(PathManager::cleanPath),
-//					callfuncIp_selector(PathManager::addPathBreaking));
-		
 		myGD->V_Ipv["PM_addPath"] = std::bind(&PathManager::addPath, this, _1);
 		myGD->V_V["PM_cleanPath"] = std::bind(&PathManager::cleanPath, this);
 		myGD->V_Ip["PM_addPathBreaking"] = std::bind(&PathManager::addPathBreaking, this, _1);
