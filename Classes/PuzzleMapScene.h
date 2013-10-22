@@ -209,12 +209,14 @@ private:
 					
 					map_mode_state = kMMS_firstTouchDefault;
 					
-					CCPoint convert_location = convertToWorldSpace(location);
+//					CCPoint convert_location = convertToWorldSpace(location);
 					
 					for(int i=start_stage_number;i<start_stage_number+stage_count && touched_stage_number == 0;i++)
 					{
 						StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-						if(t_sp->isInnerRect(convert_location))
+						
+						if(t_sp->touchBegan(touch, pEvent))
+//						if(t_sp->isInnerRect(convert_location))
 						{
 							touched_stage_number = t_sp->getStageNumber();
 							t_sp->setTouchBegin();
@@ -339,6 +341,7 @@ private:
 						else if(is_gesturable_map_mode && location.y < touchStart_p.y - 50.f)
 						{
 							startChangeUiMode();
+							return;
 						}
 					}
 					else if(multiTouchData.size() == 2)
@@ -469,8 +472,9 @@ private:
 						
 						if(map_mode_state == kMMS_firstTouchStage)
 						{
-							stageAction(touched_stage_number);
-							resetStagePiece();
+							StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
+							t_sp->touchEnded(touch, pEvent);
+							t_sp->setTouchCancel();
 						}
 						
 						map_mode_state = kMMS_default;
@@ -493,7 +497,7 @@ private:
 		ccTouchesEnded(pTouches, pEvent);
 	}
 	
-	void stageAction(int t_number);
+	void stageAction(CCObject* sender);
 	
 	MapModeState before_map_mode_state;
 	int ing_check_puzzle;
@@ -558,7 +562,7 @@ private:
 	void resetStagePiece()
 	{
 		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
-		t_sp->setTouchCancel();
+		t_sp->touchCancelled(NULL, NULL);
 		touched_stage_number = 0;
 	}
 	
