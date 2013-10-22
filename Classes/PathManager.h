@@ -233,6 +233,7 @@ public:
 			t_breaking->removeFromParent();
 		linked_list.clear();
 		
+		setTag(pathBreakingStateFalse);
 		
 		bool isRemoveTargetNull = false;
 		
