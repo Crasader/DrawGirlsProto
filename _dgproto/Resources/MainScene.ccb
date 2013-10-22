@@ -116,8 +116,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>240</real>
-							<real>160</real>
+							<real>347</real>
+							<real>148</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -140,7 +140,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>boss_tomato.ccb</string>
+						<string>boss_strawberry.ccb</string>
 					</dict>
 				</array>
 			</dict>
