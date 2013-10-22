@@ -24,6 +24,7 @@
 enum SaveDataFile{
 	kSDF_myDSH = 1,
 	kSDF_gameInfo,
+	kSDF_puzzleInfo,
 	kSDF_stageInfo,
 	kSDF_cardInfo,
 	kSDF_downloadedInfo

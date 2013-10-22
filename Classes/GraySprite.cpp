@@ -19,6 +19,17 @@ GraySprite::~GraySprite(){
     
 }
 
+GraySprite* GraySprite::create()
+{
+	GraySprite *pSprite = new GraySprite();
+    if (pSprite && pSprite->init())
+    {
+        pSprite->autorelease();
+        return pSprite;
+    }
+    CC_SAFE_DELETE(pSprite);
+    return NULL;
+}
 
 GraySprite* GraySprite::create( const char* pszFileName ){
     GraySprite* graySprite = new GraySprite;

@@ -3280,6 +3280,7 @@ private:
 	}
 };
 
+
 class MathmaticalMissileUnit : public CCSprite
 {
 public:
@@ -3290,7 +3291,7 @@ public:
 		MathmaticalMissileUnit* t_mu = new MathmaticalMissileUnit();
 		if(t_mu && t_mu->initWithFile(imgFilename.c_str()))
 		{
-			t_mu->myInit(t_sp, t_angle, t_speed, t_cs, path, curve);
+			t_mu->myInit(t_sp, t_angle, t_speed, t_cs, path, curve, imgFilename);
 			t_mu->autorelease();
 			return t_mu;
 		}
@@ -3302,7 +3303,7 @@ public:
 		MathmaticalMissileUnit* t_mu = new MathmaticalMissileUnit();
 		if(t_mu && t_mu->initWithFile(imgFilename.c_str()))
 		{
-			t_mu->myInit(t_sp, t_angle, t_speed, t_cs);
+			t_mu->myInit(t_sp, t_angle, t_speed, t_cs, std::vector<CCPoint>(), CurveDisposition::RIGHTLINE, "");
 			t_mu->autorelease();
 			return t_mu;
 		}
@@ -3397,7 +3398,8 @@ public:
 	{
 		removeFromParentAndCleanup(true);
 	}
-	void myInit(CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs)
+	
+	void myInit(CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, const vector<CCPoint>& path, enum CurveDisposition curve, const std::string& fn)
 	{
 		m_frameCount = 0;
 		m_isChecking = true;
@@ -3405,27 +3407,8 @@ public:
 		m_speed = t_distance;
 		m_crashSize = t_cs;
 		firePosition = t_sp;
-		setPosition(t_sp);
 		
-		m_catmullIndex = 0;
-		m_catmullvar = 0.0;
-		
-		
-//		m_catmullPath = {ccp(-25, 0), ccp(0,0), ccp(25, 0), ccp(50, 0),
-//			ccp(75, 0), ccp(100, 0), ccp(125, 0), ccp(150, 0), ccp(175, 0),
-//			ccp(200, 0), ccp(250, 0)};
-		schedule(schedule_selector(ThisClassType::move));
-	}
-	void myInit(CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, const vector<CCPoint>& path, enum CurveDisposition curve)
-	{
-		m_frameCount = 0;
-		m_isChecking = true;
-		m_angle = t_angle;
-		m_speed = t_distance;
-		m_crashSize = t_cs;
-		firePosition = t_sp;
-		setPosition(t_sp);
-		
+		m_fileName = fn;
 		m_catmullIndex = 0;
 		m_catmullvar = 0.0;
 		
@@ -3434,9 +3417,11 @@ public:
 //			ccp( 450, 0), ccp(500, 50)};
 		m_catmullPath = path;
 		m_curve = curve;
+		m_fileName = fn;
 		//		m_catmullPath = {ccp(-25, 0), ccp(0,0), ccp(25, 0), ccp(50, 0),
 		//			ccp(75, 0), ccp(100, 0), ccp(125, 0), ccp(150, 0), ccp(175, 0),
 		//			ccp(200, 0), ccp(250, 0)};
+		setPosition(t_sp);
 		schedule(schedule_selector(ThisClassType::move));
 	}
 
@@ -3452,14 +3437,20 @@ public:
 		
 		CCPoint r_p = getPosition(); // recent
 		
+		CCPoint dv = ccp(0, 0);
+		float len = 0;
+		if(m_catmullIndex + 4 < m_catmullPath.size())
+		{
+			dv = CatMull(m_catmullPath[m_catmullIndex], m_catmullPath[m_catmullIndex+1],
+									 m_catmullPath[m_catmullIndex+2], m_catmullPath[m_catmullIndex+3],
+									 MIN(1.0, m_catmullvar), m_curve);
+			len = CatMullLength(m_catmullPath[m_catmullIndex], m_catmullPath[m_catmullIndex+1],
+											m_catmullPath[m_catmullIndex+2], m_catmullPath[m_catmullIndex+3],
+											m_curve);
+
+		}
 		
-		CCPoint dv = CatMull(m_catmullPath[m_catmullIndex], m_catmullPath[m_catmullIndex+1],
-												 m_catmullPath[m_catmullIndex+2], m_catmullPath[m_catmullIndex+3],
-												 MIN(1.0, m_catmullvar), m_curve);
-		float len = CatMullLength(m_catmullPath[m_catmullIndex], m_catmullPath[m_catmullIndex+1],
-															m_catmullPath[m_catmullIndex+2], m_catmullPath[m_catmullIndex+3],
-															m_curve);
-		
+ 		
 //		CCLog("dis %f - %d, len = %f, u %f", ccpLength(prevPosition - dv), m_catmullIndex, len, m_catmullvar);
 		
 		m_catmullvar += m_speed / len;
@@ -3528,6 +3519,7 @@ public:
 	}
 
 protected:
+	std::string m_fileName;
 	vector<CCPoint> m_catmullPath;
 	int m_catmullIndex;
 	double m_catmullvar;

@@ -233,6 +233,21 @@ private:
 			myJack->endBackTracking();
 			myJack->willBackTracking = false;
 			isCheckingBacking = false;
+			return;
+		}
+		else
+		{
+			myJack->backTrackingAtAfterMoving(afterJackPoint);
+		}
+		
+		afterJackPoint = myPM->pathBackTracking();
+		
+		if(afterJackPoint.isNull())
+		{
+			unschedule(schedule_selector(Maingame::stunBacking));
+			myJack->endBackTracking();
+			myJack->willBackTracking = false;
+			isCheckingBacking = false;
 		}
 		else
 		{

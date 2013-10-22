@@ -147,8 +147,8 @@ void KSTargetAttackPattern8::update(float dt)
 					if(m_havePath)
 					{
 						MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(ip2ccp(myGD->getMainCumberPoint()), gun.degree.getValue(), gun.bulletSpeed,
-																					  imgFileName.c_str(), t_mSize);
-																					  //m_path, m_isCurve ? MathmaticalMissileUnit::CURVE : MathmaticalMissileUnit::RIGHTLINE);
+																					  imgFileName.c_str(), t_mSize,
+																					  m_path, m_isCurve ? MathmaticalMissileUnit::CURVE : MathmaticalMissileUnit::RIGHTLINE);
 						batchNode->addChild(t_mu);
 					}
 					else

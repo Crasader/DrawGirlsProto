@@ -11,18 +11,18 @@
 using namespace cocos2d::extension;
 
 
-class ApricotCCB : public CCSprite,// public CCBSelectorResolver        // CCMenuItem이나 CCControl 버튼의 콜백함수를 소스와 연결
+class BossCCB : public CCSprite,// public CCBSelectorResolver        // CCMenuItem이나 CCControl 버튼의 콜백함수를 소스와 연결
 public CCBMemberVariableAssigner,  // 멤버변수나 커스텀프로퍼티를 소스와 연결
 public CCNodeLoaderListener       // ccbi파일 로딩 완료후 콜백함수 연결
 {
 	
 public:
-	CREATE_FUNC(ApricotCCB);
-	ApricotCCB()
+	CREATE_FUNC(BossCCB);
+	BossCCB()
 	{
 		
 	}
-	virtual ~ApricotCCB()
+	virtual ~BossCCB()
 	{
 		for(auto i : m_s)
 		{
@@ -119,7 +119,6 @@ public:
 		//		myGD->communication("Main_moveGamePosition", t_sp);
 		//		myGD->communication("Main_moveGamePosition", t_sp);
 		//		std::thread t1([](){;});
-		
 	}
 	virtual void setPositionX(float t_x)
 	{
@@ -282,7 +281,7 @@ protected:
 	bool isGameover;
 	int lastCastNum;
 	//	CCSprite* m_headImg;
-	ApricotCCB* m_headImg;
+	BossCCB* m_headImg;
 	void update(float dt)
 	{
 		CCNode* endP = myGD->getCommunicationNode("Main_gameNodePointer");
@@ -361,7 +360,7 @@ public:
 	
 	
 protected:
-	CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(ApricotCCB); //레이어 입니다. 네이밍이 비슷해서.. 주의하세요.
+	CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(BossCCB); //레이어 입니다. 네이밍이 비슷해서.. 주의하세요.
 	/*
 	 * 아래와 같은 구문입니다.
 	 
