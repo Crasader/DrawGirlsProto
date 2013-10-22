@@ -107,6 +107,7 @@ private:
 			
 			CCRect missile_rect = CCRectMake(p_p.x - crashSize.width/2.f, p_p.y - crashSize.height/2.f, crashSize.width, crashSize.height);
 			
+			IntPoint p_pPoint = ccp2ip(p_p);
 			if(missile_rect.containsPoint(jackPosition)) //  && myGD->getJackState()
 			{
 				is_checking = false;
@@ -123,6 +124,11 @@ private:
 					myGD->communication("Jack_showMB");
 				}
 			}
+			//##
+//			else if(p_pPoint.isInnerMap() && myGD->mapState[p_pPoint.x][p_pPoint.y] == mapType::mapNewline)
+//			{
+//				myGD->communication("PM_addPathBreaking", p_pPoint);
+//			}
 		}
 		
 		da *= reduce_da;
@@ -2027,7 +2033,7 @@ private:
 		}
 		else if(rangeCode == 2)
 		{
-			myGD->communication("SW_createJDSW", setPoint, NULL, NULL);
+			myGD->communication("SW_createJDSW", setPoint);
 		}
 	}
 	
@@ -3486,6 +3492,7 @@ public:
 			return;
 		}	
 		
+		IntPoint p_pPoint = ccp2ip(p_p);
 		if(m_isChecking)
 		{
 			IntPoint jackPoint = myGD->getJackPoint();
@@ -3510,6 +3517,13 @@ public:
 					myGD->communication("Jack_showMB");
 				}
 			}
+			
+			//##
+//			else if(myGD->mapState[p_pPoint.x][p_pPoint.y] == mapType::mapNewline)
+//			{
+//				myGD->communication("PM_addPathBreaking", p_pPoint);
+//			}
+			
 		}
 		
 		setPosition(r_p);

@@ -871,7 +871,28 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			chargeArray->addObject(t_ccn);
 		}
 	}
-	else if(pattern == "1001") // 먹물
+	else if(pattern == "109") // 개돌
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			CrashChargeNodeLambda* t_ccn =
+			CrashChargeNodeLambda::create(startPosition, castFrame,
+																		[=](CCObject* cb)
+																		{
+																			KSCumberBase* t = dynamic_cast<KSCumberBase*>(cb);
+																			
+																			int totalFrame = patternData.get("totalframe", 300).asInt();
+																			t->furyModeOn(totalFrame);
+																		}, cb);
+			
+			t_ccn->setChargeColor(ccc4f(1.00, 0.00, 0.00, 1.00));
+			addChild(t_ccn);
+			t_ccn->startCharge();
+			chargeArray->addObject(t_ccn);
+		}
+	}
+	else if(pattern == "110") // 폭죽
 	{
 		if(exe)
 		{
@@ -881,7 +902,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
 																			[=](CCObject* cb)
 																			{
-																				KSSpecialAttackPattern1* t = KSSpecialAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+																				KSTargetAttackPattern10* t = KSTargetAttackPattern10::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 																				addChild(t);
 																				saveAP = t;
 																				savedAP = true;

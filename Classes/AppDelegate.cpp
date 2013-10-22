@@ -83,6 +83,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb");
+	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ksoo");
 //	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb_test");
 //	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb_test/resources-iphonehd");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb/resources-iphonehd");

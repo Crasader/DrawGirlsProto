@@ -95,7 +95,7 @@ public:
 	virtual void startAnimationNoDirection();
 	void damageReaction(float dt);
 	void animationNoDirection(float dt);
-	virtual void startAnimationDirection(){}
+//	virtual void startAnimationDirection(){}
 	virtual void onStartGame();
 	//	virtual void onEndGame();
 	virtual void onPatternEnd();

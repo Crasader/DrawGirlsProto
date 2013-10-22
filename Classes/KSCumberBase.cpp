@@ -128,11 +128,9 @@ void KSCumberBase::randomMoving(float dt)
 			{
 				//			CCLog("collision!!");
 				//			myGD->communication("Jack_startDieEffect");
-				myGD->communication("SW_createSW", checkPosition, 0, 0);
+				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
-				
 				m_directionAngleDegree += m_well512.GetValue(90, 270);
-				
 				if(m_directionAngleDegree < 0)			m_directionAngleDegree += 360;
 				else if(m_directionAngleDegree > 360)	m_directionAngleDegree -= 360;
 			}
@@ -327,7 +325,7 @@ void KSCumberBase::straightMoving(float dt)
 			{
 				//			CCLog("collision!!");
 				//			myGD->communication("Jack_startDieEffect");
-				myGD->communication("SW_createSW", checkPosition, 0, 0);
+				myGD->communication("SW_createSW", checkPosition);
 				degree = degreeSelector(cnt, degree);
 				
 				if(degree < 0)			degree += 360;
@@ -491,7 +489,7 @@ void KSCumberBase::followMoving(float dt)
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
 				//			CCLog("collision!!");
 				//			myGD->communication("Jack_startDieEffect");
-				myGD->communication("SW_createSW", checkPosition, 0, 0);
+				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 			}
@@ -661,7 +659,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			{
 				//			CCLog("collision!!");
 				//			myGD->communication("Jack_startDieEffect");
-				myGD->communication("SW_createSW", checkPosition, 0, 0);
+				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				int changeDirection = m_well512.GetValue(3);
@@ -831,7 +829,7 @@ void KSCumberBase::circleMoving(float dt)
 			{
 				//			CCLog("collision!!");
 				//			myGD->communication("Jack_startDieEffect");
-				myGD->communication("SW_createSW", checkPosition, 0, 0);
+				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				// m_circle 변수를 재지정 ...
@@ -993,7 +991,7 @@ void KSCumberBase::snakeMoving(float dt)
 			{
 				//			CCLog("collision!!");
 				//			myGD->communication("Jack_startDieEffect");
-				myGD->communication("SW_createSW", checkPosition, 0, 0);
+				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				// m_snake 변수를 재지정 ...
@@ -1193,3 +1191,34 @@ bool KSCumberBase::startDamageReaction(float damage, float angle)
 //	m_speed.init(m_speed, to, 0.1f);
 	return true; // 의미없음.
 }
+
+
+void KSCumberBase::bossDieBomb(float dt)
+{
+	m_bossDie.m_bossDieFrameCount++;
+	int maxValue = *max_element(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end());
+	if(find(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end(), m_bossDie.m_bossDieFrameCount)
+		 != m_bossDie.m_bossDieBombFrameNumbers.end())
+	{
+		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
+		
+		CCPoint t = getPosition();
+		t.x += m_well512.GetFloatValue(-100.f, 100.f);
+		t.y += m_well512.GetFloatValue(-100.f, 100.f);
+		ret.first->setPosition(t);
+		addChild(ret.first, 11);
+		
+		if(maxValue == m_bossDie.m_bossDieFrameCount)
+		{
+			auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossdie.ccbi");
+			
+			
+			CCPoint t = getPosition();
+			ret.first->setPosition(t);
+			CCLog("bossposition2 %f %f", t.x, t.y);
+			addChild(ret.first, 11);
+		}
+	}
+}
+
+
