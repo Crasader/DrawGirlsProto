@@ -13,6 +13,7 @@
 #include "StageImgLoader.h"
 #include "DataStorageHub.h"
 #include "GraySprite.h"
+#include "ScrollMenu.h"
 
 USING_NS_CC;
 using namespace std;
@@ -161,6 +162,7 @@ private:
 			level_img->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
 			piece_img->addChild(level_img);
 		}
+		
 	}
 };
 
