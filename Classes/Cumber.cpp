@@ -551,12 +551,12 @@ void CumberParent::myInit()
 //							 {"pattern":"105", "atype":"special", "percent":1}]           )", temp_root);
 	
 	
-	temp_reader.parse(R"(     [{"pattern":"108", "atype":"normal", "oneshot":5,"oneshotterm":10,"gunnumber":4,"targettype":1,"degreev":5,"color":1,"totalframe":200,"castframe":120,"path":[0,0,0,0,50,-50,100, 50, 150, -50, 200, 50, 250, -50, 300, 50, 350, -50],"percent":10},
-										{"pattern":"103", "atype":"crash", "percent":2,"perframe":10,"totalframe":60,"speed":200,"numberperframe":5},
-										{"pattern":"105", "atype":"special", "percent":1}]           )", temp_root);
+//	temp_reader.parse(R"(     [{"pattern":"108", "atype":"normal", "oneshot":5,"oneshotterm":10,"gunnumber":4,"targettype":1,"degreev":5,"color":1,"totalframe":200,"castframe":120,"path":[0,0,0,0,50,-50,100, 50, 150, -50, 200, 50, 250, -50, 300, 50, 350, -50],"percent":10},
+//										{"pattern":"103", "atype":"crash", "percent":2,"perframe":10,"totalframe":60,"speed":200,"numberperframe":5},
+//										{"pattern":"105", "atype":"special", "percent":1}]           )", temp_root);
 	
-	
-	mainCumber->settingPattern(temp_root);
+//	temp_reader.parse(boss["pattern"])
+	mainCumber->settingPattern(boss["pattern"]);
 		
 //	);
 	mainCumber->settingAttackPercent(boss["attackpercent"].asDouble());

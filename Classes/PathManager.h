@@ -86,7 +86,7 @@ public:
 	static PathBreaking* create(IntPoint* s_p)
 	{
 		PathBreaking* t_pb = new PathBreaking();
-		if(t_pb && t_pb->initWithFile("bomb.png", CCRectMake(0, 0, 8, 8)))
+		if(t_pb && t_pb->initWithFile("bomb.png", CCRectMake(0, 0, 26, 26)))
 		{
 			t_pb->myInit(s_p);
 			t_pb->autorelease();
@@ -102,7 +102,7 @@ public:
 		CCAnimation* t_anin = CCAnimation::create();
 		t_anin->setDelayPerUnit(0.1);
 		for(int i=0;i<5;i++)
-			t_anin->addSpriteFrameWithTexture(texture->getTexture(), CCRectMake(i*8, 0, 8, 8));
+			t_anin->addSpriteFrameWithTexture(texture->getTexture(), CCRectMake(i*26, 0, 26, 26));
 		CCAnimate* t_anit = CCAnimate::create(t_anin);
 		
 		CCCallFunc* callSelfRemove = CCCallFunc::create(this, callfunc_selector(PathBreaking::selfRemove));

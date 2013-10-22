@@ -212,35 +212,10 @@ public:
 //			scheduleOnce(schedule_selector(ThisClassType::bossDieBomb), m_well512.GetFloatValue(0.3f, 1.f));
 //		}	
 	}
-	void bossDieBomb(float dt)
-	{
-		m_bossDie.m_bossDieFrameCount++;
-		int maxValue = *max_element(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end());
-		if(find(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end(), m_bossDie.m_bossDieFrameCount)
-			 != m_bossDie.m_bossDieBombFrameNumbers.end())
-		{
-			auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
-			
-			CCPoint t = getPosition();
-			t.x += m_well512.GetValue(-100, 100);
-			t.y += m_well512.GetValue(-100, 100);
-			ret.first->setPosition(t);
-			addChild(ret.first, 11);
-			
-			if(maxValue == m_bossDie.m_bossDieFrameCount)
-			{
-				auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossdie.ccbi");
-				
-				
-				CCPoint t = getPosition();
-				ret.first->setPosition(t);
-				addChild(ret.first, 11);
-			}
-		}
-	}
+	void bossDieBomb(float dt);
 	virtual void cumberImgStartRotating(float gabage){} //## 임시.
 	virtual void startAnimationNoDirection() = 0;
-	virtual void startAnimationDirection() = 0;
+	virtual void startAnimationDirection(){startAnimationNoDirection();} // 기본으로 조준이 없으면 방사형으로
 	virtual void stopAnimationNoDirection() = 0;
 	virtual void stopAnimationDirection() = 0;
 	

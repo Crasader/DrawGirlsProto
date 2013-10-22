@@ -4690,36 +4690,13 @@ public:
 	
 };
 
+
+
+
 class KSTargetAttackPattern9 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern9);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
-	{
-		m_cumber = cb;
-		scheduleUpdate();
-	}
-	virtual void stopMyAction()
-	{
-		unscheduleUpdate();
-		
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		
-		startSelfRemoveSchedule();
-	}
-	void update(float dt)
-	{
-		
-	}
-protected:
-	KSCumberBase* m_cumber;
-};
-
-class KSTargetAttackPattern10 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern10);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		Json::Reader reader;
@@ -4743,6 +4720,103 @@ public:
 	}
 protected:
 	KSCumberBase* m_cumber;
+};
+
+class KSSequenceAndRemove : public CCActionInterval
+{
+public:
+	~KSSequenceAndRemove(void){}
+	
+public:
+	
+	static CCSequence* create(CCNode* thiz, std::initializer_list<CCFiniteTimeAction*> initList)
+	{
+		CCArray* actions = CCArray::create();
+		for(auto action : initList)
+		{
+			actions->addObject(action);
+		}
+		
+		auto _remove = CCCallFunc::create(thiz, callfunc_selector(CCNode::removeFromParent));
+		actions->addObject(_remove);
+		
+		return CCSequence::create(actions);
+	}
+};
+
+// 불꽃놀이
+class KSTargetAttackPattern10 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern10);
+	void crashMapForIntPoint(IntPoint t_p)
+	{
+		if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
+		{
+			myGD->mapState[t_p.x][t_p.y] = mapEmpty;
+			for(int k = -1;k<=1;k++)
+			{
+				for(int l = -1;l<=1;l++)
+				{
+					if(k == 0 && l == 0)	continue;
+					if(myGD->mapState[t_p.x+k][t_p.y+l] == mapOldget)		myGD->mapState[t_p.x+k][t_p.y+l] = mapOldline;
+				}
+			}
+			//			myGD->communication("EP_crashed");
+			myGD->communication("MFP_createNewFragment", t_p);
+			myGD->communication("VS_divideRect", t_p);
+		}
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		
+		if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
+		{
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect");
+			stopMyAction();
+		}
+		
+		if(t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
+		{
+			//					myGD->communication("PM_pathChainBomb", t_p);
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Main_showLineDiePosition", t_p);
+			stopMyAction();
+		}
+	}
+
+	void crashMapForPoint(IntPoint point, int radius)
+	{
+		for(int y = - radius; y <= radius; y++)
+		{
+			for(int x = - radius; x <= radius; x++)
+			{
+				if(sqrt(x*x + y*y) <= radius)
+					crashMapForIntPoint(IntPoint(point.x + x, point.y + y));
+			}
+		}
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
+//		m_parentMissile->removeFromParentAndCleanup(true);
+		startSelfRemoveSchedule();
+	}
+	void update(float dt);
+protected:
+	
+	KSCumberBase* m_cumber;
+	int m_frame;
+	int m_bombFrame;
+	CCParticleSystem* m_parentMissile;
+	float m_dx, m_dy;
 };
 
 class KSSpecialAttackPattern1 : public AttackPattern
