@@ -179,9 +179,9 @@ private:
 //					callfunc_selector(SW_Parent::stopAllSW),
 //					callfuncIpOC_selector(SW_Parent::createJDSW));
 		
-		myGD->V_IpCCOCallfunci["SW_createSW"] = std::bind(&SW_Parent::createSW, this, _1);
+		myGD->V_Ip["SW_createSW"] = std::bind(&SW_Parent::createSW, this, _1);
 		myGD->V_V["SW_stopAllSW"] = std::bind(&SW_Parent::stopAllSW, this);
-		myGD->V_IpCCOCallfunci["SW_createJDSW"] = std::bind(&SW_Parent::createJDSW, this, _1);
+		myGD->V_Ip["SW_createJDSW"] = std::bind(&SW_Parent::createJDSW, this, _1);
 	}
 };
 

@@ -83,7 +83,7 @@ private:
 	void startGetStageList()
 	{
 		Json::Value param;
-		param["version"] = SDS_GI(kSDF_gameInfo, "version");
+		param["version"] = SDS_GI(kSDF_puzzleInfo, puzzle_number, "version");
 		param["no"] = puzzle_number;
 		graphdog->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
 	}
