@@ -20,6 +20,7 @@ class GraySprite : public CCSprite{
 public:
     GraySprite();
     virtual ~GraySprite();
+	static GraySprite* create();
     static GraySprite* create(const char* pszFileName);
 	static GraySprite* createWithTexture(CCTexture2D* pTexture);
 	static GraySprite* createWithTexture(CCTexture2D* pTexture, const CCRect& tRect);

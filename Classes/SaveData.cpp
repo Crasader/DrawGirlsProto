@@ -40,7 +40,8 @@ string SaveData::getSyncKey(SaveDataFile t_sdf, int i1)
 {
 	string return_value;
 	
-	if(t_sdf == kSDF_stageInfo)	return_value = cocos2d::CCString::createWithFormat("STAGE%dINFO", i1)->getCString();
+	if(t_sdf == kSDF_stageInfo)			return_value = cocos2d::CCString::createWithFormat("STAGE%dINFO", i1)->getCString();
+	else if(t_sdf == kSDF_puzzleInfo)	return_value = cocos2d::CCString::createWithFormat("PUZZLE%dINFO", i1)->getCString();
 	
 	return return_value;
 }

@@ -32,10 +32,10 @@ enum SLD_MenuTag{
 class StageListDown : public CCLayer
 {
 public:
-	static StageListDown* create(CCObject* t_success, SEL_CallFunc d_success)
+	static StageListDown* create(CCObject* t_success, SEL_CallFunc d_success, int t_puzzle)
 	{
 		StageListDown* t_sid = new StageListDown();
-		t_sid->myInit(t_success, d_success);
+		t_sid->myInit(t_success, d_success, t_puzzle);
 		t_sid->autorelease();
 		return t_sid;
 	}
@@ -43,6 +43,8 @@ public:
 private:
 	CCObject* target_success;
 	SEL_CallFunc delegate_success;
+	
+	int puzzle_number;
 	
 	CCLabelTTF* state_ment;
 	CCLabelBMFont* download_state;
@@ -54,13 +56,15 @@ private:
 	int download_version;
 	
 	vector<DownloadFile> df_list;
+	vector<DownloadFile> ef_list;
 	
-	void myInit(CCObject* t_success, SEL_CallFunc d_success)
+	void myInit(CCObject* t_success, SEL_CallFunc d_success, int t_puzzle)
 	{
+		puzzle_number = t_puzzle;
 		target_success = t_success;
 		delegate_success = d_success;
 		
-		state_ment = CCLabelTTF::create("스테이지 목록을 확인하는ing...", mySGD->getFont().c_str(), 20);
+		state_ment = CCLabelTTF::create("퍼즐 정보를 확인하는ing...", mySGD->getFont().c_str(), 20);
 		state_ment->setAnchorPoint(ccp(0.5,0.5));
 		state_ment->setPosition(ccp(240,160));
 		state_ment->setHorizontalAlignment(kCCTextAlignmentCenter);
@@ -80,8 +84,11 @@ private:
 	{
 		Json::Value param;
 		param["version"] = SDS_GI(kSDF_gameInfo, "version");
-		graphdog->command("getstagelist", param, json_selector(this, StageListDown::resultGetStageList));
+		param["no"] = puzzle_number;
+		graphdog->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
 	}
+	
+	void addDownlist(string t_key, const Json::Value& result_data);
 	
 	void resultGetStageList(Json::Value result_data);
 	

@@ -69,7 +69,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_lastSelectedStage,
 	kDSH_Key_isPassCoupon_int1,
 	kDSH_Key_uiType,
-	kDSH_Key_isOpenTheme_int1_Stage_int2
+//	kDSH_Key_isOpenPuzzle_int1_Stage_int2,
+	kDSH_Key_puzzleMode,
+	kDSH_Key_selectedPuzzleNumber
 }DSH_Key;
 
 #define myDSH DataStorageHub::sharedInstance()
@@ -258,7 +260,9 @@ private:
 		else if(t_name == kDSH_Key_lastSelectedStage)					return_value = "lss";
 		else if(t_name == kDSH_Key_isPassCoupon_int1)					return_value = "ipcp%d";
 		else if(t_name == kDSH_Key_uiType)								return_value = "uitype";
-		else if(t_name == kDSH_Key_isOpenTheme_int1_Stage_int2)			return_value = "iot%ds%d";
+//		else if(t_name == kDSH_Key_isOpenTheme_int1_Stage_int2)			return_value = "iot%ds%d";
+		else if(t_name == kDSH_Key_puzzleMode)							return_value = "pm";
+		else if(t_name == kDSH_Key_selectedPuzzleNumber)				return_value = "spn";
 		
 		return return_value;
 	}

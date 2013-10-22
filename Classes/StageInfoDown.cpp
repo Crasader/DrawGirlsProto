@@ -369,8 +369,6 @@ void StageInfoDown::successAction()
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		state_ment->setString("이미지 정보 다운로드 완료.");
 		
-		myDSH->setBoolForKey(kDSH_Key_isOpenTheme_int1_Stage_int2, 1, mySD->getSilType(), true);
-		
 		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
 	else
