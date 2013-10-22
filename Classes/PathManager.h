@@ -179,13 +179,18 @@ private:
 			IntPoint* t_p = chainBombArray.front();
 			
 			IntPoint jackPoint = myGD->getJackPoint();
-			if(t_p->x == jackPoint.x && t_p->y == jackPoint.y) // die
+			
+			CCPoint sub_ccp = ccpSub(t_p->convertToCCP(), jackPoint.convertToCCP());
+			float sub_value = sqrtf(powf(sub_ccp.x, 2.f) + powf(sub_ccp.y, 2.f));
+			
+			if(sub_value < 4.f) // die
 			{
 				myGD->communication("Jack_startDieEffect");
 				beforeArray->removeAllObjects();
 				getParent()->setTag(pathBreakingStateFalse);
 				unschedule(schedule_selector(PathBreakingParent::chainBombSchedule));
 				removeFromParentAndCleanup(true);
+				return;
 			}
 				
 			chainBombArray.pop();
@@ -279,7 +284,11 @@ public:
 				IntPointVector b_pv = b_node->myPointVector;
 				IntPoint r_p = IntPoint(roundf(b_pv.origin.x + b_pv.distance.dx*b_node->pathScale), roundf(b_pv.origin.y + b_pv.distance.dy*b_node->pathScale));
 				if(myGD->mapState[r_p.x][r_p.y] == mapNewline)
+				{
+					aloneNewlineRemove(r_p);
 					myGD->mapState[r_p.x][r_p.y] = mapEmpty;
+				}
+				
 				return r_p;
 			}
 			else // pop back
@@ -288,7 +297,10 @@ public:
 				IntPoint r_p = IntPoint(b_pv.origin.x, b_pv.origin.y);
 				
 				if(myGD->mapState[r_p.x][r_p.y] == mapNewline)
+				{
+					aloneNewlineRemove(r_p);
 					myGD->mapState[r_p.x][r_p.y] = mapEmpty;
+				}
 				
 				myList.pop_back();
 				b_node->removeFromParentAndCleanup(true);
@@ -314,6 +326,25 @@ private:
 			n_pbp->setTag(childTagInPathParentPathBreaking);
 			addChild(n_pbp);
 			n_pbp->pathChainBomb(start);
+		}
+	}
+	
+	void aloneNewlineRemove(IntPoint r_p)
+	{
+		for(int i=r_p.x-2;i<=r_p.x+2;i++)
+		{
+			for(int j=r_p.y-2;j<=r_p.y+2;j++)
+			{
+				if(i == r_p.x && j == r_p.y)
+					continue;
+				IntPoint t_p = IntPoint(i,j);
+				if(t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
+				{
+					if(myGD->mapState[t_p.x-1][t_p.y] != mapNewline && myGD->mapState[t_p.x][t_p.y-1] != mapNewline &&
+					   myGD->mapState[t_p.x+1][t_p.y] != mapNewline && myGD->mapState[t_p.x][t_p.y+1] != mapNewline)
+						myGD->mapState[t_p.x][t_p.y] = mapEmpty;
+				}
+			}
 		}
 	}
 	
