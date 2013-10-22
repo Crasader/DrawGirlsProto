@@ -108,9 +108,9 @@ private:
 			float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
 			if(sub_value < 4.f)
 			{
+				getParent()->setTag(pathBreakingStateFalse);
 				myGD->communication("Jack_startDieEffect");
 				unschedule(schedule_selector(PathBreakingParent::tracing));
-				getParent()->setTag(pathBreakingStateFalse);
 				removeFromParent();
 				return;
 			}
@@ -133,9 +133,9 @@ private:
 			float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
 			if(sub_value < 4.f)
 			{
+				getParent()->setTag(pathBreakingStateFalse);
 				myGD->communication("Jack_startDieEffect");
 				unschedule(schedule_selector(PathBreakingParent::tracing));
-				getParent()->setTag(pathBreakingStateFalse);
 				removeFromParent();
 				return;
 			}
