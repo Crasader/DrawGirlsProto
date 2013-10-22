@@ -9,6 +9,7 @@
 #endif
 
 #include "GameData.h"
+#include "TitleScene.h"
 #include "PuzzleMapScene.h"
 #include "WorldMapScene.h"
 
@@ -201,8 +202,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 //    pEngine->executeScriptFile(path.c_str());
 	
 	
-	
-	CCScene *pScene = PuzzleMapScene::scene();
+	CCScene* pScene = TitleScene::scene();
+//	CCScene *pScene = PuzzleMapScene::scene();
 //	CCScene* pScene = WorldMapScene::scene();
     pDirector->runWithScene(pScene);
 
