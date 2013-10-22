@@ -80,10 +80,15 @@ bool PuzzleMapScene::init()
 	srand(time(NULL));
 	////////////////////////////////////////////////////
 	
-	Json::Value param;
-	param["ManualLogin"] = true;
+	recent_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	if(recent_puzzle_number == 0)
+	{
+		recent_puzzle_number = 1;
+		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, recent_puzzle_number);
+	}
 	
-	hspConnector::get()->login(param, param, std::bind(&PuzzleMapScene::resultLogin, this, std::placeholders::_1));
+	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(PuzzleMapScene::startSceneSetting), recent_puzzle_number);
+	addChild(t_sld, kPMS_Z_popup);
 	
     return true;
 }
