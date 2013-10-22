@@ -45,7 +45,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 			Log.i("com.litqoo.dgproto","hspcore create fail");
 		}
 		
-//		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 //		
 //		setContentView(R.layout.game_demo);
 //		mGLView = (Cocos2dxGLSurfaceView) findViewById(R.id.game_gl_surfaceview);
