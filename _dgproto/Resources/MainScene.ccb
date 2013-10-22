@@ -116,8 +116,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>347</real>
-							<real>148</real>
+							<real>300</real>
+							<real>166</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -140,7 +140,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>boss_strawberry.ccb</string>
+						<string>fx_pollution3.ccb</string>
 					</dict>
 				</array>
 			</dict>
@@ -277,7 +277,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>3</real>
+			<real>2.8666665554046631</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
