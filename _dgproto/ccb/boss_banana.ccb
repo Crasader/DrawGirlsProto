@@ -2617,8 +2617,8 @@
 									<dict>
 										<key>baseValue</key>
 										<array>
-											<real>-58</real>
-											<real>58</real>
+											<real>-58.997562408447266</real>
+											<real>57.930244445800781</real>
 										</array>
 										<key>name</key>
 										<string>position</string>
@@ -2626,8 +2626,8 @@
 										<string>Position</string>
 										<key>value</key>
 										<array>
-											<real>-58</real>
-											<real>58</real>
+											<real>-58.997562408447266</real>
+											<real>57.930244445800781</real>
 											<integer>0</integer>
 										</array>
 									</dict>
@@ -2729,7 +2729,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>360</real>
+								<real>183.99998474121094</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -2760,8 +2760,6 @@
 								<true/>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -4022,7 +4020,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>3</real>
+			<real>1.5333333015441895</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -4158,7 +4156,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
