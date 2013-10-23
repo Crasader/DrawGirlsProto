@@ -46,7 +46,7 @@ void KSTargetAttackPattern8::myInit(CCPoint t_sp, KSCumberBase* cb, const std::s
 	for(int i=0; i<m_gunNumber; i++)
 	{
 		Gun g;
-		g.bulletSpeed = 1.8f;
+		g.bulletSpeed = pattern.get("speed", 180).asInt() / 100.f;
 		g.fireTerm = pattern.get("fireterm", 1).asInt();
 		g.fireCount = 0;
 		g.idleCount = 0;
@@ -178,7 +178,6 @@ void KSTargetAttackPattern8::update(float dt)
 
 void KSTargetAttackPattern10::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
-	m_frame = 0;
 	m_cumber = cb;
 	scheduleUpdate();
 	
@@ -186,76 +185,16 @@ void KSTargetAttackPattern10::myInit(CCPoint t_sp, KSCumberBase* cb, const std::
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
 	
-	m_bombFrame = pattern.get("bombframe", 400).asInt();
-	
-	m_parentMissile = CCParticleSystemQuad::create("pm.plist");
-	m_parentMissile->setPosition(cb->getPosition());
-	addChild(m_parentMissile);
-	
-	CCPoint jackPosition = ip2ccp(myGD->getJackPoint());
-	CCPoint subtract = jackPosition - cb->getPosition();
-	float angle = atan2(subtract.y, subtract.x);
-	m_dx = 2 * cos(angle);
-	m_dy = 2 * sin(angle);
-	
-	//		m_parentMissile = CCParticleSystemQuad::createWithTotalParticles(150);
-	//		///////**** Assignment Texture Filename!  ****///////
-	//		CCTexture2D *texture= CCTextureCache::sharedTextureCache()->addImage("parent_missile.png");
-	//		m_parentMissile->setTexture(texture);
-	//		m_parentMissile->setEmissionRate(155.68);
-	//		m_parentMissile->setAngle(90.0);
-	//		m_parentMissile->setAngleVar(191.2);
-	//		ccBlendFunc blendFunc={GL_SRC_ALPHA,GL_ONE};
-	//		m_parentMissile->setBlendFunc(blendFunc);
-	//		m_parentMissile->setDuration(-1.00);
-	//		m_parentMissile->setEmitterMode(kCCParticleModeRadius);
-	//		ccColor4F startColor={0.20,0.40,0.70,1.00};
-	//		m_parentMissile->setStartColor(startColor);
-	//		ccColor4F startColorVar={0.00,0.00,0.20,0.10};
-	//		m_parentMissile->setStartColorVar(startColorVar);
-	//		ccColor4F endColor={0.00,0.00,0.00,1.00};
-	//		m_parentMissile->setEndColor(endColor);
-	//		ccColor4F endColorVar={0.00,0.00,0.00,0.00};
-	//		m_parentMissile->setEndColorVar(endColorVar);
-	//		m_parentMissile->setStartSize(92.76);
-	//		m_parentMissile->setStartSizeVar(43.09);
-	//		m_parentMissile->endSize=-1.00;
-	//		m_parentMissile->endSizeVar=0.00;
-	//		m_parentMissile->rotatePerSecond=31.95;
-	//		m_parentMissile->rotatePerSecondVar=121.78;
-	//		m_parentMissile->startRadius=0.00;
-	//		m_parentMissile->startRadiusVar=0.00;
-	//		m_parentMissile->endRadius=0.00;
-	//		m_parentMissile->totalParticles=150;
-	//		m_parentMissile->life=0.96;
-	//		m_parentMissile->lifeVar=1.00;
-	//		m_parentMissile->startSpin=0.00;
-	//		m_parentMissile->startSpinVar=0.00;
-	//		m_parentMissile->endSpin=0.00;
-	//		m_parentMissile->endSpinVar=0.00;
-	//		m_parentMissile->position=ccp(382.32,129.75);
-	//		m_parentMissile->posVar=ccp(0.00,0.00);
-	//		addChild(m_parentMissile);
 }
 
-
-
-
-void KSTargetAttackPattern10::update(float dt)
+void KSTargetAttackPattern11::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
-	m_frame++;
-
-	if(m_frame < m_bombFrame)
-	{
-		CCPoint t = m_parentMissile->getPosition();
-		m_parentMissile->setPosition(ccp(t.x + m_dx, t.y + m_dy));
-		crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
-	}
-	else if(m_frame < 700)
-	{
-		
-		stopMyAction();
-	}
+	m_cumber = cb;
+	scheduleUpdate();
+	
+	Json::Reader reader;
+	Json::Value pattern;
+	reader.parse(patternData, pattern);
 	
 }
 

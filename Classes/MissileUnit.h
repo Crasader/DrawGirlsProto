@@ -16,6 +16,7 @@
 #include "cocos-ext.h"
 #include "FromTo.h"
 #include "KSUtil.h"
+#include "Well512.h"
 USING_NS_CC_EXT;
 using namespace cocos2d;
 using namespace std;
@@ -75,6 +76,9 @@ private:
 		if(angle >= 180.f)	angle -= 360.f;
 		if(angle < -180.f)	angle += 360.f;
 		
+		
+		CCPoint beforePosition = getPosition() + getParent()->getPosition();
+//		CCLog("%x -- prev collision %f %f", this, beforePosition.x, beforePosition.y);
 		CCPoint r_p = getPosition(); // recent
 		CCPoint dv;
 		
@@ -91,6 +95,7 @@ private:
 		CCPoint p_p = getParent()->getPosition(); // parent
 		p_p = ccpAdd(r_p, p_p);
 		
+//		CCLog("%x -- collision %f %f", this, p_p.x, p_p.y);
 		if(p_p.x < 0.f - 40.f || p_p.x > 320.f + 40.f || p_p.y < -60.f - 40.f || p_p.y > 490.f + 40.f) // fixed 40.f
 		{
 			stopMove();
@@ -107,7 +112,8 @@ private:
 			
 			CCRect missile_rect = CCRectMake(p_p.x - crashSize.width/2.f, p_p.y - crashSize.height/2.f, crashSize.width, crashSize.height);
 			
-			IntPoint p_pPoint = ccp2ip(p_p);
+//			IntPoint p_pBeforePoint = ccp2ip(beforePosition);
+//			IntPoint p_pPoint = ccp2ip(p_p);
 			if(missile_rect.containsPoint(jackPosition)) //  && myGD->getJackState()
 			{
 				is_checking = false;
@@ -125,10 +131,29 @@ private:
 				}
 			}
 			//##
-//			else if(p_pPoint.isInnerMap() && myGD->mapState[p_pPoint.x][p_pPoint.y] == mapType::mapNewline)
-//			{
-//				myGD->communication("PM_addPathBreaking", p_pPoint);
-//			}
+			else
+			{
+				float angle = atan2(p_p.y - beforePosition.y, p_p.x - beforePosition.x);
+				int loop = ccpLength(p_p - beforePosition) / 1.414f;
+				CCPoint t2 = beforePosition;
+				for(int i=0; i<loop; i++)
+				{
+					
+					t2.x += 1.414f * cos(angle);
+					t2.y += 1.414f * sin(angle);
+					
+					IntPoint t = ccp2ip(t2);
+					if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
+					{
+						myGD->communication("PM_addPathBreaking", t);
+					}
+				}
+				IntPoint t = ccp2ip(p_p);
+				if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
+				{
+					myGD->communication("PM_addPathBreaking", t);
+				}
+			}
 		}
 		
 		da *= reduce_da;
@@ -2560,6 +2585,306 @@ private:
 		startMyAction();
 	}
 };
+class KSSequenceAndRemove : public CCActionInterval
+{
+public:
+	~KSSequenceAndRemove(void){}
+	
+public:
+	
+	static CCSequence* create(CCNode* thiz, std::initializer_list<CCFiniteTimeAction*> initList)
+	{
+		CCArray* actions = CCArray::create();
+		for(auto action : initList)
+		{
+			actions->addObject(action);
+		}
+		
+		auto _remove = CCCallFunc::create(thiz, callfunc_selector(CCNode::removeFromParent));
+		actions->addObject(_remove);
+		
+		return CCSequence::create(actions);
+	}
+};
+
+
+class Firework : public CrashMapObject
+{
+public:
+	static Firework* create(CCPoint cumberPosition, CCPoint jackPosition)
+	{
+		Firework* t_bf = new Firework();
+		t_bf->myInit(cumberPosition, jackPosition);
+		t_bf->autorelease();
+		return t_bf;
+	}
+	void crashMapForPoint(IntPoint point, int radius)
+	{
+		for(int y = - radius; y <= radius; y++)
+		{
+			for(int x = - radius; x <= radius; x++)
+			{
+				if(sqrt(x*x + y*y) <= radius)
+					crashMapForIntPoint(IntPoint(point.x + x, point.y + y));
+			}
+		}
+	}
+	void myInit(CCPoint cumberPosition, CCPoint jackPosition)
+	{
+		m_step = 1;
+		m_bombFrame = 300;
+		m_parentMissile = CCParticleSystemQuad::create("pm.plist");
+		m_parentMissile->setPositionType(kCCPositionTypeRelative);
+		m_parentMissile->setPosition(cumberPosition);
+		addChild(m_parentMissile);
+		
+//		CCPoint jackPosition = ip2ccp(myGD->getJackPoint());
+		CCPoint subtract = jackPosition - cumberPosition;
+		m_parentMissileGoal.init(cumberPosition, jackPosition, 0.01f * ccpLength(subtract));
+		scheduleUpdate();
+		
+		int m_color = 1;
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
+	}
+	
+	void setTwoStep()
+	{
+		myGD->communication("MS_resetRects");
+		m_step = 2;
+		m_frame = 0;
+		m_sourcePosition = m_parentMissile->getPosition();
+		m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
+		m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
+		m_parentMissile->runAction(KSSequenceAndRemove::create(this, {CCDelayTime::create(3.f)}));
+	}
+	void jackDie()
+	{
+//		unscheduleUpdate();
+		if(m_step == 1)
+		{
+			setTwoStep();
+		}
+	}
+	
+	void lineDie(IntPoint t_p)
+	{
+//		unscheduleUpdate();
+		myGD->communication("Main_showLineDiePosition", t_p);
+//		(target_removeEffect->*delegate_removeEffect)();
+		if(m_step == 1)
+		{
+			setTwoStep();
+		}
+	}
+	
+	void update(float dt)
+	{		
+//		CCLog("pokjuk %d", m_frame);
+		
+		bool r = m_parentMissileGoal.step(1.f / 60.f);
+		if(m_step == 1)
+		{
+			m_frame++;
+			m_parentMissile->setPosition(m_parentMissileGoal.getValue());
+			if(m_frame % 5 == 0)
+				crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
+		}
+		
+		if(!r && m_step == 1)
+		{
+			setTwoStep();
+			
+		}
+		
+		if(m_step == 2)
+		{
+			m_frame++;
+			
+			if(m_frame % 15 == 0)
+			{
+				float bulletSpeed = 2.f;
+				int m_color = 1;
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
+				CCSize t_mSize = CCSize(4.f, 4.f);
+				
+				for(int i=0; i<=360; i+= 10)
+				{
+					MissileUnit* t_mu = MissileUnit::create(m_sourcePosition, i, bulletSpeed,
+																									imgFileName.c_str(), t_mSize,0, 0);
+					batchNode->addChild(t_mu);
+				}
+			
+			}
+			
+			
+			if(m_frame == m_bombFrame)
+			{
+				
+				m_step = 3;
+			}
+			
+		}
+	}
+protected:
+	CCPoint m_sourcePosition;
+	int m_step;
+	int m_frame;
+	int m_bombFrame;
+	CCParticleSystem* m_parentMissile;
+	CCSpriteBatchNode* batchNode;
+	FromToWithDuration2<CCPoint> m_parentMissileGoal;
+};
+
+class MovingSunflower : public CrashMapObject
+{
+public:
+	static MovingSunflower* create(CCPoint cumberPosition, CCPoint jackPosition)
+	{
+		MovingSunflower* t_bf = new MovingSunflower();
+		t_bf->myInit(cumberPosition, jackPosition);
+		t_bf->autorelease();
+		return t_bf;
+	}
+	void crashMapForPoint(IntPoint point, int radius)
+	{
+		for(int y = - radius; y <= radius; y++)
+		{
+			for(int x = - radius; x <= radius; x++)
+			{
+				if(sqrt(x*x + y*y) <= radius)
+					crashMapForIntPoint(IntPoint(point.x + x, point.y + y));
+			}
+		}
+	}
+	void myInit(CCPoint cumberPosition, CCPoint jackPosition)
+	{
+		m_step = 1;
+		m_bombFrame = 300;
+		m_parentMissile = CCParticleSystemQuad::create("pm.plist");
+		m_parentMissile->setPositionType(kCCPositionTypeRelative);
+		m_parentMissile->setPosition(cumberPosition);
+		addChild(m_parentMissile);
+		
+		//		CCPoint jackPosition = ip2ccp(myGD->getJackPoint());
+		
+		auto mat = CCAffineTransformMakeIdentity();
+		auto mat2 = CCAffineTransformRotate(mat, m_well512.GetFloatValue(-15 * M_PI / 180.f, +15 * M_PI / 180.f));
+		jackPosition = CCPointApplyAffineTransform(jackPosition, mat2);
+		CCPoint subtract = jackPosition - cumberPosition;
+		
+		m_parentMissileGoal.init(cumberPosition, jackPosition, 0.01f * ccpLength(subtract));
+		scheduleUpdate();
+		
+		int m_color = 1;
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
+	}
+	
+	void setTwoStep()
+	{
+		myGD->communication("MS_resetRects");
+		m_step = 2;
+		m_frame = 0;
+		m_sourcePosition = m_parentMissile->getPosition();
+		m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
+		m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
+		m_parentMissile->runAction(KSSequenceAndRemove::create(this, {CCDelayTime::create(3.f)}));
+	}
+	void jackDie()
+	{
+		//		unscheduleUpdate();
+		if(m_step == 1)
+		{
+			setTwoStep();
+		}
+	}
+	
+	void lineDie(IntPoint t_p)
+	{
+		//		unscheduleUpdate();
+		myGD->communication("Main_showLineDiePosition", t_p);
+		//		(target_removeEffect->*delegate_removeEffect)();
+		if(m_step == 1)
+		{
+			setTwoStep();
+		}
+	}
+	
+	void update(float dt)
+	{
+		//		CCLog("pokjuk %d", m_frame);
+		
+		bool r = m_parentMissileGoal.step(1.f / 60.f);
+		if(m_step == 1)
+		{
+			m_frame++;
+			m_parentMissile->setPosition(m_parentMissileGoal.getValue());
+			if(m_frame % 5 == 0)
+				crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
+			
+			if(m_frame % 15 == 0)
+			{
+				float bulletSpeed = 1.f;
+				int m_color = 1;
+				std::string imgFileName;
+				std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+				if(KS::isExistFile(fileName))
+					imgFileName = fileName;
+				else
+					imgFileName = "cumber_missile1.png";
+				CCSize t_mSize = CCSize(4.f, 4.f);
+				
+				for(int i=0; i<=360; i+= 10)
+				{
+					MissileUnit* t_mu = MissileUnit::create(m_parentMissileGoal.getValue(), i, bulletSpeed,
+																									imgFileName.c_str(), t_mSize,0, 0);
+					batchNode->addChild(t_mu);
+				}
+			}
+
+		}
+		
+		if(!r && m_step == 1)
+		{
+			setTwoStep();
+			
+		}
+		
+		if(m_step == 2)
+		{
+						
+		}
+	}
+protected:
+	CCPoint m_sourcePosition;
+	int m_step;
+	int m_frame;
+	int m_bombFrame;
+	CCParticleSystem* m_parentMissile;
+	CCSpriteBatchNode* batchNode;
+	FromToWithDuration2<CCPoint> m_parentMissileGoal;
+	Well512 m_well512;
+};
+
+
 
 class Burn : public CCNode
 {
@@ -3440,7 +3765,7 @@ public:
 	void move(float dt)
 	{
 		setRotation(getRotation()-2);
-		
+		CCPoint beforePosition = getPosition() + getParent()->getPosition();
 		CCPoint r_p = getPosition(); // recent
 		
 		CCPoint dv = ccp(0, 0);
@@ -3492,7 +3817,8 @@ public:
 			return;
 		}	
 		
-		IntPoint p_pPoint = ccp2ip(p_p);
+//		IntPoint p_pPoint = ccp2ip(p_p);
+//		IntPoint p_pBeforePoint = ccp2ip(beforePosition);
 		if(m_isChecking)
 		{
 			IntPoint jackPoint = myGD->getJackPoint();
@@ -3517,8 +3843,31 @@ public:
 					myGD->communication("Jack_showMB");
 				}
 			}
-			
-			//##
+			else
+			{
+				float angle = atan2(p_p.y - beforePosition.y, p_p.x - beforePosition.x);
+				int loop = ccpLength(p_p - beforePosition) / 1.414f;
+				CCPoint t2 = beforePosition;
+				for(int i=0; i<loop; i++)
+				{
+					t2.x += 1.414f * cos(angle);
+					t2.y += 1.414f * sin(angle);
+					
+					IntPoint t = ccp2ip(t2);
+					CCLog("%d %d", t.x, t.y);
+					if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
+					{
+						myGD->communication("PM_addPathBreaking", t);
+					}
+					
+				}
+				IntPoint t = ccp2ip(p_p);
+				if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
+				{
+					myGD->communication("PM_addPathBreaking", t);
+				}
+			}
+//			//##
 //			else if(myGD->mapState[p_pPoint.x][p_pPoint.y] == mapType::mapNewline)
 //			{
 //				myGD->communication("PM_addPathBreaking", p_pPoint);
