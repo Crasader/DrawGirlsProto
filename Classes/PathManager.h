@@ -104,51 +104,28 @@ private:
 	{
 		if(pre_img)
 		{
-			CCPoint sub_point = ccpSub(myGD->getJackPoint().convertToCCP(), pre_img->getPosition());
-			float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
-			if(sub_value < 4.f)
-			{
-				getParent()->setTag(pathBreakingStateFalse);
-				myGD->communication("Jack_startDieEffect");
-				unschedule(schedule_selector(PathBreakingParent::tracing));
-				removeFromParent();
-				return;
-			}
+			pre_it--;
+			if(pre_it != plinked_list->begin())
+				pre_img->setPosition((*pre_it).convertToCCP());
 			else
 			{
-				pre_it--;
-				if(pre_it != plinked_list->begin())
-					pre_img->setPosition((*pre_it).convertToCCP());
-				else
-				{
-					pre_img->removeFromParent();
-					pre_img = NULL;
-				}
+				pre_img->removeFromParent();
+				pre_img = NULL;
 			}
 		}
 		
 		if(next_img)
 		{
-			CCPoint sub_point = ccpSub(myGD->getJackPoint().convertToCCP(), next_img->getPosition());
-			float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
-			if(sub_value < 4.f)
+			next_it++;
+			if(next_it != plinked_list->end())
+				next_img->setPosition((*next_it).convertToCCP());
+			else
 			{
 				getParent()->setTag(pathBreakingStateFalse);
 				myGD->communication("Jack_startDieEffect");
 				unschedule(schedule_selector(PathBreakingParent::tracing));
 				removeFromParent();
 				return;
-			}
-			else
-			{
-				next_it++;
-				if(next_it != plinked_list->end())
-					next_img->setPosition((*next_it).convertToCCP());
-				else
-				{
-					next_img->removeFromParent();
-					next_img = NULL;
-				}
 			}
 		}
 	}
@@ -251,6 +228,7 @@ public:
 	{
 		if(!myList.empty())
 		{
+			linked_list.pop_back();
 			PathNode* b_node = myList.back();
 			
 			if(b_node->pathScale > 1) // reduce
