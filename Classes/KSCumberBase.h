@@ -87,49 +87,7 @@ class KSCumberBase : public CCNode
 {
 public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
-	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0),/// 초당 변수만큼 충돌시 스케일 줄임.
-	AP_CODE_
-	{
-		{"1", {AttackProperty::NODIR ,"1"}},
-		{"2", {AttackProperty::NODIR ,"2"}},
-		{"3", {AttackProperty::NODIR ,"3"}},
-		{"4", {AttackProperty::NODIR ,"4"}},
-		{"5", {AttackProperty::NODIR ,"5"}},
-		{"6", {AttackProperty::NODIR ,"6"}},
-		{"7", {AttackProperty::NODIR ,"7"}},
-		{"8", {AttackProperty::NODIR ,"8"}},
-		{"9", {AttackProperty::NODIR ,"9"}},
-		{"10", {AttackProperty::NODIR ,"10"}},
-		{"101", {AttackProperty::DIR ,"101"}},
-		{"102", {AttackProperty::DIR ,"102"}},
-		{"103", {AttackProperty::DIR ,"103"}},
-		{"104", {AttackProperty::DIR ,"104"}},
-		{"105", {AttackProperty::DIR ,"105"}},
-		{"106", {AttackProperty::DIR ,"106"}},
-		{"107", {AttackProperty::DIR ,"107"}},
-		{"108", {AttackProperty::DIR ,"108"}},
-		{"109", {AttackProperty::DIR ,"109"}},
-		
-		{"1001", {AttackProperty::SPECIAL ,"1001"}},
-		{"1002", {AttackProperty::SPECIAL ,"1002"}},
-		{"1003", {AttackProperty::SPECIAL ,"1003"}},
-		{"1004", {AttackProperty::SPECIAL ,"1004"}},
-		{"1005", {AttackProperty::SPECIAL ,"1005"}},
-		{"1006", {AttackProperty::SPECIAL ,"1006"}},
-		{"1007", {AttackProperty::SPECIAL ,"1007"}},
-		{"1008", {AttackProperty::SPECIAL ,"1008"}},
-		{"1009", {AttackProperty::SPECIAL ,"1009"}},
-		{"1010", {AttackProperty::SPECIAL ,"1010"}},
-		{"1011", {AttackProperty::SPECIAL ,"1011"}},
-		{"1012", {AttackProperty::SPECIAL ,"1012"}},
-		{"1013", {AttackProperty::SPECIAL ,"1013"}},
-		{"1014", {AttackProperty::SPECIAL ,"1014"}},
-		{"1015", {AttackProperty::SPECIAL ,"1015"}},
-		{"1016", {AttackProperty::SPECIAL ,"1016"}},
-		{"1017", {AttackProperty::SPECIAL ,"1017"}},
-		{"1018", {AttackProperty::SPECIAL,"1018"}},
-		{"1019", {AttackProperty::SPECIAL,"1019"}}
-	}
+	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0)/// 초당 변수만큼 충돌시 스케일 줄임.
 //		m_state(CUMBERSTATESTOP)
 	{
 		
@@ -445,7 +403,6 @@ public:
 		myGD->communication("UI_catchSubCumber");
 		myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
 	}
-	std::map<std::string, AttackProperty> AP_CODE_;
 protected:
 		
 	struct BossDie
