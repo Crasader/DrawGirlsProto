@@ -78,7 +78,7 @@ bool StartingScene::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEv
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-	location = ccpSub(location, myDSH->ui_zero_point);
+	location = ccpSub(location, myDSH->ui_touch_convert);
 	
 	begin_point = location;
 	
@@ -100,7 +100,7 @@ void StartingScene::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEv
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-	location = ccpSub(location, myDSH->ui_zero_point);
+	location = ccpSub(location, myDSH->ui_touch_convert);
 	
 	float x_distance = begin_point.x - location.x;
 	

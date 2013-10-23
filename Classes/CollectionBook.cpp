@@ -415,7 +415,7 @@ bool CollectionBook::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 {
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-	location = ccpSub(location, myDSH->ui_zero_point);
+	location = ccpSub(location, myDSH->ui_touch_convert);
 	
     CCRect textFieldRect = CCRectMake(0, 0, input_text->getContentSize().width, input_text->getContentSize().height);
     textFieldRect = CCRectApplyAffineTransform(textFieldRect, input_text->nodeToWorldTransform());
@@ -497,7 +497,7 @@ void CollectionBook::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-	location = ccpSub(location, myDSH->ui_zero_point);
+	location = ccpSub(location, myDSH->ui_touch_convert);
 	
 	float x_distance = begin_point.x - location.x;
 	

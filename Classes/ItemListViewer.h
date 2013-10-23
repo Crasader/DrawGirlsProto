@@ -135,8 +135,7 @@ private:
 	{
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_zero_point);
-		location.y -= getPositionY();
+		location = ccpSub(location, myDSH->ui_touch_convert);
 		
 		bool return_value = false;
 		
@@ -175,8 +174,7 @@ private:
 		
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_zero_point);
-		location.y -= getPositionY();
+		location = ccpSub(location, myDSH->ui_touch_convert);
 		
 		if(isVisible() && view_rect.containsPoint(location))
 		{
@@ -227,8 +225,7 @@ private:
 		
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_zero_point);
-		location.y -= getPositionY();
+		location = ccpSub(location, myDSH->ui_touch_convert);
 		
 		if(isVisible() && view_rect.containsPoint(location))
 		{
@@ -266,8 +263,7 @@ private:
 		
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_zero_point);
-		location.y -= getPositionY();
+		location = ccpSub(location, myDSH->ui_touch_convert);
 		
 		if(isVisible() && view_rect.containsPoint(location))
 		{

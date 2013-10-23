@@ -300,7 +300,7 @@ private:
 			PathBreakingParent* n_pbp = PathBreakingParent::create(start, &linked_list);
 			n_pbp->setTag(childTagInPathParentPathBreaking);
 			if(n_pbp->isActing())
-				addChild(n_pbp);
+				addChild(n_pbp, 2);
 			else
 				setTag(pathBreakingStateFalse);
 		}
@@ -334,7 +334,7 @@ private:
 	{
 		PathNode* t_pn = PathNode::create(t_pv);
 		t_pn->setTag(childTagInPathParentPathNode);
-		addChild(t_pn);
+		addChild(t_pn, 1);
 		
 		myList.push_back(t_pn);
 	}

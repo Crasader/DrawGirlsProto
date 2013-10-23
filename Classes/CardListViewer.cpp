@@ -13,8 +13,6 @@ void CardListViewer::visit()
 {
 	glEnable(GL_SCISSOR_TEST);
 	
-	int viewport [4];
-	glGetIntegerv (GL_VIEWPORT, viewport);
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
 	
@@ -33,13 +31,6 @@ void CardListViewer::visit()
 		hScale = wScale;
 		yMargine = (frame_size.height - rSize.height*hScale)/2.f;
 	}
-	
-//	float wScale = viewport[2] / rSize.width;
-//	float hScale = viewport[3] / rSize.height;
-//	float x = view_rect.origin.x*wScale + viewport[0];
-//	float y = view_rect.origin.y*hScale + viewport[1];
-//	float w = view_rect.size.width*wScale;
-//	float h = view_rect.size.height*hScale;
 	
 	float x = view_rect.origin.x*wScale + xMargine;
 	float y = view_rect.origin.y*hScale + yMargine;
@@ -103,8 +94,7 @@ bool CardListViewer::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 {
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-	location = ccpSub(location, myDSH->ui_zero_point);
-	location.y -= getPositionY();
+	location = ccpSub(location, myDSH->ui_touch_convert);
 	
 	bool return_value = false;
 	
@@ -146,8 +136,7 @@ void CardListViewer::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-	location = ccpSub(location, myDSH->ui_zero_point);
-	location.y -= getPositionY();
+	location = ccpSub(location, myDSH->ui_touch_convert);
 	
 	if(isVisible() && view_rect.containsPoint(location))
 	{
@@ -199,8 +188,7 @@ void CardListViewer::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-	location = ccpSub(location, myDSH->ui_zero_point);
-	location.y -= getPositionY();
+	location = ccpSub(location, myDSH->ui_touch_convert);
 	
 	if(isVisible() && view_rect.containsPoint(location))
 	{
@@ -239,8 +227,7 @@ void CardListViewer::ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-	location = ccpSub(location, myDSH->ui_zero_point);
-	location.y -= getPositionY();
+	location = ccpSub(location, myDSH->ui_touch_convert);
 	
 	if(isVisible() && view_rect.containsPoint(location))
 	{

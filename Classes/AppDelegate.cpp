@@ -81,6 +81,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 		myDSH->ui_zero_point = CCPointZero;
 	}
 	
+	CCPoint ui_touch_convert = ccp(0,screen_size.height*(designResolutionSize.width/screen_size.width) - designResolutionSize.height);
+	myDSH->ui_touch_convert = ui_touch_convert;
+	
 	
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb");
