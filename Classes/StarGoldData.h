@@ -743,7 +743,11 @@ private:
 		serverTime_getted = false;
 		is_before_title = true;
 		
-		for(int i=1;i<=mySD->getLastUpdateStageNumber();i++)
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+		
+		for(int i=start_stage;i<start_stage+stage_count;i++)
 		{
 			for(int j=0;j<3;j++)
 			{

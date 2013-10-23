@@ -145,7 +145,10 @@ void CollectionView::myInit()
 
 void CollectionView::setInnerView()
 {
-	for(int i=0;i<(mySD->getLastUpdateStageNumber()+1)/2;i++)
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+	
+	for(int i=0;i<(stage_count+1)/2;i++)
 	{
 		CollectionInnerLine* t_gil = CollectionInnerLine::create(i);
 		inner_view->addChild(t_gil);
@@ -174,7 +177,10 @@ void CollectionView::moveAnimation()
 		return;
 	}
 	
-	if(inner_view->getPositionY() > 190 + ((mySD->getLastUpdateStageNumber()+1)/2-2)*103)
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+	
+	if(inner_view->getPositionY() > 190 + ((stage_count+1)/2-2)*103)
 	{
 		unschedule(schedule_selector(CollectionView::moveAnimation));
 		schedule(schedule_selector(CollectionView::moveAnimationDown));
@@ -223,9 +229,12 @@ void CollectionView::moveAnimationDown()
 {
     isAnimated = true;
 	
-	if(inner_view->getPositionY() > 190 + ((mySD->getLastUpdateStageNumber()+1)/2-2)*103)
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+	
+	if(inner_view->getPositionY() > 190 + ((stage_count+1)/2-2)*103)
 	{
-		float dy = 190 + ((mySD->getLastUpdateStageNumber()+1)/2-2)*103 - inner_view->getPositionY();
+		float dy = 190 + ((stage_count+1)/2-2)*103 - inner_view->getPositionY();
 		if(dy > -10)
 		{
 			moveList(dy);
@@ -313,7 +322,10 @@ void CollectionView::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 			}
 		}
         
-		if(inner_view->getPositionY() > 190 + ((mySD->getLastUpdateStageNumber()+1)/2-2)*103)
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+		
+		if(inner_view->getPositionY() > 190 + ((stage_count+1)/2-2)*103)
 		{
 			if(isAnimated == false)
 			{
@@ -363,8 +375,11 @@ void CollectionView::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 				return;
 			}
 		}
+		
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
         
-		if(inner_view->getPositionY() > 190 + ((mySD->getLastUpdateStageNumber()+1)/2-2)*103)
+		if(inner_view->getPositionY() > 190 + ((stage_count+1)/2-2)*103)
 		{
 			if(isAnimated == false)
 			{

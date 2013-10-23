@@ -37,12 +37,6 @@ public:
 		return t_SD;
 	}
 	
-	int getLastUpdateStageNumber()
-	{
-		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-		return SDS_GI(kSDF_puzzleInfo, puzzle_number, "stage_count");
-	}
-	
 	void setSilType(int t1)
 	{
 		myType = t1;

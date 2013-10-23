@@ -175,8 +175,8 @@ void PuzzleMapScene::setMapNode()
 	
 	CCRect stage_rect = CCRectMake(-30.f, -30.f, 60.f, 60.f);
 	
-	start_stage_number = SDS_GI(kSDF_puzzleInfo, recent_puzzle_number, "start_stage_number");
-	stage_count = SDS_GI(kSDF_puzzleInfo, recent_puzzle_number, "stage_count");
+	start_stage_number = NSDS_GI(recent_puzzle_number, kSDS_PZ_startStage_i);
+	stage_count = NSDS_GI(recent_puzzle_number, kSDS_PZ_stageCount_i);
 	
 	for(int i = start_stage_number;i<start_stage_number+stage_count;i++)
 	{
@@ -361,9 +361,9 @@ void PuzzleMapScene::setUIs()
 	addChild(showui_menu, kPMS_Z_ui_button, kPMS_MT_showui);
 	
 	
-	int event_length = SDS_GI(kSDF_gameInfo, "event_count");
-	if(event_length > 0)
-	{
+//	int event_length = NSDS_GI(kSDS_GI_eventCount_i);
+//	if(event_length > 0)
+//	{
 		CCSprite* n_event = CCSprite::create("test_ui_event.png");
 		CCSprite* s_event = CCSprite::create("test_ui_event.png");
 		s_event->setColor(ccGRAY);
@@ -375,57 +375,57 @@ void PuzzleMapScene::setUIs()
 		event_menu->setEnabled(false);
 		event_menu->setPosition(getUiButtonPosition(kPMS_MT_event));
 		main_node->addChild(event_menu, kPMS_Z_ui_button, kPMS_MT_event);
-		
-		
-		CCSprite* n_event_close = CCSprite::create("test_ui_event_close.png");
-		CCSprite* s_event_close = CCSprite::create("test_ui_event_close.png");
-		s_event_close->setColor(ccGRAY);
-		
-		CCMenuItem* event_close_item = CCMenuItemSprite::create(n_event_close, s_event_close, this, menu_selector(PuzzleMapScene::menuAction));
-		event_close_item->setTag(kPMS_MT_eventClose);
-		
-		CCMenu* event_close_menu = CCMenu::createWithItem(event_close_item);
-		event_close_menu->setEnabled(false);
-		event_close_menu->setPosition(getUiButtonPosition(kPMS_MT_eventClose));
-		main_node->addChild(event_close_menu, kPMS_Z_ui_button, kPMS_MT_eventClose);
-		
+//		
+//		
+//		CCSprite* n_event_close = CCSprite::create("test_ui_event_close.png");
+//		CCSprite* s_event_close = CCSprite::create("test_ui_event_close.png");
+//		s_event_close->setColor(ccGRAY);
+//		
+//		CCMenuItem* event_close_item = CCMenuItemSprite::create(n_event_close, s_event_close, this, menu_selector(PuzzleMapScene::menuAction));
+//		event_close_item->setTag(kPMS_MT_eventClose);
+//		
+//		CCMenu* event_close_menu = CCMenu::createWithItem(event_close_item);
+//		event_close_menu->setEnabled(false);
+//		event_close_menu->setPosition(getUiButtonPosition(kPMS_MT_eventClose));
+//		main_node->addChild(event_close_menu, kPMS_Z_ui_button, kPMS_MT_eventClose);
+//		
 //		showEventButton();
-	}
+//	}
 }
 
 void PuzzleMapScene::showEventButton()
 {
 	CCMenu* event_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_event);
-	CCMenu* event_close_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose);
+//	CCMenu* event_close_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose);
 	
 	CCMoveTo* t_move1 = CCMoveTo::create(0.5f, ccp(420,-(myDSH->puzzle_ui_top-320.f)/2.f + 52.f));
-	CCMoveTo* t_move2 = CCMoveTo::create(0.5f, ccp(450,-(myDSH->puzzle_ui_top-320.f)/2.f + 102.f));
+//	CCMoveTo* t_move2 = CCMoveTo::create(0.5f, ccp(450,-(myDSH->puzzle_ui_top-320.f)/2.f + 102.f));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::onEventButton));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move1, t_call);
 	
-	event_menu->runAction(t_move1);
-	event_close_menu->runAction(t_seq);
+	event_menu->runAction(t_seq);
+//	event_close_menu->runAction(t_seq);
 }
 void PuzzleMapScene::onEventButton()
 {
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose))->setEnabled(true);
+//	((CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose))->setEnabled(true);
 }
 void PuzzleMapScene::hideEventButton()
 {
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose))->setEnabled(false);
+//	((CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose))->setEnabled(false);
 	
 	CCMenu* event_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_event);
-	CCMenu* event_close_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose);
+//	CCMenu* event_close_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose);
 	
 	CCMoveTo* t_move1 = CCMoveTo::create(0.5f, getUiButtonPosition(kPMS_MT_event));
-	CCMoveTo* t_move2 = CCMoveTo::create(0.5f, getUiButtonPosition(kPMS_MT_eventClose));
+//	CCMoveTo* t_move2 = CCMoveTo::create(0.5f, getUiButtonPosition(kPMS_MT_eventClose));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::onEventButton));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move1, t_call);
 	
-	event_menu->runAction(t_move1);
-	event_close_menu->runAction(t_seq);
+	event_menu->runAction(t_seq);
+//	event_close_menu->runAction(t_seq);
 }
 
 CCPoint PuzzleMapScene::getUiButtonPosition(int t_tag)
@@ -438,7 +438,7 @@ CCPoint PuzzleMapScene::getUiButtonPosition(int t_tag)
 //	else if(t_tag == kWMS_MT_rank)			return_value = ccp(230,34);
 //	else if(t_tag == kWMS_MT_postbox)		return_value = ccp(285,34);
 	if(t_tag == kPMS_MT_event)				return_value = ccp(420,-(myDSH->puzzle_ui_top-320.f)/2.f - 100.f); // after move animation
-	else if(t_tag == kPMS_MT_eventClose)	return_value = ccp(450,-(myDSH->puzzle_ui_top-320.f)/2.f - 50.f); // after move animation
+//	else if(t_tag == kPMS_MT_eventClose)	return_value = ccp(450,-(myDSH->puzzle_ui_top-320.f)/2.f - 50.f); // after move animation
 	else if(t_tag == kPMS_MT_screen)		return_value = ccp(455,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f - 19.f);
 	else if(t_tag == kPMS_MT_showui)		return_value = ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f + 10.f);
 	else if(t_tag == kPMS_MT_top)			return_value = ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f); // after_move_animation
@@ -489,7 +489,7 @@ void PuzzleMapScene::startChangeUiMode()
 	isAnimated=false;
 	
 	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose))->setVisible(false);
+//	((CCMenu*)main_node->getChildByTag(kPMS_MT_eventClose))->setVisible(false);
 	
 	if(((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->getPositionY() < -(myDSH->puzzle_ui_top-320.f)/2.f - 24.f)
 		showEventButton();
@@ -651,12 +651,12 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	int tag = ((CCNode*)pSender)->getTag();
 	CCLog("menu %d", tag);
 	
-	if(tag == kPMS_MT_eventClose)
-	{
-		hideEventButton();
-		is_menu_enable = true;
-	}
-	else if(tag == kPMS_MT_event)
+//	if(tag == kPMS_MT_eventClose)
+//	{
+//		hideEventButton();
+//		is_menu_enable = true;
+//	}
+	if(tag == kPMS_MT_event)
 	{
 		resetStagePiece();
 		

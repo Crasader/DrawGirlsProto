@@ -95,7 +95,7 @@ private:
 		addChild(start_menu, kEP_Z_content);
 		
 		
-		el_length = SDS_GI(kSDF_gameInfo, "event_count");
+		el_length = NSDS_GI(kSDS_GI_eventCount_i);
 		for(int i=0;i<el_length;i++)
 		{
 			int event_code = SDS_GI(kSDF_gameInfo, CCString::createWithFormat("event%d_code", i)->getCString());

@@ -200,6 +200,10 @@ public:
 	float screen_convert_rate;
 	CCPoint ui_touch_convert;
 	
+	CCPoint mult_point;
+	CCPoint add_point;
+	CCPoint wideWidthFixTouch(CCPoint t_p){	return ccp(t_p.x*mult_point.x + add_point.x, t_p.y*mult_point.y + add_point.y);	}
+	
 private:
 	SaveData* myDefault;
 //	bool is_notRetinaIpad;

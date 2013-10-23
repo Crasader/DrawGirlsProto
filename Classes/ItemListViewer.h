@@ -31,8 +31,6 @@ public:
 	{
 		glEnable(GL_SCISSOR_TEST);
 		
-		int viewport [4];
-		glGetIntegerv (GL_VIEWPORT, viewport);
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
 		
@@ -51,13 +49,6 @@ public:
 			hScale = wScale;
 			yMargine = (frame_size.height - rSize.height*hScale)/2.f;
 		}
-		
-//		float wScale = viewport[2] / rSize.width;
-//		float hScale = viewport[3] / rSize.height;
-//		float x = view_rect.origin.x*wScale + viewport[0];
-//		float y = view_rect.origin.y*hScale + viewport[1];
-//		float w = view_rect.size.width*wScale;
-//		float h = view_rect.size.height*hScale;
 		
 		float x = view_rect.origin.x*wScale + xMargine;
 		float y = view_rect.origin.y*hScale + yMargine;
@@ -134,8 +125,8 @@ private:
 	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 	{
 		CCTouch* touch = pTouch;
-		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_touch_convert);
+		CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+		location = myDSH->wideWidthFixTouch(location);
 		
 		bool return_value = false;
 		
@@ -173,8 +164,8 @@ private:
 		if(!is_touching)		return;
 		
 		CCTouch* touch = pTouch;
-		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_touch_convert);
+		CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+		location = myDSH->wideWidthFixTouch(location);
 		
 		if(isVisible() && view_rect.containsPoint(location))
 		{
@@ -224,8 +215,8 @@ private:
 		if(!is_touching)		return;
 		
 		CCTouch* touch = pTouch;
-		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_touch_convert);
+		CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+		location = myDSH->wideWidthFixTouch(location);
 		
 		if(isVisible() && view_rect.containsPoint(location))
 		{
@@ -262,8 +253,8 @@ private:
 		if(!is_touching)		return;
 		
 		CCTouch* touch = pTouch;
-		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_touch_convert);
+		CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+		location = myDSH->wideWidthFixTouch(location);
 		
 		if(isVisible() && view_rect.containsPoint(location))
 		{
@@ -300,7 +291,6 @@ private:
 	{
 		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority-1, false);
 	}
-	
 	
 	void myInit()
 	{

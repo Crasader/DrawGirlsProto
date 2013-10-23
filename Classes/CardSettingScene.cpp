@@ -162,7 +162,11 @@ void CardSettingScene::createCardList()
 		check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-1)*82)));
 		my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 		
-		for(int i=1;i<=mySD->getLastUpdateStageNumber();i++)
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+		
+		for(int i=start_stage;i<start_stage+stage_count;i++)
 		{
 			for(int j=1;j<=3;j++)
 			{

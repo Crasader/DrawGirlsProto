@@ -68,17 +68,36 @@ bool AppDelegate::applicationDidFinishLaunching()
 	{
 		myDSH->screen_convert_rate = (designResolutionSize.width/designResolutionSize.height)/screen_rate;
 		myDSH->ui_zero_point = CCPointZero;
+		
+		float t_value = screen_size.height/designResolutionSize.height;
+		myDSH->mult_point.x = screen_size.width/t_value/designResolutionSize.width;
+		myDSH->add_point.x = -(screen_size.width-designResolutionSize.width*t_value)/2.f/t_value;
+		
+		myDSH->mult_point.y = screen_size.width/designResolutionSize.width/t_value;
+		myDSH->add_point.y = 0.f;
 	}
 	else if(screen_rate < 1.5f)
 	{
 		myDSH->screen_convert_rate = 1.f;
 		myDSH->ui_zero_point = ccp(0,(screen_size.height*(designResolutionSize.width/screen_size.width) - designResolutionSize.height)/2.f);
 		myDSH->puzzle_ui_top = myDSH->ui_top;
+		
+		myDSH->mult_point.x = 1.f;
+		myDSH->add_point.x = 0.f;
+		
+		myDSH->mult_point.y = 1.f;
+		myDSH->add_point.y = -(screen_size.height*(designResolutionSize.width/screen_size.width) - designResolutionSize.height)/2.f;
 	}
 	else
 	{
 		myDSH->screen_convert_rate = 1.f;
 		myDSH->ui_zero_point = CCPointZero;
+		
+		myDSH->mult_point.x = 1.f;
+		myDSH->add_point.x = 0.f;
+		
+		myDSH->mult_point.y = 1.f;
+		myDSH->add_point.y = 0.f;
 	}
 	
 	CCPoint ui_touch_convert = ccp(0,screen_size.height*(designResolutionSize.width/screen_size.width) - designResolutionSize.height);

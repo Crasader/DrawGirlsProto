@@ -25,35 +25,35 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 	CCLog("result data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["state"].asString() == "ok")
 	{
-		if(SDS_GI(kSDF_puzzleInfo, puzzle_number, "version") < result_data["version"].asInt())
+		if(NSDS_GI(puzzle_number, kSDS_PZ_version_i) < result_data["version"].asInt())
 		{
 			state_ment->setString("퍼즐 정보를 받아오는ing...");
 			
-			SDS_SS(kSDF_puzzleInfo, puzzle_number, "title", result_data["title"].asString());
-			SDS_SI(kSDF_puzzleInfo, puzzle_number, "ticket", result_data["ticket"].asInt());
-			SDS_SI(kSDF_puzzleInfo, puzzle_number, "point", result_data["point"].asInt());
+			NSDS_SS(puzzle_number, kSDS_PZ_title_s, result_data["title"].asString());
+			NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, result_data["ticket"].asInt());
+			NSDS_SI(puzzle_number, kSDS_PZ_point_i, result_data["point"].asInt());
 			
-			if(SDS_GS(kSDF_puzzleInfo, puzzle_number, "center") != result_data["center"]["image"].asString())		addDownlist("center", result_data);
-			if(SDS_GS(kSDF_puzzleInfo, puzzle_number, "bottom") != result_data["bottom"]["image"].asString())		addDownlist("bottom", result_data);
-			if(SDS_GS(kSDF_puzzleInfo, puzzle_number, "top") != result_data["top"]["image"].asString())				addDownlist("top", result_data);
-			if(SDS_GS(kSDF_puzzleInfo, puzzle_number, "left") != result_data["left"]["image"].asString())			addDownlist("left", result_data);
-			if(SDS_GS(kSDF_puzzleInfo, puzzle_number, "right") != result_data["right"]["image"].asString())			addDownlist("right", result_data);
+			if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != result_data["center"]["image"].asString())		addDownlist("center", result_data);
+			if(NSDS_GS(puzzle_number, kSDS_PZ_bottom_s) != result_data["bottom"]["image"].asString())		addDownlist("bottom", result_data);
+			if(NSDS_GS(puzzle_number, kSDS_PZ_top_s) != result_data["top"]["image"].asString())				addDownlist("top", result_data);
+			if(NSDS_GS(puzzle_number, kSDS_PZ_left_s) != result_data["left"]["image"].asString())			addDownlist("left", result_data);
+			if(NSDS_GS(puzzle_number, kSDS_PZ_right_s) != result_data["right"]["image"].asString())			addDownlist("right", result_data);
 			
-			SDS_SI(kSDF_puzzleInfo, puzzle_number, "start_stage_number", result_data["startStage"].asInt());
+			NSDS_SI(puzzle_number, kSDS_PZ_startStage_i, result_data["startStage"].asInt());
 			
 			Json::Value stage_list = result_data["list"];
 			int loop_cnt = stage_list.size();
-			SDS_SI(kSDF_puzzleInfo, puzzle_number, "stage_count", loop_cnt);
+			NSDS_SI(puzzle_number, kSDS_PZ_stageCount_i, loop_cnt);
 			for(int i=0;i<loop_cnt;i++)
 			{
 				int stage_number = stage_list[i]["no"].asInt();
 				
-				SDS_SI(kSDF_puzzleInfo, puzzle_number, CCSTR_CWF("stage%d_level", stage_number)->getCString(), stage_list[i]["level"].asInt());
-				SDS_SS(kSDF_puzzleInfo, puzzle_number, CCSTR_CWF("stage%d_pieceType", stage_number)->getCString(), stage_list[i]["pieceType"].asString());
-				SDS_SD(kSDF_puzzleInfo, puzzle_number, CCSTR_CWF("stage%d_x", stage_number)->getCString(), stage_list[i]["x"].asDouble());
-				SDS_SD(kSDF_puzzleInfo, puzzle_number, CCSTR_CWF("stage%d_y", stage_number)->getCString(), stage_list[i]["y"].asDouble());
+				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number, stage_list[i]["level"].asInt());
+				NSDS_SS(puzzle_number, kSDS_PZ_stage_int1_pieceType_s, stage_number, stage_list[i]["pieceType"].asString());
+				NSDS_SD(puzzle_number, kSDS_PZ_stage_int1_x_d, stage_number, stage_list[i]["x"].asDouble());
+				NSDS_SD(puzzle_number, kSDS_PZ_stage_int1_y_d, stage_number, stage_list[i]["y"].asDouble());
 				
-				if(SDS_GS(kSDF_puzzleInfo, puzzle_number, CCSTR_CWF("stage%d_piece", stage_number)->getCString()) != stage_list[i]["piece"]["image"].asString())
+				if(NSDS_GS(puzzle_number, kSDS_PZ_stage_int1_piece_s, stage_number) != stage_list[i]["piece"]["image"].asString())
 				{
 					// check, after download ----------
 					DownloadFile t_df;
@@ -64,7 +64,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					df_list.push_back(t_df);
 					// ================================
 				}
-				if(SDS_GS(kSDF_puzzleInfo, puzzle_number, CCSTR_CWF("stage%d_thumbnail", stage_number)->getCString()) != stage_list[i]["thumbnail"]["image"].asString())
+				if(NSDS_GS(puzzle_number, kSDS_PZ_stage_int1_thumbnail_s, stage_number) != stage_list[i]["thumbnail"]["image"].asString())
 				{
 					// check, after download ----------
 					DownloadFile t_df;
@@ -79,20 +79,20 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			
 			Json::Value event_list = result_data["eventList"];
 			int el_length = event_list.size();
-			SDS_SI(kSDF_gameInfo, "event_count", el_length);
+			NSDS_SI(kSDS_GI_eventCount_i, el_length);
 			for(int i=0;i<el_length;i++)
 			{
 				int event_code = event_list[i]["no"].asInt();
-				SDS_SI(kSDF_gameInfo, CCSTR_CWF("event%d_code", i)->getCString(), event_code);
+				NSDS_SI(kSDS_GI_event_int1_code_i, i, event_code);
 				Json::Value thumbnail = event_list[i]["thumbnail"];
-				if(SDS_GS(kSDF_gameInfo, CCSTR_CWF("event%d_thumbnail_image", i)->getCString()) != thumbnail["image"].asString())
+				if(NSDS_GS(kSDS_GI_event_int1_thumbnail_s, i) != thumbnail["image"].asString())
 				{
 					// check, after download ----------
 					DownloadFile t_df;
 					t_df.size = thumbnail["size"].asInt();
 					t_df.img = thumbnail["image"].asString().c_str();
 					t_df.filename = CCSTR_CWF("event%d_thumbnail.png", i)->getCString();
-					t_df.key = CCSTR_CWF("event%d_thumbnail_image", i)->getCString();
+					t_df.key = CCSTR_CWF("event%d_thumbnail", i)->getCString();
 					ef_list.push_back(t_df);
 					// ================================
 				}
@@ -112,7 +112,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			}
 			else
 			{
-				SDS_SI(kSDF_puzzleInfo, puzzle_number, "version", result_data["version"].asInt());
+				NSDS_SI(puzzle_number, kSDS_PZ_version_i, result_data["version"].asInt());
 				state_ment->setString("퍼즐 정보 갱신 완료.");
 				(target_success->*delegate_success)();
 				removeFromParent();
@@ -172,7 +172,7 @@ void StageListDown::successAction()
 
 	if(ing_download_cnt >= df_list.size()+ef_list.size())
 	{
-		SDS_SI(kSDF_puzzleInfo, puzzle_number, "version", download_version);
+		NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version);
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()+ef_list.size()))->getCString());
 		state_ment->setString("퍼즐 이미지 다운로드 완료.");
 		(target_success->*delegate_success)();
