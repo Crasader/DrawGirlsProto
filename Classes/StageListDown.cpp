@@ -85,7 +85,6 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				int event_code = event_list[i]["no"].asInt();
 				SDS_SI(kSDF_gameInfo, CCSTR_CWF("event%d_code", i)->getCString(), event_code);
 				Json::Value thumbnail = event_list[i]["thumbnail"];
-				SDS_SI(kSDF_gameInfo, CCSTR_CWF("event%d_thumbnail_size", i)->getCString(), thumbnail["size"].asInt());
 				if(SDS_GS(kSDF_gameInfo, CCSTR_CWF("event%d_thumbnail_image", i)->getCString()) != thumbnail["image"].asString())
 				{
 					// check, after download ----------

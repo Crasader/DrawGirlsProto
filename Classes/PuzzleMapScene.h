@@ -144,16 +144,11 @@ private:
 			CCSetIterator iter;
 			CCTouch *touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				multiTouchData[(int)touch] = location;
 				
@@ -168,16 +163,11 @@ private:
 			CCSetIterator iter;
 			CCTouch *touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				multiTouchData[(int)touch] = location;
 				
@@ -192,16 +182,11 @@ private:
 			CCSetIterator iter;
 			CCTouch *touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				multiTouchData[(int)touch] = location;
 				
@@ -268,16 +253,11 @@ private:
 			CCSetIterator iter;
 			CCTouch* touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for(iter = pTouches->begin();iter != pTouches->end();++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				map<int, CCPoint>::iterator o_it;
 				o_it = multiTouchData.find((int)touch);
@@ -288,6 +268,7 @@ private:
 					{
 						if(location.y < touchStart_p.y - 50.f)
 						{
+							touchStart_p = location;
 							startChangeFrameMode();
 							multiTouchData.erase((int)touch);
 						}
@@ -300,16 +281,11 @@ private:
 			CCSetIterator iter;
 			CCTouch* touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for(iter = pTouches->begin();iter != pTouches->end();++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				map<int, CCPoint>::iterator o_it;
 				o_it = multiTouchData.find((int)touch);
@@ -320,6 +296,7 @@ private:
 					{
 						if(location.y > touchStart_p.y + 50.f)
 						{
+							touchStart_p = location;
 							startReturnUiMode();
 							multiTouchData.erase((int)touch);
 						}
@@ -332,16 +309,11 @@ private:
 			CCSetIterator iter;
 			CCTouch* touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for(iter = pTouches->begin();iter != pTouches->end();++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				map<int, CCPoint>::iterator o_it;
 				o_it = multiTouchData.find((int)touch);
@@ -365,6 +337,7 @@ private:
 						}
 						else if(is_gesturable_map_mode && location.y < touchStart_p.y - 50.f)
 						{
+							touchStart_p = location;
 							startChangeUiMode();
 							return;
 						}
@@ -410,16 +383,11 @@ private:
 			CCSetIterator iter;
 			CCTouch* touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for(iter = pTouches->begin();iter != pTouches->end();++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				map<int, CCPoint>::iterator o_it;
 				o_it = multiTouchData.find((int)touch);
@@ -434,16 +402,11 @@ private:
 			CCSetIterator iter;
 			CCTouch* touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for(iter = pTouches->begin();iter != pTouches->end();++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				map<int, CCPoint>::iterator o_it;
 				o_it = multiTouchData.find((int)touch);
@@ -460,16 +423,11 @@ private:
 			CCSetIterator iter;
 			CCTouch* touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for(iter = pTouches->begin();iter != pTouches->end();++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				map<int, CCPoint>::iterator o_it;
 				o_it = multiTouchData.find((int)touch);
@@ -484,16 +442,11 @@ private:
 			CCSetIterator iter;
 			CCTouch* touch;
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			CCSize my_size = CCSizeMake(480, 320);
-			
-			CCPoint touch_convert = ccp(0,screen_size.height*(my_size.width/screen_size.width) - my_size.height);
-			
 			for(iter = pTouches->begin();iter != pTouches->end();++iter)
 			{
 				touch = (CCTouch*)(*iter);
 				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, touch_convert);
+				location = ccpSub(location, myDSH->ui_touch_convert);
 				
 				map<int, CCPoint>::iterator o_it;
 				o_it = multiTouchData.find((int)touch);
@@ -522,6 +475,7 @@ private:
 							t_sp->setTouchCancel();
 						}
 						
+						touched_stage_number = 0;
 						map_mode_state = kMMS_default;
 					}
 					else if(multiTouchData.size() == 1)
@@ -606,9 +560,13 @@ private:
 	
 	void resetStagePiece()
 	{
-		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
-		t_sp->touchCancelled(NULL, NULL);
-		touched_stage_number = 0;
+		if(touched_stage_number != 0)
+		{
+			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
+			if(t_sp)
+				t_sp->touchCancelled(NULL, NULL);
+			touched_stage_number = 0;
+		}
 	}
 	
 	virtual void registerWithTouchDispatcher(void);

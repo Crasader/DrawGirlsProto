@@ -198,6 +198,7 @@ public:
 	float ui_bottom;
 	CCPoint ui_zero_point;
 	float screen_convert_rate;
+	CCPoint ui_touch_convert;
 	
 private:
 	SaveData* myDefault;

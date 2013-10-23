@@ -65,7 +65,7 @@ private:
 	{
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_zero_point);
+		location = ccpSub(location, myDSH->ui_touch_convert);
 		
 		bool return_value = false;
 		
@@ -88,7 +88,7 @@ private:
 		
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_zero_point);
+		location = ccpSub(location, myDSH->ui_touch_convert);
 		
 		float distance = location.y - touch_begin_point.y;
 		setPositionScrollY(scroll_img->getPositionY() + distance);
@@ -100,7 +100,7 @@ private:
 		
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_zero_point);
+		location = ccpSub(location, myDSH->ui_touch_convert);
 		
 		if(isVisible() && my_rect.containsPoint(location))
 		{
@@ -117,7 +117,7 @@ private:
 		
 		CCTouch* touch = pTouch;
 		CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-		location = ccpSub(location, myDSH->ui_zero_point);
+		location = ccpSub(location, myDSH->ui_touch_convert);
 		
 		if(isVisible() && my_rect.containsPoint(location))
 		{

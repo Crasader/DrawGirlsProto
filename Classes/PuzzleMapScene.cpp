@@ -477,6 +477,8 @@ void PuzzleMapScene::startChangeUiMode()
 	is_gesturable_map_mode = false;
 	map_mode_state = kMMS_changeMode;
 	
+	resetStagePiece();
+	
 	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 	{
 		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
@@ -606,6 +608,8 @@ void PuzzleMapScene::startReturnUiMode()
 	map_mode_state = kMMS_changeMode;
 	is_menu_enable = false;
 	
+	resetStagePiece();
+	
 	showEventButton();
 	
 	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
@@ -654,6 +658,8 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_event)
 	{
+		resetStagePiece();
+		
 		EventPopup* t_ep = EventPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
 		addChild(t_ep, kPMS_Z_popup);
 	}
