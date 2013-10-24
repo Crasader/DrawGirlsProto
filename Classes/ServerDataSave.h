@@ -62,6 +62,7 @@ enum SDS_KEY
 	kSDS_GI_puzzleListCount_i,
 	kSDS_GI_puzzleList_int1_no_i,
 	kSDS_GI_puzzleList_int1_title_s,
+	kSDS_GI_puzzleList_int1_version_i,
 	kSDS_GI_eventCount_i,
 	kSDS_GI_event_int1_code_i,
 	kSDS_GI_event_int1_thumbnail_s,

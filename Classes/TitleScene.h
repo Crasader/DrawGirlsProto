@@ -74,61 +74,10 @@ private:
 				{
 					NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_list[i]["no"].asInt());
 					NSDS_SS(kSDS_GI_puzzleList_int1_title_s, i+1, puzzle_list[i]["title"].asString().c_str());
-					
-//					CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,200,50));
-//					CCLabelTTF* n_label = CCLabelTTF::create(puzzle_list[i]["title"].asString().c_str(), mySGD->getFont().c_str(), 20);
-//					n_label->setColor(ccBLACK);
-//					n_label->setPosition(ccp(100,25));
-//					n_replay->addChild(n_label);
-//					
-//					CCSprite* s_replay = CCSprite::create("whitePaper.png", CCRectMake(0, 0,200,50));
-//					s_replay->setColor(ccGRAY);
-//					CCLabelTTF* s_label = CCLabelTTF::create(puzzle_list[i]["title"].asString().c_str(), mySGD->getFont().c_str(), 20);
-//					s_label->setColor(ccBLACK);
-//					s_label->setPosition(ccp(100,25));
-//					s_replay->addChild(s_label);
-//					
-//					CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
-//					replay_item->setTag(kTitle_MT_puzzleBase + puzzle_list[i]["no"].asInt());
-//					
-//					CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
-//					replay_menu->setPosition(ccp(240,240-i*55));
-//					addChild(replay_menu);
+					NSDS_SI(kSDS_GI_puzzleList_int1_version_i, i+1, puzzle_list[i]["version"].asInt());
 				}
 				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["version"].asInt());
 			}
-//			else
-//			{
-//				int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
-//				for(int i=0;i<puzzle_cnt;i++)
-//				{
-//					int no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
-//					string title = NSDS_GS(kSDS_GI_puzzleList_int1_title_s, i+1).c_str();
-//					
-//					CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,200,50));
-//					CCLabelTTF* n_label = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 20);
-//					n_label->setColor(ccBLACK);
-//					n_label->setPosition(ccp(100,25));
-//					n_replay->addChild(n_label);
-//					
-//					CCSprite* s_replay = CCSprite::create("whitePaper.png", CCRectMake(0, 0,200,50));
-//					s_replay->setColor(ccGRAY);
-//					CCLabelTTF* s_label = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 20);
-//					s_label->setColor(ccBLACK);
-//					s_label->setPosition(ccp(100,25));
-//					s_replay->addChild(s_label);
-//					
-//					CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
-//					replay_item->setTag(kTitle_MT_puzzleBase + no);
-//					
-//					CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
-//					replay_menu->setPosition(ccp(240,240-i*55));
-//					addChild(replay_menu);
-//				}
-//			}
-//			is_menu_enable = true;
-//			
-//			state_label->setString("플레이 할 퍼즐을 선택해주세요.");
 			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 		}
 		else

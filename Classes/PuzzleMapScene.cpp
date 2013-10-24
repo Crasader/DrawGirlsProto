@@ -894,11 +894,6 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						if(is_found && found_index <= puzzle_count)
 						{
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
-							CCSprite* loading_back = CCSprite::create("whitePaper.png");
-							loading_back->setColor(ccGRAY);
-							loading_back->setOpacity(100);
-							loading_back->setPosition(ccp(240,160));
-							addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
 							
 							map_mode_state = kMMS_changeMode;
 							is_menu_enable = false;
@@ -907,16 +902,52 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							after_map_node->setPosition(ccp(240+480,180));
 							main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
 							
-							CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
-							CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
-							CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
-							CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
-							
-							map_node->runAction(t_move1);
-							after_map_node->runAction(t_seq);
+							if(after_map_node->getTag() == kPMS_MT_loaded)
+							{
+								after_map_node->setTag(-1);
+								switchMapNode(after_map_node);
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endLoadedMovingMapNode));
+								CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+								
+								map_node->runAction(t_move1);
+								after_map_node->runAction(t_seq);
+							}
+							else
+							{
+								after_map_node->setTag(-1);
+								CCSprite* loading_back = CCSprite::create("whitePaper.png");
+								loading_back->setColor(ccGRAY);
+								loading_back->setOpacity(100);
+								loading_back->setPosition(ccp(240,160));
+								addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
+								CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+								
+								map_node->runAction(t_move1);
+								after_map_node->runAction(t_seq);
+							}
 						}
 						else
+						{
 							CCLog("nothing next puzzle!!!");
+							
+							original_mms = kMMS_uiMode;
+							
+							map_mode_state = kMMS_changeMode;
+							is_menu_enable = false;
+							
+							CCMoveBy* t_move1 = CCMoveBy::create(0.2f, ccp(-40,0));
+							CCMoveBy* t_move2 = CCMoveBy::create(0.1f, ccp(40,0));
+							CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endTingMapNode));
+							CCSequence* t_seq = CCSequence::create(t_move1, t_move2, t_call, NULL);
+							map_node->runAction(t_seq);
+						}
 					}
 					else if(location.x > touchStart_p.x + 50.f) // pre
 					{
@@ -937,11 +968,6 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						if(is_found)
 						{
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
-							CCSprite* loading_back = CCSprite::create("whitePaper.png");
-							loading_back->setColor(ccGRAY);
-							loading_back->setOpacity(100);
-							loading_back->setPosition(ccp(240,160));
-							addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
 							
 							map_mode_state = kMMS_changeMode;
 							is_menu_enable = false;
@@ -950,16 +976,52 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							after_map_node->setPosition(ccp(240-480,180));
 							main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
 							
-							CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
-							CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
-							CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
-							CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
-							
-							map_node->runAction(t_move1);
-							after_map_node->runAction(t_seq);
+							if(after_map_node->getTag() == kPMS_MT_loaded)
+							{
+								after_map_node->setTag(-1);
+								switchMapNode(after_map_node);
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endLoadedMovingMapNode));
+								CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+								
+								map_node->runAction(t_move1);
+								after_map_node->runAction(t_seq);
+							}
+							else
+							{
+								after_map_node->setTag(-1);
+								CCSprite* loading_back = CCSprite::create("whitePaper.png");
+								loading_back->setColor(ccGRAY);
+								loading_back->setOpacity(100);
+								loading_back->setPosition(ccp(240,160));
+								addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
+								CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+								
+								map_node->runAction(t_move1);
+								after_map_node->runAction(t_seq);
+							}
 						}
 						else
+						{
 							CCLog("nothing pre puzzle!!!");
+							
+							original_mms = kMMS_uiMode;
+							
+							map_mode_state = kMMS_changeMode;
+							is_menu_enable = false;
+							
+							CCMoveBy* t_move1 = CCMoveBy::create(0.2f, ccp(40,0));
+							CCMoveBy* t_move2 = CCMoveBy::create(0.1f, ccp(-40,0));
+							CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endTingMapNode));
+							CCSequence* t_seq = CCSequence::create(t_move1, t_move2, t_call, NULL);
+							map_node->runAction(t_seq);
+						}
 					}
 				}
 			}
@@ -1033,11 +1095,6 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							removeChildByTag(kPMS_MT_loadPuzzleInfo);
 							
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
-							CCSprite* loading_back = CCSprite::create("whitePaper.png");
-							loading_back->setColor(ccGRAY);
-							loading_back->setOpacity(100);
-							loading_back->setPosition(ccp(240,160));
-							addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
 							
 							map_mode_state = kMMS_changeMode;
 							is_menu_enable = false;
@@ -1046,16 +1103,52 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							after_map_node->setPosition(ccp(240+480,180));
 							main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
 							
-							CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
-							CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
-							CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
-							CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
-							
-							map_node->runAction(t_move1);
-							after_map_node->runAction(t_seq);
+							if(after_map_node->getTag() == kPMS_MT_loaded)
+							{
+								after_map_node->setTag(-1);
+								switchMapNode(after_map_node);
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endLoadedMovingMapNode));
+								CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+								
+								map_node->runAction(t_move1);
+								after_map_node->runAction(t_seq);
+							}
+							else
+							{
+								after_map_node->setTag(-1);
+								CCSprite* loading_back = CCSprite::create("whitePaper.png");
+								loading_back->setColor(ccGRAY);
+								loading_back->setOpacity(100);
+								loading_back->setPosition(ccp(240,160));
+								addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
+								CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+								
+								map_node->runAction(t_move1);
+								after_map_node->runAction(t_seq);
+							}
 						}
 						else
+						{
 							CCLog("nothing next puzzle!!!");
+							
+							original_mms = kMMS_notLoadMode;
+							
+							map_mode_state = kMMS_changeMode;
+							is_menu_enable = false;
+							
+							CCMoveBy* t_move1 = CCMoveBy::create(0.2f, ccp(-40,0));
+							CCMoveBy* t_move2 = CCMoveBy::create(0.1f, ccp(40,0));
+							CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endTingMapNode));
+							CCSequence* t_seq = CCSequence::create(t_move1, t_move2, t_call, NULL);
+							map_node->runAction(t_seq);
+						}
 					}
 					else if(location.x > touchStart_p.x + 50.f) // pre
 					{
@@ -1079,11 +1172,6 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							removeChildByTag(kPMS_MT_loadPuzzleInfo);
 							
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
-							CCSprite* loading_back = CCSprite::create("whitePaper.png");
-							loading_back->setColor(ccGRAY);
-							loading_back->setOpacity(100);
-							loading_back->setPosition(ccp(240,160));
-							addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
 							
 							map_mode_state = kMMS_changeMode;
 							is_menu_enable = false;
@@ -1092,16 +1180,52 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							after_map_node->setPosition(ccp(240-480,180));
 							main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
 							
-							CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
-							CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
-							CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
-							CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
-							
-							map_node->runAction(t_move1);
-							after_map_node->runAction(t_seq);
+							if(after_map_node->getTag() == kPMS_MT_loaded)
+							{
+								after_map_node->setTag(-1);
+								switchMapNode(after_map_node);
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endLoadedMovingMapNode));
+								CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+								
+								map_node->runAction(t_move1);
+								after_map_node->runAction(t_seq);
+							}
+							else
+							{
+								after_map_node->setTag(-1);
+								CCSprite* loading_back = CCSprite::create("whitePaper.png");
+								loading_back->setColor(ccGRAY);
+								loading_back->setOpacity(100);
+								loading_back->setPosition(ccp(240,160));
+								addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
+								CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+								
+								map_node->runAction(t_move1);
+								after_map_node->runAction(t_seq);
+							}
 						}
 						else
+						{
 							CCLog("nothing pre puzzle!!!");
+							
+							original_mms = kMMS_notLoadMode;
+							
+							map_mode_state = kMMS_changeMode;
+							is_menu_enable = false;
+							
+							CCMoveBy* t_move1 = CCMoveBy::create(0.2f, ccp(40,0));
+							CCMoveBy* t_move2 = CCMoveBy::create(0.1f, ccp(-40,0));
+							CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endTingMapNode));
+							CCSequence* t_seq = CCSequence::create(t_move1, t_move2, t_call, NULL);
+							map_node->runAction(t_seq);
+						}
 					}
 				}
 			}
