@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "GameData.h"
 #include <queue>
+#include <map>
 #include "StarGoldData.h"
 #include "cocos-ext.h"
 #include "FromTo.h"
@@ -2884,6 +2885,50 @@ protected:
 	Well512 m_well512;
 };
 
+class AlongOfTheLine : public CCNode
+{
+public:
+	static AlongOfTheLine* create(CCPoint cumberPosition, CCPoint jackPosition)
+	{
+		AlongOfTheLine* t_bf = new AlongOfTheLine();
+		t_bf->myInit(cumberPosition, jackPosition);
+		t_bf->autorelease();
+		return t_bf;
+	}
+	void myInit(CCPoint cumberPosition, CCPoint jackPosition);
+	
+	void setTwoStep()
+	{
+		m_step = 2;
+	}
+	
+	void hidingAnimation(float dt);
+	void update(float dt);
+protected:
+	struct AlongPath
+	{
+		IntPoint point;
+		IntPoint direction;
+		AlongPath(const IntPoint& pt, const IntPoint& dir) : point(pt), direction(dir){}
+		AlongPath(){}
+	};
+	struct Pollution
+	{
+		CCSprite* spr;
+		FromToWithDuration2<CCPoint> glue; // 맵에 처음 붙이는 용도
+		AlongPath alongPath; // 현재 어느 방향으로 이동하고 있는가.
+		int step;
+		Pollution() : step(1) {}
+	};
+	
+	int m_step;
+	int m_frame;
+	int m_totalFrame;
+	FromToWithDuration<float> m_scaleTo;
+	std::vector<Pollution> m_pollutions;
+	std::map<IntPoint, IntPoint> m_directions; // 좌표별 이동 방향.
+	Well512 m_well512;
+};
 
 
 class Burn : public CCNode

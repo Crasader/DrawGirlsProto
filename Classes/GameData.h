@@ -73,7 +73,7 @@ enum mapLoopRange{
 	mapWidthInnerBegin = 1,
 	mapWidthInnerEnd = 161,
 	mapHeightInnerBegin = 1,
-	mapHeightInnerEnd = 216
+	mapHeightInnerEnd = 216,
 };
 
 class IntVector : public CCObject
@@ -198,6 +198,31 @@ public:
 		y = t_y;
 	}
 	
+	IntPoint operator+(const IntPoint& right) const
+	{
+		return IntPoint(x + right.x, y + right.y);
+	}
+	IntPoint operator-(const IntPoint& right) const
+	{
+		return IntPoint(x - right.x, y - right.y);
+	}
+//	IntPoint operator-() const;
+	IntPoint operator*(float a) const
+	{
+		return IntPoint(x * a, y * a);
+	}
+	IntPoint operator/(float a) const
+	{
+		return IntPoint(x / a, y / a);
+	}
+	IntPoint rotation(float rad) const
+	{
+		return IntPoint(round(cos(rad) * x - sin(rad) * y), round(cos(rad) * y + sin(rad) * x));
+	}
+	bool operator==(const IntPoint& right) const
+	{
+		return x == right.x && y == right.y;
+	}
 	bool operator<(const IntPoint& ip) const
 	{
 		if(x == ip.x)

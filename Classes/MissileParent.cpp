@@ -1279,6 +1279,27 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			
 		}
 	}
+	else if(pattern == "1017") // 선을 따라가는 공격
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+			CrashChargeNodeLambda* t_ccn =
+			CrashChargeNodeLambda::create(startPosition, castFrame,
+																		[=](CCObject* cb)
+																		{
+																			KSSpecialAttackPattern17* t = KSSpecialAttackPattern17::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+																			addChild(t);
+																			saveAP = t;
+																			savedAP = true;
+																		}, cb);
+			t_ccn->setChargeColor(ccc4f(0.00, 1.00, 0.00, 1.00));
+			addChild(t_ccn);
+			t_ccn->startCharge();
+			chargeArray->addObject(t_ccn);
+		}
+	}
 	else
 	{
 		return invalid;
