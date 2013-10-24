@@ -216,6 +216,7 @@ private:
 	{
 		removeChildByTag(kPMS_MT_loadingBack);
 		map_node->removeChildByTag(99999);
+		map_node->removeChildByTag(99998);
 		
 		CCSprite* map_back_center = mySIL->getLoadedImg(CCSTR_CWF("puzzle%d_center.png", recent_puzzle_number)->getCString());
 		map_back_center->setPosition(CCPointZero);
@@ -349,6 +350,19 @@ private:
 		t_back->setScaleY(340.f/320.f);
 		t_back->setPosition(CCPointZero);
 		t_node->addChild(t_back, 0, 99999);
+		
+		int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+		int found_index = -1;
+		for(int i=0;i<puzzle_cnt && found_index == -1;i++)
+		{
+			if(recent_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
+				found_index = i+1;
+		}
+		
+		CCLabelTTF* t_title = CCLabelTTF::create(NSDS_GS(kSDS_GI_puzzleList_int1_title_s, found_index).c_str(), mySGD->getFont().c_str(), 23);
+		t_title->setPosition(ccp(0,100));
+		t_node->addChild(t_title, 0, 99998);
+		
 		
 		t_node->getCamera()->setEyeXYZ(0, -1.f, 2.f);
 		t_node->setScale(0.53f);

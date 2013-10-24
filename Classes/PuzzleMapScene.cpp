@@ -1019,7 +1019,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						for(int i=0;i<puzzle_count && !is_found;i++)
 						{
 							int t_puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
-							if(recent_puzzle_number == t_puzzle_no)
+							if(recent_puzzle_number+1 == t_puzzle_no)
 							{
 								is_found = true;
 								found_index = i+1;
@@ -1029,9 +1029,13 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						
 						if(is_found && found_index <= puzzle_count)
 						{
+							removeChildByTag(kPMS_MT_loadingBack);
+							removeChildByTag(kPMS_MT_loadPuzzleInfo);
+							
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
 							CCSprite* loading_back = CCSprite::create("whitePaper.png");
 							loading_back->setColor(ccGRAY);
+							loading_back->setOpacity(100);
 							loading_back->setPosition(ccp(240,160));
 							addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
 							
@@ -1061,7 +1065,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						for(int i=0;i<puzzle_count && !is_found;i++)
 						{
 							int t_puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
-							if(recent_puzzle_number == t_puzzle_no)
+							if(recent_puzzle_number-1 == t_puzzle_no)
 							{
 								is_found = true;
 								found_index = i+1;
@@ -1071,9 +1075,13 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						
 						if(is_found)
 						{
+							removeChildByTag(kPMS_MT_loadingBack);
+							removeChildByTag(kPMS_MT_loadPuzzleInfo);
+							
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
 							CCSprite* loading_back = CCSprite::create("whitePaper.png");
 							loading_back->setColor(ccGRAY);
+							loading_back->setOpacity(100);
 							loading_back->setPosition(ccp(240,160));
 							addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
 							
