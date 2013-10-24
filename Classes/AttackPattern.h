@@ -5392,6 +5392,10 @@ class KSSpecialAttackPattern17 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSSpecialAttackPattern17);
+	virtual ~KSSpecialAttackPattern17()
+	{
+		CCLog("remove s 17");
+	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 	{
 		Json::Reader reader;
@@ -5411,7 +5415,9 @@ public:
 	}
 	void update(float dt)
 	{
-		
+		AlongOfTheLine* ap = AlongOfTheLine::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()));
+		addChild(ap);
+		stopMyAction();
 	}
 protected:
 	KSCumberBase* m_cumber;
