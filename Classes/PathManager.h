@@ -80,7 +80,7 @@ enum pathBreakingState{
 class PathBreakingParent : public CCNode
 {
 public:
-	static PathBreakingParent* create(IntPoint t_start, list<IntPoint>* t_linked_list)
+	static PathBreakingParent* create(IntPoint t_start, vector<IntPoint>* t_linked_list)
 	{
 		PathBreakingParent* t_pbp = new PathBreakingParent();
 		t_pbp->myInit(t_start, t_linked_list);
@@ -91,12 +91,12 @@ public:
 	bool isActing(){	return is_acting;	}
 	
 private:
-	list<IntPoint>* plinked_list;
+	vector<IntPoint>* plinked_list;
 	CCSprite* pre_img;
 	CCSprite* next_img;
 	
-	list<IntPoint>::iterator pre_it;
-	list<IntPoint>::iterator next_it;
+	int pre_it;
+	int next_it;
 	
 	bool is_acting;
 	
@@ -105,8 +105,8 @@ private:
 		if(pre_img)
 		{
 			pre_it--;
-			if(pre_it != plinked_list->begin())
-				pre_img->setPosition((*pre_it).convertToCCP());
+			if(pre_it > 0)
+				pre_img->setPosition((*plinked_list)[pre_it].convertToCCP());
 			else
 			{
 				pre_img->removeFromParent();
@@ -117,8 +117,9 @@ private:
 		if(next_img)
 		{
 			next_it++;
-			if(next_it != plinked_list->end())
-				next_img->setPosition((*next_it).convertToCCP());
+			
+			if(next_it < plinked_list->size()-1)
+				next_img->setPosition((*plinked_list)[next_it].convertToCCP());
 			else
 			{
 				getParent()->setTag(pathBreakingStateFalse);
@@ -130,7 +131,7 @@ private:
 		}
 	}
 	
-	void myInit(IntPoint t_start, list<IntPoint>* t_linked_list)
+	void myInit(IntPoint t_start, vector<IntPoint>* t_linked_list)
 	{
 		plinked_list = t_linked_list;
 		
@@ -138,9 +139,10 @@ private:
 		next_img = NULL;
 		
 		bool is_found = false;
-		for(list<IntPoint>::iterator i = plinked_list->begin();i!=plinked_list->end() && !is_found;i++)
+		int list_end = plinked_list->size();
+		for(int i = 0;i<list_end && !is_found;i++)
 		{
-			IntPoint t_p = *i;
+			IntPoint t_p = (*plinked_list)[i];
 			if(t_p.x == t_start.x && t_p.y == t_start.y)
 			{
 				is_found = true;
@@ -149,14 +151,14 @@ private:
 				
 				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 				auto reader = new CCBReader(nodeLoader);
-				if(i != plinked_list->begin())
+				if(i > 0)
 				{
 					pre_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi",this));
 					pre_img->setPosition(t_p.convertToCCP());
 					addChild(pre_img);
 				}
 				
-				if(++i != plinked_list->end())
+				if(i < plinked_list->size()-1)
 				{
 					next_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi", this));
 					next_img->setPosition(t_p.convertToCCP());
@@ -229,6 +231,7 @@ public:
 		if(!myList.empty())
 		{
 			linked_list.pop_back();
+			
 			PathNode* b_node = myList.back();
 			
 			if(b_node->pathScale > 1) // reduce
@@ -268,7 +271,7 @@ public:
 	
 private:
 	list<PathNode*> myList;
-	list<IntPoint> linked_list;
+	vector<IntPoint> linked_list;
 	
 	void addPathBreaking(IntPoint start)
 	{

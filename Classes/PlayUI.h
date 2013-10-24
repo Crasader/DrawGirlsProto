@@ -31,9 +31,170 @@
 using namespace cocos2d;
 using namespace std;
 
-#define JM_CONDITION	0.05
+#define JM_CONDITION	0.03
 
 #define MY_GRAVITY	-0.5
+
+class FeverParent : public CCNode
+{
+public:
+	static FeverParent* create()
+	{
+		FeverParent* t_fp = new FeverParent();
+		t_fp->myInit();
+		t_fp->autorelease();
+		return t_fp;
+	}
+	
+	void addFeverGage(int count)
+	{
+		if(ing_fever)	return;
+		
+		keeping_count = 300;
+		if(!is_keeping)
+			startKeep();
+		
+		recent_count += count;
+		if(recent_count >= 20)
+		{
+			ing_fever = true;
+			recent_count = 20;
+			
+			myGD->communication("GIM_startFever");
+			
+			myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 1.5f);
+			
+			fever_particle = CCParticleSystemQuad::createWithTotalParticles(100);
+			fever_particle->setPositionType(kCCPositionTypeFree);
+			CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("fever_particle.png");
+			fever_particle->setTexture(texture);
+			fever_particle->setEmissionRate(100);
+			fever_particle->setAngle(90.0);
+			fever_particle->setAngleVar(40.0);
+			ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+			fever_particle->setBlendFunc(blendFunc);
+			fever_particle->setDuration(-1.0);
+			fever_particle->setEmitterMode(kCCParticleModeGravity);
+			ccColor4F startColor = {1.0,0.8,0.4,1.0}; // 0.76 0.25 0.12
+			fever_particle->setStartColor(startColor);
+			ccColor4F startColorVar = {0,0,0,0.3};
+			fever_particle->setStartColorVar(startColorVar);
+			ccColor4F endColor = {0.0,0.0,0.0,1.00};
+			fever_particle->setEndColor(endColor);
+			ccColor4F endColorVar = {0,0,0,0.3};
+			fever_particle->setEndColorVar(endColorVar);
+			fever_particle->setStartSize(10.0);
+			fever_particle->setStartSizeVar(10.0);
+			fever_particle->setEndSize(5.0);
+			fever_particle->setEndSizeVar(10.0);
+			fever_particle->setGravity(ccp(0,-400));
+			fever_particle->setRadialAccel(0.0);
+			fever_particle->setRadialAccelVar(0.0);
+			fever_particle->setSpeed(200);
+			fever_particle->setSpeedVar(50.0);
+			fever_particle->setTangentialAccel(0);
+			fever_particle->setTangentialAccelVar(0);
+			fever_particle->setTotalParticles(100);
+			fever_particle->setLife(1.0);
+			fever_particle->setLifeVar(0.0);
+			fever_particle->setStartSpin(0.0);
+			fever_particle->setStartSpinVar(360.f);
+			fever_particle->setEndSpin(0.0);
+			fever_particle->setEndSpinVar(360.f);
+			fever_particle->setPosition(ccp(240,140));
+			fever_particle->setPosVar(ccp(240,160));
+			addChild(fever_particle);
+			
+			unschedule(schedule_selector(FeverParent::keeping));
+			is_keeping = false;
+			
+			CCDelayTime* t_delay = CCDelayTime::create(10.f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(FeverParent::endFever));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			runAction(t_seq);
+			
+			CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+			fever_top->runAction(progress_to);
+		}
+		else
+		{
+			CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+			fever_top->runAction(progress_to);
+		}
+	}
+	
+private:
+	CCParticleSystemQuad* fever_particle;
+	CCProgressTimer* fever_top;
+	int recent_count;
+	
+	bool ing_fever;
+	
+	int keeping_count;
+	bool is_keeping;
+	
+	void endFever()
+	{
+		ing_fever = false;
+		recent_count = 0;
+		
+		myGD->communication("GIM_stopFever");
+		
+		myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 1.5f);
+		
+		fever_particle->setDuration(0.f);
+		fever_particle->setAutoRemoveOnFinish(true);
+		
+		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+		fever_top->runAction(progress_to);
+	}
+	
+	void startKeep()
+	{
+		is_keeping = true;
+		schedule(schedule_selector(FeverParent::keeping));
+	}
+	void keeping()
+	{
+		keeping_count--;
+		
+		if(keeping_count <= 0)
+			stopKeep();
+	}
+	void stopKeep()
+	{
+		unschedule(schedule_selector(FeverParent::keeping));
+		is_keeping = false;
+		recent_count = 0;
+		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+		fever_top->runAction(progress_to);
+	}
+	
+	void myInit()
+	{
+		ing_fever = false;
+		keeping_count = 0;
+		is_keeping = false;
+		
+		CCSprite* fever_back = CCSprite::create("fever_gage_back.png");
+		if(myGD->gamescreen_type == kGT_leftUI)			fever_back->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-50));
+		else if(myGD->gamescreen_type == kGT_rightUI)	fever_back->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-50));
+		else											fever_back->setPosition(ccp(240,myDSH->ui_top-50));
+		addChild(fever_back);
+		
+		fever_top = CCProgressTimer::create(CCSprite::create("fever_gage_top.png"));
+		fever_top->setType(kCCProgressTimerTypeBar);
+		fever_top->setMidpoint(ccp(0,0));
+		fever_top->setBarChangeRate(ccp(1,0));
+		fever_top->setPosition(fever_back->getPosition());
+		fever_top->setPercentage(0.f);
+		addChild(fever_top);
+		
+		recent_count = 0;
+		
+		fever_particle = NULL;
+	}
+};
 
 class GoldLabel : public CCLabelBMFont
 {
@@ -121,7 +282,11 @@ private:
 		CCLabelBMFont::initWithString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString(), "etc_font.fnt", kCCLabelAutomaticWidth, kCCTextAlignmentRight, CCPointZero);
 		stopIncreasing();
 		setAnchorPoint(ccp(1,0.5));
-		setPosition(ccp(112,464));
+		
+		if(myGD->gamescreen_type == kGT_leftUI)			setPosition(ccp((480-50-myGD->boarder_value*2)/4.f+50+myGD->boarder_value,myDSH->ui_top-20));
+		else if(myGD->gamescreen_type == kGT_rightUI)	setPosition(ccp((480-50-myGD->boarder_value*2)/4.f+myGD->boarder_value,myDSH->ui_top-20));
+		else											setPosition(ccp((480-myGD->boarder_value*2)/4.f,myDSH->ui_top-20));
+		
 		mySGD->setGoldLabel(this);
 	}
 };
@@ -565,6 +730,12 @@ public:
 			if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per-item_value/100.f)
 				takeBigArea();
 			
+			if(t_p >= t_beforePercentage + 0.01f)
+			{
+				int up_count = (t_p - t_beforePercentage)/0.01f;
+				my_fp->addFeverGage(up_count);
+			}
+			
 			if(t_p >= t_beforePercentage + JM_CONDITION)
 			{
 				int cmCnt = (t_p - t_beforePercentage)/JM_CONDITION;
@@ -573,7 +744,7 @@ public:
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
 				
-				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
+//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
 				myGD->communication("Main_percentageGettingEffect", (t_p-t_beforePercentage)*100.f, true, jackPosition);
 				
 				int rmCnt = cmCnt/2 + 1;
@@ -992,6 +1163,8 @@ private:
 	
 //	CCSprite* bossLifeGage;
 	
+	FeverParent* my_fp;
+	
 	GoldLabel* gold_label;
 	CCLabelBMFont* score_label;
 	CCLabelBMFont* percentageLabel;
@@ -1237,7 +1410,7 @@ private:
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
 			if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 			else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
-			else									jack_img->setPosition(ccp(100+i*20, myDSH->ui_top-20));
+			else									jack_img->setPosition(ccp(100+i*20, myDSH->ui_top-50));
 			addChild(jack_img);
 			
 			jack_array->addObject(jack_img);
@@ -1438,6 +1611,10 @@ private:
 			addChild(icon_img, 0, kCT_UI_clrCdtIcon);
 		}
 		
+		my_fp = FeverParent::create();
+		my_fp->setPosition(CCPointZero);
+		addChild(my_fp);
+		
 		myGD->V_I["UI_addScore"] = std::bind(&PlayUI::addScore, this, _1);
 		myGD->V_F["UI_setPercentage"] = std::bind(&PlayUI::setPercentage, this, _1);
 		myGD->V_F["UI_subBossLife"] = std::bind(&PlayUI::subBossLife, this, _1);
@@ -1461,7 +1638,7 @@ private:
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
 			if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 			else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
-			else									jack_img->setPosition(ccp(100+i*20,myDSH->ui_top-20));
+			else									jack_img->setPosition(ccp(100+i*20,myDSH->ui_top-50));
 			addChild(jack_img);
 			
 			jack_array->addObject(jack_img);

@@ -16,8 +16,10 @@
 #include "SilhouetteData.h"
 #include "StarGoldData.h"
 #include "ServerDataSave.h"
+#include <deque>
 
 USING_NS_CC;
+using namespace std;
 
 enum GameItemType{
 	kGIT_speedup = 1,
@@ -1780,6 +1782,189 @@ private:
 	}
 };
 
+class FeverCoin : public CCSprite
+{
+public:
+	static FeverCoin* create(IntPoint t_point, CCObject* t_add, SEL_CallFuncO d_add)
+	{
+		FeverCoin* t_fc = new FeverCoin();
+		t_fc->myInit(t_point, t_add, d_add);
+		t_fc->autorelease();
+		return t_fc;
+	}
+	
+	void startRemove()
+	{
+		remove_frame = 0;
+		schedule(schedule_selector(FeverCoin::removing));
+	}
+	
+	bool is_stan_by;
+	
+private:
+	IntPoint my_point;
+	CCObject* target_add;
+	SEL_CallFuncO delegate_add;
+	int remove_frame;
+	
+	void removing()
+	{
+		remove_frame++;
+		if(remove_frame <= 10)
+			setPositionY(getPositionY() + 2.5f);
+		else if(remove_frame <= 20)
+			setPositionY(getPositionY() - 2.5f);
+		else
+		{
+			unschedule(schedule_selector(FeverCoin::removing));
+			removeFromParent();
+		}
+	}
+	
+	void startCheck()
+	{
+		schedule(schedule_selector(FeverCoin::checking));
+	}
+	void checking()
+	{
+		if((myGD->mapState[my_point.x][my_point.y] == mapOldget || myGD->mapState[my_point.x][my_point.y] == mapOldline) &&
+		   (myGD->mapState[my_point.x-1][my_point.y] == mapOldget || myGD->mapState[my_point.x-1][my_point.y] == mapOldline) &&
+		   (myGD->mapState[my_point.x+1][my_point.y] == mapOldget || myGD->mapState[my_point.x+1][my_point.y] == mapOldline) &&
+		   (myGD->mapState[my_point.x][my_point.y-1] == mapOldget || myGD->mapState[my_point.x][my_point.y-1] == mapOldline) &&
+		   (myGD->mapState[my_point.x][my_point.y+1] == mapOldget || myGD->mapState[my_point.x][my_point.y+1] == mapOldline))
+		{
+			stopCheck();
+			is_stan_by = true;
+			(target_add->*delegate_add)(this);
+		}
+	}
+	void stopCheck()
+	{
+		unschedule(schedule_selector(FeverCoin::checking));
+	}
+	
+	void myInit(IntPoint t_point, CCObject* t_add, SEL_CallFuncO d_add) // 0 ~ 5
+	{
+		is_stan_by = false;
+		target_add = t_add;
+		delegate_add = d_add;
+		my_point = IntPoint(t_point.x, t_point.y);
+		int start_cut = ((my_point.y-15)/17 + (my_point.x-4)/17)%12/2;
+		
+		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin.png");
+		initWithTexture(t_texture, CCRectMake(start_cut*31, 0, 31, 31));
+		CCAnimation* t_animation = CCAnimation::create();
+		t_animation->setDelayPerUnit(0.1f);
+		int add_count = 0;
+		for(int i=start_cut;add_count < 6;i=(i+1)%6)
+		{
+			add_count++;
+			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*31, 0, 31, 31));
+		}
+		CCAnimate* t_animate = CCAnimate::create(t_animation);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+		runAction(t_repeat);
+		
+		setPosition(my_point.convertToCCP());
+		setScale(1.f/1.5f);
+		
+		startCheck();
+	}
+};
+
+class FeverCoinParent : public CCSpriteBatchNode
+{
+public:
+	static FeverCoinParent* create()
+	{
+		FeverCoinParent* t_fcp = new FeverCoinParent();
+		t_fcp->myInit();
+		t_fcp->autorelease();
+		return t_fcp;
+	}
+	
+	void startFever()
+	{
+		for(int i=15;i<mapHeightInnerEnd;i+=17)
+		{
+			for(int j=4;j<mapWidthInnerEnd;j+=17)
+			{
+				if(myGD->mapState[j][i] == mapEmpty)
+				{
+					FeverCoin* t_fc = FeverCoin::create(IntPoint(j,i), this, callfuncO_selector(FeverCoinParent::addGetCoinList));
+					addChild(t_fc);
+				}
+			}
+		}
+	}
+	
+	void stopFever()
+	{
+		int loop_cnt = getChildrenCount();
+		CCArray* my_childs = getChildren();
+		CCArray* delete_target_list = CCArray::createWithCapacity(1);
+		for(int i=0;i<loop_cnt;i++)
+		{
+			FeverCoin* t_fc = (FeverCoin*)my_childs->objectAtIndex(i);
+			if(!t_fc->is_stan_by)
+			{
+				delete_target_list->addObject(t_fc);
+			}
+		}
+		
+		while(delete_target_list->count() > 0)
+		{
+			CCNode* t_node = (CCNode*)delete_target_list->randomObject();
+			delete_target_list->removeObject(t_node);
+			t_node->removeFromParent();
+		}
+	}
+	
+private:
+	bool is_removing;
+	deque<CCObject*> remove_target_list;
+	
+	void addGetCoinList(CCObject* t_coin)
+	{
+		remove_target_list.push_back(t_coin);
+		
+		if(!is_removing)
+		{
+			startRemove();
+		}
+	}
+	
+	void startRemove()
+	{
+		is_removing = true;
+		schedule(schedule_selector(FeverCoinParent::removing), 3.f/60.f);
+	}
+	void removing()
+	{
+		FeverCoin* remove_target = (FeverCoin*)remove_target_list.front();
+		remove_target->startRemove();
+		remove_target_list.pop_front();
+		
+		mySGD->setGold(mySGD->getGold() + 10);
+		
+		if(remove_target_list.empty())
+		{
+			stopRemove();
+		}
+	}
+	void stopRemove()
+	{
+		unschedule(schedule_selector(FeverCoinParent::removing));
+		is_removing = false;
+	}
+	
+	void myInit()
+	{
+		initWithFile("fever_coin.png", kDefaultSpriteBatchCapacity);
+		is_removing = false;
+	}
+};
+
 class GameItemManager : public CCNode
 {
 public:
@@ -1849,7 +2034,7 @@ public:
 	{
 		for(int i=0;i<5;i++)
 		{
-			if(getChildrenCount() < 7)
+			if(getChildrenCount()-child_base_cnt < 6)
 			{
 				addItem();
 			}
@@ -1874,18 +2059,20 @@ private:
 	int create_counting_value;
 	CLEAR_CONDITION clr_cdt_type;
 	
-	CCNode* coin_parent;
+	CCNode* coin_parent;//change coin
+	FeverCoinParent* fever_coin_parent;
 
 	vector<ITEM_CODE> creatable_list;
 	int selected_item_cnt;
 	
 	int double_item_cnt;
+	int child_base_cnt;
 
 	void counting()
 	{
 		counting_value++;
 		
-		if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount() < 3)
+		if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount()-child_base_cnt < 2)
 		{
 			GameItemAttack* t_gia = GameItemAttack::create(false);
 			addChild(t_gia);
@@ -1893,7 +2080,7 @@ private:
 			create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
 			counting_value = 0;
 		}
-		else if(clr_cdt_type == kCLEAR_itemCollect && getChildrenCount() < 2)
+		else if(clr_cdt_type == kCLEAR_itemCollect && getChildrenCount()-child_base_cnt < 1)
 		{
 			addItem();
 			
@@ -1903,7 +2090,7 @@ private:
 		
 		if(counting_value >= create_counting_value)
 		{
-			if(getChildrenCount() < 7)
+			if(getChildrenCount()-child_base_cnt < 6)
 				addItem();
 			
 			create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
@@ -1955,6 +2142,11 @@ private:
 		coin_parent = CCNode::create();
 		addChild(coin_parent);
 		
+		fever_coin_parent = FeverCoinParent::create();
+		addChild(fever_coin_parent);
+		
+		child_base_cnt = getChildrenCount();
+		
 		int defItems_cnt = SDS_GI(kSDF_stageInfo, mySD->getSilType(), "defItems_cnt");
 		for(int i=0;i<defItems_cnt;i++)
 			creatable_list.push_back(ITEM_CODE(SDS_GI(kSDF_stageInfo, mySD->getSilType(), CCString::createWithFormat("defItems_%d_type", i)->getCString())));
@@ -1973,6 +2165,8 @@ private:
 		
 //		myGD->regGIM(this, callfunc_selector(GameItemManager::dieCreateItem));
 		myGD->V_V["GIM_dieCreateItem"] = std::bind(&GameItemManager::dieCreateItem, this);
+		myGD->V_V["GIM_startFever"] = std::bind(&FeverCoinParent::startFever, fever_coin_parent);
+		myGD->V_V["GIM_stopFever"] = std::bind(&FeverCoinParent::stopFever, fever_coin_parent);
 	}
 };
 

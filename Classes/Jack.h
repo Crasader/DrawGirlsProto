@@ -717,6 +717,7 @@ public:
 	void changeSpeed(float t_s)
 	{
 		if(t_s > 4.f)			t_s = 4.f;
+		else if(t_s > 2.f)		t_s = 2.f;
 		else if(t_s < 0.8f)		t_s = 0.8f;
 		
 		after_speed = t_s;
