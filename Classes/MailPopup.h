@@ -95,7 +95,6 @@ private:
 	
 	MailPopupState my_state;
 	
-	Json::Value mailData;
 	
 	CCControlButton *closeBtn;
 	
@@ -199,7 +198,7 @@ private:
 	
 	void drawMail(Json::Value obj){
 		
-		mailData = obj;
+		hspConnector::get()->mailData = obj;
 		
 		//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -246,6 +245,7 @@ private:
 		
 		Json::Value p;
 		int mailNo =(*mail)["mailNo"].asInt();
+		
 		p["mailNo"]=mailNo;
 		p["targetOption"]="send,recv";
 		p["senderMemberNo"]=(*mail)["sender"]["memberNo"].asInt64();
@@ -258,15 +258,13 @@ private:
 			if(r["header"].get("status","1").asInt()==0){
 			
 				
-				for(int i=0;i<this->mailData["mailList"].size();i++){
-					if(this->mailData["mailList"][i]["mailNo"].asInt()!=mailNo){
-						newMailList.append(this->mailData["mailList"][i]);
-
+				for(int i=0;i<hspConnector::get()->mailData["mailList"].size();i++){
+					if(hspConnector::get()->mailData["mailList"][i]["mailNo"].asInt()!=mailNo){
+						newMailList.append(hspConnector::get()->mailData["mailList"][i]);
 					}
 				}
 				
-				this->mailData["mailList"]=newMailList;
-					
+				hspConnector::get()->mailData["mailList"]=newMailList;
 				this->mailTableView->reloadData();
 			}
 		});
@@ -285,7 +283,7 @@ private:
 		CCControlButton* sendBtn;
 		CCLabelTTF* score;
 		CCLabelTTF* rank;
-		Json::Value* mail = &mailData["mailList"][idx];
+		Json::Value* mail = hspConnector::get()->getMailByIndex(idx);
 		
 		if(!cell){
 			cell = new CCTableViewCell();
@@ -365,7 +363,7 @@ private:
 	}
 	
     virtual unsigned int numberOfCellsInTableView(CCTableView *table){
-		return mailData["mailList"].size();
+		return hspConnector::get()->mailData["mailList"].size();
 	}
 	
 	

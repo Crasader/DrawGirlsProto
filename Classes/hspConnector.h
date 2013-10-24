@@ -127,6 +127,15 @@ public:
     Json::Value appFriends;
 	Json::Value	idMap;
 	Json::Value myKakaoInfo;
+	Json::Value mailData;
+	
+	Json::Value getMailByIndexCopy(int idx){
+		return mailData["mailList"][idx];
+	}
+	
+	Json::Value* getMailByIndex(int idx){
+		return &mailData["mailList"][idx];
+	}
 	
 	Json::Value getFriendByKakaoIDCopy(string kakaoID){
 		return appFriends[kakaoID];

@@ -343,13 +343,13 @@ private:
 			 Json::Value p2;
 			 p2["receiver_id"] = (*member)["profile"]["kakaoID"].asString();
 			 p2["message"] = "드로우걸스 테스트메세지!";
-//			 hspConnector::get()->kSendMessage(p2, [](Json::Value r)
-//			 {
-//				 
-//				 GraphDogLib::JsonToLog("kSendMessage", r);
-//				 
-//				 
-//			 });
+			 hspConnector::get()->kSendMessage(p2, [](Json::Value r)
+			 {
+				 
+				 GraphDogLib::JsonToLog("kSendMessage", r);
+				 
+				 
+			 });
 		 });
 
 	}
