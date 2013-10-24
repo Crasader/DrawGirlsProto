@@ -66,7 +66,8 @@ public:
 	
 	bool isLoadedImg(string filename)
 	{
-		return my_savedata->getValue(kSDF_downloadedInfo, filename, 0) == 1;
+//		return my_savedata->getValue(kSDF_downloadedInfo, filename, 0) == 1;
+		return false;
 	}
 	
 	float getDownloadPercentage();

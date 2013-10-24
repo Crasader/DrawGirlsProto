@@ -293,10 +293,12 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
     bool ManualLogin = param["ManualLogin"].asBool();
 	
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [dkey](Json::Value obj){
+	jsonSelType nextFunc = [dkey,this](Json::Value obj){
+		
 		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(dkey);
-		hspConnector::get()->kLoadLocalUser([](Json::Value obj){
-			hspConnector::get()->myKakaoInfo = obj;
+		
+		hspConnector::get()->kLoadLocalUser([this](Json::Value r){
+			hspConnector::get()->myKakaoInfo = r;
 		});
 		
 		delsel.func(obj);

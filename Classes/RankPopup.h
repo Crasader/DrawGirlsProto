@@ -107,6 +107,7 @@ private:
 		
 		gray = CCSprite::create("back_gray.png");
 		gray->setPosition(ccp(240,160+400));
+		gray->setContentSize(CCSizeMake(600, 400));
 		addChild(gray, kRP_Z_gray);
 		
 		CCSprite* back = CCSprite::create("ui_rank_back.png");
@@ -208,7 +209,7 @@ private:
 			   CCLog("2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
 			   Json::Value p;
 			   Json::Value idMap = obj["memberNoMap"];
-				//idMap[hspConnector::get()->getHSPMemberNo()]=hspConnector::get()->getHSPMemberNo();
+				idMap[hspConnector::get()->getKakaoID()]=hspConnector::get()->getHSPMemberNo();
 			   p["past"]=true;
 			   p["rankingKey"]="rankingFactor-1,rankingPeriod-2";
 			   p["requesterMemberNo"]=hspConnector::get()->getHSPMemberNo();

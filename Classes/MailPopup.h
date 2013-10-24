@@ -105,6 +105,7 @@ private:
 		
 		gray = CCSprite::create("back_gray.png");
 		gray->setPosition(ccp(240,160+400));
+		gray->setContentSize(CCSizeMake(600, 400));
 		addChild(gray, kMP_Z_gray);
 		
 		CCSprite* back = CCSprite::create("ui_common_popup_back.png");

@@ -159,7 +159,7 @@ void StageImgLoader::successAction()
 	
 	if(target_success)
 	{
-		my_savedata->setKeyValue(kSDF_downloadedInfo, down_filename, 1);
+//		my_savedata->setKeyValue(kSDF_downloadedInfo, down_filename, 1);
 		(target_success->*delegate_success)();
 	}
 }
