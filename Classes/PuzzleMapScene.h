@@ -13,6 +13,8 @@
 #include "DataStorageHub.h"
 #include "StagePiece.h"
 #include "hspConnector.h"
+#include "ServerDataSave.h"
+#include "StageListDown.h"
 
 USING_NS_CC;
 using namespace std;
@@ -25,7 +27,40 @@ enum MapModeState
 	kMMS_multiTouchZoom,
 	kMMS_changeMode,
 	kMMS_uiMode,
-	kMMS_frameMode
+	kMMS_frameMode,
+	kMMS_notLoadMode
+};
+
+enum PMS_Zorder{
+	kPMS_Z_wall = 1,
+	kPMS_Z_main,
+	kPMS_Z_puzzle_back_side,
+	kPMS_Z_puzzle_shadow,
+	kPMS_Z_puzzle_back,
+	kPMS_Z_stage = 1000,
+	kPMS_Z_boarderStage = 2000,
+	kPMS_Z_ui_button = 3000,
+	kPMS_Z_popup
+};
+
+enum PMS_MenuTag{
+	kPMS_MT_stageBase = 0,
+	kPMS_MT_option = 10001,
+	kPMS_MT_gacha,
+	kPMS_MT_rank,
+	kPMS_MT_postbox,
+	kPMS_MT_diary,
+	kPMS_MT_event,
+	kPMS_MT_eventClose,
+	kPMS_MT_screen,
+	kPMS_MT_showui,
+	kPMS_MT_top,
+	kPMS_MT_bottom,
+	kPMS_MT_rubyShop,
+	kPMS_MT_goldShop,
+	kPMS_MT_lifeShop,
+	kPMS_MT_loadingBack,
+	kPMS_MT_loadPuzzleInfo
 };
 
 class PuzzleMapScene : public cocos2d::CCLayer
@@ -71,6 +106,7 @@ private:
 	CCNode* main_node;
 	
 	CCNode* map_node;
+	CCNode* after_map_node;
 	CCSpriteBatchNode* shadow_batchnode;
 	int touched_stage_number;
 	
@@ -135,365 +171,189 @@ private:
 	
 	bool is_gesturable_map_mode;
 	
-	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
+	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
+	virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
+	virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
+	virtual void ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent);
+	
+	void endMovingMapNode()
 	{
-		if(map_mode_state == kMMS_changeMode)
-			return;
-		else if(map_mode_state == kMMS_uiMode)
-		{
-			CCSetIterator iter;
-			CCTouch *touch;
-			
-			for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
-			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				multiTouchData[(int)touch] = location;
-				
-				if(multiTouchData.size() == 1)
-				{
-					touchStart_p = location;
-				}
-			}
-		}
-		else if(map_mode_state == kMMS_frameMode)
-		{
-			CCSetIterator iter;
-			CCTouch *touch;
-			
-			for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
-			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				multiTouchData[(int)touch] = location;
-				
-				if(multiTouchData.size() == 1)
-				{
-					touchStart_p = location;
-				}
-			}
-		}
-		else
-		{
-			CCSetIterator iter;
-			CCTouch *touch;
-			
-			for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
-			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				multiTouchData[(int)touch] = location;
-				
-				touch_p = location;
-				
-				this->unschedule(schedule_selector(PuzzleMapScene::moveAnimation));
-				isAnimated=false;
-				
-				if(multiTouchData.size() == 1)
-				{
-					timeval time;
-					gettimeofday(&time, NULL);
-					touchStartTime = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec;
-					touchStart_p = location;
-					
-					map_mode_state = kMMS_firstTouchDefault;
-					
-//					CCPoint convert_location = convertToWorldSpace(location);
-					
-					for(int i=start_stage_number;i<start_stage_number+stage_count && touched_stage_number == 0;i++)
-					{
-						StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-						
-						if(t_sp->touchBegan(touch, pEvent))
-//						if(t_sp->isInnerRect(convert_location))
-						{
-							touched_stage_number = t_sp->getStageNumber();
-							t_sp->setTouchBegin();
-							map_mode_state = kMMS_firstTouchStage;
-						}
-					}
-				}
-				else if(multiTouchData.size() == 2)
-				{
-					is_gesturable_map_mode = false;
-					if(map_mode_state == kMMS_firstTouchStage)
-						resetStagePiece();
-					
-					map_mode_state = kMMS_multiTouchZoom;
-					CCPoint sub_point = CCPointZero;
-					map<int, CCPoint>::iterator it;
-					for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
-					{
-						sub_point = ccpMult(sub_point, -1);
-						sub_point = ccpAdd(sub_point, it->second);
-					}
-					
-					zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
-				}
-				else
-				{
-					is_gesturable_map_mode = false;
-				}
-			}
-		}
+		map_mode_state = kMMS_notLoadMode;
+		map_node->removeFromParent();
+		map_node = after_map_node;
+		after_map_node = NULL;
+		
+		CCSprite* n_load = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 70, 50));
+		CCLabelTTF* n_label = CCLabelTTF::create("퍼즐 정보 로드 하기", mySGD->getFont().c_str(), 18);
+		n_label->setColor(ccBLACK);
+		n_label->setPosition(ccp(35,25));
+		n_load->addChild(n_label);
+		
+		CCSprite* s_load = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 70, 50));
+		s_load->setColor(ccGRAY);
+		CCLabelTTF* s_label = CCLabelTTF::create("퍼즐 정보 로드 하기", mySGD->getFont().c_str(), 18);
+		s_label->setColor(ccBLACK);
+		s_label->setPosition(ccp(35,25));
+		s_load->addChild(s_label);
+		
+		CCMenuItem* load_item = CCMenuItemSprite::create(n_load, s_load, this, menu_selector(PuzzleMapScene::loadPuzzleInfo));
+		
+		CCMenu* load_menu = CCMenu::createWithItem(load_item);
+		load_menu->setPosition(ccp(240,160));
+		addChild(load_menu, kPMS_Z_popup, kPMS_MT_loadPuzzleInfo);
 	}
 	
-	virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
+	void loadPuzzleInfo(CCObject* sender)
 	{
-		if(map_mode_state == kMMS_changeMode)
-			return;
-		else if(map_mode_state == kMMS_uiMode)
-		{
-			CCSetIterator iter;
-			CCTouch* touch;
-			
-			for(iter = pTouches->begin();iter != pTouches->end();++iter)
-			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				map<int, CCPoint>::iterator o_it;
-				o_it = multiTouchData.find((int)touch);
-				if(o_it != multiTouchData.end())
-				{
-					o_it->second = location;
-					if(multiTouchData.size() == 1)
-					{
-						if(location.y < touchStart_p.y - 50.f)
-						{
-							touchStart_p = location;
-							startChangeFrameMode();
-							multiTouchData.erase((int)touch);
-						}
-					}
-				}
-			}
-		}
-		else if(map_mode_state == kMMS_frameMode)
-		{
-			CCSetIterator iter;
-			CCTouch* touch;
-			
-			for(iter = pTouches->begin();iter != pTouches->end();++iter)
-			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				map<int, CCPoint>::iterator o_it;
-				o_it = multiTouchData.find((int)touch);
-				if(o_it != multiTouchData.end())
-				{
-					o_it->second = location;
-					if(multiTouchData.size() == 1)
-					{
-						if(location.y > touchStart_p.y + 50.f)
-						{
-							touchStart_p = location;
-							startReturnUiMode();
-							multiTouchData.erase((int)touch);
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			CCSetIterator iter;
-			CCTouch* touch;
-			
-			for(iter = pTouches->begin();iter != pTouches->end();++iter)
-			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				map<int, CCPoint>::iterator o_it;
-				o_it = multiTouchData.find((int)touch);
-				if(o_it != multiTouchData.end())
-				{
-					o_it->second = location;
-					if(multiTouchData.size() == 1)
-					{
-						this->moveListXY(ccpSub(touch_p, location));
-						touch_p = location;
-						
-						if(map_mode_state == kMMS_firstTouchStage)
-						{
-							CCPoint sub_point = ccpSub(location, touchStart_p);
-							float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
-							if(sub_value > 20.f)
-							{
-								resetStagePiece();
-								map_mode_state = kMMS_firstTouchDefault;
-							}
-						}
-						else if(is_gesturable_map_mode && location.y < touchStart_p.y - 50.f)
-						{
-							touchStart_p = location;
-							startChangeUiMode();
-							return;
-						}
-					}
-					else if(multiTouchData.size() == 2)
-					{
-						CCPoint sub_point = CCPointZero;
-						map<int, CCPoint>::iterator it;
-						for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
-						{
-							sub_point = ccpMult(sub_point, -1);
-							sub_point = ccpAdd(sub_point, it->second);
-						}
-						
-//						float before_scale = map_node->getScale();
-						
-						float changed_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
-						float after_scale = map_node->getScale()*changed_distance/zoom_base_distance;
-						if(after_scale > maximum_scale)				after_scale = maximum_scale;
-						else if(after_scale < minimum_scale)		after_scale = minimum_scale;
-						zoom_base_distance = changed_distance;
-						map_node->setScale(after_scale);
-						
-						if(map_node->getPositionX() < 240-(map_node->getScale()-1.f)*240.f)
-							map_node->setPositionX(240-(map_node->getScale()-1.f)*240.f);
-						else if(map_node->getPositionX() > 240+(map_node->getScale()-1.f)*240.f)
-							map_node->setPositionX(240+(map_node->getScale()-1.f)*240.f);
-						
-						if(map_node->getPositionY() < 160-(map_node->getScale()-1.f)*160.f)
-							map_node->setPositionY(160-(map_node->getScale()-1.f)*160.f);
-						else if(map_node->getPositionY() > 160+(map_node->getScale()-1.f)*160.f)
-							map_node->setPositionY(160+(map_node->getScale()-1.f)*160.f);
-					}
-				}
-			}
-		}
+		map_mode_state = kMMS_changeMode;
+		removeChildByTag(kPMS_MT_loadPuzzleInfo);
+		
+		StageListDown* t_sld = StageListDown::create(this, callfunc_selector(PuzzleMapScene::endLoadPuzzleInfo), recent_puzzle_number);
+		addChild(t_sld, kPMS_Z_popup);
 	}
 	
-	virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
+	void endLoadPuzzleInfo()
 	{
-		if(map_mode_state == kMMS_changeMode)
+		removeChildByTag(kPMS_MT_loadingBack);
+		map_node->removeChildByTag(99999);
+		
+		CCSprite* map_back_center = mySIL->getLoadedImg(CCSTR_CWF("puzzle%d_center.png", recent_puzzle_number)->getCString());
+		map_back_center->setPosition(CCPointZero);
+		map_node->addChild(map_back_center, kPMS_Z_puzzle_back_side);
+		
+		CCSize center_size = CCSizeMake(520.f, 340.f);
+		
+		CCSprite* map_back_left = mySIL->getLoadedImg(CCSTR_CWF("puzzle%d_left.png", recent_puzzle_number)->getCString());
+		map_back_left->setAnchorPoint(ccp(0.f,0.5f));
+		map_back_left->setPosition(ccp(-center_size.width/2.f, 0));
+		map_node->addChild(map_back_left, kPMS_Z_puzzle_back);
+		
+		CCSprite* map_back_right = mySIL->getLoadedImg(CCSTR_CWF("puzzle%d_right.png", recent_puzzle_number)->getCString());
+		map_back_right->setAnchorPoint(ccp(1.f,0.5f));
+		map_back_right->setPosition(ccp(center_size.width/2.f, 0));
+		map_node->addChild(map_back_right, kPMS_Z_puzzle_back);
+		
+		CCSprite* map_back_top = mySIL->getLoadedImg(CCSTR_CWF("puzzle%d_top.png", recent_puzzle_number)->getCString());
+		map_back_top->setAnchorPoint(ccp(0.5f,1.f));
+		map_back_top->setPosition(ccp(0, center_size.height/2.f));
+		map_node->addChild(map_back_top, kPMS_Z_puzzle_back);
+		
+		CCSprite* map_back_bottom = mySIL->getLoadedImg(CCSTR_CWF("puzzle%d_bottom.png", recent_puzzle_number)->getCString());
+		map_back_bottom->setAnchorPoint(ccp(0.5f,0.f));
+		map_back_bottom->setPosition(ccp(0,-center_size.height/2.f));
+		map_node->addChild(map_back_bottom, kPMS_Z_puzzle_back);
+		
+		shadow_batchnode = CCSpriteBatchNode::create("test_map_shadow.png");
+		shadow_batchnode->setPosition(CCPointZero);
+		map_node->addChild(shadow_batchnode, kPMS_Z_puzzle_shadow);
+		
+		CCRect stage_rect = CCRectMake(-30.f, -30.f, 60.f, 60.f);
+		
+		start_stage_number = NSDS_GI(recent_puzzle_number, kSDS_PZ_startStage_i);
+		stage_count = NSDS_GI(recent_puzzle_number, kSDS_PZ_stageCount_i);
+		
+		for(int i = start_stage_number;i<start_stage_number+stage_count;i++)
 		{
-			CCSetIterator iter;
-			CCTouch* touch;
+			int stage_level = NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_level_i, i);
 			
-			for(iter = pTouches->begin();iter != pTouches->end();++iter)
+			bool is_found = false;
+			int found_number = 0;
+			bool is_have_card[3] = {0,};
+			for(int k=3;k>=1;k--)
 			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				map<int, CCPoint>::iterator o_it;
-				o_it = multiTouchData.find((int)touch);
-				if(o_it != multiTouchData.end())
+				int card_number = NSDS_GI(i, kSDS_SI_level_int1_card_i, k);
+				int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
+				if(card_durability > 0)
 				{
-					multiTouchData.erase((int)touch);
-				}
-			}
-		}
-		else if(map_mode_state == kMMS_uiMode)
-		{
-			CCSetIterator iter;
-			CCTouch* touch;
-			
-			for(iter = pTouches->begin();iter != pTouches->end();++iter)
-			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				map<int, CCPoint>::iterator o_it;
-				o_it = multiTouchData.find((int)touch);
-				if(o_it != multiTouchData.end())
-				{
-					multiTouchData.erase((int)touch);
-				}
-			}
-			
-			startChangeMapMode();
-		}
-		else if(map_mode_state == kMMS_frameMode)
-		{
-			CCSetIterator iter;
-			CCTouch* touch;
-			
-			for(iter = pTouches->begin();iter != pTouches->end();++iter)
-			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				map<int, CCPoint>::iterator o_it;
-				o_it = multiTouchData.find((int)touch);
-				if(o_it != multiTouchData.end())
-				{
-					multiTouchData.erase((int)touch);
-				}
-			}
-		}
-		else
-		{
-			CCSetIterator iter;
-			CCTouch* touch;
-			
-			for(iter = pTouches->begin();iter != pTouches->end();++iter)
-			{
-				touch = (CCTouch*)(*iter);
-				CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-				location = ccpSub(location, myDSH->ui_touch_convert);
-				
-				map<int, CCPoint>::iterator o_it;
-				o_it = multiTouchData.find((int)touch);
-				if(o_it != multiTouchData.end())
-				{
-					multiTouchData.erase((int)touch);
-					
-					if(multiTouchData.size() == 0)
+					if(!is_found)
 					{
-						timeval time;
-						gettimeofday(&time, NULL);
-						long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
-						CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
-						
-						float spd_value = sqrtf(powf(_spd.x, 2.f) + powf(_spd.y, 2.f));
-						if(isAnimated == false && fabsf(spd_value) > 2)
-						{
-							moveSpeed_p = _spd;
-							this->schedule(schedule_selector(PuzzleMapScene::moveAnimation));
-						}
-						
-						if(map_mode_state == kMMS_firstTouchStage)
-						{
-							StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
-							t_sp->touchEnded(touch, pEvent);
-							t_sp->setTouchCancel();
-						}
-						
-						touched_stage_number = 0;
-						map_mode_state = kMMS_default;
+						is_found = true;
+						found_number = k;
 					}
-					else if(multiTouchData.size() == 1)
-					{
-						map_mode_state = kMMS_firstTouchDefault;
-						if(map_node->getScale() == 1.f)
-						{
-							is_gesturable_map_mode = true;
-						}
-					}
+					is_have_card[k-1] = true;
 				}
 			}
+			
+			CCPoint sp_position = ccp(NSDS_GD(recent_puzzle_number, kSDS_PZ_stage_int1_x_d, i),
+									  NSDS_GD(recent_puzzle_number, kSDS_PZ_stage_int1_y_d, i));
+			
+			if(found_number == 3)
+			{
+				StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_stage%d_piece.png", recent_puzzle_number, i)->getCString(),
+													  i, stage_level, sp_position, stage_rect, false, false,
+													  NSDS_GS(recent_puzzle_number, kSDS_PZ_stage_int1_pieceType_s, i),
+													  this, menu_selector(PuzzleMapScene::stageAction));
+				t_sp->mySetTouchEnable(false);
+				
+				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				
+				t_sp->setChangable(CCSTR_CWF("puzzle%d_stage%d_thumbnail.png", recent_puzzle_number, i)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+				t_sp->setPuzzleMode(my_puzzle_mode);
+				t_sp->shadow_node = addShadow(i, NSDS_GS(recent_puzzle_number, kSDS_PZ_stage_int1_pieceType_s, i).c_str(), sp_position);
+			}
+			else if(found_number == 2)
+			{
+				StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_stage%d_piece.png", recent_puzzle_number, i)->getCString(),
+													  i, stage_level, sp_position, stage_rect, false, true,
+													  NSDS_GS(recent_puzzle_number, kSDS_PZ_stage_int1_pieceType_s, i),
+													  this, menu_selector(PuzzleMapScene::stageAction));
+				t_sp->mySetTouchEnable(false);
+				
+				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				
+				t_sp->setChangable(CCSTR_CWF("puzzle%d_stage%d_thumbnail.png", recent_puzzle_number, i)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+				t_sp->setPuzzleMode(my_puzzle_mode);
+				t_sp->shadow_node = addShadow(i, NSDS_GS(recent_puzzle_number, kSDS_PZ_stage_int1_pieceType_s, i).c_str(), sp_position);
+			}
+			else if(found_number == 1)
+			{
+				StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_stage%d_piece.png", recent_puzzle_number, i)->getCString(),
+													  i, stage_level, sp_position, stage_rect, true, true,
+													  NSDS_GS(recent_puzzle_number, kSDS_PZ_stage_int1_pieceType_s, i),
+													  this, menu_selector(PuzzleMapScene::stageAction));
+				t_sp->mySetTouchEnable(false);
+				
+				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				
+				t_sp->setChangable(CCSTR_CWF("puzzle%d_stage%d_thumbnail.png", recent_puzzle_number, i)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+				t_sp->setPuzzleMode(my_puzzle_mode);
+				t_sp->shadow_node = addShadow(i, NSDS_GS(recent_puzzle_number, kSDS_PZ_stage_int1_pieceType_s, i).c_str(), sp_position);
+			}
+			else
+			{
+				StagePiece* t_sp = StagePiece::create("test_puzzle_empty.png",
+													  i, stage_level, sp_position, stage_rect, false, false,
+													  NSDS_GS(recent_puzzle_number, kSDS_PZ_stage_int1_pieceType_s, i),
+													  this, menu_selector(PuzzleMapScene::stageAction));
+				t_sp->mySetTouchEnable(false);
+				
+				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+			}
 		}
+		
+		map_mode_state = kMMS_uiMode;
+		is_menu_enable = true;
 	}
 	
-	virtual void ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent)
+	CCNode* createMapNode()
 	{
-		ccTouchesEnded(pTouches, pEvent);
+		CCNode* t_node = CCNode::create();
+		
+		CCSprite* t_back = CCSprite::create("whitePaper.png");
+		t_back->setColor(ccBLUE);
+		t_back->setScaleX(520.f/480.f);
+		t_back->setScaleY(340.f/320.f);
+		t_back->setPosition(CCPointZero);
+		t_node->addChild(t_back, 0, 99999);
+		
+		t_node->getCamera()->setEyeXYZ(0, -1.f, 2.f);
+		t_node->setScale(0.53f);
+		
+		return t_node;
 	}
 	
 	void stageAction(CCObject* sender);

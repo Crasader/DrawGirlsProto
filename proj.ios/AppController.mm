@@ -76,6 +76,7 @@ static AppDelegate s_sharedApplication;
     [window makeKeyAndVisible];
 
     [[UIApplication sharedApplication] setStatusBarHidden: YES];
+	[UIApplication sharedApplication].idleTimerDisabled = YES; // screen out disable
 
     cocos2d::CCApplication::sharedApplication()->run();
     return YES;
