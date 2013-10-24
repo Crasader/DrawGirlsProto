@@ -105,6 +105,8 @@ void MapScanner::scanMap()
 	
 	// outside recovery and new inside add show
 	int newInsideCnt = 0;
+	int sil_inside_cnt = 0;
+	int empty_inside_cnt = 0;
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
@@ -115,11 +117,15 @@ void MapScanner::scanMap()
 			{
 				myGD->mapState[i][j] = mapOldline;
 				newInsideCnt++;
+				if(mySD->silData[i][j])		sil_inside_cnt++;
+				else						empty_inside_cnt++;
 			}
 			else if(myGD->mapState[i][j] == mapNewget)
 			{
 				myGD->mapState[i][j] = mapOldget;
 				newInsideCnt++;
+				if(mySD->silData[i][j])		sil_inside_cnt++;
+				else						empty_inside_cnt++;
 			}
 		}
 	}
@@ -181,7 +187,8 @@ void MapScanner::scanMap()
 	else if(newInsideCnt < 5000)	rate = 0.6f; // max 50/344 = 14.5%
 	else							rate = 0.8f; // ^
 	
-	int addScore = newInsideCnt*rate;
+//	int addScore = newInsideCnt*rate;
+	int addScore = (sil_inside_cnt*2 + empty_inside_cnt)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*rate;
 	
 	myGD->communication("UI_addScore", addScore);
 	
@@ -214,7 +221,7 @@ void MapScanner::resetRects()
 			if(myGD->mapState[i][j] == mapScaningCheckLine)				myGD->mapState[i][j] = mapOldline;
 			else if(myGD->mapState[i][j] == mapScaningCheckGet)			myGD->mapState[i][j] = mapOldget;
 			
-			if((myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline) && mySD->silData[i][j] == true)				drawCellCnt++;
+			if((myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline) && mySD->silData[i][j])				drawCellCnt++;
 		}
 	}
 	

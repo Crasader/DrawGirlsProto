@@ -136,7 +136,7 @@ public:
 		score = 0.f;
 		percentage = 0.f;
 		keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-		stage_star = 0;
+		stage_grade = 0;
 		game_time = 0;
 		start_map_gacha_cnt = 0;
 		
@@ -176,7 +176,7 @@ public:
 		if(iter != card_options.end())		widePerfect_value += mySD->getCardWidePerfectItemOption(selected_card_number);
 	}
 	
-	void gameClear(int t_star, float t_score, float t_percentage, int t_game_time)
+	void gameClear(int t_grade, float t_score, float t_percentage, int t_game_time, int t_use_time, int t_total_time)
 	{
 		for(int i=kIC_attack;i<=kIC_randomChange;i++)
 		{
@@ -185,9 +185,9 @@ public:
 		}
 		
 		is_cleared = true;
-		stage_star = t_star;
+		stage_grade = t_grade;
 		percentage = t_percentage;
-		score = t_score*(1.f+percentage)*(1.f+stage_star/10.f);
+		score = t_score + t_score*(stage_grade-1.f)*0.5f + t_score*(1.f-(t_use_time*1.f)/t_total_time);
 		game_time = t_game_time;
 		myGD->setIsGameover(true);
 	}
@@ -221,9 +221,9 @@ public:
 		return percentage;
 	}
 	
-	int getStageStar()
+	int getStageGrade()
 	{
-		return stage_star;
+		return stage_grade;
 	}
 	
 	int getStageGold()
@@ -641,7 +641,7 @@ private:
 	bool is_cleared;
 	float score;
 	float percentage;
-	int stage_star;
+	int stage_grade;
 	int keep_gold;
 	int game_time;
 	

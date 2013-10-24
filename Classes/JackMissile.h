@@ -230,10 +230,16 @@ private:
 				else if(my_type == kMyElementalWind)		myColor = ccc4f(0, 1.f, 1.f, 1.f);
 				
 				myGD->communication("MP_explosion", particlePosition, myColor);
-				
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
-				
 				myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
+				
+				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
+				combo_cnt++;
+				
+				int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+				
+				myGD->communication("UI_addScore", addScore);
+				myGD->communication("UI_setComboCnt", combo_cnt);
 			}
 			
 			if(load_removing)
@@ -675,9 +681,15 @@ private:
 				else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
 				
 				myGD->communication("MP_explosion", particlePosition, myColor);
-				
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 				myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
+				
+				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
+				combo_cnt++;
+				
+				int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+				myGD->communication("UI_addScore", addScore);
+				myGD->communication("UI_setComboCnt", combo_cnt);
 				
 				removeFromParentAndCleanup(true);
 			}

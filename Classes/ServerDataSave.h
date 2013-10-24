@@ -66,6 +66,7 @@ enum SDS_KEY
 	kSDS_SI_base = 2000,
 	kSDS_SI_version_i,
 	kSDS_SI_playtime_i,
+	kSDS_SI_scoreRate_d,
 	kSDS_SI_missionType_i,
 	kSDS_SI_missionOptionEnergy_i,
 	kSDS_SI_missionOptionCount_i,
@@ -477,6 +478,7 @@ private:
 		
 		else if(t_key == kSDS_SI_version_i)					rv = "version";
 		else if(t_key == kSDS_SI_playtime_i)				rv = "playtime";
+		else if(t_key == kSDS_SI_scoreRate_d)				rv = "scoreRate";
 		else if(t_key == kSDS_SI_missionType_i)				rv = "mission_type";
 		else if(t_key == kSDS_SI_missionOptionEnergy_i)		rv = "mission_option_energy";
 		else if(t_key == kSDS_SI_missionOptionCount_i)		rv = "mission_option_count";

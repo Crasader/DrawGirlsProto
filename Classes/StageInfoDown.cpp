@@ -20,6 +20,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 		if(SDS_GI(kSDF_stageInfo, mySD->getSilType(), "version") < result_data["version"].asInt())
 		{
 			NSDS_SI(mySD->getSilType(), kSDS_SI_playtime_i, result_data["playtime"].asInt());
+			NSDS_SD(mySD->getSilType(), kSDS_SI_scoreRate_d, result_data["scoreRate"].asDouble());
 			
 			Json::Value t_mission = result_data["mission"];
 			NSDS_SI(mySD->getSilType(), kSDS_SI_missionType_i, t_mission["type"].asInt());
