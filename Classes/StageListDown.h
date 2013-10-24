@@ -10,11 +10,12 @@
 #define __DGproto__StageListDown__
 
 #include "cocos2d.h"
-#include "GraphDog.h"
+//#include "GraphDog.h"
 #include "StarGoldData.h"
 #include "ServerDataSave.h"
 #include "StageImgLoader.h"
 #include "DownloadFile.h"
+#include "hspConnector.h"
 
 USING_NS_CC;
 using namespace std;
@@ -85,7 +86,7 @@ private:
 		Json::Value param;
 		param["version"] = SDS_GI(kSDF_puzzleInfo, puzzle_number, "version");
 		param["no"] = puzzle_number;
-		graphdog->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
+		hspConnector::get()->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
 	}
 	
 	void addDownlist(string t_key, const Json::Value& result_data);

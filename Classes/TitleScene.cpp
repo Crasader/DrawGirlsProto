@@ -35,6 +35,12 @@ bool TitleScene::init()
 		return false;
 	}
 	
+	is_menu_enable = false;
+	
+	state_label = CCLabelTTF::create("까똑 로그인 ing...", mySGD->getFont().c_str(), 20);
+	state_label->setPosition(ccp(240,290));
+	addChild(state_label);
+	
 	Json::Value param;
 	param["ManualLogin"] = true;
 	

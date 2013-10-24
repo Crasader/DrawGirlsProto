@@ -31,7 +31,7 @@
 using namespace cocos2d;
 using namespace std;
 
-#define JM_CONDITION	0.03
+#define JM_CONDITION	0.01
 
 #define MY_GRAVITY	-0.5
 

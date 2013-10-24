@@ -13,9 +13,17 @@
 #include "DataStorageHub.h"
 #include "PuzzleMapScene.h"
 #include "hspConnector.h"
+#include "ServerDataSave.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 using namespace std;
+
+enum TitleMenuTag
+{
+	kTitle_MT_replay = 1,
+	kTitle_MT_puzzleBase = 10000
+};
 
 class TitleScene : public cocos2d::CCLayer
 {
@@ -31,12 +39,148 @@ public:
 	
 private:
 	
+	CCLabelTTF* state_label;
+	
+	void startGetPuzzleList()
+	{
+		Json::Value param;
+		param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
+		hspConnector::get()->command("getpuzzlelist", param, json_selector(this, TitleScene::resultGetPuzzleList));
+	}
+	
 	void resultLogin(Json::Value result_data)
 	{
 		CCLog("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+		
+		state_label->setString("퍼즐 목록을 받아오는 ing...");
+		
+		startGetPuzzleList();
 	}
 	
+	void resultGetPuzzleList(Json::Value result_data)
+	{
+		CCLog("resultGetPuzzleList data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		
+		if(result_data["state"].asString() == "ok")
+		{
+			if(result_data["version"] > NSDS_GI(kSDS_GI_puzzleListVersion_i))
+			{
+				Json::Value puzzle_list = result_data["list"];
+				
+				NSDS_SI(kSDS_GI_puzzleListCount_i, puzzle_list.size());
+				
+				int puzzle_cnt = puzzle_list.size();
+				for(int i=0;i<puzzle_cnt;i++)
+				{
+					NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_list[i]["no"].asInt());
+					NSDS_SS(kSDS_GI_puzzleList_int1_title_s, i+1, puzzle_list[i]["title"].asString().c_str());
+					
+					CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,200,70));
+					CCLabelTTF* n_label = CCLabelTTF::create(puzzle_list[i]["title"].asString().c_str(), mySGD->getFont().c_str(), 20);
+					n_label->setColor(ccBLACK);
+					n_label->setPosition(ccp(100,35));
+					n_replay->addChild(n_label);
+					
+					CCSprite* s_replay = CCSprite::create("whitePaper.png", CCRectMake(0, 0,200,70));
+					s_replay->setColor(ccGRAY);
+					CCLabelTTF* s_label = CCLabelTTF::create(puzzle_list[i]["title"].asString().c_str(), mySGD->getFont().c_str(), 20);
+					s_label->setColor(ccBLACK);
+					s_label->setPosition(ccp(100,35));
+					s_replay->addChild(s_label);
+					
+					CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+					replay_item->setTag(kTitle_MT_puzzleBase + puzzle_list[i]["no"].asInt());
+					
+					CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+					replay_menu->setPosition(ccp(240,240-i*40));
+					addChild(replay_menu);
+				}
+				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["version"].asInt());
+			}
+			else
+			{
+				int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+				for(int i=0;i<puzzle_cnt;i++)
+				{
+					int no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
+					string title = NSDS_GS(kSDS_GI_puzzleList_int1_title_s, i+1).c_str();
+					
+					CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,200,70));
+					CCLabelTTF* n_label = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 20);
+					n_label->setColor(ccBLACK);
+					n_label->setPosition(ccp(100,35));
+					n_replay->addChild(n_label);
+					
+					CCSprite* s_replay = CCSprite::create("whitePaper.png", CCRectMake(0, 0,200,70));
+					s_replay->setColor(ccGRAY);
+					CCLabelTTF* s_label = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 20);
+					s_label->setColor(ccBLACK);
+					s_label->setPosition(ccp(100,35));
+					s_replay->addChild(s_label);
+					
+					CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+					replay_item->setTag(kTitle_MT_puzzleBase + no);
+					
+					CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+					replay_menu->setPosition(ccp(240,240-i*40));
+					addChild(replay_menu);
+				}
+			}
+			is_menu_enable = true;
+			
+			state_label->setString("플레이 할 퍼즐을 선택해주세요.");
+		}
+		else
+		{
+			state_label->setString("퍼즐 목록을 받아오는데 실패하였습니다. 재시도 해주세요.");
+			
+			CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,120,70));
+			CCLabelTTF* n_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
+			n_label->setColor(ccBLACK);
+			n_label->setPosition(ccp(60,35));
+			n_replay->addChild(n_label);
+			
+			CCSprite* s_replay = CCSprite::create("whitePaper.png", CCRectMake(0, 0,120,70));
+			s_replay->setColor(ccGRAY);
+			CCLabelTTF* s_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
+			s_label->setColor(ccBLACK);
+			s_label->setPosition(ccp(60,35));
+			s_replay->addChild(s_label);
+			
+			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+			replay_item->setTag(kTitle_MT_replay);
+			
+			CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+			replay_menu->setPosition(ccp(240,160));
+			addChild(replay_menu, 0, kTitle_MT_replay);
+			
+			is_menu_enable = true;
+		}
+	}
+	
+	bool is_menu_enable;
+	
+	void menuAction(CCObject* sender)
+	{
+		if(!is_menu_enable)		return;
+		
+		is_menu_enable = false;
+		
+		int tag = ((CCNode*)sender)->getTag();
+		
+		if(tag == kTitle_MT_replay)
+		{
+			removeChildByTag(kTitle_MT_replay);
+			startGetPuzzleList();
+		}
+		else if(tag >= kTitle_MT_puzzleBase)
+		{
+			tag -= kTitle_MT_puzzleBase;
+			
+			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
+			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+		}
+	}
 };
 
 #endif /* defined(__DGproto__TitleScene__) */
