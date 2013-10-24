@@ -33,6 +33,7 @@ namespace GraphDogLib {
    //@ JsonBox::Object StringToJsonObject(string _str);
     string JsonObjectToString(Json::Value _obj);
     Json::Value StringToJsonObject(string _str);
+	void JsonToLog(string tag,Json::Value _obj);
 
 	string getLocalCode();
     void openAppStore(string appid);

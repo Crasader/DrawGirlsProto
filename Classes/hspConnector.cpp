@@ -116,6 +116,10 @@ long long int hspConnector::getHSPMemberNo(){
 #endif
 }
 
+string hspConnector::getKakaoID(){
+	return this->myKakaoInfo["user_id"].asString();
+}
+
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 bool hspConnector::setupHSPonIOS(int hspGameNo,string hspGameID,string hspGameVersion,void* launchOptions){
@@ -287,9 +291,18 @@ void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,jsonSelType 
 */
 void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType func){
     bool ManualLogin = param["ManualLogin"].asBool();
+	
+	int dkey = jsonDelegator::get()->add(func, 0, 0);
+	jsonSelType nextFunc = [dkey](Json::Value obj){
+		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(dkey);
+		hspConnector::get()->kLoadLocalUser([](Json::Value obj){
+			hspConnector::get()->myKakaoInfo = obj;
+		});
+		
+		delsel.func(obj);
+		jsonDelegator::get()->remove(dkey);
+	};
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-
-    
     
     [[HSPCore sharedHSPCore] loginWithManualLogin:ManualLogin completionHandler:
      ^(BOOL playable, HSPError *error)
@@ -299,19 +312,22 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
      [resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
      
      addErrorInResult(resultDict, error);
-     callFuncMainQueue2(param,callbackParam,func,resultDict);
+     callFuncMainQueue2(param,callbackParam,nextFunc,resultDict);
      }
      ];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     JniMethodInfo t;
     if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(IZ)V")) {
-        int _key =  jsonDelegator::get()->add(func,param,callbackParam);
+        int _key =  jsonDelegator::get()->add(nextFunc,param,callbackParam);
 				t.env->CallStaticObjectMethod(t.classID, t.methodID,_key,ManualLogin);
         t.env->DeleteLocalRef(t.classID);
     }
 #endif
 }
 
+void hspConnector::loadMyInfo(Json::Value obj){
+	GraphDogLib::JsonToLog("myinfo", obj);
+}
 /*
  로그인
   param

@@ -125,8 +125,47 @@ public:
     
     Json::Value frineds;
     Json::Value appFriends;
-    
+	Json::Value	idMap;
+	Json::Value myKakaoInfo;
+	
+	Json::Value getFriendByKakaoIDCopy(string kakaoID){
+		return appFriends[kakaoID];
+	}
+	
+	Json::Value* getFriendByKakaoID(string kakaoID){
+		return &appFriends[kakaoID];
+	}
+	
+	Json::Value* getFriendByHSPNO(int64_t memberNo){
+		Json::Value::Members m = appFriends.getMemberNames();
+		for (auto iter = m.begin(); iter!=m.end(); ++iter) {
+			string kakaoID = (string)*iter;
+			if(appFriends[kakaoID]["profile"]["memberNo"].asInt64()==memberNo){
+				return &appFriends[kakaoID];
+			}
+		}
+		return 0;
+	}
+
+	Json::Value getFriendByHSPNOCopy(int64_t memberNo){
+		Json::Value::Members m = appFriends.getMemberNames();
+		for (auto iter = m.begin(); iter!=m.end(); ++iter) {
+			string kakaoID = (string)*iter;
+			if(appFriends[kakaoID]["profile"]["memberNo"].asInt64()==memberNo){
+				return appFriends[kakaoID];
+			}
+		}
+		return 0;
+	}
+	
+	Json::Value* getFriendByIndex(unsigned int idx){
+		Json::Value::Members m =this->appFriends.getMemberNames();
+		string kakaoID=(string)m[idx];
+		return &appFriends[kakaoID];
+	}
+	
     string hspID;
+	
     int hspNo;
     
     void setup(string pHSPID, int pHSPNo, string pGraphdogVersion){
@@ -144,10 +183,12 @@ public:
     }
     
     long long int getHSPMemberNo();
+	string getKakaoID();
     
     bool setupHSPonIOS(int hspGameNo,string hspGameID,string hspGameVersion,void* launchOptions);
 
     void login(Json::Value param,Json::Value callbackParam,jsonSelType func);
+	void loadMyInfo(Json::Value obj);
     void loadMyProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
     void loadFriendsProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
     
