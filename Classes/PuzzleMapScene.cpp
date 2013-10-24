@@ -17,7 +17,7 @@
 #include "OptionScene.h"
 #include "GachaPopup.h"
 #include "RankPopup.h"
-#include "PostboxPopup.h"
+#include "MailPopup.h"
 
 enum PMS_Zorder{
 	kPMS_Z_wall = 1,
@@ -707,8 +707,8 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	else if(tag == kPMS_MT_postbox)
 	{
 		is_menu_enable = true;
-//		PostboxPopup* t_pp = PostboxPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
-//		addChild(t_pp, kPMS_Z_popup);
+		MailPopup* t_pp = MailPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
+		addChild(t_pp, kPMS_Z_popup);
 	}
 //	else if(tag == kWMS_MT_rubyShop)
 //	{

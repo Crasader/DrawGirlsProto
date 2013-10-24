@@ -1,13 +1,13 @@
 //
-//  RankPopup.h
+//  MailPopup.h
 //  DGproto
 //
 //  Created by 사원3 on 13. 9. 30..
 //
 //
 
-#ifndef __DGproto__RankPopup__
-#define __DGproto__RankPopup__
+#ifndef __DGproto__MailPopup__
+#define __DGproto__MailPopup__
 
 #include "cocos2d.h"
 #include "hspConnector.h"
@@ -18,53 +18,52 @@ USING_NS_CC;
 using namespace cocos2d::extension;
 using namespace std;
 
-enum RankPopupZorder{
-	kRP_Z_gray = 1,
-	kRP_Z_back,
-	kRP_Z_close,
-	kRP_Z_content,
-	kRP_Z_rankTable
+enum MailPopupZorder{
+	kMP_Z_gray = 1,
+	kMP_Z_back,
+	kMP_Z_close,
+	kMP_Z_content,
+	kMP_Z_mailTable
 	
 };
 
-enum RankTableViewTag{
-	kRP_RT_title = 1,
-	kRP_RT_score,
-	kRP_RT_rank,
-	kRP_RT_send
+enum MailTableViewTag{
+	kMP_MT_title = 1,
+	kMP_MT_score,
+	kMP_MT_rank,
+	kMP_MT_send
 };
 
-enum RankPopupMenuTag{
-	kRP_MT_close = 1,
-	kRP_MT_invite,
-	kRP_MT_send,
-	kRP_MT_send_close,
-	kRP_MT_invite_close,
-	kRP_MT_invite_rank,
-	kRP_MT_invite_send,
-	kRP_MT_invite_send_close
+enum MailPopupMenuTag{
+	kMP_MT_close = 1,
+	kMP_MT_invite,
+	kMP_MT_send_close,
+	kMP_MT_invite_close,
+	kMP_MT_invite_rank,
+	kMP_MT_invite_send,
+	kMP_MT_invite_send_close
 };
 
-enum RankPopupState{
-	kRP_State_rank = 1,
-	kRP_State_send,
-	kRP_State_invite,
-	kRP_State_invite_send
+enum MailPopupState{
+	kMP_State_rank = 1,
+	kMP_State_send,
+	kMP_State_invite,
+	kMP_State_invite_send
 };
 
-class RankPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
+class MailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
-	static RankPopup* create(CCObject* t_close, SEL_CallFunc d_close)
+	static MailPopup* create(CCObject* t_close, SEL_CallFunc d_close)
 	{
-		RankPopup* t_rp = new RankPopup();
+		MailPopup* t_rp = new MailPopup();
 		t_rp->myInit(t_close, d_close);
 		t_rp->autorelease();
 		return t_rp;
 	}
 	
 	void finishedOpen(){
-		loadRank();
+		loadMail();
 	}
 	
 	void finishedClose(){
@@ -76,7 +75,7 @@ public:
 	CCSprite* gray;
 private:
 	
-	CCTableView* rankTableView;
+	CCTableView* mailTableView;
 	 
 	bool is_menu_enable;
 	
@@ -94,9 +93,9 @@ private:
 	CCObject* target_close;
 	SEL_CallFunc delegate_close;
 	
-	RankPopupState my_state;
+	MailPopupState my_state;
 	
-	
+	Json::Value mailData;
 	
 	CCControlButton *closeBtn;
 	
@@ -107,11 +106,11 @@ private:
 		
 		gray = CCSprite::create("back_gray.png");
 		gray->setPosition(ccp(240,160+400));
-		addChild(gray, kRP_Z_gray);
+		addChild(gray, kMP_Z_gray);
 		
-		CCSprite* back = CCSprite::create("ui_rank_back.png");
+		CCSprite* back = CCSprite::create("ui_common_popup_back.png");
 		back->setPosition(ccp(240,160));
-		addChild(back, kRP_Z_back);
+		addChild(back, kMP_Z_back);
 		
 		CCLabelTTF *btnTitle = CCLabelTTF::create("확인", "Helvetica", 15, CCSizeMake(80, 30), kCCTextAlignmentCenter,kCCVerticalTextAlignmentCenter);
 		
@@ -119,17 +118,17 @@ private:
 		
 		closeBtn = CCControlButton::create(btnTitle, btnBg);
 		closeBtn->setPosition(ccp(240,35));
-		closeBtn->setTag(kRP_MT_send);
-		closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RankPopup::closePopup), CCControlEventTouchUpInside);
+		closeBtn->setTag(kMP_MT_send);
+		closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(MailPopup::closePopup), CCControlEventTouchUpInside);
 		closeBtn->setTouchPriority(-201);
-		addChild(closeBtn, kRP_Z_close);
+		addChild(closeBtn, kMP_Z_close);
 		closeBtn->setVisible(false);
 		
 		
 		this->setPositionY(this->getPositionY()-400);
 		
 		
-		this->runAction(CCSequence::create(CCMoveBy::create(0.5, ccp(0,400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedOpen)),NULL));
+		this->runAction(CCSequence::create(CCMoveBy::create(0.5, ccp(0,400)),CCCallFunc::create(this, callfunc_selector(MailPopup::finishedOpen)),NULL));
 		gray->runAction(CCSpawn::create(CCFadeIn::create(0.5),CCMoveBy::create(0.5,CCPoint(0,-400)),NULL));
 		
 //
@@ -137,7 +136,7 @@ private:
 //		CCSprite* s_close = CCSprite::create("ui_common_close.png");
 //		s_close->setColor(ccGRAY);
 //		
-//		CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(RankPopup::menuAction));
+//		CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(MailPopup::menuAction));
 //		close_item->setTag(kRP_MT_close);
 //		
 //		close_menu = CCMenu::createWithItem(close_item);
@@ -149,7 +148,7 @@ private:
 //		CCSprite* s_invite = CCSprite::create("rank_invite.png");
 //		s_invite->setColor(ccGRAY);
 //		
-//		CCMenuItem* invite_item = CCMenuItemSprite::create(n_invite, s_invite, this, menu_selector(RankPopup::menuAction));
+//		CCMenuItem* invite_item = CCMenuItemSprite::create(n_invite, s_invite, this, menu_selector(MailPopup::menuAction));
 //		invite_item->setTag(kRP_MT_invite);
 //		
 //		invite_menu = CCMenu::createWithItem(invite_item);
@@ -161,7 +160,7 @@ private:
 //		CCSprite* s_send = CCSprite::create("rank_send.png");
 //		s_send->setColor(ccGRAY);
 //		
-//		CCMenuItem* send_item = CCMenuItemSprite::create(n_send, s_send, this, menu_selector(RankPopup::menuAction));
+//		CCMenuItem* send_item = CCMenuItemSprite::create(n_send, s_send, this, menu_selector(MailPopup::menuAction));
 //		send_item->setTag(kRP_MT_send);
 //		
 //		send_menu = CCMenu::createWithItem(send_item);
@@ -169,7 +168,7 @@ private:
 //		back->addChild(send_menu);
 		
 		
-		my_state = kRP_State_rank;
+		my_state = kMP_State_rank;
 		
 		is_menu_enable = true;
 		touched_number = 0;
@@ -179,106 +178,49 @@ private:
 	
 	
 	
-	void loadRank()
+	void loadMail()
 	{
-		
-
 		Json::Value p;
-		p["delekey"] = jsonDelegator::get()->add(json_selector(this, RankPopup::drawRank), 0, 0);
+		//88899626759589034
+		p["receiverMemberNo"]=hspConnector::get()->getHSPMemberNo();
+		p["gameNo"]=hspConnector::get()->hspNo;
+		p["contentType"]=0;
+		p["basisYmdt"]="";
+		p["pageNo"]=1;
+		p["pageSize"]=10;
 		
-		//step1 카카오친구목록 로드
-		hspConnector::get()->kLoadFriends(p,[](Json::Value fInfo)
-		{
-		  CCLog("1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-		  int delekey = fInfo["callback"]["delekey"].asInt();
-		  
-		  Json::Value p;
-		  Json::Value appfriends = fInfo["app_friends_info"];
-		  p["oauthProvider"]="kakao";
-		  p["serviceDomain"]="KAKAOGAME";
-		  p["gameNo"]=hspConnector::get()->hspNo;
-		  
-		  for(int i=0; i<appfriends.size();i++){
-			  p["oauthIdList"].append(appfriends[i]["user_id"].asString());
-		  }
-		  
-		  //step2 카카오ID목록을 이용하여 HSPID목록 만듬
-			hspConnector::get()->command("GetMemberNoListByOauthIdList",p,[delekey](Json::Value obj)
-			{										   
-			   CCLog("2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
-			   Json::Value p;
-			   Json::Value idMap = obj["memberNoMap"];
-				//idMap[hspConnector::get()->getHSPMemberNo()]=hspConnector::get()->getHSPMemberNo();
-			   p["past"]=true;
-			   p["rankingKey"]="rankingFactor-1,rankingPeriod-2";
-			   p["requesterMemberNo"]=hspConnector::get()->getHSPMemberNo();
-			   p["gameNo"]=hspConnector::get()->hspNo;
-			   Json::Value::Members m = idMap.getMemberNames();
-			   for (auto iter = m.begin(); iter!=m.end(); ++iter) {
-				   string key = (string)*iter;
-				   p["memberNoList"].append(idMap[key].asInt64());
-			   }
-			   
-			   //step3 HSP ID목록으로 게임랭킹 뽑기
-			   hspConnector::get()->command("GetRankingListByMemberNoList2",p,[delekey,idMap](Json::Value obj)
-				{
-					
-					Json::Value friendInfo;
-					Json::Value::Members m = idMap.getMemberNames();
-					for (auto iter = m.begin(); iter!=m.end(); ++iter) {
-						string kakaoID = (string)*iter;
-						for(int i=0; i<obj["rankingList"].size();i++){
-							if(obj["rankingList"][i]["profile"]["memberNo"].asInt64() == idMap[kakaoID].asInt64()){
-								obj["rankingList"][i]["profile"]["kakaoID"] = kakaoID;
-								friendInfo[kakaoID]=obj["rankingList"][i];
-								//hspConnector::get()->frineds[i]["hspNo"]=obj["memberNoMap"][key].asInt64();
-								break;
-							}
-						}
-					}
-					
-					
-					hspConnector::get()->idMap = idMap;
-					hspConnector::get()->appFriends = friendInfo;
-					
-					//CCLog("%s",GraphDogLib::JsonObjectToString(obj).c_str());
-					jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-					
-					delsel.func(obj);
-					
-					jsonDelegator::get()->remove(delekey);
-				});
-										   
-		});
-		  
-	  });
-		
-		
+		hspConnector::get()->command("GetReceivedGameMails2",p,[this](Json::Value r)
+		 {
+			 this->drawMail(r);
+			
+		 });
 	}
 	
 	
-	void drawRank(Json::Value obj){
+	void drawMail(Json::Value obj){
+		
+		mailData = obj;
 		
 		//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 		
 		//320x320 테이블 뷰 생성
-		rankTableView = CCTableView::create(this, CCSizeMake(238, 200));
+		mailTableView = CCTableView::create(this, CCSizeMake(400, 225));
 		
-		rankTableView->setAnchorPoint(CCPointZero);
+		mailTableView->setAnchorPoint(CCPointZero);
 		
 		//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
-		rankTableView->setDirection(kCCScrollViewDirectionVertical);
+		mailTableView->setDirection(kCCScrollViewDirectionVertical);
 		
 		//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
-		rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
+		mailTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 		
 		//기준점 0,0
-		rankTableView->setPosition(ccp(210, 65));
+		mailTableView->setPosition(ccp(40, 65));
 		
 		//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
-		rankTableView->setDelegate(this);
-		this->addChild(rankTableView, kRP_Z_rankTable);
-		rankTableView->setTouchPriority(-200);
+		mailTableView->setDelegate(this);
+		this->addChild(mailTableView, kMP_Z_mailTable);
+		mailTableView->setTouchPriority(-200);
 		//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
 		
 		
@@ -294,64 +236,41 @@ private:
    	void closePopup(CCControlButton *obj, CCControlEvent event){
 		
 		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
-		this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedClose)),NULL));
+		this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(MailPopup::finishedClose)),NULL));
 	}
 	
 
 	
-	void sendHeart(CCControlButton *obj, CCControlEvent event){
-		Json::Value* member = (Json::Value *)obj->getUserData();
-
-		
-		////////////////////////////////
-		// 쪽지보내기 - HSP
-		////////////////////////////////
-		
+	void removeMail(CCControlButton *obj, CCControlEvent event){
+		Json::Value* mail = (Json::Value *)obj->getUserData();
 		
 		Json::Value p;
-		p["content"]="하트받으세용";
-		p["receiverMemberNo"]=(*member)["profile"]["memberNo"].asInt64();
-		p["senderMemberNo"]=hspConnector::get()->getHSPMemberNo();
-		p["contentType"]=1;
-		p["gameNo"]=hspConnector::get()->hspNo;
+		int mailNo =(*mail)["mailNo"].asInt();
+		p["mailNo"]=mailNo;
+		p["targetOption"]="send,recv";
+		p["senderMemberNo"]=(*mail)["sender"]["memberNo"].asInt64();
+		p["receiverMemberNo"]=(*mail)["receiver"]["memberNo"].asInt64();
 		
-		
-		
-		
-		hspConnector::get()->command("SendGameMail", p, [member](Json::Value r)
-		 {
-			 
-			 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-			 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-			 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-			 
-			 
-			 GraphDogLib::JsonToLog("sendGameMail", r);
-			 Json::Value p;
-			 //88899626759589034
-			 p["receiverMemberNo"]=r["mail"]["receiver"]["memberNo"].asInt64();
-			 p["gameNo"]=hspConnector::get()->hspNo;
-			 p["contentType"]=0;
-			 p["basisYmdt"]="";
-			 p["pageNo"]=1;
-			 p["pageSize"]=10;
-			 
-			 
-			 ////////////////////////////////
-			 // 쪽지보내기 - 카카오
-			 ////////////////////////////////
-			 Json::Value p2;
-			 p2["receiver_id"] = (*member)["profile"]["kakaoID"].asString();
-			 p2["message"] = "드로우걸스 테스트메세지!";
-//			 hspConnector::get()->kSendMessage(p2, [](Json::Value r)
-//			 {
-//				 
-//				 GraphDogLib::JsonToLog("kSendMessage", r);
-//				 
-//				 
-//			 });
-		 });
+		hspConnector::get()->command("DeleteGameMail2",p,[this,obj,mailNo](Json::Value r)
+		{
+			Json::Value newMailList;
+			
+			if(r["header"].get("status","1").asInt()==0){
+			
+				
+				for(int i=0;i<this->mailData["mailList"].size();i++){
+					if(this->mailData["mailList"][i]["mailNo"].asInt()!=mailNo){
+						newMailList.append(this->mailData["mailList"][i]);
 
+					}
+				}
+				
+				this->mailData["mailList"]=newMailList;
+					
+				this->mailTableView->reloadData();
+			}
+		});
+	
 	}
 	
 	
@@ -366,27 +285,28 @@ private:
 		CCControlButton* sendBtn;
 		CCLabelTTF* score;
 		CCLabelTTF* rank;
-		Json::Value* member = hspConnector::get()->getFriendByIndex(idx);
+		Json::Value* mail = &mailData["mailList"][idx];
 		
 		if(!cell){
 			cell = new CCTableViewCell();
 			
 			cell->autorelease();
 			
-			CCSprite* bg = CCSprite::create("ui_rank_cell_back.png");
+			CCScale9Sprite* bg = CCScale9Sprite::create("ui_rank_cell_back.png",CCRectMake(0, 0, 238, 45),CCRectMake(80, 10, 78, 25));
+			bg->setContentSize(CCSizeMake(400, 45));
 			bg->setPosition(CCPointZero);
 			bg->setAnchorPoint(CCPointZero);
 			cell->addChild(bg,1);
 			
 			
-			CCLabelTTF *btnTitle = CCLabelTTF::create("send", "Helvetica", 10, CCSizeMake(30, 30), kCCTextAlignmentCenter,kCCVerticalTextAlignmentCenter);
+			CCLabelTTF *btnTitle = CCLabelTTF::create("delete", "Helvetica", 10, CCSizeMake(30, 30), kCCTextAlignmentCenter,kCCVerticalTextAlignmentCenter);
 			//btnTitle->setContentSize(CCSizeMake(40, 40));
 			CCScale9Sprite *btnBg = CCScale9Sprite::create("ui_common_9_button_brown.png",CCRectMake(0, 0, 38, 38),CCRectMake(10, 10, 18, 18));
 			
 			sendBtn = CCControlButton::create(btnTitle, btnBg);
-			sendBtn->setPosition(ccp(205,22));
-			sendBtn->setTag(kRP_MT_send);
-			sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RankPopup::sendHeart), CCControlEventTouchUpInside);
+			sendBtn->setPosition(ccp(370,22));
+			sendBtn->setTag(kMP_MT_send);
+			sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(MailPopup::removeMail), CCControlEventTouchUpInside);
 			sendBtn->setTouchPriority(-201);
 			
 			cell->addChild(sendBtn,2);
@@ -394,34 +314,35 @@ private:
 			title = CCLabelTTF::create("","Helvetica",12);
 			title->setPosition(ccp(90,28));
 			title->setAnchorPoint(CCPointZero);
-			title->setTag(kRP_RT_title);
+			title->setTag(kMP_MT_title);
 			cell->addChild(title,2);
 			
 			
 			score = CCLabelTTF::create("","Helvetica",20);
 			score->setPosition(ccp(90,5));
 			score->setAnchorPoint(CCPointZero);
-			score->setTag(kRP_RT_score);
+			score->setTag(kMP_MT_score);
 			cell->addChild(score,2);
 			
 			rank = CCLabelTTF::create("","Helvetica",25);
 			rank->setPosition(ccp(10,10));
 			rank->setAnchorPoint(CCPointZero);
-			rank->setTag(kRP_RT_rank);
+			rank->setTag(kMP_MT_rank);
 			cell->addChild(rank,2);
 			
 		}else{
-			title=(CCLabelTTF*)cell->getChildByTag(kRP_RT_title);
-			score=(CCLabelTTF*)cell->getChildByTag(kRP_RT_score);
-			rank=(CCLabelTTF*)cell->getChildByTag(kRP_RT_rank);
-			sendBtn=(CCControlButton*)cell->getChildByTag(kRP_MT_send);
+			title=(CCLabelTTF*)cell->getChildByTag(kMP_MT_title);
+			score=(CCLabelTTF*)cell->getChildByTag(kMP_MT_score);
+			rank=(CCLabelTTF*)cell->getChildByTag(kMP_MT_rank);
+			sendBtn=(CCControlButton *)cell->getChildByTag(kMP_MT_send);
 		}
 		
 		
-		sendBtn->setUserData((void *)member);
-		title->setString((*member)["profile"]["nickname"].asString().c_str());
-		score->setString((*member)["rankingScore"].asString().c_str());
-		rank->setString((*member)["rankingGrade"].asString().c_str());
+		sendBtn->setUserData((void *)mail);
+		
+		title->setString((*mail)["sentTimestamp"].asString().c_str());
+		score->setString((*mail)["sender"]["nickname"].asString().c_str());
+		rank->setString((*mail)["contentType"].asString().c_str());
 		
 		return cell;
 	}
@@ -440,11 +361,11 @@ private:
 		
 	}
     virtual CCSize cellSizeForTable(CCTableView *table){
-		return CCSizeMake(238, 47);
+		return CCSizeMake(400, 47);
 	}
 	
     virtual unsigned int numberOfCellsInTableView(CCTableView *table){
-		return hspConnector::get()->appFriends.size();
+		return mailData["mailList"].size();
 	}
 	
 	
@@ -457,14 +378,14 @@ private:
 	{
 		CCPoint return_value;
 		
-		if(t_tag == kRP_MT_invite)					return_value = ccp(240,43);
-		else if(t_tag == kRP_MT_close)				return_value = ccp(345,283);
-		else if(t_tag == kRP_MT_send)				return_value = ccp(240,230);
-		else if(t_tag == kRP_MT_send_close)			return_value = ccp(193,59);
-		else if(t_tag == kRP_MT_invite_close)		return_value = ccp(345,283);
-		else if(t_tag == kRP_MT_invite_rank)		return_value = ccp(240,43);
-		else if(t_tag == kRP_MT_invite_send)		return_value = ccp(240,230);
-		else if(t_tag == kRP_MT_invite_send_close)	return_value = ccp(193,59);
+		if(t_tag == kMP_MT_invite)					return_value = ccp(240,43);
+		else if(t_tag == kMP_MT_close)				return_value = ccp(345,283);
+		else if(t_tag == kMP_MT_send)				return_value = ccp(240,230);
+		else if(t_tag == kMP_MT_send_close)			return_value = ccp(193,59);
+		else if(t_tag == kMP_MT_invite_close)		return_value = ccp(345,283);
+		else if(t_tag == kMP_MT_invite_rank)		return_value = ccp(240,43);
+		else if(t_tag == kMP_MT_invite_send)		return_value = ccp(240,230);
+		else if(t_tag == kMP_MT_invite_send_close)	return_value = ccp(193,59);
 		
 		return return_value;
 	}
@@ -496,7 +417,7 @@ private:
 ////			CCSprite* s_invite_close = CCSprite::create("ui_common_close.png");
 ////			s_invite_close->setColor(ccGRAY);
 ////			
-////			CCMenuItem* invite_close_item = CCMenuItemSprite::create(n_invite_close, s_invite_close, this, menu_selector(RankPopup::menuAction));
+////			CCMenuItem* invite_close_item = CCMenuItemSprite::create(n_invite_close, s_invite_close, this, menu_selector(MailPopup::menuAction));
 ////			invite_close_item->setTag(kRP_MT_invite_close);
 ////			
 ////			invite_close_menu = CCMenu::createWithItem(invite_close_item);
@@ -508,7 +429,7 @@ private:
 ////			CCSprite* s_invite_rank = CCSprite::create("rank_invite_rank.png");
 ////			s_invite_rank->setColor(ccGRAY);
 ////			
-////			CCMenuItem* invite_rank_item = CCMenuItemSprite::create(n_invite_rank, s_invite_rank, this, menu_selector(RankPopup::menuAction));
+////			CCMenuItem* invite_rank_item = CCMenuItemSprite::create(n_invite_rank, s_invite_rank, this, menu_selector(MailPopup::menuAction));
 ////			invite_rank_item->setTag(kRP_MT_invite_rank);
 ////			
 ////			invite_rank_menu = CCMenu::createWithItem(invite_rank_item);
@@ -520,7 +441,7 @@ private:
 ////			CCSprite* s_invite_send = CCSprite::create("rank_invite_send.png");
 ////			s_invite_send->setColor(ccGRAY);
 ////			
-////			CCMenuItem* invite_send_item = CCMenuItemSprite::create(n_invite_send, s_invite_send, this, menu_selector(RankPopup::menuAction));
+////			CCMenuItem* invite_send_item = CCMenuItemSprite::create(n_invite_send, s_invite_send, this, menu_selector(MailPopup::menuAction));
 ////			invite_send_item->setTag(kRP_MT_invite_send);
 ////			
 ////			invite_send_menu = CCMenu::createWithItem(invite_send_item);
@@ -544,7 +465,7 @@ private:
 //			CCSprite* s_send_close = CCSprite::create("option_short_close.png");
 //			s_send_close->setColor(ccGRAY);
 //			
-//			CCMenuItem* send_close_item = CCMenuItemSprite::create(n_send_close, s_send_close, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* send_close_item = CCMenuItemSprite::create(n_send_close, s_send_close, this, menu_selector(MailPopup::menuAction));
 //			send_close_item->setTag(kRP_MT_send_close);
 //			
 //			send_close_menu = CCMenu::createWithItem(send_close_item);
@@ -568,7 +489,7 @@ private:
 //			CCSprite* s_close = CCSprite::create("ui_common_close.png");
 //			s_close->setColor(ccGRAY);
 //			
-//			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(MailPopup::menuAction));
 //			close_item->setTag(kRP_MT_close);
 //			
 //			close_menu = CCMenu::createWithItem(close_item);
@@ -580,7 +501,7 @@ private:
 //			CCSprite* s_invite = CCSprite::create("rank_invite.png");
 //			s_invite->setColor(ccGRAY);
 //			
-//			CCMenuItem* invite_item = CCMenuItemSprite::create(n_invite, s_invite, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* invite_item = CCMenuItemSprite::create(n_invite, s_invite, this, menu_selector(MailPopup::menuAction));
 //			invite_item->setTag(kRP_MT_invite);
 //			
 //			invite_menu = CCMenu::createWithItem(invite_item);
@@ -592,7 +513,7 @@ private:
 //			CCSprite* s_send = CCSprite::create("rank_send.png");
 //			s_send->setColor(ccGRAY);
 //			
-//			CCMenuItem* send_item = CCMenuItemSprite::create(n_send, s_send, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* send_item = CCMenuItemSprite::create(n_send, s_send, this, menu_selector(MailPopup::menuAction));
 //			send_item->setTag(kRP_MT_send);
 //			
 //			send_menu = CCMenu::createWithItem(send_item);
@@ -621,7 +542,7 @@ private:
 //			CCSprite* s_invite_send_close = CCSprite::create("option_short_close.png");
 //			s_invite_send_close->setColor(ccGRAY);
 //			
-//			CCMenuItem* invite_send_close_item = CCMenuItemSprite::create(n_invite_send_close, s_invite_send_close, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* invite_send_close_item = CCMenuItemSprite::create(n_invite_send_close, s_invite_send_close, this, menu_selector(MailPopup::menuAction));
 //			invite_send_close_item->setTag(kRP_MT_invite_send_close);
 //			
 //			invite_send_close_menu = CCMenu::createWithItem(invite_send_close_item);
@@ -645,7 +566,7 @@ private:
 //			CCSprite* s_close = CCSprite::create("ui_common_close.png");
 //			s_close->setColor(ccGRAY);
 //			
-//			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(MailPopup::menuAction));
 //			close_item->setTag(kRP_MT_close);
 //			
 //			close_menu = CCMenu::createWithItem(close_item);
@@ -657,7 +578,7 @@ private:
 //			CCSprite* s_invite = CCSprite::create("rank_invite.png");
 //			s_invite->setColor(ccGRAY);
 //			
-//			CCMenuItem* invite_item = CCMenuItemSprite::create(n_invite, s_invite, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* invite_item = CCMenuItemSprite::create(n_invite, s_invite, this, menu_selector(MailPopup::menuAction));
 //			invite_item->setTag(kRP_MT_invite);
 //			
 //			invite_menu = CCMenu::createWithItem(invite_item);
@@ -669,7 +590,7 @@ private:
 //			CCSprite* s_send = CCSprite::create("rank_send.png");
 //			s_send->setColor(ccGRAY);
 //			
-//			CCMenuItem* send_item = CCMenuItemSprite::create(n_send, s_send, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* send_item = CCMenuItemSprite::create(n_send, s_send, this, menu_selector(MailPopup::menuAction));
 //			send_item->setTag(kRP_MT_send);
 //			
 //			send_menu = CCMenu::createWithItem(send_item);
@@ -693,7 +614,7 @@ private:
 //			CCSprite* s_invite_close = CCSprite::create("ui_common_close.png");
 //			s_invite_close->setColor(ccGRAY);
 //			
-//			CCMenuItem* invite_close_item = CCMenuItemSprite::create(n_invite_close, s_invite_close, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* invite_close_item = CCMenuItemSprite::create(n_invite_close, s_invite_close, this, menu_selector(MailPopup::menuAction));
 //			invite_close_item->setTag(kRP_MT_invite_close);
 //			
 //			invite_close_menu = CCMenu::createWithItem(invite_close_item);
@@ -705,7 +626,7 @@ private:
 //			CCSprite* s_invite_rank = CCSprite::create("rank_invite_rank.png");
 //			s_invite_rank->setColor(ccGRAY);
 //			
-//			CCMenuItem* invite_rank_item = CCMenuItemSprite::create(n_invite_rank, s_invite_rank, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* invite_rank_item = CCMenuItemSprite::create(n_invite_rank, s_invite_rank, this, menu_selector(MailPopup::menuAction));
 //			invite_rank_item->setTag(kRP_MT_invite_rank);
 //			
 //			invite_rank_menu = CCMenu::createWithItem(invite_rank_item);
@@ -717,7 +638,7 @@ private:
 //			CCSprite* s_invite_send = CCSprite::create("rank_invite_send.png");
 //			s_invite_send->setColor(ccGRAY);
 //			
-//			CCMenuItem* invite_send_item = CCMenuItemSprite::create(n_invite_send, s_invite_send, this, menu_selector(RankPopup::menuAction));
+//			CCMenuItem* invite_send_item = CCMenuItemSprite::create(n_invite_send, s_invite_send, this, menu_selector(MailPopup::menuAction));
 //			invite_send_item->setTag(kRP_MT_invite_send);
 //			
 //			invite_send_menu = CCMenu::createWithItem(invite_send_item);
@@ -803,4 +724,4 @@ private:
 	}
 };
 
-#endif /* defined(__DGproto__RankPopup__) */
+#endif /* defined(__DGproto__MailPopup__) */
