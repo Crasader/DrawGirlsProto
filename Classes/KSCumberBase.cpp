@@ -1102,6 +1102,7 @@ void KSCumberBase::cumberAttack(float dt)
 	float exeProb;
 	if(crashAttack)
 	{
+		
 		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 		{
 			if( (*iter)["atype"].asString() == "crash" )
@@ -1131,13 +1132,18 @@ void KSCumberBase::cumberAttack(float dt)
 		Json::Value attackCode;
 		bool searched = false;
 		int searchCount = 0;
+		ProbSelector probSel;
+		for(auto& i : selectedAttacks)
+		{
+			probSel.pushProb(i["percent"].asDouble());
+		}
 		while(!searched)
 		{
 			searchCount++;
-			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
+//			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
+			int idx = probSel.getResult();
 			
 			attackCode = selectedAttacks[idx];
-			
 			searched = true;
 			
 			if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)

@@ -54,8 +54,6 @@ using namespace std;
 #include <zlib.h>
 
 
-
-
 namespace KS
 {
 	//	CCSprite* spriteWithSpriteFrameName(const char *pszSpriteFrameName);

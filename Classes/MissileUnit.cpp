@@ -6,8 +6,9 @@ void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
 	m_step = 1;
 	m_totalFrame = 600;
 	
-	
+
 	vector<IntPoint> oldLines;
+	
 	for(int y=0; y<mapLoopRange::mapHeightInnerEnd; y++)
 	{
 		for(int x=0; x<mapLoopRange::mapWidthInnerEnd; x++)
@@ -112,7 +113,7 @@ void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
 //
 	// m_directions 은 위치에 따른 directions 을 가짐.
 	
-	int numbers = 6;
+	int numbers = 4;
 	for(int i=0; i<numbers; i++)
 	{
 		auto iter = m_directions.begin();
@@ -120,17 +121,28 @@ void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
 		auto point = iter->first;
 		auto direction = iter->second;
 		
+		// 목표 위치 부착.
+		CCSprite* goal = CCSprite::create("satelliteBeam_targeting.png");
+		addChild(goal);
+		goal->setPosition(ip2ccp(point));
+		
+		
 		Pollution pollution;
 		pollution.glue.init(cumberPosition, ip2ccp(point), 0.01f * ccpLength(ip2ccp(point) - cumberPosition));
 		pollution.alongPath.point = point;
 		pollution.alongPath.direction = direction;
 		pollution.spr = KS::loadCCBI<CCSprite*>(this, "fx_pollution3.ccbi").first;
+		pollution.goal = goal;
+		
 		m_pollutions.push_back(pollution);
 		addChild(pollution.spr);
+		
+		
+		
 	}
 
 //	scheduleUpdate();
-	schedule(schedule_selector(ThisClassType::update), 1/30.f);
+	schedule(schedule_selector(ThisClassType::update), 1/60.f);
 }
 void AlongOfTheLine::hidingAnimation(float dt)
 {
@@ -161,6 +173,7 @@ void AlongOfTheLine::update(float dt)
 		i->spr->setPosition(i->glue.getValue());
 		if(!r && i->step == 1)
 		{
+			i->goal->removeFromParent();
 			i->step = 2;
 		}
 		bool erased = false;
@@ -234,10 +247,6 @@ void AlongOfTheLine::update(float dt)
 			++i;
 	}
 }
-
-
-
-
 
 
 

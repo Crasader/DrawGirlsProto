@@ -18,6 +18,7 @@
 #include "FromTo.h"
 #include "KSUtil.h"
 #include "Well512.h"
+#include "ProbSelector.h"
 USING_NS_CC_EXT;
 using namespace cocos2d;
 using namespace std;
@@ -2663,7 +2664,16 @@ public:
 		m_sourcePosition = m_parentMissile->getPosition();
 		m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
 		m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
-		m_parentMissile->runAction(KSSequenceAndRemove::create(this, {CCDelayTime::create(3.f)}));
+		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCDelayTime::create(3.f)}));
+		
+		schedule(schedule_selector(ThisClassType::selfRemove));
+	}
+	void selfRemove(float dt)
+	{
+		if(batchNode->getChildrenCount() == 0 && getChildrenCount() == 1)
+		{
+			removeFromParentAndCleanup(true);
+		}
 	}
 	void jackDie()
 	{
@@ -2801,13 +2811,21 @@ public:
 	
 	void setTwoStep()
 	{
+		schedule(schedule_selector(ThisClassType::selfRemove));
 		myGD->communication("MS_resetRects");
 		m_step = 2;
 		m_frame = 0;
 		m_sourcePosition = m_parentMissile->getPosition();
 		m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
 		m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
-		m_parentMissile->runAction(KSSequenceAndRemove::create(this, {CCDelayTime::create(3.f)}));
+		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCDelayTime::create(3.f)}));
+	}
+	void selfRemove(float dt)
+	{
+		if(batchNode->getChildrenCount() == 0 && getChildrenCount() == 1)
+		{
+			removeFromParentAndCleanup(true);
+		}
 	}
 	void jackDie()
 	{
@@ -2915,6 +2933,7 @@ protected:
 	struct Pollution
 	{
 		CCSprite* spr;
+		CCSprite* goal;
 		FromToWithDuration2<CCPoint> glue; // 맵에 처음 붙이는 용도
 		AlongPath alongPath; // 현재 어느 방향으로 이동하고 있는가.
 		int step;
@@ -2927,6 +2946,120 @@ protected:
 	FromToWithDuration<float> m_scaleTo;
 	std::vector<Pollution> m_pollutions;
 	std::map<IntPoint, IntPoint> m_directions; // 좌표별 이동 방향.
+	Well512 m_well512;
+	std::vector<CCSprite*> goalSprites;
+};
+
+
+class CloudBomb : public CCNode
+{
+public:
+	static CloudBomb* create(CCPoint cumberPosition, CCPoint jackPosition)
+	{
+		CloudBomb* t_bf = new CloudBomb();
+		t_bf->myInit(cumberPosition, jackPosition);
+		t_bf->autorelease();
+		return t_bf;
+	}
+	void myInit(CCPoint cumberPosition, CCPoint jackPosition)
+	{
+		m_step = 1;
+		m_bombProb = 0.001f;
+		
+		m_parentMissile = CCParticleSystemQuad::create("cloudbomb.plist");
+		m_parentMissile->setPositionType(kCCPositionTypeRelative);
+		
+		
+		
+		m_parentMissile->setPosition(cumberPosition);
+		addChild(m_parentMissile);
+		
+		scheduleUpdate();
+		
+		int m_color = 1;
+		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+		if(KS::isExistFile(fileName))
+			batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+		else
+			batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+		
+		addChild(batchNode);
+		
+	}
+	
+	void setTwoStep()
+	{
+		m_step = 2;
+		m_frame = 0;
+		m_sourcePosition = m_parentMissile->getPosition();
+		m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
+		m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
+		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCDelayTime::create(3.f)}));
+		
+		schedule(schedule_selector(ThisClassType::selfRemove));
+	}
+	void selfRemove(float dt)
+	{
+		if(batchNode->getChildrenCount() == 0 && getChildrenCount() == 1)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void update(float dt)
+	{
+		//		CCLog("pokjuk %d", m_frame);
+		if(m_step == 1)
+		{
+			m_frame++;
+			IntPoint pos = ccp2ip(m_parentMissile->getPosition());
+			IntPoint afterPos;
+			while(1)
+			{
+				afterPos = IntPoint(pos.x + m_well512.GetValue(-2, +2),
+																		 pos.y + m_well512.GetValue(-2, +2));
+				if(afterPos.isInnerMap())
+					break;
+			}
+			
+			m_parentMissile->setPosition(ip2ccp(afterPos));
+			
+			int p = ProbSelector::sel(m_bombProb, 1.f - m_bombProb, 0.f);
+			if(p == 0)
+			{
+				setTwoStep();
+			}
+		}
+		
+		if(m_step == 2) // 폭발.
+		{
+			m_frame++;
+			
+			float bulletSpeed = 4.f;
+			int m_color = 1;
+			std::string imgFileName;
+			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
+			if(KS::isExistFile(fileName))
+				imgFileName = fileName;
+			else
+				imgFileName = "cumber_missile1.png";
+			CCSize t_mSize = CCSize(4.f, 4.f);
+			for(int i=0; i<=360; i+= 10)
+			{
+				MissileUnit* t_mu = MissileUnit::create(m_sourcePosition, i, bulletSpeed,
+																								imgFileName.c_str(), t_mSize,0, 0);
+				batchNode->addChild(t_mu);
+			}
+			m_step = 3;
+		}
+	}
+protected:
+	CCPoint m_sourcePosition;
+	int m_step;
+	int m_frame;
+	CCParticleSystem* m_parentMissile;
+	float m_bombProb; // 폭발 확률
+	CCSpriteBatchNode* batchNode;
 	Well512 m_well512;
 };
 

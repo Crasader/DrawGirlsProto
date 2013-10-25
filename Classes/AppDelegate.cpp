@@ -46,7 +46,6 @@ static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(480, 320);
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-	CCLog("!!ZZ");
     // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
     pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());

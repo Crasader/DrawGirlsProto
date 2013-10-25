@@ -72,6 +72,7 @@ public:
 	}
 	
 	//Float Value
+	// [0, 1) 범위 보장함.
 	float GetFloatValue()
 	{
 		unsigned int nRandValue = GetValue();

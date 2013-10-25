@@ -5446,10 +5446,23 @@ public:
 	}
 	void update(float dt)
 	{
+		int loop = m_well512.GetValue(2, 4);
+		for(int i=0; i<loop; i++)
+		{
+			int x = m_well512.GetValue(mapLoopRange::mapWidthInnerBegin, mapLoopRange::mapWidthInnerEnd - 1);
+			int y = m_well512.GetValue(mapLoopRange::mapHeightInnerBegin, mapLoopRange::mapHeightInnerEnd - 1);
+			
+//			CloudBomb* ap = CloudBomb::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()));
+			CloudBomb* ap = CloudBomb::create(ip2ccp(IntPoint(x, y)), ip2ccp(myGD->getJackPoint()));
+			
+			addChild(ap);
+		}
 		
+		stopMyAction();
 	}
 protected:
 	KSCumberBase* m_cumber;
+	Well512 m_well512;
 };
 
 class KSSpecialAttackPattern19 : public AttackPattern

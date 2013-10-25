@@ -336,8 +336,8 @@ public:
 	{
 		for(auto iter = pattern.begin(); iter != pattern.end(); ++iter)
 		{
-			int ratio = (*iter)["percent"].asInt(); // 빈번도
-			for(int j = 0; j<ratio; j++)
+//			int ratio = (*iter)["percent"].asInt(); // 빈번도
+//			for(int j = 0; j<ratio; j++)
 			{
 				m_attacks.push_back(pattern[iter.index()]);
 			}
@@ -411,7 +411,7 @@ protected:
 		int m_bossDieFrameCount;
 	}m_bossDie;
 	
-	std::vector<Json::Value> m_attacks; // 공격할 패턴의 번호를 가지고 있음. 많이 가질 수 있을 수록 해당 패턴 쓸 확률 높음.
+	std::vector<Json::Value> m_attacks; // 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	CUMBER_STATE m_state;
 	MOVEMENT m_normalMovement; // 평상시 움직임.
