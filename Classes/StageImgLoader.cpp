@@ -25,45 +25,52 @@ CCSprite* StageImgLoader::getLoadedImg(string filename, CCRect t_rect)
 
 CCTexture2D * StageImgLoader::addImage(const char * path)
 {
-	CCAssert(path != NULL, "TextureCache: fileimage MUST not be NULL");
+	return CCTextureCache::sharedTextureCache()->addImage(path, true, getDocumentPath());
 	
-	CCTexture2D * texture = NULL;
-	std::string fullpath = getDocumentPath()+path;
-	// all images are handled by UIImage except PVR extension that is handled by our own handler
-	do
-	{
-		CCImage::EImageFormat eImageFormat = CCImage::kFmtPng;
-		CCImage image;
-		unsigned long nSize = 0;
-		unsigned char* pBuffer = CCFileUtils::sharedFileUtils()->getFileData(fullpath.c_str(), "rb", &nSize);
-		if (! image.initWithImageData((void*)pBuffer, nSize, eImageFormat))
-		{
-			CC_SAFE_DELETE_ARRAY(pBuffer);
-			break;
-		}
-		else
-		{
-			CC_SAFE_DELETE_ARRAY(pBuffer);
-		}
-		
-		texture = new CCTexture2D();
-		
-		if( texture &&
-		   texture->initWithImage(&image) )
-		{
-#if CC_ENABLE_CACHE_TEXTURE_DATA
-			// cache the texture file name
-			VolatileTexture::addImageTexture(texture, fullpath.c_str(), eImageFormat);
-#endif
-		}
-		else
-		{
-			CCLOG("cocos2d: Couldn't add image:%s in CCTextureCache", path);
-		}
-	} while (0);
-	
-	//pthread_mutex_unlock(m_pDictLock);
-	return texture;
+//	CCAssert(path != NULL, "TextureCache: fileimage MUST not be NULL");
+//	
+//	CCTexture2D * texture = NULL;
+//	std::string fullpath = getDocumentPath()+path;
+//	// all images are handled by UIImage except PVR extension that is handled by our own handler
+//	do
+//	{
+//		CCImage::EImageFormat eImageFormat = CCImage::kFmtPng;
+//		CCImage image;
+//		unsigned long nSize = 0;
+//		unsigned char* pBuffer = CCFileUtils::sharedFileUtils()->getFileData(fullpath.c_str(), "rb", &nSize);
+//		if (! image.initWithImageData((void*)pBuffer, nSize, eImageFormat))
+//		{
+//			CC_SAFE_DELETE_ARRAY(pBuffer);
+//			break;
+//		}
+//		else
+//		{
+//			CC_SAFE_DELETE_ARRAY(pBuffer);
+//		}
+//		
+//		texture = new CCTexture2D();
+//		
+//		if( texture &&
+//		   texture->initWithImage(&image) )
+//		{
+//#if CC_ENABLE_CACHE_TEXTURE_DATA
+//			// cache the texture file name
+//			VolatileTexture::addImageTexture(texture, fullpath.c_str(), eImageFormat);
+//#endif
+//		}
+//		else
+//		{
+//			CCLOG("cocos2d: Couldn't add image:%s in CCTextureCache", path);
+//		}
+//	} while (0);
+//	
+//	//pthread_mutex_unlock(m_pDictLock);
+//	return texture;
+}
+
+void StageImgLoader::addImageAsync(const char *path, cocos2d::CCObject *target, SEL_CallFuncO selector)
+{
+	CCTextureCache::sharedTextureCache()->addImageAsync(path, target, selector, true, getDocumentPath());
 }
 
 size_t StageImgLoader::WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp) {

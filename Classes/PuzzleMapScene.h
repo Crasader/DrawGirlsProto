@@ -224,6 +224,60 @@ private:
 		endSwitchMapNode();
 	}
 	
+	int ing_caching_cnt;
+	int total_caching_cnt;
+	
+	void cachedPuzzleImg(CCObject* sender)
+	{
+		ing_caching_cnt++;
+		
+		if(ing_caching_cnt >= total_caching_cnt)
+		{
+			if(after_map_node)
+			{
+				after_map_node->removeChildByTag(99999);
+				after_map_node->removeChildByTag(99998);
+				switchMapNode(after_map_node);
+			}
+			else
+			{
+				map_node->removeChildByTag(99999);
+				map_node->removeChildByTag(99998);
+				switchMapNode(map_node);
+			}
+		}
+		else
+			mySIL->addImageAsync(cache_list[ing_caching_cnt].c_str(), this, callfuncO_selector(PuzzleMapScene::cachedPuzzleImg));
+	}
+	
+	vector<string> cache_list;
+	
+	void cachingPuzzleImg()
+	{
+		cache_list.clear();
+		CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+		
+		ing_caching_cnt = 0;
+		int t_stage_count = NSDS_GI(recent_puzzle_number, kSDS_PZ_stageCount_i);
+		total_caching_cnt = 5 + t_stage_count*2;
+		
+		cache_list.push_back(CCSTR_CWF("puzzle%d_center.png", recent_puzzle_number)->getCString());
+		cache_list.push_back(CCSTR_CWF("puzzle%d_left.png", recent_puzzle_number)->getCString());
+		cache_list.push_back(CCSTR_CWF("puzzle%d_right.png", recent_puzzle_number)->getCString());
+		cache_list.push_back(CCSTR_CWF("puzzle%d_top.png", recent_puzzle_number)->getCString());
+		cache_list.push_back(CCSTR_CWF("puzzle%d_bottom.png", recent_puzzle_number)->getCString());
+		
+		int t_start_stage_number = NSDS_GI(recent_puzzle_number, kSDS_PZ_startStage_i);
+		
+		for(int i = t_start_stage_number;i<t_start_stage_number+t_stage_count;i++)
+		{
+			cache_list.push_back(CCSTR_CWF("puzzle%d_stage%d_piece.png", recent_puzzle_number, i)->getCString());
+			cache_list.push_back(CCSTR_CWF("puzzle%d_stage%d_thumbnail.png", recent_puzzle_number, i)->getCString());
+		}
+		
+		mySIL->addImageAsync(cache_list[ing_caching_cnt].c_str(), this, callfuncO_selector(PuzzleMapScene::cachedPuzzleImg));
+	}
+	
 	void switchMapNode(CCNode* t_node)
 	{
 		CCSprite* map_back_center = mySIL->getLoadedImg(CCSTR_CWF("puzzle%d_center.png", recent_puzzle_number)->getCString());
@@ -343,6 +397,7 @@ private:
 				else														t_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
 			}
 		}
+		map_mode_state = kMMS_uiMode;
 	}
 	
 	void endLoadedMovingMapNode()
@@ -363,7 +418,8 @@ private:
 	
 	void endSwitchMapNode()
 	{
-		map_mode_state = kMMS_uiMode;
+		if(map_mode_state == kMMS_changeMode)
+			map_mode_state = kMMS_notLoadMode;
 		is_menu_enable = true;
 	}
 	
@@ -379,25 +435,21 @@ private:
 				found_index = i+1;
 		}
 		
+		CCSprite* t_back = CCSprite::create("whitePaper.png");
+		t_back->setColor(ccBLUE);
+		t_back->setScaleX(520.f/480.f);
+		t_back->setScaleY(340.f/320.f);
+		t_back->setPosition(CCPointZero);
+		t_node->addChild(t_back, 0, 99999);
+		
+		CCLabelTTF* t_title = CCLabelTTF::create(NSDS_GS(kSDS_GI_puzzleList_int1_title_s, found_index).c_str(), mySGD->getFont().c_str(), 23);
+		t_title->setPosition(ccp(0,100));
+		t_node->addChild(t_title, 0, 99998);
+		
 		if(NSDS_GI(kSDS_GI_puzzleList_int1_version_i, found_index) > NSDS_GI(recent_puzzle_number, kSDS_PZ_version_i))
-		{
-			CCSprite* t_back = CCSprite::create("whitePaper.png");
-			t_back->setColor(ccBLUE);
-			t_back->setScaleX(520.f/480.f);
-			t_back->setScaleY(340.f/320.f);
-			t_back->setPosition(CCPointZero);
-			t_node->addChild(t_back, 0, 99999);
-			
-			CCLabelTTF* t_title = CCLabelTTF::create(NSDS_GS(kSDS_GI_puzzleList_int1_title_s, found_index).c_str(), mySGD->getFont().c_str(), 23);
-			t_title->setPosition(ccp(0,100));
-			t_node->addChild(t_title, 0, 99998);
-			
 			t_node->setTag(kPMS_MT_notLoaded);
-		}
 		else
-		{
 			t_node->setTag(kPMS_MT_loaded);
-		}
 		
 		
 		t_node->getCamera()->setEyeXYZ(0, -1.f, 2.f);

@@ -76,6 +76,7 @@ public:
 	string down_filename;
 	
 	CCTexture2D* addImage(const char * path);
+	void addImageAsync(const char *path, CCObject *target, SEL_CallFuncO selector);
 	
 private:
 	SaveData* my_savedata;

@@ -1915,6 +1915,7 @@ private:
 	
 	void goHome()
 	{
+		AudioEngine::sharedInstance()->stopSound();
 		closeShutter();
 	}
 	

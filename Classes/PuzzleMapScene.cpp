@@ -82,6 +82,7 @@ void PuzzleMapScene::startSceneSetting()
 {
 	is_gesturable_map_mode = false;
 	map_mode_state = kMMS_default;
+	ing_caching_cnt = 0;
 	
 	my_puzzle_mode = (PuzzleMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);
 	
@@ -905,7 +906,9 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							if(after_map_node->getTag() == kPMS_MT_loaded)
 							{
 								after_map_node->setTag(-1);
-								switchMapNode(after_map_node);
+								
+								cachingPuzzleImg();
+//								switchMapNode(after_map_node);
 								
 								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
 								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
@@ -979,7 +982,9 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							if(after_map_node->getTag() == kPMS_MT_loaded)
 							{
 								after_map_node->setTag(-1);
-								switchMapNode(after_map_node);
+								
+								cachingPuzzleImg();
+//								switchMapNode(after_map_node);
 								
 								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
 								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
@@ -1106,7 +1111,9 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							if(after_map_node->getTag() == kPMS_MT_loaded)
 							{
 								after_map_node->setTag(-1);
-								switchMapNode(after_map_node);
+								
+								cachingPuzzleImg();
+//								switchMapNode(after_map_node);
 								
 								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
 								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
@@ -1183,7 +1190,9 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							if(after_map_node->getTag() == kPMS_MT_loaded)
 							{
 								after_map_node->setTag(-1);
-								switchMapNode(after_map_node);
+								
+								cachingPuzzleImg();
+//								switchMapNode(after_map_node);
 								
 								CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
 								CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
