@@ -31,7 +31,6 @@ void MissileParent::bombCumber( CCObject* target )
 
 void MissileParent::createJackMissile( int jm_type, int cmCnt, float damage_per )
 {
-//	cmCnt *= 3.f;
 	if(jm_type >= 0 && jm_type <= 3)
 	{
 		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");

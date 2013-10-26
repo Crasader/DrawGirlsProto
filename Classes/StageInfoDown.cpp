@@ -16,8 +16,8 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 	CCLog("result data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["state"].asString() == "ok")
 	{
-		CCLog("saved version : %d", SDS_GI(kSDF_stageInfo, mySD->getSilType(), "version"));
-		if(SDS_GI(kSDF_stageInfo, mySD->getSilType(), "version") < result_data["version"].asInt())
+		CCLog("saved version : %d", NSDS_GI(mySD->getSilType(), kSDS_SI_version_i));
+		if(NSDS_GI(mySD->getSilType(), kSDS_SI_version_i) < result_data["version"].asInt())
 		{
 			NSDS_SI(mySD->getSilType(), kSDS_SI_playtime_i, result_data["playtime"].asInt());
 			NSDS_SD(mySD->getSilType(), kSDS_SI_scoreRate_d, result_data["scoreRate"].asDouble());

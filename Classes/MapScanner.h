@@ -86,36 +86,6 @@ private:
 	}
 };
 
-//class InvisibleSprite : public CCSprite
-//{
-//public:
-//	static InvisibleSprite* create(const char* filename)
-//	{
-//		InvisibleSprite* t_iv = new InvisibleSprite();
-//		if(t_iv && t_iv->initWithFile(filename))
-//		{
-//			t_iv->myInit();
-//			t_iv->autorelease();
-//			return t_iv;
-//		}
-//		CC_SAFE_DELETE(t_iv);
-//		return NULL;
-//	}
-//	
-//	virtual ~InvisibleSprite()
-//	{
-//
-//	}
-//	
-//private:
-//
-//	
-//	void myInit()
-//	{
-//		
-//	}
-//};
-
 class TestEyeSprite : public CCSprite
 {
 public:
@@ -135,8 +105,6 @@ public:
 		{
 			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
 			
-//			CCRect r_rect = CCRectMake(t_rect->origin.x, t_rect->origin.y, t_rect->size.width, t_rect->size.height);
-			
 			glEnable(GL_SCISSOR_TEST);
 			
 			int viewport [4];
@@ -150,8 +118,6 @@ public:
 			float h = t_rect->size.height*hScale;
 			glScissor(x,y,w,h);
 			
-//			glScissor(floor(t_rect->origin.x*visit_factor + device_margine.width), floor(t_rect->origin.y*visit_factor + device_margine.height),
-//					  ceil(t_rect->size.width*visit_factor), ceil(t_rect->size.height*visit_factor));
 			CCSprite::visit();
 			
 			glDisable(GL_SCISSOR_TEST);
@@ -159,23 +125,13 @@ public:
 	}
 	
 private:
-	
-//	float scaleFactor;
-//	float device_rate;
-//	float visit_factor;
-//	CCSize device_margine;
 	CCArray* drawRects;
 	
 	void myInit(const char* filename, CCRect t_rect, CCArray* t_drawRects)
 	{
 		initWithFile(filename, t_rect);
 		
-		
 		drawRects = t_drawRects;
-//		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
-//		device_rate = myDSH->device_rate;
-//		visit_factor = scaleFactor*device_rate;
-//		device_margine = myDSH->device_margine;
 	}
 };
 
@@ -196,11 +152,6 @@ public:
 	}
 	
 private:
-	
-//	float scaleFactor;
-//	float device_rate;
-//	float visit_factor;
-//	CCSize device_margine;
 	CCArray* drawRects;
 	
 	CCPoint jack_position;
@@ -213,8 +164,6 @@ private:
 		{
 			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
 			
-//			CCRect r_rect = CCRectMake(t_rect->origin.x, t_rect->origin.y, t_rect->size.width, t_rect->size.height);
-			
 			glEnable(GL_SCISSOR_TEST);
 			
 			int viewport [4];
@@ -223,19 +172,12 @@ private:
 			float wScale = viewport[2] / rSize.width;
 			float hScale = viewport[3] / rSize.height;
 			
-//			CCLog("viewport2 : %d , rSize.width : %.2f", viewport[2], rSize.width);
-//			CCLog("viewport3 : %d , rSize.height : %.2f", viewport[3], rSize.height);
-			
-//			CCPoint convert_origin = convertToNodeSpace(ccp(t_rect->origin.x, t_rect->origin.y));
 			float x = (t_rect->origin.x*myGD->game_scale+jack_position.x)*wScale + viewport[0]-1;
 			float y = (t_rect->origin.y*myGD->game_scale+jack_position.y)*hScale + viewport[1]-1;
 			float w = (t_rect->size.width*myGD->game_scale)*wScale+2;
 			float h = (t_rect->size.height*myGD->game_scale)*hScale+2;
 			
 			glScissor(x,y,w,h);
-			
-//			glScissor(floor((t_rect->origin.x*1.5f + jack_position.x)*visit_factor + device_margine.width), floor((t_rect->origin.y*1.5f + jack_position.y)*visit_factor + device_margine.height),
-//					  ceil(t_rect->size.width*visit_factor*1.5f), ceil(t_rect->size.height*visit_factor*1.5f));
 			
 			draw();
 			
@@ -245,177 +187,12 @@ private:
 	
 	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects)
 	{
-//		CCSprite* t_texture = NULL;
-//		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
-//		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
-		
-//		if(selected_stage == 5 && selected_chapter <= 21)
-//		{
-//			initWithFile(filename, isPattern ? kDefaultSpriteBatchCapacity : 1);
-//		}
-//		else if(selected_stage == 5 && selected_chapter != 1 && selected_chapter != 11 && selected_chapter >= 2)
-//		{
-//			t_texture = StageImgLoader::sharedInstance()->getLoadedImg(selected_chapter, selected_stage);
-//			initWithTexture(t_texture->getTexture(), 1);
-//		}
-//		else
-//			initWithFile(filename, isPattern ? kDefaultSpriteBatchCapacity : 1);
-		
-//		if(isPattern)
-//		{
-//			for(int i=0;i<4;i++)
-//			{
-//				for(int j=0;j<6;j++)
-//				{
-//					CCSprite* t_spr = CCSprite::create(filename);
-//					t_spr->setPosition(ccp(40+i*80, 40+j*80));
-//					addChild(t_spr);
-//				}
-//			}
-//		}
-//		else
-//		{
-//			if(t_texture)
-//			{
-//				CCSprite* t_spr = CCSprite::createWithTexture(t_texture->getTexture());
-//				CCSize t_size = t_spr->getContentSize();
-//				t_spr->setScaleX(320.f/t_size.width);
-//				t_spr->setScaleY(480.f/t_size.height);
-//				t_spr->setPosition(ccp(160,240));
-//				addChild(t_spr);
-//				
-//				t_texture->release();
-//			}
-//			else
-//			{
-		
 		initWithTexture(mySIL->addImage(filename));
 		setPosition(ccp(160,215));
-//				CCSprite* t_spr = mySIL->getLoadedImg(filename);
-//				t_spr->setPosition(ccp(160,215));
-//				addChild(t_spr);
-//			}
-//		}
-		
-		
+
 		drawRects = t_drawRects;
-//		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
-//		device_rate = myDSH->device_rate;
-//		visit_factor = scaleFactor*device_rate;
-//		device_margine = myDSH->device_margine;
 	}
 };
-
-//class ObjParent : public CCNode
-//{
-//public:
-//	static ObjParent* create(CCArray* t_drawRects)
-//	{
-//		ObjParent* t_op = new ObjParent();
-//		t_op->myInit(t_drawRects);
-//		t_op->autorelease();
-//		return t_op;
-//	}
-//	
-//	virtual ~ObjParent()
-//	{
-//		innerObjs->release();
-//	}
-//	
-//	CCArray* innerObjs;
-//	
-//private:
-//	
-//	float scaleFactor;
-//	float device_rate;
-//	float visit_factor;
-//	CCSize device_margine;
-//	CCArray* drawRects;
-//	
-//	virtual void visit()
-//	{
-//		unsigned int loopCnt = drawRects->count();
-//		
-//		for(int i=0;i<loopCnt;i++)
-//		{
-//			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
-//			
-//			CCRect r_rect = CCRectMake(t_rect->origin.x, t_rect->origin.y, t_rect->size.width, t_rect->size.height);
-//			
-//			glEnable(GL_SCISSOR_TEST);
-//			
-//			glScissor(floor(t_rect->origin.x*visit_factor + device_margine.width), floor(t_rect->origin.y*visit_factor + device_margine.height),
-//					  ceil(t_rect->size.width*visit_factor), ceil(t_rect->size.height*visit_factor));
-//			draw();
-//			for(int j=0;j<innerObjs->count();j++)
-//			{
-//				CCRect* child_rect = (CCRect*)innerObjs->objectAtIndex(j);
-//				if(child_rect->intersectsRect(r_rect))
-//				{
-//					BackObj* r_child = (BackObj*)getChildren()->objectAtIndex(j);
-//					r_child->visit();
-//				}
-//			}
-//			glDisable(GL_SCISSOR_TEST);
-//		}
-//	}
-//	
-//	void myInit(CCArray* t_drawRects)
-//	{
-//		
-//		drawRects = t_drawRects;
-//		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
-//		device_rate = myDSH->device_rate;
-//		visit_factor = scaleFactor*device_rate;
-//		device_margine = myDSH->device_margine;
-//		
-//		innerObjs = new CCArray(1);
-//		
-//		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
-//		int selected_stage = SelectedMapData::sharedInstance()->getSelectedStage();
-//		if(selected_chapter <= 20 && !((selected_chapter%10 == 1 && selected_stage == 1) || selected_stage == 5))
-//		{
-//			for(int i=0;i<8;i++)
-//			{
-//				int objCode = rand()%4 + 1;
-//				
-//				BackObj* n_obj = BackObj::create(CCString::createWithFormat("chapter%d_back_obj%d.png", (selected_chapter-1)%10/2+1+(selected_chapter-1)/10*10, objCode)->getCString());
-//				CCPoint newposition;
-//				
-//				bool findedSafetyPosition = false;
-//				while(!findedSafetyPosition)
-//				{
-//					newposition.x = rand()%321;
-//					newposition.y = rand()%431;
-//					findedSafetyPosition = true;
-//					for(int j=0;j<getChildrenCount();j++)
-//					{
-//						CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(j);
-//						CCPoint c_position = t_child->getPosition();
-//						
-//						c_position = ccpSub(newposition, c_position);
-//						
-//						float distance = sqrtf(powf(c_position.x, 2.f) + powf(c_position.y, 2.f));
-//						
-//						if(distance < 40)
-//						{
-//							findedSafetyPosition = false;
-//							break;
-//						}
-//					}
-//				}
-//				n_obj->setPosition(newposition);
-//				addChild(n_obj);
-//				
-//				CCSize objSize = n_obj->getContentSize();
-//				
-//				CCRect* t_rect = new CCRect(newposition.x - objSize.width/2.f, newposition.y - objSize.height/2.f, objSize.width, objSize.height);
-//				t_rect->autorelease();
-//				innerObjs->addObject(t_rect);
-//			}
-//		}
-//	}
-//};
 
 class VisibleParent : public CCNode
 {
@@ -446,7 +223,6 @@ public:
 	
 private:
 	VisibleSprite* myVS;
-//	ObjParent* myOP;
 	
 	CCArray* drawRects;
 	
@@ -521,8 +297,6 @@ private:
 	
 	void setMoveGamePosition(CCPoint t_p)
 	{
-//		myVS->setMoveGamePosition(ccp((280-t_p.x)*1.25f-70.f,(160-t_p.y)*1.25f-43.f));
-		
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
 		if(y_value > 60)																	y_value = 60;
@@ -538,25 +312,12 @@ private:
 		drawRects = new CCArray(1);
 		setPosition(CCPointZero);
 		
-//		myGD->regVS(this, callfuncIp_selector(VisibleParent::divideRect),
-//					callfuncCCp_selector(VisibleParent::setMoveGamePosition));
 		myGD->V_Ip["VS_divideRect"] = std::bind(&VisibleParent::divideRect, this, _1);
 		myGD->V_CCP["VS_setMoveGamePosition"] = std::bind(&VisibleParent::setMoveGamePosition, this, _1);
 		
 		myVS = VisibleSprite::create(filename, isPattern, drawRects);
 		myVS->setPosition(CCPointZero);
 		addChild(myVS);
-		
-		if(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getViewChapterSubNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1)
-		{
-			TestEyeSprite* t_tes = TestEyeSprite::create("beach_eye.png", CCRectMake(0, 0, 100, 50), drawRects);
-			t_tes->setPosition(ccp(184,322));
-			addChild(t_tes);
-		}
-		
-//		myOP = ObjParent::create(drawRects);
-//		myOP->setPosition(CCPointZero);
-//		addChild(myOP);
 	}
 };
 
@@ -704,11 +465,6 @@ public:
 			init_rect.size.width = rand()%(60-36 + 1) + 36;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
 			init_rect.size.height = rand()%(60-36 + 1) + 36;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
 		}
-//		else if(gacha_cnt <= 10)
-//		{
-//			init_rect.size.width = rand()%(100-60 + 1) + 60;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
-//			init_rect.size.height = rand()%(100-60 + 1) + 60;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
-//		}
 		
 		IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
 		
@@ -729,8 +485,6 @@ public:
 	void stopRandomingRectView()
 	{
 		random_rect_img->removeFromParentAndCleanup(true);
-//		init_rect.origin.x -= mapWidthInnerBegin;
-//		init_rect.origin.y -= mapHeightInnerBegin;
 		myGD->initUserSelectedStartRect(init_rect);
 	}
 	
@@ -738,7 +492,6 @@ private:
 	InvisibleSprite* invisibleImg;
 	VisibleParent* visibleImg;
 	CCSprite* random_rect_img;
-//	VisibleSprite* visibleImg;
 	CCNode* blockParent;
 	
 	
@@ -789,68 +542,6 @@ private:
 		r_value.filename = CCString::createWithFormat("stage%d_level1_visible.png", silType)->getCString();
 		r_value.isPattern = false;
 		
-//		if(worldMap <= 20)
-//		{
-//			if(worldMap == 1 && insideMap == 1)
-//			{
-//				r_value.filename = "beach_back.png";
-//				r_value.isPattern = false;
-//			}
-//			else if(insideMap == 5 && worldMap <= 20)
-//			{
-//				r_value.filename = CCString::createWithFormat("test%d_visible.png", worldMap)->getCString();
-//				r_value.isPattern = false;
-//			}
-//			else if(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1)
-//			{
-//				if(insideMap == 1)
-//				{
-//					r_value.filename = CCString::createWithFormat("c%d_s1_visible.png", worldMap)->getCString();
-//					r_value.isPattern = false;
-//				}
-//				else if(insideMap == 5)
-//				{
-//					r_value.filename = CCString::createWithFormat("c%d_s5_visible.png", worldMap)->getCString();
-//					r_value.isPattern = false;
-//				}
-//				else
-//				{
-//					r_value.filename = CCString::createWithFormat("chapter%d_backImg.png", (worldMap-1)%10/2+1+(worldMap-1)/10*10)->getCString();
-//					r_value.isPattern = true;
-//				}
-//			}
-//			else
-//			{
-//				if(insideMap == 5)
-//				{
-//					r_value.filename = CCString::createWithFormat("c%d_s5_visible.png", worldMap)->getCString();
-//					r_value.isPattern = false;
-//				}
-//				else
-//				{
-//					r_value.filename = CCString::createWithFormat("chapter%d_backImg.png", (worldMap-1)%10/2+1+(worldMap-1)/10*10)->getCString();
-//					r_value.isPattern = true;
-//				}
-//			}
-//		}
-//		else
-//		{
-//			if(insideMap == 5 && worldMap <= 21)
-//			{
-//				r_value.filename = CCString::createWithFormat("test%d_visible.png", worldMap)->getCString();
-//				r_value.isPattern = false;
-//			}
-//			else if(insideMap == 5)
-//			{
-//				r_value.filename = CCString::createWithFormat("c%d_s5_visible.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_bonusImage))->getCString();
-//				r_value.isPattern = false;
-//			}
-//			else
-//			{
-//				r_value.filename = CCString::createWithFormat("chapter%d_backImg.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_backPattern))->getCString();
-//				r_value.isPattern = true;
-//			}
-//		}
 		return r_value;
 	}
 	
@@ -861,68 +552,6 @@ private:
 		r_value.filename = CCString::createWithFormat("stage%d_level1_invisible.png", silType)->getCString();
 		r_value.isPattern = false;
 		
-//		if(worldMap <= 20)
-//		{
-//			if(worldMap == 1 && insideMap == 1)
-//			{
-//				r_value.filename = "beach_silhouette.png";
-//				r_value.isPattern = false;
-//			}
-//			else if(insideMap == 5 && worldMap <= 20)
-//			{
-//				r_value.filename = CCString::createWithFormat("test%d_invisible.png", worldMap)->getCString();
-//				r_value.isPattern = false;
-//			}
-//			else if(worldMap%10 == 1)
-//			{
-//				if(insideMap == 1)
-//				{
-//					r_value.filename = CCString::createWithFormat("c%d_s1_invisible.png", worldMap)->getCString();
-//					r_value.isPattern = false;
-//				}
-//				else if(insideMap == 5)
-//				{
-//					r_value.filename = CCString::createWithFormat("c%d_s5_invisible.png", worldMap)->getCString();
-//					r_value.isPattern = false;
-//				}
-//				else
-//				{
-//					r_value.filename = CCString::createWithFormat("chapter%d_backImg.png", (worldMap-1)%10/2+1+(worldMap-1)/10*10)->getCString();
-//					r_value.isPattern = true;
-//				}
-//			}
-//			else
-//			{
-//				if(insideMap == 5)
-//				{
-//					r_value.filename = CCString::createWithFormat("c%d_s5_invisible.png", worldMap)->getCString();
-//					r_value.isPattern = false;
-//				}
-//				else
-//				{
-//					r_value.filename = CCString::createWithFormat("chapter%d_backImg.png", (worldMap-1)%10/2+1+(worldMap-1)/10*10)->getCString();
-//					r_value.isPattern = true;
-//				}
-//			}
-//		}
-//		else
-//		{
-//			if(insideMap == 5 && worldMap <= 21)
-//			{
-//				r_value.filename = CCString::createWithFormat("test%d_invisible.png", worldMap)->getCString();
-//				r_value.isPattern = false;
-//			}
-//			else if(insideMap == 5)
-//			{
-//				r_value.filename = CCString::createWithFormat("c%d_s5_invisible.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_bonusImage))->getCString();
-//				r_value.isPattern = false;
-//			}
-//			else
-//			{
-//				r_value.filename = CCString::createWithFormat("chapter%d_backImg.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_backPattern))->getCString();
-//				r_value.isPattern = true;
-//			}
-//		}
 		return r_value;
 	}
 	
@@ -962,20 +591,6 @@ private:
 		blockParent = CCNode::create();
 		addChild(blockParent, blockZorder);
 		
-//		SetMapType map_type = myGD->getRecentMapType();
-//		if(map_type == kSMT_oneRect)
-//		{
-//			CCSprite* block1_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 160, 6));
-//			block1_img->setColor(ccRED);
-//			block1_img->setPosition(ccp(80,139));
-//			blockParent->addChild(block1_img);
-//			
-//			CCSprite* block2_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 160, 6));
-//			block2_img->setColor(ccRED);
-//			block2_img->setPosition(ccp(240,279));
-//			blockParent->addChild(block2_img);
-//		}
-		
 		CCSprite* top_back = CCSprite::create("top_back.png");
 		top_back->setAnchorPoint(ccp(0.5,0));
 		top_back->setPosition(ccp(160,430));
@@ -991,25 +606,21 @@ private:
 		top_boarder = CCSprite::create("frame_top.png", CCRectMake(0, 0, 334, 7));
 		top_boarder->setAnchorPoint(ccp(0.5,0));
 		top_boarder->setPosition(ccp(160,430));
-//		top_boarder->setScaleX(34.f);
 		addChild(top_boarder, boarderZorder);
 		
 		bottom_boarder = CCSprite::create("frame_bottom.png", CCRectMake(0, 0, 334, 7));
 		bottom_boarder->setAnchorPoint(ccp(0.5,1));
 		bottom_boarder->setPosition(ccp(160,0));
-//		bottom_boarder->setScaleX(34.f);
 		addChild(bottom_boarder, boarderZorder);
 		
 		left_boarder = CCSprite::create("frame_left.png", CCRectMake(0,0,7,430));
 		left_boarder->setAnchorPoint(ccp(1,0.5));
 		left_boarder->setPosition(ccp(0,215));
-//		left_boarder->setScaleY(45.f);
 		addChild(left_boarder, boarderZorder);
 		
 		right_boarder = CCSprite::create("frame_right.png", CCRectMake(0,0,7,430));
 		right_boarder->setAnchorPoint(ccp(0,0.5));
 		right_boarder->setPosition(ccp(320,215));
-//		right_boarder->setScaleY(45.f);
 		addChild(right_boarder, boarderZorder);
 	}
 	
@@ -1030,7 +641,6 @@ private:
 		visibleImg = NULL;
 		blockParent = NULL;
 		
-//		myGD->regMS(this, callfunc_selector(MapScanner::scanMap), callfunc_selector(MapScanner::resetRects));
 		myGD->V_V["MS_scanMap"] = std::bind(&MapScanner::scanMap, this);
 		myGD->V_V["MS_resetRects"] = std::bind(&MapScanner::resetRects, this);
 		

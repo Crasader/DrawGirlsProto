@@ -32,8 +32,8 @@ public:
 	
 	void setAnimation(int t_card_number)
 	{
-		stage_number = t_card_number / 10;
-		level_number = t_card_number % 10 + 1;
+		stage_number = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
+		level_number = NSDS_GI(kSDS_CI_int1_rank_i, t_card_number);
 		ani_size = mySD->getAnimationCutSize(stage_number);
 		
 		mySD->setAnimationLoop(stage_number);

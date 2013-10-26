@@ -93,14 +93,14 @@ private:
 	
 	void setChild()
 	{
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_stage*10 + card_level-1) != 0)
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)) != 0)
 		{
-			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_stage*10 + card_level-1) > 0;
+			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)) > 0;
 			
 			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString()));
 			t_card->setScale(0.15);
 			t_card->setPosition(CCPointZero);
-			addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+card_stage*10+card_level-1);
+			addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 			
 			if(is_color)		t_card->setGray(false);
 			else				t_card->setGray(true);
@@ -127,11 +127,11 @@ private:
 			t_card->addChild(t_durability);
 			
 			CCMenuItem* t_card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", target_menu, delegate_menu);
-			t_card_item->setTag(kCSS_MT_cardMenuBase+card_stage*10+card_level-1);
+			t_card_item->setTag(kCSS_MT_cardMenuBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 			
 			CCMenu* t_card_menu = CCMenu::createWithItem(t_card_item);
 			t_card_menu->setPosition(CCPointZero);
-			addChild(t_card_menu, kCSS_Z_content, kCSS_MT_cardMenuBase+card_stage*10+card_level-1);
+			addChild(t_card_menu, kCSS_Z_content, kCSS_MT_cardMenuBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 		}
 		else
 		{
@@ -140,11 +140,11 @@ private:
 			addChild(t_no, kCSS_Z_content);
 			
 			CCMenuItem* t_card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", target_menu, delegate_menu);
-			t_card_item->setTag(kCSS_MT_noCardBase+card_stage*10+card_level-1);
+			t_card_item->setTag(kCSS_MT_noCardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 			
 			CCMenu* t_card_menu = CCMenu::createWithItem(t_card_item);
 			t_card_menu->setPosition(CCPointZero);
-			addChild(t_card_menu, kCSS_Z_content, kCSS_MT_noCardBase+card_stage*10+card_level-1);
+			addChild(t_card_menu, kCSS_Z_content, kCSS_MT_noCardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 		}
 		is_setted = true;;
 	}
@@ -163,10 +163,10 @@ private:
 		my_size = CCSizeMake(60, 78);
 		is_setted = false;
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_stage*10 + card_level-1) != 0)
-			my_tag = kCSS_MT_cardMenuBase+card_stage*10+card_level-1;
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)) != 0)
+			my_tag = kCSS_MT_cardMenuBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level);
 		else
-			my_tag = kCSS_MT_noCardBase+card_stage*10+card_level-1;
+			my_tag = kCSS_MT_noCardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level);
 			
 		CCRect tt_rect = CCRectMake(my_position.x-my_size.width/2.f, my_position.y-my_size.height/2.f, my_size.width, my_size.height);
 		if(parent_view_rect.intersectsRect(tt_rect))

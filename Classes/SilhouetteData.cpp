@@ -17,7 +17,7 @@ void SilhouetteData::startSetting()
 //	
 //	string t_sil((char*)pBuffer);
 	
-	string t_sil = SDS_GS(kSDF_cardInfo, CCString::createWithFormat("%d_silImgInfo_silData", myType*10)->getCString());
+	string t_sil = NSDS_GS(kSDS_CI_int1_silImgInfoSilData_s, NSDS_GI(myType, kSDS_SI_level_int1_card_i, 1));
 	
 	must_cnt = 0;
 	
@@ -82,7 +82,7 @@ void SilhouetteData::exchangeSilhouette()
 //	
 //	string t_sil((char*)pBuffer);
 	
-	string t_sil = SDS_GS(kSDF_cardInfo, CCString::createWithFormat("%d_silImgInfo_silData", myType*10 + 1)->getCString());
+	string t_sil = NSDS_GS(kSDS_CI_int1_silImgInfoSilData_s, NSDS_GI(myType, kSDS_SI_level_int1_card_i, 2));
 	
 	must_cnt = 0;
 	
@@ -143,5 +143,5 @@ string SilhouetteData::getScriptString(int level)
 }
 string SilhouetteData::getScriptString(int t_type, int level)
 {
-	return SDS_GS(kSDF_cardInfo, CCString::createWithFormat("%d_script", t_type*10 + level - 1)->getCString());
+	return NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, level));
 }

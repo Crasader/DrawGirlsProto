@@ -214,21 +214,6 @@ private:
 			CCRepeatForever* right_repeat = CCRepeatForever::create(right_animate);
 			right_boarder->runAction(right_repeat);
 		}
-		
-//		scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
-//		device_rate = DataStorageHub::sharedInstance()->device_rate;
-//		visit_factor = scaleFactor*device_rate;
-//		device_margine = DataStorageHub::sharedInstance()->device_margine;
-		
-//		CCSprite* top_back = CCSprite::create("top_back.png");
-//		top_back->setAnchorPoint(ccp(0.5,0));
-//		top_back->setPosition(ccp(160,430));
-//		addChild(top_back);
-//		
-//		CCSprite* bottom_back = CCSprite::create("top_back.png");
-//		bottom_back->setAnchorPoint(ccp(0.5,1));
-//		bottom_back->setPosition(ccp(160,0));
-//		addChild(bottom_back);
 	}
 };
 

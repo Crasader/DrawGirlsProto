@@ -363,52 +363,6 @@ public:
 		return r_value;
 	}
 	
-	void resetData()
-	{
-		myDSH->setIntegerForKey(kDSH_Key_elementLevelEmpty, 1);
-		myDSH->setIntegerForKey(kDSH_Key_elementLevelLife, 0);
-		myDSH->setIntegerForKey(kDSH_Key_elementLevelFire, 0);
-		myDSH->setIntegerForKey(kDSH_Key_elementLevelWater, 0);
-		myDSH->setIntegerForKey(kDSH_Key_elementLevelWind, 0);
-		myDSH->setIntegerForKey(kDSH_Key_elementLevelLightning, 0);
-		myDSH->setIntegerForKey(kDSH_Key_elementLevelPlasma, 0);
-		myDSH->setIntegerForKey(kDSH_Key_lastSelectedElement, kElementCode_empty);
-		myDSH->setIntegerForKey(kDSH_Key_savedStar, 0);
-		myDSH->setIntegerForKey(kDSH_Key_savedGold, 0);
-		myDSH->setIntegerForKey(kDSH_Key_brushCnt, 5);
-		myDSH->setIntegerForKey(kDSH_Key_brushTime, -1);
-		myDSH->setBoolForKey(kDSH_Key_isBrushInf, false);
-		myDSH->setBoolForKey(kDSH_Key_isRemoveAD, false);
-		myDSH->setIntegerForKey(kDSH_Key_lastSelectedPet, kPetCode_empty_ladybug);
-		myDSH->setIntegerForKey(kDSH_Key_totalSelfPetCount, 1);
-		myDSH->setIntegerForKey(kDSH_Key_selfPetCode_int1, kPetCode_empty_ladybug);
-		myDSH->setIntegerForKey(kDSH_Key_openSlotCount, 1);
-		for(int i=1;i<=20;i++)
-		{
-			myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, i, 0, false);
-			myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, i, 1, false);
-			myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, i, 0, 0);
-			myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, i, 1, 0);
-		}
-		for(int i=20;i<=26;i++)
-		{
-			myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, i, 0, false);
-			myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, i, 1, false);
-			myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, i, 0, 0);
-			myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, i, 1, 0);
-			myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, i+10, 0, false);
-			myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, i+10, 1, false);
-			myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, i+10, 0, 0);
-			myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, i+10, 1, 0);
-			myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, i+20, 0, false);
-			myDSH->setBoolForKey(kDSH_Key_hasCaughtMonsterChapter_int1_IsBoss_int2, i+20, 1, false);
-			myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, i+20, 0, 0);
-			myDSH->setIntegerForKey(kDSH_Key_catchedMonsterChapter_int1_IsBoss_int2, i+20, 1, 0);
-		}
-		for(int i=kPetCode_attack_genie;i<=kPetCode_gold_frog;i++)
-			myDSH->setBoolForKey(kDSH_Key_hasGottenPet_int1, i, false);
-	}
-	
 	void setBrushTimeInstance(CCObject* t_o)
 	{
 		brush_time_instance = t_o;
@@ -476,7 +430,7 @@ public:
 		do{
 			ing_card_number = getNextCardNumber(ing_card_number);
 			if(ing_card_number == -1)		break;
-			if(ing_card_number/10 != recent_card_number/10)
+			if(NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number) != NSDS_GI(kSDS_CI_int1_stage_i, recent_card_number))
 				is_found = true;
 		}while(!is_found && ing_card_number != recent_card_number);
 		
@@ -484,13 +438,13 @@ public:
 			return -1;
 		else
 		{
-			int ing_card_stage = ing_card_number/10;
-			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 2) > 0)
-				return ing_card_stage*10 + 2;
-			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 1) > 0)
-				return ing_card_stage*10 + 1;
+			int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
+			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
+				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
+			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2)) > 0)
+				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
 			else
-				return ing_card_stage*10;
+				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
 		}
 	}
 	
@@ -527,7 +481,7 @@ public:
 		do{
 			ing_card_number = getPreCardNumber(ing_card_number);
 			if(ing_card_number == -1)		break;
-			if(ing_card_number/10 != recent_card_number/10)
+			if(NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number) != NSDS_GI(kSDS_CI_int1_stage_i, recent_card_number))
 				is_found = true;
 		}while(!is_found && ing_card_number != recent_card_number);
 		
@@ -535,13 +489,13 @@ public:
 			return -1;
 		else
 		{
-			int ing_card_stage = ing_card_number/10;
-			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 2) > 0)
-				return ing_card_stage*10 + 2;
-			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, ing_card_stage*10 + 1) > 0)
-				return ing_card_stage*10 + 1;
+			int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
+			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
+				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
+			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2)) > 0)
+				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
 			else
-				return ing_card_stage*10;
+				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
 		}
 	}
 	
@@ -601,7 +555,7 @@ public:
 		CardSortInfo t_info;
 		t_info.card_number = card_number;
 		t_info.take_number = take_number;
-		t_info.grade = t_info.card_number%10+1;
+		t_info.grade = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
 		has_gotten_cards.push_back(t_info);
 		
 		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
@@ -751,13 +705,13 @@ private:
 		{
 			for(int j=0;j<3;j++)
 			{
-				int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, i*10+j);
+				int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, j+1));
 				if(take_number != 0)
 				{
 					CardSortInfo t_info;
-					t_info.card_number = i*10+j;
+					t_info.card_number = NSDS_GI(i, kSDS_SI_level_int1_card_i, j+1);
 					t_info.take_number = take_number;
-					t_info.grade = t_info.card_number%10+1;
+					t_info.grade = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
 					has_gotten_cards.push_back(t_info);
 				}
 			}

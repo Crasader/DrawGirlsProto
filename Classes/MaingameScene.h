@@ -20,7 +20,6 @@
 #include "AttackItem.h"
 #include "ClearScene.h"
 #include "FailScene.h"
-#include "ShowTimeScene.h"
 #include "ControlType.h"
 #include "ClearShowTime.h"
 #include "GameItemManager.h"

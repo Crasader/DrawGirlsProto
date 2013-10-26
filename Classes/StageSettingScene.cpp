@@ -81,8 +81,8 @@ bool StageSettingScene::init()
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 1, 2, 3 / 11, 12, 13 / 14, ...
 	if(selected_card_number > 0)
 	{
-		int card_stage = selected_card_number/10;
-		int card_level = selected_card_number%10 + 1;
+		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
+		int card_level = NSDS_GI(kSDS_CI_int1_rank_i, selected_card_number);
 		
 		CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
 		card_img->setScale(0.45);

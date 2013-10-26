@@ -74,8 +74,8 @@ bool CardSettingScene::init()
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)
 	{
-		int card_stage = selected_card_number/10;
-		int card_level = selected_card_number%10 + 1;
+		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
+		int card_level = NSDS_GI(kSDS_CI_int1_rank_i, selected_card_number);
 		
 		mountingCard(card_stage, card_level);
 	}
@@ -155,8 +155,8 @@ void CardSettingScene::createCardList()
 	if(sort_type == kCST_default)
 	{
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int card_stage = selected_card_number/10;
-		int card_level = selected_card_number%10 + 1;
+		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
+		int card_level = NSDS_GI(kSDS_CI_int1_rank_i, selected_card_number);
 		
 		check_img = CCSprite::create("card_check.png");
 		check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-1)*82)));
@@ -187,8 +187,8 @@ void CardSettingScene::createCardList()
 		for(int i=0;i<loop_length;i++)
 		{
 			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-			int card_stage = card_number/10;
-			int card_level = card_number%10 + 1;
+			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+			int card_level = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
 			
 			CLV_Node* t_node = CLV_Node::create(card_stage, card_level, this, menu_selector(CardSettingScene::menuAction),
 												ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*65, -(i/3)*82)), my_clv->getViewRect());
@@ -383,8 +383,8 @@ void CardSettingScene::menuAction(CCObject* pSender)
 		{
 			removeMountingCard();
 			recent_mounted_number = clicked_card_number;
-			int card_stage = recent_mounted_number/10;
-			int card_level = recent_mounted_number%10 + 1;
+			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, recent_mounted_number);
+			int card_level = NSDS_GI(kSDS_CI_int1_rank_i, recent_mounted_number);
 			mountingCard(card_stage, card_level);
 		}
 		else if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) != clicked_card_number && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, clicked_card_number) > 0)
@@ -399,8 +399,8 @@ void CardSettingScene::menuAction(CCObject* pSender)
 			
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_default)
 			{
-				int card_stage = clicked_card_number/10;
-				int card_level = clicked_card_number%10 + 1;
+				int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, clicked_card_number);
+				int card_level = NSDS_GI(kSDS_CI_int1_rank_i, clicked_card_number);
 				check_img = CCSprite::create("card_check.png");
 				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-1)*82)));
 				my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
@@ -444,8 +444,8 @@ void CardSettingScene::alignChange()
 {
 	my_clv->removeAllChildren();
 	
-	int card_stage = recent_mounted_number/10;
-	int card_level = recent_mounted_number%10+1;
+	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, recent_mounted_number);
+	int card_level = NSDS_GI(kSDS_CI_int1_rank_i, recent_mounted_number);
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_default)
 	{
@@ -456,7 +456,7 @@ void CardSettingScene::alignChange()
 	else
 	{
 		int loop_length = mySGD->getHasGottenCardsSize();
-		int card_number = card_stage*10 + card_level-1;
+		int card_number = NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level);
 		for(int i=0;i<loop_length;i++)
 		{
 			if(card_number == mySGD->getHasGottenCardsDataCardNumber(i))
@@ -553,7 +553,7 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 	else
 	{
 		int loop_length = mySGD->getHasGottenCardsSize();
-		int card_number = card_stage*10 + card_level-1;
+		int card_number = NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level);
 		for(int i=0;i<loop_length;i++)
 		{
 			if(card_number == mySGD->getHasGottenCardsDataCardNumber(i))

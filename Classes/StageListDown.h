@@ -84,7 +84,7 @@ private:
 	void startGetStageList()
 	{
 		Json::Value param;
-		param["version"] = SDS_GI(kSDF_puzzleInfo, puzzle_number, "version");
+		param["version"] = NSDS_GI(puzzle_number, kSDS_PZ_version_i);
 		param["no"] = puzzle_number;
 		hspConnector::get()->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
 	}

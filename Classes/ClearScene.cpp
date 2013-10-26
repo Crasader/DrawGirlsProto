@@ -11,7 +11,6 @@
 //#include "WorldMapScene.h"
 #include "PuzzleMapScene.h"
 #include "ScreenSide.h"
-#include "CardFullPopup.h"
 #include "StageImgLoader.h"
 #include "StarGoldData.h"
 #include "SilhouetteData.h"
@@ -301,14 +300,14 @@ void ClearScene::menuAction(CCObject* pSender)
 		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
 		else												take_level = 1;
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, mySD->getSilType()*10+take_level-1) == 0)
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
 		{
 			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, mySD->getSilType()*10+take_level-1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
 			
-			mySGD->addHasGottenCardNumber(mySD->getSilType()*10+take_level-1);
+			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 		}
-		int card_number = SDS_GI(kSDF_stageInfo, mySD->getSilType(), CCString::createWithFormat("level%d_card", take_level)->getCString());
+		int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
 		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, mySD->getCardDurability(mySD->getSilType(), take_level));
 			
 		

@@ -21,7 +21,6 @@
 #include "CountingBMLabel.h"
 #include "BossLifeGage.h"
 #include "AreaGage.h"
-#include "StartingScene.h"
 #include "ContinuePopup.h"
 //#include "WorldMapScene.h"
 #include "PuzzleMapScene.h"

@@ -10,7 +10,7 @@
 #define __DGproto__StageInfoDown__
 
 #include "cocos2d.h"
-#include "GraphDog.h"
+#include "hspConnector.h"
 #include "StarGoldData.h"
 #include "ServerDataSave.h"
 #include "StageImgLoader.h"
@@ -102,15 +102,15 @@ private:
 		{
 			Json::Value param;
 			param["no"] = stage_number;
-			param["version"] = SDS_GI(kSDF_stageInfo, stage_number, "version");
-			graphdog->command("getstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
+			param["version"] = NSDS_GI(stage_number, kSDS_SI_version_i);
+			hspConnector::get()->command("getstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
 		}
 		else // event stage
 		{
 			Json::Value param;
 			param["no"] = stage_number;
-			param["version"] = SDS_GI(kSDF_stageInfo, stage_number, "version");
-			graphdog->command("geteventstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
+			param["version"] = NSDS_GI(stage_number, kSDS_SI_version_i);
+			hspConnector::get()->command("geteventstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
 		}
 	}
 	
