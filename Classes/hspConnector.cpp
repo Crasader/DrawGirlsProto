@@ -295,6 +295,8 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [dkey,this](Json::Value obj){
 		
+		graphdog->setHSPMemberNo(hspConnector::get()->getHSPMemberNo());
+		
 		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(dkey);
 		
 		hspConnector::get()->kLoadLocalUser([this](Json::Value r){

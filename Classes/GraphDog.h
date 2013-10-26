@@ -101,7 +101,9 @@ public:
     void setEmail(string email);
     //언어저장
     void setLanguage(string lang);
-    
+    //hspmemberno저장
+	void setHSPMemberNo(long long int _hspMemberNo);
+	
     //graphdog 버전설정 - 평소엔 필요없음
     void setGraphDogVersion(int version);
     
@@ -120,10 +122,10 @@ public:
 	string getGraphDogVersion();
 	string getDeviceID();
     string getDeviceInfo();
-    
+    long long int getHSPMemberNo();
+	
     static GraphDog* get()
 	{
-		CCLog("5zdfsfdsfufdgdfskgjfdskgjdfslgjfdlg");
 		static GraphDog* _ins = 0;
 		if(_ins == 0)
 			_ins = new GraphDog();
@@ -164,6 +166,7 @@ private:
 	string packageName;
     string appVersion;
 	string deviceInfo;
+	long long int hspMemberNo;
     CURL* getCURL();
     string getToken();
     string getUdid();
