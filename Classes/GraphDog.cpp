@@ -62,6 +62,13 @@ string GraphDog::getGraphDogVersion(){
     return this->gdVersion;
 }
 
+void GraphDog::setHSPMemberNo(long long int _hspMemberNo){
+	hspMemberNo =_hspMemberNo;
+}
+
+long long int GraphDog::getHSPMemberNo(){
+	return this->hspMemberNo;
+}
 void GraphDog::setup(string secretKey,string _appVersion){
   
     
@@ -221,9 +228,10 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 		cmdQueue.commands[buf] = cmd;
 		cmdCollect.push_back(cmd);
 	}
-	ostringstream oss2;
-	oss2 << jsonTotalCmd;
-	cmdQueue.commandStr = oss2.str();
+	jsonTotalCmd["memberNo"]=getHSPMemberNo();
+	//ostringstream oss2;
+	//oss2 << jsonTotalCmd;
+	cmdQueue.commandStr = GraphDogLib::JsonObjectToString(jsonTotalCmd); //oss2.str();
 	cmdQueue.caller = this;
 	commandQueue[insertIndex] = cmdQueue;
 	pthread_t p_thread;
@@ -305,7 +313,6 @@ void* GraphDog::t_function(void *_insertIndex)
 	//CCLog("t_function2");
 	string token="";
 	//CCLog("t_function2");
-    CCLog("command %s",command.commandStr.c_str());
 	string paramStr = toBase64(desEncryption(graphdog->sKey, command.commandStr));
 	string dataset = "&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
 	//CCLog("t_function3");
