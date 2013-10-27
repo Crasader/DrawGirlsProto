@@ -166,7 +166,7 @@ private:
 		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)) != 0)
 			my_tag = kCSS_MT_cardMenuBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level);
 		else
-			my_tag = kCSS_MT_noCardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level);
+			my_tag = kCSS_MT_noCardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level); // if (not loaded stage info) then my_tag = 30000 -> error
 			
 		CCRect tt_rect = CCRectMake(my_position.x-my_size.width/2.f, my_position.y-my_size.height/2.f, my_size.width, my_size.height);
 		if(parent_view_rect.intersectsRect(tt_rect))
