@@ -16,6 +16,7 @@
 //#include "StageSettingPopup.h"
 #include "StageSettingScene.h"
 #include "FailHelpPopup.h"
+#include "LogData.h"
 
 typedef enum tMenuTagFailScene{
 	kMT_FS_main = 1,
@@ -59,6 +60,13 @@ bool FailScene::init()
     }
     
 	setKeypadEnabled(true);
+	
+	Json::Value param;
+	param["key"] = CCSTR_CWF("stage_over_%d", mySD->getSilType())->getCString();
+	
+	hspConnector::get()->command("increaseStats", param, NULL);
+	
+	myLog->sendLog("fail");
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	

@@ -26,6 +26,7 @@
 #include "PuzzleMapScene.h"
 #include "ConditionPopup.h"
 #include "ServerDataSave.h"
+#include "LogData.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -225,6 +226,7 @@ public:
 			ing_fever = true;
 			recent_count = 20;
 			
+			myLog->addLog(kLOG_show_fever, myGD->getCommunication("UI_getUseTime"));
 			myGD->communication("GIM_startFever");
 			
 			myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 1.5f);
@@ -956,10 +958,13 @@ public:
 		else
 		{
 //			t_p = 0.99f;
+			
 			myGD->communication("CP_changeMaxSize", t_p);
 			
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
+			
+			myLog->addLog(kLOG_get_percent, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
 			int item_value = mySGD->getSmallAreaValue();
 			
@@ -1390,6 +1395,11 @@ public:
 		{
 			my_combo->showCombo(t_combo);
 		}
+	}
+	
+	int getUseTime()
+	{
+		return use_time;
 	}
 	
 private:
@@ -1915,6 +1925,7 @@ private:
 		myGD->F_V["UI_getMapPercentage"] = std::bind(&PlayUI::getPercentage, this);
 		myGD->I_V["UI_getComboCnt"] = std::bind(&PlayUI::getComboCnt, this);
 		myGD->V_I["UI_setComboCnt"] = std::bind(&PlayUI::setComboCnt, this, _1);
+		myGD->I_V["UI_getUseTime"] = std::bind(&PlayUI::getUseTime, this);
 	}
 	
 	void continueAction()
@@ -1988,6 +1999,7 @@ private:
 	
 	void goHome()
 	{
+		myLog->sendLog("home");
 		AudioEngine::sharedInstance()->stopSound();
 		closeShutter();
 	}

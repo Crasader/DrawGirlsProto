@@ -19,6 +19,7 @@
 #include "KSUtil.h"
 #include "Well512.h"
 #include "ProbSelector.h"
+
 USING_NS_CC_EXT;
 using namespace cocos2d;
 using namespace std;
@@ -123,7 +124,7 @@ private:
 				if(myGD->getJackState())
 				{
 					myGD->communication("CP_jackCrashDie");
-					myGD->communication("Jack_startDieEffect");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 					stopMove();
 					removeEffect();
 				}
@@ -269,7 +270,7 @@ private:
 				if(myGD->getJackState())
 				{
 					myGD->communication("CP_jackCrashDie");
-					myGD->communication("Jack_startDieEffect");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 					stopMove();
 					removeEffect();
 				}
@@ -354,7 +355,7 @@ private:
 		if(afterRect.containsPoint(jackPosition))
 		{
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			stopMove();
 			removeEffect();
 		}
@@ -559,7 +560,7 @@ private:
 			if(checkRect.containsPoint(jackPosition))
 			{
 				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				(target_removeEffect->*delegate_removeEffect)();
 			}
 		}
@@ -720,7 +721,7 @@ public:
 		if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
 		{
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			jackDie();
 		}
 		
@@ -728,7 +729,7 @@ public:
 		{
 			//					myGD->communication("PM_pathChainBomb", t_p);
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			lineDie(t_p);
 		}
 	}
@@ -797,7 +798,7 @@ private:
 		if(distance < 16*getScale())
 		{
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		}
 		
 		if(!is_action)
@@ -2349,7 +2350,7 @@ private:
 		if(distance < 10)
 		{
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			
 			unschedule(schedule_selector(PrisonObject::myAction));
 			CCFadeTo* t_fade = CCFadeTo::create(getOpacity()/255.f, 0);
@@ -2466,7 +2467,7 @@ private:
 		if(jackPoint.x == myPoint.x && jackPoint.y == myPoint.y)
 		{
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			jackDie();
 			return;
 		}
@@ -3326,7 +3327,7 @@ private:
 		if(jackPoint.x == mapPoint.x && jackPoint.y == mapPoint.y)
 		{
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			stopMyAction();
 			
 			return;
@@ -4012,7 +4013,7 @@ public:
 				if(myGD->getJackState())
 				{
 					myGD->communication("CP_jackCrashDie");
-					myGD->communication("Jack_startDieEffect");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 					unschedule(schedule_selector(ThisClassType::move));
 					removeEffect();
 				}

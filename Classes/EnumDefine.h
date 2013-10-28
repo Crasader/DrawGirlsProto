@@ -9,6 +9,12 @@
 #ifndef DrawingJack_EnumDefine_h
 #define DrawingJack_EnumDefine_h
 
+enum DieType{
+	kDieType_other = 0,
+	kDieType_shockwave,
+	kDieType_missileToLine
+};
+
 typedef enum t_ElementCode{
 	kElementCode_empty = 0,
 	kElementCode_life,

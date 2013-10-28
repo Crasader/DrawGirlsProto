@@ -41,6 +41,11 @@ bool TitleScene::init()
 	state_label->setPosition(ccp(240,290));
 	addChild(state_label);
 	
+	if(myLog->getLogCount() > 0)
+	{
+		myLog->sendLog("ting");
+	}
+	
 	Json::Value param;
 	param["ManualLogin"] = true;
 	

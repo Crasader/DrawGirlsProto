@@ -779,7 +779,7 @@ private:
 		if(distance < 16*getScale())
 		{
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		}
 		
 		if(!is_action)
@@ -1189,7 +1189,7 @@ private:
 			addChild(t_ds, 4);
 			t_ds->startAnimation();
 			
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		}
 	}
 	

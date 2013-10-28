@@ -284,6 +284,11 @@ void StageSettingScene::menuAction(CCObject* pSender)
 	
 	if(tag == kSSS_MT_start)
 	{
+		Json::Value param;
+		param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
+		
+		hspConnector::get()->command("increaseStats", param, NULL);
+		
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(selected_card_number > 0)
 		{

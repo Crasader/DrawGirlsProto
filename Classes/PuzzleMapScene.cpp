@@ -55,10 +55,18 @@ bool PuzzleMapScene::init()
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, recent_puzzle_number);
 	}
 	
-	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(PuzzleMapScene::startSceneSetting), recent_puzzle_number);
+	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(PuzzleMapScene::loadSuccess), recent_puzzle_number);
 	addChild(t_sld, kPMS_Z_popup);
 	
     return true;
+}
+
+void PuzzleMapScene::loadSuccess()
+{
+	CCDelayTime* t_delay = CCDelayTime::create(0.2f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::startSceneSetting));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+	runAction(t_seq);
 }
 
 void PuzzleMapScene::resultLogin(Json::Value result_data)

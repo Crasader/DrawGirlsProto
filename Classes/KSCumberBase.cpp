@@ -31,7 +31,7 @@ void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 	if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
 	{
 		//			showEmotion(kEmotionType_fun);
-		myGD->communication("Jack_startDieEffect");
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		//			if(isFuryMode) //##
 		//				furyModeOff();
 	}
@@ -40,7 +40,7 @@ void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 	{
 		//					myGD->communication("PM_pathChainBomb", t_p);
 
-		myGD->communication("Jack_startDieEffect");
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		myGD->communication("Main_showLineDiePosition", t_p);
 		//			if(isFuryMode) //##
 		//				furyModeOff();
@@ -105,7 +105,7 @@ void KSCumberBase::randomMoving(float dt)
 				validPosition = true;
 				// 즉사 시킴.
 				if(myGD->getJackState() != jackStateNormal)
-					myGD->communication("Jack_startDieEffect");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -127,7 +127,7 @@ void KSCumberBase::randomMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			myGD->communication("Jack_startDieEffect");
+				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				m_directionAngleDegree += m_well512.GetValue(90, 270);
@@ -297,7 +297,7 @@ void KSCumberBase::straightMoving(float dt)
 				// 즉사 시킴.
 				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal)
-					myGD->communication("Jack_startDieEffect");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -324,7 +324,7 @@ void KSCumberBase::straightMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			myGD->communication("Jack_startDieEffect");
+				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				myGD->communication("SW_createSW", checkPosition);
 				degree = degreeSelector(cnt, degree);
 				
@@ -454,7 +454,7 @@ void KSCumberBase::followMoving(float dt)
 				// 즉사 시킴.
 				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal)
-					myGD->communication("Jack_startDieEffect");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				m_follow.lastMapCollisionTime = m_follow.timer;
 				m_directionAngleDegree += m_well512.GetValue(90, 360);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
@@ -488,7 +488,7 @@ void KSCumberBase::followMoving(float dt)
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + 0.01f*cnt);
 				//			CCLog("collision!!");
-				//			myGD->communication("Jack_startDieEffect");
+				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
@@ -622,7 +622,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 				// 즉사 시킴.
 				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal)
-					myGD->communication("Jack_startDieEffect");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -658,7 +658,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			myGD->communication("Jack_startDieEffect");
+				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
@@ -808,7 +808,7 @@ void KSCumberBase::circleMoving(float dt)
 				// 즉사 시킴.
 				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal)
-					myGD->communication("Jack_startDieEffect");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -828,7 +828,7 @@ void KSCumberBase::circleMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			myGD->communication("Jack_startDieEffect");
+				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
@@ -970,7 +970,7 @@ void KSCumberBase::snakeMoving(float dt)
 				// 즉사 시킴.
 				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal)
-					myGD->communication("Jack_startDieEffect");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -990,7 +990,7 @@ void KSCumberBase::snakeMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				//			CCLog("collision!!");
-				//			myGD->communication("Jack_startDieEffect");
+				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				myGD->communication("SW_createSW", checkPosition);
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				

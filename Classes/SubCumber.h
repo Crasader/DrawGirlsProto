@@ -416,13 +416,13 @@ private:
 		
 		if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
 		{
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		}
 		
 		if(t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
 		{
 			//					myGD->communication("PM_pathChainBomb", t_p);
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			myGD->communication("Main_showLineDiePosition", t_p);
 		}
 	}

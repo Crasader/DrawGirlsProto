@@ -14,6 +14,7 @@
 #include <list>
 #include <algorithm>
 #include "cocos-ext.h"
+#include "LogData.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -123,7 +124,7 @@ private:
 			else
 			{
 				getParent()->setTag(pathBreakingStateFalse);
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_missileToLine);
 				unschedule(schedule_selector(PathBreakingParent::tracing));
 				removeFromParent();
 				return;

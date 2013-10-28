@@ -15,6 +15,7 @@
 #include "hspConnector.h"
 #include "ServerDataSave.h"
 #include "StarGoldData.h"
+#include "LogData.h"
 
 USING_NS_CC;
 using namespace std;
@@ -57,6 +58,11 @@ private:
 		startGetPuzzleList();
 	}
 	
+	void changeScene()
+	{
+		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+	}
+	
 	void resultGetPuzzleList(Json::Value result_data)
 	{
 		CCLog("resultGetPuzzleList data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
@@ -78,7 +84,11 @@ private:
 				}
 				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["version"].asInt());
 			}
-			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+			
+			CCDelayTime* t_delay = CCDelayTime::create(0.2f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleScene::changeScene));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			runAction(t_seq);
 		}
 		else
 		{

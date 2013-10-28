@@ -27,7 +27,8 @@ enum SaveDataFile{
 	kSDF_puzzleInfo,
 	kSDF_stageInfo,
 	kSDF_cardInfo,
-	kSDF_downloadedInfo
+	kSDF_downloadedInfo,
+	kSDF_log
 };
 
 using namespace std;
@@ -53,6 +54,9 @@ public:
 	void setKeyValue(SaveDataFile t_sdf, int i1, string _key, string _value);
 	void setKeyValue(string filename, string _key, string _value);
 	
+	void addKeyValue(SaveDataFile t_sdf, string _key, string _value);
+	void addKeyValue(string filename, string _key, string _value);
+	
 	void setKeyValue(SaveDataFile t_sdf, string _key, int _value);
 	void setKeyValue(SaveDataFile t_sdf, int i1, string _key, int _value);
 	void setKeyValue(string filename, string _key, int _value);
@@ -76,6 +80,9 @@ public:
 	void createJSON(SaveDataFile t_sdf);
 	void createJSON(SaveDataFile t_sdf, int i1);
 	void createJSON(string filename);
+	
+	void resetData(SaveDataFile t_sdf);
+	void resetData(string filename);
 	
 //	void setKeyValue(string key, string value);
 //	void setKeyValue(string key, int value);
