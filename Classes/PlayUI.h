@@ -770,7 +770,7 @@ private:
 	}
 };
 
-class AreaScroll : public CCSprite
+class AreaScroll : public CCNode
 {
 public:
 	static AreaScroll* create()
@@ -783,16 +783,21 @@ public:
 	
 	void startAction()
 	{
+		CCSprite* main_view = CCSprite::create("show_area_scroll.png");
+		main_view->setPosition(ccp(640,myDSH->ui_center_y));
+		addChild(main_view);
+		
 		CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
+		CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(AreaScroll::showArrow));
 		CCHide* t_hide = CCHide::create();
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
 		CCShow* t_show = CCShow::create();
 		CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
 		CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
 		CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AreaScroll::selfRemove));
+		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(AreaScroll::selfRemove));
 		
-		runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
+		main_view->runAction(CCSequence::create(t_move1, t_call1, t_repeat, t_move2, t_call2, NULL));
 	}
 	
 private:
@@ -802,11 +807,37 @@ private:
 		removeFromParentAndCleanup(true);
 	}
 	
+	void showArrow()
+	{
+		for(int i=0;i<4;i++)
+		{
+			CCSprite* t_down = CCSprite::create("area_scroll_down.png");
+			t_down->setPosition(ccp(180+i*40, myDSH->ui_center_y-18));
+			t_down->setOpacity(0);
+			addChild(t_down);
+			
+			CCFadeTo* down_fade = CCFadeTo::create(0.3f, 255);
+			CCMoveBy* down_move = CCMoveBy::create(0.5f, ccp(0,-250));
+			CCSequence* down_seq = CCSequence::createWithTwoActions(down_fade, down_move);
+			
+			t_down->runAction(down_seq);
+			
+			
+			CCSprite* t_up = CCSprite::create("area_scroll_up.png");
+			t_up->setPosition(ccp(180+i*40, myDSH->ui_center_y+18));
+			t_up->setOpacity(0);
+			addChild(t_up);
+			
+			CCFadeTo* up_fade = CCFadeTo::create(0.3f, 255);
+			CCMoveBy* up_move = CCMoveBy::create(0.5f, ccp(0,250));
+			CCSequence* up_seq = CCSequence::createWithTwoActions(up_fade, up_move);
+			
+			t_up->runAction(up_seq);
+		}
+	}
+	
 	void myInit()
 	{
-		initWithFile("show_area_scroll.png");
-		
-		setPosition(ccp(640,myDSH->ui_center_y));
 	}
 };
 
