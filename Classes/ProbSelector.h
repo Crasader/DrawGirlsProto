@@ -17,7 +17,7 @@ protected:
 public:
 	ProbSelector(std::initializer_list<float> s) : m_probs(s)
 	{
-
+		
 	}
 	ProbSelector(){}
 	void pushProb(float p)

@@ -559,6 +559,7 @@ void CumberParent::myInit()
 	}
 	mainCumber->settingHp(hp);
 	KS::KSLog("%", boss);
+	mainCumber->settingAI(boss.get("ai", 0).asInt());
 	mainCumber->settingFuryRule(boss["fury"]);
 	mainCumber->settingScale(startScale, minScale, maxScale);
 	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
@@ -652,6 +653,9 @@ void CumberParent::myInit()
 					break;
 				case 1006:
 					t_SC = Wolf::create();
+					break;
+				default:
+					t_SC = Bear::create();
 					break;
 			}
 			

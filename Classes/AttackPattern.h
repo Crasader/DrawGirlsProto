@@ -977,8 +977,8 @@ private:
 		
 		float throwAngle;
 		
-		if(distance < 200)			throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%91-45;
-		else						throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%31-15;
+		if(distance < 200)			throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + (rand()%91-45)/2;
+		else						throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + (rand()%31-15)/2;
 		
 		
 		ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, throwAngle, t_mSize);

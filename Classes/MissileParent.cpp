@@ -432,9 +432,11 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	reader.parse(patternD, patternData);
 
 	int castFrame = patternData.get("castframe", 120).asInt();
+	// 캐스팅 실패하면 캐스팅 시간 점점 줄음.
+	castFrame = MAX(30, castFrame - (castFrame * 0.1f)* cb->getCastingCancelCount());
 	int valid = 1;
 	int invalid = 0;
-
+	
 	std::string pattern = patternData["pattern"].asString();
 	
 	if(pattern == "1")

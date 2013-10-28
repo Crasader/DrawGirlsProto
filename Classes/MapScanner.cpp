@@ -205,8 +205,7 @@ void* MapScanner::thrFunction(void* data)
 				rects->addObject(t_rect);
 			}
 		}
-	}
-	
+	}	
 	return (void*)rects;
 }
 
