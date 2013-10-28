@@ -1,4 +1,4 @@
-#include "Bear.h"
+#include "KSJuniorBase.h"
 #include "GameData.h"
 
 #include "AlertEngine.h"
@@ -10,25 +10,25 @@
 
 
 
-bool Bear::init()
+bool KSJuniorBase::init()
 {
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
-	std::string ccbiName = "mob_bear.ccbi";
-    CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-    CCBReader* reader = new CCBReader(nodeLoader);
-	CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
+	std::string _ccbiName = ccbiName();
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	CCNode* p = reader->readNodeGraphFromFile(_ccbiName.c_str(),this);
 	m_headImg = dynamic_cast<CCSprite*>(p);
-    
 	
 	
-    mAnimationManager = reader->getAnimationManager();
-    reader->release();
-    if(m_headImg != NULL) {
-        this->addChild(m_headImg);
-    }
+	
+	mAnimationManager = reader->getAnimationManager();
+	reader->release();
+	if(m_headImg != NULL) {
+		this->addChild(m_headImg);
+	}
 	
 	//	m_headImg = CCSprite::create("chapter10_boss.png");
 	//	addChild(m_headImg);
@@ -41,12 +41,12 @@ bool Bear::init()
 	//	startMoving();
 	
 	lastCastNum = m_well512.GetValue(1, 3);
-//	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
+	//	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 	startAnimationNoDirection();
 	
-	schedule(schedule_selector(Bear::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(KSJuniorBase::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Bear::cumberAttack));
+	schedule(schedule_selector(KSJuniorBase::cumberAttack));
 	
 	return true;
 }
@@ -56,11 +56,11 @@ bool Bear::init()
 
 
 
-bool Bear::startDamageReaction(float damage, float angle)
+bool KSJuniorBase::startDamageReaction(float damage, float angle)
 {
 	KSCumberBase::startDamageReaction(damage, angle);
 	m_remainHp -= damage;
-	CCLog("Bear Hp %f", m_remainHp);
+	CCLog("KSJuniorBase Hp %f", m_remainHp);
 	CCLog("damaga!!!");
 	// 방사형으로 돌아가고 있는 중이라면
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
@@ -82,7 +82,7 @@ bool Bear::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Bear::damageReaction));
+		schedule(schedule_selector(KSJuniorBase::damageReaction));
 	}
 	else if(m_state == CUMBERSTATESTOP)
 	{
@@ -94,7 +94,7 @@ bool Bear::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Bear::damageReaction));
+		schedule(schedule_selector(KSJuniorBase::damageReaction));
 	}
 	else if(m_state == CUMBERSTATEFURY)
 	{
@@ -106,7 +106,7 @@ bool Bear::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Bear::damageReaction));
+		schedule(schedule_selector(KSJuniorBase::damageReaction));
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects");
 	}
@@ -120,14 +120,14 @@ bool Bear::startDamageReaction(float damage, float angle)
 		addChild(ret.first, 11);
 		
 		scheduleOnce(schedule_selector(ThisClassType::removeFromParent), 1.f);
-//		removeFromParentAndCleanup(true);
+		//		removeFromParentAndCleanup(true);
 		return true;
 	}
 	else
 		return false;
 }
 
-void Bear::startAnimationNoDirection()
+void KSJuniorBase::startAnimationNoDirection()
 {
 	CCLog("Lets rotate");
 	if(m_state != CUMBERSTATENODIRECTION)
@@ -139,11 +139,11 @@ void Bear::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
-		schedule(schedule_selector(Bear::animationNoDirection));
+		schedule(schedule_selector(KSJuniorBase::animationNoDirection));
 	}
 }
 
-void Bear::damageReaction(float)
+void KSJuniorBase::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
@@ -154,84 +154,50 @@ void Bear::damageReaction(float)
 	{
 		//		m_headImg->setColor(ccc3(255, 255, 255));
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Bear::damageReaction));
-//		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+		unschedule(schedule_selector(KSJuniorBase::damageReaction));
+		//		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
 
 
-void Bear::animationNoDirection(float dt)
+void KSJuniorBase::animationNoDirection(float dt)
 {
 	m_noDirection.timer += 1.f/60.f;
 	
 	if(m_noDirection.state == 1)
 	{
 		/// 좀 돌았으면 돌아감.
-//		if(m_noDirection.timer >= 5)
-//		{
-//			m_noDirection.state = 2;
-//			return;
-//		}
+		//		if(m_noDirection.timer >= 5)
+		//		{
+		//			m_noDirection.state = 2;
+		//			return;
+		//		}
 	}
 	else if(m_noDirection.state == 2)
 	{
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Bear::animationNoDirection));
-//		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
+		unschedule(schedule_selector(KSJuniorBase::animationNoDirection));
+		//		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
 	}
 }
 
-void Bear::onPatternEnd()
+void KSJuniorBase::onPatternEnd()
 {
 	CCLog("onPatternEnd!!");
 	m_noDirection.state = 2;
 }
 
-void Bear::onStartGame()
+void KSJuniorBase::onStartGame()
 {
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }
 
 
-void Bear::cumberAttack(float dt)
+void KSJuniorBase::cumberAttack(float dt)
 {
 	// 서브는 공격을 하지 않음... ㅋㅋ.
-}
-COLLISION_CODE Bear::crashWithX(IntPoint check_position)
-{
-	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
-	   check_position.y < mapLoopRange::mapHeightInnerBegin || check_position.y >= mapLoopRange::mapHeightInnerEnd )
-	{
-		// 나갔을 시.
-		return COLLISION_CODE::kCOLLISION_OUTLINE;
-	}
-	
-	// 이미 그려진 곳에 충돌했을 경우.
-	if(myGD->mapState[check_position.x][check_position.y] == mapOldline ||
-	   myGD->mapState[check_position.x][check_position.y] == mapOldget)
-	{
-		return COLLISION_CODE::kCOLLISION_MAP;
-	}
-	
-	if(myGD->mapState[check_position.x][check_position.y] == mapNewline)
-	{
-		return COLLISION_CODE::kCOLLISION_NEWLINE;
-	}
-	IntPoint jackPoint = myGD->getJackPoint();
-	if(jackPoint.x == check_position.x && jackPoint.y == check_position.y)
-	{
-		return COLLISION_CODE::kCOLLISION_JACK;
-	}
-	
-	
-	
-	
-	
-	return COLLISION_CODE::kCOLLISION_NONE;
-	
-}
-COLLISION_CODE Bear::crashLooper(const set<IntPoint>& v, IntPoint* cp)
+}COLLISION_CODE KSJuniorBase::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)
 	{
@@ -246,7 +212,7 @@ COLLISION_CODE Bear::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Bear::startInvisible(int totalframe)
+void KSJuniorBase::startInvisible(int totalframe)
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
@@ -254,12 +220,12 @@ void Bear::startInvisible(int totalframe)
 		m_invisible.VISIBLE_FRAME = totalframe;
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
-		schedule(schedule_selector(Bear::invisibling));
+		schedule(schedule_selector(KSJuniorBase::invisibling));
 		m_invisible.startInvisibleScheduler = true;
 	}
 }
 
-void Bear::invisibling(float dt)
+void KSJuniorBase::invisibling(float dt)
 {
 	m_invisible.invisibleFrame++;
 	
@@ -281,7 +247,7 @@ void Bear::invisibling(float dt)
 	}
 }
 
-void Bear::getRandomPosition(IntPoint* ip, bool* finded)
+void KSJuniorBase::getRandomPosition(IntPoint* ip, bool* finded)
 {
 	bool isGoodPointed = false;
 	
@@ -354,7 +320,7 @@ void Bear::getRandomPosition(IntPoint* ip, bool* finded)
 	}
 }
 
-void Bear::randomPosition()
+void KSJuniorBase::randomPosition()
 {
 	IntPoint mapPoint;
 	bool finded;
@@ -370,7 +336,7 @@ void Bear::randomPosition()
 	{
 		CCScaleTo* t_scale = CCScaleTo::create(0.2, 1.f);
 		CCCallFunc* t_call = CCCallFunc::create(this,
-												callfunc_selector(KSCumberBase::lightSmaller));
+																						callfunc_selector(KSCumberBase::lightSmaller));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -379,7 +345,7 @@ void Bear::randomPosition()
 	
 }
 
-void Bear::crashMapForPosition(CCPoint targetPt)
+void KSJuniorBase::crashMapForPosition(CCPoint targetPt)
 {
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
@@ -410,7 +376,7 @@ void Bear::crashMapForPosition(CCPoint targetPt)
 	
 }
 
-void Bear::furyModeOn(int tf)
+void KSJuniorBase::furyModeOn(int tf)
 {
 	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
@@ -421,7 +387,7 @@ void Bear::furyModeOn(int tf)
 	schedule(schedule_selector(ThisClassType::furyModeScheduler));
 }
 
-void Bear::furyModeScheduler(float dt)
+void KSJuniorBase::furyModeScheduler(float dt)
 {
 	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
@@ -433,14 +399,14 @@ void Bear::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
-void Bear::furyModeOff()
+void KSJuniorBase::furyModeOff()
 {
-//	myGD->communication("EP_stopCrashAction");
+	//	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects");
 }
 
 
-void Bear::scaleAdjustment(float dt)
+void KSJuniorBase::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	

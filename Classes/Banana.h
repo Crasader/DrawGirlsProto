@@ -28,7 +28,9 @@ public:
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
-	virtual ~Banana(){}
+	virtual ~Banana(){
+		CCLog("zxc");
+	}
 	
 	
 	
@@ -71,7 +73,7 @@ public:
 		return m_headImg->getPosition();
 	}
 	
-	COLLISION_CODE crashWithX(IntPoint check_position);
+
 	COLLISION_CODE crashLooper(const set<IntPoint>& v, IntPoint* cp);
 	const float RADIUS;
 //	void showEmotion(EmotionType t_type)
