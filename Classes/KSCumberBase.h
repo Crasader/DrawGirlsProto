@@ -87,7 +87,9 @@ class KSCumberBase : public CCNode
 {
 public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
-	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0)/// 초당 변수만큼 충돌시 스케일 줄임.
+	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0), /// 초당 변수만큼 충돌시 스케일 줄임.
+	m_castingCancelCount(0)
+	
 //		m_state(CUMBERSTATESTOP)
 	{
 		
@@ -150,7 +152,14 @@ public:
 //		mEmotion = NULL;
 //	}
 	CCNode* getBossEye() { return NULL; }
-	
+	void resetCastingCancelCount()
+	{
+		m_castingCancelCount = 0;
+	}
+	int getCastingCancelCount()
+	{
+		return m_castingCancelCount;
+	}
 	virtual void furyModeOn(int tf) = 0;
 	virtual void setGameover()
 	{
@@ -346,6 +355,10 @@ public:
 		m_furyRule.gtCount = fury["gtcount"].asDouble();
 //		m_furyRule
 	}
+	void settingAI(int ai)
+	{
+		m_aiValue = ai;
+	}
 	void settingSpeed(float startSpeed, float minSpeed, float maxSpeed)
 	{
 		m_speed = m_startSpeed = startSpeed;
@@ -375,16 +388,6 @@ public:
 		{
 			KS::KSLog("%", i);
 		}
-//		for(auto i : pattern)
-//		{
-//			//i.asString().c_str()
-//			int patternNumber = atoi(i.first.c_str()); // 패턴 넘버
-//			int ratio = i.second["percent"].getInt();  // 빈번도
-//			for(int j = 0; j<ratio; j++)
-//			{
-//				m_attacks.push_back(patternNumber);
-//			}			
-//		}
 	}
 	void settingHp(float hp)
 	{
@@ -431,6 +434,17 @@ public:
 		myGD->communication("UI_catchSubCumber");
 		myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
 	}
+	// 보스가 갇혔으면 true
+	bool bossIsClosed()
+	{
+		int greaterNumber = count_if(outlineCountRatio.begin(), outlineCountRatio.end(), [](int i){return i >= 20;} );
+		bool closedBoss = false;
+		if((float)greaterNumber / (float)outlineCountRatio.size() >= 0.8f)
+		{
+			closedBoss = true;
+		}
+		return closedBoss;
+	}
 protected:
 		
 	struct BossDie
@@ -448,7 +462,7 @@ protected:
 //	Emotion* mEmotion;
 	Well512 m_well512;
 	int m_directionAngleDegree;
-
+	std::deque<int> outlineCountRatio;
 	float m_attackPercent;
 	float m_startScale, m_minScale, m_maxScale;
 	float m_startSpeed, m_minSpeed, m_maxSpeed;
@@ -459,6 +473,8 @@ protected:
 	float m_speedRatio;
 	bool m_slience;
 	int m_crashCount;
+	int m_aiValue;
+	int m_castingCancelCount; // 캐스팅이 취소당한 횟수를 셈.
 	IntPoint m_mapPoint; // 자기 자신의 맵포인트를 저장함. setPosition 할 때 마다 수정해줘야함.
 //	enum MOVEMENT m_normalMode, m_drawMode;
 	

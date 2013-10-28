@@ -14,8 +14,7 @@ class KSJuniorBase : public KSCumberBase
 {
 public:
 	KSJuniorBase() : RADIUS(15.f),// mEmotion(nullptr),
-	
-	
+
 	teleportImg(NULL) // 텔레포트 이미지
 	{
 		m_state = (CUMBERSTATEMOVING);

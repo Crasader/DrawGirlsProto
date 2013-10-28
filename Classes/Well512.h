@@ -3,9 +3,10 @@
 
 #include <iostream>
 #include <ctime>
+#include <chrono>
 
 using namespace std;
-
+using namespace chrono;
 class Well512
 {
     enum
@@ -15,18 +16,7 @@ class Well512
 	
 public:
 	
-	explicit Well512()
-	{
-		//시드값 자동 생성
-		index = 0;
-		unsigned int s = static_cast<unsigned int>(time(NULL));
-		
-		for (int i = 0; i < 16; i++)
-		{
-			state[i] = s;
-			s += s + DIFFER_VALUE;
-		}
-	}
+	explicit Well512();
 	
 	explicit Well512(unsigned int nSeed)
 	{

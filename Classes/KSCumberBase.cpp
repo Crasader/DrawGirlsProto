@@ -1082,7 +1082,6 @@ void KSCumberBase::cumberAttack(float dt)
 	bool crashAttack = false;
 	
 	
-	
 	if(m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance)
 	{
 		float w = ProbSelector::sel(m_furyRule.percent / 100.f, 1.0 - m_furyRule.percent / 100.f, 0.0);
@@ -1115,28 +1114,119 @@ void KSCumberBase::cumberAttack(float dt)
 	{
 		selectedAttacks.assign(m_attacks.begin(), m_attacks.end());
 	}
+	
+	
 	if(crashAttack)
 	{
 		exeProb = 0; // 무조건 실행.
 	}
 	else
 	{
-		auto ps = ProbSelector({m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f});
+		const float originalAttackProb = m_attackPercent / 100.f;
+		float attackProb = originalAttackProb;
+		// 선을 긋고 있을 땐 공격확률 높임 X2 까지.
+		if(myGD->getJackState() == jackStateDrawing)
+		{
+			attackProb += originalAttackProb * (m_aiValue / 100);
+		}
+		
+		// 많이 맞았으면 공격확률 높임.
+		if(getLife() / getTotalLife() <= 0.3f)
+		{
+			attackProb += originalAttackProb * 0.5f;
+		}
+		
+		auto ps = ProbSelector({attackProb, 1.0 - attackProb});
 //		exeProb = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
 		exeProb = ps.getResult();
 	}
+	
+	{
+		IntPoint point = ccp2ip(getPosition());
+		IntPoint afterPoint = point;
+		float radius = 40.f;
+//		float sc = getCumberScale();
+		float half_distance = radius*getCumberScale(); // 20.f : radius for base scale 1.f
+		int ip_half_distance = half_distance;
+		int outlineCount = 0;
+//		set<IntPoint> ips;
+		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+		{
+			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+			{
+				float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+				if(calc_distance < ip_half_distance)
+				{
+					if(IntPoint(i, j).isInnerMap() && myGD->mapState[i][j] == mapOldline)
+					{
+						outlineCount++;
+					}
+				}
+			}
+		}
+		int s = 6; // 3초 동안
+		outlineCountRatio.push_back(outlineCount);
+		if(outlineCountRatio.size() > 60 * s)
+		{
+			outlineCountRatio.pop_front();
+		}
+//		if(out)
+//		if(outlineCount >= 1)
+//			CCLog("outline Count = %d", outlineCount);
 
-	// 1% 확률로.
+	}
+	// 확률로.
 	if(exeProb == 0 && m_state == CUMBERSTATEMOVING && !selectedAttacks.empty())
 	{
 		Json::Value attackCode;
 		bool searched = false;
 		int searchCount = 0;
+		
+		// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
+		
 		ProbSelector probSel;
+		float crashAdder = 0.f;
+		if(bossIsClosed())
+		{
+			crashAdder = m_aiValue / 50.f;
+		}
+		
+		// 바깥쪽으로 얼마나 먹었는지를...
+		int externalOutlineCount = 0;
+		for(int x=mapLoopRange::mapWidthInnerBegin; x != mapLoopRange::mapWidthInnerEnd; x++)
+		{
+			if(myGD->mapState[x][mapLoopRange::mapHeightInnerBegin] == mapOldline)
+				externalOutlineCount++;
+			if(myGD->mapState[x][mapLoopRange::mapHeightInnerEnd-1] == mapOldline)
+				externalOutlineCount++;
+		}
+		for(int y=mapLoopRange::mapHeightInnerBegin; y != mapLoopRange::mapHeightInnerEnd; y++)
+		{
+			if(myGD->mapState[mapLoopRange::mapWidthInnerBegin][y] == mapOldline)
+				externalOutlineCount++;
+			if(myGD->mapState[mapLoopRange::mapWidthInnerEnd - 1][y] == mapOldline)
+				externalOutlineCount++;
+		}
+		
+		float alongLineAdder = 0.f;
+		if(externalOutlineCount >= 150)
+			alongLineAdder = m_aiValue / 50.f;
 		for(auto& i : selectedAttacks)
 		{
-			probSel.pushProb(i["percent"].asDouble());
+			if(i["pattern"].asString() == "1017")
+			{
+				probSel.pushProb(i["percent"].asDouble() * (1 +  alongLineAdder));
+			}
+			else if(i["atype"] == "crash")
+			{
+				probSel.pushProb(i["percent"].asDouble() * (1 +  crashAdder));
+			}
+			else
+			{
+				probSel.pushProb(i["percent"].asDouble());
+			}
 		}
+		CCLog("externalCnt %d", externalOutlineCount);
 		while(!searched)
 		{
 			searchCount++;

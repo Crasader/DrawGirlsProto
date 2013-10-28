@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "AudioEngine.h"
 #include "GameData.h"
+#include "KSCumberBase.h"
 USING_NS_CC;
 
 class CCN_InnerNode : public CCSprite
@@ -160,6 +161,11 @@ public:
 		{
 			actionFunction(real_target);
 			removeFromParentAndCleanup(true);
+			KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
+			if(cb)
+			{
+				cb->resetCastingCancelCount();
+			}
 		}
 	}
 protected:
@@ -291,6 +297,11 @@ private:
 			AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 			actionFunction(real_target);
 			removeSelf();
+			KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
+			if(cb)
+			{
+				cb->resetCastingCancelCount();
+			}
 		}
 	}
 	
@@ -566,6 +577,11 @@ private:
 			AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 			actionFunction(real_target);
 			removeSelf();
+			KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
+			if(cb)
+			{
+				cb->resetCastingCancelCount();
+			}
 		}
 	}
 	
@@ -859,6 +875,11 @@ private:
 			AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 			actionFunction(real_target);
 			removeSelf();
+			KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
+			if(cb)
+			{
+				cb->resetCastingCancelCount();
+			}
 		}
 	}
 	
