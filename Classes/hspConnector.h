@@ -187,9 +187,17 @@ public:
         return graphdog->command(params);
     }
     
-    bool command(string action, const Json::Value param,function<void(Json::Value)> func){
+    bool command(const char* action, const Json::Value param,function<void(Json::Value)> func){
         return graphdog->command(action,param,func);
     }
+	
+	bool command(const char* action, const char* param,function<void(Json::Value)> func){
+		Json::Reader r;
+		Json::Value p;
+		r.parse(param, p);
+        return graphdog->command(action,p,func);
+    }
+	
     
     long long int getHSPMemberNo();
 	string getKakaoID();
