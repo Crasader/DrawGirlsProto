@@ -530,7 +530,6 @@ private:
 	CCSprite* random_rect_img;
 	CCNode* blockParent;
 	
-	
 	int silType;
 	
 	IntRect init_rect;
@@ -544,8 +543,7 @@ private:
 	
 	void resetRects();
 	
-	static IntRect* newRectChecking(IntMoveState start);
-	static void* thrFunction(void* data);
+	IntRect* newRectChecking(IntMoveState start);
 	
 	void bfsCheck(mapType beforeType, mapType afterType, IntPoint startPoint);
 	

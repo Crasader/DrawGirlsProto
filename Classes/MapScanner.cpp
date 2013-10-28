@@ -211,10 +211,14 @@ void MapScanner::scanMap()
 	resetRects();
 }
 
-void* MapScanner::thrFunction(void* data)
+void MapScanner::resetRects()
 {
+//	chrono::time_point<chrono::system_clock> start, end;
+//	chrono::duration<double> elapsed_seconds;
+//	start = chrono::system_clock::now();
+	
 	// view rects reset
-	CCArray* rects = CCArray::createWithCapacity(1);
+	CCArray* rects = CCArray::createWithCapacity(256);
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
@@ -227,40 +231,11 @@ void* MapScanner::thrFunction(void* data)
 		}
 	}
 	
-	return (void*)rects;
-}
-
-void MapScanner::resetRects()
-{
-	pthread_t p_thread;
-	int thr_id;
-	CCArray* rv;
-	// 쓰레드 생성 아규먼트로 1 을 넘긴다.
-	thr_id = pthread_create(&p_thread, NULL, thrFunction, NULL);
-	if (thr_id < 0)
-	{
-		perror("thread create error : ");
-		exit(0);
-	}
-	pthread_join(p_thread, (void**)&rv);
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLog("reset rects : %f", elapsed_seconds.count());
 	
-	visibleImg->setDrawRects(rv);
-	
-//	// view rects reset
-//	CCArray* rects = CCArray::createWithCapacity(1);
-//	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
-//	{
-//		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
-//		{
-//			if(myGD->mapState[i][j] == mapOldline || myGD->mapState[i][j] == mapOldget)
-//			{
-//				IntRect* t_rect = newRectChecking(IntMoveState(i, j, directionRightUp));
-//				rects->addObject(t_rect);
-//			}
-//		}
-//	}
-//	
-//	visibleImg->setDrawRects(rects);
+	visibleImg->setDrawRects(rects);
 	
 	float drawCellCnt = 0;
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
