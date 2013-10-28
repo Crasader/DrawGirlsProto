@@ -589,20 +589,23 @@ void CumberParent::myInit()
 	int create_cnt;
 	if(mySGD->isUsingItem(kIC_subNothing))
 		return;
-	if(mySD->getClearCondition() != kCLEAR_subCumberCatch)
-	{
-		 create_cnt = m_well512.GetValue(1, 2);
-	}
-	else
-	{
-		create_cnt = 2;
-	}
+	
+	// 랜덤으로 생성 ㄴㄴ 정해준 숫자만큼만 생성.
+//	if(mySD->getClearCondition() != kCLEAR_subCumberCatch)
+//	{
+//		 create_cnt = m_well512.GetValue(1, 2);
+//	}
+//	else
+//	{
+//		create_cnt = 2;
+//	}
+	create_cnt = 1;
 	for(int i=0;i<create_cnt;i++)
 	{
 		Json::Reader reader;
 		Json::Value root;
 		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"), root);
-		
+		KS::KSLog("%", root);
 		
 		for(int i=0; i<root.size(); i++)
 		{
