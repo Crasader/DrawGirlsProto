@@ -472,14 +472,14 @@ private:
 			if(beforeAngle <= afterAngle && jackAngle >= beforeAngle && jackAngle <= afterAngle)
 			{
 				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				unschedule(schedule_selector(AP_Missile6::myAction));
 				removeEffect();
 			}
 			else if(beforeAngle > afterAngle && (jackAngle >= beforeAngle || jackAngle <= afterAngle))
 			{
 				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				unschedule(schedule_selector(AP_Missile6::myAction));
 				removeEffect();
 			}
@@ -561,7 +561,7 @@ public:
 	void selfDie()
 	{
 		myGD->communication("CP_jackCrashDie");
-		myGD->communication("Jack_startDieEffect");
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 //		stopCut(); // 가만보면 이게 두번 호출됨. 그래서 지워줘도 됨.
 	}
 	
@@ -1801,7 +1801,7 @@ private:
 			if(crashRect.containsPoint(t_jp))
 			{
 				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 //				stopMySchedule();
 				removeEffect();
 			}
@@ -1853,7 +1853,7 @@ private:
 		if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
 		{
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			removeEffect();
 		}
 		
@@ -1861,7 +1861,7 @@ private:
 		{
 			//					myGD->communication("PM_pathChainBomb", t_p);
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			myGD->communication("Main_showLineDiePosition", t_p);
 			removeEffect();
 		}
@@ -4472,7 +4472,7 @@ public:
 			if(crashRect.containsPoint(t_jp))
 			{
 				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				//				stopMySchedule();
 				stopMyAction();
 			}
@@ -4526,7 +4526,7 @@ public:
 		if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
 		{
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			stopMyAction();
 		}
 		
@@ -4534,7 +4534,7 @@ public:
 		{
 			//					myGD->communication("PM_pathChainBomb", t_p);
 			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			myGD->communication("Main_showLineDiePosition", t_p);
 			stopMyAction();
 		}
@@ -5156,14 +5156,14 @@ public:
 			if(beforeAngle <= afterAngle && jackAngle >= beforeAngle && jackAngle <= afterAngle)
 			{
 				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				unschedule(schedule_selector(ThisClassType::myAction));
 				removeEffect();
 			}
 			else if(beforeAngle > afterAngle && (jackAngle >= beforeAngle || jackAngle <= afterAngle))
 			{
 				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				unschedule(schedule_selector(ThisClassType::myAction));
 				removeEffect();
 			}
@@ -5625,7 +5625,7 @@ public:
 			if(ccpLength(m_initialJackPosition - jackPosition) >= m_radius)
 			{
 				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				stopMyAction();
 			}
 		}

@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "GameData.h"
 #include "AudioEngine.h"
+#include "LogData.h"
 
 using namespace cocos2d;
 #include <functional>
@@ -102,7 +103,7 @@ private:
 		{
 //			if(emotion_target && emotion_delegate)
 //				(emotion_target->*emotion_delegate)(6);
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_shockwave);
 			myGD->communication("MP_resetTickingTimeBomb");
 			stopSW();
 		}

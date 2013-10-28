@@ -197,7 +197,7 @@ void AlongOfTheLine::update(float dt)
 			if(i->alongPath.point == jackPoint)
 			{
 				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				unschedule(schedule_selector(ThisClassType::update));
 				m_scaleTo.init(1.f, 0.f, 0.5f);
 				CCLog("abc");

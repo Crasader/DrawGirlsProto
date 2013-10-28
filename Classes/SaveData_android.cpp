@@ -103,7 +103,6 @@
 
 void testF(string filePath, string tt)
 {
-	
 	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
 	FILE* fp = fopen( path.c_str(), "w" );
 	if(!fp)
@@ -139,6 +138,17 @@ string readF(string filePath)
 	}
 	
 	return result;
+}
+void addF(string filePath, string tt)
+{
+	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
+	FILE* fp = fopen( path.c_str(), "a" );
+	if(!fp)
+	{
+		CCLog("file failure");
+	}
+	fprintf(fp, "%s", tt.c_str());
+	fclose(fp);
 }
 
 #endif

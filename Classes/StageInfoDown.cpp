@@ -167,7 +167,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 					t_df.size = t_imgInfo["size"].asInt();
 					t_df.img = t_imgInfo["img"].asString().c_str();
 					t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", mySD->getSilType(), i+1)->getCString();
-					t_df.key = CCSTR_CWF("%d_imgInfo_img", t_card["no"].asInt())->getCString();
+					t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
 				}
@@ -181,7 +181,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 					t_df.size = t_thumbnailInfo["size"].asInt();
 					t_df.img = t_thumbnailInfo["img"].asString().c_str();
 					t_df.filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", mySD->getSilType(), i+1)->getCString();
-					t_df.key = CCSTR_CWF("%d_thumbnailInfo_img", t_card["no"].asInt())->getCString();
+					t_df.key = CCSTR_CWF("%d_thumbnailInfo", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
 				}

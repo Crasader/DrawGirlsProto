@@ -16,6 +16,7 @@
 #include "OtherEffect.h"
 #include "StarGoldData.h"
 #include "Well512.h"
+#include "LogData.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -839,11 +840,24 @@ public:
 		unschedule(schedule_selector(Jack::moveTest));
 	}
 	
-	void startDieEffect() // after coding
+	void startDieEffect(int die_type) // after coding
 	{
 //		return;
 		if(!isDie)
 		{
+			if(die_type == DieType::kDieType_other)
+			{
+				myLog->addLog(kLOG_die_other, myGD->getCommunication("UI_getUseTime"));
+			}
+			else if(die_type == DieType::kDieType_missileToLine)
+			{
+				myLog->addLog(kLOG_die_missileToLine, myGD->getCommunication("UI_getUseTime"));
+			}
+			else if(die_type == DieType::kDieType_shockwave)
+			{
+				myLog->addLog(kLOG_die_shockwave, myGD->getCommunication("UI_getUseTime"));
+			}
+			
 //			Well512 t_well512;
 //			myGD->setJackPoint(IntPoint(t_well512.GetValue(mapWidthInnerBegin, mapWidthInnerEnd),t_well512.GetValue(mapHeightInnerBegin, mapHeightInnerEnd)));
 //			if(getJackState() == jackStateDrawing)
@@ -1329,7 +1343,7 @@ private:
 		is_double_moving = false;
 		
 		myGD->V_F["Jack_changeSpeed"] = std::bind(&Jack::changeSpeed, this, _1);
-		myGD->V_V["Jack_startDieEffect"] = std::bind(&Jack::startDieEffect, this);
+		myGD->V_I["Jack_startDieEffect"] = std::bind(&Jack::startDieEffect, this, _1);
 		myGD->V_V["Jack_createHammer"] = std::bind(&Jack::createHammer, this);
 		myGD->V_V["Jack_createFog"] = std::bind(&Jack::createFog, this);
 		myGD->V_V["Jack_createSleep"] = std::bind(&Jack::createSleep, this);

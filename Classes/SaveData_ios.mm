@@ -96,3 +96,14 @@ string readF(string filePath)
 	
 	return result;
 }
+void addF(string filePath, string tt)
+{
+	NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
+	NSString* documentsDirectory = [paths objectAtIndex:0];
+	NSString* nsfilePath = [NSString stringWithUTF8String:filePath.c_str()];
+	NSString* fullFileName = [NSString stringWithFormat:@"%@/%@", documentsDirectory, nsfilePath ];
+	const char* szFilePath = [fullFileName UTF8String];
+	FILE* fp = fopen( szFilePath, "a" );
+	fprintf(fp, "%s", tt.c_str());
+	fclose(fp);
+}

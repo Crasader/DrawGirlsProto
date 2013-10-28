@@ -32,6 +32,7 @@ string SaveData::getSyncKey(SaveDataFile t_sdf)
 	else if(t_sdf == kSDF_gameInfo)			return_value = "GAMEINFO";
 	else if(t_sdf == kSDF_cardInfo)			return_value = "CARDINFO";
 	else if(t_sdf == kSDF_downloadedInfo)	return_value = "DOWNLOADEDINFO";
+	else if(t_sdf == kSDF_log)				return_value = "LOG";
 	
 	return return_value;
 }
@@ -83,6 +84,47 @@ void SaveData::setKeyValue(string filename, string _key, string _value)
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, string _value){			setKeyValue(getSyncKey(t_sdf), _key, _value);		}
 void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, string _value){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value);	}
+
+void SaveData::addKeyValue(string filename, string _key, string _value)
+{
+	map<string, bool>::iterator iter;
+	iter = file_init.find(filename);
+	if(iter == file_init.end())
+		createJSON(filename);
+	
+	string file_key = stringEnc(filename);
+	
+	string key = stringEnc(_key);
+	string value = stringEnc(_value);
+	
+	(file_sync[file_key])[key] = value;
+	ostringstream oss;
+	file_sync[file_key].writeToStream(oss);
+	addF(filename, oss.str());
+}
+void SaveData::addKeyValue(SaveDataFile t_sdf, string _key, string _value)
+{
+	addKeyValue(getSyncKey(t_sdf), _key, _value);
+}
+
+void SaveData::resetData(SaveDataFile t_sdf)
+{
+	resetData(getSyncKey(t_sdf));
+}
+
+void SaveData::resetData(string filename)
+{
+	map<string, bool>::iterator iter;
+	iter = file_init.find(filename);
+	if(iter == file_init.end())
+		createJSON(filename);
+	
+	string file_key = stringEnc(filename);
+	
+	ostringstream oss;
+	file_sync[file_key].setNull();
+	testF(filename, "");
+}
 
 void SaveData::setKeyValue(string filename, string _key, int _value)
 {

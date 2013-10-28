@@ -173,6 +173,8 @@ private:
 	
 	bool is_gesturable_map_mode;
 	
+	void loadSuccess();
+	
 	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
 	virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
 	virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
@@ -219,6 +221,7 @@ private:
 		removeChildByTag(kPMS_MT_loadingBack);
 		map_node->removeChildByTag(99999);
 		map_node->removeChildByTag(99998);
+		map_node->removeChildByTag(99997);
 		
 		switchMapNode(map_node);
 		endSwitchMapNode();
@@ -247,12 +250,14 @@ private:
 				{
 					after_map_node->removeChildByTag(99999);
 					after_map_node->removeChildByTag(99998);
+					after_map_node->removeChildByTag(99997);
 					switchMapNode(after_map_node);
 				}
 				else
 				{
 					map_node->removeChildByTag(99999);
 					map_node->removeChildByTag(99998);
+					map_node->removeChildByTag(99997);
 					switchMapNode(map_node);
 				}
 			}
@@ -456,6 +461,10 @@ private:
 		CCLabelTTF* t_title = CCLabelTTF::create(NSDS_GS(kSDS_GI_puzzleList_int1_title_s, found_index).c_str(), mySGD->getFont().c_str(), 23);
 		t_title->setPosition(ccp(0,100));
 		t_node->addChild(t_title, 0, 99998);
+		
+		CCLabelTTF* t_loading = CCLabelTTF::create("LOADING...", mySGD->getFont().c_str(), 40);
+		t_loading->setPosition(CCPointZero);
+		t_node->addChild(t_loading, 0, 99997);
 		
 		if(NSDS_GI(kSDS_GI_puzzleList_int1_version_i, found_index) > NSDS_GI(recent_puzzle_number, kSDS_PZ_version_i))
 			t_node->setTag(kPMS_MT_notLoaded);

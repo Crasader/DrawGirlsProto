@@ -425,7 +425,7 @@ void MainCumber::checkingJackCrash()
 					IntPoint jackPoint = myGD->getJackPoint();
 					if(jackPoint.x == check_position.x && jackPoint.y == check_position.y)
 					{
-						myGD->communication("Jack_startDieEffect");
+						myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 						return;
 					}
 					else
@@ -1135,7 +1135,7 @@ void MainCumber::crashMapForIntPoint(IntPoint t_p)
 	if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
 	{
 //		showEmotion(kEmotionType_fun);
-		myGD->communication("Jack_startDieEffect");
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		if(isFuryMode)
 			furyModeOff();
 	}
@@ -1144,7 +1144,7 @@ void MainCumber::crashMapForIntPoint(IntPoint t_p)
 	{
 		//					myGD->communication("PM_pathChainBomb", t_p);
 //		showEmotion(kEmotionType_fun);
-		myGD->communication("Jack_startDieEffect");
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		myGD->communication("Main_showLineDiePosition", t_p);
 		if(isFuryMode)
 			furyModeOff();
@@ -1389,7 +1389,7 @@ bool MainCumber::checkingFunc(IntPoint check_position, bool& is_not_position, in
 //				showEmotion(kEmotionType_fun);
 //			}
 			
-			myGD->communication("Jack_startDieEffect");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			return true;
 		}
 		else

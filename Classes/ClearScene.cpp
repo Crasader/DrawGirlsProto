@@ -14,6 +14,7 @@
 #include "StageImgLoader.h"
 #include "StarGoldData.h"
 #include "SilhouetteData.h"
+#include "LogData.h"
 
 typedef enum tMenuTagClearScene{
 	kMT_CS_ok = 1
@@ -55,6 +56,13 @@ bool ClearScene::init()
     }
 	
 	setKeypadEnabled(true);
+	
+	Json::Value param;
+	param["key"] = CCSTR_CWF("stage_clear_%d", mySD->getSilType())->getCString();
+	
+	hspConnector::get()->command("increaseStats", param, NULL);
+	
+	myLog->sendLog("clear");
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)

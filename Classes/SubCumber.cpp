@@ -139,7 +139,7 @@ void SubCumber::easyMoving()
 //					showEmotion(kEmotionType_fun);
 //				}
 				
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				return;
 			}
 			else
@@ -432,7 +432,7 @@ void SubCumber::moving()
 //					showEmotion(kEmotionType_fun);
 //				}
 				
-				myGD->communication("Jack_startDieEffect");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				return;
 			}
 			else
