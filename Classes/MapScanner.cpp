@@ -47,6 +47,26 @@ void MapScanner::scanMap()
 	// locked main cumber then reverse
 	if(!mainCumberPoint.isNull() && myGD->mapState[mainCumberPoint.x][mainCumberPoint.y] == mapEmpty) // != mapScaningEmptySide
 	{
+		if(myGD->game_step == kGS_limited)
+		{
+			for(int j=mapHeightInnerBegin;j < myGD->limited_step_bottom;j++)
+			{
+				for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+				{
+					if(myGD->mapState[i][j] == mapOutline)
+						myGD->mapState[i][j] = mapNewget;
+				}
+			}
+			for(int j=myGD->limited_step_top+1;j < mapHeightInnerEnd;j++)
+			{
+				for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+				{
+					if(myGD->mapState[i][j] == mapOutline)
+						myGD->mapState[i][j] = mapNewget;
+				}
+			}
+		}
+		
 		bfsCheck(mapEmpty, mapScaningEmptySide, mainCumberPoint); // main cumber
 		
 		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -121,7 +141,7 @@ void MapScanner::scanMap()
 			   myGD->mapState[i-1][j-1] != mapEmpty && myGD->mapState[i][j+1] != mapEmpty &&
 			   myGD->mapState[i][j-1] != mapEmpty && myGD->mapState[i+1][j+1] != mapEmpty &&
 			   myGD->mapState[i+1][j] != mapEmpty && myGD->mapState[i+1][j-1] != mapEmpty &&
-			   
+			   myGD->game_step == kGS_limited &&
 			   myGD->mapState[i-1][j] != mapOutline && myGD->mapState[i-1][j+1] != mapOutline &&
 			   myGD->mapState[i-1][j-1] != mapOutline && myGD->mapState[i][j+1] != mapOutline &&
 			   myGD->mapState[i][j-1] != mapOutline && myGD->mapState[i+1][j+1] != mapOutline &&

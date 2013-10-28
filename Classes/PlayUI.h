@@ -809,27 +809,27 @@ private:
 	
 	void showArrow()
 	{
-		for(int i=0;i<4;i++)
+		for(int i=0;i<8;i++)
 		{
 			CCSprite* t_down = CCSprite::create("area_scroll_down.png");
-			t_down->setPosition(ccp(180+i*40, myDSH->ui_center_y-18));
+			t_down->setPosition(ccp(100+i*40, myDSH->ui_center_y-18));
 			t_down->setOpacity(0);
 			addChild(t_down);
 			
-			CCFadeTo* down_fade = CCFadeTo::create(0.3f, 255);
-			CCMoveBy* down_move = CCMoveBy::create(0.5f, ccp(0,-250));
+			CCFadeTo* down_fade = CCFadeTo::create(0.5f, 255);
+			CCMoveBy* down_move = CCMoveBy::create(0.7f, ccp(0,-250));
 			CCSequence* down_seq = CCSequence::createWithTwoActions(down_fade, down_move);
 			
 			t_down->runAction(down_seq);
 			
 			
 			CCSprite* t_up = CCSprite::create("area_scroll_up.png");
-			t_up->setPosition(ccp(180+i*40, myDSH->ui_center_y+18));
+			t_up->setPosition(ccp(100+i*40, myDSH->ui_center_y+18));
 			t_up->setOpacity(0);
 			addChild(t_up);
 			
-			CCFadeTo* up_fade = CCFadeTo::create(0.3f, 255);
-			CCMoveBy* up_move = CCMoveBy::create(0.5f, ccp(0,250));
+			CCFadeTo* up_fade = CCFadeTo::create(0.5f, 255);
+			CCMoveBy* up_move = CCMoveBy::create(0.7f, ccp(0,250));
 			CCSequence* up_seq = CCSequence::createWithTwoActions(up_fade, up_move);
 			
 			t_up->runAction(up_seq);
