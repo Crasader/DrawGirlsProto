@@ -238,6 +238,8 @@ private:
 				
 				int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
 				
+				myGD->communication("Main_startShake");
+				
 				myGD->communication("UI_addScore", addScore);
 				myGD->communication("UI_setComboCnt", combo_cnt);
 			}
@@ -690,6 +692,8 @@ private:
 				int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
 				myGD->communication("UI_addScore", addScore);
 				myGD->communication("UI_setComboCnt", combo_cnt);
+				
+				myGD->communication("Main_startShake");
 				
 				removeFromParentAndCleanup(true);
 			}

@@ -638,6 +638,52 @@ private:
 		addChild(t_w, goldZorder);
 		t_w->startAction();
 	}
+	
+	int shake_frame;
+	void startShake()
+	{
+		shake_frame = 0;
+		schedule(schedule_selector(Maingame::shaking), 1.f/20.f);
+	}
+	
+	void shaking()
+	{
+		shake_frame++;
+		
+		if(shake_frame == 1)
+		{
+			setRotation(-1.5f);
+			setPosition(ccp(-1,-2));
+		}
+		else if(shake_frame == 2)
+		{
+			setRotation(1.f);
+			setPosition(ccp(1,0));
+		}
+		else if(shake_frame == 3)
+		{
+			setRotation(-1.2f);
+			setPosition(ccp(-2,1));
+		}
+		else if(shake_frame == 4)
+		{
+			setRotation(0.7f);
+			setPosition(ccp(1,-1));
+		}
+		else if(shake_frame == 5)
+		{
+			setRotation(0);
+			setPosition(CCPointZero);
+			
+			stopShake();
+		}
+	}
+	
+	void stopShake()
+	{
+		unschedule(schedule_selector(Maingame::shaking));
+		shake_frame = 0;
+	}
 };
 
 #endif
