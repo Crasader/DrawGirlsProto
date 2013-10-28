@@ -961,7 +961,7 @@ public:
 	
 	void takeSpeedUpItem()
 	{
-		if(speed_up_value >= 0.5f)
+		if(myGD->jack_base_speed + speed_up_value > 2.f)
 		{
 			myGD->communication("MP_createJackMissile", rand()%(kElementCode_plasma+1), 1, 0.7f);
 		}

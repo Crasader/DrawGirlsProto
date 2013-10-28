@@ -226,6 +226,10 @@ public:
 			ing_fever = true;
 			recent_count = 20;
 			
+			fever_top->setPercentage(100.f);
+			
+			fever_top->getSprite()->setColor(ccGREEN);
+			
 			myLog->addLog(kLOG_show_fever, myGD->getCommunication("UI_getUseTime"));
 			myGD->communication("GIM_startFever");
 			
@@ -280,7 +284,7 @@ public:
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 			runAction(t_seq);
 			
-			CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+			CCProgressFromTo* progress_to = CCProgressFromTo::create(10.f, 100.f, 0.f);
 			fever_top->runAction(progress_to);
 		}
 		else
@@ -304,6 +308,8 @@ private:
 	{
 		ing_fever = false;
 		recent_count = 0;
+		
+		fever_top->getSprite()->setColor(ccWHITE);
 		
 		myGD->communication("GIM_stopFever");
 		
