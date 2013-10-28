@@ -438,7 +438,42 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	int invalid = 0;
 	
 	std::string pattern = patternData["pattern"].asString();
-	
+	std::string atype = patternData["atype"].asString();
+	auto castBranch = [=](const std::string atype, std::function<void(CCObject*)> func)
+	{
+		if(atype == "crash")
+		{
+			CrashChargeNodeLambda* t_ccn =
+			CrashChargeNodeLambda::create(startPosition, castFrame,
+																			func, cb);
+			t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
+			addChild(t_ccn);
+			t_ccn->startCharge();
+			chargeArray->addObject(t_ccn);
+		}
+		else if(atype == "special")
+		{
+			SpecialChargeNodeLambda* t_ccn =
+			SpecialChargeNodeLambda::create(startPosition, castFrame,
+																			func, cb);
+			
+			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
+			addChild(t_ccn);
+			t_ccn->startCharge();
+			chargeArray->addObject(t_ccn);
+		}
+		else // normal
+		{
+			ChargeNodeLambda* t_ccn =
+			ChargeNodeLambda::create(startPosition, castFrame,
+																			func, cb);
+			
+			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
+			addChild(t_ccn);
+			t_ccn->startCharge();
+			chargeArray->addObject(t_ccn);
+		}
+	};
 	if(pattern == "1")
 	{
 		if(exe)
@@ -446,41 +481,30 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNodeLambda* t_ccn =
-			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[=](CCObject* cb)
-																			{
-																				KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-																				addChild(t);
-																				saveAP = t;
-																				savedAP = true;
-																			}, cb);
-
-			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
-			addChild(t_ccn);
-			t_ccn->startCharge();
-			chargeArray->addObject(t_ccn);
+			auto func = [=](CCObject* cb)
+			{
+				KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				addChild(t);
+				saveAP = t;
+				savedAP = true;
+			};
+			castBranch(atype, func);
 		}
 	}
+	
 	else if(pattern == "2")
 	{
 		if(exe)
 		{
 			startFirePosition = startPosition;
-			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			SpecialChargeNodeLambda* t_ccn =
-			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			[=](CCObject* cb)
-																			{
-																				KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-																				addChild(t);
-																				saveAP = t;
-																				savedAP = true;
-																			}, cb);
-			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
-			addChild(t_ccn);
-			t_ccn->startCharge();
-			chargeArray->addObject(t_ccn);
+			auto func = [=](CCObject* cb)
+			{
+				KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				addChild(t);
+				saveAP = t;
+				savedAP = true;
+			};
+			castBranch(atype, func);
 		}
 	}
 	else if(pattern == "3")
