@@ -428,7 +428,7 @@ void GameData::myInit()
 	mainCumberPoint = new IntPoint();
 	otherTargetPoints = new CCArray(1);
 	jackState = 0; // jackStateNormal
-	jack_base_speed = 1.5f;
+	jack_base_speed = 1.2f;
 }
 
 void GameData::setStartMap( SetMapType set_map_type )
