@@ -16,6 +16,7 @@
 #include "StarGoldData.h"
 #include "StageImgLoader.h"
 #include "SilhouetteData.h"
+#include <pthread.h>
 
 using namespace cocos2d;
 using namespace std;
@@ -149,6 +150,11 @@ public:
 	void setMoveGamePosition(CCPoint t_p)
 	{
 		jack_position = t_p;
+	}
+	
+	CCPoint getMoveGamePosition()
+	{
+		return jack_position;
 	}
 	
 private:
@@ -297,14 +303,42 @@ private:
 	
 	void setMoveGamePosition(CCPoint t_p)
 	{
+		if(!myGD->is_setted_jack || myGD->game_step == kGS_unlimited)
+		{
+			CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
+			if(y_value > 60)																	y_value = 60;
+			else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+			
+			if(myGD->gamescreen_type == kGT_full)				myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
+			else if(myGD->gamescreen_type == kGT_leftUI)		myVS->setMoveGamePosition(ccp(50+myGD->boarder_value,y_value));
+			else if(myGD->gamescreen_type == kGT_rightUI)		myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
+		}
+	}
+	
+	CCPoint limitted_map_position;
+	
+	void setLimittedMapPosition()
+	{
+		limitted_map_position = myVS->getMoveGamePosition();
+	}
+	
+	void changingGameStep(int t_step)
+	{
+		IntPoint jack_point = myGD->getJackPoint();
+		CCPoint jack_position = jack_point.convertToCCP();
+		
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
+		float y_value = -jack_position.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
 		if(y_value > 60)																	y_value = 60;
 		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
 		
-		if(myGD->gamescreen_type == kGT_full)				myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
-		else if(myGD->gamescreen_type == kGT_leftUI)		myVS->setMoveGamePosition(ccp(50+myGD->boarder_value,y_value));
-		else if(myGD->gamescreen_type == kGT_rightUI)		myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
+		if(myGD->gamescreen_type == kGT_full)				jack_position = ccp(myGD->boarder_value,y_value);
+		else if(myGD->gamescreen_type == kGT_leftUI)		jack_position = ccp(50+myGD->boarder_value,y_value);
+		else if(myGD->gamescreen_type == kGT_rightUI)		jack_position = ccp(myGD->boarder_value,y_value);
+		
+		CCPoint after_position = ccpAdd(limitted_map_position, ccpMult(ccpSub(jack_position, limitted_map_position), t_step/15.f));
+		myVS->setMoveGamePosition(after_position);
 	}
 	
 	void myInit(const char* filename, bool isPattern)
@@ -314,6 +348,8 @@ private:
 		
 		myGD->V_Ip["VS_divideRect"] = std::bind(&VisibleParent::divideRect, this, _1);
 		myGD->V_CCP["VS_setMoveGamePosition"] = std::bind(&VisibleParent::setMoveGamePosition, this, _1);
+		myGD->V_V["VS_setLimittedMapPosition"] = std::bind(&VisibleParent::setLimittedMapPosition, this);
+		myGD->V_I["VS_changingGameStep"] = std::bind(&VisibleParent::changingGameStep, this, _1);
 		
 		myVS = VisibleSprite::create(filename, isPattern, drawRects);
 		myVS->setPosition(CCPointZero);
@@ -506,9 +542,10 @@ private:
 	CCObject* start_target;
 	SEL_CallFunc start_delegate;
 	
-	IntRect* newRectChecking(IntMoveState start);
-	
 	void resetRects();
+	
+	static IntRect* newRectChecking(IntMoveState start);
+	static void* thrFunction(void* data);
 	
 	void bfsCheck(mapType beforeType, mapType afterType, IntPoint startPoint);
 	

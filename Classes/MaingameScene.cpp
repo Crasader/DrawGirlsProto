@@ -61,6 +61,7 @@ bool Maingame::init()
 	myGD->V_V["Main_showChangeCard"] = std::bind(&Maingame::showChangeCard, this);
 	myGD->V_V["Main_startMoveToBossPosition"] = std::bind(&Maingame::startMoveToBossPosition, this);
 	myGD->CCN_V["Main_gameNodePointer"] = std::bind(&Maingame::gameNodePointer, this);
+	myGD->V_V["Main_setUnlimitMap"] = std::bind(&Maingame::setUnlimitMap, this);
 	mControl = NULL;
 	is_line_die = false;
 	
@@ -152,6 +153,8 @@ void Maingame::finalSetting()
 	myJack = Jack::create();
 	game_node->addChild(myJack, myJackZorder);
 	myJack->initStartPosition(game_node->getPosition());
+	
+	myGD->is_setted_jack = true;
 	
 	myUI = PlayUI::create();
 	addChild(myUI, myUIZorder);
@@ -269,6 +272,8 @@ bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 		ignore_cnt = 0;
 		randomingRectView();
 		schedule(schedule_selector(Maingame::randomingRectView), 1.f/30.f);
+		
+		setLimitMap();
 	}
 	else if(init_state == kMIS_randomRectView)
 	{

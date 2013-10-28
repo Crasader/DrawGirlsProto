@@ -770,6 +770,46 @@ private:
 	}
 };
 
+class AreaScroll : public CCSprite
+{
+public:
+	static AreaScroll* create()
+	{
+		AreaScroll* t_w = new AreaScroll();
+		t_w->myInit();
+		t_w->autorelease();
+		return t_w;
+	}
+	
+	void startAction()
+	{
+		CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
+		CCHide* t_hide = CCHide::create();
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
+		CCShow* t_show = CCShow::create();
+		CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
+		CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
+		CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AreaScroll::selfRemove));
+		
+		runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
+	}
+	
+private:
+	
+	void selfRemove()
+	{
+		removeFromParentAndCleanup(true);
+	}
+	
+	void myInit()
+	{
+		initWithFile("show_area_scroll.png");
+		
+		setPosition(ccp(640,myDSH->ui_center_y));
+	}
+};
+
 class ChangeCard : public CCSprite
 {
 public:
@@ -1402,6 +1442,9 @@ private:
 			CCScaleTo* t_scale2 = CCScaleTo::create(0.6f, 1.f);
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale1, t_scale2);
 			countingLabel->runAction(t_seq);
+			
+			if(myGD->game_step == kGS_limited)
+				myGD->communication("Main_setUnlimitMap");
 		}
 		else if(countingCnt == 100)
 		{

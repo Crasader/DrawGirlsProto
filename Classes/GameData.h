@@ -28,6 +28,11 @@ enum GAMESCREEN_TYPE{
 	kGT_rightUI
 };
 
+enum GAMESTEP{
+	kGS_limited = 0,
+	kGS_changing,
+	kGS_unlimited
+};
 
 float deg2Rad(float x) ;
 float rad2Deg(float x);
@@ -674,6 +679,11 @@ public:
 	float game_scale;
 	
 	void setUItype(GAMESCREEN_TYPE t_type);
+	
+	GAMESTEP game_step;
+	int limited_step_top;
+	int limited_step_bottom;
+	bool is_setted_jack;
 	
 private:
 	

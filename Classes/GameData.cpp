@@ -35,7 +35,9 @@ void GameData::resetGameData()
 	mainCumberPoint->release();
 	mainCumberPoint = new IntPoint();
 	otherTargetPoints->removeAllObjects();
-
+	
+	is_setted_jack = false;
+	
 	target_Main = NULL;
 
 	for(int i=mapWidthOutlineBegin;i<mapWidthOutlineEnd;i++)

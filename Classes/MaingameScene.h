@@ -468,7 +468,8 @@ private:
 	
 	void moveGamePosition(CCPoint t_p)
 	{
-		game_node->setPosition(getObjectToGameNodePosition(t_p));
+		if(!myGD->is_setted_jack || myGD->game_step == kGS_unlimited)
+			game_node->setPosition(getObjectToGameNodePosition(t_p));
 	}
 	
 	void goldGettingEffect(CCPoint t_p, int t_i)
@@ -555,6 +556,86 @@ private:
 	{
 		mySD->exchangeSilhouette();
 		myMS->exchangeMS();
+	}
+	
+	void setLimitMap()
+	{
+		myGD->game_step = kGS_limited;
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		
+		float screen_to_map_center_y = (-game_node->getPositionY() + 240.f*screen_size.height/screen_size.width)/game_node->getScale();
+		
+		int screen_to_map_top = floorf((screen_to_map_center_y + 240.f*screen_size.height/screen_size.width/game_node->getScale())/2.f);
+		int screen_to_map_bottom = ceilf((screen_to_map_center_y - 240.f*screen_size.height/screen_size.width/game_node->getScale())/2.f);
+		
+		myGD->limited_step_top = screen_to_map_top;
+		myGD->limited_step_bottom = screen_to_map_bottom;
+		
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		{
+			if(j < screen_to_map_bottom || j > screen_to_map_top)
+			{
+				for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+				{
+					myGD->mapState[i][j] = mapOutline;
+				}
+			}
+		}
+	}
+	
+	CCPoint limitted_map_position;
+	int changing_game_step_frame;
+	void setUnlimitMap()
+	{
+		myGD->game_step = kGS_changing;
+		
+		showAreaScroll();
+		
+		limitted_map_position = game_node->getPosition();
+		myGD->communication("VS_setLimittedMapPosition");
+		
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		{
+			if(j < myGD->limited_step_bottom || j > myGD->limited_step_top)
+			{
+				for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+				{
+					myGD->mapState[i][j] = mapEmpty;
+				}
+			}
+		}
+		changing_game_step_frame = 0;
+		schedule(schedule_selector(Maingame::changingGameStep));
+	}
+	
+	void changingGameStep()
+	{
+		changing_game_step_frame++;
+		gameNodeChangingGameStep(limitted_map_position, changing_game_step_frame);
+		myGD->communication("VS_changingGameStep", changing_game_step_frame);
+		
+		if(changing_game_step_frame >= 15)
+		{
+			unschedule(schedule_selector(Maingame::changingGameStep));
+			myGD->game_step = kGS_unlimited;
+		}
+	}
+	
+	void gameNodeChangingGameStep(CCPoint t_p, int t_step)
+	{
+		IntPoint jack_point = myGD->getJackPoint();
+		CCPoint jack_position = jack_point.convertToCCP();
+		jack_position = getObjectToGameNodePosition(jack_position);
+		
+		CCPoint after_position = ccpAdd(limitted_map_position, ccpMult(ccpSub(jack_position, t_p), t_step/15.f));
+		game_node->setPosition(after_position);
+	}
+	
+	void showAreaScroll()
+	{
+		AreaScroll* t_w = AreaScroll::create();
+		addChild(t_w, goldZorder);
+		t_w->startAction();
 	}
 };
 

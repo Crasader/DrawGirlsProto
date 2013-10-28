@@ -270,8 +270,17 @@ void Jack::moveTest()
 			
 			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
 			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			
+			if(myGD->game_step == kGS_limited)
+			{
+				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
+				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
+			}
+			else
+			{
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			}
 			
 			setPosition(turnPosition);
 		}
@@ -294,8 +303,17 @@ void Jack::moveTest()
 			
 			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
 			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			
+			if(myGD->game_step == kGS_limited)
+			{
+				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
+				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
+			}
+			else
+			{
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			}
 			
 			setPosition(turnPosition);
 		}
@@ -308,8 +326,17 @@ void Jack::moveTest()
 			
 			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
 			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			
+			if(myGD->game_step == kGS_limited)
+			{
+				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
+				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
+			}
+			else
+			{
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			}
 			
 			setPosition(turnPosition);
 		}
@@ -339,8 +366,17 @@ void Jack::moveTest()
 			
 			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
 			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			
+			if(myGD->game_step == kGS_limited)
+			{
+				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
+				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
+			}
+			else
+			{
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			}
 			
 			setPosition(turnPosition);
 		}
@@ -361,8 +397,17 @@ void Jack::moveTest()
 			
 			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
 			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			
+			if(myGD->game_step == kGS_limited)
+			{
+				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
+				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
+			}
+			else
+			{
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			}
 			
 			setPosition(turnPosition);
 		}
@@ -383,8 +428,17 @@ void Jack::moveTest()
 			
 			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
 			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			
+			if(myGD->game_step == kGS_limited)
+			{
+				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
+				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
+			}
+			else
+			{
+				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
+				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
+			}
 			
 			setPosition(turnPosition);
 		}

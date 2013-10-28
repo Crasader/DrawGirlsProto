@@ -7,68 +7,68 @@
 //
 
 #include "MapScanner.h"
+#include <chrono>
+#include <ctime>
 
 void MapScanner::scanMap()
 {
-	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
-	{
-		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
-		{
-			if(myGD->mapState[i][j] == mapNewline)
-			{
-				if(myGD->mapState[i-1][j] == mapEmpty && myGD->mapState[i+1][j] == mapEmpty &&
-				   myGD->mapState[i][j-1] == mapEmpty && myGD->mapState[i][j+1] == mapEmpty)
-					myGD->mapState[i][j] = mapEmpty;
-			}
-		}
-	}
-	
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
-	
-	if(!mainCumberPoint.isNull())
-		bfsCheck(mapEmpty, mapScaningEmptyCumber, mainCumberPoint); // main cumber
+//	chrono::time_point<chrono::system_clock> start, end;
+//	chrono::duration<double> elapsed_seconds;
+//	start = chrono::system_clock::now();
 	
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		if(myGD->mapState[i][mapHeightInnerBegin] == mapEmpty)
 			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
-		if(myGD->mapState[i][mapHeightInnerBegin] == mapScaningEmptyCumber)
-			bfsCheck(mapScaningEmptyCumber, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
 		if(myGD->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
 			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
-		if(myGD->mapState[i][mapHeightInnerEnd-1] == mapScaningEmptyCumber)
-			bfsCheck(mapScaningEmptyCumber, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
 	}
+	
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLog("process step 1 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
+	
 	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 	{
 		if(myGD->mapState[mapWidthInnerBegin][j] == mapEmpty)
 			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(mapWidthInnerBegin, j));
-		if(myGD->mapState[mapWidthInnerBegin][j] == mapScaningEmptyCumber)
-			bfsCheck(mapScaningEmptyCumber, mapScaningEmptySide, IntPoint(mapWidthInnerBegin, j));
 		if(myGD->mapState[mapWidthInnerEnd-1][j] == mapEmpty)
 			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(mapWidthInnerEnd-1, j));
-		if(myGD->mapState[mapWidthInnerEnd-1][j] == mapScaningEmptyCumber)
-			bfsCheck(mapScaningEmptyCumber, mapScaningEmptySide, IntPoint(mapWidthInnerEnd-1, j));
 	}
 	
-	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLog("process step 2 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
+	
+	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+	
+	// locked main cumber then reverse
+	if(!mainCumberPoint.isNull() && myGD->mapState[mainCumberPoint.x][mainCumberPoint.y] == mapEmpty) // != mapScaningEmptySide
 	{
+		bfsCheck(mapEmpty, mapScaningEmptySide, mainCumberPoint); // main cumber
+		
+		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+		{
+			if(myGD->mapState[i][mapHeightInnerBegin] == mapScaningEmptySide)
+				bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, mapHeightInnerBegin));
+			if(myGD->mapState[i][mapHeightInnerEnd-1] == mapScaningEmptySide)
+				bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, mapHeightInnerEnd-1));
+		}
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{
-			if(myGD->mapState[i][j] == mapBlock)
-			{
-				for(int k=-1;k<=1;k++)
-				{
-					for(int l=-1;l<=1;l++)
-					{
-						if(k == 1 && l == 1)	continue;
-						if(myGD->mapState[i+k][j+l] == mapEmpty)
-							bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i+k,j+l));
-					}
-				}
-			}
+			if(myGD->mapState[mapWidthInnerBegin][j] == mapScaningEmptySide)
+				bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerBegin, j));
+			if(myGD->mapState[mapWidthInnerEnd-1][j] == mapScaningEmptySide)
+				bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerEnd-1, j));
 		}
 	}
+	
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLog("process step 3 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	// new inside check
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -80,28 +80,10 @@ void MapScanner::scanMap()
 		}
 	}
 	
-	// Cumber reverse()
-	{
-		if(!mainCumberPoint.isNull() && myGD->mapState[mainCumberPoint.x][mainCumberPoint.y] == mapScaningEmptyCumber)
-		{
-			bfsCheck(mapScaningEmptyCumber, mapScaningEmptySide, mainCumberPoint);
-			
-			for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
-			{
-				if(myGD->mapState[i][mapHeightInnerBegin] == mapScaningEmptySide)
-					bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, mapHeightInnerBegin));
-				if(myGD->mapState[i][mapHeightInnerEnd-1] == mapScaningEmptySide)
-					bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, mapHeightInnerEnd-1));
-			}
-			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
-			{
-				if(myGD->mapState[mapWidthInnerBegin][j] == mapScaningEmptySide)
-					bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerBegin, j));
-				if(myGD->mapState[mapWidthInnerEnd-1][j] == mapScaningEmptySide)
-					bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerEnd-1, j));
-			}
-		}
-	}
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLog("process step 4 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	// outside recovery and new inside add show
 	int newInsideCnt = 0;
@@ -130,10 +112,9 @@ void MapScanner::scanMap()
 		}
 	}
 	
-	// inside line delete
-	for(int i=mapWidthInnerBegin+1;i<mapWidthInnerEnd-1;i++)
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
-		for(int j=mapHeightInnerBegin+1;j<mapHeightInnerEnd-1;j++)
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{
 			if(myGD->mapState[i][j] == mapOldline &&
 			   myGD->mapState[i-1][j] != mapEmpty && myGD->mapState[i-1][j+1] != mapEmpty &&
@@ -141,41 +122,56 @@ void MapScanner::scanMap()
 			   myGD->mapState[i][j-1] != mapEmpty && myGD->mapState[i+1][j+1] != mapEmpty &&
 			   myGD->mapState[i+1][j] != mapEmpty && myGD->mapState[i+1][j-1] != mapEmpty &&
 			   
-			   myGD->mapState[i-1][j] != mapBlock && myGD->mapState[i-1][j+1] != mapBlock &&
-			   myGD->mapState[i-1][j-1] != mapBlock && myGD->mapState[i][j+1] != mapBlock &&
-			   myGD->mapState[i][j-1] != mapBlock && myGD->mapState[i+1][j+1] != mapBlock &&
-			   myGD->mapState[i+1][j] != mapBlock && myGD->mapState[i+1][j-1] != mapBlock)
+			   myGD->mapState[i-1][j] != mapOutline && myGD->mapState[i-1][j+1] != mapOutline &&
+			   myGD->mapState[i-1][j-1] != mapOutline && myGD->mapState[i][j+1] != mapOutline &&
+			   myGD->mapState[i][j-1] != mapOutline && myGD->mapState[i+1][j+1] != mapOutline &&
+			   myGD->mapState[i+1][j] != mapOutline && myGD->mapState[i+1][j-1] != mapOutline)
 			{
 				myGD->mapState[i][j] = mapOldget;
-			}
-			
-			if(myGD->mapState[i][j] == mapBlock)
-			{
-				if(myGD->mapState[i+1][j] == mapOldget)					myGD->mapState[i+1][j] = mapOldline;
-				if(myGD->mapState[i+1][j-1] == mapOldget)				myGD->mapState[i+1][j-1] = mapOldline;
-				if(myGD->mapState[i+1][j+1] == mapOldget)				myGD->mapState[i+1][j+1] = mapOldline;
-				if(myGD->mapState[i][j-1] == mapOldget)					myGD->mapState[i][j-1] = mapOldline;
-				if(myGD->mapState[i][j+1] == mapOldget)					myGD->mapState[i][j+1] = mapOldline;
-				if(myGD->mapState[i-1][j] == mapOldget)					myGD->mapState[i-1][j] = mapOldline;
-				if(myGD->mapState[i-1][j-1] == mapOldget)				myGD->mapState[i-1][j-1] = mapOldline;
-				if(myGD->mapState[i-1][j+1] == mapOldget)				myGD->mapState[i-1][j+1] = mapOldline;
 			}
 		}
 	}
 	
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLog("process step 5 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
+	
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
-		if(myGD->mapState[i][mapHeightInnerBegin] != mapEmpty && myGD->mapState[i][mapHeightInnerBegin] != mapBlock)
+		if(myGD->mapState[i][mapHeightInnerBegin] != mapEmpty && myGD->mapState[i][mapHeightInnerBegin] != mapOutline)
 			myGD->mapState[i][mapHeightInnerBegin] = mapOldline;
-		if(myGD->mapState[i][mapHeightInnerEnd-1] != mapEmpty && myGD->mapState[i][mapHeightInnerEnd-1] != mapBlock)
+		if(myGD->mapState[i][mapHeightInnerEnd-1] != mapEmpty && myGD->mapState[i][mapHeightInnerEnd-1] != mapOutline)
 			myGD->mapState[i][mapHeightInnerEnd-1] = mapOldline;
 	}
 	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 	{
-		if(myGD->mapState[mapWidthInnerBegin][j] != mapEmpty && myGD->mapState[mapWidthInnerBegin][j] != mapBlock)
+		if(myGD->mapState[mapWidthInnerBegin][j] != mapEmpty && myGD->mapState[mapWidthInnerBegin][j] != mapOutline)
 			myGD->mapState[mapWidthInnerBegin][j] = mapOldline;
-		if(myGD->mapState[mapWidthInnerEnd-1][j] != mapEmpty && myGD->mapState[mapWidthInnerEnd-1][j] != mapBlock)
+		if(myGD->mapState[mapWidthInnerEnd-1][j] != mapEmpty && myGD->mapState[mapWidthInnerEnd-1][j] != mapOutline)
 			myGD->mapState[mapWidthInnerEnd-1][j] = mapOldline;
+	}
+	
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLog("process step 6 / time : %f", elapsed_seconds.count());
+	
+	if(myGD->game_step == kGS_limited)
+	{
+		int total_cell = 0;
+		int getted_cell = 0;
+		for(int j=myGD->limited_step_bottom;j<=myGD->limited_step_top;j++)
+		{
+			for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+			{
+				total_cell++;
+				if(myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline)
+					getted_cell++;
+			}
+		}
+		
+		if(1.f*getted_cell/total_cell > 0.4f)
+			myGD->communication("Main_setUnlimitMap");
 	}
 	
 	// new inside score add
@@ -195,7 +191,7 @@ void MapScanner::scanMap()
 	resetRects();
 }
 
-void MapScanner::resetRects()
+void* MapScanner::thrFunction(void* data)
 {
 	// view rects reset
 	CCArray* rects = CCArray::createWithCapacity(1);
@@ -211,7 +207,40 @@ void MapScanner::resetRects()
 		}
 	}
 	
-	visibleImg->setDrawRects(rects);
+	return (void*)rects;
+}
+
+void MapScanner::resetRects()
+{
+	pthread_t p_thread;
+	int thr_id;
+	CCArray* rv;
+	// 쓰레드 생성 아규먼트로 1 을 넘긴다.
+	thr_id = pthread_create(&p_thread, NULL, thrFunction, NULL);
+	if (thr_id < 0)
+	{
+		perror("thread create error : ");
+		exit(0);
+	}
+	pthread_join(p_thread, (void**)&rv);
+	
+	visibleImg->setDrawRects(rv);
+	
+//	// view rects reset
+//	CCArray* rects = CCArray::createWithCapacity(1);
+//	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+//	{
+//		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+//		{
+//			if(myGD->mapState[i][j] == mapOldline || myGD->mapState[i][j] == mapOldget)
+//			{
+//				IntRect* t_rect = newRectChecking(IntMoveState(i, j, directionRightUp));
+//				rects->addObject(t_rect);
+//			}
+//		}
+//	}
+//	
+//	visibleImg->setDrawRects(rects);
 	
 	float drawCellCnt = 0;
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)

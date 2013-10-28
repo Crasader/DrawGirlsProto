@@ -1885,9 +1885,9 @@ public:
 	
 	void startFever()
 	{
-		for(int i=15;i<mapHeightInnerEnd;i+=17)
+		for(int i=6;i<mapHeightInnerEnd;i+=12)
 		{
-			for(int j=4;j<mapWidthInnerEnd;j+=17)
+			for(int j=2;j<mapWidthInnerEnd;j+=12)
 			{
 				if(myGD->mapState[j][i] == mapEmpty)
 				{
