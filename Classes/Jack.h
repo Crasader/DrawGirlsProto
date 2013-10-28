@@ -1168,7 +1168,7 @@ private:
 				}
 				else
 				{
-					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::endGame));
+					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
 				}
 			}
 		}

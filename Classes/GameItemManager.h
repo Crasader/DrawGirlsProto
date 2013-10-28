@@ -1650,6 +1650,11 @@ public:
 		coin_img->runAction(t_seq);
 	}
 	
+	void stopMoving()
+	{
+		unschedule(schedule_selector(ExchangeCoin::moving));
+	}
+	
 private:
 	int myType;
 	CCObject* target_ui;
@@ -1763,10 +1768,6 @@ private:
 		move_speed = 1.f;
 	}
 	
-	void stopMoving()
-	{
-		unschedule(schedule_selector(ExchangeCoin::moving));
-	}
 	
 	void myInit(int t_type, CCObject* t_ui, SEL_CallFuncI d_takeExchangeCoin)
 	{
@@ -2053,6 +2054,17 @@ public:
 		}
 	}
 	
+	void stopCoin()
+	{
+		int loop_cnt = coin_parent->getChildrenCount();
+		CCArray* child = coin_parent->getChildren();
+		for(int i=0;i<loop_cnt;i++)
+		{
+			ExchangeCoin* t_ec = (ExchangeCoin*)child->objectAtIndex(i);
+			t_ec->stopMoving();
+		}
+	}
+	
 private:
 	
 	int counting_value;
@@ -2167,6 +2179,7 @@ private:
 		myGD->V_V["GIM_dieCreateItem"] = std::bind(&GameItemManager::dieCreateItem, this);
 		myGD->V_V["GIM_startFever"] = std::bind(&FeverCoinParent::startFever, fever_coin_parent);
 		myGD->V_V["GIM_stopFever"] = std::bind(&FeverCoinParent::stopFever, fever_coin_parent);
+		myGD->V_V["GIM_stopCoin"] = std::bind(&GameItemManager::stopCoin, this);
 	}
 };
 

@@ -69,15 +69,21 @@ private:
 		end_menu->setPosition(ccp(158,myDSH->ui_center_y-60));
 		addChild(end_menu, kCPL_Z_menu);
 		
-		CCSprite* n_continue = CCSprite::create("cpl_continue.png");
-		CCSprite* s_continue = CCSprite::create("cpl_continue.png");
-		s_continue->setColor(ccGRAY);
+		CCSprite* continue_img = CCSprite::create("cpl_continue.png");
+		continue_img->setColor(ccc3(100, 100, 100));
+		addChild(continue_img, kCPL_Z_menu);
+		
+		CCSprite* n_continue = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+		n_continue->setOpacity(0);
+		CCSprite* s_continue = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+		s_continue->setOpacity(0);
+//		s_continue->setColor(ccGRAY);
 		
 		CCMenuItem* continue_item = CCMenuItemSprite::create(n_continue, s_continue, this, menu_selector(ContinuePopup::menuAction));
 		continue_item->setTag(kCPL_MT_continue);
 		
 		continue_menu = CCMenu::createWithItem(continue_item);
-		continue_menu->setPosition(ccp(330,myDSH->ui_center_y-60));
+		continue_menu->setPosition(ccp(15,myDSH->ui_top-15));
 		addChild(continue_menu, kCPL_Z_menu);
 		
 		is_menu_enable = true;

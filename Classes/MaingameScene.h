@@ -642,8 +642,8 @@ private:
 	int shake_frame;
 	void startShake()
 	{
-		shake_frame = 0;
-		schedule(schedule_selector(Maingame::shaking), 1.f/20.f);
+//		shake_frame = 0;
+//		schedule(schedule_selector(Maingame::shaking), 1.f/20.f);
 	}
 	
 	void shaking()

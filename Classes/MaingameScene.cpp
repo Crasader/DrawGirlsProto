@@ -36,6 +36,9 @@ bool Maingame::init()
 	
 	setKeypadEnabled(true);
 	
+	auto load_obj1 = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
+	auto load_obj2 = KS::loadCCBI<CCSprite*>(this, "fx_bossdie.ccbi");
+	
 	isCheckingBacking = false;
 	
 	init_state = kMIS_beforeInit;
