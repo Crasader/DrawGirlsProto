@@ -600,7 +600,8 @@ private:
 			{
 				for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 				{
-					myGD->mapState[i][j] = mapEmpty;
+					if(myGD->mapState[i][j] == mapOutline)
+						myGD->mapState[i][j] = mapEmpty;
 				}
 			}
 		}

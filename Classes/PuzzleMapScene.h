@@ -233,17 +233,28 @@ private:
 		
 		if(ing_caching_cnt >= total_caching_cnt)
 		{
-			if(after_map_node)
+			ing_caching_cnt = -100;
+			int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+			int found_index = -1;
+			for(int i=0;i<puzzle_cnt && found_index == -1;i++)
 			{
-				after_map_node->removeChildByTag(99999);
-				after_map_node->removeChildByTag(99998);
-				switchMapNode(after_map_node);
+				if(recent_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
+					found_index = i+1;
 			}
-			else
+			if(NSDS_GI(kSDS_GI_puzzleList_int1_version_i, found_index) <= NSDS_GI(recent_puzzle_number, kSDS_PZ_version_i))
 			{
-				map_node->removeChildByTag(99999);
-				map_node->removeChildByTag(99998);
-				switchMapNode(map_node);
+				if(after_map_node)
+				{
+					after_map_node->removeChildByTag(99999);
+					after_map_node->removeChildByTag(99998);
+					switchMapNode(after_map_node);
+				}
+				else
+				{
+					map_node->removeChildByTag(99999);
+					map_node->removeChildByTag(99998);
+					switchMapNode(map_node);
+				}
 			}
 		}
 		else
