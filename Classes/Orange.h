@@ -130,7 +130,7 @@ public:
 		return m_headImg->getPositionY();
 	}
 	
-	COLLISION_CODE crashWithX(IntPoint check_position);
+
 	COLLISION_CODE crashLooper(const set<IntPoint>& v, IntPoint* cp);
 	
 //	void showEmotion(EmotionType t_type)

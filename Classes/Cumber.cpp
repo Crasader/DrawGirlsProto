@@ -15,7 +15,6 @@
 #include "Blueberry.h"
 #include "Cherry.h"
 #include "Mango.h"
-#include "Bear.h"
 #include "Apricot.h"
 #include "Grape.h"
 #include "Kiwi.h"
@@ -24,6 +23,7 @@
 #include "Peach.h"
 #include "Pear.h"
 #include "ServerDataSave.h"
+#include "KSJuniorBase.h"
 
 void CumberParent::onStartGame()
 {
@@ -170,10 +170,12 @@ void CumberParent::subCumberBomb()
 
 void CumberParent::subCumberReplication()
 {
+	// 복제할 타입의 몬스터를 저장을 안해놔서 일단은 만약 쓰게 된다면 고쳐야됨.
+	// Bear 만 생성하게 해놈.
 	int cnt = subCumberArray->count();
 	for(int i = 0;i<cnt;i++)
 	{
-		Bear* t_sc = (Bear*)subCumberArray->objectAtIndex(i);
+		KSCumberBase* t_sc = (Bear*)subCumberArray->objectAtIndex(i);
 		CCPoint t_p = t_sc->getPosition();
 		Bear* t_sc2 = Bear::create();
 		addChild(t_sc2);
@@ -356,8 +358,28 @@ void CumberParent::createSubCumber(IntPoint s_p)
 	//## if(junior.m_jrType)
 	//## 에 따라 분기 해야됨.
 	
-	
-	Bear* t_SC = Bear::create();
+	KSCumberBase* t_SC;
+	switch(junior.m_jrType)
+	{
+		case 1001:
+			t_SC = Bear::create();
+			break;
+		case 1002:
+			t_SC = Cat::create();
+			break;
+		case 1003:
+			t_SC = Cow::create();
+			break;
+		case 1004:
+			t_SC = Dog::create();
+			break;
+		case 1005:
+			t_SC = Rabbit::create();
+			break;
+		case 1006:
+			t_SC = Wolf::create();
+			break;
+	}
 	t_SC->settingHp(junior.m_jrHp);
 	t_SC->settingScale(junior.m_jrStartScale, junior.m_jrMinScale, junior.m_jrMaxScale);
 	t_SC->settingSpeed(junior.m_jrStartSpeed, junior.m_jrMinSpeed, junior.m_jrMaxSpeed);
@@ -610,7 +632,29 @@ void CumberParent::myInit()
 					  drawMovement, furyMovement, hp);
 			m_juniors.push_back(jt);
 			
-			Bear* t_SC = Bear::create();
+			KSCumberBase* t_SC;
+			switch(bossType)
+			{
+				case 1001:
+					t_SC = Bear::create();
+					break;
+				case 1002:
+					t_SC = Cat::create();
+					break;
+				case 1003:
+					t_SC = Cow::create();
+					break;
+				case 1004:
+					t_SC = Dog::create();
+					break;
+				case 1005:
+					t_SC = Rabbit::create();
+					break;
+				case 1006:
+					t_SC = Wolf::create();
+					break;
+			}
+			
 			t_SC->settingHp(hp);
 			t_SC->settingScale(startScale, minScale, maxScale);
 			t_SC->settingSpeed(startSpeed, minSpeed, maxSpeed);

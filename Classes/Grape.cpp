@@ -183,40 +183,6 @@ void Grape::onStartGame()
 	CCLog("onStartGame!!");
 }
 
-
-COLLISION_CODE Grape::crashWithX(IntPoint check_position)
-{
-	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
-	   check_position.y < mapLoopRange::mapHeightInnerBegin || check_position.y >= mapLoopRange::mapHeightInnerEnd )
-	{
-		// 나갔을 시.
-		return COLLISION_CODE::kCOLLISION_OUTLINE;
-	}
-	
-	// 이미 그려진 곳에 충돌했을 경우.
-	if(myGD->mapState[check_position.x][check_position.y] == mapOldline ||
-	   myGD->mapState[check_position.x][check_position.y] == mapOldget)
-	{
-		return COLLISION_CODE::kCOLLISION_MAP;
-	}
-	
-	if(myGD->mapState[check_position.x][check_position.y] == mapNewline)
-	{
-		return COLLISION_CODE::kCOLLISION_NEWLINE;
-	}
-	IntPoint jackPoint = myGD->getJackPoint();
-	if(jackPoint.x == check_position.x && jackPoint.y == check_position.y)
-	{
-		return COLLISION_CODE::kCOLLISION_JACK;
-	}
-	
-	
-	
-	
-	
-	return COLLISION_CODE::kCOLLISION_NONE;
-	
-}
 COLLISION_CODE Grape::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)

@@ -10,19 +10,19 @@
 using namespace cocos2d::extension;
 
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Bear : public KSCumberBase
+class KSJuniorBase : public KSCumberBase
 {
 public:
-	Bear() : RADIUS(15.f),// mEmotion(nullptr),
+	KSJuniorBase() : RADIUS(15.f),// mEmotion(nullptr),
 	
-
+	
 	teleportImg(NULL) // 텔레포트 이미지
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
-	virtual ~Bear(){}
+	virtual ~KSJuniorBase(){}
 	
-
+	virtual std::string ccbiName() = 0;
 	
 	
 	virtual void onStartMoving()
@@ -36,13 +36,12 @@ public:
 	}
 	void cumberAttack(float dt);
 	virtual bool init();
-	CREATE_FUNC(Bear);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
 		//		CCLog("setPos %f %f", t_sp.x, t_sp.y);
 		//		KSCumberBase::setPosition(t_sp);
 		m_headImg->setPosition(t_sp);
-//		myGD->setMainCumberPoint(ccp2ip(t_sp));
+		//		myGD->setMainCumberPoint(ccp2ip(t_sp));
 		m_mapPoint = ccp2ip(t_sp);
 		//		myGD->communication("Main_moveGamePosition", t_sp);
 		//		myGD->communication("VS_setMoveGamePosition", t_sp);
@@ -64,21 +63,21 @@ public:
 		return m_headImg->getPosition();
 	}
 	
-	COLLISION_CODE crashWithX(IntPoint check_position);
+
 	COLLISION_CODE crashLooper(const set<IntPoint>& v, IntPoint* cp);
 	const float RADIUS;
-//	void showEmotion(EmotionType t_type)
-//	{
-//		if(mEmotion)
-//			mEmotion->selfRemove();
-//		mEmotion = Emotion::create(t_type, this, callfunc_selector(Bear::nullmEmotion));
-//		mEmotion->setPosition(ccp(30,20));
-//		addChild(mEmotion);
-//	}
-//	void nullmEmotion()
-//	{
-//		mEmotion = NULL;
-//	}
+	//	void showEmotion(EmotionType t_type)
+	//	{
+	//		if(mEmotion)
+	//			mEmotion->selfRemove();
+	//		mEmotion = Emotion::create(t_type, this, callfunc_selector(KSJuniorBase::nullmEmotion));
+	//		mEmotion->setPosition(ccp(30,20));
+	//		addChild(mEmotion);
+	//	}
+	//	void nullmEmotion()
+	//	{
+	//		mEmotion = NULL;
+	//	}
 	bool startDamageReaction(float damage, float angle);
 	virtual void attackBehavior(Json::Value pattern)
 	{
@@ -88,7 +87,7 @@ public:
 	virtual void startAnimationNoDirection();
 	void damageReaction(float dt);
 	void animationNoDirection(float dt);
-//	virtual void startAnimationDirection(){}
+	//	virtual void startAnimationDirection(){}
 	virtual void onStartGame();
 	//	virtual void onEndGame();
 	virtual void onPatternEnd();
@@ -116,7 +115,7 @@ public:
 	virtual void furyModeOn(int tf);
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
-
+	
 	virtual void crashMapForPosition(CCPoint targetPt);
 	
 	
@@ -152,7 +151,7 @@ public:
 		addChild(teleportImg);
 		
 		CCBlink* t_scale = CCBlink::create(0.5, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Bear::smaller));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSJuniorBase::smaller));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -162,7 +161,7 @@ public:
 	virtual void smaller()
 	{
 		CCBlink* t_scale = CCBlink::create(0.5, 8);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Bear::randomPosition));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSJuniorBase::randomPosition));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 		
@@ -174,7 +173,7 @@ public:
 	}
 	virtual void stopAnimationDirection()
 	{
-//		m_direction.state = 2;
+		//		m_direction.state = 2;
 	}
 	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition){
 		IntPoint afterPoint = point;
@@ -198,7 +197,7 @@ public:
 	}
 protected:
 	CCSprite* teleportImg;
-
+	
 	
 	bool isGameover;
 	int lastCastNum;
@@ -207,10 +206,10 @@ protected:
 	CCBAnimationManager *mAnimationManager;
 	IntPoint getMapPoint(CCPoint c){
 		return IntPoint(round((c.x - 1) / pixelSize + 1.f),
-						round((c.y - 1) / pixelSize + 1.f));
+										round((c.y - 1) / pixelSize + 1.f));
 	}
 	
-//	Emotion* mEmotion;
+	//	Emotion* mEmotion;
 	/// 방사형 에니메이션 용.
 	struct NoDirection
 	{
@@ -229,10 +228,72 @@ protected:
 		float timer;
 	}m_damageData;
 	
-
+	
 	
 	
 	
 	
 };
+
+
+/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
+class Bear : public KSJuniorBase
+{
+public:
+	std::string ccbiName() { return "mob_bear.ccbi"; }
+	CREATE_FUNC(Bear);
+	
+};
+
+/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
+class Cat : public KSJuniorBase
+{
+public:
+	std::string ccbiName() { return "mob_cat.ccbi"; }
+	CREATE_FUNC(Cat);
+	
+};
+
+
+/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
+class Cow : public KSJuniorBase
+{
+public:
+	std::string ccbiName() { return "mob_cow.ccbi"; }
+	CREATE_FUNC(Cow);
+	
+};
+
+
+
+/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
+class Dog : public KSJuniorBase
+{
+public:
+	std::string ccbiName() { return "mob_dog.ccbi"; }
+	CREATE_FUNC(Dog);
+	
+};
+
+/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
+class Rabbit : public KSJuniorBase
+{
+public:
+	std::string ccbiName() { return "mob_bear.ccbi"; }
+	CREATE_FUNC(Rabbit);
+	
+};
+
+
+/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
+class Wolf : public KSJuniorBase
+{
+public:
+	std::string ccbiName() { return "mob_bear.ccbi"; }
+	CREATE_FUNC(Wolf);
+	
+};
+
+
+
 
