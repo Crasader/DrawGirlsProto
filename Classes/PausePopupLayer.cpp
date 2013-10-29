@@ -133,7 +133,8 @@ void PausePopupLayer::resetControlMenu()
 	CCMenuItem* gesture_item = CCMenuItemImage::create((gesture_filename+"normal.png").c_str(), (gesture_filename+"selected.png").c_str(), this, menu_selector(PausePopupLayer::menuAction));
 	gesture_item->setTag(kMenuTagPPL_slow);
 	slow_menu = CCMenu::createWithItem(gesture_item);
-	slow_menu->setEnabled(jack_base_speed != 1.2f);
+//	slow_menu->setEnabled(jack_base_speed != 1.2f);
+	slow_menu->setEnabled(false);
 	slow_menu->setPosition(ccp(main_case->getContentSize().width/2.f-95,125));
 	main_case->addChild(slow_menu);
 	
@@ -141,6 +142,7 @@ void PausePopupLayer::resetControlMenu()
 	button_item->setTag(kMenuTagPPL_normal);
 	normal_menu = CCMenu::createWithItem(button_item);
 	normal_menu->setEnabled(jack_base_speed != 1.5f);
+	normal_menu->setEnabled(false);
 	normal_menu->setPosition(ccp(main_case->getContentSize().width/2.f,125));
 	main_case->addChild(normal_menu);
 	
@@ -148,6 +150,7 @@ void PausePopupLayer::resetControlMenu()
 	joystick_item->setTag(kMenuTagPPL_fast);
 	fast_menu = CCMenu::createWithItem(joystick_item);
 	fast_menu->setEnabled(jack_base_speed != 2.f);
+	fast_menu->setEnabled(false);
 	fast_menu->setPosition(ccp(main_case->getContentSize().width/2.f+95,125));
 	main_case->addChild(fast_menu);
 	

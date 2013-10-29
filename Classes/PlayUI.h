@@ -226,6 +226,10 @@ public:
 			ing_fever = true;
 			recent_count = 20;
 			
+			fever_top->setPercentage(100.f);
+			
+			fever_top->getSprite()->setColor(ccGREEN);
+			
 			myLog->addLog(kLOG_show_fever, myGD->getCommunication("UI_getUseTime"));
 			myGD->communication("GIM_startFever");
 			
@@ -280,7 +284,7 @@ public:
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 			runAction(t_seq);
 			
-			CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+			CCProgressFromTo* progress_to = CCProgressFromTo::create(10.f, 100.f, 0.f);
 			fever_top->runAction(progress_to);
 		}
 		else
@@ -304,6 +308,8 @@ private:
 	{
 		ing_fever = false;
 		recent_count = 0;
+		
+		fever_top->getSprite()->setColor(ccWHITE);
 		
 		myGD->communication("GIM_stopFever");
 		
@@ -975,10 +981,10 @@ public:
 			{
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
-				myGD->communication("Main_percentageGettingEffect", t_p*100.f, true, jackPosition);
+				myGD->communication("Main_percentageGettingEffect", (t_p-t_beforePercentage)*100.f, true, jackPosition);
 			}
 			
-			if(t_p >= t_beforePercentage + 0.01f)
+			if(t_p >= t_beforePercentage + 0.01f && t_p < clearPercentage)
 			{
 				int up_count = (t_p - t_beforePercentage)/0.01f;
 				my_fp->addFeverGage(up_count);
@@ -1056,7 +1062,7 @@ public:
 			myGD->communication("Main_showTakeCoin");
 		}
 		
-//		percentageLabel->setString(CCString::createWithFormat("%.1f", floorf(t_p*10000.f)/10000.f*100.f)->getCString());
+		percentageLabel->setString(CCString::createWithFormat("%.1f", floorf(t_p*10000.f)/10000.f*100.f)->getCString());
 		
 		int item_value = mySGD->getWidePerfectValue();
 		
@@ -1069,6 +1075,8 @@ public:
 		
 		if(!isGameover && t_p > clearPercentage) // clear 80%
 		{
+			myGD->communication("GIM_stopCoin");
+			
 			if(clr_cdt_type == kCLEAR_timeLimit)
 			{
 				if(playtime_limit - countingCnt >= ing_cdt_cnt)
@@ -1143,6 +1151,9 @@ public:
 	
 	void takeExchangeCoin(int t_coin_number)
 	{
+		if(isGameover)
+			return;
+		
 		if(clr_cdt_type == kCLEAR_sequenceChange && !isGameover)
 		{
 			if(!mySGD->isUsingItem(kIC_randomChange) && t_coin_number != ing_cdt_cnt)
@@ -1435,7 +1446,7 @@ private:
 	
 	GoldLabel* gold_label;
 	CCLabelBMFont* score_label;
-//	CCLabelBMFont* percentageLabel;
+	CCLabelBMFont* percentageLabel;
 	CCLabelBMFont* countingLabel;
 	
 	CCSprite* result_sprite;
@@ -1634,13 +1645,13 @@ private:
 		percentage_p->setPosition(ccp(250,440));
 		addChild(percentage_p);
 		
-//		percentageLabel = CCLabelBMFont::create("0", "etc_font.fnt");
-//		percentageLabel->setAnchorPoint(ccp(1.0, 0.5));
-//		if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
-//		else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
-//		else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-20));
-//		
-//		addChild(percentageLabel);
+		percentageLabel = CCLabelBMFont::create("0", "etc_font.fnt");
+		percentageLabel->setAnchorPoint(ccp(1.0, 0.5));
+		if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
+		else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
+		else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
+		
+		addChild(percentageLabel);
 		
 		
 //		CCSprite* counting_tiem = CCSprite::create("maingame_time.png");

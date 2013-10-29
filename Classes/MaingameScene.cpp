@@ -36,6 +36,9 @@ bool Maingame::init()
 	
 	setKeypadEnabled(true);
 	
+	auto load_obj1 = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
+	auto load_obj2 = KS::loadCCBI<CCSprite*>(this, "fx_bossdie.ccbi");
+	
 	isCheckingBacking = false;
 	
 	init_state = kMIS_beforeInit;
@@ -62,6 +65,7 @@ bool Maingame::init()
 	myGD->V_V["Main_startMoveToBossPosition"] = std::bind(&Maingame::startMoveToBossPosition, this);
 	myGD->CCN_V["Main_gameNodePointer"] = std::bind(&Maingame::gameNodePointer, this);
 	myGD->V_V["Main_setUnlimitMap"] = std::bind(&Maingame::setUnlimitMap, this);
+	myGD->V_V["Main_startShake"] = std::bind(&Maingame::startShake, this);
 	mControl = NULL;
 	is_line_die = false;
 	

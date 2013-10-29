@@ -22,6 +22,13 @@ void MapScanner::scanMap()
 			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
 		if(myGD->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
 			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
+		if(myGD->game_step == kGS_limited)
+		{
+			if(myGD->mapState[i][myGD->limited_step_top] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, myGD->limited_step_top));
+			if(myGD->mapState[i][myGD->limited_step_bottom] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, myGD->limited_step_bottom));
+		}
 	}
 	
 //	end = chrono::system_clock::now();
