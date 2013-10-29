@@ -83,8 +83,11 @@ public:
 		param["memberNo"] = hspConnector::get()->getHSPMemberNo();
 		
 		Json::Value contents;
-		for(int i=0;i<getLogCount();i++)
-			contents[i] = getLog(kLOG_data, i);
+		int loop_cnt = getLogCount();
+		for(int i=1;i<=loop_cnt;i++)
+		{
+			contents[i-1] = getLog(kLOG_data, i);
+		}
 		
 		param["content"] = contents;
 		param["category"] = t_category.c_str();
