@@ -3778,18 +3778,18 @@ public:
 			CCSize t_mSize = CCSize(4.f, 4.f);
 			if(angle == angle2)
 			{
-				MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(m_position, angle, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize);
+				MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize, 0, 0);
 				batchNode->addChild(t_mu);
 			}
 			else
 			{
-				MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(m_position, angle, m_bulletSpeed,
-														imgFileName.c_str(), t_mSize);
+				MissileUnit* t_mu = MissileUnit::create(m_position, angle, m_bulletSpeed,
+														imgFileName.c_str(), t_mSize, 0, 0);
 				batchNode->addChild(t_mu);
 				
-				MathmaticalMissileUnit* t_mu2 = MathmaticalMissileUnit::create(m_position, angle2, m_bulletSpeed,
-														 imgFileName.c_str(), t_mSize);
+				MissileUnit* t_mu2 = MissileUnit::create(m_position, angle2, m_bulletSpeed,
+														 imgFileName.c_str(), t_mSize, 0, 0);
 				batchNode->addChild(t_mu2);
 			}
 			

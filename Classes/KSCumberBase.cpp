@@ -1122,12 +1122,12 @@ void KSCumberBase::cumberAttack(float dt)
 	}
 	else
 	{
-		const float originalAttackProb = m_attackPercent / 100.f;
+		const float originalAttackProb = m_attackPercent / 100;
 		float attackProb = originalAttackProb;
 		// 선을 긋고 있을 땐 공격확률 높임 X2 까지.
 		if(myGD->getJackState() == jackStateDrawing)
 		{
-			attackProb += originalAttackProb * (m_aiValue / 100);
+			attackProb += originalAttackProb * (m_aiValue / 100.f);
 		}
 		
 		// 많이 맞았으면 공격확률 높임.
@@ -1317,4 +1317,76 @@ void KSCumberBase::bossDieBomb(float dt)
 	}
 }
 
+void KSCumberBase::getRandomPosition(IntPoint* ip, bool* finded)
+{
+	bool isGoodPointed = false;
+	
+	IntPoint mapPoint;
+	vector<IntPoint> shuffledPositions;
+	for(int x = 1; x <= mapLoopRange::mapWidthInnerEnd - 1; x++)
+	{
+		for(int y = 1; y <= mapLoopRange::mapHeightInnerEnd - 1; y++)
+		{
+			shuffledPositions.push_back(IntPoint(x, y));
+		}
+	}
+	
+	random_shuffle(shuffledPositions.begin(), shuffledPositions.end(), [=](int n){
+		return this->m_well512.GetValue(n-1);
+	});
+	for(auto& mp : shuffledPositions)
+	{
+		mapPoint = mp;
+		
+		float myScale = getCumberScale();
+		if(mapPoint.isInnerMap() && myGD->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
+		{
+			float half_distance = getRadius()*myScale; // 20.f : radius for base scale 1.f
+			float calc_distance;
+			IntPoint check_position;
+			
+			bool is_not_position = false;
+			
+			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
+			{
+				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
+				{
+					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
+					if(calc_distance < half_distance)
+					{
+						check_position = IntPoint(i,j);
+						if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
+						{
+							is_not_position = true;
+						}
+					}
+				}
+			}
+			if(!is_not_position)
+			{
+				isGoodPointed = true;
+				break;
+			}
+		}
+	}
+	
+	if(isGoodPointed == true)
+	{
+		*ip = mapPoint;
+		*finded = true;
+		//		CCLog("map point %d %d", mapPoint.x, mapPoint.y);
+		//		CCLog("scale %f", m_headImg->getScale());
+		//		CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
+		//		m_headImg->runAction(t_scale);
+		//		myGD->setMainCumberPoint(mapPoint);
+		//
+		//		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
+	}
+	else
+	{
+		*finded = false;
+		// nothing.
+		CCAssert(false, "");
+	}
+}
 

@@ -445,6 +445,8 @@ public:
 		}
 		return closedBoss;
 	}
+	void getRandomPosition(IntPoint* ip, bool* finded);
+	virtual float getRadius() = 0;
 protected:
 		
 	struct BossDie
@@ -452,7 +454,7 @@ protected:
 		std::vector<int> m_bossDieBombFrameNumbers;
 		int m_bossDieFrameCount;
 	}m_bossDie;
-	
+
 	std::vector<Json::Value> m_attacks; // 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	CUMBER_STATE m_state;
