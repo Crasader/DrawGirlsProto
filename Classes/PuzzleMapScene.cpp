@@ -252,11 +252,89 @@ CCSprite* PuzzleMapScene::addShadow(int i, string t_type, CCPoint sp_position)
 	return t_shadow;
 }
 
+void PuzzleMapScene::puzzleAction(CCObject *sender)
+{
+	if(!puzzle_list_view->isTouchEnabled())		return;
+	
+	puzzle_list_view->setTouchEnabled(false);
+	puzzle_list_view->touchCancel();
+	
+	int tag = ((CCNode*)sender)->getTag();
+	
+	CCLog("touched puzzle number : %d", tag);
+	
+	recent_puzzle_number = tag;
+	
+	map_mode_state = kMMS_changeMode;
+	is_menu_enable = false;
+	
+	after_map_node = createMapNode();
+	after_map_node->setPosition(ccp(240,180));
+	main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
+	
+	if(after_map_node->getTag() == kPMS_MT_loaded)
+	{
+		after_map_node->setTag(-1);
+		
+		cachingPuzzleImg();
+		
+		endLoadedMovingMapNode();
+	}
+	else
+	{
+		after_map_node->setTag(-1);
+		CCSprite* loading_back = CCSprite::create("whitePaper.png");
+		loading_back->setColor(ccGRAY);
+		loading_back->setOpacity(100);
+		loading_back->setPosition(ccp(240,160));
+		addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
+		
+		endMovingMapNode();
+	}
+	
+	is_gesturable_map_mode = false;
+	
+	showEventButton();
+	
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
+	
+	CCScaleTo* t_scale = CCScaleTo::create(0.45f, map_node->getScaleX(), map_node->getScaleX());
+	map_node->runAction(t_scale);
+	
+	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(0,0));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::stopReturnUiMode));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+	main_node->runAction(t_seq);
+	
+//	recent_puzzle_number = tag;
+	// change map_node
+	// up table
+}
+
 void PuzzleMapScene::setUIs()
 {
-	CCSprite* ui_frame = CCSprite::create("test_ui_back_frame.png");
-	ui_frame->setPosition(ccp(240,160+340));
-	main_node->addChild(ui_frame, kPMS_Z_main);
+	puzzle_list_view = PuzzleListView::create();
+	puzzle_list_view->setPosition(ccp(0,340));
+	main_node->addChild(puzzle_list_view, kPMS_Z_main);
+	
+	int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	for(int i=1;i<=puzzle_cnt;i++)
+	{
+		CCPoint positioning_data = ccp(-153.f, 68.f);
+		if(i%2 == 0)
+			positioning_data.y *= -1.f;
+		positioning_data.x += 153.f*((i-1)/2);
+		
+		PLV_Node* t_node = PLV_Node::create(i, this, menu_selector(PuzzleMapScene::puzzleAction), ccpAdd(ccp(240, 160), positioning_data), puzzle_list_view->getViewRect());
+		puzzle_list_view->addChild(t_node, 0, t_node->getPuzzleNumber());
+	}
+	
+	puzzle_list_view->setMinPositionX();
+	puzzle_list_view->setTouchEnabled(false);
+	
+//	CCSprite* ui_frame = CCSprite::create("test_ui_back_frame.png");
+//	ui_frame->setPosition(ccp(240,160+340));
+//	main_node->addChild(ui_frame, kPMS_Z_main);
 	
 	CCSprite* ui_back = CCSprite::create("test_ui_back_table.png");
 	ui_back->setPosition(ccp(240,160));
@@ -560,6 +638,8 @@ void PuzzleMapScene::startChangeFrameMode()
 	map_mode_state = kMMS_changeMode;
 	is_menu_enable = false;
 	
+	puzzle_list_view->startViewCheck();
+	
 	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(false);
 	
 	CCScaleTo* t_scale = CCScaleTo::create(0.45f, map_node->getScaleX(), map_node->getScaleY()-0.65f);
@@ -576,12 +656,18 @@ void PuzzleMapScene::stopChangeFrameMode()
 {
 	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 	
+	puzzle_list_view->stopViewCheck();
+	puzzle_list_view->setTouchEnabled(true);
+	
 	map_mode_state = kMMS_frameMode;
 	is_menu_enable = true;
 }
 
 void PuzzleMapScene::startReturnUiMode()
 {
+	puzzle_list_view->setTouchEnabled(false);
+	puzzle_list_view->touchCancel();
+	
 	is_gesturable_map_mode = false;
 	map_mode_state = kMMS_changeMode;
 	is_menu_enable = false;

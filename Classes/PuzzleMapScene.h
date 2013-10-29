@@ -15,9 +15,12 @@
 #include "hspConnector.h"
 #include "ServerDataSave.h"
 #include "StageListDown.h"
+#include "PuzzleListView.h"
+#include "cocos-ext.h"
 
 USING_NS_CC;
 using namespace std;
+using namespace extension;
 
 enum MapModeState
 {
@@ -173,6 +176,8 @@ private:
 	
 	bool is_gesturable_map_mode;
 	
+	CCTableView* frame_table_view;
+	
 	void loadSuccess();
 	
 	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
@@ -244,6 +249,7 @@ private:
 				if(recent_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
 					found_index = i+1;
 			}
+			
 			if(NSDS_GI(kSDS_GI_puzzleList_int1_version_i, found_index) <= NSDS_GI(recent_puzzle_number, kSDS_PZ_version_i))
 			{
 				if(after_map_node)
@@ -262,7 +268,7 @@ private:
 				}
 			}
 		}
-		else
+		else if(!cache_list.empty())
 			mySIL->addImageAsync(cache_list[ing_caching_cnt].c_str(), this, callfuncO_selector(PuzzleMapScene::cachedPuzzleImg));
 	}
 	
@@ -413,7 +419,8 @@ private:
 				else														t_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
 			}
 		}
-		map_mode_state = kMMS_uiMode;
+		if(map_mode_state == kMMS_notLoadMode)
+			map_mode_state = kMMS_uiMode;
 	}
 	
 	void endLoadedMovingMapNode()
@@ -436,6 +443,19 @@ private:
 	{
 		if(map_mode_state == kMMS_changeMode)
 			map_mode_state = kMMS_notLoadMode;
+		else
+			map_mode_state = kMMS_uiMode;
+		is_menu_enable = true;
+	}
+	
+	void endDirectChangePuzzle()
+	{
+		((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(true);
+		
+		if(map_mode_state == kMMS_changeMode)
+			map_mode_state = kMMS_notLoadMode;
+		else
+			map_mode_state = kMMS_uiMode;
 		is_menu_enable = true;
 	}
 	
@@ -552,6 +572,9 @@ private:
 	}
 	
 	virtual void registerWithTouchDispatcher(void);
+	
+	PuzzleListView* puzzle_list_view;
+	void puzzleAction(CCObject* sender);
 };
 
 

@@ -970,7 +970,7 @@ public:
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
 			
-			myLog->addLog(kLOG_get_percent, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
+			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
 			int item_value = mySGD->getSmallAreaValue();
 			
@@ -1405,6 +1405,10 @@ public:
 		if(before_combo < combo_cnt)
 		{
 			my_combo->showCombo(t_combo);
+		}
+		else
+		{
+			myLog->addLog(kLOG_endCombo_i, myGD->getCommunication("UI_getUseTime"), before_combo);
 		}
 	}
 	
@@ -2010,7 +2014,9 @@ private:
 	
 	void goHome()
 	{
-		myLog->sendLog("home");
+		myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
+		
+		myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 		AudioEngine::sharedInstance()->stopSound();
 		closeShutter();
 	}

@@ -77,34 +77,13 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				}
 			}
 			
-			Json::Value event_list = result_data["eventList"];
-			int el_length = event_list.size();
-			NSDS_SI(kSDS_GI_eventCount_i, el_length);
-			for(int i=0;i<el_length;i++)
-			{
-				int event_code = event_list[i]["no"].asInt();
-				NSDS_SI(kSDS_GI_event_int1_code_i, i, event_code);
-				Json::Value thumbnail = event_list[i]["thumbnail"];
-				if(NSDS_GS(kSDS_GI_event_int1_thumbnail_s, i) != thumbnail["image"].asString())
-				{
-					// check, after download ----------
-					DownloadFile t_df;
-					t_df.size = thumbnail["size"].asInt();
-					t_df.img = thumbnail["image"].asString().c_str();
-					t_df.filename = CCSTR_CWF("event%d_thumbnail.png", i)->getCString();
-					t_df.key = CCSTR_CWF("event%d_thumbnail", i)->getCString();
-					ef_list.push_back(t_df);
-					// ================================
-				}
-			}
-			
-			if(df_list.size() + ef_list.size() > 0) // need download
+			if(df_list.size() > 0) // need download
 			{
 				download_version = result_data["version"].asInt();
 				state_ment->setString("퍼즐 이미지를 다운로드 합니다.");
 				ing_download_cnt = 1;
 				ing_download_per = 0;
-				download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+ef_list.size()))->getCString(), "etc_font.fnt");
+				download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString(), "etc_font.fnt");
 				download_state->setPosition(ccp(240,130));
 				addChild(download_state, kSLD_Z_content);
 				is_downloading = true;
@@ -157,7 +136,7 @@ void StageListDown::menuAction(CCObject *sender)
 		removeChildByTag(kSLD_MT_redown);
 		state_ment->setString("퍼즐 이미지를 다운로드 합니다.");
 		ing_download_per = 0;
-		download_state->setString(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+ef_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		is_downloading = true;
 		startDownload();
 	}
@@ -165,15 +144,12 @@ void StageListDown::menuAction(CCObject *sender)
 
 void StageListDown::successAction()
 {
-	if(ing_download_cnt <= df_list.size())
-		SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
-	else
-		SDS_SS(kSDF_gameInfo, ef_list[ing_download_cnt-df_list.size()-1].key, ef_list[ing_download_cnt-df_list.size()-1].img);
+	SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
 
-	if(ing_download_cnt >= df_list.size()+ef_list.size())
+	if(ing_download_cnt >= df_list.size())
 	{
 		NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version);
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()+ef_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		state_ment->setString("퍼즐 이미지 다운로드 완료.");
 		(target_success->*delegate_success)();
 		removeFromParent();
@@ -182,7 +158,7 @@ void StageListDown::successAction()
 	{
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+ef_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		startDownload();
 	}
 }
@@ -212,22 +188,13 @@ void StageListDown::downloadingAction()
 	
 	ing_download_per = t_per;
 	
-	download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+ef_list.size()))->getCString());
+	download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 }
 
 void StageListDown::startDownload()
 {
-	if(ing_download_cnt <= df_list.size())
-	{
-		CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
-		StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename, this, callfunc_selector(StageListDown::successAction), this, callfunc_selector(StageListDown::failAction));
-	}
-	else
-	{
-		CCLog("%d : %s", ing_download_cnt, ef_list[ing_download_cnt-df_list.size()-1].filename.c_str());
-		StageImgLoader::sharedInstance()->downloadImg(ef_list[ing_download_cnt-df_list.size()-1].img, ef_list[ing_download_cnt-df_list.size()-1].size,
-													  ef_list[ing_download_cnt-df_list.size()-1].filename, this, callfunc_selector(StageListDown::successAction), this, callfunc_selector(StageListDown::failAction));
-	}
+	CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+	StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename, this, callfunc_selector(StageListDown::successAction), this, callfunc_selector(StageListDown::failAction));
 	
 	schedule(schedule_selector(StageListDown::downloadingAction));
 }

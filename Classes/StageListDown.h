@@ -57,7 +57,6 @@ private:
 	int download_version;
 	
 	vector<DownloadFile> df_list;
-	vector<DownloadFile> ef_list;
 	
 	void myInit(CCObject* t_success, SEL_CallFunc d_success, int t_puzzle)
 	{

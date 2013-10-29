@@ -116,6 +116,8 @@ public:
 	void mySetTouchEnable(bool t_b)
 	{
 		s_menu->setTouchEnabled(t_b);
+		if(piece_img)
+			setTouchCancel();
 //		if(t_b)
 //			s_menu->setHandlerPriority(kCCMenuHandlerPriority+2);
 	}

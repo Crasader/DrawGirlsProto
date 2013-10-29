@@ -287,6 +287,7 @@ void Jack::moveTest()
 		// main direction drawing
 		else if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty && isDrawingOn) // main drawing start
 		{
+			myGD->communication("CP_onJackDrawLine");
 			// path add
 			if(is_end_turn)
 			{

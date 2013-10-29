@@ -22,11 +22,14 @@ enum LOG_KEY
 {
 	kLOG_count = 0,
 	kLOG_data,
-	kLOG_get_percent,
+	kLOG_getPercent_f,
 	kLOG_die_missileToLine,
 	kLOG_die_shockwave,
 	kLOG_die_other,
-	kLOG_show_fever
+	kLOG_show_fever,
+	kLOG_endCombo_i,
+	kLOG_attackPattern_i,
+	kLOG_getCoin_i
 };
 
 class LogData : public CCObject
@@ -64,6 +67,14 @@ public:
 		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_percent)->getCString());
 		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
 	}
+	void addLog(LOG_KEY t_key, int t_time, int t_i1)
+	{
+		int log_count = getLogCount();
+		log_count++;
+		
+		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_i1)->getCString());
+		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
+	}
 	
 	void sendLog(string t_category)
 	{
@@ -96,11 +107,14 @@ private:
 		
 		if(t_key == kLOG_count)						rv = "count";
 		else if(t_key == kLOG_data)					rv = "data%d";
-		else if(t_key == kLOG_get_percent)			rv = "time_%d_get_percent%.3f";
+		else if(t_key == kLOG_getPercent_f)			rv = "time_%d_getPercent_%.3f";
 		else if(t_key == kLOG_die_missileToLine)	rv = "time_%d_die_missileToLine";
 		else if(t_key == kLOG_die_shockwave)		rv = "time_%d_die_shockwave";
 		else if(t_key == kLOG_die_other)			rv = "time_%d_die_other";
 		else if(t_key == kLOG_show_fever)			rv = "time_%d_show_fever";
+		else if(t_key == kLOG_endCombo_i)			rv = "time_%d_endCombo_%d";
+		else if(t_key == kLOG_attackPattern_i)		rv = "time_%d_attackPattern_%d";
+		else if(t_key == kLOG_getCoin_i)			rv = "time_%d_getCoin_%d";
 		
 		return rv.c_str();
 	}

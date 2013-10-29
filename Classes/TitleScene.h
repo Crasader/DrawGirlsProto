@@ -16,6 +16,7 @@
 #include "ServerDataSave.h"
 #include "StarGoldData.h"
 #include "LogData.h"
+#include "StageImgLoader.h"
 
 USING_NS_CC;
 using namespace std;
@@ -41,12 +42,29 @@ public:
 private:
 	
 	CCLabelTTF* state_label;
+	CCLabelBMFont* download_state;
+	
+	int ing_download_cnt;
+	float ing_download_per;
+	
+	bool is_downloading;
+	int download_version;
+	
+	bool successed_get_puzzle_list;
 	
 	void startGetPuzzleList()
 	{
-		Json::Value param;
-		param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
-		hspConnector::get()->command("getpuzzlelist", param, json_selector(this, TitleScene::resultGetPuzzleList));
+		vector<CommandParam> cmds;
+		Json::Value param1;
+		param1["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
+		CommandParam cmd1 = CommandParam("getpuzzlelist", param1, json_selector(this, TitleScene::resultGetPuzzleList));
+		cmds.push_back(cmd1);
+		
+		Json::Value param2;
+		param2["version"] = NSDS_GI(kSDS_GI_eventListVersion_i);
+		CommandParam cmd2 = CommandParam("geteventstagelist", param2, json_selector(this, TitleScene::resultGetEventStageList));
+		cmds.push_back(cmd2);
+		hspConnector::get()->command(cmds);
 	}
 	
 	void resultLogin(Json::Value result_data)
@@ -63,12 +81,95 @@ private:
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	
+	vector<DownloadFile> ef_list;
+	
+	void resultGetEventStageList(Json::Value result_data)
+	{
+		CCLog("resultGetEventStageList data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		
+		if(result_data["state"].asString() == "ok")
+		{
+			if(result_data["version"] > NSDS_GI(kSDS_GI_eventListVersion_i))
+			{
+				Json::Value event_list = result_data["list"];
+				int el_length = event_list.size();
+				NSDS_SI(kSDS_GI_eventCount_i, el_length);
+				for(int i=0;i<el_length;i++)
+				{
+					int event_code = event_list[i]["no"].asInt();
+					NSDS_SI(kSDS_GI_event_int1_code_i, i, event_code);
+					Json::Value thumbnail = event_list[i]["thumbnail"];
+					if(NSDS_GS(kSDS_GI_event_int1_thumbnail_s, i) != thumbnail["image"].asString())
+					{
+						// check, after download ----------
+						DownloadFile t_df;
+						t_df.size = thumbnail["size"].asInt();
+						t_df.img = thumbnail["image"].asString().c_str();
+						t_df.filename = CCSTR_CWF("event%d_thumbnail.png", i)->getCString();
+						t_df.key = CCSTR_CWF("event%d_thumbnail", i)->getCString();
+						ef_list.push_back(t_df);
+						// ================================
+					}
+				}
+				
+				if(ef_list.size() > 0) // need download
+				{
+					download_version = result_data["version"].asInt();
+					state_label->setString("이벤트 정보를 받아옵니다.");
+					ing_download_cnt = 1;
+					ing_download_per = 0;
+					download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(ef_list.size()))->getCString(), "etc_font.fnt");
+					download_state->setPosition(ccp(240,130));
+					addChild(download_state);
+					is_downloading = true;
+					startDownload();
+				}
+				else
+					endingAction();
+			}
+			else
+				endingAction();
+		}
+		else
+		{
+			if(successed_get_puzzle_list)
+				endingAction();
+			else
+			{
+				state_label->setString("퍼즐 목록을 받아오는데 실패하였습니다. 재시도 해주세요.");
+				
+				CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,120,70));
+				CCLabelTTF* n_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
+				n_label->setColor(ccBLACK);
+				n_label->setPosition(ccp(60,35));
+				n_replay->addChild(n_label);
+				
+				CCSprite* s_replay = CCSprite::create("whitePaper.png", CCRectMake(0, 0,120,70));
+				s_replay->setColor(ccGRAY);
+				CCLabelTTF* s_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
+				s_label->setColor(ccBLACK);
+				s_label->setPosition(ccp(60,35));
+				s_replay->addChild(s_label);
+				
+				CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+				replay_item->setTag(kTitle_MT_replay);
+				
+				CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+				replay_menu->setPosition(ccp(240,160));
+				addChild(replay_menu, 0, kTitle_MT_replay);
+				
+				is_menu_enable = true;
+			}
+		}
+	}
+
 	void resultGetPuzzleList(Json::Value result_data)
 	{
 		CCLog("resultGetPuzzleList data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 		
 		if(result_data["state"].asString() == "ok")
 		{
+			successed_get_puzzle_list = true;
 			if(result_data["version"] > NSDS_GI(kSDS_GI_puzzleListVersion_i))
 			{
 				Json::Value puzzle_list = result_data["list"];
@@ -84,11 +185,6 @@ private:
 				}
 				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["version"].asInt());
 			}
-			
-			CCDelayTime* t_delay = CCDelayTime::create(0.2f);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleScene::changeScene));
-			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-			runAction(t_seq);
 		}
 		else
 		{
@@ -140,6 +236,62 @@ private:
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
 			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 		}
+	}
+	
+	
+	void successAction()
+	{
+		SDS_SS(kSDF_gameInfo, ef_list[ing_download_cnt-1].key, ef_list[ing_download_cnt-1].img);
+		
+		if(ing_download_cnt >= ef_list.size())
+		{
+			NSDS_SI(kSDS_GI_eventListVersion_i, download_version);
+			download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(ef_list.size()))->getCString());
+			state_label->setString("이벤트 정보 다운로드 완료.");
+			
+			endingAction();
+		}
+		else
+		{
+			ing_download_cnt++;
+			ing_download_per = 0.f;
+			download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(ef_list.size()))->getCString());
+			startDownload();
+		}
+	}
+	
+	void failAction()
+	{
+		endingAction();
+	}
+	
+	void downloadingAction()
+	{
+		float t_per = StageImgLoader::sharedInstance()->getDownloadPercentage();
+		
+		if(t_per < 0.f)			t_per = 0.f;
+		else if(t_per > 1.f)	t_per = 1.f;
+		
+		ing_download_per = t_per;
+		
+		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(ef_list.size()))->getCString());
+	}
+	
+	void startDownload()
+	{
+		CCLog("%d : %s", ing_download_cnt, ef_list[ing_download_cnt-1].filename.c_str());
+		StageImgLoader::sharedInstance()->downloadImg(ef_list[ing_download_cnt-1].img, ef_list[ing_download_cnt-1].size,
+													  ef_list[ing_download_cnt-1].filename, this, callfunc_selector(TitleScene::successAction), this, callfunc_selector(TitleScene::failAction));
+		
+		schedule(schedule_selector(TitleScene::downloadingAction));
+	}
+	
+	void endingAction()
+	{
+		CCDelayTime* t_delay = CCDelayTime::create(0.2f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleScene::changeScene));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+		runAction(t_seq);
 	}
 };
 

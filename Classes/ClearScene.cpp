@@ -57,12 +57,14 @@ bool ClearScene::init()
 	
 	setKeypadEnabled(true);
 	
+	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
+	
 	Json::Value param;
 	param["key"] = CCSTR_CWF("stage_clear_%d", mySD->getSilType())->getCString();
 	
 	hspConnector::get()->command("increaseStats", param, NULL);
 	
-	myLog->sendLog("clear");
+	myLog->sendLog(CCString::createWithFormat("clear_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)
