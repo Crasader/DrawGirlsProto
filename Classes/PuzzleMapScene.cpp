@@ -1148,7 +1148,24 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					if(location.y > touchStart_p.y + 50.f)
 					{
 						touchStart_p = location;
-						startReturnUiMode();
+						
+						int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+						int found_index = -1;
+						for(int i=0;i<puzzle_cnt && found_index == -1;i++)
+						{
+							if(recent_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
+								found_index = i+1;
+						}
+						
+						if(NSDS_GI(kSDS_GI_puzzleList_int1_version_i, found_index) > NSDS_GI(recent_puzzle_number, kSDS_PZ_version_i))
+						{
+							CCNode* t_node = CCNode::create();
+							t_node->setTag(recent_puzzle_number);
+							puzzleAction(t_node);
+						}
+						else
+							startReturnUiMode();
+						
 						multiTouchData.erase((int)touch);
 					}
 				}
