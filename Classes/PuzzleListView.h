@@ -68,18 +68,27 @@ private:
 	
 	void setChild()
 	{
-		CCSprite* n_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 148, 130));
-		CCLabelTTF* n_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", puzzle_number)->getCString(), mySGD->getFont().c_str(), 30);
-		n_number_label->setColor(ccBLACK);
-		n_number_label->setPosition(ccp(74,65));
-		n_back->addChild(n_number_label);
+		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+		int found_index = 0;
+		for(int i=1;i<=puzzle_count && found_index == 0;i++)
+		{
+			int puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+			if(puzzle_no == puzzle_number)
+				found_index = i;
+		}
 		
-		CCSprite* s_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 148, 130));
+		CCSprite* n_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
+//		CCLabelTTF* n_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", puzzle_number)->getCString(), mySGD->getFont().c_str(), 30);
+//		n_number_label->setColor(ccBLACK);
+//		n_number_label->setPosition(ccp(74,65));
+//		n_back->addChild(n_number_label);
+		
+		CCSprite* s_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
 		s_back->setColor(ccGRAY);
-		CCLabelTTF* s_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", puzzle_number)->getCString(), mySGD->getFont().c_str(), 30);
-		s_number_label->setColor(ccBLACK);
-		s_number_label->setPosition(ccp(74,65));
-		s_back->addChild(s_number_label);
+//		CCLabelTTF* s_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", puzzle_number)->getCString(), mySGD->getFont().c_str(), 30);
+//		s_number_label->setColor(ccBLACK);
+//		s_number_label->setPosition(ccp(74,65));
+//		s_back->addChild(s_number_label);
 		
 		CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, target_menu, delegate_menu);
 		back_item->setTag(puzzle_number);
@@ -102,7 +111,7 @@ private:
 		
 		setPosition(my_position);
 		
-		my_size = CCSizeMake(148, 130);
+		my_size = CCSizeMake(135, 115);
 		is_setted = false;
 		
 		CCRect tt_rect = CCRectMake(my_position.x-my_size.width/2.f, my_position.y-my_size.height/2.f, my_size.width, my_size.height);
