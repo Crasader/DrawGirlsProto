@@ -6,7 +6,6 @@ void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
 	m_step = 1;
 	m_totalFrame = 600;
 	
-
 	vector<IntPoint> oldLines;
 	
 	for(int y=0; y<mapLoopRange::mapHeightInnerEnd; y++)
@@ -23,10 +22,12 @@ void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
 				if(m_directions.find(ip) != m_directions.end())
 					continue;
 				bfs.push(AlongPath(ip, IntPoint(0, 1)));
+				
 				while(1)
 				{
 					auto path = bfs.front();
 					bfs.pop();
+					CCLog("path == %d %d, %d %d", path.point.x, path.point.y, ip.x, ip.y);
 					IntPoint left(-1, 0);
 					if(path.direction == IntPoint(-1, 0))
 					{
@@ -75,10 +76,12 @@ void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
 						IntPoint checkPoint4 = path.point + bottom;
 						if(checkPoint4 == ip)
 							break;
-						bfs.push(AlongPath(checkPoint4, bottom));	
+						
+						if(myGD->mapState[checkPoint4.x][checkPoint4.y] == mapType::mapOldline)
+							bfs.push(AlongPath(checkPoint4, bottom));	
 					}
 				}
-				
+				CCLog("end while");
 			}
 		}
 	}

@@ -13,9 +13,7 @@ using namespace cocos2d::extension;
 class KSJuniorBase : public KSCumberBase
 {
 public:
-	KSJuniorBase() : RADIUS(15.f),// mEmotion(nullptr),
-
-	teleportImg(NULL) // 텔레포트 이미지
+	KSJuniorBase() : RADIUS(15.f)
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
@@ -199,7 +197,7 @@ public:
 		return RADIUS;
 	}
 protected:
-	CCSprite* teleportImg;
+
 	
 	
 	bool isGameover;

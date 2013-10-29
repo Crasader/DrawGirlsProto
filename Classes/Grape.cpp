@@ -248,15 +248,7 @@ void Grape::randomPosition()
 	m_headImg->runAction(t_scale);
 	
 	
-	{
-		CCScaleTo* t_scale = CCScaleTo::create(0.2, 1.f);
-		CCCallFunc* t_call = CCCallFunc::create(this,
-												callfunc_selector(KSCumberBase::lightSmaller));
-		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-		
-		runAction(t_seq);
-	}
+	lightSmaller();
 	
 }
 

@@ -22,10 +22,7 @@ using namespace cocos2d::extension;
 class Coconut : public KSCumberBase
 {
 public:
-	Coconut() : RADIUS(15.f),// mEmotion(nullptr),
-	
-
-		teleportImg(NULL) // 텔레포트 이미지
+	Coconut() : RADIUS(15.f)
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
@@ -88,10 +85,19 @@ public:
 	bool startDamageReaction(float damage, float angle);
 	virtual void attackBehavior(Json::Value pattern)
 	{
-		lastCastNum = m_well512.GetValue(1, 3);
-		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
-		if(!(pattern["pattern"].asString() == "109"))
+		if(pattern["pattern"].asString() == "109")
 		{
+			m_state = CUMBERSTATESTOP;
+		}
+		else if( pattern["pattern"].asString() == "1007")
+		{
+			m_state = CUMBERSTATESTOP;
+		}
+		else
+		{
+			lastCastNum = m_well512.GetValue(1, 3);
+			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
+			
 			std::string target = pattern.get("target", "no").asString();
 			if( target == "yes") // 타게팅이라면 조준하라
 				startAnimationDirection();
@@ -139,12 +145,13 @@ public:
 
 	virtual void lightSmaller()
 	{
-		CCScaleTo* t_scale = CCScaleTo::create(0.2, 0.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSCumberBase::endTeleport));
-		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-		if(teleportImg)
-			teleportImg->runAction(t_seq);
+//		CCScaleTo* t_scale = CCScaleTo::create(0.2, 0.f);
+		endTeleport();
+//		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSCumberBase::endTeleport));
+//		
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+//		if(teleportImg)
+//			teleportImg->runAction(t_seq);
 	}
 	
 	virtual void endTeleport()
@@ -216,7 +223,7 @@ public:
 		return RADIUS;
 	}
 protected:
-	CCSprite* teleportImg;
+	
 
 	
 	bool isGameover;
