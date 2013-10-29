@@ -201,7 +201,7 @@ public:
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
 	
-	virtual void getRandomPosition(IntPoint* ip, bool* finded);
+
 	
 	virtual void lightSmaller(){}
 	
@@ -289,6 +289,10 @@ public:
 		}
 		
 		return collisionCode;
+	}
+	float getRadius()
+	{
+		return RADIUS;
 	}
 protected:
 

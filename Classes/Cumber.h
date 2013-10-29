@@ -44,6 +44,7 @@ public:
 	}
 	
 	void setMainCumberState(int t_cs); // no used
+	void onJackDrawLine();
 	void onStartGame();
 	void onPatternEnd();
 	void allStopSchedule(); //  used

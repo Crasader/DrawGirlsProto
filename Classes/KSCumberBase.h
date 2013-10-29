@@ -255,10 +255,7 @@ public:
 			{
 				movingBranch(m_drawMovement);
 			}
-		}
-		
-		
-		
+		}		
 	}
 	
 	virtual void cumberAttack(float dt);
@@ -281,6 +278,7 @@ public:
 	virtual void startTeleport() = 0;
 	virtual void smaller() = 0;
 	virtual void onTargetingJack(CCPoint jackPosition){}
+	
 	COLLISION_CODE crashWithX(IntPoint check_position)
 	{
 		if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
@@ -341,18 +339,12 @@ public:
 		float gainPercent;
 		float userDistance;
 		float percent;
-		
-		// ltPercent 보다 작고 gtCount 보다 클 때 분노함.
-		float ltPercent;
-		float gtCount;
 	}m_furyRule;
-	void settingFuryRule(Json::Value fury)
+	void settingFuryRule()
 	{
-		m_furyRule.gainPercent = fury["gainpercent"].asDouble();
-		m_furyRule.userDistance = fury["userdistance"].asDouble();
-		m_furyRule.percent = fury["percent"].asDouble();
-		m_furyRule.ltPercent = fury["ltpercent"].asDouble();
-		m_furyRule.gtCount = fury["gtcount"].asDouble();
+		m_furyRule.gainPercent = 40; //fury["gainpercent"].asDouble();
+		m_furyRule.userDistance = 350; // fury["userdistance"].asDouble();
+		m_furyRule.percent = aiProbAdder();// fury["percent"].asDouble();
 //		m_furyRule
 	}
 	void settingAI(int ai)
@@ -445,6 +437,12 @@ public:
 		}
 		return closedBoss;
 	}
+	void getRandomPosition(IntPoint* ip, bool* finded);
+	virtual float getRadius() = 0;
+	float aiProbAdder(){
+		return (0.02f + (0.5f - 0.02f) * m_aiValue / 100.f)/100.f;
+	}
+	void onJackDrawLine();
 protected:
 		
 	struct BossDie
@@ -452,7 +450,7 @@ protected:
 		std::vector<int> m_bossDieBombFrameNumbers;
 		int m_bossDieFrameCount;
 	}m_bossDie;
-	
+
 	std::vector<Json::Value> m_attacks; // 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	CUMBER_STATE m_state;

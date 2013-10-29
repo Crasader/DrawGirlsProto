@@ -60,6 +60,21 @@ void CumberParent::setMainCumberState(int t_cs)
 //		i->setCumberState(t_cs);
 }
 
+void CumberParent::onJackDrawLine()
+{
+	for(auto mainCumber : mainCumbers)
+		mainCumber->onJackDrawLine();
+	
+	int loop_cnt = subCumberArray->count();
+	for(int i=0;i<loop_cnt;i++)
+	{
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+		t_sc->onJackDrawLine();
+		//		t_sc->stopMoving();
+	}
+	
+	
+}
 void CumberParent::allStopSchedule()
 {
 	//##
@@ -447,6 +462,7 @@ void CumberParent::myInit()
 	
 	
 	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
+	myGD->V_V["CP_onJackDrawLine"] = std::bind(&CumberParent::onJackDrawLine, this);
 	myGD->V_CCO["CP_removeSubCumber"] = std::bind(&CumberParent::removeSubCumber, this, _1);
 	myGD->I_V["CP_getSubCumberCount"] = std::bind(&CumberParent::getSubCumberCount, this);
 	myGD->V_Ip["CP_createSubCumber"] = std::bind(&CumberParent::createSubCumber, this, _1);
@@ -499,14 +515,10 @@ void CumberParent::myInit()
 	float startScale = boss["scale"]["start"].asDouble(); // getNumberFromJsonValue(scale["start"]);
 	float maxScale = boss["scale"]["max"].asDouble(); // getNumberFromJsonValue(scale["max"]);
 	
-	int normalMovement = boss["movement"]["normal"].asInt();
-	int drawMovement = boss["movement"]["draw"].asInt();
-	int furyMovement = boss["movement"]["fury"].asInt();
+	int normalMovement = boss["movement"].get("normal",1).asInt();
+	int drawMovement = boss["movement"].get("draw", normalMovement).asInt();
+	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
 	
-	if(furyMovement == 0)
-	{
-		furyMovement = normalMovement;
-	}
 	KSCumberBase* mainCumber;
 	switch(bossType)
 	{
@@ -560,7 +572,7 @@ void CumberParent::myInit()
 	mainCumber->settingHp(hp);
 	KS::KSLog("%", boss);
 	mainCumber->settingAI(boss.get("ai", 0).asInt());
-	mainCumber->settingFuryRule(boss["fury"]);
+	mainCumber->settingFuryRule();
 	mainCumber->settingScale(startScale, minScale, maxScale);
 	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
 	mainCumber->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement,

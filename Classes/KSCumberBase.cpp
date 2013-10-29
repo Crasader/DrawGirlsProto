@@ -1084,17 +1084,11 @@ void KSCumberBase::cumberAttack(float dt)
 	
 	if(m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance)
 	{
-		float w = ProbSelector::sel(m_furyRule.percent / 100.f, 1.0 - m_furyRule.percent / 100.f, 0.0);
+		float w = ProbSelector::sel(m_furyRule.percent / 100.f, 1.0f - m_furyRule.percent / 100.f, 0.0);
 		if(w == 0)
 		{
 			crashAttack = true;
 		}
-	}
-	
-	if(m_crashCount > m_furyRule.gtCount && m_furyRule.ltPercent > gainPercent)
-	{
-		m_crashCount = 0;
-		crashAttack = true;
 	}
 	
 	std::vector<Json::Value> selectedAttacks;
@@ -1122,20 +1116,15 @@ void KSCumberBase::cumberAttack(float dt)
 	}
 	else
 	{
-		const float originalAttackProb = m_attackPercent / 100.f;
+		const float originalAttackProb = m_attackPercent / 100;
 		float attackProb = originalAttackProb;
-		// 선을 긋고 있을 땐 공격확률 높임 X2 까지.
-		if(myGD->getJackState() == jackStateDrawing)
-		{
-			attackProb += originalAttackProb * (m_aiValue / 100);
-		}
 		
+		// 선을 긋고 있을 땐 공격확률 높임
 		// 많이 맞았으면 공격확률 높임.
-		if(getLife() / getTotalLife() <= 0.3f)
+		if(myGD->getJackState() == jackStateDrawing ||  getLife() / getTotalLife() <= 0.3f)
 		{
-			attackProb += originalAttackProb * 0.5f;
+			attackProb += aiProbAdder();
 		}
-		
 		auto ps = ProbSelector({attackProb, 1.0 - attackProb});
 //		exeProb = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
 		exeProb = ps.getResult();
@@ -1176,100 +1165,115 @@ void KSCumberBase::cumberAttack(float dt)
 
 	}
 	// 확률로.
-	if(exeProb == 0 && m_state == CUMBERSTATEMOVING && !selectedAttacks.empty())
+	
+	if(exeProb == 0 && m_state == CUMBERSTATEMOVING)
 	{
-		Json::Value attackCode;
-		bool searched = false;
-		int searchCount = 0;
-		
-		// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
-		
-		ProbSelector probSel;
-		float crashAdder = 0.f;
-		if(bossIsClosed())
+		// 부수기 공격이 시행됐는데, 크래시 공격이 없다면 텔포 해야됨
+		if(crashAttack && selectedAttacks.empty())
 		{
-			crashAdder = m_aiValue / 50.f;
-		}
-		
-		// 바깥쪽으로 얼마나 먹었는지를...
-		int externalOutlineCount = 0;
-		for(int x=mapLoopRange::mapWidthInnerBegin; x != mapLoopRange::mapWidthInnerEnd; x++)
-		{
-			if(myGD->mapState[x][mapLoopRange::mapHeightInnerBegin] == mapOldline)
-				externalOutlineCount++;
-			if(myGD->mapState[x][mapLoopRange::mapHeightInnerEnd-1] == mapOldline)
-				externalOutlineCount++;
-		}
-		for(int y=mapLoopRange::mapHeightInnerBegin; y != mapLoopRange::mapHeightInnerEnd; y++)
-		{
-			if(myGD->mapState[mapLoopRange::mapWidthInnerBegin][y] == mapOldline)
-				externalOutlineCount++;
-			if(myGD->mapState[mapLoopRange::mapWidthInnerEnd - 1][y] == mapOldline)
-				externalOutlineCount++;
-		}
-		
-		float alongLineAdder = 0.f;
-		if(externalOutlineCount >= 150)
-			alongLineAdder = m_aiValue / 50.f;
-		for(auto& i : selectedAttacks)
-		{
-			if(i["pattern"].asString() == "1017")
-			{
-				probSel.pushProb(i["percent"].asDouble() * (1 +  alongLineAdder));
-			}
-			else if(i["atype"] == "crash")
-			{
-				probSel.pushProb(i["percent"].asDouble() * (1 +  crashAdder));
-			}
-			else
-			{
-				probSel.pushProb(i["percent"].asDouble());
-			}
-		}
-		CCLog("externalCnt %d", externalOutlineCount);
-		while(!searched)
-		{
-			searchCount++;
-//			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
-			int idx = probSel.getResult();
 			
-			attackCode = selectedAttacks[idx];
-			searched = true;
-			
-			if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
-				searched = false;
-			if(attackCode["pattern"].asString() == "109" && m_state == CUMBERSTATEFURY)
-				searched = false;
-			if(searchCount >= 30)
-			{
-				searched = false;
-				break;
-			}
 		}
-		
-		if(searched)
+		if(!selectedAttacks.empty())
 		{
-			KS::KSLog("%", attackCode);
-			Json::FastWriter fw;
-			std::string patternData = fw.write(attackCode);
-			if(attackCode["pattern"].asString() == "109") // fury
+			Json::Value attackCode;
+			bool searched = false;
+			int searchCount = 0;
+			
+			// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
+			
+			ProbSelector probSel;
+			float crashAdder = 0.f;
+			if(bossIsClosed())
 			{
-				m_state = CUMBERSTATESTOP;
-				attackBehavior(attackCode);
-				
-				myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+				crashAdder = m_aiValue / 50.f;
 			}
-			else
+			
+			// 바깥쪽으로 얼마나 먹었는지를...
+			int externalOutlineCount = 0;
+			for(int x=mapLoopRange::mapWidthInnerBegin; x != mapLoopRange::mapWidthInnerEnd; x++)
 			{
-				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
-				if(ret == 1)
+				if(myGD->mapState[x][mapLoopRange::mapHeightInnerBegin] == mapOldline)
+					externalOutlineCount++;
+				if(myGD->mapState[x][mapLoopRange::mapHeightInnerEnd-1] == mapOldline)
+					externalOutlineCount++;
+			}
+			for(int y=mapLoopRange::mapHeightInnerBegin; y != mapLoopRange::mapHeightInnerEnd; y++)
+			{
+				if(myGD->mapState[mapLoopRange::mapWidthInnerBegin][y] == mapOldline)
+					externalOutlineCount++;
+				if(myGD->mapState[mapLoopRange::mapWidthInnerEnd - 1][y] == mapOldline)
+					externalOutlineCount++;
+			}
+			
+			float alongLineAdder = 0.f;
+			if(externalOutlineCount >= 150)
+				alongLineAdder = m_aiValue / 100.f;
+			for(auto& i : selectedAttacks)
+			{
+				if(i["pattern"].asString() == "1017")
 				{
-					attackBehavior(attackCode);
+					probSel.pushProb(i["percent"].asDouble() * (1 +  alongLineAdder));
+				}
+				else if(i["atype"] == "crash")
+				{
+					probSel.pushProb(i["percent"].asDouble() * (1 +  crashAdder));
+				}
+				else
+				{
+					probSel.pushProb(i["percent"].asDouble());
 				}
 			}
+			CCLog("externalCnt %d", externalOutlineCount);
+			while(!searched)
+			{
+				searchCount++;
+				//			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
+				int idx = probSel.getResult();
+				
+				attackCode = selectedAttacks[idx];
+				searched = true;
+				
+				if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
+					searched = false;
+				if(attackCode["pattern"].asString() == "109" && m_state == CUMBERSTATEFURY)
+					searched = false;
+				if(searchCount >= 30)
+				{
+					searched = false;
+					break;
+				}
+			}
+			
+			if(searched)
+			{
+				KS::KSLog("%", attackCode);
+				Json::FastWriter fw;
+				std::string patternData = fw.write(attackCode);
+				if(attackCode["pattern"].asString() == "109") // fury
+				{
+					m_state = CUMBERSTATESTOP;
+					attackBehavior(attackCode);
+					
+					myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+				}
+				else
+				{
+					int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+					if(ret == 1)
+					{
+						attackBehavior(attackCode);
+					}
+				}
+			}
+			
 		}
 		
+		
 	}
+	
+	
+
+	
 
 }
 
@@ -1317,4 +1321,90 @@ void KSCumberBase::bossDieBomb(float dt)
 	}
 }
 
+void KSCumberBase::getRandomPosition(IntPoint* ip, bool* finded)
+{
+	bool isGoodPointed = false;
+	
+	IntPoint mapPoint;
+	vector<IntPoint> shuffledPositions;
+	for(int x = 1; x <= mapLoopRange::mapWidthInnerEnd - 1; x++)
+	{
+		for(int y = 1; y <= mapLoopRange::mapHeightInnerEnd - 1; y++)
+		{
+			shuffledPositions.push_back(IntPoint(x, y));
+		}
+	}
+	
+	random_shuffle(shuffledPositions.begin(), shuffledPositions.end(), [=](int n){
+		return this->m_well512.GetValue(n-1);
+	});
+	for(auto& mp : shuffledPositions)
+	{
+		mapPoint = mp;
+		
+		float myScale = getCumberScale();
+		if(mapPoint.isInnerMap() && myGD->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
+		{
+			float half_distance = getRadius()*myScale; // 20.f : radius for base scale 1.f
+			float calc_distance;
+			IntPoint check_position;
+			
+			bool is_not_position = false;
+			
+			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
+			{
+				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
+				{
+					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
+					if(calc_distance < half_distance)
+					{
+						check_position = IntPoint(i,j);
+						if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
+						{
+							is_not_position = true;
+						}
+					}
+				}
+			}
+			if(!is_not_position)
+			{
+				isGoodPointed = true;
+				break;
+			}
+		}
+	}
+	
+	if(isGoodPointed == true)
+	{
+		*ip = mapPoint;
+		*finded = true;
+		//		CCLog("map point %d %d", mapPoint.x, mapPoint.y);
+		//		CCLog("scale %f", m_headImg->getScale());
+		//		CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
+		//		m_headImg->runAction(t_scale);
+		//		myGD->setMainCumberPoint(mapPoint);
+		//
+		//		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
+	}
+	else
+	{
+		*finded = false;
+		// nothing.
+		CCAssert(false, "");
+	}
+}
+
+void KSCumberBase::onJackDrawLine()
+{
+	ProbSelector ps({m_aiValue, 100.f - m_aiValue});
+	int r = ps.getResult();
+	if(r == 0)
+	{
+		m_drawMovement = FOLLOW_TYPE;
+	}
+	else
+	{
+		m_drawMovement = m_normalMovement;
+	}
+}
 

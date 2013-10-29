@@ -6,7 +6,7 @@
 #include <chrono>
 
 using namespace std;
-using namespace chrono;
+
 class Well512
 {
     enum

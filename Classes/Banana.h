@@ -116,7 +116,7 @@ public:
 	{
 		return getPosition() + ccp(0, 0);
 	}
-	virtual void getRandomPosition(IntPoint* ip, bool* finded);
+
 	virtual void setScale(float scale)
 	{
 		m_headImg->setScale(scale);
@@ -212,6 +212,10 @@ public:
 		
 		COLLISION_CODE collisionCode = crashLooper(ips, checkPosition);
 		return collisionCode;
+	}
+	float getRadius()
+	{
+		return RADIUS;
 	}
 protected:
 	CCSprite* teleportImg;
