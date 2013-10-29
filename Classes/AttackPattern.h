@@ -3736,7 +3736,7 @@ public:
 		
 		m_bulletSpeed = pattern["speed"].asInt() / 100.f;
 		m_numberPerFrame = pattern["numberperframe"].asInt();
-		m_color = pattern["color"].asInt();
+		m_color = pattern.get("color", 1).asInt();
 		
 		m_frameCnt = 0;
 		m_position = t_sp;
