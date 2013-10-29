@@ -63,6 +63,7 @@ enum SDS_KEY
 	kSDS_GI_puzzleList_int1_no_i,
 	kSDS_GI_puzzleList_int1_title_s,
 	kSDS_GI_puzzleList_int1_version_i,
+	kSDS_GI_puzzleList_int1_thumbnail_s,
 	kSDS_GI_eventListVersion_i,
 	kSDS_GI_eventCount_i,
 	kSDS_GI_event_int1_code_i,
@@ -482,6 +483,7 @@ private:
 		else if(t_key == kSDS_GI_puzzleListCount_i)			rv = "puzzleListCount";
 		else if(t_key == kSDS_GI_puzzleList_int1_no_i)		rv = "puzzleList%d_no";
 		else if(t_key == kSDS_GI_puzzleList_int1_title_s)	rv = "puzzleList%d_title";
+		else if(t_key == kSDS_GI_puzzleList_int1_thumbnail_s)			rv = "puzzleList%d_thumbnail";
 		
 		else if(t_key == kSDS_GI_eventListVersion_i)		rv = "eventListVersion";
 		else if(t_key == kSDS_GI_eventCount_i)				rv = "eventCount";

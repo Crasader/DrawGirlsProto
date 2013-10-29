@@ -320,10 +320,10 @@ void PuzzleMapScene::setUIs()
 	int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	for(int i=1;i<=puzzle_cnt;i++)
 	{
-		CCPoint positioning_data = ccp(-153.f, 68.f);
+		CCPoint positioning_data = ccp(-140.f, 57.5f);
 		if(i%2 == 0)
 			positioning_data.y *= -1.f;
-		positioning_data.x += 153.f*((i-1)/2);
+		positioning_data.x += 140.f*((i-1)/2);
 		
 		PLV_Node* t_node = PLV_Node::create(i, this, menu_selector(PuzzleMapScene::puzzleAction), ccpAdd(ccp(240, 160), positioning_data), puzzle_list_view->getViewRect());
 		puzzle_list_view->addChild(t_node, 0, t_node->getPuzzleNumber());
@@ -690,7 +690,8 @@ void PuzzleMapScene::stopReturnUiMode()
 {
 	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(true);
 	
-	map_mode_state = kMMS_uiMode;
+	if(map_mode_state != kMMS_notLoadMode)
+		map_mode_state = kMMS_uiMode;
 	is_menu_enable = true;
 }
 
@@ -1147,7 +1148,24 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					if(location.y > touchStart_p.y + 50.f)
 					{
 						touchStart_p = location;
-						startReturnUiMode();
+						
+						int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+						int found_index = -1;
+						for(int i=0;i<puzzle_cnt && found_index == -1;i++)
+						{
+							if(recent_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
+								found_index = i+1;
+						}
+						
+						if(NSDS_GI(kSDS_GI_puzzleList_int1_version_i, found_index) > NSDS_GI(recent_puzzle_number, kSDS_PZ_version_i))
+						{
+							CCNode* t_node = CCNode::create();
+							t_node->setTag(recent_puzzle_number);
+							puzzleAction(t_node);
+						}
+						else
+							startReturnUiMode();
+						
 						multiTouchData.erase((int)touch);
 					}
 				}
@@ -1172,7 +1190,16 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 				o_it->second = location;
 				if(multiTouchData.size() == 1)
 				{
-					if(location.x < touchStart_p.x - 50.f) // next
+					if(location.y < touchStart_p.y - 50.f)
+					{
+						removeChildByTag(kPMS_MT_loadingBack);
+						removeChildByTag(kPMS_MT_loadPuzzleInfo);
+						
+						touchStart_p = location;
+						startChangeFrameMode();
+						multiTouchData.erase((int)touch);
+					}
+					else if(location.x < touchStart_p.x - 50.f) // next
 					{
 						int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 						bool is_found = false;
