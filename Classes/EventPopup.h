@@ -93,8 +93,7 @@ private:
 		start_menu = CCMenu::createWithItem(start_item);
 		start_menu->setPosition(getContentPosition(kEP_MT_start));
 		addChild(start_menu, kEP_Z_content);
-		
-		
+
 		el_length = NSDS_GI(kSDS_GI_eventCount_i);
 		for(int i=0;i<el_length;i++)
 		{

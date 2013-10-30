@@ -254,18 +254,11 @@ void Coconut::randomPosition()
 	//	myGD->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	m_circle.setRelocation(getPosition(), m_well512);
-	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##
-	m_headImg->runAction(t_scale);
+
 	
 	
 	{
-		CCScaleTo* t_scale = CCScaleTo::create(0.2, 1.f);
-		CCCallFunc* t_call = CCCallFunc::create(this,
-												callfunc_selector(KSCumberBase::lightSmaller));
-		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-		
-		runAction(t_seq);
+		lightSmaller();
 	}
 	
 }

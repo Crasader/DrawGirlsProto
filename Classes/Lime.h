@@ -152,6 +152,11 @@ public:
 	{
 		if(pattern["pattern"].asString() == "109")
 		{
+			m_state = CUMBERSTATESTOP;
+		}
+		else if( pattern["pattern"].asString() == "1007")
+		{
+			m_state = CUMBERSTATESTOP;
 		}
 		else
 		{
@@ -161,6 +166,7 @@ public:
 			else if(target == "no") // 타게팅이 아니면 돌아라
 				startAnimationNoDirection();
 		}
+		
 	}
 	virtual void startAnimationNoDirection();
 	virtual void startAnimationDirection();
@@ -192,11 +198,65 @@ public:
 	
 
 	
-	virtual void lightSmaller(){}
+	virtual void lightSmaller()
+	{
+		endTeleport();
+	}
 	
-	virtual void endTeleport(){}
-	virtual void startTeleport(){}
-	virtual void smaller() {}
+	virtual void endTeleport()
+	{
+		teleportImg->removeFromParentAndCleanup(true);
+		teleportImg = NULL;
+		startMoving();
+		myGD->communication("CP_onPatternEnd");
+	}
+	virtual void startTeleport()
+	{
+		if(teleportImg)
+		{
+			teleportImg->removeFromParentAndCleanup(true);
+			teleportImg = NULL;
+		}
+		
+		teleportImg = CCSprite::create("teleport_light.png");
+		teleportImg->setScale(0.01f);
+		addChild(teleportImg);
+		
+		CCBlink* t_scale = CCBlink::create(0.5, 0);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::smaller));
+		
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		
+		teleportImg->runAction(t_seq);
+		AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
+	}
+	virtual void smaller()
+	{
+		CCBlink* t_scale = CCBlink::create(0.5, 8);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::randomPosition));
+		
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		
+		runAction(t_seq);
+	}
+	virtual void randomPosition()
+	{
+		IntPoint mapPoint;
+		bool finded;
+		getRandomPosition(&mapPoint, &finded);
+		
+		//	myGD->setMainCumberPoint(mapPoint);
+		for(int i=0; i<350; i++)
+		{
+			setPosition(ip2ccp(mapPoint));
+		}
+		//		setPosition(ip2ccp(mapPoint));
+		
+		m_circle.setRelocation(getPosition(), m_well512);
+		{
+			lightSmaller();
+		}
+	}
 	virtual void onTargetingJack(CCPoint jackPosition)
 	{
 		CCPoint cumberPosition = getPosition();

@@ -1249,20 +1249,10 @@ void KSCumberBase::cumberAttack(float dt)
 				KS::KSLog("%", attackCode);
 				Json::FastWriter fw;
 				std::string patternData = fw.write(attackCode);
-				if(attackCode["pattern"].asString() == "109") // fury
+				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+				if(ret == 1)
 				{
-					m_state = CUMBERSTATESTOP;
 					attackBehavior(attackCode);
-					
-					myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
-				}
-				else
-				{
-					int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
-					if(ret == 1)
-					{
-						attackBehavior(attackCode);
-					}
 				}
 			}
 			

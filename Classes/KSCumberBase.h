@@ -88,7 +88,7 @@ class KSCumberBase : public CCNode
 public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
 	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0), /// 초당 변수만큼 충돌시 스케일 줄임.
-	m_castingCancelCount(0)
+	m_castingCancelCount(0), teleportImg(NULL)
 	
 //		m_state(CUMBERSTATESTOP)
 	{
@@ -112,12 +112,7 @@ public:
 	
 	void startMoving()
 	{
-//		if(!isGameover)
-		{
-			
-			
-//			onStartMoving();
-		}
+		m_state = CUMBERSTATEMOVING;
 	}
 	void stopMoving()
 	{
@@ -483,6 +478,7 @@ protected:
 		void startFury(int tf)
 		{
 			totalFrame = tf;
+			furyFrameCount = 0;
 		}
 	}m_furyMode;
 
@@ -594,6 +590,8 @@ protected:
 			}
 		}
 	}m_snake;
+	
+	CCSprite* teleportImg;
 };
 
 #endif /* defined(__DGproto__KSCumberBase__) */

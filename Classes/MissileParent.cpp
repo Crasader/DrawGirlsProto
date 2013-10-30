@@ -7,7 +7,7 @@
 //
 
 #include "MissileParent.h"
-
+#include "LogData.h"
 void MissileParent::bombCumber( CCObject* target )
 {
 	if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -1140,6 +1140,10 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	}
 
 	
+	if(!invalid)
+	{
+		myLog->addLog(kLOG_attackPattern_i, myGD->getCommunication("UI_getUseTime"), atoi(pattern.c_str()));
+	}
 	return valid;
 }
 
