@@ -16,6 +16,7 @@
 #include "GachaPopup.h"
 #include "RankPopup.h"
 #include "MailPopup.h"
+#include "TutorialScene.h"
 
 CCScene* PuzzleMapScene::scene()
 {
@@ -390,6 +391,18 @@ void PuzzleMapScene::setUIs()
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
 	option_menu->setPosition(ccpAdd(ccp(bottom_size.width/2.f, bottom_size.height/2.f), ccp(2+56.f*2.f,0)));
 	bottom_case->addChild(option_menu);
+	
+	
+	CCSprite* n_tutorial = CCSprite::create("test_ui_tutorial.png");
+	CCSprite* s_tutorial = CCSprite::create("test_ui_tutorial.png");
+	s_tutorial->setColor(ccGRAY);
+	
+	CCMenuItem* tutorial_item = CCMenuItemSprite::create(n_tutorial, s_tutorial);
+	tutorial_item->setTag(kPMS_MT_tutorial);
+	
+	CCMenu* tutorial_menu = CCMenu::createWithItem(tutorial_item);
+	tutorial_menu->setPosition(ccpAdd(ccp(bottom_size.width/2.f, bottom_size.height/2.f), ccp(2+56.f*3.f,0)));
+	bottom_case->addChild(tutorial_menu);
 	
 	
 	CCSprite* n_left = CCSprite::create("test_ui_left.png");
@@ -813,6 +826,10 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 		is_menu_enable = true;
 		MailPopup* t_pp = MailPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
 		addChild(t_pp, kPMS_Z_popup);
+	}
+	else if(tag == kPMS_MT_tutorial)
+	{
+		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
 	}
 	else if(tag == kPMS_MT_left)
 	{
