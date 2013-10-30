@@ -392,6 +392,42 @@ void PuzzleMapScene::setUIs()
 	bottom_case->addChild(option_menu);
 	
 	
+	CCSprite* n_left = CCSprite::create("test_ui_left.png");
+	CCSprite* s_left = CCSprite::create("test_ui_left.png");
+	s_left->setColor(ccGRAY);
+	
+	CCMenuItem* left_item = CCMenuItemSprite::create(n_left, s_left, this, menu_selector(PuzzleMapScene::menuAction));
+	left_item->setTag(kPMS_MT_left);
+	
+	CCMenu* left_menu = CCMenu::createWithItem(left_item);
+	left_menu->setPosition(getUiButtonPosition(kPMS_MT_left));
+	main_node->addChild(left_menu, kPMS_Z_arrows);
+	
+	
+	CCSprite* n_right = CCSprite::create("test_ui_right.png");
+	CCSprite* s_right = CCSprite::create("test_ui_right.png");
+	s_right->setColor(ccGRAY);
+	
+	CCMenuItem* right_item = CCMenuItemSprite::create(n_right, s_right, this, menu_selector(PuzzleMapScene::menuAction));
+	right_item->setTag(kPMS_MT_right);
+	
+	CCMenu* right_menu = CCMenu::createWithItem(right_item);
+	right_menu->setPosition(getUiButtonPosition(kPMS_MT_right));
+	main_node->addChild(right_menu, kPMS_Z_arrows);
+	
+	
+	CCSprite* n_up = CCSprite::create("test_ui_up.png");
+	CCSprite* s_up = CCSprite::create("test_ui_up.png");
+	s_up->setColor(ccGRAY);
+	
+	CCMenuItem* up_item = CCMenuItemSprite::create(n_up, s_up, this, menu_selector(PuzzleMapScene::menuAction));
+	up_item->setTag(kPMS_MT_up);
+	
+	CCMenu* up_menu = CCMenu::createWithItem(up_item);
+	up_menu->setPosition(getUiButtonPosition(kPMS_MT_up));
+	main_node->addChild(up_menu, kPMS_Z_arrows);
+	
+	
 	CCSprite* n_screen = CCSprite::create("test_ui_screen.png");
 	CCSprite* s_screen = CCSprite::create("test_ui_screen.png");
 	s_screen->setColor(ccGRAY);
@@ -498,6 +534,9 @@ CCPoint PuzzleMapScene::getUiButtonPosition(int t_tag)
 	else if(t_tag == kPMS_MT_showui)		return_value = ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f + 10.f);
 	else if(t_tag == kPMS_MT_top)			return_value = ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f); // after_move_animation
 	else if(t_tag == kPMS_MT_bottom)		return_value = ccp(145,-(myDSH->puzzle_ui_top-320.f)/2.f - 65.f); // after_move_animation
+	else if(t_tag == kPMS_MT_left)			return_value = ccp(75, 180.f);
+	else if(t_tag == kPMS_MT_right)			return_value = ccp(405, 180.f);
+	else if(t_tag == kPMS_MT_up)			return_value = ccp(395, 250);
 //	else if(t_tag == kWMS_MT_rubyShop)		return_value = ccp(140,297);
 //	else if(t_tag == kWMS_MT_goldShop)		return_value = ccp(294,297);
 //	else if(t_tag == kWMS_MT_lifeShop)		return_value = ccp(448,297);
@@ -774,6 +813,182 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 		is_menu_enable = true;
 		MailPopup* t_pp = MailPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
 		addChild(t_pp, kPMS_Z_popup);
+	}
+	else if(tag == kPMS_MT_left)
+	{
+		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+		bool is_found = false;
+		int found_index = -1;
+		for(int i=0;i<puzzle_count && !is_found;i++)
+		{
+			int t_puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
+			if(recent_puzzle_number-1 == t_puzzle_no)
+			{
+				is_found = true;
+				found_index = i+1;
+				break;
+			}
+		}
+		
+		if(is_found)
+		{
+			if(map_mode_state == kMMS_notLoadMode)
+			{
+				removeChildByTag(kPMS_MT_loadingBack);
+				removeChildByTag(kPMS_MT_loadPuzzleInfo);
+			}
+			
+			recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
+			
+			map_mode_state = kMMS_changeMode;
+			is_menu_enable = false;
+			
+			after_map_node = createMapNode();
+			after_map_node->setPosition(ccp(240-480,180));
+			main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
+			
+			if(after_map_node->getTag() == kPMS_MT_loaded)
+			{
+				after_map_node->setTag(-1);
+				
+				cachingPuzzleImg();
+				//								switchMapNode(after_map_node);
+				
+				CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
+				CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endLoadedMovingMapNode));
+				CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+				
+				map_node->runAction(t_move1);
+				after_map_node->runAction(t_seq);
+			}
+			else
+			{
+				after_map_node->setTag(-1);
+				CCSprite* loading_back = CCSprite::create("whitePaper.png");
+				loading_back->setColor(ccGRAY);
+				loading_back->setOpacity(100);
+				loading_back->setPosition(ccp(240,160));
+				addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
+				
+				CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
+				CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
+				CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+				
+				map_node->runAction(t_move1);
+				after_map_node->runAction(t_seq);
+			}
+		}
+		else
+		{
+			CCLog("nothing pre puzzle!!!");
+			
+			original_mms = map_mode_state;
+			
+			map_mode_state = kMMS_changeMode;
+			is_menu_enable = false;
+			
+			CCMoveBy* t_move1 = CCMoveBy::create(0.2f, ccp(40,0));
+			CCMoveBy* t_move2 = CCMoveBy::create(0.1f, ccp(-40,0));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endTingMapNode));
+			CCSequence* t_seq = CCSequence::create(t_move1, t_move2, t_call, NULL);
+			map_node->runAction(t_seq);
+		}
+	}
+	else if(tag == kPMS_MT_right)
+	{
+		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+		bool is_found = false;
+		int found_index = -1;
+		for(int i=0;i<puzzle_count && !is_found;i++)
+		{
+			int t_puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
+			if(recent_puzzle_number+1 == t_puzzle_no)
+			{
+				is_found = true;
+				found_index = i+1;
+				break;
+			}
+		}
+		
+		if(is_found && found_index <= puzzle_count)
+		{
+			if(map_mode_state == kMMS_notLoadMode)
+			{
+				removeChildByTag(kPMS_MT_loadingBack);
+				removeChildByTag(kPMS_MT_loadPuzzleInfo);
+			}
+			
+			recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
+			
+			map_mode_state = kMMS_changeMode;
+			is_menu_enable = false;
+			
+			after_map_node = createMapNode();
+			after_map_node->setPosition(ccp(240+480,180));
+			main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
+			
+			if(after_map_node->getTag() == kPMS_MT_loaded)
+			{
+				after_map_node->setTag(-1);
+				
+				cachingPuzzleImg();
+				//								switchMapNode(after_map_node);
+				
+				CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
+				CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endLoadedMovingMapNode));
+				CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+				
+				map_node->runAction(t_move1);
+				after_map_node->runAction(t_seq);
+			}
+			else
+			{
+				after_map_node->setTag(-1);
+				CCSprite* loading_back = CCSprite::create("whitePaper.png");
+				loading_back->setColor(ccGRAY);
+				loading_back->setOpacity(100);
+				loading_back->setPosition(ccp(240,160));
+				addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
+				
+				CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
+				CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
+				CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+				
+				map_node->runAction(t_move1);
+				after_map_node->runAction(t_seq);
+			}
+		}
+		else
+		{
+			CCLog("nothing next puzzle!!!");
+			
+			original_mms = map_mode_state;
+			
+			map_mode_state = kMMS_changeMode;
+			is_menu_enable = false;
+			
+			CCMoveBy* t_move1 = CCMoveBy::create(0.2f, ccp(-40,0));
+			CCMoveBy* t_move2 = CCMoveBy::create(0.1f, ccp(40,0));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endTingMapNode));
+			CCSequence* t_seq = CCSequence::create(t_move1, t_move2, t_call, NULL);
+			map_node->runAction(t_seq);
+		}
+	}
+	else if(tag == kPMS_MT_up)
+	{
+		if(map_mode_state == kMMS_uiMode)
+			startChangeFrameMode();
+		else if(map_mode_state == kMMS_notLoadMode)
+		{
+			removeChildByTag(kPMS_MT_loadingBack);
+			removeChildByTag(kPMS_MT_loadPuzzleInfo);
+			
+			startChangeFrameMode();
+		}
 	}
 //	else if(tag == kWMS_MT_rubyShop)
 //	{

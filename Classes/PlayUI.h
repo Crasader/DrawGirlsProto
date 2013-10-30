@@ -661,7 +661,7 @@ private:
 	
 	void myInit(float t_gp, bool is_item)
 	{
-		my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f", t_gp)->getCString(), "font_get_percentage.fnt");
+		my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f", t_gp < 0.1f ? 0.f : t_gp)->getCString(), "font_get_percentage.fnt");
 		my_label->setAlignment(kCCTextAlignmentRight);
 		addChild(my_label, kZorderGetPercentage_label);
 		
@@ -981,7 +981,7 @@ public:
 			{
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
-				myGD->communication("Main_percentageGettingEffect", (t_p-t_beforePercentage)*100.f, true, jackPosition);
+				myGD->communication("Main_percentageGettingEffect", floorf((t_p-t_beforePercentage)*10000.f)/10000.f*100.f, true, jackPosition);
 			}
 			
 			if(t_p >= t_beforePercentage + 0.01f && t_p < clearPercentage)

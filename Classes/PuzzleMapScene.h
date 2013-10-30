@@ -37,6 +37,7 @@ enum MapModeState
 enum PMS_Zorder{
 	kPMS_Z_wall = 1,
 	kPMS_Z_main,
+	kPMS_Z_arrows,
 	kPMS_Z_puzzle_back_side,
 	kPMS_Z_puzzle_shadow,
 	kPMS_Z_puzzle_back,
@@ -56,6 +57,9 @@ enum PMS_MenuTag{
 	kPMS_MT_event,
 	kPMS_MT_eventClose,
 	kPMS_MT_screen,
+	kPMS_MT_left,
+	kPMS_MT_right,
+	kPMS_MT_up,
 	kPMS_MT_showui,
 	kPMS_MT_top,
 	kPMS_MT_bottom,
