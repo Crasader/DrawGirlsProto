@@ -135,48 +135,8 @@ public:
 	
 	void scaleAdjustment(float dt);
 	
-	virtual void lightSmaller()
-	{
-		endTeleport();
-	}
-	
-	virtual void endTeleport()
-	{
-		teleportImg->removeFromParentAndCleanup(true);
-		teleportImg = NULL;
-		startMoving();
-		myGD->communication("CP_onPatternEnd");
-	}
-	virtual void startTeleport()
-	{
-		if(teleportImg)
-		{
-			teleportImg->removeFromParentAndCleanup(true);
-			teleportImg = NULL;
-		}
-		
-		teleportImg = CCSprite::create("teleport_light.png");
-		teleportImg->setScale(0.01f);
-		addChild(teleportImg);
-		
-		CCBlink* t_scale = CCBlink::create(0.5, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Peach::smaller));
-		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-		
-		teleportImg->runAction(t_seq);
-		AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
-	}
-	virtual void smaller()
-	{
-		CCBlink* t_scale = CCBlink::create(0.5, 8);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Peach::randomPosition));
-		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-		
-		runAction(t_seq);
-	}
-	virtual void stopAnimationNoDirection()
+
+		virtual void stopAnimationNoDirection()
 	{
 		m_noDirection.state = 2;
 	}

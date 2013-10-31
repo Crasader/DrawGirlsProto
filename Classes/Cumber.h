@@ -96,9 +96,11 @@ private:
 		int m_jrDrawMovement;
 		int m_jrFuryMovement;
 		float m_jrHp;
+		
+		int m_aiValue;
 		jrType(int type, float minv, float startv, float maxv,
 			   float mins, float starts, float maxs, int nm, int dr, int fury,
-			   float hp)
+			   float hp, int ai)
 		{
 			m_jrType = type;
 			m_jrMinSpeed = minv;
@@ -113,6 +115,7 @@ private:
 			m_jrDrawMovement = dr;
 			m_jrFuryMovement = fury;
 			m_jrHp = hp;
+			m_aiValue = ai;
 		}
 	};
 	vector<jrType> m_juniors; // 생성할 때 참고하려고 저장함.

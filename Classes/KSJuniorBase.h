@@ -118,16 +118,7 @@ public:
 	
 	void scaleAdjustment(float dt);
 	
-	virtual void lightSmaller()
-	{
-		CCScaleTo* t_scale = CCScaleTo::create(0.2, 0.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSCumberBase::endTeleport));
-		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-		if(teleportImg)
-			teleportImg->runAction(t_seq);
-	}
-	
+
 	virtual void endTeleport()
 	{
 		teleportImg->removeFromParentAndCleanup(true);

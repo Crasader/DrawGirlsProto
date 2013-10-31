@@ -90,340 +90,6 @@ void MissileParent::endIngActionAP()
 	savedAP = false;
 }
 
-void MissileParent::actionAP6(CCObject* cb)
-{
-	AP_Missile6* t_m6 = AP_Missile6::create(startFirePosition, 1);
-	addChild(t_m6);
-
-	saveAP = t_m6;
-	savedAP = true;
-}
-
-void MissileParent::ingAP7(CCObject* cb)
-{
-	keepAP7->myClock();
-}
-
-void MissileParent::actionAP7(CCObject* cb)
-{
-	myGD->communication("Main_allStopSchedule");
-	keepAP7->startCut();
-	keepAP7 = NULL;
-}
-
-void MissileParent::cancelAP7(CCObject* cb)
-{
-	keepAP7->stopCut();
-	keepAP7 = NULL;
-}
-
-void MissileParent::actionAP8(CCObject* cb)
-{
-	BD_P8 t_bd = SelectedMapData::sharedInstance()->getValuePattern8();
-
-	int m_img_rand_type = rand()%2 + 1;
-	AP_Missile8* t_m8 = AP_Missile8::create(startFirePosition, t_bd.mCnt, t_bd.move_speed,
-		CCString::createWithFormat("chapter%d_basic_missile_%d.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_baseMissile), m_img_rand_type)->getCString(), t_bd.crash_area);
-	addChild(t_m8);
-}
-
-void MissileParent::actionAP9(CCObject* cb)
-{
-	BD_P9 t_bd = SelectedMapData::sharedInstance()->getValuePattern9();
-	AP_Missile9* t_m9 = AP_Missile9::create(60*5, t_bd.create_frame, t_bd.move_speed, t_bd.crash_area, 1);
-	addChild(t_m9);
-
-	saveAP = t_m9;
-	savedAP = true;
-//	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP10(CCObject* cb)
-{
-	AP_Missile10* t_m10 = AP_Missile10::create(startFirePosition, 10, 60*2, 60, CCSizeMake(8.f, 8.f));
-	addChild(t_m10);
-
-	saveAP = t_m10;
-	savedAP = true;
-}
-
-void MissileParent::actionAP11(CCObject* cb)
-{
-//	BD_P11 t_bd = SelectedMapData::sharedInstance()->getValuePattern11();
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
-	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-	AP_Missile11* t_m11 = AP_Missile11::create(mainCumberPosition, 11, 1.6f, IntSize(round(14.f),round(14.f)));
-	addChild(t_m11);
-	
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP12(CCObject* cb)
-{
-	myGD->communication("CP_stopMovingMainCumber");
-	int random_value = rand()%2 + 1;
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
-	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-	AP_Missile12* t_m12 = AP_Missile12::create(mainCumberPosition, random_value, 120, 180);
-	addChild(t_m12);
-
-	saveAP = t_m12;
-	savedAP = true;
-}
-
-void MissileParent::actionAP13(CCObject* cb)
-{
-	myGD->communication("CP_furyModeOn");
-}
-
-void MissileParent::actionAP14(CCObject* cb)
-{
-//	BD_P14 t_bd = SelectedMapData::sharedInstance()->getValuePattern14();
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
-	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-	AP_Missile14* t_m14 = AP_Missile14::create(mainCumberPosition, 14, 2.f, 4, IntSize(round(10.f),round(10.f)));
-	addChild(t_m14);
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP15(CCObject* cb)
-{
-	myGD->communication("CP_stopMovingMainCumber");
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
-	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-	AP_Missile15* t_m15 = AP_Missile15::create(mainCumberPosition, 10, 180);
-	addChild(t_m15);
-
-	saveAP = t_m15;
-	savedAP = true;
-}
-
-void MissileParent::actionAP16(CCObject* cb)
-{
-	int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
-	selected_chapter = selected_chapter%10;
-	int mType = (selected_chapter == 5 ? 1 : 2);
-	AP_Missile16* t_m16 = AP_Missile16::create(mType, 2+mType, 60);
-	addChild(t_m16);
-
-	saveAP = t_m16;
-	savedAP = true;
-	
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP17(CCObject* cb)
-{
-	myGD->communication("CP_stopMovingMainCumber");
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
-	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-	AP_Missile17* t_m17 = AP_Missile17::create(mainCumberPosition, 1, 10, 120, 180);
-	addChild(t_m17);
-
-	saveAP = t_m17;
-	savedAP = true;
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP18(CCObject* cb)
-{
-	BD_P18 t_bd = SelectedMapData::sharedInstance()->getValuePattern18();
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
-	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-	AP_Missile18* t_m18 = AP_Missile18::create(mainCumberPosition, t_bd.move_speed, t_bd.mCnt, t_bd.bomb_cnt, t_bd.crash_area.width > 10.f);
-	addChild(t_m18);
-	
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP19(CCObject* cb)
-{
-	myGD->communication("CP_tickingOn");
-}
-
-void MissileParent::actionAP20(CCObject* cb)
-{
-	myGD->communication("CP_subCumberBomb");
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP21(CCObject* cb)
-{
-//	AP_Missile21* t_m21 = AP_Missile21::create(startFirePosition);
-//	addChild(t_m21);
-//	
-//	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP22(CCObject* cb)
-{
-//	AP_Missile22* t_m22 = AP_Missile22::create(startFirePosition);
-//	addChild(t_m22);
-//	
-//	myGD->communication("MP_endIngActionAP");
-//	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP23(CCObject* cb)
-{
-	if(keepAP23)
-	{
-		keepAP23->updateCobweb();
-	}
-	else
-	{
-		AP_Missile23* t_m23 = AP_Missile23::create(60*5);
-		addChild(t_m23);
-		keepAP23 = t_m23;
-	}
-
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP24(CCObject* cb)
-{
-	if(keepAP24)
-	{
-		keepAP24->updateSightOut();
-	}
-	else
-	{
-		AP_Missile24* t_m24 = AP_Missile24::create(60*5);
-		addChild(t_m24);
-		keepAP24 = t_m24;
-	}myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP25(CCObject* cb)
-{
-	if(keepAP25)
-	{
-		keepAP25->updateStun();
-	}
-	else
-	{
-		AP_Missile25* t_m25 = AP_Missile25::create(200);
-		addChild(t_m25);
-		keepAP25 = t_m25;
-	}
-}
-
-void MissileParent::actionAP26(CCObject* cb)
-{
-	if(keepAP26)
-	{
-		keepAP26->updateFreeze();
-	}
-	else
-	{
-		AP_Missile26* t_m26 = AP_Missile26::create(200);
-		addChild(t_m26);
-		keepAP26 = t_m26;
-	}
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP27(CCObject* cb)
-{
-	if(keepAP27)
-	{
-		keepAP27->updateSleep();
-	}
-	else
-	{
-		AP_Missile27* t_m27 = AP_Missile27::create(200);
-		addChild(t_m27);
-		keepAP27 = t_m27;
-	}
-}
-
-void MissileParent::actionAP28(CCObject* cb)
-{
-	int random_value = rand()%2 + 1;
-	BD_P28 t_bd = SelectedMapData::sharedInstance()->getValuePattern28();
-	AP_Missile28* t_m28 = AP_Missile28::create(startFirePosition, random_value, t_bd.size_radius, t_bd.obj_cnt);
-	addChild(t_m28);
-	t_m28->startMyAction();
-	
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP29(CCObject* cb)
-{
-	myGD->communication("CP_createAllCumberSheild");
-}
-
-void MissileParent::actionAP30(CCObject* cb)
-{
-	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
-}
-
-void MissileParent::actionAP31(CCObject* cb)
-{
-	myGD->communication("CP_subCumberReplication");
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP32(CCObject* cb)
-{
-	AP_Missile32* t_m32 = AP_Missile32::create();
-	addChild(t_m32);
-}
-
-void MissileParent::actionAP33(CCObject* cb)
-{
-	if(keepAP33)
-	{
-		keepAP33->updateChaos();
-	}
-	else
-	{
-		AP_Missile33* t_m33 = AP_Missile33::create(60*5);
-		addChild(t_m33);
-		keepAP33 = t_m33;
-	}
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP34(CCObject* cb)
-{
-	myGD->communication("CP_mainCumberInvisibleOn");
-	myGD->communication("CP_onPatternEnd");
-}
-
-void MissileParent::actionAP101(CCObject* cb)
-{
-	int m_img_rand_type = rand()%2 + 1;
-	AP_Missile101* t_m3 = AP_Missile101::create(startFirePosition, 90, 6, 2.f,
-		CCString::createWithFormat("chapter1_basic_missile_%d.png", m_img_rand_type)->getCString(), CCSizeMake(6.f, 6.f));
-	addChild(t_m3);
-
-	saveAP = t_m3;
-	savedAP = true;
-}
-
-void MissileParent::actionAP102(CCObject* cb)
-{
-	int m_img_rand_type = rand()%2 + 1;
-	AP_Missile102* t_m4 = AP_Missile102::create(startFirePosition, 60, 6, 4, 20.f*2.f, 2.f,
-		CCString::createWithFormat("chapter1_basic_missile_%d.png", m_img_rand_type)->getCString(), CCSizeMake(6.f, 6.f));
-	addChild(t_m4);
-
-	saveAP = t_m4;
-	savedAP = true;
-}
-
-void MissileParent::actionAP103(CCObject* cb)
-{
-	int m_img_rand_type = rand()%2 + 1;
-	AP_Missile102* t_m4 = AP_Missile102::create(startFirePosition, 120, 5, 1, 0, 2.5f,
-		CCString::createWithFormat("chapter1_basic_missile_%d.png", m_img_rand_type)->getCString(), CCSizeMake(6.f, 6.f));
-	addChild(t_m4);
-
-	saveAP = t_m4;
-	savedAP = true;
-}
 
 int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD, KSCumberBase* cb, bool exe)
 {
@@ -801,6 +467,38 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			
 		}
 	}
+	else if(pattern == "112") // 폭탄 여러개 던지기
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				KSTargetAttackPattern12* t = KSTargetAttackPattern12::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				addChild(t);
+				saveAP = t;
+				savedAP = true;
+			};
+			castBranch(atype, func);
+			
+		}
+	}
+	else if(pattern == "1001")
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				AP_Missile21* t_m21 = AP_Missile21::create(startFirePosition, 400, 1.5f);
+				addChild(t_m21);
+				
+				myGD->communication("CP_onPatternEnd");
+			};
+			castBranch(atype, func);
+		}
+	}
+
 	else if(pattern == "1002")
 	{
 		if(exe)
@@ -1134,6 +832,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			
 		}
 	}
+	
 	else
 	{
 		return invalid;
@@ -1202,17 +901,6 @@ void MissileParent::resetTickingTimeBomb()
 	}
 }
 
-void MissileParent::stopAutoAttacker()
-{
-	if(myAA)
-		myAA->stopFraming();
-}
-
-void MissileParent::startAutoAttacker()
-{
-	if(myAA)
-		myAA->startFraming();
-}
 
 void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, CCPoint s_p )
 {
@@ -1303,17 +991,12 @@ void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color )
 
 void MissileParent::myInit( CCNode* boss_eye )
 {
-	myAA = NULL;
 	savedAP = false;
-	keepAP7 = NULL;
 	keepAP23 = NULL;
-	keepAP25 = NULL;
 	keepAP26 = NULL;
-	keepAP27 = NULL;
 	keepAP33 = NULL;
 	keepAP24 = NULL;
-	keepAP34 = NULL;
-	keepAP35 = NULL;
+
 	chargeArray = new CCArray(1);
 	tickingArray = new CCArray(1);
 	myRS = new RandomSelector();
@@ -1437,19 +1120,19 @@ void MissileParent::myInit( CCNode* boss_eye )
 	myGD->V_CCPCOLOR["MP_explosion"] = std::bind(&MissileParent::explosion, this, _1, _2);
 	myGD->V_V["MP_endIngActionAP"] = std::bind(&MissileParent::endIngActionAP, this);
 	myGD->V_IpIII["MP_createTickingTimeBomb"] = std::bind(&MissileParent::createTickingTimeBomb, this, _1, _2, _3, _4);
-	myGD->V_V["MP_deleteKeepAP25"] = std::bind(&MissileParent::deleteKeepAP25, this);
+//	myGD->V_V["MP_deleteKeepAP25"] = std::bind(&MissileParent::deleteKeepAP25, this);
 	myGD->V_V["MP_deleteKeepAP23"] = std::bind(&MissileParent::deleteKeepAP23, this);
 	myGD->V_V["MP_deleteKeepAP26"] = std::bind(&MissileParent::deleteKeepAP26, this);
-	myGD->V_V["MP_deleteKeepAP27"] = std::bind(&MissileParent::deleteKeepAP27, this);
+//	myGD->V_V["MP_deleteKeepAP27"] = std::bind(&MissileParent::deleteKeepAP27, this);
 	myGD->V_V["MP_deleteKeepAP33"] = std::bind(&MissileParent::deleteKeepAP33, this);
 	myGD->V_V["MP_deleteKeepAP24"] = std::bind(&MissileParent::deleteKeepAP24, this);
-	myGD->V_V["MP_deleteKeepAP34"] = std::bind(&MissileParent::deleteKeepAP34, this);
-	myGD->V_V["MP_protectedAP25"] = std::bind(&MissileParent::protectedAP25, this);
+//	myGD->V_V["MP_deleteKeepAP34"] = std::bind(&MissileParent::deleteKeepAP34, this);
+//	myGD->V_V["MP_protectedAP25"] = std::bind(&MissileParent::protectedAP25, this);
 	myGD->V_V["MP_protectedAP26"] = std::bind(&MissileParent::protectedAP26, this);
-	myGD->V_V["MP_protectedAP27"] = std::bind(&MissileParent::protectedAP27, this);
+//	myGD->V_V["MP_protectedAP27"] = std::bind(&MissileParent::protectedAP27, this);
 	myGD->V_V["MP_protectedAP33"] = std::bind(&MissileParent::protectedAP33, this);
-	myGD->V_V["MP_deleteKeepAP35"] = std::bind(&MissileParent::deleteKeepAP35, this);
-	myGD->V_V["MP_stopAutoAttacker"] = std::bind(&MissileParent::stopAutoAttacker, this);
+//	myGD->V_V["MP_deleteKeepAP35"] = std::bind(&MissileParent::deleteKeepAP35, this);
+//	myGD->V_V["MP_stopAutoAttacker"] = std::bind(&MissileParent::stopAutoAttacker, this);
 	myGD->V_IIFCCP["MP_shootPetMissile"] = std::bind(&MissileParent::shootPetMissile, this, _1, _2, _3, _4);
 	myGD->V_V["MP_resetTickingTimeBomb"] = std::bind(&MissileParent::resetTickingTimeBomb, this);
 	myGD->V_V["MP_subOneDie"] = std::bind(&MissileParent::subOneDie, this);

@@ -200,54 +200,8 @@ public:
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
 	
-	
-	virtual void lightSmaller()
-	{
-		CCScaleTo* t_scale = CCScaleTo::create(0.2, 0.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSCumberBase::endTeleport));
-		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-		if(teleportImg)
-			teleportImg->runAction(t_seq);
-	}
-	
-	virtual void endTeleport()
-	{
-		teleportImg->removeFromParentAndCleanup(true);
-		teleportImg = NULL;
-		startMoving();
-		myGD->communication("CP_onPatternEnd");
-	}
-	virtual void startTeleport()
-	{
-		if(teleportImg)
-		{
-			teleportImg->removeFromParentAndCleanup(true);
-			teleportImg = NULL;
-		}
-		
-		teleportImg = CCSprite::create("teleport_light.png");
-		teleportImg->setScale(0.01f);
-		addChild(teleportImg);
-		
-		CCBlink* t_scale = CCBlink::create(0.5, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::smaller));
-		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-		
-		teleportImg->runAction(t_seq);
-		AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
-	}
-	virtual void smaller()
-	{
-		CCBlink* t_scale = CCBlink::create(0.5, 8);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::randomPosition));
-		
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-		
-		runAction(t_seq);
-	}
-	virtual void randomPosition()
+
+		virtual void randomPosition()
 	{
 		IntPoint mapPoint;
 		bool finded;

@@ -17,7 +17,6 @@
 #include "RandomSelector.h"
 #include "SelectedMapData.h"
 #include "AudioEngine.h"
-#include "AutoAttacker.h"
 #include "ShockWave.h"
 #include "KSCumberBase.h"
 #include "Charges.h"
@@ -245,116 +244,7 @@ public:
 	void subOneDie();
 	
 	void endIngActionAP();
-	
-	void actionAP6(CCObject* cb);
-	void cancelAP6(CCObject* cb){		}
-	
-	void ingAP7(CCObject* cb);
-	void actionAP7(CCObject* cb);
-	void cancelAP7(CCObject* cb);
-	
-	void actionAP8(CCObject* cb);
-	void cancelAP8(CCObject* cb){		}
-	
-	void actionAP9(CCObject* cb);
-	void cancelAP9(CCObject* cb){		}
-	
-	void actionAP10(CCObject* cb);
-	void cancelAP10(CCObject* cb){		}
-	
-	void actionAP11(CCObject* cb);
-	void cancelAP11(CCObject* cb){		}
-	
-	void actionAP12(CCObject* cb);
-	void cancelAP12(CCObject* cb){		}
-	
-	
-	void ingAP13()
-	{
-//		myGD->communication("CP_checkingJackCrash");
-	}
-	void actionAP13(CCObject* cb);
-	void cancelAP13(CCObject* cb){		}
-	
-	void actionAP14(CCObject* cb);
-	void cancelAP14(CCObject* cb){		}
-	
-	void actionAP15(CCObject* cb);
-	void cancelAP15(CCObject* cb){		}
-	
-	void actionAP16(CCObject* cb);
-	void cancelAP16(CCObject* cb){		}
-	
-	void ingAP17(CCObject* cb)
-	{
-//		myGD->communication("CP_checkingJackCrash");
-	}
-	void actionAP17(CCObject* cb);
-	void cancelAP17(CCObject* cb){		}
-	
-	void actionAP18(CCObject* cb);
-	void cancelAP18(CCObject* cb){		}
-	
-	void actionAP19(CCObject* cb);
-	void cancelAP19(CCObject* cb){		}
-	
-	void actionAP20(CCObject* cb);
-	void cancelAP20(CCObject* cb){		}
-	
-	void actionAP21(CCObject* cb);
-	void cancelAP21(CCObject* cb){		}
-	
-	void actionAP22(CCObject* cb);
-	void cancelAP22(CCObject* cb){		}
-	
-	void actionAP23(CCObject* cb);
-	void cancelAP23(CCObject* cb){		}
-	
-	void actionAP24(CCObject* cb);
-	void cancelAP24(CCObject* cb){	}
-	
-	void actionAP25(CCObject* cb);
-	void cancelAP25(CCObject* cb){		}
-	
-	void actionAP26(CCObject* cb);
-	void cancelAP26(CCObject* cb){		}
-	
-	void actionAP27(CCObject* cb);
-	void cancelAP27(CCObject* cb){	}
-	
-	void actionAP28(CCObject* cb);
-	void cancelAP28(CCObject* cb){	}
-	
-	void actionAP29(CCObject* cb);
-	void cancelAP29(CCObject* cb){	}
-	
-	void actionAP30(CCObject* cb);
-	void cancelAP30(CCObject* cb){	}
-	
-	void actionAP31(CCObject* cb);
-	void cancelAP31(CCObject* cb){		}
-	
-	void actionAP32(CCObject* cb);
-	void cancelAP32(CCObject* cb){		}
-	
-	void actionAP33(CCObject* cb);
-	void cancelAP33(CCObject* cb){		}
-	
-	void actionAP34(CCObject* cb);
-	void cancelAP34(CCObject* cb){	}
-	
-	void actionAP101(CCObject* cb);
-	void cancelAP101(CCObject* cb){		}
-	
-	void actionAP102(CCObject* cb);
-	void cancelAP102(CCObject* cb){		}
-	
-	void actionAP103(CCObject* cb);
-	void cancelAP103(CCObject* cb){	}
-	
-	
-	
-	
+
 
 	
 	void createSubCumberReplication(CCPoint s_p, CCObject* sender, SEL_CallFuncO d_startMoving);
@@ -365,33 +255,19 @@ public:
 	
 	void resetTickingTimeBomb();
 	
-	void deleteKeepAP25(){		keepAP25 = NULL;	}
-	void protectedAP25(){		keepAP25->stopFrame();	}
+	
 	
 	void deleteKeepAP23(){		keepAP23 = NULL;	}
 	void deleteKeepAP26(){		keepAP26 = NULL;	}
 	void protectedAP26(){		keepAP26->stopFrame();	}
 	
-	void deleteKeepAP27(){		keepAP27 = NULL;	}
-	void protectedAP27(){		keepAP27->stopFrame();	}
+
 	
 	void deleteKeepAP33(){		keepAP33 = NULL;	}
 	void protectedAP33(){		keepAP33->stopFrame();	}
 	
 	void deleteKeepAP24(){		keepAP24 = NULL;	}
-	void deleteKeepAP34(){		keepAP34 = NULL;	}
-	void deleteKeepAP35()
-	{
-		if(keepAP35)
-		{
-			keepAP35->stopFraming();
-			keepAP35 = NULL;
-		}
-	}
-	
-	void stopAutoAttacker();
-	
-	void startAutoAttacker();
+
 	
 	virtual ~MissileParent()
 	{
@@ -410,7 +286,6 @@ public:
 	int attackWithKSCode(CCPoint startPosition, std::string pattern, KSCumberBase* cb, bool exe);
 private:
 	
-	AutoAttacker* myAA;
 	SW_Parent* mySW;
 	
 	RandomSelector* myRS;
@@ -420,15 +295,11 @@ private:
 	
 	bool savedAP;
 	AttackPattern* saveAP;
-	AP_Missile7* keepAP7;
-	AP_Missile25* keepAP25;
+
 	AP_Missile23* keepAP23;
 	AP_Missile26* keepAP26;
-	AP_Missile27* keepAP27;
 	AP_Missile33* keepAP33;
 	AP_Missile24* keepAP24;
-	AP_Missile34* keepAP34;
-	AP_Missile35* keepAP35;
 	CCArray* chargeArray;
 	CCArray* tickingArray;
 	

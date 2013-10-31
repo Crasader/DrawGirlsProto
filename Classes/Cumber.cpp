@@ -257,7 +257,7 @@ void CumberParent::movingSubCumbers()
 
 void CumberParent::startAutoAttacker()
 {
-	myMP->startAutoAttacker();
+
 }
 
 void CumberParent::jackCrashDie()
@@ -396,6 +396,7 @@ void CumberParent::createSubCumber(IntPoint s_p)
 			break;
 	}
 	t_SC->settingHp(junior.m_jrHp);
+	t_SC->settingAI(junior.m_aiValue);
 	t_SC->settingScale(junior.m_jrStartScale, junior.m_jrMinScale, junior.m_jrMaxScale);
 	t_SC->settingSpeed(junior.m_jrStartSpeed, junior.m_jrMinSpeed, junior.m_jrMaxSpeed);
 	t_SC->settingMovement((enum MOVEMENT)junior.m_jrNormalMovement, (enum MOVEMENT)junior.m_jrDrawMovement,
@@ -637,7 +638,7 @@ void CumberParent::myInit()
 			int normalMovement = boss["movement"]["normal"].asInt();
 			int drawMovement = boss["movement"]["draw"].asInt();
 			int furyMovement = boss["movement"]["fury"].asInt();
-			
+			int aiValue = boss.get("ai", 0).asInt();
 			if(furyMovement == 0)
 			{
 				furyMovement = normalMovement;
@@ -645,7 +646,7 @@ void CumberParent::myInit()
 			//## 여기서 부하몹 분기가 들어감...
 			//## 지금은 그냥 Bear 가 부하임.
 			jrType jt(bossType, minSpeed, startSpeed, maxSpeed, minScale, startScale, maxScale, normalMovement,
-					  drawMovement, furyMovement, hp);
+					  drawMovement, furyMovement, hp, aiValue);
 			m_juniors.push_back(jt);
 			
 			KSCumberBase* t_SC;
@@ -675,6 +676,7 @@ void CumberParent::myInit()
 			}
 			
 			t_SC->settingHp(hp);
+			t_SC->settingAI(aiValue);
 			t_SC->settingScale(startScale, minScale, maxScale);
 			t_SC->settingSpeed(startSpeed, minSpeed, maxSpeed);
 			t_SC->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement
