@@ -397,7 +397,7 @@ void PuzzleMapScene::setUIs()
 	CCSprite* s_tutorial = CCSprite::create("test_ui_tutorial.png");
 	s_tutorial->setColor(ccGRAY);
 	
-	CCMenuItem* tutorial_item = CCMenuItemSprite::create(n_tutorial, s_tutorial);
+	CCMenuItem* tutorial_item = CCMenuItemSprite::create(n_tutorial, s_tutorial, this, menu_selector(PuzzleMapScene::menuAction));
 	tutorial_item->setTag(kPMS_MT_tutorial);
 	
 	CCMenu* tutorial_menu = CCMenu::createWithItem(tutorial_item);
