@@ -109,7 +109,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSJuniorBase::damageReaction));
 		crashMapForPosition(getPosition());
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 	}
 	if(m_remainHp <= 0)
 	{
@@ -314,14 +314,14 @@ void KSJuniorBase::furyModeScheduler(float dt)
 		
 		m_state = CUMBERSTATEMOVING;
 		//		m_headImg->setColor(ccc3(255, 255, 255));
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
 void KSJuniorBase::furyModeOff()
 {
 	//	myGD->communication("EP_stopCrashAction");
-	myGD->communication("MS_resetRects");
+	myGD->communication("MS_resetRects", false);
 }
 
 

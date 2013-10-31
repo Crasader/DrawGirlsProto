@@ -130,7 +130,7 @@ enum SDS_KEY
 	kSDS_CI_int1_script_s,
 	kSDS_CI_int1_silImgInfoIsSil_b,
 	kSDS_CI_int1_silImgInfoImg_s,
-	kSDS_CI_int1_silImgInfoSilData_s,
+//	kSDS_CI_int1_silImgInfoSilData_s,
 	kSDS_CI_end = 3999
 };
 
@@ -547,7 +547,7 @@ private:
 		else if(t_key == kSDS_CI_int1_script_s)						rv = "%d_script";
 		else if(t_key == kSDS_CI_int1_silImgInfoIsSil_b)			rv = "%d_silImgInfo_isSil";
 		else if(t_key == kSDS_CI_int1_silImgInfoImg_s)				rv = "%d_silImgInfo_img";
-		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
+//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
 		
 		return rv.c_str();
 	}

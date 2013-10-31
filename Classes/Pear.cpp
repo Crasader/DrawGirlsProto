@@ -308,7 +308,7 @@ bool Pear::startDamageReaction(float damage, float angle)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(Pear::damageReaction));
 		crashMapForPosition(getPosition());
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 	}
 	
 	if(m_remainHp <= 0)
@@ -488,7 +488,7 @@ void Pear::furyModeScheduler(float dt)
 		{
 			i->setColor(ccc3(255, 255, 255));
 		}
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
@@ -498,7 +498,7 @@ void Pear::furyModeOff()
 	//	if(isFuryMode)
 	//	{
 	//		myGD->communication("EP_stopCrashAction");
-	//		myGD->communication("MS_resetRects");
+	//		myGD->communication("MS_resetRects", false);
 	//		isFuryMode = false;
 	//		furyMode->removeFromParentAndCleanup(true);
 	//	}

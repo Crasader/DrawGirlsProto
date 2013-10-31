@@ -471,6 +471,7 @@ void CardSettingScene::alignChange()
 	
 	createCardList();
 	my_clv->setMaxPositionY();
+	my_clv->setPosition(CCPointZero);
 }
 
 void CardSettingScene::removeMountingCard()

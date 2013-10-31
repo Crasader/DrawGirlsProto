@@ -78,6 +78,8 @@ public:
 	CCTexture2D* addImage(const char * path);
 	void addImageAsync(const char *path, CCObject *target, SEL_CallFuncO selector);
 	
+	string getDocumentPath();
+	
 private:
 	SaveData* my_savedata;
 	
@@ -112,8 +114,6 @@ private:
 	
 	static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp);
 	static void* t_function(void *data);
-	
-	string getDocumentPath();
 	
 	void myInit()
 	{

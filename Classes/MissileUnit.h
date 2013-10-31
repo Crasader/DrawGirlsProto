@@ -2659,7 +2659,7 @@ public:
 	
 	void setTwoStep()
 	{
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 		m_step = 2;
 		m_frame = 0;
 		m_sourcePosition = m_parentMissile->getPosition();
@@ -2814,7 +2814,7 @@ public:
 	void setTwoStep()
 	{
 		schedule(schedule_selector(ThisClassType::selfRemove));
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 		m_step = 2;
 		m_frame = 0;
 		m_sourcePosition = m_parentMissile->getPosition();

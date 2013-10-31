@@ -308,7 +308,7 @@ bool Melon::startDamageReaction(float damage, float angle)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(Melon::damageReaction));
 		crashMapForPosition(getPosition());
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 	}
 	
 	if(m_remainHp <= 0)
@@ -490,7 +490,7 @@ void Melon::furyModeScheduler(float dt)
 		{
 			i->setColor(ccc3(255, 255, 255));
 		}
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
@@ -500,7 +500,7 @@ void Melon::furyModeOff()
 	//	if(isFuryMode)
 	//	{
 	//		myGD->communication("EP_stopCrashAction");
-	//		myGD->communication("MS_resetRects");
+	//		myGD->communication("MS_resetRects", false);
 	//		isFuryMode = false;
 	//		furyMode->removeFromParentAndCleanup(true);
 	//	}

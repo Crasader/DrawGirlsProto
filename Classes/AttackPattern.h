@@ -633,6 +633,209 @@ private:
 		startMyAction();
 	}
 };
+<<<<<<< HEAD
+=======
+
+class AP_Missile10 : public AttackPattern
+{
+public:
+	static AP_Missile10* create(CCPoint t_sp, int t_tmCnt, int t_targetingFrame, int t_shootFrame, CCSize t_mSize)
+	{
+		AP_Missile10* t_m10 = new AP_Missile10();
+		t_m10->myInit(t_sp, t_tmCnt, t_targetingFrame, t_shootFrame, t_mSize);
+		t_m10->autorelease();
+		return t_m10;
+	}
+	
+	virtual void stopMyAction()
+	{
+		CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile10::removeBiz));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		biz_spr->runAction(t_seq);
+		
+		unschedule(schedule_selector(AP_Missile10::myAction));
+		
+		while(!targetingArray.empty())
+		{
+			Targeting* t_t = targetingArray.front();
+			targetingArray.pop_front();
+			t_t->remove();
+		}
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	
+	void removeEffect()
+	{
+		if(!isRemoveEffect)
+		{
+			isRemoveEffect = true;
+			unschedule(schedule_selector(AP_Missile10::myAction));
+			myGD->communication("MP_endIngActionAP");
+			myGD->communication("CP_onPatternEnd");
+			
+			CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile10::selfRemove));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+			
+			biz_spr->runAction(t_seq);
+		}
+	}
+	
+private:
+	
+	CCPoint sp;
+	int tmCnt;
+	int targetingFrame;
+	int targetRate;
+	int shootFrame;
+	int shootRate;
+	int ingFrame;
+	CCSize mSize;
+	CCSprite* biz_spr;
+	
+	bool isRemoveEffect;
+	
+	deque<Targeting*> targetingArray;
+	
+	void selfRemove()
+	{
+		removeFromParentAndCleanup(true);
+	}
+	
+	void removeBiz()
+	{
+		biz_spr->removeFromParentAndCleanup(true);
+	}
+	
+	void startMyAction()
+	{
+		ingFrame = 0;
+		
+		biz_spr = CCSprite::create("lazer_bead.png");
+		biz_spr->setScale(0);
+		biz_spr->setPosition(sp);
+		addChild(biz_spr, 3);
+		
+		CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f);
+		biz_spr->runAction(t_scale);
+		
+		schedule(schedule_selector(AP_Missile10::myAction));
+	}
+	void myAction()
+	{
+		ingFrame++;
+		
+		if(ingFrame <= targetingFrame)
+		{
+			if(ingFrame%targetRate == 0)
+			{
+				// targeting
+				IntPoint jackPoint = myGD->getJackPoint();
+				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
+				
+				Targeting* t_targeting = Targeting::create();
+				t_targeting->setPosition(jackPosition);
+				addChild(t_targeting, 2);
+				
+				targetingArray.push_back(t_targeting);
+			}
+		}
+		else if(ingFrame <= targetingFrame + shootFrame)
+		{
+			if((ingFrame-targetingFrame)%shootRate == 0)
+			{
+				// shoot
+				Targeting* t_t = targetingArray.front();
+				targetingArray.pop_front();
+				
+				TG_Shoot* t_s = TG_Shoot::create(rand()%4+1, sp, t_t->getPosition(), 20, 10, t_t, mSize, this, callfunc_selector(AP_Missile10::removeEffect));
+				addChild(t_s, 2);
+			}
+		}
+		
+		if(ingFrame >= targetingFrame + shootFrame)
+		{
+			stopMyAction();
+		}
+	}
+	
+	void myInit(CCPoint t_sp, int t_tmCnt, int t_targetingFrame, int t_shootFrame, CCSize t_mSize)
+	{
+		isRemoveEffect = false;
+		
+		mSize = t_mSize;
+		sp = t_sp;
+		tmCnt = t_tmCnt;
+		targetingFrame = t_targetingFrame;
+		targetRate = targetingFrame/tmCnt;
+		shootFrame = t_shootFrame;
+		shootRate = shootFrame/tmCnt;
+		
+		startMyAction();
+	}
+};
+
+class AP_Missile11 : public AttackPattern
+{
+public:
+	static AP_Missile11* create(CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize)
+	{
+		AP_Missile11* t_m11 = new AP_Missile11();
+		t_m11->myInit(t_sp, t_type, t_speed, t_mSize);
+		t_m11->autorelease();
+		return t_m11;
+	}
+	
+	virtual void stopMyAction()
+	{
+		myGD->communication("MP_endIngActionAP");
+		
+		startSelfRemoveSchedule();
+	}
+	
+private:
+	
+	
+	virtual void selfRemoveSchedule()
+	{
+		if(getChildrenCount() == 0)
+		{
+//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects", false);
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void myInit(CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize)
+	{
+		
+//		myGD->communication("EP_startCrashAction");
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+		
+		CCPoint subPosition = ccpSub(jackPosition, t_sp);
+		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
+		
+		float throwAngle;
+		
+		if(distance < 200)			throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + (rand()%91-45)/2;
+		else						throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + (rand()%31-15)/2;
+		
+		
+		ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, throwAngle, t_mSize);
+		addChild(t_to);
+		t_to->startMyAction();
+		stopMyAction();
+	}
+};
+
+>>>>>>> 6297a13429ae71b014b5ad1aa94e6dd2353a4df4
 class AP_Missile12 : public AttackPattern
 {
 public:
@@ -723,8 +926,13 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
+<<<<<<< HEAD
 			//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
+=======
+//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects", false);
+>>>>>>> 6297a13429ae71b014b5ad1aa94e6dd2353a4df4
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -838,6 +1046,95 @@ private:
 	}
 };
 
+<<<<<<< HEAD
+=======
+class AP_Missile13 : public AttackPattern // dash
+{
+public:
+	
+	
+private:
+	
+	
+};
+
+class AP_Missile14 : public AttackPattern
+{
+public:
+	static AP_Missile14* create(CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, IntSize t_mSize)
+	{
+		AP_Missile14* t_m14 = new AP_Missile14();
+		t_m14->myInit(t_sp, t_type, t_speed, t_tmCnt, t_mSize);
+		t_m14->autorelease();
+		return t_m14;
+	}
+	
+	virtual void stopMyAction()
+	{
+		myGD->communication("MP_endIngActionAP");
+		
+		startSelfRemoveSchedule();
+	}
+	
+private:
+	
+	
+	virtual void selfRemoveSchedule()
+	{
+		if(getChildrenCount() == 0)
+		{
+//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects", false);
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void myInit(CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, IntSize t_mSize)
+	{
+		
+		
+//		myGD->communication("EP_startCrashAction");
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+		
+		CCPoint subPosition = ccpSub(jackPosition, t_sp);
+		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
+		
+		float baseAngle;
+		
+		if(distance < 200)			baseAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%91 - 45;
+		else						baseAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%31 - 15;
+		
+
+		int left = t_tmCnt / 2;
+		int right = t_tmCnt - left;
+		int unitDegree = 20;
+		for(int i=1; i<=left; i++)
+		{
+			float t_angle = baseAngle - i*unitDegree;
+			if(t_angle >= 180)		t_angle -= 360;
+			if(t_angle < -180)		t_angle += 360;
+			
+			ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, t_angle, t_mSize);
+			addChild(t_to);
+			t_to->startMyAction();
+		}
+		for (int i=0; i<right; i++) {
+			float t_angle = baseAngle + i*unitDegree;
+			if(t_angle >= 180)		t_angle -= 360;
+			if(t_angle < -180)		t_angle += 360;
+			
+			ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, t_angle, t_mSize);
+			addChild(t_to);
+			t_to->startMyAction();
+		}
+		
+		stopMyAction();
+	}
+};
+
+>>>>>>> 6297a13429ae71b014b5ad1aa94e6dd2353a4df4
 class AP_Missile15 : public AttackPattern // burn
 {
 public:
@@ -917,8 +1214,13 @@ private:
 	{
 		if(getChildrenCount() == 0)
 		{
+<<<<<<< HEAD
 			//			myGD->communication("EP_stopCrashAction");
 			myGD->communication("MS_resetRects");
+=======
+//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects", false);
+>>>>>>> 6297a13429ae71b014b5ad1aa94e6dd2353a4df4
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -1123,7 +1425,13 @@ private:
 		cobwebImg->setScale(m_scaleFromTo.getValue());
 		if(ingFrame >= slowFrame)
 		{
+<<<<<<< HEAD
 			stopFrame();
+=======
+//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects", false);
+			removeFromParentAndCleanup(true);
+>>>>>>> 6297a13429ae71b014b5ad1aa94e6dd2353a4df4
 		}
 	}
 	
@@ -1171,6 +1479,893 @@ private:
 		
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()-0.5f);
 		
+<<<<<<< HEAD
+=======
+		lazer_main->runAction(t_seq);
+		lazer_sub->runAction(t_fade2);
+	}
+	
+private:
+	
+	int type;
+	CCPoint sp;
+	int createRingFrame;
+	int chargeFrame;
+	int crashFrame;
+	int ingFrame;
+	float angle;
+	CCPoint dv;
+	CCSprite* lazer_main;
+	int dcolor;
+	CCSprite* t_bead;
+	CCRect crashRect;
+	CCSprite* lazer_sub;
+	float dscale;
+	
+	void selfRemove()
+	{
+		removeFromParentAndCleanup(true);
+	}
+	
+	virtual void selfRemoveSchedule()
+	{
+		if(getChildrenCount() == 0)
+		{
+//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects", false);
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void stopMySchedule()
+	{
+		unschedule(schedule_selector(AP_Missile17::myAction));
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+	
+	void removeObject()
+	{
+		if(lazer_sub)		lazer_sub->removeFromParentAndCleanup(true);
+		if(lazer_main)		lazer_main->removeFromParentAndCleanup(true);
+		if(t_bead)			t_bead->removeFromParentAndCleanup(true);
+	}
+	
+	void startMyAction()
+	{
+		AudioEngine::sharedInstance()->playEffect("sound_angle_beem.mp3", false);
+		ingFrame = 0;
+		schedule(schedule_selector(AP_Missile17::myAction));
+	}
+	
+	void myAction()
+	{
+		if(ingFrame <= chargeFrame)
+		{
+			ccColor3B tcolor = t_bead->getColor();
+			tcolor.g -= dcolor;
+			tcolor.b -= dcolor;
+			t_bead->setColor(tcolor);
+			lazer_sub->setScaleY(lazer_sub->getScaleY()-dscale);
+			lazer_sub->setColor(tcolor);
+			if(ingFrame%createRingFrame == 0)
+			{
+				int random_sp = rand()%21-10;
+				CCPoint r_sp = ccpMult(dv, 60 + random_sp);
+				r_sp = ccpAdd(sp, r_sp);
+				CCPoint r_fp = ccpMult(dv, 20);
+				r_fp = ccpAdd(sp, r_fp);
+				
+				int random_frame = rand()%20 + 20;
+				float random_s = (rand()%3)/10.f;
+				
+				Lazer_Ring* t_lr = Lazer_Ring::create(angle, r_sp, r_fp, 1.f-random_s, 0.3f-random_s, random_frame, tcolor);
+				addChild(t_lr);
+			}
+			
+			
+			if(ingFrame == chargeFrame)
+			{
+				lazer_main = CCSprite::create("lazer_main.png", CCRectMake(0, 0, 460, 50));
+				lazer_main->setAnchorPoint(ccp(0,0.5));
+				lazer_main->setRotation(-angle);
+				
+				CCPoint mp = ccpMult(dv, 30);
+				mp = ccpAdd(sp, mp);
+				lazer_main->setPosition(mp);
+				
+				addChild(lazer_main);
+				
+				CCSprite* t_texture = CCSprite::create("lazer_main.png");
+				CCAnimation* t_animation = CCAnimation::create();
+				t_animation->setDelayPerUnit(0.1);
+				for(int i=0;i<3;i++)
+				{
+					t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(0, i*50, 460, 50));
+				}
+				
+				CCAnimate* t_animate = CCAnimate::create(t_animation);
+				CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+				
+				lazer_main->runAction(t_repeat);
+				
+				CCPoint c_sp = ccpMult(dv, 30);
+				c_sp = ccpAdd(sp, c_sp);
+				
+				crashRect = CCRectMake(0, -60/2.f+10, 460, 60/2.f+10);
+				
+				lineCrashMap(c_sp, angle, 460, 60);
+			}
+		}
+		else if(ingFrame <= chargeFrame+crashFrame)
+		{
+			IntPoint jackPoint = myGD->getJackPoint();
+			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+			
+			CCPoint t_jp = spinTransform(jackPosition, sp, angle);
+			
+			if(crashRect.containsPoint(t_jp))
+			{
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+//				stopMySchedule();
+				removeEffect();
+			}
+		}
+		
+		if(ingFrame >= chargeFrame+crashFrame)
+		{
+			stopMyAction();
+		}
+		ingFrame++;
+	}
+	
+	void lineCrashMap(CCPoint t_sp, float t_angle, int t_width, int t_height)
+	{
+		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+		{
+			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+			{
+				CCPoint t_tp = ccp((i-1)*pixelSize+1,(j-1)*pixelSize+1);
+				CCPoint a_tp = spinTransform(t_tp, t_sp, t_angle);
+				if(crashRect.containsPoint(a_tp))
+				{
+					crashMapForIntPoint(IntPoint(i,j));
+				}
+			}
+		}
+	}
+	
+	void crashMapForIntPoint(IntPoint t_p)
+	{
+		if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
+		{
+			myGD->mapState[t_p.x][t_p.y] = mapEmpty;
+			for(int k = -1;k<=1;k++)
+			{
+				for(int l = -1;l<=1;l++)
+				{
+					if(k == 0 && l == 0)	continue;
+					if(myGD->mapState[t_p.x+k][t_p.y+l] == mapOldget)		myGD->mapState[t_p.x+k][t_p.y+l] = mapOldline;
+				}
+			}
+//			myGD->communication("EP_crashed");
+			myGD->communication("MFP_createNewFragment", t_p);
+			myGD->communication("VS_divideRect", t_p);
+		}
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		
+		if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
+		{
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+			removeEffect();
+		}
+		
+		if(t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
+		{
+			//					myGD->communication("PM_pathChainBomb", t_p);
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+			myGD->communication("Main_showLineDiePosition", t_p);
+			removeEffect();
+		}
+	}
+	
+	CCPoint spinTransform(CCPoint t_tp, CCPoint t_bp, float t_angle)
+	{
+		CCPoint a_tp = ccpSub(t_tp, t_bp);
+		float b_angle = atan2f(a_tp.y, a_tp.x)/M_PI*180.f;
+		float a_angle = b_angle - t_angle;
+		
+		if(a_angle >= 180.f)	a_angle -= 360.f;
+		if(a_angle < -180.f)	a_angle += 360.f;
+		
+		float distance = sqrtf(powf(a_tp.x, 2.f) + powf(a_tp.y, 2.f));
+		
+		a_tp.x = 1;
+		a_tp.y = tanf(a_angle/180.f*M_PI);
+		
+		float div_value = sqrtf(powf(a_tp.x, 2.f) + powf(a_tp.y, 2.f));
+		
+		if(a_angle > 90 || a_angle < -90)
+			a_tp = ccpMult(a_tp, -1.f);
+		
+		a_tp = ccpMult(a_tp, 1.f/div_value);
+		
+		a_tp = ccpMult(a_tp, distance);
+		
+		return a_tp;
+	}
+	
+	void myInit(CCPoint t_sp, int t_type, int t_createRingFrame, int t_chargeFrame, int t_crashFrame)
+	{
+		
+//		myGD->communication("EP_startCrashAction");
+		sp = t_sp;
+		type = t_type;
+		createRingFrame = t_createRingFrame;
+		chargeFrame = t_chargeFrame;
+		dcolor = 255.f/chargeFrame;
+		dscale = 0.7f/chargeFrame;
+		crashFrame = t_crashFrame;
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+		
+		CCPoint subPosition = ccpSub(jackPosition, t_sp);
+		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
+		
+		if(distance < 200)			angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
+		else						angle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;
+		
+		CCPoint beadPosition;
+		beadPosition.x = 1;
+		beadPosition.y = tanf(angle/180.f*M_PI);
+		
+		if((angle > 90.f && angle < 270.f) || angle < -90.f)
+		{
+			beadPosition = ccpMult(beadPosition, -1.f);
+		}
+		
+		float div_value = sqrtf(powf(beadPosition.x, 2.f) + powf(beadPosition.y, 2.f));
+		dv = ccpMult(beadPosition, 1.f/div_value);
+		beadPosition = ccpMult(dv, 20.f);
+		
+		beadPosition = ccpAdd(beadPosition, t_sp);
+		
+		t_bead = CCSprite::create("lazer_bead.png");
+		t_bead->setPosition(beadPosition);
+		addChild(t_bead);
+		
+		lazer_sub = CCSprite::create("lazer_sub.png");
+		lazer_sub->setAnchorPoint(ccp(0,0.5));
+		lazer_sub->setRotation(-angle);
+		
+		CCPoint subP = ccpMult(dv, 5);
+		subP = ccpAdd(beadPosition, subP);
+		lazer_sub->setPosition(subP);
+		addChild(lazer_sub);
+		
+		startMyAction();
+	}
+};
+
+class AP_Missile18 : public AttackPattern
+{
+public:
+	static AP_Missile18* create(CCPoint t_sp, float t_move_speed, int t_tmCnt, int t_cushion_cnt, bool t_is_big_bomb)
+	{
+		AP_Missile18* t_m18 = new AP_Missile18();
+		t_m18->myInit(t_sp, t_move_speed, t_tmCnt, t_cushion_cnt, t_is_big_bomb);
+		t_m18->autorelease();
+		return t_m18;
+	}
+	
+	void removeEffect()
+	{
+		if(!isRemoveEffect)
+		{
+			isRemoveEffect = true;
+			int loop_cnt = getChildrenCount();
+			for(int i=0;i<loop_cnt;i++)
+			{
+				((ThreeCushion*)getChildren()->objectAtIndex(i))->removeEffect();
+			}
+		}
+	}
+	
+private:
+	
+	bool isRemoveEffect;
+	
+	virtual void selfRemoveSchedule()
+	{
+		if(getChildrenCount() == 0)
+		{
+//			myGD->communication("EP_stopCrashAction");
+			myGD->communication("MS_resetRects", false);
+			removeFromParentAndCleanup(true);
+		}
+	}
+	
+	void myInit(CCPoint t_sp, float t_move_speed, int t_tmCnt, int t_cushion_cnt, bool t_is_big_bomb)
+	{
+		isRemoveEffect = false;
+//		myGD->communication("EP_startCrashAction");
+		for(int i=0;i<t_tmCnt;i++)
+		{
+			// create
+			ThreeCushion* t_tc = ThreeCushion::create(t_sp, t_move_speed, t_cushion_cnt, t_is_big_bomb, this, callfunc_selector(AP_Missile18::removeEffect));
+			addChild(t_tc);
+		}
+		
+		startSelfRemoveSchedule();
+	}
+};
+
+class AP_Missile19 : public AttackPattern // ticking time bomb
+{
+public:
+	
+	
+private:
+	
+	
+};
+
+class AP_Missile21 : public AttackPattern // blind
+{
+public:
+	static AP_Missile21* create(CCPoint t_sp, int tf, int sc)
+	{
+		AP_Missile21* t_m21 = new AP_Missile21();
+		t_m21->myInit(t_sp, tf, sc);
+		t_m21->autorelease();
+		return t_m21;
+	}
+	
+private:
+	
+	
+	void myInit(CCPoint t_sp, int tf, int sc)
+	{
+		int totalFrame = tf;
+		float scale = sc;
+		IntPoint jackPoint = myGD->getJackPoint();
+		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+		
+		BlindDrop* t_bd = BlindDrop::create(t_sp, jackPosition, 20, totalFrame, scale);
+		addChild(t_bd);
+		t_bd->startAction();
+		
+		startSelfRemoveSchedule();
+	}
+};
+
+//class AP_Missile22 : public AttackPattern // poison line
+//{
+//public:
+//	static AP_Missile22* create(CCPoint t_sp)
+//	{
+//		AP_Missile22* t_m22 = new AP_Missile22();
+//		t_m22->myInit(t_sp);
+//		t_m22->autorelease();
+//		return t_m22;
+//	}
+//	
+//private:
+//	
+//	
+//	
+//	void myInit(CCPoint t_sp)
+//	{
+//		
+//		IntPoint jackPoint = myGD->getJackPoint();
+//		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
+//		
+//		PoisonDrop* t_pd = PoisonDrop::create(t_sp, jackPosition, 120, 20);
+//		addChild(t_pd);
+//		t_pd->startAction();
+//		
+//		startSelfRemoveSchedule();
+//	}
+//};
+
+class AP_Missile23 : public AttackPattern // cobweb
+{
+public:
+	static AP_Missile23* create(int t_frame)
+	{
+		AP_Missile23* t_m23 = new AP_Missile23();
+		t_m23->myInit(t_frame);
+		t_m23->autorelease();
+		return t_m23;
+	}
+	
+	void updateCobweb()
+	{
+		if(!is_stop)
+			ingFrame = 0;
+	}
+	
+private:
+	
+	int slowFrame;
+	int ingFrame;
+	bool is_stop;
+	CCSprite* cobwebImg;
+	FromToWithDuration<float> m_scaleFromTo;
+	void startFrame()
+	{
+		ingFrame = 0;
+		schedule(schedule_selector(AP_Missile23::framing));
+	}
+	
+	void framing()
+	{
+		ingFrame++;
+		
+		m_scaleFromTo.step(1/60.f);
+		cobwebImg->setScale(m_scaleFromTo.getValue());
+		if(ingFrame >= slowFrame)
+		{
+			stopFrame();
+		}
+	}
+	
+	void removeCobweb()
+	{
+		cobwebImg->removeFromParent();
+		startSelfRemoveSchedule();
+	}
+	
+	void stopFrame()
+	{
+		is_stop = true;
+		unschedule(schedule_selector(AP_Missile23::framing));
+		
+		cobwebImg->stopAllActions();
+		
+		CCScaleTo* t_scale = CCScaleTo::create(0.3, 0.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile23::removeCobweb));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		cobwebImg->runAction(t_seq);
+		
+		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
+		myGD->communication("MP_deleteKeepAP23");
+	}
+	
+	void myInit(int t_frame)
+	{
+		is_stop = false;
+		
+		slowFrame = t_frame;
+		
+		
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		cobwebImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
+		reader->release();
+		
+		cobwebImg->setPosition(ccp(160,215));
+		cobwebImg->setScale(0.f);
+		
+		addChild(cobwebImg);
+		m_scaleFromTo.init(0.0f, 1.0f, 0.3f);
+//		CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.f);
+//		cobwebImg->runAction(t_scale); // 나중에 수동으로 구현해야함.
+		
+		myGD->setAlphaSpeed(myGD->getAlphaSpeed()-0.5f);
+		
+		startFrame();
+	}
+};
+
+class AP_Missile24 : public AttackPattern // sight out
+{
+public:
+	static AP_Missile24* create(int t_frame)
+	{
+		AP_Missile24* t_m24 = new AP_Missile24();
+		t_m24->myInit(t_frame);
+		t_m24->autorelease();
+		return t_m24;
+	}
+	
+	void updateSightOut()
+	{
+		ingFrame = 0;
+		
+		SightOut* t_so = SightOut::create();
+		t_so->setPosition(ccp(160,215));
+		addChild(t_so);
+		t_so->startAction();
+	}
+	
+private:
+	
+	int sightOutFrame;
+	int ingFrame;
+	
+	void startFrame()
+	{
+		ingFrame = 0;
+		schedule(schedule_selector(AP_Missile24::framing));
+	}
+	
+	void framing()
+	{
+		ingFrame++;
+		
+		if(ingFrame >= sightOutFrame)
+		{
+			stopFrame();
+		}
+	}
+	
+	void stopFrame()
+	{
+		unschedule(schedule_selector(AP_Missile24::framing));
+		
+		myGD->communication("MP_deleteKeepAP24");
+		startSelfRemoveSchedule();
+	}
+	
+	void myInit(int t_frame)
+	{
+		
+		sightOutFrame = t_frame;
+		
+		SightOut* t_so = SightOut::create();
+		t_so->setPosition(ccp(160,215));
+		addChild(t_so);
+		t_so->startAction();
+		
+		startFrame();
+	}
+};
+
+class AP_Missile25 : public AttackPattern // stun hammer
+{
+public:
+	static AP_Missile25* create(int t_frame)
+	{
+		AP_Missile25* t_m25 = new AP_Missile25();
+		t_m25->myInit(t_frame);
+		t_m25->autorelease();
+		return t_m25;
+	}
+	
+	void updateStun()
+	{
+		myGD->communication("Jack_createHammer");
+		ingFrame = 0;
+	}
+	
+	void stopFrame()
+	{
+		unschedule(schedule_selector(AP_Missile25::framing));
+		myGD->communication("MP_deleteKeepAP25");
+		removeFromParentAndCleanup(true);
+	}
+	
+private:
+	
+	int stunFrame;
+	int ingFrame;
+	
+	void startFrame()
+	{
+		ingFrame = 0;
+		schedule(schedule_selector(AP_Missile25::framing));
+	}
+	
+	void framing()
+	{
+		ingFrame++;
+		
+		if(ingFrame >= stunFrame)
+		{
+			myGD->communication("Main_touchOn");
+			stopFrame();
+		}
+	}
+	
+	void myInit(int t_frame)
+	{
+		
+		stunFrame = t_frame;
+		
+		myGD->communication("Jack_createHammer");
+		startFrame();
+	}
+};
+
+class AP_Missile26 : public AttackPattern // freeze
+{
+public:
+	static AP_Missile26* create(int t_frame)
+	{
+		AP_Missile26* t_m26 = new AP_Missile26();
+		t_m26->myInit(t_frame);
+		t_m26->autorelease();
+		return t_m26;
+	}
+	
+	void updateFreeze()
+	{
+		myGD->communication("Jack_createFog");
+		ingFrame = 0;
+	}
+	
+	void stopFrame()
+	{
+		unschedule(schedule_selector(AP_Missile26::framing));
+		myGD->communication("MP_deleteKeepAP26");
+		removeFromParentAndCleanup(true);
+	}
+	
+private:
+	
+	int freezingFrame;
+	int ingFrame;
+	
+	void startFrame()
+	{
+		ingFrame = 0;
+		schedule(schedule_selector(AP_Missile26::framing));
+	}
+	
+	void framing()
+	{
+		ingFrame++;
+		
+		if(ingFrame >= freezingFrame)
+		{
+			myGD->communication("Main_touchOn");
+			stopFrame();
+		}
+	}
+	
+	void myInit(int t_frame)
+	{
+		
+		freezingFrame = t_frame;
+		
+		myGD->communication("Jack_createFog");
+		startFrame();
+	}
+};
+
+class AP_Missile27 : public AttackPattern // sleep
+{
+public:
+	static AP_Missile27* create(int t_frame)
+	{
+		AP_Missile27* t_m27 = new AP_Missile27();
+		t_m27->myInit(t_frame);
+		t_m27->autorelease();
+		return t_m27;
+	}
+	
+	void updateSleep()
+	{
+		myGD->communication("Jack_createSleep");
+		ingFrame = 0;
+	}
+	
+	void stopFrame()
+	{
+		unschedule(schedule_selector(AP_Missile27::framing));
+		myGD->communication("MP_deleteKeepAP27");
+		removeFromParentAndCleanup(true);
+	}
+	
+private:
+	
+	int sleepFrame;
+	int ingFrame;
+	
+	void startFrame()
+	{
+		ingFrame = 0;
+		schedule(schedule_selector(AP_Missile27::framing));
+	}
+	
+	void framing()
+	{
+		ingFrame++;
+		
+		if(ingFrame >= sleepFrame)
+		{
+			myGD->communication("Main_touchOn");
+			stopFrame();
+		}
+	}
+	
+	void myInit(int t_frame)
+	{
+		
+		sleepFrame = t_frame;
+		
+		myGD->communication("Jack_createSleep");
+		startFrame();
+	}
+};
+
+class AP_Missile28 : public AttackPattern // prison
+{
+public:
+	static AP_Missile28* create(CCPoint t_sp, int t_type, int t_distance, int t_tmCnt)
+	{
+		AP_Missile28* t_m28 = new AP_Missile28();
+		t_m28->myInit(t_sp, t_type, t_distance, t_tmCnt);
+		t_m28->autorelease();
+		return t_m28;
+	}
+	
+	void startMyAction()
+	{
+		ingFrame = 0;
+		schedule(schedule_selector(AP_Missile28::myAction));
+	}
+	
+private:
+	
+	CCPoint jackPosition;
+	CCPoint sp;
+	int type;
+	int distance;
+	int tmCnt;
+	int prisonFrame;
+	int ingFrame;
+	int createFrame;
+	float da;
+	float baseAngle;
+	
+	
+	void myAction()
+	{
+		ingFrame++;
+		
+		if(ingFrame <= 60 && ingFrame%createFrame == 0)
+		{
+			for(int i=0;i<4;i++)
+			{
+				float t_angle = baseAngle+i*90.f;
+				if(t_angle > 180)		t_angle -= 360;
+				if(t_angle < -180)		t_angle += 360;
+				
+				CCPoint t_p;
+				t_p.x = 1;
+				t_p.y = tanf(t_angle/180.f*M_PI);
+				
+				if((t_angle > 90 && t_angle < 270) || t_angle < -90)
+					t_p = ccpMult(t_p, -1.f);
+				
+				float div_value = sqrtf(powf(t_p.x, 2.f) + powf(t_p.y, 2.f));
+				t_p = ccpMult(t_p, 1.f/div_value);
+				t_p = ccpMult(t_p, distance);
+				t_p = ccpAdd(t_p, jackPosition);
+				
+				PrisonObject* t_po = PrisonObject::create(t_p, type, 300);
+				addChild(t_po);
+				t_po->startMyAction();
+			}
+			
+			baseAngle += da;
+		}
+		
+		
+		if(ingFrame-60 >= prisonFrame)
+		{
+			stopMyAction();
+		}
+	}
+	
+	void stopMyAction()
+	{
+		unschedule(schedule_selector(AP_Missile28::myAction));
+		startSelfRemoveSchedule();
+	}
+	
+	void myInit(CCPoint t_sp, int t_type, int t_distance, int t_tmCnt) // create 0.5 second
+	{
+		
+		IntPoint jackPoint = myGD->getJackPoint();
+		jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
+		sp = t_sp;
+		type = t_type;
+		distance = t_distance;
+		tmCnt = t_tmCnt;
+		baseAngle = rand()%360-180.f;
+		da = 90.f/(tmCnt/4.f);
+		
+		createFrame = 60/(tmCnt/4);
+		
+		prisonFrame = 300;
+	}
+};
+
+class AP_Missile32 : public AttackPattern // teleport
+{
+public:
+	static AP_Missile32* create()
+	{
+		AP_Missile32* t_m32 = new AP_Missile32();
+		t_m32->myInit();
+		t_m32->autorelease();
+		return t_m32;
+	}
+	
+private:
+	
+	
+	void myInit()
+	{
+		
+		myGD->communication("CP_startTeleport");
+		startSelfRemoveSchedule();
+	}
+};
+
+class AP_Missile33 : public AttackPattern // chaos
+{
+public:
+	static AP_Missile33* create(int t_frame)
+	{
+		AP_Missile33* t_m33 = new AP_Missile33();
+		t_m33->myInit(t_frame);
+		t_m33->autorelease();
+		return t_m33;
+	}
+	
+	void updateChaos()
+	{
+		ingFrame = 0;
+	}
+	
+	void stopFrame()
+	{
+		unschedule(schedule_selector(AP_Missile33::framing));
+		myGD->communication("MP_deleteKeepAP33");
+		startSelfRemoveSchedule();
+	}
+	
+private:
+	
+	int chaosFrame;
+	int ingFrame;
+	
+	void startFrame()
+	{
+		ingFrame = 0;
+		schedule(schedule_selector(AP_Missile33::framing));
+	}
+	
+	void framing()
+	{
+		ingFrame++;
+		
+		if(ingFrame >= chaosFrame)
+		{
+			myGD->communication("Jack_reverseOff");
+			stopFrame();
+		}
+	}
+	
+	void myInit(int t_frame)
+	{
+		
+		chaosFrame = t_frame;
+		
+		myGD->communication("Jack_createChaos");
+>>>>>>> 6297a13429ae71b014b5ad1aa94e6dd2353a4df4
 		startFrame();
 	}
 };
@@ -2166,7 +3361,7 @@ private:
 		if(getChildrenCount() == 0)
 		{
 			//			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -2872,7 +4067,7 @@ public:
 		if(getChildrenCount() == 0)
 		{
 			//			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}

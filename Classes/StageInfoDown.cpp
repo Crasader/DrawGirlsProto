@@ -233,7 +233,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 						df_list.push_back(t_df);
 						// ================================
 					}
-					NSDS_SS(kSDS_CI_int1_silImgInfoSilData_s, t_card["no"].asInt(), t_silImgInfo["silData"].asString());
+//					NSDS_SS(kSDS_CI_int1_silImgInfoSilData_s, t_card["no"].asInt(), t_silImgInfo["silData"].asString());
 				}
 			}
 			
