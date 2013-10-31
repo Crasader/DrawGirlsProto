@@ -4785,6 +4785,54 @@ protected:
 	KSCumberBase* m_cumber;
 };
 
+// 폭탄 여러개 던지기
+class KSTargetAttackPattern12 : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(KSTargetAttackPattern12);
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
+	{
+		m_cumber = cb;
+		scheduleUpdate();
+		
+		Json::Reader reader;
+		Json::Value pattern;
+		reader.parse(patternData, pattern);
+		
+		m_frame = 0;
+		m_totalFrame = 100;
+	}
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
+		//		m_parentMissile->removeFromParentAndCleanup(true);
+		startSelfRemoveSchedule();
+	}
+	void update(float dt)
+	{
+		m_frame++;
+		if(m_frame % 20 == 0)
+		{
+			// 쏨~
+			ThrowBomb* gun = ThrowBomb::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()));
+			addChild(gun);
+		}
+		if(m_frame == m_totalFrame)
+		{
+			stopMyAction();
+		}
+	}
+protected:
+	int m_frame;
+	int m_totalFrame;
+	KSCumberBase* m_cumber;
+};
+
 
 class KSSpecialAttackPattern1 : public AttackPattern
 {
@@ -5664,6 +5712,9 @@ private:
 	int m_frameCount;
 	
 	FromToWithDuration<float> m_fadeFromToDuration;
-	};
+};
+
+
+
 
 #endif

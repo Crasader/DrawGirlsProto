@@ -46,11 +46,13 @@ bool TitleScene::init()
 	{
 		myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 	}
+
+	startGetPuzzleList();
 	
-	Json::Value param;
-	param["ManualLogin"] = true;
-	
-	hspConnector::get()->login(param, param, std::bind(&TitleScene::resultLogin, this, std::placeholders::_1));
+//	Json::Value param;
+//	param["ManualLogin"] = true;
+//	
+//	hspConnector::get()->login(param, param, std::bind(&TitleScene::resultLogin, this, std::placeholders::_1));
 	
 	return true;
 }
