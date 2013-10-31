@@ -959,7 +959,7 @@ private:
 		if(getChildrenCount() == 0)
 		{
 //			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -1079,7 +1079,7 @@ private:
 		if(getChildrenCount() == 0)
 		{
 //			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -1229,7 +1229,7 @@ private:
 		if(getChildrenCount() == 0)
 		{
 //			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -1359,7 +1359,7 @@ private:
 		if(getChildrenCount() == 0)
 		{
 //			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -1584,7 +1584,7 @@ private:
 		if(getChildrenCount() == 0)
 		{
 //			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -1703,7 +1703,7 @@ private:
 		if(getChildrenCount() == 0)
 		{
 //			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -1979,7 +1979,7 @@ private:
 		if(getChildrenCount() == 0)
 		{
 //			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -3679,7 +3679,7 @@ private:
 		if(getChildrenCount() == 0)
 		{
 			//			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}
@@ -4385,7 +4385,7 @@ public:
 		if(getChildrenCount() == 0)
 		{
 			//			myGD->communication("EP_stopCrashAction");
-			myGD->communication("MS_resetRects");
+			myGD->communication("MS_resetRects", false);
 			removeFromParentAndCleanup(true);
 		}
 	}

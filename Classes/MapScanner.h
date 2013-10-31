@@ -541,7 +541,7 @@ private:
 	CCObject* start_target;
 	SEL_CallFunc start_delegate;
 	
-	void resetRects();
+	void resetRects(bool is_after_scanmap);
 	
 	IntRect* newRectChecking(IntMoveState start);
 	
@@ -677,7 +677,7 @@ private:
 		blockParent = NULL;
 		
 		myGD->V_V["MS_scanMap"] = std::bind(&MapScanner::scanMap, this);
-		myGD->V_V["MS_resetRects"] = std::bind(&MapScanner::resetRects, this);
+		myGD->V_B["MS_resetRects"] = std::bind(&MapScanner::resetRects, this, _1);
 		
 		
 		setMapImg();

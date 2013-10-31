@@ -954,7 +954,7 @@ public:
 		return (beforePercentage^t_tta)/1000.f;
 	}
 	
-	void setPercentage(float t_p)
+	void setPercentage(float t_p, bool t_b)
 	{
 		if(isFirst)
 		{
@@ -966,23 +966,24 @@ public:
 //			t_p = 0.99f;
 			
 			myGD->communication("CP_changeMaxSize", t_p);
-			
-			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
-			
-			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
+			if(t_b)
+			{
+				AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
+				myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
+				
+				if(t_p > t_beforePercentage)
+				{
+					IntPoint jackPoint = myGD->getJackPoint();
+					CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
+					myGD->communication("Main_percentageGettingEffect", floorf((t_p-t_beforePercentage)*10000.f)/10000.f*100.f, true, jackPosition);
+				}
+			}
 			
 			int item_value = mySGD->getSmallAreaValue();
 			
 			if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per-item_value/100.f)
 				takeBigArea();
-			
-			if(t_p > t_beforePercentage)
-			{
-				IntPoint jackPoint = myGD->getJackPoint();
-				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
-				myGD->communication("Main_percentageGettingEffect", floorf((t_p-t_beforePercentage)*10000.f)/10000.f*100.f, true, jackPosition);
-			}
 			
 			if(t_p >= t_beforePercentage + 0.01f && t_p < clearPercentage)
 			{
@@ -1927,7 +1928,7 @@ private:
 		addChild(my_fp);
 		
 		myGD->V_I["UI_addScore"] = std::bind(&PlayUI::addScore, this, _1);
-		myGD->V_F["UI_setPercentage"] = std::bind(&PlayUI::setPercentage, this, _1);
+		myGD->V_FB["UI_setPercentage"] = std::bind(&PlayUI::setPercentage, this, _1, _2);
 		myGD->V_F["UI_subBossLife"] = std::bind(&PlayUI::subBossLife, this, _1);
 		myGD->V_V["UI_decreasePercentage"] = std::bind(&PlayUI::decreasePercentage, this);
 		myGD->B_V["UI_beRevivedJack"] = std::bind(&PlayUI::beRevivedJack, this);

@@ -109,7 +109,7 @@ bool Blueberry::startDamageReaction(float damage, float angle)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(Blueberry::damageReaction));
 		crashMapForPosition(getPosition());
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 	}
 	
 	if(m_remainHp <= 0)
@@ -301,14 +301,14 @@ void Blueberry::furyModeScheduler(float dt)
 		
 		m_state = CUMBERSTATEMOVING;
 		//		m_headImg->setColor(ccc3(255, 255, 255));
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
 void Blueberry::furyModeOff()
 {
 //	myGD->communication("EP_stopCrashAction");
-	myGD->communication("MS_resetRects");
+	myGD->communication("MS_resetRects", false);
 }
 
 

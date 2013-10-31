@@ -608,7 +608,7 @@ void MainCumber::furyModeOff()
 	if(isFuryMode)
 	{
 //		myGD->communication("EP_stopCrashAction");
-		myGD->communication("MS_resetRects");
+		myGD->communication("MS_resetRects", false);
 		isFuryMode = false;
 		furyMode->removeFromParentAndCleanup(true);
 	}

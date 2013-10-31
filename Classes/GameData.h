@@ -417,6 +417,7 @@ public:
 	std::map<std::string, std::function<void(bool)>> V_B;
 	std::map<std::string, std::function<void(int)>> V_I;
 	std::map<std::string, std::function<void(float)>> V_F;
+	std::map<std::string, std::function<void(float, bool)>> V_FB;
 //	std::map<std::string, std::function<bool(KSCumberBase*, float, float)>> B_CumberBaseFF;
 	std::map<std::string, std::function<void(IntPoint)>> V_Ip;
 	std::map<std::string, std::function<void(CCObject*)>> V_CCO;
@@ -640,6 +641,13 @@ public:
 	{
 		CCAssert(V_F.find(funcName) != V_F.end(), funcName.c_str());
 		V_F[funcName](t_float);
+		return;
+	}
+	
+	void communication(string funcName, float t_float, bool t_bool)
+	{
+		CCAssert(V_FB.find(funcName) != V_FB.end(), funcName.c_str());
+		V_FB[funcName](t_float, t_bool);
 		return;
 	}
 	

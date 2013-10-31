@@ -215,10 +215,10 @@ void MapScanner::scanMap()
 	
 	myGD->communication("UI_addScore", addScore);
 	
-	resetRects();
+	resetRects(true);
 }
 
-void MapScanner::resetRects()
+void MapScanner::resetRects(bool is_after_scanmap)
 {
 //	chrono::time_point<chrono::system_clock> start, end;
 //	chrono::duration<double> elapsed_seconds;
@@ -256,7 +256,7 @@ void MapScanner::resetRects()
 		}
 	}
 	
-	myGD->communication("UI_setPercentage", float(drawCellCnt/mySD->must_cnt));
+	myGD->communication("UI_setPercentage", float(drawCellCnt/mySD->must_cnt), is_after_scanmap);
 }
 
 IntRect* MapScanner::newRectChecking(IntMoveState start)
