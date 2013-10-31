@@ -2764,6 +2764,7 @@ class MovingSunflower : public CrashMapObject
 public:
 	static MovingSunflower* create(CCPoint cumberPosition, CCPoint jackPosition)
 	{
+		CCLog("%f %f", cumberPosition.x, cumberPosition.y);
 		MovingSunflower* t_bf = new MovingSunflower();
 		t_bf->myInit(cumberPosition, jackPosition);
 		t_bf->autorelease();
@@ -2951,7 +2952,185 @@ protected:
 	std::vector<CCSprite*> goalSprites;
 };
 
+class ThrowBomb : public CrashMapObject
+{
+public:
+	static ThrowBomb* create(CCPoint cumberPosition, CCPoint jackPosition)
+	{
+		ThrowBomb* t_bf = new ThrowBomb();
+		t_bf->myInit(cumberPosition, jackPosition);
+		t_bf->autorelease();
+		return t_bf;
+	}
+	void crashMapForPoint(IntPoint point, int radius)
+	{
+		for(int y = - radius; y <= radius; y++)
+		{
+			for(int x = - radius; x <= radius; x++)
+			{
+				if(sqrt(x*x + y*y) <= radius)
+					crashMapForIntPoint(IntPoint(point.x + x, point.y + y));
+			}
+		}
+	}
+	void selfRemove(float dt)
+	{
+		if(getChildrenCount() == 0)
+		{
+			removeFromParentAndCleanup(true);
+		}
+	}
+	void jackDie()
+	{
+		//		unscheduleUpdate();
+//		if(m_step == 1)
+//		{
+//			setTwoStep();
+//		}
+	}
+	
+	void lineDie(IntPoint t_p)
+	{
+		//		unscheduleUpdate();
+		myGD->communication("Main_showLineDiePosition", t_p);
+		//		(target_removeEffect->*delegate_removeEffect)();
+//		if(m_step == 1)
+//		{
+//			m_step
+//		}
+	}
 
+	void myInit(CCPoint cumberPosition, CCPoint jackPosition)
+	{
+		m_step = 1;
+		
+		m_angle = atan2(jackPosition.y - cumberPosition.y, jackPosition.x - cumberPosition.x);
+		m_angle += m_well512.GetFloatValue(-10 * M_PI/180.f, +10 * M_PI/180.f);
+		m_parentMissile = CCParticleSystemQuad::create("throwbomb.plist");
+		m_parentMissile->setPositionType(kCCPositionTypeRelative);
+		
+		
+		
+		m_parentMissile->setPosition(cumberPosition);
+		addChild(m_parentMissile);
+		
+		scheduleUpdate();
+	}
+	
+//	void setTwoStep()
+//	{
+//		m_step = 2;
+//		m_frame = 0;
+//		m_sourcePosition = m_parentMissile->getPosition();
+//		m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
+//		m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
+//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCDelayTime::create(3.f)}));
+//		
+//		schedule(schedule_selector(ThisClassType::selfRemove));
+//	}
+//	void selfRemove(float dt)
+//	{
+//		if(batchNode->getChildrenCount() == 0 && getChildrenCount() == 1)
+//		{
+//			removeFromParentAndCleanup(true);
+//		}
+//	}
+	
+	void update(float dt)
+	{
+		//		CCLog("pokjuk %d", m_frame);
+		if(m_step == 1)
+		{
+			m_frame++;
+			CCPoint delta = ccp(cos(m_angle) * 3.5f, sin(m_angle) * 3.5f);
+			
+			CCPoint missilePosition = m_parentMissile->getPosition();
+			m_parentMissile->setPosition(missilePosition + delta);
+			
+			IntPoint mapPoint = ccp2ip(m_parentMissile->getPosition());
+			float half_distance = 10;
+			bool crash = false;
+			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !crash;i++)
+			{
+				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !crash;j++)
+				{
+					float calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
+					if(calc_distance < half_distance)
+					{
+						IntPoint check_position = IntPoint(i,j);
+						if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
+						{
+							crash = true;
+						}
+					}
+				}
+			}
+			
+			if(crash)
+			{
+				crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 15);
+				m_step = 2;
+			}
+		}
+		
+		if(m_step == 2) // 폭발.
+		{
+			m_parentMissile->removeFromParent();
+			schedule(schedule_selector(ThisClassType::selfRemove));
+			CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
+			
+			particle->setAutoRemoveOnFinish(true);
+			particle->setPositionType(kCCPositionTypeRelative);
+			CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("tickingTime_bomb.png");
+			particle->setTexture(texture);
+			particle->setEmissionRate(250.00);
+			particle->setAngle(90.0);
+			particle->setAngleVar(360.0);
+			ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+			particle->setBlendFunc(blendFunc);
+			particle->setDuration(0.20);
+			particle->setEmitterMode(kCCParticleModeGravity);
+			ccColor4F startColor = {0.87,0.81,0.12,1.00}; // 0.76 0.25 0.12
+			particle->setStartColor(startColor);
+			ccColor4F startColorVar = {0,0,0,0};
+			particle->setStartColorVar(startColorVar);
+			ccColor4F endColor = {0.68,0.16,0.00,1.00};
+			particle->setEndColor(endColor);
+			ccColor4F endColorVar = {0,0,0,0};
+			particle->setEndColorVar(endColorVar);
+			particle->setStartSize(20.00);
+			particle->setStartSizeVar(10.0);
+			particle->setEndSize(40.0);
+			particle->setEndSizeVar(10.0);
+			particle->setGravity(ccp(0,0));
+			particle->setRadialAccel(0.0);
+			particle->setRadialAccelVar(0.0);
+			particle->setSpeed(250);
+			particle->setSpeedVar(60.0);
+			particle->setTangentialAccel(0);
+			particle->setTangentialAccelVar(0);
+			particle->setTotalParticles(50);
+			particle->setLife(0.30);
+			particle->setLifeVar(0.0);
+			particle->setStartSpin(0.0);
+			particle->setStartSpinVar(0.0);
+			particle->setEndSpin(0.0);
+			particle->setEndSpinVar(0.0);
+			particle->setPosition(m_parentMissile->getPosition());
+			particle->setPosVar(CCPointZero);
+			addChild(particle);
+			m_step = 3;
+
+			
+		}
+	}
+protected:
+	int m_step;
+	int m_frame;
+	CCParticleSystem* m_parentMissile;
+	Well512 m_well512;
+	float m_angle;
+};
 class CloudBomb : public CCNode
 {
 public:
@@ -3885,16 +4064,7 @@ public:
 		return sum;
 	}
 	
-	
-	double smps(double (*f)(double), double a, double b, int n)
-	{
-		double h = (b-a)/n, sum = 0;
-		for(int i=0; i<n; i++)
-		{
-			sum += (f(a+i*h)+4*f(a+i*h + h/2) + f(a+(i+1)*h)) * h / 6;
-		}
-		return sum;
-	}
+
 	void removeEffect()
 	{
 		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);

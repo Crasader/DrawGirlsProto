@@ -44,6 +44,11 @@ AppDelegate::~AppDelegate()
 //static char sharedResourceDirectory[100];
 static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(480, 320);
 
+struct AA
+{
+	int a;
+	int b;
+};
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director

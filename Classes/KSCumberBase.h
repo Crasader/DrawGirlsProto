@@ -267,11 +267,48 @@ public:
 	}
 	virtual void startInvisible(int totalframe){} // = 0;
 	
-	virtual void lightSmaller() = 0;
+	virtual void lightSmaller()
+	{
+		endTeleport();
+	}
 	
-	virtual void endTeleport() = 0;
-	virtual void startTeleport() = 0;
-	virtual void smaller() = 0;
+	virtual void endTeleport()
+	{
+		teleportImg->removeFromParentAndCleanup(true);
+		teleportImg = NULL;
+		startMoving();
+		myGD->communication("CP_onPatternEnd");
+	}
+	virtual void startTeleport()
+	{
+		if(teleportImg)
+		{
+			teleportImg->removeFromParentAndCleanup(true);
+			teleportImg = NULL;
+		}
+		
+		teleportImg = CCSprite::create("teleport_light.png");
+		teleportImg->setScale(0.01f);
+		addChild(teleportImg);
+		
+		CCBlink* t_scale = CCBlink::create(0.5, 0);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::smaller));
+		
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		
+		teleportImg->runAction(t_seq);
+		AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
+	}
+	virtual void randomPosition() = 0;
+	virtual void smaller()
+	{
+		CCBlink* t_scale = CCBlink::create(0.5, 8);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::randomPosition));
+		
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		
+		runAction(t_seq);
+	}
 	virtual void onTargetingJack(CCPoint jackPosition){}
 	
 	COLLISION_CODE crashWithX(IntPoint check_position)
