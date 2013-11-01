@@ -102,11 +102,13 @@ private:
 	std::function<void(PuzzleImage*)> m_callbackfunc;
 	
 	int m_currentLoadPuzzleNo;
+	bool m_useTread;
 public:
 	
 	PuzzleCache(){
 		isLockedLoadingPuzzleList=false;
 		m_currentLoadPuzzleNo = 0;
+		m_useTread=false;
 	}
 	
 	//퍼즐로드 - 기본방식
@@ -160,14 +162,17 @@ public:
 	}
 
 
-void addLoadingPuzzleList(PuzzleImage* texture){
+	void addLoadingPuzzleList(PuzzleImage* image){
 	
-		//CCLog("addLoadingPuzzleList1:%s",texture->getPuzzleKey().c_str());
-		texture->retain();
-		waitForLoadingPuzzleList(true);
-		//CCLog("addLoadingPuzzleList2:%s",texture->getPuzzleKey().c_str());
-		this->m_loadingPuzzleList.push_back(texture);
-		setLockedLoadingPuzzleList(false);
+		if(PuzzleCache::getInstance()->m_useTread){
+			image->retain();
+			waitForLoadingPuzzleList(true);
+			this->m_loadingPuzzleList.push_back(image);
+			setLockedLoadingPuzzleList(false);
+		}else{
+			image->retain();
+			this->m_textureList.insert(pair<string,PuzzleImage*>(image->getPuzzleKey(),image));
+		}
 	}
 
 	struct PuzzlePoint{
@@ -226,18 +231,21 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 	}
 	void loadImageWithCallback(int puzzleNo, std::function<void(PuzzleImage*)> func){
 		m_callbackfunc = func;
-		
 		//여기서 m_loadingPuzzleList에 complete있으면 지워주기
 		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(PuzzleCache::loadingPuzzle), PuzzleCache::getInstance(), 0.f, kCCRepeatForever, 0.f, false);
-		
-		std::thread puzzleThread( [puzzleNo,func] ()
+
+		std::thread puzzleThread( [puzzleNo,func, this] ()
 		{
+			
+			PuzzleCache::getInstance()->m_useTread = true;
 			PuzzleCache::getInstance()->loadImage(puzzleNo);
 			
 			PuzzleImage* complete = new PuzzleImage();
 			complete->setPuzzleKey("COMPLETE");
 			PuzzleCache::getInstance()->addLoadingPuzzleList(complete);
 			complete->release();
+			
+			PuzzleCache::getInstance()->m_useTread = false;
 		} );
 		puzzleThread.detach();
 	}
@@ -246,10 +254,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 	bool checkCancel(int loadingPuzzleNo){
 		if(loadingPuzzleNo!=m_currentLoadPuzzleNo){
 			m_puzzleState[loadingPuzzleNo]="cancel";
-			
-			
-			
-			
+
 			return true;
 		}
 		return false;
@@ -428,7 +433,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 	}
 	
 	//퍼즐이미지 가져오기
-	PuzzleImage* getTexture(string key){
+	PuzzleImage* getImage(string key){
 		map<string,PuzzleImage*>::iterator it;
 		it = m_textureList.find(key);
 		
