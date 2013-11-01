@@ -12,36 +12,42 @@
 void SilhouetteData::startSetting()
 {
 	must_cnt = 0;
-	CCLog("SD startSetting");
 	CCImage *tx = new CCImage;
 	tx->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"stage%d_level%d_invisible.png").c_str(), myType, 1)->getCString());
 	
 	unsigned char* pData = (unsigned char*)tx->getData();    //원본 이미지 데이터
+	int imgByte = 3;
+	int dataRate = 4;
+	int dataWidth = tx->getWidth()/dataRate;
+	int dataHeight = tx->getHeight()/dataRate;
 	
-	for(int y=0;y<215;y++){
-		for(int x=0;x<160;x++){
-			
-			int offset_x = 2;
-			int offset_y = 2;
-			
-			if(y==214)offset_y = 1;
-			if(x==159)offset_x = 1;
-			
-			int i = (160*4*(y*4+offset_y))+x*4+offset_x;
+	if(tx->hasAlpha())imgByte=4;
+	
+	
+	for(int y=0;y<dataHeight;y++){
+		//string xprint = "";
+		for(int x=0;x<dataWidth;x++){
+			int x_offset=2;
+			int y_offset=2;
+			if(x==dataWidth-1)x_offset=1;
+			if(y==dataHeight-1)y_offset=1;
+			int i = ((y*dataRate+y_offset)*tx->getWidth()+(x*dataRate+x_offset))*imgByte;
 			
 			//순서대로 r,g,b 값을 더하여 10 이상일때 실루엣으로 인식
-			if(pData[i*4]+pData[i*4+1]+pData[i*4+2]>=10)
+			if(pData[i]+pData[i+1]+pData[i+2]>=10)
 			{
 				must_cnt++;
 				silData[x+1][215-y]=true;
+				//xprint+="1";
 			}else{
 				silData[x+1][215-y]=false;
+				//xprint+="0";
 			}
 		}
+		//CCLog("%d : %s",y,xprint.c_str());
 	}
 	
 	tx->release();
-	CCLog("SD setting success");
 	
 //	for(int y=216;y>=0;y--){
 //		string xprint="";
