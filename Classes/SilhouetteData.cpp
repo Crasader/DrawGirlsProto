@@ -12,6 +12,7 @@
 void SilhouetteData::startSetting()
 {
 	must_cnt = 0;
+	CCLog("SD startSetting");
 	CCImage *tx = new CCImage;
 	tx->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"stage%d_level%d_invisible.png").c_str(), myType, 1)->getCString());
 	
@@ -40,6 +41,7 @@ void SilhouetteData::startSetting()
 	}
 	
 	tx->release();
+	CCLog("SD setting success");
 	
 //	for(int y=216;y>=0;y--){
 //		string xprint="";
