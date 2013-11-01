@@ -13,6 +13,7 @@
 #include <vector>
 #include "cocos2d.h"
 #include <thread>
+#include "StageImgLoader.h"
 using namespace cocos2d;
 using namespace std;
 
@@ -21,7 +22,7 @@ enum PuzzleCachePieceType {
 	kPuzzleCachePieceType_right,
 	kPuzzleCachePieceType_top,
 	kPuzzleCachePieceType_bottom
-	};
+};
 class PuzzleImage : public CCImage {
 	
 private:
@@ -84,6 +85,8 @@ public:
 	}
 };
 
+// loadImageWithCallback
+
 class PuzzleCache : public CCObject{
 private:
 	//캐쉬
@@ -91,7 +94,7 @@ private:
 	
 	//로딩한 퍼즐목록
 	list<PuzzleImage*> m_loadingPuzzleList;
-
+	
 	//퍼즐상태
 	
 	map<int,string> m_puzzleState;
@@ -120,12 +123,11 @@ public:
 		
 		//퍼즐 원본 로드
 		CCImage *puzzleImg = new CCImage;
-		puzzleImg->initWithImageFile("puzzle1.png");
-
-		CCImage *thumbImg = new CCImage;
-		thumbImg->initWithImageFile("puzzle1_thumbnail.png");
+		puzzleImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_original.png").c_str(), puzzleNo)->getCString());
 		
-
+		CCImage *thumbImg = new CCImage;
+		thumbImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo)->getCString());
+		
 		
 		loadImage(puzzleNo,puzzleImg,thumbImg);
 	}
@@ -133,20 +135,20 @@ public:
 	void cancelLoadingImage(int puzzleNo){
 		m_currentLoadPuzzleNo=0;
 	}
-
-//	void setLockedTextureList(bool locked){
-//		isLockedTextureList = locked;
-//	}
+	
+	//	void setLockedTextureList(bool locked){
+	//		isLockedTextureList = locked;
+	//	}
 	
 	void setLockedLoadingPuzzleList(bool locked){
 		//CCLog("setLockedLoadingPuzzleList %d",locked);
 		isLockedLoadingPuzzleList = locked;
 	}
 	
-//	void waitForTextureList(bool locked){
-//		while(isLockedTextureList==true){}
-//		setLockedTextureList(locked);
-//	}
+	//	void waitForTextureList(bool locked){
+	//		while(isLockedTextureList==true){}
+	//		setLockedTextureList(locked);
+	//	}
 	
 	void waitForLoadingPuzzleList(bool locked){
 		//CCLog("waitForLoadPuzzleList %d",locked);
@@ -158,10 +160,10 @@ public:
 		texture->retain();
 		this->m_textureList.insert(pair<string,PuzzleImage*>(key,texture));
 	}
-
-
-void addLoadingPuzzleList(PuzzleImage* texture){
 	
+	
+	void addLoadingPuzzleList(PuzzleImage* texture){
+		
 		//CCLog("addLoadingPuzzleList1:%s",texture->getPuzzleKey().c_str());
 		texture->retain();
 		waitForLoadingPuzzleList(true);
@@ -169,7 +171,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 		this->m_loadingPuzzleList.push_back(texture);
 		setLockedLoadingPuzzleList(false);
 	}
-
+	
 	struct PuzzlePoint{
 		int x;
 		int y;
@@ -211,7 +213,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 				}
 				
 				if(m_callbackfunc)m_callbackfunc(texture);
-			
+				
 			}else{
 				//CCLog("loadingPuzzle:else");
 			}
@@ -222,7 +224,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 			m_loadingPuzzleList.clear();
 			setLockedLoadingPuzzleList(false);
 		}
-
+		
 	}
 	void loadImageWithCallback(int puzzleNo, std::function<void(PuzzleImage*)> func){
 		m_callbackfunc = func;
@@ -231,14 +233,14 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(PuzzleCache::loadingPuzzle), PuzzleCache::getInstance(), 0.f, kCCRepeatForever, 0.f, false);
 		
 		std::thread puzzleThread( [puzzleNo,func] ()
-		{
-			PuzzleCache::getInstance()->loadImage(puzzleNo);
-			
-			PuzzleImage* complete = new PuzzleImage();
-			complete->setPuzzleKey("COMPLETE");
-			PuzzleCache::getInstance()->addLoadingPuzzleList(complete);
-			complete->release();
-		} );
+								 {
+									 PuzzleCache::getInstance()->loadImage(puzzleNo);
+									 
+									 PuzzleImage* complete = new PuzzleImage();
+									 complete->setPuzzleKey("COMPLETE");
+									 PuzzleCache::getInstance()->addLoadingPuzzleList(complete);
+									 complete->release();
+								 } );
 		puzzleThread.detach();
 	}
 	
@@ -264,7 +266,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 			}
 		}
 	}
-
+	
 	//퍼즐로드 - 원본 ccimage를 정해줄수있음
 	void loadImage(int puzzleNo, CCImage* puzzleImg, CCImage* thumbImg){
 		m_currentLoadPuzzleNo = puzzleNo;
@@ -293,7 +295,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 			texture->setPuzzleKey(key);
 			
 			addLoadingPuzzleList(texture);
-
+			
 			
 			puzzleBoarder->release();
 		}
@@ -315,7 +317,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 			texture->setPuzzleKey(key);
 			
 			addLoadingPuzzleList(texture);
-
+			
 			
 			puzzleBoarder->release();
 		}
@@ -327,7 +329,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 			puzzleBoarder->initWithImageFile("puzzle_stencli_1_top.png");
 			
 			PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, puzzleBoarder, {(int)(puzzleImg->getWidth()/2),(int)(puzzleImg->getHeight()-puzzleBoarder->getHeight()/2)},true);
-
+			
 			ostringstream oss;
 			oss << "puzzle"<<puzzleNo<<"_top";
 			string key=oss.str().c_str();
@@ -337,7 +339,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 			texture->setPuzzleKey(key);
 			
 			addLoadingPuzzleList(texture);
-
+			
 			
 			puzzleBoarder->release();
 		}
@@ -397,7 +399,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 				texture->setPuzzleNo(puzzleNo);
 				texture->setPieceNo(i);
 				texture->setPuzzleKey(key);
-
+				
 				addLoadingPuzzleList(texture);
 			}
 			
@@ -520,7 +522,7 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 				
 				stencilDataPos = &stencilData[i+3];
 				newImgDataPos = &newImgData[i+3];
-
+				
 				float calcAlpha = (*stencilDataPos / 255.f);
 				originDataPos = &originData[j+3];
 				*--newImgDataPos = *--originDataPos * calcAlpha;
@@ -529,53 +531,53 @@ void addLoadingPuzzleList(PuzzleImage* texture){
 				
 			}
 		}
-
+		
 		
 		return newImg;
-//		PuzzleCache::getInstance()->testImage = new CCImage;
-//		PuzzleCache::getInstance()->testImage->initWithImageData(stencil->getData(), stencil->getDataLen());
-//		PuzzleCache::getInstance()->testImage->retain();
-//		
-//		PuzzleImage *itex = new PuzzleImage;
-//		itex->initWithImage(stencil);
-//		itex->autorelease();
-//		return itex;
+		//		PuzzleCache::getInstance()->testImage = new CCImage;
+		//		PuzzleCache::getInstance()->testImage->initWithImageData(stencil->getData(), stencil->getDataLen());
+		//		PuzzleCache::getInstance()->testImage->retain();
+		//
+		//		PuzzleImage *itex = new PuzzleImage;
+		//		itex->initWithImage(stencil);
+		//		itex->autorelease();
+		//		return itex;
 	}
 	
-
+	
 	
 	
 };
 
 
 /*
-class PuzzleSprite : CCNode {
-public:
-	CCSprite *m_image;
-	
-	bool init(){
-		if ( !CCNode::init() )
-		{
-			return false;
-		}
-		this->setContentSize(CCSizeMake(100, 100));
-		return true;
-	}
-	
-	PuzzleSprite(){
-		m_image=nullptr;
-	}
-	
-	bool setTexture(CCTexture2D* texture){
-		if(m_image==nullptr){
-			m_image=CCSprite::createWithTexture(texture);
-			m_image->setAnchorPoint(CCPointZero);
-			m_image->setPosition(CCPointZero);
-			return true;
-		}
-		return false;
-	}
-};
-*/
+ class PuzzleSprite : CCNode {
+ public:
+ CCSprite *m_image;
+ 
+ bool init(){
+ if ( !CCNode::init() )
+ {
+ return false;
+ }
+ this->setContentSize(CCSizeMake(100, 100));
+ return true;
+ }
+ 
+ PuzzleSprite(){
+ m_image=nullptr;
+ }
+ 
+ bool setTexture(CCTexture2D* texture){
+ if(m_image==nullptr){
+ m_image=CCSprite::createWithTexture(texture);
+ m_image->setAnchorPoint(CCPointZero);
+ m_image->setPosition(CCPointZero);
+ return true;
+ }
+ return false;
+ }
+ };
+ */
 
 #endif /* defined(__DGproto__PuzzleCache__) */
