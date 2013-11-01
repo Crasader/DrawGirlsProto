@@ -21,7 +21,7 @@
 #include "JsonBox.h"
 #include "FromTo.h"
 #include "jsoncpp/json.h"
-#include "AttackPattern.h"
+
 
 using namespace cocos2d;
 using namespace std;
