@@ -202,7 +202,7 @@ void CumberParent::subCumberReplication()
 void CumberParent::setGameover()
 {
 //	myEP->setGameover();
-	myGD->communication("MP_stopAutoAttacker");
+//	myGD->communication("MP_stopAutoAttacker");
 	isGameover = true;
 	for(auto mainCumber : mainCumbers)
 		mainCumber->setGameover();
