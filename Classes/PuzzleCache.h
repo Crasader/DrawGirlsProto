@@ -13,6 +13,8 @@
 #include <vector>
 #include "cocos2d.h"
 #include <thread>
+#include "StageImgLoader.h"
+
 using namespace cocos2d;
 using namespace std;
 
@@ -122,12 +124,10 @@ public:
 		
 		//퍼즐 원본 로드
 		CCImage *puzzleImg = new CCImage;
-		puzzleImg->initWithImageFile("puzzle1.png");
+		puzzleImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_original.png").c_str(), puzzleNo)->getCString());
 
 		CCImage *thumbImg = new CCImage;
-		thumbImg->initWithImageFile("puzzle1_thumbnail.png");
-		
-
+		thumbImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo)->getCString());
 		
 		loadImage(puzzleNo,puzzleImg,thumbImg);
 	}
