@@ -122,14 +122,7 @@ public:
 			return;
 		}
 		
-		//퍼즐 원본 로드
-		CCImage *puzzleImg = new CCImage;
-		puzzleImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_original.png").c_str(), puzzleNo)->getCString());
-
-		CCImage *thumbImg = new CCImage;
-		thumbImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo)->getCString());
-		
-		loadImage(puzzleNo,puzzleImg,thumbImg);
+		startToLoadImage(puzzleNo);
 	}
 	
 	void cancelLoadingImage(int puzzleNo){
@@ -271,7 +264,14 @@ public:
 	}
 
 	//퍼즐로드 - 원본 ccimage를 정해줄수있음
-	void loadImage(int puzzleNo, CCImage* puzzleImg, CCImage* thumbImg){
+	void startToLoadImage(int puzzleNo){
+		//퍼즐 원본 로드
+		CCImage *puzzleImg = new CCImage;
+		puzzleImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_original.png").c_str(), puzzleNo)->getCString());
+		
+		CCImage *thumbImg = new CCImage;
+		thumbImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo)->getCString());
+		
 		m_currentLoadPuzzleNo = puzzleNo;
 		//중복검사
 		
@@ -286,7 +286,7 @@ public:
 		//틀만들기
 		{//left
 			CCImage *puzzleBoarder = new CCImage;
-			puzzleBoarder->initWithImageFile("puzzle_stencli_1_left.png");
+			puzzleBoarder->initWithImageFileThreadSafe("puzzle_stencli_1_left.png");
 			
 			PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, puzzleBoarder, {(int)(puzzleBoarder->getWidth()/2),(int)(puzzleImg->getHeight()/2)},true);
 			ostringstream oss;
@@ -307,7 +307,7 @@ public:
 		
 		{//right
 			CCImage *puzzleBoarder = new CCImage;
-			puzzleBoarder->initWithImageFile("puzzle_stencli_1_right.png");
+			puzzleBoarder->initWithImageFileThreadSafe("puzzle_stencli_1_right.png");
 			
 			PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, puzzleBoarder, {(int)(puzzleImg->getWidth()-puzzleBoarder->getWidth()/2),(int)(puzzleImg->getHeight()/2)},true);
 			
@@ -329,7 +329,7 @@ public:
 		
 		{//top
 			CCImage *puzzleBoarder = new CCImage;
-			puzzleBoarder->initWithImageFile("puzzle_stencli_1_top.png");
+			puzzleBoarder->initWithImageFileThreadSafe("puzzle_stencli_1_top.png");
 			
 			PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, puzzleBoarder, {(int)(puzzleImg->getWidth()/2),(int)(puzzleImg->getHeight()-puzzleBoarder->getHeight()/2)},true);
 
@@ -351,7 +351,7 @@ public:
 		
 		{//bottom
 			CCImage *puzzleBoarder = new CCImage;
-			puzzleBoarder->initWithImageFile("puzzle_stencli_1_bottom.png");
+			puzzleBoarder->initWithImageFileThreadSafe("puzzle_stencli_1_bottom.png");
 			
 			PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, puzzleBoarder, {(int)(puzzleImg->getWidth()/2),(int)(puzzleBoarder->getHeight()/2)},true);
 			
@@ -372,10 +372,10 @@ public:
 		//피스만들기
 		
 		CCImage *wPiece = new CCImage;
-		wPiece->initWithImageFile("puzzle_stencli_1_pw.png");
+		wPiece->initWithImageFileThreadSafe("puzzle_stencli_1_pw.png");
 		
 		CCImage *hPiece = new CCImage;
-		hPiece->initWithImageFile("puzzle_stencli_1_ph.png");
+		hPiece->initWithImageFileThreadSafe("puzzle_stencli_1_ph.png");
 		
 		int ycnt=0;
 		int xcnt=0;
