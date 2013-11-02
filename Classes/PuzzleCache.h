@@ -391,35 +391,35 @@ public:
 			
 			
 			
-			//퍼즐 이미지
-			{
-				PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, _img, {(int)(xcnt*68.5f*2+176),(int)(ycnt*68.5f*2+134)},false);
-				
-				ostringstream oss;
-				oss << "puzzle"<<puzzleNo<<"_piece"<<i;
-				string key=oss.str().c_str();
-				
-				texture->setPuzzleNo(puzzleNo);
-				texture->setPieceNo(i);
-				texture->setPuzzleKey(key);
-
-				addLoadingPuzzleList(texture);
-			}
+		//퍼즐 이미지
+		
+			PuzzleImage *pImg = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, _img, {(int)(xcnt*68.5f*2+176),(int)(ycnt*68.5f*2+134)},false);
 			
-			//썸네일 이미지
-			{
-				PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(thumbImg, _img, {(int)(xcnt*204+102),(int)(ycnt*204+102)},false);
-				
-				ostringstream oss;
-				oss << "puzzle"<<puzzleNo<<"_thumbnail"<<i;
-				string key=oss.str().c_str();
-				
-				texture->setPuzzleNo(puzzleNo);
-				texture->setPieceNo(i+100);
-				texture->setPuzzleKey(key);
-				
-				addLoadingPuzzleList(texture);
-			}
+			ostringstream oss;
+			oss << "puzzle"<<puzzleNo<<"_piece"<<i;
+			string key=oss.str().c_str();
+			
+			pImg->setPuzzleNo(puzzleNo);
+			pImg->setPieceNo(i);
+			pImg->setPuzzleKey(key);
+
+		
+		
+		//썸네일 이미지
+		
+			PuzzleImage *tImg = PuzzleCache::getInstance()->getTextureOriginByStensil(thumbImg, _img, {(int)(xcnt*204+102),(int)(ycnt*204+102)},false);
+			tImg->setCutPoint(pImg->getCutPoint().x,pImg->getCutPoint().y);
+			ostringstream oss2;
+			oss2 << "puzzle"<<puzzleNo<<"_thumbnail"<<i;
+			string key2=oss2.str().c_str();
+			
+			tImg->setPuzzleNo(puzzleNo);
+			tImg->setPieceNo(i+100);
+			tImg->setPuzzleKey(key2);
+			
+			addLoadingPuzzleList(tImg);
+			
+			addLoadingPuzzleList(pImg);
 			
 			xcnt++;
 		}
@@ -485,6 +485,8 @@ public:
 	PuzzleImage* getTextureOriginByStensil(CCImage* origin, CCImage* stencil,PuzzlePoint cutPointInOrigin,bool isGLcoordinate){
 		unsigned char* originData = origin->getData();
 		PuzzlePoint originSize = {origin->getWidth(),origin->getHeight()};
+		
+		
 		unsigned char* stencilData = stencil->getData();
 		PuzzlePoint stencilSize = {stencil->getWidth(),stencil->getHeight()};
 		PuzzlePoint stencilSizeHalf = {stencilSize.x/2,stencilSize.y/2};
@@ -497,6 +499,14 @@ public:
 								  stencil->getHeight(),
 								  8);
 		unsigned char* newImgData = newImg->getData();
+		
+		int originImgByte = 3;
+		int stencilImgByte =3;
+		
+		if(origin->hasAlpha()) originImgByte=4;
+		if(stencil->hasAlpha()) stencilImgByte=4;
+		
+		
 		
 		if(isGLcoordinate==true){
 			cutPointInOrigin.y = originSize.y-cutPointInOrigin.y;
@@ -515,19 +525,23 @@ public:
 		unsigned char* newImgDataPos;
 		unsigned char* originDataPos;
 		
+		PuzzlePoint tempPoint = {cutPointInOrigin.x-stencilSizeHalf.x,cutPointInOrigin.y-stencilSizeHalf.y};
+		
+		int px,py,origin_i,stencil_i;
 		for(int y=0;y<stencilSize.y;y++){
 			for(int x=0;x<stencilSize.x;x++){
-				int i=(y*stencilSize.x+x)*4;
-				int px = x+cutPointInOrigin.x-stencilSizeHalf.x;
-				int py = y+cutPointInOrigin.y-stencilSizeHalf.y;
-				int j=(py*originSize.x+px)*4;
-				if(j>=pDataLengthX4 || py<0 || px<0)continue;
+				stencil_i = (y*stencilSize.x+x)*stencilImgByte;
+				px = x+tempPoint.x;
+				py = y+tempPoint.y;
+				origin_i=(py*originSize.x+px)*originImgByte;
 				
-				stencilDataPos = &stencilData[i+3];
-				newImgDataPos = &newImgData[i+3];
+				if(origin_i>=pDataLengthX4 || py<0 || px<0)continue;
+				
+				stencilDataPos = &stencilData[stencil_i+3];
+				newImgDataPos = &newImgData[stencil_i+3];
 
 				float calcAlpha = (*stencilDataPos / 255.f);
-				originDataPos = &originData[j+3];
+				originDataPos = &originData[origin_i+3];
 				*--newImgDataPos = *--originDataPos * calcAlpha;
 				*--newImgDataPos = *--originDataPos * calcAlpha;
 				*--newImgDataPos = *--originDataPos * calcAlpha;
