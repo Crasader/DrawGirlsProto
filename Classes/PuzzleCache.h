@@ -24,6 +24,29 @@ enum PuzzleCachePieceType {
 	kPuzzleCachePieceType_top,
 	kPuzzleCachePieceType_bottom
 	};
+
+class PuzzleImageData{
+private:
+	unsigned char* m_data;
+	unsigned long  m_size;
+public:
+	void loadImageDataWithFullpath(string fullpath){
+		m_data= CCFileUtils::sharedFileUtils()->getFileData(fullpath.c_str(), "rb", &m_size);
+	}
+	
+	void loadImageData(string filename){
+		string path =  CCFileUtils::sharedFileUtils()->fullPathForFilename(filename.c_str()).c_str();
+		loadImageDataWithFullpath(path);
+	}
+unsigned char* getData(){
+	return m_data;
+}
+
+unsigned long getDataLen(){
+	return m_size;
+}
+};
+
 class PuzzleImage : public CCImage {
 	
 private:
@@ -38,6 +61,37 @@ public:
 	PuzzleImage(){
 		m_isLoaded=false;
 		m_puzzleNo=0;
+	}
+	
+	static PuzzleImage* create(string path){
+		PuzzleImage* image = new PuzzleImage();
+		image->initWithImageFile(path.c_str());
+		image->autorelease();
+		return image;
+	}
+	
+	static PuzzleImage* createWithImageFileThreadSafe(string fullpath){
+		PuzzleImage* image = new PuzzleImage();
+		image->initWithImageFileThreadSafe(fullpath.c_str());
+		image->autorelease();
+		return image;
+	}
+	
+	static PuzzleImage* createWithImageData(unsigned char* data , unsigned long size){
+		PuzzleImage* image = new PuzzleImage();
+		image->initWithImageData(data, size);
+		image->autorelease();
+		return image;
+	}
+	static PuzzleImage* createWithPuzzleImageData(PuzzleImageData *puzzleImageData){
+		PuzzleImage* image = new PuzzleImage();
+		image->initWithPuzzleImageData(puzzleImageData);
+		image->autorelease();
+		return image;
+	}
+	
+	bool initWithPuzzleImageData(PuzzleImageData *puzzleImageData){
+		return this->initWithImageData(puzzleImageData->getData(), puzzleImageData->getDataLen(), CCImage::kFmtUnKnown);
 	}
 	
 	bool isLoaded(){
@@ -226,7 +280,7 @@ public:
 		m_callbackfunc = func;
 		//여기서 m_loadingPuzzleList에 complete있으면 지워주기
 		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(PuzzleCache::loadingPuzzle), PuzzleCache::getInstance(), 0.f, kCCRepeatForever, 0.f, false);
-
+		
 		std::thread puzzleThread( [puzzleNo,func, this] ()
 		{
 			
@@ -259,6 +313,7 @@ public:
 			PuzzleImage* texture = (PuzzleImage*)it->second;
 			if(texture->getPuzzleNo()==puzzleNo){
 				addLoadingPuzzleList(texture);
+				texture->release();
 			}
 		}
 	}
@@ -266,11 +321,18 @@ public:
 	//퍼즐로드 - 원본 ccimage를 정해줄수있음
 	void startToLoadImage(int puzzleNo){
 		//퍼즐 원본 로드
-		CCImage *puzzleImg = new CCImage;
-		puzzleImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_original.png").c_str(), puzzleNo)->getCString());
-		
-		CCImage *thumbImg = new CCImage;
-		thumbImg->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo)->getCString());
+		CCString *pFilename = new CCString();
+		pFilename->initWithFormat((mySIL->getDocumentPath()+"puzzle%d_original.png").c_str(), puzzleNo);
+		PuzzleImage* puzzleImg = new PuzzleImage();
+		puzzleImg->initWithImageFileThreadSafe(pFilename->getCString());
+		pFilename->release();
+		//CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_original.png").c_str()
+		PuzzleImage* thumbImg = new PuzzleImage();
+		CCString *tFilename = new CCString();
+		tFilename->initWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo);
+		thumbImg->initWithImageFileThreadSafe(tFilename->getCString());
+		tFilename->release();
+		//CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo)->getCString()
 		
 		m_currentLoadPuzzleNo = puzzleNo;
 		//중복검사
@@ -285,148 +347,167 @@ public:
 		
 		//틀만들기
 		{//left
-			CCImage *puzzleBoarder = new CCImage;
-			puzzleBoarder->initWithImageFileThreadSafe("puzzle_stencli_1_left.png");
+			PuzzleImageData *imgdata = new PuzzleImageData();
+			imgdata->loadImageData("puzzle_stencil_1_left.png");
+			PuzzleImage *stencil = new PuzzleImage();
+			stencil->initWithPuzzleImageData(imgdata);
+			PuzzlePoint cutPoint = {(int)(stencil->getWidth()/2),(int)(stencil->getHeight()/2)};
+			PuzzleCache::getInstance()->changeStencilByOrigin(stencil, puzzleImg, cutPoint, true);
 			
-			PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, puzzleBoarder, {(int)(puzzleBoarder->getWidth()/2),(int)(puzzleImg->getHeight()/2)},true);
-			ostringstream oss;
-			oss << "puzzle"<<puzzleNo<<"_left";
-			string key=oss.str().c_str();
-			
-			texture->setPuzzleNo(puzzleNo);
-			texture->setPieceNo(kPuzzleCachePieceType_left);
-			texture->setPuzzleKey(key);
-			
-			addLoadingPuzzleList(texture);
-
-			
-			puzzleBoarder->release();
+			CCString *key =  new CCString();
+			key->initWithFormat("puzzle%d_left",puzzleNo);
+			stencil->setPuzzleNo(puzzleNo);
+			stencil->setPieceNo(kPuzzleCachePieceType_left);
+			stencil->setPuzzleKey(key->getCString());
+			addLoadingPuzzleList(stencil);
+			stencil->release();
+			key->release();
+			delete imgdata;
 		}
 		
 		if(checkCancel(puzzleNo))return;
 		
 		{//right
-			CCImage *puzzleBoarder = new CCImage;
-			puzzleBoarder->initWithImageFileThreadSafe("puzzle_stencli_1_right.png");
-			
-			PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, puzzleBoarder, {(int)(puzzleImg->getWidth()-puzzleBoarder->getWidth()/2),(int)(puzzleImg->getHeight()/2)},true);
-			
-			ostringstream oss;
-			oss << "puzzle"<<puzzleNo<<"_right";
-			string key=oss.str().c_str();
-			
-			texture->setPuzzleNo(puzzleNo);
-			texture->setPieceNo(kPuzzleCachePieceType_right);
-			texture->setPuzzleKey(key);
-			
-			addLoadingPuzzleList(texture);
 
+			PuzzleImageData *imgdata = new PuzzleImageData();
+			imgdata->loadImageData("puzzle_stencil_1_right.png");
+			PuzzleImage *stencil = new PuzzleImage();
+			stencil->initWithPuzzleImageData(imgdata);
+			PuzzlePoint cutPoint = {(int)(puzzleImg->getWidth()-stencil->getWidth()/2),(int)(puzzleImg->getHeight()/2)};
+			PuzzleCache::getInstance()->changeStencilByOrigin(stencil, puzzleImg, cutPoint, true);
 			
-			puzzleBoarder->release();
+			
+			CCString *key =  new CCString();
+			key->initWithFormat("puzzle%d_right",puzzleNo);
+			stencil->setPuzzleNo(puzzleNo);
+			stencil->setPieceNo(kPuzzleCachePieceType_right);
+			stencil->setPuzzleKey(key->getCString());
+			addLoadingPuzzleList(stencil);
+			stencil->release();
+			key->release();
+			delete imgdata;
+
 		}
 		
 		if(checkCancel(puzzleNo))return;
 		
 		{//top
-			CCImage *puzzleBoarder = new CCImage;
-			puzzleBoarder->initWithImageFileThreadSafe("puzzle_stencli_1_top.png");
 			
-			PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, puzzleBoarder, {(int)(puzzleImg->getWidth()/2),(int)(puzzleImg->getHeight()-puzzleBoarder->getHeight()/2)},true);
-
-			ostringstream oss;
-			oss << "puzzle"<<puzzleNo<<"_top";
-			string key=oss.str().c_str();
-			
-			texture->setPuzzleNo(puzzleNo);
-			texture->setPieceNo(kPuzzleCachePieceType_top);
-			texture->setPuzzleKey(key);
-			
-			addLoadingPuzzleList(texture);
+			PuzzleImageData *imgdata = new PuzzleImageData();
+			imgdata->loadImageData("puzzle_stencil_1_top.png");
+			PuzzleImage *stencil = new PuzzleImage();
+			stencil->initWithPuzzleImageData(imgdata);
+			PuzzlePoint cutPoint =  {(int)(puzzleImg->getWidth()/2),(int)(puzzleImg->getHeight()-stencil->getHeight()/2)};
+			PuzzleCache::getInstance()->changeStencilByOrigin(stencil, puzzleImg, cutPoint, true);
 
 			
-			puzzleBoarder->release();
+			CCString *key =  new CCString();
+			key->initWithFormat("puzzle%d_top",puzzleNo);
+			stencil->setPuzzleNo(puzzleNo);
+			stencil->setPieceNo(kPuzzleCachePieceType_top);
+			stencil->setPuzzleKey(key->getCString());
+			addLoadingPuzzleList(stencil);
+			stencil->release();
+			key->release();
+			delete imgdata;
 		}
 		
 		if(checkCancel(puzzleNo))return;
 		
 		{//bottom
-			CCImage *puzzleBoarder = new CCImage;
-			puzzleBoarder->initWithImageFileThreadSafe("puzzle_stencli_1_bottom.png");
 			
-			PuzzleImage *texture = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, puzzleBoarder, {(int)(puzzleImg->getWidth()/2),(int)(puzzleBoarder->getHeight()/2)},true);
+			PuzzleImageData *imgdata = new PuzzleImageData();
+			imgdata->loadImageData("puzzle_stencil_1_bottom.png");
+			PuzzleImage *stencil = new PuzzleImage();
+			stencil->initWithPuzzleImageData(imgdata);
+			PuzzlePoint cutPoint =  {(int)(puzzleImg->getWidth()/2),(int)(stencil->getHeight()/2)};
+			PuzzleCache::getInstance()->changeStencilByOrigin(stencil, puzzleImg, cutPoint, true);
 			
-			ostringstream oss;
-			oss << "puzzle"<<puzzleNo<<"_bottom";
-			string key=oss.str().c_str();
 			
-			texture->setPuzzleNo(puzzleNo);
-			texture->setPieceNo(kPuzzleCachePieceType_bottom);
-			texture->setPuzzleKey(key);
-			
-			addLoadingPuzzleList(texture);
-			
-			puzzleBoarder->release();
+			CCString *key =  new CCString();
+			key->initWithFormat("puzzle%d_bottom",puzzleNo);
+			stencil->setPuzzleNo(puzzleNo);
+			stencil->setPieceNo(kPuzzleCachePieceType_bottom);
+			stencil->setPuzzleKey(key->getCString());
+			addLoadingPuzzleList(stencil);
+			stencil->release();
+			key->release();
+			delete imgdata;
 		}
 		
 		
 		//피스만들기
 		
-		CCImage *wPiece = new CCImage;
-		wPiece->initWithImageFileThreadSafe("puzzle_stencli_1_pw.png");
 		
-		CCImage *hPiece = new CCImage;
-		hPiece->initWithImageFileThreadSafe("puzzle_stencli_1_ph.png");
+		PuzzleImageData* hPieceData = new PuzzleImageData();
+		hPieceData->loadImageData("puzzle_stencil_1_ph.png");
 		
+		PuzzleImageData* wPieceData = new PuzzleImageData();
+		wPieceData->loadImageData("puzzle_stencil_1_pw.png");
+		
+		PuzzleImageData* _pieceData;
+
 		int ycnt=0;
 		int xcnt=0;
 		int pw=1;
 		for(int i=1;i<25;i++){
+
+			
 			if(checkCancel(puzzleNo))return;
 			
 			pw++;
 			if(xcnt==6){pw++; ycnt++; xcnt=0;}
-			CCImage *_img;
-			if(pw%2)_img=wPiece;
-			else _img=hPiece;
-			
+			if(pw%2){_pieceData=wPieceData;
+			}else{ _pieceData=hPieceData;}
 			
 			
 		//퍼즐 이미지
-		
-			PuzzleImage *pImg = PuzzleCache::getInstance()->getTextureOriginByStensil(puzzleImg, _img, {(int)(xcnt*68.5f*2+176),(int)(ycnt*68.5f*2+134)},false);
 			
-			ostringstream oss;
-			oss << "puzzle"<<puzzleNo<<"_piece"<<i;
-			string key=oss.str().c_str();
+			PuzzleImage *whPiece = new PuzzleImage();
+			whPiece->initWithPuzzleImageData(_pieceData);
 			
-			pImg->setPuzzleNo(puzzleNo);
-			pImg->setPieceNo(i);
-			pImg->setPuzzleKey(key);
+			PuzzleCache::getInstance()->changeStencilByOrigin(whPiece, puzzleImg, {(int)(xcnt*136+180),(int)(ycnt*136+136)}, false);
+			//PuzzleImage *pImg = PuzzleCache::getInstance()->cutImageByStensil(puzzleImg, _img, {(int)(xcnt*136+180),(int)(ycnt*136+136)},false);
+			
+			
+			CCString *key =  new CCString();
+			key->initWithFormat("puzzle%d_piece%d",puzzleNo,i);
+			whPiece->setPuzzleNo(puzzleNo);
+			whPiece->setPieceNo(i);
+			whPiece->setPuzzleKey(key->getCString());
+			key->release();
 
 		
-		
 		//썸네일 이미지
-		
-			PuzzleImage *tImg = PuzzleCache::getInstance()->getTextureOriginByStensil(thumbImg, _img, {(int)(xcnt*204+102),(int)(ycnt*204+102)},false);
-			tImg->setCutPoint(pImg->getCutPoint().x,pImg->getCutPoint().y);
-			ostringstream oss2;
-			oss2 << "puzzle"<<puzzleNo<<"_thumbnail"<<i;
-			string key2=oss2.str().c_str();
+			PuzzleImage *tPiece = new PuzzleImage();
+			tPiece->initWithPuzzleImageData(_pieceData);
 			
-			tImg->setPuzzleNo(puzzleNo);
-			tImg->setPieceNo(i+100);
-			tImg->setPuzzleKey(key2);
+			PuzzleCache::getInstance()->changeStencilByOrigin(tPiece, thumbImg, {(int)(xcnt*202+101),(int)(ycnt*202+101)}, false);
 			
-			addLoadingPuzzleList(tImg);
+			tPiece->setCutPoint(whPiece->getCutPoint().x,whPiece->getCutPoint().y);
+
 			
-			addLoadingPuzzleList(pImg);
+			CCString *key2 =  new CCString();
+			key2->initWithFormat("puzzle%d_thumbnail%d",puzzleNo,i);
+			
+			tPiece->setPuzzleNo(puzzleNo);
+			tPiece->setPieceNo(i+100);
+			tPiece->setPuzzleKey(key2->getCString());
+			key2->release();
+			
+			addLoadingPuzzleList(tPiece);
+			tPiece->release();
+			addLoadingPuzzleList(whPiece);
+			whPiece->release();
 			
 			xcnt++;
 		}
-		
+		delete hPieceData;
+		delete wPieceData;
 		puzzleImg->release();
-		wPiece->release();
-		hPiece->release();
+		thumbImg->release();
+		//wPiece->release();
+	//	hPiece->release();
 		
 		m_puzzleState[puzzleNo]="loaded";
 		m_currentLoadPuzzleNo=0;
@@ -481,8 +562,65 @@ public:
 		}
 	}
 	
+	
+	//stencil
+	void changeStencilByOrigin(PuzzleImage* stencil,PuzzleImage* origin,PuzzlePoint cutPointInOrigin,bool isGLcoordinate){
+		
+		unsigned char* originData = origin->getData();
+		PuzzlePoint originSize = {origin->getWidth(),origin->getHeight()};
+		
+		
+		unsigned char* stencilData = stencil->getData();
+		PuzzlePoint stencilSize = {stencil->getWidth(),stencil->getHeight()};
+		PuzzlePoint stencilSizeHalf = {stencilSize.x/2,stencilSize.y/2};
+		
+		int originImgByte = 3;
+		int stencilImgByte =3;
+		
+		if(origin->hasAlpha()) originImgByte=4;
+		if(stencil->hasAlpha()) stencilImgByte=4;
+				
+		if(isGLcoordinate==true){
+			cutPointInOrigin.y = originSize.y-cutPointInOrigin.y;
+			//newImg->setCutPoint(cutPointInOrigin.x/2,(cutPointInOrigin.y)/2);
+		}else{
+			//newImg->setCutPoint(cutPointInOrigin.x/2,(originSize.y-cutPointInOrigin.y)/2);
+			
+		}
+		
+		stencil->setCutPoint(cutPointInOrigin.x/2,(originSize.y-cutPointInOrigin.y)/2);
+		
+		int originLength =	origin->getDataLen();
+		int pDataLengthX4 = originLength*4;
+		
+		
+		PuzzlePoint tempPoint = {cutPointInOrigin.x-stencilSizeHalf.x,cutPointInOrigin.y-stencilSizeHalf.y};
+		
+		int px=0,py=0,origin_i=0,stencil_i=0;
+		float calcAlpha=0;
+		for(int y=0;y<stencilSize.y;y++){
+			for(int x=0;x<stencilSize.x;x++){
+				stencil_i = (y*stencilSize.x+x)*stencilImgByte;
+				px = x+tempPoint.x;
+				py = y+tempPoint.y;
+				origin_i=(py*originSize.x+px)*originImgByte;
+				
+				if(origin_i>=pDataLengthX4 || py<0 || px<0)continue;
+				
+				calcAlpha = (stencilData[stencil_i+3] / 255.f);
+				if(stencilData[stencil_i+3]>0){
+					stencilData[stencil_i] = originData[origin_i]*calcAlpha;
+					stencilData[stencil_i+1] = originData[origin_i+1]*calcAlpha;
+					stencilData[stencil_i+2] = originData[origin_i+2]*calcAlpha;
+				}
+			}
+		}
+		
+	}
+	
 	//origin이미지에서 stencil이미지 만큼 잘라오기
-	PuzzleImage* getTextureOriginByStensil(CCImage* origin, CCImage* stencil,PuzzlePoint cutPointInOrigin,bool isGLcoordinate){
+	PuzzleImage* cutImageByStensil(CCImage* origin, CCImage* stencil,PuzzlePoint cutPointInOrigin,bool isGLcoordinate){
+		
 		unsigned char* originData = origin->getData();
 		PuzzlePoint originSize = {origin->getWidth(),origin->getHeight()};
 		
@@ -545,11 +683,9 @@ public:
 				*--newImgDataPos = *--originDataPos * calcAlpha;
 				*--newImgDataPos = *--originDataPos * calcAlpha;
 				*--newImgDataPos = *--originDataPos * calcAlpha;
-				
 			}
 		}
 
-		
 		return newImg;
 //		PuzzleCache::getInstance()->testImage = new CCImage;
 //		PuzzleCache::getInstance()->testImage->initWithImageData(stencil->getData(), stencil->getDataLen());
