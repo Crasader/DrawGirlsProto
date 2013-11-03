@@ -235,6 +235,8 @@ private:
 		map_node->removeChildByTag(99998);
 		map_node->removeChildByTag(99997);
 		
+		map_mode_state = kMMS_loadChangingMode;
+		
 		cachingPuzzleImg2();
 //		switchMapNode(map_node);
 //		endSwitchMapNode();

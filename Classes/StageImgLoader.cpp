@@ -97,9 +97,9 @@ void* StageImgLoader::t_function(void *data)
 		
 		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successAction), StageImgLoader::sharedInstance(), 0, 0, 0, false);
 		
-		while (lchunk.size!=0) {
-			usleep(10000);
-		}
+//		while (lchunk.size!=0) {
+//			usleep(10000);
+//		}
 	}while (0);
 	
 	if(StageImgLoader::sharedInstance()->isFail)
