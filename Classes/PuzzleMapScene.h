@@ -235,7 +235,7 @@ private:
 		map_node->removeChildByTag(99998);
 		map_node->removeChildByTag(99997);
 		
-		map_mode_state = kMMS_loadChangingMode;
+		map_mode_state = kMMS_notLoadMode;
 		
 		cachingPuzzleImg2();
 //		switchMapNode(map_node);
@@ -503,6 +503,8 @@ private:
 																		map_mode_state = kMMS_uiMode;
 																	else if(map_mode_state == kMMS_changeMode)
 																		map_mode_state = kMMS_loadChangingMode;
+																	else
+																		CCLog("map_mode_state : %d", map_mode_state);
 																}
 														  });
 	}
