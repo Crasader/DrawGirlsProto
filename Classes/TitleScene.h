@@ -56,7 +56,7 @@ private:
 	void startGetPuzzleList()
 	{
 		Json::Value param;
-		param["puzzlelistversion"] = NSDS_GI(kSDS_GI_puzzleList_int1_version_i);
+		param["puzzlelistversion"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 		param["eventstagelistversion"] = NSDS_GI(kSDS_GI_eventListVersion_i);
 		hspConnector::get()->command("getpuzzlelist", param, json_selector(this, TitleScene::resultGetPuzzleList));
 		
@@ -177,6 +177,7 @@ private:
 		if(result_data["state"].asString() == "ok")
 		{
 			successed_get_puzzle_list = true;
+			
 			if(result_data["puzzlelistversion"] > NSDS_GI(kSDS_GI_puzzleListVersion_i))
 			{
 				Json::Value puzzle_list = result_data["puzzlelist"];

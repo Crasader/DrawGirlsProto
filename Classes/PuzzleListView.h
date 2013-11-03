@@ -78,17 +78,8 @@ private:
 		}
 		
 		CCSprite* n_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
-//		CCLabelTTF* n_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", puzzle_number)->getCString(), mySGD->getFont().c_str(), 30);
-//		n_number_label->setColor(ccBLACK);
-//		n_number_label->setPosition(ccp(74,65));
-//		n_back->addChild(n_number_label);
-		
 		CCSprite* s_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
 		s_back->setColor(ccGRAY);
-//		CCLabelTTF* s_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", puzzle_number)->getCString(), mySGD->getFont().c_str(), 30);
-//		s_number_label->setColor(ccBLACK);
-//		s_number_label->setPosition(ccp(74,65));
-//		s_back->addChild(s_number_label);
 		
 		CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, target_menu, delegate_menu);
 		back_item->setTag(puzzle_number);

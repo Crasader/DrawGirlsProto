@@ -14,6 +14,7 @@
 #include "DataStorageHub.h"
 #include "GraySprite.h"
 #include "ScrollMenu.h"
+#include "PuzzleCache.h"
 
 USING_NS_CC;
 using namespace std;
@@ -51,6 +52,25 @@ public:
 	}
 	
 	bool isChangable(){		return is_changable;	}
+	void setBackPuzzle()
+	{
+		piece_img = GraySprite::createWithTexture(PuzzleCache::getInstance()->getImage(piece_name.c_str())->makeTexture());
+		piece_img->setGray(is_gray);
+		addChild(piece_img);
+		
+		if(is_boarder)
+		{
+			string boarder_filename;
+			bool is_long = (piece_type == "h");
+			
+			if(is_long)			boarder_filename = "test_map_boarder_long.png";
+			else				boarder_filename = "test_map_boarder_wide.png";
+			
+			CCSprite* boarder = CCSprite::create(boarder_filename.c_str());
+			boarder->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
+			piece_img->addChild(boarder);
+		}
+	}
 	void setPuzzleMode(PuzzleMode t_mode)
 	{
 		if(!is_changable)		return;
@@ -62,7 +82,7 @@ public:
 		
 		if(t_mode == kPM_default)
 		{
-			piece_img = GraySprite::createWithTexture(mySIL->addImage(piece_name.c_str()));
+			piece_img = GraySprite::createWithTexture(PuzzleCache::getInstance()->getImage(piece_name.c_str())->makeTexture());
 			piece_img->setGray(is_gray);
 			addChild(piece_img);
 			
@@ -81,7 +101,7 @@ public:
 		}
 		else if(t_mode == kPM_thumb)
 		{
-			piece_img = GraySprite::createWithTexture(mySIL->addImage(thumb_name.c_str()));
+			piece_img = GraySprite::createWithTexture(PuzzleCache::getInstance()->getImage(thumb_name.c_str())->makeTexture());
 			addChild(piece_img);
 			
 			//			if(is_boarder)

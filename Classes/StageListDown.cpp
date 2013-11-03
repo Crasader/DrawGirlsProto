@@ -34,10 +34,15 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			NSDS_SI(puzzle_number, kSDS_PZ_point_i, result_data["point"].asInt());
 			
 			if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != result_data["center"]["image"].asString())		addDownlist("center", result_data);
+			if(NSDS_GS(puzzle_number, kSDS_PZ_original_s) != result_data["original"]["image"].asString())	addDownlist("original", result_data);
+			if(NSDS_GS(puzzle_number, kSDS_PZ_face_s) != result_data["face"]["image"].asString())			addDownlist("face", result_data);
+			
+			///////// 이하 삭제 대상 /////////
 			if(NSDS_GS(puzzle_number, kSDS_PZ_bottom_s) != result_data["bottom"]["image"].asString())		addDownlist("bottom", result_data);
 			if(NSDS_GS(puzzle_number, kSDS_PZ_top_s) != result_data["top"]["image"].asString())				addDownlist("top", result_data);
 			if(NSDS_GS(puzzle_number, kSDS_PZ_left_s) != result_data["left"]["image"].asString())			addDownlist("left", result_data);
 			if(NSDS_GS(puzzle_number, kSDS_PZ_right_s) != result_data["right"]["image"].asString())			addDownlist("right", result_data);
+			///////////////////////////////
 			
 			NSDS_SI(puzzle_number, kSDS_PZ_startStage_i, result_data["startStage"].asInt());
 			
@@ -49,9 +54,12 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				int stage_number = stage_list[i]["no"].asInt();
 				
 				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number, stage_list[i]["level"].asInt());
-				NSDS_SS(puzzle_number, kSDS_PZ_stage_int1_pieceType_s, stage_number, stage_list[i]["pieceType"].asString());
+				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number, stage_list[i]["pieceNo"].asInt());
+				
+				//////////////// 이하 삭제 대상 ///////////////////
 				NSDS_SD(puzzle_number, kSDS_PZ_stage_int1_x_d, stage_number, stage_list[i]["x"].asDouble());
 				NSDS_SD(puzzle_number, kSDS_PZ_stage_int1_y_d, stage_number, stage_list[i]["y"].asDouble());
+				NSDS_SS(puzzle_number, kSDS_PZ_stage_int1_pieceType_s, stage_number, stage_list[i]["pieceType"].asString());
 				
 				if(NSDS_GS(puzzle_number, kSDS_PZ_stage_int1_piece_s, stage_number) != stage_list[i]["piece"]["image"].asString())
 				{
@@ -75,6 +83,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					df_list.push_back(t_df);
 					// ================================
 				}
+				/////////////////////////////////////////////////
 			}
 			
 			if(df_list.size() > 0) // need download

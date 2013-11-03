@@ -43,6 +43,8 @@ enum SDS_KEY
 	kSDS_PZ_ticket_i,
 	kSDS_PZ_point_i,
 	kSDS_PZ_center_s,
+	kSDS_PZ_original_s,
+	kSDS_PZ_face_s,
 	kSDS_PZ_bottom_s,
 	kSDS_PZ_top_s,
 	kSDS_PZ_left_s,
@@ -51,6 +53,7 @@ enum SDS_KEY
 	kSDS_PZ_stageCount_i,
 	kSDS_PZ_stage_int1_level_i,
 	kSDS_PZ_stage_int1_pieceType_s,
+	kSDS_PZ_stage_int1_pieceNo_i,
 	kSDS_PZ_stage_int1_x_d,
 	kSDS_PZ_stage_int1_y_d,
 	kSDS_PZ_stage_int1_piece_s,
@@ -466,6 +469,8 @@ private:
 		else if(t_key == kSDS_PZ_ticket_i)					rv = "ticket";
 		else if(t_key == kSDS_PZ_point_i)					rv = "point";
 		else if(t_key == kSDS_PZ_center_s)					rv = "center";
+		else if(t_key == kSDS_PZ_original_s)				rv = "original";
+		else if(t_key == kSDS_PZ_face_s)					rv = "face";
 		else if(t_key == kSDS_PZ_bottom_s)					rv = "bottom";
 		else if(t_key == kSDS_PZ_top_s)						rv = "top";
 		else if(t_key == kSDS_PZ_left_s)					rv = "left";
@@ -474,6 +479,7 @@ private:
 		else if(t_key == kSDS_PZ_stageCount_i)				rv = "stageCount";
 		else if(t_key == kSDS_PZ_stage_int1_level_i)		rv = "stage%d_level";
 		else if(t_key == kSDS_PZ_stage_int1_pieceType_s)	rv = "stage%d_pieceType";
+		else if(t_key == kSDS_PZ_stage_int1_pieceNo_i)		rv = "stage%d_pieceNo";
 		else if(t_key == kSDS_PZ_stage_int1_x_d)			rv = "stage%d_x";
 		else if(t_key == kSDS_PZ_stage_int1_y_d)			rv = "stage%d_y";
 		else if(t_key == kSDS_PZ_stage_int1_piece_s)		rv = "stage%d_piece";
@@ -483,6 +489,7 @@ private:
 		else if(t_key == kSDS_GI_puzzleListCount_i)			rv = "puzzleListCount";
 		else if(t_key == kSDS_GI_puzzleList_int1_no_i)		rv = "puzzleList%d_no";
 		else if(t_key == kSDS_GI_puzzleList_int1_title_s)	rv = "puzzleList%d_title";
+		else if(t_key == kSDS_GI_puzzleList_int1_version_i)	rv = "puzzleList%d_version";
 		else if(t_key == kSDS_GI_puzzleList_int1_thumbnail_s)			rv = "puzzleList%d_thumbnail";
 		
 		else if(t_key == kSDS_GI_eventListVersion_i)		rv = "eventListVersion";

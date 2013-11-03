@@ -15,6 +15,7 @@
 #include "LogoutPopup.h"
 #include "NotiPopup.h"
 #include "WithdrawPopup.h"
+#include "PuzzleCache.h"
 
 CCScene* OptionScene::scene()
 {
@@ -63,7 +64,28 @@ bool OptionScene::init()
     }
 
 	setKeypadEnabled(true);
-
+	
+	
+//	PuzzleCache::getInstance()->loadImageWithCallback(1, [&](PuzzleImage *pImg) {
+//		
+//		//퍼즐번호와 피스번호로 해당 스테이지 정보를 빼옴
+//		Json::Value stageInfo =  findStageInfoByPieceNo(pImg->getPuzzleNo(),pImg->getPieceNo());
+//		
+//		//스테이지 정보가 있다면
+//		if(!stageInfo.isNull()){
+//			//스테이지 피스세팅하고 붙여줌
+//			StagePiece *piece = StagePiece::create(pImg,stageInfo);
+//			this->addChild(piece);
+//			
+//		//스테이지정보가 없다면(=그냥 깔리는 그림이라면) 그냥 붙여줌
+//		}else{
+//			CCSprite* piece = CCSprite::createWithTexture(pImg->makeTexture());
+//			piece->setPosition(pImg->getCutPoint());
+//			this->addChild(piece,10);
+//		}
+//	});
+	
+	return true;
 	CCSprite* back = CCSprite::create("option_back.png");
 	back->setPosition(ccp(240,160));
 	addChild(back, kO_Z_back);
