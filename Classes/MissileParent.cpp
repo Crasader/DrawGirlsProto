@@ -483,6 +483,22 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			
 		}
 	}
+	else if(pattern == "113") // 리버 스크럽
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				KSTargetAttackPattern13* t = KSTargetAttackPattern13::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				addChild(t);
+				saveAP = t;
+				savedAP = true;
+			};
+			castBranch(atype, func);
+			
+		}
+	}
 	else if(pattern == "1001")
 	{
 		if(exe)
