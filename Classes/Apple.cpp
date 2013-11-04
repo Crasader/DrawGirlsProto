@@ -63,12 +63,7 @@ bool Apple::init()
 	}
 
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	myGD->setMainCumberPoint(mapPoint);
-	CCLog("start Position!!!!!! : %d %d", mapPoint.x, mapPoint.y);
-	setPosition(ip2ccp(mapPoint));
+	
 	
 	
 	//	startMoving();

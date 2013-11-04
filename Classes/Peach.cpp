@@ -33,13 +33,7 @@ bool Peach::init()
 	//	m_headImg = CCSprite::create("chapter10_boss.png");
 	//	addChild(m_headImg);
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	//	myGD->setMainCumberPoint(mapPoint);
-	setPosition(ip2ccp(mapPoint));
-	//	startMoving();
-	
+		
 	lastCastNum = m_well512.GetValue(1, 3);
 	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 	startAnimationNoDirection();

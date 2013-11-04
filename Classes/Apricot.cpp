@@ -41,13 +41,7 @@ bool Apricot::init()
 	//	m_headImg = CCSprite::create("chapter10_boss.png");
 	//	addChild(m_headImg);
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	//	myGD->setMainCumberPoint(mapPoint);
-	setPosition(ip2ccp(mapPoint));
-	//	startMoving();
-	CCLog("start Position!!!!!! : %d %d", mapPoint.x, mapPoint.y);
+	
 	lastCastNum = m_well512.GetValue(1, 1);
 	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 	startAnimationNoDirection();

@@ -63,11 +63,7 @@ bool Melon::init()
 	}
 	
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	myGD->setMainCumberPoint(mapPoint);
-	setPosition(ip2ccp(mapPoint));
+	
 	
 	
 	//	startMoving();

@@ -401,6 +401,11 @@ void CumberParent::createSubCumber(IntPoint s_p)
 	t_SC->settingSpeed(junior.m_jrStartSpeed, junior.m_jrMinSpeed, junior.m_jrMaxSpeed);
 	t_SC->settingMovement((enum MOVEMENT)junior.m_jrNormalMovement, (enum MOVEMENT)junior.m_jrDrawMovement,
 						  (enum MOVEMENT)junior.m_jrFuryMovement);
+	IntPoint mapPoint;
+	bool finded;
+	t_SC->getRandomPosition(&mapPoint, &finded);
+	myGD->setMainCumberPoint(mapPoint);
+	t_SC->setPosition(ip2ccp(mapPoint));
 	addChild(t_SC);
 	subCumberArray->addObject(t_SC);
 	t_SC->setPosition(ip2ccp(s_p));
@@ -596,6 +601,12 @@ void CumberParent::myInit()
 		
 //	);
 	mainCumber->settingAttackPercent(boss["attackpercent"].asDouble());
+	IntPoint mapPoint;
+	bool finded;
+	mainCumber->getRandomPosition(&mapPoint, &finded);
+	myGD->setMainCumberPoint(mapPoint);
+	mainCumber->setPosition(ip2ccp(mapPoint));
+	
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	
@@ -681,6 +692,11 @@ void CumberParent::myInit()
 			t_SC->settingSpeed(startSpeed, minSpeed, maxSpeed);
 			t_SC->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement
 								  , (enum MOVEMENT)furyMovement);
+			IntPoint mapPoint;
+			bool finded;
+			t_SC->getRandomPosition(&mapPoint, &finded);
+//			myGD->setMainCumberPoint(mapPoint);
+			t_SC->setPosition(ip2ccp(mapPoint));
 			addChild(t_SC);
 			
 			subCumberArray->addObject(t_SC);

@@ -41,11 +41,7 @@ bool Coconut::init()
 	//	m_headImg = CCSprite::create("chapter10_boss.png");
 	//	addChild(m_headImg);
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	//	myGD->setMainCumberPoint(mapPoint);
-	setPosition(ip2ccp(mapPoint));
+	
 	//	startMoving();
 	
 	lastCastNum = m_well512.GetValue(1, 3);
