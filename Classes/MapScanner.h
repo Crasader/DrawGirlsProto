@@ -161,40 +161,49 @@ private:
 	CCArray* drawRects;
 	
 	CCPoint jack_position;
+	CCSize screen_size;
+	CCSize design_resolution_size;
+	int viewport[4];
 	
 	virtual void visit()
 	{
 		unsigned int loopCnt = drawRects->count();
 		
+		glEnable(GL_SCISSOR_TEST);
+		
 		for(int i=0;i<loopCnt;i++)
 		{
 			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
 			
-			glEnable(GL_SCISSOR_TEST);
-			
-			int viewport [4];
-			glGetIntegerv (GL_VIEWPORT, viewport);
-			CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
-			float wScale = viewport[2] / rSize.width;
-			float hScale = viewport[3] / rSize.height;
+			float wScale = viewport[2] / design_resolution_size.width;
+			float hScale = viewport[3] / design_resolution_size.height;
 			
 			float x = (t_rect->origin.x*myGD->game_scale+jack_position.x)*wScale + viewport[0]-1;
 			float y = (t_rect->origin.y*myGD->game_scale+jack_position.y)*hScale + viewport[1]-1;
 			float w = (t_rect->size.width*myGD->game_scale)*wScale+2;
 			float h = (t_rect->size.height*myGD->game_scale)*hScale+2;
 			
-			glScissor(x,y,w,h);
+			if(y > screen_size.height || y+h < 0.f)
+				continue;
+			else
+			{
+				glScissor(x,y,w,h);
+				draw();
+			}
 			
-			draw();
-			
-			glDisable(GL_SCISSOR_TEST);
 		}
+		
+		glDisable(GL_SCISSOR_TEST);
 	}
 	
 	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects)
 	{
 		initWithTexture(mySIL->addImage(filename));
 		setPosition(ccp(160,215));
+		
+		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		design_resolution_size = CCEGLView::sharedOpenGLView()->getDesignResolutionSize();
+		glGetIntegerv(GL_VIEWPORT, viewport);
 
 		drawRects = t_drawRects;
 	}

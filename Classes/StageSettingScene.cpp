@@ -348,7 +348,7 @@ void StageSettingScene::menuAction(CCObject* pSender)
 			{
 				is_selected_item[clicked_item_number] = false;
 				
-				CCNode* t_item = getChildByTag(kSSS_MT_itemBase+clicked_item_number);
+				CCNode* t_item = my_ilv->getChildByTag(kSSS_MT_itemBase+clicked_item_number);
 				t_item->removeChildByTag(kSSS_MT_selectedBase+clicked_item_number);
 				
 				CCSprite* selected_img = CCSprite::create("stagesetting_item_unselected.png");
@@ -359,7 +359,7 @@ void StageSettingScene::menuAction(CCObject* pSender)
 			{
 				is_selected_item[clicked_item_number] = true;
 				
-				CCNode* t_item = getChildByTag(kSSS_MT_itemBase+clicked_item_number);
+				CCNode* t_item = my_ilv->getChildByTag(kSSS_MT_itemBase+clicked_item_number);
 				t_item->removeChildByTag(kSSS_MT_selectedBase+clicked_item_number);
 				
 				CCSprite* selected_img = CCSprite::create("stagesetting_item_selected.png");
@@ -388,7 +388,7 @@ void StageSettingScene::buySuccessItem(int t_clicked_item_number, int cnt)
 	int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_number]);
 	is_selected_item[t_clicked_item_number] = true;
 	
-	CCNode* item_parent = getChildByTag(kSSS_MT_itemBase+t_clicked_item_number);
+	CCNode* item_parent = my_ilv->getChildByTag(kSSS_MT_itemBase+t_clicked_item_number);
 	
 	CCSprite* cnt_img = CCSprite::create("stagesetting_item_count.png");
 	cnt_img->setPosition(ccp(-100,16));
