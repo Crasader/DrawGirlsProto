@@ -7,7 +7,6 @@ void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
 	m_totalFrame = 600;
 	
 	vector<IntPoint> oldLines;
-	
 	for(int y=0; y<mapLoopRange::mapHeightInnerEnd; y++)
 	{
 		for(int x=0; x<mapLoopRange::mapWidthInnerEnd; x++)
@@ -78,7 +77,9 @@ void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
 							break;
 						
 						if(myGD->mapState[checkPoint4.x][checkPoint4.y] == mapType::mapOldline)
-							bfs.push(AlongPath(checkPoint4, bottom));	
+							bfs.push(AlongPath(checkPoint4, bottom));
+						else
+							break;
 					}
 				}
 				CCLog("end while");
@@ -251,6 +252,163 @@ void AlongOfTheLine::update(float dt)
 	}
 }
 
+// from 에서 to 로 퍼져나갈 때 블럭 처리.
+bool ReaverScarab::processObject(IntPoint pointFrom, IntPoint pointTo, int distance)
+{
+	// 주위의블럭을 처리하는데, 열려있는 공간에 들어가있다면 g 가 갱신될 수 있는지 알아봄
+	// 열린 공간에도 없고 닫힌 공간에도 없으면 g 와 h 를 추론함.
+	if(pointTo == endPoint)
+	{
+//		cc.log("corr");
+	}
+	
+	if(pointTo.x < mapLoopRange::mapWidthInnerBegin || pointTo.x >= mapLoopRange::mapWidthInnerEnd ||
+		 pointTo.y < mapLoopRange::mapHeightInnerBegin || pointTo.y >= mapLoopRange::mapHeightInnerEnd)
+		return true;
+	// 장애물이면 패스.
+	
+	if(myGD->mapState[pointTo.x][pointTo.y] == mapType::mapOldline && !(myGD->getJackPoint() == pointTo))
+		return true;
+	if(myGD->mapState[pointTo.x][pointFrom.y] == mapType::mapOldline &&
+		 !(myGD->getJackPoint() == IntPoint(pointTo.x, pointFrom.y)))
+		return true;
+	if(myGD->mapState[pointFrom.x][pointTo.y] == mapType::mapOldline &&
+		 !(myGD->getJackPoint() == IntPoint(pointFrom.x, pointTo.y)))
+		return true;
+	
+	bool found = false;
+	auto openedIter = m_openList.find(pointTo);
+	if(openedIter != m_openList.end())
+	{
+		found = true;
+	}
+	// opened
+	if(found)
+	{
+		if(openedIter->second.g > m_closeList[pointFrom].g + distance)
+		{
+			openedIter->second.dx = pointFrom.x - openedIter->first.x;
+			openedIter->second.dy = pointFrom.y - openedIter->first.y;
+		}
+		openedIter->second.g = min(openedIter->second.g, m_closeList[pointFrom].g + distance);
+		return true;
+	}
+	
+	
+	found = false;
+	auto closedIter = m_openList.find(pointTo);
+	if(closedIter != m_openList.end())
+	{
+		found = true;
+	}
+	
+	// 닫힌 공간에 없으면
+	if(found == false)
+	{
+		CellInfo pointToObj(0, 0, 0, 0);
+//		CellInfo pointToObj = {g:0, h:0, dx:0, dy:0};
+		pointToObj.g = m_closeList[pointFrom].g + distance;
+		pointToObj.h = lengthToEnd(pointTo);
+		pointToObj.dx = pointFrom.x - pointTo.x; // 부모 가르키기.
+		pointToObj.dy = pointFrom.y - pointTo.y; // 부모 가르키기.
+		
+		m_openList[pointTo] = pointToObj;
+	}
+	return true;
+}
 
+void ReaverScarab::aStar(IntPoint endPt)
+{
+	//		endPt.x = parseInt(endPt.x);
+	//		endPt.y = parseInt(endPt.y);
+	
+	//		m_parentMissile->setPosition(ccp((int)(m_parentMissile->getPosition().x),
+	//																		 (int)(m_parentMissile->getPosition().y)));
+	
+	chrono::time_point<chrono::system_clock> start, end;
+	chrono::duration<double> elapsed_seconds;
+	start = chrono::system_clock::now();
 
+	
+	
+	
+	
+	IntPoint startPoint = ccp2ip(m_parentMissile->getPosition());
+	endPoint = endPt;
+	
+//	startPoint = IntPoint(2, 100);
+//	endPoint = IntPoint(4, 104);
+	m_openList[startPoint] = CellInfo(0, 0, 0, lengthToEnd(startPoint));
+	
+	bool foundSolution = false;
+	while(m_openList.size() > 0)
+	{
+//		auto minElement = std::min_element(m_openList.begin(), m_openList.end());
+		auto minElement = std::min_element(m_openList.begin(), m_openList.end(),
+																			 [](const std::pair<IntPoint, CellInfo>& a, const std::pair<IntPoint, CellInfo>& b)->bool
+																			 {
+																				 return a.second.g + a.second.h < b.second.g + b.second.h;
+																			 });
+		IntPoint fminIndex = minElement->first;
+		CellInfo fminElement = minElement->second;
+		
+		m_closeList[fminIndex] = fminElement;
+		m_openList.erase(fminIndex);
+		
+		CCLog("%d %d", fminIndex.x, fminIndex.y);
+		if(fminIndex == endPoint)
+			break;
+		
+		foundSolution = !processObject(fminIndex, IntPoint(fminIndex.x - 1, fminIndex.y + 1), 14);
+		if(foundSolution)
+			break;
+		foundSolution = !processObject(fminIndex, IntPoint(fminIndex.x, fminIndex.y + 1), 10);
+		if(foundSolution)
+			break;
+		
+		foundSolution = !processObject(fminIndex, IntPoint(fminIndex.x + 1, fminIndex.y + 1), 14);
+		if(foundSolution)
+			break;
+		
+		foundSolution = !processObject(fminIndex, IntPoint(fminIndex.x - 1, fminIndex.y), 10);
+		if(foundSolution)
+			break;
+		
+		foundSolution = !processObject(fminIndex, IntPoint(fminIndex.x + 1, fminIndex.y), 10);
+		if(foundSolution)
+			break;
+		
+		foundSolution = !processObject(fminIndex, IntPoint(fminIndex.x - 1, fminIndex.y - 1), 14);
+		if(foundSolution)
+			break;
+		
+		foundSolution = !processObject(fminIndex, IntPoint(fminIndex.x, fminIndex.y - 1), 10);
+		if(foundSolution)
+			break;
+		
+		foundSolution = !processObject(fminIndex, IntPoint(fminIndex.x + 1, fminIndex.y - 1), 14);
+		if(foundSolution)
+			break;
+	}
+	
+	end = chrono::system_clock::now();
+	chrono::duration<double> elapsed_seconds1 = end-start;
+	KS::KSLog("process step 1 / time : %", elapsed_seconds1.count());
 
+		
+	if(m_closeList.find(endPoint) != m_closeList.end())
+	{
+		IntPoint currentPoint = endPoint;
+		while(!(currentPoint == startPoint))
+		{
+			IntPoint coord = currentPoint;
+			currentPoint.x += m_closeList[coord].dx;
+			currentPoint.y += m_closeList[coord].dy;
+			myGD->mapState[currentPoint.x][currentPoint.y] = mapType::mapOldline;
+			//var bulletPath = cc.Sprite.create("res/CloseSelected.png");
+			//this.addChild(bulletPath);
+			//bulletPath.setPosition(currentPoint);
+		}
+	}
+	// alert("complete!!");
+}
