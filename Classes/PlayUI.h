@@ -1524,19 +1524,26 @@ private:
 		
 		if(countingCnt >= playtime_limit)
 		{
-			stopCounting();
-			// timeover
-			
-			mySGD->fail_code = kFC_timeover;
-			
-			myGD->communication("Main_allStopSchedule");
-			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-			result_sprite = CCSprite::create("game_timeover.png");
-			result_sprite->setRotation(-25);
-			result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
-			addChild(result_sprite);
-			
-			endGame();
+//			if(jack_life > 0)
+//			{
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+//			}
+//			else
+//			{
+//				stopCounting();
+//				// timeover
+//				
+//				mySGD->fail_code = kFC_timeover;
+//				
+//				myGD->communication("Main_allStopSchedule");
+//				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+//				result_sprite = CCSprite::create("game_timeover.png");
+//				result_sprite->setRotation(-25);
+//				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
+//				addChild(result_sprite);
+//				
+//				endGame();
+//			}
 		}
 	}
 	
