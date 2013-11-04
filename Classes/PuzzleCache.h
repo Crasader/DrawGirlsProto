@@ -56,7 +56,6 @@ private:
 	int m_pieceNo;
 	string m_puzzleKey;
 	bool m_isLoaded;
-	
 public:
 	PuzzleImage(){
 		m_isLoaded=false;
@@ -159,12 +158,14 @@ private:
 	
 	int m_currentLoadPuzzleNo;
 	bool m_useTread;
+	string m_documentPath;
 public:
 	
 	PuzzleCache(){
 		isLockedLoadingPuzzleList=false;
 		m_currentLoadPuzzleNo = 0;
 		m_useTread=false;
+		m_documentPath = mySIL->getDocumentPath();
 	}
 	
 	//퍼즐로드 - 기본방식
@@ -322,14 +323,19 @@ public:
 	void startToLoadImage(int puzzleNo){
 		//퍼즐 원본 로드
 		CCString *pFilename = new CCString();
-		pFilename->initWithFormat((mySIL->getDocumentPath()+"puzzle%d_original.png").c_str(), puzzleNo);
+		pFilename->initWithFormat((m_documentPath+"puzzle%d_original.png").c_str(), puzzleNo);
+		
+		
 		PuzzleImage* puzzleImg = new PuzzleImage();
 		puzzleImg->initWithImageFileThreadSafe(pFilename->getCString());
+		
+		
 		pFilename->release();
+		
 		//CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_original.png").c_str()
 		PuzzleImage* thumbImg = new PuzzleImage();
 		CCString *tFilename = new CCString();
-		tFilename->initWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo);
+		tFilename->initWithFormat((m_documentPath+"puzzle%d_face.png").c_str(), puzzleNo);
 		thumbImg->initWithImageFileThreadSafe(tFilename->getCString());
 		tFilename->release();
 		//CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo)->getCString()

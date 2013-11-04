@@ -73,7 +73,7 @@ void PuzzleListView::setMinPositionX()
 {
 	int cnt = getChildrenCount()/2;
 	
-	float t_x = (cnt-3)*135 + 5;
+	float t_x = (cnt-3)*136 + 5;
 	if(cnt > 3)
 		min_positionX = -t_x;
 	else

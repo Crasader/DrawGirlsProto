@@ -139,7 +139,7 @@ void PuzzleMapScene::setMapNode()
 	map_back_left->setPosition(ccpAdd(original_point, left_img->getCutPoint()));
 	map_node->addChild(map_back_left, kPMS_Z_puzzle_back);
 	
-	CCSprite* shadow_left = CCSprite::create("shadow_left.png");
+	CCSprite* shadow_left = CCSprite::create("puzzle_shadow_1_left.png");
 	shadow_left->setPosition(map_back_left->getPosition());
 	map_node->addChild(shadow_left, kPMS_Z_puzzle_shadow);
 	
@@ -149,7 +149,7 @@ void PuzzleMapScene::setMapNode()
 	map_back_right->setPosition(ccpAdd(original_point, right_img->getCutPoint()));
 	map_node->addChild(map_back_right, kPMS_Z_puzzle_back);
 	
-	CCSprite* shadow_right = CCSprite::create("shadow_right.png");
+	CCSprite* shadow_right = CCSprite::create("puzzle_shadow_1_right.png");
 	shadow_right->setPosition(map_back_right->getPosition());
 	map_node->addChild(shadow_right, kPMS_Z_puzzle_shadow);
 	
@@ -159,7 +159,7 @@ void PuzzleMapScene::setMapNode()
 	map_back_top->setPosition(ccpAdd(original_point, top_img->getCutPoint()));
 	map_node->addChild(map_back_top, kPMS_Z_puzzle_back);
 	
-	CCSprite* shadow_top = CCSprite::create("shadow_top.png");
+	CCSprite* shadow_top = CCSprite::create("puzzle_shadow_1_top.png");
 	shadow_top->setPosition(map_back_top->getPosition());
 	map_node->addChild(shadow_top, kPMS_Z_puzzle_shadow);
 	
@@ -169,7 +169,7 @@ void PuzzleMapScene::setMapNode()
 	map_back_bottom->setPosition(ccpAdd(original_point, bottom_img->getCutPoint()));
 	map_node->addChild(map_back_bottom, kPMS_Z_puzzle_back);
 	
-	CCSprite* shadow_bottom = CCSprite::create("shadow_bottom.png");
+	CCSprite* shadow_bottom = CCSprite::create("puzzle_shadow_1_bottom.png");
 	shadow_bottom->setPosition(map_back_bottom->getPosition());
 	map_node->addChild(shadow_bottom, kPMS_Z_puzzle_shadow);
 	
@@ -194,7 +194,7 @@ void PuzzleMapScene::setMapNode()
 //	map_back_bottom->setPosition(ccp(0,-center_size.height/2.f));
 //	map_node->addChild(map_back_bottom, kPMS_Z_puzzle_back);
 	
-	shadow_batchnode = CCSpriteBatchNode::create("test_map_shadow.png");
+	shadow_batchnode = CCSpriteBatchNode::create("puzzle_shadow_1_piece.png");
 	shadow_batchnode->setPosition(CCPointZero);
 	map_node->addChild(shadow_batchnode, kPMS_Z_puzzle_shadow);
 	
@@ -329,7 +329,7 @@ CCSprite* PuzzleMapScene::addShadow(int i, string t_type, CCPoint sp_position)
 {
 	bool is_long = (t_type == "h");
 	
-	CCSprite* t_shadow = CCSprite::create("test_map_shadow.png", CCRectMake(is_long ? 0 : 120, 0, 120, 120));
+	CCSprite* t_shadow = CCSprite::create("puzzle_shadow_1_piece.png", CCRectMake(is_long ? 0 : 105, 0, 105, 105));
 	t_shadow->setPosition(sp_position);
 	shadow_batchnode->addChild(t_shadow);
 	
