@@ -102,7 +102,7 @@ private:
 		
 		setPosition(my_position);
 		
-		my_size = CCSizeMake(135, 115);
+		my_size = CCSizeMake(136, 115);
 		is_setted = false;
 		
 		CCRect tt_rect = CCRectMake(my_position.x-my_size.width/2.f, my_position.y-my_size.height/2.f, my_size.width, my_size.height);

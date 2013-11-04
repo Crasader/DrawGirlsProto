@@ -18,9 +18,6 @@
 using namespace cocos2d;
 using namespace std;
 
-
-using namespace cocos2d;
-using namespace std;
 typedef void (CCObject::*kakaoSelType)(Json::Value);
 #define kakao_selector(_SELECTOR) (kakaoSelType)(&_SELECTOR)
 
