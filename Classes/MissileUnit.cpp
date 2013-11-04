@@ -404,7 +404,8 @@ void ReaverScarab::aStar(IntPoint endPt)
 			IntPoint coord = currentPoint;
 			currentPoint.x += m_closeList[coord].dx;
 			currentPoint.y += m_closeList[coord].dy;
-			myGD->mapState[currentPoint.x][currentPoint.y] = mapType::mapOldline;
+			m_bulletReversePath.push_back(currentPoint);
+//			myGD->mapState[currentPoint.x][currentPoint.y] = mapType::mapOldline;
 			//var bulletPath = cc.Sprite.create("res/CloseSelected.png");
 			//this.addChild(bulletPath);
 			//bulletPath.setPosition(currentPoint);

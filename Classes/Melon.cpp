@@ -71,7 +71,7 @@ bool Melon::init()
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Melon::cumberAttack));
 	
-	startAnimationNoDirection();
+
 	return true;
 }
 

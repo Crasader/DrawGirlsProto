@@ -44,7 +44,6 @@ bool Banana::init()
 		
 	lastCastNum = m_well512.GetValue(1, 3);
 	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
-	startAnimationNoDirection();
 	
 	schedule(schedule_selector(Banana::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));

@@ -71,7 +71,7 @@ bool Apple::init()
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Apple::cumberAttack));
 	
-	startAnimationNoDirection();
+	
 	return true;
 }
 

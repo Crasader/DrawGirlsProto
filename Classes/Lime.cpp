@@ -71,7 +71,7 @@ bool Lime::init()
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Lime::cumberAttack));
 	
-	startAnimationNoDirection();
+
 	return true;
 }
 

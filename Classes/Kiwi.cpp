@@ -70,7 +70,7 @@ bool Kiwi::init()
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Kiwi::cumberAttack));
 	
-	startAnimationNoDirection();
+
 	return true;
 }
 

@@ -406,6 +406,7 @@ void CumberParent::createSubCumber(IntPoint s_p)
 	t_SC->getRandomPosition(&mapPoint, &finded);
 	myGD->setMainCumberPoint(mapPoint);
 	t_SC->setPosition(ip2ccp(mapPoint));
+	t_SC->startAnimationNoDirection();
 	addChild(t_SC);
 	subCumberArray->addObject(t_SC);
 	t_SC->setPosition(ip2ccp(s_p));
@@ -606,7 +607,7 @@ void CumberParent::myInit()
 	mainCumber->getRandomPosition(&mapPoint, &finded);
 	myGD->setMainCumberPoint(mapPoint);
 	mainCumber->setPosition(ip2ccp(mapPoint));
-	
+	mainCumber->startAnimationNoDirection();
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	
@@ -697,6 +698,8 @@ void CumberParent::myInit()
 			t_SC->getRandomPosition(&mapPoint, &finded);
 //			myGD->setMainCumberPoint(mapPoint);
 			t_SC->setPosition(ip2ccp(mapPoint));
+			t_SC->startAnimationNoDirection();
+			t_SC->startAnimationNoDirection();
 			addChild(t_SC);
 			
 			subCumberArray->addObject(t_SC);

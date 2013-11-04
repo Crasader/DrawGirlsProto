@@ -70,7 +70,7 @@ bool Orange::init()
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Orange::cumberAttack));
 	
-	startAnimationNoDirection();
+
 	return true;
 }
 
