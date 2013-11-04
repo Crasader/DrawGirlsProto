@@ -296,20 +296,23 @@ public:
 	
 	void endFever()
 	{
-		ing_fever = false;
-		recent_count = 0;
-		
-		fever_top->getSprite()->setColor(ccWHITE);
-		
-		myGD->communication("GIM_stopFever");
-		
-		myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 1.5f);
-		
-		fever_particle->setDuration(0.f);
-		fever_particle->setAutoRemoveOnFinish(true);
-		
-		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
-		fever_top->runAction(progress_to);
+		if(ing_fever)
+		{
+			ing_fever = false;
+			recent_count = 0;
+			
+			fever_top->getSprite()->setColor(ccWHITE);
+			
+			myGD->communication("GIM_stopFever");
+			
+			myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 1.5f);
+			
+			fever_particle->setDuration(0.f);
+			fever_particle->setAutoRemoveOnFinish(true);
+			
+			CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+			fever_top->runAction(progress_to);
+		}
 	}
 	
 private:
