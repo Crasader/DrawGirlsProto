@@ -267,20 +267,7 @@ void Jack::moveTest()
 			afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_dv.dx,t_speed*c_dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			
-			if(myGD->game_step == kGS_limited)
-			{
-				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
-				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
-			}
-			else
-			{
-				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			}
+			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
 		}
@@ -301,20 +288,7 @@ void Jack::moveTest()
 			afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_dv.dx,t_speed*c_dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			
-			if(myGD->game_step == kGS_limited)
-			{
-				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
-				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
-			}
-			else
-			{
-				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			}
+			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
 		}
@@ -324,20 +298,7 @@ void Jack::moveTest()
 			afterPoint = IntPoint(c_s_checkPoint.x, c_s_checkPoint.y);
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_s_dv.dx,t_speed*c_s_dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			
-			if(myGD->game_step == kGS_limited)
-			{
-				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
-				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
-			}
-			else
-			{
-				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			}
+			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
 		}
@@ -364,20 +325,7 @@ void Jack::moveTest()
 			afterPoint = IntPoint(checkPoint.x, checkPoint.y);
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*dv.dx,t_speed*dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			
-			if(myGD->game_step == kGS_limited)
-			{
-				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
-				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
-			}
-			else
-			{
-				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			}
+			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
 		}
@@ -395,20 +343,7 @@ void Jack::moveTest()
 			afterPoint = IntPoint(s_checkPoint.x, s_checkPoint.y);
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv.dx,t_speed*s_dv.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			
-			if(myGD->game_step == kGS_limited)
-			{
-				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
-				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
-			}
-			else
-			{
-				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			}
+			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
 		}
@@ -426,20 +361,7 @@ void Jack::moveTest()
 			afterPoint = IntPoint(s_checkPoint_reverse.x, s_checkPoint_reverse.y);
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv_reverse.dx,t_speed*s_dv_reverse.dy));
-			
-			if(turnPosition.x < (mapWidthInnerBegin-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerBegin-1)*pixelSize+1;
-			if(turnPosition.x > (mapWidthInnerEnd-1-1)*pixelSize+1)			turnPosition.x = (mapWidthInnerEnd-1-1)*pixelSize+1;
-			
-			if(myGD->game_step == kGS_limited)
-			{
-				if(turnPosition.y < (myGD->limited_step_bottom-1)*pixelSize+1)	turnPosition.y = (myGD->limited_step_bottom-1)*pixelSize+1;
-				if(turnPosition.y > (myGD->limited_step_top-1)*pixelSize+1)		turnPosition.y = (myGD->limited_step_top-1)*pixelSize+1;
-			}
-			else
-			{
-				if(turnPosition.y < (mapHeightInnerBegin-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerBegin-1)*pixelSize+1;
-				if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
-			}
+			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
 		}
@@ -487,11 +409,24 @@ void Jack::moveTest()
 		}
 		else
 		{
+			int check_top_line, check_bottom_line;
+			
+			if(myGD->game_step == kGS_limited)
+			{
+				check_top_line = myGD->limited_step_top;
+				check_bottom_line = myGD->limited_step_bottom;
+			}
+			else
+			{
+				check_top_line = mapHeightInnerEnd-1;
+				check_bottom_line = mapHeightInnerBegin;
+			}
+			
 			if(direction == directionLeftDown)
 			{
 				if(before_x_cnt > 0)
 				{
-					if(before_x_direction == directionLeft && afterPoint.y > mapHeightInnerBegin)		before_x_direction = directionDown;
+					if(before_x_direction == directionLeft && afterPoint.y > check_bottom_line)		before_x_direction = directionDown;
 					else if(before_x_direction == directionDown && afterPoint.x > mapWidthInnerBegin)	before_x_direction = directionLeft;
 					
 					before_x_cnt = 0;
@@ -511,7 +446,7 @@ void Jack::moveTest()
 			{
 				if(before_x_cnt > 0)
 				{
-					if(before_x_direction == directionRight && afterPoint.y > mapHeightInnerBegin)		before_x_direction = directionDown;
+					if(before_x_direction == directionRight && afterPoint.y > check_bottom_line)		before_x_direction = directionDown;
 					else if(before_x_direction == directionDown && afterPoint.x < mapWidthInnerEnd-1)	before_x_direction = directionRight;
 				
 					before_x_cnt = 0;
@@ -531,7 +466,7 @@ void Jack::moveTest()
 			{
 				if(before_x_cnt > 0)
 				{
-					if(before_x_direction == directionRight && afterPoint.y < mapHeightInnerEnd-1)		before_x_direction = directionUp;
+					if(before_x_direction == directionRight && afterPoint.y < check_top_line)		before_x_direction = directionUp;
 					else if(before_x_direction == directionUp && afterPoint.x < mapWidthInnerEnd-1)				before_x_direction = directionRight;
 					
 					before_x_cnt = 0;
@@ -551,7 +486,7 @@ void Jack::moveTest()
 			{
 				if(before_x_cnt > 0)
 				{
-					if(before_x_direction == directionLeft && afterPoint.y < mapHeightInnerEnd-1)		before_x_direction = directionUp;
+					if(before_x_direction == directionLeft && afterPoint.y < check_top_line)		before_x_direction = directionUp;
 					else if(before_x_direction == directionUp && afterPoint.x > mapWidthInnerBegin)		before_x_direction = directionLeft;
 					
 					before_x_cnt = 0;
