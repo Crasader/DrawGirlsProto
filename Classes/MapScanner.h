@@ -673,6 +673,21 @@ private:
 	CCSprite* left_boarder;
 	CCSprite* right_boarder;
 	
+	void showEmptyPoint(CCPoint t_point)
+	{
+		CCSprite* show_empty_point = CCSprite::create("show_empty_point.png");
+		show_empty_point->setAnchorPoint(ccp(0.5f,0.f));
+		show_empty_point->setPosition(t_point);
+		addChild(show_empty_point, blockZorder);
+		
+		CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccpAdd(t_point, ccp(0,20)));
+		CCMoveTo* t_move2 = CCMoveTo::create(0.3f, t_point);
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move1, t_move2);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+		
+		show_empty_point->runAction(t_repeat);
+	}
+	
 	void myInit()
 	{
 		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -687,6 +702,7 @@ private:
 		
 		myGD->V_V["MS_scanMap"] = std::bind(&MapScanner::scanMap, this);
 		myGD->V_B["MS_resetRects"] = std::bind(&MapScanner::resetRects, this, _1);
+		myGD->V_CCP["MS_showEmptyPoint"] = std::bind(&MapScanner::showEmptyPoint, this, _1);
 		
 		
 		setMapImg();

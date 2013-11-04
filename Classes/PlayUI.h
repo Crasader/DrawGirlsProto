@@ -1108,7 +1108,7 @@ public:
 				
 				mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
 				
-				endGame();
+				endGame(t_p < 1.f && t_p > 0.99f);
 			}
 			else
 			{
@@ -1125,7 +1125,7 @@ public:
 				result_sprite->setRotation(-25);
 				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(result_sprite);
-				endGame();
+				endGame(false);
 			}
 		}
 	}
@@ -1172,7 +1172,7 @@ public:
 				result_sprite->setRotation(-25);
 				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(result_sprite);
-				endGame();
+				endGame(false);
 				return;
 			}
 			else
@@ -1547,16 +1547,50 @@ private:
 		}
 	}
 	
-	void endGame()
+	void endGame(bool is_show_reason)
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 //		myGD->communication("CP_setGameover");
-		CCDelayTime* n_d = CCDelayTime::create(4.5f);
-		CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+		if(!is_show_reason)
+		{
+			CCDelayTime* n_d = CCDelayTime::create(4.5f);
+			CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+			
+			CCSequence* sequence = CCSequence::createWithTwoActions(n_d, nextScene);
+			
+			runAction(sequence);
+		}
+		else
+		{
+			CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
+			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
+			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
+			CCCallFunc* nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+			
+			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
+			
+			runAction(sequence);
+		}
+	}
+	
+	void searchEmptyPosition()
+	{
+		CCPoint found_empty_position;
+		bool break_flag = false;
+		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd && !break_flag;i++)
+		{
+			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd && !break_flag;j++)
+			{
+				if(myGD->mapState[i][j] == mapEmpty && mySD->silData[i][j])
+				{
+					break_flag = true;
+					found_empty_position = IntPoint(i,j).convertToCCP();
+				}
+			}
+		}
 		
-		CCSequence* sequence = CCSequence::createWithTwoActions(n_d, nextScene);
-		
-		runAction(sequence);
+		myGD->communication("MS_showEmptyPoint", found_empty_position);
+		myGD->communication("Main_startMoveToCCPoint", found_empty_position);
 	}
 	
 	void nextScene()
