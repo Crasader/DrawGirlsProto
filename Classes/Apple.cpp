@@ -63,12 +63,7 @@ bool Apple::init()
 	}
 
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	myGD->setMainCumberPoint(mapPoint);
-	CCLog("start Position!!!!!! : %d %d", mapPoint.x, mapPoint.y);
-	setPosition(ip2ccp(mapPoint));
+	
 	
 	
 	//	startMoving();
@@ -76,7 +71,7 @@ bool Apple::init()
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Apple::cumberAttack));
 	
-	startAnimationNoDirection();
+	
 	return true;
 }
 

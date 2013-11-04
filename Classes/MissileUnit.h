@@ -3194,6 +3194,9 @@ public:
 		addChild(m_parentMissile);
 		
 		scheduleUpdate();
+		
+		aStar(jackPoint);
+		m_bulletIter = m_bulletReversePath.rbegin();
 	}
 	int lengthToEnd(IntPoint point)
 	{
@@ -3209,12 +3212,17 @@ public:
 		{
 			m_frame++;
 			
-			m_step = 2;
-			
-			aStar(jackPoint);
-			
+			if(m_bulletIter == m_bulletReversePath.rend())
+			{
+				m_step = 2;
+			}
+			else
+			{
+				m_parentMissile->setPosition(ip2ccp(*m_bulletIter));
+				
+				++m_bulletIter;
+			}
 		}
-		
 		if(m_step == 2) // 폭발.
 		{
 			m_parentMissile->removeFromParent();
@@ -3286,6 +3294,8 @@ protected:
 	IntPoint endPoint;
 	std::map<IntPoint, CellInfo> m_closeList;
 	std::map<IntPoint, CellInfo> m_openList;
+	std::vector<IntPoint> m_bulletReversePath;
+	decltype(m_bulletReversePath.rbegin()) m_bulletIter;
 };
 
 

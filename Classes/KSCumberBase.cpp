@@ -1328,41 +1328,54 @@ void KSCumberBase::getRandomPosition(IntPoint* ip, bool* finded)
 	random_shuffle(shuffledPositions.begin(), shuffledPositions.end(), [=](int n){
 		return this->m_well512.GetValue(n-1);
 	});
-	for(auto& mp : shuffledPositions)
+	int retryLimit = 5;
+	while(retryLimit)
 	{
-		mapPoint = mp;
-		
-		float myScale = getCumberScale();
-		if(mapPoint.isInnerMap() && myGD->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
+		for(auto& mp : shuffledPositions)
 		{
-			float half_distance = getRadius()*myScale; // 20.f : radius for base scale 1.f
-			float calc_distance;
-			IntPoint check_position;
+			mapPoint = mp;
 			
-			bool is_not_position = false;
-			
-			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
+			float myScale = getCumberScale();
+			if(mapPoint.isInnerMap() && myGD->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
 			{
-				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
+				float half_distance = getRadius()*myScale; // 20.f : radius for base scale 1.f
+				float calc_distance;
+				IntPoint check_position;
+				
+				bool is_not_position = false;
+				
+				for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
 				{
-					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
-					if(calc_distance < half_distance)
+					for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
 					{
-						check_position = IntPoint(i,j);
-						if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
+						calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
+						if(calc_distance < half_distance)
 						{
-							is_not_position = true;
+							check_position = IntPoint(i,j);
+							if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
+							{
+								is_not_position = true;
+							}
 						}
 					}
 				}
-			}
-			if(!is_not_position)
-			{
-				isGoodPointed = true;
-				break;
+				if(!is_not_position)
+				{
+					isGoodPointed = true;
+					break;
+				}
 			}
 		}
+		
+		if(isGoodPointed == false)
+		{
+			retryLimit--; // retryLimit 만큼 스케일을 줄여서 탐색해봄.
+			m_scale.scale.init(m_scale.scale.getValue() / 2, m_scale.scale.getValue() / 2, 0.f);
+		}
+		else
+			break;
 	}
+	
 	
 	if(isGoodPointed == true)
 	{

@@ -63,11 +63,7 @@ bool Pear::init()
 	}
 	
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	myGD->setMainCumberPoint(mapPoint);
-	setPosition(ip2ccp(mapPoint));
+
 	
 	
 	//	startMoving();
@@ -75,7 +71,7 @@ bool Pear::init()
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Pear::cumberAttack));
 	
-	startAnimationNoDirection();
+
 	return true;
 }
 

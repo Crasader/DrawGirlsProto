@@ -63,11 +63,7 @@ bool Melon::init()
 	}
 	
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	myGD->setMainCumberPoint(mapPoint);
-	setPosition(ip2ccp(mapPoint));
+	
 	
 	
 	//	startMoving();
@@ -75,7 +71,7 @@ bool Melon::init()
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Melon::cumberAttack));
 	
-	startAnimationNoDirection();
+
 	return true;
 }
 

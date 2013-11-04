@@ -63,19 +63,14 @@ bool Kiwi::init()
 	}
 	
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	myGD->setMainCumberPoint(mapPoint);
-	setPosition(ip2ccp(mapPoint));
-	
+		
 	
 	//	startMoving();
 	schedule(schedule_selector(Kiwi::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Kiwi::cumberAttack));
 	
-	startAnimationNoDirection();
+
 	return true;
 }
 

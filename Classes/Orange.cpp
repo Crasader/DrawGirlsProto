@@ -63,11 +63,6 @@ bool Orange::init()
 	}
 	
 	
-	IntPoint mapPoint;
-	bool finded;
-	getRandomPosition(&mapPoint, &finded);
-	myGD->setMainCumberPoint(mapPoint);
-	setPosition(ip2ccp(mapPoint));
 	
 	
 	//	startMoving();
@@ -75,7 +70,7 @@ bool Orange::init()
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	schedule(schedule_selector(Orange::cumberAttack));
 	
-	startAnimationNoDirection();
+
 	return true;
 }
 
