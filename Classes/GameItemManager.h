@@ -71,7 +71,6 @@ protected:
 	CCSprite* item_img;
 	IntPoint myPoint;
 	
-	
 	virtual void framing()
 	{
 		frame_cnt++;
@@ -269,11 +268,11 @@ private:
 		
 		starting_side_cnt = getSideCount();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemAddTime::startFraming));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		startFraming();
 		
-		item_img->runAction(t_seq);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		
+		item_img->runAction(t_scale);
 	}
 };
 
@@ -322,11 +321,11 @@ private:
 		
 		starting_side_cnt = getSideCount();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemSpeedUp::startFraming));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		startFraming();
 		
-		item_img->runAction(t_seq);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f);
+		
+		item_img->runAction(t_scale);
 	}
 };
 
@@ -388,11 +387,11 @@ private:
 		
 		starting_side_cnt = getSideCount();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemFast::startFraming));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		startFraming();
 		
-		item_img->runAction(t_seq);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		
+		item_img->runAction(t_scale);
 	}
 };
 
@@ -445,11 +444,11 @@ private:
 		
 		starting_side_cnt = getSideCount();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemAttack::startFraming));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		startFraming();
 		
-		item_img->runAction(t_seq);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f);
+		
+		item_img->runAction(t_scale);
 	}
 };
 
@@ -498,11 +497,11 @@ private:
 		
 		starting_side_cnt = getSideCount();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemBase::startFraming));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		startFraming();
 		
-		item_img->runAction(t_seq);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		
+		item_img->runAction(t_scale);
 	}
 };
 
@@ -562,11 +561,11 @@ private:
 		
 		starting_side_cnt = getSideCount();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemBase::startFraming));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		startFraming();
 		
-		item_img->runAction(t_seq);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		
+		item_img->runAction(t_scale);
 	}
 };
 
@@ -1449,11 +1448,11 @@ private:
 		
 		starting_side_cnt = getSideCount();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemFire::startFraming));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		startFraming();
 		
-		item_img->runAction(t_seq);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		
+		item_img->runAction(t_scale);
 		
 		damage = 20;
 		total_damage = damage*10;
@@ -1942,6 +1941,7 @@ private:
 	}
 	void removing()
 	{
+		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false);
 		FeverCoin* remove_target = (FeverCoin*)remove_target_list.front();
 		remove_target->startRemove();
 		remove_target_list.pop_front();

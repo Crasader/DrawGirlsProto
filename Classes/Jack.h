@@ -858,6 +858,8 @@ public:
 				myLog->addLog(kLOG_die_shockwave, myGD->getCommunication("UI_getUseTime"));
 			}
 			
+			myGD->communication("UI_endFever");
+			
 //			Well512 t_well512;
 //			myGD->setJackPoint(IntPoint(t_well512.GetValue(mapWidthInnerBegin, mapWidthInnerEnd),t_well512.GetValue(mapHeightInnerBegin, mapHeightInnerEnd)));
 //			if(getJackState() == jackStateDrawing)

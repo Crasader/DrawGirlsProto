@@ -294,16 +294,6 @@ public:
 		}
 	}
 	
-private:
-	CCParticleSystemQuad* fever_particle;
-	CCProgressTimer* fever_top;
-	int recent_count;
-	
-	bool ing_fever;
-	
-	int keeping_count;
-	bool is_keeping;
-	
 	void endFever()
 	{
 		ing_fever = false;
@@ -321,6 +311,16 @@ private:
 		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
 		fever_top->runAction(progress_to);
 	}
+	
+private:
+	CCParticleSystemQuad* fever_particle;
+	CCProgressTimer* fever_top;
+	int recent_count;
+	
+	bool ing_fever;
+	
+	int keeping_count;
+	bool is_keeping;
 	
 	void startKeep()
 	{
@@ -1983,6 +1983,7 @@ private:
 		myGD->I_V["UI_getComboCnt"] = std::bind(&PlayUI::getComboCnt, this);
 		myGD->V_I["UI_setComboCnt"] = std::bind(&PlayUI::setComboCnt, this, _1);
 		myGD->I_V["UI_getUseTime"] = std::bind(&PlayUI::getUseTime, this);
+		myGD->V_V["UI_endFever"] = std::bind(&FeverParent::endFever, my_fp);
 	}
 	
 	void continueAction()
