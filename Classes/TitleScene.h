@@ -77,6 +77,11 @@ private:
 	{
 		CCLog("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 		
+		if(myLog->getLogCount() > 0)
+		{
+			myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+		}
+		
 		state_label->setString("퍼즐 목록을 받아오는 ing...");
 		
 		startGetPuzzleList();

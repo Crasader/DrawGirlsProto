@@ -41,11 +41,6 @@ bool TitleScene::init()
 	state_label = CCLabelTTF::create("까똑 로그인 ing...", mySGD->getFont().c_str(), 20);
 	state_label->setPosition(ccp(240,290));
 	addChild(state_label);
-	
-	if(myLog->getLogCount() > 0)
-	{
-		myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
-	}
 
 	//startGetPuzzleList();
 	
