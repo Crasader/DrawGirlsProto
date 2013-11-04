@@ -512,7 +512,7 @@ void PuzzleMapScene::setUIs()
 	
 	CCMenu* left_menu = CCMenu::createWithItem(left_item);
 	left_menu->setPosition(getUiButtonPosition(kPMS_MT_left));
-	main_node->addChild(left_menu, kPMS_Z_arrows);
+	main_node->addChild(left_menu, kPMS_Z_arrows, kPMS_MT_left);
 	
 	
 	CCSprite* n_right = CCSprite::create("test_ui_right.png");
@@ -524,7 +524,7 @@ void PuzzleMapScene::setUIs()
 	
 	CCMenu* right_menu = CCMenu::createWithItem(right_item);
 	right_menu->setPosition(getUiButtonPosition(kPMS_MT_right));
-	main_node->addChild(right_menu, kPMS_Z_arrows);
+	main_node->addChild(right_menu, kPMS_Z_arrows, kPMS_MT_right);
 	
 	
 	CCSprite* n_up = CCSprite::create("test_ui_up.png");
@@ -536,7 +536,7 @@ void PuzzleMapScene::setUIs()
 	
 	CCMenu* up_menu = CCMenu::createWithItem(up_item);
 	up_menu->setPosition(getUiButtonPosition(kPMS_MT_up));
-	main_node->addChild(up_menu, kPMS_Z_arrows);
+	main_node->addChild(up_menu, kPMS_Z_arrows, kPMS_MT_up);
 	
 	
 	CCSprite* n_screen = CCSprite::create("test_ui_screen.png");
@@ -730,6 +730,11 @@ void PuzzleMapScene::changeUiMode()
 void PuzzleMapScene::stopChangeUiMode()
 {
 	unschedule(schedule_selector(PuzzleMapScene::changeUiMode));
+	
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(true);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(true);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(true);
+	
 	map_mode_state = kMMS_uiMode;
 	is_menu_enable = true;
 }
@@ -737,6 +742,10 @@ void PuzzleMapScene::stopChangeUiMode()
 void PuzzleMapScene::startChangeMapMode()
 {
 	map_mode_state = kMMS_changeMode;
+	
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
 	
 	change_frame = 0;
 	change_dy = 1.f/30.f;
