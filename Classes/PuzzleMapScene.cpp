@@ -731,6 +731,10 @@ void PuzzleMapScene::stopChangeUiMode()
 {
 	unschedule(schedule_selector(PuzzleMapScene::changeUiMode));
 	
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(true);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(true);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(true);
+	
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(true);
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(true);
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(true);
@@ -742,6 +746,10 @@ void PuzzleMapScene::stopChangeUiMode()
 void PuzzleMapScene::startChangeMapMode()
 {
 	map_mode_state = kMMS_changeMode;
+	
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
+	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
 	
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
