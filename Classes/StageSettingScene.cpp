@@ -41,6 +41,7 @@ enum SSS_Zorder{
 	kSSS_Z_back = 1,
 	kSSS_Z_selectedImg,
 	kSSS_Z_content,
+	kSSS_Z_top,
 	kSSS_Z_popup
 };
 
@@ -73,9 +74,9 @@ bool StageSettingScene::init()
 	stagesetting_back->setPosition(ccp(240,160));
 	addChild(stagesetting_back, kSSS_Z_back);
 	
-	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", selected_stage)->getCString(), mySGD->getFont().c_str(), 27);
+	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", selected_stage)->getCString(), mySGD->getFont().c_str(), 25);
 	stage_label->setColor(ccBLACK);
-	stage_label->setPosition(ccp(300,290));
+	stage_label->setPosition(ccp(227,235));
 	addChild(stage_label, kSSS_Z_content);
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 1, 2, 3 / 11, 12, 13 / 14, ...
@@ -171,6 +172,21 @@ bool StageSettingScene::init()
 	start_menu->setPosition(getContentPosition(kSSS_MT_start));
 	addChild(start_menu, kSSS_Z_content);
 	
+	CCSprite* top_case = CCSprite::create("test_ui_top.png");
+	top_case->setAnchorPoint(ccp(0.5f,1.f));
+	top_case->setPosition(ccp(240,320.f));//(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
+	addChild(top_case, kSSS_Z_top);
+	
+	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f);
+	gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
+	top_case->addChild(gold_label);
+	
+	mySGD->setGoldLabel(gold_label);
+	
+	heart_time = HeartTime::create();
+	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
+	top_case->addChild(heart_time);
+	
 	is_menu_enable = true;
 	
 	srand(time(NULL));
@@ -189,7 +205,7 @@ CCPoint StageSettingScene::getContentPosition(int t_tag)
 	else if(t_tag == kSSS_MT_back)				return_value = ccp(70,27);
 	else if(t_tag == kSSS_MT_challenge)			return_value = ccp(240,27);
 	else if(t_tag == kSSS_MT_start)				return_value = ccp(387,27);
-	else if(t_tag == kSSS_MT_gacha)				return_value = ccp(323,250);
+	else if(t_tag == kSSS_MT_gacha)				return_value = ccp(365,246);
 	else if(t_tag == kSSS_MT_itemBase)			return_value = ccp(314,190);
 	else if(t_tag == kSSS_MT_selectedBase)		return_value = ccp(95,1);
 	
@@ -284,45 +300,57 @@ void StageSettingScene::menuAction(CCObject* pSender)
 	
 	if(tag == kSSS_MT_start)
 	{
-		Json::Value param;
-		param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
-		
-		hspConnector::get()->command("increaseStats", param, NULL);
-		
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		if(selected_card_number > 0)
+		if(heart_time->startGame())
 		{
-			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) - 1;
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-		}
-		
-		myGD->resetGameData();
-		
-		deque<bool> is_using_item;
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
-			is_using_item.push_back(false);
-		
-		for(int i=0;i<is_selected_item.size();i++)
-		{
-			if(is_selected_item[i])
+			mySGD->resetLabels();
+			
+			Json::Value param;
+			param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
+			
+			hspConnector::get()->command("increaseStats", param, NULL);
+			
+			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			if(selected_card_number > 0)
 			{
-				myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
-				is_using_item[item_list[i]] = true;
+				int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) - 1;
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
 			}
+			
+			myGD->resetGameData();
+			
+			deque<bool> is_using_item;
+			for(int i=kIC_attack;i<=kIC_randomChange;i++)
+				is_using_item.push_back(false);
+			
+			for(int i=0;i<is_selected_item.size();i++)
+			{
+				if(is_selected_item[i])
+				{
+					myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
+					myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());
+					is_using_item[item_list[i]] = true;
+				}
+			}
+			
+			for(int i=kIC_attack;i<=kIC_randomChange;i++)
+				mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
+			
+			mySGD->setGameStart();
+			CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 		}
-		
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
-			mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
-		
-		mySGD->setGameStart();
-		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+		else
+		{
+			is_menu_enable = true;
+		}
 	}
 	else if(tag == kSSS_MT_back)
 	{
+		mySGD->resetLabels();
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	else if(tag == kSSS_MT_changeCard)
 	{
+		mySGD->resetLabels();
 		mySGD->before_cardsetting = kSceneCode_StageSetting;
 		CCDirector::sharedDirector()->replaceScene(CardSettingScene::scene());
 	}
@@ -388,6 +416,8 @@ void StageSettingScene::buySuccessItem(int t_clicked_item_number, int cnt)
 	int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_number]);
 	is_selected_item[t_clicked_item_number] = true;
 	
+	myLog->addLog(kLOG_buyItem_s, -1, convertToItemCodeToItemName(item_list[t_clicked_item_number]).c_str());
+	
 	CCNode* item_parent = my_ilv->getChildByTag(kSSS_MT_itemBase+t_clicked_item_number);
 	
 	CCSprite* cnt_img = CCSprite::create("stagesetting_item_count.png");
@@ -401,6 +431,28 @@ void StageSettingScene::buySuccessItem(int t_clicked_item_number, int cnt)
 	CCSprite* selected_img = CCSprite::create("stagesetting_item_selected.png");
 	selected_img->setPosition(getContentPosition(kSSS_MT_selectedBase));
 	item_parent->addChild(selected_img, kSSS_Z_content, kSSS_MT_selectedBase+t_clicked_item_number);
+}
+
+string StageSettingScene::convertToItemCodeToItemName(ITEM_CODE t_code)
+{
+	string return_value;
+	if(t_code == kIC_attack)				return_value = "attack";
+	else if(t_code == kIC_speedUp)			return_value = "speedUp";
+	else if(t_code == kIC_addTime)			return_value = "addTime";
+	else if(t_code == kIC_fast)				return_value = "fast";
+	else if(t_code == kIC_critical)			return_value = "critical";
+	else if(t_code == kIC_subOneDie)		return_value = "subOneDie";
+	else if(t_code == kIC_doubleItem)		return_value = "doubleItem";
+	else if(t_code == kIC_silence)			return_value = "silence";
+	else if(t_code == kIC_subNothing)		return_value = "subNothing";
+	else if(t_code == kIC_longTime)			return_value = "longTime";
+	else if(t_code == kIC_bossLittleEnergy)	return_value = "bossLittleEnergy";
+	else if(t_code == kIC_subSmallSize)		return_value = "subSmallSize";
+	else if(t_code == kIC_smallArea)		return_value = "smallArea";
+	else if(t_code == kIC_widePerfect)		return_value = "widePerfect";
+	else if(t_code == kIC_randomChange)		return_value = "randomChange";
+	
+	return return_value.c_str();
 }
 
 void StageSettingScene::alertAction(int t1, int t2)

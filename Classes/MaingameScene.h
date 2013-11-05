@@ -460,6 +460,19 @@ private:
 		return after_position;
 	}
 	
+	CCPoint getObjectToGameNodePositionCoin(CCPoint t_p)
+	{
+		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float x_value = t_p.x/320.f*(480.f-myGD->boarder_value*2.f) + myGD->boarder_value;
+		if(myGD->gamescreen_type == kGT_leftUI)			x_value += 50.f;
+		float y_value = t_p.y/320.f*(480.f-myGD->boarder_value*2.f);
+		
+//		x_value = x_value-game_node->getPositionX();
+		y_value = y_value+game_node->getPositionY();
+		
+		return ccp(x_value, y_value);
+	}
+	
 	CCPoint getGameNodeToObjectPosition(CCPoint t_p)
 	{
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -553,7 +566,12 @@ private:
 	
 	void showCoin()
 	{
-		myGIM->showCoin(myUI, callfuncI_selector(PlayUI::takeExchangeCoin));
+		myGIM->showCoin(this, callfuncCCpI_selector(Maingame::takeExchangeCoin));
+	}
+	
+	void takeExchangeCoin(CCPoint t_start_position, int t_coin_number)
+	{
+		myUI->takeExchangeCoin(getObjectToGameNodePositionCoin(t_start_position), t_coin_number);
 	}
 	
 	void startExchange()

@@ -17,6 +17,8 @@
 #include "RankPopup.h"
 #include "MailPopup.h"
 #include "TutorialScene.h"
+#include "CountingBMLabel.h"
+#include "HeartTime.h"
 
 CCScene* PuzzleMapScene::scene()
 {
@@ -444,6 +446,17 @@ void PuzzleMapScene::setUIs()
 	top_case->setAnchorPoint(ccp(0.5f,1.f));
 	top_case->setPosition(getUiButtonPosition(kPMS_MT_top));
 	addChild(top_case, kPMS_Z_ui_button, kPMS_MT_top);
+	
+	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f);
+	gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
+	top_case->addChild(gold_label);
+	
+	mySGD->setGoldLabel(gold_label);
+	
+	
+	HeartTime* heart_time = HeartTime::create();
+	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
+	top_case->addChild(heart_time);
 	
 	
 	CCSprite* bottom_case = CCSprite::create("test_ui_bottom.png");
@@ -917,11 +930,13 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_diary)
 	{
+		mySGD->resetLabels();
 		mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
 		CCDirector::sharedDirector()->replaceScene(CardSettingScene::scene());
 	}
 	else if(tag == kPMS_MT_option)
 	{
+		mySGD->resetLabels();
 		CCDirector::sharedDirector()->replaceScene(OptionScene::scene());
 	}
 	else if(tag == kPMS_MT_gacha)
@@ -944,6 +959,7 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_tutorial)
 	{
+		mySGD->resetLabels();
 		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
 	}
 	else if(tag == kPMS_MT_left)

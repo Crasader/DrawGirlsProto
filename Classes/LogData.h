@@ -29,7 +29,10 @@ enum LOG_KEY
 	kLOG_show_fever,
 	kLOG_endCombo_i,
 	kLOG_attackPattern_i,
-	kLOG_getCoin_i
+	kLOG_getCoin_i,
+	kLOG_getItem_s,
+	kLOG_buyItem_s,
+	kLOG_useItem_s
 };
 
 class LogData : public CCObject
@@ -75,6 +78,14 @@ public:
 		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_i1)->getCString());
 		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
 	}
+	void addLog(LOG_KEY t_key, int t_time, string t_str1)
+	{
+		int log_count = getLogCount();
+		log_count++;
+		
+		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_str1.c_str())->getCString());
+		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
+	}
 	
 	void sendLog(string t_category)
 	{
@@ -118,6 +129,9 @@ private:
 		else if(t_key == kLOG_endCombo_i)			rv = "time_%d_endCombo_%d";
 		else if(t_key == kLOG_attackPattern_i)		rv = "time_%d_attackPattern_%d";
 		else if(t_key == kLOG_getCoin_i)			rv = "time_%d_getCoin_%d";
+		else if(t_key == kLOG_getItem_s)			rv = "time_%d_getItem_%s";
+		else if(t_key == kLOG_buyItem_s)			rv = "time_%d_buyItem_%s";
+		else if(t_key == kLOG_useItem_s)			rv = "time_%d_useItem_%s";
 		
 		return rv.c_str();
 	}
