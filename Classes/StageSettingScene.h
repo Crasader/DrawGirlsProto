@@ -16,6 +16,7 @@
 #include "StarGoldData.h"
 #include <deque>
 #include "ItemListViewer.h"
+#include "HeartTime.h"
 
 USING_NS_CC;
 using namespace std;
@@ -44,6 +45,8 @@ private:
 	
 	ItemListViewer* my_ilv;
 	
+	HeartTime* heart_time;
+	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
 	
@@ -53,6 +56,8 @@ private:
 	void itemSetting();
 	
 	void buySuccessItem(int t_clicked_item_number, int cnt);
+	
+	string convertToItemCodeToItemName(ITEM_CODE t_code);
 };
 
 #endif /* defined(__DGproto__StageSettingScene__) */

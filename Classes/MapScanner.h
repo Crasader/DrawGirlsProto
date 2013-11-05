@@ -161,40 +161,49 @@ private:
 	CCArray* drawRects;
 	
 	CCPoint jack_position;
+	CCSize screen_size;
+	CCSize design_resolution_size;
+	int viewport[4];
 	
 	virtual void visit()
 	{
 		unsigned int loopCnt = drawRects->count();
 		
+		glEnable(GL_SCISSOR_TEST);
+		
 		for(int i=0;i<loopCnt;i++)
 		{
 			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
 			
-			glEnable(GL_SCISSOR_TEST);
-			
-			int viewport [4];
-			glGetIntegerv (GL_VIEWPORT, viewport);
-			CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
-			float wScale = viewport[2] / rSize.width;
-			float hScale = viewport[3] / rSize.height;
+			float wScale = viewport[2] / design_resolution_size.width;
+			float hScale = viewport[3] / design_resolution_size.height;
 			
 			float x = (t_rect->origin.x*myGD->game_scale+jack_position.x)*wScale + viewport[0]-1;
 			float y = (t_rect->origin.y*myGD->game_scale+jack_position.y)*hScale + viewport[1]-1;
 			float w = (t_rect->size.width*myGD->game_scale)*wScale+2;
 			float h = (t_rect->size.height*myGD->game_scale)*hScale+2;
 			
-			glScissor(x,y,w,h);
+			if(y > screen_size.height || y+h < 0.f)
+				continue;
+			else
+			{
+				glScissor(x,y,w,h);
+				draw();
+			}
 			
-			draw();
-			
-			glDisable(GL_SCISSOR_TEST);
 		}
+		
+		glDisable(GL_SCISSOR_TEST);
 	}
 	
 	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects)
 	{
 		initWithTexture(mySIL->addImage(filename));
 		setPosition(ccp(160,215));
+		
+		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		design_resolution_size = CCEGLView::sharedOpenGLView()->getDesignResolutionSize();
+		glGetIntegerv(GL_VIEWPORT, viewport);
 
 		drawRects = t_drawRects;
 	}
@@ -664,6 +673,21 @@ private:
 	CCSprite* left_boarder;
 	CCSprite* right_boarder;
 	
+	void showEmptyPoint(CCPoint t_point)
+	{
+		CCSprite* show_empty_point = CCSprite::create("show_empty_point.png");
+		show_empty_point->setAnchorPoint(ccp(0.5f,0.f));
+		show_empty_point->setPosition(t_point);
+		addChild(show_empty_point, blockZorder);
+		
+		CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccpAdd(t_point, ccp(0,20)));
+		CCMoveTo* t_move2 = CCMoveTo::create(0.3f, t_point);
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move1, t_move2);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+		
+		show_empty_point->runAction(t_repeat);
+	}
+	
 	void myInit()
 	{
 		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -678,6 +702,7 @@ private:
 		
 		myGD->V_V["MS_scanMap"] = std::bind(&MapScanner::scanMap, this);
 		myGD->V_B["MS_resetRects"] = std::bind(&MapScanner::resetRects, this, _1);
+		myGD->V_CCP["MS_showEmptyPoint"] = std::bind(&MapScanner::showEmptyPoint, this, _1);
 		
 		
 		setMapImg();

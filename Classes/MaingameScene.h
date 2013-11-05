@@ -419,8 +419,12 @@ private:
 	CCPoint move_to_boss_position_ds;
 	void startMoveToBossPosition()
 	{
+		startMoveToCCPoint(myGD->getMainCumberPoint().convertToCCP());
+	}
+	void startMoveToCCPoint(CCPoint t_point)
+	{
 		move_to_boss_position_frame = 0;
-		CCPoint after_position = getObjectToGameNodePosition(myGD->getMainCumberPoint().convertToCCP());
+		CCPoint after_position = getObjectToGameNodePosition(t_point);
 		CCPoint sub_position = ccpSub(after_position, game_node->getPosition());
 		CCLog("boss : %.2f\t recent : %.2f", after_position.y, game_node->getPositionY());
 		move_to_boss_position_ds = ccpMult(sub_position, 1.f/30.f);
@@ -454,6 +458,19 @@ private:
 		else if(myGD->gamescreen_type == kGT_rightUI)			after_position = ccp(myGD->boarder_value,y_value);
 		
 		return after_position;
+	}
+	
+	CCPoint getObjectToGameNodePositionCoin(CCPoint t_p)
+	{
+		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float x_value = t_p.x/320.f*(480.f-myGD->boarder_value*2.f) + myGD->boarder_value;
+		if(myGD->gamescreen_type == kGT_leftUI)			x_value += 50.f;
+		float y_value = t_p.y/320.f*(480.f-myGD->boarder_value*2.f);
+		
+//		x_value = x_value-game_node->getPositionX();
+		y_value = y_value+game_node->getPositionY();
+		
+		return ccp(x_value, y_value);
 	}
 	
 	CCPoint getGameNodeToObjectPosition(CCPoint t_p)
@@ -549,7 +566,12 @@ private:
 	
 	void showCoin()
 	{
-		myGIM->showCoin(myUI, callfuncI_selector(PlayUI::takeExchangeCoin));
+		myGIM->showCoin(this, callfuncCCpI_selector(Maingame::takeExchangeCoin));
+	}
+	
+	void takeExchangeCoin(CCPoint t_start_position, int t_coin_number)
+	{
+		myUI->takeExchangeCoin(getObjectToGameNodePositionCoin(t_start_position), t_coin_number);
 	}
 	
 	void startExchange()

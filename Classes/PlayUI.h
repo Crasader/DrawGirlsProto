@@ -294,6 +294,27 @@ public:
 		}
 	}
 	
+	void endFever()
+	{
+		if(ing_fever)
+		{
+			ing_fever = false;
+			recent_count = 0;
+			
+			fever_top->getSprite()->setColor(ccWHITE);
+			
+			myGD->communication("GIM_stopFever");
+			
+			myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 1.5f);
+			
+			fever_particle->setDuration(0.f);
+			fever_particle->setAutoRemoveOnFinish(true);
+			
+			CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+			fever_top->runAction(progress_to);
+		}
+	}
+	
 private:
 	CCParticleSystemQuad* fever_particle;
 	CCProgressTimer* fever_top;
@@ -303,24 +324,6 @@ private:
 	
 	int keeping_count;
 	bool is_keeping;
-	
-	void endFever()
-	{
-		ing_fever = false;
-		recent_count = 0;
-		
-		fever_top->getSprite()->setColor(ccWHITE);
-		
-		myGD->communication("GIM_stopFever");
-		
-		myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 1.5f);
-		
-		fever_particle->setDuration(0.f);
-		fever_particle->setAutoRemoveOnFinish(true);
-		
-		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
-		fever_top->runAction(progress_to);
-	}
 	
 	void startKeep()
 	{
@@ -1063,7 +1066,7 @@ public:
 			myGD->communication("Main_showTakeCoin");
 		}
 		
-		percentageLabel->setString(CCString::createWithFormat("%.1f", int(floorf(t_p*10000.f))/10000.f*100.f)->getCString());
+		percentageLabel->setString(CCString::createWithFormat("%d", int(floorf(t_p*10000))/100)->getCString());
 		
 		int item_value = mySGD->getWidePerfectValue();
 		
@@ -1108,7 +1111,7 @@ public:
 				
 				mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
 				
-				endGame();
+				endGame(t_p < 1.f && t_p > 0.99f);
 			}
 			else
 			{
@@ -1125,7 +1128,7 @@ public:
 				result_sprite->setRotation(-25);
 				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(result_sprite);
-				endGame();
+				endGame(false);
 			}
 		}
 	}
@@ -1150,7 +1153,7 @@ public:
 		addChild(condition_fail);
 	}
 	
-	void takeExchangeCoin(int t_coin_number)
+	void takeExchangeCoin(CCPoint t_start_position, int t_coin_number)
 	{
 		if(isGameover)
 			return;
@@ -1172,7 +1175,7 @@ public:
 				result_sprite->setRotation(-25);
 				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(result_sprite);
-				endGame();
+				endGame(false);
 				return;
 			}
 			else
@@ -1203,10 +1206,17 @@ public:
 		exchange_dic->removeObjectForKey(t_coin_number);
 		
 		CCSprite* new_coin_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", t_coin_number)->getCString());
-		if(myGD->gamescreen_type == kGT_leftUI)			new_coin_spr->setPosition(ccp(260-32*3-16+t_coin_number*32,25));
-		else if(myGD->gamescreen_type == kGT_rightUI)		new_coin_spr->setPosition(ccp(220-32*3-16+t_coin_number*32,25));
-		else									new_coin_spr->setPosition(ccp(260-32*3-16+t_coin_number*32,25));
+		new_coin_spr->setPosition(t_start_position);
 		addChild(new_coin_spr);
+		
+		CCPoint after_position;
+		if(myGD->gamescreen_type == kGT_leftUI)				after_position = ccp(260-32*3-16+t_coin_number*32,25);
+		else if(myGD->gamescreen_type == kGT_rightUI)		after_position = ccp(220-32*3-16+t_coin_number*32,25);
+		else												after_position = ccp(260-32*3-16+t_coin_number*32,25);
+		
+		CCMoveTo* t_move = CCMoveTo::create(0.5f, after_position);
+		new_coin_spr->runAction(t_move);
+		
 		
 		exchange_dic->setObject(new_coin_spr, t_coin_number);
 		
@@ -1547,16 +1557,50 @@ private:
 		}
 	}
 	
-	void endGame()
+	void endGame(bool is_show_reason)
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 //		myGD->communication("CP_setGameover");
-		CCDelayTime* n_d = CCDelayTime::create(4.5f);
-		CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+		if(!is_show_reason)
+		{
+			CCDelayTime* n_d = CCDelayTime::create(4.5f);
+			CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+			
+			CCSequence* sequence = CCSequence::createWithTwoActions(n_d, nextScene);
+			
+			runAction(sequence);
+		}
+		else
+		{
+			CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
+			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
+			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
+			CCCallFunc* nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+			
+			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
+			
+			runAction(sequence);
+		}
+	}
+	
+	void searchEmptyPosition()
+	{
+		CCPoint found_empty_position;
+		bool break_flag = false;
+		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd && !break_flag;i++)
+		{
+			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd && !break_flag;j++)
+			{
+				if(myGD->mapState[i][j] == mapEmpty && mySD->silData[i][j])
+				{
+					break_flag = true;
+					found_empty_position = IntPoint(i,j).convertToCCP();
+				}
+			}
+		}
 		
-		CCSequence* sequence = CCSequence::createWithTwoActions(n_d, nextScene);
-		
-		runAction(sequence);
+		myGD->communication("MS_showEmptyPoint", found_empty_position);
+		myGD->communication("Main_startMoveToCCPoint", found_empty_position);
 	}
 	
 	void nextScene()
@@ -1949,6 +1993,7 @@ private:
 		myGD->I_V["UI_getComboCnt"] = std::bind(&PlayUI::getComboCnt, this);
 		myGD->V_I["UI_setComboCnt"] = std::bind(&PlayUI::setComboCnt, this, _1);
 		myGD->I_V["UI_getUseTime"] = std::bind(&PlayUI::getUseTime, this);
+		myGD->V_V["UI_endFever"] = std::bind(&FeverParent::endFever, my_fp);
 	}
 	
 	void continueAction()

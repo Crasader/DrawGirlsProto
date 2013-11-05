@@ -66,6 +66,7 @@ bool Maingame::init()
 	myGD->CCN_V["Main_gameNodePointer"] = std::bind(&Maingame::gameNodePointer, this);
 	myGD->V_V["Main_setUnlimitMap"] = std::bind(&Maingame::setUnlimitMap, this);
 	myGD->V_V["Main_startShake"] = std::bind(&Maingame::startShake, this);
+	myGD->V_CCP["Main_startMoveToCCPoint"] = std::bind(&Maingame::startMoveToCCPoint, this, _1);
 	mControl = NULL;
 	is_line_die = false;
 	

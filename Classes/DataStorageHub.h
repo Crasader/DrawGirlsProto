@@ -37,8 +37,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_bgmOff,
 	kDSH_Key_effectOff,
 	kDSH_Key_serverTime,
-	kDSH_Key_brushCnt,
-	kDSH_Key_brushTime,
+	kDSH_Key_heartCnt,
+	kDSH_Key_heartTime,
 	kDSH_Key_FBMHEldestNumber, // FBMH : Facebook Message History
 	kDSH_Key_FBMHId,
 	kDSH_Key_FBMHTime,
@@ -71,7 +71,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_uiType,
 //	kDSH_Key_isOpenPuzzle_int1_Stage_int2,
 	kDSH_Key_puzzleMode,
-	kDSH_Key_selectedPuzzleNumber
+	kDSH_Key_selectedPuzzleNumber,
+	kDSH_Key_allHighScore
 }DSH_Key;
 
 #define myDSH DataStorageHub::sharedInstance()
@@ -233,8 +234,8 @@ private:
 		else if(t_name == kDSH_Key_bgmOff)								return_value = "bgmoff";
 		else if(t_name == kDSH_Key_effectOff)							return_value = "effoff";
 		else if(t_name == kDSH_Key_serverTime)							return_value = "st";
-		else if(t_name == kDSH_Key_brushCnt)							return_value = "bc";
-		else if(t_name == kDSH_Key_brushTime)							return_value = "bt";
+		else if(t_name == kDSH_Key_heartCnt)							return_value = "hc";
+		else if(t_name == kDSH_Key_heartTime)							return_value = "ht";
 		else if(t_name == kDSH_Key_FBMHEldestNumber)					return_value = "fmhen";
 		else if(t_name == kDSH_Key_FBMHId)								return_value = "fmhi%d";
 		else if(t_name == kDSH_Key_FBMHTime)							return_value = "fmht%d";
@@ -268,6 +269,7 @@ private:
 //		else if(t_name == kDSH_Key_isOpenTheme_int1_Stage_int2)			return_value = "iot%ds%d";
 		else if(t_name == kDSH_Key_puzzleMode)							return_value = "pm";
 		else if(t_name == kDSH_Key_selectedPuzzleNumber)				return_value = "spn";
+		else if(t_name == kDSH_Key_allHighScore)						return_value = "ahs";
 		
 		return return_value;
 	}

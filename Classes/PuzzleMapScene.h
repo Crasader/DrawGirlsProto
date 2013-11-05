@@ -217,6 +217,8 @@ private:
 		CCMenu* load_menu = CCMenu::createWithItem(load_item);
 		load_menu->setPosition(ccp(240,160));
 		addChild(load_menu, kPMS_Z_popup, kPMS_MT_loadPuzzleInfo);
+		
+		is_menu_enable = true;
 	}
 	
 	void loadPuzzleInfo(CCObject* sender)
@@ -755,6 +757,7 @@ private:
 		while(!is_found && ing_check_puzzle < start_stage_number+stage_count)
 		{
 			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(ing_check_puzzle);
+			if(!t_sp)	break;
 			if(t_sp->isChangable())
 			{
 				t_sp->shadow_node->stopAllActions();
@@ -773,6 +776,10 @@ private:
 			CCCallFuncO* t_call2 = CCCallFuncO::create(this, callfuncO_selector(PuzzleMapScene::endChangePiece), found_node);
 			CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, t_call2, NULL);
 			found_node->runAction(t_seq);
+		}
+		else
+		{
+			stopPuzzleModeChange();
 		}
 		
 		if(ing_check_puzzle >= start_stage_number+stage_count)

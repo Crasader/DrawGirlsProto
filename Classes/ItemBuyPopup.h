@@ -115,8 +115,11 @@ private:
 		
 		if(tag == kIBP_MT_buy)
 		{
-			// sub gold
-			(target_buy->*delegate_buy)(clicked_item_number, 1);
+			if(mySD->getItemPrice(item_type) <= mySGD->getGold())
+			{
+				mySGD->setGold(mySGD->getGold()-mySD->getItemPrice(item_type));
+				(target_buy->*delegate_buy)(clicked_item_number, 1);
+			}
 		}
 		else if(tag == kIBP_MT_close)
 		{

@@ -19,6 +19,7 @@
 #include "SilhouetteData.h"
 #include <deque>
 #include <algorithm>
+#include <chrono>
 
 using namespace cocos2d;
 using namespace std;
@@ -284,42 +285,10 @@ public:
 	
 	SceneCode getAfterScene(){	return after_scene;	}
 	
-	int getBrushCnt(){	return myDSH->getIntegerForKey(kDSH_Key_brushCnt);	}
-	void setBrushCnt(int t_t)
-	{
-		myDSH->setIntegerForKey(kDSH_Key_brushCnt, t_t);
-	}
-	int getBrushTime(){	return brush_time;	}
-	void setBrushTime(int t_t)
-	{
-		brush_time = t_t;
-		myDSH->setIntegerForKey(kDSH_Key_brushTime, brush_time);
-	}
-	int getSavedServerTime(){	return server_time;	}
-	void refreshServerTime()
-	{
-		if(is_credit_servertime)
-		{
-			time_t recent_client_time = time(NULL);
-			server_time += recent_client_time - client_time;
-			client_time = recent_client_time;
-			(graphDog_target->*graphDog_delegate)(is_credit_servertime);
-		}
-		else
-		{
-//			GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogRefreshServerTime));
-		}
-	}
-	
 	void setTargetDelegate(CCObject* t_t, SEL_CallFuncB t_d)
 	{
 		graphDog_target = t_t;
 		graphDog_delegate = t_d;
-	}
-	
-	void removeGraphDogTarget()
-	{
-//		GraphDog::get()->removeCommand(this);
 	}
 	
 	int getGameTime()
@@ -337,19 +306,9 @@ public:
 		return startRequestsData;
 	}
 	
-	void notBelieveServerTime()
-	{
-		is_credit_servertime = false;
-	}
-	
 	bool is_paused;
 	
 	string getFont();
-	
-	bool getIsCreditServerTime()
-	{
-		return is_credit_servertime;
-	}
 	
 	void setCollectionStarter(CollectionStarterType t_type)
 	{
@@ -361,16 +320,6 @@ public:
 		CollectionStarterType r_value = collection_starter;
 		collection_starter = kCST_basic;
 		return r_value;
-	}
-	
-	void setBrushTimeInstance(CCObject* t_o)
-	{
-		brush_time_instance = t_o;
-	}
-	
-	CCObject* getBrushTimeInstance()
-	{
-		return brush_time_instance;
 	}
 	
 	bool is_before_title;
@@ -615,12 +564,6 @@ private:
 	bool is_tutorial_cleared;
 	ImgType after_loading;
 	SceneCode after_scene;
-//	int brush_cnt;
-	int brush_time;
-	int server_time;
-	bool is_credit_servertime;
-	time_t client_time;
-	
 	
 	CollectionStarterType collection_starter;
 	
@@ -628,73 +571,16 @@ private:
 	SEL_CallFuncB graphDog_delegate;
 	bool graphDog_logined;
 	bool login_getted;
-	bool serverTime_getted;
 	
 	CCObject* shop_opener;
 	SEL_CallFuncI open_shop_delegate;
 	
-	CCObject* brush_time_instance;
-	
 	JsonBox::Object startRequestsData;
-	
-	void graphDogRefreshServerTime(JsonBox::Object data)
-	{
-		if(data["state"].getString() == "ok")
-		{
-			server_time = data["timestamp"].getInt();
-			myDSH->setIntegerForKey(kDSH_Key_serverTime, server_time);
-			is_credit_servertime = true;
-			client_time = time(NULL);
-		}
-		else
-			is_credit_servertime = false;
-		
-		(graphDog_target->*graphDog_delegate)(is_credit_servertime);
-	}
-	
-	void getServerTime()
-	{
-//		GraphDog::get()->command("timestamp", NULL, this, gd_selector(StarGoldData::graphDogGetServerTime));
-	}
-	
-	void loadServerTime()
-	{
-		server_time = myDSH->getIntegerForKey(kDSH_Key_serverTime);
-		serverTime_getted = true;
-		
-		if(login_getted && serverTime_getted)
-		{
-			(graphDog_target->*graphDog_delegate)(is_credit_servertime && graphDog_logined);
-		}
-	}
-	
-	void graphDogGetServerTime(JsonBox::Object data)
-	{
-		if(data["state"].getString() == "ok")
-		{
-			server_time = data["timestamp"].getInt();
-			myDSH->setIntegerForKey(kDSH_Key_serverTime, server_time);
-			myDSH->setBoolForKey(kDSH_Key_notFirstExe, true);
-			is_credit_servertime = true;
-			client_time = time(NULL);
-		}
-		else
-			is_credit_servertime = false;
-		serverTime_getted = true;
-		
-		if(login_getted && serverTime_getted)
-		{
-			(graphDog_target->*graphDog_delegate)(is_credit_servertime && graphDog_logined);
-		}
-	}
 	
 	void myInit()
 	{
 		is_paused = false;
-		is_credit_servertime = false;
-		server_time = -1;
 		login_getted = false;
-		serverTime_getted = false;
 		is_before_title = true;
 		
 		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
@@ -718,8 +604,6 @@ private:
 		}
 		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
 		
-//		collection_starter = kCST_basic;//kCST_basic;
-		
 		setTargetDelegate(NULL, NULL);
 		
 		after_loading = kImgType_Empty;
@@ -732,29 +616,16 @@ private:
 			is_using_item.push_back(false);
 		}
 		
-//		if(myDSH->getIntegerForKey(kDSH_Key_chapter_int1_Stage_int2_Rating,10,5) > 0 && !myDSH->getBoolForKey(kDSH_Key_isOpendChapter_int1, 21))
-//			myDSH->setBoolForKey(kDSH_Key_isOpendChapter_int1, 21, true);
-//		
-//		if(myDSH->getIntegerForKey(kDSH_Key_totalSelfPetCount) <= 0)
-//		{
-//			myDSH->setIntegerForKey(kDSH_Key_openSlotCount, 1);
-//			myDSH->setIntegerForKey(kDSH_Key_totalSelfPetCount, 1);
-//			myDSH->setIntegerForKey(kDSH_Key_selfPetCode_int1, 1, kPetCode_empty_ladybug);
-//			myDSH->setIntegerForKey(kDSH_Key_lastSelectedPet, 1);
-//		}
-//		
-//		if(!myDSH->getBoolForKey(kDSH_Key_hasGottenPet_int1, kPetCode_empty_ladybug))
-//		{
-//			int total_self_pet_cnt = myDSH->getIntegerForKey(kDSH_Key_totalSelfPetCount);
-//			for(int i=1;i<=total_self_pet_cnt;i++)
-//			{
-//				int pet_code = myDSH->getIntegerForKey(kDSH_Key_selfPetCode_int1, i);
-//				myDSH->setBoolForKey(kDSH_Key_hasGottenPet_int1, pet_code, true);
-//			}
-//		}
-//		
-//		GraphDog::get()->setup("drawingjack", "GDSK8052", "com.litqoo.lib.FBConnectorBase", 20);
-//		graphdog->setGraphDogVersion(5);
+		
+		if(myDSH->getIntegerForKey(kDSH_Key_heartTime) == 0)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
+			chrono::time_point<chrono::system_clock> recent_time = chrono::system_clock::now();
+			chrono::duration<double> recent_time_value = recent_time.time_since_epoch();
+			int recent_time_second = recent_time_value.count();
+			myDSH->setIntegerForKey(kDSH_Key_heartTime, recent_time_second);
+		}
+		
 		
 		if(!myDSH->getBoolForKey(kDSH_Key_notFirstExe))
 		{
@@ -767,29 +638,18 @@ private:
 			
 			int cmp_value1 = 0xD8;
 			int cmp_value2 = 0x331;
-			int cmp_value3 = 0xDC;
 			
 			myDSH->setIntegerForKey(kDSH_Key_savedStar, (cmp_value1^SGD_KEY));
 			myDSH->setIntegerForKey(kDSH_Key_savedGold, (cmp_value2^SGD_KEY));
-			
-			myDSH->setIntegerForKey(kDSH_Key_brushCnt, (cmp_value3^SGD_KEY));
-			brush_time = -1;
-			myDSH->setIntegerForKey(kDSH_Key_brushTime, brush_time);
-			getServerTime();
-			
 			myDSH->setIntegerForKey(kDSH_Key_lastSelectedChapter, 1);
 		}
 		else
 		{
 			is_tutorial_cleared = true;
 			
-//			AudioEngine::sharedInstance()->initMusicOnOff(myDSH->getIntegerForKey(kDSH_Key_musicOn));
 			AudioEngine::sharedInstance()->setSoundOnOff(!myDSH->getBoolForKey(kDSH_Key_bgmOff));
 			AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
 			
-			brush_time = myDSH->getIntegerForKey(kDSH_Key_brushTime);
-			
-			loadServerTime();
 		}
 	}
 };
