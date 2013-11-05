@@ -66,6 +66,20 @@ bool ClearScene::init()
 	
 	myLog->sendLog(CCString::createWithFormat("clear_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 	
+	if(mySGD->getScore() > myDSH->getIntegerForKey(kDSH_Key_allHighScore))
+	{
+		myDSH->setIntegerForKey(kDSH_Key_allHighScore, int(mySGD->getScore()));
+		
+		Json::Value p;
+		p["memberNo"] = hspConnector::get()->getHSPMemberNo();
+		p["rankingScore"]=myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+		p["rankingFactor"]=3;
+		p["gameNo"]=hspConnector::get()->hspNo;
+		hspConnector::get()->command("SetRankingScore", p, [](Json::Value r){
+			
+		});
+	}
+	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)
 	{
