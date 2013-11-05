@@ -2147,7 +2147,16 @@ class KSAttackPattern9 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSAttackPattern9);
-	
+	virtual void stopMyAction()
+	{
+		unscheduleUpdate();
+		
+		myGD->communication("MP_endIngActionAP");
+		myGD->communication("CP_onPatternEnd");
+		
+		startSelfRemoveSchedule();
+	}
+
 	void removeEffect()
 	{
 		if(!isRemoveEffect)
@@ -2208,9 +2217,8 @@ private:
 																								this, callfunc_selector(ThisClassType::removeEffect));
 			addChild(t_tc);
 		}
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
-		startSelfRemoveSchedule();
+		
+		stopMyAction();
 	}
 };
 
