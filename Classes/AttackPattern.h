@@ -2162,9 +2162,12 @@ public:
 	}
 	
 private:
-	
+	float t_move_speed;
+	float t_cushion_cnt;
+	bool t_is_big_bomb;
+	int t_tmCnt;
 	bool isRemoveEffect;
-	
+	CCPoint t_sp;
 	virtual void selfRemoveSchedule()
 	{
 		if(getChildrenCount() == 0)
@@ -2186,17 +2189,23 @@ private:
 		Json::Value pattern;
 		reader.parse(patternData, pattern);
 		
-		
-		float t_move_speed = pattern.get("speed", 200.0).asDouble() / 100.f;
-		float t_cushion_cnt = pattern.get("cushioncount", 4).asInt();
-		bool t_is_big_bomb = pattern.get("big", false).asBool();
-		int t_tmCnt = pattern.get("number", 10).asInt();
+		this->t_sp = t_sp;
+		t_move_speed = pattern.get("speed", 200.0).asDouble() / 100.f;
+		t_cushion_cnt = pattern.get("cushioncount", 4).asInt();
+		t_is_big_bomb = pattern.get("big", false).asBool();
+		t_tmCnt = pattern.get("number", 10).asInt();
 		///////////////////////////////////////////
+		
+		scheduleUpdate();
+		
+	}
+	void update(float dt)
+	{
 		for(int i=0;i<t_tmCnt;i++)
 		{
 			// create
 			ThreeCushion* t_tc = ThreeCushion::create(t_sp, t_move_speed, t_cushion_cnt, t_is_big_bomb,
-													  this, callfunc_selector(ThisClassType::removeEffect));
+																								this, callfunc_selector(ThisClassType::removeEffect));
 			addChild(t_tc);
 		}
 		myGD->communication("MP_endIngActionAP");

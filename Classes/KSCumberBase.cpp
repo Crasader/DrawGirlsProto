@@ -1210,6 +1210,7 @@ void KSCumberBase::cumberAttack(float dt)
 				alongLineAdder = m_aiValue / 100.f;
 			for(auto& i : selectedAttacks)
 			{
+				KS::KSLog("% percent!!!", i["percent"].asDouble());
 				if(i["pattern"].asString() == "1017")
 				{
 					probSel.pushProb(i["percent"].asDouble() * (1 +  alongLineAdder));
