@@ -210,8 +210,8 @@ private:
 			   Json::Value p;
 			   Json::Value idMap = obj["memberNoMap"];
 				idMap[hspConnector::get()->getKakaoID()]=hspConnector::get()->getHSPMemberNo();
-			   p["past"]=true;
-			   p["rankingKey"]="rankingFactor-1,rankingPeriod-2";
+			   p["past"]=false;
+			   p["rankingKey"]="rankingFactor-3,rankingPeriod-77";
 			   p["requesterMemberNo"]=hspConnector::get()->getHSPMemberNo();
 			   p["gameNo"]=hspConnector::get()->hspNo;
 			   Json::Value::Members m = idMap.getMemberNames();
@@ -315,8 +315,6 @@ private:
 		p["senderMemberNo"]=hspConnector::get()->getHSPMemberNo();
 		p["contentType"]=1;
 		p["gameNo"]=hspConnector::get()->hspNo;
-		
-		
 		
 		
 		hspConnector::get()->command("SendGameMail", p, [member](Json::Value r)
