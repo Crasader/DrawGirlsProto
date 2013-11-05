@@ -1066,7 +1066,7 @@ public:
 			myGD->communication("Main_showTakeCoin");
 		}
 		
-		percentageLabel->setString(CCString::createWithFormat("%.1f", int(floorf(t_p*10000.f))/10000.f*100.f)->getCString());
+		percentageLabel->setString(CCString::createWithFormat("%d", int(floorf(t_p*10000))/100)->getCString());
 		
 		int item_value = mySGD->getWidePerfectValue();
 		
