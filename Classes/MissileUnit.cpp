@@ -252,70 +252,88 @@ void AlongOfTheLine::update(float dt)
 	}
 }
 
-// from 에서 to 로 퍼져나갈 때 블럭 처리.
-bool ReaverScarab::processObject(IntPoint pointFrom, IntPoint pointTo, int distance)
+void ReaverScarab::update(float dt)
 {
-	// 주위의블럭을 처리하는데, 열려있는 공간에 들어가있다면 g 가 갱신될 수 있는지 알아봄
-	// 열린 공간에도 없고 닫힌 공간에도 없으면 g 와 h 를 추론함.
-	if(pointTo == endPoint)
+	//		CCLog("pokjuk %d", m_frame);
+	if(m_step == 1)
 	{
-//		cc.log("corr");
-	}
-	
-	if(pointTo.x < mapLoopRange::mapWidthInnerBegin || pointTo.x >= mapLoopRange::mapWidthInnerEnd ||
-		 pointTo.y < mapLoopRange::mapHeightInnerBegin || pointTo.y >= mapLoopRange::mapHeightInnerEnd)
-		return true;
-	// 장애물이면 패스.
-	
-	if(myGD->mapState[pointTo.x][pointTo.y] == mapType::mapOldline && !(myGD->getJackPoint() == pointTo))
-		return true;
-	if(myGD->mapState[pointTo.x][pointFrom.y] == mapType::mapOldline &&
-		 !(myGD->getJackPoint() == IntPoint(pointTo.x, pointFrom.y)))
-		return true;
-	if(myGD->mapState[pointFrom.x][pointTo.y] == mapType::mapOldline &&
-		 !(myGD->getJackPoint() == IntPoint(pointFrom.x, pointTo.y)))
-		return true;
-	
-	bool found = false;
-	auto openedIter = m_openList.find(pointTo);
-	if(openedIter != m_openList.end())
-	{
-		found = true;
-	}
-	// opened
-	if(found)
-	{
-		if(openedIter->second.g > m_closeList[pointFrom].g + distance)
+		m_frame++;
+		if(m_bulletIter != m_bulletReversePath.rend())
 		{
-			openedIter->second.dx = pointFrom.x - openedIter->first.x;
-			openedIter->second.dy = pointFrom.y - openedIter->first.y;
+			m_parentMissile->setPosition((*m_bulletIter));
+			
+			++m_bulletIter;
 		}
-		openedIter->second.g = min(openedIter->second.g, m_closeList[pointFrom].g + distance);
-		return true;
-	}
-	
-	
-	found = false;
-	auto closedIter = m_openList.find(pointTo);
-	if(closedIter != m_openList.end())
-	{
-		found = true;
-	}
-	
-	// 닫힌 공간에 없으면
-	if(found == false)
-	{
-		CellInfo pointToObj(0, 0, 0, 0);
-//		CellInfo pointToObj = {g:0, h:0, dx:0, dy:0};
-		pointToObj.g = m_closeList[pointFrom].g + distance;
-		pointToObj.h = lengthToEnd(pointTo);
-		pointToObj.dx = pointFrom.x - pointTo.x; // 부모 가르키기.
-		pointToObj.dy = pointFrom.y - pointTo.y; // 부모 가르키기.
+		else
+		{
+//			--m_bulletIter;
+//			if(!(ccp2ip(*m_bulletIter) == m_jackPoint))
+//			{
+//				aStar(m_jackPoint);
+//			}
+//			else
+			{
+				m_step = 2;
+				crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
+			}
+		}
 		
-		m_openList[pointTo] = pointToObj;
+		if(m_frame >= 60*4)
+		{
+			m_step = 2;
+			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
+		}
 	}
-	return true;
+	if(m_step == 2) // 폭발.
+	{
+		m_parentMissile->removeFromParent();
+		schedule(schedule_selector(ThisClassType::selfRemove));
+		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
+		
+		particle->setAutoRemoveOnFinish(true);
+		particle->setPositionType(kCCPositionTypeRelative);
+		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("tickingTime_bomb.png");
+		particle->setTexture(texture);
+		particle->setEmissionRate(250.00);
+		particle->setAngle(90.0);
+		particle->setAngleVar(360.0);
+		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+		particle->setBlendFunc(blendFunc);
+		particle->setDuration(0.20);
+		particle->setEmitterMode(kCCParticleModeGravity);
+		ccColor4F startColor = {0.87,0.81,0.12,1.00}; // 0.76 0.25 0.12
+		particle->setStartColor(startColor);
+		ccColor4F startColorVar = {0,0,0,0};
+		particle->setStartColorVar(startColorVar);
+		ccColor4F endColor = {0.68,0.16,0.00,1.00};
+		particle->setEndColor(endColor);
+		ccColor4F endColorVar = {0,0,0,0};
+		particle->setEndColorVar(endColorVar);
+		particle->setStartSize(20.00);
+		particle->setStartSizeVar(10.0);
+		particle->setEndSize(40.0);
+		particle->setEndSizeVar(10.0);
+		particle->setGravity(ccp(0,0));
+		particle->setRadialAccel(0.0);
+		particle->setRadialAccelVar(0.0);
+		particle->setSpeed(250);
+		particle->setSpeedVar(60.0);
+		particle->setTangentialAccel(0);
+		particle->setTangentialAccelVar(0);
+		particle->setTotalParticles(50);
+		particle->setLife(0.30);
+		particle->setLifeVar(0.0);
+		particle->setStartSpin(0.0);
+		particle->setStartSpinVar(0.0);
+		particle->setEndSpin(0.0);
+		particle->setEndSpinVar(0.0);
+		particle->setPosition(m_parentMissile->getPosition());
+		particle->setPosVar(CCPointZero);
+		addChild(particle);
+		m_step = 3;
+	}
 }
+
 
 void ReaverScarab::aStar(IntPoint endPt)
 {
@@ -334,18 +352,28 @@ void ReaverScarab::aStar(IntPoint endPt)
 	
 	
 	IntPoint startPoint = ccp2ip(m_parentMissile->getPosition());
-	endPoint = endPt;
 	
 //	startPoint = IntPoint(2, 100);
 //	endPoint = IntPoint(4, 104);
+	m_openList.clear();
+	m_closeList.clear();
+	m_bulletReversePath.clear();
 	m_openList[startPoint] = CellInfo(0, 0, 0, lengthToEnd(startPoint));
 	
 	bool foundSolution = false;
+	int counter = 0;
+	
+	
 	while(m_openList.size() > 0)
 	{
+//		counter++;
+//		if(counter >= 100)
+//			break;
+//		if(counter >= 6000)
+//			break;
 //		auto minElement = std::min_element(m_openList.begin(), m_openList.end());
 		auto minElement = std::min_element(m_openList.begin(), m_openList.end(),
-																			 [](const std::pair<IntPoint, CellInfo>& a, const std::pair<IntPoint, CellInfo>& b)->bool
+																			 [&](const std::pair<IntPoint, CellInfo>& a, const std::pair<IntPoint, CellInfo>& b)->bool
 																			 {
 																				 return a.second.g + a.second.h < b.second.g + b.second.h;
 																			 });
@@ -355,8 +383,8 @@ void ReaverScarab::aStar(IntPoint endPt)
 		m_closeList[fminIndex] = fminElement;
 		m_openList.erase(fminIndex);
 		
-		CCLog("%d %d", fminIndex.x, fminIndex.y);
-		if(fminIndex == endPoint)
+//		CCLog("%d %d -> %d %d", fminIndex.x, fminIndex.y, endPoint.x, endPoint.y);
+		if(fminIndex == endPt)
 			break;
 		
 		foundSolution = !processObject(fminIndex, IntPoint(fminIndex.x - 1, fminIndex.y + 1), 14);
@@ -393,23 +421,113 @@ void ReaverScarab::aStar(IntPoint endPt)
 	
 	end = chrono::system_clock::now();
 	chrono::duration<double> elapsed_seconds1 = end-start;
-	KS::KSLog("process step 1 / time : %", elapsed_seconds1.count());
+	KS::KSLog("process step 1 / time : %, %", elapsed_seconds1.count(), counter);
+	
+	IntPoint coordNearEndPoint;
+	int nearDistance = INT_MAX;
+	for(auto closeElement : m_closeList)
 
-		
-	if(m_closeList.find(endPoint) != m_closeList.end())
 	{
-		IntPoint currentPoint = endPoint;
+		if(nearDistance > (endPt - closeElement.first).length())
+		{
+			nearDistance = ((endPt - closeElement.first).length());
+			coordNearEndPoint = closeElement.first;
+		}
+	}
+	
+	if(m_closeList.find(coordNearEndPoint) != m_closeList.end())
+	{
+		IntPoint currentPoint = coordNearEndPoint;
+		IntPoint beforePoint = coordNearEndPoint;
 		while(!(currentPoint == startPoint))
 		{
 			IntPoint coord = currentPoint;
+			m_bulletReversePath.push_back(ip2ccp(currentPoint));
+//			m_prevCloseList[currentPoint]; // insert     다음에 한번더 길찾기를 할 때 여기를 온다면 안가게끔 함.
+			beforePoint = currentPoint;
 			currentPoint.x += m_closeList[coord].dx;
 			currentPoint.y += m_closeList[coord].dy;
-			m_bulletReversePath.push_back(currentPoint);
-//			myGD->mapState[currentPoint.x][currentPoint.y] = mapType::mapOldline;
-			//var bulletPath = cc.Sprite.create("res/CloseSelected.png");
-			//this.addChild(bulletPath);
-			//bulletPath.setPosition(currentPoint);
+			
+//			m_bulletReversePath.push_back(ip2ccp(beforePoint) + ip2ccp(currentPoint - beforePoint) / 4.f);
+//			m_bulletReversePath.push_back(ip2ccp(beforePoint) + ip2ccp(currentPoint - beforePoint) / 4.f * 2.f);
+//			m_bulletReversePath.push_back(ip2ccp(beforePoint) + ip2ccp(currentPoint - beforePoint) / 4.f * 3.f);
 		}
+		
+		m_bulletReversePath.push_back(ip2ccp(startPoint));
+//		m_prevCloseList[startPoint]; // insert     다음에 한번더 길찾기를 할 때 여기를 온다면 안가게끔 함.
+		m_bulletIter = m_bulletReversePath.rbegin();
+		while(0);
+	}
+	
+//	int t = ;
+	ccColor3B c3 = ccc3(m_well512.GetValue(0, 255),m_well512.GetValue(0, 255),m_well512.GetValue(0, 255));
+	for(auto cl : m_closeList)
+	{
+		CCSprite* rt = CCSprite::create();
+		rt->setTextureRect(CCRectMake(0, 0, 2, 2));
+		rt->setColor(c3);
+		rt->setPosition(ip2ccp(cl.first));
+		addChild(rt);
 	}
 	// alert("complete!!");
 }
+
+// from 에서 to 로 퍼져나갈 때 블럭 처리.
+bool ReaverScarab::processObject(IntPoint pointFrom, IntPoint pointTo, int distance)
+{
+	if(pointTo.x < mapLoopRange::mapWidthInnerBegin || pointTo.x >= mapLoopRange::mapWidthInnerEnd ||
+		 pointTo.y < mapLoopRange::mapHeightInnerBegin || pointTo.y >= mapLoopRange::mapHeightInnerEnd)
+		return true;
+	// 장애물이면 패스.
+	
+	if(!(myGD->getJackPoint() == pointTo))
+	{
+		if(myGD->mapState[pointTo.x][pointTo.y] == mapType::mapOldget ||
+			 myGD->mapState[pointTo.x][pointTo.y] == mapType::mapOutline)
+			return true;
+		if(myGD->mapState[pointTo.x][pointFrom.y] == mapType::mapOldget ||
+			 myGD->mapState[pointTo.x][pointFrom.y] == mapType::mapOutline )
+			return true;
+		if(myGD->mapState[pointFrom.x][pointTo.y] == mapType::mapOldget ||
+			 myGD->mapState[pointFrom.x][pointTo.y] == mapType::mapOutline)
+			return true;
+	}
+	
+	
+	bool found = false;
+	
+	auto openedIter = m_openList.find(pointTo);
+	auto closedIter = m_closeList.find(pointTo);
+	
+	// 닫힌 쪽에 있지 않고 열린 쪽이라면
+	if(openedIter != m_openList.end() && closedIter == m_closeList.end() )
+	{
+		if(openedIter->second.g > m_closeList[pointFrom].g + distance)
+		{
+			openedIter->second.dx = pointFrom.x - openedIter->first.x;
+			openedIter->second.dy = pointFrom.y - openedIter->first.y;
+		}
+		openedIter->second.g = min(openedIter->second.g, m_closeList[pointFrom].g + distance);
+		return true;
+	}
+	
+	// 닫힌쪽도 아니고 열린쪽도 아니면!
+	if(closedIter == m_closeList.end() && openedIter == m_openList.end())
+	{
+		CellInfo pointToObj(0, 0, 0, 0);
+		//		CellInfo pointToObj = {g:0, h:0, dx:0, dy:0};
+		pointToObj.g = m_closeList[pointFrom].g + distance;
+		pointToObj.h = lengthToEnd(pointTo);
+		pointToObj.dx = pointFrom.x - pointTo.x; // 부모 가르키기.
+		pointToObj.dy = pointFrom.y - pointTo.y; // 부모 가르키기.
+		
+		 // 예전에 갔던 곳이면 안가려는 습성 넣음.
+//		if(m_prevCloseList.find(pointTo) != m_prevCloseList.end())
+//			pointToObj.g = 99999999;
+		m_openList[pointTo] = pointToObj;
+	}
+	return true;
+}
+
+
+

@@ -202,7 +202,10 @@ public:
 		x = t_x;
 		y = t_y;
 	}
-	
+	int length() const
+	{
+		return sqrt(x*x + y*y);
+	}
 	IntPoint operator+(const IntPoint& right) const
 	{
 		return IntPoint(x + right.x, y + right.y);
