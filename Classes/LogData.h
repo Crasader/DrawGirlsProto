@@ -32,7 +32,8 @@ enum LOG_KEY
 	kLOG_getCoin_i,
 	kLOG_getItem_s,
 	kLOG_buyItem_s,
-	kLOG_useItem_s
+	kLOG_useItem_s,
+	kLOG_remainHeart_i
 };
 
 class LogData : public CCObject
@@ -132,6 +133,7 @@ private:
 		else if(t_key == kLOG_getItem_s)			rv = "time_%d_getItem_%s";
 		else if(t_key == kLOG_buyItem_s)			rv = "time_%d_buyItem_%s";
 		else if(t_key == kLOG_useItem_s)			rv = "time_%d_useItem_%s";
+		else if(t_key == kLOG_remainHeart_i)		rv = "time_%d_remainHeart_%d";
 		
 		return rv.c_str();
 	}

@@ -57,6 +57,8 @@ bool ClearScene::init()
 	
 	setKeypadEnabled(true);
 	
+	myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
 	Json::Value param;

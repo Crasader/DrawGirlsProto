@@ -62,6 +62,7 @@ bool FailScene::init()
 	setKeypadEnabled(true);
 	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
+	myLog->addLog(kLOG_remainHeart_i, -1, myDSH->getIntegerForKey(kDSH_Key_heartCnt));
 	
 	Json::Value param;
 	param["key"] = CCSTR_CWF("stage_over_%d", mySD->getSilType())->getCString();
