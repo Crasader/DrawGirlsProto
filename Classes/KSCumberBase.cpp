@@ -1208,7 +1208,7 @@ void KSCumberBase::cumberAttack(float dt)
 			bool bossIsClosed_ = bossIsClosed();
 			for(auto& i : selectedAttacks)
 			{
-				if(i["atype"] != "crash")
+				if(i["atype"].asString() != "crash")
 				{
 					notCrashSum += i["percent"].asDouble();
 				}
@@ -1249,7 +1249,7 @@ void KSCumberBase::cumberAttack(float dt)
 						probSel.pushProb(i["percent"].asDouble());
 					}
 				}
-				else if(i["atype"] == "crash")
+				else if(i["atype"].asString() == "crash")
 				{
 					float patternMin = i["percent"].asDouble();
 					if(bossIsClosed_) // 보스가 갇힘.
