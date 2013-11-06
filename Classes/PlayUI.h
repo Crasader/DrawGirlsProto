@@ -1994,6 +1994,12 @@ private:
 		myGD->V_I["UI_setComboCnt"] = std::bind(&PlayUI::setComboCnt, this, _1);
 		myGD->I_V["UI_getUseTime"] = std::bind(&PlayUI::getUseTime, this);
 		myGD->V_V["UI_endFever"] = std::bind(&FeverParent::endFever, my_fp);
+		myGD->B_V["UI_isExchanged"] = std::bind(&PlayUI::isExchanged, this);
+	}
+	
+	bool isExchanged()
+	{
+		return is_exchanged;
 	}
 	
 	void continueAction()
