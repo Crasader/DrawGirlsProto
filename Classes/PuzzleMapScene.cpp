@@ -319,7 +319,7 @@ void PuzzleMapScene::setMapNode()
 			
 			map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber());
 			
-			t_sp->setPuzzleMode(kPM_default);
+			t_sp->setBackPuzzle();
 			t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
 		}
 	}
@@ -1911,7 +1911,7 @@ void PuzzleMapScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 						this->schedule(schedule_selector(PuzzleMapScene::moveAnimation));
 					}
 					
-					if(map_mode_state == kMMS_firstTouchStage)
+					if(map_mode_state == kMMS_firstTouchStage || map_mode_state == kMMS_firstTouchDefault)
 					{
 						StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
 						t_sp->touchEnded(touch, pEvent);
