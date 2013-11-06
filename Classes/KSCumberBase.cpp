@@ -8,6 +8,8 @@
 
 #include "KSCumberBase.h"
 #include "Jack.h"
+#include "PlayUI.h"
+
 void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 {
 	IntPoint jackPoint = myGD->getJackPoint();
@@ -1080,8 +1082,7 @@ void KSCumberBase::cumberAttack(float dt)
 	float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
 //	CCLog("%f %f %d", distance, gainPercent, m_crashCount);
 	bool crashAttack = false;
-	
-	
+
 	if(m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance)
 	{
 		float w = ProbSelector::sel(m_furyRule.percent / 100.f, 1.0f - m_furyRule.percent / 100.f, 0.0);
@@ -1182,11 +1183,6 @@ void KSCumberBase::cumberAttack(float dt)
 			// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
 			
 			ProbSelector probSel;
-			float crashAdder = 0.f;
-			if(bossIsClosed())
-			{
-				crashAdder = m_aiValue / 50.f;
-			}
 			
 			// 바깥쪽으로 얼마나 먹었는지를...
 			int externalOutlineCount = 0;
@@ -1205,19 +1201,70 @@ void KSCumberBase::cumberAttack(float dt)
 					externalOutlineCount++;
 			}
 			
-			float alongLineAdder = 0.f;
-			if(externalOutlineCount >= 150)
-				alongLineAdder = m_aiValue / 100.f;
+			
+			
+			float notCrashSum = 0; // 크래시가 아닌것의 합
+			int crashNumber = 0;   // 부수기 공격의 개수
+			bool bossIsClosed_ = bossIsClosed();
+			for(auto& i : selectedAttacks)
+			{
+				if(i["atype"] != "crash")
+				{
+					notCrashSum += i["percent"].asDouble();
+				}
+				else
+				{
+					crashNumber++;
+				}
+			}
+			float patternMax = 2 * notCrashSum / crashNumber;
 			for(auto& i : selectedAttacks)
 			{
 				KS::KSLog("% percent!!!", i["percent"].asDouble());
 				if(i["pattern"].asString() == "1017")
 				{
-					probSel.pushProb(i["percent"].asDouble() * (1 +  alongLineAdder));
+					if(externalOutlineCount >= 150) // 가장자리 위주로 먹었다면...
+					{
+						float notAlongSum = 0;
+						for(auto& i : selectedAttacks)
+						{
+							if(i["pattern"].asString() != "1017")
+							{
+								notAlongSum += i["percent"].asDouble();
+							}
+						}
+						float alongMin = i["percent"].asDouble();
+						float alongMax = notAlongSum / 1.5f;
+						if(alongMax >= alongMin)
+						{
+							probSel.pushProb(i["percent"].asDouble() + (alongMax - i["percent"].asDouble()) * getAiValue() / 100.f);
+						}
+						else
+						{
+							probSel.pushProb(i["percent"].asDouble() * (1 + getAiValue() / 100.f));
+						}
+					}
+					else
+					{
+						probSel.pushProb(i["percent"].asDouble());
+					}
 				}
 				else if(i["atype"] == "crash")
 				{
-					probSel.pushProb(i["percent"].asDouble() * (1 +  crashAdder));
+					float patternMin = i["percent"].asDouble();
+					if(bossIsClosed_) // 보스가 갇힘.
+					{
+						if(patternMax >= patternMin)
+						{
+							probSel.pushProb(i["percent"].asDouble() + (patternMax - i["percent"].asDouble()) * getAiValue() / 100.f);
+						}
+						else
+						{
+							probSel.pushProb(i["percent"].asDouble() * (1 + getAiValue() / 100.f));
+						}
+					}
+					else
+						probSel.pushProb(i["percent"].asDouble());
 				}
 				else
 				{
@@ -1400,7 +1447,7 @@ void KSCumberBase::getRandomPosition(IntPoint* ip, bool* finded)
 
 void KSCumberBase::onJackDrawLine()
 {
-	ProbSelector ps({m_aiValue, 100.f - m_aiValue});
+	ProbSelector ps({getAiValue(), 100.f - getAiValue()});
 	int r = ps.getResult();
 	if(r == 0)
 	{

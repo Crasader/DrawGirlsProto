@@ -375,7 +375,7 @@ public:
 	void settingFuryRule()
 	{
 		m_furyRule.gainPercent = 40; //fury["gainpercent"].asDouble();
-		m_furyRule.userDistance = 350; // fury["userdistance"].asDouble();
+		m_furyRule.userDistance = 300; // fury["userdistance"].asDouble();
 		m_furyRule.percent = aiProbAdder();// fury["percent"].asDouble();
 //		m_furyRule
 	}
@@ -472,9 +472,18 @@ public:
 	void getRandomPosition(IntPoint* ip, bool* finded);
 	virtual float getRadius() = 0;
 	float aiProbAdder(){
-		return (0.02f + (0.5f - 0.02f) * m_aiValue / 100.f)/100.f;
+		return (0.02f + (0.5f - 0.02f) * getAiValue() / 100.f)/100.f;
 	}
 	void onJackDrawLine();
+	int getAiValue()
+	{
+		if(myGD->getCommunicationBool("UI_isExchanged")) // CHANGE 라면
+		{
+			return m_aiValue * 1.2f;
+		}
+		else
+			return m_aiValue;
+	}
 protected:
 		
 	struct BossDie
