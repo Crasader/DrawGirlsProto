@@ -963,46 +963,67 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 
 void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color )
 {
-	particle = CCParticleSystemQuad::createWithTotalParticles(25);
-	particle->setPositionType(kCCPositionTypeRelative);
-	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("circle1.png");
-	particle->setTexture(texture);
-	particle->setEmissionRate(2500.00); // inf
-	particle->setAngle(90.0);
-	particle->setAngleVar(360.0);
-	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-	particle->setBlendFunc(blendFunc);
-	particle->setDuration(0.01);
-	particle->setEmitterMode(kCCParticleModeGravity);
-	particle->setStartColor(t_color);
-	ccColor4F startColorVar = {0,0,0,0};
-	particle->setStartColorVar(startColorVar);
-	ccColor4F endColor = {0.00,0.00,0.00,1.00};
-	particle->setEndColor(endColor);
-	ccColor4F endColorVar = {0,0,0,0};
-	particle->setEndColorVar(endColorVar);
-	particle->setStartSize(0.00);
-	particle->setStartSizeVar(2.0);
-	particle->setEndSize(10.0);
-	particle->setEndSizeVar(2.0);
-	particle->setGravity(ccp(2.0,10.0));
-	particle->setRadialAccel(0.0);
-	particle->setRadialAccelVar(10.0);
-	particle->setSpeed(50);
-	particle->setSpeedVar(5);
-	particle->setTangentialAccel(0);
-	particle->setTangentialAccelVar(10);
-	particle->setTotalParticles(25);
-	particle->setLife(0.50);
-	particle->setLifeVar(0.1);
-	particle->setStartSpin(0.0);
-	particle->setStartSpinVar(0.0);
-	particle->setEndSpin(0.0);
-	particle->setEndSpinVar(0.0);
-	particle->setPosition(startPosition);
-	particle->setPosVar(ccp(0,0));
-	particle->setAutoRemoveOnFinish(true);
-	addChild(particle);
+	Well512 t_well512;
+	int x_change = t_well512.GetValue(0, 21) - 10;
+	int y_change = t_well512.GetValue(0, 21) - 10;
+	
+	CCSprite* t_explosion = CCSprite::create("fx_boss_hit1.png");
+	t_explosion->setScale(1.f/1.5f);
+	t_explosion->setPosition(ccpAdd(startPosition, ccp(x_change, y_change)));
+	addChild(t_explosion);
+	
+	CCAnimation* t_animation = CCAnimation::create();
+	t_animation->setDelayPerUnit(0.1f);
+	for(int i=1;i<=7;i++)
+		t_animation->addSpriteFrameWithFileName(CCString::createWithFormat("fx_boss_hit%d.png", i)->getCString());
+	
+	CCAnimate* t_animate = CCAnimate::create(t_animation);
+	CCFadeTo* t_fade = CCFadeTo::create(0.2f, 0);
+	CCRemoveSelf* t_remove = CCRemoveSelf::create();
+	CCSequence* t_seq = CCSequence::create(t_animate, t_fade, t_remove, NULL);
+	t_explosion->runAction(t_seq);
+	
+	
+//	particle = CCParticleSystemQuad::createWithTotalParticles(25);
+//	particle->setPositionType(kCCPositionTypeRelative);
+//	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("circle1.png");
+//	particle->setTexture(texture);
+//	particle->setEmissionRate(2500.00); // inf
+//	particle->setAngle(90.0);
+//	particle->setAngleVar(360.0);
+//	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+//	particle->setBlendFunc(blendFunc);
+//	particle->setDuration(0.01);
+//	particle->setEmitterMode(kCCParticleModeGravity);
+//	particle->setStartColor(t_color);
+//	ccColor4F startColorVar = {0,0,0,0};
+//	particle->setStartColorVar(startColorVar);
+//	ccColor4F endColor = {0.00,0.00,0.00,1.00};
+//	particle->setEndColor(endColor);
+//	ccColor4F endColorVar = {0,0,0,0};
+//	particle->setEndColorVar(endColorVar);
+//	particle->setStartSize(0.00);
+//	particle->setStartSizeVar(2.0);
+//	particle->setEndSize(10.0);
+//	particle->setEndSizeVar(2.0);
+//	particle->setGravity(ccp(2.0,10.0));
+//	particle->setRadialAccel(0.0);
+//	particle->setRadialAccelVar(10.0);
+//	particle->setSpeed(50);
+//	particle->setSpeedVar(5);
+//	particle->setTangentialAccel(0);
+//	particle->setTangentialAccelVar(10);
+//	particle->setTotalParticles(25);
+//	particle->setLife(0.50);
+//	particle->setLifeVar(0.1);
+//	particle->setStartSpin(0.0);
+//	particle->setStartSpinVar(0.0);
+//	particle->setEndSpin(0.0);
+//	particle->setEndSpinVar(0.0);
+//	particle->setPosition(startPosition);
+//	particle->setPosVar(ccp(0,0));
+//	particle->setAutoRemoveOnFinish(true);
+//	addChild(particle);
 }
 
 void MissileParent::myInit( CCNode* boss_eye )
