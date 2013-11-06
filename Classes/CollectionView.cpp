@@ -71,18 +71,18 @@ void CollectionInnerLine::myInit(int t_line_number)
 
 void CollectionInnerLine::createCard(int t_stage, int t_level, int index)
 {
-	CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", t_stage, t_level)->getCString());
-	card_img->setScale(0.17);
+	CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", t_stage, t_level)->getCString());
+	card_img->setScale(0.17f/0.2f);
 	card_img->setPosition(ccp(index*69,0));
 	addChild(card_img);
 	
-	if(t_level == 3 && mySD->isAnimationStage(t_stage))
-	{
-		CCSize ani_size = mySD->getAnimationCutSize(t_stage);
-		CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", t_stage, t_level)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
-		ani_img->setPosition(mySD->getAnimationPosition(t_stage));
-		card_img->addChild(ani_img);
-	}
+//	if(t_level == 3 && mySD->isAnimationStage(t_stage))
+//	{
+//		CCSize ani_size = mySD->getAnimationCutSize(t_stage);
+//		CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", t_stage, t_level)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
+//		ani_img->setPosition(mySD->getAnimationPosition(t_stage));
+//		card_img->addChild(ani_img);
+//	}
 	
 	CCMenuItem* card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionInnerLine::menuAction));
 	card_item->setTag(index);

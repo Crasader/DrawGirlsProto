@@ -12,6 +12,7 @@
 #include "CardSettingScene.h"
 #include "utf8.h"
 #include "DiaryZoom.h"
+#include "LogData.h"
 
 CCScene* CollectionBook::scene()
 {
@@ -108,6 +109,7 @@ bool CollectionBook::onTextFieldDetachWithIME(cocos2d::CCTextFieldTTF *sender)
 	}
     
     myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number, sender->getString());
+	myLog->addLog(kLOG_typing_cardComment, -1);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,-105));
     runAction(t_move);
@@ -144,14 +146,14 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
 	zoom_menu->setPosition(ccp(45,35));
 	target->addChild(zoom_menu, 1, kCB_MT_zoom);
 	
-	float mul_value = 0.16f;
+	float mul_value = 0.16f/0.2f;
     int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
     int level_number = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
     if(level_number == 1)
     {
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1)) != 0)
         {
-            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number+1)->getCString());
+            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number+1)->getCString());
             second_img->setScale(mul_value);
             second_img->setPosition(ccp(44,235));
             target->addChild(second_img);
@@ -166,18 +168,18 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
         
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+2)) != 0)
         {
-            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number+2)->getCString());
+            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number+2)->getCString());
             third_img->setScale(mul_value);
             third_img->setPosition(ccp(116,235));
             target->addChild(third_img);
             
-            if(mySD->isAnimationStage(stage_number))
-            {
-                CCSize ani_size = mySD->getAnimationCutSize(stage_number);
-                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, level_number+2)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
-                ani_img->setPosition(mySD->getAnimationPosition(stage_number));
-                third_img->addChild(ani_img);
-            }
+//            if(mySD->isAnimationStage(stage_number))
+//            {
+//                CCSize ani_size = mySD->getAnimationCutSize(stage_number);
+//                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, level_number+2)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
+//                ani_img->setPosition(mySD->getAnimationPosition(stage_number));
+//                third_img->addChild(ani_img);
+//            }
 			
 			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
 			third_item->setTag(kCB_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+2));
@@ -191,7 +193,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
     {
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1)) != 0)
         {
-            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number-1)->getCString());
+            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number-1)->getCString());
             first_img->setScale(mul_value);
             first_img->setPosition(ccp(44,235));
             target->addChild(first_img);
@@ -206,18 +208,18 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
         
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1)) != 0)
         {
-            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number+1)->getCString());
+            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number+1)->getCString());
             third_img->setScale(mul_value);
             third_img->setPosition(ccp(116,235));
             target->addChild(third_img);
             
-            if(mySD->isAnimationStage(stage_number))
-            {
-                CCSize ani_size = mySD->getAnimationCutSize(stage_number);
-                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, level_number+1)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
-                ani_img->setPosition(mySD->getAnimationPosition(stage_number));
-                third_img->addChild(ani_img);
-            }
+//            if(mySD->isAnimationStage(stage_number))
+//            {
+//                CCSize ani_size = mySD->getAnimationCutSize(stage_number);
+//                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, level_number+1)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
+//                ani_img->setPosition(mySD->getAnimationPosition(stage_number));
+//                third_img->addChild(ani_img);
+//            }
 			
 			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
 			third_item->setTag(kCB_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1));
@@ -231,7 +233,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
     {
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-2)) != 0)
         {
-            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number-2)->getCString());
+            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number-2)->getCString());
             first_img->setScale(mul_value);
             first_img->setPosition(ccp(44,235));
             target->addChild(first_img);
@@ -246,7 +248,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
         
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1)) != 0)
         {
-            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number-1)->getCString());
+            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number-1)->getCString());
             second_img->setScale(mul_value);
             second_img->setPosition(ccp(116,235));
             target->addChild(second_img);
