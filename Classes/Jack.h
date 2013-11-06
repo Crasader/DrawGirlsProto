@@ -1162,17 +1162,10 @@ private:
 					CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
 					
 					jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-					jackImg->setScale(2.8f);
-					jackImg->setPosition(ccp(-300,100));
+					jackImg->setScale(0.8f);
 					addChild(jackImg, kJackZ_main);
 					
-					CCMoveTo* t_move = CCMoveTo::create(0.5f, CCPointZero);
-					CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.8f);
-					CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_move, t_scale);
-					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Jack::endReviveJack));
-					CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
-					
-					jackImg->runAction(t_seq);
+					startReviveAnimation(jackImg);
 				}
 				else
 				{
@@ -1389,6 +1382,8 @@ private:
 		jackImg->setScale(0.8f);
 		addChild(jackImg, kJackZ_main);
 		
+		startShowJackAnimation(jackImg);
+		
 		CCAnimation* jack_animation = CCAnimation::create();
 		jack_animation->setDelayPerUnit(0.1f);
 		jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
@@ -1560,6 +1555,132 @@ private:
 			if(turnPosition.y > (mapHeightInnerEnd-1-1)*pixelSize+1)		turnPosition.y = (mapHeightInnerEnd-1-1)*pixelSize+1;
 		}
 		return turnPosition;
+	}
+	
+	void startReviveAnimation(CCSprite* t_jack_img)
+	{
+		t_jack_img->setOpacity(0);
+		t_jack_img->runAction(CCFadeTo::create(1.3f, 255));
+		
+		CCNode* animation_node = CCNode::create();
+		animation_node->setPosition(ccp(t_jack_img->getContentSize().width/2.f, t_jack_img->getContentSize().height/2.f));
+		t_jack_img->addChild(animation_node);
+		
+		startInnerParticle(animation_node);
+		CCDelayTime* delay1 = CCDelayTime::create(0.2f);
+		CCCallFuncO* call1 = CCCallFuncO::create(this, callfuncO_selector(Jack::startLightSprite), animation_node);
+		CCDelayTime* delay2 = CCDelayTime::create(0.4f);
+		CCCallFuncO* call2 = CCCallFuncO::create(this, callfuncO_selector(Jack::startOutterParticle), animation_node);
+		CCDelayTime* delay3 = CCDelayTime::create(1.f);
+		CCCallFunc* call3 = CCCallFunc::create(this, callfunc_selector(Jack::endReviveJack));
+		CCCallFunc* call4 = CCCallFunc::create(animation_node, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq = CCSequence::create(delay1, call1, delay2, call2, delay3, call3, call4, NULL);
+		
+		animation_node->runAction(t_seq);
+	}
+	
+	void startShowJackAnimation(CCSprite* t_jack_img)
+	{
+		t_jack_img->setOpacity(0);
+		t_jack_img->runAction(CCFadeTo::create(1.3f, 255));
+		
+		CCNode* animation_node = CCNode::create();
+		animation_node->setPosition(ccp(t_jack_img->getContentSize().width/2.f, t_jack_img->getContentSize().height/2.f));
+		t_jack_img->addChild(animation_node);
+		
+		startInnerParticle(animation_node);
+		CCDelayTime* delay1 = CCDelayTime::create(0.2f);
+		CCCallFuncO* call1 = CCCallFuncO::create(this, callfuncO_selector(Jack::startLightSprite), animation_node);
+		CCDelayTime* delay2 = CCDelayTime::create(0.4f);
+		CCCallFuncO* call2 = CCCallFuncO::create(this, callfuncO_selector(Jack::startOutterParticle), animation_node);
+		CCDelayTime* delay3 = CCDelayTime::create(1.f);
+		CCCallFunc* call4 = CCCallFunc::create(animation_node, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq = CCSequence::create(delay1, call1, delay2, call2, delay3, call4, NULL);
+		
+		animation_node->runAction(t_seq);
+	}
+	
+	void startInnerParticle(CCNode* target_node)
+	{
+		CCParticleSystemQuad* inner_particle = CCParticleSystemQuad::createWithTotalParticles(100);
+		inner_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle5.png"));
+		inner_particle->setEmissionRate(166.67f);
+		inner_particle->setAngle(90.f);
+		inner_particle->setAngleVar(360.f);
+		ccBlendFunc inner_blend_func = {GL_SRC_ALPHA, GL_ONE};
+		inner_particle->setBlendFunc(inner_blend_func);
+		inner_particle->setDuration(0.5f);
+		inner_particle->setEmitterMode(kCCParticleModeRadius);
+		inner_particle->setStartColor(ccc4f(1.f, 1.f, 0.55f, 1.f));
+		inner_particle->setStartColorVar(ccc4f(0.f, 0.28f, 0.57f, 1.f));
+		inner_particle->setEndColor(ccc4f(0.f, 0.f, 0.f, 1.f));
+		inner_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+		inner_particle->setStartSize(50.f);
+		inner_particle->setStartSizeVar(20.f);
+		inner_particle->setEndSize(20.f);
+		inner_particle->setEndSizeVar(10.f);
+		inner_particle->setRotatePerSecond(0.f);
+		inner_particle->setRotatePerSecondVar(0.f);
+		inner_particle->setStartRadius(80.f);
+		inner_particle->setStartRadiusVar(40.f);
+		inner_particle->setEndRadius(15.f);
+		inner_particle->setTotalParticles(100);
+		inner_particle->setLife(0.6f);
+		inner_particle->setLifeVar(0.3f);
+		inner_particle->setStartSpin(0.f);
+		inner_particle->setStartSpinVar(0.f);
+		inner_particle->setEndSpin(0.f);
+		inner_particle->setEndSpinVar(0.f);
+		inner_particle->setPosition(ccp(0,0));
+		inner_particle->setPosVar(CCPointZero);
+		inner_particle->setAutoRemoveOnFinish(true);
+		target_node->addChild(inner_particle);
+	}
+	void startLightSprite(CCNode* target_node)
+	{
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		CCSprite* lighter = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_cha_new.ccbi",this));
+		lighter->setPosition(ccp(0,0));
+		target_node->addChild(lighter);
+	}
+	void startOutterParticle(CCNode* target_node)
+	{
+		CCParticleSystemQuad* outter_particle = CCParticleSystemQuad::createWithTotalParticles(100);
+		outter_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle5.png"));
+		outter_particle->setEmissionRate(166.67f);
+		outter_particle->setAngle(90.f);
+		outter_particle->setAngleVar(90.f);
+		ccBlendFunc outter_blend_func = {GL_SRC_ALPHA, GL_ONE};
+		outter_particle->setBlendFunc(outter_blend_func);
+		outter_particle->setDuration(0.4f);
+		outter_particle->setEmitterMode(kCCParticleModeGravity);
+		outter_particle->setStartColor(ccc4f(1.f, 1.f, 0.55f, 1.f));
+		outter_particle->setStartColorVar(ccc4f(0.f, 0.28f, 0.57f, 1.f));
+		outter_particle->setEndColor(ccc4f(0.f, 0.f, 0.f, 1.f));
+		outter_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+		outter_particle->setStartSize(20.f);
+		outter_particle->setStartSizeVar(10.f);
+		outter_particle->setEndSize(50.f);
+		outter_particle->setEndSizeVar(20.f);
+		outter_particle->setGravity(ccp(0.f,300.f));
+		outter_particle->setRadialAccel(0.f);
+		outter_particle->setRadialAccelVar(0.f);
+		outter_particle->setSpeed(100.f);
+		outter_particle->setSpeedVar(40.f);
+		outter_particle->setTangentialAccel(0.f);
+		outter_particle->setTangentialAccelVar(0.f);
+		outter_particle->setTotalParticles(100);
+		outter_particle->setLife(0.4f);
+		outter_particle->setLifeVar(0.5f);
+		outter_particle->setStartSpin(0.f);
+		outter_particle->setStartSpinVar(0.f);
+		outter_particle->setEndSpin(0.f);
+		outter_particle->setEndSpinVar(0.f);
+		outter_particle->setPosition(ccp(0,0));
+		outter_particle->setPosVar(ccp(40.f,40.f));
+		outter_particle->setAutoRemoveOnFinish(true);
+		target_node->addChild(outter_particle);
 	}
 };
 

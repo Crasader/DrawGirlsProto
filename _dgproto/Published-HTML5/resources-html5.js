@@ -159,7 +159,6 @@ var ccb_resources = [
     {type:'ccbi', src:"boss_banana.ccbi"},
     {type:'image', src:"fx_cha_die_ring2.png"},
     {type:'ccbi', src:"boss_lime_body.ccbi"},
-    {type:'image', src:"10121.png"},
     {type:'image', src:"pattern_energyball1_10.png"},
     {type:'image', src:"fx_bomb2_10.png"},
     {type:'ccbi', src:"fx_cha_die1.ccbi"},
