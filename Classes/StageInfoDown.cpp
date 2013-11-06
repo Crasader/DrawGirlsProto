@@ -160,6 +160,8 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				
 				Json::Value t_imgInfo = t_card["imgInfo"];
 				
+				bool is_add_cf = false;
+				
 				if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
 				{
 					// check, after download ----------
@@ -170,21 +172,28 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 					t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
+					
+					CopyFile t_cf;
+					t_cf.from_filename = t_df.filename.c_str();
+					t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", mySD->getSilType(), i+1)->getCString();
+					cf_list.push_back(t_cf);
+					
+					is_add_cf = true;
 				}
 				
-				Json::Value t_thumbnailInfo = t_card["thumbnailInfo"];
-				
-				if(NSDS_GS(kSDS_CI_int1_thumbnailInfo_s, t_card["no"].asInt()) != t_thumbnailInfo["img"].asString())
-				{
-					// check, after download ----------
-					DownloadFile t_df;
-					t_df.size = t_thumbnailInfo["size"].asInt();
-					t_df.img = t_thumbnailInfo["img"].asString().c_str();
-					t_df.filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", mySD->getSilType(), i+1)->getCString();
-					t_df.key = CCSTR_CWF("%d_thumbnailInfo", t_card["no"].asInt())->getCString();
-					df_list.push_back(t_df);
-					// ================================
-				}
+//				Json::Value t_thumbnailInfo = t_card["thumbnailInfo"];
+//				
+//				if(NSDS_GS(kSDS_CI_int1_thumbnailInfo_s, t_card["no"].asInt()) != t_thumbnailInfo["img"].asString())
+//				{
+//					// check, after download ----------
+//					DownloadFile t_df;
+//					t_df.size = t_thumbnailInfo["size"].asInt();
+//					t_df.img = t_thumbnailInfo["img"].asString().c_str();
+//					t_df.filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", mySD->getSilType(), i+1)->getCString();
+//					t_df.key = CCSTR_CWF("%d_thumbnailInfo", t_card["no"].asInt())->getCString();
+//					df_list.push_back(t_df);
+//					// ================================
+//				}
 				
 				Json::Value t_aniInfo = t_card["aniInfo"];
 				NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool());
@@ -213,6 +222,21 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 						t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
 						df_list.push_back(t_df);
 						// ================================
+					}
+					
+					if(is_add_cf)
+					{
+						CopyFile t_cf = cf_list.back();
+						cf_list.pop_back();
+						t_cf.is_ani = true;
+						t_cf.cut_width = t_detail["cutWidth"].asInt();
+						t_cf.cut_height = t_detail["cutHeight"].asInt();
+						t_cf.position_x = t_detail["positionX"].asInt();
+						t_cf.position_y = t_detail["positionY"].asInt();
+						
+						t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", mySD->getSilType(), i+1)->getCString();
+						
+						cf_list.push_back(t_cf);
 					}
 				}
 				
@@ -279,6 +303,30 @@ void StageInfoDown::successAction()
 	
 	if(ing_download_cnt >= df_list.size())
 	{
+		state_ment->setString("카드 섬네일 만드는 중...");
+		for(int i=0;i<cf_list.size();i++)
+		{
+			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+			target_img->setAnchorPoint(ccp(0,0));
+			
+			if(cf_list[i].is_ani)
+			{
+				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+				target_img->addChild(ani_img);
+			}
+			
+			target_img->setScale(0.2f);
+			
+			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			t_texture->setSprite(target_img);
+			t_texture->begin();
+			t_texture->getSprite()->visit();
+			t_texture->end();
+			
+			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+		}
+		
 		NSDS_SI(mySD->getSilType(), kSDS_SI_version_i, download_version);
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		state_ment->setString("이미지 정보 다운로드 완료.");

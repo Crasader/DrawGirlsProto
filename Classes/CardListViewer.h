@@ -97,29 +97,30 @@ private:
 		{
 			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)) > 0;
 			
-			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString()));
-			t_card->setScale(0.15);
+			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_level)->getCString()));
+			t_card->setScale(0.15f/0.2f);
 			t_card->setPosition(CCPointZero);
 			addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 			
 			if(is_color)		t_card->setGray(false);
 			else				t_card->setGray(true);
 			
-			if(card_level == 3 && mySD->isAnimationStage(card_stage))
-			{
-				CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-				GraySprite* t_ani = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString()),
-													  CCRectMake(0, 0, ani_size.width, ani_size.height));
-				t_ani->setPosition(mySD->getAnimationPosition(card_stage));
-				t_card->addChild(t_ani);
-				
-				if(is_color)			t_ani->setGray(false);
-				else					t_ani->setGray(true);
-			}
+//			if(card_level == 3 && mySD->isAnimationStage(card_stage))
+//			{
+//				CCSize ani_size = mySD->getAnimationCutSize(card_stage);
+//				GraySprite* t_ani = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString()),
+//													  CCRectMake(0, 0, ani_size.width, ani_size.height));
+//				t_ani->setPosition(mySD->getAnimationPosition(card_stage));
+//				t_card->addChild(t_ani);
+//				
+//				if(is_color)			t_ani->setGray(false);
+//				else					t_ani->setGray(true);
+//			}
 			
 			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_stage*10+card_level-1),
 																					 mySD->getCardDurability(card_stage, card_level))->getCString(),
 														  mySGD->getFont().c_str(), 50);
+			t_durability->setScale(0.15f);
 			t_durability->setColor(ccBLACK);
 			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
 			t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);

@@ -36,7 +36,8 @@ enum LOG_KEY
 	kLOG_remainHeart_i,
 	kLOG_gacha_startMap,
 	kLOG_puzzleAchievementMinimum_i,
-	kLOG_puzzleAchievementMaximum_i
+	kLOG_puzzleAchievementMaximum_i,
+	kLOG_typing_cardComment
 };
 
 class LogData : public CCObject
@@ -140,6 +141,7 @@ private:
 		else if(t_key == kLOG_gacha_startMap)		rv = "time_%d_gacha_startMap";
 		else if(t_key == kLOG_puzzleAchievementMinimum_i)	rv = "time_%d_puzzleAchievementMinimum_%d";
 		else if(t_key == kLOG_puzzleAchievementMaximum_i)	rv = "time_%d_puzzleAchievementMaximum_%d";
+		else if(t_key == kLOG_typing_cardComment)			rv = "time_%d_typing_cardComment";
 		
 		return rv.c_str();
 	}

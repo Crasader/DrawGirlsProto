@@ -25,4 +25,19 @@ public:
 	string key;
 };
 
+class CopyFile
+{
+public:
+	string from_filename;
+	string to_filename;
+	bool is_ani;
+	
+	int cut_width;
+	int cut_height;
+	int position_x;
+	int position_y;
+	
+	string ani_filename;
+};
+
 #endif /* defined(__DGproto__DownloadFile__) */

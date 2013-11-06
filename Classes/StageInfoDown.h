@@ -57,6 +57,7 @@ private:
 	int download_version;
 	
 	vector<DownloadFile> df_list;
+	vector<CopyFile> cf_list;
 	
 	void myInit(CCObject* t_cancel, SEL_CallFunc d_cancel)
 	{
