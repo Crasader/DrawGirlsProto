@@ -66,8 +66,6 @@ bool ClearScene::init()
 	
 	hspConnector::get()->command("increaseStats", param, NULL);
 	
-	myLog->sendLog(CCString::createWithFormat("clear_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
-	
 	if(mySGD->getScore() > myDSH->getIntegerForKey(kDSH_Key_allHighScore))
 	{
 		myDSH->setIntegerForKey(kDSH_Key_allHighScore, int(mySGD->getScore()));
@@ -99,12 +97,9 @@ bool ClearScene::init()
 	
 	int stage_number = mySD->getSilType();
 	int take_level;
-	if(mySGD->is_exchanged && mySGD->is_showtime)
-		take_level = 3;
-	else if(mySGD->is_exchanged || mySGD->is_showtime)
-		take_level = 2;
-	else
-		take_level = 1;
+	if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
+	else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
+	else												take_level = 1;
 	
 	CCSprite* take_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, take_level)->getCString());
 	take_card->setScale(0.65);
@@ -118,6 +113,47 @@ bool ClearScene::init()
 		take_ani->setPosition(mySD->getAnimationPosition());
 		take_card->addChild(take_ani);
 	}
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+		myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+		
+		mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+	}
+	int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+	myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, mySD->getCardDurability(mySD->getSilType(), take_level));
+	
+	
+	int start_stage_number = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
+	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
+	
+	int minimum_count = 0;
+	int maximum_count = 0;
+	
+	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+	{
+		bool is_found = false;
+		for(int j=3;j>=1 && !is_found;j--)
+		{
+			int check_card_number = NSDS_GI(i, kSDS_SI_level_int1_card_i, j);
+			int check_card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, check_card_number);
+			
+			if(check_card_durability > 0)
+			{
+				is_found = true;
+				if(j == 3)
+					maximum_count++;
+				minimum_count++;
+			}
+		}
+	}
+	
+	myLog->addLog(kLOG_puzzleAchievementMinimum_i, -1, 100*minimum_count/stage_count);
+	myLog->addLog(kLOG_puzzleAchievementMaximum_i, -1, 100*maximum_count/stage_count);
+	
+	
+	myLog->sendLog(CCString::createWithFormat("clear_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 	
 	
 	for(int i=0;i<take_level;i++)
@@ -320,22 +356,7 @@ void ClearScene::menuAction(CCObject* pSender)
 	int tag = ((CCNode*)pSender)->getTag();
 	
 	if(tag == kMT_CS_ok)
-	{
-		int take_level;
-		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
-		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
-		else												take_level = 1;
-		
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
-		{
-			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
-			
-			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
-		}
-		int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
-		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, mySD->getCardDurability(mySD->getSilType(), take_level));
-			
+	{	
 		
 		realEnd();
 	}
