@@ -17,8 +17,10 @@
 #include "StarGoldData.h"
 #include "Well512.h"
 #include "LogData.h"
+#include "cocos-ext.h"
 
 using namespace cocos2d;
+USING_NS_CC_EXT;
 using namespace std;
 using namespace placeholders;
 enum jackSpeed{
@@ -880,8 +882,12 @@ public:
 			isDie = true;
 			dieEffectCnt = 0;
 			jackImg->removeFromParentAndCleanup(true);
-			jackImg = CCSprite::create("jack_die.png");
-			jackImg->setScale(0.2f);
+			
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			CCBReader* reader = new CCBReader(nodeLoader);
+			jackImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_cha_die1.ccbi",this));
+//			jackImg = CCSprite::create("jack_die.png");
+//			jackImg->setScale(0.2f);
 			addChild(jackImg, kJackZ_main);
 			schedule(schedule_selector(Jack::dieEffect));
 		}
@@ -1133,8 +1139,8 @@ private:
 		dieEffectCnt++;
 		if(dieEffectCnt < 45)
 		{
-			jackImg->setScale(0.2f + dieEffectCnt*0.02f);
-			jackImg->setOpacity(255-dieEffectCnt*5);
+//			jackImg->setScale(0.2f + dieEffectCnt*0.02f);
+//			jackImg->setOpacity(255-dieEffectCnt*5);
 		}
 		else if(dieEffectCnt == 45)
 		{
