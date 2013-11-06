@@ -158,13 +158,13 @@ void CardSettingScene::createCardList()
 		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
 		int card_level = NSDS_GI(kSDS_CI_int1_rank_i, selected_card_number);
 		
-		check_img = CCSprite::create("card_check.png");
-		check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-1)*82)));
-		my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
-		
 		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+		
+		check_img = CCSprite::create("card_check.png");
+		check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-start_stage)*82)));
+		my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 		
 		for(int i=start_stage;i<start_stage+stage_count;i++)
 		{
@@ -174,7 +174,7 @@ void CardSettingScene::createCardList()
 				int card_level = j;
 				
 				CLV_Node* t_node = CLV_Node::create(card_stage, card_level, this, menu_selector(CardSettingScene::menuAction),
-													ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((j-1)*65, -(i-1)*82)), my_clv->getViewRect());
+													ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((j-1)*65, -(i-start_stage)*82)), my_clv->getViewRect());
 				my_clv->addChild(t_node, kCSS_Z_content, t_node->getMyTag());
 			}
 		}
@@ -401,8 +401,12 @@ void CardSettingScene::menuAction(CCObject* pSender)
 			{
 				int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, clicked_card_number);
 				int card_level = NSDS_GI(kSDS_CI_int1_rank_i, clicked_card_number);
+				
+				int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+				int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+				
 				check_img = CCSprite::create("card_check.png");
-				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-1)*82)));
+				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-start_stage)*82)));
 				my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 			}
 			else
@@ -449,8 +453,11 @@ void CardSettingScene::alignChange()
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_default)
 	{
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+		
 		selected_img = CCSprite::create("card_selected.png");
-		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-1)*82)));
+		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-start_stage)*82)));
 		my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
 	}
 	else
@@ -547,8 +554,11 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_default)
 	{
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+		
 		selected_img = CCSprite::create("card_selected.png");
-		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-1)*82)));
+		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-start_stage)*82)));
 		my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
 	}
 	else

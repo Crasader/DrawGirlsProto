@@ -120,6 +120,7 @@ private:
 			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_stage*10+card_level-1),
 																					 mySD->getCardDurability(card_stage, card_level))->getCString(),
 														  mySGD->getFont().c_str(), 50);
+			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
 			t_durability->setScale(0.15f);
 			t_durability->setColor(ccBLACK);
 			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
