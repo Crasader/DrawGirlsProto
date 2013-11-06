@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "hspConnector.h"
 #include "cocos-ext.h"
+#include "DataStorageHub.h"
 
 USING_NS_CC;
 
@@ -266,6 +267,10 @@ private:
 				}
 				
 				hspConnector::get()->mailData["mailList"]=newMailList;
+				
+				if(myDSH->getIntegerForKey(kDSH_Key_heartCnt)<5){
+					myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+				}
 				this->mailTableView->reloadData();
 			}
 		});
@@ -298,7 +303,7 @@ private:
 			cell->addChild(bg,1);
 			
 			
-			CCLabelTTF *btnTitle = CCLabelTTF::create("delete", "Helvetica", 10, CCSizeMake(30, 30), kCCTextAlignmentCenter,kCCVerticalTextAlignmentCenter);
+			CCLabelTTF *btnTitle = CCLabelTTF::create("get", "Helvetica", 10, CCSizeMake(30, 30), kCCTextAlignmentCenter,kCCVerticalTextAlignmentCenter);
 			//btnTitle->setContentSize(CCSizeMake(40, 40));
 			CCScale9Sprite *btnBg = CCScale9Sprite::create("ui_common_9_button_brown.png",CCRectMake(0, 0, 38, 38),CCRectMake(10, 10, 18, 18));
 			
