@@ -317,7 +317,7 @@ private:
 		p["gameNo"]=hspConnector::get()->hspNo;
 		
 		
-		hspConnector::get()->command("SendGameMail", p, [member](Json::Value r)
+		hspConnector::get()->command("SendGameMail", p, [member,this](Json::Value r)
 		 {
 			 
 			 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
@@ -341,13 +341,11 @@ private:
 			 ////////////////////////////////
 			 Json::Value p2;
 			 p2["receiver_id"] = (*member)["profile"]["kakaoID"].asString();
-			 p2["message"] = "드로우걸스 테스트메세지!";
-			 hspConnector::get()->kSendMessage(p2, [](Json::Value r)
+			 p2["message"] = "하트받으세용!";
+			 hspConnector::get()->kSendMessage(p2, [this](Json::Value r)
 			 {
-				 
 				 GraphDogLib::JsonToLog("kSendMessage", r);
-				 
-				 
+				 this->closePopup(0,0);
 			 });
 		 });
 
@@ -386,7 +384,7 @@ private:
 			sendBtn->setPosition(ccp(205,22));
 			sendBtn->setTag(kRP_MT_send);
 			sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RankPopup::sendHeart), CCControlEventTouchUpInside);
-			sendBtn->setTouchPriority(-201);
+			sendBtn->setTouchPriority(-300);
 			
 			cell->addChild(sendBtn,2);
 			
@@ -418,6 +416,11 @@ private:
 		
 		
 		sendBtn->setUserData((void *)member);
+		if((*member)["profile"]["memberNo"].asInt64()==hspConnector::get()->getHSPMemberNo()){
+			sendBtn->setVisible(false);
+		}else{
+			sendBtn->setVisible(true);
+		}
 		title->setString((*member)["profile"]["nickname"].asString().c_str());
 		score->setString((*member)["rankingScore"].asString().c_str());
 		rank->setString((*member)["rankingGrade"].asString().c_str());

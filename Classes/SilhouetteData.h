@@ -196,14 +196,14 @@ public:
 	{
 		float return_value;
 		
-		if(t_code == kIC_attack)				return_value = 50.f;
-		else if(t_code == kIC_speedUp)			return_value = 50.f;
-		else if(t_code == kIC_addTime)			return_value = 70.f;
-		else if(t_code == kIC_fast)				return_value = 100.f;
-		else if(t_code == kIC_critical)			return_value = 150.f;
+		if(t_code == kIC_attack)				return_value = 250.f;
+		else if(t_code == kIC_speedUp)			return_value = 250.f;
+		else if(t_code == kIC_addTime)			return_value = 350.f;
+		else if(t_code == kIC_fast)				return_value = 700.f;
+		else if(t_code == kIC_critical)			return_value = 500.f;
 		else if(t_code == kIC_subOneDie)		return_value = 100.f;
-		else if(t_code == kIC_doubleItem)		return_value = 70.f;
-		else if(t_code == kIC_silence)			return_value = 100.f;
+		else if(t_code == kIC_doubleItem)		return_value = 300.f;
+		else if(t_code == kIC_silence)			return_value = 200.f;
 		else if(t_code == kIC_subNothing)		return_value = 200.f;
 		else if(t_code == kIC_longTime)			return_value = 70.f;
 		else if(t_code == kIC_bossLittleEnergy)	return_value = 100.f;

@@ -255,13 +255,18 @@ void Maingame::counting()
 		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
 		addChild(countingLabel, countingLabelZorder);
 		
-		StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
-		addChild(t_smg, mControlZorder);
+		if(mySGD->getGold() >= 500)
+		{
+			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
+			addChild(t_smg, mControlZorder);
+		}
 	}
 }
 
 void Maingame::gachaOn()
 {
+	myLog->addLog(kLOG_gacha_startMap, -1);
+	mySGD->setGold(mySGD->getGold() - 500);
 	myGD->resetGameData();
 	mySGD->startMapGachaOn();
 	CCDirector::sharedDirector()->replaceScene(Maingame::scene());

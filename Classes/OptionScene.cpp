@@ -17,6 +17,11 @@
 #include "WithdrawPopup.h"
 #include "PuzzleCache.h"
 
+#include "cocos-ext.h"
+#include "StageImgLoader.h"
+
+USING_NS_CC_EXT;
+
 CCScene* OptionScene::scene()
 {
     // 'scene' is an autorelease object
@@ -169,6 +174,24 @@ bool OptionScene::init()
 	CCMenu* withdraw_menu = CCMenu::createWithItem(withdraw_item);
 	withdraw_menu->setPosition(getContentPosition(kO_MT_withdraw));
 	addChild(withdraw_menu, kO_Z_content);
+	
+	
+	CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage("stage25_level1_visible.png"));
+	target_img->setAnchorPoint(ccp(0,0));
+	target_img->setScale(0.5f);
+	
+	CCRenderTexture* t_texture = CCRenderTexture::create(160, 215);
+	t_texture->setSprite(target_img);
+	t_texture->begin();
+	t_texture->getSprite()->visit();
+	t_texture->end();
+	
+	t_texture->saveToFile("ttttt_test_img.png", kCCImageFormatPNG);
+	
+	CCSprite* saved_img = CCSprite::createWithTexture(mySIL->addImage("ttttt_test_img.png"));
+	saved_img->setPosition(ccp(240,160));
+	addChild(saved_img, kO_Z_popup);
+	
 	
 	
 	is_menu_enable = true;

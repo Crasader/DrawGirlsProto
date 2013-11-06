@@ -534,7 +534,11 @@ public:
 	int getWidePerfectValue(){	return widePerfect_value;	}
 	int getStartMapGachaCnt(){	return start_map_gacha_cnt;	}
 	
-	void startMapGachaOn(){	start_map_gacha_cnt++;	}
+	void startMapGachaOn()
+	{
+		start_map_gacha_cnt++;
+		keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	}
 	
 private:
 	CCLabelBMFont* star_label;
