@@ -40,7 +40,7 @@ bool KSJuniorBase::init()
 	
 	schedule(schedule_selector(KSJuniorBase::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(KSJuniorBase::cumberAttack));
+
 	
 	return true;
 }

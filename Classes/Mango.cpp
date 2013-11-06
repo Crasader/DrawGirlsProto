@@ -40,7 +40,7 @@ bool Mango::init()
 	
 	schedule(schedule_selector(Mango::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Mango::cumberAttack));
+
 	
 	return true;
 }
@@ -175,6 +175,7 @@ void Mango::onPatternEnd()
 
 void Mango::onStartGame()
 {
+	KSCumberBase::onStartGame();
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }

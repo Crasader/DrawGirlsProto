@@ -68,7 +68,7 @@ bool Kiwi::init()
 	//	startMoving();
 	schedule(schedule_selector(Kiwi::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Kiwi::cumberAttack));
+
 	
 
 	return true;

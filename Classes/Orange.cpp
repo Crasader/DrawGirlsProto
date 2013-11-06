@@ -68,7 +68,7 @@ bool Orange::init()
 	//	startMoving();
 	schedule(schedule_selector(Orange::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Orange::cumberAttack));
+
 	
 
 	return true;

@@ -69,7 +69,7 @@ bool Lime::init()
 	//	startMoving();
 	schedule(schedule_selector(Lime::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Lime::cumberAttack));
+
 	
 
 	return true;

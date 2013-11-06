@@ -50,7 +50,7 @@ bool Coconut::init()
 	
 	schedule(schedule_selector(Coconut::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Coconut::cumberAttack));
+
 	
 	return true;
 }
@@ -186,6 +186,7 @@ void Coconut::onPatternEnd()
 
 void Coconut::onStartGame()
 {
+	KSCumberBase::onStartGame();
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }

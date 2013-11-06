@@ -69,7 +69,7 @@ bool Pear::init()
 	//	startMoving();
 	schedule(schedule_selector(Pear::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Pear::cumberAttack));
+
 	
 
 	return true;

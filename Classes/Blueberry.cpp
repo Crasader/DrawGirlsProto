@@ -40,7 +40,7 @@ bool Blueberry::init()
 	
 	schedule(schedule_selector(Blueberry::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Blueberry::cumberAttack));
+
 	
 	return true;
 }
@@ -174,6 +174,7 @@ void Blueberry::onPatternEnd()
 
 void Blueberry::onStartGame()
 {
+	KSCumberBase::onStartGame();
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }

@@ -40,7 +40,7 @@ bool Grape::init()
 	
 	schedule(schedule_selector(Grape::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Grape::cumberAttack));
+
 	
 	return true;
 }
@@ -174,6 +174,7 @@ void Grape::onPatternEnd()
 
 void Grape::onStartGame()
 {
+	KSCumberBase::onStartGame();
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }

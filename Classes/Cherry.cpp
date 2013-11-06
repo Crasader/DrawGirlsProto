@@ -42,7 +42,7 @@ bool Cherry::init()
 	
 	schedule(schedule_selector(Cherry::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Cherry::cumberAttack));
+
 	
 	return true;
 }
@@ -178,6 +178,7 @@ void Cherry::onPatternEnd()
 
 void Cherry::onStartGame()
 {
+	KSCumberBase::onStartGame();
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }

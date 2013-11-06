@@ -88,7 +88,7 @@ class KSCumberBase : public CCNode
 public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
 	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0), /// 초당 변수만큼 충돌시 스케일 줄임.
-	m_castingCancelCount(0), teleportImg(NULL)
+	m_castingCancelCount(0), teleportImg(NULL), m_isStarted(false)
 	
 //		m_state(CUMBERSTATESTOP)
 	{
@@ -260,7 +260,10 @@ public:
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
 	virtual void attackBehavior(Json::Value pattern) = 0;
-	virtual void onStartGame(){} // = 0;
+	virtual void onStartGame(){
+		m_isStarted = true;
+		schedule(schedule_selector(ThisClassType::cumberAttack));
+	} // = 0;
 	//	virtual void onEndGame(){} // = 0;
 	virtual void onPatternEnd() // = 0;
 	{
@@ -477,15 +480,17 @@ public:
 	void onJackDrawLine();
 	int getAiValue()
 	{
-		if(myGD->getCommunicationBool("UI_isExchanged")) // CHANGE 라면
+		if(m_isStarted && myGD->getCommunicationBool("UI_isExchanged")) // CHANGE 라면
 		{
 			return m_aiValue * 1.2f;
 		}
 		else
+		{
 			return m_aiValue;
+		}
 	}
 protected:
-		
+	bool m_isStarted;
 	struct BossDie
 	{
 		std::vector<int> m_bossDieBombFrameNumbers;

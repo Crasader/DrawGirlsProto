@@ -73,6 +73,7 @@ public:
 	}
 	virtual void onStartGame()
 	{
+		KSCumberBase::onStartGame();
 		m_noDirection.state = 2;
 		
 

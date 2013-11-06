@@ -48,7 +48,7 @@ bool Apricot::init()
 	
 	schedule(schedule_selector(Apricot::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Apricot::cumberAttack));
+	
 	scheduleUpdate();
 //	m_headImg->m_7->setColor(ccc3(255, 0, 0));
 	return true;
@@ -183,6 +183,7 @@ void Apricot::onPatternEnd()
 
 void Apricot::onStartGame()
 {
+	KSCumberBase::onStartGame();
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }

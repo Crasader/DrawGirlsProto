@@ -47,7 +47,7 @@ bool Banana::init()
 	
 	schedule(schedule_selector(Banana::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(Banana::cumberAttack));
+
 	
 	return true;
 }
@@ -186,6 +186,7 @@ void Banana::onPatternEnd()
 
 void Banana::onStartGame()
 {
+	KSCumberBase::onStartGame();
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }
