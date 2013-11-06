@@ -258,26 +258,20 @@ void ReaverScarab::update(float dt)
 	if(m_step == 1)
 	{
 		m_frame++;
-		if(m_bulletIter != m_bulletReversePath.rend())
+		if(m_bulletReversePath.empty() == false && m_bulletIter != m_bulletReversePath.rend())
 		{
 			m_parentMissile->setPosition((*m_bulletIter));
-			
+
 			++m_bulletIter;
 		}
 		else
 		{
-//			--m_bulletIter;
-//			if(!(ccp2ip(*m_bulletIter) == m_jackPoint))
-//			{
-//				aStar(m_jackPoint);
-//			}
-//			else
-			{
-				m_step = 2;
-				crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
-			}
+			m_step = 2;
+			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
 		}
+//		aStar(m_jackPoint);
 		
+
 		if(m_frame >= 60*4)
 		{
 			m_step = 2;
@@ -337,12 +331,6 @@ void ReaverScarab::update(float dt)
 
 void ReaverScarab::aStar(IntPoint endPt)
 {
-	//		endPt.x = parseInt(endPt.x);
-	//		endPt.y = parseInt(endPt.y);
-	
-	//		m_parentMissile->setPosition(ccp((int)(m_parentMissile->getPosition().x),
-	//																		 (int)(m_parentMissile->getPosition().y)));
-	
 	chrono::time_point<chrono::system_clock> start, end;
 	chrono::duration<double> elapsed_seconds;
 	start = chrono::system_clock::now();
@@ -352,36 +340,34 @@ void ReaverScarab::aStar(IntPoint endPt)
 	
 	
 	IntPoint startPoint = ccp2ip(m_parentMissile->getPosition());
-	
-//	startPoint = IntPoint(2, 100);
-//	endPoint = IntPoint(4, 104);
-	m_openList.clear();
-	m_closeList.clear();
+
+	m_openList = decltype(m_openList)();
+	m_closeListMap.clear();
+
 	m_bulletReversePath.clear();
-	m_openList[startPoint] = CellInfo(0, 0, 0, lengthToEnd(startPoint));
+	auto ret = CoordAndCellInfo(startPoint.x, startPoint.y, 0, 0, 0, lengthToEnd(startPoint));
+	m_openList.insert(ret);
+//	m_openList[startPoint] = CellInfo(0, 0, 0, lengthToEnd(startPoint));
 	
 	bool foundSolution = false;
 	int counter = 0;
 	
-	
+
 	while(m_openList.size() > 0)
 	{
-//		counter++;
-//		if(counter >= 100)
-//			break;
-//		if(counter >= 6000)
-//			break;
-//		auto minElement = std::min_element(m_openList.begin(), m_openList.end());
-		auto minElement = std::min_element(m_openList.begin(), m_openList.end(),
-																			 [&](const std::pair<IntPoint, CellInfo>& a, const std::pair<IntPoint, CellInfo>& b)->bool
-																			 {
-																				 return a.second.g + a.second.h < b.second.g + b.second.h;
-																			 });
-		IntPoint fminIndex = minElement->first;
-		CellInfo fminElement = minElement->second;
+		counter++;
+		if(counter >= 1000)
+			break;
+		auto minElement = *m_openList.begin();
 		
-		m_closeList[fminIndex] = fminElement;
-		m_openList.erase(fminIndex);
+		
+		IntPoint fminIndex = IntPoint(minElement.x, minElement.y);
+		CellInfo fminElement = CellInfo(minElement.dx, minElement.dy, minElement.g, minElement.h);
+		
+		m_closeListMap[fminIndex] = fminElement;
+
+		m_openList.erase(m_openList.begin());
+//		m_openList.erase(fminIndex);
 		
 //		CCLog("%d %d -> %d %d", fminIndex.x, fminIndex.y, endPoint.x, endPoint.y);
 		if(fminIndex == endPt)
@@ -422,20 +408,22 @@ void ReaverScarab::aStar(IntPoint endPt)
 	end = chrono::system_clock::now();
 	chrono::duration<double> elapsed_seconds1 = end-start;
 	KS::KSLog("process step 1 / time : %, %", elapsed_seconds1.count(), counter);
-	
-	IntPoint coordNearEndPoint;
-	int nearDistance = INT_MAX;
-	for(auto closeElement : m_closeList)
 
+	
+	IntPoint coordNearEndPoint = m_jackPoint;
+	int minDistance = INT_MAX;
+	for(auto obj : m_closeListMap)
 	{
-		if(nearDistance > (endPt - closeElement.first).length())
+		if(minDistance > (obj.first - m_jackPoint).length())
 		{
-			nearDistance = ((endPt - closeElement.first).length());
-			coordNearEndPoint = closeElement.first;
+			minDistance = (obj.first - m_jackPoint).length();
+			coordNearEndPoint = obj.first;
 		}
 	}
 	
-	if(m_closeList.find(coordNearEndPoint) != m_closeList.end())
+	
+	
+	if(m_closeListMap.find(coordNearEndPoint) != m_closeListMap.end())
 	{
 		IntPoint currentPoint = coordNearEndPoint;
 		IntPoint beforePoint = coordNearEndPoint;
@@ -443,32 +431,28 @@ void ReaverScarab::aStar(IntPoint endPt)
 		{
 			IntPoint coord = currentPoint;
 			m_bulletReversePath.push_back(ip2ccp(currentPoint));
-//			m_prevCloseList[currentPoint]; // insert     다음에 한번더 길찾기를 할 때 여기를 온다면 안가게끔 함.
 			beforePoint = currentPoint;
-			currentPoint.x += m_closeList[coord].dx;
-			currentPoint.y += m_closeList[coord].dy;
-			
-//			m_bulletReversePath.push_back(ip2ccp(beforePoint) + ip2ccp(currentPoint - beforePoint) / 4.f);
-//			m_bulletReversePath.push_back(ip2ccp(beforePoint) + ip2ccp(currentPoint - beforePoint) / 4.f * 2.f);
-//			m_bulletReversePath.push_back(ip2ccp(beforePoint) + ip2ccp(currentPoint - beforePoint) / 4.f * 3.f);
+			currentPoint.x += m_closeListMap[coord].dx;
+			currentPoint.y += m_closeListMap[coord].dy;
 		}
-		
-		m_bulletReversePath.push_back(ip2ccp(startPoint));
-//		m_prevCloseList[startPoint]; // insert     다음에 한번더 길찾기를 할 때 여기를 온다면 안가게끔 함.
 		m_bulletIter = m_bulletReversePath.rbegin();
 		while(0);
 	}
-	
+
 //	int t = ;
+#if 0 // 탐색하는 과정 보임.
 	ccColor3B c3 = ccc3(m_well512.GetValue(0, 255),m_well512.GetValue(0, 255),m_well512.GetValue(0, 255));
-	for(auto cl : m_closeList)
+	for(auto cl : m_closeListMap)
 	{
 		CCSprite* rt = CCSprite::create();
 		rt->setTextureRect(CCRectMake(0, 0, 2, 2));
 		rt->setColor(c3);
 		rt->setPosition(ip2ccp(cl.first));
+//		rt->setOpacity(100);
 		addChild(rt);
+		rt->runAction(CCSequence::create(CCDelayTime::create(4.f), CCRemoveSelf::create(), 0));
 	}
+#endif
 	// alert("complete!!");
 }
 
@@ -482,49 +466,54 @@ bool ReaverScarab::processObject(IntPoint pointFrom, IntPoint pointTo, int dista
 	
 	if(!(myGD->getJackPoint() == pointTo))
 	{
-		if(myGD->mapState[pointTo.x][pointTo.y] == mapType::mapOldget ||
+		if(myGD->mapState[pointTo.x][pointTo.y] == mapType::mapOldline ||
 			 myGD->mapState[pointTo.x][pointTo.y] == mapType::mapOutline)
 			return true;
-		if(myGD->mapState[pointTo.x][pointFrom.y] == mapType::mapOldget ||
+		if(myGD->mapState[pointTo.x][pointFrom.y] == mapType::mapOldline ||
 			 myGD->mapState[pointTo.x][pointFrom.y] == mapType::mapOutline )
 			return true;
-		if(myGD->mapState[pointFrom.x][pointTo.y] == mapType::mapOldget ||
+		if(myGD->mapState[pointFrom.x][pointTo.y] == mapType::mapOldline ||
 			 myGD->mapState[pointFrom.x][pointTo.y] == mapType::mapOutline)
 			return true;
 	}
 	
-	
 	bool found = false;
+	auto openedIter = m_openList.find(CoordAndCellInfo(pointTo.x, pointTo.y, 0, 0, 0, 0));
 	
-	auto openedIter = m_openList.find(pointTo);
-	auto closedIter = m_closeList.find(pointTo);
-	
+	auto closedIter = m_closeListMap.find(pointTo);
 	// 닫힌 쪽에 있지 않고 열린 쪽이라면
-	if(openedIter != m_openList.end() && closedIter == m_closeList.end() )
+	if(openedIter != m_openList.end() && closedIter == m_closeListMap.end() )
 	{
-		if(openedIter->second.g > m_closeList[pointFrom].g + distance)
+		m_openList.erase(openedIter);
+		auto openedValue = *openedIter;
+//		auto smart = ProbSelector({1,50}).getResult();
+//		smart = 1;
+		if(openedValue.g > m_closeListMap[pointFrom].g + distance)
 		{
-			openedIter->second.dx = pointFrom.x - openedIter->first.x;
-			openedIter->second.dy = pointFrom.y - openedIter->first.y;
+			openedValue.dx = pointFrom.x - openedValue.x;
+			openedValue.dy = pointFrom.y - openedValue.y;
+			openedValue.g = m_closeListMap[pointFrom].g + distance;
 		}
-		openedIter->second.g = min(openedIter->second.g, m_closeList[pointFrom].g + distance);
+
+		m_openList.insert(openedValue);
 		return true;
 	}
 	
 	// 닫힌쪽도 아니고 열린쪽도 아니면!
-	if(closedIter == m_closeList.end() && openedIter == m_openList.end())
+	if(closedIter == m_closeListMap.end() && openedIter == m_openList.end())
 	{
 		CellInfo pointToObj(0, 0, 0, 0);
 		//		CellInfo pointToObj = {g:0, h:0, dx:0, dy:0};
-		pointToObj.g = m_closeList[pointFrom].g + distance;
+		pointToObj.g = m_closeListMap[pointFrom].g + distance;
 		pointToObj.h = lengthToEnd(pointTo);
 		pointToObj.dx = pointFrom.x - pointTo.x; // 부모 가르키기.
 		pointToObj.dy = pointFrom.y - pointTo.y; // 부모 가르키기.
-		
-		 // 예전에 갔던 곳이면 안가려는 습성 넣음.
-//		if(m_prevCloseList.find(pointTo) != m_prevCloseList.end())
-//			pointToObj.g = 99999999;
-		m_openList[pointTo] = pointToObj;
+		m_insertCount++;
+
+		auto obj = CoordAndCellInfo(pointTo.x, pointTo.y, pointToObj.dx, pointToObj.dy, pointToObj.g, pointToObj.h);
+		obj.order = m_insertCount;
+		m_openList.insert(obj);
+//		m_openList[pointTo] = pointToObj;
 	}
 	return true;
 }

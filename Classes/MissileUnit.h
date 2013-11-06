@@ -20,6 +20,9 @@
 #include "Well512.h"
 #include "ProbSelector.h"
 #include <unordered_map>
+#include <queue>
+#include <functional>
+#include <set>
 
 USING_NS_CC_EXT;
 using namespace cocos2d;
@@ -3150,7 +3153,7 @@ namespace std
 }
 
 
-
+static ProbSelector randomObj = {9, 1};
 class ReaverScarab : public CrashMapObject
 {
 public:
@@ -3201,6 +3204,7 @@ public:
 	
 	void myInit(CCPoint cumberPosition, CCPoint jackPosition)
 	{
+		m_insertCount = 0;
 		m_step = 1;
 		m_jackPoint = ccp2ip(jackPosition);
 		CCLog("init %d %d", m_jackPoint.x, m_jackPoint.y);
@@ -3254,11 +3258,51 @@ protected:
 //	};
 //	std::unordered_map<IntPoint, int> m_test;
 //	std::unordered_map<IntPoint, CellInfo> m_prevCloseList;
-	std::unordered_map<IntPoint, CellInfo> m_closeList;
-	std::unordered_map<IntPoint, CellInfo> m_openList;
+	struct CoordAndCellInfo
+	{
+		int x, y, dx, dy, g, h, order;
+		CoordAndCellInfo(int _x, int _y, int _dx, int _dy, int _g, int _h)
+		: x(_x), y(_y), dx(_dx), dy(_dy), g(_g), h(_h)
+		{
+			order = 0;
+		}
+		CoordAndCellInfo(){
+			order = 0;
+		}
+//		bool operator<(const CoordAndCellInfo& ci) const
+//		{
+//			bool r = false;
+//			if(g+h == ci.g + ci.h)
+//				
+//				r = -order < -ci.order;
+//			else
+//				r = g+h < ci.g + ci.h;
+//			return r;
+//		}
+		
+		bool operator<(const CoordAndCellInfo& ci) const
+		{
+			return g+h - order< ci.g + ci.h - ci.order;
+		}
+		
+//		bool operator<(const CoordAndCellInfo& ci) const
+//		{
+//			return -order < -ci.order;
+//		}
+		bool operator==(const CoordAndCellInfo& ci) const
+		{
+			return x == ci.x && y == ci.y;
+		}
+	};
+	
+	std::unordered_map<IntPoint, CellInfo> m_closeListMap;
+
+	std::multiset<CoordAndCellInfo, less<CoordAndCellInfo> > m_openList;
+
 	
 	std::vector<CCPoint> m_bulletReversePath;
 	decltype(m_bulletReversePath.rbegin()) m_bulletIter;
+	int m_insertCount;
 };
 
 
