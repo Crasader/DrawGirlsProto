@@ -491,6 +491,14 @@ public:
 			return m_aiValue;
 		}
 	}
+	float getAgility()
+	{
+		return m_agility;
+	}
+	void setAgility(float ag)
+	{
+		m_agility = ag;
+	}
 protected:
 	bool m_isStarted;
 	struct BossDie
@@ -513,6 +521,7 @@ protected:
 	float m_startScale, m_minScale, m_maxScale;
 	float m_startSpeed, m_minSpeed, m_maxSpeed;
 //	FromTo<float> m_speed;
+	float m_agility;
 	float m_speed;
 	float m_remainHp;
 	float m_totalHp;

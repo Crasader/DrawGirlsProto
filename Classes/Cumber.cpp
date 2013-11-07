@@ -396,6 +396,7 @@ void CumberParent::createSubCumber(IntPoint s_p)
 			break;
 	}
 	t_SC->settingHp(junior.m_jrHp);
+	t_SC->setAgility(junior.m_jrAgi);
 	t_SC->settingAI(junior.m_aiValue);
 	t_SC->settingScale(junior.m_jrStartScale, junior.m_jrMinScale, junior.m_jrMaxScale);
 	t_SC->settingSpeed(junior.m_jrStartSpeed, junior.m_jrMinSpeed, junior.m_jrMaxSpeed);
@@ -526,6 +527,7 @@ void CumberParent::myInit()
 	int drawMovement = boss["movement"].get("draw", normalMovement).asInt();
 	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
 	
+	float agi = boss.get("agi", 0).asDouble();
 	KSCumberBase* mainCumber;
 	switch(bossType)
 	{
@@ -577,6 +579,7 @@ void CumberParent::myInit()
 			break;
 	}
 	mainCumber->settingHp(hp);
+	mainCumber->setAgility(agi);
 	KS::KSLog("%", boss);
 	mainCumber->settingAI(boss.get("ai", 0).asInt());
 	mainCumber->settingFuryRule();
@@ -651,6 +654,7 @@ void CumberParent::myInit()
 			int drawMovement = boss["movement"]["draw"].asInt();
 			int furyMovement = boss["movement"]["fury"].asInt();
 			int aiValue = boss.get("ai", 0).asInt();
+			float agi = boss.get("agi", 0).asDouble();
 			if(furyMovement == 0)
 			{
 				furyMovement = normalMovement;
@@ -658,7 +662,7 @@ void CumberParent::myInit()
 			//## 여기서 부하몹 분기가 들어감...
 			//## 지금은 그냥 Bear 가 부하임.
 			jrType jt(bossType, minSpeed, startSpeed, maxSpeed, minScale, startScale, maxScale, normalMovement,
-					  drawMovement, furyMovement, hp, aiValue);
+					  drawMovement, furyMovement, hp, aiValue, agi);
 			m_juniors.push_back(jt);
 			
 			KSCumberBase* t_SC;
@@ -688,6 +692,7 @@ void CumberParent::myInit()
 			}
 			
 			t_SC->settingHp(hp);
+			t_SC->setAgility(agi);
 			t_SC->settingAI(aiValue);
 			t_SC->settingScale(startScale, minScale, maxScale);
 			t_SC->settingSpeed(startSpeed, minSpeed, maxSpeed);

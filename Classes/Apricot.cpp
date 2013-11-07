@@ -20,15 +20,15 @@ bool Apricot::init()
 	
 	CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
 	ccNodeLoaderLibrary->registerCCNodeLoader("BossCCB", ApricotLoader::loader());
-
+	
 	cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 	CCNode* p = reader->readNodeGraphFromFile("boss_apricot.ccbi", this);
 	m_headImg = dynamic_cast<BossCCB*>(p);
 	mAnimationManager = reader->getAnimationManager();
 	mAnimationManager->setDelegate(this);
 	reader->release();
-
- 
+	
+	
 	if(m_headImg != NULL) {
 		this->addChild(m_headImg);
 	}
@@ -39,13 +39,13 @@ bool Apricot::init()
 	
 	lastCastNum = m_well512.GetValue(1, 1);
 	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
-
+	
 	
 	schedule(schedule_selector(Apricot::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	
-	scheduleUpdate();
-//	m_headImg->m_7->setColor(ccc3(255, 0, 0));
+	schedule(schedule_selector(ThisClassType::update), 1/20.f);
+	//	m_headImg->m_7->setColor(ccc3(255, 0, 0));
 	return true;
 }
 
@@ -64,14 +64,16 @@ bool Apricot::startDamageReaction(float damage, float angle)
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
 	
+	m_attackCanceled = true;
 	
+	// 방사형으로 돌아가고 있는 중이라면
 	if(m_state == CUMBERSTATENODIRECTION)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 		m_castingCancelCount++;
 	}
-	else if(m_state == CUMBERSTATEMOVING)
+	if(m_state == CUMBERSTATEMOVING)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
 		float rad = deg2Rad(angle);
@@ -94,6 +96,12 @@ bool Apricot::startDamageReaction(float damage, float angle)
 		
 		m_damageData.timer = 0;
 		schedule(schedule_selector(Apricot::damageReaction));
+		
+		if(currentTimelineFooter == "_b")
+		{
+			m_castingCancelCount++;
+		}
+		
 	}
 	else if(m_state == CUMBERSTATEFURY)
 	{
@@ -139,12 +147,16 @@ void Apricot::damageReaction(float)
 	{
 		//		m_headImg->setColor(ccc3(255, 0, 0)); //##
 	}
-	else
+	else if(currentTimelineFooter == "")
 	{
 		//		m_headImg->setColor(ccc3(255, 255, 255));
-		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Apricot::damageReaction));
-		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+		if(m_state != CUMBERSTATEMOVING)
+		{
+			m_state = CUMBERSTATEMOVING;
+			unschedule(schedule_selector(Apricot::damageReaction));
+			mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+		}
+		
 	}
 }
 
@@ -155,18 +167,18 @@ void Apricot::animationNoDirection(float dt)
 	
 	if(m_noDirection.state == 1)
 	{
-//		/// 좀 돌았으면 돌아감.
-//		if(m_noDirection.timer >= 5)
-//		{
-//			m_noDirection.state = 2;
-//			return;
-//		}
+		//		/// 좀 돌았으면 돌아감.
+		//		if(m_noDirection.timer >= 5)
+		//		{
+		//			m_noDirection.state = 2;
+		//			return;
+		//		}
 	}
 	else if(m_noDirection.state == 2)
 	{
 		m_state = CUMBERSTATEMOVING;
 		unschedule(schedule_selector(Apricot::animationNoDirection));
-//		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
+		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
 	}
 }
 
@@ -307,7 +319,7 @@ void Apricot::furyModeScheduler(float dt)
 }
 void Apricot::furyModeOff()
 {
-//	myGD->communication("EP_stopCrashAction");
+	//	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects", false);
 }
 

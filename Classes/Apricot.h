@@ -89,11 +89,17 @@ public:
 public:
 	virtual void runTimeline(Json::Value patternInfo)
 	{
-		std::string timeline = patternInfo["pattern"].asString();
-		m_atype = patternInfo["atype"].asString();
-		currentTimeline = timeline;
-		currentTimelineFooter = "_b";
-		mAnimationManager->runAnimationsForSequenceNamed((currentTimeline + currentTimelineFooter).c_str());
+		if(currentTimelineFooter == "") // 아무것도 공격중이 아니면 발싸 !!
+		{
+			std::string timeline = patternInfo["pattern"].asString();
+			m_atype = patternInfo.get("atype", "special").asString();
+			m_repeatNumber = patternInfo.get("repeat", 1).asInt();
+			m_attackCanceled = false;
+			currentTimeline = timeline;
+			currentTimelineFooter = "_b";
+			mAnimationManager->runAnimationsForSequenceNamed((currentTimeline + currentTimelineFooter).c_str());
+		}
+		
 	}
 	virtual void completedAnimationSequenceNamed(const char *name_)
 	{
@@ -101,7 +107,10 @@ public:
 		if(name.size() < 2)
 			return;
 		char lastChar = name[name.size() - 1];
+		char lastPrevChar = name[name.size() - 2];
 		std::string tl(name.begin(), name.end() - 2);
+		if(lastPrevChar != '_')
+			return;
 		if(lastChar == 'b')
 		{
 			// 캔슬이 되었는지의 여부를 알아야 됨.
@@ -114,8 +123,6 @@ public:
 			else if(m_atype == "special")
 			{
 				AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
-				
-				
 			}
 			else // normal
 			{
@@ -123,7 +130,7 @@ public:
 
 			}
 																				
-			if(0) // 맞아서 캔슬이 되었다면
+			if(m_attackCanceled) // 맞아서 캔슬이 되었다면
 			{
 				currentTimelineFooter = "_e";
 				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
@@ -138,22 +145,32 @@ public:
 		{
 			// 반복을 시킬 건지 검사하고 캔슬이 되었다면 캔슬 동작을 작동시킴.
 			// 캔슬이면 속성을 해제함.
-			if(0) // 캔슬
+			if(m_attackCanceled) // 캔슬
 			{
 				currentTimelineFooter = "_e";
 				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
 			}
 			else
 			{
-				currentTimelineFooter = "_e";
-				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+				m_repeatNumber--;
+				if(m_repeatNumber > 0)
+				{
+					currentTimelineFooter = "_m";
+					mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+				}
+				else
+				{
+					currentTimelineFooter = "_e";
+					mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+				}
 			}
 		}
 		else if(lastChar == 'e')
 		{
 			currentTimelineFooter = "";
-			stopAnimationNoDirection();
+			m_state = CUMBERSTATEMOVING;
 			mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+			myGD->communication("MS_resetRects", false);
 		}
 	}
 	Apricot() : RADIUS(15.f)
@@ -231,7 +248,8 @@ public:
 		}
 		else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 		{
-			startAnimationNoDirection();
+			m_state = CUMBERSTATESTOP;
+//			startAnimationNoDirection();
 		}
 		else
 		{
@@ -320,13 +338,15 @@ protected:
 	std::string m_atype;
 	std::string currentTimeline;
 	std::string currentTimelineFooter; // _b _m _e 같은것들.
-	
+	bool m_attackCanceled;
+	int m_repeatNumber;
 	bool isGameover;
 	int lastCastNum;
 	//	CCSprite* m_headImg;
 	BossCCB* m_headImg;
 	void update(float dt)
 	{
+		
 		CCNode* endP = myGD->getCommunicationNode("Main_gameNodePointer");
 		auto function = [&](CCNode* node)->CCAffineTransform
 		{
@@ -342,11 +362,33 @@ protected:
 		{
 			
 			CCPoint ret = CCPointApplyAffineTransform(i->getPosition(), function(i));
-			if(currentTimelineFooter == "_m" && m_atype == "crash")
+			if(currentTimelineFooter == "_m")
 			{
-				crashMapForPosition(ret);
+				if(m_atype == "crash")
+				{
+					crashMapForPosition(ret);
+				}
+				else if(m_atype == "normal")
+				{
+					IntPoint bulletPoint = ccp2ip(ret);
+					IntPoint jackPoint = myGD->getJackPoint();
+					if( bulletPoint.isInnerMap() &&
+						 myGD->mapState[bulletPoint.x][bulletPoint.y] == mapType::mapNewline )
+					{
+						myGD->communication("PM_addPathBreaking", bulletPoint);
+					}
+				}
+				else if(m_atype == "special")
+				{
+					IntPoint bulletPoint = ccp2ip(ret);
+					IntPoint jackPoint = myGD->getJackPoint();
+					if( (bulletPoint - jackPoint).length() <= 2)
+					{
+						myGD->communication("CP_jackCrashDie");
+						myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+					}
+				}
 			}
-			
 		}
 		
 	}
