@@ -1264,30 +1264,30 @@ private:
 //		unschedule(schedule_selector(FallMeteor::fall));
 //		(target_removeEffect->*delegate_removeEffect)();
 		AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
-		IntPoint rightUpPoint = IntPoint((meteor->getPositionX()-1)/pixelSize+1,(meteor->getPositionY()-1)/pixelSize+1); // right up
-		IntPoint leftDownPoint = IntPoint(rightUpPoint.x-mSize.width,rightUpPoint.y-mSize.height);		// left down point
-		
-		IntSize size = IntSize(rightUpPoint.x - leftDownPoint.x + 1, rightUpPoint.y - leftDownPoint.y + 1); // size
-		
-		for(int i=0;i<11;i++)
-		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
-		}
-		for(int i=0;i<7;i++)
-		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
-		}
-		crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
-		
-		for(int i=0;i<11;i++)
-		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
-		}
-		for(int i=0;i<7;i++)
-		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
-		}
-		crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
+//		IntPoint rightUpPoint = IntPoint((meteor->getPositionX()-1)/pixelSize+1,(meteor->getPositionY()-1)/pixelSize+1); // right up
+//		IntPoint leftDownPoint = IntPoint(rightUpPoint.x-mSize.width,rightUpPoint.y-mSize.height);		// left down point
+//		
+//		IntSize size = IntSize(rightUpPoint.x - leftDownPoint.x + 1, rightUpPoint.y - leftDownPoint.y + 1); // size
+//		
+//		for(int i=0;i<11;i++)
+//		{
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
+//		}
+//		for(int i=0;i<7;i++)
+//		{
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
+//		}
+//		crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
+//		
+//		for(int i=0;i<11;i++)
+//		{
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
+//		}
+//		for(int i=0;i<7;i++)
+//		{
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
+//		}
+//		crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
 		
 		stopFall();
 //		removeEffect();
@@ -1298,43 +1298,38 @@ private:
 		myGD->communication("Main_showLineDiePosition", t_p);
 //		unschedule(schedule_selector(FallMeteor::fall));
 		AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
-		IntPoint rightUpPoint = IntPoint((meteor->getPositionX()-1)/pixelSize+1,(meteor->getPositionY()-1)/pixelSize+1); // right up
-		IntPoint leftDownPoint = IntPoint(rightUpPoint.x-mSize.width,rightUpPoint.y-mSize.height);		// left down point
-		
-		IntSize size = IntSize(rightUpPoint.x - leftDownPoint.x + 1, rightUpPoint.y - leftDownPoint.y + 1); // size
-		
-		for(int i=0;i<11;i++)
-		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
-		}
-		for(int i=0;i<7;i++)
-		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
-		}
-		crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
-		
-		for(int i=0;i<11;i++)
-		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
-		}
-		for(int i=0;i<7;i++)
-		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
-		}
-		crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
+//		IntPoint rightUpPoint = IntPoint((meteor->getPositionX()-1)/pixelSize+1,(meteor->getPositionY()-1)/pixelSize+1); // right up
+//		IntPoint leftDownPoint = IntPoint(rightUpPoint.x-mSize.width,rightUpPoint.y-mSize.height);		// left down point
+//		
+//		IntSize size = IntSize(rightUpPoint.x - leftDownPoint.x + 1, rightUpPoint.y - leftDownPoint.y + 1); // size
+//		
+//		for(int i=0;i<11;i++)
+//		{
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
+//		}
+//		for(int i=0;i<7;i++)
+//		{
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
+//		}
+//		crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
+//		
+//		for(int i=0;i<11;i++)
+//		{
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
+//		}
+//		for(int i=0;i<7;i++)
+//		{
+//			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
+//		}
+//		crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
 		
 		stopFall();
 //		(target_removeEffect->*delegate_removeEffect)();
 //		removeEffect();
 	}
 	
-
-	void stopFall()
+	void finalCrash()
 	{
-		unschedule(schedule_selector(FallMeteor::fall));
-		initParticle();
-		meteor->removeFromParentAndCleanup(true);
-		
 		IntPoint mapPoint = IntPoint(round((fp.x-1)/pixelSize+1),round((fp.y-1)/pixelSize+1));
 		
 		for(int i=-20;i<=20;i++)
@@ -1357,6 +1352,15 @@ private:
 				crashMapForIntPoint(IntPoint(mapPoint.x+i, mapPoint.y+j));
 			}
 		}
+	}
+
+	void stopFall()
+	{
+		unschedule(schedule_selector(FallMeteor::fall));
+		initParticle();
+		meteor->removeFromParentAndCleanup(true);
+		
+		//finalCrash();
 		
 		CCDelayTime* t_delay = CCDelayTime::create(0.5);
 		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(FallMeteor::selfRemove));
