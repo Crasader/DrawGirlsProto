@@ -8,6 +8,7 @@
 //#include "CumberEmotion.h"
 #include "FromTo.h"
 #include "cocos-ext.h"
+
 using namespace cocos2d::extension;
 
 
@@ -62,27 +63,97 @@ public:
 public:
 	vector<CCSprite*> m_s;
 };
-/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Apricot : public KSCumberBase, public CCBAnimationManagerDelegate
+
+class KSCumberCCBPieceBase : public KSCumberBase, public CCBAnimationManagerDelegate
 {
 public:
+	virtual void runTimeline(Json::Value patternInfo) = 0;
+};
+/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
+class Apricot : public KSCumberCCBPieceBase, public CCBSelectorResolver
+{
+public:
+	virtual SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, const char* pSelectorName){
+		CCLog("%s", pSelectorName);
+		return NULL;
+	}
+	virtual SEL_CallFuncN onResolveCCBCCCallFuncSelector(CCObject * pTarget, const char* pSelectorName) {
+		CCLog("%s", pSelectorName);
+		return NULL;
+	}
+	virtual SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, const char* pSelectorName)
+	{
+		CCLog("%s", pSelectorName);
+		return NULL;
+	}
+public:
+	virtual void runTimeline(Json::Value patternInfo)
+	{
+		std::string timeline = patternInfo["pattern"].asString();
+		m_atype = patternInfo["atype"].asString();
+		currentTimeline = timeline;
+		currentTimelineFooter = "_b";
+		mAnimationManager->runAnimationsForSequenceNamed((currentTimeline + currentTimelineFooter).c_str());
+	}
 	virtual void completedAnimationSequenceNamed(const char *name_)
 	{
 		string name = name_;
-		if(name == "attack_b")
+		if(name.size() < 2)
+			return;
+		char lastChar = name[name.size() - 1];
+		std::string tl(name.begin(), name.end() - 2);
+		if(lastChar == 'b')
 		{
 			// 캔슬이 되었는지의 여부를 알아야 됨.
 			// middle 액션을 하기전에 속성을 설정함.
 			
+			if(m_atype == "crash")
+			{
+				AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
+			}
+			else if(m_atype == "special")
+			{
+				AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
+				
+				
+			}
+			else // normal
+			{
+				AudioEngine::sharedInstance()->stopEffect("sound_attackpattern_base.mp3");
+
+			}
+																				
+			if(0) // 맞아서 캔슬이 되었다면
+			{
+				currentTimelineFooter = "_e";
+				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+			}
+			else
+			{
+				currentTimelineFooter = "_m";
+				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+			}
 		}
-		else if(name == "attack_m")
+		else if(lastChar == 'm')
 		{
 			// 반복을 시킬 건지 검사하고 캔슬이 되었다면 캔슬 동작을 작동시킴.
 			// 캔슬이면 속성을 해제함.
+			if(0) // 캔슬
+			{
+				currentTimelineFooter = "_e";
+				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+			}
+			else
+			{
+				currentTimelineFooter = "_e";
+				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+			}
 		}
-		else if(name == "attack_e")
+		else if(lastChar == 'e')
 		{
-			// 우흥~
+			currentTimelineFooter = "";
+			stopAnimationNoDirection();
+			mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 		}
 	}
 	Apricot() : RADIUS(15.f)
@@ -147,22 +218,27 @@ public:
 //		mEmotion = NULL;
 //	}
 	bool startDamageReaction(float damage, float angle);
-	virtual void attackBehavior(Json::Value pattern)
+	virtual void attackBehavior(Json::Value _pattern)
 	{
-		if(pattern["pattern"].asString() == "109")
+		std::string pattern = _pattern["pattern"].asString();
+		if(pattern == "109")
 		{
 			m_state = CUMBERSTATESTOP;
 		}
-		else if( pattern["pattern"].asString() == "1007")
+		else if( pattern == "1007")
 		{
 			m_state = CUMBERSTATESTOP;
+		}
+		else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
+		{
+			startAnimationNoDirection();
 		}
 		else
 		{
 			lastCastNum = m_well512.GetValue(1, 1);
 			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 
-			std::string target = pattern.get("target", "no").asString();
+			std::string target = _pattern.get("target", "no").asString();
 			if( target == "yes") // 타게팅이라면 조준하라
 				startAnimationDirection();
 			else if(target == "no") // 타게팅이 아니면 돌아라
@@ -241,8 +317,9 @@ public:
 		return RADIUS;
 	}
 protected:
-
-
+	std::string m_atype;
+	std::string currentTimeline;
+	std::string currentTimelineFooter; // _b _m _e 같은것들.
 	
 	bool isGameover;
 	int lastCastNum;
@@ -265,7 +342,11 @@ protected:
 		{
 			
 			CCPoint ret = CCPointApplyAffineTransform(i->getPosition(), function(i));
-			crashMapForPosition(ret);
+			if(currentTimelineFooter == "_m" && m_atype == "crash")
+			{
+				crashMapForPosition(ret);
+			}
+			
 		}
 		
 	}
