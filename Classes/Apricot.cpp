@@ -7,36 +7,31 @@
 #include "ProbSelector.h"
 //#include "CumberEmotion.h"
 #include <algorithm>
-
+#include <cocos-ext.h>
 
 
 bool Apricot::init()
 {
 	KSCumberBase::init();
 	
+	
+	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
 	CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
 	ccNodeLoaderLibrary->registerCCNodeLoader("BossCCB", ApricotLoader::loader());
-	
-	
-	cocos2d::extension::CCBReader * reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-	
-	CCNode * node = reader->readNodeGraphFromFile("boss_apricot.ccbi", this);
-	
-	m_headImg = dynamic_cast<BossCCB*>(node);
-	
-//	std::string ccbiName = "img_ccb_test/boss_apricot_1.ccbi";
-//    CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-//    CCBReader* reader = new CCBReader(nodeLoader);
-//	CCNode* p = reader->readNodeGraphFromFile(ccbiName.c_str(),this);
-//	m_headImg = dynamic_cast<CCSprite*>(p);
-	
-    mAnimationManager = reader->getAnimationManager();
-    reader->release();
-    if(m_headImg != NULL) {
-        this->addChild(m_headImg);
-    }
+
+	cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+	CCNode* p = reader->readNodeGraphFromFile("boss_apricot.ccbi", this);
+	m_headImg = dynamic_cast<BossCCB*>(p);
+	mAnimationManager = reader->getAnimationManager();
+	mAnimationManager->setDelegate(this);
+	reader->release();
+
+ 
+	if(m_headImg != NULL) {
+		this->addChild(m_headImg);
+	}
 	
 	//	m_headImg = CCSprite::create("chapter10_boss.png");
 	//	addChild(m_headImg);
