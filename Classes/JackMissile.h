@@ -48,7 +48,7 @@ protected:
 	CCNode* targetNode;
 	
 	float damage;
-	int dex;
+	float dex;
 	MyElemental my_type;
 };
 
@@ -680,26 +680,60 @@ private:
 			{
 				unschedule(schedule_selector(JM_BasicMissile::moving));
 				
-				ccColor4F myColor;
-				if(my_type == kMyElementalNonElemental)			myColor = ccc4f(1.f, 1.f, 1.f, 1.f);
-				else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
-				else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
-				else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
+				float target_agi = ((KSCumberBase*)targetNode)->getAgility();
 				
-				myGD->communication("MP_explosion", particlePosition, myColor);
-				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
-				myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
+				float agi_rate = (target_agi-dex)/target_agi;
+				agi_rate = agi_rate < 0 ? 0 : agi_rate;
 				
-				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
-				combo_cnt++;
+				agi_rate = agi_rate/100.f*85.f + 0.1f;
+				agi_rate *= 100.f;
 				
-				int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-				myGD->communication("UI_addScore", addScore);
-				myGD->communication("UI_setComboCnt", combo_cnt);
-				
-				myGD->communication("Main_startShake");
-				
-				removeFromParentAndCleanup(true);
+				if(rand()%100 > agi_rate)
+				{
+					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0));
+					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
+					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
+					
+					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
+					combo_cnt++;
+					
+					int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+					myGD->communication("UI_addScore", addScore);
+					myGD->communication("UI_setComboCnt", combo_cnt);
+					
+					myGD->communication("Main_startShake");
+					
+					removeFromParentAndCleanup(true);
+				}
+				else
+				{
+					myGD->communication("Main_showMissMissile", particlePosition);
+					
+					int random_angle = directionAngle + rand()%21 - 10;
+					
+					if(is_spin)				mainImg->setRotation(mainImg->getRotation()-6);
+					else					mainImg->setRotation((mainImg->getRotation()-(random_angle-90))/2.f);
+					
+					CCPoint miss_position;
+					miss_position.x = 1.f;
+					miss_position.y = tanf(random_angle/180.f*M_PI);
+					
+					if(random_angle >= 90 && random_angle <= 270)
+						miss_position = ccpMult(miss_position, -1.f);
+					
+					miss_position = ccpMult(miss_position, 10.f*myJM_SPEED/sqrtf(powf(miss_position.x, 2.f) + powf(miss_position.y, 2.f)));
+					
+					CCMoveBy* move2 = CCMoveBy::create(10.f/60.f, miss_position);
+					mainImg->runAction(move2);
+					
+					CCMoveBy* move1 = CCMoveBy::create(10.f/60.f, miss_position);
+					CCCallFunc* call1 = CCCallFunc::create(this, callfunc_selector(JM_BasicMissile::removeFromParent));
+					CCSequence* t_seq = CCSequence::createWithTwoActions(move1, call1);
+					
+					particle->runAction(t_seq);
+					
+					
+				}
 			}
 		}
 		else
@@ -711,8 +745,6 @@ private:
 	
 	void myInit(CCNode* t_target, int jm_type, float damage_per, CCPoint s_p)
 	{
-		
-		
 		setStartPosition(s_p);
 		realInit(t_target, jm_type, damage_per);
 	}

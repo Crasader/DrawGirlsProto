@@ -513,6 +513,19 @@ private:
 		game_node->addChild(t_tsu, goldZorder);
 	}
 	
+	void showMissMissile(CCPoint t_position)
+	{
+		CCLabelTTF* miss_label = CCLabelTTF::create("MISS", mySGD->getFont().c_str(), 50);
+		miss_label->setPosition(t_position);
+		game_node->addChild(miss_label, goldZorder);
+		
+		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+		CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCLabelTTF::removeFromParent));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+		
+		miss_label->runAction(t_seq);
+	}
+	
 	bool is_line_die;
 	
 	void showLineDiePosition(IntPoint t_p)
