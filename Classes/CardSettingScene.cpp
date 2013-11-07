@@ -72,7 +72,7 @@ bool CardSettingScene::init()
 	addChild(my_clv, kCSS_Z_content);
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	if(selected_card_number > 0)
+	if(selected_card_number > 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) > 0)
 	{
 		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
 		int card_level = NSDS_GI(kSDS_CI_int1_rank_i, selected_card_number);
@@ -81,6 +81,7 @@ bool CardSettingScene::init()
 	}
 	else
 	{
+		myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
 		selected_card_img = NULL;
 		selected_img = NULL;
 		star_parent = NULL;

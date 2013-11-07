@@ -80,7 +80,7 @@ bool StageSettingScene::init()
 	addChild(stage_label, kSSS_Z_content);
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 1, 2, 3 / 11, 12, 13 / 14, ...
-	if(selected_card_number > 0)
+	if(selected_card_number > 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) > 0)
 	{
 		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
 		int card_level = NSDS_GI(kSDS_CI_int1_rank_i, selected_card_number);
@@ -98,6 +98,10 @@ bool StageSettingScene::init()
 			card_ani->setPosition(mySD->getAnimationPosition(card_stage));
 			card_img->addChild(card_ani);
 		}
+	}
+	else
+	{
+		myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
 	}
 	
 	mySD->setCardOptions(card_options, selected_card_number);
@@ -356,9 +360,9 @@ void StageSettingScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSSS_MT_challenge)
 	{
-		is_menu_enable = false;
-		ChallengePopup* t_cp = ChallengePopup::create(this, callfunc_selector(StageSettingScene::popupClose));
-		addChild(t_cp, kSSS_Z_popup);
+		is_menu_enable = true;
+//		ChallengePopup* t_cp = ChallengePopup::create(this, callfunc_selector(StageSettingScene::popupClose));
+//		addChild(t_cp, kSSS_Z_popup);
 	}
 	else if(tag == kSSS_MT_gacha)
 	{

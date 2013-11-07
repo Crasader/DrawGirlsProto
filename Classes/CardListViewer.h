@@ -16,6 +16,7 @@
 #include "SilhouetteData.h"
 #include "StarGoldData.h"
 #include "GraySprite.h"
+#include "ServerDataSave.h"
 
 USING_NS_CC;
 using namespace std;
@@ -60,7 +61,7 @@ public:
 	void viewCheck()
 	{
 		CCPoint parent_position = getParent()->getPosition();
-		CCRect tt_rect = CCRectMake(parent_position.x+my_position.x-my_size.width/2.f, parent_position.y+my_position.y-my_size.height/2.f, my_size.width, my_size.height);
+		CCRect tt_rect = CCRectMake(parent_position.x+my_position.x-my_size.width/2.f - 2, parent_position.y+my_position.y-my_size.height/2.f - 2, my_size.width + 4, my_size.height + 4);
 		if(parent_view_rect.intersectsRect(tt_rect))
 		{
 			if(!is_setted)
@@ -117,15 +118,14 @@ private:
 //				else					t_ani->setGray(true);
 //			}
 			
-			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_stage*10+card_level-1),
+			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)),
 																					 mySD->getCardDurability(card_stage, card_level))->getCString(),
-														  mySGD->getFont().c_str(), 50);
+														  mySGD->getFont().c_str(), 10);
 			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
-			t_durability->setScale(0.15f);
 			t_durability->setColor(ccBLACK);
 			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
 			t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-			t_durability->setPosition(ccp(70,30));
+			t_durability->setPosition(ccp(t_card->getContentSize().width/2.f, 10));
 			t_card->addChild(t_durability);
 			
 			CCMenuItem* t_card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", target_menu, delegate_menu);
