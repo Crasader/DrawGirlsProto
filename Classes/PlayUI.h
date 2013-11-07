@@ -48,41 +48,54 @@ public:
 	
 	void changeCombo(int combo)
 	{
-		unschedule(schedule_selector(ComboView::hiding));
+//		unschedule(schedule_selector(ComboView::hiding));
 		setOpacity(255);
 		combo_label->setString(CCString::createWithFormat("%d", combo)->getCString());
-		combo_label->setOpacity(255);
+//		combo_label->setOpacity(255);
 		
 		startAnimation();
+	}
+	
+	void setPercentage(float t_percent)
+	{
+		combo_timer->setPercentage(t_percent*100);
 	}
 	
 private:
 	int hide_frame;
 	CCLabelBMFont* combo_label;
+	CCProgressTimer* combo_timer;
 	
-	void startHide()
+//	void startHide()
+//	{
+//		hide_frame = 51;
+//		schedule(schedule_selector(ComboView::hiding));
+//	}
+//	void hiding()
+//	{
+//		hide_frame--;
+//		
+//		setOpacity(hide_frame*5);
+//		combo_label->setOpacity(hide_frame*5);
+//		
+//		if(hide_frame <= 0)
+//			stopHide();
+//	}
+//	void stopHide()
+//	{
+//		unschedule(schedule_selector(ComboView::hiding));
+//		removeFromParent();
+//	}
+	
+	void timerVisibleOn()
 	{
-		hide_frame = 51;
-		schedule(schedule_selector(ComboView::hiding));
-	}
-	void hiding()
-	{
-		hide_frame--;
-		
-		setOpacity(hide_frame*5);
-		combo_label->setOpacity(hide_frame*5);
-		
-		if(hide_frame <= 0)
-			stopHide();
-	}
-	void stopHide()
-	{
-		unschedule(schedule_selector(ComboView::hiding));
-		removeFromParent();
+		combo_timer->setVisible(true);
+		setOpacity(0);
 	}
 	
 	void startAnimation()
 	{
+		combo_timer->setVisible(false);
 		CCTexture2D* t_texture = getTexture();
 		
 		CCAnimation* t_animation = CCAnimation::create();
@@ -95,7 +108,7 @@ private:
 		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(240, 120, 120, 120));
 		
 		CCAnimate* t_animate = CCAnimate::create(t_animation);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ComboView::startHide));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ComboView::timerVisibleOn));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_animate, t_call);
 		
 		runAction(t_seq);
@@ -107,6 +120,16 @@ private:
 		initWithTexture(t_texture, CCRectMake(0, 0, 120, 120));
 		
 		setPosition(ccp(65,myDSH->ui_top-120));
+		
+		combo_timer = CCProgressTimer::create(CCSprite::createWithTexture(t_texture, CCRectMake(240, 120, 120, 120)));
+		combo_timer->getSprite()->setColor(ccBLUE);
+		combo_timer->setType(kCCProgressTimerTypeRadial);
+		combo_timer->setPercentage(100);
+		combo_timer->setReverseDirection(true);
+		combo_timer->setReverseProgress(true);
+		combo_timer->setVisible(false);
+		combo_timer->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
+		addChild(combo_timer);
 		
 		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "gamecombo.fnt");
 		combo_label->setPosition(ccp(60,60));
@@ -137,67 +160,71 @@ public:
 		else
 		{
 			ComboView* t_cv = ComboView::create(t_combo);
-			addChild(t_cv);
+			t_cv->setScale(1.f/1.5f);
+			addChild(t_cv,0,1);// 1 : ComboView
 		}
 		
+		keeping_frame = 600;
 		if(!is_keeping)
 			startKeep();
+	}
+	
+	void stopKeep()
+	{
+		unschedule(schedule_selector(ComboParent::keeping));
+		removeChildByTag(1);
+		myGD->communication("UI_setComboCnt", 0);
+		is_keeping = false;
 	}
 	
 private:
 	
 	int keeping_frame;
 	bool is_keeping;
-	bool is_holding;
-	int hold_frame;
+//	bool is_holding;
+//	int hold_frame;
 	
 	void startKeep()
 	{
 		is_keeping = true;
-		keeping_frame = 300;
 		schedule(schedule_selector(ComboParent::keeping));
 	}
 	void keeping()
 	{
-		if(myGD->getJackState() == jackState::jackStateDrawing)
-		{
-			if(!is_holding)
-			{
-				is_holding = true;
-				hold_frame = 1;
-			}
-			else
-			{
-				hold_frame++;
-			}
-		}
-		else
-		{
-			if(is_holding)
-			{
-				is_holding = false;
-				keeping_frame -= hold_frame;
-			}
+//		if(myGD->getJackState() == jackState::jackStateDrawing)
+//		{
+//			if(!is_holding)
+//			{
+//				is_holding = true;
+//				hold_frame = 1;
+//			}
+//			else
+//			{
+//				hold_frame++;
+//			}
+//		}
+//		else
+//		{
+//			if(is_holding)
+//			{
+//				is_holding = false;
+//				keeping_frame -= hold_frame;
+//			}
 			
 			keeping_frame--;
+			((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/600.f);
 			
 			if(keeping_frame <= 0)
 			{
-				myGD->communication("UI_setComboCnt", 0);
 				stopKeep();
 			}
-		}
-	}
-	void stopKeep()
-	{
-		unschedule(schedule_selector(ComboParent::keeping));
-		is_keeping = false;
+//		}
 	}
 	
 	void myInit()
 	{
 		is_keeping = false;
-		is_holding = false;
+//		is_holding = false;
 	}
 };
 
@@ -690,6 +717,42 @@ private:
 			addChild(backImg, kZorderGetPercentage_backImg);
 			startFadeOut();
 		}
+	}
+};
+
+class TakeSpeedUp : public CCSprite
+{
+public:
+	static TakeSpeedUp* create(int t_step)
+	{
+		TakeSpeedUp* t_g = new TakeSpeedUp();
+		t_g->myInit(t_step);
+		t_g->autorelease();
+		return t_g;
+	}
+	
+private:
+	CCSprite* backImg;
+	
+	void startFadeOut()
+	{
+		CCFadeOut* t_fadeout1 = CCFadeOut::create(1.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TakeSpeedUp::selfRemove));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fadeout1, t_call);
+		
+		runAction(t_seq);
+	}
+	
+	void selfRemove()
+	{
+		removeFromParentAndCleanup(true);
+	}
+	
+	void myInit(int t_step)
+	{
+		initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
+		
+		startFadeOut();
 	}
 };
 
@@ -1994,6 +2057,7 @@ private:
 		myGD->V_I["UI_setComboCnt"] = std::bind(&PlayUI::setComboCnt, this, _1);
 		myGD->I_V["UI_getUseTime"] = std::bind(&PlayUI::getUseTime, this);
 		myGD->V_V["UI_endFever"] = std::bind(&FeverParent::endFever, my_fp);
+		myGD->V_V["UI_stopCombo"] = std::bind(&ComboParent::stopKeep, my_combo);
 		myGD->B_V["UI_isExchanged"] = std::bind(&PlayUI::isExchanged, this);
 	}
 	

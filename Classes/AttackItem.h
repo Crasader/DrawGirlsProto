@@ -232,6 +232,7 @@ private:
 	float damage;
 	float total_damage;
 	float sum_damage;
+	int dex;
 	
 	void alertAction(int t1, int t2)
 	{
@@ -424,7 +425,22 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getJMDamage();
+		
+		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(recent_card_number >= 0)
+		{
+			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
+			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+			
+			damage = damage < 1 ? 1 : damage;
+			dex = dex < 1 ? 1 : dex;
+		}
+		else
+		{
+			damage = 1;
+			dex = 1;
+		}
+		
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*AttackItemBaseUpRate);
 		sum_damage = 0;
 		
@@ -553,6 +569,8 @@ private:
 	float damage;
 	float total_damage;
 	float sum_damage;
+	
+	int dex;
 	
 	void alertAction(int t1, int t2)
 	{
@@ -754,9 +772,23 @@ private:
 	{
 		base_hide_time = AttackItemBaseHideTime;
 		
-		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getJMDamage();
+		
+		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(recent_card_number >= 0)
+		{
+			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
+			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+			
+			damage = damage < 1 ? 1 : damage;
+			dex = dex < 1 ? 1 : dex;
+		}
+		else
+		{
+			damage = 1;
+			dex = 1;
+		}
+		
 		total_damage = damage * (AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
@@ -953,6 +985,8 @@ private:
 	float total_damage;
 	float sum_damage;
 	
+	int dex;
+	
 	void alertAction(int t1, int t2)
 	{
 		
@@ -1063,7 +1097,22 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelLife)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getJMDamage();
+		
+		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(recent_card_number >= 0)
+		{
+			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
+			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+			
+			damage = damage < 1 ? 1 : damage;
+			dex = dex < 1 ? 1 : dex;
+		}
+		else
+		{
+			damage = 1;
+			dex = 1;
+		}
+		
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelLife)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
@@ -1294,6 +1343,8 @@ private:
 	float total_damage;
 	float sum_damage;
 	
+	int dex;
+	
 	void alertAction(int t1, int t2)
 	{
 		
@@ -1408,7 +1459,22 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getJMDamage();
+		
+		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(recent_card_number >= 0)
+		{
+			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
+			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+			
+			damage = damage < 1 ? 1 : damage;
+			dex = dex < 1 ? 1 : dex;
+		}
+		else
+		{
+			damage = 1;
+			dex = 1;
+		}
+		
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
@@ -1599,6 +1665,8 @@ private:
 	float total_damage;
 	float sum_damage;
 	
+	int dex;
+	
 	void alertAction(int t1, int t2)
 	{
 		
@@ -1707,7 +1775,22 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getJMDamage();
+		
+		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(recent_card_number >= 0)
+		{
+			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
+			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+			
+			damage = damage < 1 ? 1 : damage;
+			dex = dex < 1 ? 1 : dex;
+		}
+		else
+		{
+			damage = 1;
+			dex = 1;
+		}
+		
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
@@ -1861,6 +1944,8 @@ private:
 	float total_damage;
 	float sum_damage;
 	
+	int dex;
+	
 	void alertAction(int t1, int t2)
 	{
 		
@@ -1971,7 +2056,22 @@ private:
 		base_hide_time = AttackItemBaseHideTime;
 		
 		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*AttackItemBaseSubValue;
-		damage = MissileDamageData::getJMDamage();
+		
+		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(recent_card_number >= 0)
+		{
+			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
+			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+			
+			damage = damage < 1 ? 1 : damage;
+			dex = dex < 1 ? 1 : dex;
+		}
+		else
+		{
+			damage = 1;
+			dex = 1;
+		}
+		
 		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		

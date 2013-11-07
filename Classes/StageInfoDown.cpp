@@ -125,6 +125,13 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), mySD->getSilType());
 				NSDS_SI(mySD->getSilType(), kSDS_SI_level_int1_card_i, i+1, t_card["no"].asInt());
 				
+				Json::Value t_card_missile = t_card["missile"];
+				NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str());
+				NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt());
+				NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt());
+				
+				NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str());
+				
 				Json::Value t_ability = t_card["ability"];
 				NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), t_ability.size());
 				for(int j=0;j<t_ability.size();j++)

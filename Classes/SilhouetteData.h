@@ -47,6 +47,15 @@ public:
 		}
 	}
 	
+	string getPassiveData()
+	{
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(selected_card_number > 0)
+			return NSDS_GS(kSDS_CI_int1_passive_s, selected_card_number).c_str();
+		else
+			return "{}";
+	}
+	
 	void setAnimationLoop(int t_type)
 	{
 		animation_frame.clear();
@@ -196,22 +205,32 @@ public:
 	{
 		float return_value;
 		
-		if(t_code == kIC_attack)				return_value = 250.f;
-		else if(t_code == kIC_speedUp)			return_value = 250.f;
-		else if(t_code == kIC_addTime)			return_value = 350.f;
-		else if(t_code == kIC_fast)				return_value = 700.f;
-		else if(t_code == kIC_critical)			return_value = 500.f;
-		else if(t_code == kIC_subOneDie)		return_value = 100.f;
-		else if(t_code == kIC_doubleItem)		return_value = 300.f;
-		else if(t_code == kIC_silence)			return_value = 200.f;
-		else if(t_code == kIC_subNothing)		return_value = 200.f;
-		else if(t_code == kIC_longTime)			return_value = 70.f;
-		else if(t_code == kIC_bossLittleEnergy)	return_value = 100.f;
-		else if(t_code == kIC_subSmallSize)		return_value = 70.f;
-		else if(t_code == kIC_smallArea)		return_value = 100.f;
-		else if(t_code == kIC_widePerfect)		return_value = 100.f;
-		else if(t_code == kIC_randomChange)		return_value = 100.f;
-		else									return_value = 0.f;
+		int shop_item_cnt = NSDS_GI(myType, kSDS_SI_shopItemsCnt_i);
+		bool is_found = false;
+		for(int i=0;i<shop_item_cnt && !is_found;i++)
+		{
+			if(t_code == NSDS_GI(myType, kSDS_SI_shopItems_int1_type_i, i))
+			{
+				is_found = true;
+				return_value = NSDS_GI(myType, kSDS_SI_shopItems_int1_price_i, i);
+			}
+		}		
+//		if(t_code == kIC_attack)				return_value = 250.f;
+//		else if(t_code == kIC_speedUp)			return_value = 250.f;
+//		else if(t_code == kIC_addTime)			return_value = 350.f;
+//		else if(t_code == kIC_fast)				return_value = 700.f;
+//		else if(t_code == kIC_critical)			return_value = 500.f;
+//		else if(t_code == kIC_subOneDie)		return_value = 100.f;
+//		else if(t_code == kIC_doubleItem)		return_value = 300.f;
+//		else if(t_code == kIC_silence)			return_value = 200.f;
+//		else if(t_code == kIC_subNothing)		return_value = 200.f;
+//		else if(t_code == kIC_longTime)			return_value = 70.f;
+//		else if(t_code == kIC_bossLittleEnergy)	return_value = 100.f;
+//		else if(t_code == kIC_subSmallSize)		return_value = 70.f;
+//		else if(t_code == kIC_smallArea)		return_value = 100.f;
+//		else if(t_code == kIC_widePerfect)		return_value = 100.f;
+//		else if(t_code == kIC_randomChange)		return_value = 100.f;
+//		else									return_value = 0.f;
 		
 		return return_value;
 	}

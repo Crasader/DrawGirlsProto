@@ -861,6 +861,7 @@ public:
 			}
 			
 			myGD->communication("UI_endFever");
+			myGD->communication("UI_stopCombo");
 			
 //			Well512 t_well512;
 //			myGD->setJackPoint(IntPoint(t_well512.GetValue(mapWidthInnerBegin, mapWidthInnerEnd),t_well512.GetValue(mapHeightInnerBegin, mapHeightInnerEnd)));
@@ -977,6 +978,7 @@ public:
 		{
 			speed_up_value += 0.1f;
 			changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
+			myGD->communication("Main_takeSpeedUpEffect", int(roundf(speed_up_value/0.1f)));
 		}
 	}
 	
@@ -1259,17 +1261,10 @@ private:
 		CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
 		
 		jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-		jackImg->setScale(2.8f);
-		jackImg->setPosition(ccp(-300,100));
+		jackImg->setScale(0.8f);
 		addChild(jackImg, kJackZ_main);
 		
-		CCMoveTo* t_move = CCMoveTo::create(0.5f, CCPointZero);
-		CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.8f);
-		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_move, t_scale);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Jack::endReviveJack));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
-		
-		jackImg->runAction(t_seq);
+		startReviveAnimation(jackImg);
 	}
 	
 	void endGame()
@@ -1603,7 +1598,7 @@ private:
 	void startInnerParticle(CCNode* target_node)
 	{
 		CCParticleSystemQuad* inner_particle = CCParticleSystemQuad::createWithTotalParticles(100);
-		inner_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle5.png"));
+		inner_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle2.png"));
 		inner_particle->setEmissionRate(166.67f);
 		inner_particle->setAngle(90.f);
 		inner_particle->setAngleVar(360.f);
@@ -1615,10 +1610,10 @@ private:
 		inner_particle->setStartColorVar(ccc4f(0.f, 0.28f, 0.57f, 1.f));
 		inner_particle->setEndColor(ccc4f(0.f, 0.f, 0.f, 1.f));
 		inner_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
-		inner_particle->setStartSize(50.f);
-		inner_particle->setStartSizeVar(20.f);
-		inner_particle->setEndSize(20.f);
-		inner_particle->setEndSizeVar(10.f);
+		inner_particle->setStartSize(30.f);
+		inner_particle->setStartSizeVar(15.f);
+		inner_particle->setEndSize(10.f);
+		inner_particle->setEndSizeVar(5.f);
 		inner_particle->setRotatePerSecond(0.f);
 		inner_particle->setRotatePerSecondVar(0.f);
 		inner_particle->setStartRadius(80.f);
@@ -1647,7 +1642,7 @@ private:
 	void startOutterParticle(CCNode* target_node)
 	{
 		CCParticleSystemQuad* outter_particle = CCParticleSystemQuad::createWithTotalParticles(100);
-		outter_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle5.png"));
+		outter_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle2.png"));
 		outter_particle->setEmissionRate(166.67f);
 		outter_particle->setAngle(90.f);
 		outter_particle->setAngleVar(90.f);
@@ -1659,10 +1654,10 @@ private:
 		outter_particle->setStartColorVar(ccc4f(0.f, 0.28f, 0.57f, 1.f));
 		outter_particle->setEndColor(ccc4f(0.f, 0.f, 0.f, 1.f));
 		outter_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
-		outter_particle->setStartSize(20.f);
-		outter_particle->setStartSizeVar(10.f);
-		outter_particle->setEndSize(50.f);
-		outter_particle->setEndSizeVar(20.f);
+		outter_particle->setStartSize(10.f);
+		outter_particle->setStartSizeVar(5.f);
+		outter_particle->setEndSize(30.f);
+		outter_particle->setEndSizeVar(15.f);
 		outter_particle->setGravity(ccp(0.f,300.f));
 		outter_particle->setRadialAccel(0.f);
 		outter_particle->setRadialAccelVar(0.f);
