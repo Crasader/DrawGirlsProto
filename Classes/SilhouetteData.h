@@ -47,6 +47,15 @@ public:
 		}
 	}
 	
+	string getPassiveData()
+	{
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(selected_card_number > 0)
+			return NSDS_GS(kSDS_CI_int1_passive_s, selected_card_number).c_str();
+		else
+			return "{}";
+	}
+	
 	void setAnimationLoop(int t_type)
 	{
 		animation_frame.clear();

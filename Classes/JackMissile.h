@@ -318,7 +318,7 @@ private:
 		element_level = rand()%9 + 1;
 		
 		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		if(recent_card_number >= 0)
+		if(recent_card_number > 0)
 		{
 			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
 			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
@@ -752,7 +752,7 @@ private:
 		particle_string = type_name + ".png";
 		
 		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		if(recent_card_number >= 0)
+		if(recent_card_number > 0)
 		{
 			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
 			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
