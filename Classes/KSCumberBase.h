@@ -172,7 +172,9 @@ public:
 //		for(int i=0; i<number; i++)
 //		{
 //			scheduleOnce(schedule_selector(ThisClassType::bossDieBomb), m_well512.GetFloatValue(0.3f, 1.f));
-//		}	
+//		}
+		
+		this->setVisible(false);
 	}
 	void bossDieBomb(float dt);
 	virtual void cumberImgStartRotating(float gabage){} //## 임시.
