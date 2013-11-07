@@ -861,6 +861,7 @@ public:
 			}
 			
 			myGD->communication("UI_endFever");
+			myGD->communication("UI_stopCombo");
 			
 //			Well512 t_well512;
 //			myGD->setJackPoint(IntPoint(t_well512.GetValue(mapWidthInnerBegin, mapWidthInnerEnd),t_well512.GetValue(mapHeightInnerBegin, mapHeightInnerEnd)));
@@ -977,6 +978,7 @@ public:
 		{
 			speed_up_value += 0.1f;
 			changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
+			myGD->communication("Main_takeSpeedUpEffect", int(roundf(speed_up_value/0.1f)));
 		}
 	}
 	

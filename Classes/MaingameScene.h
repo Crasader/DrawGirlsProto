@@ -503,6 +503,16 @@ private:
 		game_node->addChild(t_gp, goldZorder);
 	}
 	
+	void takeSpeedUpEffect(int t_step)
+	{
+		CCPoint jack_position = myGD->getJackPoint().convertToCCP();
+		
+		TakeSpeedUp* t_tsu = TakeSpeedUp::create(t_step);
+		t_tsu->setScale(1.f/1.5f);
+		t_tsu->setPosition(ccpAdd(jack_position, ccp(20,20)));
+		game_node->addChild(t_tsu, goldZorder);
+	}
+	
 	bool is_line_die;
 	
 	void showLineDiePosition(IntPoint t_p)
