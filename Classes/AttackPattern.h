@@ -2257,7 +2257,6 @@ public:
 		
 		addChild(batchNode);
 		scheduleUpdate();
-		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
@@ -2361,7 +2360,7 @@ public:
 		
 		addChild(batchNode);
 		scheduleUpdate();
-		cb->stopAnimationDirection();
+//		cb->stopAnimationDirection();
 	}
 	virtual void stopMyAction()
 	{
