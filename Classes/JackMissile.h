@@ -14,6 +14,7 @@
 #include "SelectedMapData.h"
 #include "MissileDamageData.h"
 #include "DataStorageHub.h"
+#include "ServerDataSave.h"
 
 #define JM_SPEED 5.f
 #define JM_CHANGE_DIRECTION_VAL	10.f
@@ -47,6 +48,7 @@ protected:
 	CCNode* targetNode;
 	
 	float damage;
+	int dex;
 	MyElemental my_type;
 };
 
@@ -313,20 +315,22 @@ private:
 		else if(my_type == kMyElementalLightning)		type_name = "jm_lightning";
 		else if(my_type == kMyElementalWind)			type_name = "jm_wind";
 		
-//		int selected_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
-		
 		element_level = rand()%9 + 1;
 		
-//		if(selected_type == kMyElementalNonElemental)	element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelEmpty);
-//		else if(selected_type == kMyElementalFire)		element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelFire);
-//		else if(selected_type == kMyElementalLife)		element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelLife);
-//		else if(selected_type == kMyElementalWater)		element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelWater);
-//		else if(selected_type == kMyElementalWind)		element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelWind);
-//		else if(selected_type == kMyElementalLightning)	element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelLightning);
-//		else if(selected_type == kMyElementalPlasma)	element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelPlasma);
-		
-		
-		damage = MissileDamageData::getJMDamage() * damage_per;
+		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(recent_card_number >= 0)
+		{
+			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
+			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+			
+			damage = damage < 1 ? 1 : damage;
+			dex = dex < 1 ? 1 : dex;
+		}
+		else
+		{
+			damage = 1;
+			dex = 1;
+		}
 		
 		load_removing = false;
 		shoot_removing = false;
@@ -720,8 +724,6 @@ private:
 	
 	void myInit(CCNode* t_target, int jm_type, float damage_per)
 	{
-		
-		
 		IntPoint jackPoint = myGD->getJackPoint();
 		setStartPosition(ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1));
 		realInit(t_target, jm_type, damage_per);
@@ -729,13 +731,10 @@ private:
 	
 	void realInit(CCNode* t_target, int jm_type, float damage_per)
 	{
-//		myGD->communication("EP_addJackAttack");
-		
 		targetNode = t_target;
 		particle = new CCParticleSystemQuad();
 		
 		my_type = (MyElemental)jm_type;
-		
 		
 		string type_name;
 		int element_level;
@@ -745,24 +744,28 @@ private:
 		else if(jm_type == kMyElementalWater)			type_name = "jm_water";
 		else if(jm_type == kMyElementalLife)			type_name = "jm_life";
 		
-//		int selected_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
-		
 		element_level = rand()%9 + 1;
-		
-//		if(selected_type == kMyElementalNonElemental)	element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelEmpty);
-//		else if(selected_type == kMyElementalFire)		element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelFire);
-//		else if(selected_type == kMyElementalLife)		element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelLife);
-//		else if(selected_type == kMyElementalWater)		element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelWater);
-//		else if(selected_type == kMyElementalWind)		element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelWind);
-//		else if(selected_type == kMyElementalLightning)	element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelLightning);
-//		else if(selected_type == kMyElementalPlasma)	element_level = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelPlasma);
 		
 		float particle_cnt = 3 + element_level*3;
 		string particle_string;
 		
 		particle_string = type_name + ".png";
 		
-		damage = MissileDamageData::getJMDamage() * damage_per;
+		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(recent_card_number >= 0)
+		{
+			damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
+			dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+			
+			damage = damage < 1 ? 1 : damage;
+			dex = dex < 1 ? 1 : dex;
+		}
+		else
+		{
+			damage = 1;
+			dex = 1;
+		}
+		
 		myJM_SPEED = JM_SPEED * ((rand()%5 - 2)/10.f + 1.f);
 		myJM_CHANGE_DIRECTION_VAL = JM_CHANGE_DIRECTION_VAL;
 		

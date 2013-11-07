@@ -1913,9 +1913,12 @@ void PuzzleMapScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 					
 					if(map_mode_state == kMMS_firstTouchStage || map_mode_state == kMMS_firstTouchDefault)
 					{
-						StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
-						t_sp->touchEnded(touch, pEvent);
-						t_sp->setTouchCancel();
+						if(touched_stage_number != 0)
+						{
+							StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
+							t_sp->touchEnded(touch, pEvent);
+							t_sp->setTouchCancel();
+						}
 					}
 					
 					touched_stage_number = 0;
