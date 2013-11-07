@@ -107,6 +107,10 @@ enum SDS_KEY
 	kSDS_CI_int1_durability_i,
 	kSDS_CI_int1_theme_i,
 	kSDS_CI_int1_stage_i,
+	kSDS_CI_int1_missile_type_s,
+	kSDS_CI_int1_missile_power_i,
+	kSDS_CI_int1_missile_dex_i,
+	kSDS_CI_int1_passive_s,
 	kSDS_CI_int1_abilityCnt_i,
 	kSDS_CI_int1_ability_int2_type_i,
 	kSDS_CI_int1_abilityAttackOptionPower_i,
@@ -528,6 +532,10 @@ private:
 		else if(t_key == kSDS_CI_int1_durability_i)					rv = "%d_durability";
 		else if(t_key == kSDS_CI_int1_theme_i)						rv = "%d_theme";
 		else if(t_key == kSDS_CI_int1_stage_i)						rv = "%d_stage";
+		else if(t_key == kSDS_CI_int1_missile_type_s)				rv = "%d_missile_type";
+		else if(t_key == kSDS_CI_int1_missile_power_i)				rv = "%d_missile_power";
+		else if(t_key == kSDS_CI_int1_missile_dex_i)				rv = "%d_missile_dex";
+		else if(t_key == kSDS_CI_int1_passive_s)					rv = "%d_passive";
 		else if(t_key == kSDS_CI_int1_abilityCnt_i)					rv = "%d_ability_cnt";
 		else if(t_key == kSDS_CI_int1_ability_int2_type_i)			rv = "%d_ability_%d_type";
 		else if(t_key == kSDS_CI_int1_abilityAttackOptionPower_i)	rv = "%d_ability_attack_option_power";

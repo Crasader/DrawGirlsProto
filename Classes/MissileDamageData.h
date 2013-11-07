@@ -20,11 +20,6 @@ using namespace cocos2d;
 class MissileDamageData : public CCObject
 {
 public:
-	static int getJMDamage()
-	{
-		return SDS_GI(kSDF_stageInfo, mySD->getSilType(), "itemOption_attack_power");
-	}
-	
 	static float getCorrelationDamage(float t_damage, int cumber_elemental)
 	{
 		int missile_elemental = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
