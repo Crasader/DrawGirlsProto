@@ -169,6 +169,7 @@ private:
 			}
 		}
 		
+		is_acting = false;
 		if(is_found && (pre_img || next_img))
 		{
 			is_acting = true;
@@ -284,7 +285,10 @@ private:
 			if(n_pbp->isActing())
 				addChild(n_pbp, 2);
 			else
+			{
 				setTag(pathBreakingStateFalse);
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_missileToLine);
+			}
 		}
 	}
 	
