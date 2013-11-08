@@ -515,7 +515,8 @@ private:
 	
 	void showMissMissile(CCPoint t_position)
 	{
-		CCLabelTTF* miss_label = CCLabelTTF::create("MISS", mySGD->getFont().c_str(), 50);
+		CCSprite* miss_label = CCSprite::create("missile_miss.png");
+		miss_label->setScale(1.f/1.5f);
 		miss_label->setPosition(t_position);
 		game_node->addChild(miss_label, goldZorder);
 		

@@ -58,6 +58,8 @@ private:
 	void buySuccessItem(int t_clicked_item_number, int cnt);
 	
 	string convertToItemCodeToItemName(ITEM_CODE t_code);
+	
+	void tempAction(CCObject* sender);
 };
 
 #endif /* defined(__DGproto__StageSettingScene__) */

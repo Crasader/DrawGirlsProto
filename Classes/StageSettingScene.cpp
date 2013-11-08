@@ -176,6 +176,19 @@ bool StageSettingScene::init()
 	start_menu->setPosition(getContentPosition(kSSS_MT_start));
 	addChild(start_menu, kSSS_Z_content);
 	
+	
+	CCSprite* n_temp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+	n_temp->setOpacity(0);
+	CCSprite* s_temp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+	s_temp->setOpacity(0);
+	
+	CCMenuItemSprite* temp_item = CCMenuItemSprite::create(n_temp, s_temp, this, menu_selector(StageSettingScene::tempAction));
+	CCMenu* temp_menu = CCMenu::createWithItem(temp_item);
+	temp_menu->setPosition(ccp(15,305));
+	addChild(temp_menu, kSSS_Z_content);
+	
+	
+	
 	CCSprite* top_case = CCSprite::create("test_ui_top.png");
 	top_case->setAnchorPoint(ccp(0.5f,1.f));
 	top_case->setPosition(ccp(240,320.f));//(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
@@ -199,6 +212,11 @@ bool StageSettingScene::init()
 	addChild(t_screen, 99999);
 	
     return true;
+}
+
+void StageSettingScene::tempAction(CCObject* sender)
+{
+	myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
 }
 
 CCPoint StageSettingScene::getContentPosition(int t_tag)
