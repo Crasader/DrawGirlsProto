@@ -301,6 +301,7 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 		
 		hspConnector::get()->kLoadLocalUser([this](Json::Value r){
 			hspConnector::get()->myKakaoInfo = r;
+			graphdog->setKakaoMemberID(hspConnector::get()->getKakaoID());
 		});
 		
 		delsel.func(obj);

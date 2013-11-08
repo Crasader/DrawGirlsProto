@@ -104,6 +104,9 @@ public:
     //hspmemberno저장
 	void setHSPMemberNo(long long int _hspMemberNo);
 	
+	//kakaomemberno저장
+	void setKakaoMemberID(string _kakaomemberID);
+	
     //graphdog 버전설정 - 평소엔 필요없음
     void setGraphDogVersion(int version);
     
@@ -123,6 +126,7 @@ public:
 	string getDeviceID();
     string getDeviceInfo();
     long long int getHSPMemberNo();
+	string getKakaoMemberID();
 	
     static GraphDog* get()
 	{
@@ -167,6 +171,7 @@ private:
     string appVersion;
 	string deviceInfo;
 	long long int hspMemberNo;
+	string kakaoMemberID;
     CURL* getCURL();
     string getToken();
     string getUdid();

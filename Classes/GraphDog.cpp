@@ -69,6 +69,15 @@ void GraphDog::setHSPMemberNo(long long int _hspMemberNo){
 long long int GraphDog::getHSPMemberNo(){
 	return this->hspMemberNo;
 }
+
+void GraphDog::setKakaoMemberID(string _kakaoID){
+	kakaoMemberID=_kakaoID;
+}
+
+string GraphDog::getKakaoMemberID(){
+	return kakaoMemberID;
+}
+
 void GraphDog::setup(string secretKey,string _appVersion){
   
     
@@ -229,6 +238,8 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 		cmdCollect.push_back(cmd);
 	}
 	jsonTotalCmd["memberNo"]=getHSPMemberNo();
+	jsonTotalCmd["hspMemberNo"]=getHSPMemberNo();
+	jsonTotalCmd["kakaoMemberID"]=getKakaoMemberID();
 	//ostringstream oss2;
 	//oss2 << jsonTotalCmd;
 	cmdQueue.commandStr = GraphDogLib::JsonObjectToString(jsonTotalCmd); //oss2.str();
