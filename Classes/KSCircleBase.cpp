@@ -1,4 +1,4 @@
-#include "Apricot.h"
+#include "KSCircleBase.h"
 #include "GameData.h"
 
 #include "AlertEngine.h"
@@ -10,20 +10,25 @@
 #include <cocos-ext.h>
 
 
-bool Apricot::init()
+bool KSCircleBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();
 	
-	
+	////////////////////////////////////// by hs
+	string ccbiname2 = ccbiName;
+	if(ccbiName.length()<3) {
+		ccbiname2="cherry";
+	}
+	////////////////////////////////////////////
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
 	CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
-	ccNodeLoaderLibrary->registerCCNodeLoader("BossCCB", ApricotLoader::loader());
+	ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
 	
 	cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-	CCNode* p = reader->readNodeGraphFromFile("boss_apricot.ccbi", this);
-	m_headImg = dynamic_cast<BossCCB*>(p);
+	CCNode* p = reader->readNodeGraphFromFile(("boss_" + ccbiname2 + ".ccbi").c_str(), this);
+	m_headImg = dynamic_cast<CircleBossCCB*>(p);
 	mAnimationManager = reader->getAnimationManager();
 	mAnimationManager->setDelegate(this);
 	reader->release();
@@ -41,7 +46,7 @@ bool Apricot::init()
 	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 	
 	
-	schedule(schedule_selector(Apricot::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(KSCircleBase::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 	
 	schedule(schedule_selector(ThisClassType::update), 1/20.f);
@@ -49,7 +54,7 @@ bool Apricot::init()
 	return true;
 }
 
-bool Apricot::startDamageReaction(float damage, float angle)
+bool KSCircleBase::startDamageReaction(float damage, float angle)
 {
 	KSCumberBase::startDamageReaction(damage, angle);
 	CCLog("damaga!!!");
@@ -66,7 +71,7 @@ bool Apricot::startDamageReaction(float damage, float angle)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
-
+		
 	}
 	if(m_state == CUMBERSTATEMOVING)
 	{
@@ -78,7 +83,7 @@ bool Apricot::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Apricot::damageReaction));
+		schedule(schedule_selector(KSCircleBase::damageReaction));
 	}
 	else if(m_state == CUMBERSTATESTOP)
 	{
@@ -90,7 +95,7 @@ bool Apricot::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Apricot::damageReaction));
+		schedule(schedule_selector(KSCircleBase::damageReaction));
 		
 		if(currentTimelineFooter == "_b")
 		{
@@ -107,7 +112,7 @@ bool Apricot::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Apricot::damageReaction));
+		schedule(schedule_selector(KSCircleBase::damageReaction));
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects", false);
 	}
@@ -118,7 +123,7 @@ bool Apricot::startDamageReaction(float damage, float angle)
 		return false;
 }
 
-void Apricot::startAnimationNoDirection()
+void KSCircleBase::startAnimationNoDirection()
 {
 	CCLog("Lets rotate");
 	if(m_state != CUMBERSTATENODIRECTION)
@@ -130,11 +135,11 @@ void Apricot::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
-		schedule(schedule_selector(Apricot::animationNoDirection));
+		schedule(schedule_selector(KSCircleBase::animationNoDirection));
 	}
 }
 
-void Apricot::damageReaction(float)
+void KSCircleBase::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
@@ -147,7 +152,7 @@ void Apricot::damageReaction(float)
 		if(m_state != CUMBERSTATEMOVING)
 		{
 			m_state = CUMBERSTATEMOVING;
-			unschedule(schedule_selector(Apricot::damageReaction));
+			unschedule(schedule_selector(KSCircleBase::damageReaction));
 			mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 		}
 		
@@ -155,7 +160,7 @@ void Apricot::damageReaction(float)
 }
 
 
-void Apricot::animationNoDirection(float dt)
+void KSCircleBase::animationNoDirection(float dt)
 {
 	m_noDirection.timer += 1.f/60.f;
 	
@@ -171,25 +176,25 @@ void Apricot::animationNoDirection(float dt)
 	else if(m_noDirection.state == 2)
 	{
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Apricot::animationNoDirection));
+		unschedule(schedule_selector(KSCircleBase::animationNoDirection));
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
 	}
 }
 
-void Apricot::onPatternEnd()
+void KSCircleBase::onPatternEnd()
 {
 	CCLog("onPatternEnd!!");
 	m_noDirection.state = 2;
 }
 
-void Apricot::onStartGame()
+void KSCircleBase::onStartGame()
 {
 	KSCumberBase::onStartGame();
 	m_noDirection.state = 2;
 	CCLog("onStartGame!!");
 }
 
-COLLISION_CODE Apricot::crashLooper(const set<IntPoint>& v, IntPoint* cp)
+COLLISION_CODE KSCircleBase::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)
 	{
@@ -204,7 +209,7 @@ COLLISION_CODE Apricot::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Apricot::startInvisible(int totalframe)
+void KSCircleBase::startInvisible(int totalframe)
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
@@ -212,12 +217,12 @@ void Apricot::startInvisible(int totalframe)
 		m_invisible.VISIBLE_FRAME = totalframe;
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
-		schedule(schedule_selector(Apricot::invisibling));
+		schedule(schedule_selector(KSCircleBase::invisibling));
 		m_invisible.startInvisibleScheduler = true;
 	}
 }
 
-void Apricot::invisibling(float dt)
+void KSCircleBase::invisibling(float dt)
 {
 	m_invisible.invisibleFrame++;
 	
@@ -240,7 +245,7 @@ void Apricot::invisibling(float dt)
 	
 }
 
-void Apricot::randomPosition()
+void KSCircleBase::randomPosition()
 {
 	IntPoint mapPoint;
 	bool finded;
@@ -257,7 +262,7 @@ void Apricot::randomPosition()
 	
 }
 
-void Apricot::crashMapForPosition(CCPoint targetPt)
+void KSCircleBase::crashMapForPosition(CCPoint targetPt)
 {
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
@@ -288,7 +293,7 @@ void Apricot::crashMapForPosition(CCPoint targetPt)
 	
 }
 
-void Apricot::furyModeOn(int tf)
+void KSCircleBase::furyModeOn(int tf)
 {
 	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
@@ -299,7 +304,7 @@ void Apricot::furyModeOn(int tf)
 	schedule(schedule_selector(ThisClassType::furyModeScheduler));
 }
 
-void Apricot::furyModeScheduler(float dt)
+void KSCircleBase::furyModeScheduler(float dt)
 {
 	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
@@ -311,7 +316,7 @@ void Apricot::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
-void Apricot::furyModeOff()
+void KSCircleBase::furyModeOff()
 {
 	//	myGD->communication("EP_stopCrashAction");
 	myGD->communication("MS_resetRects", false);
@@ -319,7 +324,7 @@ void Apricot::furyModeOff()
 
 
 
-void Apricot::scaleAdjustment(float dt)
+void KSCircleBase::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	

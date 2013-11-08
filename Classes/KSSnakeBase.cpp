@@ -1,12 +1,13 @@
 //
-//  Orange.cpp
+//  KSSnakeBase.cpp
 //  DGproto
 //
-//  Created by ksoo k on 13. 9. 25..
+//  Created by ksoo k on 13. 9. 12..
 //
 //
 
-#include "Orange.h"
+#include "KSSnakeBase.h"
+
 #include "GameData.h"
 
 #include "AlertEngine.h"
@@ -16,35 +17,38 @@
 //#include "CumberEmotion.h"
 #include "Jack.h"
 #include "RandomSelector.h"
-Orange::~Orange()
+
+
+KSSnakeBase::~KSSnakeBase()
 {
 	
 }
 
 
 
-bool Orange::init()
+bool KSSnakeBase::init(const string& ccbiFile)
 {
 	KSCumberBase::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
-
 	
-    CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_orange_head.ccbi",this));
+		auto fileName = "boss_"+ccbiFile+"_"+"head.ccbi";
+		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
 		m_headAnimationManager = reader->getAnimationManager();
 		this->addChild(m_headImg, 10);
 		reader->release();
-    }
+	}
 	int lastZ=-1;
 	{
 		
 		for(int i=0; i<7; i++)
 		{
 			CCBReader* reader = new CCBReader(nodeLoader);
-			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_orange_body.ccbi",this));
+			auto fileName = "boss_"+ccbiFile+"_"+"body.ccbi";
+			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
 			m_bodyAnimationManagers.push_back(reader->getAnimationManager());
 			addChild(body, 9 - i);
 			lastZ = 9 - i;
@@ -56,7 +60,8 @@ bool Orange::init()
 	
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("boss_orange_tail.ccbi",this));
+		auto fileName = "boss_"+ccbiFile+"_"+"tail.ccbi";
+		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
 		m_tailAnimationManager = reader->getAnimationManager();
 		this->addChild(m_tailImg, lastZ - 1);
 		reader->release();
@@ -65,16 +70,17 @@ bool Orange::init()
 	
 	
 	
-	//	startMoving();
-	schedule(schedule_selector(Orange::scaleAdjustment), 1/60.f);
-	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-
 	
-
+	//	startMoving();
+	schedule(schedule_selector(KSSnakeBase::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(KSCumberBase::movingAndCrash));
+	
+	
+	
 	return true;
 }
 
-void Orange::setHeadAndBodies()
+void KSSnakeBase::setHeadAndBodies()
 {
 	SnakeTrace lastTrace = m_cumberTrace.back();
 	float tt = rad2Deg( lastTrace.directionRad );
@@ -135,7 +141,7 @@ void Orange::setHeadAndBodies()
 	
 }
 
-void Orange::startAnimationNoDirection()
+void KSSnakeBase::startAnimationNoDirection()
 {
 	// 돌자...
 	CCLog("Lets rotate");
@@ -148,13 +154,13 @@ void Orange::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
-		schedule(schedule_selector(Orange::animationNoDirection));
+		schedule(schedule_selector(KSSnakeBase::animationNoDirection));
 	}
 }
 
-void Orange::animationNoDirection(float dt)
+void KSSnakeBase::animationNoDirection(float dt)
 {
-//	CCLog("animationNoDirection");
+	//	CCLog("animationNoDirection");
 	m_noDirection.timer += 1.f/60.f;
 	
 	if(m_noDirection.state == 1)
@@ -164,12 +170,12 @@ void Orange::animationNoDirection(float dt)
 		{
 			m_noDirection.rotationDeg -= 360;
 			m_noDirection.rotationCnt++;
-//			/// 좀 돌았으면 돌아감.
-//			if(m_noDirection.rotationCnt >= 5)
-//			{
-//				m_noDirection.state = 2;
-//				return;
-//			}
+			//			/// 좀 돌았으면 돌아감.
+			//			if(m_noDirection.rotationCnt >= 5)
+			//			{
+			//				m_noDirection.state = 2;
+			//				return;
+			//			}
 		}
 		m_noDirection.distance += 0.5f;
 		m_noDirection.distance = MIN(m_noDirection.distance, 30);
@@ -194,14 +200,10 @@ void Orange::animationNoDirection(float dt)
 		{
 			m_state = CUMBERSTATEMOVING;
 			m_noDirection.state = 0;
-			unschedule(schedule_selector(Orange::animationNoDirection));
+			unschedule(schedule_selector(KSSnakeBase::animationNoDirection));
 			setPosition(m_noDirection.startingPoint);
-//			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
-//			for(auto bodyAniManager : m_bodyAnimationManagers)
-//			{
-//				bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
-//			}
-//			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 		}
 		else
 			setPosition(getPosition() + ccp(dx, dy));
@@ -210,15 +212,15 @@ void Orange::animationNoDirection(float dt)
 
 
 
-void Orange::startAnimationDirection()
+void KSSnakeBase::startAnimationDirection()
 {
 	// 잭을 바라보자.
 	m_state = CUMBERSTATEDIRECTION;
 	m_direction.initVars();
-	schedule(schedule_selector(Orange::animationDirection));
+	schedule(schedule_selector(KSSnakeBase::animationDirection));
 }
 
-void Orange::animationDirection(float dt)
+void KSSnakeBase::animationDirection(float dt)
 {
 	m_direction.timer += 1 / 60.f;
 	if(m_direction.state == 1)
@@ -231,23 +233,19 @@ void Orange::animationDirection(float dt)
 	}
 	else if(m_direction.state == 2)
 	{
-//		m_state = CUMBERSTATEMOVING; //#!
+		//		m_state = CUMBERSTATEMOVING; //#!
 		m_direction.state = 0;
-		unschedule(schedule_selector(Orange::animationDirection));
-//		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
-//		for(auto bodyAniManager : m_bodyAnimationManagers)
-//		{
-//			bodyAniManager->runAnimationsForSequenceNamed("cast101stop");
-//		}
-//		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+		unschedule(schedule_selector(KSSnakeBase::animationDirection));
+		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
+		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 	}
 }
-bool Orange::startDamageReaction(float damage, float angle)
+bool KSSnakeBase::startDamageReaction(float damage, float angle)
 {
 	KSCumberBase::startDamageReaction(damage, angle);
 	m_remainHp -= damage;
-	CCLog("Orange Hp %f", m_remainHp);
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
+	CCLog("remain hp %f", m_remainHp);
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
@@ -258,14 +256,14 @@ bool Orange::startDamageReaction(float damage, float angle)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
-
+		
 	}
 	else if(m_state == CUMBERSTATEDIRECTION)
 	{
 		CCLog("m_state == CUMBERSTATEDIRECTION");
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
-		m_state = CUMBERSTATEMOVING;
-
+		m_state = CUMBERSTATEMOVING; //#!
+		
 	}
 	else if(m_state == CUMBERSTATEMOVING)
 	{
@@ -277,7 +275,7 @@ bool Orange::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Orange::damageReaction));
+		schedule(schedule_selector(KSSnakeBase::damageReaction));
 	}
 	else if(m_state == CUMBERSTATESTOP)
 	{
@@ -289,7 +287,7 @@ bool Orange::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Orange::damageReaction));
+		schedule(schedule_selector(KSSnakeBase::damageReaction));
 	}
 	else if(m_state == CUMBERSTATEFURY)
 	{
@@ -301,18 +299,23 @@ bool Orange::startDamageReaction(float damage, float angle)
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
-		schedule(schedule_selector(Orange::damageReaction));
+		schedule(schedule_selector(KSSnakeBase::damageReaction));
 		crashMapForPosition(getPosition());
 		myGD->communication("MS_resetRects", false);
 	}
 	
 	if(m_remainHp <= 0)
+	{
+		
 		return true;
+	}
 	else
+	{
 		return false;
+	}
 }
 
-void Orange::damageReaction(float)
+void KSSnakeBase::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
 	if(m_damageData.timer < 1)
@@ -333,16 +336,12 @@ void Orange::damageReaction(float)
 			i->setColor(ccc3(255, 255, 255));
 		}
 		m_state = CUMBERSTATEMOVING;
-		unschedule(schedule_selector(Orange::damageReaction));
+		unschedule(schedule_selector(KSSnakeBase::damageReaction));
 		m_headAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
-		for(auto bodyAniManager : m_bodyAnimationManagers)
-		{
-			bodyAniManager->runAnimationsForSequenceNamed("Default Timeline");
-		}
 		m_tailAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 }
-void Orange::startInvisible(int totalframe)
+void KSSnakeBase::startInvisible(int totalframe)
 {
 	//	if(!isScheduled(schedule_selector(KSCumber::invisibling)))
 	if(m_invisible.startInvisibleScheduler == false)
@@ -350,12 +349,13 @@ void Orange::startInvisible(int totalframe)
 		m_invisible.VISIBLE_FRAME = totalframe;
 		m_invisible.invisibleFrame = 0;
 		m_invisible.invisibleValue = 0;
-		schedule(schedule_selector(Orange::invisibling));
+		//		m_headImg->stopAllActions();
+		schedule(schedule_selector(KSSnakeBase::invisibling));
 		m_invisible.startInvisibleScheduler = true;
 	}
 }
 
-void Orange::invisibling(float dt)
+void KSSnakeBase::invisibling(float dt)
 {
 	m_invisible.invisibleFrame++;
 	
@@ -386,9 +386,10 @@ void Orange::invisibling(float dt)
 			unschedule(schedule_selector(ThisClassType::invisibling));
 		}
 	}
+	
 }
 
-void Orange::scaleAdjustment(float dt)
+void KSSnakeBase::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	
@@ -410,7 +411,9 @@ void Orange::scaleAdjustment(float dt)
 	
 }
 
-COLLISION_CODE Orange::crashLooper(const set<IntPoint>& v, IntPoint* cp)
+
+
+COLLISION_CODE KSSnakeBase::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 {
 	for(const auto& i : v)
 	{
@@ -425,7 +428,7 @@ COLLISION_CODE Orange::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 	return kCOLLISION_NONE;
 }
 
-void Orange::furyModeOn(int tf)
+void KSSnakeBase::furyModeOn(int tf)
 {
 	m_furyMode.startFury(tf);
 	m_state = CUMBERSTATEFURY;
@@ -441,7 +444,7 @@ void Orange::furyModeOn(int tf)
 }
 
 
-void Orange::crashMapForPosition(CCPoint targetPt)
+void KSSnakeBase::crashMapForPosition(CCPoint targetPt)
 {
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
@@ -471,7 +474,7 @@ void Orange::crashMapForPosition(CCPoint targetPt)
 	}
 	
 }
-void Orange::furyModeScheduler(float dt)
+void KSSnakeBase::furyModeScheduler(float dt)
 {
 	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
@@ -488,7 +491,7 @@ void Orange::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 	}
 }
-void Orange::furyModeOff()
+void KSSnakeBase::furyModeOff()
 {
 	//##
 	//	if(isFuryMode)
@@ -499,3 +502,39 @@ void Orange::furyModeOff()
 	//		furyMode->removeFromParentAndCleanup(true);
 	//	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

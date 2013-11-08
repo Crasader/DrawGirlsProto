@@ -24,7 +24,8 @@
 #include "Pear.h"
 #include "ServerDataSave.h"
 #include "KSJuniorBase.h"
-
+#include "KSCircleBase.h"
+#include "KSSnakeBase.h"
 void CumberParent::onStartGame()
 {
 	for(auto i : mainCumbers)
@@ -190,9 +191,9 @@ void CumberParent::subCumberReplication()
 	int cnt = subCumberArray->count();
 	for(int i = 0;i<cnt;i++)
 	{
-		KSCumberBase* t_sc = (Bear*)subCumberArray->objectAtIndex(i);
+		KSCumberBase* t_sc = (KSJuniorBase*)subCumberArray->objectAtIndex(i);
 		CCPoint t_p = t_sc->getPosition();
-		Bear* t_sc2 = Bear::create();
+		KSJuniorBase* t_sc2 = KSJuniorBase::create("bear");
 		addChild(t_sc2);
 		t_sc2->setPosition(t_p);
 		subCumberArray->addObject(t_sc2);
@@ -374,27 +375,7 @@ void CumberParent::createSubCumber(IntPoint s_p)
 	//## 에 따라 분기 해야됨.
 	
 	KSCumberBase* t_SC;
-	switch(junior.m_jrType)
-	{
-		case 1001:
-			t_SC = Bear::create();
-			break;
-		case 1002:
-			t_SC = Cat::create();
-			break;
-		case 1003:
-			t_SC = Cow::create();
-			break;
-		case 1004:
-			t_SC = Dog::create();
-			break;
-		case 1005:
-			t_SC = Rabbit::create();
-			break;
-		case 1006:
-			t_SC = Wolf::create();
-			break;
-	}
+	t_SC = KSJuniorBase::create(junior.m_jrType);
 	t_SC->settingHp(junior.m_jrHp);
 	t_SC->setAgility(junior.m_jrAgi);
 	t_SC->settingAI(junior.m_aiValue);
@@ -462,6 +443,7 @@ void CumberParent::removeSubCumber(CCObject* r_sc)
 	subCumberArray->removeObject(r_sc);
 }
 
+
 void CumberParent::myInit()
 {
 	is_die_animationing = false;
@@ -512,7 +494,8 @@ void CumberParent::myInit()
 	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
 	Json::Value boss = root[0u];
 
-	int bossType = boss["type"].asInt();
+	std::string bossShape = boss.get("shape", "circle").asString();
+	std::string bossType = boss["type"].asString();
 	
 	float hp = boss["hp"].asInt();
 	float minSpeed = boss["speed"]["min"].asDouble();// getNumberFromJsonValue(speed["max"]);
@@ -529,55 +512,16 @@ void CumberParent::myInit()
 	
 	float agi = boss.get("agi", 0).asDouble();
 	KSCumberBase* mainCumber;
-	switch(bossType)
+	if(bossShape == "circle")
 	{
-		case 1:
-			mainCumber = Apple::create();
-			break;
-		case 2:
-			mainCumber = Coconut::create();
-			break;
-		case 3:
-			mainCumber = Melon::create();
-			break;
-		case 4:
-			mainCumber = Banana::create();
-			break;
-		case 5:
-			mainCumber = Blueberry::create();
-			break;
-		case 6:
-			mainCumber = Cherry::create();
-			break;
-		case 7:
-			mainCumber = Mango::create();
-			break;
-		case 8:
-		{
-
-		}
-			
-			mainCumber = Apricot::create();
-			break;
-		case 9:
-			mainCumber = Grape::create();
-			break;
-		case 10:
-			mainCumber = Kiwi::create();
-			break;
-		case 11:
-			mainCumber = Lime::create();
-			break;
-		case 12:
-			mainCumber = Orange::create();
-			break;
-		case 13:
-			mainCumber = Peach::create();
-			break;
-		case 14:
-			mainCumber = Pear::create();
-			break;
+		mainCumber = KSCircleBase::create(bossType);
 	}
+	else if(bossShape == "snake")
+	{
+		mainCumber = KSSnakeBase::create(bossType);
+	}	
+
+
 	mainCumber->settingHp(hp);
 	mainCumber->setAgility(agi);
 	KS::KSLog("%", boss);
@@ -639,7 +583,7 @@ void CumberParent::myInit()
 		{
 			Json::Value boss = root[i];
 			KS::KSLog("%", boss);
-			int bossType = boss["type"].asInt();
+			std::string bossType = boss["type"].asString();
 			
 			float hp = boss["hp"].asInt();
 			float minSpeed = boss["speed"]["min"].asDouble();// getNumberFromJsonValue(speed["max"]);
@@ -665,31 +609,7 @@ void CumberParent::myInit()
 					  drawMovement, furyMovement, hp, aiValue, agi);
 			m_juniors.push_back(jt);
 			
-			KSCumberBase* t_SC;
-			switch(bossType)
-			{
-				case 1001:
-					t_SC = Bear::create();
-					break;
-				case 1002:
-					t_SC = Cat::create();
-					break;
-				case 1003:
-					t_SC = Cow::create();
-					break;
-				case 1004:
-					t_SC = Dog::create();
-					break;
-				case 1005:
-					t_SC = Rabbit::create();
-					break;
-				case 1006:
-					t_SC = Wolf::create();
-					break;
-				default:
-					t_SC = Bear::create();
-					break;
-			}
+			KSCumberBase* t_SC = KSJuniorBase::create(bossType);
 			
 			t_SC->settingHp(hp);
 			t_SC->setAgility(agi);

@@ -19,7 +19,6 @@ public:
 	}
 	virtual ~KSJuniorBase(){}
 	
-	virtual std::string ccbiName() = 0;
 	
 	
 	virtual void onStartMoving()
@@ -32,7 +31,23 @@ public:
 		m_state = CUMBERSTATESTOP;
 	}
 	void cumberAttack(float dt);
-	virtual bool init();
+	
+	static KSJuniorBase* create(const string& ccbiName) \
+	{ \
+    KSJuniorBase *pRet = new KSJuniorBase(); \
+    if (pRet && pRet->init(ccbiName)) \
+    { \
+			pRet->autorelease(); \
+			return pRet; \
+    } \
+    else \
+    { \
+			delete pRet; \
+			pRet = NULL; \
+			return NULL; \
+    } \
+	}
+	virtual bool init(const string& ccbiName);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
 		//		CCLog("setPos %f %f", t_sp.x, t_sp.y);
@@ -228,63 +243,6 @@ protected:
 };
 
 
-/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Bear : public KSJuniorBase
-{
-public:
-	std::string ccbiName() { return "mob_bear.ccbi"; }
-	CREATE_FUNC(Bear);
-	
-};
-
-/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Cat : public KSJuniorBase
-{
-public:
-	std::string ccbiName() { return "mob_cat.ccbi"; }
-	CREATE_FUNC(Cat);
-	
-};
-
-
-/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Cow : public KSJuniorBase
-{
-public:
-	std::string ccbiName() { return "mob_cow.ccbi"; }
-	CREATE_FUNC(Cow);
-	
-};
-
-
-
-/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Dog : public KSJuniorBase
-{
-public:
-	std::string ccbiName() { return "mob_dog.ccbi"; }
-	CREATE_FUNC(Dog);
-	
-};
-
-/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Rabbit : public KSJuniorBase
-{
-public:
-	std::string ccbiName() { return "mob_bear.ccbi"; }
-	CREATE_FUNC(Rabbit);
-	
-};
-
-
-/// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Wolf : public KSJuniorBase
-{
-public:
-	std::string ccbiName() { return "mob_bear.ccbi"; }
-	CREATE_FUNC(Wolf);
-	
-};
 
 
 

@@ -74,7 +74,7 @@ bool Coconut::startDamageReaction(float damage, float angle)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
-		m_castingCancelCount++;
+
 	}
 	else if(m_state == CUMBERSTATEMOVING)
 	{

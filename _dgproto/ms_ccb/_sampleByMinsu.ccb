@@ -93,7 +93,7 @@
 			</dict>
 		</array>
 		<key>customClass</key>
-		<string></string>
+		<string>CircleBossCCB</string>
 		<key>displayName</key>
 		<string>CCSprite</string>
 		<key>memberVarAssignmentName</key>

@@ -82,7 +82,7 @@ private:
 	struct jrType
 	{
 		
-		int m_jrType;
+		std::string m_jrType;
 		
 		float m_jrMinSpeed;
 		float m_jrStartSpeed;
@@ -99,7 +99,7 @@ private:
 		float m_jrAgi;
 		
 		int m_aiValue;
-		jrType(int type, float minv, float startv, float maxv,
+		jrType(const std::string& type, float minv, float startv, float maxv,
 			   float mins, float starts, float maxs, int nm, int dr, int fury,
 			   float hp, int ai, int agi)
 		{
