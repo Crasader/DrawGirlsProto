@@ -1586,6 +1586,7 @@ public:
 		
 		if(baseNode)
 		{
+			baseNode->stopAllActions();
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call2);
 			baseNode->runAction(t_seq);
 		}
