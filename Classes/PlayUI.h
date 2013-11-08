@@ -48,12 +48,7 @@ public:
 	
 	void changeCombo(int combo)
 	{
-//		unschedule(schedule_selector(ComboView::hiding));
-		setOpacity(255);
 		combo_label->setString(CCString::createWithFormat("%d", combo)->getCString());
-//		combo_label->setOpacity(255);
-		
-		startAnimation();
 	}
 	
 	void setPercentage(float t_percent)
@@ -87,55 +82,25 @@ private:
 //		removeFromParent();
 //	}
 	
-	void timerVisibleOn()
-	{
-		combo_timer->setVisible(true);
-		setOpacity(0);
-	}
-	
-	void startAnimation()
-	{
-		combo_timer->setVisible(false);
-		CCTexture2D* t_texture = getTexture();
-		
-		CCAnimation* t_animation = CCAnimation::create();
-		t_animation->setDelayPerUnit(0.1f);
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(0, 0, 120, 120));
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(120, 0, 120, 120));
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(240, 0, 120, 120));
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(0, 120, 120, 120));
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(120, 120, 120, 120));
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(240, 120, 120, 120));
-		
-		CCAnimate* t_animate = CCAnimate::create(t_animation);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ComboView::timerVisibleOn));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_animate, t_call);
-		
-		runAction(t_seq);
-	}
-	
 	void myInit(int combo)
 	{
-		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("combo_img.png");
-		initWithTexture(t_texture, CCRectMake(0, 0, 120, 120));
+		initWithFile("combo_back.png");
+		setPosition(ccp(30,myDSH->ui_top-60));
 		
-		setPosition(ccp(65,myDSH->ui_top-120));
-		
-		combo_timer = CCProgressTimer::create(CCSprite::createWithTexture(t_texture, CCRectMake(240, 120, 120, 120)));
-		combo_timer->getSprite()->setColor(ccBLUE);
-		combo_timer->setType(kCCProgressTimerTypeRadial);
+		combo_timer = CCProgressTimer::create(CCSprite::create("combo_front.png"));
+		combo_timer->setType(kCCProgressTimerTypeBar);
+		combo_timer->setMidpoint(ccp(0,0));
+		combo_timer->setBarChangeRate(ccp(1,0));
 		combo_timer->setPercentage(100);
-		combo_timer->setReverseDirection(true);
-		combo_timer->setReverseProgress(true);
-		combo_timer->setVisible(false);
+//		combo_timer->setReverseDirection(true);
+//		combo_timer->setReverseProgress(true);
 		combo_timer->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
 		addChild(combo_timer);
 		
-		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "gamecombo.fnt");
-		combo_label->setPosition(ccp(60,60));
+		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
+		combo_label->setAnchorPoint(ccp(0,0.5));
+		combo_label->setPosition(ccp(70,15));
 		addChild(combo_label);
-		
-		startAnimation();
 	}
 };
 

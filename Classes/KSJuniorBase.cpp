@@ -172,7 +172,7 @@ void KSJuniorBase::animationNoDirection(float dt)
 	{
 		m_state = CUMBERSTATEMOVING;
 		unschedule(schedule_selector(KSJuniorBase::animationNoDirection));
-		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
+//		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
 	}
 }
 
