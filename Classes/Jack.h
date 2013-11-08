@@ -1610,8 +1610,8 @@ private:
 		inner_particle->setStartColorVar(ccc4f(0.f, 0.28f, 0.57f, 1.f));
 		inner_particle->setEndColor(ccc4f(0.f, 0.f, 0.f, 1.f));
 		inner_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
-		inner_particle->setStartSize(30.f);
-		inner_particle->setStartSizeVar(15.f);
+		inner_particle->setStartSize(15.f);
+		inner_particle->setStartSizeVar(7.f);
 		inner_particle->setEndSize(10.f);
 		inner_particle->setEndSizeVar(5.f);
 		inner_particle->setRotatePerSecond(0.f);
@@ -1656,8 +1656,8 @@ private:
 		outter_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
 		outter_particle->setStartSize(10.f);
 		outter_particle->setStartSizeVar(5.f);
-		outter_particle->setEndSize(30.f);
-		outter_particle->setEndSizeVar(15.f);
+		outter_particle->setEndSize(10.f);
+		outter_particle->setEndSizeVar(5.f);
 		outter_particle->setGravity(ccp(0.f,300.f));
 		outter_particle->setRadialAccel(0.f);
 		outter_particle->setRadialAccelVar(0.f);

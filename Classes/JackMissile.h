@@ -240,7 +240,7 @@ private:
 				
 				int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
 				
-				myGD->communication("Main_startShake");
+				myGD->communication("Main_startShake", -shootImg->getRotation());
 				
 				myGD->communication("UI_addScore", addScore);
 				myGD->communication("UI_setComboCnt", combo_cnt);
@@ -701,7 +701,7 @@ private:
 					myGD->communication("UI_addScore", addScore);
 					myGD->communication("UI_setComboCnt", combo_cnt);
 					
-					myGD->communication("Main_startShake");
+					myGD->communication("Main_startShake", directionAngle);
 					
 					removeFromParentAndCleanup(true);
 				}
@@ -798,7 +798,7 @@ private:
 			dex = 1;
 		}
 		
-		myJM_SPEED = JM_SPEED * ((rand()%5 - 2)/10.f + 1.f);
+		myJM_SPEED = JM_SPEED * ((rand()%11 - 5)/10.f + 1.f);
 		myJM_CHANGE_DIRECTION_VAL = JM_CHANGE_DIRECTION_VAL;
 		
 		particle->initWithTotalParticles(particle_cnt);

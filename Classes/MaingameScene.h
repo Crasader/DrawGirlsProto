@@ -689,8 +689,19 @@ private:
 	}
 	
 	int shake_frame;
-	void startShake()
+	void startShake(float t_direction_angle)
 	{
+		stopAllActions();
+		
+		CCPoint change_position = ccp(cosf(t_direction_angle/180.f*M_PI), sinf(t_direction_angle/180.f*M_PI));
+		change_position = ccpMult(change_position, 3.f/sqrtf(powf(change_position.x, 2.f) + powf(change_position.y, 2.f)));
+		
+		setPosition(ccpAdd(getPosition(), change_position));
+		CCDelayTime* t_delay = CCDelayTime::create(0.1f);
+		CCMoveTo* t_move = CCMoveTo::create(0.2f, CCPointZero);
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_move);
+		runAction(t_seq);
+		
 //		shake_frame = 0;
 //		schedule(schedule_selector(Maingame::shaking), 1.f/20.f);
 	}
