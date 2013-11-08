@@ -2822,7 +2822,7 @@
 			</dict>
 		</array>
 		<key>customClass</key>
-		<string></string>
+		<string>CirlcleBossCCB</string>
 		<key>displayName</key>
 		<string>CCSprite</string>
 		<key>memberVarAssignmentName</key>
