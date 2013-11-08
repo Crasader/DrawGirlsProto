@@ -892,17 +892,8 @@ private:
 	void myInit(CCPoint t_sp, int t_tmCnt, int t_burnFrame)
 	{
 		is_remove_called = false;
-		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
-		if(selected_chapter <= 20)
-			mType = 1;
-		else
-		{
-			int chapter_number = selected_chapter%10;
-			if(chapter_number <= 3)
-				mType = 2;
-			else
-				mType = 1;
-		}
+		
+		mType = 1;
 		
 		myPosition = t_sp;
 		tmCnt = t_tmCnt;

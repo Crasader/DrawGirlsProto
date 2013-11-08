@@ -102,79 +102,79 @@ enum AP_CODE{
 	kAP_CODE_pattern103 // pattern3 fast
 };
 
-class MyNumerator
-{
-public:
-	int numerator;
-	int return_code;
-};
-
-class RandomSelector : public CCObject
-{
-public:
-	void setNumerator(int numerator, int return_code)
-	{
-		MyNumerator t_mn;
-		t_mn.numerator = numerator;
-		t_mn.return_code = return_code;
-		numeratorArray.push_back(t_mn);
-	}
-	
-	int getRandomCode()
-	{
-		int random_value = rand()%denominator;
-		
-		int limit=0;
-		
-		for(int i=0;i<numeratorArray.size();i++)
-		{
-			MyNumerator t_mn = numeratorArray[i];
-			limit += t_mn.numerator;
-			if(random_value < limit)
-			{
-				return t_mn.return_code;
-			}
-		}
-		
-		return -1;
-	}
-	
-	int getNotCrashCode()
-	{
-		bool is_searched = false;
-		int t_rc;
-		while(!is_searched)
-		{
-			t_rc = getRandomCode();
-			if(t_rc < kAP_CODE_pattern11 || t_rc > kAP_CODE_pattern19)
-				return t_rc;
-		}
-		
-		return -1;
-	}
-	
-	int getCrashCode()
-	{
-		bool is_searched = false;
-		int t_rc;
-		while(!is_searched)
-		{
-			t_rc = getRandomCode();
-			if(t_rc >= kAP_CODE_pattern11 && t_rc <= kAP_CODE_pattern19)
-				return t_rc;
-		}
-		
-		return -1;
-	}
-	
-	void myInit(int t_denominator)
-	{
-		denominator = t_denominator;
-	}
-	
-private:
-	int denominator;
-	vector<MyNumerator> numeratorArray;
-};
+//class MyNumerator
+//{
+//public:
+//	int numerator;
+//	int return_code;
+//};
+//
+//class RandomSelector : public CCObject
+//{
+//public:
+//	void setNumerator(int numerator, int return_code)
+//	{
+//		MyNumerator t_mn;
+//		t_mn.numerator = numerator;
+//		t_mn.return_code = return_code;
+//		numeratorArray.push_back(t_mn);
+//	}
+//	
+//	int getRandomCode()
+//	{
+//		int random_value = rand()%denominator;
+//		
+//		int limit=0;
+//		
+//		for(int i=0;i<numeratorArray.size();i++)
+//		{
+//			MyNumerator t_mn = numeratorArray[i];
+//			limit += t_mn.numerator;
+//			if(random_value < limit)
+//			{
+//				return t_mn.return_code;
+//			}
+//		}
+//		
+//		return -1;
+//	}
+//	
+//	int getNotCrashCode()
+//	{
+//		bool is_searched = false;
+//		int t_rc;
+//		while(!is_searched)
+//		{
+//			t_rc = getRandomCode();
+//			if(t_rc < kAP_CODE_pattern11 || t_rc > kAP_CODE_pattern19)
+//				return t_rc;
+//		}
+//		
+//		return -1;
+//	}
+//	
+//	int getCrashCode()
+//	{
+//		bool is_searched = false;
+//		int t_rc;
+//		while(!is_searched)
+//		{
+//			t_rc = getRandomCode();
+//			if(t_rc >= kAP_CODE_pattern11 && t_rc <= kAP_CODE_pattern19)
+//				return t_rc;
+//		}
+//		
+//		return -1;
+//	}
+//	
+//	void myInit(int t_denominator)
+//	{
+//		denominator = t_denominator;
+//	}
+//	
+//private:
+//	int denominator;
+//	vector<MyNumerator> numeratorArray;
+//};
 
 #endif

@@ -213,7 +213,7 @@ void WorldMapScene::resultFriendList(Json::Value result_data)
 
 void WorldMapScene::passTicketStage()
 {
-	myDSH->setBoolForKey(kDSH_Key_isPassCoupon_int1, pass_target_stage, true);
+//	myDSH->setBoolForKey(kDSH_Key_isPassCoupon_int1, pass_target_stage, true);
 	resetWorldMapScene();
 }
 
@@ -270,19 +270,19 @@ void WorldMapScene::setMapNode()
 	stage1_menu->setPosition(getStagePosition(1));
 	map_node->addChild(stage1_menu, kWMS_Z_stage);
 	
-	int cleared_number = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
+//	int cleared_number = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
 	int updated_stage = 1;
 	
 	for(int i=2;i<=updated_stage;i++)
 	{
 		bool is_coupon = false;
 		bool is_pass = false;
-		if(i-1 <= cleared_number)
+		if(i-1 <= 1)//cleared_number)
 		{
 			if(SDS_GB(kSDF_gameInfo, CCSTR_CWF("is_coupon%d", i)->getCString()))
 			{
 				is_coupon = true;
-				if(myDSH->getBoolForKey(kDSH_Key_isPassCoupon_int1, i))
+				if(1)//myDSH->getBoolForKey(kDSH_Key_isPassCoupon_int1, i))
 				{
 					is_pass = true;
 					CCSprite* pass_img = CCSprite::create("worldmap_ticket_open.png");
@@ -687,21 +687,6 @@ void WorldMapScene::setUIs()
 	is_menu_enable = true;
 	
 	srand(time(NULL));
-	
-	//////////////////////////////////////////////////////////////////////////////////////////////
-	int selected_chapter = rand()%38+1;
-	if(selected_chapter > 26)
-	{
-		selected_chapter += 4;
-	}
-	if(selected_chapter > 36)
-	{
-		selected_chapter += 4;
-	}
-	
-	SelectedMapData::sharedInstance()->setSelectedChapter(selected_chapter);
-	SelectedMapData::sharedInstance()->setSelectedStage(5);
-	////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 CCPoint WorldMapScene::getTrackPositionMove(string d)

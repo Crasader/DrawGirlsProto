@@ -424,7 +424,7 @@ private:
 	{
 		base_hide_time = AttackItemBaseHideTime;
 		
-		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*AttackItemBaseSubValue;
+		base_cast_time = AttackItemBaseCastTime - 4*AttackItemBaseSubValue;
 		
 		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(recent_card_number >= 0)
@@ -441,7 +441,7 @@ private:
 			dex = 1;
 		}
 		
-		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*AttackItemBaseUpRate);
+		total_damage = damage*(AttackItemBaseDamage+4*AttackItemBaseUpRate);
 		sum_damage = 0;
 		
 		CCTextureCache::sharedTextureCache()->addImage("tornado1_repeat1.png");
@@ -772,7 +772,7 @@ private:
 	{
 		base_hide_time = AttackItemBaseHideTime;
 		
-		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*AttackItemBaseSubValue;
+		base_cast_time = AttackItemBaseCastTime - 4*AttackItemBaseSubValue;
 		
 		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(recent_card_number >= 0)
@@ -789,7 +789,7 @@ private:
 			dex = 1;
 		}
 		
-		total_damage = damage * (AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*AttackItemBaseUpRate);;
+		total_damage = damage * (AttackItemBaseDamage+4*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
 		CCTextureCache::sharedTextureCache()->addImage("lightning_storm_start1.png");
@@ -1096,7 +1096,7 @@ private:
 	{
 		base_hide_time = AttackItemBaseHideTime;
 		
-		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelLife)-1)*AttackItemBaseSubValue;
+		base_cast_time = AttackItemBaseCastTime - 4*AttackItemBaseSubValue;
 		
 		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(recent_card_number >= 0)
@@ -1113,7 +1113,7 @@ private:
 			dex = 1;
 		}
 		
-		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelLife)-1)*AttackItemBaseUpRate);;
+		total_damage = damage*(AttackItemBaseDamage+4*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
 		CCTextureCache::sharedTextureCache()->addImage("ankle_snare1.png");
@@ -1458,7 +1458,7 @@ private:
 	{
 		base_hide_time = AttackItemBaseHideTime;
 		
-		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*AttackItemBaseSubValue;
+		base_cast_time = AttackItemBaseCastTime - 4*AttackItemBaseSubValue;
 		
 		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(recent_card_number >= 0)
@@ -1475,7 +1475,7 @@ private:
 			dex = 1;
 		}
 		
-		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*AttackItemBaseUpRate);;
+		total_damage = damage*(AttackItemBaseDamage+4*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
 		CCTextureCache::sharedTextureCache()->addImage("ice_storm_fragment.png");
@@ -1774,7 +1774,7 @@ private:
 	{
 		base_hide_time = AttackItemBaseHideTime;
 		
-		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*AttackItemBaseSubValue;
+		base_cast_time = AttackItemBaseCastTime - 4*AttackItemBaseSubValue;
 		
 		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(recent_card_number >= 0)
@@ -1791,7 +1791,7 @@ private:
 			dex = 1;
 		}
 		
-		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*AttackItemBaseUpRate);;
+		total_damage = damage*(AttackItemBaseDamage+4*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
 		CCTextureCache::sharedTextureCache()->addImage("fire_arrow.png");
@@ -2055,7 +2055,7 @@ private:
 	{
 		base_hide_time = AttackItemBaseHideTime;
 		
-		base_cast_time = AttackItemBaseCastTime - (myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*AttackItemBaseSubValue;
+		base_cast_time = AttackItemBaseCastTime - 4*AttackItemBaseSubValue;
 		
 		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(recent_card_number >= 0)
@@ -2072,7 +2072,7 @@ private:
 			dex = 1;
 		}
 		
-		total_damage = damage*(AttackItemBaseDamage+(myDSH->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*AttackItemBaseUpRate);;
+		total_damage = damage*(AttackItemBaseDamage+4*AttackItemBaseUpRate);;
 		sum_damage = 0;
 		
 		CCTextureCache::sharedTextureCache()->addImage("plasma_storm_init1.png");

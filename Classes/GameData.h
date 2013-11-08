@@ -12,7 +12,6 @@
 #include "cocos2d.h"
 #include "DataStorageHub.h"
 #include "EnumDefine.h"
-#include "SelectedMapData.h"
 #include "SelectorDefine.h"
 
 using namespace cocos2d;
@@ -214,7 +213,6 @@ public:
 	{
 		return IntPoint(x - right.x, y - right.y);
 	}
-//	IntPoint operator-() const;
 	IntPoint operator*(float a) const
 	{
 		return IntPoint(x * a, y * a);
@@ -472,8 +470,6 @@ public:
 	void resetGameData();
 	
 	void changeJackBaseSpeed(float t_s);
-	
-	void initStartRect();
 	
 	void setInitRect(IntPoint initPoint, IntSize initSize);
 	

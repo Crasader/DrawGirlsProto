@@ -168,8 +168,8 @@ void Maingame::finalSetting()
 	
 	myUI = PlayUI::create();
 	addChild(myUI, myUIZorder);
-	myUI->setMaxBossLife(mySD->getBossMaxLife());//SelectedMapData::sharedInstance()->getMaxBossLife());
-	myUI->setClearPercentage(SelectedMapData::sharedInstance()->getClearPercentage());
+	myUI->setMaxBossLife(mySD->getBossMaxLife());
+	myUI->setClearPercentage(0.85f);
 	
 //	myCP->setUI_forEP(myUI, callfunc_selector(PlayUI::keepBossLife), callfunc_selector(PlayUI::checkBossLife));
 	
@@ -199,18 +199,10 @@ void Maingame::startScene()
 void Maingame::startCounting()
 {
 	CCTexture2D* t_texture;
-//	if(SelectedMapData::sharedInstance()->getIsNoShield())
-//	{
-		t_texture = CCTextureCache::sharedTextureCache()->addImage("hard_condition.png");
-		condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
-		addChild(condition_spr, conditionLabelZorder);
-//	}
-//	else
-//	{
-//		t_texture = CCTextureCache::sharedTextureCache()->addImage("easy_condition.png");
-//		condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
-//		addChild(condition_spr, conditionLabelZorder);
-//	}
+	t_texture = CCTextureCache::sharedTextureCache()->addImage("hard_condition.png");
+	condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
+	addChild(condition_spr, conditionLabelZorder);
+	
 	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+50));
 	
 	CCAnimation* t_animation = CCAnimation::create();

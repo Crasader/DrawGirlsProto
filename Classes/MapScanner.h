@@ -12,7 +12,6 @@
 #include "cocos2d.h"
 #include "GameData.h"
 #include <queue>
-#include "SelectedMapData.h"
 #include "StarGoldData.h"
 #include "StageImgLoader.h"
 #include "SilhouetteData.h"
@@ -579,7 +578,7 @@ private:
 			return false;
 	}
 	
-	BackFilename getBackVisibleFilename(int worldMap, int insideMap)
+	BackFilename getBackVisibleFilename()
 	{
 		BackFilename r_value;
 		
@@ -589,7 +588,7 @@ private:
 		return r_value;
 	}
 	
-	BackFilename getBackInvisibleFilename(int worldMap, int insideMap)
+	BackFilename getBackInvisibleFilename()
 	{
 		BackFilename r_value;
 		
@@ -607,10 +606,8 @@ private:
 			invisibleImg = NULL;
 		}
 		
-		SelectedMapData* mySMD = SelectedMapData::sharedInstance();
-		
-		BackFilename visible_filename = getBackVisibleFilename(mySMD->getSelectedChapter(), mySMD->getSelectedStage());
-		BackFilename invisible_filename = getBackInvisibleFilename(mySMD->getSelectedChapter(), mySMD->getSelectedStage());
+		BackFilename visible_filename = getBackVisibleFilename();
+		BackFilename invisible_filename = getBackInvisibleFilename();
 		
 		invisibleImg = InvisibleSprite::create(invisible_filename.filename.c_str(), invisible_filename.isPattern);
 		invisibleImg->setPosition(CCPointZero);

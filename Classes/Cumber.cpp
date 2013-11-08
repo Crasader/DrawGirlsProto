@@ -288,14 +288,7 @@ void CumberParent::startDieAnimation()
 		die_animation_cnt = 0;
 		die_animation_rate = 40;
 		
-//		if(!(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1) && rand()%CAUGHT_RATE == 0)
-//		{
-//			mySGD->caughtBoss();
-//			for(auto mainCumber : mainCumbers)
-//				mainCumber->caughtBoss(this, callfunc_selector(CumberParent::realStartDieAnimation));
-//		}
-//		else
-			realStartDieAnimation();
+		realStartDieAnimation();
 	}
 }
 
@@ -309,18 +302,18 @@ void CumberParent::changeMaxSize(float t_p)
 void CumberParent::realStartDieAnimation()
 {
 	ccColor4F myColor;
-	int my_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
-	if(my_type == kMyElementalPlasma)				myColor = ccc4f(1.f, 0, 1.f, 1.f);
-	else if(my_type == kMyElementalLightning)		myColor = ccc4f(1.f, 1.f, 0, 1.f);
-	else if(my_type == kMyElementalWind)			myColor = ccc4f(0, 1.f, 1.f, 1.f);
-	else if(my_type == kMyElementalNonElemental)	myColor = ccc4f(1.f, 1.f, 1.f, 1.f);
-	else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
-	else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
-	else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
+//	int my_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
+//	if(my_type == kMyElementalPlasma)				myColor = ccc4f(1.f, 0, 1.f, 1.f);
+//	else if(my_type == kMyElementalLightning)		myColor = ccc4f(1.f, 1.f, 0, 1.f);
+//	else if(my_type == kMyElementalWind)			myColor = ccc4f(0, 1.f, 1.f, 1.f);
+//	else if(my_type == kMyElementalNonElemental)	myColor = ccc4f(1.f, 1.f, 1.f, 1.f);
+//	else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
+//	else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
+//	else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
 	
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
 	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	myGD->communication("MP_explosion", mainCumber->getPosition(), myColor);
+	myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 0, 0));
 	
 //	for(auto mainCumber : mainCumbers)
 //	{
@@ -345,18 +338,18 @@ void CumberParent::dieAnimation()
 		{
 			unschedule(schedule_selector(CumberParent::dieAnimation));
 		}
-		ccColor4F myColor;
-		int my_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
-		if(my_type == kMyElementalPlasma)				myColor = ccc4f(1.f, 0, 1.f, 1.f);
-		else if(my_type == kMyElementalLightning)		myColor = ccc4f(1.f, 1.f, 0, 1.f);
-		else if(my_type == kMyElementalWind)			myColor = ccc4f(0, 1.f, 1.f, 1.f);
-		else if(my_type == kMyElementalNonElemental)	myColor = ccc4f(1.f, 1.f, 1.f, 1.f);
-		else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
-		else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
-		else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
+//		ccColor4F myColor;
+//		int my_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
+//		if(my_type == kMyElementalPlasma)				myColor = ccc4f(1.f, 0, 1.f, 1.f);
+//		else if(my_type == kMyElementalLightning)		myColor = ccc4f(1.f, 1.f, 0, 1.f);
+//		else if(my_type == kMyElementalWind)			myColor = ccc4f(0, 1.f, 1.f, 1.f);
+//		else if(my_type == kMyElementalNonElemental)	myColor = ccc4f(1.f, 1.f, 1.f, 1.f);
+//		else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
+//		else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
+//		else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
 		//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
 		auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-		myGD->communication("MP_explosion", mainCumber->getPosition(), myColor);
+		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 0, 0));
 //		for(auto mainCumber : mainCumbers)
 //			mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
 	}
@@ -396,7 +389,6 @@ void CumberParent::createSubCumber(IntPoint s_p)
 
 void CumberParent::initSubCumber()
 {
-	//		int create_cnt = SelectedMapData::sharedInstance()->getSubCumberCnt();
 	
 }
 

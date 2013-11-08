@@ -61,229 +61,6 @@ void GameData::changeJackBaseSpeed( float t_s )
 		F_V["Jack_getAlphaSpeed"]());
 }
 
-void GameData::initStartRect()
-{
-	int chapter_number = SelectedMapData::sharedInstance()->getSelectedChapter();
-	int stage_number = SelectedMapData::sharedInstance()->getSelectedStage();
-
-	float rate_arg;
-
-	if(chapter_number <= 20)
-	{
-		if(chapter_number%2 == 1)
-		{
-			if(stage_number == 1)								setStartMap(kSMT_side);
-			else if(stage_number == 2)
-			{
-				if(((chapter_number-1)%10+1)%4 == 1)			setStartMap(kSMT_randRect);
-				else if(((chapter_number-1)%10+1)%4 == 3)		setStartMap(kSMT_fixRect);
-			}
-			else if(stage_number == 3)							setStartMap(kSMT_dotLine);
-			else if(stage_number == 4)
-			{
-				if(((chapter_number-1)%10+1)%4 == 1)			setStartMap(kSMT_fixRect);
-				else if(((chapter_number-1)%10+1)%4 == 3)		setStartMap(kSMT_randRect);
-			}
-			else												setStartMap(kSMT_oneRect);
-		}
-		else
-		{
-			if(stage_number == 1)
-			{
-				if((chapter_number-1)%10+1 == 2 || (chapter_number-1)%10+1 == 8)			setStartMap(kSMT_leftRight);
-				else if((chapter_number-1)%10+1 == 4 || (chapter_number-1)%10+1 == 10)		setStartMap(kSMT_topBottom);
-				else																		setStartMap(kSMT_cross);
-			}
-			else if(stage_number == 2)
-			{
-				if((chapter_number-1)%10+1 == 2 || (chapter_number-1)%10+1 == 10)			setStartMap(kSMT_cross);
-				else if((chapter_number-1)%10+1 == 4)										setStartMap(kSMT_leftRight);
-				else																		setStartMap(kSMT_topBottom);
-			}
-			else if(stage_number == 3)														setStartMap(kSMT_oneRect);
-			else if(stage_number == 4)
-			{
-				if((chapter_number-1)%10+1 == 2)											setStartMap(kSMT_topBottom);
-				else if((chapter_number-1)%10+1 == 4 || (chapter_number-1)%10+1 == 8)		setStartMap(kSMT_cross);
-				else																		setStartMap(kSMT_leftRight);
-			}
-			else																			setStartMap(kSMT_oneRect);
-		}
-	}
-	else
-	{
-		int view_chapter_number = chapter_number%10;
-		int sub_chapter_number = chapter_number/10 - 1;
-		if(view_chapter_number == 1)
-		{
-			if(sub_chapter_number == 1)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_sLine);
-				else if(stage_number == 2)			setStartMap(kSMT2_centerCross);
-				else if(stage_number == 3)			setStartMap(kSMT2_oneLineCenter);
-				else if(stage_number == 4)			setStartMap(kSMT2_centerPrison);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 2)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 2)			setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 3)			setStartMap(kSMT_oneRect);
-				else if(stage_number == 4)			setStartMap(kSMT2_man);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 3)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_sLine);
-				else if(stage_number == 2)			setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 3)			setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 4)			setStartMap(kSMT2_man);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-		}
-		else if(view_chapter_number == 2)
-		{
-			if(sub_chapter_number == 1)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_centerCross);
-				else if(stage_number == 2)			setStartMap(kSMT2_sLine);
-				else if(stage_number == 3)			setStartMap(kSMT2_oneLineCenter);
-				else if(stage_number == 4)			setStartMap(kSMT2_man);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 2)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_centerPrison);
-				else if(stage_number == 2)			setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 3)			setStartMap(kSMT_oneRect);
-				else if(stage_number == 4)			setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 3)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_oneLineCenter);
-				else if(stage_number == 2)			setStartMap(kSMT2_centerPrison);
-				else if(stage_number == 3)			setStartMap(kSMT2_man);
-				else if(stage_number == 4)			setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-		}
-		else if(view_chapter_number == 3)
-		{
-			if(sub_chapter_number == 1)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_oneLineCenter);
-				else if(stage_number == 2)			setStartMap(kSMT2_centerCross);
-				else if(stage_number == 3)			setStartMap(kSMT2_sLine);
-				else if(stage_number == 4)			setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 2)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_man);
-				else if(stage_number == 2)			setStartMap(kSMT2_centerPrison);
-				else if(stage_number == 3)			setStartMap(kSMT_oneRect);
-				else if(stage_number == 4)			setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 3)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_centerCross);
-				else if(stage_number == 2)			setStartMap(kSMT2_sLine);
-				else if(stage_number == 3)			setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 4)			setStartMap(kSMT2_man);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-		}
-		else if(view_chapter_number == 4)
-		{
-			if(sub_chapter_number == 1)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_centerCross);
-				else if(stage_number == 2)			setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 3)			setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 4)			setStartMap(kSMT2_oneLineCenter);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 2)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_sLine);
-				else if(stage_number == 2)			setStartMap(kSMT2_centerPrison);
-				else if(stage_number == 3)			setStartMap(kSMT_oneRect);
-				else if(stage_number == 4)			setStartMap(kSMT2_man);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 3)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 2)			setStartMap(kSMT2_oneLineCenter);
-				else if(stage_number == 3)			setStartMap(kSMT2_centerCross);
-				else if(stage_number == 4)			setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-		}
-		else if(view_chapter_number == 5)
-		{
-			if(sub_chapter_number == 1)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_sLine);
-				else if(stage_number == 2)			setStartMap(kSMT2_man);
-				else if(stage_number == 3)			setStartMap(kSMT2_oneLineCenter);
-				else if(stage_number == 4)			setStartMap(kSMT2_centerCross);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 2)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 2)			setStartMap(kSMT2_centerPrison);
-				else if(stage_number == 3)			setStartMap(kSMT_oneRect);
-				else if(stage_number == 4)			setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 3)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_centerCross);
-				else if(stage_number == 2)			setStartMap(kSMT2_centerPrison);
-				else if(stage_number == 3)			setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 4)			setStartMap(kSMT2_man);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-		}
-		else if(view_chapter_number == 6)
-		{
-			if(sub_chapter_number == 1)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 2)			setStartMap(kSMT2_oneLineCenter);
-				else if(stage_number == 3)			setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 4)			setStartMap(kSMT2_man);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 2)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_sLine);
-				else if(stage_number == 2)			setStartMap(kSMT2_centerPrison);
-				else if(stage_number == 3)			setStartMap(kSMT_oneRect);
-				else if(stage_number == 4)			setStartMap(kSMT2_centerCross);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-			else if(sub_chapter_number == 3)
-			{
-				if(stage_number == 1)				setStartMap(kSMT2_sLine);
-				else if(stage_number == 2)			setStartMap(kSMT2_dddPrison);
-				else if(stage_number == 3)			setStartMap(kSMT2_man);
-				else if(stage_number == 4)			setStartMap(kSMT2_cornerPrison);
-				else if(stage_number == 5)			setStartMap(kSMT_oneRect);
-			}
-		}
-	}
-	float t_arg = 2.5f + SelectedMapData::sharedInstance()->getViewChapterNumber()*0.5f;
-	t_arg = t_arg > 8.f ? 8.f : t_arg;
-	rate_arg = t_arg * (0.7f + SelectedMapData::sharedInstance()->getViewChapterSubNumber()*0.3f);
-
-	myDSH->setGoldGetRate(myDSH->getGoldGetRate()*5.f/3.f*rate_arg);
-}
-
 void GameData::setInitRect( IntPoint initPoint, IntSize initSize )
 {
 	initPoint.x += mapWidthInnerBegin;
@@ -436,8 +213,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	recent_map_type = set_map_type;
 	if(set_map_type == kSMT_side)
 	{
-		myDSH->setGoldGetRate(0.5f);
-
 		IntSize maxSize = IntSize(50,50);
 		IntSize minSize = IntSize(20,20);
 
@@ -466,8 +241,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT_randRect)
 	{
-		myDSH->setGoldGetRate(0.7f);
-
 		setInitRect(IntPoint(20,20), IntSize(20,20));
 		setInitRect(IntPoint(120,24), IntSize(20,20));
 		setInitRect(IntPoint(70,50), IntSize(20,20));
@@ -479,8 +252,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT_dotLine)
 	{
-		myDSH->setGoldGetRate(0.8f);
-
 		IntSize maxSize = IntSize(50,50);
 		IntSize minSize = IntSize(20,20);
 
@@ -515,8 +286,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT_fixRect)
 	{
-		myDSH->setGoldGetRate(0.6f);
-
 		setInitRect(IntPoint(0,0), IntSize(20,20));
 		setInitRect(IntPoint(70,0), IntSize(20,20));
 		setInitRect(IntPoint(140,0), IntSize(20,20));
@@ -529,8 +298,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT_leftRight)
 	{
-		myDSH->setGoldGetRate(0.6f);
-
 		IntSize maxSize = IntSize(50,50);
 		IntSize minSize = IntSize(20,20);
 
@@ -554,8 +321,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT_topBottom)
 	{
-		myDSH->setGoldGetRate(0.7f);
-
 		IntSize maxSize = IntSize(50,50);
 		IntSize minSize = IntSize(20,20);
 
@@ -579,7 +344,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT_cross)
 	{
-		myDSH->setGoldGetRate(0.8f);
 		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 		{
 			if(i <= 80-40 || i >= 80+40)
@@ -608,8 +372,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT_oneRect)
 	{
-		myDSH->setGoldGetRate(1.f);
-
 		IntSize maxSize = IntSize(50,50);
 		IntSize minSize = IntSize(20,20);
 
@@ -624,24 +386,9 @@ void GameData::setStartMap( SetMapType set_map_type )
 		initPoint.y = rand()%maxPoint.y;
 
 		setInitRect(initPoint, initSize);
-
-		//			for(int i=mapWidthInnerBegin;i<mapWidthInnerBegin+80;i++)
-		//			{
-		//				mapState[i][69] = mapBlock;
-		//				mapState[i][70] = mapBlock;
-		//				mapState[i][71] = mapBlock;
-		//			}
-		//			for(int i=mapWidthInnerEnd-1;i>mapWidthInnerEnd-1-80;i--)
-		//			{
-		//				mapState[i][139] = mapBlock;
-		//				mapState[i][140] = mapBlock;
-		//				mapState[i][141] = mapBlock;
-		//			}
 	}
 	else if(set_map_type == kSMT2_sLine)
 	{
-		myDSH->setGoldGetRate(0.7f);
-
 		int height1 = 70, height2 = 140;
 		if(rand()%2 == 0)
 		{
@@ -671,8 +418,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT2_cornerPrison)
 	{
-		myDSH->setGoldGetRate(0.8f);
-
 		for(int i=mapWidthInnerBegin;i<mapWidthInnerBegin+50;i++) // (topleft -> top) and (bottomleft -> bottom)
 		{
 			mapState[i][mapHeightInnerEnd-1] = mapOldline;
@@ -731,8 +476,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT2_centerPrison)
 	{
-		myDSH->setGoldGetRate(0.8f);
-
 		for(int i=mapWidthInnerBegin+40;i<=mapWidthInnerEnd-1-40;i++)
 		{
 			if(i >= 80-10 && i <= 80+10)	continue;
@@ -763,8 +506,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT2_dddPrison)
 	{
-		myDSH->setGoldGetRate(0.9f);
-
 		int random_value = rand()%4; // 0 : top , 1 : bottom , 2 : left , 3 : right
 		for(int i=mapWidthInnerBegin+15;i<=mapWidthInnerBegin+15+60;i++)
 		{
@@ -819,8 +560,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT2_oneLineCenter)
 	{
-		myDSH->setGoldGetRate(0.7f);
-
 		int random_value = rand()%4; // 0 : top , 1 : bottom , 2 : left , 3 : right
 		if(random_value == 0)
 		{
@@ -860,8 +599,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT2_centerCross)
 	{
-		myDSH->setGoldGetRate(0.7f);
-
 		for(int i=mapWidthInnerBegin+40;i<mapWidthInnerEnd-1-40;i++)
 			mapState[i][108] = mapOldline;
 		for(int j=mapHeightInnerBegin+60;j<mapHeightInnerEnd-1-60;j++)
@@ -884,8 +621,6 @@ void GameData::setStartMap( SetMapType set_map_type )
 	}
 	else if(set_map_type == kSMT2_man)
 	{
-		myDSH->setGoldGetRate(0.8f);
-
 		for(int i=mapWidthInnerBegin;i<mapWidthInnerBegin+40;i++)
 			mapState[i][54] = mapOldline;
 		for(int j=mapHeightInnerBegin+54;j<mapHeightInnerBegin+108;j++)

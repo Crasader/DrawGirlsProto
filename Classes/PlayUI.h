@@ -10,7 +10,6 @@
 #define DrawingJack_PlayUI_h
 
 #include "cocos2d.h"
-#include "SelectedMapData.h"
 #include "StarGoldData.h"
 #include "EnumDefine.h"
 #include "DataStorageHub.h"
@@ -1027,7 +1026,7 @@ public:
 			if(t_p >= t_beforePercentage + JM_CONDITION)
 			{
 				int cmCnt = (t_p - t_beforePercentage)/JM_CONDITION;
-				int missile_type = myDSH->getIntegerForKey(kDSH_Key_lastSelectedElement);
+				int missile_type = rand()%7;//myDSH->getIntegerForKey(kDSH_Key_lastSelectedElement);
 				
 //				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
 				float damage_per = 1.f;
@@ -1475,7 +1474,7 @@ private:
 	float maxBossLife;
 	float clearPercentage;
 	
-	ElementCode main_cumber_element;
+//	ElementCode main_cumber_element;
 	
 	CCSprite* ui_case;
 	CCSprite* sand_clock;
@@ -1676,22 +1675,6 @@ private:
 	void myInit()
 	{
 		isGameover = false;
-		
-		int re_chapter_number = SelectedMapData::sharedInstance()->getViewChapterNumber();
-		
-		if(re_chapter_number == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1)
-			main_cumber_element = kElementCode_empty;
-		else if(re_chapter_number <= 2)			main_cumber_element = kElementCode_life;
-		else if(re_chapter_number <= 4)			main_cumber_element = kElementCode_fire;
-		else if(re_chapter_number <= 6)			main_cumber_element = kElementCode_water;
-		else if(re_chapter_number <= 8)			main_cumber_element = kElementCode_water;
-		else if(re_chapter_number <= 10)		main_cumber_element = kElementCode_fire;
-		else if(re_chapter_number == 11)		main_cumber_element = kElementCode_empty;
-		else if(re_chapter_number == 12)		main_cumber_element = kElementCode_water;
-		else if(re_chapter_number == 13)		main_cumber_element = kElementCode_life;
-		else if(re_chapter_number == 14)		main_cumber_element = kElementCode_life;
-		else if(re_chapter_number == 15)		main_cumber_element = kElementCode_fire;
-		else if(re_chapter_number == 16)		main_cumber_element = kElementCode_water;
 		
 		percentage_decrease_cnt = 0;
 		combo_cnt = 0;

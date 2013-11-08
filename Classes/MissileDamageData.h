@@ -20,60 +20,60 @@ using namespace cocos2d;
 class MissileDamageData : public CCObject
 {
 public:
-	static float getCorrelationDamage(float t_damage, int cumber_elemental)
-	{
-		int missile_elemental = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
-		float level_penalty = 0;
-		
-		if(missile_elemental == kElementCode_empty || cumber_elemental == kElementCode_empty)			t_damage *= 0.7f;
-		else if(missile_elemental == kElementCode_life)
-		{
-			level_penalty = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelLife)*0.03;
-			if(cumber_elemental == kElementCode_life)			t_damage *= 0.8f-level_penalty;
-			else if(cumber_elemental == kElementCode_fire)		t_damage *= 0.5f-level_penalty;
-			else if(cumber_elemental == kElementCode_water)
-			{
-				t_damage *= 1.2f;
-			}
-		}
-		else if(missile_elemental == kElementCode_fire)
-		{
-			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*0.03;
-			if(cumber_elemental == kElementCode_life)			t_damage *= 1.2f;
-			else if(cumber_elemental == kElementCode_fire)		t_damage *= 0.8f-level_penalty;
-			else if(cumber_elemental == kElementCode_water)		t_damage *= 0.5f-level_penalty;
-		}
-		else if(missile_elemental == kElementCode_water)
-		{
-			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*0.03;
-			if(cumber_elemental == kElementCode_life)			t_damage *= 0.5f-level_penalty;
-			else if(cumber_elemental == kElementCode_fire)		t_damage *= 1.2f;
-			else if(cumber_elemental == kElementCode_water)		t_damage *= 0.8f-level_penalty;
-		}
-		else if(missile_elemental == kElementCode_wind)
-		{
-			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*0.03;
-			if(cumber_elemental == kElementCode_life)			t_damage *= 1.2f;
-			else if(cumber_elemental == kElementCode_fire)		t_damage *= 1.2f;
-			else if(cumber_elemental == kElementCode_water)		t_damage *= 0.3f-level_penalty;
-		}
-		else if(missile_elemental == kElementCode_lightning)
-		{
-			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*0.03;
-			if(cumber_elemental == kElementCode_life)			t_damage *= 1.2f;
-			else if(cumber_elemental == kElementCode_fire)		t_damage *= 0.3f-level_penalty;
-			else if(cumber_elemental == kElementCode_water)		t_damage *= 1.2f;
-		}
-		else if(missile_elemental == kElementCode_plasma)
-		{
-			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*0.03;
-			if(cumber_elemental == kElementCode_life)			t_damage *= 0.3f-level_penalty;
-			else if(cumber_elemental == kElementCode_fire)		t_damage *= 1.2f;
-			else if(cumber_elemental == kElementCode_water)		t_damage *= 1.2f;
-		}
-		
-		return t_damage;
-	}
+//	static float getCorrelationDamage(float t_damage, int cumber_elemental)
+//	{
+//		int missile_elemental = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
+//		float level_penalty = 0;
+//		
+//		if(missile_elemental == kElementCode_empty || cumber_elemental == kElementCode_empty)			t_damage *= 0.7f;
+//		else if(missile_elemental == kElementCode_life)
+//		{
+//			level_penalty = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelLife)*0.03;
+//			if(cumber_elemental == kElementCode_life)			t_damage *= 0.8f-level_penalty;
+//			else if(cumber_elemental == kElementCode_fire)		t_damage *= 0.5f-level_penalty;
+//			else if(cumber_elemental == kElementCode_water)
+//			{
+//				t_damage *= 1.2f;
+//			}
+//		}
+//		else if(missile_elemental == kElementCode_fire)
+//		{
+//			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelFire)-1)*0.03;
+//			if(cumber_elemental == kElementCode_life)			t_damage *= 1.2f;
+//			else if(cumber_elemental == kElementCode_fire)		t_damage *= 0.8f-level_penalty;
+//			else if(cumber_elemental == kElementCode_water)		t_damage *= 0.5f-level_penalty;
+//		}
+//		else if(missile_elemental == kElementCode_water)
+//		{
+//			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelWater)-1)*0.03;
+//			if(cumber_elemental == kElementCode_life)			t_damage *= 0.5f-level_penalty;
+//			else if(cumber_elemental == kElementCode_fire)		t_damage *= 1.2f;
+//			else if(cumber_elemental == kElementCode_water)		t_damage *= 0.8f-level_penalty;
+//		}
+//		else if(missile_elemental == kElementCode_wind)
+//		{
+//			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelWind)-1)*0.03;
+//			if(cumber_elemental == kElementCode_life)			t_damage *= 1.2f;
+//			else if(cumber_elemental == kElementCode_fire)		t_damage *= 1.2f;
+//			else if(cumber_elemental == kElementCode_water)		t_damage *= 0.3f-level_penalty;
+//		}
+//		else if(missile_elemental == kElementCode_lightning)
+//		{
+//			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelLightning)-1)*0.03;
+//			if(cumber_elemental == kElementCode_life)			t_damage *= 1.2f;
+//			else if(cumber_elemental == kElementCode_fire)		t_damage *= 0.3f-level_penalty;
+//			else if(cumber_elemental == kElementCode_water)		t_damage *= 1.2f;
+//		}
+//		else if(missile_elemental == kElementCode_plasma)
+//		{
+//			level_penalty = (DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_elementLevelPlasma)-1)*0.03;
+//			if(cumber_elemental == kElementCode_life)			t_damage *= 0.3f-level_penalty;
+//			else if(cumber_elemental == kElementCode_fire)		t_damage *= 1.2f;
+//			else if(cumber_elemental == kElementCode_water)		t_damage *= 1.2f;
+//		}
+//		
+//		return t_damage;
+//	}
 	
 	static ElementCode getReverseElemental(int t_elemental)
 	{

@@ -1395,28 +1395,22 @@ private:
 		jack_drawing->setVisible(false);
 		addChild(jack_drawing, kJackZ_defaultBarrier);
 		
-//		is_hard = SelectedMapData::sharedInstance()->getIsNoShield();
 		is_hard = false;
 		
-//		if(!is_hard)
-//		{
-			CCSprite* t_texture = CCSprite::create("jack_barrier.png");
-			
-			jack_barrier = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(100, 0, 25, 25));
-			jack_barrier->setScale(0.8f);
-			addChild(jack_barrier, kJackZ_defaultBarrier);
-			
-			CCAnimation* t_animation = CCAnimation::create();
-			t_animation->setDelayPerUnit(0.1);
-			for(int i=0;i<5;i++)
-				t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(i*25, 0, 25, 25));
-			CCAnimate* t_animate = CCAnimate::create(t_animation);
-			CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-			
-			jack_barrier->runAction(t_repeat);
-//		}
+		CCSprite* t_texture = CCSprite::create("jack_barrier.png");
 		
-//		setStartPosition();
+		jack_barrier = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(100, 0, 25, 25));
+		jack_barrier->setScale(0.8f);
+		addChild(jack_barrier, kJackZ_defaultBarrier);
+		
+		CCAnimation* t_animation = CCAnimation::create();
+		t_animation->setDelayPerUnit(0.1);
+		for(int i=0;i<5;i++)
+			t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(i*25, 0, 25, 25));
+		CCAnimate* t_animate = CCAnimate::create(t_animation);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+		
+		jack_barrier->runAction(t_repeat);
 	}
 	
 	void setStartPosition()

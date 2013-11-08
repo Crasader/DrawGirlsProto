@@ -7,7 +7,6 @@
 //
 
 #include "StageImgLoader.h"
-#include "SelectedMapData.h"
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #import <Foundation/Foundation.h>
 #endif

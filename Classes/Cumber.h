@@ -13,7 +13,6 @@
 #include "GameData.h"
 #include <queue>
 #include "MissileParent.h"
-#include "SelectedMapData.h"
 #include "StarGoldData.h"
 #include "AlertEngine.h"
 //#include "MainCumber.h"
