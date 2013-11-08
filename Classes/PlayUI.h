@@ -302,8 +302,10 @@ public:
 			fever_particle->setDuration(0.f);
 			fever_particle->setAutoRemoveOnFinish(true);
 			
-			CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
-			fever_top->runAction(progress_to);
+			fever_top->stopAllActions();
+			fever_top->setPercentage(0.f);
+//			CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+//			fever_top->runAction(progress_to);
 		}
 	}
 	

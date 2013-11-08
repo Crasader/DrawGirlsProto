@@ -36,6 +36,7 @@ enum Mainzorder{
 	controlImgZorder,
 	countingLabelZorder,
 	conditionLabelZorder,
+	searchEyeZorder,
 	goldZorder,
 	clearshowtimeZorder,
 	myUIZorder,
@@ -472,6 +473,8 @@ private:
 		
 		return ccp(x_value, y_value);
 	}
+	
+	CCPoint getGameNodePosition(){	return game_node->getPosition();	}
 	
 	CCPoint getGameNodeToObjectPosition(CCPoint t_p)
 	{

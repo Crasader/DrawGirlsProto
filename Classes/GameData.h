@@ -446,6 +446,7 @@ public:
 	std::map<std::string, std::function<void(IntPoint, int, int, int)>> V_IpIII;
 	std::map<std::string, std::function<void(float, bool, CCPoint)>> V_FBCCP;
 	std::map<std::string, std::function<void(CCObject*, SEL_CallFunc, CCObject*, SEL_CallFunc)>> V_TDTD;
+	std::map<std::string, std::function<CCPoint(void)>> CCP_V;
 
 	
 	mapType mapState[162][217];
@@ -494,18 +495,22 @@ public:
 	
 	void setAlphaSpeed(float t_f);
 	
+	CCPoint getCommunicationCCPoint(string funcName)
+	{
+		CCAssert(CCP_V.find(funcName) != CCP_V.end(), funcName.c_str());
+		return CCP_V[funcName]();
+	}
+	
 	CCNode* getCommunicationNode(string funcName)
 	{
 		CCAssert(CCN_V.find(funcName) != CCN_V.end(), funcName.c_str());
 		return CCN_V[funcName]();
-
 	}
 	
 	CCArray* getCommunicationArray(string funcName)
 	{
 		CCAssert(CCA_V.find(funcName) != CCA_V.end(), funcName.c_str());
 		return CCA_V[funcName]();
-		
 	}
 	
 	void communication(string funcName)

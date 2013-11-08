@@ -13,6 +13,7 @@
 #include "StarGoldData.h"
 #include "PausePopupLayer.h"
 #include "StartMapGacha.h"
+#include "SearchEye.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -70,6 +71,7 @@ bool Maingame::init()
 	myGD->V_CCP["Main_startMoveToCCPoint"] = std::bind(&Maingame::startMoveToCCPoint, this, _1);
 	myGD->V_I["Main_takeSpeedUpEffect"] = std::bind(&Maingame::takeSpeedUpEffect, this, _1);
 	myGD->V_CCP["Main_showMissMissile"] = std::bind(&Maingame::showMissMissile, this, _1);
+	myGD->CCP_V["Main_getGameNodePosition"] = std::bind(&Maingame::getGameNodePosition, this);
 	mControl = NULL;
 	is_line_die = false;
 	
@@ -174,6 +176,12 @@ void Maingame::finalSetting()
 	myMS->scanMap();
 	
 	myUI->setControlTD(this, callfunc_selector(Maingame::setControlGesture), callfunc_selector(Maingame::setControlButton), callfunc_selector(Maingame::setControlJoystick), callfunc_selector(Maingame::startControl));
+	
+	SearchEye* search_eye = SearchEye::create();
+	search_eye->setPosition(CCPointZero);
+	addChild(search_eye, searchEyeZorder);
+	
+	search_eye->startSearch();
 	
 	startScene();
 }
