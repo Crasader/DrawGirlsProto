@@ -12,18 +12,18 @@
 using namespace cocos2d::extension;
 
 
-class BossCCB : public CCSprite,// public CCBSelectorResolver        // CCMenuItem이나 CCControl 버튼의 콜백함수를 소스와 연결
+class CircleBossCCB : public CCSprite,// public CCBSelectorResolver        // CCMenuItem이나 CCControl 버튼의 콜백함수를 소스와 연결
 public CCBMemberVariableAssigner,  // 멤버변수나 커스텀프로퍼티를 소스와 연결
 public CCNodeLoaderListener       // ccbi파일 로딩 완료후 콜백함수 연결
 {
 	
 public:
-	CREATE_FUNC(BossCCB);
-	BossCCB()
+	CREATE_FUNC(CircleBossCCB);
+	CircleBossCCB()
 	{
 		
 	}
-	virtual ~BossCCB()
+	virtual ~CircleBossCCB()
 	{
 		for(auto i : m_s)
 		{
@@ -43,7 +43,7 @@ public:
      * 3. 멤버변수의 타입. (CCSprite*)
      * 4. 헤더에 선언한 실제 멤버변수 this->m_pSprBg
      */
-//    CCB_MEMBERVARIABLEASSIGNER_GLUE(this,   "m_7", CCSprite *, m_7);
+		//    CCB_MEMBERVARIABLEASSIGNER_GLUE(this,   "m_7", CCSprite *, m_7);
 		CCSprite* temp = 0;
 		if (pTarget == this) {
 			temp = dynamic_cast<CCSprite*>(pNode);
@@ -64,13 +64,13 @@ public:
 	vector<CCSprite*> m_s;
 };
 
-class KSCumberCCBPieceBase : public KSCumberBase, public CCBAnimationManagerDelegate
+class CircleCCBPieceBase : public KSCumberBase, public CCBAnimationManagerDelegate
 {
 public:
 	virtual void runTimeline(Json::Value patternInfo) = 0;
 };
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
-class Apricot : public KSCumberCCBPieceBase, public CCBSelectorResolver
+class KSCircleBase : public CircleCCBPieceBase, public CCBSelectorResolver
 {
 public:
 	virtual SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, const char* pSelectorName){
@@ -129,7 +129,7 @@ public:
 			{
 				AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 			}
-																				
+			
 			if(m_attackCanceled) // 맞아서 캔슬이 되었다면
 			{
 				currentTimelineFooter = "_e";
@@ -174,11 +174,11 @@ public:
 			myGD->communication("MS_resetRects", false);
 		}
 	}
-	Apricot() : RADIUS(15.f)
+	KSCircleBase() : RADIUS(15.f)
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
-	virtual ~Apricot(){
+	virtual ~KSCircleBase(){
 		
 	}
 	
@@ -191,9 +191,24 @@ public:
 	{
 		m_state = CUMBERSTATESTOP;
 	}
+	
+	virtual bool init(const string& ccbiName);
+	static KSCircleBase* create(const string& ccbiName) \
+	{ \
+    KSCircleBase *pRet = new KSCircleBase(); \
+    if (pRet && pRet->init(ccbiName)) \
+    { \
+			pRet->autorelease(); \
+			return pRet; \
+    } \
+    else \
+    { \
+			delete pRet; \
+			pRet = NULL; \
+			return NULL; \
+    } \
+	}
 
-	virtual bool init();
-	CREATE_FUNC(Apricot);
 	virtual void setPosition(const CCPoint& t_sp)
 	{
 		//		CCLog("setPos %f %f", t_sp.x, t_sp.y);
@@ -220,21 +235,21 @@ public:
 		return m_headImg->getPosition();
 	}
 	
-
+	
 	COLLISION_CODE crashLooper(const set<IntPoint>& v, IntPoint* cp);
 	const float RADIUS;
-//	void showEmotion(EmotionType t_type)
-//	{
-//		if(mEmotion)
-//			mEmotion->selfRemove();
-//		mEmotion = Emotion::create(t_type, this, callfunc_selector(Apricot::nullmEmotion));
-//		mEmotion->setPosition(ccp(30,20));
-//		addChild(mEmotion);
-//	}
-//	void nullmEmotion()
-//	{
-//		mEmotion = NULL;
-//	}
+	//	void showEmotion(EmotionType t_type)
+	//	{
+	//		if(mEmotion)
+	//			mEmotion->selfRemove();
+	//		mEmotion = Emotion::create(t_type, this, callfunc_selector(Apricot::nullmEmotion));
+	//		mEmotion->setPosition(ccp(30,20));
+	//		addChild(mEmotion);
+	//	}
+	//	void nullmEmotion()
+	//	{
+	//		mEmotion = NULL;
+	//	}
 	bool startDamageReaction(float damage, float angle);
 	virtual void attackBehavior(Json::Value _pattern)
 	{
@@ -250,13 +265,13 @@ public:
 		else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 		{
 			m_state = CUMBERSTATESTOP;
-//			startAnimationNoDirection();
+			//			startAnimationNoDirection();
 		}
 		else
 		{
 			lastCastNum = m_well512.GetValue(1, 1);
 			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
-
+			
 			std::string target = _pattern.get("target", "no").asString();
 			if( target == "yes") // 타게팅이라면 조준하라
 				startAnimationDirection();
@@ -268,7 +283,7 @@ public:
 	virtual void startAnimationNoDirection();
 	void damageReaction(float dt);
 	void animationNoDirection(float dt);
-//	virtual void startAnimationDirection(){}
+	//	virtual void startAnimationDirection(){}
 	virtual void onStartGame();
 	//	virtual void onEndGame();
 	virtual void onPatternEnd();
@@ -278,7 +293,7 @@ public:
 	{
 		return getPosition() + ccp(0, 0);
 	}
-
+	
 	virtual void setScale(float scale)
 	{
 		m_headImg->setScale(scale);
@@ -296,20 +311,20 @@ public:
 	virtual void furyModeOn(int tf);
 	void furyModeScheduler(float dt);
 	virtual void furyModeOff();
-
+	
 	virtual void crashMapForPosition(CCPoint targetPt);
 	
 	
 	void scaleAdjustment(float dt);
 	
-
-		virtual void stopAnimationNoDirection()
+	
+	virtual void stopAnimationNoDirection()
 	{
 		m_noDirection.state = 2;
 	}
 	virtual void stopAnimationDirection()
 	{
-//		m_direction.state = 2;
+		//		m_direction.state = 2;
 	}
 	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition){
 		IntPoint afterPoint = point;
@@ -344,7 +359,7 @@ protected:
 	bool isGameover;
 	int lastCastNum;
 	//	CCSprite* m_headImg;
-	BossCCB* m_headImg;
+	CircleBossCCB* m_headImg;
 	void update(float dt)
 	{
 		
@@ -378,13 +393,13 @@ protected:
 					int sizey = i->getContentSize().height * getCumberScale() * 1.2 / 2.f;
 					auto mapState = myGD->mapState;
 					
-//					if(myGD->getJackState() == jackStateDrawing &&
-//						 (bulletPoint - jackPoint).length() <= sizex)
-//					{
-//						myGD->communication("CP_jackCrashDie");
-//						myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-//					}
-//					else
+					//					if(myGD->getJackState() == jackStateDrawing &&
+					//						 (bulletPoint - jackPoint).length() <= sizex)
+					//					{
+					//						myGD->communication("CP_jackCrashDie");
+					//						myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+					//					}
+					//					else
 					{
 						for(int y = bulletPoint.y - sizey; y<=bulletPoint.y + sizey; y++)
 						{
@@ -421,10 +436,10 @@ protected:
 	CCBAnimationManager *mAnimationManager;
 	IntPoint getMapPoint(CCPoint c){
 		return IntPoint(round((c.x - 1) / pixelSize + 1.f),
-						round((c.y - 1) / pixelSize + 1.f));
+										round((c.y - 1) / pixelSize + 1.f));
 	}
 	
-//	Emotion* mEmotion;
+	//	Emotion* mEmotion;
 	/// 방사형 에니메이션 용.
 	struct NoDirection
 	{
@@ -452,10 +467,10 @@ protected:
 };
 
 class CCBReader;
-class ApricotLoader : public CCSpriteLoader
+class CircleLoader : public CCSpriteLoader
 {
 public:
-	CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(ApricotLoader, loader); //로더 입니다. 네이밍이 비슷해서.. 주의하세요.
+	CCB_STATIC_NEW_AUTORELEASE_OBJECT_METHOD(CircleLoader, loader); //로더 입니다. 네이밍이 비슷해서.. 주의하세요.
 	/*
 	 * 아래와 같은 구문입니다.
 	 
@@ -475,7 +490,7 @@ public:
 	
 	
 protected:
-	CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(BossCCB); //레이어 입니다. 네이밍이 비슷해서.. 주의하세요.
+	CCB_VIRTUAL_NEW_AUTORELEASE_CREATECCNODE_METHOD(CircleBossCCB); //레이어 입니다. 네이밍이 비슷해서.. 주의하세요.
 	/*
 	 * 아래와 같은 구문입니다.
 	 

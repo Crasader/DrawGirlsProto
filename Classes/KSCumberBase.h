@@ -353,6 +353,10 @@ public:
 	{
 		return m_scale.scale.getValue();
 	}
+	void onCanceledCasting()
+	{
+		m_castingCancelCount++;
+	}
 	void randomMoving(float dt); /// 무작위 움직임.
 	void straightMoving(float dt); /// 당구공 움직임.
 	void followMoving(float dt); /// 따라가는 움직임.

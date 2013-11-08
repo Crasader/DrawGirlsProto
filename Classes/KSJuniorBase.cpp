@@ -10,13 +10,21 @@
 
 
 
-bool KSJuniorBase::init()
+bool KSJuniorBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();
 	
+	
+	////////////////////////////////////// by hs
+	string ccbiname2 = ccbiName;
+	if(ccbiName.substr(0,1)=="1") {
+		ccbiname2="bear";
+	}
+	////////////////////////////////////////////
+	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
-	std::string _ccbiName = ccbiName();
+	std::string _ccbiName = ("mob_" + ccbiname2 + ".ccbi").c_str();
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
 	CCNode* p = reader->readNodeGraphFromFile(_ccbiName.c_str(),this);
@@ -65,7 +73,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
-		m_castingCancelCount++;
+
 	}
 	else if(m_state == CUMBERSTATEMOVING)
 	{
