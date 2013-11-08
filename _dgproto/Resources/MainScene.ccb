@@ -127,8 +127,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>149</real>
-							<real>126</real>
+							<real>161</real>
+							<real>124</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -151,11 +151,9 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>fx_cha_new.ccb</string>
+						<string>fx_bomb3.ccb</string>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -284,13 +282,13 @@
 			<key>chainedSequenceId</key>
 			<integer>0</integer>
 			<key>length</key>
-			<real>0.66666668653488159</real>
+			<real>2</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.66666668653488159</real>
+			<real>2</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
