@@ -1590,11 +1590,11 @@ public:
 			baseNode->runAction(t_seq);
 		}
 		
-		if(colorControl)
-		{
-			CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
-			colorControl->runAction(t_fade2);
-		}
+//		if(colorControl)
+//		{
+//			CCFadeTo* t_fade2 = CCFadeTo::create(1.f, 0);
+//			colorControl->runAction(t_fade2);
+//		}
 		
 		if(cntLabel)
 		{
@@ -1608,7 +1608,7 @@ private:
 	float speed;
 	int angle;
 	CCSprite* baseNode;
-	CCSprite* colorControl;
+//	CCSprite* colorControl;
 	CCLabelAtlas* cntLabel;
 	int cushionCnt;
 	bool is_big_bomb;
@@ -1616,16 +1616,16 @@ private:
 	CCObject* target_removeEffect;
 	SEL_CallFunc delegate_removeEffect;
 	
-	ccColor3B getCushionColor(int t_cushion_cnt)
-	{
-		if(t_cushion_cnt == 1)			return ccc3(227, 0, 0); // red
-		else if(t_cushion_cnt == 2)		return ccc3(205, 70, 22); // orange
-		else if(t_cushion_cnt == 3)		return ccc3(220, 100, 10); // light orange
-		else if(t_cushion_cnt == 4)		return ccc3(80, 137, 50); // green
-		else if(t_cushion_cnt == 5)		return ccc3(20, 142, 155); // blue green
-		else if(t_cushion_cnt == 6)		return ccc3(14, 120, 215); // blue
-		else							return ccc3(0, 0, 0); // black
-	}
+//	ccColor3B getCushionColor(int t_cushion_cnt)
+//	{
+//		if(t_cushion_cnt == 1)			return ccc3(227, 0, 0); // red
+//		else if(t_cushion_cnt == 2)		return ccc3(205, 70, 22); // orange
+//		else if(t_cushion_cnt == 3)		return ccc3(220, 100, 10); // light orange
+//		else if(t_cushion_cnt == 4)		return ccc3(80, 137, 50); // green
+//		else if(t_cushion_cnt == 5)		return ccc3(20, 142, 155); // blue green
+//		else if(t_cushion_cnt == 6)		return ccc3(14, 120, 215); // blue
+//		else							return ccc3(0, 0, 0); // black
+//	}
 	
 	void startMyAction()
 	{
@@ -1640,7 +1640,7 @@ private:
 		crashMap();
 		baseNode->removeFromParentAndCleanup(true);
 		baseNode = NULL;
-		colorControl = NULL;
+//		colorControl = NULL;
 		cntLabel = NULL;
 		
 		CCDelayTime* t_delay = CCDelayTime::create(0.5);
@@ -1697,7 +1697,7 @@ private:
 				stopMyAction(); // bomb
 				return;
 			}
-			colorControl->setColor(getCushionColor(cushionCnt));
+//			colorControl->setColor(getCushionColor(cushionCnt));
 			cntLabel->setString(CCString::createWithFormat("%d", cushionCnt)->getCString());
 			
 			after_position = judgeAnglePoint(baseNode->getPosition());
@@ -1892,17 +1892,22 @@ private:
 			angle = rand()%360 - 180;
 		}
 		
-		baseNode = CCSprite::create("threeCushion_main.png");
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		baseNode = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_bumbball.ccbi",this));
+		
+//		baseNode = CCSprite::create("threeCushion_main.png");
 		baseNode->setPosition(t_sp);
 		addChild(baseNode);
 		
-		colorControl = CCSprite::create("threeCushion_color.png");
-		colorControl->setPosition(ccp(12,12));
-		colorControl->setColor(getCushionColor(cushionCnt));
-		baseNode->addChild(colorControl);
+//		colorControl = CCSprite::create("threeCushion_color.png");
+//		colorControl->setPosition(ccp(12,12));
+//		colorControl->setColor(getCushionColor(cushionCnt));
+//		baseNode->addChild(colorControl);
 		
 		cntLabel = CCLabelAtlas::create(CCString::createWithFormat("%d", cushionCnt)->getCString(), "threeCushion_number.png", 13, 13, '1');
-		cntLabel->setPosition(ccp(6,5));
+		cntLabel->setAnchorPoint(ccp(0.5,0.5));
+		cntLabel->setPosition(ccp(baseNode->getContentSize().width/2.f,baseNode->getContentSize().height/2.f));
 		baseNode->addChild(cntLabel);
 		
 		startMyAction();
