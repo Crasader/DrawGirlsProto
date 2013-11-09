@@ -244,6 +244,8 @@ private:
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
 					
+					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
+					
 					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 					combo_cnt++;
 					
@@ -492,6 +494,8 @@ private:
 	CCSprite* mainImg;
 	bool is_spin;
 	
+	int ing_miss_counting;
+	
 	void moving()
 	{
 		bool isEnable = false;
@@ -711,6 +715,8 @@ private:
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
 					
+					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
+					
 					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 					combo_cnt++;
 					
@@ -724,6 +730,45 @@ private:
 				}
 				else
 				{
+					myGD->communication("Main_showMissMissile", particlePosition);
+					
+					int random_angle = directionAngle + rand()%21 - 10;
+					
+					if(is_spin)				mainImg->setRotation(mainImg->getRotation()-6);
+					else					mainImg->setRotation((mainImg->getRotation()-(random_angle-90))/2.f);
+					
+					CCPoint miss_position;
+					miss_position.x = 1.f;
+					miss_position.y = tanf(random_angle/180.f*M_PI);
+					
+					if(random_angle >= 90 && random_angle <= 270)
+						miss_position = ccpMult(miss_position, -1.f);
+					
+					miss_position = ccpMult(miss_position, 10.f*myJM_SPEED/sqrtf(powf(miss_position.x, 2.f) + powf(miss_position.y, 2.f)));
+					
+					CCMoveBy* move2 = CCMoveBy::create(10.f/60.f, miss_position);
+					mainImg->runAction(move2);
+					
+					CCMoveBy* move1 = CCMoveBy::create(10.f/60.f, miss_position);
+					CCCallFunc* call1 = CCCallFunc::create(this, callfunc_selector(JM_BasicMissile::removeFromParent));
+					CCSequence* t_seq = CCSequence::createWithTwoActions(move1, call1);
+					
+					particle->runAction(t_seq);
+				}
+			}
+			if(ing_miss_counting < 0)
+			{
+				if(t_distance <= 5)
+					ing_miss_counting = 30;
+			}
+			else
+			{
+				ing_miss_counting--;
+				
+				if(ing_miss_counting == 0)
+				{
+					unschedule(schedule_selector(JM_BasicMissile::moving));
+					
 					myGD->communication("Main_showMissMissile", particlePosition);
 					
 					int random_angle = directionAngle + rand()%21 - 10;
@@ -778,6 +823,7 @@ private:
 	
 	void realInit(CCNode* t_target, int jm_type, float damage_per)
 	{
+		ing_miss_counting = -1;
 		targetNode = t_target;
 		particle = new CCParticleSystemQuad();
 		

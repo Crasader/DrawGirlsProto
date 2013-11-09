@@ -35,10 +35,10 @@ enum Mainzorder{
 	controlImgZorder,
 	countingLabelZorder,
 	conditionLabelZorder,
-	searchEyeZorder,
 	goldZorder,
 	clearshowtimeZorder,
 	myUIZorder,
+	searchEyeZorder,
 	mControlZorder,
 	particleZorder,
 	shutterZorder
@@ -507,16 +507,48 @@ private:
 	
 	void showMissMissile(CCPoint t_position)
 	{
+		t_position.x += rand()%21 - 10;
+		t_position.y += rand()%21 - 10;
+		
 		CCSprite* miss_label = CCSprite::create("missile_miss.png");
 		miss_label->setScale(1.f/1.5f);
 		miss_label->setPosition(t_position);
 		game_node->addChild(miss_label, goldZorder);
 		
 		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-		CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCLabelTTF::removeFromParent));
+		CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCSprite::removeFromParent));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
 		
 		miss_label->runAction(t_seq);
+	}
+	
+	void showDamageMissile(CCPoint t_position, int t_damage)
+	{
+//		CCSprite* miss_label = CCSprite::create("missile_miss.png");
+//		miss_label->setScale(1.f/1.5f);
+//		miss_label->setPosition(t_position);
+//		game_node->addChild(miss_label, goldZorder);
+//		
+//		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+//		CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCLabelTTF::removeFromParent));
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+//		
+//		miss_label->runAction(t_seq);
+		
+		t_position.x += rand()%21 - 10;
+		t_position.y += rand()%21 - 10;
+		
+		CCLabelTTF* damage_label = CCLabelTTF::create(CCString::createWithFormat("%d", t_damage)->getCString(), mySGD->getFont().c_str(), 30);
+		damage_label->setColor(ccRED);
+		damage_label->setAnchorPoint(ccp(0.5f, 0.5f));
+		damage_label->setPosition(t_position);
+		game_node->addChild(damage_label, goldZorder);
+		
+		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+		CCCallFunc* t_call = CCCallFunc::create(damage_label, callfunc_selector(CCLabelTTF::removeFromParent));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+		
+		damage_label->runAction(t_seq);
 	}
 	
 	bool is_line_die;
