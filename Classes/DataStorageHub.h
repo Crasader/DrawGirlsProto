@@ -29,6 +29,7 @@ typedef enum t_DSH_Key{
 	kDSH_Key_hasGottenCard_int1,
 	kDSH_Key_inputTextCard_int1,
 	kDSH_Key_cardTakeCnt,
+	kDSH_Key_takeCardNumber_int1,
 	kDSH_Key_cardSortType,
 	kDSH_Key_lastSelectedStage,
 	kDSH_Key_uiType,
@@ -154,24 +155,32 @@ private:
 	string getKey(DSH_Key t_name)
 	{
 		string return_value;
-		if(t_name == kDSH_Key_savedStar)								return_value = "ss";
-		else if(t_name == kDSH_Key_savedGold)							return_value = "sg";
-		else if(t_name == kDSH_Key_notFirstExe)							return_value = "nfe";
+		if(t_name == kDSH_Key_notFirstExe)								return_value = "nfe";
+		
 		else if(t_name == kDSH_Key_bgmOff)								return_value = "bgmoff";
 		else if(t_name == kDSH_Key_effectOff)							return_value = "effoff";
+		else if(t_name == kDSH_Key_uiType)								return_value = "uitype";
+		
+		else if(t_name == kDSH_Key_savedStar)							return_value = "ss";
+		else if(t_name == kDSH_Key_savedGold)							return_value = "sg";
+		else if(t_name == kDSH_Key_haveItemCnt_int1)					return_value = "hic%d";
+		
 		else if(t_name == kDSH_Key_heartCnt)							return_value = "hc";
 		else if(t_name == kDSH_Key_heartTime)							return_value = "ht";
-		else if(t_name == kDSH_Key_haveItemCnt_int1)					return_value = "hic%d";
-		else if(t_name == kDSH_Key_selectedCard)						return_value = "scard";
-		else if(t_name == kDSH_Key_cardDurability_int1)					return_value = "cd%d";
-		else if(t_name == kDSH_Key_hasGottenCard_int1)					return_value = "hgcard%d";
-		else if(t_name == kDSH_Key_inputTextCard_int1)					return_value = "itc%d";
-		else if(t_name == kDSH_Key_cardTakeCnt)							return_value = "ctc";
-		else if(t_name == kDSH_Key_cardSortType)						return_value = "cst";
-		else if(t_name == kDSH_Key_lastSelectedStage)					return_value = "lss";
-		else if(t_name == kDSH_Key_uiType)								return_value = "uitype";
+		
 		else if(t_name == kDSH_Key_puzzleMode)							return_value = "pm";
 		else if(t_name == kDSH_Key_selectedPuzzleNumber)				return_value = "spn";
+		else if(t_name == kDSH_Key_lastSelectedStage)					return_value = "lss";
+		
+		else if(t_name == kDSH_Key_selectedCard)						return_value = "scard";
+		else if(t_name == kDSH_Key_cardSortType)						return_value = "cst";
+		else if(t_name == kDSH_Key_inputTextCard_int1)					return_value = "itc%d";
+		
+		else if(t_name == kDSH_Key_cardDurability_int1)					return_value = "cd%d";	// arg int(card_number) // return usable durability
+		else if(t_name == kDSH_Key_hasGottenCard_int1)					return_value = "hgcard%d";	// arg int(card_number) // return cardTakeCnt_number
+		else if(t_name == kDSH_Key_cardTakeCnt)							return_value = "ctc";	// hasGottenCards count
+		else if(t_name == kDSH_Key_takeCardNumber_int1)					return_value = "tcn%d"; // arg int(loop start 1 ~ cardTakeCnt) // return card_number
+		
 		else if(t_name == kDSH_Key_allHighScore)						return_value = "ahs";
 		
 		return return_value;

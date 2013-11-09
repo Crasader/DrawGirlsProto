@@ -989,13 +989,9 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 
 void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color )
 {
-	Well512 t_well512;
-	int x_change = t_well512.GetValue(0, 21) - 10;
-	int y_change = t_well512.GetValue(0, 21) - 10;
-	
 	CCSprite* t_explosion = CCSprite::create("fx_boss_hit1.png");
 	t_explosion->setScale(1.f/1.5f);
-	t_explosion->setPosition(ccpAdd(startPosition, ccp(x_change, y_change)));
+	t_explosion->setPosition(startPosition);
 	addChild(t_explosion);
 	
 	CCAnimation* t_animation = CCAnimation::create();

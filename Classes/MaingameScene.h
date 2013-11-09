@@ -23,6 +23,7 @@
 #include "ClearShowTime.h"
 #include "GameItemManager.h"
 #include "ZoomScriptScene.h"
+#include "MissileDamageLabel.h"
 
 using namespace cocos2d;
 
@@ -524,31 +525,12 @@ private:
 	
 	void showDamageMissile(CCPoint t_position, int t_damage)
 	{
-//		CCSprite* miss_label = CCSprite::create("missile_miss.png");
-//		miss_label->setScale(1.f/1.5f);
-//		miss_label->setPosition(t_position);
-//		game_node->addChild(miss_label, goldZorder);
-//		
-//		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-//		CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCLabelTTF::removeFromParent));
-//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-//		
-//		miss_label->runAction(t_seq);
-		
-		t_position.x += rand()%21 - 10;
-		t_position.y += rand()%21 - 10;
-		
-		CCLabelTTF* damage_label = CCLabelTTF::create(CCString::createWithFormat("%d", t_damage)->getCString(), mySGD->getFont().c_str(), 30);
-		damage_label->setColor(ccRED);
-		damage_label->setAnchorPoint(ccp(0.5f, 0.5f));
+		MissileDamageLabel* damage_label = MissileDamageLabel::create(t_damage);
+		damage_label->setScale(1.f/1.5f);
 		damage_label->setPosition(t_position);
 		game_node->addChild(damage_label, goldZorder);
 		
-		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-		CCCallFunc* t_call = CCCallFunc::create(damage_label, callfunc_selector(CCLabelTTF::removeFromParent));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-		
-		damage_label->runAction(t_seq);
+		damage_label->startMyAction();
 	}
 	
 	bool is_line_die;

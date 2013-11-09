@@ -235,12 +235,10 @@ private:
 					particlePosition = shootImg->getPosition();
 					mainImg->removeFromParentAndCleanup(true);
 					
-					ccColor4F myColor;
-					if(my_type == kMyElementalPlasma)			myColor = ccc4f(1.f, 0, 1.f, 1.f);
-					else if(my_type == kMyElementalLightning)	myColor = ccc4f(1.f, 1.f, 0, 1.f);
-					else if(my_type == kMyElementalWind)		myColor = ccc4f(0, 1.f, 1.f, 1.f);
+					particlePosition.x += rand()%21 - 10;
+					particlePosition.y += rand()%21 - 10;
 					
-					myGD->communication("MP_explosion", particlePosition, myColor);
+					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0));
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
 					
@@ -711,6 +709,9 @@ private:
 				
 				if(rand()%100 > agi_rate)
 				{
+					particlePosition.x += rand()%21 - 10;
+					particlePosition.y += rand()%21 - 10;
+					
 					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0));
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
@@ -758,7 +759,7 @@ private:
 			}
 			if(ing_miss_counting < 0)
 			{
-				if(t_distance <= 5)
+				if(distance <= 5)
 					ing_miss_counting = 30;
 			}
 			else
