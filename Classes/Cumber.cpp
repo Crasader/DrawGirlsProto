@@ -355,6 +355,31 @@ void CumberParent::dieAnimation()
 	}
 }
 
+void CumberParent::onJackDie()
+{
+	for(auto mainCumber : mainCumbers)
+		mainCumber->onJackDie();
+	
+	int loop_cnt = subCumberArray->count();
+	for(int i=0;i<loop_cnt;i++)
+	{
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+		t_sc->onJackDie();
+	}
+}
+void CumberParent::onJackRevived()
+{
+	for(auto mainCumber : mainCumbers)
+		mainCumber->onJackRevived();
+	
+	int loop_cnt = subCumberArray->count();
+	for(int i=0;i<loop_cnt;i++)
+	{
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+		t_sc->onJackRevived();
+	}
+}
+
 int CumberParent::getSubCumberCount()
 {
 	return subCumberArray->count();
@@ -476,7 +501,8 @@ void CumberParent::myInit()
 	myGD->V_V["CP_onStartGame"] = std::bind(&CumberParent::onStartGame, this);
 	myGD->V_V["CP_onPatternEnd"] = std::bind(&CumberParent::onPatternEnd, this);
 	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
-	
+	myGD->V_V["CP_onJackDie"] = std::bind(&CumberParent::onJackDie, this);
+	myGD->V_V["CP_onJackRevived"] = std::bind(&CumberParent::onJackRevived, this);
 	
 	void onStartGame();
 	void onPatternEnd();

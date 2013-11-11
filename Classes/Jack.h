@@ -847,6 +847,8 @@ public:
 //		return;
 		if(!isDie && !myGD->getIsGameover())
 		{
+			myGD->communication("CP_onJackDie");
+			
 			if(die_type == DieType::kDieType_other)
 			{
 				myLog->addLog(kLOG_die_other, myGD->getCommunication("UI_getUseTime"));
@@ -1251,6 +1253,7 @@ private:
 		myGD->communication("GIM_dieCreateItem");
 		myGD->communication("Main_resetIsLineDie");
 		myGD->communication("Main_stopSpecialAttack");
+		myGD->communication("CP_onJackRevived");
 	}
 	
 	void continueGame()

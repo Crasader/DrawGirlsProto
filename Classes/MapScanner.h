@@ -393,6 +393,7 @@ enum MSzorder{
 	invisibleZorder = 1,
 	visibleZorder,
 	blockZorder,
+	topBottomZorder,
 	boarderZorder
 };
 
@@ -518,6 +519,8 @@ public:
 		int base_value = roundf(-t_p.y/myGD->game_scale/2.f);
 		
 		int gacha_cnt = mySGD->getStartMapGachaCnt();
+		
+		if(gacha_cnt)
 		if(gacha_cnt > 1)
 			gacha_cnt = 1;
 		
@@ -530,8 +533,8 @@ public:
 		}
 		else if(gacha_cnt <= 5)
 		{
-			init_rect.size.width = rand()%(60-36 + 1) + 36;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
-			init_rect.size.height = rand()%(60-36 + 1) + 36;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
+			init_rect.size.width = rand()%(60-30 + 1) + 50;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
+			init_rect.size.height = rand()%(60-30 + 1) + 46;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
 		}
 		
 		IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
@@ -660,13 +663,13 @@ private:
 		top_back->setAnchorPoint(ccp(0.5,0));
 		top_back->setPosition(ccp(160,430));
 		top_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
-		addChild(top_back);
+		addChild(top_back, topBottomZorder);
 		
 		CCSprite* bottom_back = CCSprite::create("bottom_back.png");
 		bottom_back->setAnchorPoint(ccp(0.5,1));
 		bottom_back->setPosition(ccp(160,0));
 		bottom_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
-		addChild(bottom_back);
+		addChild(bottom_back, topBottomZorder);
 		
 		top_boarder = CCSprite::create("frame_top.png", CCRectMake(0, 0, 334, 7));
 		top_boarder->setAnchorPoint(ccp(0.5,0));
@@ -693,6 +696,100 @@ private:
 	CCSprite* bottom_boarder;
 	CCSprite* left_boarder;
 	CCSprite* right_boarder;
+	
+	CCSpriteBatchNode* top_block_manager;
+	CCSpriteBatchNode* bottom_block_manager;
+	
+	void setTopBottomBlock()
+	{
+		float top_y = (myGD->limited_step_top-1)*pixelSize;
+		float bottom_y = (myGD->limited_step_bottom-1)*pixelSize+2.f;
+		
+		top_block_manager = CCSpriteBatchNode::create("temp_block.png");
+		top_block_manager->setPosition(CCPointZero);
+		addChild(top_block_manager, blockZorder);
+		
+		int top_cnt = 0;
+		while(top_y < 430)
+		{
+			top_cnt++;
+			for(int i=0;i<10;i++)
+			{
+				CCSprite* t_block = CCSprite::create("temp_block.png");
+				t_block->setAnchorPoint(ccp(0,0));
+				t_block->setPosition(ccp(i*32, top_y));
+				t_block->setTag(top_cnt*10+i);
+				top_block_manager->addChild(t_block);
+			}
+			top_y += 32.f;
+		}
+		top_block_manager->setTag(top_cnt);
+		
+		bottom_block_manager = CCSpriteBatchNode::create("temp_block.png");
+		bottom_block_manager->setPosition(CCPointZero);
+		addChild(bottom_block_manager, blockZorder);
+		
+		int bottom_cnt = 0;
+		while(bottom_y > 0)
+		{
+			bottom_cnt++;
+			for(int i=0;i<10;i++)
+			{
+				CCSprite* t_block = CCSprite::create("temp_block.png");
+				t_block->setAnchorPoint(ccp(0,1.f));
+				t_block->setPosition(ccp(i*32, bottom_y));
+				t_block->setTag(bottom_cnt*10+i);
+				bottom_block_manager->addChild(t_block);
+			}
+			bottom_y -= 32.f;
+		}
+		bottom_block_manager->setTag(bottom_cnt);
+	}
+	
+	
+	bool is_removed_top_block, is_removed_bottom_block;
+	int remove_block_cnt;
+	void startRemoveBlock()
+	{
+		is_removed_top_block = false;
+		is_removed_bottom_block = false;
+		remove_block_cnt = 0;
+		schedule(schedule_selector(MapScanner::removingBlock), 0.15f);
+	}
+	
+	void removingBlock()
+	{
+		remove_block_cnt++;
+		
+		if(!is_removed_top_block)
+		{
+			if(top_block_manager->getTag() < remove_block_cnt)
+				is_removed_top_block = true;
+			else
+			{
+				for(int i=0;i<10;i++)
+					top_block_manager->removeChildByTag(remove_block_cnt*10+i);
+			}
+		}
+		if(!is_removed_bottom_block)
+		{
+			if(bottom_block_manager->getTag() < remove_block_cnt)
+				is_removed_bottom_block = true;
+			else
+			{
+				for(int i=0;i<10;i++)
+					bottom_block_manager->removeChildByTag(remove_block_cnt*10+i);
+			}
+		}
+		
+		
+		if(is_removed_top_block && is_removed_bottom_block)
+		{
+			unschedule(schedule_selector(MapScanner::removingBlock));
+			top_block_manager->removeFromParent();
+			bottom_block_manager->removeFromParent();
+		}
+	}
 	
 	void showEmptyPoint(CCPoint t_point)
 	{
@@ -724,7 +821,8 @@ private:
 		myGD->V_V["MS_scanMap"] = std::bind(&MapScanner::scanMap, this);
 		myGD->V_B["MS_resetRects"] = std::bind(&MapScanner::resetRects, this, _1);
 		myGD->V_CCP["MS_showEmptyPoint"] = std::bind(&MapScanner::showEmptyPoint, this, _1);
-		
+		myGD->V_V["MS_setTopBottomBlock"] = std::bind(&MapScanner::setTopBottomBlock, this);
+		myGD->V_V["MS_startRemoveBlock"] = std::bind(&MapScanner::startRemoveBlock, this);
 		
 		setMapImg();
 	}

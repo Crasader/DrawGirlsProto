@@ -17,6 +17,7 @@
 #include "ListViewerScroll.h"
 #include "ChallengePopup.h"
 #include "GachaPopup.h"
+#include "DurabilityNoti.h"
 
 CCScene* StageSettingScene::scene()
 {
@@ -356,59 +357,8 @@ void StageSettingScene::menuAction(CCObject* pSender)
 		}
 		else if(heart_time->isStartable())
 		{
-			CCSprite* noti_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
-			noti_back->setColor(ccc3(100, 100, 100));
-			noti_back->setOpacity(150);
-			noti_back->setPosition(ccp(240,160));
-			addChild(noti_back, kSSS_Z_popup, kSSS_MT_noti);
-			
-			CCLabelTTF* noti_label = CCLabelTTF::create("내구도 1 입니다. 실패시 카드가 사라집니다. 그래도 플레이 하시겠습니까?", mySGD->getFont().c_str(), 20, CCSizeMake(300,200), kCCTextAlignmentCenter,	kCCVerticalTextAlignmentCenter);
-			noti_label->setAnchorPoint(ccp(0.5,0.5));
-			noti_label->setPosition(ccp(240,200));
-			noti_back->addChild(noti_label);
-			
-			CCSprite* n_ok = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 100, 70));
-			CCLabelTTF* n_label = CCLabelTTF::create("OK", mySGD->getFont().c_str(), 15);
-			n_label->setColor(ccBLACK);
-			n_label->setAnchorPoint(ccp(0.5,0.5));
-			n_label->setPosition(ccp(50,35));
-			n_ok->addChild(n_label);
-			
-			CCSprite* s_ok = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 100, 70));
-			s_ok->setColor(ccGRAY);
-			CCLabelTTF* s_label = CCLabelTTF::create("OK", mySGD->getFont().c_str(), 15);
-			s_label->setColor(ccBLACK);
-			s_label->setAnchorPoint(ccp(0.5,0.5));
-			s_label->setPosition(ccp(50,35));
-			s_ok->addChild(s_label);
-			
-			CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(StageSettingScene::tempAction));
-			ok_item->setTag(2);
-			CCMenu* ok_menu = CCMenu::createWithItem(ok_item);
-			ok_menu->setPosition(ccp(360, 50));
-			noti_back->addChild(ok_menu);
-			
-			
-			CCSprite* n_cancel = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 100, 70));
-			CCLabelTTF* n_c_label = CCLabelTTF::create("CANCEL", mySGD->getFont().c_str(), 15);
-			n_c_label->setColor(ccBLACK);
-			n_c_label->setAnchorPoint(ccp(0.5,0.5));
-			n_c_label->setPosition(ccp(50,35));
-			n_cancel->addChild(n_c_label);
-			
-			CCSprite* s_cancel = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 100, 70));
-			s_cancel->setColor(ccGRAY);
-			CCLabelTTF* s_c_label = CCLabelTTF::create("CANCEL", mySGD->getFont().c_str(), 15);
-			s_c_label->setColor(ccBLACK);
-			s_c_label->setAnchorPoint(ccp(0.5,0.5));
-			s_c_label->setPosition(ccp(50,35));
-			s_cancel->addChild(s_c_label);
-			
-			CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, this, menu_selector(StageSettingScene::tempAction));
-			cancel_item->setTag(3);
-			CCMenu* cancel_menu = CCMenu::createWithItem(cancel_item);
-			cancel_menu->setPosition(ccp(120, 50));
-			noti_back->addChild(cancel_menu);
+			DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingScene::tempAction), this, menu_selector(StageSettingScene::tempAction));
+			addChild(t_popup, kSSS_Z_popup, kSSS_MT_noti);
 		}
 	}
 	else if(tag == kSSS_MT_back)

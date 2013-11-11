@@ -636,6 +636,8 @@ private:
 				}
 			}
 		}
+		
+		myGD->communication("MS_setTopBottomBlock");
 	}
 	
 	CCPoint limitted_map_position;
@@ -648,6 +650,7 @@ private:
 		
 		limitted_map_position = game_node->getPosition();
 		myGD->communication("VS_setLimittedMapPosition");
+		myGD->communication("MS_startRemoveBlock");
 		
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{

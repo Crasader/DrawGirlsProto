@@ -68,6 +68,8 @@ public:
 //	void mainCumberShowEmotion(int t_e);
 	void startDieAnimation();
 	void changeMaxSize(float t_p);
+	void onJackDie();
+	void onJackRevived();
 	float getNumberFromJsonValue(JsonBox::Value v)
 	{
 		if(v.getType() == JsonBox::Value::DOUBLE)
