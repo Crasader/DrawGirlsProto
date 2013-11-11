@@ -242,17 +242,17 @@ private:
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
 					
-					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
-					
 					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 					combo_cnt++;
 					
-					int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+					int addScore = (100.f + damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
 					
 					myGD->communication("Main_startShake", -shootImg->getRotation());
 					
 					myGD->communication("UI_addScore", addScore);
 					myGD->communication("UI_setComboCnt", combo_cnt);
+					
+					myGD->communication("Main_showDamageMissile", particlePosition, addScore);
 				}
 				else
 				{
@@ -716,14 +716,14 @@ private:
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
 					
-					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
-					
 					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 					combo_cnt++;
 					
-					int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+					int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
 					myGD->communication("UI_addScore", addScore);
 					myGD->communication("UI_setComboCnt", combo_cnt);
+					
+					myGD->communication("Main_showDamageMissile", particlePosition, addScore);
 					
 					myGD->communication("Main_startShake", directionAngle);
 					

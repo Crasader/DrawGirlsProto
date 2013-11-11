@@ -53,7 +53,8 @@ enum SSS_MenuTag{
 	kSSS_MT_gacha = 5,
 	kSSS_MT_itemBase = 100,
 	kSSS_MT_selectedBase = 200,
-	kSSS_MT_itemCntBase = 300
+	kSSS_MT_itemCntBase = 300,
+	kSSS_MT_noti = 9999
 };
 
 // on "init" you need to initialize your instance
@@ -183,6 +184,7 @@ bool StageSettingScene::init()
 	s_temp->setOpacity(0);
 	
 	CCMenuItemSprite* temp_item = CCMenuItemSprite::create(n_temp, s_temp, this, menu_selector(StageSettingScene::tempAction));
+	temp_item->setTag(1);
 	CCMenu* temp_menu = CCMenu::createWithItem(temp_item);
 	temp_menu->setPosition(ccp(15,305));
 	addChild(temp_menu, kSSS_Z_content);
@@ -216,7 +218,19 @@ bool StageSettingScene::init()
 
 void StageSettingScene::tempAction(CCObject* sender)
 {
-	myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
+	int tag = ((CCNode*)sender)->getTag();
+	if(tag == 1)
+		myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
+	else if(tag == 2)
+	{
+		removeChildByTag(kSSS_MT_noti);
+		realStartAction();
+	}
+	else if(tag == 3)
+	{
+		removeChildByTag(kSSS_MT_noti);
+		is_menu_enable = true;
+	}
 }
 
 CCPoint StageSettingScene::getContentPosition(int t_tag)
@@ -322,47 +336,79 @@ void StageSettingScene::menuAction(CCObject* pSender)
 	
 	if(tag == kSSS_MT_start)
 	{
-		if(heart_time->startGame())
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		int durability;
+		if(selected_card_number > 0)
 		{
-			mySGD->resetLabels();
-			
-			Json::Value param;
-			param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
-			
-			hspConnector::get()->command("increaseStats", param, NULL);
-			
-			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			if(selected_card_number > 0)
-			{
-				int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) - 1;
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-			}
-			
-			myGD->resetGameData();
-			
-			deque<bool> is_using_item;
-			for(int i=kIC_attack;i<=kIC_randomChange;i++)
-				is_using_item.push_back(false);
-			
-			for(int i=0;i<is_selected_item.size();i++)
-			{
-				if(is_selected_item[i])
-				{
-					myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
-					myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());
-					is_using_item[item_list[i]] = true;
-				}
-			}
-			
-			for(int i=kIC_attack;i<=kIC_randomChange;i++)
-				mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
-			
-			mySGD->setGameStart();
-			CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+			durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
 		}
-		else
+		
+		if(durability > 0 && heart_time->isStartable())
 		{
-			is_menu_enable = true;
+			if(heart_time->startGame())
+			{
+				realStartAction();
+			}
+			else
+			{
+				is_menu_enable = true;
+			}
+		}
+		else if(heart_time->isStartable())
+		{
+			CCSprite* noti_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
+			noti_back->setColor(ccc3(100, 100, 100));
+			noti_back->setOpacity(150);
+			noti_back->setPosition(ccp(240,160));
+			addChild(noti_back, kSSS_Z_popup, kSSS_MT_noti);
+			
+			CCLabelTTF* noti_label = CCLabelTTF::create("내구도 1 입니다. 실패시 카드가 사라집니다. 그래도 플레이 하시겠습니까?", mySGD->getFont().c_str(), 20, CCSizeMake(300,200), kCCTextAlignmentCenter,	kCCVerticalTextAlignmentCenter);
+			noti_label->setAnchorPoint(ccp(0.5,0.5));
+			noti_label->setPosition(ccp(240,200));
+			noti_back->addChild(noti_label);
+			
+			CCSprite* n_ok = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 100, 70));
+			CCLabelTTF* n_label = CCLabelTTF::create("OK", mySGD->getFont().c_str(), 15);
+			n_label->setColor(ccBLACK);
+			n_label->setAnchorPoint(ccp(0.5,0.5));
+			n_label->setPosition(ccp(50,35));
+			n_ok->addChild(n_label);
+			
+			CCSprite* s_ok = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 100, 70));
+			s_ok->setColor(ccGRAY);
+			CCLabelTTF* s_label = CCLabelTTF::create("OK", mySGD->getFont().c_str(), 15);
+			s_label->setColor(ccBLACK);
+			s_label->setAnchorPoint(ccp(0.5,0.5));
+			s_label->setPosition(ccp(50,35));
+			s_ok->addChild(s_label);
+			
+			CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(StageSettingScene::tempAction));
+			ok_item->setTag(2);
+			CCMenu* ok_menu = CCMenu::createWithItem(ok_item);
+			ok_menu->setPosition(ccp(360, 50));
+			noti_back->addChild(ok_menu);
+			
+			
+			CCSprite* n_cancel = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 100, 70));
+			CCLabelTTF* n_c_label = CCLabelTTF::create("CANCEL", mySGD->getFont().c_str(), 15);
+			n_c_label->setColor(ccBLACK);
+			n_c_label->setAnchorPoint(ccp(0.5,0.5));
+			n_c_label->setPosition(ccp(50,35));
+			n_cancel->addChild(n_c_label);
+			
+			CCSprite* s_cancel = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 100, 70));
+			s_cancel->setColor(ccGRAY);
+			CCLabelTTF* s_c_label = CCLabelTTF::create("CANCEL", mySGD->getFont().c_str(), 15);
+			s_c_label->setColor(ccBLACK);
+			s_c_label->setAnchorPoint(ccp(0.5,0.5));
+			s_c_label->setPosition(ccp(50,35));
+			s_cancel->addChild(s_c_label);
+			
+			CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, this, menu_selector(StageSettingScene::tempAction));
+			cancel_item->setTag(3);
+			CCMenu* cancel_menu = CCMenu::createWithItem(cancel_item);
+			cancel_menu->setPosition(ccp(120, 50));
+			noti_back->addChild(cancel_menu);
 		}
 	}
 	else if(tag == kSSS_MT_back)
@@ -425,6 +471,44 @@ void StageSettingScene::menuAction(CCObject* pSender)
 		
 		is_menu_enable = true;
 	}
+}
+
+void StageSettingScene::realStartAction()
+{
+	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	if(selected_card_number > 0)
+	{
+		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) - 1;
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
+	}
+	
+	Json::Value param;
+	param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
+	
+	hspConnector::get()->command("increaseStats", param, NULL);
+	
+	mySGD->resetLabels();
+	myGD->resetGameData();
+	
+	deque<bool> is_using_item;
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		is_using_item.push_back(false);
+	
+	for(int i=0;i<is_selected_item.size();i++)
+	{
+		if(is_selected_item[i])
+		{
+			myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
+			myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());
+			is_using_item[item_list[i]] = true;
+		}
+	}
+	
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
+	
+	mySGD->setGameStart();
+	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 }
 
 void StageSettingScene::popupClose()

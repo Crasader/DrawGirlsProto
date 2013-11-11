@@ -80,6 +80,12 @@ enum mapLoopRange{
 	mapHeightInnerEnd = 216,
 };
 
+enum JackBaseSpeedTag{
+	kJackBaseSpeedTag_level1 = 0,
+	kJackBaseSpeedTag_level2,
+	kJackBaseSpeedTag_level3
+};
+
 class IntVector : public CCObject
 {
 public:

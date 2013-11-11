@@ -194,7 +194,12 @@ public:
 		   myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
 		   myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty)
 		{
+			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
+			int missile_type = rand()%7;
 			
+			int rmCnt = 5;
+			float damage_per = 1.f;
+			myGD->communication("MP_createJackMissile", missile_type, rmCnt, damage_per);
 			
 			myGD->communication("CP_removeSubCumber", this);
 			

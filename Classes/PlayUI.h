@@ -128,7 +128,7 @@ public:
 			addChild(t_cv,0,1);// 1 : ComboView
 		}
 		
-		keeping_frame = 600;
+		keeping_frame = 500;
 		if(!is_keeping)
 			startKeep();
 	}
@@ -176,7 +176,7 @@ private:
 //			}
 			
 			keeping_frame--;
-			((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/600.f);
+			((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/500.f);
 			
 			if(keeping_frame <= 0)
 			{
@@ -1258,6 +1258,7 @@ public:
 			
 			isFirst = true;
 			is_exchanged = true;
+			my_fp->addFeverGage(20);
 			myGD->communication("Main_startExchange");
 			myGD->communication("Main_showChangeCard");
 			myGD->communication("Jack_positionRefresh");
@@ -1772,7 +1773,7 @@ private:
 		
 		jack_array = new CCArray(1);
 		
-		jack_life = 3;
+		jack_life = 2;
 		for(int i=0;i<jack_life;i++)
 		{
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
@@ -2019,7 +2020,7 @@ private:
 	void continueAction()
 	{
 		addGameTime30Sec();
-		jack_life = 3;
+		jack_life = 2;
 		for(int i=0;i<jack_life;i++)
 		{
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));

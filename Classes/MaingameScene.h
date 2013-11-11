@@ -37,9 +37,9 @@ enum Mainzorder{
 	countingLabelZorder,
 	conditionLabelZorder,
 	goldZorder,
+	searchEyeZorder,
 	clearshowtimeZorder,
 	myUIZorder,
-	searchEyeZorder,
 	mControlZorder,
 	particleZorder,
 	shutterZorder
@@ -133,16 +133,19 @@ private:
 	
 	void setControlGesture()
 	{
+		myDSH->setIntegerForKey(kDSH_Key_jackBaseSpeed, int(JackBaseSpeedTag::kJackBaseSpeedTag_level1));
 		myGD->changeJackBaseSpeed(1.2f);
 	}
 	
 	void setControlButton()
 	{
+		myDSH->setIntegerForKey(kDSH_Key_jackBaseSpeed, int(JackBaseSpeedTag::kJackBaseSpeedTag_level2));
 		myGD->changeJackBaseSpeed(1.5f);
 	}
 	
 	void setControlJoystick()
 	{
+		myDSH->setIntegerForKey(kDSH_Key_jackBaseSpeed, int(JackBaseSpeedTag::kJackBaseSpeedTag_level3));
 		myGD->changeJackBaseSpeed(2.f);
 	}
 	
@@ -478,7 +481,7 @@ private:
 	
 	void moveGamePosition(CCPoint t_p)
 	{
-		if(!myGD->is_setted_jack || myGD->game_step == kGS_unlimited)
+//		if(!myGD->is_setted_jack)// || myGD->game_step == kGS_unlimited)
 			game_node->setPosition(getObjectToGameNodePosition(t_p));
 	}
 	

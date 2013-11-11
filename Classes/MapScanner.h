@@ -28,37 +28,37 @@ public:
 	int y;
 };
 
-class BackObj : public CCSprite
-{
-public:
-	static BackObj* create(const char* filename)
-	{
-		BackObj* t_bo = new BackObj();
-		if(t_bo && t_bo->initWithFile(filename))
-		{
-			t_bo->myInit();
-			t_bo->autorelease();
-			return t_bo;
-		}
-		CC_SAFE_DELETE(t_bo);
-		return NULL;
-	}
-	
-	virtual void visit()
-	{
-		kmGLPushMatrix();
-		transform();
-		draw();
-		kmGLPopMatrix();
-	}
-	
-private:
-	
-	void myInit()
-	{
-		
-	}
-};
+//class BackObj : public CCSprite
+//{
+//public:
+//	static BackObj* create(const char* filename)
+//	{
+//		BackObj* t_bo = new BackObj();
+//		if(t_bo && t_bo->initWithFile(filename))
+//		{
+//			t_bo->myInit();
+//			t_bo->autorelease();
+//			return t_bo;
+//		}
+//		CC_SAFE_DELETE(t_bo);
+//		return NULL;
+//	}
+//	
+//	virtual void visit()
+//	{
+//		kmGLPushMatrix();
+//		transform();
+//		draw();
+//		kmGLPopMatrix();
+//	}
+//	
+//private:
+//	
+//	void myInit()
+//	{
+//		
+//	}
+//};
 
 class InvisibleSprite : public CCNode
 {
@@ -86,54 +86,54 @@ private:
 	}
 };
 
-class TestEyeSprite : public CCSprite
-{
-public:
-	static TestEyeSprite* create(const char* filename, CCRect t_rect, CCArray* t_drawRects)
-	{
-		TestEyeSprite* t_tes = new TestEyeSprite();
-		t_tes->myInit(filename, t_rect, t_drawRects);
-		t_tes->autorelease();
-		return t_tes;
-	}
-	
-	virtual void visit()
-	{
-		unsigned int loopCnt = drawRects->count();
-		
-		for(int i=0;i<loopCnt;i++)
-		{
-			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
-			
-			glEnable(GL_SCISSOR_TEST);
-			
-			int viewport [4];
-			glGetIntegerv (GL_VIEWPORT, viewport);
-			CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
-			float wScale = viewport[2] / rSize.width;
-			float hScale = viewport[3] / rSize.height;
-			float x = t_rect->origin.x*wScale + viewport[0];
-			float y = t_rect->origin.y*hScale + viewport[1];
-			float w = t_rect->size.width*wScale;
-			float h = t_rect->size.height*hScale;
-			glScissor(x,y,w,h);
-			
-			CCSprite::visit();
-			
-			glDisable(GL_SCISSOR_TEST);
-		}
-	}
-	
-private:
-	CCArray* drawRects;
-	
-	void myInit(const char* filename, CCRect t_rect, CCArray* t_drawRects)
-	{
-		initWithFile(filename, t_rect);
-		
-		drawRects = t_drawRects;
-	}
-};
+//class TestEyeSprite : public CCSprite
+//{
+//public:
+//	static TestEyeSprite* create(const char* filename, CCRect t_rect, CCArray* t_drawRects)
+//	{
+//		TestEyeSprite* t_tes = new TestEyeSprite();
+//		t_tes->myInit(filename, t_rect, t_drawRects);
+//		t_tes->autorelease();
+//		return t_tes;
+//	}
+//	
+//	virtual void visit()
+//	{
+//		unsigned int loopCnt = drawRects->count();
+//		
+//		for(int i=0;i<loopCnt;i++)
+//		{
+//			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
+//			
+//			glEnable(GL_SCISSOR_TEST);
+//			
+//			int viewport [4];
+//			glGetIntegerv (GL_VIEWPORT, viewport);
+//			CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
+//			float wScale = viewport[2] / rSize.width;
+//			float hScale = viewport[3] / rSize.height;
+//			float x = t_rect->origin.x*wScale + viewport[0];
+//			float y = t_rect->origin.y*hScale + viewport[1];
+//			float w = t_rect->size.width*wScale;
+//			float h = t_rect->size.height*hScale;
+//			glScissor(x,y,w,h);
+//			
+//			CCSprite::visit();
+//			
+//			glDisable(GL_SCISSOR_TEST);
+//		}
+//	}
+//	
+//private:
+//	CCArray* drawRects;
+//	
+//	void myInit(const char* filename, CCRect t_rect, CCArray* t_drawRects)
+//	{
+//		initWithFile(filename, t_rect);
+//		
+//		drawRects = t_drawRects;
+//	}
+//};
 
 class VisibleSprite : public CCSprite
 {
@@ -156,6 +156,12 @@ public:
 		return jack_position;
 	}
 	
+	void setSceneNode(CCObject* t_scene_node)
+	{
+		scene_node = (CCNode*)t_scene_node;
+		is_set_scene_node = true;
+	}
+	
 private:
 	CCArray* drawRects;
 	
@@ -163,6 +169,8 @@ private:
 	CCSize screen_size;
 	CCSize design_resolution_size;
 	int viewport[4];
+	CCNode* scene_node;
+	bool is_set_scene_node;
 	
 	virtual void visit()
 	{
@@ -177,10 +185,22 @@ private:
 			float wScale = viewport[2] / design_resolution_size.width;
 			float hScale = viewport[3] / design_resolution_size.height;
 			
-			float x = (t_rect->origin.x*myGD->game_scale+jack_position.x)*wScale + viewport[0]-1;
-			float y = (t_rect->origin.y*myGD->game_scale+jack_position.y)*hScale + viewport[1]-1;
-			float w = (t_rect->size.width*myGD->game_scale)*wScale+2;
-			float h = (t_rect->size.height*myGD->game_scale)*hScale+2;
+			float x, y, w, h;
+			
+			if(is_set_scene_node)
+			{
+				x = (t_rect->origin.x*myGD->game_scale+jack_position.x+scene_node->getPositionX())*wScale + viewport[0]-1;
+				y = (t_rect->origin.y*myGD->game_scale+jack_position.y+scene_node->getPositionY())*hScale + viewport[1]-1;
+				w = (t_rect->size.width*myGD->game_scale)*wScale+2;
+				h = (t_rect->size.height*myGD->game_scale)*hScale+2;
+			}
+			else
+			{
+				x = (t_rect->origin.x*myGD->game_scale+jack_position.x)*wScale + viewport[0]-1;
+				y = (t_rect->origin.y*myGD->game_scale+jack_position.y)*hScale + viewport[1]-1;
+				w = (t_rect->size.width*myGD->game_scale)*wScale+2;
+				h = (t_rect->size.height*myGD->game_scale)*hScale+2;
+			}
 			
 			if(y > screen_size.height || y+h < 0.f)
 				continue;
@@ -199,6 +219,8 @@ private:
 	{
 		initWithTexture(mySIL->addImage(filename));
 		setPosition(ccp(160,215));
+		
+		is_set_scene_node = false;
 		
 		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		design_resolution_size = CCEGLView::sharedOpenGLView()->getDesignResolutionSize();
@@ -311,7 +333,7 @@ private:
 	
 	void setMoveGamePosition(CCPoint t_p)
 	{
-		if(!myGD->is_setted_jack || myGD->game_step == kGS_unlimited)
+//		if(!myGD->is_setted_jack || myGD->game_step == kGS_unlimited)
 		{
 			CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 			float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
@@ -362,6 +384,8 @@ private:
 		myVS = VisibleSprite::create(filename, isPattern, drawRects);
 		myVS->setPosition(CCPointZero);
 		addChild(myVS);
+		
+		myGD->V_CCO["VS_setSceneNode"] = std::bind(&VisibleSprite::setSceneNode, myVS, _1);
 	}
 };
 

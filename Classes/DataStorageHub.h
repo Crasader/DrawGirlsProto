@@ -35,7 +35,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_uiType,
 	kDSH_Key_puzzleMode,
 	kDSH_Key_selectedPuzzleNumber,
-	kDSH_Key_allHighScore
+	kDSH_Key_allHighScore,
+	kDSH_Key_jackBaseSpeed
 }DSH_Key;
 
 #define myDSH DataStorageHub::sharedInstance()
@@ -182,6 +183,8 @@ private:
 		else if(t_name == kDSH_Key_takeCardNumber_int1)					return_value = "tcn%d"; // arg int(loop start 1 ~ cardTakeCnt) // return card_number
 		
 		else if(t_name == kDSH_Key_allHighScore)						return_value = "ahs";
+		
+		else if(t_name == kDSH_Key_jackBaseSpeed)						return_value = "jbs";
 		
 		return return_value;
 	}

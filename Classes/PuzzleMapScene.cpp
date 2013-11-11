@@ -947,13 +947,11 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_rank)
 	{
-		is_menu_enable = true;
 		RankPopup* t_rp = RankPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
 		addChild(t_rp, kPMS_Z_popup);
 	}
 	else if(tag == kPMS_MT_postbox)
 	{
-		is_menu_enable = true;
 		MailPopup* t_pp = MailPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
 		addChild(t_pp, kPMS_Z_popup);
 	}
@@ -1753,7 +1751,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					{
 						CCPoint sub_point = ccpSub(location, touchStart_p);
 						float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
-						if(sub_value > 20.f)
+						if(sub_value > 10.f)
 						{
 							resetStagePiece();
 							map_mode_state = kMMS_firstTouchDefault;

@@ -845,7 +845,7 @@ public:
 	void startDieEffect(int die_type) // after coding
 	{
 //		return;
-		if(!isDie)
+		if(!isDie && !myGD->getIsGameover())
 		{
 			if(die_type == DieType::kDieType_other)
 			{
@@ -870,6 +870,7 @@ public:
 //				jack_drawing->setVisible(false);
 //			}
 			setJackState(jackStateNormal);
+			jack_barrier->setVisible(false);
 			isDrawingOn = false;
 			
 			myGD->removeMapNewline();
@@ -1245,6 +1246,7 @@ private:
 		
 		setTouchPointByJoystick(CCPointZero, directionStop, true);
 		setJackState(jackStateNormal);
+		jack_barrier->setVisible(true);
 		
 		myGD->communication("GIM_dieCreateItem");
 		myGD->communication("Main_resetIsLineDie");
@@ -1549,7 +1551,7 @@ private:
 	void startReviveAnimation(CCSprite* t_jack_img)
 	{
 		t_jack_img->setOpacity(0);
-		t_jack_img->runAction(CCFadeTo::create(1.3f, 255));
+		t_jack_img->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.8f), CCFadeTo::create(0.5f, 255)));
 		
 		CCNode* animation_node = CCNode::create();
 		animation_node->setPosition(ccp(t_jack_img->getContentSize().width/2.f, t_jack_img->getContentSize().height/2.f));

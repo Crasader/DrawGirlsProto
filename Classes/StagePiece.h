@@ -160,6 +160,7 @@ public:
 	void touchCancelled(CCTouch* touch, CCEvent* event)
 	{
 		s_menu->ccTouchCancelled(touch, event);
+		setTouchCancel();
 	}
 	
 	int getStageNumber(){	return stage_number;	}
