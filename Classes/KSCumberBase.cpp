@@ -1318,19 +1318,44 @@ void KSCumberBase::cumberAttack(float dt)
 void KSCumberBase::speedAdjustment(float dt)
 {
 //	m_speed.step();
+	float ratio = getLife() / getTotalLife();
 	float t = (m_maxSpeed - m_minSpeed) * 0.0005f;
-	m_speed = MIN(m_maxSpeed, m_speed + t);
+	
+	// 남은 피통의 50% 부터 min~max 속도 적용.
+	m_speed = MIN(MAX(m_minSpeed + (m_maxSpeed - m_minSpeed) * ratio / 0.5f, m_maxSpeed), m_speed + t);
+	
+	
 }
 
+void KSCumberBase::selfHealing(float dt)
+{
+	m_healingFrameCount++;
+	
+	// 5초마다 한번씩, 현재 라이프에서 n% 만큼 더함.
+	if(m_healingFrameCount >= 60*5)
+	{
+		float n = 10.f;
+		float adder = n / getTotalLife();
+		setLife(MIN(getTotalLife(), getLife() + adder));
+		m_healingFrameCount = 0;
+	}
+}
 bool KSCumberBase::startDamageReaction(float damage, float angle)
 {
-	float t = (m_maxSpeed - m_minSpeed) * 0.3f;
-	m_speed = MAX(m_speed - t, m_minSpeed);
+//	float t = (m_maxSpeed - m_minSpeed) * 0.3f;
+//	m_speed = MAX(m_speed - t, m_minSpeed);
 //	m_speed.init(m_speed, to, 0.1f);
 	return true; // 의미없음.
 }
 
-
+void KSCumberBase::onJackDie()
+{
+	
+}
+void KSCumberBase::onJackRevived()
+{
+	
+}
 void KSCumberBase::bossDieBomb(float dt)
 {
 	m_bossDie.m_bossDieFrameCount++;
