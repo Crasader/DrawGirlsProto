@@ -88,7 +88,7 @@ class KSCumberBase : public CCNode
 public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
 	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0), /// 초당 변수만큼 충돌시 스케일 줄임.
-	m_castingCancelCount(0), teleportImg(NULL), m_isStarted(false)
+	m_castingCancelCount(0), teleportImg(NULL), m_isStarted(false), m_healingFrameCount(0)
 	
 //		m_state(CUMBERSTATESTOP)
 	{
@@ -105,6 +105,8 @@ public:
 //		mEmotion = NULL;
 		schedule(schedule_selector(ThisClassType::speedAdjustment));
 		
+		// 미션에 따라 on/off 해야됨.
+		schedule(schedule_selector(ThisClassType::selfHealing));
 	
 		
 		return true;
@@ -194,13 +196,6 @@ public:
 		   myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
 		   myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty)
 		{
-			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
-			int missile_type = rand()%7;
-			
-			int rmCnt = 5;
-			float damage_per = 1.f;
-			myGD->communication("MP_createJackMissile", missile_type, rmCnt, damage_per);
-			
 			myGD->communication("CP_removeSubCumber", this);
 			
 			if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
@@ -262,6 +257,7 @@ public:
 	
 	virtual void cumberAttack(float dt);
 	void speedAdjustment(float dt);
+	void selfHealing(float dt);
 	virtual bool startDamageReaction(float damage, float angle);
 	//	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
@@ -281,7 +277,8 @@ public:
 	{
 		endTeleport();
 	}
-	
+	virtual void onJackDie();
+	virtual void onJackRevived();
 	virtual void endTeleport()
 	{
 		teleportImg->removeFromParentAndCleanup(true);
@@ -540,6 +537,7 @@ protected:
 	int m_aiValue;
 	int m_castingCancelCount; // 캐스팅이 취소당한 횟수를 셈.
 	IntPoint m_mapPoint; // 자기 자신의 맵포인트를 저장함. setPosition 할 때 마다 수정해줘야함.
+	int m_healingFrameCount;
 //	enum MOVEMENT m_normalMode, m_drawMode;
 	
 	struct FuryMode
