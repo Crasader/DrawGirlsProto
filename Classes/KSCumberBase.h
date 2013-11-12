@@ -17,7 +17,7 @@
 #include "Well512.h"
 #include "Jack.h"
 #include "JsonBox.h"
-
+#include <queue>
 USING_NS_CC;
 
 struct SnakeTrace
@@ -83,12 +83,43 @@ enum MOVEMENT
 	SNAKE_TYPE = 6
 };
 
+template <typename T>
+class FixedSizeDeque
+{
+protected:
+	std::deque<T> m_deque;
+	int m_maxSize;
+public:
+	FixedSizeDeque(int size) : m_maxSize(size){}
+	FixedSizeDeque() { m_maxSize = INT_MAX; }
+	const std::deque<T>& getSTL(){return m_deque;} // STL 의 큐가 필요할 때
+	void push_back(const T& p)
+	{
+		if(m_deque.size() >= m_maxSize)
+		{
+			m_deque.pop_front();
+		}
+		m_deque.push_back(p);
+	}
+	T& front()
+	{
+		return m_deque.front();
+	}
+	void pop_front()
+	{
+		m_deque.pop_front();
+	}
+	bool empty(){return m_deque.empty();}
+};
+
+
 class KSCumberBase : public CCNode
 {
 public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
 	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0), /// 초당 변수만큼 충돌시 스케일 줄임.
-	m_castingCancelCount(0), teleportImg(NULL), m_isStarted(false), m_healingFrameCount(0)
+	m_castingCancelCount(0), teleportImg(NULL), m_isStarted(false), m_healingFrameCount(0),
+	m_damagedFrames(500)
 	
 //		m_state(CUMBERSTATESTOP)
 	{
@@ -97,7 +128,7 @@ public:
 	
 	virtual ~KSCumberBase()
 	{
-
+		CCLog("huk hide.dfkfdjgfdsjgldfsjgldfjgldf!!!!!!!");
 	}
 	virtual bool init()
 	{
@@ -107,7 +138,7 @@ public:
 		
 		// 미션에 따라 on/off 해야됨.
 		schedule(schedule_selector(ThisClassType::selfHealing));
-	
+		schedule(schedule_selector(ThisClassType::cumberFrame));
 		
 		return true;
 	}
@@ -179,6 +210,7 @@ public:
 		this->setVisible(false);
 	}
 	void bossDieBomb(float dt);
+	virtual void stopCasting() = 0;
 	virtual void cumberImgStartRotating(float gabage){} //## 임시.
 	virtual void startAnimationNoDirection() = 0;
 	virtual void startAnimationDirection(){startAnimationNoDirection();} // 기본으로 조준이 없으면 방사형으로
@@ -265,6 +297,10 @@ public:
 	virtual void cumberAttack(float dt);
 	void speedAdjustment(float dt);
 	void selfHealing(float dt);
+	void cumberFrame(float dt)
+	{
+		m_frameCount++; // 쿰버의 프레임수를 잼. 
+	}
 	virtual bool startDamageReaction(float damage, float angle);
 	//	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
@@ -453,7 +489,7 @@ public:
 	}
 	void setLife(float t)
 	{
-		m_remainHp = t;
+		m_remainHp = MAX(0, t);
 	}
 	float getTotalLife()
 	{
@@ -546,7 +582,8 @@ protected:
 	IntPoint m_mapPoint; // 자기 자신의 맵포인트를 저장함. setPosition 할 때 마다 수정해줘야함.
 	int m_healingFrameCount;
 //	enum MOVEMENT m_normalMode, m_drawMode;
-	
+	int m_frameCount;
+	FixedSizeDeque<int> m_damagedFrames; // 맞았을 때의 프레임을 기록.
 	struct FuryMode
 	{
 		int furyFrameCount;

@@ -191,7 +191,16 @@ public:
 	{
 		m_state = CUMBERSTATESTOP;
 	}
-	
+	virtual void stopCasting()
+	{
+		myGD->communication("MP_bombCumber", this);
+		// 방사형으로 돌아가고 있는 중이라면
+		if(m_state == CUMBERSTATENODIRECTION)
+		{
+			CCLog("m_state == CUMBERSTATENODIRECTION");
+			m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
+		}
+	}
 	virtual bool init(const string& ccbiName);
 	static KSCircleBase* create(const string& ccbiName) \
 	{ \
@@ -377,7 +386,6 @@ protected:
 		
 		for(auto i : m_headImg->m_s)
 		{
-			
 			CCPoint ret = CCPointApplyAffineTransform(i->getPosition(), function(i));
 			if(currentTimelineFooter == "_m")
 			{
@@ -431,7 +439,6 @@ protected:
 				}
 			}
 		}
-		
 	}
 	CCBAnimationManager *mAnimationManager;
 	IntPoint getMapPoint(CCPoint c){

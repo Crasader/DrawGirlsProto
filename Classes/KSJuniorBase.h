@@ -20,7 +20,10 @@ public:
 	virtual ~KSJuniorBase(){}
 	
 	
-	
+	virtual void stopCasting()
+	{
+		return;
+	}
 	virtual void onStartMoving()
 	{
 		m_state = CUMBERSTATEMOVING;
