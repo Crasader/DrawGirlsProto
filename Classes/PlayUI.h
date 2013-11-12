@@ -1037,50 +1037,27 @@ public:
 			{
 				if(t_p >= t_beforePercentage + 0.2f) // 0.2
 				{
-					is_show_exchange_coin = true;
-					taked_coin_cnt = 0;
-					myGD->communication("Main_showCoin");
-					myGD->communication("Main_showTakeCoin");
+					takeCoinModeOn();
 				}
 				else if(t_p >= t_beforePercentage + 0.15f)
 				{
 					if(rand()%10 < 7) // 70%
-					{
-						is_show_exchange_coin = true;
-						taked_coin_cnt = 0;
-						myGD->communication("Main_showCoin");
-						myGD->communication("Main_showTakeCoin");
-					}
+						takeCoinModeOn();
 				}
 				else if(t_p >= t_beforePercentage + 0.1f)
 				{
 					if(rand()%2 == 0) // 50%
-					{
-						is_show_exchange_coin = true;
-						taked_coin_cnt = 0;
-						myGD->communication("Main_showCoin");
-						myGD->communication("Main_showTakeCoin");
-					}
+						takeCoinModeOn();
 				}
 				else if(t_p >= t_beforePercentage + 0.08f)
 				{
 					if(rand()%20 < 7) // 35%
-					{
-						is_show_exchange_coin = true;
-						taked_coin_cnt = 0;
-						myGD->communication("Main_showCoin");
-						myGD->communication("Main_showTakeCoin");
-					}
+						takeCoinModeOn();
 				}
 				else if(t_p >= t_beforePercentage + 0.06f)
 				{
 					if(rand()%5 == 0) // 20%
-					{
-						is_show_exchange_coin = true;
-						taked_coin_cnt = 0;
-						myGD->communication("Main_showCoin");
-						myGD->communication("Main_showTakeCoin");
-					}
+						takeCoinModeOn();
 				}
 			}
 			
@@ -1089,10 +1066,7 @@ public:
 		
 		if(t_p > 0.5f && !is_show_exchange_coin && t_p < clearPercentage)
 		{
-			is_show_exchange_coin = true;
-			taked_coin_cnt = 0;
-			myGD->communication("Main_showCoin");
-			myGD->communication("Main_showTakeCoin");
+			takeCoinModeOn();
 		}
 		
 		percentageLabel->setString(CCString::createWithFormat("%d", int(floorf(t_p*10000))/100)->getCString());
@@ -1259,6 +1233,7 @@ public:
 			isFirst = true;
 			is_exchanged = true;
 			my_fp->addFeverGage(20);
+			
 			myGD->communication("Main_startExchange");
 			myGD->communication("Main_showChangeCard");
 			myGD->communication("Jack_positionRefresh");
@@ -1521,6 +1496,19 @@ private:
 	int ing_cdt_cnt;
 	float clr_cdt_per;
 	float clr_cdt_range;
+	
+	void takeCoinModeOn()
+	{
+		is_show_exchange_coin = true;
+		taked_coin_cnt = 0;
+		for(int i=1;i<=6;i++)
+		{
+			CCSprite* t_gray_coin = (CCSprite*)exchange_dic->objectForKey(i);
+			t_gray_coin->setVisible(true);
+		}
+		myGD->communication("Main_showCoin");
+		myGD->communication("Main_showTakeCoin");
+	}
 	
 	void counting()
 	{
@@ -1796,6 +1784,8 @@ private:
 			else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(220-32*3-16+i*32,25));
 			else									exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
 			addChild(exchange_spr);
+			
+			exchange_spr->setVisible(false);
 			
 			exchange_dic->setObject(exchange_spr, i);
 		}

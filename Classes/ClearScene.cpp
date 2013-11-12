@@ -15,6 +15,7 @@
 #include "StarGoldData.h"
 #include "SilhouetteData.h"
 #include "LogData.h"
+#include "CardCase.h"
 
 typedef enum tMenuTagClearScene{
 	kMT_CS_ok = 1
@@ -149,6 +150,10 @@ bool ClearScene::init()
 			}
 		}
 	}
+	
+	CardCase* t_case = CardCase::create(stage_number, take_level);
+	t_case->setPosition(CCPointZero);
+	take_card->addChild(t_case);
 	
 	myLog->addLog(kLOG_puzzleAchievementMinimum_i, -1, 100*minimum_count/stage_count);
 	myLog->addLog(kLOG_puzzleAchievementMaximum_i, -1, 100*maximum_count/stage_count);

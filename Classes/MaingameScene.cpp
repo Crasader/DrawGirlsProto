@@ -215,9 +215,10 @@ void Maingame::startCounting()
 		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*105, 117, 105, 117));
 	
 	CCAnimate* t_animate = CCAnimate::create(t_animation);
+	CCCallFunc* t_ms_startGame = CCCallFunc::create(myMS, callfunc_selector(MapScanner::startGame));
 	CCFadeOut* t_fo = CCFadeOut::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::removeConditionLabel));
-	condition_spr->runAction(CCSequence::create(t_animate, t_fo, t_call, NULL));
+	condition_spr->runAction(CCSequence::create(t_animate, t_ms_startGame, t_fo, t_call, NULL));
 	
 	countingCnt = 0;
 	keepTexture = CCSprite::create("maingame_ui_start_count.png");

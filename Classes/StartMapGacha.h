@@ -49,8 +49,8 @@ private:
 		delegate_gacha = d_gacha;
 		
 		CCSprite* back = CCSprite::create("start_map_gacha_back.png");
-		back->setAnchorPoint(ccp(0,0.5));
-		back->setPosition(ccp(-190,120));
+		back->setAnchorPoint(ccp(0.5f,1.f));
+		back->setPosition(ccp(240,0));
 		addChild(back, kSMG_Z_back);
 		
 		
@@ -71,9 +71,9 @@ private:
 		
 		setTouchEnabled(true);
 		
-		CCMoveTo* t_move1 = CCMoveTo::create(1.f, ccp(0,120));
+		CCMoveTo* t_move1 = CCMoveTo::create(1.f, ccp(240,100));
 		CCDelayTime* t_delay = CCDelayTime::create(3.f);
-		CCMoveTo* t_move2 = CCMoveTo::create(1.f, ccp(-190,120));
+		CCMoveTo* t_move2 = CCMoveTo::create(1.f, ccp(240,0));
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartMapGacha::removeFromParent));
 		CCAction* t_seq = CCSequence::create(t_move1, t_delay, t_move2, t_call, NULL);
 		

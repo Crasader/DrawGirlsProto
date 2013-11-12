@@ -18,6 +18,7 @@
 #include "ChallengePopup.h"
 #include "GachaPopup.h"
 #include "DurabilityNoti.h"
+#include "CardCase.h"
 
 CCScene* StageSettingScene::scene()
 {
@@ -56,6 +57,11 @@ enum SSS_MenuTag{
 	kSSS_MT_selectedBase = 200,
 	kSSS_MT_itemCntBase = 300,
 	kSSS_MT_noti = 9999
+};
+
+enum CARD_Zorder{
+	kCARD_Z_ani = 1,
+	kCARD_Z_cardCase
 };
 
 // on "init" you need to initialize your instance
@@ -98,8 +104,12 @@ bool StageSettingScene::init()
 			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
 												  CCRectMake(0, 0, ani_size.width, ani_size.height));
 			card_ani->setPosition(mySD->getAnimationPosition(card_stage));
-			card_img->addChild(card_ani);
+			card_img->addChild(card_ani, kCARD_Z_ani);
 		}
+		
+		CardCase* t_case = CardCase::create(selected_card_number);
+		t_case->setPosition(CCPointZero);
+		card_img->addChild(t_case, kCARD_Z_cardCase);
 	}
 	else
 	{

@@ -16,6 +16,8 @@
 #include "StageImgLoader.h"
 #include "SilhouetteData.h"
 #include <pthread.h>
+#include <random>
+#include "StartMapLuckyItem.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -528,13 +530,21 @@ public:
 		
 		if(gacha_cnt <= 3)
 		{
-			init_rect.size.width = rand()%(30-16 + 1) + 16;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
-			init_rect.size.height = rand()%(30-16 + 1) + 16;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
+			random_device rd;
+			default_random_engine e1(rd());
+			uniform_int_distribution<int> uniform_dist(0, 24);
+			
+			init_rect.size.width = uniform_dist(e1) + 6;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
+			init_rect.size.height = uniform_dist(e1) + 6;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
 		}
 		else if(gacha_cnt <= 5)
 		{
-			init_rect.size.width = rand()%(60-30 + 1) + 50;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
-			init_rect.size.height = rand()%(60-30 + 1) + 46;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
+			random_device rd;
+			default_random_engine e1(rd());
+			uniform_int_distribution<int> uniform_dist(0, 30);
+			
+			init_rect.size.width = uniform_dist(e1) + 50;//rand()%(maxSize.width-minSize.width + 1) + minSize.width; // rand()%(60-30 + 1)
+			init_rect.size.height = uniform_dist(e1) + 46;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
 		}
 		
 		IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
@@ -557,6 +567,11 @@ public:
 	{
 		random_rect_img->removeFromParentAndCleanup(true);
 		myGD->initUserSelectedStartRect(init_rect);
+	}
+	
+	void startGame()
+	{
+		start_map_lucky_item->checkInnerRect();
 	}
 	
 private:
@@ -744,8 +759,19 @@ private:
 			bottom_y -= 32.f;
 		}
 		bottom_block_manager->setTag(bottom_cnt);
+		
+		random_device rd;
+		default_random_engine e1(rd());
+		uniform_int_distribution<int> uniform_dist1(mapWidthInnerBegin+10, mapWidthInnerEnd-10);
+		uniform_int_distribution<int> uniform_dist2(myGD->limited_step_bottom+5, myGD->limited_step_top-5);
+		
+		int random_x = uniform_dist1(e1);
+		int random_y = uniform_dist2(e1);
+		
+		start_map_lucky_item = StartMapLuckyItem::create(IntPoint(random_x, random_y));
+		addChild(start_map_lucky_item, blockZorder);
 	}
-	
+	StartMapLuckyItem* start_map_lucky_item;
 	
 	bool is_removed_top_block, is_removed_bottom_block;
 	int remove_block_cnt;
