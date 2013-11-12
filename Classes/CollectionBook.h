@@ -137,6 +137,8 @@ private:
 	CCTextFieldTTF* input_text;
     bool was_open_text;
 	
+	void endCloseTextInput();
+	
 	virtual bool onTextFieldInsertText(CCTextFieldTTF* sender, const char* text, int nLen);
 	virtual bool onTextFieldDetachWithIME(CCTextFieldTTF * sender);
 	virtual bool onTextFieldAttachWithIME(CCTextFieldTTF * sender);

@@ -14,6 +14,7 @@
 #include "CollectionListScene.h"
 #include "CollectionBook.h"
 #include "PuzzleMapScene.h"
+#include "CardCase.h"
 
 CCScene* CardSettingScene::scene()
 {
@@ -519,31 +520,35 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 		selected_card_img->addChild(t_ani);
 	}
 	
-	star_parent = CCNode::create();
-	star_parent->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(80,110)));
-	addChild(star_parent, kCSS_Z_content);
+	CardCase* t_case = CardCase::create(card_stage, card_level);
+	t_case->setPosition(CCPointZero);
+	selected_card_img->addChild(t_case);
 	
-	for(int i=card_level-1;i>=0;i--)
-	{
-		CCSprite* card_star = CCSprite::create("card_star.png");
-		card_star->setPosition(ccp(i*(-20),0));
-		star_parent->addChild(card_star);
-	}
-	
-	card_option_case = CCSprite::create("card_option_case.png");
-	card_option_case->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-110)));
-	addChild(card_option_case, kCSS_Z_content);
-	
-	card_option_script = CCLabelTTF::create(CCString::createWithFormat("%d/%d | %s",
-																	   myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_stage*10 + card_level-1),
-																	   mySD->getCardDurability(card_stage, card_level),
-																	   mySD->getCardOptionScript(card_stage, card_level).c_str())->getCString(),
-											mySGD->getFont().c_str(), 12);
-	card_option_script->setColor(ccBLACK);
-	card_option_script->setHorizontalAlignment(kCCTextAlignmentCenter);
-	card_option_script->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-	card_option_script->setPosition(card_option_case->getPosition());
-	addChild(card_option_script, kCSS_Z_content);
+//	star_parent = CCNode::create();
+//	star_parent->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(80,110)));
+//	addChild(star_parent, kCSS_Z_content);
+//	
+//	for(int i=card_level-1;i>=0;i--)
+//	{
+//		CCSprite* card_star = CCSprite::create("card_star.png");
+//		card_star->setPosition(ccp(i*(-20),0));
+//		star_parent->addChild(card_star);
+//	}
+//	
+//	card_option_case = CCSprite::create("card_option_case.png");
+//	card_option_case->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-110)));
+//	addChild(card_option_case, kCSS_Z_content);
+//	
+//	card_option_script = CCLabelTTF::create(CCString::createWithFormat("%d/%d | %s",
+//																	   myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_stage*10 + card_level-1),
+//																	   mySD->getCardDurability(card_stage, card_level),
+//																	   mySD->getCardOptionScript(card_stage, card_level).c_str())->getCString(),
+//											mySGD->getFont().c_str(), 12);
+//	card_option_script->setColor(ccBLACK);
+//	card_option_script->setHorizontalAlignment(kCCTextAlignmentCenter);
+//	card_option_script->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+//	card_option_script->setPosition(card_option_case->getPosition());
+//	addChild(card_option_script, kCSS_Z_content);
 	
 	
 	CCMenuItem* selected_card_item = CCMenuItemImage::create("cardsetting_cardmenu_big.png", "cardsetting_cardmenu_big.png", this, menu_selector(CardSettingScene::menuAction));

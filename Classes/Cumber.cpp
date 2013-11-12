@@ -26,6 +26,47 @@
 #include "KSJuniorBase.h"
 #include "KSCircleBase.h"
 #include "KSSnakeBase.h"
+#include <functional>
+template <class _Tp>
+struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
+{
+	virtual _Tp operator()(const _Tp& a, const _Tp& b) const = 0;//(const _Tp& a, const _Tp& b) const
+//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
+//	{
+//		return __x*(1 - __y);
+//	}
+};
+
+template <class _Tp>
+struct DecreaseOp : public PassiveOp<_Tp>
+{
+	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
+	{
+		return a*(1 - b);
+	}
+	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
+	//	{
+	//		return __x*(1 - __y);
+	//	}
+};
+
+
+template <class _Tp>
+struct SubtractOp : public PassiveOp<_Tp>
+{
+	virtual ~SubtractOp(){
+	}
+	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
+	{
+		return a - b;
+	}
+	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
+	//	{
+	//		return __x*(1 - __y);
+	//	}
+};
+
+
 void CumberParent::onStartGame()
 {
 	for(auto i : mainCumbers)
@@ -458,6 +499,31 @@ void CumberParent::setCasting(bool t_b)
 void CumberParent::removeSubCumber(CCObject* r_sc)
 {
 	subCumberArray->removeObject(r_sc);
+	
+	auto beginIter = std::remove_if(hp_graphs.begin(), hp_graphs.end(), [=](MobHpGraph* mg)
+				   {
+					   return mg->getTargetNode() == r_sc;
+				   });
+	for(auto iter = beginIter; iter != hp_graphs.end(); ++iter)
+		{
+			removeChild(*iter);
+		}
+	
+	hp_graphs.erase(beginIter, hp_graphs.end());
+//	bool is_found = false;
+//	for(int i=0;i<hp_graphs.size() && !is_found;i++)
+//	{
+//		MobHpGraph* t_hp = hp_graphs[i];
+//		if(t_hp->getTargetNode() == r_sc)
+//		{
+//			is_found = true;
+//			hp_graphs.erase(std::remove_if(hp_graphs.begin(), hp_graphs.end(), [=](MobHpGraph* mg)
+//										   {
+//												return ;
+//										   }), hp_graphs.end());
+//			removeChild(t_hp);
+//		}
+//	}
 }
 
 
@@ -504,31 +570,39 @@ void CumberParent::myInit()
 	myGD->V_V["CP_onJackDie"] = std::bind(&CumberParent::onJackDie, this);
 	myGD->V_V["CP_onJackRevived"] = std::bind(&CumberParent::onJackRevived, this);
 	
-	void onStartGame();
-	void onPatternEnd();
-	
 	Json::Reader reader;
 	Json::Value root;
 	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+	Json::Value passiveCard;
+	reader.parse(mySD->getPassiveData(), passiveCard);
 	Json::Value boss = root[0u];
 
 	std::string bossShape = boss.get("shape", "circle").asString();
 	std::string bossType = boss["type"].asString();
+	shared_ptr<PassiveOp<float>> cardOperator;
+	if(passiveCard["operator"].asString() == "-")
+	{
+		cardOperator = shared_ptr<PassiveOp<float>>(new SubtractOp<float>());
+	}
+	else// if(passiveCard["operator"].asString() == "*(1-x)")
+	{
+		cardOperator = shared_ptr<PassiveOp<float>>(new DecreaseOp<float>());
+	}
 	
-	float hp = boss["hp"].asInt();
-	float minSpeed = boss["speed"]["min"].asDouble();// getNumberFromJsonValue(speed["max"]);
-	float startSpeed = boss["speed"]["start"].asDouble(); //getNumberFromJsonValue(speed["start"]);
-	float maxSpeed = boss["speed"]["max"].asDouble();// getNumberFromJsonValue(speed["min"]);
+	float hp = MAX((*cardOperator)(boss["hp"].asInt(), passiveCard["hp"].asInt()), 0);
+	float minSpeed = MAX((*cardOperator)(boss["speed"]["min"].asDouble(), passiveCard["speed"].asDouble()), 0);
+	float startSpeed = MAX((*cardOperator)(boss["speed"]["start"].asDouble(), passiveCard["speed"].asDouble()), 0); //getNumberFromJsonValue(speed["start"]);
+	float maxSpeed = MAX((*cardOperator)(boss["speed"]["max"].asDouble(), passiveCard["speed"].asDouble()), 0);// getNumberFromJsonValue(speed["min"]);
 	
-	float minScale = boss["scale"]["min"].asDouble(); // getNumberFromJsonValue(scale["min"]);
-	float startScale = boss["scale"]["start"].asDouble(); // getNumberFromJsonValue(scale["start"]);
-	float maxScale = boss["scale"]["max"].asDouble(); // getNumberFromJsonValue(scale["max"]);
+	float minScale = MAX((*cardOperator)(boss["scale"]["min"].asDouble(), passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["min"]);
+	float startScale = MAX((*cardOperator)(boss["scale"]["start"].asDouble(), passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["start"]);
+	float maxScale = MAX((*cardOperator)(boss["scale"]["max"].asDouble(), passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["max"]);
 	
 	int normalMovement = boss["movement"].get("normal",1).asInt();
 	int drawMovement = boss["movement"].get("draw", normalMovement).asInt();
 	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
 	
-	float agi = boss.get("agi", 0).asDouble();
+	float agi = MAX((*cardOperator)(boss.get("agi", 0).asDouble(), passiveCard["agi"].asDouble()), 0);
 	KSCumberBase* mainCumber;
 	if(bossShape == "circle")
 	{
@@ -543,7 +617,7 @@ void CumberParent::myInit()
 	mainCumber->settingHp(hp);
 	mainCumber->setAgility(agi);
 	KS::KSLog("%", boss);
-	mainCumber->settingAI(boss.get("ai", 0).asInt());
+	mainCumber->settingAI(MAX(0, (*cardOperator)(boss.get("ai", 0).asInt(), passiveCard["ai"].asInt()) ));
 	mainCumber->settingFuryRule();
 	mainCumber->settingScale(startScale, minScale, maxScale);
 	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
@@ -656,6 +730,17 @@ void CumberParent::myInit()
 	
 	myMFP = MapFragmentParent::create();
 	addChild(myMFP);
+	
+	for(int i=0;i<subCumberArray->count();i++)
+	{
+		MobHpGraph* t_sub_hp = MobHpGraph::create(subCumberArray->objectAtIndex(i));
+		addChild(t_sub_hp);
+		hp_graphs.push_back(t_sub_hp);
+	}
+	
+	MobHpGraph* main_hp = MobHpGraph::create(mainCumber);
+	addChild(main_hp);
+//	hp_graphs.push_back(main_hp);
 	
 //	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
 //	addChild(myEP);

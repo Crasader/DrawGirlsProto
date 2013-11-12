@@ -10,8 +10,13 @@
 #include "Jack.h"
 #include "PlayUI.h"
 
+
+
 void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 {
+	FixedSizeDeque<int> wee;
+	std::queue<int> wee2;
+	
 	IntPoint jackPoint = myGD->getJackPoint();
 
 	if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
@@ -1096,7 +1101,6 @@ void KSCumberBase::cumberAttack(float dt)
 	float exeProb;
 	if(crashAttack)
 	{
-		
 		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 		{
 			if( (*iter)["atype"].asString() == "crash" )
@@ -1320,11 +1324,17 @@ void KSCumberBase::speedAdjustment(float dt)
 //	m_speed.step();
 	float ratio = getLife() / getTotalLife();
 	float t = (m_maxSpeed - m_minSpeed) * 0.0005f;
-	
-	// 남은 피통의 50% 부터 min~max 속도 적용.
-	m_speed = MIN(MAX(m_minSpeed + (m_maxSpeed - m_minSpeed) * ratio / 0.5f, m_maxSpeed), m_speed + t);
-	
-	
+
+	int considerFrames = 60 * 7; // 초.
+	int maxCre = 15;
+	int cntPerSecond = MIN(count_if(m_damagedFrames.getSTL().begin(), m_damagedFrames.getSTL().end(),
+															[=](int w){
+																return w >= m_frameCount - considerFrames;
+															}), maxCre);
+
+	float baseSpeed = (m_startSpeed - m_minSpeed) * getLife() / getTotalLife();
+	float finalSpeed = baseSpeed + cntPerSecond * (m_maxSpeed - baseSpeed) / maxCre;
+	m_speed = finalSpeed;
 }
 
 void KSCumberBase::selfHealing(float dt)
@@ -1335,13 +1345,14 @@ void KSCumberBase::selfHealing(float dt)
 	if(m_healingFrameCount >= 60*5)
 	{
 		float n = 10.f;
-		float adder = n / getTotalLife();
+		float adder = getTotalLife() * n / 100.f;
 		setLife(MIN(getTotalLife(), getLife() + adder));
 		m_healingFrameCount = 0;
 	}
 }
 bool KSCumberBase::startDamageReaction(float damage, float angle)
 {
+	m_damagedFrames.push_back(m_frameCount);
 //	float t = (m_maxSpeed - m_minSpeed) * 0.3f;
 //	m_speed = MAX(m_speed - t, m_minSpeed);
 //	m_speed.init(m_speed, to, 0.1f);
@@ -1350,10 +1361,11 @@ bool KSCumberBase::startDamageReaction(float damage, float angle)
 
 void KSCumberBase::onJackDie()
 {
-	
+		unschedule(schedule_selector(ThisClassType::cumberAttack));
 }
 void KSCumberBase::onJackRevived()
 {
+	schedule(schedule_selector(ThisClassType::cumberAttack));
 	
 }
 void KSCumberBase::bossDieBomb(float dt)
