@@ -8,7 +8,7 @@
 
 #include "MissileParent.h"
 #include "LogData.h"
-#include "Apricot.h"
+#include "KSCircleBase.h"
 void MissileParent::bombCumber( CCObject* target )
 {
 	if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -848,7 +848,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	}
 	else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 	{
-		KSCumberCCBPieceBase* ccbPiece = dynamic_cast<KSCumberCCBPieceBase*>(cb);
+		CircleCCBPieceBase* ccbPiece = dynamic_cast<CircleCCBPieceBase*>(cb);
 		if(!ccbPiece)
 			return invalid;
 		
@@ -871,7 +871,6 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			myGD->communication("Main_showWarning", 1);
 			AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
 			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
-			
 		}
 		ccbPiece->runTimeline(patternData); // "at" 같은게 넘어감.
 	}
