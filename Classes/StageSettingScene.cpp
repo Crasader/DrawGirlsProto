@@ -345,25 +345,33 @@ void StageSettingScene::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			durability = 0;
+			durability = -1;
 		}
 		
-		if(durability > 0 && heart_time->isStartable())
+		if(heart_time->isStartable())
 		{
-			if(heart_time->startGame())
+			if(durability > 0)
 			{
-				realStartAction();
+				if(heart_time->startGame())
+					realStartAction();
+				else
+					is_menu_enable = true;
 			}
-			else
+			else if(durability == 0)
 			{
-				is_menu_enable = true;
+				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingScene::tempAction), this, menu_selector(StageSettingScene::tempAction));
+				addChild(t_popup, kSSS_Z_popup, kSSS_MT_noti);
+			}
+			else // not selected card
+			{
+				if(heart_time->startGame())
+					realStartAction();
+				else
+					is_menu_enable = true;
 			}
 		}
-		else if(heart_time->isStartable())
-		{
-			DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingScene::tempAction), this, menu_selector(StageSettingScene::tempAction));
-			addChild(t_popup, kSSS_Z_popup, kSSS_MT_noti);
-		}
+		else
+			is_menu_enable = true;
 	}
 	else if(tag == kSSS_MT_back)
 	{

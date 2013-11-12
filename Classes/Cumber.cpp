@@ -458,6 +458,31 @@ void CumberParent::setCasting(bool t_b)
 void CumberParent::removeSubCumber(CCObject* r_sc)
 {
 	subCumberArray->removeObject(r_sc);
+	
+	auto beginIter = std::remove_if(hp_graphs.begin(), hp_graphs.end(), [=](MobHpGraph* mg)
+				   {
+					   return mg->getTargetNode() == r_sc;
+				   });
+	for(auto iter = beginIter; iter != hp_graphs.end(); ++iter)
+		{
+			removeChild(*iter);
+		}
+	
+	hp_graphs.erase(beginIter, hp_graphs.end());
+//	bool is_found = false;
+//	for(int i=0;i<hp_graphs.size() && !is_found;i++)
+//	{
+//		MobHpGraph* t_hp = hp_graphs[i];
+//		if(t_hp->getTargetNode() == r_sc)
+//		{
+//			is_found = true;
+//			hp_graphs.erase(std::remove_if(hp_graphs.begin(), hp_graphs.end(), [=](MobHpGraph* mg)
+//										   {
+//												return ;
+//										   }), hp_graphs.end());
+//			removeChild(t_hp);
+//		}
+//	}
 }
 
 
@@ -656,6 +681,17 @@ void CumberParent::myInit()
 	
 	myMFP = MapFragmentParent::create();
 	addChild(myMFP);
+	
+	for(int i=0;i<subCumberArray->count();i++)
+	{
+		MobHpGraph* t_sub_hp = MobHpGraph::create(subCumberArray->objectAtIndex(i));
+		addChild(t_sub_hp);
+		hp_graphs.push_back(t_sub_hp);
+	}
+	
+	MobHpGraph* main_hp = MobHpGraph::create(mainCumber);
+	addChild(main_hp);
+//	hp_graphs.push_back(main_hp);
 	
 //	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
 //	addChild(myEP);
