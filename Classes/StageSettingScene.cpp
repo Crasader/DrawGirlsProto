@@ -343,6 +343,10 @@ void StageSettingScene::menuAction(CCObject* pSender)
 		{
 			durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
 		}
+		else
+		{
+			durability = 0;
+		}
 		
 		if(durability > 0 && heart_time->isStartable())
 		{
