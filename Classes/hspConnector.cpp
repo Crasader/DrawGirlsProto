@@ -295,17 +295,21 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [dkey,this](Json::Value obj){
 		
+		int delekey = dkey;
 		graphdog->setHSPMemberNo(hspConnector::get()->getHSPMemberNo());
 		
-		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(dkey);
 		
-		hspConnector::get()->kLoadLocalUser([this](Json::Value r){
+		
+		hspConnector::get()->kLoadLocalUser([this,delekey,obj](Json::Value r){
 			hspConnector::get()->myKakaoInfo = r;
 			graphdog->setKakaoMemberID(hspConnector::get()->getKakaoID());
+			
+			jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
+			delsel.func(obj);
+			jsonDelegator::get()->remove(delekey);
+			
 		});
 		
-		delsel.func(obj);
-		jsonDelegator::get()->remove(dkey);
 	};
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
