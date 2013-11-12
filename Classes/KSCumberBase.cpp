@@ -1345,7 +1345,7 @@ void KSCumberBase::selfHealing(float dt)
 	if(m_healingFrameCount >= 60*5)
 	{
 		float n = 10.f;
-		float adder = n / getTotalLife();
+		float adder = getTotalLife() * n / 100.f;
 		setLife(MIN(getTotalLife(), getLife() + adder));
 		m_healingFrameCount = 0;
 	}

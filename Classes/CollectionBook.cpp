@@ -82,15 +82,23 @@ bool CollectionBook::onTextFieldAttachWithIME(cocos2d::CCTextFieldTTF *sender)
     return false;
 }
 
+void CollectionBook::endCloseTextInput()
+{
+	was_open_text = false;
+}
+
 bool CollectionBook::onTextFieldDetachWithIME(cocos2d::CCTextFieldTTF *sender)
 {
-    was_open_text = false;
 	string tempString = sender->getString();
 	if(tempString == "")
 	{
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
         CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,-105));
-        runAction(t_move);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CollectionBook::endCloseTextInput));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+		runAction(t_seq);
+#else
+		was_open_text = false;
 #endif
 		return false;
 	}
@@ -112,7 +120,11 @@ bool CollectionBook::onTextFieldDetachWithIME(cocos2d::CCTextFieldTTF *sender)
 	myLog->addLog(kLOG_typing_cardComment, -1);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,-105));
-    runAction(t_move);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CollectionBook::endCloseTextInput));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+    runAction(t_seq);
+#else
+	was_open_text = false;
 #endif
     
 	return false;
@@ -422,28 +434,36 @@ bool CollectionBook::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
     CCRect textFieldRect = CCRectMake(0, 0, input_text->getContentSize().width, input_text->getContentSize().height);
     textFieldRect = CCRectApplyAffineTransform(textFieldRect, input_text->nodeToWorldTransform());
     
-    if(!was_open_text && textFieldRect.containsPoint(location))
+    if(textFieldRect.containsPoint(location))//!was_open_text &&
     {
         input_text->attachWithIME();
         touch_direction = 0;
     }
     else
     {
-        if(!is_touch_enable)
-			return true;
-        
-        begin_point = location;
-        
-        if(begin_point.x > 240)
-        {
-            touch_direction = 1;
-        }
-        else
-        {
-            touch_direction = -1;
-        }
-        
-        is_menu_enable = false;
+		if(was_open_text)
+		{
+			input_text->detachWithIME();
+			touch_direction = 0;
+		}
+		else
+		{
+			if(!is_touch_enable)
+				return true;
+			
+			begin_point = location;
+			
+			if(begin_point.x > 240)
+			{
+				touch_direction = 1;
+			}
+			else
+			{
+				touch_direction = -1;
+			}
+			
+			is_menu_enable = false;
+		}
     }
 	
 	return true;
@@ -495,7 +515,7 @@ void CollectionBook::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	if(!is_touch_enable)
 		return;
 	
-	if(was_open_text)	return;
+//	if(was_open_text)	return;
 	
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));

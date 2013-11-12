@@ -18,6 +18,7 @@
 //#include "MainCumber.h"
 #include "SubCumber.h"
 #include "MapFragment.h"
+#include "MobHpGraph.h"
 
 #include <vector>
 
@@ -138,6 +139,7 @@ private:
 //	EmotionParent* myEP;
 	
 	CCArray* subCumberArray;
+	vector<MobHpGraph*> hp_graphs;
 	
 	bool isGameover;
 	
