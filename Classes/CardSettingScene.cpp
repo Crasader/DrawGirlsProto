@@ -171,10 +171,8 @@ void CardSettingScene::createCardList()
 		for(int i=0;i<loop_length;i++)
 		{
 			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			int card_level = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
 			
-			CLV_Node* t_node = CLV_Node::create(card_stage, card_level, this, menu_selector(CardSettingScene::menuAction),
+			CLV_Node* t_node = CLV_Node::create(card_number, this, menu_selector(CardSettingScene::menuAction),
 												ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)), my_clv->getViewRect());
 			my_clv->addChild(t_node, kCSS_Z_content, t_node->getMyTag());
 			

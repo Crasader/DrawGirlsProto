@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "SaveData.h"
+#include "EnumDefine.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -185,13 +186,26 @@ public:
 		return return_value;
 	}
 	
-	DSH_Key getDSHKeyForStrKey(string t_str_key)
+	void resetDSH()
 	{
-		DSH_Key return_value;
+		setIntegerForKey(kDSH_Key_savedStar, 1);
+		setIntegerForKey(kDSH_Key_savedGold, 1000);
 		
+		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0);
 		
+		int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=card_take_cnt;i++)
+		{
+			int take_card_number = getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, 0);
+			setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, 0);
+			setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, 0);
+			setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, "");
+		}
+		setIntegerForKey(kDSH_Key_cardTakeCnt, 0);
 		
-		return return_value;
+		setIntegerForKey(kDSH_Key_allHighScore, 0);
 	}
 	
 private:

@@ -117,6 +117,7 @@ void StageListDown::menuAction(CCObject *sender)
 
 void StageListDown::successAction()
 {
+	unschedule(schedule_selector(StageListDown::downloadingAction));
 	SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
 
 	if(ing_download_cnt >= df_list.size())
@@ -138,6 +139,7 @@ void StageListDown::successAction()
 
 void StageListDown::failAction()
 {
+	unschedule(schedule_selector(StageListDown::downloadingAction));
 	state_ment->setString("퍼즐 이미지 다운로드에 실패하였습니다.");
 	is_downloading = false;
 	CCSprite* n_button = CCSprite::create("cardsetting_zoom.png");

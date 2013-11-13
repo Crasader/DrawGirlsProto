@@ -179,6 +179,8 @@ private:
 			
 			myDSH->setIntegerForKey(kDSH_Key_allHighScore, data[myDSH->getKey(kDSH_Key_allHighScore)].asInt());
 			
+			mySGD->resetHasGottenCards();
+			
 			if(card_data_load_list.size() > 0)
 			{
 				state_label->setString("카드 정보를 받아오는 ing...");
@@ -213,8 +215,8 @@ private:
 				NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt());
 				
 				NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1);
-				NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), mySD->getSilType());
-				NSDS_SI(mySD->getSilType(), kSDS_SI_level_int1_card_i, i+1, t_card["no"].asInt());
+				NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt());
+				NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["rank"].asInt(), t_card["no"].asInt());
 				
 				Json::Value t_card_missile = t_card["missile"];
 				NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str());
@@ -266,14 +268,14 @@ private:
 					DownloadFile t_df;
 					t_df.size = t_imgInfo["size"].asInt();
 					t_df.img = t_imgInfo["img"].asString().c_str();
-					t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", mySD->getSilType(), i+1)->getCString();
+					t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
 					t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
 					
 					CopyFile t_cf;
 					t_cf.from_filename = t_df.filename.c_str();
-					t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", mySD->getSilType(), i+1)->getCString();
+					t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
 					cf_list.push_back(t_cf);
 					
 					is_add_cf = true;
@@ -302,7 +304,7 @@ private:
 						DownloadFile t_df;
 						t_df.size = t_detail["size"].asInt();
 						t_df.img = t_detail["img"].asString().c_str();
-						t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", mySD->getSilType(), i+1)->getCString();
+						t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
 						t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
 						df_list.push_back(t_df);
 						// ================================
@@ -318,7 +320,7 @@ private:
 						t_cf.position_x = t_detail["positionX"].asInt();
 						t_cf.position_y = t_detail["positionY"].asInt();
 						
-						t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", mySD->getSilType(), i+1)->getCString();
+						t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
 						
 						cf_list.push_back(t_cf);
 					}
@@ -336,7 +338,7 @@ private:
 						DownloadFile t_df;
 						t_df.size = t_silImgInfo["size"].asInt();
 						t_df.img = t_silImgInfo["img"].asString().c_str();
-						t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", mySD->getSilType(), i+1)->getCString();
+						t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
 						t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
 						df_list.push_back(t_df);
 						// ================================
@@ -372,6 +374,7 @@ private:
 	
 	void successAction2()
 	{
+		unschedule(schedule_selector(TitleScene::downloadingAction2));
 		SDS_SS(kSDF_cardInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
 		
 		if(ing_download_cnt >= df_list.size())
@@ -415,12 +418,13 @@ private:
 			ing_download_cnt++;
 			ing_download_per = 0.f;
 			download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
-			startDownload();
+			startDownload2();
 		}
 	}
 	
 	void failAction2()
 	{
+		unschedule(schedule_selector(TitleScene::downloadingAction2));
 		state_label->setString("이미지 정보 다운로드에 실패하였습니다.\n재시도 합니다.");
 		ing_download_cnt = 1;
 		ing_download_per = 0;
@@ -627,6 +631,7 @@ private:
 	
 	void successAction()
 	{
+		unschedule(schedule_selector(TitleScene::downloadingAction));
 		if(ing_download_cnt <= df_list.size())
 			SDS_SS(kSDF_gameInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
 		else
@@ -654,6 +659,7 @@ private:
 	
 	void failAction()
 	{
+		unschedule(schedule_selector(TitleScene::downloadingAction));
 		state_label->setString("게임 정보를 받아오는데 실패하였습니다. 재시도 해주세요.");
 		
 		CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,120,70));

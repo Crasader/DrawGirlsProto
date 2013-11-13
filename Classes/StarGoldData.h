@@ -544,6 +544,26 @@ public:
 		keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
 	}
 	
+	void resetHasGottenCards()
+	{
+		has_gotten_cards.clear();
+		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=card_take_cnt;i++)
+		{
+			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number);
+			if(take_number != 0)
+			{
+				CardSortInfo t_info;
+				t_info.card_number = card_number;
+				t_info.take_number = take_number;
+				t_info.grade = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
+				has_gotten_cards.push_back(t_info);
+			}
+		}
+		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
+	}
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
@@ -591,27 +611,6 @@ private:
 		login_getted = false;
 		is_before_title = true;
 		
-		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
-		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
-		
-		for(int i=start_stage;i<start_stage+stage_count;i++)
-		{
-			for(int j=0;j<3;j++)
-			{
-				int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, j+1));
-				if(take_number != 0)
-				{
-					CardSortInfo t_info;
-					t_info.card_number = NSDS_GI(i, kSDS_SI_level_int1_card_i, j+1);
-					t_info.take_number = take_number;
-					t_info.grade = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
-					has_gotten_cards.push_back(t_info);
-				}
-			}
-		}
-		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
-		
 		setTargetDelegate(NULL, NULL);
 		
 		after_loading = kImgType_Empty;
@@ -644,11 +643,7 @@ private:
 			AudioEngine::sharedInstance()->setSoundOnOff(true);
 			AudioEngine::sharedInstance()->setEffectOnOff(true);
 			
-			int cmp_value1 = 0xD8;
-			int cmp_value2 = 0x331;
-			
-			myDSH->setIntegerForKey(kDSH_Key_savedStar, (cmp_value1^SGD_KEY));
-			myDSH->setIntegerForKey(kDSH_Key_savedGold, (cmp_value2^SGD_KEY));
+			myDSH->resetDSH();
 		}
 		else
 		{

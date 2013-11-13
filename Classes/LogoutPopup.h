@@ -11,6 +11,8 @@
 
 #include "cocos2d.h"
 #include "hspConnector.h"
+#include "DataStorageHub.h"
+#include "TitleScene.h"
 
 USING_NS_CC;
 using namespace std;
@@ -116,13 +118,22 @@ private:
 		}
 		else if(tag == kLP_MT_logout)
 		{
-			hspConnector::get()->kLogout(json_selector(this, LogoutPopup::resultLogoutAction));
+			hspConnector::get()->logout(json_selector(this, LogoutPopup::resultLogoutAction));
 		}
 	}
 	
 	void resultLogoutAction(Json::Value result_data)
 	{
 		CCLog("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		if(result_data["error"]["isSuccess"].asBool())
+		{
+			myDSH->resetDSH();
+			CCDirector::sharedDirector()->replaceScene(TitleScene::scene());
+		}
+		else
+		{
+			is_menu_enable = true;
+		}
 	}
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
