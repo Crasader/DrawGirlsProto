@@ -15,6 +15,7 @@
 #include "StarGoldData.h"
 #include "SilhouetteData.h"
 #include "LogData.h"
+#include "CardCase.h"
 
 typedef enum tMenuTagClearScene{
 	kMT_CS_ok = 1
@@ -118,6 +119,7 @@ bool ClearScene::init()
 	{
 		myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
 		myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+		myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 		
 		mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 	}
@@ -148,6 +150,10 @@ bool ClearScene::init()
 			}
 		}
 	}
+	
+	CardCase* t_case = CardCase::create(stage_number, take_level);
+	t_case->setPosition(CCPointZero);
+	take_card->addChild(t_case);
 	
 	myLog->addLog(kLOG_puzzleAchievementMinimum_i, -1, 100*minimum_count/stage_count);
 	myLog->addLog(kLOG_puzzleAchievementMaximum_i, -1, 100*maximum_count/stage_count);

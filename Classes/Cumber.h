@@ -13,12 +13,12 @@
 #include "GameData.h"
 #include <queue>
 #include "MissileParent.h"
-#include "SelectedMapData.h"
 #include "StarGoldData.h"
 #include "AlertEngine.h"
 //#include "MainCumber.h"
 #include "SubCumber.h"
 #include "MapFragment.h"
+#include "MobHpGraph.h"
 
 #include <vector>
 
@@ -69,6 +69,8 @@ public:
 //	void mainCumberShowEmotion(int t_e);
 	void startDieAnimation();
 	void changeMaxSize(float t_p);
+	void onJackDie();
+	void onJackRevived();
 	float getNumberFromJsonValue(JsonBox::Value v)
 	{
 		if(v.getType() == JsonBox::Value::DOUBLE)
@@ -82,7 +84,7 @@ private:
 	struct jrType
 	{
 		
-		int m_jrType;
+		std::string m_jrType;
 		
 		float m_jrMinSpeed;
 		float m_jrStartSpeed;
@@ -99,7 +101,7 @@ private:
 		float m_jrAgi;
 		
 		int m_aiValue;
-		jrType(int type, float minv, float startv, float maxv,
+		jrType(const std::string& type, float minv, float startv, float maxv,
 			   float mins, float starts, float maxs, int nm, int dr, int fury,
 			   float hp, int ai, int agi)
 		{
@@ -137,6 +139,7 @@ private:
 //	EmotionParent* myEP;
 	
 	CCArray* subCumberArray;
+	vector<MobHpGraph*> hp_graphs;
 	
 	bool isGameover;
 	

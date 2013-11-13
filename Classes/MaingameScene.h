@@ -16,7 +16,6 @@
 #include "PathManager.h"
 #include "Cumber.h"
 #include "PlayUI.h"
-#include "SelectedMapData.h"
 #include "AttackItem.h"
 #include "ClearScene.h"
 #include "FailScene.h"
@@ -24,6 +23,7 @@
 #include "ClearShowTime.h"
 #include "GameItemManager.h"
 #include "ZoomScriptScene.h"
+#include "MissileDamageLabel.h"
 
 using namespace cocos2d;
 
@@ -36,8 +36,8 @@ enum Mainzorder{
 	controlImgZorder,
 	countingLabelZorder,
 	conditionLabelZorder,
-	searchEyeZorder,
 	goldZorder,
+	searchEyeZorder,
 	clearshowtimeZorder,
 	myUIZorder,
 	mControlZorder,
@@ -133,16 +133,19 @@ private:
 	
 	void setControlGesture()
 	{
+		myDSH->setIntegerForKey(kDSH_Key_jackBaseSpeed, int(JackBaseSpeedTag::kJackBaseSpeedTag_level1));
 		myGD->changeJackBaseSpeed(1.2f);
 	}
 	
 	void setControlButton()
 	{
+		myDSH->setIntegerForKey(kDSH_Key_jackBaseSpeed, int(JackBaseSpeedTag::kJackBaseSpeedTag_level2));
 		myGD->changeJackBaseSpeed(1.5f);
 	}
 	
 	void setControlJoystick()
 	{
+		myDSH->setIntegerForKey(kDSH_Key_jackBaseSpeed, int(JackBaseSpeedTag::kJackBaseSpeedTag_level3));
 		myGD->changeJackBaseSpeed(2.f);
 	}
 	
@@ -321,16 +324,6 @@ private:
 		
 		if(mySGD->getIsCleared())
 		{
-			if(mySD->getSilType() < 10000)
-			{
-				int cleared_number = myDSH->getIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1);
-				
-				if(mySD->getSilType() > cleared_number)
-				{
-					myDSH->setIntegerForKey(kDSH_Key_theme_int1_clearednumber, 1, mySD->getSilType());
-				}
-			}
-			
 			AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
 			AudioEngine::sharedInstance()->playEffect("sound_clear_ment.mp3", false);
 			ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 1.f, game_node, this, callfunc_selector(Maingame::closeShutter));
@@ -488,7 +481,7 @@ private:
 	
 	void moveGamePosition(CCPoint t_p)
 	{
-		if(!myGD->is_setted_jack || myGD->game_step == kGS_unlimited)
+//		if(!myGD->is_setted_jack)// || myGD->game_step == kGS_unlimited)
 			game_node->setPosition(getObjectToGameNodePosition(t_p));
 	}
 	
@@ -518,16 +511,29 @@ private:
 	
 	void showMissMissile(CCPoint t_position)
 	{
+		t_position.x += rand()%21 - 10;
+		t_position.y += rand()%21 - 10;
+		
 		CCSprite* miss_label = CCSprite::create("missile_miss.png");
 		miss_label->setScale(1.f/1.5f);
 		miss_label->setPosition(t_position);
 		game_node->addChild(miss_label, goldZorder);
 		
 		CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-		CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCLabelTTF::removeFromParent));
+		CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCSprite::removeFromParent));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
 		
 		miss_label->runAction(t_seq);
+	}
+	
+	void showDamageMissile(CCPoint t_position, int t_damage)
+	{
+		MissileDamageLabel* damage_label = MissileDamageLabel::create(t_damage);
+		damage_label->setScale(1.f/1.5f);
+		damage_label->setPosition(t_position);
+		game_node->addChild(damage_label, goldZorder);
+		
+		damage_label->startMyAction();
 	}
 	
 	bool is_line_die;
@@ -630,6 +636,8 @@ private:
 				}
 			}
 		}
+		
+		myGD->communication("MS_setTopBottomBlock");
 	}
 	
 	CCPoint limitted_map_position;
@@ -642,6 +650,7 @@ private:
 		
 		limitted_map_position = game_node->getPosition();
 		myGD->communication("VS_setLimittedMapPosition");
+		myGD->communication("MS_startRemoveBlock");
 		
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{

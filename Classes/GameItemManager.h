@@ -272,7 +272,7 @@ private:
 		
 		startFraming();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f*0.7f);
 		
 		item_img->runAction(t_scale);
 	}
@@ -326,7 +326,7 @@ private:
 		
 		startFraming();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f*0.7f);
 		
 		item_img->runAction(t_scale);
 	}
@@ -392,7 +392,7 @@ private:
 		
 		startFraming();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f*0.7f);
 		
 		item_img->runAction(t_scale);
 	}
@@ -451,7 +451,7 @@ private:
 		
 		startFraming();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 1.f*0.7f);
 		
 		item_img->runAction(t_scale);
 	}
@@ -505,7 +505,7 @@ private:
 		
 		startFraming();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f*0.7f);
 		
 		item_img->runAction(t_scale);
 	}
@@ -570,7 +570,7 @@ private:
 		
 		startFraming();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f*0.7f);
 		
 		item_img->runAction(t_scale);
 	}
@@ -720,7 +720,7 @@ private:
 		
 		startFraming();
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f);
+		CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.5f*0.7f);
 		
 		item_img->runAction(t_scale);
 		
@@ -960,11 +960,15 @@ private:
 	}
 	void checking()
 	{
-		if((myGD->mapState[my_point.x][my_point.y] == mapOldget || myGD->mapState[my_point.x][my_point.y] == mapOldline) &&
-		   (myGD->mapState[my_point.x-1][my_point.y] == mapOldget || myGD->mapState[my_point.x-1][my_point.y] == mapOldline) &&
-		   (myGD->mapState[my_point.x+1][my_point.y] == mapOldget || myGD->mapState[my_point.x+1][my_point.y] == mapOldline) &&
-		   (myGD->mapState[my_point.x][my_point.y-1] == mapOldget || myGD->mapState[my_point.x][my_point.y-1] == mapOldline) &&
-		   (myGD->mapState[my_point.x][my_point.y+1] == mapOldget || myGD->mapState[my_point.x][my_point.y+1] == mapOldline))
+		if(myGD->mapState[my_point.x][my_point.y] != mapOutline && (myGD->mapState[my_point.x][my_point.y] == mapOldget || myGD->mapState[my_point.x][my_point.y] == mapOldline ||
+		   myGD->mapState[my_point.x-1][my_point.y] == mapOldget || myGD->mapState[my_point.x-1][my_point.y] == mapOldline ||
+		   myGD->mapState[my_point.x+1][my_point.y] == mapOldget || myGD->mapState[my_point.x+1][my_point.y] == mapOldline ||
+		   myGD->mapState[my_point.x][my_point.y-1] == mapOldget || myGD->mapState[my_point.x][my_point.y-1] == mapOldline ||
+		   myGD->mapState[my_point.x][my_point.y+1] == mapOldget || myGD->mapState[my_point.x][my_point.y+1] == mapOldline ||
+		   myGD->mapState[my_point.x-1][my_point.y-1] == mapOldget || myGD->mapState[my_point.x-1][my_point.y-1] == mapOldline ||
+		   myGD->mapState[my_point.x-1][my_point.y+1] == mapOldget || myGD->mapState[my_point.x-1][my_point.y+1] == mapOldline ||
+		   myGD->mapState[my_point.x+1][my_point.y-1] == mapOldget || myGD->mapState[my_point.x+1][my_point.y-1] == mapOldline ||
+		   myGD->mapState[my_point.x+1][my_point.y+1] == mapOldget || myGD->mapState[my_point.x+1][my_point.y+1] == mapOldline))
 		{
 			stopCheck();
 			is_stan_by = true;
@@ -1020,9 +1024,13 @@ public:
 	{
 		for(int i=6;i<mapHeightInnerEnd;i+=12)
 		{
-			for(int j=2;j<mapWidthInnerEnd;j+=12)
+			for(int j=3;j<mapWidthInnerEnd;j+=12)
 			{
-				if(myGD->mapState[j][i] == mapEmpty)
+				if((myGD->mapState[j][i] == mapEmpty || myGD->mapState[j][i] == mapOutline) &&
+				   (myGD->mapState[j-1][i-1] == mapEmpty || myGD->mapState[j-1][i-1] == mapOutline) && (myGD->mapState[j-1][i] == mapEmpty || myGD->mapState[j-1][i] == mapOutline) &&
+				   (myGD->mapState[j-1][i+1] == mapEmpty || myGD->mapState[j-1][i+1] == mapOutline) && (myGD->mapState[j][i-1] == mapEmpty || myGD->mapState[j][i-1] == mapOutline) &&
+				   (myGD->mapState[j][i+1] == mapEmpty || myGD->mapState[j][i+1] == mapOutline) && (myGD->mapState[j+1][i-1] == mapEmpty || myGD->mapState[j+1][i-1] == mapOutline) &&
+				   (myGD->mapState[j+1][i] == mapEmpty || myGD->mapState[j+1][i] == mapOutline) && (myGD->mapState[j+1][i+1] == mapEmpty || myGD->mapState[j+1][i+1] == mapOutline))
 				{
 					FeverCoin* t_fc = FeverCoin::create(IntPoint(j,i), this, callfuncO_selector(FeverCoinParent::addGetCoinList));
 					addChild(t_fc);

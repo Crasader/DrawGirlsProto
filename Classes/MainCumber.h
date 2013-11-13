@@ -14,7 +14,6 @@
 #include "AudioEngine.h"
 #include "AlertEngine.h"
 //#include "CumberEmotion.h"
-#include "BossEye.h"
 #include <algorithm>
 #include <vector>
 #include <map>
@@ -69,7 +68,7 @@ public:
 	virtual void setCasting(bool t_b);
 //	virtual void showEmotion(EmotionType t_type);
 //	virtual void nullmEmotion();
-	virtual CCNode* getBossEye();
+//	virtual CCNode* getBossEye();
 	virtual void caughtBoss(CCObject* t_setCaught, SEL_CallFunc d_setCaught);
 	virtual void endCaughtBoss();
 	virtual void changeMaxSize(float t_p);
@@ -104,7 +103,6 @@ protected:
 	bool is_casting;
 	bool is_moving_shoot;
 	CCPoint b_c_p;
-	BossEye* my_eye;
 	
 	//	int t_chapter_number;
 	//	int t_stage_number;

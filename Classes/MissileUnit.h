@@ -1586,6 +1586,7 @@ public:
 		
 		if(baseNode)
 		{
+			baseNode->stopAllActions();
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call2);
 			baseNode->runAction(t_seq);
 		}
@@ -1677,7 +1678,7 @@ private:
 		{
 			unschedule(schedule_selector(ThreeCushion::myAction));
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
-			int missile_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
+			int missile_type = rand()%7;//DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
 			
 			int rmCnt = 2/2 + 1;
 			float damage_per = 2*0.8f / rmCnt;

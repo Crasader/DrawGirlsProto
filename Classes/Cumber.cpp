@@ -24,6 +24,48 @@
 #include "Pear.h"
 #include "ServerDataSave.h"
 #include "KSJuniorBase.h"
+#include "KSCircleBase.h"
+#include "KSSnakeBase.h"
+#include <functional>
+template <class _Tp>
+struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
+{
+	virtual _Tp operator()(const _Tp& a, const _Tp& b) const = 0;//(const _Tp& a, const _Tp& b) const
+//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
+//	{
+//		return __x*(1 - __y);
+//	}
+};
+
+template <class _Tp>
+struct DecreaseOp : public PassiveOp<_Tp>
+{
+	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
+	{
+		return a*(1 - b);
+	}
+	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
+	//	{
+	//		return __x*(1 - __y);
+	//	}
+};
+
+
+template <class _Tp>
+struct SubtractOp : public PassiveOp<_Tp>
+{
+	virtual ~SubtractOp(){
+	}
+	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
+	{
+		return a - b;
+	}
+	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
+	//	{
+	//		return __x*(1 - __y);
+	//	}
+};
+
 
 void CumberParent::onStartGame()
 {
@@ -190,9 +232,9 @@ void CumberParent::subCumberReplication()
 	int cnt = subCumberArray->count();
 	for(int i = 0;i<cnt;i++)
 	{
-		KSCumberBase* t_sc = (Bear*)subCumberArray->objectAtIndex(i);
+		KSCumberBase* t_sc = (KSJuniorBase*)subCumberArray->objectAtIndex(i);
 		CCPoint t_p = t_sc->getPosition();
-		Bear* t_sc2 = Bear::create();
+		KSJuniorBase* t_sc2 = KSJuniorBase::create("bear");
 		addChild(t_sc2);
 		t_sc2->setPosition(t_p);
 		subCumberArray->addObject(t_sc2);
@@ -287,14 +329,7 @@ void CumberParent::startDieAnimation()
 		die_animation_cnt = 0;
 		die_animation_rate = 40;
 		
-//		if(!(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1) && rand()%CAUGHT_RATE == 0)
-//		{
-//			mySGD->caughtBoss();
-//			for(auto mainCumber : mainCumbers)
-//				mainCumber->caughtBoss(this, callfunc_selector(CumberParent::realStartDieAnimation));
-//		}
-//		else
-			realStartDieAnimation();
+		realStartDieAnimation();
 	}
 }
 
@@ -308,18 +343,18 @@ void CumberParent::changeMaxSize(float t_p)
 void CumberParent::realStartDieAnimation()
 {
 	ccColor4F myColor;
-	int my_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
-	if(my_type == kMyElementalPlasma)				myColor = ccc4f(1.f, 0, 1.f, 1.f);
-	else if(my_type == kMyElementalLightning)		myColor = ccc4f(1.f, 1.f, 0, 1.f);
-	else if(my_type == kMyElementalWind)			myColor = ccc4f(0, 1.f, 1.f, 1.f);
-	else if(my_type == kMyElementalNonElemental)	myColor = ccc4f(1.f, 1.f, 1.f, 1.f);
-	else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
-	else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
-	else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
+//	int my_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
+//	if(my_type == kMyElementalPlasma)				myColor = ccc4f(1.f, 0, 1.f, 1.f);
+//	else if(my_type == kMyElementalLightning)		myColor = ccc4f(1.f, 1.f, 0, 1.f);
+//	else if(my_type == kMyElementalWind)			myColor = ccc4f(0, 1.f, 1.f, 1.f);
+//	else if(my_type == kMyElementalNonElemental)	myColor = ccc4f(1.f, 1.f, 1.f, 1.f);
+//	else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
+//	else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
+//	else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
 	
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
 	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	myGD->communication("MP_explosion", mainCumber->getPosition(), myColor);
+	myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 0, 0));
 	
 //	for(auto mainCumber : mainCumbers)
 //	{
@@ -344,20 +379,45 @@ void CumberParent::dieAnimation()
 		{
 			unschedule(schedule_selector(CumberParent::dieAnimation));
 		}
-		ccColor4F myColor;
-		int my_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
-		if(my_type == kMyElementalPlasma)				myColor = ccc4f(1.f, 0, 1.f, 1.f);
-		else if(my_type == kMyElementalLightning)		myColor = ccc4f(1.f, 1.f, 0, 1.f);
-		else if(my_type == kMyElementalWind)			myColor = ccc4f(0, 1.f, 1.f, 1.f);
-		else if(my_type == kMyElementalNonElemental)	myColor = ccc4f(1.f, 1.f, 1.f, 1.f);
-		else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
-		else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
-		else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
+//		ccColor4F myColor;
+//		int my_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
+//		if(my_type == kMyElementalPlasma)				myColor = ccc4f(1.f, 0, 1.f, 1.f);
+//		else if(my_type == kMyElementalLightning)		myColor = ccc4f(1.f, 1.f, 0, 1.f);
+//		else if(my_type == kMyElementalWind)			myColor = ccc4f(0, 1.f, 1.f, 1.f);
+//		else if(my_type == kMyElementalNonElemental)	myColor = ccc4f(1.f, 1.f, 1.f, 1.f);
+//		else if(my_type == kMyElementalFire)			myColor = ccc4f(1.f, 0, 0, 1.f);
+//		else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
+//		else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
 		//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
 		auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-		myGD->communication("MP_explosion", mainCumber->getPosition(), myColor);
+		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 0, 0));
 //		for(auto mainCumber : mainCumbers)
 //			mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
+	}
+}
+
+void CumberParent::onJackDie()
+{
+	for(auto mainCumber : mainCumbers)
+		mainCumber->onJackDie();
+	
+	int loop_cnt = subCumberArray->count();
+	for(int i=0;i<loop_cnt;i++)
+	{
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+		t_sc->onJackDie();
+	}
+}
+void CumberParent::onJackRevived()
+{
+	for(auto mainCumber : mainCumbers)
+		mainCumber->onJackRevived();
+	
+	int loop_cnt = subCumberArray->count();
+	for(int i=0;i<loop_cnt;i++)
+	{
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+		t_sc->onJackRevived();
 	}
 }
 
@@ -374,27 +434,7 @@ void CumberParent::createSubCumber(IntPoint s_p)
 	//## 에 따라 분기 해야됨.
 	
 	KSCumberBase* t_SC;
-	switch(junior.m_jrType)
-	{
-		case 1001:
-			t_SC = Bear::create();
-			break;
-		case 1002:
-			t_SC = Cat::create();
-			break;
-		case 1003:
-			t_SC = Cow::create();
-			break;
-		case 1004:
-			t_SC = Dog::create();
-			break;
-		case 1005:
-			t_SC = Rabbit::create();
-			break;
-		case 1006:
-			t_SC = Wolf::create();
-			break;
-	}
+	t_SC = KSJuniorBase::create(junior.m_jrType);
 	t_SC->settingHp(junior.m_jrHp);
 	t_SC->setAgility(junior.m_jrAgi);
 	t_SC->settingAI(junior.m_aiValue);
@@ -415,7 +455,6 @@ void CumberParent::createSubCumber(IntPoint s_p)
 
 void CumberParent::initSubCumber()
 {
-	//		int create_cnt = SelectedMapData::sharedInstance()->getSubCumberCnt();
 	
 }
 
@@ -460,7 +499,33 @@ void CumberParent::setCasting(bool t_b)
 void CumberParent::removeSubCumber(CCObject* r_sc)
 {
 	subCumberArray->removeObject(r_sc);
+	
+	auto beginIter = std::remove_if(hp_graphs.begin(), hp_graphs.end(), [=](MobHpGraph* mg)
+				   {
+					   return mg->getTargetNode() == r_sc;
+				   });
+	for(auto iter = beginIter; iter != hp_graphs.end(); ++iter)
+		{
+			removeChild(*iter);
+		}
+	
+	hp_graphs.erase(beginIter, hp_graphs.end());
+//	bool is_found = false;
+//	for(int i=0;i<hp_graphs.size() && !is_found;i++)
+//	{
+//		MobHpGraph* t_hp = hp_graphs[i];
+//		if(t_hp->getTargetNode() == r_sc)
+//		{
+//			is_found = true;
+//			hp_graphs.erase(std::remove_if(hp_graphs.begin(), hp_graphs.end(), [=](MobHpGraph* mg)
+//										   {
+//												return ;
+//										   }), hp_graphs.end());
+//			removeChild(t_hp);
+//		}
+//	}
 }
+
 
 void CumberParent::myInit()
 {
@@ -502,86 +567,57 @@ void CumberParent::myInit()
 	myGD->V_V["CP_onStartGame"] = std::bind(&CumberParent::onStartGame, this);
 	myGD->V_V["CP_onPatternEnd"] = std::bind(&CumberParent::onPatternEnd, this);
 	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
-	
-	
-	void onStartGame();
-	void onPatternEnd();
+	myGD->V_V["CP_onJackDie"] = std::bind(&CumberParent::onJackDie, this);
+	myGD->V_V["CP_onJackRevived"] = std::bind(&CumberParent::onJackRevived, this);
 	
 	Json::Reader reader;
 	Json::Value root;
 	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+	Json::Value passiveCard;
+	reader.parse(mySD->getPassiveData(), passiveCard);
 	Json::Value boss = root[0u];
 
-	int bossType = boss["type"].asInt();
+	std::string bossShape = boss.get("shape", "circle").asString();
+	std::string bossType = boss["type"].asString();
+	shared_ptr<PassiveOp<float>> cardOperator;
+	if(passiveCard["operator"].asString() == "-")
+	{
+		cardOperator = shared_ptr<PassiveOp<float>>(new SubtractOp<float>());
+	}
+	else// if(passiveCard["operator"].asString() == "*(1-x)")
+	{
+		cardOperator = shared_ptr<PassiveOp<float>>(new DecreaseOp<float>());
+	}
 	
-	float hp = boss["hp"].asInt();
-	float minSpeed = boss["speed"]["min"].asDouble();// getNumberFromJsonValue(speed["max"]);
-	float startSpeed = boss["speed"]["start"].asDouble(); //getNumberFromJsonValue(speed["start"]);
-	float maxSpeed = boss["speed"]["max"].asDouble();// getNumberFromJsonValue(speed["min"]);
+	float hp = MAX((*cardOperator)(boss["hp"].asInt(), passiveCard["hp"].asInt()), 0);
+	float minSpeed = MAX((*cardOperator)(boss["speed"]["min"].asDouble(), passiveCard["speed"].asDouble()), 0);
+	float startSpeed = MAX((*cardOperator)(boss["speed"]["start"].asDouble(), passiveCard["speed"].asDouble()), 0); //getNumberFromJsonValue(speed["start"]);
+	float maxSpeed = MAX((*cardOperator)(boss["speed"]["max"].asDouble(), passiveCard["speed"].asDouble()), 0);// getNumberFromJsonValue(speed["min"]);
 	
-	float minScale = boss["scale"]["min"].asDouble(); // getNumberFromJsonValue(scale["min"]);
-	float startScale = boss["scale"]["start"].asDouble(); // getNumberFromJsonValue(scale["start"]);
-	float maxScale = boss["scale"]["max"].asDouble(); // getNumberFromJsonValue(scale["max"]);
+	float minScale = MAX((*cardOperator)(boss["scale"]["min"].asDouble(), passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["min"]);
+	float startScale = MAX((*cardOperator)(boss["scale"]["start"].asDouble(), passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["start"]);
+	float maxScale = MAX((*cardOperator)(boss["scale"]["max"].asDouble(), passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["max"]);
 	
 	int normalMovement = boss["movement"].get("normal",1).asInt();
 	int drawMovement = boss["movement"].get("draw", normalMovement).asInt();
 	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
 	
-	float agi = boss.get("agi", 0).asDouble();
+	float agi = MAX((*cardOperator)(boss.get("agi", 0).asDouble(), passiveCard["agi"].asDouble()), 0);
 	KSCumberBase* mainCumber;
-	switch(bossType)
+	if(bossShape == "circle")
 	{
-		case 1:
-			mainCumber = Apple::create();
-			break;
-		case 2:
-			mainCumber = Coconut::create();
-			break;
-		case 3:
-			mainCumber = Melon::create();
-			break;
-		case 4:
-			mainCumber = Banana::create();
-			break;
-		case 5:
-			mainCumber = Blueberry::create();
-			break;
-		case 6:
-			mainCumber = Cherry::create();
-			break;
-		case 7:
-			mainCumber = Mango::create();
-			break;
-		case 8:
-		{
-
-		}
-			
-			mainCumber = Apricot::create();
-			break;
-		case 9:
-			mainCumber = Grape::create();
-			break;
-		case 10:
-			mainCumber = Kiwi::create();
-			break;
-		case 11:
-			mainCumber = Lime::create();
-			break;
-		case 12:
-			mainCumber = Orange::create();
-			break;
-		case 13:
-			mainCumber = Peach::create();
-			break;
-		case 14:
-			mainCumber = Pear::create();
-			break;
+		mainCumber = KSCircleBase::create(bossType);
 	}
+	else if(bossShape == "snake")
+	{
+		mainCumber = KSSnakeBase::create(bossType);
+	}	
+
+
 	mainCumber->settingHp(hp);
 	mainCumber->setAgility(agi);
 	KS::KSLog("%", boss);
-	mainCumber->settingAI(boss.get("ai", 0).asInt());
+	mainCumber->settingAI(MAX(0, (*cardOperator)(boss.get("ai", 0).asInt(), passiveCard["ai"].asInt()) ));
 	mainCumber->settingFuryRule();
 	mainCumber->settingScale(startScale, minScale, maxScale);
 	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
@@ -639,7 +675,7 @@ void CumberParent::myInit()
 		{
 			Json::Value boss = root[i];
 			KS::KSLog("%", boss);
-			int bossType = boss["type"].asInt();
+			std::string bossType = boss["type"].asString();
 			
 			float hp = boss["hp"].asInt();
 			float minSpeed = boss["speed"]["min"].asDouble();// getNumberFromJsonValue(speed["max"]);
@@ -665,31 +701,7 @@ void CumberParent::myInit()
 					  drawMovement, furyMovement, hp, aiValue, agi);
 			m_juniors.push_back(jt);
 			
-			KSCumberBase* t_SC;
-			switch(bossType)
-			{
-				case 1001:
-					t_SC = Bear::create();
-					break;
-				case 1002:
-					t_SC = Cat::create();
-					break;
-				case 1003:
-					t_SC = Cow::create();
-					break;
-				case 1004:
-					t_SC = Dog::create();
-					break;
-				case 1005:
-					t_SC = Rabbit::create();
-					break;
-				case 1006:
-					t_SC = Wolf::create();
-					break;
-				default:
-					t_SC = Bear::create();
-					break;
-			}
+			KSCumberBase* t_SC = KSJuniorBase::create(bossType);
 			
 			t_SC->settingHp(hp);
 			t_SC->setAgility(agi);
@@ -718,6 +730,17 @@ void CumberParent::myInit()
 	
 	myMFP = MapFragmentParent::create();
 	addChild(myMFP);
+	
+	for(int i=0;i<subCumberArray->count();i++)
+	{
+		MobHpGraph* t_sub_hp = MobHpGraph::create(subCumberArray->objectAtIndex(i));
+		addChild(t_sub_hp);
+		hp_graphs.push_back(t_sub_hp);
+	}
+	
+	MobHpGraph* main_hp = MobHpGraph::create(mainCumber);
+	addChild(main_hp);
+//	hp_graphs.push_back(main_hp);
 	
 //	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
 //	addChild(myEP);

@@ -80,34 +80,19 @@ public:
 	{
 		myState = cumberStateMoving;
 		
-//		if(SelectedMapData::sharedInstance()->getSelectedChapter() <= 20)
-//		{
-//			directionAngle = (rand()%4)*90+45+(rand()%30 - 15);
-//			schedule(schedule_selector(SubCumber::easyMoving));
-//		}
-//		else
-//		{
-			directionAngle = rand()%360;
-			schedule(schedule_selector(SubCumber::moving));
-//		}
+		directionAngle = rand()%360;
+		schedule(schedule_selector(SubCumber::moving));
 	}
 	void stopMoving()
 	{
-//		if(SelectedMapData::sharedInstance()->getSelectedChapter() <= 20)
-//		{
-//			unschedule(schedule_selector(SubCumber::easyMoving));
-//		}
-//		else
-//		{
-			unschedule(schedule_selector(SubCumber::moving));
-//		}
+		unschedule(schedule_selector(SubCumber::moving));
 		myState = cumberStateStop;
 	}
 	
 	void decreaseLife(float t_damage, float t_directionAngle)
 	{
 		stopSelfBomb();
-		life -= MissileDamageData::getCorrelationDamage(t_damage, my_element);
+		life -= t_damage;
 		if(life <= 0)
 		{
 			if(mySD->getClearCondition() == kCLEAR_subCumberCatch && t_damage >= 999999.f)
@@ -469,7 +454,7 @@ private:
 //		mEmotion = NULL;
 		is_slowed = false;
 		isSheild = 0;
-		life = SelectedMapData::sharedInstance()->getMaxBossLife()/10.f;
+		life = 10.f;
 		isSelfBomb = false;
 		
 		myState = cumberStateStop;

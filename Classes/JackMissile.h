@@ -11,7 +11,6 @@
 
 #include "cocos2d.h"
 #include "GameData.h"
-#include "SelectedMapData.h"
 #include "MissileDamageData.h"
 #include "DataStorageHub.h"
 #include "ServerDataSave.h"
@@ -213,37 +212,55 @@ private:
 			}
 			else if(ingFrame == 20 + 10)
 			{
-				particlePosition = ccpAdd(shootImg->getPosition(),shoot_dv);
-				shootImg->setPosition(particlePosition);
-				particle->setPosition(particlePosition);
-				mainImg->setPosition(particlePosition);
+				float target_agi = ((KSCumberBase*)targetNode)->getAgility();
 				
-				if(shootImg->getScaleX() < 30.f)
-					shootImg->setScaleX(shootImg->getScaleX() + shoot_dv_distance);
-				shoot_removing = true;
+				float agi_rate = (target_agi-dex)/target_agi;
+				agi_rate = agi_rate < 0 ? 0 : agi_rate;
 				
-				// bomb
-				particlePosition = shootImg->getPosition();
-				mainImg->removeFromParentAndCleanup(true);
+				agi_rate = agi_rate/100.f*85.f + 0.1f;
+				agi_rate *= 100.f;
 				
-				ccColor4F myColor;
-				if(my_type == kMyElementalPlasma)			myColor = ccc4f(1.f, 0, 1.f, 1.f);
-				else if(my_type == kMyElementalLightning)	myColor = ccc4f(1.f, 1.f, 0, 1.f);
-				else if(my_type == kMyElementalWind)		myColor = ccc4f(0, 1.f, 1.f, 1.f);
-				
-				myGD->communication("MP_explosion", particlePosition, myColor);
-				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
-				myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
-				
-				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
-				combo_cnt++;
-				
-				int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-				
-				myGD->communication("Main_startShake", -shootImg->getRotation());
-				
-				myGD->communication("UI_addScore", addScore);
-				myGD->communication("UI_setComboCnt", combo_cnt);
+				if(rand()%100 > agi_rate)
+				{
+					particlePosition = ccpAdd(shootImg->getPosition(),shoot_dv);
+					shootImg->setPosition(particlePosition);
+					particle->setPosition(particlePosition);
+					mainImg->setPosition(particlePosition);
+					
+					if(shootImg->getScaleX() < 30.f)
+						shootImg->setScaleX(shootImg->getScaleX() + shoot_dv_distance);
+					shoot_removing = true;
+					
+					// bomb
+					particlePosition = shootImg->getPosition();
+					mainImg->removeFromParentAndCleanup(true);
+					
+					particlePosition.x += rand()%21 - 10;
+					particlePosition.y += rand()%21 - 10;
+					
+					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0));
+					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
+					myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
+					
+					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
+					combo_cnt++;
+					
+					int addScore = (100.f + damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+					
+					myGD->communication("Main_startShake", -shootImg->getRotation());
+					
+					myGD->communication("UI_addScore", addScore);
+					myGD->communication("UI_setComboCnt", combo_cnt);
+					
+					myGD->communication("Main_showDamageMissile", particlePosition, addScore);
+				}
+				else
+				{
+					myGD->communication("Main_showMissMissile", particlePosition);
+					
+					shoot_removing = true;
+					mainImg->removeFromParentAndCleanup(true);
+				}
 			}
 			
 			if(load_removing)
@@ -475,6 +492,8 @@ private:
 	CCSprite* mainImg;
 	bool is_spin;
 	
+	int ing_miss_counting;
+	
 	void moving()
 	{
 		bool isEnable = false;
@@ -690,6 +709,9 @@ private:
 				
 				if(rand()%100 > agi_rate)
 				{
+					particlePosition.x += rand()%21 - 10;
+					particlePosition.y += rand()%21 - 10;
+					
 					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0));
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
@@ -697,9 +719,11 @@ private:
 					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 					combo_cnt++;
 					
-					int addScore = 300.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+					int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
 					myGD->communication("UI_addScore", addScore);
 					myGD->communication("UI_setComboCnt", combo_cnt);
+					
+					myGD->communication("Main_showDamageMissile", particlePosition, addScore);
 					
 					myGD->communication("Main_startShake", directionAngle);
 					
@@ -731,8 +755,45 @@ private:
 					CCSequence* t_seq = CCSequence::createWithTwoActions(move1, call1);
 					
 					particle->runAction(t_seq);
+				}
+			}
+			if(ing_miss_counting < 0)
+			{
+				if(distance <= 5)
+					ing_miss_counting = 30;
+			}
+			else
+			{
+				ing_miss_counting--;
+				
+				if(ing_miss_counting == 0)
+				{
+					unschedule(schedule_selector(JM_BasicMissile::moving));
 					
+					myGD->communication("Main_showMissMissile", particlePosition);
 					
+					int random_angle = directionAngle + rand()%21 - 10;
+					
+					if(is_spin)				mainImg->setRotation(mainImg->getRotation()-6);
+					else					mainImg->setRotation((mainImg->getRotation()-(random_angle-90))/2.f);
+					
+					CCPoint miss_position;
+					miss_position.x = 1.f;
+					miss_position.y = tanf(random_angle/180.f*M_PI);
+					
+					if(random_angle >= 90 && random_angle <= 270)
+						miss_position = ccpMult(miss_position, -1.f);
+					
+					miss_position = ccpMult(miss_position, 10.f*myJM_SPEED/sqrtf(powf(miss_position.x, 2.f) + powf(miss_position.y, 2.f)));
+					
+					CCMoveBy* move2 = CCMoveBy::create(10.f/60.f, miss_position);
+					mainImg->runAction(move2);
+					
+					CCMoveBy* move1 = CCMoveBy::create(10.f/60.f, miss_position);
+					CCCallFunc* call1 = CCCallFunc::create(this, callfunc_selector(JM_BasicMissile::removeFromParent));
+					CCSequence* t_seq = CCSequence::createWithTwoActions(move1, call1);
+					
+					particle->runAction(t_seq);
 				}
 			}
 		}
@@ -763,6 +824,7 @@ private:
 	
 	void realInit(CCNode* t_target, int jm_type, float damage_per)
 	{
+		ing_miss_counting = -1;
 		targetNode = t_target;
 		particle = new CCParticleSystemQuad();
 		

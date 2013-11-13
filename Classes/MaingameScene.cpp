@@ -71,6 +71,7 @@ bool Maingame::init()
 	myGD->V_CCP["Main_startMoveToCCPoint"] = std::bind(&Maingame::startMoveToCCPoint, this, _1);
 	myGD->V_I["Main_takeSpeedUpEffect"] = std::bind(&Maingame::takeSpeedUpEffect, this, _1);
 	myGD->V_CCP["Main_showMissMissile"] = std::bind(&Maingame::showMissMissile, this, _1);
+	myGD->V_CCPI["Main_showDamageMissile"] = std::bind(&Maingame::showDamageMissile, this, _1, _2);
 	myGD->CCP_V["Main_getGameNodePosition"] = std::bind(&Maingame::getGameNodePosition, this);
 	mControl = NULL;
 	is_line_die = false;
@@ -168,12 +169,13 @@ void Maingame::finalSetting()
 	
 	myUI = PlayUI::create();
 	addChild(myUI, myUIZorder);
-	myUI->setMaxBossLife(mySD->getBossMaxLife());//SelectedMapData::sharedInstance()->getMaxBossLife());
-	myUI->setClearPercentage(SelectedMapData::sharedInstance()->getClearPercentage());
+	myUI->setMaxBossLife(mySD->getBossMaxLife());
+	myUI->setClearPercentage(0.85f);
 	
 //	myCP->setUI_forEP(myUI, callfunc_selector(PlayUI::keepBossLife), callfunc_selector(PlayUI::checkBossLife));
 	
 	myMS->scanMap();
+	myGD->communication("VS_setSceneNode", this);
 	
 	myUI->setControlTD(this, callfunc_selector(Maingame::setControlGesture), callfunc_selector(Maingame::setControlButton), callfunc_selector(Maingame::setControlJoystick), callfunc_selector(Maingame::startControl));
 	
@@ -199,18 +201,10 @@ void Maingame::startScene()
 void Maingame::startCounting()
 {
 	CCTexture2D* t_texture;
-//	if(SelectedMapData::sharedInstance()->getIsNoShield())
-//	{
-		t_texture = CCTextureCache::sharedTextureCache()->addImage("hard_condition.png");
-		condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
-		addChild(condition_spr, conditionLabelZorder);
-//	}
-//	else
-//	{
-//		t_texture = CCTextureCache::sharedTextureCache()->addImage("easy_condition.png");
-//		condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
-//		addChild(condition_spr, conditionLabelZorder);
-//	}
+	t_texture = CCTextureCache::sharedTextureCache()->addImage("hard_condition.png");
+	condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
+	addChild(condition_spr, conditionLabelZorder);
+	
 	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+50));
 	
 	CCAnimation* t_animation = CCAnimation::create();
@@ -221,9 +215,10 @@ void Maingame::startCounting()
 		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*105, 117, 105, 117));
 	
 	CCAnimate* t_animate = CCAnimate::create(t_animation);
+	CCCallFunc* t_ms_startGame = CCCallFunc::create(myMS, callfunc_selector(MapScanner::startGame));
 	CCFadeOut* t_fo = CCFadeOut::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::removeConditionLabel));
-	condition_spr->runAction(CCSequence::create(t_animate, t_fo, t_call, NULL));
+	condition_spr->runAction(CCSequence::create(t_animate, t_ms_startGame, t_fo, t_call, NULL));
 	
 	countingCnt = 0;
 	keepTexture = CCSprite::create("maingame_ui_start_count.png");

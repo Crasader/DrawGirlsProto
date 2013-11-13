@@ -645,7 +645,6 @@ private:
 			
 			myDSH->setIntegerForKey(kDSH_Key_savedStar, (cmp_value1^SGD_KEY));
 			myDSH->setIntegerForKey(kDSH_Key_savedGold, (cmp_value2^SGD_KEY));
-			myDSH->setIntegerForKey(kDSH_Key_lastSelectedChapter, 1);
 		}
 		else
 		{

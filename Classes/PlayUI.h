@@ -10,7 +10,6 @@
 #define DrawingJack_PlayUI_h
 
 #include "cocos2d.h"
-#include "SelectedMapData.h"
 #include "StarGoldData.h"
 #include "EnumDefine.h"
 #include "DataStorageHub.h"
@@ -27,6 +26,7 @@
 #include "ConditionPopup.h"
 #include "ServerDataSave.h"
 #include "LogData.h"
+#include "OnePercentGacha.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -129,7 +129,7 @@ public:
 			addChild(t_cv,0,1);// 1 : ComboView
 		}
 		
-		keeping_frame = 600;
+		keeping_frame = 500;
 		if(!is_keeping)
 			startKeep();
 	}
@@ -177,7 +177,7 @@ private:
 //			}
 			
 			keeping_frame--;
-			((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/600.f);
+			((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/500.f);
 			
 			if(keeping_frame <= 0)
 			{
@@ -1027,7 +1027,7 @@ public:
 			if(t_p >= t_beforePercentage + JM_CONDITION)
 			{
 				int cmCnt = (t_p - t_beforePercentage)/JM_CONDITION;
-				int missile_type = myDSH->getIntegerForKey(kDSH_Key_lastSelectedElement);
+				int missile_type = rand()%7;//myDSH->getIntegerForKey(kDSH_Key_lastSelectedElement);
 				
 //				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
 				float damage_per = 1.f;
@@ -1038,50 +1038,27 @@ public:
 			{
 				if(t_p >= t_beforePercentage + 0.2f) // 0.2
 				{
-					is_show_exchange_coin = true;
-					taked_coin_cnt = 0;
-					myGD->communication("Main_showCoin");
-					myGD->communication("Main_showTakeCoin");
+					takeCoinModeOn();
 				}
 				else if(t_p >= t_beforePercentage + 0.15f)
 				{
 					if(rand()%10 < 7) // 70%
-					{
-						is_show_exchange_coin = true;
-						taked_coin_cnt = 0;
-						myGD->communication("Main_showCoin");
-						myGD->communication("Main_showTakeCoin");
-					}
+						takeCoinModeOn();
 				}
 				else if(t_p >= t_beforePercentage + 0.1f)
 				{
 					if(rand()%2 == 0) // 50%
-					{
-						is_show_exchange_coin = true;
-						taked_coin_cnt = 0;
-						myGD->communication("Main_showCoin");
-						myGD->communication("Main_showTakeCoin");
-					}
+						takeCoinModeOn();
 				}
 				else if(t_p >= t_beforePercentage + 0.08f)
 				{
 					if(rand()%20 < 7) // 35%
-					{
-						is_show_exchange_coin = true;
-						taked_coin_cnt = 0;
-						myGD->communication("Main_showCoin");
-						myGD->communication("Main_showTakeCoin");
-					}
+						takeCoinModeOn();
 				}
 				else if(t_p >= t_beforePercentage + 0.06f)
 				{
 					if(rand()%5 == 0) // 20%
-					{
-						is_show_exchange_coin = true;
-						taked_coin_cnt = 0;
-						myGD->communication("Main_showCoin");
-						myGD->communication("Main_showTakeCoin");
-					}
+						takeCoinModeOn();
 				}
 			}
 			
@@ -1090,10 +1067,7 @@ public:
 		
 		if(t_p > 0.5f && !is_show_exchange_coin && t_p < clearPercentage)
 		{
-			is_show_exchange_coin = true;
-			taked_coin_cnt = 0;
-			myGD->communication("Main_showCoin");
-			myGD->communication("Main_showTakeCoin");
+			takeCoinModeOn();
 		}
 		
 		percentageLabel->setString(CCString::createWithFormat("%d", int(floorf(t_p*10000))/100)->getCString());
@@ -1259,6 +1233,8 @@ public:
 			
 			isFirst = true;
 			is_exchanged = true;
+			my_fp->addFeverGage(20);
+			
 			myGD->communication("Main_startExchange");
 			myGD->communication("Main_showChangeCard");
 			myGD->communication("Jack_positionRefresh");
@@ -1475,7 +1451,7 @@ private:
 	float maxBossLife;
 	float clearPercentage;
 	
-	ElementCode main_cumber_element;
+//	ElementCode main_cumber_element;
 	
 	CCSprite* ui_case;
 	CCSprite* sand_clock;
@@ -1521,6 +1497,19 @@ private:
 	int ing_cdt_cnt;
 	float clr_cdt_per;
 	float clr_cdt_range;
+	
+	void takeCoinModeOn()
+	{
+		is_show_exchange_coin = true;
+		taked_coin_cnt = 0;
+		for(int i=1;i<=6;i++)
+		{
+			CCSprite* t_gray_coin = (CCSprite*)exchange_dic->objectForKey(i);
+			t_gray_coin->setVisible(true);
+		}
+		myGD->communication("Main_showCoin");
+		myGD->communication("Main_showTakeCoin");
+	}
 	
 	void counting()
 	{
@@ -1605,12 +1594,28 @@ private:
 			CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
 			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
 			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
-			CCCallFunc* nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+			CCCallFunc* nextScene2;
+			if(mySGD->getGold() >= 500)
+				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
+			else
+				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 			
 			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
 			
 			runAction(sequence);
 		}
+	}
+	
+	void showGachaOnePercent()
+	{
+		OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::nextScene), this, callfunc_selector(PlayUI::gachaOnOnePercent));
+		addChild(t_popup);
+	}
+	
+	void gachaOnOnePercent()
+	{
+		is_exchanged = true;
+		nextScene();
 	}
 	
 	void searchEmptyPosition()
@@ -1676,22 +1681,6 @@ private:
 	void myInit()
 	{
 		isGameover = false;
-		
-		int re_chapter_number = SelectedMapData::sharedInstance()->getViewChapterNumber();
-		
-		if(re_chapter_number == 1 && SelectedMapData::sharedInstance()->getSelectedStage() == 1)
-			main_cumber_element = kElementCode_empty;
-		else if(re_chapter_number <= 2)			main_cumber_element = kElementCode_life;
-		else if(re_chapter_number <= 4)			main_cumber_element = kElementCode_fire;
-		else if(re_chapter_number <= 6)			main_cumber_element = kElementCode_water;
-		else if(re_chapter_number <= 8)			main_cumber_element = kElementCode_water;
-		else if(re_chapter_number <= 10)		main_cumber_element = kElementCode_fire;
-		else if(re_chapter_number == 11)		main_cumber_element = kElementCode_empty;
-		else if(re_chapter_number == 12)		main_cumber_element = kElementCode_water;
-		else if(re_chapter_number == 13)		main_cumber_element = kElementCode_life;
-		else if(re_chapter_number == 14)		main_cumber_element = kElementCode_life;
-		else if(re_chapter_number == 15)		main_cumber_element = kElementCode_fire;
-		else if(re_chapter_number == 16)		main_cumber_element = kElementCode_water;
 		
 		percentage_decrease_cnt = 0;
 		combo_cnt = 0;
@@ -1789,7 +1778,7 @@ private:
 		
 		jack_array = new CCArray(1);
 		
-		jack_life = 3;
+		jack_life = 2;
 		for(int i=0;i<jack_life;i++)
 		{
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
@@ -1812,6 +1801,8 @@ private:
 			else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(220-32*3-16+i*32,25));
 			else									exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
 			addChild(exchange_spr);
+			
+			exchange_spr->setVisible(false);
 			
 			exchange_dic->setObject(exchange_spr, i);
 		}
@@ -2036,7 +2027,7 @@ private:
 	void continueAction()
 	{
 		addGameTime30Sec();
-		jack_life = 3;
+		jack_life = 2;
 		for(int i=0;i<jack_life;i++)
 		{
 			CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));

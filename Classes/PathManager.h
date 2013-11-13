@@ -53,17 +53,17 @@ private:
 	{
 		myPointVector = t_pv;
 		
-		ElementCode elemental_type = ElementCode(DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement));
-		string elemental_string;
-		if(elemental_type == kElementCode_empty)			elemental_string = "path_empty.png";
-		else if(elemental_type == kElementCode_life)		elemental_string = "path_life.png";
-		else if(elemental_type == kElementCode_fire)		elemental_string = "path_fire.png";
-		else if(elemental_type == kElementCode_water)		elemental_string = "path_water.png";
-		else if(elemental_type == kElementCode_wind)		elemental_string = "path_wind.png";
-		else if(elemental_type == kElementCode_lightning)	elemental_string = "path_lightning.png";
-		else if(elemental_type == kElementCode_plasma)		elemental_string = "path_plasma.png";
+//		ElementCode elemental_type = ElementCode(DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement));
+//		string elemental_string;
+//		if(elemental_type == kElementCode_empty)			elemental_string = "path_empty.png";
+//		else if(elemental_type == kElementCode_life)		elemental_string = "path_life.png";
+//		else if(elemental_type == kElementCode_fire)		elemental_string = "path_fire.png";
+//		else if(elemental_type == kElementCode_water)		elemental_string = "path_water.png";
+//		else if(elemental_type == kElementCode_wind)		elemental_string = "path_wind.png";
+//		else if(elemental_type == kElementCode_lightning)	elemental_string = "path_lightning.png";
+//		else if(elemental_type == kElementCode_plasma)		elemental_string = "path_plasma.png";
 		
-		pathImg = CCSprite::create(elemental_string.c_str());
+		pathImg = CCSprite::create("path_empty.png");
 		pathImg->setAnchorPoint(ccp(0.0, 0.5));
 		pathImg->setRotation(myPointVector.distance.getAngle());
 		pathScale = 1;

@@ -8,7 +8,7 @@
 
 #include "MissileParent.h"
 #include "LogData.h"
-#include "Apricot.h"
+#include "KSCircleBase.h"
 void MissileParent::bombCumber( CCObject* target )
 {
 	if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -589,7 +589,6 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	}
 	else if(pattern == "1005")
 	{
-		
 		if(exe)
 		{
 			startFirePosition = startPosition;
@@ -750,9 +749,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
-				selected_chapter = selected_chapter%10;
-				int mType = (selected_chapter == 5 ? 1 : 2);
+				int mType = 1;
 				int number = patternData.get("number", 3).asInt();
 				AP_Missile16* t_m16 = AP_Missile16::create(mType, number, 60);
 				addChild(t_m16);
@@ -851,7 +848,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	}
 	else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 	{
-		KSCumberCCBPieceBase* ccbPiece = dynamic_cast<KSCumberCCBPieceBase*>(cb);
+		CircleCCBPieceBase* ccbPiece = dynamic_cast<CircleCCBPieceBase*>(cb);
 		if(!ccbPiece)
 			return invalid;
 		
@@ -874,7 +871,6 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			myGD->communication("Main_showWarning", 1);
 			AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
 			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
-			
 		}
 		ccbPiece->runTimeline(patternData); // "at" 같은게 넘어감.
 	}
@@ -992,13 +988,9 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 
 void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color )
 {
-	Well512 t_well512;
-	int x_change = t_well512.GetValue(0, 21) - 10;
-	int y_change = t_well512.GetValue(0, 21) - 10;
-	
 	CCSprite* t_explosion = CCSprite::create("fx_boss_hit1.png");
 	t_explosion->setScale(1.f/1.5f);
-	t_explosion->setPosition(ccpAdd(startPosition, ccp(x_change, y_change)));
+	t_explosion->setPosition(startPosition);
 	addChild(t_explosion);
 	
 	CCAnimation* t_animation = CCAnimation::create();
@@ -1065,112 +1057,9 @@ void MissileParent::myInit( CCNode* boss_eye )
 
 	chargeArray = new CCArray(1);
 	tickingArray = new CCArray(1);
-	myRS = new RandomSelector();
-
-	myRS->myInit(100);
-	//		myRS->myInit(85);
-
-	//		int selected_chapter = SelectedMapData::sharedInstance()->getSelectedChapter();
-	//		
-	//		if(selected_chapter == 1)								myRS->myInit(0);
-	//		else if(mySGD->getIsHard() || selected_chapter > 30)	myRS->myInit(140);
-	//		else													myRS->myInit(120);
-	setBalance();
-
-	//		if(selected_chapter == 1 || selected_chapter == 2 || selected_chapter == 11 || selected_chapter == 12)
-	//		{
-	//			if(selected_chapter == 1)
-	//			{
-	//				if(SelectedMapData::sharedInstance()->getSelectedStage() >= 3)
-	//				{
-	//					myAA = AutoATK1::create();
-	//					addChild(myAA);
-	//				}
-	//			}
-	//			else
-	//			{
-	//				myAA = AutoATK1::create();
-	//				addChild(myAA);
-	//			}
-	//		}
-	//		else if(selected_chapter == 3 || selected_chapter == 4 || selected_chapter == 13 || selected_chapter == 14)
-	//		{
-	//			myAA = AutoATK2::create();
-	//			addChild(myAA);
-	//		}
-	//		else if(selected_chapter == 5 || selected_chapter == 6 || selected_chapter == 15 || selected_chapter == 16)
-	//		{
-	//			myAA = AutoATK3::create();
-	//			addChild(myAA);
-	//		}
-	//		else if(selected_chapter == 7 || selected_chapter == 8 || selected_chapter == 17 || selected_chapter == 18)
-	//		{
-	//			myAA = AutoATK4::create();
-	//			addChild(myAA);
-	//		}
-	//		else if(selected_chapter == 9 || selected_chapter == 10 || selected_chapter == 19 || selected_chapter == 20)
-	//		{
-	//			myAA = AutoATK5::create();
-	//			addChild(myAA);
-	//		}
-	//		else if(selected_chapter == 21 || selected_chapter == 31 || selected_chapter == 41)
-	//		{
-	//			myAA = AutoATK6::create();
-	//			addChild(myAA);
-	//		}
-	//		else if(selected_chapter == 22 || selected_chapter == 32 || selected_chapter == 42)
-	//		{
-	//			myAA = AutoATK7::create();
-	//			addChild(myAA);
-	//		}
-	//		else if(selected_chapter == 23 || selected_chapter == 33 || selected_chapter == 43)
-	//		{
-	//			myAA = AutoATK8::create();
-	//			addChild(myAA);
-	//		}
-	//		else if(selected_chapter == 24 || selected_chapter == 34 || selected_chapter == 44)
-	//		{
-	//			myAA = AutoATK9::create();
-	//			addChild(myAA);
-	//		}
-	//		else if(selected_chapter == 25 || selected_chapter == 35 || selected_chapter == 45)
-	//		{
-	//			myAA = AutoATK10::create();
-	//			addChild(myAA);
-	//		}
-	//		else if(selected_chapter == 26 || selected_chapter == 36 || selected_chapter == 46)
-	//		{
-	//			myAA = AutoATK11::create(boss_eye);
-	//			addChild(myAA);
-	//		}
 
 	mySW = SW_Parent::create();
 	addChild(mySW);
-
-
-	//		myGD->regMP(this, callfuncCCpB_selector(MissileParent::startFire),
-	//					callfuncCCpODv_selector(MissileParent::createSubCumberReplication),
-	//					callfuncO_selector(MissileParent::removeChargeInArray),
-	//					callfuncIIF_selector(MissileParent::createJackMissile),
-	//					callfuncO_selector(MissileParent::bombCumber),
-	//					callfuncCCpColor_selector(MissileParent::explosion),
-	//					callfunc_selector(MissileParent::endIngActionAP),
-	//					callfuncIpIII_selector(MissileParent::createTickingTimeBomb),
-	//					callfunc_selector(MissileParent::deleteKeepAP25),
-	//					callfunc_selector(MissileParent::deleteKeepAP23),
-	//					callfunc_selector(MissileParent::deleteKeepAP26),
-	//					callfunc_selector(MissileParent::deleteKeepAP27),
-	//					callfunc_selector(MissileParent::deleteKeepAP33),
-	//					callfunc_selector(MissileParent::deleteKeepAP24),
-	//					callfunc_selector(MissileParent::deleteKeepAP34),
-	//					callfunc_selector(MissileParent::protectedAP25),
-	//					callfunc_selector(MissileParent::protectedAP26),
-	//					callfunc_selector(MissileParent::protectedAP27),
-	//					callfunc_selector(MissileParent::protectedAP33),
-	//					callfunc_selector(MissileParent::deleteKeepAP35),
-	//					callfunc_selector(MissileParent::stopAutoAttacker),
-	//					callfuncIIFCCp_selector(MissileParent::shootPetMissile),
-	//					callfunc_selector(MissileParent::resetTickingTimeBomb));
 
 //	myGD->V_CCPB["MP_startFire"] = std::bind(&MissileParent::startFire, this, _1, _2);
 	
@@ -1212,9 +1101,4 @@ void MissileParent::removeChargeInArray( CCObject* remove_charge )
 void MissileParent::movingMainCumber()
 {
 	myGD->communication("CP_movingMainCumber");
-}
-
-void MissileParent::setBalance()
-{
-	SelectedMapData::sharedInstance()->setAttackPattern(myRS);
 }

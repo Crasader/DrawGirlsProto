@@ -57,6 +57,14 @@ public:
 		}
 	}
 	
+	bool isStartable()
+	{
+		if(heart_list.size() <= 0)
+			return false;
+		else
+			return true;
+	}
+	
 private:
 	vector<CCSprite*> heart_list;
 	CCLabelTTF* state_label;
@@ -74,7 +82,7 @@ private:
 		if(sub_value >= CHARGE_TIME)
 		{
 			myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
-			myDSH->setIntegerForKey(kDSH_Key_heartTime, saved_time_second);
+			myDSH->setIntegerForKey(kDSH_Key_heartTime, recent_time_second);
 			CCSprite* t_heart = CCSprite::create("test_ui_heart.png");
 			t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 			addChild(t_heart);

@@ -938,10 +938,10 @@ void MainCumber::setCasting(bool t_b)
 //	mEmotion = NULL;
 //}
 
-CCNode* MainCumber::getBossEye()
-{
-	return my_eye;
-}
+//CCNode* MainCumber::getBossEye()
+//{
+//	return my_eye;
+//}
 
 void MainCumber::caughtBoss(CCObject* t_setCaught, SEL_CallFunc d_setCaught)
 {
@@ -1153,7 +1153,6 @@ void MainCumber::crashMapForIntPoint(IntPoint t_p)
 
 void MainCumber::myInit()
 {
-	my_eye = NULL;
 //	mEmotion = NULL;
 	map_visit_cnt = 0;
 	
@@ -1168,52 +1167,16 @@ void MainCumber::myInit()
 	ableTickingTimeBomb = false;
 	is_moving_shoot = false;
 	teleportImg = NULL;
-	//		move_speed = SelectedMapData::sharedInstance()->getBossSpeed();
 	move_speed = 1.6f;
 	
 	before_keep_frame_cnt = 0;
 	keep_number = 0;
 	
-	//		attack_rate = SelectedMapData::sharedInstance()->getAttackRate();
 	attack_rate = 400.f;
 	
-	//		int worldMap = SelectedMapData::sharedInstance()->getSelectedChapter();
-	//		t_chapter_number = SelectedMapData::sharedInstance()->getViewChapterNumber();
-	//		t_stage_number = SelectedMapData::sharedInstance()->getSelectedStage();
-	
-	//		is_attackOn = worldMap >= 2;
 	is_attackOn = true;
 	
-	//		if(worldMap <= 20)
-	//			max_visit_cnt = 13-(worldMap-1)%10+1;
-	//		else
-	//			max_visit_cnt = 5;
 	max_visit_cnt = 8;
-	
-	//		if(SelectedMapData::sharedInstance()->getViewChapterNumber() == 1 &&
-	//		   SelectedMapData::sharedInstance()->getSelectedStage() == 1)
-	//		{
-	//			cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_1_boss_body.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_mainCumber))->getCString());
-	//			addChild(cumberImg);
-	//
-	//			CCSprite* side = CCSprite::create(CCString::createWithFormat("chapter%d_1_boss_side.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_mainCumber))->getCString());
-	//			side->setPosition(ccp(cumberImg->getContentSize().width/2.f,cumberImg->getContentSize().height/2.f));
-	//			cumberImg->addChild(side, -1);
-	//		}
-	//		else if(SelectedMapData::sharedInstance()->getViewChapterNumber() == 11)
-	//		{
-	//			cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_boss_body.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_mainCumber))->getCString());
-	//			addChild(cumberImg);
-	//
-	//			CCSprite* side = CCSprite::create(CCString::createWithFormat("chapter%d_boss_side.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_mainCumber))->getCString());
-	//			side->setPosition(ccp(cumberImg->getContentSize().width/2.f,cumberImg->getContentSize().height/2.f));
-	//			cumberImg->addChild(side, -1);
-	//		}
-	//		else
-	//		{
-	//			cumberImg = CCSprite::create(CCString::createWithFormat("chapter%d_boss.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_mainCumber))->getCString());;
-	//			addChild(cumberImg);
-	//		}
 	
 	myScale = 1.5f;
 	maxScale = 1.7f;
@@ -1225,26 +1188,6 @@ void MainCumber::myInit()
 	cumberImg->setScale(myScale);
 	addChild(cumberImg);
 	
-	//		if(SelectedMapData::sharedInstance()->getViewChapterNumber() == 10)
-	//		{
-	//			CCNode* outside_parent = CCNode::create();
-	//			outside_parent->setPosition(ccp(cumberImg->getContentSize().width/2.f,cumberImg->getContentSize().height/2.f));
-	//			for(int i=0;i<10;i++)
-	//			{
-	//				CCSprite* t_outside = CCSprite::create(CCString::createWithFormat("chapter%d_boss_outside.png", SelectedMapData::sharedInstance()->getImageNumber(kIN_mainCumber))->getCString());
-	//				t_outside->setRotation(i*36);
-	//				outside_parent->addChild(t_outside);
-	//			}
-	//			cumberImg->addChild(outside_parent);
-	//			CCRotateBy* t_rotate = CCRotateBy::create(2.f, 360);
-	//			CCRepeatForever* t_repeat = CCRepeatForever::create(t_rotate);
-	//			outside_parent->runAction(t_repeat);
-	//		}
-	//		else if(SelectedMapData::sharedInstance()->getViewChapterNumber() == 16)
-	//		{
-	//			my_eye = BossEye::create(SelectedMapData::sharedInstance()->getViewChapterSubNumber());
-	//			cumberImg->addChild(my_eye);
-	//		}
 	CCNode* outside_parent = CCNode::create();
 	outside_parent->setPosition(ccp(cumberImg->getContentSize().width/2.f,cumberImg->getContentSize().height/2.f));
 	for(int i=0;i<10;i++)

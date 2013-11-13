@@ -264,6 +264,8 @@ public:
 	
 	void cancelCharge()
 	{
+		auto p = dynamic_cast<KSCumberBase*>(real_target);
+		if(p) p->onCanceledCasting();
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 		removeSelf();
 	}
@@ -544,6 +546,8 @@ public:
 	
 	void cancelCharge()
 	{
+		auto p = dynamic_cast<KSCumberBase*>(real_target);
+		if(p) p->onCanceledCasting();
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 //		if(cancel_target && cancel_delegate)
 //			(cancel_target->*cancel_delegate)(real_target);
@@ -827,6 +831,9 @@ public:
 	
 	void cancelCharge()
 	{
+		auto p = dynamic_cast<KSCumberBase*>(real_target);
+		if(p) p->onCanceledCasting();
+
 //		myGD->communication("CP_setCasting", false);
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 //		if(cancel_target && cancel_delegate)

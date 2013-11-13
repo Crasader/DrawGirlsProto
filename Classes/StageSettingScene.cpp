@@ -17,6 +17,8 @@
 #include "ListViewerScroll.h"
 #include "ChallengePopup.h"
 #include "GachaPopup.h"
+#include "DurabilityNoti.h"
+#include "CardCase.h"
 
 CCScene* StageSettingScene::scene()
 {
@@ -53,7 +55,13 @@ enum SSS_MenuTag{
 	kSSS_MT_gacha = 5,
 	kSSS_MT_itemBase = 100,
 	kSSS_MT_selectedBase = 200,
-	kSSS_MT_itemCntBase = 300
+	kSSS_MT_itemCntBase = 300,
+	kSSS_MT_noti = 9999
+};
+
+enum CARD_Zorder{
+	kCARD_Z_ani = 1,
+	kCARD_Z_cardCase
 };
 
 // on "init" you need to initialize your instance
@@ -96,8 +104,12 @@ bool StageSettingScene::init()
 			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
 												  CCRectMake(0, 0, ani_size.width, ani_size.height));
 			card_ani->setPosition(mySD->getAnimationPosition(card_stage));
-			card_img->addChild(card_ani);
+			card_img->addChild(card_ani, kCARD_Z_ani);
 		}
+		
+		CardCase* t_case = CardCase::create(selected_card_number);
+		t_case->setPosition(CCPointZero);
+		card_img->addChild(t_case, kCARD_Z_cardCase);
 	}
 	else
 	{
@@ -183,6 +195,7 @@ bool StageSettingScene::init()
 	s_temp->setOpacity(0);
 	
 	CCMenuItemSprite* temp_item = CCMenuItemSprite::create(n_temp, s_temp, this, menu_selector(StageSettingScene::tempAction));
+	temp_item->setTag(1);
 	CCMenu* temp_menu = CCMenu::createWithItem(temp_item);
 	temp_menu->setPosition(ccp(15,305));
 	addChild(temp_menu, kSSS_Z_content);
@@ -216,7 +229,19 @@ bool StageSettingScene::init()
 
 void StageSettingScene::tempAction(CCObject* sender)
 {
-	myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
+	int tag = ((CCNode*)sender)->getTag();
+	if(tag == 1)
+		myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
+	else if(tag == 2)
+	{
+		removeChildByTag(kSSS_MT_noti);
+		realStartAction();
+	}
+	else if(tag == 3)
+	{
+		removeChildByTag(kSSS_MT_noti);
+		is_menu_enable = true;
+	}
 }
 
 CCPoint StageSettingScene::getContentPosition(int t_tag)
@@ -322,48 +347,41 @@ void StageSettingScene::menuAction(CCObject* pSender)
 	
 	if(tag == kSSS_MT_start)
 	{
-		if(heart_time->startGame())
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		int durability;
+		if(selected_card_number > 0)
 		{
-			mySGD->resetLabels();
-			
-			Json::Value param;
-			param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
-			
-			hspConnector::get()->command("increaseStats", param, NULL);
-			
-			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			if(selected_card_number > 0)
-			{
-				int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) - 1;
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-			}
-			
-			myGD->resetGameData();
-			
-			deque<bool> is_using_item;
-			for(int i=kIC_attack;i<=kIC_randomChange;i++)
-				is_using_item.push_back(false);
-			
-			for(int i=0;i<is_selected_item.size();i++)
-			{
-				if(is_selected_item[i])
-				{
-					myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
-					myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());
-					is_using_item[item_list[i]] = true;
-				}
-			}
-			
-			for(int i=kIC_attack;i<=kIC_randomChange;i++)
-				mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
-			
-			mySGD->setGameStart();
-			CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+			durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
 		}
 		else
 		{
-			is_menu_enable = true;
+			durability = -1;
 		}
+		
+		if(heart_time->isStartable())
+		{
+			if(durability > 0)
+			{
+				if(heart_time->startGame())
+					realStartAction();
+				else
+					is_menu_enable = true;
+			}
+			else if(durability == 0)
+			{
+				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingScene::tempAction), this, menu_selector(StageSettingScene::tempAction));
+				addChild(t_popup, kSSS_Z_popup, kSSS_MT_noti);
+			}
+			else // not selected card
+			{
+				if(heart_time->startGame())
+					realStartAction();
+				else
+					is_menu_enable = true;
+			}
+		}
+		else
+			is_menu_enable = true;
 	}
 	else if(tag == kSSS_MT_back)
 	{
@@ -425,6 +443,44 @@ void StageSettingScene::menuAction(CCObject* pSender)
 		
 		is_menu_enable = true;
 	}
+}
+
+void StageSettingScene::realStartAction()
+{
+	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	if(selected_card_number > 0)
+	{
+		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) - 1;
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
+	}
+	
+	Json::Value param;
+	param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
+	
+	hspConnector::get()->command("increaseStats", param, NULL);
+	
+	mySGD->resetLabels();
+	myGD->resetGameData();
+	
+	deque<bool> is_using_item;
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		is_using_item.push_back(false);
+	
+	for(int i=0;i<is_selected_item.size();i++)
+	{
+		if(is_selected_item[i])
+		{
+			myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
+			myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());
+			is_using_item[item_list[i]] = true;
+		}
+	}
+	
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
+	
+	mySGD->setGameStart();
+	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 }
 
 void StageSettingScene::popupClose()

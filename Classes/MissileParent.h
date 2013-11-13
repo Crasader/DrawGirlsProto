@@ -15,7 +15,6 @@
 #include "AttackPattern.h"
 #include "JackMissile.h"
 #include "RandomSelector.h"
-#include "SelectedMapData.h"
 #include "AudioEngine.h"
 #include "ShockWave.h"
 #include "KSCumberBase.h"
@@ -273,7 +272,6 @@ public:
 	{
 		chargeArray->release();
 		tickingArray->release();
-		myRS->release();
 	}
 	
 	void shootPetMissile(int jm_type, int cmCnt, float damage_per, CCPoint s_p);
@@ -287,8 +285,6 @@ public:
 private:
 	
 	SW_Parent* mySW;
-	
-	RandomSelector* myRS;
 	
 	CCPoint startFirePosition;
 	int slowAreaCnt;
@@ -310,8 +306,6 @@ private:
 	void removeChargeInArray(CCObject* remove_charge);
 	
 	void movingMainCumber();
-	
-	void setBalance();
 
 	void myInit(CCNode* boss_eye);
 };

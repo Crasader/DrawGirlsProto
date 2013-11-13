@@ -845,8 +845,10 @@ public:
 	void startDieEffect(int die_type) // after coding
 	{
 //		return;
-		if(!isDie)
+		if(!isDie && !myGD->getIsGameover())
 		{
+			myGD->communication("CP_onJackDie");
+			
 			if(die_type == DieType::kDieType_other)
 			{
 				myLog->addLog(kLOG_die_other, myGD->getCommunication("UI_getUseTime"));
@@ -870,6 +872,7 @@ public:
 //				jack_drawing->setVisible(false);
 //			}
 			setJackState(jackStateNormal);
+			jack_barrier->setVisible(false);
 			isDrawingOn = false;
 			
 			myGD->removeMapNewline();
@@ -1245,10 +1248,12 @@ private:
 		
 		setTouchPointByJoystick(CCPointZero, directionStop, true);
 		setJackState(jackStateNormal);
+		jack_barrier->setVisible(true);
 		
 		myGD->communication("GIM_dieCreateItem");
 		myGD->communication("Main_resetIsLineDie");
 		myGD->communication("Main_stopSpecialAttack");
+		myGD->communication("CP_onJackRevived");
 	}
 	
 	void continueGame()
@@ -1395,28 +1400,22 @@ private:
 		jack_drawing->setVisible(false);
 		addChild(jack_drawing, kJackZ_defaultBarrier);
 		
-//		is_hard = SelectedMapData::sharedInstance()->getIsNoShield();
 		is_hard = false;
 		
-//		if(!is_hard)
-//		{
-			CCSprite* t_texture = CCSprite::create("jack_barrier.png");
-			
-			jack_barrier = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(100, 0, 25, 25));
-			jack_barrier->setScale(0.8f);
-			addChild(jack_barrier, kJackZ_defaultBarrier);
-			
-			CCAnimation* t_animation = CCAnimation::create();
-			t_animation->setDelayPerUnit(0.1);
-			for(int i=0;i<5;i++)
-				t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(i*25, 0, 25, 25));
-			CCAnimate* t_animate = CCAnimate::create(t_animation);
-			CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-			
-			jack_barrier->runAction(t_repeat);
-//		}
+		CCSprite* t_texture = CCSprite::create("jack_barrier.png");
 		
-//		setStartPosition();
+		jack_barrier = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(100, 0, 25, 25));
+		jack_barrier->setScale(0.8f);
+		addChild(jack_barrier, kJackZ_defaultBarrier);
+		
+		CCAnimation* t_animation = CCAnimation::create();
+		t_animation->setDelayPerUnit(0.1);
+		for(int i=0;i<5;i++)
+			t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(i*25, 0, 25, 25));
+		CCAnimate* t_animate = CCAnimate::create(t_animation);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+		
+		jack_barrier->runAction(t_repeat);
 	}
 	
 	void setStartPosition()
@@ -1555,7 +1554,7 @@ private:
 	void startReviveAnimation(CCSprite* t_jack_img)
 	{
 		t_jack_img->setOpacity(0);
-		t_jack_img->runAction(CCFadeTo::create(1.3f, 255));
+		t_jack_img->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.8f), CCFadeTo::create(0.5f, 255)));
 		
 		CCNode* animation_node = CCNode::create();
 		animation_node->setPosition(ccp(t_jack_img->getContentSize().width/2.f, t_jack_img->getContentSize().height/2.f));

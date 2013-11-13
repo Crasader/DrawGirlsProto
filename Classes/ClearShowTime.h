@@ -143,13 +143,13 @@ private:
 		CCSprite* top_back = CCSprite::create("top_back.png");
 		top_back->setAnchorPoint(ccp(0.5,0));
 		top_back->setPosition(ccp(160,430));
-		top_back->setScaleX(340.f/320.f);
+		top_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
 		addChild(top_back);
 		
-		CCSprite* bottom_back = CCSprite::create("top_back.png");
+		CCSprite* bottom_back = CCSprite::create("bottom_back.png");
 		bottom_back->setAnchorPoint(ccp(0.5,1));
 		bottom_back->setPosition(ccp(160,0));
-		bottom_back->setScaleX(340.f/320.f);
+		bottom_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
 		addChild(bottom_back);
 		
 		CCSprite* top_boarder = CCSprite::create("frame_top.png", CCRectMake(0, 0, 334, 7));

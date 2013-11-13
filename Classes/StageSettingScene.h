@@ -60,6 +60,7 @@ private:
 	string convertToItemCodeToItemName(ITEM_CODE t_code);
 	
 	void tempAction(CCObject* sender);
+	void realStartAction();
 };
 
 #endif /* defined(__DGproto__StageSettingScene__) */

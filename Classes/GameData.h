@@ -12,7 +12,6 @@
 #include "cocos2d.h"
 #include "DataStorageHub.h"
 #include "EnumDefine.h"
-#include "SelectedMapData.h"
 #include "SelectorDefine.h"
 
 using namespace cocos2d;
@@ -79,6 +78,12 @@ enum mapLoopRange{
 	mapWidthInnerEnd = 161,
 	mapHeightInnerBegin = 1,
 	mapHeightInnerEnd = 216,
+};
+
+enum JackBaseSpeedTag{
+	kJackBaseSpeedTag_level1 = 0,
+	kJackBaseSpeedTag_level2,
+	kJackBaseSpeedTag_level3
 };
 
 class IntVector : public CCObject
@@ -214,7 +219,6 @@ public:
 	{
 		return IntPoint(x - right.x, y - right.y);
 	}
-//	IntPoint operator-() const;
 	IntPoint operator*(float a) const
 	{
 		return IntPoint(x * a, y * a);
@@ -472,8 +476,6 @@ public:
 	void resetGameData();
 	
 	void changeJackBaseSpeed(float t_s);
-	
-	void initStartRect();
 	
 	void setInitRect(IntPoint initPoint, IntSize initSize);
 	
