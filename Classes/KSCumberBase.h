@@ -200,6 +200,7 @@ public:
 		m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(30, 60));
 		m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(60, 90));
 		m_bossDie.m_bossDieFrameCount = 0;
+		unschedule(schedule_selector(ThisClassType::cumberAttack));
 		schedule(schedule_selector(ThisClassType::bossDieBomb));
 //		int number = m_well512.GetValue(3, 4);
 //		for(int i=0; i<number; i++)
