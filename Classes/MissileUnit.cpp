@@ -140,9 +140,6 @@ void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
 		
 		m_pollutions.push_back(pollution);
 		addChild(pollution.spr);
-		
-		
-		
 	}
 
 //	scheduleUpdate();
