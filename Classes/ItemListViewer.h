@@ -89,7 +89,7 @@ public:
 	{
 		int cnt = getChildrenCount();
 		
-		float t_y = cnt*43 + 5;
+		float t_y = cnt*46 + 5;
 		t_y -= view_rect.size.height;
 		
 		if(t_y > 0)
@@ -294,7 +294,13 @@ private:
 	
 	void myInit()
 	{
-		view_rect = CCRectMake(197, 60, 234, 156);
+		view_rect = CCRectMake(183, 76, 246, 146);
+		
+//		CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, view_rect.size.width, view_rect.size.height));
+//		temp_back->setOpacity(100);
+//		temp_back->setPosition(ccp(view_rect.origin.x+view_rect.size.width/2.f, view_rect.origin.y+view_rect.size.height/2.f));
+//		addChild(temp_back);
+		
 		
 		setPosition(CCPointZero);
 		

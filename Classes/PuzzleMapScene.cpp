@@ -512,7 +512,7 @@ void PuzzleMapScene::setUIs()
 	tutorial_item->setTag(kPMS_MT_tutorial);
 	
 	CCMenu* tutorial_menu = CCMenu::createWithItem(tutorial_item);
-	tutorial_menu->setPosition(ccpAdd(ccp(bottom_size.width/2.f, bottom_size.height/2.f), ccp(2+56.f*3.f,0)));
+	tutorial_menu->setPosition(ccpAdd(ccp(bottom_size.width/2.f, bottom_size.height/2.f), ccp(2+56.f*3.f,-5)));
 	bottom_case->addChild(tutorial_menu);
 	
 	

@@ -212,6 +212,22 @@ void CardSettingScene::menuAction(CCObject* pSender)
 	
 	if(tag == kCSS_MT_close)
 	{
+		Json::Value param;
+		param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		
+		Json::Value data;
+
+		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=card_take_cnt;i++)
+		{
+			int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+		}
+		
+		Json::FastWriter writer;
+		param["data"] = writer.write(data);
+		hspConnector::get()->command("updateUserData", param, NULL);
+		
 		if(mySGD->before_cardsetting == kSceneCode_PuzzleMapScene)
 			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 		else if(mySGD->before_cardsetting == kSceneCode_StageSetting)

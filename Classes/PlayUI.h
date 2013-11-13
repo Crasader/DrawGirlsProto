@@ -27,6 +27,7 @@
 #include "ServerDataSave.h"
 #include "LogData.h"
 #include "OnePercentGacha.h"
+#include "hspConnector.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -1614,6 +1615,16 @@ private:
 	
 	void gachaOnOnePercent()
 	{
+		Json::Value param2;
+		param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		
+		Json::Value data;
+		data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+		
+		Json::FastWriter writer;
+		param2["data"] = writer.write(data);
+		hspConnector::get()->command("updateUserData", param2, NULL);
+		
 		is_exchanged = true;
 		nextScene();
 	}

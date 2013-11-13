@@ -275,6 +275,17 @@ void Maingame::gachaOn()
 	mySGD->setGold(mySGD->getGold() - 500);
 	myGD->resetGameData();
 	mySGD->startMapGachaOn();
+	
+	Json::Value param2;
+	param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+	
+	Json::Value data;
+	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	
+	Json::FastWriter writer;
+	param2["data"] = writer.write(data);
+	hspConnector::get()->command("updateUserData", param2, NULL);
+	
 	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 }
 

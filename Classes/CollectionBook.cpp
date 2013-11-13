@@ -414,14 +414,22 @@ bool CollectionBook::init()
 	
 	if(is_enable_pageturn)
 	{
-		CCMenuItem* r_pre_item = CCMenuItemImage::create("diary_left.png", "diary_left.png", this, menu_selector(CollectionBook::menuAction));
+		CCSprite* n_pre = CCSprite::create("diary_left.png");
+		CCSprite* s_pre = CCSprite::create("diary_left.png");
+		s_pre->setColor(ccGRAY);
+		
+		CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBook::menuAction));
 		r_pre_item->setTag(kCB_MT_pre);
 		
 		CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
 		r_pre_menu->setPosition(getContentPosition(kCB_MT_pre));
 		recent_right_img->addChild(r_pre_menu, 1, kCB_MT_pre);
 		
-		CCMenuItem* r_next_item = CCMenuItemImage::create("diary_right.png", "diary_right.png", this, menu_selector(CollectionBook::menuAction));
+		CCSprite* n_next = CCSprite::create("diary_right.png");
+		CCSprite* s_next = CCSprite::create("diary_right.png");
+		s_next->setColor(ccGRAY);
+		
+		CCMenuItem* r_next_item = CCMenuItemSprite::create(n_next, s_next, this, menu_selector(CollectionBook::menuAction));
 		r_next_item->setTag(kCB_MT_next);
 		
 		CCMenu* r_next_menu = CCMenu::createWithItem(r_next_item);
@@ -452,7 +460,11 @@ bool CollectionBook::init()
 		if(after_right_img->getChildByTag(kCB_MT_third))
 			((CCMenu*)after_right_img->getChildByTag(kCB_MT_third))->setEnabled(false);
 		
-		CCMenuItem* a_pre_item = CCMenuItemImage::create("diary_left.png", "diary_left.png", this, menu_selector(CollectionBook::menuAction));
+		CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+		CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+		a_s_pre->setColor(ccGRAY);
+		
+		CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBook::menuAction));
 		a_pre_item->setTag(kCB_MT_pre);
 		
 		CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
@@ -460,7 +472,11 @@ bool CollectionBook::init()
 		a_pre_menu->setEnabled(false);
 		after_right_img->addChild(a_pre_menu, 1, kCB_MT_pre);
 		
-		CCMenuItem* a_next_item = CCMenuItemImage::create("diary_right.png", "diary_right.png", this, menu_selector(CollectionBook::menuAction));
+		CCSprite* a_n_next = CCSprite::create("diary_right.png");
+		CCSprite* a_s_next = CCSprite::create("diary_right.png");
+		a_s_next->setColor(ccGRAY);
+		
+		CCMenuItem* a_next_item = CCMenuItemSprite::create(a_n_next, a_s_next, this, menu_selector(CollectionBook::menuAction));
 		a_next_item->setTag(kCB_MT_next);
 		
 		CCMenu* a_next_menu = CCMenu::createWithItem(a_next_item);
@@ -740,7 +756,11 @@ void CollectionBook::endNextPage()
 		((CCMenu*)after_right_img->getChildByTag(kCB_MT_third))->setEnabled(false);
 	
 	
-	CCMenuItem* a_pre_item = CCMenuItemImage::create("diary_left.png", "diary_left.png", this, menu_selector(CollectionBook::menuAction));
+	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+	a_s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBook::menuAction));
 	a_pre_item->setTag(kCB_MT_pre);
 	
 	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
@@ -748,7 +768,11 @@ void CollectionBook::endNextPage()
 	a_pre_menu->setEnabled(false);
 	after_right_img->addChild(a_pre_menu, 1, kCB_MT_pre);
 	
-	CCMenuItem* a_next_item = CCMenuItemImage::create("diary_right.png", "diary_right.png", this, menu_selector(CollectionBook::menuAction));
+	CCSprite* a_n_next = CCSprite::create("diary_right.png");
+	CCSprite* a_s_next = CCSprite::create("diary_right.png");
+	a_s_next->setColor(ccGRAY);
+	
+	CCMenuItem* a_next_item = CCMenuItemSprite::create(a_n_next, a_s_next, this, menu_selector(CollectionBook::menuAction));
 	a_next_item->setTag(kCB_MT_next);
 	
 	CCMenu* a_next_menu = CCMenu::createWithItem(a_next_item);
@@ -798,8 +822,11 @@ void CollectionBook::startPrePage()
 	if(covered_right_img->getChildByTag(kCB_MT_third))
 		((CCMenu*)covered_right_img->getChildByTag(kCB_MT_third))->setEnabled(false);
 	
-		
-	CCMenuItem* a_pre_item = CCMenuItemImage::create("diary_left.png", "diary_left.png", this, menu_selector(CollectionBook::menuAction));
+	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+	a_s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBook::menuAction));
 	a_pre_item->setTag(kCB_MT_pre);
 	
 	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
@@ -807,7 +834,11 @@ void CollectionBook::startPrePage()
 	a_pre_menu->setEnabled(false);
 	covered_right_img->addChild(a_pre_menu, 1, kCB_MT_pre);
 	
-	CCMenuItem* a_next_item = CCMenuItemImage::create("diary_right.png", "diary_right.png", this, menu_selector(CollectionBook::menuAction));
+	CCSprite* a_n_next = CCSprite::create("diary_right.png");
+	CCSprite* a_s_next = CCSprite::create("diary_right.png");
+	a_s_next->setColor(ccGRAY);
+	
+	CCMenuItem* a_next_item = CCMenuItemSprite::create(a_n_next, a_s_next, this, menu_selector(CollectionBook::menuAction));
 	a_next_item->setTag(kCB_MT_next);
 	
 	CCMenu* a_next_menu = CCMenu::createWithItem(a_next_item);

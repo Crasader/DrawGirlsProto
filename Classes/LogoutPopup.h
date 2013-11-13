@@ -10,6 +10,7 @@
 #define __DGproto__LogoutPopup__
 
 #include "cocos2d.h"
+#include "hspConnector.h"
 
 USING_NS_CC;
 using namespace std;
@@ -21,7 +22,8 @@ enum LogoutPopupZorder{
 };
 
 enum LogoutPopupMenuTag{
-	kLP_MT_close = 1
+	kLP_MT_close = 1,
+	kLP_MT_logout
 };
 
 class LogoutPopup : public CCLayer
@@ -40,6 +42,7 @@ private:
 	
 	int touched_number;
 	CCMenu* close_menu;
+	CCMenu* logout_menu;
 	
 	CCObject* target_close;
 	SEL_CallFunc delegate_close;
@@ -56,6 +59,17 @@ private:
 		CCSprite* back = CCSprite::create("option_logout_back.png");
 		back->setPosition(ccp(240,160));
 		addChild(back, kLP_Z_back);
+		
+		CCSprite* n_logout = CCSprite::create("option_long_close.png");
+		CCSprite* s_logout = CCSprite::create("option_long_close.png");
+		s_logout->setColor(ccGRAY);
+		
+		CCMenuItem* logout_item = CCMenuItemSprite::create(n_logout, s_logout, this, menu_selector(LogoutPopup::menuAction));
+		logout_item->setTag(kLP_MT_logout);
+		
+		logout_menu = CCMenu::createWithItem(logout_item);
+		logout_menu->setPosition(getContentPosition(kLP_MT_logout));
+		addChild(logout_menu, kLP_Z_content);
 		
 		
 		CCSprite* n_close = CCSprite::create("option_long_close.png");
@@ -81,6 +95,7 @@ private:
 		CCPoint return_value;
 		
 		if(t_tag == kLP_MT_close)	return_value = ccp(241,97);
+		else if(t_tag == kLP_MT_logout)	return_value = ccp(241,160);
 		
 		return return_value;
 	}
@@ -97,29 +112,41 @@ private:
 		if(tag == kLP_MT_close)
 		{
 			(target_close->*delegate_close)();
+			removeFromParent();
 		}
-		
-		removeFromParent();
+		else if(tag == kLP_MT_logout)
+		{
+			hspConnector::get()->kLogout(json_selector(this, LogoutPopup::resultLogoutAction));
+		}
+	}
+	
+	void resultLogoutAction(Json::Value result_data)
+	{
+		CCLog("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	}
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
 		if(touched_number != 0)		return true;
 		if(close_menu->ccTouchBegan(pTouch, pEvent))				touched_number = kLP_MT_close;
+		else if(logout_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kLP_MT_logout;
 		return true;
 	}
 	
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 	{
 		if(touched_number == kLP_MT_close)							close_menu->ccTouchMoved(pTouch, pEvent);
+		else if(touched_number == kLP_MT_logout)					logout_menu->ccTouchMoved(pTouch, pEvent);
 	}
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	{
 		if(touched_number == kLP_MT_close){			close_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
+		else if(touched_number == kLP_MT_logout){	logout_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
 	}
     virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	{
 		if(touched_number == kLP_MT_close){			close_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
+		else if(touched_number == kLP_MT_logout){	logout_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
 	}
 	
 	virtual void registerWithTouchDispatcher()

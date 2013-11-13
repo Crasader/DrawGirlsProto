@@ -200,16 +200,16 @@ typedef enum t_ITEM_CODE{
 	kIC_addTime,	// 3
 	kIC_fast,		// 4
 	kIC_critical,	// 5
-	kIC_subOneDie,	// 6
+	kIC_subOneDie,	// 6 // mission
 	kIC_doubleItem,	// 7
 	kIC_silence,	// 8
 	kIC_subNothing,	// 9
-	kIC_longTime,	// 10
-	kIC_bossLittleEnergy,	// 11
+	kIC_longTime,	// 10 // mission
+	kIC_bossLittleEnergy,	// 11 // mission
 	kIC_subSmallSize,	// 12
-	kIC_smallArea,		// 13
-	kIC_widePerfect,	// 14
-	kIC_randomChange	// 15
+	kIC_smallArea,		// 13 // mission
+	kIC_widePerfect,	// 14 // mission
+	kIC_randomChange	// 15 // mission
 }ITEM_CODE;
 
 #define SHOP_KEY	0xD9
