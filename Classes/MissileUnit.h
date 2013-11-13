@@ -800,7 +800,7 @@ private:
 		
 		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
 		
-		if(distance < 16*getScale() && myGD->getCommunicationBool("Jack_isDie"))
+		if(distance < 16*getScale() && myGD->getCommunicationBool("Jack_isDie") == false)
 		{
 			myGD->communication("CP_jackCrashDie");
 			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
