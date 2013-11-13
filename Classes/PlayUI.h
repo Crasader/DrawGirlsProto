@@ -26,6 +26,7 @@
 #include "ConditionPopup.h"
 #include "ServerDataSave.h"
 #include "LogData.h"
+#include "OnePercentGacha.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -1593,12 +1594,28 @@ private:
 			CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
 			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
 			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
-			CCCallFunc* nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+			CCCallFunc* nextScene2;
+			if(mySGD->getGold() >= 500)
+				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
+			else
+				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 			
 			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
 			
 			runAction(sequence);
 		}
+	}
+	
+	void showGachaOnePercent()
+	{
+		OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::nextScene), this, callfunc_selector(PlayUI::gachaOnOnePercent));
+		addChild(t_popup);
+	}
+	
+	void gachaOnOnePercent()
+	{
+		is_exchanged = true;
+		nextScene();
 	}
 	
 	void searchEmptyPosition()

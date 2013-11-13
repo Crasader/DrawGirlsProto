@@ -77,14 +77,35 @@ private:
 	{
 		CCLog("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 		
-		if(myLog->getLogCount() > 0)
+		if(result_data["error"]["isSuccess"].isBool())
 		{
-			myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+			if(myLog->getLogCount() > 0)
+			{
+				myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+			}
+			
+//			state_label->setString("유저 정보를 가져오는 ing...");
+//			
+//			Json::Value param;
+//			param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+//			hspConnector::get()->command("getUserData", param, json_selector(this, TitleScene::resultGetUserData));
+			
+			state_label->setString("퍼즐 목록을 받아오는 ing...");
+			
+			startGetPuzzleList();
 		}
-		
-		state_label->setString("퍼즐 목록을 받아오는 ing...");
-		
-		startGetPuzzleList();
+		else
+		{
+			Json::Value param;
+			param["ManualLogin"] = true;
+			
+			hspConnector::get()->login(param, param, std::bind(&TitleScene::resultLogin, this, std::placeholders::_1));
+		}
+	}
+	
+	void resultGetUserData(Json::Value result_data)
+	{
+		CCLog("resultGetUserData data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	}
 	
 	void changeScene()
