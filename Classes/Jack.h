@@ -1329,6 +1329,11 @@ private:
 		setPosition(getPosition());
 	}
 	
+	bool isDieJack()
+	{
+		return isDie;
+	}
+	
 	void myInit()
 	{
 		before_x_direction = directionStop;
@@ -1357,7 +1362,7 @@ private:
 		myGD->V_F["Jack_setAlphaSpeed"] = std::bind(&Jack::setAlphaSpeed, this, _1);
 		myGD->F_V["Jack_getSpeedUpValue"] = std::bind(&Jack::getSpeedUpValue, this);
 		myGD->V_V["Jack_positionRefresh"] = std::bind(&Jack::positionRefresh, this);
-		
+		myGD->B_V["Jack_isDie"] = std::bind(&Jack::isDieJack, this);
 		
 		
 		isMoving = false;
