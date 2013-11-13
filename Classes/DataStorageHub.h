@@ -149,10 +149,6 @@ public:
 	CCPoint add_point;
 	CCPoint wideWidthFixTouch(CCPoint t_p){	return ccp(t_p.x*mult_point.x + add_point.x, t_p.y*mult_point.y + add_point.y);	}
 	
-private:
-	SaveData* myDefault;
-	float gold_get_rate;
-	
 	string getKey(DSH_Key t_name)
 	{
 		string return_value;
@@ -188,6 +184,19 @@ private:
 		
 		return return_value;
 	}
+	
+	DSH_Key getDSHKeyForStrKey(string t_str_key)
+	{
+		DSH_Key return_value;
+		
+		
+		
+		return return_value;
+	}
+	
+private:
+	SaveData* myDefault;
+	float gold_get_rate;
 	
 	void myInit()
 	{

@@ -342,6 +342,10 @@ public:
 	{
 		is_using_item[t_i] = t_b;
 	}
+	void resetUsingItem()
+	{
+		is_using_item.clear();
+	}
 	
 	int selected_collectionbook;
 	SceneCode before_cardsetting;

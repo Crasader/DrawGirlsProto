@@ -49,6 +49,8 @@ private:
 	
 	CardListViewer* my_clv;
 	
+	CCPoint inner_card_distance;
+	
 	int recent_mounted_number;
 	
 	CCPoint getContentPosition(int t_tag);

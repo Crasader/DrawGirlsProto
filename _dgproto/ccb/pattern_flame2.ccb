@@ -135,8 +135,8 @@
 								<string>FloatVar</string>
 								<key>value</key>
 								<array>
-									<real>90</real>
 									<real>30</real>
+									<real>10</real>
 								</array>
 							</dict>
 							<dict>
@@ -146,8 +146,8 @@
 								<string>FloatVar</string>
 								<key>value</key>
 								<array>
-									<real>40</real>
-									<real>30</real>
+									<real>20</real>
+									<real>10</real>
 								</array>
 							</dict>
 							<dict>
@@ -289,6 +289,8 @@
 								<string>particle3.png</string>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 						<key>seqExpanded</key>
 						<true/>
 					</dict>
@@ -445,7 +447,7 @@
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>-1</integer>
+			<integer>0</integer>
 			<key>length</key>
 			<real>1</real>
 			<key>name</key>

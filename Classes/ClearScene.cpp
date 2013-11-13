@@ -197,7 +197,8 @@ bool ClearScene::init()
 	CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(ClearScene::menuAction));
 	ok_item->setTag(kMT_CS_ok);
 	
-	CCMenu* ok_menu = CCMenu::createWithItem(ok_item);
+	ok_menu = CCMenu::createWithItem(ok_item);
+	ok_menu->setVisible(false);
 	ok_menu->setPosition(ccp(360,50));
 	addChild(ok_menu, kZ_CS_menu);
 	
@@ -206,7 +207,77 @@ bool ClearScene::init()
 	ScreenSide* t_screen = ScreenSide::create();
 	addChild(t_screen, 99999);
 	
+	
+	
+	is_saved_user_data = false;
+	
+	Json::Value param2;
+	param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+	
+	Json::Value data;
+	data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i);
+	
+	data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+	int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+	for(int i=1;i<=card_take_cnt;i++)
+	{
+		int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+		data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
+		data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
+		data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
+		data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+	}
+	
+	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	
+	Json::FastWriter writer;
+	param2["data"] = writer.write(data);
+	hspConnector::get()->command("updateUserData", param2, json_selector(this, ClearScene::resultSavedUserData));
+	
     return true;
+}
+
+void ClearScene::resultSavedUserData(Json::Value result_data)
+{
+	if(result_data["state"] == "ok")
+	{
+		is_saved_user_data = true;
+		
+		ok_menu->setVisible(true);
+	}
+	else
+	{
+		Json::Value param2;
+		param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		
+		Json::Value data;
+		data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+		data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+		
+		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+			data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i);
+		
+		data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=card_take_cnt;i++)
+		{
+			int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
+			data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
+			data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
+			data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+		}
+		
+		data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+		
+		Json::FastWriter writer;
+		param2["data"] = writer.write(data);
+		hspConnector::get()->command("updateUserData", param2, json_selector(this, ClearScene::resultSavedUserData));
+	}
 }
 
 void ClearScene::onEnter()
