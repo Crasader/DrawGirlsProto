@@ -23,6 +23,7 @@
 #include <queue>
 #include <functional>
 #include <set>
+#include "KSUtil.h"
 
 USING_NS_CC_EXT;
 using namespace cocos2d;
@@ -799,10 +800,13 @@ private:
 		
 		float distance = sqrtf(powf(subPosition.x, 2.f) + powf(subPosition.y, 2.f));
 		
-		if(distance < 16*getScale())
+		if(distance < 16*getScale() && myGD->getCommunicationBool("Jack_isDie") == false)
 		{
 			myGD->communication("CP_jackCrashDie");
 			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+			is_action = false;
+			ingFrame = 1;
+//			return;
 		}
 		
 		if(!is_action)
@@ -2625,9 +2629,14 @@ public:
 };
 
 
+
 class Firework : public CrashMapObject
 {
 public:
+	virtual ~Firework()
+	{
+		CCLog("exit firework");
+	}
 	static Firework* create(CCPoint cumberPosition, CCPoint jackPosition)
 	{
 		Firework* t_bf = new Firework();
@@ -2648,10 +2657,12 @@ public:
 	}
 	void myInit(CCPoint cumberPosition, CCPoint jackPosition)
 	{
+		m_1TO2 = false;
 		m_step = 1;
-		m_bombFrame = 300;
-		m_parentMissile = CCParticleSystemQuad::create("pm.plist");
-		m_parentMissile->setPositionType(kCCPositionTypeRelative);
+		m_bombFrame = 200;
+		m_parentMissile = KS::loadCCBI<CCSprite*>(this, "pattern_flame1.ccbi").first;
+//		m_parentMissile = CCParticleSystemQuad::create("pm.plist");
+//		m_parentMissile->setPositionType(kCCPositionTypeRelative);
 		m_parentMissile->setPosition(cumberPosition);
 		addChild(m_parentMissile);
 		
@@ -2673,13 +2684,38 @@ public:
 	
 	void setTwoStep()
 	{
+		
+		
+		
+//		m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
+//		m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
+		m_1TO2 = true;
 		myGD->communication("MS_resetRects", false);
-		m_step = 2;
-		m_frame = 0;
-		m_sourcePosition = m_parentMissile->getPosition();
-		m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
-		m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
-		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCDelayTime::create(3.f)}));
+		addChild(KSGradualValue<float>::create(1, 0, 2.f,
+																	[=](float t)
+		{
+			CCLog("scale = %f", t);
+			m_parentMissile->setScale(t);
+		},
+																	[=](float t)
+		{
+			CCLog("scale finish");
+			m_step = 2;
+			m_1TO2 = false;
+			m_frame = 0;
+			m_sourcePosition = m_parentMissile->getPosition();
+			
+			m_parentMissile->removeFromParent();
+			
+			CCSprite* frame2 = KS::loadCCBI<CCSprite*>(this, "pattern_flame2.ccbi").first;
+			frame2->setPosition(m_sourcePosition);
+			addChild(frame2);
+			addChild(KSTimer::create(0.7, [=]()
+															 {
+																 frame2->removeFromParent();
+															 }));
+		}));
+		
 		
 		schedule(schedule_selector(ThisClassType::selfRemove));
 	}
@@ -2693,7 +2729,7 @@ public:
 	void jackDie()
 	{
 //		unscheduleUpdate();
-		if(m_step == 1)
+		if(m_step == 1 && m_1TO2 == false)
 		{
 			setTwoStep();
 		}
@@ -2704,7 +2740,7 @@ public:
 //		unscheduleUpdate();
 		myGD->communication("Main_showLineDiePosition", t_p);
 //		(target_removeEffect->*delegate_removeEffect)();
-		if(m_step == 1)
+		if(m_step == 1 && m_1TO2 == false)
 		{
 			setTwoStep();
 		}
@@ -2723,7 +2759,7 @@ public:
 				crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
 		}
 		
-		if(!r && m_step == 1)
+		if(!r && m_step == 1 && m_1TO2 == false)
 		{
 			setTwoStep();
 			
@@ -2764,11 +2800,13 @@ public:
 		}
 	}
 protected:
+	bool m_1TO2; // 1에서 2번째로 가는 도중
 	CCPoint m_sourcePosition;
 	int m_step;
 	int m_frame;
 	int m_bombFrame;
-	CCParticleSystem* m_parentMissile;
+//	CCParticleSystem* m_parentMissile;
+	CCSprite* m_parentMissile;
 	CCSpriteBatchNode* batchNode;
 	FromToWithDuration2<CCPoint> m_parentMissileGoal;
 };
@@ -3021,10 +3059,9 @@ public:
 		
 		m_angle = atan2(jackPosition.y - cumberPosition.y, jackPosition.x - cumberPosition.x);
 		m_angle += m_well512.GetFloatValue(-10 * M_PI/180.f, +10 * M_PI/180.f);
-		m_parentMissile = CCParticleSystemQuad::create("throwbomb.plist");
-		m_parentMissile->setPositionType(kCCPositionTypeRelative);
-		
-		
+//		m_parentMissile = CCParticleSystemQuad::create("throwbomb.plist");
+//		m_parentMissile->setPositionType(kCCPositionTypeRelative);
+		m_parentMissile = KS::loadCCBI<CCSprite*>(this, "pattern_meteor4.ccb").first;
 		
 		m_parentMissile->setPosition(cumberPosition);
 		addChild(m_parentMissile);
@@ -3142,7 +3179,7 @@ public:
 protected:
 	int m_step;
 	int m_frame;
-	CCParticleSystem* m_parentMissile;
+	CCSprite* m_parentMissile;
 	Well512 m_well512;
 	float m_angle;
 };

@@ -25,10 +25,12 @@ private:
 	//	bool positive;
 	
 	float flowTime;
+	bool nextTurnIsFinish;
 public:
 	FromToWithDuration2(){}
-	FromToWithDuration2(T _from, T _to, float _duration) : originFrom(_from)
+	FromToWithDuration2(T _from, T _to, float _duration) : originFrom(_from), nextTurnIsFinish(false)
 	{
+		nextTurnIsFinish = false;
 		flowTime = 0.f;
 		from = _from;
 		to = _to;
@@ -39,6 +41,7 @@ public:
 	
 	void init(T _from, T _to, float _duration)
 	{
+		nextTurnIsFinish = false;
 		flowTime = 0.f;
 		originFrom = _from;
 		from = _from;
@@ -51,6 +54,8 @@ public:
 	}
 	bool step(float dt)
 	{
+		if(nextTurnIsFinish)
+			return false; // finish
 		flowTime += dt;
 		if(duration)
 			from = from + dx * dt;
@@ -59,10 +64,10 @@ public:
 		if(duration <= flowTime)
 		{
 			from = to;
-			return false; // finish
+			nextTurnIsFinish = true;
 		}
-		else
-			return true;
+		
+		return true;
 	}
 	T getValue(){return from;}
 	T getTo(){return to;}

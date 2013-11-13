@@ -27,6 +27,7 @@
 #include "KSCircleBase.h"
 #include "KSSnakeBase.h"
 #include <functional>
+#include <memory>
 template <class _Tp>
 struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
 {

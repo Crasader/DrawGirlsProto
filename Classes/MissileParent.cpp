@@ -876,7 +876,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	}
 
 	
-	if(!invalid)
+//	if(!invalid)
 	{
 		myLog->addLog(kLOG_attackPattern_i, myGD->getCommunication("UI_getUseTime"), atoi(pattern.c_str()));
 	}
