@@ -76,7 +76,7 @@ void CardListViewer::setMaxPositionY()
 {
 	int cnt = getChildrenCount()/3;
 	
-	float t_y = cnt*82 + 5;
+	float t_y = cnt*92 + 5;
 	t_y -= view_rect.size.height;
 	
 	if(t_y > 0)

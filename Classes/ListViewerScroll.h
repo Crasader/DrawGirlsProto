@@ -140,6 +140,11 @@ private:
 		my_rect = t_rect;
 		target_link = t_link;
 		
+//		CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, t_rect.size.width, t_rect.size.height));
+//		temp_back->setOpacity(100);
+//		temp_back->setPosition(ccp(t_rect.origin.x+t_rect.size.width/2.f, t_rect.origin.y+t_rect.size.height/2.f));
+//		addChild(temp_back);
+		
 		scroll_img = CCSprite::create(filename.c_str());
 		addChild(scroll_img);
 		

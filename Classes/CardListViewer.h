@@ -99,12 +99,16 @@ private:
 			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)) > 0;
 			
 			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_level)->getCString()));
-			t_card->setScale(0.15f/0.2f);
+			t_card->setScale(0.92f);
 			t_card->setPosition(CCPointZero);
 			addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 			
 			if(is_color)		t_card->setGray(false);
 			else				t_card->setGray(true);
+			
+			CCSprite* t_no = CCSprite::create("cardsetting_noimg.png");
+			t_no->setPosition(CCPointZero);
+			addChild(t_no, kCSS_Z_content);
 			
 //			if(card_level == 3 && mySD->isAnimationStage(card_stage))
 //			{

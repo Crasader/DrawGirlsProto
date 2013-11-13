@@ -100,7 +100,7 @@ bool CardSettingScene::init()
 	
 	my_clv->setMaxPositionY();
 	
-	ListViewerScroll* t_lvs = ListViewerScroll::create(CCRectMake(428, 27, 27, 187), my_clv, "card_scroll.png", ccp(440,35), ccp(440,208));
+	ListViewerScroll* t_lvs = ListViewerScroll::create(CCRectMake(428, 27, 27, 232), my_clv, "card_scroll.png", ccp(441,49), ccp(441,233));
 	t_lvs->setTouchEnabled(true);
 	addChild(t_lvs, kCSS_Z_content);
 	
@@ -463,7 +463,7 @@ void CardSettingScene::alignChange()
 		
 		selected_img = CCSprite::create("card_selected.png");
 		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(card_stage-start_stage)*inner_card_distance.y)));
-		my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
+		my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 	}
 	else
 	{
