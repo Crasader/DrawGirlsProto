@@ -180,7 +180,8 @@ bool FailScene::init()
 	CCMenuItem* main_item = CCMenuItemSprite::create(n_main, s_main, this, menu_selector(FailScene::menuAction));
 	main_item->setTag(kMT_FS_main);
 	
-	CCMenu* main_menu = CCMenu::createWithItem(main_item);
+	main_menu = CCMenu::createWithItem(main_item);
+	main_menu->setVisible(false);
 	main_menu->setPosition(getContentPosition(kMT_FS_main));
 	addChild(main_menu, kZ_FS_menu);
 	
@@ -192,7 +193,8 @@ bool FailScene::init()
 	CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(FailScene::menuAction));
 	replay_item->setTag(kMT_FS_replay);
 	
-	CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+	replay_menu = CCMenu::createWithItem(replay_item);
+	replay_menu->setVisible(false);
 	replay_menu->setPosition(getContentPosition(kMT_FS_replay));
 	addChild(replay_menu, kZ_FS_menu);
 	
@@ -204,7 +206,8 @@ bool FailScene::init()
 	CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailScene::menuAction));
 	help_item->setTag(kMT_FS_help);
 	
-	CCMenu* help_menu = CCMenu::createWithItem(help_item);
+	help_menu = CCMenu::createWithItem(help_item);
+	help_menu->setVisible(false);
 	help_menu->setPosition(getContentPosition(kMT_FS_help));
 	addChild(help_menu, kZ_FS_menu);
 	
@@ -214,7 +217,80 @@ bool FailScene::init()
 	ScreenSide* t_screen = ScreenSide::create();
 	addChild(t_screen, 99999);
 	
+	
+	
+	is_saved_user_data = false;
+	
+	Json::Value param2;
+	param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+	
+	Json::Value data;
+	data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i);
+	
+	data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+	int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+	for(int i=1;i<=card_take_cnt;i++)
+	{
+		int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+		data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
+		data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
+		data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
+		data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+	}
+	
+	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	
+	Json::FastWriter writer;
+	param2["data"] = writer.write(data);
+	hspConnector::get()->command("updateUserData", param2, json_selector(this, FailScene::resultSavedUserData));
+	
     return true;
+}
+
+void FailScene::resultSavedUserData(Json::Value result_data)
+{
+	if(result_data["state"] == "ok")
+	{
+		is_saved_user_data = true;
+		
+		main_menu->setVisible(true);
+		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) > 0)
+			replay_menu->setVisible(true);
+		help_menu->setVisible(true);
+	}
+	else
+	{
+		Json::Value param2;
+		param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		
+		Json::Value data;
+		data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+		data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+		
+		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+			data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i);
+		
+		data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=card_take_cnt;i++)
+		{
+			int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
+			data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
+			data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
+			data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+		}
+		
+		data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+		
+		Json::FastWriter writer;
+		param2["data"] = writer.write(data);
+		hspConnector::get()->command("updateUserData", param2, json_selector(this, FailScene::resultSavedUserData));
+	}
 }
 
 CCPoint FailScene::getContentPosition(int t_tag)
@@ -246,6 +322,7 @@ void FailScene::menuAction(CCObject* pSender)
 	else if(tag == kMT_FS_replay)
 	{
 		is_menu_enable = false;
+		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)-1);
 //		StageSettingPopupLayer* t_sspl = StageSettingPopupLayer::create(mySD->getSilType(), this, callfunc_selector(FailScene::closeReplayPopup));
 //		addChild(t_sspl, kZ_FS_popup);
 		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());

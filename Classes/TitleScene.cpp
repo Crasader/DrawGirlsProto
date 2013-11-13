@@ -7,6 +7,7 @@
 //
 
 #include "TitleScene.h"
+#include "StarGoldData.h"
 
 CCScene* TitleScene::scene()
 {

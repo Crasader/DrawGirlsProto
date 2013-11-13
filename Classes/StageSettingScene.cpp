@@ -454,14 +454,6 @@ void StageSettingScene::realStartAction()
 		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
 	}
 	
-	Json::Value param;
-	param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
-	
-	hspConnector::get()->command("increaseStats", param, NULL);
-	
-	mySGD->resetLabels();
-	myGD->resetGameData();
-	
 	deque<bool> is_using_item;
 	for(int i=kIC_attack;i<=kIC_randomChange;i++)
 		is_using_item.push_back(false);
@@ -479,8 +471,79 @@ void StageSettingScene::realStartAction()
 	for(int i=kIC_attack;i<=kIC_randomChange;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
 	
-	mySGD->setGameStart();
-	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+	
+	
+	
+	Json::Value param;
+	param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+	
+	Json::Value data;
+	data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i);
+	
+	data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+	int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+	for(int i=1;i<=card_take_cnt;i++)
+	{
+		int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+		data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
+		data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
+		data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
+		data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+	}
+	
+	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	
+	Json::FastWriter writer;
+	param["data"] = writer.write(data);
+	hspConnector::get()->command("updateUserData", param, json_selector(this, StageSettingScene::finalStartAction));
+}
+
+void StageSettingScene::finalStartAction(Json::Value result_data)
+{
+	if(result_data["state"].asString() == "ok")
+	{
+		Json::Value param;
+		param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
+		
+		hspConnector::get()->command("increaseStats", param, NULL);
+		
+		mySGD->resetLabels();
+		myGD->resetGameData();
+		
+		mySGD->setGameStart();
+		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+	}
+	else
+	{
+		CCLog("Fail : user data save");
+		
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(selected_card_number > 0)
+		{
+			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
+		}
+		
+		deque<bool> is_using_item;
+		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+			is_using_item.push_back(false);
+		
+		for(int i=0;i<is_selected_item.size();i++)
+		{
+			if(is_selected_item[i])
+			{
+				myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])+1);
+				is_using_item[item_list[i]] = true;
+			}
+		}
+		
+		mySGD->resetUsingItem();
+		is_menu_enable = true;
+	}
 }
 
 void StageSettingScene::popupClose()

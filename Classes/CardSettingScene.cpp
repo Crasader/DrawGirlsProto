@@ -105,8 +105,8 @@ bool CardSettingScene::init()
 	my_clv->setScroll(t_lvs);
 	my_clv->setTouchEnabled(true);
 	
-	CCSprite* n_close = CCSprite::create("ui_common_close.png");
-	CCSprite* s_close = CCSprite::create("ui_common_close.png");
+	CCSprite* n_close = CCSprite::create("cardsetting_close.png");
+	CCSprite* s_close = CCSprite::create("cardsetting_close.png");
 	s_close->setColor(ccGRAY);
 	
 	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(CardSettingScene::menuAction));

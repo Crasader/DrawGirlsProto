@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "AlertEngine.h"
 #include "MyLocalization.h"
+#include "hspConnector.h"
 
 USING_NS_CC;
 
@@ -35,6 +36,9 @@ public:
 private:
 	
 	bool is_menu_enable;
+	bool is_saved_user_data;
+	
+	CCMenu* ok_menu;
 	
 	CCLabelBMFont* score_label;
 	CCLabelBMFont* percentage_label;
@@ -64,6 +68,8 @@ private:
 	void startCalcAnimation();
 	
 	void realEnd();
+	
+	void resultSavedUserData(Json::Value result_data);
 	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);

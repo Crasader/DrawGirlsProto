@@ -53,6 +53,11 @@ private:
 	
 	bool successed_get_puzzle_list;
 	
+	vector<int> card_data_load_list;
+	vector<DownloadFile> df_list;
+	vector<CopyFile> cf_list;
+	vector<DownloadFile> ef_list;
+	
 	void startGetPuzzleList()
 	{
 		Json::Value param;
@@ -77,22 +82,18 @@ private:
 	{
 		CCLog("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 		
-		if(result_data["error"]["isSuccess"].isBool())
+		if(result_data["error"]["isSuccess"].asBool())
 		{
 			if(myLog->getLogCount() > 0)
 			{
 				myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 			}
 			
-//			state_label->setString("유저 정보를 가져오는 ing...");
-//			
-//			Json::Value param;
-//			param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
-//			hspConnector::get()->command("getUserData", param, json_selector(this, TitleScene::resultGetUserData));
+			state_label->setString("유저 정보를 가져오는 ing...");
 			
-			state_label->setString("퍼즐 목록을 받아오는 ing...");
-			
-			startGetPuzzleList();
+			Json::Value param;
+			param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+			hspConnector::get()->command("getUserData", param, json_selector(this, TitleScene::resultGetUserData));
 		}
 		else
 		{
@@ -106,95 +107,384 @@ private:
 	void resultGetUserData(Json::Value result_data)
 	{
 		CCLog("resultGetUserData data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		
+		if(result_data["state"].asString() == "ok")
+		{
+			if(result_data["data"].isNull())
+			{
+				startSaveUserData();
+			}
+			else
+			{
+				resultSaveUserData(result_data);
+			}
+		}
+		else
+		{
+			Json::Value param;
+			param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+			hspConnector::get()->command("getUserData", param, json_selector(this, TitleScene::resultGetUserData));
+		}
+	}
+	
+	void resultSaveUserData(Json::Value result_data)
+	{
+		CCLog("resultSaveUserData data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		
+		if(result_data["state"].asString() == "ok")
+		{
+			Json::Value data;
+			Json::Reader reader;
+			reader.parse(result_data["data"].asString(), data);
+			
+			CCLog("parse data : %s", GraphDogLib::JsonObjectToString(data).c_str());
+			
+			myDSH->setIntegerForKey(kDSH_Key_savedStar, data[myDSH->getKey(kDSH_Key_savedStar)].asInt());
+			myDSH->setIntegerForKey(kDSH_Key_savedGold, data[myDSH->getKey(kDSH_Key_savedGold)].asInt());
+			
+			for(int i=kIC_attack;i<=kIC_randomChange;i++)
+				myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i].asInt());
+			
+			
+			
+			/////// 카드 수집 정보 초기화 ////////////
+			int before_card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, 0);
+			for(int i=1;i<=before_card_take_cnt;i++)
+			{
+				int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+				myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, 0);
+				myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, "");
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, 0);
+				myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, 0);
+			}
+			////////// 카드 수집 정보 초기화 //////////
+			
+			
+			
+			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, data[myDSH->getKey(kDSH_Key_cardTakeCnt)].asInt());
+			int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+			
+			for(int i=1;i<=card_take_cnt;i++)
+			{
+				int take_card_number = data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i].asInt();
+				myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, take_card_number);
+				myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i].asString());
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i].asInt());
+				myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i].asInt());
+				
+				if(NSDS_GS(kSDS_CI_int1_imgInfo_s, take_card_number) == "")
+					card_data_load_list.push_back(take_card_number);
+			}
+			
+			myDSH->setIntegerForKey(kDSH_Key_allHighScore, data[myDSH->getKey(kDSH_Key_allHighScore)].asInt());
+			
+			if(card_data_load_list.size() > 0)
+			{
+				state_label->setString("카드 정보를 받아오는 ing...");
+				Json::Value param;
+				for(int i=0;i<card_data_load_list.size();i++)
+					param["noList"][i] = card_data_load_list[i];
+				hspConnector::get()->command("getcardlist", param, json_selector(this, TitleScene::resultLoadedCardData));
+			}
+			else
+			{
+				state_label->setString("퍼즐 목록을 받아오는 ing...");
+				startGetPuzzleList();
+			}
+		}
+		else
+		{
+			startSaveUserData();
+		}
+	}
+	
+	void resultLoadedCardData(Json::Value result_data)
+	{
+		CCLog("resultLoadedCardData data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		
+		if(result_data["state"].asString() == "ok")
+		{
+			Json::Value cards = result_data["list"];
+			for(int i=0;i<cards.size();i++)
+			{
+				Json::Value t_card = cards[i];
+				NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt());
+				NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt());
+				
+				NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1);
+				NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), mySD->getSilType());
+				NSDS_SI(mySD->getSilType(), kSDS_SI_level_int1_card_i, i+1, t_card["no"].asInt());
+				
+				Json::Value t_card_missile = t_card["missile"];
+				NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str());
+				NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt());
+				NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt());
+				
+				NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str());
+				
+				Json::Value t_ability = t_card["ability"];
+				NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), t_ability.size());
+				for(int j=0;j<t_ability.size();j++)
+				{
+					Json::Value t_abil = t_ability[j];
+					NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt());
+					
+					Json::Value t_option;
+					if(!t_abil["option"].isObject())                    t_option["key"]="value";
+					else												t_option =t_abil["option"];
+					
+					if(t_abil["type"].asInt() == kIC_attack)
+						NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt());
+					else if(t_abil["type"].asInt() == kIC_addTime)
+						NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					else if(t_abil["type"].asInt() == kIC_fast)
+						NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					else if(t_abil["type"].asInt() == kIC_silence)
+						NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					else if(t_abil["type"].asInt() == kIC_doubleItem)
+						NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					else if(t_abil["type"].asInt() == kIC_longTime)
+						NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
+						NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					else if(t_abil["type"].asInt() == kIC_subSmallSize)
+						NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					else if(t_abil["type"].asInt() == kIC_smallArea)
+						NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					else if(t_abil["type"].asInt() == kIC_widePerfect)
+						NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+				}
+				
+				Json::Value t_imgInfo = t_card["imgInfo"];
+				
+				bool is_add_cf = false;
+				
+				if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df;
+					t_df.size = t_imgInfo["size"].asInt();
+					t_df.img = t_imgInfo["img"].asString().c_str();
+					t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", mySD->getSilType(), i+1)->getCString();
+					t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
+					df_list.push_back(t_df);
+					// ================================
+					
+					CopyFile t_cf;
+					t_cf.from_filename = t_df.filename.c_str();
+					t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", mySD->getSilType(), i+1)->getCString();
+					cf_list.push_back(t_cf);
+					
+					is_add_cf = true;
+				}
+				
+				Json::Value t_aniInfo = t_card["aniInfo"];
+				NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool());
+				if(t_aniInfo["isAni"].asBool())
+				{
+					Json::Value t_detail = t_aniInfo["detail"];
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt());
+					
+					Json::Value t_loopSeq = t_detail["loopSeq"];
+					for(int j=0;j<t_loopSeq.size();j++)
+						NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt());
+					
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt());
+					
+					if(NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card["no"].asInt()) != t_detail["img"].asString())
+					{
+						// check, after download ----------
+						DownloadFile t_df;
+						t_df.size = t_detail["size"].asInt();
+						t_df.img = t_detail["img"].asString().c_str();
+						t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", mySD->getSilType(), i+1)->getCString();
+						t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
+						df_list.push_back(t_df);
+						// ================================
+					}
+					
+					if(is_add_cf)
+					{
+						CopyFile t_cf = cf_list.back();
+						cf_list.pop_back();
+						t_cf.is_ani = true;
+						t_cf.cut_width = t_detail["cutWidth"].asInt();
+						t_cf.cut_height = t_detail["cutHeight"].asInt();
+						t_cf.position_x = t_detail["positionX"].asInt();
+						t_cf.position_y = t_detail["positionY"].asInt();
+						
+						t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", mySD->getSilType(), i+1)->getCString();
+						
+						cf_list.push_back(t_cf);
+					}
+				}
+				
+				NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString());
+				
+				Json::Value t_silImgInfo = t_card["silImgInfo"];
+				NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool());
+				if(t_silImgInfo["isSil"].asBool())
+				{
+					if(NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card["no"].asInt()) != t_silImgInfo["img"].asString())
+					{
+						// check, after download ----------
+						DownloadFile t_df;
+						t_df.size = t_silImgInfo["size"].asInt();
+						t_df.img = t_silImgInfo["img"].asString().c_str();
+						t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", mySD->getSilType(), i+1)->getCString();
+						t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
+						df_list.push_back(t_df);
+						// ================================
+					}
+				}
+			}
+			
+			if(df_list.size() > 0) // need download
+			{
+				state_label->setString("이미지 정보를 다운로드 합니다.");
+				ing_download_cnt = 1;
+				ing_download_per = 0;
+				download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString(), "etc_font.fnt");
+				download_state->setPosition(ccp(240,130));
+				addChild(download_state);
+				is_downloading = true;
+				startDownload2();
+			}
+			else
+			{
+				state_label->setString("퍼즐 목록을 받아오는 ing...");
+				startGetPuzzleList();
+			}
+		}
+		else
+		{
+			Json::Value param;
+			for(int i=0;i<card_data_load_list.size();i++)
+				param["noList"][i] = card_data_load_list[i];
+			hspConnector::get()->command("getcardlist", param, json_selector(this, TitleScene::resultLoadedCardData));
+		}
+	}
+	
+	void successAction2()
+	{
+		SDS_SS(kSDF_cardInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
+		
+		if(ing_download_cnt >= df_list.size())
+		{
+			state_label->setString("카드 섬네일 만드는 중...");
+			for(int i=0;i<cf_list.size();i++)
+			{
+				CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+				target_img->setAnchorPoint(ccp(0,0));
+				
+				if(cf_list[i].is_ani)
+				{
+					CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+					ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+					target_img->addChild(ani_img);
+				}
+				
+				target_img->setScale(0.2f);
+				
+				CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+				t_texture->setSprite(target_img);
+				t_texture->begin();
+				t_texture->getSprite()->visit();
+				t_texture->end();
+				
+				t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			}
+			
+			download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()))->getCString());
+			
+			df_list.clear();
+			cf_list.clear();
+			download_state->removeFromParent();
+			
+			
+			state_label->setString("퍼즐 목록을 받아오는 ing...");
+			startGetPuzzleList();
+		}
+		else
+		{
+			ing_download_cnt++;
+			ing_download_per = 0.f;
+			download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
+			startDownload();
+		}
+	}
+	
+	void failAction2()
+	{
+		state_label->setString("이미지 정보 다운로드에 실패하였습니다.\n재시도 합니다.");
+		ing_download_cnt = 1;
+		ing_download_per = 0;
+		is_downloading = true;
+		startDownload2();
+	}
+	
+	void downloadingAction2()
+	{
+		float t_per = StageImgLoader::sharedInstance()->getDownloadPercentage();
+		
+		if(t_per < 0.f)			t_per = 0.f;
+		else if(t_per > 1.f)	t_per = 1.f;
+		
+		ing_download_per = t_per;
+		
+		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString());
+	}
+	
+	void startDownload2()
+	{
+		CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+		
+		StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename, this, callfunc_selector(TitleScene::successAction2), this, callfunc_selector(TitleScene::failAction2));
+		
+		schedule(schedule_selector(TitleScene::downloadingAction2));
+	}
+	
+	void startSaveUserData()
+	{
+		state_label->setString("유저 데이터를 초기화 ing...");
+		
+		Json::Value param;
+		param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		
+		Json::Value data;
+		data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar); // 1
+		data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold); // 1000
+		
+		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+			data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i); // 0
+		
+		data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt); // 0
+		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt); /////////////////////////////
+		for(int i=1;i<=card_take_cnt;i++)
+		{
+			int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
+			data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
+			data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
+			data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+		} /////////////////////////////////////////
+		
+		data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore); // 0
+		
+		Json::FastWriter writer;
+		param["data"] = writer.write(data);
+		hspConnector::get()->command("updateUserData", param, json_selector(this, TitleScene::resultSaveUserData));
 	}
 	
 	void changeScene()
 	{
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
-	
-	vector<DownloadFile> df_list;
-	vector<DownloadFile> ef_list;
-	
-//	void resultGetEventStageList(Json::Value result_data)
-//	{
-//		CCLog("resultGetEventStageList data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-//		
-//		if(result_data["state"].asString() == "ok")
-//		{
-//			if(result_data["version"] > NSDS_GI(kSDS_GI_eventListVersion_i))
-//			{
-//				Json::Value event_list = result_data["list"];
-//				int el_length = event_list.size();
-//				NSDS_SI(kSDS_GI_eventCount_i, el_length);
-//				for(int i=0;i<el_length;i++)
-//				{
-//					int event_code = event_list[i]["no"].asInt();
-//					NSDS_SI(kSDS_GI_event_int1_code_i, i, event_code);
-//					Json::Value thumbnail = event_list[i]["thumbnail"];
-//					if(NSDS_GS(kSDS_GI_event_int1_thumbnail_s, i) != thumbnail["image"].asString())
-//					{
-//						// check, after download ----------
-//						DownloadFile t_df;
-//						t_df.size = thumbnail["size"].asInt();
-//						t_df.img = thumbnail["image"].asString().c_str();
-//						t_df.filename = CCSTR_CWF("event%d_thumbnail.png", i)->getCString();
-//						t_df.key = CCSTR_CWF("event%d_thumbnail", i)->getCString();
-//						ef_list.push_back(t_df);
-//						// ================================
-//					}
-//				}
-//				
-//				if(ef_list.size() > 0) // need download
-//				{
-//					download_version = result_data["version"].asInt();
-//					state_label->setString("이벤트 정보를 받아옵니다.");
-//					ing_download_cnt = 1;
-//					ing_download_per = 0;
-//					download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(ef_list.size()))->getCString(), "etc_font.fnt");
-//					download_state->setPosition(ccp(240,130));
-//					addChild(download_state);
-//					is_downloading = true;
-//					startDownload();
-//				}
-//				else
-//					endingAction();
-//			}
-//			else
-//				endingAction();
-//		}
-//		else
-//		{
-//			if(successed_get_puzzle_list)
-//				endingAction();
-//			else
-//			{
-//				state_label->setString("퍼즐 목록을 받아오는데 실패하였습니다. 재시도 해주세요.");
-//				
-//				CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,120,70));
-//				CCLabelTTF* n_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
-//				n_label->setColor(ccBLACK);
-//				n_label->setPosition(ccp(60,35));
-//				n_replay->addChild(n_label);
-//				
-//				CCSprite* s_replay = CCSprite::create("whitePaper.png", CCRectMake(0, 0,120,70));
-//				s_replay->setColor(ccGRAY);
-//				CCLabelTTF* s_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
-//				s_label->setColor(ccBLACK);
-//				s_label->setPosition(ccp(60,35));
-//				s_replay->addChild(s_label);
-//				
-//				CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
-//				replay_item->setTag(kTitle_MT_replay);
-//				
-//				CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
-//				replay_menu->setPosition(ccp(240,160));
-//				addChild(replay_menu, 0, kTitle_MT_replay);
-//				
-//				is_menu_enable = true;
-//			}
-//		}
-//	}
 
 	void resultGetPuzzleList(Json::Value result_data)
 	{
