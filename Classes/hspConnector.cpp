@@ -289,8 +289,32 @@ void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,jsonSelType 
     bool playable : 게임 실행 가능 여부.
     dict error : 에러정보.
 */
+
+void hspConnector::logout(jsonSelType func){
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+    [[HSPCore sharedHSPCore] logoutWithCompletionHandler:
+     ^(HSPError *error)
+     {
+		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		 addErrorInResult(resultDict, error);
+		 callFuncMainQueue2(0,0,func,resultDict);
+     }
+     ];
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+    if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "logout", "(I)V")) {
+        int _key =  jsonDelegator::get()->add(func,0,0);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID,_key);
+        t.env->DeleteLocalRef(t.classID);
+    }
+#endif
+	
+}
 void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType func){
-    bool ManualLogin = param["ManualLogin"].asBool();
+    bool ManualLogin=true;
+	if(param!=0 && param!=NULL){
+		ManualLogin= param.get("ManualLogin",true).asBool();
+	}
 	
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [dkey,this](Json::Value obj){
@@ -305,7 +329,7 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 			graphdog->setKakaoMemberID(hspConnector::get()->getKakaoID());
 			
 			jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-			delsel.func(obj);
+			if(delsel.func)delsel.func(obj);
 			jsonDelegator::get()->remove(delekey);
 			
 		});

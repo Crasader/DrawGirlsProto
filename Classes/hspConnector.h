@@ -202,6 +202,7 @@ public:
     bool setupHSPonIOS(int hspGameNo,string hspGameID,string hspGameVersion,void* launchOptions);
 
     void login(Json::Value param,Json::Value callbackParam,jsonSelType func);
+    void logout(jsonSelType func);
 	void loadMyInfo(Json::Value obj);
     void loadMyProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
     void loadFriendsProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
