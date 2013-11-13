@@ -794,6 +794,8 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			WindmillObject* t_to = WindmillObject::create(ccp2ip(startPosition), totalframe);
 			addChild(t_to);
+			 
+			return invalid; // 노 캐스팅
 		}
 	}
 	else if(pattern == "1016") // 다이너마이트.
@@ -801,17 +803,11 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		if(exe)
 		{
 			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				int remainSecond = patternData.get("remainsecond", 9).asInt();
-				
-				TickingTimeBomb* t_ttb = TickingTimeBomb::create(ccp2ip(startPosition), 120, remainSecond, 1, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
-				addChild(t_ttb);
-			};
-			castBranch(atype, func);
+			int remainSecond = patternData.get("remainsecond", 9).asInt();
 			
-			
-			
+			TickingTimeBomb* t_ttb = TickingTimeBomb::create(ccp2ip(startPosition), 120, remainSecond, 1, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
+			addChild(t_ttb);
+			return invalid; // 노 캐스팅
 		}
 	}
 	else if(pattern == "1017") // 선을 따라가는 공격

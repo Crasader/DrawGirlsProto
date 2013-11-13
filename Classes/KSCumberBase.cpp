@@ -1321,18 +1321,14 @@ void KSCumberBase::cumberAttack(float dt)
 
 void KSCumberBase::speedAdjustment(float dt)
 {
-//	m_speed.step();
-	float ratio = getLife() / getTotalLife();
-	float t = (m_maxSpeed - m_minSpeed) * 0.0005f;
-
 	int considerFrames = 60 * 7; // 초.
 	int maxCre = 15;
 	int cntPerSecond = MIN(count_if(m_damagedFrames.getSTL().begin(), m_damagedFrames.getSTL().end(),
 															[=](int w){
 																return w >= m_frameCount - considerFrames;
 															}), maxCre);
-
-	float baseSpeed = (m_startSpeed - m_minSpeed) * getLife() / getTotalLife();
+	CCLog("cntps %d", cntPerSecond);
+	float baseSpeed = m_minSpeed + (m_startSpeed - m_minSpeed) * getLife() / getTotalLife();
 	float finalSpeed = baseSpeed + cntPerSecond * (m_maxSpeed - baseSpeed) / maxCre;
 	m_speed = finalSpeed;
 }
@@ -1381,17 +1377,16 @@ void KSCumberBase::bossDieBomb(float dt)
 		t.x += m_well512.GetFloatValue(-100.f, 100.f);
 		t.y += m_well512.GetFloatValue(-100.f, 100.f);
 		ret.first->setPosition(t);
-		addChild(ret.first, 11);
+		getParent()->addChild(ret.first, 11);
 		
 		if(maxValue == m_bossDie.m_bossDieFrameCount)
 		{
-			auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossdie.ccbi");
+			auto ret = KS::loadCCBI<CCSprite*>(this, "fx_boss_die.ccbi");
 			
 			
 			CCPoint t = getPosition();
 			ret.first->setPosition(t);
-			CCLog("bossposition2 %f %f", t.x, t.y);
-			addChild(ret.first, 11);
+			getParent()->addChild(ret.first, 11);
 		}
 	}
 }
