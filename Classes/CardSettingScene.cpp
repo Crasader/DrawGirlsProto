@@ -11,7 +11,6 @@
 #include "MyLocalization.h"
 #include "StageSettingScene.h"
 #include "StageImgLoader.h"
-#include "CollectionListScene.h"
 #include "CollectionBook.h"
 #include "PuzzleMapScene.h"
 #include "CardCase.h"
@@ -33,25 +32,6 @@ CCScene* CardSettingScene::scene()
     // return the scene
     return scene;
 }
-
-//enum CSS_Zorder{
-//	kCSS_Z_back = 1,
-//	kCSS_Z_selectedImg,
-//	kCSS_Z_content,
-//	kCSS_Z_check
-//};
-//
-//enum CSS_MenuTag{
-//	kCSS_MT_close = 1,
-//	kCSS_MT_align = 2,
-//	kCSS_MT_diary = 3,
-//	kCSS_MT_selectedCard = 4,
-//	kCSS_MT_selectedCheck = 5,
-//	kCSS_MT_checkMark = 6,
-//	kCSS_MT_cardBase = 1000,
-//	kCSS_MT_cardMenuBase = 2000,
-//	kCSS_MT_noCardBase = 3000
-//};
 
 // on "init" you need to initialize your instance
 bool CardSettingScene::init()
@@ -475,7 +455,7 @@ void CardSettingScene::alignChange()
 			{
 				selected_img = CCSprite::create("card_selected.png");
 				selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)));
-				my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
+				my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 				break;
 			}
 		}
@@ -568,7 +548,7 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 		
 		selected_img = CCSprite::create("card_selected.png");
 		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(card_stage-start_stage)*inner_card_distance.y)));
-		my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
+		my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 	}
 	else
 	{
@@ -580,7 +560,7 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 			{
 				selected_img = CCSprite::create("card_selected.png");
 				selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)));
-				my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
+				my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 				break;
 			}
 		}

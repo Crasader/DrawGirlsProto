@@ -129,8 +129,16 @@ private:
 			t_durability->setColor(ccBLACK);
 			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
 			t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-			t_durability->setPosition(ccp(t_card->getContentSize().width/2.f, 10));
+			t_durability->setPosition(ccp(t_card->getContentSize().width/2.f+15, 7));
 			t_card->addChild(t_durability);
+			
+			CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
+			mini_rank->setPosition(ccp(9,9));
+			t_card->addChild(mini_rank);
+			
+			CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)))->getCString(), mySGD->getFont().c_str(), 8);
+			t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
+			mini_rank->addChild(t_rank);
 			
 			CCMenuItem* t_card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", target_menu, delegate_menu);
 			t_card_item->setTag(kCSS_MT_cardMenuBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));

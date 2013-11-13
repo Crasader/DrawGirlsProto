@@ -10,7 +10,6 @@
 #include "ScreenSide.h"
 #include "MyLocalization.h"
 #include "StageSettingScene.h"
-#include "CollectionListScene.h"
 #include "StageInfoDown.h"
 #include "OptionScene.h"
 #include "GachaPopup.h"
