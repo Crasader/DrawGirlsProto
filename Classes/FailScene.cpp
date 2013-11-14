@@ -244,6 +244,7 @@ bool FailScene::init()
 	}
 	
 	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	
 	Json::FastWriter writer;
 	param2["data"] = writer.write(data);
@@ -287,6 +288,7 @@ void FailScene::resultSavedUserData(Json::Value result_data)
 		}
 		
 		data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+		data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		
 		Json::FastWriter writer;
 		param2["data"] = writer.write(data);

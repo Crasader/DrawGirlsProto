@@ -184,6 +184,7 @@ private:
 			}
 			
 			myDSH->setIntegerForKey(kDSH_Key_allHighScore, data[myDSH->getKey(kDSH_Key_allHighScore)].asInt());
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, data[myDSH->getKey(kDSH_Key_selectedCard)].asInt());
 			
 			mySGD->resetHasGottenCards();
 			
@@ -538,6 +539,7 @@ private:
 		} /////////////////////////////////////////
 		
 		data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore); // 0
+		data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 0
 		
 		Json::FastWriter writer;
 		param["data"] = writer.write(data);
