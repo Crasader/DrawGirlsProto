@@ -18,6 +18,7 @@
 #include "FailHelpPopup.h"
 #include "LogData.h"
 #include "CountingBMLabel.h"
+#include "DecreaseCardDurabilityPopup.h"
 
 typedef enum tMenuTagFailScene{
 	kMT_FS_main = 1,
@@ -87,7 +88,11 @@ bool FailScene::init()
 	p["stageNo"]=mySD->getSilType();
 	hspConnector::get()->command("addStageScore",p,NULL);
 	
+	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	
+	DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number));
+	addChild(t_popup, kZ_FS_popup);
 	
 	if(selected_card_number > 0)
 	{

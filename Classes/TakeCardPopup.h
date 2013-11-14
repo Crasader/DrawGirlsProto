@@ -89,7 +89,6 @@ private:
 	
 	void openingAction()
 	{
-		CCScaleTo* t_scale = CCScaleTo::create(0.8f, 0.5f);
 		CCMoveTo* t_move = CCMoveTo::create(0.8f, ccp(240,130));
 		
 		CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.1f, 0.2f, 0, 0, 90, 0, 0);// float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX
@@ -100,17 +99,16 @@ private:
 		CCRepeat* t_repeat = CCRepeat::create(t_seq, 4);
 		CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(TakeCardPopup::touchOn));
 		CCSequence* t_seq2 = CCSequence::createWithTwoActions(t_repeat, t_call3);
-		CCSpawn* t_spawn1 = CCSpawn::create(t_scale, t_move, t_seq2, NULL);
+		CCSpawn* t_spawn1 = CCSpawn::create(t_move, t_seq2, NULL);
 		take_card->runAction(t_spawn1);
 		
 		
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.8f, 0.5f);
 		CCMoveTo* t_move2 = CCMoveTo::create(0.8f, ccp(240,130));
 		CCOrbitCamera* t_orbit3 = CCOrbitCamera::create(0.1f, 0.2f, 0, 0, 90, 0, 0);
 		CCOrbitCamera* t_orbit4 = CCOrbitCamera::create(0.1f, 0.2f, 0, -90, 90, 0, 0);
 		CCSequence* t_seq3 = CCSequence::create(t_orbit3, t_orbit4, NULL);
 		CCRepeat* t_repeat2 = CCRepeat::create(t_seq3, 4);
-		CCSpawn* t_spawn2 = CCSpawn::create(t_scale2, t_move2, t_repeat2, NULL);
+		CCSpawn* t_spawn2 = CCSpawn::create(t_move2, t_repeat2, NULL);
 		card_back->runAction(t_spawn2);
 	}
 	
@@ -177,7 +175,6 @@ private:
 	
 	void closingAction()
 	{
-		CCScaleTo* t_scale = CCScaleTo::create(0.8f, 0.5f);
 		CCMoveTo* t_move = CCMoveTo::create(0.8f, ccp(-120,130));
 		
 		CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.1f, 0.2f, 0, 0, 90, 0, 0);// float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX
@@ -198,17 +195,16 @@ private:
 		
 		CCCallFunc* t_call6 = CCCallFunc::create(this, callfunc_selector(TakeCardPopup::removeFromParent));
 		CCSequence* t_seq2 = CCSequence::create(t_repeat, t_call3, t_repeat3, t_call6, NULL);
-		CCSpawn* t_spawn1 = CCSpawn::create(t_scale, t_move, t_seq2, NULL);
+		CCSpawn* t_spawn1 = CCSpawn::create(t_move, t_seq2, NULL);
 		take_card->runAction(t_spawn1);
 		
 		
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.8f, 0.5f);
 		CCMoveTo* t_move2 = CCMoveTo::create(0.8f, ccp(-120,130));
 		CCOrbitCamera* t_orbit3 = CCOrbitCamera::create(0.1f, 0.2f, 0, 0, 90, 0, 0);
 		CCOrbitCamera* t_orbit4 = CCOrbitCamera::create(0.1f, 0.2f, 0, -90, 90, 0, 0);
 		CCSequence* t_seq3 = CCSequence::create(t_orbit3, t_orbit4, NULL);
 		CCRepeat* t_repeat2 = CCRepeat::create(t_seq3, 4);
-		CCSpawn* t_spawn2 = CCSpawn::create(t_scale2, t_move2, t_repeat2, NULL);
+		CCSpawn* t_spawn2 = CCSpawn::create(t_move2, t_repeat2, NULL);
 		card_back->runAction(t_spawn2);
 	}
 	

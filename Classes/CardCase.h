@@ -40,10 +40,47 @@ public:
 		return t_cc;
 	}
 	
+	CCLabelTTF* getRecentDurabilityLabel()
+	{
+		return recent_durability_label;
+	}
+	
+	void startDecreaseDurability(CCObject* t_end, SEL_CallFunc d_end)
+	{
+		recent_durability_label->setColor(ccRED);
+		CCScaleTo* t_scale = CCScaleTo::create(1.5f, 10.f);
+		CCFadeTo* t_fade1 = CCFadeTo::create(1.5f, 30);
+		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_fade1);
+		CCCallFunc* t_call1 = CCCallFunc::create(recent_durability_label, callfunc_selector(CCLabelTTF::removeFromParent));
+		CCSequence* t_seq1 = CCSequence::createWithTwoActions(t_spawn, t_call1);
+		recent_durability_label->runAction(t_seq1);
+		
+		CCLabelTTF* after_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number))->getCString(), mySGD->getFont().c_str(), 20);
+		after_durability_label->setOpacity(0);
+		after_durability_label->setColor(ccBLACK);
+		after_durability_label->setAnchorPoint(ccp(0.5,0.5));
+		after_durability_label->setPosition(ccp(20,25));
+		durability_case->addChild(after_durability_label, kCARDCASE_Z_data);
+		CCFadeTo* t_fade2 = CCFadeTo::create(1.5f, 255);
+		CCCallFuncO* t_call2 = CCCallFuncO::create(this, callfuncO_selector(CardCase::changeRecentDurabilityLabel), after_durability_label);
+		CCCallFunc* t_call3 = CCCallFunc::create(t_end, d_end);
+		CCSequence* t_seq2 = CCSequence::create(t_fade2, t_call2, t_call3, NULL);
+		after_durability_label->runAction(t_seq2);
+	}
+	
 private:
+	CCLabelTTF* recent_durability_label;
+	CCSprite* durability_case;
+	int selected_card_number;
+	
+	void changeRecentDurabilityLabel(CCObject* sender)
+	{
+		recent_durability_label = (CCLabelTTF*)sender;
+	}
 	
 	void myInit(int t_selected_card_number)
 	{
+		selected_card_number = t_selected_card_number;
 		CCSprite* top_case = CCSprite::create("card_case_top.png");
 		top_case->setPosition(ccp(160,430));
 		addChild(top_case, kCARDCASE_Z_sideCase);
@@ -69,7 +106,7 @@ private:
 		rank_label->setPosition(ccp(rank_case->getContentSize().width/2.f, rank_case->getContentSize().height/2.f-3));
 		rank_case->addChild(rank_label, kCARDCASE_Z_data);
 		
-		CCSprite* durability_case = CCSprite::create("card_case_durability.png");
+		durability_case = CCSprite::create("card_case_durability.png");
 		durability_case->setPosition(ccp(287,417));
 		addChild(durability_case, kCARDCASE_Z_innerCase);
 		
@@ -79,7 +116,7 @@ private:
 		total_durability_label->setPosition(ccp(42,21));
 		durability_case->addChild(total_durability_label, kCARDCASE_Z_data);
 		
-		CCLabelTTF* recent_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 20);
+		recent_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 20);
 		recent_durability_label->setColor(ccBLACK);
 		recent_durability_label->setAnchorPoint(ccp(0.5,0.5));
 		recent_durability_label->setPosition(ccp(20,25));
