@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>0</integer>
+	<integer>8</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -1189,7 +1189,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -1592,9 +1592,9 @@
 								<key>displayName</key>
 								<string>boss_pineapple_square1</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a1</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -1648,7 +1648,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -1677,8 +1677,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>27.5</real>
-									<real>16</real>
+									<real>0.0</real>
+									<real>74.766204833984375</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -2762,7 +2762,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -3266,9 +3266,9 @@
 								<key>displayName</key>
 								<string>boss_pineapple_square1</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a2</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -3322,7 +3322,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -3351,8 +3351,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>27.5</real>
-									<real>-16</real>
+									<real>64.583335876464844</real>
+									<real>37.25</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -4436,7 +4436,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -4940,9 +4940,9 @@
 								<key>displayName</key>
 								<string>boss_pineapple_square1</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a3</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -4996,7 +4996,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -5025,8 +5025,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>-32</real>
+									<real>64.382720947265625</real>
+									<real>-37.305934906005859</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -6110,7 +6110,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -6614,9 +6614,9 @@
 								<key>displayName</key>
 								<string>boss_pineapple_square1</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a4</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -6670,7 +6670,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -6699,8 +6699,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-27.5</real>
-									<real>-16</real>
+									<real>0.0</real>
+									<real>-74.661262512207031</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -7784,7 +7784,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -8288,9 +8288,9 @@
 								<key>displayName</key>
 								<string>boss_pineapple_square1</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a5</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -8344,7 +8344,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 							</dict>
@@ -8371,8 +8371,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-27.5</real>
-									<real>16</real>
+									<real>-64.334495544433594</real>
+									<real>-37.392742156982422</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -9456,7 +9456,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -9960,9 +9960,9 @@
 								<key>displayName</key>
 								<string>boss_pineapple_square1</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a6</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -10016,7 +10016,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -10045,8 +10045,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>32</real>
+									<real>-64.734451293945312</real>
+									<real>36.936622619628906</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -10150,8 +10150,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
-							<real>1</real>
+							<real>0.80000001192092896</real>
+							<real>0.80000001192092896</real>
 							<true/>
 							<integer>0</integer>
 						</array>
@@ -10964,7 +10964,7 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>0</integer>
+								<integer>28</integer>
 							</dict>
 						</array>
 						<key>seqExpanded</key>
@@ -11623,7 +11623,7 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>255</integer>
+								<integer>227</integer>
 							</dict>
 						</array>
 						<key>seqExpanded</key>
@@ -12035,7 +12035,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.5</real>
+			<real>0.033333335071802139</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>0</integer>
+	<integer>19</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -545,9 +545,9 @@
 										<key>displayName</key>
 										<string>boss_metal11</string>
 										<key>memberVarAssignmentName</key>
-										<string></string>
+										<string>a3</string>
 										<key>memberVarAssignmentType</key>
-										<integer>0</integer>
+										<integer>1</integer>
 										<key>properties</key>
 										<array>
 											<dict>
@@ -1113,9 +1113,9 @@
 										<key>displayName</key>
 										<string>boss_metal11</string>
 										<key>memberVarAssignmentName</key>
-										<string></string>
+										<string>a7</string>
 										<key>memberVarAssignmentType</key>
-										<integer>0</integer>
+										<integer>1</integer>
 										<key>properties</key>
 										<array>
 											<dict>
@@ -1130,7 +1130,7 @@
 												<string>Position</string>
 												<key>value</key>
 												<array>
-													<real>-30</real>
+													<real>-123.91304016113281</real>
 													<real>0.0</real>
 													<integer>0</integer>
 												</array>
@@ -1681,9 +1681,9 @@
 										<key>displayName</key>
 										<string>boss_metal11</string>
 										<key>memberVarAssignmentName</key>
-										<string></string>
+										<string>a1</string>
 										<key>memberVarAssignmentType</key>
-										<integer>0</integer>
+										<integer>1</integer>
 										<key>properties</key>
 										<array>
 											<dict>
@@ -2249,9 +2249,9 @@
 										<key>displayName</key>
 										<string>boss_metal11</string>
 										<key>memberVarAssignmentName</key>
-										<string></string>
+										<string>a5</string>
 										<key>memberVarAssignmentType</key>
-										<integer>0</integer>
+										<integer>1</integer>
 										<key>properties</key>
 										<array>
 											<dict>
@@ -2648,9 +2648,9 @@
 										<key>displayName</key>
 										<string>boss_metal11</string>
 										<key>memberVarAssignmentName</key>
-										<string></string>
+										<string>a2</string>
 										<key>memberVarAssignmentType</key>
-										<integer>0</integer>
+										<integer>1</integer>
 										<key>properties</key>
 										<array>
 											<dict>
@@ -2968,9 +2968,9 @@
 										<key>displayName</key>
 										<string>boss_metal11</string>
 										<key>memberVarAssignmentName</key>
-										<string></string>
+										<string>a4</string>
 										<key>memberVarAssignmentType</key>
-										<integer>0</integer>
+										<integer>1</integer>
 										<key>properties</key>
 										<array>
 											<dict>
@@ -3288,9 +3288,9 @@
 										<key>displayName</key>
 										<string>boss_metal11</string>
 										<key>memberVarAssignmentName</key>
-										<string></string>
+										<string>a6</string>
 										<key>memberVarAssignmentType</key>
-										<integer>0</integer>
+										<integer>1</integer>
 										<key>properties</key>
 										<array>
 											<dict>
@@ -3608,9 +3608,9 @@
 										<key>displayName</key>
 										<string>boss_metal11</string>
 										<key>memberVarAssignmentName</key>
-										<string></string>
+										<string>a8</string>
 										<key>memberVarAssignmentType</key>
-										<integer>0</integer>
+										<integer>1</integer>
 										<key>properties</key>
 										<array>
 											<dict>
@@ -4661,7 +4661,7 @@
 										<key>value</key>
 										<array>
 											<real>0.0</real>
-											<real>0.0</real>
+											<real>7</real>
 											<integer>0</integer>
 										</array>
 									</dict>
@@ -5254,9 +5254,9 @@
 			<key>name</key>
 			<string>at1_m</string>
 			<key>offset</key>
-			<real>0.0</real>
+			<real>0.58130645751953125</real>
 			<key>position</key>
-			<real>2.0999999046325684</real>
+			<real>1.2666666507720947</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

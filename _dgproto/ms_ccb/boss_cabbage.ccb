@@ -725,9 +725,9 @@
 								<key>displayName</key>
 								<string>boss_candy66</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a4</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -1310,9 +1310,9 @@
 								<key>displayName</key>
 								<string>boss_candy66</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a2</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -1895,9 +1895,9 @@
 								<key>displayName</key>
 								<string>boss_candy66</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a5</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -2480,9 +2480,9 @@
 								<key>displayName</key>
 								<string>boss_candy66</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a7</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -2587,8 +2587,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>0.5</real>
-									<real>0.5</real>
+									<real>0.0</real>
+									<real>0.0</real>
 								</array>
 							</dict>
 							<dict>
@@ -3158,9 +3158,9 @@
 								<key>displayName</key>
 								<string>boss_candy66</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a6</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -3632,9 +3632,9 @@
 								<key>displayName</key>
 								<string>boss_candy66</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a1</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -4106,9 +4106,9 @@
 								<key>displayName</key>
 								<string>boss_candy66</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a3</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -4580,9 +4580,9 @@
 								<key>displayName</key>
 								<string>boss_candy66</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a8</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -4672,8 +4672,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>0.5</real>
-									<real>0.5</real>
+									<real>0.0</real>
+									<real>0.0</real>
 								</array>
 							</dict>
 							<dict>
@@ -5543,8 +5543,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>0.5</real>
-									<real>0.5</real>
+									<real>0.0</real>
+									<real>0.0</real>
 								</array>
 							</dict>
 							<dict>
@@ -5717,6 +5717,8 @@
 				</array>
 			</dict>
 		</array>
+		<key>selected</key>
+		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>

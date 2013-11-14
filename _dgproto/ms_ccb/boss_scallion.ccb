@@ -816,9 +816,9 @@
 								<key>displayName</key>
 								<string>boss_ancient2</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a8</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -887,6 +887,8 @@
 										</array>
 									</dict>
 								</array>
+								<key>selected</key>
+								<true/>
 								<key>seqExpanded</key>
 								<true/>
 							</dict>
@@ -1687,9 +1689,9 @@
 								<key>displayName</key>
 								<string>boss_ancient2</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a2</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -2558,9 +2560,9 @@
 								<key>displayName</key>
 								<string>boss_ancient2</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a4</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -3411,9 +3413,9 @@
 								<key>displayName</key>
 								<string>boss_ancient2</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a6</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -3958,9 +3960,9 @@
 								<key>displayName</key>
 								<string>boss_ancient2</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a3</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -4500,9 +4502,9 @@
 								<key>displayName</key>
 								<string>boss_ancient2</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a5</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -5042,9 +5044,9 @@
 								<key>displayName</key>
 								<string>boss_ancient2</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a1</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
@@ -5582,9 +5584,9 @@
 								<key>displayName</key>
 								<string>boss_ancient2</string>
 								<key>memberVarAssignmentName</key>
-								<string></string>
+								<string>a7</string>
 								<key>memberVarAssignmentType</key>
-								<integer>0</integer>
+								<integer>1</integer>
 								<key>properties</key>
 								<array>
 									<dict>
