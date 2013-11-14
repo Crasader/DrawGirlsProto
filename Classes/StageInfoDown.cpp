@@ -270,6 +270,8 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				}
 			}
 			
+			NSDS_SI(mySD->getSilType(), kSDS_SI_level_i, result_data["level"].asInt());
+			
 			NSDS_SS(mySD->getSilType(), kSDS_SI_boss_s, result_data["boss"].asString());
 			NSDS_SS(mySD->getSilType(), kSDS_SI_junior_s, result_data["junior"].asString());
 			

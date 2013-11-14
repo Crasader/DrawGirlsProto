@@ -98,6 +98,7 @@ enum SDS_KEY
 	kSDS_SI_itemOptionSmallAreaPercent_i,
 	kSDS_SI_itemOptionWidePerfectPercent_i,
 	kSDS_SI_level_int1_card_i,
+	kSDS_SI_level_i,
 	kSDS_SI_boss_s,
 	kSDS_SI_junior_s,
 	kSDS_SI_end = 2999,
@@ -527,6 +528,7 @@ private:
 		else if(t_key == kSDS_SI_itemOptionSmallAreaPercent_i)			rv = "itemOption_smallArea_percent";
 		else if(t_key == kSDS_SI_itemOptionWidePerfectPercent_i)		rv = "itemOption_widePerfect_percent";
 		else if(t_key == kSDS_SI_level_int1_card_i)			rv = "level%d_card";
+		else if(t_key == kSDS_SI_level_i)					rv = "level";
 		else if(t_key == kSDS_SI_boss_s)					rv = "boss";
 		else if(t_key == kSDS_SI_junior_s)					rv = "junior";
 		
