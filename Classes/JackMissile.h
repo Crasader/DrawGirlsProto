@@ -836,6 +836,8 @@ private:
 		
 		element_level = jm_type/10 + 1;
 		
+		jm_type = jm_type%10;
+		
 		float particle_cnt = 3 + element_level*3;
 		string particle_string;
 		
