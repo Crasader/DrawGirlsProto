@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "SaveData.h"
+#include "EnumDefine.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -149,10 +150,6 @@ public:
 	CCPoint add_point;
 	CCPoint wideWidthFixTouch(CCPoint t_p){	return ccp(t_p.x*mult_point.x + add_point.x, t_p.y*mult_point.y + add_point.y);	}
 	
-private:
-	SaveData* myDefault;
-	float gold_get_rate;
-	
 	string getKey(DSH_Key t_name)
 	{
 		string return_value;
@@ -188,6 +185,32 @@ private:
 		
 		return return_value;
 	}
+	
+	void resetDSH()
+	{
+		setIntegerForKey(kDSH_Key_savedStar, 1);
+		setIntegerForKey(kDSH_Key_savedGold, 1000);
+		
+		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0);
+		
+		int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=card_take_cnt;i++)
+		{
+			int take_card_number = getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, 0);
+			setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, 0);
+			setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, 0);
+			setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, "");
+		}
+		setIntegerForKey(kDSH_Key_cardTakeCnt, 0);
+		
+		setIntegerForKey(kDSH_Key_allHighScore, 0);
+	}
+	
+private:
+	SaveData* myDefault;
+	float gold_get_rate;
 	
 	void myInit()
 	{

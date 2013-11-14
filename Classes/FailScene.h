@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "AlertEngine.h"
 #include "MyLocalization.h"
+#include "hspConnector.h"
 
 USING_NS_CC;
 
@@ -33,11 +34,18 @@ public:
 private:
 	
 	bool is_menu_enable;
+	bool is_saved_user_data;
+	
+	CCMenu* main_menu;
+	CCMenu* replay_menu;
+	CCMenu* help_menu;
 	
 	void closeReplayPopup();
 	void popupClose();
 	
 	CCPoint getContentPosition(int t_tag);
+	
+	void resultSavedUserData(Json::Value result_data);
 	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);

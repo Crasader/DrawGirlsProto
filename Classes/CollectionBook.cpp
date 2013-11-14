@@ -45,8 +45,34 @@ enum CB_MenuTag{
 	kCB_MT_next,
 	kCB_MT_second,
 	kCB_MT_third,
+	kCB_MT_inputText,
 	kCB_MT_cardBase = 10000
 };
+
+CCPoint CollectionBook::getContentPosition(int t_tag)
+{
+	CCPoint return_value;
+	
+	if(t_tag == kCB_MT_zoom)		return_value = ccp(42, 51);
+	else if(t_tag == kCB_MT_pre)	return_value = ccp(120, 51);
+	else if(t_tag == kCB_MT_next)	return_value = ccp(170, 51);
+	else if(t_tag == kCB_MT_second)	return_value = ccp(93,222);
+	else if(t_tag == kCB_MT_third)	return_value = ccp(163,234);
+	else if(t_tag == kCB_MT_close)	return_value = ccp(220, 30);
+	else if(t_tag == kCB_MT_inputText)	return_value = ccp(115,91);
+	
+	return return_value;
+}
+
+int CollectionBook::getContentRotate(int t_tag)
+{
+	int return_value;
+	
+	if(t_tag == kCB_MT_second)			return_value = 5;
+	else if(t_tag == kCB_MT_third)		return_value = -11;
+	
+	return return_value;
+}
 
 bool CollectionBook::onTextFieldInsertText(cocos2d::CCTextFieldTTF *sender, const char *text, int nLen)
 {
@@ -132,33 +158,40 @@ bool CollectionBook::onTextFieldDetachWithIME(cocos2d::CCTextFieldTTF *sender)
 
 void CollectionBook::setRightPage(CCNode *target, int card_number)
 {
-	CCLabelTTF* r_stage_script = CCLabelTTF::create(mySD->getScriptString(NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_rank_i, card_number)).c_str(), mySGD->getFont().c_str(), 15, CCSizeMake(185, 150), kCCTextAlignmentLeft);
-	r_stage_script->setPosition(ccp(27,175));
+	CCLabelTTF* r_stage_script = CCLabelTTF::create(mySD->getScriptString(NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_rank_i, card_number)).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(180, 60), kCCTextAlignmentLeft);
+	r_stage_script->setPosition(ccp(25,175));
 	r_stage_script->setColor(ccBLACK);
 	r_stage_script->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_script->setAnchorPoint(ccp(0,1));
 	target->addChild(r_stage_script);
+	
+//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 180, 60));
+//	temp_back->setColor(ccBLUE);
+//	temp_back->setOpacity(100);
+//	temp_back->setPosition(ccp(25,175));
+//	temp_back->setAnchorPoint(ccp(0,1));
+//	target->addChild(temp_back);
 	
 	
 	CCMenuItem* r_close_item = CCMenuItemImage::create("sspl_cancel.png", "sspl_cancel.png", this, menu_selector(CollectionBook::menuAction));
 	r_close_item->setTag(kCB_MT_close);
 	
 	CCMenu* r_close_menu = CCMenu::createWithItem(r_close_item);
-	r_close_menu->setPosition(ccp(210, 290));
+	r_close_menu->setPosition(getContentPosition(kCB_MT_close));
 	target->addChild(r_close_menu, 1, kCB_MT_close);
 	
-	CCSprite* n_zoom = CCSprite::create("cardsetting_zoom.png");
-	CCSprite* s_zoom = CCSprite::create("cardsetting_zoom.png");
+	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
+	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
 	s_zoom->setColor(ccGRAY);
 	
 	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBook::menuAction));
 	zoom_item->setTag(kCB_MT_zoom);
 	
 	CCMenu* zoom_menu = CCMenu::createWithItem(zoom_item);
-	zoom_menu->setPosition(ccp(45,35));
+	zoom_menu->setPosition(getContentPosition(kCB_MT_zoom));
 	target->addChild(zoom_menu, 1, kCB_MT_zoom);
 	
-	float mul_value = 0.16f/0.2f;
+	float mul_value = 0.88f;
     int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
     int level_number = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
     if(level_number == 1)
@@ -167,11 +200,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
         {
             CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number+1)->getCString());
             second_img->setScale(mul_value);
-            second_img->setPosition(ccp(44,235));
+			second_img->setRotation(getContentRotate(kCB_MT_second));
+            second_img->setPosition(getContentPosition(kCB_MT_second));
             target->addChild(second_img);
 			
 			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
 			second_item->setTag(kCB_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1));
+			second_item->setRotation(getContentRotate(kCB_MT_second));
 			
 			CCMenu* second_menu = CCMenu::createWithItem(second_item);
 			second_menu->setPosition(second_img->getPosition());
@@ -182,7 +217,8 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
         {
             CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number+2)->getCString());
             third_img->setScale(mul_value);
-            third_img->setPosition(ccp(116,235));
+			third_img->setRotation(getContentRotate(kCB_MT_third));
+            third_img->setPosition(getContentPosition(kCB_MT_third));
             target->addChild(third_img);
             
 //            if(mySD->isAnimationStage(stage_number))
@@ -195,6 +231,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
 			
 			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
 			third_item->setTag(kCB_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+2));
+			third_item->setRotation(getContentRotate(kCB_MT_third));
 			
 			CCMenu* third_menu = CCMenu::createWithItem(third_item);
 			third_menu->setPosition(third_img->getPosition());
@@ -207,11 +244,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
         {
             CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number-1)->getCString());
             first_img->setScale(mul_value);
-            first_img->setPosition(ccp(44,235));
+			first_img->setRotation(getContentRotate(kCB_MT_second));
+            first_img->setPosition(getContentPosition(kCB_MT_second));
             target->addChild(first_img);
 			
 			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
 			second_item->setTag(kCB_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1));
+			second_item->setRotation(getContentRotate(kCB_MT_second));
 			
 			CCMenu* second_menu = CCMenu::createWithItem(second_item);
 			second_menu->setPosition(first_img->getPosition());
@@ -222,7 +261,8 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
         {
             CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number+1)->getCString());
             third_img->setScale(mul_value);
-            third_img->setPosition(ccp(116,235));
+			third_img->setRotation(getContentRotate(kCB_MT_third));
+            third_img->setPosition(getContentPosition(kCB_MT_third));
             target->addChild(third_img);
             
 //            if(mySD->isAnimationStage(stage_number))
@@ -235,6 +275,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
 			
 			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
 			third_item->setTag(kCB_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1));
+			third_item->setRotation(getContentRotate(kCB_MT_third));
 			
 			CCMenu* third_menu = CCMenu::createWithItem(third_item);
 			third_menu->setPosition(third_img->getPosition());
@@ -247,11 +288,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
         {
             CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number-2)->getCString());
             first_img->setScale(mul_value);
-            first_img->setPosition(ccp(44,235));
+			first_img->setRotation(getContentRotate(kCB_MT_second));
+            first_img->setPosition(getContentPosition(kCB_MT_second));
             target->addChild(first_img);
 			
 			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
 			second_item->setTag(kCB_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-2));
+			second_item->setRotation(getContentRotate(kCB_MT_second));
 			
 			CCMenu* second_menu = CCMenu::createWithItem(second_item);
 			second_menu->setPosition(first_img->getPosition());
@@ -262,24 +305,34 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
         {
             CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number-1)->getCString());
             second_img->setScale(mul_value);
-            second_img->setPosition(ccp(116,235));
+			second_img->setRotation(getContentRotate(kCB_MT_third));
+            second_img->setPosition(getContentPosition(kCB_MT_third));
             target->addChild(second_img);
 			
 			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBook::menuAction));
 			third_item->setTag(kCB_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1));
+			third_item->setRotation(getContentRotate(kCB_MT_third));
 			
 			CCMenu* third_menu = CCMenu::createWithItem(third_item);
 			third_menu->setPosition(second_img->getPosition());
 			target->addChild(third_menu, 1, kCB_MT_third);
         }
     }
+	
+	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat("STAGE %d-%d", stage_number, level_number)->getCString(), mySGD->getFont().c_str(), 8);
+	r_stage_label->setPosition(ccp(180, 287));
+	r_stage_label->setColor(ccBLACK);
+	r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
+	r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+	r_stage_label->setAnchorPoint(ccp(0.5,0.5));
+	target->addChild(r_stage_label);
 }
 
 void CollectionBook::setLeftPage(CCNode *target, int card_number)
 {
 	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_rank_i, card_number))->getCString());
-	r_card_img->setScale(0.56);
-	r_card_img->setPosition(ccp(122,149));
+	r_card_img->setScale(0.57);
+	r_card_img->setPosition(ccp(129,161));
 	target->addChild(r_card_img);
 	
 	int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
@@ -291,13 +344,14 @@ void CollectionBook::setLeftPage(CCNode *target, int card_number)
 		r_card_img->addChild(t_ca);
 	}
 	
-	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat("STAGE %d-%d", stage_number, level_number)->getCString(), mySGD->getFont().c_str(), 8);
-	r_stage_label->setPosition(ccp(185, 287));
-	r_stage_label->setColor(ccBLACK);
-	r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
-	r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-	r_stage_label->setAnchorPoint(ccp(0.5,0.5));
-	target->addChild(r_stage_label);
+	CCSprite* left_top_paper = CCSprite::create("diary_paper.png");
+	left_top_paper->setPosition(ccp(46,277));
+	target->addChild(left_top_paper);
+	
+	CCSprite* right_bottom_paper = CCSprite::create("diary_paper.png");
+	right_bottom_paper->setRotation(180);
+	right_bottom_paper->setPosition(ccp(213,44));
+	target->addChild(right_bottom_paper);
 }
 
 // on "init" you need to initialize your instance
@@ -342,10 +396,16 @@ bool CollectionBook::init()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(190,45), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 15);
-    input_text->setPosition(ccp(121,94));
+    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(170,40), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 12);
+    input_text->setPosition(getContentPosition(kCB_MT_inputText));
     input_text->setAnchorPoint(ccp(0.5,0.5));
     recent_right_img->addChild(input_text);
+	
+//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 170, 40));
+//	temp_back->setColor(ccRED);
+//	temp_back->setOpacity(100);
+//	temp_back->setPosition(ccp(115,91));
+//	recent_right_img->addChild(temp_back);
     
     if(input_data != "입력해주세요.")
         input_text->setString(input_data.c_str());
@@ -354,18 +414,26 @@ bool CollectionBook::init()
 	
 	if(is_enable_pageturn)
 	{
-		CCMenuItem* r_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
+		CCSprite* n_pre = CCSprite::create("diary_left.png");
+		CCSprite* s_pre = CCSprite::create("diary_left.png");
+		s_pre->setColor(ccGRAY);
+		
+		CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBook::menuAction));
 		r_pre_item->setTag(kCB_MT_pre);
 		
 		CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
-		r_pre_menu->setPosition(ccp(150, 35));
+		r_pre_menu->setPosition(getContentPosition(kCB_MT_pre));
 		recent_right_img->addChild(r_pre_menu, 1, kCB_MT_pre);
 		
-		CCMenuItem* r_next_item = CCMenuItemImage::create("collectionbook_next.png", "collectionbook_next.png", this, menu_selector(CollectionBook::menuAction));
+		CCSprite* n_next = CCSprite::create("diary_right.png");
+		CCSprite* s_next = CCSprite::create("diary_right.png");
+		s_next->setColor(ccGRAY);
+		
+		CCMenuItem* r_next_item = CCMenuItemSprite::create(n_next, s_next, this, menu_selector(CollectionBook::menuAction));
 		r_next_item->setTag(kCB_MT_next);
 		
 		CCMenu* r_next_menu = CCMenu::createWithItem(r_next_item);
-		r_next_menu->setPosition(ccp(200,35));
+		r_next_menu->setPosition(getContentPosition(kCB_MT_next));
 		recent_right_img->addChild(r_next_menu, 1, kCB_MT_next);
 		
 		
@@ -392,19 +460,27 @@ bool CollectionBook::init()
 		if(after_right_img->getChildByTag(kCB_MT_third))
 			((CCMenu*)after_right_img->getChildByTag(kCB_MT_third))->setEnabled(false);
 		
-		CCMenuItem* a_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
+		CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+		CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+		a_s_pre->setColor(ccGRAY);
+		
+		CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBook::menuAction));
 		a_pre_item->setTag(kCB_MT_pre);
 		
 		CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-		a_pre_menu->setPosition(ccp(150, 35));
+		a_pre_menu->setPosition(getContentPosition(kCB_MT_pre));
 		a_pre_menu->setEnabled(false);
 		after_right_img->addChild(a_pre_menu, 1, kCB_MT_pre);
 		
-		CCMenuItem* a_next_item = CCMenuItemImage::create("collectionbook_next.png", "collectionbook_next.png", this, menu_selector(CollectionBook::menuAction));
+		CCSprite* a_n_next = CCSprite::create("diary_right.png");
+		CCSprite* a_s_next = CCSprite::create("diary_right.png");
+		a_s_next->setColor(ccGRAY);
+		
+		CCMenuItem* a_next_item = CCMenuItemSprite::create(a_n_next, a_s_next, this, menu_selector(CollectionBook::menuAction));
 		a_next_item->setTag(kCB_MT_next);
 		
 		CCMenu* a_next_menu = CCMenu::createWithItem(a_next_item);
-		a_next_menu->setPosition(ccp(200,35));
+		a_next_menu->setPosition(getContentPosition(kCB_MT_next));
 		a_next_menu->setEnabled(false);
 		after_right_img->addChild(a_next_menu, 1, kCB_MT_next);
 		
@@ -599,8 +675,8 @@ void CollectionBook::startNextPage()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(190,45), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 15);
-    input_text->setPosition(ccp(121,94));
+    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(170,40), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 12);
+    input_text->setPosition(getContentPosition(kCB_MT_inputText));
     input_text->setAnchorPoint(ccp(0.5,0.5));
     recent_right_img->addChild(input_text);
     
@@ -680,19 +756,27 @@ void CollectionBook::endNextPage()
 		((CCMenu*)after_right_img->getChildByTag(kCB_MT_third))->setEnabled(false);
 	
 	
-	CCMenuItem* a_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
+	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+	a_s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBook::menuAction));
 	a_pre_item->setTag(kCB_MT_pre);
 	
 	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-	a_pre_menu->setPosition(ccp(150, 35));
+	a_pre_menu->setPosition(getContentPosition(kCB_MT_pre));
 	a_pre_menu->setEnabled(false);
 	after_right_img->addChild(a_pre_menu, 1, kCB_MT_pre);
 	
-	CCMenuItem* a_next_item = CCMenuItemImage::create("collectionbook_next.png", "collectionbook_next.png", this, menu_selector(CollectionBook::menuAction));
+	CCSprite* a_n_next = CCSprite::create("diary_right.png");
+	CCSprite* a_s_next = CCSprite::create("diary_right.png");
+	a_s_next->setColor(ccGRAY);
+	
+	CCMenuItem* a_next_item = CCMenuItemSprite::create(a_n_next, a_s_next, this, menu_selector(CollectionBook::menuAction));
 	a_next_item->setTag(kCB_MT_next);
 	
 	CCMenu* a_next_menu = CCMenu::createWithItem(a_next_item);
-	a_next_menu->setPosition(ccp(200,35));
+	a_next_menu->setPosition(getContentPosition(kCB_MT_next));
 	a_next_menu->setEnabled(false);
 	after_right_img->addChild(a_next_menu, 1, kCB_MT_next);
 	
@@ -720,8 +804,8 @@ void CollectionBook::startPrePage()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(190,45), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 15);
-    input_text->setPosition(ccp(121,94));
+    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(170,40), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 12);
+    input_text->setPosition(getContentPosition(kCB_MT_inputText));
     input_text->setAnchorPoint(ccp(0.5,0.5));
     covered_right_img->addChild(input_text);
     
@@ -738,20 +822,27 @@ void CollectionBook::startPrePage()
 	if(covered_right_img->getChildByTag(kCB_MT_third))
 		((CCMenu*)covered_right_img->getChildByTag(kCB_MT_third))->setEnabled(false);
 	
-		
-	CCMenuItem* a_pre_item = CCMenuItemImage::create("collectionbook_pre.png", "collectionbook_pre.png", this, menu_selector(CollectionBook::menuAction));
+	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+	a_s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBook::menuAction));
 	a_pre_item->setTag(kCB_MT_pre);
 	
 	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-	a_pre_menu->setPosition(ccp(150, 35));
+	a_pre_menu->setPosition(getContentPosition(kCB_MT_pre));
 	a_pre_menu->setEnabled(false);
 	covered_right_img->addChild(a_pre_menu, 1, kCB_MT_pre);
 	
-	CCMenuItem* a_next_item = CCMenuItemImage::create("collectionbook_next.png", "collectionbook_next.png", this, menu_selector(CollectionBook::menuAction));
+	CCSprite* a_n_next = CCSprite::create("diary_right.png");
+	CCSprite* a_s_next = CCSprite::create("diary_right.png");
+	a_s_next->setColor(ccGRAY);
+	
+	CCMenuItem* a_next_item = CCMenuItemSprite::create(a_n_next, a_s_next, this, menu_selector(CollectionBook::menuAction));
 	a_next_item->setTag(kCB_MT_next);
 	
 	CCMenu* a_next_menu = CCMenu::createWithItem(a_next_item);
-	a_next_menu->setPosition(ccp(200,35));
+	a_next_menu->setPosition(getContentPosition(kCB_MT_next));
 	a_next_menu->setEnabled(false);
 	covered_right_img->addChild(a_next_menu, 1, kCB_MT_next);
 	

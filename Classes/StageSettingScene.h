@@ -17,6 +17,7 @@
 #include <deque>
 #include "ItemListViewer.h"
 #include "HeartTime.h"
+#include "hspConnector.h"
 
 USING_NS_CC;
 using namespace std;
@@ -61,6 +62,7 @@ private:
 	
 	void tempAction(CCObject* sender);
 	void realStartAction();
+	void finalStartAction(Json::Value result_data);
 };
 
 #endif /* defined(__DGproto__StageSettingScene__) */

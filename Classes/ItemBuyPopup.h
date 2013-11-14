@@ -63,7 +63,7 @@ private:
 		
 		
 		CCSprite* buy_case = CCSprite::create("buy_item_case.png");
-		buy_case->setPosition(ccpAdd(ccp(270+(clicked_item_number%2)*104, 226-(clicked_item_number/2)*70), ccp(-45,-70)));
+		buy_case->setPosition(ccp(270, 226));
 		addChild(buy_case, kIBP_Z_case);
 		
 		CCSprite* item_img = CCSprite::create(CCString::createWithFormat("item%d.png", item_type)->getCString());

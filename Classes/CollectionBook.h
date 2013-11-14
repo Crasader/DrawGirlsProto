@@ -139,6 +139,9 @@ private:
 	
 	void endCloseTextInput();
 	
+	CCPoint getContentPosition(int t_tag);
+	int getContentRotate(int t_tag);
+	
 	virtual bool onTextFieldInsertText(CCTextFieldTTF* sender, const char* text, int nLen);
 	virtual bool onTextFieldDetachWithIME(CCTextFieldTTF * sender);
 	virtual bool onTextFieldAttachWithIME(CCTextFieldTTF * sender);

@@ -11,7 +11,6 @@
 #include "MyLocalization.h"
 #include "StageSettingScene.h"
 #include "StageImgLoader.h"
-#include "CollectionListScene.h"
 #include "CollectionBook.h"
 #include "PuzzleMapScene.h"
 #include "CardCase.h"
@@ -34,25 +33,6 @@ CCScene* CardSettingScene::scene()
     return scene;
 }
 
-//enum CSS_Zorder{
-//	kCSS_Z_back = 1,
-//	kCSS_Z_selectedImg,
-//	kCSS_Z_content,
-//	kCSS_Z_check
-//};
-//
-//enum CSS_MenuTag{
-//	kCSS_MT_close = 1,
-//	kCSS_MT_align = 2,
-//	kCSS_MT_diary = 3,
-//	kCSS_MT_selectedCard = 4,
-//	kCSS_MT_selectedCheck = 5,
-//	kCSS_MT_checkMark = 6,
-//	kCSS_MT_cardBase = 1000,
-//	kCSS_MT_cardMenuBase = 2000,
-//	kCSS_MT_noCardBase = 3000
-//};
-
 // on "init" you need to initialize your instance
 bool CardSettingScene::init()
 {
@@ -64,6 +44,8 @@ bool CardSettingScene::init()
     }
     
 	setKeypadEnabled(true);
+	
+	inner_card_distance = ccp(72,92);
 	
 	CCSprite* cardsetting_back = CCSprite::create("cardsetting_back.png");
 	cardsetting_back->setPosition(ccp(240,160));
@@ -98,15 +80,15 @@ bool CardSettingScene::init()
 	
 	my_clv->setMaxPositionY();
 	
-	ListViewerScroll* t_lvs = ListViewerScroll::create(CCRectMake(428, 27, 27, 187), my_clv, "card_scroll.png", ccp(440,35), ccp(440,208));
+	ListViewerScroll* t_lvs = ListViewerScroll::create(CCRectMake(428, 27, 27, 232), my_clv, "card_scroll.png", ccp(441,49), ccp(441,233));
 	t_lvs->setTouchEnabled(true);
 	addChild(t_lvs, kCSS_Z_content);
 	
 	my_clv->setScroll(t_lvs);
 	my_clv->setTouchEnabled(true);
 	
-	CCSprite* n_close = CCSprite::create("ui_common_close.png");
-	CCSprite* s_close = CCSprite::create("ui_common_close.png");
+	CCSprite* n_close = CCSprite::create("cardsetting_close.png");
+	CCSprite* s_close = CCSprite::create("cardsetting_close.png");
 	s_close->setColor(ccGRAY);
 	
 	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(CardSettingScene::menuAction));
@@ -165,7 +147,7 @@ void CardSettingScene::createCardList()
 		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
 		
 		check_img = CCSprite::create("card_check.png");
-		check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-start_stage)*82)));
+		check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(card_stage-start_stage)*inner_card_distance.y)));
 		my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 		
 		for(int i=start_stage;i<start_stage+stage_count;i++)
@@ -176,7 +158,7 @@ void CardSettingScene::createCardList()
 				int card_level = j;
 				
 				CLV_Node* t_node = CLV_Node::create(card_stage, card_level, this, menu_selector(CardSettingScene::menuAction),
-													ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((j-1)*65, -(i-start_stage)*82)), my_clv->getViewRect());
+													ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((j-1)*inner_card_distance.x, -(i-start_stage)*inner_card_distance.y)), my_clv->getViewRect());
 				my_clv->addChild(t_node, kCSS_Z_content, t_node->getMyTag());
 			}
 		}
@@ -189,17 +171,15 @@ void CardSettingScene::createCardList()
 		for(int i=0;i<loop_length;i++)
 		{
 			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			int card_level = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
 			
-			CLV_Node* t_node = CLV_Node::create(card_stage, card_level, this, menu_selector(CardSettingScene::menuAction),
-												ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*65, -(i/3)*82)), my_clv->getViewRect());
+			CLV_Node* t_node = CLV_Node::create(card_number, this, menu_selector(CardSettingScene::menuAction),
+												ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)), my_clv->getViewRect());
 			my_clv->addChild(t_node, kCSS_Z_content, t_node->getMyTag());
 			
 			if(selected_card_number == mySGD->getHasGottenCardsDataCardNumber(i))
 			{
 				check_img = CCSprite::create("card_check.png");
-				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*65, -(i/3)*82)));
+				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)));
 				my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 			}
 		}
@@ -210,10 +190,10 @@ CCPoint CardSettingScene::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kCSS_MT_close)			return_value = ccp(450,295);
-	else if(t_tag == kCSS_MT_align)		return_value = ccp(290,250);
-	else if(t_tag == kCSS_MT_diary)		return_value = ccp(403,250);
-	else if(t_tag == kCSS_MT_cardBase)	return_value = ccp(267,180);
+	if(t_tag == kCSS_MT_close)			return_value = ccp(440,290);
+	else if(t_tag == kCSS_MT_align)		return_value = ccp(265,290);
+	else if(t_tag == kCSS_MT_diary)		return_value = ccp(373,290);
+	else if(t_tag == kCSS_MT_cardBase)	return_value = ccp(245,213);
 	
 	return return_value;
 }
@@ -230,6 +210,22 @@ void CardSettingScene::menuAction(CCObject* pSender)
 	
 	if(tag == kCSS_MT_close)
 	{
+		Json::Value param;
+		param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		
+		Json::Value data;
+
+		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=card_take_cnt;i++)
+		{
+			int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+		}
+		
+		Json::FastWriter writer;
+		param["data"] = writer.write(data);
+		hspConnector::get()->command("updateUserData", param, NULL);
+		
 		if(mySGD->before_cardsetting == kSceneCode_PuzzleMapScene)
 			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 		else if(mySGD->before_cardsetting == kSceneCode_StageSetting)
@@ -289,7 +285,8 @@ void CardSettingScene::menuAction(CCObject* pSender)
 			align_list_img->addChild(align_take_menu);
 			align_take_menu->setTouchPriority(kCCMenuHandlerPriority-3);
 			
-			CCSprite* sort_check = CCSprite::create("card_check.png");
+			CCSprite* sort_check = CCSprite::create("cardsetting_check.png");
+			sort_check->setScale(0.5f);
 			align_list_img->addChild(sort_check);
 			
 			CardSortType sort_type = CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType));
@@ -408,7 +405,7 @@ void CardSettingScene::menuAction(CCObject* pSender)
 				int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 				
 				check_img = CCSprite::create("card_check.png");
-				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-start_stage)*82)));
+				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(card_stage-start_stage)*inner_card_distance.y)));
 				my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 			}
 			else
@@ -419,7 +416,7 @@ void CardSettingScene::menuAction(CCObject* pSender)
 					if(clicked_card_number == mySGD->getHasGottenCardsDataCardNumber(i))
 					{
 						check_img = CCSprite::create("card_check.png");
-						check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*65, -(i/3)*82)));
+						check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)));
 						my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 						break;
 					}
@@ -459,8 +456,8 @@ void CardSettingScene::alignChange()
 		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 		
 		selected_img = CCSprite::create("card_selected.png");
-		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-start_stage)*82)));
-		my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
+		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(card_stage-start_stage)*inner_card_distance.y)));
+		my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 	}
 	else
 	{
@@ -471,8 +468,8 @@ void CardSettingScene::alignChange()
 			if(card_number == mySGD->getHasGottenCardsDataCardNumber(i))
 			{
 				selected_img = CCSprite::create("card_selected.png");
-				selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*65, -(i/3)*82)));
-				my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
+				selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)));
+				my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 				break;
 			}
 		}
@@ -507,8 +504,8 @@ void CardSettingScene::removeMountingCard()
 void CardSettingScene::mountingCard(int card_stage, int card_level)
 {
 	selected_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
-	selected_card_img->setScale(0.58);
-	selected_card_img->setPosition(ccp(117,144));
+	selected_card_img->setScale(0.53);
+	selected_card_img->setPosition(ccp(112,143));
 	addChild(selected_card_img, kCSS_Z_content);
 	
 	if(card_level == 3 && mySD->isAnimationStage(card_stage))
@@ -564,8 +561,8 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 		
 		selected_img = CCSprite::create("card_selected.png");
-		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*65, -(card_stage-start_stage)*82)));
-		my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
+		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(card_stage-start_stage)*inner_card_distance.y)));
+		my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 	}
 	else
 	{
@@ -576,8 +573,8 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 			if(card_number == mySGD->getHasGottenCardsDataCardNumber(i))
 			{
 				selected_img = CCSprite::create("card_selected.png");
-				selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*65, -(i/3)*82)));
-				my_clv->addChild(selected_img, kCSS_Z_selectedImg, kCSS_MT_selectedCheck);
+				selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)));
+				my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 				break;
 			}
 		}

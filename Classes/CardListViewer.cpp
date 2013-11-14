@@ -76,7 +76,7 @@ void CardListViewer::setMaxPositionY()
 {
 	int cnt = getChildrenCount()/3;
 	
-	float t_y = cnt*82 + 5;
+	float t_y = cnt*92 + 5;
 	t_y -= view_rect.size.height;
 	
 	if(t_y > 0)
@@ -303,7 +303,11 @@ void CardListViewer::moveAnimation()
 
 void CardListViewer::myInit()
 {
-	view_rect = CCRectMake(237, 22, 189, 203);
+	view_rect = CCRectMake(210, 25, 215, 236);//CCRectMake(237, 22, 189, 203)
+//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 215, 236));
+//	temp_back->setOpacity(150);
+//	temp_back->setPosition(ccp(210+107.5, 25+118));
+//	addChild(temp_back);
 	
 	setPosition(CCPointZero);
 	

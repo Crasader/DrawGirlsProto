@@ -20,6 +20,7 @@
 #include "utf8.h"
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "FromTo.h"
 
 #define ThisClassType remove_pointer<decltype(this)>::type
 using namespace cocos2d;
@@ -202,6 +203,95 @@ public:
 };
 
 
+class KSTimer : public CCNode
+{
+protected:
+	std::function<void(void)> f;
+public:
+	virtual ~KSTimer(){}
+	void after()
+	{
+		removeFromParent();
+		f();
+	}
+	static KSTimer* create(float s, std::function<void(void)> __f)
+	{
+		KSTimer* kt = new KSTimer;
+		kt->init(s, __f);
+		kt->autorelease();
+		return kt;
+	}
+	bool init(float s, std::function<void(void)> __f)
+	{
+		f = __f;
+		runAction(
+							CCSequence::create(CCDelayTime::create(s),
+																 CCCallFunc::create(this, callfunc_selector(ThisClassType::after)), 0)
+							);
+		return true;
+	}
+};
 
+template <typename T>
+class KSGradualValue : public CCNode
+{
+protected:
+	std::function<void(T)> m_f;
+	std::function<void(T)> m_fFinish;
+	T m_a;
+	T m_b;
+	T m_s;
+	FromToWithDuration2<T> fromTo;
+public:
+	virtual ~KSGradualValue(){
+	}
+	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f)
+	{
+		KSGradualValue* newO = new KSGradualValue;
+		newO->init(a, b, s, __f);
+		newO->autorelease();
+		return newO;
+	}
+	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish)
+	{
+		KSGradualValue* newO = new KSGradualValue;
+		newO->init(a, b, s, __f, __finish);
+		newO->autorelease();
+		return newO;
+	}
+	bool init(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish)
+	{
+		
+		m_a = a;
+		m_b = b;
+		m_f = __f;
+		m_fFinish = __finish;
+		
+		fromTo.init(m_a, m_b, s);
+		
+		scheduleUpdate();
+		return true;
+	}
+	bool init(T a, T b, float s, std::function<void(T)> __f)
+	{
+		return init(a, b, s, __f, []{});
+	}
+	void update(float dt)
+	{
+		dt = 1/60.f;
+		T val = fromTo.getValue();
+		m_f(val);
+		bool result = fromTo.step(dt);
+		if(result)
+		{
+		}
+		else
+		{
+			m_fFinish(val);
+			removeFromParent();
+			unscheduleUpdate();
+		}
+	}
+};
 
 #endif
