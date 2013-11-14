@@ -316,7 +316,7 @@ private:
 		mySGD->resetLabels();
 		
 		if(!mySGD->getIsCleared())
-			mySGD->gameOver(myUI->getScore(), myUI->getPercentage(), myUI->getGameTime());
+			mySGD->gameOver(myUI->getScore(), myUI->getPercentage(), myUI->getUseTime());
 		
 		mControl->setVisible(false);
 		
