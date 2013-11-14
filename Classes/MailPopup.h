@@ -74,6 +74,7 @@ public:
 	}
 	
 	CCSprite* gray;
+	Json::Value m_mailList;
 private:
 	
 	CCTableView* mailTableView;
@@ -183,24 +184,21 @@ private:
 	{
 		Json::Value p;
 		//88899626759589034
-		p["receiverMemberNo"]=hspConnector::get()->getHSPMemberNo();
-		p["gameNo"]=hspConnector::get()->hspNo;
-		p["contentType"]=0;
-		p["basisYmdt"]="";
-		p["pageNo"]=1;
-		p["pageSize"]=10;
+		p["memberID"]=hspConnector::get()->getKakaoID();
+		p["type"]=0;
 		
-		hspConnector::get()->command("GetReceivedGameMails2",p,[this](Json::Value r)
+		hspConnector::get()->command("getmessagelist",p,[this](Json::Value r)
 		 {
+			 GraphDogLib::JsonToLog("getmessagelist", r);
 			 this->drawMail(r);
-			
 		 });
 	}
 	
 	
 	void drawMail(Json::Value obj){
-		
-		hspConnector::get()->mailData = obj;
+	
+		m_mailList=obj["list"];
+		//hspConnector::get()->mailData = obj;
 		
 		//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 		
@@ -246,32 +244,38 @@ private:
 		Json::Value* mail = (Json::Value *)obj->getUserData();
 		
 		Json::Value p;
-		int mailNo =(*mail)["mailNo"].asInt();
+		int mailNo =(*mail)["no"].asInt();
 		
-		p["mailNo"]=mailNo;
-		p["targetOption"]="send,recv";
-		p["senderMemberNo"]=(*mail)["sender"]["memberNo"].asInt64();
-		p["receiverMemberNo"]=(*mail)["receiver"]["memberNo"].asInt64();
+		p["no"]=mailNo;
+		p["memberID"]=(*mail)["memberID"].asInt64();
 		
-		hspConnector::get()->command("DeleteGameMail2",p,[this,obj,mailNo](Json::Value r)
+		
+		//삭제요청
+		hspConnector::get()->command("removemessage",p,[this,obj,mailNo](Json::Value r)
 		{
 			Json::Value newMailList;
 			
-			if(r["header"].get("status","1").asInt()==0){
+			if(r.get("state","fail").asString()=="ok"){
 			
 				
-				for(int i=0;i<hspConnector::get()->mailData["mailList"].size();i++){
-					if(hspConnector::get()->mailData["mailList"][i]["mailNo"].asInt()!=mailNo){
-						newMailList.append(hspConnector::get()->mailData["mailList"][i]);
+				
+				//테이블에서 없어진것 없애기
+				for(int i=0;i<m_mailList.size();i++){
+					if(m_mailList[i]["no"].asInt()!=mailNo){
+						newMailList.append(m_mailList[i]);
 					}
 				}
 				
-				hspConnector::get()->mailData["mailList"]=newMailList;
 				
+				//테이블 리로드
+				m_mailList=newMailList;
+				this->mailTableView->reloadData();
+				
+				//하트올리기
 				if(myDSH->getIntegerForKey(kDSH_Key_heartCnt)<5){
 					myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 				}
-				this->mailTableView->reloadData();
+				
 			}
 		});
 	
@@ -289,7 +293,7 @@ private:
 		CCControlButton* sendBtn;
 		CCLabelTTF* score;
 		CCLabelTTF* rank;
-		Json::Value* mail = hspConnector::get()->getMailByIndex(idx);
+		Json::Value *mail = &m_mailList[idx]; //hspConnector::get()->getMailByIndex(idx);
 		
 		if(!cell){
 			cell = new CCTableViewCell();
@@ -344,9 +348,9 @@ private:
 		
 		sendBtn->setUserData((void *)mail);
 		
-		title->setString((*mail)["sentTimestamp"].asString().c_str());
-		score->setString((*mail)["sender"]["nickname"].asString().c_str());
-		rank->setString((*mail)["contentType"].asString().c_str());
+		title->setString((*mail)["regDate"].asString().c_str());
+		score->setString((*mail)["sender"].asString().c_str());
+		rank->setString((*mail)["type"].asString().c_str());
 		
 		return cell;
 	}
@@ -369,7 +373,7 @@ private:
 	}
 	
     virtual unsigned int numberOfCellsInTableView(CCTableView *table){
-		return hspConnector::get()->mailData["mailList"].size();
+		return m_mailList.size();
 	}
 	
 	

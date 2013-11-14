@@ -237,8 +237,12 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 		cmdQueue.commands[buf] = cmd;
 		cmdCollect.push_back(cmd);
 	}
+	
 	jsonTotalCmd["hspMemberNo"]=getHSPMemberNo();
 	jsonTotalCmd["kakaoMemberID"]=getKakaoMemberID();
+	jsonTotalCmd["memberID"]=getKakaoMemberID();
+	
+	
 	//ostringstream oss2;
 	//oss2 << jsonTotalCmd;
 	cmdQueue.commandStr = GraphDogLib::JsonObjectToString(jsonTotalCmd); //oss2.str();

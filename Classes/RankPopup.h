@@ -74,6 +74,7 @@ public:
 	}
 	
 	CCSprite* gray;
+	Json::Value m_scoreList;
 private:
 	
 	CCTableView* rankTableView;
@@ -190,65 +191,89 @@ private:
 		//step1 카카오친구목록 로드
 		hspConnector::get()->kLoadFriends(p,[](Json::Value fInfo)
 		{
-		  CCLog("1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-		  int delekey = fInfo["callback"]["delekey"].asInt();
+			CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
+			int delekey = fInfo["callback"]["delekey"].asInt();
+			  
+				
+			Json::Value appfriends = fInfo["app_friends_info"];
+			appfriends.append(hspConnector::get()->myKakaoInfo);
+			Json::Value p;
+			  
+			for(int i=0; i<appfriends.size();i++){
+				p["memberIDList"].append(appfriends[i]["user_id"].asString());
+				
+			}
 		  
-		  Json::Value p;
-		  Json::Value appfriends = fInfo["app_friends_info"];
-		  p["oauthProvider"]="kakao";
-		  p["serviceDomain"]="KAKAOGAME";
-		  p["gameNo"]=hspConnector::get()->hspNo;
-		  
-		  for(int i=0; i<appfriends.size();i++){
-			  p["oauthIdList"].append(appfriends[i]["user_id"].asString());
-		  }
-		  
-		  //step2 카카오ID목록을 이용하여 HSPID목록 만듬
-			hspConnector::get()->command("GetMemberNoListByOauthIdList",p,[delekey](Json::Value obj)
+			p["memberIDList"].append(hspConnector::get()->getKakaoID());
+			
+			//step2 위클리스코어 목록 읽어옴
+			hspConnector::get()->command("getweeklyscorelist",p,[delekey,appfriends](Json::Value obj)
 			{										   
-			   CCLog("2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
-			   Json::Value p;
-			   Json::Value idMap = obj["memberNoMap"];
-				idMap[hspConnector::get()->getKakaoID()]=hspConnector::get()->getHSPMemberNo();
-			   p["past"]=false;
-			   p["rankingKey"]="rankingFactor-3,rankingPeriod-77";
-			   p["requesterMemberNo"]=hspConnector::get()->getHSPMemberNo();
-			   p["gameNo"]=hspConnector::get()->hspNo;
-			   Json::Value::Members m = idMap.getMemberNames();
-			   for (auto iter = m.begin(); iter!=m.end(); ++iter) {
-				   string key = (string)*iter;
-				   p["memberNoList"].append(idMap[key].asInt64());
-			   }
-			   
-			   //step3 HSP ID목록으로 게임랭킹 뽑기
-			   hspConnector::get()->command("GetRankingListByMemberNoList2",p,[delekey,idMap](Json::Value obj)
-				{
-					
-					Json::Value friendInfo;
-					Json::Value::Members m = idMap.getMemberNames();
-					for (auto iter = m.begin(); iter!=m.end(); ++iter) {
-						string kakaoID = (string)*iter;
-						for(int i=0; i<obj["rankingList"].size();i++){
-							if(obj["rankingList"][i]["profile"]["memberNo"].asInt64() == idMap[kakaoID].asInt64()){
-								obj["rankingList"][i]["profile"]["kakaoID"] = kakaoID;
-								friendInfo[kakaoID]=obj["rankingList"][i];
-								//hspConnector::get()->frineds[i]["hspNo"]=obj["memberNoMap"][key].asInt64();
-								break;
-							}
-						}
-					}
-					
-					
-					hspConnector::get()->idMap = idMap;
-					hspConnector::get()->appFriends = friendInfo;
-					
-					//CCLog("%s",GraphDogLib::JsonObjectToString(obj).c_str());
-					jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-					
-					delsel.func(obj);
-					
-					jsonDelegator::get()->remove(delekey);
-				});
+				CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
+				
+				//step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
+				GraphDogLib::JsonToLog("friend1", appfriends);
+				Json::Value scorelist;
+				
+				for(unsigned int i=0;i<appfriends.size();i++){
+					string mid = appfriends[i]["user_id"].asString();
+					scorelist[mid]=appfriends[i];
+				}
+				
+				for(unsigned int j=0;j<obj["list"].size();j++){
+					string mid = obj["list"][j]["memberID"].asString();
+					scorelist[mid]["scoreInfo"]=obj["list"][j];
+				}
+				GraphDogLib::JsonToLog("result", scorelist);
+				
+				//결과 돌려줌
+				jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
+				
+				delsel.func(scorelist);
+				
+				jsonDelegator::get()->remove(delekey);
+//			   Json::Value p;
+//			   Json::Value idMap = obj["memberNoMap"];
+//				idMap[hspConnector::get()->getKakaoID()]=hspConnector::get()->getHSPMemberNo();
+//			   p["past"]=false;
+//			   p["rankingKey"]="rankingFactor-3,rankingPeriod-77";
+//			   p["requesterMemberNo"]=hspConnector::get()->getHSPMemberNo();
+//			   p["gameNo"]=hspConnector::get()->hspNo;
+//			   Json::Value::Members m = idMap.getMemberNames();
+//			   for (auto iter = m.begin(); iter!=m.end(); ++iter) {
+//				   string key = (string)*iter;
+//				   p["memberNoList"].append(idMap[key].asInt64());
+//			   }
+//			   
+//			   //step3 HSP ID목록으로 게임랭킹 뽑기
+//			   hspConnector::get()->command("GetRankingListByMemberNoList2",p,[delekey,idMap](Json::Value obj)
+//				{
+//					
+//					Json::Value friendInfo;
+//					Json::Value::Members m = idMap.getMemberNames();
+//					for (auto iter = m.begin(); iter!=m.end(); ++iter) {
+//						string kakaoID = (string)*iter;
+//						for(int i=0; i<obj["rankingList"].size();i++){
+//							if(obj["rankingList"][i]["profile"]["memberNo"].asInt64() == idMap[kakaoID].asInt64()){
+//								obj["rankingList"][i]["profile"]["kakaoID"] = kakaoID;
+//								friendInfo[kakaoID]=obj["rankingList"][i];
+//								//hspConnector::get()->frineds[i]["hspNo"]=obj["memberNoMap"][key].asInt64();
+//								break;
+//							}
+//						}
+//					}
+//					
+//					
+//					hspConnector::get()->idMap = idMap;
+//					hspConnector::get()->appFriends = friendInfo;
+//					
+//					//CCLog("%s",GraphDogLib::JsonObjectToString(obj).c_str());
+//					jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
+//					
+//					delsel.func(obj);
+//					
+//					jsonDelegator::get()->remove(delekey);
+//				});
 										   
 		});
 		  
@@ -259,7 +284,7 @@ private:
 	
 	
 	void drawRank(Json::Value obj){
-		
+		m_scoreList=obj;
 		//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 		
 		//320x320 테이블 뷰 생성
@@ -302,7 +327,6 @@ private:
 	
 	void sendHeart(CCControlButton *obj, CCControlEvent event){
 		Json::Value* member = (Json::Value *)obj->getUserData();
-
 		
 		////////////////////////////////
 		// 쪽지보내기 - HSP
@@ -311,13 +335,12 @@ private:
 		
 		Json::Value p;
 		p["content"]="하트받으세용";
-		p["receiverMemberNo"]=(*member)["profile"]["memberNo"].asInt64();
-		p["senderMemberNo"]=hspConnector::get()->getHSPMemberNo();
-		p["contentType"]=1;
-		p["gameNo"]=hspConnector::get()->hspNo;
+		p["receiverMemberID"]=(*member)["user_id"].asString();
+		p["senderMemberID"]=hspConnector::get()->getKakaoID();
+		p["type"]=1;
 		
 		
-		hspConnector::get()->command("SendGameMail", p, [member,this](Json::Value r)
+		hspConnector::get()->command("sendMessage", p, [member,this](Json::Value r)
 		 {
 			 
 			 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
@@ -325,22 +348,14 @@ private:
 			 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 			 
 			 
-			 GraphDogLib::JsonToLog("sendGameMail", r);
-			 Json::Value p;
-			 //88899626759589034
-			 p["receiverMemberNo"]=r["mail"]["receiver"]["memberNo"].asInt64();
-			 p["gameNo"]=hspConnector::get()->hspNo;
-			 p["contentType"]=0;
-			 p["basisYmdt"]="";
-			 p["pageNo"]=1;
-			 p["pageSize"]=10;
+			 GraphDogLib::JsonToLog("sendMessage", r);
 			 
 			 
 			 ////////////////////////////////
 			 // 쪽지보내기 - 카카오
 			 ////////////////////////////////
 			 Json::Value p2;
-			 p2["receiver_id"] = (*member)["profile"]["kakaoID"].asString();
+			 p2["receiver_id"] = (*member)["user_id"].asString();
 			 p2["message"] = "하트받으세용!";
 			 hspConnector::get()->kSendMessage(p2, [this](Json::Value r)
 			 {
@@ -363,7 +378,9 @@ private:
 		CCControlButton* sendBtn;
 		CCLabelTTF* score;
 		CCLabelTTF* rank;
-		Json::Value* member = hspConnector::get()->getFriendByIndex(idx);
+		Json::Value::Members m = m_scoreList.getMemberNames();
+		auto iter = m.begin()+idx;
+		Json::Value* member = &m_scoreList[(string)*iter];
 		
 		if(!cell){
 			cell = new CCTableViewCell();
@@ -416,14 +433,15 @@ private:
 		
 		
 		sendBtn->setUserData((void *)member);
-		if((*member)["profile"]["memberNo"].asInt64()==hspConnector::get()->getHSPMemberNo()){
+		//sendBtn->setUserData((void *)&member);
+		if((*member)["user_id"].asString()==hspConnector::get()->getKakaoID()){
 			sendBtn->setVisible(false);
 		}else{
 			sendBtn->setVisible(true);
 		}
-		title->setString((*member)["profile"]["nickname"].asString().c_str());
-		score->setString((*member)["rankingScore"].asString().c_str());
-		rank->setString((*member)["rankingGrade"].asString().c_str());
+		title->setString((*member)["nickname"].asString().c_str());
+		score->setString((*member)["scoreInfo"].get("score","0").asString().c_str());
+		//rank->setString((*member)["rankingGrade"].asString().c_str());
 		
 		return cell;
 	}
@@ -446,7 +464,7 @@ private:
 	}
 	
     virtual unsigned int numberOfCellsInTableView(CCTableView *table){
-		return hspConnector::get()->appFriends.size();
+		return m_scoreList.size();
 	}
 	
 	
