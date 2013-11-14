@@ -7,8 +7,6 @@
 //
 
 #include "ClearScene.h"
-//#include "StartingScene.h"
-//#include "WorldMapScene.h"
 #include "PuzzleMapScene.h"
 #include "ScreenSide.h"
 #include "StageImgLoader.h"
@@ -16,9 +14,14 @@
 #include "SilhouetteData.h"
 #include "LogData.h"
 #include "CardCase.h"
+#include "CountingBMLabel.h"
+#include "StageSettingScene.h"
+#include "TakeCardPopup.h"
 
 typedef enum tMenuTagClearScene{
-	kMT_CS_ok = 1
+	kMT_CS_ok = 1,
+	kMT_CS_replay,
+	kMT_CS_noti
 }MenuTagClearScene;
 
 typedef enum tZorderClearScene{
@@ -92,28 +95,41 @@ bool ClearScene::init()
 	clear_back->setPosition(ccp(240,160));
 	addChild(clear_back, kZ_CS_back);
 	
+	CCSprite* top_case = CCSprite::create("test_ui_top.png");
+	top_case->setAnchorPoint(ccp(0.5f,1.f));
+	top_case->setPosition(ccp(240,320.f));//(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
+	addChild(top_case, kZ_CS_img);
+	
+	CountingBMLabel* total_gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f);
+	total_gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
+	top_case->addChild(total_gold_label);
+	
+	mySGD->setGoldLabel(total_gold_label);
+	
+	heart_time = HeartTime::create();
+	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
+	top_case->addChild(heart_time);
+	
 	CCSprite* title = CCSprite::create("ending_clear.png");
-	title->setPosition(ccp(360,280));
+	title->setPosition(ccp(137,237));
 	addChild(title, kZ_CS_img);
 	
+	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySD->getSilType())->getCString(), mySGD->getFont().c_str(), 18);
+	stage_label->setAnchorPoint(ccp(1.f,0.5f));
+	stage_label->setPosition(ccp(330,253));
+	addChild(stage_label, kZ_CS_img);
+	
+	
+	///////////////////////////// 딤드 로 팝업 띄움
 	int stage_number = mySD->getSilType();
 	int take_level;
 	if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
 	else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
 	else												take_level = 1;
 	
-	CCSprite* take_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, take_level)->getCString());
-	take_card->setScale(0.65);
-	take_card->setPosition(ccp(130,160));
-	addChild(take_card, kZ_CS_img);
-	
-	if(take_level == 3 && mySD->isAnimationStage())
-	{
-		CCSize ani_size = mySD->getAnimationCutSize();
-		CCSprite* take_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, take_level)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
-		take_ani->setPosition(mySD->getAnimationPosition());
-		take_card->addChild(take_ani);
-	}
+	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level);
+	addChild(t_popup, kZ_CS_popup);
+	/////////////////////////////////////////////
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
 	{
@@ -151,10 +167,6 @@ bool ClearScene::init()
 		}
 	}
 	
-	CardCase* t_case = CardCase::create(stage_number, take_level);
-	t_case->setPosition(CCPointZero);
-	take_card->addChild(t_case);
-	
 	myLog->addLog(kLOG_puzzleAchievementMinimum_i, -1, 100*minimum_count/stage_count);
 	myLog->addLog(kLOG_puzzleAchievementMaximum_i, -1, 100*maximum_count/stage_count);
 	
@@ -165,33 +177,44 @@ bool ClearScene::init()
 	for(int i=0;i<take_level;i++)
 	{
 		CCSprite* star = CCSprite::create("ending_star.png");
-		star->setPosition(ccp(308+i*46,228));
+		star->setAnchorPoint(ccp(0.5,0));
+		if(i == 0)
+			star->setPosition(ccp(135,174));
+		else if(i == 1)
+		{
+			star->setScale(0.8f);
+			star->setPosition(ccp(92,174));
+		}
+		else if(i == 2)
+		{
+			star->setScale(0.8f);
+			star->setPosition(ccp(176,174));
+		}
+		
 		addChild(star, kZ_CS_img);
 	}
 	
-	score_label = CCLabelBMFont::create("0", "bb_white_font.fnt");
-	score_label->setAnchorPoint(ccp(1.0,0.5));
-	score_label->setPosition(ccp(450,171));
+	score_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
+	score_label->setAnchorPoint(ccp(0.5,0.5));
+	score_label->setPosition(ccp(175,147));
 	score_label->setAlignment(kCCTextAlignmentRight);
 	addChild(score_label, kZ_CS_img);
 	
+	gold_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
+	gold_label->setAnchorPoint(ccp(0.5,0.5));
+	gold_label->setPosition(ccp(175,117));
+	gold_label->setAlignment(kCCTextAlignmentRight);
+	addChild(gold_label, kZ_CS_img);
 	
-	percentage_label = CCLabelBMFont::create("0.0", "bb_white_font.fnt");
-	percentage_label->setAnchorPoint(ccp(1.0,0.5));
-	percentage_label->setPosition(ccp(450,138));
-	percentage_label->setAlignment(kCCTextAlignmentRight);
-	addChild(percentage_label, kZ_CS_img);
-	
-	
-	time_label = CCLabelBMFont::create("0", "bb_white_font.fnt");
-	time_label->setAnchorPoint(ccp(1.0,0.5));
-	time_label->setPosition(ccp(450,105));
+	time_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
+	time_label->setAnchorPoint(ccp(0.5,0.5));
+	time_label->setPosition(ccp(175,88));
 	time_label->setAlignment(kCCTextAlignmentRight);
 	addChild(time_label, kZ_CS_img);
 	
 	
-	CCSprite* n_ok = CCSprite::create("ending_ok.png");
-	CCSprite* s_ok = CCSprite::create("ending_ok.png");
+	CCSprite* n_ok = CCSprite::create("ending_main.png");
+	CCSprite* s_ok = CCSprite::create("ending_main.png");
 	s_ok->setColor(ccGRAY);
 	
 	CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(ClearScene::menuAction));
@@ -199,8 +222,22 @@ bool ClearScene::init()
 	
 	ok_menu = CCMenu::createWithItem(ok_item);
 	ok_menu->setVisible(false);
-	ok_menu->setPosition(ccp(360,50));
+	ok_menu->setPosition(ccp(330,33));
 	addChild(ok_menu, kZ_CS_menu);
+	
+	
+	CCSprite* n_replay = CCSprite::create("ending_replay.png");
+	CCSprite* s_replay = CCSprite::create("ending_replay.png");
+	s_replay->setColor(ccGRAY);
+	
+	CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ClearScene::menuAction));
+	replay_item->setTag(kMT_CS_replay);
+	
+	replay_menu = CCMenu::createWithItem(replay_item);
+	replay_menu->setVisible(false);
+	replay_menu->setPosition(ccp(150,33));
+	addChild(replay_menu, kZ_CS_menu);
+	
 	
 	is_menu_enable = true;
 	
@@ -248,6 +285,7 @@ void ClearScene::resultSavedUserData(Json::Value result_data)
 		is_saved_user_data = true;
 		
 		ok_menu->setVisible(true);
+		replay_menu->setVisible(true);
 	}
 	else
 	{
@@ -333,49 +371,49 @@ void ClearScene::stopScoreAnimation()
 {
 	unschedule(schedule_selector(ClearScene::scoreAnimation));
 	score_label->setString(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString());
-	startPercentageAnimation();
+	startGoldAnimation();
 }
 
-void ClearScene::startPercentageAnimation()
+void ClearScene::startGoldAnimation()
 {
-	keep_percentage = mySGD->getPercentage()*100.f;
-	decrease_percentage = keep_percentage;
-	increase_percentage = 0.f;
-	schedule(schedule_selector(ClearScene::percentageAnimation));
+	keep_gold = mySGD->getStageGold();
+	decrease_gold = keep_gold;
+	increase_gold = 0.f;
+	schedule(schedule_selector(ClearScene::goldAnimation));
 }
 
-void ClearScene::percentageAnimation(float dt)
+void ClearScene::goldAnimation(float dt)
 {
-	if(decrease_percentage > 0)
+	if(decrease_gold > 0)
 	{
-		int decreaseUnit = keep_percentage / 0.5f * dt;
+		int decreaseUnit = keep_gold / 0.5f * dt;
 		
-		if(decrease_percentage < decreaseUnit)
+		if(decrease_gold < decreaseUnit)
 		{
-			increase_percentage += decrease_percentage;
-			decrease_percentage = 0;
+			increase_gold += decrease_gold;
+			decrease_gold = 0;
 		}
 		else {
 			if(decreaseUnit <= 0)
 			{
-				increase_percentage	+= decrease_percentage;
-				decrease_percentage = 0;
+				increase_gold += decrease_gold;
+				decrease_gold = 0;
 			}
 			else {
-				decrease_percentage -= decreaseUnit;
-				increase_percentage	+= decreaseUnit;
+				decrease_gold -= decreaseUnit;
+				increase_gold	+= decreaseUnit;
 			}
 		}
-		percentage_label->setString(CCString::createWithFormat("%.1f",increase_percentage)->getCString());
+		gold_label->setString(CCString::createWithFormat("%.0f",increase_gold)->getCString());
 	}
 	else
-		stopPercentageAnimation();
+		stopGoldAnimation();
 }
 
-void ClearScene::stopPercentageAnimation()
+void ClearScene::stopGoldAnimation()
 {
-	unschedule(schedule_selector(ClearScene::percentageAnimation));
-	percentage_label->setString(CCString::createWithFormat("%.1f", mySGD->getPercentage()*100.f)->getCString());
+	unschedule(schedule_selector(ClearScene::goldAnimation));
+	gold_label->setString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString());
 	startTimeAnimation();
 }
 
@@ -433,11 +471,17 @@ void ClearScene::menuAction(CCObject* pSender)
 	int tag = ((CCNode*)pSender)->getTag();
 	
 	if(tag == kMT_CS_ok)
-	{	
-		
+	{
+		mySGD->resetLabels();
 		realEnd();
 	}
+	else if(tag == kMT_CS_replay)
+	{
+		mySGD->resetLabels();
+		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
+	}
 }
+
 
 void ClearScene::realEnd()
 {

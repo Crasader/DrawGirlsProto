@@ -13,6 +13,7 @@
 #include "AlertEngine.h"
 #include "MyLocalization.h"
 #include "hspConnector.h"
+#include "HeartTime.h"
 
 USING_NS_CC;
 
@@ -39,17 +40,20 @@ private:
 	bool is_saved_user_data;
 	
 	CCMenu* ok_menu;
+	CCMenu* replay_menu;
+	
+	HeartTime* heart_time;
 	
 	CCLabelBMFont* score_label;
-	CCLabelBMFont* percentage_label;
+	CCLabelBMFont* gold_label;
 	CCLabelBMFont* time_label;
 	
-	float keep_percentage;
-	float decrease_percentage;
-	float increase_percentage;
-	void startPercentageAnimation();
-	void percentageAnimation(float dt);
-	void stopPercentageAnimation();
+	float keep_gold;
+	float decrease_gold;
+	float increase_gold;
+	void startGoldAnimation();
+	void goldAnimation(float dt);
+	void stopGoldAnimation();
 	
 	float keep_score;
 	float decrease_score;
