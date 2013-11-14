@@ -8,6 +8,7 @@
 
 #include "TitleScene.h"
 #include "StarGoldData.h"
+#include "TakeCardPopup.h"
 
 CCScene* TitleScene::scene()
 {
