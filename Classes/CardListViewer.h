@@ -113,7 +113,7 @@ private:
 				bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0;
 				
 				GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
-																											  NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_rank_i, card_number))->getCString()));
+																											  NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_grade_i, card_number))->getCString()));
 				t_card->setScale(0.92f);
 				t_card->setPosition(CCPointZero);
 				addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+card_number);
@@ -126,7 +126,7 @@ private:
 				addChild(t_no, kCSS_Z_content);
 				
 				CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
-																						 mySD->getCardDurability(NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_rank_i, card_number)))->getCString(),
+																						 mySD->getCardDurability(NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_grade_i, card_number)))->getCString(),
 															  mySGD->getFont().c_str(), 10);
 				t_durability->setAnchorPoint(ccp(0.5f,0.5f));
 				t_durability->setColor(ccBLACK);

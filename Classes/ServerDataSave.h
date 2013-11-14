@@ -104,6 +104,7 @@ enum SDS_KEY
 	
 	kSDS_CI_base = 3000,
 	kSDS_CI_int1_rank_i,
+	kSDS_CI_int1_grade_i,
 	kSDS_CI_int1_durability_i,
 	kSDS_CI_int1_theme_i,
 	kSDS_CI_int1_stage_i,
@@ -528,7 +529,8 @@ private:
 		else if(t_key == kSDS_SI_boss_s)					rv = "boss";
 		else if(t_key == kSDS_SI_junior_s)					rv = "junior";
 		
-		else if(t_key == kSDS_CI_int1_rank_i)						rv = "%d_rank";
+		else if(t_key == kSDS_CI_int1_rank_i)						rv = "%d_grade";
+		else if(t_key == kSDS_CI_int1_grade_i)						rv = "%d_rank";
 		else if(t_key == kSDS_CI_int1_durability_i)					rv = "%d_durability";
 		else if(t_key == kSDS_CI_int1_theme_i)						rv = "%d_theme";
 		else if(t_key == kSDS_CI_int1_stage_i)						rv = "%d_stage";

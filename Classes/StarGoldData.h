@@ -57,8 +57,8 @@ enum FailCode{
 enum CardSortType{
 	kCST_default = 0,
 	kCST_take,
-	kCST_gradeUp,
-	kCST_gradeDown
+	kCST_gradeUp, // rank
+	kCST_gradeDown // rank
 };
 
 class CardSortInfo{
@@ -66,6 +66,7 @@ public:
 	int card_number;
 	int take_number;
 	int grade;
+	int rank;
 };
 
 #define SGD_KEY	0xD9
@@ -478,23 +479,23 @@ public:
 			
 			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 		}
-		else if(t_type == kCST_gradeUp)
+		else if(t_type == kCST_gradeUp) // rank
 		{
 			struct t_CardSortGradeUp{
 				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 				{
-					return a.grade > b.grade;
+					return a.rank > b.rank;
 				}
 			} pred;
 			
 			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 		}
-		else if(t_type == kCST_gradeDown)
+		else if(t_type == kCST_gradeDown) // rank
 		{
 			struct t_CardSortGradeDown{
 				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 				{
-					return a.grade < b.grade;
+					return a.rank < b.rank;
 				}
 			} pred;
 			
@@ -508,7 +509,8 @@ public:
 		CardSortInfo t_info;
 		t_info.card_number = card_number;
 		t_info.take_number = take_number;
-		t_info.grade = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
+		t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number);
+		t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
 		has_gotten_cards.push_back(t_info);
 		
 		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
@@ -544,6 +546,17 @@ public:
 		keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
 	}
 	
+	int isHasGottenCards(int t_stage, int t_grade)
+	{
+		for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
+		{
+			if(NSDS_GI(kSDS_CI_int1_stage_i, (*i).card_number) == t_stage && (*i).grade == t_grade)
+				return (*i).card_number;
+		}
+		
+		return 0;
+	}
+	
 	void resetHasGottenCards()
 	{
 		has_gotten_cards.clear();
@@ -557,7 +570,8 @@ public:
 				CardSortInfo t_info;
 				t_info.card_number = card_number;
 				t_info.take_number = take_number;
-				t_info.grade = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
+				t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+				t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
 				has_gotten_cards.push_back(t_info);
 			}
 		}

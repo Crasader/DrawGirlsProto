@@ -58,24 +58,15 @@ private:
 	vector<CopyFile> cf_list;
 	vector<DownloadFile> ef_list;
 	
+	CCObject* save_target;
+	SEL_CallFunc save_delegate;
+	
 	void startGetPuzzleList()
 	{
 		Json::Value param;
 		param["puzzlelistversion"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 		param["eventstagelistversion"] = NSDS_GI(kSDS_GI_eventListVersion_i);
 		hspConnector::get()->command("getpuzzlelist", param, json_selector(this, TitleScene::resultGetPuzzleList));
-		
-//		vector<CommandParam> cmds;
-//		Json::Value param1;
-//		param1["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
-//		CommandParam cmd1 = CommandParam("getpuzzlelist", param1, json_selector(this, TitleScene::resultGetPuzzleList));
-//		cmds.push_back(cmd1);
-//		
-//		Json::Value param2;
-//		param2["version"] = NSDS_GI(kSDS_GI_eventListVersion_i);
-//		CommandParam cmd2 = CommandParam("geteventstagelist", param2, json_selector(this, TitleScene::resultGetEventStageList));
-//		cmds.push_back(cmd2);
-//		hspConnector::get()->command(cmds);
 	}
 	
 	void resultLogin(Json::Value result_data)
@@ -89,11 +80,7 @@ private:
 				myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 			}
 			
-			state_label->setString("유저 정보를 가져오는 ing...");
-			
-			Json::Value param;
-			param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
-			hspConnector::get()->command("getUserData", param, json_selector(this, TitleScene::resultGetUserData));
+			startGetUserData();
 		}
 		else
 		{
@@ -104,6 +91,15 @@ private:
 		}
 	}
 	
+	void startGetUserData()
+	{
+		state_label->setString("유저 정보를 가져오는 ing...");
+		
+		Json::Value param;
+		param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		hspConnector::get()->command("getUserData", param, json_selector(this, TitleScene::resultGetUserData));
+	}
+	
 	void resultGetUserData(Json::Value result_data)
 	{
 		CCLog("resultGetUserData data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
@@ -111,19 +107,29 @@ private:
 		if(result_data["state"].asString() == "ok")
 		{
 			if(result_data["data"].isNull())
-			{
 				startSaveUserData();
-			}
 			else
-			{
 				resultSaveUserData(result_data);
-			}
 		}
 		else
 		{
-			Json::Value param;
-			param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
-			hspConnector::get()->command("getUserData", param, json_selector(this, TitleScene::resultGetUserData));
+			save_target = this;
+			save_delegate = callfunc_selector(TitleScene::startGetUserData);
+			
+			state_label->setString("유저 정보를 가져오는데 실패하였습니다.");
+			
+			CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+			CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+			s_replay->setColor(ccGRAY);
+			
+			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+			replay_item->setTag(kTitle_MT_replay);
+			
+			CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+			replay_menu->setPosition(ccp(240,160));
+			addChild(replay_menu, 0, kTitle_MT_replay);
+			
+			is_menu_enable = true;
 		}
 	}
 	
@@ -183,11 +189,7 @@ private:
 			
 			if(card_data_load_list.size() > 0)
 			{
-				state_label->setString("카드 정보를 받아오는 ing...");
-				Json::Value param;
-				for(int i=0;i<card_data_load_list.size();i++)
-					param["noList"][i] = card_data_load_list[i];
-				hspConnector::get()->command("getcardlist", param, json_selector(this, TitleScene::resultLoadedCardData));
+				startGetCardsInfo();
 			}
 			else
 			{
@@ -197,8 +199,33 @@ private:
 		}
 		else
 		{
-			startSaveUserData();
+			save_target = this;
+			save_delegate = callfunc_selector(TitleScene::startSaveUserData);
+			
+			state_label->setString("유저 정보를 초기화 하는데 실패하였습니다.");
+			
+			CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+			CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+			s_replay->setColor(ccGRAY);
+			
+			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+			replay_item->setTag(kTitle_MT_replay);
+			
+			CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+			replay_menu->setPosition(ccp(240,160));
+			addChild(replay_menu, 0, kTitle_MT_replay);
+			
+			is_menu_enable = true;
 		}
+	}
+	
+	void startGetCardsInfo()
+	{
+		state_label->setString("카드 정보를 받아오는 ing...");
+		Json::Value param;
+		for(int i=0;i<card_data_load_list.size();i++)
+			param["noList"][i] = card_data_load_list[i];
+		hspConnector::get()->command("getcardlist", param, json_selector(this, TitleScene::resultLoadedCardData));
 	}
 	
 	void resultLoadedCardData(Json::Value result_data)
@@ -212,11 +239,12 @@ private:
 			{
 				Json::Value t_card = cards[i];
 				NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt());
+				NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt());
 				NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt());
 				
 				NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1);
 				NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt());
-				NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["rank"].asInt(), t_card["no"].asInt());
+				NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 				
 				Json::Value t_card_missile = t_card["missile"];
 				NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str());
@@ -268,14 +296,14 @@ private:
 					DownloadFile t_df;
 					t_df.size = t_imgInfo["size"].asInt();
 					t_df.img = t_imgInfo["img"].asString().c_str();
-					t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
+					t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
 					t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
 					
 					CopyFile t_cf;
 					t_cf.from_filename = t_df.filename.c_str();
-					t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
+					t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
 					cf_list.push_back(t_cf);
 					
 					is_add_cf = true;
@@ -304,7 +332,7 @@ private:
 						DownloadFile t_df;
 						t_df.size = t_detail["size"].asInt();
 						t_df.img = t_detail["img"].asString().c_str();
-						t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
+						t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
 						t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
 						df_list.push_back(t_df);
 						// ================================
@@ -320,7 +348,7 @@ private:
 						t_cf.position_x = t_detail["positionX"].asInt();
 						t_cf.position_y = t_detail["positionY"].asInt();
 						
-						t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
+						t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
 						
 						cf_list.push_back(t_cf);
 					}
@@ -338,7 +366,7 @@ private:
 						DownloadFile t_df;
 						t_df.size = t_silImgInfo["size"].asInt();
 						t_df.img = t_silImgInfo["img"].asString().c_str();
-						t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", t_card["stage"].asInt(), t_card["rank"].asInt())->getCString();
+						t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
 						t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
 						df_list.push_back(t_df);
 						// ================================
@@ -348,14 +376,10 @@ private:
 			
 			if(df_list.size() > 0) // need download
 			{
-				state_label->setString("이미지 정보를 다운로드 합니다.");
-				ing_download_cnt = 1;
-				ing_download_per = 0;
 				download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString(), "etc_font.fnt");
 				download_state->setPosition(ccp(240,130));
 				addChild(download_state);
-				is_downloading = true;
-				startDownload2();
+				startDownloadCardImage();
 			}
 			else
 			{
@@ -365,10 +389,23 @@ private:
 		}
 		else
 		{
-			Json::Value param;
-			for(int i=0;i<card_data_load_list.size();i++)
-				param["noList"][i] = card_data_load_list[i];
-			hspConnector::get()->command("getcardlist", param, json_selector(this, TitleScene::resultLoadedCardData));
+			save_target = this;
+			save_delegate = callfunc_selector(TitleScene::startGetCardsInfo);
+			
+			state_label->setString("카드 정보를 가져오는데 실패하였습니다.");
+			
+			CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+			CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+			s_replay->setColor(ccGRAY);
+			
+			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+			replay_item->setTag(kTitle_MT_replay);
+			
+			CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+			replay_menu->setPosition(ccp(240,160));
+			addChild(replay_menu, 0, kTitle_MT_replay);
+			
+			is_menu_enable = true;
 		}
 	}
 	
@@ -425,7 +462,28 @@ private:
 	void failAction2()
 	{
 		unschedule(schedule_selector(TitleScene::downloadingAction2));
-		state_label->setString("이미지 정보 다운로드에 실패하였습니다.\n재시도 합니다.");
+		state_label->setString("이미지 정보 다운로드에 실패하였습니다.");
+		
+		save_target = this;
+		save_delegate = callfunc_selector(TitleScene::startDownloadCardImage);
+		
+		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+		replay_item->setTag(kTitle_MT_replay);
+		
+		CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setPosition(ccp(240,160));
+		addChild(replay_menu, 0, kTitle_MT_replay);
+		
+		is_menu_enable = true;
+	}
+	
+	void startDownloadCardImage()
+	{
+		state_label->setString("이미지 정보를 다운로드 합니다.");
 		ing_download_cnt = 1;
 		ing_download_per = 0;
 		is_downloading = true;
@@ -510,6 +568,8 @@ private:
 					NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_list[i]["no"].asInt());
 					NSDS_SS(kSDS_GI_puzzleList_int1_title_s, i+1, puzzle_list[i]["title"].asString().c_str());
 					NSDS_SI(kSDS_GI_puzzleList_int1_version_i, i+1, puzzle_list[i]["version"].asInt());
+					NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_startStage_i, puzzle_list[i]["startStage"].asInt());
+					NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_stageCount_i, puzzle_list[i]["stageCount"].asInt());
 					
 					Json::Value thumbnail = puzzle_list[i]["thumbnail"];
 					if(NSDS_GS(kSDS_GI_puzzleList_int1_thumbnail_s, i+1) != thumbnail["image"].asString())
@@ -563,14 +623,10 @@ private:
 			
 			if(df_list.size() + ef_list.size() > 0)
 			{
-				state_label->setString("게임 정보를 받아옵니다.");
-				ing_download_cnt = 1;
-				ing_download_per = 0;
 				download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size() + ef_list.size()))->getCString(), "etc_font.fnt");
 				download_state->setPosition(ccp(240,130));
 				addChild(download_state);
-				is_downloading = true;
-				startDownload();
+				startDownloadGameInfo();
 			}
 			else
 				endingAction();
@@ -580,18 +636,12 @@ private:
 		{
 			state_label->setString("퍼즐 목록을 받아오는데 실패하였습니다. 재시도 해주세요.");
 			
-			CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,120,70));
-			CCLabelTTF* n_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
-			n_label->setColor(ccBLACK);
-			n_label->setPosition(ccp(60,35));
-			n_replay->addChild(n_label);
+			save_target = this;
+			save_delegate = callfunc_selector(TitleScene::startGetPuzzleList);
 			
-			CCSprite* s_replay = CCSprite::create("whitePaper.png", CCRectMake(0, 0,120,70));
+			CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+			CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
 			s_replay->setColor(ccGRAY);
-			CCLabelTTF* s_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
-			s_label->setColor(ccBLACK);
-			s_label->setPosition(ccp(60,35));
-			s_replay->addChild(s_label);
 			
 			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
 			replay_item->setTag(kTitle_MT_replay);
@@ -602,6 +652,15 @@ private:
 			
 			is_menu_enable = true;
 		}
+	}
+	
+	void startDownloadGameInfo()
+	{
+		state_label->setString("게임 정보를 받아옵니다.");
+		ing_download_cnt = 1;
+		ing_download_per = 0;
+		is_downloading = true;
+		startDownload();
 	}
 	
 	bool is_menu_enable;
@@ -617,7 +676,7 @@ private:
 		if(tag == kTitle_MT_replay)
 		{
 			removeChildByTag(kTitle_MT_replay);
-			startGetPuzzleList();
+			(save_target->*save_delegate)();
 		}
 		else if(tag >= kTitle_MT_puzzleBase)
 		{
@@ -660,20 +719,14 @@ private:
 	void failAction()
 	{
 		unschedule(schedule_selector(TitleScene::downloadingAction));
-		state_label->setString("게임 정보를 받아오는데 실패하였습니다. 재시도 해주세요.");
+		state_label->setString("게임 정보를 받아오는데 실패하였습니다.");
 		
-		CCSprite* n_replay = CCSprite::create("whitePaper.png", CCRectMake(0,0,120,70));
-		CCLabelTTF* n_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
-		n_label->setColor(ccBLACK);
-		n_label->setPosition(ccp(60,35));
-		n_replay->addChild(n_label);
+		save_target = this;
+		save_delegate = callfunc_selector(TitleScene::startDownloadGameInfo);
 		
-		CCSprite* s_replay = CCSprite::create("whitePaper.png", CCRectMake(0, 0,120,70));
+		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
 		s_replay->setColor(ccGRAY);
-		CCLabelTTF* s_label = CCLabelTTF::create("재시도", mySGD->getFont().c_str(), 20);
-		s_label->setColor(ccBLACK);
-		s_label->setPosition(ccp(60,35));
-		s_replay->addChild(s_label);
 		
 		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
 		replay_item->setTag(kTitle_MT_replay);
