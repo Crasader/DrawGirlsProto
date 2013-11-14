@@ -4735,8 +4735,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>0.5</real>
-									<real>0.5</real>
+									<real>0.0</real>
+									<real>0.0</real>
 								</array>
 							</dict>
 							<dict>
@@ -4786,12 +4786,14 @@
 								<true/>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 						<key>seqExpanded</key>
 						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
-				<string>CircleBossCCB</string>
+				<string></string>
 				<key>displayName</key>
 				<string>CCLayer</string>
 				<key>memberVarAssignmentName</key>
@@ -4807,8 +4809,8 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
-							<real>0.5</real>
+							<real>0.0</real>
+							<real>0.0</real>
 						</array>
 					</dict>
 					<dict>
@@ -4856,7 +4858,7 @@
 			</dict>
 		</array>
 		<key>customClass</key>
-		<string>BossCCB</string>
+		<string>CircleBossCCB</string>
 		<key>displayName</key>
 		<string>CCSprite</string>
 		<key>memberVarAssignmentName</key>
