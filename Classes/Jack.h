@@ -975,7 +975,7 @@ public:
 	{
 		if(myGD->jack_base_speed + speed_up_value > 2.f)
 		{
-			myGD->communication("MP_createJackMissile", rand()%(kElementCode_plasma+1) + (rand()%9)*10, 1, NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard)));
+			myGD->communication("MP_createJackMissile", rand()%(kElementCode_plasma+1) + (rand()%9)*10, 1, float(NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard))));
 		}
 		else
 		{
