@@ -1616,7 +1616,7 @@ private:
 	void gachaOnOnePercent()
 	{
 		Json::Value param2;
-		param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		param2["memberID"] = hspConnector::get()->getKakaoID();
 		
 		Json::Value data;
 		data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);

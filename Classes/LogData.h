@@ -96,7 +96,7 @@ public:
 	{
 		Json::Value param;
 		
-		param["memberNo"] = hspConnector::get()->getHSPMemberNo();
+		param["memberID"] = hspConnector::get()->getKakaoID();
 		
 		Json::Value contents;
 		int loop_cnt = getLogCount();

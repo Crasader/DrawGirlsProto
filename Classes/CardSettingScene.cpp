@@ -261,7 +261,7 @@ void CardSettingScene::menuAction(CCObject* pSender)
 	if(tag == kCSS_MT_close)
 	{
 		Json::Value param;
-		param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		param["memberID"] = hspConnector::get()->getKakaoID();
 		
 		Json::Value data;
 

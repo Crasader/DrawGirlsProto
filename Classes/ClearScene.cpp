@@ -75,11 +75,9 @@ bool ClearScene::init()
 		myDSH->setIntegerForKey(kDSH_Key_allHighScore, int(mySGD->getScore()));
 		
 		Json::Value p;
-		p["memberNo"] = hspConnector::get()->getHSPMemberNo();
-		p["rankingScore"]=myDSH->getIntegerForKey(kDSH_Key_allHighScore);
-		p["rankingFactor"]=3;
-		p["gameNo"]=hspConnector::get()->hspNo;
-		hspConnector::get()->command("SetRankingScore", p, [](Json::Value r){
+		p["memberID"] = hspConnector::get()->getKakaoID();
+		p["score"]=myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+		hspConnector::get()->command("setweeklyscore", p, [](Json::Value r){
 			
 		});
 	}
@@ -249,7 +247,7 @@ bool ClearScene::init()
 	is_saved_user_data = false;
 	
 	Json::Value param2;
-	param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+	param2["memberID"] = hspConnector::get()->getKakaoID();
 	
 	Json::Value data;
 	data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
@@ -290,7 +288,7 @@ void ClearScene::resultSavedUserData(Json::Value result_data)
 	else
 	{
 		Json::Value param2;
-		param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		param2["memberID"] = hspConnector::get()->getKakaoID();
 		
 		Json::Value data;
 		data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);

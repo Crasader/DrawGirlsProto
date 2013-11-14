@@ -502,7 +502,7 @@ void StageSettingScene::realStartAction()
 	
 	
 	Json::Value param;
-	param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getKakaoID();
 	
 	Json::Value data;
 	data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
@@ -603,7 +603,7 @@ void StageSettingScene::buySuccessItem(int t_clicked_item_number, int cnt)
 	((CCSprite*)item_parent->getChildByTag(kSSS_MT_selectedBase+t_clicked_item_number))->setVisible(true);
 	
 	Json::Value param2;
-	param2["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+	param2["memberID"] = hspConnector::get()->getKakaoID();
 	
 	Json::Value data;
 	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);

@@ -96,7 +96,7 @@ private:
 		state_label->setString("유저 정보를 가져오는 ing...");
 		
 		Json::Value param;
-		param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		param["memberID"] = hspConnector::get()->getKakaoID();
 		hspConnector::get()->command("getUserData", param, json_selector(this, TitleScene::resultGetUserData));
 	}
 	
@@ -516,7 +516,7 @@ private:
 		state_label->setString("유저 데이터를 초기화 ing...");
 		
 		Json::Value param;
-		param["kakaoMemberID"] = hspConnector::get()->getKakaoID();
+		param["memberID"] = hspConnector::get()->getKakaoID();
 		
 		Json::Value data;
 		data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar); // 1
