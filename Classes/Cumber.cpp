@@ -501,16 +501,27 @@ void CumberParent::removeSubCumber(CCObject* r_sc)
 {
 	subCumberArray->removeObject(r_sc);
 	
-	auto beginIter = std::remove_if(hp_graphs.begin(), hp_graphs.end(), [=](MobHpGraph* mg)
-				   {
-					   return mg->getTargetNode() == r_sc;
-				   });
-	for(auto iter = beginIter; iter != hp_graphs.end(); ++iter)
+	for(auto iter = hp_graphs.begin();iter!=hp_graphs.end();++iter)
+	{
+		if((*iter)->getTargetNode() == r_sc)
 		{
 			removeChild(*iter);
+			hp_graphs.erase(iter);
+			break;
 		}
+	}
 	
-	hp_graphs.erase(beginIter, hp_graphs.end());
+//	auto beginIter = std::remove_if(hp_graphs.begin(), hp_graphs.end(), [=](MobHpGraph* mg)
+//				   {
+//					   return mg->getTargetNode() == r_sc;
+//				   });
+//	for(auto iter = beginIter; iter != hp_graphs.end(); ++iter)
+//		{
+//			removeChild(*iter);
+//		}
+//	
+//	hp_graphs.erase(beginIter, hp_graphs.end());
+	
 //	bool is_found = false;
 //	for(int i=0;i<hp_graphs.size() && !is_found;i++)
 //	{
