@@ -28,6 +28,7 @@
 #include "LogData.h"
 #include "OnePercentGacha.h"
 #include "hspConnector.h"
+#include "MissileDamageData.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -1028,11 +1029,13 @@ public:
 			if(t_p >= t_beforePercentage + JM_CONDITION)
 			{
 				int cmCnt = (t_p - t_beforePercentage)/JM_CONDITION;
-				int missile_type = rand()%7;//myDSH->getIntegerForKey(kDSH_Key_lastSelectedElement);
+				
+				string missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+				int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
 				
 //				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
-				float damage_per = 1.f;
-				myGD->communication("MP_createJackMissile", missile_type, cmCnt, damage_per);
+				float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+				myGD->communication("MP_createJackMissile", missile_type, cmCnt, missile_speed);
 			}
 			
 			if(!is_exchanged && !is_show_exchange_coin && !isGameover && t_p < clearPercentage)

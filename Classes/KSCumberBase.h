@@ -230,11 +230,11 @@ public:
 		   myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty)
 		{
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
-			int missile_type = rand()%7;
+			int missile_type = rand()%7 + (rand()%9)*10;
 			
 			int rmCnt = 5;
-			float damage_per = 1.f;
-			myGD->communication("MP_createJackMissile", missile_type, rmCnt, damage_per);
+			float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+			myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed);
 			
 			myGD->communication("CP_removeSubCumber", this);
 			

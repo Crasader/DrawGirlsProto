@@ -30,9 +30,9 @@ void MissileParent::bombCumber( CCObject* target )
 	}
 }
 
-void MissileParent::createJackMissile( int jm_type, int cmCnt, float damage_per )
+void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_speed )
 {
-	if(jm_type >= 0 && jm_type <= 3)
+	if(jm_type%10 >= 0 && jm_type%10 <= 3)
 	{
 		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
 		int cumberCnt = 1 + subCumberArray->count();
@@ -42,7 +42,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float damage_per 
 		{
 			if(i == 0)
 			{
-				JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, damage_per);
+				JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
 				addChild(t_jm);
 				t_jm->startMoving();
 			}
@@ -51,22 +51,22 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float damage_per 
 				random_value = rand()%cumberCnt;
 				if(random_value == 0)
 				{
-					JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, damage_per);
+					JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
 					addChild(t_jm);
 					t_jm->startMoving();
 				}
 				else
 				{
-					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), jm_type, damage_per);
+					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), jm_type, missile_speed);
 					addChild(t_jm);
 					t_jm->startMoving();
 				}
 			}
 		}
 	}
-	else if(jm_type >= 4 && jm_type <= 6)
+	else if(jm_type%10 >= 4 && jm_type%10 <= 6)
 	{
-		UM_creator* t_c = UM_creator::create(cmCnt, jm_type, damage_per);
+		UM_creator* t_c = UM_creator::create(cmCnt, jm_type, missile_speed);
 		addChild(t_c);
 		t_c->startCreate();
 	}
