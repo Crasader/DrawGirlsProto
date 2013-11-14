@@ -416,14 +416,14 @@ private:
 	{
 		myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "attack");
 		
-		myGD->communication("MP_createJackMissile", my_elemental, rand()%3 + 1, 0.7f);
+		myGD->communication("MP_createJackMissile", my_elemental, rand()%3 + 1, NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard)));
 		removeFromParent();
 	}
 	
 	void myInit(bool is_near)
 	{
 //		my_elemental = rand()%kElementCode_plasma + 1;
-		my_elemental = kElementCode_fire;
+		my_elemental = rand()%7 + (rand()%9)*10;
 		
 		holding_time = rand()%10 + 20;
 		holding_time *= 60;

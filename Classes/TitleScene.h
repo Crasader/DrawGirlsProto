@@ -184,6 +184,7 @@ private:
 			}
 			
 			myDSH->setIntegerForKey(kDSH_Key_allHighScore, data[myDSH->getKey(kDSH_Key_allHighScore)].asInt());
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, data[myDSH->getKey(kDSH_Key_selectedCard)].asInt());
 			
 			mySGD->resetHasGottenCards();
 			
@@ -250,7 +251,7 @@ private:
 				NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str());
 				NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt());
 				NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt());
-				NSDS_SI(kSDS_CI_int1_missile_speed_i, t_card["no"].asInt(), t_card_missile["speed"].asInt());
+				NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble());
 				
 				NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str());
 				
@@ -538,6 +539,7 @@ private:
 		} /////////////////////////////////////////
 		
 		data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore); // 0
+		data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 0
 		
 		Json::FastWriter writer;
 		param["data"] = writer.write(data);

@@ -15,6 +15,8 @@
 #include "GraySprite.h"
 #include "ScrollMenu.h"
 #include "PuzzleCache.h"
+#include "ServerDataSave.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 using namespace std;
@@ -210,9 +212,43 @@ private:
 			piece_img->setGray(is_gray);
 			addChild(piece_img);
 			
-			CCSprite* level_img = CCSprite::create(CCString::createWithFormat("test_map_level%d.png", stage_level)->getCString());
-			level_img->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
-			piece_img->addChild(level_img);
+			CCSprite* level_label = CCSprite::create("level_label.png");
+			level_label->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f-6));
+			piece_img->addChild(level_label);
+			
+			CCLabelBMFont* level_count = CCLabelBMFont::create(CCString::createWithFormat("%d", stage_level)->getCString(), "levelcount.fnt");
+			level_count->setAnchorPoint(ccp(0.5,0.5));
+			level_count->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f+6));
+			piece_img->addChild(((CCLabelBMFont*)level_count));
+			
+			ccColor3B font_color = ccc3(0,0,0);
+			if(stage_level <= 1)
+				font_color = ccc3(255,255,255);
+			else if(stage_level == 2)
+				font_color = ccc3(255,255,102);
+			else if(stage_level == 3)
+				font_color = ccc3(255,204,102);
+			else if(stage_level == 4)
+				font_color = ccc3(204,255,102);
+			else if(stage_level == 5)
+				font_color = ccc3(102,255,204);
+			else if(stage_level == 6)
+				font_color = ccc3(102,204,255);
+			else if(stage_level == 7)
+				font_color = ccc3(204,102,255);
+			else if(stage_level == 8)
+				font_color = ccc3(255,111,207);
+			else if(stage_level == 9)
+				font_color = ccc3(255,0,128);
+			else if(stage_level >= 10)
+				font_color = ccc3(0,0,0);
+			
+			level_label->setColor(font_color);
+			level_count->setColor(font_color);
+			
+//			CCSprite* level_img = CCSprite::create(CCString::createWithFormat("test_map_level%d.png", stage_level)->getCString());
+//			level_img->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
+//			piece_img->addChild(level_img);
 		}
 
 		CCSprite* n_touch = CCSprite::create("whitePaper.png", CCRectMake(0, 0, touch_rect.size.width, touch_rect.size.height));

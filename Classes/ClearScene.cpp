@@ -73,14 +73,17 @@ bool ClearScene::init()
 	if(mySGD->getScore() > myDSH->getIntegerForKey(kDSH_Key_allHighScore))
 	{
 		myDSH->setIntegerForKey(kDSH_Key_allHighScore, int(mySGD->getScore()));
-		
-		Json::Value p;
-		p["memberID"] = hspConnector::get()->getKakaoID();
-		p["score"]=myDSH->getIntegerForKey(kDSH_Key_allHighScore);
-		hspConnector::get()->command("setweeklyscore", p, [](Json::Value r){
-			
-		});
 	}
+	Json::Value p1;
+	p1["memberID"] = hspConnector::get()->getKakaoID();
+	p1["score"]=int(mySGD->getScore());
+	hspConnector::get()->command("setweeklyscore", p1, NULL);
+	
+	Json::Value p;
+	p["memberID"]=hspConnector::get()->getKakaoID();
+	p["score"]=int(mySGD->getScore());
+	p["stageNo"]=mySD->getSilType();
+	hspConnector::get()->command("addStageScore",p,NULL);
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)
@@ -268,6 +271,7 @@ bool ClearScene::init()
 	}
 	
 	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	
 	Json::FastWriter writer;
 	param2["data"] = writer.write(data);
@@ -309,6 +313,7 @@ void ClearScene::resultSavedUserData(Json::Value result_data)
 		}
 		
 		data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+		data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		
 		Json::FastWriter writer;
 		param2["data"] = writer.write(data);

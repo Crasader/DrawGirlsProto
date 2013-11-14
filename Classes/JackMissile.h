@@ -62,18 +62,18 @@ class JM_UpgradeMissile : public JackMissile
 {
 public:
 	
-	static JM_UpgradeMissile* create(CCNode* t_target, int jm_type, float damage_per)
+	static JM_UpgradeMissile* create(CCNode* t_target, int jm_type, float missile_speed)
 	{
 		JM_UpgradeMissile* t_um = new JM_UpgradeMissile();
-		t_um->myInit(t_target, jm_type, damage_per);
+		t_um->myInit(t_target, jm_type, missile_speed);
 		t_um->autorelease();
 		return t_um;
 	}
 	
-	static JM_UpgradeMissile* create(CCNode* t_target, int jm_type, float damage_per, CCPoint s_p)
+	static JM_UpgradeMissile* create(CCNode* t_target, int jm_type, float missile_speed, CCPoint s_p)
 	{
 		JM_UpgradeMissile* t_um = new JM_UpgradeMissile();
-		t_um->myInit(t_target, jm_type, damage_per, s_p);
+		t_um->myInit(t_target, jm_type, missile_speed, s_p);
 		t_um->autorelease();
 		return t_um;
 	}
@@ -300,39 +300,35 @@ private:
 		}
 	}
 	
-	void myInit(CCNode* t_target, int jm_type, float damage_per, CCPoint s_p)
+	void myInit(CCNode* t_target, int jm_type, float missile_speed, CCPoint s_p)
 	{
-		
-		
 		particlePosition = s_p;
 		
-		realInit(t_target, jm_type, damage_per);
+		realInit(t_target, jm_type, missile_speed);
 	}
 	
-	void myInit(CCNode* t_target, int jm_type, float damage_per)
+	void myInit(CCNode* t_target, int jm_type, float missile_speed)
 	{
-		
-		
 		IntPoint jackPoint = myGD->getJackPoint();
 		particlePosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
 		
-		realInit(t_target, jm_type, damage_per);
+		realInit(t_target, jm_type, missile_speed);
 	}
 	
-	void realInit(CCNode* t_target, int jm_type, float damage_per)
+	void realInit(CCNode* t_target, int jm_type, float missile_speed)
 	{
 //		myGD->communication("EP_addJackAttack");
 		
 		targetNode = t_target;
-		my_type = (MyElemental)jm_type;
+		my_type = (MyElemental)(jm_type%10);
 		
 		int element_level;
 		
-		if(my_type == kMyElementalPlasma)				type_name = "jm_plasma";
-		else if(my_type == kMyElementalLightning)		type_name = "jm_lightning";
-		else if(my_type == kMyElementalWind)			type_name = "jm_wind";
+		if(jm_type%10 == kMyElementalPlasma)				type_name = "jm_plasma";
+		else if(jm_type%10 == kMyElementalLightning)		type_name = "jm_lightning";
+		else if(jm_type%10 == kMyElementalWind)				type_name = "jm_wind";
 		
-		element_level = rand()%9 + 1;
+		element_level = jm_type/10 + 1;
 		
 		int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(recent_card_number > 0)
@@ -459,18 +455,18 @@ class JM_BasicMissile : public JackMissile
 {
 public:
 	
-	static JM_BasicMissile* create(CCNode* t_target, int jm_type, float damage_per)
+	static JM_BasicMissile* create(CCNode* t_target, int jm_type, float missile_speed)
 	{
 		JM_BasicMissile* t_bm = new JM_BasicMissile();
-		t_bm->myInit(t_target, jm_type, damage_per);
+		t_bm->myInit(t_target, jm_type, missile_speed);
 		t_bm->autorelease();
 		return t_bm;
 	}
 	
-	static JM_BasicMissile* create(CCNode* t_target, int jm_type, float damage_per, CCPoint s_p)
+	static JM_BasicMissile* create(CCNode* t_target, int jm_type, float missile_speed, CCPoint s_p)
 	{
 		JM_BasicMissile* t_bm = new JM_BasicMissile();
-		t_bm->myInit(t_target, jm_type, damage_per, s_p);
+		t_bm->myInit(t_target, jm_type, missile_speed, s_p);
 		t_bm->autorelease();
 		return t_bm;
 	}
@@ -804,10 +800,10 @@ private:
 		}
 	}
 	
-	void myInit(CCNode* t_target, int jm_type, float damage_per, CCPoint s_p)
+	void myInit(CCNode* t_target, int jm_type, float missile_speed, CCPoint s_p)
 	{
 		setStartPosition(s_p);
-		realInit(t_target, jm_type, damage_per);
+		realInit(t_target, jm_type, missile_speed);
 	}
 	
 	void setStartPosition(CCPoint s_p)
@@ -815,14 +811,14 @@ private:
 		particlePosition = s_p;
 	}
 	
-	void myInit(CCNode* t_target, int jm_type, float damage_per)
+	void myInit(CCNode* t_target, int jm_type, float missile_speed)
 	{
 		IntPoint jackPoint = myGD->getJackPoint();
 		setStartPosition(ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1));
-		realInit(t_target, jm_type, damage_per);
+		realInit(t_target, jm_type, missile_speed);
 	}
 	
-	void realInit(CCNode* t_target, int jm_type, float damage_per)
+	void realInit(CCNode* t_target, int jm_type, float missile_speed)
 	{
 		ing_miss_counting = -1;
 		targetNode = t_target;
@@ -833,12 +829,14 @@ private:
 		string type_name;
 		int element_level;
 		
-		if(jm_type == kMyElementalNonElemental)			type_name = "jm_empty";
-		else if(jm_type == kMyElementalFire)			type_name = "jm_fire";
-		else if(jm_type == kMyElementalWater)			type_name = "jm_water";
-		else if(jm_type == kMyElementalLife)			type_name = "jm_life";
+		if(jm_type%10 == kMyElementalNonElemental)			type_name = "jm_empty";
+		else if(jm_type%10 == kMyElementalFire)				type_name = "jm_fire";
+		else if(jm_type%10 == kMyElementalWater)			type_name = "jm_water";
+		else if(jm_type%10 == kMyElementalLife)				type_name = "jm_life";
 		
-		element_level = rand()%9 + 1;
+		element_level = jm_type/10 + 1;
+		
+		jm_type = jm_type%10;
 		
 		float particle_cnt = 3 + element_level*3;
 		string particle_string;
@@ -860,7 +858,12 @@ private:
 			dex = 1;
 		}
 		
-		myJM_SPEED = JM_SPEED * ((rand()%11 - 5)/10.f + 1.f);
+		if(missile_speed < 2.f)
+			missile_speed = 2.f;
+		else if(missile_speed > 9.f)
+			missile_speed = 9.f;
+		
+		myJM_SPEED = missile_speed * ((rand()%11 - 5)/10.f + 1.f);
 		myJM_CHANGE_DIRECTION_VAL = JM_CHANGE_DIRECTION_VAL;
 		
 		particle->initWithTotalParticles(particle_cnt);

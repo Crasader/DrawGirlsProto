@@ -76,18 +76,18 @@ private:
 class UM_creator : public CCNode
 {
 public:
-	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_damage_per)
+	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_missile_speed)
 	{
 		UM_creator* t_c = new UM_creator();
-		t_c->myInit(t_um_tcnt, t_create_type, t_damage_per);
+		t_c->myInit(t_um_tcnt, t_create_type, t_missile_speed);
 		t_c->autorelease();
 		return t_c;
 	}
 	
-	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_damage_per, CCPoint s_p)
+	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_missile_speed, CCPoint s_p)
 	{
 		UM_creator* t_c = new UM_creator();
-		t_c->myInit(t_um_tcnt, t_create_type, t_damage_per, s_p);
+		t_c->myInit(t_um_tcnt, t_create_type, t_missile_speed, s_p);
 		t_c->autorelease();
 		return t_c;
 	}
@@ -112,7 +112,8 @@ private:
 	int um_tcnt;
 	int ing_um_cnt;
 	int create_type;
-	float damage_per;
+	float missile_speed;
+	int shoot_frame;
 	
 	CCPoint start_position;
 	
@@ -120,11 +121,11 @@ private:
 	{
 		ing_frame++;
 		
-		if(ing_frame%6 == 0)
+		if(ing_frame%shoot_frame == 0)
 		{
-			if(ing_frame/6 <= 1)
+			if(ing_frame/shoot_frame <= 1)
 			{
-				JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, damage_per);
+				JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, missile_speed);
 				getParent()->addChild(t_jm);
 				t_jm->startMoving();
 			}
@@ -137,13 +138,13 @@ private:
 				random_value = rand()%cumberCnt;
 				if(random_value == 0)
 				{
-					JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, damage_per);
+					JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, missile_speed);
 					getParent()->addChild(t_jm);
 					t_jm->startMoving();
 				}
 				else
 				{
-					JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), create_type, damage_per);
+					JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), create_type, missile_speed);
 					getParent()->addChild(t_jm);
 					t_jm->startMoving();
 				}
@@ -161,11 +162,11 @@ private:
 	{
 		ing_frame++;
 		
-		if(ing_frame%6 == 0)
+		if(ing_frame%shoot_frame == 0)
 		{
-			if(ing_frame/6 <= 1)
+			if(ing_frame/shoot_frame <= 1)
 			{
-				JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, damage_per, start_position);
+				JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, missile_speed, start_position);
 				getParent()->addChild(t_jm);
 				t_jm->startMoving();
 			}
@@ -178,13 +179,13 @@ private:
 				random_value = rand()%cumberCnt;
 				if(random_value == 0)
 				{
-					JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, damage_per, start_position);
+					JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, missile_speed, start_position);
 					getParent()->addChild(t_jm);
 					t_jm->startMoving();
 				}
 				else
 				{
-					JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), create_type, damage_per, start_position);
+					JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), create_type, missile_speed, start_position);
 					getParent()->addChild(t_jm);
 					t_jm->startMoving();
 				}
@@ -210,18 +211,18 @@ private:
 		removeFromParentAndCleanup(true);
 	}
 	
-	void myInit(int t_um_tcnt, int t_create_type, float t_damage_per)
+	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed)
 	{
-		
-		damage_per = t_damage_per;
+		missile_speed = t_missile_speed;
+		shoot_frame = missile_speed*3;
 		um_tcnt = t_um_tcnt;
 		create_type = t_create_type;
 	}
 	
-	void myInit(int t_um_tcnt, int t_create_type, float t_damage_per, CCPoint s_p)
+	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed, CCPoint s_p)
 	{
 		start_position = s_p;
-		myInit(t_um_tcnt, t_create_type, t_damage_per);
+		myInit(t_um_tcnt, t_create_type, t_missile_speed);
 	}
 };
 
@@ -238,7 +239,7 @@ public:
 	
 	void bombCumber(CCObject* target);
 	
-	void createJackMissile(int jm_type, int cmCnt, float damage_per);
+	void createJackMissile(int jm_type, int cmCnt, float missile_speed);
 	
 	void subOneDie();
 	

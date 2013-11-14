@@ -98,6 +98,7 @@ enum SDS_KEY
 	kSDS_SI_itemOptionSmallAreaPercent_i,
 	kSDS_SI_itemOptionWidePerfectPercent_i,
 	kSDS_SI_level_int1_card_i,
+	kSDS_SI_level_i,
 	kSDS_SI_boss_s,
 	kSDS_SI_junior_s,
 	kSDS_SI_end = 2999,
@@ -111,7 +112,7 @@ enum SDS_KEY
 	kSDS_CI_int1_missile_type_s,
 	kSDS_CI_int1_missile_power_i,
 	kSDS_CI_int1_missile_dex_i,
-	kSDS_CI_int1_missile_speed_i,
+	kSDS_CI_int1_missile_speed_d,
 	kSDS_CI_int1_passive_s,
 	kSDS_CI_int1_abilityCnt_i,
 	kSDS_CI_int1_ability_int2_type_i,
@@ -527,6 +528,7 @@ private:
 		else if(t_key == kSDS_SI_itemOptionSmallAreaPercent_i)			rv = "itemOption_smallArea_percent";
 		else if(t_key == kSDS_SI_itemOptionWidePerfectPercent_i)		rv = "itemOption_widePerfect_percent";
 		else if(t_key == kSDS_SI_level_int1_card_i)			rv = "level%d_card";
+		else if(t_key == kSDS_SI_level_i)					rv = "level";
 		else if(t_key == kSDS_SI_boss_s)					rv = "boss";
 		else if(t_key == kSDS_SI_junior_s)					rv = "junior";
 		
@@ -538,7 +540,7 @@ private:
 		else if(t_key == kSDS_CI_int1_missile_type_s)				rv = "%d_missile_type";
 		else if(t_key == kSDS_CI_int1_missile_power_i)				rv = "%d_missile_power";
 		else if(t_key == kSDS_CI_int1_missile_dex_i)				rv = "%d_missile_dex";
-		else if(t_key == kSDS_CI_int1_missile_speed_i)				rv = "%d_missile_speed";
+		else if(t_key == kSDS_CI_int1_missile_speed_d)				rv = "%d_missile_speed";
 		else if(t_key == kSDS_CI_int1_passive_s)					rv = "%d_passive";
 		else if(t_key == kSDS_CI_int1_abilityCnt_i)					rv = "%d_ability_cnt";
 		else if(t_key == kSDS_CI_int1_ability_int2_type_i)			rv = "%d_ability_%d_type";

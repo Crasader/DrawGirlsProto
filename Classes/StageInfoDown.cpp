@@ -130,7 +130,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str());
 				NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt());
 				NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt());
-				NSDS_SI(kSDS_CI_int1_missile_speed_i, t_card["no"].asInt(), t_card_missile["speed"].asInt());
+				NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble());
 				
 				NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str());
 				
@@ -269,6 +269,8 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 //					NSDS_SS(kSDS_CI_int1_silImgInfoSilData_s, t_card["no"].asInt(), t_silImgInfo["silData"].asString());
 				}
 			}
+			
+			NSDS_SI(mySD->getSilType(), kSDS_SI_level_i, result_data["level"].asInt());
 			
 			NSDS_SS(mySD->getSilType(), kSDS_SI_boss_s, result_data["boss"].asString());
 			NSDS_SS(mySD->getSilType(), kSDS_SI_junior_s, result_data["junior"].asString());

@@ -13,6 +13,7 @@
 #include "AlertEngine.h"
 #include "MyLocalization.h"
 #include "hspConnector.h"
+#include "HeartTime.h"
 
 USING_NS_CC;
 
@@ -31,6 +32,8 @@ public:
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(FailScene);
 	
+	virtual void onEnter();
+	
 private:
 	
 	bool is_menu_enable;
@@ -38,10 +41,40 @@ private:
 	
 	CCMenu* main_menu;
 	CCMenu* replay_menu;
-	CCMenu* help_menu;
+//	CCMenu* help_menu;
+	
+	CCLabelBMFont* score_label;
+	CCLabelBMFont* gold_label;
+	CCLabelBMFont* time_label;
+	
+	HeartTime* heart_time;
 	
 	void closeReplayPopup();
 	void popupClose();
+	
+	
+	float keep_gold;
+	float decrease_gold;
+	float increase_gold;
+	
+	float keep_score;
+	float decrease_score;
+	float increase_score;
+	
+	float keep_time;
+	float decrease_time;
+	float increase_time;
+	
+	void startCalcAnimation();
+	void startScoreAnimation();
+	void scoreAnimation(float dt);
+	void stopScoreAnimation();
+	void startGoldAnimation();
+	void goldAnimation(float dt);
+	void stopGoldAnimation();
+	void startTimeAnimation();
+	void timeAnimation(float dt);
+	void stopTimeAnimation();
 	
 	CCPoint getContentPosition(int t_tag);
 	

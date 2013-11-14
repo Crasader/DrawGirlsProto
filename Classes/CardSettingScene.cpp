@@ -272,6 +272,8 @@ void CardSettingScene::menuAction(CCObject* pSender)
 			data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
 		}
 		
+		data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		
 		Json::FastWriter writer;
 		param["data"] = writer.write(data);
 		hspConnector::get()->command("updateUserData", param, NULL);

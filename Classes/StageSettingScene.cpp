@@ -523,6 +523,7 @@ void StageSettingScene::realStartAction()
 	}
 	
 	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	
 	Json::FastWriter writer;
 	param["data"] = writer.write(data);
