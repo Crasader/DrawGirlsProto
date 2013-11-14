@@ -158,7 +158,7 @@ bool CollectionBook::onTextFieldDetachWithIME(cocos2d::CCTextFieldTTF *sender)
 
 void CollectionBook::setRightPage(CCNode *target, int card_number)
 {
-	CCLabelTTF* r_stage_script = CCLabelTTF::create(mySD->getScriptString(NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_rank_i, card_number)).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(180, 60), kCCTextAlignmentLeft);
+	CCLabelTTF* r_stage_script = CCLabelTTF::create(mySD->getScriptString(NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_grade_i, card_number)).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(180, 60), kCCTextAlignmentLeft);
 	r_stage_script->setPosition(ccp(25,175));
 	r_stage_script->setColor(ccBLACK);
 	r_stage_script->setVerticalAlignment(kCCVerticalTextAlignmentTop);
@@ -193,7 +193,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
 	
 	float mul_value = 0.88f;
     int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-    int level_number = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
+    int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
     if(level_number == 1)
     {
         if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1)) != 0)
@@ -330,13 +330,13 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
 
 void CollectionBook::setLeftPage(CCNode *target, int card_number)
 {
-	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_rank_i, card_number))->getCString());
+	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_grade_i, card_number))->getCString());
 	r_card_img->setScale(0.57);
 	r_card_img->setPosition(ccp(129,161));
 	target->addChild(r_card_img);
 	
 	int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-	int level_number = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
+	int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
 	
 	if(level_number == 3 && mySD->isAnimationStage(stage_number))
 	{

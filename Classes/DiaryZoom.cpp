@@ -46,7 +46,7 @@ bool DiaryZoom::init()
 	int card_number = mySGD->selected_collectionbook;
 	
 	int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-	int level_number = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
+	int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
 	
 	first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number)->getCString());
 	first_img->setPosition(ccp(160,215));
