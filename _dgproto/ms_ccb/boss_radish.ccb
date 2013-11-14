@@ -4791,7 +4791,7 @@
 					</dict>
 				</array>
 				<key>customClass</key>
-				<string>CircleBossCCB</string>
+				<string></string>
 				<key>displayName</key>
 				<string>CCLayer</string>
 				<key>memberVarAssignmentName</key>
@@ -4856,7 +4856,7 @@
 			</dict>
 		</array>
 		<key>customClass</key>
-		<string>BossCCB</string>
+		<string>CircleBossCCB</string>
 		<key>displayName</key>
 		<string>CCSprite</string>
 		<key>memberVarAssignmentName</key>
@@ -4909,6 +4909,8 @@
 				</array>
 			</dict>
 		</array>
+		<key>selected</key>
+		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
