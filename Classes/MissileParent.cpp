@@ -44,7 +44,6 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 		{
 			if(i == 0)
 			{
-				CCLog("target boss");
 				JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
 				addChild(t_jm);
 				t_jm->startMoving();
@@ -54,14 +53,12 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 				random_value = rand()%cumberCnt;
 				if(random_value == 0)
 				{
-					CCLog("target boss");
 					JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
 					addChild(t_jm);
 					t_jm->startMoving();
 				}
 				else
 				{
-					CCLog("target sub");
 					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), jm_type, missile_speed);
 					addChild(t_jm);
 					t_jm->startMoving();
