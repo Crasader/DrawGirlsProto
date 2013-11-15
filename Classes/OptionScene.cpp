@@ -19,6 +19,8 @@
 
 #include "cocos-ext.h"
 #include "StageImgLoader.h"
+#include "KSAlertView.h"
+
 
 USING_NS_CC_EXT;
 
@@ -85,7 +87,7 @@ bool OptionScene::init()
 	CCMenu* close_menu = CCMenu::createWithItem(close_item);
 	close_menu->setPosition(getContentPosition(kO_MT_close));
 	addChild(close_menu, kO_Z_content);
-	
+
 	bgm_menu = NULL;
 	resetBgmMenu();
 	
@@ -180,6 +182,25 @@ bool OptionScene::init()
 	ScreenSide* t_screen = ScreenSide::create();
 	addChild(t_screen, 99999);
 	
+
+	KSAlertView* av = KSAlertView::create();
+	
+	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
+																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
+	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
+																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
+	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
+																					[](CCObject* e){
+																						CCLog("press!!");
+																					});
+	
+	av->addButton(m1);
+	av->addButton(CCMenuItemImageLambda::create("ticket_send.png", "ticket_send.png",
+																							[](CCObject* e){
+																								CCLog("press!!");
+																							}));
+	addChild(av, kO_MT_withdraw);
+	av->show();
 	return true;
 }
 

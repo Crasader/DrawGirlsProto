@@ -15,6 +15,7 @@
 #include "KSUtil.h"
 #include "CCMenuLambda.h"
 #include "GDWebSprite.h"
+#include "DataStorageHub.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -82,39 +83,14 @@ public:
 		removeFromParent();
 	}
 	
-	CCSprite* gray;
-	Json::Value m_scoreList;
-private:
 	
-	CCTableView* rankTableView;
-	 
-	bool is_menu_enable;
-	
-	int touched_number;
-//	CCMenu* close_menu;
-//	CCMenu* invite_menu;
-//	CCMenu* send_menu;
-//	CCMenu* send_close_menu;
-//	CCMenu* invite_close_menu;
-//	CCMenu* invite_rank_menu;
-//	CCMenu* invite_send_menu;
-//	CCMenu* invite_send_close_menu;
-	
-	
-	CCObject* target_close;
-	SEL_CallFunc delegate_close;
-	
-	RankPopupState my_state;
-	
-	
-	
-	CCControlButton *closeBtn;
 	
 	void myInit(CCObject* t_close, SEL_CallFunc d_close)
 	{
 		setTouchEnabled(true);
 		target_close = t_close;
 		delegate_close = d_close;
+		m_currentSelectSprite = NULL;
 		
 		gray = CCSprite::create("back_gray.png");
 		gray->setPosition(ccp(240,160));
@@ -348,13 +324,7 @@ private:
 		bg->setAnchorPoint(CCPointZero);
 		cell->addChild(bg,1);
 		
-		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
-		{
-			CCSprite* meBack = CCSprite::create("rank_cell_select.png");
-			meBack->setPosition(CCPointZero - ccp(6, 0));
-			meBack->setAnchorPoint(CCPointZero);
-			cell->addChild(meBack, 2);
-		}
+		
 			
 
 		
@@ -456,8 +426,39 @@ private:
 	}
     
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell){
-		// 영호
-		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
+		
+		int selectedCardIndex = 0;
+		// 나를 클릭함.
+		if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+		{
+			selectedCardIndex = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 자기 카드 번호.
+		}
+		else
+		{
+			Json::Reader reader;
+			Json::Value data;
+			reader.parse(m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString(), data);
+			//		Json::Value data = m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString()
+			selectedCardIndex = data.get("selectedcard", 0).asInt();
+		}
+		CCLog("card Number %d", selectedCardIndex); // 영호
+		
+		if(m_currentSelectSprite)
+		{
+			m_currentSelectSprite->removeFromParent();
+			m_currentSelectSprite = NULL;
+		}
+		
+		
+//		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
+		{
+			m_currentSelectSprite = CCSprite::create("rank_cell_select.png");
+			m_currentSelectSprite->setPosition(CCPointZero - ccp(6, 0));
+			m_currentSelectSprite->setAnchorPoint(CCPointZero);
+			cell->addChild(m_currentSelectSprite, 2);
+		}
+		
+		
 		
 		
 	}
@@ -823,6 +824,22 @@ private:
 		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 		pDispatcher->addTargetedDelegate(this, -170, true);
 	}
+	
+protected:
+	CCSprite* gray;
+	Json::Value m_scoreList;
+
+	CCTableView* rankTableView;
+	
+	bool is_menu_enable;
+	
+	int touched_number;
+	CCObject* target_close;
+	SEL_CallFunc delegate_close;
+	RankPopupState my_state;
+	CCControlButton *closeBtn;
+	
+	CCSprite* m_currentSelectSprite;
 };
 
 #endif /* defined(__DGproto__RankPopup__) */
