@@ -101,6 +101,9 @@ protected:
 	CCMenuItemLambda* itemForTouch(CCTouch * touch);
 	tCCMenuState m_eState;
 	CCMenuItemLambda *m_pSelectedItem;
+	
+	CCPoint m_touchesStart;
+	CCPoint m_touchesEnd;
 };
 
 // end of GUI group

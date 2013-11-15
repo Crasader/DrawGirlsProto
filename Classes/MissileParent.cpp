@@ -741,8 +741,6 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				savedAP = true;
 			};
 			castBranch(atype, func);
-			
-
 		}
 	}
 	else if(pattern == "1013") // 메테오
