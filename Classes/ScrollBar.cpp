@@ -89,6 +89,23 @@ bool THIS::init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Spri
 	scrollView = sv;
 	CCLayerColor::initWithColor(ccc4(0, 255, 0, 0));
 	marginOffset = offset;
+//
+	if(h9 && v9)
+	{
+		sv->setDirection(kCCScrollViewDirectionBoth);
+	}
+	if(!h9 && v9)
+	{
+		sv->setDirection(kCCScrollViewDirectionVertical);
+	}
+	if(h9 && !v9)
+	{
+		sv->setDirection(kCCScrollViewDirectionHorizontal);
+	}
+	if(!h9 && !v9)
+	{
+		sv->setDirection(kCCScrollViewDirectionNone);
+	}
 	CCScrollViewDirection type = sv->getDirection();
 	switch(type)
 	{
@@ -160,25 +177,11 @@ void THIS::setBarRefreshH()
 	
 	if(dynamicScrollSize)
 	{
-		if(fixedBarH)
-			fixedBarH->setVisible(false);
-		if(barH)
-		{
-			barH->setVisible(true);
-			barH->setContentSize(CCSizeMake(scrollBarSize, barH->getContentSize().height));
-		}
-		
+		barH->setContentSize(CCSizeMake(scrollBarSize, barH->getContentSize().height));
 	}
 	else
 	{
-		if(fixedBarH)
-			
-			fixedBarH->setVisible(true);
-		if(barH)
-		{
-			barH->setVisible(false);
-			barH->setContentSize(barH->getOriginalSize());
-		}
+		barH->setContentSize(barH->getOriginalSize());
 	}
 	CCSize barContentSize = barH->getContentSize();//, at);
 	
@@ -193,9 +196,6 @@ void THIS::setBarRefreshH()
 	{
 		barH->setPosition(ccp(offset + position, offsetY + marginOffset));
 	}
-	
-	if(fixedBarH)
-		fixedBarH->setPosition(ccp(offset + position, offsetY + marginOffset));
 }
 void THIS::setBarRefreshV()
 {
@@ -206,24 +206,11 @@ void THIS::setBarRefreshV()
 	float scrollBarSize = viewSize.height * viewSize.height / total;
 	if(dynamicScrollSize)
 	{
-		if(fixedBarV)
-			fixedBarV->setVisible(false);
-		if(barV)
-		{
-			barV->setVisible(true);
-			barV->setContentSize(CCSizeMake(barV->getContentSize().width, scrollBarSize));
-		}
+		barV->setContentSize(CCSizeMake(barV->getContentSize().width, scrollBarSize));
 	}
 	else
 	{
-		if(fixedBarV)
-			fixedBarV->setVisible(true);
-		if(barV)
-		{
-			barV->setVisible(false);
-			barV->setContentSize(barV->getOriginalSize());
-		}
-		
+		barV->setContentSize(barV->getOriginalSize());
 	}
 	CCSize barContentSize = barV->getContentSize();//, at);
 	
@@ -236,11 +223,7 @@ void THIS::setBarRefreshV()
 	float position = ((percent * viewSize.height) + barContentSize.height / 2.f);
 	if(barV)
 		barV->setPosition(ccp(marginOffset + offsetX + viewSize.width, offset + position));
-	if(fixedBarV)
-	{
-		fixedBarV->setScale(1.f);
-		fixedBarV->setPosition(ccp(marginOffset + offsetX + viewSize.width, offset + position));
-	}
+
 	
 }
 //주기적으로 호출 되면서 내용을 갱신할 함수 -> scrollViewDidScroll에서 호출됨.

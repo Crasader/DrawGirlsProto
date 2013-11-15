@@ -212,6 +212,14 @@ typedef enum t_ITEM_CODE{
 	kIC_randomChange	// 15 // mission
 }ITEM_CODE;
 
+
+enum MessageRecvType
+{
+	kHeart = 1,
+	kChallenge,
+	kHelpRequest,
+	kTicketRequest
+};
 #define SHOP_KEY	0xD9
 
 #endif

@@ -1327,7 +1327,6 @@ void KSCumberBase::speedAdjustment(float dt)
 															[=](int w){
 																return w >= m_frameCount - considerFrames;
 															}), maxCre);
-	CCLog("cntps %d", cntPerSecond);
 	float baseSpeed = m_minSpeed + (m_startSpeed - m_minSpeed) * getLife() / getTotalLife();
 	float finalSpeed = baseSpeed + cntPerSecond * (m_maxSpeed - baseSpeed) / maxCre;
 	m_speed = finalSpeed;

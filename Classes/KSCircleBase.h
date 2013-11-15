@@ -383,8 +383,12 @@ protected:
 		{
 			CCAffineTransform t = this->nodeToParentTransform();
 			for (CCNode *p = node->getParent(); p != endP; p = p->getParent())
-        t = CCAffineTransformConcat(t, p->nodeToParentTransform());
-			
+			{
+				if( p == NULL)
+					return CCAffineTransformIdentity;
+				else
+					t = CCAffineTransformConcat(t, p->nodeToParentTransform());
+			}
 			return t;
 		};
 		

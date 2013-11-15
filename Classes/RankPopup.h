@@ -17,6 +17,8 @@
 #include "GDWebSprite.h"
 #include "DataStorageHub.h"
 #include <chrono>
+#include "ScrollBar.h"
+#include "ServerDataSave.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -367,8 +369,12 @@ public:
 		//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 		
 		//320x320 테이블 뷰 생성
-		rankTableView = RankTableView::create(this, CCSizeMake(244*2, 233), NULL);
-		
+		rankTableView = RankTableView::create(this, CCSizeMake(270, 233), NULL);
+//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
+//																								 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
+		CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
+		m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2, NULL, bar);
+		m_scrollBar->setDynamicScrollSize(false);
 		rankTableView->setAnchorPoint(CCPointZero);
 		
 		//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
@@ -435,12 +441,7 @@ public:
 		cell->autorelease();
 		
 		
-		CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "ending_take_particle.png");
-		profileImg->setAnchorPoint(ccp(0.5, 0.5));
-		profileImg->setTag(kRP_RT_profileImg);
-		profileImg->setPosition(ccp(62, 22));
-		profileImg->setScale(45.f / profileImg->getContentSize().width);
-		cell->addChild(profileImg, kRP_Z_profileImg);
+		
 		
 		std::string cellBackFile = "ui_rank_cell_back.png";
 			
@@ -448,9 +449,14 @@ public:
 		CCSprite* bg = CCSprite::create(cellBackFile.c_str());
 		bg->setPosition(CCPointZero);
 		bg->setAnchorPoint(CCPointZero);
-		cell->addChild(bg,1);
+		cell->addChild(bg,0);
 		
-		
+		CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "ending_take_particle.png");
+		profileImg->setAnchorPoint(ccp(0.5, 0.5));
+		profileImg->setTag(kRP_RT_profileImg);
+		profileImg->setPosition(ccp(62, 22));
+		profileImg->setScale(45.f / profileImg->getContentSize().width);
+		cell->addChild(profileImg, kRP_Z_profileImg);
 			
 
 		
@@ -473,7 +479,12 @@ public:
 				 
 				 
 				 Json::Value p;
-				 p["content"]="하트받으세용";
+				 Json::Value contentJson;
+
+				 contentJson["msg"] = "하트받으쇼~";
+				 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
+//				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+				 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 				 p["receiverMemberID"]=m_scoreList[idx]["user_id"].asString();
 				 p["senderMemberID"]=hspConnector::get()->getKakaoID();
 				 p["type"]=1;
@@ -488,7 +499,12 @@ public:
 																				
 																				GraphDogLib::JsonToLog("sendMessage", r);
 																				this->setHeartSendTime(m_scoreList[idx]["user_id"].asString());
+																				sendBtn->removeFromParent();
 																				
+																				CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
+																																								[](CCObject*){});
+																				sendBtn1->setPosition(ccp(205,22));
+																				_menu->addChild(sendBtn1,2);
 																				////////////////////////////////
 																				// 쪽지보내기 - 카카오
 																				////////////////////////////////
@@ -552,6 +568,10 @@ public:
 	}
 	
 	virtual void scrollViewDidScroll(CCScrollView* view) {
+		if(m_scrollBar)
+		{
+			m_scrollBar->setBarRefresh();
+		}
 	}
 	
     virtual void scrollViewDidZoom(CCScrollView* view) {
@@ -561,6 +581,7 @@ public:
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell){
 		
 		int selectedCardIndex = 0;
+		int highScore = 71234;
 		// 나를 클릭함.
 		if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
 		{
@@ -573,9 +594,19 @@ public:
 			reader.parse(m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString(), data);
 			//		Json::Value data = m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString()
 			selectedCardIndex = data.get("selectedcard", 0).asInt();
+			highScore = data.get("highscore", 71234).asInt();
 		}
 		CCLog("card Number %d", selectedCardIndex); // 영호
+		auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, selectedCardIndex);
+		KS::KSLog("retStr %", retStr); // 영호.
 		
+		std::string scoreStr = CCString::createWithFormat("%d", highScore)->getCString();
+		scoreStr = KS::insert_separator(scoreStr, ',', 3); // 3자리 마다 콤마찍기
+		CCLabelBMFont* highScoreFnt =
+			CCLabelBMFont::create(
+						scoreStr.c_str(), "mb_white_font.fnt");
+		highScoreFnt->setPosition(ccp(216 / 2.f, 86 / 2.f));
+		addChild(highScoreFnt, 3);
 		if(m_currentSelectSprite)
 		{
 			m_currentSelectSprite->removeFromParent();
@@ -973,6 +1004,7 @@ protected:
 	CCControlButton *closeBtn;
 	
 	CCSprite* m_currentSelectSprite;
+	ScrollBar* m_scrollBar;
 };
 
 #endif /* defined(__DGproto__RankPopup__) */

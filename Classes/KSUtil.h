@@ -68,7 +68,7 @@ namespace KS
 	
 	string getLocalCode();
 	
-	
+	string insert_separator(const string& s, char separator = ',', int width = 3);
 	
 	
 	static void __KSLogCore(ostringstream& oss, const char* s) {
