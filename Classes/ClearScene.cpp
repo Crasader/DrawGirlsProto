@@ -81,6 +81,7 @@ bool ClearScene::init()
 	p1["score"]=int(mySGD->getScore());
 	Json::Value p1_data;
 	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	p1_data["allhighscore"] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
 	Json::FastWriter p1_data_writer;
 	p1["data"] = p1_data_writer.write(p1_data);
 	hspConnector::get()->command("setweeklyscore", p1, NULL);

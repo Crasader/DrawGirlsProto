@@ -61,6 +61,8 @@ bool FailScene::init()
         return false;
     }
     
+	is_loaded_list = false;
+	
 	setKeypadEnabled(true);
 	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
@@ -82,6 +84,7 @@ bool FailScene::init()
 	p1["score"] = int(mySGD->getScore());
 	Json::Value p1_data;
 	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	p1_data["allhighscore"] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
 	Json::FastWriter p1_data_writer;
 	p1["data"] = p1_data_writer.write(p1_data);
 	hspConnector::get()->command("setweeklyscore", p1, NULL);
@@ -448,10 +451,9 @@ void FailScene::resultSavedUserData(Json::Value result_data)
 	if(result_data["state"] == "ok")
 	{
 		is_saved_user_data = true;
+		endLoad();
 		
-		main_menu->setVisible(true);
-		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) > 0)
-			replay_menu->setVisible(true);
+		hspConnector::get()->kLoadFriends(json_selector(this, FailScene::resultLoadFriends));
 	}
 	else
 	{
@@ -482,6 +484,117 @@ void FailScene::resultSavedUserData(Json::Value result_data)
 		Json::FastWriter writer;
 		param2["data"] = writer.write(data);
 		hspConnector::get()->command("updateUserData", param2, json_selector(this, FailScene::resultSavedUserData));
+	}
+}
+
+void FailScene::resultLoadFriends(Json::Value result_data)
+{
+	CCLog("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	if(result_data["status"].asInt() == 0)
+	{
+		Json::Value appfriends = result_data["app_friends_info"];
+		appfriends.append(hspConnector::get()->myKakaoInfo);
+		
+		Json::Value p;
+		for(int i=0; i<appfriends.size();i++)
+		{
+			FailFriendRank t_friend_info;
+			t_friend_info.nickname = appfriends[i]["nickname"].asString().c_str();
+			t_friend_info.img_url = appfriends[i]["profile_image_url"].asString().c_str();
+			t_friend_info.user_id = appfriends[i]["user_id"].asString().c_str();
+			t_friend_info.score = 0;
+			t_friend_info.is_play = false;
+			friend_list.push_back(t_friend_info);
+			
+			p["memberIDList"].append(appfriends[i]["user_id"].asString());
+		}
+		
+		p["stageNo"]=mySD->getSilType();
+		hspConnector::get()->command("getstagescorelist",p,json_selector(this, FailScene::resultGetStageScoreList));
+	}
+	else
+	{
+		is_loaded_list = true;
+		endLoad();
+	}
+}
+
+void FailScene::resultGetStageScoreList(Json::Value result_data)
+{
+	CCLog("resultGetStageScoreList : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	if(result_data["state"].asString() == "ok")
+	{
+		Json::Value score_list = result_data["list"];
+		for(int i=0;i<score_list.size();i++)
+		{
+			vector<FailFriendRank>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString().c_str());
+			if(iter != friend_list.end())
+			{
+				(*iter).score = score_list[i]["score"].asFloat();
+				(*iter).is_play = true;
+			}
+			else
+				CCLog("not found friend memberID");
+		}
+		
+		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](FailFriendRank t_info)
+										{
+											return !t_info.is_play;
+										});
+		friend_list.erase(beginIter, friend_list.end());
+		
+		struct t_FriendSort{
+			bool operator() (const FailFriendRank& a, const FailFriendRank& b)
+			{
+				return a.score > b.score;
+			}
+		} pred;
+		
+		sort(friend_list.begin(), friend_list.end(), pred);
+		
+		// create cell
+		
+		//		CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 195, 176));
+		//		temp_back->setAnchorPoint(CCPointZero);
+		//		temp_back->setOpacity(100);
+		//		temp_back->setPosition(ccp(246, 65));
+		//		addChild(temp_back, kZ_CS_menu);
+		
+		rankTableView = CCTableView::create(this, CCSizeMake(195, 176));
+		
+		rankTableView->setAnchorPoint(CCPointZero);
+		rankTableView->setDirection(kCCScrollViewDirectionVertical);
+		rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
+		rankTableView->setPosition(ccp(246, 65));
+		
+		rankTableView->setDelegate(this);
+		addChild(rankTableView, kZ_FS_menu);
+		rankTableView->setTouchPriority(kCCMenuHandlerPriority+1);
+		
+		//		int myPosition = rankTableView->minContainerOffset().y;
+		//		for(int i=0; i<friend_list.size(); i++)
+		//		{
+		//			if(friend_list[i].user_id == hspConnector::get()->getKakaoID())
+		//			{
+		//				myPosition = friend_list.size() - i - 1;
+		//				break;
+		//			}
+		//		}
+		//		float yInitPosition = MAX(rankTableView->minContainerOffset().y, -cellSizeForTable(rankTableView).height*myPosition + rankTableView->getViewSize().height / 2.f);
+		//		yInitPosition = MIN(0, yInitPosition);
+		//		rankTableView->setContentOffsetInDuration(ccp(0, yInitPosition), 0.7f);
+	}
+	is_loaded_list = true;
+	endLoad();
+}
+
+void FailScene::endLoad()
+{
+	if(is_saved_user_data && is_loaded_list)
+	{
+		main_menu->setVisible(true);
+		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) > 0)
+			replay_menu->setVisible(true);
 	}
 }
 
