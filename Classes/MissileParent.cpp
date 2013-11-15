@@ -32,8 +32,10 @@ void MissileParent::bombCumber( CCObject* target )
 
 void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_speed )
 {
+	CCLog("createJackMissile inner : %d, %d, %.2f", jm_type, cmCnt, missile_speed);
 	if(jm_type%10 >= 0 && jm_type%10 <= 3)
 	{
+		CCLog("base JackMissile");
 		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
 		int cumberCnt = 1 + subCumberArray->count();
 		int random_value;
@@ -42,6 +44,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 		{
 			if(i == 0)
 			{
+				CCLog("target boss");
 				JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
 				addChild(t_jm);
 				t_jm->startMoving();
@@ -51,12 +54,14 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 				random_value = rand()%cumberCnt;
 				if(random_value == 0)
 				{
+					CCLog("target boss");
 					JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
 					addChild(t_jm);
 					t_jm->startMoving();
 				}
 				else
 				{
+					CCLog("target sub");
 					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), jm_type, missile_speed);
 					addChild(t_jm);
 					t_jm->startMoving();
@@ -66,6 +71,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	}
 	else if(jm_type%10 >= 4 && jm_type%10 <= 6)
 	{
+		CCLog("Upgrade JackMissile");
 		UM_creator* t_c = UM_creator::create(cmCnt, jm_type, missile_speed);
 		addChild(t_c);
 		t_c->startCreate();
