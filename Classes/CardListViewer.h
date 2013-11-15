@@ -147,6 +147,7 @@ private:
 				t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
 				
 				CCMenu* t_card_menu = CCMenu::createWithItem(t_card_item);
+				t_card_menu->setTouchEnabled(false);
 				t_card_menu->setPosition(CCPointZero);
 				addChild(t_card_menu, kCSS_Z_content, kCSS_MT_cardMenuBase+card_number);
 			}
@@ -160,6 +161,7 @@ private:
 				t_card_item->setTag(kCSS_MT_noCardBase+card_number);
 				
 				CCMenu* t_card_menu = CCMenu::createWithItem(t_card_item);
+				t_card_menu->setTouchEnabled(false);
 				t_card_menu->setPosition(CCPointZero);
 				addChild(t_card_menu, kCSS_Z_content, kCSS_MT_noCardBase+card_number);
 			}
@@ -204,6 +206,7 @@ private:
 				t_card_item->setTag(kCSS_MT_cardMenuBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 				
 				CCMenu* t_card_menu = CCMenu::createWithItem(t_card_item);
+				t_card_menu->setTouchEnabled(false);
 				t_card_menu->setPosition(CCPointZero);
 				addChild(t_card_menu, kCSS_Z_content, kCSS_MT_cardMenuBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 			}
@@ -217,6 +220,7 @@ private:
 				t_card_item->setTag(kCSS_MT_noCardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 				
 				CCMenu* t_card_menu = CCMenu::createWithItem(t_card_item);
+				t_card_menu->setTouchEnabled(false);
 				t_card_menu->setPosition(CCPointZero);
 				addChild(t_card_menu, kCSS_Z_content, kCSS_MT_noCardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
 			}
