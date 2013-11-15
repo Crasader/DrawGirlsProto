@@ -97,6 +97,24 @@ public:
 		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), bool_string);
 	}
 	
+	int getUserIntForStr(string t_key, int t_default)
+	{
+		return myDefault->getValue(kSDF_myDSH, t_key, t_default);
+	}
+	void setUserIntForStr(string t_key, int t_val1)
+	{
+		myDefault->setKeyValue(kSDF_myDSH, t_key, t_val1);
+	}
+	
+	string getUserStrForStr(string t_key, string t_default)
+	{
+		return myDefault->getValue(kSDF_myDSH, t_key, t_default);
+	}
+	void setUserStrForStr(string t_key, string t_val1)
+	{
+		myDefault->setKeyValue(kSDF_myDSH, t_key, t_val1);
+	}
+	
 	int getIntegerForKey(DSH_Key t_key)
 	{
 		return myDefault->getValue(kSDF_myDSH, getKey(t_key), 0);
