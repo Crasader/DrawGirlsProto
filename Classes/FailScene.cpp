@@ -95,11 +95,11 @@ bool FailScene::init()
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	
-	DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number));
-	addChild(t_popup, kZ_FS_popup);
-	
 	if(selected_card_number > 0)
 	{
+		DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number));
+		addChild(t_popup, kZ_FS_popup);
+		
 		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number);
 		if(durability <= 0)
 			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);

@@ -59,6 +59,8 @@ bool ClearScene::init()
         return false;
     }
 	
+	is_loaded_list = false;
+	
 	setKeypadEnabled(true);
 	
 	myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
@@ -251,6 +253,10 @@ bool ClearScene::init()
 	
 	
 	
+	hspConnector::get()->kLoadFriends(json_selector(this, ClearScene::resultLoadFriends));
+	
+	
+	
 	is_saved_user_data = false;
 	
 	Json::Value param2;
@@ -284,14 +290,113 @@ bool ClearScene::init()
     return true;
 }
 
+void ClearScene::resultLoadFriends(Json::Value result_data)
+{
+	CCLog("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	if(result_data["status"].asInt() == 0)
+	{
+		Json::Value appfriends = result_data["app_friends_info"];
+		appfriends.append(hspConnector::get()->myKakaoInfo);
+		
+		Json::Value p;
+		for(int i=0; i<appfriends.size();i++)
+		{
+			ClearFriendRank t_friend_info;
+			t_friend_info.nickname = appfriends[i]["nickname"].asString().c_str();
+			t_friend_info.img_url = appfriends[i]["profile_image_url"].asString().c_str();
+			t_friend_info.user_id = appfriends[i]["user_id"].asString().c_str();
+			t_friend_info.score = 0;
+			t_friend_info.is_play = false;
+			friend_list.push_back(t_friend_info);
+			
+			p["memberIDList"].append(appfriends[i]["user_id"].asString());
+		}
+		
+		p["stageNo"]=mySD->getSilType();
+		hspConnector::get()->command("getstagescorelist",p,json_selector(this, ClearScene::resultGetStageScoreList));
+	}
+	else
+	{
+		is_loaded_list = true;
+		endLoad();
+	}
+}
+
+void ClearScene::resultGetStageScoreList(Json::Value result_data)
+{
+	CCLog("resultGetStageScoreList : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	if(result_data["state"].asString() == "ok")
+	{
+		Json::Value score_list = result_data["list"];
+		for(int i=0;i<score_list.size();i++)
+		{
+			vector<ClearFriendRank>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString().c_str());
+			if(iter != friend_list.end())
+			{
+				(*iter).score = score_list[i]["score"].asFloat();
+				(*iter).is_play = true;
+			}
+			else
+				CCLog("not found friend memberID");
+		}
+		
+		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](ClearFriendRank t_info)
+										{
+											return !t_info.is_play;
+										});
+		friend_list.erase(beginIter, friend_list.end());
+		
+		struct t_FriendSort{
+			bool operator() (const ClearFriendRank& a, const ClearFriendRank& b)
+			{
+				return a.score > b.score;
+			}
+		} pred;
+		
+		sort(friend_list.begin(), friend_list.end(), pred);
+		
+		// create cell
+		
+//		CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 195, 176));
+//		temp_back->setAnchorPoint(CCPointZero);
+//		temp_back->setOpacity(100);
+//		temp_back->setPosition(ccp(246, 65));
+//		addChild(temp_back, kZ_CS_menu);
+		
+		rankTableView = CCTableView::create(this, CCSizeMake(195, 176));
+		
+		rankTableView->setAnchorPoint(CCPointZero);
+		rankTableView->setDirection(kCCScrollViewDirectionVertical);
+		rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
+		rankTableView->setPosition(ccp(246, 65));
+		
+		rankTableView->setDelegate(this);
+		addChild(rankTableView, kZ_CS_menu);
+		rankTableView->setTouchPriority(-200);
+		
+//		int myPosition = rankTableView->minContainerOffset().y;
+//		for(int i=0; i<friend_list.size(); i++)
+//		{
+//			if(friend_list[i].user_id == hspConnector::get()->getKakaoID())
+//			{
+//				myPosition = friend_list.size() - i - 1;
+//				break;
+//			}
+//		}
+//		float yInitPosition = MAX(rankTableView->minContainerOffset().y, -cellSizeForTable(rankTableView).height*myPosition + rankTableView->getViewSize().height / 2.f);
+//		yInitPosition = MIN(0, yInitPosition);
+//		rankTableView->setContentOffsetInDuration(ccp(0, yInitPosition), 0.7f);
+	}
+	is_loaded_list = true;
+	endLoad();
+}
+
 void ClearScene::resultSavedUserData(Json::Value result_data)
 {
 	if(result_data["state"] == "ok")
 	{
 		is_saved_user_data = true;
-		
-		ok_menu->setVisible(true);
-		replay_menu->setVisible(true);
+		endLoad();
 	}
 	else
 	{
@@ -322,6 +427,15 @@ void ClearScene::resultSavedUserData(Json::Value result_data)
 		Json::FastWriter writer;
 		param2["data"] = writer.write(data);
 		hspConnector::get()->command("updateUserData", param2, json_selector(this, ClearScene::resultSavedUserData));
+	}
+}
+
+void ClearScene::endLoad()
+{
+	if(is_saved_user_data && is_loaded_list)
+	{
+		ok_menu->setVisible(true);
+		replay_menu->setVisible(true);
 	}
 }
 
