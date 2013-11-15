@@ -278,7 +278,13 @@ public:
 		}
 		else
 		{
-			lastCastNum = m_well512.GetValue(1, 1);
+			std::string atype = _pattern.get("atype", "normal").asString();
+			std::map<std::string, int> mapper = {{"normal", 1}, {"special", 2}, {"crash", 3}};
+			if(mapper.find(atype) == mapper.end())
+				lastCastNum = 1;
+			else
+				lastCastNum = mapper[atype];
+			
 			mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 			
 			std::string target = _pattern.get("target", "no").asString();

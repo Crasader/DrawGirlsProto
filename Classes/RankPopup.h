@@ -15,6 +15,7 @@
 #include "KSUtil.h"
 #include "CCMenuLambda.h"
 #include "GDWebSprite.h"
+#include "DataStorageHub.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -61,6 +62,91 @@ namespace{
 	CCSize cellSize = CCSizeMake(238, 47);
 }
 #define SAFE_REMOVECHILD(X) do{if(X){ X->removeFromParentAndCleanup(true); X = 0;}}while(0);
+
+class CC_DLL KSEaseBackOut : public CCActionEase
+{
+public:
+	virtual void update(float time)
+	{
+//    float overshoot = 1.70158f;
+    float overshoot = 0.1f;
+		
+    time = time - 1;
+    m_pInner->update(time * time * ((overshoot + 1) * time + overshoot) + 1);
+	}
+	virtual CCActionInterval* reverse(void)
+	{
+    return CCEaseBackIn::create(m_pInner->reverse());
+	}
+	virtual CCObject* copyWithZone(CCZone* pZone)
+	{
+    CCZone* pNewZone = NULL;
+    CCEaseBackOut* pCopy = NULL;
+    if(pZone && pZone->m_pCopyObject)
+    {
+			//in case of being called at sub class
+			pCopy = (CCEaseBackOut*)(pZone->m_pCopyObject);
+    }
+    else
+    {
+			pCopy = new CCEaseBackOut();
+			pNewZone = new CCZone(pCopy);
+    }
+		
+    pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
+    
+    CC_SAFE_DELETE(pNewZone);
+    return pCopy;
+	}
+	
+public:
+	
+	/** creates the action */
+	static CCEaseBackOut* create(CCActionInterval* pAction)
+	{
+    CCEaseBackOut *pRet = new CCEaseBackOut();
+    if (pRet)
+    {
+			if (pRet->initWithAction(pAction))
+			{
+				pRet->autorelease();
+			}
+			else
+			{
+				CC_SAFE_RELEASE_NULL(pRet);
+			}
+    }
+		
+    return pRet;
+		
+	}
+};
+
+class RankTableView : public CCTableView
+{
+public:
+	static RankTableView* create(CCTableViewDataSource* dataSource, CCSize size, CCNode *container)
+	{
+    RankTableView *table = new RankTableView();
+    table->initWithViewSize(size, container);
+    table->autorelease();
+    table->setDataSource(dataSource);
+    table->_updateCellPositions();
+    table->_updateContentSize();
+		
+    return table;
+	}
+
+	void setContentOffsetInDuration(CCPoint offset, float dt)
+	{
+    CCFiniteTimeAction *scroll, *expire;
+    
+    scroll = KSEaseBackOut::create( CCMoveTo::create(dt, offset) );
+    expire = CCCallFuncN::create(this, (SEL_CallFuncN)(&CCScrollView::stoppedAnimatedScroll));
+    m_pContainer->runAction(CCSequence::create(scroll, expire, NULL));
+    this->schedule(schedule_selector(CCScrollView::performedAnimatedScroll));
+	}
+};
 class RankPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -82,39 +168,14 @@ public:
 		removeFromParent();
 	}
 	
-	CCSprite* gray;
-	Json::Value m_scoreList;
-private:
 	
-	CCTableView* rankTableView;
-	 
-	bool is_menu_enable;
-	
-	int touched_number;
-//	CCMenu* close_menu;
-//	CCMenu* invite_menu;
-//	CCMenu* send_menu;
-//	CCMenu* send_close_menu;
-//	CCMenu* invite_close_menu;
-//	CCMenu* invite_rank_menu;
-//	CCMenu* invite_send_menu;
-//	CCMenu* invite_send_close_menu;
-	
-	
-	CCObject* target_close;
-	SEL_CallFunc delegate_close;
-	
-	RankPopupState my_state;
-	
-	
-	
-	CCControlButton *closeBtn;
 	
 	void myInit(CCObject* t_close, SEL_CallFunc d_close)
 	{
 		setTouchEnabled(true);
 		target_close = t_close;
 		delegate_close = d_close;
+		m_currentSelectSprite = NULL;
 		
 		gray = CCSprite::create("back_gray.png");
 		gray->setPosition(ccp(240,160));
@@ -124,6 +185,21 @@ private:
 		CCSprite* back = CCSprite::create("ranking_back.png");
 		back->setPosition(ccp(240,160));
 		addChild(back, kRP_Z_back);
+		
+		CCMenuLambda* _menu = CCMenuLambda::create();
+		_menu->setTouchPriority(-200);
+		back->addChild(_menu);
+		_menu->setPosition(ccp(0, 0));
+		
+		CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
+				"cardsetting_close.png", "cardsetting_close.png",
+																															 [=](CCObject*){
+																																 (target_close->*delegate_close)();
+																																 removeFromParent();
+																																 
+																															 });
+		closeBtn->setPosition(ccp(440, 290));
+		_menu->addChild(closeBtn);
 		
 		loadRank();
 	}
@@ -265,7 +341,7 @@ private:
 		//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 		
 		//320x320 테이블 뷰 생성
-		rankTableView = CCTableView::create(this, CCSizeMake(244*2, 233));
+		rankTableView = RankTableView::create(this, CCSizeMake(244*2, 233), NULL);
 		
 		rankTableView->setAnchorPoint(CCPointZero);
 		
@@ -348,13 +424,7 @@ private:
 		bg->setAnchorPoint(CCPointZero);
 		cell->addChild(bg,1);
 		
-		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
-		{
-			CCSprite* meBack = CCSprite::create("rank_cell_select.png");
-			meBack->setPosition(CCPointZero - ccp(6, 0));
-			meBack->setAnchorPoint(CCPointZero);
-			cell->addChild(meBack, 2);
-		}
+		
 			
 
 		
@@ -456,8 +526,39 @@ private:
 	}
     
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell){
-		// 영호
-		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
+		
+		int selectedCardIndex = 0;
+		// 나를 클릭함.
+		if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+		{
+			selectedCardIndex = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 자기 카드 번호.
+		}
+		else
+		{
+			Json::Reader reader;
+			Json::Value data;
+			reader.parse(m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString(), data);
+			//		Json::Value data = m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString()
+			selectedCardIndex = data.get("selectedcard", 0).asInt();
+		}
+		CCLog("card Number %d", selectedCardIndex); // 영호
+		
+		if(m_currentSelectSprite)
+		{
+			m_currentSelectSprite->removeFromParent();
+			m_currentSelectSprite = NULL;
+		}
+		
+		
+//		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
+		{
+			m_currentSelectSprite = CCSprite::create("rank_cell_select.png");
+			m_currentSelectSprite->setPosition(CCPointZero - ccp(6, 0));
+			m_currentSelectSprite->setAnchorPoint(CCPointZero);
+			cell->addChild(m_currentSelectSprite, 2);
+		}
+		
+		
 		
 		
 	}
@@ -823,6 +924,22 @@ private:
 		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 		pDispatcher->addTargetedDelegate(this, -170, true);
 	}
+	
+protected:
+	CCSprite* gray;
+	Json::Value m_scoreList;
+
+	RankTableView* rankTableView;
+	
+	bool is_menu_enable;
+	
+	int touched_number;
+	CCObject* target_close;
+	SEL_CallFunc delegate_close;
+	RankPopupState my_state;
+	CCControlButton *closeBtn;
+	
+	CCSprite* m_currentSelectSprite;
 };
 
 #endif /* defined(__DGproto__RankPopup__) */
