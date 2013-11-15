@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>8</integer>
+	<integer>13</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -138,36 +138,7 @@
 						</dict>
 					</dict>
 					<key>8</key>
-					<dict>
-						<key>scale</key>
-						<dict>
-							<key>keyframes</key>
-							<array>
-								<dict>
-									<key>easing</key>
-									<dict>
-										<key>type</key>
-										<integer>1</integer>
-									</dict>
-									<key>name</key>
-									<string>scale</string>
-									<key>time</key>
-									<real>0.0</real>
-									<key>type</key>
-									<integer>4</integer>
-									<key>value</key>
-									<array>
-										<real>0.80000001192092896</real>
-										<real>0.80000001192092896</real>
-									</array>
-								</dict>
-							</array>
-							<key>name</key>
-							<string>scale</string>
-							<key>type</key>
-							<integer>4</integer>
-						</dict>
-					</dict>
+					<dict/>
 					<key>9</key>
 					<dict/>
 				</dict>
@@ -1114,6 +1085,21 @@
 													<key>value</key>
 													<integer>255</integer>
 												</dict>
+												<dict>
+													<key>easing</key>
+													<dict>
+														<key>type</key>
+														<integer>1</integer>
+													</dict>
+													<key>name</key>
+													<string>opacity</string>
+													<key>time</key>
+													<real>0.5</real>
+													<key>type</key>
+													<integer>5</integer>
+													<key>value</key>
+													<integer>255</integer>
+												</dict>
 											</array>
 											<key>name</key>
 											<string>opacity</string>
@@ -1189,7 +1175,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -1571,7 +1557,22 @@
 													<key>type</key>
 													<integer>5</integer>
 													<key>value</key>
-													<integer>0</integer>
+													<integer>255</integer>
+												</dict>
+												<dict>
+													<key>easing</key>
+													<dict>
+														<key>type</key>
+														<integer>1</integer>
+													</dict>
+													<key>name</key>
+													<string>opacity</string>
+													<key>time</key>
+													<real>0.5</real>
+													<key>type</key>
+													<integer>5</integer>
+													<key>value</key>
+													<integer>255</integer>
 												</dict>
 											</array>
 											<key>name</key>
@@ -1648,7 +1649,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -1660,7 +1661,7 @@
 						<key>displayName</key>
 						<string>CCLayer</string>
 						<key>memberVarAssignmentName</key>
-						<string>a1</string>
+						<string></string>
 						<key>memberVarAssignmentType</key>
 						<integer>1</integer>
 						<key>properties</key>
@@ -1678,7 +1679,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>74.766204833984375</real>
+									<real>32</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -2687,6 +2688,21 @@
 													<key>value</key>
 													<integer>255</integer>
 												</dict>
+												<dict>
+													<key>easing</key>
+													<dict>
+														<key>type</key>
+														<integer>1</integer>
+													</dict>
+													<key>name</key>
+													<string>opacity</string>
+													<key>time</key>
+													<real>0.5</real>
+													<key>type</key>
+													<integer>5</integer>
+													<key>value</key>
+													<integer>255</integer>
+												</dict>
 											</array>
 											<key>name</key>
 											<string>opacity</string>
@@ -2762,7 +2778,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -3245,7 +3261,7 @@
 													<key>type</key>
 													<integer>5</integer>
 													<key>value</key>
-													<integer>0</integer>
+													<integer>255</integer>
 												</dict>
 											</array>
 											<key>name</key>
@@ -3322,7 +3338,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -3334,9 +3350,9 @@
 						<key>displayName</key>
 						<string>CCLayer</string>
 						<key>memberVarAssignmentName</key>
-						<string>a2</string>
+						<string></string>
 						<key>memberVarAssignmentType</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>properties</key>
 						<array>
 							<dict>
@@ -3351,8 +3367,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>64.583335876464844</real>
-									<real>37.25</real>
+									<real>27.5</real>
+									<real>16</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -4436,7 +4452,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -4919,7 +4935,7 @@
 													<key>type</key>
 													<integer>5</integer>
 													<key>value</key>
-													<integer>0</integer>
+													<integer>255</integer>
 												</dict>
 											</array>
 											<key>name</key>
@@ -4996,7 +5012,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -5008,9 +5024,9 @@
 						<key>displayName</key>
 						<string>CCLayer</string>
 						<key>memberVarAssignmentName</key>
-						<string>a3</string>
+						<string></string>
 						<key>memberVarAssignmentType</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>properties</key>
 						<array>
 							<dict>
@@ -5025,8 +5041,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>64.382720947265625</real>
-									<real>-37.305934906005859</real>
+									<real>27.5</real>
+									<real>-16</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -6110,7 +6126,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -6593,7 +6609,7 @@
 													<key>type</key>
 													<integer>5</integer>
 													<key>value</key>
-													<integer>0</integer>
+													<integer>255</integer>
 												</dict>
 											</array>
 											<key>name</key>
@@ -6670,7 +6686,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -6682,9 +6698,9 @@
 						<key>displayName</key>
 						<string>CCLayer</string>
 						<key>memberVarAssignmentName</key>
-						<string>a4</string>
+						<string></string>
 						<key>memberVarAssignmentType</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>properties</key>
 						<array>
 							<dict>
@@ -6700,7 +6716,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>-74.661262512207031</real>
+									<real>-32</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -7784,7 +7800,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -8267,7 +8283,7 @@
 													<key>type</key>
 													<integer>5</integer>
 													<key>value</key>
-													<integer>0</integer>
+													<integer>255</integer>
 												</dict>
 											</array>
 											<key>name</key>
@@ -8344,9 +8360,11 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
+								<key>seqExpanded</key>
+								<true/>
 							</dict>
 						</array>
 						<key>customClass</key>
@@ -8354,9 +8372,9 @@
 						<key>displayName</key>
 						<string>CCLayer</string>
 						<key>memberVarAssignmentName</key>
-						<string>a5</string>
+						<string></string>
 						<key>memberVarAssignmentType</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>properties</key>
 						<array>
 							<dict>
@@ -8371,8 +8389,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-64.334495544433594</real>
-									<real>-37.392742156982422</real>
+									<real>-27.5</real>
+									<real>-16</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -9456,7 +9474,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -9939,7 +9957,7 @@
 													<key>type</key>
 													<integer>5</integer>
 													<key>value</key>
-													<integer>0</integer>
+													<integer>255</integer>
 												</dict>
 											</array>
 											<key>name</key>
@@ -10016,7 +10034,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>0</integer>
+										<integer>255</integer>
 									</dict>
 								</array>
 								<key>seqExpanded</key>
@@ -10028,9 +10046,9 @@
 						<key>displayName</key>
 						<string>CCLayer</string>
 						<key>memberVarAssignmentName</key>
-						<string>a6</string>
+						<string></string>
 						<key>memberVarAssignmentType</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>properties</key>
 						<array>
 							<dict>
@@ -10045,8 +10063,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-64.734451293945312</real>
-									<real>36.936622619628906</real>
+									<real>-27.5</real>
+									<real>16</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -10150,8 +10168,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>0.80000001192092896</real>
-							<real>0.80000001192092896</real>
+							<real>1</real>
+							<real>1</real>
 							<true/>
 							<integer>0</integer>
 						</array>
@@ -10964,7 +10982,7 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>28</integer>
+								<integer>0</integer>
 							</dict>
 						</array>
 						<key>seqExpanded</key>
@@ -11623,7 +11641,7 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>227</integer>
+								<integer>255</integer>
 							</dict>
 						</array>
 						<key>seqExpanded</key>
@@ -11789,7 +11807,7 @@
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>-1</integer>
+			<integer>0</integer>
 			<key>length</key>
 			<real>0.60000002384185791</real>
 			<key>name</key>
@@ -11797,7 +11815,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.60000002384185791</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -11954,24 +11972,7 @@
 			<key>callbackChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array>
-					<dict>
-						<key>easing</key>
-						<dict>
-							<key>type</key>
-							<integer>0</integer>
-						</dict>
-						<key>time</key>
-						<real>1.9666666984558105</real>
-						<key>type</key>
-						<integer>10</integer>
-						<key>value</key>
-						<array>
-							<string>atteck_b</string>
-							<integer>2</integer>
-						</array>
-					</dict>
-				</array>
+				<array/>
 				<key>type</key>
 				<integer>10</integer>
 			</dict>
@@ -12005,29 +12006,12 @@
 			<key>callbackChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array>
-					<dict>
-						<key>easing</key>
-						<dict>
-							<key>type</key>
-							<integer>0</integer>
-						</dict>
-						<key>time</key>
-						<real>0.5</real>
-						<key>type</key>
-						<integer>10</integer>
-						<key>value</key>
-						<array>
-							<string>atteck_m</string>
-							<integer>2</integer>
-						</array>
-					</dict>
-				</array>
+				<array/>
 				<key>type</key>
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>1</integer>
+			<integer>-1</integer>
 			<key>length</key>
 			<real>0.5</real>
 			<key>name</key>
@@ -12035,7 +12019,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.033333335071802139</real>
+			<real>0.5</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -12056,24 +12040,7 @@
 			<key>callbackChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array>
-					<dict>
-						<key>easing</key>
-						<dict>
-							<key>type</key>
-							<integer>0</integer>
-						</dict>
-						<key>time</key>
-						<real>0.3333333432674408</real>
-						<key>type</key>
-						<integer>10</integer>
-						<key>value</key>
-						<array>
-							<string>atteck_e</string>
-							<integer>2</integer>
-						</array>
-					</dict>
-				</array>
+				<array/>
 				<key>type</key>
 				<integer>10</integer>
 			</dict>
@@ -12209,24 +12176,7 @@
 			<key>callbackChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array>
-					<dict>
-						<key>easing</key>
-						<dict>
-							<key>type</key>
-							<integer>0</integer>
-						</dict>
-						<key>time</key>
-						<real>0.3333333432674408</real>
-						<key>type</key>
-						<integer>10</integer>
-						<key>value</key>
-						<array>
-							<string>atteck_e</string>
-							<integer>2</integer>
-						</array>
-					</dict>
-				</array>
+				<array/>
 				<key>type</key>
 				<integer>10</integer>
 			</dict>
@@ -12239,7 +12189,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.033333335071802139</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
