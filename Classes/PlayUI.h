@@ -1113,12 +1113,6 @@ public:
 				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(result_sprite);
 				
-				int grade_value = 1;
-				if(is_exchanged)				grade_value++;
-				if(t_p >= 1.f)					grade_value++;
-				
-				mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
-				
 				endGame(t_p < 1.f && t_p > 0.99f);
 			}
 			else
@@ -1586,6 +1580,11 @@ private:
 //		myGD->communication("CP_setGameover");
 		if(!is_show_reason)
 		{
+			int grade_value = 1;
+			if(is_exchanged)				grade_value++;
+			if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+			
+			mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
 			CCDelayTime* n_d = CCDelayTime::create(4.5f);
 			CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 			
@@ -1600,9 +1599,18 @@ private:
 			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
 			CCCallFunc* nextScene2;
 			if(mySGD->getGold() >= 500)
+			{
 				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
+			}
 			else
+			{
+				int grade_value = 1;
+				if(is_exchanged)				grade_value++;
+				if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+				
+				mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
 				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+			}
 			
 			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
 			
@@ -1612,12 +1620,24 @@ private:
 	
 	void showGachaOnePercent()
 	{
-		OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::nextScene), this, callfunc_selector(PlayUI::gachaOnOnePercent));
+		OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::nextScene), this, callfuncF_selector(PlayUI::gachaOnOnePercent), getPercentage());
 		addChild(t_popup);
 	}
 	
-	void gachaOnOnePercent()
+	void gachaOnOnePercent(float t_percent)
 	{
+		int grade_value = 1;
+		if(is_exchanged && t_percent >= 1.f)		grade_value+=2;
+		else
+		{
+			if(t_percent >= 1.f)
+			{
+				is_exchanged = true;
+				grade_value++;
+			}
+		}
+		
+		mySGD->gameClear(grade_value, atoi(score_label->getString()), t_percent, countingCnt, use_time, total_time);
 		Json::Value param2;
 		param2["memberID"] = hspConnector::get()->getKakaoID();
 		
@@ -1628,7 +1648,6 @@ private:
 		param2["data"] = writer.write(data);
 		hspConnector::get()->command("updateUserData", param2, NULL);
 		
-		is_exchanged = true;
 		nextScene();
 	}
 	

@@ -785,6 +785,10 @@ public:
 	void stopMoving()
 	{
 		unschedule(schedule_selector(ExchangeCoin::moving));
+		CCScaleTo* t_scale = CCScaleTo::create(1.5f, 0);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::removeFromParent));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		runAction(t_seq);
 	}
 	
 private:

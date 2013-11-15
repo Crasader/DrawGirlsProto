@@ -504,6 +504,7 @@ void FailScene::resultLoadFriends(Json::Value result_data)
 			t_friend_info.user_id = appfriends[i]["user_id"].asString().c_str();
 			t_friend_info.score = 0;
 			t_friend_info.is_play = false;
+			t_friend_info.is_message_blocked = appfriends[i]["message_blocked"].asBool();
 			friend_list.push_back(t_friend_info);
 			
 			p["memberIDList"].append(appfriends[i]["user_id"].asString());

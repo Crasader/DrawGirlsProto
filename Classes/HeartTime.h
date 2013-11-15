@@ -57,6 +57,14 @@ public:
 		}
 	}
 	
+	void backHeart()
+	{
+		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+		CCSprite* t_heart = CCSprite::create("test_ui_heart.png");
+		t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
+		addChild(t_heart);
+	}
+	
 	bool isStartable()
 	{
 		if(heart_list.size() <= 0)

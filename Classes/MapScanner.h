@@ -544,7 +544,7 @@ public:
 			uniform_int_distribution<int> uniform_dist(0, 30);
 			
 			init_rect.size.width = uniform_dist(e1) + 50;//rand()%(maxSize.width-minSize.width + 1) + minSize.width; // rand()%(60-30 + 1)
-			init_rect.size.height = uniform_dist(e1) + 46;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
+			init_rect.size.height = uniform_dist(e1) + 40;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
 		}
 		
 		IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
@@ -766,7 +766,7 @@ private:
 		uniform_int_distribution<int> uniform_dist2(myGD->limited_step_bottom+5, myGD->limited_step_top-5);
 		
 		int random_x = uniform_dist1(e1);
-		int random_y = uniform_dist2(e1);
+		int random_y = myGD->limited_step_bottom + roundf((myGD->limited_step_top-myGD->limited_step_bottom)/2.f);
 		
 		start_map_lucky_item = StartMapLuckyItem::create(IntPoint(random_x, random_y));
 		addChild(start_map_lucky_item, blockZorder);

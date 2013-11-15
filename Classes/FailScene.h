@@ -29,6 +29,7 @@ public:
 	string user_id;
 	float score;
 	bool is_play;
+	bool is_message_blocked;
 	
 	bool operator==(string t_id)
 	{
@@ -147,16 +148,25 @@ private:
 		}
 		else
 		{
-			CCSprite* n_help = CCSprite::create("ending_help_on.png");
-			CCSprite* s_help = CCSprite::create("ending_help_on.png");
-			s_help->setColor(ccGRAY);
-			
-			CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailScene::cellAction));
-			help_item->setTag(kFFC_T_menuBase + idx);
-			
-			CCMenu* help_menu = CCMenu::createWithItem(help_item);
-			help_menu->setPosition(ccp(165,21));
-			cell->addChild(help_menu, kFFC_Z_img);
+			if(!(*member).is_message_blocked)
+			{
+				CCSprite* n_help = CCSprite::create("ending_help_on.png");
+				CCSprite* s_help = CCSprite::create("ending_help_on.png");
+				s_help->setColor(ccGRAY);
+				
+				CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailScene::cellAction));
+				help_item->setTag(kFFC_T_menuBase + idx);
+				
+				CCMenu* help_menu = CCMenu::createWithItem(help_item);
+				help_menu->setPosition(ccp(165,21));
+				cell->addChild(help_menu, kFFC_Z_img);
+			}
+			else
+			{
+				CCSprite* not_help = CCSprite::create("ending_help_off.png");
+				not_help->setPosition(ccp(165,21));
+				cell->addChild(not_help, kFFC_Z_img);
+			}
 		}
 		
 		return cell;

@@ -35,6 +35,7 @@ private:
 	float max_life;
 	float last_life;
 	CCProgressTimer* hp_progress;
+	CCSprite* t_case;
 	
 	void startGraph()
 	{
@@ -45,23 +46,39 @@ private:
 	{
 		if(target_node->getLife() != last_life)
 		{
+			t_case->stopAllActions();
 			hp_progress->stopAllActions();
+			
+			t_case->setVisible(true);
+			hp_progress->setVisible(true);
+			
 			CCProgressFromTo* progress_to = CCProgressFromTo::create(0.3f, last_life/max_life*100.f, target_node->getLife()/max_life*100.f);
-			hp_progress->runAction(progress_to);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MobHpGraph::hidingAction));
+			hp_progress->runAction(CCSequence::createWithTwoActions(progress_to, t_call));
 			last_life = target_node->getLife();
 		}
 		
 		setPosition(ccpAdd(target_node->getPosition(), ccp(0,-20)));
 	}
 	
+	void hidingAction()
+	{
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+		CCHide* t_hide1 = CCHide::create();
+		CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
+		CCHide* t_hide2 = CCHide::create();
+		
+		t_case->runAction(CCSequence::createWithTwoActions(t_delay1, t_hide1));
+		hp_progress->runAction(CCSequence::createWithTwoActions(t_delay2, t_hide2));
+	}
+	
 	void myInit(CCObject* t_target)
 	{
-		CCSprite* t_case = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 40, 8));
+		t_case = CCSprite::create("monster_hp_back.png");
 		t_case->setPosition(CCPointZero);
 		addChild(t_case);
 		
-		CCSprite* t_graph = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 35, 6));
-		t_graph->setColor(ccRED);
+		CCSprite* t_graph = CCSprite::create("monster_hp_bar.png");
 		
 		hp_progress = CCProgressTimer::create(t_graph);
 		hp_progress->setType(kCCProgressTimerTypeBar);
@@ -70,6 +87,8 @@ private:
 		hp_progress->setPosition(CCPointZero);
 		hp_progress->setPercentage(100.f);
 		addChild(hp_progress);
+		
+		hidingAction();
 		
 		target_node = (KSCumberBase*)t_target;
 		last_life = 100.f;

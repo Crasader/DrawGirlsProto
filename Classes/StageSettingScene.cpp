@@ -235,6 +235,7 @@ void StageSettingScene::tempAction(CCObject* sender)
 	else if(tag == 2)
 	{
 		removeChildByTag(kSSS_MT_noti);
+		heart_time->startGame();
 		realStartAction();
 	}
 	else if(tag == 3)
@@ -548,6 +549,8 @@ void StageSettingScene::finalStartAction(Json::Value result_data)
 	else
 	{
 		CCLog("Fail : user data save");
+		
+		heart_time->backHeart();
 		
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(selected_card_number > 0)

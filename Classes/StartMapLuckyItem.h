@@ -95,9 +95,8 @@ private:
 	{
 		my_point = IntPoint(t_point.x, t_point.y);
 		
-		initWithFile("item2.png");
+		initWithFile("item_lucky.png");
 		
-		setColor(ccGREEN);
 		setScale(0.f);
 		
 		setPosition(my_point.convertToCCP());
