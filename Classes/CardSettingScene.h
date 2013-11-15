@@ -16,6 +16,7 @@
 #include "StarGoldData.h"
 #include "CardListViewer.h"
 //#include <deque>
+#include <map>
 
 USING_NS_CC;
 using namespace std;
@@ -44,6 +45,8 @@ private:
 	
 	CCSprite* selected_img;
 	CCSprite* check_img;
+	
+	map<int, CCPoint> align_default_position_list;
 	
 	CCSprite* align_list_img;
 	
