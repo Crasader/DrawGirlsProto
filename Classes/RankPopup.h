@@ -62,6 +62,91 @@ namespace{
 	CCSize cellSize = CCSizeMake(238, 47);
 }
 #define SAFE_REMOVECHILD(X) do{if(X){ X->removeFromParentAndCleanup(true); X = 0;}}while(0);
+
+class CC_DLL KSEaseBackOut : public CCActionEase
+{
+public:
+	virtual void update(float time)
+	{
+//    float overshoot = 1.70158f;
+    float overshoot = 0.1f;
+		
+    time = time - 1;
+    m_pInner->update(time * time * ((overshoot + 1) * time + overshoot) + 1);
+	}
+	virtual CCActionInterval* reverse(void)
+	{
+    return CCEaseBackIn::create(m_pInner->reverse());
+	}
+	virtual CCObject* copyWithZone(CCZone* pZone)
+	{
+    CCZone* pNewZone = NULL;
+    CCEaseBackOut* pCopy = NULL;
+    if(pZone && pZone->m_pCopyObject)
+    {
+			//in case of being called at sub class
+			pCopy = (CCEaseBackOut*)(pZone->m_pCopyObject);
+    }
+    else
+    {
+			pCopy = new CCEaseBackOut();
+			pNewZone = new CCZone(pCopy);
+    }
+		
+    pCopy->initWithAction((CCActionInterval *)(m_pInner->copy()->autorelease()));
+    
+    CC_SAFE_DELETE(pNewZone);
+    return pCopy;
+	}
+	
+public:
+	
+	/** creates the action */
+	static CCEaseBackOut* create(CCActionInterval* pAction)
+	{
+    CCEaseBackOut *pRet = new CCEaseBackOut();
+    if (pRet)
+    {
+			if (pRet->initWithAction(pAction))
+			{
+				pRet->autorelease();
+			}
+			else
+			{
+				CC_SAFE_RELEASE_NULL(pRet);
+			}
+    }
+		
+    return pRet;
+		
+	}
+};
+
+class RankTableView : public CCTableView
+{
+public:
+	static RankTableView* create(CCTableViewDataSource* dataSource, CCSize size, CCNode *container)
+	{
+    RankTableView *table = new RankTableView();
+    table->initWithViewSize(size, container);
+    table->autorelease();
+    table->setDataSource(dataSource);
+    table->_updateCellPositions();
+    table->_updateContentSize();
+		
+    return table;
+	}
+
+	void setContentOffsetInDuration(CCPoint offset, float dt)
+	{
+    CCFiniteTimeAction *scroll, *expire;
+    
+    scroll = KSEaseBackOut::create( CCMoveTo::create(dt, offset) );
+    expire = CCCallFuncN::create(this, (SEL_CallFuncN)(&CCScrollView::stoppedAnimatedScroll));
+    m_pContainer->runAction(CCSequence::create(scroll, expire, NULL));
+    this->schedule(schedule_selector(CCScrollView::performedAnimatedScroll));
+	}
+};
 class RankPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -100,6 +185,21 @@ public:
 		CCSprite* back = CCSprite::create("ranking_back.png");
 		back->setPosition(ccp(240,160));
 		addChild(back, kRP_Z_back);
+		
+		CCMenuLambda* _menu = CCMenuLambda::create();
+		_menu->setTouchPriority(-200);
+		back->addChild(_menu);
+		_menu->setPosition(ccp(0, 0));
+		
+		CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
+				"cardsetting_close.png", "cardsetting_close.png",
+																															 [=](CCObject*){
+																																 (target_close->*delegate_close)();
+																																 removeFromParent();
+																																 
+																															 });
+		closeBtn->setPosition(ccp(440, 290));
+		_menu->addChild(closeBtn);
 		
 		loadRank();
 	}
@@ -241,7 +341,7 @@ public:
 		//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 		
 		//320x320 테이블 뷰 생성
-		rankTableView = CCTableView::create(this, CCSizeMake(244*2, 233));
+		rankTableView = RankTableView::create(this, CCSizeMake(244*2, 233), NULL);
 		
 		rankTableView->setAnchorPoint(CCPointZero);
 		
@@ -829,7 +929,7 @@ protected:
 	CCSprite* gray;
 	Json::Value m_scoreList;
 
-	CCTableView* rankTableView;
+	RankTableView* rankTableView;
 	
 	bool is_menu_enable;
 	
