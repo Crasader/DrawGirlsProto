@@ -16,6 +16,7 @@
 #include "CCMenuLambda.h"
 #include "GDWebSprite.h"
 #include "DataStorageHub.h"
+#include <chrono>
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -168,7 +169,33 @@ public:
 		removeFromParent();
 	}
 	
-	
+	int getHeartIsSendable(std::string userId, int base_s = 60 * 60 * 24)
+	{
+		auto end = chrono::system_clock::now();
+		auto currentSecond = chrono::system_clock::to_time_t(end);
+		int ii = myDSH->getUserIntForStr("heart_" + userId, 0);
+		if(ii + base_s < currentSecond)
+		{
+			return 1;
+		}
+		else
+			return 0;
+		
+//		if(ii + base_s < GameSystem::getCurrentTime_s())
+//		{
+//			return 1;
+//		}
+//		else
+//			return 0;
+	}
+	void setHeartSendTime(string userId)
+	{
+		auto end = chrono::system_clock::now();
+		auto currentSecond = chrono::system_clock::to_time_t(end);
+		myDSH->setUserIntForStr("heart_" + userId, currentSecond);
+//		saveData->setKeyValue(fbid, GameSystem::getCurrentTime_s());
+	}
+
 	
 	void myInit(CCObject* t_close, SEL_CallFunc d_close)
 	{
@@ -177,10 +204,10 @@ public:
 		delegate_close = d_close;
 		m_currentSelectSprite = NULL;
 		
-		gray = CCSprite::create("back_gray.png");
-		gray->setPosition(ccp(240,160));
-		gray->setContentSize(CCSizeMake(600, 400));
-		addChild(gray, kRP_Z_gray);
+//		gray = CCSprite::create("back_gray.png");
+//		gray->setPosition(ccp(240,160));
+//		gray->setContentSize(CCSizeMake(600, 400));
+//		addChild(gray, kRP_Z_gray);
 		
 		CCSprite* back = CCSprite::create("ranking_back.png");
 		back->setPosition(ccp(240,160));
@@ -337,7 +364,6 @@ public:
 	
 	void drawRank(Json::Value obj){
 		m_scoreList = obj;
-		KS::KSLog("%", m_scoreList);
 		//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 		
 		//320x320 테이블 뷰 생성
@@ -384,7 +410,7 @@ public:
 	
    	void closePopup(CCControlButton *obj, CCControlEvent event){
 		
-		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
+//		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
 		this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedClose)),NULL));
 	}
 	
@@ -434,47 +460,54 @@ public:
 		_menu->setTag(kRP_RT_menu);
 		cell->addChild(_menu, kRP_Z_send);
 		
-		sendBtn = CCMenuItemImageLambda::create
-		("rank_cell_send.png", "rank_cell_send.png",
-		 [=](CCObject* _obj){
-			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(_obj);
-			 int idx = (int)obj->getUserData();
-			 ////////////////////////////////
-			 // 쪽지보내기 - HSP
-			 ////////////////////////////////
-			 
-			 
-			 Json::Value p;
-			 p["content"]="하트받으세용";
-			 p["receiverMemberID"]=m_scoreList[idx]["user_id"].asString();
-			 p["senderMemberID"]=hspConnector::get()->getKakaoID();
-			 p["type"]=1;
-			 
-			 
-			 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
-																		{
-																			
-																			//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-																			//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-																			//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-																			
-																			
-																			GraphDogLib::JsonToLog("sendMessage", r);
-																			
-																			
-																			////////////////////////////////
-																			// 쪽지보내기 - 카카오
-																			////////////////////////////////
-																			Json::Value p2;
-																			p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
-																			p2["message"] = "하트받으세용!";
-																			hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
-																																				{
-																																					GraphDogLib::JsonToLog("kSendMessage", r);
-																																					this->closePopup(0,0);
-																																				});
-																		});
-		 });
+		if(getHeartIsSendable( m_scoreList[idx]["user_id"].asString() ))
+		{
+			sendBtn = CCMenuItemImageLambda::create
+			("rank_cell_send.png", "rank_cell_send.png",
+			 [=](CCObject* _obj){
+				 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(_obj);
+				 int idx = (int)obj->getUserData();
+				 ////////////////////////////////
+				 // 쪽지보내기 - HSP
+				 ////////////////////////////////
+				 
+				 
+				 Json::Value p;
+				 p["content"]="하트받으세용";
+				 p["receiverMemberID"]=m_scoreList[idx]["user_id"].asString();
+				 p["senderMemberID"]=hspConnector::get()->getKakaoID();
+				 p["type"]=1;
+
+				 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+																			{
+																				
+																				//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+																				//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+																				//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+																				
+																				
+																				GraphDogLib::JsonToLog("sendMessage", r);
+																				this->setHeartSendTime(m_scoreList[idx]["user_id"].asString());
+																				
+																				////////////////////////////////
+																				// 쪽지보내기 - 카카오
+																				////////////////////////////////
+																				Json::Value p2;
+																				p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
+																				p2["message"] = "하트받으세용!";
+																				hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
+																																					{
+																																						GraphDogLib::JsonToLog("kSendMessage", r);
+																																						this->closePopup(0,0);
+																																					});
+																			});
+			 });
+		}
+		else
+		{
+			sendBtn = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
+																							[](CCObject*){});
+		}
 		
 		
 		sendBtn->setPosition(ccp(205,22));
@@ -926,7 +959,7 @@ public:
 	}
 	
 protected:
-	CCSprite* gray;
+
 	Json::Value m_scoreList;
 
 	RankTableView* rankTableView;
