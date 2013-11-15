@@ -54,11 +54,15 @@ bool CardSettingScene::init()
 	my_clv = CardListViewer::create();
 	addChild(my_clv, kCSS_Z_content);
 	
+	createCardList();
+	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) > 0)
 	{
 		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
 		int card_level = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
+		
+		recent_mounted_number = selected_card_number;
 		
 		mountingCard(card_stage, card_level);
 	}
@@ -72,11 +76,9 @@ bool CardSettingScene::init()
 		card_option_script = NULL;
 		selected_card_menu = NULL;
 		check_img = NULL;
+		
+		recent_mounted_number = selected_card_number;
 	}
-	
-	recent_mounted_number = selected_card_number;
-	
-	createCardList();
 	
 	my_clv->setMaxPositionY();
 	
@@ -138,27 +140,9 @@ void CardSettingScene::createCardList()
 	
 	if(sort_type == kCST_default)
 	{
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
-		int card_level = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
+		align_default_position_list.clear();
 		
-		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
-//		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
-		
-		int stage_y_base = 0;
 		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-		for(int i=1;i<=puzzle_count;i++)
-		{
-			if(puzzle_number > i)
-				stage_y_base += NSDS_GI(i, kSDS_PZ_stageCount_i);
-			else
-				break;
-		}
-		
-		check_img = CCSprite::create("card_check.png");
-		check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(stage_y_base+card_stage-start_stage)*inner_card_distance.y)));
-		my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 		
 		int t_stage_y_base = 0;
 		for(int i=1;i<=puzzle_count;i++)
@@ -178,12 +162,16 @@ void CardSettingScene::createCardList()
 						CLV_Node* t_node = CLV_Node::create(t_card_number, this, menu_selector(CardSettingScene::menuAction),
 															ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((t_card_grade-1)*inner_card_distance.x, -(t_stage_y_base+t_card_stage-t_start_stage)*inner_card_distance.y)), my_clv->getViewRect());
 						my_clv->addChild(t_node, kCSS_Z_content, t_node->getMyTag());
+						
+						align_default_position_list[t_card_number] = t_node->getPosition();
 					}
 					else
 					{
 						CLV_Node* t_node = CLV_Node::create(t_card_stage, t_card_grade, this, menu_selector(CardSettingScene::menuAction),
 															ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((t_card_grade-1)*inner_card_distance.x, -(t_stage_y_base+t_card_stage-t_start_stage)*inner_card_distance.y)), my_clv->getViewRect());
 						my_clv->addChild(t_node, kCSS_Z_content, t_node->getMyTag());
+						
+						align_default_position_list[NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_grade)] = t_node->getPosition();
 					}
 				}
 			}
@@ -203,15 +191,24 @@ void CardSettingScene::createCardList()
 					CLV_Node* t_node = CLV_Node::create(t_card_number, this, menu_selector(CardSettingScene::menuAction),
 														ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((t_card_grade-1)*inner_card_distance.x, -(t_stage_y_base+t_card_stage-10001)*inner_card_distance.y)), my_clv->getViewRect());
 					my_clv->addChild(t_node, kCSS_Z_content, t_node->getMyTag());
+					
+					align_default_position_list[t_card_number] = t_node->getPosition();
 				}
 				else
 				{
 					CLV_Node* t_node = CLV_Node::create(t_card_stage, t_card_grade, this, menu_selector(CardSettingScene::menuAction),
 														ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((t_card_grade-1)*inner_card_distance.x, -(t_stage_y_base+t_card_stage-10001)*inner_card_distance.y)), my_clv->getViewRect());
 					my_clv->addChild(t_node, kCSS_Z_content, t_node->getMyTag());
+					
+					align_default_position_list[NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_grade)] = t_node->getPosition();
 				}
 			}
 		}
+		
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		check_img = CCSprite::create("card_check.png");
+		check_img->setPosition(align_default_position_list[selected_card_number]);
+		my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 	}
 	else
 	{
@@ -450,24 +447,8 @@ void CardSettingScene::menuAction(CCObject* pSender)
 			
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_default)
 			{
-				int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, clicked_card_number);
-				int card_level = NSDS_GI(kSDS_CI_int1_grade_i, clicked_card_number);
-				
-				int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-				int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
-				
-				int stage_y_base = 0;
-				int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-				for(int i=1;i<=puzzle_count;i++)
-				{
-					if(puzzle_number > i)
-						stage_y_base += NSDS_GI(i, kSDS_PZ_stageCount_i);
-					else
-						break;
-				}
-				
 				check_img = CCSprite::create("card_check.png");
-				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(stage_y_base+card_stage-start_stage)*inner_card_distance.y)));
+				check_img->setPosition(align_default_position_list[clicked_card_number]);
 				my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 			}
 			else
@@ -514,21 +495,8 @@ void CardSettingScene::alignChange()
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_default)
 	{
-		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
-		
-		int stage_y_base = 0;
-		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-		for(int i=1;i<=puzzle_count;i++)
-		{
-			if(puzzle_number > i)
-				stage_y_base += NSDS_GI(i, kSDS_PZ_stageCount_i);
-			else
-				break;
-		}
-		
 		selected_img = CCSprite::create("card_selected.png");
-		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(stage_y_base+card_stage-start_stage)*inner_card_distance.y)));
+		selected_img->setPosition(align_default_position_list[recent_mounted_number]);
 		my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 	}
 	else
@@ -593,33 +561,6 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 	t_case->setPosition(CCPointZero);
 	selected_card_img->addChild(t_case);
 	
-//	star_parent = CCNode::create();
-//	star_parent->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(80,110)));
-//	addChild(star_parent, kCSS_Z_content);
-//	
-//	for(int i=card_level-1;i>=0;i--)
-//	{
-//		CCSprite* card_star = CCSprite::create("card_star.png");
-//		card_star->setPosition(ccp(i*(-20),0));
-//		star_parent->addChild(card_star);
-//	}
-//	
-//	card_option_case = CCSprite::create("card_option_case.png");
-//	card_option_case->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-110)));
-//	addChild(card_option_case, kCSS_Z_content);
-//	
-//	card_option_script = CCLabelTTF::create(CCString::createWithFormat("%d/%d | %s",
-//																	   myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_stage*10 + card_level-1),
-//																	   mySD->getCardDurability(card_stage, card_level),
-//																	   mySD->getCardOptionScript(card_stage, card_level).c_str())->getCString(),
-//											mySGD->getFont().c_str(), 12);
-//	card_option_script->setColor(ccBLACK);
-//	card_option_script->setHorizontalAlignment(kCCTextAlignmentCenter);
-//	card_option_script->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-//	card_option_script->setPosition(card_option_case->getPosition());
-//	addChild(card_option_script, kCSS_Z_content);
-	
-	
 	CCMenuItem* selected_card_item = CCMenuItemImage::create("cardsetting_cardmenu_big.png", "cardsetting_cardmenu_big.png", this, menu_selector(CardSettingScene::menuAction));
 	selected_card_item->setTag(kCSS_MT_selectedCard);
 	
@@ -629,21 +570,8 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_default)
 	{
-		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
-		
-		int stage_y_base = 0;
-		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-		for(int i=1;i<=puzzle_count;i++)
-		{
-			if(puzzle_number > i)
-				stage_y_base += NSDS_GI(i, kSDS_PZ_stageCount_i);
-			else
-				break;
-		}
-		
 		selected_img = CCSprite::create("card_selected.png");
-		selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(stage_y_base+card_stage-start_stage)*inner_card_distance.y)));
+		selected_img->setPosition(align_default_position_list[recent_mounted_number]);
 		my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
 	}
 	else
