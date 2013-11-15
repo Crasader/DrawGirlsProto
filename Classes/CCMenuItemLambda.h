@@ -28,7 +28,8 @@ public:
 	CCMenuItemLambda()
 	: m_bSelected(false)
 	, m_bEnabled(false)
-	, m_nScriptTapHandler(0)
+	, m_nScriptTapHandler(0),
+	m_afterSelector(nullptr)
 	{}
 	virtual ~CCMenuItemLambda();
 	
@@ -63,8 +64,9 @@ public:
 	/** set the target/selector of the menu item*/
 	void setTarget(std::function<void(CCObject*)> selector);
 	
-protected:
+public:
 	std::function<void(CCObject*)> m_selector;
+	std::function<void(CCObject*)> m_afterSelector;
 	int             m_nScriptTapHandler;
 };
 

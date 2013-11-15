@@ -210,12 +210,14 @@ void CCMenuLambda::setHandlerPriority(int newPriority)
 void CCMenuLambda::registerWithTouchDispatcher()
 {
 	CCDirector* pDirector = CCDirector::sharedDirector();
-	pDirector->getTouchDispatcher()->addTargetedDelegate(this, this->getTouchPriority(), true);
+	pDirector->getTouchDispatcher()->addTargetedDelegate(this, this->getTouchPriority(), true); // 원래 true
 }
 
 bool CCMenuLambda::ccTouchBegan(CCTouch* touch, CCEvent* event)
 {
 	CC_UNUSED_PARAM(event);
+	
+	m_touchesStart = touch->getStartLocation();
 	if (m_eState != kCCMenuStateWaiting || ! m_bVisible || !m_bEnabled)
 	{
 		return false;
@@ -243,13 +245,37 @@ void CCMenuLambda::ccTouchEnded(CCTouch *touch, CCEvent* event)
 {
 	CC_UNUSED_PARAM(touch);
 	CC_UNUSED_PARAM(event);
+	
 	CCAssert(m_eState == kCCMenuStateTrackingTouch, "[Menu ccTouchEnded] -- invalid state");
-	if (m_pSelectedItem)
+	m_touchesEnd = touch->getLocation();
+	
+	CCPoint difference = ccpSub(m_touchesEnd, m_touchesStart);
+	
+	if (difference.x > 5.0f || difference.y > 5.0f )
 	{
-		m_pSelectedItem->unselected();
-		m_pSelectedItem->activate();
+		CCMenuLambda::ccTouchCancelled(touch, event);
 	}
-	m_eState = kCCMenuStateWaiting;
+	else if (difference.x < -5.0f || difference.y < -5.0f)
+	{
+		CCMenuLambda::ccTouchCancelled(touch, event);
+	}
+	else
+	{
+		if (m_pSelectedItem)
+		{
+			m_pSelectedItem->unselected();
+			m_pSelectedItem->activate();
+		}
+		m_eState = kCCMenuStateWaiting;
+	}
+
+	//////////// 여긴 원본소스.
+//	if (m_pSelectedItem)
+//	{
+//		m_pSelectedItem->unselected();
+//		m_pSelectedItem->activate();
+//	}
+//	m_eState = kCCMenuStateWaiting;
 }
 
 void CCMenuLambda::ccTouchCancelled(CCTouch *touch, CCEvent* event)

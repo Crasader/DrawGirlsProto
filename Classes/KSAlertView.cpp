@@ -9,3 +9,6 @@
 #include "KSAlertView.h"
 
 
+int KSCoverLayer::touchPriority = INT_MIN + 1000;
+
+

@@ -74,6 +74,8 @@ void CCMenuItemLambda::activate()
 	{
 		m_selector(this);
 		
+		if(m_afterSelector != nullptr)
+			m_afterSelector(this);
 //		if (kScriptTypeNone != m_eScriptType)
 //		{
 //			CCScriptEngineManager::sharedManager()->getScriptEngine()->executeMenuItemEvent(this);

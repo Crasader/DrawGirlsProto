@@ -12,7 +12,9 @@
 #include "cocos2d.h"
 #include "hspConnector.h"
 #include "cocos-ext.h"
-
+#include "KSUtil.h"
+#include "CCMenuLambda.h"
+#include "GDWebSprite.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -23,19 +25,22 @@ enum RankPopupZorder{
 	kRP_Z_back,
 	kRP_Z_close,
 	kRP_Z_content,
-	kRP_Z_rankTable
-	
+	kRP_Z_rankTable,
+	kRP_Z_send,
+	kRP_Z_profileImg
 };
 
 enum RankTableViewTag{
-	kRP_RT_title = 1,
+	kRP_RT_title = 0x1000,
 	kRP_RT_score,
 	kRP_RT_rank,
-	kRP_RT_send
+	kRP_RT_send,
+	kRP_RT_menu,
+	kRP_RT_profileImg,
 };
 
 enum RankPopupMenuTag{
-	kRP_MT_close = 1,
+	kRP_MT_close = 0x2000,
 	kRP_MT_invite,
 	kRP_MT_send,
 	kRP_MT_send_close,
@@ -52,6 +57,10 @@ enum RankPopupState{
 	kRP_State_invite_send
 };
 
+namespace{
+	CCSize cellSize = CCSizeMake(238, 47);
+}
+#define SAFE_REMOVECHILD(X) do{if(X){ X->removeFromParentAndCleanup(true); X = 0;}}while(0);
 class RankPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -103,80 +112,20 @@ private:
 	
 	void myInit(CCObject* t_close, SEL_CallFunc d_close)
 	{
+		setTouchEnabled(true);
 		target_close = t_close;
 		delegate_close = d_close;
 		
 		gray = CCSprite::create("back_gray.png");
-		gray->setPosition(ccp(240,160+400));
+		gray->setPosition(ccp(240,160));
 		gray->setContentSize(CCSizeMake(600, 400));
 		addChild(gray, kRP_Z_gray);
 		
-		CCSprite* back = CCSprite::create("ui_rank_back.png");
+		CCSprite* back = CCSprite::create("ranking_back.png");
 		back->setPosition(ccp(240,160));
 		addChild(back, kRP_Z_back);
 		
-		CCLabelTTF *btnTitle = CCLabelTTF::create("확인", "Helvetica", 15, CCSizeMake(80, 30), kCCTextAlignmentCenter,kCCVerticalTextAlignmentCenter);
-		
-		CCScale9Sprite *btnBg = CCScale9Sprite::create("ui_common_9_button_red.png",CCRectMake(0, 0, 38, 38),CCRectMake(10, 10, 18, 18));
-		
-		closeBtn = CCControlButton::create(btnTitle, btnBg);
-		closeBtn->setPosition(ccp(240,35));
-		closeBtn->setTag(kRP_MT_send);
-		closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RankPopup::closePopup), CCControlEventTouchUpInside);
-		closeBtn->setTouchPriority(-201);
-		addChild(closeBtn, kRP_Z_close);
-		closeBtn->setVisible(false);
-		
-		
-		this->setPositionY(this->getPositionY()-400);
-		
-		
-		this->runAction(CCSequence::create(CCMoveBy::create(0.5, ccp(0,400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedOpen)),NULL));
-		gray->runAction(CCSpawn::create(CCFadeIn::create(0.5),CCMoveBy::create(0.5,CCPoint(0,-400)),NULL));
-		
-//
-//		CCSprite* n_close = CCSprite::create("ui_common_close.png");
-//		CCSprite* s_close = CCSprite::create("ui_common_close.png");
-//		s_close->setColor(ccGRAY);
-//		
-//		CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(RankPopup::menuAction));
-//		close_item->setTag(kRP_MT_close);
-//		
-//		close_menu = CCMenu::createWithItem(close_item);
-//		close_menu->setPosition(getContentPosition(kRP_MT_close));
-//		back->addChild(close_menu);
-//		
-//		
-//		CCSprite* n_invite = CCSprite::create("rank_invite.png");
-//		CCSprite* s_invite = CCSprite::create("rank_invite.png");
-//		s_invite->setColor(ccGRAY);
-//		
-//		CCMenuItem* invite_item = CCMenuItemSprite::create(n_invite, s_invite, this, menu_selector(RankPopup::menuAction));
-//		invite_item->setTag(kRP_MT_invite);
-//		
-//		invite_menu = CCMenu::createWithItem(invite_item);
-//		invite_menu->setPosition(getContentPosition(kRP_MT_invite));
-//		back->addChild(invite_menu);
-//		
-//		
-//		CCSprite* n_send = CCSprite::create("rank_send.png");
-//		CCSprite* s_send = CCSprite::create("rank_send.png");
-//		s_send->setColor(ccGRAY);
-//		
-//		CCMenuItem* send_item = CCMenuItemSprite::create(n_send, s_send, this, menu_selector(RankPopup::menuAction));
-//		send_item->setTag(kRP_MT_send);
-//		
-//		send_menu = CCMenu::createWithItem(send_item);
-//		send_menu->setPosition(getContentPosition(kRP_MT_send));
-//		back->addChild(send_menu);
-		
-		
-		my_state = kRP_State_rank;
-		
-		is_menu_enable = true;
-		touched_number = 0;
-		
-		setTouchEnabled(true);
+		loadRank();
 	}
 	
 	
@@ -185,14 +134,12 @@ private:
 	{
 		
 
-		Json::Value p;
-		p["delekey"] = jsonDelegator::get()->add(json_selector(this, RankPopup::drawRank), 0, 0);
-		
+		std::function<void(Json::Value e)> p1 = bind(&RankPopup::drawRank, this, std::placeholders::_1);
 		//step1 카카오친구목록 로드
-		hspConnector::get()->kLoadFriends(p,[](Json::Value fInfo)
+		hspConnector::get()->kLoadFriends(Json::Value(),[p1](Json::Value fInfo)
 		{
 			CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-			int delekey = fInfo["callback"]["delekey"].asInt();
+
 			  
 				
 			Json::Value appfriends = fInfo["app_friends_info"];
@@ -207,7 +154,7 @@ private:
 			p["memberIDList"].append(hspConnector::get()->getKakaoID());
 			
 			//step2 위클리스코어 목록 읽어옴
-			hspConnector::get()->command("getweeklyscorelist",p,[delekey,appfriends](Json::Value obj)
+			hspConnector::get()->command("getweeklyscorelist",p,[p1,appfriends](Json::Value obj)
 			{										   
 				CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
 				
@@ -225,13 +172,42 @@ private:
 					scorelist[mid]["scoreInfo"]=obj["list"][j];
 				}
 				GraphDogLib::JsonToLog("result", scorelist);
+				Json::Value scorearray;
+				for(auto iter = scorelist.begin(); iter != scorelist.end(); ++iter)
+				{
+					Json::Value temp = scorelist[iter.key().asString()];
+					temp["user_id"] = iter.key().asString();
+					scorearray.append(temp);
+				}
+				
+				// 정렬 함
+				// Selection Sort
+				int N = scorearray.size();
+				for (int i = 0; i < (N - 1); i++)
+				{
+					int minIndex = i;
+					
+					// Find the index of the minimum element
+					for (int j = i + 1; j < N; j++)
+					{
+            if (scorearray[j]["scoreInfo"].get("score", -1).asInt() > scorearray[minIndex]["scoreInfo"].get("score", -1).asInt())
+            {
+							minIndex = j;
+            }
+					}
+					
+					// Swap if i-th element not already smallest
+					if (minIndex > i)
+					{
+						scorearray[i].swap(scorearray[minIndex]);
+//            swap(a[i], a[minIndex]);
+					}
+				}
+				
 				
 				//결과 돌려줌
-				jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
+				p1(scorearray);
 				
-				delsel.func(scorelist);
-				
-				jsonDelegator::get()->remove(delekey);
 //			   Json::Value p;
 //			   Json::Value idMap = obj["memberNoMap"];
 //				idMap[hspConnector::get()->getKakaoID()]=hspConnector::get()->getHSPMemberNo();
@@ -284,11 +260,12 @@ private:
 	
 	
 	void drawRank(Json::Value obj){
-		m_scoreList=obj;
+		m_scoreList = obj;
+		KS::KSLog("%", m_scoreList);
 		//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 		
 		//320x320 테이블 뷰 생성
-		rankTableView = CCTableView::create(this, CCSizeMake(238, 200));
+		rankTableView = CCTableView::create(this, CCSizeMake(244*2, 233));
 		
 		rankTableView->setAnchorPoint(CCPointZero);
 		
@@ -299,17 +276,29 @@ private:
 		rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 		
 		//기준점 0,0
-		rankTableView->setPosition(ccp(210, 65));
+		rankTableView->setPosition(ccp(187, 28));
 		
 		//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 		rankTableView->setDelegate(this);
 		this->addChild(rankTableView, kRP_Z_rankTable);
 		rankTableView->setTouchPriority(-200);
+		
+		int myPosition = rankTableView->minContainerOffset().y;
+		for(int i=0; i<m_scoreList.size(); i++)
+		{
+			if(m_scoreList[i]["user_id"].asString() == hspConnector::get()->getKakaoID())
+			{
+				myPosition = m_scoreList.size() - i - 1;
+				break;
+			}
+		}
+		float yInitPosition = MAX(rankTableView->minContainerOffset().y, -cellSize.height*myPosition + rankTableView->getViewSize().height / 2.f);
+		yInitPosition = MIN(0, yInitPosition);
+		rankTableView->setContentOffsetInDuration(
+						ccp(
+							0, yInitPosition)
+						, 0.7f);
 		//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
-		
-		
-		
-		closeBtn->setVisible(true);
 	}
 
 	
@@ -325,114 +314,127 @@ private:
 	
 
 	
-	void sendHeart(CCControlButton *obj, CCControlEvent event){
-		Json::Value* member = (Json::Value *)obj->getUserData();
-		
-		////////////////////////////////
-		// 쪽지보내기 - HSP
-		////////////////////////////////
-		
-		
-		Json::Value p;
-		p["content"]="하트받으세용";
-		p["receiverMemberID"]=(*member)["user_id"].asString();
-		p["senderMemberID"]=hspConnector::get()->getKakaoID();
-		p["type"]=1;
-		
-		
-		hspConnector::get()->command("sendMessage", p, [member,this](Json::Value r)
-		 {
-			 
-			 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-			 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-			 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-			 
-			 
-			 GraphDogLib::JsonToLog("sendMessage", r);
-			 
-			 
-			 ////////////////////////////////
-			 // 쪽지보내기 - 카카오
-			 ////////////////////////////////
-			 Json::Value p2;
-			 p2["receiver_id"] = (*member)["user_id"].asString();
-			 p2["message"] = "하트받으세용!";
-			 hspConnector::get()->kSendMessage(p2, [this](Json::Value r)
-			 {
-				 GraphDogLib::JsonToLog("kSendMessage", r);
-				 this->closePopup(0,0);
-			 });
-		 });
-
-	}
-	
 	
 	
 	////////////////////////////////////////////////////////
 	// tableview	////////////////////////////////////////
 	////////////////////////////////////////////////////////
 	
-    virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx){
-		CCTableViewCell *cell = table->dequeueCell();
+	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx){
+		
 		CCLabelTTF* title;
-		CCControlButton* sendBtn;
+		CCMenuItemLambda* sendBtn;
 		CCLabelTTF* score;
 		CCLabelTTF* rank;
-		Json::Value::Members m = m_scoreList.getMemberNames();
-		auto iter = m.begin()+idx;
-		Json::Value* member = &m_scoreList[(string)*iter];
+		Json::Value* member = &m_scoreList[idx];
+		KS::KSLog("%", *member);
+		CCTableViewCell* cell = new CCTableViewCell();
+		cell->init();
+		cell->autorelease();
 		
-		if(!cell){
-			cell = new CCTableViewCell();
+		
+		CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "ending_take_particle.png");
+		profileImg->setAnchorPoint(ccp(0.5, 0.5));
+		profileImg->setTag(kRP_RT_profileImg);
+		profileImg->setPosition(ccp(62, 22));
+		profileImg->setScale(45.f / profileImg->getContentSize().width);
+		cell->addChild(profileImg, kRP_Z_profileImg);
+		
+		std::string cellBackFile = "ui_rank_cell_back.png";
 			
-			cell->autorelease();
-			
-			CCSprite* bg = CCSprite::create("ui_rank_cell_back.png");
-			bg->setPosition(CCPointZero);
-			bg->setAnchorPoint(CCPointZero);
-			cell->addChild(bg,1);
-			
-			
-			CCLabelTTF *btnTitle = CCLabelTTF::create("send", "Helvetica", 10, CCSizeMake(30, 30), kCCTextAlignmentCenter,kCCVerticalTextAlignmentCenter);
-			//btnTitle->setContentSize(CCSizeMake(40, 40));
-			CCScale9Sprite *btnBg = CCScale9Sprite::create("ui_common_9_button_brown.png",CCRectMake(0, 0, 38, 38),CCRectMake(10, 10, 18, 18));
-			
-			sendBtn = CCControlButton::create(btnTitle, btnBg);
-			sendBtn->setPosition(ccp(205,22));
-			sendBtn->setTag(kRP_MT_send);
-			sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RankPopup::sendHeart), CCControlEventTouchUpInside);
-			sendBtn->setTouchPriority(-300);
-			
-			cell->addChild(sendBtn,2);
-			
-			title = CCLabelTTF::create("","Helvetica",12);
-			title->setPosition(ccp(90,28));
-			title->setAnchorPoint(CCPointZero);
-			title->setTag(kRP_RT_title);
-			cell->addChild(title,2);
-			
-			
-			score = CCLabelTTF::create("","Helvetica",20);
-			score->setPosition(ccp(90,5));
-			score->setAnchorPoint(CCPointZero);
-			score->setTag(kRP_RT_score);
-			cell->addChild(score,2);
-			
-			rank = CCLabelTTF::create("","Helvetica",25);
-			rank->setPosition(ccp(10,10));
-			rank->setAnchorPoint(CCPointZero);
-			rank->setTag(kRP_RT_rank);
-			cell->addChild(rank,2);
-			
-		}else{
-			title=(CCLabelTTF*)cell->getChildByTag(kRP_RT_title);
-			score=(CCLabelTTF*)cell->getChildByTag(kRP_RT_score);
-			rank=(CCLabelTTF*)cell->getChildByTag(kRP_RT_rank);
-			sendBtn=(CCControlButton*)cell->getChildByTag(kRP_MT_send);
+		
+		CCSprite* bg = CCSprite::create(cellBackFile.c_str());
+		bg->setPosition(CCPointZero);
+		bg->setAnchorPoint(CCPointZero);
+		cell->addChild(bg,1);
+		
+		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
+		{
+			CCSprite* meBack = CCSprite::create("rank_cell_select.png");
+			meBack->setPosition(CCPointZero - ccp(6, 0));
+			meBack->setAnchorPoint(CCPointZero);
+			cell->addChild(meBack, 2);
 		}
+			
+
+		
+		CCMenuLambda* _menu = CCMenuLambda::create();
+		_menu->setPosition(ccp(0, 0));
+		_menu->setTouchPriority(-300);
+		_menu->setTag(kRP_RT_menu);
+		cell->addChild(_menu, kRP_Z_send);
+		
+		sendBtn = CCMenuItemImageLambda::create
+		("rank_cell_send.png", "rank_cell_send.png",
+		 [=](CCObject* _obj){
+			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(_obj);
+			 int idx = (int)obj->getUserData();
+			 ////////////////////////////////
+			 // 쪽지보내기 - HSP
+			 ////////////////////////////////
+			 
+			 
+			 Json::Value p;
+			 p["content"]="하트받으세용";
+			 p["receiverMemberID"]=m_scoreList[idx]["user_id"].asString();
+			 p["senderMemberID"]=hspConnector::get()->getKakaoID();
+			 p["type"]=1;
+			 
+			 
+			 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+																		{
+																			
+																			//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+																			//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+																			//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+																			
+																			
+																			GraphDogLib::JsonToLog("sendMessage", r);
+																			
+																			
+																			////////////////////////////////
+																			// 쪽지보내기 - 카카오
+																			////////////////////////////////
+																			Json::Value p2;
+																			p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
+																			p2["message"] = "하트받으세용!";
+																			hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
+																																				{
+																																					GraphDogLib::JsonToLog("kSendMessage", r);
+																																					this->closePopup(0,0);
+																																				});
+																		});
+		 });
 		
 		
-		sendBtn->setUserData((void *)member);
+		sendBtn->setPosition(ccp(205,22));
+		sendBtn->setTag(kRP_MT_send);
+		_menu->addChild(sendBtn,2);
+		
+		title = CCLabelTTF::create("","Helvetica",12);
+		title->setPosition(ccp(90,28));
+		title->setAnchorPoint(CCPointZero);
+		title->setTag(kRP_RT_title);
+		cell->addChild(title,2);
+		
+		
+		score = CCLabelTTF::create("","Helvetica",20);
+		score->setPosition(ccp(90,5));
+		score->setAnchorPoint(CCPointZero);
+		score->setTag(kRP_RT_score);
+		cell->addChild(score,2);
+		
+		rank = CCLabelTTF::create("","Helvetica",25);
+		rank->setPosition(ccp(10,10));
+		rank->setAnchorPoint(CCPointZero);
+		rank->setTag(kRP_RT_rank);
+		cell->addChild(rank,2);
+		
+		
+		
+		
+		
+		sendBtn->setUserData((void *)idx);
 		//sendBtn->setUserData((void *)&member);
 		if((*member)["user_id"].asString()==hspConnector::get()->getKakaoID()){
 			sendBtn->setVisible(false);
@@ -447,20 +449,20 @@ private:
 	}
 	
 	virtual void scrollViewDidScroll(CCScrollView* view) {
-		
 	}
 	
     virtual void scrollViewDidZoom(CCScrollView* view) {
 		
 	}
     
-    virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell){
+	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell){
+		// 영호
+		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 		
-		CCLog("touch!!");
 		
 	}
     virtual CCSize cellSizeForTable(CCTableView *table){
-		return CCSizeMake(238, 47);
+			return cellSize;
 	}
 	
     virtual unsigned int numberOfCellsInTableView(CCTableView *table){
