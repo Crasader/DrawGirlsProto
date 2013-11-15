@@ -30,6 +30,20 @@ public:
 		return target_node;
 	}
 	
+	void setGameover()
+	{
+		unschedule(schedule_selector(MobHpGraph::graphing));
+		t_case->stopAllActions();
+		hp_progress->stopAllActions();
+		
+		t_case->setVisible(true);
+		hp_progress->setVisible(true);
+		
+		CCProgressFromTo* progress_to = CCProgressFromTo::create(0.3f, last_life/max_life*100.f, 0.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MobHpGraph::hidingAction));
+		hp_progress->runAction(CCSequence::createWithTwoActions(progress_to, t_call));
+	}
+	
 private:
 	KSCumberBase* target_node;
 	float max_life;

@@ -459,6 +459,10 @@ public:
 	{
 		return recent_durability_label;
 	}
+	CCLabelTTF* getTotalDurabilityLabel()
+	{
+		return total_durability_label;
+	}
 	
 	void startDecreaseDurability(CCObject* t_end, SEL_CallFunc d_end)
 	{
@@ -485,6 +489,7 @@ public:
 	
 private:
 	CCLabelTTF* recent_durability_label;
+	CCLabelTTF* total_durability_label;
 	CCSprite* durability_case;
 	int selected_card_number;
 	
@@ -525,7 +530,7 @@ private:
 		durability_case->setPosition(ccp(287,417));
 		addChild(durability_case, kCARDCASE_Z_innerCase);
 		
-		CCLabelTTF* total_durability_label = CCLabelTTF::create(CCString::createWithFormat("/%d", NSDS_GI(kSDS_CI_int1_durability_i, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+		total_durability_label = CCLabelTTF::create(CCString::createWithFormat("/%d", NSDS_GI(kSDS_CI_int1_durability_i, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
 		total_durability_label->setColor(ccBLACK);
 		total_durability_label->setAnchorPoint(ccp(1.f,0.5));
 		total_durability_label->setPosition(ccp(42,21));
@@ -574,9 +579,6 @@ private:
 		
 		CCProgressFromTo* dex_action = CCProgressFromTo::create(1.f, 0.f, 100.f);
 		dex_progress->runAction(dex_action);
-		
-		
-		
 		
 		
 		string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, t_selected_card_number).c_str();

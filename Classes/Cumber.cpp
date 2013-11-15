@@ -257,6 +257,11 @@ void CumberParent::setGameover()
 		t_sc->setGameover();
 //		t_sc->stopMoving();
 	}
+	
+	for(int i=0;i<hp_graphs.size();i++)
+	{
+		hp_graphs[i]->setGameover();
+	}
 }
 
 void CumberParent::startTeleport()
