@@ -456,8 +456,18 @@ void CardSettingScene::menuAction(CCObject* pSender)
 				int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 				int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 				
+				int stage_y_base = 0;
+				int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+				for(int i=1;i<=puzzle_count;i++)
+				{
+					if(puzzle_number > i)
+						stage_y_base += NSDS_GI(i, kSDS_PZ_stageCount_i);
+					else
+						break;
+				}
+				
 				check_img = CCSprite::create("card_check.png");
-				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(card_stage-start_stage)*inner_card_distance.y)));
+				check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((card_level-1)*inner_card_distance.x, -(stage_y_base+card_stage-start_stage)*inner_card_distance.y)));
 				my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
 			}
 			else
