@@ -9,6 +9,16 @@
 #endif
 namespace KS
 {
+	
+	string insert_separator(const string& s, char separator, int width)
+	{
+		string ss = s;
+		string::iterator i = ss.end() - width;
+		while (i > ss.begin())
+			i = ss.insert(i, separator) - width;
+		
+		return ss;
+	}
 	void setOpacity(CCObject* object, GLubyte opaque)
 	{
 		CCArray* childs = NULL;
