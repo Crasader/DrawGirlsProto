@@ -51,6 +51,8 @@ bool PuzzleMapScene::init()
 	srand(time(NULL));
 	////////////////////////////////////////////////////
 	
+	is_creating_puzzle = false;
+	
 	recent_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	if(recent_puzzle_number == 0)
 	{
