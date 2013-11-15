@@ -213,7 +213,12 @@ private:
 	
 	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed)
 	{
-		missile_speed = t_missile_speed;
+		if(t_missile_speed < 2.f)
+			missile_speed = 2.f;
+		else if(t_missile_speed > 9.f)
+			missile_speed = 9.f;
+		else
+			missile_speed = t_missile_speed;
 		shoot_frame = missile_speed*3;
 		um_tcnt = t_um_tcnt;
 		create_type = t_create_type;

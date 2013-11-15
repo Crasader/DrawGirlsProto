@@ -79,7 +79,11 @@ bool FailScene::init()
 	}
 	Json::Value p1;
 	p1["memberID"] = hspConnector::get()->getKakaoID();
-	p1["score"]=int(mySGD->getScore());
+	p1["score"] = int(mySGD->getScore());
+	Json::Value p1_data;
+	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	Json::FastWriter p1_data_writer;
+	p1["data"] = p1_data_writer.write(p1_data);
 	hspConnector::get()->command("setweeklyscore", p1, NULL);
 	
 	Json::Value p;

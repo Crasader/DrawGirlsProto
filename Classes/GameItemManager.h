@@ -416,7 +416,7 @@ private:
 	{
 		myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "attack");
 		
-		myGD->communication("MP_createJackMissile", my_elemental, rand()%3 + 1, NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard)));
+		myGD->communication("MP_createJackMissile", my_elemental, rand()%3 + 1, float(NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard))));
 		removeFromParent();
 	}
 	
