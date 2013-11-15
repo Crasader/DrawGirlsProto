@@ -74,7 +74,7 @@ private:
 		t_case->setPosition(CCPointZero);
 		take_card->addChild(t_case);
 		
-		card_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320, 430));
+		card_back = CCSprite::create("ending_take_card_back.png");
 		card_back->setVisible(false);
 		card_back->setScale(take_card->getScale());
 		card_back->setPosition(take_card->getPosition());

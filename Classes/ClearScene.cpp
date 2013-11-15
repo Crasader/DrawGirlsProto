@@ -252,11 +252,6 @@ bool ClearScene::init()
 	addChild(t_screen, 99999);
 	
 	
-	
-	hspConnector::get()->kLoadFriends(json_selector(this, ClearScene::resultLoadFriends));
-	
-	
-	
 	is_saved_user_data = false;
 	
 	Json::Value param2;
@@ -397,6 +392,8 @@ void ClearScene::resultSavedUserData(Json::Value result_data)
 	{
 		is_saved_user_data = true;
 		endLoad();
+		
+		hspConnector::get()->kLoadFriends(json_selector(this, ClearScene::resultLoadFriends));
 	}
 	else
 	{

@@ -1753,7 +1753,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					{
 						CCPoint sub_point = ccpSub(location, touchStart_p);
 						float sub_value = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
-						if(sub_value > 10.f)
+						if(sub_value > 15.f)
 						{
 							resetStagePiece();
 							map_mode_state = kMMS_firstTouchDefault;
