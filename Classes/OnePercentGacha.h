@@ -177,7 +177,7 @@ private:
 		back_img->setPosition(ccp(240,myDSH->ui_center_y));
 		addChild(back_img, kOnePercentGacha_Z_back);
 		
-		percent_label = CountingBMLabel::create(CCString::createWithFormat("%.1f", recent_percent*100.f)->getCString(), "bb_white_font.fnt", 0.5f);
+		percent_label = CountingBMLabel::create(CCString::createWithFormat("%.1f", recent_percent*100.f)->getCString(), "bb_white_font.fnt", 0.5f, "%.1f");
 		percent_label->setPosition(ccp(305, myDSH->ui_center_y+87.f));
 		addChild(percent_label, kOnePercentGacha_Z_content);
 		

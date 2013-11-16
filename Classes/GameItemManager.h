@@ -785,6 +785,10 @@ public:
 	void stopMoving()
 	{
 		unschedule(schedule_selector(ExchangeCoin::moving));
+	}
+	
+	void smallScaleHiding()
+	{
 		CCScaleTo* t_scale = CCScaleTo::create(1.5f, 0);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::removeFromParent));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
@@ -796,6 +800,7 @@ private:
 	CCObject* target_ui;
 	SEL_CallFuncCCpI delegate_takeExchangeCoin;
 	CCSprite* coin_img;
+	CCSprite* back_img;
 	
 	IntPoint myPoint;
 	int directionAngle;
@@ -808,6 +813,24 @@ private:
 		schedule(schedule_selector(ExchangeCoin::moving));
 	}
 	
+	void endTakeAction()
+	{
+		(target_ui->*delegate_takeExchangeCoin)(getPosition(), myType);
+		removeFromParent();
+	}
+	
+	void changeBack()
+	{
+		back_img->setVisible(true);
+		coin_img->setVisible(false);
+	}
+	
+	void changeFront()
+	{
+		coin_img->setVisible(true);
+		back_img->setVisible(false);
+	}
+	
 	void moving()
 	{
 		if(myGD->mapState[myPoint.x][myPoint.y] != mapEmpty &&
@@ -817,8 +840,23 @@ private:
 		   myGD->mapState[myPoint.x][myPoint.y+1] != mapEmpty)
 		{
 			stopMoving();
-			(target_ui->*delegate_takeExchangeCoin)(getPosition(), myType);
-			removeFromParentAndCleanup(true);
+			
+			back_img = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", myType)->getCString());
+			back_img->setVisible(false);
+			back_img->setScale(2.f/3.f);
+			back_img->setPosition(CCPointZero);
+			addChild(back_img);
+			
+			CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.05f, 0.2f, 0, 0, 90, 0, 0);
+			CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::changeBack));
+			CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.05f, 0.2f, 0, -90, 90, 0, 0);
+			CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::changeFront));
+			CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, t_call2, NULL);
+			CCRepeat* t_repeat = CCRepeat::create(t_seq, 10);
+			CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::endTakeAction));
+			CCSequence* t_seq2 = CCSequence::createWithTwoActions(t_repeat, t_call3);
+			
+			runAction(t_seq2);
 			
 			return;
 		}
@@ -1206,7 +1244,7 @@ public:
 		for(int i=0;i<loop_cnt;i++)
 		{
 			ExchangeCoin* t_ec = (ExchangeCoin*)child->objectAtIndex(i);
-			t_ec->stopMoving();
+			t_ec->smallScaleHiding();
 		}
 	}
 	

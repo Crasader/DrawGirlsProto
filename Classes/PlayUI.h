@@ -29,6 +29,7 @@
 #include "OnePercentGacha.h"
 #include "hspConnector.h"
 #include "MissileDamageData.h"
+#include "StageSettingScene.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -1207,6 +1208,45 @@ public:
 		t_coin_spr->removeFromParentAndCleanup(true);
 		exchange_dic->removeObjectForKey(t_coin_number);
 		
+		
+		CCParticleSystemQuad* coin_particle = CCParticleSystemQuad::createWithTotalParticles(30);
+		coin_particle->setPositionType(kCCPositionTypeRelative);
+		coin_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("fever_particle.png"));
+		coin_particle->setEmissionRate(60);
+		coin_particle->setAngle(90.0);
+		coin_particle->setAngleVar(30.0);
+		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+		coin_particle->setBlendFunc(blendFunc);
+		coin_particle->setDuration(0.7f);
+		coin_particle->setEmitterMode(kCCParticleModeGravity);
+		coin_particle->setStartColor(ccc4f(1.f, 0.8f, 0.4f, 1.f));
+		coin_particle->setStartColorVar(ccc4f(0,0,0,0));
+		coin_particle->setEndColor(ccc4f(1.f,1.f,1.f,0.f));
+		coin_particle->setEndColorVar(ccc4f(0, 0, 0, 0));
+		coin_particle->setStartSize(13.0);
+		coin_particle->setStartSizeVar(5.0);
+		coin_particle->setEndSize(-1.0);
+		coin_particle->setEndSizeVar(0.0);
+		coin_particle->setGravity(ccp(0,80));
+		coin_particle->setRadialAccel(0.0);
+		coin_particle->setRadialAccelVar(0.0);
+		coin_particle->setSpeed(140);
+		coin_particle->setSpeedVar(60.0);
+		coin_particle->setTangentialAccel(0);
+		coin_particle->setTangentialAccelVar(0);
+		coin_particle->setTotalParticles(30);
+		coin_particle->setLife(0.5);
+		coin_particle->setLifeVar(0.3);
+		coin_particle->setStartSpin(0.0);
+		coin_particle->setStartSpinVar(180.f);
+		coin_particle->setEndSpin(0.0);
+		coin_particle->setEndSpinVar(180.f);
+		coin_particle->setPosVar(ccp(12,12));
+		coin_particle->setPosition(t_start_position);
+		coin_particle->setAutoRemoveOnFinish(true);
+		addChild(coin_particle);
+		
+		
 		CCSprite* new_coin_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", t_coin_number)->getCString());
 		new_coin_spr->setPosition(t_start_position);
 		addChild(new_coin_spr);
@@ -1216,8 +1256,10 @@ public:
 		else if(myGD->gamescreen_type == kGT_rightUI)		after_position = ccp(220-32*3-16+t_coin_number*32,25);
 		else												after_position = ccp(260-32*3-16+t_coin_number*32,25);
 		
+		CCDelayTime* t_delay = CCDelayTime::create(0.7f);
 		CCMoveTo* t_move = CCMoveTo::create(0.5f, after_position);
-		new_coin_spr->runAction(t_move);
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_move);
+		new_coin_spr->runAction(t_seq);
 		
 		
 		exchange_dic->setObject(new_coin_spr, t_coin_number);
@@ -1329,7 +1371,7 @@ public:
 	void showPause()
 	{
 		mySGD->is_paused = true;
-		PausePopupLayer* t_ppl = PausePopupLayer::create(this, callfunc_selector(PlayUI::goHome), this, callfunc_selector(PlayUI::cancelHome), target_main, delegate_gesture, delegate_button, delegate_joystick);
+		PausePopupLayer* t_ppl = PausePopupLayer::create(this, callfunc_selector(PlayUI::goHome), this, callfunc_selector(PlayUI::cancelHome), target_main, delegate_gesture, delegate_button, delegate_joystick, this, callfunc_selector(PlayUI::goReplay));
 		addChild(t_ppl);
 	}
 	
@@ -1632,7 +1674,6 @@ private:
 		{
 			if(t_percent >= 1.f)
 			{
-				is_exchanged = true;
 				grade_value++;
 			}
 		}
@@ -1740,7 +1781,7 @@ private:
 		gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-60,0)));
 		addChild(gold_img);
 		
-		score_label = CountingBMLabel::create("0", "etc_font.fnt", 2.f);
+		score_label = CountingBMLabel::create("0", "etc_font.fnt", 2.f, "%d");
 		score_label->setAnchorPoint(ccp(0.5,0.5));
 		if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));
 		else if(myGD->gamescreen_type == kGT_rightUI)	score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-15));
@@ -2145,6 +2186,22 @@ private:
 		myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 		AudioEngine::sharedInstance()->stopSound();
 		closeShutter();
+	}
+	
+	void goReplay()
+	{
+		myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
+		
+		myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+		AudioEngine::sharedInstance()->stopSound();
+		
+		mySGD->is_paused = false;
+		AudioEngine::sharedInstance()->setAppFore();
+		CCDirector::sharedDirector()->resume();
+		mySGD->gameOver(0, 0, 0);
+		mySGD->resetLabels();
+		myGD->resetGameData();
+		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
 	
 	void cancelHome()

@@ -31,7 +31,8 @@ enum ZS_Zorder{
 	kZS_Z_script_case,
 	kZS_Z_script_label,
 	kZS_Z_next_button,
-	kZS_Z_showtime_back
+	kZS_Z_showtime_back,
+	kZS_Z_whitePaper
 };
 
 bool ZoomScript::init()
@@ -155,21 +156,42 @@ void ZoomScript::menuAction(CCObject *sender)
 		if(is_showtime)
 		{
 			showtime_back = CCSprite::create("showtime_back.png");
-			showtime_back->setScale(1.5f);
+			showtime_back->setScale(10.f);
 			showtime_back->setPosition(ccp(240,myDSH->ui_center_y));
 			showtime_back->setOpacity(0);
 			addChild(showtime_back, kZS_Z_showtime_back);
 			
-			CCFadeTo* t_fade = CCFadeTo::create(0.5f, 255);
-			CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeFirstAction));
+			white_paper = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
+			white_paper->setOpacity(0);
+			white_paper->setScaleY(myDSH->ui_top/320.f);
+			white_paper->setPosition(ccp(240,myDSH->ui_center_y));
+			addChild(white_paper, kZS_Z_whitePaper);
 			
-			CCAction* t_seq = CCSequence::create(t_fade, t_delay, t_call, NULL);
-			showtime_back->runAction(t_seq);
+			CCDelayTime* white_paper_delay = CCDelayTime::create(46.f/60.f);
+			CCFadeTo* white_paper_fade = CCFadeTo::create(18.f/60.f, 255);
+			CCSequence* white_paper_seq = CCSequence::createWithTwoActions(white_paper_delay, white_paper_fade);
+			white_paper->runAction(white_paper_seq);
+			
+			CCScaleTo* showtime_scale1 = CCScaleTo::create(28.f/60.f, 1.f);
+			CCDelayTime* showtime_delay1 = CCDelayTime::create(18.f/60.f);
+			CCScaleTo* showtime_scale2 = CCScaleTo::create(18.f/60.f, 12.f);
+			CCSequence* showtime_seq1 = CCSequence::create(showtime_scale1, showtime_delay1, showtime_scale2, NULL);
+			
+			CCFadeTo* showtime_fade1 = CCFadeTo::create(28.f/60.f, 255);
+			CCDelayTime* showtime_delay2 = CCDelayTime::create(18.f/60.f);
+			CCFadeTo* showtime_fade2 = CCFadeTo::create(18.f/60.f, 0);
+			CCSequence* showtime_seq2 = CCSequence::create(showtime_fade1, showtime_delay2, showtime_fade2, NULL);
+			
+			CCSpawn* showtime_spawn = CCSpawn::create(showtime_seq1, showtime_seq2, NULL);
+			CCDelayTime* showtime_delay = CCDelayTime::create(8.f/60.f);
+			
+			CCCallFunc* showtime_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeFirstAction));
+			CCSequence* showtime_seq = CCSequence::create(showtime_spawn, showtime_delay, showtime_call, NULL);
+			
+			showtime_back->runAction(showtime_seq);
 		}
 		else
 		{
-			
 			CCDirector::sharedDirector()->replaceScene(ClearScene::scene());
 		}
 	}
@@ -177,6 +199,8 @@ void ZoomScript::menuAction(CCObject *sender)
 
 void ZoomScript::showtimeFirstAction()
 {
+	showtime_back->removeFromParent();
+	
 	script_label->setString("");
 	script_case->setTextureRect(CCRectMake(0, 0, 0, 0));
 	
@@ -208,17 +232,16 @@ void ZoomScript::showtimeFirstAction()
 		second_img->addChild(eye, 1, 1);
 	}
 	
-	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+	CCFadeTo* t_fade = CCFadeTo::create(1.f/6.f, 0);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeSecondAction));
-	
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
 	
-	showtime_back->runAction(t_seq);
+	white_paper->runAction(t_seq);
 }
 
 void ZoomScript::showtimeSecondAction()
 {
-	showtime_back->removeFromParentAndCleanup(true);
+	white_paper->removeFromParent();
 	
 	CCDelayTime* delay1 = CCDelayTime::create(0.5f);
 	CCMoveTo* move1 = CCMoveTo::create(1.3f, ccp(0,0));

@@ -47,6 +47,7 @@ private:
 	CCMenu* next_button;
 	CCSprite* showtime_back;
 	CCSprite* second_img;
+	CCSprite* white_paper;
 	
 	
 	float minimum_scale;

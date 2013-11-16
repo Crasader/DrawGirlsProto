@@ -17,7 +17,7 @@ using namespace std;
 class CountingBMLabel : public CCLabelBMFont
 {
 public:
-	static CountingBMLabel* create(string init_value, string font_filename, float t_duration);
+	static CountingBMLabel* create(string init_value, string font_filename, float t_duration, string t_format);
 	
 	virtual void setString(const char* after_value);
 	virtual const char* getString();
@@ -31,12 +31,13 @@ private:
 	float increase_value;
 	string keep_value_string;
 	float duration;
+	string show_format;
 	
 	void startChanging(const char* after_value);
 	void changing(float dt);
 	void stopChanging();
 	
-	void myInit(string init_value, string font_filename, float t_duration);
+	void myInit(string init_value, string font_filename, float t_duration, string t_format);
 };
 
 #endif /* defined(__DrawingJack__CountingBMLabel__) */

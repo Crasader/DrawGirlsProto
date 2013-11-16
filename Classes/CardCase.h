@@ -13,6 +13,7 @@
 #include "ServerDataSave.h"
 #include "StarGoldData.h"
 #include "MissileDamageData.h"
+#include "CountingBMLabel.h"
 
 USING_NS_CC;
 
@@ -547,38 +548,59 @@ private:
 		option_case->setScale(1.5f);
 		addChild(option_case, kCARDCASE_Z_innerCase);
 		
-		CCProgressTimer* pow_progress = CCProgressTimer::create(CCSprite::create("card_damage_bar.png"));
-		pow_progress->setType(kCCProgressTimerTypeBar);
-		pow_progress->setMidpoint(ccp(0,0));
-		pow_progress->setBarChangeRate(ccp(1,0));
-		pow_progress->setPosition(ccp(82,27));
-		pow_progress->setPercentage(100.f);
-		option_case->addChild(pow_progress);
+		CountingBMLabel* pow_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
+		pow_label->setPosition(ccp(135,35));
+		pow_label->setColor(ccRED);
+		addChild(pow_label, kCARDCASE_Z_data);
 		
-		CCProgressFromTo* pow_action = CCProgressFromTo::create(1.f, 0.f, 100.f);
-		pow_progress->runAction(pow_action);
+		pow_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_missile_power_i, t_selected_card_number))->getCString());
 		
-		CCProgressTimer* spd_progress = CCProgressTimer::create(CCSprite::create("card_speed_bar.png"));
-		spd_progress->setType(kCCProgressTimerTypeBar);
-		spd_progress->setMidpoint(ccp(0,0));
-		spd_progress->setBarChangeRate(ccp(1,0));
-		spd_progress->setPosition(ccp(82,17));
-		spd_progress->setPercentage(100.f);
-		option_case->addChild(spd_progress);
+		CountingBMLabel* dex_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
+		dex_label->setPosition(ccp(210,35));
+		dex_label->setColor(ccGREEN);
+		addChild(dex_label, kCARDCASE_Z_data);
 		
-		CCProgressFromTo* spd_action = CCProgressFromTo::create(1.f, 0.f, 100.f);
-		spd_progress->runAction(spd_action);
+		dex_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_missile_dex_i, t_selected_card_number))->getCString());
 		
-		CCProgressTimer* dex_progress = CCProgressTimer::create(CCSprite::create("card_dex_bar.png"));
-		dex_progress->setType(kCCProgressTimerTypeBar);
-		dex_progress->setMidpoint(ccp(0,0));
-		dex_progress->setBarChangeRate(ccp(1,0));
-		dex_progress->setPosition(ccp(82,7));
-		dex_progress->setPercentage(100.f);
-		option_case->addChild(dex_progress);
+		CountingBMLabel* spd_label = CountingBMLabel::create("0.00", "etc_font.fnt", 0.5f, "%.2f");
+		spd_label->setPosition(ccp(270,35));
+		spd_label->setColor(ccBLUE);
+		addChild(spd_label, kCARDCASE_Z_data);
 		
-		CCProgressFromTo* dex_action = CCProgressFromTo::create(1.f, 0.f, 100.f);
-		dex_progress->runAction(dex_action);
+		spd_label->setString(CCString::createWithFormat("%.2f", NSDS_GD(kSDS_CI_int1_missile_speed_d, t_selected_card_number))->getCString());
+		
+//		CCProgressTimer* pow_progress = CCProgressTimer::create(CCSprite::create("card_damage_bar.png"));
+//		pow_progress->setType(kCCProgressTimerTypeBar);
+//		pow_progress->setMidpoint(ccp(0,0));
+//		pow_progress->setBarChangeRate(ccp(1,0));
+//		pow_progress->setPosition(ccp(82,27));
+//		pow_progress->setPercentage(100.f);
+//		option_case->addChild(pow_progress);
+//		
+//		CCProgressFromTo* pow_action = CCProgressFromTo::create(1.f, 0.f, 100.f);
+//		pow_progress->runAction(pow_action);
+//		
+//		CCProgressTimer* spd_progress = CCProgressTimer::create(CCSprite::create("card_speed_bar.png"));
+//		spd_progress->setType(kCCProgressTimerTypeBar);
+//		spd_progress->setMidpoint(ccp(0,0));
+//		spd_progress->setBarChangeRate(ccp(1,0));
+//		spd_progress->setPosition(ccp(82,17));
+//		spd_progress->setPercentage(100.f);
+//		option_case->addChild(spd_progress);
+//		
+//		CCProgressFromTo* spd_action = CCProgressFromTo::create(1.f, 0.f, 100.f);
+//		spd_progress->runAction(spd_action);
+//		
+//		CCProgressTimer* dex_progress = CCProgressTimer::create(CCSprite::create("card_dex_bar.png"));
+//		dex_progress->setType(kCCProgressTimerTypeBar);
+//		dex_progress->setMidpoint(ccp(0,0));
+//		dex_progress->setBarChangeRate(ccp(1,0));
+//		dex_progress->setPosition(ccp(82,7));
+//		dex_progress->setPercentage(100.f);
+//		option_case->addChild(dex_progress);
+//		
+//		CCProgressFromTo* dex_action = CCProgressFromTo::create(1.f, 0.f, 100.f);
+//		dex_progress->runAction(dex_action);
 		
 		
 		string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, t_selected_card_number).c_str();

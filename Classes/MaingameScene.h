@@ -338,40 +338,39 @@ private:
 				spin_light->setPosition(ccp(240,160));
 				addChild(spin_light, particleZorder);
 				
-				CCFadeTo* t_fade1 = CCFadeTo::create(0.5f, 255);
-				CCRotateBy* t_rotate1 = CCRotateBy::create(0.5f, -100);
-				CCSpawn* t_spawn1 = CCSpawn::createWithTwoActions(t_fade1, t_rotate1);
+				CCScaleTo* light_scale = CCScaleTo::create(1.2f, 2.f);//2.f/3.f, 2);
+				CCRotateTo* light_rotate = CCRotateTo::create(1.2f, -90);//2.f/3.f, -90);
 				
-				CCDelayTime* t_delay1 = CCDelayTime::create(0.3f);
-				CCRotateBy* t_rotate2 = CCRotateBy::create(0.3f, -60);
-				CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_delay1, t_rotate2);
+				CCFadeTo* light_fade1 = CCFadeTo::create(0.3f, 255);//1.f/6.f, 255);
+				CCFadeTo* light_fade2 = CCFadeTo::create(0.3f, 20);//1.f/6.f, 20);
+				CCFadeTo* light_fade3 = CCFadeTo::create(0.3f, 255);//1.f/6.f, 255);
+				CCFadeTo* light_fade4 = CCFadeTo::create(0.3f, 0);//1.f/6.f, 0);
+				CCCallFunc* light_call = CCCallFunc::create(spin_light, callfunc_selector(CCSprite::removeFromParent));
+				CCSequence* light_seq = CCSequence::create(light_fade1, light_fade2, light_fade3, light_fade4, light_call, NULL);
 				
-				CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
-				CCRotateBy* t_rotate3 = CCRotateBy::create(0.5f, -100);
-				CCSpawn* t_spawn3 = CCSpawn::createWithTwoActions(t_fade2, t_rotate3);
-				
-				CCAction* t_seq1 = CCSequence::create(t_spawn1, t_spawn2, t_spawn3, NULL);
-				spin_light->runAction(t_seq1);
+				CCSpawn* light_spawn = CCSpawn::create(light_scale, light_rotate, light_seq, NULL);
+				spin_light->runAction(light_spawn); // 1.3
 				
 				
 				CCSprite* bakper = CCSprite::create("bakper.png");
-				bakper->setScale(0);
 				bakper->setOpacity(0);
 				bakper->setPosition(ccp(240,160));
 				addChild(bakper, particleZorder);
 				
-				CCFadeTo* t_fade3 = CCFadeTo::create(0.5f, 255);
-				CCScaleTo* t_scale1 = CCScaleTo::create(0.5f, 1.f);
-				CCSpawn* t_spawn4 = CCSpawn::createWithTwoActions(t_fade3, t_scale1);
+				CCScaleTo* bak_scale1 = CCScaleTo::create(32.4f/60.f, 1.3f);
+				CCScaleTo* bak_scale2 = CCScaleTo::create(18.f/60.f, 0.9f);
+				CCScaleTo* bak_scale3 = CCScaleTo::create(7.2f/60.f,1.2f);
+				CCScaleTo* bak_scale4 = CCScaleTo::create(14.4f/60.f,0.f);
+				CCSequence* bak_seq1 = CCSequence::create(bak_scale1, bak_scale2, bak_scale3, bak_scale4, NULL);
 				
-				CCDelayTime* t_delay2 = CCDelayTime::create(0.3f);
+				CCFadeTo* bak_fade1 = CCFadeTo::create(32.4f/60.f, 255);
+				CCDelayTime* bak_delay = CCDelayTime::create(25.2f/60.f);
+				CCFadeTo* bak_fade2 = CCFadeTo::create(14.4f/60.f, 0);
+				CCCallFunc* bak_call = CCCallFunc::create(bakper, callfunc_selector(CCSprite::removeFromParent));
+				CCSequence* bak_seq2 = CCSequence::create(bak_fade1, bak_delay, bak_fade2, bak_call, NULL);
 				
-				CCFadeTo* t_fade4 = CCFadeTo::create(0.5f, 0);
-				CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 0.f);
-				CCSpawn* t_spawn5 = CCSpawn::createWithTwoActions(t_fade4, t_scale2);
-				
-				CCAction* t_seq2 = CCSequence::create(t_spawn4, t_delay2, t_spawn5, NULL);
-				bakper->runAction(t_seq2);
+				CCSpawn* bak_spawn = CCSpawn::create(bak_seq1, bak_seq2, NULL);
+				bakper->runAction(bak_spawn);
 			}
 			
 			myUI->setVisible(false);

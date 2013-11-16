@@ -449,7 +449,7 @@ void PuzzleMapScene::setUIs()
 	top_case->setPosition(getUiButtonPosition(kPMS_MT_top));
 	addChild(top_case, kPMS_Z_ui_button, kPMS_MT_top);
 	
-	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f);
+	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_label);
 	

@@ -14,6 +14,7 @@
 #include "MissileDamageData.h"
 #include "DataStorageHub.h"
 #include "ServerDataSave.h"
+#include <random>
 
 #define JM_SPEED 5.f
 #define JM_CHANGE_DIRECTION_VAL	10.f
@@ -242,6 +243,8 @@ private:
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
 					
+					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
+					
 					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 					combo_cnt++;
 					
@@ -251,8 +254,6 @@ private:
 					
 					myGD->communication("UI_addScore", addScore);
 					myGD->communication("UI_setComboCnt", combo_cnt);
-					
-					myGD->communication("Main_showDamageMissile", particlePosition, addScore);
 				}
 				else
 				{
@@ -344,6 +345,16 @@ private:
 			damage = 1;
 			dex = 1;
 		}
+		
+		float damage_variation = damage*0.1f;
+		
+		random_device rd;
+		default_random_engine e1(rd());
+		uniform_real_distribution<float> uniform_dist(0, damage_variation);
+		
+		damage += uniform_dist(e1) - damage_variation/2.f;
+		if(damage < 1.f)
+			damage = 1.f;
 		
 		load_removing = false;
 		shoot_removing = false;
@@ -712,14 +723,14 @@ private:
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
 					
+					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
+					
 					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 					combo_cnt++;
 					
 					int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
 					myGD->communication("UI_addScore", addScore);
 					myGD->communication("UI_setComboCnt", combo_cnt);
-					
-					myGD->communication("Main_showDamageMissile", particlePosition, addScore);
 					
 					myGD->communication("Main_startShake", directionAngle);
 					
@@ -857,6 +868,17 @@ private:
 			damage = 1;
 			dex = 1;
 		}
+		
+		float damage_variation = damage*0.1f;
+		
+		random_device rd;
+		default_random_engine e1(rd());
+		uniform_real_distribution<float> uniform_dist(0, damage_variation);
+		
+		damage += uniform_dist(e1) - damage_variation/2.f;
+		if(damage < 1.f)
+			damage = 1.f;
+		
 		
 		if(missile_speed < 2.f)
 			missile_speed = 2.f;
