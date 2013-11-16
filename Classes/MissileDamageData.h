@@ -25,7 +25,7 @@ public:
 	{
 		int return_value;
 		
-		if(t_code.size() == 2 && t_code[0] >= 'A' && t_code[0] <= 'G' && t_code[1] >= 'A' && t_code[1] <= 'I')
+		if(t_code.size() == 2 && t_code[1] >= 'A' && t_code[1] <= 'G' && t_code[0] >= 'A' && t_code[0] <= 'I')
 		{
 			return_value = t_code[1]-'A';
 			return_value += (t_code[0]-'A')*10;
