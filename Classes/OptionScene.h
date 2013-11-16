@@ -34,6 +34,9 @@ private:
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
 
+	CCSprite* bgm_img;
+	CCSprite* effect_img;
+	
 	CCMenu* bgm_menu;
 	CCMenu* effect_menu;
 	

@@ -240,7 +240,21 @@ private:
 				font_color = ccc3(255,111,207);
 			else if(stage_level == 9)
 				font_color = ccc3(255,0,128);
-			else if(stage_level >= 10)
+			else if(stage_level == 10)
+				font_color = ccc3(128,0,128);
+			else if(stage_level == 11)
+				font_color = ccc3(128,0,0);
+			else if(stage_level == 12)
+				font_color = ccc3(128,64,0);
+			else if(stage_level == 13)
+				font_color = ccc3(128,128,0);
+			else if(stage_level == 14)
+				font_color = ccc3(0,128,128);
+			else if(stage_level == 15)
+				font_color = ccc3(0,64,128);
+			else if(stage_level == 16)
+				font_color = ccc3(64,0,128);
+			else if(stage_level >= 17)
 				font_color = ccc3(0,0,0);
 			
 			level_label->setColor(font_color);

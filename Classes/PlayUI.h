@@ -2059,6 +2059,16 @@ private:
 	
 	void continueAction()
 	{
+		Json::Value param2;
+		param2["memberID"] = hspConnector::get()->getKakaoID();
+		
+		Json::Value data;
+		data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+		
+		Json::FastWriter writer;
+		param2["data"] = writer.write(data);
+		hspConnector::get()->command("updateUserData", param2, NULL);
+		
 		addGameTime30Sec();
 		jack_life = 2;
 		for(int i=0;i<jack_life;i++)
