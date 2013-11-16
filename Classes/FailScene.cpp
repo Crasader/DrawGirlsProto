@@ -621,6 +621,7 @@ void FailScene::menuAction(CCObject* pSender)
 	
 	if(tag == kMT_FS_main)
 	{
+		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		is_menu_enable = false;
 //		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
@@ -628,6 +629,7 @@ void FailScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kMT_FS_replay)
 	{
+		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		is_menu_enable = false;
 //		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)-1);

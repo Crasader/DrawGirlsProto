@@ -591,11 +591,13 @@ void ClearScene::menuAction(CCObject* pSender)
 	
 	if(tag == kMT_CS_ok)
 	{
+		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		realEnd();
 	}
 	else if(tag == kMT_CS_replay)
 	{
+		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
