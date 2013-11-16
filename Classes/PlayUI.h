@@ -1637,6 +1637,8 @@ private:
 			}
 		}
 		
+		beforePercentage = (int(t_percent*1000))^t_tta;
+		
 		mySGD->gameClear(grade_value, atoi(score_label->getString()), t_percent, countingCnt, use_time, total_time);
 		Json::Value param2;
 		param2["memberID"] = hspConnector::get()->getKakaoID();
