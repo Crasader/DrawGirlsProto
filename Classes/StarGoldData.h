@@ -202,10 +202,6 @@ public:
 		
 		score = t_score + t_score*(stage_grade-1.f)*0.5f + t_score*(1.f-(t_use_time*1.f)/t_total_time);
 		
-		if(score < 0.f)
-			CCLog("t_score : %.1f, stage_grade : %d, use_time : %d, total_time : %d", t_score, stage_grade, t_use_time, t_total_time);
-		
-		
 		game_time = t_game_time;
 		myGD->setIsGameover(true);
 	}
