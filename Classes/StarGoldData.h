@@ -129,6 +129,16 @@ public:
 			gold_label->setString(CCString::createWithFormat("%d", t_gold)->getCString());
 	}
 	
+	int getKeepGold()
+	{
+		return keep_gold;
+	}
+	
+	void setKeepGold(int t_gold)
+	{
+		keep_gold = t_gold;
+	}
+	
 	void setGameStart()
 	{
 		mySD->startSetting();

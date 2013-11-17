@@ -44,6 +44,8 @@ private:
 	
 	void resetBgmMenu();
 	void resetEffectMenu();
+	
+	void cheatAction(CCObject* sender);
 
 	void menuAction(CCObject* sender);
 	void popupClose();

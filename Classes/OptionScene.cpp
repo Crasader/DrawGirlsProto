@@ -77,6 +77,22 @@ bool OptionScene::init()
 	back->setPosition(ccp(240,160));
 	addChild(back, kO_Z_back);
 	
+	if(myDSH->isCheatKeyEnable())
+	{
+		CCSprite* n_temp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+		n_temp->setOpacity(0);
+		CCSprite* s_temp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+		s_temp->setOpacity(0);
+		
+		CCMenuItemSprite* temp_item = CCMenuItemSprite::create(n_temp, s_temp, this, menu_selector(OptionScene::cheatAction));
+		temp_item->setTag(1);
+		CCMenu* temp_menu = CCMenu::createWithItem(temp_item);
+		temp_menu->setPosition(ccp(15,305));
+		addChild(temp_menu, kO_Z_content);
+	}
+	
+	
+	
 	CCSprite* n_close = CCSprite::create("option_small_close.png");
 	CCSprite* s_close = CCSprite::create("option_small_close.png");
 	s_close->setColor(ccGRAY);
@@ -229,6 +245,16 @@ bool OptionScene::init()
 //	addChild(av, kO_MT_withdraw);
 //	av->show();
 	return true;
+}
+
+void OptionScene::cheatAction(CCObject *sender)
+{
+	int tag = ((CCNode*)sender)->getTag();
+	
+	if(tag == 1) // gold up 10000
+	{
+		myDSH->setIntegerForKey(kDSH_Key_savedGold, myDSH->getIntegerForKey(kDSH_Key_savedGold)+10000);
+	}
 }
 
 void OptionScene::menuAction(CCObject* pSender)

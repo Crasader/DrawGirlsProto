@@ -47,19 +47,6 @@ enum SSS_Zorder{
 	kSSS_Z_popup
 };
 
-enum SSS_MenuTag{
-	kSSS_MT_start = 1,
-	kSSS_MT_back = 2,
-	kSSS_MT_changeCard = 3,
-	kSSS_MT_challenge = 4,
-	kSSS_MT_gacha = 5,
-	kSSS_MT_itemBase = 100,
-	kSSS_MT_itemBuy = 200,
-	kSSS_MT_selectedBase = 300,
-	kSSS_MT_itemCntBase = 400,
-	kSSS_MT_noti = 9999
-};
-
 enum CARD_Zorder{
 	kCARD_Z_ani = 1,
 	kCARD_Z_cardCase
@@ -188,17 +175,19 @@ bool StageSettingScene::init()
 	start_menu->setPosition(getContentPosition(kSSS_MT_start));
 	addChild(start_menu, kSSS_Z_content);
 	
-	
-	CCSprite* n_temp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
-	n_temp->setOpacity(0);
-	CCSprite* s_temp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
-	s_temp->setOpacity(0);
-	
-	CCMenuItemSprite* temp_item = CCMenuItemSprite::create(n_temp, s_temp, this, menu_selector(StageSettingScene::tempAction));
-	temp_item->setTag(1);
-	CCMenu* temp_menu = CCMenu::createWithItem(temp_item);
-	temp_menu->setPosition(ccp(15,305));
-	addChild(temp_menu, kSSS_Z_content);
+	if(myDSH->isCheatKeyEnable())
+	{
+		CCSprite* n_temp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+		n_temp->setOpacity(0);
+		CCSprite* s_temp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+		s_temp->setOpacity(0);
+		
+		CCMenuItemSprite* temp_item = CCMenuItemSprite::create(n_temp, s_temp, this, menu_selector(StageSettingScene::cheatAction));
+		temp_item->setTag(1);
+		CCMenu* temp_menu = CCMenu::createWithItem(temp_item);
+		temp_menu->setPosition(ccp(15,305));
+		addChild(temp_menu, kSSS_Z_content);
+	}
 	
 	
 	
@@ -227,22 +216,11 @@ bool StageSettingScene::init()
     return true;
 }
 
-void StageSettingScene::tempAction(CCObject* sender)
+void StageSettingScene::cheatAction(CCObject* sender)
 {
 	int tag = ((CCNode*)sender)->getTag();
 	if(tag == 1)
 		myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
-	else if(tag == 2)
-	{
-		removeChildByTag(kSSS_MT_noti);
-		heart_time->startGame();
-		realStartAction();
-	}
-	else if(tag == 3)
-	{
-		removeChildByTag(kSSS_MT_noti);
-		is_menu_enable = true;
-	}
 }
 
 CCPoint StageSettingScene::getContentPosition(int t_tag)
@@ -397,7 +375,7 @@ void StageSettingScene::menuAction(CCObject* pSender)
 			}
 			else if(durability == 0)
 			{
-				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingScene::tempAction), this, menu_selector(StageSettingScene::tempAction));
+				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingScene::menuAction), this, menu_selector(StageSettingScene::menuAction));
 				addChild(t_popup, kSSS_Z_popup, kSSS_MT_noti);
 			}
 			else // not selected card
@@ -469,6 +447,17 @@ void StageSettingScene::menuAction(CCObject* pSender)
 		
 		ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_number], clicked_item_number, this, callfuncII_selector(StageSettingScene::buySuccessItem));
 		addChild(t_ibp, kSSS_Z_popup);
+		is_menu_enable = true;
+	}
+	else if(tag == kSSS_MT_noti_ok)
+	{
+		removeChildByTag(kSSS_MT_noti);
+		heart_time->startGame();
+		realStartAction();
+	}
+	else if(tag == kSSS_MT_noti_cancel)
+	{
+		removeChildByTag(kSSS_MT_noti);
 		is_menu_enable = true;
 	}
 }

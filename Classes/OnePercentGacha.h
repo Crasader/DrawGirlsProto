@@ -113,6 +113,7 @@ private:
 		if(tag == kOnePercentGacha_MT_ok)
 		{
 			mySGD->setGold(mySGD->getGold()-500);
+			mySGD->setKeepGold(mySGD->getKeepGold() - 500);
 			gachaOn();
 			ok_menu->removeFromParent();
 			

@@ -226,13 +226,20 @@ public:
 		setIntegerForKey(kDSH_Key_allHighScore, 0);
 	}
 	
+	bool isCheatKeyEnable()
+	{
+		return is_cheat_key_enabled;
+	}
+	
 private:
 	SaveData* myDefault;
 	float gold_get_rate;
+	bool is_cheat_key_enabled;
 	
 	void myInit()
 	{
 		myDefault = SaveData::sharedObject();
+		is_cheat_key_enabled = true;
 	}
 };
 

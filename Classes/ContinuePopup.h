@@ -139,6 +139,7 @@ private:
 			removeAction();
 			
 			mySGD->setGold(mySGD->getGold() - 5000);
+			mySGD->setKeepGold(mySGD->getKeepGold() - 5000);
 			
 			CCSprite* continue_effect = CCSprite::create("continue_effect.png");
 			continue_effect->setOpacity(0);
