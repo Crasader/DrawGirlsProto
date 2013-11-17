@@ -1154,7 +1154,9 @@ private:
 			dieEscapeJack();
 			
 			if(myGD->getIsGameover())
-				endGame();
+            {
+//				endGame();
+            }
 			else
 			{
 				if(myGD->getCommunicationBool("UI_beRevivedJack"))
