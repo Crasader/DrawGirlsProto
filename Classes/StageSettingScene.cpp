@@ -375,6 +375,7 @@ void StageSettingScene::menuAction(CCObject* pSender)
 			}
 			else if(durability == 0)
 			{
+				is_menu_enable = true;
 				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingScene::menuAction), this, menu_selector(StageSettingScene::menuAction));
 				addChild(t_popup, kSSS_Z_popup, kSSS_MT_noti);
 			}
