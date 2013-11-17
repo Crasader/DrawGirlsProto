@@ -1401,7 +1401,7 @@ public:
 		}
 		
 		countingCnt -= 30;
-		total_time -= 30;
+		total_time += 30;
 		if(mySGD->isUsingItem(kIC_longTime))
 		{
 			if(countingCnt < -mySGD->getLongTimeValue())
