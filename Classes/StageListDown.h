@@ -16,6 +16,7 @@
 #include "StageImgLoader.h"
 #include "DownloadFile.h"
 #include "hspConnector.h"
+#include "LogData.h"
 
 USING_NS_CC;
 using namespace std;
@@ -82,6 +83,8 @@ private:
 	
 	void startGetStageList()
 	{
+		myLog->addLog(kLog_getPuzzleInfo_i, -1, puzzle_number);
+		
 		Json::Value param;
 		param["version"] = NSDS_GI(puzzle_number, kSDS_PZ_version_i);
 		param["no"] = puzzle_number;

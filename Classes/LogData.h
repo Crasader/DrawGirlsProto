@@ -35,9 +35,19 @@ enum LOG_KEY
 	kLOG_useItem_s,
 	kLOG_remainHeart_i,
 	kLOG_gacha_startMap,
+	kLOG_gacha_onePercent,
 	kLOG_puzzleAchievementMinimum_i,
 	kLOG_puzzleAchievementMaximum_i,
-	kLOG_typing_cardComment
+	kLOG_typing_cardComment,
+	kLOG_action_continue,
+	kLOG_network_getUserData,
+	kLOG_network_loadCardData,
+	kLOG_network_downloadCardImg,
+	kLOG_network_getPuzzleEventList,
+	kLOG_network_downloadPuzzleEventImg,
+	kLOG_network_setUserData,
+	kLOG_getStageInfo_i,
+	kLog_getPuzzleInfo_i
 };
 
 class LogData : public CCObject
@@ -139,9 +149,19 @@ private:
 		else if(t_key == kLOG_useItem_s)			rv = "time_%d_useItem_%s";
 		else if(t_key == kLOG_remainHeart_i)		rv = "time_%d_remainHeart_%d";
 		else if(t_key == kLOG_gacha_startMap)		rv = "time_%d_gacha_startMap";
+		else if(t_key == kLOG_gacha_onePercent)		rv = "time_%d_gacha_onePercent";
 		else if(t_key == kLOG_puzzleAchievementMinimum_i)	rv = "time_%d_puzzleAchievementMinimum_%d";
 		else if(t_key == kLOG_puzzleAchievementMaximum_i)	rv = "time_%d_puzzleAchievementMaximum_%d";
 		else if(t_key == kLOG_typing_cardComment)			rv = "time_%d_typing_cardComment";
+		else if(t_key == kLOG_action_continue)				rv = "time_%d_action_continue";
+		else if(t_key == kLOG_network_getUserData)			rv = "time_%d_network_getUserData";
+		else if(t_key == kLOG_network_loadCardData)			rv = "time_%d_network_loadCardData";
+		else if(t_key == kLOG_network_downloadCardImg)		rv = "time_%d_network_downloadCardImg";
+		else if(t_key == kLOG_network_getPuzzleEventList)	rv = "time_%d_network_getPuzzleEventList";
+		else if(t_key == kLOG_network_downloadPuzzleEventImg)	rv = "time_%d_network_downloadPuzzleEventImg";
+		else if(t_key == kLOG_network_setUserData)			rv = "time_%d_network_setUserData";
+		else if(t_key == kLOG_getStageInfo_i)				rv = "time_%d_getStageInfo_%d";
+		else if(t_key == kLog_getPuzzleInfo_i)				rv = "time_%d_getPuzzleInfo_%d";
 		
 		return rv.c_str();
 	}

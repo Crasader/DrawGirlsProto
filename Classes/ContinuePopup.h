@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "StarGoldData.h"
+#include "LogData.h"
 
 USING_NS_CC;
 
@@ -133,6 +134,8 @@ private:
 		}
 		else if(tag == kCPL_MT_continue)
 		{
+			myLog->addLog(kLOG_action_continue, -1);
+			
 			end_menu->setEnabled(false);
 			continue_menu->setEnabled(false);
 			

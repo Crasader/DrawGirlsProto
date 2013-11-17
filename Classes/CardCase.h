@@ -549,21 +549,21 @@ private:
 		addChild(option_case, kCARDCASE_Z_innerCase);
 		
 		CountingBMLabel* pow_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
-		pow_label->setPosition(ccp(135,35));
+		pow_label->setPosition(ccp(145,58));//135,35));
 		pow_label->setColor(ccRED);
 		addChild(pow_label, kCARDCASE_Z_data);
 		
 		pow_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_missile_power_i, t_selected_card_number))->getCString());
 		
 		CountingBMLabel* dex_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
-		dex_label->setPosition(ccp(210,35));
+		dex_label->setPosition(ccp(145,26));//210,35));
 		dex_label->setColor(ccGREEN);
 		addChild(dex_label, kCARDCASE_Z_data);
 		
 		dex_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_missile_dex_i, t_selected_card_number))->getCString());
 		
 		CountingBMLabel* spd_label = CountingBMLabel::create("0.00", "etc_font.fnt", 0.5f, "%.2f");
-		spd_label->setPosition(ccp(270,35));
+		spd_label->setPosition(ccp(145,42));//270,35));
 		spd_label->setColor(ccBLUE);
 		addChild(spd_label, kCARDCASE_Z_data);
 		

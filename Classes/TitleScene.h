@@ -63,6 +63,8 @@ private:
 	
 	void startGetPuzzleList()
 	{
+		myLog->addLog(kLOG_network_getPuzzleEventList, -1);
+		
 		Json::Value param;
 		param["puzzlelistversion"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 		param["eventstagelistversion"] = NSDS_GI(kSDS_GI_eventListVersion_i);
@@ -93,6 +95,8 @@ private:
 	
 	void startGetUserData()
 	{
+		myLog->addLog(kLOG_network_getUserData, -1);
+		
 		state_label->setString("유저 정보를 가져오는 ing...");
 		
 		Json::Value param;
@@ -222,6 +226,8 @@ private:
 	
 	void startGetCardsInfo()
 	{
+		myLog->addLog(kLOG_network_loadCardData, -1);
+		
 		state_label->setString("카드 정보를 받아오는 ing...");
 		Json::Value param;
 		for(int i=0;i<card_data_load_list.size();i++)
@@ -485,6 +491,8 @@ private:
 	
 	void startDownloadCardImage()
 	{
+		myLog->addLog(kLOG_network_downloadCardImg, -1);
+		
 		state_label->setString("이미지 정보를 다운로드 합니다.");
 		ing_download_cnt = 1;
 		ing_download_per = 0;
@@ -515,6 +523,8 @@ private:
 	
 	void startSaveUserData()
 	{
+		myLog->addLog(kLOG_network_setUserData, -1);
+		
 		state_label->setString("유저 데이터를 초기화 ing...");
 		
 		Json::Value param;
@@ -659,6 +669,8 @@ private:
 	
 	void startDownloadGameInfo()
 	{
+		myLog->addLog(kLOG_network_downloadPuzzleEventImg, -1);
+		
 		state_label->setString("게임 정보를 받아옵니다.");
 		ing_download_cnt = 1;
 		ing_download_per = 0;
