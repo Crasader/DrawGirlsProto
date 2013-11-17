@@ -138,7 +138,7 @@ private:
 			
 			removeAction();
 			
-			mySGD->setGold(mySGD->getGold() - 5000);
+			myDSH->setIntegerForKey(kDSH_Key_savedGold, myDSH->getIntegerForKey(kDSH_Key_savedGold) - 5000);
 			mySGD->setKeepGold(mySGD->getKeepGold() - 5000);
 			
 			CCSprite* continue_effect = CCSprite::create("continue_effect.png");

@@ -81,6 +81,13 @@ bool FailScene::init()
 	}
 	Json::Value p1;
 	p1["memberID"] = hspConnector::get()->getKakaoID();
+	
+	CCLog("original score : %.1f / int score : %d", mySGD->getScore(), int(mySGD->getScore()));
+	if(int(mySGD->getScore()) < 0)
+	{
+		CCLog("?!!!!!!!!!!!!!");
+	}
+	
 	p1["score"] = int(mySGD->getScore());
 	Json::Value p1_data;
 	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
