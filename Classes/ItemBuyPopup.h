@@ -23,7 +23,8 @@ enum IBP_MenuTag{
 
 enum IBP_Zorder{
 	kIBP_Z_back = 1,
-	kIBP_Z_case
+	kIBP_Z_case,
+	kIBP_Z_menu
 };
 
 class ItemBuyPopup : public CCLayer
@@ -62,40 +63,40 @@ private:
 		addChild(back, kIBP_Z_back);
 		
 		
-		CCSprite* buy_case = CCSprite::create("buy_item_case.png");
-		buy_case->setPosition(ccp(270, 226));
+		CCSprite* buy_case = CCSprite::create("item_buy_popup_back.png");
+		buy_case->setPosition(ccp(240, 160));
 		addChild(buy_case, kIBP_Z_case);
 		
-		CCSprite* item_img = CCSprite::create(CCString::createWithFormat("item%d.png", item_type)->getCString());
-		item_img->setPosition(ccp(50,85));
-		buy_case->addChild(item_img);
+//		CCSprite* item_img = CCSprite::create(CCString::createWithFormat("item%d.png", item_type)->getCString());
+//		item_img->setPosition(ccp(50,85));
+//		buy_case->addChild(item_img);
+//		
+//		CCLabelTTF* item_price = CCLabelTTF::create(CCString::createWithFormat("%.0f원", mySD->getItemPrice(item_type))->getCString(), mySGD->getFont().c_str(), 25);
+//		item_price->setPosition(ccp(140,83));
+//		buy_case->addChild(item_price);
 		
-		CCLabelTTF* item_price = CCLabelTTF::create(CCString::createWithFormat("%.0f원", mySD->getItemPrice(item_type))->getCString(), mySGD->getFont().c_str(), 25);
-		item_price->setPosition(ccp(140,83));
-		buy_case->addChild(item_price);
 		
-		
-		CCSprite* n_buy = CCSprite::create("buy_item_buy.png");
-		CCSprite* s_buy = CCSprite::create("buy_item_buy.png");
+		CCSprite* n_buy = CCSprite::create("itemshop_buy.png");
+		CCSprite* s_buy = CCSprite::create("itemshop_buy.png");
 		s_buy->setColor(ccGRAY);
 		
 		CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(ItemBuyPopup::menuAction));
 		buy_item->setTag(kIBP_MT_buy);
 		
 		buy_menu = CCMenu::createWithItem(buy_item);
-		buy_menu->setPosition(ccp(105,32));
-		buy_case->addChild(buy_menu);
+		buy_menu->setPosition(ccp(240,115));
+		addChild(buy_menu, kIBP_Z_menu);
 		
-		CCSprite* n_close = CCSprite::create("sspl_cancel.png");
-		CCSprite* s_close = CCSprite::create("sspl_cancel.png");
+		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
 		s_close->setColor(ccGRAY);
 		
 		CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(ItemBuyPopup::menuAction));
 		close_item->setTag(kIBP_MT_close);
 		
 		close_menu = CCMenu::createWithItem(close_item);
-		close_menu->setPosition(ccp(193,115));
-		buy_case->addChild(close_menu);
+		close_menu->setPosition(ccp(355,215));
+		addChild(close_menu, kIBP_Z_menu);
 		
 		is_menu_enable = true;
 		
