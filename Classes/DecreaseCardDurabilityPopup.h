@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "CardCase.h"
 #include "StageImgLoader.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 using namespace std;
@@ -44,8 +45,10 @@ public:
 		glDisable(GL_SCISSOR_TEST);
 	}
 	
-	void startRemoveCard()
+	void startSlowRemoveCard()
 	{
+		stopAllActions();
+		
 		CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
 		
 		float wScale = frame_size.width / rSize.width;
@@ -69,10 +72,73 @@ public:
 		view_rect.size.width = (getContentSize().width*getScale() + 10.f)*wScale;
 		view_rect.size.height = (getContentSize().height*getScale() + 10.f)*hScale;
 		
-		decrease_value = view_rect.size.height/85.f;
+		decrease_value = view_rect.size.height/590.f;
 		
 		ing_frame = 0;
-		schedule(schedule_selector(RemoveCardSprite::removingCard));
+		schedule(schedule_selector(RemoveCardSprite::slowRemovingCard));
+	}
+	
+	void startFastRemoveCard()
+	{
+		stopAllActions();
+		
+		CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
+		
+		float wScale = frame_size.width / rSize.width;
+		float hScale = frame_size.height / rSize.height;
+		float xMargine = 0;
+		float yMargine = 0;
+		
+		if(wScale >= hScale)
+		{
+			wScale = hScale;
+			xMargine = (frame_size.width - rSize.width*wScale)/2.f;
+		}
+		else
+		{
+			hScale = wScale;
+			yMargine = (frame_size.height - rSize.height*hScale)/2.f;
+		}
+		
+		view_rect.origin.x = (getPositionX() - getContentSize().width/2.f*getScale() - 5.f)*wScale + xMargine;
+		view_rect.origin.y = (getPositionY() - getContentSize().height/2.f*getScale() - 5.f)*hScale + yMargine;
+		view_rect.size.width = (getContentSize().width*getScale() + 10.f)*wScale;
+		view_rect.size.height = (getContentSize().height*getScale() + 10.f)*hScale;
+		
+		decrease_value = view_rect.size.height/55.f;
+		
+		ing_frame = 0;
+		schedule(schedule_selector(RemoveCardSprite::fastRemovingCard));
+	}
+	
+	void startRecovery()
+	{
+		stopAllActions();
+		
+		CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
+		
+		float wScale = frame_size.width / rSize.width;
+		float hScale = frame_size.height / rSize.height;
+		float xMargine = 0;
+		float yMargine = 0;
+		
+		if(wScale >= hScale)
+		{
+			wScale = hScale;
+			xMargine = (frame_size.width - rSize.width*wScale)/2.f;
+		}
+		else
+		{
+			hScale = wScale;
+			yMargine = (frame_size.height - rSize.height*hScale)/2.f;
+		}
+		
+		float total_height = (getContentSize().height*getScale() + 10.f)*hScale;
+		
+		decrease_value = -(total_height-view_rect.size.height)/27.f;
+		
+		ing_frame = 0;
+		schedule(schedule_selector(RemoveCardSprite::recoveringCard));
 	}
 	
 private:
@@ -81,15 +147,40 @@ private:
 	int ing_frame;
 	float decrease_value;
 	
-	void removingCard()
+	void recoveringCard()
 	{
 		ing_frame++;
 		
 		view_rect.size.height -= decrease_value;
 		
-		if(ing_frame >= 85)
+		if(ing_frame >= 27)
 		{
-			unschedule(schedule_selector(RemoveCardSprite::removingCard));
+			unschedule(schedule_selector(RemoveCardSprite::recoveringCard));
+		}
+	}
+	
+	void slowRemovingCard()
+	{
+		ing_frame++;
+		
+		view_rect.size.height -= decrease_value;
+		
+		if(ing_frame >= 590)
+		{
+			unschedule(schedule_selector(RemoveCardSprite::slowRemovingCard));
+		}
+	}
+	
+	void fastRemovingCard()
+	{
+		ing_frame++;
+		
+		view_rect.size.height -= decrease_value;
+		
+		if(ing_frame >= 55)
+		{
+			unschedule(schedule_selector(RemoveCardSprite::fastRemovingCard));
+			removeFromParent();
 		}
 	}
 	
@@ -120,12 +211,19 @@ private:
 	CCSprite* decrease_durability_label;
 	RemoveCardSprite* selected_card;
 	CardCase* t_case;
+	CCMenu* recovery_menu;
+	bool is_menu_on;
+	
+	int remove_state;
 	
 	int stage_number;
 	int grade_number;
 	
 	void myInit(int t_stage, int t_grade)
 	{
+		is_menu_on = false;
+		recovery_menu = NULL;
+		remove_state = 0;
 		stage_number = t_stage;
 		grade_number = t_grade;
 		gray = CCSprite::create("back_gray.png");
@@ -234,13 +332,38 @@ private:
 		remove_particle->setDuration(0);
 	}
 	
+	void menuAction(CCObject* sender)
+	{
+		remove_state = 2;
+		recovery_menu->removeFromParent();
+		recovery_menu = NULL;
+		is_touch_enable = false;
+		
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number)));
+		myDSH->setIntegerForKey(kDSH_Key_selectedCard, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number));
+		myDSH->setIntegerForKey(kDSH_Key_savedGold, myDSH->getIntegerForKey(kDSH_Key_savedGold) - 5000);
+		
+		CCMoveTo* particle_move = CCMoveTo::create(27.f/60.f, ccp(selected_card->getPositionX(), selected_card->getPositionY()+selected_card->getContentSize().height/2.f*selected_card->getScale()+5.f));
+		CCCallFunc* particle_call = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeParticle));
+		CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_call);
+		remove_particle->runAction(particle_seq);
+		
+		selected_card->startRecovery();
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+		CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
+		CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
+		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
+		CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
+		selected_card->runAction(t_seq1);
+	}
+	
 	void touchOn()
 	{
 		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number));
 		
 		if(durability <= 0)
 		{
-			is_touch_enable = false;
 			arrow_particle->setDuration(0);
 			
 			remove_particle = CCParticleSystemQuad::createWithTotalParticles(150);
@@ -279,19 +402,53 @@ private:
 			remove_particle->setPosition(ccp(selected_card->getPositionX(), selected_card->getPositionY()+selected_card->getContentSize().height/2.f*selected_card->getScale()+5.f));
 			remove_particle->setAutoRemoveOnFinish(true);
 			addChild(remove_particle, kDecreaseCardDurabilityPopup_Z_particle);
-			CCMoveBy* particle_move = CCMoveBy::create(85.f/60.f, ccp(0,-selected_card->getContentSize().height*selected_card->getScale()-10.f));
-			CCCallFunc* particle_call = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeParticle));
-			CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_call);
-			remove_particle->runAction(particle_seq);
 			
-			selected_card->startRemoveCard();
-			
-			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
-			CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
-			CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
-			CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
-			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
-			selected_card->runAction(t_seq1);
+			if(myDSH->getIntegerForKey(kDSH_Key_savedGold) >= 5000)
+			{
+				remove_state = 1;
+				is_touch_enable = true;
+				
+				CCSprite* n_recovery = CCSprite::create("card_recovery.png");
+				CCSprite* s_recovery = CCSprite::create("card_recovery.png");
+				s_recovery->setColor(ccGRAY);
+				
+				CCMenuItem* recovery_item = CCMenuItemSprite::create(n_recovery, s_recovery, this, menu_selector(DecreaseCardDurabilityPopup::menuAction));
+				recovery_menu = CCMenu::createWithItem(recovery_item);
+				recovery_menu->setPosition(ccp(360, 80));
+				addChild(recovery_menu, kDecreaseCardDurabilityPopup_Z_img);
+				
+				CCMoveBy* particle_move = CCMoveBy::create(590.f/60.f, ccp(0,-selected_card->getContentSize().height*selected_card->getScale()-10.f));
+				CCCallFunc* particle_call = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeParticle));
+				CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_call);
+				remove_particle->runAction(particle_seq);
+				
+				selected_card->startSlowRemoveCard();
+				
+				CCDelayTime* t_delay1 = CCDelayTime::create(10.f);
+				CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
+				CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
+				CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
+				CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
+				selected_card->runAction(t_seq1);
+			}
+			else
+			{
+				is_touch_enable = false;
+				
+				CCMoveBy* particle_move = CCMoveBy::create(55.f/60.f, ccp(0,-selected_card->getContentSize().height*selected_card->getScale()-10.f));
+				CCCallFunc* particle_call = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeParticle));
+				CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_call);
+				remove_particle->runAction(particle_seq);
+				
+				selected_card->startFastRemoveCard();
+				
+				CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
+				CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
+				CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
+				CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
+				CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
+				selected_card->runAction(t_seq1);
+			}
 		}
 		else
 		{
@@ -319,19 +476,68 @@ private:
 		selected_card->runAction(t_spawn1);
 	}
 	
+	void fastRemoveAction()
+	{
+		remove_particle->stopAllActions();
+		
+		remove_particle->setPosition(ccp(selected_card->getPositionX(), selected_card->getPositionY()+selected_card->getContentSize().height/2.f*selected_card->getScale()+5.f));
+		
+		CCMoveBy* particle_move = CCMoveBy::create(55.f/60.f, ccp(0,-selected_card->getContentSize().height*selected_card->getScale()-10.f));
+		CCCallFunc* particle_call = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeParticle));
+		CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_call);
+		remove_particle->runAction(particle_seq);
+		
+		selected_card->startFastRemoveCard();
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
+		CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
+		CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
+		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
+		CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
+		selected_card->runAction(t_seq1);
+	}
+	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(is_touch_enable)
+		if(recovery_menu)
 		{
-			closingAction();
-			is_touch_enable = false;
+			is_menu_on = recovery_menu->ccTouchBegan(pTouch, pEvent);
+		}
+		
+		if(!is_menu_on && is_touch_enable)
+		{
+			if(remove_state == 0)
+			{
+				closingAction();
+				is_touch_enable = false;
+			}
+			else if(remove_state == 1)
+			{
+				remove_state = 2;
+				recovery_menu->removeFromParent();
+				recovery_menu = NULL;
+				fastRemoveAction();
+				is_touch_enable = false;
+			}
 		}
 		return true;
 	}
 	
-	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent){}
-    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){}
-    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent){}
+	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		if(is_menu_on)
+			recovery_menu->ccTouchMoved(pTouch, pEvent);
+	}
+    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		if(is_menu_on)
+			recovery_menu->ccTouchEnded(pTouch, pEvent);
+	}
+    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		if(is_menu_on)
+			recovery_menu->ccTouchCancelled(pTouch, pEvent);
+	}
 	
 	virtual void registerWithTouchDispatcher()
 	{
