@@ -35,7 +35,7 @@ public:
 	
 	void startControl()
 	{
-		if(((CCNode*)target_main)->getTag() == 1)
+//		if(((CCNode*)target_main)->getTag() == 1)
 			setTouchEnabled(true);
 	}
 	
