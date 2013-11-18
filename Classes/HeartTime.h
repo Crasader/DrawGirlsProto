@@ -17,7 +17,7 @@
 USING_NS_CC;
 using namespace std;
 
-#define CHARGE_TIME 480
+#define CHARGE_TIME 300
 #define HEART_DISTANCE 20
 
 class HeartTime : public CCNode
