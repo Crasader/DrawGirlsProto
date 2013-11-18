@@ -22,13 +22,14 @@ enum MenuTagPPL{
 	kMenuTagPPL_continue,
 	kMenuTagPPL_slow,
 	kMenuTagPPL_normal,
-	kMenuTagPPL_fast
+	kMenuTagPPL_fast,
+	kMenuTagPPL_replay
 };
 
 class PausePopupLayer : public CCLayer
 {
 public:
-	static PausePopupLayer* create(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_continue, SEL_CallFunc d_continue, CCObject* t_control, SEL_CallFunc d_gesture, SEL_CallFunc d_button, SEL_CallFunc d_joystick);
+	static PausePopupLayer* create(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_continue, SEL_CallFunc d_continue, CCObject* t_speed, SEL_CallFunc d_slow, SEL_CallFunc d_normal, SEL_CallFunc d_fast, CCObject* t_replay, SEL_CallFunc d_replay);
 	void removeSelf();
 	
 private:
@@ -39,13 +40,12 @@ private:
 //	CCMenu* gesture_menu;
 //	CCMenu* button_menu;
 //	CCMenu* joystick_menu;
-	CCMenu* slow_menu;
-	CCMenu* normal_menu;
-	CCMenu* fast_menu;
+//	CCMenu* slow_menu;
+//	CCMenu* normal_menu;
+//	CCMenu* fast_menu;
+	CCMenu* replay_menu;
 	
 	int touched_number;
-	
-	
 	
 	bool is_action;
 	
@@ -55,13 +55,15 @@ private:
 	SEL_CallFunc delegate_home;
 	CCObject* target_continue;
 	SEL_CallFunc delegate_continue;
-	CCObject* target_control;
+	CCObject* target_speed;
 //	SEL_CallFunc delegate_gesture;
 //	SEL_CallFunc delegate_button;
 //	SEL_CallFunc delegate_joystick;
 	SEL_CallFunc delegate_slow;
 	SEL_CallFunc delegate_normal;
 	SEL_CallFunc delegate_fast;
+	CCObject* target_replay;
+	SEL_CallFunc delegate_replay;
 	
 	void startPopupAnimation()
 	{
@@ -102,12 +104,13 @@ private:
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		touched_number = 0;
+		if(touched_number != 0)		return true;
 		if(home_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kMenuTagPPL_home;
 		else if(continue_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kMenuTagPPL_continue;
-		else if(slow_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_slow;
-		else if(normal_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_normal;
-		else if(fast_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_fast;
+		else if(replay_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_replay;
+//		else if(slow_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_slow;
+//		else if(normal_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_normal;
+//		else if(fast_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_fast;
 		return true;
 	}
 	
@@ -115,25 +118,28 @@ private:
 	{
 		if(touched_number == kMenuTagPPL_home)						home_menu->ccTouchMoved(pTouch, pEvent);
 		else if(touched_number == kMenuTagPPL_continue)				continue_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchMoved(pTouch, pEvent);
+		else if(touched_number == kMenuTagPPL_replay)				replay_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchMoved(pTouch, pEvent);
+//		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchMoved(pTouch, pEvent);
 	}
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == kMenuTagPPL_home)						home_menu->ccTouchEnded(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_continue)				continue_menu->ccTouchEnded(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchEnded(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchEnded(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchEnded(pTouch, pEvent);
+		if(touched_number == kMenuTagPPL_home){						home_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;		}
+		else if(touched_number == kMenuTagPPL_continue){			continue_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;		}
+		else if(touched_number == kMenuTagPPL_replay){				replay_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;		}
+//		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchEnded(pTouch, pEvent);
+//		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchEnded(pTouch, pEvent);
+//		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchEnded(pTouch, pEvent);
 	}
     virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		if(touched_number == kMenuTagPPL_home)						home_menu->ccTouchEnded(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_continue)				continue_menu->ccTouchEnded(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchEnded(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchEnded(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchEnded(pTouch, pEvent);
+		if(touched_number == kMenuTagPPL_home){						home_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;		}
+		else if(touched_number == kMenuTagPPL_continue){			continue_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;		}
+		else if(touched_number == kMenuTagPPL_replay){				replay_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;		}
+//		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchEnded(pTouch, pEvent);
+//		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchEnded(pTouch, pEvent);
+//		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchEnded(pTouch, pEvent);
 	}
 	
 	void resetControlMenu();
@@ -144,7 +150,7 @@ private:
 		pDispatcher->addTargetedDelegate(this, -150, true);
 	}
 	
-	void myInit(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_continue, SEL_CallFunc d_continue, CCObject* t_control, SEL_CallFunc d_gesture, SEL_CallFunc d_button, SEL_CallFunc d_joystick);
+	void myInit(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_continue, SEL_CallFunc d_continue, CCObject* t_speed, SEL_CallFunc d_slow, SEL_CallFunc d_normal, SEL_CallFunc d_fast, CCObject* t_replay, SEL_CallFunc d_replay);
 	void menuAction(CCObject* sender);
 };
 

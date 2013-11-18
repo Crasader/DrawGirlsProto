@@ -318,9 +318,12 @@ private:
 			else
 				target_node = map_node;
 			
-			target_node->removeChildByTag(99999);
-			target_node->removeChildByTag(99998);
-			target_node->removeChildByTag(99997);
+			if(target_node->getChildByTag(99999))
+				target_node->removeChildByTag(99999);
+			if(target_node->getChildByTag(99998))
+				target_node->removeChildByTag(99998);
+			if(target_node->getChildByTag(99997))
+				target_node->removeChildByTag(99997);
 			
 			CCSprite* map_back_center = mySIL->getLoadedImg(CCSTR_CWF("puzzle%d_center.png", recent_puzzle_number)->getCString());
 			map_back_center->setPosition(CCPointZero);
@@ -524,6 +527,13 @@ private:
 	
 	void cachingPuzzleImg2()
 	{
+		unschedule(schedule_selector(PuzzleMapScene::creatingPuzzle));
+		PuzzleCache::getInstance()->cancelLoadingImage(0);
+		is_creating_puzzle = false;
+		loaded_imgs.clear();
+		ing_caching_cnt = 0;
+		total_caching_cnt = 0;
+		
 		stage_count = NSDS_GI(recent_puzzle_number, kSDS_PZ_stageCount_i);
 		start_stage_number = NSDS_GI(recent_puzzle_number, kSDS_PZ_startStage_i);
 		

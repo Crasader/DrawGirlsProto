@@ -74,6 +74,13 @@ private:
 		t_case->setPosition(CCPointZero);
 		take_card->addChild(t_case);
 		
+		CCLabelTTF* recent_durability_label = t_case->getRecentDurabilityLabel();
+		recent_durability_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(t_stage, kSDS_SI_level_int1_card_i, t_grade)))->getCString());
+		recent_durability_label->setPosition(ccpAdd(recent_durability_label->getPosition(), ccp(6,-1)));
+		recent_durability_label->setFontSize(recent_durability_label->getFontSize()+3);
+		
+		t_case->getTotalDurabilityLabel()->removeFromParent();
+		
 		card_back = CCSprite::create("ending_take_card_back.png");
 		card_back->setVisible(false);
 		card_back->setScale(take_card->getScale());

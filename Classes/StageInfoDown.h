@@ -15,6 +15,7 @@
 #include "ServerDataSave.h"
 #include "StageImgLoader.h"
 #include "DownloadFile.h"
+#include "LogData.h"
 
 USING_NS_CC;
 using namespace std;
@@ -98,6 +99,8 @@ private:
 	void startGetStageInfo()
 	{
 		int stage_number = mySD->getSilType();
+		
+		myLog->addLog(kLOG_getStageInfo_i, -1, stage_number);
 		
 		if(stage_number < 10000)
 		{

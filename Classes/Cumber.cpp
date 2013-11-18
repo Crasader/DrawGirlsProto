@@ -257,6 +257,11 @@ void CumberParent::setGameover()
 		t_sc->setGameover();
 //		t_sc->stopMoving();
 	}
+	
+	for(int i=0;i<hp_graphs.size();i++)
+	{
+		hp_graphs[i]->setGameover();
+	}
 }
 
 void CumberParent::startTeleport()
@@ -752,7 +757,7 @@ void CumberParent::myInit()
 	
 	MobHpGraph* main_hp = MobHpGraph::create(mainCumber);
 	addChild(main_hp);
-//	hp_graphs.push_back(main_hp);
+	hp_graphs.push_back(main_hp);
 	
 //	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
 //	addChild(myEP);

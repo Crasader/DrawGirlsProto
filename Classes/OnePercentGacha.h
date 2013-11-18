@@ -13,6 +13,7 @@
 #include "StarGoldData.h"
 #include "DataStorageHub.h"
 #include "CountingBMLabel.h"
+#include "LogData.h"
 
 USING_NS_CC;
 using namespace std;
@@ -112,7 +113,9 @@ private:
 		
 		if(tag == kOnePercentGacha_MT_ok)
 		{
-			mySGD->setGold(mySGD->getGold()-500);
+			myLog->addLog(kLOG_gacha_onePercent, -1);
+			myDSH->setIntegerForKey(kDSH_Key_savedGold, myDSH->getIntegerForKey(kDSH_Key_savedGold) - 500);
+			mySGD->setKeepGold(mySGD->getKeepGold() - 500);
 			gachaOn();
 			ok_menu->removeFromParent();
 			
@@ -177,7 +180,7 @@ private:
 		back_img->setPosition(ccp(240,myDSH->ui_center_y));
 		addChild(back_img, kOnePercentGacha_Z_back);
 		
-		percent_label = CountingBMLabel::create(CCString::createWithFormat("%.1f", recent_percent*100.f)->getCString(), "bb_white_font.fnt", 0.5f);
+		percent_label = CountingBMLabel::create(CCString::createWithFormat("%.1f", recent_percent*100.f)->getCString(), "bb_white_font.fnt", 0.5f, "%.1f");
 		percent_label->setPosition(ccp(305, myDSH->ui_center_y+87.f));
 		addChild(percent_label, kOnePercentGacha_Z_content);
 		

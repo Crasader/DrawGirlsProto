@@ -497,7 +497,7 @@ void CardSettingScene::alignChange()
 	{
 		selected_img = CCSprite::create("card_selected.png");
 		selected_img->setPosition(align_default_position_list[recent_mounted_number]);
-		my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
+		my_clv->addChild(selected_img, kCSS_Z_select, kCSS_MT_selectedCheck);
 	}
 	else
 	{
@@ -509,7 +509,7 @@ void CardSettingScene::alignChange()
 			{
 				selected_img = CCSprite::create("card_selected.png");
 				selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)));
-				my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
+				my_clv->addChild(selected_img, kCSS_Z_select, kCSS_MT_selectedCheck);
 				break;
 			}
 		}
@@ -572,7 +572,7 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 	{
 		selected_img = CCSprite::create("card_selected.png");
 		selected_img->setPosition(align_default_position_list[recent_mounted_number]);
-		my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
+		my_clv->addChild(selected_img, kCSS_Z_select, kCSS_MT_selectedCheck);
 	}
 	else
 	{
@@ -584,7 +584,7 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 			{
 				selected_img = CCSprite::create("card_selected.png");
 				selected_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)));
-				my_clv->addChild(selected_img, kCSS_Z_check, kCSS_MT_selectedCheck);
+				my_clv->addChild(selected_img, kCSS_Z_select, kCSS_MT_selectedCheck);
 				break;
 			}
 		}

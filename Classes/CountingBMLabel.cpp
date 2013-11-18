@@ -8,10 +8,10 @@
 
 #include "CountingBMLabel.h"
 
-CountingBMLabel* CountingBMLabel::create(string init_value, string font_filename, float t_duration)
+CountingBMLabel* CountingBMLabel::create(string init_value, string font_filename, float t_duration, string t_format)
 {
 	CountingBMLabel* t_cbml = new CountingBMLabel();
-	t_cbml->myInit(init_value, font_filename, t_duration);
+	t_cbml->myInit(init_value, font_filename, t_duration, t_format);
 	t_cbml->autorelease();
 	return t_cbml;
 }
@@ -70,7 +70,7 @@ void CountingBMLabel::changing(float dt)
 				increase_value += decreaseUnit*sign_value;
 			}
 		}
-		CCLabelBMFont::setString(CCString::createWithFormat("%.0f",base_value+increase_value)->getCString());
+		CCLabelBMFont::setString(CCString::createWithFormat(show_format.c_str(),base_value+increase_value)->getCString());
 	}
 	else
 		stopChanging();
@@ -83,11 +83,15 @@ void CountingBMLabel::stopChanging()
 	CCLabelBMFont::setString(keep_value_string.c_str());
 }
 
-void CountingBMLabel::myInit(string init_value, string font_filename, float t_duration)
+void CountingBMLabel::myInit(string init_value, string font_filename, float t_duration, string t_format)
 {
 	is_changing = false;
 	duration = t_duration;
-	keep_value_string = init_value;
+	keep_value_string = init_value.c_str();
+	if(t_format == "%d")
+		show_format = "%.0f";
+	else
+		show_format = t_format.c_str();
 	CCLabelBMFont::initWithString(init_value.c_str(), font_filename.c_str(), kCCLabelAutomaticWidth, kCCTextAlignmentLeft, CCPointZero);
 	stopChanging();
 }

@@ -34,6 +34,9 @@ private:
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked(void);
 
+	CCSprite* bgm_img;
+	CCSprite* effect_img;
+	
 	CCMenu* bgm_menu;
 	CCMenu* effect_menu;
 	
@@ -41,6 +44,8 @@ private:
 	
 	void resetBgmMenu();
 	void resetEffectMenu();
+	
+	void cheatAction(CCObject* sender);
 
 	void menuAction(CCObject* sender);
 	void popupClose();

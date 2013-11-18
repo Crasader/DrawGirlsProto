@@ -19,6 +19,11 @@
 #include <chrono>
 #include "ScrollBar.h"
 #include "ServerDataSave.h"
+#include "StageImgLoader.h"
+#include "SilhouetteData.h"
+#include "CardCase.h"
+#include "DownloadFile.h"
+#include "StarGoldData.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -31,7 +36,8 @@ enum RankPopupZorder{
 	kRP_Z_content,
 	kRP_Z_rankTable,
 	kRP_Z_send,
-	kRP_Z_profileImg
+	kRP_Z_profileImg,
+	kRP_Z_usedCardImg
 };
 
 enum RankTableViewTag{
@@ -168,6 +174,7 @@ public:
 	void finishedClose(){
 		
 		(target_close->*delegate_close)();
+		StageImgLoader::sharedInstance()->removeTD();
 		removeFromParent();
 	}
 	
@@ -205,6 +212,11 @@ public:
 		target_close = t_close;
 		delegate_close = d_close;
 		m_currentSelectSprite = NULL;
+		
+		used_card_img = NULL;
+		loading_card_number = 0;
+		after_loading_card_number = 0;
+		last_selected_card_number = 0;
 		
 //		gray = CCSprite::create("back_gray.png");
 //		gray->setPosition(ccp(240,160));
@@ -578,6 +590,339 @@ public:
 		
 	}
     
+	CCSprite* used_card_img;
+	int loading_card_number;
+	int after_loading_card_number;
+	int last_selected_card_number;
+	vector<DownloadFile> df_list;
+	vector<CopyFile> cf_list;
+	
+	void resultLoadedCardInfo(Json::Value result_data)
+	{
+		CCLog("resultLoadedCardData data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		
+		if(result_data["state"].asString() == "ok")
+		{
+			Json::Value cards = result_data["list"];
+			for(int i=0;i<cards.size();i++)
+			{
+				Json::Value t_card = cards[i];
+				NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt());
+				NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt());
+				NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt());
+				
+				NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1);
+				NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt());
+				NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+				
+				Json::Value t_card_missile = t_card["missile"];
+				NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str());
+				NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt());
+				NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt());
+				NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble());
+				
+				NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str());
+				
+				Json::Value t_ability = t_card["ability"];
+				NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), t_ability.size());
+				for(int j=0;j<t_ability.size();j++)
+				{
+					Json::Value t_abil = t_ability[j];
+					NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt());
+					
+					Json::Value t_option;
+					if(!t_abil["option"].isObject())                    t_option["key"]="value";
+					else												t_option =t_abil["option"];
+					
+					if(t_abil["type"].asInt() == kIC_attack)
+						NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt());
+					else if(t_abil["type"].asInt() == kIC_addTime)
+						NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					else if(t_abil["type"].asInt() == kIC_fast)
+						NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					else if(t_abil["type"].asInt() == kIC_silence)
+						NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					else if(t_abil["type"].asInt() == kIC_doubleItem)
+						NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					else if(t_abil["type"].asInt() == kIC_longTime)
+						NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
+						NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					else if(t_abil["type"].asInt() == kIC_subSmallSize)
+						NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					else if(t_abil["type"].asInt() == kIC_smallArea)
+						NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					else if(t_abil["type"].asInt() == kIC_widePerfect)
+						NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+				}
+				
+				Json::Value t_imgInfo = t_card["imgInfo"];
+				
+				bool is_add_cf = false;
+				
+				if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df;
+					t_df.size = t_imgInfo["size"].asInt();
+					t_df.img = t_imgInfo["img"].asString().c_str();
+					t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
+					df_list.push_back(t_df);
+					// ================================
+					
+					CopyFile t_cf;
+					t_cf.from_filename = t_df.filename.c_str();
+					t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					cf_list.push_back(t_cf);
+					
+					is_add_cf = true;
+				}
+				
+				Json::Value t_aniInfo = t_card["aniInfo"];
+				NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool());
+				if(t_aniInfo["isAni"].asBool())
+				{
+					Json::Value t_detail = t_aniInfo["detail"];
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt());
+					
+					Json::Value t_loopSeq = t_detail["loopSeq"];
+					for(int j=0;j<t_loopSeq.size();j++)
+						NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt());
+					
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt());
+					
+					if(NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card["no"].asInt()) != t_detail["img"].asString())
+					{
+						// check, after download ----------
+						DownloadFile t_df;
+						t_df.size = t_detail["size"].asInt();
+						t_df.img = t_detail["img"].asString().c_str();
+						t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+						t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
+						df_list.push_back(t_df);
+						// ================================
+					}
+					
+					if(is_add_cf)
+					{
+						CopyFile t_cf = cf_list.back();
+						cf_list.pop_back();
+						t_cf.is_ani = true;
+						t_cf.cut_width = t_detail["cutWidth"].asInt();
+						t_cf.cut_height = t_detail["cutHeight"].asInt();
+						t_cf.position_x = t_detail["positionX"].asInt();
+						t_cf.position_y = t_detail["positionY"].asInt();
+						
+						t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+						
+						cf_list.push_back(t_cf);
+					}
+				}
+				
+				NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString());
+				
+				Json::Value t_silImgInfo = t_card["silImgInfo"];
+				NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool());
+				if(t_silImgInfo["isSil"].asBool())
+				{
+					if(NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card["no"].asInt()) != t_silImgInfo["img"].asString())
+					{
+						// check, after download ----------
+						DownloadFile t_df;
+						t_df.size = t_silImgInfo["size"].asInt();
+						t_df.img = t_silImgInfo["img"].asString().c_str();
+						t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+						t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
+						df_list.push_back(t_df);
+						// ================================
+					}
+				}
+			}
+			
+			if(df_list.size() > 0) // need download
+			{
+				startDownloadCardImage();
+			}
+			else
+			{
+				if(last_selected_card_number == loading_card_number)
+				{
+					if(used_card_img)
+					{
+						used_card_img->removeFromParent();
+						used_card_img = NULL;
+					}
+					addCardImg(loading_card_number);
+				}
+				
+				if(after_loading_card_number != 0)
+				{
+					loading_card_number = after_loading_card_number;
+					after_loading_card_number = 0;
+					
+					Json::Value param;
+					param["noList"][0] = loading_card_number;
+					hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+				}
+				else
+					loading_card_number = 0;
+			}
+		}
+		else
+		{
+			failAction();
+		}
+	}
+	
+	void successAction()
+	{
+		SDS_SS(kSDF_cardInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
+		
+		if(ing_download_cnt >= df_list.size())
+		{
+			for(int i=0;i<cf_list.size();i++)
+			{
+				CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+				target_img->setAnchorPoint(ccp(0,0));
+				
+				if(cf_list[i].is_ani)
+				{
+					CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+					ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+					target_img->addChild(ani_img);
+				}
+				
+				target_img->setScale(0.2f);
+				
+				CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+				t_texture->setSprite(target_img);
+				t_texture->begin();
+				t_texture->getSprite()->visit();
+				t_texture->end();
+				
+				t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			}
+			
+			df_list.clear();
+			cf_list.clear();
+			
+			
+			if(last_selected_card_number == loading_card_number)
+			{
+				if(used_card_img)
+				{
+					used_card_img->removeFromParent();
+					used_card_img = NULL;
+				}
+				addCardImg(loading_card_number);
+			}
+			
+			if(after_loading_card_number != 0)
+			{
+				loading_card_number = after_loading_card_number;
+				after_loading_card_number = 0;
+				
+				Json::Value param;
+				param["noList"][0] = loading_card_number;
+				hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+			}
+			else
+				loading_card_number = 0;
+		}
+		else
+		{
+			ing_download_cnt++;
+			startDownload();
+		}
+	}
+	
+	void failAction()
+	{
+		if(last_selected_card_number == loading_card_number)
+		{
+			if(used_card_img)
+			{
+				used_card_img->removeFromParent();
+				used_card_img = NULL;
+			}
+			
+			used_card_img = CCSprite::create("ending_take_card_back.png");
+			used_card_img->setScale(0.34f);
+			used_card_img->setPosition(ccp(99.f,156.f));
+			addChild(used_card_img, kRP_Z_usedCardImg);
+			
+			CCLabelTTF* t_label = CCLabelTTF::create("정보 로드 실패", mySGD->getFont().c_str(), 20);
+			t_label->setColor(ccBLACK);
+			t_label->setPosition(ccp(160,215));
+			used_card_img->addChild(t_label);
+		}
+		
+		if(after_loading_card_number != 0)
+		{
+			loading_card_number = after_loading_card_number;
+			after_loading_card_number = 0;
+			
+			Json::Value param;
+			param["noList"][0] = loading_card_number;
+			hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+		}
+		else
+			loading_card_number = 0;
+	}
+	
+	int ing_download_cnt;
+	
+	void startDownloadCardImage()
+	{
+		CCLog("start download card img");
+		ing_download_cnt = 1;
+		startDownload();
+	}
+	
+	void startDownload()
+	{
+		CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+		
+		StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename,
+													  this, callfunc_selector(RankPopup::successAction), this, callfunc_selector(RankPopup::failAction));
+	}
+	
+	void addCardImg(int t_card_number)
+	{
+		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
+		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
+		
+		used_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_grade)->getCString());
+		used_card_img->setScale(0.34f);
+		used_card_img->setPosition(ccp(99.f,156.f));
+		addChild(used_card_img, kRP_Z_usedCardImg);
+		
+		if(card_grade == 3 && mySD->isAnimationStage(card_stage))
+		{
+			CCSize ani_size = mySD->getAnimationCutSize(card_stage);
+			CCSprite* t_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_grade)->getCString(),
+												  CCRectMake(0, 0, ani_size.width, ani_size.height));
+			t_ani->setPosition(mySD->getAnimationPosition(card_stage));
+			used_card_img->addChild(t_ani);
+		}
+		
+		CardCase* t_case = CardCase::create(card_stage, card_grade);
+		t_case->setPosition(CCPointZero);
+		used_card_img->addChild(t_case);
+		
+		CCLabelTTF* recent_durability_label = t_case->getRecentDurabilityLabel();
+		recent_durability_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_durability_i, t_card_number))->getCString());
+		recent_durability_label->setPosition(ccpAdd(recent_durability_label->getPosition(), ccp(6,-1)));
+		recent_durability_label->setFontSize(recent_durability_label->getFontSize()+3);
+		
+		t_case->getTotalDurabilityLabel()->removeFromParent();
+	}
+	
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell){
 		
 		int selectedCardIndex = 0;
@@ -599,6 +944,53 @@ public:
 		CCLog("card Number %d", selectedCardIndex); // 영호
 		auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, selectedCardIndex);
 		KS::KSLog("retStr %", retStr); // 영호.
+		
+		if(used_card_img)
+		{
+			used_card_img->removeFromParent();
+			used_card_img = NULL;
+		}
+		
+		last_selected_card_number = selectedCardIndex;
+		if(selectedCardIndex != 0)
+		{
+			if(retStr == "") // 카드 정보 없음
+			{
+				used_card_img = CCSprite::create("ending_take_card_back.png");
+				used_card_img->setScale(0.34f);
+				used_card_img->setPosition(ccp(99.f,156.f));
+				addChild(used_card_img, kRP_Z_usedCardImg);
+				
+				CCLabelTTF* t_label = CCLabelTTF::create("카드 정보 로딩", mySGD->getFont().c_str(), 20);
+				t_label->setColor(ccBLACK);
+				t_label->setPosition(ccp(160,215));
+				used_card_img->addChild(t_label);
+				
+				if(loading_card_number == 0)
+				{
+					loading_card_number = selectedCardIndex;
+					
+					Json::Value param;
+					param["noList"][0] = loading_card_number;
+					hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+				}
+				else
+					after_loading_card_number = selectedCardIndex;
+			}
+			else // 카드 정보 있음
+			{
+				addCardImg(selectedCardIndex);
+			}
+		}
+		else
+		{
+			used_card_img = CCSprite::create("ending_take_card_back.png");
+			used_card_img->setScale(0.34f);
+			used_card_img->setPosition(ccp(99.f,156.f));
+			addChild(used_card_img, kRP_Z_usedCardImg);
+		}
+		
+		
 		
 		std::string scoreStr = CCString::createWithFormat("%d", highScore)->getCString();
 		scoreStr = KS::insert_separator(scoreStr, ',', 3); // 3자리 마다 콤마찍기

@@ -22,6 +22,21 @@
 USING_NS_CC;
 using namespace std;
 
+enum SSS_MenuTag{
+	kSSS_MT_start = 1,
+	kSSS_MT_back = 2,
+	kSSS_MT_changeCard = 3,
+	kSSS_MT_challenge = 4,
+	kSSS_MT_gacha = 5,
+	kSSS_MT_itemBase = 100,
+	kSSS_MT_itemBuy = 200,
+	kSSS_MT_selectedBase = 300,
+	kSSS_MT_itemCntBase = 400,
+	kSSS_MT_noti = 9999,
+	kSSS_MT_noti_ok,
+	kSSS_MT_noti_cancel
+};
+
 class StageSettingScene : public cocos2d::CCLayer
 {
 public:
@@ -60,7 +75,7 @@ private:
 	
 	string convertToItemCodeToItemName(ITEM_CODE t_code);
 	
-	void tempAction(CCObject* sender);
+	void cheatAction(CCObject* sender);
 	void realStartAction();
 	void finalStartAction(Json::Value result_data);
 };

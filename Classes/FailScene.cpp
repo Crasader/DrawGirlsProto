@@ -117,7 +117,7 @@ bool FailScene::init()
 	top_case->setPosition(ccp(240,320.f));//(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
 	addChild(top_case, kZ_FS_img);
 	
-	CountingBMLabel* total_gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f);
+	CountingBMLabel* total_gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
 	total_gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
 	top_case->addChild(total_gold_label);
 	
@@ -621,6 +621,7 @@ void FailScene::menuAction(CCObject* pSender)
 	
 	if(tag == kMT_FS_main)
 	{
+		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		is_menu_enable = false;
 //		CCDirector::sharedDirector()->replaceScene(StartingScene::scene());
@@ -628,6 +629,7 @@ void FailScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kMT_FS_replay)
 	{
+		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		is_menu_enable = false;
 //		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)-1);

@@ -46,6 +46,31 @@ public:
 	
 	void startRemoveCard()
 	{
+		CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
+		
+		float wScale = frame_size.width / rSize.width;
+		float hScale = frame_size.height / rSize.height;
+		float xMargine = 0;
+		float yMargine = 0;
+		
+		if(wScale >= hScale)
+		{
+			wScale = hScale;
+			xMargine = (frame_size.width - rSize.width*wScale)/2.f;
+		}
+		else
+		{
+			hScale = wScale;
+			yMargine = (frame_size.height - rSize.height*hScale)/2.f;
+		}
+		
+		view_rect.origin.x = (getPositionX() - getContentSize().width/2.f*getScale() - 5.f)*wScale + xMargine;
+		view_rect.origin.y = (getPositionY() - getContentSize().height/2.f*getScale() - 5.f)*hScale + yMargine;
+		view_rect.size.width = (getContentSize().width*getScale() + 10.f)*wScale;
+		view_rect.size.height = (getContentSize().height*getScale() + 10.f)*hScale;
+		
+		decrease_value = view_rect.size.height/85.f;
+		
 		ing_frame = 0;
 		schedule(schedule_selector(RemoveCardSprite::removingCard));
 	}
@@ -54,15 +79,15 @@ private:
 	CCRect view_rect;
 	CCSize frame_size;
 	int ing_frame;
+	float decrease_value;
 	
 	void removingCard()
 	{
 		ing_frame++;
 		
-		view_rect.origin.y += frame_size.height/45.f;
-		view_rect.size.height -= frame_size.height/45.f;
+		view_rect.size.height -= decrease_value;
 		
-		if(ing_frame >= 45)
+		if(ing_frame >= 85)
 		{
 			unschedule(schedule_selector(RemoveCardSprite::removingCard));
 		}
@@ -110,7 +135,15 @@ private:
 		
 		gray->runAction(CCFadeTo::create(0.4f, 255));
 		
-		decrease_durability_label = CCSprite::create("ending_decrease_durability.png");
+		string title_filename;
+		
+		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number));
+		if(durability <= 0)
+			title_filename = "ending_remove_card.png";
+		else
+			title_filename = "ending_decrease_durability.png";
+		
+		decrease_durability_label = CCSprite::create(title_filename.c_str());
 		decrease_durability_label->setPosition(ccp(240,280));
 		decrease_durability_label->setOpacity(0);
 		addChild(decrease_durability_label, kDecreaseCardDurabilityPopup_Z_img);
@@ -194,6 +227,13 @@ private:
 		t_case->startDecreaseDurability(this, callfunc_selector(DecreaseCardDurabilityPopup::touchOn));
 	}
 	
+	CCParticleSystemQuad* remove_particle;
+	
+	void removeParticle()
+	{
+		remove_particle->setDuration(0);
+	}
+	
 	void touchOn()
 	{
 		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number));
@@ -203,11 +243,52 @@ private:
 			is_touch_enable = false;
 			arrow_particle->setDuration(0);
 			
+			remove_particle = CCParticleSystemQuad::createWithTotalParticles(150);
+			remove_particle->setPositionType(kCCPositionTypeRelative);
+			remove_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("fever_particle.png"));
+			remove_particle->setEmissionRate(5000);
+			remove_particle->setAngle(0.0);
+			remove_particle->setAngleVar(0.0);
+			ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+			remove_particle->setBlendFunc(blendFunc);
+			remove_particle->setDuration(-1.f);
+			remove_particle->setEmitterMode(kCCParticleModeGravity);
+			remove_particle->setStartColor(ccc4f(1.f, 1.f, 1.f, 0.f));
+			remove_particle->setStartColorVar(ccc4f(0,0,0,1.f));
+			remove_particle->setEndColor(ccc4f(0.f,1.f,1.f,0.f));
+			remove_particle->setEndColorVar(ccc4f(0, 0, 0, 1.f));
+			remove_particle->setStartSize(8.0);
+			remove_particle->setStartSizeVar(5.0);
+			remove_particle->setEndSize(20.0);
+			remove_particle->setEndSizeVar(10.0);
+			remove_particle->setGravity(ccp(39.47f,118.4f));
+			remove_particle->setRadialAccel(-671.0);
+			remove_particle->setRadialAccelVar(0.0);
+			remove_particle->setSpeed(51);
+			remove_particle->setSpeedVar(300.0);
+			remove_particle->setTangentialAccel(0);
+			remove_particle->setTangentialAccelVar(0);
+			remove_particle->setTotalParticles(150);
+			remove_particle->setLife(0.03);
+			remove_particle->setLifeVar(0.1);
+			remove_particle->setStartSpin(0.0);
+			remove_particle->setStartSpinVar(0.f);
+			remove_particle->setEndSpin(360.0);
+			remove_particle->setEndSpinVar(0.f);
+			remove_particle->setPosVar(ccp(selected_card->getContentSize().width/2.f*selected_card->getScale() + 5.f,0));
+			remove_particle->setPosition(ccp(selected_card->getPositionX(), selected_card->getPositionY()+selected_card->getContentSize().height/2.f*selected_card->getScale()+5.f));
+			remove_particle->setAutoRemoveOnFinish(true);
+			addChild(remove_particle, kDecreaseCardDurabilityPopup_Z_particle);
+			CCMoveBy* particle_move = CCMoveBy::create(85.f/60.f, ccp(0,-selected_card->getContentSize().height*selected_card->getScale()-10.f));
+			CCCallFunc* particle_call = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeParticle));
+			CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_call);
+			remove_particle->runAction(particle_seq);
+			
 			selected_card->startRemoveCard();
 			
-			CCDelayTime* t_delay1 = CCDelayTime::create(0.4f);
+			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
 			CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
-			CCDelayTime* t_delay2 = CCDelayTime::create(0.4f);
+			CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
 			CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
 			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
 			selected_card->runAction(t_seq1);

@@ -449,7 +449,7 @@ void PuzzleMapScene::setUIs()
 	top_case->setPosition(getUiButtonPosition(kPMS_MT_top));
 	addChild(top_case, kPMS_Z_ui_button, kPMS_MT_top);
 	
-	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f);
+	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_label);
 	
@@ -462,13 +462,18 @@ void PuzzleMapScene::setUIs()
 	
 	
 	CCSprite* bottom_case = CCSprite::create("test_ui_bottom.png");
+	bottom_case->setOpacity(0);
 	bottom_case->setAnchorPoint(ccp(0.5f,0.f));
 	bottom_case->setPosition(getUiButtonPosition(kPMS_MT_bottom));
 	main_node->addChild(bottom_case, kPMS_Z_ui_button, kPMS_MT_bottom);
 	
 	CCSize bottom_size = bottom_case->getContentSize();
 	
-	CCMenuItem* postbox_item = CCMenuItemImage::create("test_ui_bottom_empty.png", "test_ui_bottom_empty.png", this, menu_selector(PuzzleMapScene::menuAction));
+	CCSprite* n_postbox = CCSprite::create("test_ui_postbox.png");
+	CCSprite* s_postbox = CCSprite::create("test_ui_postbox.png");
+	s_postbox->setColor(ccGRAY);
+	
+	CCMenuItem* postbox_item = CCMenuItemSprite::create(n_postbox, s_postbox, this, menu_selector(PuzzleMapScene::menuAction));
 	postbox_item->setTag(kPMS_MT_postbox);
 	
 	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
@@ -476,7 +481,11 @@ void PuzzleMapScene::setUIs()
 	bottom_case->addChild(postbox_menu);
 	
 	
-	CCMenuItem* diary_item = CCMenuItemImage::create("test_ui_bottom_empty.png", "test_ui_bottom_empty.png", this, menu_selector(PuzzleMapScene::menuAction));
+	CCSprite* n_cardsetting = CCSprite::create("test_ui_cardsetting.png");
+	CCSprite* s_cardsetting = CCSprite::create("test_ui_cardsetting.png");
+	s_cardsetting->setColor(ccGRAY);
+	
+	CCMenuItem* diary_item = CCMenuItemSprite::create(n_cardsetting, s_cardsetting, this, menu_selector(PuzzleMapScene::menuAction));
 	diary_item->setTag(kPMS_MT_diary);
 	
 	CCMenu* diary_menu = CCMenu::createWithItem(diary_item);
@@ -484,21 +493,35 @@ void PuzzleMapScene::setUIs()
 	bottom_case->addChild(diary_menu);
 	
 	
-	CCMenuItem* rank_item = CCMenuItemImage::create("test_ui_bottom_empty.png", "test_ui_bottom_empty.png", this, menu_selector(PuzzleMapScene::menuAction));
+	CCSprite* n_rank = CCSprite::create("test_ui_rank.png");
+	CCSprite* s_rank = CCSprite::create("test_ui_rank.png");
+	s_rank->setColor(ccGRAY);
+	
+	CCMenuItem* rank_item = CCMenuItemSprite::create(n_rank, s_rank, this, menu_selector(PuzzleMapScene::menuAction));
 	rank_item->setTag(kPMS_MT_rank);
 	
 	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
 	rank_menu->setPosition(ccpAdd(ccp(bottom_size.width/2.f, bottom_size.height/2.f), ccp(2,0)));
 	bottom_case->addChild(rank_menu);
 	
-	CCMenuItem* gacha_item = CCMenuItemImage::create("test_ui_bottom_empty.png", "test_ui_bottom_empty.png", this, menu_selector(PuzzleMapScene::menuAction));
+	
+	CCSprite* n_gacha = CCSprite::create("test_ui_gacha.png");
+	CCSprite* s_gacha = CCSprite::create("test_ui_gacha.png");
+	s_gacha->setColor(ccGRAY);
+	
+	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(PuzzleMapScene::menuAction));
 	gacha_item->setTag(kPMS_MT_gacha);
 	
 	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
 	gacha_menu->setPosition(ccpAdd(ccp(bottom_size.width/2.f, bottom_size.height/2.f), ccp(2+56.f,0)));
 	bottom_case->addChild(gacha_menu);
 	
-	CCMenuItem* option_item = CCMenuItemImage::create("test_ui_bottom_empty.png", "test_ui_bottom_empty.png", this, menu_selector(PuzzleMapScene::menuAction));
+	
+	CCSprite* n_option = CCSprite::create("test_ui_option.png");
+	CCSprite* s_option = CCSprite::create("test_ui_option.png");
+	s_option->setColor(ccGRAY);
+	
+	CCMenuItem* option_item = CCMenuItemSprite::create(n_option, s_option, this, menu_selector(PuzzleMapScene::menuAction));
 	option_item->setTag(kPMS_MT_option);
 	
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
@@ -514,7 +537,7 @@ void PuzzleMapScene::setUIs()
 	tutorial_item->setTag(kPMS_MT_tutorial);
 	
 	CCMenu* tutorial_menu = CCMenu::createWithItem(tutorial_item);
-	tutorial_menu->setPosition(ccpAdd(ccp(bottom_size.width/2.f, bottom_size.height/2.f), ccp(2+56.f*3.f,-5)));
+	tutorial_menu->setPosition(ccpAdd(ccp(bottom_size.width/2.f, bottom_size.height/2.f), ccp(2+56.f*3.f,0)));
 	bottom_case->addChild(tutorial_menu);
 	
 	
@@ -1350,6 +1373,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							}
 						}
 						
+						touchStart_p = location;
+						
 						if(is_found && found_index <= puzzle_count)
 						{
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
@@ -1425,6 +1450,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 								break;
 							}
 						}
+						
+						touchStart_p = location;
 						
 						if(is_found)
 						{
@@ -1580,6 +1607,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							}
 						}
 						
+						touchStart_p = location;
+						
 						if(is_found && found_index <= puzzle_count)
 						{
 							removeChildByTag(kPMS_MT_loadingBack);
@@ -1658,6 +1687,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 								break;
 							}
 						}
+						
+						touchStart_p = location;
 						
 						if(is_found)
 						{

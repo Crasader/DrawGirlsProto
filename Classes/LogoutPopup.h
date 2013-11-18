@@ -62,8 +62,8 @@ private:
 		back->setPosition(ccp(240,160));
 		addChild(back, kLP_Z_back);
 		
-		CCSprite* n_logout = CCSprite::create("option_long_close.png");
-		CCSprite* s_logout = CCSprite::create("option_long_close.png");
+		CCSprite* n_logout = CCSprite::create("option_real_logout.png");
+		CCSprite* s_logout = CCSprite::create("option_real_logout.png");
 		s_logout->setColor(ccGRAY);
 		
 		CCMenuItem* logout_item = CCMenuItemSprite::create(n_logout, s_logout, this, menu_selector(LogoutPopup::menuAction));

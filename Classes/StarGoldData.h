@@ -129,6 +129,16 @@ public:
 			gold_label->setString(CCString::createWithFormat("%d", t_gold)->getCString());
 	}
 	
+	int getKeepGold()
+	{
+		return keep_gold;
+	}
+	
+	void setKeepGold(int t_gold)
+	{
+		keep_gold = t_gold;
+	}
+	
 	void setGameStart()
 	{
 		mySD->startSetting();
@@ -189,7 +199,9 @@ public:
 		is_cleared = true;
 		stage_grade = t_grade;
 		percentage = t_percentage;
+		
 		score = t_score + t_score*(stage_grade-1.f)*0.5f + t_score*(1.f-(t_use_time*1.f)/t_total_time);
+		
 		game_time = t_game_time;
 		myGD->setIsGameover(true);
 	}

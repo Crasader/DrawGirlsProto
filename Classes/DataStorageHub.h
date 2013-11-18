@@ -207,7 +207,7 @@ public:
 	void resetDSH()
 	{
 		setIntegerForKey(kDSH_Key_savedStar, 1);
-		setIntegerForKey(kDSH_Key_savedGold, 1000);
+		setIntegerForKey(kDSH_Key_savedGold, 10000);
 		
 		for(int i=kIC_attack;i<=kIC_randomChange;i++)
 			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0);
@@ -226,13 +226,20 @@ public:
 		setIntegerForKey(kDSH_Key_allHighScore, 0);
 	}
 	
+	bool isCheatKeyEnable()
+	{
+		return is_cheat_key_enabled;
+	}
+	
 private:
 	SaveData* myDefault;
 	float gold_get_rate;
+	bool is_cheat_key_enabled;
 	
 	void myInit()
 	{
 		myDefault = SaveData::sharedObject();
+		is_cheat_key_enabled = true;
 	}
 };
 
