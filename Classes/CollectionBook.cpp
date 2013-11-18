@@ -13,6 +13,9 @@
 #include "utf8.h"
 #include "DiaryZoom.h"
 #include "LogData.h"
+#include "SilhouetteData.h"
+#include "StarGoldData.h"
+#include "AlertEngine.h"
 
 CCScene* CollectionBook::scene()
 {

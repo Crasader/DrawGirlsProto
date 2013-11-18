@@ -15,6 +15,12 @@
 #include "PuzzleMapScene.h"
 #include "CardCase.h"
 
+
+#include "AlertEngine.h"
+#include "GameData.h"
+#include "DataStorageHub.h"
+#include "StarGoldData.h"
+#include "CardListViewer.h"
 CCScene* CardSettingScene::scene()
 {
     // 'scene' is an autorelease object
