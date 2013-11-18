@@ -3061,7 +3061,7 @@ public:
 		m_angle += m_well512.GetFloatValue(-10 * M_PI/180.f, +10 * M_PI/180.f);
 //		m_parentMissile = CCParticleSystemQuad::create("throwbomb.plist");
 //		m_parentMissile->setPositionType(kCCPositionTypeRelative);
-		m_parentMissile = KS::loadCCBI<CCSprite*>(this, "pattern_meteor4.ccb").first;
+		m_parentMissile = KS::loadCCBI<CCSprite*>(this, "pattern_meteor4.ccbi").first;
 		
 		m_parentMissile->setPosition(cumberPosition);
 		addChild(m_parentMissile);
