@@ -127,8 +127,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>161</real>
-							<real>124</real>
+							<real>91</real>
+							<real>96</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -151,7 +151,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>fx_bomb3.ccb</string>
+						<string>fx_lucky.ccb</string>
 					</dict>
 				</array>
 			</dict>
