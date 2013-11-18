@@ -40,7 +40,7 @@ public:
 		hp_progress->setVisible(true);
 		
 		CCProgressFromTo* progress_to = CCProgressFromTo::create(0.3f, last_life/max_life*100.f, 0.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MobHpGraph::hidingAction));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MobHpGraph::realHidingAction));
 		hp_progress->runAction(CCSequence::createWithTwoActions(progress_to, t_call));
 	}
 	
@@ -75,7 +75,7 @@ private:
 		setPosition(ccpAdd(target_node->getPosition(), ccp(0,-20)));
 	}
 	
-	void hidingAction()
+	void realHidingAction()
 	{
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
 		CCHide* t_hide1 = CCHide::create();
@@ -84,6 +84,31 @@ private:
 		
 		t_case->runAction(CCSequence::createWithTwoActions(t_delay1, t_hide1));
 		hp_progress->runAction(CCSequence::createWithTwoActions(t_delay2, t_hide2));
+	}
+	
+	void hidingAction()
+	{
+		if(last_life/max_life > 0.3f)
+		{
+			realHidingAction();
+		}
+		else
+		{
+			CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+			CCHide* t_hide1 = CCHide::create();
+			CCDelayTime* t_delay2 = CCDelayTime::create(0.2f);
+			CCShow* t_show1 = CCShow::create();
+			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_hide1, t_delay2, t_show1, NULL);
+			
+			CCDelayTime* t_delay3 = CCDelayTime::create(0.5f);
+			CCHide* t_hide2 = CCHide::create();
+			CCDelayTime* t_delay4 = CCDelayTime::create(0.2f);
+			CCShow* t_show2 = CCShow::create();
+			CCSequence* t_seq2 = CCSequence::create(t_delay3, t_hide2, t_delay4, t_show2, NULL);
+			
+			t_case->runAction(t_seq1);
+			hp_progress->runAction(t_seq2);
+		}
 	}
 	
 	void myInit(CCObject* t_target)
@@ -102,11 +127,11 @@ private:
 		hp_progress->setPercentage(100.f);
 		addChild(hp_progress);
 		
-		hidingAction();
-		
 		target_node = (KSCumberBase*)t_target;
-		last_life = 100.f;
+		last_life = target_node->getLife();
 		max_life = target_node->getTotalLife();
+		
+		hidingAction();
 		
 		setPosition(ccpAdd(target_node->getPosition(), ccp(0,-20)));
 		
