@@ -207,7 +207,7 @@ public:
 	void resetDSH()
 	{
 		setIntegerForKey(kDSH_Key_savedStar, 1);
-		setIntegerForKey(kDSH_Key_savedGold, 1000);
+		setIntegerForKey(kDSH_Key_savedGold, 10000);
 		
 		for(int i=kIC_attack;i<=kIC_randomChange;i++)
 			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0);

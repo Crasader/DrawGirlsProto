@@ -1350,6 +1350,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							}
 						}
 						
+						touchStart_p = location;
+						
 						if(is_found && found_index <= puzzle_count)
 						{
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
@@ -1425,6 +1427,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 								break;
 							}
 						}
+						
+						touchStart_p = location;
 						
 						if(is_found)
 						{
@@ -1580,6 +1584,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							}
 						}
 						
+						touchStart_p = location;
+						
 						if(is_found && found_index <= puzzle_count)
 						{
 							removeChildByTag(kPMS_MT_loadingBack);
@@ -1658,6 +1664,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 								break;
 							}
 						}
+						
+						touchStart_p = location;
 						
 						if(is_found)
 						{
