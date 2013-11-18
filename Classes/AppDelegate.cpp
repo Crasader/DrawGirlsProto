@@ -22,6 +22,12 @@ USING_NS_CC;
 #include "KSUtil.h"
 #include "Well512.h"
 
+
+
+
+
+
+//#include <boost/graph/graphviz.hpp>
 /*
  메테오 : AP_Missile16
  AP_Missile15 불지르기
@@ -34,6 +40,8 @@ USING_NS_CC;
  */
 AppDelegate::AppDelegate()
 {
+	
+	
 }
 
 AppDelegate::~AppDelegate()
@@ -51,6 +59,8 @@ struct AA
 };
 bool AppDelegate::applicationDidFinishLaunching()
 {
+	
+		
     // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
     pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
@@ -110,6 +120,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb");
+	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb/ccbResources");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ksoo");
 //	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb_test");
 //	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb_test/resources-iphonehd");

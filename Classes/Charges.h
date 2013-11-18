@@ -541,6 +541,7 @@ public:
 	{
 		charge_cnt = 0;
 		AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
+		myGD->communication("Main_showWarning", 3);
 		schedule(schedule_selector(SpecialChargeNodeLambda::charging));
 	}
 	

@@ -3127,8 +3127,7 @@ public:
 		
 		if(m_step == 2) // 폭발.
 		{
-			m_parentMissile->removeFromParent();
-			schedule(schedule_selector(ThisClassType::selfRemove));
+			
 			CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
 			
 			particle->setAutoRemoveOnFinish(true);
@@ -3172,7 +3171,8 @@ public:
 			particle->setPosVar(CCPointZero);
 			addChild(particle);
 			m_step = 3;
-
+			m_parentMissile->removeFromParent();
+			schedule(schedule_selector(ThisClassType::selfRemove));
 			
 		}
 	}

@@ -1339,7 +1339,7 @@ void KSCumberBase::selfHealing(float dt)
 	// 5초마다 한번씩, 현재 라이프에서 n% 만큼 더함.
 	if(m_healingFrameCount >= 60*5)
 	{
-		float n = 10.f;
+		float n = 5.f;
 		float adder = getTotalLife() * n / 100.f;
 		setLife(MIN(getTotalLife(), getLife() + adder));
 		m_healingFrameCount = 0;

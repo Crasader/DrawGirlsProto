@@ -770,6 +770,10 @@ private:
 		{
 			setColor(ccRED);
 		}
+		else if(t1 == 3)
+		{
+			setColor(ccGREEN);
+		}
 		setPosition(ccp(640,myDSH->ui_center_y));
 	}
 };
