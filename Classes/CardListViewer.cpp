@@ -9,6 +9,7 @@
 #include "CardListViewer.h"
 
 
+
 void CardListViewer::visit()
 {
 	glEnable(GL_SCISSOR_TEST);

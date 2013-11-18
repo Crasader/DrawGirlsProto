@@ -383,7 +383,7 @@ public:
 		//320x320 테이블 뷰 생성
 		rankTableView = RankTableView::create(this, CCSizeMake(270, 233), NULL);
 //		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-//																								 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
+//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
 		CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
 		m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2, NULL, bar);
 		m_scrollBar->setDynamicScrollSize(false);

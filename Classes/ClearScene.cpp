@@ -17,6 +17,10 @@
 #include "CountingBMLabel.h"
 #include "StageSettingScene.h"
 #include "TakeCardPopup.h"
+#include "AlertEngine.h"
+#include "MyLocalization.h"
+#include "HeartTime.h"
+
 
 typedef enum tMenuTagClearScene{
 	kMT_CS_ok = 1,

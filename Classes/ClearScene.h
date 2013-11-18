@@ -10,17 +10,16 @@
 #define __galsprototype__ClearScene__
 
 #include "cocos2d.h"
-#include "AlertEngine.h"
-#include "MyLocalization.h"
-#include "hspConnector.h"
-#include "HeartTime.h"
 #include "cocos-ext.h"
 #include "GDWebSprite.h"
-
+#include "hspConnector.h"
+#include "StarGoldData.h"
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
+
+class HeartTime;
 class ClearFriendRank
 {
 public:

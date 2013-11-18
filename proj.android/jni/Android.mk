@@ -17,6 +17,7 @@ LOCAL_SRC_FILES := hellolua/main.cpp \
 	
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../boost_1_55_0
 
 LOCAL_STATIC_LIBRARIES := curl_static_prebuilt
 

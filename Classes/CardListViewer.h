@@ -10,15 +10,17 @@
 #define __DGproto__CardListViewer__
 
 #include "cocos2d.h"
-#include "ListViewerScroll.h"
-#include "StageImgLoader.h"
-#include "DataStorageHub.h"
-#include "SilhouetteData.h"
-#include "StarGoldData.h"
 #include "GraySprite.h"
 #include "ServerDataSave.h"
 
+#include "DataStorageHub.h"
+#include "StageImgLoader.h"
+#include "ListViewerScroll.h"
+
+#include "SilhouetteData.h"
+#include "StarGoldData.h"
 USING_NS_CC;
+
 using namespace std;
 
 enum CSS_Zorder{

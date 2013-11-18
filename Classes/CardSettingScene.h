@@ -10,17 +10,15 @@
 #define __DGproto__CardSettingScene__
 
 #include "cocos2d.h"
-#include "AlertEngine.h"
-#include "GameData.h"
-#include "DataStorageHub.h"
-#include "StarGoldData.h"
-#include "CardListViewer.h"
+
 //#include <deque>
 #include <map>
 
 USING_NS_CC;
 using namespace std;
 
+
+class CardListViewer;
 class CardSettingScene : public cocos2d::CCLayer
 {
 public:
