@@ -42,6 +42,12 @@ typedef enum t_DSH_Key{
 
 #define myDSH DataStorageHub::sharedInstance()
 
+enum PuzzleMapSceneShowType{
+	kPuzzleMapSceneShowType_init = 0,
+	kPuzzleMapSceneShowType_stage,
+	kPuzzleMapSceneShowType_getPiece
+};
+
 class DataStorageHub : public CCObject
 {
 public:
@@ -231,15 +237,27 @@ public:
 		return is_cheat_key_enabled;
 	}
 	
+	int getPuzzleMapSceneShowType()
+	{
+		return puzzle_map_scene_show_type;
+	}
+	
+	void setPuzzleMapSceneShowType(int t_type)
+	{
+		puzzle_map_scene_show_type = t_type;
+	}
+	
 private:
 	SaveData* myDefault;
 	float gold_get_rate;
 	bool is_cheat_key_enabled;
+	int puzzle_map_scene_show_type;
 	
 	void myInit()
 	{
 		myDefault = SaveData::sharedObject();
 		is_cheat_key_enabled = true;
+		puzzle_map_scene_show_type = kPuzzleMapSceneShowType_init;
 	}
 };
 

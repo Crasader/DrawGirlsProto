@@ -18,6 +18,7 @@
 #include "PuzzleListView.h"
 #include "cocos-ext.h"
 #include "PuzzleCache.h"
+#include "CountingBMLabel.h"
 
 USING_NS_CC;
 using namespace std;
@@ -1088,6 +1089,9 @@ private:
 			touched_stage_number = 0;
 		}
 	}
+	CountingBMLabel* gold_label;
+	void showStageSettingPopup();
+	void hideStageSettingPopup();
 	
 	virtual void registerWithTouchDispatcher(void);
 	

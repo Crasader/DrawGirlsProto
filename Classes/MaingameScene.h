@@ -335,7 +335,7 @@ private:
 			{
 				CCSprite* spin_light = CCSprite::create("showtime_spin_light.png");
 				spin_light->setOpacity(0);
-				spin_light->setPosition(ccp(240,160));
+				spin_light->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(spin_light, particleZorder);
 				
 				CCScaleTo* light_scale = CCScaleTo::create(1.2f, 2.f);//2.f/3.f, 2);
@@ -354,7 +354,7 @@ private:
 				
 				CCSprite* bakper = CCSprite::create("bakper.png");
 				bakper->setOpacity(0);
-				bakper->setPosition(ccp(240,160));
+				bakper->setPosition(ccp(240,myDSH->ui_center_y));
 				addChild(bakper, particleZorder);
 				
 				CCScaleTo* bak_scale1 = CCScaleTo::create(32.4f/60.f, 1.3f);

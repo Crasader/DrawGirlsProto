@@ -1,12 +1,13 @@
 //
-//  StageSettingScene.cpp
+//  StageSettingPopup.cpp
 //  DGproto
 //
-//  Created by 사원3 on 13. 9. 18..
+//  Created by 사원3 on 2013. 11. 19..
 //
 //
 
-#include "StageSettingScene.h"
+#include "StageSettingPopup.h"
+
 #include "ScreenSide.h"
 #include "MyLocalization.h"
 //#include "WorldMapScene.h"
@@ -14,37 +15,18 @@
 #include "MaingameScene.h"
 #include "ItemBuyPopup.h"
 #include "CardSettingScene.h"
-#include "ListViewerScroll.h"
 #include "ChallengePopup.h"
 #include "GachaPopup.h"
 #include "DurabilityNoti.h"
 #include "CardCase.h"
 
-CCScene* StageSettingScene::scene()
-{
-    // 'scene' is an autorelease object
-    CCScene *scene = CCScene::create();
-    
-    // 'layer' is an autorelease object
-    StageSettingScene *layer = StageSettingScene::create();
-	
-	layer->setAnchorPoint(ccp(0.5,0));
-	layer->setScale(myDSH->screen_convert_rate);
-	layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
-	
-    // add layer as a child to scene
-    scene->addChild(layer);
-	
-    // return the scene
-    return scene;
-}
-
-enum SSS_Zorder{
-	kSSS_Z_back = 1,
-	kSSS_Z_selectedImg,
-	kSSS_Z_content,
-	kSSS_Z_top,
-	kSSS_Z_popup
+enum SSP_Zorder{
+	kSSP_Z_gray = 1,
+	kSSP_Z_back,
+	kSSP_Z_selectedImg,
+	kSSP_Z_content,
+	kSSP_Z_top,
+	kSSP_Z_popup
 };
 
 enum CARD_Zorder{
@@ -52,8 +34,14 @@ enum CARD_Zorder{
 	kCARD_Z_cardCase
 };
 
+void StageSettingPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
+{
+	target_final = t_final;
+	delegate_final = d_final;
+}
+
 // on "init" you need to initialize your instance
-bool StageSettingScene::init()
+bool StageSettingPopup::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -64,15 +52,30 @@ bool StageSettingScene::init()
     
 	setKeypadEnabled(true);
 	
+	is_menu_enable = false;
+	
 	selected_stage = mySD->getSilType();
 	
-	CCSprite* stagesetting_back = CCSprite::create("stagesetting_back.png");
-	stagesetting_back->setPosition(ccp(240,160));
-	addChild(stagesetting_back, kSSS_Z_back);
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	gray = CCSprite::create("back_gray.png");
+	gray->setOpacity(0);
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f);
+	addChild(gray, kSSP_Z_gray);
+	
+	main_case = CCSprite::create("stagesetting_back.png");
+	main_case->setAnchorPoint(ccp(0,0));
+	main_case->setPosition(ccp(0,-320));
+	addChild(main_case, kSSP_Z_back);
 	
 	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("STAGE %d", selected_stage)->getCString(), mySGD->getFont().c_str(), 18);
 	stage_label->setPosition(ccp(250,248));
-	addChild(stage_label, kSSS_Z_content);
+	main_case->addChild(stage_label, kSSP_Z_content);
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 1, 2, 3 / 11, 12, 13 / 14, ...
 	if(selected_card_number > 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) > 0)
@@ -82,14 +85,14 @@ bool StageSettingScene::init()
 		
 		CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
 		card_img->setScale(0.45);
-		card_img->setPosition(getContentPosition(kSSS_MT_changeCard));
-		addChild(card_img, kSSS_Z_content);
+		card_img->setPosition(getContentPosition(kSSP_MT_changeCard));
+		main_case->addChild(card_img, kSSP_Z_content);
 		
 		if(card_level == 3 && mySD->isAnimationStage(card_stage))
 		{
 			CCSize ani_size = mySD->getAnimationCutSize(card_stage);
 			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
-												  CCRectMake(0, 0, ani_size.width, ani_size.height));
+													 CCRectMake(0, 0, ani_size.width, ani_size.height));
 			card_ani->setPosition(mySD->getAnimationPosition(card_stage));
 			card_img->addChild(card_ani, kCARD_Z_ani);
 		}
@@ -109,74 +112,72 @@ bool StageSettingScene::init()
 	CCSprite* s_gacha = CCSprite::create("stagesetting_item_gacha_on.png");
 	s_gacha->setColor(ccGRAY);
 	
-	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(StageSettingScene::menuAction));
-	gacha_item->setTag(kSSS_MT_gacha);
+	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(StageSettingPopup::menuAction));
+	gacha_item->setTag(kSSP_MT_gacha);
 	
 	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
-	gacha_menu->setPosition(getContentPosition(kSSS_MT_gacha));
-	addChild(gacha_menu, kSSS_Z_content);
+	gacha_menu->setPosition(getContentPosition(kSSP_MT_gacha));
+	main_case->addChild(gacha_menu, kSSP_Z_content);
 	
 	
 	my_ilv = ItemListViewer::create();
-	addChild(my_ilv, kSSS_Z_content);
+	main_case->addChild(my_ilv, kSSP_Z_content);
 	
 	item_list = mySD->getStageItemList(selected_stage);
 	itemSetting();
 	
 	my_ilv->setMaxPositionY();
 	
-	ListViewerScroll* t_lvs = ListViewerScroll::create(CCRectMake(430, 80, 27, 138), my_ilv, "stagesetting_scroll.png", ccp(443,102), ccp(443,195));
-	t_lvs->setTouchEnabled(true);
-	addChild(t_lvs, kSSS_Z_content);
+	t_lvs = ListViewerScroll::create(CCRectMake(430, 80, 27, 138), my_ilv, "stagesetting_scroll.png", ccp(443,102), ccp(443,195));
+	main_case->addChild(t_lvs, kSSP_Z_content);
 	
 	my_ilv->setScroll(t_lvs);
-	my_ilv->setTouchEnabled(true);
 	
 	CCSprite* n_cardmenu = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*0.45f, 430*0.45f));
 	CCSprite* s_cardmenu = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*0.45f, 430*0.45f));
 	
-	CCMenuItem* changeCard_item = CCMenuItemSprite::create(n_cardmenu, s_cardmenu, this, menu_selector(StageSettingScene::menuAction));
-	changeCard_item->setTag(kSSS_MT_changeCard);
+	CCMenuItem* changeCard_item = CCMenuItemSprite::create(n_cardmenu, s_cardmenu, this, menu_selector(StageSettingPopup::menuAction));
+	changeCard_item->setTag(kSSP_MT_changeCard);
 	
 	CCMenu* change_menu = CCMenu::createWithItem(changeCard_item);
-	change_menu->setPosition(getContentPosition(kSSS_MT_changeCard));
-	addChild(change_menu, kSSS_Z_content);
+	change_menu->setPosition(getContentPosition(kSSP_MT_changeCard));
+	main_case->addChild(change_menu, kSSP_Z_content);
 	
 	
 	CCSprite* n_backward = CCSprite::create("stagesetting_backward.png");
 	CCSprite* s_backward = CCSprite::create("stagesetting_backward.png");
 	s_backward->setColor(ccGRAY);
 	
-	CCMenuItem* backward_item = CCMenuItemSprite::create(n_backward, s_backward, this, menu_selector(StageSettingScene::menuAction));
-	backward_item->setTag(kSSS_MT_back);
+	CCMenuItem* backward_item = CCMenuItemSprite::create(n_backward, s_backward, this, menu_selector(StageSettingPopup::menuAction));
+	backward_item->setTag(kSSP_MT_back);
 	
 	CCMenu* backward_menu = CCMenu::createWithItem(backward_item);
-	backward_menu->setPosition(getContentPosition(kSSS_MT_back));
-	addChild(backward_menu, kSSS_Z_content);
+	backward_menu->setPosition(getContentPosition(kSSP_MT_back));
+	main_case->addChild(backward_menu, kSSP_Z_content);
 	
 	
 	CCSprite* n_challenge = CCSprite::create("stagesetting_challenge.png");
 	CCSprite* s_challenge = CCSprite::create("stagesetting_challenge.png");
 	s_challenge->setColor(ccGRAY);
 	
-	CCMenuItem* challenge_item = CCMenuItemSprite::create(n_challenge, s_challenge, this, menu_selector(StageSettingScene::menuAction));
-	challenge_item->setTag(kSSS_MT_challenge);
+	CCMenuItem* challenge_item = CCMenuItemSprite::create(n_challenge, s_challenge, this, menu_selector(StageSettingPopup::menuAction));
+	challenge_item->setTag(kSSP_MT_challenge);
 	
 	CCMenu* challenge_menu = CCMenu::createWithItem(challenge_item);
-	challenge_menu->setPosition(getContentPosition(kSSS_MT_challenge));
-	addChild(challenge_menu, kSSS_Z_content);
+	challenge_menu->setPosition(getContentPosition(kSSP_MT_challenge));
+	main_case->addChild(challenge_menu, kSSP_Z_content);
 	
 	
 	CCSprite* n_start = CCSprite::create("stagesetting_start.png");
 	CCSprite* s_start = CCSprite::create("stagesetting_start.png");
 	s_start->setColor(ccGRAY);
 	
-	CCMenuItem* start_item = CCMenuItemSprite::create(n_start, s_start, this, menu_selector(StageSettingScene::menuAction));
-	start_item->setTag(kSSS_MT_start);
+	CCMenuItem* start_item = CCMenuItemSprite::create(n_start, s_start, this, menu_selector(StageSettingPopup::menuAction));
+	start_item->setTag(kSSP_MT_start);
 	
 	CCMenu* start_menu = CCMenu::createWithItem(start_item);
-	start_menu->setPosition(getContentPosition(kSSS_MT_start));
-	addChild(start_menu, kSSS_Z_content);
+	start_menu->setPosition(getContentPosition(kSSP_MT_start));
+	main_case->addChild(start_menu, kSSP_Z_content);
 	
 	if(myDSH->isCheatKeyEnable())
 	{
@@ -185,19 +186,17 @@ bool StageSettingScene::init()
 		CCSprite* s_temp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
 		s_temp->setOpacity(0);
 		
-		CCMenuItemSprite* temp_item = CCMenuItemSprite::create(n_temp, s_temp, this, menu_selector(StageSettingScene::cheatAction));
+		CCMenuItemSprite* temp_item = CCMenuItemSprite::create(n_temp, s_temp, this, menu_selector(StageSettingPopup::cheatAction));
 		temp_item->setTag(1);
 		CCMenu* temp_menu = CCMenu::createWithItem(temp_item);
 		temp_menu->setPosition(ccp(15,305));
-		addChild(temp_menu, kSSS_Z_content);
+		main_case->addChild(temp_menu, kSSP_Z_content);
 	}
 	
-	
-	
-	CCSprite* top_case = CCSprite::create("test_ui_top.png");
+	top_case = CCSprite::create("test_ui_top.png");
 	top_case->setAnchorPoint(ccp(0.5f,1.f));
-	top_case->setPosition(ccp(240,320.f));//(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
-	addChild(top_case, kSSS_Z_top);
+	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f));
+	addChild(top_case, kSSP_Z_top);
 	
 	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
@@ -209,39 +208,79 @@ bool StageSettingScene::init()
 	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
 	top_case->addChild(heart_time);
 	
-	is_menu_enable = true;
-	
-	srand(time(NULL));
-	
-	ScreenSide* t_screen = ScreenSide::create();
-	addChild(t_screen, 99999);
+	showPopup();
 	
     return true;
 }
 
-void StageSettingScene::cheatAction(CCObject* sender)
+void StageSettingPopup::showPopup()
+{
+	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
+	top_case->runAction(top_move);
+	
+	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
+	gray->runAction(gray_fade);
+	
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
+	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(StageSettingPopup::endShowPopup));
+	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
+	main_case->runAction(main_seq);
+}
+
+void StageSettingPopup::endShowPopup()
+{
+	is_menu_enable = true;
+	t_lvs->setTouchEnabled(true);
+	my_ilv->setTouchEnabled(true);
+}
+
+void StageSettingPopup::hidePopup()
+{
+	is_menu_enable = false;
+	t_lvs->setTouchEnabled(false);
+	my_ilv->setTouchEnabled(false);
+	
+	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f));
+	top_case->runAction(top_move);
+	
+	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
+	gray->runAction(gray_fade);
+	
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,-320));
+	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(StageSettingPopup::endHidePopup));
+	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
+	main_case->runAction(main_seq);
+}
+
+void StageSettingPopup::endHidePopup()
+{
+	(target_final->*delegate_final)();
+	removeFromParent();
+}
+
+void StageSettingPopup::cheatAction(CCObject* sender)
 {
 	int tag = ((CCNode*)sender)->getTag();
 	if(tag == 1)
 		myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
 }
 
-CCPoint StageSettingScene::getContentPosition(int t_tag)
+CCPoint StageSettingPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kSSS_MT_changeCard)				return_value = ccp(98,163);
-	else if(t_tag == kSSS_MT_back)				return_value = ccp(70,29);
-	else if(t_tag == kSSS_MT_challenge)			return_value = ccp(265,29);
-	else if(t_tag == kSSS_MT_start)				return_value = ccp(395,29);
-	else if(t_tag == kSSS_MT_gacha)				return_value = ccp(385,250);
-	else if(t_tag == kSSS_MT_itemBase)			return_value = ccp(305,200);
-	else if(t_tag == kSSS_MT_selectedBase)		return_value = ccp(95,1);
+	if(t_tag == kSSP_MT_changeCard)				return_value = ccp(98,163);
+	else if(t_tag == kSSP_MT_back)				return_value = ccp(70,29);
+	else if(t_tag == kSSP_MT_challenge)			return_value = ccp(265,29);
+	else if(t_tag == kSSP_MT_start)				return_value = ccp(395,29);
+	else if(t_tag == kSSP_MT_gacha)				return_value = ccp(385,250);
+	else if(t_tag == kSSP_MT_itemBase)			return_value = ccp(305,200);
+	else if(t_tag == kSSP_MT_selectedBase)		return_value = ccp(95,1);
 	
 	return return_value;
 }
 
-void StageSettingScene::itemSetting()
+void StageSettingPopup::itemSetting()
 {
 	for(int i=0;i<item_list.size();i++)
 	{
@@ -251,12 +290,12 @@ void StageSettingScene::itemSetting()
 		if(iter == card_options.end()) // not same option card // enable item
 		{
 			CCNode* item_parent = CCNode::create();
-			item_parent->setPosition(ccpAdd(getContentPosition(kSSS_MT_itemBase), ccpMult(ccp(0,-46), i)));
-			my_ilv->addChild(item_parent, kSSS_Z_content, kSSS_MT_itemBase+i);
+			item_parent->setPosition(ccpAdd(getContentPosition(kSSP_MT_itemBase), ccpMult(ccp(0,-46), i)));
+			my_ilv->addChild(item_parent, kSSP_Z_content, kSSP_MT_itemBase+i);
 			
 			CCSprite* item_back = CCSprite::create("stagesetting_item_normal_back.png");
 			item_back->setPosition(CCPointZero);
-			item_parent->addChild(item_back, kSSS_Z_content);
+			item_parent->addChild(item_back, kSSP_Z_content);
 			
 			
 			string item_filename = "";
@@ -278,31 +317,31 @@ void StageSettingScene::itemSetting()
 			s_img->setPosition(ccp(s_case->getContentSize().width/2.f,s_case->getContentSize().height/2.f));
 			s_case->addChild(s_img);
 			
-			CCMenuItem* select_item = CCMenuItemSprite::create(n_case, s_case, this, menu_selector(StageSettingScene::menuAction));
-			select_item->setTag(kSSS_MT_itemBase+i);
+			CCMenuItem* select_item = CCMenuItemSprite::create(n_case, s_case, this, menu_selector(StageSettingPopup::menuAction));
+			select_item->setTag(kSSP_MT_itemBase+i);
 			
 			CCMenu* select_menu = CCMenu::createWithItem(select_item);
 			select_menu->setPosition(ccp(-100,0));
-			item_parent->addChild(select_menu, kSSS_Z_content, kSSS_MT_itemBase+i);
+			item_parent->addChild(select_menu, kSSP_Z_content, kSSP_MT_itemBase+i);
 			
 			
-//			int price_value = mySD->getItemPrice(t_ic);
-//			CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", price_value)->getCString(), mySGD->getFont().c_str(), 18);
-//			price_label->setAnchorPoint(ccp(0,0.5));
-//			price_label->setPosition(ccp(-70,5));
-//			item_parent->addChild(price_label, kSSS_Z_content);
+			//			int price_value = mySD->getItemPrice(t_ic);
+			//			CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", price_value)->getCString(), mySGD->getFont().c_str(), 18);
+			//			price_label->setAnchorPoint(ccp(0,0.5));
+			//			price_label->setPosition(ccp(-70,5));
+			//			item_parent->addChild(price_label, kSSS_Z_content);
 			
 			CCLabelTTF* option_label = CCLabelTTF::create(mySD->getItemScript(t_ic).c_str(), mySGD->getFont().c_str(), 8, CCSizeMake(130, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 			option_label->setAnchorPoint(ccp(0,1));
 			option_label->setPosition(ccp(-73,8));
-			item_parent->addChild(option_label, kSSS_Z_content);
+			item_parent->addChild(option_label, kSSP_Z_content);
 			
-//			CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 130, 23));
-//			temp_back->setColor(ccGREEN);
-//			temp_back->setOpacity(100);
-//			temp_back->setAnchorPoint(ccp(0,1));
-//			temp_back->setPosition(ccp(-73,8));
-//			item_parent->addChild(temp_back, kSSS_Z_content);
+			//			CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 130, 23));
+			//			temp_back->setColor(ccGREEN);
+			//			temp_back->setOpacity(100);
+			//			temp_back->setAnchorPoint(ccp(0,1));
+			//			temp_back->setPosition(ccp(-73,8));
+			//			item_parent->addChild(temp_back, kSSS_Z_content);
 			
 			CCSprite* n_buy = CCSprite::create("stagesetting_item_buy.png");
 			CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 8);
@@ -316,24 +355,24 @@ void StageSettingScene::itemSetting()
 			s_label->setPosition(ccp(35, 15));
 			s_buy->addChild(s_label);
 			
-			CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(StageSettingScene::menuAction));
-			buy_item->setTag(kSSS_MT_itemBuy+i);
+			CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(StageSettingPopup::menuAction));
+			buy_item->setTag(kSSP_MT_itemBuy+i);
 			CCMenu* buy_menu = CCMenu::createWithItem(buy_item);
 			buy_menu->setPosition(ccp(90,0));
-			item_parent->addChild(buy_menu, kSSS_Z_content, kSSS_MT_itemBuy+i);
+			item_parent->addChild(buy_menu, kSSP_Z_content, kSSP_MT_itemBuy+i);
 			
 			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
 			if(item_cnt > 0)
 			{
 				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("+%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 				cnt_label->setPosition(ccp(-115, -15));
-				item_parent->addChild(cnt_label, kSSS_Z_content, kSSS_MT_itemCntBase + i);
+				item_parent->addChild(cnt_label, kSSP_Z_content, kSSP_MT_itemCntBase + i);
 			}
 			
 			CCSprite* selected_img = CCSprite::create("stagesetting_item_selected.png");
 			selected_img->setVisible(false);
 			selected_img->setPosition(ccp(-100, 0));
-			item_parent->addChild(selected_img, kSSS_Z_content, kSSS_MT_selectedBase+i);
+			item_parent->addChild(selected_img, kSSP_Z_content, kSSP_MT_selectedBase+i);
 			
 			is_selected_item.push_back(false);
 		}
@@ -344,7 +383,7 @@ void StageSettingScene::itemSetting()
 	}
 }
 
-void StageSettingScene::menuAction(CCObject* pSender)
+void StageSettingPopup::menuAction(CCObject* pSender)
 {
 	if(!is_menu_enable)
 	{
@@ -354,7 +393,7 @@ void StageSettingScene::menuAction(CCObject* pSender)
 	is_menu_enable = false;
 	int tag = ((CCNode*)pSender)->getTag();
 	
-	if(tag == kSSS_MT_start)
+	if(tag == kSSP_MT_start)
 	{
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		int durability;
@@ -379,8 +418,8 @@ void StageSettingScene::menuAction(CCObject* pSender)
 			else if(durability == 0)
 			{
 				is_menu_enable = true;
-				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingScene::menuAction), this, menu_selector(StageSettingScene::menuAction));
-				addChild(t_popup, kSSS_Z_popup, kSSS_MT_noti);
+				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
+				addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
 			}
 			else // not selected card
 			{
@@ -393,32 +432,33 @@ void StageSettingScene::menuAction(CCObject* pSender)
 		else
 			is_menu_enable = true;
 	}
-	else if(tag == kSSS_MT_back)
+	else if(tag == kSSP_MT_back)
 	{
 		mySGD->resetLabels();
-		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+		hidePopup();
+//		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
-	else if(tag == kSSS_MT_changeCard)
+	else if(tag == kSSP_MT_changeCard)
 	{
 		mySGD->resetLabels();
 		mySGD->before_cardsetting = kSceneCode_StageSetting;
 		CCDirector::sharedDirector()->replaceScene(CardSettingScene::scene());
 	}
-	else if(tag == kSSS_MT_challenge)
+	else if(tag == kSSP_MT_challenge)
 	{
 		is_menu_enable = true;
-//		ChallengePopup* t_cp = ChallengePopup::create(this, callfunc_selector(StageSettingScene::popupClose));
-//		addChild(t_cp, kSSS_Z_popup);
+		//		ChallengePopup* t_cp = ChallengePopup::create(this, callfunc_selector(StageSettingPopup::popupClose));
+		//		addChild(t_cp, kSSS_Z_popup);
 	}
-	else if(tag == kSSS_MT_gacha)
+	else if(tag == kSSP_MT_gacha)
 	{
 		is_menu_enable = false;
-		GachaPopup* t_gp = GachaPopup::create(this, callfunc_selector(StageSettingScene::popupClose));
-		addChild(t_gp, kSSS_Z_popup);
+		GachaPopup* t_gp = GachaPopup::create(this, callfunc_selector(StageSettingPopup::popupClose));
+		addChild(t_gp, kSSP_Z_popup);
 	}
-	else if(tag >= kSSS_MT_itemBase && tag < kSSS_MT_itemBuy)
+	else if(tag >= kSSP_MT_itemBase && tag < kSSP_MT_itemBuy)
 	{
-		int clicked_item_number = tag-kSSS_MT_itemBase;
+		int clicked_item_number = tag-kSSP_MT_itemBase;
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[clicked_item_number]) > 0)
 		{
@@ -426,47 +466,47 @@ void StageSettingScene::menuAction(CCObject* pSender)
 			{
 				is_selected_item[clicked_item_number] = false;
 				
-				CCNode* t_item = my_ilv->getChildByTag(kSSS_MT_itemBase+clicked_item_number);
-				((CCSprite*)t_item->getChildByTag(kSSS_MT_selectedBase+clicked_item_number))->setVisible(false);
+				CCNode* t_item = my_ilv->getChildByTag(kSSP_MT_itemBase+clicked_item_number);
+				((CCSprite*)t_item->getChildByTag(kSSP_MT_selectedBase+clicked_item_number))->setVisible(false);
 			}
 			else
 			{
 				is_selected_item[clicked_item_number] = true;
 				
-				CCNode* t_item = my_ilv->getChildByTag(kSSS_MT_itemBase+clicked_item_number);
-				((CCSprite*)t_item->getChildByTag(kSSS_MT_selectedBase+clicked_item_number))->setVisible(true);
+				CCNode* t_item = my_ilv->getChildByTag(kSSP_MT_itemBase+clicked_item_number);
+				((CCSprite*)t_item->getChildByTag(kSSP_MT_selectedBase+clicked_item_number))->setVisible(true);
 			}
 		}
 		else
 		{
-			ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_number], clicked_item_number, this, callfuncII_selector(StageSettingScene::buySuccessItem));
-			addChild(t_ibp, kSSS_Z_popup);
+			ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_number], clicked_item_number, this, callfuncII_selector(StageSettingPopup::buySuccessItem));
+			addChild(t_ibp, kSSP_Z_popup);
 		}
 		
 		is_menu_enable = true;
 	}
-	else if(tag >= kSSS_MT_itemBuy && tag < kSSS_MT_selectedBase)
+	else if(tag >= kSSP_MT_itemBuy && tag < kSSP_MT_selectedBase)
 	{
-		int clicked_item_number = tag-kSSS_MT_itemBuy;
+		int clicked_item_number = tag-kSSP_MT_itemBuy;
 		
-		ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_number], clicked_item_number, this, callfuncII_selector(StageSettingScene::buySuccessItem));
-		addChild(t_ibp, kSSS_Z_popup);
+		ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_number], clicked_item_number, this, callfuncII_selector(StageSettingPopup::buySuccessItem));
+		addChild(t_ibp, kSSP_Z_popup);
 		is_menu_enable = true;
 	}
-	else if(tag == kSSS_MT_noti_ok)
+	else if(tag == kSSP_MT_noti_ok)
 	{
-		removeChildByTag(kSSS_MT_noti);
+		removeChildByTag(kSSP_MT_noti);
 		heart_time->startGame();
 		realStartAction();
 	}
-	else if(tag == kSSS_MT_noti_cancel)
+	else if(tag == kSSP_MT_noti_cancel)
 	{
-		removeChildByTag(kSSS_MT_noti);
+		removeChildByTag(kSSP_MT_noti);
 		is_menu_enable = true;
 	}
 }
 
-void StageSettingScene::realStartAction()
+void StageSettingPopup::realStartAction()
 {
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)
@@ -521,10 +561,10 @@ void StageSettingScene::realStartAction()
 	
 	Json::FastWriter writer;
 	param["data"] = writer.write(data);
-	hspConnector::get()->command("updateUserData", param, json_selector(this, StageSettingScene::finalStartAction));
+	hspConnector::get()->command("updateUserData", param, json_selector(this, StageSettingPopup::finalStartAction));
 }
 
-void StageSettingScene::finalStartAction(Json::Value result_data)
+void StageSettingPopup::finalStartAction(Json::Value result_data)
 {
 	if(result_data["state"].asString() == "ok")
 	{
@@ -572,12 +612,12 @@ void StageSettingScene::finalStartAction(Json::Value result_data)
 	}
 }
 
-void StageSettingScene::popupClose()
+void StageSettingPopup::popupClose()
 {
 	is_menu_enable = true;
 }
 
-void StageSettingScene::buySuccessItem(int t_clicked_item_number, int cnt)
+void StageSettingPopup::buySuccessItem(int t_clicked_item_number, int cnt)
 {
 	myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_number], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_number])+cnt);
 	int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_number]);
@@ -585,9 +625,9 @@ void StageSettingScene::buySuccessItem(int t_clicked_item_number, int cnt)
 	
 	myLog->addLog(kLOG_buyItem_s, -1, convertToItemCodeToItemName(item_list[t_clicked_item_number]).c_str());
 	
-	CCNode* item_parent = my_ilv->getChildByTag(kSSS_MT_itemBase+t_clicked_item_number);
+	CCNode* item_parent = my_ilv->getChildByTag(kSSP_MT_itemBase+t_clicked_item_number);
 	
-	CCLabelTTF* cnt_label = (CCLabelTTF*)item_parent->getChildByTag(kSSS_MT_itemCntBase+t_clicked_item_number);
+	CCLabelTTF* cnt_label = (CCLabelTTF*)item_parent->getChildByTag(kSSP_MT_itemCntBase+t_clicked_item_number);
 	if(cnt_label)
 	{
 		cnt_label->setString(CCString::createWithFormat("+%d", item_cnt)->getCString());
@@ -596,10 +636,10 @@ void StageSettingScene::buySuccessItem(int t_clicked_item_number, int cnt)
 	{
 		cnt_label = CCLabelTTF::create(CCString::createWithFormat("+%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 		cnt_label->setPosition(ccp(-115, -15));
-		item_parent->addChild(cnt_label, kSSS_Z_content, kSSS_MT_itemCntBase + t_clicked_item_number);
+		item_parent->addChild(cnt_label, kSSP_Z_content, kSSP_MT_itemCntBase + t_clicked_item_number);
 	}
 	
-	((CCSprite*)item_parent->getChildByTag(kSSS_MT_selectedBase+t_clicked_item_number))->setVisible(true);
+	((CCSprite*)item_parent->getChildByTag(kSSP_MT_selectedBase+t_clicked_item_number))->setVisible(true);
 	
 	Json::Value param2;
 	param2["memberID"] = hspConnector::get()->getKakaoID();
@@ -615,7 +655,7 @@ void StageSettingScene::buySuccessItem(int t_clicked_item_number, int cnt)
 	hspConnector::get()->command("updateUserData", param2, NULL);
 }
 
-string StageSettingScene::convertToItemCodeToItemName(ITEM_CODE t_code)
+string StageSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 {
 	string return_value;
 	if(t_code == kIC_attack)				return_value = "attack";
@@ -637,7 +677,7 @@ string StageSettingScene::convertToItemCodeToItemName(ITEM_CODE t_code)
 	return return_value.c_str();
 }
 
-void StageSettingScene::alertAction(int t1, int t2)
+void StageSettingPopup::alertAction(int t1, int t2)
 {
 	if(t1 == 1 && t2 == 0)
 	{
@@ -645,7 +685,7 @@ void StageSettingScene::alertAction(int t1, int t2)
 	}
 }
 
-void StageSettingScene::keyBackClicked()
+void StageSettingPopup::keyBackClicked()
 {
-	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(StageSettingScene::alertAction));
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(StageSettingPopup::alertAction));
 }
