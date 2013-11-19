@@ -225,6 +225,9 @@ void Maingame::startCounting()
 	keepTexture->setPosition(ccp(-500,-500));
 	addChild(keepTexture);
 	countingLabel = NULL;
+	
+	myJack->isStun = true;
+	startControl();
 }
 
 void Maingame::counting()
@@ -240,9 +243,9 @@ void Maingame::counting()
 	if(countingCnt/60 >= 2)
 	{
 		setTag(1);
+		myJack->isStun = false;
 		unschedule(schedule_selector(Maingame::counting));
 //		setTouchEnabled(true);
-		startControl();
 //		myCP->movingMainCumber();
 		myCP->onStartGame();
 //		myCP->movingSubCumbers();

@@ -32,10 +32,10 @@ enum SID_MenuTag{
 class StageInfoDown : public CCLayer
 {
 public:
-	static StageInfoDown* create(CCObject* t_cancel, SEL_CallFunc d_cancel)
+	static StageInfoDown* create(CCObject* t_success, SEL_CallFunc d_success, CCObject* t_cancel, SEL_CallFunc d_cancel)
 	{
 		StageInfoDown* t_sid = new StageInfoDown();
-		t_sid->myInit(t_cancel, d_cancel);
+		t_sid->myInit(t_success, d_success, t_cancel, d_cancel);
 		t_sid->autorelease();
 		return t_sid;
 	}
@@ -43,6 +43,8 @@ public:
 private:
 	CCObject* target_cancel;
 	SEL_CallFunc delegate_cancel;
+	CCObject* target_success;
+	SEL_CallFunc delegate_success;
 	
 	int touch_number;
 	bool is_menu_enable;
@@ -60,8 +62,10 @@ private:
 	vector<DownloadFile> df_list;
 	vector<CopyFile> cf_list;
 	
-	void myInit(CCObject* t_cancel, SEL_CallFunc d_cancel)
+	void myInit(CCObject* t_success, SEL_CallFunc d_success, CCObject* t_cancel, SEL_CallFunc d_cancel)
 	{
+		target_success = t_success;
+		delegate_success = d_success;
 		target_cancel = t_cancel;
 		delegate_cancel = d_cancel;
 		

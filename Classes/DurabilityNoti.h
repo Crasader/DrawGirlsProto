@@ -63,8 +63,15 @@ private:
 		cancel_menu = NULL;
 		ok_menu = NULL;
 		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
 		CCSprite* gray = CCSprite::create("back_gray.png");
 		gray->setPosition(ccp(240,160));
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(myDSH->ui_top/320.f);
 		addChild(gray, kDN_Z_gray);
 		
 		setBack();

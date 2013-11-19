@@ -17,8 +17,8 @@
 #include "RankPopup.h"
 #include "MailPopup.h"
 #include "TutorialScene.h"
-#include "CountingBMLabel.h"
 #include "HeartTime.h"
+#include "StageSettingPopup.h"
 
 CCScene* PuzzleMapScene::scene()
 {
@@ -112,8 +112,37 @@ void PuzzleMapScene::startSceneSetting()
 	setUIs();
 	
 	is_menu_enable = false;
-	startChangeUiMode();
 	setTouchEnabled(true);
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init)
+	{
+		startChangeUiMode();
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
+	{
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
+		
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
+		
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+		
+		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+		{
+			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+			t_sp->mySetTouchEnable(true);
+		}
+		
+		is_gesturable_map_mode = true;
+		map_mode_state = kMMS_default;
+		is_menu_enable = true;
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_getPiece)
+	{
+		
+	}
 }
 
 void PuzzleMapScene::setMapNode()
@@ -449,7 +478,7 @@ void PuzzleMapScene::setUIs()
 	top_case->setPosition(getUiButtonPosition(kPMS_MT_top));
 	addChild(top_case, kPMS_Z_ui_button, kPMS_MT_top);
 	
-	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
+	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_label);
 	
@@ -712,8 +741,48 @@ void PuzzleMapScene::stageAction(CCObject* sender)
 	myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, tag);
 	myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, recent_puzzle_number);
 	
-	StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(PuzzleMapScene::stageCancel));
+	StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(PuzzleMapScene::showStageSettingPopup), this, callfunc_selector(PuzzleMapScene::stageCancel));
 	addChild(t_sid, kPMS_Z_popup);
+}
+
+void PuzzleMapScene::showStageSettingPopup()
+{
+	setTouchEnabled(false);
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
+	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(false);
+	
+	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+	{
+		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+		t_sp->mySetTouchEnable(false);
+	}
+	
+	is_gesturable_map_mode = false;
+	map_mode_state = kMMS_default;
+	is_menu_enable = false;
+	
+	StageSettingPopup* t_popup = StageSettingPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::hideStageSettingPopup));
+	addChild(t_popup, kPMS_Z_popup);
+}
+
+void PuzzleMapScene::hideStageSettingPopup()
+{
+	mySGD->setGoldLabel(gold_label);
+	
+	is_gesturable_map_mode = true;
+	map_mode_state = kMMS_default;
+	is_menu_enable = true;
+	
+	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+	{
+		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+		t_sp->mySetTouchEnable(true);
+	}
+	
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(true);
+	setTouchEnabled(true);
 }
 
 void PuzzleMapScene::startChangeUiMode()

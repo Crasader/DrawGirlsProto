@@ -1666,7 +1666,7 @@ private:
 	
 	void showGachaOnePercent()
 	{
-		OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::nextScene), this, callfuncF_selector(PlayUI::gachaOnOnePercent), getPercentage());
+		OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha), this, callfuncF_selector(PlayUI::gachaOnOnePercent), getPercentage());
 		addChild(t_popup);
 	}
 	
@@ -1716,6 +1716,16 @@ private:
 		
 		myGD->communication("MS_showEmptyPoint", found_empty_position);
 		myGD->communication("Main_startMoveToCCPoint", found_empty_position);
+	}
+	
+	void cancelOnePercentGacha()
+	{
+		int grade_value = 1;
+		if(is_exchanged)				grade_value++;
+		if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+		
+		mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+		nextScene();
 	}
 	
 	void nextScene()

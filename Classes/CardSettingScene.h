@@ -40,6 +40,7 @@ private:
 	CCSprite* card_option_case;
 	CCLabelTTF* card_option_script;
 	CCNode* star_parent;
+	CCMenu* mount_menu;
 	
 	CCSprite* selected_img;
 	CCSprite* check_img;
@@ -60,6 +61,8 @@ private:
 	
 	void createCardList();
 	void alignChange();
+	void addMountedCase();
+	void removeMountedCase();
 	
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);

@@ -292,14 +292,16 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				SDS_SI(kSDF_stageInfo, mySD->getSilType(), "version", result_data["version"].asInt());
 				state_ment->setString("스테이지 정보 확인 완료.");
 				
-				CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
+				(target_success->*delegate_success)();
+				removeFromParent();
 			}
 		}
 		else
 		{
 			state_ment->setString("스테이지 정보 확인 완료.");
 			
-			CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
+			(target_success->*delegate_success)();
+			removeFromParent();
 		}
 	}
 	else
@@ -343,7 +345,9 @@ void StageInfoDown::successAction()
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		state_ment->setString("이미지 정보 다운로드 완료.");
 		
-		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
+		(target_success->*delegate_success)();
+		removeFromParent();
+//		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
 	else
 	{

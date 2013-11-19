@@ -45,6 +45,8 @@ enum CSS_MenuTag{
 	kCSS_MT_alignGradeUp = 9,
 	kCSS_MT_alignGradeDown = 10,
 	kCSS_MT_alignDefault = 11,
+	kCSS_MT_releaseCard = 12,
+	kCSS_MT_mountCard = 13,
 	kCSS_MT_cardBase = 1000000,
 	kCSS_MT_cardMenuBase = 2000000,
 	kCSS_MT_noCardBase = 3000000

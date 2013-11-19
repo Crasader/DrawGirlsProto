@@ -58,8 +58,15 @@ private:
 		target_buy = t_buy;
 		delegate_buy = d_buy;
 		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
 		CCSprite* back = CCSprite::create("back_gray.png");
 		back->setPosition(ccp(240,160));
+		back->setScaleX(screen_scale_x);
+		back->setScaleY(myDSH->ui_top/320.f);
 		addChild(back, kIBP_Z_back);
 		
 		

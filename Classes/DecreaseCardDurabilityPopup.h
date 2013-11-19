@@ -343,6 +343,8 @@ private:
 		myDSH->setIntegerForKey(kDSH_Key_selectedCard, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number));
 		myDSH->setIntegerForKey(kDSH_Key_savedGold, myDSH->getIntegerForKey(kDSH_Key_savedGold) - 5000);
 		
+		remove_particle->stopAllActions();
+		
 		CCMoveTo* particle_move = CCMoveTo::create(27.f/60.f, ccp(selected_card->getPositionX(), selected_card->getPositionY()+selected_card->getContentSize().height/2.f*selected_card->getScale()+5.f));
 		CCCallFunc* particle_call = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeParticle));
 		CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_call);

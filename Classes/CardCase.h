@@ -437,6 +437,13 @@ enum CARDCASE_Zorder{
 	kCARDCASE_Z_data
 };
 
+enum CARDCASE_Tag{
+	kCARDCASE_Tag_mounted_top = 10,
+	kCARDCASE_Tag_mounted_bottom,
+	kCARDCASE_Tag_mounted_left,
+	kCARDCASE_Tag_mounted_right
+};
+
 class CardCase : public CCNode
 {
 public:

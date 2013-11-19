@@ -13,6 +13,7 @@
 #include "ServerDataSave.h"
 #include "StageImgLoader.h"
 #include "StageInfoDown.h"
+#include "StageSettingScene.h"
 
 USING_NS_CC;
 using namespace std;
@@ -159,7 +160,7 @@ private:
 			{
 				mySD->setSilType(selected_event_code);
 				
-				StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(EventPopup::startCancel));
+				StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(EventPopup::successStageInfoDown), this, callfunc_selector(EventPopup::startCancel));
 				addChild(t_sid, kEP_Z_popup);
 			}
 		}
@@ -181,10 +182,15 @@ private:
 			{
 				mySD->setSilType(selected_event_code);
 				
-				StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(EventPopup::startCancel));
+				StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(EventPopup::successStageInfoDown), this, callfunc_selector(EventPopup::startCancel));
 				addChild(t_sid, kEP_Z_popup);
 			}
 		}
+	}
+	
+	void successStageInfoDown()
+	{
+		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)

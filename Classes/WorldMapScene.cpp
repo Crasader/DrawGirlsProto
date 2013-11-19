@@ -771,8 +771,8 @@ void WorldMapScene::menuAction(CCObject* pSender)
 		mySD->setSilType(tag);
 		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, tag);
 		
-		StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(WorldMapScene::stageCancel));
-		addChild(t_sid, kWMS_Z_popup);
+//		StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(WorldMapScene::stageCancel));
+//		addChild(t_sid, kWMS_Z_popup);
 		
 //		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 	}
