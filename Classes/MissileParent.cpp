@@ -559,9 +559,10 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				}
 				else
 				{
-					int totalFrame = patternData.get("totalframe", 300).asInt();
+//					int totalFrame = patternData.get("totalframe", 60*4).asInt();
 					
-					AP_Missile23* t_m23 = AP_Missile23::create(totalFrame);
+//					Cobweb* t_m23 = Cobweb::create(totalFrame);
+					Cobweb* t_m23 = Cobweb::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 					addChild(t_m23);
 					keepAP23 = t_m23;
 				}
@@ -674,8 +675,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				int totalFrame = patternData.get("totalframe", 600).asInt();
-				myGD->communication("CP_stopMovingMainCumber");
+				int totalFrame = patternData.get("totalframe", 60*3).asInt();
 				IntPoint mainCumberPoint = myGD->getMainCumberPoint();
 				CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 				AP_Missile15* t_m15 = AP_Missile15::create(mainCumberPosition, 10, totalFrame);
@@ -694,8 +694,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				int targetingFrame = patternData.get("targetingframe", 120).asInt();
-				int shootFrame = patternData.get("shootframe", 180).asInt();
+				// 2.f 하는 이유는 AP12 의 myAction 이 1/60 이 아니고 1/30.f 이라서.
+				int targetingFrame = patternData.get("targetingframe", 120).asInt() / 2.f;
+				int shootFrame = patternData.get("shootframe", 180).asInt() / 2.f;
 				int random_value = rand()%2 + 1;
 				
 				IntPoint mainCumberPoint = myGD->getMainCumberPoint();
@@ -705,7 +706,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				
 				saveAP = t_m12;
 				savedAP = true;
-				myGD->communication("CP_onPatternEnd");
+//				myGD->communication("CP_onPatternEnd");
 
 			};
 			castBranch(atype, func);

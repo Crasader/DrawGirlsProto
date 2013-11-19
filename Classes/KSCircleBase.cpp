@@ -249,7 +249,7 @@ void KSCircleBase::randomPosition()
 {
 	IntPoint mapPoint;
 	bool finded;
-	getRandomPosition(&mapPoint, &finded);
+	getRandomPositionToJack(&mapPoint, &finded);
 	
 	//	myGD->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));

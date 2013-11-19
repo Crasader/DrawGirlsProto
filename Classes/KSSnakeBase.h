@@ -234,7 +234,7 @@ public:
 	{
 		IntPoint mapPoint;
 		bool finded;
-		getRandomPosition(&mapPoint, &finded);
+		getRandomPositionToJack(&mapPoint, &finded);
 		
 		//	myGD->setMainCumberPoint(mapPoint);
 		for(int i=0; i<350; i++)
