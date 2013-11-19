@@ -1620,11 +1620,62 @@ private:
 		}
 	}
 	
-	void endGame(bool is_show_reason)
+	void lifeBonus()
 	{
-		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
-//		myGD->communication("CP_setGameover");
-		if(!is_show_reason)
+		if(jack_life > 0)
+		{
+			jack_life--;
+			CCSprite* t_jack = (CCSprite*)jack_array->lastObject();
+			jack_array->removeObject(t_jack);
+			
+			CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(100);
+			t_particle->setPositionType(kCCPositionTypeRelative);
+			t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("bonus_score_particle.png"));
+			t_particle->setEmissionRate(100);
+			t_particle->setAngle(90.0);
+			t_particle->setAngleVar(180.0);
+			ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+			t_particle->setBlendFunc(blendFunc);
+			t_particle->setDuration(-1.f);
+			t_particle->setEmitterMode(kCCParticleModeGravity);
+			t_particle->setStartColor(ccc4f(1.f, 0.8f, 0.4f, 1.f));
+			t_particle->setStartColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+			t_particle->setEndColor(ccc4f(1.f, 1.f, 1.f, 0.f));
+			t_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+			t_particle->setStartSize(30.0);
+			t_particle->setStartSizeVar(10.0);
+			t_particle->setEndSize(-1.0);
+			t_particle->setEndSizeVar(0.0);
+			t_particle->setGravity(ccp(0,0));
+			t_particle->setRadialAccel(0.0);
+			t_particle->setRadialAccelVar(0.0);
+			t_particle->setSpeed(40);
+			t_particle->setSpeedVar(20.0);
+			t_particle->setTangentialAccel(0);
+			t_particle->setTangentialAccelVar(0);
+			t_particle->setTotalParticles(100);
+			t_particle->setLife(1.0);
+			t_particle->setLifeVar(0.25);
+			t_particle->setStartSpin(0);
+			t_particle->setStartSpinVar(0);
+			t_particle->setEndSpin(0);
+			t_particle->setEndSpinVar(0);
+			t_particle->setPosVar(ccp(10,10));
+			t_particle->setPosition(t_jack->getPosition());
+			t_particle->setAutoRemoveOnFinish(true);
+			addChild(t_particle);
+			
+			CCMoveTo* particle_move = CCMoveTo::create(1.f, score_label->getPosition());
+			CCCallFuncO* particle_remove = CCCallFuncO::create(this, callfuncO_selector(PlayUI::removeParticle), t_particle);
+			CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_remove);
+			t_particle->runAction(particle_seq);
+			
+			CCFadeTo* jack_fade = CCFadeTo::create(0.7f, 0);
+			CCCallFunc* jack_remove = CCCallFunc::create(t_jack, callfunc_selector(CCSprite::removeFromParent));
+			CCSequence* jack_seq = CCSequence::createWithTwoActions(jack_fade, jack_remove);
+			t_jack->runAction(jack_seq);
+		}
+		else
 		{
 			int grade_value = 1;
 			if(is_exchanged)				grade_value++;
@@ -1638,29 +1689,99 @@ private:
 			
 			runAction(sequence);
 		}
-		else
+	}
+	
+	void removeParticle(CCObject* sender)
+	{
+		((CCParticleSystemQuad*)sender)->setDuration(0);
+		addScore(getScore()*0.1f);
+		lifeBonus();
+	}
+	
+	void createBonusScore()
+	{
+		CCSprite* bonus_score = CCSprite::create("bonus_score.png");
+		bonus_score->setOpacity(0);
+		bonus_score->setPosition(ccp(240,myDSH->ui_center_y+50));
+		addChild(bonus_score);
+		
+		CCFadeTo* t_fade = CCFadeTo::create(1.f, 255);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::lifeBonus));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+		bonus_score->runAction(t_seq);
+	}
+	
+	void endGame(bool is_show_reason)
+	{
+		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+//		myGD->communication("CP_setGameover");
+		if(myGD->getIsGameover())
 		{
-			CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
-			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
-			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
-			CCCallFunc* nextScene2;
-			if(mySGD->getGold() >= 500)
+			if(!is_show_reason)
 			{
-				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
+				if(jack_life > 0)
+				{
+					CCDelayTime* t_delay = CCDelayTime::create(2.f);
+					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
+					CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+					runAction(t_seq);
+				}
+				else
+				{
+				
+					int grade_value = 1;
+					if(is_exchanged)				grade_value++;
+					if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+					
+					mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+					CCDelayTime* n_d = CCDelayTime::create(4.5f);
+					CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+					
+					CCSequence* sequence = CCSequence::createWithTwoActions(n_d, nextScene);
+					
+					runAction(sequence);
+				}
 			}
 			else
 			{
-				int grade_value = 1;
-				if(is_exchanged)				grade_value++;
-				if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+				CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
+				CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
+				CCDelayTime* n_d2 = CCDelayTime::create(2.f);
+				CCFiniteTimeAction* nextScene2;
+				if(mySGD->getGold() >= 500)
+				{
+					nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
+				}
+				else
+				{
+					if(jack_life > 0)
+					{
+						CCDelayTime* t_delay = CCDelayTime::create(2.f);
+						CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
+						nextScene2 = CCSequence::createWithTwoActions(t_delay, t_call);
+					}
+					else
+					{
+						int grade_value = 1;
+						if(is_exchanged)				grade_value++;
+						if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+						
+						mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+						nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+					}
+				}
 				
-				mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
-				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+				CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
+				
+				runAction(sequence);
 			}
-			
-			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
-			
-			runAction(sequence);
+		}
+		else
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(2.f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			runAction(t_seq);
 		}
 	}
 	
@@ -1672,19 +1793,6 @@ private:
 	
 	void gachaOnOnePercent(float t_percent)
 	{
-		int grade_value = 1;
-		if(is_exchanged && t_percent >= 1.f)		grade_value+=2;
-		else
-		{
-			if(t_percent >= 1.f)
-			{
-				grade_value++;
-			}
-		}
-		
-		beforePercentage = (int(t_percent*1000))^t_tta;
-		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), t_percent, countingCnt, use_time, total_time);
 		Json::Value param2;
 		param2["memberID"] = hspConnector::get()->getKakaoID();
 		
@@ -1695,7 +1803,27 @@ private:
 		param2["data"] = writer.write(data);
 		hspConnector::get()->command("updateUserData", param2, NULL);
 		
-		nextScene();
+		beforePercentage = (int(t_percent*1000))^t_tta;
+		
+		if(jack_life > 0)
+		{
+			createBonusScore();
+		}
+		else
+		{
+			int grade_value = 1;
+			if(is_exchanged && getPercentage() >= 1.f)		grade_value+=2;
+			else
+			{
+				if(getPercentage() >= 1.f)
+				{
+					grade_value++;
+				}
+			}
+			
+			mySGD->gameClear(grade_value, atoi(score_label->getString()), getPercentage(), countingCnt, use_time, total_time);
+			nextScene();
+		}
 	}
 	
 	void searchEmptyPosition()
@@ -1720,12 +1848,19 @@ private:
 	
 	void cancelOnePercentGacha()
 	{
-		int grade_value = 1;
-		if(is_exchanged)				grade_value++;
-		if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
-		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
-		nextScene();
+		if(jack_life > 0)
+		{
+			createBonusScore();
+		}
+		else
+		{
+			int grade_value = 1;
+			if(is_exchanged)				grade_value++;
+			if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+			
+			mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+			nextScene();
+		}
 	}
 	
 	void nextScene()

@@ -171,6 +171,7 @@ void PuzzleMapScene::startSceneSetting()
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
@@ -195,6 +196,7 @@ void PuzzleMapScene::startSceneSetting()
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
 	{
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
@@ -1015,6 +1017,7 @@ void PuzzleMapScene::hideFailPopup()
 
 void PuzzleMapScene::startChangeUiMode()
 {
+	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 	is_gesturable_map_mode = false;
 	map_mode_state = kMMS_changeMode;
 	
@@ -1080,6 +1083,7 @@ void PuzzleMapScene::stopChangeUiMode()
 
 void PuzzleMapScene::startChangeMapMode()
 {
+	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 	map_mode_state = kMMS_changeMode;
 	
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
