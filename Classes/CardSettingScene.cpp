@@ -21,6 +21,7 @@
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
 #include "CardListViewer.h"
+
 CCScene* CardSettingScene::scene()
 {
     // 'scene' is an autorelease object
@@ -50,6 +51,8 @@ bool CardSettingScene::init()
     }
     
 	setKeypadEnabled(true);
+	
+	mount_menu = NULL;
 	
 	inner_card_distance = ccp(72,92);
 	
@@ -429,6 +432,68 @@ void CardSettingScene::menuAction(CCObject* pSender)
 			is_menu_enable = true;
 		}
 	}
+	else if(tag == kCSS_MT_releaseCard)
+	{
+		removeMountedCase();
+		myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+		
+		if(check_img)
+		{
+			check_img->removeFromParent();
+			check_img = NULL;
+		}
+		
+		is_menu_enable = true;
+	}
+	else if(tag == kCSS_MT_mountCard)
+	{
+		mount_menu->removeFromParent();
+		mount_menu = NULL;
+		
+		myDSH->setIntegerForKey(kDSH_Key_selectedCard, recent_mounted_number);
+		
+		if(check_img)
+		{
+			check_img->removeFromParent();
+			check_img = NULL;
+		}
+		
+		if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_default)
+		{
+			check_img = CCSprite::create("card_check.png");
+			check_img->setPosition(align_default_position_list[recent_mounted_number]);
+			my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
+		}
+		else
+		{
+			int loop_length = mySGD->getHasGottenCardsSize();
+			for(int i=0;i<loop_length;i++)
+			{
+				if(recent_mounted_number == mySGD->getHasGottenCardsDataCardNumber(i))
+				{
+					check_img = CCSprite::create("card_check.png");
+					check_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_cardBase), ccp((i%3)*inner_card_distance.x, -(i/3)*inner_card_distance.y)));
+					my_clv->addChild(check_img, kCSS_Z_check, kCSS_MT_checkMark);
+					break;
+				}
+			}
+		}
+		
+		addMountedCase();
+		
+		CCSprite* n_release = CCSprite::create("card_release.png");
+		CCSprite* s_release = CCSprite::create("card_release.png");
+		s_release->setColor(ccGRAY);
+		
+		CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardSettingScene::menuAction));
+		release_item->setTag(kCSS_MT_releaseCard);
+		
+		mount_menu = CCMenu::createWithItem(release_item);
+		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
+		addChild(mount_menu, kCSS_Z_content);
+		
+		is_menu_enable = true;
+	}
 	else if(tag >= kCSS_MT_cardMenuBase && tag < kCSS_MT_noCardBase)
 	{
 		int clicked_card_number = tag-kCSS_MT_cardMenuBase;
@@ -443,6 +508,9 @@ void CardSettingScene::menuAction(CCObject* pSender)
 		}
 		else if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) != clicked_card_number && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, clicked_card_number) > 0)
 		{
+			mount_menu->removeFromParent();
+			mount_menu = NULL;
+			
 			myDSH->setIntegerForKey(kDSH_Key_selectedCard, clicked_card_number);
 			
 			if(check_img)
@@ -471,25 +539,65 @@ void CardSettingScene::menuAction(CCObject* pSender)
 					}
 				}
 			}
+			
+			addMountedCase();
+			
+			CCSprite* n_release = CCSprite::create("card_release.png");
+			CCSprite* s_release = CCSprite::create("card_release.png");
+			s_release->setColor(ccGRAY);
+			
+			CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardSettingScene::menuAction));
+			release_item->setTag(kCSS_MT_releaseCard);
+			
+			mount_menu = CCMenu::createWithItem(release_item);
+			mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
+			addChild(mount_menu, kCSS_Z_content);
 		}
 		
 		is_menu_enable = true;
 	}
 	else if(tag >= kCSS_MT_noCardBase)
 	{
-		if(recent_mounted_number != 0)
+//		if(recent_mounted_number != 0)
 			removeMountingCard();
-		else
-		{
-			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
-			if(check_img)
-			{
-				check_img->removeFromParent();
-				check_img = NULL;
-			}
-		}
+//		else
+//		{
+//			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+//			if(check_img)
+//			{
+//				check_img->removeFromParent();
+//				check_img = NULL;
+//			}
+//		}
 		is_menu_enable = true;
 	}
+}
+
+void CardSettingScene::removeMountedCase()
+{
+	selected_card_img->removeChildByTag(kCARDCASE_Tag_mounted_top);
+	selected_card_img->removeChildByTag(kCARDCASE_Tag_mounted_bottom);
+	selected_card_img->removeChildByTag(kCARDCASE_Tag_mounted_left);
+	selected_card_img->removeChildByTag(kCARDCASE_Tag_mounted_right);
+}
+
+void CardSettingScene::addMountedCase()
+{
+	CCSprite* top_case = CCSprite::create("card_case_check_top.png");
+	top_case->setPosition(ccp(160,430));
+	selected_card_img->addChild(top_case, 1, kCARDCASE_Tag_mounted_top);
+	
+	CCSprite* bottom_case = CCSprite::create("card_case_check_bottom.png");
+	bottom_case->setPosition(ccp(160,0));
+	selected_card_img->addChild(bottom_case, 1, kCARDCASE_Tag_mounted_bottom);
+	
+	CCSprite* left_case = CCSprite::create("card_case_check_left.png");
+	left_case->setPosition(ccp(0,215));
+	selected_card_img->addChild(left_case, 1, kCARDCASE_Tag_mounted_left);
+	
+	CCSprite* right_case = CCSprite::create("card_case_check_right.png");
+	right_case->setPosition(ccp(320,215));
+	selected_card_img->addChild(right_case, 1, kCARDCASE_Tag_mounted_right);
 }
 
 void CardSettingScene::alignChange()
@@ -544,14 +652,18 @@ void CardSettingScene::removeMountingCard()
 	if(selected_img)			selected_img->removeFromParent();
 	selected_img = NULL;
 	
+	if(mount_menu)
+		mount_menu->removeFromParent();
+	mount_menu = NULL;
+	
 	recent_mounted_number = 0;
 }
 
 void CardSettingScene::mountingCard(int card_stage, int card_level)
 {
 	selected_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
-	selected_card_img->setScale(0.53);
-	selected_card_img->setPosition(ccp(112,143));
+	selected_card_img->setScale(0.43f);
+	selected_card_img->setPosition(ccp(112,159));
 	addChild(selected_card_img, kCSS_Z_content);
 	
 	if(card_level == 3 && mySD->isAnimationStage(card_stage))
@@ -563,16 +675,19 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 		selected_card_img->addChild(t_ani);
 	}
 	
-	CardCase* t_case = CardCase::create(card_stage, card_level);
-	t_case->setPosition(CCPointZero);
-	selected_card_img->addChild(t_case);
+	CCSprite* n_cardmenu = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*selected_card_img->getScale(), 430*selected_card_img->getScale()));
+	CCSprite* s_cardmenu = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*selected_card_img->getScale(), 430*selected_card_img->getScale()));
 	
-	CCMenuItem* selected_card_item = CCMenuItemImage::create("cardsetting_cardmenu_big.png", "cardsetting_cardmenu_big.png", this, menu_selector(CardSettingScene::menuAction));
+	CCMenuItem* selected_card_item = CCMenuItemSprite::create(n_cardmenu, s_cardmenu, this, menu_selector(CardSettingScene::menuAction));
 	selected_card_item->setTag(kCSS_MT_selectedCard);
 	
 	selected_card_menu = CCMenu::createWithItem(selected_card_item);
 	selected_card_menu->setPosition(selected_card_img->getPosition());
 	addChild(selected_card_menu, kCSS_Z_content);
+	
+	CardCase* t_case = CardCase::create(card_stage, card_level);
+	t_case->setPosition(CCPointZero);
+	selected_card_img->addChild(t_case);
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_default)
 	{
@@ -594,6 +709,50 @@ void CardSettingScene::mountingCard(int card_stage, int card_level)
 				break;
 			}
 		}
+	}
+	
+	if(recent_mounted_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
+	{
+		addMountedCase();
+		
+		CCSprite* n_release = CCSprite::create("card_release.png");
+		CCSprite* s_release = CCSprite::create("card_release.png");
+		s_release->setColor(ccGRAY);
+		
+		CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardSettingScene::menuAction));
+		release_item->setTag(kCSS_MT_releaseCard);
+		
+		mount_menu = CCMenu::createWithItem(release_item);
+		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
+		addChild(mount_menu, kCSS_Z_content);
+	}
+	else if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_mounted_number) > 0)
+	{
+		CCSprite* n_mount = CCSprite::create("card_mount.png");
+		CCSprite* s_mount = CCSprite::create("card_mount.png");
+		s_mount->setColor(ccGRAY);
+		
+		CCMenuItem* mount_item = CCMenuItemSprite::create(n_mount, s_mount, this, menu_selector(CardSettingScene::menuAction));
+		mount_item->setTag(kCSS_MT_mountCard);
+		
+		mount_menu = CCMenu::createWithItem(mount_item);
+		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
+		addChild(mount_menu, kCSS_Z_content);
+	}
+	else
+	{
+		GraySprite* n_mount = GraySprite::create("card_mount.png");
+		n_mount->setGray(true);
+		GraySprite* s_mount = GraySprite::create("card_mount.png");
+		s_mount->setGray(true);
+		
+		CCMenuItem* mount_item = CCMenuItemSprite::create(n_mount, s_mount, this, menu_selector(CardSettingScene::menuAction));
+		mount_item->setTag(kCSS_MT_mountCard);
+		
+		mount_menu = CCMenu::createWithItem(mount_item);
+		mount_menu->setEnabled(false);
+		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
+		addChild(mount_menu, kCSS_Z_content);
 	}
 }
 

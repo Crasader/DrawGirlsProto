@@ -132,7 +132,10 @@ bool StageSettingScene::init()
 	my_ilv->setScroll(t_lvs);
 	my_ilv->setTouchEnabled(true);
 	
-	CCMenuItem* changeCard_item = CCMenuItemImage::create("stagesetting_card_button.png", "stagesetting_card_button.png", this, menu_selector(StageSettingScene::menuAction));
+	CCSprite* n_cardmenu = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*0.45f, 430*0.45f));
+	CCSprite* s_cardmenu = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*0.45f, 430*0.45f));
+	
+	CCMenuItem* changeCard_item = CCMenuItemSprite::create(n_cardmenu, s_cardmenu, this, menu_selector(StageSettingScene::menuAction));
 	changeCard_item->setTag(kSSS_MT_changeCard);
 	
 	CCMenu* change_menu = CCMenu::createWithItem(changeCard_item);

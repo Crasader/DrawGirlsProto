@@ -973,15 +973,16 @@ public:
 	
 	void takeSpeedUpItem()
 	{
-		if(myGD->jack_base_speed + speed_up_value > 2.f)
+		if(myGD->jack_base_speed + speed_up_value >= 2.f)
 		{
+			myGD->communication("Main_takeSpeedUpEffect", int(roundf((0.8f - (2.f - myGD->jack_base_speed) + speed_up_value)/0.1f)));
 			myGD->communication("MP_createJackMissile", rand()%(kElementCode_plasma+1) + (rand()%9)*10, 1, float(NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard))));
 		}
 		else
 		{
 			speed_up_value += 0.1f;
 			changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
-			myGD->communication("Main_takeSpeedUpEffect", int(roundf(speed_up_value/0.1f)));
+			myGD->communication("Main_takeSpeedUpEffect", int(roundf((0.8f - (2.f - myGD->jack_base_speed) + speed_up_value)/0.1f)));
 		}
 	}
 	
