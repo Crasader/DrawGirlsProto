@@ -15,7 +15,7 @@
 	<key>guides</key>
 	<array/>
 	<key>jsControlled</key>
-	<true/>
+	<false/>
 	<key>nodeGraph</key>
 	<dict>
 		<key>baseClass</key>
@@ -930,8 +930,6 @@
 		<string></string>
 		<key>displayName</key>
 		<string>CCLayer</string>
-		<key>jsController</key>
-		<string>MainScene</string>
 		<key>memberVarAssignmentName</key>
 		<string></string>
 		<key>memberVarAssignmentType</key>
@@ -1042,7 +1040,7 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.0</real>
+			<real>1.6668809652328491</real>
 			<key>position</key>
 			<real>3.6666667461395264</real>
 			<key>resolution</key>
