@@ -493,7 +493,7 @@ private:
 	int shootFrame;
 	int ingFrame;
 	deque<CCPoint> pJackArray;
-	
+	deque<CCPoint> visitPoint;
 	CCSprite* targetingImg;
 	CCSprite* wifiImg;
 	
@@ -512,7 +512,7 @@ private:
 	void startMyAction()
 	{
 		ingFrame = 0;
-		schedule(schedule_selector(AP_Missile12::myAction));
+		schedule(schedule_selector(AP_Missile12::myAction), 1/30.f);
 	}
 	
 	void myAction()
@@ -526,7 +526,20 @@ private:
 			IntPoint jackPoint = myGD->getJackPoint();
 			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
 			
-			pJackArray.push_back(jackPosition);
+			bool found = false;
+			for(const auto&  i : visitPoint)
+			{
+				if(i.equals(jackPosition))
+				{
+					found = true;
+					break;
+				}
+			}
+			if(!found) // 중복된건 ㄴㄴ 해
+			{
+				pJackArray.push_back(jackPosition);
+				visitPoint.push_back(jackPosition);
+			}
 			
 			if(ingFrame == targetingFrame)
 			{
@@ -536,16 +549,32 @@ private:
 		}
 		else if(ingFrame <= targetingFrame+shootFrame)
 		{
-			CCPoint t_p = pJackArray.front();
-			pJackArray.pop_front();
-			
-			targetingImg->setPosition(t_p);
-			myBeam->beamSetPosition(t_p);
+			if(pJackArray.empty() == false)
+			{
+				CCPoint t_p = pJackArray.front();
+				pJackArray.pop_front();
+				
+				targetingImg->setPosition(t_p);
+				myBeam->beamSetPosition(t_p);
+			}
 			
 			IntPoint jackPoint = myGD->getJackPoint();
 			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
+			bool found = false;
+			for(const auto&  i : visitPoint)
+			{
+				if(i.equals(jackPosition))
+				{
+					found = true;
+					break;
+				}
+			}
+			if(!found) // 중복된건 ㄴㄴ 해
+			{
+				pJackArray.push_back(jackPosition);
+				visitPoint.push_back(jackPosition);
+			}
 			
-			pJackArray.push_back(jackPosition);
 			
 			if(ingFrame == targetingFrame+shootFrame)
 			{
@@ -1008,8 +1037,11 @@ private:
 		if(ingFrame%mRate == 0)
 		{
 			CCPoint random_fp;
+			
+			int screenHeight = (myGD->limited_step_top - myGD->limited_step_bottom)*pixelSize;
 			random_fp.x = m_well512.GetValue(240);
-			random_fp.y = m_well512.GetValue(320);
+			random_fp.y = m_well512.GetValue(myGD->getJackPoint().y * pixelSize - screenHeight / 2.f,
+																			 myGD->getJackPoint().y * pixelSize + screenHeight / 2.f);
 			
 			CCPoint random_sp;
 			random_sp.x = random_fp.x + 500;
@@ -4181,6 +4213,152 @@ protected:
  KSCumberBase* m_cumber;
  };
  */
+class Cobweb : public AttackPattern // cobweb
+{
+public:
+//	static Cobweb* create(int t_frame)
+	static Cobweb* create(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
+	{
+		Cobweb* t_m23 = new Cobweb();
+		t_m23->myInit(t_sp, cb, patternData);
+		t_m23->autorelease();
+		return t_m23;
+	}
+	
+	void updateCobweb()
+	{
+		if(!is_stop)
+			ingFrame = 0;
+	}
+	
+private:
+
+	Json::Value pattern;
+	KSCumberBase* cumber;
+	int slowFrame;
+	int ingFrame;
+	bool is_stop;
+	enum {kElse, kInner, kOuter, kFrameTerminated} state;
+	CCSprite* cobwebImg;
+	FromToWithDuration<float> m_scaleFromTo;
+	void startFrame()
+	{
+		ingFrame = 0;
+		schedule(schedule_selector(Cobweb::framing));
+	}
+	
+	void framing()
+	{
+		ingFrame++;
+		
+		m_scaleFromTo.step(1/60.f);
+		cobwebImg->setScale(m_scaleFromTo.getValue());
+		if(ingFrame < slowFrame)
+		{
+			CCPoint cobwebPosition = cobwebImg->getPosition();
+			CCPoint jackPosition = ip2ccp(myGD->getJackPoint());
+			if(state == kElse)
+			{
+				if(cobwebPosition.x - 100 <= jackPosition.x && jackPosition.x <= cobwebPosition.x + 100 &&
+					 cobwebPosition.y - 100 <= jackPosition.y && jackPosition.y <= cobwebPosition.y + 100)
+				{
+//					CCLog("-0.5");
+					myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 0.5f);
+					state = kInner;
+				}
+				else
+				{
+					state = kOuter;
+				}
+				
+			}
+			else if(state == kInner || state == kOuter)
+			{
+				if(cobwebPosition.x - 100 <= jackPosition.x && jackPosition.x <= cobwebPosition.x + 100 &&
+					 cobwebPosition.y - 100 <= jackPosition.y && jackPosition.y <= cobwebPosition.y + 100)
+				{
+					// 밖에 있다가 들어옴.
+					if(state == kOuter)
+					{
+						myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 0.5f);
+						CCLog("-0.5");
+						state = kInner;
+					}
+				}
+				else // 밖
+				{
+					// 안에 있다가 나갔으면
+					if(state == kInner)
+					{
+						myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 0.5f);
+						CCLog("+0.5");
+						state = kOuter;
+					}
+				}
+			}
+		}
+		else if(ingFrame >= slowFrame)
+		{
+			stopFrame();
+		}
+	}
+	
+	void removeCobweb()
+	{
+		cobwebImg->removeFromParent();
+		startSelfRemoveSchedule();
+	}
+	
+	void stopFrame()
+	{
+		is_stop = true;
+		unschedule(schedule_selector(Cobweb::framing));
+		
+		cobwebImg->stopAllActions();
+		
+		CCScaleTo* t_scale = CCScaleTo::create(0.3, 0.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Cobweb::removeCobweb));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		cobwebImg->runAction(t_seq);
+		
+		if(state == kInner)
+		{
+			myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
+		}
+		myGD->communication("MP_deleteKeepAP23");
+		state = kFrameTerminated;
+	}
+	
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
+	{
+		cumber = cb;
+		state = kElse;
+		is_stop = false;
+		Json::Reader reader;
+		reader.parse(patternData, pattern);
+		KS::KSLog("%", pattern);
+		slowFrame = pattern.get("totalframe", 60*4).asInt();
+		
+		
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader1 = new CCBReader(nodeLoader);
+		cobwebImg = dynamic_cast<CCSprite*>(reader1->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
+		reader1->release();
+		
+		cobwebImg->setPosition(cumber->getPosition());
+		cobwebImg->setScale(0.f);
+		
+		addChild(cobwebImg);
+		m_scaleFromTo.init(0.0f, 1.0f, 0.3f);
+		//		CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.f);
+		//		cobwebImg->runAction(t_scale); // 나중에 수동으로 구현해야함.
+		
+//		myGD->setAlphaSpeed(myGD->getAlphaSpeed()-0.5f);
+		
+		startFrame();
+	}
+};
+
 
 class PrisonPattern : public AttackPattern // prison
 {

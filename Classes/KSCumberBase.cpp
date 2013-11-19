@@ -1083,6 +1083,11 @@ void KSCumberBase::snakeMoving(float dt)
 void KSCumberBase::cumberAttack(float dt)
 {
 //	myJack->get
+	
+	if(m_slience) // 침묵 상태면
+	{
+		return;
+	}
 	float gainPercent = myGD->Fcommunication("UI_getMapPercentage") * 100.f;
 	float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
 //	CCLog("%f %f %d", distance, gainPercent, m_crashCount);

@@ -298,7 +298,7 @@ private:
 	bool savedAP;
 	AttackPattern* saveAP;
 
-	AP_Missile23* keepAP23;
+	Cobweb* keepAP23;
 	AP_Missile26* keepAP26;
 	AP_Missile33* keepAP33;
 	AP_Missile24* keepAP24;

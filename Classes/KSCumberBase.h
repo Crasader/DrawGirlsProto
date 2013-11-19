@@ -119,7 +119,7 @@ public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
 	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0), /// 초당 변수만큼 충돌시 스케일 줄임.
 	m_castingCancelCount(0), teleportImg(NULL), m_isStarted(false), m_healingFrameCount(0),
-	m_damagedFrames(500)
+	m_damagedFrames(500), m_slience(false)
 	
 //		m_state(CUMBERSTATESTOP)
 	{
