@@ -200,31 +200,20 @@ void Maingame::startScene()
 
 void Maingame::startCounting()
 {
-	CCTexture2D* t_texture;
-	t_texture = CCTextureCache::sharedTextureCache()->addImage("hard_condition.png");
-	condition_spr = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 105, 117));
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	condition_spr = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_ready.ccbi",this));
 	addChild(condition_spr, conditionLabelZorder);
 	
 	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+50));
 	
-	CCAnimation* t_animation = CCAnimation::create();
-	t_animation->setDelayPerUnit(0.15);
-	for(int i=0;i<3;i++)
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*105, 0, 105, 117));
-	for(int i=0;i<2;i++)
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*105, 117, 105, 117));
-	
-	CCAnimate* t_animate = CCAnimate::create(t_animation);
+	CCDelayTime* t_delay1 = CCDelayTime::create(0.75f);
 	CCCallFunc* t_ms_startGame = CCCallFunc::create(myMS, callfunc_selector(MapScanner::startGame));
-	CCFadeOut* t_fo = CCFadeOut::create(1.f);
+	CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::removeConditionLabel));
-	condition_spr->runAction(CCSequence::create(t_animate, t_ms_startGame, t_fo, t_call, NULL));
+	runAction(CCSequence::create(t_delay1, t_ms_startGame, t_delay2, t_call, NULL));
 	
 	countingCnt = 0;
-	keepTexture = CCSprite::create("maingame_ui_start_count.png");
-	keepTexture->setPosition(ccp(-500,-500));
-	addChild(keepTexture);
-	countingLabel = NULL;
 	
 	myJack->isStun = true;
 	startControl();
@@ -234,16 +223,11 @@ void Maingame::counting()
 {
 	countingCnt++;
 	
-	if(countingLabel)
-	{
-		countingLabel->setScale(0.5 + countingCnt%60*0.015);
-		countingLabel->setOpacity(255 - countingCnt%60*3);
-	}
-	
 	if(countingCnt/60 >= 2)
 	{
 		setTag(1);
 		myJack->isStun = false;
+		condition_spr->removeFromParent();
 		unschedule(schedule_selector(Maingame::counting));
 //		setTouchEnabled(true);
 //		myCP->movingMainCumber();
@@ -252,18 +236,10 @@ void Maingame::counting()
 		myCP->startAutoAttacker();
 		myUI->startCounting();
 		myGD->setIsGameover(false);
-		countingLabel->removeFromParentAndCleanup(true);
-		keepTexture->removeFromParentAndCleanup(true);
 	}
 	else if(countingCnt/60 >= 1 && countingCnt%60 == 0)
 	{
 //		AudioEngine::sharedInstance()->playEffect("sound_go.mp3", false);
-		countingLabel->removeFromParentAndCleanup(true);
-		countingLabel = CCSprite::createWithTexture(keepTexture->getTexture(), CCRectMake(0, 80, 200, 80));
-		countingLabel->setScale(0.5);
-		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
-		addChild(countingLabel, countingLabelZorder);
-		
 		if(mySGD->getGold() >= 500)
 		{
 			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));

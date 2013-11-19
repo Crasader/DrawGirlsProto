@@ -108,10 +108,7 @@ private:
 	PathManager* myPM;
 	CumberParent* myCP;
 	
-	
-	CCSprite* keepTexture;
-	CCSprite* countingLabel;
-	CCSprite* condition_spr;
+	CCLayer* condition_spr;
 	CCSprite* touch_img;
 	
 	GameItemManager* myGIM;
@@ -163,13 +160,8 @@ private:
 	
 	void removeConditionLabel()
 	{
-		condition_spr->removeFromParentAndCleanup(true);
 //		AudioEngine::sharedInstance()->playEffect("sound_ready.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("sound_gamestart.mp3", false);
-		countingLabel = CCSprite::createWithTexture(keepTexture->getTexture(), CCRectMake(0, 0, 200, 80));
-		countingLabel->setScale(0.5);
-		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
-		addChild(countingLabel, countingLabelZorder);
 		
 		myGIM->startItemSetting();
 		myGIM->startCounting();
