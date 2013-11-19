@@ -19,6 +19,9 @@
 #include "TutorialScene.h"
 #include "HeartTime.h"
 #include "StageSettingPopup.h"
+#include "ClearPopup.h"
+#include "FailPopup.h"
+#include <random>
 
 CCScene* PuzzleMapScene::scene()
 {
@@ -108,6 +111,33 @@ void PuzzleMapScene::startSceneSetting()
 	
 	after_map_node = NULL;
 	
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(selected_card_number > 0)
+		{
+			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
+		}
+		
+		int take_level;
+		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
+		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
+		else												take_level = 1;
+		
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+			
+			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+		}
+		int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, mySD->getCardDurability(mySD->getSilType(), take_level));
+	}
+	
 	setMapNode();
 	setUIs();
 	
@@ -138,6 +168,54 @@ void PuzzleMapScene::startSceneSetting()
 		is_gesturable_map_mode = true;
 		map_mode_state = kMMS_default;
 		is_menu_enable = true;
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
+	{
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
+		
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
+		
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+		
+		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+		{
+			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+			t_sp->mySetTouchEnable(true);
+		}
+		
+		is_gesturable_map_mode = true;
+		map_mode_state = kMMS_default;
+		is_menu_enable = true;
+		
+		showClearPopup();
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
+	{
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
+		
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
+		
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+		
+		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+		{
+			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+			t_sp->mySetTouchEnable(true);
+		}
+		
+		is_gesturable_map_mode = true;
+		map_mode_state = kMMS_default;
+		is_menu_enable = true;
+		
+		showFailPopup();
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_getPiece)
 	{
@@ -767,6 +845,156 @@ void PuzzleMapScene::showStageSettingPopup()
 }
 
 void PuzzleMapScene::hideStageSettingPopup()
+{
+	mySGD->setGoldLabel(gold_label);
+	
+	is_gesturable_map_mode = true;
+	map_mode_state = kMMS_default;
+	is_menu_enable = true;
+	
+	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+	{
+		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+		t_sp->mySetTouchEnable(true);
+	}
+	
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(true);
+	setTouchEnabled(true);
+}
+
+void PuzzleMapScene::showClearPopup()
+{
+	setTouchEnabled(false);
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
+	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(false);
+	
+	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+	{
+		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+		t_sp->mySetTouchEnable(false);
+	}
+	
+	is_gesturable_map_mode = false;
+	map_mode_state = kMMS_default;
+	is_menu_enable = false;
+	
+	ClearPopup* t_popup = ClearPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::hideClearPopup));
+	addChild(t_popup, kPMS_Z_popup);
+}
+
+void PuzzleMapScene::hideClearPopup()
+{
+	showGetPuzzle();
+}
+
+void PuzzleMapScene::showGetPuzzle()
+{
+	CCSprite* get_piece_title = CCSprite::create("get_piece_title.png");
+	StagePiece* new_piece = (StagePiece*)map_node->getChildByTag(mySD->getSilType());
+	get_piece_title->setPosition(ccpAdd(new_piece->getPosition(), ccp(0, 45)));
+	map_node->addChild(get_piece_title, kPMS_Z_popup);
+	
+	new_piece->startGetPieceAnimation(this, callfuncCCp_selector(PuzzleMapScene::createGetPuzzleParticle));
+	
+	CCDelayTime* t_delay = CCDelayTime::create(1.f);
+	CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endGetPuzzle));
+	CCCallFunc* t_call2 = CCCallFunc::create(get_piece_title, callfunc_selector(CCSprite::removeFromParent));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_fade, t_call1, t_call2, NULL);
+	get_piece_title->runAction(t_seq);
+}
+
+void PuzzleMapScene::createGetPuzzleParticle(CCPoint t_point)
+{
+	random_device rd;
+	default_random_engine e1(rd());
+	uniform_real_distribution<float> uniform_dist(-50, 50);
+	
+	CCPoint random_value;
+	random_value.x = uniform_dist(e1);
+	random_value.y = uniform_dist(e1);
+	
+	CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(150);
+	t_particle->setPositionType(kCCPositionTypeRelative);
+	t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("get_piece_particle.png"));
+	t_particle->setEmissionRate(400);
+	t_particle->setAngle(90.0);
+	t_particle->setAngleVar(45.0);
+	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+	t_particle->setBlendFunc(blendFunc);
+	t_particle->setDuration(0.1);
+	t_particle->setEmitterMode(kCCParticleModeGravity);
+	t_particle->setStartColor(ccc4f(1.f, 1.f, 1.f, 1.f));
+	t_particle->setStartColorVar(ccc4f(0.57f, 0.57f, 0.54f, 0.f));
+	t_particle->setEndColor(ccc4f(1.f, 1.f, 1.f, 0.f));
+	t_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+	t_particle->setStartSize(10.0);
+	t_particle->setStartSizeVar(5.0);
+	t_particle->setEndSize(20.0);
+	t_particle->setEndSizeVar(5.0);
+	t_particle->setGravity(ccp(0,-400));
+	t_particle->setRadialAccel(0.0);
+	t_particle->setRadialAccelVar(0.0);
+	t_particle->setSpeed(150);
+	t_particle->setSpeedVar(70.0);
+	t_particle->setTangentialAccel(0);
+	t_particle->setTangentialAccelVar(0);
+	t_particle->setTotalParticles(150);
+	t_particle->setLife(0.40);
+	t_particle->setLifeVar(0.5);
+	t_particle->setStartSpin(0);
+	t_particle->setStartSpinVar(180);
+	t_particle->setEndSpin(0);
+	t_particle->setEndSpinVar(180);
+	t_particle->setPosVar(ccp(10,10));
+	t_particle->setPosition(ccpAdd(t_point, random_value));
+	t_particle->setAutoRemoveOnFinish(true);
+	map_node->addChild(t_particle, kPMS_Z_popup);
+}
+
+void PuzzleMapScene::endGetPuzzle()
+{
+	mySGD->setGoldLabel(gold_label);
+	
+	is_gesturable_map_mode = true;
+	map_mode_state = kMMS_default;
+	is_menu_enable = true;
+	
+	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+	{
+		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+		t_sp->mySetTouchEnable(true);
+	}
+	
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(true);
+	setTouchEnabled(true);
+}
+
+void PuzzleMapScene::showFailPopup()
+{
+	setTouchEnabled(false);
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
+	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(false);
+	
+	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+	{
+		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+		t_sp->mySetTouchEnable(false);
+	}
+	
+	is_gesturable_map_mode = false;
+	map_mode_state = kMMS_default;
+	is_menu_enable = false;
+	
+	FailPopup* t_popup = FailPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::hideFailPopup));
+	addChild(t_popup, kPMS_Z_popup);
+}
+
+void PuzzleMapScene::hideFailPopup()
 {
 	mySGD->setGoldLabel(gold_label);
 	

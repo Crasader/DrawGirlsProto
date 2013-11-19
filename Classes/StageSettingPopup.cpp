@@ -8,10 +8,8 @@
 
 #include "StageSettingPopup.h"
 
-#include "ScreenSide.h"
 #include "MyLocalization.h"
 //#include "WorldMapScene.h"
-#include "PuzzleMapScene.h"
 #include "MaingameScene.h"
 #include "ItemBuyPopup.h"
 #include "CardSettingScene.h"
@@ -19,6 +17,7 @@
 #include "GachaPopup.h"
 #include "DurabilityNoti.h"
 #include "CardCase.h"
+#include "DownloadFile.h"
 
 enum SSP_Zorder{
 	kSSP_Z_gray = 1,
@@ -49,8 +48,6 @@ bool StageSettingPopup::init()
     {
         return false;
     }
-    
-	setKeypadEnabled(true);
 	
 	is_menu_enable = false;
 	
@@ -675,17 +672,4 @@ string StageSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_randomChange)		return_value = "randomChange";
 	
 	return return_value.c_str();
-}
-
-void StageSettingPopup::alertAction(int t1, int t2)
-{
-	if(t1 == 1 && t2 == 0)
-	{
-		CCDirector::sharedDirector()->end();
-	}
-}
-
-void StageSettingPopup::keyBackClicked()
-{
-	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(StageSettingPopup::alertAction));
 }

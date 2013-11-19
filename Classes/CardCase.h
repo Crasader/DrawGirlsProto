@@ -438,6 +438,8 @@ enum CARDCASE_Zorder{
 };
 
 enum CARDCASE_Tag{
+	kCARDCASE_Tag_passive = 1,
+	kCARDCASE_Tag_passive_content,
 	kCARDCASE_Tag_mounted_top = 10,
 	kCARDCASE_Tag_mounted_bottom,
 	kCARDCASE_Tag_mounted_left,
@@ -500,6 +502,8 @@ private:
 	CCLabelTTF* total_durability_label;
 	CCSprite* durability_case;
 	int selected_card_number;
+	string passive_content;
+	bool is_show_passive_content;
 	
 	void changeRecentDurabilityLabel(CCObject* sender)
 	{
@@ -508,6 +512,7 @@ private:
 	
 	void myInit(int t_selected_card_number)
 	{
+		is_show_passive_content = false;
 		selected_card_number = t_selected_card_number;
 		CCSprite* top_case = CCSprite::create("card_case_top.png");
 		top_case->setPosition(ccp(160,430));
@@ -610,6 +615,49 @@ private:
 //		dex_progress->runAction(dex_action);
 		
 		
+		string passive_string = NSDS_GS(kSDS_CI_int1_passive_s, t_selected_card_number).c_str();
+		
+		if(passive_string != "")
+		{
+			Json::Reader reader;
+			Json::Value passive_data;
+			reader.parse(passive_string, passive_data);
+			
+			string operator_string = passive_data["operator"].asString();
+			double ai_value = passive_data["ai"].asDouble();
+			double speed_value = passive_data["speed"].asDouble();
+			double scale_value = passive_data["scale"].asDouble();
+			double attackpercent_value = passive_data["attackpercent"].asDouble();
+			double hp_value = passive_data["hp"].asDouble();
+			double agi_value = passive_data["agi"].asDouble();
+			
+			passive_content = "몬스터 능력치 감소";
+			if(ai_value != 0.0)
+				passive_content += "\nai : " + operator_string + CCString::createWithFormat("%.0f", ai_value)->getCString();
+			if(speed_value != 0.0)
+				passive_content += "\nspeed : " + operator_string + CCString::createWithFormat("%.2f", speed_value)->getCString();
+			if(scale_value != 0.0)
+				passive_content += "\nscale : " + operator_string + CCString::createWithFormat("%.2f", scale_value)->getCString();
+			if(attackpercent_value != 0.0)
+				passive_content += "\nattack percent : " + operator_string + CCString::createWithFormat("%.2f", attackpercent_value)->getCString();
+			if(hp_value != 0.0)
+				passive_content += "\nhp : " + operator_string + CCString::createWithFormat("%.0f", hp_value)->getCString();
+			if(agi_value != 0.0)
+				passive_content += "\nagi : " + operator_string + CCString::createWithFormat("%.0f", agi_value)->getCString();
+			
+			CCSprite* n_passive = CCSprite::create("card_passive_button.png");
+			CCSprite* s_passive = CCSprite::create("card_passive_button.png");
+			s_passive->setColor(ccGRAY);
+			
+			CCMenuItem* passive_item = CCMenuItemSprite::create(n_passive, s_passive, this, menu_selector(CardCase::menuAction));
+			passive_item->setTag(kCARDCASE_Tag_passive);
+			
+			CCMenu* passive_menu = CCMenu::createWithItem(passive_item);
+			passive_menu->setPosition(ccp(275,32));
+			addChild(passive_menu, kCARDCASE_Z_data, kCARDCASE_Tag_passive);
+		}
+		
+		
 		string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, t_selected_card_number).c_str();
 		int missile_type_number = MissileDamageData::getMissileType(missile_type_code.c_str());
 		
@@ -642,6 +690,59 @@ private:
 		{
 			SpinUpgradeMissile* missile_img = SpinUpgradeMissile::create(type_name.c_str(), level_number, ccp(18,18), false);
 			option_case->addChild(missile_img, kCARDCASE_Z_data);
+		}
+	}
+	
+	void menuAction(CCObject* sender)
+	{
+		int tag = ((CCNode*)sender)->getTag();
+		
+		if(tag == kCARDCASE_Tag_passive)
+		{
+//			CCMenu* passive_menu = (CCMenu*)getChildByTag(kCARDCASE_Tag_passive);
+//			passive_menu->setEnabled(false);
+			
+			if(!is_show_passive_content)
+			{
+				is_show_passive_content = true;
+				CCSprite* n_passive_content = CCSprite::create("card_passive_case.png");
+				CCLabelTTF* n_content = CCLabelTTF::create(passive_content.c_str(), mySGD->getFont().c_str(), 15);
+				n_content->setHorizontalAlignment(kCCTextAlignmentCenter);
+				n_content->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+				n_content->setPosition(ccp(n_passive_content->getContentSize().width/2.f, n_passive_content->getContentSize().height/2.f));
+				n_passive_content->addChild(n_content);
+				
+				CCSprite* s_passive_content = CCSprite::create("card_passive_case.png");
+				s_passive_content->setColor(ccGRAY);
+				CCLabelTTF* s_content = CCLabelTTF::create(passive_content.c_str(), mySGD->getFont().c_str(), 15);
+				s_content->setHorizontalAlignment(kCCTextAlignmentCenter);
+				s_content->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+				s_content->setPosition(ccp(s_passive_content->getContentSize().width/2.f, s_passive_content->getContentSize().height/2.f));
+				s_passive_content->addChild(s_content);
+				
+				CCMenuItem* passive_content_item = CCMenuItemSprite::create(n_passive_content, s_passive_content, this, menu_selector(CardCase::menuAction));
+				passive_content_item->setTag(kCARDCASE_Tag_passive_content);
+				
+				CCMenu* passive_content_menu = CCMenu::createWithItem(passive_content_item);
+				passive_content_menu->setPosition(ccp(160, 100));
+				addChild(passive_content_menu, kCARDCASE_Z_data, kCARDCASE_Tag_passive_content);
+			}
+			else
+			{
+				is_show_passive_content = false;
+				removeChildByTag(kCARDCASE_Tag_passive_content);
+				
+//				CCMenu* passive_menu = (CCMenu*)getChildByTag(kCARDCASE_Tag_passive);
+//				passive_menu->setEnabled(true);
+			}
+		}
+		else if(tag == kCARDCASE_Tag_passive_content)
+		{
+			is_show_passive_content = false;
+			removeChildByTag(kCARDCASE_Tag_passive_content);
+			
+//			CCMenu* passive_menu = (CCMenu*)getChildByTag(kCARDCASE_Tag_passive);
+//			passive_menu->setEnabled(true);
 		}
 	}
 };

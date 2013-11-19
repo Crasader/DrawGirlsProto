@@ -43,8 +43,15 @@ private:
 	
 	void myInit(int t_stage, int t_grade)
 	{
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
 		gray = CCSprite::create("back_gray.png");
 		gray->setPosition(ccp(240,160));
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(myDSH->ui_top/320.f);
 		gray->setOpacity(0);
 		addChild(gray, kTakeCardPopup_Z_gray);
 		

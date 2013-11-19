@@ -172,10 +172,38 @@ public:
 	
 	bool isBoarder(){	return is_boarder;	}
 	
+	void startGetPieceAnimation(CCObject* t_create_particle, SEL_CallFuncCCp d_create_particle)
+	{
+		target_create_particle = t_create_particle;
+		delegate_create_particle = d_create_particle;
+		get_animation_mode = (PuzzleMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);
+		
+		CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.05f, 1.f, 0, 0, 90, 0, 0);
+		CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(StagePiece::myChangeAction));
+		CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.05f, 1.f, 0, -90, 90, 0, 0);
+		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(StagePiece::myChangeAction));
+		CCSequence* t_seq1 = CCSequence::create(t_orbit1, t_call1, t_orbit2, t_call2, NULL);
+		CCRepeat* t_repeat1 = CCRepeat::create(t_seq1, 10);
+		CCCallFunc* t_call4 = CCCallFunc::create(this, callfunc_selector(StagePiece::originalMode));
+		CCSequence* t_seq4 = CCSequence::createWithTwoActions(t_repeat1, t_call4);
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
+		CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(StagePiece::showParticle));
+		CCSequence* t_seq2 = CCSequence::create(t_delay1, t_call3, NULL);
+		CCRepeat* t_repeat2 = CCRepeat::create(t_seq2, 5);
+		CCSequence* t_seq3 = CCSequence::create(t_seq4, t_repeat2, NULL);
+		runAction(t_seq3);
+	}
+	
 	CCSprite* shadow_node;
 	
 private:
+	PuzzleMode get_animation_mode;
+	
 	GraySprite* piece_img;
+	
+	CCObject* target_create_particle;
+	SEL_CallFuncCCp delegate_create_particle;
 	
 	string piece_name;
 	int stage_number;
@@ -190,6 +218,22 @@ private:
 	bool is_have_card[3];
 	
 	ScrollMenu* s_menu;
+	
+	void originalMode()
+	{
+		setPuzzleMode((PuzzleMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode));
+	}
+	
+	void showParticle()
+	{
+		(target_create_particle->*delegate_create_particle)(getPosition());
+	}
+	
+	void myChangeAction()
+	{
+		get_animation_mode = (PuzzleMode)((get_animation_mode + 1)%(kPM_thumb+1));
+		setPuzzleMode(get_animation_mode);
+	}
 	
 	void myInit(string t_piece, int t_number, int t_level, CCPoint t_p, CCRect t_rect, bool t_gray, bool t_boarder, string t_type, CCObject* t_t, SEL_MenuHandler t_d)
 	{

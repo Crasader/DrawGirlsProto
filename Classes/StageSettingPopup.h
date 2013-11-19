@@ -78,9 +78,6 @@ private:
 	void hidePopup();
 	void endHidePopup();
 	
-	void alertAction(int t1, int t2);
-	virtual void keyBackClicked(void);
-	
 	CCPoint getContentPosition(int t_tag);
 	void popupClose();
 	

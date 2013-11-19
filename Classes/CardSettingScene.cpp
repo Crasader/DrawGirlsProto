@@ -434,6 +434,9 @@ void CardSettingScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCSS_MT_releaseCard)
 	{
+		mount_menu->removeFromParent();
+		mount_menu = NULL;
+		
 		removeMountedCase();
 		myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
 		
@@ -442,6 +445,17 @@ void CardSettingScene::menuAction(CCObject* pSender)
 			check_img->removeFromParent();
 			check_img = NULL;
 		}
+		
+		CCSprite* n_mount = CCSprite::create("card_mount.png");
+		CCSprite* s_mount = CCSprite::create("card_mount.png");
+		s_mount->setColor(ccGRAY);
+		
+		CCMenuItem* mount_item = CCMenuItemSprite::create(n_mount, s_mount, this, menu_selector(CardSettingScene::menuAction));
+		mount_item->setTag(kCSS_MT_mountCard);
+		
+		mount_menu = CCMenu::createWithItem(mount_item);
+		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
+		addChild(mount_menu, kCSS_Z_content);
 		
 		is_menu_enable = true;
 	}

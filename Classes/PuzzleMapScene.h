@@ -1093,6 +1093,14 @@ private:
 	void showStageSettingPopup();
 	void hideStageSettingPopup();
 	
+	void showClearPopup();
+	void hideClearPopup();
+	void showGetPuzzle();
+	void createGetPuzzleParticle(CCPoint t_point);
+	void endGetPuzzle();
+	void showFailPopup();
+	void hideFailPopup();
+	
 	virtual void registerWithTouchDispatcher(void);
 	
 	PuzzleListView* puzzle_list_view;

@@ -10,7 +10,7 @@
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
 #include "StageImgLoader.h"
-#include "ClearScene.h"
+#include "PuzzleMapScene.h"
 #include "utf8.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
@@ -192,7 +192,8 @@ void ZoomScript::menuAction(CCObject *sender)
 		}
 		else
 		{
-			CCDirector::sharedDirector()->replaceScene(ClearScene::scene());
+			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
+			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 		}
 	}
 }

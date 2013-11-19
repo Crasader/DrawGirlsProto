@@ -17,7 +17,6 @@
 #include "Cumber.h"
 #include "PlayUI.h"
 #include "AttackItem.h"
-#include "ClearScene.h"
 #include "FailScene.h"
 #include "ControlType.h"
 #include "ClearShowTime.h"
@@ -403,8 +402,8 @@ private:
 		}
 		else
 		{
-			
-			CCDirector::sharedDirector()->replaceScene(FailScene::scene());
+			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
+			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 		}
 	}
 	
