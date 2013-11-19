@@ -253,7 +253,7 @@ void KSJuniorBase::randomPosition()
 {
 	IntPoint mapPoint;
 	bool finded;
-	getRandomPosition(&mapPoint, &finded);
+	getRandomPositionToJack(&mapPoint, &finded);
 	
 	
 	//	myGD->setMainCumberPoint(mapPoint);

@@ -9,7 +9,7 @@
 #include "KSCumberBase.h"
 #include "Jack.h"
 #include "PlayUI.h"
-
+#include <chrono>
 
 
 void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
@@ -1395,6 +1395,131 @@ void KSCumberBase::bossDieBomb(float dt)
 	}
 }
 
+
+void KSCumberBase::getRandomPositionToJack(IntPoint* ip, bool* finded)
+{
+//	chrono::time_point<chrono::system_clock> start, end;
+//	start = chrono::system_clock::now();
+	//	chrono::duration<double> elapsed_seconds;
+	//	start = chrono::system_clock::now();
+	bool isGoodPointed = false;
+	IntPoint jackPoint = myGD->getJackPoint();
+//	auto comp1 = [jackPoint](const IntPoint& a, const IntPoint& b ) {
+//		auto _a = (jackPoint - a).length();
+//		auto _b = (jackPoint - b).length();
+//		if(_a < 50)
+//			return false;
+////		if(_b < 50)
+////			_b = 99999999;
+//		return _a > _b;
+//	};
+//	priority_queue<IntPoint, std::vector<IntPoint>, decltype(comp1) > shuffledPositions(comp1);
+//	std::vector<IntPoint>
+//	priority_queue<IntPoint> shuffledPositions;
+	IntPoint mapPoint;
+	vector<IntPoint> shuffledPositions;
+	for(int x = 1; x <= mapLoopRange::mapWidthInnerEnd - 1; x+=5)
+	{
+		for(int y = 1; y <= mapLoopRange::mapHeightInnerEnd - 1; y+=5)
+		{
+			if(myGD->mapState[x][y] == mapEmpty)
+				shuffledPositions.push_back(IntPoint(x, y));
+		}
+	}
+//	end = chrono::system_clock::now();
+//	KS::KSLog("s1 %", chrono::duration_cast<chrono::milliseconds>(end - start).count());
+//	start = chrono::system_clock::now();
+	std::sort(shuffledPositions.begin(), shuffledPositions.end(), [jackPoint](const IntPoint& a, const IntPoint& b ) {
+				auto _a = (jackPoint - a).length();
+				auto _b = (jackPoint - b).length();
+		
+				if(_a < 35)
+					return false;
+		////		if(_b < 50)
+		////			_b = 99999999;
+		return _a < _b;
+	});
+	
+//	end = chrono::system_clock::now();
+//	KS::KSLog("s2 %", chrono::duration_cast<chrono::milliseconds>(end - start).count());
+//	random_shuffle(shuffledPositions.begin(), shuffledPositions.end(), [=](int n){
+//		return this->m_well512.GetValue(n-1);
+//	});
+	int retryLimit = 5;
+	auto copiedObject = shuffledPositions;
+	
+	while(retryLimit)
+	{
+		for(const auto& mp : shuffledPositions)
+//		while(copiedObject.empty() == false)
+		{
+//			auto mp = copiedObject.top();
+//			copiedObject.pop();
+		
+			mapPoint = mp;
+			
+			float myScale = getCumberScale();
+			if(mapPoint.isInnerMap() && myGD->mapState[mapPoint.x][mapPoint.y] == mapEmpty)
+			{
+				float half_distance = getRadius()*myScale; // 20.f : radius for base scale 1.f
+				float calc_distance;
+				IntPoint check_position;
+				
+				bool is_not_position = false;
+				
+				for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
+				{
+					for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
+					{
+						calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
+						if(calc_distance < half_distance)
+						{
+							check_position = IntPoint(i,j);
+							if(!check_position.isInnerMap() || myGD->mapState[check_position.x][check_position.y] != mapEmpty)
+							{
+								is_not_position = true;
+							}
+						}
+					}
+				}
+				if(!is_not_position)
+				{
+					isGoodPointed = true;
+					break;
+				}
+			}
+		}
+		
+		if(isGoodPointed == false)
+		{
+			retryLimit--; // retryLimit 만큼 스케일을 줄여서 탐색해봄.
+			m_scale.scale.init(m_scale.scale.getValue() / 2, m_scale.scale.getValue() / 2, 0.f);
+		}
+		else
+			break;
+	}
+	
+	
+	if(isGoodPointed == true)
+	{
+		*ip = mapPoint;
+		*finded = true;
+		//		CCLog("map point %d %d", mapPoint.x, mapPoint.y);
+		//		CCLog("scale %f", m_headImg->getScale());
+		//		CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
+		//		m_headImg->runAction(t_scale);
+		//		myGD->setMainCumberPoint(mapPoint);
+		//
+		//		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
+	}
+	else
+	{
+		*finded = false;
+		// nothing.
+		CCAssert(false, "");
+	}
+
+}
 void KSCumberBase::getRandomPosition(IntPoint* ip, bool* finded)
 {
 	bool isGoodPointed = false;

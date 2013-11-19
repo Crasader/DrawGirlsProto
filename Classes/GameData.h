@@ -201,7 +201,11 @@ public:
 	{
 		x = y = IntPointValueIsNULL;
 	}
-	
+	IntPoint(const IntPoint& ip)
+	{
+		x = ip.x;
+		y = ip.y;
+	}
 	IntPoint(int t_x, int t_y)
 	{
 		x = t_x;

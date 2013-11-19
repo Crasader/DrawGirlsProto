@@ -525,6 +525,7 @@ public:
 		return closedBoss;
 	}
 	void getRandomPosition(IntPoint* ip, bool* finded);
+	void getRandomPositionToJack(IntPoint* ip, bool* finded);
 	virtual float getRadius() = 0;
 	float aiProbAdder(){
 		return (0.02f + (0.5f - 0.02f) * getAiValue() / 100.f)/100.f;
