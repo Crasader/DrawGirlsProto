@@ -4035,6 +4035,7 @@ public:
 		Json::Value pattern;
 		reader.parse(patternData, pattern);
 		m_cumber = cb;
+		m_totalFrame = pattern.get("totalframe", 180).asInt();
 		scheduleUpdate();
 	}
 	virtual void stopMyAction()
@@ -4048,12 +4049,13 @@ public:
 	}
 	void update(float dt)
 	{
-		AlongOfTheLine* ap = AlongOfTheLine::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()));
+		AlongOfTheLine* ap = AlongOfTheLine::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), m_totalFrame);
 		addChild(ap);
 		stopMyAction();
 	}
 protected:
 	KSCumberBase* m_cumber;
+	int m_totalFrame;
 };
 
 class KSSpecialAttackPattern18 : public AttackPattern

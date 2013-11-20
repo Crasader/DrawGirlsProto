@@ -218,7 +218,8 @@ enum MessageRecvType
 	kHeart = 1,
 	kChallenge,
 	kHelpRequest,
-	kTicketRequest
+	kTicketRequest,
+	kInvite
 };
 #define SHOP_KEY	0xD9
 

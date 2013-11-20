@@ -1,10 +1,10 @@
 #include "MissileUnit.h"
 
 
-void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition)
+void AlongOfTheLine::myInit(CCPoint cumberPosition, CCPoint jackPosition, int totalFrame)
 {
 	m_step = 1;
-	m_totalFrame = 600;
+	m_totalFrame = totalFrame;
 	
 	vector<IntPoint> oldLines;
 	for(int y=0; y<mapLoopRange::mapHeightInnerEnd; y++)

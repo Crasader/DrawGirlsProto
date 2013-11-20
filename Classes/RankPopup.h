@@ -24,6 +24,7 @@
 #include "CardCase.h"
 #include "DownloadFile.h"
 #include "StarGoldData.h"
+#include "InviteEventPopup.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -166,7 +167,10 @@ public:
 		t_rp->autorelease();
 		return t_rp;
 	}
-	
+	virtual ~RankPopup()
+	{
+		StageImgLoader::sharedInstance()->removeTD();
+	}
 	void finishedOpen(){
 		loadRank();
 	}
@@ -174,12 +178,13 @@ public:
 	void finishedClose(){
 		
 		(target_close->*delegate_close)();
-		StageImgLoader::sharedInstance()->removeTD();
+		
 		removeFromParent();
 	}
 	
 	int getHeartIsSendable(std::string userId, int base_s = 60 * 60 * 24)
 	{
+		return true;
 		auto end = chrono::system_clock::now();
 		auto currentSecond = chrono::system_clock::to_time_t(end);
 		int ii = myDSH->getUserIntForStr("heart_" + userId, 0);
@@ -241,6 +246,19 @@ public:
 																															 });
 		closeBtn->setPosition(ccp(440, 290));
 		_menu->addChild(closeBtn);
+		CCMenuItemLambda* inviteEventBtn = CCMenuItemImageLambda::create(
+																															 "rank_default_invite.png", "rank_default_invite.png",
+																															 [=](CCObject*){
+//																																 (target_close->*delegate_close)();
+																																 
+																																 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
+																																 getParent()->addChild(t_rp, this->getZOrder());
+																																 removeFromParent();
+																																 
+																															 });
+		inviteEventBtn->setPosition(ccp(380, 290));
+		
+		_menu->addChild(inviteEventBtn);
 		
 		loadRank();
 	}
@@ -455,7 +473,7 @@ public:
 		
 		
 		
-		std::string cellBackFile = "ui_rank_cell_back.png";
+		std::string cellBackFile = "rank_cell.png";
 			
 		
 		CCSprite* bg = CCSprite::create(cellBackFile.c_str());
@@ -482,8 +500,8 @@ public:
 		{
 			sendBtn = CCMenuItemImageLambda::create
 			("rank_cell_send.png", "rank_cell_send.png",
-			 [=](CCObject* _obj){
-				 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(_obj);
+			 [=](CCObject* sender){
+				 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 				 int idx = (int)obj->getUserData();
 				 ////////////////////////////////
 				 // 쪽지보내기 - HSP
@@ -497,21 +515,20 @@ public:
 				 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 				 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-				 p["receiverMemberID"]=m_scoreList[idx]["user_id"].asString();
+				 std::string recvId = m_scoreList[idx]["user_id"].asString();
+				 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' 제거
+				 p["receiverMemberID"] = recvId;
 				 p["senderMemberID"]=hspConnector::get()->getKakaoID();
-				 p["type"]=1;
+				 p["type"]=kHeart;
 
 				 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
 																			{
-																				
 																				//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
 																				//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 																				//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-																				
-																				
 																				GraphDogLib::JsonToLog("sendMessage", r);
 																				this->setHeartSendTime(m_scoreList[idx]["user_id"].asString());
-																				sendBtn->removeFromParent();
+																				obj->removeFromParent();
 																				
 																				CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
 																																								[](CCObject*){});
@@ -526,7 +543,7 @@ public:
 																				hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
 																																					{
 																																						GraphDogLib::JsonToLog("kSendMessage", r);
-																																						this->closePopup(0,0);
+//																																						this->closePopup(0,0);
 																																					});
 																			});
 			 });
@@ -926,10 +943,15 @@ public:
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell){
 		
 		int selectedCardIndex = 0;
-		int highScore = 71234;
+		int highScore = 0;
 		// 나를 클릭함.
 		if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
 		{
+			Json::Reader reader;
+			Json::Value data;
+			reader.parse(m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString(), data);
+			highScore = data.get("allhighscore", 0).asInt();
+			
 			selectedCardIndex = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 자기 카드 번호.
 		}
 		else
@@ -938,8 +960,9 @@ public:
 			Json::Value data;
 			reader.parse(m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString(), data);
 			//		Json::Value data = m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString()
+			KS::KSLog("%", data);
 			selectedCardIndex = data.get("selectedcard", 0).asInt();
-			highScore = data.get("highscore", 71234).asInt();
+			highScore = data.get("allhighscore", 0).asInt();
 		}
 		CCLog("card Number %d", selectedCardIndex); // 영호
 		auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, selectedCardIndex);

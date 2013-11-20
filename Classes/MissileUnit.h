@@ -2960,14 +2960,14 @@ protected:
 class AlongOfTheLine : public CCNode
 {
 public:
-	static AlongOfTheLine* create(CCPoint cumberPosition, CCPoint jackPosition)
+	static AlongOfTheLine* create(CCPoint cumberPosition, CCPoint jackPosition, int totalFrame)
 	{
 		AlongOfTheLine* t_bf = new AlongOfTheLine();
-		t_bf->myInit(cumberPosition, jackPosition);
+		t_bf->myInit(cumberPosition, jackPosition, totalFrame);
 		t_bf->autorelease();
 		return t_bf;
 	}
-	void myInit(CCPoint cumberPosition, CCPoint jackPosition);
+	void myInit(CCPoint cumberPosition, CCPoint jackPosition, int totalFrame);
 	
 	void setTwoStep()
 	{
