@@ -2,8 +2,22 @@
 //
 
 #include "MissileUnit.h"
+
+
+#include "StarGoldData.h"
+
+
+#include "KSUtil.h"
+
+#include "ProbSelector.h"
+
+
+#include "KSUtil.h"
+#include "cocos2d.h"
+#include "cocos-ext.h"
+
 #define LZZ_INLINE inline
-using namespace cocos2d;
+
 using namespace std;
 using namespace placeholders;
 static ProbSelector randomObj = {9, 1};

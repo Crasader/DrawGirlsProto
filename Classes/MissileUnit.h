@@ -4,29 +4,24 @@
 #ifndef LZZ_MissileUnit_h
 #define LZZ_MissileUnit_h
 #include "cocos2d.h"
-#include "GameData.h"
-#include <queue>
-#include <map>
-#include "StarGoldData.h"
 #include "cocos-ext.h"
+#include "GameData.h"
 #include "FromTo.h"
-#include "KSUtil.h"
 #include "Well512.h"
-#include "ProbSelector.h"
 #include <unordered_map>
 #include <queue>
+#include <map>
 #include <functional>
 #include <set>
-#include "KSUtil.h"
-
 USING_NS_CC_EXT;
+USING_NS_CC;
 #define MAX_SCALE_X	10.f
 #define ADD_SCALE_X	2.5f
 #define LZZ_INLINE inline
 class MissileUnit : public CCSprite
 {
 public:
-  static MissileUnit * create (CCPoint t_sp, float t_angle, float t_distance, string imgFilename, CCSize t_cs, float t_da, float t_reduce_da);
+  static MissileUnit * create (CCPoint t_sp, float t_angle, float t_distance, std::string imgFilename, CCSize t_cs, float t_da, float t_reduce_da);
 private:
   float angle;
   float distance;
@@ -44,7 +39,7 @@ private:
 class MissileUnit2 : public CCSprite
 {
 public:
-  static MissileUnit2 * create (CCPoint t_sp, float t_angle, float t_distance, string imgFilename, CCSize t_cs, float t_da, float t_reduce_da);
+  static MissileUnit2 * create (CCPoint t_sp, float t_angle, float t_distance, std::string imgFilename, CCSize t_cs, float t_da, float t_reduce_da);
 private:
   float angle;
   float distance;
