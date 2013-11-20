@@ -749,6 +749,219 @@ void CollectionBookPopup::startNextPage()
 	schedule(schedule_selector(CollectionBookPopup::ingPage));
 }
 
+void CollectionBookPopup::startNextFullSelectedPage()
+{
+	setTouchEnabled(false);
+	is_touch_enable = false;
+	
+	after_right_img->removeFromParent();
+	after_right_img = NULL;
+	
+	after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
+	after_right_img->setAnchorPoint(ccp(0.f,0.5f));
+	after_right_img->setPosition(ccp(240,160));
+	main_case->addChild(after_right_img, kCBP_Z_after);
+	
+	setRightPage(after_right_img, mySGD->selected_collectionbook);
+	
+	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	if(after_right_img->getChildByTag(kCBP_MT_second))
+		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
+	if(after_right_img->getChildByTag(kCBP_MT_third))
+		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
+	
+	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+	a_s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+	a_pre_item->setTag(kCBP_MT_pre);
+	
+	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+	a_pre_menu->setEnabled(false);
+	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+	
+	CCSprite* a_n_next = CCSprite::create("diary_right.png");
+	CCSprite* a_s_next = CCSprite::create("diary_right.png");
+	a_s_next->setColor(ccGRAY);
+	
+	CCMenuItem* a_next_item = CCMenuItemSprite::create(a_n_next, a_s_next, this, menu_selector(CollectionBookPopup::menuAction));
+	a_next_item->setTag(kCBP_MT_next);
+	
+	CCMenu* a_next_menu = CCMenu::createWithItem(a_next_item);
+	a_next_menu->setPosition(getContentPosition(kCBP_MT_next));
+	a_next_menu->setEnabled(false);
+	after_right_img->addChild(a_next_menu, 1, kCBP_MT_next);
+	
+	
+	animation_angle = 0;
+	animation_img = recent_right_img;
+	touch_direction = 1;
+	touch_end_direction = -1;
+	end_animation_delegate = callfunc_selector(CollectionBookPopup::startNextSelectedPage);
+	
+	schedule(schedule_selector(CollectionBookPopup::ingPageFull));
+}
+
+void CollectionBookPopup::startPreFullSelectedPage()
+{
+	setTouchEnabled(false);
+	is_touch_enable = false;
+	
+	after_left_img->removeFromParent();
+	after_left_img = NULL;
+	
+	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
+	after_left_img->setAnchorPoint(ccp(1.f,0.5f));
+	after_left_img->setPosition(ccp(240,160));
+	main_case->addChild(after_left_img, kCBP_Z_after);
+	
+	setLeftPage(after_left_img, mySGD->selected_collectionbook);
+	
+	
+	animation_angle = 0;
+	animation_img = recent_left_img;
+	touch_direction = -1;
+	touch_end_direction = -1;
+	end_animation_delegate = callfunc_selector(CollectionBookPopup::startPreSelectedPage);
+	
+	schedule(schedule_selector(CollectionBookPopup::ingPageFull));
+}
+
+void CollectionBookPopup::startPreSelectedPage()
+{
+	recent_left_img->removeFromParent();
+	recent_left_img = after_left_img;
+	after_left_img = NULL;
+	
+	reorderChild(recent_left_img, kCBP_Z_recent);
+	
+	recent_card_number = mySGD->selected_collectionbook;
+	
+	covered_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
+	covered_right_img->setAnchorPoint(ccp(0.f,0.5f));
+	covered_right_img->setPosition(ccp(240,160));
+	main_case->addChild(covered_right_img, kCBP_Z_cover);
+	
+	setRightPage(covered_right_img, recent_card_number);
+	
+	string input_data = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number).c_str();
+    if(input_data == "")
+        input_data = "입력해주세요.";
+    
+    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(170,40), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 12);
+    input_text->setPosition(getContentPosition(kCBP_MT_inputText));
+    input_text->setAnchorPoint(ccp(0.5,0.5));
+    covered_right_img->addChild(input_text);
+    
+    if(input_data != "입력해주세요.")
+        input_text->setString(input_data.c_str());
+    
+    input_text->setDelegate(this);
+	
+	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	
+	if(covered_right_img->getChildByTag(kCBP_MT_second))
+		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
+	if(covered_right_img->getChildByTag(kCBP_MT_third))
+		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
+	
+	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+	a_s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+	a_pre_item->setTag(kCBP_MT_pre);
+	
+	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+	a_pre_menu->setEnabled(false);
+	covered_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+	
+	CCSprite* a_n_next = CCSprite::create("diary_right.png");
+	CCSprite* a_s_next = CCSprite::create("diary_right.png");
+	a_s_next->setColor(ccGRAY);
+	
+	CCMenuItem* a_next_item = CCMenuItemSprite::create(a_n_next, a_s_next, this, menu_selector(CollectionBookPopup::menuAction));
+	a_next_item->setTag(kCBP_MT_next);
+	
+	CCMenu* a_next_menu = CCMenu::createWithItem(a_next_item);
+	a_next_menu->setPosition(getContentPosition(kCBP_MT_next));
+	a_next_menu->setEnabled(false);
+	covered_right_img->addChild(a_next_menu, 1, kCBP_MT_next);
+	
+	
+	animation_angle = 90.f;
+	
+	covered_right_img->setSkewY(animation_angle/4.f);
+	covered_right_img->setScaleX(cosf(animation_angle/180.f*M_PI));
+	
+	animation_img = covered_right_img;
+	end_animation_delegate = callfunc_selector(CollectionBookPopup::endPrePage);
+	
+	touch_end_direction = 1;
+	
+	schedule(schedule_selector(CollectionBookPopup::ingPage));
+}
+
+void CollectionBookPopup::startNextSelectedPage()
+{
+	recent_right_img->removeFromParent();
+	recent_right_img = after_right_img;
+	after_right_img = NULL;
+	
+	reorderChild(recent_right_img, kCBP_Z_recent);
+	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
+	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
+	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
+	
+	if(recent_right_img->getChildByTag(kCBP_MT_second))
+		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second))->setEnabled(true);
+	if(recent_right_img->getChildByTag(kCBP_MT_third))
+		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
+	
+	
+	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
+	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
+	covered_left_img->setPosition(ccp(240,160));
+	main_case->addChild(covered_left_img, kCBP_Z_cover);
+	
+	recent_card_number = mySGD->selected_collectionbook;
+	
+	string input_data = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number).c_str();
+    if(input_data == "")
+        input_data = "입력해주세요.";
+    
+    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(170,40), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 12);
+    input_text->setPosition(getContentPosition(kCBP_MT_inputText));
+    input_text->setAnchorPoint(ccp(0.5,0.5));
+    recent_right_img->addChild(input_text);
+    
+    if(input_data != "입력해주세요.")
+        input_text->setString(input_data.c_str());
+    
+    input_text->setDelegate(this);
+	
+	setLeftPage(covered_left_img, recent_card_number);
+	
+	
+	animation_angle = 90.f;
+	
+	covered_left_img->setSkewY(animation_angle/4.f);
+	covered_left_img->setScaleX(cosf(animation_angle/180.f*M_PI));
+	
+	animation_img = covered_left_img;
+	end_animation_delegate = callfunc_selector(CollectionBookPopup::endNextPage);
+	
+	touch_end_direction = 1;
+	
+	schedule(schedule_selector(CollectionBookPopup::ingPage));
+}
+
 void CollectionBookPopup::ingPage()
 {
 	animation_angle -= 3.f;
@@ -1040,11 +1253,9 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 		
 		mySGD->selected_collectionbook = t_tag;
 		
-		CollectionBookPopup* t_popup = CollectionBookPopup::create();
-		t_popup->setHideFinalAction(target_final, delegate_final);
-		getParent()->addChild(t_popup, kPMS_Z_popup);
-		
-		target_final = NULL;
-		hidePopup();
+		if(t_tag > recent_card_number)
+			startNextFullSelectedPage();
+		else if(t_tag < recent_card_number)
+			startPreFullSelectedPage();
 	}
 }

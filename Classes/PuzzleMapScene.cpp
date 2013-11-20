@@ -151,6 +151,7 @@ void PuzzleMapScene::startSceneSetting()
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
 	{
+		is_from_call_map_mode = true;
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
@@ -173,6 +174,7 @@ void PuzzleMapScene::startSceneSetting()
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
+		is_from_call_map_mode = true;
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
@@ -198,6 +200,7 @@ void PuzzleMapScene::startSceneSetting()
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
 	{
+		is_from_call_map_mode = true;
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
 		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
@@ -220,10 +223,6 @@ void PuzzleMapScene::startSceneSetting()
 		is_menu_enable = true;
 		
 		showFailPopup();
-	}
-	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_getPiece)
-	{
-		
 	}
 }
 
@@ -1142,6 +1141,7 @@ void PuzzleMapScene::startChangeUiMode()
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 	is_gesturable_map_mode = false;
 	map_mode_state = kMMS_changeMode;
+	is_from_call_map_mode = false;
 	
 	resetStagePiece();
 	
@@ -1207,6 +1207,8 @@ void PuzzleMapScene::startChangeMapMode()
 {
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 	map_mode_state = kMMS_changeMode;
+	
+	is_from_call_map_mode = true;
 	
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
@@ -1429,8 +1431,10 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 		{
 			if(map_mode_state == kMMS_notLoadMode)
 			{
-				removeChildByTag(kPMS_MT_loadingBack);
-				removeChildByTag(kPMS_MT_loadPuzzleInfo);
+				if(getChildByTag(kPMS_MT_loadingBack))
+					removeChildByTag(kPMS_MT_loadingBack);
+				if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+					removeChildByTag(kPMS_MT_loadPuzzleInfo);
 			}
 			
 			recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
@@ -1511,8 +1515,10 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 		{
 			if(map_mode_state == kMMS_notLoadMode)
 			{
-				removeChildByTag(kPMS_MT_loadingBack);
-				removeChildByTag(kPMS_MT_loadPuzzleInfo);
+				if(getChildByTag(kPMS_MT_loadingBack))
+					removeChildByTag(kPMS_MT_loadingBack);
+				if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+					removeChildByTag(kPMS_MT_loadPuzzleInfo);
 			}
 			
 			recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
@@ -1579,8 +1585,10 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 			startChangeFrameMode();
 		else if(map_mode_state == kMMS_notLoadMode)
 		{
-			removeChildByTag(kPMS_MT_loadingBack);
-			removeChildByTag(kPMS_MT_loadPuzzleInfo);
+			if(getChildByTag(kPMS_MT_loadingBack))
+				removeChildByTag(kPMS_MT_loadingBack);
+			if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+				removeChildByTag(kPMS_MT_loadPuzzleInfo);
 			
 			startChangeFrameMode();
 		}
@@ -1718,8 +1726,7 @@ void PuzzleMapScene::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				for(int i=start_stage_number;i<start_stage_number+stage_count && touched_stage_number == 0;i++)
 				{
 					StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-					
-					if(t_sp->touchBegan(touch, pEvent))
+					if(t_sp && t_sp->touchBegan(touch, pEvent))
 						//						if(t_sp->isInnerRect(convert_location))
 					{
 						touched_stage_number = t_sp->getStageNumber();
@@ -2035,8 +2042,10 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						
 						if(is_found && found_index <= puzzle_count)
 						{
-							removeChildByTag(kPMS_MT_loadingBack);
-							removeChildByTag(kPMS_MT_loadPuzzleInfo);
+							if(getChildByTag(kPMS_MT_loadingBack))
+								removeChildByTag(kPMS_MT_loadingBack);
+							if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+								removeChildByTag(kPMS_MT_loadPuzzleInfo);
 							
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
 							
@@ -2219,6 +2228,179 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						touchStart_p = location;
 						startChangeUiMode();
 						return;
+					}
+					else if(map_node->getScale() <= minimum_scale)
+					{
+						if(location.x < touchStart_p.x - 50.f)
+						{
+							int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+							bool is_found = false;
+							int found_index = -1;
+							for(int i=0;i<puzzle_count && !is_found;i++)
+							{
+								int t_puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
+								if(recent_puzzle_number+1 == t_puzzle_no)
+								{
+									is_found = true;
+									found_index = i+1;
+									break;
+								}
+							}
+							
+							touchStart_p = location;
+							
+							if(is_found && found_index <= puzzle_count)
+							{
+								recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
+								
+								if(getChildByTag(kPMS_MT_loadingBack))
+									removeChildByTag(kPMS_MT_loadingBack);
+								if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+									removeChildByTag(kPMS_MT_loadPuzzleInfo);
+								
+								map_mode_state = kMMS_changeMode;
+								is_menu_enable = false;
+								
+								after_map_node = createMapNode();
+								after_map_node->getCamera()->setEyeXYZ(0, 0.f, 2.f);
+								after_map_node->setScale(1.f);
+								after_map_node->setPosition(ccp(240+480,160));
+								main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
+								
+								if(after_map_node->getTag() == kPMS_MT_loaded)
+								{
+									after_map_node->setTag(-1);
+									
+									cachingPuzzleImg2();
+									//								switchMapNode(after_map_node);
+									
+									CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
+									CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
+									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endLoadedMovingMapNode));
+									CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+									
+									map_node->runAction(t_move1);
+									after_map_node->runAction(t_seq);
+								}
+								else
+								{
+									after_map_node->setTag(-1);
+									CCSprite* loading_back = CCSprite::create("whitePaper.png");
+									loading_back->setColor(ccGRAY);
+									loading_back->setOpacity(100);
+									loading_back->setPosition(ccp(240,160));
+									addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
+									
+									CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(-480,0));
+									CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(-480,0));
+									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
+									CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+									
+									map_node->runAction(t_move1);
+									after_map_node->runAction(t_seq);
+								}
+							}
+							else
+							{
+								CCLog("nothing next puzzle!!!");
+								
+								original_mms = kMMS_firstTouchDefault;
+								
+								map_mode_state = kMMS_changeMode;
+								is_menu_enable = false;
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.2f, ccp(-40,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.1f, ccp(40,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endTingMapNode));
+								CCSequence* t_seq = CCSequence::create(t_move1, t_move2, t_call, NULL);
+								map_node->runAction(t_seq);
+							}
+						}
+						else if(location.x > touchStart_p.x + 50.f)
+						{
+							int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+							bool is_found = false;
+							int found_index = -1;
+							for(int i=0;i<puzzle_count && !is_found;i++)
+							{
+								int t_puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
+								if(recent_puzzle_number-1 == t_puzzle_no)
+								{
+									is_found = true;
+									found_index = i+1;
+									break;
+								}
+							}
+							
+							touchStart_p = location;
+							
+							if(is_found)
+							{
+								recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
+								
+								if(getChildByTag(kPMS_MT_loadingBack))
+									removeChildByTag(kPMS_MT_loadingBack);
+								if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+									removeChildByTag(kPMS_MT_loadPuzzleInfo);
+								
+								map_mode_state = kMMS_changeMode;
+								is_menu_enable = false;
+								
+								after_map_node = createMapNode();
+								after_map_node->getCamera()->setEyeXYZ(0, 0.f, 2.f);
+								after_map_node->setScale(1.f);
+								after_map_node->setPosition(ccp(240-480,160));
+								main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
+								
+								if(after_map_node->getTag() == kPMS_MT_loaded)
+								{
+									after_map_node->setTag(-1);
+									
+									cachingPuzzleImg2();
+									//								switchMapNode(after_map_node);
+									
+									CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
+									CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
+									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endLoadedMovingMapNode));
+									CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+									
+									map_node->runAction(t_move1);
+									after_map_node->runAction(t_seq);
+								}
+								else
+								{
+									after_map_node->setTag(-1);
+									CCSprite* loading_back = CCSprite::create("whitePaper.png");
+									loading_back->setColor(ccGRAY);
+									loading_back->setOpacity(100);
+									loading_back->setPosition(ccp(240,160));
+									addChild(loading_back, kPMS_Z_popup, kPMS_MT_loadingBack);
+									
+									CCMoveBy* t_move1 = CCMoveBy::create(0.4f, ccp(480,0));
+									CCMoveBy* t_move2 = CCMoveBy::create(0.5f, ccp(480,0));
+									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endMovingMapNode));
+									CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_call);
+									
+									map_node->runAction(t_move1);
+									after_map_node->runAction(t_seq);
+								}
+							}
+							else
+							{
+								CCLog("nothing pre puzzle!!!");
+								
+								original_mms = kMMS_firstTouchDefault;
+								
+								map_mode_state = kMMS_changeMode;
+								is_menu_enable = false;
+								
+								CCMoveBy* t_move1 = CCMoveBy::create(0.2f, ccp(40,0));
+								CCMoveBy* t_move2 = CCMoveBy::create(0.1f, ccp(-40,0));
+								CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::endTingMapNode));
+								CCSequence* t_seq = CCSequence::create(t_move1, t_move2, t_call, NULL);
+								map_node->runAction(t_seq);
+							}
+						}
 					}
 				}
 				else if(multiTouchData.size() == 2)

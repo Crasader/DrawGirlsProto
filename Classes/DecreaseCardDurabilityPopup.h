@@ -48,6 +48,9 @@ public:
 	void startSlowRemoveCard()
 	{
 		stopAllActions();
+		unschedule(schedule_selector(RemoveCardSprite::slowRemovingCard));
+		unschedule(schedule_selector(RemoveCardSprite::fastRemovingCard));
+		unschedule(schedule_selector(RemoveCardSprite::recoveringCard));
 		
 		CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
 		
@@ -81,6 +84,9 @@ public:
 	void startFastRemoveCard()
 	{
 		stopAllActions();
+		unschedule(schedule_selector(RemoveCardSprite::slowRemovingCard));
+		unschedule(schedule_selector(RemoveCardSprite::fastRemovingCard));
+		unschedule(schedule_selector(RemoveCardSprite::recoveringCard));
 		
 		CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
 		
@@ -114,6 +120,9 @@ public:
 	void startRecovery()
 	{
 		stopAllActions();
+		unschedule(schedule_selector(RemoveCardSprite::slowRemovingCard));
+		unschedule(schedule_selector(RemoveCardSprite::fastRemovingCard));
+		unschedule(schedule_selector(RemoveCardSprite::recoveringCard));
 		
 		CCSize rSize = myDSH->getDesignResolutionSize(); // getSize
 		
@@ -180,7 +189,6 @@ private:
 		if(ing_frame >= 55)
 		{
 			unschedule(schedule_selector(RemoveCardSprite::fastRemovingCard));
-			removeFromParent();
 		}
 	}
 	
