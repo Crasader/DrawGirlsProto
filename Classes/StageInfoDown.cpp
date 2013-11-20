@@ -418,3 +418,85 @@ void StageInfoDown::registerWithTouchDispatcher()
 {
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -180, true);
 }
+
+StageInfoDown* StageInfoDown::create( CCObject* t_success, SEL_CallFunc d_success, CCObject* t_cancel, SEL_CallFunc d_cancel )
+{
+	StageInfoDown* t_sid = new StageInfoDown();
+	t_sid->myInit(t_success, d_success, t_cancel, d_cancel);
+	t_sid->autorelease();
+	return t_sid;
+}
+
+void StageInfoDown::myInit( CCObject* t_success, SEL_CallFunc d_success, CCObject* t_cancel, SEL_CallFunc d_cancel )
+{
+	target_success = t_success;
+	delegate_success = d_success;
+	target_cancel = t_cancel;
+	delegate_cancel = d_cancel;
+
+	CCSprite* t_back = CCSprite::create("back_gray.png");
+	t_back->setPosition(ccp(240,160));
+	addChild(t_back, kSID_Z_back);
+
+	CCMenuItem* cancel_item = CCMenuItemImage::create("sspl_cancel.png", "sspl_cancel.png", this, menu_selector(StageInfoDown::menuAction));
+	cancel_item->setTag(kSID_MT_cancel);
+
+	cancel_menu = CCMenu::createWithItem(cancel_item);
+	cancel_menu->setPosition(ccp(350, 240));
+	addChild(cancel_menu, kSID_Z_content);
+
+	state_ment = CCLabelTTF::create("스테이지 정보를 받아오는 ing...", mySGD->getFont().c_str(), 20);
+	state_ment->setAnchorPoint(ccp(0.5,0.5));
+	state_ment->setPosition(ccp(240,160));
+	state_ment->setHorizontalAlignment(kCCTextAlignmentCenter);
+	state_ment->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+	addChild(state_ment, kSID_Z_content);
+
+	is_downloading = false;
+
+	startGetStageInfo();
+
+	touch_number = 0;
+	is_menu_enable = true;
+	setTouchEnabled(true);
+}
+
+void StageInfoDown::startGetStageInfo()
+{
+	int stage_number = mySD->getSilType();
+
+	myLog->addLog(kLOG_getStageInfo_i, -1, stage_number);
+
+	if(stage_number < 10000)
+	{
+		Json::Value param;
+		param["no"] = stage_number;
+		param["version"] = NSDS_GI(stage_number, kSDS_SI_version_i);
+		hspConnector::get()->command("getstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
+	}
+	else // event stage
+	{
+		Json::Value param;
+		param["no"] = stage_number;
+		param["version"] = NSDS_GI(stage_number, kSDS_SI_version_i);
+		hspConnector::get()->command("geteventstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
+	}
+}
+
+void StageInfoDown::menuAction( CCObject* sender )
+{
+	if(!is_menu_enable)	return;
+
+	int tag = ((CCNode*)sender)->getTag();
+
+	is_menu_enable = false;
+
+	if(tag == kSID_MT_cancel)
+	{
+		graphdog->removeCommand(this);
+		if(is_downloading)
+			StageImgLoader::sharedInstance()->removeTD();
+		(target_cancel->*delegate_cancel)();
+		removeFromParent();
+	}
+}

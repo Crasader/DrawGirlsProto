@@ -779,3 +779,42 @@ CCString* MyLocal::getLocalCode()
 	
 	return CCString::create(tempCode);
 }
+
+const char* MyLocal::getLocalForKey( MyLocalKey key )
+{
+	languageType = getLocalCode();
+	CCArray* allkeys_ = this->allKeys();
+	bool supportable = false;
+	for(int i=0;i<allkeys_->count();i++)
+	{
+		CCString* key = (CCString*)allkeys_->objectAtIndex(i);
+		if(languageType->isEqual(key))
+		{
+			supportable = true;
+			break;
+		}
+	}
+	if(!supportable)
+	{
+		languageType = CCString::create("en");
+	}
+	CCDictionary* localDic = (CCDictionary*)this->objectForKey(languageType->getCString());
+	CCString* returnLocal = (CCString*)localDic->objectForKey(key);
+
+	return returnLocal->getCString();
+}
+
+MyLocal* MyLocal::sharedInstance()
+{
+	static MyLocal* myLocal = NULL;
+	if(myLocal == NULL)
+	{
+		myLocal = new MyLocal();
+	}
+	return myLocal;
+}
+
+void MyLocal::setLocal()
+{
+	languageType = CCString::create(getCurrentLanguageJNI());
+}

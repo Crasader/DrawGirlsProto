@@ -203,7 +203,7 @@ void GameData::myInit()
 	mainCumberPoint = new IntPoint();
 	otherTargetPoints = new CCArray(1);
 	jackState = 0; // jackStateNormal
-	int speed_tag = kJackBaseSpeedTag_level3;//myDSH->getIntegerForKey(kDSH_Key_jackBaseSpeed);
+	int speed_tag = kJackBaseSpeedTag_level1;//myDSH->getIntegerForKey(kDSH_Key_jackBaseSpeed);
 	if(speed_tag == kJackBaseSpeedTag_level2)
 		jack_base_speed = 1.5f;
 	else if(speed_tag == kJackBaseSpeedTag_level3)

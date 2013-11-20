@@ -33,17 +33,9 @@ public:
 	bool isStun;
 	CT_Type mType;
 	
-	void startControl()
-	{
-//		if(((CCNode*)target_main)->getTag() == 1)
-			setTouchEnabled(true);
-	}
+	void startControl();
 	
-	virtual void setTouchEnabled(bool t_b)
-	{
-		CCLayer::setTouchEnabled(t_b);
-		is_control = t_b;
-	}
+	virtual void setTouchEnabled(bool t_b);
 	
 protected:
 	Jack* myJack;
@@ -54,16 +46,7 @@ protected:
 	
 	
 	
-	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack)
-	{
-		myJack = t_jack;
-		isStun = false;
-		is_control = false;
-		
-//		device_rate = myDSH->getDeviceRate();
-		target_main = t_main;
-		delegate_readyBack = d_readyBack;
-	}
+	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack);
 };
 
 enum CBS_State{
@@ -214,39 +197,9 @@ enum CBS_Touch{
 class ControlJoystickButton : public ControlCommon
 {
 public:
-	static ControlJoystickButton* create(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack)
-	{
-		ControlJoystickButton* t_cjf = new ControlJoystickButton();
-		t_cjf->myInit(t_main, d_readyBack, t_jack);
-		t_cjf->autorelease();
-		return t_cjf;
-	}
+	static ControlJoystickButton* create(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack);
 	
-	virtual void setTouchEnabled(bool t_b)
-	{
-		ControlCommon::setTouchEnabled(t_b);
-		
-		if(!t_b)
-		{
-			unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
-			if(button_touch)
-			{
-//				draw_button->setColor(ccWHITE);
-				offButton();
-				button_touch = NULL;
-			}
-			
-			if(joystick_touch)
-			{
-				if(myGD->gamescreen_type == kGT_rightUI)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-				else										control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));;
-				
-				control_ball->setVisible(false);
-				myJack->setTouchPointByJoystick(CCPointZero, directionStop, t_b);
-				joystick_touch = NULL;
-			}
-		}
-	}
+	virtual void setTouchEnabled(bool t_b);
 	
 	void stopMySchedule();
 	bool isBacking;
@@ -268,51 +221,11 @@ private:
 	
 	CCBAnimationManager* button_ani;
 	
-	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack)
-	{
-		CCLayer::init();
-		
-		isButtonAction = false;
-		button_touch = NULL;
-		joystick_touch = NULL;
-		isBacking = false;
-		
-		ControlCommon::myInit(t_main, d_readyBack, t_jack);
-		beforeDirection = directionStop;
-		control_circle = CCSprite::create("control_joystick_big_circle.png");
-		control_circle->setScale(0.5f);
-		control_circle->setVisible(false);
-//		if(myGD->gamescreen_type == kGT_rightUI)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-//		else										control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));;
-		addChild(control_circle);
-		
-		control_ball = CCSprite::create("control_joystick_big_ball.png");
-		control_ball->setScale(0.5f);
-		control_ball->setVisible(false);
-		addChild(control_ball);
-		
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("gameui_button.ccbi",this));
-		button_ani = reader->getAnimationManager();
-//		draw_button = CCSprite::create("ui_draw.png");
-		if(myGD->gamescreen_type == kGT_rightUI)		draw_button->setPosition(ccp(480-25,25));
-		else if(myGD->gamescreen_type == kGT_leftUI)	draw_button->setPosition(ccp(25,25));
-		else								draw_button->setPosition(ccp(25,25));
-		addChild(draw_button);
-		
-		mType = kCT_Type_Joystick_button;
-	}
+	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack);
 	
-	void onButton()
-	{
-		button_ani->runAnimationsForSequenceNamed("cast1start");
-	}
+	void onButton();
 	
-	void offButton()
-	{
-		button_ani->runAnimationsForSequenceNamed("cast1stop");
-	}
+	void offButton();
 	
 	void touchAction(CCPoint t_p, bool t_b);
 	

@@ -78,6 +78,18 @@ void AlertEngine::doAction(int t_alertNumber, int t_buttonNumber)
 	CCLog("seo reaction end");
 }
 
+AlertEngine* AlertEngine::sharedInstance()
+{
+	static AlertEngine* myAlert = NULL;
+	if(myAlert == NULL)
+	{
+		myAlert = new AlertEngine();
+		myAlert->myInit();
+	}
+	return myAlert;
+}
+
+
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
 #ifdef __cplusplus

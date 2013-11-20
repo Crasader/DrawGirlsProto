@@ -102,44 +102,14 @@ class MyLocal : public CCDictionary
 	
 public:
 	
-	static MyLocal* sharedInstance()
-	{
-		static MyLocal* myLocal = NULL;
-		if(myLocal == NULL)
-		{
-			myLocal = new MyLocal();
-		}
-		return myLocal;
-	}
+	static MyLocal* sharedInstance();
 	
 	~MyLocal()
 	{
 		
 	}
 	
-	const char* getLocalForKey(MyLocalKey key)
-	{
-		languageType = getLocalCode();
-		CCArray* allkeys_ = this->allKeys();
-		bool supportable = false;
-		for(int i=0;i<allkeys_->count();i++)
-		{
-			CCString* key = (CCString*)allkeys_->objectAtIndex(i);
-			if(languageType->isEqual(key))
-			{
-				supportable = true;
-				break;
-			}
-		}
-		if(!supportable)
-		{
-			languageType = CCString::create("en");
-		}
-		CCDictionary* localDic = (CCDictionary*)this->objectForKey(languageType->getCString());
-		CCString* returnLocal = (CCString*)localDic->objectForKey(key);
-		
-		return returnLocal->getCString();
-	}
+	const char* getLocalForKey(MyLocalKey key);
 	
 	CCString* getLocalCode();
 	
@@ -149,10 +119,7 @@ private:
 		this->initLocal();
 	}
 	void initLocal();
-	void setLocal()
-	{
-		languageType = CCString::create(getCurrentLanguageJNI());
-	}
+	void setLocal();
 	CCString* languageType;
 };
 

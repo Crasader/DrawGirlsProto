@@ -33,26 +33,11 @@ class CreateSubCumberOtherAction : public CCNode
 public:
 	static CreateSubCumberOtherAction* create(IntPoint c_p,
 											  CCObject* t_after, SEL_CallFuncO d_after,
-											  CCObject* t_cancel, SEL_CallFuncO d_cancel)
-	{
-		CreateSubCumberOtherAction* t_CSCAA = new CreateSubCumberOtherAction();
-		t_CSCAA->myInit(c_p, t_after, d_after, t_cancel, d_cancel);
-		t_CSCAA->autorelease();
-		return t_CSCAA;
-	}
+											  CCObject* t_cancel, SEL_CallFuncO d_cancel);
 	
-	void afterAction(CCObject* cb)
-	{
-		myGD->communication("CP_createSubCumber", createPoint);
-		(after_target->*after_delegate)(cb);
-		removeFromParentAndCleanup(true);
-	}
+	void afterAction(CCObject* cb);
 	
-	void cancelAction(CCObject* cb)
-	{
-		(cancel_target->*cancel_delegate)(cb);
-		removeFromParentAndCleanup(true);
-	}
+	void cancelAction(CCObject* cb);
 	
 private:
 	
@@ -62,49 +47,19 @@ private:
 	SEL_CallFuncO cancel_delegate;
 	IntPoint createPoint;
 	
-	void myInit(IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel)
-	{
-		
-		createPoint = c_p;
-		after_target = t_after;
-		after_delegate = d_after;
-		cancel_target = t_cancel;
-		cancel_delegate = d_cancel;
-	}
+	void myInit(IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel);
 };
 
 class UM_creator : public CCNode
 {
 public:
-	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_missile_speed)
-	{
-		UM_creator* t_c = new UM_creator();
-		t_c->myInit(t_um_tcnt, t_create_type, t_missile_speed);
-		t_c->autorelease();
-		return t_c;
-	}
+	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_missile_speed);
 	
-	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_missile_speed, CCPoint s_p)
-	{
-		UM_creator* t_c = new UM_creator();
-		t_c->myInit(t_um_tcnt, t_create_type, t_missile_speed, s_p);
-		t_c->autorelease();
-		return t_c;
-	}
+	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_missile_speed, CCPoint s_p);
 	
-	void startCreate()
-	{
-		ing_frame = 0;
-		ing_um_cnt = 0;
-		schedule(schedule_selector(UM_creator::creating));
-	}
+	void startCreate();
 	
-	void startPetCreate()
-	{
-		ing_frame = 0;
-		ing_um_cnt = 0;
-		schedule(schedule_selector(UM_creator::petCreating));
-	}
+	void startPetCreate();
 	
 private:
 	
@@ -117,130 +72,23 @@ private:
 	
 	CCPoint start_position;
 	
-	void creating()
-	{
-		ing_frame++;
-		
-		if(ing_frame%shoot_frame == 0)
-		{
-			if(ing_frame/shoot_frame <= 1)
-			{
-				JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, missile_speed);
-				getParent()->addChild(t_jm);
-				t_jm->startMoving();
-			}
-			else
-			{
-				CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-				int cumberCnt = 1 + subCumberArray->count();
-				int random_value;
-				
-				random_value = rand()%cumberCnt;
-				if(random_value == 0)
-				{
-					JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, missile_speed);
-					getParent()->addChild(t_jm);
-					t_jm->startMoving();
-				}
-				else
-				{
-					JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), create_type, missile_speed);
-					getParent()->addChild(t_jm);
-					t_jm->startMoving();
-				}
-			}
-			ing_um_cnt++;
-		}
-		
-		if(ing_um_cnt >= um_tcnt)
-		{
-			stopCreate();
-		}
-	}
+	void creating();
 	
-	void petCreating()
-	{
-		ing_frame++;
-		
-		if(ing_frame%shoot_frame == 0)
-		{
-			if(ing_frame/shoot_frame <= 1)
-			{
-				JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, missile_speed, start_position);
-				getParent()->addChild(t_jm);
-				t_jm->startMoving();
-			}
-			else
-			{
-				CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-				int cumberCnt = 1 + subCumberArray->count();
-				int random_value;
-				
-				random_value = rand()%cumberCnt;
-				if(random_value == 0)
-				{
-					JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), create_type, missile_speed, start_position);
-					getParent()->addChild(t_jm);
-					t_jm->startMoving();
-				}
-				else
-				{
-					JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), create_type, missile_speed, start_position);
-					getParent()->addChild(t_jm);
-					t_jm->startMoving();
-				}
-			}
-			ing_um_cnt++;
-		}
-		
-		if(ing_um_cnt >= um_tcnt)
-		{
-			stopPetCreate();
-		}
-	}
+	void petCreating();
 	
-	void stopCreate()
-	{
-		unschedule(schedule_selector(UM_creator::creating));
-		removeFromParentAndCleanup(true);
-	}
+	void stopCreate();
 	
-	void stopPetCreate()
-	{
-		unschedule(schedule_selector(UM_creator::petCreating));
-		removeFromParentAndCleanup(true);
-	}
+	void stopPetCreate();
 	
-	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed)
-	{
-		if(t_missile_speed < 2.f)
-			missile_speed = 2.f;
-		else if(t_missile_speed > 9.f)
-			missile_speed = 9.f;
-		else
-			missile_speed = t_missile_speed;
-		shoot_frame = missile_speed*3;
-		um_tcnt = t_um_tcnt;
-		create_type = t_create_type;
-	}
+	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed);
 	
-	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed, CCPoint s_p)
-	{
-		start_position = s_p;
-		myInit(t_um_tcnt, t_create_type, t_missile_speed);
-	}
+	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed, CCPoint s_p);
 };
 
 class MissileParent : public CCNode
 {
 public:
-	static MissileParent* create(CCNode* boss_eye)
-	{
-		MissileParent* t_mp = new MissileParent();
-		t_mp->myInit(boss_eye);
-		t_mp->autorelease();
-		return t_mp;
-	}
+	static MissileParent* create(CCNode* boss_eye);
 	
 	void bombCumber(CCObject* target);
 	

@@ -12,16 +12,7 @@ typedef void (CCObject::*SEL_AlertFuncII)(int, int);
 class AlertEngine : public CCNode
 {
 public:
-	static AlertEngine* sharedInstance()
-	{
-		static AlertEngine* myAlert = NULL;
-		if(myAlert == NULL)
-		{
-			myAlert = new AlertEngine();
-			myAlert->myInit();
-		}
-		return myAlert;
-	}
+	static AlertEngine* sharedInstance();
 	
 	void addDoubleAlert(const char* t_title, const char* t_message, const char* t_leftButtonText, const char* t_rightButtonText, int t_tag, CCObject* t_target, SEL_AlertFuncII t_selector);
 	void addSingleAlert(const char* t_title, const char* t_message, const char* t_checkButtonText, int t_tag, CCObject* t_target, SEL_AlertFuncII t_selector);

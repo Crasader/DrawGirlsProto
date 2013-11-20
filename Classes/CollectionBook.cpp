@@ -343,8 +343,8 @@ void CollectionBook::setLeftPage(CCNode *target, int card_number)
 	
 	if(level_number == 3 && mySD->isAnimationStage(stage_number))
 	{
-		CollectionAnimation* t_ca = CollectionAnimation::create(card_number);
-		r_card_img->addChild(t_ca);
+//		CollectionAnimation* t_ca = CollectionAnimation::create(card_number);
+//		r_card_img->addChild(t_ca);
 	}
 	
 	CCSprite* left_top_paper = CCSprite::create("diary_paper.png");
@@ -997,3 +997,72 @@ void CollectionBook::keyBackClicked()
 {
 	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(CollectionBook::alertAction));
 }
+
+//CollectionAnimation* CollectionAnimation::create( int t_card_number )
+//{
+//	CollectionAnimation* t_ca = new CollectionAnimation();
+//	t_ca->setAnimation(t_card_number);
+//	t_ca->initWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_animation.png", t_ca->stage_number, t_ca->level_number)->getCString()), CCRectMake(0, 0, t_ca->ani_size.width, t_ca->ani_size.height));
+//	t_ca->setPosition(mySD->getAnimationPosition(t_ca->stage_number));
+//	t_ca->autorelease();
+//	t_ca->startAnimation();
+//	return t_ca;
+//}
+
+//void CollectionAnimation::setAnimation( int t_card_number )
+//{
+//	stage_number = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
+//	level_number = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
+//	ani_size = mySD->getAnimationCutSize(stage_number);
+//
+//	mySD->setAnimationLoop(stage_number);
+//	loop_length = mySD->getAnimationLoopLength(stage_number);
+//
+//	for(int i=0;i<loop_length;i++)
+//		animation_frame.push_back(mySD->getAnimationLoopPoint(i));
+//}
+//
+//void CollectionAnimation::startAnimation()
+//{
+//	startStageAnimation();
+//}
+//
+//void CollectionAnimation::startStageAnimation()
+//{
+//	ing_animation_frame = 0;
+//
+//	int random_value = rand()%16;
+//
+//	if(random_value >= 2 && random_value <= 4)
+//		random_value = 7;
+//	else if(random_value >= 5 && random_value <= 10)
+//		random_value = 10;
+//	else if(random_value >= 11 && random_value <= 13)
+//		random_value = 13;
+//	else if(random_value == 14 || random_value == 15)
+//		random_value = 16;
+//	else
+//		random_value++;
+//
+//	CCDelayTime* t_delay = CCDelayTime::create(random_value*0.1f);
+//	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CollectionAnimation::frameAnimation));
+//	CCAction* t_seq = CCSequence::create(t_delay, t_call, NULL);
+//	runAction(t_seq);
+//}
+//
+//void CollectionAnimation::frameAnimation()
+//{
+//	int loop_point = animation_frame[ing_animation_frame];
+//	setTextureRect(CCRectMake(loop_point*ani_size.width, 0, ani_size.width, ani_size.height));
+//
+//	ing_animation_frame++;
+//	if(ing_animation_frame >= loop_length)
+//		startStageAnimation();
+//	else
+//	{
+//		CCDelayTime* t_delay = CCDelayTime::create(0.1f);
+//		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CollectionAnimation::frameAnimation));
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//		runAction(t_seq);
+//	}
+//}

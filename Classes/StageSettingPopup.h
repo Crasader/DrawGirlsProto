@@ -11,14 +11,11 @@
 
 #include "cocos2d.h"
 #include "AlertEngine.h"
-#include "GameData.h"
-#include "DataStorageHub.h"
-#include "StarGoldData.h"
+
 #include <deque>
-#include "ItemListViewer.h"
-#include "HeartTime.h"
-#include "hspConnector.h"
-#include "ListViewerScroll.h"
+
+#include "EnumDefine.h"
+#include "jsoncpp/json.h"
 
 USING_NS_CC;
 using namespace std;
@@ -38,6 +35,9 @@ enum SSP_MenuTag{
 	kSSP_MT_noti_cancel
 };
 
+class HeartTime;
+class ItemListViewer;
+class ListViewerScroll;
 class StageSettingPopup : public CCLayer
 {
 public:

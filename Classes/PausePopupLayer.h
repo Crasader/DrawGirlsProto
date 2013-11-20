@@ -65,90 +65,21 @@ private:
 	CCObject* target_replay;
 	SEL_CallFunc delegate_replay;
 	
-	void startPopupAnimation()
-	{
-		is_ing = true;
-		
-		main_case->setScale(0.1);
-		
-		CCScaleTo* t_scale = CCScaleTo::create(0.2f, 1.f);
-		CCMoveTo* t_move = CCMoveTo::create(0.2f, ccp(240,myDSH->ui_center_y));
-		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_move);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PausePopupLayer::endPopAnimation));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
-		
-		main_case->runAction(t_seq);
-	}
+	void startPopupAnimation();
 	
-	void startPopdownAnimation()
-	{
-		is_ing = true;
-		CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.1f);
-		float x_value;
-		if(myGD->gamescreen_type == kGT_rightUI)		x_value = 480-25;
-		else								x_value = 25;
-		CCMoveTo* t_move = CCMoveTo::create(0.2f, ccp(x_value,myDSH->ui_top-25));
-		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_move);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PausePopupLayer::removeSelf));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
-		
-		main_case->runAction(t_seq);
-	}
+	void startPopdownAnimation();
 	
-	void endPopAnimation()
-	{
-		is_ing = false;
-		AudioEngine::sharedInstance()->setAppBack();
-		CCDirector::sharedDirector()->pause();
-	}
+	void endPopAnimation();
 	
-	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
-	{
-		if(touched_number != 0)		return true;
-		if(home_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kMenuTagPPL_home;
-		else if(continue_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kMenuTagPPL_continue;
-		else if(replay_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_replay;
-//		else if(slow_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_slow;
-//		else if(normal_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_normal;
-//		else if(fast_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_fast;
-		return true;
-	}
+	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
 	
-	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
-	{
-		if(touched_number == kMenuTagPPL_home)						home_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_continue)				continue_menu->ccTouchMoved(pTouch, pEvent);
-		else if(touched_number == kMenuTagPPL_replay)				replay_menu->ccTouchMoved(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchMoved(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchMoved(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchMoved(pTouch, pEvent);
-	}
-    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
-	{
-		if(touched_number == kMenuTagPPL_home){						home_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;		}
-		else if(touched_number == kMenuTagPPL_continue){			continue_menu->ccTouchEnded(pTouch, pEvent);	touched_number = 0;		}
-		else if(touched_number == kMenuTagPPL_replay){				replay_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;		}
-//		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchEnded(pTouch, pEvent);
-	}
-    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
-	{
-		if(touched_number == kMenuTagPPL_home){						home_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;		}
-		else if(touched_number == kMenuTagPPL_continue){			continue_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;		}
-		else if(touched_number == kMenuTagPPL_replay){				replay_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;		}
-//		else if(touched_number == kMenuTagPPL_slow)					slow_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_normal)				normal_menu->ccTouchEnded(pTouch, pEvent);
-//		else if(touched_number == kMenuTagPPL_fast)					fast_menu->ccTouchEnded(pTouch, pEvent);
-	}
+	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent);
 	
 	void resetControlMenu();
 	
-	virtual void registerWithTouchDispatcher()
-	{
-		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-		pDispatcher->addTargetedDelegate(this, -150, true);
-	}
+	virtual void registerWithTouchDispatcher();
 	
 	void myInit(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_continue, SEL_CallFunc d_continue, CCObject* t_speed, SEL_CallFunc d_slow, SEL_CallFunc d_normal, SEL_CallFunc d_fast, CCObject* t_replay, SEL_CallFunc d_replay);
 	void menuAction(CCObject* sender);

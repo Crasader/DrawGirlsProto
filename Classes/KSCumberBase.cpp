@@ -1620,3 +1620,458 @@ void KSCumberBase::onJackDrawLine()
 	}
 }
 
+bool KSCumberBase::init()
+{
+	CCNode::init();
+	//		mEmotion = NULL;
+	schedule(schedule_selector(ThisClassType::speedAdjustment));
+
+	// 미션에 따라 on/off 해야됨.
+	schedule(schedule_selector(ThisClassType::selfHealing));
+	schedule(schedule_selector(ThisClassType::cumberFrame));
+
+	return true;
+}
+
+void KSCumberBase::startMoving()
+{
+	m_state = CUMBERSTATEMOVING;
+}
+
+void KSCumberBase::stopMoving()
+{
+	//		unschedule(schedule_selector(KSCumberBase::movingAndCrash));
+	//		schedule(schedule_selector(KSCumberBase::processCrash));
+	//		schedule(crash)
+	onStopMoving();
+}
+
+void KSCumberBase::setCumberState( int e )
+{
+	m_state = (CUMBER_STATE)e;
+}
+
+CUMBER_STATE KSCumberBase::getCumberState()
+{
+	return m_state;
+}
+
+void KSCumberBase::resetCastingCancelCount()
+{
+	m_castingCancelCount = 0;
+}
+
+int KSCumberBase::getCastingCancelCount()
+{
+	return m_castingCancelCount;
+}
+
+void KSCumberBase::setGameover()
+{
+	m_state = CUMBERSTATEGAMEOVER;
+
+	//		m_scale.scale.init(m_scale.scale.getValue(), 0.f, 0.03f);
+	//		runAction(CCScaleTo::create(2.f, 0.01f));
+	m_minScale = 0.f;
+	m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(0, 30));
+	m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(30, 60));
+	m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(60, 90));
+	m_bossDie.m_bossDieFrameCount = 0;
+	unschedule(schedule_selector(ThisClassType::cumberAttack));
+	schedule(schedule_selector(ThisClassType::bossDieBomb));
+	//		int number = m_well512.GetValue(3, 4);
+	//		for(int i=0; i<number; i++)
+	//		{
+	//			scheduleOnce(schedule_selector(ThisClassType::bossDieBomb), m_well512.GetFloatValue(0.3f, 1.f));
+	//		}
+
+	this->setVisible(false);
+}
+
+void KSCumberBase::movingAndCrash( float dt )
+{
+	IntPoint mapPoint = m_mapPoint;
+
+	// 갇혀있는지 검사함. 갇혀있으면 없앰.
+	if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
+		myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
+		myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
+		myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
+		myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty)
+	{
+		AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
+		int missile_type = rand()%7 + (rand()%9)*10;
+
+		int rmCnt = 5;
+		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed);
+
+		myGD->communication("CP_removeSubCumber", this);
+
+		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
+		{
+			caughtAnimation();
+		}
+		else
+		{
+			removeFromParentAndCleanup(true);
+		}
+		return;
+	}
+
+	if(m_state == CUMBERSTATEFURY)
+	{
+		m_furyMode.furyFrameCount++;
+	}	
+
+	auto movingBranch = [&](MOVEMENT movement)
+	{
+		switch(movement)
+		{
+		case STRAIGHT_TYPE:
+			straightMoving(dt);
+			break;
+		case RANDOM_TYPE:
+			randomMoving(dt);
+			break;
+		case FOLLOW_TYPE:
+			followMoving(dt);
+			break;
+		case RIGHTANGLE_TYPE:
+			rightAngleMoving(dt);
+			break;
+		case CIRCLE_TYPE:
+			circleMoving(dt);
+			break;
+		case SNAKE_TYPE:
+			snakeMoving(dt);
+		}
+	};
+
+	if(m_state == CUMBERSTATEFURY)
+	{
+		movingBranch(m_furyMovement);
+	}
+	else
+	{
+		if(myGD->getJackState() == jackStateNormal)
+		{
+			movingBranch(m_normalMovement);
+		}
+		else
+		{
+			movingBranch(m_drawMovement);
+		}
+	}
+}
+
+void KSCumberBase::cumberFrame( float dt )
+{
+	m_frameCount++; // 쿰버의 프레임수를 잼.
+}
+
+void KSCumberBase::onStartGame()
+{
+	m_isStarted = true;
+	schedule(schedule_selector(ThisClassType::cumberAttack));
+}
+
+void KSCumberBase::lightSmaller()
+{
+	endTeleport();
+}
+
+void KSCumberBase::endTeleport()
+{
+	teleportImg->removeFromParentAndCleanup(true);
+	teleportImg = NULL;
+	startMoving();
+	myGD->communication("CP_onPatternEnd");
+}
+
+void KSCumberBase::startTeleport()
+{
+	if(teleportImg)
+	{
+		teleportImg->removeFromParentAndCleanup(true);
+		teleportImg = NULL;
+	}
+
+	teleportImg = CCSprite::create("teleport_light.png");
+	teleportImg->setScale(0.01f);
+	addChild(teleportImg);
+
+	CCBlink* t_scale = CCBlink::create(0.5, 0);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::smaller));
+
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+
+	teleportImg->runAction(t_seq);
+	AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
+}
+
+void KSCumberBase::smaller()
+{
+	CCBlink* t_scale = CCBlink::create(0.5, 8);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::randomPosition));
+
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+
+	runAction(t_seq);
+}
+
+COLLISION_CODE KSCumberBase::crashWithX( IntPoint check_position )
+{
+	if(check_position.x < mapLoopRange::mapWidthInnerBegin || check_position.x >= mapLoopRange::mapWidthInnerEnd ||
+		check_position.y < mapLoopRange::mapHeightInnerBegin || check_position.y >= mapLoopRange::mapHeightInnerEnd ||
+		myGD->mapState[check_position.x][check_position.y] == mapType::mapOutline)
+	{
+		// 나갔을 시.
+		return COLLISION_CODE::kCOLLISION_OUTLINE;
+	}
+
+	// 이미 그려진 곳에 충돌했을 경우.
+	if(myGD->mapState[check_position.x][check_position.y] == mapOldline ||
+		myGD->mapState[check_position.x][check_position.y] == mapOldget)
+	{
+		return COLLISION_CODE::kCOLLISION_MAP;
+	}
+
+	if(myGD->mapState[check_position.x][check_position.y] == mapNewline)
+	{
+		return COLLISION_CODE::kCOLLISION_NEWLINE;
+	}
+	IntPoint jackPoint = myGD->getJackPoint();
+	if(jackPoint.x == check_position.x && jackPoint.y == check_position.y)
+	{
+		return COLLISION_CODE::kCOLLISION_JACK;
+	}
+	return COLLISION_CODE::kCOLLISION_NONE;
+}
+
+void KSCumberBase::setCumberScale( float r )
+{
+	m_scale.scale.init(m_scale.scale.getValue(), r, 0.005f);
+}
+
+float KSCumberBase::getCumberScale()
+{
+	return m_scale.scale.getValue();
+}
+
+void KSCumberBase::onCanceledCasting()
+{
+	m_castingCancelCount++;
+}
+
+void KSCumberBase::settingScale( float startScale, float minScale, float maxScale )
+{
+	m_startScale = startScale;
+	m_minScale = minScale;
+	m_maxScale = maxScale;
+
+	m_scale.SCALE_ADDER = m_scale.SCALE_SUBER = (m_maxScale - m_minScale) / 5.f;
+	m_scale.scale.init(m_startScale, m_startScale, 0.f);
+}
+
+void KSCumberBase::settingFuryRule()
+{
+	m_furyRule.gainPercent = 40; //fury["gainpercent"].asDouble();
+	m_furyRule.userDistance = 300; // fury["userdistance"].asDouble();
+	m_furyRule.percent = aiProbAdder();// fury["percent"].asDouble();
+	//		m_furyRule
+}
+
+void KSCumberBase::settingAI( int ai )
+{
+	m_aiValue = ai;
+}
+
+void KSCumberBase::settingSpeed( float startSpeed, float minSpeed, float maxSpeed )
+{
+	m_speed = m_startSpeed = startSpeed;
+	//		m_speed.init(m_startSpeed, m_startSpeed, 0.1f);
+
+	m_minSpeed = minSpeed;
+	m_maxSpeed = maxSpeed;
+}
+
+void KSCumberBase::settingMovement( enum MOVEMENT normal, enum MOVEMENT draw, enum MOVEMENT fury )
+{
+	m_normalMovement = normal;
+	m_drawMovement = draw;
+	m_furyMovement = fury;
+}
+
+void KSCumberBase::settingPattern( Json::Value pattern )
+{
+	for(auto iter = pattern.begin(); iter != pattern.end(); ++iter)
+	{
+		//			int ratio = (*iter)["percent"].asInt(); // 빈번도
+		//			for(int j = 0; j<ratio; j++)
+		{
+			m_attacks.push_back(pattern[iter.index()]);
+		}
+	}
+
+	for(auto i : m_attacks)
+	{
+		KS::KSLog("%", i);
+	}
+}
+
+void KSCumberBase::settingHp( float hp )
+{
+	m_remainHp = m_totalHp = hp;
+}
+
+void KSCumberBase::settingAttackPercent( float ap )
+{
+	m_attackPercent = ap;
+}
+
+void KSCumberBase::decreaseLife( float damage )
+{
+	m_remainHp -= damage;
+	if(m_remainHp <= 0)
+	{
+		myGD->communication("CP_removeSubCumber", this);
+	}
+}
+
+float KSCumberBase::getLife()
+{
+	return m_remainHp;
+}
+
+void KSCumberBase::setLife( float t )
+{
+	m_remainHp = MAX(0, t);
+}
+
+float KSCumberBase::getTotalLife()
+{
+	return m_totalHp;
+}
+
+void KSCumberBase::setTotalLife( float t )
+{
+	m_totalHp = t;
+}
+
+void KSCumberBase::setSpeedRatio( float sr )
+{
+	m_speedRatio = sr;
+}
+
+void KSCumberBase::setSlience( bool s )
+{
+	m_slience = s;
+}
+
+void KSCumberBase::caughtAnimation()
+{
+	myGD->communication("UI_catchSubCumber");
+	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
+}
+
+bool KSCumberBase::bossIsClosed()
+{
+	int greaterNumber = count_if(outlineCountRatio.begin(), outlineCountRatio.end(), [](int i){return i >= 20;} );
+	bool closedBoss = false;
+	if((float)greaterNumber / (float)outlineCountRatio.size() >= 0.8f)
+	{
+		closedBoss = true;
+	}
+	return closedBoss;
+}
+
+float KSCumberBase::aiProbAdder()
+{
+	return (0.02f + (0.5f - 0.02f) * getAiValue() / 100.f)/100.f;
+}
+
+int KSCumberBase::getAiValue()
+{
+	if(m_isStarted && myGD->getCommunicationBool("UI_isExchanged")) // CHANGE 라면
+	{
+		return m_aiValue * 1.2f;
+	}
+	else
+	{
+		return m_aiValue;
+	}
+}
+
+float KSCumberBase::getAgility()
+{
+	return m_agility;
+}
+
+void KSCumberBase::setAgility( float ag )
+{
+	m_agility = ag;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+template <typename T>
+void FixedSizeDeque<T>::push_back( const T& p )
+{
+	if(m_deque.size() >= m_maxSize)
+	{
+		m_deque.pop_front();
+	}
+	m_deque.push_back(p);
+}
+
+template <typename T>
+T& FixedSizeDeque<T>::front()
+{
+	return m_deque.front();
+}
+
+template <typename T>
+void FixedSizeDeque<T>::pop_front()
+{
+	m_deque.pop_front();
+}

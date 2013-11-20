@@ -102,107 +102,18 @@ private:
 	void hidePopup();
 	void endHidePopup();
 	
-	void cellAction(CCObject* sender)
-	{
-		int tag = ((CCNode*)sender)->getTag();
-		tag -= kFFC_T_menuBase;
-		
-		CCLog("help memberID : %s", friend_list[tag].user_id.c_str());
-	}
+	void cellAction(CCObject* sender);
 	
-	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx){
-		
-		CCLabelTTF* nickname_label;
-		CCLabelTTF* score_label;
-		CCLabelTTF* rank_label;
-		FailFriendRank* member = &friend_list[idx];
-		CCTableViewCell* cell = new CCTableViewCell();
-		cell->init();
-		cell->autorelease();
-		
-		CCSprite* profileImg = GDWebSprite::create((*member).img_url, "ending_noimg.png");
-		profileImg->setAnchorPoint(ccp(0.5, 0.5));
-		profileImg->setTag(kFFC_T_img);
-		profileImg->setPosition(ccp(27, 20));
-		profileImg->setScale(33.f / profileImg->getContentSize().width);
-		cell->addChild(profileImg, kFFC_Z_img);
-		
-		CCSprite* bg = CCSprite::create("ending_cell_back.png");
-		bg->setPosition(CCPointZero);
-		bg->setAnchorPoint(CCPointZero);
-		cell->addChild(bg,kFFC_Z_case);
-		
-		nickname_label = CCLabelTTF::create((*member).nickname.c_str(), mySGD->getFont().c_str(), 12);
-		nickname_label->setPosition(ccp(47,22));
-		nickname_label->setAnchorPoint(CCPointZero);
-		nickname_label->setTag(kFFC_T_nickname);
-		cell->addChild(nickname_label,kFFC_Z_img);
-		
-		score_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", (*member).score)->getCString(), mySGD->getFont().c_str(), 18);
-		score_label->setPosition(ccp(47,0));
-		score_label->setAnchorPoint(CCPointZero);
-		score_label->setTag(kFFC_T_score);
-		cell->addChild(score_label,kFFC_Z_img);
-		
-		rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 10);
-		rank_label->setPosition(ccp(12,3));
-		rank_label->setAnchorPoint(CCPointZero);
-		rank_label->setTag(kFFC_T_rank);
-		cell->addChild(rank_label,kFFC_Z_img);
-		
-		if((*member).user_id == hspConnector::get()->getKakaoID())
-		{
-			CCSprite* meBack = CCSprite::create("ending_cell_selected.png");
-			meBack->setPosition(ccp(meBack->getContentSize().width - bg->getContentSize().width, 0));
-			meBack->setAnchorPoint(CCPointZero);
-			cell->addChild(meBack,kFFC_Z_case);
-		}
-		else
-		{
-			if(!(*member).is_message_blocked)
-			{
-				CCSprite* n_help = CCSprite::create("ending_help_on.png");
-				CCSprite* s_help = CCSprite::create("ending_help_on.png");
-				s_help->setColor(ccGRAY);
-				
-				CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailPopup::cellAction));
-				help_item->setTag(kFFC_T_menuBase + idx);
-				
-				CCMenu* help_menu = CCMenu::createWithItem(help_item);
-				help_menu->setPosition(ccp(165,21));
-				cell->addChild(help_menu, kFFC_Z_img);
-			}
-			else
-			{
-				CCSprite* not_help = CCSprite::create("ending_help_off.png");
-				not_help->setPosition(ccp(165,21));
-				cell->addChild(not_help, kFFC_Z_img);
-			}
-		}
-		
-		return cell;
-	}
+	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
 	
-	virtual void scrollViewDidScroll(CCScrollView* view) {
-	}
+	virtual void scrollViewDidScroll(CCScrollView* view);
 	
-    virtual void scrollViewDidZoom(CCScrollView* view) {
-		
-	}
+    virtual void scrollViewDidZoom(CCScrollView* view);
     
-	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell){
-		// 영호
-		//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
-		
-		
-	}
-    virtual CCSize cellSizeForTable(CCTableView *table){
-		return CCSizeMake(195, 45);
-	}
+	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
+    virtual CCSize cellSizeForTable(CCTableView *table);
 	
-    virtual unsigned int numberOfCellsInTableView(CCTableView *table){
-		return friend_list.size();
-	}
+    virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
 	
 	float keep_gold;

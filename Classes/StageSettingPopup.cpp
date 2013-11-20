@@ -17,7 +17,13 @@
 #include "DurabilityNoti.h"
 #include "CardCase.h"
 #include "DownloadFile.h"
-
+#include "ListViewerScroll.h"
+#include "HeartTime.h"
+#include "GameData.h"
+#include "DataStorageHub.h"
+#include "StarGoldData.h"
+#include "ItemListViewer.h"
+#include "hspConnector.h"
 enum SSP_Zorder{
 	kSSP_Z_gray = 1,
 	kSSP_Z_back,

@@ -173,3 +173,39 @@ void StageListDown::startDownload()
 	
 	schedule(schedule_selector(StageListDown::downloadingAction));
 }
+
+StageListDown* StageListDown::create( CCObject* t_success, SEL_CallFunc d_success, int t_puzzle )
+{
+	StageListDown* t_sid = new StageListDown();
+	t_sid->myInit(t_success, d_success, t_puzzle);
+	t_sid->autorelease();
+	return t_sid;
+}
+
+void StageListDown::myInit( CCObject* t_success, SEL_CallFunc d_success, int t_puzzle )
+{
+	puzzle_number = t_puzzle;
+	target_success = t_success;
+	delegate_success = d_success;
+
+	state_ment = CCLabelTTF::create("퍼즐 정보를 확인하는ing...", mySGD->getFont().c_str(), 20);
+	state_ment->setAnchorPoint(ccp(0.5,0.5));
+	state_ment->setPosition(ccp(240,160));
+	state_ment->setHorizontalAlignment(kCCTextAlignmentCenter);
+	state_ment->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+	addChild(state_ment, kSLD_Z_content);
+
+	is_downloading = false;
+
+	startGetStageList();
+}
+
+void StageListDown::startGetStageList()
+{
+	myLog->addLog(kLog_getPuzzleInfo_i, -1, puzzle_number);
+
+	Json::Value param;
+	param["version"] = NSDS_GI(puzzle_number, kSDS_PZ_version_i);
+	param["no"] = puzzle_number;
+	hspConnector::get()->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
+}

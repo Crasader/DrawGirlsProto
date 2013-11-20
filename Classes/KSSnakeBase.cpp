@@ -503,6 +503,283 @@ void KSSnakeBase::furyModeOff()
 	//	}
 }
 
+void KSSnakeBase::onStartMoving()
+{
+	m_state = CUMBERSTATEMOVING;
+}
+
+void KSSnakeBase::onStopMoving()
+{
+	m_state = CUMBERSTATESTOP;
+	CCLog("stop!!");
+}
+
+void KSSnakeBase::onPatternEnd()
+{
+	CCLog("onPatternEnd!!");
+	m_noDirection.state = 2;
+	if(m_direction.state == 1)
+	{
+		m_direction.state = 2; // 돌아가라고 상태 변경때림.
+		m_state = CUMBERSTATEMOVING;
+	}
+	else if(m_state == CUMBERSTATEDIRECTION)
+	{
+		m_state = CUMBERSTATEMOVING;
+	}
+}
+
+void KSSnakeBase::onStartGame()
+{
+	KSCumberBase::onStartGame();
+	m_noDirection.state = 2;
+}
+
+void KSSnakeBase::stopCasting()
+{
+	myGD->communication("MP_bombCumber", this);
+	// 방사형으로 돌아가고 있는 중이라면
+	if(m_state == CUMBERSTATENODIRECTION)
+	{
+		CCLog("m_state == CUMBERSTATENODIRECTION");
+		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
+
+	}
+	else if(m_state == CUMBERSTATEDIRECTION)
+	{
+		CCLog("m_state == CUMBERSTATEDIRECTION");
+		m_direction.state = 2; // 돌아가라고 상태 변경때림.
+		m_state = CUMBERSTATEMOVING; //#!
+
+	}
+}
+
+void KSSnakeBase::setPosition( const CCPoint& t_sp )
+{
+	CCPoint prevPosition = getPosition();
+	if(isnan(prevPosition.x))
+	{
+		CCLog("hg!!!!");
+	}
+	SnakeTrace tr;
+	tr.position = t_sp;
+	tr.directionRad = atan2f(t_sp.y - prevPosition.y, t_sp.x - prevPosition.x);
+
+	//		KSCumberBase::setPosition(t_sp);
+	m_headImg->setPosition(t_sp);
+	m_cumberTrace.push_back(tr); //
+	if(m_cumberTrace.size() >= 350)
+	{
+		m_cumberTrace.pop_front();
+	}
+
+	if(m_state != CUMBERSTATENODIRECTION) // 도는것이 아니라면
+	{
+		myGD->setMainCumberPoint(ccp2ip(t_sp));
+		m_mapPoint = ccp2ip(t_sp);
+	}
+	setHeadAndBodies();
+	//		myGD->communication("Main_moveGamePosition", t_sp);
+	//		myGD->communication("VS_setMoveGamePosition", t_sp);
+	//		myGD->communication("Main_moveGamePosition", t_sp);
+	//		myGD->communication("Main_moveGamePosition", t_sp);
+}
+
+void KSSnakeBase::setPositionX( float t_x )
+{
+	setPosition(ccp(t_x, getPositionY()));
+}
+
+void KSSnakeBase::setPositionY( float t_y )
+{
+	setPosition(ccp(getPositionX(), t_y));
+}
+
+const CCPoint& KSSnakeBase::getPosition()
+{
+	//		CCLog("snake position : %.2f, %.2f", m_headImg->getPositionX(), m_headImg->getPositionY());
+
+	return m_headImg->getPosition();
+}
+
+float KSSnakeBase::getPositionX()
+{
+	return m_headImg->getPositionX();
+}
+
+float KSSnakeBase::getPositionY()
+{
+	return m_headImg->getPositionY();
+}
+
+void KSSnakeBase::attackBehavior( Json::Value pattern )
+{
+	if(pattern["pattern"].asString() == "109")
+	{
+		m_state = CUMBERSTATESTOP;
+	}
+	else if( pattern["pattern"].asString() == "1007")
+	{
+		m_state = CUMBERSTATESTOP;
+	}
+	else
+	{
+		m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
+		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
+		std::string target = pattern.get("target", "no").asString();
+		if( target == "yes") // 타게팅이라면 조준하라
+			startAnimationDirection();
+		else if(target == "no") // 타게팅이 아니면 돌아라
+			startAnimationNoDirection();
+	}
+}
+
+void KSSnakeBase::stopAnimationNoDirection()
+{
+	m_noDirection.state = 2;
+}
+
+void KSSnakeBase::stopAnimationDirection()
+{
+	m_direction.state = 2;
+}
+
+CCPoint KSSnakeBase::getMissilePoint()
+{
+	float theta = deg2Rad(-m_headImg->getRotation());
+	float x = ATTACK_POINT_X;
+	float y = ATTACK_POINT_Y;
+	return m_headImg->getPosition() +
+		ccp(x*cos(theta) - y*sin(theta), x*sin(theta) + y * cos(theta));
+}
+
+void KSSnakeBase::randomPosition()
+{
+	IntPoint mapPoint;
+	bool finded;
+	getRandomPositionToJack(&mapPoint, &finded);
+
+	//	myGD->setMainCumberPoint(mapPoint);
+	for(int i=0; i<350; i++)
+	{
+		setPosition(ip2ccp(mapPoint));
+	}
+	//		setPosition(ip2ccp(mapPoint));
+
+	m_circle.setRelocation(getPosition(), m_well512);
+	{
+		lightSmaller();
+	}
+}
+
+void KSSnakeBase::onTargetingJack( CCPoint jackPosition )
+{
+	CCPoint cumberPosition = getPosition();
+	float deg = rad2Deg(atan2(jackPosition.y - cumberPosition.y, jackPosition.x - cumberPosition.x));
+	m_headImg->setRotation(-deg);
+}
+
+COLLISION_CODE KSSnakeBase::getCrashCode( IntPoint point, IntPoint* checkPosition )
+{
+	float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+	int ip_half_distance = half_distance / 2;
+	IntPoint afterPoint = point;
+
+	set<IntPoint> ips;
+
+	for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+	{
+		for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+		{
+			float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+			if(calc_distance < ip_half_distance)
+			{
+				ips.insert(IntPoint(i, j));
+			}
+		}
+	}
+
+	COLLISION_CODE collisionCode = crashLooper(ips, checkPosition);
+
+	if(collisionCode == kCOLLISION_NONE)
+	{
+		// 몸통에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
+		if(myGD->getJackState() != jackStateNormal)
+		{
+			for(auto body : m_Bodies)
+			{
+				CCPoint cumberPosition = body->getPosition();
+				CCPoint bodyPosition = cumberPosition;
+				IntPoint afterPoint = ccp2ip(bodyPosition);
+				IntPoint checkPosition;
+				float half_distance = BODY_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+				int ip_half_distance = half_distance / 2;
+
+
+				IntPoint jackPoint = myGD->getJackPoint();
+				float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
+				if(calc_distance < ip_half_distance)
+				{
+					collisionCode = COLLISION_CODE::kCOLLISION_JACK;
+					break;
+				}
+			}
+		}
+
+		// 꼬리에 대한 충돌처리 ver2 : 잭과의 거리만 측정해서 계산함.
+		if(myGD->getJackState() != jackStateNormal)
+		{
+			CCPoint cumberPosition = m_tailImg->getPosition();
+			CCPoint bodyPosition = cumberPosition;
+			IntPoint afterPoint = ccp2ip(bodyPosition);
+			IntPoint checkPosition;
+			float half_distance = TAIL_RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+			int ip_half_distance = half_distance / 2;
+
+
+			IntPoint jackPoint = myGD->getJackPoint();
+			float calc_distance = sqrtf(powf((afterPoint.x - jackPoint.x)*1,2) + powf((afterPoint.y - jackPoint.y)*1, 2));
+			if(calc_distance < ip_half_distance)
+			{
+				collisionCode = COLLISION_CODE::kCOLLISION_JACK;
+			}
+		}
+	}
+
+	return collisionCode;
+}
+
+float KSSnakeBase::getRadius()
+{
+	return RADIUS;
+}
+
+IntPoint KSSnakeBase::getMapPoint( CCPoint c )
+{
+	return IntPoint(round((c.x - 1) / pixelSize + 1.f),
+		round((c.y - 1) / pixelSize + 1.f));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

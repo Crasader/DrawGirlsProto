@@ -341,3 +341,389 @@ void KSCircleBase::scaleAdjustment(float dt)
 	
 }
 
+SEL_MenuHandler KSCircleBase::onResolveCCBCCMenuItemSelector( CCObject * pTarget, const char* pSelectorName )
+{
+	CCLog("%s", pSelectorName);
+	return NULL;
+}
+
+SEL_CallFuncN KSCircleBase::onResolveCCBCCCallFuncSelector( CCObject * pTarget, const char* pSelectorName )
+{
+	CCLog("%s", pSelectorName);
+	return NULL;
+}
+
+SEL_CCControlHandler KSCircleBase::onResolveCCBCCControlSelector( CCObject * pTarget, const char* pSelectorName )
+{
+	CCLog("%s", pSelectorName);
+	return NULL;
+}
+
+void KSCircleBase::runTimeline( Json::Value patternInfo )
+{
+	if(currentTimelineFooter == "") // 아무것도 공격중이 아니면 발싸 !!
+	{
+		std::string timeline = patternInfo["pattern"].asString();
+		m_atype = patternInfo.get("atype", "special").asString();
+		m_repeatNumber = patternInfo.get("repeat", 1).asInt();
+		m_attackCanceled = false;
+		currentTimeline = timeline;
+		currentTimelineFooter = "_b";
+		mAnimationManager->runAnimationsForSequenceNamed((currentTimeline + currentTimelineFooter).c_str());
+	}
+}
+
+void KSCircleBase::completedAnimationSequenceNamed( const char *name_ )
+{
+	string name = name_;
+	if(name.size() < 2)
+		return;
+	char lastChar = name[name.size() - 1];
+	char lastPrevChar = name[name.size() - 2];
+	std::string tl(name.begin(), name.end() - 2);
+	if(lastPrevChar != '_')
+		return;
+	if(lastChar == 'b')
+	{
+		// 캔슬이 되었는지의 여부를 알아야 됨.
+		// middle 액션을 하기전에 속성을 설정함.
+
+		if(m_atype == "crash")
+		{
+			AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
+		}
+		else if(m_atype == "special")
+		{
+			AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
+		}
+		else // normal
+		{
+			AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
+		}
+
+		if(m_attackCanceled) // 맞아서 캔슬이 되었다면
+		{
+			currentTimelineFooter = "_e";
+			mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+		}
+		else
+		{
+			currentTimelineFooter = "_m";
+			mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+		}
+	}
+	else if(lastChar == 'm')
+	{
+
+		// 반복을 시킬 건지 검사하고 캔슬이 되었다면 캔슬 동작을 작동시킴.
+		// 캔슬이면 속성을 해제함.
+		if(m_attackCanceled) // 캔슬
+		{
+			currentTimelineFooter = "_e";
+			mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+		}
+		else
+		{
+			m_repeatNumber--;
+			if(m_repeatNumber > 0)
+			{
+				currentTimelineFooter = "_m";
+				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+			}
+			else
+			{
+				currentTimelineFooter = "_e";
+				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+			}
+		}
+	}
+	else if(lastChar == 'e')
+	{
+		currentTimelineFooter = "";
+		m_state = CUMBERSTATEMOVING;
+		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+		myGD->communication("MS_resetRects", false);
+	}
+}
+
+void KSCircleBase::onStartMoving()
+{
+	m_state = CUMBERSTATEMOVING;
+	schedule(schedule_selector(KSCumberBase::movingAndCrash));
+}
+
+void KSCircleBase::onStopMoving()
+{
+	m_state = CUMBERSTATESTOP;
+}
+
+void KSCircleBase::stopCasting()
+{
+	myGD->communication("MP_bombCumber", this);
+	// 방사형으로 돌아가고 있는 중이라면
+	if(m_state == CUMBERSTATENODIRECTION)
+	{
+		CCLog("m_state == CUMBERSTATENODIRECTION");
+		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
+	}
+}
+
+void KSCircleBase::setPosition( const CCPoint& t_sp )
+{
+	//		CCLog("setPos %f %f", t_sp.x, t_sp.y);
+	//		KSCumberBase::setPosition(t_sp);
+	m_headImg->setPosition(t_sp);
+	myGD->setMainCumberPoint(ccp2ip(t_sp));
+	m_mapPoint = ccp2ip(t_sp);
+	//		myGD->communication("Main_moveGamePosition", t_sp);
+	//		myGD->communication("VS_setMoveGamePosition", t_sp);
+	//		myGD->communication("Main_moveGamePosition", t_sp);
+	//		myGD->communication("Main_moveGamePosition", t_sp);
+	//		std::thread t1([](){;});
+}
+
+void KSCircleBase::setPositionX( float t_x )
+{
+	setPosition(ccp(t_x, getPositionY()));
+}
+
+void KSCircleBase::setPositionY( float t_y )
+{
+	setPosition(ccp(getPositionX(), t_y));
+}
+
+const CCPoint& KSCircleBase::getPosition()
+{
+	return m_headImg->getPosition();
+}
+
+void KSCircleBase::attackBehavior( Json::Value _pattern )
+{
+	std::string pattern = _pattern["pattern"].asString();
+	if(pattern == "109")
+	{
+		m_state = CUMBERSTATESTOP;
+	}
+	else if( pattern == "1007")
+	{
+		m_state = CUMBERSTATESTOP;
+	}
+	else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
+	{
+		m_state = CUMBERSTATESTOP;
+		//			startAnimationNoDirection();
+	}
+	else
+	{
+		std::string atype = _pattern.get("atype", "normal").asString();
+		std::map<std::string, int> mapper = {{"normal", 1}, {"special", 2}, {"crash", 3}};
+		if(mapper.find(atype) == mapper.end())
+			lastCastNum = 1;
+		else
+			lastCastNum = mapper[atype];
+
+		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
+
+		std::string target = _pattern.get("target", "no").asString();
+		if( target == "yes") // 타게팅이라면 조준하라
+			startAnimationDirection();
+		else if(target == "no") // 타게팅이 아니면 돌아라
+			startAnimationNoDirection();
+	}
+}
+
+CCPoint KSCircleBase::getMissilePoint()
+{
+	return getPosition() + ccp(0, 0);
+}
+
+void KSCircleBase::setScale( float scale )
+{
+	m_headImg->setScale(scale);
+}
+
+void KSCircleBase::setScaleX( float x )
+{
+	m_headImg->setScaleX(x);
+}
+
+void KSCircleBase::setScaleY( float y )
+{
+	m_headImg->setScaleY(y);
+}
+
+void KSCircleBase::stopAnimationNoDirection()
+{
+	m_noDirection.state = 2;
+}
+
+void KSCircleBase::stopAnimationDirection()
+{
+	//		m_direction.state = 2;
+}
+
+COLLISION_CODE KSCircleBase::getCrashCode( IntPoint point, IntPoint* checkPosition )
+{
+	IntPoint afterPoint = point;
+	float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+	int ip_half_distance = half_distance / 2;
+	set<IntPoint> ips;
+	for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+	{
+		for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+		{
+			float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+			if(calc_distance < ip_half_distance)
+			{
+				ips.insert(IntPoint(i, j));
+			}
+		}
+	}
+
+	COLLISION_CODE collisionCode = crashLooper(ips, checkPosition);
+	return collisionCode;
+}
+
+float KSCircleBase::getRadius()
+{
+	return RADIUS;
+}
+
+void KSCircleBase::update( float dt )
+{
+	CCNode* endP = myGD->getCommunicationNode("Main_gameNodePointer");
+	auto function = [&](CCNode* node)->CCAffineTransform
+	{
+		CCAffineTransform t = this->nodeToParentTransform();
+		for (CCNode *p = node->getParent(); p != endP; p = p->getParent())
+		{
+			if( p == NULL)
+				return CCAffineTransformIdentity;
+			else
+				t = CCAffineTransformConcat(t, p->nodeToParentTransform());
+		}
+		return t;
+	};
+
+
+
+	for(auto i : m_headImg->m_s)
+	{
+		CCPoint ret = CCPointApplyAffineTransform(i->getPosition(), function(i));
+		if(currentTimelineFooter == "_m")
+		{
+			if(m_atype == "crash")
+			{
+				crashMapForPosition(ret);
+			}
+			else if(m_atype == "normal")
+			{
+				IntPoint bulletPoint = ccp2ip(ret);
+				IntPoint jackPoint = myGD->getJackPoint();
+				int sizex = i->getContentSize().width * getCumberScale() * 1.2f / 2.f;
+				int sizey = i->getContentSize().height * getCumberScale() * 1.2 / 2.f;
+				auto mapState = myGD->mapState;
+
+				//					if(myGD->getJackState() == jackStateDrawing &&
+				//						 (bulletPoint - jackPoint).length() <= sizex)
+				//					{
+				//						myGD->communication("CP_jackCrashDie");
+				//						myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+				//					}
+				//					else
+				{
+					for(int y = bulletPoint.y - sizey; y<=bulletPoint.y + sizey; y++)
+					{
+						for(int x = bulletPoint.x - sizex; x<=bulletPoint.x + sizex; x++)
+						{
+							//CCLog("\t %d %d", x, y);
+							if(IntPoint(x, y).isInnerMap() &&
+								mapState[x][y] == mapType::mapNewline)
+							{
+								myGD->communication("PM_addPathBreaking", IntPoint(x, y));
+								goto end;
+							}
+						}
+					}
+end:
+					;
+				}
+
+			}
+			else if(m_atype == "special")
+			{
+				IntPoint bulletPoint = ccp2ip(ret);
+				IntPoint jackPoint = myGD->getJackPoint();
+				if( (bulletPoint - jackPoint).length() <= 2)
+				{
+					myGD->communication("CP_jackCrashDie");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+				}
+			}
+		}
+	}
+}
+
+IntPoint KSCircleBase::getMapPoint( CCPoint c )
+{
+	return IntPoint(round((c.x - 1) / pixelSize + 1.f),
+		round((c.y - 1) / pixelSize + 1.f));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bool CircleBossCCB::onAssignCCBCustomProperty( cocos2d::CCObject *pTarget, const char *pMemberVariableName, cocos2d::extension::CCBValue *pCCBValue )
+{
+	return false;
+}
+
+bool CircleBossCCB::onAssignCCBMemberVariable( CCObject * pTarget, const char * pMemberVariableName, CCNode * pNode )
+{
+	/*
+	* CCB_MEMBERVARIABLEASSIGNER_GLUE parameters
+	* 1. 타겟. 커스텀 클래스, 여기선 this (this == pTarget)
+	* 2. 매칭시킬 변수 이름. pMemberVariableName == "m_pSprBg" 코코스빌더에서 지정한 이름과 같아야 매칭이 됩니다.
+	* 3. 멤버변수의 타입. (CCSprite*)
+	* 4. 헤더에 선언한 실제 멤버변수 this->m_pSprBg
+	*/
+	//    CCB_MEMBERVARIABLEASSIGNER_GLUE(this,   "m_7", CCSprite *, m_7);
+	CCSprite* temp = 0;
+	if (pTarget == this) {
+		temp = dynamic_cast<CCSprite*>(pNode);
+		temp->retain();
+		m_s.push_back(temp);
+		return true;
+
+	}
+	/*
+	* 성공하면 위에서 return true 됩니다.
+	*/
+	return false;
+}
+
+void CircleBossCCB::onNodeLoaded( CCNode * pNode, CCNodeLoader * pNodeLoader )
+{
+
+}

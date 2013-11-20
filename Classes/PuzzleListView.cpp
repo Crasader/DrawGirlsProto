@@ -308,3 +308,146 @@ void PuzzleListView::myInit()
 	
 	CCLayer::init();
 }
+
+PuzzleListView* PuzzleListView::create()
+{
+	PuzzleListView* t_clv = new PuzzleListView();
+	t_clv->myInit();
+	t_clv->autorelease();
+	return t_clv;
+}
+
+void PuzzleListView::setPercentage( float t_p )
+{
+	setPosition(ccp(min_positionX*t_p,getPositionY()));
+	for(int i=0;i<getChildrenCount();i++)
+	{
+		CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(i);
+		((PLV_Node*)t_child)->viewCheck();
+	}
+}
+
+void PuzzleListView::touchCancel()
+{
+	if(touched_index != 0)
+	{
+		CCNode* t_child = (CCNode*)getChildByTag(touched_index);
+		((PLV_Node*)t_child)->touchCancel();
+	}
+}
+
+void PuzzleListView::startViewCheck()
+{
+	schedule(schedule_selector(PuzzleListView::viewChecking));
+}
+
+void PuzzleListView::stopViewCheck()
+{
+	unschedule(schedule_selector(PuzzleListView::viewChecking));
+}
+
+CCRect PuzzleListView::getViewRect()
+{
+	return view_rect;
+}
+
+void PuzzleListView::viewChecking()
+{
+	for(int i=0;i<getChildrenCount();i++)
+	{
+		CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(i);
+		((PLV_Node*)t_child)->viewCheck();
+	}
+}
+
+
+
+
+
+
+
+
+PLV_Node* PLV_Node::create( int t_puzzle_number, CCObject* t_menu, SEL_MenuHandler d_menu, CCPoint t_position, CCRect t_rect )
+{
+	PLV_Node* t_n = new PLV_Node();
+	t_n->myInit(t_puzzle_number, t_menu, d_menu, t_position, t_rect);
+	t_n->autorelease();
+	return t_n;
+}
+
+void PLV_Node::viewCheck()
+{
+	CCPoint parent_position = getParent()->getPosition();
+	CCRect tt_rect = CCRectMake(parent_position.x+my_position.x-my_size.width/2.f, parent_position.y+my_position.y-my_size.height/2.f, my_size.width, my_size.height);
+	if(parent_view_rect.intersectsRect(tt_rect))
+	{
+		if(!is_setted)
+			setChild();
+	}
+	else
+	{
+		is_setted = false;
+		removeAllChildren();
+	}
+}
+
+void PLV_Node::touchCancel()
+{
+	((CCMenu*)getChildByTag(puzzle_number))->ccTouchCancelled(NULL, NULL);
+}
+
+bool PLV_Node::isSetted()
+{
+	return is_setted;
+}
+
+int PLV_Node::getPuzzleNumber()
+{
+	return puzzle_number;
+}
+
+void PLV_Node::setChild()
+{
+	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int found_index = 0;
+	for(int i=1;i<=puzzle_count && found_index == 0;i++)
+	{
+		int puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+		if(puzzle_no == puzzle_number)
+			found_index = i;
+	}
+
+	CCSprite* n_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
+	CCSprite* s_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
+	s_back->setColor(ccGRAY);
+
+	CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, target_menu, delegate_menu);
+	back_item->setTag(puzzle_number);
+
+	CCMenu* back_menu = CCMenu::createWithItem(back_item);
+	back_menu->setPosition(CCPointZero);
+	back_menu->setTouchEnabled(false);
+	addChild(back_menu, 0, puzzle_number);
+
+	is_setted = true;;
+}
+
+void PLV_Node::myInit( int t_puzzle_number, CCObject* t_menu, SEL_MenuHandler d_menu, CCPoint t_position, CCRect t_rect )
+{
+	puzzle_number = t_puzzle_number;
+	target_menu = t_menu;
+	delegate_menu = d_menu;
+	my_position = t_position;
+	parent_view_rect = t_rect;
+
+	setPosition(my_position);
+
+	my_size = CCSizeMake(136, 115);
+	is_setted = false;
+
+	CCRect tt_rect = CCRectMake(my_position.x-my_size.width/2.f, my_position.y-my_size.height/2.f, my_size.width, my_size.height);
+	if(parent_view_rect.intersectsRect(tt_rect))
+	{
+		setChild();
+	}
+}

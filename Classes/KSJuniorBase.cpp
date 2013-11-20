@@ -345,4 +345,151 @@ void KSJuniorBase::scaleAdjustment(float dt)
 	
 }
 
+void KSJuniorBase::onStartMoving()
+{
+	m_state = CUMBERSTATEMOVING;
+	schedule(schedule_selector(KSCumberBase::movingAndCrash));
+}
+
+void KSJuniorBase::onStopMoving()
+{
+	m_state = CUMBERSTATESTOP;
+}
+
+void KSJuniorBase::setPosition( const CCPoint& t_sp )
+{
+	//		CCLog("setPos %f %f", t_sp.x, t_sp.y);
+	//		KSCumberBase::setPosition(t_sp);
+	m_headImg->setPosition(t_sp);
+	//		myGD->setMainCumberPoint(ccp2ip(t_sp));
+	m_mapPoint = ccp2ip(t_sp);
+	//		myGD->communication("Main_moveGamePosition", t_sp);
+	//		myGD->communication("VS_setMoveGamePosition", t_sp);
+	//		myGD->communication("Main_moveGamePosition", t_sp);
+	//		myGD->communication("Main_moveGamePosition", t_sp);
+	//		std::thread t1([](){;});
+}
+
+void KSJuniorBase::setPositionX( float t_x )
+{
+	setPosition(ccp(t_x, getPositionY()));
+}
+
+void KSJuniorBase::setPositionY( float t_y )
+{
+	setPosition(ccp(getPositionX(), t_y));
+}
+
+const CCPoint& KSJuniorBase::getPosition()
+{
+	return m_headImg->getPosition();
+}
+
+CCPoint KSJuniorBase::getMissilePoint()
+{
+	return getPosition() + ccp(0, 0);
+}
+
+void KSJuniorBase::setScale( float scale )
+{
+	m_headImg->setScale(scale);
+}
+
+void KSJuniorBase::setScaleX( float x )
+{
+	m_headImg->setScaleX(x);
+}
+
+void KSJuniorBase::setScaleY( float y )
+{
+	m_headImg->setScaleY(y);
+}
+
+void KSJuniorBase::endTeleport()
+{
+	teleportImg->removeFromParentAndCleanup(true);
+	teleportImg = NULL;
+	startMoving();
+	myGD->communication("CP_onPatternEnd");
+}
+
+void KSJuniorBase::startTeleport()
+{
+	if(teleportImg)
+	{
+		teleportImg->removeFromParentAndCleanup(true);
+		teleportImg = NULL;
+	}
+
+	teleportImg = CCSprite::create("teleport_light.png");
+	teleportImg->setScale(0.01f);
+	addChild(teleportImg);
+
+	CCBlink* t_scale = CCBlink::create(0.5, 0);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSJuniorBase::smaller));
+
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+
+	teleportImg->runAction(t_seq);
+	AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
+}
+
+void KSJuniorBase::smaller()
+{
+	CCBlink* t_scale = CCBlink::create(0.5, 8);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSJuniorBase::randomPosition));
+
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+
+	runAction(t_seq);
+}
+
+void KSJuniorBase::stopAnimationNoDirection()
+{
+	m_noDirection.state = 2;
+}
+
+COLLISION_CODE KSJuniorBase::getCrashCode( IntPoint point, IntPoint* checkPosition )
+{
+	IntPoint afterPoint = point;
+	float half_distance = RADIUS*getCumberScale(); // 20.f : radius for base scale 1.f
+	int ip_half_distance = half_distance / 2;
+	set<IntPoint> ips;
+	for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
+	{
+		for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
+		{
+			float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+			if(calc_distance < ip_half_distance)
+			{
+				ips.insert(IntPoint(i, j));
+			}
+		}
+	}
+
+	COLLISION_CODE collisionCode = crashLooper(ips, checkPosition);
+	return collisionCode;
+}
+
+float KSJuniorBase::getRadius()
+{
+	return RADIUS;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

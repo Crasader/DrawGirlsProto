@@ -65,13 +65,7 @@ public:
 class InvisibleSprite : public CCNode
 {
 public:
-	static InvisibleSprite* create(const char* filename, bool isPattern)
-	{
-		InvisibleSprite* t_iv = new InvisibleSprite();
-		t_iv->myInit(filename, isPattern);
-		t_iv->autorelease();
-		return t_iv;
-	}
+	static InvisibleSprite* create(const char* filename, bool isPattern);
 	
 	virtual ~InvisibleSprite()
 	{
@@ -80,12 +74,7 @@ public:
 	
 private:
 	
-	void myInit(const char* filename, bool isPattern)
-	{
-		CCSprite* t_spr = mySIL->getLoadedImg(filename);
-		t_spr->setPosition(ccp(160,215));
-		addChild(t_spr);
-	}
+	void myInit(const char* filename, bool isPattern);
 };
 
 //class TestEyeSprite : public CCSprite
@@ -140,29 +129,13 @@ private:
 class VisibleSprite : public CCSprite
 {
 public:
-	static VisibleSprite* create(const char* filename, bool isPattern, CCArray* t_drawRects)
-	{
-		VisibleSprite* t_v = new VisibleSprite();
-		t_v->myInit(filename, isPattern, t_drawRects);
-		t_v->autorelease();
-		return t_v;
-	}
+	static VisibleSprite* create(const char* filename, bool isPattern, CCArray* t_drawRects);
 	
-	void setMoveGamePosition(CCPoint t_p)
-	{
-		jack_position = t_p;
-	}
+	void setMoveGamePosition(CCPoint t_p);
 	
-	CCPoint getMoveGamePosition()
-	{
-		return jack_position;
-	}
+	CCPoint getMoveGamePosition();
 	
-	void setSceneNode(CCObject* t_scene_node)
-	{
-		scene_node = (CCNode*)t_scene_node;
-		is_set_scene_node = true;
-	}
+	void setSceneNode(CCObject* t_scene_node);
 	
 private:
 	CCArray* drawRects;
@@ -174,221 +147,41 @@ private:
 	CCNode* scene_node;
 	bool is_set_scene_node;
 	
-	virtual void visit()
-	{
-		unsigned int loopCnt = drawRects->count();
-		
-		glEnable(GL_SCISSOR_TEST);
-		
-		for(int i=0;i<loopCnt;i++)
-		{
-			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
-			
-			float wScale = viewport[2] / design_resolution_size.width;
-			float hScale = viewport[3] / design_resolution_size.height;
-			
-			float x, y, w, h;
-			
-			if(is_set_scene_node)
-			{
-				x = (t_rect->origin.x*myGD->game_scale+jack_position.x+scene_node->getPositionX())*wScale + viewport[0]-1;
-				y = (t_rect->origin.y*myGD->game_scale+jack_position.y+scene_node->getPositionY())*hScale + viewport[1]-1;
-				w = (t_rect->size.width*myGD->game_scale)*wScale+2;
-				h = (t_rect->size.height*myGD->game_scale)*hScale+2;
-			}
-			else
-			{
-				x = (t_rect->origin.x*myGD->game_scale+jack_position.x)*wScale + viewport[0]-1;
-				y = (t_rect->origin.y*myGD->game_scale+jack_position.y)*hScale + viewport[1]-1;
-				w = (t_rect->size.width*myGD->game_scale)*wScale+2;
-				h = (t_rect->size.height*myGD->game_scale)*hScale+2;
-			}
-			
-			if(y > screen_size.height || y+h < 0.f)
-				continue;
-			else
-			{
-				glScissor(x,y,w,h);
-				draw();
-			}
-			
-		}
-		
-		glDisable(GL_SCISSOR_TEST);
-	}
+	virtual void visit();
 	
-	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects)
-	{
-		initWithTexture(mySIL->addImage(filename));
-		setPosition(ccp(160,215));
-		
-		is_set_scene_node = false;
-		
-		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		design_resolution_size = CCEGLView::sharedOpenGLView()->getDesignResolutionSize();
-		glGetIntegerv(GL_VIEWPORT, viewport);
-
-		drawRects = t_drawRects;
-	}
+	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects);
 };
 
 class VisibleParent : public CCNode
 {
 public:
-	static VisibleParent* create(const char* filename, bool isPattern)
-	{
-		VisibleParent* t_vp = new VisibleParent();
-		t_vp->myInit(filename, isPattern);
-		t_vp->autorelease();
-		return t_vp;
-	}
+	static VisibleParent* create(const char* filename, bool isPattern);
 	
-	void setDrawRects(CCArray* t_rects)
-	{
-		drawRects->removeAllObjects();
-		drawRects->addObjectsFromArray(t_rects);
-	}
+	void setDrawRects(CCArray* t_rects);
 	
 	virtual ~VisibleParent()
 	{
 		drawRects->release();
 	}
 	
-	CCArray* getDrawRects()
-	{
-		return drawRects;
-	}
+	CCArray* getDrawRects();
 	
 private:
 	VisibleSprite* myVS;
 	
 	CCArray* drawRects;
 	
-	void divideRect(IntPoint crashPoint)
-	{
-		if(mySD->silData[crashPoint.x][crashPoint.y] == true)
-			myGD->communication("UI_decreasePercentage");
-		
-		crashPoint.x = (crashPoint.x-1)*pixelSize;
-		crashPoint.y = (crashPoint.y-1)*pixelSize;
-		
-		vector<IntRect*> removeArray;
-		int loopCnt = drawRects->count();
-		for(int i=0;i<loopCnt;i++)
-		{
-			IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
-			if(crashPoint.x >= t_rect->origin.x && crashPoint.x < t_rect->origin.x + t_rect->size.width && crashPoint.y >= t_rect->origin.y && crashPoint.y < t_rect->origin.y + t_rect->size.height)
-			{
-				// divide rect
-				IntSize t_size;
-				
-				// left down
-				t_size.width = crashPoint.x - t_rect->origin.x;
-				t_size.height = crashPoint.y - t_rect->origin.y + pixelSize;
-				if(t_size.width >= pixelSize) // left down create
-				{
-					IntRect* n_rect = new IntRect(t_rect->origin.x, t_rect->origin.y, t_size.width, t_size.height);
-					n_rect->autorelease();
-					drawRects->addObject(n_rect);
-				}
-				
-				// down right
-				t_size.width = t_rect->origin.x + t_rect->size.width - crashPoint.x;
-				t_size.height = crashPoint.y - t_rect->origin.y;
-				if(t_size.height >= pixelSize) // down right create
-				{
-					IntRect* n_rect = new IntRect(crashPoint.x, t_rect->origin.y, t_size.width, t_size.height);
-					n_rect->autorelease();
-					drawRects->addObject(n_rect);
-				}
-				
-				// right up
-				t_size.width = t_rect->origin.x + t_rect->size.width - crashPoint.x - pixelSize;
-				t_size.height = t_rect->origin.y + t_rect->size.height - crashPoint.y;
-				if(t_size.width >= pixelSize)
-				{
-					IntRect* n_rect = new IntRect(crashPoint.x+pixelSize, crashPoint.y, t_size.width, t_size.height);
-					n_rect->autorelease();
-					drawRects->addObject(n_rect);
-				}
-				
-				// up left
-				t_size.width = crashPoint.x - t_rect->origin.x + pixelSize;
-				t_size.height = t_rect->origin.y + t_rect->size.height - crashPoint.y - pixelSize;
-				if(t_size.height >= pixelSize)
-				{
-					IntRect* n_rect = new IntRect(t_rect->origin.x, crashPoint.y + pixelSize, t_size.width, t_size.height);
-					n_rect->autorelease();
-					drawRects->addObject(n_rect);
-				}
-				removeArray.push_back(t_rect);
-			}
-		}
-		
-		while(!removeArray.empty())
-		{
-			IntRect* t_rect = removeArray.back();
-			removeArray.pop_back();
-			drawRects->removeObject(t_rect);
-		}
-	}
+	void divideRect(IntPoint crashPoint);
 	
-	void setMoveGamePosition(CCPoint t_p)
-	{
-//		if(!myGD->is_setted_jack || myGD->game_step == kGS_unlimited)
-		{
-			CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
-			if(y_value > 60)																	y_value = 60;
-			else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
-			
-			if(myGD->gamescreen_type == kGT_full)				myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
-			else if(myGD->gamescreen_type == kGT_leftUI)		myVS->setMoveGamePosition(ccp(50+myGD->boarder_value,y_value));
-			else if(myGD->gamescreen_type == kGT_rightUI)		myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
-		}
-	}
+	void setMoveGamePosition(CCPoint t_p);
 	
 	CCPoint limitted_map_position;
 	
-	void setLimittedMapPosition()
-	{
-		limitted_map_position = myVS->getMoveGamePosition();
-	}
+	void setLimittedMapPosition();
 	
-	void changingGameStep(int t_step)
-	{
-		IntPoint jack_point = myGD->getJackPoint();
-		CCPoint jack_position = jack_point.convertToCCP();
-		
-		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float y_value = -jack_position.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
-		if(y_value > 60)																	y_value = 60;
-		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
-		
-		if(myGD->gamescreen_type == kGT_full)				jack_position = ccp(myGD->boarder_value,y_value);
-		else if(myGD->gamescreen_type == kGT_leftUI)		jack_position = ccp(50+myGD->boarder_value,y_value);
-		else if(myGD->gamescreen_type == kGT_rightUI)		jack_position = ccp(myGD->boarder_value,y_value);
-		
-		CCPoint after_position = ccpAdd(limitted_map_position, ccpMult(ccpSub(jack_position, limitted_map_position), t_step/15.f));
-		myVS->setMoveGamePosition(after_position);
-	}
+	void changingGameStep(int t_step);
 	
-	void myInit(const char* filename, bool isPattern)
-	{
-		drawRects = new CCArray(1);
-		setPosition(CCPointZero);
-		
-		myGD->V_Ip["VS_divideRect"] = std::bind(&VisibleParent::divideRect, this, _1);
-		myGD->V_CCP["VS_setMoveGamePosition"] = std::bind(&VisibleParent::setMoveGamePosition, this, _1);
-		myGD->V_V["VS_setLimittedMapPosition"] = std::bind(&VisibleParent::setLimittedMapPosition, this);
-		myGD->V_I["VS_changingGameStep"] = std::bind(&VisibleParent::changingGameStep, this, _1);
-		
-		myVS = VisibleSprite::create(filename, isPattern, drawRects);
-		myVS->setPosition(CCPointZero);
-		addChild(myVS);
-		
-		myGD->V_CCO["VS_setSceneNode"] = std::bind(&VisibleSprite::setSceneNode, myVS, _1);
-	}
+	void myInit(const char* filename, bool isPattern);
 };
 
 enum MSzorder{
@@ -409,170 +202,19 @@ public:
 class MapScanner : public CCNode
 {
 public:
-	static MapScanner* create()
-	{
-		MapScanner* myMS = new MapScanner();
-		myMS->myInit();
-		myMS->autorelease();
-		return myMS;
-	}
+	static MapScanner* create();
 
 	void scanMap();
 	
-	virtual void visit()
-	{
-		glEnable(GL_SCISSOR_TEST);
-		
-		int viewport [4];
-		glGetIntegerv (GL_VIEWPORT, viewport);
-		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float rate = frame_size.height/frame_size.width;
-		CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
-		float wScale = viewport[2] / rSize.width;
-		float hScale = viewport[3] / rSize.height;
-		
-		float x = 0*wScale + viewport[0];
-		float y = 0*hScale + viewport[1];
-		float w = 480*wScale;
-		float h = 320*(rate/(320.f/480.f))*hScale;
-		
-		glScissor(x,y,w,h);
-		
-		CCNode::visit();
-		
-		glDisable(GL_SCISSOR_TEST);
-	}
+	virtual void visit();
 	
-	void exchangeMS()
-	{
-		CCTexture2D* top_texture = CCTextureCache::sharedTextureCache()->addImage("frame_top.png");
-		CCAnimation* top_animation = CCAnimation::create();
-		top_animation->setDelayPerUnit(0.1f);
-		for(int i=0;i<4;i++)
-			top_animation->addSpriteFrameWithTexture(top_texture, CCRectMake(0, i*7, 334, 7));
-		CCAnimate* top_animate = CCAnimate::create(top_animation);
-		CCRepeatForever* top_repeat = CCRepeatForever::create(top_animate);
-		top_boarder->runAction(top_repeat);
-		
-		CCTexture2D* bottom_texture = CCTextureCache::sharedTextureCache()->addImage("frame_bottom.png");
-		CCAnimation* bottom_animation = CCAnimation::create();
-		bottom_animation->setDelayPerUnit(0.1f);
-		for(int i=0;i<4;i++)
-			bottom_animation->addSpriteFrameWithTexture(bottom_texture, CCRectMake(0, i*7, 334, 7));
-		CCAnimate* bottom_animate = CCAnimate::create(bottom_animation);
-		CCRepeatForever* bottom_repeat = CCRepeatForever::create(bottom_animate);
-		bottom_boarder->runAction(bottom_repeat);
-		
-		CCTexture2D* left_texture = CCTextureCache::sharedTextureCache()->addImage("frame_left.png");
-		CCAnimation* left_animation = CCAnimation::create();
-		left_animation->setDelayPerUnit(0.1f);
-		for(int i=0;i<4;i++)
-			left_animation->addSpriteFrameWithTexture(left_texture, CCRectMake(i*7, 0, 7, 430));
-		CCAnimate* left_animate = CCAnimate::create(left_animation);
-		CCRepeatForever* left_repeat = CCRepeatForever::create(left_animate);
-		left_boarder->runAction(left_repeat);
-		
-		CCTexture2D* right_texture = CCTextureCache::sharedTextureCache()->addImage("frame_right.png");
-		CCAnimation* right_animation = CCAnimation::create();
-		right_animation->setDelayPerUnit(0.1f);
-		for(int i=0;i<4;i++)
-			right_animation->addSpriteFrameWithTexture(right_texture, CCRectMake(i*7, 0, 7, 430));
-		CCAnimate* right_animate = CCAnimate::create(right_animation);
-		CCRepeatForever* right_repeat = CCRepeatForever::create(right_animate);
-		right_boarder->runAction(right_repeat);
-		
-		if(invisibleImg)
-		{
-			invisibleImg->removeFromParentAndCleanup(true);
-			invisibleImg = NULL;
-		}
-		
-		invisibleImg = InvisibleSprite::create(CCString::createWithFormat("stage%d_level2_invisible.png",silType)->getCString(), false);
-		invisibleImg->setPosition(CCPointZero);
-		addChild(invisibleImg, invisibleZorder);
-		
-		CCArray* t_rect_array = new CCArray();;
-		
-		if(visibleImg)
-		{
-			t_rect_array->initWithArray(visibleImg->getDrawRects());
-			visibleImg->removeFromParentAndCleanup(true);
-			visibleImg = NULL;
-		}
-		
-		visibleImg = VisibleParent::create(CCString::createWithFormat("stage%d_level2_visible.png",silType)->getCString(), false);
-		visibleImg->setPosition(CCPointZero);
-		addChild(visibleImg, visibleZorder);
-		
-		visibleImg->setDrawRects(t_rect_array);
-		
-		t_rect_array->autorelease();
-		
-		scanMap();
-	}
+	void exchangeMS();
 	
-	void randomingRectView(CCPoint t_p)
-	{
-		if(my_tic_toc)
-			AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", false);
-		
-		my_tic_toc = !my_tic_toc;
-		
-		int base_value = roundf(-t_p.y/myGD->game_scale/2.f);
-		
-		int gacha_cnt = mySGD->getStartMapGachaCnt();
-		
-		if(gacha_cnt)
-		if(gacha_cnt > 1)
-			gacha_cnt = 1;
-		
-		gacha_cnt = rand()%(gacha_cnt*5+1);
-		
-		if(gacha_cnt <= 3)
-		{
-			random_device rd;
-			default_random_engine e1(rd());
-			uniform_int_distribution<int> uniform_dist(0, 24);
-			
-			init_rect.size.width = uniform_dist(e1) + 6;//rand()%(maxSize.width-minSize.width + 1) + minSize.width;
-			init_rect.size.height = uniform_dist(e1) + 6;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
-		}
-		else if(gacha_cnt <= 5)
-		{
-			random_device rd;
-			default_random_engine e1(rd());
-			uniform_int_distribution<int> uniform_dist(0, 30);
-			
-			init_rect.size.width = uniform_dist(e1) + 50;//rand()%(maxSize.width-minSize.width + 1) + minSize.width; // rand()%(60-30 + 1)
-			init_rect.size.height = uniform_dist(e1) + 40;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
-		}
-		
-		IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
-		
-		init_rect.origin.x = rand()%maxPoint.x+10;//mapWidthInnerBegin+10;
-		init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/myGD->game_scale/2.f)-init_rect.size.height+1;
-		
-		if(!random_rect_img)
-		{
-			random_rect_img = CCSprite::create("whitePaper.png");
-			random_rect_img->setColor(ccGRAY);
-			addChild(random_rect_img, blockZorder);
-		}
-		
-		random_rect_img->setTextureRect(CCRectMake(0, 0, init_rect.size.width*2.f, init_rect.size.height*2.f));
-		random_rect_img->setPosition(ccp(init_rect.origin.x*pixelSize + init_rect.size.width, init_rect.origin.y*pixelSize-1 + init_rect.size.height));
-	}
+	void randomingRectView(CCPoint t_p);
 	
-	void stopRandomingRectView()
-	{
-		random_rect_img->removeFromParentAndCleanup(true);
-		myGD->initUserSelectedStartRect(init_rect);
-	}
+	void stopRandomingRectView();
 	
-	void startGame()
-	{
-		start_map_lucky_item->checkInnerRect();
-	}
+	void startGame();
 	
 private:
 	InvisibleSprite* invisibleImg;
@@ -597,115 +239,15 @@ private:
 	
 	void bfsCheck(mapType beforeType, mapType afterType, IntPoint startPoint);
 	
-	BFS_Point directionVector(IntDirection direction)
-	{
-		BFS_Point r_v;
-		if(direction == directionLeftUp)			{		r_v.x = -1;		r_v.y = 1;		}
-		else if(direction == directionLeft)			{		r_v.x = -1;		r_v.y = 0;		}
-		else if(direction == directionLeftDown)		{		r_v.x = -1;		r_v.y = -1;		}
-		else if(direction == directionDown)			{		r_v.x = 0;		r_v.y = -1;		}
-		else if(direction == directionRightDown)	{		r_v.x = 1;		r_v.y = -1;		}
-		else if(direction == directionRight)		{		r_v.x = 1;		r_v.y = 0;		}
-		else if(direction == directionRightUp)		{		r_v.x = 1;		r_v.y = 1;		}
-		else if(direction == directionUp)			{		r_v.x = 0;		r_v.y = 1;		}
-		else										{		r_v.x = 0;		r_v.y = 0;		}
-		return r_v;
-	}
+	BFS_Point directionVector(IntDirection direction);
 	
-	bool isInnerMap(BFS_Point t_p)
-	{
-		if(t_p.x >= mapWidthInnerBegin && t_p.x < mapWidthInnerEnd && t_p.y >= mapHeightInnerBegin && t_p.y < mapHeightInnerEnd)
-			return true;
-		else
-			return false;
-	}
+	bool isInnerMap(BFS_Point t_p);
 	
-	BackFilename getBackVisibleFilename()
-	{
-		BackFilename r_value;
-		
-		r_value.filename = CCString::createWithFormat("stage%d_level1_visible.png", silType)->getCString();
-		r_value.isPattern = false;
-		
-		return r_value;
-	}
+	BackFilename getBackVisibleFilename();
 	
-	BackFilename getBackInvisibleFilename()
-	{
-		BackFilename r_value;
-		
-		r_value.filename = CCString::createWithFormat("stage%d_level1_invisible.png", silType)->getCString();
-		r_value.isPattern = false;
-		
-		return r_value;
-	}
+	BackFilename getBackInvisibleFilename();
 	
-	void setMapImg()
-	{
-		if(invisibleImg)
-		{
-			invisibleImg->release();
-			invisibleImg = NULL;
-		}
-		
-		BackFilename visible_filename = getBackVisibleFilename();
-		BackFilename invisible_filename = getBackInvisibleFilename();
-		
-		invisibleImg = InvisibleSprite::create(invisible_filename.filename.c_str(), invisible_filename.isPattern);
-		invisibleImg->setPosition(CCPointZero);
-		addChild(invisibleImg, invisibleZorder);
-		
-		if(visibleImg)
-		{
-			visibleImg->release();
-			visibleImg = NULL;
-		}
-		
-		visibleImg = VisibleParent::create(visible_filename.filename.c_str(), visible_filename.isPattern);
-		visibleImg->setPosition(CCPointZero);
-		addChild(visibleImg, visibleZorder);
-		
-		if(blockParent)
-		{
-			blockParent->release();
-			blockParent = NULL;
-		}
-		
-		blockParent = CCNode::create();
-		addChild(blockParent, blockZorder);
-		
-		CCSprite* top_back = CCSprite::create("top_back.png");
-		top_back->setAnchorPoint(ccp(0.5,0));
-		top_back->setPosition(ccp(160,430));
-		top_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
-		addChild(top_back, topBottomZorder);
-		
-		CCSprite* bottom_back = CCSprite::create("bottom_back.png");
-		bottom_back->setAnchorPoint(ccp(0.5,1));
-		bottom_back->setPosition(ccp(160,0));
-		bottom_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
-		addChild(bottom_back, topBottomZorder);
-		
-		top_boarder = CCSprite::create("frame_top.png", CCRectMake(0, 0, 334, 7));
-		top_boarder->setAnchorPoint(ccp(0.5,0));
-		top_boarder->setPosition(ccp(160,430));
-		addChild(top_boarder, boarderZorder);
-		
-		bottom_boarder = CCSprite::create("frame_bottom.png", CCRectMake(0, 0, 334, 7));
-		bottom_boarder->setAnchorPoint(ccp(0.5,1));
-		bottom_boarder->setPosition(ccp(160,0));
-		addChild(bottom_boarder, boarderZorder);
-		
-		left_boarder = CCSprite::create("frame_left.png", CCRectMake(0,0,7,430));
-		left_boarder->setAnchorPoint(ccp(1,0.5));
-		left_boarder->setPosition(ccp(0,215));
-		addChild(left_boarder, boarderZorder);
-		
-		right_boarder = CCSprite::create("frame_right.png", CCRectMake(0,0,7,430));
-		right_boarder->setAnchorPoint(ccp(0,0.5));
-		right_boarder->setPosition(ccp(320,215));
-		addChild(right_boarder, boarderZorder);
-	}
+	void setMapImg();
 	
 	CCSprite* top_boarder;
 	CCSprite* bottom_boarder;
@@ -715,143 +257,18 @@ private:
 	CCSpriteBatchNode* top_block_manager;
 	CCSpriteBatchNode* bottom_block_manager;
 	
-	void setTopBottomBlock()
-	{
-		float top_y = (myGD->limited_step_top-1)*pixelSize;
-		float bottom_y = (myGD->limited_step_bottom-1)*pixelSize+2.f;
-		
-		top_block_manager = CCSpriteBatchNode::create("temp_block.png");
-		top_block_manager->setPosition(CCPointZero);
-		addChild(top_block_manager, blockZorder);
-		
-		int top_cnt = 0;
-		while(top_y < 430)
-		{
-			top_cnt++;
-			for(int i=0;i<10;i++)
-			{
-				CCSprite* t_block = CCSprite::create("temp_block.png");
-				t_block->setAnchorPoint(ccp(0,0));
-				t_block->setPosition(ccp(i*32, top_y));
-				t_block->setTag(top_cnt*10+i);
-				top_block_manager->addChild(t_block);
-			}
-			top_y += 32.f;
-		}
-		top_block_manager->setTag(top_cnt);
-		
-		bottom_block_manager = CCSpriteBatchNode::create("temp_block.png");
-		bottom_block_manager->setPosition(CCPointZero);
-		addChild(bottom_block_manager, blockZorder);
-		
-		int bottom_cnt = 0;
-		while(bottom_y > 0)
-		{
-			bottom_cnt++;
-			for(int i=0;i<10;i++)
-			{
-				CCSprite* t_block = CCSprite::create("temp_block.png");
-				t_block->setAnchorPoint(ccp(0,1.f));
-				t_block->setPosition(ccp(i*32, bottom_y));
-				t_block->setTag(bottom_cnt*10+i);
-				bottom_block_manager->addChild(t_block);
-			}
-			bottom_y -= 32.f;
-		}
-		bottom_block_manager->setTag(bottom_cnt);
-		
-		random_device rd;
-		default_random_engine e1(rd());
-		uniform_int_distribution<int> uniform_dist1(mapWidthInnerBegin+10, mapWidthInnerEnd-10);
-		uniform_int_distribution<int> uniform_dist2(myGD->limited_step_bottom+5, myGD->limited_step_top-5);
-		
-		int random_x = uniform_dist1(e1);
-		int random_y = myGD->limited_step_bottom + roundf((myGD->limited_step_top-myGD->limited_step_bottom)/2.f);
-		
-		start_map_lucky_item = StartMapLuckyItem::create(IntPoint(random_x, random_y));
-		addChild(start_map_lucky_item, blockZorder);
-	}
+	void setTopBottomBlock();
 	StartMapLuckyItem* start_map_lucky_item;
 	
 	bool is_removed_top_block, is_removed_bottom_block;
 	int remove_block_cnt;
-	void startRemoveBlock()
-	{
-		is_removed_top_block = false;
-		is_removed_bottom_block = false;
-		remove_block_cnt = 0;
-		schedule(schedule_selector(MapScanner::removingBlock), 0.15f);
-	}
+	void startRemoveBlock();
 	
-	void removingBlock()
-	{
-		remove_block_cnt++;
-		
-		if(!is_removed_top_block)
-		{
-			if(top_block_manager->getTag() < remove_block_cnt)
-				is_removed_top_block = true;
-			else
-			{
-				for(int i=0;i<10;i++)
-					top_block_manager->removeChildByTag(remove_block_cnt*10+i);
-			}
-		}
-		if(!is_removed_bottom_block)
-		{
-			if(bottom_block_manager->getTag() < remove_block_cnt)
-				is_removed_bottom_block = true;
-			else
-			{
-				for(int i=0;i<10;i++)
-					bottom_block_manager->removeChildByTag(remove_block_cnt*10+i);
-			}
-		}
-		
-		
-		if(is_removed_top_block && is_removed_bottom_block)
-		{
-			unschedule(schedule_selector(MapScanner::removingBlock));
-			top_block_manager->removeFromParent();
-			bottom_block_manager->removeFromParent();
-		}
-	}
+	void removingBlock();
 	
-	void showEmptyPoint(CCPoint t_point)
-	{
-		CCSprite* show_empty_point = CCSprite::create("show_empty_point.png");
-		show_empty_point->setAnchorPoint(ccp(0.5f,0.f));
-		show_empty_point->setPosition(t_point);
-		addChild(show_empty_point, blockZorder);
-		
-		CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccpAdd(t_point, ccp(0,20)));
-		CCMoveTo* t_move2 = CCMoveTo::create(0.3f, t_point);
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move1, t_move2);
-		CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
-		
-		show_empty_point->runAction(t_repeat);
-	}
+	void showEmptyPoint(CCPoint t_point);
 	
-	void myInit()
-	{
-		screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		screen_height = roundf(480*screen_size.height/screen_size.width/2.f);
-		
-		silType = mySD->getSilType();
-		
-		random_rect_img = NULL;
-		invisibleImg = NULL;
-		visibleImg = NULL;
-		blockParent = NULL;
-		
-		myGD->V_V["MS_scanMap"] = std::bind(&MapScanner::scanMap, this);
-		myGD->V_B["MS_resetRects"] = std::bind(&MapScanner::resetRects, this, _1);
-		myGD->V_CCP["MS_showEmptyPoint"] = std::bind(&MapScanner::showEmptyPoint, this, _1);
-		myGD->V_V["MS_setTopBottomBlock"] = std::bind(&MapScanner::setTopBottomBlock, this);
-		myGD->V_V["MS_startRemoveBlock"] = std::bind(&MapScanner::startRemoveBlock, this);
-		
-		setMapImg();
-	}
+	void myInit();
 };
 
 #endif

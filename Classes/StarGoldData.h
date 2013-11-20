@@ -76,264 +76,77 @@ class StarGoldData : public CCObject
 {
 public:
 	
-	static StarGoldData* sharedInstance()
-	{
-		static StarGoldData* t_sg = NULL;
-		if(t_sg == NULL)
-		{
-			t_sg = new StarGoldData();
-			t_sg->myInit();
-		}
-		return t_sg;
-	}
+	static StarGoldData* sharedInstance();
 	
-	void resetLabels()
-	{
-		star_label = NULL;
-		gold_label = NULL;
-	}
+	void resetLabels();
 	
-	void setStarLabel(CCLabelBMFont* t_label)
-	{
-		star_label = t_label;
-	}
+	void setStarLabel(CCLabelBMFont* t_label);
 	
-	int getStar()
-	{
-		return myDSH->getIntegerForKey(kDSH_Key_savedStar);
-	}
+	int getStar();
 	
-	void setStar(int t_star)
-	{
-		myDSH->setIntegerForKey(kDSH_Key_savedStar, t_star);
-		
-		if(star_label)
-			star_label->setString(CCString::createWithFormat("%d", t_star)->getCString());
-	}
+	void setStar(int t_star);
 	
-	void setGoldLabel(CCLabelBMFont* t_label)
-	{
-		gold_label = t_label;
-	}
+	void setGoldLabel(CCLabelBMFont* t_label);
 	
-	int getGold()
-	{
-		return myDSH->getIntegerForKey(kDSH_Key_savedGold);
-	}
+	int getGold();
 	
-	void setGold(int t_gold)
-	{
-		myDSH->setIntegerForKey(kDSH_Key_savedGold, t_gold);
-		
-		if(gold_label)
-			gold_label->setString(CCString::createWithFormat("%d", t_gold)->getCString());
-	}
+	void setGold(int t_gold);
 	
-	int getKeepGold()
-	{
-		return keep_gold;
-	}
+	int getKeepGold();
 	
-	void setKeepGold(int t_gold)
-	{
-		keep_gold = t_gold;
-	}
+	void setKeepGold(int t_gold);
 	
-	void setGameStart()
-	{
-		mySD->startSetting();
-		is_showtime = false;
-		is_exchanged = false;
-		is_cleared = false;
-		score = 0.f;
-		percentage = 0.f;
-		keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-		stage_grade = 0;
-		game_time = 0;
-		start_map_gacha_cnt = 0;
-		
-		deque<int> card_options;
-		deque<int>::iterator iter;
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		mySD->setCardOptions(card_options, selected_card_number);
-		
-		doubleItem_value = 0;
-		if(isUsingItem(kIC_doubleItem))		doubleItem_value += mySD->getDoubleItemOption();
-		iter = find(card_options.begin(), card_options.end(), kIC_doubleItem);
-		if(iter != card_options.end())		doubleItem_value += mySD->getCardDoubleItemOption(selected_card_number);
-		
-		longTime_value = 0;
-		if(isUsingItem(kIC_longTime))		longTime_value += mySD->getLongTimeItemOption();
-		iter = find(card_options.begin(), card_options.end(), kIC_longTime);
-		if(iter != card_options.end())		longTime_value += mySD->getCardLongTimeItemOption(selected_card_number);
-		
-		bossLittleEnergy_value = 0;
-		if(isUsingItem(kIC_bossLittleEnergy))	bossLittleEnergy_value += mySD->getBossLittleEnergyItemOption();
-		iter = find(card_options.begin(), card_options.end(), kIC_bossLittleEnergy);
-		if(iter != card_options.end())			bossLittleEnergy_value += mySD->getCardBossLittleEnergyItemOption(selected_card_number);
-		
-		subSmallSize_value = 0;
-		if(isUsingItem(kIC_subSmallSize))	subSmallSize_value += mySD->getSubSmallSizeItemOption();
-		iter = find(card_options.begin(), card_options.end(), kIC_subSmallSize);
-		if(iter != card_options.end())		subSmallSize_value += mySD->getCardSubSmallSizeItemOption(selected_card_number);
-		
-		smallArea_value = 0;
-		if(isUsingItem(kIC_smallArea))		smallArea_value += mySD->getSmallAreaItemOption();
-		iter = find(card_options.begin(), card_options.end(), kIC_smallArea);
-		if(iter != card_options.end())		smallArea_value += mySD->getCardSmallAreaItemOption(selected_card_number);
-		
-		widePerfect_value = 0;
-		if(isUsingItem(kIC_widePerfect))	widePerfect_value += mySD->getWidePerfectItemOption();
-		iter = find(card_options.begin(), card_options.end(), kIC_widePerfect);
-		if(iter != card_options.end())		widePerfect_value += mySD->getCardWidePerfectItemOption(selected_card_number);
-	}
+	void setGameStart();
 	
-	void gameClear(int t_grade, float t_score, float t_percentage, int t_game_time, int t_use_time, int t_total_time)
-	{
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
-		{
-			before_use_item[i] = is_using_item[i];
-			is_using_item[i] = false;
-		}
-		
-		is_cleared = true;
-		stage_grade = t_grade;
-		percentage = t_percentage;
-		
-		score = t_score + t_score*(stage_grade-1.f)*0.5f + t_score*(1.f-(t_use_time*1.f)/t_total_time);
-		
-		game_time = t_game_time;
-		myGD->setIsGameover(true);
-	}
+	void gameClear(int t_grade, float t_score, float t_percentage, int t_game_time, int t_use_time, int t_total_time);
 	
-	void gameOver(float t_score, float t_percentage, int t_game_time)
-	{
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
-		{
-			before_use_item[i] = is_using_item[i];
-			is_using_item[i] = false;
-		}
-		
-		score = t_score;
-		percentage = t_percentage;
-		game_time = t_game_time;
-		myGD->setIsGameover(true);
-	}
+	void gameOver(float t_score, float t_percentage, int t_game_time);
 	
-	bool getIsCleared()
-	{
-		return is_cleared;
-	}
+	bool getIsCleared();
 	
-	float getScore()
-	{
-		return score;
-	}
+	float getScore();
 	
-	float getPercentage()
-	{
-		return percentage;
-	}
+	float getPercentage();
 	
-	int getStageGrade()
-	{
-		return stage_grade;
-	}
+	int getStageGrade();
 	
-	int getStageGold()
-	{
-		return myDSH->getIntegerForKey(kDSH_Key_savedGold)-keep_gold;
-	}
+	int getStageGold();
 	
-	bool getIsAfterSceneChapter()
-	{
-		return is_after_scene_chapter;
-	}
+	bool getIsAfterSceneChapter();
 	
-	void setIsAfterSceneChapter(bool t_b)
-	{
-		is_after_scene_chapter = t_b;
-	}
+	void setIsAfterSceneChapter(bool t_b);
 	
-	bool getTutorialCleared()
-	{
-		return is_tutorial_cleared;
-	}
+	bool getTutorialCleared();
 	
-	ImgType getRandomImgType()
-	{
-//		if(!FBConnector::get()->isUsed() && rand()%5 == 0)
-//		{
-//			return kImgType_facebookLoginReward;
-//		}
-//		else
-//		{
-			int t_rand = rand()%kImgType_elemental + kImgType_specialMap;
-			return ImgType(t_rand);
-//		}
-	}
+	ImgType getRandomImgType();
 	
-	void setLoadingImgType(ImgType t_t)
-	{
-		after_loading = t_t;
-	}
+	void setLoadingImgType(ImgType t_t);
 	
 	CCSprite* getLoadingImg();
 	
-	void setOpenShopTD(CCObject* t_target, SEL_CallFuncI t_delegate)
-	{
-		shop_opener = t_target;
-		open_shop_delegate = t_delegate;
-	}
+	void setOpenShopTD(CCObject* t_target, SEL_CallFuncI t_delegate);
 	
-	void openShop(int t_code)
-	{
-		(shop_opener->*open_shop_delegate)(t_code);
-	}
+	void openShop(int t_code);
 	
-	void setAfterScene(SceneCode t_s)
-	{
-		after_scene = t_s;
-	}
+	void setAfterScene(SceneCode t_s);
 	
-	SceneCode getAfterScene(){	return after_scene;	}
+	SceneCode getAfterScene();
 	
-	void setTargetDelegate(CCObject* t_t, SEL_CallFuncB t_d)
-	{
-		graphDog_target = t_t;
-		graphDog_delegate = t_d;
-	}
+	void setTargetDelegate(CCObject* t_t, SEL_CallFuncB t_d);
 	
-	int getGameTime()
-	{
-		return game_time;
-	}
+	int getGameTime();
 	
-	void setStartRequestsData(JsonBox::Object result_data)
-	{
-		startRequestsData = result_data;
-	}
+	void setStartRequestsData(JsonBox::Object result_data);
 	
-	JsonBox::Object getStartRequestsData()
-	{
-		return startRequestsData;
-	}
+	JsonBox::Object getStartRequestsData();
 	
 	bool is_paused;
 	
 	string getFont();
 	
-	void setCollectionStarter(CollectionStarterType t_type)
-	{
-		collection_starter = t_type;
-	}
+	void setCollectionStarter(CollectionStarterType t_type);
 	
-	CollectionStarterType getCollectionStarter()
-	{
-		CollectionStarterType r_value = collection_starter;
-		collection_starter = kCST_basic;
-		return r_value;
-	}
+	CollectionStarterType getCollectionStarter();
 	
 	bool is_before_title;
 	
@@ -342,253 +155,44 @@ public:
 	
 	FailCode fail_code;
 	
-	bool isBeforeUseItem(ITEM_CODE t_i)
-	{
-		return before_use_item[t_i];
-	}
-	bool isUsingItem(ITEM_CODE t_i)
-	{
-		return is_using_item[t_i];
-	}
+	bool isBeforeUseItem(ITEM_CODE t_i);
+	bool isUsingItem(ITEM_CODE t_i);
 	
-	void setIsUsingItem(ITEM_CODE t_i, bool t_b)
-	{
-		is_using_item[t_i] = t_b;
-	}
-	void resetUsingItem()
-	{
-		is_using_item.clear();
-	}
+	void setIsUsingItem(ITEM_CODE t_i, bool t_b);
+	void resetUsingItem();
 	
 	int selected_collectionbook;
 	SceneCode before_cardsetting;
 	
-	int getNextCardNumber(int recent_card_number)
-	{
-		int t_size = has_gotten_cards.size();
-		
-		if(t_size == 1)
-			return -1;
-		
-		int found_number = -1;
-		for(int i=0;i<t_size;i++)
-		{
-			if(recent_card_number == has_gotten_cards[i].card_number)
-			{
-				found_number = i;
-				break;
-			}
-		}
-		
-		if(found_number == -1) // not found
-			return -1;
-
-		if(found_number >= t_size-1)
-			return has_gotten_cards[0].card_number;
-		else
-			return has_gotten_cards[found_number+1].card_number;
-	}
+	int getNextCardNumber(int recent_card_number);
 	
-	int getNextStageCardNumber(int recent_card_number)
-	{
-		int ing_card_number = recent_card_number;
-		bool is_found = false;
-		do{
-			ing_card_number = getNextCardNumber(ing_card_number);
-			if(ing_card_number == -1)		break;
-			if(NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number) != NSDS_GI(kSDS_CI_int1_stage_i, recent_card_number))
-				is_found = true;
-		}while(!is_found && ing_card_number != recent_card_number);
-		
-		if(!is_found)
-			return -1;
-		else
-		{
-			int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
-			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
-				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
-			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2)) > 0)
-				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
-			else
-				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
-		}
-	}
+	int getNextStageCardNumber(int recent_card_number);
 	
-	int getPreCardNumber(int recent_card_number)
-	{
-		int t_size = has_gotten_cards.size();
-		
-		if(t_size == 1)
-			return -1;
-		
-		int found_number = -1;
-		for(int i=0;i<t_size;i++)
-		{
-			if(recent_card_number == has_gotten_cards[i].card_number)
-			{
-				found_number = i;
-				break;
-			}
-		}
-		
-		if(found_number == -1) // not found
-			return -1;
-		
-		if(found_number <= 0)
-			return has_gotten_cards[t_size-1].card_number;
-		else
-			return has_gotten_cards[found_number-1].card_number;
-	}
+	int getPreCardNumber(int recent_card_number);
 	
-	int getPreStageCardNumber(int recent_card_number)
-	{
-		int ing_card_number = recent_card_number;
-		bool is_found = false;
-		do{
-			ing_card_number = getPreCardNumber(ing_card_number);
-			if(ing_card_number == -1)		break;
-			if(NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number) != NSDS_GI(kSDS_CI_int1_stage_i, recent_card_number))
-				is_found = true;
-		}while(!is_found && ing_card_number != recent_card_number);
-		
-		if(!is_found)
-			return -1;
-		else
-		{
-			int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
-			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
-				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
-			else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2)) > 0)
-				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
-			else
-				return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
-		}
-	}
+	int getPreStageCardNumber(int recent_card_number);
 	
-	void changeSortType(CardSortType t_type)
-	{
-		myDSH->setIntegerForKey(kDSH_Key_cardSortType, t_type);
-		
-		if(t_type == kCST_default)
-		{
-			struct t_CardSortDefault{
-				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
-				{
-					return a.card_number < b.card_number;
-				}
-			} pred;
-			
-			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
-		}
-		else if(t_type == kCST_take)
-		{
-			struct t_CardSortTake{
-				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
-				{
-					return a.take_number > b.take_number;
-				}
-			} pred;
-			
-			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
-		}
-		else if(t_type == kCST_gradeUp) // rank
-		{
-			struct t_CardSortGradeUp{
-				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
-				{
-					return a.rank > b.rank;
-				}
-			} pred;
-			
-			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
-		}
-		else if(t_type == kCST_gradeDown) // rank
-		{
-			struct t_CardSortGradeDown{
-				bool operator() (const CardSortInfo& a, const CardSortInfo& b)
-				{
-					return a.rank < b.rank;
-				}
-			} pred;
-			
-			sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
-		}
-	}
+	void changeSortType(CardSortType t_type);
 	
-	void addHasGottenCardNumber(int card_number)
-	{
-		int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number);
-		CardSortInfo t_info;
-		t_info.card_number = card_number;
-		t_info.take_number = take_number;
-		t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number);
-		t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
-		has_gotten_cards.push_back(t_info);
-		
-		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
-		
-		CCLog("input %d, sort", card_number);
-		for(int i=0;i<has_gotten_cards.size();i++)
-		{
-			CCLog("%d", has_gotten_cards[i].card_number);
-		}
-	}
+	void addHasGottenCardNumber(int card_number);
 	
-	int getHasGottenCardsDataCardNumber(int index)
-	{
-		return has_gotten_cards[index].card_number;
-	}
+	int getHasGottenCardsDataCardNumber(int index);
 	
-	int getHasGottenCardsSize()
-	{
-		return int(has_gotten_cards.size());
-	}
+	int getHasGottenCardsSize();
 	
-	int getDoubleItemValue(){	return doubleItem_value;	}
-	int getLongTimeValue(){		return longTime_value;		}
-	int getBossLittleEnergyValue(){		return bossLittleEnergy_value;	}
-	int getSubSmallSizeValue(){	return subSmallSize_value;	}
-	int getSmallAreaValue(){	return smallArea_value;		}
-	int getWidePerfectValue(){	return widePerfect_value;	}
-	int getStartMapGachaCnt(){	return start_map_gacha_cnt;	}
+	int getDoubleItemValue();
+	int getLongTimeValue();
+	int getBossLittleEnergyValue();
+	int getSubSmallSizeValue();
+	int getSmallAreaValue();
+	int getWidePerfectValue();
+	int getStartMapGachaCnt();
 	
-	void startMapGachaOn()
-	{
-		start_map_gacha_cnt++;
-		keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-	}
+	void startMapGachaOn();
 	
-	int isHasGottenCards(int t_stage, int t_grade)
-	{
-		for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
-		{
-			if(NSDS_GI(kSDS_CI_int1_stage_i, (*i).card_number) == t_stage && (*i).grade == t_grade)
-				return (*i).card_number;
-		}
-		
-		return 0;
-	}
+	int isHasGottenCards(int t_stage, int t_grade);
 	
-	void resetHasGottenCards()
-	{
-		has_gotten_cards.clear();
-		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=card_take_cnt;i++)
-		{
-			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number);
-			if(take_number != 0)
-			{
-				CardSortInfo t_info;
-				t_info.card_number = card_number;
-				t_info.take_number = take_number;
-				t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
-				t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
-				has_gotten_cards.push_back(t_info);
-			}
-		}
-		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
-	}
+	void resetHasGottenCards();
 	
 private:
 	CCLabelBMFont* star_label;
@@ -631,55 +235,7 @@ private:
 	
 	JsonBox::Object startRequestsData;
 	
-	void myInit()
-	{
-		is_paused = false;
-		login_getted = false;
-		is_before_title = true;
-		
-		setTargetDelegate(NULL, NULL);
-		
-		after_loading = kImgType_Empty;
-		is_after_scene_chapter = false;
-		resetLabels();
-		
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
-		{
-			before_use_item.push_back(false);
-			is_using_item.push_back(false);
-		}
-		
-		
-		if(myDSH->getIntegerForKey(kDSH_Key_heartTime) == 0)
-		{
-			myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
-			chrono::time_point<chrono::system_clock> recent_time = chrono::system_clock::now();
-			chrono::duration<double> recent_time_value = recent_time.time_since_epoch();
-			int recent_time_second = recent_time_value.count();
-			myDSH->setIntegerForKey(kDSH_Key_heartTime, recent_time_second);
-		}
-		
-		
-		if(!myDSH->getBoolForKey(kDSH_Key_notFirstExe))
-		{
-			myDSH->setBoolForKey(kDSH_Key_notFirstExe, true);
-			is_tutorial_cleared = false;
-			myDSH->setBoolForKey(kDSH_Key_bgmOff, false);
-			myDSH->setBoolForKey(kDSH_Key_effectOff, false);
-			AudioEngine::sharedInstance()->setSoundOnOff(true);
-			AudioEngine::sharedInstance()->setEffectOnOff(true);
-			
-			myDSH->resetDSH();
-		}
-		else
-		{
-			is_tutorial_cleared = true;
-			
-			AudioEngine::sharedInstance()->setSoundOnOff(!myDSH->getBoolForKey(kDSH_Key_bgmOff));
-			AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
-			
-		}
-	}
+	void myInit();
 };
 
 #endif

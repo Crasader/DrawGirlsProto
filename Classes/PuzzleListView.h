@@ -22,38 +22,15 @@ using namespace std;
 class PLV_Node : public CCNode
 {
 public:
-	static PLV_Node* create(int t_puzzle_number, CCObject* t_menu, SEL_MenuHandler d_menu, CCPoint t_position, CCRect t_rect)
-	{
-		PLV_Node* t_n = new PLV_Node();
-		t_n->myInit(t_puzzle_number, t_menu, d_menu, t_position, t_rect);
-		t_n->autorelease();
-		return t_n;
-	}
+	static PLV_Node* create(int t_puzzle_number, CCObject* t_menu, SEL_MenuHandler d_menu, CCPoint t_position, CCRect t_rect);
 	
-	void viewCheck()
-	{
-		CCPoint parent_position = getParent()->getPosition();
-		CCRect tt_rect = CCRectMake(parent_position.x+my_position.x-my_size.width/2.f, parent_position.y+my_position.y-my_size.height/2.f, my_size.width, my_size.height);
-		if(parent_view_rect.intersectsRect(tt_rect))
-		{
-			if(!is_setted)
-				setChild();
-		}
-		else
-		{
-			is_setted = false;
-			removeAllChildren();
-		}
-	}
+	void viewCheck();
 	
-	bool isSetted(){	return is_setted;	}
+	bool isSetted();
 	
-	int getPuzzleNumber(){		return puzzle_number;	}
+	int getPuzzleNumber();
 	
-	void touchCancel()
-	{
-		((CCMenu*)getChildByTag(puzzle_number))->ccTouchCancelled(NULL, NULL);
-	}
+	void touchCancel();
 	
 private:
 	
@@ -66,96 +43,27 @@ private:
 	
 	bool is_setted;
 	
-	void setChild()
-	{
-		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-		int found_index = 0;
-		for(int i=1;i<=puzzle_count && found_index == 0;i++)
-		{
-			int puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
-			if(puzzle_no == puzzle_number)
-				found_index = i;
-		}
-		
-		CCSprite* n_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
-		CCSprite* s_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
-		s_back->setColor(ccGRAY);
-		
-		CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, target_menu, delegate_menu);
-		back_item->setTag(puzzle_number);
-		
-		CCMenu* back_menu = CCMenu::createWithItem(back_item);
-		back_menu->setPosition(CCPointZero);
-		back_menu->setTouchEnabled(false);
-		addChild(back_menu, 0, puzzle_number);
-		
-		is_setted = true;;
-	}
+	void setChild();
 	
-	void myInit(int t_puzzle_number, CCObject* t_menu, SEL_MenuHandler d_menu, CCPoint t_position, CCRect t_rect)
-	{
-		puzzle_number = t_puzzle_number;
-		target_menu = t_menu;
-		delegate_menu = d_menu;
-		my_position = t_position;
-		parent_view_rect = t_rect;
-		
-		setPosition(my_position);
-		
-		my_size = CCSizeMake(136, 115);
-		is_setted = false;
-		
-		CCRect tt_rect = CCRectMake(my_position.x-my_size.width/2.f, my_position.y-my_size.height/2.f, my_size.width, my_size.height);
-		if(parent_view_rect.intersectsRect(tt_rect))
-		{
-			setChild();
-		}
-	}
+	void myInit(int t_puzzle_number, CCObject* t_menu, SEL_MenuHandler d_menu, CCPoint t_position, CCRect t_rect);
 };
 
 class PuzzleListView : public CCLayer
 {
 public:
-	static PuzzleListView* create()
-	{
-		PuzzleListView* t_clv = new PuzzleListView();
-		t_clv->myInit();
-		t_clv->autorelease();
-		return t_clv;
-	}
+	static PuzzleListView* create();
 	
 	virtual void visit();
 	virtual void setPositionX(float t_x);
-	void setPercentage(float t_p)
-	{
-		setPosition(ccp(min_positionX*t_p,getPositionY()));
-		for(int i=0;i<getChildrenCount();i++)
-		{
-			CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(i);
-			((PLV_Node*)t_child)->viewCheck();
-		}
-	}
+	void setPercentage(float t_p);
 	void setMinPositionX();
-	void touchCancel()
-	{
-		if(touched_index != 0)
-		{
-			CCNode* t_child = (CCNode*)getChildByTag(touched_index);
-			((PLV_Node*)t_child)->touchCancel();
-		}
-	}
+	void touchCancel();
 	
-	void startViewCheck()
-	{
-		schedule(schedule_selector(PuzzleListView::viewChecking));
-	}
+	void startViewCheck();
 	
-	void stopViewCheck()
-	{
-		unschedule(schedule_selector(PuzzleListView::viewChecking));
-	}
+	void stopViewCheck();
 	
-	CCRect getViewRect(){	return view_rect;	}
+	CCRect getViewRect();
 	
 private:
 	
@@ -183,14 +91,7 @@ private:
 	void moveList(float dx);
 	void moveAnimation();
 	
-	void viewChecking()
-	{
-		for(int i=0;i<getChildrenCount();i++)
-		{
-			CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(i);
-			((PLV_Node*)t_child)->viewCheck();
-		}
-	}
+	void viewChecking();
 };
 
 #endif /* defined(__DGproto__PuzzleListView__) */

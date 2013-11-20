@@ -138,3 +138,61 @@ void StageImgLoader::failAction()
 	if(target_fail)
 		(target_fail->*delegate_fail)();
 }
+
+StageImgLoader* StageImgLoader::sharedInstance()
+{
+	static StageImgLoader* t_loader = NULL;
+	if(t_loader == NULL)
+	{
+		t_loader = new StageImgLoader();
+		t_loader->myInit();
+	}
+	return t_loader;
+}
+
+void StageImgLoader::downloadImg( string t_url, int t_size, string t_down_filename, CCObject* t_success, SEL_CallFunc d_success, CCObject* t_fail, SEL_CallFunc d_fail )
+{
+	target_success = t_success;
+	delegate_success = d_success;
+	target_fail = t_fail;
+	delegate_fail = d_fail;
+	down_filename = t_down_filename;
+
+	startDownload(t_url, t_size);
+}
+
+void StageImgLoader::removeTD()
+{
+	target_success = NULL;
+	target_fail = NULL;
+}
+
+bool StageImgLoader::isLoadedImg( string filename )
+{
+	//		return my_savedata->getValue(kSDF_downloadedInfo, filename, 0) == 1;
+	return false;
+}
+
+void StageImgLoader::startDownload( string t_url, int t_size )
+{
+	p_url = t_url;
+	total_size = t_size*1024;
+
+	isFail = false;
+	pthread_t p_thread;
+	int thr_id;
+	// 쓰레드 생성 아규먼트로 1 을 넘긴다.
+	thr_id = pthread_create(&p_thread, NULL, t_function, NULL);
+	if (thr_id < 0)
+	{
+		perror("thread create error : ");
+		exit(0);
+	}
+}
+
+void StageImgLoader::myInit()
+{
+	my_savedata = SaveData::sharedObject();
+	my_savedata->createJSON(kSDF_downloadedInfo);
+	writeable_path = getDocumentPath();
+}

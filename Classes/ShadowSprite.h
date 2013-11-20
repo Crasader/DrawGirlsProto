@@ -22,47 +22,10 @@ public:
 	ShadowSprite();
 	virtual ~ShadowSprite(){}
 	
-	static ShadowSprite* create(const std::string& fn)
-	{
-		ShadowSprite *pRet = new ShadowSprite();
-		
-    if(pRet && pRet->init(fn) )
-    {
-			pRet->autorelease();
-    }
-    else
-    {
-			delete pRet;
-			pRet = NULL;
-    }
-		
-    return pRet;
-		
-	}
-	void setPosition(const CCPoint& pt)
-	{
-		CCSprite::setPosition(pt);
-		KS::KSLog("%", m_fileName);
-		const char* tt = m_fileName.c_str();
-		KS::KSLog("%", tt);
-		CCSprite *pShadow = CCSprite::create(tt);
-		//    pShadow->setPosition( pt );
-    this->getParent()->addChild(pShadow);
-		
-    pShadow->runAction(CCSequence::create(
-																					CCFadeOut::create(0.3f),
-																					CCCallFuncN::create(this, callfuncN_selector(ShadowSprite::removeFromParentAndCleanup)),
-                                          NULL));
-	}
+	static ShadowSprite* create(const std::string& fn);
+	void setPosition(const CCPoint& pt);
 	
-	virtual bool init(const std::string& fn)
-	{
-		if( !CCSprite::initWithFile(fn.c_str()) )
-			return false;
-		
-		m_fileName = fn;
-		return true;
-	}
+	virtual bool init(const std::string& fn);
 protected:
 	std::string m_fileName;
 };
