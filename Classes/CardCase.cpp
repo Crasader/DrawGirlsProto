@@ -555,6 +555,8 @@ void CardCase::myInit( int t_selected_card_number )
 		CCMenu* passive_menu = CCMenu::createWithItem(passive_item);
 		passive_menu->setPosition(ccp(275,32));
 		addChild(passive_menu, kCARDCASE_Z_data, kCARDCASE_Tag_passive);
+		
+		passive_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 	}
 
 
