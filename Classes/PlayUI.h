@@ -2324,6 +2324,7 @@ private:
 		mySGD->gameOver(0, 0, 0);
 		mySGD->resetLabels();
 		myGD->resetGameData();
+		
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	
@@ -2333,6 +2334,7 @@ private:
 		
 		myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 		AudioEngine::sharedInstance()->stopSound();
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 		closeShutter();
 	}
 	
