@@ -795,7 +795,7 @@ void WorldMapScene::menuAction(CCObject* pSender)
 //	}
 	else if(tag == kWMS_MT_option)
 	{
-		CCDirector::sharedDirector()->replaceScene(OptionScene::scene());
+//		CCDirector::sharedDirector()->replaceScene(OptionScene::scene());
 	}
 	else if(tag == kWMS_MT_gacha)
 	{
