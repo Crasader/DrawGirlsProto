@@ -177,6 +177,14 @@ private:
 	void endPrePage();
 	void endPage();
 	
+	void startNextFullSelectedPage();
+	void startNextSelectedPage();
+	void endNextSelectedPage();
+	
+	void startPreFullSelectedPage();
+	void startPreSelectedPage();
+	void endPreSelectedPage();
+	
 	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);

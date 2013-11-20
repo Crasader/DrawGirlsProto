@@ -795,7 +795,7 @@ void WorldMapScene::menuAction(CCObject* pSender)
 //	}
 	else if(tag == kWMS_MT_option)
 	{
-		CCDirector::sharedDirector()->replaceScene(OptionScene::scene());
+//		CCDirector::sharedDirector()->replaceScene(OptionScene::scene());
 	}
 	else if(tag == kWMS_MT_gacha)
 	{
@@ -814,8 +814,8 @@ void WorldMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kWMS_MT_event)
 	{
-		EventPopup* t_ep = EventPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
-		addChild(t_ep, kWMS_Z_popup);
+//		EventPopup* t_ep = EventPopup::create(this, callfunc_selector(WorldMapScene::popupClose));
+//		addChild(t_ep, kWMS_Z_popup);
 	}
 	else if(tag == kWMS_MT_rubyShop)
 	{

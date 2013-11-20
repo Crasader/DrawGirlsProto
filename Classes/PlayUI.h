@@ -29,7 +29,6 @@
 #include "OnePercentGacha.h"
 #include "hspConnector.h"
 #include "MissileDamageData.h"
-#include "StageSettingScene.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -2325,6 +2324,7 @@ private:
 		mySGD->gameOver(0, 0, 0);
 		mySGD->resetLabels();
 		myGD->resetGameData();
+		
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	
@@ -2334,6 +2334,7 @@ private:
 		
 		myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 		AudioEngine::sharedInstance()->stopSound();
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 		closeShutter();
 	}
 	
@@ -2350,7 +2351,9 @@ private:
 		mySGD->gameOver(0, 0, 0);
 		mySGD->resetLabels();
 		myGD->resetGameData();
-		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
+		
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stageSetting);
+		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	
 	void cancelHome()

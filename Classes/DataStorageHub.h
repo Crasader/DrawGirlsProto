@@ -47,7 +47,7 @@ enum PuzzleMapSceneShowType{
 	kPuzzleMapSceneShowType_stage,
 	kPuzzleMapSceneShowType_clear,
 	kPuzzleMapSceneShowType_fail,
-	kPuzzleMapSceneShowType_getPiece
+	kPuzzleMapSceneShowType_stageSetting
 };
 
 class DataStorageHub : public CCObject

@@ -204,7 +204,10 @@ private:
 	
 	void endMovingMapNode()
 	{
-		map_mode_state = kMMS_notLoadMode;
+		if(!is_from_call_map_mode)
+			map_mode_state = kMMS_notLoadMode;
+		else
+			map_mode_state = kMMS_firstTouchDefault;
 		map_node->removeFromParent();
 		map_node = after_map_node;
 		after_map_node = NULL;
@@ -242,12 +245,16 @@ private:
 	
 	void endLoadPuzzleInfo()
 	{
-		removeChildByTag(kPMS_MT_loadingBack);
+		if(getChildByTag(kPMS_MT_loadingBack))
+			removeChildByTag(kPMS_MT_loadingBack);
 		map_node->removeChildByTag(99999);
 		map_node->removeChildByTag(99998);
 		map_node->removeChildByTag(99997);
 		
-		map_mode_state = kMMS_notLoadMode;
+		if(!is_from_call_map_mode)
+			map_mode_state = kMMS_notLoadMode;
+		else
+			map_mode_state = kMMS_firstTouchDefault;
 		
 		cachingPuzzleImg2();
 //		switchMapNode(map_node);
@@ -511,12 +518,19 @@ private:
 		
 		if(t_info.piece_number == 24)
 		{
-			if(map_mode_state == kMMS_notLoadMode)
-				map_mode_state = kMMS_uiMode;
-			else if(map_mode_state == kMMS_changeMode)
-				map_mode_state = kMMS_loadChangingMode;
+			if(!is_from_call_map_mode)
+			{
+				if(map_mode_state == kMMS_notLoadMode)
+					map_mode_state = kMMS_uiMode;
+				else if(map_mode_state == kMMS_changeMode)
+					map_mode_state = kMMS_loadChangingMode;
+				else
+					CCLog("map_mode_state : %d", map_mode_state);
+			}
 			else
-				CCLog("map_mode_state : %d", map_mode_state);
+			{
+				map_mode_state = kMMS_firstTouchDefault;
+			}
 		}
 		
 		if(loaded_imgs.empty())
@@ -946,6 +960,8 @@ private:
 		endSwitchMapNode();
 	}
 	
+	bool is_from_call_map_mode;
+	
 	MapModeState original_mms;
 	void endTingMapNode()
 	{
@@ -955,10 +971,17 @@ private:
 	
 	void endSwitchMapNode()
 	{
-		if(map_mode_state == kMMS_changeMode)
-			map_mode_state = kMMS_notLoadMode;
-		else if(map_mode_state == kMMS_loadChangingMode)
-			map_mode_state = kMMS_uiMode;
+		if(!is_from_call_map_mode)
+		{
+			if(map_mode_state == kMMS_changeMode)
+				map_mode_state = kMMS_notLoadMode;
+			else if(map_mode_state == kMMS_loadChangingMode)
+				map_mode_state = kMMS_uiMode;
+		}
+		else
+		{
+			map_mode_state = kMMS_firstTouchDefault;
+		}
 		is_menu_enable = true;
 	}
 	
@@ -1103,6 +1126,12 @@ private:
 	
 	void showCardSettingPopup();
 	void hideCardSettingPopup();
+	
+	void showOptionPopup();
+	void hideOptionPopup();
+	
+	void showEventPopup();
+	void hideEventPopup();
 	
 	virtual void registerWithTouchDispatcher(void);
 	
