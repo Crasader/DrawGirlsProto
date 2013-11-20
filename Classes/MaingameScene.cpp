@@ -205,7 +205,7 @@ void Maingame::startCounting()
 	condition_spr = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_ready.ccbi",this));
 	addChild(condition_spr, conditionLabelZorder);
 	
-	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+50));
+	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top/0.1f));
 	
 	CCDelayTime* t_delay1 = CCDelayTime::create(0.75f);
 	CCCallFunc* t_ms_startGame = CCCallFunc::create(myMS, callfunc_selector(MapScanner::startGame));

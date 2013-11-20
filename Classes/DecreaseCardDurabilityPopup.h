@@ -235,7 +235,7 @@ private:
 		gray = CCSprite::create("back_gray.png");
 		gray->setPosition(ccp(240,160));
 		gray->setScaleX(screen_scale_x);
-		gray->setScaleY(myDSH->ui_top/320.f);
+		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 		gray->setOpacity(0);
 		addChild(gray, kDecreaseCardDurabilityPopup_Z_gray);
 		

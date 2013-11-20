@@ -24,7 +24,8 @@ USING_NS_CC;
 using namespace std;
 
 enum CSS_Zorder{
-	kCSS_Z_back = 1,
+	kCSS_Z_gray = 1,
+	kCSS_Z_back,
 	kCSS_Z_selectedImg,
 	kCSS_Z_content,
 	kCSS_Z_select,

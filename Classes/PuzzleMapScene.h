@@ -1101,6 +1101,9 @@ private:
 	void showFailPopup();
 	void hideFailPopup();
 	
+	void showCardSettingPopup();
+	void hideCardSettingPopup();
+	
 	virtual void registerWithTouchDispatcher(void);
 	
 	PuzzleListView* puzzle_list_view;

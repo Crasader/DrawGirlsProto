@@ -71,7 +71,7 @@ private:
 		CCSprite* gray = CCSprite::create("back_gray.png");
 		gray->setPosition(ccp(240,160));
 		gray->setScaleX(screen_scale_x);
-		gray->setScaleY(myDSH->ui_top/320.f);
+		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 		addChild(gray, kDN_Z_gray);
 		
 		setBack();

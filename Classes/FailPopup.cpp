@@ -102,7 +102,7 @@ bool FailPopup::init()
 	gray->setOpacity(0);
 	gray->setPosition(ccp(240,160));
 	gray->setScaleX(screen_scale_x);
-	gray->setScaleY(myDSH->ui_top/320.f);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray, kZ_FP_gray);
 	
 	main_case = CCSprite::create("ending_back.png");

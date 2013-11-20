@@ -9,10 +9,9 @@
 #include "StageSettingPopup.h"
 
 #include "MyLocalization.h"
-//#include "WorldMapScene.h"
 #include "MaingameScene.h"
 #include "ItemBuyPopup.h"
-#include "CardSettingScene.h"
+#include "CardSettingPopup.h"
 #include "ChallengePopup.h"
 #include "GachaPopup.h"
 #include "DurabilityNoti.h"
@@ -62,7 +61,7 @@ bool StageSettingPopup::init()
 	gray->setOpacity(0);
 	gray->setPosition(ccp(240,160));
 	gray->setScaleX(screen_scale_x);
-	gray->setScaleY(myDSH->ui_top/320.f);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray, kSSP_Z_gray);
 	
 	main_case = CCSprite::create("stagesetting_back.png");
@@ -251,7 +250,8 @@ void StageSettingPopup::hidePopup()
 
 void StageSettingPopup::endHidePopup()
 {
-	(target_final->*delegate_final)();
+	if(target_final)
+		(target_final->*delegate_final)();
 	removeFromParent();
 }
 
@@ -439,7 +439,13 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	{
 		mySGD->resetLabels();
 		mySGD->before_cardsetting = kSceneCode_StageSetting;
-		CCDirector::sharedDirector()->replaceScene(CardSettingScene::scene());
+		
+		CardSettingPopup* t_popup = CardSettingPopup::create();
+		t_popup->setHideFinalAction(target_final, delegate_final);
+		getParent()->addChild(t_popup, kPMS_Z_popup);
+		
+		target_final = NULL;
+		hidePopup();
 	}
 	else if(tag == kSSP_MT_challenge)
 	{

@@ -34,8 +34,8 @@ void CardListViewer::visit()
 		yMargine = (frame_size.height - rSize.height*hScale)/2.f;
 	}
 	
-	float x = view_rect.origin.x*wScale + xMargine;
-	float y = view_rect.origin.y*hScale + yMargine;
+	float x = (view_rect.origin.x+getParent()->getPositionX())*wScale + xMargine;
+	float y = (view_rect.origin.y+getParent()->getPositionY())*hScale + yMargine;
 	float w = view_rect.size.width*wScale;
 	float h = view_rect.size.height*hScale;
 	

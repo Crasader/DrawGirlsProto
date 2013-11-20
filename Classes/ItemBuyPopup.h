@@ -66,7 +66,7 @@ private:
 		CCSprite* back = CCSprite::create("back_gray.png");
 		back->setPosition(ccp(240,160));
 		back->setScaleX(screen_scale_x);
-		back->setScaleY(myDSH->ui_top/320.f);
+		back->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 		addChild(back, kIBP_Z_back);
 		
 		

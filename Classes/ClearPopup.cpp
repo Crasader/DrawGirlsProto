@@ -64,7 +64,7 @@ bool ClearPopup::init()
 	gray->setOpacity(0);
 	gray->setPosition(ccp(240,160));
 	gray->setScaleX(screen_scale_x);
-	gray->setScaleY(myDSH->ui_top/320.f);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray, kZ_CP_gray);
 	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
