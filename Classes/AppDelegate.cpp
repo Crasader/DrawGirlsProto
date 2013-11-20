@@ -11,7 +11,6 @@
 #include "GameData.h"
 #include "TitleScene.h"
 #include "PuzzleMapScene.h"
-#include "WorldMapScene.h"
 
 using namespace CocosDenshion;
 

@@ -17,7 +17,6 @@
 #include "Cumber.h"
 #include "PlayUI.h"
 #include "AttackItem.h"
-#include "FailScene.h"
 #include "ControlType.h"
 #include "ClearShowTime.h"
 #include "GameItemManager.h"

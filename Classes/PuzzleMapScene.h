@@ -1130,6 +1130,9 @@ private:
 	void showOptionPopup();
 	void hideOptionPopup();
 	
+	void showEventPopup();
+	void hideEventPopup();
+	
 	virtual void registerWithTouchDispatcher(void);
 	
 	PuzzleListView* puzzle_list_view;

@@ -11,7 +11,7 @@
 
 #include "cocos2d.h"
 #include "StarGoldData.h"
-#include "StageSettingScene.h"
+#include "StageSettingPopup.h"
 
 USING_NS_CC;
 using namespace std;
@@ -94,7 +94,7 @@ private:
 		s_ok->setColor(ccGRAY);
 		
 		CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, target_ok, delegate_ok);
-		ok_item->setTag(kSSS_MT_noti_ok);
+		ok_item->setTag(kSSP_MT_noti_ok);
 		ok_menu = CCMenu::createWithItem(ok_item);
 		ok_menu->setPosition(ccp(296, 115));
 		addChild(ok_menu, kDN_Z_content);
@@ -105,7 +105,7 @@ private:
 		s_cancel->setColor(ccGRAY);
 		
 		CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, target_cancel, delegate_cancel);
-		cancel_item->setTag(kSSS_MT_noti_cancel);
+		cancel_item->setTag(kSSP_MT_noti_cancel);
 		cancel_menu = CCMenu::createWithItem(cancel_item);
 		cancel_menu->setPosition(ccp(175, 115));
 		addChild(cancel_menu, kDN_Z_content);
