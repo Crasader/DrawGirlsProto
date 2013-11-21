@@ -12,7 +12,6 @@
 #include "MaingameScene.h"
 #include "ItemBuyPopup.h"
 #include "CardSettingPopup.h"
-#include "ChallengePopup.h"
 #include "GachaPopup.h"
 #include "DurabilityNoti.h"
 #include "CardCase.h"
@@ -24,6 +23,9 @@
 #include "StarGoldData.h"
 #include "ItemListViewer.h"
 #include "hspConnector.h"
+#include "StageInfoPopup.h"
+#include "StageRankPopup.h"
+
 enum SSP_Zorder{
 	kSSP_Z_gray = 1,
 	kSSP_Z_back,
@@ -75,7 +77,7 @@ bool StageSettingPopup::init()
 	main_case->setPosition(ccp(0,-320));
 	addChild(main_case, kSSP_Z_back);
 	
-	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("STAGE %d", selected_stage)->getCString(), mySGD->getFont().c_str(), 18);
+	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("STAGE %d - %d", NSDS_GI(selected_stage, kSDS_SI_puzzle_i), selected_stage)->getCString(), mySGD->getFont().c_str(), 13);
 	stage_label->setPosition(ccp(250,248));
 	main_case->addChild(stage_label, kSSP_Z_content);
 	
@@ -156,6 +158,18 @@ bool StageSettingPopup::init()
 	CCMenu* backward_menu = CCMenu::createWithItem(backward_item);
 	backward_menu->setPosition(getContentPosition(kSSP_MT_back));
 	main_case->addChild(backward_menu, kSSP_Z_content);
+	
+	
+	CCSprite* n_info = CCSprite::create("stagesetting_stageinfo.png");
+	CCSprite* s_info = CCSprite::create("stagesetting_stageinfo.png");
+	s_info->setColor(ccGRAY);
+	
+	CCMenuItem* info_item = CCMenuItemSprite::create(n_info, s_info, this, menu_selector(StageSettingPopup::menuAction));
+	info_item->setTag(kSSP_MT_info);
+	
+	CCMenu* info_menu = CCMenu::createWithItem(info_item);
+	info_menu->setPosition(getContentPosition(kSSP_MT_info));
+	main_case->addChild(info_menu, kSSP_Z_content);
 	
 	
 	CCSprite* n_challenge = CCSprite::create("stagesetting_challenge.png");
@@ -273,9 +287,10 @@ CCPoint StageSettingPopup::getContentPosition(int t_tag)
 	CCPoint return_value;
 	
 	if(t_tag == kSSP_MT_changeCard)				return_value = ccp(98,163);
-	else if(t_tag == kSSP_MT_back)				return_value = ccp(70,29);
-	else if(t_tag == kSSP_MT_challenge)			return_value = ccp(265,29);
+	else if(t_tag == kSSP_MT_back)				return_value = ccp(55,29);
+	else if(t_tag == kSSP_MT_challenge)			return_value = ccp(267,29);
 	else if(t_tag == kSSP_MT_start)				return_value = ccp(395,29);
+	else if(t_tag == kSSP_MT_info)				return_value = ccp(150,29);
 	else if(t_tag == kSSP_MT_gacha)				return_value = ccp(385,250);
 	else if(t_tag == kSSP_MT_itemBase)			return_value = ccp(305,200);
 	else if(t_tag == kSSP_MT_selectedBase)		return_value = ccp(95,1);
@@ -455,15 +470,21 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSSP_MT_challenge)
 	{
-		is_menu_enable = true;
-		//		ChallengePopup* t_cp = ChallengePopup::create(this, callfunc_selector(StageSettingPopup::popupClose));
-		//		addChild(t_cp, kSSS_Z_popup);
+		is_menu_enable = false;
+		StageRankPopup* t_sip = StageRankPopup::create(this, callfunc_selector(StageSettingPopup::popupClose), selected_stage);
+		addChild(t_sip, kSSP_Z_popup);
 	}
 	else if(tag == kSSP_MT_gacha)
 	{
 		is_menu_enable = false;
 		GachaPopup* t_gp = GachaPopup::create(this, callfunc_selector(StageSettingPopup::popupClose));
 		addChild(t_gp, kSSP_Z_popup);
+	}
+	else if(tag == kSSP_MT_info)
+	{
+		is_menu_enable = false;
+		StageInfoPopup* t_sip = StageInfoPopup::create(this, callfunc_selector(StageSettingPopup::popupClose), selected_stage);
+		addChild(t_sip, kSSP_Z_popup);
 	}
 	else if(tag >= kSSP_MT_itemBase && tag < kSSP_MT_itemBuy)
 	{

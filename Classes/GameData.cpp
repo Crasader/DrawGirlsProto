@@ -25,6 +25,17 @@ IntPoint ccp2ip(const CCPoint& cc)
 	return ip;
 }
 
+GameData* GameData::sharedGameData()
+{
+	static GameData* t_GD = NULL;
+	if(t_GD == NULL)
+	{
+		t_GD = new GameData();
+		t_GD->myInit();
+	}
+	return t_GD;
+}
+
 void GameData::resetGameData()
 {
 	jackState = 0; // normal
@@ -48,6 +59,175 @@ void GameData::resetGameData()
 				mapState[i][j] = mapEmpty;
 		}
 	}
+}
+
+CCPoint GameData::getCommunicationCCPoint(string funcName)
+{
+	CCAssert(CCP_V.find(funcName) != CCP_V.end(), funcName.c_str());
+	return CCP_V[funcName]();
+}
+
+CCNode* GameData::getCommunicationNode(string funcName)
+{
+	CCAssert(CCN_V.find(funcName) != CCN_V.end(), funcName.c_str());
+	return CCN_V[funcName]();
+}
+
+CCArray* GameData::getCommunicationArray(string funcName)
+{
+	CCAssert(CCA_V.find(funcName) != CCA_V.end(), funcName.c_str());
+	return CCA_V[funcName]();
+}
+
+float GameData::Fcommunication(string funcName)
+{
+	CCAssert(F_V.find(funcName) != F_V.end(), funcName.c_str());
+	return F_V[funcName]();
+}
+
+int GameData::communication(string funcName, CCPoint t_p, std::string t_i, KSCumberBase* cb, bool t_b)
+{
+	CCAssert(I_CCPStrCumberBaseB.find(funcName) != I_CCPStrCumberBaseB.end(), funcName.c_str());
+	return I_CCPStrCumberBaseB[funcName](t_p, t_i, cb, t_b);
+}
+
+bool GameData::communication(string funcName, CCObject* t_obj, float f_val, float f_val2)
+{
+	CCAssert(B_CCOFF.find(funcName) != B_CCOFF.end(), funcName.c_str());
+	return B_CCOFF[funcName](t_obj, f_val, f_val2);
+}
+
+void GameData::communication(string funcName)
+{
+	CCAssert(V_V.find(funcName) != V_V.end(), funcName.c_str());
+	V_V[funcName]();
+	return;
+}
+
+void GameData::communication(string funcName, CCPoint t_p, int t_i)
+{
+	CCAssert(V_CCPI.find(funcName) != V_CCPI.end(), funcName.c_str());
+	V_CCPI[funcName](t_p, t_i);
+	return;
+}
+
+void GameData::communication(string funcName, float t_f, bool t_b, CCPoint t_p)
+{
+	CCAssert(V_FBCCP.find(funcName) != V_FBCCP.end(), funcName.c_str());
+	V_FBCCP[funcName](t_f, t_b, t_p);
+	return;
+}
+
+void GameData::communication(string funcName, bool t_b)
+{
+	CCAssert(V_B.find(funcName) != V_B.end(), funcName.c_str());
+	V_B[funcName](t_b);
+	return;
+}
+
+void GameData::communication(string funcName, CCObject* t_obj)
+{
+	CCAssert(V_CCO.find(funcName) != V_CCO.end(), funcName.c_str());
+	V_CCO[funcName](t_obj);
+	return;
+}
+
+void GameData::communication(string funcName, IntPointVector t_addPath)
+{
+	CCAssert(V_Ipv.find(funcName) != V_Ipv.end(), funcName.c_str());
+	V_Ipv[funcName](t_addPath);
+	return;
+}
+
+void GameData::communication(string funcName, IntPoint t_p)
+{
+	CCAssert(V_Ip.find(funcName) != V_Ip.end(), funcName.c_str());
+	V_Ip[funcName](t_p);
+	return;
+}
+
+void GameData::communication(string funcName, IntPoint t_p, int t_i1, int t_i2, int t_i3)
+{
+	CCAssert(V_IpIII.find(funcName) != V_IpIII.end(), funcName.c_str());
+	V_IpIII[funcName](t_p, t_i1, t_i2, t_i3);
+	return;
+}
+
+void GameData::communication(string funcName, IntPoint t_p, CCObject* t_t, SEL_CallFuncI t_d)
+{
+	CCAssert(V_IpCCOCallfunci.find(funcName) != V_IpCCOCallfunci.end(), funcName.c_str());
+	V_IpCCOCallfunci[funcName](t_p, t_t, t_d);
+	return;
+}
+
+void GameData::communication(string funcName, CCPoint t_p, CCObject* t_target, SEL_CallFuncO d_func)
+{
+	CCAssert(V_CCPCCOCallfuncO.find(funcName) != V_CCPCCOCallfuncO.end(), funcName.c_str());
+	V_CCPCCOCallfuncO[funcName](t_p, t_target, d_func);
+	return;
+}
+
+void GameData::communication(string funcName, CCPoint t_startFire, ccColor4F t_color, float t_angle)
+{
+	CCAssert(V_CCPCOLORF.find(funcName) != V_CCPCOLORF.end(), funcName.c_str());
+	V_CCPCOLORF[funcName](t_startFire, t_color, t_angle);
+	return;
+}
+
+void GameData::communication(string funcName, CCPoint t_startFire, bool t_b)
+{
+	CCAssert(V_CCPB.find(funcName) != V_CCPB.end(), funcName.c_str());
+	V_CCPB[funcName](t_startFire, t_b);
+	return;
+}
+
+void GameData::communication(string funcName, int t_int)
+{
+	CCAssert(V_I.find(funcName) != V_I.end(), funcName.c_str());
+	V_I[funcName](t_int);
+	return;
+}
+
+void GameData::communication(string funcName, int t_int1, int t_int2, float t_float)
+{
+	CCAssert(V_IIF.find(funcName) != V_IIF.end(), funcName.c_str());
+	V_IIF[funcName](t_int1, t_int2, t_float);
+	return;
+}
+
+void GameData::communication(string funcName, int t_int1, int t_int2, float t_float, CCPoint t_p)
+{
+	CCAssert(V_IIFCCP.find(funcName) != V_IIFCCP.end(), funcName.c_str());
+	V_IIFCCP[funcName](t_int1, t_int2, t_float, t_p);
+	return;
+}
+
+void GameData::communication(string funcName, float t_float)
+{
+	CCAssert(V_F.find(funcName) != V_F.end(), funcName.c_str());
+	V_F[funcName](t_float);
+	return;
+}
+
+void GameData::communication(string funcName, float t_float, bool t_bool)
+{
+	CCAssert(V_FB.find(funcName) != V_FB.end(), funcName.c_str());
+	V_FB[funcName](t_float, t_bool);
+	return;
+}
+
+void GameData::communication(string funcName, CCPoint t_p)
+{
+	CCAssert(V_CCP.find(funcName) != V_CCP.end(), funcName.c_str());
+	V_CCP[funcName](t_p);
+	return;
+}
+
+void GameData::communication(string funcName, CCObject* t_t1, SEL_CallFunc t_d1, CCObject* t_t2, SEL_CallFunc t_d2)
+{
+	CCAssert(V_TDTD.find(funcName) != V_TDTD.end(), funcName.c_str());
+	V_TDTD[funcName](t_t1, t_d1, t_t2, t_d2);
+	return;
 }
 
 void GameData::changeJackBaseSpeed( float t_s )
