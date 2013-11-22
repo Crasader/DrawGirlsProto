@@ -29,7 +29,6 @@ enum StageInfoPopupMenuTag{
 	kSIP_MT_step1Reward,
 	kSIP_MT_step2Reward,
 	kSIP_MT_step3Reward,
-	kSIP_MT_boss,
 	kSIP_MT_monster,
 	kSIP_MT_mission
 };
