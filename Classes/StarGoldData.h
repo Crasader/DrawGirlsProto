@@ -204,18 +204,26 @@ public:
 		if(!is_me_challenge)
 			me_challenge_target_user_id = "";
 	}
-	void setMeChallengeTarget(string t_target)
+	void setMeChallengeTarget(string t_target, const std::string& t_nickname)
 	{
 		me_challenge_target_user_id = t_target.c_str();
+		me_challenge_target_user_nick = t_nickname;
 	}
-	
+	string getMeChallengeTarget()
+	{
+		return me_challenge_target_user_id;
+	}
+	string getMeChallengeTargetNick()
+	{
+		return me_challenge_target_user_nick;
+	}
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
 	
 	bool is_me_challenge;
 	string me_challenge_target_user_id;
-	
+	string me_challenge_target_user_nick;
 	bool is_after_scene_chapter;
 	bool is_cleared;
 	float score;

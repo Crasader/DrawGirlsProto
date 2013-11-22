@@ -22,6 +22,8 @@
 #include "StageSettingPopup.h"
 #include "PuzzleMapScene.h"
 #include "ShopPopup.h"
+#include "ChallengeSend.h"
+
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -367,6 +369,10 @@ void ClearPopup::endTakeCard()
 	if(mySGD->getIsMeChallenge())
 	{
 		///////////////////////////////// 경수
+
+		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore()),
+						 kZ_CP_popup);
+//		getMeChallengeTarget
 	}
 }
 

@@ -41,7 +41,7 @@ class KSAlertView : public CCNode, public CCScrollViewDelegate, public CCTouchDe
 {
 public:
 	std::vector<CCMenuItemLambda*> m_menuItems;
-	
+	CCMenuItemLambda* m_closeItem;
 	
 	
 //	virtual void registerWithTouchDispatcher() {
@@ -65,7 +65,8 @@ public:
 	m_titleStr("? ? ? ? !! ! ! "),
 	m_hScroll(NULL),
 	m_vScroll(NULL),
-	m_contentNode(NULL)
+	m_contentNode(NULL),
+	m_closeItem(NULL)
 	
 	{
 		
@@ -76,7 +77,7 @@ public:
 	static KSAlertView* create();
 	bool init();
 	void addButton(CCMenuItemLambda* item);
-	
+	void setCloseButton(CCMenuItemLambda* item);
 	void show();
 	
 	ScrollBar* m_scrollBar;

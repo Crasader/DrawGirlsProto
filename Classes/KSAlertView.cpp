@@ -92,6 +92,10 @@ void KSAlertView::addButton( CCMenuItemLambda* item )
 	m_menuItems.push_back(item);
 }
 
+void KSAlertView::setCloseButton(CCMenuItemLambda* item)
+{
+	m_closeItem = item;
+}
 void KSAlertView::show()
 {
 	KSCoverLayer* cover = KSCoverLayer::create();
@@ -118,8 +122,9 @@ void KSAlertView::show()
 	btnBg->addChild(_menu);
 	_menu->setPosition(btnBg->convertToNodeSpace(ccp(m_centerX, bottom + buttonHeight / 2.f)));
 	//		_menu->setPosition();
-
-
+	
+	
+	
 	//		_menu->alignItemsHorizontallyWithPadding(10.f);
 
 	for(auto it : m_menuItems)
@@ -130,10 +135,26 @@ void KSAlertView::show()
 			removeFromParent();
 		};
 	}
+	// 아래쪽 버튼만 넣고 정렬 때림.
 	_menu->alignItemsHorizontally();
-
-
-
+	
+	CCMenuLambda* _closeMenu = CCMenuLambda::create();
+	_closeMenu->setTouchPriority(INT_MIN);
+	_closeMenu->setPosition(ccp(0, 0));
+	btnBg->addChild(_closeMenu);
+	
+	// 닫기 버튼은 정렬 안함
+	if(m_closeItem)
+	{
+		_closeMenu->addChild(m_closeItem);
+		m_closeItem->setPosition(btnBg->convertToNodeSpace
+														 (ccp(m_centerX + m_width / 2.f - m_closeItem->getContentSize().width / 2.f,
+																	m_centerY + m_height / 2.f - m_closeItem->getContentSize().height / 2.f)));
+		m_closeItem->m_afterSelector = [=](CCObject*)
+		{
+			removeFromParent();
+		};
+	}
 	if(m_titleStr != "")
 	{
 		CCLabelTTF* t = CCLabelTTF::create(m_titleStr.c_str(), "", 14.f);

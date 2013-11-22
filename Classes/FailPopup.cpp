@@ -19,7 +19,7 @@
 #include "KSUtil.h"
 #include "KSAlertView.h"
 #include "ShopPopup.h"
-
+#include "ChallengeSend.h"
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
 	kMT_FP_replay,
@@ -98,6 +98,10 @@ bool FailPopup::init()
 		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number);
 		if(durability <= 0)
 			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+	}
+	else
+	{
+		this->endDecreaseCardDuration();
 	}
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -355,6 +359,8 @@ void FailPopup::endDecreaseCardDuration()
 	if(mySGD->getIsMeChallenge())
 	{
 		////////////////////////// 경수
+		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore()),
+						 kZ_FP_popup);
 	}
 }
 

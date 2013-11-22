@@ -230,7 +230,7 @@ void StageRankPopup::cellAction( CCObject* sender )
 	CCLog("challenge memberID : %s", friend_list[tag].user_id.c_str());
 	
 	mySGD->setIsMeChallenge(true);
-	mySGD->setMeChallengeTarget(friend_list[tag].user_id.c_str());
+	mySGD->setMeChallengeTarget(friend_list[tag].user_id.c_str(), friend_list[tag].nickname);
 	hidePopup();
 }
 
