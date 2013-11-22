@@ -60,7 +60,7 @@ bool CumberShowWindow::init(int ss)
 			this->addChild(m_circleSprite);
 			m_circleSprite->setScale(0.7f);
 			if(juniorJson.size() > 0)
-				m_circleSprite->setPosition(ccp(-50,0));
+				m_circleSprite->setPosition(ccp(-40,0));
 		}
 	}
 	else if(bossShape == "snake")
@@ -74,7 +74,7 @@ bool CumberShowWindow::init(int ss)
 		addChild(m_snakeNode, 1000);
 		m_snakeNode->setScale(0.7f);
 		if(juniorJson.size() > 0)
-			m_snakeNode->setPosition(ccp(-50,0));
+			m_snakeNode->setPosition(ccp(-40,0));
 		
 		m_snakeNode->startAnimationNoDirection();
 //		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -117,6 +117,7 @@ bool CumberShowWindow::init(int ss)
 	
 	if(juniorJson.size() > 0)
 	{
+		int junior_cnt = juniorJson.size();
 		int juniorIndex = m_well512.GetValue(0, juniorJson.size() - 1);
 		juniorJson = juniorJson[juniorIndex];
 		{
@@ -149,12 +150,13 @@ bool CumberShowWindow::init(int ss)
 			if(m_juniorSprite != NULL)
 			{
 				this->addChild(m_juniorSprite, 1001);
-				m_juniorSprite->setPosition(ccp(50, 0));
-				if(juniorJson.size() > 1)
+				m_juniorSprite->setScale(0.7f);
+				m_juniorSprite->setPosition(ccp(40, 0));
+				if(junior_cnt > 1)
 				{
-					CCLabelTTF* junior_count_label = CCLabelTTF::create(CCString::createWithFormat("x%d", juniorJson.size())->getCString(), mySGD->getFont().c_str(), 30);
+					CCLabelTTF* junior_count_label = CCLabelTTF::create(CCString::createWithFormat("x%d", junior_cnt)->getCString(), mySGD->getFont().c_str(), 30);
 					junior_count_label->setAnchorPoint(ccp(0,0.5));
-					junior_count_label->setPosition(ccp(70,-20));
+					junior_count_label->setPosition(ccp(50,-20));
 					addChild(junior_count_label, 1002);
 				}
 			}
