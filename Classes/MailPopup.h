@@ -10,6 +10,8 @@ using namespace cocos2d::extension;
 USING_NS_CC;
 
 #include "jsoncpp/json.h"
+#include <map>
+#include "CCMenuLambda.h"
 #define LZZ_INLINE inline
 enum MailPopupZorder
 {
@@ -18,7 +20,8 @@ enum MailPopupZorder
   kMP_Z_close,
   kMP_Z_content,
   kMP_Z_mailTable,
-  kMP_Z_profileImg
+  kMP_Z_profileImg,
+	kMP_Z_helpAccept
 };
 enum MailTableViewTag
 {
@@ -39,7 +42,23 @@ enum MailPopupMenuTag
   kMP_MT_invite_send,
   kMP_MT_invite_send_close
 };
+enum class AlignText
+{
+	kTotal = 1,
+	kNews,
+	kHeart,
+	kChallenge,
+	kHelp,
+	kTicket,
+	kClose,
+	kNone
+};
 
+enum class PostBoxState
+{
+	kNoMenu = 0,
+	kMenu = 1
+};
 class ScrollBar;
 class MailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
@@ -65,12 +84,20 @@ public:
   virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent);
   virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
   virtual void registerWithTouchDispatcher ();
+	
+	void setAlignText(AlignText at);
+	void showLeftMenuToggle(bool show);
+	void iHelpYou(int stage, long long user_id, const std::string& nick, Json::Value removeInfo);
 protected:
   Json::Value m_mailList;
   CCTableView * mailTableView;
   CCObject * target_close;
   SEL_CallFunc delegate_close;
   ScrollBar * m_scrollBar;
+	
+	std::map<AlignText, CCSprite*> m_alignTexts;
+	std::vector<CCMenuItemImageLambda*> m_menuList;
+	PostBoxState m_popupState;
 };
 #undef LZZ_INLINE
 #endif
