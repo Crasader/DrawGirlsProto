@@ -10,6 +10,7 @@
 #include "ServerDataSave.h"
 #include "StarGoldData.h"
 #include "SilhouetteData.h"
+#include "CumberShowWindow.h"
 
 StageInfoPopup* StageInfoPopup::create( CCObject* t_close, SEL_CallFunc d_close, int t_stage_number )
 {
@@ -161,8 +162,9 @@ void StageInfoPopup::setBack()
 		back_img->addChild(t_complete, kSIP_Z_content);
 	}
 	
-	// add boss
-	// add monster
+	CumberShowWindow* monster_img = CumberShowWindow::create(stage_number);
+	monster_img->setPosition(getContentPosition(kSIP_MT_monster));
+	back_img->addChild(monster_img, kSIP_Z_content);
 	
 	CCLabelTTF* mission_label = CCLabelTTF::create(mySD->getConditionContent(stage_number).c_str(), mySGD->getFont().c_str(), 17);
 	mission_label->setPosition(getContentPosition(kSIP_MT_mission));
@@ -203,8 +205,6 @@ CCPoint StageInfoPopup::getContentPosition( int t_tag )
 		return_value = ccp(130, 95);
 	else if(t_tag == kSIP_MT_step3Reward)
 		return_value = ccp(130, 46);
-	else if(t_tag == kSIP_MT_boss)
-		return_value = ccp(205,140);
 	else if(t_tag == kSIP_MT_monster)
 		return_value = ccp(260,140);
 	else if(t_tag == kSIP_MT_mission)

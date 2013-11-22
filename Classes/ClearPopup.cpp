@@ -220,18 +220,24 @@ bool ClearPopup::init()
 	main_case->addChild(ok_menu, kZ_CP_menu);
 	
 	
-	CCSprite* n_replay = CCSprite::create("ending_replay.png");
-	CCSprite* s_replay = CCSprite::create("ending_replay.png");
-	s_replay->setColor(ccGRAY);
-	
-	CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ClearPopup::menuAction));
-	replay_item->setTag(kMT_CP_replay);
-	
-	replay_menu = CCMenu::createWithItem(replay_item);
-	replay_menu->setVisible(false);
-	replay_menu->setPosition(ccp(150,33));
-	main_case->addChild(replay_menu, kZ_CP_menu);
-	
+	if(!mySGD->getIsMeChallenge())
+	{
+		CCSprite* n_replay = CCSprite::create("ending_replay.png");
+		CCSprite* s_replay = CCSprite::create("ending_replay.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ClearPopup::menuAction));
+		replay_item->setTag(kMT_CP_replay);
+		
+		replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setVisible(false);
+		replay_menu->setPosition(ccp(150,33));
+		main_case->addChild(replay_menu, kZ_CP_menu);
+	}
+	else
+	{
+		replay_menu = NULL;
+	}
 	
 	
 	is_saved_user_data = false;
@@ -462,7 +468,8 @@ void ClearPopup::endLoad()
 	if(is_saved_user_data && is_loaded_list)
 	{
 		ok_menu->setVisible(true);
-		replay_menu->setVisible(true);
+		if(replay_menu)
+			replay_menu->setVisible(true);
 	}
 }
 
@@ -620,6 +627,8 @@ void ClearPopup::menuAction(CCObject* pSender)
 	
 	if(tag == kMT_CP_ok)
 	{
+		if(mySGD->getIsMeChallenge())
+			mySGD->setIsMeChallenge(false);
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		hidePopup();
