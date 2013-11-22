@@ -26,9 +26,12 @@ KSSnakeBase::~KSSnakeBase()
 
 
 
-bool KSSnakeBase::init(const string& ccbiFile)
+bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 {
-	KSCumberBase::init();
+	if(isNotShowWindow)
+		KSCumberBase::init();
+	else
+		CCNode::init();
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
@@ -72,9 +75,11 @@ bool KSSnakeBase::init(const string& ccbiFile)
 	
 	
 	//	startMoving();
-	schedule(schedule_selector(KSSnakeBase::scaleAdjustment), 1/60.f);
-	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	
+	if(isNotShowWindow)
+	{
+		schedule(schedule_selector(KSSnakeBase::scaleAdjustment), 1/60.f);
+		schedule(schedule_selector(KSCumberBase::movingAndCrash));
+	}
 	
 	
 	return true;

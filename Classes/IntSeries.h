@@ -14,8 +14,8 @@
 
 USING_NS_CC;
 
-#define pixelSize 2
-
+//#define pixelSize 2
+const int pixelSize = 2;
 class IntVector : public CCObject
 {
 public:
@@ -119,7 +119,7 @@ public:
 	}
 };
 
-#define IntPointValueIsNULL		-1
+static const int IntPointValueIsNULL	=	-1;
 
 class IntPoint : public CCObject
 {

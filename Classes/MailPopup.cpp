@@ -244,7 +244,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			case kHeart:
 				comment = "하트가 도착했어요.";
 				break;
-			case kChallenge:
+			case kChallengeRequest:
 				comment = "도전장이 도착했어요.";
 				break;
 			case kHelpRequest:

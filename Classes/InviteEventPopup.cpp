@@ -242,7 +242,6 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 
 				hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
 				{
-
 					//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
 					//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 					//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];

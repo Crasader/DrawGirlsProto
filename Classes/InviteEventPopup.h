@@ -468,6 +468,81 @@ public:
 		pDispatcher->addTargetedDelegate(this, -170, true);
 	}
 	
+	void __sendChallenge(const std::string& kId, int score, enum MessageRecvType mt, const std::string& katokMsg, std::function<void(Json::Value)> yhFunc)
+	{
+		Json::Value p;
+		Json::Value contentJson;
+		std::string originalkId = kId;
+		contentJson["msg"] = "challenge";
+		KS::KSLog("%", hspConnector::get()->myKakaoInfo);
+		//				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+		p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+
+//		kId.erase(std::remove(kId.begin(), kId.end(), '-'), kId.end()); // '-' ¡¶∞≈
+		p["receiverMemberID"] = kId;
+		p["senderMemberID"] = hspConnector::get()->getKakaoID();
+		p["type"]=mt;
+		
+		hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+																 {
+																	 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+																	 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+																	 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+																	 
+																	 
+																	 GraphDogLib::JsonToLog("sendMessage", r);
+																	 
+//																	 obj->removeFromParent();
+																	 
+																	 yhFunc(r);
+																	 Json::Value p2;
+																	 p2["receiver_id"] = kId;
+																	 p2["message"] = katokMsg;
+																	 hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
+																																		 {
+																																			 GraphDogLib::JsonToLog("kSendMessage", r);
+																																		 });
+																 }
+																 );
+	
+	}
+	void sendChallengeRequest(const std::string& kId, int score, const std::string& katokMsg, std::function<void(Json::Value)> yhFunc)
+	{
+		__sendChallenge(kId, score, kChallengeRequest, katokMsg, yhFunc);
+	}
+	void sendChallengeResult(const std::string& kId, int score, const std::string& katokMsg, std::function<void(Json::Value)> yhFunc)
+	{
+		__sendChallenge(kId, score, kChallengeResult, katokMsg, yhFunc);
+	}
+	
+	
+	int getIsNotHelpableUser( std::string userId, int base_s = 60 * 60 * 24 * 1 ) /* 1일 */
+	{
+		auto end = chrono::system_clock::now();
+		auto currentSecond = chrono::system_clock::to_time_t(end);
+		int ii = myDSH->getUserIntForStr("help_" + userId, 0);
+		if(ii + base_s < currentSecond) // 보낼 수 있다.
+		{
+			return 0;
+		}
+		else
+		{
+			return ii + base_s - currentSecond; // 남은 시간 리턴
+		}
+		//		if(ii + base_s < GameSystem::getCurrentTime_s())
+		//		{
+		//			return 1;
+		//		}
+		//		else
+		//			return 0;
+	}
+	
+	void setHelpSendTime( string userId )
+	{
+		auto end = chrono::system_clock::now();
+		auto currentSecond = chrono::system_clock::to_time_t(end);
+		myDSH->setUserIntForStr("help_" + userId, currentSecond);
+	}
 protected:
 	
 	Json::Value m_scoreList;

@@ -41,11 +41,11 @@ public:
 	virtual void onStartGame();
 	virtual void stopCasting();
 	virtual void crashMapForPosition(CCPoint targetPt);
-	virtual bool init(const std::string& ccbiFile);
-	static KSSnakeBase* create(const std::string& ccbiFile) \
+	virtual bool init(const std::string& ccbiFile, bool isNotShowWindow);
+	static KSSnakeBase* create(const std::string& ccbiFile, bool isNotShowWindow = true) \
 	{ \
     KSSnakeBase *pRet = new KSSnakeBase(); \
-    if (pRet && pRet->init(ccbiFile)) \
+    if (pRet && pRet->init(ccbiFile, isNotShowWindow)) \
     { \
 			pRet->autorelease(); \
 			return pRet; \

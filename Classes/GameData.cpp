@@ -69,8 +69,9 @@ CCPoint GameData::getCommunicationCCPoint(string funcName)
 
 CCNode* GameData::getCommunicationNode(string funcName)
 {
-	CCAssert(CCN_V.find(funcName) != CCN_V.end(), funcName.c_str());
-	return CCN_V[funcName]();
+	if(CCN_V.find(funcName) != CCN_V.end())
+		return CCN_V[funcName]();
+	return NULL;
 }
 
 CCArray* GameData::getCommunicationArray(string funcName)
