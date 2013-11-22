@@ -10,7 +10,6 @@
 #define __DGproto__StageSettingPopup__
 
 #include "cocos2d.h"
-#include "AlertEngine.h"
 
 #include <deque>
 
@@ -27,6 +26,10 @@ enum SSP_MenuTag{
 	kSSP_MT_challenge = 4,
 	kSSP_MT_gacha = 5,
 	kSSP_MT_info = 6,
+	kSSP_MT_rubyShop = 7,
+	kSSP_MT_goldShop = 8,
+	kSSP_MT_heartShop = 9,
+	kSSP_MT_heartTime = 10,
 	kSSP_MT_itemBase = 100,
 	kSSP_MT_itemBuy = 200,
 	kSSP_MT_selectedBase = 300,

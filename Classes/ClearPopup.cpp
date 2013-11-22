@@ -21,11 +21,16 @@
 #include "DownloadFile.h"
 #include "StageSettingPopup.h"
 #include "PuzzleMapScene.h"
+#include "ShopPopup.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
 	kMT_CP_replay,
-	kMT_CP_noti
+	kMT_CP_noti,
+	kMT_CP_rubyShop,
+	kMT_CP_goldShop,
+	kMT_CP_heartShop,
+	kMT_CP_heartTime
 }MenuTagClearPopup;
 
 typedef enum tZorderClearPopup{
@@ -105,6 +110,12 @@ bool ClearPopup::init()
 	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f));//(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
 	addChild(top_case, kZ_CP_img);
 	
+	CountingBMLabel* ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "etc_font.fnt", 0.3f, "%d");
+	ruby_label->setPosition(ccp(108,top_case->getContentSize().height/2.f));
+	top_case->addChild(ruby_label);
+	
+	mySGD->setStarLabel(ruby_label);
+	
 	CountingBMLabel* total_gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
 	total_gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
 	top_case->addChild(total_gold_label);
@@ -113,7 +124,42 @@ bool ClearPopup::init()
 	
 	heart_time = HeartTime::create();
 	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
-	top_case->addChild(heart_time);
+	top_case->addChild(heart_time, 0, kMT_CP_heartTime);
+	
+	
+	CCSprite* n_ruby = CCSprite::create("test_ui_shop.png");
+	CCSprite* s_ruby = CCSprite::create("test_ui_shop.png");
+	s_ruby->setColor(ccGRAY);
+	
+	CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(ClearPopup::menuAction));
+	ruby_item->setTag(kMT_CP_rubyShop);
+	
+	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
+	ruby_menu->setPosition(ccp(148,top_case->getContentSize().height/2.f-2));
+	top_case->addChild(ruby_menu);
+	
+	CCSprite* n_gold = CCSprite::create("test_ui_shop.png");
+	CCSprite* s_gold = CCSprite::create("test_ui_shop.png");
+	s_gold->setColor(ccGRAY);
+	
+	CCMenuItem* gold_item = CCMenuItemSprite::create(n_gold, s_gold, this, menu_selector(ClearPopup::menuAction));
+	gold_item->setTag(kMT_CP_goldShop);
+	
+	CCMenu* gold_menu = CCMenu::createWithItem(gold_item);
+	gold_menu->setPosition(ccp(265,top_case->getContentSize().height/2.f-2));
+	top_case->addChild(gold_menu);
+	
+	CCSprite* n_heart = CCSprite::create("test_ui_shop.png");
+	CCSprite* s_heart = CCSprite::create("test_ui_shop.png");
+	s_heart->setColor(ccGRAY);
+	
+	CCMenuItem* heart_item = CCMenuItemSprite::create(n_heart, s_heart, this, menu_selector(ClearPopup::menuAction));
+	heart_item->setTag(kMT_CP_heartShop);
+	
+	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
+	heart_menu->setPosition(ccp(458,top_case->getContentSize().height/2.f-2));
+	top_case->addChild(heart_menu);
+	
 	
 	CCSprite* title = CCSprite::create("ending_clear.png");
 	title->setPosition(ccp(137,237));
@@ -645,6 +691,33 @@ void ClearPopup::menuAction(CCObject* pSender)
 		target_final = NULL;
 		hidePopup();
 //		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
+	}
+	else if(tag == kMT_CP_rubyShop)
+	{
+		ShopPopup* t_shop = ShopPopup::create();
+		t_shop->setHideFinalAction(NULL, NULL);
+		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_CP_heartTime)));
+		t_shop->setShopCode(kSC_ruby);
+		addChild(t_shop, kZ_CP_popup);
+		is_menu_enable = true;
+	}
+	else if(tag == kMT_CP_goldShop)
+	{
+		ShopPopup* t_shop = ShopPopup::create();
+		t_shop->setHideFinalAction(NULL, NULL);
+		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_CP_heartTime)));
+		t_shop->setShopCode(kSC_gold);
+		addChild(t_shop, kZ_CP_popup);
+		is_menu_enable = true;
+	}
+	else if(tag == kMT_CP_heartShop)
+	{
+		ShopPopup* t_shop = ShopPopup::create();
+		t_shop->setHideFinalAction(NULL, NULL);
+		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_CP_heartTime)));
+		t_shop->setShopCode(kSC_heart);
+		addChild(t_shop, kZ_CP_popup);
+		is_menu_enable = true;
 	}
 }
 
