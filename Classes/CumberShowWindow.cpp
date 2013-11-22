@@ -58,12 +58,6 @@ bool CumberShowWindow::init(int ss)
 		if(m_circleSprite != NULL)
 		{
 			this->addChild(m_circleSprite);
-			m_circleSprite->setScale(0.7f);
-			
-			if(juniorJson.size() > 0)
-			{
-				m_circleSprite->setPosition(ccp(-50,0));
-			}
 		}
 	}
 	else if(bossShape == "snake")
@@ -75,11 +69,6 @@ bool CumberShowWindow::init(int ss)
 		}
 		m_snakeNode = KSSnakeBase::create(ccbiname2, false);
 		addChild(m_snakeNode, 1000);
-		m_snakeNode->setScale(0.7f);
-		if(juniorJson.size() > 0)
-		{
-			m_snakeNode->setPosition(ccp(-50,0));
-		}
 		
 		m_snakeNode->startAnimationNoDirection();
 //		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -120,50 +109,40 @@ bool CumberShowWindow::init(int ss)
 		
 	}
 	
-	if(juniorJson.size() > 0)
+	
+	int juniorIndex = m_well512.GetValue(0, juniorJson.size() - 1);
+	juniorJson = juniorJson[juniorIndex];
 	{
-		int juniorIndex = m_well512.GetValue(0, juniorJson.size() - 1);
-		juniorJson = juniorJson[juniorIndex];
+		std::string juniorType = juniorJson["type"].asString();
+		std::string ccbiName = juniorType;
+		std::string ccbiname2 = ccbiName;
+
+		if(ccbiname2.substr(0,1)=="1") {
+			ccbiname2="bear";
+		}
+		////////////////////////////////////////////
+		
+		//		m_directionAngleDegree = m_well512.GetValue(0, 360);
+		
+//		CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
+//		ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
+		
+//		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+		
+		std::string _ccbiName = ("mob_" + ccbiname2 + ".ccbi").c_str();
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(nodeLoader);
+		CCNode* p = reader->readNodeGraphFromFile(_ccbiName.c_str(),this);
+		
+		m_juniorSprite = dynamic_cast<CCSprite*>(p);
+		m_juniorAnimation = reader->getAnimationManager();
+		m_juniorAnimation->setDelegate(this);
+		reader->release();
+		
+		if(m_juniorSprite != NULL)
 		{
-			std::string juniorType = juniorJson["type"].asString();
-			std::string ccbiName = juniorType;
-			std::string ccbiname2 = ccbiName;
-			if(ccbiName.length()<3) {
-				ccbiname2="bear";
-			}
-			////////////////////////////////////////////
-			
-			//		m_directionAngleDegree = m_well512.GetValue(0, 360);
-			
-			//		CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
-			//		ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
-			
-			//		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-			
-			std::string _ccbiName = ("mob_" + ccbiname2 + ".ccbi").c_str();
-			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-			cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(nodeLoader);
-			CCNode* p = reader->readNodeGraphFromFile(_ccbiName.c_str(),this);
-			
-			m_juniorSprite = dynamic_cast<CCSprite*>(p);
-			m_juniorAnimation = reader->getAnimationManager();
-			m_juniorAnimation->setDelegate(this);
-			reader->release();
-			
-			if(m_juniorSprite != NULL)
-			{
-				this->addChild(m_juniorSprite, 1001);
-				m_juniorSprite->setScale(0.7f);
-				m_juniorSprite->setPosition(ccp(50, 0));
-				
-				if(juniorJson.size() > 1)
-				{
-					CCLabelTTF* junior_cnt_label = CCLabelTTF::create(CCString::createWithFormat("x %d", juniorJson.size())->getCString(), mySGD->getFont().c_str(), 30);
-					junior_cnt_label->setAnchorPoint(ccp(0,0.5));
-					junior_cnt_label->setPosition(ccp(70,-20));
-					addChild(junior_cnt_label, 1002);
-				}
-			}
+			this->addChild(m_juniorSprite, 1001);
+			m_juniorSprite->setPosition(ccp(100, 0));
 		}
 	}
 	
