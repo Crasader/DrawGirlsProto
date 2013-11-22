@@ -25,6 +25,7 @@
 #include "hspConnector.h"
 #include "StageInfoPopup.h"
 #include "StageRankPopup.h"
+#include "LoadingLayer.h"
 
 enum SSP_Zorder{
 	kSSP_Z_gray = 1,
@@ -401,6 +402,61 @@ void StageSettingPopup::itemSetting()
 	}
 }
 
+void StageSettingPopup::callStart()
+{
+	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	int durability;
+	if(selected_card_number > 0)
+	{
+		durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
+	}
+	else
+	{
+		durability = -1;
+	}
+	
+	if(heart_time->isStartable())
+	{
+		if(durability > 0)
+		{
+			if(heart_time->startGame())
+				realStartAction();
+			else
+			{
+				if(mySGD->getIsMeChallenge())
+					mySGD->setIsMeChallenge(false);
+				
+				is_menu_enable = true;
+			}
+		}
+		else if(durability == 0)
+		{
+			is_menu_enable = true;
+			DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
+			addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
+		}
+		else // not selected card
+		{
+			if(heart_time->startGame())
+				realStartAction();
+			else
+			{
+				if(mySGD->getIsMeChallenge())
+					mySGD->setIsMeChallenge(false);
+				
+				is_menu_enable = true;
+			}
+		}
+	}
+	else
+	{
+		if(mySGD->getIsMeChallenge())
+			mySGD->setIsMeChallenge(false);
+		
+		is_menu_enable = true;
+	}
+}
+
 void StageSettingPopup::menuAction(CCObject* pSender)
 {
 	if(!is_menu_enable)
@@ -413,42 +469,7 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	
 	if(tag == kSSP_MT_start)
 	{
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int durability;
-		if(selected_card_number > 0)
-		{
-			durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
-		}
-		else
-		{
-			durability = -1;
-		}
-		
-		if(heart_time->isStartable())
-		{
-			if(durability > 0)
-			{
-				if(heart_time->startGame())
-					realStartAction();
-				else
-					is_menu_enable = true;
-			}
-			else if(durability == 0)
-			{
-				is_menu_enable = true;
-				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
-				addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
-			}
-			else // not selected card
-			{
-				if(heart_time->startGame())
-					realStartAction();
-				else
-					is_menu_enable = true;
-			}
-		}
-		else
-			is_menu_enable = true;
+		callStart();
 	}
 	else if(tag == kSSP_MT_back)
 	{
@@ -471,7 +492,7 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	else if(tag == kSSP_MT_challenge)
 	{
 		is_menu_enable = false;
-		StageRankPopup* t_sip = StageRankPopup::create(this, callfunc_selector(StageSettingPopup::popupClose), selected_stage);
+		StageRankPopup* t_sip = StageRankPopup::create(this, callfunc_selector(StageSettingPopup::popupClose), this, callfunc_selector(StageSettingPopup::callStart), selected_stage);
 		addChild(t_sip, kSSP_Z_popup);
 	}
 	else if(tag == kSSP_MT_gacha)
@@ -532,12 +553,19 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	else if(tag == kSSP_MT_noti_cancel)
 	{
 		removeChildByTag(kSSP_MT_noti);
+		
+		if(mySGD->getIsMeChallenge())
+			mySGD->setIsMeChallenge(false);
+		
 		is_menu_enable = true;
 	}
 }
 
 void StageSettingPopup::realStartAction()
 {
+	start_loading = LoadingLayer::create();
+	addChild(start_loading, kSSP_Z_popup);
+	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)
 	{
@@ -561,9 +589,7 @@ void StageSettingPopup::realStartAction()
 	
 	for(int i=kIC_attack;i<=kIC_randomChange;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
-	
-	
-	
+
 	
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getKakaoID();
@@ -613,6 +639,8 @@ void StageSettingPopup::finalStartAction(Json::Value result_data)
 	}
 	else
 	{
+		start_loading->removeFromParent();
+		
 		CCLog("Fail : user data save");
 		
 		heart_time->backHeart();
@@ -638,6 +666,10 @@ void StageSettingPopup::finalStartAction(Json::Value result_data)
 		}
 		
 		mySGD->resetUsingItem();
+		
+		if(mySGD->getIsMeChallenge())
+			mySGD->setIsMeChallenge(false);
+		
 		is_menu_enable = true;
 	}
 }

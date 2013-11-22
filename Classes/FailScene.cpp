@@ -100,7 +100,7 @@ bool FailScene::init()
 	
 	if(selected_card_number > 0)
 	{
-		DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number));
+		DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number), this, callfunc_selector(FailScene::endCall));
 		addChild(t_popup, kZ_FS_popup);
 		
 		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number);
@@ -302,6 +302,11 @@ bool FailScene::init()
 	hspConnector::get()->command("updateUserData", param2, json_selector(this, FailScene::resultSavedUserData));
 	
     return true;
+}
+
+void FailScene::endCall()
+{
+	
 }
 
 void FailScene::onEnter()

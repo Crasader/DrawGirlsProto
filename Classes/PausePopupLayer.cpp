@@ -9,7 +9,7 @@
 #include "PausePopupLayer.h"
 #include "EnumDefine.h"
 #include "AudioEngine.h"
-#include "GameData.h"
+#include "StarGoldData.h"
 
 PausePopupLayer* PausePopupLayer::create(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_continue, SEL_CallFunc d_continue, CCObject* t_speed, SEL_CallFunc d_slow, SEL_CallFunc d_normal, SEL_CallFunc d_fast, CCObject* t_replay, SEL_CallFunc d_replay)
 {
@@ -73,16 +73,27 @@ void PausePopupLayer::myInit(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_
 	home_menu->setPosition(ccp(main_case->getContentSize().width/2.f,132));
 	main_case->addChild(home_menu);
 	
-	
-	CCSprite* n_replay = CCSprite::create("pause_popup_replay.png");
-	CCSprite* s_replay = CCSprite::create("pause_popup_replay.png");
-	s_replay->setColor(ccGRAY);
-	
-	CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(PausePopupLayer::menuAction));
-	replay_item->setTag(kMenuTagPPL_replay);
-	replay_menu = CCMenu::createWithItem(replay_item);
-	replay_menu->setPosition(ccp(main_case->getContentSize().width/2.f,86));
-	main_case->addChild(replay_menu);
+	if(mySGD->getIsMeChallenge())
+	{
+		CCSprite* d_replay = CCSprite::create("pause_popup_replay.png");
+		d_replay->setColor(ccc3(100, 100, 100));
+		d_replay->setPosition(ccp(main_case->getContentSize().width/2.f,86));
+		main_case->addChild(d_replay);
+		
+		replay_menu = NULL;
+	}
+	else
+	{
+		CCSprite* n_replay = CCSprite::create("pause_popup_replay.png");
+		CCSprite* s_replay = CCSprite::create("pause_popup_replay.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(PausePopupLayer::menuAction));
+		replay_item->setTag(kMenuTagPPL_replay);
+		replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setPosition(ccp(main_case->getContentSize().width/2.f,86));
+		main_case->addChild(replay_menu);
+	}
 	
 	
 	CCSprite* n_continue = CCSprite::create("pause_popup_continue.png");
@@ -276,7 +287,7 @@ bool PausePopupLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 	if(touched_number != 0)		return true;
 	if(home_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kMenuTagPPL_home;
 	else if(continue_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kMenuTagPPL_continue;
-	else if(replay_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_replay;
+	else if(replay_menu && replay_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_replay;
 	//		else if(slow_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_slow;
 	//		else if(normal_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_normal;
 	//		else if(fast_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_fast;

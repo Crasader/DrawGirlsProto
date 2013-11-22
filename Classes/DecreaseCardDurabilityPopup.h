@@ -54,7 +54,7 @@ private:
 class DecreaseCardDurabilityPopup : public CCLayer
 {
 public:
-	static DecreaseCardDurabilityPopup* create(int t_stage, int t_grade);
+	static DecreaseCardDurabilityPopup* create(int t_stage, int t_grade, CCObject* t_end_call, SEL_CallFunc d_end_call);
 	
 private:
 	bool is_touch_enable;
@@ -66,14 +66,19 @@ private:
 	CCMenu* recovery_menu;
 	bool is_menu_on;
 	
+	CCObject* target_end_call;
+	SEL_CallFunc delegate_end_call;
+	
 	int remove_state;
 	
 	int stage_number;
 	int grade_number;
 	
-	void myInit(int t_stage, int t_grade);
+	void myInit(int t_stage, int t_grade, CCObject* t_end_call, SEL_CallFunc d_end_call);
 	
 	void openingAction();
+	
+	void endCall();
 	
 	void startEffect();
 	

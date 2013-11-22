@@ -176,16 +176,18 @@ void RemoveCardSprite::myInit( CCTexture2D* t_texture )
 	view_rect.size = frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 }
 
-DecreaseCardDurabilityPopup* DecreaseCardDurabilityPopup::create( int t_stage, int t_grade )
+DecreaseCardDurabilityPopup* DecreaseCardDurabilityPopup::create( int t_stage, int t_grade, CCObject* t_end_call, SEL_CallFunc d_end_call )
 {
 	DecreaseCardDurabilityPopup* t_cp = new DecreaseCardDurabilityPopup();
-	t_cp->myInit(t_stage, t_grade);
+	t_cp->myInit(t_stage, t_grade, t_end_call, d_end_call);
 	t_cp->autorelease();
 	return t_cp;
 }
 
-void DecreaseCardDurabilityPopup::myInit( int t_stage, int t_grade )
+void DecreaseCardDurabilityPopup::myInit( int t_stage, int t_grade, CCObject* t_end_call, SEL_CallFunc d_end_call )
 {
+	target_end_call = t_end_call;
+	delegate_end_call = d_end_call;
 	is_menu_on = false;
 	recovery_menu = NULL;
 	remove_state = 0;
@@ -303,6 +305,12 @@ void DecreaseCardDurabilityPopup::removeParticle()
 	remove_particle->setDuration(0);
 }
 
+void DecreaseCardDurabilityPopup::endCall()
+{
+	(target_end_call->*delegate_end_call)();
+	removeFromParent();
+}
+
 void DecreaseCardDurabilityPopup::menuAction( CCObject* sender )
 {
 	remove_state = 2;
@@ -326,7 +334,7 @@ void DecreaseCardDurabilityPopup::menuAction( CCObject* sender )
 	CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
 	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
 	CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
-	CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
+	CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::endCall));
 	CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
 	selected_card->runAction(t_seq1);
 }
@@ -400,7 +408,7 @@ void DecreaseCardDurabilityPopup::touchOn()
 			CCDelayTime* t_delay1 = CCDelayTime::create(10.f);
 			CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
 			CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
-			CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
+			CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::endCall));
 			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
 			selected_card->runAction(t_seq1);
 		}
@@ -418,7 +426,7 @@ void DecreaseCardDurabilityPopup::touchOn()
 			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
 			CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
 			CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
-			CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
+			CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::endCall));
 			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
 			selected_card->runAction(t_seq1);
 		}
@@ -443,7 +451,7 @@ void DecreaseCardDurabilityPopup::closingAction()
 	CCDelayTime* t_delay1 = CCDelayTime::create(0.4f);
 	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
 	CCDelayTime* t_delay2 = CCDelayTime::create(0.4f);
-	CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
+	CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::endCall));
 	CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
 	CCSpawn* t_spawn1 = CCSpawn::create(t_action, t_seq1, NULL);
 	selected_card->runAction(t_spawn1);
@@ -465,7 +473,7 @@ void DecreaseCardDurabilityPopup::fastRemoveAction()
 	CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
 	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::fadeGrayTitle));
 	CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
-	CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::removeFromParent));
+	CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(DecreaseCardDurabilityPopup::endCall));
 	CCSequence* t_seq1 = CCSequence::create(t_delay1, t_call1, t_delay2, t_call2, NULL);
 	selected_card->runAction(t_seq1);
 }

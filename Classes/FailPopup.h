@@ -90,6 +90,8 @@ private:
 	
 	HeartTime* heart_time;
 	
+	void endDecreaseCardDuration();
+	
 	void closeReplayPopup();
 	void popupClose();
 	

@@ -61,7 +61,7 @@ enum StageRankPopupMenuTag{
 class StageRankPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
-	static StageRankPopup* create(CCObject* t_close, SEL_CallFunc d_close, int t_stage_number);
+	static StageRankPopup* create(CCObject* t_close, SEL_CallFunc d_close, CCObject* t_challenge, SEL_CallFunc d_challenge, int t_stage_number);
 	
 private:
 	bool is_menu_enable;
@@ -73,6 +73,9 @@ private:
 	
 	CCObject* target_close;
 	SEL_CallFunc delegate_close;
+	
+	CCObject* target_challenge;
+	SEL_CallFunc delegate_challenge;
 	
 	vector<StageRankFriendInfo> friend_list;
 	CCTableView* rankTableView;
@@ -105,7 +108,7 @@ private:
 	
 	void menuAction(CCObject* sender);
 	
-	void myInit(CCObject* t_close, SEL_CallFunc d_close, int t_stage_number);
+	void myInit(CCObject* t_close, SEL_CallFunc d_close, CCObject* t_challenge, SEL_CallFunc d_challenge, int t_stage_number);
 	
 	void setBack();
 	

@@ -10,18 +10,20 @@
 #include "StarGoldData.h"
 #include "GDWebSprite.h"
 
-StageRankPopup* StageRankPopup::create( CCObject* t_close, SEL_CallFunc d_close, int t_stage_number )
+StageRankPopup* StageRankPopup::create( CCObject* t_close, SEL_CallFunc d_close, CCObject* t_challenge, SEL_CallFunc d_challenge, int t_stage_number )
 {
 	StageRankPopup* t_tnp = new StageRankPopup();
-	t_tnp->myInit(t_close, d_close, t_stage_number);
+	t_tnp->myInit(t_close, d_close, t_challenge, d_challenge, t_stage_number);
 	t_tnp->autorelease();
 	return t_tnp;
 }
 
-void StageRankPopup::myInit( CCObject* t_close, SEL_CallFunc d_close, int t_stage_number )
+void StageRankPopup::myInit( CCObject* t_close, SEL_CallFunc d_close, CCObject* t_challenge, SEL_CallFunc d_challenge, int t_stage_number )
 {
 	target_close = t_close;
 	delegate_close = d_close;
+	target_challenge = t_challenge;
+	delegate_challenge = d_challenge;
 	stage_number = t_stage_number;
 	
 	back_img = NULL;
@@ -84,8 +86,14 @@ void StageRankPopup::hidePopup()
 
 void StageRankPopup::endHidePopup()
 {
-	// delegate remove?
-	(target_close->*delegate_close)();
+	if(mySGD->getIsMeChallenge())
+	{
+		(target_challenge->*delegate_challenge)();
+	}
+	else
+	{
+		(target_close->*delegate_close)();
+	}
 	removeFromParent();
 }
 
@@ -220,6 +228,10 @@ void StageRankPopup::cellAction( CCObject* sender )
 	tag -= kSRFC_T_menuBase;
 	
 	CCLog("challenge memberID : %s", friend_list[tag].user_id.c_str());
+	
+	mySGD->setIsMeChallenge(true);
+	mySGD->setMeChallengeTarget(friend_list[tag].user_id.c_str());
+	hidePopup();
 }
 
 CCTableViewCell* StageRankPopup::tableCellAtIndex( CCTableView *table, unsigned int idx )
