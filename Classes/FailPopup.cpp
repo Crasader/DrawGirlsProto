@@ -42,13 +42,13 @@ void FailPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
 // on "init" you need to initialize your instance
 bool FailPopup::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if ( !CCLayer::init() )
-    {
-        return false;
-    }
-    
+	//////////////////////////////
+	// 1. super init first
+	if ( !CCLayer::init() )
+	{
+		return false;
+	}
+	
 	is_menu_enable = false;
 	is_loaded_list = false;
 	
@@ -301,7 +301,7 @@ bool FailPopup::init()
 	param2["data"] = writer.write(data);
 	hspConnector::get()->command("updateUserData", param2, json_selector(this, FailPopup::resultSavedUserData));
 	
-    return true;
+	return true;
 }
 
 void FailPopup::endDecreaseCardDuration()
@@ -588,9 +588,9 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		}
 		
 		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](FailFriendRank t_info)
-										{
-											return !t_info.is_play;
-										});
+																		{
+																			return !t_info.is_play;
+																		});
 		friend_list.erase(beginIter, friend_list.end());
 		
 		struct t_FriendSort{
@@ -707,8 +707,8 @@ void FailPopup::closeReplayPopup()
 
 void FailPopup::cellAction( CCObject* sender )
 {
-//	int tag = ((CCNode*)sender)->getTag();
-//	tag -= kFFC_T_menuBase;
+	//	int tag = ((CCNode*)sender)->getTag();
+	//	tag -= kFFC_T_menuBase;
 	int tag = (int)((CCNode*)sender)->getUserData();
 	CCLog("help memberID : %s", friend_list[tag].user_id.c_str());
 	//김현수 89987036974054944
@@ -717,87 +717,89 @@ void FailPopup::cellAction( CCObject* sender )
 	
 	KSAlertView* av = KSAlertView::create();
 	av->setCenterY(150);
-	auto ttf = CCLabelTTF::create((friend_list[tag].nickname + "좀 도와도").c_str(), "", 12.f);
+	auto ttf = CCLabelTTF::create((friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...").c_str(), "", 12.f);
 	av->setContentNode(
-		ttf
+										 ttf
 										 );
 	av->setContentSize(ttf->getDimensions());
 	
-//	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-//																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-//	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-//																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-//	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-//																					[](CCObject* e){
-//																						CCLog("press!!");
-//																					});
-//	av->addButton(m1);
+	//	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
+	//																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
+	//	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
+	//																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
+	//	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
+	//																					[](CCObject* e){
+	//																						CCLog("press!!");
+	//																					});
+	//	av->addButton(m1);
 	av->addButton(CCMenuItemImageLambda::create
-	(
-			"ticket_send.png",
-			"ticket_send.png",
-	 [=](CCObject* e){
-		 {
-		 Json::Value p;
-		 Json::Value contentJson;
-		 
-		 contentJson["msg"] = "helprequest";
-		 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
-		 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-		 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-		 std::string recvId = user_id;
-		 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
-		 p["receiverMemberID"] = recvId;
-		 p["senderMemberID"] = hspConnector::get()->getKakaoID();
-		 p["type"] = kHelpRequest;
-		 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
-																	{
-																		//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-																		//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-																		//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-																		
-//																		setHelpSendTime(recvId);
-																		GraphDogLib::JsonToLog("sendMessage", r);
-																		
-//																		obj->removeFromParent();
-																		Json::Value p2;
-																		p2["receiver_id"] = recvId;
-																		p2["message"] = "도와주세염~";
-																		hspConnector::get()->kSendMessage
-																			(p2, [=](Json::Value r)
-																			 {
-																				 GraphDogLib::JsonToLog("kSendMessage", r);
-																			 });
-																	});
-		 }
-		 { // 자기한테 보내기.
-			 Json::Value p;
-			 Json::Value contentJson;
-			 
-			 contentJson["msg"] = "helprequest";
-			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
-			 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-			 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-			 std::string recvId = user_id;
-			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
-			 p["receiverMemberID"] = hspConnector::get()->getKakaoID();
-			 p["senderMemberID"] = recvId;
-			 p["type"] = kHelpRequest;
-			 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
-																		{
-																			//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-																			//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-																			//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-																			
-//																			setHelpSendTime(recvId);
-																			GraphDogLib::JsonToLog("sendMessage", r);
-																			
-																			//																		obj->removeFromParent();
-																			
-																		});
-		 }
-	 }
-	 ));
+								(
+								 "ticket_send.png",
+								 "ticket_send.png",
+								 [=](CCObject* e){
+									 {
+										 Json::Value p;
+										 Json::Value contentJson;
+										 
+										 contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
+										 contentJson["helpstage"] = mySD->getSilType();
+										 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
+										 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+										 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+										 std::string recvId = user_id;
+										 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
+										 p["receiverMemberID"] = recvId;
+										 p["senderMemberID"] = hspConnector::get()->getKakaoID();
+										 p["type"] = kHelpRequest;
+										 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+																									{
+																										//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+																										//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+																										//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+																										
+																										//																		setHelpSendTime(recvId);
+																										GraphDogLib::JsonToLog("sendMessage", r);
+																										
+																										//																		obj->removeFromParent();
+																										Json::Value p2;
+																										p2["receiver_id"] = recvId;
+																										p2["message"] = "도와주세염~";
+																										hspConnector::get()->kSendMessage
+																										(p2, [=](Json::Value r)
+																										 {
+																											 GraphDogLib::JsonToLog("kSendMessage", r);
+																										 });
+																									});
+									 }
+									 { // 자기한테 보내기.
+										 Json::Value p;
+										 Json::Value contentJson;
+										 
+										 contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
+										 contentJson["helpstage"] = mySD->getSilType();
+										 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
+										 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+										 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+										 std::string recvId = user_id;
+										 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
+										 p["receiverMemberID"] = hspConnector::get()->getKakaoID();
+										 p["senderMemberID"] = recvId;
+										 p["type"] = kHelpRequest;
+										 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+																									{
+																										//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+																										//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+																										//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+																										
+																										//																			setHelpSendTime(recvId);
+																										GraphDogLib::JsonToLog("sendMessage", r);
+																										
+																										//																		obj->removeFromParent();
+																										
+																									});
+									 }
+								 }
+								 ));
 	addChild(av, kPMS_Z_helpRequest);
 	av->show();
 }
@@ -811,37 +813,37 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	CCTableViewCell* cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
-
+	
 	CCSprite* profileImg = GDWebSprite::create((*member).img_url, "ending_noimg.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kFFC_T_img);
 	profileImg->setPosition(ccp(27, 20));
 	profileImg->setScale(33.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kFFC_Z_img);
-
+	
 	CCSprite* bg = CCSprite::create("ending_cell_back.png");
 	bg->setPosition(CCPointZero);
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,kFFC_Z_case);
-
+	
 	nickname_label = CCLabelTTF::create((*member).nickname.c_str(), mySGD->getFont().c_str(), 12);
 	nickname_label->setPosition(ccp(47,22));
 	nickname_label->setAnchorPoint(CCPointZero);
 	nickname_label->setTag(kFFC_T_nickname);
 	cell->addChild(nickname_label,kFFC_Z_img);
-
+	
 	score_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", (*member).score)->getCString(), mySGD->getFont().c_str(), 18);
 	score_label->setPosition(ccp(47,0));
 	score_label->setAnchorPoint(CCPointZero);
 	score_label->setTag(kFFC_T_score);
 	cell->addChild(score_label,kFFC_Z_img);
-
+	
 	rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 10);
 	rank_label->setPosition(ccp(12,3));
 	rank_label->setAnchorPoint(CCPointZero);
 	rank_label->setTag(kFFC_T_rank);
 	cell->addChild(rank_label,kFFC_Z_img);
-
+	
 	if((*member).user_id == hspConnector::get()->getKakaoID())
 	{
 		CCSprite* meBack = CCSprite::create("ending_cell_selected.png");
@@ -883,7 +885,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 			}
 		}
 	}
-
+	
 	return cell;
 }
 
@@ -917,12 +919,12 @@ void FailPopup::setHelpSendTime( string userId )
 
 void FailPopup::scrollViewDidScroll( CCScrollView* view )
 {
-
+	
 }
 
 void FailPopup::scrollViewDidZoom( CCScrollView* view )
 {
-
+	
 }
 
 void FailPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
