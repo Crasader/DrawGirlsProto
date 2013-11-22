@@ -764,16 +764,25 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 		{
 			if(!(*member).is_message_blocked)
 			{
-				CCSprite* n_help = CCSprite::create("ending_help_on.png");
-				CCSprite* s_help = CCSprite::create("ending_help_on.png");
-				s_help->setColor(ccGRAY);
-				
-				CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailPopup::cellAction));
-				help_item->setTag(kFFC_T_menuBase + idx);
-				
-				CCMenu* help_menu = CCMenu::createWithItem(help_item);
-				help_menu->setPosition(ccp(165,21));
-				cell->addChild(help_menu, kFFC_Z_img);
+				if(getIsNotHelpableUser((*member).user_id.c_str()) <= 0)
+				{
+					CCSprite* n_help = CCSprite::create("ending_help_on.png");
+					CCSprite* s_help = CCSprite::create("ending_help_on.png");
+					s_help->setColor(ccGRAY);
+					
+					CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailPopup::cellAction));
+					help_item->setTag(kFFC_T_menuBase + idx);
+					
+					CCMenu* help_menu = CCMenu::createWithItem(help_item);
+					help_menu->setPosition(ccp(165,21));
+					cell->addChild(help_menu, kFFC_Z_img);
+				}
+				else
+				{
+					CCSprite* not_help = CCSprite::create("ending_help_off.png");
+					not_help->setPosition(ccp(165,21));
+					cell->addChild(not_help, kFFC_Z_img);
+				}
 			}
 			else
 			{
@@ -785,6 +794,27 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	}
 
 	return cell;
+}
+
+int FailPopup::getIsNotHelpableUser( std::string userId, int base_s ) /* 1일 */
+{
+	auto end = chrono::system_clock::now();
+	auto currentSecond = chrono::system_clock::to_time_t(end);
+	int ii = myDSH->getUserIntForStr("help_" + userId, 0);
+	if(ii + base_s < currentSecond) // 보낼 수 있다.
+	{
+		return 0;
+	}
+	else
+	{
+		return ii + base_s - currentSecond; // 남은 시간 리턴
+	}
+	//		if(ii + base_s < GameSystem::getCurrentTime_s())
+	//		{
+	//			return 1;
+	//		}
+	//		else
+	//			return 0;
 }
 
 void FailPopup::scrollViewDidScroll( CCScrollView* view )
