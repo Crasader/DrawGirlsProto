@@ -185,26 +185,7 @@ bool OptionPopup::init()
 	
 	is_menu_enable = false;
 	
-	KSAlertView* av = KSAlertView::create();
 	
-	av->setContentNode(
-										 CCLabelTTF::create((std::string("김현수~") + "좀 도와도").c_str(), "", 12.f)
-										 );
-	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-																					[](CCObject* e){
-																						CCLog("press!!");
-																					});
-	av->addButton(m1);
-	av->addButton(CCMenuItemImageLambda::create("ticket_send.png", "ticket_send.png",
-																							[](CCObject* e){
-																								CCLog("press!!");
-																							}));
-	addChild(av, kPMS_Z_helpRequest);
-	av->show();
 
 	return true;
 }
