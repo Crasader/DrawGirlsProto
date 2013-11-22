@@ -216,9 +216,12 @@ typedef enum t_ITEM_CODE{
 enum MessageRecvType
 {
 	kHeart = 1,
-	kChallenge,
+	kChallengeRequest,
+	kChallengeResult,
 	kHelpRequest,
+	kHelpResult,
 	kTicketRequest,
+	kTicketResult,
 	kInvite
 };
 #define SHOP_KEY	0xD9
