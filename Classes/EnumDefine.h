@@ -9,6 +9,18 @@
 #ifndef DrawingJack_EnumDefine_h
 #define DrawingJack_EnumDefine_h
 
+enum mapLoopRange{
+	mapWidthOutlineBegin = 0,
+	mapWidthOutlineEnd = 162,
+	mapHeightOutlineBegin = 0,
+	mapHeightOutlineEnd = 217,
+	
+	mapWidthInnerBegin = 1,
+	mapWidthInnerEnd = 161,
+	mapHeightInnerBegin = 1,
+	mapHeightInnerEnd = 216,
+};
+
 enum DieType{
 	kDieType_other = 0,
 	kDieType_shockwave,

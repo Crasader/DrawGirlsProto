@@ -102,7 +102,7 @@ public:
 	
 	void createSubCumberReplication(CCPoint s_p, CCObject* sender, SEL_CallFuncO d_startMoving);
 	
-	void explosion(CCPoint bombPosition, ccColor4F t_color);
+	void explosion(CCPoint bombPosition, ccColor4F t_color, float t_angle);
 	
 	void createTickingTimeBomb(IntPoint t_point, int t_bombFrameOneTime, int t_bombTimes, int t_rangeCode);
 	
@@ -155,7 +155,7 @@ private:
 	
 	CCParticleSystem* particle;
 	
-	void initParticle(CCPoint startPosition, ccColor4F t_color);
+	void initParticle(CCPoint startPosition, ccColor4F t_color, float t_angle);
 	
 	void removeChargeInArray(CCObject* remove_charge);
 	

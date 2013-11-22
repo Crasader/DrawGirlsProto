@@ -166,7 +166,7 @@ void JM_UpgradeMissile::moving ()
 					particlePosition.x += rand()%21 - 10;
 					particlePosition.y += rand()%21 - 10;
 					
-					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0));
+					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0), -shootImg->getRotation());
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
 					
@@ -624,7 +624,7 @@ void JM_BasicMissile::moving ()
 					particlePosition.x += rand()%21 - 10;
 					particlePosition.y += rand()%21 - 10;
 					
-					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0));
+					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0), directionAngle);
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
 					

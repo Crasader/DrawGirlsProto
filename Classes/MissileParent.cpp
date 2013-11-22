@@ -22,7 +22,7 @@ void MissileParent::bombCumber( CCObject* target )
 			}
 		}
 	}
-
+	
 	if(target == myGD->getCommunicationNode("CP_getMainCumberPointer") && savedAP)
 	{
 		saveAP->stopMyAction();
@@ -39,7 +39,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
 		int cumberCnt = 1 + subCumberArray->count();
 		int random_value;
-
+		
 		for(int i=0;i<cmCnt;i++)
 		{
 			if(i == 0)
@@ -78,7 +78,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 void MissileParent::subOneDie()
 {
 	CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-
+	
 	if(subCumberArray->count() > 0)
 	{
 		JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->randomObject(), kElementCode_life, 999999.f);
@@ -100,7 +100,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	Json::Value patternData;
 	Json::Reader reader;
 	reader.parse(patternD, patternData);
-
+	
 	int castFrame = patternData.get("castframe", 120).asInt();
 	// 캐스팅 실패하면 캐스팅 시간 점점 줄음.
 	castFrame = MAX(30, castFrame - (castFrame * 0.1f)* cb->getCastingCancelCount());
@@ -115,7 +115,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			CrashChargeNodeLambda* t_ccn =
 			CrashChargeNodeLambda::create(startPosition, castFrame,
-																			func, cb);
+										  func, cb);
 			t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
 			addChild(t_ccn);
 			t_ccn->startCharge();
@@ -125,7 +125,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-																			func, cb);
+											func, cb);
 			
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			addChild(t_ccn);
@@ -136,7 +136,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			ChargeNodeLambda* t_ccn =
 			ChargeNodeLambda::create(startPosition, castFrame,
-																			func, cb);
+									 func, cb);
 			
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			addChild(t_ccn);
@@ -308,7 +308,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			};
 			castBranch(atype, func);
 			
-		
+			
 		}
 	}
 	else if(pattern == "102")
@@ -518,7 +518,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			castBranch(atype, func);
 		}
 	}
-
+	
 	else if(pattern == "1002")
 	{
 		if(exe)
@@ -559,9 +559,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				}
 				else
 				{
-//					int totalFrame = patternData.get("totalframe", 60*4).asInt();
+					//					int totalFrame = patternData.get("totalframe", 60*4).asInt();
 					
-//					Cobweb* t_m23 = Cobweb::create(totalFrame);
+					//					Cobweb* t_m23 = Cobweb::create(totalFrame);
 					Cobweb* t_m23 = Cobweb::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 					addChild(t_m23);
 					keepAP23 = t_m23;
@@ -706,8 +706,8 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				
 				saveAP = t_m12;
 				savedAP = true;
-//				myGD->communication("CP_onPatternEnd");
-
+				//				myGD->communication("CP_onPatternEnd");
+				
 			};
 			castBranch(atype, func);
 		}
@@ -784,7 +784,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				myGD->communication("CP_onPatternEnd");
 			};
 			castBranch(atype, func);
-					
+			
 		}
 	}
 	else if(pattern == "1015") // 풍차벽.
@@ -796,7 +796,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			WindmillObject* t_to = WindmillObject::create(ccp2ip(startPosition), totalframe);
 			addChild(t_to);
-			 
+			
 			return invalid; // 노 캐스팅
 		}
 	}
@@ -854,7 +854,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
 			myGD->communication("Main_showWarning", 2);
-
+			
 			AudioEngine::sharedInstance()->playEffect("sound_casting_crash.mp3", true);
 			
 		}
@@ -876,9 +876,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	{
 		return invalid;
 	}
-
 	
-//	if(!invalid)
+	
+	//	if(!invalid)
 	{
 		myLog->addLog(kLOG_attackPattern_i, myGD->getCommunication("UI_getUseTime"), atoi(pattern.c_str()));
 	}
@@ -893,20 +893,20 @@ void MissileParent::createSubCumberReplication( CCPoint s_p,
 {
 	CreateSubCumberOtherAction* t_cscaa = CreateSubCumberOtherAction::create(IntPoint(int(round((s_p.x-1)/pixelSize+1)), int(round((s_p.y-1)/pixelSize+1))), sender, d_startMoving, sender, d_startMoving);
 	addChild(t_cscaa);
-
+	
 	ChargeNode* t_cn = ChargeNode::create(s_p, 60*3, NULL, NULL,
-		t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::afterAction),
-		t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::cancelAction), sender);
+										  t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::afterAction),
+										  t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::cancelAction), sender);
 	addChild(t_cn);
 	t_cn->startCharge();
-
+	
 	chargeArray->addObject(t_cn);
 }
 
-void MissileParent::explosion( CCPoint bombPosition, ccColor4F t_color )
+void MissileParent::explosion( CCPoint bombPosition, ccColor4F t_color, float t_angle )
 {
 	AudioEngine::sharedInstance()->playEffect("sound_jack_missile_bomb.mp3",false);
-	initParticle(bombPosition, t_color);
+	initParticle(bombPosition, t_color, t_angle);
 }
 
 void MissileParent::createTickingTimeBomb( IntPoint t_point, int t_bombFrameOneTime, int t_bombTimes, int t_rangeCode )
@@ -922,7 +922,7 @@ void MissileParent::createTickingTimeBomb( IntPoint t_point, int t_bombFrameOneT
 			break;
 		}
 	}
-
+	
 	if(!is_check)
 	{
 		TickingTimeBomb* t_ttb = TickingTimeBomb::create(t_point, t_bombFrameOneTime, t_bombTimes, t_rangeCode, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
@@ -949,7 +949,7 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
 		int cumberCnt = 1 + subCumberArray->count();
 		int random_value;
-
+		
 		for(int i=0;i<cmCnt;i++)
 		{
 			if(i == 0)
@@ -984,17 +984,19 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 	}
 }
 
-void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color )
+void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color, float t_angle )
 {
-	CCSprite* t_explosion = CCSprite::create("fx_boss_hit1.png");
+	CCSprite* t_explosion = CCSprite::create("fx_boss_hit4_1.png");
 	t_explosion->setScale(1.f/1.5f);
+	t_explosion->setRotation(-t_angle-90);
 	t_explosion->setPosition(startPosition);
 	addChild(t_explosion);
 	
 	CCAnimation* t_animation = CCAnimation::create();
 	t_animation->setDelayPerUnit(0.1f);
-	for(int i=1;i<=7;i++)
-		t_animation->addSpriteFrameWithFileName(CCString::createWithFormat("fx_boss_hit%d.png", i)->getCString());
+	t_animation->addSpriteFrameWithFileName(CCString::createWithFormat("fx_boss_hit4_%d.png", 1)->getCString());
+	for(int i=1;i<=6;i++)
+		t_animation->addSpriteFrameWithFileName(CCString::createWithFormat("fx_boss_hit4_%d.png", i)->getCString());
 	
 	CCAnimate* t_animate = CCAnimate::create(t_animation);
 	CCFadeTo* t_fade = CCFadeTo::create(0.2f, 0);
@@ -1003,46 +1005,46 @@ void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color )
 	t_explosion->runAction(t_seq);
 	
 	
-//	particle = CCParticleSystemQuad::createWithTotalParticles(25);
-//	particle->setPositionType(kCCPositionTypeRelative);
-//	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("circle1.png");
-//	particle->setTexture(texture);
-//	particle->setEmissionRate(2500.00); // inf
-//	particle->setAngle(90.0);
-//	particle->setAngleVar(360.0);
-//	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-//	particle->setBlendFunc(blendFunc);
-//	particle->setDuration(0.01);
-//	particle->setEmitterMode(kCCParticleModeGravity);
-//	particle->setStartColor(t_color);
-//	ccColor4F startColorVar = {0,0,0,0};
-//	particle->setStartColorVar(startColorVar);
-//	ccColor4F endColor = {0.00,0.00,0.00,1.00};
-//	particle->setEndColor(endColor);
-//	ccColor4F endColorVar = {0,0,0,0};
-//	particle->setEndColorVar(endColorVar);
-//	particle->setStartSize(0.00);
-//	particle->setStartSizeVar(2.0);
-//	particle->setEndSize(10.0);
-//	particle->setEndSizeVar(2.0);
-//	particle->setGravity(ccp(2.0,10.0));
-//	particle->setRadialAccel(0.0);
-//	particle->setRadialAccelVar(10.0);
-//	particle->setSpeed(50);
-//	particle->setSpeedVar(5);
-//	particle->setTangentialAccel(0);
-//	particle->setTangentialAccelVar(10);
-//	particle->setTotalParticles(25);
-//	particle->setLife(0.50);
-//	particle->setLifeVar(0.1);
-//	particle->setStartSpin(0.0);
-//	particle->setStartSpinVar(0.0);
-//	particle->setEndSpin(0.0);
-//	particle->setEndSpinVar(0.0);
-//	particle->setPosition(startPosition);
-//	particle->setPosVar(ccp(0,0));
-//	particle->setAutoRemoveOnFinish(true);
-//	addChild(particle);
+	//	particle = CCParticleSystemQuad::createWithTotalParticles(25);
+	//	particle->setPositionType(kCCPositionTypeRelative);
+	//	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("circle1.png");
+	//	particle->setTexture(texture);
+	//	particle->setEmissionRate(2500.00); // inf
+	//	particle->setAngle(90.0);
+	//	particle->setAngleVar(360.0);
+	//	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+	//	particle->setBlendFunc(blendFunc);
+	//	particle->setDuration(0.01);
+	//	particle->setEmitterMode(kCCParticleModeGravity);
+	//	particle->setStartColor(t_color);
+	//	ccColor4F startColorVar = {0,0,0,0};
+	//	particle->setStartColorVar(startColorVar);
+	//	ccColor4F endColor = {0.00,0.00,0.00,1.00};
+	//	particle->setEndColor(endColor);
+	//	ccColor4F endColorVar = {0,0,0,0};
+	//	particle->setEndColorVar(endColorVar);
+	//	particle->setStartSize(0.00);
+	//	particle->setStartSizeVar(2.0);
+	//	particle->setEndSize(10.0);
+	//	particle->setEndSizeVar(2.0);
+	//	particle->setGravity(ccp(2.0,10.0));
+	//	particle->setRadialAccel(0.0);
+	//	particle->setRadialAccelVar(10.0);
+	//	particle->setSpeed(50);
+	//	particle->setSpeedVar(5);
+	//	particle->setTangentialAccel(0);
+	//	particle->setTangentialAccelVar(10);
+	//	particle->setTotalParticles(25);
+	//	particle->setLife(0.50);
+	//	particle->setLifeVar(0.1);
+	//	particle->setStartSpin(0.0);
+	//	particle->setStartSpinVar(0.0);
+	//	particle->setEndSpin(0.0);
+	//	particle->setEndSpinVar(0.0);
+	//	particle->setPosition(startPosition);
+	//	particle->setPosVar(ccp(0,0));
+	//	particle->setAutoRemoveOnFinish(true);
+	//	addChild(particle);
 }
 
 void MissileParent::myInit( CCNode* boss_eye )
@@ -1052,40 +1054,40 @@ void MissileParent::myInit( CCNode* boss_eye )
 	keepAP26 = NULL;
 	keepAP33 = NULL;
 	keepAP24 = NULL;
-
+	
 	chargeArray = new CCArray(1);
 	tickingArray = new CCArray(1);
-
+	
 	mySW = SW_Parent::create();
 	addChild(mySW);
-
-//	myGD->V_CCPB["MP_startFire"] = std::bind(&MissileParent::startFire, this, _1, _2);
 	
-//	myGD->V_CCPI["MP_attackWithCode"] = std::bind(&MissileParent::attackWithCode, this, _1, _2);
+	//	myGD->V_CCPB["MP_startFire"] = std::bind(&MissileParent::startFire, this, _1, _2);
 	
-//	myGD->V_CCPI["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2);
+	//	myGD->V_CCPI["MP_attackWithCode"] = std::bind(&MissileParent::attackWithCode, this, _1, _2);
+	
+	//	myGD->V_CCPI["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2);
 	myGD->I_CCPStrCumberBaseB["MP_attackWithKSCode"] =
-		std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
+	std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
 	myGD->V_CCPCCOCallfuncO["MP_createSubCumberReplication"] = std::bind(&MissileParent::createSubCumberReplication, this, _1, _2, _3);
 	myGD->V_CCO["MP_removeChargeInArray"] = std::bind(&MissileParent::removeChargeInArray, this, _1);
 	myGD->V_IIF["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3);
 	myGD->V_CCO["MP_bombCumber"] = std::bind(&MissileParent::bombCumber, this, _1);
-	myGD->V_CCPCOLOR["MP_explosion"] = std::bind(&MissileParent::explosion, this, _1, _2);
+	myGD->V_CCPCOLORF["MP_explosion"] = std::bind(&MissileParent::explosion, this, _1, _2, _3);
 	myGD->V_V["MP_endIngActionAP"] = std::bind(&MissileParent::endIngActionAP, this);
 	myGD->V_IpIII["MP_createTickingTimeBomb"] = std::bind(&MissileParent::createTickingTimeBomb, this, _1, _2, _3, _4);
-//	myGD->V_V["MP_deleteKeepAP25"] = std::bind(&MissileParent::deleteKeepAP25, this);
+	//	myGD->V_V["MP_deleteKeepAP25"] = std::bind(&MissileParent::deleteKeepAP25, this);
 	myGD->V_V["MP_deleteKeepAP23"] = std::bind(&MissileParent::deleteKeepAP23, this);
 	myGD->V_V["MP_deleteKeepAP26"] = std::bind(&MissileParent::deleteKeepAP26, this);
-//	myGD->V_V["MP_deleteKeepAP27"] = std::bind(&MissileParent::deleteKeepAP27, this);
+	//	myGD->V_V["MP_deleteKeepAP27"] = std::bind(&MissileParent::deleteKeepAP27, this);
 	myGD->V_V["MP_deleteKeepAP33"] = std::bind(&MissileParent::deleteKeepAP33, this);
 	myGD->V_V["MP_deleteKeepAP24"] = std::bind(&MissileParent::deleteKeepAP24, this);
-//	myGD->V_V["MP_deleteKeepAP34"] = std::bind(&MissileParent::deleteKeepAP34, this);
-//	myGD->V_V["MP_protectedAP25"] = std::bind(&MissileParent::protectedAP25, this);
+	//	myGD->V_V["MP_deleteKeepAP34"] = std::bind(&MissileParent::deleteKeepAP34, this);
+	//	myGD->V_V["MP_protectedAP25"] = std::bind(&MissileParent::protectedAP25, this);
 	myGD->V_V["MP_protectedAP26"] = std::bind(&MissileParent::protectedAP26, this);
-//	myGD->V_V["MP_protectedAP27"] = std::bind(&MissileParent::protectedAP27, this);
+	//	myGD->V_V["MP_protectedAP27"] = std::bind(&MissileParent::protectedAP27, this);
 	myGD->V_V["MP_protectedAP33"] = std::bind(&MissileParent::protectedAP33, this);
-//	myGD->V_V["MP_deleteKeepAP35"] = std::bind(&MissileParent::deleteKeepAP35, this);
-//	myGD->V_V["MP_stopAutoAttacker"] = std::bind(&MissileParent::stopAutoAttacker, this);
+	//	myGD->V_V["MP_deleteKeepAP35"] = std::bind(&MissileParent::deleteKeepAP35, this);
+	//	myGD->V_V["MP_stopAutoAttacker"] = std::bind(&MissileParent::stopAutoAttacker, this);
 	myGD->V_IIFCCP["MP_shootPetMissile"] = std::bind(&MissileParent::shootPetMissile, this, _1, _2, _3, _4);
 	myGD->V_V["MP_resetTickingTimeBomb"] = std::bind(&MissileParent::resetTickingTimeBomb, this);
 	myGD->V_V["MP_subOneDie"] = std::bind(&MissileParent::subOneDie, this);
@@ -1173,7 +1175,7 @@ void UM_creator::startPetCreate()
 void UM_creator::creating()
 {
 	ing_frame++;
-
+	
 	if(ing_frame%shoot_frame == 0)
 	{
 		if(ing_frame/shoot_frame <= 1)
@@ -1187,7 +1189,7 @@ void UM_creator::creating()
 			CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
 			int cumberCnt = 1 + subCumberArray->count();
 			int random_value;
-
+			
 			random_value = rand()%cumberCnt;
 			if(random_value == 0)
 			{
@@ -1204,7 +1206,7 @@ void UM_creator::creating()
 		}
 		ing_um_cnt++;
 	}
-
+	
 	if(ing_um_cnt >= um_tcnt)
 	{
 		stopCreate();
@@ -1214,7 +1216,7 @@ void UM_creator::creating()
 void UM_creator::petCreating()
 {
 	ing_frame++;
-
+	
 	if(ing_frame%shoot_frame == 0)
 	{
 		if(ing_frame/shoot_frame <= 1)
@@ -1228,7 +1230,7 @@ void UM_creator::petCreating()
 			CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
 			int cumberCnt = 1 + subCumberArray->count();
 			int random_value;
-
+			
 			random_value = rand()%cumberCnt;
 			if(random_value == 0)
 			{
@@ -1245,7 +1247,7 @@ void UM_creator::petCreating()
 		}
 		ing_um_cnt++;
 	}
-
+	
 	if(ing_um_cnt >= um_tcnt)
 	{
 		stopPetCreate();

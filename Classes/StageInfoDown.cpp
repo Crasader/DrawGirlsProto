@@ -18,8 +18,11 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 		CCLog("saved version : %d", NSDS_GI(mySD->getSilType(), kSDS_SI_version_i));
 		if(NSDS_GI(mySD->getSilType(), kSDS_SI_version_i) < result_data["version"].asInt())
 		{
+			NSDS_SI(mySD->getSilType(), kSDS_SI_puzzle_i, result_data["puzzle"].asInt());
 			NSDS_SI(mySD->getSilType(), kSDS_SI_playtime_i, result_data["playtime"].asInt());
 			NSDS_SD(mySD->getSilType(), kSDS_SI_scoreRate_d, result_data["scoreRate"].asDouble());
+			NSDS_SI(mySD->getSilType(), kSDS_SI_condGold_i, result_data["condGold"].asInt());
+			NSDS_SI(mySD->getSilType(), kSDS_SI_condStageNo_i, result_data["condStageNo"].asInt());
 			
 			Json::Value t_mission = result_data["mission"];
 			NSDS_SI(mySD->getSilType(), kSDS_SI_missionType_i, t_mission["type"].asInt());
@@ -120,6 +123,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt());
 				NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt());
 				NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt());
+				NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt());
 				
 				NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1);
 				NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt());

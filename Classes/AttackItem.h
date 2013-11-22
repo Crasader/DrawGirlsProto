@@ -343,7 +343,7 @@ private:
 			{
 				CCNode* mainCumber = myGD->getCommunicationNode("CP_getMainCumberPointer");
 				
-				myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 1.f, 1.f, 1.f));
+				myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 1.f, 1.f, 1.f), rand()%360-180.f);
 				myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
 				
 				if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -360,7 +360,7 @@ private:
 				for(int i=0;i<cumber_cnt;i++)
 				{
 					CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
-					myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(0, 1.f, 1.f, 1.f)); // ccpoint
+					myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(0, 1.f, 1.f, 1.f), rand()%360-180.f); // ccpoint
 					myGD->communication("MP_bombCumber", (CCObject*)t_subCumber); // with startMoving
 					myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)t_subCumber, total_damage/10.f, rand()%360-180.f);
 					
@@ -388,7 +388,7 @@ private:
 		{
 			CCNode* mainCumber = myGD->getCommunicationNode("CP_getMainCumberPointer");
 			
-			myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 1.f, 1.f, 1.f));
+			myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 1.f, 1.f, 1.f), rand()%360-180.f);
 			myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
 			
 			if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -404,7 +404,7 @@ private:
 			for(int i=0;i<cumber_cnt;i++)
 			{
 				CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
-				myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(0, 1.f, 1.f, 1.f)); // ccpoint
+				myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(0, 1.f, 1.f, 1.f), rand()%360-180.f); // ccpoint
 				myGD->communication("MP_bombCumber", (CCObject*)t_subCumber); // with startMoving
 				myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)t_subCumber, total_damage-sum_damage, rand()%360-180.f);
 				
@@ -682,7 +682,7 @@ private:
 		{
 			CCNode* mainCumber = myGD->getCommunicationNode("CP_getMainCumberPointer");
 			
-			myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 1.f, 0, 1.f));
+			myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 1.f, 0, 1.f), rand()%360-180.f);
 			myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
 			
 			if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -699,7 +699,7 @@ private:
 			for(int i=0;i<cumber_cnt;i++)
 			{
 				CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
-				myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(1.f, 1.f, 0, 1.f)); // ccpoint
+				myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(1.f, 1.f, 0, 1.f), rand()%360-180.f); // ccpoint
 				myGD->communication("MP_bombCumber", (CCObject*)t_subCumber); // with startMoving
 				myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)t_subCumber, total_damage/23.f, rand()%360-180.f);
 				
@@ -735,7 +735,7 @@ private:
 		{
 			CCNode* mainCumber = myGD->getCommunicationNode("CP_getMainCumberPointer");
 			
-			myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 1.f, 0, 1.f));
+			myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 1.f, 0, 1.f), rand()%360-180.f);
 			myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
 			
 			if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -751,7 +751,7 @@ private:
 			for(int i=0;i<cumber_cnt;i++)
 			{
 				CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
-				myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(1.f, 1.f, 0, 1.f)); // ccpoint
+				myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(1.f, 1.f, 0, 1.f), rand()%360-180.f); // ccpoint
 				myGD->communication("MP_bombCumber", (CCObject*)t_subCumber); // with startMoving
 				myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)t_subCumber, total_damage-sum_damage, rand()%360-180.f);
 				
@@ -1045,7 +1045,7 @@ private:
 	{
 		CCNode* mainCumber = myGD->getCommunicationNode("CP_getMainCumberPointer");
 		
-		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 1.f, 0, 1.f));
+		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 1.f, 0, 1.f), rand()%360-180.f);
 		myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
 		
 		if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -1061,7 +1061,7 @@ private:
 		for(int i=0;i<cumber_cnt;i++)
 		{
 			CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
-			myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(0, 1.f, 0, 1.f)); // ccpoint
+			myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(0, 1.f, 0, 1.f), rand()%360-180.f); // ccpoint
 			myGD->communication("MP_bombCumber", (CCObject*)t_subCumber); // with startMoving
 			myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)t_subCumber, t_damage, rand()%360-180.f);
 			
@@ -1403,7 +1403,7 @@ private:
 	{
 		CCNode* mainCumber = myGD->getCommunicationNode("CP_getMainCumberPointer");
 		
-		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 1.f, 1.f));
+		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 1.f, 1.f), rand()%360-180.f);
 		myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
 		
 		if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -1420,7 +1420,7 @@ private:
 		for(int i=0;i<cumber_cnt;i++)
 		{
 			CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
-			myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(0, 0, 1.f, 1.f)); // ccpoint
+			myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(0, 0, 1.f, 1.f), rand()%360-180.f); // ccpoint
 			myGD->communication("MP_bombCumber", (CCObject*)t_subCumber); // with startMoving
 			myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)t_subCumber, t_damage, rand()%360-180.f);
 			
@@ -1725,7 +1725,7 @@ private:
 	{
 		CCNode* mainCumber = myGD->getCommunicationNode("CP_getMainCumberPointer");
 		
-		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 0, 0, 1.f));
+		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 0, 0, 1.f), rand()%360-180.f);
 		myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
 		myGD->communication("CP_startDamageReaction", mainCumber, t_damage, (float)(rand()%360-180.f));
 		
@@ -1735,7 +1735,7 @@ private:
 		for(int i=0;i<cumber_cnt;i++)
 		{
 			CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
-			myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(1.f, 0, 0, 1.f)); // ccpoint
+			myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(1.f, 0, 0, 1.f), rand()%360-180.f); // ccpoint
 			myGD->communication("MP_bombCumber", (CCObject*)t_subCumber); // with startMoving
 			myGD->communication("CP_startDamageReaction", t_subCumber, t_damage, (float)(rand()%360-180.f));
 //			myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)t_subCumber, t_damage, rand()%360-180.f);
@@ -2004,7 +2004,7 @@ private:
 	{
 		CCNode* mainCumber = myGD->getCommunicationNode("CP_getMainCumberPointer");
 		
-		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 0, 1.f, 1.f));
+		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 0, 1.f, 1.f), rand()%360-180.f);
 		myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
 		
 		if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -2020,7 +2020,7 @@ private:
 		for(int i=0;i<cumber_cnt;i++)
 		{
 			CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
-			myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(1.f, 0, 1.f, 1.f)); // ccpoint
+			myGD->communication("MP_explosion", t_subCumber->getPosition(), ccc4f(1.f, 0, 1.f, 1.f), rand()%360-180.f); // ccpoint
 			myGD->communication("MP_bombCumber", (CCObject*)t_subCumber); // with startMoving
 			myGD->communication("CP_decreaseLifeForSubCumber", (CCObject*)t_subCumber, t_damage, rand()%360-180.f);
 			

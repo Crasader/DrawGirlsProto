@@ -749,7 +749,7 @@ void CardSettingPopup::mountingCard(int card_stage, int card_level)
 	
 	selected_card_menu = CCMenu::createWithItem(selected_card_item);
 	selected_card_menu->setPosition(selected_card_img->getPosition());
-	main_case->addChild(selected_card_menu, kCSS_Z_content);
+	main_case->addChild(selected_card_menu, kCSS_Z_selectedImg);
 	
 	CardCase* t_case = CardCase::create(card_stage, card_level);
 	t_case->setPosition(CCPointZero);
