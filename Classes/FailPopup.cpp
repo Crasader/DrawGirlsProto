@@ -16,6 +16,8 @@
 #include "DownloadFile.h"
 #include "StageSettingPopup.h"
 #include "PuzzleMapScene.h"
+#include "KSUtil.h"
+#include "KSAlertView.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -709,6 +711,29 @@ void FailPopup::cellAction( CCObject* sender )
 	tag -= kFFC_T_menuBase;
 
 	CCLog("help memberID : %s", friend_list[tag].user_id.c_str());
+	//김현수 89987036974054944
+	KS::KSLog("% %" , friend_list[tag].nickname, friend_list[tag].user_id);
+	
+	KSAlertView* av = KSAlertView::create();
+	av->setCenterY(150);
+	av->setContentNode(
+		CCLabelTTF::create((friend_list[tag].nickname + "좀 도와도").c_str(), "", 12.f)
+										 );
+	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
+																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
+	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
+																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
+	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
+																					[](CCObject* e){
+																						CCLog("press!!");
+																					});
+	av->addButton(m1);
+	av->addButton(CCMenuItemImageLambda::create("ticket_send.png", "ticket_send.png",
+																							[](CCObject* e){
+																								CCLog("press!!");
+																							}));
+	addChild(av, kPMS_Z_helpRequest);
+	av->show();
 }
 
 CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int idx )
