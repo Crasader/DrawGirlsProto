@@ -134,7 +134,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		target_close = t_close;
 		delegate_close = d_close;
 		m_currentSelectSprite = NULL;
-		
+		m_highScore = NULL;
 		used_card_img = NULL;
 		loading_card_number = 0;
 		after_loading_card_number = 0;
@@ -900,14 +900,18 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 		}
 		
 		
-		
+		if(m_highScore)
+		{
+			m_highScore->removeFromParent();
+			m_highScore = NULL;
+		}
 		std::string scoreStr = CCString::createWithFormat("%d", highScore)->getCString();
 		scoreStr = KS::insert_separator(scoreStr, ',', 3); // 3자리 마다 콤마찍기
-		CCLabelBMFont* highScoreFnt =
+		m_highScore =
 			CCLabelBMFont::create(
 						scoreStr.c_str(), "mb_white_font.fnt");
-		highScoreFnt->setPosition(ccp(216 / 2.f, 86 / 2.f));
-		addChild(highScoreFnt, 3);
+		m_highScore->setPosition(ccp(216 / 2.f, 86 / 2.f));
+		addChild(m_highScore, 3);
 		if(m_currentSelectSprite)
 		{
 			m_currentSelectSprite->removeFromParent();
@@ -922,10 +926,6 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 			m_currentSelectSprite->setAnchorPoint(CCPointZero);
 			cell->addChild(m_currentSelectSprite, 2);
 		}
-		
-		
-		
-		
 	}
 CCSize RankPopup::cellSizeForTable (CCTableView * table)
                                                        {

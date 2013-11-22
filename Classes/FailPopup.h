@@ -118,7 +118,7 @@ private:
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
 	int getIsNotHelpableUser( std::string userId, int base_s = 60 * 60 * 24 * 1 );
-	
+	void setHelpSendTime( string userId );
 	float keep_gold;
 	float decrease_gold;
 	float increase_gold;

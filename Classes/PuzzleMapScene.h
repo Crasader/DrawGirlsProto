@@ -47,7 +47,8 @@ enum PMS_Zorder{
 	kPMS_Z_stage = 1000,
 	kPMS_Z_boarderStage = 2000,
 	kPMS_Z_ui_button = 3000,
-	kPMS_Z_popup
+	kPMS_Z_popup,
+	kPMS_Z_helpRequest
 };
 
 enum PMS_MenuTag{

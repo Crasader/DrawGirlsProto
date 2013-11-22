@@ -104,19 +104,19 @@ void KSAlertView::show()
 	cover->addChild(btnBg);
 
 	CCPoint centerPosition = convertToNodeSpace(ccp(m_centerX, m_centerY));
-	float top = centerPosition.y + m_height / 2.f;
-	float bottom = centerPosition.y - m_height / 2.f;
+	float top = m_centerY + m_height / 2.f;
+	float bottom = m_centerY - m_height / 2.f;
 	float titleHeight = 50;
 	float buttonHeight = 50;
 	int contentMargin = 1<<3;
 	float contentBorderMargin = contentMargin >> 1;
-	btnBg->setPosition(convertToNodeSpace(centerPosition));
+	btnBg->setPosition(ccp(m_centerX, m_centerY));
 	btnBg->setContentSize(CCSizeMake(m_width, m_height));
 
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(INT_MIN);
 	btnBg->addChild(_menu);
-	_menu->setPosition(btnBg->convertToNodeSpace(ccp(240, bottom + buttonHeight / 2.f)));
+	_menu->setPosition(btnBg->convertToNodeSpace(ccp(m_centerX, bottom + buttonHeight / 2.f)));
 	//		_menu->setPosition();
 
 
@@ -142,12 +142,9 @@ void KSAlertView::show()
 		btnBg->addChild(t);
 	}
 
-	if(m_contentNode)
-	{
-
-	}
-	m_contentNode = CCLayerGradient::create(ccc4(255, 0, 0, 255), ccc4(0,255,255,255));
-	m_contentNode->setContentSize(CCSizeMake(400, 500));
+	CCAssert(m_contentNode != NULL, "not null");
+//	m_contentNode = CCLayerGradient::create(ccc4(255, 0, 0, 255), ccc4(0,255,255,255));
+//	m_contentNode->setContentSize(CCSizeMake(400, 500));
 
 	CCScrollView* sv = CCScrollView::create();
 

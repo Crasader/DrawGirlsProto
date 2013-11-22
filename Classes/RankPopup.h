@@ -127,6 +127,7 @@ protected:
   CCControlButton * closeBtn;
   CCSprite * m_currentSelectSprite;
   ScrollBar * m_scrollBar;
+	CCLabelBMFont* m_highScore;
 };
 #undef LZZ_INLINE
 #endif
