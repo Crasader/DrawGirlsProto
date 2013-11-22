@@ -352,7 +352,10 @@ bool FailPopup::init()
 
 void FailPopup::endDecreaseCardDuration()
 {
-	/////////////////123123123
+	if(mySGD->getIsMeChallenge())
+	{
+		////////////////////////// 경수
+	}
 }
 
 void FailPopup::onEnter()

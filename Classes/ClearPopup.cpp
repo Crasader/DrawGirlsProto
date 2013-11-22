@@ -364,7 +364,10 @@ void ClearPopup::endHidePopup()
 
 void ClearPopup::endTakeCard()
 {
-	///////////123123123
+	if(mySGD->getIsMeChallenge())
+	{
+		///////////////////////////////// 경수
+	}
 }
 
 void ClearPopup::resultLoadFriends(Json::Value result_data)
