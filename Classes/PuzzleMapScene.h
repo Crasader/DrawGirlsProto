@@ -67,6 +67,7 @@ enum PMS_MenuTag{
 	kPMS_MT_tutorial,
 	kPMS_MT_showui,
 	kPMS_MT_top,
+	kPMS_MT_heartTime,
 	kPMS_MT_bottom,
 	kPMS_MT_rubyShop,
 	kPMS_MT_goldShop,
@@ -415,6 +416,7 @@ private:
 	void endChangePiece(CCObject* sender);
 	
 	void resetStagePiece();
+	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;
 	void showStageSettingPopup();
 	void hideStageSettingPopup();

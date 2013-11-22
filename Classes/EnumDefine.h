@@ -189,11 +189,11 @@ enum MUI_PET_MenuTag{
 	kMUI_PET_MT_del
 };
 
-typedef enum t_ShopCode{
-	kShopCode_ruby = 1,
-	kShopCode_gold,
-	kShopCode_brush
-}ShopCode;
+//typedef enum t_ShopCode{
+//	kShopCode_ruby = 1,
+//	kShopCode_gold,
+//	kShopCode_brush
+//}ShopCode;
 
 typedef enum t_CLEAR_CONDITION{
 	kCLEAR_default = 0,
