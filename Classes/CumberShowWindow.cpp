@@ -116,7 +116,8 @@ bool CumberShowWindow::init(int ss)
 		std::string juniorType = juniorJson["type"].asString();
 		std::string ccbiName = juniorType;
 		std::string ccbiname2 = ccbiName;
-		if(ccbiName.length()<3) {
+
+		if(ccbiname2.substr(0,1)=="1") {
 			ccbiname2="bear";
 		}
 		////////////////////////////////////////////
