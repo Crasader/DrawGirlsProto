@@ -85,7 +85,7 @@ bool FailPopup::init()
 	
 	if(selected_card_number > 0)
 	{
-		DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number));
+		DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number), this, callfunc_selector(FailPopup::endDecreaseCardDuration));
 		addChild(t_popup, kZ_FP_popup);
 		
 		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number);
@@ -293,6 +293,11 @@ bool FailPopup::init()
 	hspConnector::get()->command("updateUserData", param2, json_selector(this, FailPopup::resultSavedUserData));
 	
     return true;
+}
+
+void FailPopup::endDecreaseCardDuration()
+{
+	/////////////////123123123
 }
 
 void FailPopup::onEnter()
@@ -743,24 +748,27 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	}
 	else
 	{
-		if(!(*member).is_message_blocked)
+		if(!mySGD->getIsMeChallenge())
 		{
-			CCSprite* n_help = CCSprite::create("ending_help_on.png");
-			CCSprite* s_help = CCSprite::create("ending_help_on.png");
-			s_help->setColor(ccGRAY);
-
-			CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailPopup::cellAction));
-			help_item->setTag(kFFC_T_menuBase + idx);
-
-			CCMenu* help_menu = CCMenu::createWithItem(help_item);
-			help_menu->setPosition(ccp(165,21));
-			cell->addChild(help_menu, kFFC_Z_img);
-		}
-		else
-		{
-			CCSprite* not_help = CCSprite::create("ending_help_off.png");
-			not_help->setPosition(ccp(165,21));
-			cell->addChild(not_help, kFFC_Z_img);
+			if(!(*member).is_message_blocked)
+			{
+				CCSprite* n_help = CCSprite::create("ending_help_on.png");
+				CCSprite* s_help = CCSprite::create("ending_help_on.png");
+				s_help->setColor(ccGRAY);
+				
+				CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailPopup::cellAction));
+				help_item->setTag(kFFC_T_menuBase + idx);
+				
+				CCMenu* help_menu = CCMenu::createWithItem(help_item);
+				help_menu->setPosition(ccp(165,21));
+				cell->addChild(help_menu, kFFC_Z_img);
+			}
+			else
+			{
+				CCSprite* not_help = CCSprite::create("ending_help_off.png");
+				not_help->setPosition(ccp(165,21));
+				cell->addChild(not_help, kFFC_Z_img);
+			}
 		}
 	}
 

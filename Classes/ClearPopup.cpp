@@ -132,7 +132,7 @@ bool ClearPopup::init()
 	else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
 	else												take_level = 1;
 	
-	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level);
+	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level, this, callfunc_selector(ClearPopup::endTakeCard));
 	addChild(t_popup, kZ_CP_popup);
 	/////////////////////////////////////////////
 	
@@ -308,6 +308,11 @@ void ClearPopup::endHidePopup()
 	if(target_final)
 		(target_final->*delegate_final)();
 	removeFromParent();
+}
+
+void ClearPopup::endTakeCard()
+{
+	///////////123123123
 }
 
 void ClearPopup::resultLoadFriends(Json::Value result_data)

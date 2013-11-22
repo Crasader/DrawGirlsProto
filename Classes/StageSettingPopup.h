@@ -39,6 +39,7 @@ enum SSP_MenuTag{
 class HeartTime;
 class ItemListViewer;
 class ListViewerScroll;
+class LoadingLayer;
 class StageSettingPopup : public CCLayer
 {
 public:
@@ -72,6 +73,9 @@ private:
 	ListViewerScroll* t_lvs;
 	
 	HeartTime* heart_time;
+	LoadingLayer* start_loading;
+	
+	void callStart();
 	
 	void showPopup();
 	void endShowPopup();

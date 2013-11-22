@@ -140,7 +140,7 @@ bool ClearScene::init()
 	else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
 	else												take_level = 1;
 	
-	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level);
+	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level, this, callfunc_selector(ClearScene::endCall));
 	addChild(t_popup, kZ_CS_popup);
 	/////////////////////////////////////////////
 	
@@ -289,6 +289,11 @@ bool ClearScene::init()
 	hspConnector::get()->command("updateUserData", param2, json_selector(this, ClearScene::resultSavedUserData));
 	
     return true;
+}
+
+void ClearScene::endCall()
+{
+	
 }
 
 void ClearScene::resultLoadFriends(Json::Value result_data)

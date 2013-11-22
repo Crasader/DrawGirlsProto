@@ -194,9 +194,27 @@ public:
 	
 	void resetHasGottenCards();
 	
+	bool getIsMeChallenge()
+	{
+		return is_me_challenge;
+	}
+	void setIsMeChallenge(bool t_b)
+	{
+		is_me_challenge = t_b;
+		if(!is_me_challenge)
+			me_challenge_target_user_id = "";
+	}
+	void setMeChallengeTarget(string t_target)
+	{
+		me_challenge_target_user_id = t_target.c_str();
+	}
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
+	
+	bool is_me_challenge;
+	string me_challenge_target_user_id;
 	
 	bool is_after_scene_chapter;
 	bool is_cleared;
