@@ -288,7 +288,7 @@ bool FailPopup::init()
 	main_case->addChild(main_menu, kZ_FP_menu);
 	
 	
-	if(!mySGD->getIsMeChallenge())
+	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
 	{
 		CCSprite* n_replay = CCSprite::create("ending_replay.png");
 		CCSprite* s_replay = CCSprite::create("ending_replay.png");
@@ -361,6 +361,18 @@ void FailPopup::endDecreaseCardDuration()
 		////////////////////////// 경수
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore()),
 						 kZ_FP_popup);
+	}
+	
+	if(mySGD->getIsAcceptChallenge())
+	{
+		/////////////////// 경수
+//		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
+	}
+	
+	if(mySGD->getIsAcceptHelp())
+	{
+		////////////////// 경수
+//		mySGD->getAcceptHelpId(), mySGD->getAcceptHelpNick();
 	}
 }
 
@@ -730,8 +742,9 @@ void FailPopup::menuAction(CCObject* pSender)
 	
 	if(tag == kMT_FP_main)
 	{
-		if(mySGD->getIsMeChallenge())
-			mySGD->setIsMeChallenge(false);
+		mySGD->setIsMeChallenge(false);
+		mySGD->setIsAcceptChallenge(false);
+		mySGD->setIsAcceptHelp(false);
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		hidePopup();
@@ -935,7 +948,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	}
 	else
 	{
-		if(!mySGD->getIsMeChallenge())
+		if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
 		{
 			if(!(*member).is_message_blocked)
 			{

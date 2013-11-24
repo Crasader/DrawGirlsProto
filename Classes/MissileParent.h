@@ -154,6 +154,7 @@ private:
 	CCArray* tickingArray;
 	
 	CCParticleSystem* particle;
+	CCSpriteBatchNode* explosion_node;
 	
 	void initParticle(CCPoint startPosition, ccColor4F t_color, float t_angle);
 	

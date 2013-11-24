@@ -73,7 +73,7 @@ void PausePopupLayer::myInit(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_
 	home_menu->setPosition(ccp(main_case->getContentSize().width/2.f,132));
 	main_case->addChild(home_menu);
 	
-	if(mySGD->getIsMeChallenge())
+	if(mySGD->getIsMeChallenge() || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
 	{
 		CCSprite* d_replay = CCSprite::create("pause_popup_replay.png");
 		d_replay->setColor(ccc3(100, 100, 100));

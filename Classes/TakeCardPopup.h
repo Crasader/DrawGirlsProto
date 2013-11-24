@@ -27,6 +27,7 @@ private:
 	CCSprite * take_label;
 	CCSprite * take_card;
 	CCSprite * card_back;
+	CCLabelTTF* reward_gold_label;
 	void endCall();
 	void myInit (int t_stage, int t_grade, CCObject* t_end_call, SEL_CallFunc d_end_call);
 	void openingAction ();

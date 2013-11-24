@@ -47,8 +47,11 @@ class GameItemBase : public CCNode
 public:
 	virtual void selfRemove();
 	virtual void startFraming();
+	void setTakeEffectFunc(CCObject* t_effect, SEL_CallFuncCCp d_effect);
 	
 protected:
+	CCObject* target_effect;
+	SEL_CallFuncCCp delegate_effect;
 	virtual void acting() = 0;
 	
 	int holding_time;
@@ -242,6 +245,9 @@ private:
 	
 	CCNode* coin_parent;//change coin
 	FeverCoinParent* fever_coin_parent;
+	CCSpriteBatchNode* take_item_effects;
+	
+	void showTakeItemEffect(CCPoint t_p);
 	
 	vector<ITEM_CODE> creatable_list;
 	int selected_item_cnt;

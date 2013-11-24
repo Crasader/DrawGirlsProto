@@ -429,6 +429,8 @@ private:
 	void showFailPopup();
 	void hideFailPopup();
 	
+	void showAcceptStageSettingPopup();
+	
 	void showCardSettingPopup();
 	void hideCardSettingPopup();
 	
@@ -437,6 +439,9 @@ private:
 	
 	void showEventPopup();
 	void hideEventPopup();
+	
+	void puzzleUiDisable();
+	void puzzleUiEnable();
 	
 	virtual void registerWithTouchDispatcher(void);
 	

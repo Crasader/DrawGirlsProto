@@ -131,6 +131,7 @@ void PuzzleMapScene::startSceneSetting()
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
 		{
+			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
 			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
 			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
 			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
@@ -175,7 +176,7 @@ void PuzzleMapScene::startSceneSetting()
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
-		if(mySD->getSilType() >= 10000)
+		if(mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp() || mySD->getSilType() >= 10000)
 		{
 			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 			is_gesturable_map_mode = false;
@@ -252,7 +253,7 @@ void PuzzleMapScene::startSceneSetting()
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
 	{
-		if(mySD->getSilType() >= 10000)
+		if(mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp() || mySD->getSilType() >= 10000)
 		{
 			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 			is_gesturable_map_mode = false;
@@ -1201,29 +1202,7 @@ void PuzzleMapScene::hideFailPopup()
 
 void PuzzleMapScene::showCardSettingPopup()
 {
-	setTouchEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setTouchEnabled(false);
-	
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setEnabled(false);
-	
-	is_menu_enable = false;
-	
-	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(false);
-	
-	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
-	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f));
-	top_case->runAction(top_move);
-	
-	CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
-	CCMoveTo* bottom_move = CCMoveTo::create(0.4f, ccp(145,-(myDSH->puzzle_ui_top-320.f)/2.f - 65.f));
-	bottom_case->runAction(bottom_move);
-	
+	puzzleUiDisable();
 	
 	CardSettingPopup* t_popup = CardSettingPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::hideCardSettingPopup));
@@ -1232,39 +1211,24 @@ void PuzzleMapScene::showCardSettingPopup()
 
 void PuzzleMapScene::hideCardSettingPopup()
 {
-	mySGD->setGoldLabel(gold_label);
-	
-	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
-	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
-	top_case->runAction(top_move);
-	
-	top_case->removeChildByTag(kPMS_MT_heartTime);
-	HeartTime* heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
-	top_case->addChild(heart_time, 0, kPMS_MT_heartTime);
-	
-	CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
-	CCMoveTo* bottom_move = CCMoveTo::create(0.4f, ccp(145,-(myDSH->puzzle_ui_top-320.f)/2.f));
-	bottom_case->runAction(bottom_move);
-	
-	is_menu_enable = true;
-	
-	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(true);
-	
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setTouchEnabled(true);
-	
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setEnabled(true);
-	
-	setTouchEnabled(true);
+	puzzleUiEnable();
 }
 
 void PuzzleMapScene::showOptionPopup()
+{
+	puzzleUiDisable();
+	
+	OptionPopup* t_popup = OptionPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::hideOptionPopup));
+	addChild(t_popup, kPMS_Z_popup);
+}
+
+void PuzzleMapScene::hideOptionPopup()
+{
+	puzzleUiEnable();
+}
+
+void PuzzleMapScene::puzzleUiDisable()
 {
 	setTouchEnabled(false);
 	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
@@ -1288,14 +1252,9 @@ void PuzzleMapScene::showOptionPopup()
 	CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
 	CCMoveTo* bottom_move = CCMoveTo::create(0.4f, ccp(145,-(myDSH->puzzle_ui_top-320.f)/2.f - 65.f));
 	bottom_case->runAction(bottom_move);
-	
-	
-	OptionPopup* t_popup = OptionPopup::create();
-	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::hideOptionPopup));
-	addChild(t_popup, kPMS_Z_popup);
 }
 
-void PuzzleMapScene::hideOptionPopup()
+void PuzzleMapScene::puzzleUiEnable()
 {
 	mySGD->setGoldLabel(gold_label);
 	
@@ -1331,29 +1290,7 @@ void PuzzleMapScene::hideOptionPopup()
 
 void PuzzleMapScene::showEventPopup()
 {
-	setTouchEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setTouchEnabled(false);
-	
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setEnabled(false);
-	
-	is_menu_enable = false;
-	
-	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(false);
-	
-	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
-	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f));
-	top_case->runAction(top_move);
-	
-	CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
-	CCMoveTo* bottom_move = CCMoveTo::create(0.4f, ccp(145,-(myDSH->puzzle_ui_top-320.f)/2.f - 65.f));
-	bottom_case->runAction(bottom_move);
-	
+	puzzleUiDisable();
 	
 	EventPopup* t_popup = EventPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::hideEventPopup));
@@ -1362,36 +1299,16 @@ void PuzzleMapScene::showEventPopup()
 
 void PuzzleMapScene::hideEventPopup()
 {
-	mySGD->setGoldLabel(gold_label);
+	puzzleUiEnable();
+}
+
+void PuzzleMapScene::showAcceptStageSettingPopup()
+{
+	puzzleUiDisable();
 	
-	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
-	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
-	top_case->runAction(top_move);
-	
-	top_case->removeChildByTag(kPMS_MT_heartTime);
-	HeartTime* heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
-	top_case->addChild(heart_time, 0, kPMS_MT_heartTime);
-	
-	CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
-	CCMoveTo* bottom_move = CCMoveTo::create(0.4f, ccp(145,-(myDSH->puzzle_ui_top-320.f)/2.f));
-	bottom_case->runAction(bottom_move);
-	
-	is_menu_enable = true;
-	
-	((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(true);
-	
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setTouchEnabled(true);
-	
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(true);
-	((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->setEnabled(true);
-	
-	setTouchEnabled(true);
+	StageSettingPopup* t_popup = StageSettingPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::puzzleUiEnable));
+	addChild(t_popup, kPMS_Z_popup);
 }
 
 void PuzzleMapScene::startChangeUiMode()

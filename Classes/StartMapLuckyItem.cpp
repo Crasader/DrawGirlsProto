@@ -34,7 +34,7 @@ void StartMapLuckyItem::startMyAction ()
 {
 	main_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 													 {
-														 main_img->setScale(t*0.5f*0.7f);
+														 main_img->setScale(t*0.5f);
 													 }, [](float t){}));
 	
 //	main_img->runAction(CCScaleTo::create(1.f, 0.7f));

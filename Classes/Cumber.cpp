@@ -750,12 +750,12 @@ void CumberParent::myInit()
 	
 	for(int i=0;i<subCumberArray->count();i++)
 	{
-		MobHpGraph* t_sub_hp = MobHpGraph::create(subCumberArray->objectAtIndex(i));
+		MobHpGraph* t_sub_hp = MobHpGraph::create(subCumberArray->objectAtIndex(i), "junior_hp_bar.png");
 		addChild(t_sub_hp);
 		hp_graphs.push_back(t_sub_hp);
 	}
 	
-	MobHpGraph* main_hp = MobHpGraph::create(mainCumber);
+	MobHpGraph* main_hp = MobHpGraph::create(mainCumber, "monster_hp_bar.png");
 	addChild(main_hp);
 	hp_graphs.push_back(main_hp);
 	

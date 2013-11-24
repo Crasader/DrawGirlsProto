@@ -986,17 +986,18 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 
 void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color, float t_angle )
 {
-	CCSprite* t_explosion = CCSprite::create("fx_boss_hit4_1.png");
+	CCSprite* t_explosion = CCSprite::createWithTexture(explosion_node->getTexture(), CCRectMake(0, 0, 167, 191));
 	t_explosion->setScale(1.f/1.5f);
 	t_explosion->setRotation(-t_angle-90);
 	t_explosion->setPosition(startPosition);
-	addChild(t_explosion);
+	explosion_node->addChild(t_explosion);
 	
 	CCAnimation* t_animation = CCAnimation::create();
 	t_animation->setDelayPerUnit(0.1f);
-	t_animation->addSpriteFrameWithFileName(CCString::createWithFormat("fx_boss_hit4_%d.png", 1)->getCString());
-	for(int i=1;i<=6;i++)
-		t_animation->addSpriteFrameWithFileName(CCString::createWithFormat("fx_boss_hit4_%d.png", i)->getCString());
+	t_animation->addSpriteFrameWithTexture(explosion_node->getTexture(), CCRectMake(0, 0, 167, 191));
+	for(int i=0;i<2;i++)
+		for(int j=0;j<3;j++)
+			t_animation->addSpriteFrameWithTexture(explosion_node->getTexture(), CCRectMake(j*167, i*191, 167, 191));
 	
 	CCAnimate* t_animate = CCAnimate::create(t_animation);
 	CCFadeTo* t_fade = CCFadeTo::create(0.2f, 0);
@@ -1060,6 +1061,9 @@ void MissileParent::myInit( CCNode* boss_eye )
 	
 	mySW = SW_Parent::create();
 	addChild(mySW);
+	
+	explosion_node = CCSpriteBatchNode::create("fx_monster_hit.png");
+	addChild(explosion_node);
 	
 	//	myGD->V_CCPB["MP_startFire"] = std::bind(&MissileParent::startFire, this, _1, _2);
 	

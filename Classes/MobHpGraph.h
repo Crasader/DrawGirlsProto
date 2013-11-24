@@ -7,11 +7,13 @@
 #include "KSCumberBase.h"
 
 USING_NS_CC;
+using namespace std;
+
 #define LZZ_INLINE inline
 class MobHpGraph : public CCNode
 {
 public:
-  static MobHpGraph * create (CCObject * t_target);
+  static MobHpGraph * create (CCObject * t_target, string filename);
   CCObject * getTargetNode ();
   void setGameover ();
 private:
@@ -24,7 +26,7 @@ private:
   void graphing ();
   void realHidingAction ();
   void hidingAction ();
-  void myInit (CCObject * t_target);
+  void myInit (CCObject * t_target, string filename);
 };
 #undef LZZ_INLINE
 #endif

@@ -268,7 +268,7 @@ bool ClearPopup::init()
 	main_case->addChild(ok_menu, kZ_CP_menu);
 	
 	
-	if(!mySGD->getIsMeChallenge())
+	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
 	{
 		CCSprite* n_replay = CCSprite::create("ending_replay.png");
 		CCSprite* s_replay = CCSprite::create("ending_replay.png");
@@ -374,6 +374,19 @@ void ClearPopup::endTakeCard()
 						 kZ_CP_popup);
 //		getMeChallengeTarget
 	}
+	
+	if(mySGD->getIsAcceptChallenge())
+	{
+		/////////////////// 경수
+//		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
+	}
+	
+	if(mySGD->getIsAcceptHelp())
+	{
+		////////////////// 경수
+//		mySGD->getAcceptHelpId(), mySGD->getAcceptHelpNick();
+	}
+	
 }
 
 void ClearPopup::resultLoadFriends(Json::Value result_data)
@@ -682,8 +695,9 @@ void ClearPopup::menuAction(CCObject* pSender)
 	
 	if(tag == kMT_CP_ok)
 	{
-		if(mySGD->getIsMeChallenge())
-			mySGD->setIsMeChallenge(false);
+		mySGD->setIsMeChallenge(false);
+		mySGD->setIsAcceptChallenge(false);
+		mySGD->setIsAcceptHelp(false);
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		hidePopup();

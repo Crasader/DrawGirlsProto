@@ -40,6 +40,8 @@ void GameItemBase::framing()
 		item_img->removeFromParentAndCleanup(true);
 		unschedule(schedule_selector(GameItemBase::framing));
 		
+		(target_effect->*delegate_effect)(myPoint.convertToCCP());
+		
 		acting();
 	}
 	
@@ -49,6 +51,12 @@ void GameItemBase::framing()
 		unschedule(schedule_selector(GameItemBase::framing));
 		startHide();
 	}
+}
+
+void GameItemBase::setTakeEffectFunc(CCObject* t_effect, SEL_CallFuncCCp d_effect)
+{
+	target_effect = t_effect;
+	delegate_effect = d_effect;
 }
 
 int GameItemBase::getSideCount()
@@ -227,7 +235,7 @@ void GameItemAddTime::myInit(bool is_near)
 	startFraming();
 	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 													 {
-														 item_img->setScale(t*0.5f*0.7f);
+														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
 }
 
@@ -279,7 +287,7 @@ void GameItemSpeedUp::myInit(bool is_near)
 	startFraming();
 	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 													 {
-														 item_img->setScale(t*0.5f*0.7f);
+														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
 }
 
@@ -343,7 +351,7 @@ void GameItemFast::myInit(bool is_near)
 	startFraming();
 	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 													 {
-														 item_img->setScale(t*0.5f*0.7f);
+														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
 }
 
@@ -399,7 +407,7 @@ void GameItemAttack::myInit(bool is_near)
 	startFraming();
 	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 													 {
-														 item_img->setScale(t*0.5f*0.7f);
+														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
 }
 
@@ -620,7 +628,7 @@ void GameItemFire::myInit(bool is_near)
 	startFraming();
 	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 													 {
-														 item_img->setScale(t*0.5f*0.7f);
+														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
 	
 	damage = 20;
@@ -1032,11 +1040,13 @@ void GameItemManager::startItemSetting()
 		if(rand()%2 == 0)
 		{
 			GameItemAttack* t_gia = GameItemAttack::create(true);
+			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 			addChild(t_gia);
 		}
 		else
 		{
 			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
+			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 			addChild(t_gisu);
 		}
 	}
@@ -1044,30 +1054,35 @@ void GameItemManager::startItemSetting()
 	if(mySD->getClearCondition() == kCLEAR_timeLimit)
 	{
 		GameItemAddTime* t_giat = GameItemAddTime::create(false);
+		t_giat->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_giat);
 	}
 	
 	if(mySGD->isUsingItem(kIC_fast))
 	{
 		GameItemFast* t_fast = GameItemFast::create(false);
+		t_fast->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_fast);
 	}
 	
 	if(mySGD->isUsingItem(kIC_critical))
 	{
 		GameItemFire* t_fire = GameItemFire::create(false);
+		t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_fire);
 	}
 	
 	if(mySGD->isUsingItem(kIC_subOneDie))
 	{
 		GameItemSubOneDie* t_sod = GameItemSubOneDie::create(false);
+		t_sod->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_sod);
 	}
 	
 	if(mySGD->isUsingItem(kIC_silence))
 	{
 		GameItemSilence* t_silence = GameItemSilence::create(false);
+		t_silence->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_silence);
 	}
 }
@@ -1120,6 +1135,7 @@ void GameItemManager::counting()
 	if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount()-child_base_cnt < 2)
 	{
 		GameItemAttack* t_gia = GameItemAttack::create(false);
+		t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_gia);
 		
 		create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
@@ -1151,33 +1167,57 @@ void GameItemManager::addItem()
 	if(create_item == kIC_attack)
 	{
 		GameItemAttack* t_gia = GameItemAttack::create(rand()%2 == 0);
+		t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_gia);
 	}
 	else if(create_item == kIC_speedUp)
 	{
 		GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(rand()%2 == 0);
+		t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_gisu);
 	}
 	else if(create_item == kIC_fast)
 	{
 		GameItemFast* t_fast = GameItemFast::create(false);
+		t_fast->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_fast);
 	}
 	else if(create_item == kIC_critical)
 	{
 		GameItemFire* t_fire = GameItemFire::create(false);
+		t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_fire);
 	}
 	else if(create_item == kIC_subOneDie)
 	{
 		GameItemSubOneDie* t_sod = GameItemSubOneDie::create(false);
+		t_sod->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_sod);
 	}
 	else if(create_item == kIC_silence)
 	{
 		GameItemSilence* t_silence = GameItemSilence::create(false);
+		t_silence->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_silence);
 	}
+}
+
+void GameItemManager::showTakeItemEffect(CCPoint t_p)
+{
+	CCSprite* t_effect = CCSprite::createWithTexture(take_item_effects->getTexture(), CCRectMake(0, 0, 109, 109));
+	t_effect->setPosition(t_p);
+	take_item_effects->addChild(t_effect);
+	
+	CCAnimation* t_animation = CCAnimation::create();
+	t_animation->setDelayPerUnit(0.07f);
+	for(int i=0;i<2;i++)
+		for(int j=0;j<5;j++)
+			t_animation->addSpriteFrameWithTexture(take_item_effects->getTexture(), CCRectMake(j*109, i*109, 109, 109));
+	CCAnimate* t_animate = CCAnimate::create(t_animation);
+	CCFadeTo* t_fade = CCFadeTo::create(0.1f, 0);
+	CCCallFunc* t_call = CCCallFunc::create(t_effect, callfunc_selector(CCSprite::removeFromParent));
+	CCSequence* t_seq = CCSequence::create(t_animate, t_fade, t_call, NULL);
+	t_effect->runAction(t_seq);
 }
 
 void GameItemManager::myInit()
@@ -1189,6 +1229,9 @@ void GameItemManager::myInit()
 	
 	fever_coin_parent = FeverCoinParent::create();
 	addChild(fever_coin_parent);
+	
+	take_item_effects = CCSpriteBatchNode::create("fx_take_item.png");
+	addChild(take_item_effects);
 	
 	child_base_cnt = getChildrenCount();
 	

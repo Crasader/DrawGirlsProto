@@ -255,7 +255,12 @@ private:
 	CCSprite* right_boarder;
 	
 	CCSpriteBatchNode* top_block_manager;
+	CCSpriteBatchNode* top_block_line_manager;
 	CCSpriteBatchNode* bottom_block_manager;
+	CCSpriteBatchNode* bottom_block_line_manager;
+	
+	CCSprite* top_block_lock;
+	CCSprite* bottom_block_lock;
 	
 	void setTopBottomBlock();
 	StartMapLuckyItem* start_map_lucky_item;

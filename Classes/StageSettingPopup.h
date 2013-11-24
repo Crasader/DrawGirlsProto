@@ -15,6 +15,7 @@
 
 #include "EnumDefine.h"
 #include "jsoncpp/json.h"
+#include "GDLib.h"
 
 USING_NS_CC;
 using namespace std;
@@ -97,7 +98,16 @@ private:
 	
 	void cheatAction(CCObject* sender);
 	void realStartAction();
+	void acceptStartAction();
+	void finalSetting();
 	void finalStartAction(Json::Value result_data);
+	bool was_end_startAction;
+	bool was_end_removeMessage;
+	void finalAcceptStartAction(Json::Value result_data);
+	void finalRemoveMessage(Json::Value result_data);
+	
+	void goToGame();
+	void cancelGame();
 };
 
 #endif /* defined(__DGproto__StageSettingPopup__) */

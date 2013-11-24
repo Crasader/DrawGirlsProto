@@ -866,14 +866,14 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	ControlCommon::myInit(t_main, d_readyBack, t_jack);
 	beforeDirection = directionStop;
 	control_circle = CCSprite::create("control_joystick_big_circle.png");
-	control_circle->setScale(0.5f);
+	control_circle->setScale(1.f);
 	control_circle->setVisible(false);
 	//		if(myGD->gamescreen_type == kGT_rightUI)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
 	//		else										control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));;
 	addChild(control_circle);
 
 	control_ball = CCSprite::create("control_joystick_big_ball.png");
-	control_ball->setScale(0.5f);
+	control_ball->setScale(1.f);
 	control_ball->setVisible(false);
 	addChild(control_ball);
 

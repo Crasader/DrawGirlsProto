@@ -3,10 +3,10 @@
 
 #include "MobHpGraph.h"
 #define LZZ_INLINE inline
-MobHpGraph * MobHpGraph::create (CCObject * t_target)
+MobHpGraph * MobHpGraph::create (CCObject * t_target, string filename)
         {
 		MobHpGraph* t_graph = new MobHpGraph();
-		t_graph->myInit(t_target);
+		t_graph->myInit(t_target, filename);
 		t_graph->autorelease();
 		return t_graph;
 	}
@@ -83,13 +83,13 @@ void MobHpGraph::hidingAction ()
 			hp_progress->runAction(t_seq2);
 		}
 	}
-void MobHpGraph::myInit (CCObject * t_target)
+void MobHpGraph::myInit (CCObject * t_target, string filename)
         {
 		t_case = CCSprite::create("monster_hp_back.png");
 		t_case->setPosition(CCPointZero);
 		addChild(t_case);
 		
-		CCSprite* t_graph = CCSprite::create("monster_hp_bar.png");
+		CCSprite* t_graph = CCSprite::create(filename.c_str());
 		
 		hp_progress = CCProgressTimer::create(t_graph);
 		hp_progress->setType(kCCProgressTimerTypeBar);

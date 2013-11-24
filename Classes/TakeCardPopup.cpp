@@ -41,8 +41,21 @@ void TakeCardPopup::myInit (int t_stage, int t_grade, CCObject* t_end_call, SEL_
 	
 	take_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", t_stage, t_grade)->getCString());
 	take_card->setScale(0.5f);
-	take_card->setPosition(ccp(600,130));
+	take_card->setPosition(ccp(600,120));
 	addChild(take_card, kTakeCardPopup_Z_img);
+	
+	if(mySGD->getClearRewardGold() > 0)
+	{
+		reward_gold_label = CCLabelTTF::create(CCString::createWithFormat("보상 : %d 골드", mySGD->getClearRewardGold())->getCString(), mySGD->getFont().c_str(), 20);
+		reward_gold_label->setPosition(ccp(240,245));
+		addChild(reward_gold_label, kTakeCardPopup_Z_img);
+		mySGD->setGold(mySGD->getGold() + mySGD->getClearRewardGold());
+		mySGD->setClearRewardGold(0);
+	}
+	else
+	{
+		reward_gold_label = NULL;
+	}
 	
 	if(t_grade == 3 && mySD->isAnimationStage())
 	{
@@ -84,7 +97,7 @@ void TakeCardPopup::endCall()
 
 void TakeCardPopup::openingAction ()
 {
-	CCMoveTo* t_move = CCMoveTo::create(0.8f, ccp(240,130));
+	CCMoveTo* t_move = CCMoveTo::create(0.8f, ccp(240,120));
 	
 	CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.1f, 0.2f, 0, 0, 90, 0, 0);// float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX
 	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(TakeCardPopup::changeBack));
@@ -98,7 +111,7 @@ void TakeCardPopup::openingAction ()
 	take_card->runAction(t_spawn1);
 	
 	
-	CCMoveTo* t_move2 = CCMoveTo::create(0.8f, ccp(240,130));
+	CCMoveTo* t_move2 = CCMoveTo::create(0.8f, ccp(240,120));
 	CCOrbitCamera* t_orbit3 = CCOrbitCamera::create(0.1f, 0.2f, 0, 0, 90, 0, 0);
 	CCOrbitCamera* t_orbit4 = CCOrbitCamera::create(0.1f, 0.2f, 0, -90, 90, 0, 0);
 	CCSequence* t_seq3 = CCSequence::create(t_orbit3, t_orbit4, NULL);
@@ -165,7 +178,13 @@ void TakeCardPopup::fadeGrayTitle ()
 }
 void TakeCardPopup::closingAction ()
 {
-	CCMoveTo* t_move = CCMoveTo::create(0.8f, ccp(-120,130));
+	if(reward_gold_label)
+	{
+		CCFadeTo* t_fade = CCFadeTo::create(0.8f, 0);
+		reward_gold_label->runAction(t_fade);
+	}
+	
+	CCMoveTo* t_move = CCMoveTo::create(0.8f, ccp(-120,120));
 	
 	CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.1f, 0.2f, 0, 0, 90, 0, 0);// float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX
 	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(TakeCardPopup::changeBack));
@@ -189,7 +208,7 @@ void TakeCardPopup::closingAction ()
 	take_card->runAction(t_spawn1);
 	
 	
-	CCMoveTo* t_move2 = CCMoveTo::create(0.8f, ccp(-120,130));
+	CCMoveTo* t_move2 = CCMoveTo::create(0.8f, ccp(-120,120));
 	CCOrbitCamera* t_orbit3 = CCOrbitCamera::create(0.1f, 0.2f, 0, 0, 90, 0, 0);
 	CCOrbitCamera* t_orbit4 = CCOrbitCamera::create(0.1f, 0.2f, 0, -90, 90, 0, 0);
 	CCSequence* t_seq3 = CCSequence::create(t_orbit3, t_orbit4, NULL);

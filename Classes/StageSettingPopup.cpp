@@ -173,17 +173,19 @@ bool StageSettingPopup::init()
 	info_menu->setPosition(getContentPosition(kSSP_MT_info));
 	main_case->addChild(info_menu, kSSP_Z_content);
 	
-	
-	CCSprite* n_challenge = CCSprite::create("stagesetting_challenge.png");
-	CCSprite* s_challenge = CCSprite::create("stagesetting_challenge.png");
-	s_challenge->setColor(ccGRAY);
-	
-	CCMenuItem* challenge_item = CCMenuItemSprite::create(n_challenge, s_challenge, this, menu_selector(StageSettingPopup::menuAction));
-	challenge_item->setTag(kSSP_MT_challenge);
-	
-	CCMenu* challenge_menu = CCMenu::createWithItem(challenge_item);
-	challenge_menu->setPosition(getContentPosition(kSSP_MT_challenge));
-	main_case->addChild(challenge_menu, kSSP_Z_content);
+	if(!mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
+	{
+		CCSprite* n_challenge = CCSprite::create("stagesetting_challenge.png");
+		CCSprite* s_challenge = CCSprite::create("stagesetting_challenge.png");
+		s_challenge->setColor(ccGRAY);
+		
+		CCMenuItem* challenge_item = CCMenuItemSprite::create(n_challenge, s_challenge, this, menu_selector(StageSettingPopup::menuAction));
+		challenge_item->setTag(kSSP_MT_challenge);
+		
+		CCMenu* challenge_menu = CCMenu::createWithItem(challenge_item);
+		challenge_menu->setPosition(getContentPosition(kSSP_MT_challenge));
+		main_case->addChild(challenge_menu, kSSP_Z_content);
+	}
 	
 	
 	CCSprite* n_start = CCSprite::create("stagesetting_start.png");
@@ -446,56 +448,63 @@ void StageSettingPopup::itemSetting()
 
 void StageSettingPopup::callStart()
 {
-	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	int durability;
-	if(selected_card_number > 0)
+	if(mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
 	{
-		durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
+		acceptStartAction();
 	}
 	else
 	{
-		durability = -1;
-	}
-	
-	if(heart_time->isStartable())
-	{
-		if(durability > 0)
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		int durability;
+		if(selected_card_number > 0)
 		{
-			if(heart_time->startGame())
-				realStartAction();
-			else
-			{
-				if(mySGD->getIsMeChallenge())
-					mySGD->setIsMeChallenge(false);
-				
-				is_menu_enable = true;
-			}
+			durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
 		}
-		else if(durability == 0)
+		else
 		{
-			is_menu_enable = true;
-			DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
-			addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
+			durability = -1;
 		}
-		else // not selected card
-		{
-			if(heart_time->startGame())
-				realStartAction();
-			else
-			{
-				if(mySGD->getIsMeChallenge())
-					mySGD->setIsMeChallenge(false);
-				
-				is_menu_enable = true;
-			}
-		}
-	}
-	else
-	{
-		if(mySGD->getIsMeChallenge())
-			mySGD->setIsMeChallenge(false);
 		
-		is_menu_enable = true;
+		if(heart_time->isStartable())
+		{
+			if(durability > 0)
+			{
+				if(heart_time->startGame())
+					realStartAction();
+				else
+				{
+					if(mySGD->getIsMeChallenge())
+						mySGD->setIsMeChallenge(false);
+					
+					is_menu_enable = true;
+				}
+			}
+			else if(durability == 0)
+			{
+				is_menu_enable = true;
+				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
+				addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
+			}
+			else // not selected card
+			{
+				if(heart_time->startGame())
+					realStartAction();
+				else
+				{
+					if(mySGD->getIsMeChallenge())
+						mySGD->setIsMeChallenge(false);
+					
+					is_menu_enable = true;
+				}
+			}
+		}
+		else
+		{
+			if(mySGD->getIsMeChallenge())
+				mySGD->setIsMeChallenge(false);
+			
+			is_menu_enable = true;
+		}
 	}
 }
 
@@ -516,8 +525,12 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	else if(tag == kSSP_MT_back)
 	{
 		mySGD->resetLabels();
+		
+		mySGD->setIsMeChallenge(false);
+		mySGD->setIsAcceptChallenge(false);
+		mySGD->setIsAcceptHelp(false);
+		
 		hidePopup();
-//		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 	else if(tag == kSSP_MT_changeCard)
 	{
@@ -632,9 +645,6 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 
 void StageSettingPopup::realStartAction()
 {
-	start_loading = LoadingLayer::create();
-	addChild(start_loading, kSSP_Z_popup);
-	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)
 	{
@@ -642,23 +652,7 @@ void StageSettingPopup::realStartAction()
 		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
 	}
 	
-	deque<bool> is_using_item;
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
-		is_using_item.push_back(false);
-	
-	for(int i=0;i<is_selected_item.size();i++)
-	{
-		if(is_selected_item[i])
-		{
-			myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
-			myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());
-			is_using_item[item_list[i]] = true;
-		}
-	}
-	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
-		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
-
+	finalSetting();
 	
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getKakaoID();
@@ -689,37 +683,113 @@ void StageSettingPopup::realStartAction()
 	hspConnector::get()->command("updateUserData", param, json_selector(this, StageSettingPopup::finalStartAction));
 }
 
-void StageSettingPopup::finalStartAction(Json::Value result_data)
+void StageSettingPopup::acceptStartAction()
+{
+	finalSetting();
+	
+	was_end_startAction = false;
+	was_end_removeMessage = false;
+	
+	vector<CommandParam> command_list;
+	
+	////////////////////////////// 경수
+	
+	// create message remove command
+	// command_list.push_back(message remove command);
+	
+	//////////////////////////////
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	
+	Json::Value data;
+	data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i);
+	
+	data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+	int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+	for(int i=1;i<=card_take_cnt;i++)
+	{
+		int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+		data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
+		data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
+		data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
+		data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+	}
+	
+	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	
+	Json::FastWriter writer;
+	param["data"] = writer.write(data);
+	
+	command_list.push_back(CommandParam("updateUserData", param, json_selector(this, StageSettingPopup::finalAcceptStartAction)));
+	
+	hspConnector::get()->command(command_list);
+}
+void StageSettingPopup::finalSetting()
+{
+	start_loading = LoadingLayer::create();
+	addChild(start_loading, kSSP_Z_popup);
+	
+	deque<bool> is_using_item;
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		is_using_item.push_back(false);
+	
+	for(int i=0;i<is_selected_item.size();i++)
+	{
+		if(is_selected_item[i])
+		{
+			myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
+			myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());
+			is_using_item[item_list[i]] = true;
+		}
+	}
+	
+	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
+}
+
+void StageSettingPopup::finalRemoveMessage(Json::Value result_data)
 {
 	if(result_data["state"].asString() == "ok")
 	{
-		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
-		
-		Json::Value param;
-		param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
-		
-		hspConnector::get()->command("increaseStats", param, NULL);
-		
-		mySGD->resetLabels();
-		myGD->resetGameData();
-		
-		mySGD->setGameStart();
-		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+		was_end_removeMessage = true;
+		if(was_end_startAction)
+			goToGame();
 	}
 	else
+	{
+		cancelGame();
+	}
+}
+
+void StageSettingPopup::goToGame()
+{
+	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+	
+	Json::Value param;
+	param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
+	
+	hspConnector::get()->command("increaseStats", param, NULL);
+	
+	mySGD->resetLabels();
+	myGD->resetGameData();
+	
+	mySGD->setGameStart();
+	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+}
+
+void StageSettingPopup::cancelGame()
+{
+	if(!is_menu_enable)
 	{
 		start_loading->removeFromParent();
 		
 		CCLog("Fail : user data save");
-		
-		heart_time->backHeart();
-		
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		if(selected_card_number > 0)
-		{
-			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-		}
 		
 		deque<bool> is_using_item;
 		for(int i=kIC_attack;i<=kIC_randomChange;i++)
@@ -740,6 +810,41 @@ void StageSettingPopup::finalStartAction(Json::Value result_data)
 			mySGD->setIsMeChallenge(false);
 		
 		is_menu_enable = true;
+	}
+}
+
+void StageSettingPopup::finalAcceptStartAction(Json::Value result_data)
+{
+	if(result_data["state"].asString() == "ok")
+	{
+		was_end_startAction = true;
+		if(was_end_removeMessage)
+			goToGame();
+	}
+	else
+	{
+		cancelGame();
+	}
+}
+
+void StageSettingPopup::finalStartAction(Json::Value result_data)
+{
+	if(result_data["state"].asString() == "ok")
+	{
+		goToGame();
+	}
+	else
+	{
+		heart_time->backHeart();
+		
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(selected_card_number > 0)
+		{
+			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
+		}
+		
+		cancelGame();
 	}
 }
 

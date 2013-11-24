@@ -202,7 +202,10 @@ public:
 	{
 		is_me_challenge = t_b;
 		if(!is_me_challenge)
+		{
 			me_challenge_target_user_id = "";
+			me_challenge_target_user_nick = "";
+		}
 	}
 	void setMeChallengeTarget(string t_target, const std::string& t_nickname)
 	{
@@ -217,6 +220,76 @@ public:
 	{
 		return me_challenge_target_user_nick;
 	}
+	
+	bool getIsAcceptChallenge()
+	{
+		return is_accept_challenge;
+	}
+	void setIsAcceptChallenge(bool t_b)
+	{
+		is_accept_challenge = t_b;
+		if(!is_accept_challenge)
+		{
+			accept_challenge_target_user_id = "";
+			accept_challenge_target_user_nick = "";
+			accept_challenge_target_score = 0.f;
+		}
+	}
+	void setAcceptChallengeTarget(string t_id, string t_nick, float t_score)
+	{
+		accept_challenge_target_user_id = t_id.c_str();
+		accept_challenge_target_user_nick = t_nick.c_str();
+		accept_challenge_target_score = t_score;
+	}
+	string getAcceptChallengeId()
+	{
+		return accept_challenge_target_user_id;
+	}
+	string getAcceptChallengeNick()
+	{
+		return accept_challenge_target_user_nick;
+	}
+	float getAcceptChallengeScore()
+	{
+		return accept_challenge_target_score;
+	}
+	
+	bool getIsAcceptHelp()
+	{
+		return is_accept_help;
+	}
+	void setIsAcceptHelp(bool t_b)
+	{
+		is_accept_help = t_b;
+		if(!is_accept_help)
+		{
+			accept_help_target_user_id = "";
+			accept_help_target_user_nick = "";
+		}
+	}
+	void setAcceptHelpTarget(string t_id, string t_nick)
+	{
+		accept_help_target_user_id = t_id.c_str();
+		accept_help_target_user_nick = t_nick.c_str();
+	}
+	string getAcceptHelpId()
+	{
+		return accept_help_target_user_id;
+	}
+	string getAcceptHelpNick()
+	{
+		return accept_help_target_user_nick;
+	}
+	
+	void setClearRewardGold(int t_reward)
+	{
+		clear_reward_gold = t_reward;
+	}
+	int getClearRewardGold()
+	{
+		return clear_reward_gold;
+	}
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
@@ -224,6 +297,18 @@ private:
 	bool is_me_challenge;
 	string me_challenge_target_user_id;
 	string me_challenge_target_user_nick;
+	
+	bool is_accept_challenge;
+	string accept_challenge_target_user_id;
+	string accept_challenge_target_user_nick;
+	float accept_challenge_target_score;
+	
+	bool is_accept_help;
+	string accept_help_target_user_id;
+	string accept_help_target_user_nick;
+	
+	int clear_reward_gold;
+	
 	bool is_after_scene_chapter;
 	bool is_cleared;
 	float score;

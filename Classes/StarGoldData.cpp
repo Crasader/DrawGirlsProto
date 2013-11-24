@@ -217,6 +217,7 @@ void StarGoldData::setGameStart()
 	stage_grade = 0;
 	game_time = 0;
 	start_map_gacha_cnt = 0;
+	clear_reward_gold = 0;
 
 	deque<int> card_options;
 	deque<int>::iterator iter;
@@ -677,6 +678,8 @@ void StarGoldData::myInit()
 	is_paused = false;
 	login_getted = false;
 	is_before_title = true;
+	
+	clear_reward_gold = 0;
 
 	setTargetDelegate(NULL, NULL);
 
