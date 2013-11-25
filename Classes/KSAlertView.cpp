@@ -101,11 +101,17 @@ void KSAlertView::show()
 	KSCoverLayer* cover = KSCoverLayer::create();
 	addChild(cover, INT_MAX);
 
-
-	CCScale9Sprite *btnBg = CCScale9Sprite::create(m_backgroundFile.c_str(),
-		CCRectMake(0, 0, 150, 150),
-		CCRectMake(10, 10, 150 - 10*2, 150 - 10*2));
-	cover->addChild(btnBg);
+	if(!m_back9)
+	{
+		m_back9 = CCScale9Sprite::create("popup_back1.png",
+																									 CCRectMake(0, 0, 150, 150),
+																									 CCRectMake(10, 10, 150 - 10*2, 150 - 10*2));
+	}
+	else
+	{
+		cover->addChild(m_back9);
+	}
+	CCScale9Sprite *btnBg = m_back9;
 
 	CCPoint centerPosition = convertToNodeSpace(ccp(m_centerX, m_centerY));
 	float top = m_centerY + m_height / 2.f;
@@ -222,9 +228,16 @@ void KSAlertView::show()
 	CCRect transformedRect = rtSetScale(contentRect,
 		(contentRect.size.height + 8)/ (contentRect.size.height),
 		ccp(0.5f, 0.5f));
-	CCScale9Sprite *contentBorder = CCScale9Sprite::create(m_contentBorderFile.c_str(),
-		CCRectMake(0, 0, 150, 150),
-		CCRectMake(5, 5, 150 - 5*2, 150 - 5*2));
+	if(m_contentBorder == 0)
+	{
+		m_contentBorder = CCScale9Sprite::create("popup_back2.png", CCRectMake(0, 0, 150, 150),
+																						 CCRectMake(5, 5, 150 - 5*2, 150 - 5*2));
+	}
+	else
+	{
+		
+	}
+	CCScale9Sprite *contentBorder = m_contentBorder;
 	contentBorder->setContentSize(ccp(transformedRect.size.width, transformedRect.size.height));
 	btnBg->addChild(contentBorder, 1);
 	contentBorder->setAnchorPoint(ccp(0, 0));
