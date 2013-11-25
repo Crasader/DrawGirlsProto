@@ -8,10 +8,12 @@
 #include "cocos-ext.h"
 using namespace cocos2d::extension;
 USING_NS_CC;
+using namespace std;
 
 #include "jsoncpp/json.h"
 #include <map>
 #include "CCMenuLambda.h"
+#include "DownloadFile.h"
 #define LZZ_INLINE inline
 enum MailPopupZorder
 {
@@ -100,6 +102,19 @@ protected:
 	std::map<AlignText, CCSprite*> m_alignTexts;
 	std::vector<CCMenuItemImageLambda*> m_menuList;
 	PostBoxState m_popupState;
+	
+	int download_card_number;
+	CCNode* loading_card_img;
+	CCNode* addCardImg(int t_card_number);
+	void resultLoadedCardInfo (Json::Value result_data);
+	vector <DownloadFile> df_list;
+	vector <CopyFile> cf_list;
+	
+	int ing_download_cnt;
+	void successAction ();
+	void failAction();
+	void startDownloadCardImage ();
+	void startDownload ();
 };
 #undef LZZ_INLINE
 #endif
