@@ -86,7 +86,7 @@ private:
 	void startDownload2();
 	
 	void startSaveUserData();
-	
+	 
 	void changeScene();
 
 	void resultGetPuzzleList(Json::Value result_data);

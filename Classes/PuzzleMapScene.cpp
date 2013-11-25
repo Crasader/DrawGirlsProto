@@ -577,7 +577,7 @@ void PuzzleMapScene::setMapNode()
 		
 		Json::Value data;
 		
-		data[myDSH->getKey(kDSH_Key_isClearedPuzzle_int1)][recent_puzzle_number] = myDSH->getIntegerForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number);
+		data[myDSH->getKey(kDSH_Key_isClearedPuzzle_int1)][recent_puzzle_number] = myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number);
 		
 		Json::FastWriter writer;
 		param["data"] = writer.write(data);
@@ -3474,7 +3474,7 @@ void PuzzleMapScene::creatingPuzzle()
 			
 			Json::Value data;
 			
-			data[myDSH->getKey(kDSH_Key_isClearedPuzzle_int1)][recent_puzzle_number] = myDSH->getIntegerForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number);
+			data[myDSH->getKey(kDSH_Key_isClearedPuzzle_int1)][recent_puzzle_number] = myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number);
 			
 			Json::FastWriter writer;
 			param["data"] = writer.write(data);

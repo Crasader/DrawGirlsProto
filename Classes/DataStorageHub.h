@@ -297,8 +297,8 @@ public:
 		int open_puzzle_cnt = data[getKey(kDSH_Key_openPuzzleCnt)].asInt();
 		
 		setIntegerForKey(kDSH_Key_openPuzzleCnt, open_puzzle_cnt);
-		for(int i=1;i<=open_puzzle_cnt+2;i++)
-			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_openPuzzleCnt)][i].asInt());
+		for(int i=1;i<=open_puzzle_cnt+2 && i < data[getKey(kDSH_Key_isClearedPuzzle_int1)].size();i++)
+			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asInt());
 		
 		setIntegerForKey(kDSH_Key_haveTicketCnt, data[getKey(kDSH_Key_haveTicketCnt)].asInt());
 	}
