@@ -182,9 +182,11 @@ void KSAlertView::show()
 //	m_contentNode->setContentSize(CCSizeMake(400, 500));
 
 	CCScrollView* sv = CCScrollView::create();
-
-	sv->setViewSize(CCSizeMake(m_width-contentMargin*2, m_height - titleHeight - buttonHeight));
-	sv->setPosition(ccp(contentMargin, buttonHeight));
+	CCRect contentRect = CCRectMake(contentMargin, buttonHeight,
+																	m_width-contentMargin*2, m_height - titleHeight - buttonHeight);
+	contentRect = rtSetScale(contentRect, m_borderScale);
+	sv->setViewSize(CCSizeMake(contentRect.size.width, contentRect.size.height));
+	sv->setPosition(ccp(contentRect.origin.x, contentRect.origin.y));
 	sv->setDirection(CCScrollViewDirection::kCCScrollViewDirectionBoth);
 
 	sv->setContainer(m_contentNode);
@@ -224,8 +226,7 @@ void KSAlertView::show()
 
 
 	btnBg->addChild(sv, 2);
-	CCRect contentRect = CCRectMake(contentMargin, buttonHeight,
-		m_width-contentMargin*2, m_height - titleHeight - buttonHeight);
+	
 	CCRect transformedRect = rtSetScale(contentRect,
 		(contentRect.size.height + 8)/ (contentRect.size.height),
 		ccp(0.5f, 0.5f));
