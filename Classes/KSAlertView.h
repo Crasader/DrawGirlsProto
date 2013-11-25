@@ -67,8 +67,8 @@ public:
 	m_contentNode(NULL),
 	m_closeItem(NULL),
 	m_closeOnPress(true),
-	m_back9(NULL)
-	
+	m_back9(NULL),
+	m_contentBorder(NULL)
 	{
 		
 	}
