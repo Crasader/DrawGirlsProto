@@ -136,52 +136,9 @@ void TitleScene::resultSaveUserData( Json::Value result_data )
 
 	if(result_data["state"].asString() == "ok")
 	{
-		Json::Value data;
-		Json::Reader reader;
-		reader.parse(result_data["data"].asString(), data);
-
-		CCLog("parse data : %s", GraphDogLib::JsonObjectToString(data).c_str());
-
-		myDSH->setIntegerForKey(kDSH_Key_savedStar, data[myDSH->getKey(kDSH_Key_savedStar)].asInt());
-		myDSH->setIntegerForKey(kDSH_Key_savedGold, data[myDSH->getKey(kDSH_Key_savedGold)].asInt());
-
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
-			myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i].asInt());
-
-
-
-		/////// 카드 수집 정보 초기화 ////////////
-		int before_card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, 0);
-		for(int i=1;i<=before_card_take_cnt;i++)
-		{
-			int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, 0);
-			myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, "");
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, 0);
-			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, 0);
-		}
-		////////// 카드 수집 정보 초기화 //////////
-
-
-
-		myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, data[myDSH->getKey(kDSH_Key_cardTakeCnt)].asInt());
-		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-
-		for(int i=1;i<=card_take_cnt;i++)
-		{
-			int take_card_number = data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i].asInt();
-			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, take_card_number);
-			myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i].asString());
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i].asInt());
-			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i].asInt());
-
-			if(NSDS_GS(kSDS_CI_int1_imgInfo_s, take_card_number) == "")
-				card_data_load_list.push_back(take_card_number);
-		}
-
-		myDSH->setIntegerForKey(kDSH_Key_allHighScore, data[myDSH->getKey(kDSH_Key_allHighScore)].asInt());
-		myDSH->setIntegerForKey(kDSH_Key_selectedCard, data[myDSH->getKey(kDSH_Key_selectedCard)].asInt());
+		myDSH->resetDSH();
+		
+		myDSH->loadAllUserData(result_data, card_data_load_list);
 
 		mySGD->resetHasGottenCards();
 
@@ -521,33 +478,7 @@ void TitleScene::startSaveUserData()
 
 	state_label->setString("유저 데이터를 초기화 ing...");
 
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
-
-	Json::Value data;
-	data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar); // 1
-	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold); // 1000
-
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
-		data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i); // 0
-
-	data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt); // 0
-	int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt); /////////////////////////////
-	for(int i=1;i<=card_take_cnt;i++)
-	{
-		int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-		data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
-		data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
-		data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
-		data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
-	} /////////////////////////////////////////
-
-	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore); // 0
-	data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 0
-
-	Json::FastWriter writer;
-	param["data"] = writer.write(data);
-	hspConnector::get()->command("updateUserData", param, json_selector(this, TitleScene::resultSaveUserData));
+	myDSH->saveAllUserData(json_selector(this, TitleScene::resultSaveUserData));
 }
 
 void TitleScene::changeScene()

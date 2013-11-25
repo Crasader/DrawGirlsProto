@@ -320,7 +320,7 @@ void DecreaseCardDurabilityPopup::menuAction( CCObject* sender )
 
 	myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number)));
 	myDSH->setIntegerForKey(kDSH_Key_selectedCard, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number));
-	myDSH->setIntegerForKey(kDSH_Key_savedGold, myDSH->getIntegerForKey(kDSH_Key_savedGold) - 5000);
+	mySGD->setGold(mySGD->getGold() - 5000);
 
 	remove_particle->stopAllActions();
 

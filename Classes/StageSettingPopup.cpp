@@ -654,33 +654,7 @@ void StageSettingPopup::realStartAction()
 	
 	finalSetting();
 	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
-	
-	Json::Value data;
-	data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
-	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
-		data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i);
-	
-	data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-	int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-	for(int i=1;i<=card_take_cnt;i++)
-	{
-		int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-		data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
-		data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
-		data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
-		data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
-	}
-	
-	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
-	data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	
-	Json::FastWriter writer;
-	param["data"] = writer.write(data);
-	hspConnector::get()->command("updateUserData", param, json_selector(this, StageSettingPopup::finalStartAction));
+	myDSH->saveAllUserData(json_selector(this, StageSettingPopup::finalStartAction));
 }
 
 void StageSettingPopup::acceptStartAction()
@@ -703,34 +677,7 @@ void StageSettingPopup::acceptStartAction()
 	
 	//////////////////////////////
 	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
-	
-	Json::Value data;
-	data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
-	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
-		data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i);
-	
-	data[myDSH->getKey(kDSH_Key_cardTakeCnt)] = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-	int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-	for(int i=1;i<=card_take_cnt;i++)
-	{
-		int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-		data[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
-		data[myDSH->getKey(kDSH_Key_hasGottenCard_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
-		data[myDSH->getKey(kDSH_Key_cardDurability_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
-		data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
-	}
-	
-	data[myDSH->getKey(kDSH_Key_allHighScore)] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
-	data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	
-	Json::FastWriter writer;
-	param["data"] = writer.write(data);
-	
-	command_list.push_back(CommandParam("updateUserData", param, json_selector(this, StageSettingPopup::finalAcceptStartAction)));
+	command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StageSettingPopup::finalAcceptStartAction)));
 	
 	hspConnector::get()->command(command_list);
 }
