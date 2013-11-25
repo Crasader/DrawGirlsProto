@@ -68,7 +68,8 @@ public:
 	m_closeItem(NULL),
 	m_closeOnPress(true),
 	m_back9(NULL),
-	m_contentBorder(NULL)
+	m_contentBorder(NULL),
+	m_borderScale(1.f)
 	{
 		
 	}
@@ -96,6 +97,7 @@ public:
 
 	// 내용물 테두리, 이건 설정안해도 기본값 존재... 바꿔야할 듯.
 	CC_SYNTHESIZE(CCScale9Sprite*, m_contentBorder, ContentBorder);
+	CC_SYNTHESIZE(float, m_borderScale, BorderScale); // 전체 프레임의 스케일,
 	CC_SYNTHESIZE(CCScale9Sprite*, m_hScroll, HScroll); // 가로 스크롤, 설정안하면 안보임
 	CC_SYNTHESIZE(CCScale9Sprite*, m_vScroll, VScroll); // 세로 스크롤, 설정안하면 안보임
 	CC_SYNTHESIZE(CCScale9Sprite*, m_back9, Back9);    // 배경이미지
