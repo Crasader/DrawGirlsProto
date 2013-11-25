@@ -23,7 +23,8 @@
 #include "PuzzleMapScene.h"
 #include "ShopPopup.h"
 #include "ChallengeSend.h"
-
+#include "KSAlertView.h"
+#include "HelpResultSend.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -388,7 +389,10 @@ void ClearPopup::endTakeCard()
 	if(mySGD->getIsAcceptHelp())
 	{
 		////////////////// 경수
-//		mySGD->getAcceptHelpId(), mySGD->getAcceptHelpNick();
+		
+		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), true), kZ_CP_popup);
+
+
 		
 	}
 	
