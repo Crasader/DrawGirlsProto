@@ -106,6 +106,7 @@ void KSAlertView::show()
 		m_back9 = CCScale9Sprite::create("popup_back1.png",
 																									 CCRectMake(0, 0, 150, 150),
 																									 CCRectMake(10, 10, 150 - 10*2, 150 - 10*2));
+		cover->addChild(m_back9);
 	}
 	else
 	{
