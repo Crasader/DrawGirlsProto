@@ -28,8 +28,6 @@ HelpResultSend::~HelpResultSend()
 bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 {
 	CCLayer::init();
-	////////////////// 경수
-
 	if(isSuccess)
 	{
 		

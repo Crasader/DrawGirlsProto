@@ -360,7 +360,7 @@ void FailPopup::endDecreaseCardDuration()
 {
 	if(mySGD->getIsMeChallenge())
 	{
-		////////////////////////// 경수
+		////////////////////////// ksks
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
 																	 ChallengeCategory::kRequest),
 						 kZ_FP_popup);
@@ -368,7 +368,7 @@ void FailPopup::endDecreaseCardDuration()
 	
 	if(mySGD->getIsAcceptChallenge())
 	{
-		/////////////////// 경수
+		/////////////////// ksks
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
 																	 ChallengeCategory::kRequestReply),
 						 kZ_FP_popup);
@@ -377,7 +377,7 @@ void FailPopup::endDecreaseCardDuration()
 	
 	if(mySGD->getIsAcceptHelp())
 	{
-		/// 경수
+		/// ksks
 		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), false), kZ_FP_popup);
 		
 
@@ -1035,7 +1035,7 @@ void FailPopup::scrollViewDidZoom( CCScrollView* view )
 
 void FailPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 {
-	// 영호
+
 	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 }
 
