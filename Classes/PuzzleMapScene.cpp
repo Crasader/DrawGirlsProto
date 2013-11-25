@@ -25,6 +25,7 @@
 #include "OptionPopup.h"
 #include "ShopPopup.h"
 #include <random>
+#include "ASPopupView.h"
 
 CCScene* PuzzleMapScene::scene()
 {
@@ -356,6 +357,69 @@ void PuzzleMapScene::startSceneSetting()
 	}
 }
 
+void PuzzleMapScene::resetPuzzle()
+{
+	setPuzzle(recent_puzzle_number);
+}
+
+void PuzzleMapScene::setPuzzle(int t_puzzle_number)
+{
+	if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+		removeChildByTag(kPMS_MT_loadPuzzleInfo);
+	removeChildByTag(kPMS_MT_puzzleOpenTitle);
+	removeChildByTag(kPMS_MT_ticketCnt);
+	removeChildByTag(kPMS_MT_callTicket);
+	removeChildByTag(kPMS_MT_buyPuzzle);
+	
+	recent_puzzle_number = t_puzzle_number;
+	
+	map_mode_state = kMMS_changeMode;
+	is_menu_enable = false;
+	
+	after_map_node = createMapNode();
+	after_map_node->setPosition(ccp(240,180));
+	main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
+	
+	if(after_map_node->getTag() == kPMS_MT_loaded)
+	{
+		after_map_node->setTag(-1);
+		
+		cachingPuzzleImg2();
+		
+		map_node->removeFromParent();
+		map_node = after_map_node;
+		after_map_node = NULL;
+		
+		if(map_mode_state == kMMS_changeMode)
+			map_mode_state = kMMS_notLoadMode;
+		else
+			map_mode_state = kMMS_uiMode;
+		is_menu_enable = true;
+		
+		//		endLoadedMovingMapNode();
+	}
+	else if(after_map_node->getTag() == kPMS_MT_notOpenedPuzzle)
+	{
+		after_map_node->setTag(-1);
+		
+		endMovingMapNodeNotOpenPuzzle();
+	}
+	else if(after_map_node->getTag() == kPMS_MT_notClearBeforePuzzle)
+	{
+		after_map_node->setTag(-1);
+		
+		endMovingMapNodeNotClearPuzzle();
+	}
+	else
+	{
+		after_map_node->setTag(-1);
+		
+		endMovingMapNode();
+	}
+	
+	is_gesturable_map_mode = false;
+}
+
 void PuzzleMapScene::setMapNode()
 {
 	maximum_scale = 2.f;
@@ -609,60 +673,7 @@ void PuzzleMapScene::puzzleAction(CCObject *sender)
 	
 	CCLog("touched puzzle number : %d", tag);
 	
-	if(getChildByTag(kPMS_MT_loadPuzzleInfo))
-		removeChildByTag(kPMS_MT_loadPuzzleInfo);
-	removeChildByTag(kPMS_MT_puzzleOpenTitle);
-	removeChildByTag(kPMS_MT_ticketCnt);
-	removeChildByTag(kPMS_MT_callTicket);
-	removeChildByTag(kPMS_MT_buyPuzzle);
-	
-	recent_puzzle_number = tag;
-	
-	map_mode_state = kMMS_changeMode;
-	is_menu_enable = false;
-	
-	after_map_node = createMapNode();
-	after_map_node->setPosition(ccp(240,180));
-	main_node->addChild(after_map_node, kPMS_Z_puzzle_back_side);
-	
-	if(after_map_node->getTag() == kPMS_MT_loaded)
-	{
-		after_map_node->setTag(-1);
-		
-		cachingPuzzleImg2();
-		
-		map_node->removeFromParent();
-		map_node = after_map_node;
-		after_map_node = NULL;
-		
-		if(map_mode_state == kMMS_changeMode)
-			map_mode_state = kMMS_notLoadMode;
-		else
-			map_mode_state = kMMS_uiMode;
-		is_menu_enable = true;
-		
-//		endLoadedMovingMapNode();
-	}
-	else if(after_map_node->getTag() == kPMS_MT_notOpenedPuzzle)
-	{
-		after_map_node->setTag(-1);
-		
-		endMovingMapNodeNotOpenPuzzle();
-	}
-	else if(after_map_node->getTag() == kPMS_MT_notClearBeforePuzzle)
-	{
-		after_map_node->setTag(-1);
-		
-		endMovingMapNodeNotClearPuzzle();
-	}
-	else
-	{
-		after_map_node->setTag(-1);
-		
-		endMovingMapNode();
-	}
-	
-	is_gesturable_map_mode = false;
+	setPuzzle(tag);
 	
 	showEventButton();
 	
@@ -3159,35 +3170,99 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 	
 	if(tag == kPMS_MT_buyPuzzle)
 	{
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup);
+		
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+		case_back->setPosition(CCPointZero);
+		t_container->addChild(case_back);
+		
+		case_back->setContentSize(CCSizeMake(230, 250));
+		
+		CCScale9Sprite* content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		content_back->setPosition(ccp(0,2));
+		t_container->addChild(content_back);
+		
+		content_back->setContentSize(CCSizeMake(202, 146));
+		
+		CCLabelTTF* title_label = CCLabelTTF::create("지금 열기", mySGD->getFont().c_str(), 20);
+		title_label->setPosition(ccp(0, 102));
+		t_container->addChild(title_label);
+		
+		CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오픈", NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 18);
+		content_label->setPosition(CCPointZero);
+		t_container->addChild(content_label);
+		
+		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+		s_close->setColor(ccGRAY);
+		
+		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+		{
+			is_menu_enable = true;
+			t_popup->removeFromParent();
+		});
+		
+		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+		close_menu->setPosition(ccp(92,105));
+		t_container->addChild(close_menu);
+		
 		if(mySGD->getStar() >= NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i))
 		{
-			mySGD->setStar(mySGD->getStar() - NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i));
-			myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
-			map_mode_state = kMMS_changeMode;
-			removeChildByTag(kPMS_MT_buyPuzzle);
-			removeChildByTag(kPMS_MT_callTicket);
-			removeChildByTag(kPMS_MT_puzzleOpenTitle);
-			removeChildByTag(kPMS_MT_ticketCnt);
+			CCSprite* n_buy = CCSprite::create("popup2_buy.png");
+			CCSprite* s_buy = CCSprite::create("popup2_buy.png");
+			s_buy->setColor(ccGRAY);
 			
-			Json::Value param;
-			param["memberID"] = hspConnector::get()->getKakaoID();
+			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
+																			  {
+																				  mySGD->setStar(mySGD->getStar() - NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i));
+																				  myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+																				  map_mode_state = kMMS_changeMode;
+																				  removeChildByTag(kPMS_MT_buyPuzzle);
+																				  removeChildByTag(kPMS_MT_callTicket);
+																				  removeChildByTag(kPMS_MT_puzzleOpenTitle);
+																				  removeChildByTag(kPMS_MT_ticketCnt);
+																				  
+																				  Json::Value param;
+																				  param["memberID"] = hspConnector::get()->getKakaoID();
+																				  
+																				  Json::Value data;
+																				  
+																				  data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+																				  data[myDSH->getKey(kDSH_Key_openPuzzleCnt)] = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt);
+																				  
+																				  Json::FastWriter writer;
+																				  param["data"] = writer.write(data);
+																				  hspConnector::get()->command("updateUserData", param, NULL);
+																				  
+																				  StageListDown* t_sld = StageListDown::create(this, callfunc_selector(PuzzleMapScene::endLoadPuzzleInfo), recent_puzzle_number);
+																				  addChild(t_sld, kPMS_Z_popup);
+																				  
+																				  t_popup->removeFromParent();
+																			  });
 			
-			Json::Value data;
-			
-			data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
-			data[myDSH->getKey(kDSH_Key_openPuzzleCnt)] = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt);
-			
-			Json::FastWriter writer;
-			param["data"] = writer.write(data);
-			hspConnector::get()->command("updateUserData", param, NULL);
-			
-			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(PuzzleMapScene::endLoadPuzzleInfo), recent_puzzle_number);
-			addChild(t_sld, kPMS_Z_popup);
+			CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
+			buy_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+			buy_menu->setPosition(ccp(0,-95));
+			t_container->addChild(buy_menu);
 		}
 		else
 		{
-			CCLog("not enough ruby!!!");
-			is_menu_enable = true;
+			CCSprite* buy_img = CCSprite::create("popup2_buy.png");
+			buy_img->setColor(ccc3(100, 100, 100));
+			buy_img->setPosition(ccp(0,-95));
+			t_container->addChild(buy_img);
 		}
 	}
 	else if(tag == kPMS_MT_callTicket)

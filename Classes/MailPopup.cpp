@@ -937,6 +937,18 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 			}
 		}
 		
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, download_card_number) == 0)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, download_card_number, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), download_card_number);
+			
+			mySGD->addHasGottenCardNumber(download_card_number);
+		}
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
+		
+		(target_close->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
+		
 		if(df_list.size() > 0) // need download
 		{
 			startDownloadCardImage();
