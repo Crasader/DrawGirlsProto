@@ -2416,6 +2416,9 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					{
 						if(location.x < touchStart_p.x - 50.f)
 						{
+							((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
+							((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(false);
+							
 							int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 							bool is_found = false;
 							int found_index = -1;
@@ -2501,6 +2504,9 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						}
 						else if(location.x > touchStart_p.x + 50.f)
 						{
+							((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
+							((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(false);
+							
 							int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 							bool is_found = false;
 							int found_index = -1;
@@ -3138,6 +3144,8 @@ void PuzzleMapScene::creatingPuzzle()
 		else
 		{
 			map_mode_state = kMMS_firstTouchDefault;
+			((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+			((CCMenu*)getChildByTag(kPMS_MT_screen))->setVisible(true);
 		}
 	}
 
