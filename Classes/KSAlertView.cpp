@@ -117,8 +117,8 @@ void KSAlertView::show()
 	CCPoint centerPosition = convertToNodeSpace(ccp(m_centerX, m_centerY));
 	float top = m_centerY + m_height / 2.f;
 	float bottom = m_centerY - m_height / 2.f;
-	float titleHeight = 50;
-	float buttonHeight = 50;
+	float titleHeight = m_titleHeight;
+	float buttonHeight = m_buttonHeight;
 	int contentMargin = 1<<3;
 	float contentBorderMargin = contentMargin >> 1;
 	btnBg->setPosition(ccp(m_centerX, m_centerY));

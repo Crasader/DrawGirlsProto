@@ -69,8 +69,10 @@ public:
 	m_closeOnPress(true),
 	m_back9(NULL),
 	m_contentBorder(NULL),
-	m_containerScrollView(NULL),
-	m_borderScale(1.f)
+//	m_containerScrollView(NULL),
+	m_borderScale(1.f),
+	m_titleHeight(50),
+	m_buttonHeight(50)
 	{
 		
 	}
@@ -89,6 +91,8 @@ public:
 	CC_SYNTHESIZE(int, m_centerY, CenterY); // 팝업이 뜬 위치가 맘에 안들면 조절해야함. 기본값 가운데
 	CC_SYNTHESIZE(int, m_width, Width);   // 전체 프레임의 가로크기
 	CC_SYNTHESIZE(int, m_height, Height); // 전체 프레임의 세로 크기
+	CC_SYNTHESIZE(int, m_titleHeight, TitleHeight); // 제목줄의 크기
+	CC_SYNTHESIZE(int, m_buttonHeight, ButtonHeight); // 버튼의 크기
 	CC_SYNTHESIZE(bool, m_shown, IsShown); // 알 필요 없음
 
 	CC_SYNTHESIZE(bool, m_horizonScroll, HorizonScroll);   // 알 필요없음
@@ -103,6 +107,16 @@ public:
 	CC_SYNTHESIZE(CCScale9Sprite*, m_vScroll, VScroll); // 세로 스크롤, 설정안하면 안보임
 	CC_SYNTHESIZE(CCScale9Sprite*, m_back9, Back9);    // 배경이미지
 	CC_SYNTHESIZE(bool, m_closeOnPress, CloseOnPress); // 눌렀을 때 닫히게 할거냐, 기본값 true
-	CC_SYNTHESIZE(CCScrollView*, m_containerScrollView, ContainerScrollView); // 눌렀을 때 닫히게 할거냐, 기본값 true
+	CCSize getContainerSize()
+	{
+		int contentMargin = 1<<3;
+		
+		CCRect contentRect = CCRectMake(contentMargin, m_buttonHeight,
+																		m_width-contentMargin*2, m_height - m_titleHeight - m_buttonHeight);
+		contentRect = rtSetScale(contentRect, m_borderScale);
+		return CCSizeMake(contentRect.size.width, contentRect.size.height);
+
+	}
+//	CC_SYNTHESIZE(CCScrollView*, m_containerScrollView, ContainerScrollView); //
 };
 
