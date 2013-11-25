@@ -654,7 +654,6 @@ void ClearScene::scrollViewDidZoom( CCScrollView* view )
 
 void ClearScene::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 {
-	// 영호
 	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 }
 

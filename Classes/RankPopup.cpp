@@ -850,9 +850,9 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 			selectedCardIndex = data.get("selectedcard", 0).asInt();
 			highScore = data.get("allhighscore", 0).asInt();
 		}
-		CCLog("card Number %d", selectedCardIndex); // 영호
+		CCLog("card Number %d", selectedCardIndex);
 		auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, selectedCardIndex);
-		KS::KSLog("retStr %", retStr); // 영호.
+		KS::KSLog("retStr %", retStr);
 		
 		if(used_card_img)
 		{

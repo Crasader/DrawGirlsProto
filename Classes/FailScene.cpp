@@ -719,7 +719,6 @@ void FailScene::scrollViewDidZoom( CCScrollView* view )
 
 void FailScene::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 {
-	// 영호
 	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 }
 

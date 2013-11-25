@@ -20,6 +20,8 @@
 #include "KSAlertView.h"
 #include "ShopPopup.h"
 #include "ChallengeSend.h"
+#include "HelpResultSend.h"
+
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
 	kMT_FP_replay,
@@ -332,7 +334,7 @@ void FailPopup::endDecreaseCardDuration()
 {
 	if(mySGD->getIsMeChallenge())
 	{
-		////////////////////////// 경수
+		////////////////////////// ksks
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
 																	 ChallengeCategory::kRequest),
 						 kZ_FP_popup);
@@ -340,7 +342,7 @@ void FailPopup::endDecreaseCardDuration()
 	
 	if(mySGD->getIsAcceptChallenge())
 	{
-		/////////////////// 경수
+		/////////////////// ksks
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
 																	 ChallengeCategory::kRequestReply),
 						 kZ_FP_popup);
@@ -349,8 +351,10 @@ void FailPopup::endDecreaseCardDuration()
 	
 	if(mySGD->getIsAcceptHelp())
 	{
-		////////////////// 경수
-//		mySGD->getAcceptHelpId(), mySGD->getAcceptHelpNick();
+		/// ksks
+		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), false), kZ_FP_popup);
+		
+
 	}
 }
 
@@ -664,7 +668,7 @@ void FailPopup::endLoad()
 		main_menu->setVisible(true);
 		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) > 0)
 		{
-			if(!mySGD->getIsMeChallenge())
+			if(!mySGD->getIsMeChallenge()  && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
 				replay_menu->setVisible(true);
 		}
 	}
@@ -790,6 +794,8 @@ void FailPopup::cellAction( CCObject* sender )
 										 
 										 contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
 										 contentJson["helpstage"] = mySD->getSilType();
+										 contentJson["sender"] = hspConnector::get()->getKakaoID();
+										 
 										 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 										 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 										 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
@@ -805,6 +811,34 @@ void FailPopup::cellAction( CCObject* sender )
 																										//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 																										
 																										//																		setHelpSendTime(recvId);
+																										
+																										KSAlertView* av = KSAlertView::create();
+																										av->setCenterY(150);
+																										auto ttf = CCLabelTTF::create
+																											(("요청을 성공적으로 보냈습니다."), "", 12.f);
+																										av->setContentNode(
+																																			 ttf
+																																			 );
+																										av->setContentSize(ttf->getDimensions());
+																										
+																										//	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
+																										//																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
+																										//	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
+																										//																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
+																										//	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
+																										//																					[](CCObject* e){
+																										//																						CCLog("press!!");
+																										//																					});
+																										//	av->addButton(m1);
+																										av->addButton(CCMenuItemImageLambda::create
+																																	(
+																																	 "ui_common_ok.png",
+																																	 "ui_common_ok.png",
+																																	 [=](CCObject* e){
+																																	 }
+																																	 ));
+																										addChild(av, kPMS_Z_helpRequest);
+																										av->show();
 																										GraphDogLib::JsonToLog("sendMessage", r);
 																										
 																										//																		obj->removeFromParent();
@@ -816,33 +850,6 @@ void FailPopup::cellAction( CCObject* sender )
 																										 {
 																											 GraphDogLib::JsonToLog("kSendMessage", r);
 																										 });
-																									});
-									 }
-									 { // 자기한테 보내기.
-										 Json::Value p;
-										 Json::Value contentJson;
-										 
-										 contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
-										 contentJson["helpstage"] = mySD->getSilType();
-										 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
-										 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-										 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-										 std::string recvId = user_id;
-										 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
-										 p["receiverMemberID"] = hspConnector::get()->getKakaoID();
-										 p["senderMemberID"] = recvId;
-										 p["type"] = kHelpRequest;
-										 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
-																									{
-																										//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-																										//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-																										//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-																										
-																										//																			setHelpSendTime(recvId);
-																										GraphDogLib::JsonToLog("sendMessage", r);
-																										
-																										//																		obj->removeFromParent();
-																										
 																									});
 									 }
 								 }
@@ -976,7 +983,7 @@ void FailPopup::scrollViewDidZoom( CCScrollView* view )
 
 void FailPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 {
-	// 영호
+
 	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 }
 

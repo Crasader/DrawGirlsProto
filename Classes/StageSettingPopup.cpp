@@ -666,7 +666,7 @@ void StageSettingPopup::acceptStartAction()
 	
 	vector<CommandParam> command_list;
 	
-	////////////////////////////// 경수
+	////////////////////////////// ksks
 	Json::Value p;
 	p["no"] = mySGD->getRemoveMessageMailNo();
 	p["memberID"] = mySGD->getRemoveMessageMemberId();

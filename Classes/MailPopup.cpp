@@ -200,7 +200,6 @@ void MailPopup::loadMail ()
 }
 void MailPopup::drawMail (Json::Value obj)
 {
-	
 	m_mailList=obj["list"];
 	hspConnector::get()->kLoadFriends(Json::Value(),[=](Json::Value fInfo)
 																		{
@@ -290,7 +289,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kMP_MT_profileImg);
 	profileImg->setPosition(ccp(25, 22));
-	profileImg->setScale(45.f / profileImg->getContentSize().width);
+	profileImg->setScale(40.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kMP_Z_profileImg);
 	
 	
@@ -403,6 +402,77 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						mySGD->setAcceptChallengeTarget(contentObj["sender"].asString(), m_mailList[idx]["nickname"].asString(),
 																						contentObj["score"].asFloat());
 						mySD->setSilType(contentObj["challengestage"].asInt());
+						mySGD->setIsAcceptChallenge(true);
+						// ST 받고 성공시 창 띄움.. & sender->removeFromParent();
+						addChild(StageInfoDown::create
+										 (this,
+											callfunc_selector(ThisClassType::onReceiveStageSuccess),
+											this, callfunc_selector(ThisClassType::onReceiveStageFail)));
+						
+					});
+				 av->addButton(m1);
+				 
+				 auto ttf = CCLabelTTF::create("도전을 수락합니까?", "", 12.f);
+				 av->setContentNode(
+														ttf
+														);
+				 
+				 av->setCloseOnPress(false);
+				 addChild(av, kMP_Z_helpAccept);
+				 av->show();
+			 }
+			 );
+			sendBtn->setPosition(ccp(190, 22));
+			
+			_menu->addChild(sendBtn,2);
+			break;
+		case kChallengeResult:
+			comment = "도전결과!!";
+			sendBtn = CCMenuItemImageLambda::create
+			("card_mount.png", "card_mount.png",
+			 [=](CCObject*)
+			 {
+			 }
+			 );
+			sendBtn->setPosition(ccp(190, 22));
+			
+			_menu->addChild(sendBtn,2);
+			break;
+
+		case kHelpRequest:
+			comment = "도움요청이 도착했어요.";
+			
+			sendBtn = CCMenuItemImageLambda::create
+			("postbox_help_ok.png", "postbox_help_ok.png",
+			 [=](CCObject*)
+			 {
+				 KSAlertView* av = KSAlertView::create();
+				 auto m0 = CCMenuItemImageLambda::create("ending_remove_card.png", "ending_remove_card.png",
+																								 [=](CCObject* e){
+																									 //																									 removeFromParent();
+																									 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+																									 KS::KSLog("%", mail);
+																									 // 도망에 대한 처리가 결정이 안됨.
+																									 
+																									 
+																								 });
+				 av->addButton(m0);
+
+				 // 도움 수락버튼.
+				 auto m1 = CCMenuItemImageLambda::create
+				 ("postbox_challenge_ok.png", "postbox_challenge_ok.png",
+					[=](CCObject* e){
+						CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+						KS::KSLog("%", mail);
+						int mailNo = m_mailList[idx]["no"].asInt();
+						
+						mySGD->setRemoveMessageMailNo(mailNo);
+						mySGD->setRemoveMessageMemberId(m_mailList[idx]["memberID"].asInt64());
+//						mySGD->setAcceptChallengeTarget(contentObj["sender"].asString(), m_mailList[idx]["nickname"].asString(),
+//																						contentObj["score"].asFloat());
+						mySGD->setAcceptHelpTarget(contentObj["sender"].asString(), m_mailList[idx]["nickname"].asString());
+						mySD->setSilType(contentObj["helpstage"].asInt());
+						mySGD->setIsAcceptHelp(true);
 						// ST 받고 성공시 창 띄움.. & sender->removeFromParent();
 						addChild(StageInfoDown::create
 										 (this,
@@ -417,51 +487,9 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						//																														mail["friendID"].asInt64(), mail["nickname"].asString(),
 						//																														p);
 						
+						
+						
 					});
-				 av->addButton(m1);
-				 
-				 auto ttf = CCLabelTTF::create("?asd?", "", 12.f);
-				 av->setContentNode(
-														ttf
-														);
-				 
-				 
-				 addChild(av, kMP_Z_helpAccept);
-				 av->show();
-			 }
-			 );
-			sendBtn->setPosition(ccp(190, 22));
-			
-			_menu->addChild(sendBtn,2);
-			break;
-		case kHelpRequest:
-			comment = "도움요청이 도착했어요.";
-			
-			sendBtn = CCMenuItemImageLambda::create
-			("postbox_help_ok.png", "postbox_help_ok.png",
-			 [=](CCObject*)
-			 {
-				 KSAlertView* av = KSAlertView::create();
-//				 av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-//																							 CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-//				 av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-//																							 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-				 
-				 // 도움 수락버튼.
-				 auto m1 = CCMenuItemImageLambda::create("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-																								 [=](CCObject* e){
-																									 removeFromParent();
-																									 KS::KSLog("%", mail);
-																									 Json::Value p;
-																									 int mailNo = mail["no"].asInt();
-																									 p["no"] = mailNo;
-																									 p["memberID"] = mail["memberID"].asInt64();
-																									 
-																									 iHelpYou(contentObj.get("helpstage", 0).asInt(),
-																														mail["friendID"].asInt64(), mail["nickname"].asString(),
-																														p);
-																									 
-																								 });
 				 av->addButton(m1);
 				 
 				 auto ttf = CCLabelTTF::create("?asd?", "", 12.f);
@@ -473,6 +501,58 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 addChild(av, kMP_Z_helpAccept);
 				 av->show();
 			 });
+			sendBtn->setPosition(ccp(190, 22));
+			
+			_menu->addChild(sendBtn,2);
+			break;
+		case kHelpResult:
+			comment = "상대방의 도움이 왔어요!";
+			sendBtn = CCMenuItemImageLambda::create
+			("card_mount.png", "card_mount.png",
+			 [=](CCObject*)
+			 {
+				 Json::Value p;
+				 int mailNo = m_mailList[idx]["no"].asInt();
+				 
+				 p["no"] = mailNo;
+				 p["memberID"] = m_mailList[idx]["memberID"].asInt64();
+				 //삭제요청
+				 hspConnector::get()->command
+				 (
+					"removemessage",p,
+					[=](Json::Value r)
+					{
+						KS::KSLog("%", contentObj);
+						
+						// 영호
+#if 0
+						contentObj["helpstage"].asInt(); // 이건 스테이지 번호
+						contentObj["cardnumber"].asInt(); // 카드 번호.
+						// 아래 setContentNode 에 그림이 들어간 노드를 넣어주면 됨...
+						// 이거 작업하기 전에 나랑 이야기 ㄱㄱ.
+#endif
+						KSAlertView* av = KSAlertView::create();
+						
+						
+						// 도움 수락버튼.
+						auto m1 = CCMenuItemImageLambda::create
+						("postbox_challenge_ok.png", "postbox_challenge_ok.png",
+						 [=](CCObject* e){
+						 });
+						av->addButton(m1);
+						
+						auto ttf = CCLabelTTF::create("스테이지 획득!!", "", 12.f);
+						av->setContentNode(
+															 ttf
+															 );
+						addChild(av, kMP_Z_helpAccept);
+						av->show();
+					}
+					);
+				 
+				 
+			 }
+			 );
 			sendBtn->setPosition(ccp(190, 22));
 			
 			_menu->addChild(sendBtn,2);
@@ -489,11 +569,23 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			
 			_menu->addChild(sendBtn,2);
 			break;
+		case kTicketResult:
+			comment = "티켓이 왔네요 어서 받으세요.";
+			sendBtn = CCMenuItemImageLambda::create
+			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
+			 [=](CCObject*)
+			 {
+			 }
+			 );
+			sendBtn->setPosition(ccp(190, 22));
+			
+			_menu->addChild(sendBtn,2);
+			break;
 		default:
 			comment = "??요청이 도착했어요.";
 	}
 	
-	score = CCLabelTTF::create(comment.c_str(),"Helvetica",20);
+	score = CCLabelTTF::create(comment.c_str(),"Helvetica", 12.f);
 	score->setPosition(ccp(30,5));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kMP_MT_score);

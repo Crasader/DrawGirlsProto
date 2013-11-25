@@ -23,7 +23,8 @@
 #include "PuzzleMapScene.h"
 #include "ShopPopup.h"
 #include "ChallengeSend.h"
-
+#include "KSAlertView.h"
+#include "HelpResultSend.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -342,8 +343,7 @@ void ClearPopup::endTakeCard()
 {
 	if(mySGD->getIsMeChallenge())
 	{
-		///////////////////////////////// 경수
-
+		// ksks
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
 																	 ChallengeCategory::kRequest),
 						 kZ_CP_popup);
@@ -352,7 +352,7 @@ void ClearPopup::endTakeCard()
 	
 	if(mySGD->getIsAcceptChallenge())
 	{
-		/////////////////// 경수
+		/////////////////// ksks
 //		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
 																	 ChallengeCategory::kRequestReply),
@@ -361,8 +361,11 @@ void ClearPopup::endTakeCard()
 	
 	if(mySGD->getIsAcceptHelp())
 	{
-		////////////////// 경수
-//		mySGD->getAcceptHelpId(), mySGD->getAcceptHelpNick();
+		////////////////// ksks
+		
+		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), true), kZ_CP_popup);
+
+
 		
 	}
 	
@@ -765,7 +768,6 @@ void ClearPopup::scrollViewDidZoom( CCScrollView* view )
 
 void ClearPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 {
-	// 영호
 	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 }
 
