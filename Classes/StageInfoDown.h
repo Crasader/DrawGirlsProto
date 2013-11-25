@@ -33,7 +33,6 @@ class StageInfoDown : public CCLayer
 {
 public:
 	static StageInfoDown* create(CCObject* t_success, SEL_CallFunc d_success, CCObject* t_cancel, SEL_CallFunc d_cancel);
-	
 private:
 	CCObject* target_cancel;
 	SEL_CallFunc delegate_cancel;

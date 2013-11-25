@@ -693,7 +693,11 @@ void StageSettingPopup::acceptStartAction()
 	vector<CommandParam> command_list;
 	
 	////////////////////////////// 경수
-	
+	Json::Value p;
+	p["no"] = mySGD->getRemoveMessageMailNo();
+	p["memberID"] = mySGD->getRemoveMessageMemberId();
+	CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
+	command_list.push_back(ksooParam);
 	// create message remove command
 	// command_list.push_back(message remove command);
 	

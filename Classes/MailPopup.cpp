@@ -15,6 +15,8 @@
 #include "EnumDefine.h"
 #include "ScrollBar.h"
 #include "KSAlertView.h"
+#include "StageInfoDown.h"
+#include "PuzzleMapScene.h"
 
 #define LZZ_INLINE inline
 
@@ -368,8 +370,64 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			comment = "도전장이 도착했어요.";
 			sendBtn = CCMenuItemImageLambda::create
 			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-			 [=](CCObject*)
+			 [=](CCObject* sender)
 			 {
+				 KSAlertView* av = KSAlertView::create();
+				 //				 av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
+				 //																							 CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
+				 //				 av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
+				 //																							 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
+				 
+				 // 도망 버튼.
+				 auto m0 = CCMenuItemImageLambda::create("ending_remove_card.png", "ending_remove_card.png",
+																								 [=](CCObject* e){
+																									 //																									 removeFromParent();
+																									 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+																									 KS::KSLog("%", mail);
+																									 // 도망에 대한 처리가 결정이 안됨.
+																									 
+																									 
+																								 });
+				 av->addButton(m0);
+				 // 수락버튼.
+				 auto m1 = CCMenuItemImageLambda::create
+				 ("postbox_challenge_ok.png", "postbox_challenge_ok.png",
+					[=](CCObject* e){
+						//																									 removeFromParent();
+						CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+						KS::KSLog("%", mail);
+						int mailNo = m_mailList[idx]["no"].asInt();
+
+						mySGD->setRemoveMessageMailNo(mailNo);
+						mySGD->setRemoveMessageMemberId(m_mailList[idx]["memberID"].asInt64());
+						mySGD->setAcceptChallengeTarget(contentObj["sender"].asString(), m_mailList[idx]["nickname"].asString(),
+																						contentObj["score"].asFloat());
+						mySD->setSilType(contentObj["challengestage"].asInt());
+						// ST 받고 성공시 창 띄움.. & sender->removeFromParent();
+						addChild(StageInfoDown::create
+										 (this,
+											callfunc_selector(ThisClassType::onReceiveStageSuccess),
+											this, callfunc_selector(ThisClassType::onReceiveStageFail)));
+						//																									 Json::Value p;
+						//																									 int mailNo = mail["no"].asInt();
+						//																									 p["no"] = mailNo;
+						//																									 p["memberID"] = mail["memberID"].asInt64();
+						//
+						//																									 iHelpYou(contentObj.get("helpstage", 0).asInt(),
+						//																														mail["friendID"].asInt64(), mail["nickname"].asString(),
+						//																														p);
+						
+					});
+				 av->addButton(m1);
+				 
+				 auto ttf = CCLabelTTF::create("?asd?", "", 12.f);
+				 av->setContentNode(
+														ttf
+														);
+				 
+				 
+				 addChild(av, kMP_Z_helpAccept);
+				 av->show();
 			 }
 			 );
 			sendBtn->setPosition(ccp(190, 22));
@@ -544,11 +602,30 @@ void MailPopup::showLeftMenuToggle(bool show)
 	}
 }
 
+void MailPopup::onReceiveStageSuccess()
+{
+	// 성공시 게임창...
+	CCLog("sec");
+	PuzzleMapScene* pms = dynamic_cast<PuzzleMapScene*>(target_close);
+	CCAssert(pms, "!!");
+	
+	removeFromParent();
+	pms->showAcceptStageSettingPopup();
+//	PuzzleMapScene::showAcceptStageSettingPopup();
+	
+}
+void MailPopup::onReceiveStageFail()
+{
+	mySGD->setRemoveMessageMemberId(0);
+	mySGD->setRemoveMessageMailNo(0);
+//	removeFromParent();
+	CCLog("fail");
+}
 // 도움 수락을 누른 상태.
 void MailPopup::iHelpYou(int stage, long long user_id, const std::string& nick, Json::Value removeInfo)
 {
 
-	//삭제요청 하는 방법임. 삭제해야할 정보는 removeInfo 에 들어있음 신경 ㄴㄴ해.	
+	//삭제요청 하는 방법임. 삭제해야할 정보는 removeInfo 에 들어있음 신경 ㄴㄴ해.
 #if 0
 	hspConnector::get()->command
 	(

@@ -130,10 +130,14 @@ void KSAlertView::show()
 	for(auto it : m_menuItems)
 	{
 		_menu->addChild(it);
-		it->m_afterSelector = [=](CCObject*)
+		if(m_closeOnPress)
 		{
-			removeFromParent();
-		};
+			it->m_afterSelector = [=](CCObject*)
+			{
+				removeFromParent();
+			};
+		}
+		
 	}
 	// 아래쪽 버튼만 넣고 정렬 때림.
 	_menu->alignItemsHorizontally();
@@ -150,10 +154,13 @@ void KSAlertView::show()
 		m_closeItem->setPosition(btnBg->convertToNodeSpace
 														 (ccp(m_centerX + m_width / 2.f - m_closeItem->getContentSize().width / 2.f,
 																	m_centerY + m_height / 2.f - m_closeItem->getContentSize().height / 2.f)));
-		m_closeItem->m_afterSelector = [=](CCObject*)
+		if(m_closeOnPress)
 		{
-			removeFromParent();
-		};
+			m_closeItem->m_afterSelector = [=](CCObject*)
+			{
+				removeFromParent();
+			};
+		}
 	}
 	if(m_titleStr != "")
 	{

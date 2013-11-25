@@ -359,13 +359,17 @@ void FailPopup::endDecreaseCardDuration()
 	if(mySGD->getIsMeChallenge())
 	{
 		////////////////////////// 경수
-		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore()),
+		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
+																	 ChallengeCategory::kRequest),
 						 kZ_FP_popup);
 	}
 	
 	if(mySGD->getIsAcceptChallenge())
 	{
 		/////////////////// 경수
+		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
+																	 ChallengeCategory::kRequestReply),
+						 kZ_FP_popup);
 //		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
 	}
 	

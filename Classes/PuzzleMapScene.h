@@ -103,7 +103,7 @@ public:
     CREATE_FUNC(PuzzleMapScene);
 	
 	virtual void visit();
-	
+	void showAcceptStageSettingPopup();
 private:
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);
@@ -429,7 +429,7 @@ private:
 	void showFailPopup();
 	void hideFailPopup();
 	
-	void showAcceptStageSettingPopup();
+	
 	
 	void showCardSettingPopup();
 	void hideCardSettingPopup();

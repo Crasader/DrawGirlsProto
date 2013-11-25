@@ -87,6 +87,8 @@ public:
 	
 	void setAlignText(AlignText at);
 	void showLeftMenuToggle(bool show);
+	void onReceiveStageSuccess();
+	void onReceiveStageFail();
 	void iHelpYou(int stage, long long user_id, const std::string& nick, Json::Value removeInfo);
 protected:
   Json::Value m_mailList;

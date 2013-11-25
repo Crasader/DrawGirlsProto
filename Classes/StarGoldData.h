@@ -290,6 +290,7 @@ public:
 		return clear_reward_gold;
 	}
 	
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
@@ -307,6 +308,7 @@ private:
 	string accept_help_target_user_id;
 	string accept_help_target_user_nick;
 	
+
 	int clear_reward_gold;
 	
 	bool is_after_scene_chapter;
@@ -346,7 +348,17 @@ private:
 	
 	JsonBox::Object startRequestsData;
 	
+	
 	void myInit();
+	
+
+	
+//	string remove_message_member_id; 
+//	string remove_message_mail_no;
+	// 도움이든 도전이든 쓰는 멤버.
+	// 도움이든 도전이든 쓰는 멤버.
+	CC_SYNTHESIZE(long long, remove_message_member_id, RemoveMessageMemberId);
+	CC_SYNTHESIZE(int, remove_message_mail_no, RemoveMessageMailNo);
 };
 
 #endif

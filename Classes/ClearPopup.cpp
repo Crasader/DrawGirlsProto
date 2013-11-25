@@ -370,7 +370,8 @@ void ClearPopup::endTakeCard()
 	{
 		///////////////////////////////// 경수
 
-		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore()),
+		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
+																	 ChallengeCategory::kRequest),
 						 kZ_CP_popup);
 //		getMeChallengeTarget
 	}
@@ -379,12 +380,16 @@ void ClearPopup::endTakeCard()
 	{
 		/////////////////// 경수
 //		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
+		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
+																	 ChallengeCategory::kRequestReply),
+						 kZ_CP_popup);
 	}
 	
 	if(mySGD->getIsAcceptHelp())
 	{
 		////////////////// 경수
 //		mySGD->getAcceptHelpId(), mySGD->getAcceptHelpNick();
+		
 	}
 	
 }

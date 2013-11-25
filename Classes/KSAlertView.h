@@ -62,11 +62,12 @@ public:
 	m_buttonFile("ui_common_9_button_brown.png"),
 	m_closeButtonFile("ui_common_close.png"),
 	m_contentBorderFile("popup_back2.png"),
-	m_titleStr("? ? ? ? !! ! ! "),
+	m_titleStr(""),
 	m_hScroll(NULL),
 	m_vScroll(NULL),
 	m_contentNode(NULL),
-	m_closeItem(NULL)
+	m_closeItem(NULL),
+	m_closeOnPress(true)
 	
 	{
 		
@@ -97,5 +98,6 @@ public:
 	CC_SYNTHESIZE(std::string, m_contentBorderFile, ContentBorderFile);
 	CC_SYNTHESIZE(CCScale9Sprite*, m_hScroll, HScroll);
 	CC_SYNTHESIZE(CCScale9Sprite*, m_vScroll, VScroll);
+	CC_SYNTHESIZE(bool, m_closeOnPress, CloseOnPress);
 };
 
