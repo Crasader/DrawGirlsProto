@@ -30,276 +30,276 @@
 class ComboView : public CCSprite
 {
 public:
-  static ComboView * create (int combo);
-  void changeCombo (int combo);
-  void setPercentage (float t_percent);
+	static ComboView * create (int combo);
+	void changeCombo (int combo);
+	void setPercentage (float t_percent);
 private:
-  int hide_frame;
-  CCLabelBMFont * combo_label;
-  CCProgressTimer * combo_timer;
-  void myInit (int combo);
+	int hide_frame;
+	CCLabelBMFont * combo_label;
+	CCProgressTimer * combo_timer;
+	void myInit (int combo);
 };
 class ComboParent : public CCNode
 {
 public:
-  static ComboParent * create ();
-  void showCombo (int t_combo);
-  void stopKeep ();
+	static ComboParent * create ();
+	void showCombo (int t_combo);
+	void stopKeep ();
 private:
-  int keeping_frame;
-  bool is_keeping;
-  void startKeep ();
-  void keeping ();
-  void myInit ();
+	int keeping_frame;
+	bool is_keeping;
+	void startKeep ();
+	void keeping ();
+	void myInit ();
 };
 class FeverParent : public CCNode
 {
 public:
-  static FeverParent * create ();
-  void addFeverGage (int count);
-  void endFever ();
+	static FeverParent * create ();
+	void addFeverGage (int count);
+	void endFever ();
 private:
-  CCParticleSystemQuad * fever_particle;
-  CCProgressTimer * fever_top;
-  int recent_count;
-  bool ing_fever;
-  int keeping_count;
-  bool is_keeping;
-  void startKeep ();
-  void keeping ();
-  void stopKeep ();
-  void myInit ();
+	CCParticleSystemQuad * fever_particle;
+	CCProgressTimer * fever_top;
+	int recent_count;
+	bool ing_fever;
+	int keeping_count;
+	bool is_keeping;
+	void startKeep ();
+	void keeping ();
+	void stopKeep ();
+	void myInit ();
 };
 class GoldLabel : public CCLabelBMFont
 {
 public:
-  static GoldLabel * create ();
-  virtual void setString (char const * after_gold);
+	static GoldLabel * create ();
+	virtual void setString (char const * after_gold);
 private:
-  bool is_incresing;
-  float keep_gold;
-  float base_gold;
-  float decrease_gold;
-  float increase_gold;
-  string keep_gold_string;
-  void startIncreasing ();
-  void increasing (float dt);
-  void stopIncreasing ();
-  void myInit ();
+	bool is_incresing;
+	float keep_gold;
+	float base_gold;
+	float decrease_gold;
+	float increase_gold;
+	string keep_gold_string;
+	void startIncreasing ();
+	void increasing (float dt);
+	void stopIncreasing ();
+	void myInit ();
 };
 class MyGold : public CCSprite
 {
 public:
-  static MyGold * create ();
-  void startMoving ();
+	static MyGold * create ();
+	void startMoving ();
 private:
-  float i_dy;
-  float r_dy;
-  CCPoint t_dv;
-  float dscale;
-  int z_order;
-  CCPoint init_position;
-  int ing_frame;
-  CCPoint after_position;
-  void moving ();
-  void myInit ();
+	float i_dy;
+	float r_dy;
+	CCPoint t_dv;
+	float dscale;
+	int z_order;
+	CCPoint init_position;
+	int ing_frame;
+	CCPoint after_position;
+	void moving ();
+	void myInit ();
 };
 class GetGold : public CCNode
 {
 public:
-  static GetGold * create (CCPoint t_sp, int t_duration_frame);
-  void startMyAction ();
+	static GetGold * create (CCPoint t_sp, int t_duration_frame);
+	void startMyAction ();
 private:
-  CCSpriteBatchNode * batch_node;
-  int duration_frame;
-  int ing_frame;
-  int create_frame;
-  void myAction ();
-  void selfRemove ();
-  void myInit (CCPoint t_sp, int t_duration_frame);
+	CCSpriteBatchNode * batch_node;
+	int duration_frame;
+	int ing_frame;
+	int create_frame;
+	void myAction ();
+	void selfRemove ();
+	void myInit (CCPoint t_sp, int t_duration_frame);
 };
 enum ZorderGetPercentage
 {
-  kZorderGetPercentage_backImg = 1,
-  kZorderGetPercentage_label
+	kZorderGetPercentage_backImg = 1,
+	kZorderGetPercentage_label
 };
 class GetPercentage : public CCNode
 {
 public:
-  static GetPercentage * create (float t_gp, bool is_item);
+	static GetPercentage * create (float t_gp, bool is_item);
 private:
-  CCLabelBMFont * my_label;
-  CCSprite * backImg;
-  void startFadeOut ();
-  void selfRemove ();
-  void myInit (float t_gp, bool is_item);
+	CCLabelBMFont * my_label;
+	CCSprite * backImg;
+	void startFadeOut ();
+	void selfRemove ();
+	void myInit (float t_gp, bool is_item);
 };
 class TakeSpeedUp : public CCSprite
 {
 public:
-  static TakeSpeedUp * create (int t_step);
+	static TakeSpeedUp * create (int t_step);
 private:
-  CCSprite * backImg;
-  void startFadeOut ();
-  void selfRemove ();
-  void myInit (int t_step);
+	CCSprite * backImg;
+	void startFadeOut ();
+	void selfRemove ();
+	void myInit (int t_step);
 };
 class Warning : public CCSprite
 {
 public:
-  static Warning * create (int t1);
-  void startAction ();
+	static Warning * create (int t1);
+	void startAction ();
 private:
-  void selfRemove ();
-  void myInit (int t1);
+	void selfRemove ();
+	void myInit (int t1);
 };
 class TakeCoin : public CCSprite
 {
 public:
-  static TakeCoin * create ();
-  void startAction ();
+	static TakeCoin * create ();
+	void startAction ();
 private:
-  void selfRemove ();
-  void myInit ();
+	void selfRemove ();
+	void myInit ();
 };
 class AreaScroll : public CCNode
 {
 public:
-  static AreaScroll * create ();
-  void startAction ();
+	static AreaScroll * create ();
+	void startAction ();
 private:
-  void selfRemove ();
-  void showArrow ();
-  void myInit ();
+	void selfRemove ();
+	void showArrow ();
+	void myInit ();
 };
 class ChangeCard : public CCSprite
 {
 public:
-  static ChangeCard * create ();
-  void startAction ();
+	static ChangeCard * create ();
+	void startAction ();
 private:
-  void selfRemove ();
-  void myInit ();
+	void selfRemove ();
+	void myInit ();
 };
 enum MenuTagUI
 {
-  kMenuTagUI_home = 1,
-  kMenuTagUI_condition
+	kMenuTagUI_home = 1,
+	kMenuTagUI_condition
 };
 enum AlertTagUI
 {
-  kAlertTagUI_home = 1
+	kAlertTagUI_home = 1
 };
 enum ChildTagInPlayUI
 {
-  kCT_UI_clrCdtLabel = 100,
-  kCT_UI_clrCdtIcon,
-  kCT_UI_clrCdtPopup
+	kCT_UI_clrCdtLabel = 100,
+	kCT_UI_clrCdtIcon,
+	kCT_UI_clrCdtPopup
 };
 class PlayUI : public CCNode
 {
 public:
-  static PlayUI * create ();
-  virtual ~ PlayUI ();
-  void addScore (int t_score);
-  void decreasePercentage ();
-  float getScore ();
-  float getPercentage ();
-  void setPercentage (float t_p, bool t_b);
-  void conditionClear ();
-  void conditionFail ();
-  void takeExchangeCoin (CCPoint t_start_position, int t_coin_number);
-  void subBossLife (float t_life);
-  void setMaxBossLife (float t_life);
-  void setClearPercentage (float t_p);
-  void startCounting ();
-  void resumeCounting ();
-  void stopCounting ();
-  void keepBossLife ();
-  void checkBossLife ();
-  int getGameTime ();
-  void setControlTD (CCObject * t_main, SEL_CallFunc d_gesture, SEL_CallFunc d_button, SEL_CallFunc d_joystick, SEL_CallFunc d_startControl);
-  void showPause ();
-  void showContinuePopup (CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue);
-  void addGameTime30Sec ();
-  bool beRevivedJack ();
-  void takeAddTimeItem ();
-  bool getIsExchanged ();
-  int getComboCnt ();
-  void setComboCnt (int t_combo);
-  int getUseTime ();
+	static PlayUI * create ();
+	virtual ~ PlayUI ();
+	void addScore (int t_score);
+	void decreasePercentage ();
+	float getScore ();
+	float getPercentage ();
+	void setPercentage (float t_p, bool t_b);
+	void conditionClear ();
+	void conditionFail ();
+	void takeExchangeCoin (CCPoint t_start_position, int t_coin_number);
+	void subBossLife (float t_life);
+	void setMaxBossLife (float t_life);
+	void setClearPercentage (float t_p);
+	void startCounting ();
+	void resumeCounting ();
+	void stopCounting ();
+	void keepBossLife ();
+	void checkBossLife ();
+	int getGameTime ();
+	void setControlTD (CCObject * t_main, SEL_CallFunc d_gesture, SEL_CallFunc d_button, SEL_CallFunc d_joystick, SEL_CallFunc d_startControl);
+	void showPause ();
+	void showContinuePopup (CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue);
+	void addGameTime30Sec ();
+	bool beRevivedJack ();
+	void takeAddTimeItem ();
+	bool getIsExchanged ();
+	int getComboCnt ();
+	void setComboCnt (int t_combo);
+	int getUseTime ();
 private:
-  int percentage_decrease_cnt;
-  CCObject * target_main;
-  SEL_CallFunc delegate_gesture;
-  SEL_CallFunc delegate_button;
-  SEL_CallFunc delegate_joystick;
-  SEL_CallFunc delegate_startControl;
-  CCObject * target_continue;
-  SEL_CallFunc delegate_continue;
-  float bossLife;
-  float keepLife;
-  float maxBossLife;
-  float clearPercentage;
-  CCSprite * ui_case;
-  CCSprite * sand_clock;
-  BossLifeGage * m_bossLifeGage;
-  AreaGage * m_areaGage;
-  FeverParent * my_fp;
-  ComboParent * my_combo;
-  int combo_cnt;
-  GoldLabel * gold_label;
-  CCLabelBMFont * score_label;
-  CCLabelBMFont * percentageLabel;
-  CCLabelBMFont * countingLabel;
-  CCSprite * result_sprite;
-  CCDictionary * exchange_dic;
-  bool is_exchanged;
-  bool is_show_exchange_coin;
-  int taked_coin_cnt;
-  bool isFirst;
-  bool isGameover;
-  bool is_hard;
-  int beforePercentage;
-  int playtime_limit;
-  int countingCnt;
-  int use_time;
-  int total_time;
-  int jack_life;
-  CCArray * jack_array;
-  bool is_cleared_cdt;
-  CLEAR_CONDITION clr_cdt_type;
-  bool is_show_condition;
-  int clr_cdt_cnt;
-  int ing_cdt_cnt;
-  float clr_cdt_per;
-  float clr_cdt_range;
-  void takeCoinModeOn ();
-  void counting ();
-  void lifeBonus ();
-  void removeParticle (CCObject * sender);
-  void createBonusScore ();
-  void endGame (bool is_show_reason);
-  void showGachaOnePercent ();
-  void gachaOnOnePercent (float t_percent);
-  void searchEmptyPosition ();
-  void cancelOnePercentGacha ();
-  void nextScene ();
-  void catchSubCumber ();
-  void takeBigArea ();
-  void takeItemCollect ();
-  void myInit ();
-  bool isExchanged ();
-  void continueAction ();
-  void menuAction (CCObject * sender);
-  void showCondition ();
-  void closeCondition ();
-  void closeShutter ();
-  void endCloseShutter ();
-  void goHome ();
-  void goReplay ();
-  void cancelHome ();
-  void alertAction (int t1, int t2);
+	int percentage_decrease_cnt;
+	CCObject * target_main;
+	SEL_CallFunc delegate_gesture;
+	SEL_CallFunc delegate_button;
+	SEL_CallFunc delegate_joystick;
+	SEL_CallFunc delegate_startControl;
+	CCObject * target_continue;
+	SEL_CallFunc delegate_continue;
+	float bossLife;
+	float keepLife;
+	float maxBossLife;
+	float clearPercentage;
+	CCSprite * ui_case;
+	CCSprite * sand_clock;
+	BossLifeGage * m_bossLifeGage;
+	AreaGage * m_areaGage;
+	FeverParent * my_fp;
+	ComboParent * my_combo;
+	int combo_cnt;
+	GoldLabel * gold_label;
+	CCLabelBMFont * score_label;
+	CCLabelBMFont * percentageLabel;
+	CCLabelBMFont * countingLabel;
+	CCSprite * result_sprite;
+	CCDictionary * exchange_dic;
+	bool is_exchanged;
+	bool is_show_exchange_coin;
+	int taked_coin_cnt;
+	bool isFirst;
+	bool isGameover;
+	bool is_hard;
+	int beforePercentage;
+	int playtime_limit;
+	int countingCnt;
+	int use_time;
+	int total_time;
+	int jack_life;
+	CCArray * jack_array;
+	bool is_cleared_cdt;
+	CLEAR_CONDITION clr_cdt_type;
+	bool is_show_condition;
+	int clr_cdt_cnt;
+	int ing_cdt_cnt;
+	float clr_cdt_per;
+	float clr_cdt_range;
+	void takeCoinModeOn ();
+	void counting ();
+	void lifeBonus ();
+	void removeParticle (CCObject * sender);
+	void createBonusScore ();
+	void endGame (bool is_show_reason);
+	void showGachaOnePercent ();
+	void gachaOnOnePercent (float t_percent);
+	void searchEmptyPosition ();
+	void cancelOnePercentGacha ();
+	void nextScene ();
+	void catchSubCumber ();
+	void takeBigArea ();
+	void takeItemCollect ();
+	void myInit ();
+	bool isExchanged ();
+	void continueAction ();
+	void menuAction (CCObject * sender);
+	void showCondition ();
+	void closeCondition ();
+	void closeShutter ();
+	void endCloseShutter ();
+	void goHome ();
+	void goReplay ();
+	void cancelHome ();
+	void alertAction (int t1, int t2);
 };
 #undef LZZ_INLINE
 #endif
