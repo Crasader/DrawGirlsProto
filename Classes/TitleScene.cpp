@@ -508,6 +508,8 @@ void TitleScene::resultGetPuzzleList( Json::Value result_data )
 				NSDS_SI(kSDS_GI_puzzleList_int1_version_i, i+1, puzzle_list[i]["version"].asInt());
 				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_startStage_i, puzzle_list[i]["startStage"].asInt());
 				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_stageCount_i, puzzle_list[i]["stageCount"].asInt());
+				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_point_i, puzzle_list[i]["point"].asInt());
+				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_ticket_i, puzzle_list[i]["ticket"].asInt());
 
 				Json::Value thumbnail = puzzle_list[i]["thumbnail"];
 				if(NSDS_GS(kSDS_GI_puzzleList_int1_thumbnail_s, i+1) != thumbnail["image"].asString())

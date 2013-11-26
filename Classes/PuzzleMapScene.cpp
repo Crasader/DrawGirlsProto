@@ -3122,7 +3122,7 @@ void PuzzleMapScene::endMovingMapNodeNotOpenPuzzle()
 	
 	CCLabelTTF* ticket_cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt),
 																				 NSDS_GI(recent_puzzle_number, kSDS_PZ_ticket_i))->getCString(), mySGD->getFont().c_str(), 18);
-	ticket_cnt_label->setPosition(ccp(260,150));
+	ticket_cnt_label->setPosition(ccp(270,150));
 	addChild(ticket_cnt_label, kPMS_Z_popup, kPMS_MT_ticketCnt);
 	
 	
@@ -3768,7 +3768,17 @@ CCNode* PuzzleMapScene::createMapNode()
 		if(recent_puzzle_number-1 > myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt))
 		{
 			if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number-1))
-				t_node->setTag(kPMS_MT_notOpenedPuzzle);
+			{
+				if(NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i) == 0 || NSDS_GI(recent_puzzle_number, kSDS_PZ_ticket_i) == 0)
+				{
+					if(NSDS_GI(kSDS_GI_puzzleList_int1_version_i, found_index) > NSDS_GI(recent_puzzle_number, kSDS_PZ_version_i))
+						t_node->setTag(kPMS_MT_notLoaded);
+					else
+						t_node->setTag(kPMS_MT_loaded);
+				}
+				else
+					t_node->setTag(kPMS_MT_notOpenedPuzzle);
+			}
 			else
 				t_node->setTag(kPMS_MT_notClearBeforePuzzle);
 		}
