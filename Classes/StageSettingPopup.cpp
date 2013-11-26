@@ -828,18 +828,12 @@ void StageSettingPopup::buySuccessItem(int t_clicked_item_number, int cnt)
 	
 	((CCSprite*)item_parent->getChildByTag(kSSP_MT_selectedBase+t_clicked_item_number))->setVisible(true);
 	
-	Json::Value param2;
-	param2["memberID"] = hspConnector::get()->getKakaoID();
+	vector<SaveUserData_Key> save_userdata_list;
 	
-	Json::Value data;
-	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	save_userdata_list.push_back(kSaveUserData_Key_gold);
+	save_userdata_list.push_back(kSaveUserData_Key_item);
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
-		data[myDSH->getKey(kDSH_Key_haveItemCnt_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, i);
-	
-	Json::FastWriter writer;
-	param2["data"] = writer.write(data);
-	hspConnector::get()->command("updateUserData", param2, NULL);
+	myDSH->saveUserData(save_userdata_list, nullptr);
 }
 
 string StageSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)

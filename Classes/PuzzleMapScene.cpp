@@ -637,16 +637,12 @@ void PuzzleMapScene::setMapNode()
 	if(is_puzzle_clear)
 	{
 		myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number, true);
-		Json::Value param;
-		param["memberID"] = hspConnector::get()->getKakaoID();
 		
-		Json::Value data;
+		vector<SaveUserData_Key> save_userdata_list;
 		
-		data[myDSH->getKey(kDSH_Key_isClearedPuzzle_int1)][recent_puzzle_number] = myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number);
+		save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
 		
-		Json::FastWriter writer;
-		param["data"] = writer.write(data);
-		hspConnector::get()->command("updateUserData", param, NULL);
+		myDSH->saveUserData(save_userdata_list, nullptr);
 	}
 	
 	touched_stage_number = 0;
@@ -3237,17 +3233,12 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 				removeChildByTag(kPMS_MT_puzzleOpenTitle);
 				removeChildByTag(kPMS_MT_ticketCnt);
 				
-				Json::Value param;
-				param["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
+				save_userdata_list.push_back(kSaveUserData_Key_star);
+				save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
 				
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
-				data[myDSH->getKey(kDSH_Key_openPuzzleCnt)] = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt);
-				
-				Json::FastWriter writer;
-				param["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param, NULL);
+				myDSH->saveUserData(save_userdata_list, nullptr);
 				
 				
 				CCNode* open_puzzle_container = CCNode::create();
@@ -3619,16 +3610,12 @@ void PuzzleMapScene::creatingPuzzle()
 		if(is_puzzle_clear)
 		{
 			myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number, true);
-			Json::Value param;
-			param["memberID"] = hspConnector::get()->getKakaoID();
 			
-			Json::Value data;
+			vector<SaveUserData_Key> save_userdata_list;
 			
-			data[myDSH->getKey(kDSH_Key_isClearedPuzzle_int1)][recent_puzzle_number] = myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number);
+			save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
 			
-			Json::FastWriter writer;
-			param["data"] = writer.write(data);
-			hspConnector::get()->command("updateUserData", param, NULL);
+			myDSH->saveUserData(save_userdata_list, nullptr);
 		}
 	}
 

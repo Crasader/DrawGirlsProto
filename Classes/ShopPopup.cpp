@@ -275,15 +275,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			
 			mySGD->setStar(mySGD->getStar() + 10);
 			
-			Json::Value param2;
-			param2["memberID"] = hspConnector::get()->getKakaoID();
+			vector<SaveUserData_Key> save_userdata_list;
 			
-			Json::Value data;
-			data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+			save_userdata_list.push_back(kSaveUserData_Key_star);
 			
-			Json::FastWriter writer;
-			param2["data"] = writer.write(data);
-			hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+			myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
@@ -295,16 +291,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 				mySGD->setStar(mySGD->getStar() - 10);
 				mySGD->setGold(mySGD->getGold() + 10000);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
+				save_userdata_list.push_back(kSaveUserData_Key_gold);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -330,15 +322,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -358,15 +346,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			
 			mySGD->setStar(mySGD->getStar() + 50);
 			
-			Json::Value param2;
-			param2["memberID"] = hspConnector::get()->getKakaoID();
+			vector<SaveUserData_Key> save_userdata_list;
 			
-			Json::Value data;
-			data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+			save_userdata_list.push_back(kSaveUserData_Key_star);
 			
-			Json::FastWriter writer;
-			param2["data"] = writer.write(data);
-			hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+			myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
@@ -378,16 +362,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 				mySGD->setStar(mySGD->getStar() - 20);
 				mySGD->setGold(mySGD->getGold() + 20000);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
+				save_userdata_list.push_back(kSaveUserData_Key_gold);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -413,15 +393,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -441,15 +417,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			
 			mySGD->setStar(mySGD->getStar() + 100);
 			
-			Json::Value param2;
-			param2["memberID"] = hspConnector::get()->getKakaoID();
+			vector<SaveUserData_Key> save_userdata_list;
 			
-			Json::Value data;
-			data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+			save_userdata_list.push_back(kSaveUserData_Key_star);
 			
-			Json::FastWriter writer;
-			param2["data"] = writer.write(data);
-			hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+			myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
@@ -461,16 +433,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 				mySGD->setStar(mySGD->getStar() - 50);
 				mySGD->setGold(mySGD->getGold() + 50000);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
+				save_userdata_list.push_back(kSaveUserData_Key_gold);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -496,15 +464,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -524,15 +488,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			
 			mySGD->setStar(mySGD->getStar() + 300);
 			
-			Json::Value param2;
-			param2["memberID"] = hspConnector::get()->getKakaoID();
+			vector<SaveUserData_Key> save_userdata_list;
 			
-			Json::Value data;
-			data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+			save_userdata_list.push_back(kSaveUserData_Key_star);
 			
-			Json::FastWriter writer;
-			param2["data"] = writer.write(data);
-			hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+			myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
@@ -544,16 +504,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 				mySGD->setStar(mySGD->getStar() - 100);
 				mySGD->setGold(mySGD->getGold() + 100000);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
+				save_userdata_list.push_back(kSaveUserData_Key_gold);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -579,15 +535,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -607,15 +559,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			
 			mySGD->setStar(mySGD->getStar() + 500);
 			
-			Json::Value param2;
-			param2["memberID"] = hspConnector::get()->getKakaoID();
+			vector<SaveUserData_Key> save_userdata_list;
 			
-			Json::Value data;
-			data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+			save_userdata_list.push_back(kSaveUserData_Key_star);
 			
-			Json::FastWriter writer;
-			param2["data"] = writer.write(data);
-			hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+			myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
@@ -627,16 +575,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 				mySGD->setStar(mySGD->getStar() - 300);
 				mySGD->setGold(mySGD->getGold() + 300000);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
+				save_userdata_list.push_back(kSaveUserData_Key_gold);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -662,15 +606,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -690,15 +630,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			
 			mySGD->setStar(mySGD->getStar() + 1000);
 			
-			Json::Value param2;
-			param2["memberID"] = hspConnector::get()->getKakaoID();
+			vector<SaveUserData_Key> save_userdata_list;
 			
-			Json::Value data;
-			data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+			save_userdata_list.push_back(kSaveUserData_Key_star);
 			
-			Json::FastWriter writer;
-			param2["data"] = writer.write(data);
-			hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+			myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
@@ -710,16 +646,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 				mySGD->setStar(mySGD->getStar() - 500);
 				mySGD->setGold(mySGD->getGold() + 500000);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
+				save_userdata_list.push_back(kSaveUserData_Key_gold);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{
@@ -745,15 +677,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
 				
-				Json::Value param2;
-				param2["memberID"] = hspConnector::get()->getKakaoID();
+				vector<SaveUserData_Key> save_userdata_list;
 				
-				Json::Value data;
-				data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+				save_userdata_list.push_back(kSaveUserData_Key_star);
 				
-				Json::FastWriter writer;
-				param2["data"] = writer.write(data);
-				hspConnector::get()->command("updateUserData", param2, json_selector(this, ShopPopup::resultSetUserData));
+				myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
 			}
 			else
 			{

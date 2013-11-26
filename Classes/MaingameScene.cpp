@@ -255,15 +255,11 @@ void Maingame::gachaOn()
 	myGD->resetGameData();
 	mySGD->startMapGachaOn();
 	
-	Json::Value param2;
-	param2["memberID"] = hspConnector::get()->getKakaoID();
+	vector<SaveUserData_Key> save_userdata_list;
 	
-	Json::Value data;
-	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	save_userdata_list.push_back(kSaveUserData_Key_gold);
 	
-	Json::FastWriter writer;
-	param2["data"] = writer.write(data);
-	hspConnector::get()->command("updateUserData", param2, NULL);
+	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 }

@@ -45,6 +45,17 @@ typedef enum t_DSH_Key{
 	kDSH_Key_haveTicketCnt
 }DSH_Key;
 
+enum SaveUserData_Key{
+	kSaveUserData_Key_star = 1,
+	kSaveUserData_Key_gold,
+	kSaveUserData_Key_item,
+	kSaveUserData_Key_cardsInfo,
+	kSaveUserData_Key_highScore,
+	kSaveUserData_Key_selectedCard,
+	kSaveUserData_Key_openPuzzle,
+	kSaveUserData_Key_haveTicket
+};
+
 #define myDSH DataStorageHub::sharedInstance()
 
 enum PuzzleMapSceneShowType{
@@ -302,6 +313,63 @@ public:
 			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asBool());
 		
 		setIntegerForKey(kDSH_Key_haveTicketCnt, data[getKey(kDSH_Key_haveTicketCnt)].asInt());
+	}
+	
+	void writeParamForKey(Json::Value& data, SaveUserData_Key t_key)
+	{
+		if(t_key == kSaveUserData_Key_star)
+			data[getKey(kDSH_Key_savedStar)] = getIntegerForKey(kDSH_Key_savedStar);
+		else if(t_key == kSaveUserData_Key_gold)
+			data[getKey(kDSH_Key_savedGold)] = getIntegerForKey(kDSH_Key_savedGold);
+		else if(t_key == kSaveUserData_Key_item)
+		{
+			for(int i=kIC_attack;i<=kIC_randomChange;i++)
+				data[getKey(kDSH_Key_haveItemCnt_int1)][i] = getIntegerForKey(kDSH_Key_haveItemCnt_int1, i); // 0
+		}
+		else if(t_key == kSaveUserData_Key_cardsInfo)
+		{
+			data[getKey(kDSH_Key_cardTakeCnt)] = getIntegerForKey(kDSH_Key_cardTakeCnt);
+			int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
+			for(int i=1;i<=card_take_cnt;i++)
+			{
+				int take_card_number = getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+				data[getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
+				data[getKey(kDSH_Key_hasGottenCard_int1)][i] = getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
+				data[getKey(kDSH_Key_cardDurability_int1)][i] = getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
+				data[getKey(kDSH_Key_inputTextCard_int1)][i] = getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+			}
+		}
+		else if(t_key == kSaveUserData_Key_highScore)
+			data[getKey(kDSH_Key_allHighScore)] = getIntegerForKey(kDSH_Key_allHighScore);
+		else if(t_key == kSaveUserData_Key_selectedCard)
+			data[getKey(kDSH_Key_selectedCard)] = getIntegerForKey(kDSH_Key_selectedCard);
+		else if(t_key == kSaveUserData_Key_openPuzzle)
+		{
+			int open_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
+			data[getKey(kDSH_Key_openPuzzleCnt)] = open_puzzle_cnt;
+			for(int i=1;i<=open_puzzle_cnt+2;i++)
+				data[getKey(kDSH_Key_isClearedPuzzle_int1)][i] = getBoolForKey(kDSH_Key_isClearedPuzzle_int1, i);
+		}
+		else if(t_key == kSaveUserData_Key_haveTicket)
+			data[getKey(kDSH_Key_haveTicketCnt)] = getIntegerForKey(kDSH_Key_haveTicketCnt);
+	}
+	
+	void saveUserData(const vector<SaveUserData_Key>& key_list, function<void(Json::Value)> t_selector)
+	{
+		Json::Value param;
+		param["memberID"] = hspConnector::get()->getKakaoID();
+		
+		Json::Value data;
+		
+		for(int i=0;i<key_list.size();i++)
+		{
+			writeParamForKey(data, key_list[i]);
+		}
+		
+		Json::FastWriter writer;
+		param["data"] = writer.write(data);
+		
+		hspConnector::get()->command("updateUserData", param, t_selector);
 	}
 	
 	void saveAllUserData(jsonSelType t_saved)

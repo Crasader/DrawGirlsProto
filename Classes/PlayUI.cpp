@@ -1451,15 +1451,11 @@ void PlayUI::showGachaOnePercent ()
 }
 void PlayUI::gachaOnOnePercent (float t_percent)
 {
-	Json::Value param2;
-	param2["memberID"] = hspConnector::get()->getKakaoID();
+	vector<SaveUserData_Key> save_userdata_list;
 	
-	Json::Value data;
-	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	save_userdata_list.push_back(kSaveUserData_Key_gold);
 	
-	Json::FastWriter writer;
-	param2["data"] = writer.write(data);
-	hspConnector::get()->command("updateUserData", param2, NULL);
+	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	beforePercentage = (int(t_percent*1000))^t_tta;
 	
@@ -1900,15 +1896,11 @@ bool PlayUI::isExchanged ()
 }
 void PlayUI::continueAction ()
 {
-	Json::Value param2;
-	param2["memberID"] = hspConnector::get()->getKakaoID();
+	vector<SaveUserData_Key> save_userdata_list;
 	
-	Json::Value data;
-	data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+	save_userdata_list.push_back(kSaveUserData_Key_gold);
 	
-	Json::FastWriter writer;
-	param2["data"] = writer.write(data);
-	hspConnector::get()->command("updateUserData", param2, NULL);
+	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	addGameTime30Sec();
 	jack_life = 2;

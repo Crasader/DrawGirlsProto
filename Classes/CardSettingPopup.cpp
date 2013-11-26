@@ -304,23 +304,13 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 	
 	if(tag == kCSS_MT_close)
 	{
-		Json::Value param;
-		param["memberID"] = hspConnector::get()->getKakaoID();
+		vector<SaveUserData_Key> save_userdata_list;
 		
-		Json::Value data;
+		save_userdata_list.push_back(kSaveUserData_Key_cardsInfo);
+		save_userdata_list.push_back(kSaveUserData_Key_selectedCard);
 		
-		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=card_take_cnt;i++)
-		{
-			int take_card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			data[myDSH->getKey(kDSH_Key_inputTextCard_int1)][i] = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
-		}
+		myDSH->saveUserData(save_userdata_list, nullptr);
 		
-		data[myDSH->getKey(kDSH_Key_selectedCard)] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		
-		Json::FastWriter writer;
-		param["data"] = writer.write(data);
-		hspConnector::get()->command("updateUserData", param, NULL);
 		
 		if(mySGD->before_cardsetting == kSceneCode_PuzzleMapScene)
 			hidePopup();
