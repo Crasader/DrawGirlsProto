@@ -72,7 +72,8 @@ void CCMenuItemLambda::activate()
 {
 	if (m_bEnabled)
 	{
-		m_selector(this);
+		if(m_selector != nullptr)
+			m_selector(this);
 		
 		if(m_afterSelector != nullptr)
 			m_afterSelector(this);

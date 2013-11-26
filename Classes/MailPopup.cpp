@@ -519,10 +519,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 p["no"] = mailNo;
 				 p["memberID"] = m_mailList[idx]["memberID"].asInt64();
 				 //삭제요청
+#if 0
 				 hspConnector::get()->command
 				 (
 					"removemessage",p,
 					[=](Json::Value r)
+#endif
 					{
 						KS::KSLog("%", contentObj);
 
@@ -536,7 +538,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							download_card_number = contentObj["cardnumber"].asInt();
 							CCSprite* card_img = CCSprite::create("ending_take_card_back.png");
 							card_img->setScale(0.34f);
-							av->addChild(card_img);
+//							av->addChild(card_img);
 							
 							loading_card_img = card_img;
 
@@ -548,10 +550,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							Json::Value param;
 							param["noList"][0] = contentObj["cardnumber"].asInt();
 							hspConnector::get()->command("getcardlist", param, json_selector(this, MailPopup::resultLoadedCardInfo));
+							av->setContentNode(card_img);
 						}
 						else // 카드 정보 있음
 						{
-							av->addChild(addCardImg(contentObj["cardnumber"].asInt()));
+							av->setContentNode(addCardImg(contentObj["cardnumber"].asInt()));
+//							av->addChild();
 						}
 						
 						// 도움 수락버튼.
@@ -561,15 +565,16 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 });
 						av->addButton(m1);
 						
-						auto ttf = CCLabelTTF::create("스테이지 획득!!", "", 12.f);
-						av->setContentNode(
-															 ttf
-															 );
+//						auto ttf = CCLabelTTF::create("스테이지 획득!!", "", 12.f);
+//						av->setContentNode(
+//															 ttf
+//															 );
 						addChild(av, kMP_Z_helpAccept);
 						av->show();
 					}
+#if 0
 					);
-				 
+#endif
 				 
 			 }
 			 );

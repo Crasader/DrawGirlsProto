@@ -72,7 +72,8 @@ public:
 //	m_containerScrollView(NULL),
 	m_borderScale(1.f),
 	m_titleHeight(50),
-	m_buttonHeight(50)
+	m_buttonHeight(50),
+	m_scrollBar(NULL)
 	{
 		
 	}
@@ -84,7 +85,7 @@ public:
 	void addButton(CCMenuItemLambda* item); // 버튼을 추가함
 	void setCloseButton(CCMenuItemLambda* item); // 우측 상단 닫기 버튼을 설정함
 	void show(); // 창을 띄움, 창을 띄우기 전에 모든게 세팅이 되어야 함.
-	
+
 	ScrollBar* m_scrollBar;
 	CC_SYNTHESIZE(CCNode*, m_contentNode, ContentNode); // 내용물
 	CC_SYNTHESIZE(int, m_centerX, CenterX); // 팝업이 뜬 위치가 맘에 안들면 조절해야함. 기본값 가운데
@@ -107,7 +108,7 @@ public:
 	CC_SYNTHESIZE(CCScale9Sprite*, m_vScroll, VScroll); // 세로 스크롤, 설정안하면 안보임
 	CC_SYNTHESIZE(CCScale9Sprite*, m_back9, Back9);    // 배경이미지
 	CC_SYNTHESIZE(bool, m_closeOnPress, CloseOnPress); // 눌렀을 때 닫히게 할거냐, 기본값 true
-	CCSize getContainerSize()
+	CCSize getViewSize()
 	{
 		int contentMargin = 1<<3;
 		
