@@ -29,7 +29,8 @@ public:
 	: m_bSelected(false)
 	, m_bEnabled(false)
 	, m_nScriptTapHandler(0),
-	m_afterSelector(nullptr)
+	m_afterSelector(nullptr),
+	m_selector(nullptr)
 	{}
 	virtual ~CCMenuItemLambda();
 	
