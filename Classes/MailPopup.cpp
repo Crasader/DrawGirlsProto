@@ -525,13 +525,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					[=](Json::Value r)
 					{
 						KS::KSLog("%", contentObj);
-						// 영호
-#if 0
-						contentObj["helpstage"].asInt(); // 이건 스테이지 번호
-						contentObj["cardnumber"].asInt(); // 카드 번호.
-						// 아래 setContentNode 에 그림이 들어간 노드를 넣어주면 됨...
-						// 이거 작업하기 전에 나랑 이야기 ㄱㄱ.
-#endif
+
 						KSAlertView* av = KSAlertView::create();
 						
 						auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, contentObj["cardnumber"].asInt());

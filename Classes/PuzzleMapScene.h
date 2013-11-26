@@ -209,6 +209,8 @@ private:
 	void notClearPuzzleAction(CCObject* sender);
 	
 	void endLoadPuzzleInfo();
+	CCObject* target_visibleOn;
+	void endLoadPuzzleVisibleOn();
 	
 	int ing_caching_cnt;
 	int total_caching_cnt;

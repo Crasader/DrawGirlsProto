@@ -215,7 +215,8 @@ public:
 		else if(t_name == kDSH_Key_jackBaseSpeed)						return_value = "jbs";
 		
 		else if(t_name == kDSH_Key_openPuzzleCnt)						return_value = "opc";
-		else if(t_name == kDSH_Key_isClearedPuzzle_int1)				return_value = "icp%d";
+		else if(t_name == kDSH_Key_isClearedPuzzle_int1)
+			return_value = "icp%d";
 		
 		else if(t_name == kDSH_Key_haveTicketCnt)						return_value = "htc";
 		
@@ -298,7 +299,7 @@ public:
 		
 		setIntegerForKey(kDSH_Key_openPuzzleCnt, open_puzzle_cnt);
 		for(int i=1;i<=open_puzzle_cnt+2 && i < data[getKey(kDSH_Key_isClearedPuzzle_int1)].size();i++)
-			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asInt());
+			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asBool());
 		
 		setIntegerForKey(kDSH_Key_haveTicketCnt, data[getKey(kDSH_Key_haveTicketCnt)].asInt());
 	}
@@ -331,7 +332,7 @@ public:
 		
 		int opened_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
 		for(int i=1;i<=opened_puzzle_cnt+2;i++)
-			setIntegerForKey(kDSH_Key_isClearedPuzzle_int1, i, false);
+			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, false);
 		
 		setIntegerForKey(kDSH_Key_openPuzzleCnt, 0);
 		setIntegerForKey(kDSH_Key_haveTicketCnt, 0);
