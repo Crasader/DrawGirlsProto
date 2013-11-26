@@ -90,12 +90,26 @@ private:
 			close_menu->setVisible(false);
 			// 경수
 			
-//			요청 보낼 목록
-//			for(int i=0;i<checked_friend_list.size();i++)
-//				checked_friend_list[i].user_id;
+//			p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 			
+			Json::Value arr;
+//			요청 보낼 목록
+			for(int i=0;i<checked_friend_list.size();i++)
+			{
+				arr.append(checked_friend_list[i].user_id);
+			}
+			Json::Value p;
+			Json::Value contentJson;
+			p["receiverMemberIDList"] = arr;
+			p["senderMemberID"] = hspConnector::get()->getKakaoID();
+			p["type"] = kTicketRequest;
 			
 			// 성공이든 실패든 콜백 받은 후에 remove_selector(); // popup 닫기임
+			hspConnector::get()->command
+			("sendmessagebylist", p, [=](Json::Value r)
+			 {
+				 remove_selector();
+			 });
 		}
 	}
 	
