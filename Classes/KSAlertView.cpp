@@ -183,7 +183,7 @@ void KSAlertView::show()
 //	m_contentNode->setContentSize(CCSizeMake(400, 500));
 
 	CCScrollView* sv = CCScrollView::create();
-
+	m_containerScrollView = sv;
 	CCRect contentRect = CCRectMake(contentMargin, buttonHeight,
 																	m_width-contentMargin*2, m_height - titleHeight - buttonHeight);
 	contentRect = rtSetScale(contentRect, m_borderScale);
@@ -233,18 +233,21 @@ void KSAlertView::show()
 	CCRect transformedRect = rtSetScale(contentRect,
 		(contentRect.size.height + 8)/ (contentRect.size.height),
 		ccp(0.5f, 0.5f));
-	if(m_contentBorder == 0)
+//	if(m_contentBorder == 0)
+//	{
+//		m_contentBorder = CCScale9Sprite::create("popup_back2.png", CCRectMake(0, 0, 150, 150),
+//																						 CCRectMake(5, 5, 150 - 5*2, 150 - 5*2));
+//	}
+//	else
+//	{
+//		
+//	}
+	if(m_contentBorder)
 	{
-		m_contentBorder = CCScale9Sprite::create("popup_back2.png", CCRectMake(0, 0, 150, 150),
-																						 CCRectMake(5, 5, 150 - 5*2, 150 - 5*2));
+		CCScale9Sprite *contentBorder = m_contentBorder;
+		contentBorder->setContentSize(ccp(transformedRect.size.width, transformedRect.size.height));
+		btnBg->addChild(contentBorder, 1);
+		contentBorder->setAnchorPoint(ccp(0, 0));
+		contentBorder->setPosition(ccp(transformedRect.origin.x, transformedRect.origin.y));
 	}
-	else
-	{
-		
-	}
-	CCScale9Sprite *contentBorder = m_contentBorder;
-	contentBorder->setContentSize(ccp(transformedRect.size.width, transformedRect.size.height));
-	btnBg->addChild(contentBorder, 1);
-	contentBorder->setAnchorPoint(ccp(0, 0));
-	contentBorder->setPosition(ccp(transformedRect.origin.x, transformedRect.origin.y));
 }

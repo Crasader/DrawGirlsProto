@@ -229,15 +229,15 @@ void THIS::setBarRefreshV()
 //주기적으로 호출 되면서 내용을 갱신할 함수 -> scrollViewDidScroll에서 호출됨.
 void THIS::setBarRefresh() {
 	CCScrollView* sv = scrollView;
-	if(sv->getDirection() == kCCScrollViewDirectionHorizontal)
+	if(sv && sv->getDirection() == kCCScrollViewDirectionHorizontal)
 	{
 		setBarRefreshH();
 	}
-	else if(sv->getDirection() == kCCScrollViewDirectionVertical)
+	else if(sv && sv->getDirection() == kCCScrollViewDirectionVertical)
 	{
 		setBarRefreshV();
 	}
-	else if(sv->getDirection() == kCCScrollViewDirectionBoth)
+	else if(sv && sv->getDirection() == kCCScrollViewDirectionBoth)
 	{
 		setBarRefreshV();
 		setBarRefreshH();
