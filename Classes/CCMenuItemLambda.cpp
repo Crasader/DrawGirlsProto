@@ -456,7 +456,7 @@ CCMenuItemSpriteLambda * CCMenuItemSpriteLambda::create(CCNode* normalSprite, CC
 
 CCMenuItemSpriteLambda * CCMenuItemSpriteLambda::create(CCNode* normalSprite, CCNode* selectedSprite, std::function<void(CCObject*)> selector)
 {
-	return CCMenuItemSpriteLambda::create(normalSprite, selectedSprite, selector);
+	return CCMenuItemSpriteLambda::create(normalSprite, selectedSprite, NULL, selector);
 }
 
 CCMenuItemSpriteLambda * CCMenuItemSpriteLambda::create(CCNode *normalSprite, CCNode *selectedSprite, CCNode *disabledSprite, std::function<void(CCObject*)> selector)

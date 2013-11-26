@@ -197,6 +197,7 @@ void KSAlertView::show()
 	sv->setDelegate(this);
 	sv->setTouchPriority(INT_MIN);
 
+	
 	if(m_hScroll && m_vScroll)
 	{
 		sv->setDirection(kCCScrollViewDirectionBoth);

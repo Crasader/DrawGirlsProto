@@ -110,6 +110,7 @@ public:
 	
 	virtual void visit();
 	void showAcceptStageSettingPopup();
+	void resetPuzzle();
 private:
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);
@@ -131,6 +132,8 @@ private:
 	
 	PuzzleMode my_puzzle_mode;
 	int recent_puzzle_number;
+	
+	void setPuzzle(int t_puzzle_number);
 	
 	int start_stage_number;
 	int stage_count;
@@ -206,6 +209,8 @@ private:
 	void notClearPuzzleAction(CCObject* sender);
 	
 	void endLoadPuzzleInfo();
+	CCObject* target_visibleOn;
+	void endLoadPuzzleVisibleOn();
 	
 	int ing_caching_cnt;
 	int total_caching_cnt;

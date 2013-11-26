@@ -294,4 +294,40 @@ public:
 	}
 };
 
+class KSNode : public CCNode
+{
+public:
+	void alignItemsVerticallyWithPadding(float padding)
+	{
+		float height = -padding;
+		if (m_pChildren && m_pChildren->count() > 0)
+		{
+			CCObject* pObject = NULL;
+			CCARRAY_FOREACH(m_pChildren, pObject)
+			{
+				CCNode* pChild = dynamic_cast<CCNode*>(pObject);
+				if (pChild)
+				{
+					height += pChild->getContentSize().height * pChild->getScaleY() + padding;
+				}
+			}
+		}
+		
+		float y = height / 2.0f;
+		if (m_pChildren && m_pChildren->count() > 0)
+		{
+			CCObject* pObject = NULL;
+			CCARRAY_FOREACH(m_pChildren, pObject)
+			{
+				CCNode* pChild = dynamic_cast<CCNode*>(pObject);
+				if (pChild)
+				{
+					pChild->setPosition(ccp(0, y - pChild->getContentSize().height * pChild->getScaleY() / 2.0f));
+					y -= pChild->getContentSize().height * pChild->getScaleY() + padding;
+				}
+			}
+		}
+	}
+};
+
 #endif

@@ -527,13 +527,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 #endif
 					{
 						KS::KSLog("%", contentObj);
-						// 영호
-#if 0
-						contentObj["helpstage"].asInt(); // 이건 스테이지 번호
-						contentObj["cardnumber"].asInt(); // 카드 번호.
-						// 아래 setContentNode 에 그림이 들어간 노드를 넣어주면 됨...
-						// 이거 작업하기 전에 나랑 이야기 ㄱㄱ.
-#endif
+
 						KSAlertView* av = KSAlertView::create();
 						
 						auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, contentObj["cardnumber"].asInt());
@@ -941,6 +935,18 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 				}
 			}
 		}
+		
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, download_card_number) == 0)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, download_card_number, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), download_card_number);
+			
+			mySGD->addHasGottenCardNumber(download_card_number);
+		}
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
+		
+		(target_close->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
 		
 		if(df_list.size() > 0) // need download
 		{
