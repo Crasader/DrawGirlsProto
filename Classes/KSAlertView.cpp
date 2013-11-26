@@ -96,6 +96,7 @@ void KSAlertView::setCloseButton(CCMenuItemLambda* item)
 {
 	m_closeItem = item;
 }
+
 void KSAlertView::show()
 {
 	KSCoverLayer* cover = KSCoverLayer::create();
@@ -182,7 +183,7 @@ void KSAlertView::show()
 //	m_contentNode->setContentSize(CCSizeMake(400, 500));
 
 	CCScrollView* sv = CCScrollView::create();
-	m_containerScrollView = sv;
+
 	CCRect contentRect = CCRectMake(contentMargin, buttonHeight,
 																	m_width-contentMargin*2, m_height - titleHeight - buttonHeight);
 	contentRect = rtSetScale(contentRect, m_borderScale);
