@@ -1345,7 +1345,7 @@ void PlayUI::lifeBonus ()
 		if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
 		
 		mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
-		CCDelayTime* n_d = CCDelayTime::create(4.5f);
+		CCDelayTime* n_d = CCDelayTime::create(2.5f);
 		CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 		
 		CCSequence* sequence = CCSequence::createWithTwoActions(n_d, nextScene);
