@@ -2,6 +2,10 @@
 //
 
 #include "HeartTime.h"
+#include "StarGoldData.h"
+#include "DataStorageHub.h"
+#include <chrono>
+
 #define LZZ_INLINE inline
 HeartTime * HeartTime::create ()
 {
@@ -18,7 +22,7 @@ bool HeartTime::startGame ()
 	}
 	else
 	{
-		if(heart_list.size() >= 5)
+		if(heart_list.size() >= mySGD->getHeartMax())
 		{
 			chrono::time_point<chrono::system_clock> recent_time = chrono::system_clock::now();
 			chrono::duration<double> recent_time_value = recent_time.time_since_epoch();
@@ -26,7 +30,7 @@ bool HeartTime::startGame ()
 			myDSH->setIntegerForKey(kDSH_Key_heartTime, recent_time_second);
 		}
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) <= 5)
+		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) <= mySGD->getHeartMax())
 		{
 			myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)-1);
 			
@@ -68,7 +72,7 @@ void HeartTime::checkingTime ()
 	int saved_time_second = myDSH->getIntegerForKey(kDSH_Key_heartTime);
 	
 	int sub_value = recent_time_second - saved_time_second;
-	if(sub_value >= CHARGE_TIME)
+	if(sub_value >= mySGD->getHeartCoolTime())
 	{
 		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		myDSH->setIntegerForKey(kDSH_Key_heartTime, recent_time_second);
@@ -78,21 +82,21 @@ void HeartTime::checkingTime ()
 		
 		heart_list.push_back(t_heart);
 		
-		if(heart_list.size() >= 5)
+		if(heart_list.size() >= mySGD->getHeartMax())
 		{
 			unschedule(schedule_selector(HeartTime::checkingTime));
 			state_label->setString("MAX");
 		}
 		else
 		{
-			int minute_value = 5;
-			int second_value = 0;
+			int minute_value = mySGD->getHeartCoolTime()/60;
+			int second_value = mySGD->getHeartCoolTime()%60;
 			state_label->setString(CCString::createWithFormat("%d:%02d", minute_value, second_value)->getCString());
 		}
 	}
 	else
 	{
-		sub_value = CHARGE_TIME - sub_value;
+		sub_value = mySGD->getHeartCoolTime() - sub_value;
 		int minute_value = sub_value/60;
 		int second_value = sub_value%60 + 1;
 		
@@ -103,7 +107,7 @@ void HeartTime::myInit ()
 {
 	is_checking = false;
 	int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_heartCnt);
-	for(int i=0;i<loop_cnt && i < 5;i++)
+	for(int i=0;i<loop_cnt && i < mySGD->getHeartMax();i++)
 	{
 		CCSprite* t_heart = CCSprite::create("test_ui_heart.png");
 		t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
@@ -117,24 +121,24 @@ void HeartTime::myInit ()
 	int recent_time_second = recent_time_value.count();
 	int saved_time_second = myDSH->getIntegerForKey(kDSH_Key_heartTime);
 	
-	if(loop_cnt < 5)
+	if(loop_cnt < mySGD->getHeartMax())
 	{
 		// charge
 		int sub_value = recent_time_second - saved_time_second;
-		int charge_cnt = sub_value/CHARGE_TIME;
-		for(int i=0;i<charge_cnt && heart_list.size() < 5;i++)
+		int charge_cnt = sub_value/mySGD->getHeartCoolTime();
+		for(int i=0;i<charge_cnt && heart_list.size() < mySGD->getHeartMax();i++)
 		{
 			CCSprite* t_heart = CCSprite::create("test_ui_heart.png");
 			t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 			addChild(t_heart);
 			
 			heart_list.push_back(t_heart);
-			sub_value -= CHARGE_TIME;
+			sub_value -= mySGD->getHeartCoolTime();
 		}
 		
 		myDSH->setIntegerForKey(kDSH_Key_heartCnt, int(heart_list.size()));
 		
-		if(heart_list.size() >= 5)
+		if(heart_list.size() >= mySGD->getHeartMax())
 			myDSH->setIntegerForKey(kDSH_Key_heartTime, recent_time_second);
 		else
 		{
@@ -147,30 +151,30 @@ void HeartTime::myInit ()
 	
 	if(is_checking)
 	{
-		int sub_value = CHARGE_TIME - (recent_time_second - myDSH->getIntegerForKey(kDSH_Key_heartTime));
+		int sub_value = mySGD->getHeartCoolTime() - (recent_time_second - myDSH->getIntegerForKey(kDSH_Key_heartTime));
 		int minute_value = sub_value/60;
 		int second_value = sub_value%60 + 1;
 		state_label = CCLabelTTF::create(CCString::createWithFormat("%d:%02d", minute_value, second_value)->getCString(), mySGD->getFont().c_str(), 13);
 		state_label->setAnchorPoint(ccp(0,0.5));
-		state_label->setPosition(ccp(HEART_DISTANCE*5+2,0));
+		state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()+2,0));
 		addChild(state_label);
 		
 		schedule(schedule_selector(HeartTime::checkingTime), 1.f);
 	}
 	else
 	{
-		if(loop_cnt == 5)
+		if(loop_cnt == mySGD->getHeartMax())
 		{
 			state_label = CCLabelTTF::create("MAX", mySGD->getFont().c_str(), 13);
 			state_label->setAnchorPoint(ccp(0,0.5));
-			state_label->setPosition(ccp(HEART_DISTANCE*5+2,0));
+			state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()+2,0));
 			addChild(state_label);
 		}
 		else
 		{
-			state_label = CCLabelTTF::create(CCString::createWithFormat("+%d", loop_cnt-5)->getCString(), mySGD->getFont().c_str(), 13);
+			state_label = CCLabelTTF::create(CCString::createWithFormat("+%d", loop_cnt-mySGD->getHeartMax())->getCString(), mySGD->getFont().c_str(), 13);
 			state_label->setAnchorPoint(ccp(0,0.5));
-			state_label->setPosition(ccp(HEART_DISTANCE*5+2,0));
+			state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()+2,0));
 			addChild(state_label);
 		}
 	}

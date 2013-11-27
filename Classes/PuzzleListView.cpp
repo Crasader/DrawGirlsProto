@@ -408,28 +408,70 @@ int PLV_Node::getPuzzleNumber()
 
 void PLV_Node::setChild()
 {
-	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-	int found_index = 0;
-	for(int i=1;i<=puzzle_count && found_index == 0;i++)
+	int frame_type = 0;
+	if(puzzle_number > 1 && puzzle_number-1 > myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt))
 	{
-		int puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
-		if(puzzle_no == puzzle_number)
-			found_index = i;
+		if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number-1))
+		{
+			if(NSDS_GI(puzzle_number, kSDS_PZ_point_i) > 0 && NSDS_GI(puzzle_number, kSDS_PZ_ticket_i) > 0)
+				frame_type = 1;
+		}
+		else
+			frame_type = 2;
 	}
-
-	CCSprite* n_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
-	CCSprite* s_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
-	s_back->setColor(ccGRAY);
-
-	CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, target_menu, delegate_menu);
-	back_item->setTag(puzzle_number);
-
-	CCMenu* back_menu = CCMenu::createWithItem(back_item);
-	back_menu->setPosition(CCPointZero);
-	back_menu->setTouchEnabled(false);
-	addChild(back_menu, 0, puzzle_number);
-
-	is_setted = true;;
+	
+	if(frame_type == 0)
+	{
+		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+		int found_index = 0;
+		for(int i=1;i<=puzzle_count && found_index == 0;i++)
+		{
+			int puzzle_no = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+			if(puzzle_no == puzzle_number)
+				found_index = i;
+		}
+		
+		CCSprite* n_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
+		CCSprite* s_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", found_index)->getCString());
+		s_back->setColor(ccGRAY);
+		
+		CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, target_menu, delegate_menu);
+		back_item->setTag(puzzle_number);
+		
+		CCMenu* back_menu = CCMenu::createWithItem(back_item);
+		back_menu->setPosition(CCPointZero);
+		back_menu->setTouchEnabled(false);
+		addChild(back_menu, 0, puzzle_number);
+	}
+	else if(frame_type == 1)
+	{
+		CCSprite* n_back = CCSprite::create("gallery_needticket.png");
+		CCSprite* s_back = CCSprite::create("gallery_needticket.png");
+		s_back->setColor(ccGRAY);
+		
+		CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, target_menu, delegate_menu);
+		back_item->setTag(puzzle_number);
+		
+		CCMenu* back_menu = CCMenu::createWithItem(back_item);
+		back_menu->setPosition(CCPointZero);
+		back_menu->setTouchEnabled(false);
+		addChild(back_menu, 0, puzzle_number);
+	}
+	else if(frame_type == 2)
+	{
+		CCSprite* n_back = CCSprite::create("gallery_lock.png");
+		CCSprite* s_back = CCSprite::create("gallery_lock.png");
+		s_back->setColor(ccGRAY);
+		
+		CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, target_menu, delegate_menu);
+		back_item->setTag(puzzle_number);
+		
+		CCMenu* back_menu = CCMenu::createWithItem(back_item);
+		back_menu->setPosition(CCPointZero);
+		back_menu->setTouchEnabled(false);
+		addChild(back_menu, 0, puzzle_number);
+	}
+	is_setted = true;
 }
 
 void PLV_Node::myInit( int t_puzzle_number, CCObject* t_menu, SEL_MenuHandler d_menu, CCPoint t_position, CCRect t_rect )

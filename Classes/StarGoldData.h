@@ -359,6 +359,8 @@ private:
 	// 도움이든 도전이든 쓰는 멤버.
 	CC_SYNTHESIZE(long long, remove_message_member_id, RemoveMessageMemberId);
 	CC_SYNTHESIZE(int, remove_message_mail_no, RemoveMessageMailNo);
+	CC_SYNTHESIZE(int, heart_max, HeartMax);
+	CC_SYNTHESIZE(int, heart_cool_time, HeartCoolTime);
 };
 
 #endif

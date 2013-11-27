@@ -57,11 +57,50 @@ bool TitleScene::init()
 void TitleScene::startGetPuzzleList()
 {
 	myLog->addLog(kLOG_network_getPuzzleEventList, -1);
-
+	
 	Json::Value param;
 	param["puzzlelistversion"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 	param["eventstagelistversion"] = NSDS_GI(kSDS_GI_eventListVersion_i);
+	
 	hspConnector::get()->command("getpuzzlelist", param, json_selector(this, TitleScene::resultGetPuzzleList));
+}
+
+void TitleScene::startGetCommonSetting()
+{
+	hspConnector::get()->command("getcommonsetting", Json::Value(), json_selector(this, TitleScene::resultGetCommonSetting));
+}
+
+void TitleScene::resultGetCommonSetting(Json::Value result_data)
+{
+	CCLog("resultGetCommonSetting data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
+	if(result_data["state"].asString() == "ok")
+	{
+		mySGD->setHeartMax(result_data["heartMax"].asInt());
+		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
+		
+		startGetUserData();
+	}
+	else
+	{
+		save_target = this;
+		save_delegate = callfunc_selector(TitleScene::startGetCommonSetting);
+		
+		state_label->setString("게임 정보를 가져오는데 실패하였습니다.");
+		
+		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+		replay_item->setTag(kTitle_MT_replay);
+		
+		CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setPosition(ccp(240,160));
+		addChild(replay_menu, 0, kTitle_MT_replay);
+		
+		is_menu_enable = true;
+	}
 }
 
 void TitleScene::resultLogin( Json::Value result_data )
@@ -75,7 +114,7 @@ void TitleScene::resultLogin( Json::Value result_data )
 			myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
 		}
 
-		startGetUserData();
+		startGetCommonSetting();
 	}
 	else
 	{

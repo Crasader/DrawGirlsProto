@@ -7,7 +7,7 @@
 //
 
 #include "ShopPopup.h"
-#include "DataStorageHub.h"
+#include "StarGoldData.h"
 #include "HeartTime.h"
 #include "LoadingLayer.h"
 

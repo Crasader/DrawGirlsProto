@@ -277,6 +277,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 			
 			NSDS_SS(mySD->getSilType(), kSDS_SI_boss_s, result_data["boss"].asString());
 			NSDS_SS(mySD->getSilType(), kSDS_SI_junior_s, result_data["junior"].asString());
+			NSDS_SI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i, result_data["autoBalanceTry"].asInt());
 			
 			if(df_list.size() > 0) // need download
 			{
