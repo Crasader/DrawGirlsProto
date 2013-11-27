@@ -129,7 +129,7 @@ public:
 	static GetPercentage * create (float t_gp, bool is_item);
 private:
 	CCLabelBMFont * my_label;
-	CCSprite * backImg;
+//	CCSprite * backImg;
 	void startFadeOut ();
 	void selfRemove ();
 	void myInit (float t_gp, bool is_item);

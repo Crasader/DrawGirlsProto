@@ -34,12 +34,12 @@ void ComboView::myInit (int combo)
 	combo_timer->setPercentage(100);
 	//		combo_timer->setReverseDirection(true);
 	//		combo_timer->setReverseProgress(true);
-	combo_timer->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
+	combo_timer->setPosition(ccp(getContentSize().width/2.f-5, getContentSize().height/2.f));
 	addChild(combo_timer);
 	
 	combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
 	combo_label->setAnchorPoint(ccp(0,0.5));
-	combo_label->setPosition(ccp(70,15));
+	combo_label->setPosition(ccp(80,15));
 	addChild(combo_label);
 }
 ComboParent * ComboParent::create ()
@@ -477,9 +477,9 @@ GetPercentage * GetPercentage::create (float t_gp, bool is_item)
 }
 void GetPercentage::startFadeOut ()
 {
-	CCFadeOut* t_fadeout1 = CCFadeOut::create(1.f);
-	
-	backImg->runAction(t_fadeout1);
+//	CCFadeOut* t_fadeout1 = CCFadeOut::create(1.f);
+//	
+//	backImg->runAction(t_fadeout1);
 	
 	CCFadeOut* t_fadeout2 = CCFadeOut::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GetPercentage::selfRemove));
@@ -493,7 +493,7 @@ void GetPercentage::selfRemove ()
 }
 void GetPercentage::myInit (float t_gp, bool is_item)
 {
-	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f", t_gp < 0.1f ? 0.f : t_gp)->getCString(), "gain.fnt");
+	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.1f ? 0.f : t_gp)->getCString(), "gain.fnt");
 	my_label->setScale(1.f/1.5f);
 	my_label->setAlignment(kCCTextAlignmentRight);
 	addChild(my_label, kZorderGetPercentage_label);
