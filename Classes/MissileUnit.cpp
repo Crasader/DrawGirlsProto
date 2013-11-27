@@ -2096,7 +2096,7 @@ void BurnFragment::myAction ()
 	
 	if(ingFrame <= 30)
 	{
-		fragmentImg->setScale(fragmentImg->getScale() + 1.f/30.f);
+		fragmentImg.first->setScale(fragmentImg.first->getScale() + 1.f/30.f);
 		if(ingFrame == 30)
 		{
 			crashMapForIntPoint(myPoint);
@@ -2128,7 +2128,7 @@ void BurnFragment::myAction ()
 	}
 	else if(ingFrame <= 60)
 	{
-		fragmentImg->setScale(getScale() - 1.f/30.f);
+		fragmentImg.first->setScale(fragmentImg.first->getScale() - 1.f/30.f);
 	}
 	
 	
@@ -2191,18 +2191,18 @@ void BurnFragment::myInit (IntPoint t_sp, int t_life, CCNode * t_parent, int t_m
 	myPoint = t_sp;
 	myLife = t_life;
 	
-	if(mType == 1)
-	{
-		fragmentImg = CCSprite::create("burnFragment.png");
-		fragmentImg->setScale(0);
-		addChild(fragmentImg);
-	}
-	else
-	{
-		fragmentImg = CCSprite::create("iceFragment.png");
-		fragmentImg->setScale(0);
-		addChild(fragmentImg);
-	}
+//	if(mType == 1)
+//	{
+		fragmentImg = KS::loadCCBI<CCSprite*>(this, "fx_pollution1.ccbi");
+		fragmentImg.first->setScale(0);
+		addChild(fragmentImg.first);
+//	}
+//	else
+//	{
+//		fragmentImg = CCSprite::create("iceFragment.png");
+//		fragmentImg->setScale(0);
+//		addChild(fragmentImg);
+//	}
 	
 	startMyAction();
 }
