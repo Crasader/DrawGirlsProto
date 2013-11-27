@@ -34,12 +34,12 @@ void ComboView::myInit (int combo)
 	combo_timer->setPercentage(100);
 	//		combo_timer->setReverseDirection(true);
 	//		combo_timer->setReverseProgress(true);
-	combo_timer->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
+	combo_timer->setPosition(ccp(getContentSize().width/2.f-5, getContentSize().height/2.f));
 	addChild(combo_timer);
 	
 	combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
 	combo_label->setAnchorPoint(ccp(0,0.5));
-	combo_label->setPosition(ccp(70,15));
+	combo_label->setPosition(ccp(80,15));
 	addChild(combo_label);
 }
 ComboParent * ComboParent::create ()
@@ -131,10 +131,10 @@ void FeverParent::addFeverGage (int count)
 		startKeep();
 	
 	recent_count += count;
-	if(recent_count >= 20)
+	if(recent_count >= 10)
 	{
 		ing_fever = true;
-		recent_count = 20;
+		recent_count = 10;
 		
 		fever_top->setPercentage(100.f);
 		
@@ -199,7 +199,7 @@ void FeverParent::addFeverGage (int count)
 	}
 	else
 	{
-		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/10.f*100.f);
 		fever_top->runAction(progress_to);
 	}
 }
@@ -242,7 +242,7 @@ void FeverParent::stopKeep ()
 	unschedule(schedule_selector(FeverParent::keeping));
 	is_keeping = false;
 	recent_count = 0;
-	CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+	CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/10.f*100.f);
 	fever_top->runAction(progress_to);
 }
 void FeverParent::myInit ()
@@ -477,9 +477,9 @@ GetPercentage * GetPercentage::create (float t_gp, bool is_item)
 }
 void GetPercentage::startFadeOut ()
 {
-	CCFadeOut* t_fadeout1 = CCFadeOut::create(1.f);
-	
-	backImg->runAction(t_fadeout1);
+//	CCFadeOut* t_fadeout1 = CCFadeOut::create(1.f);
+//	
+//	backImg->runAction(t_fadeout1);
 	
 	CCFadeOut* t_fadeout2 = CCFadeOut::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GetPercentage::selfRemove));
@@ -493,32 +493,33 @@ void GetPercentage::selfRemove ()
 }
 void GetPercentage::myInit (float t_gp, bool is_item)
 {
-	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f", t_gp < 0.1f ? 0.f : t_gp)->getCString(), "font_get_percentage.fnt");
+	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f", t_gp < 0.01f ? 0.f : t_gp)->getCString(), "font_get_percentage.fnt");
+	my_label->setScale(1.f/1.5f);
 	my_label->setAlignment(kCCTextAlignmentRight);
 	addChild(my_label, kZorderGetPercentage_label);
 	
-	if(is_item)
-	{
-		CCSprite* t_texture = CCSprite::create("get_percentage.png");
-		backImg = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(0, 24, 52.5, 24));
-		addChild(backImg, kZorderGetPercentage_backImg);
-		
-		CCAnimation* t_animation = CCAnimation::create();
-		t_animation->setDelayPerUnit(0.2);
-		for(int i=1;i<=3;i++)
-			t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(0, i*24, 52.5, 24));
-		CCAnimate* t_animate = CCAnimate::create(t_animation);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GetPercentage::startFadeOut));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_animate, t_call);
-		
-		backImg->runAction(t_seq);
-	}
-	else
-	{
-		backImg = CCSprite::create("get_percentage.png", CCRectMake(0, 0, 52.5, 24));
-		addChild(backImg, kZorderGetPercentage_backImg);
+//	if(is_item)
+//	{
+//		CCSprite* t_texture = CCSprite::create("get_percentage.png");
+//		backImg = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(0, 24, 52.5, 24));
+//		addChild(backImg, kZorderGetPercentage_backImg);
+//		
+//		CCAnimation* t_animation = CCAnimation::create();
+//		t_animation->setDelayPerUnit(0.2);
+//		for(int i=1;i<=3;i++)
+//			t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(0, i*24, 52.5, 24));
+//		CCAnimate* t_animate = CCAnimate::create(t_animation);
+//		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GetPercentage::startFadeOut));
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_animate, t_call);
+//		
+//		backImg->runAction(t_seq);
+//	}
+//	else
+//	{
+//		backImg = CCSprite::create("get_percentage.png", CCRectMake(0, 0, 52.5, 24));
+//		addChild(backImg, kZorderGetPercentage_backImg);
 		startFadeOut();
-	}
+//	}
 }
 TakeSpeedUp * TakeSpeedUp::create (int t_step)
 {

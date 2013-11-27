@@ -721,7 +721,21 @@ void Maingame::goldGettingEffect( CCPoint t_p, int t_i )
 void Maingame::percentageGettingEffect( float t_f, bool t_b, CCPoint t_p )
 {
 	GetPercentage* t_gp = GetPercentage::create(t_f, t_b);
-	t_gp->setPosition(ccpAdd(t_p, ccp(0,30)));
+	
+	CCPoint add_point;
+	if(t_p.x < 30.f)
+		add_point = ccp(30.f, 0.f);
+	else if(t_p.x > 290.f)
+		add_point = ccp(-30.f, 0.f);
+	else
+	{
+		if(t_p.y > 400.f)
+			add_point = ccp(0, -20.f);
+		else
+			add_point = ccp(0, 20.f);
+	}
+	
+	t_gp->setPosition(ccpAdd(t_p, add_point));
 	game_node->addChild(t_gp, goldZorder);
 }
 
@@ -729,9 +743,22 @@ void Maingame::takeSpeedUpEffect( int t_step )
 {
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
 
+	CCPoint add_point;
+	if(jack_position.x < 30.f)
+		add_point = ccp(30.f, 20.f);
+	else if(jack_position.x > 290.f)
+		add_point = ccp(-30.f, 20.f);
+	else
+	{
+		if(jack_position.y > 400.f)
+			add_point = ccp(30.f, -20.f);
+		else
+			add_point = ccp(30.f, 20.f);
+	}
+	
 	TakeSpeedUp* t_tsu = TakeSpeedUp::create(t_step);
 	t_tsu->setScale(1.f/1.5f);
-	t_tsu->setPosition(ccpAdd(jack_position, ccp(20,20)));
+	t_tsu->setPosition(ccpAdd(jack_position, add_point));
 	game_node->addChild(t_tsu, goldZorder);
 }
 
@@ -754,12 +781,28 @@ void Maingame::showMissMissile( CCPoint t_position )
 
 void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 {
-	MissileDamageLabel* damage_label = MissileDamageLabel::create(t_damage);
-	damage_label->setScale(1.f/1.5f);
-	damage_label->setPosition(t_position);
-	game_node->addChild(damage_label, goldZorder);
-
-	damage_label->startMyAction();
+	CCNode* container = CCNode::create();
+	container->setScale(1.f/1.5f);
+	container->setPosition(t_position);
+	game_node->addChild(container, goldZorder);
+	
+	CountingBMLabel* damage_label = CountingBMLabel::create("0", "missile_damage_label.fnt", 0.5f, "%d");
+	container->addChild(damage_label, goldZorder);
+	
+	damage_label->setString(CCString::createWithFormat("%d", t_damage)->getCString());
+	
+	CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+	CCCallFunc* t_call = CCCallFunc::create(container, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_fade, t_call, NULL);
+	damage_label->runAction(t_seq);
+	
+//	MissileDamageLabel* damage_label = MissileDamageLabel::create(t_damage);
+//	damage_label->setScale(1.f/1.5f);
+//	damage_label->setPosition(t_position);
+//	game_node->addChild(damage_label, goldZorder);
+//
+//	damage_label->startMyAction();
 }
 
 void Maingame::showLineDiePosition( IntPoint t_p )

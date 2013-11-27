@@ -90,6 +90,8 @@ private:
 	void changeScene();
 
 	void resultGetPuzzleList(Json::Value result_data);
+	void startGetCommonSetting();
+	void resultGetCommonSetting(Json::Value result_data);
 	
 	void startDownloadGameInfo();
 	

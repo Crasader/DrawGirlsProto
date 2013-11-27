@@ -554,6 +554,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						}
 						else // 카드 정보 있음
 						{
+							myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
 							av->setContentNode(addCardImg(contentObj["cardnumber"].asInt()));
 //							av->addChild();
 						}

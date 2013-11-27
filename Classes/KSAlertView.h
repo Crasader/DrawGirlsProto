@@ -42,7 +42,7 @@ class KSAlertView : public CCNode, public CCScrollViewDelegate, public CCTouchDe
 public:
 	std::vector<CCMenuItemLambda*> m_menuItems;
 	CCMenuItemLambda* m_closeItem;
-	
+	std::function<void(void)> m_customCloseFunction;
 	
 //	virtual void registerWithTouchDispatcher() {
 //		cocos2d::CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate
@@ -73,7 +73,8 @@ public:
 	m_borderScale(1.f),
 	m_titleHeight(50),
 	m_buttonHeight(50),
-	m_scrollBar(NULL)
+	m_scrollBar(NULL),
+	m_customCloseFunction(nullptr)
 	{
 		
 	}
@@ -84,8 +85,9 @@ public:
 	bool init();
 	void addButton(CCMenuItemLambda* item); // 버튼을 추가함
 	void setCloseButton(CCMenuItemLambda* item); // 우측 상단 닫기 버튼을 설정함
+	void show(std::function<void(void)> closeFunc);
 	void show(); // 창을 띄움, 창을 띄우기 전에 모든게 세팅이 되어야 함.
-
+	
 	ScrollBar* m_scrollBar;
 	CC_SYNTHESIZE(CCNode*, m_contentNode, ContentNode); // 내용물
 	CC_SYNTHESIZE(int, m_centerX, CenterX); // 팝업이 뜬 위치가 맘에 안들면 조절해야함. 기본값 가운데

@@ -1376,7 +1376,6 @@ void KSCumberBase::bossDieBomb(float dt)
 		 != m_bossDie.m_bossDieBombFrameNumbers.end())
 	{
 		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
-		
 		CCPoint t = getPosition();
 		t.x += m_well512.GetFloatValue(-100.f, 100.f);
 		t.y += m_well512.GetFloatValue(-100.f, 100.f);

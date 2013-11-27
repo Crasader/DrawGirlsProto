@@ -3,12 +3,15 @@
 #include "CCMenuLambda.h"
 #include "StarGoldData.h"
 #include "hspConnector.h"
+#include "HatGacha.h"
+
 HelpResultSend::HelpResultSend()
 {
 	
 }
 HelpResultSend::~HelpResultSend()
 {
+	CCLog("help end!!");
 }
 //void HelpResult::registerWithTouchDispatcher()
 //{
@@ -30,6 +33,14 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 	CCLayer::init();
 	if(isSuccess)
 	{
+		// 도움이 성공되었다.
+		
+		auto hatgacha = HatGacha::create([=](){
+			// 모자 돌리기 끝.
+			removeFromParent();
+		});
+		addChild(hatgacha, 1);
+		
 		
 		Json::Value p;
 		Json::Value contentJson;
@@ -57,34 +68,9 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 			 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 			 
 			 //																		setHelpSendTime(recvId);
+//			 addChild(HatGacha::create([=](){}), 1);
 			 GraphDogLib::JsonToLog("sendMessage", r);
-			 KSAlertView* av = KSAlertView::create();
-			 av->setCenterY(150);
-			 auto ttf = CCLabelTTF::create((mySGD->getAcceptHelpNick() + "님에게 도움을 주었습니다. 모자돌리기!").c_str(), "", 12.f);
-			 av->setContentNode(
-													ttf
-													);
-			 av->setContentSize(ttf->getDimensions());
 			 
-			 //	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-			 //																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-			 //	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-			 //																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-			 //	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-			 //																					[](CCObject* e){
-			 //																						CCLog("press!!");
-			 //																					});
-			 //	av->addButton(m1);
-			 av->addButton(CCMenuItemImageLambda::create
-										 (
-											"ui_common_ok.png",
-											"ui_common_ok.png",
-											[=](CCObject* e){
-												//																										removeFromParent();
-											}
-											));
-			 addChild(av, 1);
-			 av->show();
 			 
 			 Json::Value p2;
 			 p2["receiver_id"] = mySGD->getAcceptHelpId();
@@ -104,33 +90,32 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 	else
 	{
 		KSAlertView* av = KSAlertView::create();
-		av->setCenterY(150);
 		auto ttf = CCLabelTTF::create((mySGD->getAcceptHelpNick() + "님에게 도움을 주지 못했습니다 OTL").c_str(), "", 12.f);
 		av->setContentNode(
 											 ttf
 											 );
-		av->setContentSize(ttf->getDimensions());
+
+		av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
+		av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+		av->setBorderScale(0.9f);
+		av->setCloseOnPress(false);
+//		av->setButtonHeight(0);
+		//	av->setTitleStr("지금 열기");
 		
-		//	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-		//																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-		//	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-		//																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-		//	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-		//																					[](CCObject* e){
-		//																						CCLog("press!!");
-		//																					});
-		//	av->addButton(m1);
 		av->addButton(CCMenuItemImageLambda::create
 									(
 									 "ui_common_ok.png",
 									 "ui_common_ok.png",
 									 [=](CCObject* e){
 										 //																										removeFromParent();
+										 removeFromParent();
 									 }
 									 ));
+		//	con2->alignItemsVerticallyWithPadding(30);
 		addChild(av, 1);
 		av->show();
-		
+		av->getContainerScrollView()->setTouchEnabled(false);
+
 		Json::Value p2;
 		p2["receiver_id"] = mySGD->getAcceptHelpId();
 		p2["message"] = "저에게 도움을 못 받으셨네요. 좀 잘하는 사람한테 도움요청하세요 ㅋㅋㅋ";

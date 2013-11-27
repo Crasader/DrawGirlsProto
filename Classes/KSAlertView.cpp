@@ -97,6 +97,11 @@ void KSAlertView::setCloseButton(CCMenuItemLambda* item)
 	m_closeItem = item;
 }
 
+void KSAlertView::show(std::function<void(void)> closeFunc)
+{
+	m_customCloseFunction = closeFunc;
+	show();
+}
 void KSAlertView::show()
 {
 	KSCoverLayer* cover = KSCoverLayer::create();

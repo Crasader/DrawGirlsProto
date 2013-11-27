@@ -57,6 +57,7 @@ public:
     CREATE_FUNC(StageSettingPopup);
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
+	HeartTime* heart_time;
 	
 private:
 	
@@ -76,7 +77,6 @@ private:
 	ItemListViewer* my_ilv;
 	ListViewerScroll* t_lvs;
 	
-	HeartTime* heart_time;
 	LoadingLayer* start_loading;
 	
 	void callStart();

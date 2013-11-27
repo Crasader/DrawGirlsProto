@@ -97,6 +97,7 @@ enum SDS_KEY
 	kSDS_SI_condStageNo_i,
 	kSDS_SI_boss_s,
 	kSDS_SI_junior_s,
+	kSDS_SI_autoBalanceTry_i,
 	kSDS_SI_end = 2999,
 	kSDS_CI_base = 3000,
 	kSDS_CI_int1_rank_i,

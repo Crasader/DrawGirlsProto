@@ -7,9 +7,10 @@
 //
 
 #include "ShopPopup.h"
-#include "DataStorageHub.h"
+#include "StarGoldData.h"
 #include "HeartTime.h"
 #include "LoadingLayer.h"
+#include "StageSettingPopup.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -321,6 +322,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
+				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -392,6 +394,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
+				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -463,6 +466,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
+				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -534,6 +538,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
+				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -605,6 +610,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
+				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -676,6 +682,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
+				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				

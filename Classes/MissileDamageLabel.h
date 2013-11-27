@@ -10,15 +10,15 @@ USING_NS_CC;
 class MissileDamageLabel : public CCNode
 {
 public:
-  static MissileDamageLabel * create (int t_damage);
-  void startMyAction ();
+	static MissileDamageLabel * create (int t_damage);
+	void startMyAction ();
 private:
-  CCSpriteBatchNode * m_batch_node;
-  std::vector <CCSprite*> digit_imgs;
-  void lastAnimation ();
-  void visibleOn (CCObject * t_target);
-  void myInit (int t_damage);
-  CCRect getNumberRect (int t_number);
+	CCSpriteBatchNode * m_batch_node;
+	std::vector <CCSprite*> digit_imgs;
+	void lastAnimation ();
+	void visibleOn (CCObject * t_target);
+	void myInit (int t_damage);
+	CCRect getNumberRect (int t_number);
 };
 #undef LZZ_INLINE
 #endif

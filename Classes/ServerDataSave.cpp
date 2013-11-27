@@ -361,6 +361,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_SI_condStageNo_i)				rv = "condStageNo";
 	else if(t_key == kSDS_SI_boss_s)					rv = "boss";
 	else if(t_key == kSDS_SI_junior_s)					rv = "junior";
+	else if(t_key == kSDS_SI_autoBalanceTry_i)			rv = "autoBalanceTry";
 	
 	else if(t_key == kSDS_CI_int1_rank_i)						rv = "%d_grade";
 	else if(t_key == kSDS_CI_int1_grade_i)						rv = "%d_rank";

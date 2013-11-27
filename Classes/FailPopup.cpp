@@ -368,16 +368,20 @@ void FailPopup::onEnter()
 
 void FailPopup::showPopup()
 {
-	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
-	top_case->runAction(top_move);
-	
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
-	gray->runAction(gray_fade);
-	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(FailPopup::endShowPopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
+//	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
+//	top_case->runAction(top_move);
+
+	gray->setOpacity(255);
+//	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
+//	gray->runAction(gray_fade);
+
+	main_case->setPosition(ccp(0,0));
+	endShowPopup();
+//	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
+//	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(FailPopup::endShowPopup));
+//	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
+//	main_case->runAction(main_seq);
 }
 
 void FailPopup::endShowPopup()
