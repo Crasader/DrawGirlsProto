@@ -92,6 +92,7 @@ public:
 		if(m_state == SceneState::kShowReward2)
 		{
 			m_parent->removeFromParent();
+			m_parent->m_customCloseFunction();
 		}
 		
 		return true;
@@ -506,6 +507,7 @@ HatGacha::HatGacha()
 }
 HatGacha::~HatGacha()
 {
+	CCLog("~hatgacha");
 }
 //void HatGacha::registerWithTouchDispatcher()
 //{
@@ -522,7 +524,7 @@ HatGacha::~HatGacha()
 //	return true;
 //}
 
-bool HatGacha::init()
+bool HatGacha::init(std::function<void(void)> closeCallback)
 {
 	CCLayer::init();
 	KSAlertView* av = KSAlertView::create();
@@ -536,12 +538,9 @@ bool HatGacha::init()
 	av->setButtonHeight(0);
 	//	av->setTitleStr("지금 열기");
 	addChild(av, 1);
-//	av->setCloseButton(CCMenuItemImageLambda::create("tutorial_common_cancel.png", "tutorial_common_cancel.png",
-//																									 [=](CCObject* sender){
-//																									 }));
-
+	
 //	con2->alignItemsVerticallyWithPadding(30);
-	av->show();
+	av->show(closeCallback);
 	av->getContainerScrollView()->setTouchEnabled(false);
 
 	

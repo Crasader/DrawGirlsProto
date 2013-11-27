@@ -5,6 +5,8 @@
 #include "GDLib.h"
 #include "hspConnector.h"
 #include "StarGoldData.h"
+#include "HatGacha.h"
+
 
 ChallengeSend::ChallengeSend()
 {
@@ -116,7 +118,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 		if(mySGD->getAcceptChallengeScore() <= score)
 		{
 			// 이겼을 때,
-			contentJson["result"] = "win"; // 상대방을 win 으로 세링~
+			contentJson["result"] = "lose"; // 상대방을 lose 으로 세링~
 			p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 			hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
 																	 {
@@ -128,38 +130,14 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 GraphDogLib::JsonToLog("sendMessage", r);
 																		 
 																		 //																		obj->removeFromParent();
-																		 KSAlertView* av = KSAlertView::create();
-																		 av->setCenterY(150);
-																		 auto ttf = CCLabelTTF::create((nickname + "에게 졌습니다...").c_str(), "", 12.f);
-																		 av->setContentNode(
-																												ttf
-																												);
-																		 av->setContentSize(ttf->getDimensions());
-																		 
-																		 //	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-																		 //																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-																		 //	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-																		 //																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-																		 //	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-																		 //																					[](CCObject* e){
-																		 //																						CCLog("press!!");
-																		 //																					});
-																		 //	av->addButton(m1);
-																		 av->addButton(CCMenuItemImageLambda::create
-																									 (
-																										"ui_common_ok.png",
-																										"ui_common_ok.png",
-																										[=](CCObject* e){
-																											//																										removeFromParent();
-																										}
-																										));
-																		 addChild(av, 1);
-																		 av->show();
+																		 addChild(HatGacha::create([=](){
+																			 CCLog("hat close");
+																		 }), 1);
 																		 
 																		 Json::Value p2;
 																		 p2["receiver_id"] = user_id;
 																		 // 여기서 당신은 지금 배틀한 상대방을 지칭
-																		 p2["message"] = "당신이 승리하였습니다. 보상을 받으세요 ^_^";
+																		 p2["message"] = "당신이 패배하였습니다.";
 																		 hspConnector::get()->kSendMessage
 																		 (p2, [=](Json::Value r)
 																			{
@@ -181,11 +159,11 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 
 																		 //																		setHelpSendTime(recvId);
 																		 GraphDogLib::JsonToLog("sendMessage", r);
-																		 //																		obj->removeFromParent();
+																		 //												 						obj->removeFromParent();
 																		 KSAlertView* av = KSAlertView::create();
 																		 av->setCenterY(150);
 																		 auto ttf = CCLabelTTF::create((nickname + "에게 졌습니다...").c_str(), "", 12.f);
-																		 av->setContentNode(
+																		  av->setContentNode(
 																												ttf
 																												);
 																		 av->setContentSize(ttf->getDimensions());

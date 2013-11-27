@@ -362,7 +362,7 @@ void ClearPopup::endTakeCard()
 	if(mySGD->getIsAcceptHelp())
 	{
 		////////////////// ksks
-		
+		CCLog("zzzz");
 		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), true), kZ_CP_popup);
 
 
