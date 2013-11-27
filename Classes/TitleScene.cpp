@@ -67,7 +67,7 @@ void TitleScene::startGetPuzzleList()
 
 void TitleScene::startGetCommonSetting()
 {
-	hspConnector::get()->command("getcommonsetting", NULL, json_selector(this, TitleScene::resultGetCommonSetting));
+	hspConnector::get()->command("getcommonsetting", Json::Value(), json_selector(this, TitleScene::resultGetCommonSetting));
 }
 
 void TitleScene::resultGetCommonSetting(Json::Value result_data)

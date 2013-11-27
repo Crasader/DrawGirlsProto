@@ -1041,6 +1041,7 @@ void PuzzleMapScene::showStageSettingPopup()
 
 void PuzzleMapScene::hideStageSettingPopup()
 {
+	mySGD->setStarLabel(ruby_label);
 	mySGD->setGoldLabel(gold_label);
 	
 	is_gesturable_map_mode = true;
@@ -1083,6 +1084,7 @@ void PuzzleMapScene::hideClearPopup()
 	if(mySD->getSilType() >= 10000)
 	{
 		map_mode_state = kMMS_uiMode;
+		mySGD->setStarLabel(ruby_label);
 		mySGD->setGoldLabel(gold_label);
 		
 		is_menu_enable = true;
@@ -1164,6 +1166,7 @@ void PuzzleMapScene::createGetPuzzleParticle(CCPoint t_point)
 
 void PuzzleMapScene::endGetPuzzle()
 {
+	mySGD->setStarLabel(ruby_label);
 	mySGD->setGoldLabel(gold_label);
 	
 	is_gesturable_map_mode = true;
@@ -1206,6 +1209,7 @@ void PuzzleMapScene::hideFailPopup()
 	if(mySD->getSilType() >= 10000)
 	{
 		map_mode_state = kMMS_uiMode;
+		mySGD->setStarLabel(ruby_label);
 		mySGD->setGoldLabel(gold_label);
 		
 		is_menu_enable = true;
@@ -1217,6 +1221,7 @@ void PuzzleMapScene::hideFailPopup()
 	{
 		map_mode_state = kMMS_default;
 	
+		mySGD->setStarLabel(ruby_label);
 		mySGD->setGoldLabel(gold_label);
 		
 		is_gesturable_map_mode = true;
@@ -1291,6 +1296,7 @@ void PuzzleMapScene::puzzleUiDisable()
 
 void PuzzleMapScene::puzzleUiEnable()
 {
+	mySGD->setStarLabel(ruby_label);
 	mySGD->setGoldLabel(gold_label);
 	
 	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
@@ -3342,6 +3348,8 @@ void PuzzleMapScene::endMovingMapNodeNotClearPuzzle()
 	map_node->removeFromParent();
 	map_node = after_map_node;
 	after_map_node = NULL;
+	
+	is_menu_enable = true;
 }
 void PuzzleMapScene::notClearPuzzleAction(CCObject* sender)
 {
