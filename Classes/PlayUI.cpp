@@ -493,32 +493,33 @@ void GetPercentage::selfRemove ()
 }
 void GetPercentage::myInit (float t_gp, bool is_item)
 {
-	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f", t_gp < 0.1f ? 0.f : t_gp)->getCString(), "font_get_percentage.fnt");
+	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f", t_gp < 0.1f ? 0.f : t_gp)->getCString(), "gain.fnt");
+	my_label->setScale(1.f/1.5f);
 	my_label->setAlignment(kCCTextAlignmentRight);
 	addChild(my_label, kZorderGetPercentage_label);
 	
-	if(is_item)
-	{
-		CCSprite* t_texture = CCSprite::create("get_percentage.png");
-		backImg = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(0, 24, 52.5, 24));
-		addChild(backImg, kZorderGetPercentage_backImg);
-		
-		CCAnimation* t_animation = CCAnimation::create();
-		t_animation->setDelayPerUnit(0.2);
-		for(int i=1;i<=3;i++)
-			t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(0, i*24, 52.5, 24));
-		CCAnimate* t_animate = CCAnimate::create(t_animation);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GetPercentage::startFadeOut));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_animate, t_call);
-		
-		backImg->runAction(t_seq);
-	}
-	else
-	{
-		backImg = CCSprite::create("get_percentage.png", CCRectMake(0, 0, 52.5, 24));
-		addChild(backImg, kZorderGetPercentage_backImg);
+//	if(is_item)
+//	{
+//		CCSprite* t_texture = CCSprite::create("get_percentage.png");
+//		backImg = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(0, 24, 52.5, 24));
+//		addChild(backImg, kZorderGetPercentage_backImg);
+//		
+//		CCAnimation* t_animation = CCAnimation::create();
+//		t_animation->setDelayPerUnit(0.2);
+//		for(int i=1;i<=3;i++)
+//			t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(0, i*24, 52.5, 24));
+//		CCAnimate* t_animate = CCAnimate::create(t_animation);
+//		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GetPercentage::startFadeOut));
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_animate, t_call);
+//		
+//		backImg->runAction(t_seq);
+//	}
+//	else
+//	{
+//		backImg = CCSprite::create("get_percentage.png", CCRectMake(0, 0, 52.5, 24));
+//		addChild(backImg, kZorderGetPercentage_backImg);
 		startFadeOut();
-	}
+//	}
 }
 TakeSpeedUp * TakeSpeedUp::create (int t_step)
 {

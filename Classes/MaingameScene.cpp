@@ -754,12 +754,28 @@ void Maingame::showMissMissile( CCPoint t_position )
 
 void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 {
-	MissileDamageLabel* damage_label = MissileDamageLabel::create(t_damage);
-	damage_label->setScale(1.f/1.5f);
-	damage_label->setPosition(t_position);
-	game_node->addChild(damage_label, goldZorder);
-
-	damage_label->startMyAction();
+	CCNode* container = CCNode::create();
+	container->setScale(1.f/1.5f);
+	container->setPosition(t_position);
+	game_node->addChild(container, goldZorder);
+	
+	CountingBMLabel* damage_label = CountingBMLabel::create("0", "missile_damage_label.fnt", 0.5f, "%d");
+	container->addChild(damage_label, goldZorder);
+	
+	damage_label->setString(CCString::createWithFormat("%d", t_damage)->getCString());
+	
+	CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+	CCCallFunc* t_call = CCCallFunc::create(container, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_fade, t_call, NULL);
+	damage_label->runAction(t_seq);
+	
+//	MissileDamageLabel* damage_label = MissileDamageLabel::create(t_damage);
+//	damage_label->setScale(1.f/1.5f);
+//	damage_label->setPosition(t_position);
+//	game_node->addChild(damage_label, goldZorder);
+//
+//	damage_label->startMyAction();
 }
 
 void Maingame::showLineDiePosition( IntPoint t_p )
