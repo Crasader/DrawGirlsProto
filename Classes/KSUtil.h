@@ -207,10 +207,13 @@ class KSTimer : public CCNode
 {
 protected:
 	std::function<void(void)> f;
+	float m_s;
+	float m_timer;
 public:
 	virtual ~KSTimer(){}
 	void after()
 	{
+		unscheduleUpdate();
 		removeFromParent();
 		f();
 	}
@@ -224,11 +227,18 @@ public:
 	bool init(float s, std::function<void(void)> __f)
 	{
 		f = __f;
-		runAction(
-							CCSequence::create(CCDelayTime::create(s),
-																 CCCallFunc::create(this, callfunc_selector(ThisClassType::after)), 0)
-							);
+		m_s = s;
+		m_timer = 0;
+		scheduleUpdate();
 		return true;
+	}
+	void update(float dt)
+	{
+		m_timer += dt;
+		if(m_timer >= m_s)
+		{
+			after();
+		}
 	}
 };
 

@@ -69,7 +69,7 @@ public:
 	m_closeOnPress(true),
 	m_back9(NULL),
 	m_contentBorder(NULL),
-//	m_containerScrollView(NULL),
+	m_containerScrollView(NULL),
 	m_borderScale(1.f),
 	m_titleHeight(50),
 	m_buttonHeight(50),
@@ -101,8 +101,8 @@ public:
 	
 	CC_SYNTHESIZE(std::string, m_titleStr, TitleStr); // 타이틀 문자열, 있으면 위에서 여백이 생김
 
-	// 내용물 테두리, 이건 설정안해도 기본값 존재... 바꿔야할 듯.
-	CC_SYNTHESIZE(CCScale9Sprite*, m_contentBorder, ContentBorder);
+	
+	CC_SYNTHESIZE(CCScale9Sprite*, m_contentBorder, ContentBorder); // 내용물 테두리
 	CC_SYNTHESIZE(float, m_borderScale, BorderScale); // 전체 프레임의 스케일,
 	CC_SYNTHESIZE(CCScale9Sprite*, m_hScroll, HScroll); // 가로 스크롤, 설정안하면 안보임
 	CC_SYNTHESIZE(CCScale9Sprite*, m_vScroll, VScroll); // 세로 스크롤, 설정안하면 안보임
@@ -118,6 +118,6 @@ public:
 		return CCSizeMake(contentRect.size.width, contentRect.size.height);
 
 	}
-//	CC_SYNTHESIZE(CCScrollView*, m_containerScrollView, ContainerScrollView); //
+	CC_SYNTHESIZE(CCScrollView*, m_containerScrollView, ContainerScrollView); //
 };
 
