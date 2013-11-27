@@ -786,7 +786,7 @@ void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 	container->setPosition(t_position);
 	game_node->addChild(container, goldZorder);
 	
-	CountingBMLabel* damage_label = CountingBMLabel::create("0", "missile_damage_label.fnt", 0.5f, "%d");
+	CountingBMLabel* damage_label = CountingBMLabel::create("1", "missile_damage_label.fnt", 0.3f, "%d");
 	container->addChild(damage_label, goldZorder);
 	
 	damage_label->setString(CCString::createWithFormat("%d", t_damage)->getCString());
