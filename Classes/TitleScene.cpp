@@ -170,127 +170,21 @@ void TitleScene::resultGetUserData( Json::Value result_data )
 	}
 }
 
-bool TitleScene::onTextFieldInsertText(cocos2d::CCTextFieldTTF *sender, const char *text, int nLen)
+void TitleScene::editBoxEditingDidBegin(CCEditBox* editBox)
 {
-    string tempString = sender->getString();
-	if(tempString == "")
-	{
-		return false;
-	}
-	else
-	{
-		basic_string<wchar_t> result;
-		utf8::utf8to16(tempString.begin(), tempString.end(), back_inserter(result));
-		
-		if(result.length() > 30)
-		{
-			result = result.substr(0,30);
-			string conver;
-			utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
-			sender->setString(conver.c_str());
-		}
-	}
-	
-	return false;
+	CCLog("edit begin");
 }
-
-bool TitleScene::onTextFieldAttachWithIME(cocos2d::CCTextFieldTTF *sender)
+void TitleScene::editBoxEditingDidEnd(CCEditBox* editBox)
 {
-    was_open_text = true;
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-    CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,105));
-    runAction(t_move);
-#endif
-    return false;
+	CCLog("edit end");
 }
-
-void TitleScene::endCloseTextInput()
+void TitleScene::editBoxTextChanged(CCEditBox* editBox, const std::string& text)
 {
-	was_open_text = false;
+	CCLog("edit changed : %s", text.c_str());
 }
-
-bool TitleScene::onTextFieldDetachWithIME(cocos2d::CCTextFieldTTF *sender)
+void TitleScene::editBoxReturn(CCEditBox* editBox)
 {
-	string tempString = sender->getString();
-	if(tempString == "")
-	{
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-        CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,-105));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleScene::endCloseTextInput));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-		runAction(t_seq);
-#else
-		was_open_text = false;
-#endif
-		return false;
-	}
-	else
-	{
-		basic_string<wchar_t> result;
-		utf8::utf8to16(tempString.begin(), tempString.end(), back_inserter(result));
-		
-		if(result.length() > 30)
-		{
-			result = result.substr(0,30);
-			string conver;
-			utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
-			sender->setString(conver.c_str());
-		}
-	}
-    
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-    CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,-105));
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleScene::endCloseTextInput));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-    runAction(t_seq);
-#else
-	was_open_text = false;
-#endif
-    
-	return false;
-}
-
-bool TitleScene::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
-{
-	CCTouch* touch = pTouch;
-	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
-	location = myDSH->wideWidthFixTouch(location);
-	
-    CCRect textFieldRect = CCRectMake(0, 0, input_text->getContentSize().width, input_text->getContentSize().height);
-    textFieldRect = CCRectApplyAffineTransform(textFieldRect, input_text->nodeToWorldTransform());
-    
-    if(textFieldRect.containsPoint(location))//!was_open_text &&
-    {
-        input_text->attachWithIME();
-    }
-	else
-	{
-		if(was_open_text)
-		{
-			input_text->detachWithIME();
-		}
-	}
-    
-	return true;
-}
-
-void TitleScene::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
-{
-	
-}
-
-void TitleScene::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
-{
-	
-}
-void TitleScene::ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
-{
-	
-}
-
-void TitleScene::registerWithTouchDispatcher()
-{
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority+1, false);
+	CCLog("edit return");
 }
 
 void TitleScene::resultSaveUserData( Json::Value result_data )
@@ -312,18 +206,15 @@ void TitleScene::resultSaveUserData( Json::Value result_data )
 			nick_back = CCSprite::create("nickname_back.png");
 			nick_back->setPosition(ccp(240,130));
 			addChild(nick_back);
-			
-//			CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 210, 30));
-//			temp_back->setAnchorPoint(ccp(0.5,0.5));
-//			temp_back->setPosition(ccp(197,113));
-//			temp_back->setOpacity(100);
-//			addChild(temp_back);
-			
-			input_text = CCTextFieldTTF::textFieldWithPlaceHolder("입력해주세요.", CCSizeMake(210,30), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 18);
-			input_text->setAnchorPoint(ccp(0.5,0.5));
+
+			input_text = CCEditBox::create(CCSizeMake(210, 30), CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 			input_text->setPosition(ccp(197,113));
-			addChild(input_text);
+			input_text->setPlaceHolder("입력해주세요.");
+			input_text->setReturnType(kKeyboardReturnTypeDone);
+			input_text->setFont(mySGD->getFont().c_str(), 20);
+			input_text->setInputMode(kEditBoxInputModeSingleLine);
 			input_text->setDelegate(this);
+			addChild(input_text);
 			
 			CCSprite* n_ok = CCSprite::create("nickname_ok.png");
 			CCSprite* s_ok = CCSprite::create("nickname_ok.png");
@@ -336,9 +227,6 @@ void TitleScene::resultSaveUserData( Json::Value result_data )
 			ok_menu->setPosition(ccp(370,130));
 			addChild(ok_menu, 0, kTitle_MT_nick);
 			
-//			input_text->attachWithIME();
-			
-			setTouchEnabled(true);
 			is_menu_enable = true;
 		}
 		else
@@ -825,9 +713,9 @@ void TitleScene::menuAction( CCObject* sender )
 	else if(tag == kTitle_MT_nick)
 	{
 		string comp_not_ok = "";
-		if(input_text->getString() != comp_not_ok)
+		if(input_text->getText() != comp_not_ok)
 		{
-			myDSH->setStringForKey(kDSH_Key_nick, input_text->getString());
+			myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
 			setTouchEnabled(false);
 			is_menu_enable = false;
 			nick_back->removeFromParent();
