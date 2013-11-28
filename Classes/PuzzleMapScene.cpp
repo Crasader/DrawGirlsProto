@@ -3518,7 +3518,7 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 		
 		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
 		
-		TicketRequestContent* t_container = TicketRequestContent::create(t_popup->getTouchPriority());
+		TicketRequestContent* t_container = TicketRequestContent::create(t_popup->getTouchPriority(), recent_puzzle_number);
 		t_popup->setContainerNode(t_container);
 		addChild(t_popup);
 		

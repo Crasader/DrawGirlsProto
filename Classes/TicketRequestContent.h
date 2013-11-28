@@ -46,10 +46,10 @@ enum TicketRequestContentCellChildTag{
 class TicketRequestContent : public CCNode, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
-	static TicketRequestContent* create(int t_touch_priority)
+	static TicketRequestContent* create(int t_touch_priority, int t_puzzle_number)
 	{
 		TicketRequestContent* n_trc = new TicketRequestContent();
-		n_trc->myInit(t_touch_priority);
+		n_trc->myInit(t_touch_priority, t_puzzle_number);
 		n_trc->autorelease();
 		return n_trc;
 	}
@@ -61,6 +61,7 @@ public:
 	
 private:
 	int touch_priority;
+	int puzzle_number;
 	
 	function<void()> remove_selector;
 	bool is_menu_enable;
@@ -101,7 +102,7 @@ private:
 			}
 			Json::Value p;
 			Json::Value contentJson;
-			contentJson["puzzlenumber"] = 영호;
+			contentJson["puzzlenumber"] = puzzle_number;
 			p["receiverMemberIDList"] = arr;
 			p["senderMemberID"] = hspConnector::get()->getKakaoID();
 			p["type"] = kTicketRequest;
@@ -244,8 +245,9 @@ private:
 		close_menu->setVisible(true);
 	}
 	
-	void myInit(int t_touch_priority)
+	void myInit(int t_touch_priority, int t_puzzle_number)
 	{
+		puzzle_number = t_puzzle_number;
 		touch_priority = t_touch_priority;
 		is_menu_enable = false;
 		
