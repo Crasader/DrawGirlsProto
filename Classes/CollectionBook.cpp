@@ -77,88 +77,6 @@ int CollectionBook::getContentRotate(int t_tag)
 	return return_value;
 }
 
-bool CollectionBook::onTextFieldInsertText(cocos2d::CCTextFieldTTF *sender, const char *text, int nLen)
-{
-    string tempString = sender->getString();
-	if(tempString == "")
-	{
-		return false;
-	}
-	else
-	{
-		basic_string<wchar_t> result;
-		utf8::utf8to16(tempString.begin(), tempString.end(), back_inserter(result));
-		
-		if(result.length() > 30)
-		{
-			result = result.substr(0,30);
-			string conver;
-			utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
-			sender->setString(conver.c_str());
-		}
-	}
-	
-	return false;
-}
-
-bool CollectionBook::onTextFieldAttachWithIME(cocos2d::CCTextFieldTTF *sender)
-{
-    was_open_text = true;
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-    CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,105));
-    runAction(t_move);
-#endif
-    return false;
-}
-
-void CollectionBook::endCloseTextInput()
-{
-	was_open_text = false;
-}
-
-bool CollectionBook::onTextFieldDetachWithIME(cocos2d::CCTextFieldTTF *sender)
-{
-	string tempString = sender->getString();
-	if(tempString == "")
-	{
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-        CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,-105));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CollectionBook::endCloseTextInput));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-		runAction(t_seq);
-#else
-		was_open_text = false;
-#endif
-		return false;
-	}
-	else
-	{
-		basic_string<wchar_t> result;
-		utf8::utf8to16(tempString.begin(), tempString.end(), back_inserter(result));
-		
-		if(result.length() > 30)
-		{
-			result = result.substr(0,30);
-			string conver;
-			utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
-			sender->setString(conver.c_str());
-		}
-	}
-    
-    myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number, sender->getString());
-	myLog->addLog(kLOG_typing_cardComment, -1);
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-    CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,-105));
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CollectionBook::endCloseTextInput));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-    runAction(t_seq);
-#else
-	was_open_text = false;
-#endif
-    
-	return false;
-}
-
 void CollectionBook::setRightPage(CCNode *target, int card_number)
 {
 	CCLabelTTF* r_stage_script = CCLabelTTF::create(mySD->getScriptString(NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_grade_i, card_number)).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(180, 60), kCCTextAlignmentLeft);
@@ -167,15 +85,7 @@ void CollectionBook::setRightPage(CCNode *target, int card_number)
 	r_stage_script->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_script->setAnchorPoint(ccp(0,1));
 	target->addChild(r_stage_script);
-	
-//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 180, 60));
-//	temp_back->setColor(ccBLUE);
-//	temp_back->setOpacity(100);
-//	temp_back->setPosition(ccp(25,175));
-//	temp_back->setAnchorPoint(ccp(0,1));
-//	target->addChild(temp_back);
-	
-	
+		
 	CCMenuItem* r_close_item = CCMenuItemImage::create("sspl_cancel.png", "sspl_cancel.png", this, menu_selector(CollectionBook::menuAction));
 	r_close_item->setTag(kCB_MT_close);
 	
@@ -367,7 +277,6 @@ bool CollectionBook::init()
         return false;
     }
     
-	was_open_text = false;
 	setKeypadEnabled(true);
 	
 	recent_card_number = mySGD->selected_collectionbook;
@@ -399,21 +308,17 @@ bool CollectionBook::init()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(170,40), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 12);
-    input_text->setPosition(getContentPosition(kCB_MT_inputText));
-    input_text->setAnchorPoint(ccp(0.5,0.5));
+	input_text = CCEditBox::create(CCSizeMake(185, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+	input_text->setPosition(getContentPosition(kCB_MT_inputText));
+	input_text->setPlaceHolder(input_data.c_str());
+	input_text->setReturnType(kKeyboardReturnTypeDone);
+	input_text->setFont(mySGD->getFont().c_str(), 12);
+	input_text->setFontColor(ccBLACK);
+	input_text->setDelegate(this);
     recent_right_img->addChild(input_text);
 	
-//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 170, 40));
-//	temp_back->setColor(ccRED);
-//	temp_back->setOpacity(100);
-//	temp_back->setPosition(ccp(115,91));
-//	recent_right_img->addChild(temp_back);
-    
     if(input_data != "입력해주세요.")
-        input_text->setString(input_data.c_str());
-    
-    input_text->setDelegate(this);
+        input_text->setText(input_data.c_str());
 	
 	if(is_enable_pageturn)
 	{
@@ -504,46 +409,44 @@ bool CollectionBook::init()
     return true;
 }
 
+void CollectionBook::editBoxEditingDidBegin(CCEditBox* editBox)
+{
+	CCLog("edit begin");
+}
+void CollectionBook::editBoxEditingDidEnd(CCEditBox* editBox)
+{
+	CCLog("edit end");
+}
+void CollectionBook::editBoxTextChanged(CCEditBox* editBox, const std::string& text)
+{
+	CCLog("edit changed : %s", text.c_str());
+}
+void CollectionBook::editBoxReturn(CCEditBox* editBox)
+{
+	CCLog("edit return");
+}
+
 bool CollectionBook::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 {
 	CCTouch* touch = pTouch;
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
 	location = ccpSub(location, myDSH->ui_touch_convert);
 	
-    CCRect textFieldRect = CCRectMake(0, 0, input_text->getContentSize().width, input_text->getContentSize().height);
-    textFieldRect = CCRectApplyAffineTransform(textFieldRect, input_text->nodeToWorldTransform());
-    
-    if(textFieldRect.containsPoint(location))//!was_open_text &&
-    {
-        input_text->attachWithIME();
-        touch_direction = 0;
-    }
-    else
-    {
-		if(was_open_text)
-		{
-			input_text->detachWithIME();
-			touch_direction = 0;
-		}
-		else
-		{
-			if(!is_touch_enable)
-				return true;
-			
-			begin_point = location;
-			
-			if(begin_point.x > 240)
-			{
-				touch_direction = 1;
-			}
-			else
-			{
-				touch_direction = -1;
-			}
-			
-			is_menu_enable = false;
-		}
-    }
+	if(!is_touch_enable)
+		return true;
+	
+	begin_point = location;
+	
+	if(begin_point.x > 240)
+	{
+		touch_direction = 1;
+	}
+	else
+	{
+		touch_direction = -1;
+	}
+	
+	is_menu_enable = false;
 	
 	return true;
 }
@@ -678,15 +581,17 @@ void CollectionBook::startNextPage()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(170,40), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 12);
-    input_text->setPosition(getContentPosition(kCB_MT_inputText));
-    input_text->setAnchorPoint(ccp(0.5,0.5));
-    recent_right_img->addChild(input_text);
+	input_text = CCEditBox::create(CCSizeMake(185, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+	input_text->setPosition(getContentPosition(kCB_MT_inputText));
+	input_text->setPlaceHolder(input_data.c_str());
+	input_text->setReturnType(kKeyboardReturnTypeDone);
+	input_text->setFont(mySGD->getFont().c_str(), 12);
+	input_text->setFontColor(ccBLACK);
+	input_text->setDelegate(this);
+	recent_right_img->addChild(input_text);
     
     if(input_data != "입력해주세요.")
-        input_text->setString(input_data.c_str());
-    
-    input_text->setDelegate(this);
+        input_text->setText(input_data.c_str());
 	
 	setLeftPage(covered_left_img, next_number);
 	
@@ -807,15 +712,17 @@ void CollectionBook::startPrePage()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCTextFieldTTF::textFieldWithPlaceHolder(input_data.c_str(), CCSizeMake(170,40), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 12);
-    input_text->setPosition(getContentPosition(kCB_MT_inputText));
-    input_text->setAnchorPoint(ccp(0.5,0.5));
-    covered_right_img->addChild(input_text);
+	input_text = CCEditBox::create(CCSizeMake(185, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+	input_text->setPosition(getContentPosition(kCB_MT_inputText));
+	input_text->setPlaceHolder(input_data.c_str());
+	input_text->setReturnType(kKeyboardReturnTypeDone);
+	input_text->setFont(mySGD->getFont().c_str(), 12);
+	input_text->setFontColor(ccBLACK);
+	input_text->setDelegate(this);
+	covered_right_img->addChild(input_text);
     
     if(input_data != "입력해주세요.")
-        input_text->setString(input_data.c_str());
-    
-    input_text->setDelegate(this);
+        input_text->setText(input_data.c_str());
 	
 	((CCMenu*)covered_right_img->getChildByTag(kCB_MT_close))->setEnabled(false);
 	((CCMenu*)covered_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(false);
@@ -905,8 +812,6 @@ void CollectionBook::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 	if(!is_touch_enable)
 		return;
 	
-	if(was_open_text)	return;
-	
 	is_touch_enable = false;
 	setTouchEnabled(false);
 	
@@ -925,8 +830,6 @@ void CollectionBook::ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent
 {
 	if(!is_touch_enable)
 		return;
-	
-	if(was_open_text)	return;
 	
 	is_touch_enable = false;
 	setTouchEnabled(false);

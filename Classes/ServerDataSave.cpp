@@ -318,6 +318,8 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_PZ_stage_int1_y_d)			rv = "stage%d_y";
 	else if(t_key == kSDS_PZ_stage_int1_piece_s)		rv = "stage%d_piece";
 	else if(t_key == kSDS_PZ_stage_int1_thumbnail_s)	rv = "stage%d_thumbnail";
+	else if(t_key == kSDS_PZ_stage_int1_condition_stage_i)	rv = "stage%d_condition_stage";
+	else if(t_key == kSDS_PZ_stage_int1_condition_gold_i)	rv = "stage%d_condition_gold";
 	
 	else if(t_key == kSDS_GI_puzzleListVersion_i)		rv = "puzzleListVersion";
 	else if(t_key == kSDS_GI_puzzleListCount_i)			rv = "puzzleListCount";
@@ -357,8 +359,6 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_SI_itemOptionWidePerfectPercent_i)		rv = "itemOption_widePerfect_percent";
 	else if(t_key == kSDS_SI_level_int1_card_i)			rv = "level%d_card";
 	else if(t_key == kSDS_SI_level_i)					rv = "level";
-	else if(t_key == kSDS_SI_condGold_i)				rv = "condGold";
-	else if(t_key == kSDS_SI_condStageNo_i)				rv = "condStageNo";
 	else if(t_key == kSDS_SI_boss_s)					rv = "boss";
 	else if(t_key == kSDS_SI_junior_s)					rv = "junior";
 	else if(t_key == kSDS_SI_autoBalanceTry_i)			rv = "autoBalanceTry";

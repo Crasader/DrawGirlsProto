@@ -112,7 +112,15 @@ void* StageImgLoader::t_function(void *data)
 float StageImgLoader::getDownloadPercentage()
 {
 	if(lchunk.size != 0)
-		return 1.f*lchunk.size/total_size;
+	{
+		float return_value = 1.f*lchunk.size/total_size;
+		if(return_value < 0.f)
+			return 0.f;
+		else if(return_value > 1.f)
+			return 1.f;
+		else
+			return return_value;
+	}
 	else
 		return 0;
 }

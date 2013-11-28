@@ -134,6 +134,12 @@ void StagePiece::touchCancelled (CCTouch * touch, CCEvent * event)
 }
 int StagePiece::getStageNumber ()
 {	return stage_number;	}
+int StagePiece::getStageLevel()
+{	return stage_level;		}
+CCRect StagePiece::getTouchRect()
+{	return touch_rect;		}
+string StagePiece::getPieceType()
+{	return piece_type.c_str();	}
 void StagePiece::setTouchBegin ()
 {	piece_img->setColor(ccGRAY);	}
 void StagePiece::setTouchCancel ()
@@ -247,6 +253,30 @@ void StagePiece::myInit (string t_piece, int t_number, int t_level, CCPoint t_p,
 		//			CCSprite* level_img = CCSprite::create(CCString::createWithFormat("test_map_level%d.png", stage_level)->getCString());
 		//			level_img->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
 		//			piece_img->addChild(level_img);
+	}
+	else if(piece_name.find("piece_buy") != string::npos || piece_name.find("piece_lock") != string::npos)
+	{
+		piece_img = GraySprite::create(piece_name.c_str());
+		piece_img->setGray(is_gray);
+		addChild(piece_img);
+		
+		int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+		int found_puzzle_number = 0;
+		for(int i=1;i<=puzzle_cnt && found_puzzle_number == 0;i++)
+		{
+			int t_start_stage = NSDS_GI(i, kSDS_PZ_startStage_i);
+			int t_stage_count = NSDS_GI(i, kSDS_PZ_stageCount_i);
+			if(stage_number >= t_start_stage && stage_number < t_start_stage+t_stage_count)
+				found_puzzle_number = i;
+		}
+		
+		if(piece_name.find("piece_buy") != string::npos)
+		{
+			CCLabelTTF* condition_gold = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(found_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number))->getCString(), mySGD->getFont().c_str(), 20);
+			condition_gold->setAnchorPoint(ccp(0.5,0.5));
+			condition_gold->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
+			piece_img->addChild(condition_gold);
+		}
 	}
 	
 	CCSprite* n_touch = CCSprite::create("whitePaper.png", CCRectMake(0, 0, touch_rect.size.width, touch_rect.size.height));

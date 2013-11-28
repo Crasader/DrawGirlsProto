@@ -17,17 +17,20 @@
 #include "StarGoldData.h"
 #include "LogData.h"
 #include "StageImgLoader.h"
+#include "cocos-ext.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 using namespace std;
 
 enum TitleMenuTag
 {
 	kTitle_MT_replay = 1,
+	kTitle_MT_nick,
 	kTitle_MT_puzzleBase = 10000
 };
 
-class TitleScene : public cocos2d::CCLayer
+class TitleScene : public cocos2d::CCLayer, public CCEditBoxDelegate//, public CCTextFieldDelegate
 {
 public:
 	// Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -60,6 +63,29 @@ private:
 	
 	CCObject* save_target;
 	SEL_CallFunc save_delegate;
+	
+	CCEditBox* input_text;
+//	CCTextFieldTTF* input_text;
+//    bool was_open_text;
+	
+//	void endCloseTextInput();
+	
+	CCSprite* nick_back;
+	
+	virtual void editBoxEditingDidBegin(CCEditBox* editBox);
+    virtual void editBoxEditingDidEnd(CCEditBox* editBox);
+    virtual void editBoxTextChanged(CCEditBox* editBox, const std::string& text);
+    virtual void editBoxReturn(CCEditBox* editBox);
+	
+//	virtual bool onTextFieldInsertText(CCTextFieldTTF* sender, const char* text, int nLen);
+//	virtual bool onTextFieldDetachWithIME(CCTextFieldTTF * sender);
+//	virtual bool onTextFieldAttachWithIME(CCTextFieldTTF * sender);
+	
+//	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+//	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+//	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+//	virtual void ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+//	virtual void registerWithTouchDispatcher();
 	
 	void startGetPuzzleList();
 	

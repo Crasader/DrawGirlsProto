@@ -798,7 +798,6 @@ void FailPopup::cellAction( CCObject* sender )
 										 
 										 contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
 										 contentJson["helpstage"] = mySD->getSilType();
-										 contentJson["sender"] = hspConnector::get()->getKakaoID();
 										 
 										 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 										 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
@@ -951,6 +950,7 @@ int FailPopup::getIsNotHelpableUser( std::string userId, int base_s ) /* 1일 */
 {
 	auto end = chrono::system_clock::now();
 	auto currentSecond = chrono::system_clock::to_time_t(end);
+
 	int ii = myDSH->getUserIntForStr("help_" + userId, 0);
 	if(ii + base_s < currentSecond) // 보낼 수 있다.
 	{

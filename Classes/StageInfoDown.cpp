@@ -21,8 +21,6 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 			NSDS_SI(mySD->getSilType(), kSDS_SI_puzzle_i, result_data["puzzle"].asInt());
 			NSDS_SI(mySD->getSilType(), kSDS_SI_playtime_i, result_data["playtime"].asInt());
 			NSDS_SD(mySD->getSilType(), kSDS_SI_scoreRate_d, result_data["scoreRate"].asDouble());
-			NSDS_SI(mySD->getSilType(), kSDS_SI_condGold_i, result_data["condGold"].asInt());
-			NSDS_SI(mySD->getSilType(), kSDS_SI_condStageNo_i, result_data["condStageNo"].asInt());
 			
 			Json::Value t_mission = result_data["mission"];
 			NSDS_SI(mySD->getSilType(), kSDS_SI_missionType_i, t_mission["type"].asInt());

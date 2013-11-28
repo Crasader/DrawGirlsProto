@@ -115,7 +115,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			CrashChargeNodeLambda* t_ccn =
 			CrashChargeNodeLambda::create(startPosition, castFrame,
-										  func, cb);
+										  func, cb, pattern);
 			t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
 			addChild(t_ccn);
 			t_ccn->startCharge();
@@ -125,7 +125,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-											func, cb);
+											func, cb, pattern);
 			
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			addChild(t_ccn);
@@ -136,7 +136,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			ChargeNodeLambda* t_ccn =
 			ChargeNodeLambda::create(startPosition, castFrame,
-									 func, cb);
+									 func, cb, pattern);
 			
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			addChild(t_ccn);

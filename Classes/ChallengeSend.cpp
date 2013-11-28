@@ -47,7 +47,6 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 		contentJson["msg"] = (nickname + "님에게 도전!");
 		contentJson["challengestage"] = mySD->getSilType();
 		contentJson["score"] = score;
-		contentJson["sender"] = hspConnector::get()->getKakaoID();
 		p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 		std::string recvId = user_id;
 		p["receiverMemberID"] = recvId;
@@ -110,7 +109,6 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 //		contentJson["msg"] = (nickname + "님에게 도전!");
 		contentJson["challengestage"] = mySD->getSilType();
 		contentJson["score"] = score;
-		contentJson["sender"] = hspConnector::get()->getKakaoID();
 		p["receiverMemberID"] = user_id;
 		p["senderMemberID"] = hspConnector::get()->getKakaoID();
 		p["type"] = kChallengeResult;
@@ -125,7 +123,6 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
 																		 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 																		 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-																		 
 																		 //																		setHelpSendTime(recvId);
 																		 GraphDogLib::JsonToLog("sendMessage", r);
 																		 
@@ -167,16 +164,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																												ttf
 																												);
 																		 av->setContentSize(ttf->getDimensions());
-																		 
-																		 //	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-																		 //																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-																		 //	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-																		 //																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-																		 //	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-																		 //																					[](CCObject* e){
-																		 //																						CCLog("press!!");
-																		 //																					});
-																		 //	av->addButton(m1);
+
 																		 av->addButton(CCMenuItemImageLambda::create
 																									 (
 																										"ui_common_ok.png",

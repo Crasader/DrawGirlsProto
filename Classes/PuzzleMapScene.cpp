@@ -169,7 +169,8 @@ void PuzzleMapScene::startSceneSetting()
 		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 		{
 			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-			t_sp->mySetTouchEnable(true);
+			if(t_sp)
+				t_sp->mySetTouchEnable(true);
 		}
 		
 		is_gesturable_map_mode = true;
@@ -190,7 +191,8 @@ void PuzzleMapScene::startSceneSetting()
 			for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 			{
 				StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-				t_sp->mySetTouchEnable(false);
+				if(t_sp)
+					t_sp->mySetTouchEnable(false);
 			}
 			
 			this->unschedule(schedule_selector(PuzzleMapScene::moveAnimation));
@@ -243,7 +245,8 @@ void PuzzleMapScene::startSceneSetting()
 			for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 			{
 				StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-				t_sp->mySetTouchEnable(true);
+				if(t_sp)
+					t_sp->mySetTouchEnable(true);
 			}
 			
 			is_gesturable_map_mode = true;
@@ -267,7 +270,8 @@ void PuzzleMapScene::startSceneSetting()
 			for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 			{
 				StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-				t_sp->mySetTouchEnable(false);
+				if(t_sp)
+					t_sp->mySetTouchEnable(false);
 			}
 			
 			this->unschedule(schedule_selector(PuzzleMapScene::moveAnimation));
@@ -320,7 +324,8 @@ void PuzzleMapScene::startSceneSetting()
 			for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 			{
 				StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-				t_sp->mySetTouchEnable(true);
+				if(t_sp)
+					t_sp->mySetTouchEnable(true);
 			}
 			
 			is_gesturable_map_mode = true;
@@ -347,7 +352,8 @@ void PuzzleMapScene::startSceneSetting()
 		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 		{
 			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-			t_sp->mySetTouchEnable(true);
+			if(t_sp)
+				t_sp->mySetTouchEnable(true);
 		}
 		
 		is_gesturable_map_mode = true;
@@ -547,77 +553,105 @@ void PuzzleMapScene::setMapNode()
 		if(stage_number != 0)
 		{
 			int stage_level = SDS_GI(kSDF_puzzleInfo, recent_puzzle_number, CCSTR_CWF("stage%d_level", stage_number)->getCString());
-			
-			bool is_found = false;
-			int found_number = 0;
-			bool is_have_card[3] = {0,};
-			for(int k=3;k>=1;k--)
+			if(stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+			   (NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
+				(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
 			{
-				int card_number = SDS_GI(kSDF_stageInfo, stage_number, CCSTR_CWF("level%d_card", k)->getCString());
-				int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
-				if(card_durability > 0)
+				bool is_found = false;
+				int found_number = 0;
+				bool is_have_card[3] = {0,};
+				for(int k=3;k>=1;k--)
 				{
-					if(!is_found)
+					int card_number = SDS_GI(kSDF_stageInfo, stage_number, CCSTR_CWF("level%d_card", k)->getCString());
+					int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
+					if(card_durability > 0)
 					{
-						is_found = true;
-						found_number = k;
+						if(!is_found)
+						{
+							is_found = true;
+							found_number = k;
+						}
+						is_have_card[k-1] = true;
 					}
-					is_have_card[k-1] = true;
 				}
-			}
-			
-			if(found_number == 3)
-			{
-				StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, i)->getCString(),
-													  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
-													  this, menu_selector(PuzzleMapScene::stageAction));
-				t_sp->mySetTouchEnable(false);
 				
-				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				
-				t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, i)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
-				t_sp->setPuzzleMode(my_puzzle_mode);
-				t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
-			}
-			else if(found_number == 2)
-			{
-				StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, i)->getCString(),
-													  stage_number, stage_level, sp_position, stage_rect, false, true, piece_type.c_str(),
-													  this, menu_selector(PuzzleMapScene::stageAction));
-				t_sp->mySetTouchEnable(false);
-				
-				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				
-				t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, i)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
-				t_sp->setPuzzleMode(my_puzzle_mode);
-				t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
-			}
-			else if(found_number == 1)
-			{
-				StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, i)->getCString(),
-													  stage_number, stage_level, sp_position, stage_rect, true, true, piece_type.c_str(),
-													  this, menu_selector(PuzzleMapScene::stageAction));
-				t_sp->mySetTouchEnable(false);
-				
-				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				
-				t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, i)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
-				t_sp->setPuzzleMode(my_puzzle_mode);
-				t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
+				if(found_number == 3)
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, i)->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					
+					t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, i)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_sp->setPuzzleMode(my_puzzle_mode);
+					t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
+				}
+				else if(found_number == 2)
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, i)->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, false, true, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					
+					t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, i)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_sp->setPuzzleMode(my_puzzle_mode);
+					t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
+				}
+				else if(found_number == 1)
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, i)->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, true, true, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					
+					t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, i)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_sp->setPuzzleMode(my_puzzle_mode);
+					t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
+				}
+				else
+				{
+					is_puzzle_clear = false;
+					StagePiece* t_sp = StagePiece::create("test_puzzle_empty.png",
+														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				}
 			}
 			else
 			{
 				is_puzzle_clear = false;
-				StagePiece* t_sp = StagePiece::create("test_puzzle_empty.png",
-													  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
-													  this, menu_selector(PuzzleMapScene::stageAction));
-				t_sp->mySetTouchEnable(false);
-				
-				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("piece_buy_%s.png", piece_type.c_str())->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				}
+				else
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("piece_lock_%s.png", piece_type.c_str())->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		map_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														map_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				}
 			}
 		}
 		else
@@ -1010,12 +1044,158 @@ void PuzzleMapScene::stageAction(CCObject* sender)
 	
 	int tag = ((CCNode*)sender)->getTag();
 	
-	mySD->setSilType(tag);
-	myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, tag);
-	myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, recent_puzzle_number);
-	
-	StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(PuzzleMapScene::showStageSettingPopup), this, callfunc_selector(PuzzleMapScene::stageCancel));
-	addChild(t_sid, kPMS_Z_popup);
+	if(tag == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, tag))
+	{
+		mySD->setSilType(tag);
+		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, tag);
+		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, recent_puzzle_number);
+		
+		StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(PuzzleMapScene::showStageSettingPopup), this, callfunc_selector(PuzzleMapScene::stageCancel));
+		addChild(t_sid, kPMS_Z_popup);
+	}
+	else if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag)))
+	{
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup);
+		
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+		case_back->setPosition(CCPointZero);
+		t_container->addChild(case_back);
+		
+		case_back->setContentSize(CCSizeMake(230, 250));
+		
+		CCScale9Sprite* content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		content_back->setPosition(ccp(0,2));
+		t_container->addChild(content_back);
+		
+		content_back->setContentSize(CCSizeMake(202, 146));
+		
+		CCLabelTTF* title_label = CCLabelTTF::create("스테이지 열기", mySGD->getFont().c_str(), 20);
+		title_label->setPosition(ccp(0, 102));
+		t_container->addChild(title_label);
+		
+		CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat("%d gold 로 오픈", NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag))->getCString(), mySGD->getFont().c_str(), 18);
+		content_label->setPosition(CCPointZero);
+		t_container->addChild(content_label);
+		
+		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+		s_close->setColor(ccGRAY);
+		
+		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																			{
+																				is_menu_enable = true;
+																				t_popup->removeFromParent();
+																			});
+		
+		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+		close_menu->setPosition(ccp(92,105));
+		t_container->addChild(close_menu);
+		
+		if(mySGD->getGold() >= NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag))
+		{
+			CCSprite* n_buy = CCSprite::create("popup2_buy.png");
+			CCSprite* s_buy = CCSprite::create("popup2_buy.png");
+			s_buy->setColor(ccGRAY);
+			
+			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
+				mySGD->setGold(mySGD->getGold() - NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag));
+				myDSH->setIntegerForKey(kDSH_Key_openStageCnt, myDSH->getIntegerForKey(kDSH_Key_openStageCnt)+1);
+				myDSH->setIntegerForKey(kDSH_Key_openStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_openStageCnt), tag);
+				myDSH->setBoolForKey(kDSH_Key_isOpenStage_int1, tag, true);
+				
+				vector<SaveUserData_Key> save_userdata_list;
+				
+				save_userdata_list.push_back(kSaveUserData_Key_gold);
+				save_userdata_list.push_back(kSaveUserData_Key_openStage);
+				
+				myDSH->saveUserData(save_userdata_list, nullptr);
+				
+				
+				CCNode* open_puzzle_container = CCNode::create();
+				t_popup->setContainerNode(open_puzzle_container);
+				
+				CCScale9Sprite* open_puzzle_case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+				open_puzzle_case_back->setPosition(CCPointZero);
+				open_puzzle_container->addChild(open_puzzle_case_back);
+				
+				open_puzzle_case_back->setContentSize(CCSizeMake(230, 250));
+				
+				CCScale9Sprite* open_puzzle_content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+				open_puzzle_content_back->setPosition(ccp(0,2));
+				open_puzzle_container->addChild(open_puzzle_content_back);
+				
+				open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
+				
+				CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("스테이지 오픈", mySGD->getFont().c_str(), 20);
+				open_puzzle_title_label->setPosition(ccp(0, 102));
+				open_puzzle_container->addChild(open_puzzle_title_label);
+				
+				CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 스테이지가\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
+				open_puzzle_content_label->setPosition(CCPointZero);
+				open_puzzle_container->addChild(open_puzzle_content_label);
+				
+				CCSprite* n_op_ok = CCSprite::create("popup2_ok.png");
+				CCSprite* s_op_ok = CCSprite::create("popup2_ok.png");
+				s_op_ok->setColor(ccGRAY);
+				
+				CCMenuItemSpriteLambda* op_ok_item = CCMenuItemSpriteLambda::create(n_op_ok, s_op_ok, [=](CCObject* sender){
+					is_menu_enable = true;
+					t_popup->removeFromParent();
+				});
+				
+				CCMenuLambda* op_ok_menu = CCMenuLambda::createWithItem(op_ok_item);
+				op_ok_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+				op_ok_menu->setPosition(ccp(0,-95));
+				open_puzzle_container->addChild(op_ok_menu);
+				
+				StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(tag);
+				CCNode* t_parent = t_sp->getParent();
+				int stage_number = t_sp->getStageNumber();
+				int stage_level = t_sp->getStageLevel();
+				CCPoint sp_position = t_sp->getPosition();
+				CCRect touch_rect = t_sp->getTouchRect();
+				string piece_type = t_sp->getPieceType().c_str();
+				
+				t_sp->removeFromParent();
+				
+				t_sp = StagePiece::create("test_puzzle_empty.png",
+													  stage_number, stage_level, sp_position, touch_rect, false, false, piece_type.c_str(),
+													  this, menu_selector(PuzzleMapScene::stageAction));
+				t_sp->mySetTouchEnable(false);
+				
+				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		t_parent->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				else														t_parent->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+			});
+			
+			CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
+			buy_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+			buy_menu->setPosition(ccp(0,-95));
+			t_container->addChild(buy_menu);
+		}
+		else
+		{
+			CCSprite* buy_img = CCSprite::create("popup2_buy.png");
+			buy_img->setColor(ccc3(100, 100, 100));
+			buy_img->setPosition(ccp(0,-95));
+			t_container->addChild(buy_img);
+		}
+	}
+	else
+	{
+		is_menu_enable = true;
+	}
 }
 
 void PuzzleMapScene::showStageSettingPopup()
@@ -1027,7 +1207,8 @@ void PuzzleMapScene::showStageSettingPopup()
 	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 	{
 		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-		t_sp->mySetTouchEnable(false);
+		if(t_sp)
+			t_sp->mySetTouchEnable(false);
 	}
 	
 	is_gesturable_map_mode = false;
@@ -1051,7 +1232,8 @@ void PuzzleMapScene::hideStageSettingPopup()
 	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 	{
 		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-		t_sp->mySetTouchEnable(true);
+		if(t_sp)
+			t_sp->mySetTouchEnable(true);
 	}
 	
 	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
@@ -1068,7 +1250,8 @@ void PuzzleMapScene::showClearPopup()
 	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 	{
 		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-		t_sp->mySetTouchEnable(false);
+		if(t_sp)
+			t_sp->mySetTouchEnable(false);
 	}
 	
 	is_gesturable_map_mode = false;
@@ -1176,7 +1359,8 @@ void PuzzleMapScene::endGetPuzzle()
 	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 	{
 		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-		t_sp->mySetTouchEnable(true);
+		if(t_sp)
+			t_sp->mySetTouchEnable(true);
 	}
 	
 	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
@@ -1193,7 +1377,8 @@ void PuzzleMapScene::showFailPopup()
 	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 	{
 		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-		t_sp->mySetTouchEnable(false);
+		if(t_sp)
+			t_sp->mySetTouchEnable(false);
 	}
 	
 	is_gesturable_map_mode = false;
@@ -1231,7 +1416,8 @@ void PuzzleMapScene::hideFailPopup()
 		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 		{
 			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-			t_sp->mySetTouchEnable(true);
+			if(t_sp)
+				t_sp->mySetTouchEnable(true);
 		}
 		
 		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
@@ -1371,7 +1557,8 @@ void PuzzleMapScene::startChangeUiMode()
 	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 	{
 		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-		t_sp->mySetTouchEnable(false);
+		if(t_sp)
+			t_sp->mySetTouchEnable(false);
 	}
 	
 	this->unschedule(schedule_selector(PuzzleMapScene::moveAnimation));
@@ -1428,6 +1615,7 @@ void PuzzleMapScene::stopChangeUiMode()
 
 void PuzzleMapScene::startChangeMapMode()
 {
+	is_menu_enable = false;
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 	map_mode_state = kMMS_changeMode;
 	
@@ -1476,7 +1664,8 @@ void PuzzleMapScene::stopChangeMapMode()
 	for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 	{
 		StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-		t_sp->mySetTouchEnable(true);
+		if(t_sp)
+			t_sp->mySetTouchEnable(true);
 	}
 	
 	unschedule(schedule_selector(PuzzleMapScene::changeMapMode));
@@ -2951,8 +3140,11 @@ void PuzzleMapScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 						if(touched_stage_number != 0)
 						{
 							StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(touched_stage_number);
-							t_sp->touchEnded(touch, pEvent);
-							t_sp->setTouchCancel();
+							if(t_sp)
+							{
+								t_sp->touchEnded(touch, pEvent);
+								t_sp->setTouchCancel();
+							}
 						}
 					}
 					
@@ -3095,6 +3287,8 @@ void PuzzleMapScene::endMovingMapNode()
 	CCMenu* load_menu = CCMenu::createWithItem(load_item);
 	load_menu->setPosition(ccp(240,160));
 	addChild(load_menu, kPMS_Z_popup, kPMS_MT_loadPuzzleInfo);
+	
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 
 	is_menu_enable = true;
 }
@@ -3159,7 +3353,16 @@ void PuzzleMapScene::endMovingMapNodeNotOpenPuzzle()
 	addChild(ticket_menu, kPMS_Z_popup, kPMS_MT_callTicket);
 	
 	
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	
+	
 	is_menu_enable = true;
+}
+
+void PuzzleMapScene::openPuzzleAction(int t_puzzle_number)
+{
+	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(PuzzleMapScene::endLoadPuzzleInfo), t_puzzle_number);
+	addChild(t_sld, kPMS_Z_popup);
 }
 
 void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
@@ -3321,7 +3524,7 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 		
 		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
 		
-		TicketRequestContent* t_container = TicketRequestContent::create(t_popup->getTouchPriority());
+		TicketRequestContent* t_container = TicketRequestContent::create(t_popup->getTouchPriority(), recent_puzzle_number);
 		t_popup->setContainerNode(t_container);
 		addChild(t_popup);
 		
@@ -3348,6 +3551,8 @@ void PuzzleMapScene::endMovingMapNodeNotClearPuzzle()
 	map_node->removeFromParent();
 	map_node = after_map_node;
 	after_map_node = NULL;
+	
+	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 	
 	is_menu_enable = true;
 }
@@ -3508,77 +3713,105 @@ void PuzzleMapScene::creatingPuzzle()
 		if(stage_number != 0)
 		{
 			int stage_level = SDS_GI(kSDF_puzzleInfo, recent_puzzle_number, CCSTR_CWF("stage%d_level", stage_number)->getCString());
-
-			bool is_found = false;
-			int found_number = 0;
-			bool is_have_card[3] = {0,};
-			for(int k=3;k>=1;k--)
+			if(stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+			   (NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
+				(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
 			{
-				int card_number = SDS_GI(kSDF_stageInfo, stage_number, CCSTR_CWF("level%d_card", k)->getCString());
-				int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
-				if(card_durability > 0)
+				bool is_found = false;
+				int found_number = 0;
+				bool is_have_card[3] = {0,};
+				for(int k=3;k>=1;k--)
 				{
-					if(!is_found)
+					int card_number = SDS_GI(kSDF_stageInfo, stage_number, CCSTR_CWF("level%d_card", k)->getCString());
+					int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
+					if(card_durability > 0)
 					{
-						is_found = true;
-						found_number = k;
+						if(!is_found)
+						{
+							is_found = true;
+							found_number = k;
+						}
+						is_have_card[k-1] = true;
 					}
-					is_have_card[k-1] = true;
 				}
-			}
-
-			if(found_number == 3)
-			{
-				StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, piece_no)->getCString(),
-					stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
-					this, menu_selector(PuzzleMapScene::stageAction));
-				t_sp->mySetTouchEnable(false);
-
-				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
-
-				t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, piece_no)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
-				t_sp->setPuzzleMode(my_puzzle_mode);
-				t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
-			}
-			else if(found_number == 2)
-			{
-				StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, piece_no)->getCString(),
-					stage_number, stage_level, sp_position, stage_rect, false, true, piece_type.c_str(),
-					this, menu_selector(PuzzleMapScene::stageAction));
-				t_sp->mySetTouchEnable(false);
-
-				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
-
-				t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, piece_no)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
-				t_sp->setPuzzleMode(my_puzzle_mode);
-				t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
-			}
-			else if(found_number == 1)
-			{
-				StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, piece_no)->getCString(),
-					stage_number, stage_level, sp_position, stage_rect, true, true, piece_type.c_str(),
-					this, menu_selector(PuzzleMapScene::stageAction));
-				t_sp->mySetTouchEnable(false);
-
-				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
-
-				t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, piece_no)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
-				t_sp->setPuzzleMode(my_puzzle_mode);
-				t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
+				
+				if(found_number == 3)
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, piece_no)->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					
+					t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, piece_no)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_sp->setPuzzleMode(my_puzzle_mode);
+					t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
+				}
+				else if(found_number == 2)
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, piece_no)->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, false, true, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					
+					t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, piece_no)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_sp->setPuzzleMode(my_puzzle_mode);
+					t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
+				}
+				else if(found_number == 1)
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("puzzle%d_piece%d", recent_puzzle_number, piece_no)->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, true, true, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					
+					t_sp->setChangable(CCSTR_CWF("puzzle%d_thumbnail%d", recent_puzzle_number, piece_no)->getCString(), is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_sp->setPuzzleMode(my_puzzle_mode);
+					t_sp->shadow_node = addShadow(stage_number, piece_type.c_str(), t_sp->getPosition());
+				}
+				else
+				{
+					is_puzzle_clear = false;
+					StagePiece* t_sp = StagePiece::create("test_puzzle_empty.png",
+														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				}
 			}
 			else
 			{
 				is_puzzle_clear = false;
-				StagePiece* t_sp = StagePiece::create("test_puzzle_empty.png",
-					stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
-					this, menu_selector(PuzzleMapScene::stageAction));
-				t_sp->mySetTouchEnable(false);
-
-				if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
-				else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("piece_buy_%s.png", piece_type.c_str())->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				}
+				else
+				{
+					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("piece_lock_%s.png", piece_type.c_str())->getCString(),
+														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
+														  this, menu_selector(PuzzleMapScene::stageAction));
+					t_sp->mySetTouchEnable(false);
+					
+					if(my_puzzle_mode == kPM_default && t_sp->isBoarder())		target_node->addChild(t_sp, kPMS_Z_boarderStage + t_sp->getStageNumber(), t_sp->getStageNumber());
+					else														target_node->addChild(t_sp, kPMS_Z_stage + t_sp->getStageNumber(), t_sp->getStageNumber());
+				}
 			}
 		}
 		else

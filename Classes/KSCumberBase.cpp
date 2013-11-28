@@ -1116,7 +1116,27 @@ void KSCumberBase::cumberAttack(float dt)
 	}
 	else
 	{
-		selectedAttacks.assign(m_attacks.begin(), m_attacks.end());
+		auto end = chrono::system_clock::now();
+		auto currentSecond = chrono::system_clock::to_time_t(end);
+		
+		if(m_attacks.size() == 1) // 하나면 그냥 넣음...
+		{
+			selectedAttacks.assign(m_attacks.begin(), m_attacks.end());
+		}
+		else for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
+		{
+			// 안넣어져야할 조건
+			// 같은 패턴이 3초내 발동되면 해당패턴은 안넣음.
+			if( (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
+				 currentSecond <= m_lastPattern.exeTime + 3)
+			{
+				
+			}
+			else // 넣어져야할 조건
+			{
+				selectedAttacks.push_back(*iter);
+			}
+		}
 	}
 	
 	
@@ -1136,7 +1156,7 @@ void KSCumberBase::cumberAttack(float dt)
 			attackProb += aiProbAdder();
 		}
 		auto ps = ProbSelector({attackProb, 1.0 - attackProb});
-//		exeProb = ProbSelector::sel(m_attackPercent / 100.f, 1.0 - m_attackPercent / 100.f, 0.0);
+
 		exeProb = ps.getResult();
 	}
 	
@@ -1144,11 +1164,11 @@ void KSCumberBase::cumberAttack(float dt)
 		IntPoint point = ccp2ip(getPosition());
 		IntPoint afterPoint = point;
 		float radius = 40.f;
-//		float sc = getCumberScale();
+
 		float half_distance = radius*getCumberScale(); // 20.f : radius for base scale 1.f
 		int ip_half_distance = half_distance;
 		int outlineCount = 0;
-//		set<IntPoint> ips;
+
 		for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
 		{
 			for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
@@ -1169,9 +1189,6 @@ void KSCumberBase::cumberAttack(float dt)
 		{
 			outlineCountRatio.pop_front();
 		}
-//		if(out)
-//		if(outlineCount >= 1)
-//			CCLog("outline Count = %d", outlineCount);
 
 	}
 	// 확률로.
@@ -1375,7 +1392,7 @@ void KSCumberBase::bossDieBomb(float dt)
 	if(find(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end(), m_bossDie.m_bossDieFrameCount)
 		 != m_bossDie.m_bossDieBombFrameNumbers.end())
 	{
-		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi");
+		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
 		CCPoint t = getPosition();
 		t.x += m_well512.GetFloatValue(-100.f, 100.f);
 		t.y += m_well512.GetFloatValue(-100.f, 100.f);
@@ -1883,6 +1900,21 @@ void KSCumberBase::settingFuryRule()
 
 void KSCumberBase::settingAI( int ai )
 {
+	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
+	int balanceN = 10;
+	float downLimit = 0.5f;
+//
+	ostringstream oss;
+	oss << mySD->getSilType();
+	std::string playcountKey = std::string("playcount_") + oss.str();
+	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
+	
+	if(autobalanceTry < playCount)
+	{
+		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
+		ai = MAX(ai * downLimit, ai - downLimit / balanceN * exceedPlay);
+	}
+	
 	m_aiValue = ai;
 }
 
@@ -1926,6 +1958,21 @@ void KSCumberBase::settingHp( float hp )
 
 void KSCumberBase::settingAttackPercent( float ap )
 {
+	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
+	int balanceN = 10;
+	float downLimit = 0.5f;
+	//
+	ostringstream oss;
+	oss << mySD->getSilType();
+	std::string playcountKey = std::string("playcount_") + oss.str();
+	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
+	
+	if(autobalanceTry < playCount)
+	{
+		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
+		ap = MAX(ap * downLimit, ap - downLimit / balanceN * exceedPlay);
+	}
+	
 	m_attackPercent = ap;
 }
 
