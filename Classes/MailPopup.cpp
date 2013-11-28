@@ -772,7 +772,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 			 [=](CCObject*)
 			 {
-				 
+				 // 영호
+#if 0
+				 contentObj["sendernick"].asString(); // 보낸 사람 닉네임.
+				 mail["friendID"]; // 보낸 사람 아이디
+				 contentObj["puzzlenumber"].asInt(); // 요청했던 퍼즐 번호.
+#endif
 			 }
 			 );
 			sendBtn->setPosition(ccp(190, 22));
