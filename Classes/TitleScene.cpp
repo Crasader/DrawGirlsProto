@@ -9,6 +9,7 @@
 #include "TitleScene.h"
 #include "StarGoldData.h"
 #include "TakeCardPopup.h"
+#include "utf8.h"
 
 CCScene* TitleScene::scene()
 {
@@ -169,6 +170,129 @@ void TitleScene::resultGetUserData( Json::Value result_data )
 	}
 }
 
+bool TitleScene::onTextFieldInsertText(cocos2d::CCTextFieldTTF *sender, const char *text, int nLen)
+{
+    string tempString = sender->getString();
+	if(tempString == "")
+	{
+		return false;
+	}
+	else
+	{
+		basic_string<wchar_t> result;
+		utf8::utf8to16(tempString.begin(), tempString.end(), back_inserter(result));
+		
+		if(result.length() > 30)
+		{
+			result = result.substr(0,30);
+			string conver;
+			utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
+			sender->setString(conver.c_str());
+		}
+	}
+	
+	return false;
+}
+
+bool TitleScene::onTextFieldAttachWithIME(cocos2d::CCTextFieldTTF *sender)
+{
+    was_open_text = true;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+    CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,105));
+    runAction(t_move);
+#endif
+    return false;
+}
+
+void TitleScene::endCloseTextInput()
+{
+	was_open_text = false;
+}
+
+bool TitleScene::onTextFieldDetachWithIME(cocos2d::CCTextFieldTTF *sender)
+{
+	string tempString = sender->getString();
+	if(tempString == "")
+	{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+        CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,-105));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleScene::endCloseTextInput));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+		runAction(t_seq);
+#else
+		was_open_text = false;
+#endif
+		return false;
+	}
+	else
+	{
+		basic_string<wchar_t> result;
+		utf8::utf8to16(tempString.begin(), tempString.end(), back_inserter(result));
+		
+		if(result.length() > 30)
+		{
+			result = result.substr(0,30);
+			string conver;
+			utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
+			sender->setString(conver.c_str());
+		}
+	}
+    
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+    CCMoveBy* t_move = CCMoveBy::create(0.3f, ccp(0,-105));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleScene::endCloseTextInput));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+    runAction(t_seq);
+#else
+	was_open_text = false;
+#endif
+    
+	return false;
+}
+
+bool TitleScene::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	CCTouch* touch = pTouch;
+	CCPoint location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(touch->getLocationInView()));
+	location = myDSH->wideWidthFixTouch(location);
+	
+    CCRect textFieldRect = CCRectMake(0, 0, input_text->getContentSize().width, input_text->getContentSize().height);
+    textFieldRect = CCRectApplyAffineTransform(textFieldRect, input_text->nodeToWorldTransform());
+    
+    if(textFieldRect.containsPoint(location))//!was_open_text &&
+    {
+        input_text->attachWithIME();
+    }
+	else
+	{
+		if(was_open_text)
+		{
+			input_text->detachWithIME();
+		}
+	}
+    
+	return true;
+}
+
+void TitleScene::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	
+}
+
+void TitleScene::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	
+}
+void TitleScene::ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	
+}
+
+void TitleScene::registerWithTouchDispatcher()
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority+1, false);
+}
+
 void TitleScene::resultSaveUserData( Json::Value result_data )
 {
 	CCLog("resultSaveUserData data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
@@ -179,16 +303,57 @@ void TitleScene::resultSaveUserData( Json::Value result_data )
 		
 		myDSH->loadAllUserData(result_data, card_data_load_list);
 
-		mySGD->resetHasGottenCards();
-
-		if(card_data_load_list.size() > 0)
+		string nick = myDSH->getStringForKey(kDSH_Key_nick);
+		
+		if(nick == "")
 		{
-			startGetCardsInfo();
+			state_label->setString("닉네임을 입력해주세요.");
+			
+			nick_back = CCSprite::create("nickname_back.png");
+			nick_back->setPosition(ccp(240,130));
+			addChild(nick_back);
+			
+//			CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 210, 30));
+//			temp_back->setAnchorPoint(ccp(0.5,0.5));
+//			temp_back->setPosition(ccp(197,113));
+//			temp_back->setOpacity(100);
+//			addChild(temp_back);
+			
+			input_text = CCTextFieldTTF::textFieldWithPlaceHolder("입력해주세요.", CCSizeMake(210,30), kCCTextAlignmentLeft, mySGD->getFont().c_str(), 18);
+			input_text->setAnchorPoint(ccp(0.5,0.5));
+			input_text->setPosition(ccp(197,113));
+			addChild(input_text);
+			input_text->setDelegate(this);
+			
+			CCSprite* n_ok = CCSprite::create("nickname_ok.png");
+			CCSprite* s_ok = CCSprite::create("nickname_ok.png");
+			s_ok->setColor(ccGRAY);
+			
+			CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(TitleScene::menuAction));
+			ok_item->setTag(kTitle_MT_nick);
+			
+			CCMenu* ok_menu = CCMenu::createWithItem(ok_item);
+			ok_menu->setPosition(ccp(370,130));
+			addChild(ok_menu, 0, kTitle_MT_nick);
+			
+//			input_text->attachWithIME();
+			
+			setTouchEnabled(true);
+			is_menu_enable = true;
 		}
 		else
 		{
-			state_label->setString("퍼즐 목록을 받아오는 ing...");
-			startGetPuzzleList();
+			mySGD->resetHasGottenCards();
+			
+			if(card_data_load_list.size() > 0)
+			{
+				startGetCardsInfo();
+			}
+			else
+			{
+				state_label->setString("퍼즐 목록을 받아오는 ing...");
+				startGetPuzzleList();
+			}
 		}
 	}
 	else
@@ -656,6 +821,37 @@ void TitleScene::menuAction( CCObject* sender )
 	{
 		removeChildByTag(kTitle_MT_replay);
 		(save_target->*save_delegate)();
+	}
+	else if(tag == kTitle_MT_nick)
+	{
+		string comp_not_ok = "";
+		if(input_text->getString() != comp_not_ok)
+		{
+			myDSH->setStringForKey(kDSH_Key_nick, input_text->getString());
+			setTouchEnabled(false);
+			is_menu_enable = false;
+			nick_back->removeFromParent();
+			removeChildByTag(kTitle_MT_nick);
+			input_text->removeFromParent();
+			
+			myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
+			
+			mySGD->resetHasGottenCards();
+			
+			if(card_data_load_list.size() > 0)
+			{
+				startGetCardsInfo();
+			}
+			else
+			{
+				state_label->setString("퍼즐 목록을 받아오는 ing...");
+				startGetPuzzleList();
+			}
+		}
+		else
+		{
+			is_menu_enable = true;
+		}
 	}
 	else if(tag >= kTitle_MT_puzzleBase)
 	{

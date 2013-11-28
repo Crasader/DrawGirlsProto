@@ -270,6 +270,14 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 	score = t_score + t_score*(stage_grade-1.f)*0.5f + t_score*(1.f-(t_use_time*1.f)/t_total_time);
 
 	game_time = t_game_time;
+	
+	if(!myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType()))
+	{
+		myDSH->setIntegerForKey(kDSH_Key_clearStageCnt, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt)+1);
+		myDSH->setIntegerForKey(kDSH_Key_clearStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt), mySD->getSilType());
+		myDSH->setBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType(), true);
+	}
+	
 	myGD->setIsGameover(true);
 }
 

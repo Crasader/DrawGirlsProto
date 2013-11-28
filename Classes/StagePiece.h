@@ -34,6 +34,9 @@ public:
 	void touchEnded (CCTouch * touch, CCEvent * event);
 	void touchCancelled (CCTouch * touch, CCEvent * event);
 	int getStageNumber ();
+	int getStageLevel();
+	CCRect getTouchRect();
+	string getPieceType();
 	void setTouchBegin ();
 	void setTouchCancel ();
 	bool isBoarder ();

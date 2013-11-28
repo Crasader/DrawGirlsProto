@@ -42,7 +42,14 @@ typedef enum t_DSH_Key{
 	kDSH_Key_jackBaseSpeed,
 	kDSH_Key_openPuzzleCnt,
 	kDSH_Key_isClearedPuzzle_int1,
-	kDSH_Key_haveTicketCnt
+	kDSH_Key_haveTicketCnt,
+	kDSH_Key_openStageCnt,
+	kDSH_Key_openStageNumber_int1,
+	kDSH_Key_isOpenStage_int1,
+	kDSH_Key_clearStageCnt,
+	kDSH_Key_clearStageNumber_int1,
+	kDSH_Key_isClearStage_int1,
+	kDSH_Key_nick
 }DSH_Key;
 
 enum SaveUserData_Key{
@@ -53,7 +60,9 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_highScore,
 	kSaveUserData_Key_selectedCard,
 	kSaveUserData_Key_openPuzzle,
-	kSaveUserData_Key_haveTicket
+	kSaveUserData_Key_haveTicket,
+	kSaveUserData_Key_openStage,
+	kSaveUserData_Key_nick
 };
 
 #define myDSH DataStorageHub::sharedInstance()
@@ -161,6 +170,15 @@ public:
 		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1);
 	}
 	
+	string getStringForKey(DSH_Key t_key)
+	{
+		return myDefault->getValue(kSDF_myDSH, getKey(t_key), "");
+	}
+	void setStringForKey(DSH_Key t_key, string val1)
+	{
+		myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), val1.c_str());
+	}
+	
 	string getStringForKey(DSH_Key t_key, int key_val1)
 	{
 		return myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), "");
@@ -226,10 +244,18 @@ public:
 		else if(t_name == kDSH_Key_jackBaseSpeed)						return_value = "jbs";
 		
 		else if(t_name == kDSH_Key_openPuzzleCnt)						return_value = "opc";
-		else if(t_name == kDSH_Key_isClearedPuzzle_int1)
-			return_value = "icp%d";
+		else if(t_name == kDSH_Key_isClearedPuzzle_int1)				return_value = "icp%d";
 		
 		else if(t_name == kDSH_Key_haveTicketCnt)						return_value = "htc";
+		
+		else if(t_name == kDSH_Key_openStageCnt)						return_value = "osc";
+		else if(t_name == kDSH_Key_openStageNumber_int1)				return_value = "osn%d";
+		else if(t_name == kDSH_Key_isOpenStage_int1)					return_value = "ios%d";
+		else if(t_name == kDSH_Key_clearStageCnt)						return_value = "csc";
+		else if(t_name == kDSH_Key_clearStageNumber_int1)				return_value = "csn%d";
+		else if(t_name == kDSH_Key_isClearStage_int1)					return_value = "ics%d";
+		
+		else if(t_name == kDSH_Key_nick)								return_value = "nick";
 		
 		return return_value;
 	}
@@ -240,34 +266,11 @@ public:
 		param["memberID"] = hspConnector::get()->getKakaoID();
 		
 		Json::Value data;
-		data[getKey(kDSH_Key_savedStar)] = getIntegerForKey(kDSH_Key_savedStar); // 1
-		data[getKey(kDSH_Key_savedGold)] = getIntegerForKey(kDSH_Key_savedGold); // 1000
 		
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
-			data[getKey(kDSH_Key_haveItemCnt_int1)][i] = getIntegerForKey(kDSH_Key_haveItemCnt_int1, i); // 0
-		
-		data[getKey(kDSH_Key_cardTakeCnt)] = getIntegerForKey(kDSH_Key_cardTakeCnt); // 0
-		int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt); /////////////////////////////
-		for(int i=1;i<=card_take_cnt;i++)
+		for(SaveUserData_Key i = kSaveUserData_Key_star;i<=kSaveUserData_Key_nick;i++)
 		{
-			int take_card_number = getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			data[getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
-			data[getKey(kDSH_Key_hasGottenCard_int1)][i] = getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
-			data[getKey(kDSH_Key_cardDurability_int1)][i] = getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
-			data[getKey(kDSH_Key_inputTextCard_int1)][i] = getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
-		} /////////////////////////////////////////
-		
-		data[getKey(kDSH_Key_allHighScore)] = getIntegerForKey(kDSH_Key_allHighScore); // 0
-		data[getKey(kDSH_Key_selectedCard)] = getIntegerForKey(kDSH_Key_selectedCard); // 0
-		
-		int open_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
-		
-		data[getKey(kDSH_Key_openPuzzleCnt)] = open_puzzle_cnt;
-		
-		for(int i=1;i<=open_puzzle_cnt+2;i++)
-			data[getKey(kDSH_Key_isClearedPuzzle_int1)][i] = getBoolForKey(kDSH_Key_isClearedPuzzle_int1, i);
-		
-		data[getKey(kDSH_Key_haveTicketCnt)] = getIntegerForKey(kDSH_Key_haveTicketCnt);
+			writeParamForKey(data, i);
+		}
 		
 		Json::FastWriter writer;
 		param["data"] = writer.write(data);
@@ -313,6 +316,26 @@ public:
 			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asBool());
 		
 		setIntegerForKey(kDSH_Key_haveTicketCnt, data[getKey(kDSH_Key_haveTicketCnt)].asInt());
+		
+		int open_stage_cnt = data[getKey(kDSH_Key_openStageCnt)].asInt();
+		setIntegerForKey(kDSH_Key_openStageCnt, open_stage_cnt);
+		for(int i=1;i<=open_stage_cnt;i++)
+		{
+			int t_stage_number = data[getKey(kDSH_Key_openStageNumber_int1)][i].asInt();
+			setIntegerForKey(kDSH_Key_openStageNumber_int1, i, t_stage_number);
+			setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, data[getKey(kDSH_Key_isOpenStage_int1)][i].asBool());
+		}
+		
+		int clear_stage_cnt = data[getKey(kDSH_Key_clearStageCnt)].asInt();
+		setIntegerForKey(kDSH_Key_clearStageCnt, clear_stage_cnt);
+		for(int i=1;i<=clear_stage_cnt;i++)
+		{
+			int t_stage_number = data[getKey(kDSH_Key_clearStageNumber_int1)][i].asInt();
+			setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, t_stage_number);
+			setBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number, data[getKey(kDSH_Key_isClearStage_int1)][i].asBool());
+		}
+		
+		setStringForKey(kDSH_Key_nick, data[getKey(kDSH_Key_nick)].asString().c_str());
 	}
 	
 	void writeParamForKey(Json::Value& data, SaveUserData_Key t_key)
@@ -352,6 +375,30 @@ public:
 		}
 		else if(t_key == kSaveUserData_Key_haveTicket)
 			data[getKey(kDSH_Key_haveTicketCnt)] = getIntegerForKey(kDSH_Key_haveTicketCnt);
+		else if(t_key == kSaveUserData_Key_openStage)
+		{
+			int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
+			data[getKey(kDSH_Key_openStageCnt)] = open_stage_cnt;
+			for(int i=1;i<=open_stage_cnt;i++)
+			{
+				int t_stage_number = getIntegerForKey(kDSH_Key_openStageNumber_int1, i);
+				data[getKey(kDSH_Key_openStageNumber_int1)][i] = t_stage_number;
+				data[getKey(kDSH_Key_isOpenStage_int1)][i] = getBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number);
+			}
+			
+			int clear_stage_cnt = getIntegerForKey(kDSH_Key_clearStageCnt);
+			data[getKey(kDSH_Key_clearStageCnt)] = clear_stage_cnt;
+			for(int i=1;i<=clear_stage_cnt;i++)
+			{
+				int t_stage_number = getIntegerForKey(kDSH_Key_clearStageNumber_int1, i);
+				data[getKey(kDSH_Key_clearStageNumber_int1)][i] = t_stage_number;
+				data[getKey(kDSH_Key_isClearStage_int1)][i] = getBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number);
+			}
+		}
+		else if(t_key == kSaveUserData_Key_nick)
+		{
+			data[getKey(kDSH_Key_nick)] = getStringForKey(kDSH_Key_nick);
+		}
 	}
 	
 	void saveUserData(const vector<SaveUserData_Key>& key_list, function<void(Json::Value)> t_selector)
@@ -404,6 +451,25 @@ public:
 		
 		setIntegerForKey(kDSH_Key_openPuzzleCnt, 0);
 		setIntegerForKey(kDSH_Key_haveTicketCnt, 0);
+		
+		int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
+		for(int i=1;i<=open_stage_cnt;i++)
+		{
+			setBoolForKey(kDSH_Key_isOpenStage_int1, getIntegerForKey(kDSH_Key_openStageNumber_int1, i), false);
+			setIntegerForKey(kDSH_Key_openStageNumber_int1, i, 0);
+		}
+		setIntegerForKey(kDSH_Key_openStageCnt, 1);
+		
+		
+		int clear_stage_cnt = getIntegerForKey(kDSH_Key_clearStageCnt);
+		for(int i=1;i<=clear_stage_cnt;i++)
+		{
+			setBoolForKey(kDSH_Key_isClearStage_int1, getIntegerForKey(kDSH_Key_clearStageNumber_int1, i), false);
+			setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, 0);
+		}
+		setIntegerForKey(kDSH_Key_clearStageCnt, 0);
+		
+		setStringForKey(kDSH_Key_nick, "");
 	}
 	
 	bool isCheatKeyEnable()

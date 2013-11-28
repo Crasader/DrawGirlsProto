@@ -24,10 +24,11 @@ using namespace std;
 enum TitleMenuTag
 {
 	kTitle_MT_replay = 1,
+	kTitle_MT_nick,
 	kTitle_MT_puzzleBase = 10000
 };
 
-class TitleScene : public cocos2d::CCLayer
+class TitleScene : public cocos2d::CCLayer, public CCTextFieldDelegate
 {
 public:
 	// Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -60,6 +61,23 @@ private:
 	
 	CCObject* save_target;
 	SEL_CallFunc save_delegate;
+	
+	CCTextFieldTTF* input_text;
+    bool was_open_text;
+	
+	void endCloseTextInput();
+	
+	CCSprite* nick_back;
+	
+	virtual bool onTextFieldInsertText(CCTextFieldTTF* sender, const char* text, int nLen);
+	virtual bool onTextFieldDetachWithIME(CCTextFieldTTF * sender);
+	virtual bool onTextFieldAttachWithIME(CCTextFieldTTF * sender);
+	
+	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual void registerWithTouchDispatcher();
 	
 	void startGetPuzzleList();
 	

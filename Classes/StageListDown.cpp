@@ -48,6 +48,11 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				
 				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number, stage_list[i]["level"].asInt());
 				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number, stage_list[i]["pieceNo"].asInt());
+				if(!stage_list[i]["condition"].isNull())
+				{
+					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number, stage_list[i]["condition"]["gold"].asInt());
+					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number, stage_list[i]["condition"]["stageNo"].asInt());
+				}
 			}
 			
 			if(df_list.size() > 0) // need download
