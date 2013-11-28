@@ -14,6 +14,7 @@
 #include "StarGoldData.h"
 #include "hspConnector.h"
 #include "GDWebSprite.h"
+#include "KSUtil.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -100,14 +101,16 @@ private:
 			}
 			Json::Value p;
 			Json::Value contentJson;
+			contentJson["puzzlenumber"] = 영호;
 			p["receiverMemberIDList"] = arr;
 			p["senderMemberID"] = hspConnector::get()->getKakaoID();
 			p["type"] = kTicketRequest;
-			
+			p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 			// 성공이든 실패든 콜백 받은 후에 remove_selector(); // popup 닫기임
 			hspConnector::get()->command
 			("sendmessagebylist", p, [=](Json::Value r)
 			 {
+				 KS::KSLog("%", r);
 				 remove_selector();
 			 });
 		}

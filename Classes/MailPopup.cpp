@@ -19,6 +19,7 @@
 #include "PuzzleMapScene.h"
 #include "CardCase.h"
 #include "StageImgLoader.h"
+#include "HatGacha.h"
 
 #define LZZ_INLINE inline
 
@@ -337,7 +338,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					{
 						Json::Value newMailList;
 						
-						if(r.get("state","fail").asString() == "ok"){
+						if(r.get("state","fail").asString() == "ok")
+						{
 							
 							
 							
@@ -374,21 +376,100 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			 [=](CCObject* sender)
 			 {
 				 KSAlertView* av = KSAlertView::create();
+				 av->setCloseOnPress(false);
 				 //				 av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
 				 //																							 CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
 				 //				 av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 				 //																							 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
 				 
 				 // 도망 버튼.
-				 auto m0 = CCMenuItemImageLambda::create("ending_remove_card.png", "ending_remove_card.png",
-																								 [=](CCObject* e){
-																									 //																									 removeFromParent();
-																									 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
-																									 KS::KSLog("%", mail);
-																									 // 도망에 대한 처리가 결정이 안됨.
-																									 
-																									 
-																								 });
+				 auto m0 = CCMenuItemImageLambda::create
+				 ("ending_remove_card.png", "ending_remove_card.png",
+					[=](CCObject* e){
+						//																									 removeFromParent();
+						CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+						KS::KSLog("%", mail);
+						// 도망에 대한 처리
+						Json::Value p;
+						int mailNo = m_mailList[idx]["no"].asInt();
+						p["no"] = mailNo;
+						p["memberID"] = m_mailList[idx]["memberID"].asInt64();
+						// 도전장 삭제요청
+						hspConnector::get()->command
+						(
+						 "removemessage",p,
+						 [=](Json::Value r)
+						 {
+							 av->removeFromParent();
+							 
+							 Json::Value newMailList;
+							 
+							 
+							 //테이블에서 없어진것 없애기
+							 for(int i=0;i<m_mailList.size();i++){
+								 if(m_mailList[i]["no"].asInt() != mailNo){
+									 newMailList.append(m_mailList[i]);
+								 }
+							 }
+							 //테이블 리로드
+							 m_mailList=newMailList;
+							 this->mailTableView->reloadData();
+
+							 
+							 
+							 Json::Value p;
+							 Json::Value contentJson;
+							 //		contentJson["msg"] = (nickname + "님에게 도전!");
+							 contentJson["challengestage"] = contentObj["challengestage"].asInt();
+							 contentJson["sender"] = hspConnector::get()->getKakaoID();
+							 p["receiverMemberID"] = mail["friendID"].asString();
+							 p["senderMemberID"] = hspConnector::get()->getKakaoID();
+							 p["type"] = kChallengeResult;
+							 contentJson["result"] = "win"; // 상대방을 win 으로 세링~
+							 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+							 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+																						{
+																							//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+																							//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+																							//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+																							
+																							//																		setHelpSendTime(recvId);
+																							GraphDogLib::JsonToLog("sendMessage", r);
+																							//												 						obj->removeFromParent();
+																							KSAlertView* av = KSAlertView::create();
+																							av->setCenterY(150);
+																							auto ttf = CCLabelTTF::create((std::string("?")+"에게 졌습니다...").c_str(), "", 12.f);
+																							av->setContentNode(
+																																 ttf
+																																 );
+																							av->setContentSize(ttf->getDimensions());
+																							
+																							av->addButton(CCMenuItemImageLambda::create
+																														(
+																														 "ui_common_ok.png",
+																														 "ui_common_ok.png",
+																														 [=](CCObject* e){
+																															 //																										removeFromParent();
+																														 }
+																														 ));
+																							addChild(av, kMP_Z_helpAccept);
+																							av->show();
+																							
+																							Json::Value p2;
+																							p2["receiver_id"] = mail["friendID"].asString();
+																							// 여기서 당신은 지금 배틀한 상대방을 지칭
+																							p2["message"] = "당신이 승리하였습니다. 보상을 받으세요 ^_^";
+																							hspConnector::get()->kSendMessage
+																							(p2, [=](Json::Value r)
+																							 {
+																								 GraphDogLib::JsonToLog("kSendMessage", r);
+																							 });
+																						});
+						 }
+						 );
+//						CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
+						
+					});
 				 av->addButton(m0);
 				 // 수락버튼.
 				 auto m1 = CCMenuItemImageLambda::create
@@ -434,6 +515,80 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			("card_mount.png", "card_mount.png",
 			 [=](CCObject*)
 			 {
+				 if(contentObj["result"].asString() == "win")
+				 {
+					 // 메세지 삭제후 모자가차.
+					 
+					 Json::Value p;
+					 int mailNo = m_mailList[idx]["no"].asInt();
+					 p["no"] = mailNo;
+					 p["memberID"] = m_mailList[idx]["memberID"].asInt64();
+					 // 도전장 삭제요청
+					 hspConnector::get()->command
+					 (
+						"removemessage",p,
+						[=](Json::Value r)
+						{
+							Json::Value newMailList;
+							
+							//테이블에서 없어진것 없애기
+							for(int i=0;i<m_mailList.size();i++){
+								if(m_mailList[i]["no"].asInt() != mailNo){
+									newMailList.append(m_mailList[i]);
+								}
+							}
+							//테이블 리로드
+							m_mailList=newMailList;
+							this->mailTableView->reloadData();
+							
+							addChild(HatGacha::create([=](){
+								CCLog("hat close");
+							}), kMP_Z_helpAccept);
+						}
+						);
+					
+				 }
+				 else if(contentObj["result"].asString() == "lose")
+				 {
+					 // 메세지 삭제후 졌다는거 띄움.
+					 Json::Value p;
+					 int mailNo = m_mailList[idx]["no"].asInt();
+					 p["no"] = mailNo;
+					 p["memberID"] = m_mailList[idx]["memberID"].asInt64();
+					 // 도전장 삭제요청
+					 hspConnector::get()->command
+					 (
+						"removemessage",p,
+						[=](Json::Value r)
+						{
+							KSAlertView* av = KSAlertView::create();
+							av->setCloseOnPress(false);
+							//				 av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
+							//																							 CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
+							//				 av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
+							//																							 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
+							
+							// 확인
+							auto m1 = CCMenuItemImageLambda::create
+							("postbox_challenge_ok.png", "postbox_challenge_ok.png",
+							 [=](CCObject* e){
+								 //																									 removeFromParent();
+								 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+							 });
+							av->addButton(m1);
+							
+							auto ttf = CCLabelTTF::create("졌어요... ㅜㅜ", "", 12.f);
+							av->setContentNode(
+																 ttf
+																 );
+							
+//							av->setCloseOnPress(false);
+							addChild(av, kMP_Z_helpAccept);
+							av->show();
+							
+						}
+						);
+				 }
 			 }
 			 );
 			sendBtn->setPosition(ccp(190, 22));
@@ -454,8 +609,36 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																									 //																									 removeFromParent();
 																									 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 																									 KS::KSLog("%", mail);
-																									 // 도망에 대한 처리가 결정이 안됨.
-																									 
+																									 // 도망에 대한 처리
+																									 Json::Value p;
+																									 int mailNo = m_mailList[idx]["no"].asInt();
+																									 p["no"] = mailNo;
+																									 p["memberID"] = m_mailList[idx]["memberID"].asInt64();
+																									 // 도전장 삭제요청
+																									 hspConnector::get()->command
+																									 (
+																										"removemessage",p,
+																										[=](Json::Value r)
+																										{
+																											av->removeFromParent();
+																											
+																											Json::Value newMailList;
+																											
+																											if(r.get("state","fail").asString() == "ok")
+																											{
+																												//테이블에서 없어진것 없애기
+																												for(int i=0;i<m_mailList.size();i++){
+																													if(m_mailList[i]["no"].asInt() != mailNo){
+																														newMailList.append(m_mailList[i]);
+																													}
+																												}
+																												//테이블 리로드
+																												m_mailList=newMailList;
+																												this->mailTableView->reloadData();
+
+																											}
+																										}
+																										);
 																									 
 																								 });
 				 av->addButton(m0);
@@ -519,7 +702,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 p["no"] = mailNo;
 				 p["memberID"] = m_mailList[idx]["memberID"].asInt64();
 				 //삭제요청
-#if 0
+#if 1
 				 hspConnector::get()->command
 				 (
 					"removemessage",p,
@@ -573,7 +756,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						addChild(av, kMP_Z_helpAccept);
 						av->show();
 					}
-#if 0
+#if 1
 					);
 #endif
 				 
@@ -589,6 +772,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 			 [=](CCObject*)
 			 {
+				 
 			 }
 			 );
 			sendBtn->setPosition(ccp(190, 22));
@@ -726,7 +910,7 @@ void MailPopup::onReceiveStageSuccess()
 	CCLog("sec");
 	PuzzleMapScene* pms = dynamic_cast<PuzzleMapScene*>(target_close);
 	CCAssert(pms, "!!");
-	
+	(target_close->*delegate_close)();
 	removeFromParent();
 	pms->showAcceptStageSettingPopup();
 //	PuzzleMapScene::showAcceptStageSettingPopup();
