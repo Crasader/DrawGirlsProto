@@ -281,6 +281,10 @@ class TickingTimeBomb : public CrashMapObject
 public:
 	static TickingTimeBomb * create (IntPoint t_setPoint, int t_bombFrameOneTime, int t_bombTimes, int t_rangeCode, CCArray * t_tickingArray, CCObject * t_resetTickingTimeBomb, SEL_CallFunc d_resetTickingTimeBomb);
 	IntPoint getSettedPoint ();
+	virtual ~TickingTimeBomb()
+	{
+		CCLog("z");
+	}
 private:
 	IntPoint setPoint;
 	int bombFrameOneTime;
@@ -410,7 +414,7 @@ protected:
 	int m_step;
 	int m_frame;
 	int m_bombFrame;
-	CCParticleSystem * m_parentMissile;
+	std::pair<CCSprite*, CCBAnimationManager*> m_parentMissile;
 	CCSpriteBatchNode * batchNode;
 	FromToWithDuration2 <CCPoint> m_parentMissileGoal;
 	Well512 m_well512;

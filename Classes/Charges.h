@@ -113,7 +113,7 @@ private:
 	
 	int charge_cnt;
 	
-	CCParticleSystemQuad* particle;
+	std::pair<CCSprite*, CCBAnimationManager*> particle;
 	
 	void charging();
 	
@@ -190,11 +190,11 @@ private:
 	CCObject* real_target;
 	std::function<void(CCObject*)> actionFunction;
 	float ing_rps;
-	float chargeRate;
+//	float chargeRate;
 	
 	int charge_cnt;
 	
-	CCParticleSystemQuad* particle;
+	std::pair<CCSprite*, CCBAnimationManager*> particle;
 	
 	void charging();
 	

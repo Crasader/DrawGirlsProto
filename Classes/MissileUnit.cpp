@@ -995,7 +995,7 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
-	targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor3_targeting.ccbi",this));
+	targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor1_targeting.ccbi",this));
 	reader->release();
 	targetingImg->setPosition(t_sp);
 	
@@ -1626,7 +1626,7 @@ void ThreeCushion::initParticle ()
 {
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
-	CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_bomb1.ccbi",this));
+	CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_bomb5.ccbi",this));
 	reader->release();
 	particle->setPosition(baseNode->getPosition());
 	particle->setRotation(rand()%360);
@@ -1722,7 +1722,7 @@ void TickingTimeBomb::myAction ()
 		crashMap();
 		ticking_main->removeFromParentAndCleanup(true);
 		
-		CCDelayTime* t_delay = CCDelayTime::create(0.5);
+		CCDelayTime* t_delay = CCDelayTime::create(1.2f);
 		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(TickingTimeBomb::selfRemove));
 		
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call2);
@@ -1823,46 +1823,12 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 }
 void TickingTimeBomb::initParticle ()
 {
-	CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
-	particle->setPositionType(kCCPositionTypeRelative);
-	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("tickingTime_bomb.png");
-	particle->setTexture(texture);
-	particle->setEmissionRate(250.00);
-	particle->setAngle(90.0);
-	particle->setAngleVar(360.0);
-	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-	particle->setBlendFunc(blendFunc);
-	particle->setDuration(0.20);
-	particle->setEmitterMode(kCCParticleModeGravity);
-	ccColor4F startColor = {0.87,0.81,0.12,1.00}; // 0.76 0.25 0.12
-	particle->setStartColor(startColor);
-	ccColor4F startColorVar = {0,0,0,0};
-	particle->setStartColorVar(startColorVar);
-	ccColor4F endColor = {0.68,0.16,0.00,1.00};
-	particle->setEndColor(endColor);
-	ccColor4F endColorVar = {0,0,0,0};
-	particle->setEndColorVar(endColorVar);
-	particle->setStartSize(20.00);
-	particle->setStartSizeVar(10.0);
-	particle->setEndSize(40.0);
-	particle->setEndSizeVar(10.0);
-	particle->setGravity(ccp(0,0));
-	particle->setRadialAccel(0.0);
-	particle->setRadialAccelVar(0.0);
-	particle->setSpeed(250);
-	particle->setSpeedVar(60.0);
-	particle->setTangentialAccel(0);
-	particle->setTangentialAccelVar(0);
-	particle->setTotalParticles(50);
-	particle->setLife(0.30);
-	particle->setLifeVar(0.0);
-	particle->setStartSpin(0.0);
-	particle->setStartSpinVar(0.0);
-	particle->setEndSpin(0.0);
-	particle->setEndSpinVar(0.0);
-	particle->setPosition(CCPointZero);
-	particle->setPosVar(CCPointZero);
-	addChild(particle);
+	auto bomb = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+	bomb.first->setPosition(CCPointZero);
+	addChild(bomb.first);
+//	addChild(KSTimer::create(2.0f, [=](){
+//		bomb.first->removeFromParent();})
+//					 ); // 1.3 초 후에 사라짐.
 }
 SightOut * SightOut::create ()
 {
@@ -1964,7 +1930,7 @@ void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_bli
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	reader = new CCBReader(nodeLoader);
-	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi",this));
+	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_smog_1.ccbi",this));
 	addChild(oilImg);
 	oilImg->setScale(m_scale);
 	setPosition(t_fp); // t_sp
@@ -2407,10 +2373,11 @@ void MovingSunflower::myInit (CCPoint cumberPosition, CCPoint jackPosition)
 {
 	m_step = 1;
 	m_bombFrame = 300;
-	m_parentMissile = CCParticleSystemQuad::create("pm.plist");
-	m_parentMissile->setPositionType(kCCPositionTypeRelative);
-	m_parentMissile->setPosition(cumberPosition);
-	addChild(m_parentMissile);
+	m_parentMissile = KS::loadCCBI<CCSprite*>(this, "pattern_flame3.ccbi");
+	
+	
+	m_parentMissile.first->setPosition(cumberPosition);
+	addChild(m_parentMissile.first);
 	
 	//		CCPoint jackPosition = ip2ccp(myGD->getJackPoint());
 	
@@ -2438,10 +2405,17 @@ void MovingSunflower::setTwoStep ()
 	myGD->communication("MS_resetRects", false);
 	m_step = 2;
 	m_frame = 0;
-	m_sourcePosition = m_parentMissile->getPosition();
-	m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
-	m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
-	m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCDelayTime::create(3.f)}));
+	m_sourcePosition = m_parentMissile.first->getPosition();
+//	m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
+//	m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
+	addChild(KSGradualValue<float>::create(1, 0, 1.0f, [=](float t){
+		m_parentMissile.first->setScale(t);
+	},
+													[=](float t)
+																				 {
+																					 m_parentMissile.first->removeFromParent();
+																				 }
+																				 ));
 }
 void MovingSunflower::selfRemove (float dt)
 {
@@ -2476,9 +2450,9 @@ void MovingSunflower::update (float dt)
 	if(m_step == 1)
 	{
 		m_frame++;
-		m_parentMissile->setPosition(m_parentMissileGoal.getValue());
+		m_parentMissile.first->setPosition(m_parentMissileGoal.getValue());
 		if(m_frame % 5 == 0)
-			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
+			crashMapForPoint(ccp2ip(m_parentMissile.first->getPosition()), 10);
 		
 		if(m_frame % 15 == 0)
 		{
@@ -2877,49 +2851,11 @@ void ThrowBomb::update (float dt)
 	
 	if(m_step == 2) // 폭발.
 	{
+		auto bomb = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+		bomb.first->setPosition(m_parentMissile->getPosition());
+		addChild(bomb.first);
+		addChild(KSTimer::create(1.3f, [=](){bomb.first->removeFromParent();})); // 1.3 초 후에 사라짐.
 		
-		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
-		
-		particle->setAutoRemoveOnFinish(true);
-		particle->setPositionType(kCCPositionTypeRelative);
-		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("tickingTime_bomb.png");
-		particle->setTexture(texture);
-		particle->setEmissionRate(250.00);
-		particle->setAngle(90.0);
-		particle->setAngleVar(360.0);
-		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-		particle->setBlendFunc(blendFunc);
-		particle->setDuration(0.20);
-		particle->setEmitterMode(kCCParticleModeGravity);
-		ccColor4F startColor = {0.87,0.81,0.12,1.00}; // 0.76 0.25 0.12
-		particle->setStartColor(startColor);
-		ccColor4F startColorVar = {0,0,0,0};
-		particle->setStartColorVar(startColorVar);
-		ccColor4F endColor = {0.68,0.16,0.00,1.00};
-		particle->setEndColor(endColor);
-		ccColor4F endColorVar = {0,0,0,0};
-		particle->setEndColorVar(endColorVar);
-		particle->setStartSize(20.00);
-		particle->setStartSizeVar(10.0);
-		particle->setEndSize(40.0);
-		particle->setEndSizeVar(10.0);
-		particle->setGravity(ccp(0,0));
-		particle->setRadialAccel(0.0);
-		particle->setRadialAccelVar(0.0);
-		particle->setSpeed(250);
-		particle->setSpeedVar(60.0);
-		particle->setTangentialAccel(0);
-		particle->setTangentialAccelVar(0);
-		particle->setTotalParticles(50);
-		particle->setLife(0.30);
-		particle->setLifeVar(0.0);
-		particle->setStartSpin(0.0);
-		particle->setStartSpinVar(0.0);
-		particle->setEndSpin(0.0);
-		particle->setEndSpinVar(0.0);
-		particle->setPosition(m_parentMissile->getPosition());
-		particle->setPosVar(CCPointZero);
-		addChild(particle);
 		m_step = 3;
 		m_parentMissile->removeFromParent();
 		schedule(schedule_selector(ThisClassType::selfRemove));
@@ -3217,48 +3153,12 @@ void ReaverScarab::update (float dt)
 	{
 		m_parentMissile->removeFromParent();
 		schedule(schedule_selector(ThisClassType::selfRemove));
-		CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
 		
-		particle->setAutoRemoveOnFinish(true);
-		particle->setPositionType(kCCPositionTypeRelative);
-		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("tickingTime_bomb.png");
-		particle->setTexture(texture);
-		particle->setEmissionRate(250.00);
-		particle->setAngle(90.0);
-		particle->setAngleVar(360.0);
-		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-		particle->setBlendFunc(blendFunc);
-		particle->setDuration(0.20);
-		particle->setEmitterMode(kCCParticleModeGravity);
-		ccColor4F startColor = {0.87,0.81,0.12,1.00}; // 0.76 0.25 0.12
-		particle->setStartColor(startColor);
-		ccColor4F startColorVar = {0,0,0,0};
-		particle->setStartColorVar(startColorVar);
-		ccColor4F endColor = {0.68,0.16,0.00,1.00};
-		particle->setEndColor(endColor);
-		ccColor4F endColorVar = {0,0,0,0};
-		particle->setEndColorVar(endColorVar);
-		particle->setStartSize(20.00);
-		particle->setStartSizeVar(10.0);
-		particle->setEndSize(40.0);
-		particle->setEndSizeVar(10.0);
-		particle->setGravity(ccp(0,0));
-		particle->setRadialAccel(0.0);
-		particle->setRadialAccelVar(0.0);
-		particle->setSpeed(250);
-		particle->setSpeedVar(60.0);
-		particle->setTangentialAccel(0);
-		particle->setTangentialAccelVar(0);
-		particle->setTotalParticles(50);
-		particle->setLife(0.30);
-		particle->setLifeVar(0.0);
-		particle->setStartSpin(0.0);
-		particle->setStartSpinVar(0.0);
-		particle->setEndSpin(0.0);
-		particle->setEndSpinVar(0.0);
-		particle->setPosition(m_parentMissile->getPosition());
-		particle->setPosVar(CCPointZero);
-		addChild(particle);
+		auto bomb = KS::loadCCBI<CCSprite*>(this, "fx_bomb2.ccbi");
+		addChild(bomb.first);
+		addChild(KSTimer::create(1.3f, [=](){bomb.first->removeFromParent();})); // 1.3 초 후에 사라짐.
+		
+		bomb.first->setPosition(m_parentMissile->getPosition());
 		m_step = 3;
 	}
 	
@@ -3328,6 +3228,7 @@ void CloudBomb::setTwoStep ()
 	m_sourcePosition = m_parentMissile->getPosition();
 	m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
 	m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
+	
 	m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCDelayTime::create(3.f)}));
 	
 	schedule(schedule_selector(ThisClassType::selfRemove));
@@ -3765,7 +3666,7 @@ void PoisonDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area
 	subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
 	movingFrame = t_movingFrame;
 	
-	dropImg = CCSprite::create("blind_drop.png");
+	dropImg = KS::loadCCBI<CCSprite*>(this, "pattern_radioactivity_1.ccbi").first;
 	addChild(dropImg);
 	
 	setPosition(t_sp);

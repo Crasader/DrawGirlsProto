@@ -818,7 +818,7 @@ void AP_Missile12::myInit( CCPoint t_sp, int t_type, int t_targetingFrame, int t
 	CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
 
 	//		auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_lightning_targeting.ccbi");
-	auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_meteor3_targeting.ccbi");
+	auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_lightning_targeting.ccbi");
 
 	targetingImg = ret.first;
 	targetingImg->setScale(2.7);
