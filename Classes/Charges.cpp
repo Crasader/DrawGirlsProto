@@ -177,18 +177,17 @@ void NoChargeNode::update( float dt )
 	}
 }
 
-ChargeNodeLambda* ChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+ChargeNodeLambda* ChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
 	ChargeNodeLambda* n_charge = new ChargeNodeLambda();
-	n_charge->myInit(t_position, t_frame, func, t_rt);
+	n_charge->myInit(t_position, t_frame, func, t_rt, pattern);
 	n_charge->autorelease();
 	return n_charge;
 }
 
 void ChargeNodeLambda::setChargeColor( ccColor4F change_color )
 {
-	particle->setStartColor(change_color);
-	particle->setEndColor(change_color);
+	particle.first->setColor(ccc3(change_color.r, change_color.g, change_color.b));
 
 	//		charge_img->setColor(change_color);
 }
@@ -219,7 +218,7 @@ void ChargeNodeLambda::charging()
 {
 	charge_cnt++;
 
-	particle->setStartRadius((charge_frame/3.0)*(charge_frame-charge_cnt)/charge_frame);
+//	particle->setStartRadius((charge_frame/3.0)*(charge_frame-charge_cnt)/charge_frame);
 
 	if(charge_cnt >= charge_frame)
 	{
@@ -230,6 +229,12 @@ void ChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
+			auto end = chrono::system_clock::now();
+			auto currentSecond = chrono::system_clock::to_time_t(end);
+			LastPattern lp;
+			lp.exeTime = currentSecond;
+			lp.exePattern = m_pattern;
+			cb->setLastPattern(lp);
 		}
 	}
 }
@@ -241,8 +246,9 @@ void ChargeNodeLambda::removeSelf()
 	removeFromParentAndCleanup(true);
 }
 
-void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
+	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
 	charge_frame = t_frame;
@@ -250,45 +256,11 @@ void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<vo
 	actionFunction = func;
 
 	float chargeRate = t_frame/60.f;
-
-	particle = CCParticleSystemQuad::createWithTotalParticles(40 + chargeRate*5);
-	particle->setPositionType(kCCPositionTypeRelative);
-	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("charge_particle.png");
-	particle->setTexture(texture);
-	particle->setEmissionRate(40.00 + chargeRate*5); // inf
-	particle->setAngle(90.0);
-	particle->setAngleVar(360.0);
-	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-	particle->setBlendFunc(blendFunc);
-	particle->setDuration(-1.00);
-	particle->setEmitterMode(kCCParticleModeRadius);
-	ccColor4F startColor = {1.00,1.00,1.00,1.00};
-	particle->setStartColor(startColor);
-	ccColor4F startColorVar = {0.30,0.30,0.30,0.30};
-	particle->setStartColorVar(startColorVar);
-	ccColor4F endColor = {0.00,0.00,0.00,1.00};
-	particle->setEndColor(endColor);
-	ccColor4F endColorVar = {0,0,0,0};
-	particle->setEndColorVar(endColorVar);
-	particle->setStartSize(5.00 + chargeRate);
-	particle->setStartSizeVar(2.0);
-	particle->setEndSize(chargeRate);
-	particle->setEndSizeVar(1.0);
-	particle->setRotatePerSecond(20.00);
-	particle->setRotatePerSecondVar(0.00);
-	particle->setStartRadius(charge_frame/3.0);
-	particle->setStartRadiusVar(3.00);
-	particle->setEndRadius(0.00);
-	particle->setTotalParticles(50);
-	particle->setLife(1.00);
-	particle->setLifeVar(0.25);
-	particle->setStartSpin(0.0);
-	particle->setStartSpinVar(50.0);
-	particle->setEndSpin(0.0);
-	particle->setEndSpinVar(0.0);
-	particle->setPosVar(ccp(0,0));
-	particle->setPosition(create_position);
-	addChild(particle);
+	
+	auto castImage = KS::loadCCBI<CCSprite*>(this, "fx_cast.ccbi");
+	particle = castImage;
+	particle.first->setPosition(create_position);
+	addChild(castImage.first);
 }
 
 ChargeNode* ChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
@@ -407,18 +379,19 @@ void ChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL
 	addChild(particle);
 }
 
-SpecialChargeNodeLambda* SpecialChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+SpecialChargeNodeLambda* SpecialChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern)
 {
 	SpecialChargeNodeLambda* n_charge = new SpecialChargeNodeLambda();
-	n_charge->myInit(t_position, t_frame, func, t_rt);
+	n_charge->myInit(t_position, t_frame, func, t_rt, pattern);
 	n_charge->autorelease();
 	return n_charge;
 }
 
 void SpecialChargeNodeLambda::setChargeColor( ccColor4F change_color )
 {
-	particle->setStartColor(change_color);
-	particle->setEndColor(change_color);
+	particle.first->setColor(ccc3(change_color.r, change_color.g, change_color.b));
+//	particle->setStartColor(change_color);
+//	particle->setEndColor(change_color);
 
 	//		charge_img->setColor(change_color);
 }
@@ -450,7 +423,7 @@ void SpecialChargeNodeLambda::charging()
 {
 	charge_cnt++;
 
-	particle->setRotatePerSecond(particle->getRotatePerSecond() + chargeRate);
+//	particle->setRotatePerSecond(particle->getRotatePerSecond() + chargeRate);
 
 	if(charge_cnt >= charge_frame)
 	{
@@ -461,6 +434,12 @@ void SpecialChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
+			auto end = chrono::system_clock::now();
+			auto currentSecond = chrono::system_clock::to_time_t(end);
+			LastPattern lp;
+			lp.exeTime = currentSecond;
+			lp.exePattern = m_pattern;
+			cb->setLastPattern(lp);
 		}
 	}
 }
@@ -472,56 +451,19 @@ void SpecialChargeNodeLambda::removeSelf()
 	removeFromParentAndCleanup(true);
 }
 
-void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
+	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
 	charge_frame = t_frame;
 	actionFunction = func;
 
 	ing_rps = 0;
-	int second = t_frame/60;
-
-	chargeRate = 21600.f/powf(t_frame, 2.f)*(3.f+second); // 21600 = 360(angle)*60(frameRate),   360/(t_frame/60)/t_frame
-
-	particle = CCParticleSystemQuad::createWithTotalParticles(50);
-	particle->setPositionType(kCCPositionTypeRelative);
-	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("charge_particle.png");
-	particle->setTexture(texture);
-	particle->setEmissionRate(50.00); // inf
-	particle->setAngle(90.0);
-	particle->setAngleVar(0.0);
-	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-	particle->setBlendFunc(blendFunc);
-	particle->setDuration(-1.00);
-	particle->setEmitterMode(kCCParticleModeRadius);
-	ccColor4F startColor = {1.00,1.00,1.00,1.00};
-	particle->setStartColor(startColor);
-	ccColor4F startColorVar = {0.30,0.30,0.30,0.30};
-	particle->setStartColorVar(startColorVar);
-	ccColor4F endColor = {0.00,0.00,0.00,1.00};
-	particle->setEndColor(endColor);
-	ccColor4F endColorVar = {0,0,0,0};
-	particle->setEndColorVar(endColorVar);
-	particle->setStartSize(5+second);
-	particle->setStartSizeVar(3+second);
-	particle->setEndSize(5+second);
-	particle->setEndSizeVar(3+second);
-	particle->setRotatePerSecond(ing_rps);
-	particle->setRotatePerSecondVar(0.00);
-	particle->setStartRadius(12+3*second);
-	particle->setStartRadiusVar(0.00);
-	particle->setEndRadius(12+3*second);
-	particle->setTotalParticles(50);
-	particle->setLife(1.00);
-	particle->setLifeVar(0.0);
-	particle->setStartSpin(0.0);
-	particle->setStartSpinVar(45.0);
-	particle->setEndSpin(0.0);
-	particle->setEndSpinVar(90.0);
-	particle->setPosVar(ccp(0,0));
-	particle->setPosition(create_position);
-	addChild(particle);
+	auto castImage = KS::loadCCBI<CCSprite*>(this, "fx_cast.ccbi");
+	particle = castImage;
+	particle.first->setPosition(create_position);
+	addChild(castImage.first);
 }
 
 SpecialChargeNode* SpecialChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
@@ -641,10 +583,10 @@ void SpecialChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing
 	addChild(particle);
 }
 
-CrashChargeNodeLambda* CrashChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+CrashChargeNodeLambda* CrashChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
 	CrashChargeNodeLambda* n_charge = new CrashChargeNodeLambda();
-	n_charge->myInit(t_position, t_frame, func, t_rt);
+	n_charge->myInit(t_position, t_frame, func, t_rt, pattern);
 	n_charge->autorelease();
 	return n_charge;
 }
@@ -707,6 +649,12 @@ void CrashChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
+			auto end = chrono::system_clock::now();
+			auto currentSecond = chrono::system_clock::to_time_t(end);
+			LastPattern lp;
+			lp.exeTime = currentSecond;
+			lp.exePattern = m_pattern;
+			cb->setLastPattern(lp);
 		}
 	}
 }
@@ -718,8 +666,9 @@ void CrashChargeNodeLambda::removeSelf()
 	removeFromParentAndCleanup(true);
 }
 
-void CrashChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+void CrashChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
+	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
 	charge_frame = t_frame;

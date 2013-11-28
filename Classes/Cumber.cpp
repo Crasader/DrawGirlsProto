@@ -606,6 +606,11 @@ void CumberParent::myInit()
 		cardOperator = shared_ptr<PassiveOp<float>>(new DecreaseOp<float>());
 	}
 	
+	ostringstream oss;
+	oss << mySD->getSilType();
+	std::string playcountKey = std::string("playcount_") + oss.str();
+	myDSH->setUserIntForStr(playcountKey, myDSH->getUserIntForStr(playcountKey, 0) + 1);
+	
 	float hp = MAX((*cardOperator)(boss["hp"].asInt(), passiveCard["hp"].asInt()), 0);
 	float minSpeed = MAX((*cardOperator)(boss["speed"]["min"].asDouble(), passiveCard["speed"].asDouble()), 0);
 	float startSpeed = MAX((*cardOperator)(boss["speed"]["start"].asDouble(), passiveCard["speed"].asDouble()), 0); //getNumberFromJsonValue(speed["start"]);
@@ -634,6 +639,8 @@ void CumberParent::myInit()
 	mainCumber->settingHp(hp);
 	mainCumber->setAgility(agi);
 	KS::KSLog("%", boss);
+	
+	
 	mainCumber->settingAI(MAX(0, (*cardOperator)(boss.get("ai", 0).asInt(), passiveCard["ai"].asInt()) ));
 	mainCumber->settingFuryRule();
 	mainCumber->settingScale(startScale, minScale, maxScale);

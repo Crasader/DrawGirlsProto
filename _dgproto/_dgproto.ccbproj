@@ -21,9 +21,9 @@
 	<key>generatedSpriteSheets</key>
 	<dict/>
 	<key>javascriptBased</key>
-	<true/>
+	<false/>
 	<key>javascriptMainCCB</key>
-	<string>MainScene</string>
+	<string></string>
 	<key>onlyPublishCCBs</key>
 	<false/>
 	<key>publishDirectory</key>
@@ -35,7 +35,7 @@
 	<key>publishEnabledAndroid</key>
 	<false/>
 	<key>publishEnabledHTML5</key>
-	<true/>
+	<false/>
 	<key>publishEnablediPhone</key>
 	<true/>
 	<key>publishResolutionHTML5_height</key>
@@ -79,6 +79,14 @@
 		<dict>
 			<key>path</key>
 			<string>img</string>
+		</dict>
+		<dict>
+			<key>path</key>
+			<string>ms_ccb</string>
+		</dict>
+		<dict>
+			<key>path</key>
+			<string>ms_img</string>
 		</dict>
 	</array>
 </dict>

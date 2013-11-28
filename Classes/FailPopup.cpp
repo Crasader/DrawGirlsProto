@@ -950,6 +950,7 @@ int FailPopup::getIsNotHelpableUser( std::string userId, int base_s ) /* 1일 */
 {
 	auto end = chrono::system_clock::now();
 	auto currentSecond = chrono::system_clock::to_time_t(end);
+
 	int ii = myDSH->getUserIntForStr("help_" + userId, 0);
 	if(ii + base_s < currentSecond) // 보낼 수 있다.
 	{
