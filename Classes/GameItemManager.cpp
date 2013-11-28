@@ -43,6 +43,7 @@ void GameItemBase::framing()
 		(target_effect->*delegate_effect)(myPoint.convertToCCP());
 		
 		acting();
+		return;
 	}
 	
 	
