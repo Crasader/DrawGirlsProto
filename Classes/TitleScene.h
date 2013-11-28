@@ -66,9 +66,9 @@ private:
 	
 	CCEditBox* input_text;
 //	CCTextFieldTTF* input_text;
-    bool was_open_text;
+//    bool was_open_text;
 	
-	void endCloseTextInput();
+//	void endCloseTextInput();
 	
 	CCSprite* nick_back;
 	

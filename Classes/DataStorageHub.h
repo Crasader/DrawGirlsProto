@@ -269,9 +269,9 @@ public:
 		
 		Json::Value data;
 		
-		for(SaveUserData_Key i = kSaveUserData_Key_star;i<=kSaveUserData_Key_nick;i++)
+		for(int i = kSaveUserData_Key_star;i<=kSaveUserData_Key_nick;i++)
 		{
-			writeParamForKey(data, i);
+			writeParamForKey(data, SaveUserData_Key(i));
 		}
 		
 		Json::FastWriter writer;
