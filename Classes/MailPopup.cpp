@@ -20,6 +20,7 @@
 #include "CardCase.h"
 #include "StageImgLoader.h"
 #include "HatGacha.h"
+#include "ASPopupView.h"
 
 #define LZZ_INLINE inline
 
@@ -772,12 +773,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 			 [=](CCObject*)
 			 {
-				 // 영호
-#if 0
-				 contentObj["sendernick"].asString(); // 보낸 사람 닉네임.
-				 mail["friendID"]; // 보낸 사람 아이디
-				 contentObj["puzzlenumber"].asInt(); // 요청했던 퍼즐 번호.
-#endif
+				 
 			 }
 			 );
 			sendBtn->setPosition(ccp(190, 22));
@@ -790,6 +786,99 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 			 [=](CCObject*)
 			 {
+				 if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, contentObj["puzzlenumber"].asInt()-1) && myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+2 == contentObj["puzzlenumber"].asInt())
+				{
+					bool good_ticket = true;
+					int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
+					for(int i=1;i<=have_ticket_cnt && good_ticket;i++)
+					{
+						string ticket_user_id = myDSH->getStringForKey(kDSH_Key_ticketUserId_int1, i);
+						if(ticket_user_id == mail["friendID"].asString())
+							good_ticket = false;
+					}
+					
+					if(good_ticket)
+					{
+						int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt) + 1;
+						myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt);
+						myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, have_ticket_cnt, mail["friendID"].asString());
+						
+						int need_ticket_cnt = NSDS_GI(contentObj["puzzlenumber"].asInt(), kSDS_PZ_ticket_i);
+						
+						if(need_ticket_cnt <= have_ticket_cnt)
+						{
+							// open 퍼즐
+							myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+							vector<SaveUserData_Key> save_userdata_list;
+							save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
+							myDSH->saveUserData(save_userdata_list, nullptr);
+							
+							((PuzzleMapScene*)target_close)->openPuzzleAction(contentObj["puzzlenumber"].asInt());
+							
+							for(int i=1;i<=have_ticket_cnt;i++)
+								myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, i, "");
+							myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, 0);
+							
+							ASPopupView* t_popup = ASPopupView::create(-200);
+							
+							CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+							float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+							if(screen_scale_x < 1.f)
+								screen_scale_x = 1.f;
+							
+							t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+							
+							CCNode* open_puzzle_container = CCNode::create();
+							t_popup->setContainerNode(open_puzzle_container);
+							
+							CCScale9Sprite* open_puzzle_case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+							open_puzzle_case_back->setPosition(CCPointZero);
+							open_puzzle_container->addChild(open_puzzle_case_back);
+							
+							open_puzzle_case_back->setContentSize(CCSizeMake(230, 250));
+							
+							CCScale9Sprite* open_puzzle_content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+							open_puzzle_content_back->setPosition(ccp(0,2));
+							open_puzzle_container->addChild(open_puzzle_content_back);
+							
+							open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
+							
+							CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("퍼즐 오픈", mySGD->getFont().c_str(), 20);
+							open_puzzle_title_label->setPosition(ccp(0, 102));
+							open_puzzle_container->addChild(open_puzzle_title_label);
+							
+							CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 퍼즐이\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
+							open_puzzle_content_label->setPosition(CCPointZero);
+							open_puzzle_container->addChild(open_puzzle_content_label);
+							
+							CCLabelTTF* loading_puzzle_label = CCLabelTTF::create("Loading...", mySGD->getFont().c_str(), 12);
+							loading_puzzle_label->setPosition(ccp(0,-95));
+							open_puzzle_container->addChild(loading_puzzle_label);
+							
+							CCSprite* n_op_ok = CCSprite::create("popup2_ok.png");
+							CCSprite* s_op_ok = CCSprite::create("popup2_ok.png");
+							s_op_ok->setColor(ccGRAY);
+							
+							CCMenuItemSpriteLambda* op_ok_item = CCMenuItemSpriteLambda::create(n_op_ok, s_op_ok, [=](CCObject* sender){
+								t_popup->removeFromParent();
+							});
+							
+							CCMenuLambda* op_ok_menu = CCMenuLambda::createWithItem(op_ok_item);
+							op_ok_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+							op_ok_menu->setVisible(false);
+							op_ok_menu->setPosition(ccp(0,-95));
+							open_puzzle_container->addChild(op_ok_menu);
+						}
+					}
+					else
+					{
+						// 가지고 있는 티켓
+					}
+				}
+				 else
+				{
+					// 소용없는 티켓
+				}
 			 }
 			 );
 			sendBtn->setPosition(ccp(190, 22));
