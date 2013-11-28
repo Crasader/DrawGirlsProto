@@ -798,7 +798,6 @@ void FailPopup::cellAction( CCObject* sender )
 										 
 										 contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
 										 contentJson["helpstage"] = mySD->getSilType();
-										 contentJson["sender"] = hspConnector::get()->getKakaoID();
 										 
 										 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 										 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();

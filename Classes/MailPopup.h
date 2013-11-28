@@ -92,6 +92,7 @@ public:
 	void onReceiveStageSuccess();
 	void onReceiveStageFail();
 	void iHelpYou(int stage, long long user_id, const std::string& nick, Json::Value removeInfo);
+	void removeMessage(int mailNo, long long memberID, std::function<void(Json::Value)> f);
 protected:
   Json::Value m_mailList;
   CCTableView * mailTableView;
