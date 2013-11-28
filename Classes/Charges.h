@@ -92,7 +92,7 @@ class ChargeNodeLambda : public ChargeParent
 public:
 	static ChargeNodeLambda* create(CCPoint t_position, int t_frame,
 														std::function<void(CCObject*)> func,
-														CCObject* t_rt);
+														CCObject* t_rt, const std::string& pattern);
 	
 	void setChargeColor(ccColor4F change_color);
 	
@@ -104,7 +104,7 @@ public:
 	
 private:
 	
-	
+	std::string m_pattern;
 	CCPoint create_position;
 	int charge_frame;
 	std::function<void(CCObject*)> actionFunction;
@@ -121,7 +121,7 @@ private:
 	
 	void myInit(CCPoint t_position, int t_frame,
 							std::function<void(CCObject*)> func,
-							CCObject* t_rt);
+							CCObject* t_rt, const std::string& pattern);
 };
 
 
@@ -174,7 +174,7 @@ class SpecialChargeNodeLambda : public ChargeParent
 {
 public:
 	static SpecialChargeNodeLambda* create(CCPoint t_position, int t_frame,
-									 std::function<void(CCObject*)> func, CCObject* t_rt);
+									 std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern);
 	
 	void setChargeColor(ccColor4F change_color);
 	
@@ -184,6 +184,7 @@ public:
 	
 	CCObject* getRealTarget();
 private:
+	std::string m_pattern;
 	CCPoint create_position;
 	int charge_frame;
 	CCObject* real_target;
@@ -201,7 +202,7 @@ private:
 	
 	void myInit(CCPoint t_position, int t_frame,
 				std::function<void(CCObject*)> func,
-				CCObject* t_rt);
+				CCObject* t_rt, const std::string& pattern);
 };
 
 
@@ -255,7 +256,7 @@ class CrashChargeNodeLambda : public ChargeParent
 public:
 	static CrashChargeNodeLambda* create(CCPoint t_position, int t_frame,
 																 std::function<void(CCObject*)> func,
-																 CCObject* t_rt);
+																			 CCObject* t_rt, const std::string& pattern);
 	
 	void setChargeColor(ccColor4F change_color);
 	
@@ -267,7 +268,7 @@ public:
 	
 private:
 	
-	
+	std::string m_pattern;
 	CCPoint create_position;
 	int charge_frame;
 	CCObject* real_target;
@@ -284,7 +285,7 @@ private:
 	
 	void myInit(CCPoint t_position, int t_frame,
 							std::function<void(CCObject*)> func,
-							CCObject* t_rt);
+							CCObject* t_rt, const std::string& pattern);
 };
 
 class CrashChargeNode : public ChargeParent

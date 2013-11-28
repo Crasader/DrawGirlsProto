@@ -99,6 +99,11 @@ public:
 	bool empty(){return m_deque.empty();}
 };
 
+struct LastPattern
+{
+	long exeTime;
+	std::string exePattern;
+};
 
 class KSCumberBase : public CCNode
 {
@@ -260,6 +265,7 @@ protected:
 	int m_healingFrameCount;
 //	enum MOVEMENT m_normalMode, m_drawMode;
 	int m_frameCount;
+	
 	FixedSizeDeque<int> m_damagedFrames; // 맞았을 때의 프레임을 기록.
 	struct FuryMode
 	{
@@ -382,6 +388,9 @@ protected:
 	}m_snake;
 	
 	CCSprite* teleportImg;
+	
+//	LastPattern m_lastPattern;
+	CC_SYNTHESIZE(LastPattern, m_lastPattern, LastPattern);
 };
 
 #endif /* defined(__DGproto__KSCumberBase__) */

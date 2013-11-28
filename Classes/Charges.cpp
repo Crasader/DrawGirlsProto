@@ -177,10 +177,10 @@ void NoChargeNode::update( float dt )
 	}
 }
 
-ChargeNodeLambda* ChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+ChargeNodeLambda* ChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
 	ChargeNodeLambda* n_charge = new ChargeNodeLambda();
-	n_charge->myInit(t_position, t_frame, func, t_rt);
+	n_charge->myInit(t_position, t_frame, func, t_rt, pattern);
 	n_charge->autorelease();
 	return n_charge;
 }
@@ -230,6 +230,12 @@ void ChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
+			auto end = chrono::system_clock::now();
+			auto currentSecond = chrono::system_clock::to_time_t(end);
+			LastPattern lp;
+			lp.exeTime = currentSecond;
+			lp.exePattern = m_pattern;
+			cb->setLastPattern(lp);
 		}
 	}
 }
@@ -241,8 +247,9 @@ void ChargeNodeLambda::removeSelf()
 	removeFromParentAndCleanup(true);
 }
 
-void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
+	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
 	charge_frame = t_frame;
@@ -407,10 +414,10 @@ void ChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL
 	addChild(particle);
 }
 
-SpecialChargeNodeLambda* SpecialChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+SpecialChargeNodeLambda* SpecialChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern)
 {
 	SpecialChargeNodeLambda* n_charge = new SpecialChargeNodeLambda();
-	n_charge->myInit(t_position, t_frame, func, t_rt);
+	n_charge->myInit(t_position, t_frame, func, t_rt, pattern);
 	n_charge->autorelease();
 	return n_charge;
 }
@@ -461,6 +468,12 @@ void SpecialChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
+			auto end = chrono::system_clock::now();
+			auto currentSecond = chrono::system_clock::to_time_t(end);
+			LastPattern lp;
+			lp.exeTime = currentSecond;
+			lp.exePattern = m_pattern;
+			cb->setLastPattern(lp);
 		}
 	}
 }
@@ -472,8 +485,9 @@ void SpecialChargeNodeLambda::removeSelf()
 	removeFromParentAndCleanup(true);
 }
 
-void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
+	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
 	charge_frame = t_frame;
@@ -641,10 +655,10 @@ void SpecialChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing
 	addChild(particle);
 }
 
-CrashChargeNodeLambda* CrashChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+CrashChargeNodeLambda* CrashChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
 	CrashChargeNodeLambda* n_charge = new CrashChargeNodeLambda();
-	n_charge->myInit(t_position, t_frame, func, t_rt);
+	n_charge->myInit(t_position, t_frame, func, t_rt, pattern);
 	n_charge->autorelease();
 	return n_charge;
 }
@@ -707,6 +721,12 @@ void CrashChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
+			auto end = chrono::system_clock::now();
+			auto currentSecond = chrono::system_clock::to_time_t(end);
+			LastPattern lp;
+			lp.exeTime = currentSecond;
+			lp.exePattern = m_pattern;
+			cb->setLastPattern(lp);
 		}
 	}
 }
@@ -718,8 +738,9 @@ void CrashChargeNodeLambda::removeSelf()
 	removeFromParentAndCleanup(true);
 }
 
-void CrashChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
+void CrashChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
+	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
 	charge_frame = t_frame;
