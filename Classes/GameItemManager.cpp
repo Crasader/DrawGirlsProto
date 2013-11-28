@@ -1005,7 +1005,7 @@ void FeverCoinParent::removing()
 	remove_target->startRemove();
 	remove_target_list.pop_front();
 	
-	mySGD->setGold(mySGD->getGold() + 10);
+	mySGD->setGold(mySGD->getGold() + int(10.f*myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)/(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1.f)));
 	
 	if(remove_target_list.empty())
 	{

@@ -131,10 +131,10 @@ void FeverParent::addFeverGage (int count)
 		startKeep();
 	
 	recent_count += count;
-	if(recent_count >= 20)
+	if(recent_count >= 10)
 	{
 		ing_fever = true;
-		recent_count = 20;
+		recent_count = 10;
 		
 		fever_top->setPercentage(100.f);
 		
@@ -199,7 +199,7 @@ void FeverParent::addFeverGage (int count)
 	}
 	else
 	{
-		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/10.f*100.f);
 		fever_top->runAction(progress_to);
 	}
 }
@@ -242,7 +242,7 @@ void FeverParent::stopKeep ()
 	unschedule(schedule_selector(FeverParent::keeping));
 	is_keeping = false;
 	recent_count = 0;
-	CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+	CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/10.f*100.f);
 	fever_top->runAction(progress_to);
 }
 void FeverParent::myInit ()
@@ -493,7 +493,7 @@ void GetPercentage::selfRemove ()
 }
 void GetPercentage::myInit (float t_gp, bool is_item)
 {
-	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.1f ? 0.f : t_gp)->getCString(), "gain.fnt");
+	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), "gain.fnt");
 	my_label->setScale(1.f/1.5f);
 	my_label->setAlignment(kCCTextAlignmentRight);
 	addChild(my_label, kZorderGetPercentage_label);

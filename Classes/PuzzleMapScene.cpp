@@ -1428,6 +1428,7 @@ void PuzzleMapScene::stopChangeUiMode()
 
 void PuzzleMapScene::startChangeMapMode()
 {
+	is_menu_enable = false;
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 	map_mode_state = kMMS_changeMode;
 	
