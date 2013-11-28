@@ -111,6 +111,7 @@ public:
 	virtual void visit();
 	void showAcceptStageSettingPopup();
 	void resetPuzzle();
+	void openPuzzleAction(int t_puzzle_number);
 private:
 	bool is_menu_enable;
 	void alertAction(int t1, int t2);

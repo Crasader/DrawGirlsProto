@@ -3359,6 +3359,12 @@ void PuzzleMapScene::endMovingMapNodeNotOpenPuzzle()
 	is_menu_enable = true;
 }
 
+void PuzzleMapScene::openPuzzleAction(int t_puzzle_number)
+{
+	StageListDown* t_sld = StageListDown::create(this, callfunc_selector(PuzzleMapScene::endLoadPuzzleInfo), t_puzzle_number);
+	addChild(t_sld, kPMS_Z_popup);
+}
+
 void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 {
 	if(!is_menu_enable)

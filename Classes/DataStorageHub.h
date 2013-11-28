@@ -43,6 +43,7 @@ typedef enum t_DSH_Key{
 	kDSH_Key_openPuzzleCnt,
 	kDSH_Key_isClearedPuzzle_int1,
 	kDSH_Key_haveTicketCnt,
+	kDSH_Key_ticketUserId_int1,
 	kDSH_Key_openStageCnt,
 	kDSH_Key_openStageNumber_int1,
 	kDSH_Key_isOpenStage_int1,
@@ -247,6 +248,7 @@ public:
 		else if(t_name == kDSH_Key_isClearedPuzzle_int1)				return_value = "icp%d";
 		
 		else if(t_name == kDSH_Key_haveTicketCnt)						return_value = "htc";
+		else if(t_name == kDSH_Key_ticketUserId_int1)					return_value = "tui%d";
 		
 		else if(t_name == kDSH_Key_openStageCnt)						return_value = "osc";
 		else if(t_name == kDSH_Key_openStageNumber_int1)				return_value = "osn%d";
@@ -315,7 +317,10 @@ public:
 		for(int i=1;i<=open_puzzle_cnt+2 && i < data[getKey(kDSH_Key_isClearedPuzzle_int1)].size();i++)
 			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asBool());
 		
-		setIntegerForKey(kDSH_Key_haveTicketCnt, data[getKey(kDSH_Key_haveTicketCnt)].asInt());
+		int have_ticket_cnt = data[getKey(kDSH_Key_haveTicketCnt)].asInt();
+		setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt);
+		for(int i=1;i<=have_ticket_cnt;i++)
+			setStringForKey(kDSH_Key_ticketUserId_int1, i, data[getKey(kDSH_Key_ticketUserId_int1)][i].asString());
 		
 		int open_stage_cnt = data[getKey(kDSH_Key_openStageCnt)].asInt();
 		setIntegerForKey(kDSH_Key_openStageCnt, open_stage_cnt);
@@ -374,7 +379,12 @@ public:
 				data[getKey(kDSH_Key_isClearedPuzzle_int1)][i] = getBoolForKey(kDSH_Key_isClearedPuzzle_int1, i);
 		}
 		else if(t_key == kSaveUserData_Key_haveTicket)
-			data[getKey(kDSH_Key_haveTicketCnt)] = getIntegerForKey(kDSH_Key_haveTicketCnt);
+		{
+			int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
+			data[getKey(kDSH_Key_haveTicketCnt)] = have_ticket_cnt;
+			for(int i=1;i<=have_ticket_cnt;i++)
+				data[getKey(kDSH_Key_ticketUserId_int1)][i] = getStringForKey(kDSH_Key_ticketUserId_int1, i);
+		}
 		else if(t_key == kSaveUserData_Key_openStage)
 		{
 			int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
@@ -448,8 +458,11 @@ public:
 		int opened_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
 		for(int i=1;i<=opened_puzzle_cnt+2;i++)
 			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, false);
-		
 		setIntegerForKey(kDSH_Key_openPuzzleCnt, 0);
+		
+		int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
+		for(int i=1;i<=have_ticket_cnt;i++)
+			setStringForKey(kDSH_Key_ticketUserId_int1, i, "");
 		setIntegerForKey(kDSH_Key_haveTicketCnt, 0);
 		
 		int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
