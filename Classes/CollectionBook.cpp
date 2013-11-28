@@ -314,13 +314,11 @@ bool CollectionBook::init()
 	input_text->setReturnType(kKeyboardReturnTypeDone);
 	input_text->setFont(mySGD->getFont().c_str(), 12);
 	input_text->setFontColor(ccBLACK);
-	
+	input_text->setDelegate(this);
     recent_right_img->addChild(input_text);
-    
+	
     if(input_data != "입력해주세요.")
         input_text->setText(input_data.c_str());
-    
-    input_text->setDelegate(this);
 	
 	if(is_enable_pageturn)
 	{
@@ -589,12 +587,11 @@ void CollectionBook::startNextPage()
 	input_text->setReturnType(kKeyboardReturnTypeDone);
 	input_text->setFont(mySGD->getFont().c_str(), 12);
 	input_text->setFontColor(ccBLACK);
+	input_text->setDelegate(this);
 	recent_right_img->addChild(input_text);
     
     if(input_data != "입력해주세요.")
         input_text->setText(input_data.c_str());
-    
-    input_text->setDelegate(this);
 	
 	setLeftPage(covered_left_img, next_number);
 	
@@ -721,12 +718,11 @@ void CollectionBook::startPrePage()
 	input_text->setReturnType(kKeyboardReturnTypeDone);
 	input_text->setFont(mySGD->getFont().c_str(), 12);
 	input_text->setFontColor(ccBLACK);
+	input_text->setDelegate(this);
 	covered_right_img->addChild(input_text);
     
     if(input_data != "입력해주세요.")
         input_text->setText(input_data.c_str());
-    
-    input_text->setDelegate(this);
 	
 	((CCMenu*)covered_right_img->getChildByTag(kCB_MT_close))->setEnabled(false);
 	((CCMenu*)covered_right_img->getChildByTag(kCB_MT_zoom))->setEnabled(false);

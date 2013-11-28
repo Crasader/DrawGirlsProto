@@ -12,8 +12,10 @@
 #include "cocos2d.h"
 #include "SilhouetteData.h"
 #include "StageImgLoader.h"
+#include "cocos-ext.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 using namespace std;
 
 class CollectionAnimation : public CCSprite
@@ -39,7 +41,7 @@ private:
 	void frameAnimation();
 };
 
-class CollectionBookPopup : public CCLayer, public CCTextFieldDelegate
+class CollectionBookPopup : public CCLayer, public CCEditBoxDelegate// public CCTextFieldDelegate
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -54,6 +56,11 @@ public:
 	virtual void onEnter();
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
+	
+	virtual void editBoxEditingDidBegin(CCEditBox* editBox);
+    virtual void editBoxEditingDidEnd(CCEditBox* editBox);
+    virtual void editBoxTextChanged(CCEditBox* editBox, const std::string& text);
+    virtual void editBoxReturn(CCEditBox* editBox);
 	
 private:
 	
@@ -81,8 +88,9 @@ private:
 	
 	CCPoint begin_point;
 	
-	CCTextFieldTTF* input_text;
-    bool was_open_text;
+	CCEditBox* input_text;
+//	CCTextFieldTTF* input_text;
+//    bool was_open_text;
 	
 	void showPopup();
 	void endShowPopup();
@@ -90,14 +98,14 @@ private:
 	void hidePopup();
 	void endHidePopup();
 	
-	void endCloseTextInput();
+//	void endCloseTextInput();
 	
 	CCPoint getContentPosition(int t_tag);
 	int getContentRotate(int t_tag);
 	
-	virtual bool onTextFieldInsertText(CCTextFieldTTF* sender, const char* text, int nLen);
-	virtual bool onTextFieldDetachWithIME(CCTextFieldTTF * sender);
-	virtual bool onTextFieldAttachWithIME(CCTextFieldTTF * sender);
+//	virtual bool onTextFieldInsertText(CCTextFieldTTF* sender, const char* text, int nLen);
+//	virtual bool onTextFieldDetachWithIME(CCTextFieldTTF * sender);
+//	virtual bool onTextFieldAttachWithIME(CCTextFieldTTF * sender);
 	
 	void setRightPage(CCNode* target, int card_number);
 	void setLeftPage(CCNode* target, int card_number);
