@@ -20,7 +20,7 @@
 #include "CardCase.h"
 #include "StageImgLoader.h"
 #include "HatGacha.h"
-
+#include "ASPopupView.h"
 #define LZZ_INLINE inline
 
 using namespace std;
