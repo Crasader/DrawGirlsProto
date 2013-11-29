@@ -171,6 +171,7 @@ void StageImgLoader::downloadImg( string t_url, int t_size, string t_down_filena
 
 void StageImgLoader::removeTD()
 {
+	isFail = true;
 	target_success = NULL;
 	target_fail = NULL;
 }

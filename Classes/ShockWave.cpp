@@ -36,6 +36,7 @@ void ShockWave::removeProcess ()
 		if(ing_frame > 35)
 		{
 			unschedule(schedule_selector(ShockWave::removeProcess));
+			AudioEngine::sharedInstance()->stopEffect("sound_bomb_wave.mp3");
 			removeFromParentAndCleanup(true);
 		}
 	}
