@@ -7,7 +7,10 @@
 //
 
 #include "Jack.h"
-
+#include "ASPopupView.h"
+#include "StarGoldData.h"
+#include "CCMenuLambda.h"
+#include "MaingameScene.h"
 
 void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 {
@@ -935,18 +938,186 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	if(!isDie && !myGD->getIsGameover())
 	{
 		myGD->communication("CP_onJackDie");
-
+		
 		if(die_type == DieType::kDieType_other)
 		{
 			myLog->addLog(kLOG_die_other, myGD->getCommunication("UI_getUseTime"));
+			
+			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupCrashArea))
+			{
+				myDSH->setBoolForKey(kDSH_Key_wasTutorialPopupCrashArea, true);
+				CCNode* exit_target = getParent()->getParent();
+				exit_target->onExit();
+				
+				ASPopupView* t_popup = ASPopupView::create(-200);
+				
+				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+				if(screen_scale_x < 1.f)
+					screen_scale_x = 1.f;
+				
+				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+				t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+				t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+				
+				CCNode* t_container = CCNode::create();
+				t_popup->setContainerNode(t_container);
+				exit_target->getParent()->addChild(t_popup);
+				
+				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+				case_back->setPosition(CCPointZero);
+				t_container->addChild(case_back);
+				
+				case_back->setContentSize(CCSizeMake(348, 245));
+				
+				CCSprite* content_back = CCSprite::create("tutorial_popup3.png");
+				content_back->setPosition(ccp(0,-10));
+				t_container->addChild(content_back);
+				
+				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+				title_img->setPosition(ccp(0, 102));
+				t_container->addChild(title_img);
+				
+				CCLabelTTF* content_label = CCLabelTTF::create("몬스터가 쏘는 미사일중에는\n획득영역을 지우는 것도 있어요.", mySGD->getFont().c_str(), 11);
+				content_label->setPosition(ccp(12,-65));
+				t_container->addChild(content_label);
+				
+				CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+				CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+				s_close->setColor(ccGRAY);
+				
+				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																					{
+																						exit_target->onEnter();
+																						((Maingame*)exit_target)->touchOn();
+																						t_popup->removeFromParent();
+																					});
+				
+				CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+				close_menu->setPosition(ccp(145,103));
+				t_container->addChild(close_menu);
+			}
 		}
 		else if(die_type == DieType::kDieType_missileToLine)
 		{
 			myLog->addLog(kLOG_die_missileToLine, myGD->getCommunication("UI_getUseTime"));
+			
+			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupMissileTrace))
+			{
+				myDSH->setBoolForKey(kDSH_Key_wasTutorialPopupMissileTrace, true);
+				CCNode* exit_target = getParent()->getParent();
+				exit_target->onExit();
+				
+				ASPopupView* t_popup = ASPopupView::create(-200);
+				
+				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+				if(screen_scale_x < 1.f)
+					screen_scale_x = 1.f;
+				
+				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+				t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+				t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+				
+				CCNode* t_container = CCNode::create();
+				t_popup->setContainerNode(t_container);
+				exit_target->getParent()->addChild(t_popup);
+				
+				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+				case_back->setPosition(CCPointZero);
+				t_container->addChild(case_back);
+				
+				case_back->setContentSize(CCSizeMake(348, 245));
+				
+				CCSprite* content_back = CCSprite::create("tutorial_popup2.png");
+				content_back->setPosition(ccp(0,-10));
+				t_container->addChild(content_back);
+				
+				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+				title_img->setPosition(ccp(0, 102));
+				t_container->addChild(title_img);
+				
+				CCLabelTTF* content_label = CCLabelTTF::create("몬스터가 쏜 미사일이\n선에 닿으면 불이 붙어요.", mySGD->getFont().c_str(), 13);
+				content_label->setPosition(ccp(38,-61));
+				t_container->addChild(content_label);
+				
+				CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+				CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+				s_close->setColor(ccGRAY);
+				
+				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																					{
+																						exit_target->onEnter();
+																						((Maingame*)exit_target)->touchOn();
+																						t_popup->removeFromParent();
+																					});
+				
+				CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+				close_menu->setPosition(ccp(145,103));
+				t_container->addChild(close_menu);
+			}
 		}
 		else if(die_type == DieType::kDieType_shockwave)
 		{
 			myLog->addLog(kLOG_die_shockwave, myGD->getCommunication("UI_getUseTime"));
+			
+			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupShockWave))
+			{
+				myDSH->setBoolForKey(kDSH_Key_wasTutorialPopupShockWave, true);
+				CCNode* exit_target = getParent()->getParent();
+				exit_target->onExit();
+				
+				ASPopupView* t_popup = ASPopupView::create(-200);
+				
+				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+				if(screen_scale_x < 1.f)
+					screen_scale_x = 1.f;
+				
+				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+				t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+				t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+				
+				CCNode* t_container = CCNode::create();
+				t_popup->setContainerNode(t_container);
+				exit_target->getParent()->addChild(t_popup);
+				
+				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+				case_back->setPosition(CCPointZero);
+				t_container->addChild(case_back);
+				
+				case_back->setContentSize(CCSizeMake(348, 245));
+				
+				CCSprite* content_back = CCSprite::create("tutorial_popup1.png");
+				content_back->setPosition(ccp(0,-15));
+				t_container->addChild(content_back);
+				
+				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+				title_img->setPosition(ccp(0, 102));
+				t_container->addChild(title_img);
+				
+				CCLabelTTF* content_label = CCLabelTTF::create("선과 몬스터가 부딪히면\n충격파가 생겨요.", mySGD->getFont().c_str(), 13);
+				content_label->setPosition(ccp(55,-60));
+				t_container->addChild(content_label);
+				
+				CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+				CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+				s_close->setColor(ccGRAY);
+				
+				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																					{
+																						exit_target->onEnter();
+																						((Maingame*)exit_target)->touchOn();
+																						t_popup->removeFromParent();
+																					});
+				
+				CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+				close_menu->setPosition(ccp(145,103));
+				t_container->addChild(close_menu);
+			}
 		}
 
 		myGD->communication("UI_endFever");
@@ -1711,55 +1882,6 @@ void Jack::startOutterParticle( CCNode* target_node )
 	outter_particle->setAutoRemoveOnFinish(true);
 	target_node->addChild(outter_particle);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 StunHammer* StunHammer::create( CCObject* t_jack, SEL_CallFunc d_stun )
 {

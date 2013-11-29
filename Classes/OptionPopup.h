@@ -45,6 +45,9 @@ private:
 	CCMenu* bgm_menu;
 	CCMenu* effect_menu;
 	
+	CCMenuItem* joystick_right_item;
+	CCMenuItem* joystick_left_item;
+	
 	void showPopup();
 	void endShowPopup();
 	void hidePopup();

@@ -348,7 +348,7 @@ void CumberParent::changeMaxSize(float t_p)
 
 void CumberParent::realStartDieAnimation()
 {
-	ccColor4F myColor;
+//	ccColor4F myColor;
 //	int my_type = DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
 //	if(my_type == kMyElementalPlasma)				myColor = ccc4f(1.f, 0, 1.f, 1.f);
 //	else if(my_type == kMyElementalLightning)		myColor = ccc4f(1.f, 1.f, 0, 1.f);
@@ -359,8 +359,8 @@ void CumberParent::realStartDieAnimation()
 //	else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
 	
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 0, 0), rand()%360-180.f);
+//	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
+//	myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 0, 0), rand()%360-180.f);
 	
 //	for(auto mainCumber : mainCumbers)
 //	{
@@ -395,8 +395,8 @@ void CumberParent::dieAnimation()
 //		else if(my_type == kMyElementalLife)			myColor = ccc4f(0, 1.f, 0, 1.f);
 //		else if(my_type == kMyElementalWater)			myColor = ccc4f(0, 0, 1.f, 1.f);
 		//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-		auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 0, 0), rand()%360-180.f);
+//		auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
+//		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(0, 0, 0, 0), rand()%360-180.f);
 //		for(auto mainCumber : mainCumbers)
 //			mainCumber->cumberImgStartRotating(180.f*((50-die_animation_rate)/10.f));
 	}

@@ -206,6 +206,9 @@ public:
 	
 	SEL_CallFunc pauseBackTracking;
 	
+	void resetTouch();
+	void invisibleControl();
+	
 private:
 	IntDirection beforeDirection;
 	IntDirection beforeSecondDirection;

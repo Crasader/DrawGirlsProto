@@ -242,46 +242,58 @@ void SpinBasicMissile::myInit( string type_name, int elemental_level, CCPoint t_
 	angle = 179.8;
 
 	float particle_cnt = elemental_level*5;
-	string particle_string = "jm_" + type_name + ".png";
 
-	missile_particle = new CCParticleSystemQuad();
-	missile_particle->initWithTotalParticles(particle_cnt);
-	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage(particle_string.c_str());
-	missile_particle->setTexture(texture);
-	missile_particle->setEmissionRate(particle_cnt);
-	missile_particle->setAngle(0.0);
-	missile_particle->setAngleVar(360.0);
-	ccBlendFunc blendFunc = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
-	missile_particle->setBlendFunc(blendFunc);
-	missile_particle->setDuration(-1.0);
-	missile_particle->setEmitterMode(kCCParticleModeGravity);
-	ccColor4F startColor = {1.00,1.00,1.00,1.00}; // 0.76 0.25 0.12
-	missile_particle->setStartColor(startColor);
-	ccColor4F startColorVar = {0,0,0,0};
-	missile_particle->setStartColorVar(startColorVar);
-	ccColor4F endColor = {1.00,1.00,1.00,1.00};
-	missile_particle->setEndColor(endColor);
-	ccColor4F endColorVar = {0,0,0,0};
-	missile_particle->setEndColorVar(endColorVar);
-	missile_particle->setStartSize(5.0);
-	missile_particle->setStartSizeVar(5.0);
-	missile_particle->setEndSize(5.0);
-	missile_particle->setEndSizeVar(0.0);
-	missile_particle->setGravity(ccp(0,0));
-	missile_particle->setRadialAccel(0.0);
-	missile_particle->setRadialAccelVar(0.0);
-	missile_particle->setSpeed(20);
-	missile_particle->setSpeedVar(0.0);
-	missile_particle->setTangentialAccel(0);
-	missile_particle->setTangentialAccelVar(0);
-	missile_particle->setTotalParticles(particle_cnt);
-	missile_particle->setLife(0.3);
-	missile_particle->setLifeVar(0.0);
-	missile_particle->setStartSpin(0.0);
-	missile_particle->setStartSpinVar(360.f);
-	missile_particle->setEndSpin(0.0);
-	missile_particle->setEndSpinVar(360.f);
-	missile_particle->autorelease();
+	string particle_filename;
+	if(type_name == "life")
+		particle_filename = "jm_particle%d_life.plist";
+	else if(type_name == "fire")
+		particle_filename = "jm_particle%d_fire.plist";
+	else if(type_name == "water")
+		particle_filename = "jm_particle%d_water.plist";
+	else if(type_name == "empty")
+		particle_filename = "jm_particle%d_empty.plist";
+		
+	
+	missile_particle = CCParticleSystemQuad::create(CCString::createWithFormat(particle_filename.c_str(), (elemental_level-1)/2+1)->getCString());
+	
+//	missile_particle = new CCParticleSystemQuad();
+//	missile_particle->initWithTotalParticles(particle_cnt);
+//	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage(particle_string.c_str());
+//	missile_particle->setTexture(texture);
+//	missile_particle->setEmissionRate(particle_cnt);
+//	missile_particle->setAngle(0.0);
+//	missile_particle->setAngleVar(360.0);
+//	ccBlendFunc blendFunc = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
+//	missile_particle->setBlendFunc(blendFunc);
+//	missile_particle->setDuration(-1.0);
+//	missile_particle->setEmitterMode(kCCParticleModeGravity);
+//	ccColor4F startColor = {1.00,1.00,1.00,1.00}; // 0.76 0.25 0.12
+//	missile_particle->setStartColor(startColor);
+//	ccColor4F startColorVar = {0,0,0,0};
+//	missile_particle->setStartColorVar(startColorVar);
+//	ccColor4F endColor = {1.00,1.00,1.00,1.00};
+//	missile_particle->setEndColor(endColor);
+//	ccColor4F endColorVar = {0,0,0,0};
+//	missile_particle->setEndColorVar(endColorVar);
+//	missile_particle->setStartSize(5.0);
+//	missile_particle->setStartSizeVar(5.0);
+//	missile_particle->setEndSize(5.0);
+//	missile_particle->setEndSizeVar(0.0);
+//	missile_particle->setGravity(ccp(0,0));
+//	missile_particle->setRadialAccel(0.0);
+//	missile_particle->setRadialAccelVar(0.0);
+//	missile_particle->setSpeed(20);
+//	missile_particle->setSpeedVar(0.0);
+//	missile_particle->setTangentialAccel(0);
+//	missile_particle->setTangentialAccelVar(0);
+//	missile_particle->setTotalParticles(particle_cnt);
+//	missile_particle->setLife(0.3);
+//	missile_particle->setLifeVar(0.0);
+//	missile_particle->setStartSpin(0.0);
+//	missile_particle->setStartSpinVar(360.f);
+//	missile_particle->setEndSpin(0.0);
+//	missile_particle->setEndSpinVar(360.f);
+//	missile_particle->autorelease();
 
 	side_position = ccp(1,tan(angle/180.f*M_PI));
 	if((angle > 90 && angle <= 270) || (angle <= -90 && angle > -270))
@@ -290,65 +302,61 @@ void SpinBasicMissile::myInit( string type_name, int elemental_level, CCPoint t_
 	side_position = ccpAdd(center_position, side_position);
 
 	missile_particle->setPosition(side_position);
-	missile_particle->setPosVar(ccp(0,0));
+//	missile_particle->setPosVar(ccp(0,0));
 	addChild(missile_particle);
 
-	string missile_string = "jm_" + type_name + CCString::createWithFormat("%d_main.png", elemental_level)->getCString();
-
-	if(type_name == "life" && elemental_level >= 8)
+	int animation_cnt = 0;
+	
+	if(type_name == "life")
 	{
 		if(elemental_level == 8)
-		{
-			CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage(missile_string.c_str());
-
-			missile_main = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 27, 27));
-			missile_main->setPosition(side_position);
-			addChild(missile_main);
-
-
-			CCAnimation* t_animation = CCAnimation::create();
-			t_animation->setDelayPerUnit(0.1);
-			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(0, 0, 27, 27));
-			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(27, 0, 27, 27));
-
-			CCAnimate* t_animate = CCAnimate::create(t_animation);
-			CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-
-			missile_main->runAction(t_repeat);
-		}
-		else if(elemental_level == 9)
-		{
-			CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage(missile_string.c_str());
-
-			missile_main = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 37, 38));
-			missile_main->setPosition(side_position);
-			addChild(missile_main);
-
-
-			CCAnimation* t_animation = CCAnimation::create();
-			t_animation->setDelayPerUnit(0.1);
-			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(0, 0, 37, 38));
-			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(37, 0, 37, 38));
-
-			CCAnimate* t_animate = CCAnimate::create(t_animation);
-			CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-
-			missile_main->runAction(t_repeat);
-		}
+			animation_cnt = 3;
+		else
+			animation_cnt = 2;
 	}
-	else
+	else if(type_name == "fire")
 	{
-		missile_main = CCSprite::create(missile_string.c_str());
-		missile_main->setPosition(side_position);
-		addChild(missile_main);
+		animation_cnt = 2;
 	}
+	else if(type_name == "water")
+	{
+		if(elemental_level == 6 || elemental_level == 9)
+			animation_cnt = 4;
+		else if(elemental_level == 8)
+			animation_cnt = 5;
+		else
+			animation_cnt = 3;
+	}
+	else if(type_name == "empty")
+	{
+		if(elemental_level == 1)
+			animation_cnt = 2;
+		else if(elemental_level == 4)
+			animation_cnt = 4;
+		else
+			animation_cnt = 3;
+	}
+	
+	CCTexture2D* missile_main_texture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat(("jm_" + type_name + "%d_main.png").c_str(), elemental_level)->getCString());
+	
+	CCSize animation_cut_size = CCSizeMake(missile_main_texture->getContentSize().width/animation_cnt, missile_main_texture->getContentSize().height);
+	
+	missile_main = CCSprite::createWithTexture(missile_main_texture, CCRectMake(0, 0, animation_cut_size.width, animation_cut_size.height));
+	missile_main->setPosition(side_position);
+	addChild(missile_main);
+	
+	CCAnimation* main_animation = CCAnimation::create();
+	main_animation->setDelayPerUnit(0.1f);
+	for(int i=0;i<animation_cnt;i++)
+		main_animation->addSpriteFrameWithTexture(missile_main_texture, CCRectMake(i*animation_cut_size.width, 0, animation_cut_size.width, animation_cut_size.height));
+	
+	CCAnimate* main_animate = CCAnimate::create(main_animation);
+	CCRepeatForever* main_repeat = CCRepeatForever::create(main_animate);
+	
+	missile_main->runAction(main_repeat);
+	
 
 	is_self_spin = false;
-
-	if(type_name == "empty" && (elemental_level == 2 || elemental_level == 3 || elemental_level == 5 || elemental_level == 8 || elemental_level == 9))		is_self_spin = true;
-	else if(type_name == "life" && elemental_level >= 2 && elemental_level <= 6)									is_self_spin = true;
-	else if(type_name == "fire" && elemental_level >= 2 && elemental_level <= 7)									is_self_spin = true;
-	else if(type_name == "water" && (elemental_level == 2 || elemental_level == 4))									is_self_spin = true;
 
 	if(!is_self_spin)
 		missile_main->setRotation(-angle);
