@@ -323,6 +323,7 @@ bool CollectionBookPopup::init()
 	input_text->setFont(mySGD->getFont().c_str(), 12);
 	input_text->setFontColor(ccBLACK);
 	input_text->setDelegate(this);
+	
     recent_right_img->addChild(input_text, kCBP_Z_cover);
 	
     if(input_data != "입력해주세요.")
