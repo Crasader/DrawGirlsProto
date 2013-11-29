@@ -527,6 +527,7 @@ void ControlJoystickButton::resetTouch()
 	button_touch = NULL;
 	joystick_touch = NULL;
 	myJack->willBackTracking = false;
+	myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
 }
 
 void ControlJoystickButton::invisibleControl()

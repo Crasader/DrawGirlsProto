@@ -885,6 +885,7 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	
 	mainImg = CCSprite::createWithTexture(missile_main_texture, CCRectMake(0, 0, animation_cut_size.width, animation_cut_size.height));
 	mainImg->setPosition(particlePosition);
+	mainImg->setScale(1.f/1.5f);
 	addChild(mainImg);
 	
 	CCAnimation* main_animation = CCAnimation::create();

@@ -440,7 +440,11 @@ void StageInfoDown::myInit( CCObject* t_success, SEL_CallFunc d_success, CCObjec
 	t_back->setPosition(ccp(240,160));
 	addChild(t_back, kSID_Z_back);
 
-	CCMenuItem* cancel_item = CCMenuItemImage::create("sspl_cancel.png", "sspl_cancel.png", this, menu_selector(StageInfoDown::menuAction));
+	CCSprite* n_cancel = CCSprite::create("sspl_cancel.png");
+	CCSprite* s_cancel = CCSprite::create("sspl_cancel.png");
+	s_cancel->setColor(ccGRAY);
+	
+	CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, this, menu_selector(StageInfoDown::menuAction));
 	cancel_item->setTag(kSID_MT_cancel);
 
 	cancel_menu = CCMenu::createWithItem(cancel_item);
