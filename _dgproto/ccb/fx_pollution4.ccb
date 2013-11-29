@@ -107,7 +107,7 @@
 								<key>type</key>
 								<string>Float</string>
 								<key>value</key>
-								<real>0.69999998807907104</real>
+								<real>-1</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -289,6 +289,8 @@
 								<string>fx_pollution4.png</string>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
