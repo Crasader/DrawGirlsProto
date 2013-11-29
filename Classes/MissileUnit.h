@@ -253,11 +253,12 @@ private:
 class ThreeCushion : public CrashMapObject
 {
 public:
-	static ThreeCushion * create (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
+	static ThreeCushion * create (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
 	void removeEffect ();
 private:
 	float speed;
 	int angle;
+	int crashArea;
 	CCSprite * baseNode;
 	CCLabelAtlas * cntLabel;
 	int cushionCnt;
@@ -273,13 +274,13 @@ private:
 	void crashMap ();
 	CCPoint getAfterPosition (CCPoint b_p, int t_angle);
 	CCPoint judgeAnglePoint (CCPoint b_p);
-	void myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
+	void myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
 	void initParticle ();
 };
 class TickingTimeBomb : public CrashMapObject
 {
 public:
-	static TickingTimeBomb * create (IntPoint t_setPoint, int t_bombFrameOneTime, int t_bombTimes, int t_rangeCode, CCArray * t_tickingArray, CCObject * t_resetTickingTimeBomb, SEL_CallFunc d_resetTickingTimeBomb);
+	static TickingTimeBomb * create (IntPoint t_setPoint, int t_bombFrameOneTime, int t_bombTimes, int t_crashArea, int t_rangeCode, CCArray * t_tickingArray, CCObject * t_resetTickingTimeBomb, SEL_CallFunc d_resetTickingTimeBomb);
 	IntPoint getSettedPoint ();
 	virtual ~TickingTimeBomb()
 	{
@@ -291,6 +292,7 @@ private:
 	int bombTimes;
 	int ingFrame;
 	int rangeCode;
+	int crashArea;
 	CCSprite * ticking_main;
 	CCLabelAtlas * ticking_label;
 	CCArray * tickingArray;
@@ -303,7 +305,7 @@ private:
 	void stopMyAction ();
 	void jackDie ();
 	void lineDie (IntPoint t_p);
-	void myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t_bombTimes, int t_rangeCode, CCArray * t_tickingArray, CCObject * t_resetTickingTimeBomb, SEL_CallFunc d_resetTickingTimeBomb);
+	void myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t_bombTimes, int t_crashArea, int t_rangeCode, CCArray * t_tickingArray, CCObject * t_resetTickingTimeBomb, SEL_CallFunc d_resetTickingTimeBomb);
 	void initParticle ();
 };
 class SightOut : public CCSprite
@@ -380,9 +382,9 @@ class Firework : public CrashMapObject
 {
 public:
 	virtual ~ Firework ();
-	static Firework * create (CCPoint cumberPosition, CCPoint jackPosition);
+	static Firework * create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	void crashMapForPoint (IntPoint point, int radius);
-	void myInit (CCPoint cumberPosition, CCPoint jackPosition);
+	void myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	void setTwoStep ();
 	void selfRemove (float dt);
 	void jackDie ();
@@ -397,19 +399,21 @@ protected:
 	CCSprite * m_parentMissile;
 	CCSpriteBatchNode * batchNode;
 	FromToWithDuration2 <CCPoint> m_parentMissileGoal;
+	Json::Value m_pattern;
 };
 class MovingSunflower : public CrashMapObject
 {
 public:
-	static MovingSunflower * create (CCPoint cumberPosition, CCPoint jackPosition);
+	static MovingSunflower * create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	void crashMapForPoint (IntPoint point, int radius);
-	void myInit (CCPoint cumberPosition, CCPoint jackPosition);
+	void myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	void setTwoStep ();
 	void selfRemove (float dt);
 	void jackDie ();
 	void lineDie (IntPoint t_p);
 	void update (float dt);
 protected:
+	Json::Value m_pattern;
 	CCPoint m_sourcePosition;
 	int m_step;
 	int m_frame;
@@ -422,8 +426,8 @@ protected:
 class AlongOfTheLine : public CCNode
 {
 public:
-	static AlongOfTheLine * create (CCPoint cumberPosition, CCPoint jackPosition, int totalFrame);
-	void myInit (CCPoint cumberPosition, CCPoint jackPosition, int totalFrame);
+	static AlongOfTheLine * create (CCPoint cumberPosition, CCPoint jackPosition, int totalFrame, int number, float speed);
+	void myInit (CCPoint cumberPosition, CCPoint jackPosition, int totalFrame, int number, float speed);
 	void setTwoStep ();
 	void hidingAnimation (float dt);
 	void update (float dt);
@@ -444,6 +448,7 @@ protected:
 		int step;
 		Pollution ();
 	};
+	float m_lineSpeed;
 	int m_step;
 	int m_frame;
 	int m_totalFrame;
@@ -456,14 +461,15 @@ protected:
 class ThrowBomb : public CrashMapObject
 {
 public:
-	static ThrowBomb * create (CCPoint cumberPosition, CCPoint jackPosition);
+	static ThrowBomb * create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	void crashMapForPoint (IntPoint point, int radius);
 	void selfRemove (float dt);
 	void jackDie ();
 	void lineDie (IntPoint t_p);
-	void myInit (CCPoint cumberPosition, CCPoint jackPosition);
+	void myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	void update (float dt);
 protected:
+	Json::Value m_pattern;
 	int m_step;
 	int m_frame;
 	CCSprite * m_parentMissile;
@@ -531,8 +537,8 @@ protected:
 class CloudBomb : public CCNode
 {
 public:
-	static CloudBomb * create (CCPoint cumberPosition, CCPoint jackPosition);
-	void myInit (CCPoint cumberPosition, CCPoint jackPosition);
+	static CloudBomb * create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
+	void myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	void setTwoStep ();
 	void selfRemove (float dt);
 	void update (float dt);
@@ -544,6 +550,7 @@ protected:
 	float m_bombProb;
 	CCSpriteBatchNode * batchNode;
 	Well512 m_well512;
+	Json::Value m_pattern;
 };
 class Burn : public CCNode
 {
