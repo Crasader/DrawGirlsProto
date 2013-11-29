@@ -516,33 +516,6 @@ public:
 	}
 	
 	
-	int getIsNotHelpableUser( std::string userId, int base_s = 60 * 60 * 24 * 1 ) /* 1일 */
-	{
-		auto end = chrono::system_clock::now();
-		auto currentSecond = chrono::system_clock::to_time_t(end);
-		int ii = myDSH->getUserIntForStr("help_" + userId, 0);
-		if(ii + base_s < currentSecond) // 보낼 수 있다.
-		{
-			return 0;
-		}
-		else
-		{
-			return ii + base_s - currentSecond; // 남은 시간 리턴
-		}
-		//		if(ii + base_s < GameSystem::getCurrentTime_s())
-		//		{
-		//			return 1;
-		//		}
-		//		else
-		//			return 0;
-	}
-	
-	void setHelpSendTime( string userId )
-	{
-		auto end = chrono::system_clock::now();
-		auto currentSecond = chrono::system_clock::to_time_t(end);
-		myDSH->setUserIntForStr("help_" + userId, currentSecond);
-	}
 protected:
 	
 	Json::Value m_scoreList;

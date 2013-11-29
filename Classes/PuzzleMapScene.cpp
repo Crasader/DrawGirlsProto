@@ -1044,7 +1044,9 @@ void PuzzleMapScene::stageAction(CCObject* sender)
 	
 	int tag = ((CCNode*)sender)->getTag();
 	
-	if(tag == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, tag))
+	if(tag == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, tag) ||
+	   (NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag) == 0 &&
+		(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag)))))
 	{
 		mySD->setSilType(tag);
 		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, tag);
@@ -3853,9 +3855,7 @@ void PuzzleMapScene::creatingPuzzle()
 			myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number, true);
 			
 			vector<SaveUserData_Key> save_userdata_list;
-			
 			save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-			
 			myDSH->saveUserData(save_userdata_list, nullptr);
 		}
 	}

@@ -777,6 +777,11 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																
 																int need_ticket_cnt = NSDS_GI(contentObj["puzzlenumber"].asInt(), kSDS_PZ_ticket_i);
 																
+																CCLabelTTF* ticket_cnt_label = (CCLabelTTF*)((PuzzleMapScene*)target_close)->getChildByTag(kPMS_MT_ticketCnt);
+																if(ticket_cnt_label)
+																	ticket_cnt_label->setString(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt),
+																														   NSDS_GI(contentObj["puzzlenumber"].asInt(), kSDS_PZ_ticket_i))->getCString());
+																
 																if(need_ticket_cnt <= have_ticket_cnt)
 																{
 																	// open 퍼즐
@@ -784,6 +789,10 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																	vector<SaveUserData_Key> save_userdata_list;
 																	save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
 																	myDSH->saveUserData(save_userdata_list, nullptr);
+																	
+																	((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_buyPuzzle);
+																	((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_callTicket);
+																	((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_puzzleOpenTitle);
 																	
 																	((PuzzleMapScene*)target_close)->openPuzzleAction(contentObj["puzzlenumber"].asInt());
 																	
