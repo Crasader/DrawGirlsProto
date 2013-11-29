@@ -66,6 +66,10 @@ public:
 	
 	void touchOn();
 	
+	virtual void onEnter();
+	virtual void onExit();
+	virtual void onEnterTransitionDidFinish();
+	
 private:
 	
 	PlayUI* myUI;
@@ -115,9 +119,6 @@ private:
 	
 	void gachaOn();
 	
-	virtual void onEnter();
-    virtual void onExit();
-	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
     virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
@@ -148,6 +149,7 @@ private:
 	
 	void stopSpecialAttack()
 	{
+		((ControlJoystickButton*)mControl)->resetTouch();
 //		mControl->setTouchEnabled(true);
 	}
 	
