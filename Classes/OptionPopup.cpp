@@ -19,7 +19,7 @@
 #include "cocos-ext.h"
 #include "StageImgLoader.h"
 #include "KSAlertView.h"
-
+#include "HatGacha.h"
 
 USING_NS_CC_EXT;
 
@@ -48,6 +48,8 @@ void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
 	target_final = t_final;
 	delegate_final = d_final;
 }
+
+
 
 bool OptionPopup::init()
 {
@@ -185,7 +187,11 @@ bool OptionPopup::init()
 	
 	is_menu_enable = false;
 
-#if 0
+//	auto hatgacha = HatGacha::create([=](){
+//		// 모자 돌리기 끝.
+//	});
+//	addChild(hatgacha, kPMS_Z_helpRequest);
+#if 0 // 심플 예제
 	KSAlertView* av = KSAlertView::create();
 	
 	av->setContentNode(
@@ -212,7 +218,37 @@ bool OptionPopup::init()
 																									 }));
 	av->show();
 #endif
+#if 0 // 가운데 정렬 예제
+	KSAlertView* av = KSAlertView::create();
+	CCNode* __con = CCNode::create();
+	
+	KSNode* con2 = new KSNode();
+	con2->init();
+	con2->autorelease();
+	__con->addChild(con2);
+	
+//	con->setAnchorPoint(ccp(0, 0));
+	con2->addChild(CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오픈", 1)->getCString(), mySGD->getFont().c_str(), 25));
+	con2->addChild(CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오zzz픈", 1)->getCString(), mySGD->getFont().c_str(), 25));
+	
+	av->setContentNode(__con);
+	av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
+	av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+	av->setBorderScale(0.9f);
+//	av->setTitleStr("지금 열기");
+	addChild(av, kPMS_Z_helpRequest);
+	av->setCloseButton(CCMenuItemImageLambda::create("tutorial_common_cancel.png", "tutorial_common_cancel.png",
+																									 [=](CCObject* sender){
+																										 is_menu_enable = true;
+																									 }));
+
+	con2->setPosition(ccp((av->getViewSize() / 2.f).width,
+												-(av->getViewSize() / 2.f).height));
+	con2->alignItemsVerticallyWithPadding(30);
+	av->show();
+#endif
 	return true;
+//	return true;
 }
 
 void OptionPopup::onEnter()
