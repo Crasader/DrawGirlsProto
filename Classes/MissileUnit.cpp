@@ -1943,7 +1943,7 @@ void BlindDrop::myAction ()
 void BlindDrop::stopAction ()
 {
 	unschedule(schedule_selector(BlindDrop::myAction));
-	reader->getAnimationManager()->runAnimationsForSequenceNamed("cast1stop");
+	reader->getAnimationManager()->runAnimationsForSequenceNamed("tornado_stop");
 }
 void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame, float sc)
 {
@@ -2694,7 +2694,7 @@ void AlongOfTheLine::update (float dt)
 	}
 	else for(auto i = m_pollutions.begin(); i != m_pollutions.end();)
 	{
-		bool r = i->glue.step(1/(60.f) * (m_lineSpeed / 100.f));
+		bool r = i->glue.step(1/60.f);
 		
 		i->spr->setPosition(i->glue.getValue());
 		if(!r && i->step == 1)
@@ -2900,10 +2900,10 @@ namespace std
 		//			return x + y;
 	}
 }
-ReaverScarab * ReaverScarab::create (CCPoint cumberPosition, CCPoint jackPosition)
+ReaverScarab * ReaverScarab::create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	ReaverScarab* t_bf = new ReaverScarab();
-	t_bf->myInit(cumberPosition, jackPosition);
+	t_bf->myInit(cumberPosition, jackPosition, pattern);
 	t_bf->autorelease();
 	return t_bf;
 }
@@ -2943,8 +2943,10 @@ void ReaverScarab::lineDie (IntPoint t_p)
 	//			m_step
 	//		}
 }
-void ReaverScarab::myInit (CCPoint cumberPosition, CCPoint jackPosition)
+void ReaverScarab::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
+	m_pattern = pattern;
+	m_crashArea = m_pattern.get("area", 15).asInt();
 	m_insertCount = 0;
 	m_step = 1;
 	m_jackPoint = ccp2ip(jackPosition);
@@ -3166,15 +3168,15 @@ void ReaverScarab::update (float dt)
 		else
 		{
 			m_step = 2;
-			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
+			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), m_crashArea);
 		}
 		//		aStar(m_jackPoint);
 		
 		
-		if(m_frame >= 60*4)
+		if(m_frame >= m_pattern.get("totalframe", 240).asInt())
 		{
 			m_step = 2;
-			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
+			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), m_crashArea);
 		}
 	}
 	if(m_step == 2) // 폭발.

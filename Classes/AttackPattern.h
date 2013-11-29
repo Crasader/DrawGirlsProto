@@ -883,6 +883,7 @@ public:
 protected:
 	int m_frame;
 	int m_totalFrame;
+	Json::Value m_pattern;
 	KSCumberBase* m_cumber;
 };
 

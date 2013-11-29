@@ -3023,6 +3023,7 @@ void KSTargetAttackPattern13::myInit( CCPoint t_sp, KSCumberBase* cb, const std:
 
 	m_frame = 0;
 	m_totalFrame = 100;
+	m_pattern = pattern;
 }
 
 void KSTargetAttackPattern13::stopMyAction()
@@ -3039,7 +3040,7 @@ void KSTargetAttackPattern13::stopMyAction()
 
 void KSTargetAttackPattern13::update( float dt )
 {
-	ReaverScarab* gun = ReaverScarab::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()));
+	ReaverScarab* gun = ReaverScarab::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), m_pattern);
 	addChild(gun);
 	stopMyAction();
 
