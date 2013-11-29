@@ -141,7 +141,7 @@ public:
 		x = t_x;
 		y = t_y;
 	}
-	int length() const
+	float length() const
 	{
 		return sqrt(x*x + y*y);
 	}

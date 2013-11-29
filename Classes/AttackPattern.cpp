@@ -250,7 +250,7 @@ void KSTargetAttackPattern10::myInit(CCPoint t_sp, KSCumberBase* cb, const std::
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
-	
+	this->pattern = pattern;
 }
 
 void KSTargetAttackPattern10::stopMyAction()
@@ -267,7 +267,7 @@ void KSTargetAttackPattern10::stopMyAction()
 
 void KSTargetAttackPattern10::update( float dt )
 {
-	Firework* fw = Firework::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()));
+	Firework* fw = Firework::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), pattern);
 	addChild(fw);
 	stopMyAction();
 }
@@ -282,7 +282,7 @@ void KSTargetAttackPattern11::myInit(CCPoint t_sp, KSCumberBase* cb, const std::
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
-	
+	m_pattern = pattern;
 }
 
 void KSTargetAttackPattern11::stopMyAction()
@@ -299,7 +299,7 @@ void KSTargetAttackPattern11::stopMyAction()
 
 void KSTargetAttackPattern11::update( float dt )
 {
-	MovingSunflower* ap = MovingSunflower::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()));
+	MovingSunflower* ap = MovingSunflower::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), m_pattern);
 	addChild(ap);
 	stopMyAction();
 }
@@ -1114,10 +1114,10 @@ void AP_Missile15::myInit( CCPoint t_sp, int t_tmCnt, int t_burnFrame )
 	startMyAction();
 }
 
-AP_Missile16* AP_Missile16::create( int t_type, int t_tmCnt, int t_totalFrame )
+AP_Missile16* AP_Missile16::create( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea)
 {
 	AP_Missile16* t_m16 = new AP_Missile16();
-	t_m16->myInit(t_type, t_tmCnt, t_totalFrame);
+	t_m16->myInit(t_type, t_tmCnt, t_totalFrame, t_crashArea);
 	t_m16->autorelease();
 	return t_m16;
 }
@@ -1186,7 +1186,7 @@ void AP_Missile16::myAction()
 		random_sp.x = random_fp.x + 500;
 		random_sp.y = random_fp.y + 500;
 
-		FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(90, 109), random_sp, random_fp, 220, 20, IntSize(15, 15), this, callfunc_selector(AP_Missile16::removeEffect)); // imgSize, crashSize
+		FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(crashArea, crashArea), random_sp, random_fp, 220, 20, IntSize(15, 15), this, callfunc_selector(AP_Missile16::removeEffect)); // imgSize, crashSize
 		addChild(t_fm);
 	}
 
@@ -1196,11 +1196,12 @@ void AP_Missile16::myAction()
 	}
 }
 
-void AP_Missile16::myInit( int t_type, int t_tmCnt, int t_totalFrame )
+void AP_Missile16::myInit( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea)
 {
 	isRemoveEffect = false;
 
 	//		myGD->communication("EP_startCrashAction");
+	crashArea = t_crashArea;
 	type = t_type;
 	tmCnt = t_tmCnt;
 	totalFrame = t_totalFrame;
@@ -2166,6 +2167,7 @@ void KSAttackPattern9::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string
 	t_cushion_cnt = pattern.get("cushioncount", 4).asInt();
 	t_is_big_bomb = pattern.get("big", false).asBool();
 	t_tmCnt = pattern.get("number", 10).asInt();
+	m_crashArea = pattern.get("area", 20).asInt();
 	///////////////////////////////////////////
 
 	scheduleUpdate();
@@ -2176,7 +2178,7 @@ void KSAttackPattern9::update( float dt )
 	for(int i=0;i<t_tmCnt;i++)
 	{
 		// create
-		ThreeCushion* t_tc = ThreeCushion::create(t_sp, t_move_speed, t_cushion_cnt, t_is_big_bomb,
+		ThreeCushion* t_tc = ThreeCushion::create(t_sp, t_move_speed, t_cushion_cnt, t_is_big_bomb, m_crashArea,
 			this, callfunc_selector(ThisClassType::removeEffect));
 		addChild(t_tc);
 	}
@@ -2783,7 +2785,7 @@ void KSTargetAttackPattern7::myAction()
 	{
 		ccColor3B tcolor = t_bead->getColor();
 		tcolor.g -= dcolor;
-		tcolor.b -= dcolor;
+//		tcolor.b -= dcolor;
 		t_bead->setColor(tcolor);
 		lazer_sub->setScaleY(lazer_sub->getScaleY()-dscale);
 		lazer_sub->setColor(tcolor);
@@ -2979,7 +2981,8 @@ void KSTargetAttackPattern12::myInit( CCPoint t_sp, KSCumberBase* cb, const std:
 	reader.parse(patternData, pattern);
 
 	m_frame = 0;
-	m_totalFrame = 100;
+	m_totalFrame = pattern.get("number", 5).asInt() * 20;
+	m_pattern = pattern;
 }
 
 void KSTargetAttackPattern12::stopMyAction()
@@ -3000,7 +3003,7 @@ void KSTargetAttackPattern12::update( float dt )
 	if(m_frame % 20 == 0)
 	{
 		// 쏨~
-		ThrowBomb* gun = ThrowBomb::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()));
+		ThrowBomb* gun = ThrowBomb::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), m_pattern);
 		addChild(gun);
 	}
 	if(m_frame == m_totalFrame)
@@ -3427,6 +3430,7 @@ void KSSpecialAttackPattern12::myInit( CCPoint t_sp, KSCumberBase* cb, const std
 	reader.parse(patternData, pattern);
 	area = pattern.get("area", 10).asInt();
 	totalFrame = pattern.get("totalframe", 300).asInt();
+	movingFrame = pattern.get("movingframe", 80).asInt();
 	m_position = t_sp;
 	m_cumber = cb;
 	scheduleUpdate();
@@ -3447,7 +3451,7 @@ void KSSpecialAttackPattern12::update( float dt )
 	IntPoint jackPoint = myGD->getJackPoint();
 	CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
 
-	PoisonDrop* t_pd = PoisonDrop::create(m_position, jackPosition, 120, area, totalFrame);
+	PoisonDrop* t_pd = PoisonDrop::create(m_position, jackPosition, movingFrame, area, totalFrame);
 	addChild(t_pd);
 	t_pd->startAction();
 
@@ -3562,6 +3566,8 @@ void KSSpecialAttackPattern17::myInit( CCPoint t_sp, KSCumberBase* cb, const std
 	reader.parse(patternData, pattern);
 	m_cumber = cb;
 	m_totalFrame = pattern.get("totalframe", 180).asInt();
+	m_speed = pattern.get("linespeed", 100).asInt();
+	m_number = pattern.get("number", 4).asInt();
 	scheduleUpdate();
 }
 
@@ -3577,7 +3583,7 @@ void KSSpecialAttackPattern17::stopMyAction()
 
 void KSSpecialAttackPattern17::update( float dt )
 {
-	AlongOfTheLine* ap = AlongOfTheLine::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), m_totalFrame);
+	AlongOfTheLine* ap = AlongOfTheLine::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), m_totalFrame, m_number, m_speed);
 	addChild(ap);
 	stopMyAction();
 }
@@ -3587,6 +3593,7 @@ void KSSpecialAttackPattern18::myInit( CCPoint t_sp, KSCumberBase* cb, const std
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
+	m_pattern = pattern;
 	m_cumber = cb;
 	scheduleUpdate();
 }
@@ -3610,7 +3617,7 @@ void KSSpecialAttackPattern18::update( float dt )
 		int y = m_well512.GetValue(mapLoopRange::mapHeightInnerBegin, mapLoopRange::mapHeightInnerEnd - 1);
 
 		//			CloudBomb* ap = CloudBomb::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()));
-		CloudBomb* ap = CloudBomb::create(ip2ccp(IntPoint(x, y)), ip2ccp(myGD->getJackPoint()));
+		CloudBomb* ap = CloudBomb::create(ip2ccp(IntPoint(x, y)), ip2ccp(myGD->getJackPoint()), m_pattern);
 
 		addChild(ap);
 	}

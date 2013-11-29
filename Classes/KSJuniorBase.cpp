@@ -407,30 +407,13 @@ void KSJuniorBase::setScaleY( float y )
 
 void KSJuniorBase::endTeleport()
 {
-	teleportImg->removeFromParentAndCleanup(true);
-	teleportImg = NULL;
 	startMoving();
 	myGD->communication("CP_onPatternEnd");
 }
 
 void KSJuniorBase::startTeleport()
 {
-	if(teleportImg)
-	{
-		teleportImg->removeFromParentAndCleanup(true);
-		teleportImg = NULL;
-	}
-
-	teleportImg = CCSprite::create("teleport_light.png");
-	teleportImg->setScale(0.01f);
-	addChild(teleportImg);
-
-	CCBlink* t_scale = CCBlink::create(0.5, 0);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(KSJuniorBase::smaller));
-
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-
-	teleportImg->runAction(t_seq);
+	smaller();
 	AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
 }
 
