@@ -64,7 +64,6 @@ enum PMS_MenuTag{
 	kPMS_MT_left,
 	kPMS_MT_right,
 	kPMS_MT_up,
-	kPMS_MT_tutorial,
 	kPMS_MT_showui,
 	kPMS_MT_top,
 	kPMS_MT_heartTime,

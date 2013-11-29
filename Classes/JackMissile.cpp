@@ -603,7 +603,7 @@ void JM_BasicMissile::moving ()
 		if(is_spin)				mainImg->setRotation(mainImg->getRotation()-6);
 		else					mainImg->setRotation((mainImg->getRotation()-(directionAngle-90))/2.f);
 		
-//		particle->setPosition(particlePosition);
+		particle->setPosition(particlePosition);
 		
 		CCPoint subDistance = ccpSub(t_p, particlePosition);
 		float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
@@ -664,11 +664,8 @@ void JM_BasicMissile::moving ()
 				CCSequence* t_seq2 = CCSequence::createWithTwoActions(move2, call2);
 				mainImg->runAction(t_seq2);
 				
-//				CCMoveBy* move1 = CCMoveBy::create(10.f/60.f, miss_position);
-//				CCCallFunc* call1 = CCCallFunc::create(this, callfunc_selector(JM_BasicMissile::removeFromParent));
-//				CCSequence* t_seq = CCSequence::createWithTwoActions(move1, call1);
-				
-//				particle->runAction(t_seq);
+				CCMoveBy* move1 = CCMoveBy::create(10.f/60.f, miss_position);
+				particle->runAction(move1);
 			}
 		}
 		if(ing_miss_counting < 0)
@@ -701,13 +698,12 @@ void JM_BasicMissile::moving ()
 				miss_position = ccpMult(miss_position, 10.f*myJM_SPEED/sqrtf(powf(miss_position.x, 2.f) + powf(miss_position.y, 2.f)));
 				
 				CCMoveBy* move2 = CCMoveBy::create(10.f/60.f, miss_position);
-				mainImg->runAction(move2);
+				CCCallFunc* call2 = CCCallFunc::create(this, callfunc_selector(JM_BasicMissile::removeFromParent));
+				CCSequence* t_seq2 = CCSequence::createWithTwoActions(move2, call2);
+				mainImg->runAction(t_seq2);
 				
 				CCMoveBy* move1 = CCMoveBy::create(10.f/60.f, miss_position);
-				CCCallFunc* call1 = CCCallFunc::create(this, callfunc_selector(JM_BasicMissile::removeFromParent));
-				CCSequence* t_seq = CCSequence::createWithTwoActions(move1, call1);
-				
-//				particle->runAction(t_seq);
+				particle->runAction(move1);
 			}
 		}
 	}
@@ -791,7 +787,17 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	myJM_SPEED = missile_speed * ((rand()%11 - 5)/10.f + 1.f);
 	myJM_CHANGE_DIRECTION_VAL = JM_CHANGE_DIRECTION_VAL;
 	
-//	particle->initWithTotalParticles(particle_cnt);
+	string particle_filename;
+	if(jm_type == kElementCode_empty)
+		particle_filename = "jm_particle%d_empty.plist";
+	else if(jm_type == kElementCode_fire)
+		particle_filename = "jm_particle%d_fire.plist";
+	else if(jm_type == kElementCode_life)
+		particle_filename = "jm_particle%d_life.plist";
+	else if(jm_type == kElementCode_water)
+		particle_filename = "jm_particle%d_water.plist";
+	
+	particle = CCParticleSystemQuad::create(CCString::createWithFormat(particle_filename.c_str(), (element_level-1)/2+1)->getCString());
 //	particle->setPositionType(kCCPositionTypeRelative);
 //	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage(particle_string.c_str());
 //	particle->setTexture(texture);
@@ -828,10 +834,7 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 //	particle->setStartSpinVar(360.f);
 //	particle->setEndSpin(0.0);
 //	particle->setEndSpinVar(360.f);
-//	
-//	particle->autorelease();
-//	
-//	particle->setPosition(particlePosition);
+	particle->setPosition(particlePosition);
 //	particle->setPosVar(ccp(0,0));
 	
 	CCPoint t_p = targetNode->getPosition();
@@ -842,7 +845,7 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	directionAngle += 180.f + rand()%31 - 15.f;
 	if(directionAngle >= 180.f)
 		directionAngle -= 360.f;
-//	addChild(particle);
+	addChild(particle);
 	
 	int animation_cnt = 0;
 	
@@ -894,60 +897,6 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	
 	mainImg->runAction(main_repeat);
 	
-	
-//	if(jm_type == kMyElementalLife && element_level >= 8)
-//	{
-//		if(element_level == 8)
-//		{
-//			CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat((type_name + "%d_main.png").c_str(), element_level)->getCString());
-//			
-//			mainImg = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 27, 27));
-//			mainImg->setPosition(particlePosition);
-//			addChild(mainImg);
-//			
-//			
-//			CCAnimation* t_animation = CCAnimation::create();
-//			t_animation->setDelayPerUnit(0.1);
-//			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(0, 0, 27, 27));
-//			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(27, 0, 27, 27));
-//			
-//			CCAnimate* t_animate = CCAnimate::create(t_animation);
-//			CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-//			
-//			mainImg->runAction(t_repeat);
-//		}
-//		else if(element_level == 9)
-//		{
-//			CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat((type_name + "%d_main.png").c_str(), element_level)->getCString());
-//			
-//			mainImg = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 37, 38));
-//			mainImg->setPosition(particlePosition);
-//			addChild(mainImg);
-//			
-//			
-//			CCAnimation* t_animation = CCAnimation::create();
-//			t_animation->setDelayPerUnit(0.1);
-//			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(0, 0, 37, 38));
-//			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(37, 0, 37, 38));
-//			
-//			CCAnimate* t_animate = CCAnimate::create(t_animation);
-//			CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-//			
-//			mainImg->runAction(t_repeat);
-//		}
-//	}
-//	else
-//	{
-//		mainImg = CCSprite::create(CCString::createWithFormat((type_name + "%d_main.png").c_str(), element_level)->getCString());
-//		mainImg->setPosition(particlePosition);
-//		addChild(mainImg);
-//	}
-	
 	is_spin = false;
-	
-//	if(jm_type == kMyElementalNonElemental && (element_level == 2 || element_level == 3 || element_level == 5 || element_level == 8 || element_level == 9))		is_spin = true;
-//	else if(jm_type == kMyElementalLife && element_level >= 2 && element_level <= 6)									is_spin = true;
-//	else if(jm_type == kMyElementalFire && element_level >= 2 && element_level <= 7)									is_spin = true;
-//	else if(jm_type == kMyElementalWater && (element_level == 2 || element_level == 4))									is_spin = true;
 }
 #undef LZZ_INLINE
