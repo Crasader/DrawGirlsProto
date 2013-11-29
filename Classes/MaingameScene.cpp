@@ -89,13 +89,11 @@ bool Maingame::init()
 	return true;
 }
 
-void Maingame::onEnter()
+void Maingame::onEnterTransitionDidFinish()
 {
 	init_state = kMIS_movingGameNode;
 	
 	setTouchEnabled(true);
-	
-	CCLayer::onEnter();
 	
 	gamenode_moving_direction = kGNMD_up;
 	
@@ -332,8 +330,15 @@ void Maingame::backTracking()
 	}
 }
 
+void Maingame::onEnter()
+{
+	CCLayer::onEnter();
+}
+
 void Maingame::onExit()
 {
+	touchEnd();
+	((ControlJoystickButton*)mControl)->invisibleControl();
 	AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
 	CCLayer::onExit();
 }
@@ -373,6 +378,8 @@ void Maingame::touchEnd()
 
 void Maingame::touchOn()
 {
+//	((ControlJoystickButton*)mControl)->resetTouch();
+	
 	if(isCheckingBacking)
 	{
 		schedule(schedule_selector(Maingame::checkingBacking));

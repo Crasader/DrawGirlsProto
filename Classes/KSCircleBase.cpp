@@ -254,8 +254,8 @@ void KSCircleBase::randomPosition()
 	//	myGD->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	m_circle.setRelocation(getPosition(), m_well512);
-	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##
-	m_headImg->runAction(t_scale);
+//	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##
+//	m_headImg->runAction(t_scale);
 	
 	
 	lightSmaller();

@@ -1794,46 +1794,47 @@ void KSCumberBase::onStartGame()
 
 void KSCumberBase::lightSmaller()
 {
-	endTeleport();
+	addChild(KSTimer::create
+					 (0.5f, [=](){
+		this->endTeleport();
+	}));
 }
 
 void KSCumberBase::endTeleport()
 {
-	teleportImg->removeFromParentAndCleanup(true);
-	teleportImg = NULL;
 	startMoving();
 	myGD->communication("CP_onPatternEnd");
 }
 
 void KSCumberBase::startTeleport()
 {
-	if(teleportImg)
-	{
-		teleportImg->removeFromParentAndCleanup(true);
-		teleportImg = NULL;
-	}
+	smaller();
 
-	teleportImg = CCSprite::create("teleport_light.png");
-	teleportImg->setScale(0.01f);
-	addChild(teleportImg);
-
-	CCBlink* t_scale = CCBlink::create(0.5, 0);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::smaller));
-
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-
-	teleportImg->runAction(t_seq);
 	AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
 }
 
 void KSCumberBase::smaller()
 {
-	CCBlink* t_scale = CCBlink::create(0.5, 8);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::randomPosition));
-
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-
-	runAction(t_seq);
+	addChild(KSGradualValue<float>::create(0.f, 30.f, 0.5f,
+																				 [=](float t)
+																				 {
+																					 if((int)t % 4 == 0)
+																					 {
+																						 if((int)t % 8 == 0)
+																						 {
+																							 this->setVisible(true);
+																						 }
+																						 else
+																						 {
+																							 this->setVisible(false);
+																						 }
+																					 }
+																				 },
+																				 [=](float t)
+																				 {
+																					 this->setVisible(true);
+																					 this->randomPosition();
+																				 }));
 }
 
 COLLISION_CODE KSCumberBase::crashWithX( IntPoint check_position )

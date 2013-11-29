@@ -877,18 +877,6 @@ void PuzzleMapScene::setUIs()
 	bottom_case->addChild(option_menu);
 	
 	
-	CCSprite* n_tutorial = CCSprite::create("test_ui_tutorial.png");
-	CCSprite* s_tutorial = CCSprite::create("test_ui_tutorial.png");
-	s_tutorial->setColor(ccGRAY);
-	
-	CCMenuItem* tutorial_item = CCMenuItemSprite::create(n_tutorial, s_tutorial, this, menu_selector(PuzzleMapScene::menuAction));
-	tutorial_item->setTag(kPMS_MT_tutorial);
-	
-	CCMenu* tutorial_menu = CCMenu::createWithItem(tutorial_item);
-	tutorial_menu->setPosition(ccpAdd(ccp(bottom_size.width/2.f, bottom_size.height/2.f), ccp(2+56.f*3.f,0)));
-	bottom_case->addChild(tutorial_menu);
-	
-	
 	CCSprite* n_left = CCSprite::create("test_ui_left.png");
 	CCSprite* s_left = CCSprite::create("test_ui_left.png");
 	s_left->setColor(ccGRAY);
@@ -1811,11 +1799,6 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	{
 		MailPopup* t_pp = MailPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
 		addChild(t_pp, kPMS_Z_popup);
-	}
-	else if(tag == kPMS_MT_tutorial)
-	{
-		mySGD->resetLabels();
-		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
 	}
 	else if(tag == kPMS_MT_left)
 	{
@@ -3066,7 +3049,8 @@ void PuzzleMapScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			}
 		}
 		
-		startChangeMapMode();
+		if(is_menu_enable)
+			startChangeMapMode();
 	}
 	else if(map_mode_state == kMMS_frameMode)
 	{
@@ -3290,7 +3274,8 @@ void PuzzleMapScene::endMovingMapNode()
 	load_menu->setPosition(ccp(240,160));
 	addChild(load_menu, kPMS_Z_popup, kPMS_MT_loadPuzzleInfo);
 	
-	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	if(map_node->getPositionY() < 165.f)
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 
 	is_menu_enable = true;
 }
@@ -3354,8 +3339,8 @@ void PuzzleMapScene::endMovingMapNodeNotOpenPuzzle()
 	ticket_menu->setPosition(ccp(310,80));
 	addChild(ticket_menu, kPMS_Z_popup, kPMS_MT_callTicket);
 	
-	
-	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	if(map_node->getPositionY() < 165.f)
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 	
 	
 	is_menu_enable = true;
@@ -3554,7 +3539,8 @@ void PuzzleMapScene::endMovingMapNodeNotClearPuzzle()
 	map_node = after_map_node;
 	after_map_node = NULL;
 	
-	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	if(map_node->getPositionY() < 165.f)
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 	
 	is_menu_enable = true;
 }

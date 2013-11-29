@@ -50,8 +50,17 @@ typedef enum t_DSH_Key{
 	kDSH_Key_clearStageCnt,
 	kDSH_Key_clearStageNumber_int1,
 	kDSH_Key_isClearStage_int1,
-	kDSH_Key_nick
+	kDSH_Key_nick,
+	kDSH_Key_wasTutorialPopupShockWave,
+	kDSH_Key_wasTutorialPopupMissileTrace,
+	kDSH_Key_wasTutorialPopupCrashArea,
+	kDSH_Key_controlJoystickDirection
 }DSH_Key;
+
+enum ControlJoystickDirection{
+	kControlJoystickDirection_right = 0,
+	kControlJoystickDirection_left
+};
 
 enum SaveUserData_Key{
 	kSaveUserData_Key_star = 1,
@@ -258,6 +267,12 @@ public:
 		else if(t_name == kDSH_Key_isClearStage_int1)					return_value = "ics%d";
 		
 		else if(t_name == kDSH_Key_nick)								return_value = "nick";
+		
+		else if(t_name == kDSH_Key_wasTutorialPopupShockWave)			return_value = "wtpsw";
+		else if(t_name == kDSH_Key_wasTutorialPopupMissileTrace)		return_value = "wtpmt";
+		else if(t_name == kDSH_Key_wasTutorialPopupCrashArea)			return_value = "wtpca";
+		
+		else if(t_name == kDSH_Key_controlJoystickDirection)			return_value = "cjd";
 		
 		return return_value;
 	}

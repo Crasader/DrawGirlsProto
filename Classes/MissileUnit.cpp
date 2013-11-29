@@ -1311,10 +1311,10 @@ void Lazer_Ring::myInit (float t_ring_angle, CCPoint t_ring_sP, CCPoint t_ring_f
 	
 	startMyAction();
 }
-ThreeCushion * ThreeCushion::create (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
+ThreeCushion * ThreeCushion::create (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
 {
 	ThreeCushion* t_tc = new ThreeCushion();
-	t_tc->myInit(t_sp, t_speed, t_cushion_cnt, t_is_big_bomb, t_removeEffect, d_removeEffect);
+	t_tc->myInit(t_sp, t_speed, t_cushion_cnt, t_is_big_bomb, t_crashArea, t_removeEffect, d_removeEffect);
 	t_tc->autorelease();
 	return t_tc;
 }
@@ -1442,42 +1442,54 @@ void ThreeCushion::crashMap ()
 {
 	IntPoint centerPoint = IntPoint(round((baseNode->getPositionX()-1)/pixelSize+1),round((baseNode->getPositionY()-1)/pixelSize+1));
 	
-	if(!is_big_bomb)
+	float radius = crashArea / 2.f;
+	for(int y=-radius; y<=radius; y++)
 	{
-		for(int i=-8;i<=8;i++)
+		for(int x=-radius; x<=radius; x++)
 		{
-			int addValue;
-			if(i == -8 || i == 8)									addValue = 3;
-			else if(i == -7 || i == 7)								addValue = 5;
-			else if(i == -6 || i == 6)								addValue = 6;
-			else if(i == -5 || i == 5 || i == -4 || i == 4)			addValue = 7;
-			else													addValue = 8;
-			for(int j=-addValue;j<=addValue;j++)
+			float distance = (IntPoint(x, y)).length();
+			if(distance <= radius)
 			{
-				crashMapForIntPoint(IntPoint(centerPoint.x+i, centerPoint.y+j));
+				crashMapForIntPoint(centerPoint + IntPoint(x, y));
 			}
 		}
 	}
-	else
-	{
-		for(int i=-14;i<=14;i++)
-		{
-			int addValue;
-			if(i == -14 || i == 14)									addValue = 3;
-			else if(i == -13 || i == 13)							addValue = 6;
-			else if(i == -12 || i == 12)							addValue = 8;
-			else if(i == -11 || i == 11)							addValue = 9;
-			else if(i == -10 || i == 10)							addValue = 10;
-			else if(i == -9 || i == 9)								addValue = 11;
-			else if(i == -8 || i == 8 || i == -7 || i == 7)			addValue = 12;
-			else if((i >= -6 && i <= -4) || (i >= 4 && i <= 6))		addValue = 13;
-			else													addValue = 14;
-			for(int j=-addValue;j<=addValue;j++)
-			{
-				crashMapForIntPoint(IntPoint(centerPoint.x+i, centerPoint.y+j));
-			}
-		}
-	}
+//	if(!is_big_bomb)
+//	{
+//		for(int i=-8;i<=8;i++)
+//		{
+//			int addValue;
+//			if(i == -8 || i == 8)									addValue = 3;
+//			else if(i == -7 || i == 7)								addValue = 5;
+//			else if(i == -6 || i == 6)								addValue = 6;
+//			else if(i == -5 || i == 5 || i == -4 || i == 4)			addValue = 7;
+//			else													addValue = 8;
+//			for(int j=-addValue;j<=addValue;j++)
+//			{
+//				crashMapForIntPoint(IntPoint(centerPoint.x+i, centerPoint.y+j));
+//			}
+//		}
+//	}
+//	else
+//	{
+//		for(int i=-14;i<=14;i++)
+//		{
+//			int addValue;
+//			if(i == -14 || i == 14)									addValue = 3;
+//			else if(i == -13 || i == 13)							addValue = 6;
+//			else if(i == -12 || i == 12)							addValue = 8;
+//			else if(i == -11 || i == 11)							addValue = 9;
+//			else if(i == -10 || i == 10)							addValue = 10;
+//			else if(i == -9 || i == 9)								addValue = 11;
+//			else if(i == -8 || i == 8 || i == -7 || i == 7)			addValue = 12;
+//			else if((i >= -6 && i <= -4) || (i >= 4 && i <= 6))		addValue = 13;
+//			else													addValue = 14;
+//			for(int j=-addValue;j<=addValue;j++)
+//			{
+//				crashMapForIntPoint(IntPoint(centerPoint.x+i, centerPoint.y+j));
+//			}
+//		}
+//	}
 }
 CCPoint ThreeCushion::getAfterPosition (CCPoint b_p, int t_angle)
 {
@@ -1587,11 +1599,11 @@ CCPoint ThreeCushion::judgeAnglePoint (CCPoint b_p)
 	stopMyAction();
 	return ccp(-1,-1);
 }
-void ThreeCushion::myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
+void ThreeCushion::myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
 {
 	target_removeEffect = t_removeEffect;
 	delegate_removeEffect = d_removeEffect;
-	
+	crashArea = t_crashArea;
 	
 	cushionCnt = t_cushion_cnt;
 	speed = t_speed;
@@ -1673,10 +1685,11 @@ void ThreeCushion::initParticle ()
 	//		particle->setPosVar(CCPointZero);
 	//		addChild(particle);
 }
-TickingTimeBomb * TickingTimeBomb::create (IntPoint t_setPoint, int t_bombFrameOneTime, int t_bombTimes, int t_rangeCode, CCArray * t_tickingArray, CCObject * t_resetTickingTimeBomb, SEL_CallFunc d_resetTickingTimeBomb)
+TickingTimeBomb * TickingTimeBomb::create (IntPoint t_setPoint, int t_bombFrameOneTime, int t_bombTimes,
+																					 int t_crashArea, int t_rangeCode, CCArray * t_tickingArray, CCObject * t_resetTickingTimeBomb, SEL_CallFunc d_resetTickingTimeBomb)
 {
 	TickingTimeBomb* t_ttb = new TickingTimeBomb();
-	t_ttb->myInit(t_setPoint, t_bombFrameOneTime, t_bombTimes, t_rangeCode, t_tickingArray, t_resetTickingTimeBomb, d_resetTickingTimeBomb);
+	t_ttb->myInit(t_setPoint, t_bombFrameOneTime, t_bombTimes, t_crashArea, t_rangeCode, t_tickingArray, t_resetTickingTimeBomb, d_resetTickingTimeBomb);
 	t_ttb->autorelease();
 	return t_ttb;
 }
@@ -1734,33 +1747,46 @@ void TickingTimeBomb::crashMap ()
 {
 	initParticle();
 	AudioEngine::sharedInstance()->playEffect("sound_tickingTimeBomb.mp3", false);
-	if(rangeCode == 1)
+	float radius = crashArea / 2.f;
+	for(int y=-radius; y<=radius; y++)
 	{
-		for(int i=-40;i<=40;i++)
+		for(int x=-radius; x<=radius; x++)
 		{
-			int addValue;
-			if(i == -40 || i == -39 || i == 40 || i == 39)			addValue = 8;
-			else if(i == -38 || i == -37 || i == 38 || i == 37)		addValue = 16;
-			else if(i == -36 || i == -35 || i == 36 || i == 35)		addValue = 19;
-			else if(i == -34 || i == -33 || i == 34 || i == 33)		addValue = 22;
-			else if(i == -32 || i == -31 || i == 32 || i == 31)		addValue = 24;
-			else if(i == -30 || i == -29 || i == 30 || i == 29)		addValue = 28;
-			else if((i >= -28 && i <= -25) || (i <= 28 && i >= 25))	addValue = 30;
-			else if(i == -24 || i == -23 || i == 24 || i == 23)		addValue = 32;
-			else if((i >= -22 && i <= -19) || (i <= 22 && i >= 19))	addValue = 34;
-			else if(i == -18 || i == -17 || i == 18 || i == 17)		addValue = 36;
-			else if((i >= -16 && i <= -9) || (i >= 9 && i <= 16))	addValue = 38;
-			else													addValue = 40;
-			for(int j=-addValue;j<=addValue;j++)
+			float distance = (IntPoint(x, y)).length();
+			if(distance <= radius)
 			{
-				crashMapForIntPoint(IntPoint(setPoint.x+i, setPoint.y+j));
+				crashMapForIntPoint(setPoint + IntPoint(x, y));
 			}
 		}
 	}
-	else if(rangeCode == 2)
-	{
-		myGD->communication("SW_createJDSW", setPoint);
-	}
+	
+//	if(rangeCode == 1)
+//	{
+//		for(int i=-40;i<=40;i++)
+//		{
+//			int addValue;
+//			if(i == -40 || i == -39 || i == 40 || i == 39)			addValue = 8;
+//			else if(i == -38 || i == -37 || i == 38 || i == 37)		addValue = 16;
+//			else if(i == -36 || i == -35 || i == 36 || i == 35)		addValue = 19;
+//			else if(i == -34 || i == -33 || i == 34 || i == 33)		addValue = 22;
+//			else if(i == -32 || i == -31 || i == 32 || i == 31)		addValue = 24;
+//			else if(i == -30 || i == -29 || i == 30 || i == 29)		addValue = 28;
+//			else if((i >= -28 && i <= -25) || (i <= 28 && i >= 25))	addValue = 30;
+//			else if(i == -24 || i == -23 || i == 24 || i == 23)		addValue = 32;
+//			else if((i >= -22 && i <= -19) || (i <= 22 && i >= 19))	addValue = 34;
+//			else if(i == -18 || i == -17 || i == 18 || i == 17)		addValue = 36;
+//			else if((i >= -16 && i <= -9) || (i >= 9 && i <= 16))	addValue = 38;
+//			else													addValue = 40;
+//			for(int j=-addValue;j<=addValue;j++)
+//			{
+//				crashMapForIntPoint(IntPoint(setPoint.x+i, setPoint.y+j));
+//			}
+//		}
+//	}
+//	else if(rangeCode == 2)
+//	{
+//		myGD->communication("SW_createJDSW", setPoint);
+//	}
 }
 void TickingTimeBomb::selfRemove ()
 {
@@ -1782,7 +1808,7 @@ void TickingTimeBomb::lineDie (IntPoint t_p)
 	myGD->communication("Main_showLineDiePosition", t_p);
 	(target_resetTickingTimeBomb->*delegate_resetTickingTimeBomb)();
 }
-void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t_bombTimes, int t_rangeCode, CCArray * t_tickingArray, CCObject * t_resetTickingTimeBomb, SEL_CallFunc d_resetTickingTimeBomb)
+void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t_bombTimes, int t_crashArea, int t_rangeCode, CCArray * t_tickingArray, CCObject * t_resetTickingTimeBomb, SEL_CallFunc d_resetTickingTimeBomb)
 {
 	target_resetTickingTimeBomb = t_resetTickingTimeBomb;
 	delegate_resetTickingTimeBomb = d_resetTickingTimeBomb;
@@ -1792,6 +1818,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 	bombFrameOneTime = t_bombFrameOneTime;
 	bombTimes = t_bombTimes;
 	rangeCode = t_rangeCode;
+	crashArea = t_crashArea;
 	
 	CCPoint myPosition = ccp((setPoint.x-1)*pixelSize+1, (setPoint.y-1)*pixelSize+1);
 	setPosition(myPosition);
@@ -2191,10 +2218,10 @@ Firework::~ Firework ()
 {
 	CCLog("exit firework");
 }
-Firework * Firework::create (CCPoint cumberPosition, CCPoint jackPosition)
+Firework * Firework::create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	Firework* t_bf = new Firework();
-	t_bf->myInit(cumberPosition, jackPosition);
+	t_bf->myInit(cumberPosition, jackPosition, pattern);
 	t_bf->autorelease();
 	return t_bf;
 }
@@ -2209,11 +2236,12 @@ void Firework::crashMapForPoint (IntPoint point, int radius)
 		}
 	}
 }
-void Firework::myInit (CCPoint cumberPosition, CCPoint jackPosition)
+void Firework::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	m_1TO2 = false;
 	m_step = 1;
 	m_bombFrame = 200;
+	this->m_pattern = pattern;
 	m_parentMissile = KS::loadCCBI<CCSprite*>(this, "pattern_flame1.ccbi").first;
 	//		m_parentMissile = CCParticleSystemQuad::create("pm.plist");
 	//		m_parentMissile->setPositionType(kCCPositionTypeRelative);
@@ -2350,11 +2378,11 @@ void Firework::update (float dt)
 		
 	}
 }
-MovingSunflower * MovingSunflower::create (CCPoint cumberPosition, CCPoint jackPosition)
+MovingSunflower * MovingSunflower::create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	CCLog("%f %f", cumberPosition.x, cumberPosition.y);
 	MovingSunflower* t_bf = new MovingSunflower();
-	t_bf->myInit(cumberPosition, jackPosition);
+	t_bf->myInit(cumberPosition, jackPosition, pattern);
 	t_bf->autorelease();
 	return t_bf;
 }
@@ -2369,12 +2397,12 @@ void MovingSunflower::crashMapForPoint (IntPoint point, int radius)
 		}
 	}
 }
-void MovingSunflower::myInit (CCPoint cumberPosition, CCPoint jackPosition)
+void MovingSunflower::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	m_step = 1;
 	m_bombFrame = 300;
 	m_parentMissile = KS::loadCCBI<CCSprite*>(this, "pattern_flame3.ccbi");
-	
+	m_pattern = pattern;
 	
 	m_parentMissile.first->setPosition(cumberPosition);
 	addChild(m_parentMissile.first);
@@ -2386,7 +2414,7 @@ void MovingSunflower::myInit (CCPoint cumberPosition, CCPoint jackPosition)
 	jackPosition = CCPointApplyAffineTransform(jackPosition, mat2);
 	CCPoint subtract = jackPosition - cumberPosition;
 	
-	m_parentMissileGoal.init(cumberPosition, jackPosition, 0.01f * ccpLength(subtract));
+	m_parentMissileGoal.init(cumberPosition, jackPosition, 0.01f * ccpLength(subtract) * 100.f / pattern.get("parentspeed", 100.f).asFloat());
 	scheduleUpdate();
 	
 	int m_color = 1;
@@ -2454,9 +2482,9 @@ void MovingSunflower::update (float dt)
 		if(m_frame % 5 == 0)
 			crashMapForPoint(ccp2ip(m_parentMissile.first->getPosition()), 10);
 		
-		if(m_frame % 15 == 0)
+		if(m_frame % m_pattern.get("bulletterm", 15).asInt() == 0)
 		{
-			float bulletSpeed = 1.f;
+			float bulletSpeed = m_pattern.get("childspeed", 100.f).asFloat() / 100.f;
 			int m_color = 1;
 			std::string imgFileName;
 			std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
@@ -2466,7 +2494,7 @@ void MovingSunflower::update (float dt)
 				imgFileName = "cumber_missile1.png";
 			CCSize t_mSize = CCSize(4.f, 4.f);
 			
-			for(int i=0; i<=360; i+= 10)
+			for(int i=0; i<=360; i+= 360 / m_pattern.get("childnumber", 36).asInt())
 			{
 				MissileUnit* t_mu = MissileUnit::create(m_parentMissileGoal.getValue(), i, bulletSpeed,
 																								imgFileName.c_str(), t_mSize,0, 0);
@@ -2487,18 +2515,18 @@ void MovingSunflower::update (float dt)
 		
 	}
 }
-AlongOfTheLine * AlongOfTheLine::create (CCPoint cumberPosition, CCPoint jackPosition, int totalFrame)
+AlongOfTheLine * AlongOfTheLine::create (CCPoint cumberPosition, CCPoint jackPosition, int totalFrame, int number, float speed)
 {
 	AlongOfTheLine* t_bf = new AlongOfTheLine();
-	t_bf->myInit(cumberPosition, jackPosition, totalFrame);
+	t_bf->myInit(cumberPosition, jackPosition, totalFrame, number, speed);
 	t_bf->autorelease();
 	return t_bf;
 }
-void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int totalFrame)
+void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int totalFrame, int number, float speed)
 {
 	m_step = 1;
 	m_totalFrame = totalFrame;
-	
+	m_lineSpeed = speed;
 	vector<IntPoint> oldLines;
 	for(int y=0; y<mapLoopRange::mapHeightInnerEnd; y++)
 	{
@@ -2610,7 +2638,7 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 	//
 	// m_directions 은 위치에 따른 directions 을 가짐.
 	
-	int numbers = 4;
+	int numbers = number;
 	for(int i=0; i<numbers; i++)
 	{
 		auto iter = m_directions.begin();
@@ -2625,7 +2653,7 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 		
 		
 		Pollution pollution;
-		pollution.glue.init(cumberPosition, ip2ccp(point), 0.01f * ccpLength(ip2ccp(point) - cumberPosition));
+		pollution.glue.init(cumberPosition, ip2ccp(point), 0.005f * ccpLength(ip2ccp(point) - cumberPosition));
 		pollution.alongPath.point = point;
 		pollution.alongPath.direction = direction;
 		pollution.spr = KS::loadCCBI<CCSprite*>(this, "fx_pollution3.ccbi").first;
@@ -2666,7 +2694,7 @@ void AlongOfTheLine::update (float dt)
 	}
 	else for(auto i = m_pollutions.begin(); i != m_pollutions.end();)
 	{
-		bool r = i->glue.step(1 / 60.f);
+		bool r = i->glue.step(1/(60.f) * (m_lineSpeed / 100.f));
 		
 		i->spr->setPosition(i->glue.getValue());
 		if(!r && i->step == 1)
@@ -2754,10 +2782,10 @@ AlongOfTheLine::AlongPath::AlongPath ()
 AlongOfTheLine::Pollution::Pollution ()
 : step (1)
 {}
-ThrowBomb * ThrowBomb::create (CCPoint cumberPosition, CCPoint jackPosition)
+ThrowBomb * ThrowBomb::create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	ThrowBomb* t_bf = new ThrowBomb();
-	t_bf->myInit(cumberPosition, jackPosition);
+	t_bf->myInit(cumberPosition, jackPosition, pattern);
 	t_bf->autorelease();
 	return t_bf;
 }
@@ -2797,10 +2825,10 @@ void ThrowBomb::lineDie (IntPoint t_p)
 	//			m_step
 	//		}
 }
-void ThrowBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition)
+void ThrowBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	m_step = 1;
-	
+	m_pattern = pattern;
 	m_angle = atan2(jackPosition.y - cumberPosition.y, jackPosition.x - cumberPosition.x);
 	m_angle += m_well512.GetFloatValue(-10 * M_PI/180.f, +10 * M_PI/180.f);
 	//		m_parentMissile = CCParticleSystemQuad::create("throwbomb.plist");
@@ -2818,7 +2846,7 @@ void ThrowBomb::update (float dt)
 	if(m_step == 1)
 	{
 		m_frame++;
-		CCPoint delta = ccp(cos(m_angle) * 3.5f, sin(m_angle) * 3.5f);
+		CCPoint delta = ccp(cos(m_angle) * 3.5f, sin(m_angle) * 3.5f) * m_pattern.get("speed", 100.f).asFloat() / 100.f;
 		
 		CCPoint missilePosition = m_parentMissile->getPosition();
 		m_parentMissile->setPosition(missilePosition + delta);
@@ -2844,7 +2872,7 @@ void ThrowBomb::update (float dt)
 		
 		if(crash)
 		{
-			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 15);
+			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), m_pattern.get("area", 15).asInt());
 			m_step = 2;
 		}
 	}
@@ -3189,18 +3217,18 @@ bool ReaverScarab::CoordAndCellInfo::operator == (CoordAndCellInfo const & ci) c
 {
 	return x == ci.x && y == ci.y;
 }
-CloudBomb * CloudBomb::create (CCPoint cumberPosition, CCPoint jackPosition)
+CloudBomb * CloudBomb::create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	CloudBomb* t_bf = new CloudBomb();
-	t_bf->myInit(cumberPosition, jackPosition);
+	t_bf->myInit(cumberPosition, jackPosition, pattern);
 	t_bf->autorelease();
 	return t_bf;
 }
-void CloudBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition)
+void CloudBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	m_step = 1;
 	m_bombProb = 0.001f;
-	
+	m_pattern = pattern;
 	m_parentMissile = CCParticleSystemQuad::create("cloudbomb.plist");
 	m_parentMissile->setPositionType(kCCPositionTypeRelative);
 	
@@ -3269,7 +3297,8 @@ void CloudBomb::update (float dt)
 	{
 		m_frame++;
 		
-		float bulletSpeed = 4.f;
+		int number = m_pattern.get("bulletnumber", 36).asInt();
+		float bulletSpeed = m_pattern.get("bulletspeed", 500.f).asFloat() / 100.f;
 		int m_color = 1;
 		std::string imgFileName;
 		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
@@ -3278,7 +3307,7 @@ void CloudBomb::update (float dt)
 		else
 			imgFileName = "cumber_missile1.png";
 		CCSize t_mSize = CCSize(4.f, 4.f);
-		for(int i=0; i<=360; i+= 10)
+		for(int i=0; i<=360; i+= 360 / number)
 		{
 			MissileUnit* t_mu = MissileUnit::create(m_sourcePosition, i, bulletSpeed,
 																							imgFileName.c_str(), t_mSize,0, 0);

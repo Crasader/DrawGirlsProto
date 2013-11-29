@@ -20,6 +20,7 @@
 #include "StageImgLoader.h"
 #include "KSAlertView.h"
 
+#include "TutorialScene.h"
 
 USING_NS_CC_EXT;
 
@@ -40,7 +41,10 @@ enum OptionPopupMenuTag{
 	kOP_MT_help,
 	kOP_MT_logout,
 	kOP_MT_noti,
-	kOP_MT_withdraw
+	kOP_MT_withdraw,
+	kOP_MT_controlJoystickRight,
+	kOP_MT_controlJoystickLeft,
+	kOP_MT_tutorial
 };
 
 void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
@@ -152,6 +156,56 @@ bool OptionPopup::init()
 	main_case->addChild(withdraw_menu, kOP_Z_content);
 	
 	
+	CCSprite* n_joystick_right = CCSprite::create("option_mode_right.png");
+	n_joystick_right->setColor(ccGRAY);
+	CCSprite* s_joystick_right = CCSprite::create("option_mode_right.png");
+	s_joystick_right->setColor(ccc3(100, 100, 100));
+	CCSprite* d_joystick_right = CCSprite::create("option_mode_right.png");
+	
+	joystick_right_item = CCMenuItemSprite::create(n_joystick_right, s_joystick_right, d_joystick_right, this, menu_selector(OptionPopup::menuAction));
+	joystick_right_item->setTag(kOP_MT_controlJoystickRight);
+	
+	CCMenu* joystick_right_menu = CCMenu::createWithItem(joystick_right_item);
+	joystick_right_menu->setPosition(getContentPosition(kOP_MT_controlJoystickRight));
+	main_case->addChild(joystick_right_menu, kOP_Z_content);
+	
+	
+	CCSprite* n_joystick_left = CCSprite::create("option_mode_left.png");
+	n_joystick_left->setColor(ccGRAY);
+	CCSprite* s_joystick_left = CCSprite::create("option_mode_left.png");
+	s_joystick_left->setColor(ccc3(100, 100, 100));
+	CCSprite* d_joystick_left = CCSprite::create("option_mode_left.png");
+	
+	joystick_left_item = CCMenuItemSprite::create(n_joystick_left, s_joystick_left, d_joystick_left, this, menu_selector(OptionPopup::menuAction));
+	joystick_left_item->setTag(kOP_MT_controlJoystickLeft);
+	
+	CCMenu* joystick_left_menu = CCMenu::createWithItem(joystick_left_item);
+	joystick_left_menu->setPosition(getContentPosition(kOP_MT_controlJoystickLeft));
+	main_case->addChild(joystick_left_menu, kOP_Z_content);
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+	{
+		joystick_right_item->setEnabled(false);
+		joystick_left_item->setEnabled(true);
+	}
+	else
+	{
+		joystick_right_item->setEnabled(true);
+		joystick_left_item->setEnabled(false);
+	}
+	
+	CCSprite* n_tutorial = CCSprite::create("option_tutorial.png");
+	CCSprite* s_tutorial = CCSprite::create("option_tutorial.png");
+	s_tutorial->setColor(ccGRAY);
+	
+	CCMenuItem* tutorial_item = CCMenuItemSprite::create(n_tutorial, s_tutorial, this, menu_selector(OptionPopup::menuAction));
+	tutorial_item->setTag(kOP_MT_tutorial);
+	
+	CCMenu* tutorial_menu = CCMenu::createWithItem(tutorial_item);
+	tutorial_menu->setPosition(getContentPosition(kOP_MT_tutorial));
+	main_case->addChild(tutorial_menu, kOP_Z_content);
+	
+	
 	CCSprite* n_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 94, 40));
 	n_bgm->setOpacity(0);
 	CCSprite* s_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 94, 40));
@@ -185,7 +239,7 @@ bool OptionPopup::init()
 	
 	is_menu_enable = false;
 
-#if 0
+#if 0 // 심플 예제
 	KSAlertView* av = KSAlertView::create();
 	
 	av->setContentNode(
@@ -210,6 +264,35 @@ bool OptionPopup::init()
 																									 [=](CCObject* sender){
 																										 CCLog("close!!");
 																									 }));
+	av->show();
+#endif
+#if 0 // 가운데 정렬 예제
+	KSAlertView* av = KSAlertView::create();
+	CCNode* __con = CCNode::create();
+	
+	KSNode* con2 = new KSNode();
+	con2->init();
+	con2->autorelease();
+	__con->addChild(con2);
+	
+	//	con->setAnchorPoint(ccp(0, 0));
+	con2->addChild(CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오픈", 1)->getCString(), mySGD->getFont().c_str(), 25));
+	con2->addChild(CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오zzz픈", 1)->getCString(), mySGD->getFont().c_str(), 25));
+	
+	av->setContentNode(__con);
+	av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
+	av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+	av->setBorderScale(0.9f);
+	//	av->setTitleStr("지금 열기");
+	addChild(av, kPMS_Z_helpRequest);
+	av->setCloseButton(CCMenuItemImageLambda::create("tutorial_common_cancel.png", "tutorial_common_cancel.png",
+																									 [=](CCObject* sender){
+																										 is_menu_enable = true;
+																									 }));
+	
+	con2->setPosition(ccp((av->getViewSize() / 2.f).width,
+												-(av->getViewSize() / 2.f).height));
+	con2->alignItemsVerticallyWithPadding(30);
 	av->show();
 #endif
 	return true;
@@ -328,6 +411,24 @@ void OptionPopup::menuAction(CCObject* pSender)
 		WithdrawPopup* t_wp = WithdrawPopup::create(this, callfunc_selector(OptionPopup::popupClose));
 		addChild(t_wp, kOP_Z_popup);
 	}
+	else if(tag == kOP_MT_controlJoystickRight)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_controlJoystickDirection, kControlJoystickDirection_right);
+		joystick_right_item->setEnabled(false);
+		joystick_left_item->setEnabled(true);
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_controlJoystickLeft)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_controlJoystickDirection, kControlJoystickDirection_left);
+		joystick_right_item->setEnabled(true);
+		joystick_left_item->setEnabled(false);
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_tutorial)
+	{
+		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
+	}
 }
 
 void OptionPopup::popupClose()
@@ -397,10 +498,13 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_gameui_left)	return_value = ccp(143,113);
 	else if(t_tag == kOP_MT_gameui_full)	return_value = ccp(204, 113);
 	else if(t_tag == kOP_MT_gameui_right)	return_value = ccp(265, 113);
-	else if(t_tag == kOP_MT_help)			return_value = ccp(224,70);
-	else if(t_tag == kOP_MT_logout)			return_value = ccp(350, 70);
-	else if(t_tag == kOP_MT_noti)			return_value = ccp(117, 70);
-	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(356, 125);
+	else if(t_tag == kOP_MT_help)			return_value = ccp(224,65);
+	else if(t_tag == kOP_MT_logout)			return_value = ccp(350, 65);
+	else if(t_tag == kOP_MT_noti)			return_value = ccp(117, 65);
+	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(356, 110);
+	else if(t_tag == kOP_MT_controlJoystickRight)	return_value = ccp(173, 120);
+	else if(t_tag == kOP_MT_controlJoystickLeft)	return_value = ccp(230, 120);
+	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(200, 163);
 	
 	return_value = ccpSub(return_value, ccp(240,160));
 	return_value = ccpAdd(return_value, ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height/2.f));

@@ -245,14 +245,14 @@ private:
 class AP_Missile16 : public AttackPattern
 {
 public:
-	static AP_Missile16* create(int t_type, int t_tmCnt, int t_totalFrame);
+	static AP_Missile16* create(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea);
 	
 	virtual void stopMyAction();
 	
 	void removeEffect();
 	
 private:
-	
+	int crashArea;
 	int type;
 	int tmCnt;
 	int mRate;
@@ -271,7 +271,7 @@ private:
 	
 	void myAction();
 	
-	void myInit(int t_type, int t_tmCnt, int t_totalFrame);
+	void myInit(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea);
 };
 
 
@@ -292,9 +292,7 @@ class AP_Missile23 : public AttackPattern // cobweb
 {
 public:
 	static AP_Missile23* create(int t_frame);
-	
 	void updateCobweb();
-	
 private:
 	
 	int slowFrame;
@@ -588,7 +586,7 @@ private:
 	bool isRemoveEffect;
 	CCPoint t_sp;
 	virtual void selfRemoveSchedule();
-	
+	int m_crashArea;
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	void update(float dt);
 };
@@ -839,7 +837,7 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	
+	Json::Value pattern;
 	KSCumberBase* m_cumber;
 };
 
@@ -854,7 +852,7 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	
+	Json::Value m_pattern;
 	KSCumberBase* m_cumber;
 };
 
@@ -867,6 +865,7 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
+	Json::Value m_pattern;
 	int m_frame;
 	int m_totalFrame;
 	KSCumberBase* m_cumber;
@@ -1051,6 +1050,7 @@ protected:
 	KSCumberBase* m_cumber;
 	int area;
 	int totalFrame;
+	int movingFrame;
 };
 
 class KSSpecialAttackPattern13 : public AttackPattern
@@ -1108,6 +1108,8 @@ public:
 protected:
 	KSCumberBase* m_cumber;
 	int m_totalFrame;
+	int m_number;
+	float m_speed;
 };
 
 class KSSpecialAttackPattern18 : public AttackPattern
@@ -1118,6 +1120,7 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
+	Json::Value m_pattern;
 	KSCumberBase* m_cumber;
 	Well512 m_well512;
 };

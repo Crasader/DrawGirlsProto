@@ -510,7 +510,8 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				AP_Missile21* t_m21 = AP_Missile21::create(startFirePosition, 400, 1.5f);
+				int totalFrame = patternData.get("totalframe", 400).asInt();
+				AP_Missile21* t_m21 = AP_Missile21::create(startFirePosition, totalFrame, 1.5f);
 				addChild(t_m21);
 				
 				myGD->communication("CP_onPatternEnd");
@@ -581,7 +582,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			{
 				int random_value = rand()%2 + 1;
 				int radius = 80;//pattern.get("radius", 100).asInt();
-				int objcnt = patternData.get("totalframe", 400).asInt();
+				int objcnt = patternData.get("totalframe", 240).asInt();
 				PrisonPattern* t_m28 = PrisonPattern::create(startFirePosition, radius, objcnt);
 				addChild(t_m28);
 				t_m28->startMyAction();
@@ -753,7 +754,8 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			{
 				int mType = 1;
 				int number = patternData.get("number", 3).asInt();
-				AP_Missile16* t_m16 = AP_Missile16::create(mType, number, 60);
+				
+				AP_Missile16* t_m16 = AP_Missile16::create(mType, number, 60, patternData.get("area", 50).asInt());
 				addChild(t_m16);
 				
 				saveAP = t_m16;
@@ -806,8 +808,8 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			startFirePosition = startPosition;
 			int remainSecond = patternData.get("remainsecond", 9).asInt();
-			
-			TickingTimeBomb* t_ttb = TickingTimeBomb::create(ccp2ip(startPosition), 120, remainSecond, 1, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
+			int crashArea = patternData.get("area", 50).asInt();
+			TickingTimeBomb* t_ttb = TickingTimeBomb::create(ccp2ip(startPosition), 120, remainSecond, crashArea, 1, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
 			addChild(t_ttb);
 			return invalid; // 노 캐스팅
 		}
@@ -925,7 +927,7 @@ void MissileParent::createTickingTimeBomb( IntPoint t_point, int t_bombFrameOneT
 	
 	if(!is_check)
 	{
-		TickingTimeBomb* t_ttb = TickingTimeBomb::create(t_point, t_bombFrameOneTime, t_bombTimes, t_rangeCode, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
+		TickingTimeBomb* t_ttb = TickingTimeBomb::create(t_point, t_bombFrameOneTime, t_bombTimes, 50, t_rangeCode, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
 		addChild(t_ttb);
 	}
 }
@@ -1078,7 +1080,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	myGD->V_CCO["MP_bombCumber"] = std::bind(&MissileParent::bombCumber, this, _1);
 	myGD->V_CCPCOLORF["MP_explosion"] = std::bind(&MissileParent::explosion, this, _1, _2, _3);
 	myGD->V_V["MP_endIngActionAP"] = std::bind(&MissileParent::endIngActionAP, this);
-	myGD->V_IpIII["MP_createTickingTimeBomb"] = std::bind(&MissileParent::createTickingTimeBomb, this, _1, _2, _3, _4);
+//	myGD->V_IpIII["MP_createTickingTimeBomb"] = std::bind(&MissileParent::createTickingTimeBomb, this, _1, _2, _3, _4);
 	//	myGD->V_V["MP_deleteKeepAP25"] = std::bind(&MissileParent::deleteKeepAP25, this);
 	myGD->V_V["MP_deleteKeepAP23"] = std::bind(&MissileParent::deleteKeepAP23, this);
 	myGD->V_V["MP_deleteKeepAP26"] = std::bind(&MissileParent::deleteKeepAP26, this);
