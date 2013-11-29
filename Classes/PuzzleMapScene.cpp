@@ -3049,7 +3049,8 @@ void PuzzleMapScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			}
 		}
 		
-		startChangeMapMode();
+		if(is_menu_enable)
+			startChangeMapMode();
 	}
 	else if(map_mode_state == kMMS_frameMode)
 	{
