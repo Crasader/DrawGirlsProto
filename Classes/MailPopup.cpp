@@ -792,6 +792,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																	
 																	((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_buyPuzzle);
 																	((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_callTicket);
+																	((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_ticketCnt);
 																	((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_puzzleOpenTitle);
 																	
 																	((PuzzleMapScene*)target_close)->openPuzzleAction(contentObj["puzzlenumber"].asInt());

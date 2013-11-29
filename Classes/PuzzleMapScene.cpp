@@ -3273,7 +3273,8 @@ void PuzzleMapScene::endMovingMapNode()
 	load_menu->setPosition(ccp(240,160));
 	addChild(load_menu, kPMS_Z_popup, kPMS_MT_loadPuzzleInfo);
 	
-	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	if(map_node->getPositionY() < 165.f)
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 
 	is_menu_enable = true;
 }
@@ -3337,8 +3338,8 @@ void PuzzleMapScene::endMovingMapNodeNotOpenPuzzle()
 	ticket_menu->setPosition(ccp(310,80));
 	addChild(ticket_menu, kPMS_Z_popup, kPMS_MT_callTicket);
 	
-	
-	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	if(map_node->getPositionY() < 165.f)
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 	
 	
 	is_menu_enable = true;
@@ -3537,7 +3538,8 @@ void PuzzleMapScene::endMovingMapNodeNotClearPuzzle()
 	map_node = after_map_node;
 	after_map_node = NULL;
 	
-	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+	if(map_node->getPositionY() < 165.f)
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 	
 	is_menu_enable = true;
 }
