@@ -3541,7 +3541,7 @@ void PoisonLine::myInit (IntPoint t_sp, int frame)
 	mapPoint = t_sp;
 	
 	//		initWithFile("poison_line.png");
-	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_pollution2.ccbi");
+	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_pollution4.ccbi");
 	CCSprite* line = ret.first;
 	addChild(line);
 	CCPoint myPosition = ccp((t_sp.x-1)*pixelSize+1, (t_sp.y-1)*pixelSize+1);
