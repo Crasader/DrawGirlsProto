@@ -21,6 +21,7 @@
 #include "KSAlertView.h"
 
 #include "TutorialScene.h"
+#include "MinsuScene.h"
 
 USING_NS_CC_EXT;
 
@@ -44,7 +45,8 @@ enum OptionPopupMenuTag{
 	kOP_MT_withdraw,
 	kOP_MT_controlJoystickRight,
 	kOP_MT_controlJoystickLeft,
-	kOP_MT_tutorial
+	kOP_MT_tutorial,
+	kOP_MT_minsu
 };
 
 void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
@@ -204,6 +206,18 @@ bool OptionPopup::init()
 	CCMenu* tutorial_menu = CCMenu::createWithItem(tutorial_item);
 	tutorial_menu->setPosition(getContentPosition(kOP_MT_tutorial));
 	main_case->addChild(tutorial_menu, kOP_Z_content);
+	
+	CCSprite* n_minsu = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+	n_minsu->setOpacity(0);
+	CCSprite* s_minsu = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+	s_minsu->setOpacity(0);
+	
+	CCMenuItem* minsu_item = CCMenuItemSprite::create(n_minsu, s_minsu, this, menu_selector(OptionPopup::menuAction));
+	minsu_item->setTag(kOP_MT_minsu);
+	
+	CCMenu* minsu_menu = CCMenu::createWithItem(minsu_item);
+	minsu_menu->setPosition(getContentPosition(kOP_MT_minsu));
+	main_case->addChild(minsu_menu, kOP_Z_content);
 	
 	
 	CCSprite* n_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 94, 40));
@@ -429,6 +443,10 @@ void OptionPopup::menuAction(CCObject* pSender)
 	{
 		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
 	}
+	else if(tag == kOP_MT_minsu)
+	{
+		CCDirector::sharedDirector()->replaceScene(MinsuScene::scene());
+	}
 }
 
 void OptionPopup::popupClose()
@@ -505,6 +523,7 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_controlJoystickRight)	return_value = ccp(173, 120);
 	else if(t_tag == kOP_MT_controlJoystickLeft)	return_value = ccp(230, 120);
 	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(200, 163);
+	else if(t_tag == kOP_MT_minsu)			return_value = ccp(455,25);
 	
 	return_value = ccpSub(return_value, ccp(240,160));
 	return_value = ccpAdd(return_value, ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height/2.f));
