@@ -104,9 +104,26 @@ void StageInfoPopup::setBack()
 	close_menu->setPosition(getContentPosition(kSIP_MT_close));
 	back_img->addChild(close_menu, kSIP_Z_content);
 	
-	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d - %d", NSDS_GI(stage_number, kSDS_SI_puzzle_i), stage_number)->getCString(), mySGD->getFont().c_str(), 20);
+	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d - %d", NSDS_GI(stage_number, kSDS_SI_puzzle_i), stage_number)->getCString(), mySGD->getFont().c_str(), 16);
 	stage_label->setPosition(getContentPosition(kSIP_MT_stageLabel));
 	back_img->addChild(stage_label, kSIP_Z_content);
+	
+	int found_puzzle_number = -1;
+	int puzzle_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	for(int i=1;i<=puzzle_cnt && found_puzzle_number == -1;i++)
+	{
+		int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+		
+		if(stage_number >= start_stage && stage_number < start_stage+stage_count)
+			found_puzzle_number = puzzle_number;
+	}
+	
+	CCLabelTTF* stage_level = CCLabelTTF::create(CCString::createWithFormat("난이도 %d", NSDS_GI(found_puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number))->getCString(), mySGD->getFont().c_str(), 16);
+	stage_level->setPosition(ccpAdd(getContentPosition(kSIP_MT_stageLabel), ccp(175,0)));
+	back_img->addChild(stage_level, kSIP_Z_content);
+	
 	
 	int step1_card = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1);
 	int step2_card = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 2);
@@ -190,25 +207,25 @@ CCPoint StageInfoPopup::getContentPosition( int t_tag )
 	CCPoint return_value;
 	
 	if(t_tag == kSIP_MT_close)
-		return_value = ccp(340, 223);
+		return_value = ccp(345, 253);
 	else if(t_tag == kSIP_MT_stageLabel)
-		return_value = ccp(125, 218);
+		return_value = ccp(60, 248);
 	else if(t_tag == kSIP_MT_step1Rank)
-		return_value = ccp(51, 148);
+		return_value = ccp(47, 168);
 	else if(t_tag == kSIP_MT_step2Rank)
-		return_value = ccp(51, 100);
+		return_value = ccp(47, 111);
 	else if(t_tag == kSIP_MT_step3Rank)
-		return_value = ccp(51, 51);
+		return_value = ccp(47, 53);
 	else if(t_tag == kSIP_MT_step1Reward)
-		return_value = ccp(130, 143);
+		return_value = ccp(130, 163);
 	else if(t_tag == kSIP_MT_step2Reward)
-		return_value = ccp(130, 95);
+		return_value = ccp(130, 106);
 	else if(t_tag == kSIP_MT_step3Reward)
-		return_value = ccp(130, 46);
+		return_value = ccp(130, 48);
 	else if(t_tag == kSIP_MT_monster)
-		return_value = ccp(260,140);
+		return_value = ccp(258,165);
 	else if(t_tag == kSIP_MT_mission)
-		return_value = ccp(262, 50);
+		return_value = ccp(260, 42);
 	
 	return return_value;
 }

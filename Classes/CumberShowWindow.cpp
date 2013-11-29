@@ -59,8 +59,7 @@ bool CumberShowWindow::init(int ss)
 		{
 			this->addChild(m_circleSprite);
 			m_circleSprite->setScale(0.7f);
-			if(juniorJson.size() > 0)
-				m_circleSprite->setPosition(ccp(-40,0));
+			m_circleSprite->setPosition(ccp(-49,0));
 		}
 	}
 	else if(bossShape == "snake")
@@ -73,8 +72,7 @@ bool CumberShowWindow::init(int ss)
 		m_snakeNode = KSSnakeBase::create(ccbiname2, false);
 		addChild(m_snakeNode, 1000);
 		m_snakeNode->setScale(0.7f);
-		if(juniorJson.size() > 0)
-			m_snakeNode->setPosition(ccp(-40,0));
+		m_snakeNode->setPosition(ccp(-49,0));
 		
 		m_snakeNode->startAnimationNoDirection();
 //		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -111,9 +109,24 @@ bool CumberShowWindow::init(int ss)
 //			this->addChild(m_tailImg, lastZ - 1);
 //			reader->release();
 //		}
-		
-		
 	}
+	
+	int boss_hp = bossJson["hp"].asInt();
+	double boss_speed = bossJson["speed"]["start"].asDouble();
+	double boss_agi = bossJson.get("agi", 0).asDouble();
+	
+	CCLabelTTF* boss_hp_label = CCLabelTTF::create(CCString::createWithFormat("%d", boss_hp)->getCString(), mySGD->getFont().c_str(), 10);
+	boss_hp_label->setPosition(ccp(-78,-61));
+	addChild(boss_hp_label);
+	
+	CCLabelTTF* boss_speed_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", boss_speed)->getCString(), mySGD->getFont().c_str(), 10);
+	boss_speed_label->setPosition(ccp(-49,-61));
+	addChild(boss_speed_label);
+	
+	CCLabelTTF* boss_agi_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", boss_agi)->getCString(), mySGD->getFont().c_str(), 10);
+	boss_agi_label->setPosition(ccp(-20,-61));
+	addChild(boss_agi_label);
+	
 	
 	if(juniorJson.size() > 0)
 	{
@@ -151,16 +164,31 @@ bool CumberShowWindow::init(int ss)
 			{
 				this->addChild(m_juniorSprite, 1001);
 				m_juniorSprite->setScale(0.7f);
-				m_juniorSprite->setPosition(ccp(40, 0));
+				m_juniorSprite->setPosition(ccp(48, 0));
 				if(junior_cnt > 1)
 				{
-					CCLabelTTF* junior_count_label = CCLabelTTF::create(CCString::createWithFormat("x%d", junior_cnt)->getCString(), mySGD->getFont().c_str(), 30);
+					CCLabelTTF* junior_count_label = CCLabelTTF::create(CCString::createWithFormat("x%d", junior_cnt)->getCString(), mySGD->getFont().c_str(), 20);
 					junior_count_label->setAnchorPoint(ccp(0,0.5));
-					junior_count_label->setPosition(ccp(50,-20));
+					junior_count_label->setPosition(ccp(53,-20));
 					addChild(junior_count_label, 1002);
 				}
 			}
 		}
+		int junior_hp = juniorJson["hp"].asInt();
+		double junior_speed = juniorJson["speed"]["start"].asDouble();
+		double junior_agi = juniorJson.get("agi", 0).asDouble();
+		
+		CCLabelTTF* junior_hp_label = CCLabelTTF::create(CCString::createWithFormat("%d", junior_hp)->getCString(), mySGD->getFont().c_str(), 10);
+		junior_hp_label->setPosition(ccp(18,-61));
+		addChild(junior_hp_label);
+		
+		CCLabelTTF* junior_speed_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", junior_speed)->getCString(), mySGD->getFont().c_str(), 10);
+		junior_speed_label->setPosition(ccp(48,-61));
+		addChild(junior_speed_label);
+		
+		CCLabelTTF* junior_agi_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", junior_agi)->getCString(), mySGD->getFont().c_str(), 10);
+		junior_agi_label->setPosition(ccp(76,-61));
+		addChild(junior_agi_label);
 	}
 	
 //	std::string juniorType = juniorJson["type"].asString();
