@@ -487,12 +487,12 @@ namespace std
 class ReaverScarab : public CrashMapObject
 {
 public:
-	static ReaverScarab * create (CCPoint cumberPosition, CCPoint jackPosition);
+	static ReaverScarab * create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	void crashMapForPoint (IntPoint point, int radius);
 	void selfRemove (float dt);
 	void jackDie ();
 	void lineDie (IntPoint t_p);
-	void myInit (CCPoint cumberPosition, CCPoint jackPosition);
+	void myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	int lengthToEnd (IntPoint point);
 	bool processObject (IntPoint pointFrom, IntPoint pointTo, int distance);
 	void aStar (IntPoint endPt);
@@ -508,11 +508,13 @@ protected:
 		CellInfo ();
 		bool operator < (CellInfo const & ci) const;
 	};
+	Json::Value m_pattern;
 	int m_step;
 	int m_frame;
 	IntPoint m_jackPoint;
 	CCParticleSystem * m_parentMissile;
 	Well512 m_well512;
+	int m_crashArea;
 	float m_angle;
 	struct CoordAndCellInfo
 	{
