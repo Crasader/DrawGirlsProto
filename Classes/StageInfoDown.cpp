@@ -191,20 +191,6 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 					is_add_cf = true;
 				}
 				
-//				Json::Value t_thumbnailInfo = t_card["thumbnailInfo"];
-//				
-//				if(NSDS_GS(kSDS_CI_int1_thumbnailInfo_s, t_card["no"].asInt()) != t_thumbnailInfo["img"].asString())
-//				{
-//					// check, after download ----------
-//					DownloadFile t_df;
-//					t_df.size = t_thumbnailInfo["size"].asInt();
-//					t_df.img = t_thumbnailInfo["img"].asString().c_str();
-//					t_df.filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", mySD->getSilType(), i+1)->getCString();
-//					t_df.key = CCSTR_CWF("%d_thumbnailInfo", t_card["no"].asInt())->getCString();
-//					df_list.push_back(t_df);
-//					// ================================
-//				}
-				
 				Json::Value t_aniInfo = t_card["aniInfo"];
 				NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool());
 				if(t_aniInfo["isAni"].asBool())
@@ -267,7 +253,6 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 						df_list.push_back(t_df);
 						// ================================
 					}
-//					NSDS_SS(kSDS_CI_int1_silImgInfoSilData_s, t_card["no"].asInt(), t_silImgInfo["silData"].asString());
 				}
 			}
 			

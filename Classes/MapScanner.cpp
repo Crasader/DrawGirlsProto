@@ -835,22 +835,6 @@ void MapScanner::myInit()
 	setMapImg();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 InvisibleSprite* InvisibleSprite::create( const char* filename, bool isPattern )
 {
 	InvisibleSprite* t_iv = new InvisibleSprite();

@@ -54,8 +54,13 @@ typedef enum t_DSH_Key{
 	kDSH_Key_wasTutorialPopupShockWave,
 	kDSH_Key_wasTutorialPopupMissileTrace,
 	kDSH_Key_wasTutorialPopupCrashArea,
-	kDSH_Key_controlJoystickDirection
+	kDSH_Key_controlJoystickDirection,
+	kDSH_Key_hasShowTutorial_int1
 }DSH_Key;
+
+enum SpecialTutorialCode{
+	kSpecialTutorialCode_control = 100000
+};
 
 enum ControlJoystickDirection{
 	kControlJoystickDirection_right = 0,
@@ -273,6 +278,8 @@ public:
 		else if(t_name == kDSH_Key_wasTutorialPopupCrashArea)			return_value = "wtpca";
 		
 		else if(t_name == kDSH_Key_controlJoystickDirection)			return_value = "cjd";
+		
+		else if(t_name == kDSH_Key_hasShowTutorial_int1)				return_value = "hst%d";
 		
 		return return_value;
 	}

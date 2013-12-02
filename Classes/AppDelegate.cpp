@@ -125,6 +125,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 //	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb_test/resources-iphonehd");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb/resources-iphonehd");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_flow");
+	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_tutorial");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ingame/ingame_jack");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ingame/ingame_jmissile");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ingame/ingame_pattern");

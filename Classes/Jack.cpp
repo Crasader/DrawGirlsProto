@@ -555,6 +555,12 @@ Jack* Jack::create()
 
 void Jack::setPosition( CCPoint t_sp )
 {
+//	float t_distance = sqrtf(powf(t_sp.x-getPositionX(), 2.f) + powf(t_sp.y-getPositionY(), 2.f));
+//	if(t_distance > 5.f)
+//	{
+//		CCLog("what?!");
+//	}
+	
 	CCNode::setPosition(t_sp);
 	myGD->communication("Main_moveGamePosition", t_sp);
 	myGD->communication("VS_setMoveGamePosition", t_sp);
@@ -971,7 +977,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				case_back->setContentSize(CCSizeMake(348, 245));
 				
 				CCSprite* content_back = CCSprite::create("tutorial_popup3.png");
-				content_back->setPosition(ccp(0,-10));
+				content_back->setPosition(ccp(0,-15));
 				t_container->addChild(content_back);
 				
 				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
@@ -1031,7 +1037,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				case_back->setContentSize(CCSizeMake(348, 245));
 				
 				CCSprite* content_back = CCSprite::create("tutorial_popup2.png");
-				content_back->setPosition(ccp(0,-10));
+				content_back->setPosition(ccp(0,-15));
 				t_container->addChild(content_back);
 				
 				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");

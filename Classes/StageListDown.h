@@ -52,6 +52,10 @@ private:
 	int download_version;
 	
 	vector<DownloadFile> df_list;
+	vector<DownloadFile> sf_list;
+	vector<CopyFile> cf_list;
+	
+	vector<IntPoint> save_version_list;
 	
 	void myInit(CCObject* t_success, SEL_CallFunc d_success, int t_puzzle);
 	
@@ -68,6 +72,30 @@ private:
 	void menuAction(CCObject* sender);
 	
 	void startDownload();
+	
+	virtual void registerWithTouchDispatcher ()
+	{
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, -200, true);
+	}
+	
+	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		CCLog("touch swallow popup");
+		return true;
+	}
+    virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		
+	}
+    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		
+	}
+    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		
+	}
 };
 
 #endif /* defined(__DGproto__StageListDown__) */

@@ -52,15 +52,21 @@ public:
 		addChild(m_container);
 	}
 	
+	virtual int getTouchPriority()
+	{
+		return touch_priority;
+	}
+	
 protected:
 	CCSprite* dimmed_sprite;
 	CCPoint base_position;
 	CCNode* m_container;
+	int touch_priority;
 	
 	void myInit(int t_touch_priority)
 	{
+		touch_priority = t_touch_priority;
 		setTouchEnabled(true);
-		setTouchPriority(t_touch_priority);
 		
 		setZOrder(INT32_MAX);
 		
@@ -73,6 +79,12 @@ protected:
 		dimmed_sprite->setColor(ccc3(100, 100, 100));
 		dimmed_sprite->setOpacity(100);
 		addChild(dimmed_sprite);
+	}
+	
+	virtual void registerWithTouchDispatcher ()
+	{
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, touch_priority, true);
 	}
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)

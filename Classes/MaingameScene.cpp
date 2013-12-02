@@ -14,6 +14,8 @@
 #include "PausePopupLayer.h"
 #include "StartMapGacha.h"
 #include "SearchEye.h"
+#include "ASPopupView.h"
+#include "CCMenuLambda.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -184,6 +186,126 @@ void Maingame::finalSetting()
 	search_eye->startSearch();
 	
 	startScene();
+	
+	if(mySD->getSilType() == 1)
+	{
+		if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
+		{
+			//			myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
+			CCNode* exit_target = this;
+			exit_target->onExit();
+			
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			CCNode* t_container = CCNode::create();
+			t_popup->setContainerNode(t_container);
+			exit_target->getParent()->addChild(t_popup);
+			
+			CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+			case_back->setPosition(CCPointZero);
+			t_container->addChild(case_back);
+			
+			case_back->setContentSize(CCSizeMake(348, 245));
+			
+			CCSprite* content_back = CCSprite::create("tutorial_popup3.png");
+			content_back->setPosition(ccp(0,-15));
+			t_container->addChild(content_back);
+			
+			CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+			title_img->setPosition(ccp(0, 102));
+			t_container->addChild(title_img);
+			
+			CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+			CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+			s_close->setColor(ccGRAY);
+			
+			CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																				{
+																					mControl->isStun = false;
+																					exit_target->onEnter();
+																					t_popup->removeFromParent();
+																				});
+			
+			CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+			close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+			close_menu->setPosition(ccp(145,103));
+			t_container->addChild(close_menu);
+		}
+	}
+	else
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+		Json::Value boss = root[0u];
+		Json::Value patterns = boss["pattern"];
+		
+		vector<int> pattern_code;
+		
+		for(int i=0;i<patterns.size();i++)
+		{
+			int t_code = patterns[i]["pattern"].asInt();
+			if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, t_code))
+				pattern_code.push_back(t_code);
+		}
+		
+		CCNode* exit_target = this;
+		exit_target->onExit();
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		exit_target->getParent()->addChild(t_popup);
+		
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+		case_back->setPosition(CCPointZero);
+		t_container->addChild(case_back);
+		
+		case_back->setContentSize(CCSizeMake(348, 245));
+		
+		CCSprite* content_back = CCSprite::create("tutorial_popup3.png");
+		content_back->setPosition(ccp(0,-15));
+		t_container->addChild(content_back);
+		
+		CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+		title_img->setPosition(ccp(0, 102));
+		t_container->addChild(title_img);
+		
+		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+		s_close->setColor(ccGRAY);
+		
+		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																			{
+																				mControl->isStun = false;
+																				exit_target->onEnter();
+																				t_popup->removeFromParent();
+																			});
+		
+		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+		close_menu->setPosition(ccp(145,103));
+		t_container->addChild(close_menu);
+	}
 }
 
 void Maingame::startScene()
