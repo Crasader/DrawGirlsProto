@@ -291,6 +291,7 @@ private:
 		request_item->setEnabled(false);
 		
 		CCMenu* request_menu = CCMenu::createWithItem(request_item);
+		request_menu->setTouchPriority(touch_priority-1);
 		request_menu->setPosition(0,-110);
 		addChild(request_menu);
 		

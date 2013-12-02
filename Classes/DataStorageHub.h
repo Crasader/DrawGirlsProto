@@ -55,6 +55,7 @@ typedef enum t_DSH_Key{
 	kDSH_Key_wasTutorialPopupMissileTrace,
 	kDSH_Key_wasTutorialPopupCrashArea,
 	kDSH_Key_controlJoystickDirection,
+	kDSH_Key_isControlJoystickFixed,
 	kDSH_Key_hasShowTutorial_int1
 }DSH_Key;
 
@@ -280,6 +281,7 @@ public:
 		else if(t_name == kDSH_Key_controlJoystickDirection)			return_value = "cjd";
 		
 		else if(t_name == kDSH_Key_hasShowTutorial_int1)				return_value = "hst%d";
+		else if(t_name == kDSH_Key_isControlJoystickFixed)				return_value = "icjf";
 		
 		return return_value;
 	}

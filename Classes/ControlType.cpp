@@ -533,8 +533,22 @@ void ControlJoystickButton::resetTouch()
 void ControlJoystickButton::invisibleControl()
 {
 	offButton();
-	control_ball->setVisible(false);
-	control_circle->setVisible(false);
+	control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
+	control_circle->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
+	
+	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+	{
+		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+		{
+			control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));
+			control_ball->setPosition(ccp(480-50-myGD->boarder_value, 50));
+		}
+		else
+		{
+			control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
+			control_ball->setPosition(ccp(50+myGD->boarder_value, 50));
+		}
+	}
 }
 
 void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
@@ -649,7 +663,8 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						after_circle_position.y = 310;
 				}
 				
-				control_circle->setPosition(after_circle_position);
+				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+					control_circle->setPosition(after_circle_position);
 				control_circle->setVisible(true);
 				
 				control_ball->setPosition(location);
@@ -733,8 +748,8 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > 310)
 						after_circle_position.y = 310;
 				}
-				
-				control_circle->setPosition(after_circle_position);
+				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+					control_circle->setPosition(after_circle_position);
 				
 				control_ball->setPosition(location);
 				touchAction(location, false);
@@ -811,14 +826,30 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 					after_circle_position.y = 310;
 			}
 			
-			control_circle->setPosition(after_circle_position);
+			if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+				control_circle->setPosition(after_circle_position);
 			
 			control_ball->setPosition(location);
 			touchAction(location, true);
-			control_circle->setVisible(false);
-//			if(myGD->gamescreen_type == kGT_rightUI)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-//			else										control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));;
-			control_ball->setVisible(false);
+			if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+			{
+				control_circle->setVisible(false);
+				control_ball->setVisible(false);
+			}
+			else
+			{
+				if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+				{
+					control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));
+					control_ball->setPosition(ccp(480-50-myGD->boarder_value, 50));
+				}
+				else
+				{
+					control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
+					control_ball->setPosition(ccp(50+myGD->boarder_value, 50));
+				}
+			}
+			
 			joystick_touch = NULL;
 		}
 	}
@@ -860,9 +891,9 @@ void ControlJoystickButton::setTouchEnabled( bool t_b )
 		if(joystick_touch)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-			else										control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));;
+			else																								control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));
 
-			control_ball->setVisible(false);
+			control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, t_b);
 			joystick_touch = NULL;
 		}
@@ -882,15 +913,27 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	beforeDirection = directionStop;
 	control_circle = CCSprite::create("control_joystick_big_circle.png");
 	control_circle->setScale(1.f);
-	control_circle->setVisible(false);
-	//		if(myGD->gamescreen_type == kGT_rightUI)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-	//		else										control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));;
+	control_circle->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
 	addChild(control_circle);
 
 	control_ball = CCSprite::create("control_joystick_big_ball.png");
 	control_ball->setScale(1.f);
-	control_ball->setVisible(false);
+	control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
 	addChild(control_ball);
+	
+	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+	{
+		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+		{
+			control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));
+			control_ball->setPosition(ccp(480-50-myGD->boarder_value, 50));
+		}
+		else
+		{
+			control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
+			control_ball->setPosition(ccp(50+myGD->boarder_value, 50));
+		}
+	}
 
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
@@ -898,7 +941,6 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	button_ani = reader->getAnimationManager();
 	//		draw_button = CCSprite::create("ui_draw.png");
 	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-25,25));
-//	else if(myGD->gamescreen_type == kGT_leftUI)	draw_button->setPosition(ccp(25,25));
 	else								draw_button->setPosition(ccp(25,25));
 	addChild(draw_button);
 
@@ -914,11 +956,6 @@ void ControlJoystickButton::offButton()
 {
 	button_ani->runAnimationsForSequenceNamed("cast1stop");
 }
-
-
-
-
-
 
 
 //////////////////////////////////////////////// Joystick ///////////////////////////////////////////////////////////////////////////////

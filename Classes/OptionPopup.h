@@ -48,6 +48,9 @@ private:
 	CCMenuItem* joystick_right_item;
 	CCMenuItem* joystick_left_item;
 	
+	CCMenuItem* joystick_fixed_item;
+	CCMenuItem* joystick_move_item;
+	
 	void showPopup();
 	void endShowPopup();
 	void hidePopup();
