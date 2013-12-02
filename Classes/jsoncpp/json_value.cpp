@@ -1288,6 +1288,10 @@ Value::get( const std::string &key,
    return get( key.c_str(), defaultValue );
 }
 
+void Value::removeTest(int index)
+{
+		
+}
 Value
 Value::removeMember( const char* key )
 {
@@ -1865,5 +1869,18 @@ Path::make( Value &root ) const
    return *node;
 }
 
-
+	void removeFromIndex(Json::Value& v, int index)
+	{
+		Json::Value newObject;
+		int valueSize = v.size();
+		for(int i=0; i<valueSize; i++)
+		{
+			if(i != index)
+			{
+				newObject.append(v[i]);
+			}
+		}
+		
+		v.swap(newObject);
+	}
 } // namespace Json

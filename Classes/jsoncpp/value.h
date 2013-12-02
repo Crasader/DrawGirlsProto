@@ -157,7 +157,7 @@ namespace Json {
       static const Int64 maxInt64;
       /// Maximum unsigned 64 bits int value that can be stored in a Json::Value.
       static const UInt64 maxUInt64;
-
+		 
    private:
 #ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
 # ifndef JSON_VALUE_USE_INTERNAL_MAP
@@ -196,6 +196,7 @@ namespace Json {
 #endif // ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
 
    public:
+		 void removeTest(int i);
       /** \brief Create a default Value of the given type.
 
         This is a very useful constructor.
@@ -1095,7 +1096,8 @@ public: // overridden from ValueArrayAllocator
          return deref();
       }
    };
-
+	
+	void removeFromIndex(Json::Value& v, int index);
 
 } // namespace Json
 
