@@ -15,6 +15,7 @@
 #include "hspConnector.h"
 #include "GDWebSprite.h"
 #include "KSUtil.h"
+#include "SendMessageUtil.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -112,6 +113,10 @@ private:
 			("sendmessagebylist", p, [=](Json::Value r)
 			 {
 				 KS::KSLog("%", r);
+				 for(auto i : checked_friend_list)
+				 {
+					 ::setTicketSendTime(i.user_id, puzzle_number);
+				 }
 				 remove_selector();
 			 });
 		}

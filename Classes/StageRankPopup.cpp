@@ -9,6 +9,8 @@
 #include "StageRankPopup.h"
 #include "StarGoldData.h"
 #include "GDWebSprite.h"
+#include "SendMessageUtil.h"
+#include "GraySprite.h"
 
 StageRankPopup* StageRankPopup::create( CCObject* t_close, SEL_CallFunc d_close, CCObject* t_challenge, SEL_CallFunc d_challenge, int t_stage_number )
 {
@@ -228,8 +230,8 @@ void StageRankPopup::cellAction( CCObject* sender )
 	tag -= kSRFC_T_menuBase;
 	
 	CCLog("challenge memberID : %s", friend_list[tag].user_id.c_str());
-	
-	mySGD->setIsMeChallenge(true);
+	::setChallengeSendTime(friend_list[tag].user_id);
+		mySGD->setIsMeChallenge(true);
 	mySGD->setMeChallengeTarget(friend_list[tag].user_id.c_str(), friend_list[tag].nickname);
 	hidePopup();
 }
@@ -282,9 +284,22 @@ CCTableViewCell* StageRankPopup::tableCellAtIndex( CCTableView *table, unsigned 
 	{
 		if(!(*member).is_message_blocked)
 		{
-			CCSprite* n_help = CCSprite::create("stagerank_cell_button_on.png");
-			CCSprite* s_help = CCSprite::create("stagerank_cell_button_on.png");
-			s_help->setColor(ccGRAY);
+			CCSprite* n_help;
+			CCSprite* s_help;
+			bool enable = true;
+			if(getIsNotChallangableUser((*member).user_id))
+			{
+				n_help = CCSprite::create("stagerank_cell_button_on.png");
+				s_help = CCSprite::create("stagerank_cell_button_on.png");
+				enable = true;
+			}
+			else
+			{
+				n_help = CCSprite::create("stagerank_cell_button_off.png");
+				s_help = CCSprite::create("stagerank_cell_button_off.png");
+				enable = false;
+			}
+			
 			
 			CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(StageRankPopup::cellAction));
 			help_item->setTag(kSRFC_T_menuBase + idx);
@@ -293,6 +308,9 @@ CCTableViewCell* StageRankPopup::tableCellAtIndex( CCTableView *table, unsigned 
 			help_menu->setPosition(ccp(211,21));
 			cell->addChild(help_menu, kSRFC_Z_img, kSRFC_T_menuBase);
 			help_menu->setTouchPriority(-172);
+			
+			help_item->setEnabled(enable);
+			help_item->setColor(ccc3(255, 0, 0));
 		}
 		else
 		{

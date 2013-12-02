@@ -18,4 +18,12 @@ void setHelpSendTime( string userId );
 
 int getIsNotHelpableUser( std::string userId, int base_s = 60 * 60 * 24 * 1  ); /* 1일 */
 
+void setChallengeSendTime( string userId );
+
+int getIsNotChallangableUser( std::string userId, int base_s = 60 * 60 * 24 * 1  ); /* 1일 */
+
+void setTicketSendTime( string userId, int puzzlenumber );
+
+int getIsNotTicketUser( std::string userId, int puzzlenumber, int base_s = 60 * 60 * 24 * 1  ); /* 1일 */
+
 #endif /* defined(__DGproto__SendMessageUtil__) */

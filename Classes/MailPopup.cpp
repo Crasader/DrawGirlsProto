@@ -1336,6 +1336,7 @@ void MailPopup::removeMessage(int mailNo, long long memberID, std::function<void
 			 }
 			 //테이블 리로드
 			 m_mailList=newMailList;
+		 
 			 this->mailTableView->reloadData();
 			 
 		 }

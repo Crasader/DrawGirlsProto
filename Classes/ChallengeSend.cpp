@@ -6,7 +6,7 @@
 #include "hspConnector.h"
 #include "StarGoldData.h"
 #include "HatGacha.h"
-
+#include "SendMessageUtil.h"
 
 ChallengeSend::ChallengeSend()
 {
@@ -61,6 +61,8 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																	 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 																	 
 																	 //																		setHelpSendTime(recvId);
+																	 setChallengeSendTime(user_id);
+//																	 friend_list.erase(friend_list.begin() + tag);
 																	 GraphDogLib::JsonToLog("sendMessage", r);
 																	 
 																	 //																		obj->removeFromParent();
