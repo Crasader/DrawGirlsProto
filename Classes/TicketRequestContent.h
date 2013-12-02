@@ -214,6 +214,8 @@ private:
 			
 			for(int i=0; i<appfriends.size();i++)
 			{
+				if(::getIsNotTicketUser(appfriends[i]["user_id"].asString(), puzzle_number))
+					continue;
 				if(appfriends[i]["message_blocked"].asBool())
 					continue;
 				TicketFriendInfo t_friend_info;

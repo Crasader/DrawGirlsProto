@@ -3233,7 +3233,8 @@ void CloudBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Valu
 	m_pattern = pattern;
 	m_parentMissile = CCParticleSystemQuad::create("cloudbomb.plist");
 	m_parentMissile->setPositionType(kCCPositionTypeRelative);
-	
+	m_parentMissile->setStartColor(ccc4f(166, 166, 166, 255)); //##
+	m_parentMissile->setEndColor(ccc4f(166, 166, 166, 255)); //##
 	
 	
 	m_parentMissile->setPosition(cumberPosition);
