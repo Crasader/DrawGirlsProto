@@ -45,6 +45,8 @@ enum OptionPopupMenuTag{
 	kOP_MT_withdraw,
 	kOP_MT_controlJoystickRight,
 	kOP_MT_controlJoystickLeft,
+	kOP_MT_joystickFixed,
+	kOP_MT_joystickMove,
 	kOP_MT_tutorial,
 	kOP_MT_minsu
 };
@@ -195,6 +197,46 @@ bool OptionPopup::init()
 		joystick_right_item->setEnabled(true);
 		joystick_left_item->setEnabled(false);
 	}
+	
+	
+	CCSprite* n_joystick_fixed = CCSprite::create("option_mode_lock.png");
+	n_joystick_fixed->setColor(ccGRAY);
+	CCSprite* s_joystick_fixed = CCSprite::create("option_mode_lock.png");
+	s_joystick_fixed->setColor(ccc3(100, 100, 100));
+	CCSprite* d_joystick_fixed = CCSprite::create("option_mode_lock.png");
+	
+	joystick_fixed_item = CCMenuItemSprite::create(n_joystick_fixed, s_joystick_fixed, d_joystick_fixed, this, menu_selector(OptionPopup::menuAction));
+	joystick_fixed_item->setTag(kOP_MT_joystickFixed);
+	
+	CCMenu* joystick_fixed_menu = CCMenu::createWithItem(joystick_fixed_item);
+	joystick_fixed_menu->setPosition(getContentPosition(kOP_MT_joystickFixed));
+	main_case->addChild(joystick_fixed_menu, kOP_Z_content);
+	
+	
+	CCSprite* n_joystick_move = CCSprite::create("option_mode_move.png");
+	n_joystick_move->setColor(ccGRAY);
+	CCSprite* s_joystick_move = CCSprite::create("option_mode_move.png");
+	s_joystick_move->setColor(ccc3(100, 100, 100));
+	CCSprite* d_joystick_move = CCSprite::create("option_mode_move.png");
+	
+	joystick_move_item = CCMenuItemSprite::create(n_joystick_move, s_joystick_move, d_joystick_move, this, menu_selector(OptionPopup::menuAction));
+	joystick_move_item->setTag(kOP_MT_joystickMove);
+	
+	CCMenu* joystick_move_menu = CCMenu::createWithItem(joystick_move_item);
+	joystick_move_menu->setPosition(getContentPosition(kOP_MT_joystickMove));
+	main_case->addChild(joystick_move_menu, kOP_Z_content);
+	
+	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+	{
+		joystick_fixed_item->setEnabled(false);
+		joystick_move_item->setEnabled(true);
+	}
+	else
+	{
+		joystick_fixed_item->setEnabled(true);
+		joystick_move_item->setEnabled(false);
+	}
+	
 	
 	CCSprite* n_tutorial = CCSprite::create("option_tutorial.png");
 	CCSprite* s_tutorial = CCSprite::create("option_tutorial.png");
@@ -439,6 +481,20 @@ void OptionPopup::menuAction(CCObject* pSender)
 		joystick_left_item->setEnabled(false);
 		is_menu_enable = true;
 	}
+	else if(tag == kOP_MT_joystickFixed)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isControlJoystickFixed, true);
+		joystick_fixed_item->setEnabled(false);
+		joystick_move_item->setEnabled(true);
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_joystickMove)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isControlJoystickFixed, false);
+		joystick_fixed_item->setEnabled(true);
+		joystick_move_item->setEnabled(false);
+		is_menu_enable = true;
+	}
 	else if(tag == kOP_MT_tutorial)
 	{
 		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
@@ -510,19 +566,21 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kOP_MT_close)				return_value = ccp(400,270);
-	else if(t_tag == kOP_MT_bgm)			return_value = ccp(178,219);
-	else if(t_tag == kOP_MT_effect)			return_value = ccp(354,219);
+	if(t_tag == kOP_MT_close)				return_value = ccp(400,279);
+	else if(t_tag == kOP_MT_bgm)			return_value = ccp(178,227);
+	else if(t_tag == kOP_MT_effect)			return_value = ccp(354,227);
 	else if(t_tag == kOP_MT_gameui_left)	return_value = ccp(143,113);
 	else if(t_tag == kOP_MT_gameui_full)	return_value = ccp(204, 113);
 	else if(t_tag == kOP_MT_gameui_right)	return_value = ccp(265, 113);
-	else if(t_tag == kOP_MT_help)			return_value = ccp(224,65);
-	else if(t_tag == kOP_MT_logout)			return_value = ccp(350, 65);
-	else if(t_tag == kOP_MT_noti)			return_value = ccp(117, 65);
-	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(356, 110);
-	else if(t_tag == kOP_MT_controlJoystickRight)	return_value = ccp(173, 120);
-	else if(t_tag == kOP_MT_controlJoystickLeft)	return_value = ccp(230, 120);
-	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(200, 163);
+	else if(t_tag == kOP_MT_help)			return_value = ccp(224,54);
+	else if(t_tag == kOP_MT_logout)			return_value = ccp(350, 54);
+	else if(t_tag == kOP_MT_noti)			return_value = ccp(117, 54);
+	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(356, 120);
+	else if(t_tag == kOP_MT_controlJoystickRight)	return_value = ccp(173, 135);
+	else if(t_tag == kOP_MT_controlJoystickLeft)	return_value = ccp(230, 135);
+	else if(t_tag == kOP_MT_joystickFixed)			return_value = ccp(173, 100);
+	else if(t_tag == kOP_MT_joystickMove)			return_value = ccp(230, 100);
+	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(200, 180);
 	else if(t_tag == kOP_MT_minsu)			return_value = ccp(455,25);
 	
 	return_value = ccpSub(return_value, ccp(240,160));
