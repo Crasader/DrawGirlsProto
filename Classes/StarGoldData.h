@@ -57,6 +57,7 @@ enum FailCode{
 enum CardSortType{
 	kCST_default = 0,
 	kCST_take,
+	kCST_takeReverse,
 	kCST_gradeUp, // rank
 	kCST_gradeDown // rank
 };
@@ -177,6 +178,7 @@ public:
 	void addHasGottenCardNumber(int card_number);
 	
 	int getHasGottenCardsDataCardNumber(int index);
+	CardSortInfo getHasGottenCardData(int index);
 	
 	int getHasGottenCardsSize();
 	

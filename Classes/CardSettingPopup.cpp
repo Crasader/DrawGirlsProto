@@ -18,6 +18,7 @@
 #include "StarGoldData.h"
 #include "CardListViewer.h"
 #include "StageSettingPopup.h"
+#include "CardStrengthPopup.h"
 
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -510,6 +511,15 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		
 		is_menu_enable = true;
 	}
+	else if(tag == kCSS_MT_strength)
+	{
+		CardStrengthPopup* t_popup = CardStrengthPopup::create();
+		t_popup->setHideFinalAction(target_final, delegate_final);
+		getParent()->addChild(t_popup, kPMS_Z_popup);
+		
+		target_final = NULL;
+		hidePopup();
+	}
 	else if(tag == kCSS_MT_mountCard)
 	{
 		mount_menu->removeFromParent();
@@ -551,11 +561,37 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		s_release->setColor(ccGRAY);
 		
 		CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardSettingPopup::menuAction));
+		release_item->setPosition(ccp(40,0));
 		release_item->setTag(kCSS_MT_releaseCard);
 		
 		mount_menu = CCMenu::createWithItem(release_item);
 		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
 		main_case->addChild(mount_menu, kCSS_Z_content);
+		
+		bool is_strength_enable = true;
+		
+		// check is strength enable
+		
+		if(is_strength_enable)
+		{
+			CCSprite* n_strength = CCSprite::create("cardsetting_strength_on.png");
+			CCSprite* s_strength = CCSprite::create("cardsetting_strength_on.png");
+			s_strength->setColor(ccGRAY);
+			
+			CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardSettingPopup::menuAction));
+			strength_item->setPosition(ccp(-40,0));
+			strength_item->setTag(kCSS_MT_strength);
+			
+			mount_menu->addChild(strength_item);
+		}
+		else
+		{
+			CCMenuItem* strength_item = CCMenuItemImage::create("cardsetting_strength_off.png", "cardsetting_strength_off.png", this, menu_selector(CardSettingPopup::menuAction));
+			strength_item->setPosition(ccp(-40,0));
+			strength_item->setEnabled(false);
+			
+			mount_menu->addChild(strength_item);
+		}
 		
 		is_menu_enable = true;
 	}
@@ -612,11 +648,37 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			s_release->setColor(ccGRAY);
 			
 			CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardSettingPopup::menuAction));
+			release_item->setPosition(ccp(40,0));
 			release_item->setTag(kCSS_MT_releaseCard);
 			
 			mount_menu = CCMenu::createWithItem(release_item);
 			mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
 			main_case->addChild(mount_menu, kCSS_Z_content);
+			
+			bool is_strength_enable = true;
+			
+			// check is strength enable
+			
+			if(is_strength_enable)
+			{
+				CCSprite* n_strength = CCSprite::create("cardsetting_strength_on.png");
+				CCSprite* s_strength = CCSprite::create("cardsetting_strength_on.png");
+				s_strength->setColor(ccGRAY);
+				
+				CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardSettingPopup::menuAction));
+				strength_item->setPosition(ccp(-40,0));
+				strength_item->setTag(kCSS_MT_strength);
+				
+				mount_menu->addChild(strength_item);
+			}
+			else
+			{
+				CCMenuItem* strength_item = CCMenuItemImage::create("cardsetting_strength_off.png", "cardsetting_strength_off.png", this, menu_selector(CardSettingPopup::menuAction));
+				strength_item->setPosition(ccp(-40,0));
+				strength_item->setEnabled(false);
+				
+				mount_menu->addChild(strength_item);
+			}
 		}
 		
 		is_menu_enable = true;
@@ -776,11 +838,37 @@ void CardSettingPopup::mountingCard(int card_stage, int card_level)
 		s_release->setColor(ccGRAY);
 		
 		CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardSettingPopup::menuAction));
+		release_item->setPosition(ccp(40,0));
 		release_item->setTag(kCSS_MT_releaseCard);
 		
 		mount_menu = CCMenu::createWithItem(release_item);
 		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
 		main_case->addChild(mount_menu, kCSS_Z_content);
+		
+		bool is_strength_enable = true;
+		
+		// check is strength enable
+		
+		if(is_strength_enable)
+		{
+			CCSprite* n_strength = CCSprite::create("cardsetting_strength_on.png");
+			CCSprite* s_strength = CCSprite::create("cardsetting_strength_on.png");
+			s_strength->setColor(ccGRAY);
+			
+			CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardSettingPopup::menuAction));
+			strength_item->setPosition(ccp(-40,0));
+			strength_item->setTag(kCSS_MT_strength);
+			
+			mount_menu->addChild(strength_item);
+		}
+		else
+		{
+			CCMenuItem* strength_item = CCMenuItemImage::create("cardsetting_strength_off.png", "cardsetting_strength_off.png", this, menu_selector(CardSettingPopup::menuAction));
+			strength_item->setPosition(ccp(-40,0));
+			strength_item->setEnabled(false);
+			
+			mount_menu->addChild(strength_item);
+		}
 	}
 	else if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_mounted_number) > 0)
 	{
