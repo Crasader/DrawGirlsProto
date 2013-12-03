@@ -555,6 +555,17 @@ void StarGoldData::changeSortType( CardSortType t_type )
 
 		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
+	else if(t_type == kCST_takeReverse)
+	{
+		struct t_CardSortTake{
+			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+			{
+				return a.take_number < b.take_number;
+			}
+		} pred;
+		
+		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+	}
 	else if(t_type == kCST_gradeUp) // rank
 	{
 		struct t_CardSortGradeUp{
@@ -601,6 +612,11 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 int StarGoldData::getHasGottenCardsDataCardNumber( int index )
 {
 	return has_gotten_cards[index].card_number;
+}
+
+CardSortInfo StarGoldData::getHasGottenCardData(int index)
+{
+	return has_gotten_cards[index];
 }
 
 int StarGoldData::getHasGottenCardsSize()
