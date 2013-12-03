@@ -77,6 +77,10 @@ void TitleScene::resultGetCommonSetting(Json::Value result_data)
 	
 	if(result_data["state"].asString() == "ok")
 	{
+		mySGD->setChallengeCoolTime(result_data["challengeCoolTime"].asInt());
+		mySGD->setGameFriendMax(result_data["gameFriendMax"].asInt());
+		mySGD->setHelpCoolTime(result_data["helpCoolTime"].asInt());
+		mySGD->setMsgRemoveDay(result_data["msgRemoveDay"].asInt());
 		mySGD->setHeartMax(result_data["heartMax"].asInt());
 		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
 		
