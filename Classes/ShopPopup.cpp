@@ -23,12 +23,15 @@ enum ShopPopup_MenuTag{
 	kSP_MT_ruby,
 	kSP_MT_gold,
 	kSP_MT_heart,
+	kSP_MT_character,
 	kSP_MT_content1,
 	kSP_MT_content2,
 	kSP_MT_content3,
 	kSP_MT_content4,
 	kSP_MT_content5,
-	kSP_MT_content6
+	kSP_MT_content6,
+	kSP_MT_characterBase = 10000,
+	kSP_MT_characterUnlockBase = 20000
 };
 
 void ShopPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
@@ -47,7 +50,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	if(t_code == recent_shop_code)
 		return;
 	
-	if(recent_shop_code != kSC_empty)
+	if(recent_shop_code != kSC_empty || recent_shop_code != kSC_character)
 	{
 		main_case->removeChildByTag(kSP_MT_content1);
 		main_case->removeChildByTag(kSP_MT_content2);
@@ -59,29 +62,174 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	
 	recent_shop_code = t_code;
 	
-	string filename;
-	if(recent_shop_code == kSC_ruby)
-		filename = "shop_ruby%d.png";
-	else if(recent_shop_code == kSC_gold)
-		filename = "shop_gold%d.png";
-	else if(recent_shop_code == kSC_heart)
-		filename = "shop_heart%d.png";
-	
-	for(int i=1;i<=6;i++)
+	if(recent_shop_code == kSC_character)
 	{
-		CCSprite* n_content = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
-		CCSprite* s_content = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
-		s_content->setColor(ccGRAY);
+		CCSize table_size = CCSizeMake(440, 180);
+//		CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+//		temp_back->setAnchorPoint(CCPointZero);
+//		temp_back->setPosition(ccp(240-table_size.width/2.f, 127-table_size.height/2.f));
+//		main_case->addChild(temp_back, kSP_Z_content);
 		
-		CCMenuItem* content_item = CCMenuItemSprite::create(n_content, s_content, this, menu_selector(ShopPopup::menuAction));
-		content_item->setTag(kSP_MT_content1 + i - 1);
+		character_table	= CCTableView::create(this, table_size);
+		character_table->setAnchorPoint(CCPointZero);
+		character_table->setDirection(kCCScrollViewDirectionHorizontal);
+		character_table->setVerticalFillOrder(kCCTableViewFillTopDown);
+		character_table->setPosition(ccp(240-table_size.width/2.f, 127-table_size.height/2.f));
 		
-		CCMenu* content_menu = CCMenu::createWithItem(content_item);
-		content_menu->setPosition(getContentPosition(kSP_MT_content1 + i - 1));
-		main_case->addChild(content_menu, kSP_Z_content, kSP_MT_content1 + i - 1);
-		
-		content_menu->setTouchPriority(-170-1);
+		character_table->setDelegate(this);
+		main_case->addChild(character_table, kSP_Z_content);
+		character_table->setTouchPriority(-170-1);
 	}
+	else
+	{
+		string filename;
+		if(recent_shop_code == kSC_ruby)
+			filename = "shop_ruby%d.png";
+		else if(recent_shop_code == kSC_gold)
+			filename = "shop_gold%d.png";
+		else if(recent_shop_code == kSC_heart)
+			filename = "shop_heart%d.png";
+		
+		for(int i=1;i<=6;i++)
+		{
+			CCSprite* n_content = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
+			CCSprite* s_content = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
+			s_content->setColor(ccGRAY);
+			
+			CCMenuItem* content_item = CCMenuItemSprite::create(n_content, s_content, this, menu_selector(ShopPopup::menuAction));
+			content_item->setTag(kSP_MT_content1 + i - 1);
+			
+			CCMenu* content_menu = CCMenu::createWithItem(content_item);
+			content_menu->setPosition(getContentPosition(kSP_MT_content1 + i - 1));
+			main_case->addChild(content_menu, kSP_Z_content, kSP_MT_content1 + i - 1);
+			
+			content_menu->setTouchPriority(-170-1);
+		}
+	}
+}
+
+enum CharacterCellZorder
+{
+	kCharacterCellZorder_back = 1,
+	kCharacterCellZorder_content,
+	kCharacterCellZorder_lock,
+	kCharacterCellZorder_selected
+};
+
+void ShopPopup::cellAction(CCObject* sender)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	int tag = ((CCNode*)sender)->getTag();
+	
+	if(tag >= kSP_MT_characterUnlockBase) // unlock
+	{
+		bool is_unlock_enable = false;
+		// check unlock enable?
+		
+		if(is_unlock_enable)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_selectedCharacter, tag-kSP_MT_characterUnlockBase);
+			myDSH->setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, tag-kSP_MT_characterUnlockBase, true);
+			myDSH->saveUserData({kSaveUserData_Key_character}, nullptr);
+			character_table->reloadData();
+		}
+		else
+		{
+			CCLog("not enough condition");
+		}
+		
+		is_menu_enable = true;
+	}
+	else // select
+	{
+		myDSH->setIntegerForKey(kDSH_Key_selectedCharacter, tag-kSP_MT_characterBase);
+		character_table->reloadData();
+		
+		is_menu_enable = true;
+	}
+}
+
+CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int idx)
+{
+	CCTableViewCell* cell = new CCTableViewCell();
+	cell->init();
+	cell->autorelease();
+	
+	CCSprite* character_back = CCSprite::create("character_back.png");
+	character_back->setPosition(ccp(60, 88));
+	cell->addChild(character_back, kCharacterCellZorder_back);
+	
+	// addChild name, img, script
+	
+	if(idx > 0 && !myDSH->getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, idx))
+	{
+		CCSprite* lock_img = CCSprite::create("character_lock.png");
+		lock_img->setPosition(ccp(60,110));
+		cell->addChild(lock_img, kCharacterCellZorder_lock, kCharacterCellZorder_lock);
+		
+		CCSprite* n_unlock = CCSprite::create("character_buy.png");
+		CCSprite* s_unlock = CCSprite::create("character_buy.png");
+		s_unlock->setColor(ccGRAY);
+		
+		CCMenuItem* unlock_item = CCMenuItemSprite::create(n_unlock, s_unlock, this, menu_selector(ShopPopup::cellAction));
+		unlock_item->setTag(kSP_MT_characterUnlockBase+idx);
+		
+		CCMenu* unlock_menu = CCMenu::createWithItem(unlock_item);
+		unlock_menu->setPosition(ccp(60,25));
+		cell->addChild(unlock_menu, kCharacterCellZorder_content);
+		
+		unlock_menu->setTouchPriority(-170-2);
+	}
+	else
+	{
+		if(idx == myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))
+		{
+			CCSprite* selected_img = CCSprite::create("character_on.png");
+			selected_img->setPosition(ccp(60, 88));
+			cell->addChild(selected_img, kCharacterCellZorder_selected, kCharacterCellZorder_selected);
+		}
+		else
+		{
+			CCSprite* n_select = CCSprite::create("character_select.png");
+			CCSprite* s_select = CCSprite::create("character_select.png");
+			s_select->setColor(ccGRAY);
+			
+			CCMenuItem* select_item = CCMenuItemSprite::create(n_select, s_select, this, menu_selector(ShopPopup::cellAction));
+			select_item->setTag(kSP_MT_characterBase+idx);
+			
+			CCMenu* select_menu = CCMenu::createWithItem(select_item);
+			select_menu->setPosition(ccp(60,25));
+			cell->addChild(select_menu, kCharacterCellZorder_content);
+			
+			select_menu->setTouchPriority(-170-2);
+		}
+	}
+	
+	return cell;
+}
+void ShopPopup::scrollViewDidScroll(CCScrollView* view)
+{
+	
+}
+void ShopPopup::scrollViewDidZoom(CCScrollView* view)
+{
+	
+}
+void ShopPopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
+{
+	CCLog("cell touched!!");
+}
+CCSize ShopPopup::cellSizeForTable(CCTableView *table)
+{
+	return CCSizeMake(120, 176);
+}
+unsigned int ShopPopup::numberOfCellsInTableView(CCTableView *table)
+{
+	return 5;
 }
 
 // on "init" you need to initialize your instance
@@ -102,8 +250,8 @@ bool ShopPopup::init()
 	addChild(main_case, kSP_Z_back);
 	
 	
-	CCSprite* n_close = CCSprite::create("shop_close.png");
-	CCSprite* s_close = CCSprite::create("shop_close.png");
+	CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+	CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
 	s_close->setColor(ccGRAY);
 	
 	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(ShopPopup::menuAction));
@@ -114,6 +262,20 @@ bool ShopPopup::init()
 	main_case->addChild(close_menu, kSP_Z_content);
 	
 	close_menu->setTouchPriority(-170-1);
+	
+	
+	CCSprite* n_character = CCSprite::create("shop_character.png");
+	CCSprite* s_character = CCSprite::create("shop_character.png");
+	s_character->setColor(ccGRAY);
+	
+	CCMenuItem* character_item = CCMenuItemSprite::create(n_character, s_character, this, menu_selector(ShopPopup::menuAction));
+	character_item->setTag(kSP_MT_character);
+	
+	CCMenu* character_menu = CCMenu::createWithItem(character_item);
+	character_menu->setPosition(getContentPosition(kSP_MT_character));
+	main_case->addChild(character_menu, kSP_Z_content);
+	
+	character_menu->setTouchPriority(-170-1);
 	
 	
 	CCSprite* n_ruby = CCSprite::create("shop_ruby.png");
@@ -200,25 +362,27 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 	CCPoint return_value;
 	
 	if(t_tag == kSP_MT_close)
-		return_value = ccp(420,28);
+		return_value = ccp(440,262);
+	else if(t_tag == kSP_MT_character)
+		return_value = ccp(61,261);
 	else if(t_tag == kSP_MT_ruby)
-		return_value = ccp(62,28);
+		return_value = ccp(150,261);
 	else if(t_tag == kSP_MT_gold)
-		return_value = ccp(158,28);
+		return_value = ccp(239,261);
 	else if(t_tag == kSP_MT_heart)
-		return_value = ccp(254,28);
+		return_value = ccp(328,261);
 	else if(t_tag == kSP_MT_content1)
-		return_value = ccp(93,220);
+		return_value = ccp(93,182);
 	else if(t_tag == kSP_MT_content2)
-		return_value = ccp(240,220);
+		return_value = ccp(240,182);
 	else if(t_tag == kSP_MT_content3)
-		return_value = ccp(387,220);
+		return_value = ccp(387,182);
 	else if(t_tag == kSP_MT_content4)
-		return_value = ccp(93,110);
+		return_value = ccp(93,72);
 	else if(t_tag == kSP_MT_content5)
-		return_value = ccp(240,110);
+		return_value = ccp(240,72);
 	else if(t_tag == kSP_MT_content6)
-		return_value = ccp(387,110);
+		return_value = ccp(387,72);
 	
 	return return_value;
 }
@@ -248,6 +412,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 	
 	if(tag == kSP_MT_close)
 	{
+		myDSH->saveUserData({kSaveUserData_Key_character}, nullptr);
 		hidePopup();
 	}
 	else if(tag == kSP_MT_ruby)
@@ -263,6 +428,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 	else if(tag == kSP_MT_heart)
 	{
 		setShopCode(kSC_heart);
+		is_menu_enable = true;
+	}
+	else if(tag == kSP_MT_character)
+	{
+		setShopCode(kSC_character);
 		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_content1)
