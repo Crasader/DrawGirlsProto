@@ -56,7 +56,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_wasTutorialPopupCrashArea,
 	kDSH_Key_controlJoystickDirection,
 	kDSH_Key_isControlJoystickFixed,
-	kDSH_Key_hasShowTutorial_int1
+	kDSH_Key_hasShowTutorial_int1,
+	kDSH_Key_selectedCharacter,
+	kDSH_Key_isCharacterUnlocked_int1
 }DSH_Key;
 
 enum SpecialTutorialCode{
@@ -78,7 +80,8 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_openPuzzle,
 	kSaveUserData_Key_haveTicket,
 	kSaveUserData_Key_openStage,
-	kSaveUserData_Key_nick
+	kSaveUserData_Key_nick,
+	kSaveUserData_Key_character
 };
 
 #define myDSH DataStorageHub::sharedInstance()
@@ -283,6 +286,9 @@ public:
 		else if(t_name == kDSH_Key_hasShowTutorial_int1)				return_value = "hst%d";
 		else if(t_name == kDSH_Key_isControlJoystickFixed)				return_value = "icjf";
 		
+		else if(t_name == kDSH_Key_selectedCharacter)					return_value = "scharacter";
+		else if(t_name == kDSH_Key_isCharacterUnlocked_int1)			return_value = "icu%d";
+		
 		return return_value;
 	}
 	
@@ -293,7 +299,7 @@ public:
 		
 		Json::Value data;
 		
-		for(int i = kSaveUserData_Key_star;i<=kSaveUserData_Key_nick;i++)
+		for(int i = kSaveUserData_Key_star;i<=kSaveUserData_Key_character;i++)
 		{
 			writeParamForKey(data, SaveUserData_Key(i));
 		}
@@ -365,6 +371,13 @@ public:
 		}
 		
 		setStringForKey(kDSH_Key_nick, data[getKey(kDSH_Key_nick)].asString().c_str());
+		
+		setIntegerForKey(kDSH_Key_selectedCharacter, data[getKey(kDSH_Key_selectedCharacter)].asInt());
+		for(int i=1;i<5;i++)
+		{
+			bool t_unlocked = data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i].asBool();
+			setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, t_unlocked);
+		}
 	}
 	
 	void writeParamForKey(Json::Value& data, SaveUserData_Key t_key)
@@ -432,6 +445,12 @@ public:
 		else if(t_key == kSaveUserData_Key_nick)
 		{
 			data[getKey(kDSH_Key_nick)] = getStringForKey(kDSH_Key_nick);
+		}
+		else if(t_key == kSaveUserData_Key_character)
+		{
+			data[getKey(kDSH_Key_selectedCharacter)] = getIntegerForKey(kDSH_Key_selectedCharacter);
+			for(int i=2;i<=5;i++)
+				data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i] = getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i);
 		}
 	}
 	
@@ -507,6 +526,10 @@ public:
 		setIntegerForKey(kDSH_Key_clearStageCnt, 0);
 		
 		setStringForKey(kDSH_Key_nick, "");
+		
+		setIntegerForKey(kDSH_Key_selectedCharacter, 0);
+		for(int i=2;i<=5;i++)
+			setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, true);
 	}
 	
 	bool isCheatKeyEnable()

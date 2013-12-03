@@ -11,20 +11,23 @@
 
 #include "cocos2d.h"
 #include "hspConnector.h"
+#include "cocos-ext.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 using namespace std;
 
 enum ShopCode{
 	kSC_empty = 0,
 	kSC_ruby,
 	kSC_gold,
-	kSC_heart
+	kSC_heart,
+	kSC_character
 };
 
 class HeartTime;
 class LoadingLayer;
-class ShopPopup : public CCLayer
+class ShopPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -52,6 +55,15 @@ private:
 	LoadingLayer* loading_layer;
 	
 	CCSprite* main_case;
+	CCTableView* character_table;
+	
+	void cellAction(CCObject* sender);
+	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
+	virtual void scrollViewDidScroll(CCScrollView* view);
+    virtual void scrollViewDidZoom(CCScrollView* view);
+	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
+    virtual CCSize cellSizeForTable(CCTableView *table);
+    virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
 	bool is_menu_enable;
 	
