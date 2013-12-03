@@ -69,7 +69,7 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 	virtual void onEnterTransitionDidFinish();
-	
+		
 private:
 	
 	PlayUI* myUI;
