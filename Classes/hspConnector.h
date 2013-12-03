@@ -198,7 +198,8 @@ public:
     
     long long int getHSPMemberNo();
 	string getKakaoID();
-    
+    string getKakaoProfileURL();
+	string getKakaoNickname();
     bool setupHSPonIOS(int hspGameNo,string hspGameID,string hspGameVersion,void* launchOptions);
 
     void login(Json::Value param,Json::Value callbackParam,jsonSelType func);

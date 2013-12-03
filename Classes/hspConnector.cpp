@@ -117,7 +117,15 @@ long long int hspConnector::getHSPMemberNo(){
 }
 
 string hspConnector::getKakaoID(){
-	return this->myKakaoInfo["user_id"].asString();
+	return this->myKakaoInfo.get("user_id", "").asString();
+}
+
+string hspConnector::getKakaoProfileURL(){
+	return this->myKakaoInfo.get("profile_image_url", "").asString();
+}
+
+string hspConnector::getKakaoNickname(){
+	return this->myKakaoInfo.get("nickname", "").asString();
 }
 
 
