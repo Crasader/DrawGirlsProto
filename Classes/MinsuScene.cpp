@@ -77,7 +77,7 @@ void MinsuScene::successAction()
 	}
 	else
 	{
-		CCLayer* testchar = KS::loadCCBI<CCLayer*>(this, "testcharacter.ccbi").first;
+		CCLayer* testchar = KS::loadCCBIForFullPath<CCLayer*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + "testcharacter.ccbi").first;
 		testchar->setPosition(ccp(240,250));
 		addChild(testchar);
 	}

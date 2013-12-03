@@ -138,31 +138,36 @@ namespace KS
 		///////////////////////
 		CCNode* p;
 		{
-			if (fullPath == "")
+			do
 			{
-        return NULL;
-			}
+				if (fullPath == "")
+				{
+					p = nullptr;
+					break;
+				}
+				
+				std::string strCCBFileName(fullPath);
+				std::string strSuffix(".ccbi");
+				// Add ccbi suffix
+				if (!CCBReader::endsWith(strCCBFileName.c_str(), strSuffix.c_str()))
+				{
+					strCCBFileName += strSuffix;
+				}
+				
+				std::string strPath = CCFileUtils::sharedFileUtils()->fullPathForFilename(strCCBFileName.c_str());
+				unsigned long size = 0;
+				
+				unsigned char * pBytes = CCFileUtils::sharedFileUtils()->getFileData(strPath.c_str(), "rb", &size);
+				CCData *data = new CCData(pBytes, size);
+				CC_SAFE_DELETE_ARRAY(pBytes);
+				
+				CCNode *ret = reader->readNodeGraphFromData(data, thiz, CCDirector::sharedDirector()->getWinSize());
+				
+				data->release();
+				
+				p = ret;
+			}while(0);
 			
-			std::string strCCBFileName(fullPath);
-			std::string strSuffix(".ccbi");
-			// Add ccbi suffix
-			if (!CCBReader::endsWith(strCCBFileName.c_str(), strSuffix.c_str()))
-			{
-        strCCBFileName += strSuffix;
-			}
-			
-			std::string strPath = CCFileUtils::sharedFileUtils()->fullPathForFilename(strCCBFileName.c_str());
-			unsigned long size = 0;
-			
-			unsigned char * pBytes = CCFileUtils::sharedFileUtils()->getFileData(strPath.c_str(), "rb", &size);
-			CCData *data = new CCData(pBytes, size);
-			CC_SAFE_DELETE_ARRAY(pBytes);
-			
-			CCNode *ret = reader->readNodeGraphFromData(data, thiz, CCDirector::sharedDirector()->getWinSize());
-			
-			data->release();
-			
-			p = ret;
 		}
 
 		//////////////////////////
