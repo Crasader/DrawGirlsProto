@@ -10,16 +10,18 @@
 #define __DGproto__CardSettingPopup__
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 
 //#include <deque>
 #include <map>
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 using namespace std;
 
 class CardListViewer;
 class ListViewerScroll;
-class CardSettingPopup : public CCLayer
+class CardSettingPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -49,18 +51,23 @@ private:
 	CCNode* star_parent;
 	CCMenu* mount_menu;
 	
-	CCSprite* selected_img;
-	CCSprite* check_img;
-	
 	map<int, CCPoint> align_default_position_list;
 	
 	CCSprite* align_list_img;
-	CardListViewer* my_clv;
-	ListViewerScroll* t_lvs;
 	
-	CCPoint inner_card_distance;
+	int last_mount_idx;
+	int last_select_idx;
+	CCTableView* card_table;
 	
 	int recent_mounted_number;
+	
+	void cellAction(CCObject* sender);
+	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
+	virtual void scrollViewDidScroll(CCScrollView* view);
+    virtual void scrollViewDidZoom(CCScrollView* view);
+	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
+    virtual CCSize cellSizeForTable(CCTableView *table);
+    virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
 	void showPopup();
 	void endShowPopup();
@@ -71,7 +78,6 @@ private:
 	void removeMountingCard();
 	void mountingCard(int card_stage, int card_level);
 	
-	void createCardList();
 	void alignChange();
 	void addMountedCase();
 	void removeMountedCase();
