@@ -20,6 +20,7 @@ void UnknownFriends::deleteById(uint64 kakaoId)
 		}
 	}
 }
+
 UnknownFriendsData* UnknownFriends::findById(uint64 kakaoId)
 {
 	for(auto& i : m_friends)
@@ -33,12 +34,10 @@ UnknownFriendsData* UnknownFriends::findById(uint64 kakaoId)
 	return nullptr;
 }
 
-void UnknownFriends::addById(uint64 kakaoId)
+void UnknownFriends::add(const UnknownFriendsData& d)
 {
-	if(!findById(kakaoId))
+	if(!findById(d.userId))
 	{
-		UnknownFriendsData ufd;
-		ufd.userId = kakaoId;
-		m_friends.push_back(ufd);
+		m_friends.push_back(d);
 	}
 }
