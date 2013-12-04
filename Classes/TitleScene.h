@@ -65,10 +65,6 @@ private:
 	SEL_CallFunc save_delegate;
 	
 	CCEditBox* input_text;
-//	CCTextFieldTTF* input_text;
-//    bool was_open_text;
-	
-//	void endCloseTextInput();
 	
 	CCSprite* nick_back;
 	
@@ -77,64 +73,48 @@ private:
     virtual void editBoxTextChanged(CCEditBox* editBox, const std::string& text);
     virtual void editBoxReturn(CCEditBox* editBox);
 	
-//	virtual bool onTextFieldInsertText(CCTextFieldTTF* sender, const char* text, int nLen);
-//	virtual bool onTextFieldDetachWithIME(CCTextFieldTTF * sender);
-//	virtual bool onTextFieldAttachWithIME(CCTextFieldTTF * sender);
-	
-//	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-//	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-//	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-//	virtual void ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-//	virtual void registerWithTouchDispatcher();
-	
-	void startGetPuzzleList();
 	
 	void resultLogin(Json::Value result_data);
 	
-	void startGetUserData();
-	
-	void resultGetUserData(Json::Value result_data);
-	
-	void resultSaveUserData(Json::Value result_data);
-	
-	void startGetCardsInfo();
-	
-	void resultLoadedCardData(Json::Value result_data);
-	
-	void successAction2();
-	
-	void failAction2();
-	
-	void startDownloadCardImage();
-	
-	void downloadingAction2();
-	
-	void startDownload2();
-	
-	void startSaveUserData();
-	 
-	void changeScene();
-
-	void resultGetPuzzleList(Json::Value result_data);
 	void startGetCommonSetting();
 	void resultGetCommonSetting(Json::Value result_data);
 	
+	void startGetFriendList();
+	void resultGetFriendList(Json::Value result_data);
+	
+	void startGetCharacterInfo();
+	void resultGetCharacterInfo(Json::Value result_data);
+	void startDownloadCharacter();
+	void startDownload3();
+	void successAction3();
+	void failAction3();
+	
+	void startGetUserData();
+	void resultGetUserData(Json::Value result_data);
+	void startSaveUserData();
+	void resultSaveUserData(Json::Value result_data);
+	
+	void startGetCardsInfo();
+	void resultLoadedCardData(Json::Value result_data);
+	void startDownloadCardImage();
+	void startDownload2();
+	void downloadingAction2();
+	void successAction2();
+	void failAction2();
+	
+	void startGetPuzzleList();
+	void resultGetPuzzleList(Json::Value result_data);
 	void startDownloadGameInfo();
-	
-	bool is_menu_enable;
-	
-	void menuAction(CCObject* sender);
-	
-	
+	void startDownload();
+	void downloadingAction();
 	void successAction();
-	
 	void failAction();
 	
-	void downloadingAction();
-	
-	void startDownload();
-	
 	void endingAction();
+	void changeScene();
+	
+	bool is_menu_enable;
+	void menuAction(CCObject* sender);
 };
 
 #endif /* defined(__DGproto__TitleScene__) */

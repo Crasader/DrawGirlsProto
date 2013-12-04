@@ -46,16 +46,23 @@ ScrollMenu* ScrollMenu::createWithItems(CCMenuItem* item, va_list args)
 
 ScrollMenu::ScrollMenu()
 {
+	touch_priority = kCCMenuHandlerPriority;
 }
 
 ScrollMenu::~ScrollMenu()
 {
 }
 
+void ScrollMenu::setTouchPriority(int t_touch_priority)
+{
+	touch_priority = t_touch_priority;
+	CCMenu::setTouchPriority(touch_priority);
+}
+
 void ScrollMenu::registerWithTouchDispatcher()
 {
-//	CCDirector* pDirector = CCDirector::sharedDirector();
-//	pDirector->getTouchDispatcher()->addTargetedDelegate(this, kCCMenuHandlerPriority, false);
+	CCDirector* pDirector = CCDirector::sharedDirector();
+	pDirector->getTouchDispatcher()->addTargetedDelegate(this, touch_priority, false);
 }
 
 bool ScrollMenu::ccTouchBegan(CCTouch* touch, CCEvent* event)

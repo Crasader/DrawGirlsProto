@@ -57,6 +57,7 @@ enum FailCode{
 enum CardSortType{
 	kCST_default = 0,
 	kCST_take,
+	kCST_takeReverse,
 	kCST_gradeUp, // rank
 	kCST_gradeDown // rank
 };
@@ -177,6 +178,7 @@ public:
 	void addHasGottenCardNumber(int card_number);
 	
 	int getHasGottenCardsDataCardNumber(int index);
+	CardSortInfo getHasGottenCardData(int index);
 	
 	int getHasGottenCardsSize();
 	
@@ -361,6 +363,10 @@ private:
 	CC_SYNTHESIZE(int, remove_message_mail_no, RemoveMessageMailNo);
 	CC_SYNTHESIZE(int, heart_max, HeartMax);
 	CC_SYNTHESIZE(int, heart_cool_time, HeartCoolTime);
+	CC_SYNTHESIZE(int, challenge_cool_time, ChallengeCoolTime);
+	CC_SYNTHESIZE(int, game_friend_max, GameFriendMax);
+	CC_SYNTHESIZE(int, help_cool_time, HelpCoolTime);
+	CC_SYNTHESIZE(int, msg_remove_day, MsgRemoveDay);
 };
 
 #endif

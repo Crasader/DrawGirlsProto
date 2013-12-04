@@ -14,6 +14,13 @@
 USING_NS_CC;
 using namespace std;
 
+class TempDownload
+{
+public:
+	string url;
+	string filename;
+};
+
 class MinsuScene : public cocos2d::CCLayer
 {
 public:
@@ -28,6 +35,13 @@ public:
 	
 private:
 	
+	vector<TempDownload> download_list;
+	
+	int ing_download_cnt;
+	
+	void startAction();
+	void successAction();
+	void failAction();
 };
 
 #endif /* defined(__DGproto__MinsuScene__) */

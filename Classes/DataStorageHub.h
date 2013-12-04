@@ -373,7 +373,7 @@ public:
 		setStringForKey(kDSH_Key_nick, data[getKey(kDSH_Key_nick)].asString().c_str());
 		
 		setIntegerForKey(kDSH_Key_selectedCharacter, data[getKey(kDSH_Key_selectedCharacter)].asInt());
-		for(int i=1;i<5;i++)
+		for(int i=1;i<NSDS_GI(kSDS_GI_characterCount_i);i++)
 		{
 			bool t_unlocked = data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i].asBool();
 			setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, t_unlocked);
@@ -449,7 +449,7 @@ public:
 		else if(t_key == kSaveUserData_Key_character)
 		{
 			data[getKey(kDSH_Key_selectedCharacter)] = getIntegerForKey(kDSH_Key_selectedCharacter);
-			for(int i=2;i<=5;i++)
+			for(int i=2;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 				data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i] = getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i);
 		}
 	}
@@ -528,7 +528,7 @@ public:
 		setStringForKey(kDSH_Key_nick, "");
 		
 		setIntegerForKey(kDSH_Key_selectedCharacter, 0);
-		for(int i=2;i<=5;i++)
+		for(int i=2;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 			setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, true);
 	}
 	

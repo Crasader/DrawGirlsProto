@@ -20,6 +20,9 @@ public:
 	bool isTouching;
 	CCPoint m_touchesStart;
 	CCPoint m_touchesEnd;
+	int touch_priority;
+	
+	virtual void setTouchPriority(int t_touch_priority);
 	
 	virtual void registerWithTouchDispatcher();
 	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);

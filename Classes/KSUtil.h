@@ -114,14 +114,69 @@ namespace KS
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		CCNode* p = reader->readNodeGraphFromFile(fn.c_str(), thiz);
-		pair<NodeT, CCBAnimationManager*> ret;
-		ret.first = dynamic_cast<NodeT>(p);
-		ret.second = reader->getAnimationManager();
+		pair<NodeT, CCBAnimationManager*> retValue;
+		retValue.first = dynamic_cast<NodeT>(p);
+		retValue.second = reader->getAnimationManager();
 		reader->release();
 		
-		return ret;
+		return retValue;
 	}
-	
+	/*
+	 CCNode* CCBReader::readNodeGraphFromFile(const char* pCCBFileName, CCObject* pOwner)
+	 {
+	 return this->readNodeGraphFromFile(pCCBFileName, pOwner, CCDirector::sharedDirector()->getWinSize());
+	 }
+	 
+	 CCNode* CCBReader::readNodeGraphFromFile(const char *pCCBFileName, CCObject *pOwner, const CCSize &parentSize)
+
+	 */
+	template <typename NodeT>
+	pair<NodeT, CCBAnimationManager*> loadCCBIForFullPath(CCObject* thiz, const std::string fullPath)
+	{
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		///////////////////////
+		CCNode* p;
+		{
+			do
+			{
+				if (fullPath == "")
+				{
+					p = nullptr;
+					break;
+				}
+				
+				std::string strCCBFileName(fullPath);
+				std::string strSuffix(".ccbi");
+				// Add ccbi suffix
+				if (!CCBReader::endsWith(strCCBFileName.c_str(), strSuffix.c_str()))
+				{
+					strCCBFileName += strSuffix;
+				}
+				
+				std::string strPath = CCFileUtils::sharedFileUtils()->fullPathForFilename(strCCBFileName.c_str());
+				unsigned long size = 0;
+				
+				unsigned char * pBytes = CCFileUtils::sharedFileUtils()->getFileData(strPath.c_str(), "rb", &size);
+				CCData *data = new CCData(pBytes, size);
+				CC_SAFE_DELETE_ARRAY(pBytes);
+				
+				CCNode *ret = reader->readNodeGraphFromData(data, thiz, CCDirector::sharedDirector()->getWinSize());
+				
+				data->release();
+				
+				p = ret;
+			}while(0);
+			
+		}
+
+		//////////////////////////
+		pair<NodeT, CCBAnimationManager*> retValue;
+		retValue.first = dynamic_cast<NodeT>(p);
+		retValue.second = reader->getAnimationManager();
+		reader->release();
+		return retValue;
+	}
 }
 
 class KS_Util

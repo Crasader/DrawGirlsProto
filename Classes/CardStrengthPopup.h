@@ -1,27 +1,29 @@
 //
-//  CardSettingPopup.h
+//  CardStrengthPopup.h
 //  DGproto
 //
-//  Created by 사원3 on 2013. 11. 20..
+//  Created by 사원3 on 2013. 12. 3..
 //
 //
 
-#ifndef __DGproto__CardSettingPopup__
-#define __DGproto__CardSettingPopup__
+#ifndef __DGproto__CardStrengthPopup__
+#define __DGproto__CardStrengthPopup__
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
-
-//#include <deque>
-#include <map>
 
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
-class CardListViewer;
-class ListViewerScroll;
-class CardSettingPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
+enum CardStrengthAlign{
+	kCardStrengthAlign_rank = 0,
+	kCardStrengthAlign_rankReverse,
+	kCardStrengthAlign_take,
+	kCardStrengthAlign_takeReverse
+};
+class CardSortInfo;
+class CardStrengthPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -31,7 +33,7 @@ public:
     void menuAction(CCObject* pSender);
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
-    CREATE_FUNC(CardSettingPopup);
+    CREATE_FUNC(CardStrengthPopup);
 	
 	virtual void onEnter();
 	
@@ -44,22 +46,28 @@ private:
 	CCSprite* main_case;
 	CCSprite* gray;
 	
-	CCSprite* selected_card_img;
-	CCMenu* selected_card_menu;
-	CCSprite* card_option_case;
-	CCLabelTTF* card_option_script;
-	CCNode* star_parent;
-	CCMenu* mount_menu;
+	CCSprite* target_card;
+	CCMenu* offering_menu;
 	
-	map<int, CCPoint> align_default_position_list;
+	int recent_offering_number;
 	
-	CCSprite* align_list_img;
+	CCLabelTTF* pow_label;
+	CCLabelTTF* spd_label;
+	CCLabelTTF* dex_label;
+	CCLabelTTF* dur_label;
 	
-	int last_mount_idx;
-	int last_select_idx;
-	CCTableView* card_table;
+	CCLabelTTF* up_pow_label;
+	CCLabelTTF* up_spd_label;
+	CCLabelTTF* up_dex_label;
+	CCLabelTTF* up_dur_label;
 	
-	int recent_mounted_number;
+	CCTableView* offering_table;
+	vector<CardSortInfo> offering_list;
+	
+	CardStrengthAlign recent_align;
+	
+	void setOfferingList();
+	void alignOfferingList(CardStrengthAlign t_align);
 	
 	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
@@ -75,14 +83,8 @@ private:
 	void endHidePopup();
 	
 	CCPoint getContentPosition(int t_tag);
-	void removeMountingCard();
-	void mountingCard(int card_stage, int card_level);
-	
-	void alignChange();
-	void addMountedCase();
-	void removeMountedCase();
 	
 	bool is_menu_enable;
 };
 
-#endif /* defined(__DGproto__CardSettingPopup__) */
+#endif /* defined(__DGproto__CardStrengthPopup__) */

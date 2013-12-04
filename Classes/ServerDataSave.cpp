@@ -332,6 +332,24 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_eventCount_i)				rv = "eventCount";
 	else if(t_key == kSDS_GI_event_int1_code_i)			rv = "event%d_code";
 	else if(t_key == kSDS_GI_event_int1_thumbnail_s)	rv = "event%d_thumbnail";
+	else if(t_key == kSDS_GI_characterVersion_i)		rv = "characterVersion";
+	else if(t_key == kSDS_GI_characterCount_i)			rv = "characterCount";
+	else if(t_key == kSDS_GI_characterInfo_int1_no_i)		rv = "ci%d_no";
+	else if(t_key == kSDS_GI_characterInfo_int1_name_s)		rv = "ci%d_name";
+	else if(t_key == kSDS_GI_characterInfo_int1_purchaseInfo_type_s)	rv = "ci%d_pi_type";
+	else if(t_key == kSDS_GI_characterInfo_int1_purchaseInfo_value_i)	rv = "ci%d_pi_value";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_gold_d)		rv = "ci%d_si_gold";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_percent_d)		rv = "ci%d_si_percent";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_feverTime_i)	rv = "ci%d_si_feverTime";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_speed_d)		rv = "ci%d_si_speed";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_life_i)		rv = "ci%d_si_life";
+	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s)	rv = "ci%d_ri_ccbiID";
+	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s)	rv = "ci%d_ri_ccbi";
+	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_imageID_s)	rv = "ci%d_ri_imageID";
+	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_plist_s)	rv = "ci%d_ri_plist";
+	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_pvrccz_s)	rv = "ci%d_ri_pvrccz";
+	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_size_i)	rv = "ci%d_ri_size";
+	else if(t_key == kSDS_GI_characterInfo_int1_comment_s)				rv = "ci%d_comment";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";
