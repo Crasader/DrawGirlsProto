@@ -16,8 +16,8 @@ struct UnknownFriendsData
 {
 	uint64 userId;
 	std::string nick;
-	int joinDate;
-	int lastDate;
+	uint64 joinDate;
+	uint64 lastDate;
 };
 
 class UnknownFriends
@@ -40,7 +40,7 @@ public:
 	const std::vector<UnknownFriendsData>& getFriends(){return m_friends;}
 	void deleteById(uint64 kakaoId);
 	UnknownFriendsData* findById(uint64 kakaoId);
-	void addById(uint64 kakaoId);
+	void add(const UnknownFriendsData& d);
 };
 
 

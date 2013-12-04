@@ -135,7 +135,10 @@ void TitleScene::resultGetFriendList(Json::Value result_data)
 		for(int i=0; i<result_data["list"].size(); i++)
 		{
 			UnknownFriendsData ufd;
-			ufd.userId = result_data["list"][i].asUInt64();
+			ufd.userId = result_data["list"][i]["memberID"].asUInt64();
+			ufd.joinDate = result_data["list"][i]["joinDate"].asUInt64();
+			ufd.lastDate = result_data["list"][i]["lastDate"].asUInt64();
+			ufd.nick = result_data["list"][i]["nick"].asString();
 			UnknownFriends::getInstance()->addById(ufd.userId);
 		}
 		
