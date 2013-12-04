@@ -139,7 +139,7 @@ void TitleScene::resultGetFriendList(Json::Value result_data)
 			ufd.joinDate = result_data["list"][i]["joinDate"].asUInt64();
 			ufd.lastDate = result_data["list"][i]["lastDate"].asUInt64();
 			ufd.nick = result_data["list"][i]["nick"].asString();
-			UnknownFriends::getInstance()->addById(ufd.userId);
+			UnknownFriends::getInstance()->add(ufd);
 		}
 		
 		startGetCharacterInfo();
