@@ -11,6 +11,8 @@
 #include "HeartTime.h"
 #include "LoadingLayer.h"
 #include "StageSettingPopup.h"
+#include "KSUtil.h"
+#include "StageImgLoader.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -50,7 +52,11 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	if(t_code == recent_shop_code)
 		return;
 	
-	if(recent_shop_code != kSC_empty || recent_shop_code != kSC_character)
+	if(recent_shop_code == kSC_character)
+	{
+		character_table->removeFromParent();
+	}
+	else if(recent_shop_code != kSC_empty)
 	{
 		main_case->removeChildByTag(kSP_MT_content1);
 		main_case->removeChildByTag(kSP_MT_content2);
@@ -69,6 +75,8 @@ void ShopPopup::setShopCode(ShopCode t_code)
 //		temp_back->setAnchorPoint(CCPointZero);
 //		temp_back->setPosition(ccp(240-table_size.width/2.f, 127-table_size.height/2.f));
 //		main_case->addChild(temp_back, kSP_Z_content);
+		
+		last_select_idx = -1;
 		
 		character_table	= CCTableView::create(this, table_size);
 		character_table->setAnchorPoint(CCPointZero);
@@ -128,14 +136,34 @@ void ShopPopup::cellAction(CCObject* sender)
 	if(tag >= kSP_MT_characterUnlockBase) // unlock
 	{
 		bool is_unlock_enable = false;
-		// check unlock enable?
+		
+		CCNode* menu_node = ((CCNode*)sender)->getParent();
+		CCNode* cell_node = menu_node->getParent();
+		int unlock_idx = ((CCTableViewCell*)cell_node)->getIdx();
+		
+		string condition_type = NSDS_GS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, unlock_idx+1);
+		int condition_value = NSDS_GI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, unlock_idx+1);
+		
+		if(condition_type == "gold")
+			is_unlock_enable = mySGD->getGold() >= condition_value;
+		else if(condition_type == "ruby")
+			is_unlock_enable = mySGD->getStar() >= condition_value;
 		
 		if(is_unlock_enable)
 		{
+			if(condition_type == "gold")
+				mySGD->setGold(mySGD->getGold() - condition_value);
+			else if(condition_type == "ruby")
+				mySGD->setStar(mySGD->getStar() - condition_value);
+			
 			myDSH->setIntegerForKey(kDSH_Key_selectedCharacter, tag-kSP_MT_characterUnlockBase);
 			myDSH->setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, tag-kSP_MT_characterUnlockBase, true);
-			myDSH->saveUserData({kSaveUserData_Key_character}, nullptr);
-			character_table->reloadData();
+			myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_star, kSaveUserData_Key_character}, nullptr);
+			
+			if(last_select_idx != -1)
+				character_table->updateCellAtIndex(last_select_idx);
+			
+			character_table->updateCellAtIndex(unlock_idx);
 		}
 		else
 		{
@@ -147,7 +175,13 @@ void ShopPopup::cellAction(CCObject* sender)
 	else // select
 	{
 		myDSH->setIntegerForKey(kDSH_Key_selectedCharacter, tag-kSP_MT_characterBase);
-		character_table->reloadData();
+		
+		if(last_select_idx != -1)
+			character_table->updateCellAtIndex(last_select_idx);
+		
+		CCNode* menu_node = ((CCNode*)sender)->getParent();
+		CCNode* cell_node = menu_node->getParent();
+		character_table->updateCellAtIndex(((CCTableViewCell*)cell_node)->getIdx());
 		
 		is_menu_enable = true;
 	}
@@ -163,7 +197,19 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 	character_back->setPosition(ccp(60, 88));
 	cell->addChild(character_back, kCharacterCellZorder_back);
 	
-	// addChild name, img, script
+	CCLabelTTF* name_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_name_s, idx+1).c_str(), mySGD->getFont().c_str(), 13);
+	name_label->setColor(ccBLACK);
+	name_label->setPosition(ccp(60,152));
+	cell->addChild(name_label, kCharacterCellZorder_content);
+	
+	CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath()+NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, idx+1)+".ccbi").first;
+	character_img->setPosition(ccp(60,95));
+	cell->addChild(character_img, kCharacterCellZorder_content);
+	
+	CCLabelTTF* comment_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_s, idx+1).c_str(), mySGD->getFont().c_str(), 13);
+	comment_label->setColor(ccBLACK);
+	comment_label->setPosition(ccp(60,53));
+	cell->addChild(comment_label, kCharacterCellZorder_content);
 	
 	if(idx > 0 && !myDSH->getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, idx))
 	{
@@ -171,9 +217,22 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 		lock_img->setPosition(ccp(60,110));
 		cell->addChild(lock_img, kCharacterCellZorder_lock, kCharacterCellZorder_lock);
 		
+		string condition_type = NSDS_GS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, idx+1);
+		int condition_value = NSDS_GI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, idx+1);
+		
 		CCSprite* n_unlock = CCSprite::create("character_buy.png");
+		CCLabelTTF* n_condition_label = CCLabelTTF::create(CCString::createWithFormat("%s %d", condition_type.c_str(), condition_value)->getCString(), mySGD->getFont().c_str(), 12);
+		n_condition_label->setColor(ccBLACK);
+		n_condition_label->setPosition(ccp(n_unlock->getContentSize().width/2.f, n_unlock->getContentSize().height/2.f));
+		n_unlock->addChild(n_condition_label);
+		
 		CCSprite* s_unlock = CCSprite::create("character_buy.png");
 		s_unlock->setColor(ccGRAY);
+		CCLabelTTF* s_condition_label = CCLabelTTF::create(CCString::createWithFormat("%s %d", condition_type.c_str(), condition_value)->getCString(), mySGD->getFont().c_str(), 12);
+		s_condition_label->setColor(ccBLACK);
+		s_condition_label->setPosition(ccp(s_unlock->getContentSize().width/2.f, s_unlock->getContentSize().height/2.f));
+		s_unlock->addChild(s_condition_label);
+		
 		
 		CCMenuItem* unlock_item = CCMenuItemSprite::create(n_unlock, s_unlock, this, menu_selector(ShopPopup::cellAction));
 		unlock_item->setTag(kSP_MT_characterUnlockBase+idx);
@@ -188,6 +247,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 	{
 		if(idx == myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))
 		{
+			last_select_idx = idx;
 			CCSprite* selected_img = CCSprite::create("character_on.png");
 			selected_img->setPosition(ccp(60, 88));
 			cell->addChild(selected_img, kCharacterCellZorder_selected, kCharacterCellZorder_selected);
@@ -229,7 +289,7 @@ CCSize ShopPopup::cellSizeForTable(CCTableView *table)
 }
 unsigned int ShopPopup::numberOfCellsInTableView(CCTableView *table)
 {
-	return 5;
+	return NSDS_GI(kSDS_GI_characterCount_i);
 }
 
 // on "init" you need to initialize your instance

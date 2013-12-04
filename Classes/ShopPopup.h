@@ -57,6 +57,8 @@ private:
 	CCSprite* main_case;
 	CCTableView* character_table;
 	
+	int last_select_idx;
+	
 	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
 	virtual void scrollViewDidScroll(CCScrollView* view);
