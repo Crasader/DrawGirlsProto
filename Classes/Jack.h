@@ -165,7 +165,7 @@ private:
 	void myInit();
 };
 
-class Jack : public CCNode
+class Jack : public CCNode, public CCBAnimationManagerDelegate
 {
 public:
 	static Jack* create();
@@ -230,6 +230,8 @@ public:
 	
 	void setJackState(jackState t_s);
 	
+	virtual void completedAnimationSequenceNamed(const char *name);
+	
 private:
 	CCSprite* touchPointSpr_byJoystick;
 	CCSprite* directionSpr_byJoystick;
@@ -269,8 +271,11 @@ private:
 	Chaos* t_chaos;
 	
 	CCSprite* jackImg;
-	CCSprite* jack_drawing;
+	CCBAnimationManager* jack_ccb_manager;
+	CCSprite* die_particle;
+//	CCSprite* jack_drawing;
 	CCSprite* jack_barrier;
+	IntDirection jack_img_direction;
 	SpeedChangeEffect* speed_change_img;
 	
 	int moveValue;
