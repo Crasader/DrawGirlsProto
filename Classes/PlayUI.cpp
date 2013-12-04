@@ -189,12 +189,12 @@ void FeverParent::addFeverGage (int count)
 		unschedule(schedule_selector(FeverParent::keeping));
 		is_keeping = false;
 		
-		CCDelayTime* t_delay = CCDelayTime::create(10.f);
+		CCDelayTime* t_delay = CCDelayTime::create(NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1));
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(FeverParent::endFever));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 		runAction(t_seq);
 		
-		CCProgressFromTo* progress_to = CCProgressFromTo::create(10.f, 100.f, 0.f);
+		CCProgressFromTo* progress_to = CCProgressFromTo::create(NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1), 100.f, 0.f);
 		fever_top->runAction(progress_to);
 	}
 	else
@@ -784,9 +784,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			my_fp->addFeverGage(up_count);
 		}
 		
-		if(t_p >= t_beforePercentage + JM_CONDITION)
+		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f)
 		{
-			int cmCnt = (t_p - t_beforePercentage)/JM_CONDITION;
+			int cmCnt = (t_p - t_beforePercentage)/NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f;
 			
 			string missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 			int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
@@ -1651,7 +1651,7 @@ void PlayUI::myInit ()
 	
 	jack_array = new CCArray(1);
 	
-	jack_life = 2;
+	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
@@ -1904,7 +1904,7 @@ void PlayUI::continueAction ()
 	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	addGameTime30Sec();
-	jack_life = 2;
+	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
