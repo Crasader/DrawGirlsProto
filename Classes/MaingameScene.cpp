@@ -235,32 +235,35 @@ void Maingame::finalSetting()
 				pattern_code.push_back(t_code);
 		}
 		
-		CCNode* exit_target = this;
-		exit_target->onExit();
-		
-		ASPopupView* t_popup = ASPopupView::create(-200);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-		
-		PatternTutorialContent* t_container = PatternTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
-																			 {
-																				 mControl->isStun = false;
-																				 
-																				 for(int i=0;i<pattern_code.size();i++)
+		if(pattern_code.size() > 0)
+		{
+			CCNode* exit_target = this;
+			exit_target->onExit();
+			
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			PatternTutorialContent* t_container = PatternTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																				 {
+																					 mControl->isStun = false;
+																					 
+																					 for(int i=0;i<pattern_code.size();i++)
 																						 myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, pattern_code[i], true);
-																				 
-																				 exit_target->onEnter();
-																				 t_popup->removeFromParent();
-																			 }, pattern_code);
-		t_popup->setContainerNode(t_container);
-		exit_target->getParent()->addChild(t_popup);
+																					 
+																					 exit_target->onEnter();
+																					 t_popup->removeFromParent();
+																				 }, pattern_code);
+			t_popup->setContainerNode(t_container);
+			exit_target->getParent()->addChild(t_popup);
+		}
 	}
 }
 
