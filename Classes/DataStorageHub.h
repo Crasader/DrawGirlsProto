@@ -21,6 +21,7 @@ using namespace std;
 typedef enum t_DSH_Key{
 	kDSH_Key_savedStar,
 	kDSH_Key_savedGold,
+	kDSH_Key_savedFriendPoint,
 	kDSH_Key_notFirstExe,
 	kDSH_Key_bgmOff,
 	kDSH_Key_effectOff,
@@ -73,6 +74,7 @@ enum ControlJoystickDirection{
 enum SaveUserData_Key{
 	kSaveUserData_Key_star = 1,
 	kSaveUserData_Key_gold,
+	kSaveUserData_Key_friendPoint,
 	kSaveUserData_Key_item,
 	kSaveUserData_Key_cardsInfo,
 	kSaveUserData_Key_highScore,
@@ -240,6 +242,7 @@ public:
 		
 		else if(t_name == kDSH_Key_savedStar)							return_value = "ss";
 		else if(t_name == kDSH_Key_savedGold)							return_value = "sg";
+		else if(t_name == kDSH_Key_savedFriendPoint)					return_value = "sfp";
 		else if(t_name == kDSH_Key_haveItemCnt_int1)					return_value = "hic%d";
 		
 		else if(t_name == kDSH_Key_heartCnt)							return_value = "hc";
@@ -306,6 +309,7 @@ public:
 		
 		Json::FastWriter writer;
 		param["data"] = writer.write(data);
+		param["nick"] = getStringForKey(kDSH_Key_nick);
 		return param;
 	}
 	
@@ -319,6 +323,7 @@ public:
 		
 		setIntegerForKey(kDSH_Key_savedStar, data[getKey(kDSH_Key_savedStar)].asInt());
 		setIntegerForKey(kDSH_Key_savedGold, data[getKey(kDSH_Key_savedGold)].asInt());
+		setIntegerForKey(kDSH_Key_savedFriendPoint, data[getKey(kDSH_Key_savedFriendPoint)].asInt());
 		
 		for(int i=kIC_attack;i<=kIC_randomChange;i++)
 			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt());
@@ -386,6 +391,8 @@ public:
 			data[getKey(kDSH_Key_savedStar)] = getIntegerForKey(kDSH_Key_savedStar);
 		else if(t_key == kSaveUserData_Key_gold)
 			data[getKey(kDSH_Key_savedGold)] = getIntegerForKey(kDSH_Key_savedGold);
+		else if(t_key == kSaveUserData_Key_friendPoint)
+			data[getKey(kDSH_Key_savedFriendPoint)] = getIntegerForKey(kDSH_Key_savedFriendPoint);
 		else if(t_key == kSaveUserData_Key_item)
 		{
 			for(int i=kIC_attack;i<=kIC_randomChange;i++)
@@ -468,6 +475,7 @@ public:
 		
 		Json::FastWriter writer;
 		param["data"] = writer.write(data);
+		param["nick"] = getStringForKey(kDSH_Key_nick);
 		
 		hspConnector::get()->command("updateUserData", param, t_selector);
 	}
@@ -481,6 +489,7 @@ public:
 	{
 		setIntegerForKey(kDSH_Key_savedStar, 1);
 		setIntegerForKey(kDSH_Key_savedGold, 10000);
+		setIntegerForKey(kDSH_Key_savedFriendPoint, 0);
 		
 		for(int i=kIC_attack;i<=kIC_randomChange;i++)
 			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0);

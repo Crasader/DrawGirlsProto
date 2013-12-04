@@ -157,6 +157,7 @@ void StarGoldData::resetLabels()
 {
 	star_label = NULL;
 	gold_label = NULL;
+	friend_point_label = NULL;
 }
 
 void StarGoldData::setStarLabel( CCLabelBMFont* t_label )
@@ -181,18 +182,32 @@ void StarGoldData::setGoldLabel( CCLabelBMFont* t_label )
 {
 	gold_label = t_label;
 }
-
 int StarGoldData::getGold()
 {
 	return myDSH->getIntegerForKey(kDSH_Key_savedGold);
 }
-
 void StarGoldData::setGold( int t_gold )
 {
 	myDSH->setIntegerForKey(kDSH_Key_savedGold, t_gold);
 
 	if(gold_label)
 		gold_label->setString(CCString::createWithFormat("%d", t_gold)->getCString());
+}
+
+void StarGoldData::setFriendPointLabel(CCLabelBMFont* t_label)
+{
+	friend_point_label = t_label;
+}
+int StarGoldData::getFriendPoint()
+{
+	return myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint);
+}
+void StarGoldData::setFriendPoint(int t_point)
+{
+	myDSH->setIntegerForKey(kDSH_Key_savedFriendPoint, t_point);
+	
+	if(friend_point_label)
+		friend_point_label->setString(CCString::createWithFormat("%d", t_point)->getCString());
 }
 
 int StarGoldData::getKeepGold()

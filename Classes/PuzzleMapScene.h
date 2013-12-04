@@ -71,6 +71,8 @@ enum PMS_MenuTag{
 	kPMS_MT_rubyShop,
 	kPMS_MT_goldShop,
 	kPMS_MT_lifeShop,
+	kPMS_MT_friendPoint,
+	kPMS_MT_friendPointClose,
 	kPMS_MT_loadingBack,
 	kPMS_MT_loadPuzzleInfo,
 	kPMS_MT_notLoaded,
@@ -249,6 +251,11 @@ private:
 	void resetStagePiece();
 	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;
+	CountingBMLabel* friend_point_label;
+	CCSprite* friend_point_popup;
+	
+	void closeFriendPointPopup();
+	
 	void showStageSettingPopup();
 	void hideStageSettingPopup();
 	

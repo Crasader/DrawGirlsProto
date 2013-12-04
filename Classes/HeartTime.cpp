@@ -105,6 +105,7 @@ void HeartTime::checkingTime ()
 }
 void HeartTime::myInit ()
 {
+	setPosition(CCPointZero);
 	is_checking = false;
 	int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_heartCnt);
 	for(int i=0;i<loop_cnt && i < mySGD->getHeartMax();i++)

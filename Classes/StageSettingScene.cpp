@@ -201,20 +201,20 @@ bool StageSettingScene::init()
 	
 	
 	CountingBMLabel* ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(108,top_case->getContentSize().height/2.f));
+	ruby_label->setPosition(ccp(94,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
 	
 	
 	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
+	gold_label->setPosition(ccp(185,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
 	
 	heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
+	heart_time->setPosition(ccp(250,top_case->getContentSize().height/2.f));
 	top_case->addChild(heart_time);
 	
 	is_menu_enable = true;
