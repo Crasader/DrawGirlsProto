@@ -136,7 +136,7 @@ void TitleScene::resultGetFriendList(Json::Value result_data)
 		{
 			UnknownFriendsData ufd;
 			ufd.userId = result_data["list"][i].asUInt64();
-			UnknownFriends::getInstance()->m_friends.push_back(ufd);
+			UnknownFriends::getInstance()->addById(ufd.userId);
 		}
 		
 		startGetCharacterInfo();
