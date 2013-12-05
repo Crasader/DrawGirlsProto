@@ -35,6 +35,8 @@ typedef enum tMenuTagClearPopup{
 	kMT_CP_rubyShop,
 	kMT_CP_goldShop,
 	kMT_CP_heartShop,
+	kMT_CP_friendPoint,
+	kMT_CP_friendPointClose,
 	kMT_CP_heartTime
 }MenuTagClearPopup;
 
@@ -64,6 +66,8 @@ bool ClearPopup::init()
 	
 	is_menu_enable = false;
 	is_loaded_list = false;
+	
+	friend_point_popup = NULL;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -116,19 +120,26 @@ bool ClearPopup::init()
 	addChild(top_case, kZ_CP_img);
 	
 	CountingBMLabel* ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(108,top_case->getContentSize().height/2.f));
+	ruby_label->setPosition(ccp(94,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
 	
 	CountingBMLabel* total_gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	total_gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
+	total_gold_label->setPosition(ccp(185,top_case->getContentSize().height/2.f));
 	top_case->addChild(total_gold_label);
 	
 	mySGD->setGoldLabel(total_gold_label);
 	
+	CountingBMLabel* friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "etc_font.fnt", 0.3f, "%d");
+	friend_point_label->setPosition(ccp(427,top_case->getContentSize().height/2.f));
+	top_case->addChild(friend_point_label);
+	
+	mySGD->setFriendPointLabel(friend_point_label);
+
+	
 	heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
+	heart_time->setPosition(ccp(250,top_case->getContentSize().height/2.f));
 	top_case->addChild(heart_time, 0, kMT_CP_heartTime);
 	
 	
@@ -140,7 +151,7 @@ bool ClearPopup::init()
 	ruby_item->setTag(kMT_CP_rubyShop);
 	
 	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
-	ruby_menu->setPosition(ccp(148,top_case->getContentSize().height/2.f-2));
+	ruby_menu->setPosition(ccp(124,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_menu);
 	
 	CCSprite* n_gold = CCSprite::create("test_ui_shop.png");
@@ -151,7 +162,7 @@ bool ClearPopup::init()
 	gold_item->setTag(kMT_CP_goldShop);
 	
 	CCMenu* gold_menu = CCMenu::createWithItem(gold_item);
-	gold_menu->setPosition(ccp(265,top_case->getContentSize().height/2.f-2));
+	gold_menu->setPosition(ccp(220,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_menu);
 	
 	CCSprite* n_heart = CCSprite::create("test_ui_shop.png");
@@ -162,8 +173,19 @@ bool ClearPopup::init()
 	heart_item->setTag(kMT_CP_heartShop);
 	
 	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
-	heart_menu->setPosition(ccp(458,top_case->getContentSize().height/2.f-2));
+	heart_menu->setPosition(ccp(369,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(heart_menu);
+	
+	CCSprite* n_friend_point = CCSprite::create("test_ui_shop.png");
+	CCSprite* s_friend_point = CCSprite::create("test_ui_shop.png");
+	s_friend_point->setColor(ccGRAY);
+	
+	CCMenuItem* friend_point_item = CCMenuItemSprite::create(n_friend_point, s_friend_point, this, menu_selector(ClearPopup::menuAction));
+	friend_point_item->setTag(kMT_CP_friendPoint);
+	
+	CCMenu* friend_point_menu = CCMenu::createWithItem(friend_point_item);
+	friend_point_menu->setPosition(ccp(460,top_case->getContentSize().height/2.f-2));
+	top_case->addChild(friend_point_menu);
 	
 	
 	CCSprite* title = CCSprite::create("ending_clear.png");
@@ -717,6 +739,51 @@ void ClearPopup::menuAction(CCObject* pSender)
 		addChild(t_shop, kZ_CP_popup);
 		is_menu_enable = true;
 	}
+	else if(tag == kMT_CP_friendPoint)
+	{
+		if(!friend_point_popup)
+		{
+			CCNode* menu_node = ((CCNode*)pSender)->getParent();
+			CCNode* top_node = menu_node->getParent();
+			friend_point_popup = CCSprite::create("candy_popup.png");
+			friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
+			friend_point_popup->setPosition(ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+			top_node->addChild(friend_point_popup, -1);
+			
+			CCSprite* n_close = CCSprite::create("candy_popup_close.png");
+			CCSprite* s_close = CCSprite::create("candy_popup_close.png");
+			s_close->setColor(ccGRAY);
+			
+			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(ClearPopup::menuAction));
+			close_item->setTag(kMT_CP_friendPointClose);
+			
+			CCMenu* close_menu = CCMenu::createWithItem(close_item);
+			close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
+			friend_point_popup->addChild(close_menu);
+			
+			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY()-12));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::endShowPopup));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+			friend_point_popup->runAction(t_seq);
+		}
+		else
+			is_menu_enable = true;
+	}
+	else if(tag == kMT_CP_friendPointClose)
+	{
+		CCNode* menu_node = ((CCNode*)pSender)->getParent();
+		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::closeFriendPointPopup));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+		friend_point_popup->runAction(t_seq);
+	}
+}
+
+void ClearPopup::closeFriendPointPopup()
+{
+	friend_point_popup->removeFromParent();
+	friend_point_popup = NULL;
+	is_menu_enable = true;
 }
 
 void ClearPopup::cellAction( CCObject* sender )

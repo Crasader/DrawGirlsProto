@@ -88,6 +88,9 @@ private:
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* time_label;
 	
+	CCSprite* friend_point_popup;
+	void closeFriendPointPopup();
+	
 	HeartTime* heart_time;
 	
 	void endDecreaseCardDuration();

@@ -82,16 +82,16 @@ public:
 	void resetLabels();
 	
 	void setStarLabel(CCLabelBMFont* t_label);
-	
 	int getStar();
-	
 	void setStar(int t_star);
 	
 	void setGoldLabel(CCLabelBMFont* t_label);
-	
 	int getGold();
-	
 	void setGold(int t_gold);
+	
+	void setFriendPointLabel(CCLabelBMFont* t_label);
+	int getFriendPoint();
+	void setFriendPoint(int t_point);
 	
 	int getKeepGold();
 	
@@ -296,6 +296,7 @@ public:
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
+	CCLabelBMFont* friend_point_label;
 	
 	bool is_me_challenge;
 	string me_challenge_target_user_id;

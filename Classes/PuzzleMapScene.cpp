@@ -14,7 +14,7 @@
 //#include "CardSettingScene.h"
 #include "CardSettingPopup.h"
 #include "OptionScene.h"
-#include "GachaPopup.h"
+//#include "GachaPopup.h"
 #include "RankPopup.h"
 #include "MailPopup.h"
 #include "TutorialScene.h"
@@ -27,6 +27,7 @@
 #include <random>
 #include "ASPopupView.h"
 #include "TicketRequestContent.h"
+#include "GachaPurchase.h"
 
 CCScene* PuzzleMapScene::scene()
 {
@@ -58,6 +59,8 @@ bool PuzzleMapScene::init()
 	setKeypadEnabled(true);
 	srand(time(NULL));
 	////////////////////////////////////////////////////
+	
+	friend_point_popup = NULL;
 	
 	is_creating_puzzle = false;
 	
@@ -759,20 +762,26 @@ void PuzzleMapScene::setUIs()
 	addChild(top_case, kPMS_Z_ui_button, kPMS_MT_top);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(108,top_case->getContentSize().height/2.f));
+	ruby_label->setPosition(ccp(94,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(225,top_case->getContentSize().height/2.f));
+	gold_label->setPosition(ccp(185,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
 	
+	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "etc_font.fnt", 0.3f, "%d");
+	friend_point_label->setPosition(ccp(427,top_case->getContentSize().height/2.f));
+	top_case->addChild(friend_point_label);
+	
+	mySGD->setFriendPointLabel(friend_point_label);
+	
 	
 	HeartTime* heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
+	heart_time->setPosition(ccp(250,top_case->getContentSize().height/2.f));
 	top_case->addChild(heart_time, 0, kPMS_MT_heartTime);
 	
 	CCSprite* n_ruby = CCSprite::create("test_ui_shop.png");
@@ -783,7 +792,7 @@ void PuzzleMapScene::setUIs()
 	ruby_item->setTag(kPMS_MT_rubyShop);
 	
 	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
-	ruby_menu->setPosition(ccp(148,top_case->getContentSize().height/2.f-2));
+	ruby_menu->setPosition(ccp(124,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_menu);
 	
 	CCSprite* n_gold = CCSprite::create("test_ui_shop.png");
@@ -794,7 +803,7 @@ void PuzzleMapScene::setUIs()
 	gold_item->setTag(kPMS_MT_goldShop);
 	
 	CCMenu* gold_menu = CCMenu::createWithItem(gold_item);
-	gold_menu->setPosition(ccp(265,top_case->getContentSize().height/2.f-2));
+	gold_menu->setPosition(ccp(220,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_menu);
 	
 	CCSprite* n_heart = CCSprite::create("test_ui_shop.png");
@@ -805,8 +814,19 @@ void PuzzleMapScene::setUIs()
 	heart_item->setTag(kPMS_MT_lifeShop);
 	
 	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
-	heart_menu->setPosition(ccp(458,top_case->getContentSize().height/2.f-2));
+	heart_menu->setPosition(ccp(369,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(heart_menu);
+	
+	CCSprite* n_friend_point = CCSprite::create("test_ui_shop.png");
+	CCSprite* s_friend_point = CCSprite::create("test_ui_shop.png");
+	s_friend_point->setColor(ccGRAY);
+	
+	CCMenuItem* friend_point_item = CCMenuItemSprite::create(n_friend_point, s_friend_point, this, menu_selector(PuzzleMapScene::menuAction));
+	friend_point_item->setTag(kPMS_MT_friendPoint);
+	
+	CCMenu* friend_point_menu = CCMenu::createWithItem(friend_point_item);
+	friend_point_menu->setPosition(ccp(460,top_case->getContentSize().height/2.f-2));
+	top_case->addChild(friend_point_menu);
 	
 	
 	CCSprite* bottom_case = CCSprite::create("test_ui_bottom.png");
@@ -967,6 +987,32 @@ void PuzzleMapScene::setUIs()
 //		
 //		showEventButton();
 //	}
+}
+
+void PuzzleMapScene::outAllObject()
+{
+	getChildByTag(kPMS_MT_top)->runAction(CCMoveBy::create(0.3f, ccp(0, 50)));
+	getChildByTag(kPMS_MT_showui)->runAction(CCMoveBy::create(0.3f, ccp(0, -50)));
+	getChildByTag(kPMS_MT_screen)->runAction(CCMoveBy::create(0.3f, ccp(50, 0)));
+	main_node->getChildByTag(kPMS_MT_left)->runAction(CCMoveBy::create(0.3f, ccp(-100, 0)));
+	main_node->getChildByTag(kPMS_MT_right)->runAction(CCMoveBy::create(0.3f, ccp(100, 0)));
+	main_node->getChildByTag(kPMS_MT_up)->runAction(CCMoveBy::create(0.3f, ccp(0, 200)));
+	main_node->getChildByTag(kPMS_MT_event)->runAction(CCMoveBy::create(0.3f, ccp(0, -100)));
+	main_node->getChildByTag(kPMS_MT_bottom)->runAction(CCMoveBy::create(0.3f, ccp(0, -100)));
+	map_node->runAction(CCMoveBy::create(0.3f, ccp(-480,0)));
+}
+
+void PuzzleMapScene::inAllObject()
+{
+	getChildByTag(kPMS_MT_top)->runAction(CCMoveBy::create(0.3f, ccp(0, -50)));
+	getChildByTag(kPMS_MT_showui)->runAction(CCMoveBy::create(0.3f, ccp(0, 50)));
+	getChildByTag(kPMS_MT_screen)->runAction(CCMoveBy::create(0.3f, ccp(-50, 0)));
+	main_node->getChildByTag(kPMS_MT_left)->runAction(CCMoveBy::create(0.3f, ccp(100, 0)));
+	main_node->getChildByTag(kPMS_MT_right)->runAction(CCMoveBy::create(0.3f, ccp(-100, 0)));
+	main_node->getChildByTag(kPMS_MT_up)->runAction(CCMoveBy::create(0.3f, ccp(0, -200)));
+	main_node->getChildByTag(kPMS_MT_event)->runAction(CCMoveBy::create(0.3f, ccp(0, 100)));
+	main_node->getChildByTag(kPMS_MT_bottom)->runAction(CCMoveBy::create(0.3f, ccp(0, 100)));
+	map_node->runAction(CCSequence::createWithTwoActions(CCMoveBy::create(0.3f, ccp(480,0)), CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::popupClose))));
 }
 
 void PuzzleMapScene::showEventButton()
@@ -1213,6 +1259,7 @@ void PuzzleMapScene::hideStageSettingPopup()
 {
 	mySGD->setStarLabel(ruby_label);
 	mySGD->setGoldLabel(gold_label);
+	mySGD->setFriendPointLabel(friend_point_label);
 	
 	is_gesturable_map_mode = true;
 	map_mode_state = kMMS_default;
@@ -1256,6 +1303,7 @@ void PuzzleMapScene::hideClearPopup()
 		map_mode_state = kMMS_uiMode;
 		mySGD->setStarLabel(ruby_label);
 		mySGD->setGoldLabel(gold_label);
+		mySGD->setFriendPointLabel(friend_point_label);
 		
 		is_menu_enable = true;
 		
@@ -1337,6 +1385,7 @@ void PuzzleMapScene::endGetPuzzle()
 {
 	mySGD->setStarLabel(ruby_label);
 	mySGD->setGoldLabel(gold_label);
+	mySGD->setFriendPointLabel(friend_point_label);
 	
 	is_gesturable_map_mode = true;
 	map_mode_state = kMMS_default;
@@ -1380,6 +1429,7 @@ void PuzzleMapScene::hideFailPopup()
 		map_mode_state = kMMS_uiMode;
 		mySGD->setStarLabel(ruby_label);
 		mySGD->setGoldLabel(gold_label);
+		mySGD->setFriendPointLabel(friend_point_label);
 		
 		is_menu_enable = true;
 		
@@ -1391,6 +1441,7 @@ void PuzzleMapScene::hideFailPopup()
 	
 		mySGD->setStarLabel(ruby_label);
 		mySGD->setGoldLabel(gold_label);
+		mySGD->setFriendPointLabel(friend_point_label);
 		
 		is_gesturable_map_mode = true;
 		map_mode_state = kMMS_default;
@@ -1465,6 +1516,7 @@ void PuzzleMapScene::puzzleUiEnable()
 {
 	mySGD->setStarLabel(ruby_label);
 	mySGD->setGoldLabel(gold_label);
+	mySGD->setFriendPointLabel(friend_point_label);
 	
 	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
 	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
@@ -1472,7 +1524,7 @@ void PuzzleMapScene::puzzleUiEnable()
 	
 	top_case->removeChildByTag(kPMS_MT_heartTime);
 	HeartTime* heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
+	heart_time->setPosition(ccp(250,top_case->getContentSize().height/2.f));
 	top_case->addChild(heart_time, 0, kPMS_MT_heartTime);
 	
 	CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
@@ -1525,7 +1577,7 @@ void PuzzleMapScene::startChangeUiMode()
 	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
 	top_case->removeChildByTag(kPMS_MT_heartTime);
 	HeartTime* heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(295,top_case->getContentSize().height/2.f));
+	heart_time->setPosition(ccp(250,top_case->getContentSize().height/2.f));
 	top_case->addChild(heart_time, 0, kPMS_MT_heartTime);
 	
 	is_gesturable_map_mode = false;
@@ -1744,7 +1796,6 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_screen)
 	{
-		//////////////
 		if(my_puzzle_mode == kPM_default)
 		{
 			startPuzzleModeChange(kPM_thumb);
@@ -1774,9 +1825,12 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_gacha)
 	{
-		is_menu_enable = true;
-//		GachaPopup* t_gp = GachaPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
-//		addChild(t_gp, kPMS_Z_popup);
+		GachaPurchase* t_gp = GachaPurchase::create();
+		addChild(t_gp, kPMS_Z_popup);
+		
+		t_gp->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::popupClose));
+		t_gp->setOutAllObjectAction(this, callfunc_selector(PuzzleMapScene::outAllObject));
+		t_gp->setInAllObjectAction(this, callfunc_selector(PuzzleMapScene::inAllObject));
 	}
 	else if(tag == kPMS_MT_rank)
 	{
@@ -2038,6 +2092,51 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 		t_shop->setShopCode(kSC_heart);
 		addChild(t_shop, kPMS_Z_popup);
 	}
+	else if(tag == kPMS_MT_friendPoint)
+	{
+		if(!friend_point_popup)
+		{
+			CCNode* menu_node = ((CCNode*)pSender)->getParent();
+			CCNode* top_node = menu_node->getParent();
+			friend_point_popup = CCSprite::create("candy_popup.png");
+			friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
+			friend_point_popup->setPosition(ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+			top_node->addChild(friend_point_popup, -1);
+			
+			CCSprite* n_close = CCSprite::create("candy_popup_close.png");
+			CCSprite* s_close = CCSprite::create("candy_popup_close.png");
+			s_close->setColor(ccGRAY);
+			
+			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(PuzzleMapScene::menuAction));
+			close_item->setTag(kPMS_MT_friendPointClose);
+			
+			CCMenu* close_menu = CCMenu::createWithItem(close_item);
+			close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
+			friend_point_popup->addChild(close_menu);
+			
+			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY()-12));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::popupClose));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+			friend_point_popup->runAction(t_seq);
+		}
+		else
+			is_menu_enable = true;
+	}
+	else if(tag == kPMS_MT_friendPointClose)
+	{
+		CCNode* menu_node = ((CCNode*)pSender)->getParent();
+		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::closeFriendPointPopup));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+		friend_point_popup->runAction(t_seq);
+	}
+}
+
+void PuzzleMapScene::closeFriendPointPopup()
+{
+	friend_point_popup->removeFromParent();
+	friend_point_popup = NULL;
+	is_menu_enable = true;
 }
 
 void PuzzleMapScene::popupClose()

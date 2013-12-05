@@ -202,9 +202,12 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 	name_label->setPosition(ccp(60,152));
 	cell->addChild(name_label, kCharacterCellZorder_content);
 	
-	CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath()+NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, idx+1)+".ccbi").first;
-	character_img->setPosition(ccp(60,95));
+	auto character_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath()+NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, idx+1)+".ccbi");
+	
+	CCSprite* character_img = character_pair.first;
+	character_img->setPosition(ccp(60,100));
 	cell->addChild(character_img, kCharacterCellZorder_content);
+	character_pair.second->runAnimationsForSequenceNamed("shop");
 	
 	CCLabelTTF* comment_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_s, idx+1).c_str(), mySGD->getFont().c_str(), 13);
 	comment_label->setColor(ccBLACK);

@@ -87,6 +87,10 @@ private:
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* time_label;
 	
+	CCSprite* friend_point_popup;
+	
+	void closeFriendPointPopup();
+	
 	vector<ClearFriendRank> friend_list;
 	CCTableView* rankTableView;
 	
