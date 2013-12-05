@@ -484,7 +484,7 @@ void StageSettingScene::realStartAction()
 	}
 	
 	deque<bool> is_using_item;
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 		is_using_item.push_back(false);
 	
 	for(int i=0;i<is_selected_item.size();i++)
@@ -497,7 +497,7 @@ void StageSettingScene::realStartAction()
 		}
 	}
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
 	
 	
@@ -535,7 +535,7 @@ void StageSettingScene::finalStartAction(Json::Value result_data)
 		}
 		
 		deque<bool> is_using_item;
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		for(int i=kIC_attack;i<=kIC_rentCard;i++)
 			is_using_item.push_back(false);
 		
 		for(int i=0;i<is_selected_item.size();i++)
@@ -607,6 +607,7 @@ string StageSettingScene::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_smallArea)		return_value = "smallArea";
 	else if(t_code == kIC_widePerfect)		return_value = "widePerfect";
 	else if(t_code == kIC_randomChange)		return_value = "randomChange";
+	else if(t_code == kIC_rentCard)			return_value = "rentCard";
 	
 	return return_value.c_str();
 }

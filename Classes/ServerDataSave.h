@@ -97,6 +97,7 @@ enum SDS_KEY
 	kSDS_SI_missionOptionPercent_i,
 	kSDS_SI_missionOptionSec_i,
 	kSDS_SI_shopItemsCnt_i,
+	kSDS_SI_shopItems_int1_currency_s,
 	kSDS_SI_shopItems_int1_type_i,
 	kSDS_SI_shopItems_int1_price_i,
 	kSDS_SI_defItemsCnt_i,

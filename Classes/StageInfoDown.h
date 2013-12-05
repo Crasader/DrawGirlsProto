@@ -57,6 +57,13 @@ private:
 	
 	void myInit(CCObject* t_success, SEL_CallFunc d_success, CCObject* t_cancel, SEL_CallFunc d_cancel);
 	
+	void startGetCardsInfo();
+	void resultLoadedCardData( Json::Value result_data );
+	void startDownloadCardImage();
+	void startDownload2();
+	void successAction2();
+	void failAction2();
+	
 	void successAction();
 	void failAction();
 	void downloadingAction();

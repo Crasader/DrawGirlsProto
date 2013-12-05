@@ -1185,6 +1185,7 @@ void TitleScene::failAction()
 
 void TitleScene::endingAction()
 {
+	mySGD->selectFriendCard();
 	CCDelayTime* t_delay = CCDelayTime::create(0.2f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleScene::changeScene));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
