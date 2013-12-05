@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "hspConnector.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -66,6 +67,15 @@ private:
 	
 	CardStrengthAlign recent_align;
 	
+	CCSprite* loading_img;
+	CCLabelTTF* loading_label;
+	CCMenu* replay_menu;
+	
+	void replayAction(CCObject* sender);
+	
+	CCNode* strength_card_node;
+	void setStrengthCardNode(CCNode* t_node);
+	
 	void setOfferingList();
 	void alignOfferingList(CardStrengthAlign t_align);
 	
@@ -76,6 +86,8 @@ private:
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
     virtual CCSize cellSizeForTable(CCTableView *table);
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
+	
+	void resultStrength(Json::Value result_data);
 	
 	void showPopup();
 	void endShowPopup();

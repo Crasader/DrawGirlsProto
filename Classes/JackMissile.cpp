@@ -258,8 +258,8 @@ void JM_UpgradeMissile::realInit (CCNode * t_target, int jm_type, float missile_
 	int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(recent_card_number > 0)
 	{
-		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
-		dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f); // * damage_per
+		dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
 		
 		damage = damage < 1 ? 1 : damage;
 		dex = dex < 1 ? 1 : dex;
@@ -756,8 +756,8 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(recent_card_number > 0)
 	{
-		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number); // * damage_per
-		dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number);
+		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f); // * damage_per
+		dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
 		
 		damage = damage < 1 ? 1 : damage;
 		dex = dex < 1 ? 1 : dex;

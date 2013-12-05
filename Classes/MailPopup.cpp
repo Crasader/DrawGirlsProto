@@ -638,6 +638,9 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						else // 카드 정보 있음
 						{
 							myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
+							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
+							myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, contentObj["cardnumber"].asInt(), 1);
+							myDSH->setStringForKey(kDSH_Key_cardPassive_int1, contentObj["cardnumber"].asInt(), NSDS_GS(kSDS_CI_int1_passive_s, contentObj["cardnumber"].asInt()));
 							av->setContentNode(addCardImg(contentObj["cardnumber"].asInt()));
 							//							av->addChild();
 						}
@@ -1211,6 +1214,9 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 			mySGD->addHasGottenCardNumber(download_card_number);
 		}
 		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
+		myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, download_card_number, 1);
+		myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
+		myDSH->setStringForKey(kDSH_Key_cardPassive_int1, download_card_number, NSDS_GS(kSDS_CI_int1_passive_s, download_card_number));
 		
 		(target_close->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
 		

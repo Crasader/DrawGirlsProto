@@ -451,7 +451,7 @@ void CardCase::myInit( int t_selected_card_number )
 	durability_case->setPosition(ccp(287,417));
 	addChild(durability_case, kCARDCASE_Z_innerCase);
 
-	total_durability_label = CCLabelTTF::create(CCString::createWithFormat("/%d", NSDS_GI(kSDS_CI_int1_durability_i, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+	total_durability_label = CCLabelTTF::create(CCString::createWithFormat("/%d", myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
 	total_durability_label->setColor(ccBLACK);
 	total_durability_label->setAnchorPoint(ccp(1.f,0.5));
 	total_durability_label->setPosition(ccp(42,21));
@@ -473,14 +473,14 @@ void CardCase::myInit( int t_selected_card_number )
 	pow_label->setColor(ccRED);
 	addChild(pow_label, kCARDCASE_Z_data);
 
-	pow_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_missile_power_i, t_selected_card_number))->getCString());
+	pow_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, t_selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, t_selected_card_number)-1)*0.1f+1.f)))->getCString());
 
 	CountingBMLabel* dex_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
 	dex_label->setPosition(ccp(145,26));//210,35));
 	dex_label->setColor(ccGREEN);
 	addChild(dex_label, kCARDCASE_Z_data);
 
-	dex_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_missile_dex_i, t_selected_card_number))->getCString());
+	dex_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, t_selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, t_selected_card_number)-1)*0.1f+1.f)))->getCString());
 
 	CountingBMLabel* spd_label = CountingBMLabel::create("0.00", "etc_font.fnt", 0.5f, "%.2f");
 	spd_label->setPosition(ccp(145,42));//270,35));
@@ -523,7 +523,7 @@ void CardCase::myInit( int t_selected_card_number )
 	//		dex_progress->runAction(dex_action);
 
 
-	string passive_string = NSDS_GS(kSDS_CI_int1_passive_s, t_selected_card_number).c_str();
+	string passive_string = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, t_selected_card_number).c_str();
 
 	if(passive_string != "")
 	{

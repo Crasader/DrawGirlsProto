@@ -272,7 +272,7 @@ void StarGoldData::setGameStart()
 
 void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, int t_game_time, int t_use_time, int t_total_time )
 {
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 	{
 		before_use_item[i] = is_using_item[i];
 		is_using_item[i] = false;
@@ -298,7 +298,7 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 
 void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time )
 {
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 	{
 		before_use_item[i] = is_using_item[i];
 		is_using_item[i] = false;
@@ -726,7 +726,7 @@ void StarGoldData::myInit()
 	is_after_scene_chapter = false;
 	resetLabels();
 
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 	{
 		before_use_item.push_back(false);
 		is_using_item.push_back(false);

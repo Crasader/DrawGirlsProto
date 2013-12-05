@@ -318,7 +318,7 @@ void DecreaseCardDurabilityPopup::menuAction( CCObject* sender )
 	recovery_menu = NULL;
 	is_touch_enable = false;
 
-	myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number)));
+	myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number), myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number)));
 	myDSH->setIntegerForKey(kDSH_Key_selectedCard, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number));
 	mySGD->setGold(mySGD->getGold() - 5000);
 

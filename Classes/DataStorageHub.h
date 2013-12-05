@@ -29,6 +29,11 @@ typedef enum t_DSH_Key{
 	kDSH_Key_heartTime,
 	kDSH_Key_haveItemCnt_int1,
 	kDSH_Key_selectedCard,
+	
+	kDSH_Key_cardLevel_int1,
+	kDSH_Key_cardMaxDurability_int1,
+	kDSH_Key_cardPassive_int1,
+	
 	kDSH_Key_cardDurability_int1,
 	kDSH_Key_hasGottenCard_int1,
 	kDSH_Key_inputTextCard_int1,
@@ -256,6 +261,10 @@ public:
 		else if(t_name == kDSH_Key_cardSortType)						return_value = "cst";
 		else if(t_name == kDSH_Key_inputTextCard_int1)					return_value = "itc%d";
 		
+		else if(t_name == kDSH_Key_cardLevel_int1)						return_value = "cl%d";
+		else if(t_name == kDSH_Key_cardMaxDurability_int1)				return_value = "cmd%d";
+		else if(t_name == kDSH_Key_cardPassive_int1)					return_value = "cp%d";
+		
 		else if(t_name == kDSH_Key_cardDurability_int1)					return_value = "cd%d";	// arg int(card_number) // return usable durability
 		else if(t_name == kDSH_Key_hasGottenCard_int1)					return_value = "hgcard%d";	// arg int(card_number) // return cardTakeCnt_number
 		else if(t_name == kDSH_Key_cardTakeCnt)							return_value = "ctc";	// hasGottenCards count
@@ -325,7 +334,7 @@ public:
 		setIntegerForKey(kDSH_Key_savedGold, data[getKey(kDSH_Key_savedGold)].asInt());
 		setIntegerForKey(kDSH_Key_savedFriendPoint, data[getKey(kDSH_Key_savedFriendPoint)].asInt());
 		
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		for(int i=kIC_attack;i<=kIC_rentCard;i++)
 			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt());
 		
 		setIntegerForKey(kDSH_Key_cardTakeCnt, data[getKey(kDSH_Key_cardTakeCnt)].asInt());
@@ -338,6 +347,10 @@ public:
 			setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, data[getKey(kDSH_Key_inputTextCard_int1)][i].asString());
 			setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, data[getKey(kDSH_Key_cardDurability_int1)][i].asInt());
 			setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, data[getKey(kDSH_Key_hasGottenCard_int1)][i].asInt());
+			
+			setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, data[getKey(kDSH_Key_cardLevel_int1)].get(i, 1).asInt());
+			setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number, data[getKey(kDSH_Key_cardMaxDurability_int1)].get(i, 5).asInt());
+			setStringForKey(kDSH_Key_cardPassive_int1, take_card_number, data[getKey(kDSH_Key_cardPassive_int1)].get(i, "").asString());
 			
 			if(NSDS_GS(kSDS_CI_int1_imgInfo_s, take_card_number) == "")
 				card_data_load_list.push_back(take_card_number);
@@ -395,7 +408,7 @@ public:
 			data[getKey(kDSH_Key_savedFriendPoint)] = getIntegerForKey(kDSH_Key_savedFriendPoint);
 		else if(t_key == kSaveUserData_Key_item)
 		{
-			for(int i=kIC_attack;i<=kIC_randomChange;i++)
+			for(int i=kIC_attack;i<=kIC_rentCard;i++)
 				data[getKey(kDSH_Key_haveItemCnt_int1)][i] = getIntegerForKey(kDSH_Key_haveItemCnt_int1, i); // 0
 		}
 		else if(t_key == kSaveUserData_Key_cardsInfo)
@@ -409,6 +422,10 @@ public:
 				data[getKey(kDSH_Key_hasGottenCard_int1)][i] = getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
 				data[getKey(kDSH_Key_cardDurability_int1)][i] = getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
 				data[getKey(kDSH_Key_inputTextCard_int1)][i] = getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
+				
+				data[getKey(kDSH_Key_cardLevel_int1)][i] = getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number);
+				data[getKey(kDSH_Key_cardMaxDurability_int1)][i] = getIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number);
+				data[getKey(kDSH_Key_cardPassive_int1)][i] = getStringForKey(kDSH_Key_cardPassive_int1, take_card_number);
 			}
 		}
 		else if(t_key == kSaveUserData_Key_highScore)
@@ -491,7 +508,7 @@ public:
 		setIntegerForKey(kDSH_Key_savedGold, 10000);
 		setIntegerForKey(kDSH_Key_savedFriendPoint, 0);
 		
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		for(int i=kIC_attack;i<=kIC_rentCard;i++)
 			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0);
 		
 		int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
@@ -502,6 +519,11 @@ public:
 			setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, 0);
 			setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, 0);
 			setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, "");
+			
+			
+			setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, 1);
+			setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number, 0);
+			setStringForKey(kDSH_Key_cardPassive_int1, take_card_number, "");
 		}
 		setIntegerForKey(kDSH_Key_cardTakeCnt, 0);
 		

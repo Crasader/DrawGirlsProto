@@ -221,7 +221,8 @@ typedef enum t_ITEM_CODE{
 	kIC_subSmallSize,	// 12
 	kIC_smallArea,		// 13 // mission
 	kIC_widePerfect,	// 14 // mission
-	kIC_randomChange	// 15 // mission
+	kIC_randomChange,	// 15 // mission
+	kIC_rentCard		// 16 // friend
 }ITEM_CODE;
 
 

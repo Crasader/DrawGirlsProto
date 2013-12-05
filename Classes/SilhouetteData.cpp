@@ -247,7 +247,7 @@ std::string SilhouetteData::getPassiveData()
 {
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	if(selected_card_number > 0)
-		return NSDS_GS(kSDS_CI_int1_passive_s, selected_card_number).c_str();
+		return myDSH->getStringForKey(kDSH_Key_cardPassive_int1, selected_card_number).c_str();
 	else
 		return "{}";
 }
@@ -453,6 +453,7 @@ std::string SilhouetteData::getItemScript( ITEM_CODE t_code )
 	else if(t_code == kIC_smallArea)		return_value = "한번에 먹어야될 영역의 크기를 낮춘다.";
 	else if(t_code == kIC_widePerfect)		return_value = "기존 목표영역의 범위를 늘려준다.";
 	else if(t_code == kIC_randomChange)		return_value = "CHANGE를 순서와 상관없이 먹어도 클리어 된다.";
+	else if(t_code == kIC_rentCard)			return_value = "생명 하나를 추가하여 친구의 카드를 빌려씁니다.";
 	else									return_value = "아이템을 사용할 수 있습니다.";
 
 	return return_value;
@@ -471,24 +472,26 @@ float SilhouetteData::getItemPrice( ITEM_CODE t_code )
 			is_found = true;
 			return_value = NSDS_GI(myType, kSDS_SI_shopItems_int1_price_i, i);
 		}
-	}		
-	//		if(t_code == kIC_attack)				return_value = 250.f;
-	//		else if(t_code == kIC_speedUp)			return_value = 250.f;
-	//		else if(t_code == kIC_addTime)			return_value = 350.f;
-	//		else if(t_code == kIC_fast)				return_value = 700.f;
-	//		else if(t_code == kIC_critical)			return_value = 500.f;
-	//		else if(t_code == kIC_subOneDie)		return_value = 100.f;
-	//		else if(t_code == kIC_doubleItem)		return_value = 300.f;
-	//		else if(t_code == kIC_silence)			return_value = 200.f;
-	//		else if(t_code == kIC_subNothing)		return_value = 200.f;
-	//		else if(t_code == kIC_longTime)			return_value = 70.f;
-	//		else if(t_code == kIC_bossLittleEnergy)	return_value = 100.f;
-	//		else if(t_code == kIC_subSmallSize)		return_value = 70.f;
-	//		else if(t_code == kIC_smallArea)		return_value = 100.f;
-	//		else if(t_code == kIC_widePerfect)		return_value = 100.f;
-	//		else if(t_code == kIC_randomChange)		return_value = 100.f;
-	//		else									return_value = 0.f;
+	}
 
+	return return_value;
+}
+
+string SilhouetteData::getItemCurrency(ITEM_CODE t_code)
+{
+	string return_value;
+	
+	int shop_item_cnt = NSDS_GI(myType, kSDS_SI_shopItemsCnt_i);
+	bool is_found = false;
+	for(int i=0;i<shop_item_cnt && !is_found;i++)
+	{
+		if(t_code == NSDS_GI(myType, kSDS_SI_shopItems_int1_type_i, i))
+		{
+			is_found = true;
+			return_value = NSDS_GS(myType, kSDS_SI_shopItems_int1_currency_s, i);
+		}
+	}
+	
 	return return_value;
 }
 
