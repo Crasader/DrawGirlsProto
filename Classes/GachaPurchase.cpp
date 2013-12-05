@@ -11,6 +11,7 @@
 #include "StarGoldData.h"
 #include "GachaBase.h"
 #include "PuzzleMapScene.h"
+#include "HatGacha.h"
 
 enum GachaPurchaseZorder{
 	kGachaPurchaseZorder_gray = 1,
@@ -349,9 +350,14 @@ void GachaPurchase::visibling()
 	{
 		unschedule(schedule_selector(GachaPurchase::visibling));
 		
-		GachaBase* t_gacha;
-		t_gacha->setFinalAction(target_in, delegate_in);
-		getParent()->addChild(t_gacha, kPMS_Z_popup);
+//		recent_gacha; // 0 ~ 3
+//		gacha_cnt; // 총 가차개수. 4
+		// 0 1
+		// 3 2 순서임.
+		getParent()->addChild(HatGacha::create([=](){
+			(target_in->*delegate_in)();
+			CCLog("hat close");
+		}), kPMS_Z_popup);
 		// 경수
 		CCLog("Go! real gacha!! : %d", recent_gacha);
 	}
