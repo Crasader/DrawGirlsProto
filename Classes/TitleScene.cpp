@@ -198,6 +198,7 @@ void TitleScene::resultGetKnownFriendUserData(Json::Value v)
 	 "no" : 23
 	 }
 	 */
+	KS::KSLog("%", v);
 	if(v["state"].asString() == "ok")
 	{
 		KS::KSLog("%", v);
@@ -210,6 +211,7 @@ void TitleScene::resultGetKnownFriendUserData(Json::Value v)
 			KnownFriends::getInstance()->putLastDate(i, v["list"][i]["lastDate"].asInt64());
 			KnownFriends::getInstance()->putJoinDate(i, v["list"][i]["joinDate"].asInt64());
 		}
+//		startGetCharacterInfo();
 		startGetUnknownFriendList();
 	}
 	else
@@ -244,8 +246,19 @@ void TitleScene::startGetUnknownFriendList()
 void TitleScene::resultGetUnknownFriendList(Json::Value result_data)
 {
 	CCLog("resultGetFriendList data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	
-	if(result_data["state"].asString() == "ok")
+	// 서버 에서 값을 잘 못돌려줘서 그냥 무조건 통과하게 만듬.
+	if(1 ||
+		 1 ||
+		 1 ||
+		 1 ||
+		 1 ||
+		 1 ||
+		 1 ||
+		 1 ||
+		 1 ||
+		 1 ||
+		 1 ||
+		 1 || result_data["state"].asString() == "ok")
 	{
 		for(int i=0; i<result_data["list"].size(); i++)
 		{
@@ -264,7 +277,7 @@ void TitleScene::resultGetUnknownFriendList(Json::Value result_data)
 		save_target = this;
 		save_delegate = callfunc_selector(TitleScene::startGetUnknownFriendList);
 		
-		state_label->setString("친구 정보를 가져오는데 실패하였습니다.");
+		state_label->setString("비지인 정보를 가져오는데 실패하였습니다.");
 		
 		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
 		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
@@ -309,9 +322,9 @@ void TitleScene::resultGetUnknownFriendUserData(Json::Value v)
 	 "no" : 23
 	 }
 	 */
+	KS::KSLog("%", v);
 	if(v["state"].asString() == "ok")
 	{
-		KS::KSLog("%", v);
 		for(int i=0; i<v["list"].size(); i++)
 		{
 			Json::Reader reader;
@@ -328,7 +341,7 @@ void TitleScene::resultGetUnknownFriendUserData(Json::Value v)
 		save_target = this;
 		save_delegate = callfunc_selector(TitleScene::startGetUnknownFriendUserData);
 		
-		state_label->setString("아는 친구 유저데이터를 가져오는데 실패하였습니다.");
+		state_label->setString("비지인 유저데이터를 가져오는데 실패하였습니다.");
 		
 		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
 		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");

@@ -26,4 +26,12 @@ void setTicketSendTime( string userId, int puzzlenumber );
 
 int getIsNotTicketUser( std::string userId, int puzzlenumber, int base_s = 60 * 60 * 24 * 1  ); /* 1일 */
 
+int getInviteIsSendable( std::string userId, int base_s = 60 * 60 * 24 * 31 );
+
+void setInviteSendTime( string userId );
+
+
+int getHeartIsSendable (std::string userId, int base_s = 60 * 60 * 6);
+void setHeartSendTime (string userId);
+
 #endif /* defined(__DGproto__SendMessageUtil__) */
