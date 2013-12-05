@@ -1920,7 +1920,7 @@ void BlindDrop::startAction ()
 void BlindDrop::completedAnimationSequenceNamed (char const * name)
 {
 	string t_name = name;
-	if(t_name == "end_cast1stop")
+	if(t_name == "tornado_stop")
 	{
 		reader->release();
 		oilImg->removeFromParentAndCleanup(true);

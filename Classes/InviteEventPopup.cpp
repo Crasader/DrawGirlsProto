@@ -9,6 +9,12 @@
 #include "InviteEventPopup.h"
 
 #include "RankPopup.h"
+#include "SendMessageUtil.h"
+#include "FriendListPopup.h"
+#include "JoinGameFriendPopup.h"
+
+
+static CCSize cellSize3 = CCSizeMake(238, 47);
 void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
 	setTouchEnabled(true);
@@ -35,14 +41,19 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	//		gray->setContentSize(CCSizeMake(600, 400));
 	//		addChild(gray, kRP_Z_gray);
 	
-	CCSprite* back = CCSprite::create("invite_back.png");
+	CCSprite* back = CCSprite::create("rank_back.png");
 	back->setPosition(ccp(240,160));
 	addChild(back, kInvite_Z_back);
+	
+	CCSprite* back2 = CCSprite::create("rank_default_invite_back.png");
+	back2->setPosition(ccp(240, 160));
+	addChild(back2, kInvite_Z_back);
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
 	back->addChild(_menu);
 	_menu->setPosition(ccp(0, 0));
+	
 	
 	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
 																														 "cardsetting_close.png", "cardsetting_close.png",
@@ -54,18 +65,67 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	closeBtn->setPosition(ccp(440, 290));
 	_menu->addChild(closeBtn);
 	
-	CCMenuItemLambda* rankBtn = CCMenuItemImageLambda::create(
-																														"rank_friend_rank.png", "rank_friend_rank.png",
-																														[=](CCObject*){
-																															//																																 (target_close->*delegate_close)();
-																															RankPopup* t_rp = RankPopup::create(t_close, d_close);
-																															getParent()->addChild(t_rp, this->getZOrder());
-																															removeFromParent();
-																															
-																														});
-	rankBtn->setPosition(ccp(380, 290));
+	auto weekRank = CCMenuItemImageLambda::create
+	(
+	 "rank_friend_rank.png", "rank_friend_rank.png",
+	 [=](CCObject*){
+		 //																																 (target_close->*delegate_close)();
+		 RankPopup* t_rp = RankPopup::create(t_close, d_close);
+		 getParent()->addChild(t_rp, this->getZOrder());
+		 removeFromParent();
+	 });
+	weekRank->setPosition(ccp(67, 290));
+	weekRank->setOpacity(0);
+	_menu->addChild(weekRank, 5);
 	
-	_menu->addChild(rankBtn);
+	// ì¹œêµ¬ ì´ˆëŒ€ ì´ë²¤íŠ¸
+	auto inviteEventBtn = CCMenuItemImageLambda::create
+	(
+	 "rank_default_invite.png", "rank_default_invite.png",
+	 [=](CCObject*){
+		 //																																 (target_close->*delegate_close)();
+		 
+		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
+		 getParent()->addChild(t_rp, this->getZOrder());
+		 removeFromParent();
+		 
+	 });
+	inviteEventBtn->setPosition(ccp(169, 290));
+	inviteEventBtn->setOpacity(255);
+	
+	_menu->addChild(inviteEventBtn);
+	
+	// ì¹œêµ¬ëª©ë¡
+	auto friendList = CCMenuItemImageLambda::create
+	(
+	 "rank_friend_list.png", "rank_friend_list.png",
+	 [=](CCObject*){
+		 //																																 (target_close->*delegate_close)();
+		 FriendListPopup* t_rp = FriendListPopup::create(t_close, d_close);
+		 getParent()->addChild(t_rp, this->getZOrder());
+		 removeFromParent();
+		 
+	 });
+	friendList->setPosition(ccp(270, 290));
+	friendList->setOpacity(0);
+	_menu->addChild(friendList);
+	
+	// ê²Œìž„ ì¹œêµ¬ë§ºê¸°
+	auto joinGameFriend = CCMenuItemImageLambda::create
+	(
+	 "rank_gamefriend.png", "rank_gamefriend.png",
+	 [=](CCObject*){
+		 //																																 (target_close->*delegate_close)();
+		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
+		 getParent()->addChild(t_rp, this->getZOrder());
+		 removeFromParent();
+		 
+	 });
+	joinGameFriend->setPosition(ccp(370, 290));
+	joinGameFriend->setOpacity(0);
+	_menu->addChild(joinGameFriend);
+	
+	
 	
 	
 	loadRank();
@@ -84,57 +144,30 @@ void InviteEventPopup::finishedOpen()
 	loadRank();
 }
 
-int InviteEventPopup::getInviteIsSendable( std::string userId, int base_s /*= 60 * 60 * 24 * 31*/ ) /* 31ÀÏ. */
-{
-	auto end = chrono::system_clock::now();
-	auto currentSecond = chrono::system_clock::to_time_t(end);
-	int ii = myDSH->getUserIntForStr("invite_" + userId, 0);
-	if(ii + base_s < currentSecond)
-	{
-		return 1;
-	}
-	else
-		return 0;
 
-	//		if(ii + base_s < GameSystem::getCurrentTime_s())
-	//		{
-	//			return 1;
-	//		}
-	//		else
-	//			return 0;
-}
-
-void InviteEventPopup::setInviteSendTime( string userId )
-{
-	auto end = chrono::system_clock::now();
-	auto currentSecond = chrono::system_clock::to_time_t(end);
-	myDSH->setUserIntForStr("invite_" + userId, currentSecond);
-	myDSH->setUserIntForStr("invitecount", myDSH->getUserIntForStr("invitecount", 0) + 1);
-	//		saveData->setKeyValue(fbid, GameSystem::getCurrentTime_s());
-}
 
 void InviteEventPopup::loadRank()
 {
 	std::function<void(Json::Value e)> p1 = bind(&ThisClassType::drawRank, this, std::placeholders::_1);
-	//step1 Ä«Ä«¿ÀÄ£±¸¸ñ·Ï ·Îµå
+	//step1 Æ’Â´Æ’Â´Ã¸Â¿Æ’Â£Â±âˆâˆÃ’âˆ‘Å“ âˆ‘Å’ÂµÃ‚
 	hspConnector::get()->kLoadFriends(Json::Value(),[p1](Json::Value fInfo)
-	{
-		CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-
-
-
-		Json::Value appfriends = fInfo["friends_info"];
-		p1(appfriends);
-
-	});
+																		{
+																			CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
+																			
+																			
+																			
+																			Json::Value appfriends = fInfo["friends_info"];
+																			p1(appfriends);
+																			
+																		});
 }
 
 void InviteEventPopup::drawRank( Json::Value obj )
 {
 	m_scoreList = obj;
-	//Å×ÀÌºí ºä »ý¼º ½ÃÀÛ /////////////////////////////////////////////////////////////////////////////////////////
-
-	//320x320 Å×ÀÌºí ºä »ý¼º
+	//â‰ˆâ—ŠÂ¿Ãƒâˆ«ÃŒ âˆ«â€° ÂªËÂºâˆ« Î©âˆšÂ¿â‚¬ /////////////////////////////////////////////////////////////////////////////////////////
+	
+	//320x320 â‰ˆâ—ŠÂ¿Ãƒâˆ«ÃŒ âˆ«â€° ÂªËÂºâˆ«
 	rankTableView = InviteTableView::create(this, CCSizeMake(227, 233), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
@@ -143,16 +176,16 @@ void InviteEventPopup::drawRank( Json::Value obj )
 	m_scrollBar->setDynamicScrollSize(false);
 	rankTableView->setAnchorPoint(CCPointZero);
 
-	//kCCScrollViewDirectionVertical : ¼¼·Î ½ºÅ©·Ñ, kCCScrollViewDirectionHorizontal : °¡·Î ½ºÅ©·Ñ
+	//kCCScrollViewDirectionVertical : ÂºÂºâˆ‘Å’ Î©âˆ«â‰ˆÂ©âˆ‘â€”, kCCScrollViewDirectionHorizontal : âˆžÂ°âˆ‘Å’ Î©âˆ«â‰ˆÂ©âˆ‘â€”
 	rankTableView->setDirection(kCCScrollViewDirectionVertical);
 
-	//Ãß°¡½Ã Á¤·Ä ±âÁØ ¼³Á¤ kCCTableViewFillTopDown : ¾Æ·¡ºÎºÐÀ¸·Î Ãß°¡µÊ, kCCTableViewFillBottomUp : À§¿¡¼­ ºÎÅÍ Ãß°¡µÊ.
+	//âˆšï¬‚âˆžÂ°Î©âˆš Â¡Â§âˆ‘Æ’ Â±â€šÂ¡Ã¿ Âºâ‰¥Â¡Â§ kCCTableViewFillTopDown : Ã¦âˆ†âˆ‘Â°âˆ«Å’âˆ«â€“Â¿âˆâˆ‘Å’ âˆšï¬‚âˆžÂ°ÂµÂ , kCCTableViewFillBottomUp : Â¿ÃŸÃ¸Â°Âºâ‰  âˆ«Å’â‰ˆÃ• âˆšï¬‚âˆžÂ°ÂµÂ .
 	rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 
-	//±âÁØÁ¡ 0,0
+	//Â±â€šÂ¡Ã¿Â¡Â° 0,0
 	rankTableView->setPosition(ccp(230, 28));
 
-	//µ¥ÀÌÅÍ¸¦ °¡Á®¿À°í³ª ÅÍÄ¡ ÀÌº¥Æ®¸¦ ¹ÝÈ¯ÇØÁÙ ´ë¸®ÀÚ¸¦ ÀÌ Å¬·¡½º·Î ¼³Á¤.
+	//Âµâ€¢Â¿Ãƒâ‰ˆÃ•âˆÂ¶ âˆžÂ°Â¡Ã†Ã¸Â¿âˆžÃŒâ‰¥â„¢ â‰ˆÃ•Æ’Â° Â¿Ãƒâˆ«â€¢âˆ†Ã†âˆÂ¶ Ï€â€ºÂ»Ã˜Â«Ã¿Â¡Å¸ Â¥ÃŽâˆÃ†Â¿â„âˆÂ¶ Â¿Ãƒ â‰ˆÂ¨âˆ‘Â°Î©âˆ«âˆ‘Å’ Âºâ‰¥Â¡Â§.
 	rankTableView->setDelegate(this);
 	this->addChild(rankTableView, kInvite_Z_rankTable);
 	rankTableView->setTouchPriority(-200);
@@ -173,7 +206,7 @@ void InviteEventPopup::drawRank( Json::Value obj )
 	//		float yInitPosition = MAX(rankTableView->minContainerOffset().y, -cellSize3.height*myPosition + rankTableView->getViewSize().height / 2.f);
 	//		yInitPosition = MIN(0, yInitPosition);
 
-	//Å×ÀÌºí ºä »ý¼º ³¡/////////////////////////////////////////////////////////////////////////////////////////
+	//â‰ˆâ—ŠÂ¿Ãƒâˆ«ÃŒ âˆ«â€° ÂªËÂºâˆ« â‰¥Â°/////////////////////////////////////////////////////////////////////////////////////////
 }
 
 CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigned int idx )
@@ -215,7 +248,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	cell->addChild(_menu, kInvite_Z_send);
 
 
-	if(getInviteIsSendable( m_scoreList[idx]["user_id"].asString() ))
+	if(::getInviteIsSendable( m_scoreList[idx]["user_id"].asString() ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
 			("rank_cell_invite.png", "rank_cell_invite.png",
@@ -223,7 +256,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 				CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 				int idx = (int)obj->getUserData();
 				////////////////////////////////
-				// ÂÊÁöº¸³»±â - HSP
+				// Â¬Â Â¡Ë†âˆ«âˆâ‰¥ÂªÂ±â€š - HSP
 				////////////////////////////////
 
 
@@ -235,7 +268,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 				//				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 				p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 				std::string recvId = m_scoreList[idx]["user_id"].asString();
-				recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' Á¦°Å
+				recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' Â¡Â¶âˆžâ‰ˆ
 				p["receiverMemberID"] = recvId;
 				p["senderMemberID"]=hspConnector::get()->getKakaoID();
 				p["type"]=kInvite;
@@ -248,23 +281,23 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 
 
 					GraphDogLib::JsonToLog("sendMessage", r);
-
+					::setInviteSendTime(m_scoreList[idx]["user_id"].asString());
 					obj->removeFromParent();
 
 					CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notinvite.png", "rank_cell_notinvite.png",
 						[](CCObject*){});
-					sendBtn1->setPosition(ccp(205,22));
+					sendBtn1->setPosition(ccp(180,22));
 					_menu->addChild(sendBtn1,2);
 					////////////////////////////////
-					// ÂÊÁöº¸³»±â - Ä«Ä«¿À
+					// Â¬Â Â¡Ë†âˆ«âˆâ‰¥ÂªÂ±â€š - Æ’Â´Æ’Â´Ã¸Â¿
 					////////////////////////////////
 					Json::Value p2;
 					p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
-					p2["message"] = "ÃÊ´ëÇÕ´Ï´Ù.";
+					p2["message"] = "ë‹˜ì„ ì´ˆëŒ€í•©ë‹ˆë‹¤.";
 					hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
 					{
 						GraphDogLib::JsonToLog("kSendMessage", r);
-						this->setInviteSendTime(m_scoreList[idx]["user_id"].asString());
+						setInviteSendTime(m_scoreList[idx]["user_id"].asString());
 						m_currentInviteCount++;
 						m_inviteCountFnt->setString(CCString::createWithFormat("%d", m_currentInviteCount)->getCString());
 
@@ -284,14 +317,14 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	_menu->addChild(sendBtn,2);
 
 	title = CCLabelTTF::create("","Helvetica",12);
-	title->setPosition(ccp(90,28));
+	title->setPosition(ccp(60,28));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kInviteTagTitle);
 	cell->addChild(title,2);
 
 
 	score = CCLabelTTF::create("","Helvetica",20);
-	score->setPosition(ccp(90,5));
+	score->setPosition(ccp(60,5));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kInviteTagScore);
 	cell->addChild(score,2);
@@ -302,19 +335,14 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	rank->setTag(kInviteTagRank);
 	cell->addChild(rank,2);
 
-
-
-
-
 	sendBtn->setUserData((void *)idx);
-	//sendBtn->setUserData((void *)&member);
 	if((*member)["user_id"].asString()==hspConnector::get()->getKakaoID()){
 		sendBtn->setVisible(false);
 	}else{
 		sendBtn->setVisible(true);
 	}
 	title->setString((*member)["nickname"].asString().c_str());
-	score->setString("ÃÊ´ëÇÕ´Ï´Ù~!");
+	score->setString("ì´ˆëŒ€í•˜ì„¸ìš”~!");
 	//rank->setString((*member)["rankingGrade"].asString().c_str());
 
 	return cell;

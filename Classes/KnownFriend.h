@@ -1,19 +1,12 @@
-//
-//  UnknownFriends.h
-//  DGproto
-//
-//  Created by ksoo k on 2013. 12. 3..
-//
-//
 #pragma once
 #include <vector>
 #include <string>
 #include <map>
 #include "jsoncpp/json.h"
+
 typedef unsigned long long uint64;
 typedef long long int64;
-
-struct UnknownFriendsData
+struct KnownFriendsData
 {
 	int64 userId;
 	std::string nick;
@@ -24,31 +17,33 @@ struct UnknownFriendsData
 	Json::Value userData;
 };
 
-class UnknownFriends
+class KnownFriends
 {
 public:
-	static UnknownFriends* getInstance()
+	static KnownFriends* getInstance()
 	{
-		static UnknownFriends* t_GD = nullptr;
+		static KnownFriends* t_GD = nullptr;
 		if(t_GD == nullptr)
 		{
-			t_GD = new UnknownFriends();
+			t_GD = new KnownFriends();
 		}
 		return t_GD;
 	}
 protected:
-	UnknownFriends() {}
+	KnownFriends() {
+//		userId = joinDate = lastDate = 0;
+//		messageBlocked = false;
+	}
 	
-	std::vector<UnknownFriendsData> m_friends;
+	std::vector<KnownFriendsData> m_friends;
 public:
-	const std::vector<UnknownFriendsData>& getFriends(){return m_friends;}
-	
+	const std::vector<KnownFriendsData>& getFriends(){return m_friends;}
 	void deleteById(uint64 kakaoId);
 	void putJoinDate(int index, int64 jd);
 	void putLastDate(int index, int64 jd);
 	void putUserData(int index, Json::Value d);
-	UnknownFriendsData* findById(uint64 kakaoId);
-	void add(const UnknownFriendsData& d);
+	KnownFriendsData* findById(uint64 kakaoId);
+	void add(const KnownFriendsData& d);
 };
 
 

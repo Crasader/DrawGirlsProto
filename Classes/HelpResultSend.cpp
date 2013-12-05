@@ -90,6 +90,7 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 	{
 		KSAlertView* av = KSAlertView::create();
 		auto ttf = CCLabelTTF::create((mySGD->getAcceptHelpNick() + "님에게 도움을 주지 못했습니다 OTL").c_str(), "", 12.f);
+		ttf->setColor(ccc3(0, 0, 0));
 		av->setContentNode(
 											 ttf
 											 );

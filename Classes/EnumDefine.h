@@ -236,7 +236,8 @@ enum MessageRecvType
 	kTicketRequest,
 	kTicketResult,
 	kInvite,
-	kNews
+	kNews,
+	kUnknownFriendRequest
 };
 #define SHOP_KEY	0xD9
 

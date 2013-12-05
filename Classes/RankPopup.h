@@ -18,7 +18,7 @@
 #include "CardCase.h"
 #include "DownloadFile.h"
 #include "StarGoldData.h"
-#include "InviteEventPopup.h"
+
 USING_NS_CC;
 
 #define SAFE_REMOVECHILD(X) do{if(X){ X->removeFromParentAndCleanup(true); X = 0;}}while(0);
@@ -83,8 +83,6 @@ public:
   virtual ~ RankPopup ();
   void finishedOpen ();
   void finishedClose ();
-  int getHeartIsSendable (std::string userId, int base_s = 60 * 60 * 24);
-  void setHeartSendTime (string userId);
   void myInit (CCObject * t_close, SEL_CallFunc d_close);
   void loadRank ();
   void drawRank (Json::Value obj);
@@ -128,6 +126,10 @@ protected:
   CCSprite * m_currentSelectSprite;
   ScrollBar * m_scrollBar;
 	CCLabelBMFont* m_highScore;
+	
+	CCMenuItemLambda* m_onlyKatok;
+	CCMenuItemLambda* m_totalFriend;
+	CCMenuItemLambda* m_onlyGameFriend;
 };
 #undef LZZ_INLINE
 #endif

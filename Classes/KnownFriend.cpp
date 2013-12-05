@@ -1,15 +1,15 @@
 //
-//  UnknownFriends.cpp
+//  KnownFriends.cpp
 //  DGproto
 //
 //  Created by ksoo k on 2013. 12. 3..
 //
 //
 
-#include "UnknownFriends.h"
+#include "KnownFriend.h"
 
 
-void UnknownFriends::deleteById(uint64 kakaoId)
+void KnownFriends::deleteById(uint64 kakaoId)
 {
 	for(auto iter = m_friends.begin(); iter != m_friends.end(); ++iter)
 	{
@@ -20,19 +20,19 @@ void UnknownFriends::deleteById(uint64 kakaoId)
 		}
 	}
 }
-void UnknownFriends::putJoinDate(int index, int64 jd)
+void KnownFriends::putJoinDate(int index, int64 jd)
 {
 	m_friends[index].joinDate = jd;
 }
-void UnknownFriends::putLastDate(int index, int64 jd)
+void KnownFriends::putLastDate(int index, int64 jd)
 {
 	m_friends[index].lastDate = jd;
 }
-void UnknownFriends::putUserData(int index, Json::Value d)
+void KnownFriends::putUserData(int index, Json::Value d)
 {
 	m_friends[index].userData = d;
 }
-UnknownFriendsData* UnknownFriends::findById(uint64 kakaoId)
+KnownFriendsData* KnownFriends::findById(uint64 kakaoId)
 {
 	for(auto& i : m_friends)
 	{
@@ -45,7 +45,7 @@ UnknownFriendsData* UnknownFriends::findById(uint64 kakaoId)
 	return nullptr;
 }
 
-void UnknownFriends::add(const UnknownFriendsData& d)
+void KnownFriends::add(const KnownFriendsData& d)
 {
 	if(!findById(d.userId))
 	{

@@ -70,6 +70,8 @@ namespace KS
 	
 	string insert_separator(const string& s, char separator = ',', int width = 3);
 	
+	string longLongToStr(long long t, int radix);
+	long long strToLongLong(const std::string& t, int radix);
 	
 	static void __KSLogCore(ostringstream& oss, const char* s) {
 		
@@ -161,7 +163,7 @@ namespace KS
 				CCData *data = new CCData(pBytes, size);
 				CC_SAFE_DELETE_ARRAY(pBytes);
 				
-				CCNode *ret = reader->readNodeGraphFromData(data, thiz, CCDirector::sharedDirector()->getWinSize());
+				CCNode *ret = reader->readNodeGraphFromDataForFullPath(data, thiz, CCDirector::sharedDirector()->getWinSize());
 				
 				data->release();
 				

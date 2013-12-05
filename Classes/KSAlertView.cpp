@@ -183,7 +183,7 @@ void KSAlertView::show()
 		btnBg->addChild(t);
 	}
 
-	CCAssert(m_contentNode != NULL, "not null");
+//	CCAssert(m_contentNode != NULL, "not null");
 //	m_contentNode = CCLayerGradient::create(ccc4(255, 0, 0, 255), ccc4(0,255,255,255));
 //	m_contentNode->setContentSize(CCSizeMake(400, 500));
 
@@ -196,7 +196,8 @@ void KSAlertView::show()
 	sv->setPosition(ccp(contentRect.origin.x, contentRect.origin.y));
 	sv->setDirection(CCScrollViewDirection::kCCScrollViewDirectionBoth);
 
-	sv->setContainer(m_contentNode);
+	if(m_contentNode)
+		sv->setContainer(m_contentNode);
 
 	sv->setContentOffset(ccp(0, sv->minContainerOffset().y));
 	sv->setDelegate(this);
