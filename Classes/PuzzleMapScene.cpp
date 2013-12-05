@@ -14,7 +14,7 @@
 //#include "CardSettingScene.h"
 #include "CardSettingPopup.h"
 #include "OptionScene.h"
-#include "GachaPopup.h"
+//#include "GachaPopup.h"
 #include "RankPopup.h"
 #include "MailPopup.h"
 #include "TutorialScene.h"
@@ -27,6 +27,7 @@
 #include <random>
 #include "ASPopupView.h"
 #include "TicketRequestContent.h"
+#include "GachaPurchase.h"
 
 CCScene* PuzzleMapScene::scene()
 {
@@ -988,6 +989,32 @@ void PuzzleMapScene::setUIs()
 //	}
 }
 
+void PuzzleMapScene::outAllObject()
+{
+	getChildByTag(kPMS_MT_top)->runAction(CCMoveBy::create(0.3f, ccp(0, 50)));
+	getChildByTag(kPMS_MT_showui)->runAction(CCMoveBy::create(0.3f, ccp(0, -50)));
+	getChildByTag(kPMS_MT_screen)->runAction(CCMoveBy::create(0.3f, ccp(50, 0)));
+	main_node->getChildByTag(kPMS_MT_left)->runAction(CCMoveBy::create(0.3f, ccp(-100, 0)));
+	main_node->getChildByTag(kPMS_MT_right)->runAction(CCMoveBy::create(0.3f, ccp(100, 0)));
+	main_node->getChildByTag(kPMS_MT_up)->runAction(CCMoveBy::create(0.3f, ccp(0, 200)));
+	main_node->getChildByTag(kPMS_MT_event)->runAction(CCMoveBy::create(0.3f, ccp(0, -100)));
+	main_node->getChildByTag(kPMS_MT_bottom)->runAction(CCMoveBy::create(0.3f, ccp(0, -100)));
+	map_node->runAction(CCMoveBy::create(0.3f, ccp(-480,0)));
+}
+
+void PuzzleMapScene::inAllObject()
+{
+	getChildByTag(kPMS_MT_top)->runAction(CCMoveBy::create(0.3f, ccp(0, -50)));
+	getChildByTag(kPMS_MT_showui)->runAction(CCMoveBy::create(0.3f, ccp(0, 50)));
+	getChildByTag(kPMS_MT_screen)->runAction(CCMoveBy::create(0.3f, ccp(-50, 0)));
+	main_node->getChildByTag(kPMS_MT_left)->runAction(CCMoveBy::create(0.3f, ccp(100, 0)));
+	main_node->getChildByTag(kPMS_MT_right)->runAction(CCMoveBy::create(0.3f, ccp(-100, 0)));
+	main_node->getChildByTag(kPMS_MT_up)->runAction(CCMoveBy::create(0.3f, ccp(0, -200)));
+	main_node->getChildByTag(kPMS_MT_event)->runAction(CCMoveBy::create(0.3f, ccp(0, 100)));
+	main_node->getChildByTag(kPMS_MT_bottom)->runAction(CCMoveBy::create(0.3f, ccp(0, 100)));
+	map_node->runAction(CCSequence::createWithTwoActions(CCMoveBy::create(0.3f, ccp(480,0)), CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::popupClose))));
+}
+
 void PuzzleMapScene::showEventButton()
 {
 	CCMenu* event_menu = (CCMenu*)main_node->getChildByTag(kPMS_MT_event);
@@ -1769,7 +1796,6 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_screen)
 	{
-		//////////////
 		if(my_puzzle_mode == kPM_default)
 		{
 			startPuzzleModeChange(kPM_thumb);
@@ -1799,9 +1825,12 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_gacha)
 	{
-		is_menu_enable = true;
-//		GachaPopup* t_gp = GachaPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
-//		addChild(t_gp, kPMS_Z_popup);
+		GachaPurchase* t_gp = GachaPurchase::create();
+		addChild(t_gp, kPMS_Z_popup);
+		
+		t_gp->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::popupClose));
+		t_gp->setOutAllObjectAction(this, callfunc_selector(PuzzleMapScene::outAllObject));
+		t_gp->setInAllObjectAction(this, callfunc_selector(PuzzleMapScene::inAllObject));
 	}
 	else if(tag == kPMS_MT_rank)
 	{
