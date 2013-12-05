@@ -265,7 +265,9 @@ void Jack::moveTest()
 	if(myState == jackStateNormal)
 	{
 		// main direction moving
-		if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldline) // moving
+		if(c_dv.dx == 0 && c_dv.dy == 0)
+			stopMove();
+		else if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldline) // moving
 		{
 			afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
 			
@@ -273,6 +275,20 @@ void Jack::moveTest()
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
+			
+			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
+				jack_ccb_manager->runAnimationsForSequenceNamed("move");
+			
+			if(c_dv.dx == -1 && jack_img_direction == directionRight)
+			{
+				jackImg->setScaleX(-1.f);
+				jack_img_direction = directionLeft;
+			}
+			else if(c_dv.dx == 1 && jack_img_direction == directionLeft)
+			{
+				jackImg->setScaleX(1.f);
+				jack_img_direction = directionRight;
+			}
 		}
 		// main direction drawing
 		else if(c_checkPoint.isInnerMap() && myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty && isDrawingOn) // main drawing start
@@ -294,7 +310,23 @@ void Jack::moveTest()
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
+			
+			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+			
+			if(c_dv.dx == -1 && jack_img_direction == directionRight)
+			{
+				jackImg->setScaleX(-1.f);
+				jack_img_direction = directionLeft;
+			}
+			else if(c_dv.dx == 1 && jack_img_direction == directionLeft)
+			{
+				jackImg->setScaleX(1.f);
+				jack_img_direction = directionRight;
+			}
 		}
+		else if(c_s_dv.dx == 0 && c_s_dv.dy == 0)
+			stopMove();
 		else if(c_checkPoint.isInnerMap() && (myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapEmpty || myGD->mapState[c_checkPoint.x][c_checkPoint.y] == mapOldget) &&
 				c_s_checkPoint.isInnerMap() && myGD->mapState[c_s_checkPoint.x][c_s_checkPoint.y] == mapOldline)
 		{
@@ -304,6 +336,20 @@ void Jack::moveTest()
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
+			
+			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
+				jack_ccb_manager->runAnimationsForSequenceNamed("move");
+			
+			if(c_s_dv.dx == -1 && jack_img_direction == directionRight)
+			{
+				jackImg->setScaleX(-1.f);
+				jack_img_direction = directionLeft;
+			}
+			else if(c_s_dv.dx == 1 && jack_img_direction == directionLeft)
+			{
+				jackImg->setScaleX(1.f);
+				jack_img_direction = directionRight;
+			}
 		}
 		else // don't move
 		{
@@ -313,7 +359,9 @@ void Jack::moveTest()
 	else // myState == jackStateDrawing
 	{
 		// main direction drawing
-		if(checkPoint.isInnerMap() && (myGD->mapState[checkPoint.x][checkPoint.y] == mapOldline ||
+		if(dv.dx == 0 && dv.dy == 0)
+			stopMove();
+		else if(checkPoint.isInnerMap() && (myGD->mapState[checkPoint.x][checkPoint.y] == mapOldline ||
 									   myGD->mapState[checkPoint.x][checkPoint.y] == mapEmpty) && isDrawingOn)	//
 		{
 			// path add
@@ -331,7 +379,23 @@ void Jack::moveTest()
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
+			
+			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+			
+			if(dv.dx == -1 && jack_img_direction == directionRight)
+			{
+				jackImg->setScaleX(-1.f);
+				jack_img_direction = directionLeft;
+			}
+			else if(dv.dx == 1 && jack_img_direction == directionLeft)
+			{
+				jackImg->setScaleX(1.f);
+				jack_img_direction = directionRight;
+			}
 		}
+		else if(s_dv.dx == 0 && s_dv.dy == 0)
+			stopMove();
 		else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
 				s_checkPoint.isInnerMap() && (myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapEmpty || myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapOldline))
 		{
@@ -349,7 +413,23 @@ void Jack::moveTest()
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
+			
+			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+			
+			if(s_dv.dx == -1 && jack_img_direction == directionRight)
+			{
+				jackImg->setScaleX(-1.f);
+				jack_img_direction = directionLeft;
+			}
+			else if(s_dv.dx == 1 && jack_img_direction == directionLeft)
+			{
+				jackImg->setScaleX(1.f);
+				jack_img_direction = directionRight;
+			}
 		}
+		else if(s_dv_reverse.dx == 0 && s_dv_reverse.dy == 0)
+			stopMove();
 		else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
 				s_checkPoint_reverse.isInnerMap() && (myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapEmpty || myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapOldline))
 		{
@@ -367,6 +447,20 @@ void Jack::moveTest()
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			
 			setPosition(turnPosition);
+			
+			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+			
+			if(s_dv_reverse.dx == -1 && jack_img_direction == directionRight)
+			{
+				jackImg->setScaleX(-1.f);
+				jack_img_direction = directionLeft;
+			}
+			else if(s_dv_reverse.dx == 1 && jack_img_direction == directionLeft)
+			{
+				jackImg->setScaleX(1.f);
+				jack_img_direction = directionRight;
+			}
 		}
 		else // don't move
 		{
@@ -404,6 +498,7 @@ void Jack::moveTest()
 		{
 			myGD->mapState[afterPoint.x][afterPoint.y] = mapNewline;
 		}
+		
 		if(afterDirection == directionStop)
 		{
 			setPosition(ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1));
@@ -794,6 +889,8 @@ void Jack::backTrackingAtAfterMoving( IntPoint t_p )
 void Jack::endBackTracking()
 {
 	setJackState(jackStateNormal);
+	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
+		jack_ccb_manager->runAnimationsForSequenceNamed("stop");
 
 	afterDirection = directionStop;
 	secondDirection = directionStop;
@@ -923,6 +1020,17 @@ jackState Jack::getJackState()
 
 void Jack::stopMove()
 {
+	if(getJackState() == jackStateNormal)
+	{
+		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
+			jack_ccb_manager->runAnimationsForSequenceNamed("stop");
+	}
+	else if(getJackState() == jackStateDrawing)
+	{
+		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawStop"))
+			jack_ccb_manager->runAnimationsForSequenceNamed("drawStop");
+	}
+	
 	direction = directionStop;
 	afterDirection = directionStop;
 	secondDirection = directionStop;
@@ -1149,15 +1257,29 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		AudioEngine::sharedInstance()->playEffect("sound_die_jack.mp3", false);
 		isDie = true;
 		dieEffectCnt = 0;
-		jackImg->removeFromParentAndCleanup(true);
+		
+		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("die"))
+			jack_ccb_manager->runAnimationsForSequenceNamed("die");
+		
+//		jackImg->removeFromParentAndCleanup(true);
 
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
-		jackImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_cha_die1.ccbi",this));
+		die_particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_cha_die1.ccbi",this));
+		reader->getAnimationManager()->setDelegate(this);
 		//			jackImg = CCSprite::create("jack_die.png");
 		//			jackImg->setScale(0.2f);
-		addChild(jackImg, kJackZ_main);
+		addChild(die_particle, kJackZ_main);
 		schedule(schedule_selector(Jack::dieEffect));
+	}
+}
+
+void Jack::completedAnimationSequenceNamed (char const * name)
+{
+	string t_name = name;
+	if(t_name == "end_die_animation")
+	{
+		die_particle->removeFromParent();
 	}
 }
 
@@ -1311,22 +1433,26 @@ void Jack::setJackState( jackState t_s )
 	myGD->setJackState(myState);
 	if(myState == jackStateNormal)
 	{
-		jackImg->setColor(ccWHITE);
-		jackImg->setVisible(true);
-		jack_drawing->setVisible(false);
+		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
+			jack_ccb_manager->runAnimationsForSequenceNamed("move");
+//		jackImg->setColor(ccWHITE);
+//		jackImg->setVisible(true);
 		if(!is_hard && !jack_barrier->isVisible())
 			jack_barrier->setVisible(true);
 	}
 	else if(myState == jackStateDrawing)
 	{
-		jack_drawing->setVisible(true);
-		jackImg->setVisible(false);
+		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+			jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+//		jackImg->setVisible(false);
 		if(!is_hard && jack_barrier->isVisible())
 			jack_barrier->setVisible(false);
 	}
 	else if(myState == jackStateBackTracking)
 	{
-		jackImg->setColor(ccGRAY);
+		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("rewind"))
+			jack_ccb_manager->runAnimationsForSequenceNamed("rewind");
+//		jackImg->setColor(ccGRAY);
 		if(!is_hard && jack_barrier->isVisible())
 			jack_barrier->setVisible(false);
 	}
@@ -1373,13 +1499,13 @@ void Jack::dieEffect()
 				speed_up_value = 0.f;
 				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 
-				jackImg->removeFromParentAndCleanup(true);
-
-				CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
-
-				jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-				jackImg->setScale(0.8f);
-				addChild(jackImg, kJackZ_main);
+//				jackImg->removeFromParentAndCleanup(true);
+//
+//				CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+//
+//				jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//				jackImg->setScale(0.8f);
+//				addChild(jackImg, kJackZ_main);
 
 				startReviveAnimation(jackImg);
 			}
@@ -1445,20 +1571,22 @@ void Jack::endReviveJack()
 	isDie = false;
 	isStun = false;
 
-	CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
-
-	CCAnimation* jack_animation = CCAnimation::create();
-	jack_animation->setDelayPerUnit(0.1f);
-	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
-
-	CCAnimate* jack_animate = CCAnimate::create(jack_animation);
-	CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
-	jackImg->runAction(jack_repeat);
+//	CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+//
+//	CCAnimation* jack_animation = CCAnimation::create();
+//	jack_animation->setDelayPerUnit(0.1f);
+//	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+//
+//	CCAnimate* jack_animate = CCAnimate::create(jack_animation);
+//	CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
+//	jackImg->runAction(jack_repeat);
 
 	setTouchPointByJoystick(CCPointZero, directionStop, true);
 	setJackState(jackStateNormal);
+	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
+		jack_ccb_manager->runAnimationsForSequenceNamed("stop");
 	jack_barrier->setVisible(true);
 
 	myGD->communication("GIM_dieCreateItem");
@@ -1472,13 +1600,13 @@ void Jack::continueGame()
 	speed_up_value = 0.f;
 	changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 
-	jackImg->removeFromParentAndCleanup(true);
-
-	CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
-
-	jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-	jackImg->setScale(0.8f);
-	addChild(jackImg, kJackZ_main);
+//	jackImg->removeFromParentAndCleanup(true);
+//
+//	CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+//
+//	jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//	jackImg->setScale(0.8f);
+//	addChild(jackImg, kJackZ_main);
 
 	startReviveAnimation(jackImg);
 }
@@ -1586,29 +1714,31 @@ void Jack::myInit()
 	myState = jackStateNormal;
 	afterState = jackStateNormal;
 
-	CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
-
-	jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-	jackImg->setScale(0.8f);
+	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1) + ".ccbi");
+	
+	jackImg = t_pair.first;
+	jack_ccb_manager = t_pair.second;
+//	CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
+//
+//	jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//	jackImg->setScale(0.8f);
 	addChild(jackImg, kJackZ_main);
+	
+	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
+		jack_ccb_manager->runAnimationsForSequenceNamed("stop");
+	jack_img_direction = directionRight;
 
 	startShowJackAnimation(jackImg);
 
-	CCAnimation* jack_animation = CCAnimation::create();
-	jack_animation->setDelayPerUnit(0.1f);
-	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
-	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
-
-	CCAnimate* jack_animate = CCAnimate::create(jack_animation);
-	CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
-	jackImg->runAction(jack_repeat);
-
-
-	jack_drawing = CCSprite::create("jack.png"); // jack_drawing.png
-	jack_drawing->setScale(0.8f);
-	jack_drawing->setVisible(false);
-	addChild(jack_drawing, kJackZ_defaultBarrier);
+//	CCAnimation* jack_animation = CCAnimation::create();
+//	jack_animation->setDelayPerUnit(0.1f);
+//	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
+//	jack_animation->addSpriteFrameWithTexture(jack_texture, CCRectMake(23, 0, 23, 23));
+//
+//	CCAnimate* jack_animate = CCAnimate::create(jack_animation);
+//	CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
+//	jackImg->runAction(jack_repeat);
 
 	is_hard = false;
 
@@ -1763,8 +1893,10 @@ CCPoint Jack::checkOutlineTurnPosition( CCPoint turnPosition )
 
 void Jack::startReviveAnimation( CCSprite* t_jack_img )
 {
-	t_jack_img->setOpacity(0);
-	t_jack_img->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.8f), CCFadeTo::create(0.5f, 255)));
+	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("born"))
+		jack_ccb_manager->runAnimationsForSequenceNamed("born");
+//	t_jack_img->setOpacity(0);
+//	t_jack_img->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.8f), CCFadeTo::create(0.5f, 255)));
 
 	CCNode* animation_node = CCNode::create();
 	animation_node->setPosition(ccp(t_jack_img->getContentSize().width/2.f, t_jack_img->getContentSize().height/2.f));
@@ -1785,8 +1917,10 @@ void Jack::startReviveAnimation( CCSprite* t_jack_img )
 
 void Jack::startShowJackAnimation( CCSprite* t_jack_img )
 {
-	t_jack_img->setOpacity(0);
-	t_jack_img->runAction(CCFadeTo::create(1.3f, 255));
+	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("born"))
+		jack_ccb_manager->runAnimationsForSequenceNamed("born");
+//	t_jack_img->setOpacity(0);
+//	t_jack_img->runAction(CCFadeTo::create(1.3f, 255));
 
 	CCNode* animation_node = CCNode::create();
 	animation_node->setPosition(ccp(t_jack_img->getContentSize().width/2.f, t_jack_img->getContentSize().height/2.f));

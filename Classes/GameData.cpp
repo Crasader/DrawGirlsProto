@@ -384,13 +384,14 @@ void GameData::myInit()
 	mainCumberPoint = new IntPoint();
 	otherTargetPoints = new CCArray(1);
 	jackState = 0; // jackStateNormal
-	int speed_tag = kJackBaseSpeedTag_level1;//myDSH->getIntegerForKey(kDSH_Key_jackBaseSpeed);
-	if(speed_tag == kJackBaseSpeedTag_level2)
-		jack_base_speed = 1.5f;
-	else if(speed_tag == kJackBaseSpeedTag_level3)
-		jack_base_speed = 2.f;
-	else
-		jack_base_speed = 1.2f;
+	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+//	int speed_tag = kJackBaseSpeedTag_level1;//myDSH->getIntegerForKey(kDSH_Key_jackBaseSpeed);
+//	if(speed_tag == kJackBaseSpeedTag_level2)
+//		jack_base_speed = 1.5f;
+//	else if(speed_tag == kJackBaseSpeedTag_level3)
+//		jack_base_speed = 2.f;
+//	else
+//		jack_base_speed = 1.2f;
 }
 
 void GameData::setStartMap( SetMapType set_map_type )

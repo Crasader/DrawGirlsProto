@@ -37,7 +37,9 @@ enum SSP_MenuTag{
 	kSSP_MT_itemCntBase = 400,
 	kSSP_MT_noti = 9999,
 	kSSP_MT_noti_ok,
-	kSSP_MT_noti_cancel
+	kSSP_MT_noti_cancel,
+	kSSP_MT_friendPoint,
+	kSSP_MT_friendPointClose
 };
 
 class HeartTime;
@@ -80,6 +82,9 @@ private:
 	LoadingLayer* start_loading;
 	
 	void callStart();
+	
+	CCSprite* friend_point_popup;
+	void closeFriendPointPopup();
 	
 	void showPopup();
 	void endShowPopup();
