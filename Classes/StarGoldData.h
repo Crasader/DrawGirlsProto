@@ -309,8 +309,8 @@ public:
 	
 	void selectFriendCard()
 	{
-		vector<KnownFriendsData> known_list = KnownFriends::getInstance()->getFriends();
-		vector<UnknownFriendsData> unknown_list = UnknownFriends::getInstance()->getFriends();
+		vector<FriendData> known_list = KnownFriends::getInstance()->getFriends();
+		vector<FriendData> unknown_list = UnknownFriends::getInstance()->getFriends();
 		
 		
 		vector<FriendCardData> friends_card_data_list;
@@ -467,6 +467,7 @@ private:
 	CC_SYNTHESIZE(int, help_cool_time, HelpCoolTime);
 	CC_SYNTHESIZE(int, msg_remove_day, MsgRemoveDay);
 	CC_SYNTHESIZE(FriendCardData, selected_friend_card_data, SelectedFriendCardData);
+	CC_SYNTHESIZE(bool, is_using_friend_card, IsUsingFriendCard);
 };
 
 #endif

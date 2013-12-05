@@ -401,30 +401,55 @@ void ClearPopup::endTakeCard()
 
 void ClearPopup::resultLoadFriends(Json::Value result_data)
 {
-	CCLog("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	if(result_data["status"].asInt() == 0)
-	{
-		Json::Value appfriends = result_data["app_friends_info"];
-		appfriends.append(hspConnector::get()->myKakaoInfo);
-		
+//	CCLog("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+//	if(result_data["status"].asInt() == 0)
+//	{
+//		Json::Value appfriends = result_data["app_friends_info"];
+//		appfriends.append(hspConnector::get()->myKakaoInfo);
+//		
 		Json::Value p;
-		for(int i=0; i<appfriends.size();i++)
+//		for(int i=0; i<appfriends.size();i++)
+//		{
+//			ClearFriendRank t_friend_info;
+//			t_friend_info.nickname = appfriends[i]["nickname"].asString().c_str();
+//			t_friend_info.img_url = appfriends[i]["profile_image_url"].asString().c_str();
+//			t_friend_info.user_id = appfriends[i]["user_id"].asString().c_str();
+//			t_friend_info.score = 0;
+//			t_friend_info.is_play = false;
+//			friend_list.push_back(t_friend_info);
+//			
+//			p["memberIDList"].append(appfriends[i]["user_id"].asString());
+//		}
+		
+		Json::Value my_kakao = hspConnector::get()->myKakaoInfo;
+		
+		ClearFriendRank fInfo;
+		fInfo.nickname = my_kakao["nickname"].asString();
+		fInfo.img_url = my_kakao["profile_image_url"].asString();
+		fInfo.user_id = my_kakao["user_id"].asString();
+		fInfo.score = 0;
+		fInfo.is_play = false;
+		friend_list.push_back(fInfo);
+		
+		p["memberIDList"].append(my_kakao["user_id"].asString());
+		
+		for(auto i : KnownFriends::getInstance()->getFriends())
 		{
-			ClearFriendRank t_friend_info;
-			t_friend_info.nickname = appfriends[i]["nickname"].asString().c_str();
-			t_friend_info.img_url = appfriends[i]["profile_image_url"].asString().c_str();
-			t_friend_info.user_id = appfriends[i]["user_id"].asString().c_str();
-			t_friend_info.score = 0;
-			t_friend_info.is_play = false;
-			friend_list.push_back(t_friend_info);
+			ClearFriendRank fInfo;
+			fInfo.nickname = i.nick;
+			fInfo.img_url = i.profileUrl;
+			fInfo.user_id = i.userId;
+			fInfo.score = 0;
+			fInfo.is_play = false;
+			friend_list.push_back(fInfo);
 			
-			p["memberIDList"].append(appfriends[i]["user_id"].asString());
+			p["memberIDList"].append(i.userId);
 		}
 		for(auto i : UnknownFriends::getInstance()->getFriends())
 		{
 			ClearFriendRank fInfo;
 			fInfo.nickname = i.nick + "[unknown]";
-			fInfo.img_url = "";
+			fInfo.img_url = i.profileUrl;
 			fInfo.user_id = i.userId;
 			fInfo.score = 0;
 			fInfo.is_play = false;
@@ -436,12 +461,12 @@ void ClearPopup::resultLoadFriends(Json::Value result_data)
 		
 		p["stageNo"]=mySD->getSilType();
 		hspConnector::get()->command("getstagescorelist",p,json_selector(this, ClearPopup::resultGetStageScoreList));
-	}
-	else
-	{
-		is_loaded_list = true;
-		endLoad();
-	}
+//	}
+//	else
+//	{
+//		is_loaded_list = true;
+//		endLoad();
+//	}
 }
 
 void ClearPopup::resultGetStageScoreList(Json::Value result_data)
@@ -520,7 +545,9 @@ void ClearPopup::resultSavedUserData(Json::Value result_data)
 		is_saved_user_data = true;
 		endLoad();
 		
-		hspConnector::get()->kLoadFriends(json_selector(this, ClearPopup::resultLoadFriends));
+		resultLoadFriends(Json::Value());
+		
+//		hspConnector::get()->kLoadFriends(json_selector(this, ClearPopup::resultLoadFriends));
 	}
 	else
 	{

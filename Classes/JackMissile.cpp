@@ -256,10 +256,23 @@ void JM_UpgradeMissile::realInit (CCNode * t_target, int jm_type, float missile_
 	element_level = jm_type/10 + 1;
 	
 	int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	if(recent_card_number > 0)
+	if(recent_card_number > 0 || mySGD->getIsUsingFriendCard())
 	{
-		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f); // * damage_per
-		dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+		float base_missile_damage;
+		if(mySGD->getIsUsingFriendCard())
+			base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, mySGD->getSelectedFriendCardData().card_number)*((mySGD->getSelectedFriendCardData().card_level-1)*0.1f+1.f);
+		else
+			base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+		
+		damage = base_missile_damage; // * damage_per
+		
+		int base_missile_dex;
+		if(mySGD->getIsUsingFriendCard())
+			base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, mySGD->getSelectedFriendCardData().card_number)*((mySGD->getSelectedFriendCardData().card_level-1)*0.1f+1.f);
+		else
+			base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+		
+		dex = base_missile_dex;
 		
 		damage = damage < 1 ? 1 : damage;
 		dex = dex < 1 ? 1 : dex;
@@ -754,10 +767,23 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	particle_string = type_name + ".png";
 	
 	int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	if(recent_card_number > 0)
+	if(recent_card_number > 0 || mySGD->getIsUsingFriendCard())
 	{
-		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f); // * damage_per
-		dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+		float base_missile_damage;
+		if(mySGD->getIsUsingFriendCard())
+			base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, mySGD->getSelectedFriendCardData().card_number)*((mySGD->getSelectedFriendCardData().card_level-1)*0.1f+1.f);
+		else
+			base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+		
+		damage = base_missile_damage; // * damage_per
+		
+		int base_missile_dex;
+		if(mySGD->getIsUsingFriendCard())
+			base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, mySGD->getSelectedFriendCardData().card_number)*((mySGD->getSelectedFriendCardData().card_level-1)*0.1f+1.f);
+		else
+			base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+		
+		dex = base_missile_dex;
 		
 		damage = damage < 1 ? 1 : damage;
 		dex = dex < 1 ? 1 : dex;

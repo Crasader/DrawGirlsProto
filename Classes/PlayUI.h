@@ -228,6 +228,8 @@ public:
 	int getComboCnt ();
 	void setComboCnt (int t_combo);
 	int getUseTime ();
+	
+	void setUseFriendCard();
 private:
 	int percentage_decrease_cnt;
 	CCObject * target_main;

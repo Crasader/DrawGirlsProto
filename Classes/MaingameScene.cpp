@@ -18,6 +18,7 @@
 #include "CCMenuLambda.h"
 #include "ControlTutorialContent.h"
 #include "PatternTutorialContent.h"
+#include "RentCardAniContent.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -277,6 +278,36 @@ void Maingame::startScene()
 	startCounting();
 }
 
+void Maingame::checkFriendCard()
+{
+	if(mySGD->isUsingItem(kIC_rentCard) && mySGD->getSelectedFriendCardData().card_number != 0)
+	{
+		CCNode* exit_target = this;
+		exit_target->onExit();
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		RentCardAniContent* t_container = RentCardAniContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																			 {
+																				 myUI->setUseFriendCard();
+																				 mControl->isStun = false;
+																				 exit_target->onEnter();
+																				 t_popup->removeFromParent();
+																			 });
+		t_popup->setContainerNode(t_container);
+		exit_target->getParent()->addChild(t_popup);
+	}
+}
+
 void Maingame::startCounting()
 {
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -286,11 +317,13 @@ void Maingame::startCounting()
 	
 	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top/0.1f));
 	
-	CCDelayTime* t_delay1 = CCDelayTime::create(0.75f);
+	CCDelayTime* t_delay = CCDelayTime::create(0.1f);
+	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(Maingame::checkFriendCard));
+	CCDelayTime* t_delay1 = CCDelayTime::create(0.65f);
 	CCCallFunc* t_ms_startGame = CCCallFunc::create(myMS, callfunc_selector(MapScanner::startGame));
 	CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::removeConditionLabel));
-	runAction(CCSequence::create(t_delay1, t_ms_startGame, t_delay2, t_call, NULL));
+	runAction(CCSequence::create(t_delay, t_call1, t_delay1, t_ms_startGame, t_delay2, t_call, NULL));
 	
 	countingCnt = 0;
 	
