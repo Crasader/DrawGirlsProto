@@ -27,6 +27,9 @@
 #include "StageRankPopup.h"
 #include "LoadingLayer.h"
 #include "ShopPopup.h"
+#include "KnownFriend.h"
+#include "UnknownFriends.h"
+#include <random>
 
 enum SSP_Zorder{
 	kSSP_Z_gray = 1,
@@ -456,6 +459,15 @@ void StageSettingPopup::itemSetting()
 			selected_img->setVisible(false);
 			selected_img->setPosition(ccp(-100, 0));
 			item_parent->addChild(selected_img, kSSP_Z_content, kSSP_MT_selectedBase+i);
+			
+			if(t_ic == kIC_rentCard)
+			{
+				if(mySGD->getSelectedFriendCardData().card_number == 0)
+				{
+					select_menu->setEnabled(false);
+					buy_menu->setEnabled(false);
+				}
+			}
 			
 			is_selected_item.push_back(false);
 		}
