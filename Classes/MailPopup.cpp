@@ -23,6 +23,8 @@
 #include "ASPopupView.h"
 
 #include "UnknownFriends.h"
+#include "KnownFriend.h"
+
 #include "StarGoldData.h"
 
 #define LZZ_INLINE inline
@@ -216,52 +218,52 @@ void MailPopup::loadMail ()
 void MailPopup::drawMail (Json::Value obj)
 {
 	m_mailList=obj["list"];
-	hspConnector::get()->kLoadFriends(Json::Value(),[=](Json::Value fInfo)
-																		{
-																			CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-																			auto app_friends = fInfo["app_friends_info"];
-																			Json::Value userIdKeyValue;
-																			// m_mailList 와 app_friends 를 합쳐야됨.
-																			// 
-																			for(int i=0; i<app_friends.size(); i++)
-																			{
-																				userIdKeyValue[app_friends[i]["user_id"].asString()] =
-																				app_friends[i];
-																			}
-																			for(int i=0; i<m_mailList.size(); i++)
-																			{
-																				std::string user_id = m_mailList[i]["friendID"].asString();
-																				m_mailList[i]["nickname"] = userIdKeyValue[user_id]["nickname"];
-																				m_mailList[i]["profile_image_url"] = userIdKeyValue[user_id]["profile_image_url"];
-																			}
-																			
-																			//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
-																			
-																			//320x320 테이블 뷰 생성
-																			mailTableView = CCTableView::create(this, CCSizeMake(244.f, 222.f));
-																			
-																			CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
-																			m_scrollBar = ScrollBar::createScrollbar(mailTableView, -2, NULL, bar);
-																			m_scrollBar->setDynamicScrollSize(false);
-																			
-																			mailTableView->setAnchorPoint(CCPointZero);
-																			
-																			//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
-																			mailTableView->setDirection(kCCScrollViewDirectionVertical);
-																			
-																			//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
-																			mailTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
-																			
-																			//기준점 0,0
-																			// 좌표 수동으로 잡느라 이리 됨
-																			mailTableView->setPosition(ccp(159/2.f, 39/2.f) + ccp(159/2.f, 39/2.f - 4.f));
-																			
-																			//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
-																			mailTableView->setDelegate(this);
-																			this->addChild(mailTableView, kMP_Z_mailTable);
-																			mailTableView->setTouchPriority(-200);
-																			//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
-																		});
+//	auto app_friends = fInfo["app_friends_info"];
+	std::map<int64, FriendData> userIdKeyValue;
+	// m_mailList 와 app_friends 를 합쳐야됨.
+	//
+	
+	
+	for(auto it : KnownFriends::getInstance()->getFriends())
+	{
+		userIdKeyValue[it.userId] = it;
+	}
+	
+	for(int i=0; i<m_mailList.size(); i++)
+	{
+		uint64 user_id = m_mailList[i]["friendID"].asInt64();
+		m_mailList[i]["nickname"] = userIdKeyValue[user_id].nick;
+		m_mailList[i]["profile_image_url"] = userIdKeyValue[user_id].profileUrl;
+	}
+	
+	//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
+	
+	//320x320 테이블 뷰 생성
+	mailTableView = CCTableView::create(this, CCSizeMake(244.f, 222.f));
+	
+	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
+	m_scrollBar = ScrollBar::createScrollbar(mailTableView, -2, NULL, bar);
+	m_scrollBar->setDynamicScrollSize(false);
+	
+	mailTableView->setAnchorPoint(CCPointZero);
+	
+	//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
+	mailTableView->setDirection(kCCScrollViewDirectionVertical);
+	
+	//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
+	mailTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
+	
+	//기준점 0,0
+	// 좌표 수동으로 잡느라 이리 됨
+	mailTableView->setPosition(ccp(159/2.f, 39/2.f) + ccp(159/2.f, 39/2.f - 4.f));
+	
+	//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
+	mailTableView->setDelegate(this);
+	this->addChild(mailTableView, kMP_Z_mailTable);
+	mailTableView->setTouchPriority(-200);
+	//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
+	
+	
 }
 void MailPopup::closePopup (CCControlButton * obj, CCControlEvent event)
 {
@@ -961,12 +963,13 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							 }
 							 else
 							 {
-								 UnknownFriendsData ufd;
+								 FriendData ufd;
 								 ufd.userId = v["friendInfo"]["memberID"].asUInt64();
 								 ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
 								 ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
 								 ufd.nick = v["friendInfo"]["nick"].asString();
 								 UnknownFriends::getInstance()->add(ufd);
+
 								 av->removeFromParent();
 							 }
 						 });

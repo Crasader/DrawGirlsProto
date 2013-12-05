@@ -138,12 +138,14 @@ void TitleScene::resultGetKnownFriendList(Json::Value fInfo)
 		
 		for(int i=0; i<appFriends.size(); i++)
 		{
-			KnownFriendsData kfd;
+			FriendData kfd;
 			kfd.nick = appFriends[i]["nickname"].asString();
 			kfd.messageBlocked = appFriends[i]["message_blocked"].asInt();
 			kfd.profileUrl = appFriends[i]["profile_image_url"].asString();
 			kfd.userId = appFriends[i]["user_id"].asInt64();
-			
+			kfd.hashedTalkUserId = appFriends[i]["hashed_talk_user_id"].asString();
+			kfd.unknownFriend = false;
+			KS::KSLog("%", kfd);
 			KnownFriends::getInstance()->add(kfd);
 		}
 		startGetKnownFriendUserData();
@@ -210,6 +212,7 @@ void TitleScene::resultGetKnownFriendUserData(Json::Value v)
 			KnownFriends::getInstance()->putUserData(i, userData);
 			KnownFriends::getInstance()->putLastDate(i, v["list"][i]["lastDate"].asInt64());
 			KnownFriends::getInstance()->putJoinDate(i, v["list"][i]["joinDate"].asInt64());
+			KnownFriends::getInstance()->putHashedTalkUserId(i, v["list"][i]["hashed_talk_user_id"].asString());
 		}
 //		startGetCharacterInfo();
 		startGetUnknownFriendList();
@@ -262,11 +265,13 @@ void TitleScene::resultGetUnknownFriendList(Json::Value result_data)
 	{
 		for(int i=0; i<result_data["list"].size(); i++)
 		{
-			UnknownFriendsData ufd;
+			FriendData ufd;
 			ufd.userId = result_data["list"][i]["memberID"].asUInt64();
 			ufd.joinDate = result_data["list"][i]["joinDate"].asUInt64();
 			ufd.lastDate = result_data["list"][i]["lastDate"].asUInt64();
 			ufd.nick = result_data["list"][i]["nick"].asString();
+			ufd.hashedTalkUserId = result_data["list"][i]["hashed_talk_user_id"].asString();
+			ufd.unknownFriend = true;
 			UnknownFriends::getInstance()->add(ufd);
 		}
 		startGetUnknownFriendUserData();
@@ -333,6 +338,7 @@ void TitleScene::resultGetUnknownFriendUserData(Json::Value v)
 			UnknownFriends::getInstance()->putUserData(i, userData);
 			UnknownFriends::getInstance()->putLastDate(i, v["list"][i]["lastDate"].asInt64());
 			UnknownFriends::getInstance()->putJoinDate(i, v["list"][i]["joinDate"].asInt64());
+			UnknownFriends::getInstance()->putHashedTalkUserId(i, v["list"][i]["hashed_talk_user_id"].asString());
 		}
 		startGetCharacterInfo();
 	}

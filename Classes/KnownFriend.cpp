@@ -32,7 +32,12 @@ void KnownFriends::putUserData(int index, Json::Value d)
 {
 	m_friends[index].userData = d;
 }
-KnownFriendsData* KnownFriends::findById(uint64 kakaoId)
+
+void KnownFriends::putHashedTalkUserId(int index, const std::string hashId)
+{
+	m_friends[index].hashedTalkUserId = hashId;
+}
+FriendData* KnownFriends::findById(uint64 kakaoId)
 {
 	for(auto& i : m_friends)
 	{
@@ -45,7 +50,7 @@ KnownFriendsData* KnownFriends::findById(uint64 kakaoId)
 	return nullptr;
 }
 
-void KnownFriends::add(const KnownFriendsData& d)
+void KnownFriends::add(const FriendData& d)
 {
 	if(!findById(d.userId))
 	{

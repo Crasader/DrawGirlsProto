@@ -6,6 +6,7 @@
 #include "JoinGameFriendPopup.h"
 #include "InviteEventPopup.h"
 #include "UnknownFriends.h"
+#include "KnownFriend.h"
 #include "SendMessageUtil.h"
 
 #define LZZ_INLINE inline
@@ -248,130 +249,114 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 void RankPopup::loadRank ()
 {
 	std::function<void(Json::Value e)> p1 = bind(&RankPopup::drawRank, this, std::placeholders::_1);
-	//step1 카카오친구목록 로드
-	hspConnector::get()->kLoadFriends(Json::Value(),[p1](Json::Value fInfo)
-									  {
-										  CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-										  
-										  
-										  
-										  Json::Value appfriends = fInfo["app_friends_info"];
-										  appfriends.append(hspConnector::get()->myKakaoInfo);
-										  Json::Value p;
-										  
-										  for(int i=0; i<appfriends.size();i++){
-											  p["memberIDList"].append(appfriends[i]["user_id"].asString());
-											  
-										  }
-										  for(auto i : UnknownFriends::getInstance()->getFriends())
-											{
-												p["memberIDList"].append(i.userId);
-											}
-											
-											
-										  p["memberIDList"].append(hspConnector::get()->getKakaoID());
-										  
-										  //step2 위클리스코어 목록 읽어옴
-										  hspConnector::get()->command("getweeklyscorelist",p,[p1,appfriends](Json::Value obj)
-																	   {
-																		   CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
-																		   
-																		   //step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
-																		   GraphDogLib::JsonToLog("friend1", appfriends);
-																		   Json::Value scorelist;
-																		   
-																		   for(unsigned int i=0;i<appfriends.size();i++){
-																			   string mid = appfriends[i]["user_id"].asString();
-																			   scorelist[mid]=appfriends[i];
-																		   }
-																		   
-																		   for(unsigned int j=0;j<obj["list"].size();j++){
-																			   string mid = obj["list"][j]["memberID"].asString();
-																			   scorelist[mid]["scoreInfo"]=obj["list"][j];
-																		   }
-																		   GraphDogLib::JsonToLog("result", scorelist);
-																		   Json::Value scorearray;
-																		   for(auto iter = scorelist.begin(); iter != scorelist.end(); ++iter)
-																		   {
-																			   Json::Value temp = scorelist[iter.key().asString()];
-																			   temp["user_id"] = iter.key().asString();
-																			   scorearray.append(temp);
-																		   }
-																		   
-																		   // 정렬 함
-																		   // Selection Sort
-																		   int N = scorearray.size();
-																		   for (int i = 0; i < (N - 1); i++)
-																		   {
-																			   int minIndex = i;
-																			   
-																			   // Find the index of the minimum element
-																			   for (int j = i + 1; j < N; j++)
-																			   {
-																				   if (scorearray[j]["scoreInfo"].get("score", -1).asInt() > scorearray[minIndex]["scoreInfo"].get("score", -1).asInt())
-																				   {
-																					   minIndex = j;
-																				   }
-																			   }
-																			   
-																			   // Swap if i-th element not already smallest
-																			   if (minIndex > i)
-																			   {
-																				   scorearray[i].swap(scorearray[minIndex]);
-																				   //            swap(a[i], a[minIndex]);
-																			   }
-																		   }
-																		   
-																		   
-																		   //결과 돌려줌
-																		   p1(scorearray);
-																		   
-																		   //			   Json::Value p;
-																		   //			   Json::Value idMap = obj["memberNoMap"];
-																		   //				idMap[hspConnector::get()->getKakaoID()]=hspConnector::get()->getHSPMemberNo();
-																		   //			   p["past"]=false;
-																		   //			   p["rankingKey"]="rankingFactor-3,rankingPeriod-77";
-																		   //			   p["requesterMemberNo"]=hspConnector::get()->getHSPMemberNo();
-																		   //			   p["gameNo"]=hspConnector::get()->hspNo;
-																		   //			   Json::Value::Members m = idMap.getMemberNames();
-																		   //			   for (auto iter = m.begin(); iter!=m.end(); ++iter) {
-																		   //				   string key = (string)*iter;
-																		   //				   p["memberNoList"].append(idMap[key].asInt64());
-																		   //			   }
-																		   //
-																		   //			   //step3 HSP ID목록으로 게임랭킹 뽑기
-																		   //			   hspConnector::get()->command("GetRankingListByMemberNoList2",p,[delekey,idMap](Json::Value obj)
-																		   //				{
-																		   //
-																		   //					Json::Value friendInfo;
-																		   //					Json::Value::Members m = idMap.getMemberNames();
-																		   //					for (auto iter = m.begin(); iter!=m.end(); ++iter) {
-																		   //						string kakaoID = (string)*iter;
-																		   //						for(int i=0; i<obj["rankingList"].size();i++){
-																		   //							if(obj["rankingList"][i]["profile"]["memberNo"].asInt64() == idMap[kakaoID].asInt64()){
-																		   //								obj["rankingList"][i]["profile"]["kakaoID"] = kakaoID;
-																		   //								friendInfo[kakaoID]=obj["rankingList"][i];
-																		   //								//hspConnector::get()->frineds[i]["hspNo"]=obj["memberNoMap"][key].asInt64();
-																		   //								break;
-																		   //							}
-																		   //						}
-																		   //					}
-																		   //
-																		   //
-																		   //					hspConnector::get()->idMap = idMap;
-																		   //					hspConnector::get()->appFriends = friendInfo;
-																		   //
-																		   //					//CCLog("%s",GraphDogLib::JsonObjectToString(obj).c_str());
-																		   //					jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-																		   //
-																		   //					delsel.func(obj);
-																		   //
-																		   //					jsonDelegator::get()->remove(delekey);
-																		   //				});
-																		   
-																	   });
-										  
-									  });
+
+	
+	/*
+	 "app_friends_info" : [
+	 {
+	 "friend_nickname" : "",
+	 "hashed_talk_user_id" : "BoMOQ0MOgwY",
+	 "message_blocked" : false,
+	 "nickname" : "경수2",
+	 "profile_image_url" : "",
+	 "user_id" : "90014050894642625"
+	 },
+	 */
+	
+	Json::Value appfriends;
+	for(auto i : KnownFriends::getInstance()->getFriends())
+	{
+		Json::Value v;
+		v["friends_nickname"] = i.nick;
+		v["hashed_talk_user_id"] = i.hashedTalkUserId;
+		v["message_blocked"] = i.messageBlocked;
+		v["nickname"] = i.nick;
+		v["profile_image_url"] = i.profileUrl;
+		v["user_id"] = i.userId;
+		appfriends.append(v);
+	}
+	for(auto i : UnknownFriends::getInstance()->getFriends())
+	{
+		Json::Value v;
+		v["friends_nickname"] = i.nick;
+		v["hashed_talk_user_id"] = i.hashedTalkUserId;
+		v["message_blocked"] = i.messageBlocked;
+		v["nickname"] = i.nick;
+		v["profile_image_url"] = i.profileUrl;
+		v["user_id"] = i.userId;
+		appfriends.append(v);
+	}
+	appfriends.append(hspConnector::get()->myKakaoInfo);
+	Json::Value p;
+	
+	
+	
+	for(auto i : KnownFriends::getInstance()->getFriends())
+	{
+		p["memberIDList"].append(i.userId);
+	}
+	for(auto i : UnknownFriends::getInstance()->getFriends())
+	{
+		p["memberIDList"].append(i.userId);
+	}
+	
+	
+	p["memberIDList"].append(hspConnector::get()->getKakaoID());
+	
+	//step2 위클리스코어 목록 읽어옴
+	hspConnector::get()->command("getweeklyscorelist",p,[p1,appfriends](Json::Value obj)
+															 {
+																 CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
+																 
+																 //step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
+																 GraphDogLib::JsonToLog("friend1", appfriends);
+																 Json::Value scorelist;
+																 
+																 for(unsigned int i=0;i<appfriends.size();i++){
+																	 string mid = appfriends[i]["user_id"].asString();
+																	 scorelist[mid]=appfriends[i];
+																 }
+																 
+																 for(unsigned int j=0;j<obj["list"].size();j++){
+																	 string mid = obj["list"][j]["memberID"].asString();
+																	 scorelist[mid]["scoreInfo"]=obj["list"][j];
+																 }
+																 GraphDogLib::JsonToLog("result", scorelist);
+																 Json::Value scorearray;
+																 for(auto iter = scorelist.begin(); iter != scorelist.end(); ++iter)
+																 {
+																	 Json::Value temp = scorelist[iter.key().asString()];
+																	 temp["user_id"] = iter.key().asString();
+																	 scorearray.append(temp);
+																 }
+																 
+																 // 정렬 함
+																 // Selection Sort
+																 int N = scorearray.size();
+																 for (int i = 0; i < (N - 1); i++)
+																 {
+																	 int minIndex = i;
+																	 
+																	 // Find the index of the minimum element
+																	 for (int j = i + 1; j < N; j++)
+																	 {
+																		 if (scorearray[j]["scoreInfo"].get("score", -1).asInt() > scorearray[minIndex]["scoreInfo"].get("score", -1).asInt())
+																		 {
+																			 minIndex = j;
+																		 }
+																	 }
+																	 
+																	 // Swap if i-th element not already smallest
+																	 if (minIndex > i)
+																	 {
+																		 scorearray[i].swap(scorearray[minIndex]);
+																		 //            swap(a[i], a[minIndex]);
+																	 }
+																 }
+																 
+																 //결과 돌려줌
+																 p1(scorearray);
+															 });
 }
 void RankPopup::drawRank (Json::Value obj)
 {

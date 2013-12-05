@@ -14,6 +14,7 @@
 #include "CardCase.h"
 #include "DownloadFile.h"
 #include "StarGoldData.h"
+#include "FriendData.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -65,7 +66,7 @@ public:
 	void loadRank();
 	
 	
-	void drawRank(Json::Value obj);
+	void drawRank();
 	
 	
 	////////////////////////////////////////////////////////
@@ -131,8 +132,8 @@ public:
 		pDispatcher->addTargetedDelegate(this, -170, true);
 	}
 protected:
-	
-	Json::Value m_scoreList;
+	std::vector<FriendData> m_scoreList;
+//	Json::Value m_scoreList;
 	
 	FriendListTableView* rankTableView;
 	

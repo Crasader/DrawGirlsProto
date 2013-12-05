@@ -4,6 +4,8 @@
 #include "InviteEventPopup.h"
 #include "JoinGameFriendPopup.h"
 #include "UnknownFriends.h"
+#include "KnownFriend.h"
+
 #include "KSAlertView.h"
 
 
@@ -132,32 +134,19 @@ void FriendListPopup::finishedOpen()
 
 void FriendListPopup::loadRank()
 {
-	std::function<void(Json::Value e)> p1 = bind(&ThisClassType::drawRank, this,
-																							 std::placeholders::_1);
-	hspConnector::get()->kLoadFriends
-	(Json::Value(),[p1](Json::Value fInfo)
-	 {
-		 CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-		 Json::Value appfriends = fInfo["app_friends_info"];
-		 
-		 for(auto i : UnknownFriends::getInstance()->getFriends())
-		 {
-			 Json::Value v;
-			 v["friend_nickname"] = i.nick;
-			 v["nickname"] = i.nick;
-			 v["profile_image_url"] = "";
-			 v["user_id"] = i.userId;
-			 v["lastDate"] = i.lastDate;
-			 v["unknownFriend"] = 1;
-			 appfriends.append(v);
-		 }
-		 p1(appfriends);
-	 });
+	m_scoreList.insert(m_scoreList.end(), UnknownFriends::getInstance()->getFriends().begin(),
+										 UnknownFriends::getInstance()->getFriends().end());
+	m_scoreList.insert(m_scoreList.end(), KnownFriends::getInstance()->getFriends().begin(),
+										 KnownFriends::getInstance()->getFriends().end());
+	//		 m_scoreList.insert(UnknownFriends::getInstance()->getFriends());
+	//		 m_
+	drawRank();
+
 }
 
-void FriendListPopup::drawRank( Json::Value obj )
+void FriendListPopup::drawRank()
 {
-	m_scoreList = obj;
+//	m_scoreList = obj;
 	//320x320 ≈◊¿Ã∫Ì ∫‰ ª˝º∫
 	rankTableView = FriendListTableView::create(this, CCSizeMake(424, 195), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
@@ -205,7 +194,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	CCLabelTTF* title;
 	CCMenuItemLambda* sendBtn, *deleteBtn;
 	CCLabelTTF* score;
-	Json::Value* member = &m_scoreList[idx];
+	FriendData* member = &m_scoreList[idx];
 	KS::KSLog("%", *member);
 	CCTableViewCell* cell = new CCTableViewCell();
 	cell->init();
@@ -222,7 +211,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,0);
 	
-	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "no_img.png");
+	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "no_img.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kProfileImg);
 	profileImg->setPosition(ccp(27, 22));
@@ -237,8 +226,9 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	_menu->setTag(kFriendTableTagMenu);
 	cell->addChild(_menu, 1);
 	
-	
-	if(::getHeartIsSendable( m_scoreList[idx]["user_id"].asString() ))
+	ostringstream oss;
+	oss << (*member).userId;
+	if(::getHeartIsSendable( oss.str() ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
 		("rank_cell_send.png", "rank_cell_send.png",
@@ -257,8 +247,10 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 			 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 			 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-			 std::string recvId = m_scoreList[idx]["user_id"].asString();
-			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
+			 int64 recvId = (*member).userId;
+			 if(recvId < 0)
+				 recvId = -recvId;
+//			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 			 p["receiverMemberID"] = recvId;
 			 p["senderMemberID"] = hspConnector::get()->getKakaoID();
 			 p["type"] = kHeart;
@@ -271,7 +263,10 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			
 																			
 																			GraphDogLib::JsonToLog("sendMessage", r);
-																			::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
+																			ostringstream oss;
+																			oss << (*member).userId;
+																			std::string userIdStr = oss.str();
+																			::setHeartSendTime(userIdStr);
 																			obj->removeFromParent();
 																			
 																			CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
@@ -282,12 +277,12 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			// ¬ ¡ˆ∫∏≥ª±‚ - ƒ´ƒ´ø¿
 																			////////////////////////////////
 																			Json::Value p2;
-																			p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
+																			p2["receiver_id"] = (*member).userId;
 																			p2["message"] = "하트 받아라.";
 																			hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
 																																				{
 																																					GraphDogLib::JsonToLog("kSendMessage", r);
-																																					setInviteSendTime(m_scoreList[idx]["user_id"].asString());
+																																					setInviteSendTime(userIdStr);
 																																				});
 																		});
 		 });
@@ -303,7 +298,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	sendBtn->setTag(kFriendSendHeart);
 	sendBtn->setUserData((void *)idx);
 	_menu->addChild(sendBtn,2);
-	if(m_scoreList[idx]["unknownFriend"].asInt())
+	if((*member).unknownFriend)
 	{
 		deleteBtn = CCMenuItemImageLambda::create
 		("rank_friend_list_cancel.png", "rank_friend_list_cancel.png",
@@ -313,7 +308,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 Json::Value param;
 			 
 			 param["memberID"] = hspConnector::get()->getKakaoID();
-			 param["friendID"] = m_scoreList[idx]["user_id"].asString();
+			 param["friendID"] = (*member).userId;
 			 KSAlertView* av = KSAlertView::create();
 			 av->setCloseOnPress(false);
 			 av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
@@ -351,12 +346,12 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 						{
 							av->removeFromParent();
 							
-							UnknownFriends::getInstance()->deleteById(m_scoreList[idx]["user_id"].asUInt64());
+							UnknownFriends::getInstance()->deleteById((*member).userId);
 							
 							int targetIndex = -1;
 							for(int i=0; i<m_scoreList.size(); i++)
 							{
-								if(m_scoreList[i]["user_id"].asUInt64() == m_scoreList[idx]["user_id"].asUInt64())
+								if(m_scoreList[i].userId == (*member).userId)
 								{
 									targetIndex = i;
 									break;
@@ -365,8 +360,9 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 							
 							if(targetIndex != -1)
 							{
-								removeFromIndex(m_scoreList, targetIndex);
-								UnknownFriends::getInstance()->deleteById(m_scoreList[idx]["user_id"].asUInt64());
+								m_scoreList.erase(m_scoreList.begin() + targetIndex);
+//								removeFromIndex(m_scoreList, targetIndex);
+								UnknownFriends::getInstance()->deleteById((*member).userId);
 								rankTableView->reloadData();
 								m_friendLimitFnt->setString
 								(CCString::createWithFormat
@@ -416,12 +412,14 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	
 	
 	//sendBtn->setUserData((void *)&member);
-	if((*member)["user_id"].asString()==hspConnector::get()->getKakaoID()){
+	ostringstream oss2;
+	oss2 << (*member).userId;
+	if(oss2.str() == hspConnector::get()->getKakaoID()){
 		sendBtn->setVisible(false);
 	}else{
 		sendBtn->setVisible(true);
 	}
-	title->setString((*member)["nickname"].asString().c_str());
+	title->setString((*member).nick.c_str());
 	score->setString("최종접속 : ...");
 	//rank->setString((*member)["rankingGrade"].asString().c_str());
 	
