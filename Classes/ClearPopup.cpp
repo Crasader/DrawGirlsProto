@@ -25,6 +25,8 @@
 #include "ChallengeSend.h"
 #include "KSAlertView.h"
 #include "HelpResultSend.h"
+#include "UnknownFriends.h"
+
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -396,6 +398,19 @@ void ClearPopup::resultLoadFriends(Json::Value result_data)
 			
 			p["memberIDList"].append(appfriends[i]["user_id"].asString());
 		}
+		for(auto i : UnknownFriends::getInstance()->getFriends())
+		{
+			ClearFriendRank fInfo;
+			fInfo.nickname = i.nick + "[unknown]";
+			fInfo.img_url = "";
+			fInfo.user_id = i.userId;
+			fInfo.score = 0;
+			fInfo.is_play = false;
+			friend_list.push_back(fInfo);
+			
+			p["memberIDList"].append(i.userId);
+		}
+		
 		
 		p["stageNo"]=mySD->getSilType();
 		hspConnector::get()->command("getstagescorelist",p,json_selector(this, ClearPopup::resultGetStageScoreList));

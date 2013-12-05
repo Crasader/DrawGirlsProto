@@ -22,6 +22,7 @@
 #include "ChallengeSend.h"
 #include "HelpResultSend.h"
 #include "SendMessageUtil.h"
+#include "UnknownFriends.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -587,6 +588,21 @@ void FailPopup::resultLoadFriends(Json::Value result_data)
 			p["memberIDList"].append(appfriends[i]["user_id"].asString());
 		}
 		
+		for(auto i : UnknownFriends::getInstance()->getFriends())
+		{
+			FailFriendRank fInfo;
+			fInfo.nickname = i.nick + "[unknown]";
+			fInfo.img_url = "";
+			fInfo.user_id = i.userId;
+			fInfo.score = 0;
+			fInfo.is_play = false;
+			fInfo.is_message_blocked = false;
+			friend_list.push_back(fInfo);
+			
+			p["memberIDList"].append(i.userId);
+		}
+		
+		
 		p["stageNo"]=mySD->getSilType();
 		hspConnector::get()->command("getstagescorelist",p,json_selector(this, FailPopup::resultGetStageScoreList));
 	}
@@ -774,6 +790,7 @@ void FailPopup::cellAction( CCObject* sender )
 	KSAlertView* av = KSAlertView::create();
 	av->setCenterY(150);
 	auto ttf = CCLabelTTF::create((friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...").c_str(), "", 12.f);
+	ttf->setColor(ccc3(0, 0, 0));
 	av->setContentNode(
 										 ttf
 										 );
@@ -823,6 +840,7 @@ void FailPopup::cellAction( CCObject* sender )
 																										av->setCenterY(150);
 																										auto ttf = CCLabelTTF::create
 																											(("요청을 성공적으로 보냈습니다."), "", 12.f);
+																										ttf->setColor(ccc3(0, 0, 0));
 																										av->setContentNode(
 																																			 ttf
 																																			 );
@@ -918,7 +936,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 		{
 			if(!(*member).is_message_blocked)
 			{
-				if(::getIsNotHelpableUser((*member).user_id.c_str()) <= 0)
+				if(::getIsNotHelpableUser((*member).user_id.c_str(), mySGD->getHelpCoolTime()) <= 0)
 				{
 					CCSprite* n_help = CCSprite::create("ending_help_on.png");
 					CCSprite* s_help = CCSprite::create("ending_help_on.png");
