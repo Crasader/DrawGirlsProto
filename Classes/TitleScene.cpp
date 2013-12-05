@@ -11,6 +11,8 @@
 #include "TakeCardPopup.h"
 #include "utf8.h"
 #include "UnknownFriends.h"
+#include "KnownFriend.h"
+#include "KSUtil.h"
 
 CCScene* TitleScene::scene()
 {
@@ -96,7 +98,7 @@ void TitleScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setHeartMax(result_data["heartMax"].asInt());
 		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
 		
-		startGetFriendList();
+		startGetKnownFriendList();
 	}
 	else
 	{
@@ -120,13 +122,126 @@ void TitleScene::resultGetCommonSetting(Json::Value result_data)
 	}
 }
 
-void TitleScene::startGetFriendList()
+void TitleScene::startGetKnownFriendList()
+{
+//	std::function<void(Json::Value e)> p1 = bind(&RankPopup::drawRank, this, std::placeholders::_1);
+	//step1 카카오친구목록 로드
+	hspConnector::get()->kLoadFriends(Json::Value(),
+											bind(&ThisClassType::resultGetKnownFriendList, this, std::placeholders::_1));
+}
+void TitleScene::resultGetKnownFriendList(Json::Value fInfo)
+{
+	KS::KSLog("%", fInfo);
+	if(fInfo["status"].asInt() == 0)
+	{
+		Json::Value appFriends = fInfo["app_friends_info"];
+		
+		for(int i=0; i<appFriends.size(); i++)
+		{
+			KnownFriendsData kfd;
+			kfd.nick = appFriends[i]["nickname"].asString();
+			kfd.messageBlocked = appFriends[i]["message_blocked"].asInt();
+			kfd.profileUrl = appFriends[i]["profile_image_url"].asString();
+			kfd.userId = appFriends[i]["user_id"].asInt64();
+			
+			KnownFriends::getInstance()->add(kfd);
+		}
+		startGetKnownFriendUserData();
+	}
+	else
+	{
+		save_target = this;
+		save_delegate = callfunc_selector(TitleScene::startGetKnownFriendList);
+		
+		state_label->setString("아는 친구정보를 가져오는데 실패하였습니다.");
+		
+		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+		replay_item->setTag(kTitle_MT_replay);
+		
+		CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setPosition(ccp(240,160));
+		addChild(replay_menu, 0, kTitle_MT_replay);
+		
+		is_menu_enable = true;
+	}
+}
+
+void TitleScene::startGetKnownFriendUserData()
+{
+	Json::Value memberIDList;
+	for(auto i : KnownFriends::getInstance()->getFriends())
+	{
+		memberIDList["memberIDList"].append(i.userId);
+	}
+	
+	hspConnector::get()->command("getuserdatalist", memberIDList,
+															 bind(&ThisClassType::resultGetKnownFriendUserData,
+																		this,	std::placeholders::_1));
+}
+void TitleScene::resultGetKnownFriendUserData(Json::Value v)
+{
+	/*
+	 "list" :
+	 [
+	 
+	 {
+	 "data" : "{\"ahs\":241075,\"ctc\":3,\"hic%d\":[null,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"scard\":0,\"sg\":56360,\"ss\":10,\"cd%d\":[null,5,5,5],\"hgcard%d\":[null,1,2,3],\"itc%d\":[null,\"\",\"\",\"\"],\"tcn%d\":[null,900,50,10],\"htc\":0,\"icp%d\":[null,false,false],\"opc\":0,\"nick\":\"Fred\",\"csc\":0,\"osc\":0}",
+	 "friendList" : "[]",
+	 "joinDate" : 20131127012344,
+	 "lastDate" : 20131204163415,
+	 "memberID" : 90014050894642625,
+	 "nick" : "경수2",
+	 "no" : 23
+	 }
+	 */
+	if(v["state"].asString() == "ok")
+	{
+		KS::KSLog("%", v);
+		for(int i=0; i<v["list"].size(); i++)
+		{
+			Json::Reader reader;
+			Json::Value userData;
+			reader.parse(v["list"][i]["data"].asString(), userData);
+			KnownFriends::getInstance()->putUserData(i, userData);
+			KnownFriends::getInstance()->putLastDate(i, v["list"][i]["lastDate"].asInt64());
+			KnownFriends::getInstance()->putJoinDate(i, v["list"][i]["joinDate"].asInt64());
+		}
+		startGetUnknownFriendList();
+	}
+	else
+	{
+		save_target = this;
+		save_delegate = callfunc_selector(TitleScene::startGetKnownFriendUserData);
+		
+		state_label->setString("아는 친구 유저데이터를 가져오는데 실패하였습니다.");
+		
+		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+		replay_item->setTag(kTitle_MT_replay);
+		
+		CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setPosition(ccp(240,160));
+		addChild(replay_menu, 0, kTitle_MT_replay);
+		
+		is_menu_enable = true;
+	}
+}
+
+void TitleScene::startGetUnknownFriendList()
 {
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getKakaoID();
-	hspConnector::get()->command("getfriendlist", param, json_selector(this, TitleScene::resultGetFriendList));
+	hspConnector::get()->command("getfriendlist", param, json_selector(this, TitleScene::resultGetUnknownFriendList));
 }
-void TitleScene::resultGetFriendList(Json::Value result_data)
+
+void TitleScene::resultGetUnknownFriendList(Json::Value result_data)
 {
 	CCLog("resultGetFriendList data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	
@@ -141,13 +256,13 @@ void TitleScene::resultGetFriendList(Json::Value result_data)
 			ufd.nick = result_data["list"][i]["nick"].asString();
 			UnknownFriends::getInstance()->add(ufd);
 		}
+		startGetUnknownFriendUserData();
 		
-		startGetCharacterInfo();
 	}
 	else
 	{
 		save_target = this;
-		save_delegate = callfunc_selector(TitleScene::startGetFriendList);
+		save_delegate = callfunc_selector(TitleScene::startGetUnknownFriendList);
 		
 		state_label->setString("친구 정보를 가져오는데 실패하였습니다.");
 		
@@ -166,6 +281,70 @@ void TitleScene::resultGetFriendList(Json::Value result_data)
 	}
 }
 
+void TitleScene::startGetUnknownFriendUserData()
+{
+	Json::Value memberIDList;
+	for(auto i : UnknownFriends::getInstance()->getFriends())
+	{
+		memberIDList["memberIDList"].append(i.userId);
+	}
+	
+	hspConnector::get()->command("getuserdatalist", memberIDList,
+															 bind(&ThisClassType::resultGetUnknownFriendUserData,
+																		this,	std::placeholders::_1));
+}
+void TitleScene::resultGetUnknownFriendUserData(Json::Value v)
+{
+	/*
+	 "list" :
+	 [
+	 
+	 {
+	 "data" : "{\"ahs\":241075,\"ctc\":3,\"hic%d\":[null,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"scard\":0,\"sg\":56360,\"ss\":10,\"cd%d\":[null,5,5,5],\"hgcard%d\":[null,1,2,3],\"itc%d\":[null,\"\",\"\",\"\"],\"tcn%d\":[null,900,50,10],\"htc\":0,\"icp%d\":[null,false,false],\"opc\":0,\"nick\":\"Fred\",\"csc\":0,\"osc\":0}",
+	 "friendList" : "[]",
+	 "joinDate" : 20131127012344,
+	 "lastDate" : 20131204163415,
+	 "memberID" : 90014050894642625,
+	 "nick" : "경수2",
+	 "no" : 23
+	 }
+	 */
+	if(v["state"].asString() == "ok")
+	{
+		KS::KSLog("%", v);
+		for(int i=0; i<v["list"].size(); i++)
+		{
+			Json::Reader reader;
+			Json::Value userData;
+			reader.parse(v["list"][i]["data"].asString(), userData);
+			UnknownFriends::getInstance()->putUserData(i, userData);
+			UnknownFriends::getInstance()->putLastDate(i, v["list"][i]["lastDate"].asInt64());
+			UnknownFriends::getInstance()->putJoinDate(i, v["list"][i]["joinDate"].asInt64());
+		}
+		startGetCharacterInfo();
+	}
+	else
+	{
+		save_target = this;
+		save_delegate = callfunc_selector(TitleScene::startGetUnknownFriendUserData);
+		
+		state_label->setString("아는 친구 유저데이터를 가져오는데 실패하였습니다.");
+		
+		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+		replay_item->setTag(kTitle_MT_replay);
+		
+		CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setPosition(ccp(240,160));
+		addChild(replay_menu, 0, kTitle_MT_replay);
+		
+		is_menu_enable = true;
+	}
+
+}
 void TitleScene::startGetCharacterInfo()
 {
 	Json::Value param;

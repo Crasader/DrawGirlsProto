@@ -20,7 +20,18 @@ void UnknownFriends::deleteById(uint64 kakaoId)
 		}
 	}
 }
-
+void UnknownFriends::putJoinDate(int index, int64 jd)
+{
+	m_friends[index].joinDate = jd;
+}
+void UnknownFriends::putLastDate(int index, int64 jd)
+{
+	m_friends[index].lastDate = jd;
+}
+void UnknownFriends::putUserData(int index, Json::Value d)
+{
+	m_friends[index].userData = d;
+}
 UnknownFriendsData* UnknownFriends::findById(uint64 kakaoId)
 {
 	for(auto& i : m_friends)
