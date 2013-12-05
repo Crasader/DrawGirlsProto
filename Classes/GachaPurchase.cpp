@@ -358,8 +358,7 @@ void GachaPurchase::visibling()
 			(target_in->*delegate_in)();
 			CCLog("hat close");
 		}), kPMS_Z_popup);
-		// 경수
-		CCLog("Go! real gacha!! : %d", recent_gacha);
+		removeFromParent();
 	}
 }
 
