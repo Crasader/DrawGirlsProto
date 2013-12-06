@@ -431,7 +431,11 @@ public:
 		else if(t_key == kSaveUserData_Key_highScore)
 			data[getKey(kDSH_Key_allHighScore)] = getIntegerForKey(kDSH_Key_allHighScore);
 		else if(t_key == kSaveUserData_Key_selectedCard)
+		{
 			data[getKey(kDSH_Key_selectedCard)] = getIntegerForKey(kDSH_Key_selectedCard);
+			data[getKey(kDSH_Key_cardLevel_int1)] = getIntegerForKey(kDSH_Key_cardLevel_int1, getIntegerForKey(kDSH_Key_selectedCard));
+			data[getKey(kDSH_Key_cardPassive_int1)] = getStringForKey(kDSH_Key_cardPassive_int1, getIntegerForKey(kDSH_Key_selectedCard));
+		}
 		else if(t_key == kSaveUserData_Key_openPuzzle)
 		{
 			int open_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
