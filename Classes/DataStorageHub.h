@@ -351,14 +351,20 @@ public:
 			Json::Value level_list = data.get(getKey(kDSH_Key_cardLevel_int1), NULL);
 			if(level_list != NULL)
 				setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, data[getKey(kDSH_Key_cardLevel_int1)].get(i, 1).asInt(), false);
+			else
+				setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, 1, false);
 			
 			Json::Value max_dur_list = data.get(getKey(kDSH_Key_cardMaxDurability_int1), NULL);
 			if(max_dur_list != NULL)
 				setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number, data[getKey(kDSH_Key_cardMaxDurability_int1)].get(i, 5).asInt(), false);
+			else
+				setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number, 5, false);
 			
 			Json::Value passive_list = data.get(getKey(kDSH_Key_cardPassive_int1), NULL);
 			if(passive_list != NULL)
 				setStringForKey(kDSH_Key_cardPassive_int1, take_card_number, data[getKey(kDSH_Key_cardPassive_int1)].get(i, "").asString(), false);
+			else
+				setStringForKey(kDSH_Key_cardPassive_int1, take_card_number, "", false);
 			
 			if(NSDS_GS(kSDS_CI_int1_imgInfo_s, take_card_number) == "")
 				card_data_load_list.push_back(take_card_number);
