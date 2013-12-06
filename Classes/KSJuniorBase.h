@@ -69,6 +69,9 @@ public:
 	{
 		// nothing.
 	}
+//	void assignJuniorData(Json::Value data);
+//	void applyPassiveData(const std::string& passive);
+//	void applyAutoBalance();
 	virtual void startSpringCumber(float userdata){}
 	virtual void startAnimationNoDirection();
 	void damageReaction(float dt);

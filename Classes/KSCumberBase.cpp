@@ -10,6 +10,44 @@
 #include "Jack.h"
 #include "PlayUI.h"
 #include <chrono>
+template <class _Tp>
+struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
+{
+	virtual _Tp operator()(const _Tp& a, const _Tp& b) const = 0;//(const _Tp& a, const _Tp& b) const
+	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
+	//	{
+	//		return __x*(1 - __y);
+	//	}
+};
+
+template <class _Tp>
+struct DecreaseOp : public PassiveOp<_Tp>
+{
+	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
+	{
+		return a*(1 - b);
+	}
+	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
+	//	{
+	//		return __x*(1 - __y);
+	//	}
+};
+
+
+template <class _Tp>
+struct SubtractOp : public PassiveOp<_Tp>
+{
+	virtual ~SubtractOp(){
+	}
+	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
+	{
+		return a - b;
+	}
+	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
+	//	{
+	//		return __x*(1 - __y);
+	//	}
+};
 
 
 void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
@@ -1891,6 +1929,69 @@ void KSCumberBase::settingScale( float startScale, float minScale, float maxScal
 	m_scale.scale.init(m_startScale, m_startScale, 0.f);
 }
 
+void KSCumberBase::assignBossData(Json::Value boss)
+{
+	m_properties = boss;
+	float hp = MAX(boss["hp"].asInt(), 0);
+	float minSpeed = MAX(boss["speed"]["min"].asDouble(), 0);
+	float startSpeed = MAX(boss["speed"]["start"].asDouble(), 0); //getNumberFromJsonValue(speed["start"]);
+	float maxSpeed = MAX(boss["speed"]["max"].asDouble(), 0);// getNumberFromJsonValue(speed["min"]);
+	
+	float minScale = MAX(boss["scale"]["min"].asDouble(), 0); // getNumberFromJsonValue(scale["min"]);
+	float startScale = MAX(boss["scale"]["start"].asDouble(), 0); // getNumberFromJsonValue(scale["start"]);
+	float maxScale = MAX(boss["scale"]["max"].asDouble(), 0); // getNumberFromJsonValue(scale["max"]);
+	
+	int normalMovement = boss["movement"].get("normal",1).asInt();
+	int drawMovement = boss["movement"].get("draw", normalMovement).asInt();
+	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
+	
+	float agi = MAX(boss.get("agi", 0).asDouble(), 0);
+	float ai = MAX(0, boss.get("ai", 0).asInt() );
+	
+	settingFuryRule();
+	m_totalHp = m_remainHp = hp;
+	m_agility = agi;
+	m_aiValue = ai;
+	m_startScale = startScale;
+	m_minScale = minScale;
+	m_maxScale = maxScale;
+	
+	m_startSpeed = startSpeed;
+	m_minSpeed = minSpeed;
+	m_maxSpeed = maxSpeed;
+	
+	m_normalMovement = (enum MOVEMENT)normalMovement;
+	m_drawMovement = (enum MOVEMENT)drawMovement;
+	m_furyMovement = (enum MOVEMENT)furyMovement;
+}
+
+void KSCumberBase::applyPassiveData(const std::string& passive)
+{
+	Json::Reader reader;
+	Json::Value passiveCard;
+	reader.parse(passive, passiveCard);
+	shared_ptr<PassiveOp<float>> cardOperator;
+	if(passiveCard["operator"].asString() == "-")
+	{
+		cardOperator = shared_ptr<PassiveOp<float>>(new SubtractOp<float>());
+	}
+	else// if(passiveCard["operator"].asString() == "*(1-x)")
+	{
+		cardOperator = shared_ptr<PassiveOp<float>>(new DecreaseOp<float>());
+	}
+	m_totalHp = MAX((*cardOperator)(m_totalHp, passiveCard["hp"].asInt()), 0);
+	m_minSpeed = MAX((*cardOperator)(m_minSpeed, passiveCard["speed"].asDouble()), 0);
+	m_startSpeed = MAX((*cardOperator)(m_startSpeed, passiveCard["speed"].asDouble()), 0); //getNumberFromJsonValue(speed["start"]);
+	m_maxSpeed = MAX((*cardOperator)(m_maxSpeed, passiveCard["speed"].asDouble()), 0);// getNumberFromJsonValue(speed["min"]);
+	
+	m_minScale = MAX((*cardOperator)(m_minScale, passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["min"]);
+	m_startScale = MAX((*cardOperator)(m_startScale, passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["start"]);
+	m_maxScale = MAX((*cardOperator)(m_maxScale, passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["max"]);
+
+	m_agility = MAX((*cardOperator)(m_agility, passiveCard["agi"].asDouble()), 0);
+	
+	
+}
 void KSCumberBase::settingFuryRule()
 {
 	m_furyRule.gainPercent = 40; //fury["gainpercent"].asDouble();
@@ -1899,6 +2000,24 @@ void KSCumberBase::settingFuryRule()
 	//		m_furyRule
 }
 
+void KSCumberBase::applyAutoBalance()
+{
+	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
+	int balanceN = 10;
+	float downLimit = 0.5f;
+	//
+	ostringstream oss;
+	oss << mySD->getSilType();
+	std::string playcountKey = std::string("playcount_") + oss.str();
+	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
+	
+	if(autobalanceTry < playCount)
+	{
+		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
+		m_aiValue = MAX(m_aiValue * downLimit, m_aiValue - downLimit / balanceN * exceedPlay);
+		m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent - downLimit / balanceN * exceedPlay);
+	}
+}
 void KSCumberBase::settingAI( int ai )
 {
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
