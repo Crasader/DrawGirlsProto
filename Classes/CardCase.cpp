@@ -367,7 +367,7 @@ void SpinBasicMissile::myInit( string type_name, int elemental_level, CCPoint t_
 CardCase* CardCase::create( int t_selected_card_number )
 {
 	CardCase* t_cc = new CardCase();
-	t_cc->myInit(t_selected_card_number, 0, "-1");
+	t_cc->myInit(t_selected_card_number, -1, "-1");
 	t_cc->autorelease();
 	return t_cc;
 }
@@ -375,7 +375,7 @@ CardCase* CardCase::create( int t_selected_card_number )
 CardCase* CardCase::create( int t_card_stage, int t_card_grade )
 {
 	CardCase* t_cc = new CardCase();
-	t_cc->myInit(NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_grade), 0, "-1");
+	t_cc->myInit(NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_grade), -1, "-1");
 	t_cc->autorelease();
 	return t_cc;
 }
@@ -478,7 +478,7 @@ void CardCase::myInit( int t_selected_card_number )
 	recent_durability_label->setPosition(ccp(20,25));
 	durability_case->addChild(recent_durability_label, kCARDCASE_Z_data);
 
-	if(card_level == 0)
+	if(card_level == -1)
 		card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number);
 	
 	CCSprite* option_case = CCSprite::create("card_case_option.png");

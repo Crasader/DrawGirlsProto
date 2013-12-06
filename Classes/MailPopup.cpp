@@ -656,7 +656,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
 							myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, contentObj["cardnumber"].asInt(), 1);
 							myDSH->setStringForKey(kDSH_Key_cardPassive_int1, contentObj["cardnumber"].asInt(), NSDS_GS(kSDS_CI_int1_passive_s, contentObj["cardnumber"].asInt()));
-							av->setContentNode(addCardImg(contentObj["cardnumber"].asInt(), 0, "-1"));
+							av->setContentNode(addCardImg(contentObj["cardnumber"].asInt(), -1, "-1"));
 							//							av->addChild();
 						}
 						
@@ -1369,7 +1369,7 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 			
 			loading_card_img->removeFromParent();
 			
-			loading_parent->addChild(addCardImg(download_card_number, 0, "-1"));
+			loading_parent->addChild(addCardImg(download_card_number, -1, "-1"));
 		}
 	}
 	else
@@ -1415,7 +1415,7 @@ void MailPopup::successAction ()
 		
 		loading_card_img->removeFromParent();
 		
-		loading_parent->addChild(addCardImg(download_card_number, 0, "-1"));
+		loading_parent->addChild(addCardImg(download_card_number, -1, "-1"));
 	}
 	else
 	{
