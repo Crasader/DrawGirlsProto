@@ -942,6 +942,33 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 		{
 			// 경수
 			// 해당 유저의 선택한 카드의 레벨, 패시브데이터 가 필요
+			
+			// 자기 자신을 찍음
+//			if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+			{
+				
+			}
+//			else
+			{
+				for(auto i : UnknownFriends::getInstance()->getFriends())
+				{
+					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
+					{
+						KS::KSLog("%", i);
+						break;
+					}
+				}
+				for(auto i : KnownFriends::getInstance()->getFriends())
+				{
+					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
+					{
+						KS::KSLog("%", i);
+						break;
+					}
+				}
+			}
+			
+//			m_scoreList[cell->getIdx()]["user_id"]
 			addCardImg(selectedCardIndex, 0, "-1");
 		}
 	}

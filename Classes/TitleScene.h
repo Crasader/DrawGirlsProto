@@ -43,7 +43,7 @@ public:
 	CREATE_FUNC(TitleScene);
 	
 private:
-	
+	Json::Value m_tempUserData;
 	CCLabelTTF* state_label;
 	CCLabelBMFont* download_state;
 	
@@ -101,13 +101,13 @@ private:
 	
 	void startGetKnownFriendList();
 	void resultGetKnownFriendList(Json::Value result_data);
-	void startGetKnownFriendUserData();
-	void resultGetKnownFriendUserData(Json::Value result_data);
+	void startGetAllFriendUserData();
+	void resultGetAllFriendUserData(Json::Value result_data);
 	
-	void startGetUnknownFriendList();
-	void resultGetUnknownFriendList(Json::Value result_data);
-	void startGetUnknownFriendUserData();
-	void resultGetUnknownFriendUserData(Json::Value result_data);
+//	void startGetUnknownFriendList();
+//	void resultGetUnknownFriendList(Json::Value result_data);
+//	void startGetUnknownFriendUserData();
+//	void resultGetUnknownFriendUserData(Json::Value result_data);
 	
 	
 	

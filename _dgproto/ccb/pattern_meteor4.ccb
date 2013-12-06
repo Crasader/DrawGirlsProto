@@ -89,8 +89,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>16</real>
-									<real>16</real>
+									<real>12</real>
+									<real>12</real>
 								</array>
 							</dict>
 							<dict>
@@ -289,8 +289,6 @@
 								<string>ccbResources/ccbParticleFire.png</string>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
