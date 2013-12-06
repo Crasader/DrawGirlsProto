@@ -169,19 +169,19 @@ void TitleScene::resultGetCharacterInfo(Json::Value result_data)
 		{
 			Json::Value character_list = result_data["list"];
 			int character_count = character_list.size();
-			NSDS_SI(kSDS_GI_characterCount_i, character_count);
+			NSDS_SI(kSDS_GI_characterCount_i, character_count, false);
 			for(int i=1;i<=character_count;i++)
 			{
-				NSDS_SI(kSDS_GI_characterInfo_int1_no_i, i, character_list[i-1]["no"].asInt());
-				NSDS_SS(kSDS_GI_characterInfo_int1_name_s, i, character_list[i-1]["name"].asString());
-				NSDS_SS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, i, character_list[i-1]["purchaseInfo"]["type"].asString());
-				NSDS_SI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, i, character_list[i-1]["purchaseInfo"]["value"].asInt());
-				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_gold_d, i, character_list[i-1]["statInfo"]["gold"].asDouble());
-				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_percent_d, i, character_list[i-1]["statInfo"]["percent"].asDouble());
-				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, i, character_list[i-1]["statInfo"]["feverTime"].asInt());
-				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_speed_d, i, character_list[i-1]["statInfo"]["speed"].asDouble());
-				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_life_i, i, character_list[i-1]["statInfo"]["life"].asInt());
-				NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString());
+				NSDS_SI(kSDS_GI_characterInfo_int1_no_i, i, character_list[i-1]["no"].asInt(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_name_s, i, character_list[i-1]["name"].asString(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, i, character_list[i-1]["purchaseInfo"]["type"].asString(), false);
+				NSDS_SI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, i, character_list[i-1]["purchaseInfo"]["value"].asInt(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_gold_d, i, character_list[i-1]["statInfo"]["gold"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_percent_d, i, character_list[i-1]["statInfo"]["percent"].asDouble(), false);
+				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, i, character_list[i-1]["statInfo"]["feverTime"].asInt(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_speed_d, i, character_list[i-1]["statInfo"]["speed"].asDouble(), false);
+				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_life_i, i, character_list[i-1]["statInfo"]["life"].asInt(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
 				
 				if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s, i) != character_list[i-1]["resourceInfo"]["ccbi"].asString())
 				{
@@ -195,7 +195,7 @@ void TitleScene::resultGetCharacterInfo(Json::Value result_data)
 					// ================================
 				}
 				
-				NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_imageID_s, i, character_list[i-1]["resourceInfo"]["imageID"].asString());
+				NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_imageID_s, i, character_list[i-1]["resourceInfo"]["imageID"].asString(), false);
 				
 				if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_plist_s, i) != character_list[i-1]["resourceInfo"]["plist"].asString())
 				{
@@ -222,8 +222,8 @@ void TitleScene::resultGetCharacterInfo(Json::Value result_data)
 					// ================================
 				}
 				
-				NSDS_SI(kSDS_GI_characterInfo_int1_resourceInfo_size_i, i, character_list[i-1]["resourceInfo"]["size"].asInt());
-				NSDS_SS(kSDS_GI_characterInfo_int1_comment_s, i, character_list[i-1]["comment"].asString());
+				NSDS_SI(kSDS_GI_characterInfo_int1_resourceInfo_size_i, i, character_list[i-1]["resourceInfo"]["size"].asInt(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_comment_s, i, character_list[i-1]["comment"].asString(), false);
 			}
 			
 			if(df_list.size() > 0)
@@ -239,7 +239,8 @@ void TitleScene::resultGetCharacterInfo(Json::Value result_data)
 			}
 			else
 			{
-				NSDS_SI(kSDS_GI_characterVersion_i, result_data["version"].asInt());
+				NSDS_SI(kSDS_GI_characterVersion_i, result_data["version"].asInt(), false);
+				mySDS->fFlush(kSDS_GI_characterCount_i);
 				startGetUserData();
 			}
 		}
@@ -288,11 +289,12 @@ void TitleScene::startDownload3()
 
 void TitleScene::successAction3()
 {
-	SDS_SS(kSDF_gameInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
+	SDS_SS(kSDF_gameInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img, false);
 	
 	if(ing_download_cnt >= df_list.size())
 	{
-		NSDS_SI(kSDS_GI_characterVersion_i, puzzlelist_download_version);
+		NSDS_SI(kSDS_GI_characterVersion_i, puzzlelist_download_version, false);
+		mySDS->fFlush(kSDS_GI_characterCount_i);
 		
 		download_state->removeFromParent();
 		state_label->setString("캐릭터 정보 다운로드 완료.");
@@ -485,54 +487,54 @@ void TitleScene::resultLoadedCardData( Json::Value result_data )
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
-			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt());
-			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt());
-			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt());
-			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt());
+			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 			
-			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1);
-			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt());
+			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
+			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt(), false);
 			NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 			Json::Value t_card_missile = t_card["missile"];
-			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str());
-			NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt());
-			NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt());
-			NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble());
+			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
+			NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt(), false);
+			NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble(), false);
 			
-			NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str());
+			NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str(), false);
 			
 			Json::Value t_ability = t_card["ability"];
-			NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), t_ability.size());
+			NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), int(t_ability.size()), false);
 			for(int j=0;j<t_ability.size();j++)
 			{
 				Json::Value t_abil = t_ability[j];
-				NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt());
+				NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt(), false);
 				
 				Json::Value t_option;
 				if(!t_abil["option"].isObject())                    t_option["key"]="value";
 				else												t_option =t_abil["option"];
 				
 				if(t_abil["type"].asInt() == kIC_attack)
-					NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_addTime)
-					NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_fast)
-					NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_silence)
-					NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_doubleItem)
-					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_longTime)
-					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
-					NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_subSmallSize)
-					NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_smallArea)
-					NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_widePerfect)
-					NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 			}
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
@@ -559,21 +561,21 @@ void TitleScene::resultLoadedCardData( Json::Value result_data )
 			}
 			
 			Json::Value t_aniInfo = t_card["aniInfo"];
-			NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool());
+			NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool(), false);
 			if(t_aniInfo["isAni"].asBool())
 			{
 				Json::Value t_detail = t_aniInfo["detail"];
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt());
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt(), false);
 				
 				Json::Value t_loopSeq = t_detail["loopSeq"];
 				for(int j=0;j<t_loopSeq.size();j++)
-					NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt(), false);
 				
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt());
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt());
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt());
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt());
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt());
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt(), false);
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt(), false);
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt(), false);
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt(), false);
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt(), false);
 				
 				if(NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card["no"].asInt()) != t_detail["img"].asString())
 				{
@@ -603,10 +605,10 @@ void TitleScene::resultLoadedCardData( Json::Value result_data )
 				}
 			}
 			
-			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString());
+			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
 			
 			Json::Value t_silImgInfo = t_card["silImgInfo"];
-			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool());
+			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
 			if(t_silImgInfo["isSil"].asBool())
 			{
 				if(NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card["no"].asInt()) != t_silImgInfo["img"].asString())
@@ -632,6 +634,7 @@ void TitleScene::resultLoadedCardData( Json::Value result_data )
 		}
 		else
 		{
+			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 			state_label->setString("퍼즐 목록을 받아오는 ing...");
 			startGetKnownFriendList();
 		}
@@ -693,7 +696,7 @@ void TitleScene::downloadingAction2()
 void TitleScene::successAction2()
 {
 	unschedule(schedule_selector(TitleScene::downloadingAction2));
-	SDS_SS(kSDF_cardInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
+	SDS_SS(kSDF_cardInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img, false);
 	
 	if(ing_download_cnt >= df_list.size())
 	{
@@ -720,6 +723,8 @@ void TitleScene::successAction2()
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
 		}
+		
+		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()))->getCString());
 		
@@ -1044,18 +1049,20 @@ void TitleScene::resultGetPuzzleList( Json::Value result_data )
 		{
 			Json::Value puzzle_list = result_data["puzzlelist"];
 			
-			NSDS_SI(kSDS_GI_puzzleListCount_i, puzzle_list.size());
+			NSDS_SI(kSDS_GI_puzzleListCount_i, puzzle_list.size(), false);
 			
 			int puzzle_cnt = puzzle_list.size();
 			for(int i=0;i<puzzle_cnt;i++)
 			{
-				NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_list[i]["no"].asInt());
-				NSDS_SS(kSDS_GI_puzzleList_int1_title_s, i+1, puzzle_list[i]["title"].asString().c_str());
-				NSDS_SI(kSDS_GI_puzzleList_int1_version_i, i+1, puzzle_list[i]["version"].asInt());
-				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_startStage_i, puzzle_list[i]["startStage"].asInt());
-				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_stageCount_i, puzzle_list[i]["stageCount"].asInt());
-				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_point_i, puzzle_list[i]["point"].asInt());
-				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_ticket_i, puzzle_list[i]["ticket"].asInt());
+				NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_list[i]["no"].asInt(), false);
+				NSDS_SS(kSDS_GI_puzzleList_int1_title_s, i+1, puzzle_list[i]["title"].asString().c_str(), false);
+				NSDS_SI(kSDS_GI_puzzleList_int1_version_i, i+1, puzzle_list[i]["version"].asInt(), false);
+				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_startStage_i, puzzle_list[i]["startStage"].asInt(), false);
+				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_stageCount_i, puzzle_list[i]["stageCount"].asInt(), false);
+				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_point_i, puzzle_list[i]["point"].asInt(), false);
+				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_ticket_i, puzzle_list[i]["ticket"].asInt(), false);
+				
+				mySDS->fFlush(puzzle_list[i]["no"].asInt(), kSDS_PZ_base);
 				
 				Json::Value thumbnail = puzzle_list[i]["thumbnail"];
 				if(NSDS_GS(kSDS_GI_puzzleList_int1_thumbnail_s, i+1) != thumbnail["image"].asString())
@@ -1074,18 +1081,20 @@ void TitleScene::resultGetPuzzleList( Json::Value result_data )
 			if(df_list.size() > 0)
 				puzzlelist_download_version = result_data["puzzlelistversion"].asInt();
 			else
-				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["puzzlelistversion"].asInt());
+			{
+				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["puzzlelistversion"].asInt(), false);
+			}
 		}
 		
 		if(result_data["eventstagelistversion"] > NSDS_GI(kSDS_GI_eventListVersion_i))
 		{
 			Json::Value event_list = result_data["eventstagelist"];
 			int el_length = event_list.size();
-			NSDS_SI(kSDS_GI_eventCount_i, el_length);
+			NSDS_SI(kSDS_GI_eventCount_i, el_length, false);
 			for(int i=0;i<el_length;i++)
 			{
 				int event_code = event_list[i]["no"].asInt();
-				NSDS_SI(kSDS_GI_event_int1_code_i, i, event_code);
+				NSDS_SI(kSDS_GI_event_int1_code_i, i, event_code, false);
 				Json::Value thumbnail = event_list[i]["thumbnail"];
 				if(NSDS_GS(kSDS_GI_event_int1_thumbnail_s, i) != thumbnail["image"].asString())
 				{
@@ -1103,7 +1112,7 @@ void TitleScene::resultGetPuzzleList( Json::Value result_data )
 			if(ef_list.size() > 0) // need download
 				eventstagelist_download_version = result_data["eventstagelistversion"].asInt();
 			else
-				NSDS_SI(kSDS_GI_eventListVersion_i, result_data["eventstagelistversion"].asInt());
+				NSDS_SI(kSDS_GI_eventListVersion_i, result_data["eventstagelistversion"].asInt(), false);
 		}
 		
 		
@@ -1115,7 +1124,10 @@ void TitleScene::resultGetPuzzleList( Json::Value result_data )
 			startDownloadGameInfo();
 		}
 		else
+		{
+			mySDS->fFlush(kSDS_GI_characterCount_i);
 			endingAction();
+		}
 		
 	}
 	else
@@ -1185,16 +1197,19 @@ void TitleScene::successAction()
 {
 	unschedule(schedule_selector(TitleScene::downloadingAction));
 	if(ing_download_cnt <= df_list.size())
-		SDS_SS(kSDF_gameInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img);
+		SDS_SS(kSDF_gameInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img, false);
 	else
-		SDS_SS(kSDF_gameInfo, ef_list[ing_download_cnt-df_list.size()-1].key, ef_list[ing_download_cnt-df_list.size()-1].img);
+		SDS_SS(kSDF_gameInfo, ef_list[ing_download_cnt-df_list.size()-1].key, ef_list[ing_download_cnt-df_list.size()-1].img, false);
 	
 	if(ing_download_cnt >= df_list.size() + ef_list.size())
 	{
 		if(df_list.size() > 0)
-			NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version);
+			NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version, false);
 		if(ef_list.size() > 0)
-			NSDS_SI(kSDS_GI_eventListVersion_i, eventstagelist_download_version);
+			NSDS_SI(kSDS_GI_eventListVersion_i, eventstagelist_download_version, false);
+		
+		mySDS->fFlush(kSDS_GI_characterCount_i);
+		
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size() + ef_list.size()))->getCString());
 		state_label->setString("이벤트 정보 다운로드 완료.");
 		

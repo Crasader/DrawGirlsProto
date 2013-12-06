@@ -134,44 +134,44 @@ public:
 		else							return true;
 	}
 	
-	void setBoolForKey(DSH_Key t_key, bool t_b)
+	void setBoolForKey(DSH_Key t_key, bool t_b, bool diskWrite = true)
 	{
 		string bool_string;
 		if(t_b)			bool_string = "true";
 		else			bool_string = "false";
-		myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), bool_string);
+		myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), bool_string, diskWrite);
 	}
-	void setBoolForKey(DSH_Key t_key, int key_val1, bool t_b)
+	void setBoolForKey(DSH_Key t_key, int key_val1, bool t_b, bool diskWrite = true)
 	{
 		string bool_string;
 		if(t_b)			bool_string = "true";
 		else			bool_string = "false";
-		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), bool_string);
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), bool_string, diskWrite);
 	}
-	void setBoolForKey(DSH_Key t_key, int key_val1, int key_val2, bool t_b)
+	void setBoolForKey(DSH_Key t_key, int key_val1, int key_val2, bool t_b, bool diskWrite = true)
 	{
 		string bool_string;
 		if(t_b)			bool_string = "true";
 		else			bool_string = "false";
-		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), bool_string);
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), bool_string, diskWrite);
 	}
 	
 	int getUserIntForStr(string t_key, int t_default)
 	{
 		return myDefault->getValue(kSDF_myDSH, t_key, t_default);
 	}
-	void setUserIntForStr(string t_key, int t_val1)
+	void setUserIntForStr(string t_key, int t_val1, bool diskWrite = true)
 	{
-		myDefault->setKeyValue(kSDF_myDSH, t_key, t_val1);
+		myDefault->setKeyValue(kSDF_myDSH, t_key, t_val1, diskWrite);
 	}
 	
 	string getUserStrForStr(string t_key, string t_default)
 	{
 		return myDefault->getValue(kSDF_myDSH, t_key, t_default);
 	}
-	void setUserStrForStr(string t_key, string t_val1)
+	void setUserStrForStr(string t_key, string t_val1, bool diskWrite = true)
 	{
-		myDefault->setKeyValue(kSDF_myDSH, t_key, t_val1);
+		myDefault->setKeyValue(kSDF_myDSH, t_key, t_val1, diskWrite);
 	}
 	
 	int getIntegerForKey(DSH_Key t_key)
@@ -187,36 +187,36 @@ public:
 		return myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), 0);
 	}
 	
-	void setIntegerForKey(DSH_Key t_key, int val1)
+	void setIntegerForKey(DSH_Key t_key, int val1, bool diskWrite = true)
 	{
-		myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), val1);
+		myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), val1, diskWrite);
 	}
-	void setIntegerForKey(DSH_Key t_key, int key_val1, int val1)
+	void setIntegerForKey(DSH_Key t_key, int key_val1, int val1, bool diskWrite = true)
 	{
-		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1);
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1, diskWrite);
 	}
 	
 	string getStringForKey(DSH_Key t_key)
 	{
 		return myDefault->getValue(kSDF_myDSH, getKey(t_key), "");
 	}
-	void setStringForKey(DSH_Key t_key, string val1)
+	void setStringForKey(DSH_Key t_key, string val1, bool diskWrite = true)
 	{
-		myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), val1.c_str());
+		myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), val1.c_str(), diskWrite);
 	}
 	
 	string getStringForKey(DSH_Key t_key, int key_val1)
 	{
 		return myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), "");
 	}
-	void setStringForKey(DSH_Key t_key, int key_val1, string val1)
+	void setStringForKey(DSH_Key t_key, int key_val1, string val1, bool diskWrite = true)
 	{
-		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1.c_str());
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1.c_str(), diskWrite);
 	}
 	
-	void setIntegerForKey(DSH_Key t_key, int key_val1, int key_val2, int val1)
+	void setIntegerForKey(DSH_Key t_key, int key_val1, int key_val2, int val1, bool diskWrite = true)
 	{
-		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), val1);
+		myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
 	}
 	
 	CCSize getDesignResolutionSize()
@@ -330,72 +330,82 @@ public:
 		
 		CCLog("parse data : %s", GraphDogLib::JsonObjectToString(data).c_str());
 		
-		setIntegerForKey(kDSH_Key_savedStar, data[getKey(kDSH_Key_savedStar)].asInt());
-		setIntegerForKey(kDSH_Key_savedGold, data[getKey(kDSH_Key_savedGold)].asInt());
-		setIntegerForKey(kDSH_Key_savedFriendPoint, data[getKey(kDSH_Key_savedFriendPoint)].asInt());
+		setIntegerForKey(kDSH_Key_savedStar, data[getKey(kDSH_Key_savedStar)].asInt(), false);
+		setIntegerForKey(kDSH_Key_savedGold, data[getKey(kDSH_Key_savedGold)].asInt(), false);
+		setIntegerForKey(kDSH_Key_savedFriendPoint, data[getKey(kDSH_Key_savedFriendPoint)].asInt(), false);
 		
 		for(int i=kIC_attack;i<=kIC_rentCard;i++)
-			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt());
+			setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt(), false);
 		
-		setIntegerForKey(kDSH_Key_cardTakeCnt, data[getKey(kDSH_Key_cardTakeCnt)].asInt());
+		setIntegerForKey(kDSH_Key_cardTakeCnt, data[getKey(kDSH_Key_cardTakeCnt)].asInt(), false);
 		int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
 		
 		for(int i=1;i<=card_take_cnt;i++)
 		{
 			int take_card_number = data[getKey(kDSH_Key_takeCardNumber_int1)][i].asInt();
-			setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, take_card_number);
-			setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, data[getKey(kDSH_Key_inputTextCard_int1)][i].asString());
-			setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, data[getKey(kDSH_Key_cardDurability_int1)][i].asInt());
-			setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, data[getKey(kDSH_Key_hasGottenCard_int1)][i].asInt());
+			setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, take_card_number, false);
+			setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, data[getKey(kDSH_Key_inputTextCard_int1)][i].asString(), false);
+			setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, data[getKey(kDSH_Key_cardDurability_int1)][i].asInt(), false);
+			setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, data[getKey(kDSH_Key_hasGottenCard_int1)][i].asInt(), false);
 			
-			setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, data[getKey(kDSH_Key_cardLevel_int1)].get(i, 1).asInt());
-			setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number, data[getKey(kDSH_Key_cardMaxDurability_int1)].get(i, 5).asInt());
-			setStringForKey(kDSH_Key_cardPassive_int1, take_card_number, data[getKey(kDSH_Key_cardPassive_int1)].get(i, "").asString());
+			Json::Value level_list = data.get(getKey(kDSH_Key_cardLevel_int1), NULL);
+			if(level_list != NULL)
+				setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, data[getKey(kDSH_Key_cardLevel_int1)].get(i, 1).asInt(), false);
+			
+			Json::Value max_dur_list = data.get(getKey(kDSH_Key_cardMaxDurability_int1), NULL);
+			if(max_dur_list != NULL)
+				setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number, data[getKey(kDSH_Key_cardMaxDurability_int1)].get(i, 5).asInt(), false);
+			
+			Json::Value passive_list = data.get(getKey(kDSH_Key_cardPassive_int1), NULL);
+			if(passive_list != NULL)
+				setStringForKey(kDSH_Key_cardPassive_int1, take_card_number, data[getKey(kDSH_Key_cardPassive_int1)].get(i, "").asString(), false);
 			
 			if(NSDS_GS(kSDS_CI_int1_imgInfo_s, take_card_number) == "")
 				card_data_load_list.push_back(take_card_number);
 		}
 		
-		setIntegerForKey(kDSH_Key_allHighScore, data[getKey(kDSH_Key_allHighScore)].asInt());
-		setIntegerForKey(kDSH_Key_selectedCard, data[getKey(kDSH_Key_selectedCard)].asInt());
+		setIntegerForKey(kDSH_Key_allHighScore, data[getKey(kDSH_Key_allHighScore)].asInt(), false);
+		setIntegerForKey(kDSH_Key_selectedCard, data[getKey(kDSH_Key_selectedCard)].asInt(), false);
 		
 		int open_puzzle_cnt = data[getKey(kDSH_Key_openPuzzleCnt)].asInt();
 		
-		setIntegerForKey(kDSH_Key_openPuzzleCnt, open_puzzle_cnt);
+		setIntegerForKey(kDSH_Key_openPuzzleCnt, open_puzzle_cnt, false);
 		for(int i=1;i<=open_puzzle_cnt+2 && i < data[getKey(kDSH_Key_isClearedPuzzle_int1)].size();i++)
-			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asBool());
+			setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asBool(), false);
 		
 		int have_ticket_cnt = data[getKey(kDSH_Key_haveTicketCnt)].asInt();
-		setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt);
+		setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt, false);
 		for(int i=1;i<=have_ticket_cnt;i++)
-			setStringForKey(kDSH_Key_ticketUserId_int1, i, data[getKey(kDSH_Key_ticketUserId_int1)][i].asString());
+			setStringForKey(kDSH_Key_ticketUserId_int1, i, data[getKey(kDSH_Key_ticketUserId_int1)][i].asString(), false);
 		
 		int open_stage_cnt = data[getKey(kDSH_Key_openStageCnt)].asInt();
-		setIntegerForKey(kDSH_Key_openStageCnt, open_stage_cnt);
+		setIntegerForKey(kDSH_Key_openStageCnt, open_stage_cnt, false);
 		for(int i=1;i<=open_stage_cnt;i++)
 		{
 			int t_stage_number = data[getKey(kDSH_Key_openStageNumber_int1)][i].asInt();
-			setIntegerForKey(kDSH_Key_openStageNumber_int1, i, t_stage_number);
-			setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, data[getKey(kDSH_Key_isOpenStage_int1)][i].asBool());
+			setIntegerForKey(kDSH_Key_openStageNumber_int1, i, t_stage_number, false);
+			setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, data[getKey(kDSH_Key_isOpenStage_int1)][i].asBool(), false);
 		}
 		
 		int clear_stage_cnt = data[getKey(kDSH_Key_clearStageCnt)].asInt();
-		setIntegerForKey(kDSH_Key_clearStageCnt, clear_stage_cnt);
+		setIntegerForKey(kDSH_Key_clearStageCnt, clear_stage_cnt, false);
 		for(int i=1;i<=clear_stage_cnt;i++)
 		{
 			int t_stage_number = data[getKey(kDSH_Key_clearStageNumber_int1)][i].asInt();
-			setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, t_stage_number);
-			setBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number, data[getKey(kDSH_Key_isClearStage_int1)][i].asBool());
+			setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, t_stage_number, false);
+			setBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number, data[getKey(kDSH_Key_isClearStage_int1)][i].asBool(), false);
 		}
 		
-		setStringForKey(kDSH_Key_nick, data[getKey(kDSH_Key_nick)].asString().c_str());
+		setStringForKey(kDSH_Key_nick, data[getKey(kDSH_Key_nick)].asString().c_str(), false);
 		
-		setIntegerForKey(kDSH_Key_selectedCharacter, data[getKey(kDSH_Key_selectedCharacter)].asInt());
+		setIntegerForKey(kDSH_Key_selectedCharacter, data[getKey(kDSH_Key_selectedCharacter)].asInt(), false);
 		for(int i=1;i<NSDS_GI(kSDS_GI_characterCount_i);i++)
 		{
 			bool t_unlocked = data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i].asBool();
-			setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, t_unlocked);
+			setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, t_unlocked, false);
 		}
+		
+		fFlush();
 	}
 	
 	void writeParamForKey(Json::Value& data, SaveUserData_Key t_key)
@@ -581,6 +591,8 @@ public:
 	{
 		puzzle_map_scene_show_type = t_type;
 	}
+	
+	void fFlush(){			myDefault->fFlush(kSDF_myDSH);		}
 	
 private:
 	SaveData* myDefault;

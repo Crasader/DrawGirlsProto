@@ -1223,7 +1223,7 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 			NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str());
 			
 			Json::Value t_ability = t_card["ability"];
-			NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), t_ability.size());
+			NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), int(t_ability.size()));
 			for(int j=0;j<t_ability.size();j++)
 			{
 				Json::Value t_abil = t_ability[j];
