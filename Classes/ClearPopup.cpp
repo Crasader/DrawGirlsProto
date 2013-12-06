@@ -26,6 +26,7 @@
 #include "KSAlertView.h"
 #include "HelpResultSend.h"
 #include "UnknownFriends.h"
+#include "ASPopupView.h"
 
 
 typedef enum tMenuTagClearPopup{
@@ -392,11 +393,72 @@ void ClearPopup::endTakeCard()
 		////////////////// ksks
 		CCLog("zzzz");
 		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), true), kZ_CP_popup);
-
-
-		
 	}
 	
+	if(mySGD->getWasUsedFriendCard())
+	{
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup, kZ_CP_popup);
+		
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+		case_back->setPosition(CCPointZero);
+		t_container->addChild(case_back);
+		
+		case_back->setContentSize(CCSizeMake(330, 265));
+		
+		CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+		title_img->setPosition(ccp(0, 111));
+		t_container->addChild(title_img);
+		
+		CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님의 카드가 도움이 되었나요?\n하트로 고마움을 표현하세요.", mySGD->getSelectedFriendCardData().nick.c_str())->getCString(),
+													mySGD->getFont().c_str(), 20);
+		ment_label->setPosition(CCPointZero);
+		t_container->addChild(ment_label);
+		
+		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+		s_close->setColor(ccGRAY);
+		
+		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																			{
+																				t_popup->removeFromParent();
+																			});
+		
+		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+		close_menu->setPosition(ccp(140,112));
+		t_container->addChild(close_menu);
+		
+		
+		CCSprite* n_send_heart = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* s_send_heart = CCSprite::create("item_buy_popup_close.png");
+		s_send_heart->setColor(ccGRAY);
+		
+		CCMenuItemSpriteLambda* send_heart_item = CCMenuItemSpriteLambda::create(n_send_heart, s_send_heart, [=](CCObject* sender)
+																				 {
+																					// 경수
+																					// 하트 보내기 작업
+																					// 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
+																					 t_popup->removeFromParent();
+																				 });
+		
+		CCMenuLambda* send_heart_menu = CCMenuLambda::createWithItem(send_heart_item);
+		send_heart_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+		send_heart_menu->setPosition(ccp(0,-100));
+		t_container->addChild(send_heart_menu);
+	}
 }
 
 void ClearPopup::resultLoadFriends(Json::Value result_data)

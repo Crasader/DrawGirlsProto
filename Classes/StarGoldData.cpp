@@ -272,6 +272,7 @@ void StarGoldData::setGameStart()
 
 void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, int t_game_time, int t_use_time, int t_total_time )
 {
+	was_used_friend_card = is_using_item[kIC_rentCard];
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 	{
 		before_use_item[i] = is_using_item[i];
@@ -298,6 +299,7 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 
 void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time )
 {
+	was_used_friend_card = is_using_item[kIC_rentCard];
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 	{
 		before_use_item[i] = is_using_item[i];
