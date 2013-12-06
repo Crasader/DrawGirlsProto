@@ -219,6 +219,10 @@ void CardStrengthPopup::setStrengthCardNode(CCNode* t_node)
 	up_dex_label->setPosition(ccpAdd(dex_label->getPosition(), ccp(20,3)));
 	t_node->addChild(up_dex_label);
 	
+	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number))->getCString(), mySGD->getFont().c_str(), 8);
+	t_card_level_label->setPosition(ccp(55,220));
+	t_node->addChild(t_card_level_label, kCardStrengthPopupZorder_content);
+	
 	string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, selected_card_number).c_str();
 	int missile_type_number = MissileDamageData::getMissileType(missile_type_code.c_str());
 	
@@ -351,6 +355,10 @@ CCTableViewCell* CardStrengthPopup::tableCellAtIndex(CCTableView *table, unsigne
 	CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, offering_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 8);
 	t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 	mini_rank->addChild(t_rank);
+	
+	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 8);
+	t_card_level_label->setPosition(ccp(17,62));
+	cell->addChild(t_card_level_label);
 	
 	return cell;
 }
