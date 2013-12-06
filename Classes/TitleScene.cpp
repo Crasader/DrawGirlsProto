@@ -777,8 +777,6 @@ void TitleScene::startGetKnownFriendList()
 void TitleScene::resultGetKnownFriendList(Json::Value fInfo)
 {
 	KS::KSLog("%", fInfo);
-	KS::KSLog("%", hspConnector::get()->myKakaoInfo);
-	
 	if(fInfo["status"].asInt() == 0)
 	{
 		Json::Value appFriends = fInfo["app_friends_info"];
@@ -792,13 +790,10 @@ void TitleScene::resultGetKnownFriendList(Json::Value fInfo)
 			kfd.userId = appFriends[i]["user_id"].asInt64();
 			kfd.hashedTalkUserId = appFriends[i]["hashed_talk_user_id"].asString();
 			kfd.unknownFriend = false;
-			
 			KS::KSLog("%", kfd);
 			KnownFriends::getInstance()->add(kfd);
 		}
-		
-		
-		startGetAllFriendUserData();
+		startGetKnownFriendUserData();
 	}
 	else
 	{
@@ -822,28 +817,27 @@ void TitleScene::resultGetKnownFriendList(Json::Value fInfo)
 	}
 }
 
-void TitleScene::startGetAllFriendUserData()
+void TitleScene::startGetKnownFriendUserData()
 {
 	Json::Value memberIDList;
-	// 지인 목록들 추가
 	for(auto i : KnownFriends::getInstance()->getFriends())
 	{
 		memberIDList["memberIDList"].append(i.userId);
 	}
 	
-	Json::Reader reader;
-	Json::Value friendList;
-	reader.parse(m_tempUserData["friendList"].asString(), friendList);
-	// 비지인 목록들 추가
-	for(int i = 0; i<friendList.size(); i++)
-	{
-		memberIDList["memberIDList"].append(friendList[i].asInt64());
-	}
+	/*
+	 유저 데이터로는 
+	 "joinDate" : 20131127015752,
+	 "lastDate" : 20131206035503,
+	 "memberID" : 88741857374149376,
+	 "nick" : "세린",
+	 이 필드만 고려해주면 됨.
+	 */
 	hspConnector::get()->command("getuserdatalist", memberIDList,
-															 bind(&ThisClassType::resultGetAllFriendUserData,
+															 bind(&ThisClassType::resultGetKnownFriendUserData,
 																		this,	std::placeholders::_1));
 }
-void TitleScene::resultGetAllFriendUserData(Json::Value v)
+void TitleScene::resultGetKnownFriendUserData(Json::Value v)
 {
 	/*
 	 "list" :
@@ -871,15 +865,15 @@ void TitleScene::resultGetAllFriendUserData(Json::Value v)
 			KnownFriends::getInstance()->putUserData(i, userData);
 			KnownFriends::getInstance()->putLastDate(i, v["list"][i]["lastDate"].asInt64());
 			KnownFriends::getInstance()->putJoinDate(i, v["list"][i]["joinDate"].asInt64());
-			KnownFriends::getInstance()->putHashedTalkUserId(i, v["list"][i]["hashed_talk_user_id"].asString());
+//			KnownFriends::getInstance()->putHashedTalkUserId(i, v["list"][i]["hashed_talk_user_id"].asString());
 		}
 //		startGetCharacterInfo();
-		startGetPuzzleList();
+		startGetUnknownFriendUserData();
 	}
 	else
 	{
 		save_target = this;
-		save_delegate = callfunc_selector(TitleScene::startGetAllFriendUserData);
+		save_delegate = callfunc_selector(TitleScene::startGetKnownFriendUserData);
 		
 		state_label->setString("아는 친구 유저데이터를 가져오는데 실패하였습니다.");
 		
@@ -904,7 +898,7 @@ void TitleScene::resultGetAllFriendUserData(Json::Value v)
 //	param["memberID"] = hspConnector::get()->getKakaoID();
 //	hspConnector::get()->command("getfriendlist", param, json_selector(this, TitleScene::resultGetUnknownFriendList));
 //}
-//
+
 //void TitleScene::resultGetUnknownFriendList(Json::Value result_data)
 //{
 //	CCLog("resultGetFriendList data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
@@ -957,72 +951,83 @@ void TitleScene::resultGetAllFriendUserData(Json::Value v)
 //		is_menu_enable = true;
 //	}
 //}
-//
-//void TitleScene::startGetUnknownFriendUserData()
-//{
-//	Json::Value memberIDList;
-//	for(auto i : UnknownFriends::getInstance()->getFriends())
-//	{
-//		memberIDList["memberIDList"].append(i.userId);
-//	}
-//	
-//	hspConnector::get()->command("getuserdatalist", memberIDList,
-//															 bind(&ThisClassType::resultGetUnknownFriendUserData,
-//																		this,	std::placeholders::_1));
-//}
-//void TitleScene::resultGetUnknownFriendUserData(Json::Value v)
-//{
-//	/*
-//	 "list" :
-//	 [
-//	 
-//	 {
-//	 "data" : "{\"ahs\":241075,\"ctc\":3,\"hic%d\":[null,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"scard\":0,\"sg\":56360,\"ss\":10,\"cd%d\":[null,5,5,5],\"hgcard%d\":[null,1,2,3],\"itc%d\":[null,\"\",\"\",\"\"],\"tcn%d\":[null,900,50,10],\"htc\":0,\"icp%d\":[null,false,false],\"opc\":0,\"nick\":\"Fred\",\"csc\":0,\"osc\":0}",
-//	 "friendList" : "[]",
-//	 "joinDate" : 20131127012344,
-//	 "lastDate" : 20131204163415,
-//	 "memberID" : 90014050894642625,
-//	 "nick" : "경수2",
-//	 "no" : 23
-//	 }
-//	 */
-//	KS::KSLog("%", v);
-//	if(v["state"].asString() == "ok" || 1)
-//	{
-//		for(int i=0; i<v["list"].size(); i++)
-//		{
-//			Json::Reader reader;
-//			Json::Value userData;
-//			reader.parse(v["list"][i]["data"].asString(), userData);
-//			UnknownFriends::getInstance()->putUserData(i, userData);
-//			UnknownFriends::getInstance()->putLastDate(i, v["list"][i]["lastDate"].asInt64());
-//			UnknownFriends::getInstance()->putJoinDate(i, v["list"][i]["joinDate"].asInt64());
-//			UnknownFriends::getInstance()->putHashedTalkUserId(i, v["list"][i]["hashed_talk_user_id"].asString());
-//		}
-//		startGetPuzzleList();
-//	}
-//	else
-//	{
-//		save_target = this;
-//		save_delegate = callfunc_selector(TitleScene::startGetUnknownFriendUserData);
-//		
-//		state_label->setString("비지인 유저데이터를 가져오는데 실패하였습니다.");
-//		
-//		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
-//		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
-//		s_replay->setColor(ccGRAY);
-//		
-//		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
-//		replay_item->setTag(kTitle_MT_replay);
-//		
-//		CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
-//		replay_menu->setPosition(ccp(240,160));
-//		addChild(replay_menu, 0, kTitle_MT_replay);
-//		
-//		is_menu_enable = true;
-//	}
-//
-//}
+
+void TitleScene::startGetUnknownFriendUserData()
+{
+	Json::Value memberIDList;
+	Json::Reader reader;
+	Json::Value friendList;
+	reader.parse(m_tempUserData["friendList"].asString(), friendList);
+	
+	for(int i = 0; i<friendList.size(); i++)
+	{
+		memberIDList["memberIDList"].append(friendList[i].asInt64());
+	}
+	hspConnector::get()->command("getuserdatalist", memberIDList,
+															 bind(&ThisClassType::resultGetUnknownFriendUserData,
+																		this,	std::placeholders::_1));
+}
+void TitleScene::resultGetUnknownFriendUserData(Json::Value v)
+{
+	/*
+	 "list" :
+	 [
+	 
+	 {
+	 "data" : "{\"ahs\":241075,\"ctc\":3,\"hic%d\":[null,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\"scard\":0,\"sg\":56360,\"ss\":10,\"cd%d\":[null,5,5,5],\"hgcard%d\":[null,1,2,3],\"itc%d\":[null,\"\",\"\",\"\"],\"tcn%d\":[null,900,50,10],\"htc\":0,\"icp%d\":[null,false,false],\"opc\":0,\"nick\":\"Fred\",\"csc\":0,\"osc\":0}",
+	 "friendList" : "[]",
+	 "joinDate" : 20131127012344,
+	 "lastDate" : 20131204163415,
+	 "memberID" : 90014050894642625,
+	 "nick" : "경수2",
+	 "no" : 23
+	 }
+	 */
+	KS::KSLog("%", v);
+	if(v["state"].asString() == "ok" || 1)
+	{
+		for(int i=0; i<v["list"].size(); i++)
+		{
+			
+			Json::Reader reader;
+			Json::Value userData;
+			reader.parse(v["list"][i]["data"].asString(), userData);
+			
+			FriendData ufd;
+
+			ufd.userData = userData;
+			ufd.joinDate = v["list"][i]["joinDate"].asInt64();
+			ufd.lastDate = v["list"][i]["lastDate"].asInt64();
+			ufd.userId = v["list"][i]["memberID"].asInt64();
+			ufd.nick = v["list"][i]["nick"].asString();
+			ufd.unknownFriend = true;
+			
+			UnknownFriends::getInstance()->add(ufd);
+		}
+		startGetPuzzleList();
+	}
+	else
+	{
+		save_target = this;
+		save_delegate = callfunc_selector(TitleScene::startGetUnknownFriendUserData);
+		
+		state_label->setString("비지인 유저데이터를 가져오는데 실패하였습니다.");
+		
+		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleScene::menuAction));
+		replay_item->setTag(kTitle_MT_replay);
+		
+		CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setPosition(ccp(240,160));
+		addChild(replay_menu, 0, kTitle_MT_replay);
+		
+		is_menu_enable = true;
+	}
+
+}
 
 
 
