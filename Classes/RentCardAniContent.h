@@ -61,7 +61,7 @@ private:
 			rent_card->addChild(take_ani);
 		}
 		
-		CardCase* t_case = CardCase::create(card_stage, card_grade);
+		CardCase* t_case = CardCase::create(card_stage, card_grade, mySGD->getSelectedFriendCardData().card_level, mySGD->getSelectedFriendCardData().card_passive);
 		t_case->setPosition(CCPointZero);
 		rent_card->addChild(t_case);
 		

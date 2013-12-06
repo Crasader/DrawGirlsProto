@@ -106,7 +106,7 @@ protected:
 	
 	int download_card_number;
 	CCNode* loading_card_img;
-	CCNode* addCardImg(int t_card_number);
+	CCNode* addCardImg(int t_card_number, int t_card_level, string t_passive);
 	void resultLoadedCardInfo (Json::Value result_data);
 	vector <DownloadFile> df_list;
 	vector <CopyFile> cf_list;
