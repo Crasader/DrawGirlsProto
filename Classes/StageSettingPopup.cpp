@@ -764,6 +764,8 @@ void StageSettingPopup::finalSetting()
 	addChild(start_loading, kSSP_Z_popup);
 	
 	deque<bool> is_using_item;
+	is_using_item.push_back(false);
+	
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 		is_using_item.push_back(false);
 	
@@ -820,6 +822,7 @@ void StageSettingPopup::cancelGame()
 		CCLog("Fail : user data save");
 		
 		deque<bool> is_using_item;
+		is_using_item.push_back(false);
 		for(int i=kIC_attack;i<=kIC_rentCard;i++)
 			is_using_item.push_back(false);
 		

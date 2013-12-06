@@ -650,7 +650,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 						if(passive_data["agi"].asDouble() == 0)
 							empty_data_list.push_back("agi");
 						
-						if(passive_data["operator"].asString() == "+" || empty_data_list.empty())
+						if(passive_data["operator"].asString() == "-" || empty_data_list.empty())
 						{
 							CCLog("max durability up");
 							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);

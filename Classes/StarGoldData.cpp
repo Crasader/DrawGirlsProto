@@ -816,6 +816,9 @@ void StarGoldData::myInit()
 	is_after_scene_chapter = false;
 	resetLabels();
 
+	before_use_item.push_back(false);
+	is_using_item.push_back(false);
+	
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 	{
 		before_use_item.push_back(false);

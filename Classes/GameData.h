@@ -112,6 +112,7 @@ public:
 	std::map<std::string, std::function<void(float, bool, CCPoint)>> V_FBCCP;
 	std::map<std::string, std::function<void(CCObject*, SEL_CallFunc, CCObject*, SEL_CallFunc)>> V_TDTD;
 	std::map<std::string, std::function<CCPoint(void)>> CCP_V;
+	std::map<std::string, std::function<void(std::string)>> V_Str;
 
 	
 	mapType mapState[162][217];
@@ -170,6 +171,7 @@ public:
 	void communication(string funcName, float t_float, bool t_bool);
 	void communication(string funcName, CCPoint t_p);
 	void communication(string funcName, CCObject* t_t1, SEL_CallFunc t_d1, CCObject* t_t2, SEL_CallFunc t_d2);
+	void communication(string funcName, string t_str);
 	
 	
 	void setJackSpeed(float t_s);

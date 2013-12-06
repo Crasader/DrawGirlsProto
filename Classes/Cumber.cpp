@@ -569,6 +569,7 @@ void CumberParent::myInit()
 	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
 	myGD->V_V["CP_onJackDie"] = std::bind(&CumberParent::onJackDie, this);
 	myGD->V_V["CP_onJackRevived"] = std::bind(&CumberParent::onJackRevived, this);
+	myGD->V_Str["CP_chagePassiveData"] = std::bind(&CumberParent::changePassiveData, this, _1);
 	
 	Json::Reader reader;
 	Json::Value root;
