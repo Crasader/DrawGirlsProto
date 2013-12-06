@@ -32,7 +32,7 @@
 						<dict>
 							<key>0</key>
 							<dict>
-								<key>rotation</key>
+								<key>displayFrame</key>
 								<dict>
 									<key>keyframes</key>
 									<array>
@@ -40,37 +40,97 @@
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>1</integer>
+												<integer>0</integer>
 											</dict>
 											<key>name</key>
-											<string>rotation</string>
+											<string>displayFrame</string>
 											<key>time</key>
 											<real>0.0</real>
 											<key>type</key>
-											<integer>2</integer>
+											<integer>7</integer>
 											<key>value</key>
-											<real>0.0</real>
+											<array>
+												<string>fx_pollution5_1.png</string>
+												<string>Use regular file</string>
+											</array>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>1</integer>
+												<integer>0</integer>
 											</dict>
 											<key>name</key>
-											<string>rotation</string>
+											<string>displayFrame</string>
 											<key>time</key>
-											<real>0.66666668653488159</real>
+											<real>0.066666670143604279</real>
 											<key>type</key>
-											<integer>2</integer>
+											<integer>7</integer>
 											<key>value</key>
-											<real>-360</real>
+											<array>
+												<string>fx_pollution5_2.png</string>
+												<string>Use regular file</string>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>displayFrame</string>
+											<key>time</key>
+											<real>0.13333334028720856</real>
+											<key>type</key>
+											<integer>7</integer>
+											<key>value</key>
+											<array>
+												<string>fx_pollution5_3.png</string>
+												<string>Use regular file</string>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>displayFrame</string>
+											<key>time</key>
+											<real>0.20000000298023224</real>
+											<key>type</key>
+											<integer>7</integer>
+											<key>value</key>
+											<array>
+												<string>fx_pollution5_4.png</string>
+												<string>Use regular file</string>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>displayFrame</string>
+											<key>time</key>
+											<real>0.26666668057441711</real>
+											<key>type</key>
+											<integer>7</integer>
+											<key>value</key>
+											<array>
+												<string>fx_pollution5_5.png</string>
+												<string>Use regular file</string>
+											</array>
 										</dict>
 									</array>
 									<key>name</key>
-									<string>rotation</string>
+									<string>displayFrame</string>
 									<key>type</key>
-									<integer>2</integer>
+									<integer>7</integer>
 								</dict>
 							</dict>
 						</dict>
@@ -81,7 +141,7 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>pattern_saw3</string>
+						<string>fx_pollution3_1</string>
 						<key>memberVarAssignmentName</key>
 						<string></string>
 						<key>memberVarAssignmentType</key>
@@ -113,16 +173,6 @@
 								</array>
 							</dict>
 							<dict>
-								<key>baseValue</key>
-								<real>0.0</real>
-								<key>name</key>
-								<string>rotation</string>
-								<key>type</key>
-								<string>Degrees</string>
-								<key>value</key>
-								<real>-360</real>
-							</dict>
-							<dict>
 								<key>name</key>
 								<string>ignoreAnchorPointForPosition</string>
 								<key>type</key>
@@ -131,6 +181,11 @@
 								<false/>
 							</dict>
 							<dict>
+								<key>baseValue</key>
+								<array>
+									<string>fx_pollution3_1.png</string>
+									<string>Use regular file</string>
+								</array>
 								<key>name</key>
 								<string>displayFrame</string>
 								<key>type</key>
@@ -138,7 +193,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>pattern_saw3.png</string>
+									<string>fx_pollution5_5.png</string>
 								</array>
 							</dict>
 						</array>
@@ -146,19 +201,14 @@
 						<true/>
 					</dict>
 					<dict>
-						<key>animatedProperties</key>
-						<dict>
-							<key>0</key>
-							<dict/>
-						</dict>
 						<key>baseClass</key>
-						<string>CCSprite</string>
+						<string>CCParticleSystemQuad</string>
 						<key>children</key>
 						<array/>
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>pattern_saw3_1</string>
+						<string>CCParticleSystemQuad</string>
 						<key>memberVarAssignmentName</key>
 						<string></string>
 						<key>memberVarAssignmentType</key>
@@ -172,8 +222,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>0.5</real>
-									<real>0.5</real>
+									<real>0.0</real>
+									<real>0.0</real>
 								</array>
 							</dict>
 							<dict>
@@ -185,7 +235,7 @@
 								<array>
 									<real>1</real>
 									<real>1</real>
-									<true/>
+									<false/>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -199,147 +249,217 @@
 							</dict>
 							<dict>
 								<key>name</key>
-								<string>displayFrame</string>
+								<string>emitterMode</string>
 								<key>type</key>
-								<string>SpriteFrame</string>
-								<key>value</key>
-								<array>
-									<string></string>
-									<string>pattern_saw3_1.png</string>
-								</array>
-							</dict>
-						</array>
-						<key>seqExpanded</key>
-						<true/>
-					</dict>
-					<dict>
-						<key>animatedProperties</key>
-						<dict>
-							<key>0</key>
-							<dict>
-								<key>opacity</key>
-								<dict>
-									<key>keyframes</key>
-									<array>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>1</integer>
-											</dict>
-											<key>name</key>
-											<string>opacity</string>
-											<key>time</key>
-											<real>0.30000001192092896</real>
-											<key>type</key>
-											<integer>5</integer>
-											<key>value</key>
-											<integer>0</integer>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>1</integer>
-											</dict>
-											<key>name</key>
-											<string>opacity</string>
-											<key>time</key>
-											<real>0.5</real>
-											<key>type</key>
-											<integer>5</integer>
-											<key>value</key>
-											<integer>255</integer>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>1</integer>
-											</dict>
-											<key>name</key>
-											<string>opacity</string>
-											<key>time</key>
-											<real>0.66666668653488159</real>
-											<key>type</key>
-											<integer>5</integer>
-											<key>value</key>
-											<integer>0</integer>
-										</dict>
-									</array>
-									<key>name</key>
-									<string>opacity</string>
-									<key>type</key>
-									<integer>5</integer>
-								</dict>
-							</dict>
-						</dict>
-						<key>baseClass</key>
-						<string>CCSprite</string>
-						<key>children</key>
-						<array/>
-						<key>customClass</key>
-						<string></string>
-						<key>displayName</key>
-						<string>pattern_saw3_2</string>
-						<key>memberVarAssignmentName</key>
-						<string></string>
-						<key>memberVarAssignmentType</key>
-						<integer>0</integer>
-						<key>properties</key>
-						<array>
-							<dict>
-								<key>name</key>
-								<string>anchorPoint</string>
-								<key>type</key>
-								<string>Point</string>
-								<key>value</key>
-								<array>
-									<real>0.5</real>
-									<real>0.5</real>
-								</array>
-							</dict>
-							<dict>
-								<key>name</key>
-								<string>scale</string>
-								<key>type</key>
-								<string>ScaleLock</string>
-								<key>value</key>
-								<array>
-									<real>1</real>
-									<real>1</real>
-									<true/>
-									<integer>0</integer>
-								</array>
-							</dict>
-							<dict>
-								<key>name</key>
-								<string>ignoreAnchorPointForPosition</string>
-								<key>type</key>
-								<string>Check</string>
-								<key>value</key>
-								<false/>
-							</dict>
-							<dict>
-								<key>name</key>
-								<string>displayFrame</string>
-								<key>type</key>
-								<string>SpriteFrame</string>
-								<key>value</key>
-								<array>
-									<string></string>
-									<string>pattern_saw3_2.png</string>
-								</array>
-							</dict>
-							<dict>
-								<key>baseValue</key>
-								<integer>255</integer>
-								<key>name</key>
-								<string>opacity</string>
-								<key>type</key>
-								<string>Byte</string>
+								<string>IntegerLabeled</string>
 								<key>value</key>
 								<integer>0</integer>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>posVar</string>
+								<key>type</key>
+								<string>Point</string>
+								<key>value</key>
+								<array>
+									<real>5</real>
+									<real>5</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>emissionRate</string>
+								<key>type</key>
+								<string>Float</string>
+								<key>value</key>
+								<real>80</real>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>duration</string>
+								<key>type</key>
+								<string>Float</string>
+								<key>value</key>
+								<real>-1</real>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>totalParticles</string>
+								<key>type</key>
+								<string>Integer</string>
+								<key>value</key>
+								<integer>80</integer>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>life</string>
+								<key>type</key>
+								<string>FloatVar</string>
+								<key>value</key>
+								<array>
+									<real>0.30000001192092896</real>
+									<real>0.20000000298023224</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>startSize</string>
+								<key>type</key>
+								<string>FloatVar</string>
+								<key>value</key>
+								<array>
+									<real>10</real>
+									<real>3</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>endSize</string>
+								<key>type</key>
+								<string>FloatVar</string>
+								<key>value</key>
+								<array>
+									<real>10</real>
+									<real>0.0</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>startSpin</string>
+								<key>type</key>
+								<string>FloatVar</string>
+								<key>value</key>
+								<array>
+									<real>0.0</real>
+									<real>0.0</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>endSpin</string>
+								<key>type</key>
+								<string>FloatVar</string>
+								<key>value</key>
+								<array>
+									<real>0.0</real>
+									<real>0.0</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>angle</string>
+								<key>type</key>
+								<string>FloatVar</string>
+								<key>value</key>
+								<array>
+									<real>-90</real>
+									<real>360</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>startColor</string>
+								<key>type</key>
+								<string>Color4FVar</string>
+								<key>value</key>
+								<array>
+									<array>
+										<real>0.99976223707199097</real>
+										<real>0.16446158289909363</real>
+										<real>0.10160181671380997</real>
+										<real>1</real>
+									</array>
+									<array>
+										<real>0.0</real>
+										<real>0.0</real>
+										<real>0.0</real>
+										<real>1</real>
+									</array>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>endColor</string>
+								<key>type</key>
+								<string>Color4FVar</string>
+								<key>value</key>
+								<array>
+									<array>
+										<real>0.0</real>
+										<real>0.0</real>
+										<real>0.0</real>
+										<real>1</real>
+									</array>
+									<array>
+										<real>0.0</real>
+										<real>0.0</real>
+										<real>0.0</real>
+										<real>0.0</real>
+									</array>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>blendFunc</string>
+								<key>type</key>
+								<string>Blendmode</string>
+								<key>value</key>
+								<array>
+									<integer>1</integer>
+									<integer>1</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>gravity</string>
+								<key>type</key>
+								<string>Point</string>
+								<key>value</key>
+								<array>
+									<real>0.0</real>
+									<real>-700</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>speed</string>
+								<key>type</key>
+								<string>FloatVar</string>
+								<key>value</key>
+								<array>
+									<real>70</real>
+									<real>100</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>tangentialAccel</string>
+								<key>type</key>
+								<string>FloatVar</string>
+								<key>value</key>
+								<array>
+									<real>0.0</real>
+									<real>0.0</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>radialAccel</string>
+								<key>type</key>
+								<string>FloatVar</string>
+								<key>value</key>
+								<array>
+									<real>0.0</real>
+									<real>0.0</real>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>texture</string>
+								<key>type</key>
+								<string>Texture</string>
+								<key>value</key>
+								<string>particle1.png</string>
 							</dict>
 						</array>
 						<key>seqExpanded</key>
@@ -465,8 +585,6 @@
 				</array>
 			</dict>
 		</array>
-		<key>selected</key>
-		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
@@ -502,17 +620,17 @@
 			<key>chainedSequenceId</key>
 			<integer>0</integer>
 			<key>length</key>
-			<real>0.66666668653488159</real>
+			<real>0.26666668057441711</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.66666668653488159</real>
+			<real>0.26666668057441711</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>128</real>
+			<real>205.82723999023438</real>
 			<key>sequenceId</key>
 			<integer>0</integer>
 			<key>soundChannel</key>
