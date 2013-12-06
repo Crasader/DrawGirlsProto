@@ -102,7 +102,7 @@ public:
   int ing_download_cnt;
   void startDownloadCardImage ();
   void startDownload ();
-  void addCardImg (int t_card_number);
+  void addCardImg (int t_card_number, int t_card_level, string t_passive);
   virtual void tableCellTouched (CCTableView * table, CCTableViewCell * cell);
   virtual CCSize cellSizeForTable (CCTableView * table);
   virtual unsigned int numberOfCellsInTableView (CCTableView * table);

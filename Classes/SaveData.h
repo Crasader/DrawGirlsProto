@@ -50,20 +50,20 @@ public:
 	string getSyncKey(SaveDataFile t_sdf);
 	string getSyncKey(SaveDataFile t_sdf, int i1);
 	
-	void setKeyValue(SaveDataFile t_sdf, string _key, string _value);
-	void setKeyValue(SaveDataFile t_sdf, int i1, string _key, string _value);
-	void setKeyValue(string filename, string _key, string _value);
+	void setKeyValue(SaveDataFile t_sdf, string _key, string _value, bool diskWrite = true);
+	void setKeyValue(SaveDataFile t_sdf, int i1, string _key, string _value, bool diskWrite = true);
+	void setKeyValue(string filename, string _key, string _value, bool diskWrite = true);
 	
 	void addKeyValue(SaveDataFile t_sdf, string _key, string _value);
 	void addKeyValue(string filename, string _key, string _value);
 	
-	void setKeyValue(SaveDataFile t_sdf, string _key, int _value);
-	void setKeyValue(SaveDataFile t_sdf, int i1, string _key, int _value);
-	void setKeyValue(string filename, string _key, int _value);
+	void setKeyValue(SaveDataFile t_sdf, string _key, int _value, bool diskWrite = true);
+	void setKeyValue(SaveDataFile t_sdf, int i1, string _key, int _value, bool diskWrite = true);
+	void setKeyValue(string filename, string _key, int _value, bool diskWrite = true);
 	
-	void setKeyValue(SaveDataFile t_sdf, string _key, double _value);
-	void setKeyValue(SaveDataFile t_sdf, int i1, string _key, double _value);
-	void setKeyValue(string filename, string _key, double _value);
+	void setKeyValue(SaveDataFile t_sdf, string _key, double _value, bool diskWrite = true);
+	void setKeyValue(SaveDataFile t_sdf, int i1, string _key, double _value, bool diskWrite = true);
+	void setKeyValue(string filename, string _key, double _value, bool diskWrite = true);
 	
 	string getValue(SaveDataFile t_sdf, string _key, string _defaultValue);
 	string getValue(SaveDataFile t_sdf, int i1, string _key, string _defaultValue);
@@ -84,6 +84,9 @@ public:
 	void resetData(SaveDataFile t_sdf);
 	void resetData(string filename);
 	
+	void fFlush(SaveDataFile t_sdf);
+	void fFlush(SaveDataFile t_sdf, int i1);
+	void fFlush(string filename);
 //	void setKeyValue(string key, string value);
 //	void setKeyValue(string key, int value);
 //	string getValue(string key, string defaultValue);

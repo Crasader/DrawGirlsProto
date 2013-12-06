@@ -568,54 +568,54 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
-			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt());
-			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt());
-			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt());
-			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt());
+			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 			
-			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1);
-			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt());
+			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
+			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt(), false);
 			NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 			Json::Value t_card_missile = t_card["missile"];
-			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str());
-			NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt());
-			NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt());
-			NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble());
+			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
+			NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt(), false);
+			NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble(), false);
 			
-			NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str());
+			NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str(), false);
 			
 			Json::Value t_ability = t_card["ability"];
-			NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), t_ability.size());
+			NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), int(t_ability.size()), false);
 			for(int j=0;j<t_ability.size();j++)
 			{
 				Json::Value t_abil = t_ability[j];
-				NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt());
+				NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt(), false);
 				
 				Json::Value t_option;
 				if(!t_abil["option"].isObject())                    t_option["key"]="value";
 				else												t_option =t_abil["option"];
 				
 				if(t_abil["type"].asInt() == kIC_attack)
-					NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_addTime)
-					NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_fast)
-					NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_silence)
-					NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_doubleItem)
-					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_longTime)
-					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
-					NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_subSmallSize)
-					NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_smallArea)
-					NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_widePerfect)
-					NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt());
+					NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 			}
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
@@ -642,21 +642,21 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 			}
 			
 			Json::Value t_aniInfo = t_card["aniInfo"];
-			NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool());
+			NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool(), false);
 			if(t_aniInfo["isAni"].asBool())
 			{
 				Json::Value t_detail = t_aniInfo["detail"];
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt());
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt(), false);
 				
 				Json::Value t_loopSeq = t_detail["loopSeq"];
 				for(int j=0;j<t_loopSeq.size();j++)
-					NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt());
+					NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt(), false);
 				
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt());
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt());
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt());
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt());
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt());
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt(), false);
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt(), false);
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt(), false);
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt(), false);
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt(), false);
 				
 				if(NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card["no"].asInt()) != t_detail["img"].asString())
 				{
@@ -686,10 +686,10 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 				}
 			}
 			
-			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString());
+			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
 			
 			Json::Value t_silImgInfo = t_card["silImgInfo"];
-			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool());
+			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
 			if(t_silImgInfo["isSil"].asBool())
 			{
 				if(NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card["no"].asInt()) != t_silImgInfo["img"].asString())
@@ -704,6 +704,7 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 					// ================================
 				}
 			}
+			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		}
 		
 		if(df_list.size() > 0) // need download
@@ -719,7 +720,7 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 					used_card_img->removeFromParent();
 					used_card_img = NULL;
 				}
-				addCardImg(loading_card_number);
+				addCardImg(loading_card_number, 0, "-1");
 			}
 			
 			if(after_loading_card_number != 0)
@@ -780,7 +781,7 @@ void RankPopup::successAction ()
 				used_card_img->removeFromParent();
 				used_card_img = NULL;
 			}
-			addCardImg(loading_card_number);
+			addCardImg(loading_card_number, 0, "-1");
 		}
 		
 		if(after_loading_card_number != 0)
@@ -847,7 +848,7 @@ void RankPopup::startDownload ()
 	StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename,
 												  this, callfunc_selector(RankPopup::successAction), this, callfunc_selector(RankPopup::failAction));
 }
-void RankPopup::addCardImg (int t_card_number)
+void RankPopup::addCardImg (int t_card_number, int t_card_level, string t_passive)
 {
 	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
 	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
@@ -866,7 +867,7 @@ void RankPopup::addCardImg (int t_card_number)
 		used_card_img->addChild(t_ani);
 	}
 	
-	CardCase* t_case = CardCase::create(card_stage, card_grade);
+	CardCase* t_case = CardCase::create(card_stage, card_grade, t_card_level, t_passive);
 	t_case->setPosition(CCPointZero);
 	used_card_img->addChild(t_case);
 	
@@ -940,7 +941,43 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 		}
 		else // 카드 정보 있음
 		{
-			addCardImg(selectedCardIndex);
+			int t_card_level;
+			string t_card_passive;
+			
+			// 자기 자신을 찍음
+			if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+			{
+				t_card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+				t_card_passive = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+			}
+			else
+			{
+				bool is_found = false;
+				for(auto i : UnknownFriends::getInstance()->getFriends())
+				{
+					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
+					{
+						is_found = true;
+						Json::Value t_user_data = i.userData;
+						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
+						break;
+					}
+				}
+				for(auto i : KnownFriends::getInstance()->getFriends())
+				{
+					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
+					{
+						Json::Value t_user_data = i.userData;
+						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
+						break;
+					}
+				}
+			}
+			
+//			m_scoreList[cell->getIdx()]["user_id"]
+			addCardImg(selectedCardIndex, t_card_level, t_card_passive);
 		}
 	}
 	else

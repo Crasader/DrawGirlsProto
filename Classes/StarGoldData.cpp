@@ -736,18 +736,9 @@ void StarGoldData::selectFriendCard()
 			t_data.messageBlocked = known_list[i].messageBlocked;
 			
 			t_data.card_number = t_card_number;
-			int t_card_take_cnt = known_list[i].userData[myDSH->getKey(kDSH_Key_cardTakeCnt)].asInt();
-			int found_index = -1;
-			for(int j=1;j<=t_card_take_cnt && found_index == -1;j++)
-			{
-				int take_card_number = known_list[i].userData[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][j].asInt();
-				if(take_card_number == t_card_number)
-				{
-					found_index = j;
-					t_data.card_level = known_list[i].userData[myDSH->getKey(kDSH_Key_cardLevel_int1)].get(j, 1).asInt();
-					t_data.card_passive = known_list[i].userData[myDSH->getKey(kDSH_Key_cardPassive_int1)].get(j, "").asString();
-				}
-			}
+			t_data.card_level = known_list[i].userData.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+			t_data.card_passive = known_list[i].userData.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
+			
 			friends_card_data_list.push_back(t_data);
 		}
 	}
@@ -765,18 +756,9 @@ void StarGoldData::selectFriendCard()
 			t_data.messageBlocked = unknown_list[i].messageBlocked;
 			
 			t_data.card_number = t_card_number;
-			int t_card_take_cnt = unknown_list[i].userData[myDSH->getKey(kDSH_Key_cardTakeCnt)].asInt();
-			int found_index = -1;
-			for(int j=1;j<=t_card_take_cnt && found_index == -1;j++)
-			{
-				int take_card_number = unknown_list[i].userData[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][j].asInt();
-				if(take_card_number == t_card_number)
-				{
-					found_index = j;
-					t_data.card_level = unknown_list[i].userData[myDSH->getKey(kDSH_Key_cardLevel_int1)].get(j, 1).asInt();
-					t_data.card_passive = unknown_list[i].userData[myDSH->getKey(kDSH_Key_cardPassive_int1)].get(j, "").asString();
-				}
-			}
+			t_data.card_level = unknown_list[i].userData.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+			t_data.card_passive = unknown_list[i].userData.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
+			
 			friends_card_data_list.push_back(t_data);
 		}
 	}

@@ -65,7 +65,7 @@ void SaveData::createJSON(string filename)
 void SaveData::createJSON(SaveDataFile t_sdf){			createJSON(getSyncKey(t_sdf));		}
 void SaveData::createJSON(SaveDataFile t_sdf, int i1){	createJSON(getSyncKey(t_sdf, i1));	}
 
-void SaveData::setKeyValue(string filename, string _key, string _value)
+void SaveData::setKeyValue(string filename, string _key, string _value, bool diskWrite /*= true*/)
 {
 	map<string, bool>::iterator iter;
 	iter = file_init.find(filename);
@@ -77,13 +77,15 @@ void SaveData::setKeyValue(string filename, string _key, string _value)
 	string key = stringEnc(_key);
 	string value = stringEnc(_value);
 	
-	(file_sync[file_key])[key] = value;
+	file_sync[file_key][key] = value;
 	ostringstream oss;
 	file_sync[file_key].writeToStream(oss);
-	testF(filename, oss.str());
+	if(diskWrite)
+		testF(filename, oss.str());
 }
-void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, string _value){			setKeyValue(getSyncKey(t_sdf), _key, _value);		}
-void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, string _value){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value);	}
+void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, string _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
+void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, string _value, bool diskWrite /*= true*/){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value, diskWrite);	}
+
 
 void SaveData::addKeyValue(string filename, string _key, string _value)
 {
@@ -126,7 +128,7 @@ void SaveData::resetData(string filename)
 	testF(filename, "");
 }
 
-void SaveData::setKeyValue(string filename, string _key, int _value)
+void SaveData::setKeyValue(string filename, string _key, int _value, bool diskWrite /*= true*/)
 {
 	map<string, bool>::iterator iter;
 	iter = file_init.find(filename);
@@ -139,15 +141,16 @@ void SaveData::setKeyValue(string filename, string _key, int _value)
 	ostringstream valueoss;
 	valueoss << _value;
 	string value = stringEnc(valueoss.str());
-	(file_sync[file_key])[key] = value;
+	file_sync[file_key][key] = value;
 	ostringstream oss;
 	file_sync[file_key].writeToStream(oss);
-	testF(filename, oss.str());
+	if(diskWrite)
+		testF(filename, oss.str());
 }
-void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, int _value){			setKeyValue(getSyncKey(t_sdf), _key, _value);		}
-void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, int _value){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value);	}
+void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, int _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
+void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, int _value, bool diskWrite /*= true*/){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value, diskWrite);	}
 
-void SaveData::setKeyValue(string filename, string _key, double _value)
+void SaveData::setKeyValue(string filename, string _key, double _value, bool diskWrite /*= true*/)
 {
 	map<string, bool>::iterator iter;
 	iter = file_init.find(filename);
@@ -160,13 +163,14 @@ void SaveData::setKeyValue(string filename, string _key, double _value)
 	ostringstream valueoss;
 	valueoss << _value;
 	string value = stringEnc(valueoss.str());
-	(file_sync[file_key])[key] = value;
+	file_sync[file_key][key] = value;
 	ostringstream oss;
 	file_sync[file_key].writeToStream(oss);
-	testF(filename, oss.str());
+	if(diskWrite)
+		testF(filename, oss.str());
 }
-void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, double _value){			setKeyValue(getSyncKey(t_sdf), _key, _value);		}
-void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, double _value){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value);	}
+void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, double _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
+void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, double _value, bool diskWrite /*= true*/){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value, diskWrite);	}
 
 string SaveData::getValue(string filename, string _key, string _defaultValue)
 {
@@ -227,6 +231,21 @@ double SaveData::getValue(string filename, string _key, double _defaultValue)
 double SaveData::getValue(SaveDataFile t_sdf, string _key, double _defaultValue){				return getValue(getSyncKey(t_sdf), _key, _defaultValue);		}
 double SaveData::getValue(SaveDataFile t_sdf, int i1, string _key, double _defaultValue){		return getValue(getSyncKey(t_sdf, i1), _key, _defaultValue);	}
 
+void SaveData::fFlush(string filename)
+{
+	map<string, bool>::iterator iter;
+	iter = file_init.find(filename);
+	if(iter == file_init.end())
+		createJSON(filename);
+	
+	string file_key = stringEnc(filename);
+		
+	ostringstream oss;
+	file_sync[file_key].writeToStream(oss);
+	testF(filename, oss.str());
+}
+void SaveData::fFlush(SaveDataFile t_sdf){			fFlush(getSyncKey(t_sdf));		}
+void SaveData::fFlush(SaveDataFile t_sdf, int i1){	fFlush(getSyncKey(t_sdf, i1));	}
 //void SaveData::createJSON()
 //{
 //	string rawData = readF();
