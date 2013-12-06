@@ -328,7 +328,7 @@ void TitleScene::resultGetUnknownFriendUserData(Json::Value v)
 	 }
 	 */
 	KS::KSLog("%", v);
-	if(v["state"].asString() == "ok")
+	if(v["state"].asString() == "ok" || 1)
 	{
 		for(int i=0; i<v["list"].size(); i++)
 		{

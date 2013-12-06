@@ -28,6 +28,11 @@
 				<key>children</key>
 				<array>
 					<dict>
+						<key>animatedProperties</key>
+						<dict>
+							<key>0</key>
+							<dict/>
+						</dict>
 						<key>baseClass</key>
 						<string>CCParticleSystemQuad</string>
 						<key>children</key>
@@ -99,7 +104,7 @@
 								<key>type</key>
 								<string>Float</string>
 								<key>value</key>
-								<real>20</real>
+								<real>200</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -135,7 +140,7 @@
 								<string>FloatVar</string>
 								<key>value</key>
 								<array>
-									<real>50</real>
+									<real>40</real>
 									<real>5</real>
 								</array>
 							</dict>
@@ -289,6 +294,8 @@
 								<string>fx_pollution4.png</string>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 						<key>seqExpanded</key>
 						<true/>
 					</dict>
@@ -412,8 +419,6 @@
 				</array>
 			</dict>
 		</array>
-		<key>selected</key>
-		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
@@ -453,9 +458,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.26927089691162109</real>
+			<real>0.72447872161865234</real>
 			<key>position</key>
-			<real>2.9333333969116211</real>
+			<real>8.4666662216186523</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
