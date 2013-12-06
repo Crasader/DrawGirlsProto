@@ -130,6 +130,45 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle)
 		return false;
 }
 
+//void KSJuniorBase::assignJuniorData(Json::Value boss)
+//{
+//	float hp = MAX(boss["hp"].asInt(), 0);
+//	float minSpeed = MAX(boss["speed"]["min"].asDouble(), 0);
+//	float startSpeed = MAX(boss["speed"]["start"].asDouble(), 0); //getNumberFromJsonValue(speed["start"]);
+//	float maxSpeed = MAX(boss["speed"]["max"].asDouble(), 0);// getNumberFromJsonValue(speed["min"]);
+//	
+//	float minScale = MAX(boss["scale"]["min"].asDouble(), 0); // getNumberFromJsonValue(scale["min"]);
+//	float startScale = MAX(boss["scale"]["start"].asDouble(), 0); // getNumberFromJsonValue(scale["start"]);
+//	float maxScale = MAX(boss["scale"]["max"].asDouble(), 0); // getNumberFromJsonValue(scale["max"]);
+//	
+//	int normalMovement = boss["movement"].get("normal",1).asInt();
+//	int drawMovement = boss["movement"].get("draw", normalMovement).asInt();
+//	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
+//	
+//	float agi = MAX(boss.get("agi", 0).asDouble(), 0);
+//	float ai = MAX(0, boss.get("ai", 0).asInt() );
+//	
+//	m_totalHp = m_remainHp = hp;
+//	m_agility = agi;
+//	m_aiValue = ai;
+//	m_startScale = startScale;
+//	m_minScale = minScale;
+//	m_maxScale = maxScale;
+//	
+//	m_startSpeed = startSpeed;
+//	m_minSpeed = minSpeed;
+//	m_maxSpeed = maxSpeed;
+//	
+//	m_normalMovement = (enum MOVEMENT)normalMovement;
+//	m_drawMovement = (enum MOVEMENT)drawMovement;
+//	m_furyMovement = (enum MOVEMENT)furyMovement;
+//}
+//void KSJuniorBase::applyPassiveData(const std::string& passive)
+//{
+//	
+//}
+
+
 void KSJuniorBase::startAnimationNoDirection()
 {
 	CCLog("Lets rotate");

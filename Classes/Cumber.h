@@ -71,6 +71,8 @@ public:
 	void changeMaxSize(float t_p);
 	void onJackDie();
 	void onJackRevived();
+	
+	void changePassiveData(const std::string& passive_data);
 	float getNumberFromJsonValue(JsonBox::Value v)
 	{
 		if(v.getType() == JsonBox::Value::DOUBLE)
@@ -81,48 +83,6 @@ public:
 			return 0.f;
 	}
 private:
-	struct jrType
-	{
-		
-		std::string m_jrType;
-		
-		float m_jrMinSpeed;
-		float m_jrStartSpeed;
-		float m_jrMaxSpeed;
-		
-		float m_jrMinScale;
-		float m_jrStartScale;
-		float m_jrMaxScale;
-		
-		int m_jrNormalMovement;
-		int m_jrDrawMovement;
-		int m_jrFuryMovement;
-		float m_jrHp;
-		float m_jrAgi;
-		
-		int m_aiValue;
-		jrType(const std::string& type, float minv, float startv, float maxv,
-			   float mins, float starts, float maxs, int nm, int dr, int fury,
-			   float hp, int ai, int agi)
-		{
-			m_jrType = type;
-			m_jrMinSpeed = minv;
-			m_jrStartSpeed = startv;
-			m_jrMaxSpeed = maxv;
-			
-			m_jrMinScale = mins;
-			m_jrStartScale = starts;
-			m_jrMaxScale = maxs;
-			
-			m_jrNormalMovement = nm;
-			m_jrDrawMovement = dr;
-			m_jrFuryMovement = fury;
-			m_jrHp = hp;
-			m_aiValue = ai;
-			m_jrAgi = agi;
-		}
-	};
-	vector<jrType> m_juniors; // 생성할 때 참고하려고 저장함.
 	
 	bool is_die_animationing;
 	int die_animation_cnt;
