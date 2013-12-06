@@ -89,8 +89,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>18</real>
-									<real>18</real>
+									<real>16</real>
+									<real>16</real>
 								</array>
 							</dict>
 							<dict>
@@ -124,7 +124,7 @@
 								<string>FloatVar</string>
 								<key>value</key>
 								<array>
-									<real>0.30000001192092896</real>
+									<real>0.5</real>
 									<real>0.20000000298023224</real>
 								</array>
 							</dict>
@@ -135,8 +135,8 @@
 								<string>FloatVar</string>
 								<key>value</key>
 								<array>
-									<real>30</real>
-									<real>10</real>
+									<real>20</real>
+									<real>5</real>
 								</array>
 							</dict>
 							<dict>
@@ -147,7 +147,7 @@
 								<key>value</key>
 								<array>
 									<real>10</real>
-									<real>10</real>
+									<real>5</real>
 								</array>
 							</dict>
 							<dict>
@@ -289,6 +289,8 @@
 								<string>ccbResources/ccbParticleFire.png</string>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
