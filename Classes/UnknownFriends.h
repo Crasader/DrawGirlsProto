@@ -9,16 +9,9 @@
 #include <vector>
 #include <string>
 #include <map>
+#include "FriendData.h"
+#include "jsoncpp/json.h"
 
-typedef unsigned long long uint64;
-
-struct UnknownFriendsData
-{
-	uint64 userId;
-	std::string nick;
-	uint64 joinDate;
-	uint64 lastDate;
-};
 
 class UnknownFriends
 {
@@ -35,12 +28,18 @@ public:
 protected:
 	UnknownFriends() {}
 	
-	std::vector<UnknownFriendsData> m_friends;
+	std::vector<FriendData> m_friends;
 public:
-	const std::vector<UnknownFriendsData>& getFriends(){return m_friends;}
+	const std::vector<FriendData>& getFriends(){return m_friends;}
+	
 	void deleteById(uint64 kakaoId);
-	UnknownFriendsData* findById(uint64 kakaoId);
-	void add(const UnknownFriendsData& d);
+	void putJoinDate(int index, int64 jd);
+	void putLastDate(int index, int64 jd);
+	void putUserData(int index, Json::Value d);
+	void putHashedTalkUserId(int index, const std::string hashId);
+
+	FriendData* findById(uint64 kakaoId);
+	void add(const FriendData& d);
 };
 
 

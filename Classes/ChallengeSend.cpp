@@ -69,6 +69,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																	 KSAlertView* av = KSAlertView::create();
 																	 av->setCenterY(150);
 																	 auto ttf = CCLabelTTF::create((nickname + "님에게 도전을 하였습니다. 결과를 기다리세요!").c_str(), "", 12.f);
+																	 ttf->setColor(ccc3(0, 0, 0));
 																	 av->setContentNode(
 																											ttf
 																											);
@@ -162,6 +163,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 KSAlertView* av = KSAlertView::create();
 																		 av->setCenterY(150);
 																		 auto ttf = CCLabelTTF::create((nickname + "에게 졌습니다...").c_str(), "", 12.f);
+																		 ttf->setColor(ccc3(0, 0, 0));
 																		  av->setContentNode(
 																												ttf
 																												);

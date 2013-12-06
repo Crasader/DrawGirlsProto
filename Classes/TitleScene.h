@@ -79,8 +79,15 @@ private:
 	void startGetCommonSetting();
 	void resultGetCommonSetting(Json::Value result_data);
 	
-	void startGetFriendList();
-	void resultGetFriendList(Json::Value result_data);
+	void startGetKnownFriendList();
+	void resultGetKnownFriendList(Json::Value result_data);
+	void startGetKnownFriendUserData();
+	void resultGetKnownFriendUserData(Json::Value result_data);
+	
+	void startGetUnknownFriendList();
+	void resultGetUnknownFriendList(Json::Value result_data);
+	void startGetUnknownFriendUserData();
+	void resultGetUnknownFriendUserData(Json::Value result_data);
 	
 	void startGetCharacterInfo();
 	void resultGetCharacterInfo(Json::Value result_data);

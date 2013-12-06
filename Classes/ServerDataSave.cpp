@@ -361,6 +361,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_SI_missionOptionPercent_i)	rv = "mission_option_percent";
 	else if(t_key == kSDS_SI_missionOptionSec_i)		rv = "mission_option_sec";
 	else if(t_key == kSDS_SI_shopItemsCnt_i)			rv = "shopItems_cnt";
+	else if(t_key == kSDS_SI_shopItems_int1_currency_s)	rv = "shopItems_%d_currency";
 	else if(t_key == kSDS_SI_shopItems_int1_type_i)		rv = "shopItems_%d_type";
 	else if(t_key == kSDS_SI_shopItems_int1_price_i)	rv = "shopItems_%d_price";
 	else if(t_key == kSDS_SI_defItemsCnt_i)				rv = "defItems_cnt";

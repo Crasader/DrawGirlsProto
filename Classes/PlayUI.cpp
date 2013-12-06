@@ -786,9 +786,13 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f)
 		{
-			int cmCnt = (t_p - t_beforePercentage)/NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f;
+			int cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f);
 			
-			string missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+			string missile_code;
+			if(mySGD->getIsUsingFriendCard())
+				missile_code = NSDS_GI(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
+			else
+				missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 			int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
 			
 			//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
@@ -1551,6 +1555,22 @@ void PlayUI::takeItemCollect ()
 	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
+
+void PlayUI::setUseFriendCard()
+{
+	mySGD->setIsUsingFriendCard(true);
+	jack_life++;
+	
+	CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
+	jack_img->setColor(ccGREEN);
+	if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-(jack_life-1)*20));
+	else if(myGD->gamescreen_type == kGT_rightUI)	jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-(jack_life-1)*20));
+	else											jack_img->setPosition(ccp(80+(jack_life-1)*20, myDSH->ui_top-35));
+	addChild(jack_img);
+	
+	jack_array->addObject(jack_img);
+}
+
 void PlayUI::myInit ()
 {
 	isGameover = false;

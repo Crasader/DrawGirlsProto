@@ -27,6 +27,9 @@
 #include "StageRankPopup.h"
 #include "LoadingLayer.h"
 #include "ShopPopup.h"
+#include "KnownFriend.h"
+#include "UnknownFriends.h"
+#include <random>
 
 enum SSP_Zorder{
 	kSSP_Z_gray = 1,
@@ -457,6 +460,15 @@ void StageSettingPopup::itemSetting()
 			selected_img->setPosition(ccp(-100, 0));
 			item_parent->addChild(selected_img, kSSP_Z_content, kSSP_MT_selectedBase+i);
 			
+			if(t_ic == kIC_rentCard)
+			{
+				if(mySGD->getSelectedFriendCardData().card_number == 0)
+				{
+					select_menu->setEnabled(false);
+					buy_menu->setEnabled(false);
+				}
+			}
+			
 			is_selected_item.push_back(false);
 		}
 		else
@@ -752,7 +764,7 @@ void StageSettingPopup::finalSetting()
 	addChild(start_loading, kSSP_Z_popup);
 	
 	deque<bool> is_using_item;
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 		is_using_item.push_back(false);
 	
 	for(int i=0;i<is_selected_item.size();i++)
@@ -765,7 +777,7 @@ void StageSettingPopup::finalSetting()
 		}
 	}
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
 }
 
@@ -808,7 +820,7 @@ void StageSettingPopup::cancelGame()
 		CCLog("Fail : user data save");
 		
 		deque<bool> is_using_item;
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		for(int i=kIC_attack;i<=kIC_rentCard;i++)
 			is_using_item.push_back(false);
 		
 		for(int i=0;i<is_selected_item.size();i++)
@@ -919,6 +931,7 @@ string StageSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_smallArea)		return_value = "smallArea";
 	else if(t_code == kIC_widePerfect)		return_value = "widePerfect";
 	else if(t_code == kIC_randomChange)		return_value = "randomChange";
+	else if(t_code == kIC_rentCard)			return_value = "rentCard";
 	
 	return return_value.c_str();
 }

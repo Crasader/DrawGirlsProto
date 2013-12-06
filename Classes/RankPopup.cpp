@@ -2,6 +2,13 @@
 //
 
 #include "RankPopup.h"
+#include "FriendListPopup.h"
+#include "JoinGameFriendPopup.h"
+#include "InviteEventPopup.h"
+#include "UnknownFriends.h"
+#include "KnownFriend.h"
+#include "SendMessageUtil.h"
+
 #define LZZ_INLINE inline
 using namespace cocos2d::extension;
 using namespace std;
@@ -101,33 +108,7 @@ void RankPopup::finishedClose ()
 	
 	removeFromParent();
 }
-int RankPopup::getHeartIsSendable (std::string userId, int base_s)
-{
-	return true;
-	auto end = chrono::system_clock::now();
-	auto currentSecond = chrono::system_clock::to_time_t(end);
-	int ii = myDSH->getUserIntForStr("heart_" + userId, 0);
-	if(ii + base_s < currentSecond)
-	{
-		return 1;
-	}
-	else
-		return 0;
-	
-	//		if(ii + base_s < GameSystem::getCurrentTime_s())
-	//		{
-	//			return 1;
-	//		}
-	//		else
-	//			return 0;
-}
-void RankPopup::setHeartSendTime (string userId)
-{
-	auto end = chrono::system_clock::now();
-	auto currentSecond = chrono::system_clock::to_time_t(end);
-	myDSH->setUserIntForStr("heart_" + userId, currentSecond);
-	//		saveData->setKeyValue(fbid, GameSystem::getCurrentTime_s());
-}
+
 void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 {
 	setTouchEnabled(true);
@@ -145,13 +126,17 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	//		gray->setContentSize(CCSizeMake(600, 400));
 	//		addChild(gray, kRP_Z_gray);
 	
-	CCSprite* back = CCSprite::create("ranking_back.png");
+	CCSprite* back = CCSprite::create("rank_back.png");
 	back->setPosition(ccp(240,160));
 	addChild(back, kRP_Z_back);
 	
+	CCSprite* back2 = CCSprite::create("rank_friend_rank_back.png");
+	back2->setPosition(ccp(240, 160));
+	addChild(back2, kRP_Z_back);
+	
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
-	back->addChild(_menu);
+	addChild(_menu, kRP_Z_back + 1);
 	_menu->setPosition(ccp(0, 0));
 	
 	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
@@ -163,148 +148,215 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 															   });
 	closeBtn->setPosition(ccp(440, 290));
 	_menu->addChild(closeBtn);
-	CCMenuItemLambda* inviteEventBtn = CCMenuItemImageLambda::create(
-																	 "rank_default_invite.png", "rank_default_invite.png",
-																	 [=](CCObject*){
-																		 //																																 (target_close->*delegate_close)();
-																		 
-																		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
-																		 getParent()->addChild(t_rp, this->getZOrder());
-																		 removeFromParent();
-																		 
-																	 });
-	inviteEventBtn->setPosition(ccp(380, 290));
+
+	auto weekRank = CCMenuItemImageLambda::create
+	(
+	 "rank_friend_rank.png", "rank_friend_rank.png",
+	 [=](CCObject*){
+		 //																																 (target_close->*delegate_close)();
+		 
+	 });
+	weekRank->setPosition(ccp(67, 290));
+	_menu->addChild(weekRank, 5);
+	
+	// 친구 초대 이벤트
+	auto inviteEventBtn = CCMenuItemImageLambda::create
+	(
+	 "rank_default_invite.png", "rank_default_invite.png",
+	 [=](CCObject*){
+		 //																																 (target_close->*delegate_close)();
+		 
+		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
+		 getParent()->addChild(t_rp, this->getZOrder());
+		 removeFromParent();
+		 
+	 });
+	inviteEventBtn->setPosition(ccp(169, 290));
+	inviteEventBtn->setOpacity(0);
 	
 	_menu->addChild(inviteEventBtn);
+	
+	// 친구목록
+	auto friendList = CCMenuItemImageLambda::create
+	(
+	 "rank_friend_list.png", "rank_friend_list.png",
+	 [=](CCObject*){
+		 //																																 (target_close->*delegate_close)();
+		 FriendListPopup* t_rp = FriendListPopup::create(t_close, d_close);
+		 getParent()->addChild(t_rp, this->getZOrder());
+		 removeFromParent();
+		 
+	 });
+	friendList->setPosition(ccp(270, 290));
+	friendList->setOpacity(0);
+	_menu->addChild(friendList);
+	
+	// 게임 친구맺기
+	auto joinGameFriend = CCMenuItemImageLambda::create
+	(
+	 "rank_gamefriend.png", "rank_gamefriend.png",
+	 [=](CCObject*){
+		 //																																 (target_close->*delegate_close)();
+		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
+		 getParent()->addChild(t_rp, this->getZOrder());
+		 removeFromParent();
+		 
+	 });
+	joinGameFriend->setPosition(ccp(370, 290));
+	joinGameFriend->setOpacity(0);
+	_menu->addChild(joinGameFriend);
+
+	
+	
+	m_onlyKatok = CCMenuItemImageLambda::create
+	("rank_friend_rank_1.png", "rank_friend_rank_1.png",
+	 [=](CCObject* t)
+	 {
+		 
+	 });
+	
+	m_onlyKatok->setPosition(ccp(226, 229));
+	_menu->addChild(m_onlyKatok, 3);
+	
+	
+	m_onlyGameFriend = CCMenuItemImageLambda::create
+	("rank_friend_rank_2.png", "rank_friend_rank_2.png",
+	 [=](CCObject* t)
+	 {
+		 
+	 });
+	
+	m_onlyGameFriend->setPosition(ccp(317, 229));
+	_menu->addChild(m_onlyGameFriend, 3);
+	
+	
+	
+	m_totalFriend = CCMenuItemImageLambda::create
+	("rank_friend_rank_3.png", "rank_friend_rank_3.png",
+	 [=](CCObject* t)
+	 {
+		 
+	 });
+	
+	m_totalFriend->setPosition(ccp(406, 229));
+	_menu->addChild(m_totalFriend, 3);
+	
+		
+	
 	
 	loadRank();
 }
 void RankPopup::loadRank ()
 {
-	
-	
 	std::function<void(Json::Value e)> p1 = bind(&RankPopup::drawRank, this, std::placeholders::_1);
-	//step1 카카오친구목록 로드
-	hspConnector::get()->kLoadFriends(Json::Value(),[p1](Json::Value fInfo)
-									  {
-										  CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-										  
-										  
-										  
-										  Json::Value appfriends = fInfo["app_friends_info"];
-										  appfriends.append(hspConnector::get()->myKakaoInfo);
-										  Json::Value p;
-										  
-										  for(int i=0; i<appfriends.size();i++){
-											  p["memberIDList"].append(appfriends[i]["user_id"].asString());
-											  
-										  }
-										  
-										  p["memberIDList"].append(hspConnector::get()->getKakaoID());
-										  
-										  //step2 위클리스코어 목록 읽어옴
-										  hspConnector::get()->command("getweeklyscorelist",p,[p1,appfriends](Json::Value obj)
-																	   {
-																		   CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
-																		   
-																		   //step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
-																		   GraphDogLib::JsonToLog("friend1", appfriends);
-																		   Json::Value scorelist;
-																		   
-																		   for(unsigned int i=0;i<appfriends.size();i++){
-																			   string mid = appfriends[i]["user_id"].asString();
-																			   scorelist[mid]=appfriends[i];
-																		   }
-																		   
-																		   for(unsigned int j=0;j<obj["list"].size();j++){
-																			   string mid = obj["list"][j]["memberID"].asString();
-																			   scorelist[mid]["scoreInfo"]=obj["list"][j];
-																		   }
-																		   GraphDogLib::JsonToLog("result", scorelist);
-																		   Json::Value scorearray;
-																		   for(auto iter = scorelist.begin(); iter != scorelist.end(); ++iter)
-																		   {
-																			   Json::Value temp = scorelist[iter.key().asString()];
-																			   temp["user_id"] = iter.key().asString();
-																			   scorearray.append(temp);
-																		   }
-																		   
-																		   // 정렬 함
-																		   // Selection Sort
-																		   int N = scorearray.size();
-																		   for (int i = 0; i < (N - 1); i++)
-																		   {
-																			   int minIndex = i;
-																			   
-																			   // Find the index of the minimum element
-																			   for (int j = i + 1; j < N; j++)
-																			   {
-																				   if (scorearray[j]["scoreInfo"].get("score", -1).asInt() > scorearray[minIndex]["scoreInfo"].get("score", -1).asInt())
-																				   {
-																					   minIndex = j;
-																				   }
-																			   }
-																			   
-																			   // Swap if i-th element not already smallest
-																			   if (minIndex > i)
-																			   {
-																				   scorearray[i].swap(scorearray[minIndex]);
-																				   //            swap(a[i], a[minIndex]);
-																			   }
-																		   }
-																		   
-																		   
-																		   //결과 돌려줌
-																		   p1(scorearray);
-																		   
-																		   //			   Json::Value p;
-																		   //			   Json::Value idMap = obj["memberNoMap"];
-																		   //				idMap[hspConnector::get()->getKakaoID()]=hspConnector::get()->getHSPMemberNo();
-																		   //			   p["past"]=false;
-																		   //			   p["rankingKey"]="rankingFactor-3,rankingPeriod-77";
-																		   //			   p["requesterMemberNo"]=hspConnector::get()->getHSPMemberNo();
-																		   //			   p["gameNo"]=hspConnector::get()->hspNo;
-																		   //			   Json::Value::Members m = idMap.getMemberNames();
-																		   //			   for (auto iter = m.begin(); iter!=m.end(); ++iter) {
-																		   //				   string key = (string)*iter;
-																		   //				   p["memberNoList"].append(idMap[key].asInt64());
-																		   //			   }
-																		   //
-																		   //			   //step3 HSP ID목록으로 게임랭킹 뽑기
-																		   //			   hspConnector::get()->command("GetRankingListByMemberNoList2",p,[delekey,idMap](Json::Value obj)
-																		   //				{
-																		   //
-																		   //					Json::Value friendInfo;
-																		   //					Json::Value::Members m = idMap.getMemberNames();
-																		   //					for (auto iter = m.begin(); iter!=m.end(); ++iter) {
-																		   //						string kakaoID = (string)*iter;
-																		   //						for(int i=0; i<obj["rankingList"].size();i++){
-																		   //							if(obj["rankingList"][i]["profile"]["memberNo"].asInt64() == idMap[kakaoID].asInt64()){
-																		   //								obj["rankingList"][i]["profile"]["kakaoID"] = kakaoID;
-																		   //								friendInfo[kakaoID]=obj["rankingList"][i];
-																		   //								//hspConnector::get()->frineds[i]["hspNo"]=obj["memberNoMap"][key].asInt64();
-																		   //								break;
-																		   //							}
-																		   //						}
-																		   //					}
-																		   //
-																		   //
-																		   //					hspConnector::get()->idMap = idMap;
-																		   //					hspConnector::get()->appFriends = friendInfo;
-																		   //
-																		   //					//CCLog("%s",GraphDogLib::JsonObjectToString(obj).c_str());
-																		   //					jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-																		   //
-																		   //					delsel.func(obj);
-																		   //
-																		   //					jsonDelegator::get()->remove(delekey);
-																		   //				});
-																		   
-																	   });
-										  
-									  });
+
+	
+	/*
+	 "app_friends_info" : [
+	 {
+	 "friend_nickname" : "",
+	 "hashed_talk_user_id" : "BoMOQ0MOgwY",
+	 "message_blocked" : false,
+	 "nickname" : "경수2",
+	 "profile_image_url" : "",
+	 "user_id" : "90014050894642625"
+	 },
+	 */
+	
+	Json::Value appfriends;
+	for(auto i : KnownFriends::getInstance()->getFriends())
+	{
+		Json::Value v;
+		v["friends_nickname"] = i.nick;
+		v["hashed_talk_user_id"] = i.hashedTalkUserId;
+		v["message_blocked"] = i.messageBlocked;
+		v["nickname"] = i.nick;
+		v["profile_image_url"] = i.profileUrl;
+		v["user_id"] = i.userId;
+		appfriends.append(v);
+	}
+	for(auto i : UnknownFriends::getInstance()->getFriends())
+	{
+		Json::Value v;
+		v["friends_nickname"] = i.nick;
+		v["hashed_talk_user_id"] = i.hashedTalkUserId;
+		v["message_blocked"] = i.messageBlocked;
+		v["nickname"] = i.nick;
+		v["profile_image_url"] = i.profileUrl;
+		v["user_id"] = i.userId;
+		appfriends.append(v);
+	}
+	appfriends.append(hspConnector::get()->myKakaoInfo);
+	Json::Value p;
 	
 	
+	
+	for(auto i : KnownFriends::getInstance()->getFriends())
+	{
+		p["memberIDList"].append(i.userId);
+	}
+	for(auto i : UnknownFriends::getInstance()->getFriends())
+	{
+		p["memberIDList"].append(i.userId);
+	}
+	
+	
+	p["memberIDList"].append(hspConnector::get()->getKakaoID());
+	
+	//step2 위클리스코어 목록 읽어옴
+	hspConnector::get()->command("getweeklyscorelist",p,[p1,appfriends](Json::Value obj)
+															 {
+																 CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
+																 
+																 //step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
+																 GraphDogLib::JsonToLog("friend1", appfriends);
+																 Json::Value scorelist;
+																 
+																 for(unsigned int i=0;i<appfriends.size();i++){
+																	 string mid = appfriends[i]["user_id"].asString();
+																	 scorelist[mid]=appfriends[i];
+																 }
+																 
+																 for(unsigned int j=0;j<obj["list"].size();j++){
+																	 string mid = obj["list"][j]["memberID"].asString();
+																	 scorelist[mid]["scoreInfo"]=obj["list"][j];
+																 }
+																 GraphDogLib::JsonToLog("result", scorelist);
+																 Json::Value scorearray;
+																 for(auto iter = scorelist.begin(); iter != scorelist.end(); ++iter)
+																 {
+																	 Json::Value temp = scorelist[iter.key().asString()];
+																	 temp["user_id"] = iter.key().asString();
+																	 scorearray.append(temp);
+																 }
+																 
+																 // 정렬 함
+																 // Selection Sort
+																 int N = scorearray.size();
+																 for (int i = 0; i < (N - 1); i++)
+																 {
+																	 int minIndex = i;
+																	 
+																	 // Find the index of the minimum element
+																	 for (int j = i + 1; j < N; j++)
+																	 {
+																		 if (scorearray[j]["scoreInfo"].get("score", -1).asInt() > scorearray[minIndex]["scoreInfo"].get("score", -1).asInt())
+																		 {
+																			 minIndex = j;
+																		 }
+																	 }
+																	 
+																	 // Swap if i-th element not already smallest
+																	 if (minIndex > i)
+																	 {
+																		 scorearray[i].swap(scorearray[minIndex]);
+																		 //            swap(a[i], a[minIndex]);
+																	 }
+																 }
+																 
+																 //결과 돌려줌
+																 p1(scorearray);
+															 });
 }
 void RankPopup::drawRank (Json::Value obj)
 {
@@ -312,7 +364,7 @@ void RankPopup::drawRank (Json::Value obj)
 	//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 	
 	//320x320 테이블 뷰 생성
-	rankTableView = RankTableView::create(this, CCSizeMake(270, 233), NULL);
+	rankTableView = RankTableView::create(this, CCSizeMake(270, 233 - 47), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
 	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
@@ -396,7 +448,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	_menu->setTag(kRP_RT_menu);
 	cell->addChild(_menu, kRP_Z_send);
 	
-	if(getHeartIsSendable( m_scoreList[idx]["user_id"].asString() ))
+	if(::getHeartIsSendable( m_scoreList[idx]["user_id"].asString() ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
 		("rank_cell_send.png", "rank_cell_send.png",
@@ -427,7 +479,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 											  //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 											  //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 											  GraphDogLib::JsonToLog("sendMessage", r);
-											  this->setHeartSendTime(m_scoreList[idx]["user_id"].asString());
+											  ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
 											  obj->removeFromParent();
 											  
 											  CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",

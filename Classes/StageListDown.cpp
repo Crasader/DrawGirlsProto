@@ -93,6 +93,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					for(int i=0;i<shopItems.size();i++)
 					{
 						Json::Value t_item = shopItems[i];
+						NSDS_SS(stage_number, kSDS_SI_shopItems_int1_currency_s, i, t_item["currency"].asString());
 						NSDS_SI(stage_number, kSDS_SI_shopItems_int1_type_i, i, t_item["type"].asInt());
 						NSDS_SI(stage_number, kSDS_SI_shopItems_int1_price_i, i, t_item["price"].asInt());
 						

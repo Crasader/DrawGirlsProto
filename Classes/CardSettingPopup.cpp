@@ -767,7 +767,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					cell->addChild(t_no);
 					
 					CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
-																							 mySD->getCardDurability(found_stage, i))->getCString(),
+																							 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
 																  mySGD->getFont().c_str(), 10);
 					t_durability->setAnchorPoint(ccp(0.5f,0.5f));
 					t_durability->setColor(ccBLACK);
@@ -849,7 +849,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			cell->addChild(t_no);
 			
 			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", card_durability,
-																					 mySD->getCardDurability(card_stage, card_grade))->getCString(),
+																					 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
 														  mySGD->getFont().c_str(), 10);
 			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
 			t_durability->setColor(ccBLACK);

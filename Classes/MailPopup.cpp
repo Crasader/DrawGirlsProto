@@ -21,6 +21,12 @@
 #include "StageImgLoader.h"
 #include "HatGacha.h"
 #include "ASPopupView.h"
+
+#include "UnknownFriends.h"
+#include "KnownFriend.h"
+
+#include "StarGoldData.h"
+
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -49,6 +55,10 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 {
 	target_close = t_close;
 	delegate_close = d_close;
+	
+	
+	
+	
 	
 #if 0 // 싹 지우는 루틴...
 	Json::Value p;
@@ -196,6 +206,7 @@ void MailPopup::loadMail ()
 	Json::Value p;
 	p["memberID"]=hspConnector::get()->getKakaoID();
 	p["type"]=0; // 모든 타입의 메시지를 받겠다는 뜻.
+	p["limitDay"] = mySGD->getMsgRemoveDay();
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 	
 	hspConnector::get()->command("getmessagelist",p,[this](Json::Value r)
@@ -207,52 +218,52 @@ void MailPopup::loadMail ()
 void MailPopup::drawMail (Json::Value obj)
 {
 	m_mailList=obj["list"];
-	hspConnector::get()->kLoadFriends(Json::Value(),[=](Json::Value fInfo)
-																		{
-																			CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-																			auto app_friends = fInfo["app_friends_info"];
-																			Json::Value userIdKeyValue;
-																			// m_mailList 와 app_friends 를 합쳐야됨.
-																			//
-																			for(int i=0; i<app_friends.size(); i++)
-																			{
-																				userIdKeyValue[app_friends[i]["user_id"].asString()] =
-																				app_friends[i];
-																			}
-																			for(int i=0; i<m_mailList.size(); i++)
-																			{
-																				std::string user_id = m_mailList[i]["friendID"].asString();
-																				m_mailList[i]["nickname"] = userIdKeyValue[user_id]["nickname"];
-																				m_mailList[i]["profile_image_url"] = userIdKeyValue[user_id]["profile_image_url"];
-																			}
-																			
-																			//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
-																			
-																			//320x320 테이블 뷰 생성
-																			mailTableView = CCTableView::create(this, CCSizeMake(244.f, 222.f));
-																			
-																			CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
-																			m_scrollBar = ScrollBar::createScrollbar(mailTableView, -2, NULL, bar);
-																			m_scrollBar->setDynamicScrollSize(false);
-																			
-																			mailTableView->setAnchorPoint(CCPointZero);
-																			
-																			//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
-																			mailTableView->setDirection(kCCScrollViewDirectionVertical);
-																			
-																			//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
-																			mailTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
-																			
-																			//기준점 0,0
-																			// 좌표 수동으로 잡느라 이리 됨
-																			mailTableView->setPosition(ccp(159/2.f, 39/2.f) + ccp(159/2.f, 39/2.f - 4.f));
-																			
-																			//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
-																			mailTableView->setDelegate(this);
-																			this->addChild(mailTableView, kMP_Z_mailTable);
-																			mailTableView->setTouchPriority(-200);
-																			//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
-																		});
+//	auto app_friends = fInfo["app_friends_info"];
+	std::map<int64, FriendData> userIdKeyValue;
+	// m_mailList 와 app_friends 를 합쳐야됨.
+	//
+	
+	
+	for(auto it : KnownFriends::getInstance()->getFriends())
+	{
+		userIdKeyValue[it.userId] = it;
+	}
+	
+	for(int i=0; i<m_mailList.size(); i++)
+	{
+		uint64 user_id = m_mailList[i]["friendID"].asInt64();
+		m_mailList[i]["nickname"] = userIdKeyValue[user_id].nick;
+		m_mailList[i]["profile_image_url"] = userIdKeyValue[user_id].profileUrl;
+	}
+	
+	//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
+	
+	//320x320 테이블 뷰 생성
+	mailTableView = CCTableView::create(this, CCSizeMake(244.f, 222.f));
+	
+	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
+	m_scrollBar = ScrollBar::createScrollbar(mailTableView, -2, NULL, bar);
+	m_scrollBar->setDynamicScrollSize(false);
+	
+	mailTableView->setAnchorPoint(CCPointZero);
+	
+	//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
+	mailTableView->setDirection(kCCScrollViewDirectionVertical);
+	
+	//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
+	mailTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
+	
+	//기준점 0,0
+	// 좌표 수동으로 잡느라 이리 됨
+	mailTableView->setPosition(ccp(159/2.f, 39/2.f) + ccp(159/2.f, 39/2.f - 4.f));
+	
+	//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
+	mailTableView->setDelegate(this);
+	this->addChild(mailTableView, kMP_Z_mailTable);
+	mailTableView->setTouchPriority(-200);
+	//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
+	
+	
 }
 void MailPopup::closePopup (CCControlButton * obj, CCControlEvent event)
 {
@@ -401,6 +412,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																							KSAlertView* av = KSAlertView::create();
 																							av->setCenterY(150);
 																							auto ttf = CCLabelTTF::create((std::string("?")+"에게 졌습니다...").c_str(), "", 12.f);
+																							ttf->setColor(ccc3(0, 0, 0));
 																							av->setContentNode(
 																																 ttf
 																																 );
@@ -453,6 +465,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 av->addButton(m1);
 				 
 				 auto ttf = CCLabelTTF::create("도전을 수락합니까?", "", 12.f);
+				 ttf->setColor(ccc3(0, 0, 0));
 				 av->setContentNode(
 														ttf
 														);
@@ -514,6 +527,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							av->addButton(m1);
 							
 							auto ttf = CCLabelTTF::create("졌어요... ㅜㅜ", "", 12.f);
+							ttf->setColor(ccc3(0, 0, 0));
 							av->setContentNode(
 																 ttf
 																 );
@@ -583,7 +597,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					});
 				 av->addButton(m1);
 				 
-				 auto ttf = CCLabelTTF::create("?asd?", "", 12.f);
+				 auto ttf = CCLabelTTF::create("도와줍니다.", "", 12.f);
+				 ttf->setColor(ccc3(0, 0, 0));
 				 av->setContentNode(
 														ttf
 														);
@@ -638,6 +653,9 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						else // 카드 정보 있음
 						{
 							myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
+							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
+							myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, contentObj["cardnumber"].asInt(), 1);
+							myDSH->setStringForKey(kDSH_Key_cardPassive_int1, contentObj["cardnumber"].asInt(), NSDS_GS(kSDS_CI_int1_passive_s, contentObj["cardnumber"].asInt()));
 							av->setContentNode(addCardImg(contentObj["cardnumber"].asInt()));
 							//							av->addChild();
 						}
@@ -678,6 +696,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 //				 av->setButtonHeight(0);
 				 //	av->setTitleStr("지금 열기");
 				 auto ttf = CCLabelTTF::create("티켓요청이 도착. 티켓은 퍼즐을 열 때 필요합니다. 친구를 도와주세요!!", "", 12.f);
+				 ttf->setColor(ccc3(0, 0, 0));
 				 av->setContentNode(
 														ttf
 														);
@@ -745,6 +764,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 //				 av->setButtonHeight(0);
 				 //	av->setTitleStr("지금 열기");
 				 auto ttf = CCLabelTTF::create("티켓이 도착했습니다!!", "", 12.f);
+				 ttf->setColor(ccc3(0, 0, 0));
 				 av->setContentNode(
 														ttf
 														);
@@ -872,8 +892,129 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			
 			_menu->addChild(sendBtn,2);
 			break;
-		default:
-			comment = "??요청이 도착했어요.";
+		case kUnknownFriendRequest:
+			comment = "   ~님의 친구추가 요청이 왔습니다.";
+			sendBtn = CCMenuItemImageLambda::create
+			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
+			 [=](CCObject*)
+			 {
+				 KSAlertView* av = KSAlertView::create();
+				 av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
+				 //	av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+				 av->setBorderScale(0.9f);
+				 av->setCloseOnPress(false);
+				 // 거절.
+				 auto m0 = CCMenuItemImageLambda::create("ending_remove_card.png", "ending_remove_card.png",
+																								 [=](CCObject* e){
+																									 //																									 removeFromParent();
+																									 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+																																 [=](Json::Value r)
+																																 {
+																																	 av->removeFromParent();
+																																 });
+																								 });
+				 av->addButton(m0);
+				 
+				 // 친구 요청 수락.
+				 auto m1 = CCMenuItemImageLambda::create
+				 ("postbox_challenge_ok.png", "postbox_challenge_ok.png",
+					[=](CCObject* e){
+						CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+						Json::Value param;
+//						memberID : string or number, 내카카오아이디
+//						-> friendID : string or number, 추가할 게임친구 카카오아이디
+//						-> friendMax :
+						param["memberID"] = hspConnector::get()->getKakaoID();
+						param["friendID"] = mail["friendID"].asString();
+						param["friendMax"] = mySGD->getGameFriendMax(); // magic number
+						hspConnector::get()->command
+						("addfriendeach", param,
+						 [=](Json::Value v)
+						 {
+							 KS::KSLog("%", v);
+							 /*
+								errorCode 필드에 10030 값이 넘어오면 내친구인원이 초과
+								errorCode  필드에 10031값이 넘어오면 상대방 친구인원이 초과
+								*/
+							 
+							 // 편.삭.
+							 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+														 [=](Json::Value r)
+														 {
+														 });
+							 std::string errorMessage;
+							 if(v["errorCode"].asInt() == 10030)
+								 errorMessage = "제한 인원이 초과하여 더 이상 추가하실 수 없습니다.";
+							 else if(v["errorCode"].asInt() == 10031)
+							 {
+								 errorMessage = "상대방의 제한인원이 초과하였습니다.";
+							 }
+							 
+							 if(v["errorCode"].asInt() == 10030 ||
+									v["errorCode"].asInt() == 10031)
+							 {
+								 av->removeFromParent();
+								 
+								 KSAlertView* exceptionPopup = KSAlertView::create();
+								 exceptionPopup->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
+								 auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", "", 12.f);
+								 exceptionPopup->setContentNode(
+																								ttf
+																								);
+								 this->addChild(exceptionPopup, kMP_Z_helpAccept);
+								 exceptionPopup->show();
+							 }
+							 else
+							 {
+								 FriendData ufd;
+								 ufd.userId = v["friendInfo"]["memberID"].asUInt64();
+								 ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
+								 ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
+								 ufd.nick = v["friendInfo"]["nick"].asString();
+								 UnknownFriends::getInstance()->add(ufd);
+
+								 av->removeFromParent();
+							 }
+						 });
+					});
+				 av->addButton(m1);
+				 addChild(av, kMP_Z_helpAccept);
+				 av->setContentNode(NULL);
+				 av->show();
+			 });
+			
+			sendBtn->setPosition(ccp(190, 22));
+			
+			_menu->addChild(sendBtn,2);
+			break;
+	default:
+			comment = "알 수 없는 요청이 도착했어요.";
+			sendBtn = CCMenuItemImageLambda::create
+			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
+			 [=](CCObject*)
+			 {
+			 });
+			
+			sendBtn->setPosition(ccp(190, 22));
+			
+			_menu->addChild(sendBtn,2);
+			break;
+			///
+			/*
+			 comment = "티켓이 왔네요 어서 받으세요.";
+			 sendBtn = CCMenuItemImageLambda::create
+			 ("postbox_challenge_ok.png", "postbox_challenge_ok.png",
+			 [=](CCObject*)
+			 {
+			 });
+			 
+			 sendBtn->setPosition(ccp(190, 22));
+			 
+			 _menu->addChild(sendBtn,2);
+			 break;
+
+			 */
+			///
 	}
 	
 	score = CCLabelTTF::create(comment.c_str(),"Helvetica", 12.f);
@@ -1211,6 +1352,9 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 			mySGD->addHasGottenCardNumber(download_card_number);
 		}
 		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
+		myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, download_card_number, 1);
+		myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
+		myDSH->setStringForKey(kDSH_Key_cardPassive_int1, download_card_number, NSDS_GS(kSDS_CI_int1_passive_s, download_card_number));
 		
 		(target_close->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
 		

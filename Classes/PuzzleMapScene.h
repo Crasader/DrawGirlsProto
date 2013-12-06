@@ -135,6 +135,9 @@ private:
 	PuzzleMode my_puzzle_mode;
 	int recent_puzzle_number;
 	
+	void outAllObject();
+	void inAllObject();
+	
 	void setPuzzle(int t_puzzle_number);
 	
 	int start_stage_number;

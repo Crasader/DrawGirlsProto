@@ -79,6 +79,7 @@ public:
 	string getItemScript(ITEM_CODE t_code);
 	
 	float getItemPrice(ITEM_CODE t_code);
+	string getItemCurrency(ITEM_CODE t_code);
 	
 	int getSilenceItemOption();
 	int getDoubleItemOption();

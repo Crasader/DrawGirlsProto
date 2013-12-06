@@ -42,6 +42,24 @@ namespace KS
 			}
 		}
 	}
+	
+	string longLongToStr(long long t, int radix)
+	{
+		int remainer;
+		std::string alpha = "0123456789abcdefghijklmnopqrstuvwxyz"; // len 36
+		std::string result;
+		while((remainer = t % radix))
+		{
+			result.push_back(alpha[remainer]);
+			t /= radix;
+		}
+		return std::string(result.rbegin(), result.rend());
+	}
+	long long strToLongLong(const std::string& t, int radix)
+	{
+		char* endP;
+		return strtoll(t.c_str(), &endP, radix);
+	}
 	//	CCSprite* spriteWithSpriteFrameName(const char *pszSpriteFrameName)
 	//	{
 	//		CCSpriteFrame *pFrame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(pszSpriteFrameName);

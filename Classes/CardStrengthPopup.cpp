@@ -11,11 +11,13 @@
 #include "CardSettingPopup.h"
 #include "PuzzleMapScene.h"
 #include "CardCase.h"
+#include <random>
 
 enum CardStrengthPopupZorder{
 	kCardStrengthPopupZorder_gray = 1,
 	kCardStrengthPopupZorder_back,
-	kCardStrengthPopupZorder_content
+	kCardStrengthPopupZorder_content,
+	kCardStrengthPopupZorder_popup
 };
 
 enum CardStrengthPopupMenuTag{
@@ -45,6 +47,7 @@ bool CardStrengthPopup::init()
     }
 	
 	is_menu_enable = false;
+	replay_menu = NULL;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -124,7 +127,39 @@ bool CardStrengthPopup::init()
 	main_case->addChild(align_take_menu, kCardStrengthPopupZorder_content);
 	
 	
+	strength_card_node = CCNode::create();
+	strength_card_node->setPosition(CCPointZero);
+	main_case->addChild(strength_card_node, kCardStrengthPopupZorder_content);
 	
+	setStrengthCardNode(strength_card_node);
+	
+	setOfferingList();
+	
+	CCSize table_size = CCSizeMake(350, 70);
+	
+//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+//	temp_back->setAnchorPoint(CCPointZero);
+//	temp_back->setPosition(ccp(97, 29));
+//	main_case->addChild(temp_back, kCardStrengthPopupZorder_content);
+	
+	offering_table = CCTableView::create(this, table_size);
+	offering_table->setAnchorPoint(CCPointZero);
+	offering_table->setDirection(kCCScrollViewDirectionHorizontal);
+	offering_table->setVerticalFillOrder(kCCTableViewFillTopDown);
+	offering_table->setPosition(ccp(97, 29));
+	offering_table->setDelegate(this);
+	main_case->addChild(offering_table, kCardStrengthPopupZorder_content);
+	offering_table->setTouchPriority(kCCMenuHandlerPriority+1);
+	
+	
+	offering_menu = NULL;
+	
+	
+    return true;
+}
+
+void CardStrengthPopup::setStrengthCardNode(CCNode* t_node)
+{
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
 	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
@@ -132,7 +167,7 @@ bool CardStrengthPopup::init()
 	target_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
 	target_card->setScale(1.1f);
 	target_card->setPosition(getContentPosition(kCardStrengthPopupMenuTag_targetCard));
-	main_case->addChild(target_card, kCardStrengthPopupZorder_content);
+	t_node->addChild(target_card, kCardStrengthPopupZorder_content);
 	
 	CCSprite* no_img = CCSprite::create("cardsetting_noimg.png");
 	no_img->setScale(1.f/0.92f);
@@ -149,40 +184,40 @@ bool CardStrengthPopup::init()
 	
 	
 	dur_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number),
-															  mySD->getCardDurability(card_stage, card_grade))->getCString(), mySGD->getFont().c_str(), 10);
+															  myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
 	dur_label->setPosition(ccpAdd(target_card->getPosition(), ccp(93,54)));
-	main_case->addChild(dur_label);
+	t_node->addChild(dur_label);
 	
 	up_dur_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
 	up_dur_label->setPosition(ccpAdd(dur_label->getPosition(), ccp(20,3)));
-	main_case->addChild(up_dur_label);
+	t_node->addChild(up_dur_label);
 	
 	
-	pow_label = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_missile_power_i, selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+	pow_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
 	pow_label->setPosition(ccpAdd(target_card->getPosition(), ccp(93,35)));
-	main_case->addChild(pow_label);
+	t_node->addChild(pow_label);
 	
-	up_pow_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
+	up_pow_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_power_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
 	up_pow_label->setPosition(ccpAdd(pow_label->getPosition(), ccp(20,3)));
-	main_case->addChild(up_pow_label);
+	t_node->addChild(up_pow_label);
 	
 	
 	spd_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", NSDS_GD(kSDS_CI_int1_missile_speed_d, selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
 	spd_label->setPosition(ccpAdd(target_card->getPosition(), ccp(93,16)));
-	main_case->addChild(spd_label);
+	t_node->addChild(spd_label);
 	
 	up_spd_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
 	up_spd_label->setPosition(ccpAdd(spd_label->getPosition(), ccp(20,3)));
-	main_case->addChild(up_spd_label);
+	t_node->addChild(up_spd_label);
 	
 	
-	dex_label = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_missile_dex_i, selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+	dex_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
 	dex_label->setPosition(ccpAdd(target_card->getPosition(), ccp(93,-3)));
-	main_case->addChild(dex_label);
+	t_node->addChild(dex_label);
 	
-	up_dex_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
+	up_dex_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_dex_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
 	up_dex_label->setPosition(ccpAdd(dex_label->getPosition(), ccp(20,3)));
-	main_case->addChild(up_dex_label);
+	t_node->addChild(up_dex_label);
 	
 	string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, selected_card_number).c_str();
 	int missile_type_number = MissileDamageData::getMissileType(missile_type_code.c_str());
@@ -211,39 +246,14 @@ bool CardStrengthPopup::init()
 	{
 		SpinBasicMissile* missile_img = SpinBasicMissile::create(type_name.c_str(), level_number, ccpAdd(target_card->getPosition(), ccp(105,17)), false);
 		missile_img->setScale(0.75f);
-		main_case->addChild(missile_img, kCardStrengthPopupZorder_content);
+		t_node->addChild(missile_img, kCardStrengthPopupZorder_content);
 	}
 	else
 	{
 		SpinUpgradeMissile* missile_img = SpinUpgradeMissile::create(type_name.c_str(), level_number, ccpAdd(target_card->getPosition(), ccp(105,17)), false);
 		missile_img->setScale(0.75f);
-		main_case->addChild(missile_img, kCardStrengthPopupZorder_content);
+		t_node->addChild(missile_img, kCardStrengthPopupZorder_content);
 	}
-	
-	
-	setOfferingList();
-	
-	CCSize table_size = CCSizeMake(350, 70);
-	
-//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
-//	temp_back->setAnchorPoint(CCPointZero);
-//	temp_back->setPosition(ccp(97, 29));
-//	main_case->addChild(temp_back, kCardStrengthPopupZorder_content);
-	
-	offering_table = CCTableView::create(this, table_size);
-	offering_table->setAnchorPoint(CCPointZero);
-	offering_table->setDirection(kCCScrollViewDirectionHorizontal);
-	offering_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	offering_table->setPosition(ccp(97, 29));
-	offering_table->setDelegate(this);
-	main_case->addChild(offering_table, kCardStrengthPopupZorder_content);
-	offering_table->setTouchPriority(kCCMenuHandlerPriority+1);
-	
-	
-	offering_menu = NULL;
-	
-	
-    return true;
 }
 
 void CardStrengthPopup::setOfferingList()
@@ -530,5 +540,288 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 		}
 		
 		is_menu_enable = true;
+	}
+	else if(tag == kCardStrengthPopupMenuTag_highStrength)
+	{
+		if(offering_menu)
+		{
+			int strength_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+			CCLog("strength_rate : %.3f", strength_rate);
+			
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number, 0);
+			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, recent_offering_number, NSDS_GI(kSDS_CI_int1_durability_i, recent_offering_number));
+			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, recent_offering_number, NSDS_GS(kSDS_CI_int1_passive_s, recent_offering_number));
+			
+			for(auto iter = offering_list.begin();iter != offering_list.end();iter++)
+			{
+				if((*iter).card_number == recent_offering_number)
+				{
+					offering_list.erase(iter);
+					break;
+				}
+			}
+			
+			random_device rd;
+			default_random_engine e1(rd());
+			uniform_real_distribution<float> uniform_dist(0.f, 1.f);
+			
+			float result_value = uniform_dist(e1);
+			CCLog("result value : %.3f", result_value);
+			
+			if(result_value <= strength_rate)
+			{
+				CCLog("success");
+				
+				float success_type_rate = uniform_dist(e1);
+				if(success_type_rate <= 0.5f)
+				{
+					uniform_int_distribution<int> uniform_dist_int(1, 3);
+					int level_up_value = uniform_dist_int(e1);
+					CCLog("level up value : %d", level_up_value);
+					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)+1);
+				}
+				else if(success_type_rate <= 0.7f)
+				{
+					CCLog("max durability up");
+					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);
+					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number)+1);
+				}
+				else
+				{
+					string passive_string = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, strength_card_number).c_str();
+					
+					if(passive_string == "")
+					{
+						CCLog("passive up");
+						
+						Json::Value data;
+						
+						data["operator"] = "*(1-x)";
+						uniform_int_distribution<int> uniform_dist_int(1, 5);
+						int passive_up_type = uniform_dist_int(e1);
+						float passive_up_value = uniform_dist(e1);
+						
+						if(passive_up_value <= 0.3f)
+							passive_up_value = 0.1f;
+						else if(passive_up_value <= 0.55f)
+							passive_up_value = 0.2f;
+						else if(passive_up_value <= 0.75f)
+							passive_up_value = 0.3f;
+						else if(passive_up_value <= 0.9f)
+							passive_up_value = 0.4f;
+						else
+							passive_up_value = 0.5f;
+						
+						if(passive_up_type == 1)
+							data["ai"] = double(passive_up_value);
+						else if(passive_up_type == 2)
+							data["speed"] = double(passive_up_value);
+						else if(passive_up_type == 3)
+							data["scale"] = double(passive_up_value);
+						else if(passive_up_type == 4)
+							data["hp"] = double(passive_up_value);
+						else
+							data["agi"] = double(passive_up_value);
+						
+						Json::FastWriter data_writer;
+						myDSH->setStringForKey(kDSH_Key_cardPassive_int1, strength_card_number, data_writer.write(data));
+					}
+					else
+					{
+						Json::Reader reader;
+						Json::Value passive_data;
+						reader.parse(passive_string, passive_data);
+						
+						string operator_string = passive_data["operator"].asString();
+						
+						vector<string> empty_data_list;
+						if(passive_data["ai"].asDouble() == 0)
+							empty_data_list.push_back("ai");
+						if(passive_data["speed"].asDouble() == 0)
+							empty_data_list.push_back("speed");
+						if(passive_data["scale"].asDouble() == 0)
+							empty_data_list.push_back("scale");
+						if(passive_data["hp"].asDouble() == 0)
+							empty_data_list.push_back("hp");
+						if(passive_data["agi"].asDouble() == 0)
+							empty_data_list.push_back("agi");
+						
+						if(passive_data["operator"].asString() == "+" || empty_data_list.empty())
+						{
+							CCLog("max durability up");
+							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);
+							myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number)+1);
+						}
+						else
+						{
+							CCLog("passive up");
+							
+							Json::Value data;
+							
+							data["operator"] = "*(1-x)";
+							uniform_int_distribution<int> uniform_dist_int(0, empty_data_list.size()-1);
+							int passive_up_type = uniform_dist_int(e1);
+							float passive_up_value = uniform_dist(e1);
+							
+							if(passive_up_value <= 0.3f)
+								passive_up_value = 0.1f;
+							else if(passive_up_value <= 0.55f)
+								passive_up_value = 0.2f;
+							else if(passive_up_value <= 0.75f)
+								passive_up_value = 0.3f;
+							else if(passive_up_value <= 0.9f)
+								passive_up_value = 0.4f;
+							else
+								passive_up_value = 0.5f;
+							
+							data[empty_data_list[passive_up_type].c_str()] = double(passive_up_value);
+							
+							Json::FastWriter data_writer;
+							myDSH->setStringForKey(kDSH_Key_cardPassive_int1, strength_card_number, data_writer.write(data));
+						}
+					}
+				}
+				
+				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)+1);
+			}
+			else
+			{
+				CCLog("fail");
+			}
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			loading_img = CCSprite::create("back_gray.png");
+			loading_img->setOpacity(0);
+			loading_img->setPosition(ccp(240,160));
+			loading_img->setScaleX(screen_scale_x);
+			loading_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+			addChild(loading_img, kCardStrengthPopupZorder_popup);
+			
+			loading_label = CCLabelTTF::create("Loading...", mySGD->getFont().c_str(), 30);
+			loading_label->setPosition(ccp(240,160));
+			addChild(loading_label, kCardStrengthPopupZorder_popup);
+			
+			
+			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, json_selector(this, CardStrengthPopup::resultStrength));
+			
+			offering_menu->removeFromParent();
+			recent_offering_number = -1;
+			offering_menu = NULL;
+		}
+		else
+		{
+			is_menu_enable = true;
+		}
+	}
+	else if(tag == kCardStrengthPopupMenuTag_normalStrength)
+	{
+		if(offering_menu)
+		{
+			int strength_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+			CCLog("strength_rate : %.3f", strength_rate);
+			
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number, 0);
+			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, recent_offering_number, NSDS_GI(kSDS_CI_int1_durability_i, recent_offering_number));
+			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, recent_offering_number, NSDS_GS(kSDS_CI_int1_passive_s, recent_offering_number));
+			
+			for(auto iter = offering_list.begin();iter != offering_list.end();iter++)
+			{
+				if((*iter).card_number == recent_offering_number)
+				{
+					offering_list.erase(iter);
+					break;
+				}
+			}
+			
+			random_device rd;
+			default_random_engine e1(rd());
+			uniform_real_distribution<float> uniform_dist(0.f, 1.f);
+			
+			float result_value = uniform_dist(e1);
+			CCLog("result value : %.3f", result_value);
+			
+			if(result_value <= strength_rate)
+			{
+				CCLog("success");
+				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)+1);
+			}
+			else
+			{
+				CCLog("fail");
+			}
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			loading_img = CCSprite::create("back_gray.png");
+			loading_img->setOpacity(0);
+			loading_img->setPosition(ccp(240,160));
+			loading_img->setScaleX(screen_scale_x);
+			loading_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+			addChild(loading_img, kCardStrengthPopupZorder_popup);
+			
+			loading_label = CCLabelTTF::create("Loading...", mySGD->getFont().c_str(), 30);
+			loading_label->setPosition(ccp(240,160));
+			addChild(loading_label, kCardStrengthPopupZorder_popup);
+			
+			
+			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, json_selector(this, CardStrengthPopup::resultStrength));
+			
+			offering_menu->removeFromParent();
+			recent_offering_number = -1;
+			offering_menu = NULL;
+		}
+		else
+		{
+			is_menu_enable = true;
+		}
+	}
+}
+
+void CardStrengthPopup::replayAction(CCObject* sender)
+{
+	replay_menu->removeFromParent();
+	myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, json_selector(this, CardStrengthPopup::resultStrength));
+}
+
+void CardStrengthPopup::resultStrength(Json::Value result_data)
+{
+	CCLog("resultStrength data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
+	if(result_data["state"].asString() == "ok")
+	{
+		loading_img->removeFromParent();
+		loading_label->removeFromParent();
+		
+		strength_card_node->removeFromParent();
+		
+		strength_card_node = CCNode::create();
+		strength_card_node->setPosition(CCPointZero);
+		main_case->addChild(strength_card_node, kCardStrengthPopupZorder_content);
+		
+		setStrengthCardNode(strength_card_node);
+		offering_table->reloadData();
+		
+		is_menu_enable = true;
+	}
+	else
+	{
+		CCSprite* n_replay = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* s_replay = CCSprite::create("item_buy_popup_close.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(CardStrengthPopup::replayAction));
+		
+		replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setPosition(ccp(240,100));
+		addChild(replay_menu, kCardStrengthPopupZorder_popup);
 	}
 }

@@ -816,5 +816,5 @@ MyLocal* MyLocal::sharedInstance()
 
 void MyLocal::setLocal()
 {
-	languageType = CCString::create(getCurrentLanguageJNI());
+	languageType = getLocalCode();
 }

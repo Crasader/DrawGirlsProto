@@ -11,6 +11,8 @@
 #include "GDWebSprite.h"
 #include "SendMessageUtil.h"
 #include "GraySprite.h"
+#include "StarGoldData.h"
+#include "UnknownFriends.h"
 
 StageRankPopup* StageRankPopup::create( CCObject* t_close, SEL_CallFunc d_close, CCObject* t_challenge, SEL_CallFunc d_challenge, int t_stage_number )
 {
@@ -144,6 +146,20 @@ void StageRankPopup::resultLoadFriends(Json::Value result_data)
 			p["memberIDList"].append(appfriends[i]["user_id"].asString());
 		}
 		
+		for(auto i : UnknownFriends::getInstance()->getFriends())
+		{
+			StageRankFriendInfo fInfo;
+			fInfo.nickname = i.nick + "[unknown]";
+			fInfo.img_url = "";
+			fInfo.user_id = i.userId;
+			fInfo.score = 0;
+			fInfo.is_play = false;
+			fInfo.is_message_blocked = false;
+			friend_list.push_back(fInfo);
+			
+			p["memberIDList"].append(i.userId);
+		}
+		
 		p["stageNo"]=stage_number;
 		hspConnector::get()->command("getstagescorelist",p,json_selector(this, StageRankPopup::resultGetStageScoreList));
 	}
@@ -230,7 +246,7 @@ void StageRankPopup::cellAction( CCObject* sender )
 	tag -= kSRFC_T_menuBase;
 	
 	CCLog("challenge memberID : %s", friend_list[tag].user_id.c_str());
-	::setChallengeSendTime(friend_list[tag].user_id);
+//	::setChallengeSendTime(friend_list[tag].user_id);
 		mySGD->setIsMeChallenge(true);
 	mySGD->setMeChallengeTarget(friend_list[tag].user_id.c_str(), friend_list[tag].nickname);
 	hidePopup();
@@ -287,17 +303,17 @@ CCTableViewCell* StageRankPopup::tableCellAtIndex( CCTableView *table, unsigned 
 			CCSprite* n_help;
 			CCSprite* s_help;
 			bool enable = true;
-			if(getIsNotChallangableUser((*member).user_id))
-			{
-				n_help = CCSprite::create("stagerank_cell_button_on.png");
-				s_help = CCSprite::create("stagerank_cell_button_on.png");
-				enable = true;
-			}
-			else
+			if(getIsNotChallangableUser((*member).user_id), mySGD->getChallengeCoolTime())
 			{
 				n_help = CCSprite::create("stagerank_cell_button_off.png");
 				s_help = CCSprite::create("stagerank_cell_button_off.png");
 				enable = false;
+			}
+			else
+			{
+				n_help = CCSprite::create("stagerank_cell_button_on.png");
+				s_help = CCSprite::create("stagerank_cell_button_on.png");
+				enable = true;
 			}
 			
 			
@@ -310,7 +326,8 @@ CCTableViewCell* StageRankPopup::tableCellAtIndex( CCTableView *table, unsigned 
 			help_menu->setTouchPriority(-172);
 			
 			help_item->setEnabled(enable);
-			help_item->setColor(ccc3(255, 0, 0));
+			if(enable == false)
+				help_item->setColor(ccc3(255, 0, 0));
 		}
 		else
 		{
