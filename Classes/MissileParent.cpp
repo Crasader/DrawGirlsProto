@@ -592,7 +592,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			castBranch(atype, func);
 		}
 	}
-	else if(pattern == "1005")
+	else if(pattern == "1005") // 빙결.
 	{
 		if(exe)
 		{

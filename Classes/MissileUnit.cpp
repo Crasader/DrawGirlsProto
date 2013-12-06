@@ -2656,7 +2656,7 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 		pollution.glue.init(cumberPosition, ip2ccp(point), 0.005f * ccpLength(ip2ccp(point) - cumberPosition));
 		pollution.alongPath.point = point;
 		pollution.alongPath.direction = direction;
-		pollution.spr = KS::loadCCBI<CCSprite*>(this, "fx_pollution3.ccbi").first;
+		pollution.spr = KS::loadCCBI<CCSprite*>(this, "fx_pollution5.ccbi").first;
 		pollution.goal = goal;
 		
 		m_pollutions.push_back(pollution);
@@ -3635,45 +3635,14 @@ void PoisonDrop::myAction ()
 }
 void PoisonDrop::initParticle ()
 {
-	CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
-	particle->setPositionType(kCCPositionTypeRelative);
-	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("tickingTime_bomb.png");
-	particle->setTexture(texture);
-	particle->setEmissionRate(250.00);
-	particle->setAngle(90.0);
-	particle->setAngleVar(360.0);
-	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-	particle->setBlendFunc(blendFunc);
-	particle->setDuration(0.20);
-	particle->setEmitterMode(kCCParticleModeGravity);
-	ccColor4F startColor = {0.00,0.25,0.30,1.00}; // 0.76 0.25 0.12
-	particle->setStartColor(startColor);
-	ccColor4F startColorVar = {0,0,0,0};
-	particle->setStartColorVar(startColorVar);
-	ccColor4F endColor = {0.00,0.00,0.00,1.00};
-	particle->setEndColor(endColor);
-	ccColor4F endColorVar = {0,0,0,0};
-	particle->setEndColorVar(endColorVar);
-	particle->setStartSize(20.00);
-	particle->setStartSizeVar(10.0);
-	particle->setEndSize(40.0);
-	particle->setEndSizeVar(10.0);
-	particle->setGravity(ccp(0,0));
-	particle->setRadialAccel(0.0);
-	particle->setRadialAccelVar(0.0);
-	particle->setSpeed(170);
-	particle->setSpeedVar(60.0);
-	particle->setTangentialAccel(0);
-	particle->setTangentialAccelVar(0);
-	particle->setTotalParticles(50);
-	particle->setLife(0.20);
-	particle->setLifeVar(0.0);
-	particle->setStartSpin(0.0);
-	particle->setStartSpinVar(0.0);
-	particle->setEndSpin(0.0);
-	particle->setEndSpinVar(0.0);
+	
+	
+	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb1.ccbi");
+	CCSprite* particle = ret.first;
+	
+	
 	particle->setPosition(CCPointZero);
-	particle->setPosVar(CCPointZero);
+	//		particle->setPosVar(CCPointZero);
 	addChild(particle);
 }
 void PoisonDrop::stopAction ()
