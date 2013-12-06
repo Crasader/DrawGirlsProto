@@ -320,7 +320,8 @@ void DecreaseCardDurabilityPopup::menuAction( CCObject* sender )
 
 	myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number), myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number)));
 	myDSH->setIntegerForKey(kDSH_Key_selectedCard, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, grade_number));
-	mySGD->setGold(mySGD->getGold() - 5000);
+	mySGD->setStar(mySGD->getStar() - mySGD->getCardDurabilityUpFee());
+	myDSH->saveUserData({kSaveUserData_Key_star, kSaveUserData_Key_cardsInfo}, nullptr);
 
 	remove_particle->stopAllActions();
 
@@ -384,7 +385,7 @@ void DecreaseCardDurabilityPopup::touchOn()
 		remove_particle->setAutoRemoveOnFinish(true);
 		addChild(remove_particle, kDecreaseCardDurabilityPopup_Z_particle);
 
-		if(myDSH->getIntegerForKey(kDSH_Key_savedGold) >= 5000)
+		if(mySGD->getStar() >= mySGD->getCardDurabilityUpFee())
 		{
 			remove_state = 1;
 			is_touch_enable = true;

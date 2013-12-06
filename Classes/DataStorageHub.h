@@ -504,8 +504,8 @@ public:
 	
 	void resetDSH()
 	{
-		setIntegerForKey(kDSH_Key_savedStar, 1);
-		setIntegerForKey(kDSH_Key_savedGold, 10000);
+		setIntegerForKey(kDSH_Key_savedStar, default_ruby);
+		setIntegerForKey(kDSH_Key_savedGold, default_gold);
 		setIntegerForKey(kDSH_Key_savedFriendPoint, 0);
 		
 		for(int i=kIC_attack;i<=kIC_rentCard;i++)
@@ -590,6 +590,9 @@ private:
 		is_cheat_key_enabled = true;
 		puzzle_map_scene_show_type = kPuzzleMapSceneShowType_init;
 	}
+	
+	CC_SYNTHESIZE(int, default_gold, DefaultGold); // 기본 골드
+	CC_SYNTHESIZE(int, default_ruby, DefaultRuby); // 기본 루비
 };
 
 #endif

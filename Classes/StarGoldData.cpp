@@ -8,6 +8,7 @@
 
 #include "StarGoldData.h"
 #include "MyLocalization.h"
+#include "DataStorageHub.h"
 
 
 CCSprite* StarGoldData::getLoadingImg()
@@ -712,6 +713,93 @@ void StarGoldData::resetHasGottenCards()
 		}
 	}
 	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
+}
+
+void StarGoldData::selectFriendCard()
+{
+	vector<FriendData> known_list = KnownFriends::getInstance()->getFriends();
+	vector<FriendData> unknown_list = UnknownFriends::getInstance()->getFriends();
+	
+	
+	vector<FriendCardData> friends_card_data_list;
+	
+	for(int i=0;i<known_list.size();i++)
+	{
+		int t_card_number = known_list[i].userData[myDSH->getKey(kDSH_Key_selectedCard)].asInt();
+		if(t_card_number != 0)
+		{
+			FriendCardData t_data;
+			
+			t_data.userId = known_list[i].userId;
+			t_data.nick = known_list[i].nick;
+			t_data.profileUrl = known_list[i].profileUrl;
+			t_data.messageBlocked = known_list[i].messageBlocked;
+			
+			t_data.card_number = t_card_number;
+			int t_card_take_cnt = known_list[i].userData[myDSH->getKey(kDSH_Key_cardTakeCnt)].asInt();
+			int found_index = -1;
+			for(int j=1;j<=t_card_take_cnt && found_index == -1;j++)
+			{
+				int take_card_number = known_list[i].userData[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][j].asInt();
+				if(take_card_number == t_card_number)
+				{
+					found_index = j;
+					t_data.card_level = known_list[i].userData[myDSH->getKey(kDSH_Key_cardLevel_int1)].get(j, 1).asInt();
+					t_data.card_passive = known_list[i].userData[myDSH->getKey(kDSH_Key_cardPassive_int1)].get(j, "").asString();
+				}
+			}
+			friends_card_data_list.push_back(t_data);
+		}
+	}
+	
+	for(int i=0;i<unknown_list.size();i++)
+	{
+		int t_card_number = unknown_list[i].userData[myDSH->getKey(kDSH_Key_selectedCard)].asInt();
+		if(t_card_number != 0)
+		{
+			FriendCardData t_data;
+			
+			t_data.userId = unknown_list[i].userId;
+			t_data.nick = unknown_list[i].nick;
+			t_data.profileUrl = unknown_list[i].profileUrl;
+			t_data.messageBlocked = unknown_list[i].messageBlocked;
+			
+			t_data.card_number = t_card_number;
+			int t_card_take_cnt = unknown_list[i].userData[myDSH->getKey(kDSH_Key_cardTakeCnt)].asInt();
+			int found_index = -1;
+			for(int j=1;j<=t_card_take_cnt && found_index == -1;j++)
+			{
+				int take_card_number = unknown_list[i].userData[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][j].asInt();
+				if(take_card_number == t_card_number)
+				{
+					found_index = j;
+					t_data.card_level = unknown_list[i].userData[myDSH->getKey(kDSH_Key_cardLevel_int1)].get(j, 1).asInt();
+					t_data.card_passive = unknown_list[i].userData[myDSH->getKey(kDSH_Key_cardPassive_int1)].get(j, "").asString();
+				}
+			}
+			friends_card_data_list.push_back(t_data);
+		}
+	}
+	
+	if(!friends_card_data_list.empty())
+	{
+		random_device rd;
+		default_random_engine e1(rd());
+		uniform_int_distribution<int> uniform_dist(0, friends_card_data_list.size()-1);
+		
+		int selected_idx = uniform_dist(e1);
+		selected_friend_card_data.card_number = friends_card_data_list[selected_idx].card_number;
+		selected_friend_card_data.card_level = friends_card_data_list[selected_idx].card_level;
+		selected_friend_card_data.card_passive = friends_card_data_list[selected_idx].card_passive;
+		selected_friend_card_data.userId = friends_card_data_list[selected_idx].userId;
+		selected_friend_card_data.nick = friends_card_data_list[selected_idx].nick;
+		selected_friend_card_data.profileUrl = friends_card_data_list[selected_idx].profileUrl;
+		selected_friend_card_data.messageBlocked = friends_card_data_list[selected_idx].messageBlocked;
+	}
+	else
+	{
+		selected_friend_card_data.card_number = 0;
+	}
 }
 
 void StarGoldData::myInit()
