@@ -943,18 +943,26 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 			// 경수
 			// 해당 유저의 선택한 카드의 레벨, 패시브데이터 가 필요
 			
+			int t_card_level;
+			string t_card_passive;
+			
 			// 자기 자신을 찍음
-//			if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+			if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
 			{
-				
+				t_card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+				t_card_passive = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 			}
-//			else
+			else
 			{
+				bool is_found = false;
 				for(auto i : UnknownFriends::getInstance()->getFriends())
 				{
 					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
 					{
-						KS::KSLog("%", i);
+						is_found = true;
+						Json::Value t_user_data = i.userData;
+						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_cardLevel_int1), 1).asInt();
+						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_cardPassive_int1), "").asString();
 						break;
 					}
 				}
@@ -962,14 +970,16 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 				{
 					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
 					{
-						KS::KSLog("%", i);
+						Json::Value t_user_data = i.userData;
+						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_cardLevel_int1), 1).asInt();
+						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_cardPassive_int1), "").asString();
 						break;
 					}
 				}
 			}
 			
 //			m_scoreList[cell->getIdx()]["user_id"]
-			addCardImg(selectedCardIndex, 0, "-1");
+			addCardImg(selectedCardIndex, t_card_level, t_card_passive);
 		}
 	}
 	else
