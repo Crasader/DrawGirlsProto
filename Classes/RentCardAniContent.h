@@ -120,7 +120,7 @@ private:
 	{
 		card_back->removeFromParent();
 		CCDelayTime* t_delay = CCDelayTime::create(1.f);
-		CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(-50, myDSH->ui_top-myDSH->ui_center_y - 10));
+		CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(-100, myDSH->ui_top-myDSH->ui_center_y - 20));
 		CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.1f);
 		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_move, t_scale);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(RentCardAniContent::finalAction));
