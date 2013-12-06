@@ -940,9 +940,6 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 		}
 		else // 카드 정보 있음
 		{
-			// 경수
-			// 해당 유저의 선택한 카드의 레벨, 패시브데이터 가 필요
-			
 			int t_card_level;
 			string t_card_passive;
 			
@@ -961,8 +958,8 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 					{
 						is_found = true;
 						Json::Value t_user_data = i.userData;
-						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_cardLevel_int1), 1).asInt();
-						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_cardPassive_int1), "").asString();
+						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
 						break;
 					}
 				}
@@ -971,8 +968,8 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
 					{
 						Json::Value t_user_data = i.userData;
-						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_cardLevel_int1), 1).asInt();
-						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_cardPassive_int1), "").asString();
+						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
 						break;
 					}
 				}

@@ -138,6 +138,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_lastSelectedStage)					return_value = "lss";
 	
 	else if(t_name == kDSH_Key_selectedCard)						return_value = "scard";
+	else if(t_name == kDSH_Key_selectedCardLevel)					return_value = "scardlevel";
+	else if(t_name == kDSH_Key_selectedCardPassive)					return_value = "scardpassive";
 	else if(t_name == kDSH_Key_cardSortType)						return_value = "cst";
 	else if(t_name == kDSH_Key_inputTextCard_int1)					return_value = "itc%d";
 	
@@ -226,21 +228,14 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 		setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, data[getKey(kDSH_Key_cardDurability_int1)][i].asInt(), false);
 		setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, data[getKey(kDSH_Key_hasGottenCard_int1)][i].asInt(), false);
 		
-//		Json::Value tttt;
-//		tttt.isValidIndex()
-		Json::Value emptyArray;
-		Json::Reader r;
-		r.parse("[]", emptyArray);
-		auto rtq = data.get(getKey(kDSH_Key_cardLevel_int1), emptyArray);
-		KS::KSLog("% / %", rtq, emptyArray);
 		setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number,
-										 data.get(getKey(kDSH_Key_cardLevel_int1), emptyArray).get(i, 1).asInt(),
+										 data[getKey(kDSH_Key_cardLevel_int1)].get(i, 1).asInt(),
 										 false);
 		setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number,
-										 data.get(getKey(kDSH_Key_cardMaxDurability_int1), emptyArray).get(i, 5).asInt(),
+										 data[getKey(kDSH_Key_cardMaxDurability_int1)].get(i, 5).asInt(),
 										 false);
 		setStringForKey(kDSH_Key_cardPassive_int1, take_card_number,
-										data.get(getKey(kDSH_Key_cardPassive_int1), emptyArray).get(i, "").asString(),
+										data[getKey(kDSH_Key_cardPassive_int1)].get(i, "").asString(),
 										false);
 		
 		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, take_card_number) == "")
@@ -325,8 +320,8 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	else if(t_key == kSaveUserData_Key_selectedCard)
 	{
 		data[getKey(kDSH_Key_selectedCard)] = getIntegerForKey(kDSH_Key_selectedCard);
-		data[getKey(kDSH_Key_cardLevel_int1)] = getIntegerForKey(kDSH_Key_cardLevel_int1, getIntegerForKey(kDSH_Key_selectedCard));
-		data[getKey(kDSH_Key_cardPassive_int1)] = getStringForKey(kDSH_Key_cardPassive_int1, getIntegerForKey(kDSH_Key_selectedCard));
+		data[getKey(kDSH_Key_selectedCardLevel)] = getIntegerForKey(kDSH_Key_cardLevel_int1, getIntegerForKey(kDSH_Key_selectedCard));
+		data[getKey(kDSH_Key_selectedCardPassive)] = getStringForKey(kDSH_Key_cardPassive_int1, getIntegerForKey(kDSH_Key_selectedCard));
 	}
 	else if(t_key == kSaveUserData_Key_openPuzzle)
 	{
