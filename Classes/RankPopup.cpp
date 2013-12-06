@@ -719,7 +719,7 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 					used_card_img->removeFromParent();
 					used_card_img = NULL;
 				}
-				addCardImg(loading_card_number);
+				addCardImg(loading_card_number, 0, "-1");
 			}
 			
 			if(after_loading_card_number != 0)
@@ -780,7 +780,7 @@ void RankPopup::successAction ()
 				used_card_img->removeFromParent();
 				used_card_img = NULL;
 			}
-			addCardImg(loading_card_number);
+			addCardImg(loading_card_number, 0, "-1");
 		}
 		
 		if(after_loading_card_number != 0)
@@ -847,7 +847,7 @@ void RankPopup::startDownload ()
 	StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename,
 												  this, callfunc_selector(RankPopup::successAction), this, callfunc_selector(RankPopup::failAction));
 }
-void RankPopup::addCardImg (int t_card_number)
+void RankPopup::addCardImg (int t_card_number, int t_card_level, string t_passive)
 {
 	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
 	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
@@ -866,7 +866,7 @@ void RankPopup::addCardImg (int t_card_number)
 		used_card_img->addChild(t_ani);
 	}
 	
-	CardCase* t_case = CardCase::create(card_stage, card_grade);
+	CardCase* t_case = CardCase::create(card_stage, card_grade, t_card_level, t_passive);
 	t_case->setPosition(CCPointZero);
 	used_card_img->addChild(t_case);
 	
@@ -940,7 +940,9 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 		}
 		else // 카드 정보 있음
 		{
-			addCardImg(selectedCardIndex);
+			// 경수
+			// 해당 유저의 선택한 카드의 레벨, 패시브데이터 가 필요
+			addCardImg(selectedCardIndex, 0, "-1");
 		}
 	}
 	else

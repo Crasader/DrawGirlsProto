@@ -367,15 +367,23 @@ void SpinBasicMissile::myInit( string type_name, int elemental_level, CCPoint t_
 CardCase* CardCase::create( int t_selected_card_number )
 {
 	CardCase* t_cc = new CardCase();
-	t_cc->myInit(t_selected_card_number);
+	t_cc->myInit(t_selected_card_number, 0, "-1");
 	t_cc->autorelease();
 	return t_cc;
 }
 
-CardCase* CardCase::create( int t_card_stage, int t_card_level )
+CardCase* CardCase::create( int t_card_stage, int t_card_grade )
 {
 	CardCase* t_cc = new CardCase();
-	t_cc->myInit(NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_level));
+	t_cc->myInit(NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_grade), 0, "-1");
+	t_cc->autorelease();
+	return t_cc;
+}
+
+CardCase* CardCase::create(int t_card_stage, int t_card_grade, int t_level, string t_passive)
+{
+	CardCase* t_cc = new CardCase();
+	t_cc->myInit(NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_grade), t_level, t_passive);
 	t_cc->autorelease();
 	return t_cc;
 }
@@ -416,6 +424,13 @@ void CardCase::startDecreaseDurability( CCObject* t_end, SEL_CallFunc d_end )
 void CardCase::changeRecentDurabilityLabel( CCObject* sender )
 {
 	recent_durability_label = (CCLabelTTF*)sender;
+}
+
+void CardCase::myInit(int t_selected_card_number, int t_level, string t_passive)
+{
+	card_level = t_level;
+	original_passive_string = t_passive;
+	myInit(t_selected_card_number);
 }
 
 void CardCase::myInit( int t_selected_card_number )
@@ -463,6 +478,9 @@ void CardCase::myInit( int t_selected_card_number )
 	recent_durability_label->setPosition(ccp(20,25));
 	durability_case->addChild(recent_durability_label, kCARDCASE_Z_data);
 
+	if(card_level == 0)
+		card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number);
+	
 	CCSprite* option_case = CCSprite::create("card_case_option.png");
 	option_case->setPosition(ccpMult(ccp(65,28), 1.5f));
 	option_case->setScale(1.5f);
@@ -473,14 +491,14 @@ void CardCase::myInit( int t_selected_card_number )
 	pow_label->setColor(ccRED);
 	addChild(pow_label, kCARDCASE_Z_data);
 
-	pow_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, t_selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, t_selected_card_number)-1)*0.1f+1.f)))->getCString());
+	pow_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, t_selected_card_number)*((card_level-1)*0.1f+1.f)))->getCString());
 
 	CountingBMLabel* dex_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
 	dex_label->setPosition(ccp(145,26));//210,35));
 	dex_label->setColor(ccGREEN);
 	addChild(dex_label, kCARDCASE_Z_data);
 
-	dex_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, t_selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, t_selected_card_number)-1)*0.1f+1.f)))->getCString());
+	dex_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, t_selected_card_number)*((card_level-1)*0.1f+1.f)))->getCString());
 
 	CountingBMLabel* spd_label = CountingBMLabel::create("0.00", "etc_font.fnt", 0.5f, "%.2f");
 	spd_label->setPosition(ccp(145,42));//270,35));
@@ -521,15 +539,19 @@ void CardCase::myInit( int t_selected_card_number )
 	//		
 	//		CCProgressFromTo* dex_action = CCProgressFromTo::create(1.f, 0.f, 100.f);
 	//		dex_progress->runAction(dex_action);
+	
+	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", card_level)->getCString(), mySGD->getFont().c_str(), 20);
+	t_card_level_label->setPosition(ccp(238,412));
+	addChild(t_card_level_label, kCARDCASE_Z_data);
 
+	if(original_passive_string == "-1")
+		original_passive_string = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, t_selected_card_number).c_str();
 
-	string passive_string = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, t_selected_card_number).c_str();
-
-	if(passive_string != "")
+	if(original_passive_string != "")
 	{
 		Json::Reader reader;
 		Json::Value passive_data;
-		reader.parse(passive_string, passive_data);
+		reader.parse(original_passive_string, passive_data);
 
 		string operator_string = passive_data["operator"].asString();
 		double ai_value = passive_data["ai"].asDouble();
