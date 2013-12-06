@@ -44,7 +44,7 @@ void ContinuePopup::myInit( CCObject* t_end, SEL_CallFunc d_end, CCObject* t_con
 	end_menu->setPosition(ccp(175,myDSH->ui_center_y-45));
 	addChild(end_menu, kCPL_Z_menu);
 
-	if(mySGD->getGold() >= 5000.f)
+	if(mySGD->getStar() >= mySGD->getPlayContinueFee())
 	{
 		CCSprite* n_continue = CCSprite::create("continue_ok.png");
 		CCSprite* s_continue = CCSprite::create("continue_ok.png");
@@ -107,8 +107,8 @@ void ContinuePopup::menuAction( CCObject* sender )
 
 		removeAction();
 
-		myDSH->setIntegerForKey(kDSH_Key_savedGold, myDSH->getIntegerForKey(kDSH_Key_savedGold) - 5000);
-		mySGD->setKeepGold(mySGD->getKeepGold() - 5000);
+		mySGD->setStar(mySGD->getStar() - mySGD->getPlayContinueFee());
+		myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 
 		CCSprite* continue_effect = CCSprite::create("continue_effect.png");
 		continue_effect->setOpacity(0);

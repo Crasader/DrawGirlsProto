@@ -231,6 +231,13 @@ void GameData::communication(string funcName, CCObject* t_t1, SEL_CallFunc t_d1,
 	return;
 }
 
+void GameData::communication(string funcName, string t_str)
+{
+	CCAssert(V_Str.find(funcName) != V_Str.end(), funcName.c_str());
+	V_Str[funcName](t_str);
+	return;
+}
+
 void GameData::changeJackBaseSpeed( float t_s )
 {
 	jack_base_speed = t_s;

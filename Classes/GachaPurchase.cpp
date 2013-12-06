@@ -86,12 +86,12 @@ bool GachaPurchase::init()
 	
 	
 	CCSprite* n_ruby = CCSprite::create("gacha_purchase_ruby.png");
-	CCLabelTTF* n_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", 1)->getCString(), mySGD->getFont().c_str(), 15);
+	CCLabelTTF* n_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
 	n_ruby_price->setPosition(ccp(n_ruby->getContentSize().width/2.f+20, 25));
 	n_ruby->addChild(n_ruby_price);
 	CCSprite* s_ruby = CCSprite::create("gacha_purchase_ruby.png");
 	s_ruby->setColor(ccGRAY);
-	CCLabelTTF* s_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", 1)->getCString(), mySGD->getFont().c_str(), 15);
+	CCLabelTTF* s_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
 	s_ruby_price->setPosition(ccp(s_ruby->getContentSize().width/2.f+20, 25));
 	s_ruby->addChild(s_ruby_price);
 	
@@ -104,12 +104,12 @@ bool GachaPurchase::init()
 	ruby_menu->setTouchPriority(-171);
 	
 	CCSprite* n_gold = CCSprite::create("gacha_purchase_gold.png");
-	CCLabelTTF* n_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", 2000)->getCString(), mySGD->getFont().c_str(), 15);
+	CCLabelTTF* n_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
 	n_gold_price->setPosition(ccp(n_gold->getContentSize().width/2.f+20, 25));
 	n_gold->addChild(n_gold_price);
 	CCSprite* s_gold = CCSprite::create("gacha_purchase_gold.png");
 	s_gold->setColor(ccGRAY);
-	CCLabelTTF* s_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", 2000)->getCString(), mySGD->getFont().c_str(), 15);
+	CCLabelTTF* s_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
 	s_gold_price->setPosition(ccp(s_gold->getContentSize().width/2.f+20, 25));
 	s_gold->addChild(s_gold_price);
 	
@@ -122,12 +122,12 @@ bool GachaPurchase::init()
 	gold_menu->setTouchPriority(-171);
 	
 	CCSprite* n_candy = CCSprite::create("gacha_purchase_candy.png");
-	CCLabelTTF* n_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", 200)->getCString(), mySGD->getFont().c_str(), 15);
+	CCLabelTTF* n_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
 	n_candy_price->setPosition(ccp(n_candy->getContentSize().width/2.f+20, 25));
 	n_candy->addChild(n_candy_price);
 	CCSprite* s_candy = CCSprite::create("gacha_purchase_candy.png");
 	s_candy->setColor(ccGRAY);
-	CCLabelTTF* s_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", 200)->getCString(), mySGD->getFont().c_str(), 15);
+	CCLabelTTF* s_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
 	s_candy_price->setPosition(ccp(s_candy->getContentSize().width/2.f+20, 25));
 	s_candy->addChild(s_candy_price);
 	
@@ -287,12 +287,12 @@ void GachaPurchase::menuAction(CCObject *pSender)
 	{
 		bool is_gacha_enable = false;
 		
-		if(mySGD->getStar() >= 1)
+		if(mySGD->getStar() >= mySGD->getGachaRubyFee())
 			is_gacha_enable = true;
 		
 		if(is_gacha_enable)
 		{
-			mySGD->setStar(mySGD->getStar() - 1);
+			mySGD->setStar(mySGD->getStar() - mySGD->getGachaRubyFee());
 			myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 			
 			(target_out->*delegate_out)();
@@ -305,12 +305,12 @@ void GachaPurchase::menuAction(CCObject *pSender)
 	{
 		bool is_gacha_enable = false;
 		
-		if(mySGD->getGold() >= 2000)
+		if(mySGD->getGold() >= mySGD->getGachaGoldFee())
 			is_gacha_enable = true;
 		
 		if(is_gacha_enable)
 		{
-			mySGD->setGold(mySGD->getGold() - 2000);
+			mySGD->setGold(mySGD->getGold() - mySGD->getGachaGoldFee());
 			myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
 			
 			(target_out->*delegate_out)();
@@ -323,12 +323,12 @@ void GachaPurchase::menuAction(CCObject *pSender)
 	{
 		bool is_gacha_enable = false;
 		
-		if(mySGD->getFriendPoint() >= 200)
+		if(mySGD->getFriendPoint() >= mySGD->getGachaSocialFee())
 			is_gacha_enable = true;
 		
 		if(is_gacha_enable)
 		{
-			mySGD->setFriendPoint(mySGD->getFriendPoint() - 200);
+			mySGD->setFriendPoint(mySGD->getFriendPoint() - mySGD->getGachaSocialFee());
 			myDSH->saveUserData({kSaveUserData_Key_friendPoint}, nullptr);
 			
 			(target_out->*delegate_out)();

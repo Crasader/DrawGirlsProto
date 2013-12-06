@@ -1054,6 +1054,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		if(mySGD->getIsUsingFriendCard())
 		{
 			mySGD->setIsUsingFriendCard(false);
+			myGD->communication("CP_chagePassiveData", myDSH->getStringForKey(kDSH_Key_cardPassive_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard)));
 		}
 		myGD->communication("CP_onJackDie");
 		

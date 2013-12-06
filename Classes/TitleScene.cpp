@@ -100,12 +100,33 @@ void TitleScene::resultGetCommonSetting(Json::Value result_data)
 	
 	if(result_data["state"].asString() == "ok")
 	{
-		mySGD->setChallengeCoolTime(result_data["challengeCoolTime"].asInt());
-		mySGD->setGameFriendMax(result_data["gameFriendMax"].asInt());
-		mySGD->setHelpCoolTime(result_data["helpCoolTime"].asInt());
-		mySGD->setMsgRemoveDay(result_data["msgRemoveDay"].asInt());
 		mySGD->setHeartMax(result_data["heartMax"].asInt());
 		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
+		mySGD->setGameFriendMax(result_data["gameFriendMax"].asInt());
+		mySGD->setHelpCoolTime(result_data["helpCoolTime"].asInt());
+		mySGD->setChallengeCoolTime(result_data["challengeCoolTime"].asInt());
+		mySGD->setMsgRemoveDay(result_data["msgRemoveDay"].asInt());
+		mySGD->setGachaGoldFee(result_data["gachaGoldFee"].asInt());
+		mySGD->setGachaRubyFee(result_data["gachaRubyFee"].asInt());
+		mySGD->setGachaSocialFee(result_data["gachaSocialFee"].asInt());
+		mySGD->setCardUpgradeGoldFee(result_data["cardUpgradeGoldFee"].asInt());
+		mySGD->setCardUpgradeRubyFee(result_data["cardUpgradeRubyFee"].asInt());
+		mySGD->setHeartSendCoolTime(result_data["heartSendCoolTime"].asInt());
+		mySGD->setInviteMaxADay(result_data["inviteMaxADay"].asInt());
+		mySGD->setInviteCoolDay(result_data["inviteCoolDay"].asInt());
+		mySGD->setPlayContinueFee(result_data["playContinueFee"].asInt());
+		mySGD->setCardDurabilityUpFee(result_data["cardDurabilityUpFee"].asInt());
+		mySGD->setGachaMapFee(result_data["gachaMapFee"].asInt());
+		mySGD->setRemoveFriendCoolTime(result_data["removeFriendCoolTime"].asInt());
+		myDSH->setDefaultGold(result_data["defaultGold"].asInt());
+		myDSH->setDefaultRuby(result_data["defaultRuby"].asInt());
+		mySGD->setSPSendHeart(result_data["SPSendHeart"].asInt());
+		mySGD->setSPSendTicket(result_data["SPSendTicket"].asInt());
+		mySGD->setSPFinishedChallenge(result_data["SPFinishedChallenge"].asInt());
+		mySGD->setSPHelpChallenge(result_data["SPHelpChallenge"].asInt());
+		mySGD->setSPSendBoast(result_data["SPSendBoast"].asInt());
+		mySGD->setSPGetTime(result_data["SPGetTime"].asInt());
+		mySGD->setSPGetHeart(result_data["SPGetHeart"].asInt());
 		
 		startGetCharacterInfo();
 	}

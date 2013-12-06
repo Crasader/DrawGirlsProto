@@ -28,44 +28,7 @@
 #include "KSSnakeBase.h"
 #include <functional>
 #include <memory>
-template <class _Tp>
-struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
-{
-	virtual _Tp operator()(const _Tp& a, const _Tp& b) const = 0;//(const _Tp& a, const _Tp& b) const
-//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
-//	{
-//		return __x*(1 - __y);
-//	}
-};
 
-template <class _Tp>
-struct DecreaseOp : public PassiveOp<_Tp>
-{
-	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
-	{
-		return a*(1 - b);
-	}
-	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
-	//	{
-	//		return __x*(1 - __y);
-	//	}
-};
-
-
-template <class _Tp>
-struct SubtractOp : public PassiveOp<_Tp>
-{
-	virtual ~SubtractOp(){
-	}
-	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
-	{
-		return a - b;
-	}
-	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
-	//	{
-	//		return __x*(1 - __y);
-	//	}
-};
 
 
 void CumberParent::onStartGame()
@@ -427,6 +390,23 @@ void CumberParent::onJackRevived()
 	}
 }
 
+void CumberParent::changePassiveData(const std::string& passive_data)
+{
+	for(auto mainCumber : mainCumbers)
+	{
+		mainCumber->restoreBossData();
+		mainCumber->applyPassiveData(passive_data);
+		mainCumber->applyAutoBalance();
+	}
+	int loop_cnt = subCumberArray->count();
+	for(int i=0;i<loop_cnt;i++)
+	{
+		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+		t_sc->restoreBossData();
+		t_sc->applyPassiveData(passive_data);
+		t_sc->applyAutoBalance();
+	}
+}
 int CumberParent::getSubCumberCount()
 {
 	return subCumberArray->count();
@@ -434,29 +414,32 @@ int CumberParent::getSubCumberCount()
 
 void CumberParent::createSubCumber(IntPoint s_p)
 {
-	int index = m_well512.GetValue(m_juniors.size() - 1);
-	jrType junior = m_juniors[index];
-	//## if(junior.m_jrType)
-	//## 에 따라 분기 해야됨.
-	
-	KSCumberBase* t_SC;
-	t_SC = KSJuniorBase::create(junior.m_jrType);
-	t_SC->settingHp(junior.m_jrHp);
-	t_SC->setAgility(junior.m_jrAgi);
-	t_SC->settingAI(junior.m_aiValue);
-	t_SC->settingScale(junior.m_jrStartScale, junior.m_jrMinScale, junior.m_jrMaxScale);
-	t_SC->settingSpeed(junior.m_jrStartSpeed, junior.m_jrMinSpeed, junior.m_jrMaxSpeed);
-	t_SC->settingMovement((enum MOVEMENT)junior.m_jrNormalMovement, (enum MOVEMENT)junior.m_jrDrawMovement,
-						  (enum MOVEMENT)junior.m_jrFuryMovement);
-	IntPoint mapPoint;
-	bool finded;
-	t_SC->getRandomPosition(&mapPoint, &finded);
-	myGD->setMainCumberPoint(mapPoint);
-	t_SC->setPosition(ip2ccp(mapPoint));
-	t_SC->startAnimationNoDirection();
-	addChild(t_SC);
-	subCumberArray->addObject(t_SC);
-	t_SC->setPosition(ip2ccp(s_p));
+	Json::Reader reader;
+	Json::Value root;
+	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"), root);
+	int index = m_well512.GetValue(root.size() - 1);
+	{
+		int i = index;
+		Json::Value boss = root[i];
+		KS::KSLog("%", boss);
+		std::string bossType = boss["type"].asString();
+		
+		KSJuniorBase* t_SC = KSJuniorBase::create(bossType);
+		t_SC->assignBossData(root[i]); // 주니어 정보 대입.
+		t_SC->applyPassiveData(mySD->getPassiveData());
+		t_SC->applyAutoBalance();
+		
+		IntPoint mapPoint;
+		bool finded;
+		t_SC->getRandomPosition(&mapPoint, &finded);
+		t_SC->setPosition(ip2ccp(mapPoint));
+		t_SC->startAnimationNoDirection();
+		addChild(t_SC);
+		
+		subCumberArray->addObject(t_SC);
+		t_SC->setPosition(ip2ccp(s_p));
+
+	}
 }
 
 void CumberParent::initSubCumber()
@@ -586,45 +569,24 @@ void CumberParent::myInit()
 	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
 	myGD->V_V["CP_onJackDie"] = std::bind(&CumberParent::onJackDie, this);
 	myGD->V_V["CP_onJackRevived"] = std::bind(&CumberParent::onJackRevived, this);
+	myGD->V_Str["CP_chagePassiveData"] = std::bind(&CumberParent::changePassiveData, this, _1);
 	
 	Json::Reader reader;
 	Json::Value root;
 	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-	Json::Value passiveCard;
-	reader.parse(mySD->getPassiveData(), passiveCard);
+	
 	Json::Value boss = root[0u];
 
 	std::string bossShape = boss.get("shape", "circle").asString();
 	std::string bossType = boss["type"].asString();
-	shared_ptr<PassiveOp<float>> cardOperator;
-	if(passiveCard["operator"].asString() == "-")
-	{
-		cardOperator = shared_ptr<PassiveOp<float>>(new SubtractOp<float>());
-	}
-	else// if(passiveCard["operator"].asString() == "*(1-x)")
-	{
-		cardOperator = shared_ptr<PassiveOp<float>>(new DecreaseOp<float>());
-	}
+	
 	
 	ostringstream oss;
 	oss << mySD->getSilType();
 	std::string playcountKey = std::string("playcount_") + oss.str();
 	myDSH->setUserIntForStr(playcountKey, myDSH->getUserIntForStr(playcountKey, 0) + 1);
 	
-	float hp = MAX((*cardOperator)(boss["hp"].asInt(), passiveCard["hp"].asInt()), 0);
-	float minSpeed = MAX((*cardOperator)(boss["speed"]["min"].asDouble(), passiveCard["speed"].asDouble()), 0);
-	float startSpeed = MAX((*cardOperator)(boss["speed"]["start"].asDouble(), passiveCard["speed"].asDouble()), 0); //getNumberFromJsonValue(speed["start"]);
-	float maxSpeed = MAX((*cardOperator)(boss["speed"]["max"].asDouble(), passiveCard["speed"].asDouble()), 0);// getNumberFromJsonValue(speed["min"]);
 	
-	float minScale = MAX((*cardOperator)(boss["scale"]["min"].asDouble(), passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["min"]);
-	float startScale = MAX((*cardOperator)(boss["scale"]["start"].asDouble(), passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["start"]);
-	float maxScale = MAX((*cardOperator)(boss["scale"]["max"].asDouble(), passiveCard["scale"].asDouble()), 0); // getNumberFromJsonValue(scale["max"]);
-	
-	int normalMovement = boss["movement"].get("normal",1).asInt();
-	int drawMovement = boss["movement"].get("draw", normalMovement).asInt();
-	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
-	
-	float agi = MAX((*cardOperator)(boss.get("agi", 0).asDouble(), passiveCard["agi"].asDouble()), 0);
 	KSCumberBase* mainCumber;
 	if(bossShape == "circle")
 	{
@@ -635,18 +597,9 @@ void CumberParent::myInit()
 		mainCumber = KSSnakeBase::create(bossType);
 	}	
 
-
-	mainCumber->settingHp(hp);
-	mainCumber->setAgility(agi);
-	KS::KSLog("%", boss);
-	
-	
-	mainCumber->settingAI(MAX(0, (*cardOperator)(boss.get("ai", 0).asInt(), passiveCard["ai"].asInt()) ));
-	mainCumber->settingFuryRule();
-	mainCumber->settingScale(startScale, minScale, maxScale);
-	mainCumber->settingSpeed(startSpeed, minSpeed, maxSpeed);
-	mainCumber->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement,
-								(enum MOVEMENT)furyMovement);
+	mainCumber->assignBossData(root[0u]);
+	mainCumber->applyPassiveData(mySD->getPassiveData());
+	mainCumber->applyAutoBalance();
 //	mainCumber->settingPattern(boss["pattern"]);
 //	mainCumber->settingPattern("{\"test\":123");
 	Json::Reader temp_reader;
@@ -687,8 +640,11 @@ void CumberParent::myInit()
 //	{
 //		create_cnt = 2;
 //	}
-	create_cnt = 1;
-	for(int i=0;i<create_cnt;i++)
+	
+	
+	// 부하몹 로드함.
+//	create_cnt = 1;
+//	for(int i=0;i<create_cnt;i++)
 	{
 		Json::Reader reader;
 		Json::Value root;
@@ -700,46 +656,17 @@ void CumberParent::myInit()
 			Json::Value boss = root[i];
 			KS::KSLog("%", boss);
 			std::string bossType = boss["type"].asString();
+
+			KSJuniorBase* t_SC = KSJuniorBase::create(bossType);
+			t_SC->assignBossData(root[i]); // 주니어 정보 대입.
+			t_SC->applyPassiveData(mySD->getPassiveData());
+			t_SC->applyAutoBalance();
 			
-			float hp = boss["hp"].asInt();
-			float minSpeed = boss["speed"]["min"].asDouble();// getNumberFromJsonValue(speed["max"]);
-			float startSpeed = boss["speed"]["start"].asDouble(); //getNumberFromJsonValue(speed["start"]);
-			float maxSpeed = boss["speed"]["max"].asDouble();// getNumberFromJsonValue(speed["min"]);
-			
-			float minScale = boss["scale"]["min"].asDouble(); // getNumberFromJsonValue(scale["min"]);
-			float startScale = boss["scale"]["start"].asDouble(); // getNumberFromJsonValue(scale["start"]);
-			float maxScale = boss["scale"]["max"].asDouble(); // getNumberFromJsonValue(scale["max"]);
-			
-			int normalMovement = boss["movement"]["normal"].asInt();
-			int drawMovement = boss["movement"]["draw"].asInt();
-			int furyMovement = boss["movement"]["fury"].asInt();
-			int aiValue = boss.get("ai", 0).asInt();
-			float agi = boss.get("agi", 0).asDouble();
-			if(furyMovement == 0)
-			{
-				furyMovement = normalMovement;
-			}
-			//## 여기서 부하몹 분기가 들어감...
-			//## 지금은 그냥 Bear 가 부하임.
-			jrType jt(bossType, minSpeed, startSpeed, maxSpeed, minScale, startScale, maxScale, normalMovement,
-					  drawMovement, furyMovement, hp, aiValue, agi);
-			m_juniors.push_back(jt);
-			
-			KSCumberBase* t_SC = KSJuniorBase::create(bossType);
-			
-			t_SC->settingHp(hp);
-			t_SC->setAgility(agi);
-			t_SC->settingAI(aiValue);
-			t_SC->settingScale(startScale, minScale, maxScale);
-			t_SC->settingSpeed(startSpeed, minSpeed, maxSpeed);
-			t_SC->settingMovement((enum MOVEMENT)normalMovement, (enum MOVEMENT)drawMovement
-								  , (enum MOVEMENT)furyMovement);
 			IntPoint mapPoint;
 			bool finded;
 			t_SC->getRandomPosition(&mapPoint, &finded);
 //			myGD->setMainCumberPoint(mapPoint);
 			t_SC->setPosition(ip2ccp(mapPoint));
-			t_SC->startAnimationNoDirection();
 			t_SC->startAnimationNoDirection();
 			addChild(t_SC);
 			

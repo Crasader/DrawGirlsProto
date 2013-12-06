@@ -484,6 +484,7 @@ void StageSettingScene::realStartAction()
 	}
 	
 	deque<bool> is_using_item;
+	is_using_item.push_back(false);
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 		is_using_item.push_back(false);
 	
@@ -535,6 +536,7 @@ void StageSettingScene::finalStartAction(Json::Value result_data)
 		}
 		
 		deque<bool> is_using_item;
+		is_using_item.push_back(false);
 		for(int i=kIC_attack;i<=kIC_rentCard;i++)
 			is_using_item.push_back(false);
 		

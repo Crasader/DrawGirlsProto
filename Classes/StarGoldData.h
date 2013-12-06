@@ -10,7 +10,6 @@
 #define DrawingJack_StarGoldData_h
 
 #include "cocos2d.h"
-#include "DataStorageHub.h"
 #include "AudioEngine.h"
 #include "GraphDog.h"
 #include "GameData.h"
@@ -23,6 +22,7 @@
 #include "KnownFriend.h"
 #include "UnknownFriends.h"
 #include <random>
+#include "SelectorDefine.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -307,92 +307,7 @@ public:
 		return clear_reward_gold;
 	}
 	
-	void selectFriendCard()
-	{
-		vector<FriendData> known_list = KnownFriends::getInstance()->getFriends();
-		vector<FriendData> unknown_list = UnknownFriends::getInstance()->getFriends();
-		
-		
-		vector<FriendCardData> friends_card_data_list;
-		
-		for(int i=0;i<known_list.size();i++)
-		{
-			int t_card_number = known_list[i].userData[myDSH->getKey(kDSH_Key_selectedCard)].asInt();
-			if(t_card_number != 0)
-			{
-				FriendCardData t_data;
-				
-				t_data.userId = known_list[i].userId;
-				t_data.nick = known_list[i].nick;
-				t_data.profileUrl = known_list[i].profileUrl;
-				t_data.messageBlocked = known_list[i].messageBlocked;
-				
-				t_data.card_number = t_card_number;
-				int t_card_take_cnt = known_list[i].userData[myDSH->getKey(kDSH_Key_cardTakeCnt)].asInt();
-				int found_index = -1;
-				for(int j=1;j<=t_card_take_cnt && found_index == -1;j++)
-				{
-					int take_card_number = known_list[i].userData[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][j].asInt();
-					if(take_card_number == t_card_number)
-					{
-						found_index = j;
-						t_data.card_level = known_list[i].userData[myDSH->getKey(kDSH_Key_cardLevel_int1)].get(j, 1).asInt();
-						t_data.card_passive = known_list[i].userData[myDSH->getKey(kDSH_Key_cardPassive_int1)].get(j, "").asString();
-					}
-				}
-				friends_card_data_list.push_back(t_data);
-			}
-		}
-		
-		for(int i=0;i<unknown_list.size();i++)
-		{
-			int t_card_number = unknown_list[i].userData[myDSH->getKey(kDSH_Key_selectedCard)].asInt();
-			if(t_card_number != 0)
-			{
-				FriendCardData t_data;
-				
-				t_data.userId = unknown_list[i].userId;
-				t_data.nick = unknown_list[i].nick;
-				t_data.profileUrl = unknown_list[i].profileUrl;
-				t_data.messageBlocked = unknown_list[i].messageBlocked;
-				
-				t_data.card_number = t_card_number;
-				int t_card_take_cnt = unknown_list[i].userData[myDSH->getKey(kDSH_Key_cardTakeCnt)].asInt();
-				int found_index = -1;
-				for(int j=1;j<=t_card_take_cnt && found_index == -1;j++)
-				{
-					int take_card_number = unknown_list[i].userData[myDSH->getKey(kDSH_Key_takeCardNumber_int1)][j].asInt();
-					if(take_card_number == t_card_number)
-					{
-						found_index = j;
-						t_data.card_level = unknown_list[i].userData[myDSH->getKey(kDSH_Key_cardLevel_int1)].get(j, 1).asInt();
-						t_data.card_passive = unknown_list[i].userData[myDSH->getKey(kDSH_Key_cardPassive_int1)].get(j, "").asString();
-					}
-				}
-				friends_card_data_list.push_back(t_data);
-			}
-		}
-		
-		if(!friends_card_data_list.empty())
-		{
-			random_device rd;
-			default_random_engine e1(rd());
-			uniform_int_distribution<int> uniform_dist(0, friends_card_data_list.size()-1);
-			
-			int selected_idx = uniform_dist(e1);
-			selected_friend_card_data.card_number = friends_card_data_list[selected_idx].card_number;
-			selected_friend_card_data.card_level = friends_card_data_list[selected_idx].card_level;
-			selected_friend_card_data.card_passive = friends_card_data_list[selected_idx].card_passive;
-			selected_friend_card_data.userId = friends_card_data_list[selected_idx].userId;
-			selected_friend_card_data.nick = friends_card_data_list[selected_idx].nick;
-			selected_friend_card_data.profileUrl = friends_card_data_list[selected_idx].profileUrl;
-			selected_friend_card_data.messageBlocked = friends_card_data_list[selected_idx].messageBlocked;
-		}
-		else
-		{
-			selected_friend_card_data.card_number = 0;
-		}
-	}
+	void selectFriendCard();
 	
 	
 private:
@@ -463,15 +378,36 @@ private:
 	// 도움이든 도전이든 쓰는 멤버.
 	CC_SYNTHESIZE(long long, remove_message_member_id, RemoveMessageMemberId);
 	CC_SYNTHESIZE(int, remove_message_mail_no, RemoveMessageMailNo);
-	CC_SYNTHESIZE(int, heart_max, HeartMax);
-	CC_SYNTHESIZE(int, heart_cool_time, HeartCoolTime);
-	CC_SYNTHESIZE(int, challenge_cool_time, ChallengeCoolTime);
-	CC_SYNTHESIZE(int, game_friend_max, GameFriendMax);
-	CC_SYNTHESIZE(int, help_cool_time, HelpCoolTime);
-	CC_SYNTHESIZE(int, msg_remove_day, MsgRemoveDay);
+	
 	CC_SYNTHESIZE(FriendCardData, selected_friend_card_data, SelectedFriendCardData);
 	CC_SYNTHESIZE(bool, is_using_friend_card, IsUsingFriendCard);
 	CC_SYNTHESIZE(bool, was_used_friend_card, WasUsedFriendCard);
+	
+	CC_SYNTHESIZE(int, heart_max, HeartMax); // 최대 보유할 수 있는 하트 수
+	CC_SYNTHESIZE(int, heart_cool_time, HeartCoolTime); // 몇 초 뒤에 하트가 새로 생길 것 인가
+	CC_SYNTHESIZE(int, game_friend_max, GameFriendMax); // 게임친구 인원제한
+	CC_SYNTHESIZE(int, help_cool_time, HelpCoolTime); // 도움요청 시간제한
+	CC_SYNTHESIZE(int, challenge_cool_time, ChallengeCoolTime); // 도전요청 시간제한
+	CC_SYNTHESIZE(int, msg_remove_day, MsgRemoveDay); // 메세지 보관일 수
+	CC_SYNTHESIZE(int, gacha_gold_fee, GachaGoldFee); // 골드 가챠 가격(골드)
+	CC_SYNTHESIZE(int, gacha_ruby_fee, GachaRubyFee); // 루비 가챠 가격(루비)
+	CC_SYNTHESIZE(int, gacha_social_fee, GachaSocialFee); // 소셜 가챠 가격(소셜포인트)
+	CC_SYNTHESIZE(int, card_upgrade_gold_fee, CardUpgradeGoldFee); // 카드 일반강화 가격(골드)
+	CC_SYNTHESIZE(int, card_upgrade_ruby_fee, CardUpgradeRubyFee); // 카드 고급강화 가격(루비)
+	CC_SYNTHESIZE(int, heart_send_cool_time, HeartSendCoolTime); // 하트 보내기 쿨타임
+	CC_SYNTHESIZE(int, invite_max_a_day, InviteMaxADay); // 하루 초대 인원 제한
+	CC_SYNTHESIZE(int, invite_cool_day, InviteCoolDay); // 한 친구당 친구초대 주기 일수
+	CC_SYNTHESIZE(int, play_continue_fee, PlayContinueFee); // 이어하기 가격(루비)
+	CC_SYNTHESIZE(int, card_durability_up_fee, CardDurabilityUpFee); // 카드 내구도 회복 가격(루비)
+	CC_SYNTHESIZE(int, gacha_map_fee, GachaMapFee); // 맵 가챠 가격(골드)
+	CC_SYNTHESIZE(int, remove_friend_cool_time, RemoveFriendCoolTime); // 친구 삭제 간격(초)
+	CC_SYNTHESIZE(int, SP_send_heart, SPSendHeart); // 소셜포인트 획득량(하트 보낼때)
+	CC_SYNTHESIZE(int, SP_send_ticket, SPSendTicket); // 소셜포인트 획득량(티켓 보낼때)
+	CC_SYNTHESIZE(int, SP_finished_challenge, SPFinishedChallenge); // 소셜포인트 획득량(도전하기 끝나서 결과 나왔을때 요청자, 대상자)
+	CC_SYNTHESIZE(int, SP_help_challenge, SPHelpChallenge); // 소셜포인트 획득량(도움요청 끝나서 결과 나왔을때 요청자, 대상자)
+	CC_SYNTHESIZE(int, SP_send_boast, SPSendBoast); // 소셜포인트 획득량(자랑하기 보낼때)
+	CC_SYNTHESIZE(int, SP_get_time, SPGetTime); // 받은 메세지 몇초 안에 확인해야 소셜포인트 줄건지 설정
+	CC_SYNTHESIZE(int, SP_get_heart, SPGetHeart); // 소셜포인트 획득량(하트온지 SPGetTime초 안에 수락하면 주는 포인트)
 };
 
 #endif

@@ -543,8 +543,11 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCardStrengthPopupMenuTag_highStrength)
 	{
-		if(offering_menu)
+		if(mySGD->getStar() >= mySGD->getCardUpgradeRubyFee() && offering_menu)
 		{
+			mySGD->setStar(mySGD->getStar() - mySGD->getCardUpgradeRubyFee());
+			myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
+			
 			int strength_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 			CCLog("strength_rate : %.3f", strength_rate);
@@ -647,7 +650,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 						if(passive_data["agi"].asDouble() == 0)
 							empty_data_list.push_back("agi");
 						
-						if(passive_data["operator"].asString() == "+" || empty_data_list.empty())
+						if(passive_data["operator"].asString() == "-" || empty_data_list.empty())
 						{
 							CCLog("max durability up");
 							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);
@@ -719,8 +722,11 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCardStrengthPopupMenuTag_normalStrength)
 	{
-		if(offering_menu)
+		if(mySGD->getGold() >= mySGD->getCardUpgradeGoldFee() && offering_menu)
 		{
+			mySGD->setGold(mySGD->getGold() - mySGD->getCardUpgradeGoldFee());
+			myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
+			
 			int strength_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 			CCLog("strength_rate : %.3f", strength_rate);

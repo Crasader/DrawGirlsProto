@@ -352,7 +352,7 @@ void Maingame::counting()
 	else if(countingCnt/60 >= 1 && countingCnt%60 == 0)
 	{
 //		AudioEngine::sharedInstance()->playEffect("sound_go.mp3", false);
-		if(mySGD->getGold() >= 500)
+		if(mySGD->getGold() >= mySGD->getGachaMapFee())
 		{
 			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
 			addChild(t_smg, mControlZorder);
@@ -363,7 +363,7 @@ void Maingame::counting()
 void Maingame::gachaOn()
 {
 	myLog->addLog(kLOG_gacha_startMap, -1);
-	mySGD->setGold(mySGD->getGold() - 500);
+	mySGD->setGold(mySGD->getGold() - mySGD->getGachaMapFee());
 	myGD->resetGameData();
 	mySGD->startMapGachaOn();
 	

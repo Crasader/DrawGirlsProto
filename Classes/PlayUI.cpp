@@ -1559,6 +1559,9 @@ void PlayUI::takeItemCollect ()
 void PlayUI::setUseFriendCard()
 {
 	mySGD->setIsUsingFriendCard(true);
+	
+	myGD->communication("CP_chagePassiveData", mySGD->getSelectedFriendCardData().card_passive);
+	
 	jack_life++;
 	
 	CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));

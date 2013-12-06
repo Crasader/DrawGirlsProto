@@ -205,13 +205,25 @@ public:
 		float userDistance;
 		float percent;
 	}m_furyRule;
+	
+	void restoreBossData()
+	{
+		assignBossData(m_properties);
+	}
+	void assignBossData(Json::Value data);
+	void applyPassiveData(const std::string& passive);
+	void applyAutoBalance();
 	void settingFuryRule();
+	
+	
 	void settingAI(int ai);
 	void settingSpeed(float startSpeed, float minSpeed, float maxSpeed);
 	void settingMovement(enum MOVEMENT normal, enum MOVEMENT draw, enum MOVEMENT fury);
 	void settingPattern(Json::Value pattern);
 	void settingHp(float hp);
 	void settingAttackPercent(float ap);
+	
+	
 	void decreaseLife(float damage);
 	float getLife();
 	void setLife(float t);
@@ -231,6 +243,7 @@ public:
 	float getAgility();
 	void setAgility(float ag);
 protected:
+	Json::Value m_properties;
 	bool m_isStarted;
 	struct BossDie
 	{
