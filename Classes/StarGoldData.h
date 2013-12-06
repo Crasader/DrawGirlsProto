@@ -323,6 +323,7 @@ public:
 				FriendCardData t_data;
 				
 				t_data.userId = known_list[i].userId;
+				t_data.nick = known_list[i].nick;
 				t_data.profileUrl = known_list[i].profileUrl;
 				t_data.messageBlocked = known_list[i].messageBlocked;
 				
@@ -351,6 +352,7 @@ public:
 				FriendCardData t_data;
 				
 				t_data.userId = unknown_list[i].userId;
+				t_data.nick = unknown_list[i].nick;
 				t_data.profileUrl = unknown_list[i].profileUrl;
 				t_data.messageBlocked = unknown_list[i].messageBlocked;
 				
@@ -382,6 +384,7 @@ public:
 			selected_friend_card_data.card_level = friends_card_data_list[selected_idx].card_level;
 			selected_friend_card_data.card_passive = friends_card_data_list[selected_idx].card_passive;
 			selected_friend_card_data.userId = friends_card_data_list[selected_idx].userId;
+			selected_friend_card_data.nick = friends_card_data_list[selected_idx].nick;
 			selected_friend_card_data.profileUrl = friends_card_data_list[selected_idx].profileUrl;
 			selected_friend_card_data.messageBlocked = friends_card_data_list[selected_idx].messageBlocked;
 		}
@@ -468,6 +471,7 @@ private:
 	CC_SYNTHESIZE(int, msg_remove_day, MsgRemoveDay);
 	CC_SYNTHESIZE(FriendCardData, selected_friend_card_data, SelectedFriendCardData);
 	CC_SYNTHESIZE(bool, is_using_friend_card, IsUsingFriendCard);
+	CC_SYNTHESIZE(bool, was_used_friend_card, WasUsedFriendCard);
 };
 
 #endif

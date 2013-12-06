@@ -60,7 +60,6 @@ private:
 	vector<DownloadFile> df_list;
 	vector<CopyFile> cf_list;
 	vector<DownloadFile> ef_list;
-	
 	CCObject* save_target;
 	SEL_CallFunc save_delegate;
 	
@@ -78,16 +77,6 @@ private:
 	
 	void startGetCommonSetting();
 	void resultGetCommonSetting(Json::Value result_data);
-	
-	void startGetKnownFriendList();
-	void resultGetKnownFriendList(Json::Value result_data);
-	void startGetKnownFriendUserData();
-	void resultGetKnownFriendUserData(Json::Value result_data);
-	
-	void startGetUnknownFriendList();
-	void resultGetUnknownFriendList(Json::Value result_data);
-	void startGetUnknownFriendUserData();
-	void resultGetUnknownFriendUserData(Json::Value result_data);
 	
 	void startGetCharacterInfo();
 	void resultGetCharacterInfo(Json::Value result_data);
@@ -108,6 +97,21 @@ private:
 	void downloadingAction2();
 	void successAction2();
 	void failAction2();
+	
+	
+	void startGetKnownFriendList();
+	void resultGetKnownFriendList(Json::Value result_data);
+	void startGetKnownFriendUserData();
+	void resultGetKnownFriendUserData(Json::Value result_data);
+	
+	void startGetUnknownFriendList();
+	void resultGetUnknownFriendList(Json::Value result_data);
+	void startGetUnknownFriendUserData();
+	void resultGetUnknownFriendUserData(Json::Value result_data);
+	
+	
+	
+	
 	
 	void startGetPuzzleList();
 	void resultGetPuzzleList(Json::Value result_data);
