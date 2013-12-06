@@ -770,6 +770,7 @@ void FailPopup::menuAction(CCObject* pSender)
 		mySGD->setIsMeChallenge(false);
 		mySGD->setIsAcceptChallenge(false);
 		mySGD->setIsAcceptHelp(false);
+		mySGD->selectFriendCard();
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		mySGD->resetLabels();
 		hidePopup();

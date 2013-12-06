@@ -790,7 +790,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			
 			string missile_code;
 			if(mySGD->getIsUsingFriendCard())
-				missile_code = NSDS_GI(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
+				missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
 			else
 				missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 			int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
@@ -1563,10 +1563,13 @@ void PlayUI::setUseFriendCard()
 	
 	CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
 	jack_img->setColor(ccGREEN);
+	jack_img->setOpacity(0);
 	if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-(jack_life-1)*20));
 	else if(myGD->gamescreen_type == kGT_rightUI)	jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-(jack_life-1)*20));
 	else											jack_img->setPosition(ccp(80+(jack_life-1)*20, myDSH->ui_top-35));
 	addChild(jack_img);
+	
+	jack_img->runAction(CCFadeTo::create(1.f, 255));
 	
 	jack_array->addObject(jack_img);
 }

@@ -696,7 +696,6 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 				screen_scale_x = 1.f;
 			
 			loading_img = CCSprite::create("back_gray.png");
-			loading_img->setOpacity(0);
 			loading_img->setPosition(ccp(240,160));
 			loading_img->setScaleX(screen_scale_x);
 			loading_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
@@ -762,7 +761,6 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 				screen_scale_x = 1.f;
 			
 			loading_img = CCSprite::create("back_gray.png");
-			loading_img->setOpacity(0);
 			loading_img->setPosition(ccp(240,160));
 			loading_img->setScaleX(screen_scale_x);
 			loading_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
