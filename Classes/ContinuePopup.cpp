@@ -32,6 +32,15 @@ void ContinuePopup::myInit( CCObject* t_end, SEL_CallFunc d_end, CCObject* t_con
 	CCSprite* cpl_back = CCSprite::create("continue_back.png");
 	cpl_back->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(cpl_back, kCPL_Z_back);
+	
+	CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+	price_type->setPosition(ccp(190,myDSH->ui_center_y+35));
+	addChild(price_type, kCPL_Z_menu);
+	
+	CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 16);
+	price_label->setAnchorPoint(ccp(0,0.5f));
+	price_label->setPosition(ccp(price_type->getContentSize().width/2.f+15,price_type->getContentSize().height/2.f));
+	price_type->addChild(price_label);
 
 	CCSprite* n_end = CCSprite::create("continue_end_game.png");
 	CCSprite* s_end = CCSprite::create("continue_end_game.png");
@@ -110,10 +119,16 @@ void ContinuePopup::menuAction( CCObject* sender )
 		mySGD->setStar(mySGD->getStar() - mySGD->getPlayContinueFee());
 		myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 
-		CCSprite* continue_effect = CCSprite::create("continue_effect.png");
-		continue_effect->setOpacity(0);
-		continue_effect->setPosition(continue_menu->getPosition());
-		addChild(continue_effect, kCPL_Z_effect);
+		CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+		price_type->setOpacity(0);
+		price_type->setPosition(ccpAdd(continue_menu->getPosition(), ccp(-15, 0)));
+		addChild(price_type, kCPL_Z_effect);
+		
+		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("-%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 16);
+		price_label->setOpacity(0);
+		price_label->setAnchorPoint(ccp(0,0.5f));
+		price_label->setPosition(ccp(price_type->getContentSize().width/2.f+15,price_type->getContentSize().height/2.f));
+		price_type->addChild(price_label);
 
 		CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 255);
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
@@ -127,7 +142,13 @@ void ContinuePopup::menuAction( CCObject* sender )
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinuePopup::endContinueEffect));
 		CCSequence* t_seq2 = CCSequence::create(t_spawn, t_delay2, t_call, NULL);
 
-		continue_effect->runAction(t_seq2);
+		price_type->runAction(t_seq2);
+		
+		CCFadeTo* t_fade3 = CCFadeTo::create(0.2f, 255);
+		CCDelayTime* t_delay3 = CCDelayTime::create(0.2f);
+		CCFadeTo* t_fade4 = CCFadeTo::create(1.f, 0);
+		CCSequence* t_seq3 = CCSequence::create(t_fade3, t_delay3, t_fade4, NULL);
+		price_label->runAction(t_seq3);
 	}
 }
 

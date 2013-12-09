@@ -142,19 +142,19 @@ void OnePercentGacha::setBack ()
 	
 	CCSprite* n_ok = CCSprite::create("one_percent_gacha_button.png");
 	CCSprite* n_price_type = CCSprite::create("price_ruby_img.png");
-	n_price_type->setPosition(ccp(n_ok->getContentSize().width/2.f+10, n_ok->getContentSize().height/2.f));
+	n_price_type->setPosition(ccp(n_ok->getContentSize().width/2.f+15, n_ok->getContentSize().height/2.f));
 	n_ok->addChild(n_price_type);
-	CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 12);
-	n_price_label->setPosition(ccp(n_ok->getContentSize().width/2.f+30, n_ok->getContentSize().height/2.f));
+	CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 15);
+	n_price_label->setPosition(ccp(n_ok->getContentSize().width/2.f+40, n_ok->getContentSize().height/2.f));
 	n_ok->addChild(n_price_label);
 	
 	CCSprite* s_ok = CCSprite::create("one_percent_gacha_button.png");
 	s_ok->setColor(ccGRAY);
 	CCSprite* s_price_type = CCSprite::create("price_ruby_img.png");
-	s_price_type->setPosition(ccp(s_ok->getContentSize().width/2.f+10, s_ok->getContentSize().height/2.f));
+	s_price_type->setPosition(ccp(s_ok->getContentSize().width/2.f+15, s_ok->getContentSize().height/2.f));
 	s_ok->addChild(s_price_type);
-	CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 12);
-	s_price_label->setPosition(ccp(s_ok->getContentSize().width/2.f+30, s_ok->getContentSize().height/2.f));
+	CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 15);
+	s_price_label->setPosition(ccp(s_ok->getContentSize().width/2.f+40, s_ok->getContentSize().height/2.f));
 	s_ok->addChild(s_price_label);
 	
 	CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(OnePercentGacha::menuAction));

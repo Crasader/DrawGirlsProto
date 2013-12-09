@@ -139,6 +139,14 @@ void TitleRenewalScene::checkReceive()
 			ing_download_cnt = 1;
 			ing_download_per = 0;
 			is_downloading = true;
+			
+			if(!download_state)
+			{
+				download_state = CCLabelBMFont::create("", "etc_font.fnt");
+				download_state->setPosition(ccp(240,130));
+				addChild(download_state);
+			}
+			
 			startFileDownload();
 		}
 		else if(is_receive_fail)
@@ -818,8 +826,11 @@ void TitleRenewalScene::successDownloadAction()
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		
+		ing_download_cnt++;
+		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt,
 											int(character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+		startFileDownload();
 	}
 	else if(ing_download_cnt <= character_download_list.size() + card_download_list.size() + puzzle_download_list.size())
 	{
