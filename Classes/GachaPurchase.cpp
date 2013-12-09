@@ -12,7 +12,7 @@
 #include "GachaBase.h"
 #include "PuzzleMapScene.h"
 #include "HatGacha.h"
-
+#include "HatGacha.h"
 enum GachaPurchaseZorder{
 	kGachaPurchaseZorder_gray = 1,
 	kGachaPurchaseZorder_back,
@@ -354,11 +354,19 @@ void GachaPurchase::visibling()
 //		gacha_cnt; // 총 가차개수. 4
 		// 0 1
 		// 3 2 순서임.
-		getParent()->addChild(HatGacha::create([=](){
-			(target_in->*delegate_in)();
-			CCLog("hat close");
-		}), kPMS_Z_popup);
+		auto p = HatGachaSub::create(NULL,
+																 [=](){
+																		(target_in->*delegate_in)();
+																	 CCLog("hat close");
+																 });
+		getParent()->addChild(p, kPMS_Z_popup);
 		removeFromParent();
+//		getParent()->addChild(p, kPMS_Z_popup);
+////		getParent()->addChild(HatGacha::create([=](){
+////			(target_in->*delegate_in)();
+////			CCLog("hat close");
+////		}), kPMS_Z_popup);
+//
 	}
 }
 
