@@ -303,7 +303,9 @@ CCTableViewCell* StageRankPopup::tableCellAtIndex( CCTableView *table, unsigned 
 			CCSprite* n_help;
 			CCSprite* s_help;
 			bool enable = true;
-			if(getIsNotChallangableUser((*member).user_id), mySGD->getChallengeCoolTime())
+//			int rr = getIsNotChallangableUser((*member).user_id), mySGD->getChallengeCoolTime());
+
+			if(getIsNotChallangableUser( (*member).user_id, StarGoldData::sharedInstance()->getChallengeCoolTime() ))
 			{
 				n_help = CCSprite::create("stagerank_cell_button_off.png");
 				s_help = CCSprite::create("stagerank_cell_button_off.png");
@@ -315,7 +317,7 @@ CCTableViewCell* StageRankPopup::tableCellAtIndex( CCTableView *table, unsigned 
 				s_help = CCSprite::create("stagerank_cell_button_on.png");
 				enable = true;
 			}
-			
+
 			
 			CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(StageRankPopup::cellAction));
 			help_item->setTag(kSRFC_T_menuBase + idx);
