@@ -391,8 +391,21 @@ void DecreaseCardDurabilityPopup::touchOn()
 			is_touch_enable = true;
 
 			CCSprite* n_recovery = CCSprite::create("card_recovery.png");
+			CCSprite* n_price_type = CCSprite::create("price_ruby_img.png");
+			n_price_type->setPosition(ccp(n_recovery->getContentSize().width/2.f-15, n_recovery->getContentSize().height/2.f-15));
+			n_recovery->addChild(n_price_type);
+			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getCardDurabilityUpFee())->getCString(), mySGD->getFont().c_str(), 13);
+			n_price_label->setPosition(ccp(n_recovery->getContentSize().width/2.f+10, n_recovery->getContentSize().height/2.f-15));
+			n_recovery->addChild(n_price_label);
+			
 			CCSprite* s_recovery = CCSprite::create("card_recovery.png");
 			s_recovery->setColor(ccGRAY);
+			CCSprite* s_price_type = CCSprite::create("price_ruby_img.png");
+			s_price_type->setPosition(ccp(s_recovery->getContentSize().width/2.f-15, s_recovery->getContentSize().height/2.f-15));
+			s_recovery->addChild(s_price_type);
+			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getCardDurabilityUpFee())->getCString(), mySGD->getFont().c_str(), 13);
+			s_price_label->setPosition(ccp(s_recovery->getContentSize().width/2.f+10, s_recovery->getContentSize().height/2.f-15));
+			s_recovery->addChild(s_price_label);
 
 			CCMenuItem* recovery_item = CCMenuItemSprite::create(n_recovery, s_recovery, this, menu_selector(DecreaseCardDurabilityPopup::menuAction));
 			recovery_menu = CCMenu::createWithItem(recovery_item);

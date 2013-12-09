@@ -36,6 +36,131 @@ enum ShopPopup_MenuTag{
 	kSP_MT_characterUnlockBase = 20000
 };
 
+string ShopPopup::getPriceData(string t_code)
+{
+	string return_value;
+	
+	if(t_code == "wonToRuby1")
+		return_value = "1100원";
+	else if(t_code == "wonToRuby2")
+		return_value = "4900원";
+	else if(t_code == "wonToRuby3")
+		return_value = "9800원";
+	else if(t_code == "wonToRuby4")
+		return_value = "29800원";
+	else if(t_code == "wonToRuby5")
+		return_value = "49800원";
+	else if(t_code == "wonToRuby6")
+		return_value = "99800원";
+	else if(t_code == "rubyFromWon1")
+		return_value = "10개";
+	else if(t_code == "rubyFromWon2")
+		return_value = "50개";
+	else if(t_code == "rubyFromWon3")
+		return_value = "100개";
+	else if(t_code == "rubyFromWon4")
+		return_value = "300개";
+	else if(t_code == "rubyFromWon5")
+		return_value = "500개";
+	else if(t_code == "rubyFromWon6")
+		return_value = "1000개";
+	else if(t_code == "rubyToGold1")
+		return_value = "10개";
+	else if(t_code == "rubyToGold2")
+		return_value = "20개";
+	else if(t_code == "rubyToGold3")
+		return_value = "50개";
+	else if(t_code == "rubyToGold4")
+		return_value = "100개";
+	else if(t_code == "rubyToGold5")
+		return_value = "300개";
+	else if(t_code == "rubyToGold6")
+		return_value = "500개";
+	else if(t_code == "goldFromRuby1")
+		return_value = "1만골드";
+	else if(t_code == "goldFromRuby2")
+		return_value = "2만골드";
+	else if(t_code == "goldFromRuby3")
+		return_value = "5만골드";
+	else if(t_code == "goldFromRuby4")
+		return_value = "10만골드";
+	else if(t_code == "goldFromRuby5")
+		return_value = "30만골드";
+	else if(t_code == "goldFromRuby6")
+		return_value = "50만골드";
+	else if(t_code == "rubyToHeart1")
+		return_value = "5개";
+	else if(t_code == "rubyToHeart2")
+		return_value = "10개";
+	else if(t_code == "rubyToHeart3")
+		return_value = "20개";
+	else if(t_code == "rubyToHeart4")
+		return_value = "40개";
+	else if(t_code == "rubyToHeart5")
+		return_value = "75개";
+	else if(t_code == "rubyToHeart6")
+		return_value = "100개";
+	else if(t_code == "heartFromRuby1")
+		return_value = "5개";
+	else if(t_code == "heartFromRuby2")
+		return_value = "10개";
+	else if(t_code == "heartFromRuby3")
+		return_value = "20개";
+	else if(t_code == "heartFromRuby4")
+		return_value = "40개";
+	else if(t_code == "heartFromRuby5")
+		return_value = "75개";
+	else if(t_code == "heartFromRuby6")
+		return_value = "100개";
+	
+	return return_value;
+}
+
+void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
+{
+	if(recent_shop_code == kSC_ruby)
+	{
+		CCLabelTTF* won_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat("wonToRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		won_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f-25));
+		t_target->addChild(won_label);
+		
+		CCLabelTTF* ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		ruby_label->setColor(ccBLACK);
+		ruby_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f+25));
+		t_target->addChild(ruby_label);
+	}
+	else if(recent_shop_code == kSC_gold)
+	{
+		CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
+		ruby_img->setPosition(ccp(t_target->getContentSize().width/2.f-30, t_target->getContentSize().height/2.f-25));
+		t_target->addChild(ruby_img);
+		
+		CCLabelTTF* ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat("rubyToGold%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		ruby_label->setPosition(ccp(t_target->getContentSize().width/2.f+10, t_target->getContentSize().height/2.f-25));
+		t_target->addChild(ruby_label);
+		
+		CCLabelTTF* gold_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		gold_label->setColor(ccBLACK);
+		gold_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f+25));
+		t_target->addChild(gold_label);
+	}
+	else if(recent_shop_code == kSC_heart)
+	{
+		CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
+		ruby_img->setPosition(ccp(t_target->getContentSize().width/2.f-30, t_target->getContentSize().height/2.f-25));
+		t_target->addChild(ruby_img);
+		
+		CCLabelTTF* ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat("rubyToHeart%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		ruby_label->setPosition(ccp(t_target->getContentSize().width/2.f+10, t_target->getContentSize().height/2.f-25));
+		t_target->addChild(ruby_label);
+		
+		CCLabelTTF* heart_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		heart_label->setColor(ccBLACK);
+		heart_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f+25));
+		t_target->addChild(heart_label);
+	}
+}
+
 void ShopPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
 {
 	target_final = t_final;
@@ -92,17 +217,19 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	{
 		string filename;
 		if(recent_shop_code == kSC_ruby)
-			filename = "shop_ruby%d.png";
+			filename = "shop_ruby_button.png";
 		else if(recent_shop_code == kSC_gold)
-			filename = "shop_gold%d.png";
+			filename = "shop_gold_button.png";
 		else if(recent_shop_code == kSC_heart)
-			filename = "shop_heart%d.png";
+			filename = "shop_heart_button.png";
 		
 		for(int i=1;i<=6;i++)
 		{
-			CCSprite* n_content = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
-			CCSprite* s_content = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
+			CCSprite* n_content = CCSprite::create(filename.c_str());
+			addPriceReward(n_content, i);
+			CCSprite* s_content = CCSprite::create(filename.c_str());
 			s_content->setColor(ccGRAY);
+			addPriceReward(s_content, i);
 			
 			CCMenuItem* content_item = CCMenuItemSprite::create(n_content, s_content, this, menu_selector(ShopPopup::menuAction));
 			content_item->setTag(kSP_MT_content1 + i - 1);
@@ -555,7 +682,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
-				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
+				((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -627,7 +754,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
-				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
+				((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -699,7 +826,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
-				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
+				((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -771,7 +898,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
-				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
+				((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -843,7 +970,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
-				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
+				((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -915,7 +1042,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				target_heartTime = HeartTime::create();
 				target_heartTime->setPosition(heart_time_position);
 				target_parent->addChild(target_heartTime, 0, heart_time_tag);
-				((StageSettingPopup*)target_parent)->heart_time = target_heartTime;
+				((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				

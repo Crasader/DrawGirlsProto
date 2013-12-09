@@ -2,6 +2,7 @@
 //
 
 #include "StartMapGacha.h"
+#include "StarGoldData.h"
 #define LZZ_INLINE inline
 using namespace std;
 StartMapGacha * StartMapGacha::create (CCObject * t_gacha, SEL_CallFunc d_gacha)
@@ -23,8 +24,21 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 	
 	
 	CCSprite* n_gacha = CCSprite::create("start_map_gacha_button.png");
+	CCSprite* n_gacha_price_type = CCSprite::create("price_gold_img.png");
+	n_gacha_price_type->setPosition(ccp(n_gacha->getContentSize().width/2.f+10, n_gacha->getContentSize().height/2.f));
+	n_gacha->addChild(n_gacha_price_type);
+	CCLabelTTF* n_gacha_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 15);
+	n_gacha_price_label->setPosition(ccp(n_gacha->getContentSize().width/2.f+35, n_gacha->getContentSize().height/2.f));
+	n_gacha->addChild(n_gacha_price_label);
+	
 	CCSprite* s_gacha = CCSprite::create("start_map_gacha_button.png");
 	s_gacha->setColor(ccGRAY);
+	CCSprite* s_gacha_price_type = CCSprite::create("price_gold_img.png");
+	s_gacha_price_type->setPosition(ccp(s_gacha->getContentSize().width/2.f+10, s_gacha->getContentSize().height/2.f));
+	s_gacha->addChild(s_gacha_price_type);
+	CCLabelTTF* s_gacha_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 15);
+	s_gacha_price_label->setPosition(ccp(s_gacha->getContentSize().width/2.f+35, s_gacha->getContentSize().height/2.f));
+	s_gacha->addChild(s_gacha_price_label);
 	
 	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(StartMapGacha::menuAction));
 	gacha_item->setTag(kSMG_MT_gacha);

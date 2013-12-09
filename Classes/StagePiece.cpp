@@ -272,9 +272,13 @@ void StagePiece::myInit (string t_piece, int t_number, int t_level, CCPoint t_p,
 		
 		if(piece_name.find("piece_buy") != string::npos)
 		{
+			CCSprite* condition_type = CCSprite::create("price_gold_img.png");
+			condition_type->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f+10));
+			piece_img->addChild(condition_type);
+			
 			CCLabelTTF* condition_gold = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(found_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number))->getCString(), mySGD->getFont().c_str(), 20);
 			condition_gold->setAnchorPoint(ccp(0.5,0.5));
-			condition_gold->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
+			condition_gold->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f-10));
 			piece_img->addChild(condition_gold);
 		}
 	}

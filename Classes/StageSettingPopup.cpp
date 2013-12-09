@@ -429,13 +429,29 @@ void StageSettingPopup::itemSetting()
 			//			temp_back->setPosition(ccp(-73,8));
 			//			item_parent->addChild(temp_back, kSSS_Z_content);
 			
+			string buy_type = mySD->getItemCurrency(t_ic);
+			if(buy_type == "gold")
+				buy_type = "price_gold_img.png";
+			else if(buy_type == "ruby")
+				buy_type = "price_ruby_img.png";
+			else if(buy_type == "social")
+				buy_type = "price_candy_img.png";
+			
 			CCSprite* n_buy = CCSprite::create("stagesetting_item_buy.png");
+			CCSprite* n_buy_type = CCSprite::create(buy_type.c_str());
+			n_buy_type->setScale(0.5f);
+			n_buy_type->setPosition(ccp(12, 15));
+			n_buy->addChild(n_buy_type);
 			CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 8);
 			n_label->setAnchorPoint(ccp(0.5f, 0.5f));
 			n_label->setPosition(ccp(35, 15));
 			n_buy->addChild(n_label);
 			CCSprite* s_buy = CCSprite::create("stagesetting_item_buy.png");
 			s_buy->setColor(ccGRAY);
+			CCSprite* s_buy_type = CCSprite::create(buy_type.c_str());
+			s_buy_type->setScale(0.5f);
+			s_buy_type->setPosition(ccp(12, 15));
+			s_buy->addChild(s_buy_type);
 			CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 8);
 			s_label->setAnchorPoint(ccp(0.5f, 0.5f));
 			s_label->setPosition(ccp(35, 15));

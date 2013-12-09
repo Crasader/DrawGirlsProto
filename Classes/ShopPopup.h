@@ -79,6 +79,9 @@ private:
 	
 	CCPoint getContentPosition(int t_tag);
 	
+	string getPriceData(string t_code);
+	void addPriceReward(CCNode* t_target, int t_number);
+	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);

@@ -670,6 +670,8 @@ void Jack::changeDirection( IntDirection t_d, IntDirection t_sd )
 	}
 
 	IntPoint jp = myGD->getJackPoint();
+	if(jp.isNull())
+		return;
 	if(myGD->mapState[jp.x-1][jp.y] != mapOldline && myGD->mapState[jp.x-1][jp.y] != mapNewline &&
 		myGD->mapState[jp.x+1][jp.y] != mapOldline && myGD->mapState[jp.x+1][jp.y] != mapNewline &&
 		myGD->mapState[jp.x][jp.y-1] != mapOldline && myGD->mapState[jp.x][jp.y-1] != mapNewline &&

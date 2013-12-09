@@ -44,7 +44,7 @@ bool HeartTime::startGame ()
 		{
 			myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)-1);
 			
-			state_label->setString(CCString::createWithFormat("+%d", myDSH->getIntegerForKey(kDSH_Key_heartCnt))->getCString());
+			state_label->setString(CCString::createWithFormat("+%d", myDSH->getIntegerForKey(kDSH_Key_heartCnt)-5)->getCString());
 		}
 		
 		return true;
