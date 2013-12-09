@@ -68,7 +68,7 @@ void StageRankPopup::showPopup()
 	CCSequence* back_seq = CCSequence::createWithTwoActions(back_move, back_call);
 	back_img->runAction(back_seq);
 	
-	hspConnector::get()->kLoadFriends(json_selector(this, StageRankPopup::resultLoadFriends));
+	resultLoadFriends(Json::Value());
 }
 
 void StageRankPopup::endShowPopup()
@@ -125,49 +125,49 @@ void StageRankPopup::setBack()
 
 void StageRankPopup::resultLoadFriends(Json::Value result_data)
 {
-	CCLog("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	if(result_data["status"].asInt() == 0)
+	Json::Value p;
+	Json::Value my_info = hspConnector::get()->myKakaoInfo;
+	
+	StageRankFriendInfo t_my_info;
+	t_my_info.nickname = my_info["nickname"].asString();
+	t_my_info.img_url = my_info["profile_image_url"].asString();
+	t_my_info.user_id = my_info["user_id"].asString();
+	t_my_info.score = 0;
+	t_my_info.is_play = false;
+	t_my_info.is_message_blocked = my_info["message_blocked"].asBool();
+	
+	p["memberIDList"].append(t_my_info.user_id);
+	
+	for(auto i : KnownFriends::getInstance()->getFriends())
 	{
-		Json::Value appfriends = result_data["app_friends_info"];
-		appfriends.append(hspConnector::get()->myKakaoInfo);
+		StageRankFriendInfo t_friend_info;
+		t_friend_info.nickname = i.nick;
+		t_friend_info.img_url = i.profileUrl;
+		t_friend_info.user_id = i.userId;
+		t_friend_info.score = 0;
+		t_friend_info.is_play = false;
+		t_friend_info.is_message_blocked = i.messageBlocked;
+		friend_list.push_back(t_friend_info);
 		
-		Json::Value p;
-		for(int i=0; i<appfriends.size();i++)
-		{
-			StageRankFriendInfo t_friend_info;
-			t_friend_info.nickname = appfriends[i]["nickname"].asString().c_str();
-			t_friend_info.img_url = appfriends[i]["profile_image_url"].asString().c_str();
-			t_friend_info.user_id = appfriends[i]["user_id"].asString().c_str();
-			t_friend_info.score = 0;
-			t_friend_info.is_play = false;
-			t_friend_info.is_message_blocked = appfriends[i]["message_blocked"].asBool();
-			friend_list.push_back(t_friend_info);
-			
-			p["memberIDList"].append(appfriends[i]["user_id"].asString());
-		}
-		
-		for(auto i : UnknownFriends::getInstance()->getFriends())
-		{
-			StageRankFriendInfo fInfo;
-			fInfo.nickname = i.nick + "[unknown]";
-			fInfo.img_url = "";
-			fInfo.user_id = i.userId;
-			fInfo.score = 0;
-			fInfo.is_play = false;
-			fInfo.is_message_blocked = false;
-			friend_list.push_back(fInfo);
-			
-			p["memberIDList"].append(i.userId);
-		}
-		
-		p["stageNo"]=stage_number;
-		hspConnector::get()->command("getstagescorelist",p,json_selector(this, StageRankPopup::resultGetStageScoreList));
+		p["memberIDList"].append(i.userId);
 	}
-	else
+	
+	for(auto i : UnknownFriends::getInstance()->getFriends())
 	{
-		close_menu->setVisible(true);
-		loading_label->setString("친구 랭킹 로드 실패");
+		StageRankFriendInfo fInfo;
+		fInfo.nickname = i.nick + "[unknown]";
+		fInfo.img_url = "";
+		fInfo.user_id = i.userId;
+		fInfo.score = 0;
+		fInfo.is_play = false;
+		fInfo.is_message_blocked = false;
+		friend_list.push_back(fInfo);
+		
+		p["memberIDList"].append(i.userId);
 	}
+	
+	p["stageNo"]=stage_number;
+	hspConnector::get()->command("getstagescorelist",p,json_selector(this, StageRankPopup::resultGetStageScoreList));
 }
 
 void StageRankPopup::resultGetStageScoreList(Json::Value result_data)

@@ -145,7 +145,7 @@ bool StageSettingPopup::init()
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, t_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_code)+mySGD->getBonusItemCnt(t_code));
-//			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 		}
 	}
 	myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
