@@ -357,7 +357,6 @@ void GachaPurchase::visibling()
 		
 		HatGachaSub* p = HatGachaSub::create(NULL,
 																 [=](){
-																	 p->finalAction();
 																	 CCLog("hat close");
 																 });
 		p->setFinalAction(target_in, delegate_in);

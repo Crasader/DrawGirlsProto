@@ -111,6 +111,7 @@ public:
 			if(m_callback != nullptr)
 			{
 				m_callback();
+				removeFromParent();
 			}
 			
 		}

@@ -22,7 +22,7 @@ public:
 		delegate_final = d_final;
 	}
 	
-	void finalAction()
+	virtual ~GachaBase()
 	{
 		(target_fianl->*delegate_final)();
 	}
