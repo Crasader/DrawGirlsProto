@@ -49,6 +49,7 @@ private:
 	
 	CCSprite* target_card;
 	CCMenu* offering_menu;
+	CCSprite* strength_probability;
 	
 	int recent_offering_number;
 	

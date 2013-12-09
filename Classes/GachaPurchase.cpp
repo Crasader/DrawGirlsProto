@@ -45,100 +45,132 @@ void GachaPurchase::setInAllObjectAction(CCObject* t_in, SEL_CallFunc d_in)
 	delegate_in = d_in;
 }
 
-bool GachaPurchase::init()
+GachaPurchase* GachaPurchase::create(GachaPurchaseStartMode start_mode /*= kGachaPurchaseStartMode_select*/)
+{
+	GachaPurchase* t_gp = new GachaPurchase();
+	if(t_gp && t_gp->init(start_mode))
+	{
+		t_gp->autorelease();
+		return t_gp;
+	}
+	CC_SAFE_DELETE(t_gp);
+	return NULL;
+}
+
+bool GachaPurchase::init(GachaPurchaseStartMode start_mode)
 {
 	if(!CCLayer::init())
 	{
 		return false;
 	}
+	
+	recent_mode = start_mode;
+	
 	is_menu_enable = false;
 	is_touch_on = false;
 	setTouchEnabled(true);
 	
-	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-	if(screen_scale_x < 1.f)
-		screen_scale_x = 1.f;
-	
-	gray = CCSprite::create("back_gray.png");
-	gray->setOpacity(0);
-	gray->setPosition(ccp(240,160));
-	gray->setScaleX(screen_scale_x);
-	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
-	addChild(gray, kGachaPurchaseZorder_gray);
-	
-	main_case = CCSprite::create("gacha_purchase_back.png");
-	main_case->setPosition(ccp(240,-160));
-	addChild(main_case, kGachaPurchaseZorder_back);
-	
-	
-	CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-	CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-	s_close->setColor(ccGRAY);
-	
-	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(GachaPurchase::menuAction));
-	close_item->setTag(kGachaPurchaseMenuTag_close);
-	
-	CCMenu* close_menu = CCMenu::createWithItem(close_item);
-	close_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_close));
-	main_case->addChild(close_menu);
-	close_menu->setTouchPriority(-171);
-	
-	
-	CCSprite* n_ruby = CCSprite::create("gacha_purchase_ruby.png");
-	CCLabelTTF* n_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
-	n_ruby_price->setPosition(ccp(n_ruby->getContentSize().width/2.f+20, 25));
-	n_ruby->addChild(n_ruby_price);
-	CCSprite* s_ruby = CCSprite::create("gacha_purchase_ruby.png");
-	s_ruby->setColor(ccGRAY);
-	CCLabelTTF* s_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
-	s_ruby_price->setPosition(ccp(s_ruby->getContentSize().width/2.f+20, 25));
-	s_ruby->addChild(s_ruby_price);
-	
-	CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(GachaPurchase::menuAction));
-	ruby_item->setTag(kGachaPurchaseMenuTag_ruby);
-	
-	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
-	ruby_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_ruby));
-	main_case->addChild(ruby_menu);
-	ruby_menu->setTouchPriority(-171);
-	
-	CCSprite* n_gold = CCSprite::create("gacha_purchase_gold.png");
-	CCLabelTTF* n_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
-	n_gold_price->setPosition(ccp(n_gold->getContentSize().width/2.f+20, 25));
-	n_gold->addChild(n_gold_price);
-	CCSprite* s_gold = CCSprite::create("gacha_purchase_gold.png");
-	s_gold->setColor(ccGRAY);
-	CCLabelTTF* s_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
-	s_gold_price->setPosition(ccp(s_gold->getContentSize().width/2.f+20, 25));
-	s_gold->addChild(s_gold_price);
-	
-	CCMenuItem* gold_item = CCMenuItemSprite::create(n_gold, s_gold, this, menu_selector(GachaPurchase::menuAction));
-	gold_item->setTag(kGachaPurchaseMenuTag_gold);
-	
-	CCMenu* gold_menu = CCMenu::createWithItem(gold_item);
-	gold_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_gold));
-	main_case->addChild(gold_menu);
-	gold_menu->setTouchPriority(-171);
-	
-	CCSprite* n_candy = CCSprite::create("gacha_purchase_candy.png");
-	CCLabelTTF* n_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
-	n_candy_price->setPosition(ccp(n_candy->getContentSize().width/2.f+20, 25));
-	n_candy->addChild(n_candy_price);
-	CCSprite* s_candy = CCSprite::create("gacha_purchase_candy.png");
-	s_candy->setColor(ccGRAY);
-	CCLabelTTF* s_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
-	s_candy_price->setPosition(ccp(s_candy->getContentSize().width/2.f+20, 25));
-	s_candy->addChild(s_candy_price);
-	
-	CCMenuItem* candy_item = CCMenuItemSprite::create(n_candy, s_candy, this, menu_selector(GachaPurchase::menuAction));
-	candy_item->setTag(kGachaPurchaseMenuTag_candy);
-	
-	CCMenu* candy_menu = CCMenu::createWithItem(candy_item);
-	candy_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_candy));
-	main_case->addChild(candy_menu);
-	candy_menu->setTouchPriority(-171);
-	
+	if(recent_mode == kGachaPurchaseStartMode_select)
+	{
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		gray = CCSprite::create("back_gray.png");
+		gray->setOpacity(0);
+		gray->setPosition(ccp(240,160));
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+		addChild(gray, kGachaPurchaseZorder_gray);
+		
+		main_case = CCSprite::create("gacha_purchase_back.png");
+		main_case->setPosition(ccp(240,-160));
+		addChild(main_case, kGachaPurchaseZorder_back);
+		
+		
+		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+		s_close->setColor(ccGRAY);
+		
+		CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(GachaPurchase::menuAction));
+		close_item->setTag(kGachaPurchaseMenuTag_close);
+		
+		CCMenu* close_menu = CCMenu::createWithItem(close_item);
+		close_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_close));
+		main_case->addChild(close_menu);
+		close_menu->setTouchPriority(-171);
+		
+		
+		CCSprite* n_ruby = CCSprite::create("gacha_purchase_ruby.png");
+		CCLabelTTF* n_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
+		n_ruby_price->setPosition(ccp(n_ruby->getContentSize().width/2.f+20, 25));
+		n_ruby->addChild(n_ruby_price);
+		CCSprite* s_ruby = CCSprite::create("gacha_purchase_ruby.png");
+		s_ruby->setColor(ccGRAY);
+		CCLabelTTF* s_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
+		s_ruby_price->setPosition(ccp(s_ruby->getContentSize().width/2.f+20, 25));
+		s_ruby->addChild(s_ruby_price);
+		
+		CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(GachaPurchase::menuAction));
+		ruby_item->setTag(kGachaPurchaseMenuTag_ruby);
+		
+		CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
+		ruby_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_ruby));
+		main_case->addChild(ruby_menu);
+		ruby_menu->setTouchPriority(-171);
+		
+		CCSprite* n_gold = CCSprite::create("gacha_purchase_gold.png");
+		CCLabelTTF* n_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
+		n_gold_price->setPosition(ccp(n_gold->getContentSize().width/2.f+20, 25));
+		n_gold->addChild(n_gold_price);
+		CCSprite* s_gold = CCSprite::create("gacha_purchase_gold.png");
+		s_gold->setColor(ccGRAY);
+		CCLabelTTF* s_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
+		s_gold_price->setPosition(ccp(s_gold->getContentSize().width/2.f+20, 25));
+		s_gold->addChild(s_gold_price);
+		
+		CCMenuItem* gold_item = CCMenuItemSprite::create(n_gold, s_gold, this, menu_selector(GachaPurchase::menuAction));
+		gold_item->setTag(kGachaPurchaseMenuTag_gold);
+		
+		CCMenu* gold_menu = CCMenu::createWithItem(gold_item);
+		gold_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_gold));
+		main_case->addChild(gold_menu);
+		gold_menu->setTouchPriority(-171);
+		
+		CCSprite* n_candy = CCSprite::create("gacha_purchase_candy.png");
+		CCLabelTTF* n_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
+		n_candy_price->setPosition(ccp(n_candy->getContentSize().width/2.f+20, 25));
+		n_candy->addChild(n_candy_price);
+		CCSprite* s_candy = CCSprite::create("gacha_purchase_candy.png");
+		s_candy->setColor(ccGRAY);
+		CCLabelTTF* s_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
+		s_candy_price->setPosition(ccp(s_candy->getContentSize().width/2.f+20, 25));
+		s_candy->addChild(s_candy_price);
+		
+		CCMenuItem* candy_item = CCMenuItemSprite::create(n_candy, s_candy, this, menu_selector(GachaPurchase::menuAction));
+		candy_item->setTag(kGachaPurchaseMenuTag_candy);
+		
+		CCMenu* candy_menu = CCMenu::createWithItem(candy_item);
+		candy_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_candy));
+		main_case->addChild(candy_menu);
+		candy_menu->setTouchPriority(-171);
+	}
+	else if(recent_mode == kGachaPurchaseStartMode_reward)
+	{
+		left_curtain = CCSprite::create("curtain_left.png");
+		left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+		left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
+		left_curtain->setPosition(ccp(0, 160));
+		addChild(left_curtain, kGachaPurchaseZorder_content);
+		
+		right_curtain = CCSprite::create("curtain_left.png");
+		right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+		right_curtain->setFlipX(true);
+		right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
+		right_curtain->setPosition(ccp(480,160));
+		addChild(right_curtain, kGachaPurchaseZorder_content);
+	}
 	
 	return true;
 }
@@ -147,7 +179,21 @@ void GachaPurchase::onEnter()
 {
 	CCLayer::onEnter();
 	
-	showPopup();
+	if(recent_mode == kGachaPurchaseStartMode_select)
+		showPopup();
+	else if(recent_mode == kGachaPurchaseStartMode_reward)
+		startGacha();
+}
+
+void GachaPurchase::startGacha()
+{
+	CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(240,160));
+	left_curtain->runAction(left_move);
+	
+	CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(240,160));
+	CCCallFunc* move_end = CCCallFunc::create(this, callfunc_selector(GachaPurchase::endGachaListPopup));
+	CCSequence* right_seq = CCSequence::createWithTwoActions(right_move, move_end);
+	right_curtain->runAction(right_seq);
 }
 
 void GachaPurchase::showPopup()
@@ -189,8 +235,6 @@ void GachaPurchase::endHidePopup()
 
 void GachaPurchase::gachaListPopup()
 {
-	gacha_cnt = 4;
-	
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
@@ -198,6 +242,37 @@ void GachaPurchase::gachaListPopup()
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(GachaPurchase::endGachaListPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
+	
+	left_curtain = CCSprite::create("curtain_left.png");
+	left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+	left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
+	left_curtain->setPosition(ccp(0, 160));
+	addChild(left_curtain, kGachaPurchaseZorder_content);
+	
+	right_curtain = CCSprite::create("curtain_left.png");
+	right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+	right_curtain->setFlipX(true);
+	right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
+	right_curtain->setPosition(ccp(480,160));
+	addChild(right_curtain, kGachaPurchaseZorder_content);
+	
+	CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(240,160));
+	left_curtain->runAction(left_move);
+	
+	CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(240,160));
+	right_curtain->runAction(right_move);
+}
+
+void GachaPurchase::endGachaListPopup()
+{
+	if(gray)
+		gray->removeFromParent();
+	if(main_case)
+		main_case->removeFromParent();
+	
+	gacha_cnt = 4;
+	
+	recent_gacha = rand()%gacha_cnt;
 	
 	gacha_touch = CCSprite::create("gacha_touch.png");
 	gacha_touch->setPosition(ccp(240, 480));
@@ -222,14 +297,6 @@ void GachaPurchase::gachaListPopup()
 		on_gacha->setVisible(false);
 		t_gacha->addChild(on_gacha, 1, 1);
 	}
-}
-
-void GachaPurchase::endGachaListPopup()
-{
-	gray->removeFromParent();
-	main_case->removeFromParent();
-	
-	recent_gacha = rand()%gacha_cnt;
 	
 	getChildByTag(kGachaPurchaseMenuTag_gachaBase+recent_gacha)->getChildByTag(1)->setVisible(true);
 	
@@ -355,19 +422,46 @@ void GachaPurchase::visibling()
 		// 0 1
 		// 3 2 순서임.
 		
+		CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(0, 160));
+		left_curtain->runAction(left_move);
+		
+		CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(480, 160));
+		right_curtain->runAction(right_move);
+		
+		gacha_touch->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(240,550)), CCCallFunc::create(gacha_touch, callfunc_selector(CCSprite::removeFromParent))));
+		
+		float base_angle = 90.f + 360.f/gacha_cnt/2.f;
+		float base_distance = 100.f;
+		for(int i=1;i<=gacha_cnt;i++)
+		{
+			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccpAdd(ccp(240,140),
+															 ccp(cosf((base_angle+(i-1)*(360.f/gacha_cnt))/180.f*M_PI)*(base_distance+300),
+																 sinf((base_angle+(i-1)*(360.f/gacha_cnt))/180.f*M_PI)*(base_distance+300))));
+			getChildByTag(kGachaPurchaseMenuTag_gachaBase+i-1)->runAction(t_move);
+		}
+		
+		
 		HatGachaSub* p = HatGachaSub::create(NULL,
 																 [=](){
 																	 CCLog("hat close");
+																	 
+																	 CCMoveTo* left_in_move = CCMoveTo::create(0.3f, ccp(240,160));
+																	 CCDelayTime* left_delay = CCDelayTime::create(0.3f);
+																	 CCMoveTo* left_out_move = CCMoveTo::create(0.3f, ccp(0, 160));
+																	 CCCallFunc* left_remove = CCCallFunc::create(left_curtain, callfunc_selector(CCSprite::removeFromParent));
+																	 CCSequence* left_seq = CCSequence::create(left_in_move, left_delay, left_out_move, left_remove, NULL);
+																	 left_curtain->runAction(left_seq);
+																	 
+																	 CCMoveTo* right_in_move = CCMoveTo::create(0.3f, ccp(240,160));
+																	 CCDelayTime* right_delay = CCDelayTime::create(0.3f);
+																	 CCCallFunc* remove_main = CCCallFunc::create(main_case, callfunc_selector(CCSprite::removeFromParent));
+																	 CCMoveTo* right_out_move = CCMoveTo::create(0.3f, ccp(480,160));
+																	 CCCallFunc* right_remove = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
+																	 CCSequence* right_seq = CCSequence::create(right_in_move, right_delay, remove_main, right_out_move, right_remove, NULL);
+																	 right_curtain->runAction(right_seq);
 																 });
 		p->setFinalAction(target_in, delegate_in);
 		getParent()->addChild(p, kPMS_Z_popup);
-		removeFromParent();
-//		getParent()->addChild(p, kPMS_Z_popup);
-////		getParent()->addChild(HatGacha::create([=](){
-////			(target_in->*delegate_in)();
-////			CCLog("hat close");
-////		}), kPMS_Z_popup);
-//
 	}
 }
 
@@ -377,6 +471,12 @@ bool GachaPurchase::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
 	{
 		is_touch_on = false;
 		unschedule(schedule_selector(GachaPurchase::changeGacha));
+		
+		main_case = CCSprite::create("gacha_back_table.png");
+		main_case->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+		main_case->setPosition(ccp(240,160));
+		addChild(main_case, kGachaPurchaseZorder_back);
+		
 		visibling_cnt = 0;
 		schedule(schedule_selector(GachaPurchase::visibling), 0.4f);
 	}

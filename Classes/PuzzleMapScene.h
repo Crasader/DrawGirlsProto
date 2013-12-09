@@ -64,6 +64,10 @@ enum PMS_MenuTag{
 	kPMS_MT_left,
 	kPMS_MT_right,
 	kPMS_MT_up,
+	kPMS_MT_selectedCard,
+	kPMS_MT_trophy,
+	kPMS_MT_memo,
+	kPMS_MT_titleBox,
 	kPMS_MT_showui,
 	kPMS_MT_top,
 	kPMS_MT_heartTime,
@@ -274,6 +278,9 @@ private:
 	
 	void showCardSettingPopup();
 	void hideCardSettingPopup();
+	
+	void showDiaryPopup();
+	void hideDiaryPopup();
 	
 	void showOptionPopup();
 	void hideOptionPopup();

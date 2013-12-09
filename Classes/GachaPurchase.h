@@ -14,25 +14,35 @@
 USING_NS_CC;
 using namespace std;
 
+enum GachaPurchaseStartMode{
+	kGachaPurchaseStartMode_select = 1,
+	kGachaPurchaseStartMode_reward
+};
+
 class GachaPurchase : public CCLayer
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
-    virtual bool init();
     
     // a selector callback
     void menuAction(CCObject* pSender);
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
-    CREATE_FUNC(GachaPurchase);
+	
+	static GachaPurchase* create(GachaPurchaseStartMode start_mode = kGachaPurchaseStartMode_select);
+//    CREATE_FUNC(GachaPurchase);
 	
 	virtual void onEnter();
+	
+	virtual bool init(GachaPurchaseStartMode start_mode);
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	void setOutAllObjectAction(CCObject* t_out, SEL_CallFunc d_out);
 	void setInAllObjectAction(CCObject* t_in, SEL_CallFunc d_in);
 	
 private:
+	GachaPurchaseStartMode recent_mode;
+	
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	
@@ -45,6 +55,9 @@ private:
 	CCSprite* gray;
 	CCSprite* main_case;
 	
+	CCSprite* left_curtain;
+	CCSprite* right_curtain;
+	
 	CCSprite* gacha_touch;
 	int gacha_cnt;
 	
@@ -52,6 +65,8 @@ private:
 	bool is_menu_enable;
 	
 	void popupClose();
+	
+	void startGacha();
 	
 	void gachaListPopup();
 	void endGachaListPopup();

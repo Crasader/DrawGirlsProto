@@ -383,7 +383,10 @@ void CardStrengthPopup::tableCellTouched(CCTableView* table, CCTableViewCell* ce
 	
 	recent_offering_number = selected_card_number;
 	if(offering_menu)
+	{
 		offering_menu->removeFromParent();
+		strength_probability->removeFromParent();
+	}
 	
 	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
 	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
@@ -429,6 +432,18 @@ void CardStrengthPopup::tableCellTouched(CCTableView* table, CCTableViewCell* ce
 	offering_menu = CCMenu::createWithItem(offering_item);
 	offering_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_offeringCard));
 	main_case->addChild(offering_menu, kCardStrengthPopupZorder_content);
+	
+	strength_probability = CCSprite::create("cardsetting_probability.png");
+	strength_probability->setPosition(offering_menu->getPosition());
+	main_case->addChild(strength_probability, kCardStrengthPopupMenuTag_offeringCard);
+	
+	int strength_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+	
+	CCLabelTTF* probability_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", strength_rate*100.f)->getCString(), mySGD->getFont().c_str(), 10);
+	probability_label->setAnchorPoint(ccp(1.f,0.5f));
+	probability_label->setPosition(ccp(strength_probability->getContentSize().width-17, strength_probability->getContentSize().height/2.f-2));
+	strength_probability->addChild(probability_label);
 	
 	is_menu_enable = true;
 }
@@ -543,6 +558,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 		if(offering_menu)
 		{
 			offering_menu->removeFromParent();
+			strength_probability->removeFromParent();
 			recent_offering_number = -1;
 			offering_menu = NULL;
 		}
@@ -720,6 +736,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, json_selector(this, CardStrengthPopup::resultStrength));
 			
 			offering_menu->removeFromParent();
+			strength_probability->removeFromParent();
 			recent_offering_number = -1;
 			offering_menu = NULL;
 		}
@@ -788,6 +805,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, json_selector(this, CardStrengthPopup::resultStrength));
 			
 			offering_menu->removeFromParent();
+			strength_probability->removeFromParent();
 			recent_offering_number = -1;
 			offering_menu = NULL;
 		}
