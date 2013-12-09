@@ -261,7 +261,10 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 //@		resultobj["state"]= JsonBox::Value("error");
 //@		resultobj["errorMsg"]=JsonBox::Value("don't create thread");
 //@		resultobj["errorCode"]=JsonBox::Value(1001);
-        resultobj["state"]= "error";
+		
+		resultobj["result"]["code"]=GDDONTMAKETHREAD;
+		
+		resultobj["state"]= "error";
 		resultobj["errorMsg"]="don't create thread";
 		resultobj["errorCode"]=1001;
 	
@@ -494,6 +497,8 @@ void* GraphDog::t_function(void *_insertIndex)
 			resultCode=CURLE_CHUNK_FAILED;
             resultobj["state"]="error";
             resultobj["errorMsg"]="hack!!";
+			
+			resultobj["result"]["code"]=GDSECURITY;
             //@ GraphDog::get()->timestamp=resultobj["timestamp"].getInt();
             GraphDog::get()->timestamp=resultobj["timestamp"].asInt();
         }
@@ -555,6 +560,7 @@ void GraphDog::receivedCommand(float dt)
 					resultobj["state"] = "error";
 					resultobj["errorMsg"] = "check your network state";
 					resultobj["errorCode"] = 1002;
+					resultobj["result"]["code"]=GDCHECKNETWORK;
 					
 					//callbackparam
 					if(command.paramStr!=""){
