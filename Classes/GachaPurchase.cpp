@@ -16,6 +16,7 @@
 enum GachaPurchaseZorder{
 	kGachaPurchaseZorder_gray = 1,
 	kGachaPurchaseZorder_back,
+	kGachaPurchaseZorder_realGacha,
 	kGachaPurchaseZorder_content
 };
 
