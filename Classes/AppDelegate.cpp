@@ -10,7 +10,7 @@
 
 #include "GameData.h"
 #include "TitleScene.h"
-#include "PuzzleMapScene.h"
+#include "TitleRenewal.h"
 
 using namespace CocosDenshion;
 
@@ -239,9 +239,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 //    pEngine->executeScriptFile(path.c_str());
 	
 	
-	CCScene* pScene = TitleScene::scene();
-//	CCScene *pScene = PuzzleMapScene::scene();
-//	CCScene* pScene = WorldMapScene::scene();
+//	CCScene* pScene = TitleScene::scene();
+	CCScene* pScene = TitleRenewalScene::scene();
     pDirector->runWithScene(pScene);
 
     return true;
