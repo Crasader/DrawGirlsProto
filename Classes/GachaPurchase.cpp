@@ -354,11 +354,13 @@ void GachaPurchase::visibling()
 //		gacha_cnt; // 총 가차개수. 4
 		// 0 1
 		// 3 2 순서임.
-		auto p = HatGachaSub::create(NULL,
+		
+		HatGachaSub* p = HatGachaSub::create(NULL,
 																 [=](){
-																		(target_in->*delegate_in)();
+																	 p->finalAction();
 																	 CCLog("hat close");
 																 });
+		p->setFinalAction(target_in, delegate_in);
 		getParent()->addChild(p, kPMS_Z_popup);
 		removeFromParent();
 //		getParent()->addChild(p, kPMS_Z_popup);

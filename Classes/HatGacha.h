@@ -13,7 +13,7 @@ USING_NS_CC;
 #include "FromTo.h"
 #include "KSUtil.h"
 #include "StarGoldData.h"
-
+#include "GachaBase.h"
 
 
 
@@ -62,7 +62,7 @@ enum class SceneState
 	kShowReward1,
 	kShowReward2
 };
-class HatGachaSub : public CCLayer
+class HatGachaSub : public GachaBase
 {
 protected:
 	CCMenuLambda* m_menu;

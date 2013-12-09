@@ -13,7 +13,7 @@
 
 USING_NS_CC;
 
-class GachaBase : public CCNode
+class GachaBase : public CCLayer
 {
 public:
 	void setFinalAction(CCObject* t_final, SEL_CallFunc d_final)

@@ -2355,6 +2355,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						
 						if(is_found && found_index <= puzzle_count)
 						{
+							if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+								removeChildByTag(kPMS_MT_loadPuzzleInfo);
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
 							
 							map_mode_state = kMMS_changeMode;
@@ -2452,6 +2454,8 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						
 						if(is_found)
 						{
+							if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+								removeChildByTag(kPMS_MT_loadPuzzleInfo);
 							recent_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, found_index);
 							
 							map_mode_state = kMMS_changeMode;
@@ -3196,6 +3200,9 @@ void PuzzleMapScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				multiTouchData.erase((int)touch);
 			}
 		}
+		
+		if(is_menu_enable)
+			startChangeMapMode();
 	}
 	else
 	{
