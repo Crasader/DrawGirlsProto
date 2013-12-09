@@ -95,6 +95,7 @@ private:
 	CCPoint getContentPosition(int t_tag);
 	void popupClose();
 	
+	vector<int> show_item_popup;
 	void itemSetting();
 	
 	void buySuccessItem(int t_clicked_item_number, int cnt);

@@ -22,6 +22,7 @@ typedef enum t_DSH_Key{
 	kDSH_Key_heartCnt,
 	kDSH_Key_heartTime,
 	kDSH_Key_haveItemCnt_int1,
+	kDSH_Key_isShowItem_int1,
 	kDSH_Key_selectedCard,
 	kDSH_Key_selectedCardLevel,
 	kDSH_Key_selectedCardPassive,

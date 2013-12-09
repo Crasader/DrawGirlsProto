@@ -30,6 +30,8 @@
 #include "KnownFriend.h"
 #include "UnknownFriends.h"
 #include <random>
+#include "ASPopupView.h"
+#include "ShowItemContent.h"
 
 enum SSP_Zorder{
 	kSSP_Z_gray = 1,
@@ -135,6 +137,40 @@ bool StageSettingPopup::init()
 	main_case->addChild(my_ilv, kSSP_Z_content);
 	
 	item_list = mySD->getStageItemList(selected_stage);
+	
+	for(int i=0;i<item_list.size();i++)
+	{
+		ITEM_CODE t_code = item_list[i];
+		if(!myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		{
+			show_item_popup.push_back(t_code);
+			myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, t_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_code)+mySGD->getBonusItemCnt(t_code));
+//			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+		}
+	}
+	myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
+	
+	if(!show_item_popup.empty())
+	{
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		ShowItemContent* t_container = ShowItemContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+		{
+			t_popup->removeFromParent();
+		}, show_item_popup);
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup, kSSP_Z_popup);
+	}
+	
 	itemSetting();
 	
 	my_ilv->setMaxPositionY();
@@ -411,23 +447,11 @@ void StageSettingPopup::itemSetting()
 			item_parent->addChild(select_menu, kSSP_Z_content, kSSP_MT_itemBase+i);
 			
 			
-			//			int price_value = mySD->getItemPrice(t_ic);
-			//			CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", price_value)->getCString(), mySGD->getFont().c_str(), 18);
-			//			price_label->setAnchorPoint(ccp(0,0.5));
-			//			price_label->setPosition(ccp(-70,5));
-			//			item_parent->addChild(price_label, kSSS_Z_content);
-			
 			CCLabelTTF* option_label = CCLabelTTF::create(mySD->getItemScript(t_ic).c_str(), mySGD->getFont().c_str(), 8, CCSizeMake(130, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 			option_label->setAnchorPoint(ccp(0,1));
 			option_label->setPosition(ccp(-73,8));
 			item_parent->addChild(option_label, kSSP_Z_content);
 			
-			//			CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 130, 23));
-			//			temp_back->setColor(ccGREEN);
-			//			temp_back->setOpacity(100);
-			//			temp_back->setAnchorPoint(ccp(0,1));
-			//			temp_back->setPosition(ccp(-73,8));
-			//			item_parent->addChild(temp_back, kSSS_Z_content);
 			
 			string buy_type = mySD->getItemCurrency(t_ic);
 			if(buy_type == "gold")
@@ -476,16 +500,31 @@ void StageSettingPopup::itemSetting()
 			selected_img->setPosition(ccp(-100, 0));
 			item_parent->addChild(selected_img, kSSP_Z_content, kSSP_MT_selectedBase+i);
 			
-			if(t_ic == kIC_rentCard)
+			
+			auto t_iter = find(show_item_popup.begin(), show_item_popup.end(), t_ic);
+			if(t_iter != show_item_popup.end())
 			{
-				if(mySGD->getSelectedFriendCardData().card_number == 0)
+				if(t_ic == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0)
+				{
+					select_menu->setEnabled(false);
+					buy_menu->setEnabled(false);
+					is_selected_item.push_back(false);
+				}
+				else
+				{
+					is_selected_item.push_back(true);
+					selected_img->setVisible(true);
+				}
+			}
+			else
+			{
+				is_selected_item.push_back(false);
+				if(t_ic == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0)
 				{
 					select_menu->setEnabled(false);
 					buy_menu->setEnabled(false);
 				}
 			}
-			
-			is_selected_item.push_back(false);
 		}
 		else
 		{

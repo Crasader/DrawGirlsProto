@@ -806,6 +806,10 @@ void StarGoldData::myInit()
 		before_use_item.push_back(false);
 		is_using_item.push_back(false);
 	}
+	
+	bonus_item_cnt.push_back(0); // empty
+	for(int i=kIC_attack;i<=kIC_rentCard;i++)
+		bonus_item_cnt.push_back(0);
 
 
 	if(myDSH->getIntegerForKey(kDSH_Key_heartTime) == 0)

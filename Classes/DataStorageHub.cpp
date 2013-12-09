@@ -129,6 +129,7 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_savedGold)							return_value = "sg";
 	else if(t_name == kDSH_Key_savedFriendPoint)					return_value = "sfp";
 	else if(t_name == kDSH_Key_haveItemCnt_int1)					return_value = "hic%d";
+	else if(t_name == kDSH_Key_isShowItem_int1)						return_value = "isi%d";
 	
 	else if(t_name == kDSH_Key_heartCnt)							return_value = "hc";
 	else if(t_name == kDSH_Key_heartTime)							return_value = "ht";
@@ -215,7 +216,10 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 	setIntegerForKey(kDSH_Key_savedFriendPoint, data[getKey(kDSH_Key_savedFriendPoint)].asInt(), false);
 	
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
+	{
 		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt(), false);
+		setBoolForKey(kDSH_Key_isShowItem_int1, i, data[getKey(kDSH_Key_isShowItem_int1)][i].asBool(), false);
+	}
 	
 	setIntegerForKey(kDSH_Key_cardTakeCnt, data[getKey(kDSH_Key_cardTakeCnt)].asInt(), false);
 	int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
@@ -296,7 +300,10 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	else if(t_key == kSaveUserData_Key_item)
 	{
 		for(int i=kIC_attack;i<=kIC_rentCard;i++)
+		{
 			data[getKey(kDSH_Key_haveItemCnt_int1)][i] = getIntegerForKey(kDSH_Key_haveItemCnt_int1, i); // 0
+			data[getKey(kDSH_Key_isShowItem_int1)][i] = getBoolForKey(kDSH_Key_isShowItem_int1, i);
+		}
 	}
 	else if(t_key == kSaveUserData_Key_cardsInfo)
 	{
@@ -392,63 +399,68 @@ void DataStorageHub::saveAllUserData (jsonSelType t_saved)
 }
 void DataStorageHub::resetDSH ()
 {
-	setIntegerForKey(kDSH_Key_savedStar, default_ruby);
-	setIntegerForKey(kDSH_Key_savedGold, default_gold);
-	setIntegerForKey(kDSH_Key_savedFriendPoint, 0);
+	setIntegerForKey(kDSH_Key_savedStar, default_ruby, false);
+	setIntegerForKey(kDSH_Key_savedGold, default_gold, false);
+	setIntegerForKey(kDSH_Key_savedFriendPoint, 0, false);
 	
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
-		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0);
+	{
+		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0, false);
+		setBoolForKey(kDSH_Key_isShowItem_int1, i, false, false);
+	}
 	
 	int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
 	for(int i=1;i<=card_take_cnt;i++)
 	{
 		int take_card_number = getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-		setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, 0);
-		setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, 0);
-		setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, 0);
-		setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, "");
+		setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, 0, false);
+		setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, 0, false);
+		setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, 0, false);
+		setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, "", false);
 		
 		
-		setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, 1);
-		setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number, 0);
-		setStringForKey(kDSH_Key_cardPassive_int1, take_card_number, "");
+		setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, 1, false);
+		setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number, 0, false);
+		setStringForKey(kDSH_Key_cardPassive_int1, take_card_number, "", false);
 	}
-	setIntegerForKey(kDSH_Key_cardTakeCnt, 0);
+	setIntegerForKey(kDSH_Key_cardTakeCnt, 0, false);
 	
-	setIntegerForKey(kDSH_Key_allHighScore, 0);
+	setIntegerForKey(kDSH_Key_allHighScore, 0, false);
 	
 	int opened_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
 	for(int i=1;i<=opened_puzzle_cnt+2;i++)
-		setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, false);
-	setIntegerForKey(kDSH_Key_openPuzzleCnt, 0);
+		setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, false, false);
+	setIntegerForKey(kDSH_Key_openPuzzleCnt, 0, false);
 	
 	int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
 	for(int i=1;i<=have_ticket_cnt;i++)
-		setStringForKey(kDSH_Key_ticketUserId_int1, i, "");
-	setIntegerForKey(kDSH_Key_haveTicketCnt, 0);
+		setStringForKey(kDSH_Key_ticketUserId_int1, i, "", false);
+	setIntegerForKey(kDSH_Key_haveTicketCnt, 0, false);
 	
 	int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
 	for(int i=1;i<=open_stage_cnt;i++)
 	{
-		setBoolForKey(kDSH_Key_isOpenStage_int1, getIntegerForKey(kDSH_Key_openStageNumber_int1, i), false);
-		setIntegerForKey(kDSH_Key_openStageNumber_int1, i, 0);
+		setBoolForKey(kDSH_Key_isOpenStage_int1, getIntegerForKey(kDSH_Key_openStageNumber_int1, i), false, false);
+		setIntegerForKey(kDSH_Key_openStageNumber_int1, i, 0, false);
 	}
-	setIntegerForKey(kDSH_Key_openStageCnt, 1);
+	setIntegerForKey(kDSH_Key_openStageCnt, 1, false);
 	
 	
 	int clear_stage_cnt = getIntegerForKey(kDSH_Key_clearStageCnt);
 	for(int i=1;i<=clear_stage_cnt;i++)
 	{
-		setBoolForKey(kDSH_Key_isClearStage_int1, getIntegerForKey(kDSH_Key_clearStageNumber_int1, i), false);
-		setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, 0);
+		setBoolForKey(kDSH_Key_isClearStage_int1, getIntegerForKey(kDSH_Key_clearStageNumber_int1, i), false, false);
+		setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, 0, false);
 	}
-	setIntegerForKey(kDSH_Key_clearStageCnt, 0);
+	setIntegerForKey(kDSH_Key_clearStageCnt, 0, false);
 	
-	setStringForKey(kDSH_Key_nick, "");
+	setStringForKey(kDSH_Key_nick, "", false);
 	
-	setIntegerForKey(kDSH_Key_selectedCharacter, 0);
+	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
 	for(int i=2;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
-		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, true);
+		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
+	
+	fFlush();
 }
 bool DataStorageHub::isCheatKeyEnable ()
 {

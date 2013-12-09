@@ -205,6 +205,20 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setSPGetTime(result_data["SPGetTime"].asInt());
 		mySGD->setSPGetHeart(result_data["SPGetHeart"].asInt());
 		mySGD->setGachaOnePercentFee(result_data["gachaOnePercentFee"].asInt());
+		
+		mySGD->setBonusItemCnt(kIC_fast, result_data["bonusItemCntFast"].asInt());
+		mySGD->setBonusItemCnt(kIC_critical, result_data["bonusItemCntCritical"].asInt());
+		mySGD->setBonusItemCnt(kIC_subOneDie, result_data["bonusItemCntSubOneDie"].asInt());
+		mySGD->setBonusItemCnt(kIC_doubleItem, result_data["bonusItemCntDoubleItem"].asInt());
+		mySGD->setBonusItemCnt(kIC_silence, result_data["bonusItemCntSilence"].asInt());
+		mySGD->setBonusItemCnt(kIC_subNothing, result_data["bonusItemCntSubNothing"].asInt());
+		mySGD->setBonusItemCnt(kIC_longTime, result_data["bonusItemCntLongTime"].asInt());
+		mySGD->setBonusItemCnt(kIC_bossLittleEnergy, result_data["bonusItemCntBossLittleEnergy"].asInt());
+		mySGD->setBonusItemCnt(kIC_subSmallSize, result_data["bonusItemCntSubSmallSize"].asInt());
+		mySGD->setBonusItemCnt(kIC_smallArea, result_data["bonusItemCntSmallArea"].asInt());
+		mySGD->setBonusItemCnt(kIC_widePerfect, result_data["bonusItemCntWidePerfect"].asInt());
+		mySGD->setBonusItemCnt(kIC_randomChange, result_data["bonusItemCntRandomChange"].asInt());
+		mySGD->setBonusItemCnt(kIC_rentCard, result_data["bonusItemCntRentCard"].asInt());
 	}
 	else
 	{

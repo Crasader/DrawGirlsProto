@@ -308,7 +308,14 @@ public:
 	}
 	
 	void selectFriendCard();
-	
+	void setBonusItemCnt(ITEM_CODE t_code, int t_cnt)
+	{
+		bonus_item_cnt[t_code] = t_cnt;
+	}
+	int getBonusItemCnt(ITEM_CODE t_code)
+	{
+		return bonus_item_cnt[t_code];
+	}
 	
 private:
 	CCLabelBMFont* star_label;
@@ -327,6 +334,8 @@ private:
 	bool is_accept_help;
 	string accept_help_target_user_id;
 	string accept_help_target_user_nick;
+	
+	vector<int> bonus_item_cnt;
 
 	int clear_reward_gold;
 	
@@ -369,8 +378,6 @@ private:
 	
 	
 	void myInit();
-	
-
 	
 //	string remove_message_member_id; 
 //	string remove_message_mail_no;

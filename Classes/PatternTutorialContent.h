@@ -28,16 +28,6 @@ public:
 		return t_ctc;
 	}
 	
-//	virtual void completedAnimationSequenceNamed (char const * name)
-//	{
-//		string t_name = name;
-//		
-//		if(t_name == "Default Timeline")
-//		{
-//			close_menu->setVisible(true);
-//		}
-//	}
-	
 private:
 	int touch_priority;
 	CCMenu* close_menu;
