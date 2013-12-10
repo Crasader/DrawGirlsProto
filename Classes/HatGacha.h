@@ -62,7 +62,7 @@ enum class SceneState
 	kShowReward1,
 	kShowReward2
 };
-class HatGachaSub : public GachaBase
+class HatGachaSub : public CCLayer
 {
 protected:
 	CCMenuLambda* m_menu;
@@ -113,12 +113,49 @@ public:
 				m_callback();
 				removeFromParent();
 			}
-			
 		}
 		
 		return true;
 	}
-	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	static __TYPE__* create(KSAlertView* av) \
+	{ \
+    __TYPE__ *pRet = new __TYPE__(); \
+    if (pRet && pRet->init(av))
+    { \
+			pRet->autorelease(); \
+			return pRet; \
+    } \
+    else \
+    { \
+			delete pRet; \
+			pRet = NULL; \
+			return NULL; \
+    } \
+	}
+	static __TYPE__* create(std::function<void(void)> callback) \
+	{ \
+    __TYPE__ *pRet = new __TYPE__(); \
+    if (pRet && pRet->init(callback))
+    { \
+			pRet->autorelease(); \
+			return pRet; \
+    } \
+    else \
+    { \
+			delete pRet; \
+			pRet = NULL; \
+			return NULL; \
+    } \
+	}
+	bool init(KSAlertView* av)
+	{
+		return init(av, nullptr);
+	}
+	bool init(std::function<void(void)> callback)
+	{
+	 return init(nullptr, callback);
+	}
+	
 	virtual bool init(KSAlertView* av, std::function<void(void)> callback)
 	{
 		CCLayer::init();
@@ -524,21 +561,7 @@ public:
 		return centerPosition +
 		ccp(r * cos(t), r * 3.f/4.f * sin(t)) + ccp(0, 0);
 	}
-	static __TYPE__* create(KSAlertView* av, std::function<void(void)> callback) \
-	{ \
-    __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(av, callback))
-    { \
-			pRet->autorelease(); \
-			return pRet; \
-    } \
-    else \
-    { \
-			delete pRet; \
-			pRet = NULL; \
-			return NULL; \
-    } \
-	}
+	
 };
 #undef __TYPE__
 
