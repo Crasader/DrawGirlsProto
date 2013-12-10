@@ -999,7 +999,7 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	reader->release();
 	targetingImg->setPosition(t_sp);
 	
-	targetingImg->setScale(t_sSize);
+	targetingImg->setScale(1.f);
 	targetingImg->setRotation(t_sAngle);
 	
 	addChild(targetingImg);
@@ -1211,7 +1211,7 @@ void FallMeteor::selfRemove ()
 }
 void FallMeteor::initParticle ()
 {
-	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb1.ccbi");
+	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
 	CCSprite* particle = ret.first;
 	
 	

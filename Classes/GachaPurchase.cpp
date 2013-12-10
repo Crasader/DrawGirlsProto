@@ -12,7 +12,8 @@
 #include "GachaBase.h"
 #include "PuzzleMapScene.h"
 #include "HatGacha.h"
-#include "HatGacha.h"
+#include "HorseGacha.h"
+
 enum GachaPurchaseZorder{
 	kGachaPurchaseZorder_gray = 1,
 	kGachaPurchaseZorder_back,
@@ -441,27 +442,34 @@ void GachaPurchase::visibling()
 			getChildByTag(kGachaPurchaseMenuTag_gachaBase+i-1)->runAction(t_move);
 		}
 		
-		
-		HatGachaSub* p = HatGachaSub::create(NULL,
-																 [=](){
-																	 CCLog("hat close");
-																	 
-																	 CCMoveTo* left_in_move = CCMoveTo::create(0.3f, ccp(240,160));
-																	 CCDelayTime* left_delay = CCDelayTime::create(0.3f);
-																	 CCMoveTo* left_out_move = CCMoveTo::create(0.3f, ccp(0, 160));
-																	 CCCallFunc* left_remove = CCCallFunc::create(left_curtain, callfunc_selector(CCSprite::removeFromParent));
-																	 CCSequence* left_seq = CCSequence::create(left_in_move, left_delay, left_out_move, left_remove, NULL);
-																	 left_curtain->runAction(left_seq);
-																	 
-																	 CCMoveTo* right_in_move = CCMoveTo::create(0.3f, ccp(240,160));
-																	 CCDelayTime* right_delay = CCDelayTime::create(0.3f);
-																	 CCCallFunc* remove_main = CCCallFunc::create(main_case, callfunc_selector(CCSprite::removeFromParent));
-																	 CCMoveTo* right_out_move = CCMoveTo::create(0.3f, ccp(480,160));
-																	 CCCallFunc* right_remove = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
-																	 CCSequence* right_seq = CCSequence::create(right_in_move, right_delay, remove_main, right_out_move, right_remove, NULL);
-																	 right_curtain->runAction(right_seq);
-																 });
-		p->setFinalAction(target_in, delegate_in);
+//		auto target = target_in;
+//		auto delegate = delegate_in;
+//		HorseGachaSub* p = HorseGachaSub::create([=](){
+//			(target->*delegate)();
+//		});
+		auto target = target_in;
+		auto delegate = delegate_in;
+		HatGachaSub* p = HatGachaSub::create([=](){
+			CCLog("hat close");
+			
+			CCMoveTo* left_in_move = CCMoveTo::create(0.3f, ccp(240,160));
+			CCDelayTime* left_delay = CCDelayTime::create(0.3f);
+			CCMoveTo* left_out_move = CCMoveTo::create(0.3f, ccp(0, 160));
+			CCCallFunc* left_remove = CCCallFunc::create(left_curtain, callfunc_selector(CCSprite::removeFromParent));
+			CCSequence* left_seq = CCSequence::create(left_in_move, left_delay, left_out_move, left_remove, NULL);
+			left_curtain->runAction(left_seq);
+			
+			CCMoveTo* right_in_move = CCMoveTo::create(0.3f, ccp(240,160));
+			CCDelayTime* right_delay = CCDelayTime::create(0.3f);
+			CCCallFunc* remove_main = CCCallFunc::create(main_case, callfunc_selector(CCSprite::removeFromParent));
+			CCMoveTo* right_out_move = CCMoveTo::create(0.3f, ccp(480,160));
+			CCCallFunc* right_remove = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
+			CCSequence* right_seq = CCSequence::create(right_in_move, right_delay, remove_main, right_out_move, right_remove, NULL);
+			right_curtain->runAction(right_seq);
+			(target->*delegate)();
+			
+		});
+//		p->setFinalAction(target_in, delegate_in);
 		getParent()->addChild(p, kPMS_Z_popup);
 	}
 }

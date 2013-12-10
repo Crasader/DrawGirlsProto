@@ -31,7 +31,7 @@ bool HatGacha::init(std::function<void(void)> closeCallback)
 	CCLayer::init();
 	KSAlertView* av = KSAlertView::create();
 	
-	HatGachaSub* gs = HatGachaSub::create(av, nullptr);
+	HatGachaSub* gs = HatGachaSub::create(av);
 	
 	av->setContentNode(gs);
 	av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));

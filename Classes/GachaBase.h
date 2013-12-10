@@ -15,6 +15,9 @@ USING_NS_CC;
 
 class GachaBase : public CCLayer
 {
+private:
+	CCObject* target_fianl;
+	SEL_CallFunc delegate_final;
 public:
 	void setFinalAction(CCObject* t_final, SEL_CallFunc d_final)
 	{
@@ -22,14 +25,12 @@ public:
 		delegate_final = d_final;
 	}
 	
-	virtual ~GachaBase()
+	void finalAction()
 	{
 		(target_fianl->*delegate_final)();
 	}
 	
-private:
-	CCObject* target_fianl;
-	SEL_CallFunc delegate_final;
+
 };
 
 #endif /* defined(__DGproto__GachaBase__) */
