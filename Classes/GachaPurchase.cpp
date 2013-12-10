@@ -47,10 +47,11 @@ void GachaPurchase::setInAllObjectAction(CCObject* t_in, SEL_CallFunc d_in)
 	delegate_in = d_in;
 }
 
-GachaPurchase* GachaPurchase::create(GachaPurchaseStartMode start_mode /*= kGachaPurchaseStartMode_select*/)
+GachaPurchase* GachaPurchase::create(GachaPurchaseStartMode start_mode /*= kGachaPurchaseStartMode_select*/,
+																		 std::function<void(void)> t_finish)
 {
 	GachaPurchase* t_gp = new GachaPurchase();
-	if(t_gp && t_gp->init(start_mode))
+	if(t_gp && t_gp->init(start_mode, t_finish))
 	{
 		t_gp->autorelease();
 		return t_gp;
@@ -59,13 +60,13 @@ GachaPurchase* GachaPurchase::create(GachaPurchaseStartMode start_mode /*= kGach
 	return NULL;
 }
 
-bool GachaPurchase::init(GachaPurchaseStartMode start_mode)
+bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(void)> t_finish)
 {
 	if(!CCLayer::init())
 	{
 		return false;
 	}
-	
+	finish_function = t_finish;
 	recent_mode = start_mode;
 	
 	is_menu_enable = false;
@@ -449,8 +450,9 @@ void GachaPurchase::visibling()
 //		});
 		auto target = target_in;
 		auto delegate = delegate_in;
-		HatGachaSub* p = HatGachaSub::create([=](){
-			CCLog("hat close");
+		auto finalFunction = [=]()
+		{
+			CCLog("gacha close");
 			
 			CCMoveTo* left_in_move = CCMoveTo::create(0.3f, ccp(240,160));
 			CCDelayTime* left_delay = CCDelayTime::create(0.3f);
@@ -467,10 +469,39 @@ void GachaPurchase::visibling()
 			CCSequence* right_seq = CCSequence::create(right_in_move, right_delay, remove_main, right_out_move, right_remove, NULL);
 			right_curtain->runAction(right_seq);
 			(target->*delegate)();
+			if(finish_function)
+				finish_function();
+		};
+		
+		switch(recent_gacha)
+		{
+			case 0:
+			{
+				HorseGachaSub* p = HorseGachaSub::create(finalFunction, recent_mode);
+				getParent()->addChild(p, kPMS_Z_popup);
+			}
+				break;
+			case 1:
+			{
+				HatGachaSub* p = HatGachaSub::create(finalFunction, recent_mode);
+				getParent()->addChild(p, kPMS_Z_popup);
+			}
+				break;
 			
-		});
-//		p->setFinalAction(target_in, delegate_in);
-		getParent()->addChild(p, kPMS_Z_popup);
+				break;
+			case 2:
+			{
+				HorseGachaSub* p = HorseGachaSub::create(finalFunction, recent_mode);
+				getParent()->addChild(p, kPMS_Z_popup);
+			}
+				break;
+			case 3:
+			{
+				HorseGachaSub* p = HorseGachaSub::create(finalFunction, recent_mode);
+				getParent()->addChild(p, kPMS_Z_popup);
+			}
+		}
+		
 	}
 }
 

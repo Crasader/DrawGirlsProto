@@ -26,7 +26,7 @@
 #include "KnownFriend.h"
 
 #include "StarGoldData.h"
-
+#include "GachaPurchase.h"
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -491,9 +491,11 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 												 [=](Json::Value r)
 												 {
-													 addChild(HatGacha::create([=](){
-														 CCLog("hat close");
-													 }), kMP_Z_helpAccept);
+													 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
+																													[=](){
+																														CCLog("hat close");
+																													}
+																													), kMP_Z_helpAccept);
 												 });
 					
 				 }
