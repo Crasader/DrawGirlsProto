@@ -718,6 +718,10 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 void TitleRenewalScene::endingAction()
 {
 	mySGD->selectFriendCard();
+	
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	
 	CCDelayTime* t_delay = CCDelayTime::create(0.2f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);

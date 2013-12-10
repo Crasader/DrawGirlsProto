@@ -69,6 +69,8 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 	virtual void onEnterTransitionDidFinish();
+	
+	void controlStunOff();
 		
 private:
 	
@@ -147,7 +149,8 @@ private:
 	
 	void stopSpecialAttack()
 	{
-		((ControlJoystickButton*)mControl)->resetTouch();
+		mControl->isStun = false;
+//		((ControlJoystickButton*)mControl)->resetTouch();
 //		mControl->setTouchEnabled(true);
 	}
 	

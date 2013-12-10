@@ -149,6 +149,12 @@ void Maingame::randomingRectView()
 	}
 }
 
+void Maingame::controlStunOff()
+{
+	mControl->isStun = false;
+	((ControlJoystickButton*)mControl)->resetTouch();
+}
+
 void Maingame::finalSetting()
 {
 	init_state = kMIS_startGame;
@@ -480,7 +486,7 @@ void Maingame::touchEnd()
 	myJack->isStun = true;
 	mControl->isStun = true;
 	//		mControl->setTouchEnabled(false);
-	((ControlJoystickButton*)mControl)->stopMySchedule();
+//	((ControlJoystickButton*)mControl)->stopMySchedule();
 	if(mControl->mType == kCT_Type_Joystick_button)
 		myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
 	myJack->changeDirection(directionStop, directionStop);
@@ -658,6 +664,7 @@ void Maingame::allStopSchedule()
 void Maingame::startSpecialAttack()
 {
 	myJack->changeDirection(directionStop, directionStop);
+	mControl->isStun = true;
 	//		mControl->setTouchEnabled(false);
 }
 

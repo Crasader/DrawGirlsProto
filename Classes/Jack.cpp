@@ -1145,7 +1145,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																					{
 																						exit_target->onEnter();
-																						((Maingame*)exit_target)->touchOn();
+																						((Maingame*)exit_target)->controlStunOff();
 																						t_popup->removeFromParent();
 																					});
 				
@@ -1205,7 +1205,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																					{
 																						exit_target->onEnter();
-																						((Maingame*)exit_target)->touchOn();
+																						((Maingame*)exit_target)->controlStunOff();
 																						t_popup->removeFromParent();
 																					});
 				
@@ -1265,7 +1265,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																					{
 																						exit_target->onEnter();
-																						((Maingame*)exit_target)->touchOn();
+																						((Maingame*)exit_target)->controlStunOff();
 																						t_popup->removeFromParent();
 																					});
 				
