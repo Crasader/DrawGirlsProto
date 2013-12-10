@@ -348,6 +348,12 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		return;
 	}
 	
+	if(button_touch && !myJack->isDie && !myJack->isDrawingOn && myJack->getJackState() == jackStateNormal)
+	{
+		myJack->isDrawingOn = true;
+		myJack->setJackState(jackStateDrawing);
+	}
+	
 	if(distanceValue > minimumDistanceJ)
 	{
 		IntPoint jackPoint = myGD->getJackPoint();
@@ -526,6 +532,7 @@ void ControlJoystickButton::resetTouch()
 {
 	button_touch = NULL;
 	joystick_touch = NULL;
+	offButton();
 	myJack->willBackTracking = false;
 	myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
 }

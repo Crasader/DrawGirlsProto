@@ -232,6 +232,8 @@ public:
 	
 	virtual void completedAnimationSequenceNamed(const char *name);
 	
+	bool isDie;
+	
 private:
 	CCSprite* touchPointSpr_byJoystick;
 	CCSprite* directionSpr_byJoystick;
@@ -286,7 +288,6 @@ private:
 	IntPoint afterPoint;
 	
 	int dieEffectCnt;
-	bool isDie;
 	
 	float speed_up_value;
 	float alpha_speed_value;

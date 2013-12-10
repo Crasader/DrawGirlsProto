@@ -385,7 +385,45 @@ void StageListDown::menuAction(CCObject *sender)
 void StageListDown::successAction()
 {
 	unschedule(schedule_selector(StageListDown::downloadingAction));
-	if(ing_download_cnt >= df_list.size() + sf_list.size())
+	
+	if(ing_download_cnt <= df_list.size())
+	{
+		SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img, false);
+		if(sf_list.empty())
+		{
+			SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img, false);
+			NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version, false);
+			mySDS->fFlush(puzzle_number, kSDS_PZ_bottom_s);
+			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+			
+			for(int i=0;i<save_version_list.size();i++)
+			{
+				NSDS_SI(save_version_list[i].x, kSDS_SI_version_i, save_version_list[i].y);
+				mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
+			}
+			
+			download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
+			state_ment->setString("퍼즐 이미지 다운로드 완료.");
+			(target_success->*delegate_success)();
+			removeFromParent();
+		}
+		else
+		{
+			ing_download_cnt++;
+			ing_download_per = 0.f;
+			download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
+			startDownload();
+		}
+	}
+	else if(ing_download_cnt < df_list.size() + sf_list.size())
+	{
+		SDS_SS(kSDF_cardInfo, sf_list[ing_download_cnt-df_list.size()-1].key, sf_list[ing_download_cnt-df_list.size()-1].img, false);
+		ing_download_cnt++;
+		ing_download_per = 0.f;
+		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
+		startDownload();
+	}
+	else
 	{
 		SDS_SS(kSDF_cardInfo, sf_list[ing_download_cnt-df_list.size()-1].key, sf_list[ing_download_cnt-df_list.size()-1].img, false);
 		
@@ -428,22 +466,6 @@ void StageListDown::successAction()
 		state_ment->setString("퍼즐 이미지 다운로드 완료.");
 		(target_success->*delegate_success)();
 		removeFromParent();
-	}
-	else if(ing_download_cnt > df_list.size())
-	{
-		SDS_SS(kSDF_cardInfo, sf_list[ing_download_cnt-df_list.size()-1].key, sf_list[ing_download_cnt-df_list.size()-1].img, false);
-		ing_download_cnt++;
-		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
-		startDownload();
-	}
-	else
-	{
-		SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img, false);
-		ing_download_cnt++;
-		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
-		startDownload();
 	}
 }
 
