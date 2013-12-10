@@ -271,9 +271,14 @@ void Jack::moveTest()
 		{
 			afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
 			
+			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+			{
+				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+			}
+			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_dv.dx,t_speed*c_dv.dy));
 			turnPosition = checkOutlineTurnPosition(turnPosition);
-			
 			setPosition(turnPosition);
 			
 			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
@@ -306,9 +311,14 @@ void Jack::moveTest()
 			setJackState(jackStateDrawing);
 			afterPoint = IntPoint(c_checkPoint.x, c_checkPoint.y);
 			
+			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+			{
+				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+			}
+			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_dv.dx,t_speed*c_dv.dy));
 			turnPosition = checkOutlineTurnPosition(turnPosition);
-			
 			setPosition(turnPosition);
 			
 			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
@@ -332,9 +342,14 @@ void Jack::moveTest()
 		{
 			afterPoint = IntPoint(c_s_checkPoint.x, c_s_checkPoint.y);
 			
+			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+			{
+				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+			}
+			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_s_dv.dx,t_speed*c_s_dv.dy));
 			turnPosition = checkOutlineTurnPosition(turnPosition);
-			
 			setPosition(turnPosition);
 			
 			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
@@ -375,9 +390,14 @@ void Jack::moveTest()
 			// jack drawing
 			afterPoint = IntPoint(checkPoint.x, checkPoint.y);
 			
+			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+			{
+				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+			}
+			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*dv.dx,t_speed*dv.dy));
 			turnPosition = checkOutlineTurnPosition(turnPosition);
-			
 			setPosition(turnPosition);
 			
 			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
@@ -409,9 +429,14 @@ void Jack::moveTest()
 			// jack drawing
 			afterPoint = IntPoint(s_checkPoint.x, s_checkPoint.y);
 			
+			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+			{
+				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+			}
+			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv.dx,t_speed*s_dv.dy));
 			turnPosition = checkOutlineTurnPosition(turnPosition);
-			
 			setPosition(turnPosition);
 			
 			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
@@ -443,9 +468,14 @@ void Jack::moveTest()
 			// jack drawing
 			afterPoint = IntPoint(s_checkPoint_reverse.x, s_checkPoint_reverse.y);
 			
+			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+			{
+				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+			}
+			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv_reverse.dx,t_speed*s_dv_reverse.dy));
 			turnPosition = checkOutlineTurnPosition(turnPosition);
-			
 			setPosition(turnPosition);
 			
 			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
@@ -501,6 +531,12 @@ void Jack::moveTest()
 		
 		if(afterDirection == directionStop)
 		{
+			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+			{
+				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+				afterPoint = IntPoint::convertToIntPoint(getPosition());
+			}
 			setPosition(ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1));
 //			direction = afterDirection;
 			stopMove();
@@ -655,7 +691,6 @@ void Jack::setPosition( CCPoint t_sp )
 //	{
 //		CCLog("what?!");
 //	}
-	
 	CCNode::setPosition(t_sp);
 	myGD->communication("Main_moveGamePosition", t_sp);
 	myGD->communication("VS_setMoveGamePosition", t_sp);
