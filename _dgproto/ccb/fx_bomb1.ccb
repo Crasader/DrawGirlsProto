@@ -239,7 +239,7 @@
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
-											<integer>150</integer>
+											<integer>50</integer>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -254,7 +254,7 @@
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
-											<integer>255</integer>
+											<integer>230</integer>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -269,7 +269,7 @@
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
-											<integer>255</integer>
+											<integer>230</integer>
 										</dict>
 										<dict>
 											<key>easing</key>
