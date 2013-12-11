@@ -1,9 +1,13 @@
 #include "HorseGacha.h"
 #include "KSUtil.h"
-bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback)
+#include "StarGoldData.h"
+
+
+bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, GachaPurchaseStartMode gsm)
 {
 	CCLayer::init();
 
+	m_gachaMode = gsm;
 	setTouchEnabled(true);
 	CCSprite* back = CCSprite::create("table12.png");
 	back->setPosition(ccp(240, 160));
@@ -200,29 +204,78 @@ void HorseGachaSub::update(float dt)
 	{
 		m_state = HorseSceneState::kFinish;
 		KSAlertView* av = KSAlertView::create();
+		
+		CCNode* contentParent = CCNode::create();
+		
+		KSNode* content = new KSNode();
+		content->init();
+		content->autorelease();
+		contentParent->addChild(content);
+		av->setContentNode(contentParent);
 		av->setCloseOnPress(true);
 		av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
 		
 		av->setBorderScale(0.9f);
 		av->setCenterY(150);
 		
-		auto ttf = CCLabelTTF::create("축하!!", "", 12.f);
-		ttf->setColor(ccc3(0, 0, 0));
-		
 		av->setContentNode(
-											 ttf
+											 contentParent
 											 );
-		av->setContentSize(ttf->getDimensions());
+		if(m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind == HorseRewardKind::kRuby)
+		{
+			content->addChild(CCSprite::create("price_ruby_img.png"));
+		}
+		else if(m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind == HorseRewardKind::kGold)
+		{
+			content->addChild(CCSprite::create("price_gold_img.png"));
+		}
+		int selectedHorseOrder = -1;
+		for(int i=0; i<m_arriveOrder.size(); i++)
+		{
+			if(m_arriveOrder[i] == m_selectedHorseIndex)
+			{
+				selectedHorseOrder = i;
+				break;
+			}
+		}
+		content->addChild(CCLabelTTF::create
+											(CCString::createWithFormat
+											 ("+%d",
+												
+												m_rewards[ selectedHorseOrder ]->m_value)->getCString(), mySGD->getFont().c_str(), 25));
 		
-		av->addButton(CCMenuItemImageLambda::create
-									(
-									 "gacha_replay.png",
-									 "gacha_replay.png",
-									 [=](CCObject* e){
-										 // 다시 해야되는데, 커튼이 닫히는거부터... 시작함.
-									 }
-									 ));
-		
+		if(m_gachaMode == kGachaPurchaseStartMode_select)
+		{
+			auto retryBtn = CCMenuItemImageLambda::create
+			(
+			 "gacha_replay.png",
+			 "gacha_replay.png",
+			 [=](CCObject* e){
+				 // 다시 해야되는데, 커튼이 닫히는거부터... 시작함.
+				 
+				 if(mySGD->getGold() >= 500)
+				 {
+					 mySGD->setStar(mySGD->getStar() - 500);
+					 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+															 {
+																 
+															 });
+					 getParent()->addChild(HorseGachaSub::create(m_callback, m_gachaMode),
+																 this->getZOrder());
+					 this->removeFromParent();
+				 }
+				 else
+				 {
+					 CCLog("돈 없음");
+				 }
+			 }
+			 );
+			auto don = CCSprite::create("price_gold_img.png");
+			don->setPosition(ccp(50, 20));
+			don->addChild(CCLabelTTF::create("-500", mySGD->getFont().c_str(), 25));
+			retryBtn->addChild(don);
+			av->addButton(retryBtn);
+		}
 		av->addButton(CCMenuItemImageLambda::create
 									(
 									 "gacha_ok.png",
@@ -231,6 +284,24 @@ void HorseGachaSub::update(float dt)
 									 {
 										 CCLog("%d %d", m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind, m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_value);
 //										 removeFromParent();
+										 if(m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind == HorseRewardKind::kRuby)
+										 {
+											 mySGD->setStar(mySGD->getStar() + m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_value);
+											 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+																					 {
+																						 
+																					 });
+
+										 }
+										 else if(m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind == HorseRewardKind::kGold)
+										 {
+											 mySGD->setGold(mySGD->getGold() + m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_value);
+											 myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v)
+																					 {
+																						 
+																					 });
+
+										 }
 										 
 										 if(m_parent)
 										 {
@@ -246,7 +317,10 @@ void HorseGachaSub::update(float dt)
 
 									 }
 									 ));
-		addChild(av);
+		content->setPosition(ccp((av->getViewSize() / 2.f).width,
+														 -(av->getViewSize() / 2.f).height));
+		content->alignItemsVerticallyWithPadding(30);
+		addChild(av, 3);
 		av->show();
 		
 	}

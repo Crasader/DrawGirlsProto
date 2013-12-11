@@ -29,18 +29,20 @@ public:
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
 	
-	static GachaPurchase* create(GachaPurchaseStartMode start_mode = kGachaPurchaseStartMode_select);
+	static GachaPurchase* create(GachaPurchaseStartMode start_mode = kGachaPurchaseStartMode_select,
+															 std::function<void(void)> t_finish = nullptr);
 //    CREATE_FUNC(GachaPurchase);
 	
 	virtual void onEnter();
 	
-	virtual bool init(GachaPurchaseStartMode start_mode);
+	virtual bool init(GachaPurchaseStartMode start_mode, std::function<void(void)> t_finish);
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	void setOutAllObjectAction(CCObject* t_out, SEL_CallFunc d_out);
 	void setInAllObjectAction(CCObject* t_in, SEL_CallFunc d_in);
 	
 private:
+	std::function<void(void)> finish_function;
 	GachaPurchaseStartMode recent_mode;
 	
 	CCObject* target_final;

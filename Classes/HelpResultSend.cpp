@@ -4,6 +4,7 @@
 #include "StarGoldData.h"
 #include "hspConnector.h"
 #include "HatGacha.h"
+#include "GachaPurchase.h"
 
 HelpResultSend::HelpResultSend()
 {
@@ -35,11 +36,11 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 	{
 		// 도움이 성공되었다.
 		
-		auto hatgacha = HatGacha::create([=](){
-			// 모자 돌리기 끝.
-			removeFromParent();
-		});
-		addChild(hatgacha, 1);
+		addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
+																	 [=](){
+																		 removeFromParent();
+																	 }
+																	 ), 1);
 		
 		
 		Json::Value p;

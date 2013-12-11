@@ -12,7 +12,7 @@ USING_NS_CC;
 #include "FromTo.h"
 #include "KSUtil.h"
 #include "StarGoldData.h"
-
+#include "GachaPurchase.h"
 
 
 
@@ -66,6 +66,7 @@ class HorseGachaSub : public CCLayer
 {
 protected:
 //	CCSprite* aHorse;
+	GachaPurchaseStartMode m_gachaMode;
 	CCPoint m_trackPosition;
 	CCMenuLambda* m_menu;
 	std::vector<int> m_arriveOrder;
@@ -100,10 +101,10 @@ public:
 		return true;
 	}
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	static __TYPE__* create(KSAlertView* av) \
+	static __TYPE__* create(KSAlertView* av, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(av))
+    if (pRet && pRet->init(av, gsm))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -115,10 +116,10 @@ public:
 			return NULL; \
     } \
 	}
-	static __TYPE__* create(std::function<void(void)> callback) \
+	static __TYPE__* create(std::function<void(void)> callback, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward)  \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(callback))
+    if (pRet && pRet->init(callback, gsm))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -130,15 +131,15 @@ public:
 			return NULL; \
     } \
 	}
-	bool init(KSAlertView* av)
+	bool init(KSAlertView* av, GachaPurchaseStartMode gsm)
 	{
-		return init(av, nullptr);
+		return init(av, nullptr, gsm);
 	}
-	bool init(std::function<void(void)> callback)
+	bool init(std::function<void(void)> callback, GachaPurchaseStartMode gsm)
 	{
-		return init(nullptr, callback);
+		return init(nullptr, callback, gsm);
 	}
-	virtual bool init(KSAlertView* av, std::function<void(void)> callback);
+	virtual bool init(KSAlertView* av, std::function<void(void)> callback, GachaPurchaseStartMode gsm);
 	
 	virtual void update(float dt);
 	

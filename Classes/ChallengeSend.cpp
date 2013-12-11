@@ -7,6 +7,7 @@
 #include "StarGoldData.h"
 #include "HatGacha.h"
 #include "SendMessageUtil.h"
+#include "GachaPurchase.h"
 
 ChallengeSend::ChallengeSend()
 {
@@ -127,12 +128,16 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 																		 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 																		 //																		setHelpSendTime(recvId);
+																		 
 																		 GraphDogLib::JsonToLog("sendMessage", r);
 																		 
 																		 //																		obj->removeFromParent();
-																		 addChild(HatGacha::create([=](){
-																			 CCLog("hat close");
-																		 }), 1);
+																		 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
+																																		[=](){
+																																			CCLog("hat close");
+																																		}
+																																		), 1);
+
 																		 
 																		 Json::Value p2;
 																		 p2["receiver_id"] = user_id;
