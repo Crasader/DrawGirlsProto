@@ -505,8 +505,15 @@ void Jack::moveTest()
 		check_turn_cnt++;
 		
 		IntPoint beforePoint = myGD->getJackPoint();
-		
+
+		CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+		if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+		{
+			CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+			afterPoint = IntPoint::convertToIntPoint(getPosition());
+		}
 		myGD->setJackPoint(afterPoint);
+		
 		if(myGD->mapState[afterPoint.x][afterPoint.y] == mapOldline && myGD->mapState[beforePoint.x][beforePoint.y] == mapNewline) // != mapOldline 
 		{
 			if(myState == jackStateDrawing)
@@ -531,12 +538,12 @@ void Jack::moveTest()
 		
 		if(afterDirection == directionStop)
 		{
-			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
-			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
-			{
-				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
-				afterPoint = IntPoint::convertToIntPoint(getPosition());
-			}
+//			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+//			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+//			{
+//				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+//				afterPoint = IntPoint::convertToIntPoint(getPosition());
+//			}
 			setPosition(ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1));
 //			direction = afterDirection;
 			stopMove();
