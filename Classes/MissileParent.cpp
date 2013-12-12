@@ -989,7 +989,7 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color, float t_angle )
 {
 	CCSprite* t_explosion = CCSprite::createWithTexture(explosion_node->getTexture(), CCRectMake(0, 0, 167, 191));
-	t_explosion->setScale(1.f/1.5f);
+	t_explosion->setScale(1.f/myGD->game_scale);
 	t_explosion->setRotation(-t_angle-90);
 	t_explosion->setPosition(startPosition);
 	explosion_node->addChild(t_explosion);

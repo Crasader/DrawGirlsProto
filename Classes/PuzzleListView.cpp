@@ -333,6 +333,7 @@ void PuzzleListView::touchCancel()
 	{
 		CCNode* t_child = (CCNode*)getChildByTag(touched_index);
 		((PLV_Node*)t_child)->touchCancel();
+		touched_index = 0;
 	}
 }
 

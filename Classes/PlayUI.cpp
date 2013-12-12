@@ -494,7 +494,7 @@ void GetPercentage::selfRemove ()
 void GetPercentage::myInit (float t_gp, bool is_item)
 {
 	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), "gain.fnt");
-	my_label->setScale(1.f/1.5f);
+	my_label->setScale(1.f/myGD->game_scale);
 	my_label->setAlignment(kCCTextAlignmentRight);
 	addChild(my_label, kZorderGetPercentage_label);
 	

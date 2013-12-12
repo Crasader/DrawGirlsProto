@@ -63,6 +63,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					NSDS_SI(stage_number, kSDS_SI_puzzle_i, stage_list[i]["puzzle"].asInt(), false);
 					NSDS_SI(stage_number, kSDS_SI_playtime_i, stage_list[i]["playtime"].asInt(), false);
 					NSDS_SD(stage_number, kSDS_SI_scoreRate_d, stage_list[i]["scoreRate"].asDouble(), false);
+					NSDS_SD(stage_number, kSDS_SI_scale_d, result_data["scale"].asDouble(), false);
 					
 					Json::Value t_mission = stage_list[i]["mission"];
 					NSDS_SI(stage_number, kSDS_SI_missionType_i, t_mission["type"].asInt(), false);

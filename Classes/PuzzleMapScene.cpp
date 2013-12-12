@@ -461,7 +461,7 @@ void PuzzleMapScene::setPuzzle(int t_puzzle_number)
 			map_mode_state = kMMS_uiMode;
 		is_menu_enable = true;
 		
-		//		endLoadedMovingMapNode();
+//		endLoadedMovingMapNode();
 	}
 	else if(after_map_node->getTag() == kPMS_MT_notOpenedPuzzle)
 	{
@@ -764,21 +764,19 @@ void PuzzleMapScene::puzzleAction(CCObject *sender)
 	
 	setPuzzle(tag);
 	
-	showEventButton();
+	startReturnUiMode();
 	
-	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
-	
-	CCScaleTo* t_scale = CCScaleTo::create(0.45f, map_node->getScaleX(), map_node->getScaleX());
-	map_node->runAction(t_scale);
-	
-	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(0,0));
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::stopReturnUiMode));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-	main_node->runAction(t_seq);
-	
-//	recent_puzzle_number = tag;
-	// change map_node
-	// up table
+//	showEventButton();
+//	
+//	((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
+//	
+//	CCScaleTo* t_scale = CCScaleTo::create(0.45f, map_node->getScaleX(), map_node->getScaleX());
+//	map_node->runAction(t_scale);
+//	
+//	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(0,0));
+//	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleMapScene::stopReturnUiMode));
+//	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+//	main_node->runAction(t_seq);
 }
 
 void PuzzleMapScene::setUIs()
@@ -807,6 +805,7 @@ void PuzzleMapScene::setUIs()
 //	main_node->addChild(ui_frame, kPMS_Z_main);
 	
 	CCSprite* ui_back = CCSprite::create("test_ui_back_table.png");
+	ui_back->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
 	ui_back->setPosition(ccp(240,160));
 	main_node->addChild(ui_back, kPMS_Z_main);
 	
@@ -1862,6 +1861,9 @@ void PuzzleMapScene::stopChangeMapMode()
 
 void PuzzleMapScene::startChangeFrameMode()
 {
+	if(getChildByTag(kPMS_MT_loadPuzzleInfo))
+		removeChildByTag(kPMS_MT_loadPuzzleInfo);
+	
 	is_gesturable_map_mode = false;
 	map_mode_state = kMMS_changeMode;
 	is_menu_enable = false;

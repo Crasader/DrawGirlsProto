@@ -505,8 +505,15 @@ void Jack::moveTest()
 		check_turn_cnt++;
 		
 		IntPoint beforePoint = myGD->getJackPoint();
-		
+
+		CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+		if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+		{
+			CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+			afterPoint = IntPoint::convertToIntPoint(getPosition());
+		}
 		myGD->setJackPoint(afterPoint);
+		
 		if(myGD->mapState[afterPoint.x][afterPoint.y] == mapOldline && myGD->mapState[beforePoint.x][beforePoint.y] == mapNewline) // != mapOldline 
 		{
 			if(myState == jackStateDrawing)
@@ -531,12 +538,12 @@ void Jack::moveTest()
 		
 		if(afterDirection == directionStop)
 		{
-			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
-			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
-			{
-				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
-				afterPoint = IntPoint::convertToIntPoint(getPosition());
-			}
+//			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+//			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+//			{
+//				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+//				afterPoint = IntPoint::convertToIntPoint(getPosition());
+//			}
 			setPosition(ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1));
 //			direction = afterDirection;
 			stopMove();
@@ -1330,7 +1337,7 @@ void Jack::showMB()
 	if(!isDie)
 	{
 		MissileBarrier* t_mb = MissileBarrier::create();
-		t_mb->setScale(0.8f);
+//		t_mb->setScale(0.8f);
 		addChild(t_mb, kJackZ_ActiveBarrier);
 	}
 }
@@ -1432,11 +1439,11 @@ void Jack::setAlphaSpeed( float t_s )
 
 void Jack::initStartPosition( CCPoint t_p )
 {
-	int base_value = roundf(-t_p.y/myGD->game_scale/2.f);
+	int base_value = roundf(-t_p.y/((480.f-myGD->boarder_value*2)/(320.f))/2.f); // 중간 괄호 : myGD->game_scale
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_height = roundf(480*screen_size.height/screen_size.width/2.f);
 
-	IntPoint checking_point = IntPoint(80,base_value+roundf(screen_height/myGD->game_scale/2.f));
+	IntPoint checking_point = IntPoint(80,base_value+roundf(screen_height/((480.f-myGD->boarder_value*2)/(320.f))/2.f)); // 중간 괄호 : myGD->game_scale
 
 	int map_end_check_cnt = 0;
 	bool is_found = false;
@@ -1787,7 +1794,7 @@ void Jack::myInit()
 	CCSprite* t_texture = CCSprite::create("jack_barrier.png");
 
 	jack_barrier = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(100, 0, 25, 25));
-	jack_barrier->setScale(0.8f);
+//	jack_barrier->setScale(0.8f);
 	addChild(jack_barrier, kJackZ_defaultBarrier);
 
 	CCAnimation* t_animation = CCAnimation::create();
@@ -1798,6 +1805,8 @@ void Jack::myInit()
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
 
 	jack_barrier->runAction(t_repeat);
+	
+	setScale(1.f/myGD->game_scale);
 }
 
 void Jack::setStartPosition()

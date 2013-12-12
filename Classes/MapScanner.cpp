@@ -500,7 +500,7 @@ void MapScanner::randomingRectView( CCPoint t_p )
 
 	my_tic_toc = !my_tic_toc;
 
-	int base_value = roundf(-t_p.y/myGD->game_scale/2.f);
+	int base_value = roundf(-t_p.y/((480.f-myGD->boarder_value*2)/(320.f))/2.f); // 중간 괄호 : myGD->game_scale
 
 	int gacha_cnt = mySGD->getStartMapGachaCnt();
 
@@ -532,7 +532,7 @@ void MapScanner::randomingRectView( CCPoint t_p )
 	IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
 
 	init_rect.origin.x = rand()%maxPoint.x+10;//mapWidthInnerBegin+10;
-	init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/myGD->game_scale/2.f)-init_rect.size.height+1;
+	init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/((480.f-myGD->boarder_value*2)/(320.f))/2.f)-init_rect.size.height+1; // 중간 괄호 : myGD->game_scale
 
 	if(!random_rect_img)
 	{
@@ -877,7 +877,8 @@ void VisibleSprite::setSceneNode( CCObject* t_scene_node )
 void VisibleSprite::visit()
 {
 	unsigned int loopCnt = drawRects->count();
-
+	float game_node_scale = myGD->Fcommunication("Main_getGameNodeScale");
+	
 	glEnable(GL_SCISSOR_TEST);
 
 	for(int i=0;i<loopCnt;i++)
@@ -891,17 +892,17 @@ void VisibleSprite::visit()
 
 		if(is_set_scene_node)
 		{
-			x = (t_rect->origin.x*myGD->game_scale+jack_position.x+scene_node->getPositionX())*wScale + viewport[0]-1;
-			y = (t_rect->origin.y*myGD->game_scale+jack_position.y+scene_node->getPositionY())*hScale + viewport[1]-1;
-			w = (t_rect->size.width*myGD->game_scale)*wScale+2;
-			h = (t_rect->size.height*myGD->game_scale)*hScale+2;
+			x = (t_rect->origin.x*game_node_scale+jack_position.x+scene_node->getPositionX())*wScale + viewport[0]-1;
+			y = (t_rect->origin.y*game_node_scale+jack_position.y+scene_node->getPositionY())*hScale + viewport[1]-1;
+			w = (t_rect->size.width*game_node_scale)*wScale+2;
+			h = (t_rect->size.height*game_node_scale)*hScale+2;
 		}
 		else
 		{
-			x = (t_rect->origin.x*myGD->game_scale+jack_position.x)*wScale + viewport[0]-1;
-			y = (t_rect->origin.y*myGD->game_scale+jack_position.y)*hScale + viewport[1]-1;
-			w = (t_rect->size.width*myGD->game_scale)*wScale+2;
-			h = (t_rect->size.height*myGD->game_scale)*hScale+2;
+			x = (t_rect->origin.x*game_node_scale+jack_position.x)*wScale + viewport[0]-1;
+			y = (t_rect->origin.y*game_node_scale+jack_position.y)*hScale + viewport[1]-1;
+			w = (t_rect->size.width*game_node_scale)*wScale+2;
+			h = (t_rect->size.height*game_node_scale)*hScale+2;
 		}
 
 		if(y > screen_size.height || y+h < 0.f)
@@ -1023,14 +1024,21 @@ void VisibleParent::setMoveGamePosition( CCPoint t_p )
 {
 	//		if(!myGD->is_setted_jack || myGD->game_step == kGS_unlimited)
 	{
+//		float game_node_scale = myGD->Fcommunication("Main_getGameNodeScale");
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
 		if(y_value > 60)																	y_value = 60;
 		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+		
+		float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
+		if(x_value > myGD->boarder_value)													x_value = myGD->boarder_value;
+		else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)					x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+		
 
-		if(myGD->gamescreen_type == kGT_full)				myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
-		else if(myGD->gamescreen_type == kGT_leftUI)		myVS->setMoveGamePosition(ccp(50+myGD->boarder_value,y_value));
-		else if(myGD->gamescreen_type == kGT_rightUI)		myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
+//		if(myGD->gamescreen_type == kGT_full)				myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
+//		else if(myGD->gamescreen_type == kGT_leftUI)		myVS->setMoveGamePosition(ccp(50+myGD->boarder_value,y_value));
+//		else if(myGD->gamescreen_type == kGT_rightUI)		myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
+		myVS->setMoveGamePosition(ccp(x_value, y_value));
 	}
 }
 
@@ -1048,10 +1056,17 @@ void VisibleParent::changingGameStep( int t_step )
 	float y_value = -jack_position.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
 	if(y_value > 60)																	y_value = 60;
 	else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+	
+	float x_value = -jack_position.x*myGD->game_scale+480.f/2.f;
+	if(x_value > myGD->boarder_value)
+		x_value = myGD->boarder_value;
+	else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)
+		x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
 
-	if(myGD->gamescreen_type == kGT_full)				jack_position = ccp(myGD->boarder_value,y_value);
-	else if(myGD->gamescreen_type == kGT_leftUI)		jack_position = ccp(50+myGD->boarder_value,y_value);
-	else if(myGD->gamescreen_type == kGT_rightUI)		jack_position = ccp(myGD->boarder_value,y_value);
+//	if(myGD->gamescreen_type == kGT_full)				jack_position = ccp(myGD->boarder_value,y_value);
+//	else if(myGD->gamescreen_type == kGT_leftUI)		jack_position = ccp(50+myGD->boarder_value,y_value);
+//	else if(myGD->gamescreen_type == kGT_rightUI)		jack_position = ccp(myGD->boarder_value,y_value);
+	jack_position = ccp(x_value, y_value);
 
 	CCPoint after_position = ccpAdd(limitted_map_position, ccpMult(ccpSub(jack_position, limitted_map_position), t_step/15.f));
 	myVS->setMoveGamePosition(after_position);

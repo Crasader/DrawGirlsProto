@@ -91,6 +91,7 @@ enum SDS_KEY
 	kSDS_SI_puzzle_i,
 	kSDS_SI_playtime_i,
 	kSDS_SI_scoreRate_d,
+	kSDS_SI_scale_d,
 	kSDS_SI_missionType_i,
 	kSDS_SI_missionOptionEnergy_i,
 	kSDS_SI_missionOptionCount_i,
