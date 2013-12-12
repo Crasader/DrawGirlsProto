@@ -805,6 +805,7 @@ void PuzzleMapScene::setUIs()
 //	main_node->addChild(ui_frame, kPMS_Z_main);
 	
 	CCSprite* ui_back = CCSprite::create("test_ui_back_table.png");
+	ui_back->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
 	ui_back->setPosition(ccp(240,160));
 	main_node->addChild(ui_back, kPMS_Z_main);
 	

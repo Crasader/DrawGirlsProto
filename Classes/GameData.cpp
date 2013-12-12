@@ -7,6 +7,7 @@
 //
 
 #include "GameData.h"
+#include "SilhouetteData.h"
 
 float deg2Rad(float x) { return x * M_PI / 180.f;}
 float rad2Deg(float x) { return x * 180.f / M_PI;}
@@ -356,6 +357,8 @@ SetMapType GameData::getRecentMapType()
 
 void GameData::initUserSelectedStartRect( IntRect t_rect )
 {
+	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)*NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d);
+	game_scale = (720.f-boarder_value*2)/(320.f)*NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d);
 	setInitRect(t_rect.origin, t_rect.size);
 }
 
@@ -364,11 +367,6 @@ void GameData::setUItype( GAMESCREEN_TYPE t_type )
 	if(t_type != myDSH->getIntegerForKey(kDSH_Key_uiType))
 		myDSH->setIntegerForKey(kDSH_Key_uiType, t_type);
 	gamescreen_type = t_type;
-
-	if(gamescreen_type != kGT_full)
-		game_scale = (215-boarder_value)/(160.f);
-	else
-		game_scale = (480.f-boarder_value*2)/(320.f);
 }
 
 void GameData::myInit()

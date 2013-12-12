@@ -681,7 +681,7 @@ void ExchangeCoin::showCoin()
 	
 	setPosition(ccp(myPoint.x*pixelSize + 1, myPoint.y*pixelSize + 1));
 	
-	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 2.f/3.f);
+	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f/myGD->game_scale);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::startMoving));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 	
@@ -738,7 +738,7 @@ void ExchangeCoin::moving()
 		
 		back_img = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", myType)->getCString());
 		back_img->setVisible(false);
-		back_img->setScale(2.f/3.f);
+		back_img->setScale(1.f/myGD->game_scale);
 		back_img->setPosition(CCPointZero);
 		addChild(back_img);
 		
@@ -929,7 +929,7 @@ void FeverCoin::myInit(IntPoint t_point, CCObject* t_add, SEL_CallFuncO d_add) /
 	runAction(t_repeat);
 	
 	setPosition(my_point.convertToCCP());
-	setScale(1.f/1.5f);
+	setScale(1.f/myGD->game_scale);
 	
 	startCheck();
 }

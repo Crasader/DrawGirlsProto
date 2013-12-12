@@ -342,15 +342,15 @@ void JM_UpgradeMissile::realInit (CCNode * t_target, int jm_type, float missile_
 	particle->setEndColor(endColor);
 	ccColor4F endColorVar = {0,0,0,0};
 	particle->setEndColorVar(endColorVar);
-	particle->setStartSize(20.0);
-	particle->setStartSizeVar(5.0);
-	particle->setEndSize(10.0);
-	particle->setEndSizeVar(5.0);
+	particle->setStartSize(20.0/myGD->game_scale);
+	particle->setStartSizeVar(5.0/myGD->game_scale);
+	particle->setEndSize(10.0/myGD->game_scale);
+	particle->setEndSizeVar(5.0/myGD->game_scale);
 	particle->setGravity(ccp(0,0));
 	particle->setRadialAccel(0.0);
 	particle->setRadialAccelVar(0.0);
-	particle->setSpeed(50);
-	particle->setSpeedVar(0.0);
+	particle->setSpeed(50/myGD->game_scale);
+	particle->setSpeedVar(0.0/myGD->game_scale);
 	particle->setTangentialAccel(0);
 	particle->setTangentialAccelVar(0);
 	particle->setTotalParticles(particle_cnt);
@@ -378,6 +378,7 @@ void JM_UpgradeMissile::realInit (CCNode * t_target, int jm_type, float missile_
 	string main_string = type_name + CCString::createWithFormat("%d_main.png", element_level)->getCString();
 	
 	mainImg = CCSprite::create(main_string.c_str());
+	mainImg->setScale(1.f/myGD->game_scale);
 	mainImg->setPosition(particlePosition);
 	addChild(mainImg, kZorderJMU_mainImg);
 	
@@ -745,7 +746,7 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 {
 	ing_miss_counting = -1;
 	targetNode = t_target;
-	particle = new CCParticleSystemQuad();
+//	particle = new CCParticleSystemQuad();
 	
 	my_type = (MyElemental)jm_type;
 	
@@ -842,15 +843,15 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 //	particle->setEndColor(endColor);
 //	ccColor4F endColorVar = {0,0,0,0};
 //	particle->setEndColorVar(endColorVar);
-//	particle->setStartSize(5.0);
-//	particle->setStartSizeVar(5.0);
+	particle->setStartSize(particle->getStartSize()/myGD->game_scale);
+	particle->setStartSizeVar(particle->getStartSizeVar()/myGD->game_scale);
 //	particle->setEndSize(5.0);
 //	particle->setEndSizeVar(0.0);
 //	particle->setGravity(ccp(0,0));
 //	particle->setRadialAccel(0.0);
 //	particle->setRadialAccelVar(0.0);
-//	particle->setSpeed(20);
-//	particle->setSpeedVar(0.0);
+	particle->setSpeed(particle->getSpeed()/myGD->game_scale);
+	particle->setSpeedVar(particle->getSpeedVar()/myGD->game_scale);
 //	particle->setTangentialAccel(0);
 //	particle->setTangentialAccelVar(0);
 //	particle->setTotalParticles(particle_cnt);
@@ -911,7 +912,7 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	
 	mainImg = CCSprite::createWithTexture(missile_main_texture, CCRectMake(0, 0, animation_cut_size.width, animation_cut_size.height));
 	mainImg->setPosition(particlePosition);
-	mainImg->setScale(1.f/1.5f);
+	mainImg->setScale(1.f/myGD->game_scale);
 	addChild(mainImg);
 	
 	CCAnimation* main_animation = CCAnimation::create();

@@ -78,15 +78,18 @@ bool Maingame::init()
 	myGD->V_CCP["Main_showMissMissile"] = std::bind(&Maingame::showMissMissile, this, _1);
 	myGD->V_CCPI["Main_showDamageMissile"] = std::bind(&Maingame::showDamageMissile, this, _1, _2);
 	myGD->CCP_V["Main_getGameNodePosition"] = std::bind(&Maingame::getGameNodePosition, this);
+	
 	mControl = NULL;
 	is_line_die = false;
 	
 	game_node = CCNode::create();
-	game_node->setScale(myGD->game_scale);
+	game_node->setScale((480.f-myGD->boarder_value*2)/(320.f));
 	if(myGD->gamescreen_type == kGT_leftUI)			game_node->setPosition(ccp(50+myGD->boarder_value,0));
 	else if(myGD->gamescreen_type == kGT_rightUI)	game_node->setPosition(ccp(myGD->boarder_value, 0));
 	else											game_node->setPosition(ccp(myGD->boarder_value,0));
 	addChild(game_node, myMSZorder);
+	
+	myGD->F_V["Main_getGameNodeScale"] = std::bind(&CCNode::getScale, game_node);
 	
 	myMS = MapScanner::create();
 	game_node->addChild(myMS, myMSZorder);
@@ -173,6 +176,8 @@ void Maingame::finalSetting()
 	myJack = Jack::create();
 	game_node->addChild(myJack, myJackZorder);
 	myJack->initStartPosition(game_node->getPosition());
+	
+	game_node->setScale(myGD->game_scale);
 	
 	myGD->is_setted_jack = true;
 	
@@ -793,14 +798,20 @@ CCPoint Maingame::getObjectToGameNodePosition( CCPoint t_p )
 {
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;
-	if(y_value > 60)																	y_value = 60;
-	else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+	if(y_value > 60)																		y_value = 60;
+	else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)			y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+	
+	float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
+	if(x_value > myGD->boarder_value)														x_value = myGD->boarder_value;
+	else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
 
 	CCPoint after_position;
 
-	if(myGD->gamescreen_type == kGT_full)					after_position = ccp(myGD->boarder_value,y_value);
-	else if(myGD->gamescreen_type == kGT_leftUI)			after_position = ccp(50+myGD->boarder_value,y_value);
-	else if(myGD->gamescreen_type == kGT_rightUI)			after_position = ccp(myGD->boarder_value,y_value);
+//	if(myGD->gamescreen_type == kGT_full)					after_position = ccp(myGD->boarder_value,y_value);
+//	else if(myGD->gamescreen_type == kGT_leftUI)			after_position = ccp(50+myGD->boarder_value,y_value);
+//	else if(myGD->gamescreen_type == kGT_rightUI)			after_position = ccp(myGD->boarder_value,y_value);
+	
+	after_position = ccp(x_value, y_value);
 
 	return after_position;
 }
@@ -808,11 +819,10 @@ CCPoint Maingame::getObjectToGameNodePosition( CCPoint t_p )
 CCPoint Maingame::getObjectToGameNodePositionCoin( CCPoint t_p )
 {
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float x_value = t_p.x/320.f*(480.f-myGD->boarder_value*2.f) + myGD->boarder_value;
-	if(myGD->gamescreen_type == kGT_leftUI)			x_value += 50.f;
-	float y_value = t_p.y/320.f*(480.f-myGD->boarder_value*2.f);
+	float x_value = t_p.x/320.f*(720.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)-myGD->boarder_value*2.f);
+	float y_value = t_p.y/320.f*(720.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)-myGD->boarder_value*2.f);
 
-	//		x_value = x_value-game_node->getPositionX();
+	x_value = x_value+game_node->getPositionX();
 	y_value = y_value+game_node->getPositionY();
 
 	return ccp(x_value, y_value);
@@ -822,8 +832,15 @@ CCPoint Maingame::getGameNodeToObjectPosition( CCPoint t_p )
 {
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float y_value = -(t_p.y - 480.f*frame_size.height/frame_size.width/2.f)/myGD->game_scale;
+	float x_value = -(t_p.x - 480.f/2.f)/myGD->game_scale;
+	
+//	if(y_value > 60)																		y_value = 60;
+//	else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)			y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+//	if(x_value > myGD->boarder_value)														x_value = myGD->boarder_value;
+//	else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+	
 	CCPoint after_position;
-	after_position = ccp(160,y_value);
+	after_position = ccp(x_value,y_value);
 
 	return after_position;
 }
@@ -885,7 +902,7 @@ void Maingame::takeSpeedUpEffect( int t_step )
 	}
 	
 	TakeSpeedUp* t_tsu = TakeSpeedUp::create(t_step);
-	t_tsu->setScale(1.f/1.5f);
+	t_tsu->setScale(1.f/myGD->game_scale);
 	t_tsu->setPosition(ccpAdd(jack_position, add_point));
 	game_node->addChild(t_tsu, goldZorder);
 }
@@ -896,7 +913,7 @@ void Maingame::showMissMissile( CCPoint t_position )
 	t_position.y += rand()%21 - 10;
 
 	CCSprite* miss_label = CCSprite::create("missile_miss.png");
-	miss_label->setScale(1.f/1.5f);
+	miss_label->setScale(1.f/myGD->game_scale);
 	miss_label->setPosition(t_position);
 	game_node->addChild(miss_label, goldZorder);
 
@@ -910,7 +927,7 @@ void Maingame::showMissMissile( CCPoint t_position )
 void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 {
 	CCNode* container = CCNode::create();
-	container->setScale(1.f/1.5f);
+	container->setScale(1.f/myGD->game_scale);
 	container->setPosition(t_position);
 	game_node->addChild(container, goldZorder);
 	
@@ -1147,58 +1164,3 @@ void Maingame::stopShake()
 	unschedule(schedule_selector(Maingame::shaking));
 	shake_frame = 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

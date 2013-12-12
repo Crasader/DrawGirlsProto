@@ -355,6 +355,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";
 	else if(t_key == kSDS_SI_playtime_i)				rv = "playtime";
 	else if(t_key == kSDS_SI_scoreRate_d)				rv = "scoreRate";
+	else if(t_key == kSDS_SI_scale_d)					rv = "scale";
 	else if(t_key == kSDS_SI_missionType_i)				rv = "mission_type";
 	else if(t_key == kSDS_SI_missionOptionEnergy_i)		rv = "mission_option_energy";
 	else if(t_key == kSDS_SI_missionOptionCount_i)		rv = "mission_option_count";
