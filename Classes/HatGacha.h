@@ -15,20 +15,8 @@ USING_NS_CC;
 #include "StarGoldData.h"
 #include "GachaBase.h"
 #include "GachaPurchase.h"
+#include "GachaReward.h"
 
-
-enum class RewardKind
-{
-	kGold,
-	kRuby
-};
-class RewardSprite : public CCSprite
-{
-public:
-	virtual ~RewardSprite(){}
-	RewardKind m_kind;
-	int m_value; // 가치.
-};
 
 class CCMenuItemToggleWithTopHatLambda : public CCMenuItemToggleLambda
 {
@@ -69,7 +57,8 @@ protected:
 	CCMenuLambda* m_menu, *m_internalMenu;
 	CCMenuLambda* m_disableMenu;
 	std::vector<std::pair<CCMenuItemToggleWithTopHatLambda*, float> > m_hats;
-	std::vector<std::pair<RewardSprite*, float> > m_rewards;
+	std::vector<RewardSprite*> m_fakeRewards;
+	std::vector<RewardSprite*> m_rewards;
 	Well512 m_well512;
 	bool m_rewardFollowHat;
 	SceneState m_state;
@@ -120,10 +109,10 @@ public:
 		
 		return true;
 	}
-	static __TYPE__* create(KSAlertView* av, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
+	static __TYPE__* create(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(av, gsm))
+    if (pRet && pRet->init(av, rs, gsm))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -135,10 +124,10 @@ public:
 			return NULL; \
     } \
 	}
-	static __TYPE__* create(std::function<void(void)> callback, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
+	static __TYPE__* create(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(callback, gsm))
+    if (pRet && pRet->init(callback, rs, gsm))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -150,16 +139,16 @@ public:
 			return NULL; \
     } \
 	}
-	bool init(KSAlertView* av, GachaPurchaseStartMode gsm)
+	bool init(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
 	{
-		return init(av, nullptr, gsm);
+		return init(av, nullptr, rs, gsm);
 	}
-	bool init(std::function<void(void)> callback, GachaPurchaseStartMode gsm)
+	bool init(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
 	{
-	 return init(nullptr, callback, gsm);
+	 return init(nullptr, callback, rs, gsm);
 	}
 	
-	virtual bool init(KSAlertView* av, std::function<void(void)> callback, GachaPurchaseStartMode gsm);
+	virtual bool init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm);
 	void update(float dt)
 	{
 		m_timer += 1/60.f;

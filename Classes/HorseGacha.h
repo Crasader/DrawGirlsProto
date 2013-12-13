@@ -13,21 +13,8 @@ USING_NS_CC;
 #include "KSUtil.h"
 #include "StarGoldData.h"
 #include "GachaPurchase.h"
+#include "GachaReward.h"
 
-
-
-enum class HorseRewardKind
-{
-	kGold,
-	kRuby
-};
-class HorseRewardSprite : public CCSprite
-{
-public:
-	virtual ~HorseRewardSprite(){}
-	HorseRewardKind m_kind;
-	int m_value; // 가치.
-};
 
 class CCMenuItemToggleWithTopHorseLambda : public CCMenuItemToggleLambda
 {
@@ -43,7 +30,7 @@ public:
 		return pRet;
 	}
 	CCMenuItemToggleLambda* m_hatTop;
-	HorseRewardSprite* m_reward;
+	RewardSprite* m_reward;
 };
 
 
@@ -61,24 +48,35 @@ enum class HorseSceneState
 	kFinish
 };
 
-
+class HorseSprite : public CCSprite
+{
+public:
+	float m_horseSpeed;
+	std::deque<float> m_speedPerFrame; // 프레임 별로 가지는 스피드. 미리 정해논 스피드로 달림. 마음아픔.
+	float m_totalDistance;
+	
+};
 class HorseGachaSub : public CCLayer
 {
 protected:
 //	CCSprite* aHorse;
 	GachaPurchaseStartMode m_gachaMode;
+
 	CCPoint m_trackPosition;
 	CCMenuLambda* m_menu;
 	std::vector<int> m_arriveOrder;
 	std::vector<CCPoint> m_horsePositions;
-	std::vector<CCSprite*> m_horses; // 말.
-	std::vector<HorseRewardSprite*> m_rewards; // 보상.
+	std::vector<HorseSprite*> m_horses; // 말.
+	std::vector<RewardSprite*> m_rewards; // 보상.
+	mt19937 m_rEngine;                    // MT19937 난수 엔진
+	
 	Well512 m_well512;
 	HorseSceneState m_state;
 	float m_timer;
 	CCSprite* m_horseBoard;
 	CCNode* m_horseBoardNode;
 	int m_selectedHorseIndex;
+	int m_alreadyDeterminantOrder; // 이미 정해져 있는 나의 등수... 슬프다.
 public:
 	KSAlertView* m_parent;
 	std::function<void(void)> m_callback;
@@ -90,7 +88,7 @@ public:
 	{
 		
 	}
-	void setRewards(const std::vector<HorseRewardSprite*> v) { m_rewards = v; }
+	void setRewards(const std::vector<RewardSprite*> v) { m_rewards = v; }
 	void registerWithTouchDispatcher()
 	{
 		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, INT_MIN + 1,true);
@@ -101,10 +99,10 @@ public:
 		return true;
 	}
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	static __TYPE__* create(KSAlertView* av, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
+	static __TYPE__* create(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(av, gsm))
+    if (pRet && pRet->init(av, rs, gsm))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -116,10 +114,10 @@ public:
 			return NULL; \
     } \
 	}
-	static __TYPE__* create(std::function<void(void)> callback, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward)  \
+	static __TYPE__* create(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward)  \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(callback, gsm))
+    if (pRet && pRet->init(callback, rs, gsm))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -131,15 +129,15 @@ public:
 			return NULL; \
     } \
 	}
-	bool init(KSAlertView* av, GachaPurchaseStartMode gsm)
+	bool init(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
 	{
-		return init(av, nullptr, gsm);
+		return init(av, nullptr, rs, gsm);
 	}
-	bool init(std::function<void(void)> callback, GachaPurchaseStartMode gsm)
+	bool init(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
 	{
-		return init(nullptr, callback, gsm);
+		return init(nullptr, callback, rs, gsm);
 	}
-	virtual bool init(KSAlertView* av, std::function<void(void)> callback, GachaPurchaseStartMode gsm);
+	virtual bool init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm);
 	
 	virtual void update(float dt);
 	

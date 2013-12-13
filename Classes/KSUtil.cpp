@@ -24,6 +24,9 @@ namespace KS
 		CCArray* childs = NULL;
 		CCObject* child = NULL;
 		CCNode* nodeObject = (CCNode*)object;
+		CCRGBAProtocol* mine = dynamic_cast<CCRGBAProtocol*>(nodeObject);
+		if(mine)
+			mine->setOpacity(opaque);
 		if (nodeObject) {
 			childs = nodeObject->getChildren();
 		}

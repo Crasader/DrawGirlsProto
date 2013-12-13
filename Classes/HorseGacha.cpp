@@ -1,12 +1,23 @@
 #include "HorseGacha.h"
 #include "KSUtil.h"
 #include "StarGoldData.h"
+#include "ProbSelector.h"
 
-
-bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, GachaPurchaseStartMode gsm)
+bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
 {
 	CCLayer::init();
-
+	m_rewards = rs;
+	
+	// 시작하기도 전에 미리 등수를 지정함.
+	// 슬프다... ㅜ.ㅜ
+	int totalWeight = 0;
+	ProbSelector ps; // {1,1,1,3,3,3,10} 으로 입력됐다면,
+	for(auto i : m_rewards)
+	{
+		ps.pushProb(i->m_weight);
+	}
+	m_alreadyDeterminantOrder = ps.getResult(); // 등수를 미리 지정.
+	CCLog("my order %d", m_alreadyDeterminantOrder);
 	m_gachaMode = gsm;
 	setTouchEnabled(true);
 	CCSprite* back = CCSprite::create("table12.png");
@@ -27,29 +38,31 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Ga
 	std::vector<CCPoint> rewardPositions = {ccp(30, 30), ccp(30 + 60*1, 30), ccp(30 + 60*2, 30), ccp(30 + 60*3, 30),
 		ccp(30 + 60*4, 30), ccp(30 + 60*5, 30), ccp(30 + 60*6, 30)};
 	CCPoint horseToReward = ccp(450, 0);
-	for(int i=0; i<7; i++)
+
+	int i=0;
+	for(auto& reward : m_rewards)
 	{
-		HorseRewardSprite* hrs = new HorseRewardSprite();
-		hrs->initWithFile("ui_gold_img.png");
-		hrs->autorelease();
-		hrs->m_kind = HorseRewardKind::kGold;
-		hrs->m_value = m_well512.GetValue(100, 300);
-		hrs->setPosition(rewardPositions[i]);
-//		hrs->getCamera()->setEyeXYZ(0, 0.4f, 0.5f);
-		hrs->setAnchorPoint(ccp(0.5f, 0.0f));
-		CCLabelBMFont* value = CCLabelBMFont::create(CCString::createWithFormat("%d", hrs->m_value)->getCString(), "mb_white_font.fnt");
-		hrs->addChild(value);
-		m_rewards.push_back(hrs);
-		addChild(hrs);
-//		m_horseBoardNode->addChild(hrs);
-		
+		reward->setPosition(rewardPositions[i]);
+		reward->setAnchorPoint(ccp(0.5f, 0.0f));
+		CCLabelBMFont* value = CCLabelBMFont::create(CCString::createWithFormat("%d", reward->m_value)->getCString(), "mb_white_font.fnt");
+		reward->addChild(value);
+//		m_rewards.push_back(hrs);
+		addChild(reward);
+		i++;
 	}
 	
 	for(int i=0; i<horseFiles.size(); i++)
 	{
-		CCSprite* horse = CCSprite::create(horseFiles[i].c_str());
+		HorseSprite* horse = new HorseSprite();
+		horse->init();
+		horse->autorelease();
+		horse->initWithFile( horseFiles[i].c_str() );
+		
 		horse->setPosition(m_horsePositions[i] + ccp(0, 300));
 		horse->getCamera()->setEyeXYZ(0, 0.4f, 0.5f);
+		
+		horse->m_horseSpeed = m_well512.GetFloatValue(1.f, 1.f);
+		horse->m_totalDistance = 0.f;
 		m_horses.push_back(horse);
 		m_horseBoardNode->addChild(horse, 8 - i);
 	}
@@ -73,6 +86,52 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Ga
 	startBtn->setVisible(false);
 	startBtn->setTarget([=](CCObject*)
 											{
+												normal_distribution<> distribution(1.3f, 1.0f);       // 생성 범위
+												auto generator = bind(distribution, m_rEngine);
+												for(int frame=0; ;frame++) // 가상 시뮬레이션 프레임
+												{
+													for(int i=0; i<m_horses.size(); i++)
+													{
+														if(std::find(m_arriveOrder.begin(), m_arriveOrder.end(), i) != m_arriveOrder.end())
+															continue;
+														ProbSelector ps = {1, 50};
+														
+														if(ps.getResult() == 0)
+														{
+															auto randomValue = generator();
+															
+															m_horses[i]->m_horseSpeed = MAX(1.0, randomValue);
+														}
+														m_horses[i]->m_speedPerFrame.push_back(m_horses[i]->m_horseSpeed);
+														m_horses[i]->m_totalDistance += m_horses[i]->m_horseSpeed;
+														if(m_horses[i]->m_totalDistance >= 450)
+														{
+															m_arriveOrder.push_back(i);
+														}
+													}
+													
+													// 전부 도착했으면 달림.
+													if(m_arriveOrder.size() >= 7)
+													{
+														m_state = HorseSceneState::kRun;
+														break;
+													}
+												}
+												
+//												m_arriveOrder[m_alreadyDeterminantOrder] = m_selectedHorseIndex;
+												
+												// 미리 정해진 등수가 몇 번째 인덱스인지
+												int determintOrderIndex = m_arriveOrder[m_alreadyDeterminantOrder];
+												for(int i=0; i<m_arriveOrder.size(); i++)
+												{
+													if(m_arriveOrder[i] == m_selectedHorseIndex)
+													{
+														std::swap(m_arriveOrder[i], m_arriveOrder[m_alreadyDeterminantOrder]);
+														break;
+													}
+												}
+												m_horses[m_selectedHorseIndex]->m_speedPerFrame.swap(m_horses[determintOrderIndex]->m_speedPerFrame);
+												
 												m_state = HorseSceneState::kRun;
 												startBtn->setVisible(false);
 											});
@@ -82,7 +141,7 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Ga
 																					 [=](CCPoint t)
 																					 {
 																						 m_horseBoard->setPosition(t);
-																						 CCLog("%f %f", t.x, t.y);
+//																						 CCLog("%f %f", t.x, t.y);
 																					 },
 																					 [=](CCPoint t)
 																					 {
@@ -93,7 +152,7 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Ga
 																																												[=](CCPoint t)
 																																												{
 																																													m_horses[i]->setPosition(t);
-																																													CCLog("%f", t.y);
+//																																													CCLog("%f", t.y);
 																																												},
 																																												[=](CCPoint t)
 																																												{
@@ -149,12 +208,8 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Ga
 																								 m0->addChild(horse);
 																								 _menu->addChild(m0);
 																							 }
-																							 
-																							 
+																						 
 																							 //
-																							 
-																							 
-																							 
 																						 }));
 																						 CCLog("reward start");
 																					 }));
@@ -164,41 +219,31 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Ga
 
 }
 
-
 void HorseGachaSub::update(float dt)
 {
 	if(m_state == HorseSceneState::kRun)
 	{
-//		m_horses[0]->setPosition(ccp()
-		for(int i=0; i<m_horses.size(); i++)
+		bool allArrive = true;
+		for(auto horse : m_horses)
 		{
-			if(std::find(m_arriveOrder.begin(), m_arriveOrder.end(), i) != m_arriveOrder.end())
-				continue;
-			
-			switch(i)
+			if(horse->m_speedPerFrame.empty() == false)
 			{
-				case 0:
-					m_horses[i]->setPosition(ccp(m_horses[i]->getPosition().x + m_well512.GetFloatValue(2, 3.f), m_horses[i]->getPosition().y ));
-					break;
-				case 1:
-					m_horses[i]->setPosition(ccp(m_horses[i]->getPosition().x + m_well512.GetFloatValue(0, 4.f), m_horses[i]->getPosition().y ));
-					break;
-				default:
-					m_horses[i]->setPosition(ccp(m_horses[i]->getPosition().x + m_well512.GetFloatValue(2, 4.f), m_horses[i]->getPosition().y ));
-					break;
+				float speed = horse->m_speedPerFrame.front();
+				horse->m_speedPerFrame.pop_front();
+				horse->setPositionX(horse->getPositionX() + speed);
+				allArrive = false;
 			}
-			
-				
-			if(m_horses[i]->getPosition().x >= 450)
+			else
 			{
-				m_arriveOrder.push_back(i);
+				
 			}
 		}
 		
-		if(m_arriveOrder.size() >= 7)
+		if(allArrive) // 전부 도착했으면
 		{
 			m_state = HorseSceneState::kShowReward1;
 		}
+//		m_horses[0]->setPosition(ccp()
 	}
 	else if(m_state == HorseSceneState::kShowReward1)
 	{
@@ -221,14 +266,8 @@ void HorseGachaSub::update(float dt)
 		av->setContentNode(
 											 contentParent
 											 );
-		if(m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind == HorseRewardKind::kRuby)
-		{
-			content->addChild(CCSprite::create("price_ruby_img.png"));
-		}
-		else if(m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind == HorseRewardKind::kGold)
-		{
-			content->addChild(CCSprite::create("price_gold_img.png"));
-		}
+
+		content->addChild(CCSprite::create(m_rewards[ m_alreadyDeterminantOrder ]->m_spriteStr.c_str()));
 		int selectedHorseOrder = -1;
 		for(int i=0; i<m_arriveOrder.size(); i++)
 		{
@@ -242,7 +281,7 @@ void HorseGachaSub::update(float dt)
 											(CCString::createWithFormat
 											 ("+%d",
 												
-												m_rewards[ selectedHorseOrder ]->m_value)->getCString(), mySGD->getFont().c_str(), 25));
+												m_rewards[m_alreadyDeterminantOrder]->m_value)->getCString(), mySGD->getFont().c_str(), 25));
 		
 		if(m_gachaMode == kGachaPurchaseStartMode_select)
 		{
@@ -260,7 +299,14 @@ void HorseGachaSub::update(float dt)
 															 {
 																 
 															 });
-					 getParent()->addChild(HorseGachaSub::create(m_callback, m_gachaMode),
+
+					 
+					 std::vector<RewardSprite*> rewards;
+					 for(auto i : m_rewards)
+					 {
+						 rewards.push_back(RewardSprite::create(i->m_kind, i->m_value, i->m_spriteStr, i->m_weight));
+					 }
+					 getParent()->addChild(HorseGachaSub::create(m_callback, rewards, m_gachaMode),
 																 this->getZOrder());
 					 this->removeFromParent();
 				 }
@@ -282,26 +328,57 @@ void HorseGachaSub::update(float dt)
 									 "gacha_ok.png",
 									 [=](CCObject* e)
 									 {
-										 CCLog("%d %d", m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind, m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_value);
 //										 removeFromParent();
-										 if(m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind == HorseRewardKind::kRuby)
+										 RewardKind kind = m_rewards[ m_alreadyDeterminantOrder ]->m_kind;
+										 int selectedItemValue = m_rewards[ m_alreadyDeterminantOrder ]->m_value;
+										 switch(kind)
 										 {
-											 mySGD->setStar(mySGD->getStar() + m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_value);
-											 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
-																					 {
-																						 
-																					 });
-
+											 case RewardKind::kRuby:
+												 mySGD->setStar(mySGD->getStar() + selectedItemValue);
+												 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+																						 {
+																							 
+																						 });
+												 break;
+											 case RewardKind::kGold:
+												 mySGD->setGold(mySGD->getGold() + selectedItemValue);
+												 myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v)
+																						 {
+																							 
+																						 });
+												 break;
+											 case RewardKind::kSpecialAttack:
+											 {
+												 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_attack);
+												 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+											 }
+												 break;
+											 case RewardKind::kDash:
+											 {
+												 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_fast);
+												 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+											 }
+												 break;
+											 case RewardKind::kSlience:
+											 {
+												 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_silence);
+												 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+											 }
+												 break;
+											 case RewardKind::kRentCard:
+											 {
+												 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_rentCard);
+												 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+											 }
+												 break;
+											 case RewardKind::kSubMonsterOneKill:
+											 {
+												 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_subOneDie);
+												 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+											 }
+												 break;
 										 }
-										 else if(m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_kind == HorseRewardKind::kGold)
-										 {
-											 mySGD->setGold(mySGD->getGold() + m_rewards[ m_arriveOrder[m_selectedHorseIndex] ]->m_value);
-											 myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v)
-																					 {
-																						 
-																					 });
-
-										 }
+										 
 										 
 										 if(m_parent)
 										 {
@@ -354,7 +431,15 @@ bool HorseGacha::init(std::function<void(void)> closeCallback)
 	CCLayer::init();
 	KSAlertView* av = KSAlertView::create();
 	
-	HorseGachaSub* gs = HorseGachaSub::create(av);
+	HorseGachaSub* gs = HorseGachaSub::create(av, {
+		RewardSprite::create(RewardKind::kRuby, 20, "price_ruby_img.png", 1),
+		RewardSprite::create(RewardKind::kGold, 500, "price_gold_img.png", 2),
+		RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
+		RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
+		RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
+		RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
+		RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
+	});
 	
 	av->setContentNode(gs);
 	av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));

@@ -1,10 +1,63 @@
 #include "HatGacha.h"
+#include <random>
+const int kFakeItemTag = 0x43534;
 
-
-bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, GachaPurchaseStartMode gsm)
+class CCNodeFrames : public CCNode
+{
+protected:
+	std::vector<CCNode*> m_nodes;
+	int m_currentIndex;
+	float m_delay;
+	float m_timer;
+public:
+	void runAnimation(float delay)
+	{
+		m_timer = 0;
+		m_delay = delay;
+		for(auto i : m_nodes)
+		{
+			i->setVisible(false);
+		}
+		scheduleUpdate();
+	}
+	void update(float dt)
+	{
+		m_timer += dt;
+		if(m_timer > m_delay)
+		{
+			m_nodes[m_currentIndex]->setVisible(false);
+			
+			m_currentIndex++;
+			if(m_nodes.size() == m_currentIndex)
+			{
+				m_currentIndex = 0;
+			}
+			
+			m_nodes[m_currentIndex]->setVisible(true);
+			while(m_timer > m_delay)
+			{
+				m_timer -= m_delay;
+			}
+		}
+	}
+	void appendNode(CCNode* n)
+	{
+		m_nodes.push_back(n);
+		addChild(n);
+	}
+	static CCNodeFrames* create()
+	{
+		CCNodeFrames* nf = new CCNodeFrames();
+		nf->init();
+		nf->autorelease();
+		return nf;
+	}
+};
+bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
 {
 	CCLayer::init();
 	m_gachaMode = gsm;
+	m_fakeRewards = rs;
 	setTouchEnabled(true);
 	m_parent = av;
 	m_callback = callback;
@@ -117,14 +170,8 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Gach
 																																						av->setContentNode(contentParent);
 																																						
 																																						// 내용에 루비인지 골드인지 아템인지 표시
-																																						if(i.first->m_reward->m_kind == RewardKind::kRuby)
-																																						{
-																																							content->addChild(CCSprite::create("price_ruby_img.png"));
-																																						}
-																																						else if(i.first->m_reward->m_kind == RewardKind::kGold)
-																																						{
-																																							content->addChild(CCSprite::create("price_gold_img.png"));
-																																						}
+																																						content->addChild(CCSprite::create(i.first->m_reward->m_spriteStr.c_str()));
+																																						
 																																						// 가격 표시
 																																						content->addChild(CCLabelTTF::create
 																																															(CCString::createWithFormat
@@ -148,7 +195,13 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Gach
 																																																			 {
 																																																				 
 																																																			 });
-																																									 getParent()->addChild(HatGachaSub::create(m_callback, m_gachaMode),
+																																									 std::vector<RewardSprite*> rewards;
+																																									 for(auto i : m_rewards)
+																																									 {
+																																										 rewards.push_back(RewardSprite::create(i->m_kind, i->m_value, i->m_spriteStr, i->m_weight));
+																																									 }
+																																									
+																																									 getParent()->addChild(HatGachaSub::create(m_callback, rewards, m_gachaMode),
 																																																				 this->getZOrder());
 																																									 this->removeFromParent();
 																																								 }
@@ -173,24 +226,56 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Gach
 																																													 "gacha_ok.png",
 																																													 [=](CCObject* e)
 																																													 {
-																																														 if(i.first->m_reward->m_kind == RewardKind::kRuby)
+																																														 RewardKind kind = i.first->m_reward->m_kind;
+																																														 int selectedItemValue = i.first->m_reward->m_value;
+																																														 switch(kind)
 																																														 {
-																																															 mySGD->setStar(mySGD->getStar() + i.first->m_reward->m_value);
-																																															 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
-																																																									 {
-																																																										 
-																																																									 });
-																																															 
-
+																																															 case RewardKind::kRuby:
+																																																 mySGD->setStar(mySGD->getStar() + selectedItemValue);
+																																																 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+																																																										 {
+																																																											 
+																																																										 });
+																																																 break;
+																																															 case RewardKind::kGold:
+																																																 mySGD->setGold(mySGD->getGold() + selectedItemValue);
+																																																 myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v)
+																																																										 {
+																																																											 
+																																																										 });
+																																																 break;
+																																															 case RewardKind::kSpecialAttack:
+																																															 {
+																																																 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_attack);
+																																																 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+																																															 }
+																																																 break;
+																																															 case RewardKind::kDash:
+																																															 {
+																																																 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_fast);
+																																																 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+																																															 }
+																																																 break;
+																																															 case RewardKind::kSlience:
+																																															 {
+																																																 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_silence);
+																																																 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+																																															 }
+																																																 break;
+																																															 case RewardKind::kRentCard:
+																																															 {
+																																																 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_rentCard);
+																																																 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+																																															 }
+																																																 break;
+																																															 case RewardKind::kSubMonsterOneKill:
+																																															 {
+																																																 int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_subOneDie);
+																																																 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+																																															 }
+																																																 break;
 																																														 }
-																																														 else if(i.first->m_reward->m_kind == RewardKind::kGold)
-																																														 {
-																																															 mySGD->setGold(mySGD->getGold() + i.first->m_reward->m_value);
-																																															 myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v)
-																																																									 {
-																																																										 
-																																																									 });
-																																														 }
+																																														 
 																																														 
 																																														 if(m_parent)
 																																														 {
@@ -285,48 +370,75 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Gach
 		
 		
 	}
-	// 모자와 똑같은 위치에 상품 넣음.
-	{ // gold 넣기
-		for(int n=0; n<m_hats.size()-1; n++)
-		{
-			RewardSprite* rs = new RewardSprite();
-			rs->initWithFile("hat_gold.png");
-			rs->autorelease();
-			
-			//			rs->setPosition(retOnTheta(i * M_PI / 180.f));
-			rs->m_kind = RewardKind::kGold;
-			rs->m_value = (int)(m_well512.GetValue(1000, 2000) / 100) * 100;
-			std::string valueStr = CCString::createWithFormat("%d", rs->m_value)->getCString();
-			valueStr = std::string("+") + KS::insert_separator(valueStr);
-			CCLabelBMFont* value = CCLabelBMFont::create(valueStr.c_str(), "mb_white_font.fnt");
-			rs->addChild(value);
-			value->setPosition(ccp(rs->getContentSize().width, rs->getContentSize().height) / 2.f);
-			addChild(rs, 20);
-			m_rewards.push_back(std::make_pair(rs, 0));
-		}
+	
+	ProbSelector ps;
+	for(auto i : m_fakeRewards)
+	{
+		ps.pushProb(i->m_weight);
 	}
-	{ // ruby 넣기
-		RewardSprite* rs = new RewardSprite();
-		rs->initWithFile("hat_ruby.png");
-		rs->autorelease();
+	
+	for(int i=0; i<8; i++)
+	{
+		int index = ps.getResult();
+		RewardSprite* temp_rs = m_fakeRewards[index];
+		RewardSprite* rs = RewardSprite::create(temp_rs->m_kind, temp_rs->m_value, temp_rs->m_spriteStr, temp_rs->m_weight);
 		
 		
-		
-		
-		//			rs->setPosition(retOnTheta(i * M_PI / 180.f));
-		rs->m_kind = RewardKind::kRuby;
-		rs->m_value = (m_well512.GetValue(1, 2));
-		std::string valueStr = CCString::createWithFormat("%d", rs->m_value)->getCString();
+		std::string valueStr = CCString::createWithFormat("%d", temp_rs->m_value)->getCString();
 		valueStr = std::string("+") + KS::insert_separator(valueStr);
 		CCLabelBMFont* value = CCLabelBMFont::create(valueStr.c_str(), "mb_white_font.fnt");
 		rs->addChild(value);
 		value->setPosition(ccp(rs->getContentSize().width, rs->getContentSize().height) / 2.f);
-		addChild(rs);
-		m_rewards.push_back(std::make_pair(rs, 0));
+		
+//		rs->setColor(ccc3(255, 0, 0));
+		KS::setOpacity(rs, 0);
+//		rs->setOpacity(0);
+		addChild(rs, 20);
+		m_rewards.push_back(rs);
 		
 		
+		CCNodeFrames* nf = CCNodeFrames::create();
 		
+		std::vector<int> randomIndex;
+		for(int i=0; i<m_fakeRewards.size(); i++)
+		{
+			randomIndex.push_back(i);
+		}
+		random_device rd;
+		mt19937 rEngine(rd());
+		
+		random_shuffle(randomIndex.begin(), randomIndex.end(), [&rEngine](int n)
+									 {
+										 uniform_int_distribution<> distribution(0, n-1);
+										 return distribution(rEngine);
+									 });
+		// 페이크 에니메이션 돌림.
+		for(auto iter : randomIndex)
+		{
+			RewardSprite* temp_rs = m_fakeRewards[iter];
+			RewardSprite* fakeItem = RewardSprite::create(temp_rs->m_kind, temp_rs->m_value, temp_rs->m_spriteStr, temp_rs->m_weight);
+			
+			
+			std::string valueStr = CCString::createWithFormat("%d", temp_rs->m_value)->getCString();
+			valueStr = std::string("+") + KS::insert_separator(valueStr);
+			CCLabelBMFont* value = CCLabelBMFont::create(valueStr.c_str(), "mb_white_font.fnt");
+			fakeItem->addChild(value);
+			value->setPosition(ccp(rs->getContentSize().width, fakeItem->getContentSize().height) / 2.f);
+			
+			nf->appendNode(fakeItem);
+		}
+		nf->runAnimation(0.05f);
+		nf->setTag(kFakeItemTag);
+		rs->addChild(nf);
+//		nf->setPosition(rs->getPosition());
+		nf->setPosition(ccp(rs->getContentSize().width, rs->getContentSize().height) / 2.f);
 	}
+	
+	
+	// 모자와 똑같은 위치에 상품 넣음.
+	
+	
+	
 	{ // 상품 연결
 		std::random_shuffle(m_rewards.begin(), m_rewards.end(), [=](int i)
 												{
@@ -334,7 +446,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Gach
 												});
 		for(int i=0; i<m_hats.size(); i++)
 		{
-			m_hats[i].first->m_reward = m_rewards[i].first;
+			m_hats[i].first->m_reward = m_rewards[i];
 		}
 	}
 	repositionHat();
@@ -352,7 +464,17 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, Gach
 											{
 												//													m_state = SceneState::kRun;
 												startBtn->setVisible(false);
-												m_state = SceneState::kCoveringHat;
+												for(auto i : m_rewards)
+												{
+													KS::setOpacity(i, 255);
+													i->getChildByTag(kFakeItemTag)->removeFromParent();
+												}
+												
+												addChild(KSTimer::create(2.f, [=]()
+												{
+													m_state = SceneState::kCoveringHat;
+												}));
+												
 												
 											});
 	
@@ -390,7 +512,16 @@ bool HatGacha::init(std::function<void(void)> closeCallback)
 	CCLayer::init();
 	KSAlertView* av = KSAlertView::create();
 	
-	HatGachaSub* gs = HatGachaSub::create(av);
+	HatGachaSub* gs = HatGachaSub::create(av, {
+		RewardSprite::create(RewardKind::kRuby, 20, "price_ruby_img.png", 1),
+		RewardSprite::create(RewardKind::kGold, 500, "price_gold_img.png", 2),
+		RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
+		RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
+		RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
+		RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
+		RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5),
+		RewardSprite::create(RewardKind::kGold, 1000, "price_gold_img.png", 5)
+	});
 	
 	av->setContentNode(gs);
 	av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
