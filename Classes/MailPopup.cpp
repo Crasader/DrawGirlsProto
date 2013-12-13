@@ -1199,9 +1199,7 @@ CCNode* MailPopup::addCardImg (int t_card_number, int t_card_level, string t_pas
 
 void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 {
-	CCLog("resultLoadedCardData data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		Json::Value cards = result_data["list"];
 		for(int i=0;i<cards.size();i++)
@@ -1374,6 +1372,15 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 			
 			loading_parent->addChild(addCardImg(download_card_number, -1, "-1"));
 		}
+	}
+	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
+	{
+		CCNode* loading_parent = loading_card_img->getParent();
+		CCPoint loading_position = loading_card_img->getPosition();
+		
+		loading_card_img->removeFromParent();
+		
+		loading_parent->addChild(addCardImg(download_card_number, -1, "-1"));
 	}
 	else
 	{

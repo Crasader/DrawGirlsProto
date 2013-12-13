@@ -840,7 +840,7 @@ void StageSettingPopup::finalSetting()
 
 void StageSettingPopup::finalRemoveMessage(Json::Value result_data)
 {
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		was_end_removeMessage = true;
 		if(was_end_startAction)
@@ -901,7 +901,7 @@ void StageSettingPopup::cancelGame()
 
 void StageSettingPopup::finalAcceptStartAction(Json::Value result_data)
 {
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		was_end_startAction = true;
 		if(was_end_removeMessage)
@@ -915,7 +915,7 @@ void StageSettingPopup::finalAcceptStartAction(Json::Value result_data)
 
 void StageSettingPopup::finalStartAction(Json::Value result_data)
 {
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		goToGame();
 	}

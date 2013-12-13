@@ -175,7 +175,7 @@ void TitleRenewalScene::checkReceive()
 
 void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 {
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		mySGD->setHeartMax(result_data["heartMax"].asInt());
 		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
@@ -235,76 +235,77 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 
 void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 {
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		if(result_data["version"].asInt() > NSDS_GI(kSDS_GI_characterVersion_i))
+		Json::Value character_list = result_data["list"];
+		int character_count = character_list.size();
+		NSDS_SI(kSDS_GI_characterCount_i, character_count, false);
+		for(int i=1;i<=character_count;i++)
 		{
-			Json::Value character_list = result_data["list"];
-			int character_count = character_list.size();
-			NSDS_SI(kSDS_GI_characterCount_i, character_count, false);
-			for(int i=1;i<=character_count;i++)
+			NSDS_SI(kSDS_GI_characterInfo_int1_no_i, i, character_list[i-1]["no"].asInt(), false);
+			NSDS_SS(kSDS_GI_characterInfo_int1_name_s, i, character_list[i-1]["name"].asString(), false);
+			NSDS_SS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, i, character_list[i-1]["purchaseInfo"]["type"].asString(), false);
+			NSDS_SI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, i, character_list[i-1]["purchaseInfo"]["value"].asInt(), false);
+			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_gold_d, i, character_list[i-1]["statInfo"]["gold"].asDouble(), false);
+			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_percent_d, i, character_list[i-1]["statInfo"]["percent"].asDouble(), false);
+			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, i, character_list[i-1]["statInfo"]["feverTime"].asInt(), false);
+			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_speed_d, i, character_list[i-1]["statInfo"]["speed"].asDouble(), false);
+			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_life_i, i, character_list[i-1]["statInfo"]["life"].asInt(), false);
+			NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
+			
+			if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s, i) != character_list[i-1]["resourceInfo"]["ccbi"].asString())
 			{
-				NSDS_SI(kSDS_GI_characterInfo_int1_no_i, i, character_list[i-1]["no"].asInt(), false);
-				NSDS_SS(kSDS_GI_characterInfo_int1_name_s, i, character_list[i-1]["name"].asString(), false);
-				NSDS_SS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, i, character_list[i-1]["purchaseInfo"]["type"].asString(), false);
-				NSDS_SI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, i, character_list[i-1]["purchaseInfo"]["value"].asInt(), false);
-				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_gold_d, i, character_list[i-1]["statInfo"]["gold"].asDouble(), false);
-				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_percent_d, i, character_list[i-1]["statInfo"]["percent"].asDouble(), false);
-				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, i, character_list[i-1]["statInfo"]["feverTime"].asInt(), false);
-				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_speed_d, i, character_list[i-1]["statInfo"]["speed"].asDouble(), false);
-				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_life_i, i, character_list[i-1]["statInfo"]["life"].asInt(), false);
-				NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
-				
-				if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s, i) != character_list[i-1]["resourceInfo"]["ccbi"].asString())
-				{
-					// check, after download ----------
-					DownloadFile t_df;
-					t_df.size = 100;
-					t_df.img = character_list[i-1]["resourceInfo"]["ccbi"].asString().c_str();
-					t_df.filename = character_list[i-1]["resourceInfo"]["ccbiID"].asString() + ".ccbi";
-					t_df.key = CCSTR_CWF("ci%d_ri_ccbi", i)->getCString();
-					character_download_list.push_back(t_df);
-					// ================================
-				}
-				
-				NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_imageID_s, i, character_list[i-1]["resourceInfo"]["imageID"].asString(), false);
-				
-				if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_plist_s, i) != character_list[i-1]["resourceInfo"]["plist"].asString())
-				{
-					// check, after download ----------
-					DownloadFile t_df;
-					t_df.size = 100;
-					t_df.img = character_list[i-1]["resourceInfo"]["plist"].asString().c_str();
-					t_df.filename = character_list[i-1]["resourceInfo"]["imageID"].asString() + ".plist";
-					t_df.key = CCSTR_CWF("ci%d_ri_plist", i)->getCString();
-					character_download_list.push_back(t_df);
-					// ================================
-				}
-				
-				
-				if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_pvrccz_s, i) != character_list[i-1]["resourceInfo"]["pvrccz"].asString())
-				{
-					// check, after download ----------
-					DownloadFile t_df;
-					t_df.size = 100;
-					t_df.img = character_list[i-1]["resourceInfo"]["pvrccz"].asString().c_str();
-					t_df.filename = character_list[i-1]["resourceInfo"]["imageID"].asString() + ".pvr.ccz";
-					t_df.key = CCSTR_CWF("ci%d_ri_pvrccz", i)->getCString();
-					character_download_list.push_back(t_df);
-					// ================================
-				}
-				
-				NSDS_SI(kSDS_GI_characterInfo_int1_resourceInfo_size_i, i, character_list[i-1]["resourceInfo"]["size"].asInt(), false);
-				NSDS_SS(kSDS_GI_characterInfo_int1_comment_s, i, character_list[i-1]["comment"].asString(), false);
+				// check, after download ----------
+				DownloadFile t_df;
+				t_df.size = 100;
+				t_df.img = character_list[i-1]["resourceInfo"]["ccbi"].asString().c_str();
+				t_df.filename = character_list[i-1]["resourceInfo"]["ccbiID"].asString() + ".ccbi";
+				t_df.key = CCSTR_CWF("ci%d_ri_ccbi", i)->getCString();
+				character_download_list.push_back(t_df);
+				// ================================
 			}
 			
-			if(character_download_list.size() > 0)
-				character_download_version = result_data["version"].asInt();
-			else
-				NSDS_SI(kSDS_GI_characterVersion_i, result_data["version"].asInt(), false);
+			NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_imageID_s, i, character_list[i-1]["resourceInfo"]["imageID"].asString(), false);
 			
-			mySDS->fFlush(kSDS_GI_characterCount_i);
+			if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_plist_s, i) != character_list[i-1]["resourceInfo"]["plist"].asString())
+			{
+				// check, after download ----------
+				DownloadFile t_df;
+				t_df.size = 100;
+				t_df.img = character_list[i-1]["resourceInfo"]["plist"].asString().c_str();
+				t_df.filename = character_list[i-1]["resourceInfo"]["imageID"].asString() + ".plist";
+				t_df.key = CCSTR_CWF("ci%d_ri_plist", i)->getCString();
+				character_download_list.push_back(t_df);
+				// ================================
+			}
+			
+			
+			if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_pvrccz_s, i) != character_list[i-1]["resourceInfo"]["pvrccz"].asString())
+			{
+				// check, after download ----------
+				DownloadFile t_df;
+				t_df.size = 100;
+				t_df.img = character_list[i-1]["resourceInfo"]["pvrccz"].asString().c_str();
+				t_df.filename = character_list[i-1]["resourceInfo"]["imageID"].asString() + ".pvr.ccz";
+				t_df.key = CCSTR_CWF("ci%d_ri_pvrccz", i)->getCString();
+				character_download_list.push_back(t_df);
+				// ================================
+			}
+			
+			NSDS_SI(kSDS_GI_characterInfo_int1_resourceInfo_size_i, i, character_list[i-1]["resourceInfo"]["size"].asInt(), false);
+			NSDS_SS(kSDS_GI_characterInfo_int1_comment_s, i, character_list[i-1]["comment"].asString(), false);
 		}
+		
+		if(character_download_list.size() > 0)
+			character_download_version = result_data["version"].asInt();
+		else
+			NSDS_SI(kSDS_GI_characterVersion_i, result_data["version"].asInt(), false);
+		
+		mySDS->fFlush(kSDS_GI_characterCount_i);
+	}
+	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
+	{
+		
 	}
 	else
 	{
@@ -323,7 +324,7 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 
 void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 {
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		myDSH->resetDSH();
 		card_data_load_list.clear();
@@ -364,7 +365,7 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 
 void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 {
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		Json::Value cards = result_data["list"];
 		for(int i=0;i<cards.size();i++)
@@ -561,7 +562,7 @@ void TitleRenewalScene::resultGetKnownFriendList(Json::Value fInfo)
 
 void TitleRenewalScene::resultGetKnownFriendUserData(Json::Value v)
 {
-	if(v["state"].asString() == "ok")
+	if(v["result"]["code"].asInt() == GDSUCCESS)
 	{
 		for(int i=0; i<v["list"].size(); i++)
 		{
@@ -593,7 +594,7 @@ void TitleRenewalScene::resultGetKnownFriendUserData(Json::Value v)
 
 void TitleRenewalScene::resultGetUnknownFriendUserData(Json::Value v)
 {
-	if(v["state"].asString() == "ok" || 1)
+	if(v["result"]["code"].asInt() == GDSUCCESS || 1)
 	{
 		for(int i=0; i<v["list"].size(); i++)
 		{
@@ -630,7 +631,7 @@ void TitleRenewalScene::resultGetUnknownFriendUserData(Json::Value v)
 
 void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 {
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		if(result_data["puzzlelistversion"] > NSDS_GI(kSDS_GI_puzzleListVersion_i))
 		{

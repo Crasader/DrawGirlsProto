@@ -78,10 +78,12 @@ void SaveData::setKeyValue(string filename, string _key, string _value, bool dis
 	string value = stringEnc(_value);
 	
 	file_sync[file_key][key] = value;
-	ostringstream oss;
-	file_sync[file_key].writeToStream(oss);
 	if(diskWrite)
+	{
+		ostringstream oss;
+		file_sync[file_key].writeToStream(oss);
 		testF(filename, oss.str());
+	}
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, string _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
 void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, string _value, bool diskWrite /*= true*/){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value, diskWrite);	}
@@ -142,10 +144,12 @@ void SaveData::setKeyValue(string filename, string _key, int _value, bool diskWr
 	valueoss << _value;
 	string value = stringEnc(valueoss.str());
 	file_sync[file_key][key] = value;
-	ostringstream oss;
-	file_sync[file_key].writeToStream(oss);
 	if(diskWrite)
+	{
+		ostringstream oss;
+		file_sync[file_key].writeToStream(oss);
 		testF(filename, oss.str());
+	}
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, int _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
 void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, int _value, bool diskWrite /*= true*/){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value, diskWrite);	}
@@ -164,10 +168,12 @@ void SaveData::setKeyValue(string filename, string _key, double _value, bool dis
 	valueoss << _value;
 	string value = stringEnc(valueoss.str());
 	file_sync[file_key][key] = value;
-	ostringstream oss;
-	file_sync[file_key].writeToStream(oss);
 	if(diskWrite)
+	{
+		ostringstream oss;
+		file_sync[file_key].writeToStream(oss);
 		testF(filename, oss.str());
+	}
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, double _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
 void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, double _value, bool diskWrite /*= true*/){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value, diskWrite);	}
