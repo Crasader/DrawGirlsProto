@@ -23,10 +23,12 @@ void SearchEye::mainCumberSearching ()
 	if(ing_frame%6 == 0)
 	{
 		CCPoint main_cumber_position = myGD->getMainCumberPoint().convertToCCP();
-		
+		float scale_value = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d);
+		if(scale_value < 0.1f)
+			scale_value = 1.f;
 		CCPoint position_to_game_node;
-		position_to_game_node.x = main_cumber_position.x/320.f*(720.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)-myGD->boarder_value*2.f);
-		position_to_game_node.y = main_cumber_position.y/320.f*(720.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)-myGD->boarder_value*2.f);
+		position_to_game_node.x = main_cumber_position.x/320.f*(720.f*scale_value-myGD->boarder_value*2.f);
+		position_to_game_node.y = main_cumber_position.y/320.f*(720.f*scale_value-myGD->boarder_value*2.f);
 		position_to_game_node.x += myGD->getCommunicationCCPoint("Main_getGameNodePosition").x;
 		position_to_game_node.y += myGD->getCommunicationCCPoint("Main_getGameNodePosition").y;
 		

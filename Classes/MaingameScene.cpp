@@ -818,9 +818,12 @@ CCPoint Maingame::getObjectToGameNodePosition( CCPoint t_p )
 
 CCPoint Maingame::getObjectToGameNodePositionCoin( CCPoint t_p )
 {
+	float scale_value = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d);
+	if(scale_value < 0.1f)
+		scale_value = 1.f;
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float x_value = t_p.x/320.f*(720.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)-myGD->boarder_value*2.f);
-	float y_value = t_p.y/320.f*(720.f*NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)-myGD->boarder_value*2.f);
+	float x_value = t_p.x/320.f*(720.f*scale_value-myGD->boarder_value*2.f);
+	float y_value = t_p.y/320.f*(720.f*scale_value-myGD->boarder_value*2.f);
 
 	x_value = x_value+game_node->getPositionX();
 	y_value = y_value+game_node->getPositionY();
