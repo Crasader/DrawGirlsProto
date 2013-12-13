@@ -824,9 +824,7 @@ void CardStrengthPopup::replayAction(CCObject* sender)
 
 void CardStrengthPopup::resultStrength(Json::Value result_data)
 {
-	CCLog("resultStrength data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		loading_img->removeFromParent();
 		loading_label->removeFromParent();

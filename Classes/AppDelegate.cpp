@@ -9,7 +9,6 @@
 #endif
 
 #include "GameData.h"
-#include "TitleScene.h"
 #include "TitleRenewal.h"
 
 using namespace CocosDenshion;

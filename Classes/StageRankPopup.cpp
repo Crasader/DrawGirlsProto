@@ -172,8 +172,7 @@ void StageRankPopup::resultLoadFriends(Json::Value result_data)
 
 void StageRankPopup::resultGetStageScoreList(Json::Value result_data)
 {
-	CCLog("resultGetStageScoreList : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		Json::Value score_list = result_data["list"];
 		for(int i=0;i<score_list.size();i++)

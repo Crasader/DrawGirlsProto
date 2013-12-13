@@ -533,8 +533,7 @@ void ClearPopup::resultLoadFriends(Json::Value result_data)
 
 void ClearPopup::resultGetStageScoreList(Json::Value result_data)
 {
-	CCLog("resultGetStageScoreList : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		Json::Value score_list = result_data["list"];
 		for(int i=0;i<score_list.size();i++)
@@ -602,7 +601,7 @@ void ClearPopup::resultGetStageScoreList(Json::Value result_data)
 
 void ClearPopup::resultSavedUserData(Json::Value result_data)
 {
-	if(result_data["state"] == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		is_saved_user_data = true;
 		endLoad();

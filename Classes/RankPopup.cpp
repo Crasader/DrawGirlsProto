@@ -560,9 +560,7 @@ void RankPopup::scrollViewDidZoom (CCScrollView * view)
 }
 void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 {
-	CCLog("resultLoadedCardData data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	
-	if(result_data["state"].asString() == "ok")
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		Json::Value cards = result_data["list"];
 		for(int i=0;i<cards.size();i++)
@@ -735,6 +733,30 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 			else
 				loading_card_number = 0;
 		}
+	}
+	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
+	{
+		if(last_selected_card_number == loading_card_number)
+		{
+			if(used_card_img)
+			{
+				used_card_img->removeFromParent();
+				used_card_img = NULL;
+			}
+			addCardImg(loading_card_number, 0, "-1");
+		}
+		
+		if(after_loading_card_number != 0)
+		{
+			loading_card_number = after_loading_card_number;
+			after_loading_card_number = 0;
+			
+			Json::Value param;
+			param["noList"][0] = loading_card_number;
+			hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+		}
+		else
+			loading_card_number = 0;
 	}
 	else
 	{

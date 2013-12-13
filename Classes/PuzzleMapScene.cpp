@@ -13,7 +13,6 @@
 #include "EventPopup.h"
 //#include "CardSettingScene.h"
 #include "CardSettingPopup.h"
-#include "OptionScene.h"
 //#include "GachaPopup.h"
 #include "RankPopup.h"
 #include "MailPopup.h"
