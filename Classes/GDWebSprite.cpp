@@ -96,8 +96,11 @@ void* GDWebSprite::t_function(void * _caller)
 CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageName, CCObject* t_final, SEL_CallFunc d_final){
 	
     if(imgUrl==""){
-		(t_final->*d_final)();
-        return (CCSprite *)defaultNode;
+		if(t_final && d_final){
+				(t_final->*d_final)();
+		}
+        
+		return (CCSprite *)defaultNode;
     }
     
     //1. webImages 검사해서 값있으면 그냥 리턴
@@ -116,7 +119,9 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
                 ret->setPosition(CCPointZero);
                 ret->setContentSize(CCSizeMake(ret->getContentSize().width*image->xScale,ret->getContentSize().height*image->yScale));
                 newimg->setContentSize(ret->getContentSize());
-				(t_final->*d_final)();
+				if(t_final && d_final){
+					(t_final->*d_final)();
+				}
                 return (CCSprite *)newimg;
             }
         }
