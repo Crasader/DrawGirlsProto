@@ -22,17 +22,19 @@ public:
     bool isDown;
     float xScale;
     float yScale;
+	
+	CCObject* final_target;
+	SEL_CallFunc final_delegate;
 
-    static CCSprite* create(string imgUrl, string defaultImg);
-    static CCSprite* create(string imgUrl, CCNode *defaultNode);
-    static CCSprite* create(string imgUrl, string defaultImg, string imageName);
-    static CCSprite* create(string imgUrl, CCNode *defaultNode, string imageName);
+    static CCSprite* create(string imgUrl, string defaultImg, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+    static CCSprite* create(string imgUrl, CCNode *defaultNode, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+    static CCSprite* create(string imgUrl, string defaultImg, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+    static CCSprite* create(string imgUrl, CCNode *defaultNode, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
     
-    
-    bool init(string imgUrl, string defaultImg);
-    bool init(string imgUrl, CCNode *defaultNode);
-    bool init(string imgUrl, string defaultImg, string imageName);
-    bool init(string imgUrl, CCNode *defaultNode, string imageName);
+    bool init(string imgUrl, string defaultImg, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+    bool init(string imgUrl, CCNode *defaultNode, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+    bool init(string imgUrl, string defaultImg, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+    bool init(string imgUrl, CCNode *defaultNode, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
 
     static void removeAllSprite(); //remove all sprite
     

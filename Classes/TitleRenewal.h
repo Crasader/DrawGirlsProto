@@ -88,6 +88,8 @@ private:
 	
 	void resultGetCommonSetting(Json::Value result_data);
 	
+	void resultGetNoticeList(Json::Value result_data);
+	
 	void resultGetCharacterInfo(Json::Value result_data);
 	vector<DownloadFile> character_download_list;
 	int character_download_version;

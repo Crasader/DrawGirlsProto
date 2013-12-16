@@ -184,6 +184,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_selectedCharacter)					return_value = "scharacter";
 	else if(t_name == kDSH_Key_isCharacterUnlocked_int1)			return_value = "icu%d";
 	
+	else if(t_name == kDSH_Key_noticeViewDate_int1)					return_value = "ntcvdt%d";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()
@@ -476,6 +478,7 @@ void DataStorageHub::setPuzzleMapSceneShowType (int t_type)
 }
 void DataStorageHub::fFlush ()
 {			myDefault->fFlush(kSDF_myDSH);		}
+
 void DataStorageHub::myInit ()
 {
 	myDefault = SaveData::sharedObject();

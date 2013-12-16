@@ -93,9 +93,10 @@ void* GDWebSprite::t_function(void * _caller)
     return NULL;
 }
 
-CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageName){
-    
+CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageName, CCObject* t_final, SEL_CallFunc d_final){
+	
     if(imgUrl==""){
+		(t_final->*d_final)();
         return (CCSprite *)defaultNode;
     }
     
@@ -115,6 +116,7 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
                 ret->setPosition(CCPointZero);
                 ret->setContentSize(CCSizeMake(ret->getContentSize().width*image->xScale,ret->getContentSize().height*image->yScale));
                 newimg->setContentSize(ret->getContentSize());
+				(t_final->*d_final)();
                 return (CCSprite *)newimg;
             }
         }
@@ -123,7 +125,7 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
     
     //2. 새로운 이미지이면 webImages에 값넣고 스프라잇
     GDWebSprite* _ws = new GDWebSprite;
-    _ws->init(imgUrl, defaultNode, imageName);
+    _ws->init(imgUrl, defaultNode, imageName, t_final, d_final);
     _ws->autorelease();
     
     GDWebSprite::startDownload(_ws);
@@ -131,44 +133,47 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
     return (CCSprite*)_ws;
 }
 
-CCSprite* GDWebSprite::create(string imgUrl, string defaultImg){
+CCSprite* GDWebSprite::create(string imgUrl, string defaultImg, CCObject* t_final, SEL_CallFunc d_final){
 	CCNode *defalutNode = CCSprite::create(defaultImg.c_str());
 	if(!defalutNode)
 		defalutNode = CCNode::create();
 
-	return GDWebSprite::create(imgUrl,defalutNode,"");
+	return GDWebSprite::create(imgUrl,defalutNode,"", t_final, d_final);
 }
 
 
-CCSprite* GDWebSprite::create(string imgUrl, CCNode* defaultNode){
-    return GDWebSprite::create(imgUrl,defaultNode,"");
+CCSprite* GDWebSprite::create(string imgUrl, CCNode* defaultNode, CCObject* t_final, SEL_CallFunc d_final){
+    return GDWebSprite::create(imgUrl,defaultNode,"", t_final, d_final);
 }
 
-CCSprite* GDWebSprite::create(string imgUrl, string defaultImg, string imageName){
+CCSprite* GDWebSprite::create(string imgUrl, string defaultImg, string imageName, CCObject* t_final, SEL_CallFunc d_final){
     CCNode *defalutNode = CCSprite::create(defaultImg.c_str());
-    return GDWebSprite::create(imgUrl,defalutNode,imageName);
+    return GDWebSprite::create(imgUrl,defalutNode,imageName, t_final, d_final);
 }
 
 
-bool GDWebSprite::init(string imgUrl, string defaultImg){
-    return this->init(imgUrl,defaultSprite,"");
+bool GDWebSprite::init(string imgUrl, string defaultImg, CCObject* t_final, SEL_CallFunc d_final){
+    return this->init(imgUrl,defaultSprite,"", t_final, d_final);
 }
 
-bool GDWebSprite::init(string imgUrl, CCNode* defaultNode){
-    return this->init(imgUrl,defaultNode,"");
+bool GDWebSprite::init(string imgUrl, CCNode* defaultNode, CCObject* t_final, SEL_CallFunc d_final){
+    return this->init(imgUrl,defaultNode,"", t_final, d_final);
 }
 
-bool GDWebSprite::init(string imgUrl, string defaultImg, string imageName){
+bool GDWebSprite::init(string imgUrl, string defaultImg, string imageName, CCObject* t_final, SEL_CallFunc d_final){
     defaultSprite = CCSprite::create(defaultImg.c_str());
-    return this->init(imgUrl,defaultSprite,imageName);
+    return this->init(imgUrl,defaultSprite,imageName, t_final, d_final);
 }
 
-bool GDWebSprite::init(string imgUrl, CCNode *defaultNode, string imageName){
+bool GDWebSprite::init(string imgUrl, CCNode *defaultNode, string imageName, CCObject* t_final, SEL_CallFunc d_final){
     
     if(!CCNode::init()){
         return false;
     }
     
+	final_target = t_final;
+	final_delegate = d_final;
+	
     defaultSprite = defaultNode;
     this->addChild(defaultSprite,1);
     this->setContentSize(CCSize(defaultSprite->getContentSize().width,defaultSprite->getContentSize().height));
@@ -227,7 +232,11 @@ void GDWebSprite::finishDownload(){
             delete img;// in cocos2d-x 1.x
         }
     }
-    
+	
+	if(final_target && final_delegate)
+	{
+		(final_target->*final_delegate)();
+	}
 }
 
 void GDWebSprite::changeWebSprite(CCTexture2D *pTexture){
