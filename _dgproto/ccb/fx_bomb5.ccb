@@ -383,7 +383,7 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>fx_bomb4_1</string>
+						<string>fx_bomb5_1</string>
 						<key>memberVarAssignmentName</key>
 						<string></string>
 						<key>memberVarAssignmentType</key>
@@ -413,9 +413,9 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1.5</real>
-									<real>1.5</real>
-									<true/>
+									<real>0.5</real>
+									<real>0.5</real>
+									<false/>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -430,7 +430,7 @@
 							<dict>
 								<key>baseValue</key>
 								<array>
-									<string>fx_bomb4_1.png</string>
+									<string>fx_bomb5_1.png</string>
 									<string>Use regular file</string>
 								</array>
 								<key>name</key>
@@ -440,7 +440,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>fx_bomb5_9.png</string>
+									<string>fx_bomb5_1.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -451,11 +451,9 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>230</integer>
+								<integer>0</integer>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 						<key>seqExpanded</key>
 						<true/>
 					</dict>
@@ -620,7 +618,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.93333333730697632</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

@@ -13,6 +13,7 @@
 #include "UnknownFriends.h"
 #include "KnownFriend.h"
 #include "KSUtil.h"
+#include <chrono>
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -72,6 +73,11 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		common_setting_label->setPosition(ccp(40, myDSH->ui_top-30));
 		addChild(common_setting_label);
 		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+		
+		CCLabelTTF* noticelist_label = CCLabelTTF::create("start getnoticelist", mySGD->getFont().c_str(), 10);
+		noticelist_label->setPosition(ccp(440, myDSH->ui_top-30));
+		addChild(noticelist_label);
+		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 		
 		CCLabelTTF* character_label = CCLabelTTF::create("start getcharacterlist", mySGD->getFont().c_str(), 10);
 		character_label->setPosition(ccp(120, myDSH->ui_top-30));
@@ -227,6 +233,25 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		common_setting_label->setPosition(ccp(40, myDSH->ui_top-60));
 		addChild(common_setting_label);
 		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetNoticeList(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->resetNoticeList(result_data["list"]);
+	}
+	else
+	{
+		is_receive_fail = true;
+		CCLabelTTF* common_setting_label = CCLabelTTF::create("fail getnoticelist", mySGD->getFont().c_str(), 10);
+		common_setting_label->setPosition(ccp(440, myDSH->ui_top-60));
+		addChild(common_setting_label);
+		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 	}
 	
 	receive_cnt--;

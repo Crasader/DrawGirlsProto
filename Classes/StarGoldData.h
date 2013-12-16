@@ -317,6 +317,46 @@ public:
 		return bonus_item_cnt[t_code];
 	}
 	
+	void resetNoticeList(Json::Value t_notice_list)
+	{
+		must_be_show_notice = false;
+		notice_list.clear();
+		
+		chrono::time_point<chrono::system_clock> chrono_now_time = chrono::system_clock::now();
+		time_t now_time = chrono::system_clock::to_time_t(chrono_now_time);
+		struct tm* struct_time = localtime(&now_time);
+		string time_string = "";
+		time_string += CCString::createWithFormat("%04d", struct_time->tm_year+1900)->getCString();
+		time_string += CCString::createWithFormat("%02d", struct_time->tm_mon+1)->getCString();
+		time_string += CCString::createWithFormat("%02d", struct_time->tm_mday)->getCString();
+		time_string += CCString::createWithFormat("%02d", struct_time->tm_hour)->getCString();
+		time_string += CCString::createWithFormat("%02d", struct_time->tm_min)->getCString();
+		time_string += CCString::createWithFormat("%02d", struct_time->tm_sec)->getCString();
+		
+		int64 now_value = atoll(time_string.c_str());
+		
+		for(int i=0;i<t_notice_list.size();i++)
+		{
+			string notice_time = myDSH->getStringForKey(kDSH_Key_noticeViewDate_int1, t_notice_list[i]["no"].asInt());
+			int64 notice_value = atoll(notice_time.c_str());
+			if(notice_time == "" || notice_value <= now_value)
+				notice_list.append(t_notice_list[i]);
+		}
+		if(!notice_list.empty())
+			must_be_show_notice = true;
+	}
+	
+	bool getMustBeShowNotice()
+	{
+		return must_be_show_notice;
+	}
+	
+	Json::Value getNoticeList()
+	{
+		must_be_show_notice = false;
+		return notice_list;
+	}
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
@@ -376,6 +416,8 @@ private:
 	
 	JsonBox::Object startRequestsData;
 	
+	bool must_be_show_notice;
+	Json::Value notice_list;
 	
 	void myInit();
 	

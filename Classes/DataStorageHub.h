@@ -61,7 +61,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_isControlJoystickFixed,
 	kDSH_Key_hasShowTutorial_int1,
 	kDSH_Key_selectedCharacter,
-	kDSH_Key_isCharacterUnlocked_int1
+	kDSH_Key_isCharacterUnlocked_int1,
+	
+	kDSH_Key_noticeViewDate_int1
 }DSH_Key;
 
 enum SpecialTutorialCode{
@@ -102,59 +104,59 @@ enum PuzzleMapSceneShowType{
 class DataStorageHub : public CCObject
 {
 public:
-  static DataStorageHub * sharedInstance ();
-  bool getBoolForKey (DSH_Key t_key);
-  bool getBoolForKey (DSH_Key t_key, int key_val1);
-  bool getBoolForKey (DSH_Key t_key, int key_val1, int key_val2);
-  void setBoolForKey (DSH_Key t_key, bool t_b, bool diskWrite = true);
-  void setBoolForKey (DSH_Key t_key, int key_val1, bool t_b, bool diskWrite = true);
-  void setBoolForKey (DSH_Key t_key, int key_val1, int key_val2, bool t_b, bool diskWrite = true);
-  int getUserIntForStr (string t_key, int t_default);
-  void setUserIntForStr (string t_key, int t_val1, bool diskWrite = true);
-  string getUserStrForStr (string t_key, string t_default);
-  void setUserStrForStr (string t_key, string t_val1, bool diskWrite = true);
-  int getIntegerForKey (DSH_Key t_key);
-  int getIntegerForKey (DSH_Key t_key, int key_val1);
-  int getIntegerForKey (DSH_Key t_key, int key_val1, int key_val2);
-  void setIntegerForKey (DSH_Key t_key, int val1, bool diskWrite = true);
-  void setIntegerForKey (DSH_Key t_key, int key_val1, int val1, bool diskWrite = true);
-  string getStringForKey (DSH_Key t_key);
-  void setStringForKey (DSH_Key t_key, string val1, bool diskWrite = true);
-  string getStringForKey (DSH_Key t_key, int key_val1);
-  void setStringForKey (DSH_Key t_key, int key_val1, string val1, bool diskWrite = true);
-  void setIntegerForKey (DSH_Key t_key, int key_val1, int key_val2, int val1, bool diskWrite = true);
-  CCSize getDesignResolutionSize ();
-  float ui_top;
-  float puzzle_ui_top;
-  float ui_center_y;
-  float ui_bottom;
-  CCPoint ui_zero_point;
-  float screen_convert_rate;
-  CCPoint ui_touch_convert;
-  CCPoint mult_point;
-  CCPoint add_point;
-  CCPoint wideWidthFixTouch (CCPoint t_p);
-  string getKey (DSH_Key t_name);
-  Json::Value getSaveAllUserDataParam ();
-  void loadAllUserData (Json::Value result_data, vector <int> & card_data_load_list);
-  void writeParamForKey (Json::Value & data, SaveUserData_Key t_key);
-  void saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector);
-  void saveAllUserData (jsonSelType t_saved);
-  void resetDSH ();
-  bool isCheatKeyEnable ();
-  int getPuzzleMapSceneShowType ();
-  void setPuzzleMapSceneShowType (int t_type);
-  void fFlush ();
+	static DataStorageHub * sharedInstance ();
+	bool getBoolForKey (DSH_Key t_key);
+	bool getBoolForKey (DSH_Key t_key, int key_val1);
+	bool getBoolForKey (DSH_Key t_key, int key_val1, int key_val2);
+	void setBoolForKey (DSH_Key t_key, bool t_b, bool diskWrite = true);
+	void setBoolForKey (DSH_Key t_key, int key_val1, bool t_b, bool diskWrite = true);
+	void setBoolForKey (DSH_Key t_key, int key_val1, int key_val2, bool t_b, bool diskWrite = true);
+	int getUserIntForStr (string t_key, int t_default);
+	void setUserIntForStr (string t_key, int t_val1, bool diskWrite = true);
+	string getUserStrForStr (string t_key, string t_default);
+	void setUserStrForStr (string t_key, string t_val1, bool diskWrite = true);
+	int getIntegerForKey (DSH_Key t_key);
+	int getIntegerForKey (DSH_Key t_key, int key_val1);
+	int getIntegerForKey (DSH_Key t_key, int key_val1, int key_val2);
+	void setIntegerForKey (DSH_Key t_key, int val1, bool diskWrite = true);
+	void setIntegerForKey (DSH_Key t_key, int key_val1, int val1, bool diskWrite = true);
+	string getStringForKey (DSH_Key t_key);
+	void setStringForKey (DSH_Key t_key, string val1, bool diskWrite = true);
+	string getStringForKey (DSH_Key t_key, int key_val1);
+	void setStringForKey (DSH_Key t_key, int key_val1, string val1, bool diskWrite = true);
+	void setIntegerForKey (DSH_Key t_key, int key_val1, int key_val2, int val1, bool diskWrite = true);
+	CCSize getDesignResolutionSize ();
+	float ui_top;
+	float puzzle_ui_top;
+	float ui_center_y;
+	float ui_bottom;
+	CCPoint ui_zero_point;
+	float screen_convert_rate;
+	CCPoint ui_touch_convert;
+	CCPoint mult_point;
+	CCPoint add_point;
+	CCPoint wideWidthFixTouch (CCPoint t_p);
+	string getKey (DSH_Key t_name);
+	Json::Value getSaveAllUserDataParam ();
+	void loadAllUserData (Json::Value result_data, vector <int> & card_data_load_list);
+	void writeParamForKey (Json::Value & data, SaveUserData_Key t_key);
+	void saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector);
+	void saveAllUserData (jsonSelType t_saved);
+	void resetDSH ();
+	bool isCheatKeyEnable ();
+	int getPuzzleMapSceneShowType ();
+	void setPuzzleMapSceneShowType (int t_type);
+	void fFlush ();
 private:
-  SaveData * myDefault;
-  float gold_get_rate;
-  bool is_cheat_key_enabled;
-  int puzzle_map_scene_show_type;
-  void myInit ();
-
+	SaveData * myDefault;
+	float gold_get_rate;
+	bool is_cheat_key_enabled;
+	int puzzle_map_scene_show_type;
+	void myInit ();
+	
 	CC_SYNTHESIZE(int, default_gold, DefaultGold); // 기본 골드
 	CC_SYNTHESIZE(int, default_ruby, DefaultRuby); // 기본 루비
-
+	
 };
 #undef LZZ_INLINE
 #endif
