@@ -191,6 +191,8 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 	for(auto i : rs)
 	{
 		ps.pushProb(i->m_weight);
+		addChild(i);
+		i->setVisible(false);
 	}
 	m_alreadyDeterminantOrder = ps.getResult(); // 순서
 	CCLog("my order %d", m_alreadyDeterminantOrder);
@@ -411,7 +413,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 											 }
 											 else if(m_state == SlotMachineState::kScrolling3)
 											 {
-												 m_state = SlotMachineState::kShow;
+												 
 												 int currentSlot = 2;
 												 addChild(KSSchedule::create([=](float dt)
 																										 {
@@ -431,7 +433,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 																																	 ,
 																																	 [=](float t)
 																																	 {
-																																		 
+																																			m_state = SlotMachineState::kShow;
 																																	 }));
 																												 return false;
 																											 }
