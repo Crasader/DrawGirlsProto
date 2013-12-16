@@ -537,6 +537,7 @@ void GachaPurchase::visibling()
 																									 RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
 																									 RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
 																									 RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
+																									 RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5),
 																									 RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 																								 },
 																								 recent_mode);
