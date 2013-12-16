@@ -366,7 +366,8 @@ void GachaPurchase::menuAction(CCObject *pSender)
 			mySGD->setStar(mySGD->getStar() - mySGD->getGachaRubyFee());
 			myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 			
-			(target_out->*delegate_out)();
+			if(target_out)
+				(target_out->*delegate_out)();
 			gachaListPopup();
 		}
 		else
@@ -384,7 +385,8 @@ void GachaPurchase::menuAction(CCObject *pSender)
 			mySGD->setGold(mySGD->getGold() - mySGD->getGachaGoldFee());
 			myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
 			
-			(target_out->*delegate_out)();
+			if(target_out)
+				(target_out->*delegate_out)();
 			gachaListPopup();
 		}
 		else
@@ -402,7 +404,8 @@ void GachaPurchase::menuAction(CCObject *pSender)
 			mySGD->setFriendPoint(mySGD->getFriendPoint() - mySGD->getGachaSocialFee());
 			myDSH->saveUserData({kSaveUserData_Key_friendPoint}, nullptr);
 			
-			(target_out->*delegate_out)();
+			if(target_out)
+				(target_out->*delegate_out)();
 			gachaListPopup();
 		}
 		else
@@ -469,7 +472,8 @@ void GachaPurchase::visibling()
 			CCCallFunc* right_remove = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
 			CCSequence* right_seq = CCSequence::create(right_in_move, right_delay, remove_main, right_out_move, right_remove, NULL);
 			right_curtain->runAction(right_seq);
-			(target->*delegate)();
+			if(target)
+				(target->*delegate)();
 			if(finish_function)
 				finish_function();
 		};
