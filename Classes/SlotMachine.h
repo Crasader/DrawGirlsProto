@@ -16,75 +16,52 @@ USING_NS_CC;
 #include "GachaReward.h"
 
 
-class CCMenuItemToggleWithTopHorseLambda : public CCMenuItemToggleLambda
-{
-public:
-	static CCMenuItemToggleWithTopHorseLambda * createWithTarget(std::function<void(CCObject*)> selector, CCMenuItemLambda* item, ...)
-	{
-		va_list args;
-		va_start(args, item);
-		CCMenuItemToggleWithTopHorseLambda *pRet = new CCMenuItemToggleWithTopHorseLambda();
-		pRet->initWithTarget( selector, item, args);
-		pRet->autorelease();
-		va_end(args);
-		return pRet;
-	}
-	CCMenuItemToggleLambda* m_hatTop;
-	RewardSprite* m_reward;
-};
 
 
-#define __TYPE__ HorseGachaSub
+#define __TYPE__ SlotMachineSub
 
-enum class HorseSceneState
+enum class SlotMachineState
 {
 	kPutBoard,
-	kUnjiHorseReward,
-	kHorseSelect,
-	kCanStart, // 스타트 가능한 상태
-	kRun,
-	kAllArive,
-	kShowReward1,
-	kFinish
+	kScrolling1,
+	kScrolling2,
+	kScrolling3,
+	kShow,
+	kQuestion
 };
 
-class HorseSprite : public CCSprite
-{
-public:
-	float m_horseSpeed;
-	std::deque<float> m_speedPerFrame; // 프레임 별로 가지는 스피드. 미리 정해논 스피드로 달림. 마음아픔.
-	float m_totalDistance;
-	
-};
-class HorseGachaSub : public CCLayer
+class SlotMachineSub : public CCLayer
 {
 protected:
 //	CCSprite* aHorse;
 	GachaPurchaseStartMode m_gachaMode;
-
-	CCPoint m_trackPosition;
+	
 	CCMenuLambda* m_menu;
-	std::vector<int> m_arriveOrder;
-	std::vector<CCPoint> m_horsePositions;
-	std::vector<HorseSprite*> m_horses; // 말.
 	std::vector<RewardSprite*> m_rewards; // 보상.
+	std::vector<std::string> m_rewardItems; // 보상 아이템들.
 	mt19937 m_rEngine;                    // MT19937 난수 엔진
 	
 	Well512 m_well512;
-	HorseSceneState m_state;
+	SlotMachineState m_state;
 	float m_timer;
-	CCSprite* m_horseBoard;
-	CCNode* m_horseBoardNode;
-	int m_selectedHorseIndex;
-	int m_alreadyDeterminantOrder; // 이미 정해져 있는 나의 등수... 슬프다.
+//	CCNode* m_slotNode[3];
+	CCClippingNode* m_clipSlot[3];
+	CCNode* m_nodeOfItems[3];
+	int m_alreadyDeterminantOrder;
+	std::vector<int> m_determinantSlotItems;
+	int m_prevSlotIndex[3];
+	bool m_firstSlotStopFirst;
+	bool m_firstSlotStopSecond;
+	bool m_firstSlotStopThird;
+//	float m_itemTopY[3];
 public:
 	KSAlertView* m_parent;
 	std::function<void(void)> m_callback;
-	HorseGachaSub() : m_state(HorseSceneState::kPutBoard), m_timer(0)
+	SlotMachineSub() : m_state(SlotMachineState::kPutBoard), m_timer(0)
 	{
 		
 	}
-	virtual ~HorseGachaSub()
+	virtual ~SlotMachineSub()
 	{
 		
 	}
@@ -140,24 +117,24 @@ public:
 	virtual bool init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm);
 	
 	virtual void update(float dt);
-	
+	std::vector<int> rotationSlot(const std::vector<int>& slots, float scrollSpeed);
 	
 };
 #undef __TYPE__
 
 
-#define __TYPE__ HorseGacha
-class HorseGacha : public CCLayer
+
+class SlotMachine : public CCLayer
 {
 public:
 	std::function<void(void)> m_closeCallback;
-	HorseGacha();
-	virtual ~HorseGacha();
+	SlotMachine();
+	virtual ~SlotMachine();
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual bool init(std::function<void(void)> closeCallback);
-	static __TYPE__* create(std::function<void(void)> closeCallback) \
+	static SlotMachine* create(std::function<void(void)> closeCallback) \
 	{ \
-    __TYPE__ *pRet = new __TYPE__(); \
+    SlotMachine *pRet = new SlotMachine(); \
     if (pRet && pRet->init(closeCallback))
     { \
 			pRet->autorelease(); \
@@ -173,8 +150,5 @@ public:
 	
 	//virtual void registerWithTouchDispatcher();
 };
-
-#undef __TYPE__
-
 
 
