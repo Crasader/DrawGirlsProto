@@ -14,6 +14,7 @@
 #include "HatGacha.h"
 #include "HorseGacha.h"
 #include "SlotMachine.h"
+#include "Roulette.h"
 
 enum GachaPurchaseZorder{
 	kGachaPurchaseZorder_gray = 1,
@@ -478,18 +479,15 @@ void GachaPurchase::visibling()
 		{
 			case 0:
 			{
-				HorseGachaSub* p = HorseGachaSub::create
-				(finalFunction,
-				 {
-					 RewardSprite::create(RewardKind::kRuby, 20, "price_ruby_img.png", 1),
-					 RewardSprite::create(RewardKind::kGold, 500, "price_gold_img.png", 2),
-					 RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
-					 RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
-					 RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-					 RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
-					 RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
-				 }
-				 , recent_mode);
+				RouletteSub* p = RouletteSub::create(finalFunction, {
+					RewardSprite::create(RewardKind::kRuby, 20, "", 1),
+					RewardSprite::create(RewardKind::kGold, 500, "", 2),
+					RewardSprite::create(RewardKind::kDash, 1, "", 3),
+					RewardSprite::create(RewardKind::kPower, 1, "", 4),
+					RewardSprite::create(RewardKind::kSlience, 1, "", 5),
+					RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
+					RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
+				}, recent_mode);
 				getParent()->addChild(p, kPMS_Z_popup);
 			}
 				break;
