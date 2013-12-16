@@ -259,7 +259,39 @@ public:
 	}
 };
 
-
+class KSSchedule : public CCNode
+{
+protected:
+	std::function<bool(float)> f;
+	float m_s;
+	float m_timer;
+public:
+	virtual ~KSSchedule(){}
+	static KSSchedule* create(std::function<bool(float)> __f)
+	{
+		KSSchedule* kt = new KSSchedule;
+		kt->init(__f);
+		kt->autorelease();
+		return kt;
+	}
+	bool init(std::function<bool(float)> __f)
+	{
+		f = __f;
+//		m_s = s;
+		m_timer = 0;
+		scheduleUpdate();
+		return true;
+	}
+	void update(float dt)
+	{
+		m_timer += dt;
+		bool r = f(dt);
+		if( r == false )
+		{
+			removeFromParent();
+		}
+	}
+};
 class KSTimer : public CCNode
 {
 protected:

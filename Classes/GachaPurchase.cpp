@@ -13,6 +13,7 @@
 #include "PuzzleMapScene.h"
 #include "HatGacha.h"
 #include "HorseGacha.h"
+#include "SlotMachine.h"
 
 enum GachaPurchaseZorder{
 	kGachaPurchaseZorder_gray = 1,
@@ -526,9 +527,9 @@ void GachaPurchase::visibling()
 				getParent()->addChild(p, kPMS_Z_popup);
 			}
 				break;
-			case 3:
+			case 3: // 빠ㅊ칭ㅋ코
 			{
-				HorseGachaSub* p = HorseGachaSub::create(finalFunction,
+				SlotMachineSub* p = SlotMachineSub::create(finalFunction,
 																								 {
 																									 RewardSprite::create(RewardKind::kRuby, 20, "price_ruby_img.png", 1),
 																									 RewardSprite::create(RewardKind::kGold, 500, "price_gold_img.png", 2),

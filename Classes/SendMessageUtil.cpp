@@ -117,7 +117,6 @@ void setInviteSendTime( string userId )
 
 int getHeartIsSendable (std::string userId, int base_s)
 {
-	return true;
 	auto end = chrono::system_clock::now();
 	auto currentSecond = chrono::system_clock::to_time_t(end);
 	int ii = myDSH->getUserIntForStr("heart_" + userId, 0);
