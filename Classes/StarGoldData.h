@@ -338,7 +338,7 @@ public:
 		for(int i=0;i<t_notice_list.size();i++)
 		{
 			string notice_time = myDSH->getStringForKey(kDSH_Key_noticeViewDate_int1, t_notice_list[i]["no"].asInt());
-			int notice_value = atoll(notice_time.c_str());
+			int64 notice_value = atoll(notice_time.c_str());
 			if(notice_time == "" || notice_value <= now_value)
 				notice_list.append(t_notice_list[i]);
 		}
