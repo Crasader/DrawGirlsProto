@@ -27,7 +27,8 @@ enum ShopCode{
 
 enum ShopBeforeCode{
 	kShopBeforeCode_stagesetting = 0,
-	kShopBeforeCode_mainflow
+	kShopBeforeCode_mainflow,
+	kShopBeforeCode_puzzle
 };
 
 class HeartTime;

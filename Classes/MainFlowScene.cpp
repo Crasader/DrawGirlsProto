@@ -21,6 +21,7 @@
 #include "ServerDataSave.h"
 #include "ASPopupView.h"
 #include "TicketRequestContent.h"
+#include "PuzzleScene.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -108,8 +109,8 @@ void MainFlowScene::cellAction(CCObject* sender)
 	if(tag < kMainFlowTableCellTag_buyBase)
 	{
 		int puzzle_number = tag - kMainFlowTableCellTag_openBase;
-		CCLog("puzzle_number : %d", puzzle_number);
-		is_menu_enable = true;
+		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+		CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 	}
 	else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
 	{
@@ -334,8 +335,6 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			cell->addChild(not_clear_img);
 		}
 	}
-	
-	cell->setIdx(idx);
 	
 	return cell;
 }
@@ -602,7 +601,7 @@ void MainFlowScene::setTop()
 	top_case->addChild(heart_menu);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(240,top_case->getContentSize().height/2.f));
+	gold_label->setPosition(ccp(237,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);

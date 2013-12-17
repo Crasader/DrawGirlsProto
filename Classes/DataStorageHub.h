@@ -38,6 +38,7 @@ typedef enum t_DSH_Key{
 	kDSH_Key_takeCardNumber_int1,
 	kDSH_Key_cardSortType,
 	kDSH_Key_lastSelectedStage,
+	kDSH_Key_lastSelectedStageForPuzzle_int1,
 	kDSH_Key_uiType,
 	kDSH_Key_puzzleMode,
 	kDSH_Key_selectedPuzzleNumber,
