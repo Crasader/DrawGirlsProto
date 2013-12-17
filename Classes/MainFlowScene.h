@@ -58,6 +58,8 @@ private:
 	void setBottom();
 	
 	void popupClose();
+	
+	void puzzleLoadSuccess();
 };
 
 #endif /* defined(__DGproto__MainFlowScene__) */

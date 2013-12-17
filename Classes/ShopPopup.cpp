@@ -12,6 +12,7 @@
 #include "LoadingLayer.h"
 #include "StageSettingPopup.h"
 #include "MainFlowScene.h"
+#include "PuzzleScene.h"
 #include "KSUtil.h"
 #include "StageImgLoader.h"
 
@@ -692,6 +693,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_mainflow)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_puzzle)
+					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -767,6 +770,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_mainflow)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_puzzle)
+					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -842,6 +847,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_mainflow)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_puzzle)
+					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -917,6 +924,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_mainflow)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_puzzle)
+					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -992,6 +1001,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_mainflow)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_puzzle)
+					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -1067,6 +1078,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_mainflow)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_puzzle)
+					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
