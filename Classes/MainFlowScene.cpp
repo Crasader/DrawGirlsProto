@@ -22,6 +22,7 @@
 #include "ASPopupView.h"
 #include "TicketRequestContent.h"
 #include "PuzzleScene.h"
+#include "StageListDown.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -98,6 +99,11 @@ enum MainFlowTableCellTag{
 	kMainFlowTableCellTag_ticketBase = 20000
 };
 
+void MainFlowScene::puzzleLoadSuccess()
+{
+	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+}
+
 void MainFlowScene::cellAction(CCObject* sender)
 {
 	if(!is_menu_enable)
@@ -110,7 +116,9 @@ void MainFlowScene::cellAction(CCObject* sender)
 	{
 		int puzzle_number = tag - kMainFlowTableCellTag_openBase;
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
-		CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+		
+		StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::puzzleLoadSuccess), puzzle_number);
+		addChild(t_sld, kMainFlowZorder_popup);
 	}
 	else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
 	{
