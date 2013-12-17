@@ -1123,8 +1123,9 @@ void FallMeteor::stopFall ()
 {
 	unschedule(schedule_selector(FallMeteor::fall));
 	initParticle();
-	meteor->removeFromParentAndCleanup(true);
-	
+	if(meteor)
+		meteor->removeFromParentAndCleanup(true);
+	meteor = nullptr;
 	//finalCrash();
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.5);
@@ -1214,8 +1215,8 @@ void FallMeteor::initParticle ()
 	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
 	CCSprite* particle = ret.first;
 	
-	
-	particle->setPosition(meteor->getPosition());
+	if(meteor)
+		particle->setPosition(meteor->getPosition());
 	//		particle->setPosVar(CCPointZero);
 	addChild(particle);
 }
