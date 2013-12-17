@@ -53,7 +53,7 @@ bool HeartTime::startGame ()
 void HeartTime::backHeart ()
 {
 	myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
-	CCSprite* t_heart = CCSprite::create("test_ui_heart.png");
+	CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 	t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 	addChild(t_heart);
 }
@@ -76,7 +76,7 @@ void HeartTime::checkingTime ()
 	{
 		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		myDSH->setIntegerForKey(kDSH_Key_heartTime, recent_time_second);
-		CCSprite* t_heart = CCSprite::create("test_ui_heart.png");
+		CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 		t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 		addChild(t_heart);
 		
@@ -110,7 +110,7 @@ void HeartTime::myInit ()
 	int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_heartCnt);
 	for(int i=0;i<loop_cnt && i < mySGD->getHeartMax();i++)
 	{
-		CCSprite* t_heart = CCSprite::create("test_ui_heart.png");
+		CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 		t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 		addChild(t_heart);
 		
@@ -129,7 +129,7 @@ void HeartTime::myInit ()
 		int charge_cnt = sub_value/mySGD->getHeartCoolTime();
 		for(int i=0;i<charge_cnt && heart_list.size() < mySGD->getHeartMax();i++)
 		{
-			CCSprite* t_heart = CCSprite::create("test_ui_heart.png");
+			CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 			t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 			addChild(t_heart);
 			
