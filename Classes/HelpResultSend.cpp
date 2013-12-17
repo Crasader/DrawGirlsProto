@@ -69,6 +69,11 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 			 
 			 //																		setHelpSendTime(recvId);
 //			 addChild(HatGacha::create([=](){}), 1);
+			 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+			 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+													 {
+														 
+													 });
 			 GraphDogLib::JsonToLog("sendMessage", r);
 			 
 			 

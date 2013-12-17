@@ -408,6 +408,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																							
 																							//																		setHelpSendTime(recvId);
 																							GraphDogLib::JsonToLog("sendMessage", r);
+
 																							//												 						obj->removeFromParent();
 																							KSAlertView* av = KSAlertView::create();
 																							av->setCenterY(150);
@@ -491,6 +492,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 												 [=](Json::Value r)
 												 {
+													 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+													 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																							 {
+																								 
+																							 });
+
 													 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
 																													[=](){
 																														CCLog("hat close");
@@ -512,6 +519,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						"removemessage",p,
 						[=](Json::Value r)
 						{
+							mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+							myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																	{
+																		
+																	});
+
 							KSAlertView* av = KSAlertView::create();
 							av->setCloseOnPress(false);
 							//				 av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
@@ -629,6 +642,11 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 (mailNo, mail["memberID"].asInt64(),
 					[=](Json::Value r)
 					{
+						mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+						myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																{
+																	
+																});
 						KSAlertView* av = KSAlertView::create();
 						
 						auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, contentObj["cardnumber"].asInt());
@@ -734,6 +752,11 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 														hspConnector::get()->command
 														("sendMessage", p, [=](Json::Value r)
 														 {
+															 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendTicket());
+															 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																									 {
+																										 
+																									 });
 															 av->removeFromParent();
 														 });
 													});

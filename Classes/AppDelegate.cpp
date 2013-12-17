@@ -19,7 +19,8 @@ USING_NS_CC;
 #include <map>
 #include "KSUtil.h"
 #include "Well512.h"
-
+#include "Dodge.h"
+#include "RandomDistribution.h"
 
 
 
@@ -240,8 +241,14 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 //	CCScene* pScene = TitleScene::scene();
 	CCScene* pScene = TitleRenewalScene::scene();
+//	CCScene* pScene = Dodge::scene();
+	
+	
+//	pEGLView->setDesignResolutionSize(480, 480, kResolutionFixedWidth);// kResolutionNoBorder);
+//	CCScene* pScene = RandomDistribution::scene();
     pDirector->runWithScene(pScene);
 
+	
     return true;
 }
 

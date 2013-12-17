@@ -130,6 +130,11 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 //																		setHelpSendTime(recvId);
 																		 
 																		 GraphDogLib::JsonToLog("sendMessage", r);
+																		 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+																		 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																												 {
+																													 
+																												 });
 																		 
 																		 //																		obj->removeFromParent();
 																		 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
@@ -164,6 +169,11 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 
 																		 //																		setHelpSendTime(recvId);
 																		 GraphDogLib::JsonToLog("sendMessage", r);
+																		 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+																		 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																												 {
+																													 
+																												 });
 																		 //												 						obj->removeFromParent();
 																		 KSAlertView* av = KSAlertView::create();
 																		 av->setCenterY(150);

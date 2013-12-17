@@ -228,7 +228,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	
 	ostringstream oss;
 	oss << (*member).userId;
-	if(::getHeartIsSendable( oss.str() ))
+	if(::getHeartIsSendable( oss.str(), mySGD->getHeartSendCoolTime() ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
 		("rank_cell_send.png", "rank_cell_send.png",
@@ -263,6 +263,11 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			
 																			
 																			GraphDogLib::JsonToLog("sendMessage", r);
+																			mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
+																			myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																													{
+																														
+																													});
 																			ostringstream oss;
 																			oss << (*member).userId;
 																			std::string userIdStr = oss.str();

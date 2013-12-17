@@ -448,7 +448,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	_menu->setTag(kRP_RT_menu);
 	cell->addChild(_menu, kRP_Z_send);
 	
-	if(::getHeartIsSendable( m_scoreList[idx]["user_id"].asString() ))
+	if(::getHeartIsSendable( m_scoreList[idx]["user_id"].asString(), mySGD->getHeartSendCoolTime() ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
 		("rank_cell_send.png", "rank_cell_send.png",
@@ -479,7 +479,15 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 											  //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 											  //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 											  GraphDogLib::JsonToLog("sendMessage", r);
+												
 											  ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
+												
+												mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
+												myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																						{
+																							
+																						});
+												
 											  obj->removeFromParent();
 											  
 											  CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
