@@ -135,7 +135,15 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 											{
 												stopBtn->setVisible(true);
 												startBtn->removeFromParent();
-												scheduleUpdate();
+												addChild(KSGradualValue<float>::create(0, 15, 0.3f, [=](float t)
+																															 {
+																																 m_rotationBoard->setRotation(m_rotationBoard->getRotation() + t);
+																															 },
+																															 [=](float t)
+																															 {
+																																	scheduleUpdate();
+																															 }));
+												
 											});
 	
 	startBtn->setPosition(ccp(240, 190));
@@ -146,6 +154,7 @@ void RouletteSub::update(float dt)
 {
 	if(m_state == RouletteState::kRotation)
 	{
+		
 		m_rotationBoard->setRotation(m_rotationBoard->getRotation() + 15.f);
 		
 		float tempDegree = m_rotationBoard->getRotation();
