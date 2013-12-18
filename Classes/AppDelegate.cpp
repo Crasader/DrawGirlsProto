@@ -21,6 +21,7 @@ USING_NS_CC;
 #include "Well512.h"
 #include "Dodge.h"
 #include "RandomDistribution.h"
+#include "CountingGame.h"
 
 
 
@@ -240,12 +241,12 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 //	CCScene* pScene = TitleScene::scene();
-//	CCScene* pScene = TitleRenewalScene::scene();
+	CCScene* pScene = TitleRenewalScene::scene();
 //	CCScene* pScene = Dodge::scene();
-	
+//	CCScene* pScene = CountingGame::scene();
 	
 //	pEGLView->setDesignResolutionSize(480, 480, kResolutionFixedWidth);// kResolutionNoBorder);
-	CCScene* pScene = RandomDistribution::scene();
+//	CCScene* pScene = RandomDistribution::scene();
     pDirector->runWithScene(pScene);
 
 	
