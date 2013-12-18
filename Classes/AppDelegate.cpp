@@ -240,12 +240,12 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 //	CCScene* pScene = TitleScene::scene();
-	CCScene* pScene = TitleRenewalScene::scene();
+//	CCScene* pScene = TitleRenewalScene::scene();
 //	CCScene* pScene = Dodge::scene();
 	
 	
 //	pEGLView->setDesignResolutionSize(480, 480, kResolutionFixedWidth);// kResolutionNoBorder);
-//	CCScene* pScene = RandomDistribution::scene();
+	CCScene* pScene = RandomDistribution::scene();
     pDirector->runWithScene(pScene);
 
 	

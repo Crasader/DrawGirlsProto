@@ -16,7 +16,7 @@
 #include "ProbSelector.h"
 #include "Well512.h"
 #include "Jack.h"
-#include "JsonBox.h"
+#include "jsoncpp/json.h"
 #include <queue>
 USING_NS_CC;
 

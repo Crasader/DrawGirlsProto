@@ -119,44 +119,9 @@ CCArray* CumberParent::getSubCumberArrayPointer()
 	return subCumberArray;
 }
 
-void CumberParent::decreaseLifeForSubCumber(CCObject* target, float t_damage, float t_directionAngle)
-{
-	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
-	if(target == mainCumber)
-	{
-//		if(mainCumber->isSheild == 1)
-//			mainCumber->crashSheild();
-	}
-	else
-	{
-		// RTTI
-		for(int i=0;i<subCumberArray->count();i++)
-		{
-			SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
-			
-			if(target == t_sc)
-			{
-				if(t_sc->isSheild == 0)
-					t_sc->decreaseLife(t_damage, t_directionAngle);
-				else
-					t_sc->crashSheild();
-				break;
-			}
-		}
-	}
-}
 
-void CumberParent::createAllCumberSheild()
-{
-//	for(auto mainCumber : mainCumbers)
-//		mainCumber->createSheild();
-	for(int i = 0;i<subCumberArray->count();i++)
-	{
-		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
-		t_sc->createSheild();
-	}
-}
+
+
 
 bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle)
 {
@@ -166,14 +131,7 @@ bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle)
 	KSCumberBase* cbp = dynamic_cast<KSCumberBase*>(cb);
 	return cbp->startDamageReaction(damage, angle);
 }
-void CumberParent::subCumberBomb()
-{
-	for(int i = 0;i<subCumberArray->count();i++)
-	{
-		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
-		t_sc->startSelfBomb();
-	}
-}
+
 
 void CumberParent::subCumberReplication()
 {
@@ -232,25 +190,7 @@ int CumberParent::getMainCumberSheild()
 }
 
 
-void CumberParent::stopSubCumbers()
-{
-	int loop_cnt = subCumberArray->count();
-	for(int i=0;i<loop_cnt;i++)
-	{
-		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
-		t_sc->stopMoving();
-	}
-}
 
-void CumberParent::movingSubCumbers()
-{
-	int loop_cnt = subCumberArray->count();
-	for(int i=0;i<loop_cnt;i++)
-	{
-		SubCumber* t_sc = (SubCumber*)subCumberArray->objectAtIndex(i);
-		t_sc->startMoving();
-	}
-}
 
 void CumberParent::startAutoAttacker()
 {
@@ -539,7 +479,7 @@ void CumberParent::myInit()
 	myGD->B_CCOFF["CP_startDamageReaction"] =
 		std::bind(&CumberParent::startDamageReaction, this, _1, _2, _3);
 	myGD->I_V["CP_getMainCumberSheild"] = std::bind(&CumberParent::getMainCumberSheild, this);
-	myGD->V_V["CP_createAllCumberSheild"] = std::bind(&CumberParent::createAllCumberSheild, this);
+
 	myGD->V_B["CP_slowItem"] = std::bind(&CumberParent::slowItem, this, _1);
 	myGD->V_B["CP_silenceItem"] = std::bind(&CumberParent::silenceItem, this, _1);
 //	myGD->V_V["CP_furyModeOn"] = std::bind(&CumberParent::furyModeOn, this);
