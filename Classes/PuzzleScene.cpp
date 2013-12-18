@@ -69,7 +69,48 @@ bool PuzzleScene::init()
 
 void PuzzleScene::setPuzzle()
 {
+	CCSize puzzle_size = CCSizeMake(326, 268);
 	
+	puzzle_node = CCNode::create();
+	puzzle_node->setPosition(ccp(puzzle_size.width/2.f, puzzle_size.height/2.f));
+	addChild(puzzle_node, kPuzzleZorder_puzzle);
+	
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	
+	CCSprite* top = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_top.png", puzzle_number)->getCString());
+	top->setAnchorPoint(ccp(0.5, 1));
+	top->setPosition(ccp(0, puzzle_size.height/2.f));
+	puzzle_node->addChild(top);
+	
+	CCSprite* bottom = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_bottom.png", puzzle_number)->getCString());
+	bottom->setAnchorPoint(ccp(0.5, 0));
+	bottom->setPosition(ccp(0, -puzzle_size.height/2.f));
+	puzzle_node->addChild(bottom);
+	
+	CCSprite* left = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_left.png", puzzle_number)->getCString());
+	left->setAnchorPoint(ccp(0, 0.5));
+	left->setPosition(ccp(-puzzle_size.width/2.f, 0));
+	puzzle_node->addChild(left);
+	
+	CCSprite* right = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_right.png", puzzle_number)->getCString());
+	right->setAnchorPoint(ccp(1, 0.5));
+	right->setPosition(ccp(puzzle_size.width/2.f, 0));
+	puzzle_node->addChild(right);
+	
+	for(int i=0;i<20;i++)
+	{
+		int x = i%5;
+		int y = i/5;
+		
+		int cutx =x*116+94;
+		int cuty =y*116+94;
+		
+		//테스트로 한번 붙여봅니다.
+		CCSprite *piece =  mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number, i)->getCString());
+		piece->setAnchorPoint(ccp(0.5,0.5));
+		piece->setPosition(ccpAdd(ccp(puzzle_size.width/2.f, puzzle_size.height/2.f), ccp(cutx/2,cuty/2)));
+		puzzle_node->addChild(piece);
+	}
 }
 
 enum PuzzleMenuTag{

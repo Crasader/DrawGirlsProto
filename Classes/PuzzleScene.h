@@ -72,6 +72,7 @@ private:
 	
 	void puzzleAction();
 	void setPuzzle();
+	CCNode* puzzle_node;
 	
 	void menuAction(CCObject* sender);
 	void setTop();
