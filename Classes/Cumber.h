@@ -53,7 +53,7 @@ public:
 	CCNode* getMainCumberPointer();
 	CCArray* getSubCumberArrayPointer();
 
-	void subCumberBomb();
+
 	void subCumberReplication();
 	void setGameover();
 	void startTeleport();

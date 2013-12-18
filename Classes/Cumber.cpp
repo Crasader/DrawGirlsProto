@@ -473,7 +473,6 @@ void CumberParent::myInit()
 	
 	myGD->V_V["CP_setGameover"] = std::bind(&CumberParent::setGameover, this);
 	myGD->V_V["CP_tickingOn"] = std::bind(&CumberParent::tickingOn, this);
-	myGD->V_V["CP_subCumberBomb"] = std::bind(&CumberParent::subCumberBomb, this);
 	myGD->V_V["CP_startTeleport"] = std::bind(&CumberParent::startTeleport, this);
 	myGD->V_V["CP_subCumberReplication"] = std::bind(&CumberParent::subCumberReplication, this);
 	myGD->B_CCOFF["CP_startDamageReaction"] =
