@@ -13,7 +13,7 @@
 #include "AudioEngine.h"
 #include "GraphDog.h"
 #include "GameData.h"
-#include "JsonBox.h"
+#include "jsoncpp/json.h"
 #include "EnumDefine.h"
 #include "SilhouetteData.h"
 #include <deque>
@@ -152,9 +152,9 @@ public:
 	
 	int getGameTime();
 	
-	void setStartRequestsData(JsonBox::Object result_data);
+	void setStartRequestsData(Json::Value result_data);
 	
-	JsonBox::Object getStartRequestsData();
+	Json::Value getStartRequestsData();
 	
 	bool is_paused;
 	
@@ -414,7 +414,7 @@ private:
 	CCObject* shop_opener;
 	SEL_CallFuncI open_shop_delegate;
 	
-	JsonBox::Object startRequestsData;
+	Json::Value startRequestsData;
 	
 	bool must_be_show_notice;
 	Json::Value notice_list;

@@ -18,8 +18,8 @@
 	#include "SaveData_android.h"
 #endif
 
+#include "jsoncpp/json.h"
 
-#include "JsonBox.h"
 
 enum SaveDataFile{
 	kSDF_myDSH = 1,
@@ -96,7 +96,7 @@ private:
 	bool isInit;
 private:
 //	JsonBox::Value jsonData;
-	JsonBox::Value file_sync;
+	Json::Value file_sync;
 	map<string, bool> file_init;
 };
 //extern SaveData* saveData;

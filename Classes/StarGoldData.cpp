@@ -403,12 +403,12 @@ int StarGoldData::getGameTime()
 	return game_time;
 }
 
-void StarGoldData::setStartRequestsData( JsonBox::Object result_data )
+void StarGoldData::setStartRequestsData( Json::Value result_data )
 {
 	startRequestsData = result_data;
 }
 
-JsonBox::Object StarGoldData::getStartRequestsData()
+Json::Value StarGoldData::getStartRequestsData()
 {
 	return startRequestsData;
 }

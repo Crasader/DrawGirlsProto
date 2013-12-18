@@ -10,8 +10,7 @@ USING_NS_CC;
 class RandomDistribution : public CCLayer
 {
 public:
-	CCSpriteBatchNode* m_batchNode;
-	CCSprite* m_rect;
+	CCDrawNode* m_dn;
 	std::mt19937 m_rEngine;
 	RandomDistribution();
 	virtual ~RandomDistribution();

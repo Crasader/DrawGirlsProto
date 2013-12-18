@@ -16,7 +16,6 @@
 #include "StarGoldData.h"
 #include "AlertEngine.h"
 //#include "MainCumber.h"
-#include "SubCumber.h"
 #include "MapFragment.h"
 #include "MobHpGraph.h"
 
@@ -53,16 +52,14 @@ public:
 	void stopMovingMainCumber();
 	CCNode* getMainCumberPointer();
 	CCArray* getSubCumberArrayPointer();
-	void decreaseLifeForSubCumber(CCObject* target, float t_damage, float t_directionAngle);
-	void createAllCumberSheild();
-	bool startDamageReaction(CCObject* cb, float damage, float angle);
-	void subCumberBomb();
+
+
 	void subCumberReplication();
 	void setGameover();
 	void startTeleport();
 	int getMainCumberSheild();
-	void movingSubCumbers();
-	void stopSubCumbers();
+
+
 	void startAutoAttacker();
 	void jackCrashDie();
 //	void setUI_forEP(CCObject* t_ui, SEL_CallFunc k_ui, SEL_CallFunc c_ui);
@@ -71,17 +68,17 @@ public:
 	void changeMaxSize(float t_p);
 	void onJackDie();
 	void onJackRevived();
-	
+	bool startDamageReaction(CCObject* cb, float damage, float angle);
 	void changePassiveData(const std::string& passive_data);
-	float getNumberFromJsonValue(JsonBox::Value v)
-	{
-		if(v.getType() == JsonBox::Value::DOUBLE)
-			return v.getDouble();
-		else if(v.getType() == JsonBox::Value::INTEGER)
-			return v.getInt();
-		else
-			return 0.f;
-	}
+//	float getNumberFromJsonValue(JsonBox::Value v)
+//	{
+//		if(v.getType() == JsonBox::Value::DOUBLE)
+//			return v.getDouble();
+//		else if(v.getType() == JsonBox::Value::INTEGER)
+//			return v.getInt();
+//		else
+//			return 0.f;
+//	}
 private:
 	
 	bool is_die_animationing;
