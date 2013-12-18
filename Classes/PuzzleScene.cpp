@@ -18,6 +18,7 @@
 #include "UnknownFriends.h"
 #include "GDWebSprite.h"
 #include "CumberShowWindow.h"
+#include "StartSettingScene.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -35,8 +36,8 @@ CCScene* PuzzleScene::scene()
 enum PuzzleZorder{
 	kPuzzleZorder_back = 1,
 	kPuzzleZorder_puzzle,
-	kPuzzleZorder_top,
 	kPuzzleZorder_right,
+	kPuzzleZorder_top,
 	kPuzzleZorder_popup
 };
 
@@ -186,11 +187,19 @@ void PuzzleScene::menuAction(CCObject* sender)
 	}
 	else if(tag == kPuzzleMenuTag_start)
 	{
-		
+		CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 	}
 	else if(tag == kPuzzleMenuTag_challenge)
 	{
-		
+		if(selected_friend_idx != -1)
+		{
+			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+		}
+		else
+		{
+			CCLog("not selected friend");
+			is_menu_enable = true;
+		}
 	}
 }
 

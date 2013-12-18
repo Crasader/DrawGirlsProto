@@ -87,6 +87,13 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
 		command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
 		
+		CCLabelTTF* monster_label = CCLabelTTF::create("start getmonsterlist", mySGD->getFont().c_str(), 10);
+		monster_label->setPosition(ccp(240, myDSH->ui_top-45));
+		addChild(monster_label);
+		Json::Value monster_param;
+		monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
+		command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
+		
 		CCLabelTTF* userdata_label = CCLabelTTF::create("start getuserdata", mySGD->getFont().c_str(), 10);
 		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
 		addChild(userdata_label);
@@ -342,6 +349,88 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 		Json::Value character_param;
 		character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
 		command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
+{
+	CCLog("result getmonsterlist : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		Json::Value monster_list = result_data["list"];
+		int monster_count = monster_list.size();
+		NSDS_SI(kSDS_GI_monsterCount_i, monster_count, false);
+		for(int i=1;i<=monster_count;i++)
+		{
+			NSDS_SI(kSDS_GI_monsterInfo_int1_no_i, i, monster_list[i-1]["no"].asInt(), false);
+			NSDS_SS(kSDS_GI_monsterInfo_int1_name_s, i, monster_list[i-1]["name"].asString(), false);
+			NSDS_SB(kSDS_GI_monsterInfo_int1_isBoss_b, i, monster_list[i-1]["isBoss"].asBool(), false);
+			NSDS_SS(kSDS_GI_monsterInfo_int1_resourceInfo_ccbiID_s, i, monster_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
+			
+			if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_ccbi_s, i) != monster_list[i-1]["resourceInfo"]["ccbi"].asString())
+			{
+				// check, after download ----------
+				DownloadFile t_df;
+				t_df.size = 100;
+				t_df.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString().c_str();
+				t_df.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + ".ccbi";
+				t_df.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
+				monster_download_list.push_back(t_df);
+				// ================================
+			}
+			
+			NSDS_SS(kSDS_GI_monsterInfo_int1_resourceInfo_imageID_s, i, monster_list[i-1]["resourceInfo"]["imageID"].asString(), false);
+			
+			if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_plist_s, i) != monster_list[i-1]["resourceInfo"]["plist"].asString())
+			{
+				// check, after download ----------
+				DownloadFile t_df;
+				t_df.size = 100;
+				t_df.img = monster_list[i-1]["resourceInfo"]["plist"].asString().c_str();
+				t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".plist";
+				t_df.key = CCSTR_CWF("mi%d_ri_plist", i)->getCString();
+				monster_download_list.push_back(t_df);
+				// ================================
+			}
+			
+			if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_pvrccz_s, i) != monster_list[i-1]["resourceInfo"]["pvrccz"].asString())
+			{
+				// check, after download ----------
+				DownloadFile t_df;
+				t_df.size = 100;
+				t_df.img = monster_list[i-1]["resourceInfo"]["pvrccz"].asString().c_str();
+				t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".pvr.ccz";
+				t_df.key = CCSTR_CWF("mi%d_ri_pvrccz", i)->getCString();
+				monster_download_list.push_back(t_df);
+				// ================================
+			}
+			
+			NSDS_SI(kSDS_GI_monsterInfo_int1_resourceInfo_size_i, i, monster_list[i-1]["resourceInfo"]["size"].asInt(), false);
+		}
+		
+		if(monster_download_list.size() > 0)
+			monster_download_version = result_data["version"].asInt();
+		else
+			NSDS_SI(kSDS_GI_monsterVersion_i, result_data["version"].asInt(), false);
+		
+		mySDS->fFlush(kSDS_GI_characterCount_i);
+	}
+	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
+	{
+		
+	}
+	else
+	{
+		is_receive_fail = true;
+		CCLabelTTF* monster_label = CCLabelTTF::create("fail getmonsterlist", mySGD->getFont().c_str(), 10);
+		monster_label->setPosition(ccp(240, myDSH->ui_top-90));
+		addChild(monster_label);
+		Json::Value monster_param;
+		monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
+		command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
 	}
 	
 	receive_cnt--;
@@ -772,32 +861,40 @@ void TitleRenewalScene::startFileDownload()
 													  character_download_list[ing_download_cnt-1].filename,
 													  this, callfunc_selector(TitleRenewalScene::successDownloadAction), this, callfunc_selector(TitleRenewalScene::failDownloadAction));
 	}
-	else if(card_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + card_download_list.size())
+	else if(monster_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + monster_download_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, card_download_list[ing_download_cnt-character_download_list.size()-1].filename.c_str());
-		StageImgLoader::sharedInstance()->downloadImg(card_download_list[ing_download_cnt-character_download_list.size()-1].img,
-													  card_download_list[ing_download_cnt-character_download_list.size()-1].size,
-													  card_download_list[ing_download_cnt-character_download_list.size()-1].filename,
+		CCLog("%d : %s", ing_download_cnt, monster_download_list[ing_download_cnt-character_download_list.size()-1].filename.c_str());
+		StageImgLoader::sharedInstance()->downloadImg(monster_download_list[ing_download_cnt-character_download_list.size()-1].img,
+													  monster_download_list[ing_download_cnt-character_download_list.size()-1].size,
+													  monster_download_list[ing_download_cnt-character_download_list.size()-1].filename,
+													  this, callfunc_selector(TitleRenewalScene::successDownloadAction), this, callfunc_selector(TitleRenewalScene::failDownloadAction));
+	}
+	else if(card_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + monster_download_list.size() + card_download_list.size())
+	{
+		CCLog("%d : %s", ing_download_cnt, card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].filename.c_str());
+		StageImgLoader::sharedInstance()->downloadImg(card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img,
+													  card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].size,
+													  card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].filename,
 													  this, callfunc_selector(TitleRenewalScene::successDownloadAction), this, callfunc_selector(TitleRenewalScene::failDownloadAction));
 		
 		schedule(schedule_selector(TitleRenewalScene::downloadingFileAction));
 	}
-	else if(puzzle_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + card_download_list.size() + puzzle_download_list.size())
+	else if(puzzle_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, puzzle_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-1].filename.c_str());
-		StageImgLoader::sharedInstance()->downloadImg(puzzle_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-1].img,
-													  puzzle_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-1].size,
-													  puzzle_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-1].filename,
+		CCLog("%d : %s", ing_download_cnt, puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].filename.c_str());
+		StageImgLoader::sharedInstance()->downloadImg(puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].img,
+													  puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].size,
+													  puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].filename,
 													  this, callfunc_selector(TitleRenewalScene::successDownloadAction), this, callfunc_selector(TitleRenewalScene::failDownloadAction));
 		
 		schedule(schedule_selector(TitleRenewalScene::downloadingFileAction));
 	}
-	else if(event_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size())
+	else if(event_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, event_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].filename.c_str());
-		StageImgLoader::sharedInstance()->downloadImg(event_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img,
-													  event_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].size,
-													  event_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].filename,
+		CCLog("%d : %s", ing_download_cnt, event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].filename.c_str());
+		StageImgLoader::sharedInstance()->downloadImg(event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img,
+													  event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].size,
+													  event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].filename,
 													  this, callfunc_selector(TitleRenewalScene::successDownloadAction), this, callfunc_selector(TitleRenewalScene::failDownloadAction));
 		
 		schedule(schedule_selector(TitleRenewalScene::downloadingFileAction));
@@ -817,7 +914,7 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size())
@@ -829,23 +926,44 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
 		startFileDownload();
 	}
-	else if(ing_download_cnt < character_download_list.size() + card_download_list.size())
+	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size())
 	{
-		SDS_SS(kSDF_cardInfo, card_download_list[ing_download_cnt-character_download_list.size()-1].key,
-			   card_download_list[ing_download_cnt-character_download_list.size()-1].img, false);
+		SDS_SS(kSDF_gameInfo, monster_download_list[ing_download_cnt-character_download_list.size()-1].key, monster_download_list[ing_download_cnt-character_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
 		startFileDownload();
 	}
-	else if(ing_download_cnt == character_download_list.size() + card_download_list.size())
+	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size())
 	{
-		SDS_SS(kSDF_cardInfo, card_download_list[ing_download_cnt-character_download_list.size()-1].key,
-			   card_download_list[ing_download_cnt-character_download_list.size()-1].img, false);
+		SDS_SS(kSDF_gameInfo, monster_download_list[ing_download_cnt-character_download_list.size()-1].key, monster_download_list[ing_download_cnt-character_download_list.size()-1].img, false);
+		NSDS_SI(kSDS_GI_monsterVersion_i, monster_download_version, false);
+		mySDS->fFlush(kSDS_GI_monsterCount_i);
+		
+		ing_download_cnt++;
+		ing_download_per = 0.f;
+		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+		startFileDownload();
+	}
+	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size() + card_download_list.size())
+	{
+		SDS_SS(kSDF_cardInfo, card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].key,
+			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
+		ing_download_cnt++;
+		ing_download_per = 0.f;
+		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+		startFileDownload();
+	}
+	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size() + card_download_list.size())
+	{
+		SDS_SS(kSDF_cardInfo, card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].key,
+			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
 		state_label->setString("카드 섬네일 만드는 중...");
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
@@ -876,33 +994,33 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt,
-											int(character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
 		startFileDownload();
 	}
-	else if(ing_download_cnt <= character_download_list.size() + card_download_list.size() + puzzle_download_list.size())
+	else if(ing_download_cnt <= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
 	{
-		SDS_SS(kSDF_gameInfo, puzzle_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-1].key,
-			   puzzle_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-1].img, false);
+		SDS_SS(kSDF_gameInfo, puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].key,
+			   puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
 		startFileDownload();
 	}
-	else if(ing_download_cnt < character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size())
+	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size())
 	{
-		SDS_SS(kSDF_gameInfo, event_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].key,
-			   event_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img, false);
+		SDS_SS(kSDF_gameInfo, event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].key,
+			   event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
 		startFileDownload();
 	}
-	else if(ing_download_cnt == character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size())
+	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size())
 	{
-		SDS_SS(kSDF_gameInfo, event_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].key,
-			   event_download_list[ing_download_cnt-character_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img, false);
+		SDS_SS(kSDF_gameInfo, event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].key,
+			   event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img, false);
 		if(puzzle_download_list.size() > 0)
 			NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version, false);
 		if(event_download_list.size() > 0)
@@ -911,7 +1029,7 @@ void TitleRenewalScene::successDownloadAction()
 		mySDS->fFlush(kSDS_GI_characterCount_i);
 		
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt,
-											int(character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
 		
 		string nick = myDSH->getStringForKey(kDSH_Key_nick);
 		
@@ -960,7 +1078,7 @@ void TitleRenewalScene::downloadingFileAction()
 	ing_download_per = t_per;
 	
 	download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-										int(character_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+										int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
 }
 
 void TitleRenewalScene::failDownloadAction()
