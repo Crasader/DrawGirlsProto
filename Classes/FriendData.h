@@ -12,14 +12,14 @@
 #include "jsoncpp/json.h"
 #include <boost/format.hpp>
 #include <sstream>
-typedef unsigned long long uint64;
-typedef long long int64;
+
 struct FriendData
 {
-	int64 userId;
+	std::string userId;
 	std::string nick;
-	int64 joinDate;
-	int64 lastDate;
+	
+	int64_t joinDate;
+	int64_t lastDate;
 	std::string profileUrl;
 	bool messageBlocked;
 	Json::Value userData;

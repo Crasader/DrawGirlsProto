@@ -26,10 +26,10 @@ class TicketFriendInfo
 public:
 	string nickname;
 	string img_url;
-	string user_id;
+	std::string user_id;
 	bool is_message_blocked;
 	
-	bool operator==(string t_id)
+	bool operator==(std::string t_id)
 	{
 		return user_id == t_id;
 	};
@@ -145,7 +145,7 @@ private:
 		nickname_label->setPosition(ccp(85,21));
 		cell->addChild(nickname_label);
 		
-		auto iter = find(checked_friend_list.begin(), checked_friend_list.end(), (*member).user_id.c_str());
+		auto iter = find(checked_friend_list.begin(), checked_friend_list.end(), (*member).user_id);
 		
 		if(iter != checked_friend_list.end())
 		{
@@ -177,7 +177,7 @@ private:
     
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 	{
-		auto iter = find(checked_friend_list.begin(), checked_friend_list.end(), friend_list[cell->getTag()].user_id.c_str());
+		auto iter = find(checked_friend_list.begin(), checked_friend_list.end(), friend_list[cell->getTag()].user_id);
 		if(iter != checked_friend_list.end())
 		{
 			cell->removeChildByTag(kTRC_CCT_check);
@@ -221,7 +221,7 @@ private:
 				TicketFriendInfo t_friend_info;
 				t_friend_info.nickname = appfriends[i]["nickname"].asString().c_str();
 				t_friend_info.img_url = appfriends[i]["profile_image_url"].asString().c_str();
-				t_friend_info.user_id = appfriends[i]["user_id"].asString().c_str();
+				t_friend_info.user_id = appfriends[i]["user_id"].asInt64();
 				friend_list.push_back(t_friend_info);
 			}
 			

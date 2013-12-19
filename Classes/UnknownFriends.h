@@ -32,13 +32,14 @@ protected:
 public:
 	const std::vector<FriendData>& getFriends(){return m_friends;}
 	
-	void deleteById(uint64 kakaoId);
-	void putJoinDate(int index, int64 jd);
-	void putLastDate(int index, int64 jd);
+	
+	void deleteById(std::string kakaoId);
+	void putJoinDate(int index, int64_t jd);
+	void putLastDate(int index, int64_t jd);
 	void putUserData(int index, Json::Value d);
 	void putHashedTalkUserId(int index, const std::string hashId);
 
-	FriendData* findById(uint64 kakaoId);
+	FriendData* findById(std::string kakaoId);
 	void add(const FriendData& d);
 };
 

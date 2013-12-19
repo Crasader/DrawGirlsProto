@@ -226,9 +226,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	_menu->setTag(kFriendTableTagMenu);
 	cell->addChild(_menu, 1);
 	
-	ostringstream oss;
-	oss << (*member).userId;
-	if(::getHeartIsSendable( oss.str(), mySGD->getHeartSendCoolTime() ))
+	if(::getHeartIsSendable( (*member).userId, mySGD->getHeartSendCoolTime() ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
 		("rank_cell_send.png", "rank_cell_send.png",
@@ -247,9 +245,8 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 			 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 			 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-			 int64 recvId = (*member).userId;
-			 if(recvId < 0)
-				 recvId = -recvId;
+			 std::string recvId = (*member).userId;
+			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 //			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 			 p["receiverMemberID"] = recvId;
 			 p["senderMemberID"] = hspConnector::get()->getKakaoID();
@@ -271,7 +268,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			ostringstream oss;
 																			oss << (*member).userId;
 																			std::string userIdStr = oss.str();
-																			::setHeartSendTime(userIdStr);
+																			::setHeartSendTime((*member).userId);
 																			obj->removeFromParent();
 																			
 																			CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
@@ -287,7 +284,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
 																																				{
 																																					GraphDogLib::JsonToLog("kSendMessage", r);
-																																					setInviteSendTime(userIdStr);
+																																					setInviteSendTime((*member).userId);
 																																				});
 																		});
 		 });

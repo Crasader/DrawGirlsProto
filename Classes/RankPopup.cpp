@@ -985,7 +985,7 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 				bool is_found = false;
 				for(auto i : UnknownFriends::getInstance()->getFriends())
 				{
-					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
+					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asString())
 					{
 						is_found = true;
 						Json::Value t_user_data = i.userData;
@@ -996,7 +996,7 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 				}
 				for(auto i : KnownFriends::getInstance()->getFriends())
 				{
-					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
+					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asString())
 					{
 						Json::Value t_user_data = i.userData;
 						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
