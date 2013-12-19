@@ -71,7 +71,7 @@ public:
 	int card_number;
 	int card_level;
 	string card_passive;
-	int64 userId;
+	std::string userId;
 	std::string nick;
 	std::string profileUrl;
 	bool messageBlocked;
@@ -333,12 +333,12 @@ public:
 		time_string += CCString::createWithFormat("%02d", struct_time->tm_min)->getCString();
 		time_string += CCString::createWithFormat("%02d", struct_time->tm_sec)->getCString();
 		
-		int64 now_value = atoll(time_string.c_str());
+		int64_t now_value = atoll(time_string.c_str());
 		
 		for(int i=0;i<t_notice_list.size();i++)
 		{
 			string notice_time = myDSH->getStringForKey(kDSH_Key_noticeViewDate_int1, t_notice_list[i]["no"].asInt());
-			int64 notice_value = atoll(notice_time.c_str());
+			int64_t notice_value = atoll(notice_time.c_str());
 			if(notice_time == "" || notice_value <= now_value)
 				notice_list.append(t_notice_list[i]);
 		}

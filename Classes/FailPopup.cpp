@@ -877,7 +877,7 @@ void FailPopup::cellAction( CCObject* sender )
 	int tag = (int)((CCNode*)sender)->getUserData();
 	CCLog("help memberID : %s", friend_list[tag].user_id.c_str());
 	//김현수 89987036974054944
-	std::string user_id = friend_list[tag].user_id.c_str();
+	std::string user_id = friend_list[tag].user_id;
 	KS::KSLog("% %" , friend_list[tag].nickname, friend_list[tag].user_id);
 	
 	KSAlertView* av = KSAlertView::create();
