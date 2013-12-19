@@ -11,7 +11,7 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
-#include "Json.h"
+#include "jsoncpp/json.h"
 #include "KnownFriend.h"
 
 USING_NS_CC;
@@ -70,8 +70,12 @@ private:
 	
 	int selected_stage_number;
 	
-	void puzzleAction();
 	void setPuzzle();
+	CCNode* puzzle_node;
+	CCSpriteBatchNode* shadow_batchnode;
+	void pieceAction(int t_stage_number);
+	void buyPieceAction(int t_stage_number);
+	void lockPieceAction(int t_stage_number);
 	
 	void menuAction(CCObject* sender);
 	void setTop();

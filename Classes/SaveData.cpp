@@ -129,7 +129,8 @@ void SaveData::resetData(string filename)
 	
 	string file_key = stringEnc(filename);
 	
-	file_sync[file_key] = "";
+	Json::Reader reader;
+	reader.parse("{}", file_sync[file_key]);
 	testF(filename, "");
 }
 

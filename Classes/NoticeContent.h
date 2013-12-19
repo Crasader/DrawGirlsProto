@@ -12,7 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "CCMenuLambda.h"
-#include "Json.h"
+#include "jsoncpp/json.h"
 #include "GDWebSprite.h"
 #include "StarGoldData.h"
 #include <chrono>
