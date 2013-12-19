@@ -992,7 +992,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							 else
 							 {
 								 FriendData ufd;
-								 ufd.userId = v["friendInfo"]["memberID"].asUInt64();
+								 ufd.userId = v["friendInfo"]["memberID"].asString();
 								 ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
 								 ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
 								 ufd.nick = v["friendInfo"]["nick"].asString();
