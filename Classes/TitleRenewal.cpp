@@ -847,8 +847,8 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
-//	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
-	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+//	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 }
 
 void TitleRenewalScene::startFileDownload()

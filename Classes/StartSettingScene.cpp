@@ -12,7 +12,7 @@
 #include "StarGoldData.h"
 #include "HeartTime.h"
 #include "ShopPopup.h"
-#include "CardSettingPopup.h"
+#include "CardChangePopup.h"
 #include "ServerDataSave.h"
 #include "ASPopupView.h"
 #include "PuzzleScene.h"
@@ -504,9 +504,7 @@ void StartSettingScene::menuAction(CCObject* sender)
 	}
 	else if(tag == kStartSettingMenuTag_card)
 	{
-		mySGD->before_cardsetting = kSceneCode_PuzzleMapScene; // CardSettingPopup close action : hidePopup // StageSetting action -> StageSettingPopup open
-		
-		CardSettingPopup* t_popup = CardSettingPopup::create();
+		CardChangePopup* t_popup = CardChangePopup::create();
 		t_popup->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupCloseCardSetting));
 		addChild(t_popup, kStartSettingZorder_popup);
 	}

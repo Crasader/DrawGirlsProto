@@ -91,6 +91,27 @@ void MainFlowScene::setTable()
 	puzzle_table->setDelegate(this);
 	addChild(puzzle_table, kMainFlowZorder_table);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
+	
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	
+	if(puzzle_number == 0)
+	{
+		puzzle_number = 1;
+		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+	}
+	
+	int myPosition = puzzle_table->minContainerOffset().x;
+	for(int i=0; i<numberOfCellsInTableView(puzzle_table); i++)
+	{
+		if(puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
+		{
+			myPosition = i;
+			break;
+		}
+	}
+	float xInitPosition = MAX(puzzle_table->minContainerOffset().x, -cellSizeForTable(puzzle_table).width*myPosition + puzzle_table->getViewSize().width / 2.f);
+	xInitPosition = MIN(0, xInitPosition);
+	puzzle_table->setContentOffsetInDuration(ccp(xInitPosition, 0), 0.3f);
 }
 
 enum MainFlowTableCellTag{
@@ -242,6 +263,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	cell->autorelease();
 	
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
+	cell->setTag(puzzle_number);
 	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt) >= puzzle_number)
 	{
 		CCSprite* n_open_back = CCSprite::create("mainflow_puzzle_open_back.png");
@@ -261,7 +283,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		cell->addChild(title_label);
 		
 		CCSprite* puzzle_thumbnail = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());
-		puzzle_thumbnail->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+15));
+		puzzle_thumbnail->setPosition(ccp(cellSizeForTable(table).width/2.f-1, cellSizeForTable(table).height/2.f+13));
 		cell->addChild(puzzle_thumbnail);
 		
 		int have_card_cnt = 0;

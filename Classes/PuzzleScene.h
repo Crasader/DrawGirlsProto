@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include "jsoncpp/json.h"
 #include "KnownFriend.h"
+#include "PuzzlePiece.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -32,13 +33,13 @@ class PuzzleRankFriendInfo
 public:
 	string nickname;
 	string img_url;
-	int64 user_id;
+	string user_id;
 	float score;
 	int rank;
 	bool is_play;
 	bool is_message_blocked;
 	
-	bool operator==(int64 t_id)
+	bool operator==(string t_id)
 	{
 		return user_id == t_id;
 	};
@@ -70,12 +71,17 @@ private:
 	
 	int selected_stage_number;
 	
+	PieceMode piece_mode;
 	void setPuzzle();
 	CCNode* puzzle_node;
 	CCSpriteBatchNode* shadow_batchnode;
+	void addShadow(string piece_type, CCPoint piece_position, int t_stage_number);
+	CCSprite* selected_piece_img;
+	void setPieceClick(int t_stage_number);
 	void pieceAction(int t_stage_number);
 	void buyPieceAction(int t_stage_number);
 	void lockPieceAction(int t_stage_number);
+	CCSprite* have_card_cnt_case;
 	
 	void menuAction(CCObject* sender);
 	void setTop();
