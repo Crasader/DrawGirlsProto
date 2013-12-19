@@ -468,6 +468,7 @@ void CardChangePopup::menuAction(CCObject* pSender)
 	else if(tag == kCardChangePopupMenuTag_mount)
 	{
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		myDSH->setIntegerForKey(kDSH_Key_selectedCard, clicked_card_number);
 		if(selected_card_number > 0)
 		{
 			int found_idx = -1;
@@ -480,7 +481,6 @@ void CardChangePopup::menuAction(CCObject* pSender)
 			have_card_table->updateCellAtIndex(found_idx);
 		}
 		
-		myDSH->setIntegerForKey(kDSH_Key_selectedCard, clicked_card_number);
 		setSelectedCard(clicked_card_number);
 		int found_idx = -1;
 		for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
