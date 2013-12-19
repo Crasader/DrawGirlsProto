@@ -221,7 +221,7 @@ private:
 				TicketFriendInfo t_friend_info;
 				t_friend_info.nickname = appfriends[i]["nickname"].asString().c_str();
 				t_friend_info.img_url = appfriends[i]["profile_image_url"].asString().c_str();
-				t_friend_info.user_id = appfriends[i]["user_id"].asInt64();
+				t_friend_info.user_id = appfriends[i]["user_id"].asString();
 				friend_list.push_back(t_friend_info);
 			}
 			

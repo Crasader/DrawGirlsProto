@@ -181,6 +181,9 @@ void JoinGameFriendPopup::loadRank()
 
 void JoinGameFriendPopup::drawRank( Json::Value obj )
 {
+	if(obj["result"]["code"].asInt() != GDSUCCESS)
+		return;
+	
 	m_randomList = obj["list"];
 	//≈◊¿Ã∫Ì ∫‰ ª˝º∫ Ω√¿€ /////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -280,6 +283,8 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 																			
 																			
 																			GraphDogLib::JsonToLog("sendMessage", r);
+																			if(r["result"]["code"].asInt() != GDSUCCESS)
+																				return;
 																			
 																			obj->removeFromParent();
 																			
@@ -417,6 +422,9 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 																 ("sendMessage", p, [=](Json::Value r)
 																	{
 																		GraphDogLib::JsonToLog("sendMessage", r);
+																		if(r["result"]["code"].asInt() != GDSUCCESS)
+																			return;
+																		
 																		KSAlertView* av = KSAlertView::create();
 																		av->setCloseOnPress(true);
 																		av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));

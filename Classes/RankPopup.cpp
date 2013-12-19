@@ -308,8 +308,13 @@ void RankPopup::loadRank ()
 															 {
 																 CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
 																 
+																 
 																 //step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
 																 GraphDogLib::JsonToLog("friend1", appfriends);
+																 
+																 if(obj["result"]["code"].asInt() != GDSUCCESS)
+																	 return;
+																 
 																 Json::Value scorelist;
 																 
 																 for(unsigned int i=0;i<appfriends.size();i++){
@@ -479,6 +484,8 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 											  //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 											  //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 											  GraphDogLib::JsonToLog("sendMessage", r);
+												if(r["result"]["code"].asInt() != GDSUCCESS)
+													return;
 												
 											  ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
 												

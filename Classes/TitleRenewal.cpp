@@ -459,7 +459,7 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		reader.parse(result_data["friendList"].asString(), friendList);
 		
 		for(int i = 0; i<friendList.size(); i++)
-			memberIDList["memberIDList"].append(friendList[i].asInt64());
+			memberIDList["memberIDList"].append(friendList[i].asString());
 		
 		command_list.push_back(CommandParam("getuserdatalist", memberIDList, bind(&ThisClassType::resultGetUnknownFriendUserData, this,	std::placeholders::_1)));
 	}
@@ -649,7 +649,7 @@ void TitleRenewalScene::resultGetKnownFriendList(Json::Value fInfo)
 			kfd.nick = appFriends[i]["nickname"].asString();
 			kfd.messageBlocked = appFriends[i]["message_blocked"].asInt();
 			kfd.profileUrl = appFriends[i]["profile_image_url"].asString();
-			kfd.userId = appFriends[i]["user_id"].asInt64();
+			kfd.userId = appFriends[i]["user_id"].asString();
 			kfd.hashedTalkUserId = appFriends[i]["hashed_talk_user_id"].asString();
 			kfd.unknownFriend = false;
 			KnownFriends::getInstance()->add(kfd);
@@ -723,7 +723,7 @@ void TitleRenewalScene::resultGetUnknownFriendUserData(Json::Value v)
 			ufd.userData = userData;
 			ufd.joinDate = v["list"][i]["joinDate"].asInt64();
 			ufd.lastDate = v["list"][i]["lastDate"].asInt64();
-			ufd.userId = v["list"][i]["memberID"].asInt64();
+			ufd.userId = v["list"][i]["memberID"].asString();
 			ufd.nick = v["list"][i]["nick"].asString();
 			ufd.unknownFriend = true;
 			
