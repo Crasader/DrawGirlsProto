@@ -113,6 +113,12 @@ private:
 			("sendmessagebylist", p, [=](Json::Value r)
 			 {
 				 KS::KSLog("%", r);
+				 if(r["result"]["code"].asInt() != GDSUCCESS)
+				 {
+					 remove_selector();
+					 return;
+				 }
+				 
 				 for(auto i : checked_friend_list)
 				 {
 					 ::setTicketSendTime(i.user_id, puzzle_number);

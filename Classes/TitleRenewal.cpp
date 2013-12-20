@@ -233,6 +233,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setBonusItemCnt(kIC_widePerfect, result_data["bonusItemCntWidePerfect"].asInt());
 		mySGD->setBonusItemCnt(kIC_randomChange, result_data["bonusItemCntRandomChange"].asInt());
 		mySGD->setBonusItemCnt(kIC_rentCard, result_data["bonusItemCntRentCard"].asInt());
+		mySGD->setAiAdderOnDrewOrDamaged(result_data["aiAdderOnDrewOrDamaged"].asFloat());
+		mySGD->setFuryPercent(result_data["furyPercent"].asFloat());
 	}
 	else
 	{
