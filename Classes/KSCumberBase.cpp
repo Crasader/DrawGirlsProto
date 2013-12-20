@@ -1133,7 +1133,7 @@ void KSCumberBase::cumberAttack(float dt)
 
 	if(m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance)
 	{
-		float w = ProbSelector::sel(m_furyRule.percent / 100.f, 1.0f - m_furyRule.percent / 100.f, 0.0);
+		float w = ProbSelector::sel(m_furyRule.percent, 1.0f - m_furyRule.percent, 0.0);
 		if(w == 0)
 		{
 			crashAttack = true;
@@ -1297,42 +1297,42 @@ void KSCumberBase::cumberAttack(float dt)
 								notAlongSum += i["percent"].asDouble();
 							}
 						}
-						float alongMin = i["percent"].asDouble();
+						float alongMin = i["percent"].asFloat();
 						float alongMax = notAlongSum / 1.5f;
 						if(alongMax >= alongMin)
 						{
-							probSel.pushProb(i["percent"].asDouble() + (alongMax - i["percent"].asDouble()) * getAiValue() / 100.f);
+							probSel.pushProb(i["percent"].asFloat() + (alongMax - i["percent"].asFloat()) * getAiValue() / 100.f);
 						}
 						else
 						{
-							probSel.pushProb(i["percent"].asDouble() * (1 + getAiValue() / 100.f));
+							probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
 						}
 					}
 					else
 					{
-						probSel.pushProb(i["percent"].asDouble());
+						probSel.pushProb(i["percent"].asFloat());
 					}
 				}
 				else if(i["atype"].asString() == "crash")
 				{
-					float patternMin = i["percent"].asDouble();
+					float patternMin = i["percent"].asFloat();
 					if(bossIsClosed_) // 보스가 갇힘.
 					{
 						if(patternMax >= patternMin)
 						{
-							probSel.pushProb(i["percent"].asDouble() + (patternMax - i["percent"].asDouble()) * getAiValue() / 100.f);
+							probSel.pushProb(i["percent"].asFloat() + (patternMax - i["percent"].asFloat()) * getAiValue() / 100.f);
 						}
 						else
 						{
-							probSel.pushProb(i["percent"].asDouble() * (1 + getAiValue() / 100.f));
+							probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
 						}
 					}
 					else
-						probSel.pushProb(i["percent"].asDouble());
+						probSel.pushProb(i["percent"].asFloat());
 				}
 				else
 				{
-					probSel.pushProb(i["percent"].asDouble());
+					probSel.pushProb(i["percent"].asFloat());
 				}
 			}
 			CCLog("externalCnt %d", externalOutlineCount);
@@ -1994,9 +1994,9 @@ void KSCumberBase::applyPassiveData(const std::string& passive)
 }
 void KSCumberBase::settingFuryRule()
 {
-	m_furyRule.gainPercent = 40; //fury["gainpercent"].asDouble();
-	m_furyRule.userDistance = 300; // fury["userdistance"].asDouble();
-	m_furyRule.percent = aiProbAdder();// fury["percent"].asDouble();
+	m_furyRule.gainPercent = 40;
+	m_furyRule.userDistance = 300;
+	m_furyRule.percent = mySGD->getFuryPercent() * getAiValue() / 10000.f;
 	//		m_furyRule
 }
 
@@ -2154,7 +2154,7 @@ bool KSCumberBase::bossIsClosed()
 
 float KSCumberBase::aiProbAdder()
 {
-	return (0.02f + (0.5f - 0.02f) * getAiValue() / 100.f)/100.f;
+	return mySGD->getAiAdderOnDrewOrDamaged() * getAiValue() / 10000.f;
 }
 
 int KSCumberBase::getAiValue()

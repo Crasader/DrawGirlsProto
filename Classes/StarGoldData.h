@@ -458,6 +458,9 @@ private:
 	CC_SYNTHESIZE(int, SP_get_time, SPGetTime); // 받은 메세지 몇초 안에 확인해야 소셜포인트 줄건지 설정
 	CC_SYNTHESIZE(int, SP_get_heart, SPGetHeart); // 소셜포인트 획득량(하트온지 SPGetTime초 안에 수락하면 주는 포인트)
 	CC_SYNTHESIZE(int, gacha_one_percent_fee, GachaOnePercentFee); // 1프로 가챠 가격(루비)
+	CC_SYNTHESIZE(float, ai_adder_on_drew_or_damaged, AiAdderOnDrewOrDamaged); // 
+	CC_SYNTHESIZE(float, fury_percent, FuryPercent); //
+	
 };
 
 #endif

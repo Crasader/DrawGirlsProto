@@ -281,6 +281,9 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 
 
 					GraphDogLib::JsonToLog("sendMessage", r);
+					if(r["result"]["code"].asInt() != GDSUCCESS)
+						return;
+					
 					::setInviteSendTime(m_scoreList[idx]["user_id"].asString());
 					obj->removeFromParent();
 

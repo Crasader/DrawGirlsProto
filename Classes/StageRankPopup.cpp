@@ -131,7 +131,7 @@ void StageRankPopup::resultLoadFriends(Json::Value result_data)
 	StageRankFriendInfo t_my_info;
 	t_my_info.nickname = my_info["nickname"].asString();
 	t_my_info.img_url = my_info["profile_image_url"].asString();
-	t_my_info.user_id = my_info["user_id"].asInt64();
+	t_my_info.user_id = my_info["user_id"].asString();
 	t_my_info.score = 0;
 	t_my_info.is_play = false;
 	t_my_info.is_message_blocked = my_info["message_blocked"].asBool();

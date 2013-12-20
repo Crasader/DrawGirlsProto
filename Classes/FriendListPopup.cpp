@@ -260,6 +260,9 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			
 																			
 																			GraphDogLib::JsonToLog("sendMessage", r);
+																			if(r["result"]["code"].asInt() != GDSUCCESS)
+																				return;
+																			
 																			mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
 																			myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
 																													{
@@ -269,7 +272,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			oss << (*member).userId;
 																			std::string userIdStr = oss.str();
 																			::setHeartSendTime((*member).userId);
-																			obj->removeFromParent();
+																			obj->removeFromParent(); // 버튼 삭제.
 																			
 																			CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
 																																																			[](CCObject*){});
@@ -346,6 +349,11 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 					 hspConnector::get()->command
 					 ("removefriendeach", param, [=](Json::Value r)
 						{
+							if(r["result"]["code"].asInt() != GDSUCCESS)
+							{
+								av->removeFromParent();
+								return;
+							}
 							av->removeFromParent();
 							
 							UnknownFriends::getInstance()->deleteById((*member).userId);

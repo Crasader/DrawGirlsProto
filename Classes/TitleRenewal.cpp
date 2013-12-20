@@ -233,6 +233,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setBonusItemCnt(kIC_widePerfect, result_data["bonusItemCntWidePerfect"].asInt());
 		mySGD->setBonusItemCnt(kIC_randomChange, result_data["bonusItemCntRandomChange"].asInt());
 		mySGD->setBonusItemCnt(kIC_rentCard, result_data["bonusItemCntRentCard"].asInt());
+		mySGD->setAiAdderOnDrewOrDamaged(result_data["aiAdderOnDrewOrDamaged"].asFloat());
+		mySGD->setFuryPercent(result_data["furyPercent"].asFloat());
 	}
 	else
 	{
@@ -459,7 +461,7 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		reader.parse(result_data["friendList"].asString(), friendList);
 		
 		for(int i = 0; i<friendList.size(); i++)
-			memberIDList["memberIDList"].append(friendList[i].asInt64());
+			memberIDList["memberIDList"].append(friendList[i].asString());
 		
 		command_list.push_back(CommandParam("getuserdatalist", memberIDList, bind(&ThisClassType::resultGetUnknownFriendUserData, this,	std::placeholders::_1)));
 	}
