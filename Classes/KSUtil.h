@@ -70,8 +70,8 @@ namespace KS
 	
 	string insert_separator(const string& s, char separator = ',', int width = 3);
 	
-	string longLongToStr(long long t, int radix);
-	long long strToLongLong(const std::string& t, int radix);
+	string longLongToStr(long long t);
+	long long strToLongLong(const std::string& t);
 	
 	static void __KSLogCore(ostringstream& oss, const char* s) {
 		

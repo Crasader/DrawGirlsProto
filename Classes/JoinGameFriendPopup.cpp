@@ -130,8 +130,10 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	 [=](CCObject* t)
 	 {
 		 // "abkcje34454" -> 45843068445565 -> "45843068445565" 과정.
-		 this->searchById
-		 ( KS::longLongToStr((KS::strToLongLong(m_searchIdEditBox->getText(), 36)), 10) );
+		 ostringstream oss;
+		 oss << KS::strToLongLong(m_searchIdEditBox->getText());
+
+		 this->searchById( oss.str() );
 			});
 		 
 		 

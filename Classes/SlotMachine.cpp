@@ -413,7 +413,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 											 }
 											 else if(m_state == SlotMachineState::kScrolling3)
 											 {
-												 
+												 m_state = SlotMachineState::kFinishing;
 												 int currentSlot = 2;
 												 addChild(KSSchedule::create([=](float dt)
 																										 {
