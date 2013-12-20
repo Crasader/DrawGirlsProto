@@ -9,6 +9,7 @@
 #include "TutorialScene.h"
 #include "DataStorageHub.h"
 #include "PuzzleMapScene.h"
+#include "PuzzleScene.h"
 
 CCScene* TutorialScene::scene()
 {
@@ -221,7 +222,8 @@ void TutorialScene::menuAction(CCObject *sender)
 		if(recent_tutorial_state == kTutorialState_list)
 		{
 			is_menu_enable = false;
-			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+//			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 		}
 		else
 		{

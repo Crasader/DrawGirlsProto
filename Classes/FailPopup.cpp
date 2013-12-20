@@ -23,6 +23,7 @@
 #include "HelpResultSend.h"
 #include "SendMessageUtil.h"
 #include "UnknownFriends.h"
+#include "StartSettingScene.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -132,25 +133,26 @@ bool FailPopup::init()
 	top_case = CCSprite::create("test_ui_top.png");
 	top_case->setAnchorPoint(ccp(0.5f,1.f));
 	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f));//(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
+	top_case->setVisible(false);
 	addChild(top_case, kZ_FP_img);
 	
 	CountingBMLabel* ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "etc_font.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(94,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_label);
 	
-	mySGD->setStarLabel(ruby_label);
+//	mySGD->setStarLabel(ruby_label);
 	
 	CountingBMLabel* total_gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
 	total_gold_label->setPosition(ccp(185,top_case->getContentSize().height/2.f));
 	top_case->addChild(total_gold_label);
 	
-	mySGD->setGoldLabel(total_gold_label);
+//	mySGD->setGoldLabel(total_gold_label);
 	
 	CountingBMLabel* friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "etc_font.fnt", 0.3f, "%d");
 	friend_point_label->setPosition(ccp(427,top_case->getContentSize().height/2.f));
 	top_case->addChild(friend_point_label);
 	
-	mySGD->setFriendPointLabel(friend_point_label);
+//	mySGD->setFriendPointLabel(friend_point_label);
 
 	
 	
@@ -771,20 +773,21 @@ void FailPopup::menuAction(CCObject* pSender)
 		mySGD->setIsAcceptHelp(false);
 		mySGD->selectFriendCard();
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
-		mySGD->resetLabels();
+//		mySGD->resetLabels();
 		hidePopup();
 	}
 	else if(tag == kMT_FP_replay)
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
-		mySGD->resetLabels();
+//		mySGD->resetLabels();
 		
-		StageSettingPopup* t_popup = StageSettingPopup::create();
-		t_popup->setHideFinalAction(target_final, delegate_final);
-		getParent()->addChild(t_popup, kPMS_Z_popup);
-		
-		target_final = NULL;
-		hidePopup();
+		CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+//		StageSettingPopup* t_popup = StageSettingPopup::create();
+//		t_popup->setHideFinalAction(target_final, delegate_final);
+//		getParent()->addChild(t_popup, kPMS_Z_popup);
+//		
+//		target_final = NULL;
+//		hidePopup();
 	}
 	else if(tag == kMT_FP_rubyShop)
 	{

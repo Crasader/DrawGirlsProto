@@ -19,6 +19,10 @@
 #include "GDWebSprite.h"
 #include "CumberShowWindow.h"
 #include "StartSettingScene.h"
+#include "ASPopupView.h"
+#include "NoticeContent.h"
+#include "ClearPopup.h"
+#include "FailPopup.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -53,6 +57,54 @@ bool PuzzleScene::init()
 	challenge_menu = NULL;
 	rank_table = NULL;
 	
+	
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(selected_card_number > 0)
+		{
+			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
+		}
+		
+		int take_level;
+		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
+		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
+		else												take_level = 1;
+		
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
+		{
+			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+			
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+			myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), 1);
+			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GS(kSDS_CI_int1_passive_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+			
+			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+		}
+		else
+		{
+			int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) == 0)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, NSDS_GI(kSDS_CI_int1_durability_i, card_number));
+				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, card_number, 1);
+				myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number, NSDS_GI(kSDS_CI_int1_durability_i, card_number));
+				myDSH->setStringForKey(kDSH_Key_cardPassive_int1, card_number, NSDS_GS(kSDS_CI_int1_passive_s, card_number));
+			}
+			else
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number));
+			}
+		}
+	}
+	
+	
 	CCSprite* back_img = CCSprite::create("mainflow_back_wall.png");
 	back_img->setPosition(ccp(240,160));
 	addChild(back_img, kPuzzleZorder_back);
@@ -64,7 +116,7 @@ bool PuzzleScene::init()
 		selected_stage_number = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
 	}
-	
+	piece_mode = (PieceMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);
 	setPuzzle();
 	
 	setTop();
@@ -72,7 +124,66 @@ bool PuzzleScene::init()
 	
 	is_menu_enable = true;
 	
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
+	{
+		if(mySGD->getMustBeShowNotice())
+		{
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			NoticeContent* t_container = NoticeContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+															   {
+																   t_popup->removeFromParent();
+															   }, mySGD->getNoticeList());
+			t_popup->setContainerNode(t_container);
+			addChild(t_popup, kPuzzleZorder_popup);
+		}
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
+	{
+		
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
+	{
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+		showClearPopup();
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
+	{
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+		showFailPopup();
+	}
+	
 	return true;
+}
+
+void PuzzleScene::showClearPopup()
+{
+	is_menu_enable = false;
+	
+	ClearPopup* t_popup = ClearPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideClearPopup));
+	addChild(t_popup, kPuzzleZorder_popup);
+}
+
+void PuzzleScene::hideClearPopup()
+{
+	if(mySD->getSilType() >= 10000)
+	{
+		is_menu_enable = true;
+	}
+	else
+	{
+		showGetPuzzle();
+	}
 }
 
 enum PuzzleNodeZorder{
@@ -83,8 +194,93 @@ enum PuzzleNodeZorder{
 	kPuzzleNodeZorder_strokePiece,
 	kPuzzleNodeZorder_selected,
 	kPuzzleNodeZorder_haveCardCntCase,
-	kPuzzleNodeZorder_changeMode
+	kPuzzleNodeZorder_changeMode,
+	kPuzzleNodeZorder_getPieceEffect
 };
+
+void PuzzleScene::showGetPuzzle()
+{
+	CCSprite* get_piece_title = CCSprite::create("get_piece_title.png");
+	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
+	get_piece_title->setPosition(ccpAdd(new_piece->getPosition(), ccp(0, 45)));
+	puzzle_node->addChild(get_piece_title, kPuzzleNodeZorder_getPieceEffect);
+	
+	new_piece->startGetPieceAnimation(this, callfuncCCp_selector(PuzzleScene::createGetPuzzleParticle));
+	
+	CCDelayTime* t_delay = CCDelayTime::create(1.f);
+	CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endGetPuzzle));
+	CCCallFunc* t_call2 = CCCallFunc::create(get_piece_title, callfunc_selector(CCSprite::removeFromParent));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_fade, t_call1, t_call2, NULL);
+	get_piece_title->runAction(t_seq);
+}
+
+void PuzzleScene::createGetPuzzleParticle(CCPoint t_point)
+{
+	random_device rd;
+	default_random_engine e1(rd());
+	uniform_real_distribution<float> uniform_dist(-50, 50);
+	
+	CCPoint random_value;
+	random_value.x = uniform_dist(e1);
+	random_value.y = uniform_dist(e1);
+	
+	CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(150);
+	t_particle->setPositionType(kCCPositionTypeRelative);
+	t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("get_piece_particle.png"));
+	t_particle->setEmissionRate(400);
+	t_particle->setAngle(90.0);
+	t_particle->setAngleVar(45.0);
+	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+	t_particle->setBlendFunc(blendFunc);
+	t_particle->setDuration(0.1);
+	t_particle->setEmitterMode(kCCParticleModeGravity);
+	t_particle->setStartColor(ccc4f(1.f, 1.f, 1.f, 1.f));
+	t_particle->setStartColorVar(ccc4f(0.57f, 0.57f, 0.54f, 0.f));
+	t_particle->setEndColor(ccc4f(1.f, 1.f, 1.f, 0.f));
+	t_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+	t_particle->setStartSize(10.0);
+	t_particle->setStartSizeVar(5.0);
+	t_particle->setEndSize(20.0);
+	t_particle->setEndSizeVar(5.0);
+	t_particle->setGravity(ccp(0,-400));
+	t_particle->setRadialAccel(0.0);
+	t_particle->setRadialAccelVar(0.0);
+	t_particle->setSpeed(150);
+	t_particle->setSpeedVar(70.0);
+	t_particle->setTangentialAccel(0);
+	t_particle->setTangentialAccelVar(0);
+	t_particle->setTotalParticles(150);
+	t_particle->setLife(0.40);
+	t_particle->setLifeVar(0.5);
+	t_particle->setStartSpin(0);
+	t_particle->setStartSpinVar(180);
+	t_particle->setEndSpin(0);
+	t_particle->setEndSpinVar(180);
+	t_particle->setPosVar(ccp(10,10));
+	t_particle->setPosition(ccpAdd(t_point, random_value));
+	t_particle->setAutoRemoveOnFinish(true);
+	puzzle_node->addChild(t_particle, kPuzzleNodeZorder_getPieceEffect);
+}
+
+void PuzzleScene::endGetPuzzle()
+{
+	is_menu_enable = true;
+}
+
+void PuzzleScene::showFailPopup()
+{
+	is_menu_enable = false;
+	
+	FailPopup* t_popup = FailPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideFailPopup));
+	addChild(t_popup, kPuzzleZorder_popup);
+}
+
+void PuzzleScene::hideFailPopup()
+{
+	is_menu_enable = true;
+}
 
 enum PuzzleMenuTag{
 	kPuzzleMenuTag_cancel = 0,
@@ -103,7 +299,6 @@ enum PuzzleMenuTag{
 
 void PuzzleScene::setPuzzle()
 {
-	piece_mode = kPieceMode_default;
 	CCSize puzzle_size = CCSizeMake(326, 268);
 	
 	puzzle_node = CCNode::create();
@@ -509,6 +704,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 			piece_mode = kPieceMode_default;
 			have_card_cnt_case->setVisible(false);
 		}
+		
+		myDSH->setIntegerForKey(kDSH_Key_puzzleMode, piece_mode);
 		
 		for(int i=start_stage;i<start_stage+stage_count;i++)
 			((PuzzlePiece*)puzzle_node->getChildByTag(i))->turnPiece(piece_mode);

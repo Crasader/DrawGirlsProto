@@ -19,6 +19,7 @@
 #include "ControlTutorialContent.h"
 #include "PatternTutorialContent.h"
 #include "RentCardAniContent.h"
+#include "PuzzleScene.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -761,7 +762,8 @@ void Maingame::endCloseShutter()
 	else
 	{
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
-		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+//		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+		CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 	}
 }
 
