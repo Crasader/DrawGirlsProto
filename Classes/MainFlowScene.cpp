@@ -225,9 +225,6 @@ void MainFlowScene::cellAction(CCObject* sender)
 				if(found_idx != -1)
 					puzzle_table->updateCellAtIndex(found_idx);
 				
-//				CCTableViewCell* cell_node = (CCTableViewCell*)(((CCNode*)sender)->getParent()->getParent());
-//				puzzle_table->updateCellAtIndex(cell_node->getIdx());
-				
 				is_menu_enable = true;
 				t_popup->removeFromParent();
 			});
@@ -248,7 +245,6 @@ void MainFlowScene::cellAction(CCObject* sender)
 	else // ticketBase
 	{
 		int puzzle_number = tag - kMainFlowTableCellTag_ticketBase;
-		CCLog("puzzle_number : %d", puzzle_number);
 		
 		ASPopupView* t_popup = ASPopupView::create(-200);
 		
@@ -277,7 +273,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
-	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt) >= puzzle_number)
+	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
 	{
 		CCSprite* n_open_back = CCSprite::create("mainflow_puzzle_open_back.png");
 		CCSprite* s_open_back = CCSprite::create("mainflow_puzzle_open_back.png");
@@ -537,7 +533,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		
 		t_gp->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 		t_gp->setOutAllObjectAction(NULL, NULL);
-		t_gp->setInAllObjectAction(NULL, NULL);
+		t_gp->setInAllObjectAction(this, callfunc_selector(MainFlowScene::popupClose));
 	}
 	else if(tag == kMainFlowMenuTag_event)
 	{
