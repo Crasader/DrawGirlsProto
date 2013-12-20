@@ -16,7 +16,7 @@ extern "C" {
 }
 #endif
 
-
+#include <cstdlib>
 
 
 int CCCrypto::encodeBase64(const void* input,
