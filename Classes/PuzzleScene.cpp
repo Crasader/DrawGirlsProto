@@ -858,13 +858,13 @@ void PuzzleScene::menuAction(CCObject* sender)
 
 void PuzzleScene::setRight()
 {
-	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-	if(screen_scale_x < 1.f)
-		screen_scale_x = 1.f;
+//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//	if(screen_scale_x < 1.f)
+//		screen_scale_x = 1.f;
 	
 	right_case = CCNode::create();
-	right_case->setPosition(ccp(480*screen_scale_x,160));
+	right_case->setPosition(ccp(480,160));
 	addChild(right_case, kPuzzleZorder_right);
 	
 	CCSprite* right_body = CCSprite::create("puzzle_right_body.png");
