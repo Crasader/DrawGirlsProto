@@ -94,6 +94,11 @@ public:
 		return WorH;
 	}
 	
+	int getLevel()
+	{
+		return stage_level;
+	}
+	
 	void setTurnInfo(bool have_card1, bool have_card2, bool have_card3)
 	{
 		is_have_card[0] = have_card1;

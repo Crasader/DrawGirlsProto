@@ -211,9 +211,22 @@ void MainFlowScene::cellAction(CCObject* sender)
 				
 				myDSH->saveUserData(save_userdata_list, nullptr);
 				
-				CCTableViewCell* cell_node = (CCTableViewCell*)(((CCNode*)sender)->getParent()->getParent());
-				puzzle_table->updateCellAtIndex(cell_node->getIdx());
-//				puzzle_table->updateCellAtIndex(puzzle_number-1);
+				int found_idx = -1;
+				for(int i=0;i<numberOfCellsInTableView(puzzle_table) && found_idx == -1;i++)
+				{
+					CCTableViewCell* t_cell = puzzle_table->cellAtIndex(i);
+					if(t_cell)
+					{
+						int cell_card_number = t_cell->getTag();
+						if(cell_card_number == puzzle_number)
+							found_idx = i;
+					}
+				}
+				if(found_idx != -1)
+					puzzle_table->updateCellAtIndex(found_idx);
+				
+//				CCTableViewCell* cell_node = (CCTableViewCell*)(((CCNode*)sender)->getParent()->getParent());
+//				puzzle_table->updateCellAtIndex(cell_node->getIdx());
 				
 				is_menu_enable = true;
 				t_popup->removeFromParent();

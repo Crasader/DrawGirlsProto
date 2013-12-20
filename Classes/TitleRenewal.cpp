@@ -441,7 +441,7 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 
 void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 {
-	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	if(result_data["result"]["code"].asInt() == GDSUCCESS || result_data["result"]["code"].asInt() == GDDONTFIND)
 	{
 		myDSH->resetDSH();
 		card_data_load_list.clear();

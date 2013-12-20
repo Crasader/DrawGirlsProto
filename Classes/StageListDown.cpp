@@ -435,14 +435,21 @@ void StageListDown::successAction()
 				int x = i%5;
 				int y = i/5;
 				
-				
-				
 				//저장할파일명을 지정합니다.
 				string filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(3-y)*5))->getCString();
 				
 				//원본파일에서 자를 위치를 계산합니다.
-				int cutx =x*116+94;
-				int cuty =y*116+94;
+				int cutx, cuty;
+				if(cut_list[j].key == "face")
+				{
+					cutx = x*172+86;
+					cuty = y*172+86;
+				}
+				else if(cut_list[j].key == "original")
+				{
+					cutx =x*116+94;
+					cuty =y*116+94;
+				}
 				
 				//자르고 저장합니다.
 				bool isSuccess = PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
