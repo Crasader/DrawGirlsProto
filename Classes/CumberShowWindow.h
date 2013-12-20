@@ -29,6 +29,11 @@ USING_NS_CC_EXT;
  virtual SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, const char* pSelectorName) = 0;
  */
 
+enum CumberShowWindowSceneCode{
+	kCumberShowWindowSceneCode_puzzle = 0,
+	kCumberShowWindowSceneCode_cardChange
+};
+
 class KSSnakeBase;
 class CumberShowWindow : public CCNode, public CCBSelectorResolver,  public CCBAnimationManagerDelegate
 {
@@ -50,14 +55,14 @@ public:
 	{
 		return NULL;
 	}
-	static CumberShowWindow* create(int stageNumber)
+	static CumberShowWindow* create(int stageNumber, CumberShowWindowSceneCode t_code = kCumberShowWindowSceneCode_puzzle)
 	{
 		CumberShowWindow* t_blg = new CumberShowWindow();
-		t_blg->init(stageNumber);
+		t_blg->init(stageNumber, t_code);
 		t_blg->autorelease();
 		return t_blg;
 	}
-	bool init(int);
+	bool init(int, CumberShowWindowSceneCode);
 	CCBAnimationManager* m_circleAnimation;
 	CCBAnimationManager* m_snakeHeadAnimation;
 	std::vector<CCBAnimationManager*> m_snakeBodiesAnimation;

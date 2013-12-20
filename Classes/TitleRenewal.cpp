@@ -901,7 +901,7 @@ void TitleRenewalScene::startFileDownload()
 	}
 	else
 	{
-		endingAction();
+		endingCheck();
 	}
 }
 
@@ -1021,51 +1021,57 @@ void TitleRenewalScene::successDownloadAction()
 	{
 		SDS_SS(kSDF_gameInfo, event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].key,
 			   event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img, false);
-		if(puzzle_download_list.size() > 0)
-			NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version, false);
-		if(event_download_list.size() > 0)
-			NSDS_SI(kSDS_GI_eventListVersion_i, eventstagelist_download_version, false);
-		
-		mySDS->fFlush(kSDS_GI_characterCount_i);
 		
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt,
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
 		
-		string nick = myDSH->getStringForKey(kDSH_Key_nick);
-		
-		if(nick == "")
-		{
-			state_label->setString("닉네임을 입력해주세요.");
-			
-			nick_back = CCSprite::create("nickname_back.png");
-			nick_back->setPosition(ccp(240,130));
-			addChild(nick_back);
-			
-			input_text = CCEditBox::create(CCSizeMake(210, 30), CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-			input_text->setPosition(ccp(197,113));
-			input_text->setPlaceHolder("입력해주세요.");
-			input_text->setReturnType(kKeyboardReturnTypeDone);
-			input_text->setFont(mySGD->getFont().c_str(), 20);
-			input_text->setInputMode(kEditBoxInputModeSingleLine);
-			input_text->setDelegate(this);
-			addChild(input_text);
-			
-			CCSprite* n_ok = CCSprite::create("nickname_ok.png");
-			CCSprite* s_ok = CCSprite::create("nickname_ok.png");
-			s_ok->setColor(ccGRAY);
-			
-			CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(TitleRenewalScene::menuAction));
-			ok_item->setTag(kTitleRenewal_MT_nick);
-			
-			CCMenu* ok_menu = CCMenu::createWithItem(ok_item);
-			ok_menu->setPosition(ccp(370,130));
-			addChild(ok_menu, 0, kTitleRenewal_MT_nick);
-			
-			is_menu_enable = true;
-		}
-		else
-			endingAction();
+		endingCheck();
 	}
+}
+
+void TitleRenewalScene::endingCheck()
+{
+	if(puzzle_download_list.size() > 0)
+		NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version, false);
+	if(event_download_list.size() > 0)
+		NSDS_SI(kSDS_GI_eventListVersion_i, eventstagelist_download_version, false);
+	
+	mySDS->fFlush(kSDS_GI_characterCount_i);
+	
+	string nick = myDSH->getStringForKey(kDSH_Key_nick);
+	
+	if(nick == "")
+	{
+		state_label->setString("닉네임을 입력해주세요.");
+		
+		nick_back = CCSprite::create("nickname_back.png");
+		nick_back->setPosition(ccp(240,130));
+		addChild(nick_back);
+		
+		input_text = CCEditBox::create(CCSizeMake(210, 30), CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+		input_text->setPosition(ccp(197,113));
+		input_text->setPlaceHolder("입력해주세요.");
+		input_text->setReturnType(kKeyboardReturnTypeDone);
+		input_text->setFont(mySGD->getFont().c_str(), 20);
+		input_text->setInputMode(kEditBoxInputModeSingleLine);
+		input_text->setDelegate(this);
+		addChild(input_text);
+		
+		CCSprite* n_ok = CCSprite::create("nickname_ok.png");
+		CCSprite* s_ok = CCSprite::create("nickname_ok.png");
+		s_ok->setColor(ccGRAY);
+		
+		CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(TitleRenewalScene::menuAction));
+		ok_item->setTag(kTitleRenewal_MT_nick);
+		
+		CCMenu* ok_menu = CCMenu::createWithItem(ok_item);
+		ok_menu->setPosition(ccp(370,130));
+		addChild(ok_menu, 0, kTitleRenewal_MT_nick);
+		
+		is_menu_enable = true;
+	}
+	else
+		endingAction();
 }
 
 void TitleRenewalScene::downloadingFileAction()

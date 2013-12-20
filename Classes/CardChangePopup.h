@@ -71,6 +71,8 @@ private:
     virtual CCSize cellSizeForTable(CCTableView *table);
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
+	void setMonster();
+	
 	void showPopup();
 	void endShowPopup();
 	void hidePopup();

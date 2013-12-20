@@ -10,6 +10,7 @@
 #include "DataStorageHub.h"
 #include "CardCase.h"
 #include "StageImgLoader.h"
+#include "CumberShowWindow.h"
 
 enum CardChangePopupZorder{
 	kCardChangePopupZorder_gray = 1,
@@ -71,7 +72,7 @@ bool CardChangePopup::init()
 	close_item->setTag(kCardChangePopupMenuTag_close);
 	
 	CCMenu* close_menu = CCMenu::createWithItem(close_item);
-	close_menu->setPosition(ccp(440, 290));
+	close_menu->setPosition(ccp(440, 261));
 	main_case->addChild(close_menu, kCardChangePopupZorder_content);
 	close_menu->setTouchPriority(base_touch_priority);
 	
@@ -84,7 +85,7 @@ bool CardChangePopup::init()
 	align_take_item->setTag(kCardChangePopupMenuTag_alignTake);
 	
 	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
-	align_take_menu->setPosition(ccp(350, 150));
+	align_take_menu->setPosition(ccp(352, 113));
 	main_case->addChild(align_take_menu, kCardChangePopupZorder_content);
 	align_take_menu->setTouchPriority(base_touch_priority);
 	
@@ -97,7 +98,7 @@ bool CardChangePopup::init()
 	align_rank_item->setTag(kCardChangePopupMenuTag_alignRank);
 	
 	CCMenu* align_rank_menu = CCMenu::createWithItem(align_rank_item);
-	align_rank_menu->setPosition(ccp(420, 150));
+	align_rank_menu->setPosition(ccp(412, 113));
 	main_case->addChild(align_rank_menu, kCardChangePopupZorder_content);
 	align_rank_menu->setTouchPriority(base_touch_priority);
 	
@@ -108,22 +109,24 @@ bool CardChangePopup::init()
 	setSelectedCard(myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 	setHaveCardList();
 	
-	CCSize table_size = CCSizeMake(350, 71);
+	CCSize table_size = CCSizeMake(245, 71);
 	
-	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
-	temp_back->setOpacity(100);
-	temp_back->setAnchorPoint(CCPointZero);
-	temp_back->setPosition(ccp(97, 29));
-	main_case->addChild(temp_back, kCardChangePopupZorder_content);
+//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+//	temp_back->setOpacity(100);
+//	temp_back->setAnchorPoint(CCPointZero);
+//	temp_back->setPosition(ccp(200, 28));
+//	main_case->addChild(temp_back, kCardChangePopupZorder_content);
 	
 	have_card_table = CCTableView::create(this, table_size);
 	have_card_table->setAnchorPoint(CCPointZero);
 	have_card_table->setDirection(kCCScrollViewDirectionHorizontal);
 	have_card_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	have_card_table->setPosition(ccp(97, 29));
+	have_card_table->setPosition(ccp(200, 28));
 	have_card_table->setDelegate(this);
 	main_case->addChild(have_card_table, kCardChangePopupZorder_content);
 	have_card_table->setTouchPriority(base_touch_priority);
+	
+	setMonster();
 	
     return true;
 }
@@ -153,8 +156,8 @@ void CardChangePopup::setSelectedCard(int t_card_number)
 	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
 	
 	selected_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_grade)->getCString());
-	selected_card->setScale(0.43f);
-	selected_card->setPosition(ccp(112,159));
+	selected_card->setScale(0.36f);
+	selected_card->setPosition(ccp(107,144));
 	main_case->addChild(selected_card);
 	
 	if(card_grade == 3 && mySD->isAnimationStage(card_stage))
@@ -182,7 +185,7 @@ void CardChangePopup::setSelectedCard(int t_card_number)
 		release_item->setTag(kCardChangePopupMenuTag_release);
 		
 		release_menu = CCMenu::createWithItem(release_item);
-		release_menu->setPosition(ccpAdd(selected_card->getPosition(), ccp(0,-112)));
+		release_menu->setPosition(ccpAdd(selected_card->getPosition(), ccp(0,-100)));
 		main_case->addChild(release_menu);
 		release_menu->setTouchPriority(base_touch_priority);
 	}
@@ -196,7 +199,7 @@ void CardChangePopup::setSelectedCard(int t_card_number)
 		mount_item->setTag(kCardChangePopupMenuTag_mount);
 		
 		mount_menu = CCMenu::createWithItem(mount_item);
-		mount_menu->setPosition(ccpAdd(selected_card->getPosition(), ccp(0,-112)));
+		mount_menu->setPosition(ccpAdd(selected_card->getPosition(), ccp(0,-100)));
 		main_case->addChild(mount_menu);
 		mount_menu->setTouchPriority(base_touch_priority);
 	}
@@ -325,7 +328,7 @@ CCTableViewCell* CardChangePopup::tableCellAtIndex(CCTableView *table, unsigned 
 	mini_rank->addChild(t_rank);
 	
 	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, have_card_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 8);
-	t_card_level_label->setPosition(ccp(17,62));
+	t_card_level_label->setPosition(ccp(17,60));
 	cell->addChild(t_card_level_label, kCardChangeTableCellZorder_noimg);
 	
 	if(have_card_list[idx].card_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
@@ -363,12 +366,17 @@ void CardChangePopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell
 		int found_idx = -1;
 		for(int i=0;i<numberOfCellsInTableView(table) && found_idx == -1;i++)
 		{
-			int cell_card_number = table->cellAtIndex(i)->getTag();
-			if(cell_card_number == clicked_card_number)
-				found_idx = i;
+			CCTableViewCell* t_cell = table->cellAtIndex(i);
+			if(t_cell)
+			{
+				int cell_card_number = t_cell->getTag();
+				if(cell_card_number == clicked_card_number)
+					found_idx = i;
+			}
 		}
 		setSelectedCard(touched_card_number);
-		table->updateCellAtIndex(found_idx);
+		if(found_idx != -1)
+			table->updateCellAtIndex(found_idx);
 		table->updateCellAtIndex(cell->getIdx());
 	}
 	else
@@ -381,11 +389,18 @@ void CardChangePopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell
 }
 CCSize CardChangePopup::cellSizeForTable(CCTableView *table)
 {
-	return CCSizeMake(58, 71);
+	return CCSizeMake(56, 71);
 }
 unsigned int CardChangePopup::numberOfCellsInTableView(CCTableView *table)
 {
 	return have_card_list.size();
+}
+
+void CardChangePopup::setMonster()
+{
+	CumberShowWindow* t_monster = CumberShowWindow::create(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)), kCumberShowWindowSceneCode_cardChange);
+	t_monster->setPosition(ccp(256,183));
+	main_case->addChild(t_monster);
 }
 
 void CardChangePopup::onEnter()
@@ -474,22 +489,32 @@ void CardChangePopup::menuAction(CCObject* pSender)
 			int found_idx = -1;
 			for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
 			{
-				int cell_card_number = have_card_table->cellAtIndex(i)->getTag();
-				if(cell_card_number == selected_card_number)
-					found_idx = i;
+				CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
+				if(t_cell)
+				{
+					int cell_card_number = t_cell->getTag();
+					if(cell_card_number == selected_card_number)
+						found_idx = i;
+				}
 			}
-			have_card_table->updateCellAtIndex(found_idx);
+			if(found_idx != -1)
+				have_card_table->updateCellAtIndex(found_idx);
 		}
 		
 		setSelectedCard(clicked_card_number);
 		int found_idx = -1;
 		for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
 		{
-			int cell_card_number = have_card_table->cellAtIndex(i)->getTag();
-			if(cell_card_number == clicked_card_number)
-				found_idx = i;
+			CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
+			if(t_cell)
+			{
+				int cell_card_number = t_cell->getTag();
+				if(cell_card_number == clicked_card_number)
+					found_idx = i;
+			}
 		}
-		have_card_table->updateCellAtIndex(found_idx);
+		if(found_idx != -1)
+			have_card_table->updateCellAtIndex(found_idx);
 		is_menu_enable = true;
 	}
 	else if(tag == kCardChangePopupMenuTag_release)
@@ -500,11 +525,16 @@ void CardChangePopup::menuAction(CCObject* pSender)
 		int found_idx = -1;
 		for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
 		{
-			int cell_card_number = have_card_table->cellAtIndex(i)->getTag();
-			if(cell_card_number == selected_card_number)
-				found_idx = i;
+			CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
+			if(t_cell)
+			{
+				int cell_card_number = t_cell->getTag();
+				if(cell_card_number == selected_card_number)
+					found_idx = i;
+			}
 		}
-		have_card_table->updateCellAtIndex(found_idx);
+		if(found_idx != -1)
+			have_card_table->updateCellAtIndex(found_idx);
 		
 		setSelectedCard(clicked_card_number);
 		is_menu_enable = true;

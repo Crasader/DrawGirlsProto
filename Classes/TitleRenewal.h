@@ -116,6 +116,8 @@ private:
 	vector<DownloadFile> puzzle_download_list;
 	vector<DownloadFile> event_download_list;
 	
+	
+	void endingCheck();
 	void endingAction();
 	void changeScene();
 	
