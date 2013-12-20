@@ -325,7 +325,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		title_label->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+67));
 		cell->addChild(title_label);
 		
-		if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number))
+		if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number-1))
 		{
 			CCSprite* need_ticket_img = CCSprite::create("mainflow_puzzle_needticket.png");
 			need_ticket_img->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+15));
