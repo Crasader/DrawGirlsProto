@@ -71,6 +71,16 @@ private:
 	
 	int selected_stage_number;
 	
+	
+	void showClearPopup();
+	void hideClearPopup();
+	void showGetPuzzle();
+	void createGetPuzzleParticle(CCPoint t_point);
+	void endGetPuzzle();
+	void showFailPopup();
+	void hideFailPopup();
+	
+	
 	PieceMode piece_mode;
 	void setPuzzle();
 	CCNode* puzzle_node;

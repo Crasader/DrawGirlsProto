@@ -211,9 +211,19 @@ void MainFlowScene::cellAction(CCObject* sender)
 				
 				myDSH->saveUserData(save_userdata_list, nullptr);
 				
-				CCTableViewCell* cell_node = (CCTableViewCell*)(((CCNode*)sender)->getParent()->getParent());
-				puzzle_table->updateCellAtIndex(cell_node->getIdx());
-//				puzzle_table->updateCellAtIndex(puzzle_number-1);
+				int found_idx = -1;
+				for(int i=0;i<numberOfCellsInTableView(puzzle_table) && found_idx == -1;i++)
+				{
+					CCTableViewCell* t_cell = puzzle_table->cellAtIndex(i);
+					if(t_cell)
+					{
+						int cell_card_number = t_cell->getTag();
+						if(cell_card_number == puzzle_number)
+							found_idx = i;
+					}
+				}
+				if(found_idx != -1)
+					puzzle_table->updateCellAtIndex(found_idx);
 				
 				is_menu_enable = true;
 				t_popup->removeFromParent();
@@ -235,7 +245,6 @@ void MainFlowScene::cellAction(CCObject* sender)
 	else // ticketBase
 	{
 		int puzzle_number = tag - kMainFlowTableCellTag_ticketBase;
-		CCLog("puzzle_number : %d", puzzle_number);
 		
 		ASPopupView* t_popup = ASPopupView::create(-200);
 		
@@ -264,7 +273,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
-	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt) >= puzzle_number)
+	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
 	{
 		CCSprite* n_open_back = CCSprite::create("mainflow_puzzle_open_back.png");
 		CCSprite* s_open_back = CCSprite::create("mainflow_puzzle_open_back.png");
@@ -325,7 +334,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		title_label->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+67));
 		cell->addChild(title_label);
 		
-		if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number))
+		if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number-1))
 		{
 			CCSprite* need_ticket_img = CCSprite::create("mainflow_puzzle_needticket.png");
 			need_ticket_img->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+15));
@@ -524,7 +533,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		
 		t_gp->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 		t_gp->setOutAllObjectAction(NULL, NULL);
-		t_gp->setInAllObjectAction(NULL, NULL);
+		t_gp->setInAllObjectAction(this, callfunc_selector(MainFlowScene::popupClose));
 	}
 	else if(tag == kMainFlowMenuTag_event)
 	{
