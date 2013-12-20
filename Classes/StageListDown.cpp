@@ -435,8 +435,10 @@ void StageListDown::successAction()
 				int x = i%5;
 				int y = i/5;
 				
+				
+				
 				//저장할파일명을 지정합니다.
-				string filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), i)->getCString();
+				string filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(3-y)*5))->getCString();
 				
 				//원본파일에서 자를 위치를 계산합니다.
 				int cutx =x*116+94;
