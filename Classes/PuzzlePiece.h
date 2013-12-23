@@ -163,8 +163,9 @@ private:
 	
 	void setPieceImg()
 	{
-		if(piece_menu)
-			piece_menu->removeFromParent();
+		removeAllChildren();
+//		if(piece_menu)
+//			piece_menu->removeFromParent();
 		
 		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 		
