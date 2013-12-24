@@ -26,7 +26,9 @@ enum class SlotMachineState
 	kScrolling1,
 	kScrolling2,
 	kScrolling3,
+	kFinishing,
 	kShow,
+	
 	kQuestion
 };
 

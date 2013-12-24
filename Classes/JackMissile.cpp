@@ -825,7 +825,7 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 		particle_filename = "jm_particle%d_water.plist";
 	
 	particle = CCParticleSystemQuad::create(CCString::createWithFormat(particle_filename.c_str(), (element_level-1)/2+1)->getCString());
-//	particle->setPositionType(kCCPositionTypeRelative);
+	particle->setPositionType(kCCPositionTypeRelative);
 //	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage(particle_string.c_str());
 //	particle->setTexture(texture);
 //	particle->setEmissionRate(particle_cnt);

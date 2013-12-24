@@ -28,6 +28,7 @@
 #include "TicketRequestContent.h"
 #include "GachaPurchase.h"
 #include "CollectionBookPopup.h"
+#include "NoticeContent.h"
 
 CCScene* PuzzleMapScene::scene()
 {
@@ -173,6 +174,26 @@ void PuzzleMapScene::startSceneSetting()
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init)
 	{
 		startChangeUiMode();
+		if(mySGD->getMustBeShowNotice())
+		{
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			NoticeContent* t_container = NoticeContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																				 {
+																					 t_popup->removeFromParent();
+																				 }, mySGD->getNoticeList());
+			t_popup->setContainerNode(t_container);
+			addChild(t_popup, kPMS_Z_popup);
+		}
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
 	{

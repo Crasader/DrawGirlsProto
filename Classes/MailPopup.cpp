@@ -212,6 +212,8 @@ void MailPopup::loadMail ()
 	hspConnector::get()->command("getmessagelist",p,[this](Json::Value r)
 															 {
 																 GraphDogLib::JsonToLog("getmessagelist", r);
+																 if(r["result"]["code"].asInt() != GDSUCCESS)
+																	 return;
 																 this->drawMail(r);
 															 });
 }
@@ -219,7 +221,7 @@ void MailPopup::drawMail (Json::Value obj)
 {
 	m_mailList=obj["list"];
 //	auto app_friends = fInfo["app_friends_info"];
-	std::map<int64, FriendData> userIdKeyValue;
+	std::map<std::string, FriendData> userIdKeyValue;
 	// m_mailList 와 app_friends 를 합쳐야됨.
 	//
 	
@@ -231,7 +233,7 @@ void MailPopup::drawMail (Json::Value obj)
 	
 	for(int i=0; i<m_mailList.size(); i++)
 	{
-		uint64 user_id = m_mailList[i]["friendID"].asInt64();
+		std::string user_id = m_mailList[i]["friendID"].asString();
 		m_mailList[i]["nickname"] = userIdKeyValue[user_id].nick;
 		m_mailList[i]["profile_image_url"] = userIdKeyValue[user_id].profileUrl;
 	}
@@ -408,6 +410,9 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																							
 																							//																		setHelpSendTime(recvId);
 																							GraphDogLib::JsonToLog("sendMessage", r);
+																							if(r["result"]["code"].asInt() != GDSUCCESS)
+																								return;
+																							
 																							//												 						obj->removeFromParent();
 																							KSAlertView* av = KSAlertView::create();
 																							av->setCenterY(150);
@@ -491,6 +496,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 												 [=](Json::Value r)
 												 {
+													 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+													 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																							 {
+																								 
+																							 });
+
 													 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
 																													[=](){
 																														CCLog("hat close");
@@ -512,6 +523,15 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						"removemessage",p,
 						[=](Json::Value r)
 						{
+							if(r["result"]["code"].asInt() != GDSUCCESS)
+								return;
+							
+							mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+							myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																	{
+																		
+																	});
+
 							KSAlertView* av = KSAlertView::create();
 							av->setCloseOnPress(false);
 							//				 av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
@@ -629,6 +649,11 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 (mailNo, mail["memberID"].asInt64(),
 					[=](Json::Value r)
 					{
+						mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+						myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																{
+																	
+																});
 						KSAlertView* av = KSAlertView::create();
 						
 						auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, contentObj["cardnumber"].asInt());
@@ -734,6 +759,16 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 														hspConnector::get()->command
 														("sendMessage", p, [=](Json::Value r)
 														 {
+															 if(r["result"]["code"].asInt() != GDSUCCESS)
+															 {
+																 av->removeFromParent();
+																 return;
+															 }
+															 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendTicket());
+															 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																									 {
+																										 
+																									 });
 															 av->removeFromParent();
 														 });
 													});
@@ -934,49 +969,42 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 [=](Json::Value v)
 						 {
 							 KS::KSLog("%", v);
+							 std::string errorMessage;
 							 /*
 								errorCode 필드에 10030 값이 넘어오면 내친구인원이 초과
-								errorCode  필드에 10031값이 넘어오면 상대방 친구인원이 초과
+								errorCode 필드에 10031값이 넘어오면 상대방 친구인원이 초과
 								*/
+							 if(v["result"]["code"].asInt() != GDSUCCESS)
+								 return;
+							 
 							 
 							 // 편.삭.
 							 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 														 [=](Json::Value r)
 														 {
+															 if(r["result"]["code"].asInt() != GDSUCCESS)
+															 {
+																 av->removeFromParent();
+																 
+																 KSAlertView* exceptionPopup = KSAlertView::create();
+																 exceptionPopup->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
+																 auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", "", 12.f);
+																 exceptionPopup->setContentNode(
+																																ttf
+																																);
+																 this->addChild(exceptionPopup, kMP_Z_helpAccept);
+																 exceptionPopup->show();
+																 return;
+															 }
+															 FriendData ufd;
+															 ufd.userId = v["friendInfo"]["memberID"].asString();
+															 ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
+															 ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
+															 ufd.nick = v["friendInfo"]["nick"].asString();
+															 UnknownFriends::getInstance()->add(ufd);
+															 av->removeFromParent();
 														 });
-							 std::string errorMessage;
-							 if(v["errorCode"].asInt() == 10030)
-								 errorMessage = "제한 인원이 초과하여 더 이상 추가하실 수 없습니다.";
-							 else if(v["errorCode"].asInt() == 10031)
-							 {
-								 errorMessage = "상대방의 제한인원이 초과하였습니다.";
-							 }
-							 
-							 if(v["errorCode"].asInt() == 10030 ||
-									v["errorCode"].asInt() == 10031)
-							 {
-								 av->removeFromParent();
-								 
-								 KSAlertView* exceptionPopup = KSAlertView::create();
-								 exceptionPopup->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-								 auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", "", 12.f);
-								 exceptionPopup->setContentNode(
-																								ttf
-																								);
-								 this->addChild(exceptionPopup, kMP_Z_helpAccept);
-								 exceptionPopup->show();
-							 }
-							 else
-							 {
-								 FriendData ufd;
-								 ufd.userId = v["friendInfo"]["memberID"].asUInt64();
-								 ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
-								 ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
-								 ufd.nick = v["friendInfo"]["nick"].asString();
-								 UnknownFriends::getInstance()->add(ufd);
 
-								 av->removeFromParent();
-							 }
 						 });
 					});
 				 av->addButton(m1);
@@ -1479,8 +1507,11 @@ void MailPopup::removeMessage(int mailNo, long long memberID, std::function<void
 	 [=](Json::Value r)
 	 {
 		 Json::Value newMailList;
+		 if(r["result"]["code"].asInt() != GDSUCCESS)
+			 return;
+
 		 
-		 if(r.get("state","fail").asString() == "ok")
+
 		 {
 			 //테이블에서 없어진것 없애기
 			 for(int i=0;i<m_mailList.size();i++){

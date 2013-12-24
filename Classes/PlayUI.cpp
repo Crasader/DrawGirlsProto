@@ -3,6 +3,7 @@
 
 #include "PlayUI.h"
 #include "KSCumberBase.h"
+#include "StartSettingScene.h"
 
 #define LZZ_INLINE inline
 using namespace cocos2d;
@@ -2010,7 +2011,8 @@ void PlayUI::goReplay ()
 	myGD->resetGameData();
 	
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stageSetting);
-	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+//	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+	CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 }
 void PlayUI::cancelHome ()
 {

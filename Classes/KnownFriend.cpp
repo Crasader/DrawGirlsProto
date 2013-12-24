@@ -9,7 +9,7 @@
 #include "KnownFriend.h"
 
 
-void KnownFriends::deleteById(uint64 kakaoId)
+void KnownFriends::deleteById(std::string kakaoId)
 {
 	for(auto iter = m_friends.begin(); iter != m_friends.end(); ++iter)
 	{
@@ -20,11 +20,11 @@ void KnownFriends::deleteById(uint64 kakaoId)
 		}
 	}
 }
-void KnownFriends::putJoinDate(int index, int64 jd)
+void KnownFriends::putJoinDate(int index, int64_t jd)
 {
 	m_friends[index].joinDate = jd;
 }
-void KnownFriends::putLastDate(int index, int64 jd)
+void KnownFriends::putLastDate(int index, int64_t jd)
 {
 	m_friends[index].lastDate = jd;
 }
@@ -37,7 +37,7 @@ void KnownFriends::putHashedTalkUserId(int index, const std::string hashId)
 {
 	m_friends[index].hashedTalkUserId = hashId;
 }
-FriendData* KnownFriends::findById(uint64 kakaoId)
+FriendData* KnownFriends::findById(std::string kakaoId)
 {
 	for(auto& i : m_friends)
 	{

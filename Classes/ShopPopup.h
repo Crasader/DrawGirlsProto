@@ -25,6 +25,13 @@ enum ShopCode{
 	kSC_character
 };
 
+enum ShopBeforeCode{
+	kShopBeforeCode_stagesetting = 0,
+	kShopBeforeCode_mainflow,
+	kShopBeforeCode_puzzle,
+	kShopBeforeCode_startsetting
+};
+
 class HeartTime;
 class LoadingLayer;
 class ShopPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
@@ -41,11 +48,13 @@ public:
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	void targetHeartTime(HeartTime* t_heartTime);
+	void setShopBeforeCode(ShopBeforeCode t_code);
 	
 	void setShopCode(ShopCode t_code);
 	
 private:
 	
+	ShopBeforeCode before_code;
 	ShopCode recent_shop_code;
 	HeartTime* target_heartTime;
 	

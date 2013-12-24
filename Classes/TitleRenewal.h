@@ -88,9 +88,15 @@ private:
 	
 	void resultGetCommonSetting(Json::Value result_data);
 	
+	void resultGetNoticeList(Json::Value result_data);
+	
 	void resultGetCharacterInfo(Json::Value result_data);
 	vector<DownloadFile> character_download_list;
 	int character_download_version;
+	
+	void resultGetMonsterList(Json::Value result_data);
+	vector<DownloadFile> monster_download_list;
+	int monster_download_version;
 	
 	void resultGetUserData(Json::Value result_data);
 	Json::Value friendList;
@@ -110,6 +116,8 @@ private:
 	vector<DownloadFile> puzzle_download_list;
 	vector<DownloadFile> event_download_list;
 	
+	
+	void endingCheck();
 	void endingAction();
 	void changeScene();
 	

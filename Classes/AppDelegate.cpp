@@ -19,8 +19,12 @@ USING_NS_CC;
 #include <map>
 #include "KSUtil.h"
 #include "Well512.h"
+#include "Dodge.h"
+#include "RandomDistribution.h"
+#include "CountingGame.h"
 
-
+#include "crypto/CCCrypto.h"
+#include "SlidingPuzzle.h"
 
 
 
@@ -38,9 +42,23 @@ USING_NS_CC;
  */
 AppDelegate::AppDelegate()
 {
-	
-	
+//	std::random_device rd;
+//	std::mt19937 rEngine(rd());
+//	uniform_int_distribution<long long> dist(1000000000000000000L, 2000000000000000000L);
+//
+//	for(int i=0; i<20; i++)
+//	{
+//		long long number = dist(rEngine);
+//		CCLog("%lld", number);
+//		CCLog("%s", KS::longLongToStr(number).c_str());
+//		CCLog("\t%lld", KS::strToLongLong(KS::longLongToStr(number)));
+//		CCLog("%s", KS::longLongToStr(number).c_str());
+//		CCLog("\t%lld", KS::strToLongLong(KS::longLongToStr(number)));
+//		CCLog("");
+//	}
+//	CCLog("f");
 }
+
 
 AppDelegate::~AppDelegate()
 {
@@ -240,8 +258,14 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 //	CCScene* pScene = TitleScene::scene();
 	CCScene* pScene = TitleRenewalScene::scene();
+//	CCScene* pScene = Dodge::scene();
+//	CCScene* pScene = CountingGame::scene();
+//	CCScene* pScene = SlidingPuzzle::scene();
+//	pEGLView->setDesignResolutionSize(480, 480, kResolutionFixedWidth);// kResolutionNoBorder);
+//	CCScene* pScene = RandomDistribution::scene();
     pDirector->runWithScene(pScene);
 
+	
     return true;
 }
 

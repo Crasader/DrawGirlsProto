@@ -299,11 +299,12 @@ CLEAR_CONDITION SilhouetteData::getClearCondition( int t_type ) /* stage */
 
 float SilhouetteData::getBossMaxLife()
 {
-	JsonBox::Value t_json;
-	t_json.loadFromString(NSDS_GS(myType, kSDS_SI_boss_s));
-	JsonBox::Array t_array = t_json.getArray();
-	JsonBox::Object t_boss = t_array[0].getObject();
-	return float(t_boss["hp"].getInt());
+	Json::Value t_json;
+	Json::Reader reader;
+	reader.parse(NSDS_GS(myType, kSDS_SI_boss_s), t_json);
+	Json::Value t_array = t_json;
+	Json::Value t_boss = t_array[0];
+	return float(t_boss["hp"].asInt());
 }
 
 std::string SilhouetteData::getConditionTitle()

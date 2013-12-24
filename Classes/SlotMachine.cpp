@@ -343,10 +343,11 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 	m_menu->setTouchEnabled(true);
 	addChild(m_menu);
 	
+	CCSprite* s1 = CCSprite::create("gacha4_stop.png");
+	CCSprite* s2 = CCSprite::create("gacha4_stop.png");
+	s2->setColor(ccc3(166, 166, 166));
+	CCMenuItemSpriteLambda* stopBtn = CCMenuItemSpriteLambda::create(s1, s2);
 	
-	
-	
-	CCMenuItemImageLambda* stopBtn = CCMenuItemImageLambda::create("gacha4_stop.png", "gacha4_stop.png");
 	stopBtn->setPosition(ccp(240, 40));
 	//		startBtn->setVisible(false);
 	stopBtn->setTarget([=](CCObject*)
@@ -413,7 +414,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 											 }
 											 else if(m_state == SlotMachineState::kScrolling3)
 											 {
-												 
+												 m_state = SlotMachineState::kFinishing;
 												 int currentSlot = 2;
 												 addChild(KSSchedule::create([=](float dt)
 																										 {

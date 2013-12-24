@@ -62,6 +62,12 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																	 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 																	 
 																	 //																		setHelpSendTime(recvId);
+																	 if(r["result"]["code"].asInt() != GDSUCCESS)
+																	 {
+																		 // 에러.
+																		 return;
+																	 }
+																	 
 																	 setChallengeSendTime(user_id);
 //																	 friend_list.erase(friend_list.begin() + tag);
 																	 GraphDogLib::JsonToLog("sendMessage", r);
@@ -129,7 +135,17 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 																		 //																		setHelpSendTime(recvId);
 																		 
+																		 if(r["result"]["code"].asInt() != GDSUCCESS)
+																		 {
+																			 return;
+																		 }
+																		 
 																		 GraphDogLib::JsonToLog("sendMessage", r);
+																		 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+																		 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																												 {
+																													 
+																												 });
 																		 
 																		 //																		obj->removeFromParent();
 																		 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
@@ -164,6 +180,14 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 
 																		 //																		setHelpSendTime(recvId);
 																		 GraphDogLib::JsonToLog("sendMessage", r);
+																		 if(r["result"]["code"].asInt() != GDSUCCESS)
+																			 return;
+																		 
+																		 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+																		 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																												 {
+																													 
+																												 });
 																		 //												 						obj->removeFromParent();
 																		 KSAlertView* av = KSAlertView::create();
 																		 av->setCenterY(150);

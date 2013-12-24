@@ -46,22 +46,56 @@ namespace KS
 		}
 	}
 	
-	string longLongToStr(long long t, int radix)
+	string longLongToStr(long long t)
 	{
+		int radix = 26;
 		int remainer;
-		std::string alpha = "0123456789abcdefghijklmnopqrstuvwxyz"; // len 36
+		//                   0123456789...
+		std::string alpha = "abcdefghijklmnopqrstuvwxyz"; // max 26
 		std::string result;
-		while((remainer = t % radix))
+		while(t)
 		{
+			remainer = t % radix;
 			result.push_back(alpha[remainer]);
 			t /= radix;
 		}
 		return std::string(result.rbegin(), result.rend());
 	}
-	long long strToLongLong(const std::string& t, int radix)
+	long long strToLongLong(const std::string& t)
 	{
-		char* endP;
-		return strtoll(t.c_str(), &endP, radix);
+		int radix = 26;
+		auto converter = [](char c){
+			std::string alpha = "abcdefghijklmnopqrstuvwxyz"; // max 26
+			for(int i=0; i<alpha.size(); i++)
+			{
+				if(alpha[i] == c)
+				{
+					return i;
+				}
+			}
+			
+			return 0;
+		};
+		auto longLongPow = [](int n, int r)->long long
+		{
+			long long result = 1;
+			for(int i=0; i<r; i++)
+			{
+				result *= n;
+			}
+			return result;
+		};
+		long long result = 0;
+		int idx = 0;
+		for(auto iter = t.rbegin(); iter != t.rend(); ++iter)
+		{
+			int n = converter(*iter);
+			result += n * longLongPow(radix, idx);
+			idx++;
+		}
+		return result;
+//		char* endP;
+//		return strtoll(t.c_str(), &endP, radix);
 	}
 	//	CCSprite* spriteWithSpriteFrameName(const char *pszSpriteFrameName)
 	//	{

@@ -52,6 +52,7 @@ private:
 	int download_version;
 	
 	vector<DownloadFile> df_list;
+	vector<DownloadFile> cut_list;
 	vector<DownloadFile> sf_list;
 	vector<CopyFile> cf_list;
 	

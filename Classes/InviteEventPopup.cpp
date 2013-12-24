@@ -248,7 +248,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	cell->addChild(_menu, kInvite_Z_send);
 
 
-	if(::getInviteIsSendable( m_scoreList[idx]["user_id"].asString() ))
+	if(::getInviteIsSendable( m_scoreList[idx]["user_id"].asString(), mySGD->getInviteCoolDay() * 60*60*24 ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
 			("rank_cell_invite.png", "rank_cell_invite.png",
@@ -281,6 +281,9 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 
 
 					GraphDogLib::JsonToLog("sendMessage", r);
+					if(r["result"]["code"].asInt() != GDSUCCESS)
+						return;
+					
 					::setInviteSendTime(m_scoreList[idx]["user_id"].asString());
 					obj->removeFromParent();
 

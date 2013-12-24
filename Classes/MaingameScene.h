@@ -227,8 +227,13 @@ private:
 	void startShake(float t_direction_angle);
 	
 	void shaking();
-	
 	void stopShake();
+	
+	CCSprite* character_thumb;
+	CCSprite* boss_thumb;
+	CCPoint thumb_base_position;
+	CCRenderTexture* thumb_texture;
+	void refreshThumb();
 };
 
 #endif

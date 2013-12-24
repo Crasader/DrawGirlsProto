@@ -7,7 +7,7 @@
 //
 
 #include "SaveData.h"
-#include "JsonBox.h"
+#include "jsoncpp/json.h"
 #include <sstream>
 #include "StringCodec.h"
 
@@ -19,7 +19,9 @@ SaveData* SaveData::sharedObject()
 	if(_ins == 0)
 	{
 		_ins = new SaveData();
-		_ins->file_sync.loadFromString("{}");
+		Json::Reader reader;
+		reader.parse("{}", _ins->file_sync);
+//		_ins->file_sync.loadFromString("{}");
 	}
 	return _ins;
 }
@@ -54,12 +56,16 @@ void SaveData::createJSON(string filename)
 	string key = stringEnc(filename);
 	if(rawData == "")
 	{
-		file_sync[key].loadFromString("{}");
+		Json::Reader reader;
+		reader.parse("{}", file_sync[key]);
+//		.loadFromString("{}");
 		cocos2d::CCLog("create json : %s", filename.c_str());
 	}
 	else
-		file_sync[key].loadFromString(rawData);
-	
+	{
+		Json::Reader reader;
+		reader.parse(rawData, file_sync[key]);
+	}
 	file_init[key] = true;
 }
 void SaveData::createJSON(SaveDataFile t_sdf){			createJSON(getSyncKey(t_sdf));		}
@@ -80,9 +86,8 @@ void SaveData::setKeyValue(string filename, string _key, string _value, bool dis
 	file_sync[file_key][key] = value;
 	if(diskWrite)
 	{
-		ostringstream oss;
-		file_sync[file_key].writeToStream(oss);
-		testF(filename, oss.str());
+		Json::FastWriter writer;
+		testF(filename, writer.write(file_sync[file_key]));
 	}
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, string _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
@@ -102,9 +107,8 @@ void SaveData::addKeyValue(string filename, string _key, string _value)
 	string value = stringEnc(_value);
 	
 	(file_sync[file_key])[key] = value;
-	ostringstream oss;
-	file_sync[file_key].writeToStream(oss);
-	addF(filename, oss.str());
+	Json::FastWriter writer;
+	addF(filename, writer.write(file_sync[file_key]));
 }
 void SaveData::addKeyValue(SaveDataFile t_sdf, string _key, string _value)
 {
@@ -125,8 +129,8 @@ void SaveData::resetData(string filename)
 	
 	string file_key = stringEnc(filename);
 	
-	ostringstream oss;
-	file_sync[file_key].setNull();
+	Json::Reader reader;
+	reader.parse("{}", file_sync[file_key]);
 	testF(filename, "");
 }
 
@@ -146,9 +150,8 @@ void SaveData::setKeyValue(string filename, string _key, int _value, bool diskWr
 	file_sync[file_key][key] = value;
 	if(diskWrite)
 	{
-		ostringstream oss;
-		file_sync[file_key].writeToStream(oss);
-		testF(filename, oss.str());
+		Json::FastWriter writer;
+		testF(filename, writer.write(file_sync[file_key]));
 	}
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, int _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
@@ -170,9 +173,8 @@ void SaveData::setKeyValue(string filename, string _key, double _value, bool dis
 	file_sync[file_key][key] = value;
 	if(diskWrite)
 	{
-		ostringstream oss;
-		file_sync[file_key].writeToStream(oss);
-		testF(filename, oss.str());
+		Json::FastWriter writer;
+		testF(filename, writer.write(file_sync[file_key]));
 	}
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, double _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
@@ -187,7 +189,7 @@ string SaveData::getValue(string filename, string _key, string _defaultValue)
 	
 	string file_key = stringEnc(filename);
 	string key = stringEnc(_key);
-	string v = (file_sync[file_key])[key].getString();
+	string v = (file_sync[file_key])[key].asString();
 	string v2 = v;//stringDecode(v);
 	if(v2 == "")
 		return _defaultValue;
@@ -206,7 +208,7 @@ int SaveData::getValue(string filename, string _key, int _defaultValue)
 	
 	string file_key = stringEnc(filename);
 	string key = stringEnc(_key);
-	string v = (file_sync[file_key])[key].getString();
+	string v = (file_sync[file_key])[key].asString();
 	string v2 = v;//stringDecode(v);
 	int _v2 = atoi(v2.c_str());
 	if(v2 == "")
@@ -226,7 +228,7 @@ double SaveData::getValue(string filename, string _key, double _defaultValue)
 	
 	string file_key = stringEnc(filename);
 	string key = stringEnc(_key);
-	string v = (file_sync[file_key])[key].getString();
+	string v = (file_sync[file_key])[key].asString();
 	string v2 = v;//stringDecode(v);
 	double _v2 = atof(v2.c_str());
 	if(v2 == "")
@@ -246,9 +248,8 @@ void SaveData::fFlush(string filename)
 	
 	string file_key = stringEnc(filename);
 		
-	ostringstream oss;
-	file_sync[file_key].writeToStream(oss);
-	testF(filename, oss.str());
+	Json::FastWriter writer;
+	testF(filename, writer.write(file_sync[file_key]));
 }
 void SaveData::fFlush(SaveDataFile t_sdf){			fFlush(getSyncKey(t_sdf));		}
 void SaveData::fFlush(SaveDataFile t_sdf, int i1){	fFlush(getSyncKey(t_sdf, i1));	}

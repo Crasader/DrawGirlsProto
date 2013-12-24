@@ -11,12 +11,13 @@
 #include "KSCircleBase.h"
 #include "KSSnakeBase.h"
 #include "KSJuniorBase.h"
+#include "StageImgLoader.h"
 
 //#include "CCBReader.h"
 //#include "cocos-ext.h"
 //USING_NS_CC_EXT;
 
-bool CumberShowWindow::init(int ss)
+bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 {
 	
 //	std::string bossInfo = R"([{"shape":"snake","type":"apple","pattern":[{"speed":200,"numberperframe":5,"percent":1,"target":"no","atype":"normal","pattern":"101","color":1}],"speed":{"max":3,"start":2,"min":0.3},"scale":{"max":0.8,"start":0.7,"min":0.4},"movement":{"normal":2,"draw":2},"attackpercent":0.5,"hp":100,"agi":1,"ai":50}])";
@@ -33,6 +34,12 @@ bool CumberShowWindow::init(int ss)
 	reader.parse(juniorInfo, juniorJson);
 	
 	std::string bossShape = bossJson.get("shape", "circle").asString();
+	
+	CCPoint boss_position;
+	if(t_code == kCumberShowWindowSceneCode_puzzle)
+		boss_position = ccp(-15,45);
+	else if(t_code == kCumberShowWindowSceneCode_cardChange)
+		boss_position = ccp(0,0);
 	
 	if(bossShape == "circle")
 	{
@@ -59,7 +66,7 @@ bool CumberShowWindow::init(int ss)
 		{
 			this->addChild(m_circleSprite);
 			m_circleSprite->setScale(0.7f);
-			m_circleSprite->setPosition(ccp(-49,0));
+			m_circleSprite->setPosition(boss_position);
 		}
 	}
 	else if(bossShape == "snake")
@@ -72,7 +79,7 @@ bool CumberShowWindow::init(int ss)
 		m_snakeNode = KSSnakeBase::create(ccbiname2, false);
 		addChild(m_snakeNode, 1000);
 		m_snakeNode->setScale(0.7f);
-		m_snakeNode->setPosition(ccp(-49,0));
+		m_snakeNode->setPosition(boss_position);
 		
 		m_snakeNode->startAnimationNoDirection();
 //		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -116,19 +123,29 @@ bool CumberShowWindow::init(int ss)
 	double boss_agi = bossJson.get("agi", 0).asDouble();
 	
 	CCLabelTTF* boss_hp_label = CCLabelTTF::create(CCString::createWithFormat("%d", boss_hp)->getCString(), mySGD->getFont().c_str(), 10);
-	boss_hp_label->setPosition(ccp(-78,-61));
 	addChild(boss_hp_label);
 	
 	CCLabelTTF* boss_speed_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", boss_speed)->getCString(), mySGD->getFont().c_str(), 10);
-	boss_speed_label->setPosition(ccp(-49,-61));
 	addChild(boss_speed_label);
 	
 	CCLabelTTF* boss_agi_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", boss_agi)->getCString(), mySGD->getFont().c_str(), 10);
-	boss_agi_label->setPosition(ccp(-20,-61));
 	addChild(boss_agi_label);
 	
+	if(t_code == kCumberShowWindowSceneCode_puzzle)
+	{
+		boss_hp_label->setPosition(ccp(40,70));
+		boss_speed_label->setPosition(ccp(40,42));
+		boss_agi_label->setPosition(ccp(40,14));
+	}
+	else if(t_code == kCumberShowWindowSceneCode_cardChange)
+	{
+		boss_hp_label->setPosition(ccp(120,6));
+		boss_speed_label->setPosition(ccp(120,-13));
+		boss_agi_label->setPosition(ccp(120,-32));
+	}
 	
-	if(juniorJson.size() > 0)
+	
+	if(t_code == kCumberShowWindowSceneCode_puzzle && juniorJson.size() > 0)
 	{
 		int junior_cnt = juniorJson.size();
 		int juniorIndex = m_well512.GetValue(0, juniorJson.size() - 1);
@@ -164,12 +181,12 @@ bool CumberShowWindow::init(int ss)
 			{
 				this->addChild(m_juniorSprite, 1001);
 				m_juniorSprite->setScale(0.7f);
-				m_juniorSprite->setPosition(ccp(48, 0));
+				m_juniorSprite->setPosition(ccp(-15,-45));
 				if(junior_cnt > 1)
 				{
 					CCLabelTTF* junior_count_label = CCLabelTTF::create(CCString::createWithFormat("x%d", junior_cnt)->getCString(), mySGD->getFont().c_str(), 20);
 					junior_count_label->setAnchorPoint(ccp(0,0.5));
-					junior_count_label->setPosition(ccp(53,-20));
+					junior_count_label->setPosition(ccp(0,-65));
 					addChild(junior_count_label, 1002);
 				}
 			}
@@ -179,15 +196,15 @@ bool CumberShowWindow::init(int ss)
 		double junior_agi = juniorJson.get("agi", 0).asDouble();
 		
 		CCLabelTTF* junior_hp_label = CCLabelTTF::create(CCString::createWithFormat("%d", junior_hp)->getCString(), mySGD->getFont().c_str(), 10);
-		junior_hp_label->setPosition(ccp(18,-61));
+		junior_hp_label->setPosition(ccp(40,-20));
 		addChild(junior_hp_label);
 		
 		CCLabelTTF* junior_speed_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", junior_speed)->getCString(), mySGD->getFont().c_str(), 10);
-		junior_speed_label->setPosition(ccp(48,-61));
+		junior_speed_label->setPosition(ccp(40,-48));
 		addChild(junior_speed_label);
 		
 		CCLabelTTF* junior_agi_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", junior_agi)->getCString(), mySGD->getFont().c_str(), 10);
-		junior_agi_label->setPosition(ccp(76,-61));
+		junior_agi_label->setPosition(ccp(40,-76));
 		addChild(junior_agi_label);
 	}
 	

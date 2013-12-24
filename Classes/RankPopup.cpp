@@ -308,8 +308,13 @@ void RankPopup::loadRank ()
 															 {
 																 CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
 																 
+																 
 																 //step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
 																 GraphDogLib::JsonToLog("friend1", appfriends);
+																 
+																 if(obj["result"]["code"].asInt() != GDSUCCESS)
+																	 return;
+																 
 																 Json::Value scorelist;
 																 
 																 for(unsigned int i=0;i<appfriends.size();i++){
@@ -448,7 +453,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	_menu->setTag(kRP_RT_menu);
 	cell->addChild(_menu, kRP_Z_send);
 	
-	if(::getHeartIsSendable( m_scoreList[idx]["user_id"].asString() ))
+	if(::getHeartIsSendable( m_scoreList[idx]["user_id"].asString(), mySGD->getHeartSendCoolTime() ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
 		("rank_cell_send.png", "rank_cell_send.png",
@@ -479,7 +484,17 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 											  //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 											  //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 											  GraphDogLib::JsonToLog("sendMessage", r);
+												if(r["result"]["code"].asInt() != GDSUCCESS)
+													return;
+												
 											  ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
+												
+												mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
+												myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+																						{
+																							
+																						});
+												
 											  obj->removeFromParent();
 											  
 											  CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
@@ -977,7 +992,7 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 				bool is_found = false;
 				for(auto i : UnknownFriends::getInstance()->getFriends())
 				{
-					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
+					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asString())
 					{
 						is_found = true;
 						Json::Value t_user_data = i.userData;
@@ -988,7 +1003,7 @@ void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 				}
 				for(auto i : KnownFriends::getInstance()->getFriends())
 				{
-					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asInt64())
+					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asString())
 					{
 						Json::Value t_user_data = i.userData;
 						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();

@@ -351,6 +351,8 @@ bool OptionPopup::init()
 	con2->alignItemsVerticallyWithPadding(30);
 	av->show();
 #endif
+	
+	
 	return true;
 }
 

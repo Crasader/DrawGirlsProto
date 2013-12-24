@@ -22,6 +22,7 @@
 #include "OnePercentGacha.h"
 #include "hspConnector.h"
 #include "MissileDamageData.h"
+
 #define JM_CONDITION	0.02
 
 #define MY_GRAVITY	-0.5

@@ -20,7 +20,14 @@ enum class RewardKind
 	kDash,
 	kSlience,
 	kRentCard,
-	kSubMonsterOneKill
+	kSubMonsterOneKill,
+	kPower,
+	kMobLess,
+	kAddTime,
+	kDecreaseBossHp,
+	kDecreaseMobScale,
+	kPerfectLess, // 완벽주의자
+	kChangeOrderForce // 체인지 순서대로.
 };
 
 

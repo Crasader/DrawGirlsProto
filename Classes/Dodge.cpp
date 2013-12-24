@@ -9,6 +9,8 @@
 #include "Dodge.h"
 #include "StarGoldData.h"
 #include "KSUtil.h"
+#include "ProbSelector.h"
+
 CCPoint dodgeScreenSize = ccp(337, 320);
 
 void BulletContainer::update(float dt)
@@ -104,40 +106,45 @@ void Dodge::update(float dt)
 	m_flowTimeFnt->setString(CCString::createWithFormat("%.1f", m_timer)->getCString());
 	m_bulletCountGoal = 10 + m_timer / 1.f;
 	// 충돌 처리.
-	while(m_bulletContainer->getChildrenCount() < m_bulletCountGoal)
+	ProbSelector ps = {1,40};
+	if(ps.getResult() == 0) // 되도록이면 한번에 생성..
 	{
-		float x, y;
-		
-		if(m_well512.GetPlusMinus() > 0)
+		while(m_bulletContainer->getChildrenCount() < m_bulletCountGoal)
 		{
-			x = m_well512.GetFloatValue(0, dodgeScreenSize.x);
+			float x, y;
+			
 			if(m_well512.GetPlusMinus() > 0)
 			{
-				y = dodgeScreenSize.y - 10.f;
+				x = m_well512.GetFloatValue(0, dodgeScreenSize.x);
+				if(m_well512.GetPlusMinus() > 0)
+				{
+					y = dodgeScreenSize.y + 10.f;
+				}
+				else
+				{
+					y = -10;
+				}
 			}
 			else
 			{
-				y = 10;
+				y = m_well512.GetFloatValue(0, dodgeScreenSize.y);
+				if(m_well512.GetPlusMinus() > 0)
+				{
+					x = dodgeScreenSize.x + 10.f;
+				}
+				else
+				{
+					x = -10;
+				}
 			}
+			auto bullet = DodgeBullet::create(ccp(x, y));
+			float angle = atan2(m_player->getPosition().y - y, m_player->getPosition().x - x);
+			bullet->m_dv = ccp(cos(angle), sin(angle))*m_well512.GetFloatValue(0.7f, 2.5f);// (m_player->getPosition() - ccp(x, y)) / m_well512.GetFloatValue(100.f, 150.f);
+			m_bulletContainer->addChild(bullet);
+			m_bulletCount++;
 		}
-		else
-		{
-			y = m_well512.GetFloatValue(0, dodgeScreenSize.y);
-			if(m_well512.GetPlusMinus() > 0)
-			{
-				x = dodgeScreenSize.x - 10.f;
-			}
-			else
-			{
-				x = 10;
-			}
-		}
-		auto bullet = DodgeBullet::create(ccp(x, y));
-		float angle = atan2(m_player->getPosition().y - y, m_player->getPosition().x - x);
-		bullet->m_dv = ccp(cos(angle), sin(angle))*m_well512.GetFloatValue(0.7f, 2.5f);// (m_player->getPosition() - ccp(x, y)) / m_well512.GetFloatValue(100.f, 150.f);
-		m_bulletContainer->addChild(bullet);
-		m_bulletCount++;
 	}
+	
 }
 
 
