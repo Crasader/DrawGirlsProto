@@ -257,10 +257,10 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 //	CCScene* pScene = TitleScene::scene();
-//	CCScene* pScene = TitleRenewalScene::scene();
+	CCScene* pScene = TitleRenewalScene::scene();
 //	CCScene* pScene = Dodge::scene();
 //	CCScene* pScene = CountingGame::scene();
-	CCScene* pScene = SlidingPuzzle::scene();
+//	CCScene* pScene = SlidingPuzzle::scene();
 //	pEGLView->setDesignResolutionSize(480, 480, kResolutionFixedWidth);// kResolutionNoBorder);
 //	CCScene* pScene = RandomDistribution::scene();
     pDirector->runWithScene(pScene);
