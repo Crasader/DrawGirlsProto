@@ -202,6 +202,30 @@ void Maingame::finalSetting()
 	
 	startScene();
 	
+	thumb_texture = CCRenderTexture::create(320, 430);
+	thumb_texture->setScale(0.2f);
+	thumb_texture->setPosition(ccp(65-160.f*0.2f,140-215.f*0.2f));
+	addChild(thumb_texture, myUIZorder);
+	
+	thumb_base_position = ccp(65-320.f*0.2f,140-430.f*0.2f);
+	
+	CCDelayTime* thumb_delay = CCDelayTime::create(0.3f);
+	CCCallFunc* thumb_call = CCCallFunc::create(this, callfunc_selector(Maingame::refreshThumb));
+	CCSequence* thumb_seq = CCSequence::createWithTwoActions(thumb_delay, thumb_call);
+	CCRepeatForever* thumb_repeat = CCRepeatForever::create(thumb_seq);
+	thumb_texture->runAction(thumb_repeat);
+	
+	character_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 2, 2));
+	character_thumb->setColor(ccGREEN);
+	character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), 0.2f)));
+	addChild(character_thumb, myUIZorder);
+	
+	boss_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 3, 3));
+	boss_thumb->setColor(ccRED);
+	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
+	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), 0.2f)));
+	addChild(boss_thumb, myUIZorder);
+	
 	if(mySD->getSilType() == 1)
 	{
 		if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
@@ -854,6 +878,8 @@ void Maingame::moveGamePosition( CCPoint t_p )
 {
 	//		if(!myGD->is_setted_jack)// || myGD->game_step == kGS_unlimited)
 	game_node->setPosition(getObjectToGameNodePosition(t_p));
+	if(character_thumb)
+		character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), 0.2f)));
 }
 
 CCPoint Maingame::getGameNodePosition()
@@ -1168,4 +1194,17 @@ void Maingame::stopShake()
 {
 	unschedule(schedule_selector(Maingame::shaking));
 	shake_frame = 0;
+}
+
+void Maingame::refreshThumb()
+{
+	VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
+	thumb_texture->beginWithClear(0, 0, 0.3f, 0.5f);
+	t_vs->visitForThumb();
+	thumb_texture->end();
+	
+	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
+	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), 0.2f)));
+	
+	t_vs->visit();
 }

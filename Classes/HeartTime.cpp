@@ -44,7 +44,7 @@ bool HeartTime::startGame ()
 		{
 			myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)-1);
 			
-			state_label->setString(CCString::createWithFormat("+%d", myDSH->getIntegerForKey(kDSH_Key_heartCnt)-5)->getCString());
+			state_label->setString(CCString::createWithFormat("+%d", myDSH->getIntegerForKey(kDSH_Key_heartCnt)-mySGD->getHeartMax())->getCString());
 		}
 		
 		return true;
@@ -173,7 +173,7 @@ void HeartTime::myInit ()
 		}
 		else
 		{
-			state_label = CCLabelTTF::create(CCString::createWithFormat("+%d", loop_cnt-mySGD->getHeartMax())->getCString(), mySGD->getFont().c_str(), 13);
+			state_label = CCLabelTTF::create(CCString::createWithFormat("+%d", myDSH->getIntegerForKey(kDSH_Key_heartCnt)-mySGD->getHeartMax())->getCString(), mySGD->getFont().c_str(), 13);
 			state_label->setAnchorPoint(ccp(0,0.5));
 			state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()+2,0));
 			addChild(state_label);

@@ -918,6 +918,44 @@ void VisibleSprite::visit()
 	glDisable(GL_SCISSOR_TEST);
 }
 
+void VisibleSprite::visitForThumb()
+{
+	unsigned int loopCnt = drawRects->count();
+	
+	glEnable(GL_SCISSOR_TEST);
+	
+	for(int i=0;i<loopCnt;i++)
+	{
+		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
+		
+		float wScale = viewport[2] / (design_resolution_size.width + (viewport[2]-960.f)/2.f); // 1024, 768 / 480, 360 -> + 32, 24
+		float hScale = viewport[3] / (design_resolution_size.height + (viewport[2]-960.f)/2.f*design_resolution_size.height/design_resolution_size.width); // 1136, 641 / 480, 271 -> + 89, 50
+		
+		float x, y, w, h;
+		
+		if(is_set_scene_node)
+		{
+			x = t_rect->origin.x*wScale + viewport[0]-1;
+			y = t_rect->origin.y*hScale + viewport[1]-1;
+			w = t_rect->size.width*wScale + 2;
+			h = t_rect->size.height*hScale + 2;
+		}
+		else
+		{
+			x = t_rect->origin.x*wScale + viewport[0]-1;
+			y = t_rect->origin.y*hScale + viewport[1]-1;
+			w = t_rect->size.width*wScale + 2;
+			h = t_rect->size.height*hScale + 2;
+		}
+		
+		glScissor(x,y,w,h);
+		draw();
+		
+	}
+	
+	glDisable(GL_SCISSOR_TEST);
+}
+
 void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects )
 {
 	initWithTexture(mySIL->addImage(filename));

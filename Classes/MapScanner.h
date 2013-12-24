@@ -136,6 +136,8 @@ public:
 	CCPoint getMoveGamePosition();
 	
 	void setSceneNode(CCObject* t_scene_node);
+	void visitForThumb();
+	virtual void visit();
 	
 private:
 	CCArray* drawRects;
@@ -146,8 +148,6 @@ private:
 	int viewport[4];
 	CCNode* scene_node;
 	bool is_set_scene_node;
-	
-	virtual void visit();
 	
 	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects);
 };
@@ -165,6 +165,11 @@ public:
 	}
 	
 	CCArray* getDrawRects();
+	
+	CCSprite* getVisibleSprite()
+	{
+		return myVS;
+	}
 	
 private:
 	VisibleSprite* myVS;
@@ -215,6 +220,11 @@ public:
 	void stopRandomingRectView();
 	
 	void startGame();
+	
+	CCSprite* getVisibleSprite()
+	{
+		return visibleImg->getVisibleSprite();
+	}
 	
 private:
 	InvisibleSprite* invisibleImg;
