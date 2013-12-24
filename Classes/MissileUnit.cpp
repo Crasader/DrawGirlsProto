@@ -322,7 +322,7 @@ void MissileUnit3::myInit (int t_type, float t_distance, CCSize t_mSize, CCObjec
 	{
 		//			initWithFile("fallingStone.png", CCRectMake(0, 0, 35, 35));
 		
-		auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_marble1.ccbi");
+		auto ret = KS::loadCCBI<CCSprite*>(this, "stone_1.ccbi");//"pattern_marble1.ccbi");
 		CCSprite* stone = ret.first;
 		addChild(stone);
 	}
@@ -2648,7 +2648,7 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 		auto direction = iter->second;
 		
 		// 목표 위치 부착.
-		CCSprite* goal = CCSprite::create("satelliteBeam_targeting.png");
+		CCSprite* goal = KS::loadCCBI<CCSprite*>(this, "target1.ccbi").first; // CCSprite::create("satelliteBeam_targeting.png");
 		addChild(goal);
 		goal->setPosition(ip2ccp(point));
 		
@@ -2880,7 +2880,7 @@ void ThrowBomb::update (float dt)
 	
 	if(m_step == 2) // 폭발.
 	{
-		auto bomb = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+		auto bomb = KS::loadCCBI<CCSprite*>(this, "bomb_8_7.ccbi");//"fx_bomb5.ccbi");
 		bomb.first->setPosition(m_parentMissile->getPosition());
 		addChild(bomb.first);
 		addChild(KSTimer::create(1.3f, [=](){bomb.first->removeFromParent();})); // 1.3 초 후에 사라짐.
