@@ -995,7 +995,7 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
-	targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor1_targeting.ccbi",this));
+	targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("bomb_8_6_1.ccbi",this));//"pattern_meteor1_targeting.ccbi",this));
 	reader->release();
 	targetingImg->setPosition(t_sp);
 	
@@ -1212,7 +1212,7 @@ void FallMeteor::selfRemove ()
 }
 void FallMeteor::initParticle ()
 {
-	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+	auto ret = KS::loadCCBI<CCSprite*>(this, "bomb_8_4.ccbi");//"fx_bomb5.ccbi");
 	CCSprite* particle = ret.first;
 	
 	if(meteor)
