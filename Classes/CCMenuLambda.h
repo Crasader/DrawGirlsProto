@@ -16,7 +16,7 @@ class CC_DLL CCMenuLambda : public CCLayerRGBA
 	bool m_bEnabled;
 	
 public:
-	CCMenuLambda() : m_pSelectedItem(NULL) {}
+	CCMenuLambda() : m_pSelectedItem(NULL), m_propaOnBegan(false){}
 	virtual ~CCMenuLambda(){}
 	
 	/** creates an empty CCMenu */
@@ -104,6 +104,8 @@ protected:
 	
 	CCPoint m_touchesStart;
 	CCPoint m_touchesEnd;
+	
+	CC_SYNTHESIZE(bool, m_propaOnBegan, PropaOnBegan);
 };
 
 // end of GUI group

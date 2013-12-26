@@ -28,7 +28,14 @@ bool SlidingPuzzle::init()
 	m_rEngine.seed(rd());
 	m_menu = CCMenuLambda::create();
 	m_menu->setPosition(ccp(0, 0));
+	m_menu->setPropaOnBegan(true);
+	
 	addChild(m_menu);
+	
+	
+	m_timeFnt = CCLabelBMFont::create("", "etc_font.fnt");
+	m_timeFnt->setPosition(ccp(390, 100));
+	addChild(m_timeFnt);
 	
 	//퍼즐 파일명
 	string filename=CCFileUtils::sharedFileUtils()->getWritablePath() + "puzzle1_original.png";
@@ -60,6 +67,11 @@ bool SlidingPuzzle::init()
 		//원본파일에서 자를 위치를 계산합니다.
 		int cutx =x*116+94;
 		int cuty =y*116+94;
+		
+		/* face cut
+		 cutx = x*172+86;
+		 cuty = y*172+86;
+		 */
 		
 		//자르고 저장합니다.
 		PuzzleCache::getInstance()->changeStencilByOrigin(st, img, {cutx,cuty}, true);
@@ -123,6 +135,8 @@ bool SlidingPuzzle::init()
 																																					 if(valid)
 																																					 {
 																																						 CCLog("correct!!");
+																																						 this->unscheduleUpdate();
+																																						 m_timeFnt->setColor(ccc3(255, 0, 0));
 																																					 }
 																																				 });
 																																			}
@@ -183,9 +197,7 @@ bool SlidingPuzzle::init()
 		
 		//자르고 저장합니다.
 		PuzzleCache::getInstance()->changeStencilByOrigin(st, img, {cutx,cuty}, true);
-		
-		
-		
+
 		//테스트로 한번 붙여봅니다.
 		CCTexture2D* _texture = new CCTexture2D;
 		_texture->initWithImage(st);
@@ -292,12 +304,20 @@ bool SlidingPuzzle::init()
 //													CCLog("%d %d", m_emptyCoord.x, m_emptyCoord.y);
 //												});
 //						});
+	scheduleUpdate();
 	return true;
 }
 
 void SlidingPuzzle::shuffle(float dt)
 {
 	
+}
+
+void SlidingPuzzle::update(float dt)
+{
+	m_timer += dt;
+	
+	m_timeFnt->setString(CCString::createWithFormat("%.1f", m_timer)->getCString());
 }
 
 void SlidingPuzzle::movePiece(Coord piece, float duration, const std::function<void(Coord)>& noti )

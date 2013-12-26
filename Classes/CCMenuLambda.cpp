@@ -236,6 +236,11 @@ bool CCMenuLambda::ccTouchBegan(CCTouch* touch, CCEvent* event)
 	{
 		m_eState = kCCMenuStateTrackingTouch;
 		m_pSelectedItem->selected();
+		
+		if(m_propaOnBegan)
+		{
+			m_pSelectedItem->activate();
+		}
 		return true;
 	}
 	return false;
@@ -264,7 +269,8 @@ void CCMenuLambda::ccTouchEnded(CCTouch *touch, CCEvent* event)
 		if (m_pSelectedItem)
 		{
 			m_pSelectedItem->unselected();
-			m_pSelectedItem->activate();
+			if(m_propaOnBegan == false)
+				m_pSelectedItem->activate();
 		}
 		m_eState = kCCMenuStateWaiting;
 	}
