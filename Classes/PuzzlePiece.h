@@ -16,6 +16,7 @@
 #include "ServerDataSave.h"
 #include "StageImgLoader.h"
 #include "StarGoldData.h"
+#include "hspConnector.h"
 
 USING_NS_CC;
 using namespace std;
@@ -242,6 +243,68 @@ private:
 			piece_menu = CCMenu::createWithItem(piece_item);
 			piece_menu->setPosition(CCPointZero);
 			addChild(piece_menu);
+		}
+		
+		if(mySGD->temp_stage_ranker_list["result"]["code"].asInt() == GDSUCCESS)
+		{
+			string stage_ranker_user_id;
+			for(int i=0;i<mySGD->temp_stage_ranker_list["list"].size();i++)
+			{
+				if(mySGD->temp_stage_ranker_list["list"][i]["stageNo"].asInt() == stage_number)
+				{
+					stage_ranker_user_id = mySGD->temp_stage_ranker_list["list"][i]["memberID"].asString();
+					break;
+				}
+			}
+			
+			if(!stage_ranker_user_id.empty())
+			{
+				bool is_found = false;
+				string found_nick;
+				
+				if(stage_ranker_user_id == hspConnector::get()->myKakaoInfo["user_id"].asString())
+				{
+					is_found = true;
+					found_nick = hspConnector::get()->myKakaoInfo["nickname"].asString();
+				}
+				
+				for(auto i : KnownFriends::getInstance()->getFriends())
+				{
+					if(!is_found)
+					{
+						if(i.userId == stage_ranker_user_id)
+						{
+							is_found = true;
+							found_nick = i.nick;
+							break;
+						}
+					}
+					else
+						break;
+				}
+				
+				for(auto i : UnknownFriends::getInstance()->getFriends())
+				{
+					if(!is_found)
+					{
+						if(i.userId == stage_ranker_user_id)
+						{
+							is_found = true;
+							found_nick = i.nick;
+							break;
+						}
+					}
+					else
+						break;
+				}
+				
+				if(is_found)
+				{
+					CCLabelTTF* nick_label = CCLabelTTF::create(found_nick.c_str(), mySGD->getFont().c_str(), 20);
+					nick_label->setPosition(CCPointZero);
+					addChild(nick_label);
+				}
+			}
 		}
 	}
 	
