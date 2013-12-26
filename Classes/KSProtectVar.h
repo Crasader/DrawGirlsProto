@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 
 template<typename T>
 class KSProtectVar
@@ -17,19 +18,18 @@ private:
 		{
 			pV[i] ^= 0xcd;
 		}
-
 		return arg;
 	}
 public:
 	explicit KSProtectVar(pureT v)
 	{
+		static_assert(std::is_scalar<pureT>::value, "SCALAR");
 		data = getConv(v);
 	}
 	T getVar()
 	{
 		T g = getConv(data);
 		return g;
-//		return getConv(data);
 	}
 	T operator+(pureT arg) const
 	{
