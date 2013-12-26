@@ -713,8 +713,33 @@ void StageListDown::startGetStageList()
 {
 	myLog->addLog(kLog_getPuzzleInfo_i, -1, puzzle_number);
 
+	vector<CommandParam> command_vector;
+	
+	Json::Value rank_param;
+	rank_param["memberIDList"].append(hspConnector::get()->myKakaoInfo["user_id"].asString());
+	for(auto i : KnownFriends::getInstance()->getFriends())
+		rank_param["memberIDList"].append(i.userId);
+	for(auto i : UnknownFriends::getInstance()->getFriends())
+		rank_param["memberIDList"].append(i.userId);
+	
+	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+	for(int i=start_stage;i<start_stage+stage_count;i++)
+		rank_param["stageNoList"].append(i);
+	
+	rank_param["limit"] = 10;
+	command_vector.push_back(CommandParam("getstageranklist", rank_param, json_selector(this, StageListDown::resultGetStageRankList)));
+	
 	Json::Value param;
 	param["version"] = NSDS_GI(puzzle_number, kSDS_PZ_version_i);
 	param["no"] = puzzle_number;
-	hspConnector::get()->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
+	command_vector.push_back(CommandParam("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList)));
+//	hspConnector::get()->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
+	hspConnector::get()->command(command_vector);
+}
+
+void StageListDown::resultGetStageRankList(Json::Value result_data)
+{
+//	CCLog("resultGetStageRankList : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	mySGD->temp_stage_ranker_list = result_data;
 }

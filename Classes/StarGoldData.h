@@ -357,6 +357,8 @@ public:
 		return notice_list;
 	}
 	
+	Json::Value temp_stage_ranker_list;
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;

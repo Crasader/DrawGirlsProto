@@ -56,7 +56,8 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 		ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
 		
 		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-		CCNode* p = reader->readNodeGraphFromFile(("boss_" + ccbiname2 + ".ccbi").c_str(), this);
+		//CCNode* p = reader->readNodeGraphFromFile(("boss_" + ccbiname2 + ".ccbi").c_str(), this);
+		CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+ccbiname2+".ccbi").c_str(), this);
 		m_circleSprite = dynamic_cast<CircleBossCCB*>(p);
 		m_circleAnimation = reader->getAnimationManager();
 		m_circleAnimation->setDelegate(this);
