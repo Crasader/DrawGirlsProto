@@ -481,11 +481,13 @@ private:
 					{
 						CCSprite* n_piece = GDWebSprite::create(found_url.c_str(), "piece_ranker_noimg.png");
 						n_piece->setScale(58.f / n_piece->getContentSize().width);
-						CCSprite* s_piece = GDWebSprite::create(found_url.c_str(), "piece_ranker_noimg.png");
-						s_piece->setScale(58.f / s_piece->getContentSize().width);
-						s_piece->setColor(ccGRAY);
+//						CCSprite* s_piece = GDWebSprite::create(found_url.c_str(), "piece_ranker_noimg.png");
+//						s_piece->setScale(58.f / s_piece->getContentSize().width);
+//						s_piece->setColor(ccGRAY);
 						
-						CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
+						
+						CCNode *abc = CCNode::create();
+						CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, abc, this, menu_selector(PuzzlePiece::menuAction));
 						piece_menu = CCMenu::createWithItem(piece_item);
 						piece_menu->setPosition(CCPointZero);
 						addChild(piece_menu, kPieceZorder_menu);
