@@ -66,7 +66,7 @@ void SaveData::createJSON(string filename)
 		Json::Reader reader;
 		reader.parse(rawData, file_sync[key]);
 	}
-	file_init[key] = true;
+	file_init[filename] = true;
 }
 void SaveData::createJSON(SaveDataFile t_sdf){			createJSON(getSyncKey(t_sdf));		}
 void SaveData::createJSON(SaveDataFile t_sdf, int i1){	createJSON(getSyncKey(t_sdf, i1));	}
