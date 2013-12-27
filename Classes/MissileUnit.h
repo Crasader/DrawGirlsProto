@@ -59,8 +59,10 @@ class MissileUnit3 : public CCNode
 public:
 	static MissileUnit3 * create (int t_type, float t_distance, CCSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
 private:
+	CCSprite* stoneSprite;
 	int myType;
 	float distance;
+	bool shownWarning;
 	CCSize mSize;
 	CCObject * target_removeEffect;
 	SEL_CallFunc delegate_removeEffect;
