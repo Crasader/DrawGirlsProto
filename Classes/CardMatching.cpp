@@ -197,7 +197,10 @@ bool CardMatching::init()
 																																										 if(m_correctCount == PUZZLE_ROWS * PUZZLE_COLS / 2)
 																																										 {
 																																											 CCLog("END!!");
-																																											 unscheduleUpdate();
+																																											 addChild(KSTimer::create(3.f, [=]()
+																																																								{
+																																																									CCDirector::sharedDirector()->popScene();
+																																																								}));
 																																										 }
 																																									 }
 																																									 else

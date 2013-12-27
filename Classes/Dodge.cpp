@@ -165,6 +165,10 @@ void Dodge::checkCollision(float dt)
 			m_player->removeFromParent();
 			m_flowTimeFnt->setColor(ccc3(255, 0, 0));
 			this->unscheduleAllSelectors();
+			addChild(KSTimer::create(3.f, [=]()
+															 {
+																 CCDirector::sharedDirector()->popScene();
+															 }));
 //			unschedule(schedule_selector(Dodge::update));
 			
 //			onExit();

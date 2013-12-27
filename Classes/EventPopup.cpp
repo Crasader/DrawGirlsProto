@@ -2,6 +2,15 @@
 //
 
 #include "EventPopup.h"
+
+
+#include "KSUtil.h"
+#include "Dodge.h"
+#include "CountingGame.h"
+#include "SlidingPuzzle.h"
+#include "CardMatching.h"
+#include "CCMenuLambda.h"
+
 #define LZZ_INLINE inline
 using namespace std;
 EventPopup * EventPopup::create ()
@@ -18,6 +27,37 @@ void EventPopup::setHideFinalAction (CCObject * t_final, SEL_CallFunc d_final)
 }
 void EventPopup::myInit ()
 {
+	CCMenuLambda* _menu = CCMenuLambda::create();
+	_menu->setPosition(ccp(0, 0));
+	addChild(_menu, kEP_Z_content);
+	CCMenuItemFontLambda* dodgeFnt = CCMenuItemFontLambda::create("Dodge", [=](CCObject* s)
+																																{
+																																	CCDirector::sharedDirector()->pushScene(Dodge::scene());
+																																});
+	_menu->addChild(dodgeFnt);
+	dodgeFnt->setPosition(ccp(380, 100));
+	
+	CCMenuItemFontLambda* countingGame = CCMenuItemFontLambda::create("countingGame", [=](CCObject* s)
+																																{
+																																	CCDirector::sharedDirector()->pushScene(CountingGame::scene());
+																																});
+	_menu->addChild(countingGame);
+	countingGame->setPosition(ccp(380, 130));
+
+	CCMenuItemFontLambda* slidingPuzzle = CCMenuItemFontLambda::create("slidingPuzzle", [=](CCObject* s)
+																																{
+																																	CCDirector::sharedDirector()->pushScene(SlidingPuzzle::scene());
+																																});
+	_menu->addChild(slidingPuzzle);
+	
+	slidingPuzzle->setPosition(ccp(380, 160));
+
+	CCMenuItemFontLambda* cardMatching = CCMenuItemFontLambda::create("cardMatching", [=](CCObject* s)
+																																{
+																																	CCDirector::sharedDirector()->pushScene(CardMatching::scene());
+																																});
+	_menu->addChild(cardMatching);
+	cardMatching->setPosition(ccp(380, 190));
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)

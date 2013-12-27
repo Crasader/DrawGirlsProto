@@ -10,6 +10,7 @@
 #define __DGproto__CardMatching__
 #include "cocos2d.h"
 #include "CCMenuLambda.h"
+#include "DataStorageHub.h"
 #include <random>
 USING_NS_CC;
 
@@ -29,9 +30,9 @@ public:
 		
 		// 'layer' is an autorelease object
 		CardMatching *layer = CardMatching::create();
-		//		layer->setAnchorPoint(ccp(0.5,0));
-		//		layer->setScale(myDSH->screen_convert_rate);
-		//		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
+		layer->setAnchorPoint(ccp(0.5,0));
+		layer->setScale(myDSH->screen_convert_rate);
+		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
 
 		scene->addChild(layer);
 		return scene;

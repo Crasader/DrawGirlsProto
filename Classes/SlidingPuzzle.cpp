@@ -137,6 +137,10 @@ bool SlidingPuzzle::init()
 																																						 CCLog("correct!!");
 																																						 this->unscheduleUpdate();
 																																						 m_timeFnt->setColor(ccc3(255, 0, 0));
+																																						 addChild(KSTimer::create(3.f, [=]()
+																																																			{
+																																																				CCDirector::sharedDirector()->popScene();
+																																																			}));
 																																					 }
 																																				 });
 																																			}
