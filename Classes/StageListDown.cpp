@@ -727,7 +727,7 @@ void StageListDown::startGetStageList()
 	for(int i=start_stage;i<start_stage+stage_count;i++)
 		rank_param["stageNoList"].append(i);
 	
-	rank_param["limit"] = 10;
+	rank_param["limit"] = 1;
 	command_vector.push_back(CommandParam("getstageranklist", rank_param, json_selector(this, StageListDown::resultGetStageRankList)));
 	
 	Json::Value param;
