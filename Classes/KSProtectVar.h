@@ -1,88 +1,99 @@
 #pragma once
+#include "crypto/CCCrypto.h"
 
 #include <type_traits>
 
 template<typename T>
+
 class KSProtectVar
 {
 private:
-	typedef  T encedT;
-	typedef  T pureT;
-	T data;
+	int m_plainTextLength;
+	int m_bufferLength;
+	void* m_buff;
+	int m_cipherTextLength;
 private:
-	T getConv(T arg) const
+	void encrypt(const T& data)
 	{
-		int varSizeInByte = sizeof(arg);
-		char* pV = (char*)&arg;
-		for(int i=0; i<varSizeInByte; i++)
-		{
-			pV[i] ^= 0xcd;
-		}
-		return arg;
+		const char* key = "cocos2dx";
+		m_plainTextLength = sizeof(T);
+		m_bufferLength = m_plainTextLength + CCCrypto::getAES256KeyLength();
+		int keyLen = strlen(key);
+		m_buff = new char[m_bufferLength];
+		m_cipherTextLength = CCCrypto::encryptAES256(&data, m_plainTextLength, m_buff,
+																								 m_bufferLength, key, keyLen);
 	}
+	
 public:
-	explicit KSProtectVar(pureT v)
+	
+	T getV() const
 	{
-		static_assert(std::is_scalar<pureT>::value, "SCALAR");
-		data = getConv(v);
+		const char* key = "cocos2dx";
+		int keyLen = strlen(key);
+		T* plaintext2 = (T*)(new char[m_bufferLength]);
+    int plaintextLength2 = CCCrypto::decryptAES256(m_buff, m_cipherTextLength, plaintext2,
+																									 m_bufferLength, key, keyLen);
+		T ret = *plaintext2;
+		delete [] plaintext2;
+		return ret;
 	}
-	T getVar()
+	explicit KSProtectVar(const T& v)
 	{
-		T g = getConv(data);
-		return g;
+		static_assert(std::is_scalar<T>::value, "SCALAR");
+		encrypt(v);
 	}
-	T operator+(pureT arg) const
+	~KSProtectVar()
 	{
-		return getConv(getConv(data) + arg);
+		delete [] m_buff;
 	}
-	T operator+=(pureT arg)
+	T operator+(const T& arg) const
 	{
-		data = getConv(getConv(data) + arg);
-		return data;
+		return getV() + arg;
 	}
-	T operator-(pureT arg) const
+	T operator+=(const T& arg)
 	{
-		return getConv(getConv(data) - arg);
+		encrypt(getV() + arg);
+		return getV();
 	}
-	T operator-=(pureT arg)
+	T operator-(const T& arg) const
 	{
-		data = getConv(getConv(data) - arg);
-		return data;
+		return getV() - arg;
 	}
-	T operator=(pureT arg)
+	
+	T operator-=(const T& arg)
 	{
-		data = getConv(arg);
-		return data;
+		encrypt(getV() - arg);
+		return getV();
+	}
+	T operator=(const T& arg)
+	{
+		encrypt(arg);
+		return getV();
 	}
 	T operator--(int) // postfix
 	{
-		pureT _a = getConv(data);
-		_a--;
-		data = getConv(_a);
-		return getConv(data);
+		T original = getV();
+		*this -= 1;
+		return original;
 	}
 	T operator--() // prefix
 	{
-		pureT _a = getConv(data);
-		pureT retValue = _a;
-		_a--;
-		data = getConv(_a);
-		return retValue;
+		*this -= 1;
+		return getV();
 	}
 	
 	T operator++(int) // postfix
 	{
-		pureT _a = getConv(data);
-		_a++;
-		data = getConv(_a);
-		return getConv(data);
+		T original = getV();
+		*this += 1;
+		return original;
 	}
 	T operator++() // prefix
 	{
-		pureT _a = getConv(data);
-		pureT retValue = _a;
-		_a++;
-		data = getConv(_a);
-		return retValue;
+		*this += 1;
+		return getV();
 	}
 };
+
+
+

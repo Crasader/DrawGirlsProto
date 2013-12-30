@@ -25,8 +25,8 @@ USING_NS_CC;
 
 #include "crypto/CCCrypto.h"
 #include "SlidingPuzzle.h"
-
-
+#include "CardMatching.h"
+#include "KSProtectVar.h"
 
 
 //#include <boost/graph/graphviz.hpp>
@@ -42,27 +42,28 @@ USING_NS_CC;
  */
 AppDelegate::AppDelegate()
 {
-//	std::random_device rd;
-//	std::mt19937 rEngine(rd());
-//	uniform_int_distribution<long long> dist(1000000000000000000L, 2000000000000000000L);
-//
-//	for(int i=0; i<20; i++)
-//	{
-//		long long number = dist(rEngine);
-//		CCLog("%lld", number);
-//		CCLog("%s", KS::longLongToStr(number).c_str());
-//		CCLog("\t%lld", KS::strToLongLong(KS::longLongToStr(number)));
-//		CCLog("%s", KS::longLongToStr(number).c_str());
-//		CCLog("\t%lld", KS::strToLongLong(KS::longLongToStr(number)));
-//		CCLog("");
-//	}
-//	CCLog("f");
+	KSProtectVar<float> testVar(15.f);
+	CCLog("%f", testVar.getV());
+	//	std::random_device rd;
+	//	std::mt19937 rEngine(rd());
+	//	uniform_int_distribution<long long> dist(1000000000000000000L, 2000000000000000000L);
+	//
+	//	for(int i=0; i<20; i++)
+	//	{
+	//		long long number = dist(rEngine);
+	//		CCLog("%lld", number);
+	//		CCLog("%s", KS::longLongToStr(number).c_str());
+	//		CCLog("\t%lld", KS::strToLongLong(KS::longLongToStr(number)));
+	//		CCLog("%s", KS::longLongToStr(number).c_str());
+	//		CCLog("\t%lld", KS::strToLongLong(KS::longLongToStr(number)));
+	//		CCLog("");
+	//	}
+	//	CCLog("f");
 }
-
 
 AppDelegate::~AppDelegate()
 {
-    SimpleAudioEngine::end();
+	SimpleAudioEngine::end();
 }
 
 //static char sharedResourceDirectory[100];
@@ -76,16 +77,16 @@ struct AA
 bool AppDelegate::applicationDidFinishLaunching()
 {
 	
-		
-    // initialize director
-    CCDirector *pDirector = CCDirector::sharedDirector();
-    pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
-//	pDirector->setProjection(kCCDirectorProjection2D);
+	
+	// initialize director
+	CCDirector *pDirector = CCDirector::sharedDirector();
+	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
+	//	pDirector->setProjection(kCCDirectorProjection2D);
 	
 	CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
-//	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionShowAll);
+	//	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionShowAll);
 	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionFixedWidth);// kResolutionNoBorder);
-//	CCFileUtils::sharedFileUtils()->setResourceDirectory(sharedResourceDirectory);
+	//	CCFileUtils::sharedFileUtils()->setResourceDirectory(sharedResourceDirectory);
 	
 	CCSize screen_size = pEGLView->getFrameSize();
 	myDSH->ui_top = 480.f*screen_size.height/screen_size.width;
@@ -138,8 +139,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb/ccbResources");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ksoo");
-//	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb_test");
-//	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb_test/resources-iphonehd");
+	//	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb_test");
+	//	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb_test/resources-iphonehd");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb/resources-iphonehd");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_flow");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_tutorial");
@@ -154,135 +155,136 @@ bool AppDelegate::applicationDidFinishLaunching()
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_sound/sound_effect");
 	CCFileUtils::sharedFileUtils()->addSearchPath("fonts");
 	
-//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-//	CCSize frameSize = pEGLView->getFrameSize();
-//	
-//	float basicRate = 1.5; // iphone, ipod lower than version 5
-//	//	float upperThan5 = 1.775;
-//	//	float ipadRate = 1024.f/768.f;
-//	float frameRate = frameSize.width/frameSize.height;
-//	
-//	CCSize calcFrameSize;
-//	
-//	if(frameRate == basicRate) // iphone, ipod lower than version 5
-//	{
-//		calcFrameSize = designResolutionSize;
-//		DataStorageHub::sharedInstance()->device_rate = 1.f;
-//	}
-//	else if(frameRate > basicRate) // iphone, ipod upper than version 5 // upperThan5
-//	{
-//		float screen_rate = frameSize.height/designResolutionSize.height;
-//		calcFrameSize = CCSizeMake(frameSize.width/screen_rate, frameSize.height/screen_rate);
-//		DataStorageHub::sharedInstance()->device_rate = 1.f;
-//		DataStorageHub::sharedInstance()->device_margine = CCSizeMake(fabsf(frameSize.width-(960.f*DataStorageHub::sharedInstance()->device_rate))/2.f, 0);
-//	}
-//	else if(frameRate < basicRate) // ipad // ipadRate
-//	{
-//		calcFrameSize = CCSizeMake(1024, 768);
-//		DataStorageHub::sharedInstance()->device_rate = frameSize.width/960.f;
-//		DataStorageHub::sharedInstance()->device_margine = CCSizeMake(0, fabsf(frameSize.height-(640.f*DataStorageHub::sharedInstance()->device_rate))/2.f);
-//		if(frameSize.height == calcFrameSize.height)
-//		{
-//			DataStorageHub::sharedInstance()->setIsNotRetinaIpad(true);
-//		}
-//	}
-//	else
-//	{
-//		calcFrameSize = designResolutionSize;
-//		DataStorageHub::sharedInstance()->device_rate = 1.f;
-//	}
-//	
-//	CCSize imgSize = CCSizeMake(960, 640);
-//	
-//	if(basicRate < frameRate) // height long, calc : width
-//		pDirector->setContentScaleFactor(imgSize.height/calcFrameSize.height);
-//	else if(basicRate > frameRate) // width long, calc : height
-//		pDirector->setContentScaleFactor(2.0); // only ipad
-//	else
-//		pDirector->setContentScaleFactor(imgSize.height/calcFrameSize.height);
-//	
-//	
-//	
-//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-//	pDirector->setContentScaleFactor(2.0);
-//	
-//	CCSize frameSize = pEGLView->getFrameSize();
-//	
-//	float basicRate = 1.5; // iphone, ipod lower than version 5
-//	float frameRate = frameSize.width/frameSize.height;
-//	
-//	CCSize imgSize = CCSizeMake(960, 640);
-//	
-//	if(basicRate < frameRate) // height long, calc : width
-//	{
-//		myDSH->device_rate = frameSize.height/imgSize.height;
-//		myDSH->device_margine = CCSizeMake(fabsf(frameSize.width-(imgSize.width*myDSH->device_rate))/2.f, 0);
-//	}
-//	else if(basicRate > frameRate) // width long, calc : height
-//	{
-//		myDSH->device_rate = frameSize.width/imgSize.width;
-//		myDSH->device_margine = CCSizeMake(0, fabsf(frameSize.height-(imgSize.height*myDSH->device_rate))/2.f);
-//	}
-//	else
-//	{
-//		myDSH->device_rate = frameSize.width/imgSize.width;
-//		myDSH->device_margine = CCSizeMake(0, 0);
-//	}
-//	
-//#endif
+	//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	//	CCSize frameSize = pEGLView->getFrameSize();
+	//
+	//	float basicRate = 1.5; // iphone, ipod lower than version 5
+	//	//	float upperThan5 = 1.775;
+	//	//	float ipadRate = 1024.f/768.f;
+	//	float frameRate = frameSize.width/frameSize.height;
+	//
+	//	CCSize calcFrameSize;
+	//
+	//	if(frameRate == basicRate) // iphone, ipod lower than version 5
+	//	{
+	//		calcFrameSize = designResolutionSize;
+	//		DataStorageHub::sharedInstance()->device_rate = 1.f;
+	//	}
+	//	else if(frameRate > basicRate) // iphone, ipod upper than version 5 // upperThan5
+	//	{
+	//		float screen_rate = frameSize.height/designResolutionSize.height;
+	//		calcFrameSize = CCSizeMake(frameSize.width/screen_rate, frameSize.height/screen_rate);
+	//		DataStorageHub::sharedInstance()->device_rate = 1.f;
+	//		DataStorageHub::sharedInstance()->device_margine = CCSizeMake(fabsf(frameSize.width-(960.f*DataStorageHub::sharedInstance()->device_rate))/2.f, 0);
+	//	}
+	//	else if(frameRate < basicRate) // ipad // ipadRate
+	//	{
+	//		calcFrameSize = CCSizeMake(1024, 768);
+	//		DataStorageHub::sharedInstance()->device_rate = frameSize.width/960.f;
+	//		DataStorageHub::sharedInstance()->device_margine = CCSizeMake(0, fabsf(frameSize.height-(640.f*DataStorageHub::sharedInstance()->device_rate))/2.f);
+	//		if(frameSize.height == calcFrameSize.height)
+	//		{
+	//			DataStorageHub::sharedInstance()->setIsNotRetinaIpad(true);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		calcFrameSize = designResolutionSize;
+	//		DataStorageHub::sharedInstance()->device_rate = 1.f;
+	//	}
+	//
+	//	CCSize imgSize = CCSizeMake(960, 640);
+	//
+	//	if(basicRate < frameRate) // height long, calc : width
+	//		pDirector->setContentScaleFactor(imgSize.height/calcFrameSize.height);
+	//	else if(basicRate > frameRate) // width long, calc : height
+	//		pDirector->setContentScaleFactor(2.0); // only ipad
+	//	else
+	//		pDirector->setContentScaleFactor(imgSize.height/calcFrameSize.height);
+	//
+	//
+	//
+	//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	//	pDirector->setContentScaleFactor(2.0);
+	//
+	//	CCSize frameSize = pEGLView->getFrameSize();
+	//
+	//	float basicRate = 1.5; // iphone, ipod lower than version 5
+	//	float frameRate = frameSize.width/frameSize.height;
+	//
+	//	CCSize imgSize = CCSizeMake(960, 640);
+	//
+	//	if(basicRate < frameRate) // height long, calc : width
+	//	{
+	//		myDSH->device_rate = frameSize.height/imgSize.height;
+	//		myDSH->device_margine = CCSizeMake(fabsf(frameSize.width-(imgSize.width*myDSH->device_rate))/2.f, 0);
+	//	}
+	//	else if(basicRate > frameRate) // width long, calc : height
+	//	{
+	//		myDSH->device_rate = frameSize.width/imgSize.width;
+	//		myDSH->device_margine = CCSizeMake(0, fabsf(frameSize.height-(imgSize.height*myDSH->device_rate))/2.f);
+	//	}
+	//	else
+	//	{
+	//		myDSH->device_rate = frameSize.width/imgSize.width;
+	//		myDSH->device_margine = CCSizeMake(0, 0);
+	//	}
+	//
+	//#endif
 	
 	pDirector->setContentScaleFactor(2.0);
-
-    // turn on display FPS
-    pDirector->setDisplayStats(true);
-
-    // set FPS. the default value is 1.0/60 if you don't call this
-    pDirector->setAnimationInterval(1.0 / 60);
-
-    // register lua engine
-//    CCLuaEngine* pEngine = CCLuaEngine::defaultEngine();
-//    CCScriptEngineManager::sharedManager()->setScriptEngine(pEngine);
-//
-//    CCLuaStack *pStack = pEngine->getLuaStack();
-//    lua_State *tolua_s = pStack->getLuaState();
-//    tolua_extensions_ccb_open(tolua_s);
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-//    pStack = pEngine->getLuaStack();
-//    tolua_s = pStack->getLuaState();
-//    tolua_web_socket_open(tolua_s);
-//#endif
-//    
-//    std::string path = CCFileUtils::sharedFileUtils()->fullPathForFilename("hello.lua");
-//    pEngine->executeScriptFile(path.c_str());
+	
+	// turn on display FPS
+	pDirector->setDisplayStats(true);
+	
+	// set FPS. the default value is 1.0/60 if you don't call this
+	pDirector->setAnimationInterval(1.0 / 60);
+	
+	// register lua engine
+	//    CCLuaEngine* pEngine = CCLuaEngine::defaultEngine();
+	//    CCScriptEngineManager::sharedManager()->setScriptEngine(pEngine);
+	//
+	//    CCLuaStack *pStack = pEngine->getLuaStack();
+	//    lua_State *tolua_s = pStack->getLuaState();
+	//    tolua_extensions_ccb_open(tolua_s);
+	//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	//    pStack = pEngine->getLuaStack();
+	//    tolua_s = pStack->getLuaState();
+	//    tolua_web_socket_open(tolua_s);
+	//#endif
+	//
+	//    std::string path = CCFileUtils::sharedFileUtils()->fullPathForFilename("hello.lua");
+	//    pEngine->executeScriptFile(path.c_str());
 	
 	
-//	CCScene* pScene = TitleScene::scene();
-	CCScene* pScene = TitleRenewalScene::scene();
-//	CCScene* pScene = Dodge::scene();
-//	CCScene* pScene = CountingGame::scene();
-//	CCScene* pScene = SlidingPuzzle::scene();
-//	pEGLView->setDesignResolutionSize(480, 480, kResolutionFixedWidth);// kResolutionNoBorder);
-//	CCScene* pScene = RandomDistribution::scene();
-    pDirector->runWithScene(pScene);
-
+	//	CCScene* pScene = TitleScene::scene();
+		CCScene* pScene = TitleRenewalScene::scene();
+	//	CCScene* pScene = Dodge::scene();
+	//	CCScene* pScene = CountingGame::scene();
+	//	CCScene* pScene = SlidingPuzzle::scene();
+//	CCScene* pScene = CardMatching::scene();
+	//	pEGLView->setDesignResolutionSize(480, 480, kResolutionFixedWidth);// kResolutionNoBorder);
+	//	CCScene* pScene = RandomDistribution::scene();
+	pDirector->runWithScene(pScene);
 	
-    return true;
+	
+	return true;
 }
 
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground()
 {
-    CCDirector::sharedDirector()->stopAnimation();
-
-    SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+	CCDirector::sharedDirector()->stopAnimation();
+	
+	SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 	SimpleAudioEngine::sharedEngine()->pauseAllEffects();
 }
 
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground()
 {
-    CCDirector::sharedDirector()->startAnimation();
-
-    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+	CCDirector::sharedDirector()->startAnimation();
+	
+	SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 	SimpleAudioEngine::sharedEngine()->resumeAllEffects();
 }
