@@ -43,7 +43,12 @@ USING_NS_CC;
 AppDelegate::AppDelegate()
 {
 	KSProtectVar<float> testVar(15.f);
-	CCLog("%f", testVar.getV());
+	KSProtectVar<float> testVar2(20.f);
+	testVar += 3.f;
+	testVar -= 5.f;
+	
+	CCLog("%f", testVar.getV()); // 값 얻기.
+	CCLog("%f", testVar + testVar2); // 보호된 변수끼리 연산가능.
 	//	std::random_device rd;
 	//	std::mt19937 rEngine(rd());
 	//	uniform_int_distribution<long long> dist(1000000000000000000L, 2000000000000000000L);

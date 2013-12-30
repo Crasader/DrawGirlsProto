@@ -50,6 +50,10 @@ public:
 	{
 		return getV() + arg;
 	}
+	T operator+(const KSProtectVar<T>& arg) const
+	{
+		return getV() + arg.getV();
+	}
 	T operator+=(const T& arg)
 	{
 		encrypt(getV() + arg);
