@@ -40,6 +40,10 @@ public:
 	{
 		encrypt(v);
 	}
+	KSProtectStr()
+	{
+		encrypt("");
+	}
 	~KSProtectStr()
 	{
 		free((void*)m_buff);
@@ -60,7 +64,7 @@ private:
 		m_plainTextLength = sizeof(T);
 		m_bufferLength = m_plainTextLength + CCCrypto::getAES256KeyLength();
 		int keyLen = strlen(key);
-		m_buff = new char[m_bufferLength];
+		m_buff = (void*)malloc(m_bufferLength);
 		m_cipherTextLength = CCCrypto::encryptAES256(&data, m_plainTextLength, m_buff,
 																								 m_bufferLength, key, keyLen);
 	}
@@ -71,20 +75,32 @@ public:
 	{
 		const char* key = "cocos2dx";
 		int keyLen = strlen(key);
-		T* plaintext2 = (T*)(new char[m_bufferLength]);
+		T* plaintext2 = (T*)(malloc(m_bufferLength));
     int plaintextLength2 = CCCrypto::decryptAES256(m_buff, m_cipherTextLength, plaintext2,
 																									 m_bufferLength, key, keyLen);
 		T ret = *plaintext2;
-		delete [] plaintext2;
+		free(plaintext2);
 		return ret;
 	}
-	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v)
+	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v) : m_buff(0)
 	{
 		encrypt(v);
 	}
+	KSProtectVar(const KSProtectVar<T>& copyCtor)
+	{
+		encrypt(copyCtor.getV());
+	}
+	KSProtectVar() : m_buff(0)
+	{
+		encrypt(static_cast<T>(0));
+	}
 	~KSProtectVar()
 	{
-		delete [] m_buff;
+		if(m_buff)
+		{
+			free((void*)m_buff);
+			m_buff = 0;
+		}
 	}
 	T operator+(const T& arg) const
 	{
@@ -123,6 +139,12 @@ public:
 	}
 	T operator=(const T& arg)
 	{
+		if(m_buff)
+		{
+			free(m_buff);
+			m_buff = 0;
+		}
+		
 		encrypt(arg);
 		return getV();
 	}

@@ -807,9 +807,9 @@ void StarGoldData::myInit()
 		is_using_item.push_back(false);
 	}
 	
-	bonus_item_cnt.push_back(0); // empty
+	bonus_item_cnt.push_back(KSProtectVar<int>(0)); // empty
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
-		bonus_item_cnt.push_back(0);
+		bonus_item_cnt.push_back(KSProtectVar<int>(0));
 
 
 	if(myDSH->getIntegerForKey(kDSH_Key_heartTime) == 0)
@@ -841,4 +841,230 @@ void StarGoldData::myInit()
 		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
 
 	}
+}
+
+void StarGoldData::setHeartMax(int t_data)
+{
+	heart_max = t_data;
+}
+void StarGoldData::setHeartCoolTime(int t_data)
+{
+	heart_cool_time = t_data;
+}
+void StarGoldData::setGameFriendMax(int t_data)
+{
+	game_friend_max = t_data;
+}
+void StarGoldData::setHelpCoolTime(int t_data)
+{
+	help_cool_time = t_data;
+}
+void StarGoldData::setChallengeCoolTime(int t_data)
+{
+	challenge_cool_time = t_data;
+}
+void StarGoldData::setMsgRemoveDay(int t_data)
+{
+	msg_remove_day = t_data;
+}
+void StarGoldData::setGachaGoldFee(int t_data)
+{
+	gacha_gold_fee = t_data;
+}
+void StarGoldData::setGachaRubyFee(int t_data)
+{
+	gacha_ruby_fee = t_data;
+}
+void StarGoldData::setGachaSocialFee(int t_data)
+{
+	gacha_social_fee = t_data;
+}
+void StarGoldData::setCardUpgradeGoldFee(int t_data)
+{
+	card_upgrade_gold_fee = t_data;
+}
+void StarGoldData::setCardUpgradeRubyFee(int t_data)
+{
+	card_upgrade_ruby_fee = t_data;
+}
+void StarGoldData::setHeartSendCoolTime(int t_data)
+{
+	heart_send_cool_time = t_data;
+}
+void StarGoldData::setInviteMaxADay(int t_data)
+{
+	invite_max_a_day = t_data;
+}
+void StarGoldData::setInviteCoolDay(int t_data)
+{
+	invite_cool_day = t_data;
+}
+void StarGoldData::setPlayContinueFee(int t_data)
+{
+	play_continue_fee = t_data;
+}
+void StarGoldData::setCardDurabilityUpFee(int t_data)
+{
+	card_durability_up_fee = t_data;
+}
+void StarGoldData::setGachaMapFee(int t_data)
+{
+	gacha_map_fee = t_data;
+}
+void StarGoldData::setRemoveFriendCoolTime(int t_data)
+{
+	remove_friend_cool_time = t_data;
+}
+void StarGoldData::setSPSendHeart(int t_data)
+{
+	SP_send_heart = t_data;
+}
+void StarGoldData::setSPSendTicket(int t_data)
+{
+	SP_send_ticket = t_data;
+}
+void StarGoldData::setSPFinishedChallenge(int t_data)
+{
+	SP_finished_challenge = t_data;
+}
+void StarGoldData::setSPHelpChallenge(int t_data)
+{
+	SP_help_challenge = t_data;
+}
+void StarGoldData::setSPSendBoast(int t_data)
+{
+	SP_send_boast = t_data;
+}
+void StarGoldData::setSPGetTime(int t_data)
+{
+	SP_get_time = t_data;
+}
+void StarGoldData::setSPGetHeart(int t_data)
+{
+	SP_get_heart = t_data;
+}
+void StarGoldData::setGachaOnePercentFee(int t_data)
+{
+	gacha_one_percent_fee = t_data;
+}
+void StarGoldData::setAiAdderOnDrewOrDamaged(float t_data)
+{
+	ai_adder_on_drew_or_damaged = t_data;
+}
+void StarGoldData::setFuryPercent(float t_data)
+{
+	fury_percent = t_data;
+}
+
+int StarGoldData::getHeartMax()
+{
+	return heart_max.getV();
+}
+int StarGoldData::getHeartCoolTime()
+{
+	return heart_cool_time.getV();
+}
+int StarGoldData::getGameFriendMax()
+{
+	return game_friend_max.getV();
+}
+int StarGoldData::getHelpCoolTime()
+{
+	return help_cool_time.getV();
+}
+int StarGoldData::getChallengeCoolTime()
+{
+	return challenge_cool_time.getV();
+}
+int StarGoldData::getMsgRemoveDay()
+{
+	return msg_remove_day.getV();
+}
+int StarGoldData::getGachaGoldFee()
+{
+	return gacha_gold_fee.getV();
+}
+int StarGoldData::getGachaRubyFee()
+{
+	return gacha_ruby_fee.getV();
+}
+int StarGoldData::getGachaSocialFee()
+{
+	return gacha_social_fee.getV();
+}
+int StarGoldData::getCardUpgradeGoldFee()
+{
+	return card_upgrade_gold_fee.getV();
+}
+int StarGoldData::getCardUpgradeRubyFee()
+{
+	return card_upgrade_ruby_fee.getV();
+}
+int StarGoldData::getHeartSendCoolTime()
+{
+	return heart_send_cool_time.getV();
+}
+int StarGoldData::getInviteMaxADay()
+{
+	return invite_max_a_day.getV();
+}
+int StarGoldData::getInviteCoolDay()
+{
+	return invite_cool_day.getV();
+}
+int StarGoldData::getPlayContinueFee()
+{
+	return play_continue_fee.getV();
+}
+int StarGoldData::getCardDurabilityUpFee()
+{
+	return card_durability_up_fee.getV();
+}
+int StarGoldData::getGachaMapFee()
+{
+	return gacha_map_fee.getV();
+}
+int StarGoldData::getRemoveFriendCoolTime()
+{
+	return remove_friend_cool_time.getV();
+}
+int StarGoldData::getSPSendHeart()
+{
+	return SP_send_heart.getV();
+}
+int StarGoldData::getSPSendTicket()
+{
+	return SP_send_ticket.getV();
+}
+int StarGoldData::getSPFinishedChallenge()
+{
+	return SP_finished_challenge.getV();
+}
+int StarGoldData::getSPHelpChallenge()
+{
+	return SP_help_challenge.getV();
+}
+int StarGoldData::getSPSendBoast()
+{
+	return SP_send_boast.getV();
+}
+int StarGoldData::getSPGetTime()
+{
+	return SP_get_time.getV();
+}
+int StarGoldData::getSPGetHeart()
+{
+	return SP_get_heart.getV();
+}
+int StarGoldData::getGachaOnePercentFee()
+{
+	return gacha_one_percent_fee.getV();
+}
+float StarGoldData::getAiAdderOnDrewOrDamaged()
+{
+	return ai_adder_on_drew_or_damaged.getV();
+}
+float StarGoldData::getFuryPercent()
+{
+	return fury_percent.getV();
 }

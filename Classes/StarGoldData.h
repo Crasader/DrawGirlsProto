@@ -23,6 +23,7 @@
 #include "UnknownFriends.h"
 #include <random>
 #include "SelectorDefine.h"
+#include "KSProtect.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -314,7 +315,7 @@ public:
 	}
 	int getBonusItemCnt(ITEM_CODE t_code)
 	{
-		return bonus_item_cnt[t_code];
+		return bonus_item_cnt[t_code].getV();
 	}
 	
 	void resetNoticeList(Json::Value t_notice_list)
@@ -359,6 +360,73 @@ public:
 	
 	Json::Value temp_stage_ranker_list;
 	
+	void setHeartMax(int t_data);
+	void setHeartCoolTime(int t_data);
+	void setGameFriendMax(int t_data);
+	void setHelpCoolTime(int t_data);
+	void setChallengeCoolTime(int t_data);
+	void setMsgRemoveDay(int t_data);
+	void setGachaGoldFee(int t_data);
+	void setGachaRubyFee(int t_data);
+	void setGachaSocialFee(int t_data);
+	void setCardUpgradeGoldFee(int t_data);
+	void setCardUpgradeRubyFee(int t_data);
+	void setHeartSendCoolTime(int t_data);
+	void setInviteMaxADay(int t_data);
+	void setInviteCoolDay(int t_data);
+	void setPlayContinueFee(int t_data);
+	void setCardDurabilityUpFee(int t_data);
+	void setGachaMapFee(int t_data);
+	void setRemoveFriendCoolTime(int t_data);
+	void setSPSendHeart(int t_data);
+	void setSPSendTicket(int t_data);
+	void setSPFinishedChallenge(int t_data);
+	void setSPHelpChallenge(int t_data);
+	void setSPSendBoast(int t_data);
+	void setSPGetTime(int t_data);
+	void setSPGetHeart(int t_data);
+	void setGachaOnePercentFee(int t_data);
+	void setAiAdderOnDrewOrDamaged(float t_data);
+	void setFuryPercent(float t_data);
+	
+	int getHeartMax();
+	int getHeartCoolTime();
+	int getGameFriendMax();
+	int getHelpCoolTime();
+	int getChallengeCoolTime();
+	int getMsgRemoveDay();
+	int getGachaGoldFee();
+	int getGachaRubyFee();
+	int getGachaSocialFee();
+	int getCardUpgradeGoldFee();
+	int getCardUpgradeRubyFee();
+	int getHeartSendCoolTime();
+	int getInviteMaxADay();
+	int getInviteCoolDay();
+	int getPlayContinueFee();
+	int getCardDurabilityUpFee();
+	int getGachaMapFee();
+	int getRemoveFriendCoolTime();
+	int getSPSendHeart();
+	int getSPSendTicket();
+	int getSPFinishedChallenge();
+	int getSPHelpChallenge();
+	int getSPSendBoast();
+	int getSPGetTime();
+	int getSPGetHeart();
+	int getGachaOnePercentFee();
+	float getAiAdderOnDrewOrDamaged();
+	float getFuryPercent();
+	
+	StarGoldData() : heart_max(0), heart_cool_time(0), game_friend_max(0), help_cool_time(0), challenge_cool_time(0), msg_remove_day(0),
+	gacha_gold_fee(0), gacha_ruby_fee(0), gacha_social_fee(0), card_upgrade_gold_fee(0), card_upgrade_ruby_fee(0), heart_send_cool_time(0),
+	invite_max_a_day(0), invite_cool_day(0), play_continue_fee(0), card_durability_up_fee(0), gacha_map_fee(0), remove_friend_cool_time(0),
+	SP_send_heart(0), SP_send_ticket(0), SP_finished_challenge(0), SP_help_challenge(0), SP_send_boast(0), SP_get_time(0), SP_get_heart(0),
+	gacha_one_percent_fee(0), ai_adder_on_drew_or_damaged(0.f), fury_percent(0.f)
+	{
+		
+	}
+	
 private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
@@ -377,7 +445,7 @@ private:
 	string accept_help_target_user_id;
 	string accept_help_target_user_nick;
 	
-	vector<int> bonus_item_cnt;
+	vector<KSProtectVar<int>> bonus_item_cnt;
 
 	int clear_reward_gold;
 	
@@ -421,47 +489,44 @@ private:
 	bool must_be_show_notice;
 	Json::Value notice_list;
 	
+	KSProtectVar<int> heart_max; // 최대 보유할 수 있는 하트 수
+	KSProtectVar<int> heart_cool_time; // 몇 초 뒤에 하트가 새로 생길 것 인가
+	KSProtectVar<int> game_friend_max; // 게임친구 인원제한
+	KSProtectVar<int> help_cool_time; // 도움요청 시간제한
+	KSProtectVar<int> challenge_cool_time; // 도전요청 시간제한
+	KSProtectVar<int> msg_remove_day; // 메세지 보관일 수
+	KSProtectVar<int> gacha_gold_fee; // 골드 가챠 가격(골드)
+	KSProtectVar<int> gacha_ruby_fee; // 루비 가챠 가격(루비)
+	KSProtectVar<int> gacha_social_fee; // 소셜 가챠 가격(소셜포인트)
+	KSProtectVar<int> card_upgrade_gold_fee; // 카드 일반강화 가격(골드)
+	KSProtectVar<int> card_upgrade_ruby_fee; // 카드 고급강화 가격(루비)
+	KSProtectVar<int> heart_send_cool_time; // 하트 보내기 쿨타임
+	KSProtectVar<int> invite_max_a_day; // 하루 초대 인원 제한
+	KSProtectVar<int> invite_cool_day; // 한 친구당 친구초대 주기 일수
+	KSProtectVar<int> play_continue_fee; // 이어하기 가격(루비)
+	KSProtectVar<int> card_durability_up_fee; // 카드 내구도 회복 가격(루비)
+	KSProtectVar<int> gacha_map_fee; // 맵 가챠 가격(골드)
+	KSProtectVar<int> remove_friend_cool_time; // 친구 삭제 간격(초)
+	KSProtectVar<int> SP_send_heart; // 소셜포인트 획득량(하트 보낼때)
+	KSProtectVar<int> SP_send_ticket; // 소셜포인트 획득량(티켓 보낼때)
+	KSProtectVar<int> SP_finished_challenge; // 소셜포인트 획득량(도전하기 끝나서 결과 나왔을때 요청자, 대상자)
+	KSProtectVar<int> SP_help_challenge; // 소셜포인트 획득량(도움요청 끝나서 결과 나왔을때 요청자, 대상자)
+	KSProtectVar<int> SP_send_boast; // 소셜포인트 획득량(자랑하기 보낼때)
+	KSProtectVar<int> SP_get_time; // 받은 메세지 몇초 안에 확인해야 소셜포인트 줄건지 설정
+	KSProtectVar<int> SP_get_heart; // 소셜포인트 획득량(하트온지 SPGetTime초 안에 수락하면 주는 포인트)
+	KSProtectVar<int> gacha_one_percent_fee; // 1프로 가챠 가격(루비)
+	KSProtectVar<float> ai_adder_on_drew_or_damaged; //
+	KSProtectVar<float> fury_percent; //
+	
 	void myInit();
 	
-//	string remove_message_member_id; 
-//	string remove_message_mail_no;
-	// 도움이든 도전이든 쓰는 멤버.
-	// 도움이든 도전이든 쓰는 멤버.
+	
 	CC_SYNTHESIZE(long long, remove_message_member_id, RemoveMessageMemberId);
 	CC_SYNTHESIZE(int, remove_message_mail_no, RemoveMessageMailNo);
 	
 	CC_SYNTHESIZE(FriendCardData, selected_friend_card_data, SelectedFriendCardData);
 	CC_SYNTHESIZE(bool, is_using_friend_card, IsUsingFriendCard);
 	CC_SYNTHESIZE(bool, was_used_friend_card, WasUsedFriendCard);
-	
-	CC_SYNTHESIZE(int, heart_max, HeartMax); // 최대 보유할 수 있는 하트 수
-	CC_SYNTHESIZE(int, heart_cool_time, HeartCoolTime); // 몇 초 뒤에 하트가 새로 생길 것 인가
-	CC_SYNTHESIZE(int, game_friend_max, GameFriendMax); // 게임친구 인원제한
-	CC_SYNTHESIZE(int, help_cool_time, HelpCoolTime); // 도움요청 시간제한
-	CC_SYNTHESIZE(int, challenge_cool_time, ChallengeCoolTime); // 도전요청 시간제한
-	CC_SYNTHESIZE(int, msg_remove_day, MsgRemoveDay); // 메세지 보관일 수
-	CC_SYNTHESIZE(int, gacha_gold_fee, GachaGoldFee); // 골드 가챠 가격(골드)
-	CC_SYNTHESIZE(int, gacha_ruby_fee, GachaRubyFee); // 루비 가챠 가격(루비)
-	CC_SYNTHESIZE(int, gacha_social_fee, GachaSocialFee); // 소셜 가챠 가격(소셜포인트)
-	CC_SYNTHESIZE(int, card_upgrade_gold_fee, CardUpgradeGoldFee); // 카드 일반강화 가격(골드)
-	CC_SYNTHESIZE(int, card_upgrade_ruby_fee, CardUpgradeRubyFee); // 카드 고급강화 가격(루비)
-	CC_SYNTHESIZE(int, heart_send_cool_time, HeartSendCoolTime); // 하트 보내기 쿨타임
-	CC_SYNTHESIZE(int, invite_max_a_day, InviteMaxADay); // 하루 초대 인원 제한
-	CC_SYNTHESIZE(int, invite_cool_day, InviteCoolDay); // 한 친구당 친구초대 주기 일수
-	CC_SYNTHESIZE(int, play_continue_fee, PlayContinueFee); // 이어하기 가격(루비)
-	CC_SYNTHESIZE(int, card_durability_up_fee, CardDurabilityUpFee); // 카드 내구도 회복 가격(루비)
-	CC_SYNTHESIZE(int, gacha_map_fee, GachaMapFee); // 맵 가챠 가격(골드)
-	CC_SYNTHESIZE(int, remove_friend_cool_time, RemoveFriendCoolTime); // 친구 삭제 간격(초)
-	CC_SYNTHESIZE(int, SP_send_heart, SPSendHeart); // 소셜포인트 획득량(하트 보낼때)
-	CC_SYNTHESIZE(int, SP_send_ticket, SPSendTicket); // 소셜포인트 획득량(티켓 보낼때)
-	CC_SYNTHESIZE(int, SP_finished_challenge, SPFinishedChallenge); // 소셜포인트 획득량(도전하기 끝나서 결과 나왔을때 요청자, 대상자)
-	CC_SYNTHESIZE(int, SP_help_challenge, SPHelpChallenge); // 소셜포인트 획득량(도움요청 끝나서 결과 나왔을때 요청자, 대상자)
-	CC_SYNTHESIZE(int, SP_send_boast, SPSendBoast); // 소셜포인트 획득량(자랑하기 보낼때)
-	CC_SYNTHESIZE(int, SP_get_time, SPGetTime); // 받은 메세지 몇초 안에 확인해야 소셜포인트 줄건지 설정
-	CC_SYNTHESIZE(int, SP_get_heart, SPGetHeart); // 소셜포인트 획득량(하트온지 SPGetTime초 안에 수락하면 주는 포인트)
-	CC_SYNTHESIZE(int, gacha_one_percent_fee, GachaOnePercentFee); // 1프로 가챠 가격(루비)
-	CC_SYNTHESIZE(float, ai_adder_on_drew_or_damaged, AiAdderOnDrewOrDamaged); // 
-	CC_SYNTHESIZE(float, fury_percent, FuryPercent); //
 	
 };
 
