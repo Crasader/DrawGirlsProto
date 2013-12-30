@@ -114,6 +114,7 @@ private:
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
 	void endTakeCard();
+	void checkChallengeOrHelp();
 	
 	float keep_gold;
 	float decrease_gold;

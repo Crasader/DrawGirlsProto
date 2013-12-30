@@ -369,7 +369,7 @@ void ClearPopup::endHidePopup()
 	removeFromParent();
 }
 
-void ClearPopup::endTakeCard()
+void ClearPopup::checkChallengeOrHelp()
 {
 	if(mySGD->getIsMeChallenge())
 	{
@@ -377,13 +377,13 @@ void ClearPopup::endTakeCard()
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
 																	 ChallengeCategory::kRequest),
 						 kZ_CP_popup);
-//		getMeChallengeTarget
+		//		getMeChallengeTarget
 	}
 	
 	if(mySGD->getIsAcceptChallenge())
 	{
 		/////////////////// ksks
-//		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
+		//		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
 																	 ChallengeCategory::kRequestReply),
 						 kZ_CP_popup);
@@ -424,7 +424,7 @@ void ClearPopup::endTakeCard()
 		t_container->addChild(title_img);
 		
 		CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님의 카드가 도움이 되었나요?\n하트로 고마움을 표현하세요.", mySGD->getSelectedFriendCardData().nick.c_str())->getCString(),
-													mySGD->getFont().c_str(), 20);
+																								mySGD->getFont().c_str(), 20);
 		ment_label->setPosition(CCPointZero);
 		t_container->addChild(ment_label);
 		
@@ -433,9 +433,9 @@ void ClearPopup::endTakeCard()
 		s_close->setColor(ccGRAY);
 		
 		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																			{
-																				t_popup->removeFromParent();
-																			});
+																																				{
+																																					t_popup->removeFromParent();
+																																				});
 		
 		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
 		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
@@ -448,17 +448,29 @@ void ClearPopup::endTakeCard()
 		s_send_heart->setColor(ccGRAY);
 		
 		CCMenuItemSpriteLambda* send_heart_item = CCMenuItemSpriteLambda::create(n_send_heart, s_send_heart, [=](CCObject* sender)
-																				 {
-																					// 경수
-																					// 하트 보내기 작업
-																					// 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
-																					 t_popup->removeFromParent();
-																				 });
+																																						 {
+																																							 // 경수
+																																							 // 하트 보내기 작업
+																																							 // 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
+																																							 t_popup->removeFromParent();
+																																						 });
 		
 		CCMenuLambda* send_heart_menu = CCMenuLambda::createWithItem(send_heart_item);
 		send_heart_menu->setTouchPriority(t_popup->getTouchPriority()-1);
 		send_heart_menu->setPosition(ccp(0,-100));
 		t_container->addChild(send_heart_menu);
+	}
+}
+
+void ClearPopup::endTakeCard()
+{
+	if(1)
+	{
+		// mini game
+	}
+	else
+	{
+		checkChallengeOrHelp();
 	}
 }
 
