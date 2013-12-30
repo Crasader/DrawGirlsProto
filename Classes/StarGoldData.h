@@ -315,7 +315,7 @@ public:
 	}
 	int getBonusItemCnt(ITEM_CODE t_code)
 	{
-		return bonus_item_cnt[t_code];
+		return bonus_item_cnt[t_code].getV();
 	}
 	
 	void resetNoticeList(Json::Value t_notice_list)
@@ -445,7 +445,7 @@ private:
 	string accept_help_target_user_id;
 	string accept_help_target_user_nick;
 	
-	vector<int> bonus_item_cnt;
+	vector<KSProtectVar<int>> bonus_item_cnt;
 
 	int clear_reward_gold;
 	
