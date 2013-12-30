@@ -34,6 +34,7 @@ public:
 	virtual bool init(MiniGameCode t_code, function<void(void)> t_end_func);
 	
 private:
+	std::function<void(void)> startMiniGame;
 	bool is_menu_enable;
 	void menuAction(CCObject* pSender);
 	

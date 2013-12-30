@@ -23,7 +23,7 @@ USING_NS_CC;
 #include "RandomDistribution.h"
 #include "CountingGame.h"
 
-#include "crypto/CCCrypto.h"
+
 #include "SlidingPuzzle.h"
 #include "CardMatching.h"
 #include "KSProtect.h"

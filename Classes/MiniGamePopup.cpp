@@ -8,6 +8,8 @@
 
 #include "MiniGamePopup.h"
 #include "DataStorageHub.h"
+#include "CountingGame.h"
+
 
 enum MiniGameZorder{
 	kMiniGameZorder_game = 1,
