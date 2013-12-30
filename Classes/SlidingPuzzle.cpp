@@ -75,7 +75,7 @@ bool SlidingPuzzle::init()
 		
 		//자르고 저장합니다.
 		PuzzleCache::getInstance()->changeStencilByOrigin(st, img, {cutx,cuty}, true);
-		
+//		PuzzleImage* pi = PuzzleCache::getInstance()->cutImageByStensil(img, st, {cutx, cuty}, true);
 		//테스트로 한번 붙여봅니다.
 		CCTexture2D* _texture = new CCTexture2D;
 		_texture->initWithImage(st);
