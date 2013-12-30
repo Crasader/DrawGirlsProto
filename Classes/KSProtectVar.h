@@ -54,24 +54,41 @@ public:
 	{
 		return getV() + arg.getV();
 	}
-	T operator+=(const T& arg)
-	{
-		encrypt(getV() + arg);
-		return getV();
-	}
+	
 	T operator-(const T& arg) const
 	{
 		return getV() - arg;
 	}
 	
-	T operator-=(const T& arg)
+	T operator-(const KSProtectVar<T>& arg) const
 	{
-		encrypt(getV() - arg);
-		return getV();
+		return getV() - arg.getV();
+	}
+	T operator*(const T& arg) const
+	{
+		return getV() * arg;
+	}
+	
+	T operator*(const KSProtectVar<T>& arg) const
+	{
+		return getV() * arg.getV();
+	}
+	T operator/(const T& arg) const
+	{
+		return getV() / arg;
+	}
+	T operator/(const  KSProtectVar<T>arg) const
+	{
+		return getV() / arg.getV();
 	}
 	T operator=(const T& arg)
 	{
 		encrypt(arg);
+		return getV();
+	}
+	T operator=(const KSProtectVar<T>& arg)
+	{
+		encrypt(arg.getV());
 		return getV();
 	}
 	T operator--(int) // postfix
@@ -96,6 +113,119 @@ public:
 	{
 		*this += 1;
 		return getV();
+	}
+	T operator+=(const T& arg)
+	{
+		encrypt(getV() + arg);
+		return getV();
+	}
+	T operator+=(const KSProtectVar<T>& arg)
+	{
+		encrypt(getV() + arg.getV());
+		return getV();
+	}
+	T operator-=(const T& arg)
+	{
+		encrypt(getV() - arg);
+		return getV();
+	}
+	T operator-=(const KSProtectVar<T>& arg)
+	{
+		encrypt(getV() - arg.getV());
+		return getV();
+	}
+	T  operator *= (const T & arg) // A *= B
+	{
+		// Do the assignement... Beware of auto assignement
+		encrypt(getV() * arg);
+		return getV();
+	}
+	T  operator *= (const  KSProtectVar<T>& arg) // A *= B
+	{
+		// Do the assignement... Beware of auto assignement
+		encrypt(getV() * arg.getV());
+		return getV();
+	}
+	
+	T operator /= (const T & arg) // A /= B
+	{
+		// Do the assignement... Beware of auto assignement
+		encrypt(getV() / arg);
+		return getV();
+	}
+	
+	T operator /= (const KSProtectVar<T> & arg) // A /= B
+	{
+		// Do the assignement... Beware of auto assignement
+		encrypt(getV() / arg.getV());
+		return getV();
+	}
+	T operator %= (const T & arg) // A %= B
+	{
+		encrypt(getV() % arg);
+		return getV();
+	}
+	
+	T operator %= (const KSProtectVar<T> & arg) // A %= B
+	{
+		encrypt(getV() % arg.getV());
+		return getV();
+	}
+	bool operator!()
+	{
+		return !getV();
+	}
+	bool operator==(const T& arg)
+	{
+		return getV() == arg;
+	}
+	bool operator==(const KSProtectVar<T> & arg)
+	{
+		return getV() == arg.getV();
+	}
+	bool operator <(const T& arg)
+	{
+		return getV() < arg;
+	}
+	bool operator <(const KSProtectVar<T>& arg)
+	{
+		return getV() < arg.getV();
+	}
+	bool operator != (const T & arg) // A != B
+	{
+		return getV() != arg;
+	}
+	
+	bool operator != (const KSProtectVar<T> & arg) // A != B
+	{
+		return getV() != arg.getV();
+	}
+	bool operator > (const T & arg) // A > B
+	{
+		return getV() > arg;
+	}
+	bool operator > (const KSProtectVar<T> & arg) // A > B
+	{
+		return getV() > arg.getV();
+	}
+	
+	bool operator <= (const T & arg) // A <= B
+	{
+		return getV() <= arg;
+	}
+	
+	bool operator <= (const KSProtectVar<T>& arg) // A <= B
+	{
+		return getV() <= arg.getV();
+	}
+	bool operator >= (const T & arg) // A => B
+	{
+		return getV() >= arg;
+	}
+
+	bool operator >= (const KSProtectVar<T> & arg) // A => B
+	{
+		return getV() >= arg.getV();
 	}
 };
 
