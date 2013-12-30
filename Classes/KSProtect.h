@@ -3,8 +3,49 @@
 
 #include <type_traits>
 
+class KSProtectStr
+{
+	
+private:
+	int m_plainTextLength;
+	int m_bufferLength;
+	void* m_buff;
+	int m_cipherTextLength;
+private:
+	void encrypt(const std::string& data)
+	{
+		const char* key = "cocos2dx";
+		m_plainTextLength = data.size();
+		m_bufferLength = m_plainTextLength + CCCrypto::getAES256KeyLength();
+		int keyLen = strlen(key);
+		m_buff = malloc(m_bufferLength);
+		m_cipherTextLength = CCCrypto::encryptAES256(data.c_str(), m_plainTextLength, m_buff,
+																								 m_bufferLength, key, keyLen);
+	}
+	
+public:
+	
+	std::string getV() const
+	{
+		const char* key = "cocos2dx";
+		int keyLen = strlen(key);
+		void* plaintext2 = (char*)malloc(m_bufferLength);
+    int plaintextLength2 = CCCrypto::decryptAES256(m_buff, m_cipherTextLength, plaintext2,
+																									 m_bufferLength, key, keyLen);
+		std::string ret = (char*)plaintext2;
+		free(plaintext2);
+		return ret;
+	}
+	explicit KSProtectStr(const std::string& v)
+	{
+		encrypt(v);
+	}
+	~KSProtectStr()
+	{
+		free((void*)m_buff);
+	}
+};
 template<typename T>
-
 class KSProtectVar
 {
 private:

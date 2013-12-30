@@ -26,7 +26,7 @@ USING_NS_CC;
 #include "crypto/CCCrypto.h"
 #include "SlidingPuzzle.h"
 #include "CardMatching.h"
-#include "KSProtectVar.h"
+#include "KSProtect.h"
 
 
 //#include <boost/graph/graphviz.hpp>
@@ -49,6 +49,8 @@ AppDelegate::AppDelegate()
 	
 	CCLog("%f", testVar.getV()); // 값 얻기.
 	CCLog("%f", testVar + testVar2); // 보호된 변수끼리 연산가능.
+	KSProtectStr testStr("testtest");
+	CCLog("%s", testStr.getV().c_str());
 	//	std::random_device rd;
 	//	std::mt19937 rEngine(rd());
 	//	uniform_int_distribution<long long> dist(1000000000000000000L, 2000000000000000000L);
