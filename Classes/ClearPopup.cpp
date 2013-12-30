@@ -28,6 +28,7 @@
 #include "UnknownFriends.h"
 #include "ASPopupView.h"
 #include "StartSettingScene.h"
+#include "MiniGamePopup.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -466,7 +467,8 @@ void ClearPopup::endTakeCard()
 {
 	if(1)
 	{
-		// mini game
+		MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(rand()%(kMiniGameCode_dodge+1)), bind(&ClearPopup::checkChallengeOrHelp, this));
+		addChild(t_popup, kZ_CP_popup);
 	}
 	else
 	{
