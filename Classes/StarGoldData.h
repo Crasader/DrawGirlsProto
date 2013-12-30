@@ -321,7 +321,9 @@ public:
 	void resetNoticeList(Json::Value t_notice_list)
 	{
 		must_be_show_notice = false;
-		notice_list.clear();
+//		notice_list.clear();
+		
+		Json::Value not_encode_notice_list;
 		
 		chrono::time_point<chrono::system_clock> chrono_now_time = chrono::system_clock::now();
 		time_t now_time = chrono::system_clock::to_time_t(chrono_now_time);
@@ -341,10 +343,19 @@ public:
 			string notice_time = myDSH->getStringForKey(kDSH_Key_noticeViewDate_int1, t_notice_list[i]["no"].asInt());
 			int64_t notice_value = atoll(notice_time.c_str());
 			if(notice_time == "" || notice_value <= now_value)
-				notice_list.append(t_notice_list[i]);
+				not_encode_notice_list.append(t_notice_list[i]);
 		}
-		if(!notice_list.empty())
+		if(!not_encode_notice_list.empty())
+		{
 			must_be_show_notice = true;
+			
+			Json::FastWriter writer;
+			notice_list = KSProtectStr(writer.write(not_encode_notice_list));
+		}
+		else
+		{
+			notice_list = KSProtectStr();
+		}
 	}
 	
 	bool getMustBeShowNotice()
@@ -355,7 +366,11 @@ public:
 	Json::Value getNoticeList()
 	{
 		must_be_show_notice = false;
-		return notice_list;
+		Json::Reader reader;
+		Json::Value return_value;
+		string decode_data = notice_list.getV();
+		reader.parse(decode_data, return_value);
+		return return_value;
 	}
 	
 	Json::Value temp_stage_ranker_list;
@@ -487,7 +502,10 @@ private:
 	Json::Value startRequestsData;
 	
 	bool must_be_show_notice;
-	Json::Value notice_list;
+	
+	KSProtectStr notice_list;
+	
+//	Json::Value notice_list;
 	
 	KSProtectVar<int> heart_max; // 최대 보유할 수 있는 하트 수
 	KSProtectVar<int> heart_cool_time; // 몇 초 뒤에 하트가 새로 생길 것 인가

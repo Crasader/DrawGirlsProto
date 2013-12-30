@@ -22,6 +22,7 @@
 #include "OnePercentGacha.h"
 #include "hspConnector.h"
 #include "MissileDamageData.h"
+#include "KSProtect.h"
 
 #define JM_CONDITION	0.02
 
@@ -232,6 +233,7 @@ public:
 	
 	void setUseFriendCard();
 private:
+	KSProtectVar<float> score_value;
 	int percentage_decrease_cnt;
 	CCObject * target_main;
 	SEL_CallFunc delegate_gesture;
