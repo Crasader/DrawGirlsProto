@@ -78,9 +78,8 @@ public:
 		delete [] plaintext2;
 		return ret;
 	}
-	explicit KSProtectVar(const T& v)
+	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v)
 	{
-		static_assert(std::is_scalar<T>::value, "SCALAR");
 		encrypt(v);
 	}
 	~KSProtectVar()
