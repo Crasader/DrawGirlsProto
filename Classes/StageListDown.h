@@ -69,6 +69,7 @@ private:
 	void addDownlist(string t_key, const Json::Value& result_data);
 	
 	void resultGetStageList(Json::Value result_data);
+	void resultGetStageRankList(Json::Value result_data);
 	
 	void menuAction(CCObject* sender);
 	

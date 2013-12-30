@@ -8,7 +8,7 @@
 //#include "CumberEmotion.h"
 #include <algorithm>
 #include <cocos-ext.h>
-
+#include "StageImgLoader.h"
 
 bool KSCircleBase::init(const string& ccbiName)
 {
@@ -27,7 +27,8 @@ bool KSCircleBase::init(const string& ccbiName)
 	ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
 	
 	cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
-	CCNode* p = reader->readNodeGraphFromFile(("boss_" + ccbiname2 + ".ccbi").c_str(), this);
+	//CCNode* p = reader->readNodeGraphFromFile(("boss_" + ccbiname2 + ".ccbi").c_str(), this);
+	CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+ccbiname2+".ccbi").c_str(), this);
 	m_headImg = dynamic_cast<CircleBossCCB*>(p);
 	mAnimationManager = reader->getAnimationManager();
 	mAnimationManager->setDelegate(this);

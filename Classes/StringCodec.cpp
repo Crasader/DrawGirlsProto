@@ -14,61 +14,61 @@
 #include <vector>
 std::basic_string<char> stringEnc(string plainText)
 {
-	return plainText;
-//	if(plainText == "")
-//		return "";
-//    std::basic_string<char> strPlainText = plainText;
-//    std::basic_string<char> strCryptogram;
-//    
-//	/*
-//	 *************************************************************************
-//	 * Grab 8 bytes keys from somewhere.
-//	 *************************************************************************
-//	 */
-//	unsigned char * lpKey1 = (unsigned char*)"JSHSKSYH";
-//    unsigned char * lpKey2 = (unsigned char*)"22222222";
-//	
-//	
-//	McbDES des;
-//	des.McbSetDES();
-//	des.McbSetKey1(lpKey1);
-//	
-//	unsigned long cbCryptogram =
-//	des.McbCalcCryptogramSize(strPlainText.size());
-//	
-//	strCryptogram.resize(cbCryptogram);
-//	
-//	des.McbSetOutputBuffer((unsigned char*)strCryptogram.data(),
-//						   strCryptogram.size());
-//	
-//	if (des.McbEncrypt(strPlainText.c_str()))
-//	{
-//		strCryptogram.resize(des.McbGetCryptogramSize());
-//	}
-//	
-//	ostringstream oss;
-//    std::ostreambuf_iterator<char> out(oss);
-//    stlencoders::base16<char>::encode(strCryptogram.begin(), strCryptogram.end(), out);
-//	return oss.str();
+//	return plainText;
+	if(plainText == "")
+		return "";
+    std::basic_string<char> strPlainText = plainText;
+    std::basic_string<char> strCryptogram;
+    
+	/*
+	 *************************************************************************
+	 * Grab 8 bytes keys from somewhere.
+	 *************************************************************************
+	 */
+	unsigned char * lpKey1 = (unsigned char*)"JSHSKSYH";
+    unsigned char * lpKey2 = (unsigned char*)"22222222";
+	
+	
+	McbDES des;
+	des.McbSetDES();
+	des.McbSetKey1(lpKey1);
+	
+	unsigned long cbCryptogram =
+	des.McbCalcCryptogramSize(strPlainText.size());
+	
+	strCryptogram.resize(cbCryptogram);
+	
+	des.McbSetOutputBuffer((unsigned char*)strCryptogram.data(),
+						   strCryptogram.size());
+	
+	if (des.McbEncrypt(strPlainText.c_str()))
+	{
+		strCryptogram.resize(des.McbGetCryptogramSize());
+	}
+	
+	ostringstream oss;
+    std::ostreambuf_iterator<char> out(oss);
+    stlencoders::base16<char>::encode(strCryptogram.begin(), strCryptogram.end(), out);
+	return oss.str();
 	//return base64_encode(strCryptogram.c_str(), strCryptogram.size());
 }
 string stringDecode(std::basic_string<char> encodedText)
 {
-	return "";
-//	if(encodedText == "")
-//		return "";
-//	vector<char> v;
-//    stlencoders::base16<char>::decode(encodedText.begin(), encodedText.end(), back_inserter(v));
-//	
-//	
-//	unsigned char * lpKey1 = (unsigned char*)"JSHSKSYH";
-//	McbDES des;
-//	des.McbSetDES();
-//	des.McbSetKey1(lpKey1);
-//	
-//	des.McbDecrypt((unsigned char*)v.data(),
-//				   v.size());
-//	
-//	const unsigned char* decData = des.McbGetPlainText();
-//	return (char*)decData;
+//	return "";
+	if(encodedText == "")
+		return "";
+	vector<char> v;
+    stlencoders::base16<char>::decode(encodedText.begin(), encodedText.end(), back_inserter(v));
+	
+	
+	unsigned char * lpKey1 = (unsigned char*)"JSHSKSYH";
+	McbDES des;
+	des.McbSetDES();
+	des.McbSetKey1(lpKey1);
+	
+	des.McbDecrypt((unsigned char*)v.data(),
+				   v.size());
+	
+	const unsigned char* decData = des.McbGetPlainText();
+	return (char*)decData;
 }

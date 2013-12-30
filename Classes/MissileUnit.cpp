@@ -15,6 +15,7 @@
 #include "KSUtil.h"
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "KSUtil.h"
 
 #define LZZ_INLINE inline
 
@@ -276,11 +277,23 @@ void MissileUnit3::stopMove ()
 void MissileUnit3::removeEffect ()
 {
 	(target_removeEffect->*delegate_removeEffect)();
-	CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MissileUnit3::selfRemove));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-	
-	runAction(t_seq);
+
+	addChild(KSGradualValue<float>::create(255, 0, 0.01f, [=](float t)
+																				 {
+																					 stoneSprite->setOpacity(t);
+																					 stoneSprite->setVisible(false);
+																				 },
+																				 [=](float t)
+																				 {
+																					 
+																					 auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+																					 ret.first->setPosition(stoneSprite->getPosition());
+																					 addChild(ret.first, 2);
+																					 addChild(KSTimer::create(2.f, [=]()
+																																		{
+																																			this->selfRemove();
+																																		}));
+																				 }));
 }
 void MissileUnit3::selfRemove ()
 {
@@ -288,8 +301,8 @@ void MissileUnit3::selfRemove ()
 }
 void MissileUnit3::move ()
 {
-	CCPoint afterPosition = ccp(getPositionX(), getPositionY()-distance);
-	setPosition(afterPosition);
+	CCPoint afterPosition = ccp(stoneSprite->getPositionX(), stoneSprite->getPositionY() - distance);
+	stoneSprite->setPosition(afterPosition);
 	
 	IntPoint jackPoint = myGD->getJackPoint();
 	CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
@@ -302,7 +315,36 @@ void MissileUnit3::move ()
 		stopMove();
 		removeEffect();
 	}
-	
+	if(afterRect.origin.y + afterRect.size.height / 2.f - jackPosition.y < 200 && shownWarning == false)
+	{
+		shownWarning = true;
+		CCSprite* vertical = CCSprite::create("lazer_sub.png");
+		vertical->setColor(ccc3(255, 0, 0));
+		vertical->setScaleX(2.f);
+		vertical->setScaleY(0.25f);
+		vertical->setAnchorPoint(ccp(0.5f, 0.5f));
+		vertical->setRotation(90.f);
+		vertical->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), mapLoopRange::mapHeightInnerEnd));
+		
+		addChild(vertical);
+		CCSprite* feelMark = CCSprite::create("stone_warning.png");
+		feelMark->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), jackPosition.y + 40));
+		addChild(feelMark);
+		addChild(KSTimer::create(1.f, [=]()
+														 {
+															 addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t)
+																																			{
+																																				vertical->setOpacity(t);
+																																				feelMark->setOpacity(t);
+																																			}, [=](float t)
+																																			{
+																																				//																						 vertical->removeFromParent();
+																																				//																						 feelMark
+																																			}));
+														 }));
+		
+		CCLog("warning!!");
+	}
 	if(afterPosition.y < -mSize.height-60.f)
 	{
 		stopMove();
@@ -314,6 +356,7 @@ void MissileUnit3::myInit (int t_type, float t_distance, CCSize t_mSize, CCObjec
 	target_removeEffect = t_removeEffect;
 	delegate_removeEffect = d_removeEffect;
 	
+	shownWarning = false;
 	myType = t_type;
 	distance = t_distance;
 	mSize = t_mSize;
@@ -322,9 +365,10 @@ void MissileUnit3::myInit (int t_type, float t_distance, CCSize t_mSize, CCObjec
 	{
 		//			initWithFile("fallingStone.png", CCRectMake(0, 0, 35, 35));
 		
-		auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_marble1.ccbi");
-		CCSprite* stone = ret.first;
-		addChild(stone);
+		auto ret = KS::loadCCBI<CCSprite*>(this, "stone_1.ccbi");//"pattern_marble1.ccbi");
+		stoneSprite = ret.first;
+		//CCSprite* stone = ret.first;
+		addChild(stoneSprite, 1);
 	}
 	else
 	{
@@ -332,7 +376,9 @@ void MissileUnit3::myInit (int t_type, float t_distance, CCSize t_mSize, CCObjec
 	}
 	
 	int randomX = rand()%321;
-	setPosition(ccp(randomX, 480));
+	IntPoint jackPoint = myGD->getJackPoint();
+	
+	stoneSprite->setPosition(ccp(randomX, ip2ccp(jackPoint).y + 300));
 	
 	startMove();
 }
@@ -995,7 +1041,7 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
-	targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor1_targeting.ccbi",this));
+	targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("bomb_8_6_1.ccbi",this));//"pattern_meteor1_targeting.ccbi",this));
 	reader->release();
 	targetingImg->setPosition(t_sp);
 	
@@ -1212,7 +1258,7 @@ void FallMeteor::selfRemove ()
 }
 void FallMeteor::initParticle ()
 {
-	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+	auto ret = KS::loadCCBI<CCSprite*>(this, "bomb_8_4.ccbi");//"fx_bomb5.ccbi");
 	CCSprite* particle = ret.first;
 	
 	if(meteor)
@@ -2648,7 +2694,7 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 		auto direction = iter->second;
 		
 		// 목표 위치 부착.
-		CCSprite* goal = CCSprite::create("satelliteBeam_targeting.png");
+		CCSprite* goal = KS::loadCCBI<CCSprite*>(this, "target1.ccbi").first; // CCSprite::create("satelliteBeam_targeting.png");
 		addChild(goal);
 		goal->setPosition(ip2ccp(point));
 		
@@ -2880,7 +2926,7 @@ void ThrowBomb::update (float dt)
 	
 	if(m_step == 2) // 폭발.
 	{
-		auto bomb = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+		auto bomb = KS::loadCCBI<CCSprite*>(this, "bomb_8_7.ccbi");//"fx_bomb5.ccbi");
 		bomb.first->setPosition(m_parentMissile->getPosition());
 		addChild(bomb.first);
 		addChild(KSTimer::create(1.3f, [=](){bomb.first->removeFromParent();})); // 1.3 초 후에 사라짐.

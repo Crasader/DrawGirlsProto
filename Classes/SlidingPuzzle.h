@@ -59,9 +59,9 @@ public:
 		
 		// 'layer' is an autorelease object
 		SlidingPuzzle *layer = SlidingPuzzle::create();
-//		layer->setAnchorPoint(ccp(0.5,0));
-//		layer->setScale(myDSH->screen_convert_rate);
-//		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
+		layer->setAnchorPoint(ccp(0.5,0));
+		layer->setScale(myDSH->screen_convert_rate);
+		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
 		
 		scene->addChild(layer);
 		return scene;
@@ -69,7 +69,8 @@ public:
 
 	SlidingPuzzle() : m_pieces(4, vector<CCMenuItemLambda*>(5)), // 4 by 5,
 	PUZZLE_WIDTH(5),
-	PUZZLE_HEIGHT(4)
+	PUZZLE_HEIGHT(4),
+	m_timer(0)
 	{
 		
 	}
@@ -78,6 +79,7 @@ public:
 	virtual bool init();
 	CREATE_FUNC(SlidingPuzzle);
 	void shuffle(float dt);
+	void update(float dt);
 	//virtual void registerWithTouchDispatcher();
 	void movePiece(Coord piece, float t, const std::function<void(Coord)>& noti );
 	bool isValidCoord(Coord coord){
@@ -92,6 +94,8 @@ protected:
 	const int PUZZLE_WIDTH, PUZZLE_HEIGHT;
 	SlidingState m_state;
 	std::mt19937 m_rEngine;
+	CCLabelBMFont* m_timeFnt;
+	float m_timer;
 };
 
 #endif

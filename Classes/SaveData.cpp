@@ -66,7 +66,7 @@ void SaveData::createJSON(string filename)
 		Json::Reader reader;
 		reader.parse(rawData, file_sync[key]);
 	}
-	file_init[key] = true;
+	file_init[filename] = true;
 }
 void SaveData::createJSON(SaveDataFile t_sdf){			createJSON(getSyncKey(t_sdf));		}
 void SaveData::createJSON(SaveDataFile t_sdf, int i1){	createJSON(getSyncKey(t_sdf, i1));	}
@@ -190,7 +190,7 @@ string SaveData::getValue(string filename, string _key, string _defaultValue)
 	string file_key = stringEnc(filename);
 	string key = stringEnc(_key);
 	string v = (file_sync[file_key])[key].asString();
-	string v2 = v;//stringDecode(v);
+	string v2 = stringDecode(v);
 	if(v2 == "")
 		return _defaultValue;
 	else
@@ -209,7 +209,7 @@ int SaveData::getValue(string filename, string _key, int _defaultValue)
 	string file_key = stringEnc(filename);
 	string key = stringEnc(_key);
 	string v = (file_sync[file_key])[key].asString();
-	string v2 = v;//stringDecode(v);
+	string v2 = stringDecode(v);
 	int _v2 = atoi(v2.c_str());
 	if(v2 == "")
 		return _defaultValue;
@@ -229,7 +229,7 @@ double SaveData::getValue(string filename, string _key, double _defaultValue)
 	string file_key = stringEnc(filename);
 	string key = stringEnc(_key);
 	string v = (file_sync[file_key])[key].asString();
-	string v2 = v;//stringDecode(v);
+	string v2 = stringDecode(v);
 	double _v2 = atof(v2.c_str());
 	if(v2 == "")
 		return _defaultValue;

@@ -358,9 +358,6 @@ void PuzzleScene::setPuzzle()
 	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
 	
-	int stage_number = start_stage;
-	int stage_piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
-	
 	bool is_puzzle_clear = true;
 	
 	for(int i=0;i<20;i++)
@@ -373,7 +370,21 @@ void PuzzleScene::setPuzzle()
 		else
 			piece_type = "w";
 		
-		if(i+1 == stage_piece_number)
+		int stage_number, stage_piece_number;
+		
+		bool is_stage_piece = false;
+		for(int j=start_stage;j<start_stage+stage_count && !is_stage_piece;j++)
+		{
+			stage_piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, j);
+			if(i+1 == stage_piece_number)
+			{
+				is_stage_piece = true;
+				stage_number = j;
+			}
+		}
+		
+		
+		if(is_stage_piece)
 		{
 			int stage_level = SDS_GI(kSDF_puzzleInfo, puzzle_number, CCString::createWithFormat("stage%d_level", stage_number)->getCString());
 			if(stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
@@ -435,7 +446,7 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_piece, stage_number);
-					t_piece->initWithPieceInfo(piece_mode, kPieceType_empty, piece_type);
+					t_piece->initWithPieceInfo(kPieceMode_default, kPieceType_empty, piece_type);
 				}
 			}
 			else
@@ -447,7 +458,7 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::buyPieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_strokePiece, stage_number);
-					t_piece->initWithPieceInfo(piece_mode, kPieceType_buy, piece_type);
+					t_piece->initWithPieceInfo(kPieceMode_default, kPieceType_buy, piece_type);
 					
 					addShadow(piece_type, piece_position, stage_number);
 				}
@@ -456,21 +467,10 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::lockPieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_strokePiece, stage_number);
-					t_piece->initWithPieceInfo(piece_mode, kPieceType_lock, piece_type);
+					t_piece->initWithPieceInfo(kPieceMode_default, kPieceType_lock, piece_type);
 					
 					addShadow(piece_type, piece_position, stage_number);
 				}
-			}
-			
-			if(stage_number == start_stage+stage_count-1) // last stage
-			{
-				stage_number = -1;
-				stage_piece_number = -1;
-			}
-			else
-			{
-				stage_number++;
-				stage_piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 			}
 		}
 		else
@@ -842,6 +842,11 @@ void PuzzleScene::menuAction(CCObject* sender)
 			have_card_cnt_case->setVisible(true);
 		}
 		else if(piece_mode == kPieceMode_thumb)
+		{
+			piece_mode = kPieceMode_ranker;
+			have_card_cnt_case->setVisible(false);
+		}
+		else if(piece_mode == kPieceMode_ranker)
 		{
 			piece_mode = kPieceMode_default;
 			have_card_cnt_case->setVisible(false);

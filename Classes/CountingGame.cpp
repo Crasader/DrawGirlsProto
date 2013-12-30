@@ -105,11 +105,22 @@ void CountingGame::createObject(float dt)
 																		if(i == correctIndex)
 																		{
 																			CCLog("answer");
+																			CCLabelBMFont* result = CCLabelBMFont::create("ANSWER", "etc_font.fnt");
+																			result->setPosition(ccp(240, 160));
+																			addChild(result);
 																		}
 																		else
 																		{
-																			CCLog("wrong answer");
+																			CCLabelBMFont* result = CCLabelBMFont::create("WRONG", "etc_font.fnt");
+																			result->setPosition(ccp(240, 160));
+																			addChild(result);
+																			CCLog("wrong");
 																		}
+																		
+																		addChild(KSTimer::create(3.f, [=]()
+																														 {
+																															 CCDirector::sharedDirector()->popScene();
+																														 }));
 																	});
 																 item1->setPosition(ccp(240, 50));
 																 m_menu->addChild(item1);
