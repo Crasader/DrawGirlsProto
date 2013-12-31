@@ -539,26 +539,26 @@ bool ShopPopup::init()
 	index_to_heart.push_back(KSProtectVar<int>(75));
 	index_to_heart.push_back(KSProtectVar<int>(100));
 	
-	cash_to_ruby[index_to_ruby[0]] = KSProtectVar<int>(10);
-	cash_to_ruby[index_to_ruby[1]] = KSProtectVar<int>(50);
-	cash_to_ruby[index_to_ruby[2]] = KSProtectVar<int>(100);
-	cash_to_ruby[index_to_ruby[3]] = KSProtectVar<int>(300);
-	cash_to_ruby[index_to_ruby[4]] = KSProtectVar<int>(500);
-	cash_to_ruby[index_to_ruby[5]] = KSProtectVar<int>(1000);
+	cash_to_ruby[index_to_ruby[0].getV()] = KSProtectVar<int>(10);
+	cash_to_ruby[index_to_ruby[1].getV()] = KSProtectVar<int>(50);
+	cash_to_ruby[index_to_ruby[2].getV()] = KSProtectVar<int>(100);
+	cash_to_ruby[index_to_ruby[3].getV()] = KSProtectVar<int>(300);
+	cash_to_ruby[index_to_ruby[4].getV()] = KSProtectVar<int>(500);
+	cash_to_ruby[index_to_ruby[5].getV()] = KSProtectVar<int>(1000);
 	
-	ruby_to_gold[index_to_gold[0]] = KSProtectVar<int>(10000);
-	ruby_to_gold[index_to_gold[1]] = KSProtectVar<int>(20000);
-	ruby_to_gold[index_to_gold[2]] = KSProtectVar<int>(50000);
-	ruby_to_gold[index_to_gold[3]] = KSProtectVar<int>(100000);
-	ruby_to_gold[index_to_gold[4]] = KSProtectVar<int>(300000);
-	ruby_to_gold[index_to_gold[5]] = KSProtectVar<int>(500000);
+	ruby_to_gold[index_to_gold[0].getV()] = KSProtectVar<int>(10000);
+	ruby_to_gold[index_to_gold[1].getV()] = KSProtectVar<int>(20000);
+	ruby_to_gold[index_to_gold[2].getV()] = KSProtectVar<int>(50000);
+	ruby_to_gold[index_to_gold[3].getV()] = KSProtectVar<int>(100000);
+	ruby_to_gold[index_to_gold[4].getV()] = KSProtectVar<int>(300000);
+	ruby_to_gold[index_to_gold[5].getV()] = KSProtectVar<int>(500000);
 	
-	ruby_to_heart[index_to_heart[0]] = KSProtectVar<int>(5);
-	ruby_to_heart[index_to_heart[1]] = KSProtectVar<int>(10);
-	ruby_to_heart[index_to_heart[2]] = KSProtectVar<int>(20);
-	ruby_to_heart[index_to_heart[3]] = KSProtectVar<int>(40);
-	ruby_to_heart[index_to_heart[4]] = KSProtectVar<int>(75);
-	ruby_to_heart[index_to_heart[5]] = KSProtectVar<int>(100);
+	ruby_to_heart[index_to_heart[0].getV()] = KSProtectVar<int>(5);
+	ruby_to_heart[index_to_heart[1].getV()] = KSProtectVar<int>(10);
+	ruby_to_heart[index_to_heart[2].getV()] = KSProtectVar<int>(20);
+	ruby_to_heart[index_to_heart[3].getV()] = KSProtectVar<int>(40);
+	ruby_to_heart[index_to_heart[4].getV()] = KSProtectVar<int>(75);
+	ruby_to_heart[index_to_heart[5].getV()] = KSProtectVar<int>(100);
 	
 	showPopup();
 	
@@ -683,7 +683,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			loading_layer = LoadingLayer::create();
 			addChild(loading_layer, kSP_Z_popup);
 			
-			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1]].getV());
+			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 			
 			vector<SaveUserData_Key> save_userdata_list;
 			
@@ -699,7 +699,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
-				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1]].getV());
+				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -721,7 +721,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
-				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1]].getV());
+				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 				
 				CCNode* target_parent = target_heartTime->getParent();
 				CCPoint heart_time_position = target_heartTime->getPosition();
@@ -760,7 +760,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			loading_layer = LoadingLayer::create();
 			addChild(loading_layer, kSP_Z_popup);
 			
-			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1]].getV());
+			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 			
 			vector<SaveUserData_Key> save_userdata_list;
 			
@@ -776,7 +776,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
-				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1]].getV());
+				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -798,7 +798,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
-				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1]].getV());
+				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 				
 				CCNode* target_parent = target_heartTime->getParent();
 				CCPoint heart_time_position = target_heartTime->getPosition();
@@ -837,7 +837,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			loading_layer = LoadingLayer::create();
 			addChild(loading_layer, kSP_Z_popup);
 			
-			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1]].getV());
+			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 			
 			vector<SaveUserData_Key> save_userdata_list;
 			
@@ -853,7 +853,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
-				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1]].getV());
+				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -875,7 +875,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
-				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1]].getV());
+				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 				
 				CCNode* target_parent = target_heartTime->getParent();
 				CCPoint heart_time_position = target_heartTime->getPosition();
@@ -914,7 +914,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			loading_layer = LoadingLayer::create();
 			addChild(loading_layer, kSP_Z_popup);
 			
-			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1]].getV());
+			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 			
 			vector<SaveUserData_Key> save_userdata_list;
 			
@@ -930,7 +930,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
-				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1]].getV());
+				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -952,7 +952,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
-				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1]].getV());
+				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 				
 				CCNode* target_parent = target_heartTime->getParent();
 				CCPoint heart_time_position = target_heartTime->getPosition();
@@ -991,7 +991,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			loading_layer = LoadingLayer::create();
 			addChild(loading_layer, kSP_Z_popup);
 			
-			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1]].getV());
+			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 			
 			vector<SaveUserData_Key> save_userdata_list;
 			
@@ -1007,7 +1007,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
-				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1]].getV());
+				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -1029,7 +1029,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
-				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1]].getV());
+				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 				
 				CCNode* target_parent = target_heartTime->getParent();
 				CCPoint heart_time_position = target_heartTime->getPosition();
@@ -1068,7 +1068,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			loading_layer = LoadingLayer::create();
 			addChild(loading_layer, kSP_Z_popup);
 			
-			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1]].getV());
+			mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 			
 			vector<SaveUserData_Key> save_userdata_list;
 			
@@ -1084,7 +1084,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
-				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1]].getV());
+				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -1106,7 +1106,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				addChild(loading_layer, kSP_Z_popup);
 				
 				mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
-				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1]].getV());
+				myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 				
 				CCNode* target_parent = target_heartTime->getParent();
 				CCPoint heart_time_position = target_heartTime->getPosition();

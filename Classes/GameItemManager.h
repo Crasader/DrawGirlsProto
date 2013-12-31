@@ -10,10 +10,12 @@
 #define __galsprototype__GameItemManager__
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 #include "GameData.h"
 #include <deque>
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 using namespace std;
 
 enum GameItemType{
@@ -227,7 +229,7 @@ private:
 	void myInit();
 };
 
-class GameItemManager : public CCNode
+class GameItemManager : public CCNode, public CCBAnimationManagerDelegate
 {
 public:
 	static GameItemManager* create();
@@ -237,6 +239,8 @@ public:
 	void showCoin(CCObject* t_ui, SEL_CallFuncCCpI d_takeExchangeCoin);
 	void stopCoin();
 	
+	virtual void completedAnimationSequenceNamed (char const * name);
+	
 private:
 	
 	int counting_value;
@@ -245,7 +249,8 @@ private:
 	
 	CCNode* coin_parent;//change coin
 	FeverCoinParent* fever_coin_parent;
-	CCSpriteBatchNode* take_item_effects;
+//	CCSpriteBatchNode* take_item_effects;
+	deque<CCSprite*> effect_que;
 	
 	void showTakeItemEffect(CCPoint t_p);
 	

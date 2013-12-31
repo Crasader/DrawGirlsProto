@@ -8,14 +8,11 @@
 
 #include "GameItemManager.h"
 #include "LogData.h"
-#include "cocos-ext.h"
 #include "KSUtil.h"
 #include "AttackItem.h"
 #include "SilhouetteData.h"
 #include "StarGoldData.h"
 #include "ServerDataSave.h"
-
-USING_NS_CC_EXT;
 
 void GameItemBase::selfRemove()
 {
@@ -1205,20 +1202,42 @@ void GameItemManager::addItem()
 
 void GameItemManager::showTakeItemEffect(CCPoint t_p)
 {
-	CCSprite* t_effect = CCSprite::createWithTexture(take_item_effects->getTexture(), CCRectMake(0, 0, 109, 109));
-	t_effect->setPosition(t_p);
-	take_item_effects->addChild(t_effect);
+//	CCSprite* t_effect = CCSprite::createWithTexture(take_item_effects->getTexture(), CCRectMake(0, 0, 109, 109));
+//	t_effect->setPosition(t_p);
+//	take_item_effects->addChild(t_effect);
+//	
+//	CCAnimation* t_animation = CCAnimation::create();
+//	t_animation->setDelayPerUnit(0.07f);
+//	for(int i=0;i<2;i++)
+//		for(int j=0;j<5;j++)
+//			t_animation->addSpriteFrameWithTexture(take_item_effects->getTexture(), CCRectMake(j*109, i*109, 109, 109));
+//	CCAnimate* t_animate = CCAnimate::create(t_animation);
+//	CCFadeTo* t_fade = CCFadeTo::create(0.1f, 0);
+//	CCCallFunc* t_call = CCCallFunc::create(t_effect, callfunc_selector(CCSprite::removeFromParent));
+//	CCSequence* t_seq = CCSequence::create(t_animate, t_fade, t_call, NULL);
+//	t_effect->runAction(t_seq);
 	
-	CCAnimation* t_animation = CCAnimation::create();
-	t_animation->setDelayPerUnit(0.07f);
-	for(int i=0;i<2;i++)
-		for(int j=0;j<5;j++)
-			t_animation->addSpriteFrameWithTexture(take_item_effects->getTexture(), CCRectMake(j*109, i*109, 109, 109));
-	CCAnimate* t_animate = CCAnimate::create(t_animation);
-	CCFadeTo* t_fade = CCFadeTo::create(0.1f, 0);
-	CCCallFunc* t_call = CCCallFunc::create(t_effect, callfunc_selector(CCSprite::removeFromParent));
-	CCSequence* t_seq = CCSequence::create(t_animate, t_fade, t_call, NULL);
-	t_effect->runAction(t_seq);
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	CCSprite* take_effect = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_item2.ccbi",this));
+	take_effect->setPosition(t_p);
+	take_effect->setScale(1.f/myGD->game_scale);
+	addChild(take_effect);
+	reader->getAnimationManager()->setDelegate(this);
+	
+	effect_que.push_back(take_effect);
+}
+
+void GameItemManager::completedAnimationSequenceNamed (char const * name)
+{
+	string t_name = name;
+	
+	if(t_name == "Default Timeline")
+	{
+		CCSprite* remove_target = effect_que.front();
+		effect_que.pop_front();
+		removeChild(remove_target);
+	}
 }
 
 void GameItemManager::myInit()
@@ -1231,8 +1250,8 @@ void GameItemManager::myInit()
 	fever_coin_parent = FeverCoinParent::create();
 	addChild(fever_coin_parent);
 	
-	take_item_effects = CCSpriteBatchNode::create("fx_take_item.png");
-	addChild(take_item_effects);
+//	take_item_effects = CCSpriteBatchNode::create("fx_take_item.png");
+//	addChild(take_item_effects);
 	
 	child_base_cnt = getChildrenCount();
 	
