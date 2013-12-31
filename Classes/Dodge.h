@@ -3,7 +3,8 @@
 #include "cocos2d.h"
 #include "DataStorageHub.h"
 #include "Well512.h"
-
+#include "KSUtil.h"
+#include "StageImgLoader.h"
 USING_NS_CC;
 enum class DodgeState
 {
@@ -61,7 +62,9 @@ public:
 	bool init()
 	{
 		CCNode::init();
-		m_image = CCSprite::create("jm_plasma2_particle.png");
+		auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this,
+								StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1) + ".ccbi");
+		m_image = t_pair.first;
 		addChild(m_image);
 		
 		return true;
@@ -98,16 +101,17 @@ public:
 class Dodge : public CCLayer
 {
 public:
-	Dodge() : m_state(DodgeState::kReady)
+	Dodge() : m_state(DodgeState::kReady),
+	m_remainTime(15.f)
 	{}
 	virtual ~Dodge()
 	{
 		
 	}
-	static __TYPE__* create()
+	static __TYPE__* create(int priority, const std::function<void(void)>& hideFunction)
 	{
     __TYPE__ *pRet = new __TYPE__();
-    if (pRet && pRet->init())
+    if (pRet && pRet->init(priority, hideFunction))
     {
 			pRet->autorelease();
 			return pRet;
@@ -125,11 +129,11 @@ public:
 		CCScene *scene = CCScene::create();
 		
 		// 'layer' is an autorelease object
-		Dodge *layer = Dodge::create();
+		Dodge *layer = Dodge::create(0, nullptr);
 		layer->setAnchorPoint(ccp(0.5,0));
 		layer->setScale(myDSH->screen_convert_rate);
 		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
-
+		
 		scene->addChild(layer);
 		return scene;
 	}
@@ -137,14 +141,18 @@ public:
 	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual void registerWithTouchDispatcher()
 	{
-		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, INT_MIN,true);
+		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, m_priority, true);
 	}
-	bool init();
+	bool init(int priority, const std::function<void(void)>& hideFunction);
 	void update(float dt);
 	void checkCollision(float dt);
 	void timeChecker(float dt);
 protected:
+	std::function<void(void)> m_hideFunction;
+	CCClippingNode* m_thiz;
+	int m_priority;
 	float m_timer;
+	float m_remainTime;
 	CCLabelBMFont* m_flowTimeFnt;
 	CCLabelTTF* m_readyFnt;
 	Well512 m_well512;

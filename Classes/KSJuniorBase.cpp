@@ -116,7 +116,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle)
 	if(m_remainHp <= 0)
 	{
 		myGD->communication("CP_removeSubCumber", this);
-		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+		auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");
 		
 		CCPoint t = getPosition();
 		ret.first->setPosition(t);

@@ -16,10 +16,10 @@ public:
 	{
 		
 	}
-	static __TYPE__* create()
+	static CountingGame* create(int priority, const std::function<void(void)>& hideFunction)
 	{
-    __TYPE__ *pRet = new __TYPE__();
-    if (pRet && pRet->init())
+    CountingGame* pRet = new CountingGame();
+    if (pRet && pRet->init(priority, hideFunction))
     {
 			pRet->autorelease();
 			return pRet;
@@ -37,7 +37,7 @@ public:
 		CCScene *scene = CCScene::create();
 		
 		// 'layer' is an autorelease object
-		CountingGame *layer = CountingGame::create();
+		CountingGame *layer = CountingGame::create(0, nullptr);
 		layer->setAnchorPoint(ccp(0.5,0));
 		layer->setScale(myDSH->screen_convert_rate);
 		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
@@ -49,12 +49,17 @@ public:
 	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual void registerWithTouchDispatcher()
 	{
-		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, INT_MIN,true);
+		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, m_priority,true);
 	}
-	bool init();
+	void startSchedule();
+	bool init(int priority, const std::function<void(void)>& hideFunction);
 	void update(float dt);
 	void createObject(float dt);
 protected:
+	CCClippingNode* m_thiz;
+	int m_priority;
+	std::function<void(void)> m_hideFunction;
+	float remainTime;
 	std::mt19937 m_rEngine;
 	std::vector<CCSprite*> m_objects;
 	int m_goalCount;

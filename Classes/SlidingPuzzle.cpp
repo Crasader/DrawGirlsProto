@@ -1,6 +1,7 @@
 #include "SlidingPuzzle.h"
 #include "PuzzleCache.h"
 #include "KSUtil.h"
+#include "StarGoldData.h"
 
 SlidingPuzzle::~SlidingPuzzle()
 {
@@ -20,21 +21,47 @@ SlidingPuzzle::~SlidingPuzzle()
 //	return true;
 //}
 
-bool SlidingPuzzle::init()
+bool SlidingPuzzle::init(int priority, const std::function<void(void)>& hideFunction)
 {
 	CCLayer::init();
+	
+	CCDrawNode* shape = CCDrawNode::create();
+	
+	CCPoint pts[4];
+	pts[0] = ccp(25, 320 - 297);
+	pts[1] = ccp(366, 320 - 297);
+	pts[2] = ccp(366, 320 - 24);
+	pts[3] = ccp(25, 320 - 24);
+	shape->drawPolygon(pts, 4, ccc4f(1, 1, 1, 1), 0, ccc4f(1, 0, 0, 1));
+
+	CCSprite* back = CCSprite::create("bonusgame_back.png");
+	back->setPosition(ccp(240, 160));
+	addChild(back);
+	// add shape in stencil
+	m_thiz = CCClippingNode::create();
+	m_thiz->setAnchorPoint(ccp(0.5, 0.5));
+	m_thiz->setStencil(shape);
+	this->addChild(m_thiz);
+	
+	// setup content
+	m_hideFunction = hideFunction;
+	m_priority = priority;
 	setTouchEnabled(true);
 	std::random_device rd;
 	m_rEngine.seed(rd());
+	CCNode* containerNode = CCNode::create();
 	m_menu = CCMenuLambda::create();
 	m_menu->setPosition(ccp(0, 0));
 	m_menu->setPropaOnBegan(true);
-	
-	addChild(m_menu);
+	m_menu->setTouchPriority(m_priority);
+	m_menu->setTouchEnabled(false);
+	containerNode->addChild(m_menu);
+	m_thiz->addChild(containerNode);
 	
 	
 	m_timeFnt = CCLabelBMFont::create("", "etc_font.fnt");
-	m_timeFnt->setPosition(ccp(390, 100));
+	m_timeFnt->setPosition(ccp(420, 270));
+	m_timeFnt->setString(CCString::createWithFormat("%.1f", m_remainTime)->getCString());
 	addChild(m_timeFnt);
 	
 	//퍼즐 파일명
@@ -88,66 +115,148 @@ bool SlidingPuzzle::init()
 	
 		_texture->release();
 		pps2->setColor(ccc3(166, 166, 166));
-		CCMenuItemSpriteLambda* item = CCMenuItemSpriteLambda::create(pps, pps2,
-																																	[=](CCObject* s)
-																																	{
-																																		Coord coord(-1, -1);
-																																		for(int y=0; y<m_pieces.size(); y++)
-																																		{
-																																			for(int x=0; x<m_pieces[y].size(); x++)
-																																			{
-																																				if(m_pieces[y][x] == s)
-																																				{
-																																					coord.y = y;
-																																					coord.x = x;
-																																					break;
-																																				}
-																																			}
-																																		}
-																																		CCLog("%f ", coord.length(m_emptyCoord));
-																																		if(0.9f <= coord.length(m_emptyCoord) &&
-																																			 coord.length(m_emptyCoord) <= 1.1f)
-																																		{
-																																			if(m_state == SlidingState::kNormal)
-																																			{
-																																				m_state = SlidingState::kMovingInPlay;
-																																				this->movePiece
-																																				(coord, 0.2f,
-																																				 [=](Coord prevEmptyCoord) // 다 움직였을 때 올바른가 검사.
-																																				 {
-																																					 m_state = SlidingState::kNormal;
-																																					 CCLog("com");
-																																					 Coord coord(-1, -1);
-																																					 
-																																					 bool valid = true;
-																																					 for(int y=0; y<m_pieces.size(); y++)
-																																					 {
-																																						 for(int x=0; x<m_pieces[y].size(); x++)
-																																						 {
-																																							 CCMenuItemLambda* menuItem = m_pieces[y][x];
-																																							 if(!(Coord(x, y) == Coord((int)menuItem->getUserData()%10, (int)menuItem->getUserData()/10)))
-																																							 {
-																																								 valid = false;
-																																								 break;
-																																							 }
-																																						 }
-																																					 }
-																																					 if(valid)
-																																					 {
-																																						 CCLog("correct!!");
-																																						 this->unscheduleUpdate();
-																																						 m_timeFnt->setColor(ccc3(255, 0, 0));
-																																						 addChild(KSTimer::create(3.f, [=]()
-																																																			{
-																																																				CCDirector::sharedDirector()->popScene();
-																																																			}));
-																																					 }
-																																				 });
-																																			}
-																																		}
-																																		
-																																		
-																																		
+		CCMenuItemSpriteLambda* item = CCMenuItemSpriteLambda::create
+		(pps, pps2,
+		 [=](CCObject* s)
+		 {
+			 Coord coord(-1, -1);
+			 for(int y=0; y<m_pieces.size(); y++)
+			 {
+				 for(int x=0; x<m_pieces[y].size(); x++)
+				 {
+					 if(m_pieces[y][x] == s)
+					 {
+						 coord.y = y;
+						 coord.x = x;
+						 break;
+					 }
+				 }
+			 }
+			 /*
+				m_emptyCoord 와 클릭한 좌표는 수평선 상에 있어야 함.
+				m_emptyCoord 에서  coord 으로 방향으로 몇 번 가야 도착하는지 알아내야 하고,
+				n 번 가야 된다면, n - 1 번 째는 그냥 이동 시키고
+				마지막 함수는 검사함.
+				
+				*/
+			 if(m_emptyCoord.x == coord.x ^ m_emptyCoord.y == coord.y)
+			 {
+				 if(m_state == SlidingState::kNormal)
+				 {
+					 m_state = SlidingState::kMovingInPlay;
+					 Coord direction = coord + -m_emptyCoord;
+					 direction.y /= direction.y ? abs(direction.y) : 1;
+					 direction.x /= direction.x ? abs(direction.x) : 1;
+					 int moveCount = 0;
+					 for(Coord emptyCoord = m_emptyCoord; !(emptyCoord == coord); emptyCoord = emptyCoord + direction)
+					 {
+						 moveCount++;
+					 }
+					 int i = 0;
+					 for(Coord emptyCoord = m_emptyCoord; i < moveCount ; emptyCoord = emptyCoord + direction)
+					 {
+						 if(i == moveCount - 1) // 마지막 조건
+						 {
+							 this->movePiece
+							 (emptyCoord + direction, 0.2f,
+								[=](Coord prevEmptyCoord) // 다 움직였을 때 올바른가 검사.
+								{
+									m_state = SlidingState::kNormal;
+									CCLog("com");
+									Coord coord(-1, -1);
+									
+									bool valid = true;
+									for(int y=0; y<m_pieces.size(); y++)
+									{
+										for(int x=0; x<m_pieces[y].size(); x++)
+										{
+											CCMenuItemLambda* menuItem = m_pieces[y][x];
+											if(!(Coord(x, y) == Coord((int)menuItem->getUserData()%10, (int)menuItem->getUserData()/10)))
+											{
+												valid = false;
+												break;
+											}
+										}
+									}
+									if(valid)
+									{
+										
+										CCSprite* successSprite = CCSprite::create("bonusgame_succes.png");
+										successSprite->setPosition(ccp(240, 160));
+										addChild(successSprite);
+										CCLog("correct!!");
+										m_menu->setTouchEnabled(false);
+										unscheduleUpdate();
+										mySGD->setStar(mySGD->getStar() + 1);
+										myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+																				{
+																					addChild(KSTimer::create(3.f, [=](){
+																						m_hideFunction();
+																					}));
+																				});
+									}
+								});
+						 }
+						 else
+						 {
+							 this->movePiece(emptyCoord + direction, 0.2f, [=](Coord ){});
+						 }
+//						 moveCount++;
+						 i++;
+					 }
+				 }
+			 }
+//			 CCLog("%f ", coord.length(m_emptyCoord));
+//			 if(0.9f <= coord.length(m_emptyCoord) &&
+//					coord.length(m_emptyCoord) <= 1.1f)
+//			 {
+//				 if(m_state == SlidingState::kNormal)
+//				 {
+//					 m_state = SlidingState::kMovingInPlay;
+//					 this->movePiece
+//					 (coord, 0.2f,
+//						[=](Coord prevEmptyCoord) // 다 움직였을 때 올바른가 검사.
+//						{
+//							m_state = SlidingState::kNormal;
+//							CCLog("com");
+//							Coord coord(-1, -1);
+//							
+//							bool valid = true;
+//							for(int y=0; y<m_pieces.size(); y++)
+//							{
+//								for(int x=0; x<m_pieces[y].size(); x++)
+//								{
+//									CCMenuItemLambda* menuItem = m_pieces[y][x];
+//									if(!(Coord(x, y) == Coord((int)menuItem->getUserData()%10, (int)menuItem->getUserData()/10)))
+//									{
+//										valid = false;
+//										break;
+//									}
+//								}
+//							}
+//							if(valid)
+//							{
+//								
+//								CCSprite* successSprite = CCSprite::create("bonusgame_succes.png");
+//								successSprite->setPosition(ccp(240, 160));
+//								addChild(successSprite);
+//								CCLog("correct!!");
+//								m_menu->setTouchEnabled(false);
+//								unscheduleUpdate();
+//								mySGD->setStar(mySGD->getStar() + 1);
+//								myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+//																		{
+//																			addChild(KSTimer::create(3.f, [=](){
+//																				m_hideFunction();
+//																			}));
+//																		});
+//							}
+//						});
+//				 }
+//			 }
+			 
+			 
+			 
 																																	});
 		item->setUserData((void*)(y*10 + x));
 		m_menu->addChild(item);
@@ -183,7 +292,7 @@ bool SlidingPuzzle::init()
 		_texture->release();
 		spr->setAnchorPoint(ccp(0.5,0.5));
 		spr->setPosition(ccp(cutx/2,cuty/2));
-		addChild(spr,1000);
+		containerNode->addChild(spr,1000);
 		
 		
 		//메모리해제
@@ -209,7 +318,7 @@ bool SlidingPuzzle::init()
 		_texture->release();
 		spr->setAnchorPoint(ccp(0.5,0.5));
 		spr->setPosition(ccp(cutx/2,cuty/2));
-		addChild(spr,1000);
+		containerNode->addChild(spr,1000);
 		//메모리해제
 		st->release();
 	}
@@ -235,7 +344,7 @@ bool SlidingPuzzle::init()
 		_texture->release();
 		spr->setAnchorPoint(ccp(0.5,0.5));
 		spr->setPosition(ccp(cutx/2,cuty/2));
-		addChild(spr,1000);
+		containerNode->addChild(spr,1000);
 		//메모리해제
 		st->release();
 	}
@@ -259,7 +368,7 @@ bool SlidingPuzzle::init()
 		_texture->release();
 		spr->setAnchorPoint(ccp(0.5,0.5));
 		spr->setPosition(ccp(cutx/2,cuty/2));
-		addChild(spr,1000);
+		containerNode->addChild(spr,1000);
 		
 		//메모리해제
 		st->release();
@@ -268,10 +377,10 @@ bool SlidingPuzzle::init()
 	//메모리해제
 	img->release();
 	
+	containerNode->setPosition(ccp(30, 25));
 	m_pieces[0][PUZZLE_WIDTH - 1]->setVisible(false);
 	m_emptyCoord.y = 0;
 	m_emptyCoord.x = PUZZLE_WIDTH - 1;
-	schedule(schedule_selector(SlidingPuzzle::shuffle));
 	m_state = SlidingState::kShuffleReady;
 	
 	Coord movingPiece;
@@ -299,7 +408,7 @@ bool SlidingPuzzle::init()
 	}
 	
 	m_state = SlidingState::kMovingInShuffling;
-	shufflePieces(140, movingPiece);
+	shufflePieces(2, movingPiece);
 //	movePiece(Coord(3, 0), [=]()
 //						{
 //							CCLog("%d %d", m_emptyCoord.x, m_emptyCoord.y);
@@ -308,10 +417,15 @@ bool SlidingPuzzle::init()
 //													CCLog("%d %d", m_emptyCoord.x, m_emptyCoord.y);
 //												});
 //						});
-	scheduleUpdate();
 	return true;
 }
 
+void SlidingPuzzle::startSchedule()
+{
+	
+	schedule(schedule_selector(SlidingPuzzle::shuffle));
+	
+}
 void SlidingPuzzle::shuffle(float dt)
 {
 	
@@ -320,13 +434,26 @@ void SlidingPuzzle::shuffle(float dt)
 void SlidingPuzzle::update(float dt)
 {
 	m_timer += dt;
+	if(m_remainTime - m_timer <= 0.f)
+	{
+		CCSprite* failSprite = CCSprite::create("bonusgame_fail.png");
+		failSprite->setPosition(ccp(240, 160));
+		addChild(failSprite);
+		m_menu->setTouchEnabled(false);
+		addChild(KSTimer::create(3.f, [=]()
+														 {
+															 m_hideFunction();
+														 }));
+		unscheduleUpdate();
+	}
 	
-	m_timeFnt->setString(CCString::createWithFormat("%.1f", m_timer)->getCString());
+	m_timeFnt->setString(CCString::createWithFormat("%.1f", m_remainTime - m_timer)->getCString());
 }
 
 void SlidingPuzzle::movePiece(Coord piece, float duration, const std::function<void(Coord)>& noti )
 {
 	Coord emptyCoord = m_emptyCoord;
+	
 	CCPoint a = m_pieces[piece.y][piece.x]->getPosition();
 	CCPoint b = m_pieces[m_emptyCoord.y][m_emptyCoord.x]->getPosition();
 	m_emptyCoord = piece;
@@ -339,16 +466,16 @@ void SlidingPuzzle::movePiece(Coord piece, float duration, const std::function<v
 	}
 	else
 	{
+		m_pieces[emptyCoord.y][emptyCoord.x]->setPosition(a);
+		std::swap(m_pieces[piece.y][piece.x], m_pieces[emptyCoord.y][emptyCoord.x]);
 		addChild(KSGradualValue<CCPoint>::create(a,
 																						 b, duration,
 																						 [=](CCPoint t)
 																						 {
-																							 m_pieces[piece.y][piece.x]->setPosition(t);
+																							 m_pieces[emptyCoord.y][emptyCoord.x]->setPosition(t);
 																						 },
 																						 [=](CCPoint t)
 																						 {
-																							 m_pieces[emptyCoord.y][emptyCoord.x]->setPosition(a);
-																							 std::swap(m_pieces[piece.y][piece.x], m_pieces[emptyCoord.y][emptyCoord.x]);
 																							 noti(emptyCoord);
 																						 }));
 	}
@@ -390,7 +517,10 @@ void SlidingPuzzle::shufflePieces(int loop, Coord coord)
 							{
 								if(m_emptyCoord == Coord(PUZZLE_WIDTH - 1, 0))
 								{
+									// 섞기가 끝났다.
 									m_state = SlidingState::kNormal;
+									m_menu->setTouchEnabled(true);
+									scheduleUpdate();
 									return;
 								}
 								Coord movingPiece;
