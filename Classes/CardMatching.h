@@ -29,7 +29,7 @@ public:
 		CCScene *scene = CCScene::create();
 		
 		// 'layer' is an autorelease object
-		CardMatching *layer = CardMatching::create();
+		CardMatching *layer = CardMatching::create(0, nullptr);
 		layer->setAnchorPoint(ccp(0.5,0));
 		layer->setScale(myDSH->screen_convert_rate);
 		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
@@ -40,15 +40,30 @@ public:
 	
 	CardMatching() :
 	PUZZLE_COLS(5),
-	PUZZLE_ROWS(4)
+	PUZZLE_ROWS(4),
+	m_remainTime(50)
 	{}
 	virtual ~CardMatching()
 	{
 		
 	}
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init();
-	CREATE_FUNC(CardMatching);
+	virtual bool init(int priority, const std::function<void(void)>& hideFunction);
+	static CardMatching* create(int priority, const std::function<void(void)>& hideFunction)
+	{
+    CardMatching* pRet = new CardMatching();
+    if (pRet && pRet->init(priority, hideFunction))
+    {
+			pRet->autorelease();
+			return pRet;
+    }
+    else
+    {
+			delete pRet;
+			pRet = NULL;
+			return NULL;
+    }
+	}
 	enum CuttingType
 	{
 		kOriginal = 1,
@@ -57,6 +72,10 @@ public:
 	void splitImage(CuttingType ct, const std::string& fileName, int cols, int rows, int padding, int margin, const std::function<void(CCImage*, int)>&);
 	void update(float dt);
 protected:
+	CCClippingNode* m_thiz;
+	int m_priority;
+	std::function<void(void)> m_hideFunction;
+	float m_remainTime;
 	const int PUZZLE_COLS, PUZZLE_ROWS;
 	CCMenuLambda* m_menu;
 	std::mt19937 m_rEngine;

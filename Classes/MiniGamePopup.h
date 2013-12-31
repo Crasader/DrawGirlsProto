@@ -39,7 +39,7 @@ private:
 	void menuAction(CCObject* pSender);
 	
 	std::function<void(void)> end_function;
-	
+	std::function<void(void)> miniGameStart;
 	MiniGameCode game_code;
 	
 	CCSprite* left_curtain;

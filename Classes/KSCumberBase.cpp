@@ -1439,7 +1439,7 @@ void KSCumberBase::bossDieBomb(float dt)
 		
 		if(maxValue == m_bossDie.m_bossDieFrameCount)
 		{
-			auto ret = KS::loadCCBI<CCSprite*>(this, "fx_boss_die.ccbi");
+			auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");
 			
 			
 			CCPoint t = getPosition();

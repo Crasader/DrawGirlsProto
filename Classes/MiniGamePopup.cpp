@@ -9,7 +9,9 @@
 #include "MiniGamePopup.h"
 #include "DataStorageHub.h"
 #include "CountingGame.h"
-
+#include "Dodge.h"
+#include "SlidingPuzzle.h"
+#include "CardMatching.h"
 
 enum MiniGameZorder{
 	kMiniGameZorder_game = 1,
@@ -64,7 +66,6 @@ bool MiniGamePopup::init(MiniGameCode t_code, function<void(void)> t_end_func)
 	content_back = CCSprite::create("bonusgame_tipbox.png");
 	content_back->setPosition(ccp(650,150));
 	addChild(content_back, kMiniGameZorder_content);
-	
 	CCSprite* n_start = CCSprite::create("bonusgame_start.png");
 	CCSprite* s_start = CCSprite::create("bonusgame_start.png");
 	s_start->setColor(ccGRAY);
@@ -181,19 +182,31 @@ void MiniGamePopup::menuAction(CCObject *pSender)
 	{
 		// counting_game = counting_game(-180, bind(&MiniGamePopup::hidePopup, this));
 		// addChild(counting_game, kMiniGameZorder_game);
+		CountingGame* game = CountingGame::create(-180, bind(&MiniGamePopup::hidePopup, this));
+		miniGameStart = bind(&CountingGame::startSchedule, game);
+		addChild(game, kMiniGameZorder_game);
 	}
 	else if(game_code == kMiniGameCode_slidingPuzzle)
 	{
 		// sliding_puzzle = sliding_puzzle(-180, bind(&MiniGamePopup::hidePopup, this));
 		// addChild(sliding_puzzle, kMiniGameZorder_game);
+		SlidingPuzzle* slidingPuzzle = SlidingPuzzle::create(-180, bind(&MiniGamePopup::hidePopup, this));
+		miniGameStart = bind(&SlidingPuzzle::startSchedule, slidingPuzzle);
+		addChild(slidingPuzzle, kMiniGameZorder_game);
 	}
 	else if(game_code == kMiniGameCode_cardMatch)
 	{
 		// card_match = card_match(-180, bind(&MiniGamePopup::hidePopup, this));
 		// addChild(card_match, kMiniGameZorder_game);
+		
+		CardMatching* card = CardMatching::create(-180, bind(&MiniGamePopup::hidePopup, this));
+		miniGameStart = bind(&CardMatching::scheduleUpdate, card);
+		addChild(card, kMiniGameZorder_game);
 	}
 	else if(game_code == kMiniGameCode_dodge)
 	{
+		Dodge* dodge = Dodge::create(-180, bind(&MiniGamePopup::hidePopup, this));
+		addChild(dodge, kMiniGameZorder_game);
 		// dodge = dodge(-180, bind(&MiniGamePopup::hidePopup, this));
 		// addChild(dodge, kMiniGameZorder_game);
 	}
@@ -222,7 +235,7 @@ void MiniGamePopup::startGame()
 	right_curtain->setVisible(false);
 	title_bonusgame->removeFromParent();
 	content_back->removeFromParent();
-	
+	miniGameStart();
 	// mini_game->startGame();
 }
 
@@ -247,3 +260,11 @@ void MiniGamePopup::registerWithTouchDispatcher ()
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 	pDispatcher->addTargetedDelegate(this, -170, true);
 }
+
+
+
+
+
+
+
+

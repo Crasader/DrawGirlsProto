@@ -9,6 +9,7 @@
 #include "CardMatching.h"
 #include "PuzzleCache.h"
 #include "KSUtil.h"
+#include "StarGoldData.h"
 
 void CardMatching::splitImage(CuttingType ct, const std::string& fileName, int cols, int rows, int padding, int margin,
 															const std::function<void(CCImage*, int)>& callBack)
@@ -90,10 +91,28 @@ void CardMatching::splitImage(CuttingType ct, const std::string& fileName, int c
 	img->release();
 }
 
-bool CardMatching::init()
+bool CardMatching::init(int priority, const std::function<void(void)>& hideFunction)
 {
 	CCLayer::init();
+	CCDrawNode* shape = CCDrawNode::create();
 	
+	CCPoint pts[4];
+	pts[0] = ccp(25, 320 - 297);
+	pts[1] = ccp(366, 320 - 297);
+	pts[2] = ccp(366, 320 - 24);
+	pts[3] = ccp(25, 320 - 24);
+	shape->drawPolygon(pts, 4, ccc4f(1, 1, 1, 1), 0, ccc4f(1, 0, 0, 1));
+
+	CCSprite* back = CCSprite::create("bonusgame_back.png");
+	back->setPosition(ccp(240, 160));
+	addChild(back);
+	// add shape in stencil
+	m_thiz = CCClippingNode::create();
+	m_thiz->setAnchorPoint(ccp(0.5, 0.5));
+	m_thiz->setStencil(shape);
+	this->addChild(m_thiz);
+	m_priority = priority;
+	m_hideFunction = hideFunction;
 	m_correctCount = 0;
 	m_timer = 0;
 	m_state = MatchingState::kReady;
@@ -101,16 +120,17 @@ bool CardMatching::init()
 	m_rEngine.seed(rd());
 	
 	m_timeFnt = CCLabelBMFont::create("", "etc_font.fnt");
-	m_timeFnt->setPosition(ccp(390, 100));
+	m_timeFnt->setPosition(ccp(385, 270));
 	addChild(m_timeFnt);
 	
 	setTouchEnabled(true);
 	m_menu = CCMenuLambda::create();
 	m_menu->setPosition(ccp(0, 0));
 	m_menu->setPropaOnBegan(true);
-	
-	addChild(m_menu);
-	
+	m_menu->setTouchPriority(m_priority);
+	CCNode* containerNode = CCNode::create();
+	containerNode->addChild(m_menu);
+	addChild(containerNode);
 	splitImage(CuttingType::kFace, "puzzle4_face.png", PUZZLE_COLS, PUZZLE_ROWS, 172, 86,
 						 [=](CCImage* st, int loop)
 						 {
@@ -136,7 +156,7 @@ bool CardMatching::init()
 //																																							 });
 								 item->setOpacity(0);
 								 item->setUserData((void*)loop); // 짝.
-								 addChild(item);
+								 containerNode->addChild(item);
 								 m_matchCards.push_back(item);
 								 loop *= 2;
 								 loop += weight;
@@ -168,7 +188,11 @@ bool CardMatching::init()
 							 
 							 _texture->release();
 							 pps2->setColor(ccc3(166, 166, 166));
-							 CCMenuItemSpriteLambda* item = CCMenuItemSpriteLambda::create(pps, pps2,
+							 
+							 
+							 CCSprite* ppps = CCSprite::create("bonusgame_samecard_back.png");
+							 CCSprite* ppps2 = CCSprite::create("bonusgame_samecard_back.png");
+							 CCMenuItemSpriteLambda* item = CCMenuItemSpriteLambda::create(ppps, ppps2,
 																																						 [=](CCObject* s)
 																																						 {
 																																							 CCMenuItemSpriteLambda* menuItem = (CCMenuItemSpriteLambda*)s;
@@ -197,10 +221,19 @@ bool CardMatching::init()
 																																										 if(m_correctCount == PUZZLE_ROWS * PUZZLE_COLS / 2)
 																																										 {
 																																											 CCLog("END!!");
-																																											 addChild(KSTimer::create(3.f, [=]()
-																																																								{
-																																																									CCDirector::sharedDirector()->popScene();
-																																																								}));
+																																											 CCSprite* successSprite = CCSprite::create("bonusgame_succes.png");
+																																											 successSprite->setPosition(ccp(240, 160));
+																																											 addChild(successSprite);
+																																											 CCLog("correct!!");
+																																											 m_menu->setTouchEnabled(false);
+																																											 unscheduleUpdate();
+																																											 mySGD->setStar(mySGD->getStar() + 1);
+																																											 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+																																																					 {
+																																																						 addChild(KSTimer::create(3.f, [=](){
+																																																							 m_hideFunction();
+																																																						 }));
+																																																					 });
 																																										 }
 																																									 }
 																																									 else
@@ -235,8 +268,8 @@ bool CardMatching::init()
 							 item->setUserData(m_matchCards[loop]);
 						 });
 	
+	containerNode->setPosition(ccp(30, 25));
 	
-	scheduleUpdate();
 	return true;
 }
 
@@ -245,6 +278,18 @@ bool CardMatching::init()
 void CardMatching::update(float dt)
 {
 	m_timer += dt;
-	
-	m_timeFnt->setString(CCString::createWithFormat("%.1f", m_timer)->getCString());
+	if(m_remainTime - m_timer <= 0)
+	{
+		
+		CCSprite* failSprite = CCSprite::create("bonusgame_fail.png");
+		failSprite->setPosition(ccp(240, 160));
+		addChild(failSprite);
+		m_menu->setTouchEnabled(false);
+		addChild(KSTimer::create(3.f, [=]()
+														 {
+															 m_hideFunction();
+														 }));
+		unscheduleUpdate();
+	}
+	m_timeFnt->setString(CCString::createWithFormat("%.1f", m_remainTime - m_timer)->getCString());
 }

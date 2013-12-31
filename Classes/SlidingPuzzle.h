@@ -58,7 +58,7 @@ public:
 		CCScene *scene = CCScene::create();
 		
 		// 'layer' is an autorelease object
-		SlidingPuzzle *layer = SlidingPuzzle::create();
+		SlidingPuzzle *layer = SlidingPuzzle::create(0, nullptr);
 		layer->setAnchorPoint(ccp(0.5,0));
 		layer->setScale(myDSH->screen_convert_rate);
 		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
@@ -70,17 +70,37 @@ public:
 	SlidingPuzzle() : m_pieces(4, vector<CCMenuItemLambda*>(5)), // 4 by 5,
 	PUZZLE_WIDTH(5),
 	PUZZLE_HEIGHT(4),
-	m_timer(0)
+	m_timer(0),
+	m_remainTime(3000)
 	{
 		
 	}
 	virtual ~SlidingPuzzle();
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init();
-	CREATE_FUNC(SlidingPuzzle);
+	void startSchedule();
+	virtual bool init(int priority, const std::function<void(void)>& hideFunction);
+	static SlidingPuzzle* create(int priority, const std::function<void(void)>& hideFunction)
+	{
+    SlidingPuzzle* pRet = new SlidingPuzzle();
+    if (pRet && pRet->init(priority, hideFunction))
+    {
+			pRet->autorelease();
+			return pRet;
+    }
+    else
+    {
+			delete pRet;
+			pRet = NULL;
+			return NULL;
+    }
+	}
 	void shuffle(float dt);
 	void update(float dt);
 	//virtual void registerWithTouchDispatcher();
+	virtual void registerWithTouchDispatcher()
+	{
+		///		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, m_priority, true);
+	}
 	void movePiece(Coord piece, float t, const std::function<void(Coord)>& noti );
 	bool isValidCoord(Coord coord){
 		return 0 <= coord.x && coord.x < PUZZLE_WIDTH &&
@@ -88,6 +108,10 @@ public:
 	}
 	void shufflePieces(int loop, Coord coord);
 protected:
+	float m_remainTime;
+	std::function<void(void)> m_hideFunction;
+	CCClippingNode* m_thiz;
+	int m_priority;
 	CCMenuLambda* m_menu;
 	vector<vector<CCMenuItemLambda*> > m_pieces;
 	Coord m_emptyCoord;
