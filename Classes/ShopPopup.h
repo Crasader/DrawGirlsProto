@@ -12,6 +12,8 @@
 #include "cocos2d.h"
 #include "hspConnector.h"
 #include "cocos-ext.h"
+#include <map>
+#include "KSProtect.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -62,6 +64,13 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	LoadingLayer* loading_layer;
+	
+	vector<KSProtectVar<int>> index_to_ruby;
+	vector<KSProtectVar<int>> index_to_gold;
+	vector<KSProtectVar<int>> index_to_heart;
+	map<KSProtectVar<int>, KSProtectVar<int>> cash_to_ruby;
+	map<KSProtectVar<int>, KSProtectVar<int>> ruby_to_gold;
+	map<KSProtectVar<int>, KSProtectVar<int>> ruby_to_heart;
 	
 	CCSprite* main_case;
 	CCTableView* character_table;

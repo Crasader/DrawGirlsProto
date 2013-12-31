@@ -639,7 +639,7 @@ void MainFlowScene::setTop()
 	heart_menu->setPosition(ccp(178,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(heart_menu);
 	
-	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
+	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(237,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_label);
 	
@@ -656,7 +656,7 @@ void MainFlowScene::setTop()
 	gold_menu->setPosition(ccp(271,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_menu);
 	
-	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "etc_font.fnt", 0.3f, "%d");
+	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(326,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_label);
 	
@@ -673,7 +673,7 @@ void MainFlowScene::setTop()
 	ruby_menu->setPosition(ccp(356,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_menu);
 	
-	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "etc_font.fnt", 0.3f, "%d");
+	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
 	friend_point_label->setPosition(ccp(410,top_case->getContentSize().height/2.f));
 	top_case->addChild(friend_point_label);
 	

@@ -86,11 +86,11 @@ void ScrollMenu::ccTouchEnded(CCTouch *touch, CCEvent* event)
 	
 	CCPoint difference = ccpSub(m_touchesEnd, m_touchesStart);
 	
-	if (difference.x > 5.0f || difference.y > 5.0f )
+	if (difference.x > 10.0f || difference.y > 10.0f )
 	{
 		CCMenu::ccTouchCancelled(touch, event);
 	}
-	else if (difference.x < -5.0f || difference.y < -5.0f)
+	else if (difference.x < -10.0f || difference.y < -10.0f)
 	{
 		CCMenu::ccTouchCancelled(touch, event);
 	}

@@ -1,90 +1,77 @@
 #pragma once
-#include "crypto/CCCrypto.h"
+//#include "crypto/CCCrypto.h"
 
 #include <type_traits>
-
+#include <string>
+#include <cstdlib>
 class KSProtectStr
 {
 	
 private:
-	int m_plainTextLength;
-	int m_bufferLength;
-	void* m_buff;
-	int m_cipherTextLength;
+	std::string m_buff;
 private:
 	void encrypt(const std::string& data)
 	{
-		const char* key = "cocos2dx";
-		m_plainTextLength = data.size();
-		m_bufferLength = m_plainTextLength + CCCrypto::getAES256KeyLength();
-		int keyLen = strlen(key);
-		m_buff = malloc(m_bufferLength);
-		m_cipherTextLength = CCCrypto::encryptAES256(data.c_str(), m_plainTextLength, m_buff,
-																								 m_bufferLength, key, keyLen);
+		m_buff = data;
 	}
 	
 public:
 	
 	std::string getV() const
 	{
-		const char* key = "cocos2dx";
-		int keyLen = strlen(key);
-		void* plaintext2 = (char*)malloc(m_bufferLength);
-    int plaintextLength2 = CCCrypto::decryptAES256(m_buff, m_cipherTextLength, plaintext2,
-																									 m_bufferLength, key, keyLen);
-		std::string ret = (char*)plaintext2;
-		free(plaintext2);
-		return ret;
+		return m_buff;
 	}
 	explicit KSProtectStr(const std::string& v)
 	{
 		encrypt(v);
 	}
+	KSProtectStr()
+	{
+		encrypt("");
+	}
 	~KSProtectStr()
 	{
-		free((void*)m_buff);
+//		free((void*)m_buff);
 	}
 };
 template<typename T>
 class KSProtectVar
 {
 private:
-	int m_plainTextLength;
-	int m_bufferLength;
-	void* m_buff;
-	int m_cipherTextLength;
+	T m_buff;
 private:
 	void encrypt(const T& data)
 	{
-		const char* key = "cocos2dx";
-		m_plainTextLength = sizeof(T);
-		m_bufferLength = m_plainTextLength + CCCrypto::getAES256KeyLength();
-		int keyLen = strlen(key);
-		m_buff = new char[m_bufferLength];
-		m_cipherTextLength = CCCrypto::encryptAES256(&data, m_plainTextLength, m_buff,
-																								 m_bufferLength, key, keyLen);
+		m_buff = data;
+		//		m_cipherTextLength = CCCrypto::encryptAES256(&data, m_plainTextLength, m_buff,
+//																								 m_bufferLength, key, keyLen);
 	}
 	
 public:
 	
 	T getV() const
 	{
-		const char* key = "cocos2dx";
-		int keyLen = strlen(key);
-		T* plaintext2 = (T*)(new char[m_bufferLength]);
-    int plaintextLength2 = CCCrypto::decryptAES256(m_buff, m_cipherTextLength, plaintext2,
-																									 m_bufferLength, key, keyLen);
-		T ret = *plaintext2;
-		delete [] plaintext2;
-		return ret;
+		return m_buff;
 	}
-	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v)
+	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v) : m_buff(0)
 	{
 		encrypt(v);
 	}
+	KSProtectVar(const KSProtectVar<T>& copyCtor)
+	{
+		encrypt(copyCtor.getV());
+	}
+	KSProtectVar() : m_buff(0)
+	{
+		encrypt(static_cast<T>(0));
+	}
 	~KSProtectVar()
 	{
-		delete [] m_buff;
+//		if(m_buff)
+//		{
+//			free((void*)m_buff);
+//			m_buff = 0;
+//		}
 	}
 	T operator+(const T& arg) const
 	{
@@ -123,7 +110,7 @@ public:
 	}
 	T operator=(const T& arg)
 	{
-		encrypt(arg);
+		*this = KSProtectVar<T>(arg);
 		return getV();
 	}
 	T operator=(const KSProtectVar<T>& arg)

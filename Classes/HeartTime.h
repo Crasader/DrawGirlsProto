@@ -19,7 +19,7 @@ public:
 	bool isStartable ();
 private:
 	vector <CCSprite*> heart_list;
-	CCLabelTTF * state_label;
+	CCLabelBMFont * state_label;
 	bool is_checking;
 	void checkingTime ();
 	void myInit ();

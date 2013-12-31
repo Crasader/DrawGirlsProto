@@ -725,7 +725,8 @@ PlayUI::~ PlayUI ()
 }
 void PlayUI::addScore (int t_score)
 {
-	score_label->setString(CCString::createWithFormat("%d", atoi(score_label->getString()) + t_score)->getCString());
+	score_value = score_value.getV() + t_score;
+	score_label->setString(CCString::createWithFormat("%d", int(score_value.getV()))->getCString());
 }
 void PlayUI::decreasePercentage ()
 {
@@ -1581,6 +1582,8 @@ void PlayUI::setUseFriendCard()
 void PlayUI::myInit ()
 {
 	isGameover = false;
+	
+	score_value = 0;
 	
 	percentage_decrease_cnt = 0;
 	combo_cnt = 0;
