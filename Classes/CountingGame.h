@@ -10,7 +10,7 @@ USING_NS_CC;
 class CountingGame : public CCLayer
 {
 public:
-	CountingGame()
+	CountingGame() : m_remainTime(5)
 	{}
 	virtual ~CountingGame()
 	{
@@ -56,6 +56,10 @@ public:
 	void update(float dt);
 	void createObject(float dt);
 protected:
+
+	CCLabelBMFont* m_timeFnt;
+	int m_startTime;
+	int m_remainTime;
 	CCClippingNode* m_thiz;
 	int m_priority;
 	std::function<void(void)> m_hideFunction;

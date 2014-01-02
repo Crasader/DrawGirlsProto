@@ -26,7 +26,7 @@ void CountingGame::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEve
 
 void CountingGame::startSchedule()
 {
-	schedule(schedule_selector(CountingGame::createObject));
+	schedule(schedule_selector(CountingGame::createObject), 1/30.f);
 }
 bool CountingGame::init(int priority, const std::function<void(void)>& hideFunction)
 {
@@ -55,30 +55,51 @@ bool CountingGame::init(int priority, const std::function<void(void)>& hideFunct
 	setTouchEnabled(true);
 	std::random_device rd;
 	m_rEngine.seed(rd());
-	
-	uniform_int_distribution<> dist(15, 23);
+	normal_distribution<> dist(20, 4);
 	m_goalCount = dist(m_rEngine);
 	m_menu = CCMenuLambda::create();
 	m_menu->setTouchEnabled(true);
 	m_menu->setTouchPriority(m_priority);
-//	m_menu->setPosition(ccp(0, 0));
+	m_menu->setPosition(ccp(0, 0));
 	addChild(m_menu, 1);
+	
+	m_timeFnt = CCLabelBMFont::create(CCString::createWithFormat("%d", m_remainTime)->getCString(), "etc_font.fnt");
+	m_timeFnt->setPosition(ccp(430, 270));
+	addChild(m_timeFnt, 2);
+	
 	return true;
 }
 
 void CountingGame::update(float dt)
 {
 	
+	auto end = chrono::system_clock::now();
+	int timer = chrono::system_clock::to_time_t(end) - m_startTime;
+	m_timeFnt->setString(CCString::createWithFormat("%d", MAX(0, m_remainTime - timer))->getCString());
+	if(m_remainTime < timer) // timeover
+	{
+		CCSprite* failSprite = CCSprite::create("bonusgame_fail.png");
+		failSprite->setPosition(ccp(240, 160));
+		addChild(failSprite);
+		m_menu->setTouchEnabled(false);
+		addChild(KSTimer::create(3.f, [=]()
+														 {
+															 m_hideFunction();
+														 }));
+		unscheduleUpdate();
+	}
 }
 void CountingGame::createObject(float dt)
 {
-	uniform_int_distribution<> distX(30, 480-30);
-	uniform_int_distribution<> distY(30, 320-30);
+	uniform_int_distribution<> distX(50, 480-130);
+	uniform_int_distribution<> distY(50, 320-50);
 	float x, y;
 
+	int loopCount = 0;
 	while(1)
 	{
 		bool coll = false;
+		loopCount++;
 		x = distX(m_rEngine);
 		y = distY(m_rEngine);
 		for(auto i : m_objects)
@@ -95,21 +116,38 @@ void CountingGame::createObject(float dt)
 		{
 			break;
 		}
+		if(loopCount >= 100)
+		{
+			m_goalCount = m_objects.size(); // 전부 추가했다고 봄.
+			break;
+		}
+		
 	}
-	auto ccbi = KS::loadCCBI<CCSprite*>(this, "mob_cow.ccbi");
-	CCSprite* t = ccbi.first;
-	t->setPosition(ccp(x, y));
-	m_objects.push_back(t);
-	addChild(t);
+	if(loopCount < 100)
+	{
+		auto ccbi = KS::loadCCBI<CCSprite*>(this, "mob_cow.ccbi");
+		CCSprite* t = ccbi.first;
+		t->setPosition(ccp(x, y));
+		m_objects.push_back(t);
+		m_thiz->addChild(t);
+	}
 	if(m_objects.size() >= m_goalCount)
 	{
 		unschedule(schedule_selector(CountingGame::createObject));
+		
 		addChild(KSTimer::create(2.f, [=]()
 														 {
+															 auto end = chrono::system_clock::now();
+															 m_startTime = chrono::system_clock::to_time_t(end);
+															 scheduleUpdate();
 															 for(auto i : m_objects)
 															 {
 																 i->setVisible(false);
 															 }
+															 CCSprite* quiz = CCSprite::create("bonusgame_bosscount_back.png");
+															 quiz->setPosition(ccp(190, 160));
+															 m_thiz->addChild(quiz);
+															 
 															 int number = m_objects.size();
 															 uniform_int_distribution<> dist(0, 3);
 															 int correctIndex = dist(m_rEngine);
@@ -119,6 +157,7 @@ void CountingGame::createObject(float dt)
 															 {
 																 corrects[i] += (i - correctIndex) * 3;
 															 }
+															 CCPoint examplePositions[] = {ccp(120, 160), {303, 160}, {120, 120}, {303, 120}};
 															 for(int i=0; i<corrects.size(); i++)
 															 {
 																 
@@ -162,11 +201,11 @@ void CountingGame::createObject(float dt)
 																			unscheduleUpdate();
 																		}
 																	});
-																 item1->setPosition(ccp(240, 50));
+																 item1->setPosition(examplePositions[i]);
 																 m_menu->addChild(item1);
 															 }
-															 m_menu->alignItemsHorizontallyWithPadding(70.f);
-															 m_menu->alignItemsHorizontally();
+//															 m_menu->alignItemsHorizontallyWithPadding(70.f);
+//															 m_menu->alignItemsHorizontally();
 														 }));
 	}
 }
