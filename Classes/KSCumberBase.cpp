@@ -1233,12 +1233,26 @@ void KSCumberBase::cumberAttack(float dt)
 	
 	if(exeProb == 0 && m_state == CUMBERSTATEMOVING)
 	{
-		// 부수기 공격이 시행됐는데, 크래시 공격이 없다면 텔포 해야됨
+		// 부수기 공격이 시행됐는데, 크래시 공격이 없다면포 텔포 해야됨
 		if(crashAttack && selectedAttacks.empty())
+		
 		{
-			
+			std::string patternData = R"({
+	"atype" : "special",
+	"pattern" : "1007",
+	"percent" : 1,
+	"target" : "no"})";
+
+		Json::Reader reader;
+		Json::Value attackCode;
+		reader.parse(patternData, attackCode);
+			int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+			if(ret == 1)
+			{
+				attackBehavior(attackCode);
+			}
 		}
-		if(!selectedAttacks.empty())
+		else if(!selectedAttacks.empty())
 		{
 			Json::Value attackCode;
 			bool searched = false;
@@ -1430,7 +1444,7 @@ void KSCumberBase::bossDieBomb(float dt)
 	if(find(m_bossDie.m_bossDieBombFrameNumbers.begin(), m_bossDie.m_bossDieBombFrameNumbers.end(), m_bossDie.m_bossDieFrameCount)
 		 != m_bossDie.m_bossDieBombFrameNumbers.end())
 	{
-		auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+		auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi");
 		CCPoint t = getPosition();
 		t.x += m_well512.GetFloatValue(-100.f, 100.f);
 		t.y += m_well512.GetFloatValue(-100.f, 100.f);
@@ -1440,8 +1454,6 @@ void KSCumberBase::bossDieBomb(float dt)
 		if(maxValue == m_bossDie.m_bossDieFrameCount)
 		{
 			auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");
-			
-			
 			CCPoint t = getPosition();
 			ret.first->setPosition(t);
 			getParent()->addChild(ret.first, 11);
