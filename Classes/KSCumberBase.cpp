@@ -1122,21 +1122,33 @@ void KSCumberBase::cumberAttack(float dt)
 {
 //	myJack->get
 	
+	//분노카운터,재공격카운터 계속 증가
+	m_reAttackCnt++;
+	m_furyCnt++;
+	
 	if(m_slience) // 침묵 상태면
 	{
 		return;
 	}
-	float gainPercent = myGD->Fcommunication("UI_getMapPercentage") * 100.f;
-	float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
 //	CCLog("%f %f %d", distance, gainPercent, m_crashCount);
 	bool crashAttack = false;
 
-	if(m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance)
-	{
-		float w = ProbSelector::sel(m_furyRule.percent, 1.0f - m_furyRule.percent, 0.0);
-		if(w == 0)
+	//거리분노룰 - 분노카운터와 리어택카운터가 0이상일때, 보스-유저의 거리가 떨어져있으면 부수기공격
+	if(m_furyCnt > 0 && m_reAttackCnt > 0){
+		
+		float gainPercent = myGD->Fcommunication("UI_getMapPercentage") * 100.f;
+		float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
+		
+		if(m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance)
 		{
-			crashAttack = true;
+			float w = ProbSelector::sel(m_furyRule.percent, 1.0f - m_furyRule.percent, 0.0);
+			if(w == 0)
+			{
+				crashAttack = true;
+				
+				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
+				m_furyCnt = -600;
+			}
 		}
 	}
 	
@@ -1188,11 +1200,25 @@ void KSCumberBase::cumberAttack(float dt)
 		float attackProb = originalAttackProb;
 		
 		// 선을 긋고 있을 땐 공격확률 높임
+		if(myGD->getJackState()==jackStateDrawing){
+			
+			m_adderCnt++;
+			
+			//선긋기 시작한지 4초이후 부터 공격확률을 높임
+			if(m_adderCnt > 240){
+				attackProb += 0.1;
+			}
+		}else{
+			//안그을땐 초기화
+			m_adderCnt = 0;
+		}
+		
 		// 많이 맞았으면 공격확률 높임.
-		if(myGD->getJackState() == jackStateDrawing ||  getLife() / getTotalLife() <= 0.3f)
+		if(getLife() / getTotalLife() <= 0.3f)
 		{
 			attackProb += aiProbAdder();
 		}
+		
 		auto ps = ProbSelector({attackProb, 1.0 - attackProb});
 
 		exeProb = ps.getResult();
@@ -1229,9 +1255,10 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 
 	}
-	// 확률로.
+	// 확률로
 	
-	if(exeProb == 0 && m_state == CUMBERSTATEMOVING)
+	//재공격카운터 0이상일때.
+	if(exeProb == 0 && m_state == CUMBERSTATEMOVING && m_reAttackCnt>=0)
 	{
 		// 부수기 공격이 시행됐는데, 크래시 공격이 없다면포 텔포 해야됨
 		if(crashAttack && selectedAttacks.empty())
@@ -1379,6 +1406,9 @@ void KSCumberBase::cumberAttack(float dt)
 				if(ret == 1)
 				{
 					attackBehavior(attackCode);
+					
+					//한번 공격후 3초간 재공격 하지 않음.
+					m_reAttackCnt = -180;
 				}
 			}
 			
