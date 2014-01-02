@@ -177,7 +177,7 @@ void MiniGamePopup::menuAction(CCObject *pSender)
 		return;
 	
 	is_menu_enable = false;
-	
+	miniGameStart = nullptr;
 	if(game_code == kMiniGameCode_counting)
 	{
 		// counting_game = counting_game(-180, bind(&MiniGamePopup::hidePopup, this));
@@ -235,7 +235,8 @@ void MiniGamePopup::startGame()
 	right_curtain->setVisible(false);
 	title_bonusgame->removeFromParent();
 	content_back->removeFromParent();
-	miniGameStart();
+	if(miniGameStart)
+		miniGameStart();
 	// mini_game->startGame();
 }
 
