@@ -2045,20 +2045,43 @@ void KSCumberBase::settingFuryRule()
 void KSCumberBase::applyAutoBalance()
 {
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
-	int balanceN = 10;
+	int balanceN = 5;
 	float downLimit = 0.5f;
+	
 	//
 	ostringstream oss;
 	oss << mySD->getSilType();
 	std::string playcountKey = std::string("playcount_") + oss.str();
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
+	
+	
+	CCLog("#################### autobalance ############################");
+	CCLog("try : %d / autoBalance Start : %d",playCount,autobalanceTry);
+	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	if(autobalanceTry < playCount)
 	{
 		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
-		m_aiValue = MAX(m_aiValue * downLimit, m_aiValue - downLimit / balanceN * exceedPlay);
-		m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent - downLimit / balanceN * exceedPlay);
+		float autoRate = downLimit * exceedPlay / balanceN;
+		m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
+		m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
+		
+		
+		CCLog("NOW AUTOBALANCING..");
+		CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
+		if(autobalanceTry*2 < playCount){
+			float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
+			m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
+			m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
+			
+			CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+		}
+		
+		
 	}
+	
+	CCLog("#################### autobalance ############################");
+
 }
 void KSCumberBase::settingAI( int ai )
 {
