@@ -693,12 +693,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
-			if(mySGD->getStar() >= index_to_ruby[tag-kSP_MT_content1].getV())
+			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
 			{
 				loading_layer = LoadingLayer::create();
 				addChild(loading_layer, kSP_Z_popup);
 				
-				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
+				mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
 				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
@@ -770,12 +770,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
-			if(mySGD->getStar() >= index_to_ruby[tag-kSP_MT_content1].getV())
+			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
 			{
 				loading_layer = LoadingLayer::create();
 				addChild(loading_layer, kSP_Z_popup);
 				
-				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
+				mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
 				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
@@ -847,12 +847,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
-			if(mySGD->getStar() >= index_to_ruby[tag-kSP_MT_content1].getV())
+			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
 			{
 				loading_layer = LoadingLayer::create();
 				addChild(loading_layer, kSP_Z_popup);
 				
-				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
+				mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
 				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
@@ -924,12 +924,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
-			if(mySGD->getStar() >= index_to_ruby[tag-kSP_MT_content1].getV())
+			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
 			{
 				loading_layer = LoadingLayer::create();
 				addChild(loading_layer, kSP_Z_popup);
 				
-				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
+				mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
 				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
@@ -1001,12 +1001,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
-			if(mySGD->getStar() >= index_to_ruby[tag-kSP_MT_content1].getV())
+			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
 			{
 				loading_layer = LoadingLayer::create();
 				addChild(loading_layer, kSP_Z_popup);
 				
-				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
+				mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
 				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;
@@ -1078,12 +1078,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
-			if(mySGD->getStar() >= index_to_ruby[tag-kSP_MT_content1].getV())
+			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
 			{
 				loading_layer = LoadingLayer::create();
 				addChild(loading_layer, kSP_Z_popup);
 				
-				mySGD->setStar(mySGD->getStar() - index_to_ruby[tag-kSP_MT_content1].getV());
+				mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
 				mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 				
 				vector<SaveUserData_Key> save_userdata_list;

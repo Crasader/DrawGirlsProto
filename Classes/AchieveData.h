@@ -12,12 +12,17 @@
 #include "cocos2d.h"
 #include "KSProtect.h"
 #include <map>
+#include "StarGoldData.h"
+#include "DataStorageHub.h"
+#include "UnknownFriends.h"
+#include "ServerDataSave.h"
 
 using namespace std;
 
 enum AchievementCode
 {
-	kAchievementCode_gold1 = 1,//	골드서민 : 1000골드 모으기.
+	kAchievementCode_base = 0,
+	kAchievementCode_gold1,//	골드서민 : 1000골드 모으기.
 	kAchievementCode_gold2,//	골드부자 : 10000골드 모으기.
 	kAchievementCode_gold3,//	골드재벌 : 100000골드 모으기.
 
@@ -153,6 +158,9 @@ enum AchievementCode
 	
 	kAchievementCode_reviewer,//	리뷰어 : 리뷰남겨주기
 	
+	kAchievementCode_end,
+	kAchievementCode_hidden_base,
+	
 	kAchievementCode_hidden_returnee,//	(히든) 오랜만이야 : 일주일만에 접속.
 	kAchievementCode_hidden_bigHand1,//	(히든) 욕심쟁이 : 한번에 먹은 영역이 50%이상일때
 	kAchievementCode_hidden_bigHand2,//	(히든) 욕심쟁이2 : 한번에 먹은 영역이 100%이상일때
@@ -170,7 +178,9 @@ enum AchievementCode
 
 	kAchievementCode_hidden_dieEasy,//	(히든)다이이지 : 게임시작 5초안에 죽기
 
-	kAchievementCode_hidden_speedMania//	(히든)스피드매니아 : 스피드 max찍기
+	kAchievementCode_hidden_speedMania,//	(히든)스피드매니아 : 스피드 max찍기
+	
+	kAchievementCode_hidden_end
 };
 
 enum AchieveRewardType
@@ -233,128 +243,189 @@ public:
 		return data_map[t_code].getRewardValue();
 	}
 	
+	int getRecentValue(AchievementCode t_code) // -1 인지 먼저 확인한 후 들어옴, condition 과 비교되는 값을 보여줌, 즉 달성률 확인용
+	{
+		int return_value;
+		
+		if(t_code == kAchievementCode_gold1 || t_code == kAchievementCode_gold2 || t_code == kAchievementCode_gold3)
+		{	return_value = mySGD->getGold();	}
+		else if(t_code == kAchievementCode_ruby1 || t_code == kAchievementCode_ruby2 || t_code == kAchievementCode_ruby3)
+		{	return_value = mySGD->getStar();	}
+		else if(t_code == kAchievementCode_heart1 || t_code == kAchievementCode_heart2 || t_code == kAchievementCode_heart3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_sendHeartCnt);	}
+		else if(t_code == kAchievementCode_social1 || t_code == kAchievementCode_social2 || t_code == kAchievementCode_social3)
+		{	return_value = mySGD->getFriendPoint();	}
+		else if(t_code == kAchievementCode_bonusGame1 || t_code == kAchievementCode_bonusGame2 || t_code == kAchievementCode_bonusGame3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_playBonusGameCnt);	}
+		else if(t_code == kAchievementCode_mapGacha1 || t_code == kAchievementCode_mapGacha2 || t_code == kAchievementCode_mapGacha3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_mapGachaCnt);	}
+		else if(t_code == kAchievementCode_luckySeven1)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_luckySeven1);	}
+		else if(t_code == kAchievementCode_luckySeven2)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_luckySeven2);	}
+		else if(t_code == kAchievementCode_luckySeven3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_luckySeven3);	}
+		else if(t_code == kAchievementCode_feverMania1)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_feverMania1);	}
+		else if(t_code == kAchievementCode_feverMania2 || kAchievementCode_feverMania3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_totalFeverCnt);	}
+		else if(t_code == kAchievementCode_comboMania1)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_comboMania1);	}
+		else if(t_code == kAchievementCode_comboMania2)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_comboMania2);	}
+		else if(t_code == kAchievementCode_comboMania3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_comboMania3);	}
+		else if(t_code == kAchievementCode_noFail1 || t_code == kAchievementCode_noFail2 || t_code == kAchievementCode_noFail3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt);	}
+		else if(t_code == kAchievementCode_attacker1)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_attacker1);	}
+		else if(t_code == kAchievementCode_attacker2)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_attacker2);	}
+		else if(t_code == kAchievementCode_attacker3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_attacker3);	}
+		else if(t_code == kAchievementCode_hunter1 || t_code == kAchievementCode_hunter2 || t_code == kAchievementCode_hunter3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_catchMonsterCnt);	}
+		else if(t_code == kAchievementCode_dieHard1)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_dieHard1);	}
+		else if(t_code == kAchievementCode_dieHard2)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_dieHard2);	}
+		else if(t_code == kAchievementCode_dieHard3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_dieHard3);	}
+		else if(t_code == kAchievementCode_scoreHigh1)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_scoreHigh1);	}
+		else if(t_code == kAchievementCode_scoreHigh2)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_scoreHigh2);	}
+		else if(t_code == kAchievementCode_scoreHigh3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_scoreHigh3);	}
+		else if(t_code == kAchievementCode_allPiece1)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_allPiece1);	}
+		else if(t_code == kAchievementCode_allPiece2)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_allPiece2);	}
+		else if(t_code == kAchievementCode_allPiece3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_allPiece3);	}
+		else if(t_code == kAchievementCode_fastClear1)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_fastClear1);	}
+		else if(t_code == kAchievementCode_fastClear2)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_fastClear2);	}
+		else if(t_code == kAchievementCode_fastClear3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_fastClear3);	}
+		else if(t_code == kAchievementCode_continue1 || t_code == kAchievementCode_continue2 || t_code == kAchievementCode_continue3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_continueCnt);	}
+		else if(t_code == kAchievementCode_attendance1 || t_code == kAchievementCode_attendance2 || t_code == kAchievementCode_attendance3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_attendanceCnt);	}
+		else if(t_code == kAchievementCode_changeMania1 || t_code == kAchievementCode_changeMania2 || t_code == kAchievementCode_changeMania3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_changeCnt);	}
+		else if(t_code == kAchievementCode_fail1 || t_code == kAchievementCode_fail2 || t_code == kAchievementCode_fail3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_failCnt);	}
+		else if(t_code == kAchievementCode_cardCollection1 || t_code == kAchievementCode_cardCollection2 || t_code == kAchievementCode_cardCollection3)
+		{
+			int recent_take_card_number = 0;
+			
+			int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+			for(int i=1;i<=take_card_cnt;i++)
+			{
+				int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+					recent_take_card_number++;
+			}
+			
+			return_value = recent_take_card_number;
+		}
+		else if(t_code == kAchievementCode_friend1 || t_code == kAchievementCode_friend2 || t_code == kAchievementCode_friend3)
+		{
+			int recent_game_friend_cnt = UnknownFriends::getInstance()->getFriends().size();
+			return recent_game_friend_cnt;
+		}
+		else if(t_code == kAchievementCode_invite1 || t_code == kAchievementCode_invite2 || t_code == kAchievementCode_invite3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_inviteCnt);	}
+		else if(t_code == kAchievementCode_challenger1 || t_code == kAchievementCode_challenger2 || t_code == kAchievementCode_challenger3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_challengeCnt);	}
+		else if(t_code == kAchievementCode_help1 || t_code == kAchievementCode_help2 || t_code == kAchievementCode_help3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_helpCnt);	}
+		else if(t_code == kAchievementCode_helper1 || t_code == kAchievementCode_helper2 || t_code == kAchievementCode_helper3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_helpAcceptCnt);	}
+		else if(t_code == kAchievementCode_defender1 || t_code == kAchievementCode_defender2 || t_code == kAchievementCode_defender3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_challengeAcceptCnt);	}
+		else if(t_code == kAchievementCode_upgrade1 || t_code == kAchievementCode_upgrade2 || t_code == kAchievementCode_upgrade3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_upgradeSuccessCnt);	}
+		else if(t_code == kAchievementCode_perfect1 || t_code == kAchievementCode_perfect2 || t_code == kAchievementCode_perfect3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_perfectClearCnt);	}
+		else if(t_code == kAchievementCode_seqAttendance1 || t_code == kAchievementCode_seqAttendance2 || t_code == kAchievementCode_seqAttendance3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_seqAttendanceCnt);	}
+		else if(t_code == kAchievementCode_gacha1)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_gacha1Cnt);	}
+		else if(t_code == kAchievementCode_gacha2)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_gacha2Cnt);	}
+		else if(t_code == kAchievementCode_gacha3)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_gacha3Cnt);	}
+		else if(t_code == kAchievementCode_gacha4)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_gacha4Cnt);	}
+		else if(t_code == kAchievementCode_gachaKing)
+		{
+			return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_gachaKing);
+			if(getRecentValue(kAchievementCode_gacha1) >= getCondition(kAchievementCode_gacha1) &&
+			   getRecentValue(kAchievementCode_gacha2) >= getCondition(kAchievementCode_gacha2) &&
+			   getRecentValue(kAchievementCode_gacha3) >= getCondition(kAchievementCode_gacha3) &&
+			   getRecentValue(kAchievementCode_gacha4) >= getCondition(kAchievementCode_gacha4))
+				return_value = 1;
+		}
+		else if(t_code == kAchievementCode_weeklyKing)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_weeklyTopCnt);	}
+		else if(t_code == kAchievementCode_puzzleKing)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_puzzleKing);	}
+		else if(t_code == kAchievementCode_characterCollection)
+		{
+			int unlocked_character_cnt = 0;
+			for(int i=1;i<NSDS_GI(kSDS_GI_characterCount_i);i++)
+			{
+				if(myDSH->getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i))
+					unlocked_character_cnt++;
+			}
+			return_value = unlocked_character_cnt;
+		}
+		else if(t_code == kAchievementCode_luckyGuy)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_startLuckyCnt);	}
+		else if(t_code == kAchievementCode_goldMania)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_goldMania);	}
+		else if(t_code == kAchievementCode_tutorial)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_tutorial);	}
+		else if(t_code == kAchievementCode_cardSet)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_cardSet);	}
+		
+		else if(t_code == kAchievementCode_reviewer)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_reviewer);	}
+		
+		else if(t_code == kAchievementCode_hidden_returnee) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_returnee);	}
+		else if(t_code == kAchievementCode_hidden_bigHand1) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_bigHand1);	}
+		else if(t_code == kAchievementCode_hidden_bigHand2) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_bigHand2);	}
+		else if(t_code == kAchievementCode_hidden_holder) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_holder);	}
+		else if(t_code == kAchievementCode_hidden_noSound) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_noSound);	}
+		else if(t_code == kAchievementCode_hidden_shopper1) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_enterShopCnt);	}
+		else if(t_code == kAchievementCode_hidden_shopper2 || t_code == kAchievementCode_hidden_shopper3) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_itemBuyCnt);	}
+		else if(t_code == kAchievementCode_hidden_breathtaking1) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_breathtaking1);	}
+		else if(t_code == kAchievementCode_hidden_breathtaking2) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_breathtaking2);	}
+		else if(t_code == kAchievementCode_hidden_dieEasy) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_dieEasy);	}
+		else if(t_code == kAchievementCode_hidden_speedMania) // (히든)
+		{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_speedMania);	}
+		
+		return return_value;
+	}
+	
 private:
 	
 	map<AchievementCode, AchieveConditionRewardData> data_map;
 	
-	void myInit()
-	{
-		data_map[kAchievementCode_gold1] = AchieveConditionRewardData(1000, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_gold2] = AchieveConditionRewardData(10000, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_gold3] = AchieveConditionRewardData(100000, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_ruby1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_ruby2] = AchieveConditionRewardData(100, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_ruby3] = AchieveConditionRewardData(1000, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_heart1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_heart2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_heart3] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_social1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_social2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_social3] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_bonusGame1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_bonusGame2] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_bonusGame3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_mapGacha1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_mapGacha2] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_mapGacha3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_luckySeven1] = AchieveConditionRewardData(70, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_luckySeven2] = AchieveConditionRewardData(77, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_luckySeven3] = AchieveConditionRewardData(777, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_feverMania1] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_feverMania2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_feverMania3] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_comboMania1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_comboMania2] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_comboMania3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_noFail1] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_noFail2] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_noFail3] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_attacker1] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_attacker2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_attacker3] = AchieveConditionRewardData(40, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hunter1] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hunter2] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hunter3] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_dieHard1] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_dieHard2] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_dieHard3] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_scoreHigh1] = AchieveConditionRewardData(50000, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_scoreHigh2] = AchieveConditionRewardData(100000, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_scoreHigh3] = AchieveConditionRewardData(150000, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_allPiece1] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_allPiece2] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_allPiece3] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_fastClear1] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_fastClear2] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_fastClear3] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_continue1] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_continue2] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_continue3] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_attendance1] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_attendance2] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_attendance3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_changeMania1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_changeMania2] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_changeMania3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_fail1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_fail2] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_fail3] = AchieveConditionRewardData(100, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_cardCollection1] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_cardCollection2] = AchieveConditionRewardData(100, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_cardCollection3] = AchieveConditionRewardData(200, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_friend1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_friend2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_friend3] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_invite1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_invite2] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_invite3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_challenger1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_challenger2] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_challenger3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_help1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_help2] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_help3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_helper1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_helper2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_helper3] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_defender1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_defender2] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_defender3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_upgrade1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_upgrade2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_upgrade3] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_perfect1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_perfect2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_perfect3] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_seqAttendance1] = AchieveConditionRewardData(7, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_seqAttendance2] = AchieveConditionRewardData(14, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_seqAttendance3] = AchieveConditionRewardData(21, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_gacha1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_gacha2] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_gacha3] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_gacha4] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_gachaKing] = AchieveConditionRewardData(4, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_weeklyKing] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_puzzleKing] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_characterCollection] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_luckyGuy] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_goldMania] = AchieveConditionRewardData(100, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_tutorial] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_cardSet] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_reviewer] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_returnee] = AchieveConditionRewardData(7, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_bigHand1] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_bigHand2] = AchieveConditionRewardData(100, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_holder] = AchieveConditionRewardData(100, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_noSound] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_shopper1] = AchieveConditionRewardData(100, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_shopper2] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_shopper3] = AchieveConditionRewardData(100, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_breathtaking1] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_breathtaking2] = AchieveConditionRewardData(1, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_dieEasy] = AchieveConditionRewardData(5, kAchieveRewardType_ruby, 1);
-		data_map[kAchievementCode_hidden_speedMania] = AchieveConditionRewardData(0, kAchieveRewardType_ruby, 1);
-	}
+	void myInit();
 };
 
 class AchieveTitleContent
