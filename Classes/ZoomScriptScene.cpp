@@ -13,6 +13,7 @@
 #include "PuzzleMapScene.h"
 #include "PuzzleScene.h"
 #include "utf8.h"
+#include "MainFlowScene.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -195,7 +196,10 @@ void ZoomScript::menuAction(CCObject *sender)
 		{
 			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
 //			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+			if(mySD->getSilType() >= 10000)
+				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			else
+				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 		}
 	}
 }

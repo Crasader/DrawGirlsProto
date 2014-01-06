@@ -819,6 +819,7 @@ void StarGoldData::selectFriendCard()
 
 void StarGoldData::myInit()
 {
+	is_before_selected_event_stage = false;
 	is_paused = false;
 	login_getted = false;
 	is_before_title = true;
