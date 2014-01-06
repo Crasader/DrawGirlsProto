@@ -64,7 +64,40 @@ typedef enum t_DSH_Key{
 	kDSH_Key_selectedCharacter,
 	kDSH_Key_isCharacterUnlocked_int1,
 	
-	kDSH_Key_noticeViewDate_int1
+	kDSH_Key_noticeViewDate_int1,
+	
+	kDSH_Key_achieveDataCnt,
+	kDSH_Key_achieveData_int1_code, // 1 ~ cnt
+	kDSH_Key_achieveData_int1_value, // code
+	
+	kDSH_Key_achieve_base,
+	kDSH_Key_achieve_sendHeartCnt,
+	kDSH_Key_achieve_playBonusGameCnt,
+	kDSH_Key_achieve_mapGachaCnt,
+	kDSH_Key_achieve_totalFeverCnt,
+	kDSH_Key_achieve_seqNoFailCnt,
+	kDSH_Key_achieve_catchMonsterCnt,
+	kDSH_Key_achieve_continueCnt,
+	kDSH_Key_achieve_attendanceCnt,
+	kDSH_Key_achieve_changeCnt,
+	kDSH_Key_achieve_failCnt,
+	kDSH_Key_achieve_inviteCnt,
+	kDSH_Key_achieve_challengeCnt,
+	kDSH_Key_achieve_helpCnt,
+	kDSH_Key_achieve_helpAcceptCnt,
+	kDSH_Key_achieve_challengeAcceptCnt,
+	kDSH_Key_achieve_upgradeSuccessCnt,
+	kDSH_Key_achieve_perfectClearCnt,
+	kDSH_Key_achieve_seqAttendanceCnt,
+	kDSH_Key_achieve_gacha1Cnt,
+	kDSH_Key_achieve_gacha2Cnt,
+	kDSH_Key_achieve_gacha3Cnt,
+	kDSH_Key_achieve_gacha4Cnt,
+	kDSH_Key_achieve_weeklyTopCnt,
+	kDSH_Key_achieve_startLuckyCnt,
+	kDSH_Key_achieve_enterShopCnt,
+	kDSH_Key_achieve_itemBuyCnt,
+	kDSH_Key_achieve_end
 }DSH_Key;
 
 enum SpecialTutorialCode{
@@ -77,7 +110,8 @@ enum ControlJoystickDirection{
 };
 
 enum SaveUserData_Key{
-	kSaveUserData_Key_star = 1,
+	kSaveUserData_Key_base = 0,
+	kSaveUserData_Key_star,
 	kSaveUserData_Key_gold,
 	kSaveUserData_Key_friendPoint,
 	kSaveUserData_Key_item,
@@ -88,7 +122,9 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_haveTicket,
 	kSaveUserData_Key_openStage,
 	kSaveUserData_Key_nick,
-	kSaveUserData_Key_character
+	kSaveUserData_Key_character,
+	kSaveUserData_Key_achieve,
+	kSaveUserData_Key_end
 };
 
 #define myDSH DataStorageHub::sharedInstance()

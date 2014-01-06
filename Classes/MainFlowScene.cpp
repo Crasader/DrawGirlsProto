@@ -23,6 +23,7 @@
 #include "TicketRequestContent.h"
 #include "PuzzleScene.h"
 #include "StageListDown.h"
+#include "AchievePopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -538,7 +539,10 @@ void MainFlowScene::menuAction(CCObject* sender)
 	}
 	else if(tag == kMainFlowMenuTag_achievement)
 	{
-		is_menu_enable = true;
+		AchievePopup* t_ap = AchievePopup::create();
+		addChild(t_ap, kMainFlowZorder_popup);
+		
+		t_ap->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 	}
 	else if(tag == kMainFlowMenuTag_event)
 	{
