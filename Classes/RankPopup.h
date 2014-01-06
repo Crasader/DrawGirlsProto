@@ -122,6 +122,7 @@ public:
   virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent);
   virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
   virtual void registerWithTouchDispatcher ();
+	void touchCellIndex(int idx);
 protected:
   Json::Value m_scoreList;
   RankTableView * rankTableView;
