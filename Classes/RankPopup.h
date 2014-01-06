@@ -76,6 +76,14 @@ public:
   static RankTableView * create (CCTableViewDataSource * dataSource, CCSize size, CCNode * container);
   void setContentOffsetInDuration (CCPoint offset, float dt);
 };
+
+
+enum RankCategory
+{
+	kTotalFriend,
+	kUnknownFriend,
+	kKnownFriend
+};
 class RankPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -114,6 +122,7 @@ public:
   virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent);
   virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
   virtual void registerWithTouchDispatcher ();
+	void touchCellIndex(int idx);
 protected:
   Json::Value m_scoreList;
   RankTableView * rankTableView;
@@ -127,9 +136,12 @@ protected:
   ScrollBar * m_scrollBar;
 	CCLabelBMFont* m_highScore;
 	
+	
 	CCMenuItemLambda* m_onlyKatok;
 	CCMenuItemLambda* m_totalFriend;
 	CCMenuItemLambda* m_onlyGameFriend;
+	
+	RankCategory m_rankCategory;
 };
 #undef LZZ_INLINE
 #endif
