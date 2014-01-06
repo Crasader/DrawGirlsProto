@@ -11,6 +11,7 @@
 #include "StarGoldData.h"
 #include "CCMenuLambda.h"
 #include "MaingameScene.h"
+#include "TutorialFlowStep.h"
 
 void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 {
@@ -1543,7 +1544,14 @@ void Jack::dieEffect()
 		}
 		else
 		{
-			if(myGD->getCommunicationBool("UI_beRevivedJack"))
+			if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
+			{
+				speed_up_value = 0.f;
+				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
+				
+				startReviveAnimation(jackImg);
+			}
+			else if(myGD->getCommunicationBool("UI_beRevivedJack"))
 			{
 				speed_up_value = 0.f;
 				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);

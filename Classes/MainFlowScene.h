@@ -32,7 +32,8 @@ public:
 	
 	HeartTime* heart_time;
 private:
-
+	CCNode* tutorial_node;
+	
 	bool is_menu_enable;
 	
 	CountingBMLabel* ruby_label;

@@ -218,6 +218,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_achieve_enterShopCnt)				return_value = "achieve_esc";
 	else if(t_name == kDSH_Key_achieve_itemBuyCnt)					return_value = "achieve_ibc";
 	
+	else if(t_name == kDSH_Key_tutorial_flowStep)					return_value = "ttrl_fs";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()

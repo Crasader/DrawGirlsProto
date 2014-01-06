@@ -12,6 +12,7 @@
 #include "PuzzleMapScene.h"
 #include "CardCase.h"
 #include <random>
+#include "TutorialFlowStep.h"
 
 enum CardStrengthPopupZorder{
 	kCardStrengthPopupZorder_gray = 1,
@@ -476,6 +477,15 @@ void CardStrengthPopup::showPopup()
 
 void CardStrengthPopup::endShowPopup()
 {
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	
+	if(recent_step == kTutorialFlowStep_upgradeScript)
+	{
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_upgradeScript);
+		addChild(t_tutorial, kCardStrengthPopupZorder_popup);
+	}
+	
 	is_menu_enable = true;
 }
 

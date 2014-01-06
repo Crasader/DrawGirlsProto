@@ -20,10 +20,12 @@
 #include "EventPopup.h"
 #include "ServerDataSave.h"
 #include "ASPopupView.h"
+#include "NoticeContent.h"
 #include "TicketRequestContent.h"
 #include "PuzzleScene.h"
 #include "StageListDown.h"
 #include "AchievePopup.h"
+#include "TutorialFlowStep.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -64,7 +66,56 @@ bool MainFlowScene::init()
 	setTop();
 	setBottom();
 	
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
+	{
+		if(mySGD->getMustBeShowNotice())
+		{
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			NoticeContent* t_container = NoticeContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+															   {
+																   t_popup->removeFromParent();
+															   }, mySGD->getNoticeList());
+			t_popup->setContainerNode(t_container);
+			addChild(t_popup, kMainFlowZorder_popup);
+		}
+		
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+	}
+	
 	is_menu_enable = true;
+	
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	
+	if(recent_step == kTutorialFlowStep_puzzleClick)
+	{
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_puzzleClick);
+		addChild(t_tutorial, kMainFlowZorder_popup);
+		
+		tutorial_node = t_tutorial;
+		
+		puzzle_table->setTouchEnabled(false);
+	}
+	else if(recent_step == kTutorialFlowStep_cardCollectionClick)
+	{
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_cardCollectionClick);
+		addChild(t_tutorial, kMainFlowZorder_popup);
+		
+		tutorial_node = t_tutorial;
+		
+		puzzle_table->setTouchEnabled(false);
+	}
 	
 	return true;
 }
@@ -130,140 +181,163 @@ void MainFlowScene::cellAction(CCObject* sender)
 {
 	if(!is_menu_enable)
 		return;
-	is_menu_enable = false;
 	
 	int tag = ((CCNode*)sender)->getTag();
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
-	if(tag < kMainFlowTableCellTag_buyBase)
+	if(recent_step == kTutorialFlowStep_puzzleClick)
 	{
-		int puzzle_number = tag - kMainFlowTableCellTag_openBase;
-		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
-		
-		StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::puzzleLoadSuccess), puzzle_number);
-		addChild(t_sld, kMainFlowZorder_popup);
-	}
-	else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
-	{
-		int puzzle_number = tag - kMainFlowTableCellTag_buyBase;
-		CCLog("puzzle_number : %d", puzzle_number);
-		
-		ASPopupView* t_popup = ASPopupView::create(-200);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
-		
-		CCNode* t_container = CCNode::create();
-		t_popup->setContainerNode(t_container);
-		addChild(t_popup);
-		
-		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-		case_back->setPosition(CCPointZero);
-		t_container->addChild(case_back);
-		
-		case_back->setContentSize(CCSizeMake(230, 250));
-		
-		CCScale9Sprite* content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-		content_back->setPosition(ccp(0,2));
-		t_container->addChild(content_back);
-		
-		content_back->setContentSize(CCSizeMake(202, 146));
-		
-		CCLabelTTF* title_label = CCLabelTTF::create("지금 열기", mySGD->getFont().c_str(), 20);
-		title_label->setPosition(ccp(0, 102));
-		t_container->addChild(title_label);
-		
-		CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오픈", NSDS_GI(puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 18);
-		content_label->setPosition(CCPointZero);
-		t_container->addChild(content_label);
-		
-		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-		s_close->setColor(ccGRAY);
-		
-		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																			{
-																				is_menu_enable = true;
-																				t_popup->removeFromParent();
-																			});
-		
-		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
-		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-		close_menu->setPosition(ccp(92,105));
-		t_container->addChild(close_menu);
-		
-		if(mySGD->getStar() >= NSDS_GI(puzzle_number, kSDS_PZ_point_i))
+		if(tag < kMainFlowTableCellTag_buyBase)
 		{
-			CCSprite* n_buy = CCSprite::create("popup2_buy.png");
-			CCSprite* s_buy = CCSprite::create("popup2_buy.png");
-			s_buy->setColor(ccGRAY);
+			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_pieceClick);
+			is_menu_enable = false;
 			
-			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
-				mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
-				myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+			int puzzle_number = tag - kMainFlowTableCellTag_openBase;
+			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+			
+			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::puzzleLoadSuccess), puzzle_number);
+			addChild(t_sld, kMainFlowZorder_popup);
+		}
+	}
+	else if(recent_step == kTutorialFlowStep_cardCollectionClick)
+	{
+		
+	}
+	else
+	{
+		is_menu_enable = false;
+		
+		if(tag < kMainFlowTableCellTag_buyBase)
+		{
+			int puzzle_number = tag - kMainFlowTableCellTag_openBase;
+			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+			
+			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::puzzleLoadSuccess), puzzle_number);
+			addChild(t_sld, kMainFlowZorder_popup);
+		}
+		else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
+		{
+			int puzzle_number = tag - kMainFlowTableCellTag_buyBase;
+			CCLog("puzzle_number : %d", puzzle_number);
+			
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+			
+			CCNode* t_container = CCNode::create();
+			t_popup->setContainerNode(t_container);
+			addChild(t_popup);
+			
+			CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+			case_back->setPosition(CCPointZero);
+			t_container->addChild(case_back);
+			
+			case_back->setContentSize(CCSizeMake(230, 250));
+			
+			CCScale9Sprite* content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+			content_back->setPosition(ccp(0,2));
+			t_container->addChild(content_back);
+			
+			content_back->setContentSize(CCSizeMake(202, 146));
+			
+			CCLabelTTF* title_label = CCLabelTTF::create("지금 열기", mySGD->getFont().c_str(), 20);
+			title_label->setPosition(ccp(0, 102));
+			t_container->addChild(title_label);
+			
+			CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오픈", NSDS_GI(puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 18);
+			content_label->setPosition(CCPointZero);
+			t_container->addChild(content_label);
+			
+			CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+			CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+			s_close->setColor(ccGRAY);
+			
+			CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																				{
+																					is_menu_enable = true;
+																					t_popup->removeFromParent();
+																				});
+			
+			CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+			close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+			close_menu->setPosition(ccp(92,105));
+			t_container->addChild(close_menu);
+			
+			if(mySGD->getStar() >= NSDS_GI(puzzle_number, kSDS_PZ_point_i))
+			{
+				CCSprite* n_buy = CCSprite::create("popup2_buy.png");
+				CCSprite* s_buy = CCSprite::create("popup2_buy.png");
+				s_buy->setColor(ccGRAY);
 				
-				vector<SaveUserData_Key> save_userdata_list;
-				
-				save_userdata_list.push_back(kSaveUserData_Key_star);
-				save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-				
-				myDSH->saveUserData(save_userdata_list, nullptr);
-				
-				int found_idx = -1;
-				for(int i=0;i<numberOfCellsInTableView(puzzle_table) && found_idx == -1;i++)
-				{
-					CCTableViewCell* t_cell = puzzle_table->cellAtIndex(i);
-					if(t_cell)
+				CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
+					mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
+					myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+					
+					vector<SaveUserData_Key> save_userdata_list;
+					
+					save_userdata_list.push_back(kSaveUserData_Key_star);
+					save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
+					
+					myDSH->saveUserData(save_userdata_list, nullptr);
+					
+					int found_idx = -1;
+					for(int i=0;i<numberOfCellsInTableView(puzzle_table) && found_idx == -1;i++)
 					{
-						int cell_card_number = t_cell->getTag();
-						if(cell_card_number == puzzle_number)
-							found_idx = i;
+						CCTableViewCell* t_cell = puzzle_table->cellAtIndex(i);
+						if(t_cell)
+						{
+							int cell_card_number = t_cell->getTag();
+							if(cell_card_number == puzzle_number)
+								found_idx = i;
+						}
 					}
-				}
-				if(found_idx != -1)
-					puzzle_table->updateCellAtIndex(found_idx);
+					if(found_idx != -1)
+						puzzle_table->updateCellAtIndex(found_idx);
+					
+					is_menu_enable = true;
+					t_popup->removeFromParent();
+				});
 				
+				CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
+				buy_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+				buy_menu->setPosition(ccp(0,-95));
+				t_container->addChild(buy_menu);
+			}
+			else
+			{
+				CCSprite* buy_img = CCSprite::create("popup2_buy.png");
+				buy_img->setColor(ccc3(100, 100, 100));
+				buy_img->setPosition(ccp(0,-95));
+				t_container->addChild(buy_img);
+			}
+		}
+		else // ticketBase
+		{
+			int puzzle_number = tag - kMainFlowTableCellTag_ticketBase;
+			
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+			
+			TicketRequestContent* t_container = TicketRequestContent::create(t_popup->getTouchPriority(), puzzle_number);
+			t_popup->setContainerNode(t_container);
+			addChild(t_popup);
+			
+			t_container->setRemoveAction([=](){
 				is_menu_enable = true;
 				t_popup->removeFromParent();
 			});
-			
-			CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
-			buy_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-			buy_menu->setPosition(ccp(0,-95));
-			t_container->addChild(buy_menu);
 		}
-		else
-		{
-			CCSprite* buy_img = CCSprite::create("popup2_buy.png");
-			buy_img->setColor(ccc3(100, 100, 100));
-			buy_img->setPosition(ccp(0,-95));
-			t_container->addChild(buy_img);
-		}
-	}
-	else // ticketBase
-	{
-		int puzzle_number = tag - kMainFlowTableCellTag_ticketBase;
-		
-		ASPopupView* t_popup = ASPopupView::create(-200);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
-		
-		TicketRequestContent* t_container = TicketRequestContent::create(t_popup->getTouchPriority(), puzzle_number);
-		t_popup->setContainerNode(t_container);
-		addChild(t_popup);
-		
-		t_container->setRemoveAction([=](){
-			is_menu_enable = true;
-			t_popup->removeFromParent();
-		});
 	}
 }
 CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned int idx)
@@ -306,7 +380,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		{
 			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
 			int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
+			if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
 				have_card_cnt++;
 		}
 		
@@ -423,132 +497,155 @@ void MainFlowScene::menuAction(CCObject* sender)
 	if(!is_menu_enable)
 		return;
 	
-	is_menu_enable = false;
-	
 	int tag = ((CCNode*)sender)->getTag();
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
-	if(tag == kMainFlowMenuTag_rubyShop)
+	if(recent_step == kTutorialFlowStep_puzzleClick)
 	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_ruby);
-		t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-		addChild(t_shop, kMainFlowZorder_popup);
+		return;
 	}
-	else if(tag == kMainFlowMenuTag_goldShop)
+	else if(recent_step == kTutorialFlowStep_cardCollectionClick)
 	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_gold);
-		t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-		addChild(t_shop, kMainFlowZorder_popup);
+		if(tag == kMainFlowMenuTag_cardSetting)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_upgradeClick);
+			is_menu_enable = false;
+			
+			mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
+			CardSettingPopup* t_popup = CardSettingPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			addChild(t_popup, kMainFlowZorder_popup);
+			
+			removeChild(tutorial_node);
+		}
 	}
-	else if(tag == kMainFlowMenuTag_heartShop)
+	else
 	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_heart);
-		t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-		addChild(t_shop, kMainFlowZorder_popup);
-	}
-	else if(tag == kMainFlowMenuTag_friendPointContent)
-	{
-		if(!friend_point_popup)
+		is_menu_enable = false;
+		
+		if(tag == kMainFlowMenuTag_rubyShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_ruby);
+			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+			addChild(t_shop, kMainFlowZorder_popup);
+		}
+		else if(tag == kMainFlowMenuTag_goldShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_gold);
+			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+			addChild(t_shop, kMainFlowZorder_popup);
+		}
+		else if(tag == kMainFlowMenuTag_heartShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_heart);
+			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+			addChild(t_shop, kMainFlowZorder_popup);
+		}
+		else if(tag == kMainFlowMenuTag_friendPointContent)
+		{
+			if(!friend_point_popup)
+			{
+				CCNode* menu_node = ((CCNode*)sender)->getParent();
+				CCNode* top_node = menu_node->getParent();
+				friend_point_popup = CCSprite::create("candy_popup.png");
+				friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
+				friend_point_popup->setPosition(ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+				top_node->addChild(friend_point_popup, -1);
+				
+				CCSprite* n_close = CCSprite::create("candy_popup_close.png");
+				CCSprite* s_close = CCSprite::create("candy_popup_close.png");
+				s_close->setColor(ccGRAY);
+				
+				CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(MainFlowScene::menuAction));
+				close_item->setTag(kMainFlowMenuTag_friendPointClose);
+				
+				CCMenu* close_menu = CCMenu::createWithItem(close_item);
+				close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
+				friend_point_popup->addChild(close_menu);
+				
+				CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY()-12));
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainFlowScene::popupClose));
+				CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+				friend_point_popup->runAction(t_seq);
+			}
+			else
+				is_menu_enable = true;
+		}
+		else if(tag == kMainFlowMenuTag_friendPointClose)
 		{
 			CCNode* menu_node = ((CCNode*)sender)->getParent();
-			CCNode* top_node = menu_node->getParent();
-			friend_point_popup = CCSprite::create("candy_popup.png");
-			friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
-			friend_point_popup->setPosition(ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-			top_node->addChild(friend_point_popup, -1);
-			
-			CCSprite* n_close = CCSprite::create("candy_popup_close.png");
-			CCSprite* s_close = CCSprite::create("candy_popup_close.png");
-			s_close->setColor(ccGRAY);
-			
-			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(MainFlowScene::menuAction));
-			close_item->setTag(kMainFlowMenuTag_friendPointClose);
-			
-			CCMenu* close_menu = CCMenu::createWithItem(close_item);
-			close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
-			friend_point_popup->addChild(close_menu);
-			
-			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY()-12));
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainFlowScene::popupClose));
+			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainFlowScene::closeFriendPointPopup));
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
 			friend_point_popup->runAction(t_seq);
 		}
-		else
+		else if(tag == kMainFlowMenuTag_postbox)
+		{
+			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
+			addChild(t_pp, kMainFlowZorder_popup);
+		}
+		else if(tag == kMainFlowMenuTag_option)
+		{
+			OptionPopup* t_popup = OptionPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			addChild(t_popup, kMainFlowZorder_popup);
+		}
+		else if(tag == kMainFlowMenuTag_rank)
+		{
+			RankPopup* t_rp = RankPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
+			addChild(t_rp, kMainFlowZorder_popup);
+		}
+		else if(tag == kMainFlowMenuTag_shop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_character);
+			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+			addChild(t_shop, kMainFlowZorder_popup);
+		}
+		else if(tag == kMainFlowMenuTag_cardSetting)
+		{
+			mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
+			CardSettingPopup* t_popup = CardSettingPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			addChild(t_popup, kMainFlowZorder_popup);
+		}
+		else if(tag == kMainFlowMenuTag_puzzleSetting)
+		{
 			is_menu_enable = true;
-	}
-	else if(tag == kMainFlowMenuTag_friendPointClose)
-	{
-		CCNode* menu_node = ((CCNode*)sender)->getParent();
-		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainFlowScene::closeFriendPointPopup));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-		friend_point_popup->runAction(t_seq);
-	}
-	else if(tag == kMainFlowMenuTag_postbox)
-	{
-		MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
-		addChild(t_pp, kMainFlowZorder_popup);
-	}
-	else if(tag == kMainFlowMenuTag_option)
-	{
-		OptionPopup* t_popup = OptionPopup::create();
-		t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-		addChild(t_popup, kMainFlowZorder_popup);
-	}
-	else if(tag == kMainFlowMenuTag_rank)
-	{
-		RankPopup* t_rp = RankPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
-		addChild(t_rp, kMainFlowZorder_popup);
-	}
-	else if(tag == kMainFlowMenuTag_shop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_character);
-		t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-		addChild(t_shop, kMainFlowZorder_popup);
-	}
-	else if(tag == kMainFlowMenuTag_cardSetting)
-	{
-		mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
-		CardSettingPopup* t_popup = CardSettingPopup::create();
-		t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-		addChild(t_popup, kMainFlowZorder_popup);
-	}
-	else if(tag == kMainFlowMenuTag_puzzleSetting)
-	{
-		is_menu_enable = true;
-	}
-	else if(tag == kMainFlowMenuTag_gacha)
-	{
-		GachaPurchase* t_gp = GachaPurchase::create();
-		addChild(t_gp, kMainFlowZorder_popup);
-		
-		t_gp->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-		t_gp->setOutAllObjectAction(NULL, NULL);
-		t_gp->setInAllObjectAction(this, callfunc_selector(MainFlowScene::popupClose));
-	}
-	else if(tag == kMainFlowMenuTag_achievement)
-	{
-		AchievePopup* t_ap = AchievePopup::create();
-		addChild(t_ap, kMainFlowZorder_popup);
-		
-		t_ap->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-	}
-	else if(tag == kMainFlowMenuTag_event)
-	{
-		EventPopup* t_popup = EventPopup::create();
-		t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-		addChild(t_popup, kMainFlowZorder_popup);
+		}
+		else if(tag == kMainFlowMenuTag_gacha)
+		{
+			GachaPurchase* t_gp = GachaPurchase::create();
+			addChild(t_gp, kMainFlowZorder_popup);
+			
+			t_gp->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_gp->setOutAllObjectAction(NULL, NULL);
+			t_gp->setInAllObjectAction(this, callfunc_selector(MainFlowScene::popupClose));
+		}
+		else if(tag == kMainFlowMenuTag_achievement)
+		{
+			AchievePopup* t_ap = AchievePopup::create();
+			addChild(t_ap, kMainFlowZorder_popup);
+			
+			t_ap->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+		}
+		else if(tag == kMainFlowMenuTag_event)
+		{
+			EventPopup* t_popup = EventPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			addChild(t_popup, kMainFlowZorder_popup);
+		}
 	}
 }
 

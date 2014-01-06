@@ -45,6 +45,14 @@ public:
 	};
 };
 
+enum PuzzleZorder{
+	kPuzzleZorder_back = 1,
+	kPuzzleZorder_puzzle,
+	kPuzzleZorder_right,
+	kPuzzleZorder_top,
+	kPuzzleZorder_popup
+};
+
 class PuzzleScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -58,6 +66,7 @@ public:
     CREATE_FUNC(PuzzleScene);
 	
 	HeartTime* heart_time;
+	CCNode* tutorial_node;
 private:
 	
 	bool is_menu_enable;
@@ -70,7 +79,6 @@ private:
 	void closeFriendPointPopup();
 	
 	int selected_stage_number;
-	
 	
 	void showClearPopup();
 	void hideClearPopup();
@@ -115,7 +123,6 @@ private:
 	void resultGetStageScoreList(Json::Value result_data);
 	CCTableView* rank_table;
 	int selected_friend_idx;
-	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
 	virtual void scrollViewDidScroll(CCScrollView* view);
     virtual void scrollViewDidZoom(CCScrollView* view);

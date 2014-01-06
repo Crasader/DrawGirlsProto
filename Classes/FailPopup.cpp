@@ -634,6 +634,7 @@ void FailPopup::resultLoadFriends(Json::Value result_data)
 		fInfo.user_id = i.userId;
 		fInfo.score = 0;
 		fInfo.is_play = false;
+		fInfo.is_message_blocked = i.messageBlocked;
 		friend_list.push_back(fInfo);
 		
 		p["memberIDList"].append(i.userId);
@@ -646,7 +647,7 @@ void FailPopup::resultLoadFriends(Json::Value result_data)
 		fInfo.user_id = i.userId;
 		fInfo.score = 0;
 		fInfo.is_play = false;
-		fInfo.is_message_blocked = false;
+		fInfo.is_message_blocked = i.messageBlocked;
 		friend_list.push_back(fInfo);
 		
 		p["memberIDList"].append(i.userId);

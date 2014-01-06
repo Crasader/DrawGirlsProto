@@ -31,7 +31,8 @@ enum CSS_Zorder{
 	kCSS_Z_select,
 	kCSS_Z_check,
 	kCSS_Z_alignList,
-	kCSS_Z_alignButton
+	kCSS_Z_alignButton,
+	kCSS_Z_popup
 };
 
 enum CSS_MenuTag{

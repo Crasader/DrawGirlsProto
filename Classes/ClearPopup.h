@@ -67,6 +67,8 @@ public:
 	
 private:
 	
+	CCNode* tutorial_node;
+	
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	

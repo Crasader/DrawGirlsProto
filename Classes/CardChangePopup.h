@@ -40,6 +40,8 @@ public:
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
 private:
+	CCNode* tutorial_node;
+	
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	
@@ -63,7 +65,6 @@ private:
 	void setHaveCardList();
 	void alignHaveCardList(CardChangeAlign t_align);
 	
-	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
 	virtual void scrollViewDidScroll(CCScrollView* view);
     virtual void scrollViewDidZoom(CCScrollView* view);

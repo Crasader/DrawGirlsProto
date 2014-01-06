@@ -103,7 +103,7 @@ public:
 	
 	void setGoldLabel(CCLabelBMFont* t_label);
 	int getGold();
-	void setGold(int t_gold);
+	void setGold(int t_gold, bool is_write = true);
 	
 	void setFriendPointLabel(CCLabelBMFont* t_label);
 	int getFriendPoint();

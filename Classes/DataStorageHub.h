@@ -97,7 +97,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_achieve_startLuckyCnt,
 	kDSH_Key_achieve_enterShopCnt,
 	kDSH_Key_achieve_itemBuyCnt,
-	kDSH_Key_achieve_end
+	kDSH_Key_achieve_end,
+	
+	kDSH_Key_tutorial_flowStep
 }DSH_Key;
 
 enum SpecialTutorialCode{

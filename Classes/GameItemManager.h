@@ -221,6 +221,7 @@ public:
 private:
 	bool is_removing;
 	deque<CCObject*> remove_target_list;
+	float weight_value;
 	
 	void addGetCoinList(CCObject* t_coin);
 	void startRemove();
