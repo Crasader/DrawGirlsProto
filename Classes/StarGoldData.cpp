@@ -9,6 +9,7 @@
 #include "StarGoldData.h"
 #include "MyLocalization.h"
 #include "DataStorageHub.h"
+#include "AchieveNoti.h"
 
 
 CCSprite* StarGoldData::getLoadingImg()
@@ -173,6 +174,22 @@ int StarGoldData::getStar()
 
 void StarGoldData::setStar( int t_star )
 {
+	if(myDSH->getIntegerForKey(kDSH_Key_savedStar) < t_star)
+	{
+		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+		
+		for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+			   shared_acr->getRecentValue((AchievementCode)i) < shared_acr->getCondition((AchievementCode)i) &&
+			   t_star >= shared_acr->getCondition((AchievementCode)i))
+			{
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+	}
+	
 	myDSH->setIntegerForKey(kDSH_Key_savedStar, t_star);
 
 	if(star_label)
@@ -189,6 +206,22 @@ int StarGoldData::getGold()
 }
 void StarGoldData::setGold( int t_gold )
 {
+	if(myDSH->getIntegerForKey(kDSH_Key_savedGold) < t_gold)
+	{
+		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+		
+		for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+			   shared_acr->getRecentValue((AchievementCode)i) < shared_acr->getCondition((AchievementCode)i) &&
+			   t_gold >= shared_acr->getCondition((AchievementCode)i))
+			{
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+	}
+	
 	myDSH->setIntegerForKey(kDSH_Key_savedGold, t_gold);
 
 	if(gold_label)

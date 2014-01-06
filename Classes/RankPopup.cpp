@@ -206,45 +206,90 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	joinGameFriend->setOpacity(0);
 	_menu->addChild(joinGameFriend);
 
+	// 분류 지정.
 	
-	
+	// 카톡 친구.
 	m_onlyKatok = CCMenuItemImageLambda::create
 	("rank_friend_rank_1.png", "rank_friend_rank_1.png",
 	 [=](CCObject* t)
 	 {
-		 
+		 if(m_rankCategory != RankCategory::kKnownFriend)
+		 {
+			 m_rankCategory = RankCategory::kKnownFriend;
+			 rankTableView->removeFromParent();
+			 m_currentSelectSprite = nullptr;
+			 loadRank();
+			 m_onlyKatok->setOpacity(255);
+			 m_onlyGameFriend->setOpacity(0);
+			 m_totalFriend->setOpacity(0);
+		 }
 	 });
 	
 	m_onlyKatok->setPosition(ccp(226, 229));
 	_menu->addChild(m_onlyKatok, 3);
 	
 	
+	// 게임 친구ㅇㅇㅇㅇ
 	m_onlyGameFriend = CCMenuItemImageLambda::create
 	("rank_friend_rank_2.png", "rank_friend_rank_2.png",
 	 [=](CCObject* t)
 	 {
 		 
+		 if(m_rankCategory != RankCategory::kUnknownFriend)
+		 {
+			 m_rankCategory = RankCategory::kUnknownFriend;
+			 rankTableView->removeFromParent();
+			 m_currentSelectSprite = nullptr;
+			 loadRank();
+			 m_onlyKatok->setOpacity(0);
+			 m_onlyGameFriend->setOpacity(255);
+			 m_totalFriend->setOpacity(0);
+		 }
 	 });
 	
 	m_onlyGameFriend->setPosition(ccp(317, 229));
 	_menu->addChild(m_onlyGameFriend, 3);
 	
 	
-	
+	// 전체 친구
 	m_totalFriend = CCMenuItemImageLambda::create
 	("rank_friend_rank_3.png", "rank_friend_rank_3.png",
 	 [=](CCObject* t)
 	 {
-		 
+		 if(m_rankCategory != RankCategory::kTotalFriend)
+		 {
+			 m_rankCategory = RankCategory::kTotalFriend;
+			 rankTableView->removeFromParent();
+			 m_currentSelectSprite = nullptr;
+			 loadRank();
+			 m_onlyKatok->setOpacity(0);
+			 m_onlyGameFriend->setOpacity(0);
+			 m_totalFriend->setOpacity(255);
+		 }
 	 });
 	
 	m_totalFriend->setPosition(ccp(406, 229));
 	_menu->addChild(m_totalFriend, 3);
 	
-		
-	
+	m_rankCategory = RankCategory::kTotalFriend;
 	
 	loadRank();
+	
+	m_onlyKatok->setOpacity(0);
+	m_onlyGameFriend->setOpacity(0);
+	addChild(KSTimer::create(0.5f, [=]()
+													 {
+														 for(int i=0; i<m_scoreList.size(); i++)
+														 {
+															 
+															 if(m_scoreList[i]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+																 
+															 {
+																 touchCellIndex(i);
+																 break;
+															 }
+														 }
+													 }));
 }
 void RankPopup::loadRank ()
 {
@@ -264,40 +309,56 @@ void RankPopup::loadRank ()
 	 */
 	
 	Json::Value appfriends;
-	for(auto i : KnownFriends::getInstance()->getFriends())
+	if(m_rankCategory != RankCategory::kUnknownFriend)
 	{
-		Json::Value v;
-		v["friends_nickname"] = i.nick;
-		v["hashed_talk_user_id"] = i.hashedTalkUserId;
-		v["message_blocked"] = i.messageBlocked;
-		v["nickname"] = i.nick;
-		v["profile_image_url"] = i.profileUrl;
-		v["user_id"] = i.userId;
-		appfriends.append(v);
+		
+		for(auto i : KnownFriends::getInstance()->getFriends())
+		{
+			Json::Value v;
+			v["friends_nickname"] = i.nick;
+			v["hashed_talk_user_id"] = i.hashedTalkUserId;
+			v["message_blocked"] = i.messageBlocked;
+			v["nickname"] = i.nick;
+			v["profile_image_url"] = i.profileUrl;
+			v["user_id"] = i.userId;
+			appfriends.append(v);
+		}
 	}
-	for(auto i : UnknownFriends::getInstance()->getFriends())
+	if(m_rankCategory != RankCategory::kKnownFriend)
 	{
-		Json::Value v;
-		v["friends_nickname"] = i.nick;
-		v["hashed_talk_user_id"] = i.hashedTalkUserId;
-		v["message_blocked"] = i.messageBlocked;
-		v["nickname"] = i.nick;
-		v["profile_image_url"] = i.profileUrl;
-		v["user_id"] = i.userId;
-		appfriends.append(v);
+		
+		for(auto i : UnknownFriends::getInstance()->getFriends())
+		{
+			Json::Value v;
+			v["friends_nickname"] = i.nick;
+			v["hashed_talk_user_id"] = i.hashedTalkUserId;
+			v["message_blocked"] = i.messageBlocked;
+			v["nickname"] = i.nick;
+			v["profile_image_url"] = i.profileUrl;
+			v["user_id"] = i.userId;
+			appfriends.append(v);
+		}
 	}
 	appfriends.append(hspConnector::get()->myKakaoInfo);
 	Json::Value p;
 	
 	
 	
-	for(auto i : KnownFriends::getInstance()->getFriends())
+	if(m_rankCategory != RankCategory::kUnknownFriend)
 	{
-		p["memberIDList"].append(i.userId);
+		
+		for(auto i : KnownFriends::getInstance()->getFriends())
+		{
+			p["memberIDList"].append(i.userId);
+		}
 	}
-	for(auto i : UnknownFriends::getInstance()->getFriends())
+	if(m_rankCategory != RankCategory::kKnownFriend)
 	{
-		p["memberIDList"].append(i.userId);
+		
+		for(auto i : UnknownFriends::getInstance()->getFriends())
+		{
+			p["memberIDList"].append(i.userId);
+		}
 	}
 	
 	
@@ -917,141 +978,7 @@ void RankPopup::addCardImg (int t_card_number, int t_card_level, string t_passiv
 }
 void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 {
-	
-	int selectedCardIndex = 0;
-	int highScore = 0;
-	// 나를 클릭함.
-	if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
-	{
-		Json::Reader reader;
-		Json::Value data;
-		reader.parse(m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString(), data);
-		highScore = data.get("allhighscore", 0).asInt();
-		
-		selectedCardIndex = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 자기 카드 번호.
-	}
-	else
-	{
-		Json::Reader reader;
-		Json::Value data;
-		reader.parse(m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString(), data);
-		//		Json::Value data = m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString()
-		KS::KSLog("%", data);
-		selectedCardIndex = data.get("selectedcard", 0).asInt();
-		highScore = data.get("allhighscore", 0).asInt();
-	}
-	CCLog("card Number %d", selectedCardIndex);
-	auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, selectedCardIndex);
-	KS::KSLog("retStr %", retStr);
-	
-	if(used_card_img)
-	{
-		used_card_img->removeFromParent();
-		used_card_img = NULL;
-	}
-	
-	last_selected_card_number = selectedCardIndex;
-	if(selectedCardIndex != 0)
-	{
-		if(retStr == "") // 카드 정보 없음
-		{
-			used_card_img = CCSprite::create("ending_take_card_back.png");
-			used_card_img->setScale(0.34f);
-			used_card_img->setPosition(ccp(99.f,156.f));
-			addChild(used_card_img, kRP_Z_usedCardImg);
-			
-			CCLabelTTF* t_label = CCLabelTTF::create("카드 정보 로딩", mySGD->getFont().c_str(), 20);
-			t_label->setColor(ccBLACK);
-			t_label->setPosition(ccp(160,215));
-			used_card_img->addChild(t_label);
-			
-			if(loading_card_number == 0)
-			{
-				loading_card_number = selectedCardIndex;
-				
-				Json::Value param;
-				param["noList"][0] = loading_card_number;
-				hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
-			}
-			else
-				after_loading_card_number = selectedCardIndex;
-		}
-		else // 카드 정보 있음
-		{
-			int t_card_level;
-			string t_card_passive;
-			
-			// 자기 자신을 찍음
-			if(m_scoreList[cell->getIdx()]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
-			{
-				t_card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-				t_card_passive = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-			}
-			else
-			{
-				bool is_found = false;
-				for(auto i : UnknownFriends::getInstance()->getFriends())
-				{
-					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asString())
-					{
-						is_found = true;
-						Json::Value t_user_data = i.userData;
-						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
-						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
-						break;
-					}
-				}
-				for(auto i : KnownFriends::getInstance()->getFriends())
-				{
-					if(i.userId == m_scoreList[cell->getIdx()]["user_id"].asString())
-					{
-						Json::Value t_user_data = i.userData;
-						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
-						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
-						break;
-					}
-				}
-			}
-			
-//			m_scoreList[cell->getIdx()]["user_id"]
-			addCardImg(selectedCardIndex, t_card_level, t_card_passive);
-		}
-	}
-	else
-	{
-		used_card_img = CCSprite::create("ending_take_card_back.png");
-		used_card_img->setScale(0.34f);
-		used_card_img->setPosition(ccp(99.f,156.f));
-		addChild(used_card_img, kRP_Z_usedCardImg);
-	}
-	
-	
-	if(m_highScore)
-	{
-		m_highScore->removeFromParent();
-		m_highScore = NULL;
-	}
-	std::string scoreStr = CCString::createWithFormat("%d", highScore)->getCString();
-	scoreStr = KS::insert_separator(scoreStr, ',', 3); // 3자리 마다 콤마찍기
-	m_highScore =
-	CCLabelBMFont::create(
-						  scoreStr.c_str(), "mb_white_font.fnt");
-	m_highScore->setPosition(ccp(216 / 2.f, 86 / 2.f));
-	addChild(m_highScore, 3);
-	if(m_currentSelectSprite)
-	{
-		m_currentSelectSprite->removeFromParent();
-		m_currentSelectSprite = NULL;
-	}
-	
-	
-	//		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
-	{
-		m_currentSelectSprite = CCSprite::create("rank_cell_select.png");
-		m_currentSelectSprite->setPosition(CCPointZero - ccp(6, 0));
-		m_currentSelectSprite->setAnchorPoint(CCPointZero);
-		cell->addChild(m_currentSelectSprite, 2);
-	}
+	touchCellIndex(cell->getIdx());
 }
 CCSize RankPopup::cellSizeForTable (CCTableView * table)
 {
@@ -1409,5 +1336,145 @@ void RankPopup::registerWithTouchDispatcher ()
 {
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 	pDispatcher->addTargetedDelegate(this, -170, true);
+}
+
+void RankPopup::touchCellIndex(int idx)
+{
+	
+	int selectedCardIndex = 0;
+	int highScore = 0;
+	// 나를 클릭함.
+	if(m_scoreList[idx]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+	{
+		Json::Reader reader;
+		Json::Value data;
+		reader.parse(m_scoreList[idx]["scoreInfo"]["data"].asString(), data);
+		highScore = data.get("allhighscore", 0).asInt();
+		
+		selectedCardIndex = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 자기 카드 번호.
+	}
+	else
+	{
+		Json::Reader reader;
+		Json::Value data;
+		reader.parse(m_scoreList[idx]["scoreInfo"]["data"].asString(), data);
+		//		Json::Value data = m_scoreList[cell->getIdx()]["scoreInfo"]["data"].asString()
+		KS::KSLog("%", data);
+		selectedCardIndex = data.get("selectedcard", 0).asInt();
+		highScore = data.get("allhighscore", 0).asInt();
+	}
+	CCLog("card Number %d", selectedCardIndex);
+	auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, selectedCardIndex);
+	KS::KSLog("retStr %", retStr);
+	
+	if(used_card_img)
+	{
+		used_card_img->removeFromParent();
+		used_card_img = NULL;
+	}
+	
+	last_selected_card_number = selectedCardIndex;
+	if(selectedCardIndex != 0)
+	{
+		if(retStr == "") // 카드 정보 없음
+		{
+			used_card_img = CCSprite::create("ending_take_card_back.png");
+			used_card_img->setScale(0.34f);
+			used_card_img->setPosition(ccp(99.f,156.f));
+			addChild(used_card_img, kRP_Z_usedCardImg);
+			
+			CCLabelTTF* t_label = CCLabelTTF::create("카드 정보 로딩", mySGD->getFont().c_str(), 20);
+			t_label->setColor(ccBLACK);
+			t_label->setPosition(ccp(160,215));
+			used_card_img->addChild(t_label);
+			
+			if(loading_card_number == 0)
+			{
+				loading_card_number = selectedCardIndex;
+				
+				Json::Value param;
+				param["noList"][0] = loading_card_number;
+				hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+			}
+			else
+				after_loading_card_number = selectedCardIndex;
+		}
+		else // 카드 정보 있음
+		{
+			int t_card_level;
+			string t_card_passive;
+			
+			// 자기 자신을 찍음
+			if(m_scoreList[idx]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+			{
+				t_card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+				t_card_passive = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+			}
+			else
+			{
+				bool is_found = false;
+				for(auto i : UnknownFriends::getInstance()->getFriends())
+				{
+					if(i.userId == m_scoreList[idx]["user_id"].asString())
+					{
+						is_found = true;
+						Json::Value t_user_data = i.userData;
+						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
+						break;
+					}
+				}
+				for(auto i : KnownFriends::getInstance()->getFriends())
+				{
+					if(i.userId == m_scoreList[idx]["user_id"].asString())
+					{
+						Json::Value t_user_data = i.userData;
+						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
+						break;
+					}
+				}
+			}
+			
+//			m_scoreList[cell->getIdx()]["user_id"]
+			addCardImg(selectedCardIndex, t_card_level, t_card_passive);
+		}
+	}
+	else
+	{
+		used_card_img = CCSprite::create("ending_take_card_back.png");
+		used_card_img->setScale(0.34f);
+		used_card_img->setPosition(ccp(99.f,156.f));
+		addChild(used_card_img, kRP_Z_usedCardImg);
+	}
+	
+	
+	if(m_highScore)
+	{
+		m_highScore->removeFromParent();
+		m_highScore = NULL;
+	}
+	std::string scoreStr = CCString::createWithFormat("%d", highScore)->getCString();
+	scoreStr = KS::insert_separator(scoreStr, ',', 3); // 3자리 마다 콤마찍기
+	m_highScore =
+	CCLabelBMFont::create(
+						  scoreStr.c_str(), "mb_white_font.fnt");
+	m_highScore->setPosition(ccp(216 / 2.f, 86 / 2.f));
+	addChild(m_highScore, 3);
+	if(m_currentSelectSprite)
+	{
+		m_currentSelectSprite->removeFromParent();
+		m_currentSelectSprite = NULL;
+	}
+	
+	
+	//		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
+	{
+		m_currentSelectSprite = CCSprite::create("rank_cell_select.png");
+		m_currentSelectSprite->setPosition(CCPointZero - ccp(6, 0));
+		m_currentSelectSprite->setAnchorPoint(CCPointZero);
+		rankTableView->cellAtIndex(idx)->addChild(m_currentSelectSprite, 2);
+	}
+	
 }
 #undef LZZ_INLINE

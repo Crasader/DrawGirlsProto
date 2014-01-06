@@ -187,6 +187,37 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	
 	else if(t_name == kDSH_Key_noticeViewDate_int1)					return_value = "ntcvdt%d";
 	
+	else if(t_name == kDSH_Key_achieveDataCnt)						return_value = "adc";
+	else if(t_name == kDSH_Key_achieveData_int1_code)				return_value = "ad%dcode"; // 1 ~ cnt
+	else if(t_name == kDSH_Key_achieveData_int1_value)				return_value = "ad%dvalue"; // code
+	
+	else if(t_name == kDSH_Key_achieve_sendHeartCnt)				return_value = "achieve_shc";
+	else if(t_name == kDSH_Key_achieve_playBonusGameCnt)			return_value = "achieve_pbgc";
+	else if(t_name == kDSH_Key_achieve_mapGachaCnt)					return_value = "achieve_mgc";
+	else if(t_name == kDSH_Key_achieve_totalFeverCnt)				return_value = "achieve_tfc";
+	else if(t_name == kDSH_Key_achieve_seqNoFailCnt)				return_value = "achieve_snfc";
+	else if(t_name == kDSH_Key_achieve_catchMonsterCnt)				return_value = "achieve_cmc";
+	else if(t_name == kDSH_Key_achieve_continueCnt)					return_value = "achieve_cnc";
+	else if(t_name == kDSH_Key_achieve_attendanceCnt)				return_value = "achieve_ac";
+	else if(t_name == kDSH_Key_achieve_changeCnt)					return_value = "achieve_chc";
+	else if(t_name == kDSH_Key_achieve_failCnt)						return_value = "achieve_fc";
+	else if(t_name == kDSH_Key_achieve_inviteCnt)					return_value = "achieve_ic";
+	else if(t_name == kDSH_Key_achieve_challengeCnt)				return_value = "achieve_clc";
+	else if(t_name == kDSH_Key_achieve_helpCnt)						return_value = "achieve_hc";
+	else if(t_name == kDSH_Key_achieve_helpAcceptCnt)				return_value = "achieve_hac";
+	else if(t_name == kDSH_Key_achieve_challengeAcceptCnt)			return_value = "achieve_cac";
+	else if(t_name == kDSH_Key_achieve_upgradeSuccessCnt)			return_value = "achieve_usc";
+	else if(t_name == kDSH_Key_achieve_perfectClearCnt)				return_value = "achieve_pcc";
+	else if(t_name == kDSH_Key_achieve_seqAttendanceCnt)			return_value = "achieve_sac";
+	else if(t_name == kDSH_Key_achieve_gacha1Cnt)					return_value = "achieve_g1c";
+	else if(t_name == kDSH_Key_achieve_gacha2Cnt)					return_value = "achieve_g2c";
+	else if(t_name == kDSH_Key_achieve_gacha3Cnt)					return_value = "achieve_g3c";
+	else if(t_name == kDSH_Key_achieve_gacha4Cnt)					return_value = "achieve_g4c";
+	else if(t_name == kDSH_Key_achieve_weeklyTopCnt)				return_value = "achieve_wtc";
+	else if(t_name == kDSH_Key_achieve_startLuckyCnt)				return_value = "achieve_slc";
+	else if(t_name == kDSH_Key_achieve_enterShopCnt)				return_value = "achieve_esc";
+	else if(t_name == kDSH_Key_achieve_itemBuyCnt)					return_value = "achieve_ibc";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()
@@ -196,7 +227,7 @@ Json::Value DataStorageHub::getSaveAllUserDataParam ()
 	
 	Json::Value data;
 	
-	for(int i = kSaveUserData_Key_star;i<=kSaveUserData_Key_character;i++)
+	for(int i = kSaveUserData_Key_base+1;i<kSaveUserData_Key_end;i++)
 	{
 		writeParamForKey(data, SaveUserData_Key(i));
 	}
@@ -290,6 +321,17 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, t_unlocked, false);
 	}
 	
+	int achieve_data_cnt = data[getKey(kDSH_Key_achieveDataCnt)].asInt();
+	setIntegerForKey(kDSH_Key_achieveDataCnt, achieve_data_cnt);
+	for(int i=1;i<=achieve_data_cnt;i++)
+	{
+		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, data[getKey(kDSH_Key_achieveData_int1_code)][i].asInt(), false);
+		setIntegerForKey(kDSH_Key_achieveData_int1_value, data[getKey(kDSH_Key_achieveData_int1_code)][i].asInt(), data[getKey(kDSH_Key_achieveData_int1_value)][i].asInt(), false);
+	}
+	
+	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
+		setIntegerForKey((DSH_Key)i, data[getKey((DSH_Key)i)].asInt(), false);
+	
 	fFlush();
 }
 void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_key)
@@ -377,6 +419,19 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 		for(int i=2;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 			data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i] = getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i);
 	}
+	else if(t_key == kSaveUserData_Key_achieve)
+	{
+		int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);
+		data[getKey(kDSH_Key_achieveDataCnt)] = achieve_data_cnt;
+		for(int i=1;i<=achieve_data_cnt;i++)
+		{
+			data[getKey(kDSH_Key_achieveData_int1_code)][i] = getIntegerForKey(kDSH_Key_achieveData_int1_code, i);
+			data[getKey(kDSH_Key_achieveData_int1_value)][i] = getIntegerForKey(kDSH_Key_achieveData_int1_value, getIntegerForKey(kDSH_Key_achieveData_int1_code, i));
+		}
+		
+		for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
+			data[getKey((DSH_Key)i)] = getIntegerForKey((DSH_Key)i);
+	}
 }
 void DataStorageHub::saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector)
 {
@@ -462,6 +517,18 @@ void DataStorageHub::resetDSH ()
 	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
 	for(int i=2;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
+	
+	int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);
+	setIntegerForKey(kDSH_Key_achieveDataCnt, 0);
+	for(int i=1;i<=achieve_data_cnt;i++)
+	{
+		int code = getIntegerForKey(kDSH_Key_achieveData_int1_code, i);
+		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, 0);
+		setIntegerForKey(kDSH_Key_achieveData_int1_value, code, 0);
+	}
+	
+	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
+		setIntegerForKey((DSH_Key)i, 0, false);
 	
 	fFlush();
 }
