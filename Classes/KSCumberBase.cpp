@@ -911,7 +911,7 @@ void KSCumberBase::circleMoving(float dt)
 			}
 		}
 		if(cnt >= 3)
-			CCLog("snakeMoving cnt !! = %d", cnt);
+			CCLog("circleMoving cnt !! = %d", cnt);
 		if(cnt >= 30)
 		{
 			pathFound = false;
@@ -1073,7 +1073,7 @@ void KSCumberBase::snakeMoving(float dt)
 			}
 		}
 		if(cnt >= 3)
-			CCLog("circleMoving cnt !! = %d", cnt);
+			CCLog("snakeMoving cnt !! = %d", cnt);
 		if(cnt >= 30)
 		{
 			pathFound = false;
