@@ -236,7 +236,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kInviteTagProfileImg);
 	profileImg->setPosition(ccp(27, 22));
-	profileImg->setScale(45.f / profileImg->getContentSize().width);
+	profileImg->setScale(38.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kInvite_Z_profileImg);
 
 
@@ -320,14 +320,14 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	_menu->addChild(sendBtn,2);
 
 	title = CCLabelTTF::create("","Helvetica",12);
-	title->setPosition(ccp(60,28));
+	title->setPosition(ccp(60,24));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kInviteTagTitle);
 	cell->addChild(title,2);
 
 
-	score = CCLabelTTF::create("","Helvetica",20);
-	score->setPosition(ccp(60,5));
+	score = CCLabelTTF::create("","Helvetica",14);
+	score->setPosition(ccp(60,1));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kInviteTagScore);
 	cell->addChild(score,2);

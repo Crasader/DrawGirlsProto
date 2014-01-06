@@ -15,7 +15,7 @@
 #include "NotiPopup.h"
 #include "WithdrawPopup.h"
 #include "PuzzleCache.h"
-
+#include "MiniGamePopup.h"
 #include "cocos-ext.h"
 #include "StageImgLoader.h"
 #include "KSAlertView.h"
@@ -64,6 +64,9 @@ bool OptionPopup::init()
         return false;
     }
 	
+	
+//	MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
+//	addChild(t_popup, 4);
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)

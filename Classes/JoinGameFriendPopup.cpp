@@ -53,7 +53,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
-	back->addChild(_menu);
+	back2->addChild(_menu);
 	_menu->setPosition(ccp(0, 0));
 	
 	
@@ -62,7 +62,6 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 																														 [=](CCObject*){
 																															 (target_close->*delegate_close)();
 																															 removeFromParent();
-																															 
 																														 });
 	closeBtn->setPosition(ccp(440, 290));
 	_menu->addChild(closeBtn);
@@ -139,11 +138,12 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 
 	
 	addFriend->setPosition(380, 320 - 72);
-	_menu->addChild(addFriend, kZorderJoinGameFriendIdInput + 1);
+	_menu->addChild(addFriend);
 	
 	
 	m_searchIdEditBox = CCEditBox::create(CCSizeMake(190, 25), CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-	
+	m_searchIdEditBox->getBackgroundSprite()->setVisible(false);
+	m_searchIdEditBox->getBackgroundSprite()->setOpacity(0);
 	m_searchIdEditBox->setPosition(ccp(260, 320 - 72 - 3));
 	m_searchIdEditBox->setPlaceHolder("입력해주세요.");
 	m_searchIdEditBox->setTouchPriority(-200);
@@ -152,7 +152,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	m_searchIdEditBox->setInputMode(kEditBoxInputModeSingleLine);
 	m_searchIdEditBox->setDelegate(this);
 	addChild(m_searchIdEditBox, kZorderJoinGameFriendIdInput);
-	
+//	rank_gamefriend_search.png
 	loadRank();
 }
 
@@ -239,7 +239,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kTagGameFriendProfileImg);
 	profileImg->setPosition(ccp(27, 22));
-	profileImg->setScale(45.f / profileImg->getContentSize().width);
+	profileImg->setScale(38.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kZorderJoinGameFriendProfileImg);
 	
 	
@@ -304,12 +304,12 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	_menu->addChild(sendBtn, kZorderJoinGameFriendSend);
 	
 	title = CCLabelTTF::create("","Helvetica",12);
-	title->setPosition(ccp(90,28));
+	title->setPosition(ccp(90,25));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kTagGameFriendNickname);
 	cell->addChild(title, 2);
 	
-	score = CCLabelTTF::create("","Helvetica",20);
+	score = CCLabelTTF::create("","Helvetica",10);
 	score->setPosition(ccp(90,5));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kTagGameFriendLastDate);

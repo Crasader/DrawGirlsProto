@@ -225,7 +225,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 }
 	 });
 	
-	m_onlyKatok->setPosition(ccp(226, 229));
+	m_onlyKatok->setPosition(ccp(226, 229 + 4));
 	_menu->addChild(m_onlyKatok, 3);
 	
 	
@@ -247,7 +247,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 }
 	 });
 	
-	m_onlyGameFriend->setPosition(ccp(317, 229));
+	m_onlyGameFriend->setPosition(ccp(317, 229 + 4));
 	_menu->addChild(m_onlyGameFriend, 3);
 	
 	
@@ -268,7 +268,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 }
 	 });
 	
-	m_totalFriend->setPosition(ccp(406, 229));
+	m_totalFriend->setPosition(ccp(408, 229 + 4));
 	_menu->addChild(m_totalFriend, 3);
 	
 	m_rankCategory = RankCategory::kTotalFriend;
@@ -503,7 +503,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kRP_RT_profileImg);
 	profileImg->setPosition(ccp(62, 22));
-	profileImg->setScale(45.f / profileImg->getContentSize().width);
+	profileImg->setScale(38.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kRP_Z_profileImg);
 	
 	
@@ -588,14 +588,14 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	_menu->addChild(sendBtn,2);
 	
 	title = CCLabelTTF::create("","Helvetica",12);
-	title->setPosition(ccp(90,28));
+	title->setPosition(ccp(90,23));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kRP_RT_title);
 	cell->addChild(title,2);
 	
 	
 	score = CCLabelTTF::create("","Helvetica",20);
-	score->setPosition(ccp(90,5));
+	score->setPosition(ccp(90,5 - 5));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kRP_RT_score);
 	cell->addChild(score,2);
@@ -1459,6 +1459,8 @@ void RankPopup::touchCellIndex(int idx)
 	m_highScore =
 	CCLabelBMFont::create(
 						  scoreStr.c_str(), "mb_white_font.fnt");
+	
+	m_highScore->setScale(0.5f);
 	m_highScore->setPosition(ccp(216 / 2.f, 86 / 2.f));
 	addChild(m_highScore, 3);
 	if(m_currentSelectSprite)

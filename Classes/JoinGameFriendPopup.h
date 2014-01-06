@@ -56,6 +56,10 @@ public:
 class JoinGameFriendPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate, public CCEditBoxDelegate
 {
 public:
+	virtual void editBoxEditingDidBegin(CCEditBox* editBox)
+	{
+		m_searchIdEditBox->getBackgroundSprite()->setVisible(false);
+	}
 	static JoinGameFriendPopup* create(CCObject* t_close, SEL_CallFunc d_close);
 	
 	virtual ~JoinGameFriendPopup(){
