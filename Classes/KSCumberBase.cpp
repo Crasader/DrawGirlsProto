@@ -1844,6 +1844,7 @@ void KSCumberBase::movingAndCrash( float dt )
 				break;
 			case SNAKE_TYPE:
 				snakeMoving(dt);
+				break;
 		}
 	};
 	

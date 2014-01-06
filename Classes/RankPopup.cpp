@@ -206,45 +206,74 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	joinGameFriend->setOpacity(0);
 	_menu->addChild(joinGameFriend);
 
+	// 분류 지정.
 	
-	
+	// 카톡 친구.
 	m_onlyKatok = CCMenuItemImageLambda::create
 	("rank_friend_rank_1.png", "rank_friend_rank_1.png",
 	 [=](CCObject* t)
 	 {
-		 
+		 if(m_rankCategory != RankCategory::kKnownFriend)
+		 {
+			 m_rankCategory = RankCategory::kKnownFriend;
+			 rankTableView->removeFromParent();
+			 loadRank();
+			 m_onlyKatok->setOpacity(255);
+			 m_onlyGameFriend->setOpacity(0);
+			 m_totalFriend->setOpacity(0);
+		 }
 	 });
 	
 	m_onlyKatok->setPosition(ccp(226, 229));
 	_menu->addChild(m_onlyKatok, 3);
 	
 	
+	// 게임 친구ㅇㅇㅇㅇ
 	m_onlyGameFriend = CCMenuItemImageLambda::create
 	("rank_friend_rank_2.png", "rank_friend_rank_2.png",
 	 [=](CCObject* t)
 	 {
 		 
+		 if(m_rankCategory != RankCategory::kUnknownFriend)
+		 {
+			 m_rankCategory = RankCategory::kUnknownFriend;
+			 rankTableView->removeFromParent();
+			 loadRank();
+			 m_onlyKatok->setOpacity(0);
+			 m_onlyGameFriend->setOpacity(255);
+			 m_totalFriend->setOpacity(0);
+		 }
 	 });
 	
 	m_onlyGameFriend->setPosition(ccp(317, 229));
 	_menu->addChild(m_onlyGameFriend, 3);
 	
 	
-	
+	// 전체 친구
 	m_totalFriend = CCMenuItemImageLambda::create
 	("rank_friend_rank_3.png", "rank_friend_rank_3.png",
 	 [=](CCObject* t)
 	 {
-		 
+		 if(m_rankCategory != RankCategory::kTotalFriend)
+		 {
+			 m_rankCategory = RankCategory::kTotalFriend;
+			 rankTableView->removeFromParent();
+			 loadRank();
+			 m_onlyKatok->setOpacity(0);
+			 m_onlyGameFriend->setOpacity(0);
+			 m_totalFriend->setOpacity(255);
+		 }
 	 });
 	
 	m_totalFriend->setPosition(ccp(406, 229));
 	_menu->addChild(m_totalFriend, 3);
 	
-		
-	
+	m_rankCategory = RankCategory::kTotalFriend;
 	
 	loadRank();
+	
+	m_onlyKatok->setOpacity(0);
+	m_onlyGameFriend->setOpacity(0);
 }
 void RankPopup::loadRank ()
 {
@@ -264,40 +293,56 @@ void RankPopup::loadRank ()
 	 */
 	
 	Json::Value appfriends;
-	for(auto i : KnownFriends::getInstance()->getFriends())
+	if(m_rankCategory != RankCategory::kUnknownFriend)
 	{
-		Json::Value v;
-		v["friends_nickname"] = i.nick;
-		v["hashed_talk_user_id"] = i.hashedTalkUserId;
-		v["message_blocked"] = i.messageBlocked;
-		v["nickname"] = i.nick;
-		v["profile_image_url"] = i.profileUrl;
-		v["user_id"] = i.userId;
-		appfriends.append(v);
+		
+		for(auto i : KnownFriends::getInstance()->getFriends())
+		{
+			Json::Value v;
+			v["friends_nickname"] = i.nick;
+			v["hashed_talk_user_id"] = i.hashedTalkUserId;
+			v["message_blocked"] = i.messageBlocked;
+			v["nickname"] = i.nick;
+			v["profile_image_url"] = i.profileUrl;
+			v["user_id"] = i.userId;
+			appfriends.append(v);
+		}
 	}
-	for(auto i : UnknownFriends::getInstance()->getFriends())
+	if(m_rankCategory != RankCategory::kKnownFriend)
 	{
-		Json::Value v;
-		v["friends_nickname"] = i.nick;
-		v["hashed_talk_user_id"] = i.hashedTalkUserId;
-		v["message_blocked"] = i.messageBlocked;
-		v["nickname"] = i.nick;
-		v["profile_image_url"] = i.profileUrl;
-		v["user_id"] = i.userId;
-		appfriends.append(v);
+		
+		for(auto i : UnknownFriends::getInstance()->getFriends())
+		{
+			Json::Value v;
+			v["friends_nickname"] = i.nick;
+			v["hashed_talk_user_id"] = i.hashedTalkUserId;
+			v["message_blocked"] = i.messageBlocked;
+			v["nickname"] = i.nick;
+			v["profile_image_url"] = i.profileUrl;
+			v["user_id"] = i.userId;
+			appfriends.append(v);
+		}
 	}
 	appfriends.append(hspConnector::get()->myKakaoInfo);
 	Json::Value p;
 	
 	
 	
-	for(auto i : KnownFriends::getInstance()->getFriends())
+	if(m_rankCategory != RankCategory::kUnknownFriend)
 	{
-		p["memberIDList"].append(i.userId);
+		
+		for(auto i : KnownFriends::getInstance()->getFriends())
+		{
+			p["memberIDList"].append(i.userId);
+		}
 	}
-	for(auto i : UnknownFriends::getInstance()->getFriends())
+	if(m_rankCategory != RankCategory::kKnownFriend)
 	{
-		p["memberIDList"].append(i.userId);
+		
+		for(auto i : UnknownFriends::getInstance()->getFriends())
+		{
+			p["memberIDList"].append(i.userId);
+		}
 	}
 	
 	
