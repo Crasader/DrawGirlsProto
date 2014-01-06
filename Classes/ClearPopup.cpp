@@ -29,6 +29,7 @@
 #include "ASPopupView.h"
 #include "StartSettingScene.h"
 #include "MiniGamePopup.h"
+#include "TutorialFlowStep.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -65,6 +66,9 @@ bool ClearPopup::init()
     {
         return false;
     }
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
+		myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_homeClick);
 	
 	is_menu_enable = false;
 	is_loaded_list = false;
@@ -414,13 +418,13 @@ void ClearPopup::checkChallengeOrHelp()
 		t_popup->setContainerNode(t_container);
 		addChild(t_popup, kZ_CP_popup);
 		
-		CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
 		case_back->setPosition(CCPointZero);
 		t_container->addChild(case_back);
 		
 		case_back->setContentSize(CCSizeMake(330, 265));
 		
-		CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+		CCLabelTTF* title_img = CCLabelTTF::create("보답하기", mySGD->getFont().c_str(), 13);
 		title_img->setPosition(ccp(0, 111));
 		t_container->addChild(title_img);
 		
@@ -444,8 +448,8 @@ void ClearPopup::checkChallengeOrHelp()
 		t_container->addChild(close_menu);
 		
 		
-		CCSprite* n_send_heart = CCSprite::create("item_buy_popup_close.png");
-		CCSprite* s_send_heart = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* n_send_heart = CCSprite::create("help_send.png");
+		CCSprite* s_send_heart = CCSprite::create("help_send.png");
 		s_send_heart->setColor(ccGRAY);
 		
 		CCMenuItemSpriteLambda* send_heart_item = CCMenuItemSpriteLambda::create(n_send_heart, s_send_heart, [=](CCObject* sender)
@@ -460,6 +464,17 @@ void ClearPopup::checkChallengeOrHelp()
 		send_heart_menu->setTouchPriority(t_popup->getTouchPriority()-1);
 		send_heart_menu->setPosition(ccp(0,-100));
 		t_container->addChild(send_heart_menu);
+	}
+	
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	
+	if(recent_step == kTutorialFlowStep_homeClick)
+	{
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_homeClick);
+		addChild(t_tutorial, kZ_CP_popup);
+		
+		tutorial_node = t_tutorial;
 	}
 }
 
@@ -789,97 +804,122 @@ void ClearPopup::menuAction(CCObject* pSender)
 	{
 		return;
 	}
-	is_menu_enable = false;
-	AudioEngine::sharedInstance()->stopAllEffects();
-	int tag = ((CCNode*)pSender)->getTag();
 	
-	if(tag == kMT_CP_ok)
+	AudioEngine::sharedInstance()->stopAllEffects();
+	
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	
+	if(recent_step == kTutorialFlowStep_homeClick)
 	{
-		mySGD->setIsMeChallenge(false);
-		mySGD->setIsAcceptChallenge(false);
-		mySGD->setIsAcceptHelp(false);
-		mySGD->selectFriendCard();
-		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
-//		mySGD->resetLabels();
-		hidePopup();
-	}
-	else if(tag == kMT_CP_replay)
-	{
-		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
-//		mySGD->resetLabels();
+		int tag = ((CCNode*)pSender)->getTag();
 		
-		CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
-//		StageSettingPopup* t_popup = StageSettingPopup::create();
-//		t_popup->setHideFinalAction(target_final, delegate_final);
-//		getParent()->addChild(t_popup, kPMS_Z_popup);
-//		
-//		target_final = NULL;
-//		hidePopup();
+		if(tag == kMT_CP_ok)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_pieceType);
+			is_menu_enable = false;
+			mySGD->setIsMeChallenge(false);
+			mySGD->setIsAcceptChallenge(false);
+			mySGD->setIsAcceptHelp(false);
+			mySGD->selectFriendCard();
+			AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+			//		mySGD->resetLabels();
+			hidePopup();
+			removeChild(tutorial_node);
+		}
 	}
-	else if(tag == kMT_CP_rubyShop)
+	else
 	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(NULL, NULL);
-		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_CP_heartTime)));
-		t_shop->setShopCode(kSC_ruby);
-		addChild(t_shop, kZ_CP_popup);
-		is_menu_enable = true;
-	}
-	else if(tag == kMT_CP_goldShop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(NULL, NULL);
-		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_CP_heartTime)));
-		t_shop->setShopCode(kSC_gold);
-		addChild(t_shop, kZ_CP_popup);
-		is_menu_enable = true;
-	}
-	else if(tag == kMT_CP_heartShop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(NULL, NULL);
-		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_CP_heartTime)));
-		t_shop->setShopCode(kSC_heart);
-		addChild(t_shop, kZ_CP_popup);
-		is_menu_enable = true;
-	}
-	else if(tag == kMT_CP_friendPoint)
-	{
-		if(!friend_point_popup)
+		is_menu_enable = false;
+		int tag = ((CCNode*)pSender)->getTag();
+		
+		if(tag == kMT_CP_ok)
+		{
+			mySGD->setIsMeChallenge(false);
+			mySGD->setIsAcceptChallenge(false);
+			mySGD->setIsAcceptHelp(false);
+			mySGD->selectFriendCard();
+			AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+			//		mySGD->resetLabels();
+			hidePopup();
+		}
+		else if(tag == kMT_CP_replay)
+		{
+			AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+			//		mySGD->resetLabels();
+			
+			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+			//		StageSettingPopup* t_popup = StageSettingPopup::create();
+			//		t_popup->setHideFinalAction(target_final, delegate_final);
+			//		getParent()->addChild(t_popup, kPMS_Z_popup);
+			//
+			//		target_final = NULL;
+			//		hidePopup();
+		}
+		else if(tag == kMT_CP_rubyShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(NULL, NULL);
+			t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_CP_heartTime)));
+			t_shop->setShopCode(kSC_ruby);
+			addChild(t_shop, kZ_CP_popup);
+			is_menu_enable = true;
+		}
+		else if(tag == kMT_CP_goldShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(NULL, NULL);
+			t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_CP_heartTime)));
+			t_shop->setShopCode(kSC_gold);
+			addChild(t_shop, kZ_CP_popup);
+			is_menu_enable = true;
+		}
+		else if(tag == kMT_CP_heartShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(NULL, NULL);
+			t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_CP_heartTime)));
+			t_shop->setShopCode(kSC_heart);
+			addChild(t_shop, kZ_CP_popup);
+			is_menu_enable = true;
+		}
+		else if(tag == kMT_CP_friendPoint)
+		{
+			if(!friend_point_popup)
+			{
+				CCNode* menu_node = ((CCNode*)pSender)->getParent();
+				CCNode* top_node = menu_node->getParent();
+				friend_point_popup = CCSprite::create("candy_popup.png");
+				friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
+				friend_point_popup->setPosition(ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+				top_node->addChild(friend_point_popup, -1);
+				
+				CCSprite* n_close = CCSprite::create("candy_popup_close.png");
+				CCSprite* s_close = CCSprite::create("candy_popup_close.png");
+				s_close->setColor(ccGRAY);
+				
+				CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(ClearPopup::menuAction));
+				close_item->setTag(kMT_CP_friendPointClose);
+				
+				CCMenu* close_menu = CCMenu::createWithItem(close_item);
+				close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
+				friend_point_popup->addChild(close_menu);
+				
+				CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY()-12));
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::endShowPopup));
+				CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+				friend_point_popup->runAction(t_seq);
+			}
+			else
+				is_menu_enable = true;
+		}
+		else if(tag == kMT_CP_friendPointClose)
 		{
 			CCNode* menu_node = ((CCNode*)pSender)->getParent();
-			CCNode* top_node = menu_node->getParent();
-			friend_point_popup = CCSprite::create("candy_popup.png");
-			friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
-			friend_point_popup->setPosition(ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-			top_node->addChild(friend_point_popup, -1);
-			
-			CCSprite* n_close = CCSprite::create("candy_popup_close.png");
-			CCSprite* s_close = CCSprite::create("candy_popup_close.png");
-			s_close->setColor(ccGRAY);
-			
-			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(ClearPopup::menuAction));
-			close_item->setTag(kMT_CP_friendPointClose);
-			
-			CCMenu* close_menu = CCMenu::createWithItem(close_item);
-			close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
-			friend_point_popup->addChild(close_menu);
-			
-			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY()-12));
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::endShowPopup));
+			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::closeFriendPointPopup));
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
 			friend_point_popup->runAction(t_seq);
 		}
-		else
-			is_menu_enable = true;
-	}
-	else if(tag == kMT_CP_friendPointClose)
-	{
-		CCNode* menu_node = ((CCNode*)pSender)->getParent();
-		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::closeFriendPointPopup));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-		friend_point_popup->runAction(t_seq);
 	}
 }
 

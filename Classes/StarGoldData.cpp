@@ -204,7 +204,7 @@ int StarGoldData::getGold()
 {
 	return myDSH->getIntegerForKey(kDSH_Key_savedGold);
 }
-void StarGoldData::setGold( int t_gold )
+void StarGoldData::setGold( int t_gold , bool is_write/* = true */)
 {
 	if(myDSH->getIntegerForKey(kDSH_Key_savedGold) < t_gold)
 	{
@@ -222,7 +222,7 @@ void StarGoldData::setGold( int t_gold )
 		}
 	}
 	
-	myDSH->setIntegerForKey(kDSH_Key_savedGold, t_gold);
+	myDSH->setIntegerForKey(kDSH_Key_savedGold, t_gold, is_write);
 
 	if(gold_label)
 		gold_label->setString(CCString::createWithFormat("%d", t_gold)->getCString());
@@ -872,8 +872,11 @@ void StarGoldData::myInit()
 
 		AudioEngine::sharedInstance()->setSoundOnOff(!myDSH->getBoolForKey(kDSH_Key_bgmOff));
 		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
-
 	}
+	
+	is_me_challenge = false;
+	is_accept_challenge = false;
+	is_accept_help = false;
 }
 
 void StarGoldData::setHeartMax(int t_data)

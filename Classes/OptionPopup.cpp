@@ -43,10 +43,8 @@ enum OptionPopupMenuTag{
 	kOP_MT_logout,
 	kOP_MT_noti,
 	kOP_MT_withdraw,
-	kOP_MT_controlJoystickRight,
-	kOP_MT_controlJoystickLeft,
-	kOP_MT_joystickFixed,
-	kOP_MT_joystickMove,
+	kOP_MT_joystickPositioning,
+	kOP_MT_joystickMoving,
 	kOP_MT_tutorial,
 	kOP_MT_minsu
 };
@@ -163,82 +161,36 @@ bool OptionPopup::init()
 	main_case->addChild(withdraw_menu, kOP_Z_content);
 	
 	
-	CCSprite* n_joystick_right = CCSprite::create("option_mode_right.png");
-	n_joystick_right->setColor(ccGRAY);
-	CCSprite* s_joystick_right = CCSprite::create("option_mode_right.png");
-	s_joystick_right->setColor(ccc3(100, 100, 100));
-	CCSprite* d_joystick_right = CCSprite::create("option_mode_right.png");
+	CCSprite* n_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 40));
+	n_joystick_positioning->setOpacity(0);
+	CCSprite* s_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 40));
+	s_joystick_positioning->setOpacity(0);
 	
-	joystick_right_item = CCMenuItemSprite::create(n_joystick_right, s_joystick_right, d_joystick_right, this, menu_selector(OptionPopup::menuAction));
-	joystick_right_item->setTag(kOP_MT_controlJoystickRight);
+	CCMenuItem* joystick_positioning_item = CCMenuItemSprite::create(n_joystick_positioning, s_joystick_positioning, this, menu_selector(OptionPopup::menuAction));
+	joystick_positioning_item->setTag(kOP_MT_joystickPositioning);
 	
-	CCMenu* joystick_right_menu = CCMenu::createWithItem(joystick_right_item);
-	joystick_right_menu->setPosition(getContentPosition(kOP_MT_controlJoystickRight));
-	main_case->addChild(joystick_right_menu, kOP_Z_content);
+	joystick_positioning_menu = CCMenu::createWithItem(joystick_positioning_item);
+	joystick_positioning_menu->setPosition(getContentPosition(kOP_MT_joystickPositioning));
+	main_case->addChild(joystick_positioning_menu, kOP_Z_content);
 	
-	
-	CCSprite* n_joystick_left = CCSprite::create("option_mode_left.png");
-	n_joystick_left->setColor(ccGRAY);
-	CCSprite* s_joystick_left = CCSprite::create("option_mode_left.png");
-	s_joystick_left->setColor(ccc3(100, 100, 100));
-	CCSprite* d_joystick_left = CCSprite::create("option_mode_left.png");
-	
-	joystick_left_item = CCMenuItemSprite::create(n_joystick_left, s_joystick_left, d_joystick_left, this, menu_selector(OptionPopup::menuAction));
-	joystick_left_item->setTag(kOP_MT_controlJoystickLeft);
-	
-	CCMenu* joystick_left_menu = CCMenu::createWithItem(joystick_left_item);
-	joystick_left_menu->setPosition(getContentPosition(kOP_MT_controlJoystickLeft));
-	main_case->addChild(joystick_left_menu, kOP_Z_content);
-	
-	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
-	{
-		joystick_right_item->setEnabled(false);
-		joystick_left_item->setEnabled(true);
-	}
-	else
-	{
-		joystick_right_item->setEnabled(true);
-		joystick_left_item->setEnabled(false);
-	}
+	joystick_positioning_img = NULL;
+	resetJoystickPositioningMenu();
 	
 	
-	CCSprite* n_joystick_fixed = CCSprite::create("option_mode_lock.png");
-	n_joystick_fixed->setColor(ccGRAY);
-	CCSprite* s_joystick_fixed = CCSprite::create("option_mode_lock.png");
-	s_joystick_fixed->setColor(ccc3(100, 100, 100));
-	CCSprite* d_joystick_fixed = CCSprite::create("option_mode_lock.png");
+	CCSprite* n_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 40));
+	n_joystick_moving->setOpacity(0);
+	CCSprite* s_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 40));
+	s_joystick_moving->setOpacity(0);
 	
-	joystick_fixed_item = CCMenuItemSprite::create(n_joystick_fixed, s_joystick_fixed, d_joystick_fixed, this, menu_selector(OptionPopup::menuAction));
-	joystick_fixed_item->setTag(kOP_MT_joystickFixed);
+	CCMenuItem* joystick_moving_item = CCMenuItemSprite::create(n_joystick_moving, s_joystick_moving, this, menu_selector(OptionPopup::menuAction));
+	joystick_moving_item->setTag(kOP_MT_joystickMoving);
 	
-	CCMenu* joystick_fixed_menu = CCMenu::createWithItem(joystick_fixed_item);
-	joystick_fixed_menu->setPosition(getContentPosition(kOP_MT_joystickFixed));
-	main_case->addChild(joystick_fixed_menu, kOP_Z_content);
+	joystick_moving_menu = CCMenu::createWithItem(joystick_moving_item);
+	joystick_moving_menu->setPosition(getContentPosition(kOP_MT_joystickMoving));
+	main_case->addChild(joystick_moving_menu, kOP_Z_content);
 	
-	
-	CCSprite* n_joystick_move = CCSprite::create("option_mode_move.png");
-	n_joystick_move->setColor(ccGRAY);
-	CCSprite* s_joystick_move = CCSprite::create("option_mode_move.png");
-	s_joystick_move->setColor(ccc3(100, 100, 100));
-	CCSprite* d_joystick_move = CCSprite::create("option_mode_move.png");
-	
-	joystick_move_item = CCMenuItemSprite::create(n_joystick_move, s_joystick_move, d_joystick_move, this, menu_selector(OptionPopup::menuAction));
-	joystick_move_item->setTag(kOP_MT_joystickMove);
-	
-	CCMenu* joystick_move_menu = CCMenu::createWithItem(joystick_move_item);
-	joystick_move_menu->setPosition(getContentPosition(kOP_MT_joystickMove));
-	main_case->addChild(joystick_move_menu, kOP_Z_content);
-	
-	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
-	{
-		joystick_fixed_item->setEnabled(false);
-		joystick_move_item->setEnabled(true);
-	}
-	else
-	{
-		joystick_fixed_item->setEnabled(true);
-		joystick_move_item->setEnabled(false);
-	}
+	joystick_moving_img = NULL;
+	resetJoystickMovingMenu();
 	
 	
 	CCSprite* n_tutorial = CCSprite::create("option_tutorial.png");
@@ -472,32 +424,20 @@ void OptionPopup::menuAction(CCObject* pSender)
 		WithdrawPopup* t_wp = WithdrawPopup::create(this, callfunc_selector(OptionPopup::popupClose));
 		addChild(t_wp, kOP_Z_popup);
 	}
-	else if(tag == kOP_MT_controlJoystickRight)
+	else if(tag == kOP_MT_joystickPositioning)
 	{
-		myDSH->setIntegerForKey(kDSH_Key_controlJoystickDirection, kControlJoystickDirection_right);
-		joystick_right_item->setEnabled(false);
-		joystick_left_item->setEnabled(true);
+		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)
+			myDSH->setIntegerForKey(kDSH_Key_controlJoystickDirection, kControlJoystickDirection_right);
+		else if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+			myDSH->setIntegerForKey(kDSH_Key_controlJoystickDirection, kControlJoystickDirection_left);
+		
+		resetJoystickPositioningMenu();
 		is_menu_enable = true;
 	}
-	else if(tag == kOP_MT_controlJoystickLeft)
+	else if(tag == kOP_MT_joystickMoving)
 	{
-		myDSH->setIntegerForKey(kDSH_Key_controlJoystickDirection, kControlJoystickDirection_left);
-		joystick_right_item->setEnabled(true);
-		joystick_left_item->setEnabled(false);
-		is_menu_enable = true;
-	}
-	else if(tag == kOP_MT_joystickFixed)
-	{
-		myDSH->setBoolForKey(kDSH_Key_isControlJoystickFixed, true);
-		joystick_fixed_item->setEnabled(false);
-		joystick_move_item->setEnabled(true);
-		is_menu_enable = true;
-	}
-	else if(tag == kOP_MT_joystickMove)
-	{
-		myDSH->setBoolForKey(kDSH_Key_isControlJoystickFixed, false);
-		joystick_fixed_item->setEnabled(true);
-		joystick_move_item->setEnabled(false);
+		myDSH->setBoolForKey(kDSH_Key_isControlJoystickFixed, !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
+		resetJoystickMovingMenu();
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_tutorial)
@@ -567,6 +507,58 @@ void OptionPopup::resetEffectMenu()
 	main_case->addChild(effect_img, kOP_Z_content);
 }
 
+void OptionPopup::resetJoystickPositioningMenu()
+{
+	if(joystick_positioning_img)
+	{
+		joystick_positioning_img->removeFromParent();
+		joystick_positioning_img = NULL;
+	}
+	
+	string filename;
+	CCPoint img_position;
+	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)
+	{
+		filename = "option_mode_left.png";
+		img_position = ccp(-20,0);
+	}
+	else
+	{
+		filename = "option_mode_right.png";
+		img_position = ccp(20,0);
+	}
+	
+	joystick_positioning_img = CCSprite::create(filename.c_str());
+	joystick_positioning_img->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickPositioning), img_position));
+	main_case->addChild(joystick_positioning_img, kOP_Z_content);
+}
+
+void OptionPopup::resetJoystickMovingMenu()
+{
+	if(joystick_moving_img)
+	{
+		joystick_moving_img->removeFromParent();
+		joystick_moving_img = NULL;
+	}
+	
+	string filename;
+	CCPoint img_position;
+	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+	{
+		filename = "option_mode_lock.png";
+		img_position = ccp(-20,0);
+	}
+	else
+	{
+		filename = "option_mode_move.png";
+		img_position = ccp(20,0);
+	}
+	
+	joystick_moving_img = CCSprite::create(filename.c_str());
+	joystick_moving_img->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickMoving), img_position));
+	main_case->addChild(joystick_moving_img, kOP_Z_content);
+}
+
 CCPoint OptionPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
@@ -581,10 +573,8 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_logout)			return_value = ccp(350, 54);
 	else if(t_tag == kOP_MT_noti)			return_value = ccp(117, 54);
 	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(356, 120);
-	else if(t_tag == kOP_MT_controlJoystickRight)	return_value = ccp(173, 135);
-	else if(t_tag == kOP_MT_controlJoystickLeft)	return_value = ccp(230, 135);
-	else if(t_tag == kOP_MT_joystickFixed)			return_value = ccp(173, 100);
-	else if(t_tag == kOP_MT_joystickMove)			return_value = ccp(230, 100);
+	else if(t_tag == kOP_MT_joystickPositioning)	return_value = ccp(202, 135);
+	else if(t_tag == kOP_MT_joystickMoving)			return_value = ccp(202, 100);
 	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(200, 180);
 	else if(t_tag == kOP_MT_minsu)			return_value = ccp(455,25);
 	

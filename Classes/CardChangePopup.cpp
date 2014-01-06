@@ -11,6 +11,7 @@
 #include "CardCase.h"
 #include "StageImgLoader.h"
 #include "CumberShowWindow.h"
+#include "TutorialFlowStep.h"
 
 enum CardChangePopupZorder{
 	kCardChangePopupZorder_gray = 1,
@@ -355,37 +356,64 @@ void CardChangePopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell
 	if(!is_menu_enable)
 		return;
 	
-	int touched_card_number = have_card_list[cell->getIdx()].card_number;
-	if(touched_card_number == clicked_card_number)
-		return;
-	
-	is_menu_enable = false;
-	
-	if(clicked_card_number > 0)
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	if(recent_step == kTutorialFlowStep_targetCardClick)
 	{
-		int found_idx = -1;
-		for(int i=0;i<numberOfCellsInTableView(table) && found_idx == -1;i++)
-		{
-			CCTableViewCell* t_cell = table->cellAtIndex(i);
-			if(t_cell)
-			{
-				int cell_card_number = t_cell->getTag();
-				if(cell_card_number == clicked_card_number)
-					found_idx = i;
-			}
-		}
+		int touched_card_number = have_card_list[cell->getIdx()].card_number;
 		setSelectedCard(touched_card_number);
-		if(found_idx != -1)
-			table->updateCellAtIndex(found_idx);
 		table->updateCellAtIndex(cell->getIdx());
+		
+		myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_mountClick);
+		removeChild(tutorial_node);
+		
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_mountClick);
+		addChild(t_tutorial, kCardChangePopupZorder_popup);
+		
+		tutorial_node = t_tutorial;
+	}
+	else if(recent_step == kTutorialFlowStep_mountClick)
+	{
+		
+	}
+	else if(recent_step == kTutorialFlowStep_closeClick)
+	{
+		
 	}
 	else
 	{
-		setSelectedCard(touched_card_number);
-		table->updateCellAtIndex(cell->getIdx());
+		int touched_card_number = have_card_list[cell->getIdx()].card_number;
+		if(touched_card_number == clicked_card_number)
+			return;
+		
+		is_menu_enable = false;
+		
+		if(clicked_card_number > 0)
+		{
+			int found_idx = -1;
+			for(int i=0;i<numberOfCellsInTableView(table) && found_idx == -1;i++)
+			{
+				CCTableViewCell* t_cell = table->cellAtIndex(i);
+				if(t_cell)
+				{
+					int cell_card_number = t_cell->getTag();
+					if(cell_card_number == clicked_card_number)
+						found_idx = i;
+				}
+			}
+			setSelectedCard(touched_card_number);
+			if(found_idx != -1)
+				table->updateCellAtIndex(found_idx);
+			table->updateCellAtIndex(cell->getIdx());
+		}
+		else
+		{
+			setSelectedCard(touched_card_number);
+			table->updateCellAtIndex(cell->getIdx());
+		}
+		
+		is_menu_enable = true;
 	}
-	
-	is_menu_enable = true;
 }
 CCSize CardChangePopup::cellSizeForTable(CCTableView *table)
 {
@@ -423,6 +451,17 @@ void CardChangePopup::showPopup()
 
 void CardChangePopup::endShowPopup()
 {
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	
+	if(recent_step == kTutorialFlowStep_targetCardClick)
+	{
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_targetCardClick);
+		addChild(t_tutorial, kCardChangePopupZorder_popup);
+		
+		tutorial_node = t_tutorial;
+	}
+	
 	is_menu_enable = true;
 }
 
@@ -453,39 +492,143 @@ void CardChangePopup::menuAction(CCObject* pSender)
 		return;
 	}
 	
-	is_menu_enable = false;
-	int tag = ((CCNode*)pSender)->getTag();
-	
-	if(tag == kCardChangePopupMenuTag_close)
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	if(recent_step == kTutorialFlowStep_targetCardClick)
 	{
-		hidePopup();
-	}
-	else if(tag == kCardChangePopupMenuTag_alignRank)
-	{
-		if(recent_align == kCardChangeAlign_rankReverse)
-			alignHaveCardList(kCardChangeAlign_rank);
-		else
-			alignHaveCardList(kCardChangeAlign_rankReverse);
 		
-		have_card_table->reloadData();
-		is_menu_enable = true;
 	}
-	else if(tag == kCardChangePopupMenuTag_alignTake)
+	else if(recent_step == kTutorialFlowStep_mountClick)
 	{
-		if(recent_align == kCardChangeAlign_takeReverse)
-			alignHaveCardList(kCardChangeAlign_take);
-		else
-			alignHaveCardList(kCardChangeAlign_takeReverse);
+		int tag = ((CCNode*)pSender)->getTag();
 		
-		have_card_table->reloadData();
-		is_menu_enable = true;
-	}
-	else if(tag == kCardChangePopupMenuTag_mount)
-	{
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		myDSH->setIntegerForKey(kDSH_Key_selectedCard, clicked_card_number);
-		if(selected_card_number > 0)
+		if(tag == kCardChangePopupMenuTag_mount)
 		{
+			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, clicked_card_number);
+			if(selected_card_number > 0)
+			{
+				int found_idx = -1;
+				for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
+				{
+					CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
+					if(t_cell)
+					{
+						int cell_card_number = t_cell->getTag();
+						if(cell_card_number == selected_card_number)
+							found_idx = i;
+					}
+				}
+				if(found_idx != -1)
+					have_card_table->updateCellAtIndex(found_idx);
+			}
+			
+			setSelectedCard(clicked_card_number);
+			int found_idx = -1;
+			for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
+			{
+				CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
+				if(t_cell)
+				{
+					int cell_card_number = t_cell->getTag();
+					if(cell_card_number == clicked_card_number)
+						found_idx = i;
+				}
+			}
+			if(found_idx != -1)
+				have_card_table->updateCellAtIndex(found_idx);
+			
+			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_closeClick);
+			removeChild(tutorial_node);
+			
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_closeClick);
+			addChild(t_tutorial, kCardChangePopupZorder_popup);
+			
+			tutorial_node = t_tutorial;
+		}
+	}
+	else if(recent_step == kTutorialFlowStep_closeClick)
+	{
+		int tag = ((CCNode*)pSender)->getTag();
+		
+		if(tag == kCardChangePopupMenuTag_close)
+		{
+			hidePopup();
+			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_backClick);
+			removeChild(tutorial_node);
+		}
+	}
+	else
+	{
+		is_menu_enable = false;
+		int tag = ((CCNode*)pSender)->getTag();
+		
+		if(tag == kCardChangePopupMenuTag_close)
+		{
+			hidePopup();
+		}
+		else if(tag == kCardChangePopupMenuTag_alignRank)
+		{
+			if(recent_align == kCardChangeAlign_rankReverse)
+				alignHaveCardList(kCardChangeAlign_rank);
+			else
+				alignHaveCardList(kCardChangeAlign_rankReverse);
+			
+			have_card_table->reloadData();
+			is_menu_enable = true;
+		}
+		else if(tag == kCardChangePopupMenuTag_alignTake)
+		{
+			if(recent_align == kCardChangeAlign_takeReverse)
+				alignHaveCardList(kCardChangeAlign_take);
+			else
+				alignHaveCardList(kCardChangeAlign_takeReverse);
+			
+			have_card_table->reloadData();
+			is_menu_enable = true;
+		}
+		else if(tag == kCardChangePopupMenuTag_mount)
+		{
+			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, clicked_card_number);
+			if(selected_card_number > 0)
+			{
+				int found_idx = -1;
+				for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
+				{
+					CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
+					if(t_cell)
+					{
+						int cell_card_number = t_cell->getTag();
+						if(cell_card_number == selected_card_number)
+							found_idx = i;
+					}
+				}
+				if(found_idx != -1)
+					have_card_table->updateCellAtIndex(found_idx);
+			}
+			
+			setSelectedCard(clicked_card_number);
+			int found_idx = -1;
+			for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
+			{
+				CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
+				if(t_cell)
+				{
+					int cell_card_number = t_cell->getTag();
+					if(cell_card_number == clicked_card_number)
+						found_idx = i;
+				}
+			}
+			if(found_idx != -1)
+				have_card_table->updateCellAtIndex(found_idx);
+			is_menu_enable = true;
+		}
+		else if(tag == kCardChangePopupMenuTag_release)
+		{
+			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+			clicked_card_number = 0;
 			int found_idx = -1;
 			for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
 			{
@@ -499,44 +642,9 @@ void CardChangePopup::menuAction(CCObject* pSender)
 			}
 			if(found_idx != -1)
 				have_card_table->updateCellAtIndex(found_idx);
+			
+			setSelectedCard(clicked_card_number);
+			is_menu_enable = true;
 		}
-		
-		setSelectedCard(clicked_card_number);
-		int found_idx = -1;
-		for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
-		{
-			CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
-			if(t_cell)
-			{
-				int cell_card_number = t_cell->getTag();
-				if(cell_card_number == clicked_card_number)
-					found_idx = i;
-			}
-		}
-		if(found_idx != -1)
-			have_card_table->updateCellAtIndex(found_idx);
-		is_menu_enable = true;
-	}
-	else if(tag == kCardChangePopupMenuTag_release)
-	{
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
-		clicked_card_number = 0;
-		int found_idx = -1;
-		for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
-		{
-			CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
-			if(t_cell)
-			{
-				int cell_card_number = t_cell->getTag();
-				if(cell_card_number == selected_card_number)
-					found_idx = i;
-			}
-		}
-		if(found_idx != -1)
-			have_card_table->updateCellAtIndex(found_idx);
-		
-		setSelectedCard(clicked_card_number);
-		is_menu_enable = true;
 	}
 }

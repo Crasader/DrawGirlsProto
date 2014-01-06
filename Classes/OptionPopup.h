@@ -45,11 +45,17 @@ private:
 	CCMenu* bgm_menu;
 	CCMenu* effect_menu;
 	
-	CCMenuItem* joystick_right_item;
-	CCMenuItem* joystick_left_item;
+	CCSprite* joystick_positioning_img;
+	CCSprite* joystick_moving_img;
 	
-	CCMenuItem* joystick_fixed_item;
-	CCMenuItem* joystick_move_item;
+	CCMenu* joystick_positioning_menu;
+	CCMenu* joystick_moving_menu;
+	
+//	CCMenuItem* joystick_right_item;
+//	CCMenuItem* joystick_left_item;
+//	
+//	CCMenuItem* joystick_fixed_item;
+//	CCMenuItem* joystick_move_item;
 	
 	void showPopup();
 	void endShowPopup();
@@ -60,6 +66,9 @@ private:
 	
 	void resetBgmMenu();
 	void resetEffectMenu();
+	
+	void resetJoystickPositioningMenu();
+	void resetJoystickMovingMenu();
 	
 	void cheatAction(CCObject* sender);
 	

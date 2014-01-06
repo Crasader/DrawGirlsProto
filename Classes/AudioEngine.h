@@ -221,12 +221,25 @@ public:
 		{
 			if(loop)
 			{
-				LoopEffect* t_effect = new LoopEffect();
-				t_effect->autorelease();
-				unsigned int code = mySAE->playEffect(filename, true);
-				t_effect->filename = filename;
-				t_effect->effectCode = code;
-				loopEffects->addObject(t_effect);
+				bool is_ing = false;
+				for(int i=0;i<loopEffects->count();i++)
+				{
+					LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(i);
+					if(target->filename == filename)
+					{
+						is_ing = true;
+					}
+				}
+				
+				if(!is_ing)
+				{
+					LoopEffect* t_effect = new LoopEffect();
+					t_effect->autorelease();
+					unsigned int code = mySAE->playEffect(filename, true);
+					t_effect->filename = filename;
+					t_effect->effectCode = code;
+					loopEffects->addObject(t_effect);
+				}
 			}
 			else
 			{
@@ -237,16 +250,22 @@ public:
 	
 	void stopEffect(const char* filename)
 	{
-		for(int i=0;i<loopEffects->count();i++)
+		bool is_found;
+		do
 		{
-			LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(i);
-			if(target->filename == filename)
+			is_found = false;
+			for(int i=0;i<loopEffects->count();i++)
 			{
-				mySAE->stopEffect(target->effectCode);
-				loopEffects->removeObject(target);
-				break;
+				LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(i);
+				if(target->filename == filename)
+				{
+					is_found = true;
+					mySAE->stopEffect(target->effectCode);
+					loopEffects->removeObject(target);
+					break;
+				}
 			}
-		}
+		}while(is_found);
 	}
 	
 	void stopAllEffects()

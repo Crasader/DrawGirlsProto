@@ -10,6 +10,7 @@
 #include "EnumDefine.h"
 #include "AudioEngine.h"
 #include "StarGoldData.h"
+#include "TutorialFlowStep.h"
 
 PausePopupLayer* PausePopupLayer::create(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_continue, SEL_CallFunc d_continue, CCObject* t_speed, SEL_CallFunc d_slow, SEL_CallFunc d_normal, SEL_CallFunc d_fast, CCObject* t_replay, SEL_CallFunc d_replay)
 {
@@ -63,48 +64,79 @@ void PausePopupLayer::myInit(CCObject* t_home, SEL_CallFunc d_home, CCObject* t_
 	main_case->setPosition(ccp(40,myDSH->ui_top-25));
 	addChild(main_case);
 	
-	CCSprite* n_home = CCSprite::create("pause_popup_home.png");
-	CCSprite* s_home = CCSprite::create("pause_popup_home.png");
-	s_home->setColor(ccGRAY);
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
-	CCMenuItem* home_item = CCMenuItemSprite::create(n_home, s_home, this, menu_selector(PausePopupLayer::menuAction));
-	home_item->setTag(kMenuTagPPL_home);
-	home_menu = CCMenu::createWithItem(home_item);
-	home_menu->setPosition(ccp(main_case->getContentSize().width/2.f,132));
-	main_case->addChild(home_menu);
-	
-	if(mySGD->getIsMeChallenge() || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
+	if(recent_step == kTutorialFlowStep_ingame)
 	{
+		CCSprite* d_home = CCSprite::create("pause_popup_home.png");
+		d_home->setColor(ccc3(100, 100, 100));
+		d_home->setPosition(ccp(main_case->getContentSize().width/2.f,132));
+		main_case->addChild(d_home);
+		
+		home_menu = NULL;
+		
 		CCSprite* d_replay = CCSprite::create("pause_popup_replay.png");
 		d_replay->setColor(ccc3(100, 100, 100));
 		d_replay->setPosition(ccp(main_case->getContentSize().width/2.f,86));
 		main_case->addChild(d_replay);
 		
 		replay_menu = NULL;
+		
+		CCSprite* n_continue = CCSprite::create("pause_popup_continue.png");
+		CCSprite* s_continue = CCSprite::create("pause_popup_continue.png");
+		s_continue->setColor(ccGRAY);
+		
+		CCMenuItem* continue_item = CCMenuItemSprite::create(n_continue, s_continue, this, menu_selector(PausePopupLayer::menuAction));
+		continue_item->setTag(kMenuTagPPL_continue);
+		continue_menu = CCMenu::createWithItem(continue_item);
+		continue_menu->setPosition(ccp(main_case->getContentSize().width/2.f,40));
+		main_case->addChild(continue_menu);
 	}
 	else
 	{
-		CCSprite* n_replay = CCSprite::create("pause_popup_replay.png");
-		CCSprite* s_replay = CCSprite::create("pause_popup_replay.png");
-		s_replay->setColor(ccGRAY);
+		CCSprite* n_home = CCSprite::create("pause_popup_home.png");
+		CCSprite* s_home = CCSprite::create("pause_popup_home.png");
+		s_home->setColor(ccGRAY);
 		
-		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(PausePopupLayer::menuAction));
-		replay_item->setTag(kMenuTagPPL_replay);
-		replay_menu = CCMenu::createWithItem(replay_item);
-		replay_menu->setPosition(ccp(main_case->getContentSize().width/2.f,86));
-		main_case->addChild(replay_menu);
+		CCMenuItem* home_item = CCMenuItemSprite::create(n_home, s_home, this, menu_selector(PausePopupLayer::menuAction));
+		home_item->setTag(kMenuTagPPL_home);
+		home_menu = CCMenu::createWithItem(home_item);
+		home_menu->setPosition(ccp(main_case->getContentSize().width/2.f,132));
+		main_case->addChild(home_menu);
+		
+		if(mySGD->getIsMeChallenge() || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
+		{
+			CCSprite* d_replay = CCSprite::create("pause_popup_replay.png");
+			d_replay->setColor(ccc3(100, 100, 100));
+			d_replay->setPosition(ccp(main_case->getContentSize().width/2.f,86));
+			main_case->addChild(d_replay);
+			
+			replay_menu = NULL;
+		}
+		else
+		{
+			CCSprite* n_replay = CCSprite::create("pause_popup_replay.png");
+			CCSprite* s_replay = CCSprite::create("pause_popup_replay.png");
+			s_replay->setColor(ccGRAY);
+			
+			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(PausePopupLayer::menuAction));
+			replay_item->setTag(kMenuTagPPL_replay);
+			replay_menu = CCMenu::createWithItem(replay_item);
+			replay_menu->setPosition(ccp(main_case->getContentSize().width/2.f,86));
+			main_case->addChild(replay_menu);
+		}
+		
+		
+		CCSprite* n_continue = CCSprite::create("pause_popup_continue.png");
+		CCSprite* s_continue = CCSprite::create("pause_popup_continue.png");
+		s_continue->setColor(ccGRAY);
+		
+		CCMenuItem* continue_item = CCMenuItemSprite::create(n_continue, s_continue, this, menu_selector(PausePopupLayer::menuAction));
+		continue_item->setTag(kMenuTagPPL_continue);
+		continue_menu = CCMenu::createWithItem(continue_item);
+		continue_menu->setPosition(ccp(main_case->getContentSize().width/2.f,40));
+		main_case->addChild(continue_menu);
 	}
-	
-	
-	CCSprite* n_continue = CCSprite::create("pause_popup_continue.png");
-	CCSprite* s_continue = CCSprite::create("pause_popup_continue.png");
-	s_continue->setColor(ccGRAY);
-	
-	CCMenuItem* continue_item = CCMenuItemSprite::create(n_continue, s_continue, this, menu_selector(PausePopupLayer::menuAction));
-	continue_item->setTag(kMenuTagPPL_continue);
-	continue_menu = CCMenu::createWithItem(continue_item);
-	continue_menu->setPosition(ccp(main_case->getContentSize().width/2.f,40));
-	main_case->addChild(continue_menu);
 	
 	
 //	gesture_menu = NULL;
@@ -285,7 +317,7 @@ void PausePopupLayer::endPopAnimation()
 bool PausePopupLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
 	if(touched_number != 0)		return true;
-	if(home_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kMenuTagPPL_home;
+	if(home_menu && home_menu->ccTouchBegan(pTouch, pEvent))					touched_number = kMenuTagPPL_home;
 	else if(continue_menu->ccTouchBegan(pTouch, pEvent))		touched_number = kMenuTagPPL_continue;
 	else if(replay_menu && replay_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_replay;
 	//		else if(slow_menu->ccTouchBegan(pTouch, pEvent))			touched_number = kMenuTagPPL_slow;

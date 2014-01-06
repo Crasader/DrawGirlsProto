@@ -1003,7 +1003,7 @@ void FeverCoinParent::removing()
 	remove_target->startRemove();
 	remove_target_list.pop_front();
 	
-	mySGD->setGold(mySGD->getGold() + int(10.f*myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)/(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1.f)*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)));
+	mySGD->setGold(mySGD->getGold() + int(10.f*weight_value), false);
 	
 	if(remove_target_list.empty())
 	{
@@ -1013,6 +1013,7 @@ void FeverCoinParent::removing()
 
 void FeverCoinParent::stopRemove()
 {
+	mySGD->setGold(mySGD->getGold());
 	unschedule(schedule_selector(FeverCoinParent::removing));
 	is_removing = false;
 }
@@ -1021,6 +1022,7 @@ void FeverCoinParent::myInit()
 {
 	initWithFile("fever_coin.png", kDefaultSpriteBatchCapacity);
 	is_removing = false;
+	weight_value = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)/(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1.f)*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
 }
 
 GameItemManager* GameItemManager::create()

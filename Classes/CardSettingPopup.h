@@ -38,6 +38,8 @@ public:
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
 private:
+	CCNode* tutorial_node;
+	
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	

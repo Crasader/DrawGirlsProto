@@ -39,6 +39,8 @@ private:
 	
 	bool is_menu_enable;
 	
+	CCNode* tutorial_node;
+	
 	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;
 	CountingBMLabel* friend_point_label;

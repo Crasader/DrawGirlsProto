@@ -20,9 +20,10 @@
 #include "CumberShowWindow.h"
 #include "StartSettingScene.h"
 #include "ASPopupView.h"
-#include "NoticeContent.h"
+#include "CCMenuLambda.h"
 #include "ClearPopup.h"
 #include "FailPopup.h"
+#include "TutorialFlowStep.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -36,14 +37,6 @@ CCScene* PuzzleScene::scene()
 	
     return scene;
 }
-
-enum PuzzleZorder{
-	kPuzzleZorder_back = 1,
-	kPuzzleZorder_puzzle,
-	kPuzzleZorder_right,
-	kPuzzleZorder_top,
-	kPuzzleZorder_popup
-};
 
 bool PuzzleScene::init()
 {
@@ -124,34 +117,7 @@ bool PuzzleScene::init()
 	
 	is_menu_enable = true;
 	
-	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
-	{
-		if(mySGD->getMustBeShowNotice())
-		{
-			ASPopupView* t_popup = ASPopupView::create(-200);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-			
-			NoticeContent* t_container = NoticeContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
-															   {
-																   t_popup->removeFromParent();
-															   }, mySGD->getNoticeList());
-			t_popup->setContainerNode(t_container);
-			addChild(t_popup, kPuzzleZorder_popup);
-		}
-	}
-	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
-	{
-		
-	}
-	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		showClearPopup();
@@ -160,6 +126,63 @@ bool PuzzleScene::init()
 	{
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		showFailPopup();
+	}
+	else
+	{
+		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+		
+		if(recent_step == kTutorialFlowStep_pieceClick)
+		{
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_pieceClick);
+			addChild(t_tutorial, kPuzzleZorder_popup);
+			
+			tutorial_node = t_tutorial;
+		}
+		else if(recent_step == kTutorialFlowStep_readyClick)
+		{
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_readyClick);
+			addChild(t_tutorial, kPuzzleZorder_popup);
+			
+			tutorial_node = t_tutorial;
+		}
+		else if(recent_step == kTutorialFlowStep_pieceClick2)
+		{
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_pieceClick2);
+			addChild(t_tutorial, kPuzzleZorder_popup);
+			
+			tutorial_node = t_tutorial;
+		}
+		else if(recent_step == kTutorialFlowStep_readyClick2)
+		{
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_readyClick2);
+			addChild(t_tutorial, kPuzzleZorder_popup);
+			
+			tutorial_node = t_tutorial;
+		}
+		else if(recent_step == kTutorialFlowStep_backClick)
+		{
+			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			int recent_get_card_cnt = 0;
+			int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+			for(int i=1;i<=take_card_cnt;i++)
+			{
+				int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+					recent_get_card_cnt++;
+			}
+			if(selected_card_number > 0 && recent_get_card_cnt >= 2)
+			{
+				TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+				t_tutorial->initStep(kTutorialFlowStep_backClick);
+				addChild(t_tutorial, kPuzzleZorder_popup);
+				
+				tutorial_node = t_tutorial;
+			}
+		}
 	}
 	
 	return true;
@@ -182,6 +205,16 @@ void PuzzleScene::hideClearPopup()
 	}
 	else
 	{
+		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+		if(recent_step == kTutorialFlowStep_pieceType)
+		{
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_pieceType);
+			addChild(t_tutorial, kPuzzleZorder_popup);
+			
+			tutorial_node = t_tutorial;
+		}
+		
 		showGetPuzzle();
 	}
 }
@@ -556,10 +589,72 @@ void PuzzleScene::pieceAction(int t_stage_number)
 	if(!is_menu_enable)
 		return;
 	
-	selected_stage_number = t_stage_number;
-	setPieceClick(selected_stage_number);
+	bool is_action = true;
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
-	setRightContent();
+	if(recent_step == kTutorialFlowStep_readyClick || recent_step == kTutorialFlowStep_readyClick2 || recent_step == kTutorialFlowStep_pieceType)
+		is_action = false;
+	else if(recent_step == kTutorialFlowStep_pieceClick || recent_step == kTutorialFlowStep_pieceClick2)
+	{
+		int check_puzzle_number = 1;
+		int start_stage = NSDS_GI(check_puzzle_number, kSDS_PZ_startStage_i);
+		if(recent_step == kTutorialFlowStep_pieceClick)
+		{
+			if(t_stage_number != start_stage)
+				is_action = false;
+			else
+			{
+				myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_readyClick);
+				removeChild(tutorial_node);
+				
+				TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+				t_tutorial->initStep(kTutorialFlowStep_readyClick);
+				addChild(t_tutorial, kPuzzleZorder_popup);
+				
+				tutorial_node = t_tutorial;
+			}
+		}
+		else if(recent_step == kTutorialFlowStep_pieceClick2)
+		{
+			if(t_stage_number != start_stage+1)
+				is_action = false;
+			else
+			{
+				myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_readyClick2);
+				removeChild(tutorial_node);
+				
+				TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+				t_tutorial->initStep(kTutorialFlowStep_readyClick2);
+				addChild(t_tutorial, kPuzzleZorder_popup);
+				
+				tutorial_node = t_tutorial;
+			}
+		}
+	}
+	else if(recent_step == kTutorialFlowStep_backClick)
+	{
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		int recent_get_card_cnt = 0;
+		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=take_card_cnt;i++)
+		{
+			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+				recent_get_card_cnt++;
+		}
+		if(selected_card_number > 0 && recent_get_card_cnt >= 2)
+		{
+			is_action = false;
+		}
+	}
+	
+	if(is_action)
+	{
+		selected_stage_number = t_stage_number;
+		setPieceClick(selected_stage_number);
+		
+		setRightContent();
+	}
 }
 
 void PuzzleScene::buyPieceAction(int t_stage_number)
@@ -569,140 +664,167 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 	if(!is_menu_enable)
 		return;
 	
-	is_menu_enable = false;
-	
-	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	
-	ASPopupView* t_popup = ASPopupView::create(-200);
-	
-	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-	if(screen_scale_x < 1.f)
-		screen_scale_x = 1.f;
-	
-	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
-	
-	CCNode* t_container = CCNode::create();
-	t_popup->setContainerNode(t_container);
-	addChild(t_popup);
-	
-	CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-	case_back->setPosition(CCPointZero);
-	t_container->addChild(case_back);
-	
-	case_back->setContentSize(CCSizeMake(230, 250));
-	
-	CCScale9Sprite* content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-	content_back->setPosition(ccp(0,2));
-	t_container->addChild(content_back);
-	
-	content_back->setContentSize(CCSizeMake(202, 146));
-	
-	CCLabelTTF* title_label = CCLabelTTF::create("스테이지 열기", mySGD->getFont().c_str(), 20);
-	title_label->setPosition(ccp(0, 102));
-	t_container->addChild(title_label);
-	
-	CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat("%d gold 로 오픈", NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number))->getCString(), mySGD->getFont().c_str(), 18);
-	content_label->setPosition(CCPointZero);
-	t_container->addChild(content_label);
-	
-	CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-	CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-	s_close->setColor(ccGRAY);
-	
-	CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																		{
-																			is_menu_enable = true;
-																			t_popup->removeFromParent();
-																		});
-	
-	CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
-	close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-	close_menu->setPosition(ccp(92,105));
-	t_container->addChild(close_menu);
-	
-	if(mySGD->getGold() >= NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number))
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	bool is_action = true;
+	if(recent_step == kTutorialFlowStep_pieceClick || recent_step == kTutorialFlowStep_readyClick || recent_step == kTutorialFlowStep_pieceType ||
+	   recent_step == kTutorialFlowStep_pieceClick2 || recent_step == kTutorialFlowStep_readyClick2)
 	{
-		CCSprite* n_buy = CCSprite::create("popup2_buy.png");
-		CCSprite* s_buy = CCSprite::create("popup2_buy.png");
-		s_buy->setColor(ccGRAY);
+		is_action = false;
+	}
+	else if(recent_step == kTutorialFlowStep_backClick)
+	{
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		int recent_get_card_cnt = 0;
+		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=take_card_cnt;i++)
+		{
+			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+				recent_get_card_cnt++;
+		}
+		if(selected_card_number > 0 && recent_get_card_cnt >= 2)
+		{
+			is_action = false;
+		}
+	}
+	
+	if(is_action)
+	{
+		is_menu_enable = false;
 		
-		CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
-			mySGD->setGold(mySGD->getGold() - NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number));
-			myDSH->setIntegerForKey(kDSH_Key_openStageCnt, myDSH->getIntegerForKey(kDSH_Key_openStageCnt)+1);
-			myDSH->setIntegerForKey(kDSH_Key_openStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_openStageCnt), t_stage_number);
-			myDSH->setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, true);
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup);
+		
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+		case_back->setPosition(CCPointZero);
+		t_container->addChild(case_back);
+		
+		case_back->setContentSize(CCSizeMake(230, 250));
+		
+		CCScale9Sprite* content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		content_back->setPosition(ccp(0,2));
+		t_container->addChild(content_back);
+		
+		content_back->setContentSize(CCSizeMake(202, 146));
+		
+		CCLabelTTF* title_label = CCLabelTTF::create("스테이지 열기", mySGD->getFont().c_str(), 20);
+		title_label->setPosition(ccp(0, 102));
+		t_container->addChild(title_label);
+		
+		CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat("%d gold 로 오픈", NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number))->getCString(), mySGD->getFont().c_str(), 18);
+		content_label->setPosition(CCPointZero);
+		t_container->addChild(content_label);
+		
+		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+		s_close->setColor(ccGRAY);
+		
+		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																			{
+																				is_menu_enable = true;
+																				t_popup->removeFromParent();
+																			});
+		
+		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+		close_menu->setPosition(ccp(92,105));
+		t_container->addChild(close_menu);
+		
+		if(mySGD->getGold() >= NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number))
+		{
+			CCSprite* n_buy = CCSprite::create("popup2_buy.png");
+			CCSprite* s_buy = CCSprite::create("popup2_buy.png");
+			s_buy->setColor(ccGRAY);
 			
-			vector<SaveUserData_Key> save_userdata_list;
-			
-			save_userdata_list.push_back(kSaveUserData_Key_gold);
-			save_userdata_list.push_back(kSaveUserData_Key_openStage);
-			
-			myDSH->saveUserData(save_userdata_list, nullptr);
-			
-			
-			CCNode* open_puzzle_container = CCNode::create();
-			t_popup->setContainerNode(open_puzzle_container);
-			
-			CCScale9Sprite* open_puzzle_case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-			open_puzzle_case_back->setPosition(CCPointZero);
-			open_puzzle_container->addChild(open_puzzle_case_back);
-			
-			open_puzzle_case_back->setContentSize(CCSizeMake(230, 250));
-			
-			CCScale9Sprite* open_puzzle_content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-			open_puzzle_content_back->setPosition(ccp(0,2));
-			open_puzzle_container->addChild(open_puzzle_content_back);
-			
-			open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
-			
-			CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("스테이지 오픈", mySGD->getFont().c_str(), 20);
-			open_puzzle_title_label->setPosition(ccp(0, 102));
-			open_puzzle_container->addChild(open_puzzle_title_label);
-			
-			CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 스테이지가\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
-			open_puzzle_content_label->setPosition(CCPointZero);
-			open_puzzle_container->addChild(open_puzzle_content_label);
-			
-			CCSprite* n_op_ok = CCSprite::create("popup2_ok.png");
-			CCSprite* s_op_ok = CCSprite::create("popup2_ok.png");
-			s_op_ok->setColor(ccGRAY);
-			
-			CCMenuItemSpriteLambda* op_ok_item = CCMenuItemSpriteLambda::create(n_op_ok, s_op_ok, [=](CCObject* sender){
-				is_menu_enable = true;
-				t_popup->removeFromParent();
+			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
+				mySGD->setGold(mySGD->getGold() - NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number));
+				myDSH->setIntegerForKey(kDSH_Key_openStageCnt, myDSH->getIntegerForKey(kDSH_Key_openStageCnt)+1);
+				myDSH->setIntegerForKey(kDSH_Key_openStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_openStageCnt), t_stage_number);
+				myDSH->setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, true);
+				
+				vector<SaveUserData_Key> save_userdata_list;
+				
+				save_userdata_list.push_back(kSaveUserData_Key_gold);
+				save_userdata_list.push_back(kSaveUserData_Key_openStage);
+				
+				myDSH->saveUserData(save_userdata_list, nullptr);
+				
+				
+				CCNode* open_puzzle_container = CCNode::create();
+				t_popup->setContainerNode(open_puzzle_container);
+				
+				CCScale9Sprite* open_puzzle_case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+				open_puzzle_case_back->setPosition(CCPointZero);
+				open_puzzle_container->addChild(open_puzzle_case_back);
+				
+				open_puzzle_case_back->setContentSize(CCSizeMake(230, 250));
+				
+				CCScale9Sprite* open_puzzle_content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+				open_puzzle_content_back->setPosition(ccp(0,2));
+				open_puzzle_container->addChild(open_puzzle_content_back);
+				
+				open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
+				
+				CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("스테이지 오픈", mySGD->getFont().c_str(), 20);
+				open_puzzle_title_label->setPosition(ccp(0, 102));
+				open_puzzle_container->addChild(open_puzzle_title_label);
+				
+				CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 스테이지가\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
+				open_puzzle_content_label->setPosition(CCPointZero);
+				open_puzzle_container->addChild(open_puzzle_content_label);
+				
+				CCSprite* n_op_ok = CCSprite::create("popup2_ok.png");
+				CCSprite* s_op_ok = CCSprite::create("popup2_ok.png");
+				s_op_ok->setColor(ccGRAY);
+				
+				CCMenuItemSpriteLambda* op_ok_item = CCMenuItemSpriteLambda::create(n_op_ok, s_op_ok, [=](CCObject* sender){
+					is_menu_enable = true;
+					t_popup->removeFromParent();
+				});
+				
+				CCMenuLambda* op_ok_menu = CCMenuLambda::createWithItem(op_ok_item);
+				op_ok_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+				op_ok_menu->setPosition(ccp(0,-95));
+				open_puzzle_container->addChild(op_ok_menu);
+				
+				PuzzlePiece* b_piece = (PuzzlePiece*)puzzle_node->getChildByTag(t_stage_number);
+				int stage_level = b_piece->getLevel();
+				CCPoint piece_position = b_piece->getPosition();
+				string piece_type = b_piece->getWorH();
+				
+				puzzle_node->removeChildByTag(t_stage_number);
+				shadow_batchnode->removeChildByTag(t_stage_number);
+				
+				PuzzlePiece* a_piece = PuzzlePiece::create(t_stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
+				a_piece->setPosition(piece_position);
+				puzzle_node->addChild(a_piece, kPuzzleNodeZorder_piece, t_stage_number);
+				a_piece->initWithPieceInfo(piece_mode, kPieceType_empty, piece_type);
 			});
 			
-			CCMenuLambda* op_ok_menu = CCMenuLambda::createWithItem(op_ok_item);
-			op_ok_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-			op_ok_menu->setPosition(ccp(0,-95));
-			open_puzzle_container->addChild(op_ok_menu);
-			
-			PuzzlePiece* b_piece = (PuzzlePiece*)puzzle_node->getChildByTag(t_stage_number);
-			int stage_level = b_piece->getLevel();
-			CCPoint piece_position = b_piece->getPosition();
-			string piece_type = b_piece->getWorH();
-			
-			puzzle_node->removeChildByTag(t_stage_number);
-			shadow_batchnode->removeChildByTag(t_stage_number);
-			
-			PuzzlePiece* a_piece = PuzzlePiece::create(t_stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
-			a_piece->setPosition(piece_position);
-			puzzle_node->addChild(a_piece, kPuzzleNodeZorder_piece, t_stage_number);
-			a_piece->initWithPieceInfo(piece_mode, kPieceType_empty, piece_type);
-		});
-		
-		CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
-		buy_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-		buy_menu->setPosition(ccp(0,-95));
-		t_container->addChild(buy_menu);
-	}
-	else
-	{
-		CCSprite* buy_img = CCSprite::create("popup2_buy.png");
-		buy_img->setColor(ccc3(100, 100, 100));
-		buy_img->setPosition(ccp(0,-95));
-		t_container->addChild(buy_img);
+			CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
+			buy_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+			buy_menu->setPosition(ccp(0,-95));
+			t_container->addChild(buy_menu);
+		}
+		else
+		{
+			CCSprite* buy_img = CCSprite::create("popup2_buy.png");
+			buy_img->setColor(ccc3(100, 100, 100));
+			buy_img->setPosition(ccp(0,-95));
+			t_container->addChild(buy_img);
+		}
 	}
 }
 
@@ -716,148 +838,196 @@ void PuzzleScene::menuAction(CCObject* sender)
 	if(!is_menu_enable)
 		return;
 	
-	is_menu_enable = false;
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	bool is_action = true;
+	if(recent_step == kTutorialFlowStep_pieceClick || recent_step == kTutorialFlowStep_pieceType || recent_step == kTutorialFlowStep_pieceClick2)
+		is_action = false;
+	else if(recent_step == kTutorialFlowStep_backClick)
+	{
+		is_action = false;
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		int recent_get_card_cnt = 0;
+		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=take_card_cnt;i++)
+		{
+			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+				recent_get_card_cnt++;
+		}
+		if(selected_card_number > 0 && recent_get_card_cnt >= 2)
+		{
+			int tag = ((CCNode*)sender)->getTag();
+			if(tag == kPuzzleMenuTag_cancel)
+			{
+				is_menu_enable = false;
+				myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_cardCollectionClick);
+				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			}
+		}
+	}
+	else if(recent_step == kTutorialFlowStep_readyClick || recent_step == kTutorialFlowStep_readyClick2)
+	{
+		is_action = false;
+		int tag = ((CCNode*)sender)->getTag();
+		if(tag == kPuzzleMenuTag_start)
+		{
+			is_menu_enable = false;
+			if(recent_step == kTutorialFlowStep_readyClick)
+				myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_startClick);
+			else if(recent_step == kTutorialFlowStep_readyClick2)
+				myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_emptyCardClick);
+			
+			int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+		}
+	}
 	
-	int tag = ((CCNode*)sender)->getTag();
-	
-	if(tag == kPuzzleMenuTag_cancel)
+	if(is_action)
 	{
-		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
-	}
-	else if(tag == kPuzzleMenuTag_rubyShop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_ruby);
-		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-		addChild(t_shop, kPuzzleZorder_popup);
-	}
-	else if(tag == kPuzzleMenuTag_goldShop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_gold);
-		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-		addChild(t_shop, kPuzzleZorder_popup);
-	}
-	else if(tag == kPuzzleMenuTag_heartShop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_heart);
-		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-		addChild(t_shop, kPuzzleZorder_popup);
-	}
-	else if(tag == kPuzzleMenuTag_friendPointContent)
-	{
-		if(!friend_point_popup)
+		is_menu_enable = false;
+		
+		int tag = ((CCNode*)sender)->getTag();
+		
+		if(tag == kPuzzleMenuTag_cancel)
+		{
+			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+		}
+		else if(tag == kPuzzleMenuTag_rubyShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_ruby);
+			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+			addChild(t_shop, kPuzzleZorder_popup);
+		}
+		else if(tag == kPuzzleMenuTag_goldShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_gold);
+			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+			addChild(t_shop, kPuzzleZorder_popup);
+		}
+		else if(tag == kPuzzleMenuTag_heartShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_heart);
+			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+			addChild(t_shop, kPuzzleZorder_popup);
+		}
+		else if(tag == kPuzzleMenuTag_friendPointContent)
+		{
+			if(!friend_point_popup)
+			{
+				CCNode* menu_node = ((CCNode*)sender)->getParent();
+				CCNode* top_node = menu_node->getParent();
+				friend_point_popup = CCSprite::create("candy_popup.png");
+				friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
+				friend_point_popup->setPosition(ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+				top_node->addChild(friend_point_popup, -1);
+				
+				CCSprite* n_close = CCSprite::create("candy_popup_close.png");
+				CCSprite* s_close = CCSprite::create("candy_popup_close.png");
+				s_close->setColor(ccGRAY);
+				
+				CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(PuzzleScene::menuAction));
+				close_item->setTag(kPuzzleMenuTag_friendPointClose);
+				
+				CCMenu* close_menu = CCMenu::createWithItem(close_item);
+				close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
+				friend_point_popup->addChild(close_menu);
+				
+				CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY()-12));
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::popupClose));
+				CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+				friend_point_popup->runAction(t_seq);
+			}
+			else
+				is_menu_enable = true;
+		}
+		else if(tag == kPuzzleMenuTag_friendPointClose)
 		{
 			CCNode* menu_node = ((CCNode*)sender)->getParent();
-			CCNode* top_node = menu_node->getParent();
-			friend_point_popup = CCSprite::create("candy_popup.png");
-			friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
-			friend_point_popup->setPosition(ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-			top_node->addChild(friend_point_popup, -1);
-			
-			CCSprite* n_close = CCSprite::create("candy_popup_close.png");
-			CCSprite* s_close = CCSprite::create("candy_popup_close.png");
-			s_close->setColor(ccGRAY);
-			
-			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(PuzzleScene::menuAction));
-			close_item->setTag(kPuzzleMenuTag_friendPointClose);
-			
-			CCMenu* close_menu = CCMenu::createWithItem(close_item);
-			close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
-			friend_point_popup->addChild(close_menu);
-			
-			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY()-12));
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::popupClose));
+			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::closeFriendPointPopup));
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
 			friend_point_popup->runAction(t_seq);
 		}
-		else
+		else if(tag == kPuzzleMenuTag_rightReward)
+		{
+			recent_right_code = kPuzzleRightCode_reward;
+			setRightHead();
+			setRightContent();
 			is_menu_enable = true;
-	}
-	else if(tag == kPuzzleMenuTag_friendPointClose)
-	{
-		CCNode* menu_node = ((CCNode*)sender)->getParent();
-		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::closeFriendPointPopup));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-		friend_point_popup->runAction(t_seq);
-	}
-	else if(tag == kPuzzleMenuTag_rightReward)
-	{
-		recent_right_code = kPuzzleRightCode_reward;
-		setRightHead();
-		setRightContent();
-		is_menu_enable = true;
-	}
-	else if(tag == kPuzzleMenuTag_rightRank)
-	{
-		recent_right_code = kPuzzleRightCode_rank;
-		setRightHead();
-		setRightContent();
-		is_menu_enable = true;
-	}
-	else if(tag == kPuzzleMenuTag_rightMonster)
-	{
-		recent_right_code = kPuzzleRightCode_monster;
-		setRightHead();
-		setRightContent();
-		is_menu_enable = true;
-	}
-	else if(tag == kPuzzleMenuTag_start)
-	{
-		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
-		CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
-	}
-	else if(tag == kPuzzleMenuTag_challenge)
-	{
-		if(selected_friend_idx != -1)
+		}
+		else if(tag == kPuzzleMenuTag_rightRank)
+		{
+			recent_right_code = kPuzzleRightCode_rank;
+			setRightHead();
+			setRightContent();
+			is_menu_enable = true;
+		}
+		else if(tag == kPuzzleMenuTag_rightMonster)
+		{
+			recent_right_code = kPuzzleRightCode_monster;
+			setRightHead();
+			setRightContent();
+			is_menu_enable = true;
+		}
+		else if(tag == kPuzzleMenuTag_start)
 		{
 			int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
 			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 		}
-		else
+		else if(tag == kPuzzleMenuTag_challenge)
 		{
-			CCLog("not selected friend");
+			if(selected_friend_idx != -1)
+			{
+				int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+				CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+			}
+			else
+			{
+				CCLog("not selected friend");
+				is_menu_enable = true;
+			}
+		}
+		else if(tag == kPuzzleMenuTag_changeMode)
+		{
+			int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+			int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+			int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+			
+			if(piece_mode == kPieceMode_default)
+			{
+				piece_mode = kPieceMode_thumb;
+				have_card_cnt_case->setVisible(true);
+			}
+			else if(piece_mode == kPieceMode_thumb)
+			{
+				piece_mode = kPieceMode_ranker;
+				have_card_cnt_case->setVisible(false);
+			}
+			else if(piece_mode == kPieceMode_ranker)
+			{
+				piece_mode = kPieceMode_default;
+				have_card_cnt_case->setVisible(false);
+			}
+			
+			myDSH->setIntegerForKey(kDSH_Key_puzzleMode, piece_mode);
+			
+			for(int i=start_stage;i<start_stage+stage_count;i++)
+				((PuzzlePiece*)puzzle_node->getChildByTag(i))->turnPiece(piece_mode);
+			
 			is_menu_enable = true;
 		}
-	}
-	else if(tag == kPuzzleMenuTag_changeMode)
-	{
-		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
-		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
-		
-		if(piece_mode == kPieceMode_default)
-		{
-			piece_mode = kPieceMode_thumb;
-			have_card_cnt_case->setVisible(true);
-		}
-		else if(piece_mode == kPieceMode_thumb)
-		{
-			piece_mode = kPieceMode_ranker;
-			have_card_cnt_case->setVisible(false);
-		}
-		else if(piece_mode == kPieceMode_ranker)
-		{
-			piece_mode = kPieceMode_default;
-			have_card_cnt_case->setVisible(false);
-		}
-		
-		myDSH->setIntegerForKey(kDSH_Key_puzzleMode, piece_mode);
-		
-		for(int i=start_stage;i<start_stage+stage_count;i++)
-			((PuzzlePiece*)puzzle_node->getChildByTag(i))->turnPiece(piece_mode);
-		
-		is_menu_enable = true;
 	}
 }
 
@@ -1228,7 +1398,19 @@ void PuzzleScene::resultGetStageScoreList(Json::Value result_data)
 		rank_table->setDelegate(this);
 		rank_node->addChild(rank_table);
 		rank_table->setTouchPriority(kCCMenuHandlerPriority+1);
-		rank_table->setTouchEnabled(rank_node->isVisible());
+		
+		bool is_table_touch_enable = true;
+		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+		if(recent_step == kTutorialFlowStep_pieceClick || recent_step == kTutorialFlowStep_readyClick || recent_step == kTutorialFlowStep_pieceType ||
+		   recent_step == kTutorialFlowStep_pieceClick2 || recent_step == kTutorialFlowStep_readyClick2)
+			is_table_touch_enable = false;
+		else if(recent_step == kTutorialFlowStep_backClick)
+		{
+			//if check
+			is_table_touch_enable = false;
+		}
+		
+		rank_table->setTouchEnabled(rank_node->isVisible() && is_table_touch_enable);
 	}
 }
 

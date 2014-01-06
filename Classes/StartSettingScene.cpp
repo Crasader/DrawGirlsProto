@@ -26,6 +26,7 @@
 #include "LoadingLayer.h"
 #include "DurabilityNoti.h"
 #include "MaingameScene.h"
+#include "TutorialFlowStep.h"
 
 CCScene* StartSettingScene::scene()
 {
@@ -69,6 +70,25 @@ bool StartSettingScene::init()
 	setTop();
 	
 	is_menu_enable = true;
+	
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	
+	if(recent_step == kTutorialFlowStep_startClick)
+	{
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_startClick);
+		addChild(t_tutorial, kStartSettingZorder_popup);
+		
+		tutorial_node = t_tutorial;
+	}
+	else if(recent_step == kTutorialFlowStep_emptyCardClick)
+	{
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_emptyCardClick);
+		addChild(t_tutorial, kStartSettingZorder_popup);
+		
+		tutorial_node = t_tutorial;
+	}
 	
 	return true;
 }
@@ -311,109 +331,118 @@ void StartSettingScene::itemAction(CCObject *sender)
 	if(!is_menu_enable)
 		return;
 	
-	is_menu_enable = false;
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
-	int tag = ((CCNode*)sender)->getTag();
-	
-	if(clicked_item_idx == -1)
+	if(recent_step == kTutorialFlowStep_startClick || recent_step == kTutorialFlowStep_emptyCardClick)
 	{
-		clicked_item_idx = tag-1;
-		CCNode* item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
-		CCSprite* clicked_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_clicked);
-		clicked_img->setVisible(true);
+		
 	}
 	else
 	{
-		CCNode* before_item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
-		CCSprite* before_clicked_img = (CCSprite*)before_item_parent->getChildByTag(kStartSettingItemZorder_clicked);
-		before_clicked_img->setVisible(false);
+		is_menu_enable = false;
 		
-		clicked_item_idx = tag-1;
+		int tag = ((CCNode*)sender)->getTag();
 		
-		CCNode* after_item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
-		CCSprite* after_clicked_img = (CCSprite*)after_item_parent->getChildByTag(kStartSettingItemZorder_clicked);
-		after_clicked_img->setVisible(true);
-	}
-	
-	if(is_selected_item[tag-1]) // selected -> unselect
-	{
-		CCNode* item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+tag-1);
-		CCSprite* selected_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_selected);
-		selected_img->setVisible(false);
-		is_selected_item[tag-1] = false;
-	}
-	else // unselected -> selected or nothing
-	{
-		bool is_selectable = false;
-		ITEM_CODE clicked_item_code = item_list[tag-1];
-		if(clicked_item_code == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0) // nothing friend
-			is_selectable = false;
+		if(clicked_item_idx == -1)
+		{
+			clicked_item_idx = tag-1;
+			CCNode* item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
+			CCSprite* clicked_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_clicked);
+			clicked_img->setVisible(true);
+		}
 		else
-			is_selectable = true;
+		{
+			CCNode* before_item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
+			CCSprite* before_clicked_img = (CCSprite*)before_item_parent->getChildByTag(kStartSettingItemZorder_clicked);
+			before_clicked_img->setVisible(false);
+			
+			clicked_item_idx = tag-1;
+			
+			CCNode* after_item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
+			CCSprite* after_clicked_img = (CCSprite*)after_item_parent->getChildByTag(kStartSettingItemZorder_clicked);
+			after_clicked_img->setVisible(true);
+		}
 		
-		int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[tag-1]);
-		if(item_cnt > 0 && is_selectable)
+		if(is_selected_item[tag-1]) // selected -> unselect
 		{
 			CCNode* item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+tag-1);
 			CCSprite* selected_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_selected);
-			selected_img->setVisible(true);
-			is_selected_item[tag-1] = true;
+			selected_img->setVisible(false);
+			is_selected_item[tag-1] = false;
 		}
+		else // unselected -> selected or nothing
+		{
+			bool is_selectable = false;
+			ITEM_CODE clicked_item_code = item_list[tag-1];
+			if(clicked_item_code == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0) // nothing friend
+				is_selectable = false;
+			else
+				is_selectable = true;
+			
+			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[tag-1]);
+			if(item_cnt > 0 && is_selectable)
+			{
+				CCNode* item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+tag-1);
+				CCSprite* selected_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_selected);
+				selected_img->setVisible(true);
+				is_selected_item[tag-1] = true;
+			}
+		}
+		
+		if(item_title_label)
+			item_title_label->removeFromParent();
+		if(option_label)
+			option_label->removeFromParent();
+		if(buy_menu)
+			buy_menu->removeFromParent();
+		
+		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(145, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+		item_title_label->setAnchorPoint(ccp(0,1));
+		item_title_label->setPosition(ccp(218, 120));
+		main_case->addChild(item_title_label);
+		
+		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 8, CCSizeMake(145, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+		option_label->setAnchorPoint(ccp(0,1));
+		option_label->setPosition(ccp(218, 102));
+		main_case->addChild(option_label);
+		
+		
+		string buy_type = mySD->getItemCurrency(item_list[tag-1]);
+		if(buy_type == "gold")
+			buy_type = "price_gold_img.png";
+		else if(buy_type == "ruby")
+			buy_type = "price_ruby_img.png";
+		else if(buy_type == "social")
+			buy_type = "price_candy_img.png";
+		
+		CCSprite* n_buy = CCSprite::create("startsetting_item_buy.png");
+		CCSprite* n_buy_type = CCSprite::create(buy_type.c_str());
+		n_buy_type->setScale(0.5f);
+		n_buy_type->setPosition(ccp(17, 32));
+		n_buy->addChild(n_buy_type);
+		CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(item_list[tag-1]))->getCString(), mySGD->getFont().c_str(), 8);
+		n_label->setAnchorPoint(ccp(0.5f, 0.5f));
+		n_label->setPosition(ccp(38, 32));
+		n_buy->addChild(n_label);
+		CCSprite* s_buy = CCSprite::create("startsetting_item_buy.png");
+		s_buy->setColor(ccGRAY);
+		CCSprite* s_buy_type = CCSprite::create(buy_type.c_str());
+		s_buy_type->setScale(0.5f);
+		s_buy_type->setPosition(ccp(17, 32));
+		s_buy->addChild(s_buy_type);
+		CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(item_list[tag-1]))->getCString(), mySGD->getFont().c_str(), 8);
+		s_label->setAnchorPoint(ccp(0.5f, 0.5f));
+		s_label->setPosition(ccp(38, 32));
+		s_buy->addChild(s_label);
+		
+		CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(StartSettingScene::menuAction));
+		buy_item->setTag(kStartSettingMenuTag_itemBuy);
+		buy_menu = CCMenu::createWithItem(buy_item);
+		buy_menu->setPosition(ccp(398, 102));
+		main_case->addChild(buy_menu);
+		
+		is_menu_enable = true;
 	}
-	
-	if(item_title_label)
-		item_title_label->removeFromParent();
-	if(option_label)
-		option_label->removeFromParent();
-	if(buy_menu)
-		buy_menu->removeFromParent();
-	
-	item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(145, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
-	item_title_label->setAnchorPoint(ccp(0,1));
-	item_title_label->setPosition(ccp(218, 120));
-	main_case->addChild(item_title_label);
-	
-	option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 8, CCSizeMake(145, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
-	option_label->setAnchorPoint(ccp(0,1));
-	option_label->setPosition(ccp(218, 102));
-	main_case->addChild(option_label);
-	
-	
-	string buy_type = mySD->getItemCurrency(item_list[tag-1]);
-	if(buy_type == "gold")
-		buy_type = "price_gold_img.png";
-	else if(buy_type == "ruby")
-		buy_type = "price_ruby_img.png";
-	else if(buy_type == "social")
-		buy_type = "price_candy_img.png";
-	
-	CCSprite* n_buy = CCSprite::create("startsetting_item_buy.png");
-	CCSprite* n_buy_type = CCSprite::create(buy_type.c_str());
-	n_buy_type->setScale(0.5f);
-	n_buy_type->setPosition(ccp(17, 32));
-	n_buy->addChild(n_buy_type);
-	CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(item_list[tag-1]))->getCString(), mySGD->getFont().c_str(), 8);
-	n_label->setAnchorPoint(ccp(0.5f, 0.5f));
-	n_label->setPosition(ccp(38, 32));
-	n_buy->addChild(n_label);
-	CCSprite* s_buy = CCSprite::create("startsetting_item_buy.png");
-	s_buy->setColor(ccGRAY);
-	CCSprite* s_buy_type = CCSprite::create(buy_type.c_str());
-	s_buy_type->setScale(0.5f);
-	s_buy_type->setPosition(ccp(17, 32));
-	s_buy->addChild(s_buy_type);
-	CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(item_list[tag-1]))->getCString(), mySGD->getFont().c_str(), 8);
-	s_label->setAnchorPoint(ccp(0.5f, 0.5f));
-	s_label->setPosition(ccp(38, 32));
-	s_buy->addChild(s_label);
-	
-	CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(StartSettingScene::menuAction));
-	buy_item->setTag(kStartSettingMenuTag_itemBuy);
-	buy_menu = CCMenu::createWithItem(buy_item);
-	buy_menu->setPosition(ccp(398, 102));
-	main_case->addChild(buy_menu);
-	
-	is_menu_enable = true;
 }
 
 void StartSettingScene::menuAction(CCObject* sender)
@@ -421,97 +450,126 @@ void StartSettingScene::menuAction(CCObject* sender)
 	if(!is_menu_enable)
 		return;
 	
-	is_menu_enable = false;
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
-	int tag = ((CCNode*)sender)->getTag();
-	
-	if(tag == kStartSettingMenuTag_cancel)
+	if(recent_step == kTutorialFlowStep_startClick)
 	{
-		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+		int tag = ((CCNode*)sender)->getTag();
+		if(tag == kStartSettingMenuTag_start)
+		{
+			is_menu_enable = false;
+			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_ingame);
+			removeChild(tutorial_node);
+			callStart();
+		}
 	}
-	else if(tag == kStartSettingMenuTag_rubyShop)
+	else if(recent_step == kTutorialFlowStep_emptyCardClick)
 	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_ruby);
-		t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
-		addChild(t_shop, kStartSettingZorder_popup);
+		int tag = ((CCNode*)sender)->getTag();
+		if(tag == kStartSettingMenuTag_card)
+		{
+			is_menu_enable = false;
+			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_targetCardClick);
+			removeChild(tutorial_node);
+			CardChangePopup* t_popup = CardChangePopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupCloseCardSetting));
+			addChild(t_popup, kStartSettingZorder_popup);
+		}
 	}
-	else if(tag == kStartSettingMenuTag_goldShop)
+	else
 	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_gold);
-		t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
-		addChild(t_shop, kStartSettingZorder_popup);
-	}
-	else if(tag == kStartSettingMenuTag_heartShop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_heart);
-		t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
-		addChild(t_shop, kStartSettingZorder_popup);
-	}
-	else if(tag == kStartSettingMenuTag_friendPointContent)
-	{
-		if(!friend_point_popup)
+		is_menu_enable = false;
+		
+		int tag = ((CCNode*)sender)->getTag();
+		
+		if(tag == kStartSettingMenuTag_cancel)
+		{
+			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+		}
+		else if(tag == kStartSettingMenuTag_rubyShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_ruby);
+			t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+			addChild(t_shop, kStartSettingZorder_popup);
+		}
+		else if(tag == kStartSettingMenuTag_goldShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_gold);
+			t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+			addChild(t_shop, kStartSettingZorder_popup);
+		}
+		else if(tag == kStartSettingMenuTag_heartShop)
+		{
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_heart);
+			t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+			addChild(t_shop, kStartSettingZorder_popup);
+		}
+		else if(tag == kStartSettingMenuTag_friendPointContent)
+		{
+			if(!friend_point_popup)
+			{
+				CCNode* menu_node = ((CCNode*)sender)->getParent();
+				CCNode* top_node = menu_node->getParent();
+				friend_point_popup = CCSprite::create("candy_popup.png");
+				friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
+				friend_point_popup->setPosition(ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+				top_node->addChild(friend_point_popup, -1);
+				
+				CCSprite* n_close = CCSprite::create("candy_popup_close.png");
+				CCSprite* s_close = CCSprite::create("candy_popup_close.png");
+				s_close->setColor(ccGRAY);
+				
+				CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(StartSettingScene::menuAction));
+				close_item->setTag(kStartSettingMenuTag_friendPointClose);
+				
+				CCMenu* close_menu = CCMenu::createWithItem(close_item);
+				close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
+				friend_point_popup->addChild(close_menu);
+				
+				CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY()-12));
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartSettingScene::popupClose));
+				CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
+				friend_point_popup->runAction(t_seq);
+			}
+			else
+				is_menu_enable = true;
+		}
+		else if(tag == kStartSettingMenuTag_friendPointClose)
 		{
 			CCNode* menu_node = ((CCNode*)sender)->getParent();
-			CCNode* top_node = menu_node->getParent();
-			friend_point_popup = CCSprite::create("candy_popup.png");
-			friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
-			friend_point_popup->setPosition(ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-			top_node->addChild(friend_point_popup, -1);
-			
-			CCSprite* n_close = CCSprite::create("candy_popup_close.png");
-			CCSprite* s_close = CCSprite::create("candy_popup_close.png");
-			s_close->setColor(ccGRAY);
-			
-			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(StartSettingScene::menuAction));
-			close_item->setTag(kStartSettingMenuTag_friendPointClose);
-			
-			CCMenu* close_menu = CCMenu::createWithItem(close_item);
-			close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
-			friend_point_popup->addChild(close_menu);
-			
-			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY()-12));
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartSettingScene::popupClose));
+			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartSettingScene::closeFriendPointPopup));
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
 			friend_point_popup->runAction(t_seq);
 		}
-		else
-			is_menu_enable = true;
-	}
-	else if(tag == kStartSettingMenuTag_friendPointClose)
-	{
-		CCNode* menu_node = ((CCNode*)sender)->getParent();
-		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartSettingScene::closeFriendPointPopup));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-		friend_point_popup->runAction(t_seq);
-	}
-	else if(tag == kStartSettingMenuTag_back)
-	{
-		CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
-	}
-	else if(tag == kStartSettingMenuTag_start)
-	{
-		callStart();
-	}
-	else if(tag == kStartSettingMenuTag_card)
-	{
-		CardChangePopup* t_popup = CardChangePopup::create();
-		t_popup->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupCloseCardSetting));
-		addChild(t_popup, kStartSettingZorder_popup);
-	}
-	else if(tag == kStartSettingMenuTag_itemBuy)
-	{
-		ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_idx], clicked_item_idx, this, callfuncII_selector(StartSettingScene::buySuccessItem));
-		addChild(t_ibp, kStartSettingZorder_popup);
+		else if(tag == kStartSettingMenuTag_back)
+		{
+			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+		}
+		else if(tag == kStartSettingMenuTag_start)
+		{
+			callStart();
+		}
+		else if(tag == kStartSettingMenuTag_card)
+		{
+			CardChangePopup* t_popup = CardChangePopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupCloseCardSetting));
+			addChild(t_popup, kStartSettingZorder_popup);
+		}
+		else if(tag == kStartSettingMenuTag_itemBuy)
+		{
+			ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_idx], clicked_item_idx, this, callfuncII_selector(StartSettingScene::buySuccessItem));
+			addChild(t_ibp, kStartSettingZorder_popup);
+		}
 	}
 }
 
