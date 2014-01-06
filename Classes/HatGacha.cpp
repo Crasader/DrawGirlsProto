@@ -457,7 +457,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 		i.first->m_hatTop->setSelectedIndex(1);
 	}
 	//		m_rewardFollowHat = false;
-	CCMenuItemImageLambda* startBtn = CCMenuItemImageLambda::create("gacha_start.png", "gacha_start.png");
+	CCMenuItemImageLambda* startBtn = CCMenuItemImageLambda::create("gacha4_stop.png", "gacha4_stop.png");
 	startBtn->setPosition(ccp(240, 40));
 	//		startBtn->setVisible(false);
 	startBtn->setTarget([=](CCObject*)

@@ -43,6 +43,7 @@ protected:
 	int m_alreadyDeterminantOrder;
 	CCNode* m_rotationBoard;
 	CCSprite* m_circleBoard;
+	CCSprite* m_guide;
 	//	float m_itemTopY[3];
 public:
 	KSAlertView* m_parent;

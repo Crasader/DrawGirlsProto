@@ -61,7 +61,10 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 	addChild(m_menu, 1);
 	
 	
-	
+	CCSprite* m_guide = CCSprite::create("gacha1_tip.png");
+	m_guide->setPosition(ccp(240, 160));
+	addChild(m_guide, 1);
+
 	
 	CCMenuItemImageLambda* stopBtn = CCMenuItemImageLambda::create("gacha4_stop.png", "gacha4_stop.png");
 	stopBtn->setPosition(ccp(240, 40));
@@ -103,7 +106,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 	m_menu->addChild(stopBtn);
 	
 	m_rotationBoard = CCNode::create();
-	m_rotationBoard->setPosition(ccp(240, 190));
+	m_rotationBoard->setPosition(ccp(240, 185));
 	addChild(m_rotationBoard);
 	
 	m_circleBoard = CCSprite::create("gacha1_roulette.png");
@@ -123,6 +126,17 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 		m_rotationBoard->addChild(item);
 		item->setRotation(360 / 7.f * degreeCount);
 		m_rewards.push_back(std::make_pair(360 / 7.f * degreeCount, item));
+		
+		if(i->m_kind == RewardKind::kGold || i->m_kind == RewardKind::kRuby)
+		{
+			CCLabelBMFont* m_value = CCLabelBMFont::create(CCString::createWithFormat("%d", i->m_value)->getCString(), "etc_font.fnt");
+			float degree = 360 / 7.f * degreeCount;
+			float rad = deg2Rad(-degree) + M_PI / 2.f;
+			m_value->setRotation(360 / 7.f * degreeCount);
+			m_value->setPosition(ccp(50 * cos(rad), 50 * sin(rad)));
+			m_rotationBoard->addChild(m_value);
+			m_value->setAnchorPoint(ccp(0.5f, 0.f));
+		}
 		degreeCount++;
 	}
 	
@@ -133,7 +147,10 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 	CCMenuItemImageLambda* startBtn = CCMenuItemImageLambda::create("gacha1_start.png", "gacha1_start.png");
 	startBtn->setTarget([=](CCObject*)
 											{
+												m_guide->setVisible(false);
 												stopBtn->setVisible(true);
+												stopBtn->runAction(CCRepeatForever::create((CCSequence::createWithTwoActions(
+																																																		 CCEaseBackOut::create(CCScaleTo::create(0.8f, 1.1f)), CCEaseBackOut::create(CCScaleTo::create(0.7f, 1.0f))))));
 												startBtn->removeFromParent();
 												addChild(KSGradualValue<float>::create(0, 15, 0.3f, [=](float t)
 																															 {

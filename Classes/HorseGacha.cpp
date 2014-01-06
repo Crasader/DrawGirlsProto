@@ -152,7 +152,6 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 																																												[=](CCPoint t)
 																																												{
 																																													m_horses[i]->setPosition(t);
-//																																													CCLog("%f", t.y);
 																																												},
 																																												[=](CCPoint t)
 																																												{
@@ -164,11 +163,11 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 																							 // horseFiles[i].c_str() 으로 생성하면 됨.
 																							 // 선택이 끝났으면 m_state = HorseSceneState::kRun; 달려!
 																							 
-																							 CCLayerColor* thiz = CCLayerColor::create(ccc4(166, 166, 166, 0));
+																							 CCLayerColor* thiz = CCLayerColor::create(ccc4(0, 0, 0, 0));
 																							 CCSprite* thiz0 = CCSprite::create();
 																							 thiz0->setTextureRect(CCRectMake(0, 0, 520, 320));
-																							 thiz0->setColor(ccc3(166, 166, 166));
-																							 thiz0->setOpacity(100);
+																							 thiz0->setColor(ccc3(0, 0, 0));
+																							 thiz0->setOpacity(150);
 																							 thiz0->setPosition(ccp(240, 160));
 																							 thiz->addChild(thiz0);
 																							 addChild(thiz);
