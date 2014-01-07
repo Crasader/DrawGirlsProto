@@ -440,7 +440,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
-	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+//	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
 		CCSprite* n_open_back = CCSprite::create("mainflow_puzzle_open_back.png");
 		CCSprite* s_open_back = CCSprite::create("mainflow_puzzle_open_back.png");
