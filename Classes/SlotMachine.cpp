@@ -35,6 +35,11 @@ void SlotMachineSub::update(float dt)
 		av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 		av->setWidth(446 / 2.f);
 		av->setHeight(466 / 2.f + 10);
+		av->setCloseButton(CCMenuItemImageLambda::create("tutorial_common_cancel.png", "tutorial_common_cancel.png",
+																									 [=](CCObject* sender){
+																										 CCLog("close!!");
+																									 }));
+		av->setButtonOffsetY(7);
 		av->setBorderScale(0.8f);
 		av->setCenterY(150);
 		av->setContentNode(

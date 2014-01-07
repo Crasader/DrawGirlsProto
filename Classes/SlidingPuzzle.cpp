@@ -33,7 +33,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 	pts[2] = ccp(366, 320 - 24);
 	pts[3] = ccp(25, 320 - 24);
 	shape->drawPolygon(pts, 4, ccc4f(1, 1, 1, 1), 0, ccc4f(1, 0, 0, 1));
-
+	
 	CCSprite* back = CCSprite::create("bonusgame_back.png");
 	back->setPosition(ccp(240, 160));
 	addChild(back);
@@ -417,6 +417,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 //													CCLog("%d %d", m_emptyCoord.x, m_emptyCoord.y);
 //												});
 //						});
+	
 	return true;
 }
 

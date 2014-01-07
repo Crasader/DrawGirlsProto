@@ -120,7 +120,6 @@ void KSAlertView::show()
 	}
 	CCScale9Sprite *btnBg = m_back9;
 
-	CCPoint centerPosition = convertToNodeSpace(ccp(m_centerX, m_centerY));
 	float top = m_centerY + m_height / 2.f;
 	float bottom = m_centerY - m_height / 2.f;
 	float titleHeight = m_titleHeight;
@@ -133,7 +132,8 @@ void KSAlertView::show()
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(INT_MIN);
 	btnBg->addChild(_menu);
-	_menu->setPosition(btnBg->convertToNodeSpace(ccp(m_centerX, bottom + buttonHeight / 2.f)));
+	_menu->setPosition(ccp(m_width / 2, buttonHeight / 2.f + m_buttonOffsetY));
+//	_menu->setPosition(btnBg->convertToNodeSpace(ccp(m_centerX, bottom + buttonHeight / 2.f)));
 	//		_menu->setPosition();
 	
 	
@@ -164,9 +164,10 @@ void KSAlertView::show()
 	if(m_closeItem)
 	{
 		_closeMenu->addChild(m_closeItem);
-		m_closeItem->setPosition(btnBg->convertToNodeSpace
-														 (ccp(m_centerX + m_width / 2.f - m_closeItem->getContentSize().width / 2.f,
-																	m_centerY + m_height / 2.f - m_closeItem->getContentSize().height / 2.f)));
+		m_closeItem->setPosition(ccp(m_width - m_closeItem->getContentSize().width / 2.f, m_height - m_closeItem->getContentSize().height / 2.f));
+//		m_closeItem->setPosition(btnBg->convertToNodeSpace
+//														 (ccp(m_centerX + m_width / 2.f - m_closeItem->getContentSize().width / 2.f,
+//																	m_centerY + m_height / 2.f - m_closeItem->getContentSize().height / 2.f)));
 		if(m_closeOnPress)
 		{
 			m_closeItem->m_afterSelector = [=](CCObject*)
@@ -179,7 +180,7 @@ void KSAlertView::show()
 	{
 		CCLabelTTF* t = CCLabelTTF::create(m_titleStr.c_str(), "", 14.f);
 		t->setAnchorPoint(ccp(0.5, 1.0));
-		t->setPosition(btnBg->convertToNodeSpace(ccp(240 + m_titleOffsetX, m_height + m_titleOffsetY)));
+		t->setPosition(ccp(m_width / 2, m_height));
 		btnBg->addChild(t);
 	}
 

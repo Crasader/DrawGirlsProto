@@ -44,7 +44,7 @@ void EventPopup::myInit ()
 																																});
 	_menu->addChild(countingGame);
 	countingGame->setPosition(ccp(380, 130));
-
+	
 	CCMenuItemFontLambda* slidingPuzzle = CCMenuItemFontLambda::create("slidingPuzzle", [=](CCObject* s)
 																																{
 																																	CCDirector::sharedDirector()->pushScene(SlidingPuzzle::scene());
