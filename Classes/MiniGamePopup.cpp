@@ -20,7 +20,7 @@ enum MiniGameZorder{
 	kMiniGameZorder_content,
 	kMiniGameZorder_menu
 };
-
+using namespace placeholders;
 MiniGamePopup* MiniGamePopup::create(MiniGameCode t_code, function<void(void)> t_end_func)
 {
 	MiniGamePopup* t_mgp = new MiniGamePopup();
@@ -146,7 +146,7 @@ void MiniGamePopup::endShowPopup()
 	is_menu_enable = true;
 }
 
-void MiniGamePopup::hidePopup()
+void MiniGamePopup::hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector)
 {
 	left_curtain->setVisible(true);
 	right_curtain->setVisible(true);
@@ -161,7 +161,8 @@ void MiniGamePopup::hidePopup()
 	CCDelayTime* right_delay = CCDelayTime::create(1.f);
 	CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(560,160));
 	CCCallFunc* right_call = CCCallFunc::create(this, callfunc_selector(MiniGamePopup::endHidePopup));
-	CCSequence* right_seq = CCSequence::create(right_move1, right_delay, right_move, right_call, NULL);
+	CCCallFunc* middle_call = CCCallFunc::create(pSelectorTarget, selector);
+	CCSequence* right_seq = CCSequence::create(right_move1, right_delay, middle_call, right_move, right_call, NULL);
 	right_curtain->runAction(right_seq);
 }
 
@@ -178,11 +179,12 @@ void MiniGamePopup::menuAction(CCObject *pSender)
 	
 	is_menu_enable = false;
 	miniGameStart = nullptr;
+	game_code = kMiniGameCode_counting;
 	if(game_code == kMiniGameCode_counting)
 	{
 		// counting_game = counting_game(-180, bind(&MiniGamePopup::hidePopup, this));
 		// addChild(counting_game, kMiniGameZorder_game);
-		CountingGame* game = CountingGame::create(-180, bind(&MiniGamePopup::hidePopup, this));
+		CountingGame* game = CountingGame::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
 		miniGameStart = bind(&CountingGame::startSchedule, game);
 		addChild(game, kMiniGameZorder_game);
 	}
@@ -190,7 +192,7 @@ void MiniGamePopup::menuAction(CCObject *pSender)
 	{
 		// sliding_puzzle = sliding_puzzle(-180, bind(&MiniGamePopup::hidePopup, this));
 		// addChild(sliding_puzzle, kMiniGameZorder_game);
-		SlidingPuzzle* slidingPuzzle = SlidingPuzzle::create(-180, bind(&MiniGamePopup::hidePopup, this));
+		SlidingPuzzle* slidingPuzzle = SlidingPuzzle::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
 		miniGameStart = bind(&SlidingPuzzle::startSchedule, slidingPuzzle);
 		addChild(slidingPuzzle, kMiniGameZorder_game);
 	}
@@ -199,13 +201,13 @@ void MiniGamePopup::menuAction(CCObject *pSender)
 		// card_match = card_match(-180, bind(&MiniGamePopup::hidePopup, this));
 		// addChild(card_match, kMiniGameZorder_game);
 		
-		CardMatching* card = CardMatching::create(-180, bind(&MiniGamePopup::hidePopup, this));
+		CardMatching* card = CardMatching::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
 		miniGameStart = bind(&CardMatching::scheduleUpdate, card);
 		addChild(card, kMiniGameZorder_game);
 	}
 	else if(game_code == kMiniGameCode_dodge)
 	{
-		Dodge* dodge = Dodge::create(-180, bind(&MiniGamePopup::hidePopup, this));
+		Dodge* dodge = Dodge::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
 		addChild(dodge, kMiniGameZorder_game);
 		// dodge = dodge(-180, bind(&MiniGamePopup::hidePopup, this));
 		// addChild(dodge, kMiniGameZorder_game);

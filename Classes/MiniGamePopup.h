@@ -51,7 +51,7 @@ private:
 	void showPopup();
 	void endShowPopup();
 	
-	void hidePopup();
+	void hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector);
 	void endHidePopup();
 	
 	void startGame();
