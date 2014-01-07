@@ -352,8 +352,9 @@ void Maingame::startCounting()
 	CCBReader* reader = new CCBReader(nodeLoader);
 	condition_spr = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_ready.ccbi",this));
 	addChild(condition_spr, conditionLabelZorder);
+	reader->release();
 	
-	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top/0.1f));
+	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.1f);
 	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(Maingame::checkFriendCard));

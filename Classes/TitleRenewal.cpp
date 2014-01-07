@@ -54,13 +54,6 @@ bool TitleRenewalScene::init()
 	
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	CCLayer* condition_spr = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_ready.ccbi",this));
-	addChild(condition_spr);
-	
-	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top/0.1f));
-	
 	return true;
 }
 
