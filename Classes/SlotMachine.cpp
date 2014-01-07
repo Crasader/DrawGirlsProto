@@ -32,14 +32,16 @@ void SlotMachineSub::update(float dt)
 		av->setContentNode(contentParent);
 		av->setCloseOnPress(true);
 		av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-		
-		av->setBorderScale(0.9f);
+		av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+		av->setWidth(446 / 2.f);
+		av->setHeight(466 / 2.f + 10);
+		av->setBorderScale(0.8f);
 		av->setCenterY(150);
-		
 		av->setContentNode(
 											 contentParent
 											 );
-		
+		av->setTitleOffsetY(-20);
+		av->setTitleStr("획득");
 		content->addChild(CCSprite::create(m_rewards[ m_alreadyDeterminantOrder ]->m_spriteStr.c_str()));
 //		int selectedHorseOrder = -1;
 //		for(int i=0; i<m_arriveOrder.size(); i++)
@@ -89,8 +91,10 @@ void SlotMachineSub::update(float dt)
 			 }
 			 );
 			auto don = CCSprite::create("price_gold_img.png");
-			don->setPosition(ccp(50, 20));
-			don->addChild(CCLabelTTF::create("-500", mySGD->getFont().c_str(), 25));
+			don->setPosition(ccp(25, 17));
+			CCLabelTTF* value = CCLabelTTF::create("500", mySGD->getFont().c_str(), 14);
+			value->setPosition(ccp(34, 12));
+			don->addChild(value);
 			retryBtn->addChild(don);
 			av->addButton(retryBtn);
 		}
@@ -534,7 +538,7 @@ bool SlotMachine::init(std::function<void(void)> closeCallback)
 	
 	av->setContentNode(gs);
 	av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-	//	av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+//	av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 	av->setBorderScale(0.9f);
 	av->setButtonHeight(0);
 	av->setCloseOnPress(false);

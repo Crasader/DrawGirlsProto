@@ -16,7 +16,7 @@ public:
 	{
 		
 	}
-	static CountingGame* create(int priority, const std::function<void(void)>& hideFunction)
+	static CountingGame* create(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
 	{
     CountingGame* pRet = new CountingGame();
     if (pRet && pRet->init(priority, hideFunction))
@@ -52,7 +52,7 @@ public:
 		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, m_priority,true);
 	}
 	void startSchedule();
-	bool init(int priority, const std::function<void(void)>& hideFunction);
+	bool init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction);
 	void update(float dt);
 	void createObject(float dt);
 protected:
@@ -62,7 +62,7 @@ protected:
 	int m_remainTime;
 	CCClippingNode* m_thiz;
 	int m_priority;
-	std::function<void(void)> m_hideFunction;
+	std::function<void(CCObject*, SEL_CallFunc)> m_hideFunction;
 	float remainTime;
 	std::mt19937 m_rEngine;
 	std::vector<CCSprite*> m_objects;

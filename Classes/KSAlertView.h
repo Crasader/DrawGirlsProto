@@ -74,7 +74,9 @@ public:
 	m_titleHeight(50),
 	m_buttonHeight(50),
 	m_scrollBar(NULL),
-	m_customCloseFunction(nullptr)
+	m_customCloseFunction(nullptr),
+	m_titleOffsetX(0),
+	m_titleOffsetY(0)
 	{
 		
 	}
@@ -88,6 +90,16 @@ public:
 	void show(std::function<void(void)> closeFunc);
 	void show(); // 창을 띄움, 창을 띄우기 전에 모든게 세팅이 되어야 함.
 	
+	CCSize getViewSize()
+	{
+		int contentMargin = 1<<3;
+		
+		CCRect contentRect = CCRectMake(contentMargin, m_buttonHeight,
+																		m_width-contentMargin*2, m_height - m_titleHeight - m_buttonHeight);
+		contentRect = rtSetScale(contentRect, m_borderScale);
+		return CCSizeMake(contentRect.size.width, contentRect.size.height);
+
+	}
 	ScrollBar* m_scrollBar;
 	CC_SYNTHESIZE(CCNode*, m_contentNode, ContentNode); // 내용물
 	CC_SYNTHESIZE(int, m_centerX, CenterX); // 팝업이 뜬 위치가 맘에 안들면 조절해야함. 기본값 가운데
@@ -110,16 +122,8 @@ public:
 	CC_SYNTHESIZE(CCScale9Sprite*, m_vScroll, VScroll); // 세로 스크롤, 설정안하면 안보임
 	CC_SYNTHESIZE(CCScale9Sprite*, m_back9, Back9);    // 배경이미지
 	CC_SYNTHESIZE(bool, m_closeOnPress, CloseOnPress); // 눌렀을 때 닫히게 할거냐, 기본값 true
-	CCSize getViewSize()
-	{
-		int contentMargin = 1<<3;
-		
-		CCRect contentRect = CCRectMake(contentMargin, m_buttonHeight,
-																		m_width-contentMargin*2, m_height - m_titleHeight - m_buttonHeight);
-		contentRect = rtSetScale(contentRect, m_borderScale);
-		return CCSizeMake(contentRect.size.width, contentRect.size.height);
-
-	}
 	CC_SYNTHESIZE(CCScrollView*, m_containerScrollView, ContainerScrollView); //
+	CC_SYNTHESIZE(int, m_titleOffsetX, TitleOffsetX); //
+	CC_SYNTHESIZE(int, m_titleOffsetY, TitleOffsetY); //
 };
 

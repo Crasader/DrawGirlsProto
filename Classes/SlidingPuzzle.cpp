@@ -21,7 +21,7 @@ SlidingPuzzle::~SlidingPuzzle()
 //	return true;
 //}
 
-bool SlidingPuzzle::init(int priority, const std::function<void(void)>& hideFunction)
+bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
 {
 	CCLayer::init();
 	
@@ -191,7 +191,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(void)>& hideFunc
 										myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
 																				{
 																					addChild(KSTimer::create(3.f, [=](){
-																						m_hideFunction();
+																						m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 																					}));
 																				});
 									}
@@ -442,7 +442,7 @@ void SlidingPuzzle::update(float dt)
 		m_menu->setTouchEnabled(false);
 		addChild(KSTimer::create(3.f, [=]()
 														 {
-															 m_hideFunction();
+															 m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 														 }));
 		unscheduleUpdate();
 	}

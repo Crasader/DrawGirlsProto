@@ -63,7 +63,7 @@ void Dodge::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 			
 	}
 }
-bool Dodge::init(int priority, const std::function<void(void)>& hideFunction)
+bool Dodge::init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
 {
 	CCLayer::init();
 // setup stencil shape
@@ -112,7 +112,7 @@ bool Dodge::init(int priority, const std::function<void(void)>& hideFunction)
 //	addChild(back, 100);
 	
 	m_flowTimeFnt = CCLabelBMFont::create("0", "etc_font.fnt");
-	m_flowTimeFnt->setPosition(ccp(dodgeScreenSize.x + 100, 270));
+	m_flowTimeFnt->setPosition(ccp(420, 270));
 	addChild(m_flowTimeFnt, 101);
 	
 	return true;
@@ -134,7 +134,7 @@ void Dodge::update(float dt)
 		myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
 												{
 													addChild(KSTimer::create(3.f, [=](){
-														m_hideFunction();
+														m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 													}));
 												});
 	}
@@ -205,9 +205,7 @@ void Dodge::checkCollision(float dt)
 			addChild(failSprite);
 			addChild(KSTimer::create(3.f, [=]()
 															 {
-//																 CCDirector::sharedDirector()->popScene();
-																 
-																 m_hideFunction();
+																 m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 															 }));
 //			unschedule(schedule_selector(Dodge::update));
 			

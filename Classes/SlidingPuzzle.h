@@ -78,8 +78,8 @@ public:
 	virtual ~SlidingPuzzle();
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	void startSchedule();
-	virtual bool init(int priority, const std::function<void(void)>& hideFunction);
-	static SlidingPuzzle* create(int priority, const std::function<void(void)>& hideFunction)
+	virtual bool init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction);
+	static SlidingPuzzle* create(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
 	{
     SlidingPuzzle* pRet = new SlidingPuzzle();
     if (pRet && pRet->init(priority, hideFunction))
@@ -109,7 +109,7 @@ public:
 	void shufflePieces(int loop, Coord coord);
 protected:
 	float m_remainTime;
-	std::function<void(void)> m_hideFunction;
+	std::function<void(CCObject*, SEL_CallFunc)> m_hideFunction;
 	CCClippingNode* m_thiz;
 	int m_priority;
 	CCMenuLambda* m_menu;

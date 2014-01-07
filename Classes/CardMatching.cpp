@@ -91,7 +91,7 @@ void CardMatching::splitImage(CuttingType ct, const std::string& fileName, int c
 	img->release();
 }
 
-bool CardMatching::init(int priority, const std::function<void(void)>& hideFunction)
+bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
 {
 	CCLayer::init();
 	CCDrawNode* shape = CCDrawNode::create();
@@ -119,9 +119,9 @@ bool CardMatching::init(int priority, const std::function<void(void)>& hideFunct
 	std::random_device rd;
 	m_rEngine.seed(rd());
 	
-	m_timeFnt = CCLabelBMFont::create("", "etc_font.fnt");
-	m_timeFnt->setPosition(ccp(385, 270));
-	addChild(m_timeFnt);
+	m_timeFnt = CCLabelBMFont::create(CCString::createWithFormat("%.1f", m_remainTime)->getCString(), "etc_font.fnt");
+	m_timeFnt->setPosition(ccp(420, 270));
+	addChild(m_timeFnt, 5);
 	
 	setTouchEnabled(true);
 	m_menu = CCMenuLambda::create();
@@ -231,7 +231,7 @@ bool CardMatching::init(int priority, const std::function<void(void)>& hideFunct
 																																											 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
 																																																					 {
 																																																						 addChild(KSTimer::create(3.f, [=](){
-																																																							 m_hideFunction();
+																																																							 m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 																																																						 }));
 																																																					 });
 																																										 }
@@ -263,13 +263,12 @@ bool CardMatching::init(int priority, const std::function<void(void)>& hideFunct
 							 int x = loop % PUZZLE_COLS;
 							 int y = loop / PUZZLE_COLS;
 							 
-							 item->setPosition(ccp((x*116 + 94)/2,(y*116 + 94)/2));
+							 item->setPosition(ccp((x*140 + 94)/2,(y*140 + 94)/2));
 							 m_matchCards[loop]->setPosition(item->getPosition());
 							 item->setUserData(m_matchCards[loop]);
 						 });
 	
-	containerNode->setPosition(ccp(30, 25));
-	
+	containerNode->setPosition(ccp(10, 10));
 	return true;
 }
 
@@ -287,7 +286,8 @@ void CardMatching::update(float dt)
 		m_menu->setTouchEnabled(false);
 		addChild(KSTimer::create(3.f, [=]()
 														 {
-															 m_hideFunction();
+															 setVisible(false);
+															 m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 														 }));
 		unscheduleUpdate();
 	}

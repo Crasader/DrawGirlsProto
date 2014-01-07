@@ -28,7 +28,7 @@ void CountingGame::startSchedule()
 {
 	schedule(schedule_selector(CountingGame::createObject), 1/30.f);
 }
-bool CountingGame::init(int priority, const std::function<void(void)>& hideFunction)
+bool CountingGame::init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
 {
 	CCLayer::init();
 	
@@ -64,9 +64,10 @@ bool CountingGame::init(int priority, const std::function<void(void)>& hideFunct
 	addChild(m_menu, 1);
 	
 	m_timeFnt = CCLabelBMFont::create(CCString::createWithFormat("%d", m_remainTime)->getCString(), "etc_font.fnt");
-	m_timeFnt->setPosition(ccp(430, 270));
+	m_timeFnt->setPosition(ccp(420, 270));
 	addChild(m_timeFnt, 2);
 	
+//	schedule(schedule_selector(CountingGame::createObject)); // 임시.
 	return true;
 }
 
@@ -84,7 +85,7 @@ void CountingGame::update(float dt)
 		m_menu->setTouchEnabled(false);
 		addChild(KSTimer::create(3.f, [=]()
 														 {
-															 m_hideFunction();
+															 m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 														 }));
 		unscheduleUpdate();
 	}
@@ -165,8 +166,13 @@ void CountingGame::createObject(float dt)
 																 (CCString::createWithFormat("%d", corrects[i])->getCString(),
 																	[=](CCObject* s)
 																	{
+																		CCMenuItemLambda* item = dynamic_cast<CCMenuItemLambda*>(s);
 																		if(i == correctIndex)
 																		{
+																			CCSprite* resultMark = CCSprite::create("bonusgame_bosscount_ok.png");
+																			resultMark->setPosition(item->getPosition());
+																			addChild(resultMark, 10);
+																			
 																			CCLog("answer");
 																			CCLabelBMFont* result = CCLabelBMFont::create("ANSWER", "etc_font.fnt");
 																			result->setPosition(ccp(240, 160));
@@ -180,13 +186,26 @@ void CountingGame::createObject(float dt)
 																			mySGD->setStar(mySGD->getStar() + 1);
 																			myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
 																													{
-																														addChild(KSTimer::create(3.f, [=](){
-																															m_hideFunction();
+																														addChild(KSTimer::create(1.f, [=](){
+																															m_menu->setVisible(false);
+																															quiz->setVisible(false);
+																															resultMark->setVisible(false);
+																															for(auto i : m_objects)
+																															{
+																																i->setVisible(true);
+																															}
+																															addChild(KSTimer::create(4.f, [=]()
+																																											 {
+																																												 m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
+																																											 }));
 																														}));
 																													});
 																		}
 																		else
 																		{
+																			CCSprite* resultMark = CCSprite::create("bonusgame_bosscount_cancel.png");
+																			resultMark->setPosition(item->getPosition());
+																			addChild(resultMark, 10);
 																			CCLabelBMFont* result = CCLabelBMFont::create("WRONG", "etc_font.fnt");
 																			result->setPosition(ccp(240, 160));
 																			addChild(result);
@@ -194,9 +213,19 @@ void CountingGame::createObject(float dt)
 																			failSprite->setPosition(ccp(240, 160));
 																			addChild(failSprite);
 																			m_menu->setTouchEnabled(false);
-																			addChild(KSTimer::create(3.f, [=]()
+																			addChild(KSTimer::create(2.f, [=]()
 																															 {
-																																 m_hideFunction();
+																																 m_menu->setVisible(false);
+																																 quiz->setVisible(false);
+																																 resultMark->setVisible(false);
+																																 for(auto i : m_objects)
+																																 {
+																																	 i->setVisible(true);
+																																 }
+																																 addChild(KSTimer::create(7.f, [=]()
+																																													{
+																																														m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
+																																													}));
 																															 }));
 																			unscheduleUpdate();
 																		}
