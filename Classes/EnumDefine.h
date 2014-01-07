@@ -244,37 +244,37 @@ enum MessageRecvType
 enum AchievementCode
 {
 	kAchievementCode_base = 0,
-	kAchievementCode_gold1,//	골드서민 : 1000골드 모으기.
-	kAchievementCode_gold2,//	골드부자 : 10000골드 모으기.
-	kAchievementCode_gold3,//	골드재벌 : 100000골드 모으기.
+	kAchievementCode_gold1,//	골드서민 : 1000골드 모으기. 완
+	kAchievementCode_gold2,//	골드부자 : 10000골드 모으기. 완
+	kAchievementCode_gold3,//	골드재벌 : 100000골드 모으기. 완
 	
-	kAchievementCode_ruby1,//	루비서민 : 10골드모으기.
-	kAchievementCode_ruby2,//	루비부자 : 100루비모으기.
-	kAchievementCode_ruby3,//	루비재벌 : 1000루비모으기.
+	kAchievementCode_ruby1,//	루비서민 : 10골드모으기. 완
+	kAchievementCode_ruby2,//	루비부자 : 100루비모으기. 완
+	kAchievementCode_ruby3,//	루비재벌 : 1000루비모으기. 완
 	
 	kAchievementCode_heart1,//	큐피트 : 10하트보내기.
 	kAchievementCode_heart2,//	바람둥이 : 30하트보내기.
 	kAchievementCode_heart3,//	카사노바 : 50하트보내기.
 	
-	kAchievementCode_social1,//	스타: 10소셜포인트모으기.
-	kAchievementCode_social2,//	탑스타 : 30소셜포인트모으기.
-	kAchievementCode_social3,//	월드스타 : 50소셜포인트모으기.
+	kAchievementCode_social1,//	스타: 10소셜포인트모으기. 완
+	kAchievementCode_social2,//	탑스타 : 30소셜포인트모으기. 완
+	kAchievementCode_social3,//	월드스타 : 50소셜포인트모으기. 완
 	
 	kAchievementCode_bonusGame1,//	보너스게임아마추어 : 보너스게임 10회 성공
 	kAchievementCode_bonusGame2,//	보너스게임프로 : 보너스게임 20회 성공
 	kAchievementCode_bonusGame3,//	보너스게임마스터 : 보너스게임 30회 성공
 	
-	kAchievementCode_mapGacha1,//	맵가챠맨1 : 맵가챠 10회 돌리기
-	kAchievementCode_mapGacha2,//	맵가챠맨2 : 맵가챠 20회 돌리기
-	kAchievementCode_mapGacha3,//	맵가챠맨3 : 맵가챠 30회 돌리기
+	kAchievementCode_mapGacha1,//	맵가챠맨1 : 맵가챠 10회 돌리기 완
+	kAchievementCode_mapGacha2,//	맵가챠맨2 : 맵가챠 20회 돌리기 완
+	kAchievementCode_mapGacha3,//	맵가챠맨3 : 맵가챠 30회 돌리기 완
 	
-	kAchievementCode_luckySeven1,//	럭키세븐1 : 한번에 7% 먹기
-	kAchievementCode_luckySeven2,//	럭키세븐2 : 한번에 7.7% 먹기
-	kAchievementCode_luckySeven3,//	럭키세븐3 : 한번에 77.7% 먹기
+	kAchievementCode_luckySeven1,//	럭키세븐1 : 한번에 7% 먹기 완
+	kAchievementCode_luckySeven2,//	럭키세븐2 : 한번에 7.7% 먹기 완
+	kAchievementCode_luckySeven3,//	럭키세븐3 : 한번에 77.7% 먹기 완
 	
-	kAchievementCode_feverMania1,//	피버매니아1: 한판에 피버모드 5회진입시
-	kAchievementCode_feverMania2,//	피버매니아2: 전체 피버모드 30회진입시
-	kAchievementCode_feverMania3,//	피버매니아3: 전체 피버모드 50회진입시
+	kAchievementCode_feverMania1,//	피버매니아1: 한판에 피버모드 5회진입시 완
+	kAchievementCode_feverMania2,//	피버매니아2: 전체 피버모드 30회진입시 완
+	kAchievementCode_feverMania3,//	피버매니아3: 전체 피버모드 50회진입시 완
 	
 	kAchievementCode_comboMania1,//	콤보매니아1 : 10콤보달성
 	kAchievementCode_comboMania2,//	콤보매니아2 : 20콤보달성

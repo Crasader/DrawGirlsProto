@@ -4,6 +4,7 @@
 #include "PlayUI.h"
 #include "KSCumberBase.h"
 #include "StartSettingScene.h"
+#include "AchieveNoti.h"
 
 #define LZZ_INLINE inline
 using namespace cocos2d;
@@ -135,6 +136,32 @@ void FeverParent::addFeverGage (int count)
 	if(recent_count >= 10)
 	{
 		ing_fever = true;
+		entered_fever_cnt++;
+		int total_fever_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_totalFeverCnt)+1;
+		myDSH->setIntegerForKey(kDSH_Key_achieve_totalFeverCnt, total_fever_cnt);
+		
+		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+		
+		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_feverMania1) == 0 &&
+		   entered_fever_cnt >= shared_acr->getCondition(kAchievementCode_feverMania1))
+		{
+			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_feverMania1, 1);
+			AchieveNoti* t_noti = AchieveNoti::create(kAchievementCode_feverMania1);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+		
+		for(int i=kAchievementCode_feverMania2;i<=kAchievementCode_feverMania3;i++)
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+			   total_fever_cnt == shared_acr->getCondition((AchievementCode)i))
+			{
+				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		
+		
 		recent_count = 10;
 		
 		fever_top->setPercentage(100.f);
@@ -251,6 +278,7 @@ void FeverParent::myInit ()
 	ing_fever = false;
 	keeping_count = 0;
 	is_keeping = false;
+	entered_fever_cnt = 0;
 	
 	CCSprite* fever_back = CCSprite::create("fever_gage_back.png");
 	fever_back->setPosition(ccp(12,myDSH->ui_top-25));
@@ -776,6 +804,20 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				myGD->communication("Main_percentageGettingEffect", floorf((t_p-t_beforePercentage)*10000.f)/10000.f*100.f, true, jackPosition);
 			}
 		}
+		
+		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+		
+		for(int i=kAchievementCode_luckySeven1;i<=kAchievementCode_luckySeven3;i++)
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+			   t_p == t_beforePercentage + shared_acr->getCondition((AchievementCode)i)/0.001f)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		
 		
 		int item_value = mySGD->getSmallAreaValue();
 		

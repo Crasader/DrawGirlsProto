@@ -21,6 +21,7 @@
 #include "RentCardAniContent.h"
 #include "PuzzleScene.h"
 #include "MainFlowScene.h"
+#include "AchieveNoti.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -404,9 +405,26 @@ void Maingame::gachaOn()
 	myGD->resetGameData();
 	mySGD->startMapGachaOn();
 	
+	int map_gacha_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_mapGachaCnt)+1;
+	myDSH->setIntegerForKey(kDSH_Key_achieve_mapGachaCnt, map_gacha_cnt);
+	
+	AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+	
+	for(int i=kAchievementCode_mapGacha1;i<=kAchievementCode_mapGacha3;i++)
+	{
+		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+		   map_gacha_cnt >= shared_acr->getCondition((AchievementCode)i))
+		{
+			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
+	
 	vector<SaveUserData_Key> save_userdata_list;
 	
 	save_userdata_list.push_back(kSaveUserData_Key_gold);
+	save_userdata_list.push_back(kSaveUserData_Key_achieve);
 	
 	myDSH->saveUserData(save_userdata_list, nullptr);
 	

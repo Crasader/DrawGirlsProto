@@ -67,6 +67,7 @@ private:
 	bool ing_fever;
 	int keeping_count;
 	bool is_keeping;
+	int entered_fever_cnt;
 	void startKeep ();
 	void keeping ();
 	void stopKeep ();

@@ -242,7 +242,7 @@ void AchievePopup::setAchieveTable()
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == -1 ||
-			   AchieveConditionReward::sharedInstance()->getRecentValue((AchievementCode)i) >= AchieveConditionReward::sharedInstance()->getCondition((AchievementCode)i))
+			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
 				achieve_list.push_back((AchievementCode)i);
 		}
 	}
@@ -265,7 +265,7 @@ void AchievePopup::setAchieveTable()
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-			   AchieveConditionReward::sharedInstance()->getRecentValue((AchievementCode)i) < AchieveConditionReward::sharedInstance()->getCondition((AchievementCode)i))
+			   !AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
 				achieve_list.push_back((AchievementCode)i);
 		}
 	}
@@ -274,14 +274,14 @@ void AchievePopup::setAchieveTable()
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-			   AchieveConditionReward::sharedInstance()->getRecentValue((AchievementCode)i) >= AchieveConditionReward::sharedInstance()->getCondition((AchievementCode)i))
+			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
 				achieve_list.push_back((AchievementCode)i);
 		}
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-			   AchieveConditionReward::sharedInstance()->getRecentValue((AchievementCode)i) >= AchieveConditionReward::sharedInstance()->getCondition((AchievementCode)i))
+			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
 				achieve_list.push_back((AchievementCode)i);
 		}
 	}

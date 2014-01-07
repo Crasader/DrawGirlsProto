@@ -179,10 +179,10 @@ void StarGoldData::setStar( int t_star )
 		
 		for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-			   shared_acr->getRecentValue((AchievementCode)i) < shared_acr->getCondition((AchievementCode)i) &&
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
 			   t_star >= shared_acr->getCondition((AchievementCode)i))
 			{
+				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -211,10 +211,10 @@ void StarGoldData::setGold( int t_gold , bool is_write/* = true */)
 		
 		for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-			   shared_acr->getRecentValue((AchievementCode)i) < shared_acr->getCondition((AchievementCode)i) &&
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
 			   t_gold >= shared_acr->getCondition((AchievementCode)i))
 			{
+				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -237,6 +237,22 @@ int StarGoldData::getFriendPoint()
 }
 void StarGoldData::setFriendPoint(int t_point)
 {
+	if(myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint) < t_point)
+	{
+		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+		
+		for(int i=kAchievementCode_social1;i<=kAchievementCode_social3;i++)
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+			   t_point >= shared_acr->getCondition((AchievementCode)i))
+			{
+				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+	}
+	
 	myDSH->setIntegerForKey(kDSH_Key_savedFriendPoint, t_point);
 	
 	if(friend_point_label)
