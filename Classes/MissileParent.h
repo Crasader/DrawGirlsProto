@@ -130,12 +130,11 @@ public:
 	
 	void shootPetMissile(int jm_type, int cmCnt, float damage_per, CCPoint s_p);
 	
-	
-	
-	
 	enum PATTERN_RET_CODE{INVALID=0, VALID=1, NOCAST=2};
 	
 	int attackWithKSCode(CCPoint startPosition, std::string pattern, KSCumberBase* cb, bool exe);
+	
+	int getJackMissileCnt();
 private:
 	
 	SW_Parent* mySW;
@@ -155,6 +154,8 @@ private:
 	
 	CCParticleSystem* particle;
 	CCSpriteBatchNode* explosion_node;
+	
+	CCNode* jack_missile_node;
 	
 	void initParticle(CCPoint startPosition, ccColor4F t_color, float t_angle);
 	

@@ -554,5 +554,6 @@ void DataStorageHub::myInit ()
 	myDefault = SaveData::sharedObject();
 	is_cheat_key_enabled = true;
 	puzzle_map_scene_show_type = kPuzzleMapSceneShowType_init;
+//	setIntegerForKey(kDSH_Key_tutorial_flowStep, 0);
 }
 #undef LZZ_INLINE

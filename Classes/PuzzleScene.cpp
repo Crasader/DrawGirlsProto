@@ -214,6 +214,26 @@ void PuzzleScene::hideClearPopup()
 			
 			tutorial_node = t_tutorial;
 		}
+		else if(recent_step == kTutorialFlowStep_backClick)
+		{
+			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			int recent_get_card_cnt = 0;
+			int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+			for(int i=1;i<=take_card_cnt;i++)
+			{
+				int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+					recent_get_card_cnt++;
+			}
+			if(selected_card_number > 0 && recent_get_card_cnt >= 2)
+			{
+				TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+				t_tutorial->initStep(kTutorialFlowStep_backClick);
+				addChild(t_tutorial, kPuzzleZorder_popup);
+				
+				tutorial_node = t_tutorial;
+			}
+		}
 		
 		showGetPuzzle();
 	}
@@ -312,6 +332,27 @@ void PuzzleScene::showFailPopup()
 
 void PuzzleScene::hideFailPopup()
 {
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	if(recent_step == kTutorialFlowStep_backClick)
+	{
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		int recent_get_card_cnt = 0;
+		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=take_card_cnt;i++)
+		{
+			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+				recent_get_card_cnt++;
+		}
+		if(selected_card_number > 0 && recent_get_card_cnt >= 2)
+		{
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_backClick);
+			addChild(t_tutorial, kPuzzleZorder_popup);
+			
+			tutorial_node = t_tutorial;
+		}
+	}
 	is_menu_enable = true;
 }
 
