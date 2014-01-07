@@ -179,7 +179,6 @@ void MiniGamePopup::menuAction(CCObject *pSender)
 	
 	is_menu_enable = false;
 	miniGameStart = nullptr;
-	game_code = kMiniGameCode_counting;
 	if(game_code == kMiniGameCode_counting)
 	{
 		// counting_game = counting_game(-180, bind(&MiniGamePopup::hidePopup, this));
