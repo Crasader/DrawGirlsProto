@@ -133,8 +133,8 @@ void KSCumberBase::randomMoving(float dt)
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * MAX(0.1f, m_speed)) - 1));
+		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * MAX(0.1f, m_speed)) - 1));
 		CCPoint cumberPosition = getPosition();
 		
 		afterPosition = cumberPosition + ccp(speedX, speedY);

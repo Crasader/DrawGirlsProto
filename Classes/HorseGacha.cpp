@@ -67,9 +67,10 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 		m_horseBoardNode->addChild(horse, 8 - i);
 	}
 	m_horseBoardNode->setScaleY(1.2f);
-	m_horseBoardNode->setScaleX(1.4f);
+//	m_horseBoardNode->setScaleX(1.4f);
+	m_horseBoardNode->setScaleX(1.08f);
 	m_horseBoardNode->getCamera()->setEyeXYZ(0, -1.1f, 1.6f);
-	m_horseBoardNode->setPosition(ccp(-100.f, 0.f));
+	m_horseBoardNode->setPosition(ccp(-25.f, 0.f));
 	// y = 0.4f, z = 0.5f 말의 카메라.
 	
 	m_parent = av;
@@ -261,6 +262,7 @@ void HorseGachaSub::update(float dt)
 		av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 		av->setWidth(446 / 2.f);
 		av->setHeight(466 / 2.f + 10);
+		av->setButtonOffsetY(7);
 		av->setBorderScale(0.8f);
 		av->setCenterY(150);
 		av->setContentNode(

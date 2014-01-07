@@ -76,7 +76,8 @@ public:
 	m_scrollBar(NULL),
 	m_customCloseFunction(nullptr),
 	m_titleOffsetX(0),
-	m_titleOffsetY(0)
+	m_titleOffsetY(0),
+	m_buttonOffsetY(0)
 	{
 		
 	}
@@ -125,5 +126,7 @@ public:
 	CC_SYNTHESIZE(CCScrollView*, m_containerScrollView, ContainerScrollView); //
 	CC_SYNTHESIZE(int, m_titleOffsetX, TitleOffsetX); //
 	CC_SYNTHESIZE(int, m_titleOffsetY, TitleOffsetY); //
+	
+	CC_SYNTHESIZE(int, m_buttonOffsetY, ButtonOffsetY); //
 };
 
