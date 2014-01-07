@@ -86,6 +86,8 @@ void StartMapGacha::menuAction (CCObject * sender)
 {
 	if(!is_menu_enable)
 		return;
+	if(mySGD->is_paused)
+		return;
 	
 	is_menu_enable = false;
 	

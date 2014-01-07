@@ -885,7 +885,6 @@ void PuzzleScene::menuAction(CCObject* sender)
 		is_action = false;
 	else if(recent_step == kTutorialFlowStep_backClick)
 	{
-		is_action = false;
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		int recent_get_card_cnt = 0;
 		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
@@ -900,6 +899,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 			int tag = ((CCNode*)sender)->getTag();
 			if(tag == kPuzzleMenuTag_cancel)
 			{
+				is_action = false;
 				is_menu_enable = false;
 				myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_cardCollectionClick);
 				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());

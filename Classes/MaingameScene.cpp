@@ -392,7 +392,7 @@ void Maingame::counting()
 		if(mySGD->getGold() >= mySGD->getGachaMapFee())
 		{
 			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
-			addChild(t_smg, mControlZorder);
+			addChild(t_smg, clearshowtimeZorder);
 		}
 	}
 }
