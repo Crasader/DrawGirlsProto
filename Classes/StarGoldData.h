@@ -444,7 +444,14 @@ public:
 		
 	}
 	
+	bool isEmptyAchieveNotiQueue();
+	void pushAchieveNotiQueue(AchievementCode t_code);
+	void popAchieveNotiQueue();
+	AchievementCode frontAchieveNotiQueue();
+	
 private:
+	deque<AchievementCode> achieve_noti_que;
+	
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* friend_point_label;
