@@ -137,6 +137,11 @@ void ZoomScript::typingAnimation()
 			(this->*delegate_typing_after)();
 		}
 	}
+	else
+	{
+		unschedule(schedule_selector(ZoomScript::typingAnimation));
+		(this->*delegate_typing_after)();
+	}
 }
 
 void ZoomScript::startTouchAction()
