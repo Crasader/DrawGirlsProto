@@ -1685,7 +1685,7 @@ void ThreeCushion::initParticle ()
 {
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
-	CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_bomb5.ccbi",this));
+	CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("bomb_8_8.ccbi",this));
 	reader->release();
 	particle->setPosition(baseNode->getPosition());
 	particle->setRotation(rand()%360);

@@ -157,10 +157,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 																																						// 다시 할꺼냐 받을거냐 물어보는 팝업.
 																																						// 가운데 정렬 예제
 																																						KSAlertView* av = KSAlertView::create();
-																																						av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
 																																						
-																																						av->setBorderScale(0.9f);
-																																						av->setCenterY(150);
 																																						CCNode* contentParent = CCNode::create();
 																																						
 																																						KSNode* content = new KSNode();
@@ -168,6 +165,18 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 																																						content->autorelease();
 																																						contentParent->addChild(content);
 																																						av->setContentNode(contentParent);
+																																						av->setCloseOnPress(true);
+																																						av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
+																																						av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+																																						av->setWidth(446 / 2.f);
+																																						av->setHeight(466 / 2.f + 10);
+																																						av->setBorderScale(0.8f);
+																																						av->setCenterY(150);
+																																						av->setContentNode(
+																																															 contentParent
+																																															 );
+																																						av->setTitleOffsetY(-20);
+																																						av->setTitleStr("획득");
 																																						
 																																						// 내용에 루비인지 골드인지 아템인지 표시
 																																						content->addChild(CCSprite::create(i.first->m_reward->m_spriteStr.c_str()));
@@ -208,12 +217,15 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 																																								 else
 																																								 {
 																																									 CCLog("돈 없음");
+																																									 
 																																								 }
 																																							 }
 																																							 );
 																																							auto don = CCSprite::create("price_gold_img.png");
-																																							don->setPosition(ccp(50, 20));
-																																							don->addChild(CCLabelTTF::create("-500", mySGD->getFont().c_str(), 25));
+																																							don->setPosition(ccp(25, 17));
+																																							CCLabelTTF* value = CCLabelTTF::create("500", mySGD->getFont().c_str(), 14);
+																																							value->setPosition(ccp(34, 12));
+																																							don->addChild(value);
 																																							retryBtn->addChild(don);
 																																							av->addButton(retryBtn);
 																																						}
@@ -298,7 +310,6 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 																																						
 																																						
 																																						
-																																						av->setBorderScale(0.9f);
 																																						//	av->setTitleStr("지금 열기");
 																																						
 																																						

@@ -179,7 +179,7 @@ void KSAlertView::show()
 	{
 		CCLabelTTF* t = CCLabelTTF::create(m_titleStr.c_str(), "", 14.f);
 		t->setAnchorPoint(ccp(0.5, 1.0));
-		t->setPosition(btnBg->convertToNodeSpace(ccp(240, top)));
+		t->setPosition(btnBg->convertToNodeSpace(ccp(240 + m_titleOffsetX, m_height + m_titleOffsetY)));
 		btnBg->addChild(t);
 	}
 

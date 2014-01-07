@@ -108,7 +108,7 @@ public:
 	{
 		
 	}
-	static __TYPE__* create(int priority, const std::function<void(void)>& hideFunction)
+	static __TYPE__* create(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
 	{
     __TYPE__ *pRet = new __TYPE__();
     if (pRet && pRet->init(priority, hideFunction))
@@ -143,12 +143,12 @@ public:
 	{
 		CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, m_priority, true);
 	}
-	bool init(int priority, const std::function<void(void)>& hideFunction);
+	bool init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction);
 	void update(float dt);
 	void checkCollision(float dt);
 	void timeChecker(float dt);
 protected:
-	std::function<void(void)> m_hideFunction;
+	std::function<void(CCObject*, SEL_CallFunc)> m_hideFunction;
 	CCClippingNode* m_thiz;
 	int m_priority;
 	float m_timer;

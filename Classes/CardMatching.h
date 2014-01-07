@@ -48,8 +48,8 @@ public:
 		
 	}
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init(int priority, const std::function<void(void)>& hideFunction);
-	static CardMatching* create(int priority, const std::function<void(void)>& hideFunction)
+	virtual bool init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction);
+	static CardMatching* create(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
 	{
     CardMatching* pRet = new CardMatching();
     if (pRet && pRet->init(priority, hideFunction))
@@ -74,7 +74,7 @@ public:
 protected:
 	CCClippingNode* m_thiz;
 	int m_priority;
-	std::function<void(void)> m_hideFunction;
+	std::function<void(CCObject*, SEL_CallFunc)> m_hideFunction;
 	float m_remainTime;
 	const int PUZZLE_COLS, PUZZLE_ROWS;
 	CCMenuLambda* m_menu;
