@@ -1278,8 +1278,8 @@ void PuzzleScene::setReward()
 			step_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f,mini_rank->getContentSize().height/2.f));
 			mini_rank->addChild(step_rank);
 			
-			CCLabelTTF* step_reward = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step_card_number))->getCString(), mySGD->getFont().c_str(), 15);
-			step_reward->setPosition(ccp(50,60-i*58));
+			CCLabelTTF* step_reward = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+			step_reward->setPosition(ccp(35,53-i*58));
 			reward_node->addChild(step_reward);
 			
 			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0)
