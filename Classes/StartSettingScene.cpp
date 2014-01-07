@@ -120,14 +120,29 @@ void StartSettingScene::setMain()
 	main_case->setPosition(ccp(240,160));
 	addChild(main_case, kStartSettingZorder_main);
 	
-	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	int stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+	int stage_number;
 	
-	mySD->setSilType(stage_number);
-	
-	CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
-	stage_number_label->setPosition(ccp(60, main_case->getContentSize().height-62));
-	main_case->addChild(stage_number_label);
+	if(mySGD->is_before_selected_event_stage)
+	{
+		stage_number = mySD->getSilType();
+		
+		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height-62));
+		main_case->addChild(stage_number_label);
+		
+		mySGD->is_before_selected_event_stage = false;
+	}
+	else
+	{
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+		
+		mySD->setSilType(stage_number);
+		
+		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height-62));
+		main_case->addChild(stage_number_label);
+	}
 	
 	CCLabelTTF* mission_label = CCLabelTTF::create(mySD->getConditionContent(stage_number).c_str(), mySGD->getFont().c_str(), 13);
 	mission_label->setPosition(ccp(main_case->getContentSize().width/2.f+62, main_case->getContentSize().height-62));
@@ -553,7 +568,10 @@ void StartSettingScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kStartSettingMenuTag_back)
 		{
-			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+			if(mySD->getSilType() >= 10000)
+				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			else
+				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 		}
 		else if(tag == kStartSettingMenuTag_start)
 		{

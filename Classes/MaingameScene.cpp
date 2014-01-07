@@ -20,6 +20,7 @@
 #include "PatternTutorialContent.h"
 #include "RentCardAniContent.h"
 #include "PuzzleScene.h"
+#include "MainFlowScene.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -391,7 +392,7 @@ void Maingame::counting()
 		if(mySGD->getGold() >= mySGD->getGachaMapFee())
 		{
 			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
-			addChild(t_smg, mControlZorder);
+			addChild(t_smg, clearshowtimeZorder);
 		}
 	}
 }
@@ -787,7 +788,10 @@ void Maingame::endCloseShutter()
 	{
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 //		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-		CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+		if(mySD->getSilType() >= 10000)
+			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+		else
+			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 	}
 }
 

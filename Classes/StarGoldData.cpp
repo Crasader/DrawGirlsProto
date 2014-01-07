@@ -11,7 +11,6 @@
 #include "DataStorageHub.h"
 #include "AchieveNoti.h"
 
-
 CCSprite* StarGoldData::getLoadingImg()
 {
 	if(after_loading == kImgType_Empty)
@@ -817,8 +816,29 @@ void StarGoldData::selectFriendCard()
 	}
 }
 
+bool StarGoldData::isEmptyAchieveNotiQueue()
+{
+	return achieve_noti_que.empty();
+}
+
+void StarGoldData::pushAchieveNotiQueue(AchievementCode t_code)
+{
+	achieve_noti_que.push_back(t_code);
+}
+
+void StarGoldData::popAchieveNotiQueue()
+{
+	achieve_noti_que.pop_front();
+}
+
+AchievementCode StarGoldData::frontAchieveNotiQueue()
+{
+	return achieve_noti_que.front();
+}
+
 void StarGoldData::myInit()
 {
+	is_before_selected_event_stage = false;
 	is_paused = false;
 	login_getted = false;
 	is_before_title = true;

@@ -26,6 +26,8 @@
 #include "StageListDown.h"
 #include "AchievePopup.h"
 #include "TutorialFlowStep.h"
+#include "ClearPopup.h"
+#include "FailPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -94,30 +96,120 @@ bool MainFlowScene::init()
 	
 	is_menu_enable = true;
 	
-	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
-	if(recent_step == kTutorialFlowStep_puzzleClick)
+	
+	
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
-		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
-		t_tutorial->initStep(kTutorialFlowStep_puzzleClick);
-		addChild(t_tutorial, kMainFlowZorder_popup);
+		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+		if(selected_card_number > 0)
+		{
+			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
+		}
 		
-		tutorial_node = t_tutorial;
+		int take_level;
+		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
+		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
+		else												take_level = 1;
 		
-		puzzle_table->setTouchEnabled(false);
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
+		{
+			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+			
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+			myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), 1);
+			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GS(kSDS_CI_int1_passive_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+			
+			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+		}
+		else
+		{
+			int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) == 0)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, NSDS_GI(kSDS_CI_int1_durability_i, card_number));
+				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, card_number, 1);
+				myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number, NSDS_GI(kSDS_CI_int1_durability_i, card_number));
+				myDSH->setStringForKey(kDSH_Key_cardPassive_int1, card_number, NSDS_GS(kSDS_CI_int1_passive_s, card_number));
+			}
+			else
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number));
+			}
+		}
 	}
-	else if(recent_step == kTutorialFlowStep_cardCollectionClick)
+	
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
-		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
-		t_tutorial->initStep(kTutorialFlowStep_cardCollectionClick);
-		addChild(t_tutorial, kMainFlowZorder_popup);
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+		showClearPopup();
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
+	{
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+		showFailPopup();
+	}
+	else
+	{
+		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 		
-		tutorial_node = t_tutorial;
-		
-		puzzle_table->setTouchEnabled(false);
+		if(recent_step == kTutorialFlowStep_puzzleClick)
+		{
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_puzzleClick);
+			addChild(t_tutorial, kMainFlowZorder_popup);
+			
+			tutorial_node = t_tutorial;
+			
+			puzzle_table->setTouchEnabled(false);
+		}
+		else if(recent_step == kTutorialFlowStep_cardCollectionClick)
+		{
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_cardCollectionClick);
+			addChild(t_tutorial, kMainFlowZorder_popup);
+			
+			tutorial_node = t_tutorial;
+			
+			puzzle_table->setTouchEnabled(false);
+		}
 	}
 	
 	return true;
+}
+
+void MainFlowScene::showClearPopup()
+{
+	is_menu_enable = false;
+	
+	ClearPopup* t_popup = ClearPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::hideClearPopup));
+	addChild(t_popup, kPuzzleZorder_popup);
+}
+
+void MainFlowScene::hideClearPopup()
+{
+	is_menu_enable = true;
+}
+
+void MainFlowScene::showFailPopup()
+{
+	is_menu_enable = false;
+	
+	FailPopup* t_popup = FailPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::hideFailPopup));
+	addChild(t_popup, kPuzzleZorder_popup);
+}
+
+void MainFlowScene::hideFailPopup()
+{
+	is_menu_enable = true;
 }
 
 void MainFlowScene::setTable()

@@ -10,6 +10,7 @@
 #include "SlidingPuzzle.h"
 #include "CardMatching.h"
 #include "CCMenuLambda.h"
+#include "StartSettingScene.h"
 
 #define LZZ_INLINE inline
 using namespace std;
@@ -229,12 +230,15 @@ void EventPopup::menuAction (CCObject * sender)
 }
 void EventPopup::successStageInfoDown ()
 {
-	StageSettingPopup* t_popup = StageSettingPopup::create();
-	t_popup->setHideFinalAction(target_final, delegate_final);
-	getParent()->addChild(t_popup, kPMS_Z_popup);
+	mySGD->is_before_selected_event_stage = true;
+	CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 	
-	target_final = NULL;
-	hidePopup();
+//	StageSettingPopup* t_popup = StageSettingPopup::create();
+//	t_popup->setHideFinalAction(target_final, delegate_final);
+//	getParent()->addChild(t_popup, kPMS_Z_popup);
+//	
+//	target_final = NULL;
+//	hidePopup();
 	
 	//		CCDirector::sharedDirector()->replaceScene(StageSettingScene::scene());
 }

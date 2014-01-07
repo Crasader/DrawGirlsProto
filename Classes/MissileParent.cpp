@@ -45,7 +45,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 			if(i == 0)
 			{
 				JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
-				addChild(t_jm);
+				jack_missile_node->addChild(t_jm);
 				t_jm->startMoving();
 			}
 			else
@@ -54,13 +54,13 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 				if(random_value == 0)
 				{
 					JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
-					addChild(t_jm);
+					jack_missile_node->addChild(t_jm);
 					t_jm->startMoving();
 				}
 				else
 				{
 					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), jm_type, missile_speed);
-					addChild(t_jm);
+					jack_missile_node->addChild(t_jm);
 					t_jm->startMoving();
 				}
 			}
@@ -70,9 +70,14 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	{
 		CCLog("Upgrade JackMissile");
 		UM_creator* t_c = UM_creator::create(cmCnt, jm_type, missile_speed);
-		addChild(t_c);
+		jack_missile_node->addChild(t_c);
 		t_c->startCreate();
 	}
+}
+
+int MissileParent::getJackMissileCnt()
+{
+	return jack_missile_node->getChildrenCount();
 }
 
 void MissileParent::subOneDie()
@@ -1067,6 +1072,9 @@ void MissileParent::myInit( CCNode* boss_eye )
 	explosion_node = CCSpriteBatchNode::create("fx_monster_hit.png");
 	addChild(explosion_node);
 	
+	jack_missile_node = CCNode::create();
+	addChild(jack_missile_node, 10);
+	
 	//	myGD->V_CCPB["MP_startFire"] = std::bind(&MissileParent::startFire, this, _1, _2);
 	
 	//	myGD->V_CCPI["MP_attackWithCode"] = std::bind(&MissileParent::attackWithCode, this, _1, _2);
@@ -1097,6 +1105,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	myGD->V_IIFCCP["MP_shootPetMissile"] = std::bind(&MissileParent::shootPetMissile, this, _1, _2, _3, _4);
 	myGD->V_V["MP_resetTickingTimeBomb"] = std::bind(&MissileParent::resetTickingTimeBomb, this);
 	myGD->V_V["MP_subOneDie"] = std::bind(&MissileParent::subOneDie, this);
+	myGD->I_V["MP_getJackMissileCnt"] = std::bind(&MissileParent::getJackMissileCnt, this);
 }
 
 void MissileParent::removeChargeInArray( CCObject* remove_charge )

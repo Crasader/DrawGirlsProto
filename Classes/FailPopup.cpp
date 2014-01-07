@@ -782,6 +782,9 @@ void FailPopup::menuAction(CCObject* pSender)
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 //		mySGD->resetLabels();
 		
+		if(mySD->getSilType() >= 10000)
+			mySGD->is_before_selected_event_stage = true;
+		
 		CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 //		StageSettingPopup* t_popup = StageSettingPopup::create();
 //		t_popup->setHideFinalAction(target_final, delegate_final);
