@@ -220,6 +220,10 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	
 	else if(t_name == kDSH_Key_tutorial_flowStep)					return_value = "ttrl_fs";
 	
+	else if(t_name == kDSH_Key_minigame_playedCnt)					return_value = "mngm_pc";
+	else if(t_name == kDSH_Key_minigame_int1_stageNumber)			return_value = "mngm_%d_sn";
+	else if(t_name == kDSH_Key_minigame_int1_isPlayed)				return_value = "mngm_%d_ip";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()
@@ -334,6 +338,17 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
 		setIntegerForKey((DSH_Key)i, data[getKey((DSH_Key)i)].asInt(), false);
 	
+	int minigame_played_cnt = data[getKey(kDSH_Key_minigame_playedCnt)].asInt();
+	setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
+	for(int i=1;i<=minigame_played_cnt;i++)
+	{
+		int stage_number = data[getKey(kDSH_Key_minigame_int1_stageNumber)][i].asInt();
+		setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i, stage_number, false);
+		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, data[getKey(kDSH_Key_minigame_int1_isPlayed)][i].asBool(), false);
+	}
+	
+	setIntegerForKey(kDSH_Key_tutorial_flowStep, data[getKey(kDSH_Key_tutorial_flowStep)].asInt(), false);
+	
 	fFlush();
 }
 void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_key)
@@ -434,6 +449,21 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 		for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
 			data[getKey((DSH_Key)i)] = getIntegerForKey((DSH_Key)i);
 	}
+	else if(t_key == kSaveUserData_Key_minigame)
+	{
+		int minigame_played_cnt = getIntegerForKey(kDSH_Key_minigame_playedCnt);
+		data[getKey(kDSH_Key_minigame_playedCnt)] = minigame_played_cnt;
+		for(int i=1;i<=minigame_played_cnt;i++)
+		{
+			int stage_number = getIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i);
+			data[getKey(kDSH_Key_minigame_int1_stageNumber)][i] = stage_number;
+			data[getKey(kDSH_Key_minigame_int1_isPlayed)][i] = getBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number);
+		}
+	}
+	else if(t_key == kSaveUserData_Key_tutorial)
+	{
+		data[getKey(kDSH_Key_tutorial_flowStep)] = getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	}
 }
 void DataStorageHub::saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector)
 {
@@ -521,16 +551,27 @@ void DataStorageHub::resetDSH ()
 		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
 	
 	int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);
-	setIntegerForKey(kDSH_Key_achieveDataCnt, 0);
+	setIntegerForKey(kDSH_Key_achieveDataCnt, 0, false);
 	for(int i=1;i<=achieve_data_cnt;i++)
 	{
 		int code = getIntegerForKey(kDSH_Key_achieveData_int1_code, i);
-		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, 0);
-		setIntegerForKey(kDSH_Key_achieveData_int1_value, code, 0);
+		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, 0, false);
+		setIntegerForKey(kDSH_Key_achieveData_int1_value, code, 0, false);
 	}
 	
 	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
 		setIntegerForKey((DSH_Key)i, 0, false);
+	
+	int minigame_played_cnt = getIntegerForKey(kDSH_Key_minigame_playedCnt);
+	setIntegerForKey(kDSH_Key_minigame_playedCnt, 0);
+	for(int i=1;i<=minigame_played_cnt;i++)
+	{
+		int stage_number = getIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i);
+		setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i, 0, false);
+		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, false, false);
+	}
+	
+	setIntegerForKey(kDSH_Key_tutorial_flowStep, 0);
 	
 	fFlush();
 }

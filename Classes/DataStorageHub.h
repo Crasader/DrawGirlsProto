@@ -99,7 +99,11 @@ typedef enum t_DSH_Key{
 	kDSH_Key_achieve_itemBuyCnt,
 	kDSH_Key_achieve_end,
 	
-	kDSH_Key_tutorial_flowStep
+	kDSH_Key_tutorial_flowStep,
+	
+	kDSH_Key_minigame_playedCnt,
+	kDSH_Key_minigame_int1_stageNumber, // int1 : playedCnt loop number 1 ~ playedCnt
+	kDSH_Key_minigame_int1_isPlayed // int1 : stage_number
 }DSH_Key;
 
 enum SpecialTutorialCode{
@@ -126,6 +130,8 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_nick,
 	kSaveUserData_Key_character,
 	kSaveUserData_Key_achieve,
+	kSaveUserData_Key_minigame,
+	kSaveUserData_Key_tutorial,
 	kSaveUserData_Key_end
 };
 

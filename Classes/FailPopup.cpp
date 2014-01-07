@@ -395,6 +395,7 @@ void FailPopup::onEnter()
 
 void FailPopup::showPopup()
 {
+	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, 0);
 	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
 //	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
 //	top_case->runAction(top_move);

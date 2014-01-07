@@ -40,6 +40,8 @@ bool CardSettingPopup::init()
 	is_menu_enable = false;
 	mount_menu = NULL;
 	
+	setTouchEnabled(true);
+	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -79,6 +81,22 @@ bool CardSettingPopup::init()
 		recent_mounted_number = selected_card_number;
 	}
 	
+	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	
+	int total_stage_cnt = 0;
+	for(int i=1;i<=puzzle_count;i++)
+	{
+		int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+		
+		total_stage_cnt += stage_count;
+	}
+	
+	int event_stage_count = NSDS_GI(kSDS_GI_eventCount_i);
+	total_stage_cnt += event_stage_count;
+	
+	default_align_number_of_cell = total_stage_cnt;
+	
 	CCSize table_size = CCSizeMake(215, 236);
 	
 	card_table = CCTableView::create(this, table_size);
@@ -88,7 +106,7 @@ bool CardSettingPopup::init()
 	card_table->setPosition(ccp(210, 25));
 	card_table->setDelegate(this);
 	main_case->addChild(card_table, kCSS_Z_content);
-	card_table->setTouchPriority(kCCMenuHandlerPriority-2);
+	card_table->setTouchPriority(-180-2);
 	
 	last_mount_idx = -1;
 	last_select_idx = -1;
@@ -104,6 +122,7 @@ bool CardSettingPopup::init()
 	CCMenu* close_menu = CCMenu::createWithItem(close_item);
 	close_menu->setPosition(getContentPosition(kCSS_MT_close));
 	main_case->addChild(close_menu, kCSS_Z_content);
+	close_menu->setTouchPriority(-180);
 	
 	
 	CCSprite* n_align = CCSprite::create("cardsetting_align.png");
@@ -116,6 +135,7 @@ bool CardSettingPopup::init()
 	CCMenu* align_menu = CCMenu::createWithItem(align_item);
 	align_menu->setPosition(getContentPosition(kCSS_MT_align));
 	main_case->addChild(align_menu, kCSS_Z_alignButton);
+	align_menu->setTouchPriority(-180);
 	
 	
 	CCSprite* n_diary = CCSprite::create("cardsetting_diary.png");
@@ -128,6 +148,7 @@ bool CardSettingPopup::init()
 	CCMenu* diary_menu = CCMenu::createWithItem(diary_item);
 	diary_menu->setPosition(getContentPosition(kCSS_MT_diary));
 	main_case->addChild(diary_menu, kCSS_Z_content);
+	diary_menu->setTouchPriority(-180);
 	
 	align_list_img = NULL;
 	
@@ -274,7 +295,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				CCMenu* align_close_menu = CCMenu::createWithItem(align_close_item);
 				align_close_menu->setPosition(ccp(52,21));
 				align_list_img->addChild(align_close_menu);
-				align_close_menu->setTouchPriority(kCCMenuHandlerPriority-3);
+				align_close_menu->setTouchPriority(-180-3);
 				
 				CCMenuItem* align_default_item = CCMenuItemImage::create("cardsetting_align_click.png", "cardsetting_align_click.png", this, menu_selector(CardSettingPopup::menuAction));
 				align_default_item->setTag(kCSS_MT_alignDefault);
@@ -282,7 +303,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				CCMenu* align_default_menu = CCMenu::createWithItem(align_default_item);
 				align_default_menu->setPosition(ccp(52,53));
 				align_list_img->addChild(align_default_menu);
-				align_default_menu->setTouchPriority(kCCMenuHandlerPriority-3);
+				align_default_menu->setTouchPriority(-180-3);
 				
 				CCMenuItem* align_gradedown_item = CCMenuItemImage::create("cardsetting_align_click.png", "cardsetting_align_click.png", this, menu_selector(CardSettingPopup::menuAction));
 				align_gradedown_item->setTag(kCSS_MT_alignGradeDown);
@@ -290,7 +311,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				CCMenu* align_gradedown_menu = CCMenu::createWithItem(align_gradedown_item);
 				align_gradedown_menu->setPosition(ccp(52,53+27));
 				align_list_img->addChild(align_gradedown_menu);
-				align_gradedown_menu->setTouchPriority(kCCMenuHandlerPriority-3);
+				align_gradedown_menu->setTouchPriority(-180-3);
 				
 				CCMenuItem* align_gradeup_item = CCMenuItemImage::create("cardsetting_align_click.png", "cardsetting_align_click.png", this, menu_selector(CardSettingPopup::menuAction));
 				align_gradeup_item->setTag(kCSS_MT_alignGradeUp);
@@ -298,7 +319,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				CCMenu* align_gradeup_menu = CCMenu::createWithItem(align_gradeup_item);
 				align_gradeup_menu->setPosition(ccp(52,53+27+27));
 				align_list_img->addChild(align_gradeup_menu);
-				align_gradeup_menu->setTouchPriority(kCCMenuHandlerPriority-3);
+				align_gradeup_menu->setTouchPriority(-180-3);
 				
 				CCMenuItem* align_take_item = CCMenuItemImage::create("cardsetting_align_click.png", "cardsetting_align_click.png", this, menu_selector(CardSettingPopup::menuAction));
 				align_take_item->setTag(kCSS_MT_alignTake);
@@ -306,7 +327,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
 				align_take_menu->setPosition(ccp(52,53+27+27+27));
 				align_list_img->addChild(align_take_menu);
-				align_take_menu->setTouchPriority(kCCMenuHandlerPriority-3);
+				align_take_menu->setTouchPriority(-180-3);
 				
 				CCSprite* sort_check = CCSprite::create("cardsetting_check.png");
 				sort_check->setScale(0.5f);
@@ -434,6 +455,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			mount_menu = CCMenu::createWithItem(mount_item);
 			mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
 			main_case->addChild(mount_menu, kCSS_Z_content);
+			mount_menu->setTouchPriority(-181);
 			
 			is_menu_enable = true;
 		}
@@ -469,6 +491,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			mount_menu = CCMenu::createWithItem(release_item);
 			mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
 			main_case->addChild(mount_menu, kCSS_Z_content);
+			mount_menu->setTouchPriority(-181);
 			
 			bool is_strength_enable = true;
 			
@@ -543,6 +566,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				mount_menu = CCMenu::createWithItem(release_item);
 				mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
 				main_case->addChild(mount_menu, kCSS_Z_content);
+				mount_menu->setTouchPriority(-181);
 				
 				bool is_strength_enable = true;
 				
@@ -663,6 +687,7 @@ void CardSettingPopup::mountingCard(int card_stage, int card_level)
 	selected_card_menu = CCMenu::createWithItem(selected_card_item);
 	selected_card_menu->setPosition(selected_card_img->getPosition());
 	main_case->addChild(selected_card_menu, kCSS_Z_selectedImg);
+	selected_card_menu->setTouchPriority(-181);
 	
 	CardCase* t_case = CardCase::create(card_stage, card_level);
 	t_case->setPosition(CCPointZero);
@@ -683,6 +708,7 @@ void CardSettingPopup::mountingCard(int card_stage, int card_level)
 		mount_menu = CCMenu::createWithItem(release_item);
 		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
 		main_case->addChild(mount_menu, kCSS_Z_content);
+		mount_menu->setTouchPriority(-181);
 		
 		bool is_strength_enable = true;
 		
@@ -721,6 +747,7 @@ void CardSettingPopup::mountingCard(int card_stage, int card_level)
 		mount_menu = CCMenu::createWithItem(mount_item);
 		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
 		main_case->addChild(mount_menu, kCSS_Z_content);
+		mount_menu->setTouchPriority(-181);
 	}
 	else
 	{
@@ -736,6 +763,7 @@ void CardSettingPopup::mountingCard(int card_stage, int card_level)
 		mount_menu->setEnabled(false);
 		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
 		main_case->addChild(mount_menu, kCSS_Z_content);
+		mount_menu->setTouchPriority(-181);
 	}
 }
 
@@ -829,7 +857,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 					t_card_menu->setPosition(card_position);
 					cell->addChild(t_card_menu);
-					t_card_menu->setTouchPriority(kCCMenuHandlerPriority-3);
+					t_card_menu->setTouchPriority(-180-3);
 					
 					if(card_number == recent_mounted_number)
 					{
@@ -860,7 +888,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 					t_card_menu->setPosition(card_position);
 					cell->addChild(t_card_menu);
-					t_card_menu->setTouchPriority(kCCMenuHandlerPriority-3);
+					t_card_menu->setTouchPriority(-180-3);
 				}
 			}
 		}
@@ -915,7 +943,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 			t_card_menu->setPosition(card_position);
 			cell->addChild(t_card_menu);
-			t_card_menu->setTouchPriority(kCCMenuHandlerPriority-3);
+			t_card_menu->setTouchPriority(-180-3);
 			
 			if(card_number == recent_mounted_number)
 			{
@@ -965,24 +993,34 @@ unsigned int CardSettingPopup::numberOfCellsInTableView( CCTableView *table )
 	
 	if(sort_type == kCST_default)
 	{
-		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-		
-		int total_stage_cnt = 0;
-		for(int i=1;i<=puzzle_count;i++)
-		{
-			int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
-			int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
-			
-			total_stage_cnt += stage_count;
-		}
-		
-		int event_stage_count = NSDS_GI(kSDS_GI_eventCount_i);
-		total_stage_cnt += event_stage_count;
-		
-		return total_stage_cnt;
+		return default_align_number_of_cell;
 	}
 	else
 	{
 		return (mySGD->getHasGottenCardsSize()-1)/3+1;
 	}
+}
+
+bool CardSettingPopup::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
+{
+	CCLog("touch swallow!!");
+	
+	return true;
+}
+void CardSettingPopup::ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent)
+{
+	
+}
+void CardSettingPopup::ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent)
+{
+	
+}
+void CardSettingPopup::ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent)
+{
+	
+}
+void CardSettingPopup::registerWithTouchDispatcher ()
+{
+	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+	pDispatcher->addTargetedDelegate(this, -170, true);
 }

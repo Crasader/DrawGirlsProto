@@ -43,7 +43,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		
 		CCSprite* stencil_node = CCSprite::create("tutorial_clipping.png");
 		stencil_node->setScale(0.8f);
-		stencil_node->setPosition(ccp(-170,10));
+		stencil_node->setPosition(ccp(-170+(-480.f*screen_scale_x+480.f)/2.f,10));
 		CCClippingNode* cliping_node = CCClippingNode::create(stencil_node);
 		float change_scale = 1.f;
 		CCPoint change_origin = ccp(0,0);

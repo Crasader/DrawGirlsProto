@@ -18,6 +18,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 		NSDS_SI(mySD->getSilType(), kSDS_SI_playtime_i, result_data["playtime"].asInt(), false);
 		NSDS_SD(mySD->getSilType(), kSDS_SI_scoreRate_d, result_data["scoreRate"].asDouble(), false);
 		NSDS_SD(mySD->getSilType(), kSDS_SI_scale_d, result_data["scale"].asDouble(), false);
+		NSDS_SB(mySD->getSilType(), kSDS_SI_minigame_b, result_data["minigame"].asBool(), false);
 		
 		Json::Value t_mission = result_data["mission"];
 		NSDS_SI(mySD->getSilType(), kSDS_SI_missionType_i, t_mission["type"].asInt(), false);

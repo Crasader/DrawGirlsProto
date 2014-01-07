@@ -1247,6 +1247,19 @@ void PlayUI::setComboCnt (int t_combo)
 	if(before_combo < combo_cnt)
 	{
 		my_combo->showCombo(t_combo);
+		
+		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+		
+		for(int i=kAchievementCode_comboMania1;i<=kAchievementCode_comboMania3;i++)
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+			   combo_cnt == shared_acr->getCondition((AchievementCode)i))
+			{
+				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
 	}
 	else
 	{
@@ -2057,6 +2070,7 @@ void PlayUI::goHome ()
 }
 void PlayUI::goReplay ()
 {
+	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, 0);
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
 	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());

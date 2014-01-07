@@ -30,6 +30,7 @@
 #include "StartSettingScene.h"
 #include "MiniGamePopup.h"
 #include "TutorialFlowStep.h"
+#include "AchieveNoti.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -245,7 +246,7 @@ bool ClearPopup::init()
 	myLog->addLog(kLOG_puzzleAchievementMaximum_i, -1, 100*maximum_count/stage_count);
 	
 	
-	myLog->sendLog(CCString::createWithFormat("clear_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+	myLog->sendLog(CCString::createWithFormat("clear_%d", stage_number)->getCString());
 	
 	
 	for(int i=0;i<take_level;i++)
@@ -321,7 +322,6 @@ bool ClearPopup::init()
 	
 	
 	is_saved_user_data = false;
-	
 	myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
 	
     return true;
@@ -329,6 +329,22 @@ bool ClearPopup::init()
 
 void ClearPopup::showPopup()
 {
+	int seq_no_fail_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt)+1;
+	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, seq_no_fail_cnt);
+	
+	AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+	
+	for(int i=kAchievementCode_noFail1;i<=kAchievementCode_noFail3;i++)
+	{
+		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+		   seq_no_fail_cnt == shared_acr->getCondition((AchievementCode)i))
+		{
+			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
+	
 	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
 //	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
 //	top_case->runAction(top_move);
@@ -480,8 +496,14 @@ void ClearPopup::checkChallengeOrHelp()
 
 void ClearPopup::endTakeCard()
 {
-	if(1)
+	bool is_minigame_stage = NSDS_GB(mySD->getSilType(), kSDS_SI_minigame_b);
+	if(is_minigame_stage && !myDSH->getBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType()))
 	{
+		int minigame_played_cnt = myDSH->getIntegerForKey(kDSH_Key_minigame_playedCnt)+1;
+		myDSH->setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
+		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
+		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
+		myDSH->fFlush();
 		MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(rand()%(kMiniGameCode_dodge+1)), bind(&ClearPopup::checkChallengeOrHelp, this));
 		addChild(t_popup, kZ_CP_popup);
 	}

@@ -276,13 +276,13 @@ enum AchievementCode
 	kAchievementCode_feverMania2,//	피버매니아2: 전체 피버모드 30회진입시 완
 	kAchievementCode_feverMania3,//	피버매니아3: 전체 피버모드 50회진입시 완
 	
-	kAchievementCode_comboMania1,//	콤보매니아1 : 10콤보달성
-	kAchievementCode_comboMania2,//	콤보매니아2 : 20콤보달성
-	kAchievementCode_comboMania3,//	콤보매니아3 : 30콤보달성
+	kAchievementCode_comboMania1,//	콤보매니아1 : 10콤보달성 완
+	kAchievementCode_comboMania2,//	콤보매니아2 : 20콤보달성 완
+	kAchievementCode_comboMania3,//	콤보매니아3 : 30콤보달성 완
 	
-	kAchievementCode_noFail1,//	실패란없다1 : 5회연속 클리어
-	kAchievementCode_noFail2,//	실패란없다2 : 10회연속클리어
-	kAchievementCode_noFail3,//	실패란없다3 : 20회연속클리어
+	kAchievementCode_noFail1,//	실패란없다1 : 5회연속 클리어 완
+	kAchievementCode_noFail2,//	실패란없다2 : 10회연속클리어 완
+	kAchievementCode_noFail3,//	실패란없다3 : 20회연속클리어 완
 	
 	kAchievementCode_attacker1,//	닥치고공격1 : 한판에 20회공격 성공
 	kAchievementCode_attacker2,//	닥치고공격2 : 한판에 30회공격 성공

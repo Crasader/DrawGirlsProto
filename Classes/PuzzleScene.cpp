@@ -104,9 +104,30 @@ bool PuzzleScene::init()
 	
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
 	if(selected_stage_number == 0)
 	{
-		selected_stage_number = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+		int found_unlocked_stage_number = -1;
+		for(int i=start_stage;i<start_stage+stage_count && found_unlocked_stage_number == -1;i++)
+		{
+			if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 && NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == 0)
+				found_unlocked_stage_number = i;
+		}
+		
+		selected_stage_number = found_unlocked_stage_number;
+		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+	}
+	else if(selected_stage_number < start_stage || selected_stage_number >= start_stage + stage_count)
+	{
+		int found_unlocked_stage_number = -1;
+		for(int i=start_stage;i<start_stage+stage_count && found_unlocked_stage_number == -1;i++)
+		{
+			if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 && NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == 0)
+				found_unlocked_stage_number = i;
+		}
+		
+		selected_stage_number = found_unlocked_stage_number;
 		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
 	}
 	piece_mode = (PieceMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);

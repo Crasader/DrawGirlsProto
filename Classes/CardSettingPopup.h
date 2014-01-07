@@ -59,6 +59,7 @@ private:
 	
 	int last_mount_idx;
 	int last_select_idx;
+	unsigned int default_align_number_of_cell;
 	CCTableView* card_table;
 	
 	int recent_mounted_number;
@@ -85,6 +86,12 @@ private:
 	void removeMountedCase();
 	
 	bool is_menu_enable;
+	
+	virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent);
+	virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent);
+	virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent);
+	virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
+	virtual void registerWithTouchDispatcher ();
 };
 
 #endif /* defined(__DGproto__CardSettingPopup__) */

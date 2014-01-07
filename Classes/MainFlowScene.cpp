@@ -231,7 +231,7 @@ void MainFlowScene::setTable()
 	puzzle_table->setAnchorPoint(CCPointZero);
 	puzzle_table->setDirection(kCCScrollViewDirectionHorizontal);
 	puzzle_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	puzzle_table->setPosition(ccp(myDSH->ui_zero_point.x, 160-table_size.height/2.f));
+	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f));
 	puzzle_table->setDelegate(this);
 	addChild(puzzle_table, kMainFlowZorder_table);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
@@ -735,9 +735,10 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_event)
 		{
-			EventPopup* t_popup = EventPopup::create();
-			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-			addChild(t_popup, kMainFlowZorder_popup);
+			is_menu_enable = true; // 임시
+//			EventPopup* t_popup = EventPopup::create();
+//			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+//			addChild(t_popup, kMainFlowZorder_popup);
 		}
 	}
 }
