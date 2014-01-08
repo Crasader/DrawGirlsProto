@@ -233,6 +233,8 @@ public:
 				
 				if(!is_ing)
 				{
+					CCLog("PlayEffect loop : %s", filename);
+					
 					LoopEffect* t_effect = new LoopEffect();
 					t_effect->autorelease();
 					unsigned int code = mySAE->playEffect(filename, true);
@@ -250,6 +252,7 @@ public:
 	
 	void stopEffect(const char* filename)
 	{
+		CCLog("StopEffect loop check start : %s", filename);
 		bool is_found;
 		do
 		{
@@ -259,6 +262,7 @@ public:
 				LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(i);
 				if(target->filename == filename)
 				{
+					CCLog("StopEffect loop find : %s", filename);
 					is_found = true;
 					mySAE->stopEffect(target->effectCode);
 					loopEffects->removeObject(target);
@@ -270,6 +274,7 @@ public:
 	
 	void stopAllEffects()
 	{
+		CCLog("StopAllEffect loop");
 		mySAE->stopAllEffects();
 	}
 	
