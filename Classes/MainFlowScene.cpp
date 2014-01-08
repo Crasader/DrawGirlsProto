@@ -161,6 +161,12 @@ bool MainFlowScene::init()
 		
 		if(recent_step == kTutorialFlowStep_puzzleClick)
 		{
+			if(mySGD->getStar() == 0 && mySGD->getGold() == 0)
+			{
+				mySGD->setStar(myDSH->getDefaultRuby());
+				mySGD->setGold(myDSH->getDefaultGold());
+			}
+			
 			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
 			t_tutorial->initStep(kTutorialFlowStep_puzzleClick);
 			addChild(t_tutorial, kMainFlowZorder_popup);
