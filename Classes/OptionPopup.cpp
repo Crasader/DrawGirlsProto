@@ -392,12 +392,14 @@ void OptionPopup::menuAction(CCObject* pSender)
 	else if(tag == kOP_MT_bgm)
 	{
 		myDSH->setBoolForKey(kDSH_Key_bgmOff, !myDSH->getBoolForKey(kDSH_Key_bgmOff));
+		AudioEngine::sharedInstance()->setSoundOnOff(!myDSH->getBoolForKey(kDSH_Key_bgmOff));
 		resetBgmMenu();
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_effect)
 	{
 		myDSH->setBoolForKey(kDSH_Key_effectOff, !myDSH->getBoolForKey(kDSH_Key_effectOff));
+		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
 		resetEffectMenu();
 		is_menu_enable = true;
 	}
