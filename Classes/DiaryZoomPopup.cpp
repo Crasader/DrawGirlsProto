@@ -89,6 +89,7 @@ bool DiaryZoomPopup::init()
 	next_button->setPosition(ccp(480-60,30));
 	next_button->setVisible(false);
 	addChild(next_button, kDZP_Z_next_button);
+	next_button->setTouchPriority(-211);
 	
 	is_touched_menu = false;
 	is_actioned = false;
@@ -178,7 +179,7 @@ void DiaryZoomPopup::registerWithTouchDispatcher()
 {
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 	
-	pDispatcher->addStandardDelegate(this, -150);
+	pDispatcher->addStandardDelegate(this, -250);
 }
 
 void DiaryZoomPopup::moveListXY(CCPoint t_p)
