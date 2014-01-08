@@ -118,8 +118,10 @@ void ItemBuyPopup::menuAction (CCObject * sender)
 	}
 	else if(tag == kIBP_MT_close)
 	{
-		(target_close->*delegate_close)();
+		
 	}
+	
+	(target_close->*delegate_close)();
 	
 	removeFromParent();
 }
