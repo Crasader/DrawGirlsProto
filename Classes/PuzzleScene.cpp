@@ -53,6 +53,8 @@ bool PuzzleScene::init()
 	challenge_menu = NULL;
 	rank_table = NULL;
 	
+	selected_friend_idx = -1;
+	
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
