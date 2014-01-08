@@ -79,7 +79,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
-	_menu->setTouchEnabled(false); // 임시...
+//	_menu->setTouchEnabled(false); // 임시...
 	CCSprite* back = CCSprite::create("postbox_back.png");
 	back->setPosition(ccp(240,160));
 	addChild(back, kMP_Z_back);
