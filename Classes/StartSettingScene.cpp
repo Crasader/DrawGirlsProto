@@ -148,6 +148,17 @@ void StartSettingScene::setMain()
 	mission_label->setPosition(ccp(main_case->getContentSize().width/2.f+62, main_case->getContentSize().height-62));
 	main_case->addChild(mission_label);
 	
+	if(mySD->getClearCondition(stage_number) != kCLEAR_default)
+	{
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+		CCHide* t_hide = CCHide::create();
+		CCDelayTime* t_delay2 = CCDelayTime::create(0.2f);
+		CCShow* t_show = CCShow::create();
+		CCSequence* t_seq = CCSequence::create(t_delay1, t_hide, t_delay2, t_show, NULL);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+		mission_label->runAction(t_repeat);
+	}
+	
 	CCSprite* n_back = CCSprite::create("item_buy_popup_close.png");
 	CCSprite* s_back = CCSprite::create("item_buy_popup_close.png");
 	s_back->setColor(ccGRAY);
