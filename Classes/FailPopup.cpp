@@ -372,10 +372,9 @@ void FailPopup::endDecreaseCardDuration()
 	if(mySGD->getIsAcceptChallenge())
 	{
 		/////////////////// ksks
-		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
+		addChild(ChallengeSend::create(mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getScore(),
 																	 ChallengeCategory::kRequestReply),
 						 kZ_FP_popup);
-//		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
 	}
 	
 	if(mySGD->getIsAcceptHelp())
