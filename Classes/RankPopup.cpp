@@ -278,7 +278,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	
 	m_onlyKatok->setOpacity(0);
 	m_onlyGameFriend->setOpacity(0);
-	addChild(KSTimer::create(0.5f, [=]()
+	addChild(KSTimer::create(2.f, [=]()
 													 {
 														 for(int i=0; i<m_scoreList.size(); i++)
 														 {
@@ -468,7 +468,7 @@ void RankPopup::drawRank (Json::Value obj)
 	rankTableView->setContentOffsetInDuration(
 											  ccp(
 												  0, yInitPosition)
-											  , 0.4f);
+											  , 0.3f);
 	//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
 }
 void RankPopup::closePopup (CCControlButton * obj, CCControlEvent event)

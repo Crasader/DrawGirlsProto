@@ -586,8 +586,12 @@ void StartSettingScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kStartSettingMenuTag_back)
 		{
-			if(mySD->getSilType() >= 10000)
+			if(mySD->getSilType() >= 10000 || mySGD->getIsAcceptHelp() || mySGD->getIsAcceptChallenge())
+			{
+				mySGD->setIsAcceptChallenge(false);
+				mySGD->setIsAcceptHelp(false);
 				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			}
 			else
 				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 		}
