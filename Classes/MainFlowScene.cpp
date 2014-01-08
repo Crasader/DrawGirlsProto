@@ -714,9 +714,10 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_cardSetting)
 		{
+			puzzle_table->setTouchEnabled(false);
 			mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
 			CardSettingPopup* t_popup = CardSettingPopup::create();
-			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
 			addChild(t_popup, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_puzzleSetting)
