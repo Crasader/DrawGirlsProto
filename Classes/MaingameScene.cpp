@@ -806,7 +806,7 @@ void Maingame::endCloseShutter()
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 //		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-		if(mySD->getSilType() >= 10000)
+		if(mySD->getSilType() >= 10000 || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
 			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		else
 			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
