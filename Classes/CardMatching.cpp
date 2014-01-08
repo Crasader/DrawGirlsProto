@@ -14,7 +14,7 @@
 void CardMatching::splitImage(CuttingType ct, const std::string& fileName, int cols, int rows, int padding, int margin,
 															const std::function<void(CCImage*, int)>& callBack)
 {
-	std::string filename=CCFileUtils::sharedFileUtils()->getWritablePath() + fileName;
+	std::string filename="test_puzzle7_back.png"; // CCFileUtils::sharedFileUtils()->getWritablePath() + fileName;
 	
 	//퍼즐이미지를 불러옵니다.
 	CCImage *img = new CCImage;
