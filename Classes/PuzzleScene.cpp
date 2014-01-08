@@ -544,7 +544,8 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_piece, stage_number);
-					t_piece->initWithPieceInfo(kPieceMode_default, kPieceType_empty, piece_type);
+					t_piece->setTurnInfo(false, false, false);
+					t_piece->initWithPieceInfo(piece_mode, kPieceType_empty, piece_type);
 				}
 			}
 			else
@@ -556,7 +557,8 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::buyPieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_strokePiece, stage_number);
-					t_piece->initWithPieceInfo(kPieceMode_default, kPieceType_buy, piece_type);
+					t_piece->setTurnInfo(false, false, false);
+					t_piece->initWithPieceInfo(piece_mode, kPieceType_buy, piece_type);
 					
 					addShadow(piece_type, piece_position, stage_number);
 				}
@@ -565,7 +567,8 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::lockPieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_strokePiece, stage_number);
-					t_piece->initWithPieceInfo(kPieceMode_default, kPieceType_lock, piece_type);
+					t_piece->setTurnInfo(false, false, false);
+					t_piece->initWithPieceInfo(piece_mode, kPieceType_lock, piece_type);
 					
 					addShadow(piece_type, piece_position, stage_number);
 				}

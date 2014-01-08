@@ -1149,7 +1149,7 @@ void KSCumberBase::cumberAttack(float dt)
 				crashAttack = true;
 				
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
-				m_furyCnt = -600;
+				m_furyCnt = -400;
 			}
 		}
 	}
@@ -1206,8 +1206,8 @@ void KSCumberBase::cumberAttack(float dt)
 			
 			m_adderCnt++;
 			
-			//선긋기 시작한지 4초이후 부터 공격확률을 높임
-			if(m_adderCnt > 240){
+			//선긋기 시작한지 3초이후 부터 공격확률을 높임
+			if(m_adderCnt > 180){
 				attackProb += 0.1;
 			}
 		}else{
@@ -1384,6 +1384,11 @@ void KSCumberBase::cumberAttack(float dt)
 			searchCount++;
 			//			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
 			int idx = probSel.getResult();
+			
+			if(idx<0){
+				searched = false;
+				break;
+			}
 			
 			attackCode = selectedAttacks[idx];
 			searched = true;

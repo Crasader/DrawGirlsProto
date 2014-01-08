@@ -212,6 +212,13 @@ private:
 			{
 				createBasicPieceMenu(false);
 			}
+			else if(piece_mode == kPieceMode_thumb)
+			{
+				createBasicPieceMenu(true);
+				CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + WorH + ".png").c_str());
+				stroke_img->setPosition(CCPointZero);
+				addChild(stroke_img, kPieceZorder_stroke);
+			}
 		}
 		else if(piece_type == kPieceType_buy)
 		{
@@ -248,6 +255,13 @@ private:
 			{
 				createBasicPieceMenu(false);
 			}
+			else if(piece_mode == kPieceMode_thumb)
+			{
+				createBasicPieceMenu(false);
+				CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + WorH + ".png").c_str());
+				stroke_img->setPosition(CCPointZero);
+				addChild(stroke_img, kPieceZorder_stroke);
+			}
 		}
 		else if(piece_type == kPieceType_lock)
 		{
@@ -266,6 +280,13 @@ private:
 			else if(piece_mode == kPieceMode_ranker)
 			{
 				createBasicPieceMenu(false);
+			}
+			else if(piece_mode == kPieceMode_thumb)
+			{
+				createBasicPieceMenu(false);
+				CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + WorH + ".png").c_str());
+				stroke_img->setPosition(CCPointZero);
+				addChild(stroke_img, kPieceZorder_stroke);
 			}
 		}
 	}
@@ -405,18 +426,30 @@ private:
 		}
 		else if(piece_mode == kPieceMode_thumb)
 		{
-			GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
-																										   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-			setHaveCardBase(n_piece, false);
-			GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
-																										   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-			s_piece->setColor(ccGRAY);
-			setHaveCardBase(s_piece, true);
-			
-			CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
-			piece_menu = CCMenu::createWithItem(piece_item);
-			piece_menu->setPosition(CCPointZero);
-			addChild(piece_menu, kPieceZorder_menu);
+			if(piece_type == kPieceType_buy || piece_type == kPieceType_lock || piece_type == kPieceType_empty)
+			{
+				GraySprite* t_piece_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+																												   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
+				t_piece_img->setGray(is_gray);
+				if(piece_type == kPieceType_buy || piece_type == kPieceType_lock)
+					t_piece_img->setColor(ccc3(85,85,85));
+				addChild(t_piece_img, kPieceZorder_menu);
+			}
+			else
+			{
+				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
+				setHaveCardBase(n_piece, false);
+				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
+				s_piece->setColor(ccGRAY);
+				setHaveCardBase(s_piece, true);
+				
+				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
+				piece_menu = CCMenu::createWithItem(piece_item);
+				piece_menu->setPosition(CCPointZero);
+				addChild(piece_menu, kPieceZorder_menu);
+			}
 		}
 		else if(piece_mode == kPieceMode_ranker)
 		{
