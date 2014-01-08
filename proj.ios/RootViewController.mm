@@ -53,6 +53,12 @@
 */
 // Override to allow orientations other than the default portrait orientation.
 // This method is deprecated on ios6
+
+- (BOOL)prefersStatusBarHidden
+{
+	    return YES;
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return UIInterfaceOrientationIsLandscape( interfaceOrientation );
 }
