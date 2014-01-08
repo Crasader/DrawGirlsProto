@@ -61,6 +61,8 @@ bool FailPopup::init()
 		return false;
 	}
 	
+	AudioEngine::sharedInstance()->preloadEffectScene("Ending");
+	
 	is_menu_enable = false;
 	is_loaded_list = false;
 	
@@ -436,6 +438,8 @@ void FailPopup::hidePopup()
 
 void FailPopup::endHidePopup()
 {
+	AudioEngine::sharedInstance()->unloadEffectScene("Ending");
+	
 	if(target_final)
 		(target_final->*delegate_final)();
 	removeFromParent();

@@ -505,7 +505,6 @@ void Maingame::onExit()
 {
 	touchEnd();
 	((ControlJoystickButton*)mControl)->invisibleControl();
-	AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
 	CCLayer::onExit();
 }
 
@@ -796,11 +795,15 @@ void Maingame::endCloseShutter()
 {
 	if(mySGD->getIsCleared())
 	{
+		AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
+		
 		CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
 		CCDirector::sharedDirector()->replaceScene(t_trans);
 	}
 	else
 	{
+		AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
+		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 //		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 		if(mySD->getSilType() >= 10000)

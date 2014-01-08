@@ -68,6 +68,8 @@ bool ClearPopup::init()
         return false;
     }
 	
+	AudioEngine::sharedInstance()->preloadEffectScene("Ending");
+	
 	if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
 		myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_homeClick);
 	
@@ -385,6 +387,8 @@ void ClearPopup::hidePopup()
 
 void ClearPopup::endHidePopup()
 {
+	AudioEngine::sharedInstance()->unloadEffectScene("Ending");
+	
 	if(target_final)
 		(target_final->*delegate_final)();
 	removeFromParent();

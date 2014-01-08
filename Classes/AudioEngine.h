@@ -146,10 +146,18 @@ public:
 			mySAE->preloadEffect("sound_ending_fail.mp3");
 			mySAE->preloadEffect("sound_star_visible.mp3");
 			mySAE->preloadEffect("sound_calc.mp3");
+			mySAE->preloadEffect("sound_calc.ogg");
 		}
 	}
 	void unloadEffectScene(string scenename)
 	{
+		while(loopEffects->count() > 0)
+		{
+			LoopEffect* target = (LoopEffect*)loopEffects->lastObject();
+			mySAE->stopEffect(target->effectCode);
+			loopEffects->removeObject(target);
+		}
+		
 		if(scenename == "Title")
 		{
 			
@@ -217,6 +225,7 @@ public:
 			mySAE->unloadEffect("sound_ending_fail.mp3");
 			mySAE->unloadEffect("sound_star_visible.mp3");
 			mySAE->unloadEffect("sound_calc.mp3");
+			mySAE->unloadEffect("sound_calc.ogg");
 		}
 	}
 	void startGame()
@@ -244,7 +253,7 @@ public:
 					string real_filename = filename;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 					if(real_filename == "sound_casting_attack.mp3" || real_filename == "sound_casting_crash.mp3" ||
-					   real_filename == "sound_casting_option.mp3" || real_filename == "sound_bomb_wave.mp3")
+					   real_filename == "sound_casting_option.mp3" || real_filename == "sound_bomb_wave.mp3" || real_filename == "sound_calc.mp3")
 					{
 						real_filename = real_filename.substr(0,real_filename.length()-3);
 						real_filename += "ogg";
