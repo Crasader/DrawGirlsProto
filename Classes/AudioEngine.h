@@ -233,11 +233,21 @@ public:
 				
 				if(!is_ing)
 				{
+					string real_filename = filename;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+					if(real_filename == "sound_casting_attack.mp3" || real_filename == "sound_casting_crash.mp3" ||
+					   real_filename == "sound_casting_option.mp3" || real_filename == "sound_bomb_wave.mp3")
+					{
+						real_filename = real_filename.substr(0,real_filename.length()-3);
+						real_filename += "ogg";
+					}
+#endif
+					
 					CCLog("PlayEffect loop : %s", filename);
 					
 					LoopEffect* t_effect = new LoopEffect();
 					t_effect->autorelease();
-					unsigned int code = mySAE->playEffect(filename, true);
+					unsigned int code = mySAE->playEffect(real_filename.c_str(), true);
 					t_effect->filename = filename;
 					t_effect->effectCode = code;
 					loopEffects->addObject(t_effect);

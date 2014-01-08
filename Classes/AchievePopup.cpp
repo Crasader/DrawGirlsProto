@@ -264,7 +264,7 @@ void AchievePopup::setAchieveTable()
 	{
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
 			   !AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
 				achieve_list.push_back((AchievementCode)i);
 		}
@@ -391,7 +391,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		success_img->setPosition(ccp(270,25));
 		cell_back->addChild(success_img);
 	}
-	else if(AchieveConditionReward::sharedInstance()->getRecentValue(achieve_list[idx]) >= AchieveConditionReward::sharedInstance()->getCondition(achieve_list[idx]))
+	else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx]))
 	{
 		CCSprite* n_reward_img = CCSprite::create("achievement_cell_reward_get.png");
 		CCSprite* s_reward_img = CCSprite::create("achievement_cell_reward_get.png");
