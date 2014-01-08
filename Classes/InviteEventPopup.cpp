@@ -85,9 +85,9 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
 		 
-		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
+//		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
+//		 getParent()->addChild(t_rp, this->getZOrder());
+//		 removeFromParent();
 		 
 	 });
 	inviteEventBtn->setPosition(ccp(169, 290));

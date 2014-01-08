@@ -109,8 +109,8 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	_menu->addChild(joinGameFriend);
 	
 	m_friendLimitFnt = CCLabelBMFont::create
-	(CCString::createWithFormat("%lu.%d", UnknownFriends::getInstance()->getFriends().size(), mySGD->getGameFriendMax())->getCString(),
-	 "mb_white_font.fnt");
+	(CCString::createWithFormat("%lu/%d", UnknownFriends::getInstance()->getFriends().size(), mySGD->getGameFriendMax())->getCString(),
+	 "allfont.fnt");
 	m_friendLimitFnt->setPosition(ccp(141, 320 - 74));
 	addChild(m_friendLimitFnt, 2);
 	

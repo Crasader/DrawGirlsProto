@@ -1,5 +1,4 @@
-// MailPopup.cpp
-//
+// MailPopup.cp180
 
 #include "MailPopup.h"
 
@@ -79,7 +78,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
-	
+	_menu->setTouchEnabled(false); // 임시...
 	CCSprite* back = CCSprite::create("postbox_back.png");
 	back->setPosition(ccp(240,160));
 	addChild(back, kMP_Z_back);
@@ -104,7 +103,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	
 	const int leftMenuX = 54;
 	const int leftMenuY = 240;
-	stateButtonBack->setPosition(ccp(leftMenuX, leftMenuY));
+	stateButtonBack->setPosition(ccp(leftMenuX - 4, leftMenuY - 11));
 	
 	_menu->addChild(stateButtonBack);
 	
@@ -244,7 +243,7 @@ void MailPopup::drawMail (Json::Value obj)
 	mailTableView = CCTableView::create(this, CCSizeMake(244.f, 222.f));
 	
 	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
-	m_scrollBar = ScrollBar::createScrollbar(mailTableView, -2, NULL, bar);
+	m_scrollBar = ScrollBar::createScrollbar(mailTableView, -2 - 10, NULL, bar);
 	m_scrollBar->setDynamicScrollSize(false);
 	
 	mailTableView->setAnchorPoint(CCPointZero);
@@ -308,7 +307,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kMP_MT_profileImg);
 	profileImg->setPosition(ccp(25, 22));
-	profileImg->setScale(40.f / profileImg->getContentSize().width);
+	profileImg->setScale(36.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kMP_Z_profileImg);
 	
 	
@@ -321,7 +320,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	
 	
 	title = CCLabelTTF::create(((mail)["nickname"].asString() + "님의").c_str(), "Helvetica",12);
-	title->setPosition(ccp(30,28));
+	title->setPosition(ccp(38 + 5,28));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kMP_MT_title);
 	cell->addChild(title,2);
@@ -378,7 +377,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 
 				 // 도망 버튼.
 				 auto m0 = CCMenuItemImageLambda::create
-				 ("ending_remove_card.png", "ending_remove_card.png",
+				 ("postbox_deny.png", "postbox_deny.png",
 					[=](CCObject* e){
 						//																									 removeFromParent();
 						CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
@@ -480,14 +479,15 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 av->show();
 			 }
 			 );
-			sendBtn->setPosition(ccp(190, 22));
+			sendBtn->setScale(0.5f);
+			sendBtn->setPosition(ccp(180, 22));
 			
 			_menu->addChild(sendBtn,2);
 			break;
 		case kChallengeResult:
 			comment = "도전결과!!";
 			sendBtn = CCMenuItemImageLambda::create
-			("card_mount.png", "card_mount.png",
+			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 			 [=](CCObject*)
 			 {
 				 if(contentObj["result"].asString() == "win")
@@ -563,7 +563,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 }
 			 }
 			 );
-			sendBtn->setPosition(ccp(190, 22));
+			sendBtn->setScale(0.5f);
+			sendBtn->setPosition(ccp(180, 22));
 			
 			_menu->addChild(sendBtn,2);
 			break;
@@ -576,7 +577,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			 [=](CCObject*)
 			 {
 				 KSAlertView* av = KSAlertView::create();
-				 auto m0 = CCMenuItemImageLambda::create("ending_remove_card.png", "ending_remove_card.png",
+				 auto m0 = CCMenuItemImageLambda::create("postbox_deny.png", "postbox_deny.png",
 																								 [=](CCObject* e){
 																									 //																									 removeFromParent();
 																									 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
@@ -629,14 +630,15 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 addChild(av, kMP_Z_helpAccept);
 				 av->show();
 			 });
-			sendBtn->setPosition(ccp(190, 22));
+			sendBtn->setPosition(ccp(180, 22));
+			sendBtn->setScale(0.5f);
 			
 			_menu->addChild(sendBtn,2);
 			break;
 		case kHelpResult:
 			comment = "상대방의 도움이 왔어요!";
 			sendBtn = CCMenuItemImageLambda::create
-			("card_mount.png", "card_mount.png",
+			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 			 [=](CCObject*)
 			 {
 				 Json::Value p;
@@ -703,7 +705,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					});
 			 }
 			 );
-			sendBtn->setPosition(ccp(190, 22));
+			sendBtn->setPosition(ccp(180, 22));
+			sendBtn->setScale(0.5f);
 			
 			_menu->addChild(sendBtn,2);
 			break;
@@ -729,7 +732,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 														);
 				 
 				 // 거절.
-				 auto m0 = CCMenuItemImageLambda::create("ending_remove_card.png", "ending_remove_card.png",
+				 auto m0 = CCMenuItemImageLambda::create("postbox_deny.png", "postbox_deny.png",
 																								 [=](CCObject* e){
 																									 //																									 removeFromParent();
 																									 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
@@ -782,7 +785,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 			 }
 			 );
-			sendBtn->setPosition(ccp(190, 22));
+			sendBtn->setPosition(ccp(180, 22));
+			sendBtn->setScale(0.5f);
 			_menu->addChild(sendBtn,2);
 			break;
 		case kTicketResult:
@@ -925,12 +929,13 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 av->show();
 			 }
 			 );
-			sendBtn->setPosition(ccp(190, 22));
+			sendBtn->setPosition(ccp(180, 22));
+			sendBtn->setScale(0.5f);
 			
 			_menu->addChild(sendBtn,2);
 			break;
 		case kUnknownFriendRequest:
-			comment = "   ~님의 친구추가 요청이 왔습니다.";
+			comment = "친구추가 요청이 왔습니다.";
 			sendBtn = CCMenuItemImageLambda::create
 			("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 			 [=](CCObject*)
@@ -941,7 +946,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 av->setBorderScale(0.9f);
 				 av->setCloseOnPress(false);
 				 // 거절.
-				 auto m0 = CCMenuItemImageLambda::create("ending_remove_card.png", "ending_remove_card.png",
+				 auto m0 = CCMenuItemImageLambda::create("postbox_deny.png", "postbox_deny.png",
 																								 [=](CCObject* e){
 																									 //																									 removeFromParent();
 																									 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
@@ -1013,7 +1018,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				 av->show();
 			 });
 			
-			sendBtn->setPosition(ccp(190, 22));
+			sendBtn->setPosition(ccp(180, 22));
+			sendBtn->setScale(0.5f);
 			
 			_menu->addChild(sendBtn,2);
 			break;
@@ -1025,7 +1031,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			 {
 			 });
 			
-			sendBtn->setPosition(ccp(190, 22));
+			sendBtn->setPosition(ccp(180, 22));
+			sendBtn->setScale(0.5f);
 			
 			_menu->addChild(sendBtn,2);
 			break;
@@ -1048,7 +1055,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	}
 	
 	score = CCLabelTTF::create(comment.c_str(),"Helvetica", 12.f);
-	score->setPosition(ccp(30,5));
+	score->setPosition(ccp(45,5));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kMP_MT_score);
 	cell->addChild(score,2);

@@ -194,7 +194,7 @@ void JoinGameFriendPopup::drawRank( Json::Value obj )
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
 	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
-	m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2, NULL, bar);
+	m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2 - 8, NULL, bar);
 	m_scrollBar->setDynamicScrollSize(false);
 	rankTableView->setAnchorPoint(CCPointZero);
 	
@@ -299,18 +299,18 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	}
 	
 	
-	sendBtn->setPosition(ccp(360, 22));
+	sendBtn->setPosition(ccp(360 - 8, 22));
 	sendBtn->setTag(kTagGameFriendSend);
 	_menu->addChild(sendBtn, kZorderJoinGameFriendSend);
 	
 	title = CCLabelTTF::create("","Helvetica",12);
-	title->setPosition(ccp(90,25));
+	title->setPosition(ccp(90 - 16,25));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kTagGameFriendNickname);
 	cell->addChild(title, 2);
 	
 	score = CCLabelTTF::create("","Helvetica",10);
-	score->setPosition(ccp(90,5));
+	score->setPosition(ccp(90 - 16,5 + 3));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kTagGameFriendLastDate);
 	cell->addChild(score,2);

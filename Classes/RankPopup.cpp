@@ -9,6 +9,7 @@
 #include "KnownFriend.h"
 #include "SendMessageUtil.h"
 
+#include <boost/format.hpp>
 #define LZZ_INLINE inline
 using namespace cocos2d::extension;
 using namespace std;
@@ -467,12 +468,11 @@ void RankPopup::drawRank (Json::Value obj)
 	rankTableView->setContentOffsetInDuration(
 											  ccp(
 												  0, yInitPosition)
-											  , 0.7f);
+											  , 0.4f);
 	//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
 }
 void RankPopup::closePopup (CCControlButton * obj, CCControlEvent event)
 {
-	
 	//		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
 	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedClose)),NULL));
 }
@@ -505,9 +505,16 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	profileImg->setPosition(ccp(62, 22));
 	profileImg->setScale(38.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kRP_Z_profileImg);
+
+	// 순위 표시함
 	
+	CCLabelBMFont* rankFnt = CCLabelBMFont::create(boost::str(boost::format("%||") % (idx + 1)).c_str(), "etc_font.fnt");
+	cell->addChild(rankFnt);
+	rankFnt->setPosition(ccp(31, 22));
 	// 카톡 마크 붙임.
-	if(!KnownFriends::getInstance()->findById((*member)["user_id"].asString()))
+	
+	if(!KnownFriends::getInstance()->findById((*member)["user_id"].asString()) &&
+		 (*member)["user_id"].asString() != hspConnector::get()->myKakaoInfo["user_id"].asString())
 	{
 		CCSprite* katokMark = CCSprite::create("rank_kakao.png");
 		cell->addChild(katokMark, kRP_Z_profileImg);
@@ -1469,7 +1476,7 @@ void RankPopup::touchCellIndex(int idx)
 						  scoreStr.c_str(), "mb_white_font.fnt");
 	
 	m_highScore->setScale(0.5f);
-	m_highScore->setPosition(ccp(216 / 2.f, 86 / 2.f));
+	m_highScore->setPosition(ccp(216 / 2.f + 5, 86 / 2.f + 7));
 	addChild(m_highScore, 3);
 	if(m_currentSelectSprite)
 	{
