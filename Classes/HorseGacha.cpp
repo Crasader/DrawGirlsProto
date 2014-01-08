@@ -298,7 +298,7 @@ void HorseGachaSub::update(float dt)
 				 
 				 if(mySGD->getGold() >= 500)
 				 {
-					 mySGD->setStar(mySGD->getStar() - 500);
+					 mySGD->setGold(mySGD->getGold() - 500);
 					 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
 															 {
 																 
