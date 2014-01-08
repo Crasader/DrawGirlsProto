@@ -95,6 +95,9 @@ public:
 			mySAE->preloadEffect("sound_casting_attack.mp3");
 			mySAE->preloadEffect("sound_casting_crash.mp3");
 			mySAE->preloadEffect("sound_casting_option.mp3");
+			mySAE->preloadEffect("sound_casting_attack.ogg");
+			mySAE->preloadEffect("sound_casting_crash.ogg");
+			mySAE->preloadEffect("sound_casting_option.ogg");
 			mySAE->preloadEffect("sound_stamp.mp3");
 			mySAE->preloadEffect("sound_jack_basic_missile_shoot.mp3");
 			mySAE->preloadEffect("sound_jack_special_missile.mp3");
@@ -102,6 +105,7 @@ public:
 			mySAE->preloadEffect("sound_crashed_map.mp3");
 			mySAE->preloadEffect("sound_pilsalgi.mp3");
 			mySAE->preloadEffect("sound_bomb_wave.mp3");
+			mySAE->preloadEffect("sound_bomb_wave.ogg");
 			mySAE->preloadEffect("sound_throw_obj_shot.mp3");
 			mySAE->preloadEffect("sound_threecusion_bomb.mp3");
 			mySAE->preloadEffect("sound_rock_falling.mp3");
@@ -162,6 +166,9 @@ public:
 			mySAE->unloadEffect("sound_casting_attack.mp3");
 			mySAE->unloadEffect("sound_casting_crash.mp3");
 			mySAE->unloadEffect("sound_casting_option.mp3");
+			mySAE->unloadEffect("sound_casting_attack.ogg");
+			mySAE->unloadEffect("sound_casting_crash.ogg");
+			mySAE->unloadEffect("sound_casting_option.ogg");
 			mySAE->unloadEffect("sound_stamp.mp3");
 			mySAE->unloadEffect("sound_jack_basic_missile_shoot.mp3");
 			mySAE->unloadEffect("sound_jack_special_missile.mp3");
@@ -169,6 +176,7 @@ public:
 			mySAE->unloadEffect("sound_crashed_map.mp3");
 			mySAE->unloadEffect("sound_pilsalgi.mp3");
 			mySAE->unloadEffect("sound_bomb_wave.mp3");
+			mySAE->unloadEffect("sound_bomb_wave.ogg");
 			mySAE->unloadEffect("sound_throw_obj_shot.mp3");
 			mySAE->unloadEffect("sound_threecusion_bomb.mp3");
 			mySAE->unloadEffect("sound_rock_falling.mp3");
