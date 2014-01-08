@@ -1666,7 +1666,7 @@ void PlayUI::myInit ()
 	gold_label->setString("0");
 	
 	CCSprite* gold_img = CCSprite::create("ui_gold_img.png");
-	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-50,7)));
+	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-50,9)));
 	addChild(gold_img);
 	
 	score_label = CountingBMLabel::create("0", "etc_font.fnt", 2.f, "%d");

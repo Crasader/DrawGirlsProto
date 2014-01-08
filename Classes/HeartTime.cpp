@@ -164,7 +164,7 @@ void HeartTime::myInit ()
 	}
 	else
 	{
-		if(loop_cnt == mySGD->getHeartMax())
+		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) == mySGD->getHeartMax())
 		{
 			state_label = CCLabelBMFont::create("MAX", "mainflow_top_font1.png.fnt");
 			state_label->setAnchorPoint(ccp(0,0.5));

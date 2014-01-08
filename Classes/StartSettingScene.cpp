@@ -276,7 +276,10 @@ void StartSettingScene::setMain()
 			if(t_iter != show_item_popup.end())
 			{
 				if(t_ic == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0)
+				{
 					is_selected_item.push_back(false);
+					select_menu->setEnabled(false);
+				}
 				else
 				{
 					is_selected_item.push_back(true);
@@ -284,7 +287,11 @@ void StartSettingScene::setMain()
 				}
 			}
 			else
+			{
+				if(t_ic == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0)
+					select_menu->setEnabled(false);
 				is_selected_item.push_back(false);
+			}
 		}
 		else
 			is_selected_item.push_back(false);
