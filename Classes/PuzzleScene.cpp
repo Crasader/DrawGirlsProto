@@ -45,6 +45,9 @@ bool PuzzleScene::init()
         return false;
     }
 	
+	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	
 	friend_point_popup = NULL;
 	start_menu = NULL;
 	challenge_menu = NULL;

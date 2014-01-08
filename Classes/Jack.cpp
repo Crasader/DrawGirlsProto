@@ -1546,6 +1546,7 @@ void Jack::dieEffect()
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
 			{
+				myGD->communication("UI_addGameTime30Sec");
 				speed_up_value = 0.f;
 				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 				

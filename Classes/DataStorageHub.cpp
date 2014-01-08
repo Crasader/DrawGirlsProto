@@ -255,6 +255,9 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 	setIntegerForKey(kDSH_Key_savedGold, data[getKey(kDSH_Key_savedGold)].asInt(), false);
 	setIntegerForKey(kDSH_Key_savedFriendPoint, data[getKey(kDSH_Key_savedFriendPoint)].asInt(), false);
 	
+	setIntegerForKey(kDSH_Key_heartCnt, data[getKey(kDSH_Key_heartCnt)].asInt(), false);
+	setIntegerForKey(kDSH_Key_heartTime, data[getKey(kDSH_Key_heartTime)].asInt(), false);
+	
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 	{
 		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt(), false);
@@ -359,6 +362,11 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 		data[getKey(kDSH_Key_savedGold)] = getIntegerForKey(kDSH_Key_savedGold);
 	else if(t_key == kSaveUserData_Key_friendPoint)
 		data[getKey(kDSH_Key_savedFriendPoint)] = getIntegerForKey(kDSH_Key_savedFriendPoint);
+	else if(t_key == kSaveUserData_Key_heart)
+	{
+		data[getKey(kDSH_Key_heartCnt)] = getIntegerForKey(kDSH_Key_heartCnt);
+		data[getKey(kDSH_Key_heartTime)] = getIntegerForKey(kDSH_Key_heartTime);
+	}
 	else if(t_key == kSaveUserData_Key_item)
 	{
 		for(int i=kIC_attack;i<=kIC_rentCard;i++)
@@ -492,6 +500,9 @@ void DataStorageHub::resetDSH ()
 	setIntegerForKey(kDSH_Key_savedStar, default_ruby, false);
 	setIntegerForKey(kDSH_Key_savedGold, default_gold, false);
 	setIntegerForKey(kDSH_Key_savedFriendPoint, 0, false);
+	
+	setIntegerForKey(kDSH_Key_heartCnt, 0, false);
+	setIntegerForKey(kDSH_Key_heartTime, 0, false);
 	
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 	{

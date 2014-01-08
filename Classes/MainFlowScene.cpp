@@ -606,7 +606,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			
 			mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
 			CardSettingPopup* t_popup = CardSettingPopup::create();
-			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
 			addChild(t_popup, kMainFlowZorder_popup);
 			
 			removeChild(tutorial_node);
@@ -927,6 +927,13 @@ void MainFlowScene::setTop()
 void MainFlowScene::popupClose()
 {
 	is_menu_enable = true;
+}
+
+void MainFlowScene::tutorialCardSettingClose()
+{
+	is_menu_enable = true;
+	puzzle_table->setTouchEnabled(true);
+	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
 }
 
 void MainFlowScene::closeFriendPointPopup()

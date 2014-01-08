@@ -64,6 +64,7 @@ private:
 	void setBottom();
 	
 	void popupClose();
+	void tutorialCardSettingClose();
 	
 	void puzzleLoadSuccess();
 };

@@ -586,6 +586,7 @@ void StartSettingScene::menuAction(CCObject* sender)
 		else if(tag == kStartSettingMenuTag_itemBuy)
 		{
 			ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_idx], clicked_item_idx, this, callfuncII_selector(StartSettingScene::buySuccessItem));
+			t_ibp->setCloseTargetDelegate(this, callfunc_selector(StartSettingScene::popupClose));
 			addChild(t_ibp, kStartSettingZorder_popup);
 		}
 	}

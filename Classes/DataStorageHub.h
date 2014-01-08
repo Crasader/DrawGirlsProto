@@ -120,6 +120,7 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_star,
 	kSaveUserData_Key_gold,
 	kSaveUserData_Key_friendPoint,
+	kSaveUserData_Key_heart,
 	kSaveUserData_Key_item,
 	kSaveUserData_Key_cardsInfo,
 	kSaveUserData_Key_highScore,

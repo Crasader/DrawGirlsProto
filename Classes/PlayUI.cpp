@@ -1988,6 +1988,7 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_endFever"] = std::bind(&FeverParent::endFever, my_fp);
 	myGD->V_V["UI_stopCombo"] = std::bind(&ComboParent::stopKeep, my_combo);
 	myGD->B_V["UI_isExchanged"] = std::bind(&PlayUI::isExchanged, this);
+	myGD->V_V["UI_addGameTime30Sec"] = std::bind(&PlayUI::addGameTime30Sec, this);
 }
 bool PlayUI::isExchanged ()
 {

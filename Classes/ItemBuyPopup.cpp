@@ -11,6 +11,13 @@ ItemBuyPopup * ItemBuyPopup::create (ITEM_CODE t_item_type, int t_clicked_item_n
 	t_ibp->autorelease();
 	return t_ibp;
 }
+
+void ItemBuyPopup::setCloseTargetDelegate(CCObject *t_close, SEL_CallFunc d_close)
+{
+	target_close = t_close;
+	delegate_close = d_close;
+}
+
 void ItemBuyPopup::myInit (ITEM_CODE t_item_type, int t_clicked_item_number, CCObject * t_buy, SEL_CallFuncII d_buy)
 {
 	item_type = t_item_type;
@@ -111,7 +118,7 @@ void ItemBuyPopup::menuAction (CCObject * sender)
 	}
 	else if(tag == kIBP_MT_close)
 	{
-		
+		(target_close->*delegate_close)();
 	}
 	
 	removeFromParent();
