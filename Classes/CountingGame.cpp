@@ -26,7 +26,10 @@ void CountingGame::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEve
 
 void CountingGame::startSchedule()
 {
-	schedule(schedule_selector(CountingGame::createObject), 1/30.f);
+	addChild(KSTimer::create(3.f, [=]()
+													 {
+														 schedule(schedule_selector(CountingGame::createObject), 1/30.f);
+													 }));
 }
 bool CountingGame::init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
 {
@@ -61,12 +64,16 @@ bool CountingGame::init(int priority, const std::function<void(CCObject*, SEL_Ca
 	m_menu->setTouchEnabled(true);
 	m_menu->setTouchPriority(m_priority);
 	m_menu->setPosition(ccp(0, 0));
+	m_menu->setPropaOnBegan(true);
 	addChild(m_menu, 1);
 	
 	m_timeFnt = CCLabelBMFont::create(CCString::createWithFormat("%d", m_remainTime)->getCString(), "etc_font.fnt");
 	m_timeFnt->setPosition(ccp(420, 270));
 	addChild(m_timeFnt, 2);
 	
+	auto ready_go = KS::loadCCBI<CCLayer*>(this, "ui_ready.ccbi");
+	addChild(ready_go.first);
+	ready_go.first->setPosition(ccp(240, 160));
 //	schedule(schedule_selector(CountingGame::createObject)); // 임시.
 	return true;
 }
@@ -126,8 +133,9 @@ void CountingGame::createObject(float dt)
 	}
 	if(loopCount < 100)
 	{
-		auto ccbi = KS::loadCCBI<CCSprite*>(this, "mob_cow.ccbi");
-		CCSprite* t = ccbi.first;
+//		auto ccbi = KS::loadCCBI<CCSprite*>(this, "mob_cow.ccbi");
+//		CCSprite* t = ccbi.first;
+		CCSprite* t = CCSprite::create("bonusboss1.png");
 		t->setPosition(ccp(x, y));
 		m_objects.push_back(t);
 		m_thiz->addChild(t);
