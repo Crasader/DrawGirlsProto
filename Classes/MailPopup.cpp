@@ -682,6 +682,15 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						}
 						else // 카드 정보 있음
 						{
+							if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt()) == 0)
+							{
+								myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+								myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt(), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+								myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), contentObj["cardnumber"].asInt());
+								
+								mySGD->addHasGottenCardNumber(contentObj["cardnumber"].asInt());
+							}
+							
 							myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
 							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
 							myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, contentObj["cardnumber"].asInt(), 1);
