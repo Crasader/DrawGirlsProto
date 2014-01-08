@@ -64,6 +64,7 @@ bool OptionPopup::init()
         return false;
     }
 	
+	setTouchEnabled(true);
 	
 //	MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
 //	addChild(t_popup, 4);
@@ -96,6 +97,7 @@ bool OptionPopup::init()
 		CCMenu* temp_menu = CCMenu::createWithItem(temp_item);
 		temp_menu->setPosition(ccpSub(ccp(15,305), ccp(240,160)));
 		main_case->addChild(temp_menu, kOP_Z_content);
+		temp_menu->setTouchPriority(-171);
 	}
 	
 	
@@ -110,6 +112,7 @@ bool OptionPopup::init()
 	CCMenu* close_menu = CCMenu::createWithItem(close_item);
 	close_menu->setPosition(getContentPosition(kOP_MT_close));
 	main_case->addChild(close_menu, kOP_Z_content);
+	close_menu->setTouchPriority(-171);
 	
 	
 	
@@ -123,6 +126,7 @@ bool OptionPopup::init()
 	CCMenu* help_menu = CCMenu::createWithItem(help_item);
 	help_menu->setPosition(getContentPosition(kOP_MT_help));
 	main_case->addChild(help_menu, kOP_Z_content);
+	help_menu->setTouchPriority(-171);
 	
 	
 	CCSprite* n_logout = CCSprite::create("option_logout.png");
@@ -135,6 +139,7 @@ bool OptionPopup::init()
 	CCMenu* logout_menu = CCMenu::createWithItem(logout_item);
 	logout_menu->setPosition(getContentPosition(kOP_MT_logout));
 	main_case->addChild(logout_menu, kOP_Z_content);
+	logout_menu->setTouchPriority(-171);
 	
 	
 	CCSprite* n_noti = CCSprite::create("option_noti.png");
@@ -147,6 +152,7 @@ bool OptionPopup::init()
 	CCMenu* noti_menu = CCMenu::createWithItem(noti_item);
 	noti_menu->setPosition(getContentPosition(kOP_MT_noti));
 	main_case->addChild(noti_menu, kOP_Z_content);
+	noti_menu->setTouchPriority(-171);
 	
 	
 	CCSprite* n_withdraw = CCSprite::create("option_withdraw.png");
@@ -159,6 +165,7 @@ bool OptionPopup::init()
 	CCMenu* withdraw_menu = CCMenu::createWithItem(withdraw_item);
 	withdraw_menu->setPosition(getContentPosition(kOP_MT_withdraw));
 	main_case->addChild(withdraw_menu, kOP_Z_content);
+	withdraw_menu->setTouchPriority(-171);
 	
 	
 	CCSprite* n_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 40));
@@ -172,6 +179,7 @@ bool OptionPopup::init()
 	joystick_positioning_menu = CCMenu::createWithItem(joystick_positioning_item);
 	joystick_positioning_menu->setPosition(getContentPosition(kOP_MT_joystickPositioning));
 	main_case->addChild(joystick_positioning_menu, kOP_Z_content);
+	joystick_positioning_menu->setTouchPriority(-171);
 	
 	joystick_positioning_img = NULL;
 	resetJoystickPositioningMenu();
@@ -188,6 +196,7 @@ bool OptionPopup::init()
 	joystick_moving_menu = CCMenu::createWithItem(joystick_moving_item);
 	joystick_moving_menu->setPosition(getContentPosition(kOP_MT_joystickMoving));
 	main_case->addChild(joystick_moving_menu, kOP_Z_content);
+	joystick_moving_menu->setTouchPriority(-171);
 	
 	joystick_moving_img = NULL;
 	resetJoystickMovingMenu();
@@ -203,6 +212,7 @@ bool OptionPopup::init()
 	CCMenu* tutorial_menu = CCMenu::createWithItem(tutorial_item);
 	tutorial_menu->setPosition(getContentPosition(kOP_MT_tutorial));
 	main_case->addChild(tutorial_menu, kOP_Z_content);
+	tutorial_menu->setTouchPriority(-171);
 	
 	CCSprite* n_minsu = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
 	n_minsu->setOpacity(0);
@@ -228,6 +238,7 @@ bool OptionPopup::init()
 	bgm_menu = CCMenu::createWithItem(bgm_item);
 	bgm_menu->setPosition(getContentPosition(kOP_MT_bgm));
 	main_case->addChild(bgm_menu, kOP_Z_content);
+	bgm_menu->setTouchPriority(-171);
 	
 	bgm_img = NULL;
 	resetBgmMenu();
@@ -244,6 +255,7 @@ bool OptionPopup::init()
 	effect_menu = CCMenu::createWithItem(effect_item);
 	effect_menu->setPosition(getContentPosition(kOP_MT_effect));
 	main_case->addChild(effect_menu, kOP_Z_content);
+	effect_menu->setTouchPriority(-171);
 	
 	effect_img = NULL;
 	resetEffectMenu();
@@ -582,4 +594,30 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	return_value = ccpAdd(return_value, ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height/2.f));
 	
 	return return_value;
+}
+
+bool OptionPopup::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
+{
+	return true;
+}
+
+void OptionPopup::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
+{
+	
+}
+
+void OptionPopup::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
+{
+	
+}
+
+void OptionPopup::ccTouchCancelled( CCTouch *pTouch, CCEvent *pEvent )
+{
+	
+}
+
+void OptionPopup::registerWithTouchDispatcher()
+{
+	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+	pDispatcher->addTargetedDelegate(this, -170, true);
 }

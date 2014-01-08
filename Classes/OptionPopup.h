@@ -74,6 +74,13 @@ private:
 	
 	void menuAction(CCObject* sender);
 	void popupClose();
+	
+	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
+	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent);
+	
+	virtual void registerWithTouchDispatcher();
 };
 
 #endif /* defined(__DGproto__OptionPopup__) */
