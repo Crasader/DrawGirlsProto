@@ -1287,7 +1287,11 @@ void PlayUI::counting ()
 	countingCnt++;
 	use_time++;
 	
-	countingLabel->setString(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString());
+	int label_value = playtime_limit-countingCnt;
+	if(label_value < 0)
+		label_value = 0;
+	
+	countingLabel->setString(CCString::createWithFormat("%d", label_value)->getCString());
 	CCRotateBy* t_rotate = CCRotateBy::create(0.5, -180);
 	sand_clock->runAction(t_rotate);
 	
