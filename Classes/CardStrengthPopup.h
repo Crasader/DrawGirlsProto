@@ -98,6 +98,12 @@ private:
 	CCPoint getContentPosition(int t_tag);
 	
 	bool is_menu_enable;
+	
+	virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent);
+	virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent);
+	virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent);
+	virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
+	virtual void registerWithTouchDispatcher ();
 };
 
 #endif /* defined(__DGproto__CardStrengthPopup__) */

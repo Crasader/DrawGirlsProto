@@ -78,6 +78,7 @@ bool CardStrengthPopup::init()
 	CCMenu* close_menu = CCMenu::createWithItem(close_item);
 	close_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_close));
 	main_case->addChild(close_menu, kCardStrengthPopupZorder_content);
+	close_menu->setTouchPriority(-181);
 	
 	
 	CCSprite* n_high_strength = CCSprite::create("cardstrength_high_strength.png");
@@ -90,6 +91,7 @@ bool CardStrengthPopup::init()
 	CCMenu* high_strength_menu = CCMenu::createWithItem(high_strength_item);
 	high_strength_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_highStrength));
 	main_case->addChild(high_strength_menu, kCardStrengthPopupZorder_content);
+	high_strength_menu->setTouchPriority(-181);
 	
 	
 	CCSprite* n_normal_strength = CCSprite::create("cardstrength_normal_strength.png");
@@ -102,6 +104,7 @@ bool CardStrengthPopup::init()
 	CCMenu* normal_strength_menu = CCMenu::createWithItem(normal_strength_item);
 	normal_strength_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_normalStrength));
 	main_case->addChild(normal_strength_menu, kCardStrengthPopupZorder_content);
+	normal_strength_menu->setTouchPriority(-181);
 	
 	
 	CCSprite* n_align_rank = CCSprite::create("cardstrength_align_rank.png");
@@ -114,6 +117,7 @@ bool CardStrengthPopup::init()
 	CCMenu* align_rank_menu = CCMenu::createWithItem(align_rank_item);
 	align_rank_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_alignRank));
 	main_case->addChild(align_rank_menu, kCardStrengthPopupZorder_content);
+	align_rank_menu->setTouchPriority(-181);
 	
 	
 	CCSprite* n_align_take = CCSprite::create("cardstrength_align_take.png");
@@ -126,6 +130,7 @@ bool CardStrengthPopup::init()
 	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
 	align_take_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_alignTake));
 	main_case->addChild(align_take_menu, kCardStrengthPopupZorder_content);
+	align_take_menu->setTouchPriority(-181);
 	
 	
 	strength_card_node = CCNode::create();
@@ -150,7 +155,7 @@ bool CardStrengthPopup::init()
 	offering_table->setPosition(ccp(97, 29));
 	offering_table->setDelegate(this);
 	main_case->addChild(offering_table, kCardStrengthPopupZorder_content);
-	offering_table->setTouchPriority(kCCMenuHandlerPriority+1);
+	offering_table->setTouchPriority(-180);
 	
 	
 	offering_menu = NULL;
@@ -433,6 +438,7 @@ void CardStrengthPopup::tableCellTouched(CCTableView* table, CCTableViewCell* ce
 	offering_menu = CCMenu::createWithItem(offering_item);
 	offering_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_offeringCard));
 	main_case->addChild(offering_menu, kCardStrengthPopupZorder_content);
+	offering_menu->setTouchPriority(-181);
 	
 	strength_probability = CCSprite::create("cardsetting_probability.png");
 	strength_probability->setPosition(offering_menu->getPosition());
@@ -861,5 +867,30 @@ void CardStrengthPopup::resultStrength(Json::Value result_data)
 		replay_menu = CCMenu::createWithItem(replay_item);
 		replay_menu->setPosition(ccp(240,100));
 		addChild(replay_menu, kCardStrengthPopupZorder_popup);
+		replay_menu->setTouchPriority(-181);
 	}
+}
+
+bool CardStrengthPopup::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
+{
+	CCLog("touch swallow!!");
+	
+	return true;
+}
+void CardStrengthPopup::ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent)
+{
+	
+}
+void CardStrengthPopup::ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent)
+{
+	
+}
+void CardStrengthPopup::ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent)
+{
+	
+}
+void CardStrengthPopup::registerWithTouchDispatcher ()
+{
+	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+	pDispatcher->addTargetedDelegate(this, -179, true);
 }
