@@ -5,6 +5,8 @@
 #include "Well512.h"
 #include "CCMenuLambda.h"
 #include <random>
+#include "cocos-ext.h"
+USING_NS_CC_EXT;
 USING_NS_CC;
 #define __TYPE__ CountingGame
 class CountingGame : public CCLayer

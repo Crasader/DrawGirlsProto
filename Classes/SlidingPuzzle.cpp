@@ -522,6 +522,10 @@ void SlidingPuzzle::shufflePieces(int loop, Coord coord)
 									m_state = SlidingState::kNormal;
 									m_menu->setTouchEnabled(true);
 									scheduleUpdate();
+									
+									auto ready_go = KS::loadCCBI<CCLayer*>(this, "ui_ready.ccbi");
+	addChild(ready_go.first);
+									ready_go.first->setPosition(ccp(240, 160));
 									return;
 								}
 								Coord movingPiece;

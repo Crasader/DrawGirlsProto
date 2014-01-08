@@ -311,7 +311,6 @@ void RankPopup::loadRank ()
 	Json::Value appfriends;
 	if(m_rankCategory != RankCategory::kUnknownFriend)
 	{
-		
 		for(auto i : KnownFriends::getInstance()->getFriends())
 		{
 			Json::Value v;
@@ -326,7 +325,6 @@ void RankPopup::loadRank ()
 	}
 	if(m_rankCategory != RankCategory::kKnownFriend)
 	{
-		
 		for(auto i : UnknownFriends::getInstance()->getFriends())
 		{
 			Json::Value v;
@@ -346,7 +344,6 @@ void RankPopup::loadRank ()
 	
 	if(m_rankCategory != RankCategory::kUnknownFriend)
 	{
-		
 		for(auto i : KnownFriends::getInstance()->getFriends())
 		{
 			p["memberIDList"].append(i.userId);
@@ -462,7 +459,11 @@ void RankPopup::drawRank (Json::Value obj)
 		}
 	}
 	float yInitPosition = MAX(rankTableView->minContainerOffset().y, -cellSize.height*myPosition + rankTableView->getViewSize().height / 2.f);
-	yInitPosition = MIN(0, yInitPosition);
+	yInitPosition = MIN(rankTableView->maxContainerOffset().y, yInitPosition);
+	if(rankTableView->minContainerOffset().y > rankTableView->maxContainerOffset().y)
+	{
+		yInitPosition = rankTableView->minContainerOffset().y;
+	}
 	rankTableView->setContentOffsetInDuration(
 											  ccp(
 												  0, yInitPosition)
@@ -493,7 +494,6 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	
 	std::string cellBackFile = "rank_cell.png";
 	
-	
 	CCSprite* bg = CCSprite::create(cellBackFile.c_str());
 	bg->setPosition(CCPointZero);
 	bg->setAnchorPoint(CCPointZero);
@@ -506,6 +506,14 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	profileImg->setScale(38.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kRP_Z_profileImg);
 	
+	// 카톡 마크 붙임.
+	if(!KnownFriends::getInstance()->findById((*member)["user_id"].asString()))
+	{
+		CCSprite* katokMark = CCSprite::create("rank_kakao.png");
+		cell->addChild(katokMark, kRP_Z_profileImg);
+		katokMark->setPosition(ccp(62, 22) - ccp(19, 19) + ccp(katokMark->getContentSize().width / 2.f, katokMark->getContentSize().height / 2.f));
+		
+	}
 	
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();

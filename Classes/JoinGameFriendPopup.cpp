@@ -137,7 +137,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 
 		 
 	
-	addFriend->setPosition(380, 320 - 72);
+	addFriend->setPosition(377, 320 - 72 - 3);
 	_menu->addChild(addFriend);
 	
 	

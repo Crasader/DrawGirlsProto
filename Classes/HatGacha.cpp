@@ -200,7 +200,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 																																								 
 																																								 if(mySGD->getGold() >= 500)
 																																								 {
-																																									 mySGD->setStar(mySGD->getStar() - 500);
+																																									 mySGD->setGold(mySGD->getGold() - 500);
 																																									 myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
 																																																			 {
 																																																				 

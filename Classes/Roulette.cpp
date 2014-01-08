@@ -255,7 +255,7 @@ void RouletteSub::update(float dt)
 																		// 다시 해야되는데, 커튼이 닫히는거부터... 시작함.
 																		if(mySGD->getGold() >= 500)
 																		{
-																			mySGD->setStar(mySGD->getStar() - 500);
+																			mySGD->setGold(mySGD->getGold() - 500);
 																			myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
 																													{
 																														
