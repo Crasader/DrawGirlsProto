@@ -269,6 +269,9 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 						 });
 	
 	containerNode->setPosition(ccp(10, 10));
+	auto ready_go = KS::loadCCBI<CCLayer*>(this, "ui_ready.ccbi");
+	addChild(ready_go.first);
+	ready_go.first->setPosition(ccp(240, 160));
 	return true;
 }
 

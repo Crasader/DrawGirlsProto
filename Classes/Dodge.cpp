@@ -93,6 +93,10 @@ bool Dodge::init(int priority, const std::function<void(CCObject*, SEL_CallFunc)
 	m_readyFnt = CCLabelTTF::create("준비", mySGD->getFont().c_str(), 25);
 	m_readyFnt->setPosition(dodgeScreenSize / 2.f);
 	addChild(m_readyFnt);
+
+	auto ready_go = KS::loadCCBI<CCLayer*>(this, "ui_ready.ccbi");
+	addChild(ready_go.first);
+	ready_go.first->setPosition(ccp(240, 160));
 	
 	m_player = DodgePlayer::create();
 	m_thiz->addChild(m_player);
@@ -205,7 +209,7 @@ void Dodge::checkCollision(float dt)
 			addChild(failSprite);
 			addChild(KSTimer::create(3.f, [=]()
 															 {
-																 m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
+																m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 															 }));
 //			unschedule(schedule_selector(Dodge::update));
 			
