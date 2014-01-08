@@ -122,7 +122,7 @@ void StartSettingScene::setMain()
 	
 	int stage_number;
 	
-	if(mySGD->is_before_selected_event_stage)
+	if(mySGD->is_before_selected_event_stage || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
 	{
 		stage_number = mySD->getSilType();
 		

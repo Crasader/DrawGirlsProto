@@ -1626,7 +1626,7 @@ void PlayUI::setUseFriendCard()
 	
 	jack_life++;
 	
-	CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
+	CCSprite* jack_img = CCSprite::create("basic_character.png");
 	jack_img->setColor(ccGREEN);
 	jack_img->setOpacity(0);
 	jack_img->setPosition(ccp(425-(jack_life-1)*20, myDSH->ui_top-14));
@@ -1755,7 +1755,7 @@ void PlayUI::myInit ()
 	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	for(int i=0;i<jack_life;i++)
 	{
-		CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
+		CCSprite* jack_img = CCSprite::create("basic_character.png");
 		jack_img->setPosition(ccp(425-i*20, myDSH->ui_top-14));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
@@ -2010,7 +2010,7 @@ void PlayUI::continueAction ()
 	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	for(int i=0;i<jack_life;i++)
 	{
-		CCSprite* jack_img = CCSprite::create("jack2.png", CCRectMake(0, 0, 23, 23));
+		CCSprite* jack_img = CCSprite::create("basic_character.png");
 		jack_img->setPosition(ccp(425-i*20, myDSH->ui_top-14));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));

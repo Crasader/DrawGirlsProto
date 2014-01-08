@@ -26,6 +26,7 @@
 
 #include "StarGoldData.h"
 #include "GachaPurchase.h"
+#include "StartSettingScene.h"
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -1167,11 +1168,14 @@ void MailPopup::onReceiveStageSuccess()
 {
 	// 성공시 게임창...
 	CCLog("sec");
-	PuzzleMapScene* pms = dynamic_cast<PuzzleMapScene*>(target_close);
-	CCAssert(pms, "!!");
-	(target_close->*delegate_close)();
-	removeFromParent();
-	pms->showAcceptStageSettingPopup();
+//	PuzzleMapScene* pms = dynamic_cast<PuzzleMapScene*>(target_close);
+//	CCAssert(pms, "!!");
+//	(target_close->*delegate_close)();
+//	removeFromParent();
+//	pms->showAcceptStageSettingPopup();
+	
+	CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+	
 //	PuzzleMapScene::showAcceptStageSettingPopup();
 	
 }
