@@ -32,12 +32,12 @@ struct FriendData
 		oss << a.userData;
 		std::ostringstream oss2;
 		oss2 << a.extraData;
-		auto t = boost::str(boost::format("\n\tuserId = %||\n\tnick = %||\n\tunknown = %||\n\tuserData = %||\n\t"
+		auto ta = boost::str(boost::format("\n\tuserId = %||\n\tnick = %||\n\tunknown = %||\n\tuserData = %||\n\t"
 																			"joinDate = %||\n\tlastDate = %||\n\thashId = %||\n\tprofileUrl = %||\n\t"
 																			"messageBlocked = %||\n\textraData = %||\n\t") % a.userId
 												% a.nick % a.unknownFriend % oss.str() % a.joinDate  % a.lastDate %
 												a.hashedTalkUserId % a.profileUrl.c_str() % a.messageBlocked % oss2.str().c_str());
-		output << t << std::endl;
+		output << ta << std::endl;
 		return output;
 	}
 	FriendData()
