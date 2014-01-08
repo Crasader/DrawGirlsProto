@@ -629,7 +629,13 @@ void GameItemFire::myInit(bool is_near)
 														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
 	
-	damage = 20;
+	if(mySGD->getIsUsingFriendCard())
+		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, mySGD->getSelectedFriendCardData().card_number)*((mySGD->getSelectedFriendCardData().card_level-1)*0.1f+1.f);
+	else if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
+		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, myDSH->getIntegerForKey(kDSH_Key_selectedCard))*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard))-1)*0.1f+1.f);
+	else
+		damage = 1;
+	
 	total_damage = damage*10;
 	sum_damage = 0;
 	
