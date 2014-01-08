@@ -201,7 +201,7 @@ void ZoomScript::menuAction(CCObject *sender)
 		{
 			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
 //			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-			if(mySD->getSilType() >= 10000)
+			if(mySD->getSilType() >= 10000 || mySGD->getIsAcceptHelp() || mySGD->getIsAcceptChallenge())
 				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 			else
 				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
