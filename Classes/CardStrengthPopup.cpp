@@ -671,38 +671,47 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			if(offering_card_grade == 3)
 			{
 				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																											   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																													   offering_card_stage)-1)->getCString()));
-				n_piece->setPosition(offering_piece_point);
-				result_popup->addChild(n_piece);
+				if(offering_card_puzzle_number != 0)
+				{
+					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
+																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
+																														   offering_card_stage)-1)->getCString()));
+					n_piece->setPosition(offering_piece_point);
+					result_popup->addChild(n_piece);
+				}
 			}
 			else if(offering_card_grade == 2)
 			{
 				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																											   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																													   offering_card_stage)-1)->getCString()));
-				n_piece->setPosition(offering_piece_point);
-				result_popup->addChild(n_piece);
-				
-				CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
-				stroke_img->setPosition(offering_piece_point);
-				result_popup->addChild(stroke_img);
+				if(offering_card_puzzle_number != 0)
+				{
+					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
+																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
+																														   offering_card_stage)-1)->getCString()));
+					n_piece->setPosition(offering_piece_point);
+					result_popup->addChild(n_piece);
+					
+					CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
+					stroke_img->setPosition(offering_piece_point);
+					result_popup->addChild(stroke_img);
+				}
 			}
 			else if(offering_card_grade == 1)
 			{
 				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																											   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																													   offering_card_stage)-1)->getCString()));
-				n_piece->setGray(true);
-				n_piece->setPosition(offering_piece_point);
-				result_popup->addChild(n_piece);
-				
-				CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
-				stroke_img->setPosition(offering_piece_point);
-				result_popup->addChild(stroke_img);
+				if(offering_card_puzzle_number != 0)
+				{
+					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
+																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
+																														   offering_card_stage)-1)->getCString()));
+					n_piece->setGray(true);
+					n_piece->setPosition(offering_piece_point);
+					result_popup->addChild(n_piece);
+					
+					CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
+					stroke_img->setPosition(offering_piece_point);
+					result_popup->addChild(stroke_img);
+				}
 			}
 			
 			
@@ -1004,38 +1013,47 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			if(offering_card_grade == 3)
 			{
 				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																											   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																													   offering_card_stage)-1)->getCString()));
-				n_piece->setPosition(offering_piece_point);
-				result_popup->addChild(n_piece);
+				if(offering_card_puzzle_number != 0)
+				{
+					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
+																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
+																														   offering_card_stage)-1)->getCString()));
+					n_piece->setPosition(offering_piece_point);
+					result_popup->addChild(n_piece);
+				}
 			}
 			else if(offering_card_grade == 2)
 			{
 				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																											   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																													   offering_card_stage)-1)->getCString()));
-				n_piece->setPosition(offering_piece_point);
-				result_popup->addChild(n_piece);
-				
-				CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
-				stroke_img->setPosition(offering_piece_point);
-				result_popup->addChild(stroke_img);
+				if(offering_card_puzzle_number != 0)
+				{
+					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
+																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
+																														   offering_card_stage)-1)->getCString()));
+					n_piece->setPosition(offering_piece_point);
+					result_popup->addChild(n_piece);
+					
+					CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
+					stroke_img->setPosition(offering_piece_point);
+					result_popup->addChild(stroke_img);
+				}
 			}
 			else if(offering_card_grade == 1)
 			{
 				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																											   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																													   offering_card_stage)-1)->getCString()));
-				n_piece->setGray(true);
-				n_piece->setPosition(offering_piece_point);
-				result_popup->addChild(n_piece);
-				
-				CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
-				stroke_img->setPosition(offering_piece_point);
-				result_popup->addChild(stroke_img);
+				if(offering_card_puzzle_number != 0)
+				{
+					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
+																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
+																														   offering_card_stage)-1)->getCString()));
+					n_piece->setGray(true);
+					n_piece->setPosition(offering_piece_point);
+					result_popup->addChild(n_piece);
+					
+					CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
+					stroke_img->setPosition(offering_piece_point);
+					result_popup->addChild(stroke_img);
+				}
 			}
 			
 			
