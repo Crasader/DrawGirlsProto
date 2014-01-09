@@ -170,10 +170,11 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 			
 			//		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
 			
-			std::string _ccbiName = ("mob_" + ccbiname2 + ".ccbi").c_str();
+			
+			std::string _ccbiName = (ccbiname2 + ".ccbi").c_str();
 			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 			cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(nodeLoader);
-			CCNode* p = reader->readNodeGraphFromFile(_ccbiName.c_str(),this);
+			CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+_ccbiName).c_str(), this);
 			
 			m_juniorSprite = dynamic_cast<CCSprite*>(p);
 			m_juniorAnimation = reader->getAnimationManager();

@@ -17,6 +17,7 @@
 //#include "CumberEmotion.h"
 #include "Jack.h"
 #include "RandomSelector.h"
+#include "StageImgLoader.h"
 
 
 KSSnakeBase::~KSSnakeBase()
@@ -38,8 +39,10 @@ bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		auto fileName = "boss_"+ccbiFile+"_"+"head.ccbi";
-		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
+//		auto fileName = "boss_"+ccbiFile+"_"+"head.ccbi";
+		auto fileName = ccbiFile+"_"+"head.ccbi";
+//		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
+		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+fileName).c_str(), this));
 		m_headAnimationManager = reader->getAnimationManager();
 		this->addChild(m_headImg, 10);
 		reader->release();
@@ -50,8 +53,10 @@ bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 		for(int i=0; i<7; i++)
 		{
 			CCBReader* reader = new CCBReader(nodeLoader);
-			auto fileName = "boss_"+ccbiFile+"_"+"body.ccbi";
-			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
+//			auto fileName = "boss_"+ccbiFile+"_"+"body.ccbi";
+			auto fileName = ccbiFile+"_"+"body.ccbi";
+//			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
+			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+fileName).c_str(), this));
 			m_bodyAnimationManagers.push_back(reader->getAnimationManager());
 			addChild(body, 9 - i);
 			lastZ = 9 - i;
@@ -63,8 +68,10 @@ bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 	
 	{
 		CCBReader* reader = new CCBReader(nodeLoader);
-		auto fileName = "boss_"+ccbiFile+"_"+"tail.ccbi";
-		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
+//		auto fileName = "boss_"+ccbiFile+"_"+"tail.ccbi";
+		auto fileName = ccbiFile+"_"+"tail.ccbi";
+//		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
+		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+fileName).c_str(), this));
 		m_tailAnimationManager = reader->getAnimationManager();
 		this->addChild(m_tailImg, lastZ - 1);
 		reader->release();
