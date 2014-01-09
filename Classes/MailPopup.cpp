@@ -219,7 +219,7 @@ void MailPopup::loadMail ()
 }
 void MailPopup::drawMail (Json::Value obj)
 {
-	m_mailList=obj["list"];
+	m_mailList = obj["list"];
 //	auto app_friends = fInfo["app_friends_info"];
 	std::map<std::string, FriendData> userIdKeyValue;
 	// m_mailList 와 app_friends 를 합쳐야됨.

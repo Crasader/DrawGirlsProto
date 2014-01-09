@@ -74,7 +74,11 @@ bool CountingGame::init(int priority, const std::function<void(CCObject*, SEL_Ca
 	auto ready_go = KS::loadCCBI<CCLayer*>(this, "ui_ready.ccbi");
 	addChild(ready_go.first);
 	ready_go.first->setPosition(ccp(240, 160));
-//	schedule(schedule_selector(CountingGame::createObject)); // 임시.
+//	addChild(KSTimer::create(3.f, [=]()
+//													 {
+//														 schedule(schedule_selector(CountingGame::createObject)); // 임시.
+//														 
+//													 }));
 	return true;
 }
 
@@ -185,9 +189,6 @@ void CountingGame::createObject(float dt)
 																			CCLabelBMFont* result = CCLabelBMFont::create("ANSWER", "etc_font.fnt");
 																			result->setPosition(ccp(240, 160));
 																			addChild(result);
-																			CCSprite* successSprite = CCSprite::create("bonusgame_succes.png");
-																			successSprite->setPosition(ccp(240, 160));
-																			addChild(successSprite);
 																			CCLog("correct!!");
 																			m_menu->setTouchEnabled(false);
 																			unscheduleUpdate();
@@ -198,13 +199,22 @@ void CountingGame::createObject(float dt)
 																															m_menu->setVisible(false);
 																															quiz->setVisible(false);
 																															resultMark->setVisible(false);
+																															CCLabelTTF* confirmPlz = CCLabelTTF::create("확인해보세요.", "", 14.f);
+																															confirmPlz->setPosition(ccp(190, 280));
+																															m_thiz->addChild(confirmPlz);
 																															for(auto i : m_objects)
 																															{
 																																i->setVisible(true);
 																															}
 																															addChild(KSTimer::create(4.f, [=]()
 																																											 {
-																																												 m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
+																																												 CCSprite* successSprite = CCSprite::create("bonusgame_succes.png");
+																																												 successSprite->setPosition(ccp(240, 160));
+																																												 addChild(successSprite);
+																																												 addChild(KSTimer::create(2.f, [=]()
+																																																									{
+																																																										m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
+																																																									}));
 																																											 }));
 																														}));
 																													});
@@ -217,22 +227,28 @@ void CountingGame::createObject(float dt)
 																			CCLabelBMFont* result = CCLabelBMFont::create("WRONG", "etc_font.fnt");
 																			result->setPosition(ccp(240, 160));
 																			addChild(result);
-																			CCSprite* failSprite = CCSprite::create("bonusgame_fail.png");
-																			failSprite->setPosition(ccp(240, 160));
-																			addChild(failSprite);
 																			m_menu->setTouchEnabled(false);
 																			addChild(KSTimer::create(2.f, [=]()
 																															 {
 																																 m_menu->setVisible(false);
 																																 quiz->setVisible(false);
 																																 resultMark->setVisible(false);
+																																 CCLabelTTF* confirmPlz = CCLabelTTF::create("확인해보세요.", "", 14.f);
+																																 confirmPlz->setPosition(ccp(190, 280));
+																																 m_thiz->addChild(confirmPlz);
 																																 for(auto i : m_objects)
 																																 {
 																																	 i->setVisible(true);
 																																 }
 																																 addChild(KSTimer::create(7.f, [=]()
 																																													{
-																																														m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
+																																														CCSprite* failSprite = CCSprite::create("bonusgame_fail.png");
+																																														failSprite->setPosition(ccp(240, 160));
+																																														addChild(failSprite);
+																																														addChild(KSTimer::create(2.f, [=]()
+																																																										 {
+																																																											 m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
+																																																										 }));
 																																													}));
 																															 }));
 																			unscheduleUpdate();
