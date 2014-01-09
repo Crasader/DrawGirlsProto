@@ -426,7 +426,7 @@ unsigned int CardChangePopup::numberOfCellsInTableView(CCTableView *table)
 
 void CardChangePopup::setMonster()
 {
-	CumberShowWindow* t_monster = CumberShowWindow::create(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)), kCumberShowWindowSceneCode_cardChange);
+	CumberShowWindow* t_monster = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
 	t_monster->setPosition(ccp(256,183));
 	main_case->addChild(t_monster);
 }

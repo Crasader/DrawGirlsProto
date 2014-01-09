@@ -84,6 +84,8 @@ private:
 	void durabilityCancelAction(CCObject* sender);
 	void durabilityOkAction(CCObject* sender); // remove noti
 	
+	int getSelectedItemCount();
+	
 	void popupClose();
 	void popupCloseCardSetting();
 	void buySuccessItem(int t_clicked_item_idx, int cnt);

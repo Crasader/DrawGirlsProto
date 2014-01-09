@@ -460,6 +460,9 @@ void PuzzleScene::setPuzzle()
 	
 	bool is_puzzle_clear = true;
 	
+	bool must_be_change_selected_stage_number = false;
+	int enable_stage_number = -1;
+	
 	for(int i=0;i<20;i++)
 	{
 		CCPoint piece_position = ccpAdd(ccp(-puzzle_size.width/2.f, -puzzle_size.height/2.f), ccp((i%5*116+94)/2,((3-i/5)*116+94)/2));
@@ -549,6 +552,7 @@ void PuzzleScene::setPuzzle()
 					t_piece->setTurnInfo(false, false, false);
 					t_piece->initWithPieceInfo(piece_mode, kPieceType_empty, piece_type);
 				}
+				enable_stage_number = stage_number;
 			}
 			else
 			{
@@ -574,6 +578,9 @@ void PuzzleScene::setPuzzle()
 					
 					addShadow(piece_type, piece_position, stage_number);
 				}
+				
+				if(selected_stage_number == stage_number)
+					must_be_change_selected_stage_number = true;
 			}
 		}
 		else
@@ -593,6 +600,12 @@ void PuzzleScene::setPuzzle()
 	{
 		myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number, true);
 		myDSH->saveUserData({kSaveUserData_Key_openPuzzle}, nullptr);
+	}
+	
+	if(must_be_change_selected_stage_number && enable_stage_number != -1)
+	{
+		selected_stage_number = enable_stage_number;
+		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
 	}
 	
 	setPieceClick(selected_stage_number);
@@ -950,6 +963,9 @@ void PuzzleScene::menuAction(CCObject* sender)
 			
 			int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+			
+			mySD->setSilType(selected_stage_number);
+			
 			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 		}
 	}
@@ -1054,6 +1070,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 		{
 			int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+			
+			mySD->setSilType(selected_stage_number);
 			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_challenge)
@@ -1062,6 +1080,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 			{
 				int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+				mySD->setSilType(selected_stage_number);
 				mySGD->setIsMeChallenge(true);
 				mySGD->setMeChallengeTarget(friend_list[selected_friend_idx].user_id, friend_list[selected_friend_idx].nickname);
 				CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
@@ -1287,18 +1306,24 @@ void PuzzleScene::setReward()
 		reward_back->setPosition(ccp(0,0));
 		reward_node->addChild(reward_back);
 		
+		int puzzle_number = NSDS_GI(selected_stage_number, kSDS_SI_puzzle_i);
+		CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, selected_stage_number))->getCString(),
+													 mySGD->getFont().c_str(), 12);
+		stage_label->setPosition(ccp(-18,82));
+		reward_node->addChild(stage_label);
+		
 		for(int i=0;i<3;i++)
 		{
 			int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i+1);
 			
 			CCSprite* step_card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", selected_stage_number, i+1)->getCString()));
-			step_card_img->setScale(0.73f*0.7f);
-			step_card_img->setPosition(ccp(-10, 63-i*58));
+			step_card_img->setScale(0.73f*0.6f);
+			step_card_img->setPosition(ccp(-7, 46-i*52));
 			reward_node->addChild(step_card_img);
 			
 			CCSprite* no_img = CCSprite::create("cardsetting_noimg.png");
-			no_img->setScale(0.8f*0.7f);
-			no_img->setPosition(ccp(-10, 63-i*58));
+			no_img->setScale(0.8f*0.6f);
+			no_img->setPosition(ccp(-7, 46-i*52));
 			reward_node->addChild(no_img);
 			
 			CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
@@ -1311,13 +1336,13 @@ void PuzzleScene::setReward()
 			mini_rank->addChild(step_rank);
 			
 			CCLabelTTF* step_reward = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step_card_number))->getCString(), mySGD->getFont().c_str(), 10);
-			step_reward->setPosition(ccp(35,53-i*58));
+			step_reward->setPosition(ccp(35,36-i*52));
 			reward_node->addChild(step_reward);
 			
 			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0)
 			{
 				CCSprite* t_complete = CCSprite::create("stageinfo_complete.png");
-				t_complete->setPosition(ccpAdd(step_reward->getPosition(), ccp(-15, 5)));
+				t_complete->setPosition(ccpAdd(step_reward->getPosition(), ccp(-3, 8)));
 				reward_node->addChild(t_complete);
 			}
 		}
@@ -1629,7 +1654,7 @@ void PuzzleScene::setTop()
 	top_case->addChild(heart_menu);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(302,top_case->getContentSize().height/2.f));
+	gold_label->setPosition(ccp(302,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
@@ -1646,7 +1671,7 @@ void PuzzleScene::setTop()
 	top_case->addChild(gold_menu);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(391,top_case->getContentSize().height/2.f));
+	ruby_label->setPosition(ccp(391,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
@@ -1663,7 +1688,7 @@ void PuzzleScene::setTop()
 	top_case->addChild(ruby_menu);
 	
 	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(475,top_case->getContentSize().height/2.f));
+	friend_point_label->setPosition(ccp(475,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(friend_point_label);
 	
 	mySGD->setFriendPointLabel(friend_point_label);

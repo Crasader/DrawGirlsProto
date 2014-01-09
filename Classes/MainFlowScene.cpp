@@ -161,10 +161,11 @@ bool MainFlowScene::init()
 		
 		if(recent_step == kTutorialFlowStep_puzzleClick)
 		{
-			if(mySGD->getStar() == 0 && mySGD->getGold() == 0)
+			if(mySGD->getStar() == 0 && mySGD->getGold() == 0 && mySGD->getFriendPoint() == 0)
 			{
 				mySGD->setStar(myDSH->getDefaultRuby());
 				mySGD->setGold(myDSH->getDefaultGold());
+				mySGD->setFriendPoint(myDSH->getDefaultSocial());
 			}
 			
 			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
@@ -858,7 +859,7 @@ void MainFlowScene::setTop()
 	top_case->addChild(heart_menu);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(237,top_case->getContentSize().height/2.f));
+	gold_label->setPosition(ccp(237,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
@@ -875,7 +876,7 @@ void MainFlowScene::setTop()
 	top_case->addChild(gold_menu);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(326,top_case->getContentSize().height/2.f));
+	ruby_label->setPosition(ccp(326,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
@@ -892,7 +893,7 @@ void MainFlowScene::setTop()
 	top_case->addChild(ruby_menu);
 	
 	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(410,top_case->getContentSize().height/2.f));
+	friend_point_label->setPosition(ccp(410,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(friend_point_label);
 	
 	mySGD->setFriendPointLabel(friend_point_label);

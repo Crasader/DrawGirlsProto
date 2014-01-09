@@ -499,7 +499,7 @@ void DataStorageHub::resetDSH ()
 {
 	setIntegerForKey(kDSH_Key_savedStar, default_ruby, false);
 	setIntegerForKey(kDSH_Key_savedGold, default_gold, false);
-	setIntegerForKey(kDSH_Key_savedFriendPoint, 0, false);
+	setIntegerForKey(kDSH_Key_savedFriendPoint, default_social, false);
 	
 	setIntegerForKey(kDSH_Key_heartCnt, 0, false);
 	setIntegerForKey(kDSH_Key_heartTime, 0, false);
