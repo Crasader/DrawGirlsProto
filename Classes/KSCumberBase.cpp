@@ -2057,40 +2057,73 @@ void KSCumberBase::applyAutoBalance()
 	int balanceN = 5;
 	float downLimit = 0.5f;
 	
-	//
+	int clearCount = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt);
+	int puzzleNo = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	
+	
+	
 	ostringstream oss;
 	oss << mySD->getSilType();
 	std::string playcountKey = std::string("playcount_") + oss.str();
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
+	int balPt = clearCount-2;
 	
 	
 	CCLog("#################### autobalance ############################");
-	CCLog("try : %d / autoBalance Start : %d",playCount,autobalanceTry);
+	CCLog("clear : %d / try : %d / autoBalance Start : %d / puzzleNo : %d",clearCount,playCount,balPt,puzzleNo);
 	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
-	if(autobalanceTry < playCount)
-	{
-		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
-		float autoRate = downLimit * exceedPlay / balanceN;
-		m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
-		m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
+	
+	// 연속으로 잘 깰경우 몬스터 능력치 향상시키기
+	
+	
+	if(clearCount>1 && puzzleNo!=1){
 		
+		CCLog("UP monster abillity");
 		
-		CCLog("NOW AUTOBALANCING..");
+		if(balPt>10)balPt=10;
+		m_aiValue += balPt*10;
+		m_aiValue = MIN(100,m_aiValue);
+		
+		m_attackPercent *= 1+balPt/10.f;
+		m_attackPercent = MIN(0.4,m_attackPercent);
+		
+		m_maxSpeed *= 1+balPt/10.f;
+		m_minSpeed *= 1+balPt/10.f;
+		m_minSpeed = MIN(1, m_minSpeed);
+		m_maxSpeed = MIN(3, m_maxSpeed);
+		
 		CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
-		if(autobalanceTry*2 < playCount){
-			float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
-			m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
-			m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
+		CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+		
+		CCLog("#################### autobalance ############################");
+		//m_aiValue , m_attackPercent, m_maxSpeed , m_minSpeed
+	
+	// 계속 실패할경우 능력치 하향하기
+	}else{
+
+		if(autobalanceTry < playCount)
+		{
+			int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
+			float autoRate = downLimit * exceedPlay / balanceN;
+			m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
+			m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
 			
-			CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+			CCLog("DOWN monster abillity");
+			CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
+			if(autobalanceTry*2 < playCount){
+				float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
+				m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
+				m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
+				
+				CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+			}
+			
+			
 		}
 		
-		
+		CCLog("#################### autobalance ############################");
 	}
-	
-	CCLog("#################### autobalance ############################");
-
 }
 void KSCumberBase::settingAI( int ai )
 {
@@ -2152,20 +2185,27 @@ void KSCumberBase::settingHp( float hp )
 
 void KSCumberBase::settingAttackPercent( float ap )
 {
-	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
-	int balanceN = 10;
-	float downLimit = 0.5f;
-	//
-	ostringstream oss;
-	oss << mySD->getSilType();
-	std::string playcountKey = std::string("playcount_") + oss.str();
-	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
-	if(autobalanceTry < playCount)
-	{
-		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
-		ap = MAX(ap * downLimit, ap - downLimit / balanceN * exceedPlay);
-	}
+	CCLog("!!!settingAttackPercent!!! %f",ap);
+	
+//	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
+//	int balanceN = 10;
+//	float downLimit = 0.5f;
+//	//
+//	ostringstream oss;
+//	oss << mySD->getSilType();
+//	std::string playcountKey = std::string("playcount_") + oss.str();
+//	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
+//	
+//	if(autobalanceTry < playCount)
+//	{
+//		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
+//		ap = MAX(ap * downLimit, ap - downLimit / balanceN * exceedPlay);
+//	}
+	
+	
+	
+	//CCLog("!!!settingAttackPercent!!! %f",ap);
 	
 	m_attackPercent = ap;
 }
