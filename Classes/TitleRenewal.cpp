@@ -374,45 +374,109 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 			NSDS_SB(kSDS_GI_monsterInfo_int1_isBoss_b, i, monster_list[i-1]["isBoss"].asBool(), false);
 			NSDS_SS(kSDS_GI_monsterInfo_int1_resourceInfo_ccbiID_s, i, monster_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
 			
-			if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_ccbi_s, i) != monster_list[i-1]["resourceInfo"]["ccbi"].asString())
+			string monster_type = monster_list[i-1]["type"].asString();
+			if(monster_type == "snake")
 			{
-				// check, after download ----------
-				DownloadFile t_df;
-				t_df.size = 100;
-				t_df.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString().c_str();
-				t_df.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + ".ccbi";
-				t_df.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
-				monster_download_list.push_back(t_df);
-				// ================================
+				if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_ccbi_s, i) != monster_list[i-1]["resourceInfo"]["ccbi"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df1;
+					t_df1.size = 100;
+					t_df1.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + "_head.ccbi";
+					t_df1.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + "_head.ccbi";
+					t_df1.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
+					monster_download_list.push_back(t_df1);
+					// ================================
+					
+					// check, after download ----------
+					DownloadFile t_df2;
+					t_df2.size = 100;
+					t_df2.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + "_body.ccbi";
+					t_df2.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + "_body.ccbi";
+					t_df2.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
+					monster_download_list.push_back(t_df2);
+					// ================================
+					
+					// check, after download ----------
+					DownloadFile t_df3;
+					t_df3.size = 100;
+					t_df3.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + "_tail.ccbi";
+					t_df3.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + "_tail.ccbi";
+					t_df3.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
+					monster_download_list.push_back(t_df3);
+					// ================================
+				}
+				
+				NSDS_SS(kSDS_GI_monsterInfo_int1_resourceInfo_imageID_s, i, monster_list[i-1]["resourceInfo"]["imageID"].asString(), false);
+				
+				if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_plist_s, i) != monster_list[i-1]["resourceInfo"]["plist"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df;
+					t_df.size = 100;
+					t_df.img = monster_list[i-1]["resourceInfo"]["plist"].asString().c_str();
+					t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".plist";
+					t_df.key = CCSTR_CWF("mi%d_ri_plist", i)->getCString();
+					monster_download_list.push_back(t_df);
+					// ================================
+				}
+				
+				if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_pvrccz_s, i) != monster_list[i-1]["resourceInfo"]["pvrccz"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df;
+					t_df.size = 100;
+					t_df.img = monster_list[i-1]["resourceInfo"]["pvrccz"].asString().c_str();
+					t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".pvr.ccz";
+					t_df.key = CCSTR_CWF("mi%d_ri_pvrccz", i)->getCString();
+					monster_download_list.push_back(t_df);
+					// ================================
+				}
+				
+				NSDS_SI(kSDS_GI_monsterInfo_int1_resourceInfo_size_i, i, monster_list[i-1]["resourceInfo"]["size"].asInt(), false);
 			}
-			
-			NSDS_SS(kSDS_GI_monsterInfo_int1_resourceInfo_imageID_s, i, monster_list[i-1]["resourceInfo"]["imageID"].asString(), false);
-			
-			if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_plist_s, i) != monster_list[i-1]["resourceInfo"]["plist"].asString())
+			else
 			{
-				// check, after download ----------
-				DownloadFile t_df;
-				t_df.size = 100;
-				t_df.img = monster_list[i-1]["resourceInfo"]["plist"].asString().c_str();
-				t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".plist";
-				t_df.key = CCSTR_CWF("mi%d_ri_plist", i)->getCString();
-				monster_download_list.push_back(t_df);
-				// ================================
+				if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_ccbi_s, i) != monster_list[i-1]["resourceInfo"]["ccbi"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df;
+					t_df.size = 100;
+					t_df.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + ".ccbi";
+					t_df.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + ".ccbi";
+					t_df.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
+					monster_download_list.push_back(t_df);
+					// ================================
+				}
+				
+				NSDS_SS(kSDS_GI_monsterInfo_int1_resourceInfo_imageID_s, i, monster_list[i-1]["resourceInfo"]["imageID"].asString(), false);
+				
+				if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_plist_s, i) != monster_list[i-1]["resourceInfo"]["plist"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df;
+					t_df.size = 100;
+					t_df.img = monster_list[i-1]["resourceInfo"]["plist"].asString().c_str();
+					t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".plist";
+					t_df.key = CCSTR_CWF("mi%d_ri_plist", i)->getCString();
+					monster_download_list.push_back(t_df);
+					// ================================
+				}
+				
+				if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_pvrccz_s, i) != monster_list[i-1]["resourceInfo"]["pvrccz"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df;
+					t_df.size = 100;
+					t_df.img = monster_list[i-1]["resourceInfo"]["pvrccz"].asString().c_str();
+					t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".pvr.ccz";
+					t_df.key = CCSTR_CWF("mi%d_ri_pvrccz", i)->getCString();
+					monster_download_list.push_back(t_df);
+					// ================================
+				}
+				
+				NSDS_SI(kSDS_GI_monsterInfo_int1_resourceInfo_size_i, i, monster_list[i-1]["resourceInfo"]["size"].asInt(), false);
 			}
-			
-			if(NSDS_GS(kSDS_GI_monsterInfo_int1_resourceInfo_pvrccz_s, i) != monster_list[i-1]["resourceInfo"]["pvrccz"].asString())
-			{
-				// check, after download ----------
-				DownloadFile t_df;
-				t_df.size = 100;
-				t_df.img = monster_list[i-1]["resourceInfo"]["pvrccz"].asString().c_str();
-				t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".pvr.ccz";
-				t_df.key = CCSTR_CWF("mi%d_ri_pvrccz", i)->getCString();
-				monster_download_list.push_back(t_df);
-				// ================================
-			}
-			
-			NSDS_SI(kSDS_GI_monsterInfo_int1_resourceInfo_size_i, i, monster_list[i-1]["resourceInfo"]["size"].asInt(), false);
 		}
 		
 		if(monster_download_list.size() > 0)

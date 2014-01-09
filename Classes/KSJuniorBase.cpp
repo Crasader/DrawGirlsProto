@@ -7,7 +7,7 @@
 #include "ProbSelector.h"
 //#include "CumberEmotion.h"
 #include <algorithm>
-
+#include "StageImgLoader.h"
 
 
 bool KSJuniorBase::init(const string& ccbiName)
@@ -24,10 +24,13 @@ bool KSJuniorBase::init(const string& ccbiName)
 	
 	m_directionAngleDegree = m_well512.GetValue(0, 360);
 	
-	std::string _ccbiName = ("mob_" + ccbiname2 + ".ccbi").c_str();
+	
+//	std::string _ccbiName = ("mob_" + ccbiname2 + ".ccbi").c_str();
+	std::string _ccbiName = (ccbiname2 + ".ccbi").c_str();
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
-	CCNode* p = reader->readNodeGraphFromFile(_ccbiName.c_str(),this);
+//	CCNode* p = reader->readNodeGraphFromFile(_ccbiName.c_str(),this);
+	CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+_ccbiName).c_str(), this);
 	m_headImg = dynamic_cast<CCSprite*>(p);
 	
 	
