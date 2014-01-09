@@ -278,7 +278,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	
 	m_onlyKatok->setOpacity(0);
 	m_onlyGameFriend->setOpacity(0);
-	addChild(KSTimer::create(2.f, [=]()
+	addChild(KSTimer::create(0.5f, [=]()
 													 {
 														 for(int i=0; i<m_scoreList.size(); i++)
 														 {
@@ -1490,7 +1490,10 @@ void RankPopup::touchCellIndex(int idx)
 		m_currentSelectSprite = CCSprite::create("rank_cell_select.png");
 		m_currentSelectSprite->setPosition(CCPointZero - ccp(6, 0));
 		m_currentSelectSprite->setAnchorPoint(CCPointZero);
-		rankTableView->cellAtIndex(idx)->addChild(m_currentSelectSprite, 2);
+		if(rankTableView->cellAtIndex(idx))
+		{
+			rankTableView->cellAtIndex(idx)->addChild(m_currentSelectSprite, 2);
+		}
 	}
 	
 }
