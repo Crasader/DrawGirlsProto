@@ -180,6 +180,7 @@ void KSCircleBase::animationNoDirection(float dt)
 		unschedule(schedule_selector(KSCircleBase::animationNoDirection));
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
 	}
+	
 }
 
 void KSCircleBase::onPatternEnd()

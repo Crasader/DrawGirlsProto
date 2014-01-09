@@ -247,6 +247,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setPosition(ccp(0, 0));
 	_menu->setTouchPriority(-300);
+	_menu->setPropaOnBegan(true);
 	_menu->setTag(kTagGameFriendMenu);
 	cell->addChild(_menu, kZorderJoinGameFriendMenu);
 	

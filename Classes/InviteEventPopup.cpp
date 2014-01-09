@@ -52,6 +52,7 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
 	back->addChild(_menu);
+	_menu->setPropaOnBegan(true);
 	_menu->setPosition(ccp(0, 0));
 	
 	

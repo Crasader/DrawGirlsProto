@@ -224,6 +224,10 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 																																											 CCSprite* successSprite = CCSprite::create("bonusgame_succes.png");
 																																											 successSprite->setPosition(ccp(240, 160));
 																																											 addChild(successSprite);
+																																											 CCSprite* reward = CCSprite::create("price_ruby_img.png");
+																																											 reward->setPosition(ccp(205, 133));
+																																											 addChild(reward);
+																																											 reward->setScale(2.f);
 																																											 CCLog("correct!!");
 																																											 m_menu->setTouchEnabled(false);
 																																											 unscheduleUpdate();
@@ -239,7 +243,7 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 																																									 else
 																																									 {
 																																										 m_state = MatchingState::kDiff;
-																																										 addChild(KSTimer::create(1.f, [=]()
+																																										 addChild(KSTimer::create(0.5f, [=]()
 																																																							{
 																																																								m_state = MatchingState::kReady;
 																																																								m_firstSelectSprite->setOpacity(0);
