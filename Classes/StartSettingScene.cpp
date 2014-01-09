@@ -27,6 +27,7 @@
 #include "DurabilityNoti.h"
 #include "MaingameScene.h"
 #include "TutorialFlowStep.h"
+#include "AlertEngine.h"
 
 CCScene* StartSettingScene::scene()
 {
@@ -54,6 +55,8 @@ bool StartSettingScene::init()
     {
         return false;
     }
+	
+	setKeypadEnabled(true);
 	
 	friend_point_popup = NULL;
 	item_title_label = NULL;
@@ -1046,4 +1049,17 @@ string StartSettingScene::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_rentCard)			return_value = "RentCard";
 	
 	return return_value.c_str();
+}
+
+void StartSettingScene::alertAction(int t1, int t2)
+{
+	if(t1 == 1 && t2 == 0)
+	{
+		CCDirector::sharedDirector()->end();
+	}
+}
+
+void StartSettingScene::keyBackClicked()
+{
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(StartSettingScene::alertAction));
 }

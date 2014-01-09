@@ -71,6 +71,10 @@ public:
 	virtual void onEnterTransitionDidFinish();
 	
 	void controlStunOff();
+	virtual ~Maingame()
+	{
+		sub_thumbs->release();
+	}
 		
 private:
 	
@@ -231,6 +235,7 @@ private:
 	
 	CCSprite* character_thumb;
 	CCSprite* boss_thumb;
+	CCArray* sub_thumbs;
 	CCPoint thumb_base_position;
 	CCRenderTexture* thumb_texture;
 	void refreshThumb();

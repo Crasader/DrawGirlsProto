@@ -91,6 +91,9 @@ private:
 	void buySuccessItem(int t_clicked_item_idx, int cnt);
 	
 	string convertToItemCodeToItemName(ITEM_CODE t_code);
+	
+	void alertAction(int t1, int t2);
+	virtual void keyBackClicked();
 };
 
 #endif /* defined(__DGproto__StartSettingScene__) */

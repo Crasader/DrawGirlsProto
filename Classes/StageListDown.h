@@ -42,6 +42,8 @@ private:
 	
 	int puzzle_number;
 	
+	CCSprite* gray;
+	
 	CCLabelTTF* state_ment;
 	CCLabelBMFont* download_state;
 	

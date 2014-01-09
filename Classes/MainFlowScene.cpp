@@ -28,6 +28,7 @@
 #include "TutorialFlowStep.h"
 #include "ClearPopup.h"
 #include "FailPopup.h"
+#include "AlertEngine.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -57,6 +58,7 @@ bool MainFlowScene::init()
         return false;
     }
 	
+	setKeypadEnabled(true);
 	friend_point_popup = NULL;
 	
 	CCSprite* back_img = CCSprite::create("mainflow_back_wall.png");
@@ -286,7 +288,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 	
 	if(recent_step == kTutorialFlowStep_puzzleClick)
 	{
-		if(tag < kMainFlowTableCellTag_buyBase)
+		if(tag < kMainFlowTableCellTag_buyBase && tag - kMainFlowTableCellTag_openBase == 1)
 		{
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_pieceClick);
 			is_menu_enable = false;
@@ -949,4 +951,17 @@ void MainFlowScene::closeFriendPointPopup()
 	friend_point_popup->removeFromParent();
 	friend_point_popup = NULL;
 	is_menu_enable = true;
+}
+
+void MainFlowScene::alertAction(int t1, int t2)
+{
+	if(t1 == 1 && t2 == 0)
+	{
+		CCDirector::sharedDirector()->end();
+	}
+}
+
+void MainFlowScene::keyBackClicked()
+{
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
 }

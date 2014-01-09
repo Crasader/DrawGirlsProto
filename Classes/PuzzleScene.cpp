@@ -24,6 +24,7 @@
 #include "ClearPopup.h"
 #include "FailPopup.h"
 #include "TutorialFlowStep.h"
+#include "AlertEngine.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -44,6 +45,8 @@ bool PuzzleScene::init()
     {
         return false;
     }
+	
+	setKeypadEnabled(true);
 	
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
@@ -1715,4 +1718,17 @@ void PuzzleScene::closeFriendPointPopup()
 	friend_point_popup->removeFromParent();
 	friend_point_popup = NULL;
 	is_menu_enable = true;
+}
+
+void PuzzleScene::alertAction(int t1, int t2)
+{
+	if(t1 == 1 && t2 == 0)
+	{
+		CCDirector::sharedDirector()->end();
+	}
+}
+
+void PuzzleScene::keyBackClicked()
+{
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(PuzzleScene::alertAction));
 }
