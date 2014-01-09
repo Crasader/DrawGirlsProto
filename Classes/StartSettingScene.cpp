@@ -292,7 +292,7 @@ void StartSettingScene::setMain()
 				}
 				else
 				{
-					if(getSelectedItemCount() > 3)
+					if(getSelectedItemCount() >= 3)
 					{
 						is_selected_item.push_back(false);
 					}
@@ -329,7 +329,7 @@ void StartSettingScene::setMain()
 int StartSettingScene::getSelectedItemCount()
 {
 	int selected_item_cnt = 0;
-	for(int k=0;k<selected_item_cnt;k++)
+	for(int k=0;k<is_selected_item.size();k++)
 		if(is_selected_item[k])
 			selected_item_cnt++;
 	
@@ -425,8 +425,11 @@ void StartSettingScene::itemAction(CCObject *sender)
 			ITEM_CODE clicked_item_code = item_list[tag-1];
 			if(clicked_item_code == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0) // nothing friend
 				is_selectable = false;
-			else if(getSelectedItemCount() > 3)
+			else if(getSelectedItemCount() >= 3)
+			{
 				is_selectable = false;
+				addChild(ASPopupView::getCommonNoti(-210, "아이템은 최대 3개까지\n선택이 가능합니다."), kStartSettingZorder_popup);
+			}
 			else
 				is_selectable = true;
 			
@@ -771,6 +774,8 @@ void StartSettingScene::callStart()
 		}
 		else
 		{
+			addChild(ASPopupView::getCommonNoti(-210, "하트가 부족해요."), kStartSettingZorder_popup);
+			
 			if(mySGD->getIsMeChallenge())
 				mySGD->setIsMeChallenge(false);
 			

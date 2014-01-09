@@ -14,6 +14,7 @@
 #include <random>
 #include "TutorialFlowStep.h"
 #include "TouchSuctionLayer.h"
+#include "ASPopupView.h"
 
 enum CardStrengthPopupZorder{
 	kCardStrengthPopupZorder_gray = 1,
@@ -907,6 +908,10 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
+			if(!offering_menu)
+				addChild(ASPopupView::getCommonNoti(-210, "재료 카드를 선택해주세요."), kCardStrengthPopupZorder_popup);
+			else
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kCardStrengthPopupZorder_popup);
 			is_menu_enable = true;
 		}
 	}
@@ -1108,6 +1113,10 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
+			if(!offering_menu)
+				addChild(ASPopupView::getCommonNoti(-210, "재료 카드를 선택해주세요."), kCardStrengthPopupZorder_popup);
+			else
+				addChild(ASPopupView::getCommonNoti(-210, "골드가 부족합니다."), kCardStrengthPopupZorder_popup);
 			is_menu_enable = true;
 		}
 	}

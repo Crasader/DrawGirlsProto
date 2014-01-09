@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "CCMenuLambda.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -45,7 +46,7 @@ private:
 	void myInit(int t_touch_priority, function<void(CCObject*)> t_selector)
 	{
 		touch_priority = t_touch_priority;
-		CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
 		case_back->setPosition(CCPointZero);
 		addChild(case_back);
 		
@@ -69,9 +70,9 @@ private:
 		control_tutorial->setPosition(ccp(0,0));
 		clipper->addChild(control_tutorial);
 		
-		CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
-		title_img->setPosition(ccp(0, 111));
-		addChild(title_img);
+		CCLabelTTF* title_label = CCLabelTTF::create("게임 설명", mySGD->getFont().c_str(), 15);
+		title_label->setPosition(ccp(0, 111));
+		addChild(title_label);
 		
 		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
 		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
