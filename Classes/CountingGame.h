@@ -12,7 +12,7 @@ USING_NS_CC;
 class CountingGame : public CCLayer
 {
 public:
-	CountingGame() : m_remainTime(5)
+	CountingGame() : m_remainTime(10)
 	{}
 	virtual ~CountingGame()
 	{

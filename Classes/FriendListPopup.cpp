@@ -38,6 +38,7 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	addChild(back2, 0);
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
+	_menu->setPropaOnBegan(true);
 	addChild(_menu);
 	_menu->setPosition(ccp(0, 0));
 	

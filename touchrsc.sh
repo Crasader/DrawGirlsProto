@@ -1,2 +1,2 @@
-find ./Resources/res_img/ -exec touch {} +
-find ./Resources/res_sound/ -exec touch {} +
+find ./Resources/res_img/ -type d -exec touch {} +
+find ./Resources/res_sound/ -type d  -exec touch {} +

@@ -139,7 +139,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	_menu->setTouchPriority(-200);
 	addChild(_menu, kRP_Z_back + 1);
 	_menu->setPosition(ccp(0, 0));
-	
+	_menu->setPropaOnBegan(true);
 	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
 															   "cardsetting_close.png", "cardsetting_close.png",
 															   [=](CCObject*){
@@ -217,7 +217,11 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 if(m_rankCategory != RankCategory::kKnownFriend)
 		 {
 			 m_rankCategory = RankCategory::kKnownFriend;
-			 rankTableView->removeFromParent();
+			 if(rankTableView)
+			 {
+				 rankTableView->removeFromParent();
+				 rankTableView = nullptr;
+			 }
 			 m_currentSelectSprite = nullptr;
 			 loadRank();
 			 m_onlyKatok->setOpacity(255);
@@ -239,7 +243,11 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 if(m_rankCategory != RankCategory::kUnknownFriend)
 		 {
 			 m_rankCategory = RankCategory::kUnknownFriend;
-			 rankTableView->removeFromParent();
+			 if(rankTableView)
+			 {
+				 rankTableView->removeFromParent();
+				 rankTableView = nullptr;
+			 }
 			 m_currentSelectSprite = nullptr;
 			 loadRank();
 			 m_onlyKatok->setOpacity(0);
@@ -260,7 +268,11 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 if(m_rankCategory != RankCategory::kTotalFriend)
 		 {
 			 m_rankCategory = RankCategory::kTotalFriend;
-			 rankTableView->removeFromParent();
+			 if(rankTableView)
+			 {
+				 rankTableView->removeFromParent();
+				 rankTableView = nullptr;
+			 }
 			 m_currentSelectSprite = nullptr;
 			 loadRank();
 			 m_onlyKatok->setOpacity(0);
@@ -1462,7 +1474,7 @@ void RankPopup::touchCellIndex(int idx)
 		used_card_img->setPosition(ccp(99.f,156.f));
 		addChild(used_card_img, kRP_Z_usedCardImg);
 	}
-	
+//	[a imageNamed:]
 	
 	if(m_highScore)
 	{
@@ -1474,7 +1486,6 @@ void RankPopup::touchCellIndex(int idx)
 	m_highScore =
 	CCLabelBMFont::create(
 						  scoreStr.c_str(), "mb_white_font.fnt");
-	
 	m_highScore->setScale(0.5f);
 	m_highScore->setPosition(ccp(216 / 2.f + 5, 86 / 2.f + 7));
 	addChild(m_highScore, 3);
