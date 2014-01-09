@@ -997,6 +997,8 @@ void StartSettingScene::buySuccessItem(int t_clicked_item_idx, int cnt)
 	
 	if(is_selectable)
 	{
+		CCSprite* selected_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_selected);
+		selected_img->setVisible(true);
 		((CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_clicked))->setVisible(true);
 		is_selected_item[t_clicked_item_idx] = true;
 	}
