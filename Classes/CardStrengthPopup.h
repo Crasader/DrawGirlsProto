@@ -24,6 +24,7 @@ enum CardStrengthAlign{
 	kCardStrengthAlign_takeReverse
 };
 class CardSortInfo;
+class TouchSuctionLayer;
 class CardStrengthPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -50,6 +51,8 @@ private:
 	CCSprite* target_card;
 	CCMenu* offering_menu;
 	CCSprite* strength_probability;
+	
+	TouchSuctionLayer* result_popup;
 	
 	int recent_offering_number;
 	

@@ -15,6 +15,7 @@
 #include "PuzzleScene.h"
 #include "KSUtil.h"
 #include "StageImgLoader.h"
+#include "ASPopupView.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -301,6 +302,10 @@ void ShopPopup::cellAction(CCObject* sender)
 		}
 		else
 		{
+			if(condition_type == "gold")
+				addChild(ASPopupView::getCommonNoti(-210, "골드가 부족합니다."), kSP_Z_popup);
+			else if(condition_type == "ruby")
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 			CCLog("not enough condition");
 		}
 		
@@ -710,6 +715,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -746,6 +752,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -787,6 +794,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -823,6 +831,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -864,6 +873,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -900,6 +910,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -941,6 +952,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -977,6 +989,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -1018,6 +1031,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -1054,6 +1068,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -1095,6 +1110,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
@@ -1131,6 +1147,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
+				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
 			}
 		}
