@@ -200,14 +200,14 @@ void Maingame::finalSetting()
 	
 	startScene();
 	
-	float thumb_scale = 0.2f;
+	float thumb_scale = 0.17f;
 	
 	thumb_texture = CCRenderTexture::create(320, 430);
 	thumb_texture->setScale(thumb_scale);
-	thumb_texture->setPosition(ccp(65-160.f*thumb_scale,myDSH->ui_top-75-215.f*thumb_scale));
+	thumb_texture->setPosition(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale));
 	addChild(thumb_texture, myUIZorder);
 	
-	thumb_base_position = ccp(65-320.f*thumb_scale,myDSH->ui_top-75-430.f*thumb_scale);
+	thumb_base_position = ccp(58-320.f*thumb_scale,myDSH->ui_top-70-430.f*thumb_scale);
 	
 	CCDelayTime* thumb_delay = CCDelayTime::create(0.3f);
 	CCCallFunc* thumb_call = CCCallFunc::create(this, callfunc_selector(Maingame::refreshThumb));
@@ -917,7 +917,7 @@ void Maingame::moveGamePosition( CCPoint t_p )
 	//		if(!myGD->is_setted_jack)// || myGD->game_step == kGS_unlimited)
 	game_node->setPosition(getObjectToGameNodePosition(t_p));
 	if(character_thumb)
-		character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), 0.2f)));
+		character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), thumb_texture->getScale())));
 }
 
 CCPoint Maingame::getGameNodePosition()
@@ -1242,7 +1242,7 @@ void Maingame::refreshThumb()
 	thumb_texture->end();
 	
 	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
-	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), 0.2f)));
+	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_texture->getScale())));
 	
 	CCArray* sub_array = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
 	while(sub_thumbs->count() > sub_array->count())
@@ -1264,7 +1264,7 @@ void Maingame::refreshThumb()
 	{
 		CCNode* sub_position_img = (CCNode*)sub_thumbs->objectAtIndex(i);
 		CCNode* sub_pointer = (CCNode*)sub_array->objectAtIndex(i);
-		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), 0.2f)));//thumb_scale)));
+		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
 	}
 	
 	t_vs->visit();
