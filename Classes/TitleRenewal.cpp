@@ -15,6 +15,7 @@
 #include "KSUtil.h"
 #include <chrono>
 #include "MainFlowScene.h"
+#include "TutorialFlowStep.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -219,6 +220,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setSPGetTime(result_data["SPGetTime"].asInt());
 		mySGD->setSPGetHeart(result_data["SPGetHeart"].asInt());
 		mySGD->setGachaOnePercentFee(result_data["gachaOnePercentFee"].asInt());
+		myDSH->setDefaultSocial(result_data["defaultSocial"].asInt());
 		
 		mySGD->setBonusItemCnt(kIC_fast, result_data["bonusItemCntFast"].asInt());
 		mySGD->setBonusItemCnt(kIC_critical, result_data["bonusItemCntCritical"].asInt());
@@ -446,6 +448,10 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		myDSH->resetDSH();
 		card_data_load_list.clear();
 		myDSH->loadAllUserData(result_data, card_data_load_list);
+		
+		if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) != kTutorialFlowStep_puzzleClick)
+			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
+		
 		mySGD->resetHasGottenCards();
 		
 		if(card_data_load_list.size() > 0)

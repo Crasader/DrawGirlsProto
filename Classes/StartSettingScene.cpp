@@ -122,7 +122,7 @@ void StartSettingScene::setMain()
 	
 	int stage_number;
 	
-	if(mySGD->is_before_selected_event_stage || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
+	if(mySGD->is_before_selected_event_stage)
 	{
 		stage_number = mySD->getSilType();
 		
@@ -134,14 +134,13 @@ void StartSettingScene::setMain()
 	}
 	else
 	{
-		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-		stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+		stage_number = mySD->getSilType();
+		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
+		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
-		mySD->setSilType(stage_number);
-		
-		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height-62));
-		main_case->addChild(stage_number_label);
+		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height-62));
+		main_case->addChild(piece_number_label);
 	}
 	
 	CCLabelTTF* mission_label = CCLabelTTF::create(mySD->getConditionContent(stage_number).c_str(), mySGD->getFont().c_str(), 13);
@@ -293,8 +292,15 @@ void StartSettingScene::setMain()
 				}
 				else
 				{
-					is_selected_item.push_back(true);
-					selected_img->setVisible(true);
+					if(getSelectedItemCount() > 3)
+					{
+						is_selected_item.push_back(false);
+					}
+					else
+					{
+						is_selected_item.push_back(true);
+						selected_img->setVisible(true);
+					}
 				}
 			}
 			else
@@ -318,6 +324,16 @@ void StartSettingScene::setMain()
 	CCMenu* start_menu = CCMenu::createWithItem(start_item);
 	start_menu->setPosition(ccp(321, 45));
 	main_case->addChild(start_menu);
+}
+
+int StartSettingScene::getSelectedItemCount()
+{
+	int selected_item_cnt = 0;
+	for(int k=0;k<selected_item_cnt;k++)
+		if(is_selected_item[k])
+			selected_item_cnt++;
+	
+	return selected_item_cnt;
 }
 
 void StartSettingScene::changeCard()
@@ -408,6 +424,8 @@ void StartSettingScene::itemAction(CCObject *sender)
 			bool is_selectable = false;
 			ITEM_CODE clicked_item_code = item_list[tag-1];
 			if(clicked_item_code == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0) // nothing friend
+				is_selectable = false;
+			else if(getSelectedItemCount() > 3)
 				is_selectable = false;
 			else
 				is_selectable = true;
@@ -648,7 +666,7 @@ void StartSettingScene::setTop()
 	top_case->addChild(heart_menu);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(302,top_case->getContentSize().height/2.f));
+	gold_label->setPosition(ccp(302,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
@@ -665,7 +683,7 @@ void StartSettingScene::setTop()
 	top_case->addChild(gold_menu);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(391,top_case->getContentSize().height/2.f));
+	ruby_label->setPosition(ccp(391,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
@@ -682,7 +700,7 @@ void StartSettingScene::setTop()
 	top_case->addChild(ruby_menu);
 	
 	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(475,top_case->getContentSize().height/2.f));
+	friend_point_label->setPosition(ccp(475,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(friend_point_label);
 	
 	mySGD->setFriendPointLabel(friend_point_label);
@@ -951,7 +969,6 @@ void StartSettingScene::buySuccessItem(int t_clicked_item_idx, int cnt)
 {
 	myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_idx], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_idx])+cnt);
 	int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_idx]);
-	is_selected_item[t_clicked_item_idx] = true;
 	
 	myLog->addLog(kLOG_buyItem_s, -1, convertToItemCodeToItemName(item_list[t_clicked_item_idx]).c_str());
 	
@@ -972,6 +989,8 @@ void StartSettingScene::buySuccessItem(int t_clicked_item_idx, int cnt)
 	bool is_selectable = false;
 	ITEM_CODE clicked_item_code = item_list[t_clicked_item_idx];
 	if(clicked_item_code == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0) // nothing friend
+		is_selectable = false;
+	else if(getSelectedItemCount() > 0)
 		is_selectable = false;
 	else
 		is_selectable = true;

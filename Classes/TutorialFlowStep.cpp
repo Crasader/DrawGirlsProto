@@ -30,6 +30,8 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 	recent_step = t_step;
 	if(t_step == kTutorialFlowStep_puzzleClick)
 	{
+		setTouchEnabled(true);
+		
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 		if(screen_scale_x < 1.f)
@@ -40,36 +42,23 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		CCSprite* gray = CCSprite::create("back_gray.png");
 		gray->setScaleX(screen_scale_x);
 		gray->setScaleY(screen_scale_y);
+		gray->setPosition(ccp(240,160));
+		addChild(gray);
 		
-		CCSprite* stencil_node = CCSprite::create("tutorial_clipping.png");
-		stencil_node->setScale(0.8f);
-		stencil_node->setPosition(ccp(-170+(-480.f*screen_scale_x+480.f)/2.f,10));
-		CCClippingNode* cliping_node = CCClippingNode::create(stencil_node);
-		float change_scale = 1.f;
-		CCPoint change_origin = ccp(0,0);
-		if(screen_scale_x > 1.f)
-		{
-			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
-			change_scale = screen_scale_x;
-		}
-		if(screen_scale_y > 1.f)
-			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
-		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
-		cliping_node->addChild(gray);
-		cliping_node->setAlphaThreshold(0.05f);
-		cliping_node->setInverted(true);
-		cliping_node->setPosition(ccp(240,160));
-		addChild(cliping_node);
+		CCSprite* girl_img = CCSprite::create("tutorial_girl.png");
+		girl_img->setAnchorPoint(ccp(0.5,0));
+		girl_img->setPosition(ccp(170, -(screen_scale_y-1.f)*320.f/2.f));
+		addChild(girl_img);
 		
-		CCSprite* arrow = CCSprite::create("tutorial_arrow.png");
-		arrow->setPosition(ccpAdd(cliping_node->getPosition(), ccpAdd(stencil_node->getPosition(), ccp(70,0))));
-		addChild(arrow);
+		CCSprite* toke_box = CCSprite::create("tutorial_girlbox.png");
+		toke_box->setAnchorPoint(ccp(0,3.f/4.f));
+		toke_box->setPosition(ccp(140, 150));
+		girl_img->addChild(toke_box);
 		
-		CCLabelTTF* script = CCLabelTTF::create("퍼즐테마를 선택해주세요.", mySGD->getFont().c_str(), 13);
-		script->setAnchorPoint(ccp(0,0.5));
-		script->setPosition(ccpAdd(arrow->getPosition(), ccp(arrow->getContentSize().width/2.f+2, 0)));
-		addChild(script);
+		CCLabelTTF* start_ment = CCLabelTTF::create("반가워요!\n지금부터 튜토리얼을 시작합니다.", mySGD->getFont().c_str(), 13);
+		start_ment->setColor(ccBLACK);
+		start_ment->setPosition(ccp(120,43));
+		toke_box->addChild(start_ment);
 	}
 	else if(t_step == kTutorialFlowStep_pieceClick)
 	{
@@ -833,7 +822,52 @@ void TutorialFlowStepLayer::ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent)
 }
 void TutorialFlowStepLayer::ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent)
 {
-	if(recent_step == kTutorialFlowStep_pieceType)
+	if(recent_step == kTutorialFlowStep_puzzleClick)
+	{
+		setTouchEnabled(false);
+		removeAllChildren();
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+		
+		CCSprite* gray = CCSprite::create("back_gray.png");
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(screen_scale_y);
+		
+		CCSprite* stencil_node = CCSprite::create("tutorial_clipping.png");
+		stencil_node->setScale(0.8f);
+		stencil_node->setPosition(ccp(-170+(-480.f*screen_scale_x+480.f)/2.f,10));
+		CCClippingNode* cliping_node = CCClippingNode::create(stencil_node);
+		float change_scale = 1.f;
+		CCPoint change_origin = ccp(0,0);
+		if(screen_scale_x > 1.f)
+		{
+			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+			change_scale = screen_scale_x;
+		}
+		if(screen_scale_y > 1.f)
+			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+		cliping_node->addChild(gray);
+		cliping_node->setAlphaThreshold(0.05f);
+		cliping_node->setInverted(true);
+		cliping_node->setPosition(ccp(240,160));
+		addChild(cliping_node);
+		
+		CCSprite* arrow = CCSprite::create("tutorial_arrow.png");
+		arrow->setPosition(ccpAdd(cliping_node->getPosition(), ccpAdd(stencil_node->getPosition(), ccp(70,0))));
+		addChild(arrow);
+		
+		CCLabelTTF* script = CCLabelTTF::create("퍼즐테마를 선택해주세요.", mySGD->getFont().c_str(), 13);
+		script->setAnchorPoint(ccp(0,0.5));
+		script->setPosition(ccpAdd(arrow->getPosition(), ccp(arrow->getContentSize().width/2.f+2, 0)));
+		addChild(script);
+	}
+	else if(recent_step == kTutorialFlowStep_pieceType)
 	{
 		myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_pieceClick2);
 		
@@ -849,6 +883,40 @@ void TutorialFlowStepLayer::ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent)
 	else if(recent_step == kTutorialFlowStep_upgradeScript)
 	{
 		myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
+		recent_step = kTutorialFlowStep_end;
+		
+		removeAllChildren();
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+		
+		CCSprite* gray = CCSprite::create("back_gray.png");
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(screen_scale_y);
+		gray->setPosition(ccp(240,160));
+		addChild(gray);
+		
+		CCSprite* girl_img = CCSprite::create("tutorial_girl.png");
+		girl_img->setAnchorPoint(ccp(0.5,0));
+		girl_img->setPosition(ccp(170, -(screen_scale_y-1.f)*320.f/2.f));
+		addChild(girl_img);
+		
+		CCSprite* toke_box = CCSprite::create("tutorial_girlbox.png");
+		toke_box->setAnchorPoint(ccp(0,3.f/4.f));
+		toke_box->setPosition(ccp(140, 150));
+		girl_img->addChild(toke_box);
+		
+		CCLabelTTF* start_ment = CCLabelTTF::create("수고하셨어요!\n이제 친구들과 경쟁도 하면서\n즐거운 게임되세요~!", mySGD->getFont().c_str(), 13);
+		start_ment->setColor(ccBLACK);
+		start_ment->setPosition(ccp(120,43));
+		toke_box->addChild(start_ment);
+	}
+	else if(recent_step == kTutorialFlowStep_end)
+	{
 		removeFromParent();
 	}
 }
