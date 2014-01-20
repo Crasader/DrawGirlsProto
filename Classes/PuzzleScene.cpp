@@ -942,10 +942,10 @@ void PuzzleScene::menuAction(CCObject* sender)
 		}
 		if(selected_card_number > 0 && recent_get_card_cnt >= 2)
 		{
+			is_action = false;
 			int tag = ((CCNode*)sender)->getTag();
 			if(tag == kPuzzleMenuTag_cancel)
 			{
-				is_action = false;
 				is_menu_enable = false;
 				myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_cardCollectionClick);
 				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());

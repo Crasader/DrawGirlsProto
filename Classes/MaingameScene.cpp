@@ -862,12 +862,19 @@ CCPoint Maingame::getObjectToGameNodePosition( CCPoint t_p )
 {
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;
-	if(y_value > 60)																		y_value = 60;
-	else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)			y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+	
+	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+	{
+		if(y_value > 60)																		y_value = 60;
+		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)			y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+	}
 	
 	float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
-	if(x_value > myGD->boarder_value)														x_value = myGD->boarder_value;
-	else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+	{
+		if(x_value > myGD->boarder_value)														x_value = myGD->boarder_value;
+		else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+	}
 
 	CCPoint after_position;
 
