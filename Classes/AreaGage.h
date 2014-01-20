@@ -10,24 +10,33 @@
 #define __DrawingJack__AreaGage__
 
 #include "cocos2d.h"
-#include "GageBar.h"
+
+USING_NS_CC;
 
 class AreaGage : public CCNode
 {
 public:
-	static AreaGage* create();
+	static AreaGage* create(float t_clear_percent);
 	
 	virtual void setPosition(CCPoint t_p);
 	
 	void setPercentage(float t_p);
+	void onChange();
 	
 private:
-	GageBar* green_bar;
-	CCSprite* area_icon;
+	CCSprite* gage_back;
+	CCProgressTimer* gage_bar1;
+	CCProgressTimer* gage_bar2;
+	CCProgressTimer* gage_bar3;
+	CCSprite* gage_case;
 	
+	CCSprite* star1;
+	CCSprite* star2;
+	
+	float clear_percent;
 	float m_percentage;
 	
-	void myInit();
+	void myInit(float t_clear_percent);
 };
 
 #endif /* defined(__DrawingJack__AreaGage__) */
