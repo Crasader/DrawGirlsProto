@@ -36,6 +36,7 @@ struct DecreaseOp : public PassiveOp<_Tp>
 
 
 
+
 template <class _Tp>
 struct SubtractOp : public PassiveOp<_Tp>
 {
@@ -1134,6 +1135,7 @@ void KSCumberBase::cumberAttack(float dt)
 	}
 	//	CCLog("%f %f %d", distance, gainPercent, m_crashCount);
 	bool crashAttack = false;
+	bool distanceFury = false; // 거리로 인한 분노인가.
 	
 	//거리분노룰 - 분노카운터와 리어택카운터가 0이상일때, 보스-유저의 거리가 떨어져있으면 부수기공격
 	if(m_furyCnt > 0 && m_reAttackCnt > 0){
@@ -1147,7 +1149,7 @@ void KSCumberBase::cumberAttack(float dt)
 			if(w == 0)
 			{
 				crashAttack = true;
-				
+				distanceFury = true;
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
 				m_furyCnt = -400;
 			}
@@ -1272,157 +1274,176 @@ void KSCumberBase::cumberAttack(float dt)
 			"percent" : 1,
 			"target" : "no"})";
 		
-		Json::Reader reader;
-		Json::Value attackCode;
-		reader.parse(patternData, attackCode);
-		int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
-		if(ret == 1)
-		{
-			attackBehavior(attackCode);
-		}
-	}
-	else if(!selectedAttacks.empty())
-	{
-		Json::Value attackCode;
-		bool searched = false;
-		int searchCount = 0;
-		
-		// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
-		
-		ProbSelector probSel;
-		
-		// 바깥쪽으로 얼마나 먹었는지를...
-		int externalOutlineCount = 0;
-		for(int x=mapLoopRange::mapWidthInnerBegin; x != mapLoopRange::mapWidthInnerEnd; x++)
-		{
-			if(myGD->mapState[x][mapLoopRange::mapHeightInnerBegin] == mapOldline)
-				externalOutlineCount++;
-			if(myGD->mapState[x][mapLoopRange::mapHeightInnerEnd-1] == mapOldline)
-				externalOutlineCount++;
-		}
-		for(int y=mapLoopRange::mapHeightInnerBegin; y != mapLoopRange::mapHeightInnerEnd; y++)
-		{
-			if(myGD->mapState[mapLoopRange::mapWidthInnerBegin][y] == mapOldline)
-				externalOutlineCount++;
-			if(myGD->mapState[mapLoopRange::mapWidthInnerEnd - 1][y] == mapOldline)
-				externalOutlineCount++;
-		}
-		
-		
-		
-		float notCrashSum = 0; // 크래시가 아닌것의 합
-		int crashNumber = 0;   // 부수기 공격의 개수
-		bool bossIsClosed_ = bossIsClosed();
-		for(auto& i : selectedAttacks)
-		{
-			if(i["atype"].asString() != "crash")
-			{
-				notCrashSum += i["percent"].asDouble();
-			}
-			else
-			{
-				crashNumber++;
-			}
-		}
-		float patternMax = 2 * notCrashSum / crashNumber;
-		for(auto& i : selectedAttacks)
-		{
-			KS::KSLog("% percent!!!", i["percent"].asDouble());
-			if(i["pattern"].asString() == "1017")
-			{
-				if(externalOutlineCount >= 150) // 가장자리 위주로 먹었다면...
-				{
-					float notAlongSum = 0;
-					for(auto& i : selectedAttacks)
-					{
-						if(i["pattern"].asString() != "1017")
-						{
-							notAlongSum += i["percent"].asDouble();
-						}
-					}
-					float alongMin = i["percent"].asFloat();
-					float alongMax = notAlongSum / 1.5f;
-					if(alongMax >= alongMin)
-					{
-						probSel.pushProb(i["percent"].asFloat() + (alongMax - i["percent"].asFloat()) * getAiValue() / 100.f);
-					}
-					else
-					{
-						probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
-					}
-				}
-				else
-				{
-					probSel.pushProb(i["percent"].asFloat());
-				}
-			}
-			else if(i["atype"].asString() == "crash")
-			{
-				float patternMin = i["percent"].asFloat();
-				if(bossIsClosed_) // 보스가 갇힘.
-				{
-					if(patternMax >= patternMin)
-					{
-						probSel.pushProb(i["percent"].asFloat() + (patternMax - i["percent"].asFloat()) * getAiValue() / 100.f);
-					}
-					else
-					{
-						probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
-					}
-				}
-				else
-					probSel.pushProb(i["percent"].asFloat());
-			}
-			else
-			{
-				probSel.pushProb(i["percent"].asFloat());
-			}
-		}
-		CCLog("externalCnt %d", externalOutlineCount);
-		while(!searched)
-		{
-			searchCount++;
-			//			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
-			int idx = probSel.getResult();
-			
-			if(idx<0){
-				searched = false;
-				break;
-			}
-			
-			attackCode = selectedAttacks[idx];
-			searched = true;
-			
-			if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
-				searched = false;
-			if(attackCode["pattern"].asString() == "109" && m_state == CUMBERSTATEFURY)
-				searched = false;
-			if(searchCount >= 30)
-			{
-				searched = false;
-				break;
-			}
-		}
-		
-		if(searched)
-		{
-			KS::KSLog("%", attackCode);
-			Json::FastWriter fw;
-			std::string patternData = fw.write(attackCode);
+			Json::Reader reader;
+			Json::Value attackCode;
+			reader.parse(patternData, attackCode);
 			int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
 			if(ret == 1)
 			{
 				attackBehavior(attackCode);
-				
-				//한번 공격후 3초간 재공격 하지 않음.
-				m_reAttackCnt = -180;
 			}
 		}
-		
+		else if(!selectedAttacks.empty())
+		{
+			ProbSelector teleportProb = {1,2};
+			if(teleportProb.getResult() == 0)
+			{
+				
+				std::string patternData = R"({
+				"atype" : "special",
+				"pattern" : "1007",
+				"percent" : 1,
+				"target" : "no"})";
+			
+				Json::Reader reader;
+				Json::Value attackCode;
+				reader.parse(patternData, attackCode);
+				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+				if(ret == 1)
+				{
+					attackBehavior(attackCode);
+				}
+			}
+			else
+			{
+				Json::Value attackCode;
+				bool searched = false;
+				int searchCount = 0;
+				
+				// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
+				
+				ProbSelector probSel;
+				
+				// 바깥쪽으로 얼마나 먹었는지를...
+				int externalOutlineCount = 0;
+				for(int x=mapLoopRange::mapWidthInnerBegin; x != mapLoopRange::mapWidthInnerEnd; x++)
+				{
+					if(myGD->mapState[x][mapLoopRange::mapHeightInnerBegin] == mapOldline)
+						externalOutlineCount++;
+					if(myGD->mapState[x][mapLoopRange::mapHeightInnerEnd-1] == mapOldline)
+						externalOutlineCount++;
+				}
+				for(int y=mapLoopRange::mapHeightInnerBegin; y != mapLoopRange::mapHeightInnerEnd; y++)
+				{
+					if(myGD->mapState[mapLoopRange::mapWidthInnerBegin][y] == mapOldline)
+						externalOutlineCount++;
+					if(myGD->mapState[mapLoopRange::mapWidthInnerEnd - 1][y] == mapOldline)
+						externalOutlineCount++;
+				}
+				
+				
+				
+				float notCrashSum = 0; // 크래시가 아닌것의 합
+				int crashNumber = 0;   // 부수기 공격의 개수
+				bool bossIsClosed_ = bossIsClosed();
+				for(auto& i : selectedAttacks)
+				{
+					if(i["atype"].asString() != "crash")
+					{
+						notCrashSum += i["percent"].asDouble();
+					}
+					else
+					{
+						crashNumber++;
+					}
+				}
+				float patternMax = 2 * notCrashSum / crashNumber;
+				for(auto& i : selectedAttacks)
+				{
+					KS::KSLog("% percent!!!", i["percent"].asDouble());
+					if(i["pattern"].asString() == "1017")
+					{
+						if(externalOutlineCount >= 150) // 가장자리 위주로 먹었다면...
+						{
+							float notAlongSum = 0;
+							for(auto& i : selectedAttacks)
+							{
+								if(i["pattern"].asString() != "1017")
+								{
+									notAlongSum += i["percent"].asDouble();
+								}
+							}
+							float alongMin = i["percent"].asFloat();
+							float alongMax = notAlongSum / 1.5f;
+							if(alongMax >= alongMin)
+							{
+								probSel.pushProb(i["percent"].asFloat() + (alongMax - i["percent"].asFloat()) * getAiValue() / 100.f);
+							}
+							else
+							{
+								probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
+							}
+						}
+						else
+						{
+							probSel.pushProb(i["percent"].asFloat());
+						}
+					}
+					else if(i["atype"].asString() == "crash")
+					{
+						float patternMin = i["percent"].asFloat();
+						if(bossIsClosed_) // 보스가 갇힘.
+						{
+							if(patternMax >= patternMin)
+							{
+								probSel.pushProb(i["percent"].asFloat() + (patternMax - i["percent"].asFloat()) * getAiValue() / 100.f);
+							}
+							else
+							{
+								probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
+							}
+						}
+						else
+							probSel.pushProb(i["percent"].asFloat());
+					}
+					else
+					{
+						probSel.pushProb(i["percent"].asFloat());
+					}
+				}
+				CCLog("externalCnt %d", externalOutlineCount);
+				while(!searched)
+				{
+					searchCount++;
+					//			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
+					int idx = probSel.getResult();
+					
+					if(idx<0){
+						searched = false;
+						break;
+					}
+					
+					attackCode = selectedAttacks[idx];
+					searched = true;
+					
+					if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
+						searched = false;
+					if(attackCode["pattern"].asString() == "109" && m_state == CUMBERSTATEFURY)
+						searched = false;
+					if(searchCount >= 30)
+					{
+						searched = false;
+						break;
+					}
+				}
+				
+				if(searched)
+				{
+					KS::KSLog("%", attackCode);
+					Json::FastWriter fw;
+					std::string patternData = fw.write(attackCode);
+					int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+					if(ret == 1)
+					{
+						attackBehavior(attackCode);
+						
+						//한번 공격후 3초간 재공격 하지 않음.
+						m_reAttackCnt = -180;
+					}
+				}
+			}
+		}
 	}
-	
-	
-}
 
 
 
@@ -1495,6 +1516,7 @@ void KSCumberBase::bossDieBomb(float dt)
 			CCPoint t = getPosition();
 			ret.first->setPosition(t);
 			getParent()->addChild(ret.first, 11);
+			this->setVisible(false);
 		}
 	}
 }
@@ -1714,7 +1736,11 @@ void KSCumberBase::onJackDrawLine()
 {
 	ProbSelector ps({getAiValue(), 100.f - getAiValue()});
 	int r = ps.getResult();
-	if(r == 0)
+	CCLog("%d %d", myGD->getJackPoint().x, myGD->getJackPoint().y);
+	CCLog("%f %f", getPosition().x, getPosition().y);
+	CCLog("distance = %f", ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition()));
+	float dis = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
+	if(r == 0 && dis >= 55.f) // 너무 가까우면 안따라가게 함.
 	{
 		m_drawMovement = FOLLOW_TYPE;
 	}
@@ -1789,7 +1815,6 @@ void KSCumberBase::setGameover()
 	//			scheduleOnce(schedule_selector(ThisClassType::bossDieBomb), m_well512.GetFloatValue(0.3f, 1.f));
 	//		}
 	
-	this->setVisible(false);
 }
 
 void KSCumberBase::movingAndCrash( float dt )
