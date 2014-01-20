@@ -315,7 +315,7 @@ void KSCumberBase::straightMoving(float dt)
 						degree = m_directionAngleDegree + 90;
 						break;
 					case 2:
-						degree = m_directionAngleDegree + 90;
+						degree = m_directionAngleDegree - 90;
 						break;
 				}
 			}
@@ -1121,6 +1121,144 @@ void KSCumberBase::snakeMoving(float dt)
 	m_snake.lastMovingTime = m_scale.timer;
 }
 
+void KSCumberBase::rushMoving(float dt)
+{
+	//	CCLog("%f %f", getPosition().x, getPosition().y);
+	m_scale.timer += 1/60.f;
+
+
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	{
+		m_scale.collisionCount = 0;
+		m_scale.collisionStartTime = m_scale.timer;
+		//		setCumberSize(MIN(1.0, getCumberSize() + scale.SCALE_ADDER));
+	}
+	CCPoint afterPosition;
+	IntPoint afterPoint;
+	//	int check_loop_cnt = 0;
+
+	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	{
+		if(m_furyMode.firstMoving == true)
+		{
+			CCLog("firstRush");
+			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
+			m_directionAngleDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetValue(-10, +10);
+			m_furyMode.firstMoving = false;
+		}
+		else 
+		{
+			// 오직 벽에 의해서만 튕기도록함.
+			//int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
+			//if(changeDirection == 0)
+			//{
+				//m_directionAngleDegree += m_well512.GetValue(0, 360);
+			//}
+		}
+
+	}
+
+	bool validPosition = false;
+	int cnt = 0;
+	bool onceOutlineAndMapCollision = false;
+	float degree = m_directionAngleDegree;
+	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
+	while(!validPosition)
+	{
+		cnt++;
+		float tempSpeed = 1.5f;
+		float speedX = tempSpeed * cos(deg2Rad(degree)) * (1 + cnt / 30.f * (3.f / (0.5f * tempSpeed) - 1));
+		float speedY = tempSpeed * sin(deg2Rad(degree)) * (1 + cnt / 30.f * (3.f / (0.5f * tempSpeed) - 1));
+
+		CCPoint cumberPosition = getPosition();
+		afterPosition = cumberPosition + ccp(speedX, speedY);
+		afterPoint = ccp2ip(afterPosition);
+
+		IntPoint checkPosition;
+		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
+		auto degreeSelector = [&](int cnt, float degree)->float {
+			if(cnt >= 30)
+			{
+				validPosition = true;
+				pathFound = false;
+			}
+			else if(cnt >= 5)
+			{
+				degree = (cnt % 8) * 45;
+			}
+			else
+			{
+				auto probSel = ProbSelector({1,1,1});
+				auto pSel = probSel.getResult();
+
+				switch(pSel)
+				{
+					case 0:
+						degree = -degree;
+						break;
+					case 1:
+						degree = m_directionAngleDegree + 90;
+						break;
+					case 2:
+						degree = m_directionAngleDegree - 90;
+						break;
+				}
+			}
+			return degree;
+		};
+
+
+		
+		if(collisionCode == kCOLLISION_OUTLINE)
+		{
+			m_crashCount++;
+			degree = degreeSelector(cnt, degree);
+			if(degree < 0)			degree += 360;
+			else if(degree > 360)	degree -= 360;
+		}
+		else
+		{
+			validPosition = true;
+		}
+		if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
+		{
+			crashMapForPosition(afterPosition);
+		}
+
+		if(cnt >= 2)
+		{
+			CCLog("rushMoving cnt !! = %d", cnt);
+		}
+	}
+
+	m_directionAngleDegree = degree;
+
+	//	CCLog("cnt outer !! = %d", cnt);
+
+
+	if(m_state == CUMBERSTATEFURY)
+	{
+		if(pathFound)
+			setPosition(afterPosition);
+	}
+	if(onceOutlineAndMapCollision)
+	{
+
+		if(m_scale.collisionCount == 0)
+		{
+			m_scale.collisionStartTime = m_scale.timer;
+
+		}
+		m_scale.collisionCount++;
+		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
+		{
+			CCLog("decrese Size !!");
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
+		}
+	}
+
+
+}
 void KSCumberBase::cumberAttack(float dt)
 {
 	//	myJack->get
@@ -1294,7 +1432,6 @@ void KSCumberBase::cumberAttack(float dt)
 				"pattern" : "1007",
 				"percent" : 1,
 				"target" : "no"})";
-			
 				Json::Reader reader;
 				Json::Value attackCode;
 				reader.parse(patternData, attackCode);
@@ -1875,6 +2012,9 @@ void KSCumberBase::movingAndCrash( float dt )
 			case SNAKE_TYPE:
 				snakeMoving(dt);
 				break;
+			case RUSH_TYPE:
+				rushMoving(dt);
+				break;
 		}
 	};
 	
@@ -2038,7 +2178,7 @@ void KSCumberBase::assignBossData(Json::Value boss)
 	
 	m_normalMovement = (enum MOVEMENT)normalMovement;
 	m_drawMovement = (enum MOVEMENT)drawMovement;
-	m_furyMovement = (enum MOVEMENT)furyMovement;
+	m_furyMovement = MOVEMENT::RUSH_TYPE;
 }
 
 void KSCumberBase::applyPassiveData(const std::string& passive)
