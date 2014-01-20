@@ -412,7 +412,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 	}
 	
 	m_state = SlidingState::kMovingInShuffling;
-	shufflePieces(80, movingPiece);
+	shufflePieces(15, movingPiece);
 //	movePiece(Coord(3, 0), [=]()
 //						{
 //							CCLog("%d %d", m_emptyCoord.x, m_emptyCoord.y);
