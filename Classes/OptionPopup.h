@@ -70,6 +70,18 @@ private:
 	void resetJoystickPositioningMenu();
 	void resetJoystickMovingMenu();
 	
+	CCMenu* irregular_direction_menu;
+	CCMenu* draw_button_menu;
+	CCMenu* show_joystick_menu;
+	CCMenu* center_character_menu;
+	CCMenu* line_over_menu;
+	
+	void resetIrregularDirection();
+	void resetDrawButton();
+	void resetShowJoystick();
+	void resetCenterCharacter();
+	void resetLineOver();
+	
 	void cheatAction(CCObject* sender);
 	
 	void menuAction(CCObject* sender);

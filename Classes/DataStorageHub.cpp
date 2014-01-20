@@ -178,6 +178,11 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_wasTutorialPopupCrashArea)			return_value = "wtpca";
 	
 	else if(t_name == kDSH_Key_controlJoystickDirection)			return_value = "cjd";
+	else if(t_name == kDSH_Key_isDisableIrregularDirection)			return_value = "idid";
+	else if(t_name == kDSH_Key_isDisableDrawButton)					return_value = "iddb";
+	else if(t_name == kDSH_Key_isAlwaysVisibleJoystick)				return_value = "iavj";
+	else if(t_name == kDSH_Key_isAlwaysCenterCharacter)				return_value = "iacc";
+	else if(t_name == kDSH_Key_isEnableLineOver)					return_value = "idlo";
 	
 	else if(t_name == kDSH_Key_hasShowTutorial_int1)				return_value = "hst%d";
 	else if(t_name == kDSH_Key_isControlJoystickFixed)				return_value = "icjf";
@@ -604,7 +609,7 @@ void DataStorageHub::fFlush ()
 void DataStorageHub::myInit ()
 {
 	myDefault = SaveData::sharedObject();
-	is_cheat_key_enabled = true;
+	is_cheat_key_enabled = false;
 	puzzle_map_scene_show_type = kPuzzleMapSceneShowType_init;
 //	setIntegerForKey(kDSH_Key_tutorial_flowStep, 0);
 }

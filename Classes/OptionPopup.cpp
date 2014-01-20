@@ -46,6 +46,12 @@ enum OptionPopupMenuTag{
 	kOP_MT_joystickPositioning,
 	kOP_MT_joystickMoving,
 	kOP_MT_tutorial,
+	kOP_MT_testBack,
+	kOP_MT_testIrregularDirection,
+	kOP_MT_testDrawButton,
+	kOP_MT_testShowJoystick,
+	kOP_MT_testCenterCharacter,
+	kOP_MT_testLineOver,
 	kOP_MT_minsu
 };
 
@@ -82,7 +88,7 @@ bool OptionPopup::init()
 	
 	main_case = CCSprite::create("option_back.png");
 	main_case->setAnchorPoint(ccp(0.5,0.5));
-	main_case->setPosition(ccp(240,-160));
+	main_case->setPosition(ccp(205,-160));
 	addChild(main_case, kOP_Z_back);
 	
 	if(myDSH->isCheatKeyEnable())
@@ -260,6 +266,25 @@ bool OptionPopup::init()
 	effect_img = NULL;
 	resetEffectMenu();
 	
+	CCSprite* test_option_back = CCSprite::create("test_option_back.png");
+	test_option_back->setPosition(getContentPosition(kOP_MT_testBack));
+	main_case->addChild(test_option_back, kOP_Z_content);
+	
+	irregular_direction_menu = NULL;
+	resetIrregularDirection();
+	
+	draw_button_menu = NULL;
+	resetDrawButton();
+	
+	show_joystick_menu = NULL;
+	resetShowJoystick();
+	
+	center_character_menu = NULL;
+	resetCenterCharacter();
+	
+	line_over_menu = NULL;
+	resetLineOver();
+	
 	is_menu_enable = false;
 
 #if 0 // 심플 예제
@@ -334,7 +359,7 @@ void OptionPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(210,160));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(OptionPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -352,7 +377,7 @@ void OptionPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,-160));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(210,-160));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(OptionPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -457,6 +482,36 @@ void OptionPopup::menuAction(CCObject* pSender)
 	else if(tag == kOP_MT_tutorial)
 	{
 		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
+	}
+	else if(tag == kOP_MT_testIrregularDirection)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isDisableIrregularDirection, !myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection));
+		resetIrregularDirection();
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_testDrawButton)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isDisableDrawButton, !myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton));
+		resetDrawButton();
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_testShowJoystick)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isAlwaysVisibleJoystick, !myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
+		resetShowJoystick();
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_testCenterCharacter)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isAlwaysCenterCharacter, !myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter));
+		resetCenterCharacter();
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_testLineOver)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isEnableLineOver, !myDSH->getBoolForKey(kDSH_Key_isEnableLineOver));
+		resetLineOver();
+		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_minsu)
 	{
@@ -573,6 +628,137 @@ void OptionPopup::resetJoystickMovingMenu()
 	main_case->addChild(joystick_moving_img, kOP_Z_content);
 }
 
+void OptionPopup::resetIrregularDirection()
+{
+	if(irregular_direction_menu)
+	{
+		irregular_direction_menu->removeFromParent();
+		irregular_direction_menu = NULL;
+	}
+	
+	string filename;
+	if(myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+		filename = "test_option_off.png";
+	else
+		filename = "test_option_on.png";
+	
+	CCSprite* n_irregular = CCSprite::create(filename.c_str());
+	CCSprite* s_irregular = CCSprite::create(filename.c_str());
+	s_irregular->setColor(ccGRAY);
+	
+	CCMenuItem* irregular_item = CCMenuItemSprite::create(n_irregular, s_irregular, this, menu_selector(OptionPopup::menuAction));
+	irregular_item->setTag(kOP_MT_testIrregularDirection);
+	
+	irregular_direction_menu = CCMenu::createWithItem(irregular_item);
+	irregular_direction_menu->setPosition(getContentPosition(kOP_MT_testIrregularDirection));
+	main_case->addChild(irregular_direction_menu, kOP_Z_content);
+	irregular_direction_menu->setTouchPriority(-171);
+}
+void OptionPopup::resetDrawButton()
+{
+	if(draw_button_menu)
+	{
+		draw_button_menu->removeFromParent();
+		draw_button_menu = NULL;
+	}
+	
+	string filename;
+	if(myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton))
+		filename = "test_option_off.png";
+	else
+		filename = "test_option_on.png";
+	
+	CCSprite* n_draw_button = CCSprite::create(filename.c_str());
+	CCSprite* s_draw_button = CCSprite::create(filename.c_str());
+	s_draw_button->setColor(ccGRAY);
+	
+	CCMenuItem* draw_button_item = CCMenuItemSprite::create(n_draw_button, s_draw_button, this, menu_selector(OptionPopup::menuAction));
+	draw_button_item->setTag(kOP_MT_testDrawButton);
+	
+	draw_button_menu = CCMenu::createWithItem(draw_button_item);
+	draw_button_menu->setPosition(getContentPosition(kOP_MT_testDrawButton));
+	main_case->addChild(draw_button_menu, kOP_Z_content);
+	draw_button_menu->setTouchPriority(-171);
+}
+void OptionPopup::resetShowJoystick()
+{
+	if(show_joystick_menu)
+	{
+		show_joystick_menu->removeFromParent();
+		show_joystick_menu = NULL;
+	}
+	
+	string filename;
+	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick))
+		filename = "test_option_off.png";
+	else
+		filename = "test_option_on.png";
+	
+	CCSprite* n_show_joystick = CCSprite::create(filename.c_str());
+	CCSprite* s_show_joystick = CCSprite::create(filename.c_str());
+	s_show_joystick->setColor(ccGRAY);
+	
+	CCMenuItem* show_joystick_item = CCMenuItemSprite::create(n_show_joystick, s_show_joystick, this, menu_selector(OptionPopup::menuAction));
+	show_joystick_item->setTag(kOP_MT_testShowJoystick);
+	
+	show_joystick_menu = CCMenu::createWithItem(show_joystick_item);
+	show_joystick_menu->setPosition(getContentPosition(kOP_MT_testShowJoystick));
+	main_case->addChild(show_joystick_menu, kOP_Z_content);
+	show_joystick_menu->setTouchPriority(-171);
+}
+void OptionPopup::resetCenterCharacter()
+{
+	if(center_character_menu)
+	{
+		center_character_menu->removeFromParent();
+		center_character_menu = NULL;
+	}
+	
+	string filename;
+	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+		filename = "test_option_off.png";
+	else
+		filename = "test_option_on.png";
+	
+	CCSprite* n_center_character = CCSprite::create(filename.c_str());
+	CCSprite* s_center_character = CCSprite::create(filename.c_str());
+	s_center_character->setColor(ccGRAY);
+	
+	CCMenuItem* center_character_item = CCMenuItemSprite::create(n_center_character, s_center_character, this, menu_selector(OptionPopup::menuAction));
+	center_character_item->setTag(kOP_MT_testCenterCharacter);
+	
+	center_character_menu = CCMenu::createWithItem(center_character_item);
+	center_character_menu->setPosition(getContentPosition(kOP_MT_testCenterCharacter));
+	main_case->addChild(center_character_menu, kOP_Z_content);
+	center_character_menu->setTouchPriority(-171);
+}
+void OptionPopup::resetLineOver()
+{
+	if(line_over_menu)
+	{
+		line_over_menu->removeFromParent();
+		line_over_menu = NULL;
+	}
+	
+	string filename;
+	if(!myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+		filename = "test_option_off.png";
+	else
+		filename = "test_option_on.png";
+	
+	CCSprite* n_line_over = CCSprite::create(filename.c_str());
+	CCSprite* s_line_over = CCSprite::create(filename.c_str());
+	s_line_over->setColor(ccGRAY);
+	
+	CCMenuItem* line_over_item = CCMenuItemSprite::create(n_line_over, s_line_over, this, menu_selector(OptionPopup::menuAction));
+	line_over_item->setTag(kOP_MT_testLineOver);
+	
+	line_over_menu = CCMenu::createWithItem(line_over_item);
+	line_over_menu->setPosition(getContentPosition(kOP_MT_testLineOver));
+	main_case->addChild(line_over_menu, kOP_Z_content);
+	line_over_menu->setTouchPriority(-171);
+}
+
 CCPoint OptionPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
@@ -590,6 +776,14 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_joystickPositioning)	return_value = ccp(202, 135);
 	else if(t_tag == kOP_MT_joystickMoving)			return_value = ccp(202, 100);
 	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(200, 180);
+	
+	else if(t_tag == kOP_MT_testBack)		return_value = ccp(460,160);
+	else if(t_tag == kOP_MT_testIrregularDirection)	return_value = ccp(460,270);
+	else if(t_tag == kOP_MT_testDrawButton)			return_value = ccp(460,210);
+	else if(t_tag == kOP_MT_testShowJoystick)		return_value = ccp(460,150);
+	else if(t_tag == kOP_MT_testCenterCharacter)	return_value = ccp(460,90);
+	else if(t_tag == kOP_MT_testLineOver)			return_value = ccp(460,30);
+	
 	else if(t_tag == kOP_MT_minsu)			return_value = ccp(455,25);
 	
 	return_value = ccpSub(return_value, ccp(240,160));

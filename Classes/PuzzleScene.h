@@ -135,6 +135,9 @@ private:
 	CCMenu* monster_start_menu;
 	
 	void popupClose();
+	
+	void alertAction(int t1, int t2);
+	virtual void keyBackClicked();
 };
 
 #endif /* defined(__DGproto__PuzzleScene__) */

@@ -31,10 +31,13 @@ const char* CountingBMLabel::getString()
 
 void CountingBMLabel::startChanging(const char* after_value)
 {
+	if(base_scale == -1.f)
+		base_scale = getScale();
+	
 	is_changing = true;
 	
-	CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-	CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 1.f);
+	CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f*base_scale);
+	CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 1.f*base_scale);
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale1, t_scale2);
 	runAction(t_seq);
 	
@@ -84,8 +87,15 @@ void CountingBMLabel::stopChanging()
 	CCLabelBMFont::setString(keep_value_string.c_str());
 }
 
+void CountingBMLabel::setScale(float t_scale)
+{
+	base_scale = t_scale;
+	CCLabelBMFont::setScale(t_scale);
+}
+
 void CountingBMLabel::myInit(string init_value, string font_filename, float t_duration, string t_format)
 {
+	base_scale = -1;
 	is_changing = false;
 	duration = t_duration;
 	keep_value_string = init_value.c_str();

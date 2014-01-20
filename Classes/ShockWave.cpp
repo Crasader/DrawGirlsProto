@@ -59,9 +59,9 @@ void ShockWave::ingSW ()
 	for(int i=0;i<getChildrenCount();i++)
 	{
 		CCSprite* t_child = (CCSprite*)my_child->objectAtIndex(i);
-		t_child->setScale(t_child->getScale()+0.04f);
+		t_child->setScale(t_child->getScale()+0.03f);
 	}
-	radius += 80.f*0.04f;
+	radius += 80.f*0.03f;
 	
 	IntPoint jackPoint = myGD->getJackPoint();
 	CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);

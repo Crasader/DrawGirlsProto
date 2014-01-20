@@ -358,115 +358,171 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 	{
 		IntPoint jackPoint = myGD->getJackPoint();
 		
-		if(angle < -148.f)
+		if(angle < -180.f+regular_spectrum/2.f)
 		{
 			angleDirection = directionLeft;
-			
 			if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
 			else												secondDirection = directionDown;
 		}
-		else if(angle < -135.f)
+		else if(angle < -180.f+(regular_spectrum+irregular_spectrum)/2.f)
 		{
-			angleDirection = directionLeftDown;
-			
-			if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionDown;
-			else												secondDirection = directionLeft;
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			{
+				angleDirection = directionLeftDown;
+				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionDown;
+				else												secondDirection = directionLeft;
+			}
+			else
+			{
+				angleDirection = directionLeft;
+				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
+				else												secondDirection = directionDown;
+			}
 		}
-		else if(angle < -122.f)
+		else if(angle < -180.f+regular_spectrum/2.f+irregular_spectrum)
 		{
-			angleDirection = directionLeftDown;
-			
-			if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionLeft;
-			else												secondDirection = directionDown;
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			{
+				angleDirection = directionLeftDown;
+				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionLeft;
+				else												secondDirection = directionDown;
+			}
+			else
+			{
+				angleDirection = directionDown;
+				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
+				else												secondDirection = directionLeft;
+			}
 		}
-		else if(angle < -90.f)
+		else if(angle < -180.f+regular_spectrum+irregular_spectrum)
 		{
 			angleDirection = directionDown;
-			
 			if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
 			else												secondDirection = directionLeft;
 		}
-		else if(angle < -58.f)
+		else if(angle < -180.f+regular_spectrum*3.f/2.f+irregular_spectrum)
 		{
 			angleDirection = directionDown;
-			
 			if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
 			else												secondDirection = directionRight;
 		}
-		else if(angle < -45.f)
+		else if(angle < -180.f+(regular_spectrum+irregular_spectrum)*3.f/2.f)
 		{
-			angleDirection = directionRightDown;
-			
-			if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionRight;
-			else												secondDirection = directionDown;
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			{
+				angleDirection = directionRightDown;
+				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionRight;
+				else												secondDirection = directionDown;
+			}
+			else
+			{
+				angleDirection = directionDown;
+				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
+				else												secondDirection = directionRight;
+			}
 		}
-		else if(angle < -32.f)
+		else if(angle < -180.f+regular_spectrum*3.f/2.f+irregular_spectrum*2.f)
 		{
-			angleDirection = directionRightDown;
-			
-			if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionDown;
-			else												secondDirection = directionRight;
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			{
+				angleDirection = directionRightDown;
+				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionDown;
+				else												secondDirection = directionRight;
+			}
+			else
+			{
+				angleDirection = directionRight;
+				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
+				else												secondDirection = directionDown;
+			}
 		}
 		else if(angle < 0.f)
 		{
 			angleDirection = directionRight;
-			
 			if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
 			else												secondDirection = directionDown;
 		}
-		else if(angle < 32.f)
+		else if(angle < regular_spectrum/2.f)
 		{
 			angleDirection = directionRight;
-			
 			if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
 			else												secondDirection = directionUp;
 		}
-		else if(angle < 45.f)
+		else if(angle < regular_spectrum/2.f+irregular_spectrum/2.f)
 		{
-			angleDirection = directionRightUp;
-			
-			if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionUp;
-			else												secondDirection = directionRight;
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			{
+				angleDirection = directionRightUp;
+				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionUp;
+				else												secondDirection = directionRight;
+			}
+			else
+			{
+				angleDirection = directionRight;
+				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
+				else												secondDirection = directionUp;
+			}
 		}
-		else if(angle < 58.f)
+		else if(angle < regular_spectrum/2.f+irregular_spectrum)
 		{
-			angleDirection = directionRightUp;
-			
-			if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionRight;
-			else												secondDirection = directionUp;
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			{
+				angleDirection = directionRightUp;
+				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionRight;
+				else												secondDirection = directionUp;
+			}
+			else
+			{
+				angleDirection = directionUp;
+				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
+				else												secondDirection = directionRight;
+			}
 		}
-		else if(angle < 90.f)
+		else if(angle < regular_spectrum+irregular_spectrum)
 		{
 			angleDirection = directionUp;
-			
 			if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
 			else												secondDirection = directionRight;
 		}
-		else if(angle < 122.f)
+		else if(angle < regular_spectrum*3.f/2.f+irregular_spectrum)
 		{
 			angleDirection = directionUp;
-			
 			if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
 			else												secondDirection = directionLeft;
 		}
-		else if(angle < 135.f)
+		else if(angle < (regular_spectrum+irregular_spectrum)*3.f/2.f)
 		{
-			angleDirection = directionLeftUp;
-			
-			if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionLeft;
-			else												secondDirection = directionUp;
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			{
+				angleDirection = directionLeftUp;
+				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionLeft;
+				else												secondDirection = directionUp;
+			}
+			else
+			{
+				angleDirection = directionUp;
+				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
+				else												secondDirection = directionLeft;
+			}
 		}
-		else if(angle < 148.f)
+		else if(angle < regular_spectrum*3.f/2.f+irregular_spectrum*2.f)
 		{
-			angleDirection = directionLeftUp;
-			
-			if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionUp;
-			else												secondDirection = directionLeft;
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			{
+				angleDirection = directionLeftUp;
+				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionUp;
+				else												secondDirection = directionLeft;
+			}
+			else
+			{
+				angleDirection = directionLeft;
+				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
+				else												secondDirection = directionUp;
+			}
 		}
 		else
 		{
 			angleDirection = directionLeft;
-			
 			if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
 			else												secondDirection = directionUp;
 		}
@@ -540,10 +596,10 @@ void ControlJoystickButton::resetTouch()
 void ControlJoystickButton::invisibleControl()
 {
 	offButton();
-	control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
-	control_circle->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
+	control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
+	control_circle->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
 	
-	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick))
 	{
 		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
 		{
@@ -838,7 +894,7 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			
 			control_ball->setPosition(location);
 			touchAction(location, true);
-			if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+			if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) && !myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick))
 			{
 				control_circle->setVisible(false);
 				control_ball->setVisible(false);
@@ -900,7 +956,7 @@ void ControlJoystickButton::setTouchEnabled( bool t_b )
 			if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
 			else																								control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));
 
-			control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
+			control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, t_b);
 			joystick_touch = NULL;
 		}
@@ -910,6 +966,9 @@ void ControlJoystickButton::setTouchEnabled( bool t_b )
 void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack )
 {
 	CCLayer::init();
+	
+	regular_spectrum = 70.f;
+	irregular_spectrum = 20.f;
 
 	isButtonAction = false;
 	button_touch = NULL;
@@ -920,15 +979,15 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	beforeDirection = directionStop;
 	control_circle = CCSprite::create("control_joystick_big_circle.png");
 	control_circle->setScale(1.f);
-	control_circle->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
+	control_circle->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
 	addChild(control_circle);
 
 	control_ball = CCSprite::create("control_joystick_big_ball.png");
 	control_ball->setScale(1.f);
-	control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
+	control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
 	addChild(control_ball);
 	
-	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick))
 	{
 		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
 		{

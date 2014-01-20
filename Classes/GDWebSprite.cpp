@@ -181,7 +181,7 @@ bool GDWebSprite::init(string imgUrl, CCNode *defaultNode, string imageName, CCO
 	
     defaultSprite = defaultNode;
     this->addChild(defaultSprite,1);
-    this->setContentSize(CCSize(defaultSprite->getContentSize().width,defaultSprite->getContentSize().height));
+    this->setContentSize(CCSize(defaultSprite->getContentSize().width*defaultSprite->getScaleX(),defaultSprite->getContentSize().height*defaultSprite->getScaleY()));
     CCSize s = getContentSize();
     defaultSprite->setAnchorPoint(ccp(0.5,0.5));
     defaultSprite->setPosition(ccp(s.width / 2, s.height / 2));

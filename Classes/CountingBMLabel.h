@@ -21,6 +21,7 @@ public:
 	
 	virtual void setString(const char* after_value);
 	virtual const char* getString();
+	virtual void setScale(float t_scale);
 	
 private:
 	bool is_changing;
@@ -32,6 +33,7 @@ private:
 	string keep_value_string;
 	float duration;
 	string show_format;
+	float base_scale;
 	
 	void startChanging(const char* after_value);
 	void changing(float dt);

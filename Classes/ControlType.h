@@ -220,6 +220,9 @@ private:
 	CCTouch* button_touch;
 	CCTouch* joystick_touch;
 	
+	float regular_spectrum;
+	float irregular_spectrum;
+	
 	bool isButtonAction;
 	
 	CCBAnimationManager* button_ani;
