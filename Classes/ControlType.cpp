@@ -1075,8 +1075,8 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("gameui_button.ccbi",this));
 		button_ani = reader->getAnimationManager();
 		//		draw_button = CCSprite::create("ui_draw.png");
-		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-25,25));
-		else								draw_button->setPosition(ccp(25,25));
+		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-40,40));
+		else								draw_button->setPosition(ccp(40,40));
 		addChild(draw_button);
 	}
 	else

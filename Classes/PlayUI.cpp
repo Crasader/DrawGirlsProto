@@ -1638,7 +1638,7 @@ void PlayUI::setUseFriendCard()
 	CCSprite* jack_img = CCSprite::create("basic_character.png");
 	jack_img->setColor(ccGREEN);
 	jack_img->setOpacity(0);
-	jack_img->setPosition(ccp(422-(jack_life-1)*20, myDSH->ui_top-52));
+	jack_img->setPosition(ccp(422-(jack_life-1)*20, myDSH->ui_top-55));
 //	if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else											jack_img->setPosition(ccp(80+(jack_life-1)*20, myDSH->ui_top-35));
@@ -1730,7 +1730,7 @@ void PlayUI::myInit ()
 	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
-	countingLabel->setPosition(ccp(410,myDSH->ui_top-28));
+	countingLabel->setPosition(ccp(410,myDSH->ui_top-35));
 	addChild(countingLabel);
 	
 	isFirst = true;
@@ -1763,7 +1763,7 @@ void PlayUI::myInit ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-52));
+		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-55));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20, myDSH->ui_top-35));
@@ -2018,7 +2018,7 @@ void PlayUI::continueAction ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-52));
+		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-55));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20,myDSH->ui_top-35));
