@@ -312,6 +312,11 @@ bool GameData::getCommunicationBool( string funcName )
 	return B_V[funcName ]();
 }
 
+bool GameData::getCommunicationBool( string funcName, IntPoint t_p)
+{
+	return B_Ip[funcName](t_p);
+}
+
 float GameData::getAlphaSpeed()
 {
 	return F_V["Jack_getAlphaSpeed"]();

@@ -652,7 +652,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 //		myJack->setJackState(jackStateDrawing); //## 컴터로 임시.
 //#endif
 		
-		if(is_button_x)
+		if(!myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton) && is_button_x)
 		{
 			// button or ui
 
@@ -673,7 +673,11 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					
 					IntPoint jackPoint = myGD->getJackPoint();
 					if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
+					{
+						if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+							myGD->communication("PM_checkBeforeNewline", jackPoint);
 						myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
+					}
 					
 					if(joystick_touch)
 					{
@@ -734,6 +738,64 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				control_ball->setVisible(true);
 				
 				touchAction(location, false);
+			}
+			
+			if(myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton) && !joystick_touch && isBacking)
+			{
+				(target_main->*pauseBackTracking)();
+				
+				myJack->setJackState(jackStateDrawing);
+				
+				IntPoint jackPoint = myGD->getJackPoint();
+				if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
+				{
+					if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+						myGD->communication("PM_checkBeforeNewline", jackPoint);
+					myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
+				}
+				
+				joystick_touch = touch;
+				CCPoint after_circle_position = location;
+				
+				if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+				{
+					if(after_circle_position.x < 90)
+						after_circle_position.x = 90;
+					else if(after_circle_position.x > 470)
+						after_circle_position.x = 470;
+					if(after_circle_position.y < 10)
+						after_circle_position.y = 10;
+					else if(after_circle_position.y > 310)
+						after_circle_position.y = 310;
+				}
+				else
+				{
+					if(after_circle_position.x < 10)
+						after_circle_position.x = 10;
+					else if(after_circle_position.x > 390)
+						after_circle_position.x = 390;
+					if(after_circle_position.y < 10)
+						after_circle_position.y = 10;
+					else if(after_circle_position.y > 310)
+						after_circle_position.y = 310;
+				}
+				
+				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+					control_circle->setPosition(after_circle_position);
+				control_circle->setVisible(true);
+				
+				control_ball->setPosition(location);
+				control_ball->setVisible(true);
+				
+				touchAction(location, false);
+				
+				if(joystick_touch)
+				{
+					isButtonAction = true;
+					CCPoint joystick_location = CCDirector::sharedDirector()->convertToGL(CCNode::convertToNodeSpace(joystick_touch->getLocationInView()));
+					touchAction(joystick_location, false);
+					continue;
+				}
 			}
 		}
 	}
@@ -913,6 +975,11 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				}
 			}
 			
+			if(myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton) && myJack->getJackState() == jackStateDrawing && !myJack->isStun)
+			{
+				(target_main->*delegate_readyBack)();
+			}
+			
 			joystick_touch = NULL;
 		}
 	}
@@ -1001,26 +1068,36 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		}
 	}
 
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("gameui_button.ccbi",this));
-	button_ani = reader->getAnimationManager();
-	//		draw_button = CCSprite::create("ui_draw.png");
-	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-25,25));
-	else								draw_button->setPosition(ccp(25,25));
-	addChild(draw_button);
+	if(!myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton))
+	{
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("gameui_button.ccbi",this));
+		button_ani = reader->getAnimationManager();
+		//		draw_button = CCSprite::create("ui_draw.png");
+		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-25,25));
+		else								draw_button->setPosition(ccp(25,25));
+		addChild(draw_button);
+	}
+	else
+	{
+		myJack->isDrawingOn = true;
+		button_ani = NULL;
+	}
 
 	mType = kCT_Type_Joystick_button;
 }
 
 void ControlJoystickButton::onButton()
 {
-	button_ani->runAnimationsForSequenceNamed("cast1start");
+	if(button_ani)
+		button_ani->runAnimationsForSequenceNamed("cast1start");
 }
 
 void ControlJoystickButton::offButton()
 {
-	button_ani->runAnimationsForSequenceNamed("cast1stop");
+	if(button_ani)
+		button_ani->runAnimationsForSequenceNamed("cast1stop");
 }
 
 

@@ -415,87 +415,134 @@ void Jack::moveTest()
 				jack_img_direction = directionRight;
 			}
 		}
-		else if(s_dv.dx == 0 && s_dv.dy == 0)
-			stopMove();
-		else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
-				s_checkPoint.isInnerMap() && (myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapEmpty || myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapOldline))
+		else if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
 		{
-			if(is_end_turn)
+			if(s_dv.dx == 0 && s_dv.dy == 0)
+				stopMove();
+			else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn)
 			{
-				is_end_turn = false;
-				IntPointVector t_pv = IntPointVector(jp.x, jp.y, s_dv.dx, s_dv.dy);
-				myGD->communication("PM_addPath", t_pv);
+				// path add
+				if(is_end_turn)
+				{
+					is_end_turn = false;
+					IntPointVector t_pv = IntPointVector(jp.x, jp.y, dv.dx, dv.dy);
+					myGD->communication("PM_addPath", t_pv);
+				}
+				
+				// jack drawing
+				afterPoint = IntPoint(checkPoint.x, checkPoint.y);
+				
+				CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+				if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+				{
+					CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+				}
+				
+				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*dv.dx,t_speed*dv.dy));
+				turnPosition = checkOutlineTurnPosition(turnPosition);
+				setPosition(turnPosition);
+				
+				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+					jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+				
+				if(dv.dx == -1 && jack_img_direction == directionRight)
+				{
+					jackImg->setScaleX(-1.f);
+					jack_img_direction = directionLeft;
+				}
+				else if(dv.dx == 1 && jack_img_direction == directionLeft)
+				{
+					jackImg->setScaleX(1.f);
+					jack_img_direction = directionRight;
+				}
 			}
-			
-			// jack drawing
-			afterPoint = IntPoint(s_checkPoint.x, s_checkPoint.y);
-			
-			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
-			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
-			{
-				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
-			}
-			
-			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv.dx,t_speed*s_dv.dy));
-			turnPosition = checkOutlineTurnPosition(turnPosition);
-			setPosition(turnPosition);
-			
-			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
-				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
-			
-			if(s_dv.dx == -1 && jack_img_direction == directionRight)
-			{
-				jackImg->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
-			}
-			else if(s_dv.dx == 1 && jack_img_direction == directionLeft)
-			{
-				jackImg->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
+			else
+				stopMove();
 		}
-		else if(s_dv_reverse.dx == 0 && s_dv_reverse.dy == 0)
-			stopMove();
-		else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
-				s_checkPoint_reverse.isInnerMap() && (myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapEmpty || myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapOldline))
+		else
 		{
-			if(is_end_turn)
+			if(s_dv.dx == 0 && s_dv.dy == 0)
+				stopMove();
+			else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
+					s_checkPoint.isInnerMap() && (myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapEmpty || myGD->mapState[s_checkPoint.x][s_checkPoint.y] == mapOldline))
 			{
-				is_end_turn = false;
-				IntPointVector t_pv = IntPointVector(jp.x, jp.y, s_dv_reverse.dx, s_dv_reverse.dy);
-				myGD->communication("PM_addPath", t_pv);
+				if(is_end_turn)
+				{
+					is_end_turn = false;
+					IntPointVector t_pv = IntPointVector(jp.x, jp.y, s_dv.dx, s_dv.dy);
+					myGD->communication("PM_addPath", t_pv);
+				}
+				
+				// jack drawing
+				afterPoint = IntPoint(s_checkPoint.x, s_checkPoint.y);
+				
+				CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+				if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+				{
+					CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+				}
+				
+				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv.dx,t_speed*s_dv.dy));
+				turnPosition = checkOutlineTurnPosition(turnPosition);
+				setPosition(turnPosition);
+				
+				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+					jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+				
+				if(s_dv.dx == -1 && jack_img_direction == directionRight)
+				{
+					jackImg->setScaleX(-1.f);
+					jack_img_direction = directionLeft;
+				}
+				else if(s_dv.dx == 1 && jack_img_direction == directionLeft)
+				{
+					jackImg->setScaleX(1.f);
+					jack_img_direction = directionRight;
+				}
 			}
-			
-			// jack drawing
-			afterPoint = IntPoint(s_checkPoint_reverse.x, s_checkPoint_reverse.y);
-			
-			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
-			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+			else if(s_dv_reverse.dx == 0 && s_dv_reverse.dy == 0)
+				stopMove();
+			else if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapNewline && isDrawingOn &&
+					s_checkPoint_reverse.isInnerMap() && (myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapEmpty || myGD->mapState[s_checkPoint_reverse.x][s_checkPoint_reverse.y] == mapOldline))
 			{
-				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+				if(is_end_turn)
+				{
+					is_end_turn = false;
+					IntPointVector t_pv = IntPointVector(jp.x, jp.y, s_dv_reverse.dx, s_dv_reverse.dy);
+					myGD->communication("PM_addPath", t_pv);
+				}
+				
+				// jack drawing
+				afterPoint = IntPoint(s_checkPoint_reverse.x, s_checkPoint_reverse.y);
+				
+				CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
+				if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
+				{
+					CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+				}
+				
+				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv_reverse.dx,t_speed*s_dv_reverse.dy));
+				turnPosition = checkOutlineTurnPosition(turnPosition);
+				setPosition(turnPosition);
+				
+				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+					jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+				
+				if(s_dv_reverse.dx == -1 && jack_img_direction == directionRight)
+				{
+					jackImg->setScaleX(-1.f);
+					jack_img_direction = directionLeft;
+				}
+				else if(s_dv_reverse.dx == 1 && jack_img_direction == directionLeft)
+				{
+					jackImg->setScaleX(1.f);
+					jack_img_direction = directionRight;
+				}
 			}
-			
-			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv_reverse.dx,t_speed*s_dv_reverse.dy));
-			turnPosition = checkOutlineTurnPosition(turnPosition);
-			setPosition(turnPosition);
-			
-			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
-				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
-			
-			if(s_dv_reverse.dx == -1 && jack_img_direction == directionRight)
+			else // don't move
 			{
-				jackImg->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
+				stopMove();
 			}
-			else if(s_dv_reverse.dx == 1 && jack_img_direction == directionLeft)
-			{
-				jackImg->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
-		}
-		else // don't move
-		{
-			stopMove();
 		}
 	}
 	
@@ -534,7 +581,14 @@ void Jack::moveTest()
 		}
 		else if(myGD->mapState[afterPoint.x][afterPoint.y] == mapEmpty)
 		{
+			if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+				myGD->communication("PM_checkBeforeNewline", afterPoint);
 			myGD->mapState[afterPoint.x][afterPoint.y] = mapNewline;
+		}
+		else if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver) && myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
+		{
+			if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+				myGD->communication("PM_checkBeforeNewline", afterPoint);
 		}
 		
 		if(afterDirection == directionStop)
@@ -664,14 +718,22 @@ void Jack::moveTest()
 		stopMove();
 		setPosition(ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1));
 		if(myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
-			myGD->mapState[afterPoint.x][afterPoint.y] = mapEmpty;
+		{
+			if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+			{
+				if(myGD->getCommunicationBool("PM_checkRemoveNewline", afterPoint))
+					myGD->mapState[afterPoint.x][afterPoint.y] = mapEmpty;
+			}
+			else
+				myGD->mapState[afterPoint.x][afterPoint.y] = mapEmpty;
+		}
 		setJackState(jackStateBackTracking);
 		if(!btPoint.isNull())
 		{
 			myGD->setJackPoint(btPoint);
 			setPosition(ccp((btPoint.x-1)*pixelSize+1, (btPoint.y-1)*pixelSize+1));
 		}
-		isDrawingOn = false;
+		isDrawingOn = myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton);
 		if(!isStun)
 			myGD->communication("Main_startBackTracking");
 		else
@@ -947,7 +1009,15 @@ void Jack::endBackTracking()
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{
 			if(myGD->mapState[i][j] == mapNewline)
-				myGD->mapState[i][j] = mapEmpty;
+			{
+				if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+				{
+					if(myGD->getCommunicationBool("PM_checkRemoveNewline", IntPoint(i,j)))
+						myGD->mapState[i][j] = mapEmpty;
+				}
+				else
+					myGD->mapState[i][j] = mapEmpty;
+			}
 		}
 	}
 }
@@ -1045,7 +1115,7 @@ void Jack::stunJack()
 {
 	myGD->communication("Main_touchEnd");
 	if(isDrawingOn)
-		isDrawingOn = false;
+		isDrawingOn = myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton);
 }
 
 IntDirection Jack::getDirection()
@@ -1295,7 +1365,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		//			}
 		setJackState(jackStateNormal);
 		jack_barrier->setVisible(false);
-		isDrawingOn = false;
+		isDrawingOn = myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton);
 
 		myGD->removeMapNewline();
 		myGD->communication("PM_cleanPath");
@@ -1730,7 +1800,7 @@ void Jack::myInit()
 	before_x_direction = directionStop;
 	before_x_cnt = 0;
 	keep_direction = kKeepDirection_empty;
-	isDrawingOn = false;
+	isDrawingOn = myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton);
 	//		isReverseGesture = false;
 	isReverse = false;
 	t_se = NULL;
