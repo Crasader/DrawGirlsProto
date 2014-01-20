@@ -52,6 +52,7 @@ enum OptionPopupMenuTag{
 	kOP_MT_testShowJoystick,
 	kOP_MT_testCenterCharacter,
 	kOP_MT_testLineOver,
+	kOP_MT_testJoystickCenterFix,
 	kOP_MT_minsu
 };
 
@@ -285,6 +286,14 @@ bool OptionPopup::init()
 	line_over_menu = NULL;
 	resetLineOver();
 	
+	CCLabelTTF* test_joystick_center_fix_label = CCLabelTTF::create("조이스틱 터치 후\n기준점 이동가능", mySGD->getFont().c_str(), 11);
+	test_joystick_center_fix_label->setColor(ccBLACK);
+	test_joystick_center_fix_label->setPosition(ccpAdd(getContentPosition(kOP_MT_testJoystickCenterFix), ccp(-80,0)));
+	main_case->addChild(test_joystick_center_fix_label, kOP_Z_content);
+	
+	joystick_center_fix_menu = NULL;
+	resetJoystickCenterFix();
+	
 	is_menu_enable = false;
 
 #if 0 // 심플 예제
@@ -511,6 +520,12 @@ void OptionPopup::menuAction(CCObject* pSender)
 	{
 		myDSH->setBoolForKey(kDSH_Key_isEnableLineOver, !myDSH->getBoolForKey(kDSH_Key_isEnableLineOver));
 		resetLineOver();
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_testJoystickCenterFix)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isJoystickCenterNotFixed, !myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed));
+		resetJoystickCenterFix();
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_minsu)
@@ -758,6 +773,32 @@ void OptionPopup::resetLineOver()
 	main_case->addChild(line_over_menu, kOP_Z_content);
 	line_over_menu->setTouchPriority(-171);
 }
+void OptionPopup::resetJoystickCenterFix()
+{
+	if(joystick_center_fix_menu)
+	{
+		joystick_center_fix_menu->removeFromParent();
+		joystick_center_fix_menu = NULL;
+	}
+	
+	string filename;
+	if(myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))
+		filename = "test_option_off.png";
+	else
+		filename = "test_option_on.png";
+	
+	CCSprite* n_joystick_center_fix = CCSprite::create(filename.c_str());
+	CCSprite* s_joystick_center_fix = CCSprite::create(filename.c_str());
+	s_joystick_center_fix->setColor(ccGRAY);
+	
+	CCMenuItem* joystick_center_fix_item = CCMenuItemSprite::create(n_joystick_center_fix, s_joystick_center_fix, this, menu_selector(OptionPopup::menuAction));
+	joystick_center_fix_item->setTag(kOP_MT_testJoystickCenterFix);
+	
+	joystick_center_fix_menu = CCMenu::createWithItem(joystick_center_fix_item);
+	joystick_center_fix_menu->setPosition(getContentPosition(kOP_MT_testJoystickCenterFix));
+	main_case->addChild(joystick_center_fix_menu, kOP_Z_content);
+	joystick_center_fix_menu->setTouchPriority(-171);
+}
 
 CCPoint OptionPopup::getContentPosition(int t_tag)
 {
@@ -783,6 +824,8 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_testShowJoystick)		return_value = ccp(460,150);
 	else if(t_tag == kOP_MT_testCenterCharacter)	return_value = ccp(460,90);
 	else if(t_tag == kOP_MT_testLineOver)			return_value = ccp(460,30);
+	
+	else if(t_tag == kOP_MT_testJoystickCenterFix)	return_value = ccp(377, 170);
 	
 	else if(t_tag == kOP_MT_minsu)			return_value = ccp(455,25);
 	

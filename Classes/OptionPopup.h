@@ -75,12 +75,14 @@ private:
 	CCMenu* show_joystick_menu;
 	CCMenu* center_character_menu;
 	CCMenu* line_over_menu;
+	CCMenu* joystick_center_fix_menu;
 	
 	void resetIrregularDirection();
 	void resetDrawButton();
 	void resetShowJoystick();
 	void resetCenterCharacter();
 	void resetLineOver();
+	void resetJoystickCenterFix();
 	
 	void cheatAction(CCObject* sender);
 	

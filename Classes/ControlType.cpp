@@ -873,7 +873,7 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > 310)
 						after_circle_position.y = 310;
 				}
-				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) && !myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))
 					control_circle->setPosition(after_circle_position);
 				
 				control_ball->setPosition(location);

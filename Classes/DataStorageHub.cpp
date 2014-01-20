@@ -183,6 +183,7 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_isAlwaysVisibleJoystick)				return_value = "iavj";
 	else if(t_name == kDSH_Key_isAlwaysCenterCharacter)				return_value = "iacc";
 	else if(t_name == kDSH_Key_isEnableLineOver)					return_value = "idlo";
+	else if(t_name == kDSH_Key_isJoystickCenterNotFixed)			return_value = "ijcnf";
 	
 	else if(t_name == kDSH_Key_hasShowTutorial_int1)				return_value = "hst%d";
 	else if(t_name == kDSH_Key_isControlJoystickFixed)				return_value = "icjf";
