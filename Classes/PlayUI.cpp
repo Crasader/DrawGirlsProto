@@ -5,6 +5,7 @@
 #include "KSCumberBase.h"
 #include "StartSettingScene.h"
 #include "AchieveNoti.h"
+#include "RollingButton.h"
 
 #define LZZ_INLINE inline
 using namespace cocos2d;
@@ -991,12 +992,14 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 		{
 			ing_cdt_cnt++;
 			
-//			if(mySGD->isUsingItem(kIC_randomChange))
-//			{
+			if(mySGD->isUsingItem(kIC_randomChange))
+			{
+				mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), 1);
 //				((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString());
-//			}
-//			else
-//			{
+			}
+			else
+			{
+				mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), 1);
 //				removeChildByTag(kCT_UI_clrCdtLabel);
 //				if(ing_cdt_cnt <= 6)
 //				{
@@ -1004,7 +1007,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 //					clr_cdt_img->setPosition(ccpAdd(getChildByTag(kCT_UI_clrCdtIcon)->getPosition(), ccp(0,-5)));
 //					addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
 //				}
-//			}
+			}
 		}
 	}
 	
@@ -1104,7 +1107,8 @@ void PlayUI::subBossLife (float t_life)
 	
 	//		m_bossLifeGage->setPercentage(bossLife/maxBossLife);
 	KSCumberBase* cb = dynamic_cast<KSCumberBase*>(myGD->getCommunicationNode("CP_getMainCumberPointer"));
-//	if(!is_cleared_cdt)
+	if(!is_cleared_cdt)
+		mission_button->setTextAtIndex(CCString::createWithFormat("%.1f%%", cb->getLife()/cb->getTotalLife()*100.f)->getCString(), 1);
 //		((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%.1f%%", cb->getLife()/cb->getTotalLife()*100.f)->getCString());
 	
 	if(cb->getLife() <= 0.f && !is_cleared_cdt)
@@ -1602,6 +1606,7 @@ void PlayUI::catchSubCumber ()
 	
 	ing_cdt_cnt++;
 	
+	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
 //	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
@@ -1614,6 +1619,7 @@ void PlayUI::takeBigArea ()
 	
 	int item_value = mySGD->getSmallAreaValue();
 	
+	mission_button->setTextAtIndex(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
 //	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
@@ -1623,6 +1629,8 @@ void PlayUI::takeItemCollect ()
 		return;
 	
 	ing_cdt_cnt++;
+	
+	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
 //	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
@@ -1638,7 +1646,7 @@ void PlayUI::setUseFriendCard()
 	CCSprite* jack_img = CCSprite::create("basic_character.png");
 	jack_img->setColor(ccGREEN);
 	jack_img->setOpacity(0);
-	jack_img->setPosition(ccp(422-(jack_life-1)*20, myDSH->ui_top-55));
+	jack_img->setPosition(ccp(422-(jack_life-1)*20, myDSH->ui_top-60));
 //	if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else											jack_img->setPosition(ccp(80+(jack_life-1)*20, myDSH->ui_top-35));
@@ -1763,7 +1771,7 @@ void PlayUI::myInit ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-55));
+		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-60));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20, myDSH->ui_top-35));
@@ -1792,6 +1800,26 @@ void PlayUI::myInit ()
 	is_show_condition = false;
 	clr_cdt_type = mySD->getClearCondition();
 	
+	mission_button = RollingButton::create("");
+	mission_button->setPosition(ccp(480-25, myDSH->ui_top-62));
+	addChild(mission_button);
+	
+	mission_button->startMarquee();
+	
+	mission_button->setOpenFunction([&](){
+		int jack_cnt = jack_array->count();
+		for(int i=0;i<jack_cnt;i++)
+			((CCSprite*)jack_array->objectAtIndex(i))->runAction(CCMoveBy::create(0.3f, ccp(40,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(-215,0)));
+	});
+	
+	mission_button->setCloseFunction([&](){
+		int jack_cnt = jack_array->count();
+		for(int i=0;i<jack_cnt;i++)
+			((CCSprite*)jack_array->objectAtIndex(i))->runAction(CCMoveBy::create(0.3f, ccp(-40,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(215,0)));
+	});
+	
 //	CCPoint icon_menu_position;
 //	if(myGD->gamescreen_type == kGT_leftUI)				icon_menu_position = ccp(25,myDSH->ui_center_y+43);
 //	else if(myGD->gamescreen_type == kGT_rightUI)		icon_menu_position = ccp(480-25,myDSH->ui_center_y+43);
@@ -1818,6 +1846,9 @@ void PlayUI::myInit ()
 		
 		int start_percentage = 100 - mySGD->getBossLittleEnergyValue();
 		
+		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+		mission_button->addText(CCString::createWithFormat("%d%%", start_percentage)->getCString());
+		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d%%", start_percentage)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 //		addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
@@ -1839,6 +1870,9 @@ void PlayUI::myInit ()
 		
 		clr_cdt_cnt = mySD->getClearConditionCatchSubCumber();
 		ing_cdt_cnt = 0;
+		
+		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
 		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -1863,7 +1897,10 @@ void PlayUI::myInit ()
 		clr_cdt_cnt = mySD->getClearConditionBigAreaCnt();
 		ing_cdt_cnt = 0;
 		
-//		int item_value = mySGD->getSmallAreaValue();
+		int item_value = mySGD->getSmallAreaValue();
+		
+		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+		mission_button->addText(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
 //		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -1887,6 +1924,9 @@ void PlayUI::myInit ()
 		clr_cdt_cnt = mySD->getClearConditionItemCollect();
 		ing_cdt_cnt = 0;
 		
+		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 //		addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
@@ -1909,6 +1949,9 @@ void PlayUI::myInit ()
 		clr_cdt_per = mySD->getClearConditionPerfectBase();
 		clr_cdt_range = mySD->getClearConditionPerfectRange();
 		
+		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+		mission_button->addText(CCString::createWithFormat("%.0f", clr_cdt_per*100.f)->getCString());
+		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", clr_cdt_per*100.f)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 //		addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
@@ -1930,18 +1973,24 @@ void PlayUI::myInit ()
 		
 		ing_cdt_cnt = 1;
 		
-//		if(mySGD->isUsingItem(kIC_randomChange))
-//		{
+		if(mySGD->isUsingItem(kIC_randomChange))
+		{
+			mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+			mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString());
+			
 //			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), mySGD->getFont().c_str(), 12);
 //			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 //			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
-//		}
-//		else
-//		{
+		}
+		else
+		{
+			mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+			mission_button->addText(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+			
 //			CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
 //			clr_cdt_img->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 //			addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
-//		}
+		}
 	}
 	else if(clr_cdt_type == kCLEAR_timeLimit)
 	{
@@ -1960,6 +2009,9 @@ void PlayUI::myInit ()
 		
 		ing_cdt_cnt = mySD->getClearConditionTimeLimit();
 		
+		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+		mission_button->addText(CCString::createWithFormat("%d", ing_cdt_cnt)->getCString());
+		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 //		addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
@@ -1967,6 +2019,8 @@ void PlayUI::myInit ()
 	else if(clr_cdt_type == kCLEAR_default)
 	{
 		is_cleared_cdt = true;
+		
+		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
 		
 //		CCSprite* icon_img = CCSprite::create("condition0_menu.png");
 //		icon_img->setPosition(icon_menu_position);
@@ -2018,7 +2072,7 @@ void PlayUI::continueAction ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-55));
+		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-60));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20,myDSH->ui_top-35));
