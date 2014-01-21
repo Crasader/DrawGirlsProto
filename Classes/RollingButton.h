@@ -162,10 +162,8 @@ public:
 	}
 	
 	void doOpen(){
-		CCLog("touch open1");
 		if(m_isOpened==true)return;
 		
-		CCLog("touch open2");
 		{
 			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(-90,0));
 			m_black_left->runAction(ani);
@@ -201,10 +199,7 @@ public:
 		return this->m_maqueeLbl;
 	}
 	void doClose(){
-		CCLog("touch close1");
 		if(m_isOpened==false)return;
-		CCLog("touch close2");
-		m_maqueeLbl->stopMarqueeAtNowIndex();
 		
 		{
 			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(90,0));
