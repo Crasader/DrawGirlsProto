@@ -449,8 +449,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>480</real>
-							<real>320</real>
+							<real>240</real>
+							<real>160</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -665,8 +665,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>480</real>
-							<real>320</real>
+							<real>240</real>
+							<real>160</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -729,6 +729,8 @@
 						<integer>0</integer>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
