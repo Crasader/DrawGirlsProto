@@ -99,7 +99,7 @@
 				<key>customClass</key>
 				<string></string>
 				<key>displayName</key>
-				<string>signal1_1</string>
+				<string>signal1_2</string>
 				<key>memberVarAssignmentName</key>
 				<string></string>
 				<key>memberVarAssignmentType</key>
@@ -146,7 +146,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>signal1_1.png</string>
+							<string>signal2_2.png</string>
 						</array>
 					</dict>
 				</array>
