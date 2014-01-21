@@ -155,9 +155,9 @@ void HeartTime::myInit ()
 		int sub_value = mySGD->getHeartCoolTime() - (recent_time_second - myDSH->getIntegerForKey(kDSH_Key_heartTime));
 		int minute_value = sub_value/60;
 		int second_value = sub_value%60 + 1;
-		state_label = CCLabelBMFont::create(CCString::createWithFormat("%d:%02d", minute_value, second_value)->getCString(), "mainflow_top_font1.png.fnt");
+		state_label = CCLabelBMFont::create(CCString::createWithFormat("%d:%02d", minute_value, second_value)->getCString(), "mainflow_top_font1.fnt");
 		state_label->setAnchorPoint(ccp(0,0.5));
-		state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()+2,-2));
+		state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()-1,-6));
 		addChild(state_label);
 		
 		schedule(schedule_selector(HeartTime::checkingTime), 1.f);
@@ -166,16 +166,16 @@ void HeartTime::myInit ()
 	{
 		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) == mySGD->getHeartMax())
 		{
-			state_label = CCLabelBMFont::create("MAX", "mainflow_top_font1.png.fnt");
+			state_label = CCLabelBMFont::create("MAX", "mainflow_top_font1.fnt");
 			state_label->setAnchorPoint(ccp(0,0.5));
-			state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()+2,-2));
+			state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()-1,-6));
 			addChild(state_label);
 		}
 		else
 		{
-			state_label = CCLabelBMFont::create(CCString::createWithFormat("+%d", myDSH->getIntegerForKey(kDSH_Key_heartCnt)-mySGD->getHeartMax())->getCString(), "mainflow_top_font1.png.fnt");
+			state_label = CCLabelBMFont::create(CCString::createWithFormat("+%d", myDSH->getIntegerForKey(kDSH_Key_heartCnt)-mySGD->getHeartMax())->getCString(), "mainflow_top_font1.fnt");
 			state_label->setAnchorPoint(ccp(0,0.5));
-			state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()+2,-2));
+			state_label->setPosition(ccp(HEART_DISTANCE*mySGD->getHeartMax()-1,-6));
 			addChild(state_label);
 		}
 	}
