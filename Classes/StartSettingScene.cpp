@@ -28,6 +28,7 @@
 #include "MaingameScene.h"
 #include "TutorialFlowStep.h"
 #include "AlertEngine.h"
+#include "LoadingTipScene.h"
 
 CCScene* StartSettingScene::scene()
 {
@@ -877,7 +878,9 @@ void StartSettingScene::goToGame()
 	myGD->resetGameData();
 	
 	mySGD->setGameStart();
-	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+	mySGD->setNextSceneName("maingame");
+	CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
+//	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 }
 
 void StartSettingScene::cancelGame()
