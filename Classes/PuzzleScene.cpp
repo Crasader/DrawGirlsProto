@@ -1656,7 +1656,7 @@ void PuzzleScene::setTop()
 	heart_menu->setPosition(ccp(243,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(heart_menu);
 	
-	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
+	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(302,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_label);
 	
@@ -1673,7 +1673,7 @@ void PuzzleScene::setTop()
 	gold_menu->setPosition(ccp(336,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_menu);
 	
-	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
+	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(391,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_label);
 	
@@ -1690,7 +1690,7 @@ void PuzzleScene::setTop()
 	ruby_menu->setPosition(ccp(421,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_menu);
 	
-	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
+	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	friend_point_label->setPosition(ccp(475,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(friend_point_label);
 	
