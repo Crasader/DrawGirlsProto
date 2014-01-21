@@ -852,6 +852,18 @@ AchievementCode StarGoldData::frontAchieveNotiQueue()
 	return achieve_noti_que.front();
 }
 
+void StarGoldData::setNextSceneName(string scene_name)
+{
+	next_scene_name = scene_name;
+}
+
+string StarGoldData::getNextSceneName()
+{
+	string return_value = next_scene_name;
+	next_scene_name = "";
+	return return_value;
+}
+
 void StarGoldData::myInit()
 {
 	is_before_selected_event_stage = false;

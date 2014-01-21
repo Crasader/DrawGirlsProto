@@ -448,6 +448,8 @@ public:
 	void pushAchieveNotiQueue(AchievementCode t_code);
 	void popAchieveNotiQueue();
 	AchievementCode frontAchieveNotiQueue();
+	void setNextSceneName(string scene_name);
+	string getNextSceneName();
 	
 private:
 	deque<AchievementCode> achieve_noti_que;
@@ -513,6 +515,8 @@ private:
 	bool must_be_show_notice;
 	
 	KSProtectStr notice_list;
+	
+	string next_scene_name;
 	
 //	Json::Value notice_list;
 	
