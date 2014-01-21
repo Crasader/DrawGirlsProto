@@ -6,6 +6,6 @@
 //
 //
 
-#include "CCLabelTTFMarquee.h"
+#include "LabelTTFMarquee.h"
 
 
