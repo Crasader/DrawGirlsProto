@@ -2130,6 +2130,7 @@ void PlayUI::goHome ()
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
 	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+	AudioEngine::sharedInstance()->stopAllEffects();
 	AudioEngine::sharedInstance()->stopSound();
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 	closeShutter();
@@ -2140,6 +2141,7 @@ void PlayUI::goReplay ()
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
 	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+	AudioEngine::sharedInstance()->stopAllEffects();
 	AudioEngine::sharedInstance()->stopSound();
 	
 	mySGD->is_paused = false;
