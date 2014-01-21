@@ -60,6 +60,13 @@ typedef enum t_DSH_Key{
 	kDSH_Key_wasTutorialPopupCrashArea,
 	kDSH_Key_controlJoystickDirection,
 	kDSH_Key_isControlJoystickFixed,
+	kDSH_Key_isDisableIrregularDirection,
+	kDSH_Key_isDisableDrawButton,
+	kDSH_Key_isAlwaysVisibleJoystick,
+	kDSH_Key_isAlwaysCenterCharacter,
+	kDSH_Key_isEnableLineOver,
+	kDSH_Key_isJoystickCenterNotFixed,
+	
 	kDSH_Key_hasShowTutorial_int1,
 	kDSH_Key_selectedCharacter,
 	kDSH_Key_isCharacterUnlocked_int1,

@@ -200,12 +200,14 @@ void Maingame::finalSetting()
 	
 	startScene();
 	
+	float thumb_scale = 0.17f;
+	
 	thumb_texture = CCRenderTexture::create(320, 430);
-	thumb_texture->setScale(0.2f);
-	thumb_texture->setPosition(ccp(65-160.f*0.2f,140-215.f*0.2f));
+	thumb_texture->setScale(thumb_scale);
+	thumb_texture->setPosition(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale));
 	addChild(thumb_texture, myUIZorder);
 	
-	thumb_base_position = ccp(65-320.f*0.2f,140-430.f*0.2f);
+	thumb_base_position = ccp(58-320.f*thumb_scale,myDSH->ui_top-70-430.f*thumb_scale);
 	
 	CCDelayTime* thumb_delay = CCDelayTime::create(0.3f);
 	CCCallFunc* thumb_call = CCCallFunc::create(this, callfunc_selector(Maingame::refreshThumb));
@@ -215,14 +217,28 @@ void Maingame::finalSetting()
 	
 	character_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 2, 2));
 	character_thumb->setColor(ccGREEN);
-	character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), 0.2f)));
+	character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), thumb_scale)));
 	addChild(character_thumb, myUIZorder);
 	
 	boss_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 3, 3));
 	boss_thumb->setColor(ccRED);
 	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
-	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), 0.2f)));
+	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_scale)));
 	addChild(boss_thumb, myUIZorder);
+	
+	sub_thumbs = new CCArray(1);
+	
+	CCArray* sub_array = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
+	for(int i=0;i<sub_array->count();i++)
+	{
+		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 2, 2));
+		sub_position_img->setColor(ccYELLOW);
+		CCNode* sub_pointer = (CCNode*)sub_array->objectAtIndex(i);
+		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_scale)));
+		addChild(sub_position_img, myUIZorder);
+		
+		sub_thumbs->addObject(sub_position_img);
+	}
 	
 	if(mySD->getSilType() == 1)
 	{
@@ -846,12 +862,19 @@ CCPoint Maingame::getObjectToGameNodePosition( CCPoint t_p )
 {
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;
-	if(y_value > 60)																		y_value = 60;
-	else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)			y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+	
+	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+	{
+		if(y_value > 60)																		y_value = 60;
+		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)			y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+	}
 	
 	float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
-	if(x_value > myGD->boarder_value)														x_value = myGD->boarder_value;
-	else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+	{
+		if(x_value > myGD->boarder_value)														x_value = myGD->boarder_value;
+		else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+	}
 
 	CCPoint after_position;
 
@@ -901,7 +924,7 @@ void Maingame::moveGamePosition( CCPoint t_p )
 	//		if(!myGD->is_setted_jack)// || myGD->game_step == kGS_unlimited)
 	game_node->setPosition(getObjectToGameNodePosition(t_p));
 	if(character_thumb)
-		character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), 0.2f)));
+		character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), thumb_texture->getScale())));
 }
 
 CCPoint Maingame::getGameNodePosition()
@@ -1226,7 +1249,30 @@ void Maingame::refreshThumb()
 	thumb_texture->end();
 	
 	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
-	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), 0.2f)));
+	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_texture->getScale())));
+	
+	CCArray* sub_array = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
+	while(sub_thumbs->count() > sub_array->count())
+	{
+		CCNode* sub_position_img = (CCNode*)sub_thumbs->lastObject();
+		sub_thumbs->removeObject(sub_position_img);
+		sub_position_img->removeFromParent();
+	}
+	while (sub_thumbs->count() < sub_array->count())
+	{
+		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 2, 2));
+		sub_position_img->setColor(ccYELLOW);
+		addChild(sub_position_img, myUIZorder);
+		
+		sub_thumbs->addObject(sub_position_img);
+	}
+	
+	for(int i=0;i<sub_array->count();i++)
+	{
+		CCNode* sub_position_img = (CCNode*)sub_thumbs->objectAtIndex(i);
+		CCNode* sub_pointer = (CCNode*)sub_array->objectAtIndex(i);
+		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
+	}
 	
 	t_vs->visit();
 }

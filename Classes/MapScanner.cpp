@@ -1065,12 +1065,18 @@ void VisibleParent::setMoveGamePosition( CCPoint t_p )
 //		float game_node_scale = myGD->Fcommunication("Main_getGameNodeScale");
 		CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
-		if(y_value > 60)																	y_value = 60;
-		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+		if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+		{
+			if(y_value > 60)																	y_value = 60;
+			else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+		}
 		
 		float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
-		if(x_value > myGD->boarder_value)													x_value = myGD->boarder_value;
-		else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)					x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+		if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+		{
+			if(x_value > myGD->boarder_value)													x_value = myGD->boarder_value;
+			else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)					x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+		}
 		
 
 //		if(myGD->gamescreen_type == kGT_full)				myVS->setMoveGamePosition(ccp(myGD->boarder_value,y_value));
@@ -1092,14 +1098,18 @@ void VisibleParent::changingGameStep( int t_step )
 
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float y_value = -jack_position.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
-	if(y_value > 60)																	y_value = 60;
-	else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+	{
+		if(y_value > 60)																	y_value = 60;
+		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+	}
 	
 	float x_value = -jack_position.x*myGD->game_scale+480.f/2.f;
-	if(x_value > myGD->boarder_value)
-		x_value = myGD->boarder_value;
-	else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)
-		x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+	{
+		if(x_value > myGD->boarder_value)														x_value = myGD->boarder_value;
+		else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+	}
 
 //	if(myGD->gamescreen_type == kGT_full)				jack_position = ccp(myGD->boarder_value,y_value);
 //	else if(myGD->gamescreen_type == kGT_leftUI)		jack_position = ccp(50+myGD->boarder_value,y_value);

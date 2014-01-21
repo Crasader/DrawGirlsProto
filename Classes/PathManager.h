@@ -205,8 +205,36 @@ public:
 		linked_list.push_back(t_p);
 	}
 	
+	void checkBeforeNewline(IntPoint t_p)
+	{
+		if(myGD->mapState[t_p.x][t_p.y] == mapNewline)
+			overlap_map[t_p.x][t_p.y]++;
+	}
+	
+	bool checkRemoveNewline(IntPoint t_p)
+	{
+		if(overlap_map[t_p.x][t_p.y] > 0)
+		{
+			overlap_map[t_p.x][t_p.y]--;
+			return false;
+		}
+		else
+		{
+			overlap_map[t_p.x][t_p.y] = 0;
+			return true;
+		}
+	}
+	
 	void cleanPath()
 	{
+		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+		{
+			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+			{
+				overlap_map[i][j] = 0;
+			}
+		}
+		
 		myList.clear();
 		
 		PathBreakingParent* t_breaking = (PathBreakingParent*)getChildByTag(childTagInPathParentPathBreaking);
@@ -244,7 +272,8 @@ public:
 				if(myGD->mapState[r_p.x][r_p.y] == mapNewline)
 				{
 					aloneNewlineRemove(r_p);
-					myGD->mapState[r_p.x][r_p.y] = mapEmpty;
+					if(checkRemoveNewline(r_p))
+						myGD->mapState[r_p.x][r_p.y] = mapEmpty;
 				}
 				
 				return r_p;
@@ -257,7 +286,8 @@ public:
 				if(myGD->mapState[r_p.x][r_p.y] == mapNewline)
 				{
 					aloneNewlineRemove(r_p);
-					myGD->mapState[r_p.x][r_p.y] = mapEmpty;
+					if(checkRemoveNewline(r_p))
+						myGD->mapState[r_p.x][r_p.y] = mapEmpty;
 				}
 				
 				myList.pop_back();
@@ -274,6 +304,7 @@ public:
 private:
 	list<PathNode*> myList;
 	vector<IntPoint> linked_list;
+	int overlap_map[162][217];
 	
 	void addPathBreaking(IntPoint start)
 	{
@@ -327,9 +358,19 @@ private:
 	
 	void myInit()
 	{
+		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+		{
+			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+			{
+				overlap_map[i][j] = 0;
+			}
+		}
+		
 		myGD->V_Ipv["PM_addPath"] = std::bind(&PathManager::addPath, this, _1);
 		myGD->V_V["PM_cleanPath"] = std::bind(&PathManager::cleanPath, this);
 		myGD->V_Ip["PM_addPathBreaking"] = std::bind(&PathManager::addPathBreaking, this, _1);
+		myGD->V_Ip["PM_checkBeforeNewline"] = std::bind(&PathManager::checkBeforeNewline, this, _1);
+		myGD->B_Ip["PM_checkRemoveNewline"] = std::bind(&PathManager::checkRemoveNewline, this, _1);
 		setTag(pathBreakingStateFalse);
 	}
 };

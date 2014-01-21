@@ -482,27 +482,30 @@ void CardCase::myInit( int t_selected_card_number )
 		card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number);
 	
 	CCSprite* option_case = CCSprite::create("card_case_option.png");
-	option_case->setPosition(ccpMult(ccp(65,28), 1.5f));
-	option_case->setScale(1.5f);
+	option_case->setPosition(ccpMult(ccp(65,28), 1.5f*1.5f));
+	option_case->setScale(1.5f*1.5f);
 	addChild(option_case, kCARDCASE_Z_innerCase);
 
 	CountingBMLabel* pow_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
-	pow_label->setPosition(ccp(145,58));//135,35));
+	pow_label->setPosition(ccp(200,85));//145,58));
 	pow_label->setColor(ccRED);
+	pow_label->setScale(1.8f);
 	addChild(pow_label, kCARDCASE_Z_data);
 
 	pow_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, t_selected_card_number)*((card_level-1)*0.1f+1.f)))->getCString());
 
 	CountingBMLabel* dex_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
-	dex_label->setPosition(ccp(145,26));//210,35));
+	dex_label->setPosition(ccp(200,35));//145,26));
 	dex_label->setColor(ccGREEN);
+	dex_label->setScale(1.8f);
 	addChild(dex_label, kCARDCASE_Z_data);
 
 	dex_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, t_selected_card_number)*((card_level-1)*0.1f+1.f)))->getCString());
 
 	CountingBMLabel* spd_label = CountingBMLabel::create("0.00", "etc_font.fnt", 0.5f, "%.2f");
-	spd_label->setPosition(ccp(145,42));//270,35));
+	spd_label->setPosition(ccp(200,60));//180,42));
 	spd_label->setColor(ccBLUE);
+	spd_label->setScale(1.8f);
 	addChild(spd_label, kCARDCASE_Z_data);
 
 	spd_label->setString(CCString::createWithFormat("%.2f", NSDS_GD(kSDS_CI_int1_missile_speed_d, t_selected_card_number))->getCString());

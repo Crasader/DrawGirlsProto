@@ -281,7 +281,7 @@ void FeverParent::myInit ()
 	entered_fever_cnt = 0;
 	
 	CCSprite* fever_back = CCSprite::create("fever_gage_back.png");
-	fever_back->setPosition(ccp(12,myDSH->ui_top-25));
+	fever_back->setPosition(ccp(14,myDSH->ui_top-35));
 //	if(myGD->gamescreen_type == kGT_leftUI)			fever_back->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-40));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	fever_back->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-40));
 //	else											fever_back->setPosition(ccp(240,myDSH->ui_top-35));
@@ -368,9 +368,9 @@ void GoldLabel::myInit ()
 	is_incresing = false;
 	CCLabelBMFont::initWithString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString(), "goldfont.fnt", kCCLabelAutomaticWidth, kCCTextAlignmentRight, CCPointZero);
 	stopIncreasing();
-	setAnchorPoint(ccp(1,0.5));
+	setAnchorPoint(ccp(0,0.5));
 	
-	setPosition(ccp(430, myDSH->ui_top-43));
+	setPosition(ccp(52, myDSH->ui_top-50));
 //	if(myGD->gamescreen_type == kGT_leftUI)			setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											setPosition(ccp((480-myGD->boarder_value*2)*1.1f/4.f,myDSH->ui_top-15));
@@ -765,8 +765,9 @@ void PlayUI::decreasePercentage ()
 	{
 		beforePercentage ^= t_tta;
 		beforePercentage -= 1;
-		//			percentageLabel->setString(CCString::createWithFormat("%.1f", beforePercentage/10.f)->getCString());
-		m_areaGage->setPercentage(beforePercentage/1000.f);
+		percentageLabel->setString(CCString::createWithFormat("%.1f%%", beforePercentage/10.f)->getCString());
+		if(m_areaGage)
+			m_areaGage->setPercentage(beforePercentage/1000.f);
 		beforePercentage ^= t_tta;
 		percentage_decrease_cnt = 0;
 	}
@@ -882,7 +883,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		takeCoinModeOn();
 	}
 	
-	percentageLabel->setString(CCString::createWithFormat("%d", int(floorf(t_p*10000))/100)->getCString());
+	percentageLabel->setString(CCString::createWithFormat("%d%%", int(floorf(t_p*10000))/100)->getCString());
 	
 	int item_value = mySGD->getWidePerfectValue();
 	
@@ -890,7 +891,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 	   floorf(t_p*10000.f)/10000.f*100.f <= (clr_cdt_per+clr_cdt_range+item_value/200.f)*100.f)
 		conditionClear();
 	
-	m_areaGage->setPercentage(t_p);
+	if(m_areaGage)
+		m_areaGage->setPercentage(t_p);
 	percentage_decrease_cnt = 0;
 	
 	if(!isGameover && t_p > clearPercentage) // clear 80%
@@ -1082,6 +1084,8 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 		myGD->communication("Main_startExchange");
 		myGD->communication("Main_showChangeCard");
 		myGD->communication("Jack_positionRefresh");
+		
+		m_areaGage->onChange();
 	}
 }
 void PlayUI::subBossLife (float t_life)
@@ -1116,6 +1120,10 @@ void PlayUI::setMaxBossLife (float t_life)
 void PlayUI::setClearPercentage (float t_p)
 {
 	clearPercentage = t_p;
+	m_areaGage = AreaGage::create(clearPercentage);
+	m_areaGage->setPosition(ccp(240,myDSH->ui_top-30));
+	addChild(m_areaGage);
+	m_areaGage->setPercentage(getPercentage());
 }
 void PlayUI::startCounting ()
 {
@@ -1525,6 +1533,7 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	beforePercentage = (int(t_percent*1000))^t_tta;
+	m_areaGage->setPercentage(t_percent);
 	
 	if(jack_life > 0)
 	{
@@ -1629,7 +1638,7 @@ void PlayUI::setUseFriendCard()
 	CCSprite* jack_img = CCSprite::create("basic_character.png");
 	jack_img->setColor(ccGREEN);
 	jack_img->setOpacity(0);
-	jack_img->setPosition(ccp(425-(jack_life-1)*20, myDSH->ui_top-14));
+	jack_img->setPosition(ccp(422-(jack_life-1)*20, myDSH->ui_top-55));
 //	if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else											jack_img->setPosition(ccp(80+(jack_life-1)*20, myDSH->ui_top-35));
@@ -1666,38 +1675,36 @@ void PlayUI::myInit ()
 	gold_label->setString("0");
 	
 	CCSprite* gold_img = CCSprite::create("ui_gold_img.png");
-	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-50,9)));
+	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-15,9)));
 	addChild(gold_img);
 	
-	score_label = CountingBMLabel::create("0", "etc_font.fnt", 2.f, "%d");
+	score_label = CountingBMLabel::create("0", "timefont.fnt", 2.f, "%d");
 	score_label->setAnchorPoint(ccp(0,0.5));
-	score_label->setPosition(ccp(32,myDSH->ui_top-15));
+	score_label->setPosition(ccp(32,myDSH->ui_top-30));
 //	if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											score_label->setPosition(ccp(240,myDSH->ui_top-15));
 	addChild(score_label);
 	
-	m_areaGage = AreaGage::create();
-	m_areaGage->setPosition(ccp(228,441));
-	addChild(m_areaGage);
+	m_areaGage = NULL;
 	
-	percentageLabel = CCLabelBMFont::create("0", "etc_font.fnt");
-	percentageLabel->setAnchorPoint(ccp(1, 0.5));
-	percentageLabel->setPosition(ccp(98,myDSH->ui_top-35));
+	percentageLabel = CCLabelBMFont::create("0%%", "star_gage_font.fnt");
+	percentageLabel->setAnchorPoint(ccp(0, 0.5));
+	percentageLabel->setPosition(ccp(160,myDSH->ui_top-35));
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 //	else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
-	addChild(percentageLabel);
+	addChild(percentageLabel, 1);
 	
-	CCSprite* percentage_gain = CCSprite::create("ui_gain.png");
-	percentage_gain->setAnchorPoint(ccp(0,0.5));
-	percentage_gain->setPosition(ccp(28,myDSH->ui_top-35));
-	addChild(percentage_gain);
-	
-	CCSprite* percentage_p = CCSprite::create("maingame_percentage.png");
-	percentage_p->setAnchorPoint(ccp(0,0.5));
-	percentage_p->setPosition(ccpAdd(percentageLabel->getPosition(), ccp(2,0)));
-	addChild(percentage_p);
+//	CCSprite* percentage_gain = CCSprite::create("ui_gain.png");
+//	percentage_gain->setAnchorPoint(ccp(0,0.5));
+//	percentage_gain->setPosition(ccp(205,myDSH->ui_top-35));
+//	addChild(percentage_gain);
+//	
+//	CCSprite* percentage_p = CCSprite::create("maingame_percentage.png");
+//	percentage_p->setAnchorPoint(ccp(0,0.5));
+//	percentage_p->setPosition(ccpAdd(percentageLabel->getPosition(), ccp(2,0)));
+//	addChild(percentage_p);
 	
 	
 	//		CCSprite* counting_tiem = CCSprite::create("maingame_time.png");
@@ -1713,17 +1720,17 @@ void PlayUI::myInit ()
 	playtime_limit = mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime");
 	total_time = playtime_limit;
 	
-	CCSprite* time_back = CCSprite::create("ui_time_back.png");
-	time_back->setPosition(ccp(240-25,myDSH->ui_top-25));
+//	CCSprite* time_back = CCSprite::create("ui_time_back.png");
+//	time_back->setPosition(ccp(240-25,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			time_back->setPosition(ccp((480-50-myGD->boarder_value*2)*3.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-25));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	time_back->setPosition(ccp((480-50-myGD->boarder_value*2)*3.1f/4.f+myGD->boarder_value,myDSH->ui_top-25));
 //	else											time_back->setPosition(ccp(480.f*3.1f/4.f,myDSH->ui_top-25));
-	addChild(time_back);
+//	addChild(time_back);
 	
 	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
-	countingLabel->setPosition(ccpAdd(time_back->getPosition(), ccp(40,-18)));
+	countingLabel->setPosition(ccp(410,myDSH->ui_top-35));
 	addChild(countingLabel);
 	
 	isFirst = true;
@@ -1756,7 +1763,7 @@ void PlayUI::myInit ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(425-i*20, myDSH->ui_top-14));
+		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-55));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20, myDSH->ui_top-35));
@@ -2011,7 +2018,7 @@ void PlayUI::continueAction ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(425-i*20, myDSH->ui_top-14));
+		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-55));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20,myDSH->ui_top-35));

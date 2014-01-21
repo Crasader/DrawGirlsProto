@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>0</integer>
+	<integer>1</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -180,7 +180,7 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>0</integer>
+								<integer>255</integer>
 							</dict>
 						</array>
 						<key>seqExpanded</key>
@@ -376,7 +376,7 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>255</integer>
+						<integer>0</integer>
 					</dict>
 				</array>
 				<key>seqExpanded</key>
@@ -503,8 +503,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1</real>
-										<real>1</real>
+										<real>1.2999999523162842</real>
+										<real>1.2999999523162842</real>
 									</array>
 								</dict>
 								<dict>
@@ -521,8 +521,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.2999999523162842</real>
-										<real>1.2999999523162842</real>
+										<real>1.6000000238418579</real>
+										<real>1.6000000238418579</real>
 									</array>
 								</dict>
 								<dict>
@@ -539,8 +539,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.2999999523162842</real>
-										<real>1.2999999523162842</real>
+										<real>1.6000000238418579</real>
+										<real>1.6000000238418579</real>
 									</array>
 								</dict>
 								<dict>
@@ -557,8 +557,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1</real>
-										<real>1</real>
+										<real>1.2999999523162842</real>
+										<real>1.2999999523162842</real>
 									</array>
 								</dict>
 							</array>
@@ -662,8 +662,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
-							<real>1</real>
+							<real>1.2999999523162842</real>
+							<real>1.2999999523162842</real>
 							<true/>
 							<integer>0</integer>
 						</array>

@@ -46,6 +46,32 @@ namespace KS
 		}
 	}
 	
+	void setColor(CCObject* object, const ccColor3B& color)
+	{
+		CCArray* childs = NULL;
+		CCObject* child = NULL;
+		CCNode* nodeObject = (CCNode*)object;
+		CCNodeRGBA* mine = dynamic_cast<CCNodeRGBA*>(nodeObject);
+		if(mine)
+			mine->setColor(color);
+		if (nodeObject) {
+			childs = nodeObject->getChildren();
+		}
+		if (childs) {
+			CCARRAY_FOREACH(childs, child){
+				CCNodeRGBA *pRGBAProtocol = dynamic_cast<CCNodeRGBA*>(child);
+				if (pRGBAProtocol)
+				{
+					pRGBAProtocol->setColor(color);
+					// pRGBAProtocol->setColor(ccc3(opaque, opaque, opaque));
+				}
+				CCNode* singleObject = (CCNode*)child;
+				if (singleObject && singleObject->getChildrenCount()>0) {
+					setColor(singleObject, color);
+				}
+			}
+		}
+	}
 	string longLongToStr(long long t)
 	{
 		int radix = 26;

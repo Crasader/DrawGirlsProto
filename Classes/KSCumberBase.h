@@ -81,6 +81,7 @@ enum MOVEMENT
 	CIRCLE_TYPE = 4,
 	SNAKE_TYPE = 5,
 	FOLLOW_TYPE = 6,
+	RUSH_TYPE = 7
 };
 
 template <typename T>
@@ -195,6 +196,7 @@ public:
 	void rightAngleMoving(float dt); /// 직각 움직임.
 	void circleMoving(float dt); /// 원형 움직임.
 	void snakeMoving(float dt);  /// 뱀형 움직임
+	void rushMoving(float dt); /// 개돌 움직임. 
 	virtual void crashMapForPosition(CCPoint targetPt) = 0;
 	void settingScale(float startScale, float minScale, float maxScale);
 	struct FuryRule
@@ -291,11 +293,17 @@ protected:
 	{
 		int furyFrameCount;
 		int totalFrame;
+		int colorRef;
+		int colorDir;
 		void startFury(int tf)
 		{
 			totalFrame = tf;
 			furyFrameCount = 0;
+			firstMoving = true;
+			colorRef = 255;
+			colorDir = -1; // 처음에 레드를 제외한 다른 컬러는 감소시킴.
 		}
+		bool firstMoving; // 처음 분노를 시작했다면 true
 	}m_furyMode;
 
 	struct Invisible

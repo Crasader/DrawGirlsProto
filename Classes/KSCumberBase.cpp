@@ -36,6 +36,7 @@ struct DecreaseOp : public PassiveOp<_Tp>
 
 
 
+
 template <class _Tp>
 struct SubtractOp : public PassiveOp<_Tp>
 {
@@ -314,7 +315,7 @@ void KSCumberBase::straightMoving(float dt)
 						degree = m_directionAngleDegree + 90;
 						break;
 					case 2:
-						degree = m_directionAngleDegree + 90;
+						degree = m_directionAngleDegree - 90;
 						break;
 				}
 			}
@@ -1120,6 +1121,144 @@ void KSCumberBase::snakeMoving(float dt)
 	m_snake.lastMovingTime = m_scale.timer;
 }
 
+void KSCumberBase::rushMoving(float dt)
+{
+	//	CCLog("%f %f", getPosition().x, getPosition().y);
+	m_scale.timer += 1/60.f;
+
+
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	{
+		m_scale.collisionCount = 0;
+		m_scale.collisionStartTime = m_scale.timer;
+		//		setCumberSize(MIN(1.0, getCumberSize() + scale.SCALE_ADDER));
+	}
+	CCPoint afterPosition;
+	IntPoint afterPoint;
+	//	int check_loop_cnt = 0;
+
+	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	{
+		if(m_furyMode.firstMoving == true)
+		{
+			CCLog("firstRush");
+			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
+			m_directionAngleDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetValue(-10, +10);
+			m_furyMode.firstMoving = false;
+		}
+		else 
+		{
+			// 오직 벽에 의해서만 튕기도록함.
+			//int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
+			//if(changeDirection == 0)
+			//{
+				//m_directionAngleDegree += m_well512.GetValue(0, 360);
+			//}
+		}
+
+	}
+
+	bool validPosition = false;
+	int cnt = 0;
+	bool onceOutlineAndMapCollision = false;
+	float degree = m_directionAngleDegree;
+	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
+	while(!validPosition)
+	{
+		cnt++;
+		float tempSpeed = 1.5f;
+		float speedX = tempSpeed * cos(deg2Rad(degree)) * (1 + cnt / 30.f * (3.f / (0.5f * tempSpeed) - 1));
+		float speedY = tempSpeed * sin(deg2Rad(degree)) * (1 + cnt / 30.f * (3.f / (0.5f * tempSpeed) - 1));
+
+		CCPoint cumberPosition = getPosition();
+		afterPosition = cumberPosition + ccp(speedX, speedY);
+		afterPoint = ccp2ip(afterPosition);
+
+		IntPoint checkPosition;
+		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
+		auto degreeSelector = [&](int cnt, float degree)->float {
+			if(cnt >= 30)
+			{
+				validPosition = true;
+				pathFound = false;
+			}
+			else if(cnt >= 5)
+			{
+				degree = (cnt % 8) * 45;
+			}
+			else
+			{
+				auto probSel = ProbSelector({1,1,1});
+				auto pSel = probSel.getResult();
+
+				switch(pSel)
+				{
+					case 0:
+						degree = -degree;
+						break;
+					case 1:
+						degree = m_directionAngleDegree + 90;
+						break;
+					case 2:
+						degree = m_directionAngleDegree - 90;
+						break;
+				}
+			}
+			return degree;
+		};
+
+
+		
+		if(collisionCode == kCOLLISION_OUTLINE)
+		{
+			m_crashCount++;
+			degree = degreeSelector(cnt, degree);
+			if(degree < 0)			degree += 360;
+			else if(degree > 360)	degree -= 360;
+		}
+		else
+		{
+			validPosition = true;
+		}
+		if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
+		{
+			crashMapForPosition(afterPosition);
+		}
+
+		if(cnt >= 2)
+		{
+			CCLog("rushMoving cnt !! = %d", cnt);
+		}
+	}
+
+	m_directionAngleDegree = degree;
+
+	//	CCLog("cnt outer !! = %d", cnt);
+
+
+	if(m_state == CUMBERSTATEFURY)
+	{
+		if(pathFound)
+			setPosition(afterPosition);
+	}
+	if(onceOutlineAndMapCollision)
+	{
+
+		if(m_scale.collisionCount == 0)
+		{
+			m_scale.collisionStartTime = m_scale.timer;
+
+		}
+		m_scale.collisionCount++;
+		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
+		{
+			CCLog("decrese Size !!");
+			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
+		}
+	}
+
+
+}
 void KSCumberBase::cumberAttack(float dt)
 {
 	//	myJack->get
@@ -1134,6 +1273,7 @@ void KSCumberBase::cumberAttack(float dt)
 	}
 	//	CCLog("%f %f %d", distance, gainPercent, m_crashCount);
 	bool crashAttack = false;
+	bool distanceFury = false; // 거리로 인한 분노인가.
 	
 	//거리분노룰 - 분노카운터와 리어택카운터가 0이상일때, 보스-유저의 거리가 떨어져있으면 부수기공격
 	if(m_furyCnt > 0 && m_reAttackCnt > 0){
@@ -1147,7 +1287,7 @@ void KSCumberBase::cumberAttack(float dt)
 			if(w == 0)
 			{
 				crashAttack = true;
-				
+				distanceFury = true;
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
 				m_furyCnt = -400;
 			}
@@ -1272,157 +1412,175 @@ void KSCumberBase::cumberAttack(float dt)
 			"percent" : 1,
 			"target" : "no"})";
 		
-		Json::Reader reader;
-		Json::Value attackCode;
-		reader.parse(patternData, attackCode);
-		int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
-		if(ret == 1)
-		{
-			attackBehavior(attackCode);
-		}
-	}
-	else if(!selectedAttacks.empty())
-	{
-		Json::Value attackCode;
-		bool searched = false;
-		int searchCount = 0;
-		
-		// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
-		
-		ProbSelector probSel;
-		
-		// 바깥쪽으로 얼마나 먹었는지를...
-		int externalOutlineCount = 0;
-		for(int x=mapLoopRange::mapWidthInnerBegin; x != mapLoopRange::mapWidthInnerEnd; x++)
-		{
-			if(myGD->mapState[x][mapLoopRange::mapHeightInnerBegin] == mapOldline)
-				externalOutlineCount++;
-			if(myGD->mapState[x][mapLoopRange::mapHeightInnerEnd-1] == mapOldline)
-				externalOutlineCount++;
-		}
-		for(int y=mapLoopRange::mapHeightInnerBegin; y != mapLoopRange::mapHeightInnerEnd; y++)
-		{
-			if(myGD->mapState[mapLoopRange::mapWidthInnerBegin][y] == mapOldline)
-				externalOutlineCount++;
-			if(myGD->mapState[mapLoopRange::mapWidthInnerEnd - 1][y] == mapOldline)
-				externalOutlineCount++;
-		}
-		
-		
-		
-		float notCrashSum = 0; // 크래시가 아닌것의 합
-		int crashNumber = 0;   // 부수기 공격의 개수
-		bool bossIsClosed_ = bossIsClosed();
-		for(auto& i : selectedAttacks)
-		{
-			if(i["atype"].asString() != "crash")
-			{
-				notCrashSum += i["percent"].asDouble();
-			}
-			else
-			{
-				crashNumber++;
-			}
-		}
-		float patternMax = 2 * notCrashSum / crashNumber;
-		for(auto& i : selectedAttacks)
-		{
-			KS::KSLog("% percent!!!", i["percent"].asDouble());
-			if(i["pattern"].asString() == "1017")
-			{
-				if(externalOutlineCount >= 150) // 가장자리 위주로 먹었다면...
-				{
-					float notAlongSum = 0;
-					for(auto& i : selectedAttacks)
-					{
-						if(i["pattern"].asString() != "1017")
-						{
-							notAlongSum += i["percent"].asDouble();
-						}
-					}
-					float alongMin = i["percent"].asFloat();
-					float alongMax = notAlongSum / 1.5f;
-					if(alongMax >= alongMin)
-					{
-						probSel.pushProb(i["percent"].asFloat() + (alongMax - i["percent"].asFloat()) * getAiValue() / 100.f);
-					}
-					else
-					{
-						probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
-					}
-				}
-				else
-				{
-					probSel.pushProb(i["percent"].asFloat());
-				}
-			}
-			else if(i["atype"].asString() == "crash")
-			{
-				float patternMin = i["percent"].asFloat();
-				if(bossIsClosed_) // 보스가 갇힘.
-				{
-					if(patternMax >= patternMin)
-					{
-						probSel.pushProb(i["percent"].asFloat() + (patternMax - i["percent"].asFloat()) * getAiValue() / 100.f);
-					}
-					else
-					{
-						probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
-					}
-				}
-				else
-					probSel.pushProb(i["percent"].asFloat());
-			}
-			else
-			{
-				probSel.pushProb(i["percent"].asFloat());
-			}
-		}
-		CCLog("externalCnt %d", externalOutlineCount);
-		while(!searched)
-		{
-			searchCount++;
-			//			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
-			int idx = probSel.getResult();
-			
-			if(idx<0){
-				searched = false;
-				break;
-			}
-			
-			attackCode = selectedAttacks[idx];
-			searched = true;
-			
-			if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
-				searched = false;
-			if(attackCode["pattern"].asString() == "109" && m_state == CUMBERSTATEFURY)
-				searched = false;
-			if(searchCount >= 30)
-			{
-				searched = false;
-				break;
-			}
-		}
-		
-		if(searched)
-		{
-			KS::KSLog("%", attackCode);
-			Json::FastWriter fw;
-			std::string patternData = fw.write(attackCode);
+			Json::Reader reader;
+			Json::Value attackCode;
+			reader.parse(patternData, attackCode);
 			int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
 			if(ret == 1)
 			{
 				attackBehavior(attackCode);
-				
-				//한번 공격후 3초간 재공격 하지 않음.
-				m_reAttackCnt = -180;
 			}
 		}
-		
+		else if(!selectedAttacks.empty())
+		{
+			ProbSelector teleportProb = {1,2};
+			if(teleportProb.getResult() == 0)
+			{
+				
+				std::string patternData = R"({
+				"atype" : "special",
+				"pattern" : "1007",
+				"percent" : 1,
+				"target" : "no"})";
+				Json::Reader reader;
+				Json::Value attackCode;
+				reader.parse(patternData, attackCode);
+				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+				if(ret == 1)
+				{
+					attackBehavior(attackCode);
+				}
+			}
+			else
+			{
+				Json::Value attackCode;
+				bool searched = false;
+				int searchCount = 0;
+				
+				// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
+				
+				ProbSelector probSel;
+				
+				// 바깥쪽으로 얼마나 먹었는지를...
+				int externalOutlineCount = 0;
+				for(int x=mapLoopRange::mapWidthInnerBegin; x != mapLoopRange::mapWidthInnerEnd; x++)
+				{
+					if(myGD->mapState[x][mapLoopRange::mapHeightInnerBegin] == mapOldline)
+						externalOutlineCount++;
+					if(myGD->mapState[x][mapLoopRange::mapHeightInnerEnd-1] == mapOldline)
+						externalOutlineCount++;
+				}
+				for(int y=mapLoopRange::mapHeightInnerBegin; y != mapLoopRange::mapHeightInnerEnd; y++)
+				{
+					if(myGD->mapState[mapLoopRange::mapWidthInnerBegin][y] == mapOldline)
+						externalOutlineCount++;
+					if(myGD->mapState[mapLoopRange::mapWidthInnerEnd - 1][y] == mapOldline)
+						externalOutlineCount++;
+				}
+				
+				
+				
+				float notCrashSum = 0; // 크래시가 아닌것의 합
+				int crashNumber = 0;   // 부수기 공격의 개수
+				bool bossIsClosed_ = bossIsClosed();
+				for(auto& i : selectedAttacks)
+				{
+					if(i["atype"].asString() != "crash")
+					{
+						notCrashSum += i["percent"].asDouble();
+					}
+					else
+					{
+						crashNumber++;
+					}
+				}
+				float patternMax = 2 * notCrashSum / crashNumber;
+				for(auto& i : selectedAttacks)
+				{
+					KS::KSLog("% percent!!!", i["percent"].asDouble());
+					if(i["pattern"].asString() == "1017")
+					{
+						if(externalOutlineCount >= 150) // 가장자리 위주로 먹었다면...
+						{
+							float notAlongSum = 0;
+							for(auto& i : selectedAttacks)
+							{
+								if(i["pattern"].asString() != "1017")
+								{
+									notAlongSum += i["percent"].asDouble();
+								}
+							}
+							float alongMin = i["percent"].asFloat();
+							float alongMax = notAlongSum / 1.5f;
+							if(alongMax >= alongMin)
+							{
+								probSel.pushProb(i["percent"].asFloat() + (alongMax - i["percent"].asFloat()) * getAiValue() / 100.f);
+							}
+							else
+							{
+								probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
+							}
+						}
+						else
+						{
+							probSel.pushProb(i["percent"].asFloat());
+						}
+					}
+					else if(i["atype"].asString() == "crash")
+					{
+						float patternMin = i["percent"].asFloat();
+						if(bossIsClosed_) // 보스가 갇힘.
+						{
+							if(patternMax >= patternMin)
+							{
+								probSel.pushProb(i["percent"].asFloat() + (patternMax - i["percent"].asFloat()) * getAiValue() / 100.f);
+							}
+							else
+							{
+								probSel.pushProb(i["percent"].asFloat() * (1 + getAiValue() / 100.f));
+							}
+						}
+						else
+							probSel.pushProb(i["percent"].asFloat());
+					}
+					else
+					{
+						probSel.pushProb(i["percent"].asFloat());
+					}
+				}
+				CCLog("externalCnt %d", externalOutlineCount);
+				while(!searched)
+				{
+					searchCount++;
+					//			int idx = m_well512.GetValue(selectedAttacks.size() - 1);
+					int idx = probSel.getResult();
+					
+					if(idx<0){
+						searched = false;
+						break;
+					}
+					
+					attackCode = selectedAttacks[idx];
+					searched = true;
+					
+					if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
+						searched = false;
+					if(attackCode["pattern"].asString() == "109" && m_state == CUMBERSTATEFURY)
+						searched = false;
+					if(searchCount >= 30)
+					{
+						searched = false;
+						break;
+					}
+				}
+				
+				if(searched)
+				{
+					KS::KSLog("%", attackCode);
+					Json::FastWriter fw;
+					std::string patternData = fw.write(attackCode);
+					int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+					if(ret == 1)
+					{
+						attackBehavior(attackCode);
+						
+						//한번 공격후 3초간 재공격 하지 않음.
+						m_reAttackCnt = -180;
+					}
+				}
+			}
+		}
 	}
-	
-	
-}
 
 
 
@@ -1495,6 +1653,7 @@ void KSCumberBase::bossDieBomb(float dt)
 			CCPoint t = getPosition();
 			ret.first->setPosition(t);
 			getParent()->addChild(ret.first, 11);
+			this->setVisible(false);
 		}
 	}
 }
@@ -1714,7 +1873,11 @@ void KSCumberBase::onJackDrawLine()
 {
 	ProbSelector ps({getAiValue(), 100.f - getAiValue()});
 	int r = ps.getResult();
-	if(r == 0)
+	CCLog("%d %d", myGD->getJackPoint().x, myGD->getJackPoint().y);
+	CCLog("%f %f", getPosition().x, getPosition().y);
+	CCLog("distance = %f", ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition()));
+	float dis = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
+	if(r == 0 && dis >= 55.f) // 너무 가까우면 안따라가게 함.
 	{
 		m_drawMovement = FOLLOW_TYPE;
 	}
@@ -1789,7 +1952,6 @@ void KSCumberBase::setGameover()
 	//			scheduleOnce(schedule_selector(ThisClassType::bossDieBomb), m_well512.GetFloatValue(0.3f, 1.f));
 	//		}
 	
-	this->setVisible(false);
 }
 
 void KSCumberBase::movingAndCrash( float dt )
@@ -1849,6 +2011,9 @@ void KSCumberBase::movingAndCrash( float dt )
 				break;
 			case SNAKE_TYPE:
 				snakeMoving(dt);
+				break;
+			case RUSH_TYPE:
+				rushMoving(dt);
 				break;
 		}
 	};
@@ -2013,7 +2178,7 @@ void KSCumberBase::assignBossData(Json::Value boss)
 	
 	m_normalMovement = (enum MOVEMENT)normalMovement;
 	m_drawMovement = (enum MOVEMENT)drawMovement;
-	m_furyMovement = (enum MOVEMENT)furyMovement;
+	m_furyMovement = MOVEMENT::RUSH_TYPE;
 }
 
 void KSCumberBase::applyPassiveData(const std::string& passive)
@@ -2057,40 +2222,73 @@ void KSCumberBase::applyAutoBalance()
 	int balanceN = 5;
 	float downLimit = 0.5f;
 	
-	//
+	int clearCount = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt);
+	int puzzleNo = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	
+	
+	
 	ostringstream oss;
 	oss << mySD->getSilType();
 	std::string playcountKey = std::string("playcount_") + oss.str();
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
+	int balPt = clearCount-2;
 	
 	
 	CCLog("#################### autobalance ############################");
-	CCLog("try : %d / autoBalance Start : %d",playCount,autobalanceTry);
+	CCLog("clear : %d / try : %d / autoBalance Start : %d / puzzleNo : %d",clearCount,playCount,balPt,puzzleNo);
 	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
-	if(autobalanceTry < playCount)
-	{
-		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
-		float autoRate = downLimit * exceedPlay / balanceN;
-		m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
-		m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
+	
+	// 연속으로 잘 깰경우 몬스터 능력치 향상시키기
+	
+	
+	if(clearCount>1 && puzzleNo!=1){
 		
+		CCLog("UP monster abillity");
 		
-		CCLog("NOW AUTOBALANCING..");
+		if(balPt>10)balPt=10;
+		m_aiValue += balPt*10;
+		m_aiValue = MIN(100,m_aiValue);
+		
+		m_attackPercent *= 1+balPt/10.f;
+		m_attackPercent = MIN(0.4,m_attackPercent);
+		
+		m_maxSpeed *= 1+balPt/10.f;
+		m_minSpeed *= 1+balPt/10.f;
+		m_minSpeed = MIN(1, m_minSpeed);
+		m_maxSpeed = MIN(3, m_maxSpeed);
+		
 		CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
-		if(autobalanceTry*2 < playCount){
-			float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
-			m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
-			m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
+		CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+		
+		CCLog("#################### autobalance ############################");
+		//m_aiValue , m_attackPercent, m_maxSpeed , m_minSpeed
+	
+	// 계속 실패할경우 능력치 하향하기
+	}else{
+
+		if(autobalanceTry < playCount)
+		{
+			int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
+			float autoRate = downLimit * exceedPlay / balanceN;
+			m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
+			m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
 			
-			CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+			CCLog("DOWN monster abillity");
+			CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
+			if(autobalanceTry*2 < playCount){
+				float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
+				m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
+				m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
+				
+				CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+			}
+			
+			
 		}
 		
-		
+		CCLog("#################### autobalance ############################");
 	}
-	
-	CCLog("#################### autobalance ############################");
-
 }
 void KSCumberBase::settingAI( int ai )
 {
@@ -2152,20 +2350,27 @@ void KSCumberBase::settingHp( float hp )
 
 void KSCumberBase::settingAttackPercent( float ap )
 {
-	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
-	int balanceN = 10;
-	float downLimit = 0.5f;
-	//
-	ostringstream oss;
-	oss << mySD->getSilType();
-	std::string playcountKey = std::string("playcount_") + oss.str();
-	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
-	if(autobalanceTry < playCount)
-	{
-		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
-		ap = MAX(ap * downLimit, ap - downLimit / balanceN * exceedPlay);
-	}
+	CCLog("!!!settingAttackPercent!!! %f",ap);
+	
+//	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
+//	int balanceN = 10;
+//	float downLimit = 0.5f;
+//	//
+//	ostringstream oss;
+//	oss << mySD->getSilType();
+//	std::string playcountKey = std::string("playcount_") + oss.str();
+//	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
+//	
+//	if(autobalanceTry < playCount)
+//	{
+//		int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
+//		ap = MAX(ap * downLimit, ap - downLimit / balanceN * exceedPlay);
+//	}
+	
+	
+	
+	//CCLog("!!!settingAttackPercent!!! %f",ap);
 	
 	m_attackPercent = ap;
 }

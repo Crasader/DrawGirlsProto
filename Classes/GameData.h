@@ -104,6 +104,7 @@ public:
 	
 	std::map<std::string, std::function<void(CCPoint, CCObject*, SEL_CallFuncO)>> V_CCPCCOCallfuncO;
 	std::map<std::string, std::function<bool(void)>> B_V;
+	std::map<std::string, std::function<bool(IntPoint)>> B_Ip;
 	std::map<std::string, std::function<CCNode*(void)>> CCN_V;
 	std::map<std::string, std::function<CCArray*(void)>> CCA_V;
 	std::map<std::string, std::function<bool(CCObject*, float, float)>> B_CCOFF;
@@ -146,6 +147,7 @@ public:
 	
 	int getCommunication(string funcName);
 	bool getCommunicationBool(string funcName);
+	bool getCommunicationBool(string funcName, IntPoint t_p);
 	CCPoint getCommunicationCCPoint(string funcName);
 	CCNode* getCommunicationNode(string funcName);
 	CCArray* getCommunicationArray(string funcName);

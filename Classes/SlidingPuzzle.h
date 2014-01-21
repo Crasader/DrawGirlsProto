@@ -71,7 +71,7 @@ public:
 	PUZZLE_WIDTH(5),
 	PUZZLE_HEIGHT(4),
 	m_timer(0),
-	m_remainTime(3000)
+	m_remainTime(60*3)
 	{
 		
 	}

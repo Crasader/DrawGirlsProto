@@ -488,19 +488,57 @@ void KSSnakeBase::crashMapForPosition(CCPoint targetPt)
 }
 void KSSnakeBase::furyModeScheduler(float dt)
 {
+	//if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
+	//{
+		//crashMapForPosition(getPosition());
+		
+		//m_state = CUMBERSTATEMOVING;
+		//m_headImg->setColor(ccc3(255, 255, 255));
+		//m_tailImg->setColor(ccc3(255, 255, 255));
+		//for(auto i : m_Bodies)
+		//{
+			//i->setColor(ccc3(255, 255, 255));
+		//}
+		//myGD->communication("MS_resetRects", false);
+		//unschedule(schedule_selector(ThisClassType::furyModeScheduler));
+	//}
 	if(m_furyMode.furyFrameCount >= m_furyMode.totalFrame)
 	{
+		// 시간이 다되서 끝나는 조건.
 		crashMapForPosition(getPosition());
-		
+
 		m_state = CUMBERSTATEMOVING;
-		m_headImg->setColor(ccc3(255, 255, 255));
-		m_tailImg->setColor(ccc3(255, 255, 255));
-		for(auto i : m_Bodies)
-		{
-			i->setColor(ccc3(255, 255, 255));
-		}
+		//		m_headImg->setColor(ccc3(255, 255, 255));
 		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
+		// 다시 벌겋게 만드는 코드.
+
+		addChild(KSGradualValue<int>::create(m_furyMode.colorRef, 255, 0.5f,
+					[=](int t)
+					{
+					KS::setColor(this, ccc3(255, t, t));
+					}));
+	}
+	else
+	{
+		int c = clampf(m_furyMode.colorRef, 0, 255);
+		KS::setColor(this, ccc3(255, c, c)); 
+		if(m_furyMode.colorDir > 0)
+		{
+			m_furyMode.colorRef += 4;
+			if(m_furyMode.colorRef >= 256)
+			{
+				m_furyMode.colorDir *= -1;
+			}
+		}
+		else
+		{
+			m_furyMode.colorRef -= 4;
+			if(m_furyMode.colorRef < 0)
+			{
+				m_furyMode.colorDir *= -1;
+			}
+		}
 	}
 }
 void KSSnakeBase::furyModeOff()

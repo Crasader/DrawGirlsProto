@@ -211,6 +211,10 @@ void CountingGame::createObject(float dt)
 																																												 CCSprite* successSprite = CCSprite::create("bonusgame_succes.png");
 																																												 successSprite->setPosition(ccp(240, 160));
 																																												 addChild(successSprite);
+																																												 CCSprite* reward = CCSprite::create("price_ruby_img.png");
+																																												 reward->setPosition(ccp(205, 133));
+																																												 addChild(reward);
+																																												 reward->setScale(2.f);
 																																												 addChild(KSTimer::create(2.f, [=]()
 																																																									{
 																																																										m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
