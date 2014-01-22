@@ -101,8 +101,9 @@ class UploadHandler
             'image_library' => 1,
             // Set to false to disable rotating images based on EXIF meta data:
             'orient_image' => true,
-            'rand_filename' => true,
-            'overwrite' => false,
+            'writeMode' => "update",
+            //'rand_filename' => true,
+            //'overwrite' => false,
             'image_versions' => array(
                 // Uncomment the following version to restrict the size of
                 // uploaded images:
@@ -415,22 +416,22 @@ class UploadHandler
 
     protected function get_unique_filename($name,
         $type = null, $index = null, $content_range = null) {
-        	if($this->options['rand_filename']==true){
-        		$date=date("his",time());
-        		$newname=trim($name);
-        		$nnn = explode(" ",$newname);
-        		$hjj = explode(".",$newname);
-        		$hjj = $hjj[count($hjj)-1];
-			
-				for($i=0;$i<=count($nnn);$i++){
-					$newname2.=$nnn[$i];
-				}
-				$newname=trim($newname2);
-				$newname=hmac('ripemd160', "lq".$date.$newname).".".$hjj;
-				
-				$name = $newname;
+    	if($this->options['writeMode']=="random"){
+    		$date=date("his",time());
+    		$newname=trim($name);
+    		$nnn = explode(" ",$newname);
+    		$hjj = explode(".",$newname);
+    		$hjj = $hjj[count($hjj)-1];
+		
+			for($i=0;$i<=count($nnn);$i++){
+				$newname2.=$nnn[$i];
 			}
-		if($this->options['overwrite']!=true){
+			$newname=trim($newname2);
+			$newname=hmac('ripemd160', "lq".$date.$newname).".".$hjj;
+			
+			$name = $newname;
+		}
+		if($this->options['writeMode']=="update"){
 	        while(is_dir($this->get_upload_path($name))) {
 	            $name = $this->upcount_name($name);
 	        }
@@ -1216,20 +1217,24 @@ class UploadHandler
 
 }
 
-$category = "";
-$randfilename=true;
-$overwrite = false;
+$category = "etc";
+//$randfilename=true;
+//$overwrite = false;
+$writeMode = "update";
+if($_POST['writeMode'])$writeMode = $_POST['writeMode'];
 if($_POST['category'])$category="/".$_POST['category']."/";
-if($_POST['randfilename']=="false")$randfilename=false;
-if($_POST['overwrite']=="true")$overwrite=true;
+// if($_POST['randfilename']=="false")$randfilename=false;
+// if($_POST['overwrite']=="true")$overwrite=true;
 
 $option = array(
  			'script_url' => get_full_url()."/",
             'upload_dir' => dirname(get_server_var('SCRIPT_FILENAME')).'/../images'.$category,
             'upload_url' => get_full_url().'/../images'.$category,
-            'rand_filename' => $randfilename,
-            'overwrite' => $overwrite
+            'writeMode' => $writeMode,
 );
+//            'rand_filename' => $randfilename,
+//            'overwrite' => $overwrite
+
 $upload_handler = new UploadHandler($option);
 
 ?>

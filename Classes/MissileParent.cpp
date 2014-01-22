@@ -114,7 +114,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 	
 	std::string pattern = patternData["pattern"].asString();
 	std::string atype = patternData["atype"].asString();
-	auto castBranch = [=](const std::string atype, std::function<void(CCObject*)> func)
+	auto castBranch = [=](const std::string atype, std::function<void(CCObject*)> func, const std::string& warningFileName)
 	{
 		if(atype == "crash")
 		{
@@ -149,6 +149,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			chargeArray->addObject(t_ccn);
 		}
 	};
+	string warningFileName = "warning_" + pattern + ".ccbi";
 	if(pattern == "1")
 	{
 		if(exe)
@@ -163,7 +164,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	
@@ -179,7 +180,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "3")
@@ -194,7 +195,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -210,7 +211,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -226,7 +227,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -242,7 +243,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 			
 		}
@@ -259,7 +260,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 			
 		}
@@ -276,7 +277,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 			
 		}
@@ -293,7 +294,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -311,7 +312,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 			
 		}
@@ -328,7 +329,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -344,7 +345,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "104")
@@ -359,7 +360,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "105") // 나무 토막
@@ -376,7 +377,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 			
 		}
@@ -393,7 +394,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -409,7 +410,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -425,7 +426,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "109") // 개돌
@@ -440,7 +441,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				int totalFrame = patternData.get("totalframe", 300).asInt();
 				t->furyModeOn(totalFrame);
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -456,7 +457,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "111") // 움직이는 해바라기
@@ -471,7 +472,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 			
 		}
@@ -488,7 +489,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -504,7 +505,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -521,7 +522,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				
 				myGD->communication("CP_onPatternEnd");
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	
@@ -549,7 +550,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				//		saveAP = t;
 				//		savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "1003")
@@ -575,7 +576,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				
 				myGD->communication("CP_onPatternEnd");
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "1004")
@@ -594,7 +595,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				
 				myGD->communication("CP_onPatternEnd");
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "1005") // 빙결.
@@ -617,7 +618,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				}
 				myGD->communication("CP_onPatternEnd");
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 		
@@ -642,7 +643,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				}
 				myGD->communication("CP_onPatternEnd");
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "1007") // 텔포.
@@ -655,7 +656,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				AP_Missile32* t_m32 = AP_Missile32::create();
 				addChild(t_m32);
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -670,7 +671,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				((KSCumberBase*)cb)->startInvisible(totalFrame);
 				myGD->communication("CP_onPatternEnd");
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -690,7 +691,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t_m15;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "1010") // 위성빔.
@@ -715,7 +716,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				//				myGD->communication("CP_onPatternEnd");
 				
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "1011") // 레이저 스캔.
@@ -731,7 +732,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t_m6;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -747,7 +748,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "1013") // 메테오
@@ -769,7 +770,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				myGD->communication("MP_endIngActionAP");
 				myGD->communication("CP_onPatternEnd");
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "1014") // 떨어지는 돌
@@ -790,7 +791,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				myGD->communication("MP_endIngActionAP");
 				myGD->communication("CP_onPatternEnd");
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -831,7 +832,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}
@@ -847,7 +848,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				saveAP = t;
 				savedAP = true;
 			};
-			castBranch(atype, func);
+			castBranch(atype, func, warningFileName);
 			
 		}
 	}

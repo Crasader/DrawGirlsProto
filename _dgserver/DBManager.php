@@ -5,7 +5,6 @@ class ResultState{
 	public $m_code;
 	public $m_name;
 	public $m_message;
-	
 	static public $m_resutlCodeList=null;
 	
 	public function __construct($code=1,$message=""){
@@ -170,7 +169,7 @@ class DBInfo{
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class DBManager{
 	public  $m_serverInfo=array();
-	public  $m_shardDBInfo=array();
+	public  $m_shardDBInfoList=array();
 	public  $m_shardDBCount=0;
 	public  $m_mainDBInfo=array();
 	public static $m_mainTables=array();
@@ -188,16 +187,20 @@ class DBManager{
 		$this->m_mainDBInfo = new DBInfo("drawgirls",$this->getServerInfo($server0Index));
 		
 		//샤드db설정
-		$this->m_shardDBInfo[]=new DBInfo("dg001",$this->getServerInfo($server0Index));
-		$this->m_shardDBInfo[]=new DBInfo("dg002",$this->getServerInfo($server0Index));
+		$this->m_shardDBInfoList[]=new DBInfo("dg001",$this->getServerInfo($server0Index));
+		$this->m_shardDBInfoList[]=new DBInfo("dg002",$this->getServerInfo($server0Index));
 		
-		$this->m_shardDBCount = count($this->m_shardDBInfo);
+		$this->m_shardDBCount = count($this->m_shardDBInfoList);
 
 		//테이블 설정		
 		self::$m_shardTables["userdata"]="UserDataTable";
 		self::$m_shardTables["message"]="MessageTable";
 		self::$m_shardTables["weeklyscore"]="WeeklyScoreTable";
 		self::$m_shardTables["stagescore"]="StageScoreTable";
+		self::$m_shardTables["userlog"]="UserLogTable";
+
+
+		self::$m_mainTables["userindex"]="aUserShardIndex";
 	}
 	
 	//싱글턴 얻어오기
@@ -220,16 +223,28 @@ class DBManager{
 		return $this->m_serverInfo[$index];
 	}
 
+	public function getMainDBInfo(){
+		return $this->m_mainDBInfo;
+	}
 	public function getDBInfoByShardKey($shardKey){
 	
-		return $this->m_shardDBInfo[$this->getDBIndexByShardKey($shardKey)];
+		return $this->getDBInfoByShardIndex($this->getDBIndexByShardKey($shardKey));
 	}
 	
+	public function getDBInfoByShardIndex($index){
+		return $this->m_shardDBInfoList[$index];
+	}
+
 	public function getConnectionByShardKey($shardKey){
 		
-		LogManager::get()->addLog("getConnectionByShardKey, $shardKey -> dbindex:".$this->getDBIndexByShardKey($shardKey)." / db count is".$this->m_shardDBCount);
-		$conn = $this->m_shardDBInfo[$this->getDBIndexByShardKey($shardKey)]->getConnection();
+		
+		$conn = $this->getConnectionByShardIndex($this->getDBIndexByShardKey($shardKey));
 
+		return $conn;
+	}
+
+	public function getConnectionByShardIndex($index){
+		$conn = $this->m_shardDBInfoList[$index]->getConnection();
 		return $conn;
 	}
 		
@@ -244,7 +259,7 @@ class DBManager{
 	
 	public function closeShardDB(){
 		//for문 돌면서 close
-		foreach($this->m_shardDBInfo as &$dbInfo){
+		foreach($this->m_shardDBInfoList as &$dbInfo){
 			$dbInfo->closeConnection();
 		}
 	}
@@ -259,6 +274,9 @@ class DBManager{
 		$this->closeShardDB();
 	}
 
+	public function getShardDBInfoList(){
+		return $this->m_shardDBInfoList;
+	}
 	//static
 	
 
@@ -361,12 +379,14 @@ class DBRow{
 		return DBManager::updateQuery($this->m__DBTable,$this->getArrayData(),$where);
 	}
 	
-	public function insertQuery(){
-		return DBManager::insertQuery($this->m__DBTable,$this->getArrayData());
+	public function insertQuery($isIncludePrimaryKey=false){
+		return DBManager::insertQuery($this->m__DBTable,$this->getArrayData($isIncludePrimaryKey));
 	}
 	
-	public function save(){
+	public function save($isIncludePrimaryKey=false){
 		LogManager::get()->addLog("DBRow save function");
+		if(!$this->m__DBInfo)return false;
+
 		if($this->m__DBInfo->getConnection()){
 			$query="";
 			if($this->isLoaded()){
@@ -374,14 +394,14 @@ class DBRow{
 				$query = $this->updateQuery();
 			}else{
 				//insert
-				$query = $this->insertQuery();
+				$query = $this->insertQuery($isIncludePrimaryKey);
 			}
 			
 			if(mysql_query($query,$this->m__DBInfo->getConnection())){
-				LogManager::get()->addLog("query ok $query");
+				LogManager::get()->addLog("query ok");
 				return true;
 			}else{
-				LogManager::get()->addLog("query fail $query");
+				LogManager::get()->addLog("query fail");
 				return false;
 			}
 		}
@@ -391,6 +411,7 @@ class DBRow{
 	
 	public function load($where){
 		if(!$this->m__DBTable)return false;
+		if(!$this->m__DBInfo)return false;
 		if(!$this->m__DBInfo->getConnection())return false;
 		if(!$where && !$this->getPrimaryValue())return false;
 		
@@ -430,10 +451,120 @@ class DBRow{
 	public function setDBTable($dbTable){
 		$this->m__DBTable = $dbTable;
 	}
+
+	public function autoMatching($data){
+		foreach($data as $key => $value){
+			$this->{"m_".$key} = $value;
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class UserIndex extends DBRow{
+	public $m_memberID = null;
+	public $m_shardIndex = null;
 
+	public function __construct($memberID=null){
+		parent::__construct();
+		
+		$this->setPrimarykey("memberID");
+		$this->setDBTable(DBManager::getMT("userindex"));
+		$this->m_memberID = $memberID;
+		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+
+		if($memberID){
+		 	if(parent::load("memberID=".$memberID)){
+		 		$this->autoMatching($this->m__result);
+		 	}else{
+		 		$this->m_shardIndex = $this->getShardIndexByNumberKey($memberID);
+		 		$this->save(true);
+		 	}
+		 }
+	}
+
+	public function getShardIndexByNumberKey($numberKey){
+		return $numberKey%DBManager::get()->m_shardDBCount;
+	}
+
+	public function getShardConnection(){
+		return DBManager::get()->getConnectionByShardIndex($this->m_shardIndex);
+	}
+
+	public function getShardDBInfo(){
+		return DBManager::get()->getDBInfoByShardIndex($this->m_shardIndex);
+	}
+
+	static public function getShardConnectionByRandom(){
+		return DBManager::get()->getConnectionByShardKey(rand(0,10));
+	}
+
+	static public function getShardDBInfoList(){
+		return DBManager::get()->getShardDBInfoList();
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class UserLog extends DBRow{
+	public $m_no = null;
+	public $m_memberID = null;
+	public $m_ip = null;
+	public $m_header = null;
+	public $m_category = null;
+	public $m_input = null;
+	public $m_output = null;
+	public $m_regDate = null;
+	public $m_execTime = null;
+	public $m__userIndex = null;
+	static public $m__queryResult = null;
+	static public $m__queryCnt = 0;
+	public function __construct($memberID=null,$no=null){
+		parent::__construct();
+		
+		$this->setPrimarykey("no");
+		$this->setDBTable(DBManager::getST("userlog"));
+		$this->m_memberID = $memberID;
+		
+		if($memberID){
+			$this->m__userIndex = new UserIndex($memberID);
+			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+		}
+
+		if($memberID && $no){
+			if(parent::load("no=".$no." and memberID=".$memberID)){
+				$this->autoMatching($this->m__result);
+			}
+		}
+	}
+
+	static public function getShardDBInfoList(){
+		return UserIndex::getShardDBInfoList();
+	}
+
+
+
+	static public function getUserLogByQuery($where=""){
+		$dbInfoList = self::getShardDBInfoList();
+		if(self::$m__queryCnt>=count($dbInfoList)){
+			self::$m__queryCnt=0;
+			return false;
+		}
+
+		if(!self::$m__queryResult){
+			$dbconn = $dbInfoList[self::$m__queryCnt]->getConnection();
+			self::$m__queryResult = mysql_query("select * from ".DBManager::getST("userlog")." ".$where,$dbconn);
+		}
+
+		$result = mysql_fetch_array(self::$m__queryResult,MYSQL_ASSOC);
+
+		if($result)return $result;
+		
+		self::$m__queryResult=null;
+		self::$m__queryCnt++;
+
+		return self::getUserLogByQuery($where);
+	}
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class UserData extends DBRow{
 	public $m_no=null;
@@ -443,6 +574,7 @@ class UserData extends DBRow{
 	public $m_lastDate=null;
 	public $m_joinDate=null;
 	public $m_friendList=null;
+	public $m__userIndex=null;
 	public function __construct($memberID=null,$weekNo=null){
 		parent::__construct();
 		
@@ -450,27 +582,37 @@ class UserData extends DBRow{
 		$this->setDBTable(DBManager::getST("userdata"));
 		$this->m_memberID = $memberID;
 		
-		if($memberID)$this->setDBInfo(DBManager::get()->getDBInfoByShardKey($memberID));
+		if($memberID){
+			$this->m__userIndex = new UserIndex($memberID);
+			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+		}
 		
 		if($memberID){
 			if(parent::load("memberID=".$memberID)){
-				$this->m_no = $this->m__result["no"];
-				$this->m_memberID = $this->m__result["memberID"];
-				$this->m_data = $this->m__result["data"];
-				$this->m_nick = $this->m__result["nick"];
-				$this->m_lastDate = $this->m__result["lastDate"];
-				$this->m_joinDate = $this->m__result["joinDate"];
-				$this->m_friendList = $this->m__result["friendList"];
+				$this->autoMatching($this->m__result);
+				// $this->m_no = $this->m__result["no"];
+				// $this->m_memberID = $this->m__result["memberID"];
+				// $this->m_data = $this->m__result["data"];
+				// $this->m_nick = $this->m__result["nick"];
+				// $this->m_lastDate = $this->m__result["lastDate"];
+				// $this->m_joinDate = $this->m__result["joinDate"];
+				// $this->m_friendList = $this->m__result["friendList"];
 			}
 		}
 		//가입시간
 		if(!$this->m_joinDate)$this->m_joinDate=TimeManager::get()->getCurrentDateString();
 	}
 
-	public function save(){
+	public function save($isIncludePrimaryKey=false){
 		//마지막접속시간
 		$this->m_lastDate = TimeManager::get()->getCurrentDateString();
-		return parent::save();
+		return parent::save($isIncludePrimaryKey);
+	}
+
+	public function remove(){
+		$r = parent::remove();
+		if($r)$this->m__userIndex->remove();
+		return $r;
 	}
 
 
@@ -495,7 +637,40 @@ public function __construct($memberID=0,$DBInfo=null){
 		}
 	}
 */
-	
+	public function getArrayData($isIncludePrimaryKey=false,$keyList=null){
+		
+		$data = parent::getArrayData(isIncludePrimaryKey);
+
+		if($data["userdata"]){
+			$userdata =  json_decode($data["userdata"],true);
+
+			foreach($userdata as $key=>$value){
+				if($keyList && !in_array($name,$keyList)){
+					unset($userdata[$key]);
+				}
+			}
+
+			$data["userdata"]=json_encode($userdata,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+		}	
+		return $data;
+
+		// $arraydata=array();
+		// $class_vars = get_class_vars(get_class($this));
+		// foreach($class_vars as $name=>$value){
+		// 	if(!strpos($name,"__")){
+		// 		$fieldname = str_replace("m_","",$name);
+		// 		if(!$keyList|| in_array($fieldname,$keyList)){
+		// 			$arraydata[$fieldname]=$this->$name;
+		// 		}
+		// 	}
+		// }
+		
+		// if($this->m__primarykey && !$isIncludePrimaryKey){
+		// 	unset($arraydata[$this->m__primarykey]);
+		// }
+		
+		// return $arraydata;
+	}
 	
 	public function updateData($data){
 		//merge
@@ -558,12 +733,17 @@ class Message extends DBRow{
 	public $m_type=null;
 	public $m_isSendMsg=null;
 	
+	static public $m__queryResult = null;
+	static public $m__queryCnt = 0;
 	public function __construct($memberID=null,$messageNo=null){
 		parent::__construct();
 		$this->setPrimarykey("no");
 		$this->setDBTable(DBManager::getST("message"));
 		
-		if($memberID)$this->setDBInfo(DBManager::get()->getDBInfoByShardKey($memberID));
+		if($memberID){
+			$userIndex = new UserIndex($memberID);
+			$this->setDBInfo($userIndex->getShardDBInfo());
+		}
 		
 		if($memberID && $messageNo){
 			if(parent::load("no = $messageNo")){
@@ -583,7 +763,8 @@ class Message extends DBRow{
 	public function send(){
 		if(!$this->m_memberID)return "error";
 		if(!$this->m__DBInfo){
-			$this->m__DBInfo = DBManager::get()->getDBInfoByShardKey($this->m_memberID);
+			$userIndex = new UserIndex($this->m_memberID);
+			$this->setDBInfo($userIndex->getShardDBInfo());
 		}
 		
 		$result=mysql_query("insert into ".DBManager::getST("message")." (memberID,content,regDate,friendID,type,isSendMsg) values ('".$this->m_memberID."','".$this->m_content."','".$this->m_regDate."','".$this->m_friendID."','".$this->m_type."','".$this->m_isSendMsg."')",$this->m__DBInfo->getConnection());
@@ -591,6 +772,35 @@ class Message extends DBRow{
 		if(!$result)return "error";
 		
 		return 0;
+	}
+
+
+	static public function getShardDBInfoList(){
+		return UserIndex::getShardDBInfoList();
+	}
+
+
+
+	static public function getMessageByQuery($where=""){
+		$dbInfoList = self::getShardDBInfoList();
+		if(self::$m__queryCnt>=count($dbInfoList)){
+			self::$m__queryCnt=0;
+			return false;
+		}
+
+		if(!self::$m__queryResult){
+			$dbconn = $dbInfoList[self::$m__queryCnt]->getConnection();
+			self::$m__queryResult = mysql_query("select * from ".DBManager::getST("message")." ".$where,$dbconn);
+		}
+
+		$result = mysql_fetch_array(self::$m__queryResult,MYSQL_ASSOC);
+
+		if($result)return $result;
+		
+		self::$m__queryResult=null;
+		self::$m__queryCnt++;
+
+		return self::getMessageByQuery($where);
 	}
 
 }
@@ -610,7 +820,12 @@ class WeeklyScore extends DBRow{
 		$this->setPrimarykey("no");
 		$this->setDBTable(DBManager::getST("weeklyScore"));
 		LogManager::get()->addLog("weeklyScore is ".DBManager::getST("weeklyScore"));
-		$this->setDBInfo(DBManager::get()->getDBInfoByShardKey($memberID));
+
+
+		if($memberID){
+			$userIndex = new UserIndex($memberID);
+			$this->setDBInfo($userIndex->getShardDBInfo());
+		}
 		
 		if($memberID && $weekNo){
 			if(parent::load("memberID=".$memberID." and regWeek=".$weekNo)){
@@ -651,8 +866,6 @@ class StageScore extends DBRow{
 			if($where)$q_where = $where;
 			else $q_where = "memberID=".$memberID." and stageNo=".$stageNo;
 			
-			LogManager::get()->addLog($q_where);
-			
 			if(parent::load($q_where)){
 				$this->m_no = $this->m__result["no"];
 				$this->m_stageNo = $this->m__result["stageNo"];
@@ -667,7 +880,7 @@ class StageScore extends DBRow{
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TimeManager{
-	public $m_timeOffset=0;
+	public $m_timeOffset=32400;
 	private static $m_instance=NULL;
 	//싱글턴 얻어오기
 	public static function get()
@@ -686,6 +899,12 @@ class TimeManager{
 	public function getTime(){
 		return time()+$this->m_timeOffset;
 	}
+
+	static public function getMicroTime() 
+	{ 
+	  list($usec, $sec) = explode(" ", microtime()); 
+	  return ((float)$usec + (float)$sec + $m_timeOffset); 
+	} 
 	
 	public function getCurrentWeekNo(){
 		$y = date("Y",$this->getTime());
@@ -709,6 +928,7 @@ class TimeManager{
 	
   
 }
+
 
 class LogManager{
 	public $m_logList=array();

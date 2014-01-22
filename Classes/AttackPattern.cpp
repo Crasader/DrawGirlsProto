@@ -309,14 +309,15 @@ void KSTargetAttackPattern11::update( float dt )
 
 
 
-void AttackPattern::startSelfRemoveSchedule()
+void AttackPattern::startSelfRemoveSchedule(int baseChild)
 {
+	m_baseChildCount = baseChild;
 	schedule(schedule_selector(AttackPattern::selfRemoveSchedule));
 }
 
 void AttackPattern::selfRemoveSchedule()
 {
-	if(getChildrenCount() == 0)
+	if(getChildrenCount() == m_baseChildCount)
 	{
 		removeFromParentAndCleanup(true);
 		CCLog("self remove!!");
@@ -628,7 +629,7 @@ void AP_Missile11::myInit( CCPoint t_sp, int t_type, float t_speed, IntSize t_mS
 
 	ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, throwAngle, t_mSize);
 	addChild(t_to);
-	t_to->startMyAction();
+	//t_to->startMyAction();
 	stopMyAction();
 }
 
@@ -882,7 +883,7 @@ void AP_Missile14::myInit( CCPoint t_sp, int t_type, float t_speed, int t_tmCnt,
 
 		ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, t_angle, t_mSize);
 		addChild(t_to);
-		t_to->startMyAction();
+		//t_to->startMyAction();
 	}
 	for (int i=0; i<right; i++) {
 		float t_angle = baseAngle + i*unitDegree;
@@ -891,7 +892,7 @@ void AP_Missile14::myInit( CCPoint t_sp, int t_type, float t_speed, int t_tmCnt,
 
 		ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, t_angle, t_mSize);
 		addChild(t_to);
-		t_to->startMyAction();
+		//t_to->startMyAction();
 	}
 
 	stopMyAction();
@@ -2975,7 +2976,7 @@ void KSTargetAttackPattern12::myInit( CCPoint t_sp, KSCumberBase* cb, const std:
 {
 	m_cumber = cb;
 	scheduleUpdate();
-
+	schedule(schedule_selector(ThisClassType::targetTraceUpdate));
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -2983,6 +2984,8 @@ void KSTargetAttackPattern12::myInit( CCPoint t_sp, KSCumberBase* cb, const std:
 	m_frame = 0;
 	m_totalFrame = pattern.get("number", 5).asInt() * 20;
 	m_pattern = pattern;
+	m_targetSprite = KS::loadCCBI<CCSprite*>(this, "target3.ccbi").first;
+	addChild(m_targetSprite);
 }
 
 void KSTargetAttackPattern12::stopMyAction()
@@ -2994,7 +2997,7 @@ void KSTargetAttackPattern12::stopMyAction()
 
 	//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
 	//		m_parentMissile->removeFromParentAndCleanup(true);
-	startSelfRemoveSchedule();
+	startSelfRemoveSchedule(1);
 }
 
 void KSTargetAttackPattern12::update( float dt )
@@ -3009,9 +3012,14 @@ void KSTargetAttackPattern12::update( float dt )
 	if(m_frame == m_totalFrame)
 	{
 		stopMyAction();
+		m_targetSprite->setVisible(false);
 	}
 }
 
+void KSTargetAttackPattern12::targetTraceUpdate(float dt)
+{
+	m_targetSprite->setPosition(ip2ccp(myGD->getJackPoint()));
+}
 void KSTargetAttackPattern13::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
 	m_cumber = cb;

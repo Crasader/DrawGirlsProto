@@ -12,8 +12,13 @@ include "header.php";
 	
 	
 */
-
 ?>
+<script>
+var showCardImg = function(value,option){
+	data = s2j(value);
+	return '<img src=../images/'+data["img"]+' width=100>';
+}
+</script>
 <center>
 <form action=admin_card.php>
 조건 : <input name='where' size="50" value='<?=$_GET['where']?>'> <input type=submit value="확인">
@@ -63,7 +68,8 @@ include "header.php";
 			<th field="missile" viewer="json" editor="dictionary" editorOption='[{"field":"type","editor":"text"},{"field":"speed","editor":"text","editorOption":{"datatype":"int"}},{"field":"power","editor":"text","editorOption":{"datatype":"int"}},{"field":"dex","editor":"text","editorOption":{"datatype":"int"}}]'>missile</td>
 			<th field="language" viewer="text" editor="select" editorOption='["kr","jp","en","cn"]'>language</th>
 			<th field="stage" viewer="text" editor="text">stage</th>
-			<th field="imgInfo" viewer="json" editor="dictionary" editorOption='[{"field":"img","editor":"custom","editorOption":"imageSelector"},{"field":"size","editor":"text","editorOption":{"datatype":"int"}}]'>imgInfo</td>
+			<th field="no" viewer="text" primary editor="text">no</th>
+			<th field="imgInfo" viewer="custom" viewerOption="showCardImg" editor="dictionary" editorOption='[{"field":"img","editor":"custom","editorOption":"imageSelector"},{"field":"size","editor":"text","editorOption":{"datatype":"int"}}]'>imgInfo</td>
 			
 			<!--th field="thumbnailInfo" viewer="json" editor="dictionary" editorOption='[{"field":"img","editor":"custom","editorOption":"imageSelector"},{"field":"size","editor":"text","editorOption":{"datatype":"int"}}]'>thumbnailInfo</td-->
 			<th field="aniInfo" viewer="json" editor="dictionary" editorOption='

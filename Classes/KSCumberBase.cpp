@@ -7,7 +7,7 @@
 //
 // 한글 주석 테스트...ㅎㅎㅎㅎㅎㅎ
 #include "KSCumberBase.h"
-
+// 테스트...
 #include "Jack.h"
 #include "PlayUI.h"
 #include <chrono>
@@ -2017,7 +2017,7 @@ void KSCumberBase::movingAndCrash( float dt )
 				break;
 		}
 	};
-	
+
 	if(m_state == CUMBERSTATEFURY)
 	{
 		movingBranch(m_furyMovement);
@@ -2049,9 +2049,11 @@ void KSCumberBase::onStartGame()
 void KSCumberBase::lightSmaller()
 {
 	addChild(KSTimer::create
-					 (0.5f, [=](){
+					 (1.f, [=](){
 		this->endTeleport();
 	}));
+
+	//this->endTeleport();
 }
 
 void KSCumberBase::endTeleport()
@@ -2063,7 +2065,6 @@ void KSCumberBase::endTeleport()
 void KSCumberBase::startTeleport()
 {
 	smaller();
-	
 	AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
 }
 
