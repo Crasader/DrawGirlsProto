@@ -5,8 +5,8 @@ $stopCommand = true;
 
 include "../command/cmd2.php";
 
-echo time()."<br>";
-echo (microtime(true)*100)."<br>";
+//echo time()."<br>";
+//echo (microtime(true)*100)."<br>";
 ?>
  
 <table width=80% align=center><tr><td>
@@ -42,11 +42,11 @@ foreach ($class_methods as $method_name) {
 	    $mInfo = $command->$method_name();
 	    echo "<hr border=2>";
 	    echo "<font size=6 color=blue>".$realName."</font><br>";
-	    echo "<b>".$mInfo["discript"]."</b><br><br>";
+	    echo "<b>".$mInfo["description"]."</b><br><br>";
 	    echo "* parameter <br>";
-	    echo "<table border=1><tr><td>name</td><td>type</td><td>discript</td></tr>";
+	    echo "<table border=1><tr><td>name</td><td>type</td><td>description</td></tr>";
 	    for($i=0;$i<count($mInfo["param"]);$i++){
-		    echo "<tr><td>".$mInfo["param"][$i]["name"]."</td><td>".$mInfo["param"][$i]["type"]."</td><td>".$mInfo["param"][$i]["discript"]."</td></tr>";
+		    echo "<tr><td>".$mInfo["param"][$i]["name"]."</td><td>".$mInfo["param"][$i]["type"]."</td><td>".$mInfo["param"][$i]["description"]."</td></tr>";
 	    }
 	    echo "</table><br>";
 	    

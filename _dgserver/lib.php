@@ -43,7 +43,7 @@ $TABLE_KEYINTVALUE = "aKeyIntValue";
 $TABLE_KEYSTRINGVALUE = "aKeyStringValue";
 
 $TABLE_LOG = "logTempTable";
-
+$TABLE_MESSAGE = "messageTable";
 
 $HSP_VERSION="1.3";
 $HSP_GAMENO="10226";

@@ -32,7 +32,7 @@ include "header.php";
 				imgurl = $(this).attr('imgname')
 				fsize = filesize(imgurl)/1024;
 				
-				imgurl = imgurl.replace("../images/", "");
+				imgurl = imgurl.replace("../", "");
 				
 				log("select"+imgurl+" size:"+fsize);
 				
@@ -67,7 +67,14 @@ include "header.php";
 
 
 <?php 
-$uploaderForm = '<input type="hidden" name="category" value="resource"><input type="hidden" name="randfilename" value="false"> overwrite<input type="checkbox" name="overwrite" value="true">';
+$uploaderForm = '<input type="hidden" name="category" value="../resource">
+writeMode :
+<select name="writeMode">
+<option value="update">update : 숫자늘리기</option>
+<option value="overwrite">overwrite : 덮어쓰기</option>
+<option value="random">random : 랜덤파일명</option>
+</select>
+';
 
 include "jqueryupload/uploader.html";
  
@@ -80,7 +87,7 @@ include "jqueryupload/uploader.html";
 
 <table align=center border=1><tr><td>
 <?php
-$realDir="../images/resource";
+$realDir="../resource";
 $i=0;
 foreach (filesInDir($realDir) as $key => $a_file){ 
 	$i++;
