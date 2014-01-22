@@ -360,7 +360,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>-400</real>
+										<real>0.0</real>
 										<real>0.0</real>
 									</array>
 								</dict>
@@ -398,7 +398,7 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>-400</real>
+							<real>0.0</real>
 							<real>0.0</real>
 							<integer>0</integer>
 						</array>
@@ -443,7 +443,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>warning_108_47.png</string>
+							<string>warning_1018_38.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -454,9 +454,11 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>0</integer>
+						<integer>255</integer>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -556,7 +558,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1.4666666984558105</real>
+			<real>0.23333333432674408</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
