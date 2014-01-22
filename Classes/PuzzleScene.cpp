@@ -424,6 +424,10 @@ void PuzzleScene::setPuzzle()
 	top->setPosition(ccp(0, puzzle_size.height/2.f));
 	puzzle_node->addChild(top, kPuzzleNodeZorder_puzzle);
 	
+	CCSprite* embo_top = CCSprite::create("puzzle_embo_top.png");
+	embo_top->setPosition(ccp(top->getContentSize().width/2.f, top->getContentSize().height/2.f));
+	top->addChild(embo_top);
+	
 	CCSprite* shadow_bottom = CCSprite::create("puzzle_shadow_1_bottom.png");
 	shadow_bottom->setAnchorPoint(ccp(0.5, 0));
 	shadow_bottom->setPosition(ccp(0, -puzzle_size.height/2.f));
@@ -433,6 +437,10 @@ void PuzzleScene::setPuzzle()
 	bottom->setAnchorPoint(ccp(0.5, 0));
 	bottom->setPosition(ccp(0, -puzzle_size.height/2.f));
 	puzzle_node->addChild(bottom, kPuzzleNodeZorder_puzzle);
+	
+	CCSprite* embo_bottom = CCSprite::create("puzzle_embo_bottom.png");
+	embo_bottom->setPosition(ccp(bottom->getContentSize().width/2.f, bottom->getContentSize().height/2.f));
+	bottom->addChild(embo_bottom);
 	
 	CCSprite* shadow_left = CCSprite::create("puzzle_shadow_1_left.png");
 	shadow_left->setAnchorPoint(ccp(0, 0.5));
@@ -444,6 +452,10 @@ void PuzzleScene::setPuzzle()
 	left->setPosition(ccp(-puzzle_size.width/2.f, 0));
 	puzzle_node->addChild(left, kPuzzleNodeZorder_puzzle);
 	
+	CCSprite* embo_left = CCSprite::create("puzzle_embo_left.png");
+	embo_left->setPosition(ccp(left->getContentSize().width/2.f, left->getContentSize().height/2.f));
+	left->addChild(embo_left);
+	
 	CCSprite* shadow_right = CCSprite::create("puzzle_shadow_1_right.png");
 	shadow_right->setAnchorPoint(ccp(1, 0.5));
 	shadow_right->setPosition(ccp(puzzle_size.width/2.f, 0));
@@ -453,6 +465,26 @@ void PuzzleScene::setPuzzle()
 	right->setAnchorPoint(ccp(1, 0.5));
 	right->setPosition(ccp(puzzle_size.width/2.f, 0));
 	puzzle_node->addChild(right, kPuzzleNodeZorder_puzzle);
+	
+	CCSprite* embo_right = CCSprite::create("puzzle_embo_right.png");
+	embo_right->setPosition(ccp(right->getContentSize().width/2.f, right->getContentSize().height/2.f));
+	right->addChild(embo_right);
+	
+	CCSprite* case_top = CCSprite::create("puzzle_case_top.png");
+	case_top->setPosition(top->getPosition());
+	puzzle_node->addChild(case_top, kPuzzleNodeZorder_puzzle);
+	
+	CCSprite* case_bottom = CCSprite::create("puzzle_case_bottom.png");
+	case_bottom->setPosition(bottom->getPosition());
+	puzzle_node->addChild(case_bottom, kPuzzleNodeZorder_puzzle);
+	
+	CCSprite* case_left = CCSprite::create("puzzle_case_left.png");
+	case_left->setPosition(left->getPosition());
+	puzzle_node->addChild(case_left, kPuzzleNodeZorder_puzzle);
+	
+	CCSprite* case_right = CCSprite::create("puzzle_case_right.png");
+	case_right->setPosition(right->getPosition());
+	puzzle_node->addChild(case_right, kPuzzleNodeZorder_puzzle);
 	
 	shadow_batchnode = CCSpriteBatchNode::create("puzzle_shadow_1_piece.png");
 	shadow_batchnode->setPosition(CCPointZero);
@@ -588,10 +620,14 @@ void PuzzleScene::setPuzzle()
 		}
 		else
 		{
-			CCSprite* piece =  mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number, i)->getCString());
+			CCSprite* piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number, i)->getCString());
 			piece->setAnchorPoint(ccp(0.5,0.5));
 			piece->setPosition(piece_position);
 			puzzle_node->addChild(piece, kPuzzleNodeZorder_puzzle);
+			
+			CCSprite* embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", piece_type.c_str())->getCString());
+			embo->setPosition(ccp(piece->getContentSize().width/2.f, piece->getContentSize().height/2.f));
+			piece->addChild(embo);
 			
 			CCSprite* t_shadow = CCSprite::create("puzzle_shadow_1_piece.png", CCRectMake(piece_type == "h" ? 0 : 92, 0, 92, 92));
 			t_shadow->setPosition(piece_position);
@@ -1656,7 +1692,7 @@ void PuzzleScene::setTop()
 	heart_menu->setPosition(ccp(243,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(heart_menu);
 	
-	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
+	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(302,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_label);
 	
@@ -1673,7 +1709,7 @@ void PuzzleScene::setTop()
 	gold_menu->setPosition(ccp(336,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(gold_menu);
 	
-	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
+	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(391,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_label);
 	
@@ -1690,7 +1726,7 @@ void PuzzleScene::setTop()
 	ruby_menu->setPosition(ccp(421,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(ruby_menu);
 	
-	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.png.fnt", 0.3f, "%d");
+	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	friend_point_label->setPosition(ccp(475,top_case->getContentSize().height/2.f-2));
 	top_case->addChild(friend_point_label);
 	
