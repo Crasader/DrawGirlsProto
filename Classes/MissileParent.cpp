@@ -148,6 +148,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			t_ccn->startCharge();
 			chargeArray->addObject(t_ccn);
 		}
+		myGD->communication("Main_showDetailWarning", warningFileName);
 	};
 	string warningFileName = "warning_" + pattern + ".ccbi";
 	if(pattern == "1")

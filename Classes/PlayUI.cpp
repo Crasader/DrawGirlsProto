@@ -578,6 +578,61 @@ void TakeSpeedUp::myInit (int t_step)
 	
 	startFadeOut();
 }
+
+DetailWarning * DetailWarning::create (const std::string& fileName)
+{
+	DetailWarning* t_w = new DetailWarning();
+	t_w->myInit(fileName);
+	t_w->autorelease();
+	return t_w;
+}
+void DetailWarning::startAction ()
+{
+	//CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
+	//CCHide* t_hide = CCHide::create();
+	//CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
+	//CCShow* t_show = CCShow::create();
+	//CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
+	//CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
+	//CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
+	//CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(DetailWarning::selfRemove));
+
+	//runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
+}
+void DetailWarning::selfRemove ()
+{
+	removeFromParentAndCleanup(true);
+}
+void DetailWarning::myInit (const std::string& fileName)
+{
+	CCSprite* warningSprite = KS::loadCCBI<CCSprite*>(this, fileName).first;
+	if(!warningSprite)
+	{
+		warningSprite = CCSprite::create("attack_warning.png");
+	}
+	warningSprite->setPosition(ccp(240, myDSH->ui_center_y));
+	addChild(warningSprite);
+	addChild(KSTimer::create(3.f, [=]()
+				{
+					removeFromParentAndCleanup(true);
+				}));
+	//initWithFile("attack_warning.png");
+
+	//if(t1 == 1)
+	//{
+		//setColor(ccWHITE);
+	//}
+	//else if(t1 == 2)
+	//{
+		//setColor(ccRED);
+	//}
+	//else if(t1 == 3)
+	//{
+		//setColor(ccGREEN);
+	//}
+	//setPosition(ccp(640,myDSH->ui_center_y));
+}
+
 Warning * Warning::create (int t1)
 {
 	Warning* t_w = new Warning();
