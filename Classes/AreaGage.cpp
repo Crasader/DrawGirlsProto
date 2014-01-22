@@ -55,25 +55,30 @@ void AreaGage::setPercentage( float t_p )
 
 void AreaGage::onChange()
 {
-	CCSprite* change1 = CCSprite::create("star_change.png");
-	change1->setScale(0);
-	star1->setPosition(ccp(gage_bar2->getPositionX()-(star1->getContentSize().width+change1->getContentSize().width)/2.f+star1->getContentSize().width/2.f+2, 20));
-	change1->setPosition(ccp(gage_bar2->getPositionX()-(star1->getContentSize().width+change1->getContentSize().width)/2.f+star1->getContentSize().width+change1->getContentSize().width/2.f-2, 20));
-	addChild(change1);
-	CCScaleTo* t_scale1_1 = CCScaleTo::create(0.5f, 1.5f);
-	CCScaleTo* t_scale1_2 = CCScaleTo::create(0.3f, 1.f);
-	CCSequence* t_seq1 = CCSequence::createWithTwoActions(t_scale1_1, t_scale1_2);
-	change1->runAction(t_seq1);
+	star1->runAction(CCScaleTo::create(0.5f, 0));
+	star2->runAction(CCSequence::createWithTwoActions(CCScaleTo::create(0.5f, 0), CCCallFunc::create(this, callfunc_selector(AreaGage::removeAndCreateStar))));
+}
+
+void AreaGage::removeAndCreateStar()
+{
+	CCPoint star1_position = star1->getPosition();
+	CCPoint star2_position = star2->getPosition();
+	star1->removeFromParent();
+	star2->removeFromParent();
 	
-	CCSprite* change2 = CCSprite::create("star_change.png");
-	change2->setScale(0);
-	star2->setPosition(ccp(gage_bar3->getPositionX()-(star2->getContentSize().width+change2->getContentSize().width)/2.f+star2->getContentSize().width/2.f+2, 20));
-	change2->setPosition(ccp(gage_bar3->getPositionX()-(star2->getContentSize().width+change2->getContentSize().width)/2.f+star2->getContentSize().width+change2->getContentSize().width/2.f-2, 20));
-	addChild(change2);
-	CCScaleTo* t_scale2_1 = CCScaleTo::create(0.5f, 1.5f);
-	CCScaleTo* t_scale2_2 = CCScaleTo::create(0.3f, 1.f);
-	CCSequence* t_seq2 = CCSequence::createWithTwoActions(t_scale2_1, t_scale2_2);
-	change2->runAction(t_seq2);
+	star1 = CCSprite::create("piece_star_silver.png");
+	star1->setScale(0);
+	star1->setPosition(star1_position);
+	addChild(star1);
+	
+	star1->runAction(CCSequence::createWithTwoActions(CCScaleTo::create(0.3f, 1.5f), CCScaleTo::create(0.2f, 1)));
+	
+	star2 = CCSprite::create("piece_star_gold.png");
+	star2->setScale(0);
+	star2->setPosition(star2_position);
+	addChild(star2);
+	
+	star2->runAction(CCSequence::createWithTwoActions(CCScaleTo::create(0.3f, 1.5f), CCScaleTo::create(0.2f, 1)));
 }
 
 AreaGage* AreaGage::create(float t_clear_percent)
@@ -123,11 +128,11 @@ void AreaGage::myInit(float t_clear_percent)
 	gage_case->setPosition(CCPointZero);
 	addChild(gage_case);
 	
-	star1 = CCSprite::create("star_one.png");
+	star1 = CCSprite::create("piece_star_bronze.png");
 	star1->setPosition(ccp(gage_bar2->getPositionX(), 20));
 	addChild(star1);
 	
-	star2 = CCSprite::create("star_two.png");
+	star2 = CCSprite::create("piece_star_silver.png");
 	star2->setPosition(ccp(gage_bar3->getPositionX(), 20));
 	addChild(star2);
 	

@@ -799,7 +799,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
-			if(t_p > t_beforePercentage)
+			if(t_p >= t_beforePercentage + 0.001f)
 			{
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
@@ -1646,7 +1646,7 @@ void PlayUI::setUseFriendCard()
 	CCSprite* jack_img = CCSprite::create("basic_character.png");
 	jack_img->setColor(ccGREEN);
 	jack_img->setOpacity(0);
-	jack_img->setPosition(ccp(422-(jack_life-1)*20, myDSH->ui_top-60));
+	jack_img->setPosition(ccp(422+40-(jack_life-1)*20, myDSH->ui_top-60));
 //	if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else											jack_img->setPosition(ccp(80+(jack_life-1)*20, myDSH->ui_top-35));
@@ -1771,7 +1771,7 @@ void PlayUI::myInit ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-60));
+		jack_img->setPosition(ccp(422+40-i*20, myDSH->ui_top-60));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20, myDSH->ui_top-35));
@@ -1801,10 +1801,11 @@ void PlayUI::myInit ()
 	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
-	mission_button->setPosition(ccp(480-25, myDSH->ui_top-62));
+	mission_button->setPosition(ccp(480-25-215, myDSH->ui_top-62));
 	addChild(mission_button);
 	
 	mission_button->startMarquee();
+	mission_button->doOpen();
 	
 	mission_button->setOpenFunction([&](){
 		int jack_cnt = jack_array->count();
@@ -2072,7 +2073,7 @@ void PlayUI::continueAction ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-60));
+		jack_img->setPosition(ccp(422+40-i*20, myDSH->ui_top-60));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20,myDSH->ui_top-35));
