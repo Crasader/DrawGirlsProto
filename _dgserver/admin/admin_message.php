@@ -242,18 +242,17 @@ echo TimeManager::get()->getCurrentDateString();
  ?>
 </form>
 </center>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_LOG?>" dbSort="<?=$_GET["sort"]?>" dbLimit='<?=$_GET["limit"]?>' dbWhere='<?=$_GET["where"]?>' border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_MESSAGE?>" dbSort="<?=$_GET["sort"]?>" dbLimit='<?=$_GET["limit"]?>' dbWhere='<?=$_GET["where"]?>' border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer="text" primary>no</th>
-			<th field="ip" viewer="text">ip</th>
          <th field="nick" viewer="text">nick</th>
 			<th field="memberID" viewer="text">memberID</th>
-			<th field="header" viewer="text" viewerOption='{"cut":100}' editor="textarea">header</th>
-			<th field="category" viewer="text">category</th>
-			<th field="input" viewer="text" viewerOption='{"cut":100}' editor="textarea">input</th>
-			<th field="output" viewer="text" viewerOption='{"cut":100}' editor="textarea">output</th>
-         <th field="execTime" viewer="text">execTime</th>
+         <th field="friendNick" viewer="text">friendNick</th>
+         <th field="friendID" viewer="text">friendID</th>
+			<th field="content" viewer="text" viewerOption='{"cut":100}' editor="textarea">content</th>
+			<th field="type" viewer="text">type</th>
+         <th field="isSendMsg" viewer="text">isSendMsg</th>
 			<th field="regDate" viewer="text">regDate</th>
 		</tr>
 	</thead>

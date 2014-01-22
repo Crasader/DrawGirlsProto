@@ -1,5 +1,6 @@
 <?php
 include "header.php";
+
 ?>
 
 <table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_CHARACTER?>" border=1 align=center>

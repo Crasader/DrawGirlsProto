@@ -6,6 +6,7 @@ include "header.php";
 	<thead>
 		<tr>
 			<th field="no" viewer="text" primary>no</th>
+			<th field="type" viewer="text" editor="select" editorOption='["circle","snake","jr"]'>type</th>
 			<th field="name" viewer="text" editor="text">name</th>
 			<th field="image"  viewer="custom" viewerOption="imageViewer" editor="custom" editorOption="imageSelector">image</th>
 			<th field="resourceInfo" viewer="json" editor="dictionary" editorOption='

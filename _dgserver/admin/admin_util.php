@@ -181,7 +181,7 @@ function showAutoBalanceUpdateMode($name,$count=3){
 <input type=hidden name=mode value=autoBalance>
 <b><font color=red>슈퍼오토벨런싱</font></b>
 <br>
-적용조건 --> 퍼즐번호 : <input type=text name=puzzle size=3 value=<?=$_GET['puzzle']?>> and 레벨 : <input type=text name=level size=3 value=<?=$_GET['level']?>><br>
+적용조건 --> <input type=text name=puzzle size=3 value=<?=$_GET['puzzle']?>>번째 퍼즐 and 레벨 : <input type=text name=level size=3 value=<?=$_GET['level']?>>, 랜덤시드<input type=text name=rand_seed size=3 value=<?=$_GET['rand_seed']?>><br>
 
 <br>
 <table border=1>
@@ -342,13 +342,23 @@ if($_GET["autoConfig"]=="true")$autoConfigChecked="checked";
 	}
 	
 	if($_GET['mode']=="autoBalance"){
+
+		srand($_GET['rand_seed']);
 		echo "<textarea cols=200 rows=5>";
-		$w_puzzle = $_GET['puzzle'];
+		
+		$w_puzzle=null;
+		if(is_numeric($_GET['puzzle'])){
+			$r = mysql_fetch_assoc(mysql_query("select * from $TABLE_PUZZLE where puzzleNo=".$_GET['puzzle'],DBManager::get()->getMainConnection()));
+			$w_puzzle = $r[no];
+		}
+
 		$w_level = $_GET['level'];
 		if($w_puzzle && $w_level){
 			$w_level_where = " and level=$w_level";
 			if($w_level=="*")$w_level_where = "";
-			$result = mysql_query("select * from $TABLE_STAGE where puzzle=$w_puzzle".$w_level_where,DBManager::get()->getMainConnection());
+			if(!is_numeric($w_puzzle))$w_puzzle_where = "1=1";
+			else $w_puzzle_where = "puzzle=".$w_puzzle;
+			$result = mysql_query("select * from $TABLE_STAGE where ".$w_puzzle_where.$w_level_where,DBManager::get()->getMainConnection());
 			
 			while($stageInfo = mysql_fetch_array($result)){
 				unset($uData);
@@ -427,6 +437,10 @@ if($_GET["autoConfig"]=="true")$autoConfigChecked="checked";
 					//쥬니어갯수만큼 일단 뺌
 					$stageLevel -= (int)($_GET[jr_count]*$stageLevel/5);
 					
+
+					$level_speed_max = 7; 
+					$level_attack_max = 7;
+
 					$vv1=1;$vv2=1;$vv3=1;
 					
 					$vv1 = (int)rand(1,$stageLevel);
@@ -441,25 +455,32 @@ if($_GET["autoConfig"]=="true")$autoConfigChecked="checked";
 					${"level_".$vkey[2]}=$vv3;
 					
 					$level_speed = $level_hp;
-					if($level_speed>5)$level_speed=5;
+
+
+					if($level_speed>$level_speed_max)$level_speed=$level_speed_max;
 				
-					if($level_attack>5){
-						$level_attack=5;
-						if(rand(0,1))$level_dex += $level_attack-5;
-						else $level_hp += $level_attack-5;
+					if($level_attack>$level_attack_max){
+						$level_attack=$level_attack_max;
+						if(rand(0,1))$level_dex += $level_attack-$level_attack_max;
+						else $level_hp += $level_attack-$level_attack_max;
 					}
 					
 					//공격주기 범위는 0.2~0.4 , 10 단계로 나뉨, 1단계에 0.1+0.03*level
-					$boss_attackpercent_max = 0.2+0.02*$level_attack;
+					/*$boss_attackpercent_max = 0.2+0.02*$level_attack;
+					$boss_attackpercent_min = $boss_attackpercent_max * 0.5;*/
+
+					$boss_attackpercent_max = 0.2+0.03*$level_attack;
 					$boss_attackpercent_min = $boss_attackpercent_max * 0.5;
+					
 					if($boss_attackpercent_min<0.2)$boss_attackpercent_min=0.2;
 					$boss[0][attackpercent] = minmaxRand($boss_attackpercent_max,$boss_attackpercent_min);
 					
 					
 					//속도 범위는 1~2.5  10단계로 나뉨 0.5+0.15*level; 
-					$boss_maxspeed_max = 1+0.3*$level_speed;
+					$boss_maxspeed_max = 0.9+0.15*$level_speed;
+					if($boss_maxspeed_max>2)$boss_maxspeed_max=2;
 					$boss_maxspeed_min = $boss_maxspeed_max * 0.5;
-					if($boss_maxspeed_min<1)$boss_maxspeed_min=1;
+					if($boss_maxspeed_min<0.8)$boss_maxspeed_min=0.8;
 					$boss[0][speed][max] = minmaxRand($boss_maxspeed_max,$boss_maxspeed_min);
 					$boss[0][speed][min] = $boss[0][speed][max]*0.5;
 					$boss[0][speed][start] = ($boss[0][speed][max]+$boss[0][speed][min])/2.0; 	
@@ -542,10 +563,12 @@ if($_GET["autoConfig"]=="true")$autoConfigChecked="checked";
 				
 				if($_GET[jr_count]>0){
 					$uData["junior"]=json_encode($jr,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+				}else{
+					$uData["junior"]="";
 				}
 				$ns = $stageInfo[no];
 				
-				$query = lq_query_update($uData,$TABLE_STAGE,"where no = $ns");
+				$query = lq_query_update($uData,$TABLE_STAGE,", version=version+1 where no = $ns");
 				
 				if($_GET['pass'] == "asdf"){
 					kvManager::increase("stageVer_".$ns);
@@ -559,7 +582,10 @@ if($_GET["autoConfig"]=="true")$autoConfigChecked="checked";
 				echo $query."\n\n";
 				
 			}
-		
+			
+			if($_GET['pass'] == "asdf"){
+				kvManager::increase("puzzleVer_".$w_puzzle);
+			}
 		}else{
 			echo"set the puzzle and level";
 		}
@@ -612,6 +638,7 @@ if($_GET["mode"]=="imagechange"){
 </form>
 <?php
 if($_GET['mode']=="autoMissile"){
+	srand(1);
 	echo "<textarea cols=200 rows=5>";
 	$result = mysql_query("select * from $TABLE_CARD where no<100000",DBManager::get()->getMainConnection());
 	$alpabat = array("A","B","C","D","E","F","G","H","I","J","K","L","m","n","o");
@@ -626,6 +653,7 @@ if($_GET['mode']=="autoMissile"){
 			
 		
 			
+			//몬스터가 뱀형이면 
 			$arand = $alpabat[(int)rand(0,8)].$alpabat[(int)rand(0,6)];
 		
 			$boss=json_decode($stageInfo["boss"],true);
@@ -649,16 +677,16 @@ if($_GET['mode']=="autoMissile"){
 		
 		
 		//카드 단계별 속성능력 up
-		$prg=1;
-		$drg=1;
+		$prg=0.5;
+		$drg=0.5;
 		if($cardInfo[grade]==3){
-			$prg = (1+$cardInfo[grade]/5.0);
-			$drg = (1+$cardInfo[grade]/5.0);
+			$prg = 1;
+			$drg = 1;
 		}else if($cardInfo[grade]==2){
 			if(rand(0,1)){
-				$prg = (1+$cardInfo[grade]/5.0);
+				$prg = 0.8;
 			}else{
-				$drg = (1+$cardInfo[grade]/5.0);
+				$drg = 0.8;
 			}
 		}
 			
@@ -672,7 +700,11 @@ if($_GET['mode']=="autoMissile"){
 		$ms["dex"]=(int)($drg*$drand);		
 		
 
-		$ms["speed"]=$srand;
+		$ms["speed"]=$srand*0.5;
+		
+		if($ms["power"]<1)$ms["power"]=1;
+		if($ms["dex"]<1)$ms["dex"]=1;
+		if($ms["speed"]<1)$ms["speed"]=1;
 		
 		$uData["missile"]=json_encode($ms,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 		

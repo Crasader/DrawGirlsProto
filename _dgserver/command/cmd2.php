@@ -77,7 +77,7 @@ function httpgateway($data) {
 /////////////////////////////////////////
 function help_getcommonsetting(){
 
-	$r["discript"] = "게임 기본 설정을 가져옵니다.";
+	$r["description"] = "게임 기본 설정을 가져옵니다.";
 	
 	//$r["param"]
 	
@@ -118,7 +118,7 @@ function getcommonsetting($p){
 
 function help_getnoticelist(){
 
-	$r["discript"] = "공지사항목록을 가져옵니다.";
+	$r["description"] = "공지사항목록을 가져옵니다.";
 	//$r["param"]
 	
 	//$r["return"]
@@ -142,8 +142,7 @@ function getnoticelist($p){
 	$nowDate = TimeManager::get()->getCurrentDateString();
 	$result = mysql_query("select * from $TABLE_NOTICE where isOn='true' and startDate<$nowDate and endDate>$nowDate",$mainConn);
 	
-	LogManager::get()->addLog("select * from $TABLE_NOTICE where isOn='true' and startDate<$nowDate and endDate>$nowDate");
-	
+
 	$r = array();
 	
 	if(!$result)return ResultState::makeReturn(1001,"commonsetting error");
@@ -165,9 +164,9 @@ function getnoticelist($p){
 
 function help_getcharacterlist(){
 
-	$r["discript"] = "케릭터 목록을 가져옵니다.";
+	$r["description"] = "케릭터 목록을 가져옵니다.";
 	
-	$r["param"][] = array("name"=>"version","type"=>"int","discript"=>"버전");
+	$r["param"][] = array("name"=>"version","type"=>"int","description"=>"버전");
 	
 	//$r["return"]
 	
@@ -207,9 +206,9 @@ function getcharacterlist($p){
 			$charInfo[purchaseInfo]=json_decode($charInfo[purchaseInfo],true);
 			$charInfo[statInfo]=json_decode($charInfo[statInfo],true);
 			$charInfo[resourceInfo]=json_decode($charInfo[resourceInfo],true);
-			$charInfo[resourceInfo][ccbi]=$nowurl."/images/".$charInfo[resourceInfo][ccbi];
-			$charInfo[resourceInfo][plist]=$nowurl."/images/".$charInfo[resourceInfo][plist];
-			$charInfo[resourceInfo][pvrccz]=$nowurl."/images/".$charInfo[resourceInfo][pvrccz];
+			$charInfo[resourceInfo][ccbi]=$nowurl."/".$charInfo[resourceInfo][ccbi];
+			$charInfo[resourceInfo][plist]=$nowurl."/".$charInfo[resourceInfo][plist];
+			$charInfo[resourceInfo][pvrccz]=$nowurl."/".$charInfo[resourceInfo][pvrccz];
 	
 			$list[]=$charInfo;
 	}
@@ -224,9 +223,9 @@ function getcharacterlist($p){
 
 function help_getmonsterlist(){
 
-	$r["discript"] = "몬스터 목록을 가져옵니다.";
+	$r["description"] = "몬스터 목록을 가져옵니다.";
 	
-	$r["param"][] = array("name"=>"version","type"=>"int","discript"=>"버전");
+	$r["param"][] = array("name"=>"version","type"=>"int","description"=>"버전");
 	
 	//$r["return"]
 	
@@ -264,9 +263,9 @@ function getmonsterlist($p){
 	$list = array();
 	while($mobInfo = mysql_fetch_array($result,MYSQL_ASSOC)){
 			$mobInfo[resourceInfo]=json_decode($mobInfo[resourceInfo],true);
-			$mobInfo[resourceInfo][ccbi]=$nowurl."/images/".$mobInfo[resourceInfo][ccbi];
-			$mobInfo[resourceInfo][plist]=$nowurl."/images/".$mobInfo[resourceInfo][plist];
-			$mobInfo[resourceInfo][pvrccz]=$nowurl."/images/".$mobInfo[resourceInfo][pvrccz];
+			$mobInfo[resourceInfo][ccbi]=$nowurl."/".$mobInfo[resourceInfo][ccbi];
+			$mobInfo[resourceInfo][plist]=$nowurl."/".$mobInfo[resourceInfo][plist];
+			$mobInfo[resourceInfo][pvrccz]=$nowurl."/".$mobInfo[resourceInfo][pvrccz];
 	
 			$list[]=$mobInfo;
 	}
@@ -282,10 +281,10 @@ function getmonsterlist($p){
 
 function help_getstageinfo(){
 
-	$r["discript"] = "스테이지 정보를 받아옵니다.";
+	$r["description"] = "스테이지 정보를 받아옵니다.";
 	
-	$r["param"][] = array("name"=>"version","type"=>"int","discript"=>"버전");
-	$r["param"][] = array("name"=>"no","type"=>"int","discript"=>"스테이지 번호");
+	$r["param"][] = array("name"=>"version","type"=>"int","description"=>"버전");
+	$r["param"][] = array("name"=>"no","type"=>"int","description"=>"스테이지 번호");
 	
 	//$r["return"]
 	
@@ -302,6 +301,7 @@ function getstageinfo($p,$pTable=""){
 	global $nowurl;
 	global $TABLE_STAGE;
 	global $TABLE_CARD;
+	global $TABLE_PUZZLE;
 	if(!$pTable)$pTable=$TABLE_STAGE;
 	
 	$stageVer=0;
@@ -322,23 +322,31 @@ function getstageinfo($p,$pTable=""){
 		$r["result"]=ResultState::toArray(2001);
 		return $r;
 	}
-	
+
+
 	$siresult = mysql_query("select * from $pTable where no=$p[no]",$mainConn);
 	if(!$siresult) return ResultState::makeReturn(1001,"stageinfo");
 	
 	$stageInfo = mysql_fetch_array($siresult,MYSQL_ASSOC);
 	if(!$stageInfo) return ResultState::makeReturn(1003,"stageinfo");
 	
+	$puzzleInfo = mysql_fetch_assoc(mysql_query("select * from $TABLE_PUZZLE where no = ".$stageInfo[puzzle],$mainConn));
+
+
 	$stageInfo[version]=$stageVer;
 	$stageInfo[shopItems]=json_decode($stageInfo[shopItems],true);
 	$stageInfo[defItems]=json_decode($stageInfo[defItems],true);
 	$stageInfo[cards]=json_decode($stageInfo[cards],true);
 	$stageInfo[mission]=json_decode($stageInfo[mission],true);
 	
+	$stageInfo[puzzle] = $puzzleInfo[puzzleNo];	
+	
 	$card = array();
 	for($i=0;$i<count($stageInfo[cards]);$i++){
 		$cardInfo = mysql_fetch_array(mysql_query("select * from $TABLE_CARD where no=".$stageInfo[cards][$i],$mainConn),MYSQL_ASSOC);
 		if($cardInfo){
+			$cardInfo[stage]=$stageInfo[no];
+			$cardInfo[grade]=$i+1;
 			$cardInfo[ability]=json_decode($cardInfo[ability],true);
 			$cardInfo[missile]=json_decode($cardInfo[missile],true);
 			$cardInfo[aniInfo]=json_decode($cardInfo[aniInfo],true);
@@ -372,9 +380,9 @@ function geteventstageinfo($p)
 
 function help_getcardlist(){
 
-	$r["discript"] = "카드정보 목록을 받아옵니다.";
+	$r["description"] = "카드정보 목록을 받아옵니다.";
 	
-	$r["param"][] = array("name"=>"noList","type"=>"array(int)","discript"=>"카드번호목록");
+	$r["param"][] = array("name"=>"noList","type"=>"array(int)","description"=>"카드번호목록");
 	
 	//$r["return"]
 	
@@ -424,10 +432,10 @@ function getcardlist($p){
 //////////////////////////////////////////
 function help_getpuzzleinfo(){
 
-	$r["discript"] = "퍼즐 정보를 가져옵니다.";
+	$r["description"] = "퍼즐 정보를 가져옵니다.";
 	
-	$r["param"][] = array("name"=>"version","type"=>"int","discript"=>"퍼즐정보버전");
-	$r["param"][] = array("name"=>"no","type"=>"int","discript"=>"퍼즐 번호");
+	$r["param"][] = array("name"=>"version","type"=>"int","description"=>"퍼즐정보버전");
+	$r["param"][] = array("name"=>"no","type"=>"int","description"=>"퍼즐 번호");
 	
 	//$r["return"]
 	
@@ -462,7 +470,7 @@ function getpuzzleinfo($p){
 		return $r;
 	}
 	
-	$piresult = mysql_query("select * from $TABLE_PUZZLE where no=$p[no]",$mainConn);
+	$piresult = mysql_query("select * from $TABLE_PUZZLE where puzzleNo=$p[no]",$mainConn);
 	if(!$piresult)return ResultState::makeReturn(1001,"puzzle info");
 	
 	$puzzleInfo =  mysql_fetch_array($piresult,MYSQL_ASSOC);
@@ -481,7 +489,7 @@ function getpuzzleinfo($p){
 	
 	
 	
-	$query = mysql_query("select * from $TABLE_STAGE where puzzle=$p[no] order by no asc",$mainConn);
+	$query = mysql_query("select * from $TABLE_STAGE where puzzle=".$puzzleInfo[no]." order by no asc",$mainConn);
 	if(!$query)return ResultState::makeReturn(1001,"stage list");
 		
 	$stagelist=array();
@@ -489,7 +497,7 @@ function getpuzzleinfo($p){
 	$startStageNo=0;
 	while($stageInfo = mysql_fetch_array($query,MYSQL_ASSOC)){
 		if($startStageNo==0)$startStageNo=$stageInfo[no];
-
+		$stageInfo[puzzle] = $puzzleInfo[puzzleNo];
 		$stageInfo["condition"] = json_decode($stageInfo["condition"],true);
 		$stageInfo[shopItems]=json_decode($stageInfo[shopItems],true);
 		$stageInfo[defItems]=json_decode($stageInfo[defItems],true);
@@ -499,6 +507,9 @@ function getpuzzleinfo($p){
 		for($i=0;$i<count($stageInfo[cards]);$i++){
 			$cardInfo = mysql_fetch_array(mysql_query("select * from $TABLE_CARD where no=".$stageInfo[cards][$i],$mainConn),MYSQL_ASSOC);
 			if($cardInfo){
+
+				$cardInfo[stage]=$stageInfo[no];
+				$cardInfo[grade]=$i+1;
 				$cardInfo[ability]=json_decode($cardInfo[ability],true);
 				$cardInfo[missile]=json_decode($cardInfo[missile],true);
 				$cardInfo[aniInfo]=json_decode($cardInfo[aniInfo],true);
@@ -522,6 +533,8 @@ function getpuzzleinfo($p){
 		$cnt++;
 	}
 	
+	$puzzleInfo[no]=$puzzleInfo[puzzleNo];
+
 	$puzzleInfo["list"]=$stagelist;
 	$puzzleInfo["startStage"]=$startStageNo;
 	$puzzleInfo["state"]="ok";
@@ -532,12 +545,12 @@ function getpuzzleinfo($p){
 /////////////////////////////////////////////
 function help_getpuzzlelist(){
 
-	$r["discript"] = "퍼즐 정보 목록을 가져옵니다.";
+	$r["description"] = "퍼즐 정보 목록을 가져옵니다.";
 	
-	$r["param"][] = array("name"=>"puzzlelistversion","type"=>"int","discript"=>"퍼즐정보목록버전");
-	$r["param"][] = array("name"=>"eventstagelistversion","type"=>"int","discript"=>"이벤트스테이지목록버전");
-	$r["param"][] = array("name"=>"start","type"=>"int","discript"=>"얻어올 시작 퍼즐번호");
-	$r["param"][] = array("name"=>"limit","type"=>"int","discript"=>"시작번호부터 순서대로 갯수");
+	$r["param"][] = array("name"=>"puzzlelistversion","type"=>"int","description"=>"퍼즐정보목록버전");
+	$r["param"][] = array("name"=>"eventstagelistversion","type"=>"int","description"=>"이벤트스테이지목록버전");
+	$r["param"][] = array("name"=>"start","type"=>"int","description"=>"얻어올 시작 퍼즐번호");
+	$r["param"][] = array("name"=>"limit","type"=>"int","description"=>"시작번호부터 순서대로 갯수");
 	//$r["return"]
 	
 	$r["result"][]=ResultState::toArray(1002,"메인디비접속실패");
@@ -564,9 +577,9 @@ function getpuzzlelist($p){
 	}else{
 		// 여기서 eventstagelistversion 도 비교
 		if(!$p[start])$p[start]=0;
-		if(!$p[limit])$p[limit]=6;
+		if(!$p[limit])$p[limit]=100;
 		
-		$query = mysql_query("select no,thumbnail,title,point,ticket from $TABLE_PUZZLE order by no asc limit $p[start],$p[limit]",$mainConn);
+		$query = mysql_query("select no,puzzleNo,thumbnail,title,point,ticket from $TABLE_PUZZLE order by puzzleNo asc limit $p[start],$p[limit]",$mainConn);
 		
 		$list=array();
 		$cnt=0;
@@ -588,7 +601,7 @@ function getpuzzlelist($p){
 			$pData[version]=kvManager::get("puzzleVer_".$pData[no],1);
 			$pData[thumbnail]=json_decode($pData[thumbnail],true);
 			$pData[thumbnail][image]=$nowurl."/images/".$pData[thumbnail][image];
-			
+			$pData[no]=$pData[puzzleNo];
 			$list[]=$pData;
 			$cnt++;
 		}
@@ -626,12 +639,12 @@ function getpuzzlelist($p){
 /////////////////////////////////////////////
 function help_geteventstagelist(){
 
-	$r["discript"] = "이벤트스테이지 목록을 받아옵니다.";
+	$r["description"] = "이벤트스테이지 목록을 받아옵니다.";
 	
-	$r["param"][] = array("name"=>"puzzlelistversion","type"=>"int","discript"=>"퍼즐정보목록버전");
-	$r["param"][] = array("name"=>"eventstagelistversion","type"=>"int","discript"=>"이벤트스테이지목록버전");
-	$r["param"][] = array("name"=>"start","type"=>"int","discript"=>"얻어올 시작 퍼즐번호");
-	$r["param"][] = array("name"=>"limit","type"=>"int","discript"=>"시작번호부터 순서대로 갯수");
+	$r["param"][] = array("name"=>"puzzlelistversion","type"=>"int","description"=>"퍼즐정보목록버전");
+	$r["param"][] = array("name"=>"eventstagelistversion","type"=>"int","description"=>"이벤트스테이지목록버전");
+	$r["param"][] = array("name"=>"start","type"=>"int","description"=>"얻어올 시작 퍼즐번호");
+	$r["param"][] = array("name"=>"limit","type"=>"int","description"=>"시작번호부터 순서대로 갯수");
 	//$r["return"]
 	
 	$r["result"][]=ResultState::toArray(1002,"메인디비접속실패");
@@ -683,10 +696,10 @@ function geteventstagelist($p){
 
 function help_getstagelist(){
 
-	$r["discript"] = "스테이지 목록을 받아옵니다.";
+	$r["description"] = "스테이지 목록을 받아옵니다.";
 	
-	$r["param"][] = array("name"=>"start","type"=>"int","discript"=>"얻어올 시작 퍼즐번호");
-	$r["param"][] = array("name"=>"limit","type"=>"int","discript"=>"시작번호부터 순서대로 갯수");
+	$r["param"][] = array("name"=>"start","type"=>"int","description"=>"얻어올 시작 퍼즐번호");
+	$r["param"][] = array("name"=>"limit","type"=>"int","description"=>"시작번호부터 순서대로 갯수");
 	//$r["return"]
 	
 	$r["result"][]=ResultState::toArray(1002,"fail to get mainConnection");
@@ -757,14 +770,13 @@ function getstagelist($p){
 
 function help_writelog(){
 
-	$r["discript"] = "로그를 작성합니다.";
+	$r["description"] = "로그를 작성합니다.";
 	
-	$r["param"][] = array("name"=>"memberID","type"=>"int","discript"=>"멤버아이디");
-	$r["param"][] = array("name"=>"content","type"=>"string","discript"=>"내용");
-	$r["param"][] = array("name"=>"output","type"=>"string","discript"=>"결과");
-	$r["param"][] = array("name"=>"category","type"=>"string","discript"=>"카테고리");
+	$r["param"][] = array("name"=>"memberID","type"=>"int","description"=>"멤버아이디");
+	$r["param"][] = array("name"=>"input (exname is content)","type"=>"string","description"=>"내용");
+	$r["param"][] = array("name"=>"output","type"=>"string","description"=>"결과");
+	$r["param"][] = array("name"=>"category","type"=>"string","description"=>"카테고리");
 	
-	$r["result"][]=ResultState::toArray(1002,"메인디비접속실패");
 	$r["result"][]=ResultState::toArray(1001,"로그작성실패");
 	$r["result"][]=ResultState::toArray(1,"success");
 	
@@ -775,34 +787,53 @@ function help_writelog(){
 function writelog($p){
 	global $TABLE_LOG;
 	
-	$mainConn = DBManager::get()->getMainConnection();
-	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
-	
-	$data["memberID"]=$p["memberID"];
-	$data["content"]=$p["content"];
-	$data["output"]=$p["output"];
-	$data["time"]=time();
-	$data["category"]=$p["category"];
-	$data["ip"]=get_client_ip();
-	$data["header"]=json_encode(getallheaders());
-	$query = lq_query_insert($data,$TABLE_LOG);
-	$r = mysql_query($query,$mainConn);
-	
-	if(!$r)return ResultState::makeReturn(1001,"fail to write");
-	
+	if(!$p["input"])$p["input"]=$p["content"];
+
+	$userlog = new UserLog($p["memberID"]);
+	$userlog->m_output = $p["output"];
+	$userlog->m_input = $p["input"];
+	$userlog->m_regDate = TimeManager::get()->getCurrentDateString();
+	$userlog->m_category = $p["category"];
+	$userlog->m_ip = get_client_ip();
+	$userlog->m_header = json_encode(getallheaders());
+	$userlog->m_execTime = $p["execTime"];
+
+	if(!$userlog->save()){
+		return ResultState::makeReturn(1001,"fail to write");
+	}
+
 	$result["state"]="ok";
 	$result["result"]=ResultState::successToArray();
-	
-	
 	return $result;
+
+	// $mainConn = DBManager::get()->getMainConnection();
+	// if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
+	
+	// $data["memberID"]=$p["memberID"];
+	// $data["content"]=$p["content"];
+	// $data["output"]=$p["output"];
+	// $data["time"]=time();
+	// $data["category"]=$p["category"];
+	// $data["ip"]=get_client_ip();
+	// $data["header"]=json_encode(getallheaders());
+	// $query = lq_query_insert($data,$TABLE_LOG);
+	// $r = mysql_query($query,$mainConn);
+	
+	// if(!$r)return ResultState::makeReturn(1001,"fail to write");
+	
+	// $result["state"]="ok";
+	// $result["result"]=ResultState::successToArray();
+	
+	
+	// return $result;
 }
 /////////////////////////////////////////
 
 function help_increasestats(){
 
-	$r["discript"] = "숫자통계 증가";
+	$r["description"] = "숫자통계 증가";
 	
-	$r["param"][] = array("name"=>"key","type"=>"string","discript"=>"항목 키 값");
+	$r["param"][] = array("name"=>"key","type"=>"string","description"=>"항목 키 값");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(1001,"증가실패");
@@ -815,7 +846,7 @@ function increasestats($p){
 	if(kvManager::increase($p["key"])){
 		$r["result"]=ResultState::successToArray();	
 	}else{
-		$r["result"]=ResultState::toArray(1001);
+		$r["result"]=ResultState::toArray("1001");
 	}
 	
 	$r["state"]="ok";
@@ -823,13 +854,49 @@ function increasestats($p){
 }
 
 ///////////////////////////////////////////
+function help_dropoutuser(){
+
+	$r["description"] = "회원탈퇴";
+	
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"탈퇴할 회원 아이디");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(1001,"데이터베이스로인한 삭제오류");
+	$r["result"][]=ResultState::toArray(2002,"memberID를 안넣음");
+	$r["result"][]=ResultState::toArray(2003,"찾을수없음");
+	return $r;
+}
+
+function dropoutuser($p){
+	$memberid = $p["memberID"];
+	$keylist = $p["keyList"];
+	if($memberid){
+		$user = new UserData($memberid);
+		if($user->isLoaded()){
+			if($user->remove()){
+				$r["result"]=ResultState::successToArray();
+			}else{
+				$r["result"]=ResultState::toArray(1001,"query fail");
+			}
+		}else{
+			$r["state"]="error";
+			$r["result"]=ResultState::toArray(2003,"fail to load userdata");
+		}
+	}else{
+		$r["state"]="error";
+		$r["errorCode"]=10010;
+		$r["result"]=ResultState::toArray(2002,"memberID");
+	}
+	
+	return $r;
+}
 
 function help_setuserdata(){
 
-	$r["discript"] = "유저데이터 저장";
+	$r["description"] = "유저데이터 저장";
 	
-	$r["param"][] = array("name"=>"data","type"=>"string","discript"=>"저장할데이터 json string");
-	$r["param"][] = array("name"=>"nick","type"=>"string","discript"=>"닉네임");
+	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"저장할데이터 json string");
+	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"닉네임");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID를 안넣음");
@@ -858,14 +925,12 @@ function setuserdata($p){
 	return $r;
 }
 
-
-
 function help_getuserdata(){
 
-	$r["discript"] = "유저데이터 로드";
+	$r["description"] = "유저데이터 로드";
 	
-	$r["param"][] = array("name"=>"memberID","type"=>"int or string","discript"=>"멤머ID");
-	$r["param"][] = array("name"=>"keyList","type"=>"array(string)","discript"=>"받아올키목록, 없으면 모두 받아옴");
+	$r["param"][] = array("name"=>"memberID","type"=>"int or string","description"=>"멤머ID");
+	$r["param"][] = array("name"=>"keyList","type"=>"array(string)","description"=>"받아올키목록, 없으면 모두 받아옴");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID를 안넣음");
@@ -899,10 +964,10 @@ function getuserdata($p){
 
 function help_getuserdatalist(){
 
-	$r["discript"] = "유저데이터목록 로드";
+	$r["description"] = "유저데이터목록 로드";
 	
-	$r["param"][] = array("name"=>"memberIDList","type"=>"array(string)","discript"=>"멤머ID목록");
-	$r["param"][] = array("name"=>"keyList","type"=>"array(string)","discript"=>"받아올키목록, 없으면 모두 받아옴");
+	$r["param"][] = array("name"=>"memberIDList","type"=>"array(string)","description"=>"멤머ID목록");
+	$r["param"][] = array("name"=>"keyList","type"=>"array(string)","description"=>"받아올키목록, 없으면 모두 받아옴");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberIDList를 안넣음");
@@ -939,11 +1004,11 @@ function getuserdatalist($p){
 
 function help_updateuserdata(){
 
-	$r["discript"] = "유저데이터 업데이트";
+	$r["description"] = "유저데이터 업데이트";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string","discript"=>"멤버ID");
-	$r["param"][] = array("name"=>"data","type"=>"string","discript"=>"저장할데이터 json string");
-	$r["param"][] = array("name"=>"nick","type"=>"string","discript"=>"닉네임");
+	$r["param"][] = array("name"=>"memberID","type"=>"string","description"=>"멤버ID");
+	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"저장할데이터 json string");
+	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"닉네임");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberIDList를 안넣음");
@@ -984,11 +1049,11 @@ function updateuserdata($p){
 
 function help_adduserdata(){
 
-	$r["discript"] = "유저데이터 키 더하기";
+	$r["description"] = "유저데이터 키 더하기";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string","discript"=>"멤버ID");
-	$r["param"][] = array("name"=>"key","type"=>"string","discript"=>"올릴키");
-	$r["param"][] = array("name"=>"value","type"=>"int","discript"=>"값");
+	$r["param"][] = array("name"=>"memberID","type"=>"string","description"=>"멤버ID");
+	$r["param"][] = array("name"=>"key","type"=>"string","description"=>"올릴키");
+	$r["param"][] = array("name"=>"value","type"=>"int","description"=>"값");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID");
@@ -1040,11 +1105,11 @@ function adduserdata($p){
 
 function help_addfriend(){
 
-	$r["discript"] = "친구추가";
+	$r["description"] = "친구추가";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버ID");
-	$r["param"][] = array("name"=>"friendID","type"=>"string or int","discript"=>"추가할 친구 ID");
-	$r["param"][] = array("name"=>"friendMax","type"=>"int","discript"=>"추가가능한 친구 인원(미입력시 500,최대 500)");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버ID");
+	$r["param"][] = array("name"=>"friendID","type"=>"string or int","description"=>"추가할 친구 ID");
+	$r["param"][] = array("name"=>"friendMax","type"=>"int","description"=>"추가가능한 친구 인원(미입력시 500,최대 500)");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID");
@@ -1091,11 +1156,11 @@ function addfriend($p){
 
 function help_addfriendeach(){
 
-	$r["discript"] = "서로친구추가";
+	$r["description"] = "서로친구추가";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버ID");
-	$r["param"][] = array("name"=>"friendID","type"=>"string or int","discript"=>"추가할 친구 ID");
-	$r["param"][] = array("name"=>"friendMax","type"=>"int","discript"=>"추가가능한 친구 인원");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버ID");
+	$r["param"][] = array("name"=>"friendID","type"=>"string or int","description"=>"추가할 친구 ID");
+	$r["param"][] = array("name"=>"friendMax","type"=>"int","description"=>"추가가능한 친구 인원");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID");
@@ -1164,10 +1229,10 @@ function addfriendeach($p){
 
 function help_removefriendeach(){
 
-	$r["discript"] = "서로친구삭제";
+	$r["description"] = "서로친구삭제";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버ID");
-	$r["param"][] = array("name"=>"friendID","type"=>"string or int","discript"=>"삭제할 친구 ID");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버ID");
+	$r["param"][] = array("name"=>"friendID","type"=>"string or int","description"=>"삭제할 친구 ID");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	
@@ -1196,10 +1261,10 @@ function removefriendeach($p){
 
 function help_removefriend(){
 
-	$r["discript"] = "친구삭제";
+	$r["description"] = "친구삭제";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버ID");
-	$r["param"][] = array("name"=>"friendID","type"=>"string or int","discript"=>"삭제할 친구 ID");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버ID");
+	$r["param"][] = array("name"=>"friendID","type"=>"string or int","description"=>"삭제할 친구 ID");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID");
@@ -1236,9 +1301,9 @@ function removefriend($p){
 
 function help_getfriendlist(){
 
-	$r["discript"] = "친구목록받아오기";
+	$r["description"] = "친구목록받아오기";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버ID");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버ID");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID");
@@ -1271,9 +1336,9 @@ function getfriendlist($p){
 
 function help_getuserlistbyrandom(){
 
-	$r["discript"] = "추천친구목록";
+	$r["description"] = "추천친구목록";
 
-	$r["param"][] = array("name"=>"limit","type"=>"int","discript"=>"갯수, (기본 10, 최대 50)");
+	$r["param"][] = array("name"=>"limit","type"=>"int","description"=>"갯수, (기본 10, 최대 50)");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(1001,"fail to load list");
@@ -1290,8 +1355,8 @@ function getuserlistbyrandom($p){
 	
 	if($limit>50)$limit=50;
 	
+	$shardConn = UserIndex::getShardConnectionByRandom();
 	
-	$shardConn = DBManager::get()->getConnectionByShardKey(rand(0,10));
 	if(!$shardConn) return ResultState::makeReturn(1002,"fail to get shardConnection");
 	
 	$result = mysql_query("select memberID,nick,lastDate from ".DBManager::getST("userdata")." where nick<>'' limit $limit",$shardConn);
@@ -1314,12 +1379,12 @@ function getuserlistbyrandom($p){
 
 function help_sendmessage(){
 
-	$r["discript"] = "메세지보내기";
+	$r["description"] = "메세지보내기";
 
-	$r["param"][] = array("name"=>"receiverMemberID","type"=>"string or int","discript"=>"받는사람아이디");
-	$r["param"][] = array("name"=>"senderMemberID","type"=>"string or int","discript"=>"보내는사람아이디");
-	$r["param"][] = array("name"=>"content","type"=>"string","discript"=>"내용");
-	$r["param"][] = array("name"=>"type","type"=>"int","discript"=>"메세지타입");
+	$r["param"][] = array("name"=>"receiverMemberID","type"=>"string or int","description"=>"받는사람아이디");
+	$r["param"][] = array("name"=>"senderMemberID","type"=>"string or int","description"=>"보내는사람아이디");
+	$r["param"][] = array("name"=>"content","type"=>"string","description"=>"내용");
+	$r["param"][] = array("name"=>"type","type"=>"int","description"=>"메세지타입");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	
@@ -1357,12 +1422,12 @@ function sendmessage($p){
 
 function help_sendmessagebylist(){
 
-	$r["discript"] = "메세지 여러사람에게 보내기";
+	$r["description"] = "메세지 여러사람에게 보내기";
 
-	$r["param"][] = array("name"=>"receiverMemberIDList","type"=>"array(string or int)","discript"=>"받는사람아이디목록");
-	$r["param"][] = array("name"=>"senderMemberID","type"=>"string or int","discript"=>"보내는사람아이디");
-	$r["param"][] = array("name"=>"content","type"=>"string","discript"=>"내용");
-	$r["param"][] = array("name"=>"type","type"=>"int","discript"=>"메세지타입");
+	$r["param"][] = array("name"=>"receiverMemberIDList","type"=>"array(string or int)","description"=>"받는사람아이디목록");
+	$r["param"][] = array("name"=>"senderMemberID","type"=>"string or int","description"=>"보내는사람아이디");
+	$r["param"][] = array("name"=>"content","type"=>"string","description"=>"내용");
+	$r["param"][] = array("name"=>"type","type"=>"int","description"=>"메세지타입");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"receiverMemberIDList");
@@ -1408,10 +1473,10 @@ function sendmessagebylist($p){
 
 function help_getmessagelist(){
 
-	$r["discript"] = "메세지목록 받기";
+	$r["description"] = "메세지목록 받기";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버아이디");
-	$r["param"][] = array("name"=>"type","type"=>"int","discript"=>"메세지타입, (0혹은 미입력시 모두받아옴)");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
+	$r["param"][] = array("name"=>"type","type"=>"int","description"=>"메세지타입, (0혹은 미입력시 모두받아옴)");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(1002,"fail to get shardConnection");
@@ -1422,11 +1487,20 @@ function help_getmessagelist(){
 
 function getmessagelist($p){
 	$whereType = "";
-	$shardConn = DBManager::get()->getConnectionByShardKey($p["memberID"]);
+
+	if(!$p["memberID"]){
+		$r["state"]="error";
+		$r["result"]=ResultState::toArray(2002,"memberID");
+		return $r;
+	}
+
+	$userIndex = new UserIndex($p["memberID"]);
+	$shardConn = $userIndex->getShardConnection();	
+
 	if(!$shardConn)return ResultState::makeReturn(1002,"fail to get shardConnection");
 	
 	if($p["type"])$whereType=" and type='".$p["type"]."'";
-	$result = mysql_query("select * from MessageTable where memberID=".$p["memberID"].$whereType." and isSendMsg=0",$shardConn);
+	$result = mysql_query("select * from MessageTable where memberID=".$p["memberID"].$whereType." and isSendMsg=0 order by no desc",$shardConn);
 	
 	$mlist=array();
 	while($message = mysql_fetch_array($result,MYSQL_ASSOC)){
@@ -1440,10 +1514,10 @@ function getmessagelist($p){
 
 function help_removemessage(){
 
-	$r["discript"] = "메세지삭제";
+	$r["description"] = "메세지삭제";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버아이디");
-	$r["param"][] = array("name"=>"no","type"=>"int","discript"=>"메세지번호");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
+	$r["param"][] = array("name"=>"no","type"=>"int","description"=>"메세지번호");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(1002,"fail to get shardConnection");
@@ -1469,10 +1543,10 @@ function removemessage($p){
 
 function help_removemessagebylist(){
 
-	$r["discript"] = "메세지 여러개 삭제";
+	$r["description"] = "메세지 여러개 삭제";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버아이디");
-	$r["param"][] = array("name"=>"noList","type"=>"array(int)","discript"=>"메세지번호목록");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
+	$r["param"][] = array("name"=>"noList","type"=>"array(int)","description"=>"메세지번호목록");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(1002,"fail to get shardConnection");
@@ -1489,8 +1563,8 @@ function removemessagebylist($p){
 		return $r;
 	}
 	
-	
-	$shardConn = DBManager::get()->getConnectionByShardKey($p["memberID"]);
+	$userIndex = new UserIndex($p["memberID"]);
+	$shardConn = $userIndex->getShardConnection();	
 	if(!$shardConn)return ResultState::makeReturn(1002,"fail to get shardConnection");
 	
 	$messageNos = implode(",", $p["noList"]);
@@ -1504,10 +1578,10 @@ function removemessagebylist($p){
 
 function help_removeallmessage(){
 
-	$r["discript"] = "메세지 전부삭제";
+	$r["description"] = "메세지 전부삭제";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버아이디");
-	$r["param"][] = array("name"=>"type","type"=>"int","discript"=>"메세지타입(0혹은 입력안할시 모두삭제)");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
+	$r["param"][] = array("name"=>"type","type"=>"int","description"=>"메세지타입(0혹은 입력안할시 모두삭제)");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(1002,"fail to get shardConnection");
@@ -1518,7 +1592,8 @@ function help_removeallmessage(){
 function removeallmessage($p){
 	if($p["type"] && $p["type"]>0)$whereType=" and type='".$p["type"]."'";
 	
-	$shardConn = DBManager::get()->getConnectionByShardKey($p["memberID"]);
+	$userIndex = new UserIndex($p["memberID"]);
+	$shardConn = $userIndex->getShardConnection();	
 	if(!$shardConn)return ResultState::makeReturn(1002,"fail to get shardConnection");
 	
 	$result = mysql_query("delete from MessageTable where memberID=".$p["memberID"].$whereType." and isSendMsg=0",$shardConn);
@@ -1537,11 +1612,11 @@ function removeallmessage($p){
 
 function help_setweeklyscore(){
 
-	$r["discript"] = "주간점수등록";
+	$r["description"] = "주간점수등록";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버아이디");
-	$r["param"][] = array("name"=>"score","type"=>"int","discript"=>"점수");
-	$r["param"][] = array("name"=>"data","type"=>"string","discript"=>"데이터");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
+	$r["param"][] = array("name"=>"score","type"=>"int","description"=>"점수");
+	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"데이터");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	
@@ -1571,10 +1646,10 @@ function setweeklyscore($p){
 
 function help_getweeklyscorelist(){
 
-	$r["discript"] = "주간점수목록";
+	$r["description"] = "주간점수목록";
 
-	$r["param"][] = array("name"=>"memberIDList","type"=>"array(string or int)","discript"=>"멤버아이디목록");
-	$r["param"][] = array("name"=>"weekNo","type"=>"int","discript"=>"주간번호 없을경우 이번주");
+	$r["param"][] = array("name"=>"memberIDList","type"=>"array(string or int)","description"=>"멤버아이디목록");
+	$r["param"][] = array("name"=>"weekNo","type"=>"int","description"=>"주간번호 없을경우 이번주");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	
@@ -1603,12 +1678,12 @@ function getweeklyscorelist($p){
 
 function help_setstagescore(){
 
-	$r["discript"] = "스테이지점수등록";
+	$r["description"] = "스테이지점수등록";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버아이디");
-	$r["param"][] = array("name"=>"stageNo","type"=>"int","discript"=>"스테이지번호");
-	$r["param"][] = array("name"=>"data","type"=>"string","discript"=>"데이터");
-	$r["param"][] = array("name"=>"score","type"=>"int","discript"=>"점수");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
+	$r["param"][] = array("name"=>"stageNo","type"=>"int","description"=>"스테이지번호");
+	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"데이터");
+	$r["param"][] = array("name"=>"score","type"=>"int","description"=>"점수");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	
@@ -1636,12 +1711,12 @@ function setstagescore($p){
 
 function help_addstagescore(){
 
-	$r["discript"] = "스테이지점수추가";
+	$r["description"] = "스테이지점수추가";
 
-	$r["param"][] = array("name"=>"memberID","type"=>"string or int","discript"=>"멤버아이디");
-	$r["param"][] = array("name"=>"stageNo","type"=>"int","discript"=>"스테이지번호");
-	$r["param"][] = array("name"=>"data","type"=>"string","discript"=>"데이터");
-	$r["param"][] = array("name"=>"score","type"=>"int","discript"=>"점수");
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
+	$r["param"][] = array("name"=>"stageNo","type"=>"int","description"=>"스테이지번호");
+	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"데이터");
+	$r["param"][] = array("name"=>"score","type"=>"int","description"=>"점수");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	
@@ -1665,12 +1740,13 @@ function addstagescore($p){
 
 function help_getstagescorelist(){
 
-	$r["discript"] = "스테이지점수목록";
+	$r["description"] = "스테이지점수목록";
 
-	$r["param"][] = array("name"=>"memberIDList","type"=>"array(string or int)","discript"=>"멤버아이디목록");
-	$r["param"][] = array("name"=>"stageNo","type"=>"int","discript"=>"스테이지번호");
+	$r["param"][] = array("name"=>"memberIDList","type"=>"array(string or int)","description"=>"멤버아이디목록");
+	$r["param"][] = array("name"=>"stageNo","type"=>"int","description"=>"스테이지번호");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(2002,"파라메터없음");
 	
 	return $r;
 }
@@ -1679,13 +1755,22 @@ function getstagescorelist($p){
 	$memberlist = $p["memberIDList"];
 	$stageNo = $p["stageNo"];
 	
+	if(!$memberlist)return ResultState::makeReturn(2002,"memberlist");
+	if(!$stageNo)return ResultState::makeReturn(2002,"stageNo");
+
+	$memberIDListString = "(".implode(",",$memberlist).")";
 	$list=array();
-	foreach($memberlist as $key=>$value){
-		$ws=new StageScore($stageNo,$value);
-		if($ws->isLoaded()){
-			$list[]=$ws->getArrayData(true);
-		}
-	}
+
+	$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString",DBManager::get()->getConnectionByShardKey($stageNo));
+	while($rankInfo = mysql_fetch_array($qresult,MYSQL_ASSOC)){
+		$list[]=$rankInfo;
+	}	
+	// foreach($memberlist as $key=>$value){
+	// 	$ws=new StageScore($stageNo,$value);
+	// 	if($ws->isLoaded()){
+	// 		$list[]=$ws->getArrayData(true);
+	// 	}
+	// }
 	
 	$r["list"]=$list;
 	$r["state"]="ok";
@@ -1693,9 +1778,47 @@ function getstagescorelist($p){
 	return $r;
 }
 
+function help_getstageranklist(){
 
-function gettopstagescorelist($p){
+	$r["description"] = "스테이지별 랭킹목록";
 
+	$r["param"][] = array("name"=>"memberIDList","type"=>"array(string or int)","description"=>"멤버아이디목록");
+	$r["param"][] = array("name"=>"stageNoList","type"=>"array(int)","description"=>"스테이지번호목록");
+	$r["param"][] = array("name"=>"limit","type"=>"int","description"=>"몇등까지뽑아올것인가, 기본값 1, 최대값 10");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(2002,"파라메터없음");
+	
+	return $r;
+}
+
+function getstageranklist($p){
+	$limit = $p["limit"];
+	
+	if(!$limit)$limit = 1;
+	if($limit>10)$limit=10;
+
+	$memberIDList = $p["memberIDList"];
+	$stageNoList = $p["stageNoList"];
+
+	if(!$memberIDList)return ResultState::makeReturn(2002,"memberIDList");
+	if(!$stageNoList)return ResultState::makeReturn(2002,"stageNoList");
+	$memberIDListString = "(".implode(",",$memberIDList).")";
+	$list = array();
+	foreach($stageNoList as $key=>$stageNo){
+		$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString order by score desc limit $limit",DBManager::get()->getConnectionByShardKey($stageNo));
+		
+		$rlist = array();
+		while($user = mysql_fetch_array($qresult,MYSQL_ASSOC)){
+			$rlist[]=$user;
+		}
+		$list[]=$rlist;
+	}
+	$r["list"]=$list;
+	$r["state"]="ok";
+	$r["result"]=ResultState::successToArray();
+
+	return $r;
 }
 
 
@@ -1715,7 +1838,9 @@ if(!$stopCommand){
 		
 		
 		if(method_exists($command,$a)){
+			$startTime = TimeManager::get()->getMicroTime();
 			$r = $command->$a($p);
+			$endTime = TimeManager::get()->getMicroTime();
 			$r[log] = LogManager::get()->getLogAndClear();
 		 	$allResult[$cmd]= $r;
 		 	
@@ -1727,7 +1852,7 @@ if(!$stopCommand){
 			$p2["category"]=$a;
 			$p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 			$p2["output"]=$allResult[$cmd];
-			
+			$p2["execTime"]=$endTime-$startTime;
 			if($a!="writelog")$command->writelog($p2);
 			
 		}else if($a=="help"){

@@ -6,7 +6,20 @@ include "../lib.php";
 
 <html>
 <head>
-<title>admin</title>
+<title>
+<?php
+if($title)echo $title;
+else {
+$php_self = explode("/", $_SERVER[PHP_SELF]);
+$url_cnt = count($php_self) - 1;
+$this_page = $php_self[$url_cnt];
+$this_page_name = explode(".",$this_page);
+$this_page_name = $this_page_name[count($this_page_name)-2];
+echo $this_page_name;
+}
+?>
+
+</title>
 		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 		<script src="lib.js"></script>
 		<script src="LQDataTable.js"></script>
@@ -51,6 +64,7 @@ include "../lib.php";
 <td><a href=admin_resources.php>resources</a></td>
 <td><a href=admin_keyintvalue.php>key-intvalue</a></td>
 <td><a href=admin_log.php>log</a></td>
+<td><a href=admin_message.php>message</a></td>
 <td><a href=admin_statsClear.php>stats-clear</a></td>
 <td><a href=admin_util.php>util</a></td>
 </tr>
