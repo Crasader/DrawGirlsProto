@@ -150,9 +150,14 @@ private:
 class ThrowObject : public CrashMapObject
 {
 public:
+	virtual ~ThrowObject()
+	{
+		CCLog("ThrowObject Destroy");
+	}
 	static ThrowObject * create (CCPoint t_sp, int t_type, float t_speed, float t_angle, IntSize t_mSize);
 	void startMyAction ();
 private:
+	CCNode* objects;
 	int type;
 	int random_spin;
 	IntSize mSize;
@@ -200,19 +205,27 @@ private:
 class FM_Targeting : public CCNode
 {
 public:
-	static FM_Targeting * create (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle);
+	static FM_Targeting * create (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle, float inDegree);
+	virtual ~FM_Targeting()
+	{
+		CCLog("FM_Targeting destroy");
+	}
 	void startAction ();
 private:
 	CCSprite * targetingImg;
 	float duration;
 	float fSize;
 	float rotateValue;
-	void myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle);
+	void myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle, float inDegree);
 };
 class FallMeteor : public CrashMapObject
 {
 public:
 	static FallMeteor * create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
+	virtual ~FallMeteor()
+	{
+		CCLog("FallMeteor~");
+	}
 	void removeEffect ();
 	void hidingAnimation (float dt);
 private:
@@ -228,6 +241,7 @@ private:
 	CCPoint fall_dv;
 	CCObject * target_removeEffect;
 	SEL_CallFunc delegate_removeEffect;
+	FM_Targeting* m_targetSprite;
 	void jackDie ();
 	void lineDie (IntPoint t_p);
 	void finalCrash ();
@@ -490,6 +504,10 @@ class ReaverScarab : public CrashMapObject
 {
 public:
 	static ReaverScarab * create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
+	virtual ~ReaverScarab()
+	{
+		CCLog("ReaverScarab destory");
+	}
 	void crashMapForPoint (IntPoint point, int radius);
 	void selfRemove (float dt);
 	void jackDie ();
@@ -537,6 +555,7 @@ protected:
 	std::vector <CCPoint> m_bulletReversePath;
 	std::vector <CCPoint>::reverse_iterator m_bulletIter;
 	int m_insertCount;
+	CCSprite* m_targetSprite;
 };
 class CloudBomb : public CCNode
 {

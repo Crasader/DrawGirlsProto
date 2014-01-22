@@ -38,7 +38,7 @@ class AttackPattern : public CCNode
 {
 public:
 	
-	void startSelfRemoveSchedule();
+	void startSelfRemoveSchedule(int baseChild = 0);
 	
 	virtual void stopMyAction(){}
 	
@@ -47,6 +47,7 @@ protected:
 	virtual void selfRemoveSchedule();
 	
 	KSCumberBase* m_cumber;
+	int m_baseChildCount;
 };
 
 class SelfSpinMissile : public CCNode
@@ -861,14 +862,20 @@ class KSTargetAttackPattern12 : public AttackPattern
 {
 public:
 	CREATE_FUNC_CCP(KSTargetAttackPattern12);
+	virtual ~KSTargetAttackPattern12()
+	{
+		CCLog("bomb throw destroy");
+	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
+	void targetTraceUpdate(float dt);
 protected:
 	Json::Value m_pattern;
 	int m_frame;
 	int m_totalFrame;
 	KSCumberBase* m_cumber;
+	CCSprite* m_targetSprite;
 };
 
 

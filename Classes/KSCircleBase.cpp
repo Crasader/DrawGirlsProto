@@ -155,6 +155,7 @@ void KSCircleBase::damageReaction(float)
 			m_state = CUMBERSTATEMOVING;
 			unschedule(schedule_selector(KSCircleBase::damageReaction));
 			mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+			m_furyMode.furyFrameCount = m_furyMode.totalFrame;
 		}
 		
 	}
@@ -256,6 +257,7 @@ void KSCircleBase::randomPosition()
 	//	myGD->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	m_circle.setRelocation(getPosition(), m_well512);
+	m_snake.setRelocation(getPosition(), m_well512);
 //	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##
 //	m_headImg->runAction(t_scale);
 	
@@ -319,8 +321,8 @@ void KSCircleBase::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 		// 다시 벌겋게 만드는 코드.
 	
-		addChild(KSGradualValue<int>::create(m_furyMode.colorRef, 255, 0.5f,
-					[=](int t)
+		addChild(KSGradualValue<float>::create(m_furyMode.colorRef, 255, 0.5f,
+					[=](float t)
 					{
 						KS::setColor(this, ccc3(255, t, t));
 					}));
@@ -501,7 +503,7 @@ void KSCircleBase::stopCasting()
 
 void KSCircleBase::setPosition( const CCPoint& t_sp )
 {
-	//		CCLog("setPos %f %f", t_sp.x, t_sp.y);
+	//CCLog("setPos %f %f", t_sp.x, t_sp.y);
 	//		KSCumberBase::setPosition(t_sp);
 	m_headImg->setPosition(t_sp);
 	myGD->setMainCumberPoint(ccp2ip(t_sp));

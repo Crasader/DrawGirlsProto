@@ -806,9 +806,9 @@ void ThrowObject::stopMyAction ()
 void ThrowObject::myAction ()
 {
 	//		objImg->setRotation(objImg->getRotation() + random_spin);
-	setPosition(ccpAdd(getPosition(), dv));
+	objects->setPosition(ccpAdd(objects->getPosition(), dv));
 	
-	CCPoint myPosition = getPosition();
+	CCPoint myPosition = objects->getPosition();
 	CCPoint subPosition = ccpSub(myPosition, b_c_p);
 	subPosition.x = fabsf(subPosition.x);
 	subPosition.y = fabsf(subPosition.y);
@@ -833,59 +833,53 @@ void ThrowObject::myAction ()
 }
 void ThrowObject::myInit (CCPoint t_sp, int t_type, float t_speed, float t_angle, IntSize t_mSize)
 {
-	setPosition(t_sp);
+	// t_sp 자리에서 부터 t_angle 각도로 던짐.
+	//
 	
+	objects = CCNode::create();
+	addChild(objects);
+	objects->setPosition(t_sp);
 	type = t_type;
-	//		random_spin = rand()%11 - 5;
 	mSize = t_mSize;
-	
-	//		type = 1;
-	if(type == 11)
+	pair<CCSprite*, CCBAnimationManager*> alreadyWarning, alreadyWarning2;
+	if(type == 11) // 하나 짜리 던지기.
 	{
-		//			objImg = CCSprite::create(CCString::createWithFormat("chapter1_throw_%d.png", randomValue)->getCString());
-		//			int randomValue = rand()%2 + 1;
-		//
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw1.ccbi",this));
-		//			m_headAnimationManager = reader->getAnimationManager();
-		//			this->addChild(m_headImg, 10);
 		reader->release();
-		addChild(objImg);
+		objects->addChild(objImg);
+		objImg->setVisible(false);
+
+		CCNode* guideNode = CCNode::create();
+		guideNode->setRotation(-t_angle);	
+		addChild(guideNode);
+		guideNode->setPosition(t_sp);
+		alreadyWarning = KS::loadCCBI<CCSprite*>(this, "signal1_1.ccbi");
+		alreadyWarning2 = KS::loadCCBI<CCSprite*>(this, "signal1_2.ccbi");
+		guideNode->addChild(alreadyWarning.first);
+		guideNode->addChild(alreadyWarning2.first);
+		alreadyWarning2.first->setPosition(ccp(55.f / 2.f, 0));
 	}
-	else if(type == 14)
+	else if(type == 14) // 여러개 던지기.
 	{
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw4.ccbi",this));
 		reader->release();
-		addChild(objImg);
+		objects->addChild(objImg);
+		objImg->setVisible(false);
+
+		CCNode* guideNode = CCNode::create();
+		guideNode->setRotation(-t_angle);	
+		addChild(guideNode);
+		guideNode->setPosition(t_sp);
+		alreadyWarning = KS::loadCCBI<CCSprite*>(this, "signal2_1.ccbi");
+		alreadyWarning2 = KS::loadCCBI<CCSprite*>(this, "signal2_2.ccbi");
+		guideNode->addChild(alreadyWarning.first);
+		guideNode->addChild(alreadyWarning2.first);
+		alreadyWarning2.first->setPosition(ccp(35.f / 2.f, 0));
 	}
-	//		else if(type == 2) // ice
-	//		{
-	//			objImg = CCSprite::create("chapter2_throw_1.png");
-	//			addChild(objImg);
-	//		}
-	//		else if(type == 3) // wood
-	//		{
-	//			objImg = CCSprite::create("chapter2_throw_2.png");
-	//			addChild(objImg);
-	//		}
-	//		else if(type == 11)
-	//		{
-	//			objImg = CCSprite::create("chapter1_multiThrow_1.png");
-	//			addChild(objImg);
-	//		}
-	//		else if(type == 12)
-	//		{
-	//			objImg = CCSprite::create("chapter2_multiThrow_1.png");
-	//			addChild(objImg);
-	//		}
-	//		else if(type == 13)
-	//		{
-	//			objImg = CCSprite::create("chapter2_multiThrow_2.png");
-	//			addChild(objImg);
-	//		}
 	
 	dv.x = 1;
 	dv.y = tanf(t_angle/180.f*M_PI);
@@ -897,6 +891,19 @@ void ThrowObject::myInit (CCPoint t_sp, int t_type, float t_speed, float t_angle
 	dv = ccpMult(dv, 1.f/div_value);
 	
 	dv = ccpMult(dv, t_speed);
+
+	addChild(KSTimer::create(0.7f, [=]()
+				{
+					AudioEngine::sharedInstance()->playEffect("sound_throw_obj_shot.mp3", false);
+					schedule(schedule_selector(ThrowObject::myAction));
+					objImg->setVisible(true);
+					addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t)
+							{
+								KS::setOpacity(alreadyWarning.first, t);
+								KS::setOpacity(alreadyWarning2.first, t);
+								alreadyWarning2.first->setOpacity(t);
+							}));
+				}));
 }
 SB_FallStar * SB_FallStar::create (int t_type)
 {
@@ -1016,10 +1023,10 @@ void SatelliteBeam::myInit (CCPoint t_sp, int t_type, CCObject * t_removeEffect,
 	
 	startFallingStar();
 }
-FM_Targeting * FM_Targeting::create (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle)
+FM_Targeting * FM_Targeting::create (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle, float inDegree)
 {
 	FM_Targeting* t_fmt = new FM_Targeting();
-	t_fmt->myInit(imgFilename, t_sp, t_aniFrame, t_sSize, t_fSize, t_sAngle, t_fAngle);
+	t_fmt->myInit(imgFilename, t_sp, t_aniFrame, t_sSize, t_fSize, t_sAngle, t_fAngle, inDegree);
 	t_fmt->autorelease();
 	return t_fmt;
 }
@@ -1033,7 +1040,7 @@ void FM_Targeting::startAction ()
 	
 	targetingImg->runAction(t_spawn);
 }
-void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle)
+void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle, float inDegree)
 {
 	duration = t_aniFrame/60.f;
 	fSize = t_fSize;
@@ -1049,6 +1056,11 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	targetingImg->setRotation(t_sAngle);
 	
 	addChild(targetingImg);
+
+	CCSprite* guideLine = KS::loadCCBI<CCSprite*>(this, "target4.ccbi").first;
+	guideLine->setPosition(t_sp);
+	guideLine->setRotation(-inDegree);
+	addChild(guideLine);
 }
 FallMeteor * FallMeteor::create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
 {
@@ -1075,70 +1087,15 @@ void FallMeteor::hidingAnimation (float dt)
 }
 void FallMeteor::jackDie ()
 {
-	//		unschedule(schedule_selector(FallMeteor::fall));
-	//		(target_removeEffect->*delegate_removeEffect)();
 	AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
-	//		IntPoint rightUpPoint = IntPoint((meteor->getPositionX()-1)/pixelSize+1,(meteor->getPositionY()-1)/pixelSize+1); // right up
-	//		IntPoint leftDownPoint = IntPoint(rightUpPoint.x-mSize.width,rightUpPoint.y-mSize.height);		// left down point
-	//
-	//		IntSize size = IntSize(rightUpPoint.x - leftDownPoint.x + 1, rightUpPoint.y - leftDownPoint.y + 1); // size
-	//
-	//		for(int i=0;i<11;i++)
-	//		{
-	//			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
-	//		}
-	//		for(int i=0;i<7;i++)
-	//		{
-	//			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
-	//		}
-	//		crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
-	//
-	//		for(int i=0;i<11;i++)
-	//		{
-	//			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
-	//		}
-	//		for(int i=0;i<7;i++)
-	//		{
-	//			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
-	//		}
-	//		crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
-	
 	stopFall();
-	//		removeEffect();
 }
 void FallMeteor::lineDie (IntPoint t_p)
 {
 	myGD->communication("Main_showLineDiePosition", t_p);
 	//		unschedule(schedule_selector(FallMeteor::fall));
 	AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
-	//		IntPoint rightUpPoint = IntPoint((meteor->getPositionX()-1)/pixelSize+1,(meteor->getPositionY()-1)/pixelSize+1); // right up
-	//		IntPoint leftDownPoint = IntPoint(rightUpPoint.x-mSize.width,rightUpPoint.y-mSize.height);		// left down point
-	//
-	//		IntSize size = IntSize(rightUpPoint.x - leftDownPoint.x + 1, rightUpPoint.y - leftDownPoint.y + 1); // size
-	//
-	//		for(int i=0;i<11;i++)
-	//		{
-	//			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
-	//		}
-	//		for(int i=0;i<7;i++)
-	//		{
-	//			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
-	//		}
-	//		crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
-	//
-	//		for(int i=0;i<11;i++)
-	//		{
-	//			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
-	//		}
-	//		for(int i=0;i<7;i++)
-	//		{
-	//			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
-	//		}
-	//		crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
-	
 	stopFall();
-	//		(target_removeEffect->*delegate_removeEffect)();
-	//		removeEffect();
 }
 void FallMeteor::finalCrash ()
 {
@@ -1291,7 +1248,7 @@ void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameS
 	
 	//		 = CCSprite::create(("meteor_stone_test" + imgFilename).c_str(), CCRectMake(0, 0, imgFrameSize.width, imgFrameSize.height));
 	meteor->setPosition(t_sp);
-	addChild(meteor);
+	addChild(meteor, 1);
 	
 	int random_sign;
 	if(rand()%2)
@@ -1299,15 +1256,20 @@ void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameS
 	else
 		random_sign = -360;
 	
-	FM_Targeting* t_fmt = FM_Targeting::create(imgFilename, t_fp, t_fallFrame, 3.0, 0.7, 0, random_sign);
-	addChild(t_fmt);
+	m_targetSprite = FM_Targeting::create(imgFilename, t_fp, t_fallFrame, 3.0, 0.7, 0, random_sign, rad2Deg(atan2f(t_sp.y - t_fp.y, t_sp.x - t_fp.x)));
+	addChild(m_targetSprite);
 	
-	t_fmt->startAction();
+	//m_targetSprite->startAction();
 	
 	ingFrame = 0;
-	
-	//		schedule(schedule_selector(FallMeteor::fall));
-	schedule(schedule_selector(FallMeteor::fall), 0, kCCRepeatForever, fallFrame / 60.f);
+	addChild(KSGradualValue<float>::create(255, 0, fallFrame / 60.f, [=](int t)
+				{
+					KS::setOpacity(m_targetSprite, t);
+				},
+				[=](float t)
+				{
+					schedule(schedule_selector(FallMeteor::fall));
+				}));	
 }
 Lazer_Ring * Lazer_Ring::create (float t_ring_angle, CCPoint t_ring_sP, CCPoint t_ring_fP, float t_ring_sS, float t_ring_fS, int t_frame, ccColor3B t_color)
 {
@@ -2250,6 +2212,7 @@ KSSequenceAndRemove::~ KSSequenceAndRemove ()
 {}
 CCSequence * KSSequenceAndRemove::create (CCNode * thiz, std::initializer_list <CCFiniteTimeAction*> initList)
 {
+
 	CCArray* actions = CCArray::create();
 	for(auto action : initList)
 	{
@@ -2684,7 +2647,11 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 	//	}
 	//
 	// m_directions 은 위치에 따른 directions 을 가짐.
-	
+	IntPoint left(-1, 0);
+	IntPoint right(1, 0);
+	IntPoint up(0, 1);
+	IntPoint down(0, -1);
+
 	int numbers = number;
 	for(int i=0; i<numbers; i++)
 	{
@@ -2698,9 +2665,21 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 		addChild(goal);
 		goal->setPosition(ip2ccp(point));
 		
-		
+		if(iter->second == down)
+		{
+			goal->setRotation(90);
+		}	
+		else if(iter->second == up)
+		{
+			goal->setRotation(-90);
+		}
+		else if(iter->second == left)
+		{
+			goal->setRotation(180);
+		}
 		Pollution pollution;
-		pollution.glue.init(cumberPosition, ip2ccp(point), 0.005f * ccpLength(ip2ccp(point) - cumberPosition));
+		//pollution.glue.init(cumberPosition, ip2ccp(point), 0.005f * ccpLength(ip2ccp(point) - cumberPosition));
+		pollution.glue.init(cumberPosition, ip2ccp(point), 1.3f);
 		pollution.alongPath.point = point;
 		pollution.alongPath.direction = direction;
 		pollution.spr = KS::loadCCBI<CCSprite*>(this, "fx_pollution5.ccbi").first;
@@ -2744,13 +2723,33 @@ void AlongOfTheLine::update (float dt)
 		bool r = i->glue.step(1/60.f);
 		
 		i->spr->setPosition(i->glue.getValue());
+		if(r)
+		{
+			i->spr->setVisible(false);
+		}
+		else
+		{
+			i->spr->setVisible(true);
+		}
 		if(!r && i->step == 1)
 		{
-			i->goal->removeFromParent();
+			// 원하는 위치에 선따라가기가 부착이 딱 되었을 때!!, 
+			//i->goal->removeFromParent();
+			addChild(KSGradualValue<float>::create(255, 0, 0.4f,
+						[=](float t)
+						{
+							KS::setOpacity(i->goal, t);
+						},
+						[=](float t)
+						{
+							i->goal->removeFromParent();
+							i->step = 3;
+						}));
 			i->step = 2;
+			
 		}
 		bool erased = false;
-		if(i->step == 2)
+		if(i->step == 3)
 		{
 			i->spr->setPosition(ip2ccp(i->alongPath.point));
 			if(myGD->mapState[i->alongPath.point.x - 1][i->alongPath.point.y] == mapType::mapOldget &&
@@ -3007,7 +3006,8 @@ void ReaverScarab::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::V
 	scheduleUpdate();
 	
 	aStar(m_jackPoint);
-	
+	m_targetSprite = KS::loadCCBI<CCSprite*>(this, "target3.ccbi").first;
+	addChild(m_targetSprite);
 }
 int ReaverScarab::lengthToEnd (IntPoint point)
 {
@@ -3202,7 +3202,7 @@ void ReaverScarab::aStar (IntPoint endPt)
 }
 void ReaverScarab::update (float dt)
 {
-	//		CCLog("pokjuk %d", m_frame);
+	
 	if(m_step == 1)
 	{
 		m_frame++;
@@ -3225,6 +3225,7 @@ void ReaverScarab::update (float dt)
 			m_step = 2;
 			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), m_crashArea);
 		}
+		m_targetSprite->setPosition(ip2ccp(myGD->getJackPoint()));
 	}
 	if(m_step == 2) // 폭발.
 	{
@@ -3233,7 +3234,10 @@ void ReaverScarab::update (float dt)
 		
 		auto bomb = KS::loadCCBI<CCSprite*>(this, "fx_bomb2.ccbi");
 		addChild(bomb.first);
-		addChild(KSTimer::create(1.3f, [=](){bomb.first->removeFromParent();})); // 1.3 초 후에 사라짐.
+		m_targetSprite->removeFromParent();
+		addChild(KSTimer::create(1.3f, [=](){
+					bomb.first->removeFromParent();
+					})); // 1.3 초 후에 사라짐.
 		
 		bomb.first->setPosition(m_parentMissile->getPosition());
 		m_step = 3;
