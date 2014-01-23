@@ -52,6 +52,8 @@ private:
     virtual CCSize cellSizeForTable(CCTableView *table);
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
+	vector<int> have_card_count_for_puzzle_index;
+	
 	void showClearPopup();
 	void hideClearPopup();
 	void showFailPopup();
@@ -60,10 +62,17 @@ private:
 	void setTable();
 	
 	void menuAction(CCObject* sender);
+	
+	void countingMessage();
+	
+	CCSprite* postbox_count_case;
+	CCLabelTTF* postbox_count_label;
+	
 	void setTop();
 	void setBottom();
 	
 	void popupClose();
+	void mailPopupClose();
 	void tutorialCardSettingClose();
 	
 	void puzzleLoadSuccess();

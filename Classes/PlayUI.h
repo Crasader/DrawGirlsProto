@@ -147,6 +147,15 @@ private:
 	void selfRemove ();
 	void myInit (int t_step);
 };
+class DetailWarning : public CCNode
+{
+	public:
+		static DetailWarning * create (const string& fileName);
+		void startAction ();
+	private:
+		void selfRemove ();
+		void myInit (const string& fileName);
+};
 class Warning : public CCSprite
 {
 public:

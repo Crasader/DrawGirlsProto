@@ -194,7 +194,7 @@ void ChargeNodeLambda::setChargeColor( ccColor4F change_color )
 
 void ChargeNodeLambda::startCharge()
 {
-	myGD->communication("Main_showWarning", 1);
+	//myGD->communication("Main_showWarning", 1);
 	charge_cnt = 0;
 	AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
 	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
@@ -281,7 +281,7 @@ void ChargeNode::setChargeColor( ccColor4F change_color )
 
 void ChargeNode::startCharge()
 {
-	myGD->communication("Main_showWarning", 1);
+	//myGD->communication("Main_showWarning", 1);
 	charge_cnt = 0;
 	AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
 	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
@@ -400,7 +400,7 @@ void SpecialChargeNodeLambda::startCharge()
 {
 	charge_cnt = 0;
 	AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
-	myGD->communication("Main_showWarning", 3);
+	//myGD->communication("Main_showWarning", 3);
 	schedule(schedule_selector(SpecialChargeNodeLambda::charging));
 }
 
@@ -599,7 +599,7 @@ void CrashChargeNodeLambda::setChargeColor( ccColor4F change_color )
 void CrashChargeNodeLambda::startCharge()
 {
 	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
-	myGD->communication("Main_showWarning", 2);
+	//myGD->communication("Main_showWarning", 2);
 	charge_cnt = 0;
 	AudioEngine::sharedInstance()->playEffect("sound_casting_crash.mp3", true);
 	schedule(schedule_selector(CrashChargeNodeLambda::charging));
@@ -693,7 +693,7 @@ void CrashChargeNode::setChargeColor( ccColor4F change_color )
 void CrashChargeNode::startCharge()
 {
 	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
-	myGD->communication("Main_showWarning", 2);
+	//myGD->communication("Main_showWarning", 2);
 	charge_cnt = 0;
 	AudioEngine::sharedInstance()->playEffect("sound_casting_crash.mp3", true);
 	schedule(schedule_selector(CrashChargeNode::charging));

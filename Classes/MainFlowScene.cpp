@@ -29,6 +29,7 @@
 #include "ClearPopup.h"
 #include "FailPopup.h"
 #include "AlertEngine.h"
+#include "PuzzleListShadow.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -61,6 +62,26 @@ bool MainFlowScene::init()
 	setKeypadEnabled(true);
 	friend_point_popup = NULL;
 	
+	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	for(int i=1;i<=puzzle_count;i++)
+	{
+		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+		int have_card_cnt = 0;
+		int start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
+		int stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
+		
+		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+		for(int i=1;i<=card_take_cnt;i++)
+		{
+			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+			if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+				have_card_cnt++;
+		}
+		
+		have_card_count_for_puzzle_index.push_back(have_card_cnt);
+	}
+	
 	CCSprite* back_img = CCSprite::create("mainflow_back_wall.png");
 	back_img->setPosition(ccp(240,160));
 	addChild(back_img, kMainFlowZorder_back);
@@ -74,12 +95,12 @@ bool MainFlowScene::init()
 	
 	CCSprite* back_shadow_left = CCSprite::create("mainflow_back_shadow_left.png");
 	back_shadow_left->setAnchorPoint(ccp(0.f,0.5f));
-	back_shadow_left->setPosition(ccp(-(screen_scale_x-1.f)/480.f/2.f,160));
+	back_shadow_left->setPosition(ccp(-(screen_scale_x-1.f)*480.f/2.f,160));
 	addChild(back_shadow_left, kMainFlowZorder_top);
 	
 	CCSprite* back_shadow_right = CCSprite::create("mainflow_back_shadow_right.png");
 	back_shadow_right->setAnchorPoint(ccp(1.f,0.5f));
-	back_shadow_right->setPosition(ccp(480+(screen_scale_x-1.f)/480.f/2.f,160));
+	back_shadow_right->setPosition(ccp(480+(screen_scale_x-1.f)*480.f/2.f,160));
 	addChild(back_shadow_right, kMainFlowZorder_top);
 	
 	setTop();
@@ -90,11 +111,6 @@ bool MainFlowScene::init()
 		if(mySGD->getMustBeShowNotice())
 		{
 			ASPopupView* t_popup = ASPopupView::create(-200);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
 			
 			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
 			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
@@ -462,6 +478,13 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	cell->init();
 	cell->autorelease();
 	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	CCSize table_size = CCSizeMake(480*screen_scale_x, 245);
+	
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
 //	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
@@ -487,21 +510,10 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //		puzzle_thumbnail->setPosition(ccp(cellSizeForTable(table).width/2.f-1, cellSizeForTable(table).height/2.f+13));
 //		cell->addChild(puzzle_thumbnail);
 		
-		int have_card_cnt = 0;
-		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
 		int total_card_cnt = stage_count*3;
 		
-		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=card_take_cnt;i++)
-		{
-			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-				have_card_cnt++;
-		}
-		
-		CCLabelTTF* rate_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", have_card_cnt, total_card_cnt)->getCString(), mySGD->getFont().c_str(), 10);
+		CCLabelTTF* rate_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", have_card_count_for_puzzle_index[idx], total_card_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 		rate_label->setPosition(ccp(cellSizeForTable(table).width/2.f-25, cellSizeForTable(table).height/2.f-81));
 		cell->addChild(rate_label);
 		
@@ -509,9 +521,17 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		rate_timer->setType(kCCProgressTimerTypeBar);
 		rate_timer->setMidpoint(ccp(0,0));
 		rate_timer->setBarChangeRate(ccp(1,0));
-		rate_timer->setPercentage(100.f*have_card_cnt/total_card_cnt);
+		rate_timer->setPercentage(100.f*have_card_count_for_puzzle_index[idx]/total_card_cnt);
 		rate_timer->setPosition(ccp(cellSizeForTable(table).width/2.f+22, cellSizeForTable(table).height/2.f-80));
 		cell->addChild(rate_timer);
+
+		
+		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
+		cell->addChild(shadow_node, -1);
+		shadow_node->startAction();
+		
+		CCSprite* shadow_img = CCSprite::create("mainflow_puzzle_shadow.png");
+		shadow_node->addChild(shadow_img, -1);
 	}
 	else
 	{
@@ -563,6 +583,13 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			not_clear_img->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+33));
 			cell->addChild(not_clear_img);
 		}
+		
+		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
+		cell->addChild(shadow_node, -1);
+		shadow_node->startAction();
+		
+		CCSprite* shadow_img = CCSprite::create("mainflow_puzzle_shadow.png");
+		shadow_node->addChild(shadow_img, -1);
 	}
 	
 	return cell;
@@ -706,8 +733,11 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_postbox)
 		{
-			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
+			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose));
 			addChild(t_pp, kMainFlowZorder_popup);
+			
+			postbox_count_case->setVisible(false);
+			postbox_count_label->setVisible(false);
 		}
 		else if(tag == kMainFlowMenuTag_option)
 		{
@@ -945,6 +975,18 @@ void MainFlowScene::setTop()
 	postbox_menu->setPosition(ccp(395,top_case->getContentSize().height/2.f));
 	top_case->addChild(postbox_menu);
 	
+	postbox_count_case = CCSprite::create("mainflow_postbox_count.png");
+	postbox_count_case->setPosition(ccp(407,top_case->getContentSize().height/2.f+6));
+	top_case->addChild(postbox_count_case);
+	postbox_count_case->setVisible(false);
+	
+	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+	postbox_count_label->setColor(ccRED);
+	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f, postbox_count_case->getContentSize().height/2.f));
+	postbox_count_case->addChild(postbox_count_label);
+	
+	countingMessage();
+	
 	CCSprite* n_option = CCSprite::create("mainflow_option.png");
 	CCSprite* s_option = CCSprite::create("mainflow_option.png");
 	s_option->setColor(ccGRAY);
@@ -968,8 +1010,56 @@ void MainFlowScene::setTop()
 	top_case->addChild(tip_menu);
 }
 
+void MainFlowScene::countingMessage()
+{
+	Json::Value p;
+	p["memberID"]=hspConnector::get()->getKakaoID();
+	p["type"]=0; // 모든 타입의 메시지를 받겠다는 뜻.
+	p["limitDay"] = mySGD->getMsgRemoveDay();
+	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
+	
+	hspConnector::get()->command("getmessagelist",p,[this](Json::Value r)
+								 {
+									 GraphDogLib::JsonToLog("getmessagelist", r);
+									 if(r["result"]["code"].asInt() != GDSUCCESS)
+										 return;
+									 Json::Value message_list = r["list"];
+									 if(message_list.size() > 0)
+									 {
+										 postbox_count_case->setVisible(true);
+										 
+										 if(message_list.size() < 10)
+										 {
+											 postbox_count_label->setFontSize(10);
+											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+										 }
+										 else if(message_list.size() < 100)
+										 {
+											 postbox_count_label->setFontSize(7);
+											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+										 }
+										 else
+										 {
+											 postbox_count_label->setFontSize(8);
+											 postbox_count_label->setString("...");
+										 }
+									 }
+									 else
+									 {
+										 postbox_count_case->setVisible(false);
+										 postbox_count_label->setString("0");
+									 }
+								 });
+}
+
 void MainFlowScene::popupClose()
 {
+	is_menu_enable = true;
+}
+
+void MainFlowScene::mailPopupClose()
+{
+	countingMessage();
 	is_menu_enable = true;
 }
 

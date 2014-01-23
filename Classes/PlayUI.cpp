@@ -578,6 +578,61 @@ void TakeSpeedUp::myInit (int t_step)
 	
 	startFadeOut();
 }
+
+DetailWarning * DetailWarning::create (const std::string& fileName)
+{
+	DetailWarning* t_w = new DetailWarning();
+	t_w->myInit(fileName);
+	t_w->autorelease();
+	return t_w;
+}
+void DetailWarning::startAction ()
+{
+	//CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
+	//CCHide* t_hide = CCHide::create();
+	//CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
+	//CCShow* t_show = CCShow::create();
+	//CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
+	//CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
+	//CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
+	//CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(DetailWarning::selfRemove));
+
+	//runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
+}
+void DetailWarning::selfRemove ()
+{
+	removeFromParentAndCleanup(true);
+}
+void DetailWarning::myInit (const std::string& fileName)
+{
+	CCSprite* warningSprite = KS::loadCCBI<CCSprite*>(this, fileName).first;
+	if(!warningSprite)
+	{
+		warningSprite = CCSprite::create("attack_warning.png");
+	}
+	warningSprite->setPosition(ccp(240, myDSH->ui_center_y));
+	addChild(warningSprite);
+	addChild(KSTimer::create(3.f, [=]()
+				{
+					removeFromParentAndCleanup(true);
+				}));
+	//initWithFile("attack_warning.png");
+
+	//if(t1 == 1)
+	//{
+		//setColor(ccWHITE);
+	//}
+	//else if(t1 == 2)
+	//{
+		//setColor(ccRED);
+	//}
+	//else if(t1 == 3)
+	//{
+		//setColor(ccGREEN);
+	//}
+	//setPosition(ccp(640,myDSH->ui_center_y));
+}
+
 Warning * Warning::create (int t1)
 {
 	Warning* t_w = new Warning();
@@ -799,7 +854,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
-			if(t_p > t_beforePercentage)
+			if(t_p >= t_beforePercentage + 0.001f)
 			{
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
@@ -1646,7 +1701,7 @@ void PlayUI::setUseFriendCard()
 	CCSprite* jack_img = CCSprite::create("basic_character.png");
 	jack_img->setColor(ccGREEN);
 	jack_img->setOpacity(0);
-	jack_img->setPosition(ccp(422-(jack_life-1)*20, myDSH->ui_top-60));
+	jack_img->setPosition(ccp(422+40-(jack_life-1)*20, myDSH->ui_top-60));
 //	if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-(jack_life-1)*20));
 //	else											jack_img->setPosition(ccp(80+(jack_life-1)*20, myDSH->ui_top-35));
@@ -1771,7 +1826,7 @@ void PlayUI::myInit ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-60));
+		jack_img->setPosition(ccp(422+40-i*20, myDSH->ui_top-60));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20, myDSH->ui_top-35));
@@ -1801,10 +1856,11 @@ void PlayUI::myInit ()
 	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
-	mission_button->setPosition(ccp(480-25, myDSH->ui_top-62));
+	mission_button->setPosition(ccp(480-25-215, myDSH->ui_top-62));
 	addChild(mission_button);
 	
 	mission_button->startMarquee();
+	mission_button->doOpen();
 	
 	mission_button->setOpenFunction([&](){
 		int jack_cnt = jack_array->count();
@@ -2072,7 +2128,7 @@ void PlayUI::continueAction ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(422-i*20, myDSH->ui_top-60));
+		jack_img->setPosition(ccp(422+40-i*20, myDSH->ui_top-60));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20,myDSH->ui_top-35));

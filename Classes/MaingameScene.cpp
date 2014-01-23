@@ -64,6 +64,7 @@ bool Maingame::init()
 	myGD->V_Ip["Main_showLineDiePosition"] = std::bind(&Maingame::showLineDiePosition, this, _1);
 	myGD->V_V["Main_resetIsLineDie"] = std::bind(&Maingame::resetIsLineDie, this);
 	myGD->V_I["Main_showWarning"] = std::bind(&Maingame::showWarning, this, _1);
+	myGD->V_Str["Main_showDetailWarning"] = std::bind(&Maingame::showDetailWarning, this, _1);
 	myGD->V_V["Main_showCoin"] = std::bind(&Maingame::showCoin, this);
 	myGD->V_V["Main_startExchange"] = std::bind(&Maingame::startExchange, this);
 	myGD->V_V["Main_showTakeCoin"] = std::bind(&Maingame::showTakeCoin, this);
@@ -1068,6 +1069,11 @@ void Maingame::showWarning( int t1 )
 	t_w->startAction();
 }
 
+void Maingame::showDetailWarning(const std::string& fileName)
+{
+	DetailWarning* w = DetailWarning::create(fileName);
+	addChild(w, goldZorder);
+}
 void Maingame::showTakeCoin()
 {
 	TakeCoin* t_w = TakeCoin::create();
