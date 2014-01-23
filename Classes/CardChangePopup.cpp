@@ -247,6 +247,7 @@ void CardChangePopup::setSelectedCard(int t_card_number)
 	dex_percent *= 100.f;
 	if(dex_percent > 100.f)		dex_percent = 100.f;
 	if(dex_percent < 0.f)		dex_percent = 0.f;
+	dex_percent = 100.f-dex_percent;
 	float speed_percent = card_speed/(boss_speed+card_speed)*100.f;
 	if(speed_percent > 100.f)	speed_percent = 100.f;
 	if(speed_percent < 0.f)		speed_percent = 0.f;
