@@ -317,6 +317,7 @@
 //////////////////////////////////////////////// Joystick Button ///////////////////////////////////////////////////////////////////////////////
 
 #define minimumDistanceJ	5.f
+#define JoystickCenterLimit	30.f
 
 void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 {
@@ -710,12 +711,12 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				{
 					if(after_circle_position.x < 90)
 						after_circle_position.x = 90;
-					else if(after_circle_position.x > 470)
-						after_circle_position.x = 470;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					else if(after_circle_position.x > 480-JoystickCenterLimit)
+						after_circle_position.x = 480-JoystickCenterLimit;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
 					if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
 						control_circle->setPosition(after_circle_position);
@@ -729,14 +730,14 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				}
 				else
 				{
-					if(after_circle_position.x < 10)
-						after_circle_position.x = 10;
+					if(after_circle_position.x < JoystickCenterLimit)
+						after_circle_position.x = JoystickCenterLimit;
 					else if(after_circle_position.x > 390)
 						after_circle_position.x = 390;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
 					if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
 						control_circle->setPosition(after_circle_position);
@@ -780,34 +781,46 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				{
 					if(after_circle_position.x < 90)
 						after_circle_position.x = 90;
-					else if(after_circle_position.x > 470)
-						after_circle_position.x = 470;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					else if(after_circle_position.x > 480-JoystickCenterLimit)
+						after_circle_position.x = 480-JoystickCenterLimit;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+					
+					if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+						control_circle->setPosition(after_circle_position);
+					else
+					{
+						if(after_circle_position.x < 480-55-100 || after_circle_position.y > 55+100)
+							return;
+						else
+							control_circle->setPosition(after_circle_position);
+					}
 				}
 				else
 				{
-					if(after_circle_position.x < 10)
-						after_circle_position.x = 10;
+					if(after_circle_position.x < JoystickCenterLimit)
+						after_circle_position.x = JoystickCenterLimit;
 					else if(after_circle_position.x > 390)
 						after_circle_position.x = 390;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+					
+					if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+						control_circle->setPosition(after_circle_position);
+					else
+					{
+						if(after_circle_position.x > 55+100 || after_circle_position.y > 55+100)
+							return;
+						else
+							control_circle->setPosition(after_circle_position);
+					}
 				}
 				
-				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
-					control_circle->setPosition(after_circle_position);
-				else
-				{
-					if(after_circle_position.x > 55+100 || after_circle_position.y > 55+100)
-						return;
-					else
-						control_circle->setPosition(after_circle_position);
-				}
+				
 				control_circle->setVisible(true);
 				
 				control_ball->setPosition(location);
@@ -881,39 +894,99 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 				{
 					if(after_circle_position.x < 90)
 						after_circle_position.x = 90;
-					else if(after_circle_position.x > 470)
-						after_circle_position.x = 470;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					else if(after_circle_position.x > 480-JoystickCenterLimit)
+						after_circle_position.x = 480-JoystickCenterLimit;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+					
+					if(!myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed)) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
+					{
+						if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+						{
+							CCPoint circle_position = after_circle_position;
+							if(circle_position.x < 480-55-100)
+								circle_position.x = 480-55-100;
+							if(circle_position.y > 55+100)
+								circle_position.y = 55+100;
+							
+							control_circle->setPosition(circle_position);
+							
+							float t_distance = distanceValue;
+							if(distanceValue > 35)
+								t_distance = 35;
+							
+							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+							
+							control_ball->setPosition(inner_position);
+						}
+						else
+						{
+							control_circle->setPosition(after_circle_position);
+							control_ball->setPosition(location);
+						}
+					}
+					else
+					{
+						float t_distance = distanceValue;
+						if(distanceValue > 35)
+							t_distance = 35;
+						
+						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+						
+						control_ball->setPosition(inner_position);
+					}
 				}
 				else
 				{
-					if(after_circle_position.x < 10)
-						after_circle_position.x = 10;
+					if(after_circle_position.x < JoystickCenterLimit)
+						after_circle_position.x = JoystickCenterLimit;
 					else if(after_circle_position.x > 390)
 						after_circle_position.x = 390;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
-				}
-				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) && !myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))
-				{
-					control_circle->setPosition(after_circle_position);
-					control_ball->setPosition(location);
-				}
-				else
-				{
-					float t_distance = distanceValue;
-					if(distanceValue > 35)
-						t_distance = 35;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
-					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
-					
-					control_ball->setPosition(inner_position);
+					if(!myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed)) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
+					{
+						if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+						{
+							CCPoint circle_position = after_circle_position;
+							if(circle_position.x > 55+100)
+								circle_position.x = 55+100;
+							if(circle_position.y > 55+100)
+								circle_position.y = 55+100;
+							
+							control_circle->setPosition(circle_position);
+							
+							float t_distance = distanceValue;
+							if(distanceValue > 35)
+								t_distance = 35;
+							
+							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+							
+							control_ball->setPosition(inner_position);
+						}
+						else
+						{
+							control_circle->setPosition(after_circle_position);
+							control_ball->setPosition(location);
+						}
+					}
+					else
+					{
+						float t_distance = distanceValue;
+						if(distanceValue > 35)
+							t_distance = 35;
+						
+						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+						
+						control_ball->setPosition(inner_position);
+					}
 				}
+				
 				
 				touchAction(location, false);
 			}
@@ -970,39 +1043,97 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			{
 				if(after_circle_position.x < 90)
 					after_circle_position.x = 90;
-				else if(after_circle_position.x > 470)
-					after_circle_position.x = 470;
-				if(after_circle_position.y < 10)
-					after_circle_position.y = 10;
-				else if(after_circle_position.y > 310)
-					after_circle_position.y = 310;
+				else if(after_circle_position.x > 480-JoystickCenterLimit)
+					after_circle_position.x = 480-JoystickCenterLimit;
+				if(after_circle_position.y < JoystickCenterLimit)
+					after_circle_position.y = JoystickCenterLimit;
+				else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+					after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+				
+				if(!myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed)) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
+				{
+					if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+					{
+						CCPoint circle_position = after_circle_position;
+						if(circle_position.x < 480-55-100)
+							circle_position.x = 480-55-100;
+						if(circle_position.y > 55+100)
+							circle_position.y = 55+100;
+						
+						control_circle->setPosition(circle_position);
+						
+						float t_distance = distanceValue;
+						if(distanceValue > 35)
+							t_distance = 35;
+						
+						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+						
+						control_ball->setPosition(inner_position);
+					}
+					else
+					{
+						control_circle->setPosition(after_circle_position);
+						control_ball->setPosition(location);
+					}
+				}
+				else
+				{
+					float t_distance = distanceValue;
+					if(distanceValue > 35)
+						t_distance = 35;
+					
+					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+					
+					control_ball->setPosition(inner_position);
+				}
 			}
 			else
 			{
-				if(after_circle_position.x < 10)
-					after_circle_position.x = 10;
+				if(after_circle_position.x < JoystickCenterLimit)
+					after_circle_position.x = JoystickCenterLimit;
 				else if(after_circle_position.x > 390)
 					after_circle_position.x = 390;
-				if(after_circle_position.y < 10)
-					after_circle_position.y = 10;
-				else if(after_circle_position.y > 310)
-					after_circle_position.y = 310;
-			}
-			
-			if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) && !myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))
-			{
-				control_circle->setPosition(after_circle_position);
-				control_ball->setPosition(location);
-			}
-			else
-			{
-				float t_distance = distanceValue;
-				if(distanceValue > 35)
-					t_distance = 35;
+				if(after_circle_position.y < JoystickCenterLimit)
+					after_circle_position.y = JoystickCenterLimit;
+				else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+					after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 				
-				CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
-				
-				control_ball->setPosition(inner_position);
+				if(!myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed)) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
+				{
+					if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+					{
+						CCPoint circle_position = after_circle_position;
+						if(circle_position.x > 55+100)
+							circle_position.x = 55+100;
+						if(circle_position.y > 55+100)
+							circle_position.y = 55+100;
+						
+						control_circle->setPosition(circle_position);
+						
+						float t_distance = distanceValue;
+						if(distanceValue > 35)
+							t_distance = 35;
+						
+						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+						
+						control_ball->setPosition(inner_position);
+					}
+					else
+					{
+						control_circle->setPosition(after_circle_position);
+						control_ball->setPosition(location);
+					}
+				}
+				else
+				{
+					float t_distance = distanceValue;
+					if(distanceValue > 35)
+						t_distance = 35;
+					
+					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+					
+					control_ball->setPosition(inner_position);
+				}
 			}
 			
 			touchAction(location, true);
