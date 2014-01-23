@@ -56,7 +56,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	target_close = t_close;
 	delegate_close = d_close;
 	
-	
+	m_mailFilter = MailFilter::kTotal;	
 	
 	
 	
@@ -125,6 +125,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		showLeftMenuToggle(false);
 		setAlignText(AlignText::kTotal);
 		CCLog("postbox_aligntotal.png");
+		m_mailFilter = MailFilter::kTotal;
 	 });
 //	m0->setAnchorPoint(ccp(0.5f, 1));
 	m0->setPosition(ccp(leftMenuX, leftMenuY - 25));
@@ -137,6 +138,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 showLeftMenuToggle(false);
 		 setAlignText(AlignText::kNews);
 		 CCLog("postbox_alignnews.png");
+		 m_mailFilter = MailFilter::kTotal;
 	 });
 	m1->setAnchorPoint(ccp(0.5f, 1));
 	m1->setPosition(ccp(leftMenuX, leftMenuY - 18 - 29));
@@ -149,6 +151,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 showLeftMenuToggle(false);
 		 setAlignText(AlignText::kHeart);
 		 CCLog("postbox_alignheart.png");
+		 m_mailFilter = MailFilter::kHeart;
 	 });
 	m2->setAnchorPoint(ccp(0.5f, 1));
 	m2->setPosition(ccp(leftMenuX, leftMenuY - 18 - 29 - 29));
@@ -161,6 +164,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 showLeftMenuToggle(false);
 		 setAlignText(AlignText::kHelp);
 		 CCLog("postbox_alignhelp.png");
+		 m_mailFilter = MailFilter::kHelp;
 	 });
 	m3->setAnchorPoint(ccp(0.5f, 1));
 	m3->setPosition(ccp(leftMenuX,leftMenuY - 18 - 29 - 29 - 29));
@@ -173,6 +177,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 showLeftMenuToggle(false);
 		 setAlignText(AlignText::kTicket);
 		 CCLog("postbox_alignticket.png");
+		 m_mailFilter = MailFilter::kTicket;
 	 });
 	m4->setAnchorPoint(ccp(0.5f, 1));
 	m4->setPosition(ccp(leftMenuX, leftMenuY - 18 - 29 - 29 - 29 - 29));
@@ -263,9 +268,17 @@ void MailPopup::drawMail (Json::Value obj)
 	mailTableView->setDelegate(this);
 	this->addChild(mailTableView, kMP_Z_mailTable);
 	mailTableView->setTouchPriority(-200);
+
 	//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
 	
-	
+	// 필터한 json 을 생성함. m_mailFilter 에 따라 필터함.
+	// atIndex 에서 그릴 때, m_filteredMailList 에 따라 돌아가야 될 듯.
+	//
+	//if(m_mailFilter == MailFilter::kTotal)
+	//{
+	//}
+	//else 
+		//if(m_mailFilter == MailFilter::kTotal)
 }
 void MailPopup::closePopup (CCControlButton * obj, CCControlEvent event)
 {
