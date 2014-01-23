@@ -36,6 +36,8 @@ private:
 	float clear_percent;
 	float m_percentage;
 	
+	void removeAndCreateStar();
+	
 	void myInit(float t_clear_percent);
 };
 

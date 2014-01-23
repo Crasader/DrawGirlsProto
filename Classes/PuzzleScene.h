@@ -92,8 +92,8 @@ private:
 	PieceMode piece_mode;
 	void setPuzzle();
 	CCNode* puzzle_node;
-	CCSpriteBatchNode* shadow_batchnode;
-	void addShadow(string piece_type, CCPoint piece_position, int t_stage_number);
+//	CCSpriteBatchNode* shadow_batchnode;
+//	void addShadow(string piece_type, CCPoint piece_position, int t_stage_number);
 	CCSprite* selected_piece_img;
 	void setPieceClick(int t_stage_number);
 	void pieceAction(int t_stage_number);
@@ -130,9 +130,9 @@ private:
     virtual CCSize cellSizeForTable(CCTableView *table);
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
-	void setMonster();
-	CCNode* monster_node;
-	CCMenu* monster_start_menu;
+//	void setMonster();
+//	CCNode* monster_node;
+//	CCMenu* monster_start_menu;
 	
 	void popupClose();
 	

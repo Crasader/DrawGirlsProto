@@ -733,9 +733,11 @@ void TitleRenewalScene::resultGetKnownFriendList(Json::Value fInfo)
 			memberIDList["memberIDList"].append(i.userId);
 		}
 		
-		command_list.push_back(CommandParam("getuserdatalist", memberIDList,
-											bind(&ThisClassType::resultGetKnownFriendUserData,
-												 this,	std::placeholders::_1)));
+//		CCAssert(memberIDList.size() > 0, "friend count is zero?");
+		if(memberIDList.size() > 0)
+			command_list.push_back(CommandParam("getuserdatalist", memberIDList,
+												bind(&ThisClassType::resultGetKnownFriendUserData,
+													 this,	std::placeholders::_1)));
 	}
 	else
 	{
