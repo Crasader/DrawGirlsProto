@@ -62,6 +62,11 @@ public:
 		t_blg->autorelease();
 		return t_blg;
 	}
+	
+	int boss_hp;
+	double boss_speed;
+	double boss_agi;
+	
 	bool init(int, CumberShowWindowSceneCode);
 	CCBAnimationManager* m_circleAnimation;
 	CCBAnimationManager* m_snakeHeadAnimation;
