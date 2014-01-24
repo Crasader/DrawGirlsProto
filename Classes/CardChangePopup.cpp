@@ -554,7 +554,7 @@ void CardChangePopup::setMonster()
 	main_case->addChild(stage_monster);
 	
 	CCSprite* boss_gage = CCSprite::create("cardchange_gage_boss.png");
-	boss_gage->setPosition(ccp(241,195));
+	boss_gage->setPosition(ccp(240,195));
 	main_case->addChild(boss_gage, kCardChangePopupZorder_content);
 	
 	power_gage = CCProgressTimer::create(CCSprite::create("cardchange_gage_power.png"));
@@ -562,7 +562,7 @@ void CardChangePopup::setMonster()
 	power_gage->setMidpoint(ccp(0,0));
 	power_gage->setBarChangeRate(ccp(1,0));
 	power_gage->setPercentage(0);
-	power_gage->setPosition(ccp(241,195));
+	power_gage->setPosition(ccp(240,195));
 	main_case->addChild(power_gage, kCardChangePopupZorder_gage);
 	
 //	power_divide_line = CCSprite::create("cardchange_gage_divide_line.png");
@@ -570,11 +570,11 @@ void CardChangePopup::setMonster()
 //	main_case->addChild(power_divide_line, kCardChangePopupZorder_gageTop);
 	
 	CCSprite* power_case = CCSprite::create("cardchange_gage_case.png");
-	power_case->setPosition(ccpAdd(power_gage->getPosition(), ccp(-1,-0.5)));
+	power_case->setPosition(ccpAdd(power_gage->getPosition(), ccp(0,-0.5)));
 	main_case->addChild(power_case, kCardChangePopupZorder_gageTop);
 	
 	CCSprite* boss_gage1 = CCSprite::create("cardchange_gage_boss.png");
-	boss_gage1->setPosition(ccp(241,166));
+	boss_gage1->setPosition(ccp(240,166));
 	main_case->addChild(boss_gage1, kCardChangePopupZorder_content);
 	
 	dex_gage = CCProgressTimer::create(CCSprite::create("cardchange_gage_dex.png"));
@@ -582,7 +582,7 @@ void CardChangePopup::setMonster()
 	dex_gage->setMidpoint(ccp(0,0));
 	dex_gage->setBarChangeRate(ccp(1,0));
 	dex_gage->setPercentage(0);
-	dex_gage->setPosition(ccp(241,166));
+	dex_gage->setPosition(ccp(240,166));
 	main_case->addChild(dex_gage, kCardChangePopupZorder_gage);
 	
 //	dex_divide_line = CCSprite::create("cardchange_gage_divide_line.png");
@@ -590,11 +590,11 @@ void CardChangePopup::setMonster()
 //	main_case->addChild(dex_divide_line, kCardChangePopupZorder_gageTop);
 	
 	CCSprite* dex_case = CCSprite::create("cardchange_gage_case.png");
-	dex_case->setPosition(ccpAdd(dex_gage->getPosition(), ccp(-1,-0.5)));
+	dex_case->setPosition(ccpAdd(dex_gage->getPosition(), ccp(0,-0.5)));
 	main_case->addChild(dex_case, kCardChangePopupZorder_gageTop);
 	
 	CCSprite* boss_gage2 = CCSprite::create("cardchange_gage_boss.png");
-	boss_gage2->setPosition(ccp(241,137));
+	boss_gage2->setPosition(ccp(240,137));
 	main_case->addChild(boss_gage2, kCardChangePopupZorder_content);
 	
 	speed_gage = CCProgressTimer::create(CCSprite::create("cardchange_gage_speed.png"));
@@ -602,7 +602,7 @@ void CardChangePopup::setMonster()
 	speed_gage->setMidpoint(ccp(0,0));
 	speed_gage->setBarChangeRate(ccp(1,0));
 	speed_gage->setPercentage(0);
-	speed_gage->setPosition(ccp(241,137));
+	speed_gage->setPosition(ccp(240,137));
 	main_case->addChild(speed_gage, kCardChangePopupZorder_gage);
 	
 //	speed_divide_line = CCSprite::create("cardchange_gage_divide_line.png");
@@ -610,7 +610,7 @@ void CardChangePopup::setMonster()
 //	main_case->addChild(speed_divide_line, kCardChangePopupZorder_gageTop);
 	
 	CCSprite* speed_case = CCSprite::create("cardchange_gage_case.png");
-	speed_case->setPosition(ccpAdd(speed_gage->getPosition(), ccp(-1,-0.5)));
+	speed_case->setPosition(ccpAdd(speed_gage->getPosition(), ccp(0,-0.5)));
 	main_case->addChild(speed_case, kCardChangePopupZorder_gageTop);
 	
 	

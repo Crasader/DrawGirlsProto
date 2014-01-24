@@ -14,6 +14,7 @@
 #include <deque>
 #include "EnumDefine.h"
 #include "hspConnector.h"
+#include "KSProtect.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -52,7 +53,15 @@ private:
 	CCSprite* main_case;
 	
 	void changeCard();
-	CCSprite* card_img;
+	CCNode* card_img;
+	
+	CCMenu* card_turn_menu;
+	
+	KSProtectVar<int> use_item_price_gold;
+	KSProtectVar<int> use_item_price_ruby;
+	KSProtectVar<int> use_item_price_social;
+	
+	deque<bool> is_have_item;
 	
 	int clicked_item_idx;
 	vector<ITEM_CODE> item_list;
@@ -63,7 +72,6 @@ private:
 	
 	CCLabelTTF* item_title_label;
 	CCLabelTTF* option_label;
-	CCMenu* buy_menu;
 	
 	void menuAction(CCObject* sender);
 	void setTop();
