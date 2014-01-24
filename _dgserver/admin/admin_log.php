@@ -21,6 +21,7 @@ echo json_encode($newmemberlist,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 */
 ?>
 <?php
+      
 
 $fdata = <<<FINPUT
 
@@ -236,7 +237,9 @@ sort : <input name='sort' size="50" value='<?=$_GET['sort']?>'><br>
 limit : <input name='limit' size="50" value='<?=$_GET['limit']?>'><br>
  <input type=submit value="확인"><br>
  
- 현재시각 : <script> document.write(timeToDate(<?=time()?>,"%Y/%M/%d %H:%m:%s")); </script>
+ 현재시각 : <?php 
+echo TimeManager::get()->getCurrentDateString();
+ ?>
 </form>
 </center>
 <table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_LOG?>" dbSort="<?=$_GET["sort"]?>" dbLimit='<?=$_GET["limit"]?>' dbWhere='<?=$_GET["where"]?>' border=1 align=center>
@@ -244,12 +247,14 @@ limit : <input name='limit' size="50" value='<?=$_GET['limit']?>'><br>
 		<tr>
 			<th field="no" viewer="text" primary>no</th>
 			<th field="ip" viewer="text">ip</th>
-			<th field="memberID" viewer="custom" viewerOption="showNick">memberID</th>
+         <th field="nick" viewer="text">nick</th>
+			<th field="memberID" viewer="text">memberID</th>
 			<th field="header" viewer="text" viewerOption='{"cut":100}' editor="textarea">header</th>
 			<th field="category" viewer="text">category</th>
-			<th field="content" viewer="text" viewerOption='{"cut":100}' editor="textarea">content</th>
+			<th field="input" viewer="text" viewerOption='{"cut":100}' editor="textarea">input</th>
 			<th field="output" viewer="text" viewerOption='{"cut":100}' editor="textarea">output</th>
-			<th field="time" viewer="custom" viewerOption="showDate">time</th>
+         <th field="execTime" viewer="text">execTime</th>
+			<th field="regDate" viewer="text">regDate</th>
 		</tr>
 	</thead>
 	<tbody datazone>

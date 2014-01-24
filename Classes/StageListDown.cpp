@@ -461,8 +461,8 @@ void StageListDown::successAction()
 				}
 				else if(cut_list[j].key == "original")
 				{
-					cutx =x*116+94;
-					cuty =y*116+94;
+					cutx =x*120+86;
+					cuty =y*120+88;
 				}
 				
 				//자르고 저장합니다.
@@ -491,7 +491,7 @@ void StageListDown::successAction()
 				st->initWithImageFile("puzzle_stencil_1_top.png");
 				
 				int cutx =652/2;
-				int cuty =536-68/2;
+				int cuty =536-50/2;
 				
 				string filename =CCString::createWithFormat("puzzle%d_%s_top.png", puzzle_number, cut_list[j].key.c_str())->getCString();
 				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
@@ -511,7 +511,7 @@ void StageListDown::successAction()
 				st->initWithImageFile("puzzle_stencil_1_bottom.png");
 				
 				int cutx =652/2;
-				int cuty =68/2;
+				int cuty =50/2;
 				
 				string filename =CCString::createWithFormat("puzzle%d_%s_bottom.png", puzzle_number, cut_list[j].key.c_str())->getCString();
 				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
@@ -530,7 +530,7 @@ void StageListDown::successAction()
 				CCImage *st = new CCImage;
 				st->initWithImageFile("puzzle_stencil_1_left.png");
 				
-				int cutx =68/2;
+				int cutx =50/2;
 				int cuty =536/2;
 				
 				string filename =CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, cut_list[j].key.c_str())->getCString();
@@ -549,7 +549,7 @@ void StageListDown::successAction()
 				CCImage *st = new CCImage;
 				st->initWithImageFile("puzzle_stencil_1_right.png");
 				
-				int cutx =652-68/2;
+				int cutx =652-50/2;
 				int cuty =536/2;
 				
 				string filename =CCString::createWithFormat("puzzle%d_%s_right.png", puzzle_number, cut_list[j].key.c_str())->getCString();

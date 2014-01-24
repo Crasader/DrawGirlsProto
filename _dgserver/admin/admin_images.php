@@ -78,6 +78,12 @@ for($i=0;$i<count($categorys);$i++){
 
 $uploaderForm.="</select>";
 
+$uploaderForm.='writeMode :
+<select name="writeMode">
+<option value="update">update : 숫자늘리기</option>
+<option value="overwrite">overwrite : 덮어쓰기</option>
+<option value="random">random : 랜덤파일명</option>
+</select>';
 
 ?>
 

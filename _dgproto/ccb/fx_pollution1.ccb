@@ -32,7 +32,7 @@
 						<dict>
 							<key>0</key>
 							<dict>
-								<key>displayFrame</key>
+								<key>scale</key>
 								<dict>
 									<key>keyframes</key>
 									<array>
@@ -40,97 +40,151 @@
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>scale</string>
 											<key>time</key>
 											<real>0.0</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<string>fx_pollution1_1.png</string>
-												<string>Use regular file</string>
+												<real>0.89999997615814209</real>
+												<real>0.89999997615814209</real>
 											</array>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>scale</string>
 											<key>time</key>
-											<real>0.10000000149011612</real>
+											<real>0.066666670143604279</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<string>fx_pollution1_2.png</string>
-												<string>Use regular file</string>
+												<real>1</real>
+												<real>1</real>
 											</array>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.13333334028720856</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>0.89999997615814209</real>
+												<real>0.89999997615814209</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
 											<key>time</key>
 											<real>0.20000000298023224</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<string>fx_pollution1_3.png</string>
-												<string>Use regular file</string>
+												<real>1</real>
+												<real>1</real>
 											</array>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>scale</string>
 											<key>time</key>
-											<real>0.30000001192092896</real>
+											<real>0.26666668057441711</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<string>fx_pollution1_4.png</string>
-												<string>Use regular file</string>
+												<real>0.89999997615814209</real>
+												<real>0.89999997615814209</real>
 											</array>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.3333333432674408</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>1</real>
+												<real>1</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
 											<key>time</key>
 											<real>0.40000000596046448</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<string>fx_pollution1_5.png</string>
-												<string>Use regular file</string>
+												<real>0.89999997615814209</real>
+												<real>0.89999997615814209</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.46666666865348816</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>1</real>
+												<real>1</real>
 											</array>
 										</dict>
 									</array>
 									<key>name</key>
-									<string>displayFrame</string>
+									<string>scale</string>
 									<key>type</key>
-									<integer>7</integer>
+									<integer>4</integer>
 								</dict>
 							</dict>
 						</dict>
@@ -160,6 +214,11 @@
 								</array>
 							</dict>
 							<dict>
+								<key>baseValue</key>
+								<array>
+									<real>1</real>
+									<real>1</real>
+								</array>
 								<key>name</key>
 								<string>scale</string>
 								<key>type</key>
@@ -181,11 +240,6 @@
 								<false/>
 							</dict>
 							<dict>
-								<key>baseValue</key>
-								<array>
-									<string>pattern_pollution1_1.png</string>
-									<string>Use regular file</string>
-								</array>
 								<key>name</key>
 								<string>displayFrame</string>
 								<key>type</key>
@@ -355,17 +409,17 @@
 			<key>chainedSequenceId</key>
 			<integer>0</integer>
 			<key>length</key>
-			<real>0.40000000596046448</real>
+			<real>0.46666666865348816</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.40000000596046448</real>
+			<real>0.46666666865348816</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>128</real>
+			<real>512</real>
 			<key>sequenceId</key>
 			<integer>0</integer>
 			<key>soundChannel</key>

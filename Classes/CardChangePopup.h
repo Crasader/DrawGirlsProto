@@ -23,6 +23,7 @@ enum CardChangeAlign{
 	kCardChangeAlign_takeReverse
 };
 class CardSortInfo;
+class CumberShowWindow;
 class CardChangePopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -58,6 +59,15 @@ private:
 	
 	CardChangeAlign recent_align;
 	
+	CumberShowWindow* stage_monster;
+	
+	CCProgressTimer* power_gage;
+//	CCSprite* power_divide_line;
+	CCProgressTimer* dex_gage;
+//	CCSprite* dex_divide_line;
+	CCProgressTimer* speed_gage;
+//	CCSprite* speed_divide_line;
+	
 	void setSelectedCard(int t_card_number);
 	void addMountedCase();
 	CCMenu* mount_menu;
@@ -80,6 +90,13 @@ private:
 	void endHidePopup();
 	
 	bool is_menu_enable;
+	
+	CCSpriteBatchNode* explosion_node;
+	void explosion(CCPoint startPosition, int t_angle);
+	void showDamageMissile(CCPoint t_position, int t_damage);
+	void showMissMissile(CCPoint t_position, int t_damage);
+	
+	void shootMissile();
 };
 
 #endif /* defined(__DGproto__CardChangePopup__) */

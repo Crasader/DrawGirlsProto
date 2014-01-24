@@ -204,7 +204,8 @@ private:
 	void resetIsLineDie();
 	
 	void showWarning(int t1);
-	
+	void showDetailMessage(const std::string& fileName);	
+	void showTextMessage(const std::string& msg);	
 	void showTakeCoin();
 	CCNode* gameNodePointer();
 	void showChangeCard();

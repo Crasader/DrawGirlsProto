@@ -12,11 +12,15 @@
 #include "StageImgLoader.h"
 #include "CumberShowWindow.h"
 #include "TutorialFlowStep.h"
+#include "JackMissileShow.h"
 
 enum CardChangePopupZorder{
 	kCardChangePopupZorder_gray = 1,
 	kCardChangePopupZorder_back,
 	kCardChangePopupZorder_content,
+	kCardChangePopupZorder_gage,
+	kCardChangePopupZorder_gageTop,
+	kCardChangePopupZorder_selectedCard,
 	kCardChangePopupZorder_popup
 };
 
@@ -65,30 +69,17 @@ bool CardChangePopup::init()
 	addChild(main_case, kCardChangePopupZorder_back);
 	
 	
-	CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-	CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+	CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
+	CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
 	s_close->setColor(ccGRAY);
 	
 	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(CardChangePopup::menuAction));
 	close_item->setTag(kCardChangePopupMenuTag_close);
 	
 	CCMenu* close_menu = CCMenu::createWithItem(close_item);
-	close_menu->setPosition(ccp(440, 261));
+	close_menu->setPosition(ccp(455, 260));
 	main_case->addChild(close_menu, kCardChangePopupZorder_content);
 	close_menu->setTouchPriority(base_touch_priority);
-	
-	
-	CCSprite* n_align_take = CCSprite::create("cardchange_align_take.png");
-	CCSprite* s_align_take = CCSprite::create("cardchange_align_take.png");
-	s_align_take->setColor(ccGRAY);
-	
-	CCMenuItem* align_take_item = CCMenuItemSprite::create(n_align_take, s_align_take, this, menu_selector(CardChangePopup::menuAction));
-	align_take_item->setTag(kCardChangePopupMenuTag_alignTake);
-	
-	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
-	align_take_menu->setPosition(ccp(352, 113));
-	main_case->addChild(align_take_menu, kCardChangePopupZorder_content);
-	align_take_menu->setTouchPriority(base_touch_priority);
 	
 	
 	CCSprite* n_align_rank = CCSprite::create("cardchange_align_rank.png");
@@ -99,9 +90,27 @@ bool CardChangePopup::init()
 	align_rank_item->setTag(kCardChangePopupMenuTag_alignRank);
 	
 	CCMenu* align_rank_menu = CCMenu::createWithItem(align_rank_item);
-	align_rank_menu->setPosition(ccp(412, 113));
+	align_rank_menu->setPosition(ccp(415, 78));
 	main_case->addChild(align_rank_menu, kCardChangePopupZorder_content);
 	align_rank_menu->setTouchPriority(base_touch_priority);
+	
+	
+	CCSprite* n_align_take = CCSprite::create("cardchange_align_take.png");
+	CCSprite* s_align_take = CCSprite::create("cardchange_align_take.png");
+	s_align_take->setColor(ccGRAY);
+	
+	CCMenuItem* align_take_item = CCMenuItemSprite::create(n_align_take, s_align_take, this, menu_selector(CardChangePopup::menuAction));
+	align_take_item->setTag(kCardChangePopupMenuTag_alignTake);
+	
+	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
+	align_take_menu->setPosition(ccp(415, 40));
+	main_case->addChild(align_take_menu, kCardChangePopupZorder_content);
+	align_take_menu->setTouchPriority(base_touch_priority);
+	
+	setMonster();
+	
+	explosion_node = CCSpriteBatchNode::create("fx_monster_hit.png");
+	main_case->addChild(explosion_node, kCardChangePopupZorder_gage);
 	
 	selected_card = NULL;
 	mount_menu = NULL;
@@ -110,30 +119,29 @@ bool CardChangePopup::init()
 	setSelectedCard(myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 	setHaveCardList();
 	
-	CCSize table_size = CCSizeMake(245, 71);
+	CCSize table_size = CCSizeMake(341, 71);
 	
 //	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //	temp_back->setOpacity(100);
 //	temp_back->setAnchorPoint(CCPointZero);
-//	temp_back->setPosition(ccp(200, 28));
+//	temp_back->setPosition(ccp(29, 26));
 //	main_case->addChild(temp_back, kCardChangePopupZorder_content);
 	
 	have_card_table = CCTableView::create(this, table_size);
 	have_card_table->setAnchorPoint(CCPointZero);
 	have_card_table->setDirection(kCCScrollViewDirectionHorizontal);
 	have_card_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	have_card_table->setPosition(ccp(200, 28));
+	have_card_table->setPosition(ccp(29, 26));
 	have_card_table->setDelegate(this);
 	main_case->addChild(have_card_table, kCardChangePopupZorder_content);
 	have_card_table->setTouchPriority(base_touch_priority);
-	
-	setMonster();
 	
     return true;
 }
 
 void CardChangePopup::setSelectedCard(int t_card_number)
 {
+	unschedule(schedule_selector(CardChangePopup::shootMissile));
 	if(selected_card)
 	{
 		selected_card->removeFromParent();
@@ -151,15 +159,26 @@ void CardChangePopup::setSelectedCard(int t_card_number)
 	}
 	
 	if(t_card_number <= 0)
+	{
+		CCProgressFromTo* power_progress_to = CCProgressFromTo::create(0.3f, power_gage->getPercentage(), 0);
+		power_gage->runAction(power_progress_to);
+		
+		CCProgressFromTo* dex_progress_to = CCProgressFromTo::create(0.3f, dex_gage->getPercentage(), 0);
+		dex_gage->runAction(dex_progress_to);
+		
+		CCProgressFromTo* speed_progress_to = CCProgressFromTo::create(0.3f, speed_gage->getPercentage(), 0);
+		speed_gage->runAction(speed_progress_to);
+
 		return;
+	}
 	
 	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
 	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
 	
 	selected_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_grade)->getCString());
-	selected_card->setScale(0.36f);
-	selected_card->setPosition(ccp(107,144));
-	main_case->addChild(selected_card);
+	selected_card->setScale(0.29f);
+	selected_card->setPosition(ccp(72,176));
+	main_case->addChild(selected_card, kCardChangePopupZorder_selectedCard);
 	
 	if(card_grade == 3 && mySD->isAnimationStage(card_stage))
 	{
@@ -174,57 +193,127 @@ void CardChangePopup::setSelectedCard(int t_card_number)
 	t_case->setPosition(CCPointZero);
 	selected_card->addChild(t_case);
 	
-	if(t_card_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard)) // mounted card
-	{
-		addMountedCase();
-		
-		CCSprite* n_release = CCSprite::create("cardchange_release.png");
-		CCSprite* s_release = CCSprite::create("cardchange_release.png");
-		s_release->setColor(ccGRAY);
-		
-		CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardChangePopup::menuAction));
-		release_item->setTag(kCardChangePopupMenuTag_release);
-		
-		release_menu = CCMenu::createWithItem(release_item);
-		release_menu->setPosition(ccpAdd(selected_card->getPosition(), ccp(0,-100)));
-		main_case->addChild(release_menu);
-		release_menu->setTouchPriority(base_touch_priority);
-	}
-	else if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number) > 0) // mountable card
-	{
-		CCSprite* n_mount = CCSprite::create("cardchange_mount.png");
-		CCSprite* s_mount = CCSprite::create("cardchange_mount.png");
-		s_mount->setColor(ccGRAY);
-		
-		CCMenuItem* mount_item = CCMenuItemSprite::create(n_mount, s_mount, this, menu_selector(CardChangePopup::menuAction));
-		mount_item->setTag(kCardChangePopupMenuTag_mount);
-		
-		mount_menu = CCMenu::createWithItem(mount_item);
-		mount_menu->setPosition(ccpAdd(selected_card->getPosition(), ccp(0,-100)));
-		main_case->addChild(mount_menu);
-		mount_menu->setTouchPriority(base_touch_priority);
-	}
+//	if(t_card_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard)) // mounted card
+//	{
+//		addMountedCase();
+//		
+//		CCSprite* n_release = CCSprite::create("cardchange_release.png");
+//		CCSprite* s_release = CCSprite::create("cardchange_release.png");
+//		s_release->setColor(ccGRAY);
+//		
+//		CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardChangePopup::menuAction));
+//		release_item->setTag(kCardChangePopupMenuTag_release);
+//		
+//		release_menu = CCMenu::createWithItem(release_item);
+//		release_menu->setPosition(ccpAdd(selected_card->getPosition(), ccp(0,0)));
+//		main_case->addChild(release_menu);
+//		release_menu->setTouchPriority(base_touch_priority);
+//	}
+//	else if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number) > 0) // mountable card
+//	{
+//		CCSprite* n_mount = CCSprite::create("cardchange_mount.png");
+//		CCSprite* s_mount = CCSprite::create("cardchange_mount.png");
+//		s_mount->setColor(ccGRAY);
+//		
+//		CCMenuItem* mount_item = CCMenuItemSprite::create(n_mount, s_mount, this, menu_selector(CardChangePopup::menuAction));
+//		mount_item->setTag(kCardChangePopupMenuTag_mount);
+//		
+//		mount_menu = CCMenu::createWithItem(mount_item);
+//		mount_menu->setPosition(ccpAdd(selected_card->getPosition(), ccp(0,0)));
+//		main_case->addChild(mount_menu);
+//		mount_menu->setTouchPriority(base_touch_priority);
+//	}
 	
 	clicked_card_number = t_card_number;
+	myDSH->setIntegerForKey(kDSH_Key_selectedCard, clicked_card_number);
+	
+	float card_power = NSDS_GI(kSDS_CI_int1_missile_power_i, clicked_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, clicked_card_number)-1)*0.1f+1.f);
+	float card_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, clicked_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, clicked_card_number)-1)*0.1f+1.f);
+	float card_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, clicked_card_number);
+	
+	card_power = card_power < 1 ? 1 : card_power;
+	card_dex = card_dex < 1 ? 1 : card_dex;
+	
+	float boss_hp = stage_monster->boss_hp;
+	float boss_agi = stage_monster->boss_agi;
+	float boss_speed = stage_monster->boss_speed;
+	
+	float power_percent = 100.f - ((boss_hp - card_power*20.f)/boss_hp*100.f);
+	if(power_percent > 100.f)	power_percent = 100.f;
+	if(power_percent < 0.f)		power_percent = 0.f;
+	float dex_percent = (boss_agi-card_dex)/boss_agi;
+	dex_percent = dex_percent < 0 ? 0 : dex_percent;
+	dex_percent = dex_percent/100.f*85.f + 0.1f;
+	dex_percent *= 100.f;
+	if(dex_percent > 100.f)		dex_percent = 100.f;
+	if(dex_percent < 0.f)		dex_percent = 0.f;
+	dex_percent = 100.f-dex_percent;
+	float speed_percent = card_speed/(boss_speed+card_speed)*100.f;
+	if(speed_percent > 100.f)	speed_percent = 100.f;
+	if(speed_percent < 0.f)		speed_percent = 0.f;
+	
+	CCProgressFromTo* power_progress_to = CCProgressFromTo::create(0.3f, power_gage->getPercentage(), power_percent);
+	power_gage->runAction(power_progress_to);
+	
+//	power_divide_line->runAction(CCMoveTo::create(0.3f, ccp(power_gage->getPositionX()-power_gage->getContentSize().width/2.f+power_gage->getContentSize().width*power_percent/100.f,power_divide_line->getPositionY())));
+	
+	CCProgressFromTo* dex_progress_to = CCProgressFromTo::create(0.3f, dex_gage->getPercentage(), dex_percent);
+	dex_gage->runAction(dex_progress_to);
+	
+//	dex_divide_line->runAction(CCMoveTo::create(0.3f, ccp(dex_gage->getPositionX()-dex_gage->getContentSize().width/2.f+dex_gage->getContentSize().width*dex_percent/100.f,dex_divide_line->getPositionY())));
+	
+	CCProgressFromTo* speed_progress_to = CCProgressFromTo::create(0.3f, speed_gage->getPercentage(), speed_percent);
+	speed_gage->runAction(speed_progress_to);
+	
+//	speed_divide_line->runAction(CCMoveTo::create(0.3f, ccp(speed_gage->getPositionX()-speed_gage->getContentSize().width/2.f+speed_gage->getContentSize().width*speed_percent/100.f,speed_divide_line->getPositionY())));
+	
+	
+	schedule(schedule_selector(CardChangePopup::shootMissile), 0.5f);
+}
+
+void CardChangePopup::shootMissile()
+{
+	int cmCnt = 1;
+	
+	string missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+	int jm_type = MissileDamageData::getMissileType(missile_code.c_str());
+	float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+	
+	if(jm_type%10 >= 0 && jm_type%10 <= 3)
+	{
+		for(int i=0;i<cmCnt;i++)
+		{
+			JackMissileShow* t_jm = JM_BasicMissileShow::create(stage_monster, jm_type, missile_speed, ccp(72,176), stage_monster->boss_agi, this, callfuncCCpI_selector(CardChangePopup::explosion), callfuncCCpI_selector(CardChangePopup::showDamageMissile), callfuncCCpI_selector(CardChangePopup::showMissMissile));
+			main_case->addChild(t_jm, kCardChangePopupZorder_gageTop);
+			t_jm->startMoving();
+		}
+	}
+	else if(jm_type%10 >= 4 && jm_type%10 <= 6)
+	{
+		UM_creatorShow* t_c = UM_creatorShow::create(cmCnt*2, jm_type, missile_speed, ccp(72,176), stage_monster, stage_monster->boss_agi, this, callfuncCCpI_selector(CardChangePopup::explosion), callfuncCCpI_selector(CardChangePopup::showDamageMissile), callfuncCCpI_selector(CardChangePopup::showMissMissile));
+		main_case->addChild(t_c, kCardChangePopupZorder_gageTop);
+		t_c->startCreate();
+	}
+
 }
 
 void CardChangePopup::addMountedCase()
 {
-	CCSprite* top_case = CCSprite::create("card_case_check_top.png");
-	top_case->setPosition(ccp(160,430));
-	selected_card->addChild(top_case, 1, kCARDCASE_Tag_mounted_top);
-	
-	CCSprite* bottom_case = CCSprite::create("card_case_check_bottom.png");
-	bottom_case->setPosition(ccp(160,0));
-	selected_card->addChild(bottom_case, 1, kCARDCASE_Tag_mounted_bottom);
-	
-	CCSprite* left_case = CCSprite::create("card_case_check_left.png");
-	left_case->setPosition(ccp(0,215));
-	selected_card->addChild(left_case, 1, kCARDCASE_Tag_mounted_left);
-	
-	CCSprite* right_case = CCSprite::create("card_case_check_right.png");
-	right_case->setPosition(ccp(320,215));
-	selected_card->addChild(right_case, 1, kCARDCASE_Tag_mounted_right);
+//	CCSprite* top_case = CCSprite::create("card_case_check_top.png");
+//	top_case->setPosition(ccp(160,430));
+//	selected_card->addChild(top_case, 1, kCARDCASE_Tag_mounted_top);
+//	
+//	CCSprite* bottom_case = CCSprite::create("card_case_check_bottom.png");
+//	bottom_case->setPosition(ccp(160,0));
+//	selected_card->addChild(bottom_case, 1, kCARDCASE_Tag_mounted_bottom);
+//	
+//	CCSprite* left_case = CCSprite::create("card_case_check_left.png");
+//	left_case->setPosition(ccp(0,215));
+//	selected_card->addChild(left_case, 1, kCARDCASE_Tag_mounted_left);
+//	
+//	CCSprite* right_case = CCSprite::create("card_case_check_right.png");
+//	right_case->setPosition(ccp(320,215));
+//	selected_card->addChild(right_case, 1, kCARDCASE_Tag_mounted_right);
 }
 
 void CardChangePopup::setHaveCardList()
@@ -306,46 +395,57 @@ CCTableViewCell* CardChangePopup::tableCellAtIndex(CCTableView *table, unsigned 
 	cell->init();
 	cell->autorelease();
 	
-	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, have_card_list[idx].card_number);
-	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, have_card_list[idx].card_number);
-	
 	CCPoint card_center_position = ccp(30, 35);
 	
-	CCSprite* have_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
-	have_card->setScale(0.73f);
-	have_card->setPosition(card_center_position);
-	cell->addChild(have_card, kCardChangeTableCellZorder_img);
-	
-	CCSprite* no_img = CCSprite::create("cardchange_noimg.png");
-	no_img->setPosition(card_center_position);
-	cell->addChild(no_img, kCardChangeTableCellZorder_noimg);
-	
-	CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
-	mini_rank->setPosition(ccp(17,17));
-	no_img->addChild(mini_rank);
-	
-	CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, have_card_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 8);
-	t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
-	mini_rank->addChild(t_rank);
-	
-	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, have_card_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 8);
-	t_card_level_label->setPosition(ccp(17,60));
-	cell->addChild(t_card_level_label, kCardChangeTableCellZorder_noimg);
-	
-	if(have_card_list[idx].card_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
+	if(idx == 0)
 	{
-		CCSprite* small_selected_img = CCSprite::create("cardchange_selected.png");
-		small_selected_img->setPosition(card_center_position);
-		cell->addChild(small_selected_img, kCardChangeTableCellZorder_mounted);
+		CCSprite* release_img = CCSprite::create("cardchange_release_card.png");
+		release_img->setPosition(card_center_position);
+		cell->addChild(release_img, kCardChangeTableCellZorder_img);
+		
+		cell->setTag(-1);
 	}
-	else if(have_card_list[idx].card_number == clicked_card_number)
+	else
 	{
-		CCSprite* clicked_img = CCSprite::create("cardchange_clicked.png");
-		clicked_img->setPosition(card_center_position);
-		cell->addChild(clicked_img, kCardChangeTableCellZorder_touched);
+		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, have_card_list[idx-1].card_number);
+		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, have_card_list[idx-1].card_number);
+		
+		CCSprite* have_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		have_card->setScale(0.73f);
+		have_card->setPosition(card_center_position);
+		cell->addChild(have_card, kCardChangeTableCellZorder_img);
+		
+		CCSprite* no_img = CCSprite::create("cardchange_noimg.png");
+		no_img->setPosition(card_center_position);
+		cell->addChild(no_img, kCardChangeTableCellZorder_noimg);
+		
+		CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
+		mini_rank->setPosition(ccp(17,17));
+		no_img->addChild(mini_rank);
+		
+		CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, have_card_list[idx-1].card_number))->getCString(), mySGD->getFont().c_str(), 8);
+		t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
+		mini_rank->addChild(t_rank);
+		
+		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, have_card_list[idx-1].card_number))->getCString(), mySGD->getFont().c_str(), 8);
+		t_card_level_label->setPosition(ccp(17,60));
+		cell->addChild(t_card_level_label, kCardChangeTableCellZorder_noimg);
+		
+		if(have_card_list[idx-1].card_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
+		{
+			CCSprite* small_selected_img = CCSprite::create("cardchange_selected.png");
+			small_selected_img->setPosition(card_center_position);
+			cell->addChild(small_selected_img, kCardChangeTableCellZorder_mounted);
+		}
+		else if(have_card_list[idx-1].card_number == clicked_card_number)
+		{
+			CCSprite* clicked_img = CCSprite::create("cardchange_clicked.png");
+			clicked_img->setPosition(card_center_position);
+			cell->addChild(clicked_img, kCardChangeTableCellZorder_touched);
+		}
+		
+		cell->setTag(have_card_list[idx-1].card_number);
 	}
-	
-	cell->setTag(have_card_list[idx].card_number);
 	
 	return cell;
 }
@@ -359,7 +459,7 @@ void CardChangePopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell
 	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	if(recent_step == kTutorialFlowStep_targetCardClick)
 	{
-		int touched_card_number = have_card_list[cell->getIdx()].card_number;
+		int touched_card_number = have_card_list[cell->getIdx()-1].card_number;
 		setSelectedCard(touched_card_number);
 		table->updateCellAtIndex(cell->getIdx());
 		
@@ -382,36 +482,59 @@ void CardChangePopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell
 	}
 	else
 	{
-		int touched_card_number = have_card_list[cell->getIdx()].card_number;
-		if(touched_card_number == clicked_card_number)
-			return;
-		
-		is_menu_enable = false;
-		
-		if(clicked_card_number > 0)
+		if(cell->getIdx() == 0)
 		{
+			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+			clicked_card_number = 0;
 			int found_idx = -1;
-			for(int i=0;i<numberOfCellsInTableView(table) && found_idx == -1;i++)
+			for(int i=0;i<numberOfCellsInTableView(have_card_table) && found_idx == -1;i++)
 			{
-				CCTableViewCell* t_cell = table->cellAtIndex(i);
+				CCTableViewCell* t_cell = have_card_table->cellAtIndex(i);
 				if(t_cell)
 				{
 					int cell_card_number = t_cell->getTag();
-					if(cell_card_number == clicked_card_number)
+					if(cell_card_number == selected_card_number)
 						found_idx = i;
 				}
 			}
-			setSelectedCard(touched_card_number);
 			if(found_idx != -1)
-				table->updateCellAtIndex(found_idx);
-			table->updateCellAtIndex(cell->getIdx());
+				have_card_table->updateCellAtIndex(found_idx);
+			
+			setSelectedCard(clicked_card_number);
 		}
 		else
 		{
-			setSelectedCard(touched_card_number);
-			table->updateCellAtIndex(cell->getIdx());
+			int touched_card_number = have_card_list[cell->getIdx()-1].card_number;
+			if(touched_card_number == clicked_card_number)
+				return;
+			
+			is_menu_enable = false;
+			
+			if(clicked_card_number > 0)
+			{
+				int found_idx = -1;
+				for(int i=1;i<numberOfCellsInTableView(table) && found_idx == -1;i++)
+				{
+					CCTableViewCell* t_cell = table->cellAtIndex(i);
+					if(t_cell)
+					{
+						int cell_card_number = t_cell->getTag();
+						if(cell_card_number == clicked_card_number)
+							found_idx = i;
+					}
+				}
+				setSelectedCard(touched_card_number);
+				if(found_idx != -1)
+					table->updateCellAtIndex(found_idx);
+				table->updateCellAtIndex(cell->getIdx());
+			}
+			else
+			{
+				setSelectedCard(touched_card_number);
+				table->updateCellAtIndex(cell->getIdx());
+			}
 		}
-		
 		is_menu_enable = true;
 	}
 }
@@ -421,14 +544,79 @@ CCSize CardChangePopup::cellSizeForTable(CCTableView *table)
 }
 unsigned int CardChangePopup::numberOfCellsInTableView(CCTableView *table)
 {
-	return have_card_list.size();
+	return have_card_list.size() + 1;
 }
 
 void CardChangePopup::setMonster()
 {
-	CumberShowWindow* t_monster = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
-	t_monster->setPosition(ccp(256,183));
-	main_case->addChild(t_monster);
+	stage_monster = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
+	stage_monster->setPosition(ccp(409,178));
+	main_case->addChild(stage_monster);
+	
+	CCSprite* boss_gage = CCSprite::create("cardchange_gage_boss.png");
+	boss_gage->setPosition(ccp(240,195));
+	main_case->addChild(boss_gage, kCardChangePopupZorder_content);
+	
+	power_gage = CCProgressTimer::create(CCSprite::create("cardchange_gage_power.png"));
+	power_gage->setType(kCCProgressTimerTypeBar);
+	power_gage->setMidpoint(ccp(0,0));
+	power_gage->setBarChangeRate(ccp(1,0));
+	power_gage->setPercentage(0);
+	power_gage->setPosition(ccp(240,195));
+	main_case->addChild(power_gage, kCardChangePopupZorder_gage);
+	
+//	power_divide_line = CCSprite::create("cardchange_gage_divide_line.png");
+//	power_divide_line->setPosition(ccpAdd(power_gage->getPosition(), ccp(power_gage->getContentSize().width*power_gage->getPercentage()/100.f,0)));
+//	main_case->addChild(power_divide_line, kCardChangePopupZorder_gageTop);
+	
+	CCSprite* power_case = CCSprite::create("cardchange_gage_case.png");
+	power_case->setPosition(ccpAdd(power_gage->getPosition(), ccp(0,-0.5)));
+	main_case->addChild(power_case, kCardChangePopupZorder_gageTop);
+	
+	CCSprite* boss_gage1 = CCSprite::create("cardchange_gage_boss.png");
+	boss_gage1->setPosition(ccp(240,166));
+	main_case->addChild(boss_gage1, kCardChangePopupZorder_content);
+	
+	dex_gage = CCProgressTimer::create(CCSprite::create("cardchange_gage_dex.png"));
+	dex_gage->setType(kCCProgressTimerTypeBar);
+	dex_gage->setMidpoint(ccp(0,0));
+	dex_gage->setBarChangeRate(ccp(1,0));
+	dex_gage->setPercentage(0);
+	dex_gage->setPosition(ccp(240,166));
+	main_case->addChild(dex_gage, kCardChangePopupZorder_gage);
+	
+//	dex_divide_line = CCSprite::create("cardchange_gage_divide_line.png");
+//	dex_divide_line->setPosition(ccpAdd(dex_gage->getPosition(), ccp(dex_gage->getContentSize().width*dex_gage->getPercentage()/100.f,0)));
+//	main_case->addChild(dex_divide_line, kCardChangePopupZorder_gageTop);
+	
+	CCSprite* dex_case = CCSprite::create("cardchange_gage_case.png");
+	dex_case->setPosition(ccpAdd(dex_gage->getPosition(), ccp(0,-0.5)));
+	main_case->addChild(dex_case, kCardChangePopupZorder_gageTop);
+	
+	CCSprite* boss_gage2 = CCSprite::create("cardchange_gage_boss.png");
+	boss_gage2->setPosition(ccp(240,137));
+	main_case->addChild(boss_gage2, kCardChangePopupZorder_content);
+	
+	speed_gage = CCProgressTimer::create(CCSprite::create("cardchange_gage_speed.png"));
+	speed_gage->setType(kCCProgressTimerTypeBar);
+	speed_gage->setMidpoint(ccp(0,0));
+	speed_gage->setBarChangeRate(ccp(1,0));
+	speed_gage->setPercentage(0);
+	speed_gage->setPosition(ccp(240,137));
+	main_case->addChild(speed_gage, kCardChangePopupZorder_gage);
+	
+//	speed_divide_line = CCSprite::create("cardchange_gage_divide_line.png");
+//	speed_divide_line->setPosition(ccpAdd(speed_gage->getPosition(), ccp(speed_gage->getContentSize().width*speed_gage->getPercentage()/100.f,0)));
+//	main_case->addChild(speed_divide_line, kCardChangePopupZorder_gageTop);
+	
+	CCSprite* speed_case = CCSprite::create("cardchange_gage_case.png");
+	speed_case->setPosition(ccpAdd(speed_gage->getPosition(), ccp(0,-0.5)));
+	main_case->addChild(speed_case, kCardChangePopupZorder_gageTop);
+	
+	
+//	CCSprite* boss_gage3 = CCSprite::create("cardchange_gage_boss.png");
+//	boss_gage3->setPosition(ccp(241,137));
+//	main_case->addChild(boss_gage3, kCardChangePopupZorder_content);
 }
 
 void CardChangePopup::onEnter()
@@ -647,4 +835,63 @@ void CardChangePopup::menuAction(CCObject* pSender)
 			is_menu_enable = true;
 		}
 	}
+}
+
+void CardChangePopup::explosion(CCPoint startPosition, int t_angle)
+{
+	AudioEngine::sharedInstance()->playEffect("sound_jack_missile_bomb.mp3",false);
+	CCSprite* t_explosion = CCSprite::createWithTexture(explosion_node->getTexture(), CCRectMake(0, 0, 167, 191));
+	t_explosion->setScale(0.5f);
+	t_explosion->setRotation(-t_angle-90);
+	t_explosion->setPosition(startPosition);
+	explosion_node->addChild(t_explosion);
+	
+	CCAnimation* t_animation = CCAnimation::create();
+	t_animation->setDelayPerUnit(0.1f);
+	t_animation->addSpriteFrameWithTexture(explosion_node->getTexture(), CCRectMake(0, 0, 167, 191));
+	for(int i=0;i<2;i++)
+		for(int j=0;j<3;j++)
+			t_animation->addSpriteFrameWithTexture(explosion_node->getTexture(), CCRectMake(j*167, i*191, 167, 191));
+	
+	CCAnimate* t_animate = CCAnimate::create(t_animation);
+	CCFadeTo* t_fade = CCFadeTo::create(0.2f, 0);
+	CCRemoveSelf* t_remove = CCRemoveSelf::create();
+	CCSequence* t_seq = CCSequence::create(t_animate, t_fade, t_remove, NULL);
+	t_explosion->runAction(t_seq);
+}
+
+void CardChangePopup::showDamageMissile(CCPoint t_position, int t_damage)
+{
+	CCNode* container = CCNode::create();
+	container->setScale(0.5f);
+	container->setPosition(t_position);
+	main_case->addChild(container, kCardChangePopupZorder_gage);
+	
+	CountingBMLabel* damage_label = CountingBMLabel::create("1", "missile_damage_label.fnt", 0.3f, "%d");
+	container->addChild(damage_label, kCardChangePopupZorder_gage);
+	
+	damage_label->setString(CCString::createWithFormat("%d", t_damage)->getCString());
+	
+	CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+	CCCallFunc* t_call = CCCallFunc::create(container, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_fade, t_call, NULL);
+	damage_label->runAction(t_seq);
+}
+
+void CardChangePopup::showMissMissile(CCPoint t_position, int t_damage)
+{
+	t_position.x += rand()%21 - 10;
+	t_position.y += rand()%21 - 10;
+	
+	CCSprite* miss_label = CCSprite::create("missile_miss.png");
+	miss_label->setScale(0.5f);
+	miss_label->setPosition(t_position);
+	main_case->addChild(miss_label, kCardChangePopupZorder_gage);
+	
+	CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
+	CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCSprite::removeFromParent));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+	
+	miss_label->runAction(t_seq);
 }

@@ -317,11 +317,12 @@
 //////////////////////////////////////////////// Joystick Button ///////////////////////////////////////////////////////////////////////////////
 
 #define minimumDistanceJ	5.f
+#define JoystickCenterLimit	30.f
 
 void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 {
 	CCPoint distancePoint = ccp(t_p.x - control_circle->getPositionX(), t_p.y - control_circle->getPositionY());
-	float distanceValue = sqrt(pow(distancePoint.x, 2.0) + pow(distancePoint.y, 2.0));
+	float distanceValue = sqrtf(powf(distancePoint.x, 2.f) + powf(distancePoint.y, 2.f));
 	float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 	
 	if(myJack->isStun)// || myJack->willBackTracking || myJack->getJackState() == jackStateBackTracking)
@@ -366,7 +367,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < -180.f+(regular_spectrum+irregular_spectrum)/2.f)
 		{
-			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			if(!isDisableIrregularDirection)
 			{
 				angleDirection = directionLeftDown;
 				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionDown;
@@ -381,7 +382,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < -180.f+regular_spectrum/2.f+irregular_spectrum)
 		{
-			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			if(!isDisableIrregularDirection)
 			{
 				angleDirection = directionLeftDown;
 				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionLeft;
@@ -408,7 +409,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < -180.f+(regular_spectrum+irregular_spectrum)*3.f/2.f)
 		{
-			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			if(!isDisableIrregularDirection)
 			{
 				angleDirection = directionRightDown;
 				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionRight;
@@ -423,7 +424,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < -180.f+regular_spectrum*3.f/2.f+irregular_spectrum*2.f)
 		{
-			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			if(!isDisableIrregularDirection)
 			{
 				angleDirection = directionRightDown;
 				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionDown;
@@ -450,7 +451,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < regular_spectrum/2.f+irregular_spectrum/2.f)
 		{
-			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			if(!isDisableIrregularDirection)
 			{
 				angleDirection = directionRightUp;
 				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionUp;
@@ -465,7 +466,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < regular_spectrum/2.f+irregular_spectrum)
 		{
-			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			if(!isDisableIrregularDirection)
 			{
 				angleDirection = directionRightUp;
 				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionRight;
@@ -492,7 +493,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < (regular_spectrum+irregular_spectrum)*3.f/2.f)
 		{
-			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			if(!isDisableIrregularDirection)
 			{
 				angleDirection = directionLeftUp;
 				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionLeft;
@@ -507,7 +508,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < regular_spectrum*3.f/2.f+irregular_spectrum*2.f)
 		{
-			if(!myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+			if(!isDisableIrregularDirection)
 			{
 				angleDirection = directionLeftUp;
 				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionUp;
@@ -596,20 +597,20 @@ void ControlJoystickButton::resetTouch()
 void ControlJoystickButton::invisibleControl()
 {
 	offButton();
-	control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
-	control_circle->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
+	control_ball->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
+	control_circle->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
 	
-	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick))
+	if(isControlJoystickFixed || isAlwaysVisibleJoystick)
 	{
-		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
-			control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));
-			control_ball->setPosition(ccp(480-50-myGD->boarder_value, 50));
+			control_circle->setPosition(ccp(480-55-myGD->boarder_value, 55));
+			control_ball->setPosition(ccp(480-55-myGD->boarder_value, 55));
 		}
 		else
 		{
-			control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-			control_ball->setPosition(ccp(50+myGD->boarder_value, 50));
+			control_circle->setPosition(ccp(55+myGD->boarder_value, 55));
+			control_ball->setPosition(ccp(55+myGD->boarder_value, 55));
 		}
 	}
 }
@@ -631,7 +632,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 	
 		bool is_button_x;
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)
+		if(controlJoystickDirection == kControlJoystickDirection_left)
 		{
 			if(location.x > 480-100)
 				is_button_x = true;
@@ -652,7 +653,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 //		myJack->setJackState(jackStateDrawing); //## 컴터로 임시.
 //#endif
 		
-		if(!myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton) && is_button_x)
+		if(!isDisableDrawButton && is_button_x)
 		{
 			// button or ui
 
@@ -674,7 +675,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					IntPoint jackPoint = myGD->getJackPoint();
 					if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
 					{
-						if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+						if(isEnableLineOver)
 							myGD->communication("PM_checkBeforeNewline", jackPoint);
 						myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
 					}
@@ -704,43 +705,62 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		{
 			if(!joystick_touch && !myJack->willBackTracking && !isStun)
 			{
-				joystick_touch = touch;
 				CCPoint after_circle_position = location;
 				
-				if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+				if(controlJoystickDirection == kControlJoystickDirection_right)
 				{
 					if(after_circle_position.x < 90)
 						after_circle_position.x = 90;
-					else if(after_circle_position.x > 470)
-						after_circle_position.x = 470;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					else if(after_circle_position.x > 480-JoystickCenterLimit)
+						after_circle_position.x = 480-JoystickCenterLimit;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+					
+					if(!isControlJoystickFixed)
+						control_circle->setPosition(after_circle_position);
+					else
+					{
+						if(after_circle_position.x < 480-55-100 || after_circle_position.y > 55+100)
+							return;
+						else
+							control_circle->setPosition(after_circle_position);
+					}
 				}
 				else
 				{
-					if(after_circle_position.x < 10)
-						after_circle_position.x = 10;
+					if(after_circle_position.x < JoystickCenterLimit)
+						after_circle_position.x = JoystickCenterLimit;
 					else if(after_circle_position.x > 390)
 						after_circle_position.x = 390;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+					
+					if(!isControlJoystickFixed)
+						control_circle->setPosition(after_circle_position);
+					else
+					{
+						if(after_circle_position.x > 55+100 || after_circle_position.y > 55+100)
+							return;
+						else
+							control_circle->setPosition(after_circle_position);
+					}
 				}
 				
-				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
-					control_circle->setPosition(after_circle_position);
 				control_circle->setVisible(true);
 				
 				control_ball->setPosition(location);
 				control_ball->setVisible(true);
 				
+				joystick_touch = touch;
+				
 				touchAction(location, false);
 			}
 			
-			if(myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton) && !joystick_touch && isBacking)
+			if(isDisableDrawButton && !joystick_touch && isBacking)
 			{
 				(target_main->*pauseBackTracking)();
 				
@@ -749,7 +769,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				IntPoint jackPoint = myGD->getJackPoint();
 				if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
 				{
-					if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+					if(isEnableLineOver)
 						myGD->communication("PM_checkBeforeNewline", jackPoint);
 					myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
 				}
@@ -757,31 +777,50 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				joystick_touch = touch;
 				CCPoint after_circle_position = location;
 				
-				if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+				if(controlJoystickDirection == kControlJoystickDirection_right)
 				{
 					if(after_circle_position.x < 90)
 						after_circle_position.x = 90;
-					else if(after_circle_position.x > 470)
-						after_circle_position.x = 470;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					else if(after_circle_position.x > 480-JoystickCenterLimit)
+						after_circle_position.x = 480-JoystickCenterLimit;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+					
+					if(!isControlJoystickFixed)
+						control_circle->setPosition(after_circle_position);
+					else
+					{
+						if(after_circle_position.x < 480-55-100 || after_circle_position.y > 55+100)
+							return;
+						else
+							control_circle->setPosition(after_circle_position);
+					}
 				}
 				else
 				{
-					if(after_circle_position.x < 10)
-						after_circle_position.x = 10;
+					if(after_circle_position.x < JoystickCenterLimit)
+						after_circle_position.x = JoystickCenterLimit;
 					else if(after_circle_position.x > 390)
 						after_circle_position.x = 390;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+					
+					if(!isControlJoystickFixed)
+						control_circle->setPosition(after_circle_position);
+					else
+					{
+						if(after_circle_position.x > 55+100 || after_circle_position.y > 55+100)
+							return;
+						else
+							control_circle->setPosition(after_circle_position);
+					}
 				}
 				
-				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
-					control_circle->setPosition(after_circle_position);
+				
 				control_circle->setVisible(true);
 				
 				control_ball->setPosition(location);
@@ -823,7 +862,7 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 			if(!myJack->willBackTracking && !isStun)
 			{
 				CCPoint distancePoint = ccp(location.x - control_circle->getPositionX(), location.y - control_circle->getPositionY());
-				float distanceValue = sqrt(pow(distancePoint.x, 2.0) + pow(distancePoint.y, 2.0));
+				float distanceValue = sqrtf(powf(distancePoint.x, 2.0) + powf(distancePoint.y, 2.0));
 				float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 				
 				CCPoint after_circle_position = CCPointZero;
@@ -840,43 +879,106 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						after_circle_position = ccpMult(after_circle_position, sub_value/div_value);
 				}
 				
-//				if(distancePoint.x > 37)
-//					after_circle_position.x = distancePoint.x - 37;
-//				else if(distancePoint.x < -37)
-//					after_circle_position.x = distancePoint.x + 37;
-//				if(distancePoint.y > 37)
-//					after_circle_position.y = distancePoint.y - 37;
-//				else if(distancePoint.y < -37)
-//					after_circle_position.y = distancePoint.y + 37;
-				
 				after_circle_position = ccpAdd(after_circle_position, control_circle->getPosition());
 				
-				if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+				if(controlJoystickDirection == kControlJoystickDirection_right)
 				{
 					if(after_circle_position.x < 90)
 						after_circle_position.x = 90;
-					else if(after_circle_position.x > 470)
-						after_circle_position.x = 470;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					else if(after_circle_position.x > 480-JoystickCenterLimit)
+						after_circle_position.x = 480-JoystickCenterLimit;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+					
+					if(!isJoystickCenterNotFixed) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
+					{
+						if(isControlJoystickFixed)
+						{
+							CCPoint circle_position = after_circle_position;
+							if(circle_position.x < 480-55-100)
+								circle_position.x = 480-55-100;
+							if(circle_position.y > 55+100)
+								circle_position.y = 55+100;
+							
+							control_circle->setPosition(circle_position);
+							
+							float t_distance = distanceValue;
+							if(distanceValue > 35)
+								t_distance = 35;
+							
+							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+							
+							control_ball->setPosition(inner_position);
+						}
+						else
+						{
+							control_circle->setPosition(after_circle_position);
+							control_ball->setPosition(location);
+						}
+					}
+					else
+					{
+						float t_distance = distanceValue;
+						if(distanceValue > 35)
+							t_distance = 35;
+						
+						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+						
+						control_ball->setPosition(inner_position);
+					}
 				}
 				else
 				{
-					if(after_circle_position.x < 10)
-						after_circle_position.x = 10;
+					if(after_circle_position.x < JoystickCenterLimit)
+						after_circle_position.x = JoystickCenterLimit;
 					else if(after_circle_position.x > 390)
 						after_circle_position.x = 390;
-					if(after_circle_position.y < 10)
-						after_circle_position.y = 10;
-					else if(after_circle_position.y > 310)
-						after_circle_position.y = 310;
+					if(after_circle_position.y < JoystickCenterLimit)
+						after_circle_position.y = JoystickCenterLimit;
+					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+					
+					if(!isJoystickCenterNotFixed) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
+					{
+						if(isControlJoystickFixed)
+						{
+							CCPoint circle_position = after_circle_position;
+							if(circle_position.x > 55+100)
+								circle_position.x = 55+100;
+							if(circle_position.y > 55+100)
+								circle_position.y = 55+100;
+							
+							control_circle->setPosition(circle_position);
+							
+							float t_distance = distanceValue;
+							if(distanceValue > 35)
+								t_distance = 35;
+							
+							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+							
+							control_ball->setPosition(inner_position);
+						}
+						else
+						{
+							control_circle->setPosition(after_circle_position);
+							control_ball->setPosition(location);
+						}
+					}
+					else
+					{
+						float t_distance = distanceValue;
+						if(distanceValue > 35)
+							t_distance = 35;
+						
+						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+						
+						control_ball->setPosition(inner_position);
+					}
 				}
-				if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) && !myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))
-					control_circle->setPosition(after_circle_position);
 				
-				control_ball->setPosition(location);
+				
 				touchAction(location, false);
 			}
 		}
@@ -928,54 +1030,124 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			}
 			after_circle_position = ccpAdd(after_circle_position, control_circle->getPosition());
 			
-			if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+			if(controlJoystickDirection == kControlJoystickDirection_right)
 			{
 				if(after_circle_position.x < 90)
 					after_circle_position.x = 90;
-				else if(after_circle_position.x > 470)
-					after_circle_position.x = 470;
-				if(after_circle_position.y < 10)
-					after_circle_position.y = 10;
-				else if(after_circle_position.y > 310)
-					after_circle_position.y = 310;
+				else if(after_circle_position.x > 480-JoystickCenterLimit)
+					after_circle_position.x = 480-JoystickCenterLimit;
+				if(after_circle_position.y < JoystickCenterLimit)
+					after_circle_position.y = JoystickCenterLimit;
+				else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+					after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+				
+				if(!isJoystickCenterNotFixed) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
+				{
+					if(isControlJoystickFixed)
+					{
+						CCPoint circle_position = after_circle_position;
+						if(circle_position.x < 480-55-100)
+							circle_position.x = 480-55-100;
+						if(circle_position.y > 55+100)
+							circle_position.y = 55+100;
+						
+						control_circle->setPosition(circle_position);
+						
+						float t_distance = distanceValue;
+						if(distanceValue > 35)
+							t_distance = 35;
+						
+						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+						
+						control_ball->setPosition(inner_position);
+					}
+					else
+					{
+						control_circle->setPosition(after_circle_position);
+						control_ball->setPosition(location);
+					}
+				}
+				else
+				{
+					float t_distance = distanceValue;
+					if(distanceValue > 35)
+						t_distance = 35;
+					
+					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+					
+					control_ball->setPosition(inner_position);
+				}
 			}
 			else
 			{
-				if(after_circle_position.x < 10)
-					after_circle_position.x = 10;
+				if(after_circle_position.x < JoystickCenterLimit)
+					after_circle_position.x = JoystickCenterLimit;
 				else if(after_circle_position.x > 390)
 					after_circle_position.x = 390;
-				if(after_circle_position.y < 10)
-					after_circle_position.y = 10;
-				else if(after_circle_position.y > 310)
-					after_circle_position.y = 310;
+				if(after_circle_position.y < JoystickCenterLimit)
+					after_circle_position.y = JoystickCenterLimit;
+				else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
+					after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
+				
+				if(!isJoystickCenterNotFixed) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
+				{
+					if(isControlJoystickFixed)
+					{
+						CCPoint circle_position = after_circle_position;
+						if(circle_position.x > 55+100)
+							circle_position.x = 55+100;
+						if(circle_position.y > 55+100)
+							circle_position.y = 55+100;
+						
+						control_circle->setPosition(circle_position);
+						
+						float t_distance = distanceValue;
+						if(distanceValue > 35)
+							t_distance = 35;
+						
+						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+						
+						control_ball->setPosition(inner_position);
+					}
+					else
+					{
+						control_circle->setPosition(after_circle_position);
+						control_ball->setPosition(location);
+					}
+				}
+				else
+				{
+					float t_distance = distanceValue;
+					if(distanceValue > 35)
+						t_distance = 35;
+					
+					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+					
+					control_ball->setPosition(inner_position);
+				}
 			}
 			
-			if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
-				control_circle->setPosition(after_circle_position);
-			
-			control_ball->setPosition(location);
 			touchAction(location, true);
-			if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) && !myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick))
+			if(!isControlJoystickFixed && !isAlwaysVisibleJoystick)
 			{
 				control_circle->setVisible(false);
 				control_ball->setVisible(false);
 			}
 			else
 			{
-				if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+				if(controlJoystickDirection == kControlJoystickDirection_right)
 				{
-					control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));
-					control_ball->setPosition(ccp(480-50-myGD->boarder_value, 50));
+					control_circle->setPosition(ccp(480-55-myGD->boarder_value, 55));
+					control_ball->setPosition(ccp(480-55-myGD->boarder_value, 55));
 				}
 				else
 				{
-					control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-					control_ball->setPosition(ccp(50+myGD->boarder_value, 50));
+					control_circle->setPosition(ccp(55+myGD->boarder_value, 55));
+					control_ball->setPosition(ccp(55+myGD->boarder_value, 55));
 				}
 			}
 			
-			if(myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton) && myJack->getJackState() == jackStateDrawing && !myJack->isStun)
+			if(isDisableDrawButton && myJack->getJackState() == jackStateDrawing && !myJack->isStun)
 			{
 				(target_main->*delegate_readyBack)();
 			}
@@ -1020,10 +1192,10 @@ void ControlJoystickButton::setTouchEnabled( bool t_b )
 
 		if(joystick_touch)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)	control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-			else																								control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));
+			if(controlJoystickDirection == kControlJoystickDirection_left)	control_circle->setPosition(ccp(55+myGD->boarder_value, 55));
+			else																								control_circle->setPosition(ccp(480-55-myGD->boarder_value, 55));
 
-			control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
+			control_ball->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, t_b);
 			joystick_touch = NULL;
 		}
@@ -1042,40 +1214,49 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	joystick_touch = NULL;
 	isBacking = false;
 
+	isDisableIrregularDirection = myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection);
+	isControlJoystickFixed = myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed);
+	isAlwaysVisibleJoystick = myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick);
+	controlJoystickDirection = myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection);
+	isDisableDrawButton = myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton);
+	isEnableLineOver = myDSH->getBoolForKey(kDSH_Key_isEnableLineOver);
+	isJoystickCenterNotFixed = myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed);
+	
+	
 	ControlCommon::myInit(t_main, d_readyBack, t_jack);
 	beforeDirection = directionStop;
 	control_circle = CCSprite::create("control_joystick_big_circle.png");
 	control_circle->setScale(1.f);
-	control_circle->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
+	control_circle->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
 	addChild(control_circle);
 
 	control_ball = CCSprite::create("control_joystick_big_ball.png");
 	control_ball->setScale(1.f);
-	control_ball->setVisible(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
+	control_ball->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
 	addChild(control_ball);
 	
-	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) || myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick))
+	if(isControlJoystickFixed || isAlwaysVisibleJoystick)
 	{
-		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
+		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
-			control_circle->setPosition(ccp(480-50-myGD->boarder_value, 50));
-			control_ball->setPosition(ccp(480-50-myGD->boarder_value, 50));
+			control_circle->setPosition(ccp(480-55-myGD->boarder_value, 55));
+			control_ball->setPosition(ccp(480-55-myGD->boarder_value, 55));
 		}
 		else
 		{
-			control_circle->setPosition(ccp(50+myGD->boarder_value, 50));
-			control_ball->setPosition(ccp(50+myGD->boarder_value, 50));
+			control_circle->setPosition(ccp(55+myGD->boarder_value, 55));
+			control_ball->setPosition(ccp(55+myGD->boarder_value, 55));
 		}
 	}
 
-	if(!myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton))
+	if(!isDisableDrawButton)
 	{
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("gameui_button.ccbi",this));
 		button_ani = reader->getAnimationManager();
 		//		draw_button = CCSprite::create("ui_draw.png");
-		if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-40,40));
+		if(controlJoystickDirection == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-40,40));
 		else								draw_button->setPosition(ccp(40,40));
 		addChild(draw_button);
 	}

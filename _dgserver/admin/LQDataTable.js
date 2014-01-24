@@ -995,7 +995,7 @@
 						var newValue=fInfo["editorValue"];
 						//getObjValue($(this).find(".LQEditor:first"),0);
 						if(newValue != undefined && newValue !=fInfo["value"]){
-							tInfo["rowData"][fInfo["field"]]=newValue;
+							tInfo["rowData"][fInfo["field"]]=j2s(newValue);
 						}
 					}
 				});

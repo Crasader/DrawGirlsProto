@@ -351,6 +351,7 @@ void KSSnakeBase::damageReaction(float)
 		unschedule(schedule_selector(KSSnakeBase::damageReaction));
 		m_headAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 		m_tailAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+		m_furyMode.furyFrameCount = m_furyMode.totalFrame;
 	}
 }
 void KSSnakeBase::startInvisible(int totalframe)
@@ -513,8 +514,8 @@ void KSSnakeBase::furyModeScheduler(float dt)
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
 		// 다시 벌겋게 만드는 코드.
 
-		addChild(KSGradualValue<int>::create(m_furyMode.colorRef, 255, 0.5f,
-					[=](int t)
+		addChild(KSGradualValue<float>::create(m_furyMode.colorRef, 255, 0.5f,
+					[=](float t)
 					{
 					KS::setColor(this, ccc3(255, t, t));
 					}));
@@ -717,6 +718,7 @@ void KSSnakeBase::randomPosition()
 	//		setPosition(ip2ccp(mapPoint));
 
 	m_circle.setRelocation(getPosition(), m_well512);
+	m_snake.setRelocation(getPosition(), m_well512);
 	{
 		lightSmaller();
 	}

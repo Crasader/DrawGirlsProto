@@ -1,13 +1,19 @@
 <?php
 include "header.php";
 ?>
-
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_PUZZLE?>" border=1 align=center>
+<script>
+var showPuzzleImg = function(value,option){
+	data = s2j(value);
+	return '<img src=../images/'+data["image"]+' width=300>';
+}
+</script>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_PUZZLE?>" dbSort="puzzleNo asc" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer="text" primary>no</th>
+			<th field="puzzleNo" viewer="text" editor="text">puzzleNo</th>
 			<th field="title" viewer="text" editor="text">title</th>
-			<th field="thumbnail" viewer="json" editor="dictionary" editorOption='
+			<th field="thumbnail" viewer="custom" viewerOption="showPuzzleImg" editor="dictionary" editorOption='
 			[
 				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
 				{"field":"size","editor":"text","editorOption":{"datatype":"int"}}			

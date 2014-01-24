@@ -29,6 +29,7 @@
 #include "TutorialFlowStep.h"
 #include "AlertEngine.h"
 #include "LoadingTipScene.h"
+#include "LabelTTFMarquee.h"
 
 CCScene* StartSettingScene::scene()
 {
@@ -62,7 +63,6 @@ bool StartSettingScene::init()
 	friend_point_popup = NULL;
 	item_title_label = NULL;
 	option_label = NULL;
-	buy_menu = NULL;
 	card_img = NULL;
 	
 	CCSprite* back_img = CCSprite::create("mainflow_back_wall.png");
@@ -104,9 +104,11 @@ enum StartSettingMenuTag{
 	kStartSettingMenuTag_heartShop,
 	kStartSettingMenuTag_friendPointContent,
 	kStartSettingMenuTag_friendPointClose,
+	kStartSettingMenuTag_tip,
 	kStartSettingMenuTag_back,
 	kStartSettingMenuTag_start,
 	kStartSettingMenuTag_card,
+	kStartSettingMenuTag_turn,
 	kStartSettingMenuTag_itemBuy,
 	kStartSettingMenuTag_itemBase = 100000
 };
@@ -131,7 +133,7 @@ void StartSettingScene::setMain()
 		stage_number = mySD->getSilType();
 		
 		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height-62));
+		stage_number_label->setPosition(ccp(49, main_case->getContentSize().height-64));
 		main_case->addChild(stage_number_label);
 		
 		mySGD->is_before_selected_event_stage = false;
@@ -143,13 +145,24 @@ void StartSettingScene::setMain()
 		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height-62));
+		piece_number_label->setPosition(ccp(49, main_case->getContentSize().height-64));
 		main_case->addChild(piece_number_label);
 	}
 	
-	CCLabelTTF* mission_label = CCLabelTTF::create(mySD->getConditionContent(stage_number).c_str(), mySGD->getFont().c_str(), 13);
-	mission_label->setPosition(ccp(main_case->getContentSize().width/2.f+62, main_case->getContentSize().height-62));
+//	CCSprite* temp_mission = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 230, 22));
+//	temp_mission->setOpacity(100);
+//	temp_mission->setPosition(ccp(main_case->getContentSize().width/2.f+79, main_case->getContentSize().height-62));
+//	main_case->addChild(temp_mission);
+	
+	LabelTTFMarquee* mission_label = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 230, 22, mySD->getConditionContent(stage_number).c_str());
+	mission_label->setAnchorPoint(ccp(0.5,0.5));
+	mission_label->setPosition(ccp(main_case->getContentSize().width/2.f+80, main_case->getContentSize().height-62));
 	main_case->addChild(mission_label);
+	mission_label->setFontSize(13);
+	mission_label->startMarquee();
+//	CCLabelTTF* mission_label = CCLabelTTF::create(mySD->getConditionContent(stage_number).c_str(), mySGD->getFont().c_str(), 13);
+//	mission_label->setPosition(ccp(main_case->getContentSize().width/2.f+79, main_case->getContentSize().height-62));
+//	main_case->addChild(mission_label);
 	
 	if(mySD->getClearCondition(stage_number) != kCLEAR_default)
 	{
@@ -162,31 +175,58 @@ void StartSettingScene::setMain()
 		mission_label->runAction(t_repeat);
 	}
 	
-	CCSprite* n_back = CCSprite::create("item_buy_popup_close.png");
-	CCSprite* s_back = CCSprite::create("item_buy_popup_close.png");
+	CCSprite* n_back = CCSprite::create("cardchange_cancel.png");
+	CCSprite* s_back = CCSprite::create("cardchange_cancel.png");
 	s_back->setColor(ccGRAY);
 	
 	CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, this, menu_selector(StartSettingScene::menuAction));
 	back_item->setTag(kStartSettingMenuTag_back);
 	
 	CCMenu* back_menu = CCMenu::createWithItem(back_item);
-	back_menu->setPosition(ccp(main_case->getContentSize().width-45, main_case->getContentSize().height-59));
+	back_menu->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height-62));
 	main_case->addChild(back_menu);
+	
+	CCSprite* n_card_turn = CCSprite::create("startsetting_cardturn.png");
+	CCSprite* s_card_turn = CCSprite::create("startsetting_cardturn.png");
+	s_card_turn->setColor(ccGRAY);
+	
+	CCMenuItem* card_turn_item = CCMenuItemSprite::create(n_card_turn, s_card_turn, this, menu_selector(StartSettingScene::menuAction));
+	card_turn_item->setTag(kStartSettingMenuTag_turn);
+	
+	card_turn_menu = CCMenu::createWithItem(card_turn_item);
+	card_turn_menu->setPosition(ccp(133,36));
+	card_turn_menu->setVisible(false);
+	main_case->addChild(card_turn_menu);
 	
 	changeCard();
 	
-	float card_rate = 0.473f;
+//	float card_rate = 0.473f;
+//	
+//	CCSprite* n_card = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*card_rate, 430*card_rate));
+//	CCSprite* s_card = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*card_rate, 430*card_rate));
+//	
+//	CCMenuItem* card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(StartSettingScene::menuAction));
+//	card_item->setTag(kStartSettingMenuTag_card);
+//	
+//	CCMenu* card_menu = CCMenu::createWithItem(card_item);
+//	card_menu->setPosition(ccp(320*card_rate/2.f + 40, 430*card_rate/2.f + 28));
+//	main_case->addChild(card_menu);
 	
-	CCSprite* n_card = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*card_rate, 430*card_rate));
-	CCSprite* s_card = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*card_rate, 430*card_rate));
+	CCSprite* n_card_change = CCSprite::create("startsetting_cardchange.png");
+	CCSprite* s_card_change = CCSprite::create("startsetting_cardchange.png");
+	s_card_change->setColor(ccGRAY);
 	
-	CCMenuItem* card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(StartSettingScene::menuAction));
-	card_item->setTag(kStartSettingMenuTag_card);
+	CCMenuItem* card_change_item = CCMenuItemSprite::create(n_card_change, s_card_change, this, menu_selector(StartSettingScene::menuAction));
+	card_change_item->setTag(kStartSettingMenuTag_card);
 	
-	CCMenu* card_menu = CCMenu::createWithItem(card_item);
-	card_menu->setPosition(ccp(320*card_rate/2.f + 40, 430*card_rate/2.f + 28));
+	CCMenu* card_menu = CCMenu::createWithItem(card_change_item);
+	card_menu->setPosition(ccp(64,36));
 	main_case->addChild(card_menu);
 	
+	
+	use_item_price_gold = KSProtectVar<int>(0);
+	use_item_price_ruby = KSProtectVar<int>(0);
+	use_item_price_social = KSProtectVar<int>(0);
 	
 	item_list = mySD->getStageItemList(stage_number);
 	
@@ -229,7 +269,7 @@ void StartSettingScene::setMain()
 	{
 		ITEM_CODE t_ic = item_list[i];
 		
-		CCPoint item_position = ccp(239 + (i%4)*55, 205 - (i/4)*51);
+		CCPoint item_position = ccp(203 + (i%4)*48.5f, 208 - (i/4)*57);
 		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);
 		if(iter == card_options.end()) // not same option card // enable item
@@ -238,81 +278,124 @@ void StartSettingScene::setMain()
 			item_parent->setPosition(item_position);
 			main_case->addChild(item_parent, 0, kStartSettingMenuTag_itemBase+i);
 			
-			string item_filename = "";
-//			if(t_ic == kIC_subOneDie || t_ic == kIC_longTime || t_ic == kIC_bossLittleEnergy || t_ic == kIC_smallArea || t_ic == kIC_widePerfect || t_ic == kIC_randomChange) // mission
-//				item_filename = "stagesetting_item_case_mission.png";
-//			else
-				item_filename = "startsetting_item_case.png";
 			
-			CCSprite* n_case = CCSprite::create(item_filename.c_str());
-			CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			n_img->setScale(0.53);
-			n_img->setPosition(ccp(n_case->getContentSize().width/2.f,n_case->getContentSize().height/2.f));
-			n_case->addChild(n_img);
-			CCSprite* s_case = CCSprite::create(item_filename.c_str());
-			s_case->setColor(ccGRAY);
-			CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			s_img->setColor(ccGRAY);
-			s_img->setScale(0.53);
-			s_img->setPosition(ccp(s_case->getContentSize().width/2.f,s_case->getContentSize().height/2.f));
-			s_case->addChild(s_img);
-			
-			CCMenuItem* select_item = CCMenuItemSprite::create(n_case, s_case, this, menu_selector(StartSettingScene::itemAction));
-			select_item->setTag(i+1);
-			
-			CCMenu* select_menu = CCMenu::createWithItem(select_item);
-			select_menu->setPosition(ccp(0,0));
-			item_parent->addChild(select_menu);
-			
-			
-			
-			CCSprite* selected_img = CCSprite::create("startsetting_item_selected.png");
-			selected_img->setVisible(false);
-			selected_img->setPosition(ccp(0, 0));
-			item_parent->addChild(selected_img, kStartSettingItemZorder_selected, kStartSettingItemZorder_selected);
-			
-			
-			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
-			clicked_img->setVisible(false);
-			clicked_img->setPosition(ccp(0, 0));
-			item_parent->addChild(clicked_img, kStartSettingItemZorder_clicked, kStartSettingItemZorder_clicked);
-			
-			
-			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
-			if(item_cnt > 0)
+			bool is_before_used_item = mySGD->isBeforeUseItem(t_ic); // 이전에 사용했는지
+			bool is_show_item_popup = false; // 처음 등장한 아이템인지
+			for(int j=0;j<show_item_popup.size();j++)
 			{
-				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("+%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setPosition(ccp(-15, -15));
-				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
-			}
-			
-			auto t_iter = find(show_item_popup.begin(), show_item_popup.end(), t_ic);
-			if(t_iter != show_item_popup.end())
-			{
-				if(t_ic == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0)
+				if(show_item_popup[j] == t_ic)
 				{
-					is_selected_item.push_back(false);
-					select_menu->setEnabled(false);
+					is_show_item_popup = true;
+					break;
 				}
-				else
+			}
+			bool is_item_condition_usable = t_ic != kIC_rentCard || mySGD->getSelectedFriendCardData().card_number != 0; // 카드 장착 불가 조건
+			bool is_price_usable = false; // 소지하고 있거나 장착 가능한 가격
+			is_price_usable = is_price_usable || (myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) > 0); // 소지하고 있는지
+			string item_currency = mySD->getItemCurrency(t_ic);
+			if(item_currency == "gold")
+				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGold());
+			else if(item_currency == "ruby")
+				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getStar());
+			else if(item_currency == "social")
+				is_price_usable = is_price_usable || ((use_item_price_social.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getFriendPoint());
+			
+			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_item_condition_usable && is_price_usable)
+			{
+				// mount
+				CCSprite* n_item_case = CCSprite::create("startsetting_item_mounted_case.png");
+				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+				n_img->setScale(0.53);
+				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+				n_item_case->addChild(n_img);
+				
+				CCSprite* s_item_case = CCSprite::create("startsetting_item_mounted_case.png");
+				s_item_case->setColor(ccGRAY);
+				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+				s_img->setScale(0.53);
+				s_img->setColor(ccGRAY);
+				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+				s_item_case->addChild(s_img);
+				
+				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
+				item_item->setTag(i+1);
+				
+				CCMenu* item_menu = CCMenu::createWithItem(item_item);
+				item_menu->setPosition(CCPointZero);
+				item_parent->addChild(item_menu);
+				
+				is_selected_item.push_back(true);
+				
+				if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) <= 0)
 				{
-					if(getSelectedItemCount() >= 3)
-					{
-						is_selected_item.push_back(false);
-					}
-					else
-					{
-						is_selected_item.push_back(true);
-						selected_img->setVisible(true);
-					}
+					if(item_currency == "gold")
+						use_item_price_gold = use_item_price_gold.getV() + mySD->getItemPrice(t_ic);
+					else if(item_currency == "ruby")
+						use_item_price_ruby = use_item_price_ruby.getV() + mySD->getItemPrice(t_ic);
+					else if(item_currency == "social")
+						use_item_price_social = use_item_price_social.getV() + mySD->getItemPrice(t_ic);
 				}
 			}
 			else
 			{
-				if(t_ic == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0)
-					select_menu->setEnabled(false);
+				// normal
+				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
+				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+				n_img->setScale(0.53);
+				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+				n_item_case->addChild(n_img);
+				
+				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
+				s_item_case->setColor(ccGRAY);
+				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+				s_img->setScale(0.53);
+				s_img->setColor(ccGRAY);
+				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+				s_item_case->addChild(s_img);
+				
+				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
+				item_item->setTag(i+1);
+				
+				CCMenu* item_menu = CCMenu::createWithItem(item_item);
+				item_menu->setPosition(CCPointZero);
+				item_parent->addChild(item_menu);
+				
 				is_selected_item.push_back(false);
 			}
+			
+			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
+			if(item_cnt > 0)
+			{
+				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("소지 %d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
+				cnt_label->setColor(ccBLACK);
+				cnt_label->setPosition(ccp(0, -19));
+				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+			}
+			else
+			{
+				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
+				cnt_label->setColor(ccBLACK);
+				cnt_label->setPosition(ccp(5, -19));
+				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+				
+				string buy_type_filename;
+				if(item_currency == "gold")
+					buy_type_filename = "price_gold_img.png";
+				else if(item_currency == "ruby")
+					buy_type_filename = "price_ruby_img.png";
+				else if(item_currency == "social")
+					buy_type_filename = "price_candy_img.png";
+				
+				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
+				buy_type->setScale(0.5f);
+				buy_type->setPosition(ccp(-13, -19));
+				item_parent->addChild(buy_type);
+			}
+			
+			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
+			clicked_img->setVisible(false);
+			clicked_img->setPosition(CCPointZero);
+			item_parent->addChild(clicked_img, kStartSettingItemZorder_clicked, kStartSettingItemZorder_clicked);
 		}
 		else
 			is_selected_item.push_back(false);
@@ -326,7 +409,7 @@ void StartSettingScene::setMain()
 	start_item->setTag(kStartSettingMenuTag_start);
 	
 	CCMenu* start_menu = CCMenu::createWithItem(start_item);
-	start_menu->setPosition(ccp(321, 45));
+	start_menu->setPosition(ccp(316, 47));
 	main_case->addChild(start_menu);
 }
 
@@ -343,9 +426,12 @@ int StartSettingScene::getSelectedItemCount()
 void StartSettingScene::changeCard()
 {
 	if(card_img)
+	{
 		card_img->removeFromParent();
+		card_img = NULL;
+	}
 	
-	float card_rate = 0.473f;
+	float card_rate = 0.4f;
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 1, 2, 3 / 11, 12, 13 / 14, ...
 	if(selected_card_number > 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) > 0)
@@ -353,10 +439,13 @@ void StartSettingScene::changeCard()
 		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
 		int card_level = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
 		
-		card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
-		card_img->setScale(card_rate);
-		card_img->setPosition(ccp(320*card_rate/2.f + 40, 430*card_rate/2.f + 28));
+		card_img = CCNode::create();
+		card_img->setPosition(ccp(94, 147));
 		main_case->addChild(card_img);
+		
+		CCSprite* real_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
+		real_card_img->setScale(card_rate);
+		card_img->addChild(real_card_img);
 		
 		if(card_level == 3 && mySD->isAnimationStage(card_stage))
 		{
@@ -364,18 +453,21 @@ void StartSettingScene::changeCard()
 			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
 													 CCRectMake(0, 0, ani_size.width, ani_size.height));
 			card_ani->setPosition(mySD->getAnimationPosition(card_stage));
-			card_img->addChild(card_ani);
+			real_card_img->addChild(card_ani);
 		}
 		
-		CardCase* t_case = CardCase::create(selected_card_number);
-		t_case->setPosition(CCPointZero);
-		card_img->addChild(t_case);
+		CCSprite* card_case = CCSprite::create("startsetting_cardframe.png");
+		card_img->addChild(card_case);
 		
 		mySD->setCardOptions(card_options, selected_card_number);
+		
+		card_turn_menu->setVisible(true);
 	}
 	else
 	{
 		myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+		
+		card_turn_menu->setVisible(false);
 	}
 }
 
@@ -396,108 +488,230 @@ void StartSettingScene::itemAction(CCObject *sender)
 		
 		int tag = ((CCNode*)sender)->getTag();
 		
-		if(clicked_item_idx == -1)
-		{
-			clicked_item_idx = tag-1;
-			CCNode* item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
-			CCSprite* clicked_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_clicked);
-			clicked_img->setVisible(true);
-		}
-		else
+		if(clicked_item_idx != -1)
 		{
 			CCNode* before_item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
 			CCSprite* before_clicked_img = (CCSprite*)before_item_parent->getChildByTag(kStartSettingItemZorder_clicked);
 			before_clicked_img->setVisible(false);
-			
-			clicked_item_idx = tag-1;
-			
-			CCNode* after_item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
-			CCSprite* after_clicked_img = (CCSprite*)after_item_parent->getChildByTag(kStartSettingItemZorder_clicked);
-			after_clicked_img->setVisible(true);
 		}
+		
+		clicked_item_idx = tag-1;
+		
 		
 		if(is_selected_item[tag-1]) // selected -> unselect
 		{
 			CCNode* item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+tag-1);
-			CCSprite* selected_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_selected);
-			selected_img->setVisible(false);
+			item_parent->removeAllChildren();
+			
+			
+			ITEM_CODE t_ic = item_list[tag-1];
+			
+			CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
+			CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+			n_img->setScale(0.53);
+			n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+			n_item_case->addChild(n_img);
+			
+			CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
+			s_item_case->setColor(ccGRAY);
+			CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+			s_img->setScale(0.53);
+			s_img->setColor(ccGRAY);
+			s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+			s_item_case->addChild(s_img);
+			
+			CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
+			item_item->setTag(tag);
+			
+			CCMenu* item_menu = CCMenu::createWithItem(item_item);
+			item_menu->setPosition(CCPointZero);
+			item_parent->addChild(item_menu);
+			
+			
+			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
+			if(item_cnt > 0)
+			{
+				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("소지 %d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
+				cnt_label->setColor(ccBLACK);
+				cnt_label->setPosition(ccp(0, -19));
+				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+			}
+			else
+			{
+				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
+				cnt_label->setColor(ccBLACK);
+				cnt_label->setPosition(ccp(5, -19));
+				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+				
+				string item_currency = mySD->getItemCurrency(t_ic);
+				string buy_type_filename;
+				if(item_currency == "gold")
+					buy_type_filename = "price_gold_img.png";
+				else if(item_currency == "ruby")
+					buy_type_filename = "price_ruby_img.png";
+				else if(item_currency == "social")
+					buy_type_filename = "price_candy_img.png";
+				
+				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
+				buy_type->setScale(0.5f);
+				buy_type->setPosition(ccp(-13, -19));
+				item_parent->addChild(buy_type);
+			}
+			
+			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
+			clicked_img->setVisible(true);
+			clicked_img->setPosition(CCPointZero);
+			item_parent->addChild(clicked_img, kStartSettingItemZorder_clicked, kStartSettingItemZorder_clicked);
+			
+			
+			if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) <= 0)
+			{
+				string item_currency = mySD->getItemCurrency(t_ic);
+				if(item_currency == "gold")
+					use_item_price_gold = use_item_price_gold.getV() - mySD->getItemPrice(t_ic);
+				else if(item_currency == "ruby")
+					use_item_price_ruby = use_item_price_ruby.getV() - mySD->getItemPrice(t_ic);
+				else if(item_currency == "social")
+					use_item_price_social = use_item_price_social.getV() - mySD->getItemPrice(t_ic);
+			}
+			
+			
 			is_selected_item[tag-1] = false;
 		}
 		else // unselected -> selected or nothing
 		{
-			bool is_selectable = false;
-			ITEM_CODE clicked_item_code = item_list[tag-1];
-			if(clicked_item_code == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0) // nothing friend
-				is_selectable = false;
-			else if(getSelectedItemCount() >= 3)
+			CCNode* item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+tag-1);
+			item_parent->removeAllChildren();
+			
+			
+			ITEM_CODE t_ic = item_list[tag-1];
+			
+			bool is_item_condition_usable = t_ic != kIC_rentCard || mySGD->getSelectedFriendCardData().card_number != 0; // 카드 장착 불가 조건
+			bool is_price_usable = false; // 소지하고 있거나 장착 가능한 가격
+			is_price_usable = is_price_usable || (myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) > 0); // 소지하고 있는지
+			string item_currency = mySD->getItemCurrency(t_ic);
+			if(item_currency == "gold")
+				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGold());
+			else if(item_currency == "ruby")
+				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getStar());
+			else if(item_currency == "social")
+				is_price_usable = is_price_usable || ((use_item_price_social.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getFriendPoint());
+			
+			if(getSelectedItemCount() < 3 && is_item_condition_usable && is_price_usable)
 			{
-				is_selectable = false;
-				addChild(ASPopupView::getCommonNoti(-210, "아이템은 최대 3개까지\n선택이 가능합니다."), kStartSettingZorder_popup);
+				// mount
+				CCSprite* n_item_case = CCSprite::create("startsetting_item_mounted_case.png");
+				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+				n_img->setScale(0.53);
+				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+				n_item_case->addChild(n_img);
+				
+				CCSprite* s_item_case = CCSprite::create("startsetting_item_mounted_case.png");
+				s_item_case->setColor(ccGRAY);
+				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+				s_img->setScale(0.53);
+				s_img->setColor(ccGRAY);
+				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+				s_item_case->addChild(s_img);
+				
+				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
+				item_item->setTag(tag);
+				
+				CCMenu* item_menu = CCMenu::createWithItem(item_item);
+				item_menu->setPosition(CCPointZero);
+				item_parent->addChild(item_menu);
+				
+				is_selected_item[tag-1] = true;
+				
+				if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) <= 0)
+				{
+					if(item_currency == "gold")
+						use_item_price_gold = use_item_price_gold.getV() + mySD->getItemPrice(t_ic);
+					else if(item_currency == "ruby")
+						use_item_price_ruby = use_item_price_ruby.getV() + mySD->getItemPrice(t_ic);
+					else if(item_currency == "social")
+						use_item_price_social = use_item_price_social.getV() + mySD->getItemPrice(t_ic);
+				}
 			}
 			else
-				is_selectable = true;
-			
-			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[tag-1]);
-			if(item_cnt > 0 && is_selectable)
 			{
-				CCNode* item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+tag-1);
-				CCSprite* selected_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_selected);
-				selected_img->setVisible(true);
-				is_selected_item[tag-1] = true;
+				if(getSelectedItemCount() >= 3)
+					addChild(ASPopupView::getCommonNoti(-210, "아이템은 최대 3개까지\n선택이 가능합니다."), kStartSettingZorder_popup);
+				
+				// normal
+				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
+				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+				n_img->setScale(0.53);
+				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+				n_item_case->addChild(n_img);
+				
+				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
+				s_item_case->setColor(ccGRAY);
+				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+				s_img->setScale(0.53);
+				s_img->setColor(ccGRAY);
+				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+				s_item_case->addChild(s_img);
+				
+				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
+				item_item->setTag(tag);
+				
+				CCMenu* item_menu = CCMenu::createWithItem(item_item);
+				item_parent->addChild(item_menu);
+				
+				is_selected_item[tag-1] = false;
 			}
+			
+			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
+			if(item_cnt > 0)
+			{
+				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("소지 %d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
+				cnt_label->setColor(ccBLACK);
+				cnt_label->setPosition(ccp(0, -19));
+				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+			}
+			else
+			{
+				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
+				cnt_label->setColor(ccBLACK);
+				cnt_label->setPosition(ccp(0, -19));
+				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+			}
+			
+			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
+			clicked_img->setVisible(true);
+			clicked_img->setPosition(CCPointZero);
+			item_parent->addChild(clicked_img, kStartSettingItemZorder_clicked, kStartSettingItemZorder_clicked);
 		}
 		
 		if(item_title_label)
 			item_title_label->removeFromParent();
 		if(option_label)
 			option_label->removeFromParent();
-		if(buy_menu)
-			buy_menu->removeFromParent();
 		
-		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(145, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+//		CCSprite* title_rect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 250, 16));
+//		title_rect->setOpacity(100);
+//		title_rect->setAnchorPoint(ccp(0,1));
+//		title_rect->setPosition(ccp(192,115));
+//		main_case->addChild(title_rect);
+		
+		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(250, 16), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		item_title_label->setAnchorPoint(ccp(0,1));
-		item_title_label->setPosition(ccp(218, 120));
+		item_title_label->setPosition(ccp(192, 115));
+		item_title_label->setColor(ccORANGE);
 		main_case->addChild(item_title_label);
 		
-		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 8, CCSizeMake(145, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+//		CCSprite* option_rect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 250, 23));
+//		option_rect->setOpacity(100);
+//		option_rect->setAnchorPoint(ccp(0,1));
+//		option_rect->setPosition(ccp(192,100));
+//		main_case->addChild(option_rect);
+		
+		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 8, CCSizeMake(250, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		option_label->setAnchorPoint(ccp(0,1));
-		option_label->setPosition(ccp(218, 102));
+		option_label->setPosition(ccp(192, 100));
 		main_case->addChild(option_label);
 		
-		
-		string buy_type = mySD->getItemCurrency(item_list[tag-1]);
-		if(buy_type == "gold")
-			buy_type = "price_gold_img.png";
-		else if(buy_type == "ruby")
-			buy_type = "price_ruby_img.png";
-		else if(buy_type == "social")
-			buy_type = "price_candy_img.png";
-		
-		CCSprite* n_buy = CCSprite::create("startsetting_item_buy.png");
-		CCSprite* n_buy_type = CCSprite::create(buy_type.c_str());
-		n_buy_type->setScale(0.5f);
-		n_buy_type->setPosition(ccp(17, 32));
-		n_buy->addChild(n_buy_type);
-		CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(item_list[tag-1]))->getCString(), mySGD->getFont().c_str(), 8);
-		n_label->setAnchorPoint(ccp(0.5f, 0.5f));
-		n_label->setPosition(ccp(38, 32));
-		n_buy->addChild(n_label);
-		CCSprite* s_buy = CCSprite::create("startsetting_item_buy.png");
-		s_buy->setColor(ccGRAY);
-		CCSprite* s_buy_type = CCSprite::create(buy_type.c_str());
-		s_buy_type->setScale(0.5f);
-		s_buy_type->setPosition(ccp(17, 32));
-		s_buy->addChild(s_buy_type);
-		CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(item_list[tag-1]))->getCString(), mySGD->getFont().c_str(), 8);
-		s_label->setAnchorPoint(ccp(0.5f, 0.5f));
-		s_label->setPosition(ccp(38, 32));
-		s_buy->addChild(s_label);
-		
-		CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(StartSettingScene::menuAction));
-		buy_item->setTag(kStartSettingMenuTag_itemBuy);
-		buy_menu = CCMenu::createWithItem(buy_item);
-		buy_menu->setPosition(ccp(398, 102));
-		main_case->addChild(buy_menu);
 		
 		is_menu_enable = true;
 	}
@@ -630,6 +844,10 @@ void StartSettingScene::menuAction(CCObject* sender)
 			t_popup->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupCloseCardSetting));
 			addChild(t_popup, kStartSettingZorder_popup);
 		}
+		else if(tag == kStartSettingMenuTag_turn)
+		{
+			is_menu_enable = true;
+		}
 		else if(tag == kStartSettingMenuTag_itemBuy)
 		{
 			ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_idx], clicked_item_idx, this, callfuncII_selector(StartSettingScene::buySuccessItem));
@@ -641,24 +859,25 @@ void StartSettingScene::menuAction(CCObject* sender)
 
 void StartSettingScene::setTop()
 {
-	CCSprite* top_case = CCSprite::create("puzzle_top.png");
+	CCSprite* top_case = CCSprite::create("mainflow_top.png");
 	top_case->setAnchorPoint(ccp(0.5f,1.f));
-	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
+	top_case->setPosition(ccp(258,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_case, kStartSettingZorder_top);
 	
-	CCSprite* n_cancel = CCSprite::create("puzzle_cancel.png");
-	CCSprite* s_cancel = CCSprite::create("puzzle_cancel.png");
+	CCSprite* n_cancel = CCSprite::create("startsetting_home.png");
+	CCSprite* s_cancel = CCSprite::create("startsetting_home.png");
 	s_cancel->setColor(ccGRAY);
 	
 	CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, this, menu_selector(StartSettingScene::menuAction));
 	cancel_item->setTag(kStartSettingMenuTag_cancel);
 	
 	CCMenu* cancel_menu = CCMenu::createWithItem(cancel_item);
-	cancel_menu->setPosition(ccp(80,top_case->getContentSize().height/2.f));
+	cancel_menu->setPosition(ccp(-32,top_case->getContentSize().height/2.f));
 	top_case->addChild(cancel_menu);
 	
+	
 	heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(130,top_case->getContentSize().height/2.f));
+	heart_time->setPosition(ccp(15,top_case->getContentSize().height/2.f+1));
 	top_case->addChild(heart_time);
 	
 	CCSprite* n_heart = CCSprite::create("mainflow_top_shop.png");
@@ -669,11 +888,12 @@ void StartSettingScene::setTop()
 	heart_item->setTag(kStartSettingMenuTag_heartShop);
 	
 	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
-	heart_menu->setPosition(ccp(243,top_case->getContentSize().height/2.f-2));
+	heart_menu->setPosition(ccp(120,top_case->getContentSize().height/2.f));
 	top_case->addChild(heart_menu);
 	
+	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(302,top_case->getContentSize().height/2.f-2));
+	gold_label->setPosition(ccp(178,top_case->getContentSize().height/2.f-5));
 	top_case->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
@@ -686,11 +906,12 @@ void StartSettingScene::setTop()
 	gold_item->setTag(kStartSettingMenuTag_goldShop);
 	
 	CCMenu* gold_menu = CCMenu::createWithItem(gold_item);
-	gold_menu->setPosition(ccp(336,top_case->getContentSize().height/2.f-2));
+	gold_menu->setPosition(ccp(212,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_menu);
 	
+	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(391,top_case->getContentSize().height/2.f-2));
+	ruby_label->setPosition(ccp(261,top_case->getContentSize().height/2.f-5));
 	top_case->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
@@ -703,11 +924,12 @@ void StartSettingScene::setTop()
 	ruby_item->setTag(kStartSettingMenuTag_rubyShop);
 	
 	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
-	ruby_menu->setPosition(ccp(421,top_case->getContentSize().height/2.f-2));
+	ruby_menu->setPosition(ccp(287,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_menu);
+
 	
 	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(475,top_case->getContentSize().height/2.f-2));
+	friend_point_label->setPosition(ccp(338,top_case->getContentSize().height/2.f-5));
 	top_case->addChild(friend_point_label);
 	
 	mySGD->setFriendPointLabel(friend_point_label);
@@ -720,8 +942,20 @@ void StartSettingScene::setTop()
 	friend_point_item->setTag(kStartSettingMenuTag_friendPointContent);
 	
 	CCMenu* friend_point_menu = CCMenu::createWithItem(friend_point_item);
-	friend_point_menu->setPosition(ccp(505,top_case->getContentSize().height/2.f-2));
+	friend_point_menu->setPosition(ccp(362,top_case->getContentSize().height/2.f));
 	top_case->addChild(friend_point_menu);
+	
+	
+	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
+	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
+	s_tip->setColor(ccGRAY);
+	
+	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip, s_tip, this, menu_selector(StartSettingScene::menuAction));
+	tip_item->setTag(kStartSettingMenuTag_tip);
+	
+	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
+	tip_menu->setPosition(ccp(394, top_case->getContentSize().height/2.f));
+	top_case->addChild(tip_menu);
 }
 
 void StartSettingScene::callStart()
@@ -831,21 +1065,35 @@ void StartSettingScene::finalSetting()
 	start_loading = LoadingLayer::create();
 	addChild(start_loading, kStartSettingZorder_popup);
 	
+	is_have_item.clear();
+	is_have_item.push_back(false);
+	
 	deque<bool> is_using_item;
 	is_using_item.push_back(false);
 	
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
+	{
 		is_using_item.push_back(false);
+		is_have_item.push_back(false);
+	}
 	
 	for(int i=0;i<is_selected_item.size();i++)
 	{
 		if(is_selected_item[i])
 		{
-			myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
+			if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i]) > 0)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
+				is_have_item[i] = true;
+			}
 			myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());
 			is_using_item[item_list[i]] = true;
 		}
 	}
+	
+	mySGD->setGold(mySGD->getGold() - use_item_price_gold.getV());
+	mySGD->setStar(mySGD->getStar() - use_item_price_ruby.getV());
+	mySGD->setFriendPoint(mySGD->getFriendPoint() - use_item_price_social.getV());
 	
 	for(int i=kIC_attack;i<=kIC_rentCard;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
@@ -900,10 +1148,15 @@ void StartSettingScene::cancelGame()
 		{
 			if(is_selected_item[i])
 			{
-				myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])+1);
+				if(is_have_item[i])
+					myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])+1);
 				is_using_item[item_list[i]] = true;
 			}
 		}
+				   
+		mySGD->setGold(mySGD->getGold() + use_item_price_gold.getV());
+		mySGD->setStar(mySGD->getStar() + use_item_price_ruby.getV());
+		mySGD->setFriendPoint(mySGD->getFriendPoint() + use_item_price_social.getV());
 		
 		mySGD->resetUsingItem();
 		

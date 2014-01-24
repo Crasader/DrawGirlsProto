@@ -241,6 +241,7 @@ var pathSelector = function(value,option){
 				}
 			]
 			'>thumbnail</th-->
+			<th field="no" viewer="text" primary editor="text">no</th>
 			<th field="pieceNo" viewer="text" editor="text" editorOption='{"datatype":"int"}'>pieceNo</th>
 			<!--th field="piece" viewer="json" editor="dictionary" editorOption='
 			[
@@ -254,8 +255,10 @@ var pathSelector = function(value,option){
 
 			<th field="condition" viewer="json" editor="dictionary" editorOption='[
 				{"field":"gold","editor":"text","editorOption":{"datatype":"int"}},
-				{"field":"stageNo","editor":"text","editorOption":{"datatype":"int"}}				
+				{"field":"pieceNo","editor":"text","editorOption":{"datatype":"int"}}			
 			]'>condition(해제조건)</th>
+
+			<th field="minigame" viewer="text" editor="bool">minigame</th>
 			<th field="version" viewer="text" editor="text" editorOption='{"datatype":"int"}'>version</th>
 			<th manage="delete update insert">manage</th>
 		</tr>
