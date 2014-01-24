@@ -136,6 +136,7 @@ void StartSettingScene::setMain()
 		stage_number_label->setPosition(ccp(49, main_case->getContentSize().height-64));
 		main_case->addChild(stage_number_label);
 		
+		is_before_selected_event_stage = true;
 		mySGD->is_before_selected_event_stage = false;
 	}
 	else
@@ -147,6 +148,8 @@ void StartSettingScene::setMain()
 		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 15);
 		piece_number_label->setPosition(ccp(49, main_case->getContentSize().height-64));
 		main_case->addChild(piece_number_label);
+		
+		is_before_selected_event_stage = false;
 	}
 	
 //	CCSprite* temp_mission = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 230, 22));
@@ -1115,6 +1118,8 @@ void StartSettingScene::finalRemoveMessage(Json::Value result_data)
 
 void StartSettingScene::goToGame()
 {
+	mySGD->is_before_selected_event_stage = is_before_selected_event_stage;
+	
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 	
 	Json::Value param;

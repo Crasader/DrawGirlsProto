@@ -74,24 +74,21 @@ private:
 	
 	CCSprite* gray;
 	CCSprite* main_case;
-	CCSprite* top_case;
 	
 	bool is_menu_enable;
 	bool is_saved_user_data;
 	bool is_loaded_list;
 	
+	CCSprite* bronze_star;
+	CCSprite* silver_star;
+	CCSprite* gold_star;
+	
 	CCMenu* ok_menu;
 	CCMenu* replay_menu;
-	
-	HeartTime* heart_time;
 	
 	CCLabelBMFont* score_label;
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* time_label;
-	
-	CCSprite* friend_point_popup;
-	
-	void closeFriendPointPopup();
 	
 	vector<ClearFriendRank> friend_list;
 	CCTableView* rankTableView;

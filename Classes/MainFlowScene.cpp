@@ -629,7 +629,7 @@ enum MainFlowMenuTag{
 	kMainFlowMenuTag_rank,
 	kMainFlowMenuTag_shop,
 	kMainFlowMenuTag_cardSetting,
-	kMainFlowMenuTag_puzzleSetting,
+	kMainFlowMenuTag_friendManagement,
 	kMainFlowMenuTag_gacha,
 	kMainFlowMenuTag_achievement,
 	kMainFlowMenuTag_event
@@ -771,7 +771,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
 			addChild(t_popup, kMainFlowZorder_popup);
 		}
-		else if(tag == kMainFlowMenuTag_puzzleSetting)
+		else if(tag == kMainFlowMenuTag_friendManagement)
 		{
 			is_menu_enable = true;
 		}
@@ -819,6 +819,17 @@ void MainFlowScene::setBottom()
 	rank_menu->setPosition(ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
 	
+	CCSprite* n_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
+	CCSprite* s_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
+	s_friendmanagement->setColor(ccGRAY);
+	
+	CCMenuItem* friendmanagement_item = CCMenuItemSprite::create(n_friendmanagement, s_friendmanagement, this, menu_selector(MainFlowScene::menuAction));
+	friendmanagement_item->setTag(kMainFlowMenuTag_friendManagement);
+	
+	CCMenu* friendmanagement_menu = CCMenu::createWithItem(friendmanagement_item);
+	friendmanagement_menu->setPosition(ccp(-139, n_friendmanagement->getContentSize().height/2.f));
+	bottom_case->addChild(friendmanagement_menu);
+	
 	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
 	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
 	s_shop->setColor(ccGRAY);
@@ -827,7 +838,7 @@ void MainFlowScene::setBottom()
 	shop_item->setTag(kMainFlowMenuTag_shop);
 	
 	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
-	shop_menu->setPosition(ccp(-139, n_shop->getContentSize().height/2.f));
+	shop_menu->setPosition(ccp(-73, n_shop->getContentSize().height/2.f));
 	bottom_case->addChild(shop_menu);
 	
 	CCSprite* n_cardsetting = CCSprite::create("mainflow_cardsetting.png");
@@ -838,19 +849,8 @@ void MainFlowScene::setBottom()
 	cardsetting_item->setTag(kMainFlowMenuTag_cardSetting);
 	
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
-	cardsetting_menu->setPosition(ccp(-73, n_cardsetting->getContentSize().height/2.f));
+	cardsetting_menu->setPosition(ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
-	
-	CCSprite* n_puzzlesetting = CCSprite::create("mainflow_puzzlesetting.png");
-	CCSprite* s_puzzlesetting = CCSprite::create("mainflow_puzzlesetting.png");
-	s_puzzlesetting->setColor(ccGRAY);
-	
-	CCMenuItem* puzzlesetting_item = CCMenuItemSprite::create(n_puzzlesetting, s_puzzlesetting, this, menu_selector(MainFlowScene::menuAction));
-	puzzlesetting_item->setTag(kMainFlowMenuTag_puzzleSetting);
-	
-	CCMenu* puzzlesetting_menu = CCMenu::createWithItem(puzzlesetting_item);
-	puzzlesetting_menu->setPosition(ccp(-7, n_puzzlesetting->getContentSize().height/2.f));
-	bottom_case->addChild(puzzlesetting_menu);
 	
 	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
 	CCSprite* s_gacha = CCSprite::create("mainflow_gacha.png");

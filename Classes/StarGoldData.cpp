@@ -272,6 +272,20 @@ void StarGoldData::setKeepGold( int t_gold )
 void StarGoldData::setGameStart()
 {
 	mySD->startSetting();
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1)) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))
+		is_ingame_before_have_stage_cards[0] = true;
+	else
+		is_ingame_before_have_stage_cards[0] = false;
+	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2)) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2))
+		is_ingame_before_have_stage_cards[1] = true;
+	else
+		is_ingame_before_have_stage_cards[1] = false;
+	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3)) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3))
+		is_ingame_before_have_stage_cards[2] = true;
+	else
+		is_ingame_before_have_stage_cards[2] = false;
+	
 	is_showtime = false;
 	is_exchanged = false;
 	is_cleared = false;
@@ -866,6 +880,10 @@ string StarGoldData::getNextSceneName()
 
 void StarGoldData::myInit()
 {
+	is_ingame_before_have_stage_cards.push_back(false);
+	is_ingame_before_have_stage_cards.push_back(false);
+	is_ingame_before_have_stage_cards.push_back(false);
+	
 	is_before_selected_event_stage = false;
 	is_paused = false;
 	login_getted = false;

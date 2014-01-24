@@ -451,6 +451,8 @@ public:
 	void setNextSceneName(string scene_name);
 	string getNextSceneName();
 	
+	deque<bool> is_ingame_before_have_stage_cards;
+	
 private:
 	deque<AchievementCode> achieve_noti_que;
 	
