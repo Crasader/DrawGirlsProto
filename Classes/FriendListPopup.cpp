@@ -243,9 +243,9 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 Json::Value contentJson;
 			 
 			 contentJson["msg"] = "";
+			 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 			 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-			 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 			 std::string recvId = (*member).userId;
 			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 //			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈

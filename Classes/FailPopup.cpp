@@ -767,6 +767,7 @@ void FailPopup::cellAction( CCObject* sender )
 										 
 										 contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
 										 contentJson["helpstage"] = mySD->getSilType();
+										 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 										 
 										 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 										 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
@@ -856,7 +857,8 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
 	string cell_id = (*member).user_id;
 	
-	if(my_id != cell_id && KnownFriends::getInstance()->findById(cell_id) != nullptr)
+	//if(my_id != cell_id && KnownFriends::getInstance()->findById(cell_id) != nullptr)
+	if(KnownFriends::getInstance()->findById(cell_id) != nullptr)
 	{
 		CCSprite* kakao_sign = CCSprite::create("puzzle_right_rank_kakao.png");
 		kakao_sign->setPosition(ccp(41,29));
@@ -864,7 +866,8 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	}
 	
 	CCSprite* bg;
-	if((*member).user_id == hspConnector::get()->getKakaoID())
+//	if((*member).user_id == hspConnector::get()->getKakaoID())
+	if(0)
 	{
 		bg = CCSprite::create("ending_cell_me.png");
 		bg->setPosition(CCPointZero);
@@ -961,7 +964,8 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	cell->addChild(score_label,kFFC_Z_img);
 	
 	
-	if((*member).user_id == hspConnector::get()->getKakaoID())
+//	if((*member).user_id == hspConnector::get()->getKakaoID())
+	if(0)
 	{
 //		CCSprite* meBack = CCSprite::create("ending_cell_selected.png");
 //		meBack->setPosition(ccp(meBack->getContentSize().width - bg->getContentSize().width, 0));

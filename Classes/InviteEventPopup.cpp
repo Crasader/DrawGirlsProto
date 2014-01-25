@@ -273,6 +273,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 				p["receiverMemberID"] = recvId;
 				p["senderMemberID"]=hspConnector::get()->getKakaoID();
 				p["type"]=kInvite;
+				p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 
 				hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
 				{

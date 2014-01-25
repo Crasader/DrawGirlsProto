@@ -48,6 +48,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 		contentJson["msg"] = (nickname + "님에게 도전!");
 		contentJson["challengestage"] = mySD->getSilType();
 		contentJson["score"] = score;
+		contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 		p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 		std::string recvId = user_id;
 		p["receiverMemberID"] = recvId;
@@ -119,10 +120,10 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 //		contentJson["msg"] = (nickname + "님에게 도전!");
 		contentJson["challengestage"] = mySD->getSilType();
 		contentJson["score"] = score;
+		contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 		p["receiverMemberID"] = user_id;
 		p["senderMemberID"] = hspConnector::get()->getKakaoID();
 		p["type"] = kChallengeResult;
-		
 		if(mySGD->getAcceptChallengeScore() <= score)
 		{
 			// 이겼을 때,

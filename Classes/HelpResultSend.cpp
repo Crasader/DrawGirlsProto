@@ -56,6 +56,7 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 		
 		contentJson["cardnumber"] = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level);
 		contentJson["result"] = "success";
+		contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 		p["receiverMemberID"] = corp_id;
 		p["senderMemberID"] = hspConnector::get()->getKakaoID();
 		p["type"] = kHelpResult;
