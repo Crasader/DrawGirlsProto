@@ -32,6 +32,9 @@ public:
 	
 	HeartTime* heart_time;
 private:
+	
+	void heartRefresh();
+	
 	CCNode* tutorial_node;
 	
 	bool is_menu_enable;

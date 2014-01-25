@@ -50,17 +50,17 @@ bool TitleRenewalScene::init()
 	state_label->setPosition(ccp(240,290));
 	addChild(state_label);
 	
-//	Json::Value param;
-//	param["ManualLogin"] = true;
-//	
-//	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+	Json::Value param;
+	param["ManualLogin"] = true;
 	
-	Json::Value t_result_data;
-	hspConnector::get()->myKakaoInfo["user_id"] = 88741857374149376L;
-	hspConnector::get()->myKakaoInfo["nickname"] = "YH";
-	graphdog->setKakaoMemberID(hspConnector::get()->getKakaoID());
-	t_result_data["error"]["isSuccess"] = true;
-	resultLogin(t_result_data);
+	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+	
+//	Json::Value t_result_data;
+//	hspConnector::get()->myKakaoInfo["user_id"] = 88741857374149376L;
+//	hspConnector::get()->myKakaoInfo["nickname"] = "YH";
+//	graphdog->setKakaoMemberID(hspConnector::get()->getKakaoID());
+//	t_result_data["error"]["isSuccess"] = true;
+//	resultLogin(t_result_data);
 	
 	return true;
 }
@@ -144,14 +144,14 @@ void TitleRenewalScene::startCommand()
 	
 	if(must_be_load_friends)
 	{
-		Json::Value t_result_data;
+//		Json::Value t_result_data;
+//		
+//		t_result_data["status"] = 0;
+//		
+//		resultGetKnownFriendList(t_result_data);
 		
-		t_result_data["status"] = 0;
-		
-		resultGetKnownFriendList(t_result_data);
-		
-//		hspConnector::get()->kLoadFriends(Json::Value(),
-//										  bind(&ThisClassType::resultGetKnownFriendList, this, std::placeholders::_1));
+		hspConnector::get()->kLoadFriends(Json::Value(),
+										  bind(&ThisClassType::resultGetKnownFriendList, this, std::placeholders::_1));
 		must_be_load_friends = false;
 	}
 }

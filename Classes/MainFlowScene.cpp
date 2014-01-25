@@ -733,7 +733,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_postbox)
 		{
-			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose));
+			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose)); // bind(&MainFlowScene::heartRefresh, this);
 			addChild(t_pp, kMainFlowZorder_popup);
 			
 			postbox_count_case->setVisible(false);
@@ -884,6 +884,18 @@ void MainFlowScene::setBottom()
 	CCMenu* event_menu = CCMenu::createWithItem(event_item);
 	event_menu->setPosition(ccp(201, n_event->getContentSize().height/2.f-3));
 	bottom_case->addChild(event_menu);
+}
+
+void MainFlowScene::heartRefresh()
+{
+	CCPoint heart_position = heart_time->getPosition();
+	CCNode* heart_parent = heart_time->getParent();
+	
+	heart_time->removeFromParent();
+	
+	heart_time = HeartTime::create();
+	heart_time->setPosition(heart_position);
+	heart_parent->addChild(heart_time);
 }
 
 void MainFlowScene::setTop()
