@@ -88,6 +88,7 @@ private:
 	void showFailPopup();
 	void hideFailPopup();
 	
+	string before_scene_name;
 	
 	PieceMode piece_mode;
 	void setPuzzle();
