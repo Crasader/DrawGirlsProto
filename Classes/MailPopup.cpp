@@ -34,10 +34,10 @@ namespace
 {
   CCSize mailCellSize = CCSizeMake(188, 37);
 }
-MailPopup * MailPopup::create (CCObject * t_close, SEL_CallFunc d_close)
+MailPopup * MailPopup::create (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh)
 {
 	MailPopup* t_rp = new MailPopup();
-	t_rp->myInit(t_close, d_close);
+	t_rp->myInit(t_close, d_close, heartRefresh);
 	t_rp->autorelease();
 	return t_rp;
 }
@@ -51,11 +51,11 @@ void MailPopup::finishedClose ()
 	(target_close->*delegate_close)();
 	removeFromParent();
 }
-void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
+void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh)
 {
 	target_close = t_close;
 	delegate_close = d_close;
-	
+	m_heartRefresh = heartRefresh;
 	m_mailFilter = MailFilter::kTotal;	
 	
 	
@@ -365,7 +365,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						//하트올리기
 						//						if(myDSH->getIntegerForKey(kDSH_Key_heartCnt)<5)
 						{
-						myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+							myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+							m_heartRefresh();
 						}
 						});
 					 }

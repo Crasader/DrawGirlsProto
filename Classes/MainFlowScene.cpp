@@ -733,7 +733,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_postbox)
 		{
-			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose)); // bind(&MainFlowScene::heartRefresh, this);
+			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
 			addChild(t_pp, kMainFlowZorder_popup);
 			
 			postbox_count_case->setVisible(false);
