@@ -212,6 +212,10 @@ public:
 private:
 	IntDirection beforeDirection;
 	IntDirection beforeSecondDirection;
+	
+//	IntDirection changing_direction;
+//	IntDirection changing_second_direction;
+	
 	CCSprite* control_circle;
 	CCSprite* control_ball;
 	

@@ -562,6 +562,10 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 
 void ControlJoystickButton::directionKeeping()
 {
+//	chrono::time_point<chrono::system_clock> start, end;
+//	start = chrono::system_clock::now();
+//	chrono::duration<double> elapsed_seconds;
+	
 	if(myJack->isStun)// || myJack->willBackTracking || myJack->getJackState() == jackStateBackTracking)
 	{
 		myJack->changeDirection(directionStop, directionStop);
@@ -573,6 +577,9 @@ void ControlJoystickButton::directionKeeping()
 		return;
 	}
 	myJack->changeDirection(beforeDirection, beforeSecondDirection);
+	
+//	end = chrono::system_clock::now();
+//	CCLog("directionKeeping time : %.8f", chrono::duration<double>(end - start).count());
 }
 
 void ControlJoystickButton::stopMySchedule()
