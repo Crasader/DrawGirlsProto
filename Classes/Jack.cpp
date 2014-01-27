@@ -1482,7 +1482,18 @@ void Jack::takeSpeedUpItem()
 	if(myGD->jack_base_speed + speed_up_value >= 2.f)
 	{
 		myGD->communication("Main_takeSpeedUpEffect", int(roundf((0.8f - (2.f - myGD->jack_base_speed) + speed_up_value)/0.1f)));
-		myGD->communication("MP_createJackMissile", rand()%(kElementCode_plasma+1) + (rand()%9)*10, 1, float(NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard))));
+		
+		string missile_code;
+		if(mySGD->getIsUsingFriendCard())
+			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
+		else
+			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+		
+		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
+		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		
+		myGD->communication("MP_createJackMissile", missile_type, 1, missile_speed, getPosition());
 	}
 	else
 	{
