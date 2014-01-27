@@ -86,6 +86,9 @@ bool MainFlowScene::init()
 	back_img->setPosition(ccp(240,160));
 	addChild(back_img, kMainFlowZorder_back);
 	
+	is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
+	mySGD->setIsUnlockPuzzle(0);
+	
 	setTable();
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -219,6 +222,13 @@ bool MainFlowScene::init()
 			
 			puzzle_table->setTouchEnabled(false);
 		}
+		
+		
+		if(is_unlock_puzzle > 0)
+		{
+			is_menu_enable = false;
+			puzzle_table->setTouchEnabled(false);
+		}
 	}
 	
 	return true;
@@ -276,7 +286,12 @@ void MainFlowScene::setTable()
 	addChild(puzzle_table, kMainFlowZorder_table);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
 	
-	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int puzzle_number;
+	
+	if(is_unlock_puzzle > 0)
+		puzzle_number = is_unlock_puzzle;
+	else
+		puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
 	if(puzzle_number == 0)
 	{
@@ -487,6 +502,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
+	
 //	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
 	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
@@ -592,8 +608,43 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		shadow_node->addChild(shadow_img, -1);
 	}
 	
+	if(puzzle_number == is_unlock_puzzle)
+	{
+		CCSprite* close_back = CCSprite::create("mainflow_puzzle_lock_back.png");
+		close_back->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
+		cell->addChild(close_back);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(0.25f);
+		CCFadeTo* t_fade1 = CCFadeTo::create(0.4f, 0);
+		CCCallFunc* t_remove_self = CCCallFunc::create(close_back, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_fade1, t_remove_self, NULL);
+		close_back->runAction(t_seq);
+		
+		
+		CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base.png");
+		not_clear_img->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+33));
+		cell->addChild(not_clear_img);
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.25f);
+		CCFadeTo* t_fade2 = CCFadeTo::create(0.4f, 0);
+		CCCallFunc* t_touch_on = CCCallFunc::create(this, callfunc_selector(MainFlowScene::endUnlockAnimation));
+		CCCallFunc* t_remove_self2 = CCCallFunc::create(not_clear_img, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq2 = CCSequence::create(t_delay1, t_fade2, t_touch_on, t_remove_self2, NULL);
+		not_clear_img->runAction(t_seq2);
+		
+		is_unlock_puzzle = 0;
+	}
+	
 	return cell;
 }
+
+void MainFlowScene::endUnlockAnimation()
+{
+	puzzle_table->setTouchEnabled(true);
+	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
+	is_menu_enable = true;
+}
+
 void MainFlowScene::scrollViewDidScroll(CCScrollView* view){}
 void MainFlowScene::scrollViewDidZoom(CCScrollView* view){}
 void MainFlowScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell){}

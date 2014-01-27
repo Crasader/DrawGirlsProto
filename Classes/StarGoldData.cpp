@@ -271,6 +271,9 @@ void StarGoldData::setKeepGold( int t_gold )
 
 void StarGoldData::setGameStart()
 {
+	
+	is_not_cleared_stage = !myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType());
+	
 	mySD->startSetting();
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1)) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))
@@ -880,6 +883,7 @@ string StarGoldData::getNextSceneName()
 
 void StarGoldData::myInit()
 {
+	is_unlock_puzzle = 0;
 	is_ingame_before_have_stage_cards.push_back(false);
 	is_ingame_before_have_stage_cards.push_back(false);
 	is_ingame_before_have_stage_cards.push_back(false);
@@ -943,6 +947,20 @@ void StarGoldData::myInit()
 	is_me_challenge = false;
 	is_accept_challenge = false;
 	is_accept_help = false;
+}
+
+bool StarGoldData::getIsNotClearedStage()
+{
+	return is_not_cleared_stage;
+}
+
+int StarGoldData::getIsUnlockPuzzle()
+{
+	return is_unlock_puzzle;
+}
+void StarGoldData::setIsUnlockPuzzle(int t_i)
+{
+	is_unlock_puzzle = t_i;
 }
 
 void StarGoldData::setHeartMax(int t_data)

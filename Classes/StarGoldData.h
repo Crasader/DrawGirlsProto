@@ -452,8 +452,14 @@ public:
 	string getNextSceneName();
 	
 	deque<bool> is_ingame_before_have_stage_cards;
+	bool getIsNotClearedStage();
+	int getIsUnlockPuzzle();
+	void setIsUnlockPuzzle(int t_i);
 	
 private:
+	bool is_not_cleared_stage;
+	int is_unlock_puzzle;
+	
 	deque<AchievementCode> achieve_noti_que;
 	
 	CCLabelBMFont* star_label;

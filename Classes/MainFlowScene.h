@@ -33,6 +33,9 @@ public:
 	HeartTime* heart_time;
 private:
 	
+	int is_unlock_puzzle;
+	void endUnlockAnimation();
+	
 	void heartRefresh();
 	
 	CCNode* tutorial_node;
