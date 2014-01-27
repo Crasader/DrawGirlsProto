@@ -149,62 +149,6 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	closeBtn->setPosition(ccp(450, 258));
 	_menu->addChild(closeBtn);
 
-	auto weekRank = CCMenuItemImageLambda::create
-	(
-	 "rank_friend_rank.png", "rank_friend_rank.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 
-	 });
-	weekRank->setPosition(ccp(67, 290));
-	_menu->addChild(weekRank, 5);
-	
-	// 친구 초대 이벤트
-	auto inviteEventBtn = CCMenuItemImageLambda::create
-	(
-	 "rank_default_invite.png", "rank_default_invite.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 
-		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-		 
-	 });
-	inviteEventBtn->setPosition(ccp(169, 290));
-	inviteEventBtn->setOpacity(0);
-	
-	_menu->addChild(inviteEventBtn);
-	
-	// 친구목록
-	auto friendList = CCMenuItemImageLambda::create
-	(
-	 "rank_friend_list.png", "rank_friend_list.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 FriendListPopup* t_rp = FriendListPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-		 
-	 });
-	friendList->setPosition(ccp(270, 290));
-	friendList->setOpacity(0);
-	_menu->addChild(friendList);
-	
-	// 게임 친구맺기
-	auto joinGameFriend = CCMenuItemImageLambda::create
-	(
-	 "rank_gamefriend.png", "rank_gamefriend.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-		 
-	 });
-	joinGameFriend->setPosition(ccp(370, 290));
-	joinGameFriend->setOpacity(0);
-	_menu->addChild(joinGameFriend);
 
 	// 분류 지정.
 	

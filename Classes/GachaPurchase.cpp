@@ -93,9 +93,9 @@ bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(v
 		main_case->setPosition(ccp(240,-160));
 		addChild(main_case, kGachaPurchaseZorder_back);
 		
-		
-		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+			
+		CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
+		CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
 		s_close->setColor(ccGRAY);
 		
 		CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(GachaPurchase::menuAction));
@@ -108,12 +108,12 @@ bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(v
 		
 		
 		CCSprite* n_ruby = CCSprite::create("gacha_purchase_ruby.png");
-		CCLabelTTF* n_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
+		CCLabelTTF* n_ruby_price = CCLabelTTF::create(CCString::createWithFormat("루비 %d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
 		n_ruby_price->setPosition(ccp(n_ruby->getContentSize().width/2.f+20, 25));
 		n_ruby->addChild(n_ruby_price);
 		CCSprite* s_ruby = CCSprite::create("gacha_purchase_ruby.png");
 		s_ruby->setColor(ccGRAY);
-		CCLabelTTF* s_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
+		CCLabelTTF* s_ruby_price = CCLabelTTF::create(CCString::createWithFormat("루비 %d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
 		s_ruby_price->setPosition(ccp(s_ruby->getContentSize().width/2.f+20, 25));
 		s_ruby->addChild(s_ruby_price);
 		
@@ -126,12 +126,12 @@ bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(v
 		ruby_menu->setTouchPriority(-171);
 		
 		CCSprite* n_gold = CCSprite::create("gacha_purchase_gold.png");
-		CCLabelTTF* n_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
+		CCLabelTTF* n_gold_price = CCLabelTTF::create(CCString::createWithFormat("금화 %d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
 		n_gold_price->setPosition(ccp(n_gold->getContentSize().width/2.f+20, 25));
 		n_gold->addChild(n_gold_price);
 		CCSprite* s_gold = CCSprite::create("gacha_purchase_gold.png");
 		s_gold->setColor(ccGRAY);
-		CCLabelTTF* s_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
+		CCLabelTTF* s_gold_price = CCLabelTTF::create(CCString::createWithFormat("금화 %d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
 		s_gold_price->setPosition(ccp(s_gold->getContentSize().width/2.f+20, 25));
 		s_gold->addChild(s_gold_price);
 		
@@ -144,12 +144,12 @@ bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(v
 		gold_menu->setTouchPriority(-171);
 		
 		CCSprite* n_candy = CCSprite::create("gacha_purchase_candy.png");
-		CCLabelTTF* n_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
+		CCLabelTTF* n_candy_price = CCLabelTTF::create(CCString::createWithFormat("소셜 %d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
 		n_candy_price->setPosition(ccp(n_candy->getContentSize().width/2.f+20, 25));
 		n_candy->addChild(n_candy_price);
 		CCSprite* s_candy = CCSprite::create("gacha_purchase_candy.png");
 		s_candy->setColor(ccGRAY);
-		CCLabelTTF* s_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
+		CCLabelTTF* s_candy_price = CCLabelTTF::create(CCString::createWithFormat("소셜 %d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
 		s_candy_price->setPosition(ccp(s_candy->getContentSize().width/2.f+20, 25));
 		s_candy->addChild(s_candy_price);
 		
