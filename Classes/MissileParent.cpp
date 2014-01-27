@@ -86,9 +86,10 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 			jack_missile_node->addChild(card_img);
 			
 			CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.3f);
-			CCFadeTo* t_fade = CCFadeTo::create(0.8f, 0);
+			CCDelayTime* t_delay = CCDelayTime::create(0.8f);
+			CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
 			CCCallFunc* t_call = CCCallFunc::create(card_img, callfunc_selector(CCSprite::removeFromParent));
-			CCSequence* t_seq = CCSequence::create(t_scale, t_fade, t_call, NULL);
+			CCSequence* t_seq = CCSequence::create(t_scale, t_delay, t_fade, t_call, NULL);
 			card_img->runAction(t_seq);
 			
 			CCSprite* no_img = CCSprite::create("cardchange_noimg.png");
@@ -96,9 +97,9 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 			no_img->setPosition(ccp(card_img->getContentSize().width/2.f, card_img->getContentSize().height/2.f));
 			card_img->addChild(no_img);
 			
-			CCDelayTime* t_delay = CCDelayTime::create(0.2f);
-			CCFadeTo* t_fade2 = CCFadeTo::create(0.8f, 0);
-			CCSequence* t_seq2 = CCSequence::create(t_delay, t_fade2, NULL);
+			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
+			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
+			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
 			no_img->runAction(t_seq2);
 		}
 		else if(jm_type%10 >= 4 && jm_type%10 <= 6)
@@ -128,9 +129,10 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 			jack_missile_node->addChild(card_img);
 			
 			CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.3f);
+			CCDelayTime* t_delay = CCDelayTime::create(0.8f);
 			CCFadeTo* t_fade = CCFadeTo::create(shoot_frame/60.f+0.5f, 0);
 			CCCallFunc* t_call = CCCallFunc::create(card_img, callfunc_selector(CCSprite::removeFromParent));
-			CCSequence* t_seq = CCSequence::create(t_scale, t_fade, t_call, NULL);
+			CCSequence* t_seq = CCSequence::create(t_scale, t_delay, t_fade, t_call, NULL);
 			card_img->runAction(t_seq);
 			
 			CCSprite* no_img = CCSprite::create("cardchange_noimg.png");
@@ -138,9 +140,9 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 			no_img->setPosition(ccp(card_img->getContentSize().width/2.f, card_img->getContentSize().height/2.f));
 			card_img->addChild(no_img);
 			
-			CCDelayTime* t_delay = CCDelayTime::create(0.2f);
+			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
 			CCFadeTo* t_fade2 = CCFadeTo::create(shoot_frame/60.f+0.5f, 0);
-			CCSequence* t_seq2 = CCSequence::create(t_delay, t_fade2, NULL);
+			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
 			no_img->runAction(t_seq2);
 		}
 	}
@@ -151,8 +153,8 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 		no_img->setPosition(missile_position);
 		jack_missile_node->addChild(no_img);
 		
-		CCDelayTime* t_delay = CCDelayTime::create(0.2f);
-		CCFadeTo* t_fade2 = CCFadeTo::create(0.8f, 0);
+		CCDelayTime* t_delay = CCDelayTime::create(1.f);
+		CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
 		CCSequence* t_seq2 = CCSequence::create(t_delay, t_fade2, NULL);
 		no_img->runAction(t_seq2);
 	}
