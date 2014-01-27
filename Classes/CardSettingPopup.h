@@ -21,6 +21,7 @@ using namespace std;
 
 class CardListViewer;
 class ListViewerScroll;
+class IntPoint;
 class CardSettingPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -46,23 +47,42 @@ private:
 	CCSprite* main_case;
 	CCSprite* gray;
 	
-	CCSprite* selected_card_img;
-	CCMenu* selected_card_menu;
-	CCSprite* card_option_case;
-	CCLabelTTF* card_option_script;
-	CCNode* star_parent;
-	CCMenu* mount_menu;
+	int server_puzzle_list_count;
+	int server_event_list_count;
+	vector<int> server_puzzle_list_no;
+	vector<int> server_puzzle_stage_count;
+	vector<int> server_puzzle_start_stage;
+	
+	map<int, int> save_DSH_cardDurability_int1;
+	int getCardDurability(int t_card_number);
+	
+	map<int, int> save_DSH_cardMaxDurability_int1;
+	int getCardMaxDurability(int t_card_number);
+	
+	map<int, int> save_DSH_cardLevel_int1;
+	int getCardLevel(int t_card_number);
+	
+	
+	map<int, int> save_SDS_CI_rank_int1;
+	int getCardRank(int t_card_number);
+	
+	map<int, int> save_SDS_CI_stage_int1;
+	int getCardStage(int t_card_number);
+	map<int, int> save_SDS_CI_grade_int1;
+	int getCardGrade(int t_card_number);
+	
+	
+	map<string, int> save_SGD_isHasGottenCards;
+	int getSGDisHasGottenCards(int t_stage, int t_grade);
+	
+	int recent_selected_card_number;
+	
+	int recent_sort_type;
 	
 	map<int, CCPoint> align_default_position_list;
 	
-	CCSprite* align_list_img;
-	
-	int last_mount_idx;
-	int last_select_idx;
 	unsigned int default_align_number_of_cell;
 	CCTableView* card_table;
-	
-	int recent_mounted_number;
 	
 	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
@@ -78,12 +98,12 @@ private:
 	void endHidePopup();
 	
 	CCPoint getContentPosition(int t_tag);
-	void removeMountingCard();
-	void mountingCard(int card_stage, int card_level);
+//	void removeMountingCard();
+//	void mountingCard(int card_stage, int card_level);
 	
 	void alignChange();
-	void addMountedCase();
-	void removeMountedCase();
+//	void addMountedCase();
+//	void removeMountedCase();
 	
 	bool is_menu_enable;
 	

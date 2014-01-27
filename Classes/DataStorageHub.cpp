@@ -454,7 +454,7 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	else if(t_key == kSaveUserData_Key_character)
 	{
 		data[getKey(kDSH_Key_selectedCharacter)] = getIntegerForKey(kDSH_Key_selectedCharacter);
-		for(int i=2;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+		for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 			data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i] = getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i);
 	}
 	else if(t_key == kSaveUserData_Key_achieve)
@@ -574,7 +574,7 @@ void DataStorageHub::resetDSH ()
 	setStringForKey(kDSH_Key_nick, "", false);
 	
 	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
-	for(int i=2;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
 	
 	int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);

@@ -65,7 +65,7 @@ void CardListViewer::setPositionY(float t_y)
 	{
 		CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(i);
 		int tag = t_child->getTag();
-		if(tag == kCSS_MT_selectedCheck || tag == kCSS_MT_checkMark)		continue;
+//		if(tag == kCSS_MT_selectedCheck || tag == kCSS_MT_checkMark)		continue;
 		((CLV_Node*)t_child)->viewCheck();
 	}
 	
@@ -117,7 +117,7 @@ bool CardListViewer::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pE
 		{
 			CCNode* item_parent = (CCNode*)getChildren()->objectAtIndex(i);
 			int tag = item_parent->getTag();
-			if(tag == kCSS_MT_selectedCheck || tag == kCSS_MT_checkMark || tag == kCSS_MT_noCardBase)	continue; // kCSS_selectedCheck || kCSS_checkMark
+//			if(tag == kCSS_MT_selectedCheck || tag == kCSS_MT_checkMark || tag == kCSS_MT_noCardBase)	continue; // kCSS_selectedCheck || kCSS_checkMark
 			if(!((CLV_Node*)item_parent)->isSetted())		continue;
 			CCMenu* item_menu = (CCMenu*)item_parent->getChildByTag(tag);
 			if(item_menu->ccTouchBegan(pTouch, pEvent))
@@ -333,7 +333,7 @@ void CardListViewer::setPercentage( float t_p )
 	{
 		CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(i);
 		int tag = t_child->getTag();
-		if(tag == kCSS_MT_selectedCheck || tag == kCSS_MT_checkMark)		continue;
+//		if(tag == kCSS_MT_selectedCheck || tag == kCSS_MT_checkMark)		continue;
 		((CLV_Node*)t_child)->viewCheck();
 	}
 }
