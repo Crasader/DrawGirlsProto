@@ -51,6 +51,7 @@ public:
 		cNode->setAnchorPoint(ccp(0,0));
 		cNode->setPosition(ccp(0,0));
 		cNode->setStencil(m_back);
+		cNode->setAlphaThreshold(255);
 		this->addChild(cNode,1);
 		
 		m_text1 = CCLabelTTF::create("", mySGD->getFont().c_str(), height);
