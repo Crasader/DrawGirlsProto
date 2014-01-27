@@ -14,6 +14,7 @@
 #include "InviteEventPopup.h"
 #include "KSAlertView.h"
 #include <boost/format.hpp>
+#include "GivenFriendList.h"
 static CCSize cellSize3 = CCSizeMake(238, 47);
 void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
@@ -24,6 +25,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	
 	
 	
+
 	
 	m_currentSelectSprite = NULL;
 	
@@ -37,20 +39,26 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	//		gray->setContentSize(CCSizeMake(600, 400));
 	//		addChild(gray, kRP_Z_gray);
 	
-	CCSprite* back = CCSprite::create("rank_back.png");
+	CCSprite* back = CCSprite::create("friendoption_back.png");
 	back->setPosition(ccp(240,160));
 	addChild(back, kZorderJoinGameFriendBack);
 	
 	
-	CCSprite* back2 = CCSprite::create("rank_gamefriend_back.png");
-	back2->setPosition(ccp(240,160));
+	CCSprite* back2 = CCSprite::create("friendsearch_back.png");
+	back2->setPosition(ccp(240,146));
 	addChild(back2, kZorderJoinGameFriendBack);
 //	CCScale9Sprite* back2 = CCScale9Sprite::create("popup_back2.png", CCRectMake(0, 0, 150, 150),
 //																								 CCRectMake(5, 5, 150 - 5*2, 150 - 5*2));
 //	back2->setPosition(ccp(240, 160));
 //	back2->setContentSize(CCSizeMake(445, 260));
 //	addChild(back2, kZorderJoinGameFriendBack);
-	
+
+	GivenFriendList* givenFriendList = GivenFriendList::create();
+	addChild(givenFriendList,kZorderJoinGameFriendContent);
+
+
+
+		
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
 	back2->addChild(_menu);
@@ -58,7 +66,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	
 	
 	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
-																														 "cardsetting_close.png", "cardsetting_close.png",
+																														 "cardchange_cancel.png", "cardchange_cancel.png",
 																														 [=](CCObject*){
 																															 (target_close->*delegate_close)();
 																															 removeFromParent();
@@ -66,6 +74,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	closeBtn->setPosition(ccp(440, 290));
 	_menu->addChild(closeBtn);
 	
+
 	auto weekRank = CCMenuItemImageLambda::create
 	(
 	 "rank_friend_rank.png", "rank_friend_rank.png",
@@ -91,7 +100,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 removeFromParent();
 		 
 	 });
-	inviteEventBtn->setPosition(ccp(169, 290));
+	inviteEventBtn->setPosition(ccp(169, 255));
 	inviteEventBtn->setOpacity(0);
 	
 	_menu->addChild(inviteEventBtn);
@@ -107,7 +116,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 removeFromParent();
 		 
 	 });
-	friendList->setPosition(ccp(270, 290));
+	friendList->setPosition(ccp(270, 255));
 	friendList->setOpacity(0);
 	_menu->addChild(friendList);
 	
@@ -120,12 +129,12 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 
 		 
 	 });
-	joinGameFriend->setPosition(ccp(370, 290));
+	joinGameFriend->setPosition(ccp(370, 255));
 	joinGameFriend->setOpacity(255);
 	_menu->addChild(joinGameFriend);
 	
 	auto addFriend = CCMenuItemImageLambda::create
-	("rank_gamefriend_plus.png", "rank_gamefriend_plus.png",
+	("friendsearch_plus.png", "friendsearch_plus.png",
 	 [=](CCObject* t)
 	 {
 		 // "abkcje34454" -> 45843068445565 -> "45843068445565" 과정.
@@ -154,6 +163,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	addChild(m_searchIdEditBox, kZorderJoinGameFriendIdInput);
 //	rank_gamefriend_search.png
 	loadRank();
+
 }
 
 JoinGameFriendPopup* JoinGameFriendPopup::create( CCObject* t_close, SEL_CallFunc d_close )
@@ -190,7 +200,7 @@ void JoinGameFriendPopup::drawRank( Json::Value obj )
 	//≈◊¿Ã∫Ì ∫‰ ª˝º∫ Ω√¿€ /////////////////////////////////////////////////////////////////////////////////////////
 	
 	//320x320 ≈◊¿Ã∫Ì ∫‰ ª˝º∫
-	rankTableView = JoinFriendTableView::create(this, CCSizeMake(424, 195), NULL);
+	rankTableView = JoinFriendTableView::create(this, CCSizeMake(212, 195), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
 	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
@@ -205,7 +215,7 @@ void JoinGameFriendPopup::drawRank( Json::Value obj )
 	rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	
 	//±‚¡ÿ¡° 0,0
-	rankTableView->setPosition(ccp(33, 320 - 291));
+	rankTableView->setPosition(ccp(240, 320 - 291));
 	
 	//µ•¿Ã≈Õ∏¶ ∞°¡Æø¿∞Ì≥™ ≈Õƒ° ¿Ã∫•∆Æ∏¶ π›»Ø«ÿ¡Ÿ ¥Î∏Æ¿⁄∏¶ ¿Ã ≈¨∑°Ω∫∑Œ º≥¡§.
 	rankTableView->setDelegate(this);
@@ -255,7 +265,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 
 	{
 		sendBtn = CCMenuItemImageLambda::create
-		("rank_gamefriend_call.png", "rank_gamefriend_call.png",
+		("friendsearch_call.png", "friendsearch_call.png",
 		 [=](CCObject* sender){
 			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 			 int idx = (int)obj->getUserData();
@@ -269,6 +279,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 			 
 			 contentJson["msg"] = "unknownreq";
 			 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+			 contentJson["profile_url"] = hspConnector::get()->myKakaoInfo["profile_image_url"].asString();
 			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 			 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 			 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
@@ -300,7 +311,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	}
 	
 	
-	sendBtn->setPosition(ccp(360 - 8, 22));
+	sendBtn->setPosition(ccp(150 - 8, 22));
 	sendBtn->setTag(kTagGameFriendSend);
 	_menu->addChild(sendBtn, kZorderJoinGameFriendSend);
 	

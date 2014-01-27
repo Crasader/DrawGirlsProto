@@ -69,6 +69,13 @@ public:
 	CCNode* tutorial_node;
 private:
 	
+	bool clear_is_empty_piece;
+	bool clear_is_empty_star;
+	int clear_star_take_level;
+	bool clear_is_first_puzzle_success;
+	bool clear_is_first_perfect;
+	bool clear_is_stage_unlock;
+	
 	bool is_menu_enable;
 	
 	CountingBMLabel* ruby_label;
@@ -80,14 +87,26 @@ private:
 	
 	int selected_stage_number;
 	
+	int next_stage_number;
+	
 	void showClearPopup();
 	void hideClearPopup();
 	void showGetPuzzle();
 	void createGetPuzzleParticle(CCPoint t_point);
 	void endGetPuzzle();
+	void showGetStar();
+	void endGetStar();
+	void showSuccessPuzzleEffect();
+	void endSuccessPuzzleEffect();
+	void showPerfectPuzzleEffect();
+	void endPerfectPuzzleEffect();
+	CCSprite* unlock_cover;
+	void showUnlockEffect();
+	void endUnlockEffect();
 	void showFailPopup();
 	void hideFailPopup();
 	
+	string before_scene_name;
 	
 	PieceMode piece_mode;
 	void setPuzzle();

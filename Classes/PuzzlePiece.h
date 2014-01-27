@@ -93,6 +93,51 @@ public:
 		runAction(t_seq3);
 	}
 	
+	void startGetStarAnimation(int t_star, CCObject* t_end, SEL_CallFunc d_end)
+	{
+		if(t_star == 1)
+		{
+			if(star1)
+			{
+				CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 2.f);
+				CCScaleTo* t_scale2 = CCScaleTo::create(0.15f, 1.f);
+				CCCallFunc* t_call = CCCallFunc::create(t_end, d_end);
+				CCSequence* t_seq = CCSequence::create(t_scale1, t_scale2, t_call, NULL);
+				star1->runAction(t_seq);
+			}
+			else
+				(t_end->*d_end)();
+		}
+		else if(t_star == 2)
+		{
+			if(star2)
+			{
+				CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 2.f);
+				CCScaleTo* t_scale2 = CCScaleTo::create(0.15f, 1.f);
+				CCCallFunc* t_call = CCCallFunc::create(t_end, d_end);
+				CCSequence* t_seq = CCSequence::create(t_scale1, t_scale2, t_call, NULL);
+				star2->runAction(t_seq);
+			}
+			else
+				(t_end->*d_end)();
+		}
+		else if(t_star == 3)
+		{
+			if(star3)
+			{
+				CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 2.f);
+				CCScaleTo* t_scale2 = CCScaleTo::create(0.15f, 1.f);
+				CCCallFunc* t_call = CCCallFunc::create(t_end, d_end);
+				CCSequence* t_seq = CCSequence::create(t_scale1, t_scale2, t_call, NULL);
+				star3->runAction(t_seq);
+			}
+			else
+				(t_end->*d_end)();
+		}
+		else
+			(t_end->*d_end)();
+	}
+	
 	string getWorH()
 	{
 		return WorH;
@@ -125,6 +170,10 @@ private:
 	CCObject* target_create_particle;
 	SEL_CallFuncCCp delegate_create_particle;
 	PieceMode get_animation_mode;
+	
+	CCSprite* star1;
+	CCSprite* star2;
+	CCSprite* star3;
 	
 	void originalMode ()
 	{
@@ -168,6 +217,9 @@ private:
 	void setPieceImg()
 	{
 		removeAllChildren();
+		star1 = NULL;
+		star2 = NULL;
+		star3 = NULL;
 //		if(piece_menu)
 //			piece_menu->removeFromParent();
 		
@@ -406,6 +458,10 @@ private:
 	
 	void myInit(int t_stage_number, int t_stage_level, CCObject* t_clicked, SEL_CallFuncI d_clicked)
 	{
+		star1 = NULL;
+		star2 = NULL;
+		star3 = NULL;
+		
 		stage_number = t_stage_number;
 		stage_level = t_stage_level;
 		target_clicked = t_clicked;
@@ -477,43 +533,32 @@ private:
 		
 		if(is_have_card[0])
 		{
-			CCSprite* card_on = CCSprite::create("piece_star_bronze.png");
-			card_on->setPosition(ccpAdd(ccp(level_label->getContentSize().width/2.f, level_label->getContentSize().height/2.f), ccp(-13,4)));
-			level_label->addChild(card_on);
+			CCSprite* star_img = CCSprite::create("piece_star_bronze.png");
+			star_img->setPosition(ccpAdd(ccp(level_label->getContentSize().width/2.f, level_label->getContentSize().height/2.f), ccp(-13,4)));
+			level_label->addChild(star_img);
+			
+			if(!is_gray)
+				star1 = star_img;
 		}
 		if(is_have_card[1])
 		{
-			CCSprite* card_on = CCSprite::create("piece_star_silver.png");
-			card_on->setPosition(ccpAdd(ccp(level_label->getContentSize().width/2.f, level_label->getContentSize().height/2.f), ccp(13,4)));
-			level_label->addChild(card_on);
+			CCSprite* star_img = CCSprite::create("piece_star_silver.png");
+			star_img->setPosition(ccpAdd(ccp(level_label->getContentSize().width/2.f, level_label->getContentSize().height/2.f), ccp(13,4)));
+			level_label->addChild(star_img);
+			
+			if(!is_gray)
+				star2 = star_img;
 		}
 		if(is_have_card[2])
 		{
-			CCSprite* card_on = CCSprite::create("piece_star_gold.png");
-			card_on->setPosition(ccpAdd(ccp(level_label->getContentSize().width/2.f, level_label->getContentSize().height/2.f), ccp(0,8)));
-			level_label->addChild(card_on);
+			CCSprite* star_img = CCSprite::create("piece_star_gold.png");
+			star_img->setPosition(ccpAdd(ccp(level_label->getContentSize().width/2.f, level_label->getContentSize().height/2.f), ccp(0,8)));
+			level_label->addChild(star_img);
+			
+			if(!is_gray)
+				star3 = star_img;
 		}
 	}
-	
-//	void setHaveCardBase(CCSprite* piece_img, bool is_gray)
-//	{
-//		CCSprite* card_base = CCSprite::create("test_map_card_base.png");
-//		if(is_gray)
-//			card_base->setColor(ccGRAY);
-//		card_base->setPosition(ccp(piece_img->getContentSize().width*2.f/7.f, piece_img->getContentSize().height/2.f));
-//		piece_img->addChild(card_base);
-//		for(int i=0;i<3;i++)
-//		{
-//			if(is_have_card[i])
-//			{
-//				CCSprite* card_on = CCSprite::create(CCString::createWithFormat("test_map_card%d.png", i+1)->getCString());
-//				if(is_gray)
-//					card_on->setColor(ccGRAY);
-//				card_on->setPosition(ccpAdd(ccp(card_base->getContentSize().width/2.f, card_base->getContentSize().height/2.f), ccp(0,18.f+i*(-18.f))));
-//				card_base->addChild(card_on);
-//			}
-//		}
-//	}
 	
 	void createRankImg()
 	{
@@ -598,132 +643,6 @@ private:
 			}
 		}
 	}
-	
-//	void createBasicPieceMenu(bool is_gray)
-//	{
-//		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-//		if(piece_mode == kPieceMode_default)
-//		{
-//			
-//		}
-//		else if(piece_mode == kPieceMode_thumb)
-//		{
-//			if(piece_type == kPieceType_buy || piece_type == kPieceType_lock)
-//			{
-//				GraySprite* t_piece_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
-//																												   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-//				t_piece_img->setColor(ccc3(85,85,85));
-//				addChild(t_piece_img, kPieceZorder_menu);
-//			}
-//			else if(piece_type == kPieceType_empty)
-//			{
-//				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
-//																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-//				n_piece->setGray(is_gray);
-//				CCSprite* n_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
-//				n_embo->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f));
-//				n_piece->addChild(n_embo);
-//				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
-//																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-//				s_piece->setGray(is_gray);
-//				CCSprite* s_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
-//				s_embo->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f));
-//				s_piece->addChild(s_embo);
-//				
-//				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
-//				piece_menu = CCMenu::createWithItem(piece_item);
-//				piece_menu->setPosition(CCPointZero);
-//				addChild(piece_menu, kPieceZorder_menu);
-//			}
-//			else
-//			{
-//				
-//			}
-//		}
-//		else if(piece_mode == kPieceMode_ranker)
-//		{
-//			if(mySGD->temp_stage_ranker_list["result"]["code"].asInt() == GDSUCCESS)
-//			{
-//				string stage_ranker_user_id;
-//				for(int i=0;i<mySGD->temp_stage_ranker_list["list"].size();i++)
-//				{
-//					if(mySGD->temp_stage_ranker_list["list"][i][0]["stageNo"].asInt() == stage_number)
-//					{
-//						stage_ranker_user_id = mySGD->temp_stage_ranker_list["list"][i][0]["memberID"].asString();
-//						break;
-//					}
-//				}
-//				
-//				if(!stage_ranker_user_id.empty())
-//				{
-//					bool is_found = false;
-//					string found_nick;
-//					string found_url;
-//					
-//					if(stage_ranker_user_id == hspConnector::get()->myKakaoInfo["user_id"].asString())
-//					{
-//						is_found = true;
-//						found_nick = hspConnector::get()->myKakaoInfo["nickname"].asString();
-//						found_url = hspConnector::get()->myKakaoInfo["profile_image_url"].asString();
-//					}
-//					
-//					for(auto i : KnownFriends::getInstance()->getFriends())
-//					{
-//						if(!is_found)
-//						{
-//							if(i.userId == stage_ranker_user_id)
-//							{
-//								is_found = true;
-//								found_nick = i.nick;
-//								found_url = i.profileUrl;
-//								break;
-//							}
-//						}
-//						else
-//							break;
-//					}
-//					
-//					for(auto i : UnknownFriends::getInstance()->getFriends())
-//					{
-//						if(!is_found)
-//						{
-//							if(i.userId == stage_ranker_user_id)
-//							{
-//								is_found = true;
-//								found_nick = i.nick;
-//								found_url = i.profileUrl;
-//								break;
-//							}
-//						}
-//						else
-//							break;
-//					}
-//					
-//					if(is_found)
-//					{
-//						CCSprite* n_piece = GDWebSprite::create(found_url.c_str(), "piece_ranker_noimg.png");
-//						n_piece->setAnchorPoint(ccp(0.5,0.5));
-//						n_piece->setScale(58.f / n_piece->getContentSize().width);
-////						CCSprite* s_piece = GDWebSprite::create(found_url.c_str(), "piece_ranker_noimg.png");
-////						s_piece->setScale(58.f / s_piece->getContentSize().width);
-////						s_piece->setColor(ccGRAY);
-//						
-//						
-//						CCNode *abc = CCNode::create();
-//						CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, abc, this, menu_selector(PuzzlePiece::menuAction));
-//						piece_menu = CCMenu::createWithItem(piece_item);
-//						piece_menu->setPosition(CCPointZero);
-//						addChild(piece_menu, kPieceZorder_menu);
-//						
-//						CCLabelTTF* nick_label = CCLabelTTF::create(found_nick.c_str(), mySGD->getFont().c_str(), 15);
-//						nick_label->setColor(ccBLACK);
-//						nick_label->setPosition(CCPointZero);
-//						addChild(nick_label, kPieceZorder_nick);
-//					}
-//				}
-//			}
-//		}
-//	}
 };
 
 #endif /* defined(__DGproto__PuzzlePiece__) */

@@ -64,7 +64,8 @@ bool Maingame::init()
 	myGD->V_Ip["Main_showLineDiePosition"] = std::bind(&Maingame::showLineDiePosition, this, _1);
 	myGD->V_V["Main_resetIsLineDie"] = std::bind(&Maingame::resetIsLineDie, this);
 	myGD->V_I["Main_showWarning"] = std::bind(&Maingame::showWarning, this, _1);
-	myGD->V_Str["Main_showDetailWarning"] = std::bind(&Maingame::showDetailWarning, this, _1);
+	myGD->V_Str["Main_showDetailMessage"] = std::bind(&Maingame::showDetailMessage, this, _1);
+	myGD->V_Str["Main_showTextMessage"] = std::bind(&Maingame::showTextMessage, this, _1);
 	myGD->V_V["Main_showCoin"] = std::bind(&Maingame::showCoin, this);
 	myGD->V_V["Main_startExchange"] = std::bind(&Maingame::startExchange, this);
 	myGD->V_V["Main_showTakeCoin"] = std::bind(&Maingame::showTakeCoin, this);
@@ -1069,10 +1070,30 @@ void Maingame::showWarning( int t1 )
 	t_w->startAction();
 }
 
-void Maingame::showDetailWarning(const std::string& fileName)
+void Maingame::showDetailMessage(const std::string& fileName)
 {
 	DetailWarning* w = DetailWarning::create(fileName);
 	addChild(w, goldZorder);
+}
+void Maingame::showTextMessage(const std::string& text)
+{
+	CCLabelTTF* msg = CCLabelTTF::create(text.c_str(), "", 28.f);
+	addChild(msg, goldZorder);
+	addChild(KSGradualValue<float>::create(600, 240, 0.7f, [=](float t)
+				{
+					msg->setPosition(ccp(t, myDSH->ui_center_y));
+				},
+				[=](float t)
+				{
+					addChild(KSGradualValue<float>::create(255, 0, 2.f, [=](float t)
+							{
+								msg->setOpacity(t);
+							},
+							[=](float t)
+							{
+								msg->removeFromParent();
+							}));
+				}));
 }
 void Maingame::showTakeCoin()
 {

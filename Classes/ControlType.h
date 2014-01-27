@@ -212,6 +212,10 @@ public:
 private:
 	IntDirection beforeDirection;
 	IntDirection beforeSecondDirection;
+	
+//	IntDirection changing_direction;
+//	IntDirection changing_second_direction;
+	
 	CCSprite* control_circle;
 	CCSprite* control_ball;
 	
@@ -227,14 +231,20 @@ private:
 	
 	CCBAnimationManager* button_ani;
 	
+	bool isDisableIrregularDirection;
+	bool isControlJoystickFixed;
+	bool isAlwaysVisibleJoystick;
+	int controlJoystickDirection;
+	bool isDisableDrawButton;
+	bool isEnableLineOver;
+	bool isJoystickCenterNotFixed;
+	
+	
 	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack);
 	
 	void onButton();
-	
 	void offButton();
-	
 	void touchAction(CCPoint t_p, bool t_b);
-	
 	void directionKeeping();
 	
 	virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);

@@ -41,12 +41,12 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	//		gray->setContentSize(CCSizeMake(600, 400));
 	//		addChild(gray, kRP_Z_gray);
 	
-	CCSprite* back = CCSprite::create("rank_back.png");
+	CCSprite* back = CCSprite::create("friendoption_back.png");
 	back->setPosition(ccp(240,160));
 	addChild(back, kInvite_Z_back);
 	
-	CCSprite* back2 = CCSprite::create("rank_default_invite_back.png");
-	back2->setPosition(ccp(240, 160));
+	CCSprite* back2 = CCSprite::create("friendinvite_back.png");
+	back2->setPosition(ccp(240, 146));
 	addChild(back2, kInvite_Z_back);
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();
@@ -57,27 +57,14 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	
 	
 	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
-																														 "cardsetting_close.png", "cardsetting_close.png",
+																														 "cardchange_cancel.png", "cardchange_cancel.png",
 																														 [=](CCObject*){
 																															 (target_close->*delegate_close)();
 																															 removeFromParent();
 																															 
 																														 });
-	closeBtn->setPosition(ccp(440, 290));
+	closeBtn->setPosition(ccp(440, 255));
 	_menu->addChild(closeBtn);
-	
-	auto weekRank = CCMenuItemImageLambda::create
-	(
-	 "rank_friend_rank.png", "rank_friend_rank.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 RankPopup* t_rp = RankPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-	 });
-	weekRank->setPosition(ccp(67, 290));
-	weekRank->setOpacity(0);
-	_menu->addChild(weekRank, 5);
 	
 	// 친구 초대 이벤트
 	auto inviteEventBtn = CCMenuItemImageLambda::create
@@ -91,7 +78,7 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 //		 removeFromParent();
 		 
 	 });
-	inviteEventBtn->setPosition(ccp(169, 290));
+	inviteEventBtn->setPosition(ccp(169, 255));
 	inviteEventBtn->setOpacity(255);
 	
 	_menu->addChild(inviteEventBtn);
@@ -107,7 +94,7 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 removeFromParent();
 		 
 	 });
-	friendList->setPosition(ccp(270, 290));
+	friendList->setPosition(ccp(270, 255));
 	friendList->setOpacity(0);
 	_menu->addChild(friendList);
 	
@@ -122,7 +109,7 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 removeFromParent();
 		 
 	 });
-	joinGameFriend->setPosition(ccp(370, 290));
+	joinGameFriend->setPosition(ccp(370, 255));
 	joinGameFriend->setOpacity(0);
 	_menu->addChild(joinGameFriend);
 	
@@ -225,7 +212,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 
 
 
-	std::string cellBackFile = "invite_cell.png";
+	std::string cellBackFile = "friendsearch_cell.png";
 
 
 	CCSprite* bg = CCSprite::create(cellBackFile.c_str());
@@ -252,7 +239,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	if(::getInviteIsSendable( m_scoreList[idx]["user_id"].asString(), mySGD->getInviteCoolDay() * 60*60*24 ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
-			("rank_cell_invite.png", "rank_cell_invite.png",
+			("friendsearch_call.png", "friendsearch_call.png",
 			[=](CCObject* sender){
 				CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 				int idx = (int)obj->getUserData();
@@ -273,6 +260,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 				p["receiverMemberID"] = recvId;
 				p["senderMemberID"]=hspConnector::get()->getKakaoID();
 				p["type"]=kInvite;
+				p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 
 				hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
 				{

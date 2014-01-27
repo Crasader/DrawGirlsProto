@@ -11,6 +11,7 @@
 #include "Jack.h"
 #include "PlayUI.h"
 #include <chrono>
+
 template <class _Tp>
 struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
 {
@@ -20,6 +21,7 @@ struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
 	//		return __x*(1 - __y);
 	//	}
 };
+
 template <class _Tp>
 struct DecreaseOp : public PassiveOp<_Tp>
 {
@@ -1290,6 +1292,10 @@ void KSCumberBase::cumberAttack(float dt)
 				distanceFury = true;
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
 				m_furyCnt = -400;
+
+				myGD->communication("Main_showTextMessage", std::string("거리 분노룰.."));
+
+
 			}
 		}
 	}
@@ -1424,7 +1430,7 @@ void KSCumberBase::cumberAttack(float dt)
 		else if(!selectedAttacks.empty())
 		{
 			ProbSelector teleportProb = {1,2};
-			if(teleportProb.getResult() == 0)
+			if(teleportProb.getResult() == 0 && distanceFury)
 			{
 				
 				std::string patternData = R"({
@@ -2134,6 +2140,7 @@ float KSCumberBase::getCumberScale()
 void KSCumberBase::onCanceledCasting()
 {
 	m_castingCancelCount++;
+	myGD->communication("Main_showDetailMessage", std::string("warning_108.ccbi")); // 말은 캐스팅 캔슬 됐다고 알려줌.
 }
 
 void KSCumberBase::settingScale( float startScale, float minScale, float maxScale )

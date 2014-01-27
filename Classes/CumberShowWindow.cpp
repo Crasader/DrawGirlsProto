@@ -121,31 +121,31 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 //		}
 	}
 	
-	int boss_hp = bossJson["hp"].asInt();
-	double boss_speed = bossJson["speed"]["start"].asDouble();
-	double boss_agi = bossJson.get("agi", 0).asDouble();
+	boss_hp = bossJson["hp"].asInt();
+	boss_speed = bossJson["speed"]["start"].asDouble();
+	boss_agi = bossJson.get("agi", 0).asDouble();
 	
-	CCLabelTTF* boss_hp_label = CCLabelTTF::create(CCString::createWithFormat("%d", boss_hp)->getCString(), mySGD->getFont().c_str(), 10);
-	addChild(boss_hp_label);
-	
-	CCLabelTTF* boss_speed_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", boss_speed)->getCString(), mySGD->getFont().c_str(), 10);
-	addChild(boss_speed_label);
-	
-	CCLabelTTF* boss_agi_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", boss_agi)->getCString(), mySGD->getFont().c_str(), 10);
-	addChild(boss_agi_label);
-	
-	if(t_code == kCumberShowWindowSceneCode_puzzle)
-	{
-		boss_hp_label->setPosition(ccp(40,70));
-		boss_speed_label->setPosition(ccp(40,42));
-		boss_agi_label->setPosition(ccp(40,14));
-	}
-	else if(t_code == kCumberShowWindowSceneCode_cardChange)
-	{
-		boss_hp_label->setPosition(ccp(120,6));
-		boss_speed_label->setPosition(ccp(120,-13));
-		boss_agi_label->setPosition(ccp(120,-32));
-	}
+//	CCLabelTTF* boss_hp_label = CCLabelTTF::create(CCString::createWithFormat("%d", boss_hp)->getCString(), mySGD->getFont().c_str(), 10);
+//	addChild(boss_hp_label);
+//	
+//	CCLabelTTF* boss_speed_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", boss_speed)->getCString(), mySGD->getFont().c_str(), 10);
+//	addChild(boss_speed_label);
+//	
+//	CCLabelTTF* boss_agi_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", boss_agi)->getCString(), mySGD->getFont().c_str(), 10);
+//	addChild(boss_agi_label);
+//	
+//	if(t_code == kCumberShowWindowSceneCode_puzzle)
+//	{
+//		boss_hp_label->setPosition(ccp(40,70));
+//		boss_speed_label->setPosition(ccp(40,42));
+//		boss_agi_label->setPosition(ccp(40,14));
+//	}
+//	else if(t_code == kCumberShowWindowSceneCode_cardChange)
+//	{
+//		boss_hp_label->setPosition(ccp(120,6));
+//		boss_speed_label->setPosition(ccp(120,-13));
+//		boss_agi_label->setPosition(ccp(120,-32));
+//	}
 	
 	
 	if(t_code == kCumberShowWindowSceneCode_puzzle && juniorJson.size() > 0)

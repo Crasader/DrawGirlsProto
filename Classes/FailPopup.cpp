@@ -28,13 +28,6 @@
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
 	kMT_FP_replay,
-	kMT_FP_rubyShop,
-	kMT_FP_goldShop,
-	kMT_FP_heartShop,
-	kMT_FP_friendPoint,
-	kMT_FP_friendPointClose,
-	kMT_FP_heartTime
-	//	kMT_FP_help
 }MenuTagFailPopup;
 
 typedef enum tZorderFailPopup{
@@ -65,8 +58,6 @@ bool FailPopup::init()
 	
 	is_menu_enable = false;
 	is_loaded_list = false;
-	
-	friend_point_popup = NULL;
 	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	myLog->addLog(kLOG_remainHeart_i, -1, myDSH->getIntegerForKey(kDSH_Key_heartCnt));
@@ -132,105 +123,46 @@ bool FailPopup::init()
 	main_case->setPosition(ccp(0,-320));
 	addChild(main_case, kZ_FP_back);
 	
-	top_case = CCSprite::create("test_ui_top.png");
-	top_case->setAnchorPoint(ccp(0.5f,1.f));
-	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f));//(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
-	top_case->setVisible(false);
-	addChild(top_case, kZ_FP_img);
 	
-	CountingBMLabel* ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(94,top_case->getContentSize().height/2.f));
-	top_case->addChild(ruby_label);
-	
-//	mySGD->setStarLabel(ruby_label);
-	
-	CountingBMLabel* total_gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	total_gold_label->setPosition(ccp(185,top_case->getContentSize().height/2.f));
-	top_case->addChild(total_gold_label);
-	
-//	mySGD->setGoldLabel(total_gold_label);
-	
-	CountingBMLabel* friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "etc_font.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(427,top_case->getContentSize().height/2.f));
-	top_case->addChild(friend_point_label);
-	
-//	mySGD->setFriendPointLabel(friend_point_label);
-
-	
-	
-	heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(250,top_case->getContentSize().height/2.f));
-	top_case->addChild(heart_time, 0, kMT_FP_heartTime);
-	
-	
-	CCSprite* n_ruby = CCSprite::create("test_ui_shop.png");
-	CCSprite* s_ruby = CCSprite::create("test_ui_shop.png");
-	s_ruby->setColor(ccGRAY);
-	
-	CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(FailPopup::menuAction));
-	ruby_item->setTag(kMT_FP_rubyShop);
-	
-	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
-	ruby_menu->setPosition(ccp(124,top_case->getContentSize().height/2.f-2));
-	top_case->addChild(ruby_menu);
-	
-	CCSprite* n_gold = CCSprite::create("test_ui_shop.png");
-	CCSprite* s_gold = CCSprite::create("test_ui_shop.png");
-	s_gold->setColor(ccGRAY);
-	
-	CCMenuItem* gold_item = CCMenuItemSprite::create(n_gold, s_gold, this, menu_selector(FailPopup::menuAction));
-	gold_item->setTag(kMT_FP_goldShop);
-	
-	CCMenu* gold_menu = CCMenu::createWithItem(gold_item);
-	gold_menu->setPosition(ccp(220,top_case->getContentSize().height/2.f-2));
-	top_case->addChild(gold_menu);
-	
-	CCSprite* n_heart = CCSprite::create("test_ui_shop.png");
-	CCSprite* s_heart = CCSprite::create("test_ui_shop.png");
-	s_heart->setColor(ccGRAY);
-	
-	CCMenuItem* heart_item = CCMenuItemSprite::create(n_heart, s_heart, this, menu_selector(FailPopup::menuAction));
-	heart_item->setTag(kMT_FP_heartShop);
-	
-	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
-	heart_menu->setPosition(ccp(369,top_case->getContentSize().height/2.f-2));
-	top_case->addChild(heart_menu);
-	
-	CCSprite* n_friend_point = CCSprite::create("test_ui_shop.png");
-	CCSprite* s_friend_point = CCSprite::create("test_ui_shop.png");
-	s_friend_point->setColor(ccGRAY);
-	
-	CCMenuItem* friend_point_item = CCMenuItemSprite::create(n_friend_point, s_friend_point, this, menu_selector(FailPopup::menuAction));
-	friend_point_item->setTag(kMT_FP_friendPoint);
-	
-	CCMenu* friend_point_menu = CCMenu::createWithItem(friend_point_item);
-	friend_point_menu->setPosition(ccp(460,top_case->getContentSize().height/2.f-2));
-	top_case->addChild(friend_point_menu);
-	
-	
-	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySD->getSilType())->getCString(), mySGD->getFont().c_str(), 18);
-	stage_label->setAnchorPoint(ccp(1.f,0.5f));
-	stage_label->setPosition(ccp(330,253));
-	main_case->addChild(stage_label, kZ_FP_img);
+	if(mySGD->is_before_selected_event_stage)
+	{
+		int stage_number = mySD->getSilType();
+		
+		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 10);
+		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height-65));
+		main_case->addChild(stage_number_label);
+		
+		mySGD->is_before_selected_event_stage = false;
+	}
+	else
+	{
+		int stage_number = mySD->getSilType();
+		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
+		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
+		
+		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 10);
+		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height-65));
+		main_case->addChild(piece_number_label);
+	}
 	
 	FailCode fail_code = mySGD->fail_code;
 	
 	if(fail_code == kFC_gameover)
 	{
 		CCSprite* title = CCSprite::create("ending_gameover.png");
-		title->setPosition(ccp(137,237));
+		title->setPosition(ccp(131,233.5f));
 		main_case->addChild(title, kZ_FP_img);
 	}
 	else if(fail_code == kFC_timeover)
 	{
 		CCSprite* title = CCSprite::create("ending_timeover.png");
-		title->setPosition(ccp(137,237));
+		title->setPosition(ccp(131,233.5f));
 		main_case->addChild(title, kZ_FP_img);
 	}
 	else if(fail_code == kFC_missionfail)
 	{
 		CCSprite* title = CCSprite::create("ending_missionfail.png");
-		title->setPosition(ccp(137,237));
+		title->setPosition(ccp(131,233.5f));
 		main_case->addChild(title, kZ_FP_img);
 		
 		//		CLEAR_CONDITION clr_cdt = mySD->getClearCondition();
@@ -289,20 +221,20 @@ bool FailPopup::init()
 	}
 	
 	score_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
-	score_label->setAnchorPoint(ccp(0.5,0.5));
-	score_label->setPosition(ccp(175,147));
+	score_label->setAnchorPoint(ccp(1.f,0.5));
+	score_label->setPosition(ccp(230,81));
 	score_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(score_label, kZ_FP_img);
 	
 	gold_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
-	gold_label->setAnchorPoint(ccp(0.5,0.5));
-	gold_label->setPosition(ccp(175,117));
+	gold_label->setAnchorPoint(ccp(1.f,0.5));
+	gold_label->setPosition(ccp(230,109));
 	gold_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(gold_label, kZ_FP_img);
 	
 	time_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
-	time_label->setAnchorPoint(ccp(0.5,0.5));
-	time_label->setPosition(ccp(175,88));
+	time_label->setAnchorPoint(ccp(1.f,0.5));
+	time_label->setPosition(ccp(230,135));
 	time_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(time_label, kZ_FP_img);
 	
@@ -315,14 +247,14 @@ bool FailPopup::init()
 	
 	main_menu = CCMenu::createWithItem(main_item);
 	main_menu->setVisible(false);
-	main_menu->setPosition(ccp(330,33));
+	main_menu->setPosition(ccp(348.5f,41));
 	main_case->addChild(main_menu, kZ_FP_menu);
 	
 	
 	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
 	{
-		CCSprite* n_replay = CCSprite::create("ending_replay.png");
-		CCSprite* s_replay = CCSprite::create("ending_replay.png");
+		CCSprite* n_replay = CCSprite::create("ending_replay2.png");
+		CCSprite* s_replay = CCSprite::create("ending_replay2.png");
 		s_replay->setColor(ccGRAY);
 		
 		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(FailPopup::menuAction));
@@ -330,27 +262,11 @@ bool FailPopup::init()
 		
 		replay_menu = CCMenu::createWithItem(replay_item);
 		replay_menu->setVisible(false);
-		replay_menu->setPosition(ccp(150,33));
+		replay_menu->setPosition(ccp(130,41));
 		main_case->addChild(replay_menu, kZ_FP_menu);
 	}
 	else
-	{
 		replay_menu = NULL;
-	}
-	
-	
-	//	CCSprite* n_help = CCSprite::create("ending_help.png");
-	//	CCSprite* s_help = CCSprite::create("ending_help.png");
-	//	s_help->setColor(ccGRAY);
-	//
-	//	CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailPopup::menuAction));
-	//	help_item->setTag(kMT_FP_help);
-	//
-	//	help_menu = CCMenu::createWithItem(help_item);
-	//	help_menu->setVisible(false);
-	//	help_menu->setPosition(getContentPosition(kMT_FP_help));
-	//	addChild(help_menu, kZ_FP_menu);
-	
 	
 	is_saved_user_data = false;
 	
@@ -397,10 +313,6 @@ void FailPopup::onEnter()
 void FailPopup::showPopup()
 {
 	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, 0);
-	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
-//	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));
-//	top_case->runAction(top_move);
-
 	gray->setOpacity(255);
 //	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 //	gray->runAction(gray_fade);
@@ -422,9 +334,6 @@ void FailPopup::hidePopup()
 {
 	is_menu_enable = false;
 	rankTableView->setTouchEnabled(false);
-	
-	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f));
-	top_case->runAction(top_move);
 	
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
@@ -675,6 +584,16 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		Json::Value score_list = result_data["list"];
 		for(int i=0;i<score_list.size();i++)
 		{
+			if(score_list[i]["memberID"].asString() == hspConnector::get()->getKakaoID())
+			{
+				if(mySGD->getScore() < score_list[i]["score"].asFloat())
+				{
+					CCSprite* high_score_img = CCSprite::create("ending_highscore.png");
+					high_score_img->setPosition(ccp(105, 81));
+					main_case->addChild(high_score_img, kZ_FP_img);
+				}
+			}
+			
 			vector<FailFriendRank>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString().c_str());
 			if(iter != friend_list.end())
 			{
@@ -702,18 +621,18 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		
 		// create cell
 		
-		//		CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 195, 176));
-		//		temp_back->setAnchorPoint(CCPointZero);
-		//		temp_back->setOpacity(100);
-		//		temp_back->setPosition(ccp(246, 65));
-		//		addChild(temp_back, kZ_CS_menu);
+//		CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 208, 199));
+//		temp_back->setAnchorPoint(CCPointZero);
+//		temp_back->setOpacity(100);
+//		temp_back->setPosition(ccp(243, 62.5f));
+//		main_case->addChild(temp_back, kZ_FP_menu);
 		
-		rankTableView = CCTableView::create(this, CCSizeMake(195, 176));
+		rankTableView = CCTableView::create(this, CCSizeMake(208, 199));
 		
 		rankTableView->setAnchorPoint(CCPointZero);
 		rankTableView->setDirection(kCCScrollViewDirectionVertical);
 		rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
-		rankTableView->setPosition(ccp(246, 65));
+		rankTableView->setPosition(ccp(243, 62.5f));
 		
 		rankTableView->setDelegate(this);
 		main_case->addChild(rankTableView, kZ_FP_menu);
@@ -797,78 +716,6 @@ void FailPopup::menuAction(CCObject* pSender)
 //		target_final = NULL;
 //		hidePopup();
 	}
-	else if(tag == kMT_FP_rubyShop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(NULL, NULL);
-		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_FP_heartTime)));
-		t_shop->setShopCode(kSC_ruby);
-		addChild(t_shop, kZ_FP_popup);
-		is_menu_enable = true;
-	}
-	else if(tag == kMT_FP_goldShop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(NULL, NULL);
-		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_FP_heartTime)));
-		t_shop->setShopCode(kSC_gold);
-		addChild(t_shop, kZ_FP_popup);
-		is_menu_enable = true;
-	}
-	else if(tag == kMT_FP_heartShop)
-	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(NULL, NULL);
-		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kMT_FP_heartTime)));
-		t_shop->setShopCode(kSC_heart);
-		addChild(t_shop, kZ_FP_popup);
-		is_menu_enable = true;
-	}
-	else if(tag == kMT_FP_friendPoint)
-	{
-		if(!friend_point_popup)
-		{
-			CCNode* menu_node = ((CCNode*)pSender)->getParent();
-			CCNode* top_node = menu_node->getParent();
-			friend_point_popup = CCSprite::create("candy_popup.png");
-			friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
-			friend_point_popup->setPosition(ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-			top_node->addChild(friend_point_popup, -1);
-			
-			CCSprite* n_close = CCSprite::create("candy_popup_close.png");
-			CCSprite* s_close = CCSprite::create("candy_popup_close.png");
-			s_close->setColor(ccGRAY);
-			
-			CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(FailPopup::menuAction));
-			close_item->setTag(kMT_FP_friendPointClose);
-			
-			CCMenu* close_menu = CCMenu::createWithItem(close_item);
-			close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
-			friend_point_popup->addChild(close_menu);
-			
-			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY()-12));
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(FailPopup::endShowPopup));
-			CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-			friend_point_popup->runAction(t_seq);
-		}
-		else
-			is_menu_enable = true;
-	}
-	else if(tag == kMT_FP_friendPointClose)
-	{
-		CCNode* menu_node = ((CCNode*)pSender)->getParent();
-		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(427,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(FailPopup::closeFriendPointPopup));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-		friend_point_popup->runAction(t_seq);
-	}
-}
-
-void FailPopup::closeFriendPointPopup()
-{
-	friend_point_popup->removeFromParent();
-	friend_point_popup = NULL;
-	is_menu_enable = true;
 }
 
 void FailPopup::popupClose()
@@ -920,6 +767,7 @@ void FailPopup::cellAction( CCObject* sender )
 										 
 										 contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
 										 contentJson["helpstage"] = mySD->getSilType();
+										 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 										 
 										 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 										 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
@@ -994,7 +842,6 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 {
 	CCLabelTTF* nickname_label;
 	CCLabelTTF* score_label;
-	CCLabelTTF* rank_label;
 	FailFriendRank* member = &friend_list[idx];
 	CCTableViewCell* cell = new CCTableViewCell();
 	cell->init();
@@ -1003,39 +850,127 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	CCSprite* profileImg = GDWebSprite::create((*member).img_url, "ending_noimg.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kFFC_T_img);
-	profileImg->setPosition(ccp(27, 20));
-	profileImg->setScale(33.f / profileImg->getContentSize().width);
+	profileImg->setPosition(ccp(52, 22));
+	profileImg->setScale(35.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kFFC_Z_img);
 	
-	CCSprite* bg = CCSprite::create("ending_cell_back.png");
-	bg->setPosition(CCPointZero);
-	bg->setAnchorPoint(CCPointZero);
-	cell->addChild(bg,kFFC_Z_case);
+	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
+	string cell_id = (*member).user_id;
+	
+	//if(my_id != cell_id && KnownFriends::getInstance()->findById(cell_id) != nullptr)
+	if(KnownFriends::getInstance()->findById(cell_id) != nullptr)
+	{
+		CCSprite* kakao_sign = CCSprite::create("puzzle_right_rank_kakao.png");
+		kakao_sign->setPosition(ccp(41,29));
+		cell->addChild(kakao_sign, kFFC_Z_img);
+	}
+	
+	CCSprite* bg;
+//	if((*member).user_id == hspConnector::get()->getKakaoID())
+	if(0)
+	{
+		bg = CCSprite::create("ending_cell_me.png");
+		bg->setPosition(CCPointZero);
+		bg->setAnchorPoint(CCPointZero);
+		cell->addChild(bg,kFFC_Z_case);
+		
+		if(idx == 0)
+		{
+			CCSprite* rank_img = CCSprite::create("puzzle_right_rank_gold.png");
+			rank_img->setPosition(ccp(21,21));
+			rank_img->setTag(kFFC_T_rank);
+			cell->addChild(rank_img, kFFC_Z_img);
+		}
+		else if(idx == 1)
+		{
+			CCSprite* rank_img = CCSprite::create("puzzle_right_rank_silver.png");
+			rank_img->setPosition(ccp(21,21));
+			rank_img->setTag(kFFC_T_rank);
+			cell->addChild(rank_img, kFFC_Z_img);
+		}
+		else if(idx == 2)
+		{
+			CCSprite* rank_img = CCSprite::create("puzzle_right_rank_bronze.png");
+			rank_img->setPosition(ccp(21,21));
+			rank_img->setTag(kFFC_T_rank);
+			cell->addChild(rank_img, kFFC_Z_img);
+		}
+		else
+		{
+			CCLabelTTF* rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 15);
+			rank_label->setPosition(ccp(21,21));
+			rank_label->setTag(kFFC_T_rank);
+			cell->addChild(rank_label,kFFC_Z_img);
+		}
+	}
+	else if(idx == 0)
+	{
+		bg = CCSprite::create("ending_cell_gold.png");
+		bg->setPosition(CCPointZero);
+		bg->setAnchorPoint(CCPointZero);
+		cell->addChild(bg,kFFC_Z_case);
+		
+		CCSprite* rank_img = CCSprite::create("puzzle_right_rank_gold.png");
+		rank_img->setPosition(ccp(21,21));
+		rank_img->setTag(kFFC_T_rank);
+		cell->addChild(rank_img, kFFC_Z_img);
+	}
+	else if(idx == 1)
+	{
+		bg = CCSprite::create("ending_cell_silver.png");
+		bg->setPosition(CCPointZero);
+		bg->setAnchorPoint(CCPointZero);
+		cell->addChild(bg,kFFC_Z_case);
+		
+		CCSprite* rank_img = CCSprite::create("puzzle_right_rank_silver.png");
+		rank_img->setPosition(ccp(21,21));
+		rank_img->setTag(kFFC_T_rank);
+		cell->addChild(rank_img, kFFC_Z_img);
+	}
+	else if(idx == 2)
+	{
+		bg = CCSprite::create("ending_cell_bronze.png");
+		bg->setPosition(CCPointZero);
+		bg->setAnchorPoint(CCPointZero);
+		cell->addChild(bg,kFFC_Z_case);
+		
+		CCSprite* rank_img = CCSprite::create("puzzle_right_rank_bronze.png");
+		rank_img->setPosition(ccp(21,21));
+		rank_img->setTag(kFFC_T_rank);
+		cell->addChild(rank_img, kFFC_Z_img);
+	}
+	else
+	{
+		bg = CCSprite::create("ending_cell_normal.png");
+		bg->setPosition(CCPointZero);
+		bg->setAnchorPoint(CCPointZero);
+		cell->addChild(bg,kFFC_Z_case);
+		
+		CCLabelTTF* rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 15);
+		rank_label->setPosition(ccp(21,21));
+		rank_label->setTag(kFFC_T_rank);
+		cell->addChild(rank_label,kFFC_Z_img);
+	}
 	
 	nickname_label = CCLabelTTF::create((*member).nickname.c_str(), mySGD->getFont().c_str(), 12);
-	nickname_label->setPosition(ccp(47,22));
-	nickname_label->setAnchorPoint(CCPointZero);
+	nickname_label->setPosition(ccp(114,28));
 	nickname_label->setTag(kFFC_T_nickname);
 	cell->addChild(nickname_label,kFFC_Z_img);
 	
-	score_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", (*member).score)->getCString(), mySGD->getFont().c_str(), 18);
-	score_label->setPosition(ccp(47,0));
-	score_label->setAnchorPoint(CCPointZero);
+	score_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", (*member).score)->getCString(), mySGD->getFont().c_str(), 12);
+	score_label->setColor(ccBLACK);
+	score_label->setPosition(ccp(114,13));
 	score_label->setTag(kFFC_T_score);
 	cell->addChild(score_label,kFFC_Z_img);
 	
-	rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 10);
-	rank_label->setPosition(ccp(12,3));
-	rank_label->setAnchorPoint(CCPointZero);
-	rank_label->setTag(kFFC_T_rank);
-	cell->addChild(rank_label,kFFC_Z_img);
 	
-	if((*member).user_id == hspConnector::get()->getKakaoID())
+//	if((*member).user_id == hspConnector::get()->getKakaoID())
+	if(0)
 	{
-		CCSprite* meBack = CCSprite::create("ending_cell_selected.png");
-		meBack->setPosition(ccp(meBack->getContentSize().width - bg->getContentSize().width, 0));
-		meBack->setAnchorPoint(CCPointZero);
-		cell->addChild(meBack,kFFC_Z_case);
+//		CCSprite* meBack = CCSprite::create("ending_cell_selected.png");
+//		meBack->setPosition(ccp(meBack->getContentSize().width - bg->getContentSize().width, 0));
+//		meBack->setAnchorPoint(CCPointZero);
+//		cell->addChild(meBack,kFFC_Z_case);
 	}
 	else
 	{
@@ -1053,20 +988,20 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 					help_item->setTag(kFFC_T_menuBase);
 					help_item->setUserData((void*)idx);
 					CCMenu* help_menu = CCMenu::createWithItem(help_item);
-					help_menu->setPosition(ccp(165,21));
+					help_menu->setPosition(ccp(180,21));
 					cell->addChild(help_menu, kFFC_Z_img);
 				}
 				else
 				{
 					CCSprite* not_help = CCSprite::create("ending_help_off.png");
-					not_help->setPosition(ccp(165,21));
+					not_help->setPosition(ccp(180,21));
 					cell->addChild(not_help, kFFC_Z_img);
 				}
 			}
 			else
 			{
 				CCSprite* not_help = CCSprite::create("ending_help_off.png");
-				not_help->setPosition(ccp(165,21));
+				not_help->setPosition(ccp(180,21));
 				cell->addChild(not_help, kFFC_Z_img);
 			}
 		}
@@ -1096,7 +1031,7 @@ void FailPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 
 CCSize FailPopup::cellSizeForTable( CCTableView *table )
 {
-	return CCSizeMake(195, 45);
+	return CCSizeMake(210, 45);
 }
 
 unsigned int FailPopup::numberOfCellsInTableView( CCTableView *table )

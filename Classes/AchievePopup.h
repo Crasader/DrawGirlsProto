@@ -54,10 +54,12 @@ private:
 	
 	bool is_menu_enable;
 	
-	CCMenu* all_menu;
-	CCMenu* success_menu;
-	CCMenu* ing_menu;
-	CCMenu* reward_menu;
+	CCNode* all_menu;
+	CCNode* success_menu;
+	CCNode* ing_menu;
+	CCNode* reward_menu;
+	
+	CCMenu* all_reward_menu;
 	
 	CCTableView* achieve_table;
 	
@@ -74,6 +76,12 @@ private:
 	void cellAction(CCObject* sender);
 	int keep_tag;
 	int keep_value;
+	
+	vector<int> keep_value_list;
+	
+	int keep_take_gold;
+	int keep_take_ruby;
+	
 	LoadingLayer* loading_layer;
 	void resultSaveUserData(Json::Value result_data);
 	
@@ -92,6 +100,14 @@ private:
 	virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent);
 	virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
 	virtual void registerWithTouchDispatcher ();
+	
+	void setAllMenu();
+	void setSuccessMenu();
+	void setIngMenu();
+	void setRewardMenu();
+	
+	void takeAllReward(CCObject* sender);
+	void resultAllTakeSaveUserData(Json::Value result_data);
 };
 
 #endif /* defined(__DGproto__AchievePopup__) */

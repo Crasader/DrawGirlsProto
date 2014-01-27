@@ -30,7 +30,7 @@
 #include "FailPopup.h"
 #include "AlertEngine.h"
 #include "PuzzleListShadow.h"
-
+#include "InviteEventPopup.h"
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -85,6 +85,9 @@ bool MainFlowScene::init()
 	CCSprite* back_img = CCSprite::create("mainflow_back_wall.png");
 	back_img->setPosition(ccp(240,160));
 	addChild(back_img, kMainFlowZorder_back);
+	
+	is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
+	mySGD->setIsUnlockPuzzle(0);
 	
 	setTable();
 	
@@ -219,6 +222,13 @@ bool MainFlowScene::init()
 			
 			puzzle_table->setTouchEnabled(false);
 		}
+		
+		
+		if(is_unlock_puzzle > 0)
+		{
+			is_menu_enable = false;
+			puzzle_table->setTouchEnabled(false);
+		}
 	}
 	
 	return true;
@@ -276,7 +286,12 @@ void MainFlowScene::setTable()
 	addChild(puzzle_table, kMainFlowZorder_table);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
 	
-	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int puzzle_number;
+	
+	if(is_unlock_puzzle > 0)
+		puzzle_number = is_unlock_puzzle;
+	else
+		puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
 	if(puzzle_number == 0)
 	{
@@ -487,6 +502,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
+	
 //	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
 	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
@@ -592,8 +608,43 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		shadow_node->addChild(shadow_img, -1);
 	}
 	
+	if(puzzle_number == is_unlock_puzzle)
+	{
+		CCSprite* close_back = CCSprite::create("mainflow_puzzle_lock_back.png");
+		close_back->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
+		cell->addChild(close_back);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(0.25f);
+		CCFadeTo* t_fade1 = CCFadeTo::create(0.4f, 0);
+		CCCallFunc* t_remove_self = CCCallFunc::create(close_back, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_fade1, t_remove_self, NULL);
+		close_back->runAction(t_seq);
+		
+		
+		CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base.png");
+		not_clear_img->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+33));
+		cell->addChild(not_clear_img);
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.25f);
+		CCFadeTo* t_fade2 = CCFadeTo::create(0.4f, 0);
+		CCCallFunc* t_touch_on = CCCallFunc::create(this, callfunc_selector(MainFlowScene::endUnlockAnimation));
+		CCCallFunc* t_remove_self2 = CCCallFunc::create(not_clear_img, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq2 = CCSequence::create(t_delay1, t_fade2, t_touch_on, t_remove_self2, NULL);
+		not_clear_img->runAction(t_seq2);
+		
+		is_unlock_puzzle = 0;
+	}
+	
 	return cell;
 }
+
+void MainFlowScene::endUnlockAnimation()
+{
+	puzzle_table->setTouchEnabled(true);
+	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
+	is_menu_enable = true;
+}
+
 void MainFlowScene::scrollViewDidScroll(CCScrollView* view){}
 void MainFlowScene::scrollViewDidZoom(CCScrollView* view){}
 void MainFlowScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell){}
@@ -629,7 +680,7 @@ enum MainFlowMenuTag{
 	kMainFlowMenuTag_rank,
 	kMainFlowMenuTag_shop,
 	kMainFlowMenuTag_cardSetting,
-	kMainFlowMenuTag_puzzleSetting,
+	kMainFlowMenuTag_friendManagement,
 	kMainFlowMenuTag_gacha,
 	kMainFlowMenuTag_achievement,
 	kMainFlowMenuTag_event
@@ -733,7 +784,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_postbox)
 		{
-			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose));
+			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
 			addChild(t_pp, kMainFlowZorder_popup);
 			
 			postbox_count_case->setVisible(false);
@@ -771,9 +822,14 @@ void MainFlowScene::menuAction(CCObject* sender)
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
 			addChild(t_popup, kMainFlowZorder_popup);
 		}
-		else if(tag == kMainFlowMenuTag_puzzleSetting)
+		else if(tag == kMainFlowMenuTag_friendManagement)
 		{
 			is_menu_enable = true;
+
+			InviteEventPopup* t_rp = InviteEventPopup::create(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
+
+			getParent()->addChild(t_rp, kMainFlowZorder_popup);
+
 		}
 		else if(tag == kMainFlowMenuTag_gacha)
 		{
@@ -819,6 +875,17 @@ void MainFlowScene::setBottom()
 	rank_menu->setPosition(ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
 	
+	CCSprite* n_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
+	CCSprite* s_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
+	s_friendmanagement->setColor(ccGRAY);
+	
+	CCMenuItem* friendmanagement_item = CCMenuItemSprite::create(n_friendmanagement, s_friendmanagement, this, menu_selector(MainFlowScene::menuAction));
+	friendmanagement_item->setTag(kMainFlowMenuTag_friendManagement);
+	
+	CCMenu* friendmanagement_menu = CCMenu::createWithItem(friendmanagement_item);
+	friendmanagement_menu->setPosition(ccp(-139, n_friendmanagement->getContentSize().height/2.f));
+	bottom_case->addChild(friendmanagement_menu);
+	
 	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
 	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
 	s_shop->setColor(ccGRAY);
@@ -827,7 +894,7 @@ void MainFlowScene::setBottom()
 	shop_item->setTag(kMainFlowMenuTag_shop);
 	
 	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
-	shop_menu->setPosition(ccp(-139, n_shop->getContentSize().height/2.f));
+	shop_menu->setPosition(ccp(-73, n_shop->getContentSize().height/2.f));
 	bottom_case->addChild(shop_menu);
 	
 	CCSprite* n_cardsetting = CCSprite::create("mainflow_cardsetting.png");
@@ -838,19 +905,8 @@ void MainFlowScene::setBottom()
 	cardsetting_item->setTag(kMainFlowMenuTag_cardSetting);
 	
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
-	cardsetting_menu->setPosition(ccp(-73, n_cardsetting->getContentSize().height/2.f));
+	cardsetting_menu->setPosition(ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
-	
-	CCSprite* n_puzzlesetting = CCSprite::create("mainflow_puzzlesetting.png");
-	CCSprite* s_puzzlesetting = CCSprite::create("mainflow_puzzlesetting.png");
-	s_puzzlesetting->setColor(ccGRAY);
-	
-	CCMenuItem* puzzlesetting_item = CCMenuItemSprite::create(n_puzzlesetting, s_puzzlesetting, this, menu_selector(MainFlowScene::menuAction));
-	puzzlesetting_item->setTag(kMainFlowMenuTag_puzzleSetting);
-	
-	CCMenu* puzzlesetting_menu = CCMenu::createWithItem(puzzlesetting_item);
-	puzzlesetting_menu->setPosition(ccp(-7, n_puzzlesetting->getContentSize().height/2.f));
-	bottom_case->addChild(puzzlesetting_menu);
 	
 	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
 	CCSprite* s_gacha = CCSprite::create("mainflow_gacha.png");
@@ -884,6 +940,18 @@ void MainFlowScene::setBottom()
 	CCMenu* event_menu = CCMenu::createWithItem(event_item);
 	event_menu->setPosition(ccp(201, n_event->getContentSize().height/2.f-3));
 	bottom_case->addChild(event_menu);
+}
+
+void MainFlowScene::heartRefresh()
+{
+	CCPoint heart_position = heart_time->getPosition();
+	CCNode* heart_parent = heart_time->getParent();
+	
+	heart_time->removeFromParent();
+	
+	heart_time = HeartTime::create();
+	heart_time->setPosition(heart_position);
+	heart_parent->addChild(heart_time);
 }
 
 void MainFlowScene::setTop()

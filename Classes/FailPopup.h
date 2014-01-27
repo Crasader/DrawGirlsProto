@@ -74,7 +74,7 @@ private:
 	
 	CCSprite* gray;
 	CCSprite* main_case;
-	CCSprite* top_case;
+//	CCSprite* top_case;
 	
 	bool is_menu_enable;
 	bool is_saved_user_data;
@@ -87,11 +87,11 @@ private:
 	CCLabelBMFont* score_label;
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* time_label;
-	
-	CCSprite* friend_point_popup;
-	void closeFriendPointPopup();
-	
-	HeartTime* heart_time;
+//
+//	CCSprite* friend_point_popup;
+//	void closeFriendPointPopup();
+//	
+//	HeartTime* heart_time;
 	
 	void endDecreaseCardDuration();
 	

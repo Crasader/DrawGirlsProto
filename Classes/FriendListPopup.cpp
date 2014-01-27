@@ -29,12 +29,12 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	//		gray->setContentSize(CCSizeMake(600, 400));
 	//		addChild(gray, kRP_Z_gray);
 	
-	CCSprite* back = CCSprite::create("rank_back.png");
+	CCSprite* back = CCSprite::create("friendoption_back.png");
 	back->setPosition(ccp(240,160));
 	addChild(back, 0);
 	
-	CCSprite* back2 = CCSprite::create("rank_friend_back.png");
-	back2->setPosition(ccp(240, 160));
+	CCSprite* back2 = CCSprite::create("friendlist_back.png");
+	back2->setPosition(ccp(240, 146));
 	addChild(back2, 0);
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
@@ -53,18 +53,6 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	closeBtn->setPosition(ccp(440, 290));
 	_menu->addChild(closeBtn);
 	
-	auto weekRank = CCMenuItemImageLambda::create
-	(
-	 "rank_friend_rank.png", "rank_friend_rank.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 RankPopup* t_rp = RankPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-	 });
-	weekRank->setPosition(ccp(67, 290));
-	weekRank->setOpacity(0);
-	_menu->addChild(weekRank, 5);
 	
 	// 친구 초대 이벤트
 	auto inviteEventBtn = CCMenuItemImageLambda::create
@@ -201,10 +189,10 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	cell->init();
 	cell->autorelease();
 	
+	CCPoint sendBtnPosition = ccp(300, 22);	
 	
 	
-	
-	std::string cellBackFile = "rank_gamefriend_cell.png";
+	std::string cellBackFile = "friendlist_list.png";
 	
 	
 	CCSprite* bg = CCSprite::create(cellBackFile.c_str());
@@ -243,9 +231,9 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 Json::Value contentJson;
 			 
 			 contentJson["msg"] = "";
+			 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 			 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-			 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 			 std::string recvId = (*member).userId;
 			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 //			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
@@ -277,7 +265,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			
 																			CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
 																																																			[](CCObject*){});
-																			sendBtn1->setPosition(ccp(205,22));
+																			sendBtn1->setPosition(sendBtnPosition);
 																			_menu->addChild(sendBtn1,2);
 																			////////////////////////////////
 																			// ¬ ¡ˆ∫∏≥ª±‚ - ƒ´ƒ´ø¿
@@ -295,19 +283,19 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	}
 	else
 	{
-		sendBtn = CCMenuItemImageLambda::create("rank_cell_send.png", "rank_cell_send.png",
+		sendBtn = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
 																						[](CCObject*){});
 	}
 	
 	
-	sendBtn->setPosition(ccp(300,22));
+	sendBtn->setPosition(sendBtnPosition);
 	sendBtn->setTag(kFriendSendHeart);
 	sendBtn->setUserData((void *)idx);
 	_menu->addChild(sendBtn,2);
 	if((*member).unknownFriend)
 	{
 		deleteBtn = CCMenuItemImageLambda::create
-		("rank_friend_list_cancel.png", "rank_friend_list_cancel.png",
+		("friendlist_delete.png", "friendlist_delete.png",
 		 [=](CCObject* sender){
 			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 			 int idx = (int)obj->getUserData();

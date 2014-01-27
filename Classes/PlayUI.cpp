@@ -974,10 +974,13 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			myGD->communication("Main_startMoveToBossPosition");
 			myGD->communication("CP_startDieAnimation");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-			result_sprite = CCSprite::create("game_clear.png");
-			result_sprite->setRotation(-25);
-			result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
+			
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			CCBReader* reader = new CCBReader(nodeLoader);
+			result_sprite = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_stageclear.ccbi",this));
+			result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
 			addChild(result_sprite);
+			reader->release();
 			
 			endGame(t_p < 1.f && t_p > 0.99f);
 		}
@@ -992,10 +995,14 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			isGameover = true;
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-			result_sprite = CCSprite::create("game_fail.png");
-			result_sprite->setRotation(-25);
-			result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
+			
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			CCBReader* reader = new CCBReader(nodeLoader);
+			result_sprite = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_missonfair.ccbi",this));
+			result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
 			addChild(result_sprite);
+			reader->release();
+			
 			endGame(false);
 		}
 	}
@@ -1036,10 +1043,14 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 			isGameover = true;
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-			result_sprite = CCSprite::create("game_fail.png");
-			result_sprite->setRotation(-25);
-			result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
+			
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			CCBReader* reader = new CCBReader(nodeLoader);
+			result_sprite = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_missonfair.ccbi",this));
+			result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
 			addChild(result_sprite);
+			reader->release();
+			
 			endGame(false);
 			return;
 		}
