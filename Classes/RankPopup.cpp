@@ -455,7 +455,7 @@ void RankPopup::drawRank (Json::Value obj)
 	//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 	
 	//320x320 테이블 뷰 생성
-	rankTableView = RankTableView::create(this, CCSizeMake(272, 233 - 47), NULL);
+	rankTableView = RankTableView::create(this, CCSizeMake(274, 233 - 47), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
 	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
@@ -507,10 +507,13 @@ void RankPopup::closePopup (CCControlButton * obj, CCControlEvent event)
 CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int idx)
 {
 	
-	CCLabelTTF* title;
+	CCLabelTTF* userName;
 	CCMenuItemLambda* sendBtn;
 	CCLabelTTF* score;
 	CCLabelTTF* rank;
+
+
+	CCPoint sendBtnPosition = ccp(245, 20);
 	Json::Value* member = &m_scoreList[idx];
 	KS::KSLog("%", *member);
 	CCTableViewCell* cell = new CCTableViewCell();
@@ -537,14 +540,16 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	}
 	
 	CCSprite* bg = CCSprite::create(cellBackFile.c_str());
-	bg->setPosition(CCPointZero);
+	bg->setPosition(CCPointZero + ccp(2, 0));
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,0);
+	
+	
 	
 	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "ending_take_particle.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kRP_RT_profileImg);
-	profileImg->setPosition(ccp(49.5, 22));
+	profileImg->setPosition(ccp(52, 21));
 	profileImg->setScale(28.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kRP_Z_profileImg);
 
@@ -640,7 +645,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 											  
 											  CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
 																											  [](CCObject*){});
-											  sendBtn1->setPosition(ccp(205,22));
+											  sendBtn1->setPosition(sendBtnPosition);
 											  _menu->addChild(sendBtn1,2);
 											  ////////////////////////////////
 											  // 쪽지보내기 - 카카오
@@ -663,19 +668,23 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	}
 	
 	
-	sendBtn->setPosition(ccp(205,20));
+	sendBtn->setPosition(sendBtnPosition);
 	sendBtn->setTag(kRP_MT_send);
 	_menu->addChild(sendBtn,2);
 	
-	title = CCLabelTTF::create("","Helvetica",12);
-	title->setPosition(ccp(90,23));
-	title->setAnchorPoint(CCPointZero);
-	title->setTag(kRP_RT_title);
-	cell->addChild(title,2);
+	CCSprite* decoInfo = CCSprite::create("rank_cardinfo.png");
+	decoInfo->setPosition(ccp(190, 20));
+	cell->addChild(decoInfo, kRP_Z_back + 1);
+
+	userName = CCLabelTTF::create("","Helvetica",12);
+	userName->setPosition(ccp(75,23));
+	userName->setAnchorPoint(CCPointZero);
+	userName->setTag(kRP_RT_title);
+	cell->addChild(userName,2);
 	
 	
 	score = CCLabelTTF::create("","Helvetica",20);
-	score->setPosition(ccp(90,5 - 5));
+	score->setPosition(ccp(75,5 - 5));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kRP_RT_score);
 	cell->addChild(score,2);
@@ -699,7 +708,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	}else{
 		sendBtn->setVisible(true);
 	}
-	title->setString((*member)["nickname"].asString().c_str());
+	userName->setString((*member)["nickname"].asString().c_str());
 	score->setString((*member)["scoreInfo"].get("score","0").asString().c_str());
 	//rank->setString((*member)["rankingGrade"].asString().c_str());
 	
@@ -1554,7 +1563,7 @@ void RankPopup::touchCellIndex(int idx)
 	//		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
 	{
 		m_currentSelectSprite = CCSprite::create("rank_cell_select.png");
-		m_currentSelectSprite->setPosition(CCPointZero - ccp(6, 0));
+		m_currentSelectSprite->setPosition(CCPointZero - ccp(3, 0));
 		m_currentSelectSprite->setAnchorPoint(CCPointZero);
 		if(rankTableView->cellAtIndex(idx))
 		{

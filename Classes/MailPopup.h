@@ -66,10 +66,10 @@ enum class MailFilter
 class MailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 	public:
-		static MailPopup * create (CCObject * t_close, SEL_CallFunc d_close);
+		static MailPopup * create (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh);
 		void finishedOpen ();
 		void finishedClose ();
-		void myInit (CCObject * t_close, SEL_CallFunc d_close);
+		void myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh);
 		void loadMail ();
 		void drawMail (Json::Value obj);
 		void closePopup (CCControlButton * obj, CCControlEvent event);
@@ -94,6 +94,7 @@ class MailPopup : public CCLayer, public CCTableViewDataSource, public CCTableVi
 		void removeMessage(int mailNo, long long memberID, std::function<void(Json::Value)> f);
 		void filterWithMailFilter();
 	protected:
+		std::function<void(void)> m_heartRefresh;
 		Json::Value m_mailList; // 이 정보를 기반으로 뿌려줌. 
 		Json::Value m_filteredMailList; // 걸러진 데이터들
 		CCTableView * mailTableView;

@@ -11,6 +11,7 @@
 #include "Jack.h"
 #include "PlayUI.h"
 #include <chrono>
+
 template <class _Tp>
 struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
 {
@@ -20,6 +21,7 @@ struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
 	//		return __x*(1 - __y);
 	//	}
 };
+
 template <class _Tp>
 struct DecreaseOp : public PassiveOp<_Tp>
 {
