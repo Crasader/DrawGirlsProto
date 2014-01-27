@@ -302,10 +302,41 @@ bool PuzzleScene::init()
 			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
 		}
 		
+		bool is_not_empty_card[3] = {false,};
+		
+		clear_is_empty_piece = true;
+		int played_stage_number = mySD->getSilType();
+		for(int i=1;i<=3;i++)
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(played_stage_number, kSDS_SI_level_int1_card_i, i)) > 0)
+			{
+				clear_is_empty_piece = false;
+				is_not_empty_card[i-1] = true;
+			}
+		}
+		
+		if(mySGD->getIsNotClearedStage())
+		{
+			for(int i=start_stage;i<start_stage+stage_count;i++)
+			{
+				if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == played_stage_number)
+				{
+					clear_is_stage_unlock = true;
+					next_stage_number = i;
+					break;
+				}
+			}
+		}
+		
+		
 		int take_level;
 		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
 		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
 		else												take_level = 1;
+		
+		clear_star_take_level = take_level;
+		clear_is_empty_star = !is_not_empty_card[take_level-1];
+		
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
 		{
@@ -343,7 +374,7 @@ bool PuzzleScene::init()
 	back_img->setPosition(ccp(240,160));
 	addChild(back_img, kPuzzleZorder_back);
 	
-	piece_mode = (PieceMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);
+	piece_mode = kPieceMode_default;//(PieceMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);
 	setPuzzle();
 	
 	setTop();
@@ -469,7 +500,20 @@ void PuzzleScene::hideClearPopup()
 			}
 		}
 		
-		showGetPuzzle();
+		if(clear_is_empty_piece)
+			showGetPuzzle();
+		else
+		{
+			if(clear_is_empty_star)
+				showGetStar();
+			else
+			{
+				if(clear_is_stage_unlock)
+					showUnlockEffect();
+				else
+					is_menu_enable = true;
+			}
+		}
 	}
 }
 
@@ -487,6 +531,7 @@ enum PuzzleNodeZorder{
 
 void PuzzleScene::showGetPuzzle()
 {
+	CCLog("get piece animation");
 	CCSprite* get_piece_title = CCSprite::create("get_piece_title.png");
 	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
 	get_piece_title->setPosition(ccpAdd(new_piece->getPosition(), ccp(0, 45)));
@@ -552,6 +597,107 @@ void PuzzleScene::createGetPuzzleParticle(CCPoint t_point)
 
 void PuzzleScene::endGetPuzzle()
 {
+	showGetStar();
+}
+
+void PuzzleScene::showGetStar()
+{
+	CCLog("get star animation : %d", mySD->getSilType());
+	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
+	new_piece->startGetStarAnimation(clear_star_take_level, this, callfunc_selector(PuzzleScene::endGetStar));
+}
+
+void PuzzleScene::endGetStar()
+{
+	if(clear_is_first_puzzle_success)
+	{
+		showSuccessPuzzleEffect();
+	}
+	else
+	{
+		if(clear_is_first_perfect)
+		{
+			showPerfectPuzzleEffect();
+		}
+		else
+		{
+			if(clear_is_stage_unlock)
+			{
+				showUnlockEffect();
+			}
+			else
+				is_menu_enable = true;
+		}
+	}
+}
+
+void PuzzleScene::showSuccessPuzzleEffect()
+{
+	CCLog("success puzzle animation");
+	endSuccessPuzzleEffect();
+}
+
+void PuzzleScene::endSuccessPuzzleEffect()
+{
+	mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
+	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+}
+
+void PuzzleScene::showPerfectPuzzleEffect()
+{
+	CCLog("perfect puzzle animation");
+	
+	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
+	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
+	
+	CCLog("start_stage : %d, stage_count : %d", start_stage, stage_count);
+	
+	for(int i=start_stage;i<start_stage+stage_count;i++)
+	{
+		PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(i);
+		new_piece->startGetPieceAnimation(this, callfuncCCp_selector(PuzzleScene::createGetPuzzleParticle));
+	}
+	
+	CCDelayTime* t_delay = CCDelayTime::create(2.f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endPerfectPuzzleEffect));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+	
+	runAction(t_seq);
+}
+void PuzzleScene::endPerfectPuzzleEffect()
+{
+	is_menu_enable = true;
+}
+
+void PuzzleScene::showUnlockEffect()
+{
+	CCLog("unlock piece animation");
+	if(unlock_cover)
+	{
+		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endUnlockEffect));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+		
+		unlock_cover->runAction(t_seq);
+	}
+	else
+	{
+		endUnlockEffect();
+	}
+}
+
+void PuzzleScene::endUnlockEffect()
+{
+	if(unlock_cover)
+	{
+		unlock_cover->removeFromParent();
+		unlock_cover = NULL;
+	}
+	
+	selected_stage_number = next_stage_number;
+	setPieceClick(selected_stage_number);
+	setRightContent();
+	
 	is_menu_enable = true;
 }
 
@@ -664,6 +810,10 @@ void PuzzleScene::setPuzzle()
 	bool must_be_change_selected_stage_number = false;
 	int enable_stage_number = -1;
 	
+	unlock_cover = NULL;
+	
+	clear_is_first_perfect = !myDSH->getBoolForKey(kDSH_Key_isPerfectPuzzle_int1, puzzle_number);
+	
 	for(int i=0;i<20;i++)
 	{
 		CCPoint piece_position = ccpAdd(ccp(-puzzle_size.width/2.f, -puzzle_size.height/2.f), ccp((i%5*120+86)/2,((3-i/5)*120+88)/2));
@@ -712,6 +862,9 @@ void PuzzleScene::setPuzzle()
 						is_have_card[k-1] = true;
 					}
 				}
+				
+				if(!is_have_card[0] || !is_have_card[1] || !is_have_card[2])
+					clear_is_first_perfect = false;
 				
 				if(found_number >= 1 && found_number <= 3)
 				{
@@ -763,6 +916,13 @@ void PuzzleScene::setPuzzle()
 				if(selected_stage_number == stage_number)
 					must_be_change_selected_stage_number = true;
 			}
+			
+			if(clear_is_stage_unlock && stage_number == next_stage_number)
+			{
+				unlock_cover = CCSprite::create(CCString::createWithFormat("piece_lock_%s.png", piece_type.c_str())->getCString());
+				unlock_cover->setPosition(piece_position);
+				puzzle_node->addChild(unlock_cover, kPuzzleNodeZorder_haveCardCntCase);
+			}
 		}
 		else
 		{
@@ -781,8 +941,15 @@ void PuzzleScene::setPuzzle()
 		}
 	}
 	
+	clear_is_first_puzzle_success = false;
+	
 	if(is_puzzle_clear && !myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number))
 	{
+		clear_is_first_puzzle_success = true;
+		
+		if(clear_is_first_perfect)
+			myDSH->setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, puzzle_number, true);
+		
 		myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number, true);
 		myDSH->saveUserData({kSaveUserData_Key_openPuzzle}, nullptr);
 	}

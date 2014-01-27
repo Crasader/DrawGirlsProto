@@ -46,6 +46,7 @@ typedef enum t_DSH_Key{
 	kDSH_Key_jackBaseSpeed,
 	kDSH_Key_openPuzzleCnt,
 	kDSH_Key_isClearedPuzzle_int1,
+	kDSH_Key_isPerfectPuzzle_int1,
 	kDSH_Key_haveTicketCnt,
 	kDSH_Key_ticketUserId_int1,
 	kDSH_Key_openStageCnt,
