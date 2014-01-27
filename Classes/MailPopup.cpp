@@ -303,6 +303,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 
 		KS::KSLog("%", mail);
+		
 		KS::KSLog("%", contentObj);
 		//	KS::KSLog("%", contentObj["puzzlenumber"].asInt());
 

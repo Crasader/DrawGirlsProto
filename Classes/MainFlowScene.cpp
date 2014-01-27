@@ -30,7 +30,7 @@
 #include "FailPopup.h"
 #include "AlertEngine.h"
 #include "PuzzleListShadow.h"
-
+#include "InviteEventPopup.h"
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -774,6 +774,11 @@ void MainFlowScene::menuAction(CCObject* sender)
 		else if(tag == kMainFlowMenuTag_friendManagement)
 		{
 			is_menu_enable = true;
+
+			InviteEventPopup* t_rp = InviteEventPopup::create(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
+
+			getParent()->addChild(t_rp, kMainFlowZorder_popup);
+
 		}
 		else if(tag == kMainFlowMenuTag_gacha)
 		{
