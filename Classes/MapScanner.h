@@ -137,6 +137,7 @@ public:
 	
 	void setSceneNode(CCObject* t_scene_node);
 	void visitForThumb();
+	void replayVisitForThumb(int temp_time);
 	virtual void visit();
 	
 private:

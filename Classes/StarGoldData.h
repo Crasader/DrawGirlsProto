@@ -92,6 +92,31 @@ public:
 	int rank;
 };
 
+enum ReplayKey
+{
+	kReplayKey_timeStamp = 0,
+	kReplayKey_timeStamp_characterPositionX,
+	kReplayKey_timeStamp_characterPositionY,
+	kReplayKey_timeStamp_bossPositionX,
+	kReplayKey_timeStamp_bossPositionY,
+	kReplayKey_timeStamp_monster,
+	kReplayKey_timeStamp_monster_x,
+	kReplayKey_timeStamp_monster_y,
+	kReplayKey_timeStamp_mapIndex,
+	kReplayKey_timeStamp_scoreIndex,
+	kReplayKey_timeStamp_isDie,
+	kReplayKey_timeStamp_isContinue,
+	kReplayKey_timeStamp_isImageChange,
+	kReplayKey_timeStamp_gameInfo,
+	kReplayKey_mapTime,
+	kReplayKey_mapData,
+	kReplayKey_scoreTime,
+	kReplayKey_scoreData,
+	kReplayKey_isChangedMap,
+	kReplayKey_isChangedScore,
+	kReplayKey_playIndex
+};
+
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
 
@@ -467,6 +492,14 @@ public:
 	
 	CardStrengthBefore getCardStrengthBefore();
 	void setCardStrengthBefore(CardStrengthBefore t_before);
+	
+	
+	bool is_write_replay;
+	Json::Value replay_write_info;
+	bool is_play_replay;
+	Json::Value replay_playing_info;
+	
+	string getReplayKey(ReplayKey t_key);
 	
 private:
 	bool is_not_cleared_stage;
