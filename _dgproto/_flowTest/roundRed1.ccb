@@ -235,7 +235,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>o1.png</string>
+							<string>roundRed1.png</string>
 						</array>
 					</dict>
 				</array>
@@ -510,7 +510,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>o1.png</string>
+							<string>roundRed1.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -524,6 +524,8 @@
 						<integer>0</integer>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
