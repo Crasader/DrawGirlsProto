@@ -61,6 +61,8 @@ private:
 	KSProtectVar<int> use_item_price_ruby;
 	KSProtectVar<int> use_item_price_social;
 	
+	bool is_before_selected_event_stage;
+	
 	deque<bool> is_have_item;
 	
 	int clicked_item_idx;

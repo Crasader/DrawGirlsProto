@@ -104,6 +104,7 @@ private:
 			Json::Value p;
 			Json::Value contentJson;
 			contentJson["puzzlenumber"] = puzzle_number;
+			contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 			p["receiverMemberIDList"] = arr;
 			p["senderMemberID"] = hspConnector::get()->getKakaoID();
 			p["type"] = kTicketRequest;

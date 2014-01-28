@@ -10,7 +10,7 @@
 #include "KSUtil.h"
 
 #include "ProbSelector.h"
-
+#include "MissileDamageData.h"
 
 #include "KSUtil.h"
 #include "cocos2d.h"
@@ -1402,11 +1402,20 @@ void ThreeCushion::myAction ()
 	{
 		unschedule(schedule_selector(ThreeCushion::myAction));
 		AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
-		int missile_type = rand()%7 + (rand()%9)*10;//DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement);
 		
 		int rmCnt = 3;
+		
+		string missile_code;
+		if(mySGD->getIsUsingFriendCard())
+			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
+		else
+			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+		
+		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
 		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed);
+		
+		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
 		
 		removeFromParentAndCleanup(true);
 		return;

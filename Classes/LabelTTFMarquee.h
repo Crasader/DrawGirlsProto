@@ -12,7 +12,7 @@
 #include <iostream>
 #include "cocos2d.h"
 #include "cocos-ext.h"
-
+#include "StarGoldData.h"
 
 using namespace std;
 using namespace cocos2d;
@@ -51,14 +51,15 @@ public:
 		cNode->setAnchorPoint(ccp(0,0));
 		cNode->setPosition(ccp(0,0));
 		cNode->setStencil(m_back);
+		cNode->setAlphaThreshold(255);
 		this->addChild(cNode,1);
 		
-		m_text1 = CCLabelTTF::create("", "", height);
+		m_text1 = CCLabelTTF::create("", mySGD->getFont().c_str(), height);
 		m_text1->setAnchorPoint(ccp(0,0.5));
 		m_text1->setPosition(ccp(m_text1->getContentSize().width*-1,height/2));
 		m_text1->setTag(-2);
 		
-		m_text2 = CCLabelTTF::create(m_texts[0].c_str(), "", height);
+		m_text2 = CCLabelTTF::create(m_texts[0].c_str(), mySGD->getFont().c_str(), height);
 		m_text2->setAnchorPoint(ccp(0,0.5));
 		m_text2->setTag(0);
 		m_text2->setPosition(ccp(0,height/2));

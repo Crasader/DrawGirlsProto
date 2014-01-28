@@ -9,7 +9,7 @@
 #include "KSAlertView.h"
 
 
-CCSize cellSize3 = CCSizeMake(238, 47);
+CCSize cellSize3 = CCSizeMake(238, 38);
 void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
 	setTouchEnabled(true);
@@ -29,12 +29,12 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	//		gray->setContentSize(CCSizeMake(600, 400));
 	//		addChild(gray, kRP_Z_gray);
 	
-	CCSprite* back = CCSprite::create("rank_back.png");
+	CCSprite* back = CCSprite::create("friendoption_back.png");
 	back->setPosition(ccp(240,160));
 	addChild(back, 0);
 	
-	CCSprite* back2 = CCSprite::create("rank_friend_back.png");
-	back2->setPosition(ccp(240, 160));
+	CCSprite* back2 = CCSprite::create("friendlist_back.png");
+	back2->setPosition(ccp(240, 129));
 	addChild(back2, 0);
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
@@ -44,32 +44,20 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	
 	
 	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
-																														 "cardsetting_close.png", "cardsetting_close.png",
+																														 "cardchange_cancel.png", "cardchange_cancel.png",
 																														 [=](CCObject*){
 																															 (target_close->*delegate_close)();
 																															 removeFromParent();
 																															 
 																														 });
-	closeBtn->setPosition(ccp(440, 290));
+	closeBtn->setPosition(ccp(450, 258));
 	_menu->addChild(closeBtn);
 	
-	auto weekRank = CCMenuItemImageLambda::create
-	(
-	 "rank_friend_rank.png", "rank_friend_rank.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 RankPopup* t_rp = RankPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-	 });
-	weekRank->setPosition(ccp(67, 290));
-	weekRank->setOpacity(0);
-	_menu->addChild(weekRank, 5);
 	
 	// 친구 초대 이벤트
 	auto inviteEventBtn = CCMenuItemImageLambda::create
 	(
-	 "rank_default_invite.png", "rank_default_invite.png",
+	 "friendoption_invite.png", "friendoption_invite.png",
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
 		 
@@ -78,7 +66,7 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 removeFromParent();
 		 
 	 });
-	inviteEventBtn->setPosition(ccp(169, 290));
+	inviteEventBtn->setPosition(ccp(172, 259));
 	inviteEventBtn->setOpacity(0);
 	
 	_menu->addChild(inviteEventBtn);
@@ -86,18 +74,18 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	// 친구목록
 	auto friendList = CCMenuItemImageLambda::create
 	(
-	 "rank_friend_list.png", "rank_friend_list.png",
+	 "friendoption_list.png", "friendoption_list.png",
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
 	 });
-	friendList->setPosition(ccp(270, 290));
+	friendList->setPosition(ccp(275, 258));
 	friendList->setOpacity(255);
 	_menu->addChild(friendList);
 	
 	// 게임 친구맺기
 	auto joinGameFriend = CCMenuItemImageLambda::create
 	(
-	 "rank_gamefriend.png", "rank_gamefriend.png",
+	 "friendoption_surch.png", "friendoption_surch.png",
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
 		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
@@ -105,14 +93,14 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 removeFromParent();
 		 
 	 });
-	joinGameFriend->setPosition(ccp(370, 290));
+	joinGameFriend->setPosition(ccp(378, 259));
 	joinGameFriend->setOpacity(0);
 	_menu->addChild(joinGameFriend);
 	
 	m_friendLimitFnt = CCLabelBMFont::create
 	(CCString::createWithFormat("%lu/%d", UnknownFriends::getInstance()->getFriends().size(), mySGD->getGameFriendMax())->getCString(),
 	 "allfont.fnt");
-	m_friendLimitFnt->setPosition(ccp(141, 320 - 74));
+	m_friendLimitFnt->setPosition(ccp(170, 210));
 	addChild(m_friendLimitFnt, 2);
 	
 	loadRank();
@@ -149,12 +137,12 @@ void FriendListPopup::drawRank()
 {
 //	m_scoreList = obj;
 	//320x320 ≈◊¿Ã∫Ì ∫‰ ª˝º∫
-	rankTableView = FriendListTableView::create(this, CCSizeMake(424, 195), NULL);
+	rankTableView = FriendListTableView::create(this, CCSizeMake(424, 179), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
-	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
-	m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2, NULL, bar);
-	m_scrollBar->setDynamicScrollSize(false);
+//	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
+//	m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2, NULL, bar);
+//	m_scrollBar->setDynamicScrollSize(false);
 	rankTableView->setAnchorPoint(CCPointZero);
 	
 	//kCCScrollViewDirectionVertical : ºº∑Œ Ω∫≈©∑—, kCCScrollViewDirectionHorizontal : ∞°∑Œ Ω∫≈©∑—
@@ -164,7 +152,7 @@ void FriendListPopup::drawRank()
 	rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	
 	//±‚¡ÿ¡° 0,0
-	rankTableView->setPosition(ccp(33, 320 - 291));
+	rankTableView->setPosition(ccp(33, 23));
 	
 	//µ•¿Ã≈Õ∏¶ ∞°¡Æø¿∞Ì≥™ ≈Õƒ° ¿Ã∫•∆Æ∏¶ π›»Ø«ÿ¡Ÿ ¥Î∏Æ¿⁄∏¶ ¿Ã ≈¨∑°Ω∫∑Œ º≥¡§.
 	rankTableView->setDelegate(this);
@@ -201,22 +189,22 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	cell->init();
 	cell->autorelease();
 	
+	CCPoint sendBtnPosition = ccp(106, -17);
 	
 	
-	
-	std::string cellBackFile = "rank_gamefriend_cell.png";
+	std::string cellBackFile = "friendlist_list.png";
 	
 	
 	CCSprite* bg = CCSprite::create(cellBackFile.c_str());
-	bg->setPosition(CCPointZero);
+	bg->setPosition(ccp(0,-2));
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,0);
 	
-	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "no_img.png");
+	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "ending_take_particle.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kProfileImg);
-	profileImg->setPosition(ccp(27, 22));
-	profileImg->setScale(45.f / profileImg->getContentSize().width);
+	profileImg->setPosition(ccp(51, 20));
+	profileImg->setScale(28.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, 1);
 	
 	
@@ -230,7 +218,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	if(::getHeartIsSendable( (*member).userId, mySGD->getHeartSendCoolTime() ))
 	{
 		sendBtn = CCMenuItemImageLambda::create
-		("rank_cell_send.png", "rank_cell_send.png",
+		("friendlist_coinsend.png", "friendlist_coinsend.png",
 		 [=](CCObject* sender){
 			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 			 int idx = (int)obj->getUserData();
@@ -243,9 +231,9 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 Json::Value contentJson;
 			 
 			 contentJson["msg"] = "";
+			 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
 			 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-			 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 			 std::string recvId = (*member).userId;
 			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 //			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
@@ -275,9 +263,10 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			::setHeartSendTime((*member).userId);
 																			obj->removeFromParent(); // 버튼 삭제.
 																			
-																			CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
+																			CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("friendlist_coinsend.png", "friendlist_coinsend.png",
 																																																			[](CCObject*){});
-																			sendBtn1->setPosition(ccp(205,22));
+																			sendBtn1->setPosition(sendBtnPosition);
+																			sendBtn1->setColor(ccc3(100, 100, 100));
 																			_menu->addChild(sendBtn1,2);
 																			////////////////////////////////
 																			// ¬ ¡ˆ∫∏≥ª±‚ - ƒ´ƒ´ø¿
@@ -295,19 +284,20 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	}
 	else
 	{
-		sendBtn = CCMenuItemImageLambda::create("rank_cell_send.png", "rank_cell_send.png",
+		sendBtn = CCMenuItemImageLambda::create("friendlist_coinsend.png", "friendlist_coinsend.png",
 																						[](CCObject*){});
 	}
 	
 	
-	sendBtn->setPosition(ccp(300,22));
+	sendBtn->setPosition(sendBtnPosition);
+	sendBtn->setColor(ccc3(100, 100, 100));
 	sendBtn->setTag(kFriendSendHeart);
 	sendBtn->setUserData((void *)idx);
 	_menu->addChild(sendBtn,2);
 	if((*member).unknownFriend)
 	{
 		deleteBtn = CCMenuItemImageLambda::create
-		("rank_friend_list_cancel.png", "rank_friend_list_cancel.png",
+		("friendlist_delete.png", "friendlist_delete.png",
 		 [=](CCObject* sender){
 			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 			 int idx = (int)obj->getUserData();
@@ -393,7 +383,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 
 		 }
 		 );
-		deleteBtn->setPosition(ccp(350, 22));
+		deleteBtn->setPosition(ccp(350, 23));
 		deleteBtn->setTag(kZorderDeleteFriend);
 		deleteBtn->setUserData((void *)idx);
 		_menu->addChild(deleteBtn, 2);
@@ -403,14 +393,14 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	
 	
 	title = CCLabelTTF::create("","Helvetica",12);
-	title->setPosition(ccp(90,28));
+	title->setPosition(ccp(75,20));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kUserNickName);
 	cell->addChild(title,2);
 	
 	
-	score = CCLabelTTF::create("","Helvetica",20);
-	score->setPosition(ccp(90,5));
+	score = CCLabelTTF::create("","Helvetica",19);
+	score->setPosition(ccp(75,1));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kLastConnectDate);
 	cell->addChild(score,2);
@@ -439,10 +429,10 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 
 void FriendListPopup::scrollViewDidScroll( CCScrollView* view )
 {
-	if(m_scrollBar)
-	{
-		m_scrollBar->setBarRefresh();
-	}
+//	if(m_scrollBar)
+//	{
+//		m_scrollBar->setBarRefresh();
+//	}
 }
 
 void FriendListPopup::scrollViewDidZoom( CCScrollView* view )

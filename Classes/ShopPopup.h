@@ -24,7 +24,8 @@ enum ShopCode{
 	kSC_ruby,
 	kSC_gold,
 	kSC_heart,
-	kSC_character
+	kSC_character,
+	kSC_card
 };
 
 enum ShopBeforeCode{
@@ -36,6 +37,7 @@ enum ShopBeforeCode{
 
 class HeartTime;
 class LoadingLayer;
+class TouchSuctionLayer;
 class ShopPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -72,8 +74,29 @@ private:
 	map<int, KSProtectVar<int>> ruby_to_gold;
 	map<int, KSProtectVar<int>> ruby_to_heart;
 	
+	KSProtectVar<int> card_price_high; // ruby
+	KSProtectVar<int> card_price_mid; // gold
+	KSProtectVar<int> card_price_low; // friend point
+	
 	CCSprite* main_case;
+	int server_character_count;
 	CCTableView* character_table;
+	
+	void setCardBuyMenu(CCPoint t_point, int t_tag, string inner_filename, string type_filename, int price_value);
+	
+	CCNode* character_menu;
+	CCNode* card_menu;
+	CCNode* ruby_menu;
+	CCNode* gold_menu;
+	CCNode* heart_menu;
+	
+	TouchSuctionLayer* suction;
+	
+	void setCharacterMenu();
+	void setCardMenu();
+	void setRubyMenu();
+	void setGoldMenu();
+	void setHeartMenu();
 	
 	int last_select_idx;
 	

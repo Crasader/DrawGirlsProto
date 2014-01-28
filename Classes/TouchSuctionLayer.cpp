@@ -16,19 +16,44 @@ TouchSuctionLayer* TouchSuctionLayer::create(int t_touch_priority)
 	return t_tnp;
 }
 
+void TouchSuctionLayer::setNotSwallowRect(CCRect t_rect)
+{
+	not_swallow_rect = t_rect;
+	is_setted_not_swallow_rect = true;
+}
+
 void TouchSuctionLayer::myInit(int t_touch_priority)
 {
 	touch_priority = t_touch_priority;
 	target_touch_began = NULL;
 	delegate_touch_began = NULL;
+	is_setted_not_swallow_rect = false;
 }
 
 bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
-	if(target_touch_began && delegate_touch_began)
-		(target_touch_began->*delegate_touch_began)();
+	if(is_setted_not_swallow_rect)
+	{
+		CCPoint touchLocation = pTouch->getLocation();
+		CCPoint local = convertToNodeSpace(touchLocation);
+		
+		if(not_swallow_rect.containsPoint(local))
+			return false;
+		else
+		{
+			if(target_touch_began && delegate_touch_began)
+				(target_touch_began->*delegate_touch_began)();
+			else
+				CCLog("touch swallow : TouchSuctionLayer");
+		}
+	}
 	else
-		CCLog("touch swallow : TouchSuctionLayer");
+	{
+		if(target_touch_began && delegate_touch_began)
+			(target_touch_began->*delegate_touch_began)();
+		else
+			CCLog("touch swallow : TouchSuctionLayer");
+	}
 	return true;
 }
 

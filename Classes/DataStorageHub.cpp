@@ -160,6 +160,7 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	
 	else if(t_name == kDSH_Key_openPuzzleCnt)						return_value = "opc";
 	else if(t_name == kDSH_Key_isClearedPuzzle_int1)				return_value = "icp%d";
+	else if(t_name == kDSH_Key_isPerfectPuzzle_int1)				return_value = "ipp%d";
 	
 	else if(t_name == kDSH_Key_haveTicketCnt)						return_value = "htc";
 	else if(t_name == kDSH_Key_ticketUserId_int1)					return_value = "tui%d";
@@ -302,7 +303,10 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 	
 	setIntegerForKey(kDSH_Key_openPuzzleCnt, open_puzzle_cnt, false);
 	for(int i=1;i<=open_puzzle_cnt+2 && i < data[getKey(kDSH_Key_isClearedPuzzle_int1)].size();i++)
+	{
 		setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asBool(), false);
+		setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, i, data[getKey(kDSH_Key_isPerfectPuzzle_int1)][i].asBool(), false);
+	}
 	
 	int have_ticket_cnt = data[getKey(kDSH_Key_haveTicketCnt)].asInt();
 	setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt, false);
@@ -356,7 +360,7 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, data[getKey(kDSH_Key_minigame_int1_isPlayed)][i].asBool(), false);
 	}
 	
-	setIntegerForKey(kDSH_Key_tutorial_flowStep, data[getKey(kDSH_Key_tutorial_flowStep)].asInt(), false);
+	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17, false);//data[getKey(kDSH_Key_tutorial_flowStep)].asInt(), false);
 	
 	fFlush();
 }
@@ -411,7 +415,10 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 		int open_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
 		data[getKey(kDSH_Key_openPuzzleCnt)] = open_puzzle_cnt;
 		for(int i=1;i<=open_puzzle_cnt+2;i++)
+		{
 			data[getKey(kDSH_Key_isClearedPuzzle_int1)][i] = getBoolForKey(kDSH_Key_isClearedPuzzle_int1, i);
+			data[getKey(kDSH_Key_isPerfectPuzzle_int1)][i] = getBoolForKey(kDSH_Key_isPerfectPuzzle_int1, i);
+		}
 	}
 	else if(t_key == kSaveUserData_Key_haveTicket)
 	{
@@ -447,7 +454,7 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	else if(t_key == kSaveUserData_Key_character)
 	{
 		data[getKey(kDSH_Key_selectedCharacter)] = getIntegerForKey(kDSH_Key_selectedCharacter);
-		for(int i=2;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+		for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 			data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i] = getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i);
 	}
 	else if(t_key == kSaveUserData_Key_achieve)
@@ -536,7 +543,10 @@ void DataStorageHub::resetDSH ()
 	
 	int opened_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
 	for(int i=1;i<=opened_puzzle_cnt+2;i++)
+	{
 		setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, false, false);
+		setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, i, false, false);
+	}
 	setIntegerForKey(kDSH_Key_openPuzzleCnt, 0, false);
 	
 	int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
@@ -564,7 +574,7 @@ void DataStorageHub::resetDSH ()
 	setStringForKey(kDSH_Key_nick, "", false);
 	
 	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
-	for(int i=2;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
 	
 	int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);
@@ -588,7 +598,7 @@ void DataStorageHub::resetDSH ()
 		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, false, false);
 	}
 	
-	setIntegerForKey(kDSH_Key_tutorial_flowStep, 0);
+	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
 	
 	fFlush();
 }
@@ -612,6 +622,6 @@ void DataStorageHub::myInit ()
 	myDefault = SaveData::sharedObject();
 	is_cheat_key_enabled = false;
 	puzzle_map_scene_show_type = kPuzzleMapSceneShowType_init;
-//	setIntegerForKey(kDSH_Key_tutorial_flowStep, 0);
+	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
 }
 #undef LZZ_INLINE

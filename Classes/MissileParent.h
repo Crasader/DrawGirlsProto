@@ -92,7 +92,7 @@ public:
 	
 	void bombCumber(CCObject* target);
 	
-	void createJackMissile(int jm_type, int cmCnt, float missile_speed);
+	void createJackMissile(int jm_type, int cmCnt, float missile_speed, CCPoint missile_position);
 	
 	void subOneDie();
 	

@@ -2015,7 +2015,7 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_postbox)
 	{
-		MailPopup* t_pp = MailPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose));
+		MailPopup* t_pp = MailPopup::create(this, callfunc_selector(PuzzleMapScene::popupClose), nullptr);
 		addChild(t_pp, kPMS_Z_popup);
 	}
 	else if(tag == kPMS_MT_selectedCard)

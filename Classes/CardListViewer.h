@@ -37,19 +37,10 @@ enum CSS_Zorder{
 
 enum CSS_MenuTag{
 	kCSS_MT_close = 1,
-	kCSS_MT_align = 2,
-	kCSS_MT_diary = 3,
-	kCSS_MT_selectedCard = 4,
-	kCSS_MT_selectedCheck = 5,
-	kCSS_MT_checkMark = 6,
-	kCSS_MT_alignClose = 7,
-	kCSS_MT_alignTake = 8,
-	kCSS_MT_alignGradeUp = 9,
-	kCSS_MT_alignGradeDown = 10,
-	kCSS_MT_alignDefault = 11,
-	kCSS_MT_releaseCard = 12,
-	kCSS_MT_strength = 13,
-	kCSS_MT_mountCard = 14,
+	kCSS_MT_alignDefault = 2,
+	kCSS_MT_alignTake = 3,
+	kCSS_MT_alignRank = 4,
+	kCSS_MT_strength = 5,
 	kCSS_MT_cardBase = 1000000,
 	kCSS_MT_cardMenuBase = 2000000,
 	kCSS_MT_noCardBase = 3000000

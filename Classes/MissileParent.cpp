@@ -9,6 +9,8 @@
 #include "MissileParent.h"
 #include "LogData.h"
 #include "KSCircleBase.h"
+#include "StageImgLoader.h"
+
 void MissileParent::bombCumber( CCObject* target )
 {
 	if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
@@ -30,48 +32,131 @@ void MissileParent::bombCumber( CCObject* target )
 	}
 }
 
-void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_speed )
+void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_speed, CCPoint missile_position )
 {
 	CCLog("createJackMissile inner : %d, %d, %.2f", jm_type, cmCnt, missile_speed);
-	if(jm_type%10 >= 0 && jm_type%10 <= 3)
+	
+	int card_number;
+	if(mySGD->getIsUsingFriendCard())
+		card_number = mySGD->getSelectedFriendCardData().card_number;
+	else
+		card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	
+	if(card_number > 0)
 	{
-		CCLog("base JackMissile");
-		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-		int cumberCnt = 1 + subCumberArray->count();
-		int random_value;
-		
-		for(int i=0;i<cmCnt;i++)
+		if(jm_type%10 >= 0 && jm_type%10 <= 3)
 		{
-			if(i == 0)
+			CCLog("base JackMissile");
+			CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
+			int cumberCnt = 1 + subCumberArray->count();
+			int random_value;
+			
+			for(int i=0;i<cmCnt;i++)
 			{
-				JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
-				jack_missile_node->addChild(t_jm);
-				t_jm->startMoving();
-			}
-			else
-			{
-				random_value = rand()%cumberCnt;
-				if(random_value == 0)
+				if(i == 0)
 				{
-					JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed);
+					JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed, missile_position);
 					jack_missile_node->addChild(t_jm);
 					t_jm->startMoving();
 				}
 				else
 				{
-					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), jm_type, missile_speed);
-					jack_missile_node->addChild(t_jm);
-					t_jm->startMoving();
+					random_value = rand()%cumberCnt;
+					if(random_value == 0)
+					{
+						JackMissile* t_jm = JM_BasicMissile::create(myGD->getCommunicationNode("CP_getMainCumberPointer"), jm_type, missile_speed, missile_position);
+						jack_missile_node->addChild(t_jm);
+						t_jm->startMoving();
+					}
+					else
+					{
+						JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), jm_type, missile_speed, missile_position);
+						jack_missile_node->addChild(t_jm);
+						t_jm->startMoving();
+					}
 				}
 			}
+			
+			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+			
+			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+			card_img->setScale(0.f);
+			card_img->setPosition(missile_position);
+			jack_missile_node->addChild(card_img);
+			
+			CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.3f);
+			CCDelayTime* t_delay = CCDelayTime::create(0.8f);
+			CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(card_img, callfunc_selector(CCSprite::removeFromParent));
+			CCSequence* t_seq = CCSequence::create(t_scale, t_delay, t_fade, t_call, NULL);
+			card_img->runAction(t_seq);
+			
+			CCSprite* no_img = CCSprite::create("cardchange_noimg.png");
+			no_img->setScale(1.f/0.73f);
+			no_img->setPosition(ccp(card_img->getContentSize().width/2.f, card_img->getContentSize().height/2.f));
+			card_img->addChild(no_img);
+			
+			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
+			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
+			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
+			no_img->runAction(t_seq2);
+		}
+		else if(jm_type%10 >= 4 && jm_type%10 <= 6)
+		{
+			CCLog("Upgrade JackMissile");
+			UM_creator* t_c = UM_creator::create(cmCnt, jm_type, missile_speed, missile_position);
+			jack_missile_node->addChild(t_c);
+			t_c->startPetCreate();
+			
+			float t_missile_speed = missile_speed;
+			
+			if(t_missile_speed < 2.f)
+				t_missile_speed = 2.f;
+			else if(t_missile_speed > 9.f)
+				t_missile_speed = 9.f;
+			else
+				t_missile_speed = t_missile_speed;
+			int shoot_frame = t_missile_speed*3;
+			shoot_frame *= cmCnt;
+			
+			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+			
+			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+			card_img->setScale(0.f);
+			card_img->setPosition(missile_position);
+			jack_missile_node->addChild(card_img);
+			
+			CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.3f);
+			CCDelayTime* t_delay = CCDelayTime::create(0.8f);
+			CCFadeTo* t_fade = CCFadeTo::create(shoot_frame/60.f+0.5f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(card_img, callfunc_selector(CCSprite::removeFromParent));
+			CCSequence* t_seq = CCSequence::create(t_scale, t_delay, t_fade, t_call, NULL);
+			card_img->runAction(t_seq);
+			
+			CCSprite* no_img = CCSprite::create("cardchange_noimg.png");
+			no_img->setScale(1.f/0.73f);
+			no_img->setPosition(ccp(card_img->getContentSize().width/2.f, card_img->getContentSize().height/2.f));
+			card_img->addChild(no_img);
+			
+			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
+			CCFadeTo* t_fade2 = CCFadeTo::create(shoot_frame/60.f+0.5f, 0);
+			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
+			no_img->runAction(t_seq2);
 		}
 	}
-	else if(jm_type%10 >= 4 && jm_type%10 <= 6)
+	else
 	{
-		CCLog("Upgrade JackMissile");
-		UM_creator* t_c = UM_creator::create(cmCnt, jm_type, missile_speed);
-		jack_missile_node->addChild(t_c);
-		t_c->startCreate();
+		CCSprite* no_img = CCSprite::create("cardchange_noimg.png");
+		no_img->setScale(0.3f);
+		no_img->setPosition(missile_position);
+		jack_missile_node->addChild(no_img);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(1.f);
+		CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
+		CCSequence* t_seq2 = CCSequence::create(t_delay, t_fade2, NULL);
+		no_img->runAction(t_seq2);
 	}
 }
 
@@ -1086,7 +1171,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
 	myGD->V_CCPCCOCallfuncO["MP_createSubCumberReplication"] = std::bind(&MissileParent::createSubCumberReplication, this, _1, _2, _3);
 	myGD->V_CCO["MP_removeChargeInArray"] = std::bind(&MissileParent::removeChargeInArray, this, _1);
-	myGD->V_IIF["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3);
+	myGD->V_IIFCCP["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3, _4);
 	myGD->V_CCO["MP_bombCumber"] = std::bind(&MissileParent::bombCumber, this, _1);
 	myGD->V_CCPCOLORF["MP_explosion"] = std::bind(&MissileParent::explosion, this, _1, _2, _3);
 	myGD->V_V["MP_endIngActionAP"] = std::bind(&MissileParent::endIngActionAP, this);

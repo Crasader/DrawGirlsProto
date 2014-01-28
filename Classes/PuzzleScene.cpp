@@ -58,6 +58,239 @@ bool PuzzleScene::init()
 	
 	selected_friend_idx = -1;
 	
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
+		before_scene_name = "clear";
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
+		before_scene_name = "fail";
+	else
+		before_scene_name = "other";
+	
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+	
+	if(before_scene_name == "other")
+	{
+		bool have_not_cleared_stage = false;
+		vector<int> not_cleared_stage_list;
+		vector<int> cleared_stage_list;
+		
+		for(int i=start_stage;i<start_stage+stage_count;i++)
+		{
+			if(!myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, i))
+			{
+				have_not_cleared_stage = true;
+				not_cleared_stage_list.push_back(i);
+			}
+			else
+				cleared_stage_list.push_back(i);
+		}
+		
+		if(have_not_cleared_stage) // 아직 못 깬 스테이지가 있다
+		{
+			bool have_can_enter_stage = false;
+			
+			vector<int> can_enter_stage_list;
+			vector<int> can_enter_stage_level_list;
+			vector<int> can_enter_stage_pieceNumber_list;
+			
+			for(int i=0;i<not_cleared_stage_list.size();i++)
+			{
+				int stage_number = not_cleared_stage_list[i];
+				if(stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+				   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
+					(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 ||
+					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
+				{
+					have_can_enter_stage = true;
+					can_enter_stage_list.push_back(stage_number);
+					can_enter_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number));
+					can_enter_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number));
+				}
+			}
+			
+			if(have_can_enter_stage) // 못 깬 스테이지 중에 입장가능한 스테이지가 있다
+			{
+				// 못 깬 스테이지 중 입장 가능한 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+				int minimum_index = 0;
+				int minimum_level = can_enter_stage_level_list[minimum_index];
+				int minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+				
+				for(int i=1;i<can_enter_stage_list.size();i++)
+				{
+					if(can_enter_stage_level_list[i] <= minimum_level && can_enter_stage_pieceNumber_list[i] < minimum_pieceNumber)
+					{
+						minimum_index = i;
+						minimum_level = can_enter_stage_level_list[minimum_index];
+						minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+					}
+				}
+				
+				selected_stage_number = can_enter_stage_list[minimum_index];
+				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+			}
+			else // 못 깬 스테이지 중에 입장가능한 스테이지가 없다
+			{
+				selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+				if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
+				{
+					// 깬 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+					
+					vector<int> cleared_stage_level_list;
+					vector<int> cleared_stage_pieceNumber_list;
+					
+					for(int i=0;i<cleared_stage_list.size();i++)
+					{
+						int stage_number = cleared_stage_list[i];
+						cleared_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number));
+						cleared_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number));
+					}
+					
+					int minimum_index = 0;
+					int minimum_level = cleared_stage_level_list[minimum_index];
+					int minimum_pieceNumber = cleared_stage_pieceNumber_list[minimum_index];
+					
+					for(int i=1;i<cleared_stage_list.size();i++)
+					{
+						if(cleared_stage_level_list[i] <= minimum_level && cleared_stage_pieceNumber_list[i] < minimum_pieceNumber)
+						{
+							minimum_index = i;
+							minimum_level = cleared_stage_level_list[minimum_index];
+							minimum_pieceNumber = cleared_stage_pieceNumber_list[minimum_index];
+						}
+					}
+					
+					selected_stage_number = cleared_stage_list[minimum_index];
+					myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+				}
+			}
+		}
+		else // 모든 스테이지를 클리어는 했다
+		{
+			bool is_perfect = true;
+			
+			vector<int> perfect_stage_list;
+			vector<int> perfect_stage_pieceNumber_list;
+			
+			vector<int> not_perfect_stage_list;
+			vector<int> not_perfect_stage_level_list;
+			vector<int> not_perfect_stage_pieceNumber_list;
+			
+			for(int i=start_stage;i<start_stage+stage_count;i++)
+			{
+				bool is_stage_perfect = true;
+				for(int j=1;j<=3;j++)
+				{
+					if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, j)) <= 0)
+					{
+						is_stage_perfect = false;
+						break;
+					}
+				}
+				
+				if(is_stage_perfect)
+				{
+					perfect_stage_list.push_back(i);
+					perfect_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i));
+				}
+				else
+				{
+					is_perfect = false;
+					not_perfect_stage_list.push_back(i);
+					not_perfect_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, i));
+					not_perfect_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i));
+				}
+			}
+			
+			if(is_perfect) // 각 피스의 모든 카드를 획득한 퍼펙트 상태이다
+			{
+				// 퍼펙트 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+				int minimum_index = 0;
+				int minimum_pieceNumber = perfect_stage_pieceNumber_list[minimum_index];
+				
+				for(int i=1;i<perfect_stage_list.size();i++)
+				{
+					if(perfect_stage_pieceNumber_list[i] < minimum_pieceNumber)
+					{
+						minimum_index = i;
+						minimum_pieceNumber = perfect_stage_pieceNumber_list[minimum_index];
+					}
+				}
+				
+				selected_stage_number = perfect_stage_list[minimum_index];
+				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+			}
+			else // 퍼펙트 아닌 상태이다
+			{
+				// 미완성 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+				int minimum_index = 0;
+				int minimum_level = not_perfect_stage_level_list[minimum_index];
+				int minimum_pieceNumber = not_perfect_stage_pieceNumber_list[minimum_index];
+				
+				for(int i=1;i<not_perfect_stage_list.size();i++)
+				{
+					if(not_perfect_stage_level_list[i] <= minimum_level && not_perfect_stage_pieceNumber_list[i] < minimum_pieceNumber)
+					{
+						minimum_index = i;
+						minimum_level = not_perfect_stage_level_list[minimum_index];
+						minimum_pieceNumber = not_perfect_stage_pieceNumber_list[minimum_index];
+					}
+				}
+				
+				selected_stage_number = not_perfect_stage_list[minimum_index];
+				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+			}
+		}
+	}
+	else if(before_scene_name == "fail" || before_scene_name == "clear")
+	{
+		selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+		if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
+		{
+			// 입장 가능한 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+			
+			vector<int> can_enter_stage_list;
+			vector<int> can_enter_stage_level_list;
+			vector<int> can_enter_stage_pieceNumber_list;
+			
+			for(int i=start_stage;i<start_stage+stage_count;i++)
+			{
+				if(i == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i) ||
+				   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 &&
+					(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == 0 ||
+					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))))
+				{
+					can_enter_stage_list.push_back(i);
+					can_enter_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, i));
+					can_enter_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i));
+				}
+			}
+			
+			int minimum_index = 0;
+			int minimum_level = can_enter_stage_level_list[minimum_index];
+			int minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+			
+			for(int i=1;i<can_enter_stage_list.size();i++)
+			{
+				if(can_enter_stage_level_list[i] <= minimum_level && can_enter_stage_pieceNumber_list[i] < minimum_pieceNumber)
+				{
+					minimum_index = i;
+					minimum_level = can_enter_stage_level_list[minimum_index];
+					minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+				}
+			}
+			
+			selected_stage_number = can_enter_stage_list[minimum_index];
+			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
@@ -69,10 +302,41 @@ bool PuzzleScene::init()
 			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
 		}
 		
+		bool is_not_empty_card[3] = {false,};
+		
+		clear_is_empty_piece = true;
+		int played_stage_number = mySD->getSilType();
+		for(int i=1;i<=3;i++)
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(played_stage_number, kSDS_SI_level_int1_card_i, i)) > 0)
+			{
+				clear_is_empty_piece = false;
+				is_not_empty_card[i-1] = true;
+			}
+		}
+		
+		if(mySGD->getIsNotClearedStage())
+		{
+			for(int i=start_stage;i<start_stage+stage_count;i++)
+			{
+				if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == played_stage_number)
+				{
+					clear_is_stage_unlock = true;
+					next_stage_number = i;
+					break;
+				}
+			}
+		}
+		
+		
 		int take_level;
 		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
 		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
 		else												take_level = 1;
+		
+		clear_star_take_level = take_level;
+		clear_is_empty_star = !is_not_empty_card[take_level-1];
+		
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
 		{
@@ -110,35 +374,7 @@ bool PuzzleScene::init()
 	back_img->setPosition(ccp(240,160));
 	addChild(back_img, kPuzzleZorder_back);
 	
-	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
-	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
-	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
-	if(selected_stage_number == 0)
-	{
-		int found_unlocked_stage_number = -1;
-		for(int i=start_stage;i<start_stage+stage_count && found_unlocked_stage_number == -1;i++)
-		{
-			if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 && NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == 0)
-				found_unlocked_stage_number = i;
-		}
-		
-		selected_stage_number = found_unlocked_stage_number;
-		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
-	}
-	else if(selected_stage_number < start_stage || selected_stage_number >= start_stage + stage_count)
-	{
-		int found_unlocked_stage_number = -1;
-		for(int i=start_stage;i<start_stage+stage_count && found_unlocked_stage_number == -1;i++)
-		{
-			if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 && NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == 0)
-				found_unlocked_stage_number = i;
-		}
-		
-		selected_stage_number = found_unlocked_stage_number;
-		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
-	}
-	piece_mode = (PieceMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);
+	piece_mode = kPieceMode_default;//(PieceMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);
 	setPuzzle();
 	
 	setTop();
@@ -264,7 +500,20 @@ void PuzzleScene::hideClearPopup()
 			}
 		}
 		
-		showGetPuzzle();
+		if(clear_is_empty_piece)
+			showGetPuzzle();
+		else
+		{
+			if(clear_is_empty_star)
+				showGetStar();
+			else
+			{
+				if(clear_is_stage_unlock)
+					showUnlockEffect();
+				else
+					is_menu_enable = true;
+			}
+		}
 	}
 }
 
@@ -282,6 +531,7 @@ enum PuzzleNodeZorder{
 
 void PuzzleScene::showGetPuzzle()
 {
+	CCLog("get piece animation");
 	CCSprite* get_piece_title = CCSprite::create("get_piece_title.png");
 	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
 	get_piece_title->setPosition(ccpAdd(new_piece->getPosition(), ccp(0, 45)));
@@ -347,6 +597,107 @@ void PuzzleScene::createGetPuzzleParticle(CCPoint t_point)
 
 void PuzzleScene::endGetPuzzle()
 {
+	showGetStar();
+}
+
+void PuzzleScene::showGetStar()
+{
+	CCLog("get star animation : %d", mySD->getSilType());
+	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
+	new_piece->startGetStarAnimation(clear_star_take_level, this, callfunc_selector(PuzzleScene::endGetStar));
+}
+
+void PuzzleScene::endGetStar()
+{
+	if(clear_is_first_puzzle_success)
+	{
+		showSuccessPuzzleEffect();
+	}
+	else
+	{
+		if(clear_is_first_perfect)
+		{
+			showPerfectPuzzleEffect();
+		}
+		else
+		{
+			if(clear_is_stage_unlock)
+			{
+				showUnlockEffect();
+			}
+			else
+				is_menu_enable = true;
+		}
+	}
+}
+
+void PuzzleScene::showSuccessPuzzleEffect()
+{
+	CCLog("success puzzle animation");
+	endSuccessPuzzleEffect();
+}
+
+void PuzzleScene::endSuccessPuzzleEffect()
+{
+	mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
+	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+}
+
+void PuzzleScene::showPerfectPuzzleEffect()
+{
+	CCLog("perfect puzzle animation");
+	
+	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
+	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
+	
+	CCLog("start_stage : %d, stage_count : %d", start_stage, stage_count);
+	
+	for(int i=start_stage;i<start_stage+stage_count;i++)
+	{
+		PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(i);
+		new_piece->startGetPieceAnimation(this, callfuncCCp_selector(PuzzleScene::createGetPuzzleParticle));
+	}
+	
+	CCDelayTime* t_delay = CCDelayTime::create(2.f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endPerfectPuzzleEffect));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+	
+	runAction(t_seq);
+}
+void PuzzleScene::endPerfectPuzzleEffect()
+{
+	is_menu_enable = true;
+}
+
+void PuzzleScene::showUnlockEffect()
+{
+	CCLog("unlock piece animation");
+	if(unlock_cover)
+	{
+		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endUnlockEffect));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+		
+		unlock_cover->runAction(t_seq);
+	}
+	else
+	{
+		endUnlockEffect();
+	}
+}
+
+void PuzzleScene::endUnlockEffect()
+{
+	if(unlock_cover)
+	{
+		unlock_cover->removeFromParent();
+		unlock_cover = NULL;
+	}
+	
+	selected_stage_number = next_stage_number;
+	setPieceClick(selected_stage_number);
+	setRightContent();
+	
 	is_menu_enable = true;
 }
 
@@ -415,65 +766,25 @@ void PuzzleScene::setPuzzle()
 	center->setPosition(CCPointZero);
 	puzzle_node->addChild(center, kPuzzleNodeZorder_center);
 	
-//	CCSprite* shadow_top = CCSprite::create("puzzle_shadow_1_top.png");
-//	shadow_top->setAnchorPoint(ccp(0.5, 1));
-//	shadow_top->setPosition(ccp(0, puzzle_size.height/2.f));
-//	puzzle_node->addChild(shadow_top, kPuzzleNodeZorder_shadow);
-	
 	CCSprite* top = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_top.png", puzzle_number)->getCString());
 	top->setAnchorPoint(ccp(0.5, 1));
 	top->setPosition(ccp(0, puzzle_size.height/2.f));
 	puzzle_node->addChild(top, kPuzzleNodeZorder_puzzle);
-	
-//	CCSprite* embo_top = CCSprite::create("puzzle_embo_top.png");
-//	embo_top->setAnchorPoint(ccp(0.5,1));
-//	embo_top->setPosition(ccp(top->getContentSize().width/2.f, top->getContentSize().height));
-//	top->addChild(embo_top);
-	
-//	CCSprite* shadow_bottom = CCSprite::create("puzzle_shadow_1_bottom.png");
-//	shadow_bottom->setAnchorPoint(ccp(0.5, 0));
-//	shadow_bottom->setPosition(ccp(0, -puzzle_size.height/2.f));
-//	puzzle_node->addChild(shadow_bottom, kPuzzleNodeZorder_shadow);
 	
 	CCSprite* bottom = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_bottom.png", puzzle_number)->getCString());
 	bottom->setAnchorPoint(ccp(0.5, 0));
 	bottom->setPosition(ccp(0, -puzzle_size.height/2.f));
 	puzzle_node->addChild(bottom, kPuzzleNodeZorder_puzzle);
 	
-//	CCSprite* embo_bottom = CCSprite::create("puzzle_embo_bottom.png");
-//	embo_bottom->setAnchorPoint(ccp(0.5, 0));
-//	embo_bottom->setPosition(ccp(bottom->getContentSize().width/2.f, 0));
-//	bottom->addChild(embo_bottom);
-	
-//	CCSprite* shadow_left = CCSprite::create("puzzle_shadow_1_left.png");
-//	shadow_left->setAnchorPoint(ccp(0, 0.5));
-//	shadow_left->setPosition(ccp(-puzzle_size.width/2.f, 0));
-//	puzzle_node->addChild(shadow_left, kPuzzleNodeZorder_shadow);
-	
 	CCSprite* left = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_left.png", puzzle_number)->getCString());
 	left->setAnchorPoint(ccp(0, 0.5));
 	left->setPosition(ccp(-puzzle_size.width/2.f, 0));
 	puzzle_node->addChild(left, kPuzzleNodeZorder_puzzle);
 	
-//	CCSprite* embo_left = CCSprite::create("puzzle_embo_left.png");
-//	embo_left->setAnchorPoint(ccp(0, 0.5));
-//	embo_left->setPosition(ccp(0, left->getContentSize().height/2.f));
-//	left->addChild(embo_left);
-	
-//	CCSprite* shadow_right = CCSprite::create("puzzle_shadow_1_right.png");
-//	shadow_right->setAnchorPoint(ccp(1, 0.5));
-//	shadow_right->setPosition(ccp(puzzle_size.width/2.f, 0));
-//	puzzle_node->addChild(shadow_right, kPuzzleNodeZorder_shadow);
-	
 	CCSprite* right = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_right.png", puzzle_number)->getCString());
 	right->setAnchorPoint(ccp(1, 0.5));
 	right->setPosition(ccp(puzzle_size.width/2.f, 0));
 	puzzle_node->addChild(right, kPuzzleNodeZorder_puzzle);
-	
-//	CCSprite* embo_right = CCSprite::create("puzzle_embo_right.png");
-//	embo_right->setAnchorPoint(ccp(1, 0.5));
-//	embo_right->setPosition(ccp(right->getContentSize().width, right->getContentSize().height/2.f));
-//	right->addChild(embo_right);
 	
 	CCSprite* embo_top = CCSprite::create("puzzle_embo_top.png");
 	embo_top->setPosition(top->getPosition());
@@ -491,10 +802,6 @@ void PuzzleScene::setPuzzle()
 	embo_right->setPosition(right->getPosition());
 	puzzle_node->addChild(embo_right, kPuzzleNodeZorder_puzzle);
 	
-//	shadow_batchnode = CCSpriteBatchNode::create("puzzle_shadow_1_piece.png");
-//	shadow_batchnode->setPosition(CCPointZero);
-//	puzzle_node->addChild(shadow_batchnode, kPuzzleNodeZorder_shadow);
-	
 	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
 	
@@ -502,6 +809,10 @@ void PuzzleScene::setPuzzle()
 	
 	bool must_be_change_selected_stage_number = false;
 	int enable_stage_number = -1;
+	
+	unlock_cover = NULL;
+	
+	clear_is_first_perfect = !myDSH->getBoolForKey(kDSH_Key_isPerfectPuzzle_int1, puzzle_number);
 	
 	for(int i=0;i<20;i++)
 	{
@@ -551,6 +862,9 @@ void PuzzleScene::setPuzzle()
 						is_have_card[k-1] = true;
 					}
 				}
+				
+				if(!is_have_card[0] || !is_have_card[1] || !is_have_card[2])
+					clear_is_first_perfect = false;
 				
 				if(found_number >= 1 && found_number <= 3)
 				{
@@ -602,6 +916,13 @@ void PuzzleScene::setPuzzle()
 				if(selected_stage_number == stage_number)
 					must_be_change_selected_stage_number = true;
 			}
+			
+			if(clear_is_stage_unlock && stage_number == next_stage_number)
+			{
+				unlock_cover = CCSprite::create(CCString::createWithFormat("piece_lock_%s.png", piece_type.c_str())->getCString());
+				unlock_cover->setPosition(piece_position);
+				puzzle_node->addChild(unlock_cover, kPuzzleNodeZorder_haveCardCntCase);
+			}
 		}
 		else
 		{
@@ -620,13 +941,20 @@ void PuzzleScene::setPuzzle()
 		}
 	}
 	
+	clear_is_first_puzzle_success = false;
+	
 	if(is_puzzle_clear && !myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number))
 	{
+		clear_is_first_puzzle_success = true;
+		
+		if(clear_is_first_perfect)
+			myDSH->setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, puzzle_number, true);
+		
 		myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number, true);
 		myDSH->saveUserData({kSaveUserData_Key_openPuzzle}, nullptr);
 	}
 	
-	if(must_be_change_selected_stage_number && enable_stage_number != -1)
+	if(must_be_change_selected_stage_number && enable_stage_number != -1) // 현재 선택된 스테이지가 선택 불가 스테이지라면
 	{
 		selected_stage_number = enable_stage_number;
 		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
