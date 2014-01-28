@@ -660,6 +660,7 @@ void StartSettingScene::itemAction(CCObject *sender)
 				item_item->setTag(tag);
 				
 				CCMenu* item_menu = CCMenu::createWithItem(item_item);
+				item_menu->setPosition(CCPointZero);
 				item_parent->addChild(item_menu);
 				
 				is_selected_item[tag-1] = false;

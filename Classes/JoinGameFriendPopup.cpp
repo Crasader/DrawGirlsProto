@@ -15,7 +15,7 @@
 #include "KSAlertView.h"
 #include <boost/format.hpp>
 #include "GivenFriendList.h"
-static CCSize cellSize3 = CCSizeMake(238, 47);
+static CCSize cellSize3 = CCSizeMake(238, 38);
 void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
 	setTouchEnabled(true);
@@ -45,7 +45,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	
 	
 	CCSprite* back2 = CCSprite::create("friendsearch_back.png");
-	back2->setPosition(ccp(240,146));
+	back2->setPosition(ccp(240, 129));
 	addChild(back2, kZorderJoinGameFriendBack);
 //	CCScale9Sprite* back2 = CCScale9Sprite::create("popup_back2.png", CCRectMake(0, 0, 150, 150),
 //																								 CCRectMake(5, 5, 150 - 5*2, 150 - 5*2));
@@ -62,7 +62,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
 	back2->addChild(_menu);
-	_menu->setPosition(ccp(0, 0));
+	_menu->setPosition(ccp(-25, -17));
 	
 	
 	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
@@ -71,27 +71,14 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 																															 (target_close->*delegate_close)();
 																															 removeFromParent();
 																														 });
-	closeBtn->setPosition(ccp(440, 290));
+	closeBtn->setPosition(ccp(450, 258));
 	_menu->addChild(closeBtn);
 	
 
-	auto weekRank = CCMenuItemImageLambda::create
-	(
-	 "rank_friend_rank.png", "rank_friend_rank.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 RankPopup* t_rp = RankPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-	 });
-	weekRank->setPosition(ccp(67, 290));
-	weekRank->setOpacity(0);
-	_menu->addChild(weekRank, 5);
-	
 	// 친구 초대 이벤트
 	auto inviteEventBtn = CCMenuItemImageLambda::create
 	(
-	 "rank_default_invite.png", "rank_default_invite.png",
+	 "friendoption_invite.png", "friendoption_invite.png",
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
 		 
@@ -100,64 +87,50 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 removeFromParent();
 		 
 	 });
-	inviteEventBtn->setPosition(ccp(169, 255));
+	inviteEventBtn->setPosition(ccp(172, 259));
 	inviteEventBtn->setOpacity(0);
-	
 	_menu->addChild(inviteEventBtn);
 	
 	// 친구목록
 	auto friendList = CCMenuItemImageLambda::create
 	(
-	 "rank_friend_list.png", "rank_friend_list.png",
+	 "friendoption_list.png", "friendoption_list.png",
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
 		 FriendListPopup* t_rp = FriendListPopup::create(t_close, d_close);
 		 getParent()->addChild(t_rp, this->getZOrder());
 		 removeFromParent();
-		 
 	 });
-	friendList->setPosition(ccp(270, 255));
+	friendList->setPosition(ccp(275, 259));
 	friendList->setOpacity(0);
 	_menu->addChild(friendList);
 	
 	// 게임 친구맺기
 	auto joinGameFriend = CCMenuItemImageLambda::create
 	(
-	 "rank_gamefriend.png", "rank_gamefriend.png",
+	 "friendoption_surch.png", "friendoption_surch.png",
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
-		 
+		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
+		 getParent()->addChild(t_rp, this->getZOrder());
+		 removeFromParent();
 		 
 	 });
-	joinGameFriend->setPosition(ccp(370, 255));
+	
+	joinGameFriend->setPosition(ccp(378, 259));
 	joinGameFriend->setOpacity(255);
 	_menu->addChild(joinGameFriend);
 	
-	auto addFriend = CCMenuItemImageLambda::create
-	("friendsearch_plus.png", "friendsearch_plus.png",
-	 [=](CCObject* t)
-	 {
-		 // "abkcje34454" -> 45843068445565 -> "45843068445565" 과정.
-		 ostringstream oss;
-		 oss << KS::strToLongLong(m_searchIdEditBox->getText());
-
-		 this->searchById( oss.str() );
-			});
-		 
-		 
-	
-	addFriend->setPosition(377, 320 - 72 - 3);
-	_menu->addChild(addFriend);
 	
 	
 	m_searchIdEditBox = CCEditBox::create(CCSizeMake(190, 25), CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 	m_searchIdEditBox->getBackgroundSprite()->setVisible(false);
 	m_searchIdEditBox->getBackgroundSprite()->setOpacity(0);
-	m_searchIdEditBox->setPosition(ccp(260, 320 - 72 - 3));
+	m_searchIdEditBox->setPosition(ccp(398, 218));
 	m_searchIdEditBox->setPlaceHolder("입력해주세요.");
 	m_searchIdEditBox->setTouchPriority(-200);
 	m_searchIdEditBox->setReturnType(kKeyboardReturnTypeDone);
-	m_searchIdEditBox->setFont(mySGD->getFont().c_str(), 15);
+	m_searchIdEditBox->setFont(mySGD->getFont().c_str(), 10);
 	m_searchIdEditBox->setInputMode(kEditBoxInputModeSingleLine);
 	m_searchIdEditBox->setDelegate(this);
 	addChild(m_searchIdEditBox, kZorderJoinGameFriendIdInput);
@@ -200,12 +173,12 @@ void JoinGameFriendPopup::drawRank( Json::Value obj )
 	//≈◊¿Ã∫Ì ∫‰ ª˝º∫ Ω√¿€ /////////////////////////////////////////////////////////////////////////////////////////
 	
 	//320x320 ≈◊¿Ã∫Ì ∫‰ ª˝º∫
-	rankTableView = JoinFriendTableView::create(this, CCSizeMake(212, 195), NULL);
+	rankTableView = JoinFriendTableView::create(this, CCSizeMake(215, 179), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
-	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
-	m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2 - 8, NULL, bar);
-	m_scrollBar->setDynamicScrollSize(false);
+//	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
+//	m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2 - 8, NULL, bar);
+//	m_scrollBar->setDynamicScrollSize(false);
 	rankTableView->setAnchorPoint(CCPointZero);
 	
 	//kCCScrollViewDirectionVertical : ºº∑Œ Ω∫≈©∑—, kCCScrollViewDirectionHorizontal : ∞°∑Œ Ω∫≈©∑—
@@ -215,7 +188,7 @@ void JoinGameFriendPopup::drawRank( Json::Value obj )
 	rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	
 	//±‚¡ÿ¡° 0,0
-	rankTableView->setPosition(ccp(240, 320 - 291));
+	rankTableView->setPosition(ccp(243, 320 - 297));
 	
 	//µ•¿Ã≈Õ∏¶ ∞°¡Æø¿∞Ì≥™ ≈Õƒ° ¿Ã∫•∆Æ∏¶ π›»Ø«ÿ¡Ÿ ¥Î∏Æ¿⁄∏¶ ¿Ã ≈¨∑°Ω∫∑Œ º≥¡§.
 	rankTableView->setDelegate(this);
@@ -237,7 +210,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	
 	
 	
-	std::string cellBackFile = "rank_gamefriend_cell.png";
+	std::string cellBackFile = "friendsearch_cell.png";
 	
 	
 	CCSprite* bg = CCSprite::create(cellBackFile.c_str());
@@ -248,8 +221,8 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	CCSprite* profileImg = GDWebSprite::create(member["profile_image_url"].asString(), "no_img.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kTagGameFriendProfileImg);
-	profileImg->setPosition(ccp(27, 22));
-	profileImg->setScale(38.f / profileImg->getContentSize().width);
+	profileImg->setPosition(ccp(22, 21));
+	profileImg->setScale(28.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kZorderJoinGameFriendProfileImg);
 	
 	
@@ -311,18 +284,18 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	}
 	
 	
-	sendBtn->setPosition(ccp(150 - 8, 22));
+	sendBtn->setPosition(ccp(170, 22));
 	sendBtn->setTag(kTagGameFriendSend);
 	_menu->addChild(sendBtn, kZorderJoinGameFriendSend);
 	
 	title = CCLabelTTF::create("","Helvetica",12);
-	title->setPosition(ccp(90 - 16,25));
+	title->setPosition(ccp(40,20));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kTagGameFriendNickname);
 	cell->addChild(title, 2);
 	
 	score = CCLabelTTF::create("","Helvetica",10);
-	score->setPosition(ccp(90 - 16,5 + 3));
+	score->setPosition(ccp(40,8));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kTagGameFriendLastDate);
 	cell->addChild(score,2);
@@ -344,10 +317,10 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 
 void JoinGameFriendPopup::scrollViewDidScroll( CCScrollView* view )
 {
-	if(m_scrollBar)
-	{
-		m_scrollBar->setBarRefresh();
-	}
+//	if(m_scrollBar)
+//	{
+//		m_scrollBar->setBarRefresh();
+//	}
 }
 
 void JoinGameFriendPopup::scrollViewDidZoom( CCScrollView* view )

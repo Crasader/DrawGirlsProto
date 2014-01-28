@@ -20,6 +20,7 @@
 #include "StageSettingPopup.h"
 #include "CardStrengthPopup.h"
 #include "TutorialFlowStep.h"
+#include "TouchSuctionLayer.h"
 
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -37,8 +38,23 @@ bool CardSettingPopup::init()
         return false;
     }
 	
+	server_puzzle_list_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	server_event_list_count = NSDS_GI(kSDS_GI_eventCount_i);
+	
+	server_puzzle_list_no.push_back(0);
+	server_puzzle_stage_count.push_back(0);
+	server_puzzle_start_stage.push_back(0);
+	for(int i=1;i<=server_puzzle_list_count;i++)
+	{
+		server_puzzle_list_no.push_back(NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i));
+		server_puzzle_stage_count.push_back(NSDS_GI(server_puzzle_list_no[i], kSDS_PZ_stageCount_i));
+		server_puzzle_start_stage.push_back(NSDS_GI(server_puzzle_list_no[i], kSDS_PZ_startStage_i));
+	}
+	
+	recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+	recent_selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	
 	is_menu_enable = false;
-	mount_menu = NULL;
 	
 	setTouchEnabled(true);
 	
@@ -59,28 +75,6 @@ bool CardSettingPopup::init()
 	main_case->setPosition(ccp(0,-320));
 	addChild(main_case, kCSS_Z_back);
 	
-	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	if(selected_card_number > 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) > 0)
-	{
-		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
-		int card_level = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
-		
-		recent_mounted_number = selected_card_number;
-		
-		mountingCard(card_stage, card_level);
-	}
-	else
-	{
-		myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
-		selected_card_img = NULL;
-		star_parent = NULL;
-		card_option_case = NULL;
-		card_option_script = NULL;
-		selected_card_menu = NULL;
-		
-		recent_mounted_number = selected_card_number;
-	}
-	
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	
 	int total_stage_cnt = 0;
@@ -95,25 +89,34 @@ bool CardSettingPopup::init()
 	int event_stage_count = NSDS_GI(kSDS_GI_eventCount_i);
 	total_stage_cnt += event_stage_count;
 	
-	default_align_number_of_cell = total_stage_cnt;
+	default_align_number_of_cell = (total_stage_cnt-1)/2 + 1;
 	
-	CCSize table_size = CCSizeMake(215, 236);
+	CCSize table_size = CCSizeMake(392, 180);
+	CCPoint table_position = ccp(34, 55);
+	
+//	CCSprite* temp_table = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+//	temp_table->setAnchorPoint(CCPointZero);
+//	temp_table->setOpacity(100);
+//	temp_table->setPosition(table_position);
+//	main_case->addChild(temp_table, kCSS_Z_content);
 	
 	card_table = CCTableView::create(this, table_size);
 	card_table->setAnchorPoint(CCPointZero);
 	card_table->setDirection(kCCScrollViewDirectionVertical);
 	card_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	card_table->setPosition(ccp(210, 25));
+	card_table->setPosition(table_position);
 	card_table->setDelegate(this);
 	main_case->addChild(card_table, kCSS_Z_content);
-	card_table->setTouchPriority(-180-2);
+	card_table->setTouchPriority(-180-5);
 	
-	last_mount_idx = -1;
-	last_select_idx = -1;
+	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-184);
+	t_suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
+	t_suction->setTouchEnabled(true);
+	addChild(t_suction);
 	
 	
-	CCSprite* n_close = CCSprite::create("cardsetting_close.png");
-	CCSprite* s_close = CCSprite::create("cardsetting_close.png");
+	CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
+	CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
 	s_close->setColor(ccGRAY);
 	
 	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(CardSettingPopup::menuAction));
@@ -122,35 +125,67 @@ bool CardSettingPopup::init()
 	CCMenu* close_menu = CCMenu::createWithItem(close_item);
 	close_menu->setPosition(getContentPosition(kCSS_MT_close));
 	main_case->addChild(close_menu, kCSS_Z_content);
-	close_menu->setTouchPriority(-180);
+	close_menu->setTouchPriority(-185);
 	
 	
-	CCSprite* n_align = CCSprite::create("cardsetting_align.png");
-	CCSprite* s_align = CCSprite::create("cardsetting_align.png");
-	s_align->setColor(ccGRAY);
+	CCSprite* n_strength = CCSprite::create("cardsetting_strength.png");
+	CCSprite* s_strength = CCSprite::create("cardsetting_strength.png");
+	s_strength->setColor(ccGRAY);
 	
-	CCMenuItem* align_item = CCMenuItemSprite::create(n_align, s_align, this, menu_selector(CardSettingPopup::menuAction));
-	align_item->setTag(kCSS_MT_align);
+	CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardSettingPopup::menuAction));
+	strength_item->setTag(kCSS_MT_strength);
 	
-	CCMenu* align_menu = CCMenu::createWithItem(align_item);
-	align_menu->setPosition(getContentPosition(kCSS_MT_align));
-	main_case->addChild(align_menu, kCSS_Z_alignButton);
-	align_menu->setTouchPriority(-180);
+	CCMenu* strength_menu = CCMenu::createWithItem(strength_item);
+	strength_menu->setPosition(ccp(78,34));
+	main_case->addChild(strength_menu, kCSS_Z_content);
+	strength_menu->setTouchPriority(-185);
 	
 	
-	CCSprite* n_diary = CCSprite::create("cardsetting_diary.png");
-	CCSprite* s_diary = CCSprite::create("cardsetting_diary.png");
-	s_diary->setColor(ccGRAY);
+	CCSprite* n_align_default = CCSprite::create("cardstrength_align_default.png");
+	CCSprite* s_align_default = CCSprite::create("cardstrength_align_default.png");
+	s_align_default->setColor(ccGRAY);
 	
-	CCMenuItem* diary_item = CCMenuItemSprite::create(n_diary, s_diary, this, menu_selector(CardSettingPopup::menuAction));
-	diary_item->setTag(kCSS_MT_diary);
+	CCMenuItem* align_default_item = CCMenuItemSprite::create(n_align_default, s_align_default, this, menu_selector(CardSettingPopup::menuAction));
+	align_default_item->setTag(kCSS_MT_alignDefault);
 	
-	CCMenu* diary_menu = CCMenu::createWithItem(diary_item);
-	diary_menu->setPosition(getContentPosition(kCSS_MT_diary));
-	main_case->addChild(diary_menu, kCSS_Z_content);
-	diary_menu->setTouchPriority(-180);
+	CCMenu* align_default_menu = CCMenu::createWithItem(align_default_item);
+	align_default_menu->setPosition(ccp(248,34));
+	main_case->addChild(align_default_menu, kCSS_Z_alignButton);
+	align_default_menu->setTouchPriority(-185);
 	
-	align_list_img = NULL;
+	
+	CCSprite* n_align_take = CCSprite::create("cardstrength_align_take.png");
+	CCSprite* s_align_take = CCSprite::create("cardstrength_align_take.png");
+	s_align_take->setColor(ccGRAY);
+	
+	CCMenuItem* align_take_item = CCMenuItemSprite::create(n_align_take, s_align_take, this, menu_selector(CardSettingPopup::menuAction));
+	align_take_item->setTag(kCSS_MT_alignTake);
+	
+	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
+	align_take_menu->setPosition(ccp(330,34));
+	main_case->addChild(align_take_menu, kCSS_Z_alignButton);
+	align_take_menu->setTouchPriority(-185);
+	
+	
+	CCSprite* n_align_rank = CCSprite::create("cardstrength_align_rank.png");
+	CCSprite* s_align_rank = CCSprite::create("cardstrength_align_rank.png");
+	s_align_rank->setColor(ccGRAY);
+	
+	CCMenuItem* align_rank_item = CCMenuItemSprite::create(n_align_rank, s_align_rank, this, menu_selector(CardSettingPopup::menuAction));
+	align_rank_item->setTag(kCSS_MT_alignRank);
+	
+	CCMenu* align_rank_menu = CCMenu::createWithItem(align_rank_item);
+	align_rank_menu->setPosition(ccp(412,34));
+	main_case->addChild(align_rank_menu, kCSS_Z_alignButton);
+	align_rank_menu->setTouchPriority(-185);
+	
+	CCSprite* title_case = CCSprite::create("cardsetting_title.png");
+	title_case->setPosition(ccp(240,259));
+	main_case->addChild(title_case, kCSS_Z_content);
+	
+	CCLabelTTF* take_card_count = CCLabelTTF::create(CCString::createWithFormat("%d 장", mySGD->getHasGottenCardsSize())->getCString(), mySGD->getFont().c_str(), 10);
+	take_card_count->setPosition(ccp(398,258));
+	main_case->addChild(take_card_count, kCSS_Z_content);
 	
     return true;
 }
@@ -215,9 +250,7 @@ CCPoint CardSettingPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kCSS_MT_close)			return_value = ccp(440,290);
-	else if(t_tag == kCSS_MT_align)		return_value = ccp(265,290);
-	else if(t_tag == kCSS_MT_diary)		return_value = ccp(373,290);
+	if(t_tag == kCSS_MT_close)			return_value = ccp(452,259);
 	else if(t_tag == kCSS_MT_cardBase)	return_value = ccp(245,213);
 	
 	return return_value;
@@ -275,107 +308,32 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				hidePopup();
 			}
 		}
-		else if(tag == kCSS_MT_align)
-		{
-			if(align_list_img)
-			{
-				align_list_img->removeFromParent();
-				align_list_img = NULL;
-			}
-			else
-			{
-				align_list_img = CCSprite::create("cardsetting_alignback.png");
-				align_list_img->setAnchorPoint(ccp(0.5f,1.f));
-				align_list_img->setPosition(ccpAdd(getContentPosition(kCSS_MT_align), ccp(0,0)));
-				main_case->addChild(align_list_img, kCSS_Z_alignList);
-				
-				CCMenuItem* align_close_item = CCMenuItemImage::create("cardsetting_align_close.png", "cardsetting_align_close.png", this, menu_selector(CardSettingPopup::menuAction));
-				align_close_item->setTag(kCSS_MT_align);
-				
-				CCMenu* align_close_menu = CCMenu::createWithItem(align_close_item);
-				align_close_menu->setPosition(ccp(52,21));
-				align_list_img->addChild(align_close_menu);
-				align_close_menu->setTouchPriority(-180-3);
-				
-				CCMenuItem* align_default_item = CCMenuItemImage::create("cardsetting_align_click.png", "cardsetting_align_click.png", this, menu_selector(CardSettingPopup::menuAction));
-				align_default_item->setTag(kCSS_MT_alignDefault);
-				
-				CCMenu* align_default_menu = CCMenu::createWithItem(align_default_item);
-				align_default_menu->setPosition(ccp(52,53));
-				align_list_img->addChild(align_default_menu);
-				align_default_menu->setTouchPriority(-180-3);
-				
-				CCMenuItem* align_gradedown_item = CCMenuItemImage::create("cardsetting_align_click.png", "cardsetting_align_click.png", this, menu_selector(CardSettingPopup::menuAction));
-				align_gradedown_item->setTag(kCSS_MT_alignGradeDown);
-				
-				CCMenu* align_gradedown_menu = CCMenu::createWithItem(align_gradedown_item);
-				align_gradedown_menu->setPosition(ccp(52,53+27));
-				align_list_img->addChild(align_gradedown_menu);
-				align_gradedown_menu->setTouchPriority(-180-3);
-				
-				CCMenuItem* align_gradeup_item = CCMenuItemImage::create("cardsetting_align_click.png", "cardsetting_align_click.png", this, menu_selector(CardSettingPopup::menuAction));
-				align_gradeup_item->setTag(kCSS_MT_alignGradeUp);
-				
-				CCMenu* align_gradeup_menu = CCMenu::createWithItem(align_gradeup_item);
-				align_gradeup_menu->setPosition(ccp(52,53+27+27));
-				align_list_img->addChild(align_gradeup_menu);
-				align_gradeup_menu->setTouchPriority(-180-3);
-				
-				CCMenuItem* align_take_item = CCMenuItemImage::create("cardsetting_align_click.png", "cardsetting_align_click.png", this, menu_selector(CardSettingPopup::menuAction));
-				align_take_item->setTag(kCSS_MT_alignTake);
-				
-				CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
-				align_take_menu->setPosition(ccp(52,53+27+27+27));
-				align_list_img->addChild(align_take_menu);
-				align_take_menu->setTouchPriority(-180-3);
-				
-				CCSprite* sort_check = CCSprite::create("cardsetting_check.png");
-				sort_check->setScale(0.5f);
-				align_list_img->addChild(sort_check);
-				
-				CardSortType sort_type = CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType));
-				if(sort_type == kCST_default)			sort_check->setPosition(ccp(18,57));
-				else if(sort_type == kCST_gradeDown)	sort_check->setPosition(ccp(18,57+27));
-				else if(sort_type == kCST_gradeUp)		sort_check->setPosition(ccp(18,57+27+27));
-				else if(sort_type == kCST_take)			sort_check->setPosition(ccp(18,57+27+27+27));
-			}
-			
-			is_menu_enable = true;
-		}
 		else if(tag == kCSS_MT_alignDefault)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_default)
 			{
 				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_default);
+				recent_sort_type = kCST_default;
 				mySGD->changeSortType(kCST_default);
-				align_list_img->removeFromParent();
-				align_list_img = NULL;
 				alignChange();
 			}
 			
 			is_menu_enable = true;
 		}
-		else if(tag == kCSS_MT_alignGradeDown)
+		else if(tag == kCSS_MT_alignRank)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_gradeDown)
 			{
 				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_gradeDown);
+				recent_sort_type = kCST_gradeDown;
 				mySGD->changeSortType(kCST_gradeDown);
-				align_list_img->removeFromParent();
-				align_list_img = NULL;
 				alignChange();
 			}
-			
-			is_menu_enable = true;
-		}
-		else if(tag == kCSS_MT_alignGradeUp)
-		{
-			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_gradeUp)
+			else
 			{
 				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_gradeUp);
+				recent_sort_type = kCST_gradeUp;
 				mySGD->changeSortType(kCST_gradeUp);
-				align_list_img->removeFromParent();
-				align_list_img = NULL;
 				alignChange();
 			}
 			
@@ -386,76 +344,17 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_take)
 			{
 				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_take);
+				recent_sort_type = kCST_take;
 				mySGD->changeSortType(kCST_take);
-				align_list_img->removeFromParent();
-				align_list_img = NULL;
 				alignChange();
 			}
-			
-			is_menu_enable = true;
-		}
-		else if(tag == kCSS_MT_diary)
-		{
-			if(recent_mounted_number != 0)
-			{
-				mySGD->selected_collectionbook = recent_mounted_number;
-				
-				CollectionBookPopup* t_popup = CollectionBookPopup::create();
-				t_popup->setHideFinalAction(target_final, delegate_final);
-				getParent()->addChild(t_popup, kPMS_Z_popup);
-				
-				target_final = NULL;
-				hidePopup();
-				
-				//			CCDirector::sharedDirector()->replaceScene(CollectionBook::scene());
-			}
 			else
 			{
-				is_menu_enable = true;
+				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_takeReverse);
+				recent_sort_type = kCST_takeReverse;
+				mySGD->changeSortType(kCST_takeReverse);
+				alignChange();
 			}
-		}
-		else if(tag == kCSS_MT_selectedCard)
-		{
-			if(recent_mounted_number != 0)
-			{
-				mySGD->selected_collectionbook = recent_mounted_number;
-				
-				CollectionBookPopup* t_popup = CollectionBookPopup::create();
-				t_popup->setHideFinalAction(target_final, delegate_final);
-				getParent()->addChild(t_popup, kPMS_Z_popup);
-				
-				target_final = NULL;
-				hidePopup();
-				
-				//			CCDirector::sharedDirector()->replaceScene(CollectionBook::scene());
-			}
-			else
-			{
-				is_menu_enable = true;
-			}
-		}
-		else if(tag == kCSS_MT_releaseCard)
-		{
-			mount_menu->removeFromParent();
-			mount_menu = NULL;
-			
-			removeMountedCase();
-			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
-			
-			if(last_select_idx != -1)
-				card_table->updateCellAtIndex(last_select_idx);
-			
-			CCSprite* n_mount = CCSprite::create("card_mount.png");
-			CCSprite* s_mount = CCSprite::create("card_mount.png");
-			s_mount->setColor(ccGRAY);
-			
-			CCMenuItem* mount_item = CCMenuItemSprite::create(n_mount, s_mount, this, menu_selector(CardSettingPopup::menuAction));
-			mount_item->setTag(kCSS_MT_mountCard);
-			
-			mount_menu = CCMenu::createWithItem(mount_item);
-			mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
-			main_case->addChild(mount_menu, kCSS_Z_content);
-			mount_menu->setTouchPriority(-181);
 			
 			is_menu_enable = true;
 		}
@@ -468,303 +367,39 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			target_final = NULL;
 			hidePopup();
 		}
-		else if(tag == kCSS_MT_mountCard)
-		{
-			mount_menu->removeFromParent();
-			mount_menu = NULL;
-			
-			myDSH->setIntegerForKey(kDSH_Key_selectedCard, recent_mounted_number);
-			
-			if(last_select_idx != -1)
-				card_table->updateCellAtIndex(last_select_idx);
-			
-			addMountedCase();
-			
-			CCSprite* n_release = CCSprite::create("card_release.png");
-			CCSprite* s_release = CCSprite::create("card_release.png");
-			s_release->setColor(ccGRAY);
-			
-			CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardSettingPopup::menuAction));
-			release_item->setPosition(ccp(40,0));
-			release_item->setTag(kCSS_MT_releaseCard);
-			
-			mount_menu = CCMenu::createWithItem(release_item);
-			mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
-			main_case->addChild(mount_menu, kCSS_Z_content);
-			mount_menu->setTouchPriority(-181);
-			
-			bool is_strength_enable = true;
-			
-			// check is strength enable
-			
-			if(is_strength_enable)
-			{
-				CCSprite* n_strength = CCSprite::create("cardsetting_strength_on.png");
-				CCSprite* s_strength = CCSprite::create("cardsetting_strength_on.png");
-				s_strength->setColor(ccGRAY);
-				
-				CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardSettingPopup::menuAction));
-				strength_item->setPosition(ccp(-40,0));
-				strength_item->setTag(kCSS_MT_strength);
-				
-				mount_menu->addChild(strength_item);
-			}
-			else
-			{
-				CCMenuItem* strength_item = CCMenuItemImage::create("cardsetting_strength_off.png", "cardsetting_strength_off.png", this, menu_selector(CardSettingPopup::menuAction));
-				strength_item->setPosition(ccp(-40,0));
-				strength_item->setEnabled(false);
-				
-				mount_menu->addChild(strength_item);
-			}
-			
-			is_menu_enable = true;
-		}
 		else if(tag >= kCSS_MT_cardMenuBase && tag < kCSS_MT_noCardBase)
 		{
 			int clicked_card_number = tag-kCSS_MT_cardMenuBase;
 			
-			if(clicked_card_number != recent_mounted_number)
+			if(clicked_card_number != 0)
 			{
-				removeMountingCard();
-				recent_mounted_number = clicked_card_number;
-				int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, recent_mounted_number);
-				int card_level = NSDS_GI(kSDS_CI_int1_grade_i, recent_mounted_number);
-				mountingCard(card_stage, card_level);
+				mySGD->selected_collectionbook = clicked_card_number;
 				
-				int recent_idx = ((CCTableViewCell*)(((CCNode*)pSender)->getParent()->getParent()))->getIdx();
-				if(last_mount_idx != -1)
-					card_table->updateCellAtIndex(last_mount_idx);
+				CollectionBookPopup* t_popup = CollectionBookPopup::create();
+				t_popup->setHideFinalAction(target_final, delegate_final);
+				getParent()->addChild(t_popup, kPMS_Z_popup);
 				
-				last_mount_idx = recent_idx;
-				card_table->updateCellAtIndex(last_mount_idx);
+				target_final = NULL;
+				hidePopup();
+				
+				//			CCDirector::sharedDirector()->replaceScene(CollectionBook::scene());
 			}
-			else if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) != clicked_card_number && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, clicked_card_number) > 0)
+			else
 			{
-				mount_menu->removeFromParent();
-				mount_menu = NULL;
-				
-				myDSH->setIntegerForKey(kDSH_Key_selectedCard, clicked_card_number);
-				
-				int recent_idx = ((CCTableViewCell*)(((CCNode*)pSender)->getParent()->getParent()))->getIdx();
-				if(last_select_idx != -1)
-					card_table->updateCellAtIndex(last_select_idx);
-				
-				last_select_idx = recent_idx;
-				card_table->updateCellAtIndex(last_select_idx);
-				
-				addMountedCase();
-				
-				CCSprite* n_release = CCSprite::create("card_release.png");
-				CCSprite* s_release = CCSprite::create("card_release.png");
-				s_release->setColor(ccGRAY);
-				
-				CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardSettingPopup::menuAction));
-				release_item->setPosition(ccp(40,0));
-				release_item->setTag(kCSS_MT_releaseCard);
-				
-				mount_menu = CCMenu::createWithItem(release_item);
-				mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
-				main_case->addChild(mount_menu, kCSS_Z_content);
-				mount_menu->setTouchPriority(-181);
-				
-				bool is_strength_enable = true;
-				
-				// check is strength enable
-				
-				if(is_strength_enable)
-				{
-					CCSprite* n_strength = CCSprite::create("cardsetting_strength_on.png");
-					CCSprite* s_strength = CCSprite::create("cardsetting_strength_on.png");
-					s_strength->setColor(ccGRAY);
-					
-					CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardSettingPopup::menuAction));
-					strength_item->setPosition(ccp(-40,0));
-					strength_item->setTag(kCSS_MT_strength);
-					
-					mount_menu->addChild(strength_item);
-				}
-				else
-				{
-					CCMenuItem* strength_item = CCMenuItemImage::create("cardsetting_strength_off.png", "cardsetting_strength_off.png", this, menu_selector(CardSettingPopup::menuAction));
-					strength_item->setPosition(ccp(-40,0));
-					strength_item->setEnabled(false);
-					
-					mount_menu->addChild(strength_item);
-				}
+				is_menu_enable = true;
 			}
-			
-			is_menu_enable = true;
 		}
 		else if(tag >= kCSS_MT_noCardBase)
 		{
-			removeMountingCard();
-			
-			if(last_mount_idx != -1)
-				card_table->updateCellAtIndex(last_mount_idx);
-			
 			is_menu_enable = true;
 		}
 	}
 }
 
-void CardSettingPopup::removeMountedCase()
-{
-	selected_card_img->removeChildByTag(kCARDCASE_Tag_mounted_top);
-	selected_card_img->removeChildByTag(kCARDCASE_Tag_mounted_bottom);
-	selected_card_img->removeChildByTag(kCARDCASE_Tag_mounted_left);
-	selected_card_img->removeChildByTag(kCARDCASE_Tag_mounted_right);
-}
-
-void CardSettingPopup::addMountedCase()
-{
-	CCSprite* top_case = CCSprite::create("card_case_check_top.png");
-	top_case->setPosition(ccp(160,430));
-	selected_card_img->addChild(top_case, 1, kCARDCASE_Tag_mounted_top);
-	
-	CCSprite* bottom_case = CCSprite::create("card_case_check_bottom.png");
-	bottom_case->setPosition(ccp(160,0));
-	selected_card_img->addChild(bottom_case, 1, kCARDCASE_Tag_mounted_bottom);
-	
-	CCSprite* left_case = CCSprite::create("card_case_check_left.png");
-	left_case->setPosition(ccp(0,215));
-	selected_card_img->addChild(left_case, 1, kCARDCASE_Tag_mounted_left);
-	
-	CCSprite* right_case = CCSprite::create("card_case_check_right.png");
-	right_case->setPosition(ccp(320,215));
-	selected_card_img->addChild(right_case, 1, kCARDCASE_Tag_mounted_right);
-}
 
 void CardSettingPopup::alignChange()
 {
 	card_table->reloadData();
-}
-
-void CardSettingPopup::removeMountingCard()
-{
-	if(selected_card_img)		selected_card_img->removeFromParent();
-	selected_card_img = NULL;
-	if(star_parent)				star_parent->removeFromParent();
-	star_parent = NULL;
-	
-	if(card_option_case)		card_option_case->removeFromParent();
-	card_option_case = NULL;
-	if(card_option_script)		card_option_script->removeFromParent();
-	card_option_script = NULL;
-	
-	if(selected_card_menu)		selected_card_menu->removeFromParent();
-	selected_card_menu = NULL;
-	
-	if(mount_menu)
-		mount_menu->removeFromParent();
-	mount_menu = NULL;
-	
-	recent_mounted_number = 0;
-}
-
-void CardSettingPopup::mountingCard(int card_stage, int card_level)
-{
-	selected_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
-	selected_card_img->setScale(0.43f);
-	selected_card_img->setPosition(ccp(112,159));
-	main_case->addChild(selected_card_img, kCSS_Z_content);
-	
-	if(card_level == 3 && mySD->isAnimationStage(card_stage))
-	{
-		CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-		CCSprite* t_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
-											  CCRectMake(0, 0, ani_size.width, ani_size.height));
-		t_ani->setPosition(mySD->getAnimationPosition(card_stage));
-		selected_card_img->addChild(t_ani);
-	}
-	
-	CCSprite* n_cardmenu = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*selected_card_img->getScale(), 430*selected_card_img->getScale()));
-	CCSprite* s_cardmenu = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*selected_card_img->getScale(), 430*selected_card_img->getScale()));
-	
-	CCMenuItem* selected_card_item = CCMenuItemSprite::create(n_cardmenu, s_cardmenu, this, menu_selector(CardSettingPopup::menuAction));
-	selected_card_item->setTag(kCSS_MT_selectedCard);
-	
-	selected_card_menu = CCMenu::createWithItem(selected_card_item);
-	selected_card_menu->setPosition(selected_card_img->getPosition());
-	main_case->addChild(selected_card_menu, kCSS_Z_selectedImg);
-	selected_card_menu->setTouchPriority(-181);
-	
-	CardCase* t_case = CardCase::create(card_stage, card_level);
-	t_case->setPosition(CCPointZero);
-	selected_card_img->addChild(t_case);
-	
-	if(recent_mounted_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
-	{
-		addMountedCase();
-		
-		CCSprite* n_release = CCSprite::create("card_release.png");
-		CCSprite* s_release = CCSprite::create("card_release.png");
-		s_release->setColor(ccGRAY);
-		
-		CCMenuItem* release_item = CCMenuItemSprite::create(n_release, s_release, this, menu_selector(CardSettingPopup::menuAction));
-		release_item->setPosition(ccp(40,0));
-		release_item->setTag(kCSS_MT_releaseCard);
-		
-		mount_menu = CCMenu::createWithItem(release_item);
-		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
-		main_case->addChild(mount_menu, kCSS_Z_content);
-		mount_menu->setTouchPriority(-181);
-		
-		bool is_strength_enable = true;
-		
-		// check is strength enable
-		
-		if(is_strength_enable)
-		{
-			CCSprite* n_strength = CCSprite::create("cardsetting_strength_on.png");
-			CCSprite* s_strength = CCSprite::create("cardsetting_strength_on.png");
-			s_strength->setColor(ccGRAY);
-			
-			CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardSettingPopup::menuAction));
-			strength_item->setPosition(ccp(-40,0));
-			strength_item->setTag(kCSS_MT_strength);
-			
-			mount_menu->addChild(strength_item);
-		}
-		else
-		{
-			CCMenuItem* strength_item = CCMenuItemImage::create("cardsetting_strength_off.png", "cardsetting_strength_off.png", this, menu_selector(CardSettingPopup::menuAction));
-			strength_item->setPosition(ccp(-40,0));
-			strength_item->setEnabled(false);
-			
-			mount_menu->addChild(strength_item);
-		}
-	}
-	else if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_mounted_number) > 0)
-	{
-		CCSprite* n_mount = CCSprite::create("card_mount.png");
-		CCSprite* s_mount = CCSprite::create("card_mount.png");
-		s_mount->setColor(ccGRAY);
-		
-		CCMenuItem* mount_item = CCMenuItemSprite::create(n_mount, s_mount, this, menu_selector(CardSettingPopup::menuAction));
-		mount_item->setTag(kCSS_MT_mountCard);
-		
-		mount_menu = CCMenu::createWithItem(mount_item);
-		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
-		main_case->addChild(mount_menu, kCSS_Z_content);
-		mount_menu->setTouchPriority(-181);
-	}
-	else
-	{
-		GraySprite* n_mount = GraySprite::create("card_mount.png");
-		n_mount->setGray(true);
-		GraySprite* s_mount = GraySprite::create("card_mount.png");
-		s_mount->setGray(true);
-		
-		CCMenuItem* mount_item = CCMenuItemSprite::create(n_mount, s_mount, this, menu_selector(CardSettingPopup::menuAction));
-		mount_item->setTag(kCSS_MT_mountCard);
-		
-		mount_menu = CCMenu::createWithItem(mount_item);
-		mount_menu->setEnabled(false);
-		mount_menu->setPosition(ccpAdd(selected_card_img->getPosition(), ccp(0,-112)));
-		main_case->addChild(mount_menu, kCSS_Z_content);
-		mount_menu->setTouchPriority(-181);
-	}
 }
 
 void CardSettingPopup::cellAction( CCObject* sender )
@@ -778,80 +413,68 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 	cell->init();
 	cell->autorelease();
 	
-	CardSortType sort_type = CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType));
+	CardSortType sort_type = (CardSortType)recent_sort_type;
 	
 	if(sort_type == kCST_default)
 	{
-		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+		int puzzle_count = server_puzzle_list_count;
 		
-		int found_stage = -1;
+		int t_idx = idx*2;
+		int found_stage1 = -1;
 		int selected_cnt = 0;
-		for(int i=1;i<=puzzle_count && found_stage == -1;i++)
+		for(int i=1;i<=puzzle_count && found_stage1 == -1;i++)
 		{
-			int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
-			int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+			int stage_count = server_puzzle_stage_count[i];
 			
-			if(idx >= selected_cnt && idx < selected_cnt+stage_count)
+			if(t_idx >= selected_cnt && t_idx < selected_cnt+stage_count)
 			{
-				int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
-				found_stage = idx-selected_cnt+start_stage;
+				int start_stage = server_puzzle_start_stage[i];
+				found_stage1 = t_idx-selected_cnt+start_stage;
 			}
 			else
 				selected_cnt += stage_count;
 		}
 		
-		if(found_stage == -1)
+		if(found_stage1 == -1)
 		{
-			int event_stage_count = NSDS_GI(kSDS_GI_eventCount_i);
-			if(idx >= selected_cnt && idx < selected_cnt+event_stage_count)
-				found_stage = idx-selected_cnt+event_stage_count;
+			int event_stage_count = server_event_list_count;
+			if(t_idx >= selected_cnt && t_idx < selected_cnt+event_stage_count)
+				found_stage1 = t_idx-selected_cnt+event_stage_count;
 			else
 				CCLog("not found stage");
 		}
 		
-		if(found_stage != -1)
+		if(found_stage1 != -1)
 		{
 			for(int i=1;i<=3;i++)
 			{
-				int card_number = mySGD->isHasGottenCards(found_stage, i);
-				CCPoint card_position = ccp(32.f+4.f + (i-1)*(64.f+8.f), 43.f+4.f);
+				int card_number = getSGDisHasGottenCards(found_stage1, i);
+				CCPoint card_position = ccp(32.f + (i-1)*(64.f+1.f), 43.f);
 				if(card_number > 0)
 				{
-					GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
-																												  found_stage, i)->getCString()));
-					t_card->setScale(0.92f);
-					t_card->setPosition(card_position);
-					cell->addChild(t_card);
+					CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
+					CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);
+					GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
+																												  found_stage1, i)->getCString()));
+					n_card->setScale(0.85f);
+					n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
+					n_card->setGray(getCardDurability(card_number) <= 0);
+					n_no->addChild(n_card, -1);
 					
-					t_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
+					CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
+					s_no->setColor(ccGRAY);
 					
-					CCSprite* t_no = CCSprite::create("cardsetting_noimg.png");
-					t_no->setPosition(card_position);
-					cell->addChild(t_no);
+					GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
+																												  found_stage1, i)->getCString()));
+					s_card->setScale(0.85f);
+					s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
+					if(getCardDurability(card_number) <= 0)
+						s_card->setColor(ccc3(60, 60, 60));
+					else
+						s_card->setColor(ccGRAY);
+					s_no->addChild(s_card, -1);
 					
-					CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
-																							 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
-																  mySGD->getFont().c_str(), 10);
-					t_durability->setAnchorPoint(ccp(0.5f,0.5f));
-					t_durability->setColor(ccBLACK);
-					t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
-					t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-					t_durability->setPosition(ccp(t_card->getContentSize().width/2.f+15, 7));
-					t_card->addChild(t_durability);
-					
-					CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
-					mini_rank->setPosition(ccp(9,9));
-					t_card->addChild(mini_rank);
-					
-					CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, card_number))->getCString(), mySGD->getFont().c_str(), 8);
-					t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
-					mini_rank->addChild(t_rank);
-					
-					CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, card_number))->getCString(), mySGD->getFont().c_str(), 8);
-					t_card_level_label->setPosition(ccp(13,80));
-					t_card->addChild(t_card_level_label);
-					
-					CCMenuItem* t_card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CardSettingPopup::menuAction));
+					CCMenuItem* t_card_item = CCMenuItemSprite::create(n_no, s_no, this, menu_selector(CardSettingPopup::menuAction));
 					t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
 					
 					ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
@@ -859,18 +482,30 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					cell->addChild(t_card_menu);
 					t_card_menu->setTouchPriority(-180-3);
 					
-					if(card_number == recent_mounted_number)
-					{
-						last_mount_idx = idx;
-						CCSprite* mount_img = CCSprite::create("card_selected.png");
-						mount_img->setPosition(card_position);
-						cell->addChild(mount_img);
-					}
+					CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", getCardDurability(card_number),
+																							 getCardMaxDurability(card_number))->getCString(),
+																  mySGD->getFont().c_str(), 9);
+					t_durability->setAnchorPoint(ccp(0.5f,0.5f));
+					t_durability->setColor(ccBLACK);
+					t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
+					t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+					t_durability->setPosition(ccpAdd(card_position, ccp(13, no_minus_half_size.y+12)));
+					cell->addChild(t_durability);
 					
-					int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-					if(selected_card_number == card_number)
+					CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
+					mini_rank->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(12,12))));
+					cell->addChild(mini_rank);
+					
+					CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", getCardRank(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+					t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
+					mini_rank->addChild(t_rank);
+					
+					CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", getCardLevel(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+					t_card_level_label->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(17,69))));
+					cell->addChild(t_card_level_label);
+					
+					if(recent_selected_card_number == card_number)
 					{
-						last_select_idx = idx;
 						CCSprite* select_img = CCSprite::create("card_check.png");
 						select_img->setPosition(card_position);
 						cell->addChild(select_img);
@@ -892,52 +527,151 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				}
 			}
 		}
+		
+		{ // next stage
+			int t_idx = idx*2+1;
+			int found_stage1 = -1;
+			int selected_cnt = 0;
+			for(int i=1;i<=puzzle_count && found_stage1 == -1;i++)
+			{
+				int stage_count = server_puzzle_stage_count[i];
+				
+				if(t_idx >= selected_cnt && t_idx < selected_cnt+stage_count)
+				{
+					int start_stage = server_puzzle_start_stage[i];
+					found_stage1 = t_idx-selected_cnt+start_stage;
+				}
+				else
+					selected_cnt += stage_count;
+			}
+			
+			if(found_stage1 == -1)
+			{
+				int event_stage_count = server_event_list_count;
+				if(t_idx >= selected_cnt && t_idx < selected_cnt+event_stage_count)
+					found_stage1 = t_idx-selected_cnt+event_stage_count;
+				else
+					CCLog("not found stage");
+			}
+			
+			if(found_stage1 != -1)
+			{
+				for(int i=1;i<=3;i++)
+				{
+					int card_number = getSGDisHasGottenCards(found_stage1, i);
+					CCPoint card_position = ccp(32.f + 3*(64.f+1.f) + (i-1)*(64.f+1.f), 43.f);
+					if(card_number > 0)
+					{
+						CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
+						CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);
+						GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
+																													  found_stage1, i)->getCString()));
+						n_card->setScale(0.85f);
+						n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
+						n_card->setGray(getCardDurability(card_number) <= 0);
+						n_no->addChild(n_card, -1);
+						
+						CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
+						s_no->setColor(ccGRAY);
+						
+						GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
+																													  found_stage1, i)->getCString()));
+						s_card->setScale(0.85f);
+						s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
+						if(getCardDurability(card_number) <= 0)
+							s_card->setColor(ccc3(60, 60, 60));
+						else
+							s_card->setColor(ccGRAY);
+						s_no->addChild(s_card, -1);
+						
+						CCMenuItem* t_card_item = CCMenuItemSprite::create(n_no, s_no, this, menu_selector(CardSettingPopup::menuAction));
+						t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
+						
+						ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
+						t_card_menu->setPosition(card_position);
+						cell->addChild(t_card_menu);
+						t_card_menu->setTouchPriority(-180-3);
+						
+						CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", getCardDurability(card_number),
+																								 getCardMaxDurability(card_number))->getCString(),
+																	  mySGD->getFont().c_str(), 9);
+						t_durability->setAnchorPoint(ccp(0.5f,0.5f));
+						t_durability->setColor(ccBLACK);
+						t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
+						t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+						t_durability->setPosition(ccpAdd(card_position, ccp(13, no_minus_half_size.y+12)));
+						cell->addChild(t_durability);
+						
+						CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
+						mini_rank->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(12,12))));
+						cell->addChild(mini_rank);
+						
+						CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", getCardRank(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+						t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
+						mini_rank->addChild(t_rank);
+						
+						CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", getCardLevel(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+						t_card_level_label->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(17,69))));
+						cell->addChild(t_card_level_label);
+						
+						if(recent_selected_card_number == card_number)
+						{
+							CCSprite* select_img = CCSprite::create("card_check.png");
+							select_img->setPosition(card_position);
+							cell->addChild(select_img);
+						}
+					}
+					else
+					{
+						CCSprite* t_no = CCSprite::create("cardsetting_noimg.png");
+						t_no->setPosition(card_position);
+						cell->addChild(t_no);
+						
+						CCMenuItem* t_card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CardSettingPopup::menuAction));
+						t_card_item->setTag(kCSS_MT_noCardBase+card_number);
+						
+						ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
+						t_card_menu->setPosition(card_position);
+						cell->addChild(t_card_menu);
+						t_card_menu->setTouchPriority(-180-3);
+					}
+				}
+			}
+		}
 	}
 	else
 	{
-		for(int i=idx*3;i<idx*3+3 && i<mySGD->getHasGottenCardsSize();i++)
+		for(int i=idx*6;i<idx*6+6 && i<mySGD->getHasGottenCardsSize();i++)
 		{
 			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
-			int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
-			CCPoint card_position = ccp(32.f+4.f + (i-idx*3)*(64.f+8.f), 43.f+4.f);
+			int card_stage = getCardStage(card_number);
+			int card_grade = getCardGrade(card_number);
+			int card_durability = getCardDurability(card_number);
+			CCPoint card_position = ccp(32.f + (i-idx*6)*(64.f+1.f), 43.f);
 			
-			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
+			CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
+			CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);
+			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
 																										  card_stage, card_grade)->getCString()));
-			t_card->setScale(0.92f);
-			t_card->setPosition(card_position);
-			cell->addChild(t_card);
+			n_card->setScale(0.85f);
+			n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
+			n_card->setGray(card_durability <= 0);
+			n_no->addChild(n_card, -1);
 			
-			t_card->setGray(card_durability <= 0);
+			CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
+			s_no->setColor(ccGRAY);
 			
-			CCSprite* t_no = CCSprite::create("cardsetting_noimg.png");
-			t_no->setPosition(card_position);
-			cell->addChild(t_no);
+			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
+																										  card_stage, card_grade)->getCString()));
+			s_card->setScale(0.85f);
+			s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
+			if(card_durability <= 0)
+				s_card->setColor(ccc3(60, 60, 60));
+			else
+				s_card->setColor(ccGRAY);
+			s_no->addChild(s_card, -1);
 			
-			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", card_durability,
-																					 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
-														  mySGD->getFont().c_str(), 10);
-			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
-			t_durability->setColor(ccBLACK);
-			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
-			t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-			t_durability->setPosition(ccp(t_card->getContentSize().width/2.f+15, 7));
-			t_card->addChild(t_durability);
-			
-			CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
-			mini_rank->setPosition(ccp(9,9));
-			t_card->addChild(mini_rank);
-			
-			CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, card_number))->getCString(), mySGD->getFont().c_str(), 8);
-			t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
-			mini_rank->addChild(t_rank);
-			
-			CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, card_number))->getCString(), mySGD->getFont().c_str(), 8);
-			t_card_level_label->setPosition(ccp(13,80));
-			t_card->addChild(t_card_level_label);
-			
-			CCMenuItem* t_card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CardSettingPopup::menuAction));
+			CCMenuItem* t_card_item = CCMenuItemSprite::create(n_no, s_no, this, menu_selector(CardSettingPopup::menuAction));
 			t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
 			
 			ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
@@ -945,18 +679,31 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			cell->addChild(t_card_menu);
 			t_card_menu->setTouchPriority(-180-3);
 			
-			if(card_number == recent_mounted_number)
-			{
-				last_mount_idx = idx;
-				CCSprite* mount_img = CCSprite::create("card_selected.png");
-				mount_img->setPosition(card_position);
-				cell->addChild(mount_img);
-			}
+			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", card_durability,
+																					 getCardMaxDurability(card_number))->getCString(),
+														  mySGD->getFont().c_str(), 9);
+			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
+			t_durability->setColor(ccBLACK);
+			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
+			t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+			t_durability->setPosition(ccpAdd(card_position, ccp(13, no_minus_half_size.y+12)));
+			cell->addChild(t_durability);
 			
-			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			if(selected_card_number == card_number)
+			CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
+			mini_rank->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(12,12))));
+			cell->addChild(mini_rank);
+			
+			CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", getCardRank(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+			t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
+			mini_rank->addChild(t_rank);
+			
+			CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", getCardLevel(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+			t_card_level_label->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(17,69))));
+			cell->addChild(t_card_level_label);
+			
+
+			if(recent_selected_card_number == card_number)
 			{
-				last_select_idx = idx;
 				CCSprite* select_img = CCSprite::create("card_check.png");
 				select_img->setPosition(card_position);
 				cell->addChild(select_img);
@@ -984,12 +731,12 @@ void CardSettingPopup::tableCellTouched( CCTableView* table, CCTableViewCell* ce
 
 CCSize CardSettingPopup::cellSizeForTable( CCTableView *table )
 {
-	return CCSizeMake(215, 94);
+	return CCSizeMake(392, 84);
 }
 
 unsigned int CardSettingPopup::numberOfCellsInTableView( CCTableView *table )
 {
-	CardSortType sort_type = CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType));
+	CardSortType sort_type = CardSortType(recent_sort_type);
 	
 	if(sort_type == kCST_default)
 	{
@@ -997,7 +744,7 @@ unsigned int CardSettingPopup::numberOfCellsInTableView( CCTableView *table )
 	}
 	else
 	{
-		return (mySGD->getHasGottenCardsSize()-1)/3+1;
+		return (mySGD->getHasGottenCardsSize()-1)/6+1;
 	}
 }
 
@@ -1023,4 +770,89 @@ void CardSettingPopup::registerWithTouchDispatcher ()
 {
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 	pDispatcher->addTargetedDelegate(this, -170, true);
+}
+
+int CardSettingPopup::getCardDurability(int t_card_number)
+{
+	map<int, int>::iterator iter = save_DSH_cardDurability_int1.find(t_card_number);
+	if(iter == save_DSH_cardDurability_int1.end())
+	{
+		save_DSH_cardDurability_int1[t_card_number] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number);
+		return save_DSH_cardDurability_int1[t_card_number];
+	}
+	else
+		return iter->second;
+}
+
+int CardSettingPopup::getCardMaxDurability(int t_card_number)
+{
+	map<int, int>::iterator iter = save_DSH_cardMaxDurability_int1.find(t_card_number);
+	if(iter == save_DSH_cardMaxDurability_int1.end())
+	{
+		save_DSH_cardMaxDurability_int1[t_card_number] = myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, t_card_number);
+		return save_DSH_cardMaxDurability_int1[t_card_number];
+	}
+	else
+		return iter->second;
+}
+
+int CardSettingPopup::getCardRank(int t_card_number)
+{
+	map<int, int>::iterator iter = save_SDS_CI_rank_int1.find(t_card_number);
+	if(iter == save_SDS_CI_rank_int1.end())
+	{
+		save_SDS_CI_rank_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_rank_i, t_card_number);
+		return save_SDS_CI_rank_int1[t_card_number];
+	}
+	else
+		return iter->second;
+}
+
+int CardSettingPopup::getCardStage(int t_card_number)
+{
+	map<int, int>::iterator iter = save_SDS_CI_stage_int1.find(t_card_number);
+	if(iter == save_SDS_CI_stage_int1.end())
+	{
+		save_SDS_CI_stage_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
+		return save_SDS_CI_stage_int1[t_card_number];
+	}
+	else
+		return iter->second;
+}
+
+int CardSettingPopup::getCardGrade(int t_card_number)
+{
+	map<int, int>::iterator iter = save_SDS_CI_grade_int1.find(t_card_number);
+	if(iter == save_SDS_CI_grade_int1.end())
+	{
+		save_SDS_CI_grade_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
+		return save_SDS_CI_grade_int1[t_card_number];
+	}
+	else
+		return iter->second;
+}
+
+int CardSettingPopup::getCardLevel(int t_card_number)
+{
+	map<int, int>::iterator iter = save_DSH_cardLevel_int1.find(t_card_number);
+	if(iter == save_DSH_cardLevel_int1.end())
+	{
+		save_DSH_cardLevel_int1[t_card_number] = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, t_card_number);
+		return save_DSH_cardLevel_int1[t_card_number];
+	}
+	else
+		return iter->second;
+}
+
+int CardSettingPopup::getSGDisHasGottenCards(int t_stage, int t_grade)
+{
+	string t_key = CCString::createWithFormat("%d %d", t_stage, t_grade)->getCString();
+	map<string, int>::iterator iter = save_SGD_isHasGottenCards.find(t_key);
+	if(iter == save_SGD_isHasGottenCards.end())
+	{
+		save_SGD_isHasGottenCards[t_key] = mySGD->isHasGottenCards(t_stage, t_grade);
+		return save_SGD_isHasGottenCards[t_key];
+	}
+	else
+		return iter->second;
 }
