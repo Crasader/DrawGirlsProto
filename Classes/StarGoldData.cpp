@@ -884,6 +884,7 @@ string StarGoldData::getNextSceneName()
 void StarGoldData::myInit()
 {
 	is_unlock_puzzle = 0;
+	strength_target_card_number = 0;
 	is_ingame_before_have_stage_cards.push_back(false);
 	is_ingame_before_have_stage_cards.push_back(false);
 	is_ingame_before_have_stage_cards.push_back(false);
@@ -961,6 +962,26 @@ int StarGoldData::getIsUnlockPuzzle()
 void StarGoldData::setIsUnlockPuzzle(int t_i)
 {
 	is_unlock_puzzle = t_i;
+}
+
+void StarGoldData::setStrengthTargetCardNumber(int t_card_number)
+{
+	strength_target_card_number = t_card_number;
+}
+
+int StarGoldData::getStrengthTargetCardNumber()
+{
+	return strength_target_card_number;
+}
+
+CardStrengthBefore StarGoldData::getCardStrengthBefore()
+{
+	return card_strength_before;
+}
+
+void StarGoldData::setCardStrengthBefore(CardStrengthBefore t_before)
+{
+	card_strength_before = t_before;
 }
 
 void StarGoldData::setHeartMax(int t_data)

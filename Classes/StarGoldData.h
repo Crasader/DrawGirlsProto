@@ -52,6 +52,12 @@ typedef enum tSceneCode{
 	kSceneCode_StageSetting
 }SceneCode;
 
+enum CardStrengthBefore{
+	kCardStrengthBefore_cardSetting = 0,
+	kCardStrengthBefore_diary,
+	kCardStrengthBefore_cardChange
+};
+
 enum FailCode{
 	kFC_gameover = 0,
 	kFC_timeover,
@@ -456,9 +462,19 @@ public:
 	int getIsUnlockPuzzle();
 	void setIsUnlockPuzzle(int t_i);
 	
+	void setStrengthTargetCardNumber(int t_card_number);
+	int getStrengthTargetCardNumber();
+	
+	CardStrengthBefore getCardStrengthBefore();
+	void setCardStrengthBefore(CardStrengthBefore t_before);
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
+	
+	CardStrengthBefore card_strength_before;
+	
+	int strength_target_card_number;
 	
 	deque<AchievementCode> achieve_noti_que;
 	

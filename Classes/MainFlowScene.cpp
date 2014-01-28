@@ -44,14 +44,6 @@ CCScene* MainFlowScene::scene()
     return scene;
 }
 
-enum MainFlowZorder{
-	kMainFlowZorder_back = 1,
-	kMainFlowZorder_table,
-	kMainFlowZorder_top,
-	kMainFlowZorder_uiButton,
-	kMainFlowZorder_popup
-};
-
 bool MainFlowScene::init()
 {
     if ( !CCLayer::init() )

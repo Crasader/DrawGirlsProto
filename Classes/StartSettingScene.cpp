@@ -44,13 +44,6 @@ CCScene* StartSettingScene::scene()
     return scene;
 }
 
-enum StartSettingZorder{
-	kStartSettingZorder_back = 1,
-	kStartSettingZorder_main,
-	kStartSettingZorder_top,
-	kStartSettingZorder_popup
-};
-
 bool StartSettingScene::init()
 {
     if ( !CCLayer::init() )
