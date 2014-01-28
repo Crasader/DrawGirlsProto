@@ -12,6 +12,7 @@
 //#include "CollectionBook.h"
 #include "CollectionBookPopup.h"
 #include "PuzzleMapScene.h"
+#include "MainFlowScene.h"
 #include "CardCase.h"
 #include "GameData.h"
 #include "DataStorageHub.h"
@@ -275,7 +276,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			is_menu_enable = false;
 			CardStrengthPopup* t_popup = CardStrengthPopup::create();
 			t_popup->setHideFinalAction(target_final, delegate_final);
-			getParent()->addChild(t_popup, kPMS_Z_popup);
+			getParent()->addChild(t_popup, kMainFlowZorder_popup);
 			
 			target_final = NULL;
 			hidePopup();
@@ -302,7 +303,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			{
 				StageSettingPopup* t_popup = StageSettingPopup::create();
 				t_popup->setHideFinalAction(target_final, delegate_final);
-				getParent()->addChild(t_popup, kPMS_Z_popup);
+				getParent()->addChild(t_popup, kMainFlowZorder_popup);
 				
 				target_final = NULL;
 				hidePopup();
@@ -360,9 +361,10 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		}
 		else if(tag == kCSS_MT_strength)
 		{
+			mySGD->setCardStrengthBefore(kCardStrengthBefore_cardSetting);
 			CardStrengthPopup* t_popup = CardStrengthPopup::create();
 			t_popup->setHideFinalAction(target_final, delegate_final);
-			getParent()->addChild(t_popup, kPMS_Z_popup);
+			getParent()->addChild(t_popup, kMainFlowZorder_popup);
 			
 			target_final = NULL;
 			hidePopup();
@@ -377,7 +379,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				
 				CollectionBookPopup* t_popup = CollectionBookPopup::create();
 				t_popup->setHideFinalAction(target_final, delegate_final);
-				getParent()->addChild(t_popup, kPMS_Z_popup);
+				getParent()->addChild(t_popup, kMainFlowZorder_popup);
 				
 				target_final = NULL;
 				hidePopup();

@@ -474,7 +474,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 	if(idx > 0 && !myDSH->getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, idx))
 	{
 		CCSprite* lock_img = CCSprite::create("character_lock.png");
-		lock_img->setPosition(ccp(62,130));
+		lock_img->setPosition(ccp(62,103));
 		cell->addChild(lock_img, kCharacterCellZorder_lock, kCharacterCellZorder_lock);
 		
 		string condition_type = NSDS_GS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, idx+1);
@@ -512,7 +512,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 		
 		CCMenu* unlock_menu = CCMenu::createWithItem(unlock_item);
 		unlock_menu->setPosition(ccp(62,23));
-		cell->addChild(unlock_menu, kCharacterCellZorder_content);
+		cell->addChild(unlock_menu, kCharacterCellZorder_selected);
 		
 		unlock_menu->setTouchPriority(-170-1);
 	}
@@ -536,7 +536,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 			
 			CCMenu* select_menu = CCMenu::createWithItem(select_item);
 			select_menu->setPosition(ccp(62,23));
-			cell->addChild(select_menu, kCharacterCellZorder_content);
+			cell->addChild(select_menu, kCharacterCellZorder_selected);
 			
 			select_menu->setTouchPriority(-170-1);
 		}
