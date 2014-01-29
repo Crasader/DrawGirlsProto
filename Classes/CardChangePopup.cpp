@@ -13,6 +13,8 @@
 #include "CumberShowWindow.h"
 #include "TutorialFlowStep.h"
 #include "JackMissileShow.h"
+#include "CardStrengthPopup.h"
+#include "StartSettingScene.h"
 
 enum CardChangePopupZorder{
 	kCardChangePopupZorder_gray = 1,
@@ -29,7 +31,8 @@ enum CardChangePopupMenuTag{
 	kCardChangePopupMenuTag_mount,
 	kCardChangePopupMenuTag_release,
 	kCardChangePopupMenuTag_alignRank,
-	kCardChangePopupMenuTag_alignTake
+	kCardChangePopupMenuTag_alignTake,
+	kCardChangePopupMenuTag_strength
 };
 
 void CardChangePopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
@@ -77,9 +80,22 @@ bool CardChangePopup::init()
 	close_item->setTag(kCardChangePopupMenuTag_close);
 	
 	CCMenu* close_menu = CCMenu::createWithItem(close_item);
-	close_menu->setPosition(ccp(455, 260));
+	close_menu->setPosition(ccp(453, 259));
 	main_case->addChild(close_menu, kCardChangePopupZorder_content);
 	close_menu->setTouchPriority(base_touch_priority);
+	
+	
+	CCSprite* n_strength = CCSprite::create("cardchange_strength.png");
+	CCSprite* s_strength = CCSprite::create("cardchange_strength.png");
+	s_strength->setColor(ccGRAY);
+	
+	CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardChangePopup::menuAction));
+	strength_item->setTag(kCardChangePopupMenuTag_strength);
+	
+	CCMenu* strength_menu = CCMenu::createWithItem(strength_item);
+	strength_menu->setPosition(ccp(393,259));
+	main_case->addChild(strength_menu, kCardChangePopupZorder_content);
+	strength_menu->setTouchPriority(base_touch_priority);
 	
 	
 	CCSprite* n_align_rank = CCSprite::create("cardchange_align_rank.png");
@@ -833,6 +849,17 @@ void CardChangePopup::menuAction(CCObject* pSender)
 			
 			setSelectedCard(clicked_card_number);
 			is_menu_enable = true;
+		}
+		else if(tag == kCardChangePopupMenuTag_strength)
+		{
+			mySGD->setCardStrengthBefore(kCardStrengthBefore_cardChange);
+			mySGD->setStrengthTargetCardNumber(myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+			CardStrengthPopup* t_popup = CardStrengthPopup::create();
+			t_popup->setHideFinalAction(target_final, delegate_final);
+			getParent()->addChild(t_popup, kStartSettingZorder_popup);
+			
+			target_final = NULL;
+			hidePopup();
 		}
 	}
 }

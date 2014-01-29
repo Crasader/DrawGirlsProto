@@ -53,8 +53,8 @@ private:
 	CountingBMLabel* gold_label;
 	CountingBMLabel* friend_point_label;
 	
-	CCSprite* friend_point_popup;
-	void closeFriendPointPopup();
+	function<void(void)> close_friend_point_action;
+	void closeFriendPoint();
 	
 	void setMain();
 	CCSprite* main_case;

@@ -82,6 +82,7 @@ bool Maingame::init()
 	myGD->V_CCP["Main_showMissMissile"] = std::bind(&Maingame::showMissMissile, this, _1);
 	myGD->V_CCPI["Main_showDamageMissile"] = std::bind(&Maingame::showDamageMissile, this, _1, _2);
 	myGD->CCP_V["Main_getGameNodePosition"] = std::bind(&Maingame::getGameNodePosition, this);
+	myGD->V_V["Main_hideThumb"] = std::bind(&Maingame::hideThumb, this);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -197,7 +198,7 @@ void Maingame::finalSetting()
 	
 	myUI->setControlTD(this, callfunc_selector(Maingame::setControlGesture), callfunc_selector(Maingame::setControlButton), callfunc_selector(Maingame::setControlJoystick), callfunc_selector(Maingame::startControl));
 	
-	SearchEye* search_eye = SearchEye::create();
+	search_eye = SearchEye::create();
 	search_eye->setPosition(CCPointZero);
 	addChild(search_eye, searchEyeZorder);
 	
@@ -235,12 +236,16 @@ void Maingame::finalSetting()
 	
 	if(mySGD->is_play_replay)
 	{
+		replay_all_node = CCNode::create();
+		replay_all_node->setPosition(CCPointZero);
+		addChild(replay_all_node, myUIZorder);
+		
 		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
 		{
 			replay_thumb_texture = CCRenderTexture::create(320, 430);
 			replay_thumb_texture->setScale(thumb_scale);
 			replay_thumb_texture->setPosition(ccpAdd(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale), ccp(320.f*thumb_scale + 2, 0)));
-			addChild(replay_thumb_texture, myUIZorder);
+			replay_all_node->addChild(replay_thumb_texture);
 			
 			myGD->V_I["Main_refreshReplayThumb"] = std::bind(&Maingame::refreshReplayThumb, this, _1);
 			
@@ -249,13 +254,13 @@ void Maingame::finalSetting()
 			replay_boss->setColor(ccRED);
 			replay_boss->setVisible(false);
 			replay_boss->setPosition(ccpAdd(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale), ccp(320.f*thumb_scale + 2, 0)));
-			addChild(replay_boss, myUIZorder);
+			replay_all_node->addChild(replay_boss);
 			
 			replay_character = CCSprite::create("whitePaper.png", CCRectMake(0,0,2,2));
 			replay_character->setColor(ccGREEN);
 			replay_character->setVisible(false);
 			replay_character->setPosition(ccpAdd(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale), ccp(320.f*thumb_scale + 2, 0)));
-			addChild(replay_character, myUIZorder);
+			replay_all_node->addChild(replay_character);
 			
 			replay_sub = new CCArray(1);
 			
@@ -267,7 +272,7 @@ void Maingame::finalSetting()
 			replay_score = CCLabelBMFont::create("0", "etc_font.fnt");
 			replay_score->setScale(0.7f);
 			replay_score->setPosition(ccpAdd(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale), ccp(320.f*thumb_scale + 2, 215.f*thumb_scale+4)));
-			addChild(replay_score, myUIZorder);
+			replay_all_node->addChild(replay_score);
 			
 			myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		}
@@ -1416,7 +1421,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 	{
 		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 2, 2));
 		sub_position_img->setColor(ccYELLOW);
-		addChild(sub_position_img, myUIZorder);
+		replay_all_node->addChild(sub_position_img);
 		
 		replay_sub->addObject(sub_position_img);
 	}
@@ -1436,7 +1441,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 		die_label->setScale(0.5f);
 		die_label->setColor(ccRED);
 		die_label->setPosition(replay_character->getPosition());
-		addChild(die_label, myUIZorder);
+		replay_all_node->addChild(die_label);
 		
 		CCScaleTo* t_scale = CCScaleTo::create(1.5f, 5.f);
 		CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
@@ -1451,7 +1456,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 		CCLabelTTF* change_label = CCLabelTTF::create("CHANGE", mySGD->getFont().c_str(), 14);
 		change_label->setColor(ccYELLOW);
 		change_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()+10)));
-		addChild(change_label, myUIZorder);
+		replay_all_node->addChild(change_label);
 	}
 	
 	int game_info = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_gameInfo)].asInt();
@@ -1459,14 +1464,32 @@ void Maingame::refreshReplayPosition(int temp_time)
 	{
 		CCLabelTTF* clear_label = CCLabelTTF::create("CLEAR", mySGD->getFont().c_str(), 14);
 		clear_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()-10)));
-		addChild(clear_label, myUIZorder);
+		replay_all_node->addChild(clear_label);
+		
+		replay_character->setVisible(false);
+		replay_boss->setVisible(false);
+		
+		int replay_sub_loop = replay_sub->count();
+		for(int i=0;i<replay_sub_loop;i++)
+		{
+			((CCSprite*)replay_sub->objectAtIndex(i))->setVisible(false);
+		}
 	}
 	else if(game_info == -1)
 	{
 		CCLabelTTF* game_over_label = CCLabelTTF::create("GAME OVER", mySGD->getFont().c_str(), 12);
 		game_over_label->setColor(ccBLACK);
 		game_over_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()-10)));
-		addChild(game_over_label, myUIZorder);
+		replay_all_node->addChild(game_over_label);
+		
+		replay_character->setVisible(false);
+		replay_boss->setVisible(false);
+		
+		int replay_sub_loop = replay_sub->count();
+		for(int i=0;i<replay_sub_loop;i++)
+		{
+			((CCSprite*)replay_sub->objectAtIndex(i))->setVisible(false);
+		}
 	}
 	
 	if(position_data[mySGD->getReplayKey(kReplayKey_timeStamp_isContinue)].asBool())
@@ -1476,7 +1499,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 		{
 			replay_continue_label = CCLabelTTF::create("continue : 1", mySGD->getFont().c_str(), 8);
 			replay_continue_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), -5)));
-			addChild(replay_continue_label, myUIZorder);
+			replay_all_node->addChild(replay_continue_label);
 		}
 		else
 			replay_continue_label->setString(CCString::createWithFormat("continue : %d", replay_continue_count)->getCString());
@@ -1485,7 +1508,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 		continue_label->setScale(0.5f);
 		continue_label->setColor(ccMAGENTA);
 		continue_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));
-		addChild(continue_label, myUIZorder);
+		replay_all_node->addChild(continue_label);
 		
 		CCScaleTo* t_scale = CCScaleTo::create(1.5f, 5.f);
 		CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
@@ -1493,5 +1516,25 @@ void Maingame::refreshReplayPosition(int temp_time)
 		CCCallFunc* t_call = CCCallFunc::create(continue_label, callfunc_selector(CCLabelTTF::removeFromParent));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
 		continue_label->runAction(t_seq);
+	}
+}
+
+void Maingame::hideThumb()
+{
+	search_eye->setVisible(false);
+	thumb_texture->setVisible(false);
+	character_thumb->setVisible(false);
+	boss_thumb->setVisible(false);
+	
+	int sub_loop = sub_thumbs->count();
+	for(int i=0;i<sub_loop;i++)
+	{
+		CCSprite* t_sub = (CCSprite*)sub_thumbs->objectAtIndex(i);
+		t_sub->setVisible(false);
+	}
+	
+	if(mySGD->is_play_replay && mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
+	{
+		replay_all_node->setVisible(false);
 	}
 }

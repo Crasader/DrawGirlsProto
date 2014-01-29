@@ -55,6 +55,7 @@ enum GameNodeMovingDirection{
 	kGNMD_down = 1
 };
 
+class SearchEye;
 class Maingame : public CCLayer
 {
 public:
@@ -234,6 +235,8 @@ private:
 	void shaking();
 	void stopShake();
 	
+	SearchEye* search_eye;
+	
 	CCSprite* character_thumb;
 	CCSprite* boss_thumb;
 	CCArray* sub_thumbs;
@@ -252,8 +255,12 @@ private:
 	CCArray* replay_sub;
 	void refreshReplayPosition(int temp_time);
 	
+	CCNode* replay_all_node;
+	
 	int replay_continue_count;
 	CCLabelTTF* replay_continue_label;
+	
+	void hideThumb();
 };
 
 #endif
