@@ -405,4 +405,10 @@ enum AchievementCode
 	kAchievementCode_hidden_end
 };
 
+enum class GachaCategory
+{
+	kRubyGacha = 1,
+	kGoldGacha = 2,
+	kSocialGacha = 3
+};
 #endif

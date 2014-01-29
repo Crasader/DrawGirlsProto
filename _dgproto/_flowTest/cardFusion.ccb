@@ -109,11 +109,9 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>roundUnderCard2.ccb</string>
+						<string>roundBlue2.ccb</string>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -218,11 +216,9 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>roundUnderCard1.ccb</string>
+						<string>roundBlue1.ccb</string>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -612,8 +608,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -1066,7 +1060,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>cardLightCover.png</string>
+							<string>cardLightCoverBlue.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -1080,7 +1074,7 @@
 						<integer>0</integer>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
+				<key>selected</key>
 				<true/>
 			</dict>
 			<dict>
@@ -1552,8 +1546,6 @@
 						<integer>100</integer>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -1827,8 +1819,6 @@
 						<string>카드강화!!</string>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -2037,8 +2027,6 @@
 						<string>강화성공!!</string>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -2247,8 +2235,6 @@
 						<string>카드레벨 +1</string>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>

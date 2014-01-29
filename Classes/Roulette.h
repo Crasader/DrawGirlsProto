@@ -44,6 +44,7 @@ protected:
 	CCNode* m_rotationBoard;
 	CCSprite* m_circleBoard;
 	CCSprite* m_guide;
+	GachaCategory m_gachaCategory;
 	//	float m_itemTopY[3];
 public:
 	KSAlertView* m_parent;
@@ -67,10 +68,10 @@ public:
 		return true;
 	}
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	static RouletteSub* create(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
+	static RouletteSub* create(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc) \
 	{ \
     RouletteSub *pRet = new RouletteSub(); \
-    if (pRet && pRet->init(av, rs, gsm))
+    if (pRet && pRet->init(av, rs, gsm, gc))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -82,10 +83,10 @@ public:
 			return NULL; \
     } \
 	}
-	static RouletteSub* create(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward)  \
+	static RouletteSub* create(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc)  \
 	{ \
     RouletteSub *pRet = new RouletteSub(); \
-    if (pRet && pRet->init(callback, rs, gsm))
+    if (pRet && pRet->init(callback, rs, gsm, gc))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -97,15 +98,15 @@ public:
 			return NULL; \
     } \
 	}
-	bool init(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
+	bool init(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc)
 	{
-		return init(av, nullptr, rs, gsm);
+		return init(av, nullptr, rs, gsm, gc);
 	}
-	bool init(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
+	bool init(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc)
 	{
-		return init(nullptr, callback, rs, gsm);
+		return init(nullptr, callback, rs, gsm, gc);
 	}
-	virtual bool init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm);
+	virtual bool init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc);
 	
 	float diffDegree(float a, float b);
 	virtual void update(float dt);
@@ -114,31 +115,31 @@ public:
 
 
 
-class Roulette : public CCLayer
-{
-public:
-	std::function<void(void)> m_closeCallback;
-	Roulette();
-	virtual ~Roulette();
-	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init(std::function<void(void)> closeCallback);
-	static Roulette* create(std::function<void(void)> closeCallback) \
-	{ \
-    Roulette *pRet = new Roulette(); \
-    if (pRet && pRet->init(closeCallback))
-    { \
-			pRet->autorelease(); \
-			return pRet; \
-    } \
-    else \
-    { \
-			delete pRet; \
-			pRet = NULL; \
-			return NULL; \
-    } \
-	}
+//class Roulette : public CCLayer
+//{
+//public:
+	//std::function<void(void)> m_closeCallback;
+	//Roulette();
+	//virtual ~Roulette();
+	////	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	//virtual bool init(std::function<void(void)> closeCallback);
+	//static Roulette* create(std::function<void(void)> closeCallback) \
+	//{ \
+    //Roulette *pRet = new Roulette(); \
+    //if (pRet && pRet->init(closeCallback))
+    //{ \
+			//pRet->autorelease(); \
+			//return pRet; \
+    //} \
+    //else \
+    //{ \
+			//delete pRet; \
+			//pRet = NULL; \
+			//return NULL; \
+    //} \
+	//}
 	
-	//virtual void registerWithTouchDispatcher();
-};
+	////virtual void registerWithTouchDispatcher();
+//};
 
 

@@ -317,6 +317,19 @@ private:
 	void goReplay ();
 	void cancelHome ();
 	void alertAction (int t1, int t2);
+	
+	void writeMap();
+	void checkMapTimeVector();
+	
+	void writeScore();
+	void checkScoreTimeVector();
+	
+	void writePosition();
+	
+	void writeDie();
+	void writeImageChange();
+	void writeGameOver(int t_i);
+	void writeContinue();
 };
 #undef LZZ_INLINE
 #endif

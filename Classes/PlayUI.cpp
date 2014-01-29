@@ -813,6 +813,14 @@ void PlayUI::addScore (int t_score)
 {
 	score_value = score_value.getV() + t_score;
 	score_label->setString(CCString::createWithFormat("%d", int(score_value.getV()))->getCString());
+	
+	if(mySGD->is_write_replay)
+	{
+		if(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreTime)].size() > 0)
+			myGD->communication("UI_checkScoreTimeVector");
+		else
+			myGD->communication("UI_writeScore");
+	}
 }
 void PlayUI::decreasePercentage ()
 {
@@ -1360,10 +1368,137 @@ void PlayUI::takeCoinModeOn ()
 	myGD->communication("Main_showCoin");
 	myGD->communication("Main_showTakeCoin");
 }
+
+void PlayUI::checkMapTimeVector()
+{
+	Json::Value map_time_list = mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_mapTime)];
+	int list_size = map_time_list.size();
+	
+	if(list_size > 0 && map_time_list[list_size-1].asInt() < use_time)
+		writeMap();
+	else
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_isChangedMap)] = true;
+}
+
+void PlayUI::writeMap()
+{
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_mapIndex)] = mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_mapTime)].size();
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_mapTime)].append(use_time);
+	
+	Json::Value writing_map;
+	int y, x, record, t_count, i, j;
+	for(y = 0;y<43;++y)
+	{
+		record = 0;
+		for(x = 0;x<32;++x)
+		{
+			t_count = 0;
+			for(i = mapWidthInnerBegin+x*5;i<mapWidthInnerBegin+(x+1)*5;++i)
+				for(j = mapHeightInnerBegin+y*5;j<mapHeightInnerBegin+(y+1)*5;++j)
+					if(myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline)
+						t_count++;
+			
+			record = record << 1;
+			if(t_count >= 13)
+			{
+				++record;
+			}
+		}
+		writing_map.append(record);
+	}
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_mapData)].append(writing_map);
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_isChangedMap)] = false;
+}
+
+void PlayUI::checkScoreTimeVector()
+{
+	Json::Value score_time_list = mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreTime)];
+	int list_size = score_time_list.size();
+	
+	if(list_size > 0 && score_time_list[list_size-1].asInt() < use_time)
+		writeScore();
+	else
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_isChangedScore)] = true;
+}
+
+void PlayUI::writeScore()
+{
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_scoreIndex)] = mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreTime)].size();
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreTime)].append(use_time);
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreData)].append(int(getScore()));
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_isChangedScore)] = false;
+}
+
+void PlayUI::writePosition()
+{
+	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_characterPositionX)] = jack_position.x;
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_characterPositionY)] = jack_position.y;
+	
+	CCNode* boss_node = myGD->getCommunicationNode("CP_getMainCumberPointer");
+	CCPoint boss_position = boss_node->getPosition();
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionX)] = boss_position.x;
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionY)] = boss_position.y;
+	
+	CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
+	int loop_cnt = subCumberArray->count();
+	for(int i=0;i<loop_cnt;i++)
+	{
+		CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
+		CCPoint t_position = t_subCumber->getPosition();
+		
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_monster)][i][mySGD->getReplayKey(kReplayKey_timeStamp_monster_x)] = t_position.x;
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_monster)][i][mySGD->getReplayKey(kReplayKey_timeStamp_monster_y)] = t_position.y;
+	}
+}
+
+void PlayUI::writeDie()
+{
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_isDie)] = true;
+}
+
+void PlayUI::writeImageChange()
+{
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_isImageChange)] = true;
+}
+
+void PlayUI::writeGameOver(int t_i)
+{
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_gameInfo)] = t_i;
+}
+
+void PlayUI::writeContinue()
+{
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_isContinue)] = true;
+}
+
 void PlayUI::counting ()
 {
 	countingCnt++;
 	use_time++;
+	
+	if(mySGD->is_write_replay)
+	{
+		if(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_isChangedMap)].asBool())
+			writeMap();
+		
+		if(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_isChangedScore)].asBool())
+			writeScore();
+		
+		writePosition();
+	}
+	
+	if(mySGD->is_play_replay)
+	{
+		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
+		{
+			myGD->communication("Main_refreshReplayThumb", use_time);
+			myGD->communication("Main_refreshReplayPosition", use_time);
+		}
+		
+		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreTime)].size() > 0)
+			myGD->communication("Main_refreshReplayScore", use_time);
+	}
 	
 	int label_value = playtime_limit-countingCnt;
 	if(label_value < 0)
@@ -1662,6 +1797,14 @@ void PlayUI::cancelOnePercentGacha ()
 }
 void PlayUI::nextScene ()
 {
+	if(mySGD->is_write_replay)
+	{
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_scoreIndex)] = mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreTime)].size();
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreTime)].append(use_time);
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreData)].append(int(mySGD->getScore()));
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_isChangedScore)] = false;
+	}
+	
 	result_sprite->setVisible(false);
 	myGD->communication("Main_gameover");
 }
@@ -2121,6 +2264,14 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_stopCombo"] = std::bind(&ComboParent::stopKeep, my_combo);
 	myGD->B_V["UI_isExchanged"] = std::bind(&PlayUI::isExchanged, this);
 	myGD->V_V["UI_addGameTime30Sec"] = std::bind(&PlayUI::addGameTime30Sec, this);
+	myGD->V_V["UI_writeMap"] = std::bind(&PlayUI::writeMap, this);
+	myGD->V_V["UI_checkMapTimeVector"] = std::bind(&PlayUI::checkMapTimeVector, this);
+	myGD->V_V["UI_writeScore"] = std::bind(&PlayUI::writeScore, this);
+	myGD->V_V["UI_checkScoreTimeVector"] = std::bind(&PlayUI::checkScoreTimeVector, this);
+	myGD->V_V["UI_writeDie"] = std::bind(&PlayUI::writeDie, this);
+	myGD->V_V["UI_writeImageChange"] = std::bind(&PlayUI::writeImageChange, this);
+	myGD->V_I["UI_writeGameOver"] = std::bind(&PlayUI::writeGameOver, this, _1);
+	myGD->V_V["UI_writeContinue"] = std::bind(&PlayUI::writeContinue, this);
 }
 bool PlayUI::isExchanged ()
 {
@@ -2147,6 +2298,8 @@ void PlayUI::continueAction ()
 		
 		jack_array->addObject(jack_img);
 	}
+	
+	writeContinue();
 	
 	(target_continue->*delegate_continue)();
 }

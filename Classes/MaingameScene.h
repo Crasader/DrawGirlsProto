@@ -240,6 +240,20 @@ private:
 	CCPoint thumb_base_position;
 	CCRenderTexture* thumb_texture;
 	void refreshThumb();
+	
+	CCRenderTexture* replay_thumb_texture;
+	void refreshReplayThumb(int temp_time);
+	
+	CCLabelBMFont* replay_score;
+	void refreshReplayScore(int temp_time);
+	
+	CCSprite* replay_character;
+	CCSprite* replay_boss;
+	CCArray* replay_sub;
+	void refreshReplayPosition(int temp_time);
+	
+	int replay_continue_count;
+	CCLabelTTF* replay_continue_label;
 };
 
 #endif

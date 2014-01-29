@@ -14,7 +14,7 @@ USING_NS_CC;
 #include "StarGoldData.h"
 #include "GachaPurchase.h"
 #include "GachaReward.h"
-
+#include "EnumDefine.h"
 
 
 
@@ -55,6 +55,7 @@ protected:
 	bool m_firstSlotStopFirst;
 	bool m_firstSlotStopSecond;
 	bool m_firstSlotStopThird;
+	GachaCategory m_gachaCategory;
 //	float m_itemTopY[3];
 public:
 	KSAlertView* m_parent;
@@ -78,10 +79,11 @@ public:
 		return true;
 	}
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	static __TYPE__* create(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
+	static __TYPE__* create(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm , 
+			GachaCategory gc) \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(av, rs, gsm))
+    if (pRet && pRet->init(av, rs, gsm, gc))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -93,10 +95,10 @@ public:
 			return NULL; \
     } \
 	}
-	static __TYPE__* create(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward)  \
+	static __TYPE__* create(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc)  \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(callback, rs, gsm))
+    if (pRet && pRet->init(callback, rs, gsm, gc))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -108,15 +110,15 @@ public:
 			return NULL; \
     } \
 	}
-	bool init(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
+	bool init(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc)
 	{
-		return init(av, nullptr, rs, gsm);
+		return init(av, nullptr, rs, gsm, gc);
 	}
-	bool init(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
+	bool init(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc)
 	{
-		return init(nullptr, callback, rs, gsm);
+		return init(nullptr, callback, rs, gsm, gc);
 	}
-	virtual bool init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm);
+	virtual bool init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc);
 	
 	virtual void update(float dt);
 	std::vector<int> rotationSlot(const std::vector<int>& slots, float scrollSpeed);
@@ -126,31 +128,31 @@ public:
 
 
 
-class SlotMachine : public CCLayer
-{
-public:
-	std::function<void(void)> m_closeCallback;
-	SlotMachine();
-	virtual ~SlotMachine();
-	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init(std::function<void(void)> closeCallback);
-	static SlotMachine* create(std::function<void(void)> closeCallback) \
-	{ \
-    SlotMachine *pRet = new SlotMachine(); \
-    if (pRet && pRet->init(closeCallback))
-    { \
-			pRet->autorelease(); \
-			return pRet; \
-    } \
-    else \
-    { \
-			delete pRet; \
-			pRet = NULL; \
-			return NULL; \
-    } \
-	}
+//class SlotMachine : public CCLayer
+//{
+//public:
+	//std::function<void(void)> m_closeCallback;
+	//SlotMachine();
+	//virtual ~SlotMachine();
+	////	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	//virtual bool init(std::function<void(void)> closeCallback);
+	//static SlotMachine* create(std::function<void(void)> closeCallback) \
+	//{ \
+    //SlotMachine *pRet = new SlotMachine(); \
+    //if (pRet && pRet->init(closeCallback))
+    //{ \
+			//pRet->autorelease(); \
+			//return pRet; \
+    //} \
+    //else \
+    //{ \
+			//delete pRet; \
+			//pRet = NULL; \
+			//return NULL; \
+    //} \
+	//}
 	
-	//virtual void registerWithTouchDispatcher();
-};
+	////virtual void registerWithTouchDispatcher();
+//};
 
 

@@ -11,6 +11,34 @@
 #include "DataStorageHub.h"
 #include "AchieveNoti.h"
 
+string StarGoldData::getReplayKey(ReplayKey t_key)
+{
+	string return_value;
+	if(t_key == kReplayKey_timeStamp)									return_value = "ts";
+	else if(t_key == kReplayKey_timeStamp_characterPositionX)			return_value = "cpx";
+	else if(t_key == kReplayKey_timeStamp_characterPositionY)			return_value = "cpy";
+	else if(t_key == kReplayKey_timeStamp_bossPositionX)				return_value = "bpx";
+	else if(t_key == kReplayKey_timeStamp_bossPositionY)				return_value = "bpy";
+	else if(t_key == kReplayKey_timeStamp_monster)						return_value = "mob";
+	else if(t_key == kReplayKey_timeStamp_monster_x)					return_value = "x";
+	else if(t_key == kReplayKey_timeStamp_monster_y)					return_value = "y";
+	else if(t_key == kReplayKey_timeStamp_mapIndex)						return_value = "mi";
+	else if(t_key == kReplayKey_timeStamp_scoreIndex)					return_value = "si";
+	else if(t_key == kReplayKey_timeStamp_isDie)						return_value = "id";
+	else if(t_key == kReplayKey_timeStamp_isContinue)					return_value = "ic";
+	else if(t_key == kReplayKey_timeStamp_isImageChange)				return_value = "iic";
+	else if(t_key == kReplayKey_timeStamp_gameInfo)						return_value = "gi";
+	else if(t_key == kReplayKey_mapTime)								return_value = "mt";
+	else if(t_key == kReplayKey_mapData)								return_value = "md";
+	else if(t_key == kReplayKey_scoreTime)								return_value = "st";
+	else if(t_key == kReplayKey_scoreData)								return_value = "sd";
+	else if(t_key == kReplayKey_isChangedMap)							return_value = "icm";
+	else if(t_key == kReplayKey_isChangedScore)							return_value = "ics";
+	else if(t_key == kReplayKey_playIndex)								return_value = "pi";
+	
+	return return_value;
+}
+
 CCSprite* StarGoldData::getLoadingImg()
 {
 	if(after_loading == kImgType_Empty)
@@ -50,36 +78,6 @@ CCSprite* StarGoldData::getLoadingImg()
 		filename = "loadingimg_facebook3.png";
 		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading6);
 	}
-//	else if(after_loading == kImgType_item1)
-//	{
-//		filename = "loadingimg_item1.png";
-//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading11);
-//	}
-//	else if(after_loading == kImgType_item2)
-//	{
-//		filename = "loadingimg_item2.png";
-//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading12);
-//	}
-//	else if(after_loading == kImgType_item3)
-//	{
-//		filename = "loadingimg_item3.png";
-//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading13);
-//	}
-//	else if(after_loading == kImgType_item4)
-//	{
-//		filename = "loadingimg_item4.png";
-//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading14);
-//	}
-//	else if(after_loading == kImgType_item5)
-//	{
-//		filename = "loadingimg_item5.png";
-//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading15);
-//	}
-//	else if(after_loading == kImgType_item6)
-//	{
-//		filename = "loadingimg_item6.png";
-//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading16);
-//	}
 	else if(after_loading == kImgType_gallery)
 	{
 		filename = "loadingimg_gallery.png";
@@ -271,6 +269,14 @@ void StarGoldData::setKeepGold( int t_gold )
 
 void StarGoldData::setGameStart()
 {
+	is_write_replay = true;
+	is_play_replay = true;
+	
+	replay_playing_info = replay_write_info;
+	replay_write_info.clear();
+	replay_write_info[getReplayKey(kReplayKey_isChangedMap)] = true;
+	replay_write_info[getReplayKey(kReplayKey_isChangedScore)] = true;
+	replay_playing_info[getReplayKey(kReplayKey_playIndex)] = 0;
 	
 	is_not_cleared_stage = !myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType());
 	
@@ -883,6 +889,9 @@ string StarGoldData::getNextSceneName()
 
 void StarGoldData::myInit()
 {
+	replay_write_info.clear();
+	replay_playing_info.clear();
+	
 	is_unlock_puzzle = 0;
 	strength_target_card_number = 0;
 	is_ingame_before_have_stage_cards.push_back(false);
