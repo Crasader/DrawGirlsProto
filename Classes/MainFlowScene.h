@@ -54,9 +54,6 @@ private:
 	CountingBMLabel* gold_label;
 	CountingBMLabel* friend_point_label;
 	
-	CCSprite* friend_point_popup;
-	void closeFriendPointPopup();
-	
 	CCTableView* puzzle_table;
 	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
@@ -67,6 +64,9 @@ private:
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
 	vector<int> have_card_count_for_puzzle_index;
+	
+	function<void(void)> close_friend_point_action;
+	void closeFriendPoint();
 	
 	void showClearPopup();
 	void hideClearPopup();
