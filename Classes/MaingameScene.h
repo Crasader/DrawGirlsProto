@@ -261,6 +261,9 @@ private:
 	CCLabelTTF* replay_continue_label;
 	
 	void hideThumb();
+	
+	void showDrawButtonTutorial();
+	void hideDrawButtonTutorial();
 };
 
 #endif

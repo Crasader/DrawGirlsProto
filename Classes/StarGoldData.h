@@ -493,6 +493,7 @@ public:
 	CardStrengthBefore getCardStrengthBefore();
 	void setCardStrengthBefore(CardStrengthBefore t_before);
 	
+	int draw_button_tutorial_ing;
 	
 	bool is_write_replay;
 	Json::Value replay_write_info;

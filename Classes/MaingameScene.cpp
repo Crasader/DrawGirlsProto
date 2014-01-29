@@ -83,6 +83,8 @@ bool Maingame::init()
 	myGD->V_CCPI["Main_showDamageMissile"] = std::bind(&Maingame::showDamageMissile, this, _1, _2);
 	myGD->CCP_V["Main_getGameNodePosition"] = std::bind(&Maingame::getGameNodePosition, this);
 	myGD->V_V["Main_hideThumb"] = std::bind(&Maingame::hideThumb, this);
+	myGD->V_V["Main_showDrawButtonTutorial"] = std::bind(&Maingame::showDrawButtonTutorial, this);
+	myGD->V_V["Main_hideDrawButtonTutorial"] = std::bind(&Maingame::hideDrawButtonTutorial, this);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -100,6 +102,18 @@ bool Maingame::init()
 	game_node->addChild(myMS, myMSZorder);
 	
 	return true;
+}
+
+void Maingame::showDrawButtonTutorial()
+{
+	if(mControl)
+		((ControlJoystickButton*)mControl)->showDrawButtonTutorial();
+}
+
+void Maingame::hideDrawButtonTutorial()
+{
+	if(mControl)
+		((ControlJoystickButton*)mControl)->hideDrawButtonTutorial();
 }
 
 void Maingame::onEnterTransitionDidFinish()

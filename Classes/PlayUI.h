@@ -330,6 +330,8 @@ private:
 	void writeImageChange();
 	void writeGameOver(int t_i);
 	void writeContinue();
+	
+	int draw_button_tutorial_show;
 };
 #undef LZZ_INLINE
 #endif

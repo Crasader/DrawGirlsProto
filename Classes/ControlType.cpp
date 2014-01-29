@@ -1213,6 +1213,8 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 {
 	CCLayer::init();
 	
+	is_show_draw_button_tutorial = false;
+	
 	regular_spectrum = 70.f;
 	irregular_spectrum = 20.f;
 
@@ -1266,6 +1268,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		if(controlJoystickDirection == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-40,40));
 		else								draw_button->setPosition(ccp(40,40));
 		addChild(draw_button);
+		reader->release();
 	}
 	else
 	{
@@ -1288,6 +1291,45 @@ void ControlJoystickButton::offButton()
 		button_ani->runAnimationsForSequenceNamed("cast1stop");
 }
 
+void ControlJoystickButton::showDrawButtonTutorial()
+{
+	is_show_draw_button_tutorial = true;
+	
+	draw_button_tutorial_img = CCSprite::create("ingame_tutorial_warning.png");
+	draw_button_tutorial_img->setPosition(ccp(-240, myDSH->ui_center_y));
+	addChild(draw_button_tutorial_img);
+	
+	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240, myDSH->ui_center_y));
+	draw_button_tutorial_img->runAction(t_move);
+	
+	
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	draw_button_tutorial_ccb = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_tutorial_button.ccbi",this));
+	draw_button_tutorial_ccb->setPosition(draw_button->getPosition());
+	addChild(draw_button_tutorial_ccb);
+	reader->release();
+}
+
+void ControlJoystickButton::hideDrawButtonTutorial()
+{
+	if(is_show_draw_button_tutorial)
+	{
+		CCMoveTo* t_move = CCMoveTo::create(0.4f, ccp(-240, myDSH->ui_center_y));
+		CCCallFunc* t_call = CCCallFunc::create(draw_button_tutorial_img, callfunc_selector(CCSprite::removeFromParent));
+		CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
+		
+		draw_button_tutorial_img->runAction(t_seq);
+		draw_button_tutorial_img = NULL;
+		
+		draw_button_tutorial_ccb->removeFromParent();
+		draw_button_tutorial_ccb = NULL;
+		
+		is_show_draw_button_tutorial = false;
+	}
+	
+	mySGD->draw_button_tutorial_ing = 1;
+}
 
 //////////////////////////////////////////////// Joystick ///////////////////////////////////////////////////////////////////////////////
 //void ControlJoystick::touchAction(CCPoint t_p, bool t_b)
