@@ -2292,7 +2292,10 @@ void PlayUI::continueAction ()
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(422+40-i*20, myDSH->ui_top-60));
+		if(mission_button->m_isOpened)
+			jack_img->setPosition(ccp(422+40-i*20, myDSH->ui_top-60));
+		else
+			jack_img->setPosition(ccp(422+40-i*20 - 40, myDSH->ui_top-60));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20,myDSH->ui_top-35));
