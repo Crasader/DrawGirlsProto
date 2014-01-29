@@ -20,6 +20,13 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
+enum StartSettingZorder{
+	kStartSettingZorder_back = 1,
+	kStartSettingZorder_main,
+	kStartSettingZorder_top,
+	kStartSettingZorder_popup
+};
+
 class CountingBMLabel;
 class HeartTime;
 class LoadingLayer;

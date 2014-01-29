@@ -1166,6 +1166,8 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	//		return;
 	if(!isDie && !myGD->getIsGameover())
 	{
+		myGD->communication("UI_writeDie");
+		
 		if(mySGD->getIsUsingFriendCard())
 		{
 			mySGD->setIsUsingFriendCard(false);

@@ -9,23 +9,28 @@
 #include "CardStrengthPopup.h"
 #include "DataStorageHub.h"
 #include "CardSettingPopup.h"
-#include "PuzzleMapScene.h"
+#include "StartSettingScene.h"
+#include "MainFlowScene.h"
 #include "CardCase.h"
 #include <random>
 #include "TutorialFlowStep.h"
 #include "TouchSuctionLayer.h"
 #include "ASPopupView.h"
+#include "CardChangePopup.h"
+#include "CollectionBookPopup.h"
+#include "GraySprite.h"
 
 enum CardStrengthPopupZorder{
 	kCardStrengthPopupZorder_gray = 1,
 	kCardStrengthPopupZorder_back,
 	kCardStrengthPopupZorder_content,
+	kCardStrengthPopupZorder_highContent,
 	kCardStrengthPopupZorder_popup
 };
 
 enum CardStrengthPopupMenuTag{
 	kCardStrengthPopupMenuTag_close = 1,
-	kCardStrengthPopupMenuTag_targetCard,
+	kCardStrengthPopupMenuTag_strengthCard,
 	kCardStrengthPopupMenuTag_offeringCard,
 	kCardStrengthPopupMenuTag_highStrength,
 	kCardStrengthPopupMenuTag_normalStrength,
@@ -52,6 +57,8 @@ bool CardStrengthPopup::init()
 	is_menu_enable = false;
 	replay_menu = NULL;
 	
+	card_strength_before = mySGD->getCardStrengthBefore();
+	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -70,8 +77,8 @@ bool CardStrengthPopup::init()
 	addChild(main_case, kCardStrengthPopupZorder_back);
 	
 	
-	CCSprite* n_close = CCSprite::create("cardsetting_close.png");
-	CCSprite* s_close = CCSprite::create("cardsetting_close.png");
+	CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
+	CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
 	s_close->setColor(ccGRAY);
 	
 	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(CardStrengthPopup::menuAction));
@@ -80,12 +87,31 @@ bool CardStrengthPopup::init()
 	CCMenu* close_menu = CCMenu::createWithItem(close_item);
 	close_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_close));
 	main_case->addChild(close_menu, kCardStrengthPopupZorder_content);
-	close_menu->setTouchPriority(-181);
+	close_menu->setTouchPriority(-184);
 	
 	
 	CCSprite* n_high_strength = CCSprite::create("cardstrength_high_strength.png");
+	CCSprite* n_ruby_img = CCSprite::create("price_ruby_img.png");
+	n_ruby_img->setScale(0.7f);
+	n_ruby_img->setPosition(ccp(n_high_strength->getContentSize().width/2.f-18, n_high_strength->getContentSize().height/2.f-10));
+	n_high_strength->addChild(n_ruby_img);
+	
+	CCLabelTTF* n_ruby_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getCardUpgradeRubyFee())->getCString(), mySGD->getFont().c_str(), 10);
+	n_ruby_label->setPosition(ccp(n_high_strength->getContentSize().width/2.f+8, n_high_strength->getContentSize().height/2.f-11));
+	n_high_strength->addChild(n_ruby_label);
+	
+	
 	CCSprite* s_high_strength = CCSprite::create("cardstrength_high_strength.png");
 	s_high_strength->setColor(ccGRAY);
+	CCSprite* s_ruby_img = CCSprite::create("price_ruby_img.png");
+	s_ruby_img->setScale(0.7f);
+	s_ruby_img->setPosition(ccp(s_high_strength->getContentSize().width/2.f-18, s_high_strength->getContentSize().height/2.f-10));
+	s_high_strength->addChild(s_ruby_img);
+	
+	CCLabelTTF* s_ruby_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getCardUpgradeRubyFee())->getCString(), mySGD->getFont().c_str(), 10);
+	s_ruby_label->setPosition(ccp(s_high_strength->getContentSize().width/2.f+8, s_high_strength->getContentSize().height/2.f-11));
+	s_high_strength->addChild(s_ruby_label);
+	
 	
 	CCMenuItem* high_strength_item = CCMenuItemSprite::create(n_high_strength, s_high_strength, this, menu_selector(CardStrengthPopup::menuAction));
 	high_strength_item->setTag(kCardStrengthPopupMenuTag_highStrength);
@@ -93,12 +119,29 @@ bool CardStrengthPopup::init()
 	CCMenu* high_strength_menu = CCMenu::createWithItem(high_strength_item);
 	high_strength_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_highStrength));
 	main_case->addChild(high_strength_menu, kCardStrengthPopupZorder_content);
-	high_strength_menu->setTouchPriority(-181);
+	high_strength_menu->setTouchPriority(-184);
 	
 	
 	CCSprite* n_normal_strength = CCSprite::create("cardstrength_normal_strength.png");
+	CCSprite* n_gold_img = CCSprite::create("price_gold_img.png");
+	n_gold_img->setScale(0.7f);
+	n_gold_img->setPosition(ccp(n_normal_strength->getContentSize().width/2.f-18, n_normal_strength->getContentSize().height/2.f-10));
+	n_normal_strength->addChild(n_gold_img);
+	
+	CCLabelTTF* n_gold_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getCardUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 10);
+	n_gold_label->setPosition(ccp(n_normal_strength->getContentSize().width/2.f+8, n_normal_strength->getContentSize().height/2.f-11));
+	n_normal_strength->addChild(n_gold_label);
+	
 	CCSprite* s_normal_strength = CCSprite::create("cardstrength_normal_strength.png");
 	s_normal_strength->setColor(ccGRAY);
+	CCSprite* s_gold_img = CCSprite::create("price_gold_img.png");
+	s_gold_img->setScale(0.7f);
+	s_gold_img->setPosition(ccp(s_normal_strength->getContentSize().width/2.f-18, s_normal_strength->getContentSize().height/2.f-10));
+	s_normal_strength->addChild(s_gold_img);
+	
+	CCLabelTTF* s_gold_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getCardUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 10);
+	s_gold_label->setPosition(ccp(s_normal_strength->getContentSize().width/2.f+8, s_normal_strength->getContentSize().height/2.f-11));
+	s_normal_strength->addChild(s_gold_label);
 	
 	CCMenuItem* normal_strength_item = CCMenuItemSprite::create(n_normal_strength, s_normal_strength, this, menu_selector(CardStrengthPopup::menuAction));
 	normal_strength_item->setTag(kCardStrengthPopupMenuTag_normalStrength);
@@ -106,7 +149,7 @@ bool CardStrengthPopup::init()
 	CCMenu* normal_strength_menu = CCMenu::createWithItem(normal_strength_item);
 	normal_strength_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_normalStrength));
 	main_case->addChild(normal_strength_menu, kCardStrengthPopupZorder_content);
-	normal_strength_menu->setTouchPriority(-181);
+	normal_strength_menu->setTouchPriority(-184);
 	
 	
 	CCSprite* n_align_rank = CCSprite::create("cardstrength_align_rank.png");
@@ -119,7 +162,7 @@ bool CardStrengthPopup::init()
 	CCMenu* align_rank_menu = CCMenu::createWithItem(align_rank_item);
 	align_rank_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_alignRank));
 	main_case->addChild(align_rank_menu, kCardStrengthPopupZorder_content);
-	align_rank_menu->setTouchPriority(-181);
+	align_rank_menu->setTouchPriority(-184);
 	
 	
 	CCSprite* n_align_take = CCSprite::create("cardstrength_align_take.png");
@@ -132,150 +175,402 @@ bool CardStrengthPopup::init()
 	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
 	align_take_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_alignTake));
 	main_case->addChild(align_take_menu, kCardStrengthPopupZorder_content);
-	align_take_menu->setTouchPriority(-181);
+	align_take_menu->setTouchPriority(-184);
 	
 	
-	strength_card_node = CCNode::create();
-	strength_card_node->setPosition(CCPointZero);
-	main_case->addChild(strength_card_node, kCardStrengthPopupZorder_content);
+	CCSprite* strength_tab = CCSprite::create("cardstrength_tab_strength.png");
+	strength_tab->setPosition(ccp(135,225));
+	main_case->addChild(strength_tab, kCardStrengthPopupZorder_highContent);
 	
-	setStrengthCardNode(strength_card_node);
+	CCSprite* offering_tab = CCSprite::create("cardstrength_tab_offering.png");
+	offering_tab->setPosition(ccp(229,225));
+	main_case->addChild(offering_tab, kCardStrengthPopupZorder_highContent);
+	
+	
+	CCSprite* plus_mark = CCSprite::create("cardstrength_plus.png");
+	plus_mark->setPosition(ccp(198.5f,175));
+	main_case->addChild(plus_mark, kCardStrengthPopupZorder_highContent);
+	
+	
+	strength_node = NULL;
+	offering_node = NULL;
+	strength_probability = NULL;
+	
+	setStrengthNode(mySGD->getStrengthTargetCardNumber());
+	setOfferingNode(0);
 	
 	setOfferingList();
 	
-	CCSize table_size = CCSizeMake(350, 70);
+	CCSize table_size = CCSizeMake(341, 78);
+	CCPoint table_position = ccp(29, 20);
 	
 //	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+//	temp_back->setOpacity(100);
 //	temp_back->setAnchorPoint(CCPointZero);
-//	temp_back->setPosition(ccp(97, 29));
+//	temp_back->setPosition(table_position);
 //	main_case->addChild(temp_back, kCardStrengthPopupZorder_content);
 	
 	offering_table = CCTableView::create(this, table_size);
 	offering_table->setAnchorPoint(CCPointZero);
 	offering_table->setDirection(kCCScrollViewDirectionHorizontal);
 	offering_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	offering_table->setPosition(ccp(97, 29));
+	offering_table->setPosition(table_position);
 	offering_table->setDelegate(this);
 	main_case->addChild(offering_table, kCardStrengthPopupZorder_content);
 	offering_table->setTouchPriority(-180);
 	
+	TouchSuctionLayer* suction = TouchSuctionLayer::create(-181);
+	suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
+	suction->setTouchEnabled(true);
+	main_case->addChild(suction);
 	
-	offering_menu = NULL;
-	
+	table_tab = NULL;
+	setTableTab();
 	
     return true;
 }
 
-void CardStrengthPopup::setStrengthCardNode(CCNode* t_node)
+void CardStrengthPopup::setTableTab()
 {
-	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
-	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
-	
-	target_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
-	target_card->setScale(1.1f);
-	target_card->setPosition(getContentPosition(kCardStrengthPopupMenuTag_targetCard));
-	t_node->addChild(target_card, kCardStrengthPopupZorder_content);
-	
-	CCSprite* no_img = CCSprite::create("cardsetting_noimg.png");
-	no_img->setScale(1.f/0.92f);
-	no_img->setPosition(ccp(target_card->getContentSize().width/2.f, target_card->getContentSize().height/2.f));
-	target_card->addChild(no_img, kCardStrengthPopupZorder_content);
-	
-	CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
-	mini_rank->setPosition(ccp(17,17));
-	no_img->addChild(mini_rank);
-	
-	CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, selected_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-	t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
-	mini_rank->addChild(t_rank);
-	
-	
-	dur_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number),
-															  myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
-	dur_label->setPosition(ccpAdd(target_card->getPosition(), ccp(93,54)));
-	t_node->addChild(dur_label);
-	
-	up_dur_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
-	up_dur_label->setPosition(ccpAdd(dur_label->getPosition(), ccp(20,3)));
-	t_node->addChild(up_dur_label);
-	
-	
-	pow_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
-	pow_label->setPosition(ccpAdd(target_card->getPosition(), ccp(93,35)));
-	t_node->addChild(pow_label);
-	
-	up_pow_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_power_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
-	up_pow_label->setPosition(ccpAdd(pow_label->getPosition(), ccp(20,3)));
-	t_node->addChild(up_pow_label);
-	
-	
-	spd_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", NSDS_GD(kSDS_CI_int1_missile_speed_d, selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
-	spd_label->setPosition(ccpAdd(target_card->getPosition(), ccp(93,16)));
-	t_node->addChild(spd_label);
-	
-	up_spd_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
-	up_spd_label->setPosition(ccpAdd(spd_label->getPosition(), ccp(20,3)));
-	t_node->addChild(up_spd_label);
-	
-	
-	dex_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
-	dex_label->setPosition(ccpAdd(target_card->getPosition(), ccp(93,-3)));
-	t_node->addChild(dex_label);
-	
-	up_dex_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_dex_i, selected_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
-	up_dex_label->setPosition(ccpAdd(dex_label->getPosition(), ccp(20,3)));
-	t_node->addChild(up_dex_label);
-	
-	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-	t_card_level_label->setPosition(ccp(55,220));
-	t_node->addChild(t_card_level_label, kCardStrengthPopupZorder_content);
-	
-	string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, selected_card_number).c_str();
-	int missile_type_number = MissileDamageData::getMissileType(missile_type_code.c_str());
-	
-	int elemental_number = missile_type_number%10;
-	int level_number = missile_type_number/10 + 1;
-	
-	string type_name;
-	
-	if(elemental_number == kElementCode_empty)
-		type_name = "empty";
-	else if(elemental_number == kElementCode_life)
-		type_name = "life";
-	else if(elemental_number == kElementCode_fire)
-		type_name = "fire";
-	else if(elemental_number == kElementCode_water)
-		type_name = "water";
-	else if(elemental_number == kElementCode_wind)
-		type_name = "wind";
-	else if(elemental_number == kElementCode_lightning)
-		type_name = "lightning";
-	else if(elemental_number == kElementCode_plasma)
-		type_name = "plasma";
-	
-	if(elemental_number == kElementCode_empty || elemental_number == kElementCode_fire || elemental_number == kElementCode_life || elemental_number == kElementCode_water)
+	if(table_tab)
 	{
-		SpinBasicMissile* missile_img = SpinBasicMissile::create(type_name.c_str(), level_number, ccpAdd(target_card->getPosition(), ccp(105,17)), false);
-		missile_img->setScale(0.75f);
-		t_node->addChild(missile_img, kCardStrengthPopupZorder_content);
+		table_tab->removeFromParent();
+		table_tab = NULL;
+	}
+	
+	if(strength_card_number == 0)
+	{
+		table_tab = CCSprite::create("cardstrength_table_tab_strength.png");
+		table_tab->setPosition(ccp(60,101));
+		main_case->addChild(table_tab, kCardStrengthPopupZorder_highContent);
 	}
 	else
 	{
-		SpinUpgradeMissile* missile_img = SpinUpgradeMissile::create(type_name.c_str(), level_number, ccpAdd(target_card->getPosition(), ccp(105,17)), false);
-		missile_img->setScale(0.75f);
-		t_node->addChild(missile_img, kCardStrengthPopupZorder_content);
+		table_tab = CCSprite::create("cardstrength_table_tab_offering.png");
+		table_tab->setPosition(ccp(60,101));
+		main_case->addChild(table_tab, kCardStrengthPopupZorder_highContent);
+	}
+}
+
+void CardStrengthPopup::setStrengthNode(int t_card_number)
+{
+	if(strength_node)
+	{
+		strength_node->removeFromParent();
+		strength_node = NULL;
+	}
+	
+	strength_card_number = t_card_number;
+	
+	if(strength_card_number == 0)
+	{
+		strength_node = CCSprite::create("cardstrength_frame.png");
+		strength_node->setPosition(ccp(152,174));
+		main_case->addChild(strength_node, kCardStrengthPopupZorder_content);
+		
+		CCSprite* tip = CCSprite::create("cardstrength_tip_strength.png");
+		tip->setPosition(ccp(strength_node->getContentSize().width/2.f, strength_node->getContentSize().height/2.f));
+		strength_node->addChild(tip);
+		
+		strength_idx = -1;
+	}
+	else
+	{
+		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, strength_card_number);
+		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, strength_card_number);
+		
+		strength_node = CCNode::create();
+		strength_node->setPosition(ccp(152,174));
+		main_case->addChild(strength_node, kCardStrengthPopupZorder_content);
+		
+		CCSprite* n_strength = CCSprite::create("cardstrength_frame.png");
+		CCSprite* n_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		n_card->setScale(1.2f);
+		n_card->setPosition(ccp(n_strength->getContentSize().width/2.f, n_strength->getContentSize().height/2.f));
+		n_strength->addChild(n_card, -1);
+		
+		CCSprite* s_strength = CCSprite::create("cardstrength_frame.png");
+		s_strength->setColor(ccGRAY);
+		CCSprite* s_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		s_card->setScale(1.2f);
+		s_card->setColor(ccGRAY);
+		s_card->setPosition(ccp(s_strength->getContentSize().width/2.f, s_strength->getContentSize().height/2.f));
+		s_strength->addChild(s_card, -1);
+		
+		CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardStrengthPopup::menuAction));
+		strength_item->setTag(kCardStrengthPopupMenuTag_strengthCard);
+		
+		CCMenu* strength_menu = CCMenu::createWithItem(strength_item);
+		strength_menu->setPosition(CCPointZero);
+		strength_node->addChild(strength_menu);
+		
+		strength_menu->setTouchPriority(-184);
+		
+		CCPoint minus_content_half = ccp(-n_strength->getContentSize().width/2.f, -n_strength->getContentSize().height/2.f);
+		
+		CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
+		mini_rank->setPosition(ccpAdd(minus_content_half, ccp(15,16)));
+		strength_node->addChild(mini_rank);
+		
+		CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number))->getCString(), mySGD->getFont().c_str(), 8);
+		t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
+		mini_rank->addChild(t_rank);
+		
+		
+//		CCLabelTTF* dur_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number),
+//																  myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+//		dur_label->setPosition(ccpAdd(minus_content_half, ccp(93,54)));
+//		strength_node->addChild(dur_label);
+//		
+//		CCLabelTTF* up_dur_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
+//		up_dur_label->setPosition(ccpAdd(dur_label->getPosition(), ccp(20,3)));
+//		strength_node->addChild(up_dur_label);
+		
+		
+		CCLabelTTF* pow_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
+		pow_label->setAnchorPoint(ccp(1,0.5));
+		pow_label->setPosition(ccpAdd(minus_content_half, ccp(-8,87)));
+		strength_node->addChild(pow_label);
+		
+//		CCLabelTTF* up_pow_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_power_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
+//		up_pow_label->setPosition(ccpAdd(pow_label->getPosition(), ccp(20,3)));
+//		strength_node->addChild(up_pow_label);
+		
+		
+		CCLabelTTF* spd_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", NSDS_GD(kSDS_CI_int1_missile_speed_d, strength_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+		spd_label->setAnchorPoint(ccp(1,0.5));
+		spd_label->setPosition(ccpAdd(minus_content_half, ccp(-8,62)));
+		strength_node->addChild(spd_label);
+		
+//		CCLabelTTF* up_spd_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
+//		up_spd_label->setPosition(ccpAdd(spd_label->getPosition(), ccp(20,3)));
+//		strength_node->addChild(up_spd_label);
+		
+		
+		CCLabelTTF* dex_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
+		dex_label->setAnchorPoint(ccp(1,0.5));
+		dex_label->setPosition(ccpAdd(minus_content_half, ccp(-8,74.5f)));
+		strength_node->addChild(dex_label);
+		
+//		CCLabelTTF* up_dex_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_dex_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
+//		up_dex_label->setPosition(ccpAdd(dex_label->getPosition(), ccp(20,3)));
+//		strength_node->addChild(up_dex_label);
+		
+		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))->getCString(), mySGD->getFont().c_str(), 8);
+		t_card_level_label->setPosition(ccpAdd(minus_content_half, ccp(17,93)));
+		strength_node->addChild(t_card_level_label, kCardStrengthPopupZorder_content);
+		
+		string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, strength_card_number).c_str();
+		int missile_type_number = MissileDamageData::getMissileType(missile_type_code.c_str());
+		
+		int elemental_number = missile_type_number%10;
+		int level_number = missile_type_number/10 + 1;
+		
+		string type_name;
+		
+		if(elemental_number == kElementCode_empty)
+			type_name = "empty";
+		else if(elemental_number == kElementCode_life)
+			type_name = "life";
+		else if(elemental_number == kElementCode_fire)
+			type_name = "fire";
+		else if(elemental_number == kElementCode_water)
+			type_name = "water";
+		else if(elemental_number == kElementCode_wind)
+			type_name = "wind";
+		else if(elemental_number == kElementCode_lightning)
+			type_name = "lightning";
+		else if(elemental_number == kElementCode_plasma)
+			type_name = "plasma";
+		
+		if(elemental_number == kElementCode_empty || elemental_number == kElementCode_fire || elemental_number == kElementCode_life || elemental_number == kElementCode_water)
+		{
+			SpinBasicMissile* missile_img = SpinBasicMissile::create(type_name.c_str(), level_number, ccpAdd(minus_content_half, ccp(-89,8)), false);
+			missile_img->setScale(0.75f);
+			strength_node->addChild(missile_img, kCardStrengthPopupZorder_content);
+		}
+		else
+		{
+			SpinUpgradeMissile* missile_img = SpinUpgradeMissile::create(type_name.c_str(), level_number, ccpAdd(minus_content_half, ccp(-89,8)), false);
+			missile_img->setScale(0.75f);
+			strength_node->addChild(missile_img, kCardStrengthPopupZorder_content);
+		}
+	}
+}
+
+void CardStrengthPopup::setOfferingNode(int t_card_number)
+{
+	if(offering_node)
+	{
+		offering_node->removeFromParent();
+		offering_node = NULL;
+	}
+	
+	if(strength_probability)
+	{
+		strength_probability->removeFromParent();
+		strength_probability = NULL;
+	}
+	
+	offering_card_number = t_card_number;
+	
+	if(offering_card_number == 0)
+	{
+		offering_node = CCSprite::create("cardstrength_frame.png");
+		offering_node->setPosition(ccp(246,174));
+		main_case->addChild(offering_node, kCardStrengthPopupZorder_content);
+		
+		if(strength_card_number != 0)
+		{
+			CCSprite* tip = CCSprite::create("cardstrength_tip_offering.png");
+			tip->setPosition(ccp(offering_node->getContentSize().width/2.f, offering_node->getContentSize().height/2.f-5));
+			offering_node->addChild(tip);
+		}
+		
+		offering_idx = -1;
+	}
+	else
+	{
+		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, offering_card_number);
+		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_card_number);
+		
+		offering_node = CCNode::create();
+		offering_node->setPosition(ccp(246,174));
+		main_case->addChild(offering_node, kCardStrengthPopupZorder_content);
+		
+		CCSprite* n_offering = CCSprite::create("cardstrength_frame.png");
+		CCSprite* n_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		n_card->setScale(1.2f);
+		n_card->setPosition(ccp(n_offering->getContentSize().width/2.f, n_offering->getContentSize().height/2.f));
+		n_offering->addChild(n_card, -1);
+		
+		CCSprite* s_offering = CCSprite::create("cardstrength_frame.png");
+		s_offering->setColor(ccGRAY);
+		CCSprite* s_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		s_card->setScale(1.2f);
+		s_card->setColor(ccGRAY);
+		s_card->setPosition(ccp(s_offering->getContentSize().width/2.f, s_offering->getContentSize().height/2.f));
+		s_offering->addChild(s_card, -1);
+		
+		CCMenuItem* offering_item = CCMenuItemSprite::create(n_offering, s_offering, this, menu_selector(CardStrengthPopup::menuAction));
+		offering_item->setTag(kCardStrengthPopupMenuTag_offeringCard);
+		
+		CCMenu* offering_menu = CCMenu::createWithItem(offering_item);
+		offering_menu->setPosition(CCPointZero);
+		offering_node->addChild(offering_menu);
+		
+		offering_menu->setTouchPriority(-184);
+		
+		CCPoint minus_content_half = ccp(-n_offering->getContentSize().width/2.f, -n_offering->getContentSize().height/2.f);
+		
+		CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
+		mini_rank->setPosition(ccpAdd(minus_content_half, ccp(15,16)));
+		offering_node->addChild(mini_rank);
+		
+		CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number))->getCString(), mySGD->getFont().c_str(), 8);
+		t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
+		mini_rank->addChild(t_rank);
+		
+		
+//		CCLabelTTF* dur_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number),
+//																			  myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, offering_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+//		dur_label->setPosition(ccpAdd(minus_content_half, ccp(93,54)));
+//		offering_node->addChild(dur_label);
+//		
+//		CCLabelTTF* up_dur_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
+//		up_dur_label->setPosition(ccpAdd(dur_label->getPosition(), ccp(20,3)));
+//		offering_node->addChild(up_dur_label);
+		
+		
+		CCLabelTTF* pow_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
+		pow_label->setAnchorPoint(ccp(1,0.5));
+		pow_label->setPosition(ccpAdd(minus_content_half, ccp(157,87)));
+		offering_node->addChild(pow_label);
+		
+//		CCLabelTTF* up_pow_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_power_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
+//		up_pow_label->setPosition(ccpAdd(pow_label->getPosition(), ccp(20,3)));
+//		offering_node->addChild(up_pow_label);
+		
+		
+		CCLabelTTF* spd_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", NSDS_GD(kSDS_CI_int1_missile_speed_d, offering_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+		spd_label->setAnchorPoint(ccp(1,0.5));
+		spd_label->setPosition(ccpAdd(minus_content_half, ccp(157,62)));
+		offering_node->addChild(spd_label);
+		
+//		CCLabelTTF* up_spd_label = CCLabelTTF::create("+0", mySGD->getFont().c_str(), 14);
+//		up_spd_label->setPosition(ccpAdd(spd_label->getPosition(), ccp(20,3)));
+//		offering_node->addChild(up_spd_label);
+		
+		
+		CCLabelTTF* dex_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
+		dex_label->setAnchorPoint(ccp(1,0.5));
+		dex_label->setPosition(ccpAdd(minus_content_half, ccp(157,74.5f)));
+		offering_node->addChild(dex_label);
+		
+//		CCLabelTTF* up_dex_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_dex_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
+//		up_dex_label->setPosition(ccpAdd(dex_label->getPosition(), ccp(20,3)));
+//		offering_node->addChild(up_dex_label);
+		
+		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))->getCString(), mySGD->getFont().c_str(), 8);
+		t_card_level_label->setPosition(ccpAdd(minus_content_half, ccp(17,93)));
+		offering_node->addChild(t_card_level_label, kCardStrengthPopupZorder_content);
+		
+		string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, offering_card_number).c_str();
+		int missile_type_number = MissileDamageData::getMissileType(missile_type_code.c_str());
+		
+		int elemental_number = missile_type_number%10;
+		int level_number = missile_type_number/10 + 1;
+		
+		string type_name;
+		
+		if(elemental_number == kElementCode_empty)
+			type_name = "empty";
+		else if(elemental_number == kElementCode_life)
+			type_name = "life";
+		else if(elemental_number == kElementCode_fire)
+			type_name = "fire";
+		else if(elemental_number == kElementCode_water)
+			type_name = "water";
+		else if(elemental_number == kElementCode_wind)
+			type_name = "wind";
+		else if(elemental_number == kElementCode_lightning)
+			type_name = "lightning";
+		else if(elemental_number == kElementCode_plasma)
+			type_name = "plasma";
+		
+		if(elemental_number == kElementCode_empty || elemental_number == kElementCode_fire || elemental_number == kElementCode_life || elemental_number == kElementCode_water)
+		{
+			SpinBasicMissile* missile_img = SpinBasicMissile::create(type_name.c_str(), level_number, ccpAdd(minus_content_half, ccp(130,8)), false);
+			missile_img->setScale(0.75f);
+			offering_node->addChild(missile_img, kCardStrengthPopupZorder_content);
+		}
+		else
+		{
+			SpinUpgradeMissile* missile_img = SpinUpgradeMissile::create(type_name.c_str(), level_number, ccpAdd(minus_content_half, ccp(130,8)), false);
+			missile_img->setScale(0.75f);
+			offering_node->addChild(missile_img, kCardStrengthPopupZorder_content);
+		}
+		
+		strength_probability = CCSprite::create("cardsetting_probability.png");
+		strength_probability->setPosition(ccp(198.5,150));
+		main_case->addChild(strength_probability, kCardStrengthPopupZorder_highContent);
+		
+		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+		
+		CCLabelTTF* probability_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", strength_rate*100.f)->getCString(), mySGD->getFont().c_str(), 10);
+		probability_label->setAnchorPoint(ccp(1.f,0.5f));
+		probability_label->setPosition(ccp(strength_probability->getContentSize().width-17, strength_probability->getContentSize().height/2.f-2));
+		strength_probability->addChild(probability_label);
 	}
 }
 
 void CardStrengthPopup::setOfferingList()
 {
-	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	int loop_length = mySGD->getHasGottenCardsSize();
 	for(int i=0;i<loop_length;i++)
 	{
 		int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-		if(selected_card_number != card_number && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
 		{
 			CardSortInfo t_info = mySGD->getHasGottenCardData(i);
 			offering_list.push_back(t_info);
@@ -283,8 +578,6 @@ void CardStrengthPopup::setOfferingList()
 	}
 	
 	alignOfferingList(kCardStrengthAlign_takeReverse);
-	
-	recent_offering_number = -1;
 }
 
 void CardStrengthPopup::alignOfferingList(CardStrengthAlign t_align)
@@ -347,25 +640,44 @@ CCTableViewCell* CardStrengthPopup::tableCellAtIndex(CCTableView *table, unsigne
 	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_list[idx].card_number);
 	
 	CCSprite* offering_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
-	offering_card->setScale(0.73f);
-	offering_card->setPosition(ccp(30, 35));
+	offering_card->setScale(0.75f);
+	offering_card->setPosition(ccp(30, 39));
 	cell->addChild(offering_card);
 	
-	CCSprite* no_img = CCSprite::create("cardsetting_noimg.png");
-	no_img->setScale(0.8f);
-	no_img->setPosition(ccp(30, 35));
-	cell->addChild(no_img);
+	CCSprite* card_case;
+	if(offering_list[idx].card_number == strength_card_number)
+	{
+		if(strength_idx == -1)
+			strength_idx = idx;
+		card_case = CCSprite::create("cardstrength_list_strength.png");
+		card_case->setPosition(ccp(30, 40));
+		cell->addChild(card_case);
+	}
+	else if(offering_list[idx].card_number == offering_card_number)
+	{
+		if(offering_idx == -1)
+			offering_idx = idx;
+		card_case = CCSprite::create("cardstrength_list_offering.png");
+		card_case->setPosition(ccp(30, 40));
+		cell->addChild(card_case);
+	}
+	else
+	{
+		card_case = CCSprite::create("cardstrength_list_normal.png");
+		card_case->setPosition(ccp(30, 40));
+		cell->addChild(card_case);
+	}
 	
 	CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
-	mini_rank->setPosition(ccp(17,17));
-	no_img->addChild(mini_rank);
+	mini_rank->setPosition(ccp(15,15));
+	card_case->addChild(mini_rank);
 	
 	CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, offering_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 8);
 	t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 	mini_rank->addChild(t_rank);
 	
 	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 8);
-	t_card_level_label->setPosition(ccp(17,62));
+	t_card_level_label->setPosition(ccp(17,63));
 	cell->addChild(t_card_level_label);
 	
 	return cell;
@@ -383,82 +695,70 @@ void CardStrengthPopup::tableCellTouched(CCTableView* table, CCTableViewCell* ce
 	if(!is_menu_enable)
 		return;
 	
-	int selected_card_number = offering_list[cell->getIdx()].card_number;
-	if(recent_offering_number == selected_card_number)
-		return;
-	
-	is_menu_enable = false;
-	
-	recent_offering_number = selected_card_number;
-	if(offering_menu)
+	int clicked_card_number = offering_list[cell->getIdx()].card_number;
+	if(clicked_card_number == offering_card_number)
 	{
-		offering_menu->removeFromParent();
-		strength_probability->removeFromParent();
+		// 재료 카드 해제
+		is_menu_enable = false;
+		int keep_idx = offering_idx;
+		setOfferingNode(0);
+		if(keep_idx >= 0)
+			table->updateCellAtIndex(keep_idx);
+		is_menu_enable = true;
 	}
-	
-	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
-	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
-	
-	CCSprite* n_offering = CCSprite::create("cardsetting_noimg.png");
-	n_offering->setScale(1.1f);
-	CCSprite* n_card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
-	n_card_img->setScale(1.05f/1.1f);
-	n_card_img->setPosition(ccp(n_offering->getContentSize().width/2.f, n_offering->getContentSize().height/2.f));
-	n_offering->addChild(n_card_img, -1);
-	
-	CCSprite* n_mini_rank = CCSprite::create("cardsetting_mini_rank.png");
-	n_mini_rank->setPosition(ccp(17,17));
-	n_offering->addChild(n_mini_rank);
-	
-	CCLabelTTF* n_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, selected_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-	n_rank->setPosition(ccp(n_mini_rank->getContentSize().width/2.f, n_mini_rank->getContentSize().height/2.f-1));
-	n_mini_rank->addChild(n_rank);
-	
-	
-	CCSprite* s_offering = CCSprite::create("cardsetting_noimg.png");
-	s_offering->setScale(1.1f);
-	s_offering->setColor(ccGRAY);
-	CCSprite* s_card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
-	s_card_img->setScale(1.05f/1.1f);
-	s_card_img->setPosition(ccp(s_offering->getContentSize().width/2.f, s_offering->getContentSize().height/2.f));
-	s_card_img->setColor(ccGRAY);
-	s_offering->addChild(s_card_img, -1);
-	
-	CCSprite* s_mini_rank = CCSprite::create("cardsetting_mini_rank.png");
-	s_mini_rank->setPosition(ccp(17,17));
-	s_mini_rank->setColor(ccGRAY);
-	s_offering->addChild(s_mini_rank);
-	
-	CCLabelTTF* s_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, selected_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-	s_rank->setPosition(ccp(s_mini_rank->getContentSize().width/2.f, s_mini_rank->getContentSize().height/2.f-1));
-	s_mini_rank->addChild(s_rank);
-	
-	
-	CCMenuItem* offering_item = CCMenuItemSprite::create(n_offering, s_offering, this, menu_selector(CardStrengthPopup::menuAction));
-	offering_item->setTag(kCardStrengthPopupMenuTag_offeringCard);
-	
-	offering_menu = CCMenu::createWithItem(offering_item);
-	offering_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_offeringCard));
-	main_case->addChild(offering_menu, kCardStrengthPopupZorder_content);
-	offering_menu->setTouchPriority(-181);
-	
-	strength_probability = CCSprite::create("cardsetting_probability.png");
-	strength_probability->setPosition(offering_menu->getPosition());
-	main_case->addChild(strength_probability, kCardStrengthPopupMenuTag_offeringCard);
-	
-	int strength_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
-	
-	CCLabelTTF* probability_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", strength_rate*100.f)->getCString(), mySGD->getFont().c_str(), 10);
-	probability_label->setAnchorPoint(ccp(1.f,0.5f));
-	probability_label->setPosition(ccp(strength_probability->getContentSize().width-17, strength_probability->getContentSize().height/2.f-2));
-	strength_probability->addChild(probability_label);
-	
-	is_menu_enable = true;
+	else if(clicked_card_number == strength_card_number)
+	{
+		if(offering_card_number != 0)
+		{
+			// 강화 카드 해제 불가
+		}
+		else
+		{
+			is_menu_enable = false;
+			int keep_idx = strength_idx;
+			setStrengthNode(0);
+			if(keep_idx >= 0)
+				table->updateCellAtIndex(keep_idx);
+			
+			setTableTab();
+			is_menu_enable = true;
+		}
+	}
+	else
+	{
+		if(strength_card_number == 0)
+		{
+			strength_idx = cell->getIdx();
+			setStrengthNode(clicked_card_number);
+			setOfferingNode(0);
+			setTableTab();
+			
+			table->updateCellAtIndex(cell->getIdx());
+		}
+		else if(offering_card_number == 0)
+		{
+			offering_idx = cell->getIdx();
+			setOfferingNode(clicked_card_number);
+			
+			table->updateCellAtIndex(cell->getIdx());
+		}
+		else
+		{
+			int keep_idx = offering_idx;
+			offering_idx = cell->getIdx();
+			setOfferingNode(clicked_card_number);
+			
+			if(keep_idx >= 0)
+				table->updateCellAtIndex(keep_idx);
+			table->updateCellAtIndex(offering_idx);
+		}
+		
+		is_menu_enable = true;
+	}
 }
 CCSize CardStrengthPopup::cellSizeForTable(CCTableView *table)
 {
-	return CCSizeMake(60, 70);
+	return CCSizeMake(60, 78);
 }
 unsigned int CardStrengthPopup::numberOfCellsInTableView(CCTableView *table)
 {
@@ -521,13 +821,11 @@ CCPoint CardStrengthPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kCardStrengthPopupMenuTag_close)						return_value = ccp(440,290);
-	else if(t_tag == kCardStrengthPopupMenuTag_highStrength)			return_value = ccp(408,210);
-	else if(t_tag == kCardStrengthPopupMenuTag_normalStrength)			return_value = ccp(408,150);
-	else if(t_tag == kCardStrengthPopupMenuTag_alignRank)				return_value = ccp(60,85);
-	else if(t_tag == kCardStrengthPopupMenuTag_alignTake)				return_value = ccp(60,45);
-	else if(t_tag == kCardStrengthPopupMenuTag_targetCard)				return_value = ccp(77,181);
-	else if(t_tag == kCardStrengthPopupMenuTag_offeringCard)			return_value = ccp(299,178);
+	if(t_tag == kCardStrengthPopupMenuTag_close)						return_value = ccp(452,259);
+	else if(t_tag == kCardStrengthPopupMenuTag_highStrength)			return_value = ccp(415,204);
+	else if(t_tag == kCardStrengthPopupMenuTag_normalStrength)			return_value = ccp(415,150);
+	else if(t_tag == kCardStrengthPopupMenuTag_alignRank)				return_value = ccp(416,78);
+	else if(t_tag == kCardStrengthPopupMenuTag_alignTake)				return_value = ccp(416,39);
 	
 	return return_value;
 }
@@ -544,9 +842,31 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 	
 	if(tag == kCardStrengthPopupMenuTag_close)
 	{
-		CardSettingPopup* t_popup = CardSettingPopup::create();
-		t_popup->setHideFinalAction(target_final, delegate_final);
-		getParent()->addChild(t_popup, kPMS_Z_popup);
+		if(card_strength_before == kCardStrengthBefore_cardSetting)
+		{
+			CardSettingPopup* t_popup = CardSettingPopup::create();
+			t_popup->setHideFinalAction(target_final, delegate_final);
+			getParent()->addChild(t_popup, kMainFlowZorder_popup);
+		}
+		else if(card_strength_before == kCardStrengthBefore_cardChange)
+		{
+			CardChangePopup* t_popup = CardChangePopup::create();
+			t_popup->setHideFinalAction(target_final, delegate_final);
+			getParent()->addChild(t_popup, kStartSettingZorder_popup);
+		}
+		else if(card_strength_before == kCardStrengthBefore_diary)
+		{
+			if(strength_card_number > 0)
+				mySGD->selected_collectionbook = strength_card_number;
+			else if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
+				mySGD->selected_collectionbook = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			else
+				mySGD->selected_collectionbook = offering_list[0].card_number;
+			
+			CollectionBookPopup* t_popup = CollectionBookPopup::create();
+			t_popup->setHideFinalAction(target_final, delegate_final);
+			getParent()->addChild(t_popup, kMainFlowZorder_popup);
+		}
 		
 		target_final = NULL;
 		hidePopup();
@@ -573,30 +893,44 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCardStrengthPopupMenuTag_offeringCard)
 	{
-		if(offering_menu)
-		{
-			offering_menu->removeFromParent();
-			strength_probability->removeFromParent();
-			recent_offering_number = -1;
-			offering_menu = NULL;
-		}
+		// 재료 카드 해제
+		int keep_idx = offering_idx;
+		setOfferingNode(0);
+		if(keep_idx >= 0)
+			offering_table->updateCellAtIndex(keep_idx);
 		
 		is_menu_enable = true;
 	}
+	else if(tag == kCardStrengthPopupMenuTag_strengthCard)
+	{
+		if(offering_card_number != 0)
+		{
+			// 강화 카드 해제 불가
+			is_menu_enable = true;
+		}
+		else
+		{
+			int keep_idx = strength_idx;
+			setStrengthNode(0);
+			if(keep_idx >= 0)
+				offering_table->updateCellAtIndex(keep_idx);
+			setTableTab();
+			is_menu_enable = true;
+		}
+	}
 	else if(tag == kCardStrengthPopupMenuTag_highStrength)
 	{
-		if(mySGD->getStar() >= mySGD->getCardUpgradeRubyFee() && offering_menu)
+		if(mySGD->getStar() >= mySGD->getCardUpgradeRubyFee() && offering_card_number > 0)
 		{
 			mySGD->setStar(mySGD->getStar() - mySGD->getCardUpgradeRubyFee());
 			myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 			
-			int strength_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 			CCLog("strength_rate : %.3f", strength_rate);
 			
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number, 0);
-			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, recent_offering_number, NSDS_GI(kSDS_CI_int1_durability_i, recent_offering_number));
-			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, recent_offering_number, NSDS_GS(kSDS_CI_int1_passive_s, recent_offering_number));
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number, 0);
+			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, offering_card_number, NSDS_GI(kSDS_CI_int1_durability_i, offering_card_number));
+			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, offering_card_number, NSDS_GS(kSDS_CI_int1_passive_s, offering_card_number));
 			
 			// 결과 창 생성
 			result_popup = TouchSuctionLayer::create(-210);
@@ -630,35 +964,48 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 				strength_card_img->addChild(t_ani);
 			}
 			
-			CCLabelTTF* comment_label = CCLabelTTF::create("재료카드와 퍼즐조각이 소진됩니다.", mySGD->getFont().c_str(), 15);
+			int offering_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, offering_card_number);
+			int offering_card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_card_number);
+			
+			bool is_piece_remove = true;
+			
+			for(int i=1;i<=3 && is_piece_remove;i++)
+			{
+				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(offering_card_stage, kSDS_SI_level_int1_card_i, i)) > 0)
+					is_piece_remove = false;
+			}
+			
+			string comment_string;
+			if(is_piece_remove)
+				comment_string = "재료카드와 퍼즐조각이 소진됩니다.";
+			else
+				comment_string = "재료카드가 소진됩니다.";
+			
+			CCLabelTTF* comment_label = CCLabelTTF::create(comment_string.c_str(), mySGD->getFont().c_str(), 15);
 			comment_label->setPosition(ccp(180,50));
 			result_popup->addChild(comment_label);
-			
-			int offering_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, recent_offering_number);
-			int offering_card_grade = NSDS_GI(kSDS_CI_int1_grade_i, recent_offering_number);
 			
 			CCSprite* offering_card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", offering_card_stage, offering_card_grade)->getCString()));
 			offering_card_img->setScale(0.73f);
 			offering_card_img->setPosition(ccp(340, 70));
 			result_popup->addChild(offering_card_img);
 			
-			CCSprite* no_img = CCSprite::create("cardsetting_noimg.png");
-			no_img->setScale(0.8f);
-			no_img->setPosition(ccp(340, 70));
-			result_popup->addChild(no_img);
+			CCSprite* card_case = CCSprite::create("cardstrength_list_normal.png");
+			card_case->setPosition(ccp(340, 70));
+			result_popup->addChild(card_case);
 			
 			CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
 			mini_rank->setPosition(ccp(17,17));
-			no_img->addChild(mini_rank);
+			card_case->addChild(mini_rank);
 			
-			CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number))->getCString(), mySGD->getFont().c_str(), 8);
+			CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number))->getCString(), mySGD->getFont().c_str(), 8);
 			t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 			mini_rank->addChild(t_rank);
 			
-			CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))->getCString(),
+			CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))->getCString(),
 																mySGD->getFont().c_str(), 10);
 			t_card_level_label->setPosition(ccp(19,75));
-			no_img->addChild(t_card_level_label);
+			card_case->addChild(t_card_level_label);
 			
 			string t_WorH;
 			if(NSDS_GI(NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i), kSDS_PZ_stage_int1_pieceNo_i) % 2 == 0)
@@ -668,58 +1015,36 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			
 			CCPoint offering_piece_point = ccp(420,70);
 			
-			if(offering_card_grade == 3)
+			if(is_piece_remove)
 			{
+				string t_WorH;
+				if(NSDS_GI(NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i), kSDS_PZ_stage_int1_pieceNo_i) % 2 == 0)
+					t_WorH = "w";
+				else
+					t_WorH = "h";
+				
+				CCPoint offering_piece_point = ccp(420,70);
+				
 				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
 				if(offering_card_puzzle_number != 0)
 				{
-					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																														   offering_card_stage)-1)->getCString()));
-					n_piece->setPosition(offering_piece_point);
-					result_popup->addChild(n_piece);
-				}
-			}
-			else if(offering_card_grade == 2)
-			{
-				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				if(offering_card_puzzle_number != 0)
-				{
-					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																														   offering_card_stage)-1)->getCString()));
-					n_piece->setPosition(offering_piece_point);
-					result_popup->addChild(n_piece);
+					GraySprite* piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
+																												 NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
+																														 offering_card_stage)-1)->getCString()));
+					piece->setPosition(offering_piece_point);
+					result_popup->addChild(piece);
 					
-					CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
-					stroke_img->setPosition(offering_piece_point);
-					result_popup->addChild(stroke_img);
+					CCSprite* embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", t_WorH.c_str())->getCString());
+					embo->setPosition(ccp(piece->getContentSize().width/2.f, piece->getContentSize().height/2.f));
+					piece->addChild(embo);
 				}
 			}
-			else if(offering_card_grade == 1)
-			{
-				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				if(offering_card_puzzle_number != 0)
-				{
-					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																														   offering_card_stage)-1)->getCString()));
-					n_piece->setGray(true);
-					n_piece->setPosition(offering_piece_point);
-					result_popup->addChild(n_piece);
-					
-					CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
-					stroke_img->setPosition(offering_piece_point);
-					result_popup->addChild(stroke_img);
-				}
-			}
-			
 			
 			
 			
 			for(auto iter = offering_list.begin();iter != offering_list.end();iter++)
 			{
-				if((*iter).card_number == recent_offering_number)
+				if((*iter).card_number == offering_card_number)
 				{
 					offering_list.erase(iter);
 					break;
@@ -910,14 +1235,11 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			
 			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, json_selector(this, CardStrengthPopup::resultStrength));
 			
-			offering_menu->removeFromParent();
-			strength_probability->removeFromParent();
-			recent_offering_number = -1;
-			offering_menu = NULL;
+			setOfferingNode(0);
 		}
 		else
 		{
-			if(!offering_menu)
+			if(offering_card_number <= 0)
 				addChild(ASPopupView::getCommonNoti(-210, "재료 카드를 선택해주세요."), kCardStrengthPopupZorder_popup);
 			else
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kCardStrengthPopupZorder_popup);
@@ -926,18 +1248,17 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCardStrengthPopupMenuTag_normalStrength)
 	{
-		if(mySGD->getGold() >= mySGD->getCardUpgradeGoldFee() && offering_menu)
+		if(mySGD->getGold() >= mySGD->getCardUpgradeGoldFee() && offering_card_number > 0)
 		{
 			mySGD->setGold(mySGD->getGold() - mySGD->getCardUpgradeGoldFee());
 			myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
 			
-			int strength_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 			CCLog("strength_rate : %.3f", strength_rate);
 			
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, recent_offering_number, 0);
-			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, recent_offering_number, NSDS_GI(kSDS_CI_int1_durability_i, recent_offering_number));
-			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, recent_offering_number, NSDS_GS(kSDS_CI_int1_passive_s, recent_offering_number));
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number, 0);
+			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, offering_card_number, NSDS_GI(kSDS_CI_int1_durability_i, offering_card_number));
+			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, offering_card_number, NSDS_GS(kSDS_CI_int1_passive_s, offering_card_number));
 			
 			
 			// 결과 창 생성
@@ -972,96 +1293,80 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 				strength_card_img->addChild(t_ani);
 			}
 			
-			CCLabelTTF* comment_label = CCLabelTTF::create("재료카드와 퍼즐조각이 소진됩니다.", mySGD->getFont().c_str(), 15);
+			int offering_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, offering_card_number);
+			int offering_card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_card_number);
+			
+			bool is_piece_remove = true;
+			
+			for(int i=1;i<=3 && is_piece_remove;i++)
+			{
+				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(offering_card_stage, kSDS_SI_level_int1_card_i, i)) > 0)
+					is_piece_remove = false;
+			}
+			
+			string comment_string;
+			if(is_piece_remove)
+				comment_string = "재료카드와 퍼즐조각이 소진됩니다.";
+			else
+				comment_string = "재료카드가 소진됩니다.";
+			
+			CCLabelTTF* comment_label = CCLabelTTF::create(comment_string.c_str(), mySGD->getFont().c_str(), 15);
 			comment_label->setPosition(ccp(180,50));
 			result_popup->addChild(comment_label);
 			
-			int offering_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, recent_offering_number);
-			int offering_card_grade = NSDS_GI(kSDS_CI_int1_grade_i, recent_offering_number);
+			
 			
 			CCSprite* offering_card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", offering_card_stage, offering_card_grade)->getCString()));
-			offering_card_img->setScale(0.73f);
+			offering_card_img->setScale(0.8f);
 			offering_card_img->setPosition(ccp(340, 70));
 			result_popup->addChild(offering_card_img);
 			
-			CCSprite* no_img = CCSprite::create("cardsetting_noimg.png");
-			no_img->setScale(0.8f);
-			no_img->setPosition(ccp(340, 70));
-			result_popup->addChild(no_img);
+			CCSprite* card_case = CCSprite::create("cardstrength_list_normal.png");
+			card_case->setPosition(ccp(340, 70));
+			result_popup->addChild(card_case);
 			
 			CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
-			mini_rank->setPosition(ccp(17,17));
-			no_img->addChild(mini_rank);
+			mini_rank->setPosition(ccp(15,15));
+			card_case->addChild(mini_rank);
 			
-			CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, recent_offering_number))->getCString(), mySGD->getFont().c_str(), 8);
+			CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number))->getCString(), mySGD->getFont().c_str(), 8);
 			t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 			mini_rank->addChild(t_rank);
 			
-			CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_offering_number))->getCString(),
+			CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))->getCString(),
 																mySGD->getFont().c_str(), 10);
-			t_card_level_label->setPosition(ccp(19,75));
-			no_img->addChild(t_card_level_label);
+			t_card_level_label->setPosition(ccp(19,65));
+			card_case->addChild(t_card_level_label);
 			
-			string t_WorH;
-			if(NSDS_GI(NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i), kSDS_PZ_stage_int1_pieceNo_i) % 2 == 0)
-				t_WorH = "w";
-			else
-				t_WorH = "h";
 			
-			CCPoint offering_piece_point = ccp(420,70);
-			
-			if(offering_card_grade == 3)
+			if(is_piece_remove)
 			{
+				string t_WorH;
+				if(NSDS_GI(NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i), kSDS_PZ_stage_int1_pieceNo_i) % 2 == 0)
+					t_WorH = "w";
+				else
+					t_WorH = "h";
+				
+				CCPoint offering_piece_point = ccp(420,70);
+				
 				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
 				if(offering_card_puzzle_number != 0)
 				{
-					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
+					GraySprite* piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
 																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
 																														   offering_card_stage)-1)->getCString()));
-					n_piece->setPosition(offering_piece_point);
-					result_popup->addChild(n_piece);
-				}
-			}
-			else if(offering_card_grade == 2)
-			{
-				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				if(offering_card_puzzle_number != 0)
-				{
-					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																														   offering_card_stage)-1)->getCString()));
-					n_piece->setPosition(offering_piece_point);
-					result_popup->addChild(n_piece);
+					piece->setPosition(offering_piece_point);
+					result_popup->addChild(piece);
 					
-					CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
-					stroke_img->setPosition(offering_piece_point);
-					result_popup->addChild(stroke_img);
+					CCSprite* embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", t_WorH.c_str())->getCString());
+					embo->setPosition(ccp(piece->getContentSize().width/2.f, piece->getContentSize().height/2.f));
+					piece->addChild(embo);
 				}
 			}
-			else if(offering_card_grade == 1)
-			{
-				int offering_card_puzzle_number = NSDS_GI(offering_card_stage, kSDS_SI_puzzle_i);
-				if(offering_card_puzzle_number != 0)
-				{
-					GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", offering_card_puzzle_number,
-																												   NSDS_GI(offering_card_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i,
-																														   offering_card_stage)-1)->getCString()));
-					n_piece->setGray(true);
-					n_piece->setPosition(offering_piece_point);
-					result_popup->addChild(n_piece);
-					
-					CCSprite* stroke_img = CCSprite::create(("piece_stroke_" + t_WorH + ".png").c_str());
-					stroke_img->setPosition(offering_piece_point);
-					result_popup->addChild(stroke_img);
-				}
-			}
-			
-			
-			
 			
 			for(auto iter = offering_list.begin();iter != offering_list.end();iter++)
 			{
-				if((*iter).card_number == recent_offering_number)
+				if((*iter).card_number == offering_card_number)
 				{
 					offering_list.erase(iter);
 					break;
@@ -1124,14 +1429,11 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			
 			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, json_selector(this, CardStrengthPopup::resultStrength));
 			
-			offering_menu->removeFromParent();
-			strength_probability->removeFromParent();
-			recent_offering_number = -1;
-			offering_menu = NULL;
+			setOfferingNode(0);
 		}
 		else
 		{
-			if(!offering_menu)
+			if(offering_card_number <= 0)
 				addChild(ASPopupView::getCommonNoti(-210, "재료 카드를 선택해주세요."), kCardStrengthPopupZorder_popup);
 			else
 				addChild(ASPopupView::getCommonNoti(-210, "골드가 부족합니다."), kCardStrengthPopupZorder_popup);
@@ -1153,13 +1455,7 @@ void CardStrengthPopup::resultStrength(Json::Value result_data)
 		loading_img->removeFromParent();
 		loading_label->removeFromParent();
 		
-		strength_card_node->removeFromParent();
-		
-		strength_card_node = CCNode::create();
-		strength_card_node->setPosition(CCPointZero);
-		main_case->addChild(strength_card_node, kCardStrengthPopupZorder_content);
-		
-		setStrengthCardNode(strength_card_node);
+		setStrengthNode(strength_card_number);
 		offering_table->reloadData();
 		
 		result_popup->setVisible(true);

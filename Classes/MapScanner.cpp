@@ -257,6 +257,14 @@ void MapScanner::resetRects(bool is_after_scanmap)
 	}
 	
 	myGD->communication("UI_setPercentage", float(drawCellCnt/mySD->must_cnt), is_after_scanmap);
+	
+	if(mySGD->is_write_replay)
+	{
+		if(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
+			myGD->communication("UI_checkMapTimeVector");
+		else
+			myGD->communication("UI_writeMap");
+	}
 }
 
 IntRect* MapScanner::newRectChecking(IntMoveState start)
@@ -954,6 +962,183 @@ void VisibleSprite::visitForThumb()
 	}
 	
 	glDisable(GL_SCISSOR_TEST);
+}
+
+void VisibleSprite::replayVisitForThumb(int temp_time)
+{
+	int play_index = mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)].asInt();
+	if(play_index >= mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size())
+		return;
+	
+	if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)][play_index].asInt() > temp_time)
+		return;
+		
+	
+	
+	int draw_array[162][217] = {mapEmpty,};
+	Json::Value map_data = mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapData)][play_index];
+	for(int y=0;y<map_data.size();y++) // y
+	{
+		int record = map_data[y].asInt();
+		for(int x = 31;x>=0;--x)
+		{
+			bool is_draw = record & 0x1;
+			record = record >> 1;
+			
+			if(is_draw)
+				for(int i=mapWidthInnerBegin+x*5;i<mapWidthInnerBegin+(x+1)*5;++i)
+					for(int j=mapHeightInnerBegin+y*5;j<mapHeightInnerBegin+(y+1)*5;j++)
+						draw_array[i][j] = mapOldline;
+		}
+	}
+	
+	
+	CCArray* rects = CCArray::createWithCapacity(256);
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	{
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		{
+			if(draw_array[i][j] == mapOldline)
+			{
+				IntPoint origin = IntPoint(i, j);
+				IntSize size = IntSize(0, 0);
+				
+				bool isUpper = true;
+				bool isRighter = true;
+				queue<IntMoveState> loopArray;
+				loopArray.push(IntMoveState(i, j, directionRightUp));
+				
+				queue<IntMoveState> nextLoopArray;
+				
+				//	int loopCnt;
+				
+				while(!loopArray.empty())
+				{
+					if(isUpper)				size.height++;
+					if(isRighter)			size.width++;
+					
+					bool upable = isUpper;
+					bool rightable = isRighter;
+					
+					while(!loopArray.empty())
+					{
+						//			loopCnt++;
+						IntMoveState t_ms = loopArray.front();
+						loopArray.pop();
+						
+						
+						if(t_ms.direction == directionUp && !isUpper)
+							continue;
+						if(t_ms.direction == directionRight && !isRighter)
+							continue;
+						
+						if(draw_array[t_ms.origin.x][t_ms.origin.y] == mapOldline)			draw_array[t_ms.origin.x][t_ms.origin.y] = mapScaningCheckLine;
+						
+						if(t_ms.direction == directionUp)
+						{
+							if(isUpper)
+							{
+								IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+								if(n_msUp.origin.isInnerMap() && draw_array[n_msUp.origin.x][n_msUp.origin.y] == mapOldline)
+									nextLoopArray.push(n_msUp);
+								else		upable = false;
+							}
+						}
+						else if(t_ms.direction == directionRight)
+						{
+							if(isRighter)
+							{
+								IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
+								if(n_msRight.origin.isInnerMap() && draw_array[n_msRight.origin.x][n_msRight.origin.y] == mapOldline)
+									nextLoopArray.push(n_msRight);
+								else		rightable = false;
+							}
+						}
+						else if(t_ms.direction == directionRightUp)
+						{
+							if(isUpper)
+							{
+								IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+								if(n_msUp.origin.isInnerMap() && draw_array[n_msUp.origin.x][n_msUp.origin.y] == mapOldline)
+									nextLoopArray.push(n_msUp);
+								else		upable = false;
+							}
+							
+							if(isRighter)
+							{
+								IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
+								if(n_msRight.origin.isInnerMap() && draw_array[n_msRight.origin.x][n_msRight.origin.y] == mapOldline)
+									nextLoopArray.push(n_msRight);
+								else		rightable = false;
+							}
+							
+							if(upable && rightable)
+							{
+								IntMoveState n_msRightUp = IntMoveState(t_ms.origin.x+1, t_ms.origin.y+1, directionRightUp);
+								if(n_msRightUp.origin.isInnerMap() && draw_array[n_msRightUp.origin.x][n_msRightUp.origin.y] == mapOldline)
+									nextLoopArray.push(n_msRightUp);
+								else		rightable = false;
+							}
+						}
+					}
+					
+					isUpper = upable;
+					isRighter = rightable;
+					
+					if(isUpper || isRighter)
+					{
+						while(!nextLoopArray.empty())
+						{
+							loopArray.push(nextLoopArray.front());
+							nextLoopArray.pop();
+						}
+					}
+				}
+				
+				IntRect* r_rect = new IntRect((origin.x-1)*pixelSize, (origin.y-1)*pixelSize, size.width*pixelSize, size.height*pixelSize);
+				r_rect->autorelease();
+				
+				rects->addObject(r_rect);
+			}
+		}
+	}
+	
+	unsigned int loopCnt = rects->count();
+	
+	glEnable(GL_SCISSOR_TEST);
+	
+	for(int i=0;i<loopCnt;i++)
+	{
+		IntRect* t_rect = (IntRect*)rects->objectAtIndex(i);
+		
+		float wScale = viewport[2] / (design_resolution_size.width + (viewport[2]-960.f)/2.f); // 1024, 768 / 480, 360 -> + 32, 24
+		float hScale = viewport[3] / (design_resolution_size.height + (viewport[2]-960.f)/2.f*design_resolution_size.height/design_resolution_size.width); // 1136, 641 / 480, 271 -> + 89, 50
+		
+		float x, y, w, h;
+		
+		if(is_set_scene_node)
+		{
+			x = t_rect->origin.x*wScale + viewport[0]-1;
+			y = t_rect->origin.y*hScale + viewport[1]-1;
+			w = t_rect->size.width*wScale + 2;
+			h = t_rect->size.height*hScale + 2;
+		}
+		else
+		{
+			x = t_rect->origin.x*wScale + viewport[0]-1;
+			y = t_rect->origin.y*hScale + viewport[1]-1;
+			w = t_rect->size.width*wScale + 2;
+			h = t_rect->size.height*hScale + 2;
+		}
+		
+		glScissor(x,y,w,h);
+		draw();
+		
+	}
+	
+	glDisable(GL_SCISSOR_TEST);
+	
+	mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = play_index+1;
 }
 
 void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects )

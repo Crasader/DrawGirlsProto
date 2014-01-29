@@ -23,6 +23,7 @@ enum CardStrengthAlign{
 	kCardStrengthAlign_take,
 	kCardStrengthAlign_takeReverse
 };
+
 class CardSortInfo;
 class TouchSuctionLayer;
 class CardStrengthPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
@@ -48,23 +49,25 @@ private:
 	CCSprite* main_case;
 	CCSprite* gray;
 	
-	CCSprite* target_card;
-	CCMenu* offering_menu;
+	CCSprite* table_tab;
+	
+	int card_strength_before;
+	
+	int strength_card_number;
+	CCNode* strength_node;
+	int offering_card_number;
+	CCNode* offering_node;
+	
+	int strength_idx;
+	int offering_idx;
+	
+	void setStrengthNode(int t_card_number);
+	void setOfferingNode(int t_card_number);
+	void setTableTab();
+	
 	CCSprite* strength_probability;
 	
 	TouchSuctionLayer* result_popup;
-	
-	int recent_offering_number;
-	
-	CCLabelTTF* pow_label;
-	CCLabelTTF* spd_label;
-	CCLabelTTF* dex_label;
-	CCLabelTTF* dur_label;
-	
-	CCLabelTTF* up_pow_label;
-	CCLabelTTF* up_spd_label;
-	CCLabelTTF* up_dex_label;
-	CCLabelTTF* up_dur_label;
 	
 	CCTableView* offering_table;
 	vector<CardSortInfo> offering_list;
@@ -76,9 +79,6 @@ private:
 	CCMenu* replay_menu;
 	
 	void replayAction(CCObject* sender);
-	
-	CCNode* strength_card_node;
-	void setStrengthCardNode(CCNode* t_node);
 	
 	void setOfferingList();
 	void alignOfferingList(CardStrengthAlign t_align);

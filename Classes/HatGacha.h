@@ -70,6 +70,7 @@ protected:
 	CCSprite* m_selectComment;
 	CCMenuItemToggleWithTopHatLambda* m_selectedHat;
 	GachaPurchaseStartMode m_gachaMode;
+	GachaCategory m_gachaCategory;
 public:
 	KSAlertView* m_parent;
 	std::function<void(void)> m_callback;
@@ -109,10 +110,10 @@ public:
 		
 		return true;
 	}
-	static __TYPE__* create(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
+	static __TYPE__* create(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc) \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(av, rs, gsm))
+    if (pRet && pRet->init(av, rs, gsm, gc))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -124,10 +125,10 @@ public:
 			return NULL; \
     } \
 	}
-	static __TYPE__* create(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm = kGachaPurchaseStartMode_reward) \
+	static __TYPE__* create(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc) \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(callback, rs, gsm))
+    if (pRet && pRet->init(callback, rs, gsm, gc))
     { \
 			pRet->autorelease(); \
 			return pRet; \
@@ -139,16 +140,16 @@ public:
 			return NULL; \
     } \
 	}
-	bool init(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
+	bool init(KSAlertView* av, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc)
 	{
-		return init(av, nullptr, rs, gsm);
+		return init(av, nullptr, rs, gsm, gc);
 	}
-	bool init(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm)
+	bool init(std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc)
 	{
-	 return init(nullptr, callback, rs, gsm);
+	 return init(nullptr, callback, rs, gsm, gc);
 	}
 	
-	virtual bool init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm);
+	virtual bool init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc);
 	void update(float dt)
 	{
 		m_timer += 1/60.f;
@@ -320,12 +321,12 @@ public:
 	}
 	CCPoint retOnTheta(float t)
 	{
-		float r = 100.f;
+		float r = 80.f;
 		CCPoint centerPosition;
 		if(m_parent)
 			centerPosition = ccp(m_parent->getViewSize().width / 2.f, m_parent->getViewSize().height / 2.f);
 		else
-			centerPosition = ccp(240, 160);
+			centerPosition = ccp(240, 145);
 		return centerPosition +
 		ccp(r * cos(t), r * 3.f/4.f * sin(t)) + ccp(0, 0);
 	}
@@ -334,35 +335,35 @@ public:
 #undef __TYPE__
 
 
-#define __TYPE__ HatGacha
-class HatGacha : public CCLayer
-{
-public:
-	std::function<void(void)> m_closeCallback;
-	HatGacha();
-	virtual ~HatGacha();
-	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init(std::function<void(void)> closeCallback);
-	static __TYPE__* create(std::function<void(void)> closeCallback) \
-	{ \
-    __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(closeCallback))
-    { \
-			pRet->autorelease(); \
-			return pRet; \
-    } \
-    else \
-    { \
-			delete pRet; \
-			pRet = NULL; \
-			return NULL; \
-    } \
-	}
+//#define __TYPE__ HatGacha
+//class HatGacha : public CCLayer
+//{
+//public:
+	//std::function<void(void)> m_closeCallback;
+	//HatGacha();
+	//virtual ~HatGacha();
+	////	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	//virtual bool init(std::function<void(void)> closeCallback);
+	//static __TYPE__* create(std::function<void(void)> closeCallback) \
+	//{ \
+    //__TYPE__ *pRet = new __TYPE__(); \
+    //if (pRet && pRet->init(closeCallback))
+    //{ \
+			//pRet->autorelease(); \
+			//return pRet; \
+    //} \
+    //else \
+    //{ \
+			//delete pRet; \
+			//pRet = NULL; \
+			//return NULL; \
+    //} \
+	//}
 
-	//virtual void registerWithTouchDispatcher();
-};
+	////virtual void registerWithTouchDispatcher();
+//};
 
-#undef __TYPE__
+//#undef __TYPE__
 
 
 #endif

@@ -109,7 +109,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>roundUnderCard2.ccb</string>
+						<string>roundBlue2.ccb</string>
 					</dict>
 				</array>
 				<key>seqExpanded</key>
@@ -218,7 +218,7 @@
 						<key>type</key>
 						<string>CCBFile</string>
 						<key>value</key>
-						<string>roundUnderCard1.ccb</string>
+						<string>roundBlue1.ccb</string>
 					</dict>
 				</array>
 				<key>seqExpanded</key>
@@ -429,7 +429,7 @@
 						<key>value</key>
 						<array>
 							<real>240</real>
-							<real>155</real>
+							<real>150</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -697,7 +697,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>cardLightCover.png</string>
+							<string>cardLightCoverBlue.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -711,8 +711,6 @@
 						<integer>0</integer>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -1059,7 +1057,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>3</real>
+			<real>2.4000000953674316</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
