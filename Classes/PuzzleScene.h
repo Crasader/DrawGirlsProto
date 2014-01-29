@@ -82,8 +82,8 @@ private:
 	CountingBMLabel* gold_label;
 	CountingBMLabel* friend_point_label;
 	
-	CCSprite* friend_point_popup;
-	void closeFriendPointPopup();
+	function<void(void)> close_friend_point_action;
+	void closeFriendPoint();
 	
 	int selected_stage_number;
 	

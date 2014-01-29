@@ -1723,6 +1723,8 @@ void PlayUI::endGame (bool is_show_reason)
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 		runAction(t_seq);
 	}
+	
+	myGD->communication("Main_hideThumb");
 }
 void PlayUI::showGachaOnePercent ()
 {

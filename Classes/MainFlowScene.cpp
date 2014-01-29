@@ -31,6 +31,7 @@
 #include "AlertEngine.h"
 #include "PuzzleListShadow.h"
 #include "InviteEventPopup.h"
+#include "TouchSuctionLayer.h"
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -52,7 +53,6 @@ bool MainFlowScene::init()
     }
 	
 	setKeypadEnabled(true);
-	friend_point_popup = NULL;
 	
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	for(int i=1;i<=puzzle_count;i++)
@@ -665,7 +665,6 @@ enum MainFlowMenuTag{
 	kMainFlowMenuTag_goldShop,
 	kMainFlowMenuTag_heartShop,
 	kMainFlowMenuTag_friendPointContent,
-	kMainFlowMenuTag_friendPointClose,
 	kMainFlowMenuTag_postbox,
 	kMainFlowMenuTag_option,
 	kMainFlowMenuTag_tip,
@@ -738,41 +737,54 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_friendPointContent)
 		{
-			if(!friend_point_popup)
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-300);
+			t_suction->setTouchEnabled(true);
+			t_suction->target_touch_began = this;
+			t_suction->delegate_touch_began = callfunc_selector(MainFlowScene::closeFriendPoint);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			CCSprite* stencil_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 78, 150));
+			stencil_node->setPosition(ccp(336,229+160.f*(screen_scale_y-1.f)));
+			CCClippingNode* cliping_node = CCClippingNode::create(stencil_node);
+			float change_scale = 1.f;
+			CCPoint change_origin = ccp(0,0);
+			if(screen_scale_x > 1.f)
 			{
-				CCNode* menu_node = ((CCNode*)sender)->getParent();
-				CCNode* top_node = menu_node->getParent();
-				friend_point_popup = CCSprite::create("candy_popup.png");
-				friend_point_popup->setAnchorPoint(ccp(0.5,1.f));
-				friend_point_popup->setPosition(ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-				top_node->addChild(friend_point_popup, -1);
-				
-				CCSprite* n_close = CCSprite::create("candy_popup_close.png");
-				CCSprite* s_close = CCSprite::create("candy_popup_close.png");
-				s_close->setColor(ccGRAY);
-				
-				CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(MainFlowScene::menuAction));
-				close_item->setTag(kMainFlowMenuTag_friendPointClose);
-				
-				CCMenu* close_menu = CCMenu::createWithItem(close_item);
-				close_menu->setPosition(ccp(friend_point_popup->getContentSize().width/2.f, 25));
-				friend_point_popup->addChild(close_menu);
-				
-				CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY()-12));
-				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainFlowScene::popupClose));
-				CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-				friend_point_popup->runAction(t_seq);
+				change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+				change_scale = screen_scale_x;
 			}
-			else
-				is_menu_enable = true;
-		}
-		else if(tag == kMainFlowMenuTag_friendPointClose)
-		{
-			CCNode* menu_node = ((CCNode*)sender)->getParent();
-			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(410,menu_node->getPositionY() + friend_point_popup->getContentSize().height));
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainFlowScene::closeFriendPointPopup));
-			CCSequence* t_seq = CCSequence::createWithTwoActions(t_move, t_call);
-			friend_point_popup->runAction(t_seq);
+			if(screen_scale_y > 1.f)
+				change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+			CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+			cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+			cliping_node->setAlphaThreshold(0.05f);
+			cliping_node->setPosition(CCPointZero);
+			t_suction->addChild(cliping_node);
+			
+			CCSprite* inner_img = CCSprite::create("candy_popup.png");
+			inner_img->setPosition(ccp(336,229+160.f*(screen_scale_y-1.f)+150));
+			cliping_node->addChild(inner_img);
+			
+			CCMoveTo* t_move_down = CCMoveTo::create(0.3f, ccp(336,229+160.f*(screen_scale_y-1.f)));
+			inner_img->runAction(t_move_down);
+			
+			close_friend_point_action = [=](){
+				t_suction->target_touch_began = NULL;
+				t_suction->delegate_touch_began = NULL;
+				
+				CCMoveTo* t_move_up = CCMoveTo::create(0.3f, ccp(336,229+160.f*(screen_scale_y-1.f)+150));
+				CCCallFunc* t_call = CCCallFunc::create(t_suction, callfunc_selector(CCLayer::removeFromParent));
+				CCSequence* t_seq = CCSequence::create(t_move_up, t_call, NULL);
+				inner_img->runAction(t_seq);
+			};
+			addChild(t_suction, kMainFlowZorder_top-1);
+			
+			is_menu_enable = true;
 		}
 		else if(tag == kMainFlowMenuTag_postbox)
 		{
@@ -1130,11 +1142,9 @@ void MainFlowScene::tutorialCardSettingClose()
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
 }
 
-void MainFlowScene::closeFriendPointPopup()
+void MainFlowScene::closeFriendPoint()
 {
-	friend_point_popup->removeFromParent();
-	friend_point_popup = NULL;
-	is_menu_enable = true;
+	close_friend_point_action();
 }
 
 void MainFlowScene::alertAction(int t1, int t2)
