@@ -119,7 +119,7 @@ public:
 		
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(8/60.f, 1, 0.2f),
+											   CCScaleTo::create(8/30.f, 1, 0.2f),
 											   CCDelayTime::create(0.2f),
 											   CCCallFunc::create(this, callfunc_selector(TakeCardAnimation::step3))
 											   ,NULL
@@ -135,8 +135,8 @@ public:
 		
 		cardLight->runAction(
 							 CCSequence::create(
-												CCMoveTo::create(7/60.f,ccp(240,150)),
-												CCMoveTo::create(7/60.f,ccp(240,155)),
+												CCMoveTo::create(7/30.f,ccp(240,150)),
+												CCMoveTo::create(7/30.f,ccp(240,155)),
 												CCCallFunc::create(this, callfunc_selector(TakeCardAnimation::step4)),
 												NULL
 												)
@@ -149,7 +149,7 @@ public:
 		title->runAction(CCEaseBounceOut::create(CCScaleTo::create(0.3,1)));
 		
 		cardLight->runAction(
-							 CCFadeOut::create(16/60.f)
+							 CCFadeOut::create(16/30.f)
 							 );
 		card->setVisible(true);
 		card->runAction(
@@ -320,14 +320,14 @@ public:
 		
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(8/60.f, 1, 0.2f),
+											   CCScaleTo::create(8/30.f, 1, 0.2f),
 											   CCDelayTime::create(0.2f),
 											   CCCallFunc::create(this, callfunc_selector(DownCardAnimation::step3))
 											   ,NULL
 											   )
 							);
 		
-		roundSmall->runAction(CCScaleTo::create(8/60.f, 1, 0.2f));
+		roundSmall->runAction(CCScaleTo::create(8/30.f, 1, 0.2f));
 		
 		
 	}
@@ -336,8 +336,8 @@ public:
 		
 		cardLight->runAction(
 							 CCSequence::create(
-												CCMoveTo::create(7/60.f,ccp(240,150)),
-												CCMoveTo::create(7/60.f,ccp(240,155)),
+												CCMoveTo::create(7/30.f,ccp(240,150)),
+												CCMoveTo::create(7/30.f,ccp(240,155)),
 												CCCallFunc::create(this, callfunc_selector(DownCardAnimation::step4)),
 												NULL
 												)
@@ -350,11 +350,11 @@ public:
 		title->runAction(CCEaseBounceOut::create(CCScaleTo::create(0.3,1)));
 		
 		cardLight->runAction(
-							 CCFadeOut::create(16/60.f)
+							 CCFadeOut::create(16/30.f)
 							 );
 		card->setVisible(true);
 		card->runAction(
-						CCRepeatForever::create(CCSequence::create(CCTintTo::create(5/60.f, 255, 100, 100),CCTintTo::create(5/60.f, 255, 255, 255),CCMoveBy::create(0.5f,ccp(0,5)),CCMoveBy::create(0.5f,ccp(0,-5)),NULL))
+						CCRepeatForever::create(CCSequence::create(CCTintTo::create(5/30.f, 255, 100, 100),CCTintTo::create(5/30.f, 255, 255, 255),CCMoveBy::create(0.5f,ccp(0,5)),CCMoveBy::create(0.5f,ccp(0,-5)),NULL))
 						);
 		
 		isOpening=false;
@@ -638,14 +638,14 @@ public:
 		
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(8/60.f, 1, 0.2f),
+											   CCScaleTo::create(8/30.f, 1, 0.2f),
 											   CCDelayTime::create(0.2f),
 											   CCCallFunc::create(this, callfunc_selector(RemoveCardAnimation::step3))
 											   ,NULL
 											   )
 							);
 		
-		roundSmall->runAction(CCScaleTo::create(8/60.f, 1, 0.2f));
+		roundSmall->runAction(CCScaleTo::create(8/30.f, 1, 0.2f));
 		
 		
 	}
@@ -654,8 +654,8 @@ public:
 		
 		cardLight->runAction(
 							 CCSequence::create(
-												CCMoveTo::create(7/60.f,ccp(240,150)),
-												CCMoveTo::create(7/60.f,ccp(240,155)),
+												CCMoveTo::create(7/30.f,ccp(240,150)),
+												CCMoveTo::create(7/30.f,ccp(240,155)),
 												CCCallFunc::create(this, callfunc_selector(RemoveCardAnimation::step4)),
 												NULL
 												)
@@ -672,11 +672,11 @@ public:
 		skipBtn->runAction(CCEaseBounceOut::create(CCScaleTo::create(0.3,1)));
 		
 		cardLight->runAction(
-							 CCFadeOut::create(16/60.f)
+							 CCFadeOut::create(16/30.f)
 							 );
 		card->setVisible(true);
 		card->runAction(
-						CCRepeatForever::create(CCSequence::create(CCTintTo::create(5/60.f, 255, 100, 100),CCTintTo::create(5/60.f, 255, 255, 255),CCMoveBy::create(0.5f,ccp(0,5)),CCMoveBy::create(0.5f,ccp(0,-5)),NULL))
+						CCRepeatForever::create(CCSequence::create(CCTintTo::create(5/30.f, 255, 100, 100),CCTintTo::create(5/30.f, 255, 255, 255),CCMoveBy::create(0.5f,ccp(0,5)),CCMoveBy::create(0.5f,ccp(0,-5)),NULL))
 						);
 		this->runAction(CCSequence::create(CCDelayTime::create(0.1),CCCallFunc::create(this, callfunc_selector(RemoveCardAnimation::step5)),NULL));
 	}
