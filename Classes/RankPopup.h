@@ -96,6 +96,7 @@ public:
   void drawRank (Json::Value obj);
   void closePopup (CCControlButton * obj, CCControlEvent event);
   virtual CCTableViewCell * tableCellAtIndex (CCTableView * table, unsigned int idx);
+
   virtual void scrollViewDidScroll (CCScrollView * view);
   virtual void scrollViewDidZoom (CCScrollView * view);
   CCSprite * used_card_img;

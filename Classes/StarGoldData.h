@@ -52,6 +52,12 @@ typedef enum tSceneCode{
 	kSceneCode_StageSetting
 }SceneCode;
 
+enum CardStrengthBefore{
+	kCardStrengthBefore_cardSetting = 0,
+	kCardStrengthBefore_diary,
+	kCardStrengthBefore_cardChange
+};
+
 enum FailCode{
 	kFC_gameover = 0,
 	kFC_timeover,
@@ -84,6 +90,31 @@ public:
 	int take_number;
 	int grade;
 	int rank;
+};
+
+enum ReplayKey
+{
+	kReplayKey_timeStamp = 0,
+	kReplayKey_timeStamp_characterPositionX,
+	kReplayKey_timeStamp_characterPositionY,
+	kReplayKey_timeStamp_bossPositionX,
+	kReplayKey_timeStamp_bossPositionY,
+	kReplayKey_timeStamp_monster,
+	kReplayKey_timeStamp_monster_x,
+	kReplayKey_timeStamp_monster_y,
+	kReplayKey_timeStamp_mapIndex,
+	kReplayKey_timeStamp_scoreIndex,
+	kReplayKey_timeStamp_isDie,
+	kReplayKey_timeStamp_isContinue,
+	kReplayKey_timeStamp_isImageChange,
+	kReplayKey_timeStamp_gameInfo,
+	kReplayKey_mapTime,
+	kReplayKey_mapData,
+	kReplayKey_scoreTime,
+	kReplayKey_scoreData,
+	kReplayKey_isChangedMap,
+	kReplayKey_isChangedScore,
+	kReplayKey_playIndex
 };
 
 #define SGD_KEY	0xD9
@@ -456,9 +487,27 @@ public:
 	int getIsUnlockPuzzle();
 	void setIsUnlockPuzzle(int t_i);
 	
+	void setStrengthTargetCardNumber(int t_card_number);
+	int getStrengthTargetCardNumber();
+	
+	CardStrengthBefore getCardStrengthBefore();
+	void setCardStrengthBefore(CardStrengthBefore t_before);
+	
+	
+	bool is_write_replay;
+	Json::Value replay_write_info;
+	bool is_play_replay;
+	Json::Value replay_playing_info;
+	
+	string getReplayKey(ReplayKey t_key);
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
+	
+	CardStrengthBefore card_strength_before;
+	
+	int strength_target_card_number;
 	
 	deque<AchievementCode> achieve_noti_que;
 	

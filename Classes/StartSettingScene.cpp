@@ -44,13 +44,6 @@ CCScene* StartSettingScene::scene()
     return scene;
 }
 
-enum StartSettingZorder{
-	kStartSettingZorder_back = 1,
-	kStartSettingZorder_main,
-	kStartSettingZorder_top,
-	kStartSettingZorder_popup
-};
-
 bool StartSettingScene::init()
 {
     if ( !CCLayer::init() )
@@ -660,6 +653,7 @@ void StartSettingScene::itemAction(CCObject *sender)
 				item_item->setTag(tag);
 				
 				CCMenu* item_menu = CCMenu::createWithItem(item_item);
+				item_menu->setPosition(CCPointZero);
 				item_parent->addChild(item_menu);
 				
 				is_selected_item[tag-1] = false;

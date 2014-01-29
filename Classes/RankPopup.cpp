@@ -15,7 +15,7 @@ using namespace cocos2d::extension;
 using namespace std;
 namespace
 {
-	CCSize cellSize = CCSizeMake(238, 47);
+	CCSize cellSize = CCSizeMake(238, 38);
 }
 void KSEaseBackOut::update (float time)
 {
@@ -173,7 +173,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 }
 	 });
 	
-	m_onlyKatok->setPosition(ccp(275, 258));
+	m_onlyKatok->setPosition(ccp(275, 259));
 	_menu->addChild(m_onlyKatok, 3);
 	
 	
@@ -214,7 +214,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 //}
 	 });
 	
-	m_onlyGameFriend->setPosition(ccp(172, 258));
+	m_onlyGameFriend->setPosition(ccp(172, 259));
 	_menu->addChild(m_onlyGameFriend, 3);
 	
 	
@@ -239,7 +239,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 		 //}
 	 });
 	
-	m_totalFriend->setPosition(ccp(378, 258));
+	m_totalFriend->setPosition(ccp(378, 259));
 	_menu->addChild(m_totalFriend, 3);
 	
 	m_rankCategory = RankCategory::kTotalFriend;
@@ -399,7 +399,7 @@ void RankPopup::drawRank (Json::Value obj)
 	//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 	
 	//320x320 테이블 뷰 생성
-	rankTableView = RankTableView::create(this, CCSizeMake(274, 233 - 47), NULL);
+	rankTableView = RankTableView::create(this, CCSizeMake(276, 190), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
 	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
@@ -415,7 +415,7 @@ void RankPopup::drawRank (Json::Value obj)
 	rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	
 	//기준점 0,0
-	rankTableView->setPosition(ccp(174, 28));
+	rankTableView->setPosition(ccp(172, 23));
 	
 	//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 	rankTableView->setDelegate(this);
@@ -463,7 +463,6 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	CCTableViewCell* cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
-	
 	std::string cellBackFile;
 	
 	if((*member)["user_id"].asString()==hspConnector::get()->getKakaoID())
@@ -484,7 +483,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	}
 	
 	CCSprite* bg = CCSprite::create(cellBackFile.c_str());
-	bg->setPosition(CCPointZero + ccp(2, 0));
+	bg->setPosition(CCPointZero + ccp(2, -2));
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,0);
 	
@@ -493,7 +492,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "ending_take_particle.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kRP_RT_profileImg);
-	profileImg->setPosition(ccp(52, 21));
+	profileImg->setPosition(ccp(51, 20));
 	profileImg->setScale(28.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kRP_Z_profileImg);
 
@@ -502,25 +501,25 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	{
 		CCSprite* rankSprite = CCSprite::create("puzzle_right_rank_gold.png");
 		cell->addChild(rankSprite);
-		rankSprite->setPosition(ccp(19, 20));
+		rankSprite->setPosition(ccp(19, 19));
 	}
 	else if(idx == 1)
 	{
 		CCSprite* rankSprite = CCSprite::create("puzzle_right_rank_silver.png");
 		cell->addChild(rankSprite);
-		rankSprite->setPosition(ccp(19, 20));
+		rankSprite->setPosition(ccp(19, 19));
 	}
 	else if(idx == 2)
 	{
 		CCSprite* rankSprite = CCSprite::create("puzzle_right_rank_bronze.png");
 		cell->addChild(rankSprite);
-		rankSprite->setPosition(ccp(19, 20));
+		rankSprite->setPosition(ccp(19, 19));
 	}
 	else
 	{
 		CCLabelBMFont* rankFnt = CCLabelBMFont::create(boost::str(boost::format("%||") % (idx + 1)).c_str(), "etc_font.fnt");
 		cell->addChild(rankFnt);
-		rankFnt->setPosition(ccp(19, 20));
+		rankFnt->setPosition(ccp(19, 19));
 	}
 
 
@@ -621,14 +620,14 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	cell->addChild(decoInfo, kRP_Z_back + 1);
 
 	userName = CCLabelTTF::create("","Helvetica",12);
-	userName->setPosition(ccp(75,23));
+	userName->setPosition(ccp(75,20));
 	userName->setAnchorPoint(CCPointZero);
 	userName->setTag(kRP_RT_title);
 	cell->addChild(userName,2);
 	
 	
-	score = CCLabelTTF::create("","Helvetica",20);
-	score->setPosition(ccp(75,5 - 5));
+	score = CCLabelTTF::create("","Helvetica",19);
+	score->setPosition(ccp(75,1));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kRP_RT_score);
 	cell->addChild(score,2);
@@ -1495,7 +1494,7 @@ void RankPopup::touchCellIndex(int idx)
 	CCLabelBMFont::create(
 						  scoreStr.c_str(), "mb_white_font.fnt");
 	m_highScore->setScale(0.5f);
-	m_highScore->setPosition(ccp(216 / 2.f + 5, 86 / 2.f + 7));
+	m_highScore->setPosition(ccp(125, 30));
 	addChild(m_highScore, 3);
 	if(m_currentSelectSprite)
 	{
@@ -1507,7 +1506,7 @@ void RankPopup::touchCellIndex(int idx)
 	//		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
 	{
 		m_currentSelectSprite = CCSprite::create("rank_cell_select.png");
-		m_currentSelectSprite->setPosition(CCPointZero - ccp(3, 0));
+		m_currentSelectSprite->setPosition(CCPointZero - ccp(3, 1));
 		m_currentSelectSprite->setAnchorPoint(CCPointZero);
 		if(rankTableView->cellAtIndex(idx))
 		{

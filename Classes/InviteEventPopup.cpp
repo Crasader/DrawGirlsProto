@@ -14,7 +14,7 @@
 #include "JoinGameFriendPopup.h"
 
 
-static CCSize cellSize3 = CCSizeMake(238, 47);
+static CCSize cellSize3 = CCSizeMake(238, 38);
 void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
 	setTouchEnabled(true);
@@ -24,7 +24,7 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	m_currentInviteCount = myDSH->getUserIntForStr("invitecount", 0);
 	m_inviteCountFnt = CCLabelBMFont::create(CCString::createWithFormat("%d", m_currentInviteCount)->getCString(),
 																					 "combo.fnt");
-	m_inviteCountFnt->setPosition(ccp(160, 220));
+	m_inviteCountFnt->setPosition(ccp(167, 218));
 	addChild(m_inviteCountFnt, kInvite_Z_count);
 	
 	
@@ -46,7 +46,7 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	addChild(back, kInvite_Z_back);
 	
 	CCSprite* back2 = CCSprite::create("friendinvite_back.png");
-	back2->setPosition(ccp(240, 146));
+	back2->setPosition(ccp(241, 129));
 	addChild(back2, kInvite_Z_back);
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();
@@ -63,13 +63,13 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 																															 removeFromParent();
 																															 
 																														 });
-	closeBtn->setPosition(ccp(440, 255));
+	closeBtn->setPosition(ccp(453, 258));
 	_menu->addChild(closeBtn);
 	
 	// 친구 초대 이벤트
 	auto inviteEventBtn = CCMenuItemImageLambda::create
 	(
-	 "rank_default_invite.png", "rank_default_invite.png",
+	 "friendoption_invite.png", "friendoption_invite.png",
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
 		 
@@ -78,7 +78,7 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 //		 removeFromParent();
 		 
 	 });
-	inviteEventBtn->setPosition(ccp(169, 255));
+	inviteEventBtn->setPosition(ccp(172, 258));
 	inviteEventBtn->setOpacity(255);
 	
 	_menu->addChild(inviteEventBtn);
@@ -86,7 +86,7 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	// 친구목록
 	auto friendList = CCMenuItemImageLambda::create
 	(
-	 "rank_friend_list.png", "rank_friend_list.png",
+	 "friendoption_list.png", "friendoption_list.png",
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
 		 FriendListPopup* t_rp = FriendListPopup::create(t_close, d_close);
@@ -94,14 +94,14 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 removeFromParent();
 		 
 	 });
-	friendList->setPosition(ccp(270, 255));
+	friendList->setPosition(ccp(275, 258));
 	friendList->setOpacity(0);
 	_menu->addChild(friendList);
 	
 	// 게임 친구맺기
 	auto joinGameFriend = CCMenuItemImageLambda::create
 	(
-	 "rank_gamefriend.png", "rank_gamefriend.png",
+	 "friendoption_surch.png", "friendoption_surch.png",
 	 [=](CCObject*){
 		 //																																 (target_close->*delegate_close)();
 		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
@@ -109,7 +109,7 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 		 removeFromParent();
 		 
 	 });
-	joinGameFriend->setPosition(ccp(370, 255));
+	joinGameFriend->setPosition(ccp(378, 258));
 	joinGameFriend->setOpacity(0);
 	_menu->addChild(joinGameFriend);
 	
@@ -156,12 +156,12 @@ void InviteEventPopup::drawRank( Json::Value obj )
 	//≈◊¿Ã∫Ì ∫‰ ª˝º∫ Ω√¿€ /////////////////////////////////////////////////////////////////////////////////////////
 	
 	//320x320 ≈◊¿Ã∫Ì ∫‰ ª˝º∫
-	rankTableView = InviteTableView::create(this, CCSizeMake(227, 233), NULL);
+	rankTableView = InviteTableView::create(this, CCSizeMake(207, 212), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
-	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
-	m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2, NULL, bar);
-	m_scrollBar->setDynamicScrollSize(false);
+	//CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
+	//m_scrollBar = ScrollBar::createScrollbar(rankTableView, -2, NULL, bar);
+	//m_scrollBar->setDynamicScrollSize(false);
 	rankTableView->setAnchorPoint(CCPointZero);
 
 	//kCCScrollViewDirectionVertical : ºº∑Œ Ω∫≈©∑—, kCCScrollViewDirectionHorizontal : ∞°∑Œ Ω∫≈©∑—
@@ -171,7 +171,7 @@ void InviteEventPopup::drawRank( Json::Value obj )
 	rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 
 	//±‚¡ÿ¡° 0,0
-	rankTableView->setPosition(ccp(230, 28));
+	rankTableView->setPosition(ccp(245, 23));
 
 	//µ•¿Ã≈Õ∏¶ ∞°¡Æø¿∞Ì≥™ ≈Õƒ° ¿Ã∫•∆Æ∏¶ π›»Ø«ÿ¡Ÿ ¥Î∏Æ¿⁄∏¶ ¿Ã ≈¨∑°Ω∫∑Œ º≥¡§.
 	rankTableView->setDelegate(this);
@@ -216,15 +216,14 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 
 
 	CCSprite* bg = CCSprite::create(cellBackFile.c_str());
-	bg->setPosition(CCPointZero);
+	bg->setPosition(ccp(0, -2));
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,0);
-
 	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "no_img.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kInviteTagProfileImg);
-	profileImg->setPosition(ccp(27, 22));
-	profileImg->setScale(38.f / profileImg->getContentSize().width);
+	profileImg->setPosition(ccp(22, 19));
+	profileImg->setScale(28.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kInvite_Z_profileImg);
 
 
@@ -276,9 +275,10 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 					::setInviteSendTime(m_scoreList[idx]["user_id"].asString());
 					obj->removeFromParent();
 
-					CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notinvite.png", "rank_cell_notinvite.png",
+					CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("friendsearch_call.png", "friendsearch_call.png",
 						[](CCObject*){});
 					sendBtn1->setPosition(ccp(180,22));
+					sendBtn1->setColor(ccc3(100, 100, 100));
 					_menu->addChild(sendBtn1,2);
 					////////////////////////////////
 					// ¬ ¡ˆ∫∏≥ª±‚ - ƒ´ƒ´ø¿
@@ -299,24 +299,25 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	}
 	else
 	{
-		sendBtn = CCMenuItemImageLambda::create("rank_cell_notinvite.png", "rank_cell_notinvite.png",
+		sendBtn = CCMenuItemImageLambda::create("friendsearch_call.png", "friendsearch_call.png",
 			[](CCObject*){});
+		sendBtn->setColor(ccc3(100, 100, 100));
 	}
 
 
-	sendBtn->setPosition(ccp(180,22));
+	sendBtn->setPosition(ccp(176, 20));
 	sendBtn->setTag(kInviteTagSend);
 	_menu->addChild(sendBtn,2);
 
 	title = CCLabelTTF::create("","Helvetica",12);
-	title->setPosition(ccp(60,24));
+	title->setPosition(ccp(45,20));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kInviteTagTitle);
 	cell->addChild(title,2);
 
 
 	score = CCLabelTTF::create("","Helvetica",14);
-	score->setPosition(ccp(60,1));
+	score->setPosition(ccp(45,2));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kInviteTagScore);
 	cell->addChild(score,2);
@@ -342,10 +343,10 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 
 void InviteEventPopup::scrollViewDidScroll( CCScrollView* view )
 {
-	if(m_scrollBar)
-	{
-		m_scrollBar->setBarRefresh();
-	}
+//	if(m_scrollBar)
+//	{
+//		m_scrollBar->setBarRefresh();
+//	}
 }
 
 void InviteEventPopup::scrollViewDidZoom( CCScrollView* view )

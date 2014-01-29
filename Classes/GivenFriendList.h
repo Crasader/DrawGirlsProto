@@ -59,7 +59,7 @@ public:
 	void drawMail(Json::Value obj)
 	{
 		m_filteredMailList = obj["list"];
-		m_mailTableView = CCTableView::create(this, CCSizeMake(240, 174.f));
+		m_mailTableView = CCTableView::create(this, CCSizeMake(200, 174.f));
 
 		CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
 		m_scrollBar = ScrollBar::createScrollbar(m_mailTableView, -2 - 10, NULL, bar);

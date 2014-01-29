@@ -16,6 +16,14 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
+enum MainFlowZorder{
+	kMainFlowZorder_back = 1,
+	kMainFlowZorder_table,
+	kMainFlowZorder_top,
+	kMainFlowZorder_uiButton,
+	kMainFlowZorder_popup
+};
+
 class CountingBMLabel;
 class HeartTime;
 class MainFlowScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
