@@ -2156,7 +2156,7 @@ void PuzzleScene::setTop()
 	top_case->addChild(cancel_menu);
 	
 	heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(15,top_case->getContentSize().height/2.f+1));
+	heart_time->setPosition(ccp(16,top_case->getContentSize().height/2.f-0.5f));
 	top_case->addChild(heart_time);
 	
 	CCSprite* n_heart = CCSprite::create("mainflow_top_shop.png");

@@ -82,6 +82,7 @@ private:
 	int recent_my_rank;
 	RankFriendInfo next_rank_info;
 	
+	CCSprite* take_star_animation_node;
 	
 	vector<RankFriendInfo> friend_list;
 	CCTableView* rankTableView;
@@ -106,6 +107,8 @@ private:
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
 	void endTakeCard();
+	void checkMiniGame();
+	void checkRentCard();
 	void checkChallengeOrHelp();
 	
 	float keep_gold;

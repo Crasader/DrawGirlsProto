@@ -17,6 +17,9 @@
 #include "StageImgLoader.h"
 #include "ASPopupView.h"
 #include "TouchSuctionLayer.h"
+#include "StageImgLoader.h"
+#include "CardCase.h"
+#include "CardAnimations.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -1374,15 +1377,539 @@ void ShopPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSP_MT_cardHigh)
 	{
-		is_menu_enable = true;
+		if(mySGD->getStar() >= card_price_high.getV())
+		{
+			mySGD->setStar(mySGD->getStar()-card_price_high.getV());
+			
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getKakaoID();
+			
+			Json::Value data;
+			data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+			
+			Json::FastWriter writer;
+			param["data"] = writer.write(data);
+			param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+			
+			command_list.push_back(CommandParam("updateUserData", param, nullptr));
+			
+			loading_layer = LoadingLayer::create();
+			addChild(loading_layer, kSP_Z_popup);
+			
+			card_gacha_type = "ruby";
+			
+			startCardGacha();
+		}
+		else
+		{
+			addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+			is_menu_enable = true;
+		}
 	}
 	else if(tag == kSP_MT_cardMid)
 	{
-		is_menu_enable = true;
+		if(mySGD->getGold() >= card_price_mid.getV())
+		{
+			mySGD->setGold(mySGD->getGold()-card_price_mid.getV());
+			
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getKakaoID();
+			
+			Json::Value data;
+			data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+			
+			Json::FastWriter writer;
+			param["data"] = writer.write(data);
+			param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+			
+			command_list.push_back(CommandParam("updateUserData", param, nullptr));
+			
+			loading_layer = LoadingLayer::create();
+			addChild(loading_layer, kSP_Z_popup);
+			
+			card_gacha_type = "gold";
+			
+			startCardGacha();
+		}
+		else
+		{
+			addChild(ASPopupView::getCommonNoti(-210, "골드가 부족합니다."), kSP_Z_popup);
+			is_menu_enable = true;
+		}
 	}
 	else if(tag == kSP_MT_cardLow)
 	{
-		is_menu_enable = true;
+		if(mySGD->getFriendPoint() >= card_price_low.getV())
+		{
+			mySGD->setFriendPoint(mySGD->getFriendPoint()-card_price_low.getV());
+			
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getKakaoID();
+			
+			Json::Value data;
+			data[myDSH->getKey(kDSH_Key_savedFriendPoint)] = myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint);
+			
+			Json::FastWriter writer;
+			param["data"] = writer.write(data);
+			param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+			
+			command_list.push_back(CommandParam("updateUserData", param, nullptr));
+			
+			loading_layer = LoadingLayer::create();
+			addChild(loading_layer, kSP_Z_popup);
+			
+			card_gacha_type = "social";
+			
+			startCardGacha();
+		}
+		else
+		{
+			addChild(ASPopupView::getCommonNoti(-210, "소셜 포인트가 부족합니다."), kSP_Z_popup);
+			is_menu_enable = true;
+		}
+	}
+}
+
+void ShopPopup::startCardGacha()
+{
+	Json::Value param;
+	param["type"] = card_gacha_type;
+	command_list.push_back(CommandParam("getcardinfobyrand", param, json_selector(this, ShopPopup::resultCardGacha)));
+	hspConnector::get()->command(command_list);
+}
+
+void ShopPopup::resultCardGacha(Json::Value result_data)
+{
+	CCLog("resultCardGacha : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		command_list.clear();
+		
+		Json::Value t_card = result_data["cardInfo"];
+		NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
+		NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
+		NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
+		NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
+		
+		NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
+		NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt(), false);
+		NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+		
+		Json::Value t_card_missile = t_card["missile"];
+		NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
+		NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt(), false);
+		NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt(), false);
+		NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble(), false);
+		
+		NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str(), false);
+		
+		Json::Value t_ability = t_card["ability"];
+		NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), int(t_ability.size()), false);
+		for(int j=0;j<t_ability.size();j++)
+		{
+			Json::Value t_abil = t_ability[j];
+			NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt(), false);
+			
+			Json::Value t_option;
+			if(!t_abil["option"].isObject())                    t_option["key"]="value";
+			else												t_option =t_abil["option"];
+			
+			if(t_abil["type"].asInt() == kIC_attack)
+				NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt(), false);
+			else if(t_abil["type"].asInt() == kIC_addTime)
+				NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+			else if(t_abil["type"].asInt() == kIC_fast)
+				NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+			else if(t_abil["type"].asInt() == kIC_silence)
+				NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+			else if(t_abil["type"].asInt() == kIC_doubleItem)
+				NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+			else if(t_abil["type"].asInt() == kIC_longTime)
+				NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+			else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
+				NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+			else if(t_abil["type"].asInt() == kIC_subSmallSize)
+				NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+			else if(t_abil["type"].asInt() == kIC_smallArea)
+				NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+			else if(t_abil["type"].asInt() == kIC_widePerfect)
+				NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+		}
+		
+		Json::Value t_imgInfo = t_card["imgInfo"];
+		
+		bool is_add_cf = false;
+		
+		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
+		{
+			// check, after download ----------
+			DownloadFile t_df;
+			t_df.size = t_imgInfo["size"].asInt();
+			t_df.img = t_imgInfo["img"].asString().c_str();
+			t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+			t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
+			df_list.push_back(t_df);
+			// ================================
+			
+			CopyFile t_cf;
+			t_cf.from_filename = t_df.filename.c_str();
+			t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+			cf_list.push_back(t_cf);
+			
+			is_add_cf = true;
+		}
+		
+		Json::Value t_aniInfo = t_card["aniInfo"];
+		NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool(), false);
+		if(t_aniInfo["isAni"].asBool())
+		{
+			Json::Value t_detail = t_aniInfo["detail"];
+			NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt(), false);
+			
+			Json::Value t_loopSeq = t_detail["loopSeq"];
+			for(int j=0;j<t_loopSeq.size();j++)
+				NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt(), false);
+			
+			NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt(), false);
+			
+			if(NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card["no"].asInt()) != t_detail["img"].asString())
+			{
+				// check, after download ----------
+				DownloadFile t_df;
+				t_df.size = t_detail["size"].asInt();
+				t_df.img = t_detail["img"].asString().c_str();
+				t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
+				df_list.push_back(t_df);
+				// ================================
+			}
+			
+			if(is_add_cf)
+			{
+				CopyFile t_cf = cf_list.back();
+				cf_list.pop_back();
+				t_cf.is_ani = true;
+				t_cf.cut_width = t_detail["cutWidth"].asInt();
+				t_cf.cut_height = t_detail["cutHeight"].asInt();
+				t_cf.position_x = t_detail["positionX"].asInt();
+				t_cf.position_y = t_detail["positionY"].asInt();
+				t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				cf_list.push_back(t_cf);
+			}
+		}
+		
+		NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
+		
+		Json::Value t_silImgInfo = t_card["silImgInfo"];
+		NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
+		if(t_silImgInfo["isSil"].asBool())
+		{
+			if(NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card["no"].asInt()) != t_silImgInfo["img"].asString())
+			{
+				// check, after download ----------
+				DownloadFile t_df;
+				t_df.size = t_silImgInfo["size"].asInt();
+				t_df.img = t_silImgInfo["img"].asString().c_str();
+				t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
+				df_list.push_back(t_df);
+				// ================================
+			}
+		}
+		
+		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+		
+		gacha_card_number = t_card["no"].asInt();
+		
+		if(df_list.size() + cf_list.size() > 0) // need download
+		{
+			ing_download_cnt = 1;
+			is_downloading = true;
+			startDownload();
+		}
+		else
+		{
+			loading_layer->removeFromParent();
+			
+			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, gacha_card_number);
+			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, gacha_card_number);
+			
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number) > 0)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
+				
+				// 강화
+				float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
+				CCLog("strength_rate : %.3f", strength_rate);
+				
+				random_device rd;
+				default_random_engine e1(rd());
+				uniform_real_distribution<float> uniform_dist(0.f, 1.f);
+				
+				float result_value = uniform_dist(e1);
+				CCLog("result value : %.3f", result_value);
+				
+				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+				CardCase* cardCase = CardCase::create(gacha_card_number);
+				card->addChild(cardCase);
+				
+				
+				CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+				CardCase* cardCase2 = CardCase::create(gacha_card_number);
+				card2->addChild(cardCase2);
+				
+				
+				StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-190);
+				
+				b->setCloseFunc([this](){
+					CCLog("close Func");
+					this->is_menu_enable = true;
+				});
+				
+				if(result_value <= strength_rate)
+				{
+					CCLog("success");
+					
+					b->startSuccess("카드레벨 +1");
+					
+					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number)+1);
+					myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, nullptr);
+				}
+				else
+				{
+					CCLog("fail");
+					
+					b->startFail("강화 실패");
+				}
+				
+				addChild(b, kSP_Z_popup);
+			}
+			else
+			{
+				if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, gacha_card_number) == 0)
+				{
+					myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+					myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+					myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), gacha_card_number);
+					
+					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, 1);
+					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+					myDSH->setStringForKey(kDSH_Key_cardPassive_int1, gacha_card_number, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
+					
+					mySGD->addHasGottenCardNumber(gacha_card_number);
+				}
+				else
+				{
+					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, 1);
+					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+					myDSH->setStringForKey(kDSH_Key_cardPassive_int1, gacha_card_number, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
+				}
+				
+				// 획득
+				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+				CardCase* cardCase = CardCase::create(gacha_card_number);
+				card->addChild(cardCase);
+				
+				TakeCardAnimation* b = TakeCardAnimation::create(card,-190);
+				b->setCloseFunc([this](){
+					CCLog("close Func");
+					this->is_menu_enable = true;
+				});
+				b->start();
+				addChild(b, kSP_Z_popup);
+			}
+		}
+	}
+	else
+	{
+		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+		s_replay->setColor(ccGRAY);
+		
+		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ShopPopup::replayAction));
+		replay_item->setTag(1);
+		
+		replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu->setPosition(ccp(240,100));
+		addChild(replay_menu, kSP_Z_popup);
+		replay_menu->setTouchPriority(-210);
+	}
+}
+
+void ShopPopup::startDownload()
+{
+	if(ing_download_cnt <= df_list.size())
+	{
+		CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+		StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename,
+													  this, callfunc_selector(ShopPopup::successAction), this, callfunc_selector(ShopPopup::failAction));
+	}
+}
+
+void ShopPopup::successAction()
+{
+	SDS_SS(kSDF_cardInfo, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img, false);
+	
+	if(ing_download_cnt < df_list.size())
+	{
+		ing_download_cnt++;
+		startDownload();
+	}
+	else
+	{
+		for(int i=0;i<cf_list.size();i++)
+		{
+			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+			target_img->setAnchorPoint(ccp(0,0));
+			
+			if(cf_list[i].is_ani)
+			{
+				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+				target_img->addChild(ani_img);
+			}
+			
+			target_img->setScale(0.2f);
+			
+			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			t_texture->setSprite(target_img);
+			t_texture->begin();
+			t_texture->getSprite()->visit();
+			t_texture->end();
+			
+			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+		}
+		
+		// 완료
+		loading_layer->removeFromParent();
+		
+		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, gacha_card_number);
+		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, gacha_card_number);
+		
+		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number) > 0)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
+			
+			// 강화
+			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
+			CCLog("strength_rate : %.3f", strength_rate);
+			
+			random_device rd;
+			default_random_engine e1(rd());
+			uniform_real_distribution<float> uniform_dist(0.f, 1.f);
+			
+			float result_value = uniform_dist(e1);
+			CCLog("result value : %.3f", result_value);
+			
+			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+			CardCase* cardCase = CardCase::create(gacha_card_number);
+			card->addChild(cardCase);
+			
+			
+			CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+			CardCase* cardCase2 = CardCase::create(gacha_card_number);
+			card2->addChild(cardCase2);
+			
+			
+			StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-190);
+			
+			b->setCloseFunc([this](){
+				CCLog("close Func");
+				this->is_menu_enable = true;
+			});
+			
+			if(result_value <= strength_rate)
+			{
+				CCLog("success");
+				
+				b->startSuccess("카드레벨 +1");
+				
+				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number)+1);
+				myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, nullptr);
+			}
+			else
+			{
+				CCLog("fail");
+				
+				b->startFail("강화 실패");
+			}
+			
+			addChild(b, kSP_Z_popup);
+		}
+		else
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, gacha_card_number) == 0)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+				myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+				myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), gacha_card_number);
+				
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, 1);
+				myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+				myDSH->setStringForKey(kDSH_Key_cardPassive_int1, gacha_card_number, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
+				
+				mySGD->addHasGottenCardNumber(gacha_card_number);
+			}
+			else
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, 1);
+				myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+				myDSH->setStringForKey(kDSH_Key_cardPassive_int1, gacha_card_number, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
+			}
+			
+			// 획득
+			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+			CardCase* cardCase = CardCase::create(gacha_card_number);
+			card->addChild(cardCase);
+			
+			TakeCardAnimation* b = TakeCardAnimation::create(card,-190);
+			b->setCloseFunc([this](){
+				CCLog("close Func");
+				this->is_menu_enable = true;
+			});
+			b->start();
+			addChild(b, kSP_Z_popup);
+		}
+	}
+}
+
+void ShopPopup::failAction()
+{
+	is_downloading = false;
+	CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
+	CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
+	s_replay->setColor(ccGRAY);
+	
+	CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ShopPopup::replayAction));
+	replay_item->setTag(2);
+	
+	replay_menu = CCMenu::createWithItem(replay_item);
+	replay_menu->setPosition(ccp(240,100));
+	addChild(replay_menu, kSP_Z_popup);
+	replay_menu->setTouchPriority(-210);
+}
+
+void ShopPopup::replayAction(CCObject* sender)
+{
+	int tag = ((CCNode*)sender)->getTag();
+	
+	replay_menu->removeFromParent();
+	
+	if(tag == 1)
+		startCardGacha();
+	else if(tag == 2)
+	{
+		is_downloading = true;
+		startDownload();
 	}
 }
 

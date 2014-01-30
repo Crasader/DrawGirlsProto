@@ -33,6 +33,7 @@
 #include "AchieveNoti.h"
 #include "SendMessageUtil.h"
 #include "RankChange.h"
+#include "CardAnimations.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -197,8 +198,76 @@ bool ClearPopup::init()
 	else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
 	else												take_level = 1;
 	
-	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level, this, callfunc_selector(ClearPopup::endTakeCard));
-	addChild(t_popup, kZ_CP_popup);
+	int take_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level);
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number) > 0)
+	{
+		// 강화
+		
+		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, take_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number));
+		CCLog("strength_rate : %.3f", strength_rate);
+		
+		random_device rd;
+		default_random_engine e1(rd());
+		uniform_real_distribution<float> uniform_dist(0.f, 1.f);
+		
+		float result_value = uniform_dist(e1);
+		CCLog("result value : %.3f", result_value);
+		
+		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",stage_number,take_level)->getCString());
+		CardCase* cardCase = CardCase::create(take_card_number);
+		card->addChild(cardCase);
+		
+		
+		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",stage_number,take_level)->getCString());
+		CardCase* cardCase2 = CardCase::create(take_card_number);
+		card2->addChild(cardCase2);
+		
+		
+		StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-190);
+		
+		b->setCloseFunc([this](){
+			CCLog("close Func");
+			this->endTakeCard();
+		});
+		
+		if(result_value <= strength_rate)
+		{
+			CCLog("success");
+			
+			b->startSuccess("카드레벨 +1");
+			
+			myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number)+1);
+			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, nullptr);
+		}
+		else
+		{
+			CCLog("fail");
+			
+			b->startFail("강화 실패");
+		}
+		
+		addChild(b, kZ_CP_popup);
+	}
+	else
+	{
+		// 획득
+		
+		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",stage_number,take_level)->getCString());
+		CardCase* cardCase = CardCase::create(take_card_number);
+		card->addChild(cardCase);
+		
+		TakeCardAnimation* b = TakeCardAnimation::create(card,-190);
+		b->setCloseFunc([this](){
+			CCLog("close Func");
+			this->endTakeCard();
+		});
+		b->start();
+		addChild(b, kZ_CP_popup);
+	}
+	
+//	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level, this, callfunc_selector(ClearPopup::endTakeCard));
+//	addChild(t_popup, kZ_CP_popup);
 	/////////////////////////////////////////////
 	
 	
@@ -238,7 +307,6 @@ bool ClearPopup::init()
 		bronze_star = CCSprite::create("ending_star_bronze.png");
 		bronze_star->setPosition(ccp(89,173));
 		main_case->addChild(bronze_star, kZ_CP_img);
-		bronze_star->setTag(1);
 	}
 	else
 		bronze_star = NULL;
@@ -248,7 +316,6 @@ bool ClearPopup::init()
 		silver_star = CCSprite::create("ending_star_silver.png");
 		silver_star->setPosition(ccp(175,173));
 		main_case->addChild(silver_star, kZ_CP_img);
-		silver_star->setTag(1);
 	}
 	else
 		silver_star = NULL;
@@ -258,52 +325,41 @@ bool ClearPopup::init()
 		gold_star = CCSprite::create("ending_star_gold.png");
 		gold_star->setPosition(ccp(132,177));
 		main_case->addChild(gold_star, kZ_CP_img);
-		gold_star->setTag(1);
 	}
 	else
 		gold_star = NULL;
+	
+	take_star_animation_node = NULL;
 	
 	if(!bronze_star && take_level == 1)
 	{
 		bronze_star = CCSprite::create("ending_star_bronze.png");
 		bronze_star->setPosition(ccp(89,173));
 		main_case->addChild(bronze_star, kZ_CP_img);
-		bronze_star->setTag(0);
 		
 		bronze_star->setScale(0);
-		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
-		bronze_star->runAction(t_seq);
+		
+		take_star_animation_node = bronze_star;
 	}
 	else if(!silver_star && take_level == 2)
 	{
 		silver_star = CCSprite::create("ending_star_silver.png");
 		silver_star->setPosition(ccp(175,173));
 		main_case->addChild(silver_star, kZ_CP_img);
-		silver_star->setTag(0);
 		
 		silver_star->setScale(0);
-		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
-		silver_star->runAction(t_seq);
+		
+		take_star_animation_node = silver_star;
 	}
 	else if(!gold_star && take_level == 3)
 	{
 		gold_star = CCSprite::create("ending_star_gold.png");
 		gold_star->setPosition(ccp(132,177));
 		main_case->addChild(gold_star, kZ_CP_img);
-		gold_star->setTag(0);
 		
 		gold_star->setScale(0);
-		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
-		gold_star->runAction(t_seq);
+		
+		take_star_animation_node = gold_star;
 	}
 	
 	
@@ -754,6 +810,57 @@ void ClearPopup::checkChallengeOrHelp()
 		}
 	}
 	
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	
+	if(recent_step == kTutorialFlowStep_homeClick)
+	{
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_homeClick);
+		addChild(t_tutorial, kZ_CP_popup);
+		
+		tutorial_node = t_tutorial;
+	}
+}
+
+void ClearPopup::endTakeCard()
+{
+	startCalcAnimation();
+	if(take_star_animation_node)
+	{
+		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkMiniGame));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, t_call, NULL);
+		take_star_animation_node->runAction(t_seq);
+	}
+	else
+	{
+		checkMiniGame();
+	}
+}
+
+void ClearPopup::checkMiniGame()
+{
+	bool is_minigame_stage = NSDS_GB(mySD->getSilType(), kSDS_SI_minigame_b);
+	if(is_minigame_stage && !myDSH->getBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType()))
+	{
+		int minigame_played_cnt = myDSH->getIntegerForKey(kDSH_Key_minigame_playedCnt)+1;
+		myDSH->setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
+		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
+		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
+		myDSH->fFlush();
+		MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(rand()%(kMiniGameCode_dodge+1)), bind(&ClearPopup::checkRentCard, this));
+		addChild(t_popup, kZ_CP_popup);
+	}
+	else
+	{
+		checkRentCard();
+	}
+}
+
+void ClearPopup::checkRentCard()
+{
 	if(mySGD->getWasUsedFriendCard())
 	{
 		ASPopupView* t_popup = ASPopupView::create(-200);
@@ -782,7 +889,7 @@ void ClearPopup::checkChallengeOrHelp()
 		t_container->addChild(title_img);
 		
 		CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님의 카드가 도움이 되었나요?\n하트로 고마움을 표현하세요.", mySGD->getSelectedFriendCardData().nick.c_str())->getCString(),
-																								mySGD->getFont().c_str(), 20);
+													mySGD->getFont().c_str(), 20);
 		ment_label->setPosition(CCPointZero);
 		t_container->addChild(ment_label);
 		
@@ -791,9 +898,10 @@ void ClearPopup::checkChallengeOrHelp()
 		s_close->setColor(ccGRAY);
 		
 		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																																				{
-																																					t_popup->removeFromParent();
-																																				});
+																			{
+																				checkChallengeOrHelp();
+																				t_popup->removeFromParent();
+																			});
 		
 		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
 		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
@@ -806,43 +914,18 @@ void ClearPopup::checkChallengeOrHelp()
 		s_send_heart->setColor(ccGRAY);
 		
 		CCMenuItemSpriteLambda* send_heart_item = CCMenuItemSpriteLambda::create(n_send_heart, s_send_heart, [=](CCObject* sender)
-																																						 {
-																																							 // 경수
-																																							 // 하트 보내기 작업
-																																							 // 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
-																																							 t_popup->removeFromParent();
-																																						 });
+																				 {
+																					 // 경수
+																					 // 하트 보내기 작업
+																					 // 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
+																					 checkChallengeOrHelp();
+																					 t_popup->removeFromParent();
+																				 });
 		
 		CCMenuLambda* send_heart_menu = CCMenuLambda::createWithItem(send_heart_item);
 		send_heart_menu->setTouchPriority(t_popup->getTouchPriority()-1);
 		send_heart_menu->setPosition(ccp(0,-100));
 		t_container->addChild(send_heart_menu);
-	}
-	
-	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
-	
-	if(recent_step == kTutorialFlowStep_homeClick)
-	{
-		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
-		t_tutorial->initStep(kTutorialFlowStep_homeClick);
-		addChild(t_tutorial, kZ_CP_popup);
-		
-		tutorial_node = t_tutorial;
-	}
-}
-
-void ClearPopup::endTakeCard()
-{
-	bool is_minigame_stage = NSDS_GB(mySD->getSilType(), kSDS_SI_minigame_b);
-	if(is_minigame_stage && !myDSH->getBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType()))
-	{
-		int minigame_played_cnt = myDSH->getIntegerForKey(kDSH_Key_minigame_playedCnt)+1;
-		myDSH->setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
-		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
-		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
-		myDSH->fFlush();
-		MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(rand()%(kMiniGameCode_dodge+1)), bind(&ClearPopup::checkChallengeOrHelp, this));
-		addChild(t_popup, kZ_CP_popup);
 	}
 	else
 	{
@@ -1049,7 +1132,6 @@ void ClearPopup::onEnter()
 {
 	CCLayer::onEnter();
 	showPopup();
-	startCalcAnimation();
 }
 
 void ClearPopup::startCalcAnimation()

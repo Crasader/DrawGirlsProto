@@ -518,6 +518,7 @@ public:
 	CardStrengthBefore getCardStrengthBefore();
 	void setCardStrengthBefore(CardStrengthBefore t_before);
 	
+	bool is_draw_button_tutorial;
 	int draw_button_tutorial_ing;
 	
 	bool is_write_replay;

@@ -1892,11 +1892,13 @@ void PlayUI::myInit ()
 	
 	if(mySD->getSilType() == 1 && !myDSH->getIntegerForKey(kDSH_Key_isDisableDrawButton))
 	{
+		mySGD->is_draw_button_tutorial = true;
 		mySGD->draw_button_tutorial_ing = 1;
 		draw_button_tutorial_show = 11;
 	}
 	else
 	{
+		mySGD->is_draw_button_tutorial = false;
 		mySGD->draw_button_tutorial_ing = 0;
 	}
 	

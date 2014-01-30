@@ -25,6 +25,7 @@
 #include "UnknownFriends.h"
 #include "StartSettingScene.h"
 #include "ASPopupView.h"
+#include "CardAnimations.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -103,12 +104,67 @@ bool FailPopup::init()
 	
 	if(selected_card_number > 0)
 	{
-		DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number), this, callfunc_selector(FailPopup::endDecreaseCardDuration));
-		addChild(t_popup, kZ_FP_popup);
+		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) <= 0)
+		{
+			// 소멸
+			int cardNo = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			int cardStage = NSDS_GI(kSDS_CI_int1_stage_i,cardNo);
+			int cardGrade = NSDS_GI(kSDS_CI_int1_grade_i,cardNo);
+			
+			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",cardStage,cardGrade)->getCString());
+			CardCase* cardCase = CardCase::create(cardNo);
+			card->addChild(cardCase);
+			
+			RemoveCardAnimation* b = RemoveCardAnimation::create(card,-190);
+			
+			b->setSkipFunc([this](){
+				CCLog("skip Func");
+			});
+			b->setRepairFunc([b, this](){
+				CCLog("repair Func");
+				
+				if(mySGD->getStar() >= mySGD->getCardDurabilityUpFee())
+				{
+					mySGD->setStar(mySGD->getStar() - mySGD->getCardDurabilityUpFee());
+					int card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number));
+					
+					myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
+					
+					//복구하기
+					b->repair();
+				}
+			});
+			b->setCloseFunc([this](){
+				CCLog("close Func");
+				myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+				this->endDecreaseCardDuration();
+			});
+			
+			b->start();
+			addChild(b, kZ_FP_popup);
+		}
+		else
+		{
+			// 내구 하락
+			int cardNo = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			int cardStage = NSDS_GI(kSDS_CI_int1_stage_i,cardNo);
+			int cardGrade = NSDS_GI(kSDS_CI_int1_grade_i,cardNo);
+			
+			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",cardStage,cardGrade)->getCString());
+			CardCase* cardCase = CardCase::create(cardNo);
+			card->addChild(cardCase);
+			
+			DownCardAnimation* b = DownCardAnimation::create(card,-190);
+			b->setCloseFunc([this](){
+				this->endDecreaseCardDuration();
+			});
+			b->start();
+			addChild(b, kZ_FP_popup);
+		}
 		
-		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number);
-		if(durability <= 0)
-			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+//		DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number), this, callfunc_selector(FailPopup::endDecreaseCardDuration));
+//		addChild(t_popup, kZ_FP_popup);
 	}
 	else
 	{
