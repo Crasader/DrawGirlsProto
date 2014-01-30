@@ -16,6 +16,7 @@
 #include <chrono>
 #include "MainFlowScene.h"
 #include "TutorialFlowStep.h"
+#include "ASPopupView.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -52,7 +53,7 @@ bool TitleRenewalScene::init()
 	
 	Json::Value param;
 	param["ManualLogin"] = true;
-	
+
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 	
 //	Json::Value t_result_data;

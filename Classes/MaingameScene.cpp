@@ -327,7 +327,13 @@ void Maingame::finalSetting()
 																				 {
 																					 mControl->isStun = false;
 																					 exit_target->onEnter();
-																					 t_popup->removeFromParent();
+																					 
+																					 CCMoveBy* t_move = CCMoveBy::create(0.5f, ccp(-480,0));
+																					 CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+																					 CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
+																					 t_popup->runAction(t_seq);
+																					 
+//																					 t_popup->removeFromParent();
 																				 });
 			t_popup->setContainerNode(t_container);
 			exit_target->getParent()->addChild(t_popup);

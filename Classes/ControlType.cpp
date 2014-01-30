@@ -1325,10 +1325,10 @@ void ControlJoystickButton::hideDrawButtonTutorial()
 		draw_button_tutorial_ccb->removeFromParent();
 		draw_button_tutorial_ccb = NULL;
 		
+		mySGD->draw_button_tutorial_ing = 1;
+		
 		is_show_draw_button_tutorial = false;
 	}
-	
-	mySGD->draw_button_tutorial_ing = 1;
 }
 
 //////////////////////////////////////////////// Joystick ///////////////////////////////////////////////////////////////////////////////

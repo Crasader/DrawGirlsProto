@@ -270,13 +270,10 @@ void StarGoldData::setKeepGold( int t_gold )
 void StarGoldData::setGameStart()
 {
 	is_write_replay = true;
-	is_play_replay = true;
 	
-	replay_playing_info = replay_write_info;
 	replay_write_info.clear();
 	replay_write_info[getReplayKey(kReplayKey_isChangedMap)] = true;
 	replay_write_info[getReplayKey(kReplayKey_isChangedScore)] = true;
-	replay_playing_info[getReplayKey(kReplayKey_playIndex)] = 0;
 	
 	is_not_cleared_stage = !myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType());
 	
@@ -891,6 +888,8 @@ void StarGoldData::myInit()
 {
 	replay_write_info.clear();
 	replay_playing_info.clear();
+	is_write_replay = false;
+	is_play_replay = false;
 	
 	is_unlock_puzzle = 0;
 	strength_target_card_number = 0;

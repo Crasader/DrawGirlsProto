@@ -254,12 +254,14 @@ public:
 		{
 			me_challenge_target_user_id = "";
 			me_challenge_target_user_nick = "";
+			me_challenge_target_user_score = 0.f;
 		}
 	}
-	void setMeChallengeTarget(string t_target, const std::string& t_nickname)
+	void setMeChallengeTarget(string t_target, const std::string& t_nickname, float t_score)
 	{
 		me_challenge_target_user_id = t_target.c_str();
 		me_challenge_target_user_nick = t_nickname;
+		me_challenge_target_user_score = t_score;
 	}
 	string getMeChallengeTarget()
 	{
@@ -268,6 +270,10 @@ public:
 	string getMeChallengeTargetNick()
 	{
 		return me_challenge_target_user_nick;
+	}
+	float getMeChallengeTargetScore()
+	{
+		return me_challenge_target_user_score;
 	}
 	
 	bool getIsAcceptChallenge()
@@ -282,13 +288,15 @@ public:
 			accept_challenge_target_user_id = "";
 			accept_challenge_target_user_nick = "";
 			accept_challenge_target_score = 0.f;
+			resetReplayPlayingInfo();
 		}
 	}
-	void setAcceptChallengeTarget(string t_id, string t_nick, float t_score)
+	void setAcceptChallengeTarget(string t_id, string t_nick, float t_score, Json::Value t_replay)
 	{
 		accept_challenge_target_user_id = t_id.c_str();
 		accept_challenge_target_user_nick = t_nick.c_str();
 		accept_challenge_target_score = t_score;
+		setReplayPlayingInfo(t_replay);
 	}
 	string getAcceptChallengeId()
 	{
@@ -500,6 +508,18 @@ public:
 	bool is_play_replay;
 	Json::Value replay_playing_info;
 	
+	void setReplayPlayingInfo(Json::Value t_data)
+	{
+		is_play_replay = true;
+		replay_playing_info = t_data;
+		replay_playing_info[getReplayKey(kReplayKey_playIndex)] = 0;
+	}
+	void resetReplayPlayingInfo()
+	{
+		is_play_replay = false;
+		replay_playing_info.clear();
+	}
+	
 	string getReplayKey(ReplayKey t_key);
 	
 private:
@@ -519,6 +539,7 @@ private:
 	bool is_me_challenge;
 	string me_challenge_target_user_id;
 	string me_challenge_target_user_nick;
+	float me_challenge_target_user_score;
 	
 	bool is_accept_challenge;
 	string accept_challenge_target_user_id;
