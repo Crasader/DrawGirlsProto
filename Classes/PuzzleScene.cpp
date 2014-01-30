@@ -1836,7 +1836,7 @@ void PuzzleScene::setRank()
 		Json::Value p;
 		Json::Value my_info = hspConnector::get()->myKakaoInfo;
 		
-		PuzzleRankFriendInfo t_my_info;
+		RankFriendInfo t_my_info;
 		t_my_info.nickname = my_info["nickname"].asString();
 		t_my_info.img_url = my_info["profile_image_url"].asString();
 		t_my_info.user_id = my_info["user_id"].asString();
@@ -1849,7 +1849,7 @@ void PuzzleScene::setRank()
 		
 		for(auto i : KnownFriends::getInstance()->getFriends())
 		{
-			PuzzleRankFriendInfo t_friend_info;
+			RankFriendInfo t_friend_info;
 			t_friend_info.nickname = i.nick;
 			t_friend_info.img_url = i.profileUrl;
 			t_friend_info.user_id = i.userId;
@@ -1863,7 +1863,7 @@ void PuzzleScene::setRank()
 		
 		for(auto i : UnknownFriends::getInstance()->getFriends())
 		{
-			PuzzleRankFriendInfo fInfo;
+			RankFriendInfo fInfo;
 			fInfo.nickname = i.nick + "[unknown]";
 			fInfo.img_url = "";
 			fInfo.user_id = i.userId;
@@ -1903,7 +1903,7 @@ void PuzzleScene::resultGetStageScoreList(Json::Value result_data)
 		Json::Value score_list = result_data["list"];
 		for(int i=0;i<score_list.size();i++)
 		{
-			vector<PuzzleRankFriendInfo>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString());
+			vector<RankFriendInfo>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString());
 			if(iter != friend_list.end())
 			{
 				(*iter).score = score_list[i]["score"].asFloat();
@@ -1914,7 +1914,7 @@ void PuzzleScene::resultGetStageScoreList(Json::Value result_data)
 		}
 		
 		struct t_FriendSort{
-			bool operator() (const PuzzleRankFriendInfo& a, const PuzzleRankFriendInfo& b)
+			bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
 			{
 				return a.score > b.score;
 			}
@@ -1924,6 +1924,9 @@ void PuzzleScene::resultGetStageScoreList(Json::Value result_data)
 		
 		for(int i=0;i<friend_list.size();i++)
 			friend_list[i].rank = i+1;
+		
+		mySGD->save_stage_rank_stageNumber = selected_stage_number;
+		mySGD->save_stage_rank_list = friend_list;
 		
 //		float my_score = 0.f;
 //		
@@ -1983,7 +1986,7 @@ void PuzzleScene::resultGetStageScoreList(Json::Value result_data)
 
 CCTableViewCell* PuzzleScene::tableCellAtIndex( CCTableView *table, unsigned int idx )
 {
-	PuzzleRankFriendInfo* member = &friend_list[idx];
+	RankFriendInfo* member = &friend_list[idx];
 	CCTableViewCell* cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();

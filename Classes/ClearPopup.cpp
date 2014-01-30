@@ -32,6 +32,7 @@
 #include "TutorialFlowStep.h"
 #include "AchieveNoti.h"
 #include "SendMessageUtil.h"
+#include "RankChange.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -105,11 +106,57 @@ bool ClearPopup::init()
 	p1["data"] = p1_data_writer.write(p1_data);
 	hspConnector::get()->command("setweeklyscore", p1, NULL);
 	
-	Json::Value p;
-	p["memberID"]=hspConnector::get()->getKakaoID();
-	p["score"]=int(mySGD->getScore());
-	p["stageNo"]=mySD->getSilType();
-	hspConnector::get()->command("addStageScore",p,NULL);
+	
+	is_rank_changed = false;
+	if(mySGD->save_stage_rank_stageNumber == mySD->getSilType())
+	{
+		// 받아왔던 rank list 사용
+		string my_id = hspConnector::get()->getKakaoID();
+		
+		vector<RankFriendInfo>::iterator iter = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
+		if(iter != mySGD->save_stage_rank_list.end())
+		{
+			// found
+			if((*iter).score < mySGD->getScore())
+			{
+				Json::Value p;
+				p["memberID"]=hspConnector::get()->getKakaoID();
+				p["score"]=int(mySGD->getScore());
+				p["stageNo"]=mySD->getSilType();
+				hspConnector::get()->command("addStageScore",p,NULL);
+				
+				
+				before_my_rank = (*iter).rank;
+				(*iter).score = mySGD->getScore();
+				struct t_FriendSort{
+					bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
+					{
+						return a.score > b.score;
+					}
+				} pred;
+				
+				sort(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), pred);
+				
+				for(int i=0;i<mySGD->save_stage_rank_list.size();i++)
+					mySGD->save_stage_rank_list[i].rank = i+1;
+				
+				vector<RankFriendInfo>::iterator iter2 = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
+				if((*iter2).rank < before_my_rank)
+				{
+					is_rank_changed = true;
+					recent_my_rank = (*iter2).rank;
+					next_rank_info = (*(iter2+1));
+				}
+			}
+		}
+		else
+		{
+			CCLog("not found myKakaoID");
+		}
+		
+		friend_list = mySGD->save_stage_rank_list;
+		is_loaded_list = true;
+	}
     
 	main_case = CCSprite::create("ending_back.png");
 	main_case->setAnchorPoint(ccp(0,0));
@@ -599,6 +646,113 @@ void ClearPopup::checkChallengeOrHelp()
 									   ChallengeCategory::kRequestReply),
 				 kZ_CP_popup);
 	}
+	else
+	{
+		if(is_rank_changed)
+		{
+			RankChange* t_rc = RankChange::create(hspConnector::get()->getKakaoProfileURL(), recent_my_rank, hspConnector::get()->getKakaoNickname(), mySGD->getScore(), next_rank_info.img_url, recent_my_rank+1, next_rank_info.nickname, next_rank_info.score, [=](){
+				Json::Value p;
+				Json::Value contentJson;
+				contentJson["msg"] = (next_rank_info.nickname + "님에게 도전!");
+				contentJson["challengestage"] = mySD->getSilType();
+				contentJson["score"] = mySGD->getScore();
+				contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+				contentJson["replaydata"] = mySGD->replay_write_info;
+				p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+				std::string recvId = next_rank_info.user_id;
+				p["receiverMemberID"] = recvId;
+				
+				p["senderMemberID"] = hspConnector::get()->getKakaoID();
+				
+				p["type"] = kChallengeRequest;
+				hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+											 {
+												 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+												 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+												 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+												 
+												 //																		setHelpSendTime(recvId);
+												 if(r["result"]["code"].asInt() != GDSUCCESS)
+												 {
+													 // 에러.
+													 return;
+												 }
+												 
+												 setChallengeSendTime(next_rank_info.user_id);
+												 //																	 friend_list.erase(friend_list.begin() + tag);
+												 GraphDogLib::JsonToLog("sendMessage", r);
+												 
+												 //																		obj->removeFromParent();
+												 ASPopupView* t_popup = ASPopupView::create(-250);
+												 
+												 CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+												 float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+												 if(screen_scale_x < 1.f)
+													 screen_scale_x = 1.f;
+												 
+												 t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+												 t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+												 t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+												 
+												 CCNode* t_container = CCNode::create();
+												 t_popup->setContainerNode(t_container);
+												 addChild(t_popup, kZ_CP_popup);
+												 
+												 CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+												 case_back->setPosition(CCPointZero);
+												 t_container->addChild(case_back);
+												 
+												 case_back->setContentSize(CCSizeMake(245, 220));
+												 
+												 CCSprite* title_img = CCSprite::create("message_title_challenge_success.png");
+												 title_img->setPosition(ccp(0, 80));
+												 t_container->addChild(title_img);
+												 
+												 CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+												 content_back->setPosition(CCPointZero);
+												 t_container->addChild(content_back);
+												 
+												 content_back->setContentSize(CCSizeMake(220, 100));
+												 
+												 CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님에게\n승리메세지가 발송되었습니다.", next_rank_info.nickname.c_str())->getCString(),
+																							 mySGD->getFont().c_str(), 13);
+												 ment_label->setPosition(CCPointZero);
+												 t_container->addChild(ment_label);
+												 
+												 CCSprite* n_close = CCSprite::create("popup4_orange_button.png");
+												 CCLabelTTF* n_label = CCLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+												 n_label->setPosition(ccp(n_close->getContentSize().width/2.f, n_close->getContentSize().height/2.f));
+												 n_close->addChild(n_label);
+												 CCSprite* s_close = CCSprite::create("popup4_orange_button.png");
+												 s_close->setColor(ccGRAY);
+												 CCLabelTTF* s_label = CCLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+												 s_label->setPosition(ccp(s_close->getContentSize().width/2.f, s_close->getContentSize().height/2.f));
+												 s_close->addChild(s_label);
+												 
+												 CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																													 {
+																														 t_rc->removeFromParent();
+																														 t_popup->removeFromParent();
+																													 });
+												 
+												 CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+												 close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+												 close_menu->setPosition(ccp(0,-80));
+												 t_container->addChild(close_menu);
+												 
+												 Json::Value p2;
+												 p2["receiver_id"] = recvId;
+												 p2["message"] = "도전을 신청한다!!";
+												 hspConnector::get()->kSendMessage
+												 (p2, [=](Json::Value r)
+												  {
+													  GraphDogLib::JsonToLog("kSendMessage", r);
+												  });
+											 });
+			});
+			addChild(t_rc, kZ_CP_popup);
+		}
+	}
 	
 	if(mySGD->getWasUsedFriendCard())
 	{
@@ -720,7 +874,7 @@ void ClearPopup::resultLoadFriends(Json::Value result_data)
 		
 		Json::Value my_kakao = hspConnector::get()->myKakaoInfo;
 		
-		ClearFriendRank fInfo;
+		RankFriendInfo fInfo;
 		fInfo.nickname = my_kakao["nickname"].asString();
 		fInfo.img_url = my_kakao["profile_image_url"].asString();
 		fInfo.user_id = my_kakao["user_id"].asString();
@@ -732,24 +886,26 @@ void ClearPopup::resultLoadFriends(Json::Value result_data)
 		
 		for(auto i : KnownFriends::getInstance()->getFriends())
 		{
-			ClearFriendRank fInfo;
+			RankFriendInfo fInfo;
 			fInfo.nickname = i.nick;
 			fInfo.img_url = i.profileUrl;
 			fInfo.user_id = i.userId;
 			fInfo.score = 0;
 			fInfo.is_play = false;
+			fInfo.is_message_blocked = i.messageBlocked;
 			friend_list.push_back(fInfo);
 			
 			p["memberIDList"].append(i.userId);
 		}
 		for(auto i : UnknownFriends::getInstance()->getFriends())
 		{
-			ClearFriendRank fInfo;
+			RankFriendInfo fInfo;
 			fInfo.nickname = i.nick + "[unknown]";
 			fInfo.img_url = i.profileUrl;
 			fInfo.user_id = i.userId;
 			fInfo.score = 0;
 			fInfo.is_play = false;
+			fInfo.is_message_blocked = i.messageBlocked;
 			friend_list.push_back(fInfo);
 			
 			p["memberIDList"].append(i.userId);
@@ -783,7 +939,7 @@ void ClearPopup::resultGetStageScoreList(Json::Value result_data)
 				}
 			}
 			
-			vector<ClearFriendRank>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString().c_str());
+			vector<RankFriendInfo>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString().c_str());
 			if(iter != friend_list.end())
 			{
 				(*iter).score = score_list[i]["score"].asFloat();
@@ -793,20 +949,23 @@ void ClearPopup::resultGetStageScoreList(Json::Value result_data)
 				CCLog("not found friend memberID");
 		}
 		
-		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](ClearFriendRank t_info)
+		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
 										{
 											return !t_info.is_play;
 										});
 		friend_list.erase(beginIter, friend_list.end());
 		
 		struct t_FriendSort{
-			bool operator() (const ClearFriendRank& a, const ClearFriendRank& b)
+			bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
 			{
 				return a.score > b.score;
 			}
 		} pred;
 		
 		sort(friend_list.begin(), friend_list.end(), pred);
+		
+		for(int i=0;i<friend_list.size();i++)
+			friend_list[i].rank = i+1;
 		
 		// create cell
 		
@@ -850,8 +1009,23 @@ void ClearPopup::resultSavedUserData(Json::Value result_data)
 	{
 		is_saved_user_data = true;
 		endLoad();
-		
-		resultLoadFriends(Json::Value());
+		if(is_loaded_list)
+		{
+			rankTableView = CCTableView::create(this, CCSizeMake(208, 199));
+			
+			rankTableView->setAnchorPoint(CCPointZero);
+			rankTableView->setDirection(kCCScrollViewDirectionVertical);
+			rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
+			rankTableView->setPosition(ccp(243, 62.5f));
+			
+			rankTableView->setDelegate(this);
+			main_case->addChild(rankTableView, kZ_CP_menu);
+			rankTableView->setTouchPriority(-200);
+		}
+		else
+		{
+			resultLoadFriends(Json::Value());
+		}
 		
 //		hspConnector::get()->kLoadFriends(json_selector(this, ClearPopup::resultLoadFriends));
 	}
@@ -1085,7 +1259,7 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 {
 	CCLabelTTF* nickname_label;
 	CCLabelTTF* score_label;
-	ClearFriendRank* member = &friend_list[idx];
+	RankFriendInfo* member = &friend_list[idx];
 	CCTableViewCell* cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();

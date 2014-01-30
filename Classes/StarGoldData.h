@@ -72,6 +72,23 @@ enum CardSortType{
 	kCST_gradeDown // rank
 };
 
+class RankFriendInfo
+{
+public:
+	string nickname;
+	string img_url;
+	string user_id;
+	float score;
+	int rank;
+	bool is_play;
+	bool is_message_blocked;
+	
+	bool operator==(string t_id)
+	{
+		return user_id == t_id;
+	};
+};
+
 class FriendCardData
 {
 public:
@@ -521,6 +538,9 @@ public:
 	}
 	
 	string getReplayKey(ReplayKey t_key);
+	
+	int save_stage_rank_stageNumber;
+	vector<RankFriendInfo> save_stage_rank_list;
 	
 private:
 	bool is_not_cleared_stage;

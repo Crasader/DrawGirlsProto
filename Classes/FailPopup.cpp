@@ -84,6 +84,14 @@ bool FailPopup::init()
 	p1["data"] = p1_data_writer.write(p1_data);
 	hspConnector::get()->command("setweeklyscore", p1, NULL);
 	
+	
+	if(mySGD->save_stage_rank_stageNumber == mySD->getSilType())
+	{
+		friend_list = mySGD->save_stage_rank_list;
+		is_loaded_list = true;
+	}
+	
+	
 	Json::Value p;
 	p["memberID"]=hspConnector::get()->getKakaoID();
 	p["score"]=int(mySGD->getScore());
@@ -687,7 +695,23 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 		is_saved_user_data = true;
 		endLoad();
 		
-		resultLoadFriends(Json::Value());
+		if(is_loaded_list)
+		{
+			rankTableView = CCTableView::create(this, CCSizeMake(208, 199));
+			
+			rankTableView->setAnchorPoint(CCPointZero);
+			rankTableView->setDirection(kCCScrollViewDirectionVertical);
+			rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
+			rankTableView->setPosition(ccp(243, 62.5f));
+			
+			rankTableView->setDelegate(this);
+			main_case->addChild(rankTableView, kZ_FP_menu);
+			rankTableView->setTouchPriority(kCCMenuHandlerPriority+1);
+		}
+		else
+		{
+			resultLoadFriends(Json::Value());
+		}
 //		hspConnector::get()->kLoadFriends(json_selector(this, FailPopup::resultLoadFriends));
 	}
 	else
@@ -721,7 +745,7 @@ void FailPopup::resultLoadFriends(Json::Value result_data)
 
 	Json::Value my_kakao = hspConnector::get()->myKakaoInfo;
 	
-	FailFriendRank fInfo;
+	RankFriendInfo fInfo;
 	fInfo.nickname = my_kakao["nickname"].asString();
 	fInfo.img_url = my_kakao["profile_image_url"].asString();
 	fInfo.user_id = my_kakao["user_id"].asString();
@@ -733,7 +757,7 @@ void FailPopup::resultLoadFriends(Json::Value result_data)
 	
 	for(auto i : KnownFriends::getInstance()->getFriends())
 	{
-		FailFriendRank fInfo;
+		RankFriendInfo fInfo;
 		fInfo.nickname = i.nick;
 		fInfo.img_url = i.profileUrl;
 		fInfo.user_id = i.userId;
@@ -746,7 +770,7 @@ void FailPopup::resultLoadFriends(Json::Value result_data)
 	}
 	for(auto i : UnknownFriends::getInstance()->getFriends())
 	{
-		FailFriendRank fInfo;
+		RankFriendInfo fInfo;
 		fInfo.nickname = i.nick + "[unknown]";
 		fInfo.img_url = "";
 		fInfo.user_id = i.userId;
@@ -786,7 +810,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 				}
 			}
 			
-			vector<FailFriendRank>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString().c_str());
+			vector<RankFriendInfo>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString().c_str());
 			if(iter != friend_list.end())
 			{
 				(*iter).score = score_list[i]["score"].asFloat();
@@ -796,20 +820,23 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 				CCLog("not found friend memberID");
 		}
 		
-		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](FailFriendRank t_info)
+		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
 																		{
 																			return !t_info.is_play;
 																		});
 		friend_list.erase(beginIter, friend_list.end());
 		
 		struct t_FriendSort{
-			bool operator() (const FailFriendRank& a, const FailFriendRank& b)
+			bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
 			{
 				return a.score > b.score;
 			}
 		} pred;
 		
 		sort(friend_list.begin(), friend_list.end(), pred);
+		
+		for(int i=0;i<friend_list.size();i++)
+			friend_list[i].rank = i+1;
 		
 		// create cell
 		
@@ -854,7 +881,7 @@ void FailPopup::endLoad()
 		main_menu->setVisible(true);
 		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) > 0)
 		{
-			if(!mySGD->getIsMeChallenge()  && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
+			if(replay_menu)
 				replay_menu->setVisible(true);
 		}
 	}
@@ -1034,7 +1061,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 {
 	CCLabelTTF* nickname_label;
 	CCLabelTTF* score_label;
-	FailFriendRank* member = &friend_list[idx];
+	RankFriendInfo* member = &friend_list[idx];
 	CCTableViewCell* cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();

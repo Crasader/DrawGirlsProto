@@ -20,20 +20,6 @@ using namespace std;
 
 
 class HeartTime;
-class ClearFriendRank
-{
-public:
-	string nickname;
-	string img_url;
-	string user_id;
-	float score;
-	bool is_play;
-	
-	bool operator==(string t_id)
-	{
-		return user_id == t_id;
-	};
-};
 
 enum ClearFriendCell_Tag
 {
@@ -49,6 +35,7 @@ enum ClearFriendCell_Zorder
 	kCFC_Z_img
 };
 
+class RankFriendInfo;
 class ClearPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -90,7 +77,13 @@ private:
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* time_label;
 	
-	vector<ClearFriendRank> friend_list;
+	bool is_rank_changed;
+	int before_my_rank;
+	int recent_my_rank;
+	RankFriendInfo next_rank_info;
+	
+	
+	vector<RankFriendInfo> friend_list;
 	CCTableView* rankTableView;
 	
 	void showPopup();

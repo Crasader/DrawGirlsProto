@@ -886,6 +886,9 @@ string StarGoldData::getNextSceneName()
 
 void StarGoldData::myInit()
 {
+	save_stage_rank_stageNumber = 0;
+	save_stage_rank_list.clear();
+	
 	replay_write_info.clear();
 	replay_playing_info.clear();
 	is_write_replay = false;
