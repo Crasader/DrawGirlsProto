@@ -178,6 +178,11 @@ private:
 	CCSprite* coin_img;
 	CCSprite* back_img;
 	
+	bool is_hiding;
+	bool is_cution;
+	void cutionAction();
+	void endCutionAction();
+	
 	IntPoint myPoint;
 	int directionAngle;
 	float move_speed;
