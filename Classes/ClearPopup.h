@@ -134,6 +134,7 @@ private:
 	
 	void startCalcAnimation();
 	
+	void closePopup();
 	void endLoad();
 	
 	void resultLoadFriends(Json::Value result_data);

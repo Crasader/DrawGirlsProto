@@ -29,7 +29,7 @@ HelpResultSend::~HelpResultSend()
 //	return true;
 //}
 
-bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
+bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::function<void(void)> endFunction)
 {
 	CCLayer::init();
 	if(isSuccess)
@@ -38,6 +38,7 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 		
 		addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
 																	 [=](){
+																		 endFunction();
 																		 removeFromParent();
 																	 }
 																	 ), 1);
@@ -118,6 +119,7 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess)
 									 "ui_common_ok.png",
 									 [=](CCObject* e){
 										 //																										removeFromParent();
+										 endFunction();
 										 removeFromParent();
 									 }
 									 ));

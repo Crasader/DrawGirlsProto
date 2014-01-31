@@ -131,6 +131,7 @@ private:
 	
 	CCPoint getContentPosition(int t_tag);
 	
+	void closePopup();
 	void endLoad();
 	
 	void resultLoadFriends(Json::Value result_data);

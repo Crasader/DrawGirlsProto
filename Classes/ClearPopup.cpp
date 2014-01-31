@@ -525,7 +525,7 @@ void ClearPopup::checkChallengeOrHelp()
 	{
 		////////////////// ksks
 		CCLog("zzzz");
-		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), true), kZ_CP_popup);
+		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), true, [=](){closePopup();}), kZ_CP_popup);
 	}
 	else if(mySGD->getIsMeChallenge())
 	{
@@ -555,6 +555,7 @@ void ClearPopup::checkChallengeOrHelp()
 											 if(r["result"]["code"].asInt() != GDSUCCESS)
 											 {
 												 // 에러.
+												 checkMiniGame();
 												 return;
 											 }
 											 
@@ -611,6 +612,7 @@ void ClearPopup::checkChallengeOrHelp()
 											 
 											 CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																												 {
+																													 checkMiniGame();
 																													 t_popup->removeFromParent();
 																												 });
 											 
@@ -680,6 +682,7 @@ void ClearPopup::checkChallengeOrHelp()
 			
 			CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																				{
+																					checkMiniGame();
 																					t_popup->removeFromParent();
 																				});
 			
@@ -696,10 +699,11 @@ void ClearPopup::checkChallengeOrHelp()
 	}
 	else if(mySGD->getIsAcceptChallenge())
 	{
+		mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = 0;
 		/////////////////// ksks
 		//		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
 		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
-									   ChallengeCategory::kRequestReply),
+									   ChallengeCategory::kRequestReply, [=](){closePopup();}),
 				 kZ_CP_popup);
 	}
 	else
@@ -731,6 +735,7 @@ void ClearPopup::checkChallengeOrHelp()
 												 if(r["result"]["code"].asInt() != GDSUCCESS)
 												 {
 													 // 에러.
+													 checkMiniGame();
 													 return;
 												 }
 												 
@@ -787,6 +792,7 @@ void ClearPopup::checkChallengeOrHelp()
 												 
 												 CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																													 {
+																														 checkMiniGame();
 																														 t_rc->removeFromParent();
 																														 t_popup->removeFromParent();
 																													 });
@@ -807,6 +813,10 @@ void ClearPopup::checkChallengeOrHelp()
 											 });
 			});
 			addChild(t_rc, kZ_CP_popup);
+		}
+		else
+		{
+			closePopup();
 		}
 	}
 	
@@ -830,13 +840,13 @@ void ClearPopup::endTakeCard()
 		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
 		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
 		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkMiniGame));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
 		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, t_call, NULL);
 		take_star_animation_node->runAction(t_seq);
 	}
 	else
 	{
-		checkMiniGame();
+		checkRentCard();
 	}
 }
 
@@ -850,13 +860,18 @@ void ClearPopup::checkMiniGame()
 		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
 		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
 		myDSH->fFlush();
-		MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(rand()%(kMiniGameCode_dodge+1)), bind(&ClearPopup::checkRentCard, this));
+		MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(rand()%(kMiniGameCode_dodge+1)), bind(&ClearPopup::closePopup, this));
 		addChild(t_popup, kZ_CP_popup);
 	}
 	else
 	{
-		checkRentCard();
+		closePopup();
 	}
+}
+
+void ClearPopup::closePopup()
+{
+	
 }
 
 void ClearPopup::checkRentCard()

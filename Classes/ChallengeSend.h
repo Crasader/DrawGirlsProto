@@ -17,11 +17,11 @@ public:
 	ChallengeSend();
 	virtual ~ChallengeSend();
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init(const std::string& user_id, const std::string& nickname, int score, ChallengeCategory cc);
-	static ChallengeSend* create(const std::string& user_id, const std::string& nick, int score, ChallengeCategory cc) \
+	virtual bool init(const std::string& user_id, const std::string& nickname, int score, ChallengeCategory cc, std::function<void(void)> endFunction);
+	static ChallengeSend* create(const std::string& user_id, const std::string& nick, int score, ChallengeCategory cc, std::function<void(void)> endFunction) \
 	{ \
     ChallengeSend *pRet = new ChallengeSend(); \
-    if (pRet && pRet->init(user_id, nick, score, cc)) \
+    if (pRet && pRet->init(user_id, nick, score, cc, endFunction)) \
     { \
 			pRet->autorelease(); \
 			return pRet; \

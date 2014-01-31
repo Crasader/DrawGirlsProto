@@ -12,11 +12,11 @@ public:
 	HelpResultSend();
 	virtual ~HelpResultSend();
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init(const std::string& corp_id, bool isSuccess);
-	static __TYPE__* create(const std::string& corp_id, bool isSuccess) \
+	virtual bool init(const std::string& corp_id, bool isSuccess, std::function<void(void)> endFunction);
+	static __TYPE__* create(const std::string& corp_id, bool isSuccess, std::function<void(void)> endFunction) \
 	{ \
     __TYPE__ *pRet = new __TYPE__(); \
-    if (pRet && pRet->init(corp_id, isSuccess))
+    if (pRet && pRet->init(corp_id, isSuccess, endFunction))
     { \
 			pRet->autorelease(); \
 			return pRet; \

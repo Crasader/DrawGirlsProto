@@ -1053,22 +1053,32 @@ void StartSettingScene::acceptStartAction()
 	was_end_startAction = false;
 	was_end_removeMessage = false;
 	
-	vector<CommandParam> command_list;
 	
-	////////////////////////////// ksks
-	Json::Value p;
-	p["no"] = mySGD->getRemoveMessageMailNo();
-	p["memberID"] = mySGD->getRemoveMessageMemberId();
-	CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
-	command_list.push_back(ksooParam);
-	// create message remove command
-	// command_list.push_back(message remove command);
-	
-	//////////////////////////////
-	
-	command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingScene::finalAcceptStartAction)));
-	
-	hspConnector::get()->command(command_list);
+	if(mySGD->getRemoveMessageMailNo() != 0 && mySGD->getRemoveMessageMemberId() != 0)
+	{
+		vector<CommandParam> command_list;
+		
+		////////////////////////////// ksks
+		Json::Value p;
+		p["no"] = mySGD->getRemoveMessageMailNo();
+		p["memberID"] = mySGD->getRemoveMessageMemberId();
+		CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
+		command_list.push_back(ksooParam);
+		// create message remove command
+		// command_list.push_back(message remove command);
+		
+		//////////////////////////////
+		
+		command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingScene::finalAcceptStartAction)));
+		
+		hspConnector::get()->command(command_list);
+	}
+	else
+	{
+		was_end_startAction = true;
+		was_end_removeMessage = true;
+		goToGame();
+	}
 }
 void StartSettingScene::finalSetting()
 {
@@ -1125,6 +1135,9 @@ void StartSettingScene::finalRemoveMessage(Json::Value result_data)
 
 void StartSettingScene::goToGame()
 {
+	mySGD->setRemoveMessageMailNo(0);
+	mySGD->setRemoveMessageMemberId(0);
+	
 	mySGD->is_before_selected_event_stage = is_before_selected_event_stage;
 	
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
