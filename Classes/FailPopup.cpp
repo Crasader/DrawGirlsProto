@@ -26,6 +26,7 @@
 #include "StartSettingScene.h"
 #include "ASPopupView.h"
 #include "CardAnimations.h"
+#include "TouchSuctionLayer.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -975,7 +976,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		
 		rankTableView->setDelegate(this);
 		main_case->addChild(rankTableView, kZ_FP_menu);
-		rankTableView->setTouchPriority(kCCMenuHandlerPriority+1);
+		rankTableView->setTouchPriority(kCCMenuHandlerPriority);
 		
 		//		int myPosition = rankTableView->minContainerOffset().y;
 		//		for(int i=0; i<friend_list.size(); i++)
@@ -989,6 +990,18 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		//		float yInitPosition = MAX(rankTableView->minContainerOffset().y, -cellSizeForTable(rankTableView).height*myPosition + rankTableView->getViewSize().height / 2.f);
 		//		yInitPosition = MIN(0, yInitPosition);
 		//		rankTableView->setContentOffsetInDuration(ccp(0, yInitPosition), 0.7f);
+		
+		if(suction)
+		{
+			suction->removeFromParent();
+			suction = NULL;
+		}
+		
+		suction = TouchSuctionLayer::create(kCCMenuHandlerPriority+1);
+		suction->setNotSwallowRect(CCRectMake(243, 62.5f, 208, 199));
+		suction->setTouchEnabled(true);
+		main_case->addChild(suction);
+		
 	}
 	is_loaded_list = true;
 	endLoad();
@@ -1326,9 +1339,10 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 					CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(FailPopup::cellAction));
 					help_item->setTag(kFFC_T_menuBase);
 					help_item->setUserData((void*)idx);
-					CCMenu* help_menu = CCMenu::createWithItem(help_item);
+					ScrollMenu* help_menu = ScrollMenu::create(help_item, NULL);
 					help_menu->setPosition(ccp(180,21));
 					cell->addChild(help_menu, kFFC_Z_img);
+					help_menu->setTouchPriority(kCCMenuHandlerPriority+2);
 				}
 				else
 				{

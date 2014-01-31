@@ -35,6 +35,7 @@ enum FailFriendCell_Zorder
 	kFFC_Z_img
 };
 
+class TouchSuctionLayer;
 class RankFriendInfo;
 class FailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
@@ -133,6 +134,8 @@ private:
 	
 	void closePopup();
 	void endLoad();
+	
+	TouchSuctionLayer* suction;
 	
 	void resultLoadFriends(Json::Value result_data);
 	void resultGetStageScoreList(Json::Value result_data);
