@@ -893,17 +893,12 @@ void FeverCoin::removing()
 
 void FeverCoin::startCheck()
 {
-	schedule(schedule_selector(FeverCoin::checking));
+	schedule(schedule_selector(FeverCoin::checking), 1.f/30.f);
 }
 
 void FeverCoin::checking()
 {
-	if(myGD->mapState[my_point.x][my_point.y] != mapOutline && (myGD->mapState[my_point.x][my_point.y] == mapOldget || myGD->mapState[my_point.x][my_point.y] == mapOldline ||
-																myGD->mapState[my_point.x-1][my_point.y] == mapOldget || myGD->mapState[my_point.x-1][my_point.y] == mapOldline ||
-																myGD->mapState[my_point.x+1][my_point.y] == mapOldget || myGD->mapState[my_point.x+1][my_point.y] == mapOldline ||
-																myGD->mapState[my_point.x][my_point.y-1] == mapOldget || myGD->mapState[my_point.x][my_point.y-1] == mapOldline ||
-																myGD->mapState[my_point.x][my_point.y+1] == mapOldget || myGD->mapState[my_point.x][my_point.y+1] == mapOldline ||
-																myGD->mapState[my_point.x-1][my_point.y-1] == mapOldget || myGD->mapState[my_point.x-1][my_point.y-1] == mapOldline ||
+	if(myGD->mapState[my_point.x][my_point.y] != mapOutline && (myGD->mapState[my_point.x-1][my_point.y-1] == mapOldget || myGD->mapState[my_point.x-1][my_point.y-1] == mapOldline ||
 																myGD->mapState[my_point.x-1][my_point.y+1] == mapOldget || myGD->mapState[my_point.x-1][my_point.y+1] == mapOldline ||
 																myGD->mapState[my_point.x+1][my_point.y-1] == mapOldget || myGD->mapState[my_point.x+1][my_point.y-1] == mapOldline ||
 																myGD->mapState[my_point.x+1][my_point.y+1] == mapOldget || myGD->mapState[my_point.x+1][my_point.y+1] == mapOldline))
@@ -957,15 +952,14 @@ FeverCoinParent* FeverCoinParent::create()
 
 void FeverCoinParent::startFever()
 {
-	for(int i=6;i<mapHeightInnerEnd;i+=12)
+	for(int i=4;i<mapHeightInnerEnd;i+=9)
 	{
-		for(int j=3;j<mapWidthInnerEnd;j+=12)
+		for(int j=4;j<mapWidthInnerEnd;j+=9)
 		{
-			if((myGD->mapState[j][i] == mapEmpty || myGD->mapState[j][i] == mapOutline) &&
-			   (myGD->mapState[j-1][i-1] == mapEmpty || myGD->mapState[j-1][i-1] == mapOutline) && (myGD->mapState[j-1][i] == mapEmpty || myGD->mapState[j-1][i] == mapOutline) &&
-			   (myGD->mapState[j-1][i+1] == mapEmpty || myGD->mapState[j-1][i+1] == mapOutline) && (myGD->mapState[j][i-1] == mapEmpty || myGD->mapState[j][i-1] == mapOutline) &&
-			   (myGD->mapState[j][i+1] == mapEmpty || myGD->mapState[j][i+1] == mapOutline) && (myGD->mapState[j+1][i-1] == mapEmpty || myGD->mapState[j+1][i-1] == mapOutline) &&
-			   (myGD->mapState[j+1][i] == mapEmpty || myGD->mapState[j+1][i] == mapOutline) && (myGD->mapState[j+1][i+1] == mapEmpty || myGD->mapState[j+1][i+1] == mapOutline))
+			if((myGD->mapState[j-1][i-1] == mapEmpty || myGD->mapState[j-1][i-1] == mapOutline) &&
+			   (myGD->mapState[j-1][i+1] == mapEmpty || myGD->mapState[j-1][i+1] == mapOutline) &&
+			   (myGD->mapState[j+1][i-1] == mapEmpty || myGD->mapState[j+1][i-1] == mapOutline) &&
+			   (myGD->mapState[j+1][i+1] == mapEmpty || myGD->mapState[j+1][i+1] == mapOutline))
 			{
 				FeverCoin* t_fc = FeverCoin::create(IntPoint(j,i), this, callfuncO_selector(FeverCoinParent::addGetCoinList));
 				addChild(t_fc);
