@@ -1456,7 +1456,11 @@ void PuzzleScene::menuAction(CCObject* sender)
 			else
 			{
 				CCLog("not selected friend");
-				is_menu_enable = true;
+				int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+				
+				mySD->setSilType(selected_stage_number);
+				CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 			}
 		}
 		else if(tag == kPuzzleMenuTag_changeMode)
