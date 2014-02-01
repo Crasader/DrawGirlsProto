@@ -1917,6 +1917,12 @@ void PuzzleScene::resultGetStageScoreList(Json::Value result_data)
 				CCLog("not found friend memberID : %s", score_list[i]["memberID"].asString().c_str());
 		}
 		
+		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
+										{
+											return !t_info.is_play;
+										});
+		friend_list.erase(beginIter, friend_list.end());
+		
 		struct t_FriendSort{
 			bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
 			{
