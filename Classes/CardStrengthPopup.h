@@ -26,6 +26,7 @@ enum CardStrengthAlign{
 
 class CardSortInfo;
 class TouchSuctionLayer;
+class StrengthCardAnimation;
 class CardStrengthPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -67,13 +68,16 @@ private:
 	
 	CCSprite* strength_probability;
 	
-	TouchSuctionLayer* result_popup;
+//	TouchSuctionLayer* result_popup;
 	
 	CCTableView* offering_table;
 	vector<CardSortInfo> offering_list;
 	
 	CardStrengthAlign recent_align;
 	
+	StrengthCardAnimation* result_popup;
+	string result_string;
+	bool is_success;
 	CCSprite* loading_img;
 	CCLabelTTF* loading_label;
 	CCMenu* replay_menu;
