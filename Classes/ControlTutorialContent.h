@@ -37,14 +37,38 @@ public:
 		{
 			close_menu->setVisible(true);
 		}
+		else if(t_name == "tutorial1")
+		{
+			state_number = 1;
+		}
+		else if(t_name == "tutorial2")
+		{
+			state_number = 3;
+		}
+		else if(t_name == "tutorial3")
+		{
+			state_number = 5;
+		}
+		else if(t_name == "tutorial4")
+		{
+			close_menu->setVisible(true);
+			touch_menu->setVisible(false);
+		}
 	}
 	
 private:
 	int touch_priority;
 	CCMenuLambda* close_menu;
+	CCMenu* touch_menu;
+	
+	CCBAnimationManager* ani_manager;
+	
+	int state_number;
 	
 	void myInit(int t_touch_priority, function<void(CCObject*)> t_selector)
 	{
+		state_number = 0;
+		
 		touch_priority = t_touch_priority;
 		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
 		case_back->setPosition(CCPointZero);
@@ -65,7 +89,8 @@ private:
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		CCSprite* control_tutorial = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("tutorial.ccbi",this));
-		reader->getAnimationManager()->setDelegate(this);
+		ani_manager = reader->getAnimationManager();
+		ani_manager->setDelegate(this);
 		control_tutorial->setScale(0.65f);
 		control_tutorial->setPosition(ccp(0,0));
 		clipper->addChild(control_tutorial);
@@ -85,6 +110,36 @@ private:
 		close_menu->setTouchPriority(touch_priority-1);
 		close_menu->setPosition(ccp(140,112));
 		addChild(close_menu);
+		
+		CCSprite* n_touch = CCSprite::create("whitePaper.png");
+		n_touch->setOpacity(0);
+		CCSprite* s_touch = CCSprite::create("whitePaper.png");
+		s_touch->setOpacity(0);
+		
+		CCMenuItem* t_touch_item = CCMenuItemSprite::create(n_touch, s_touch, this, menu_selector(ControlTutorialContent::menuAction));
+		touch_menu = CCMenu::createWithItem(t_touch_item);
+		touch_menu->setPosition(CCPointZero);
+		addChild(touch_menu);
+		touch_menu->setTouchPriority(touch_priority-2);
+	}
+	
+	void menuAction(CCObject* sender)
+	{
+		if(state_number == 1)
+		{
+			state_number = 2;
+			ani_manager->runAnimationsForSequenceNamed("tutorial2");
+		}
+		else if(state_number == 3)
+		{
+			state_number = 4;
+			ani_manager->runAnimationsForSequenceNamed("tutorial3");
+		}
+		else if(state_number == 5)
+		{
+			state_number = 6;
+			ani_manager->runAnimationsForSequenceNamed("tutorial4");
+		}
 	}
 };
 

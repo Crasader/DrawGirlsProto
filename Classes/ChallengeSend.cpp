@@ -33,7 +33,7 @@ ChallengeSend::~ChallengeSend()
 //}
 
 
-bool ChallengeSend::init(const std::string& user_id, const std::string& nickname, int score, ChallengeCategory cc)
+bool ChallengeSend::init(const std::string& user_id, const std::string& nickname, int score, ChallengeCategory cc, std::function<void(void)> endFunction)
 {
 	CCLayer::init();
 	
@@ -66,6 +66,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																	 if(r["result"]["code"].asInt() != GDSUCCESS)
 																	 {
 																		 // 에러.
+																		 endFunction();
 																		 return;
 																	 }
 																	 
@@ -98,6 +99,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																									"ui_common_ok.png",
 																									[=](CCObject* e){
 																										//																										removeFromParent();
+																										endFunction();
 																									}
 																									));
 																	 addChild(av, 1);
@@ -138,6 +140,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 
 																		 if(r["result"]["code"].asInt() != GDSUCCESS)
 																		 {
+																			 endFunction();
 																			 return;
 																		 }
 																		 
@@ -152,6 +155,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
 																																		[=](){
 																																			CCLog("hat close");
+																																			endFunction();
 																																		}
 																																		), 1);
 
@@ -182,7 +186,10 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 //																		setHelpSendTime(recvId);
 																		 GraphDogLib::JsonToLog("sendMessage", r);
 																		 if(r["result"]["code"].asInt() != GDSUCCESS)
+																		 {
+																			 endFunction();
 																			 return;
+																		 }
 																		 
 																		 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
 																		 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
@@ -205,6 +212,7 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																										"ui_common_ok.png",
 																										[=](CCObject* e){
 																											//																										removeFromParent();
+																											endFunction();
 																										}
 																										));
 																		 addChild(av, 1);

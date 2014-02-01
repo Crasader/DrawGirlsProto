@@ -31,6 +31,9 @@
 #include "MiniGamePopup.h"
 #include "TutorialFlowStep.h"
 #include "AchieveNoti.h"
+#include "SendMessageUtil.h"
+#include "RankChange.h"
+#include "CardAnimations.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -104,11 +107,57 @@ bool ClearPopup::init()
 	p1["data"] = p1_data_writer.write(p1_data);
 	hspConnector::get()->command("setweeklyscore", p1, NULL);
 	
-	Json::Value p;
-	p["memberID"]=hspConnector::get()->getKakaoID();
-	p["score"]=int(mySGD->getScore());
-	p["stageNo"]=mySD->getSilType();
-	hspConnector::get()->command("addStageScore",p,NULL);
+	
+	is_rank_changed = false;
+	if(mySGD->save_stage_rank_stageNumber == mySD->getSilType())
+	{
+		// 받아왔던 rank list 사용
+		string my_id = hspConnector::get()->getKakaoID();
+		
+		vector<RankFriendInfo>::iterator iter = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
+		if(iter != mySGD->save_stage_rank_list.end())
+		{
+			// found
+			if((*iter).score < mySGD->getScore())
+			{
+				Json::Value p;
+				p["memberID"]=hspConnector::get()->getKakaoID();
+				p["score"]=int(mySGD->getScore());
+				p["stageNo"]=mySD->getSilType();
+				hspConnector::get()->command("addStageScore",p,NULL);
+				
+				
+				before_my_rank = (*iter).rank;
+				(*iter).score = mySGD->getScore();
+				struct t_FriendSort{
+					bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
+					{
+						return a.score > b.score;
+					}
+				} pred;
+				
+				sort(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), pred);
+				
+				for(int i=0;i<mySGD->save_stage_rank_list.size();i++)
+					mySGD->save_stage_rank_list[i].rank = i+1;
+				
+				vector<RankFriendInfo>::iterator iter2 = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
+				if((*iter2).rank < before_my_rank)
+				{
+					is_rank_changed = true;
+					recent_my_rank = (*iter2).rank;
+					next_rank_info = (*(iter2+1));
+				}
+			}
+		}
+		else
+		{
+			CCLog("not found myKakaoID");
+		}
+		
+		friend_list = mySGD->save_stage_rank_list;
+		is_loaded_list = true;
+	}
     
 	main_case = CCSprite::create("ending_back.png");
 	main_case->setAnchorPoint(ccp(0,0));
@@ -149,8 +198,76 @@ bool ClearPopup::init()
 	else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
 	else												take_level = 1;
 	
-	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level, this, callfunc_selector(ClearPopup::endTakeCard));
-	addChild(t_popup, kZ_CP_popup);
+	int take_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level);
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number) > 0)
+	{
+		// 강화
+		
+		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, take_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number));
+		CCLog("strength_rate : %.3f", strength_rate);
+		
+		random_device rd;
+		default_random_engine e1(rd());
+		uniform_real_distribution<float> uniform_dist(0.f, 1.f);
+		
+		float result_value = uniform_dist(e1);
+		CCLog("result value : %.3f", result_value);
+		
+		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",stage_number,take_level)->getCString());
+		CardCase* cardCase = CardCase::create(take_card_number);
+		card->addChild(cardCase);
+		
+		
+		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",stage_number,take_level)->getCString());
+		CardCase* cardCase2 = CardCase::create(take_card_number);
+		card2->addChild(cardCase2);
+		
+		
+		StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-190);
+		
+		b->setCloseFunc([this](){
+			CCLog("close Func");
+			this->endTakeCard();
+		});
+		
+		if(result_value <= strength_rate)
+		{
+			CCLog("success");
+			
+			b->startSuccess("카드레벨 +1");
+			
+			myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number)+1);
+			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, nullptr);
+		}
+		else
+		{
+			CCLog("fail");
+			
+			b->startFail("강화 실패");
+		}
+		
+		addChild(b, kZ_CP_popup);
+	}
+	else
+	{
+		// 획득
+		
+		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",stage_number,take_level)->getCString());
+		CardCase* cardCase = CardCase::create(take_card_number);
+		card->addChild(cardCase);
+		
+		TakeCardAnimation* b = TakeCardAnimation::create(card,-190);
+		b->setCloseFunc([this](){
+			CCLog("close Func");
+			this->endTakeCard();
+		});
+		b->start();
+		addChild(b, kZ_CP_popup);
+	}
+	
+//	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level, this, callfunc_selector(ClearPopup::endTakeCard));
+//	addChild(t_popup, kZ_CP_popup);
 	/////////////////////////////////////////////
 	
 	
@@ -190,7 +307,6 @@ bool ClearPopup::init()
 		bronze_star = CCSprite::create("ending_star_bronze.png");
 		bronze_star->setPosition(ccp(89,173));
 		main_case->addChild(bronze_star, kZ_CP_img);
-		bronze_star->setTag(1);
 	}
 	else
 		bronze_star = NULL;
@@ -200,7 +316,6 @@ bool ClearPopup::init()
 		silver_star = CCSprite::create("ending_star_silver.png");
 		silver_star->setPosition(ccp(175,173));
 		main_case->addChild(silver_star, kZ_CP_img);
-		silver_star->setTag(1);
 	}
 	else
 		silver_star = NULL;
@@ -210,52 +325,41 @@ bool ClearPopup::init()
 		gold_star = CCSprite::create("ending_star_gold.png");
 		gold_star->setPosition(ccp(132,177));
 		main_case->addChild(gold_star, kZ_CP_img);
-		gold_star->setTag(1);
 	}
 	else
 		gold_star = NULL;
+	
+	take_star_animation_node = NULL;
 	
 	if(!bronze_star && take_level == 1)
 	{
 		bronze_star = CCSprite::create("ending_star_bronze.png");
 		bronze_star->setPosition(ccp(89,173));
 		main_case->addChild(bronze_star, kZ_CP_img);
-		bronze_star->setTag(0);
 		
 		bronze_star->setScale(0);
-		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
-		bronze_star->runAction(t_seq);
+		
+		take_star_animation_node = bronze_star;
 	}
 	else if(!silver_star && take_level == 2)
 	{
 		silver_star = CCSprite::create("ending_star_silver.png");
 		silver_star->setPosition(ccp(175,173));
 		main_case->addChild(silver_star, kZ_CP_img);
-		silver_star->setTag(0);
 		
 		silver_star->setScale(0);
-		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
-		silver_star->runAction(t_seq);
+		
+		take_star_animation_node = silver_star;
 	}
 	else if(!gold_star && take_level == 3)
 	{
 		gold_star = CCSprite::create("ending_star_gold.png");
 		gold_star->setPosition(ccp(132,177));
 		main_case->addChild(gold_star, kZ_CP_img);
-		gold_star->setTag(0);
 		
 		gold_star->setScale(0);
-		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
-		gold_star->runAction(t_seq);
+		
+		take_star_animation_node = gold_star;
 	}
 	
 	
@@ -277,9 +381,34 @@ bool ClearPopup::init()
 	time_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(time_label, kZ_CP_img);
 	
+	string ok_filename;
 	
-	CCSprite* n_ok = CCSprite::create("ending_next.png");
-	CCSprite* s_ok = CCSprite::create("ending_next.png");
+	if(mySGD->getIsAcceptHelp())
+	{
+		ok_filename = "ending_main.png";
+	}
+	else if(mySGD->getIsMeChallenge())
+	{
+		if(mySGD->getScore() >= mySGD->getMeChallengeTargetScore())
+			ok_filename = "ending_main.png";
+		else
+			ok_filename = "ending_fail.png";
+	}
+	else if(mySGD->getIsAcceptChallenge())
+	{
+		if(mySGD->getScore() >= mySGD->getAcceptChallengeScore())
+			ok_filename = "ending_main.png";
+		else
+			ok_filename = "ending_fail.png";
+	}
+	else
+	{
+		ok_filename = "ending_next.png";
+	}
+	
+	
+	CCSprite* n_ok = CCSprite::create(ok_filename.c_str());
+	CCSprite* s_ok = CCSprite::create(ok_filename.c_str());
 	s_ok->setColor(ccGRAY);
 	
 	CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(ClearPopup::menuAction));
@@ -307,7 +436,22 @@ bool ClearPopup::init()
 	}
 	else
 	{
-		replay_menu = NULL;
+		if((mySGD->getIsMeChallenge() && mySGD->getScore() < mySGD->getMeChallengeTargetScore()) || (mySGD->getIsAcceptChallenge() && mySGD->getScore() < mySGD->getAcceptChallengeScore()))
+		{
+			CCSprite* n_replay = CCSprite::create("ending_replay2.png");
+			CCSprite* s_replay = CCSprite::create("ending_replay2.png");
+			s_replay->setColor(ccGRAY);
+			
+			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ClearPopup::menuAction));
+			replay_item->setTag(kMT_CP_replay);
+			
+			replay_menu = CCMenu::createWithItem(replay_item);
+			replay_menu->setVisible(false);
+			replay_menu->setPosition(ccp(130,41));
+			main_case->addChild(replay_menu, kZ_CP_menu);
+		}
+		else
+			replay_menu = NULL;
 	}
 	
 	
@@ -377,31 +521,361 @@ void ClearPopup::endHidePopup()
 
 void ClearPopup::checkChallengeOrHelp()
 {
-	if(mySGD->getIsMeChallenge())
-	{
-		// ksks
-		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
-																	 ChallengeCategory::kRequest),
-						 kZ_CP_popup);
-		//		getMeChallengeTarget
-	}
-	
-	if(mySGD->getIsAcceptChallenge())
-	{
-		/////////////////// ksks
-		//		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
-		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
-																	 ChallengeCategory::kRequestReply),
-						 kZ_CP_popup);
-	}
-	
 	if(mySGD->getIsAcceptHelp())
 	{
 		////////////////// ksks
 		CCLog("zzzz");
-		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), true), kZ_CP_popup);
+		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), true, [=](){closePopup();}), kZ_CP_popup);
+	}
+	else if(mySGD->getIsMeChallenge())
+	{
+		if(mySGD->getScore() >= mySGD->getMeChallengeTargetScore())
+		{
+			Json::Value p;
+			Json::Value contentJson;
+			contentJson["msg"] = (mySGD->getMeChallengeTargetNick() + "님에게 도전!");
+			contentJson["challengestage"] = mySD->getSilType();
+			contentJson["score"] = mySGD->getScore();
+			contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+			contentJson["replaydata"] = mySGD->replay_write_info;
+			p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+			std::string recvId = mySGD->getMeChallengeTarget();
+			p["receiverMemberID"] = recvId;
+			
+			p["senderMemberID"] = hspConnector::get()->getKakaoID();
+			
+			p["type"] = kChallengeRequest;
+			hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+										 {
+											 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+											 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+											 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+											 
+											 //																		setHelpSendTime(recvId);
+											 if(r["result"]["code"].asInt() != GDSUCCESS)
+											 {
+												 // 에러.
+												 checkMiniGame();
+												 return;
+											 }
+											 
+											 setChallengeSendTime(mySGD->getMeChallengeTarget());
+											 //																	 friend_list.erase(friend_list.begin() + tag);
+											 GraphDogLib::JsonToLog("sendMessage", r);
+											 
+											 //																		obj->removeFromParent();
+											 ASPopupView* t_popup = ASPopupView::create(-200);
+											 
+											 CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+											 float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+											 if(screen_scale_x < 1.f)
+												 screen_scale_x = 1.f;
+											 
+											 t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+											 t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+											 t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+											 
+											 CCNode* t_container = CCNode::create();
+											 t_popup->setContainerNode(t_container);
+											 addChild(t_popup, kZ_CP_popup);
+											 
+											 CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+											 case_back->setPosition(CCPointZero);
+											 t_container->addChild(case_back);
+											 
+											 case_back->setContentSize(CCSizeMake(245, 220));
+											 
+											 CCSprite* title_img = CCSprite::create("message_title_challenge_success.png");
+											 title_img->setPosition(ccp(0, 80));
+											 t_container->addChild(title_img);
+											 
+											 CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+											 content_back->setPosition(CCPointZero);
+											 t_container->addChild(content_back);
+											 
+											 content_back->setContentSize(CCSizeMake(220, 100));
+											 
+											 CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님에게\n승리메세지가 발송되었습니다.", mySGD->getMeChallengeTargetNick().c_str())->getCString(),
+																						 mySGD->getFont().c_str(), 13);
+											 ment_label->setPosition(CCPointZero);
+											 t_container->addChild(ment_label);
+											 
+											 CCSprite* n_close = CCSprite::create("popup4_orange_button.png");
+											 CCLabelTTF* n_label = CCLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+											 n_label->setPosition(ccp(n_close->getContentSize().width/2.f, n_close->getContentSize().height/2.f));
+											 n_close->addChild(n_label);
+											 CCSprite* s_close = CCSprite::create("popup4_orange_button.png");
+											 s_close->setColor(ccGRAY);
+											 CCLabelTTF* s_label = CCLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+											 s_label->setPosition(ccp(s_close->getContentSize().width/2.f, s_close->getContentSize().height/2.f));
+											 s_close->addChild(s_label);
+											 
+											 CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																												 {
+																													 checkMiniGame();
+																													 t_popup->removeFromParent();
+																												 });
+											 
+											 CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+											 close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+											 close_menu->setPosition(ccp(0,-80));
+											 t_container->addChild(close_menu);
+											 
+											 Json::Value p2;
+											 p2["receiver_id"] = recvId;
+											 p2["message"] = "도전을 신청한다!!";
+											 hspConnector::get()->kSendMessage
+											 (p2, [=](Json::Value r)
+											  {
+												  GraphDogLib::JsonToLog("kSendMessage", r);
+											  });
+										 });
+			
+		}
+		else
+		{
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			CCNode* t_container = CCNode::create();
+			t_popup->setContainerNode(t_container);
+			addChild(t_popup, kZ_CP_popup);
+			
+			CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+			case_back->setPosition(CCPointZero);
+			t_container->addChild(case_back);
+			
+			case_back->setContentSize(CCSizeMake(245, 220));
+			
+			CCSprite* title_img = CCSprite::create("message_title_challenge_fail.png");
+			title_img->setPosition(ccp(0, 80));
+			t_container->addChild(title_img);
+			
+			CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+			content_back->setPosition(CCPointZero);
+			t_container->addChild(content_back);
+			
+			content_back->setContentSize(CCSizeMake(220, 100));
+			
+			CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님의 기록을\n넘지 못했습니다.", mySGD->getMeChallengeTargetNick().c_str())->getCString(),
+														mySGD->getFont().c_str(), 13);
+			ment_label->setPosition(CCPointZero);
+			t_container->addChild(ment_label);
+			
+			CCSprite* n_close = CCSprite::create("popup4_orange_button.png");
+			CCLabelTTF* n_label = CCLabelTTF::create("확인", mySGD->getFont().c_str(), 13);
+			n_label->setPosition(ccp(n_close->getContentSize().width/2.f, n_close->getContentSize().height/2.f));
+			n_close->addChild(n_label);
+			CCSprite* s_close = CCSprite::create("popup4_orange_button.png");
+			s_close->setColor(ccGRAY);
+			CCLabelTTF* s_label = CCLabelTTF::create("확인", mySGD->getFont().c_str(), 13);
+			s_label->setPosition(ccp(s_close->getContentSize().width/2.f, s_close->getContentSize().height/2.f));
+			s_close->addChild(s_label);
+			
+			CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																				{
+																					checkMiniGame();
+																					t_popup->removeFromParent();
+																				});
+			
+			CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+			close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+			close_menu->setPosition(ccp(0,-80));
+			t_container->addChild(close_menu);
+		}
+		
+		// ksks
+//		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
+//									   ChallengeCategory::kRequest), kZ_CP_popup);
+		//		getMeChallengeTarget
+	}
+	else if(mySGD->getIsAcceptChallenge())
+	{
+		mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = 0;
+		/////////////////// ksks
+		//		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
+		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
+									   ChallengeCategory::kRequestReply, [=](){closePopup();}),
+				 kZ_CP_popup);
+	}
+	else
+	{
+		if(is_rank_changed)
+		{
+			RankChange* t_rc = RankChange::create(hspConnector::get()->getKakaoProfileURL(), recent_my_rank, hspConnector::get()->getKakaoNickname(), mySGD->getScore(), next_rank_info.img_url, recent_my_rank+1, next_rank_info.nickname, next_rank_info.score, [=](){
+				Json::Value p;
+				Json::Value contentJson;
+				contentJson["msg"] = (next_rank_info.nickname + "님에게 도전!");
+				contentJson["challengestage"] = mySD->getSilType();
+				contentJson["score"] = mySGD->getScore();
+				contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+				contentJson["replaydata"] = mySGD->replay_write_info;
+				p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+				std::string recvId = next_rank_info.user_id;
+				p["receiverMemberID"] = recvId;
+				
+				p["senderMemberID"] = hspConnector::get()->getKakaoID();
+				
+				p["type"] = kChallengeRequest;
+				hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+											 {
+												 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+												 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+												 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+												 
+												 //																		setHelpSendTime(recvId);
+												 if(r["result"]["code"].asInt() != GDSUCCESS)
+												 {
+													 // 에러.
+													 checkMiniGame();
+													 return;
+												 }
+												 
+												 setChallengeSendTime(next_rank_info.user_id);
+												 //																	 friend_list.erase(friend_list.begin() + tag);
+												 GraphDogLib::JsonToLog("sendMessage", r);
+												 
+												 //																		obj->removeFromParent();
+												 ASPopupView* t_popup = ASPopupView::create(-250);
+												 
+												 CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+												 float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+												 if(screen_scale_x < 1.f)
+													 screen_scale_x = 1.f;
+												 
+												 t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+												 t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+												 t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+												 
+												 CCNode* t_container = CCNode::create();
+												 t_popup->setContainerNode(t_container);
+												 addChild(t_popup, kZ_CP_popup);
+												 
+												 CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+												 case_back->setPosition(CCPointZero);
+												 t_container->addChild(case_back);
+												 
+												 case_back->setContentSize(CCSizeMake(245, 220));
+												 
+												 CCSprite* title_img = CCSprite::create("message_title_challenge_success.png");
+												 title_img->setPosition(ccp(0, 80));
+												 t_container->addChild(title_img);
+												 
+												 CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+												 content_back->setPosition(CCPointZero);
+												 t_container->addChild(content_back);
+												 
+												 content_back->setContentSize(CCSizeMake(220, 100));
+												 
+												 CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님에게\n승리메세지가 발송되었습니다.", next_rank_info.nickname.c_str())->getCString(),
+																							 mySGD->getFont().c_str(), 13);
+												 ment_label->setPosition(CCPointZero);
+												 t_container->addChild(ment_label);
+												 
+												 CCSprite* n_close = CCSprite::create("popup4_orange_button.png");
+												 CCLabelTTF* n_label = CCLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+												 n_label->setPosition(ccp(n_close->getContentSize().width/2.f, n_close->getContentSize().height/2.f));
+												 n_close->addChild(n_label);
+												 CCSprite* s_close = CCSprite::create("popup4_orange_button.png");
+												 s_close->setColor(ccGRAY);
+												 CCLabelTTF* s_label = CCLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+												 s_label->setPosition(ccp(s_close->getContentSize().width/2.f, s_close->getContentSize().height/2.f));
+												 s_close->addChild(s_label);
+												 
+												 CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																													 {
+																														 checkMiniGame();
+																														 t_rc->removeFromParent();
+																														 t_popup->removeFromParent();
+																													 });
+												 
+												 CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+												 close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+												 close_menu->setPosition(ccp(0,-80));
+												 t_container->addChild(close_menu);
+												 
+												 Json::Value p2;
+												 p2["receiver_id"] = recvId;
+												 p2["message"] = "도전을 신청한다!!";
+												 hspConnector::get()->kSendMessage
+												 (p2, [=](Json::Value r)
+												  {
+													  GraphDogLib::JsonToLog("kSendMessage", r);
+												  });
+											 });
+			});
+			addChild(t_rc, kZ_CP_popup);
+		}
+		else
+		{
+			closePopup();
+		}
 	}
 	
+	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+	
+	if(recent_step == kTutorialFlowStep_homeClick)
+	{
+		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+		t_tutorial->initStep(kTutorialFlowStep_homeClick);
+		addChild(t_tutorial, kZ_CP_popup);
+		
+		tutorial_node = t_tutorial;
+	}
+}
+
+void ClearPopup::endTakeCard()
+{
+	startCalcAnimation();
+	if(take_star_animation_node)
+	{
+		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, t_call, NULL);
+		take_star_animation_node->runAction(t_seq);
+	}
+	else
+	{
+		checkRentCard();
+	}
+}
+
+void ClearPopup::checkMiniGame()
+{
+	bool is_minigame_stage = NSDS_GB(mySD->getSilType(), kSDS_SI_minigame_b);
+	if(is_minigame_stage && !myDSH->getBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType()))
+	{
+		int minigame_played_cnt = myDSH->getIntegerForKey(kDSH_Key_minigame_playedCnt)+1;
+		myDSH->setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
+		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
+		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
+		myDSH->fFlush();
+		MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(rand()%(kMiniGameCode_dodge+1)), bind(&ClearPopup::closePopup, this));
+		addChild(t_popup, kZ_CP_popup);
+	}
+	else
+	{
+		closePopup();
+	}
+}
+
+void ClearPopup::closePopup()
+{
+	
+}
+
+void ClearPopup::checkRentCard()
+{
 	if(mySGD->getWasUsedFriendCard())
 	{
 		ASPopupView* t_popup = ASPopupView::create(-200);
@@ -430,7 +904,7 @@ void ClearPopup::checkChallengeOrHelp()
 		t_container->addChild(title_img);
 		
 		CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님의 카드가 도움이 되었나요?\n하트로 고마움을 표현하세요.", mySGD->getSelectedFriendCardData().nick.c_str())->getCString(),
-																								mySGD->getFont().c_str(), 20);
+													mySGD->getFont().c_str(), 20);
 		ment_label->setPosition(CCPointZero);
 		t_container->addChild(ment_label);
 		
@@ -439,9 +913,10 @@ void ClearPopup::checkChallengeOrHelp()
 		s_close->setColor(ccGRAY);
 		
 		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																																				{
-																																					t_popup->removeFromParent();
-																																				});
+																			{
+																				checkChallengeOrHelp();
+																				t_popup->removeFromParent();
+																			});
 		
 		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
 		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
@@ -454,43 +929,18 @@ void ClearPopup::checkChallengeOrHelp()
 		s_send_heart->setColor(ccGRAY);
 		
 		CCMenuItemSpriteLambda* send_heart_item = CCMenuItemSpriteLambda::create(n_send_heart, s_send_heart, [=](CCObject* sender)
-																																						 {
-																																							 // 경수
-																																							 // 하트 보내기 작업
-																																							 // 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
-																																							 t_popup->removeFromParent();
-																																						 });
+																				 {
+																					 // 경수
+																					 // 하트 보내기 작업
+																					 // 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
+																					 checkChallengeOrHelp();
+																					 t_popup->removeFromParent();
+																				 });
 		
 		CCMenuLambda* send_heart_menu = CCMenuLambda::createWithItem(send_heart_item);
 		send_heart_menu->setTouchPriority(t_popup->getTouchPriority()-1);
 		send_heart_menu->setPosition(ccp(0,-100));
 		t_container->addChild(send_heart_menu);
-	}
-	
-	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
-	
-	if(recent_step == kTutorialFlowStep_homeClick)
-	{
-		TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
-		t_tutorial->initStep(kTutorialFlowStep_homeClick);
-		addChild(t_tutorial, kZ_CP_popup);
-		
-		tutorial_node = t_tutorial;
-	}
-}
-
-void ClearPopup::endTakeCard()
-{
-	bool is_minigame_stage = NSDS_GB(mySD->getSilType(), kSDS_SI_minigame_b);
-	if(is_minigame_stage && !myDSH->getBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType()))
-	{
-		int minigame_played_cnt = myDSH->getIntegerForKey(kDSH_Key_minigame_playedCnt)+1;
-		myDSH->setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
-		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
-		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
-		myDSH->fFlush();
-		MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(rand()%(kMiniGameCode_dodge+1)), bind(&ClearPopup::checkChallengeOrHelp, this));
-		addChild(t_popup, kZ_CP_popup);
 	}
 	else
 	{
@@ -522,7 +972,7 @@ void ClearPopup::resultLoadFriends(Json::Value result_data)
 		
 		Json::Value my_kakao = hspConnector::get()->myKakaoInfo;
 		
-		ClearFriendRank fInfo;
+		RankFriendInfo fInfo;
 		fInfo.nickname = my_kakao["nickname"].asString();
 		fInfo.img_url = my_kakao["profile_image_url"].asString();
 		fInfo.user_id = my_kakao["user_id"].asString();
@@ -534,24 +984,26 @@ void ClearPopup::resultLoadFriends(Json::Value result_data)
 		
 		for(auto i : KnownFriends::getInstance()->getFriends())
 		{
-			ClearFriendRank fInfo;
+			RankFriendInfo fInfo;
 			fInfo.nickname = i.nick;
 			fInfo.img_url = i.profileUrl;
 			fInfo.user_id = i.userId;
 			fInfo.score = 0;
 			fInfo.is_play = false;
+			fInfo.is_message_blocked = i.messageBlocked;
 			friend_list.push_back(fInfo);
 			
 			p["memberIDList"].append(i.userId);
 		}
 		for(auto i : UnknownFriends::getInstance()->getFriends())
 		{
-			ClearFriendRank fInfo;
+			RankFriendInfo fInfo;
 			fInfo.nickname = i.nick + "[unknown]";
 			fInfo.img_url = i.profileUrl;
 			fInfo.user_id = i.userId;
 			fInfo.score = 0;
 			fInfo.is_play = false;
+			fInfo.is_message_blocked = i.messageBlocked;
 			friend_list.push_back(fInfo);
 			
 			p["memberIDList"].append(i.userId);
@@ -585,7 +1037,7 @@ void ClearPopup::resultGetStageScoreList(Json::Value result_data)
 				}
 			}
 			
-			vector<ClearFriendRank>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString().c_str());
+			vector<RankFriendInfo>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString().c_str());
 			if(iter != friend_list.end())
 			{
 				(*iter).score = score_list[i]["score"].asFloat();
@@ -595,20 +1047,23 @@ void ClearPopup::resultGetStageScoreList(Json::Value result_data)
 				CCLog("not found friend memberID");
 		}
 		
-		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](ClearFriendRank t_info)
+		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
 										{
 											return !t_info.is_play;
 										});
 		friend_list.erase(beginIter, friend_list.end());
 		
 		struct t_FriendSort{
-			bool operator() (const ClearFriendRank& a, const ClearFriendRank& b)
+			bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
 			{
 				return a.score > b.score;
 			}
 		} pred;
 		
 		sort(friend_list.begin(), friend_list.end(), pred);
+		
+		for(int i=0;i<friend_list.size();i++)
+			friend_list[i].rank = i+1;
 		
 		// create cell
 		
@@ -652,8 +1107,23 @@ void ClearPopup::resultSavedUserData(Json::Value result_data)
 	{
 		is_saved_user_data = true;
 		endLoad();
-		
-		resultLoadFriends(Json::Value());
+		if(is_loaded_list)
+		{
+			rankTableView = CCTableView::create(this, CCSizeMake(208, 199));
+			
+			rankTableView->setAnchorPoint(CCPointZero);
+			rankTableView->setDirection(kCCScrollViewDirectionVertical);
+			rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
+			rankTableView->setPosition(ccp(243, 62.5f));
+			
+			rankTableView->setDelegate(this);
+			main_case->addChild(rankTableView, kZ_CP_menu);
+			rankTableView->setTouchPriority(-200);
+		}
+		else
+		{
+			resultLoadFriends(Json::Value());
+		}
 		
 //		hspConnector::get()->kLoadFriends(json_selector(this, ClearPopup::resultLoadFriends));
 	}
@@ -677,7 +1147,6 @@ void ClearPopup::onEnter()
 {
 	CCLayer::onEnter();
 	showPopup();
-	startCalcAnimation();
 }
 
 void ClearPopup::startCalcAnimation()
@@ -887,7 +1356,7 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 {
 	CCLabelTTF* nickname_label;
 	CCLabelTTF* score_label;
-	ClearFriendRank* member = &friend_list[idx];
+	RankFriendInfo* member = &friend_list[idx];
 	CCTableViewCell* cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();

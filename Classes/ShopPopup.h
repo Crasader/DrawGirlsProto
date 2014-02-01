@@ -14,6 +14,7 @@
 #include "cocos-ext.h"
 #include <map>
 #include "KSProtect.h"
+#include "DownloadFile.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -122,6 +123,26 @@ private:
 	
 	string getPriceData(string t_code);
 	void addPriceReward(CCNode* t_target, int t_number);
+	
+	int gacha_card_number;
+	
+	vector<DownloadFile> df_list;
+	vector<CopyFile> cf_list;
+	
+	string card_gacha_type;
+	void startCardGacha();
+	void resultCardGacha(Json::Value result_data);
+	CCMenu* replay_menu;
+	void replayAction(CCObject* sender);
+	
+	vector<CommandParam> command_list;
+	
+	bool is_downloading;
+	int ing_download_cnt;
+	
+	void startDownload();
+	void successAction();
+	void failAction();
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);

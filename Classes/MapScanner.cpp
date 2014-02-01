@@ -258,6 +258,8 @@ void MapScanner::resetRects(bool is_after_scanmap)
 	
 	myGD->communication("UI_setPercentage", float(drawCellCnt/mySD->must_cnt), is_after_scanmap);
 	
+	myGD->communication("Main_hideDrawButtonTutorial");
+	
 	if(mySGD->is_write_replay)
 	{
 		if(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)

@@ -209,7 +209,14 @@ public:
 	void resetTouch();
 	void invisibleControl();
 	
+	void showDrawButtonTutorial();
+	void hideDrawButtonTutorial();
+	
 private:
+	bool is_show_draw_button_tutorial;
+	CCSprite* draw_button_tutorial_img;
+	CCSprite* draw_button_tutorial_ccb;
+	
 	IntDirection beforeDirection;
 	IntDirection beforeSecondDirection;
 	

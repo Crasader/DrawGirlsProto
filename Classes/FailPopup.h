@@ -20,22 +20,6 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
-class FailFriendRank
-{
-public:
-	string nickname;
-	string img_url;
-	string user_id;
-	float score;
-	bool is_play;
-	bool is_message_blocked;
-	
-	bool operator==(string t_id)
-	{
-		return user_id == t_id;
-	};
-};
-
 enum FailFriendCell_Tag
 {
 	kFFC_T_score = 1,
@@ -51,6 +35,8 @@ enum FailFriendCell_Zorder
 	kFFC_Z_img
 };
 
+class TouchSuctionLayer;
+class RankFriendInfo;
 class FailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -98,7 +84,7 @@ private:
 	void closeReplayPopup();
 	void popupClose();
 	
-	vector<FailFriendRank> friend_list;
+	vector<RankFriendInfo> friend_list;
 	CCTableView* rankTableView;
 	
 	void showPopup();
@@ -146,7 +132,10 @@ private:
 	
 	CCPoint getContentPosition(int t_tag);
 	
+	void closePopup();
 	void endLoad();
+	
+	TouchSuctionLayer* suction;
 	
 	void resultLoadFriends(Json::Value result_data);
 	void resultGetStageScoreList(Json::Value result_data);

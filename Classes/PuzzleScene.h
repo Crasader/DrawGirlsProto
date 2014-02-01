@@ -28,23 +28,6 @@ enum PuzzleRightCode{
 	kPuzzleRightCode_monster
 };
 
-class PuzzleRankFriendInfo
-{
-public:
-	string nickname;
-	string img_url;
-	string user_id;
-	float score;
-	int rank;
-	bool is_play;
-	bool is_message_blocked;
-	
-	bool operator==(string t_id)
-	{
-		return user_id == t_id;
-	};
-};
-
 enum PuzzleZorder{
 	kPuzzleZorder_back = 1,
 	kPuzzleZorder_puzzle,
@@ -53,6 +36,7 @@ enum PuzzleZorder{
 	kPuzzleZorder_popup
 };
 
+class RankFriendInfo;
 class PuzzleScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -138,7 +122,7 @@ private:
 	void setRank();
 	CCNode* rank_node;
 	CCMenu* challenge_menu;
-	vector<PuzzleRankFriendInfo> friend_list;
+	vector<RankFriendInfo> friend_list;
 	void resultGetStageScoreList(Json::Value result_data);
 	CCTableView* rank_table;
 	int selected_friend_idx;

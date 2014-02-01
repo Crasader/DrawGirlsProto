@@ -708,6 +708,7 @@ void ExchangeCoin::stopMoving()
 
 void ExchangeCoin::smallScaleHiding()
 {
+	is_hiding = true;
 	CCScaleTo* t_scale = CCScaleTo::create(1.5f, 0);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::removeFromParent));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
@@ -817,6 +818,8 @@ void ExchangeCoin::moving()
 		
 		if(afterPosition.x < 0 || afterPosition.x > 320 || afterPosition.y < 0 || afterPosition.y > 430)
 		{
+			cutionAction();
+			
 			if(rand()%2)					directionAngle -= 90;
 			else							directionAngle += 90;
 			
@@ -825,6 +828,8 @@ void ExchangeCoin::moving()
 		}
 		else if(afterPoint.isInnerMap() && myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
 		{
+			cutionAction();
+			
 			if(rand()%2)					directionAngle -= 90;
 			else							directionAngle += 90;
 			
@@ -833,6 +838,8 @@ void ExchangeCoin::moving()
 		}
 		else if(afterPoint.isInnerMap() && (myGD->mapState[afterPoint.x][afterPoint.y] == mapOldline || myGD->mapState[afterPoint.x][afterPoint.y] == mapOldget))
 		{
+			cutionAction();
+			
 			if(rand()%2)					directionAngle -= 90;
 			else							directionAngle += 90;
 			
@@ -850,12 +857,50 @@ void ExchangeCoin::moving()
 	move_speed = 1.f;
 }
 
+void ExchangeCoin::cutionAction()
+{
+	if(!is_hiding && !is_cution)
+	{
+		is_cution = true;
+		coin_img->stopAllActions();
+		coin_img->setScale(1.f/myGD->game_scale);
+		
+		float first_x;
+		float first_y;
+		if(rand()%2 == 0)
+		{
+			first_x = 1.f/myGD->game_scale*0.7f;
+			first_y = 1.f/myGD->game_scale*1.1f;
+		}
+		else
+		{
+			first_x = 1.f/myGD->game_scale*1.1f;
+			first_y = 1.f/myGD->game_scale*0.7f;
+		}
+		
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, first_x, first_y);
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, first_y, first_x);
+		CCScaleTo* t_scale3 = CCScaleTo::create(0.1f, 1.f/myGD->game_scale);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::endCutionAction));
+		CCSequence* t_seq = CCSequence::create(t_scale1, t_scale2, t_scale3, t_call, NULL);
+		
+		coin_img->runAction(t_seq);
+	}
+}
+
+void ExchangeCoin::endCutionAction()
+{
+	is_cution = false;
+}
+
 void ExchangeCoin::myInit(int t_type, CCObject* t_ui, SEL_CallFuncCCpI d_takeExchangeCoin)
 {
 	myType = t_type;
 	target_ui = t_ui;
 	delegate_takeExchangeCoin = d_takeExchangeCoin;
 	
+	is_hiding = false;
+	is_cution = false;
 	
 	coin_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", myType)->getCString());
 	coin_img->setScale(0);
@@ -893,17 +938,12 @@ void FeverCoin::removing()
 
 void FeverCoin::startCheck()
 {
-	schedule(schedule_selector(FeverCoin::checking));
+	schedule(schedule_selector(FeverCoin::checking), 1.f/30.f);
 }
 
 void FeverCoin::checking()
 {
-	if(myGD->mapState[my_point.x][my_point.y] != mapOutline && (myGD->mapState[my_point.x][my_point.y] == mapOldget || myGD->mapState[my_point.x][my_point.y] == mapOldline ||
-																myGD->mapState[my_point.x-1][my_point.y] == mapOldget || myGD->mapState[my_point.x-1][my_point.y] == mapOldline ||
-																myGD->mapState[my_point.x+1][my_point.y] == mapOldget || myGD->mapState[my_point.x+1][my_point.y] == mapOldline ||
-																myGD->mapState[my_point.x][my_point.y-1] == mapOldget || myGD->mapState[my_point.x][my_point.y-1] == mapOldline ||
-																myGD->mapState[my_point.x][my_point.y+1] == mapOldget || myGD->mapState[my_point.x][my_point.y+1] == mapOldline ||
-																myGD->mapState[my_point.x-1][my_point.y-1] == mapOldget || myGD->mapState[my_point.x-1][my_point.y-1] == mapOldline ||
+	if(myGD->mapState[my_point.x][my_point.y] != mapOutline && (myGD->mapState[my_point.x-1][my_point.y-1] == mapOldget || myGD->mapState[my_point.x-1][my_point.y-1] == mapOldline ||
 																myGD->mapState[my_point.x-1][my_point.y+1] == mapOldget || myGD->mapState[my_point.x-1][my_point.y+1] == mapOldline ||
 																myGD->mapState[my_point.x+1][my_point.y-1] == mapOldget || myGD->mapState[my_point.x+1][my_point.y-1] == mapOldline ||
 																myGD->mapState[my_point.x+1][my_point.y+1] == mapOldget || myGD->mapState[my_point.x+1][my_point.y+1] == mapOldline))
@@ -957,15 +997,14 @@ FeverCoinParent* FeverCoinParent::create()
 
 void FeverCoinParent::startFever()
 {
-	for(int i=6;i<mapHeightInnerEnd;i+=12)
+	for(int i=4;i<mapHeightInnerEnd;i+=9)
 	{
-		for(int j=3;j<mapWidthInnerEnd;j+=12)
+		for(int j=4;j<mapWidthInnerEnd;j+=9)
 		{
-			if((myGD->mapState[j][i] == mapEmpty || myGD->mapState[j][i] == mapOutline) &&
-			   (myGD->mapState[j-1][i-1] == mapEmpty || myGD->mapState[j-1][i-1] == mapOutline) && (myGD->mapState[j-1][i] == mapEmpty || myGD->mapState[j-1][i] == mapOutline) &&
-			   (myGD->mapState[j-1][i+1] == mapEmpty || myGD->mapState[j-1][i+1] == mapOutline) && (myGD->mapState[j][i-1] == mapEmpty || myGD->mapState[j][i-1] == mapOutline) &&
-			   (myGD->mapState[j][i+1] == mapEmpty || myGD->mapState[j][i+1] == mapOutline) && (myGD->mapState[j+1][i-1] == mapEmpty || myGD->mapState[j+1][i-1] == mapOutline) &&
-			   (myGD->mapState[j+1][i] == mapEmpty || myGD->mapState[j+1][i] == mapOutline) && (myGD->mapState[j+1][i+1] == mapEmpty || myGD->mapState[j+1][i+1] == mapOutline))
+			if((myGD->mapState[j-1][i-1] == mapEmpty || myGD->mapState[j-1][i-1] == mapOutline) &&
+			   (myGD->mapState[j-1][i+1] == mapEmpty || myGD->mapState[j-1][i+1] == mapOutline) &&
+			   (myGD->mapState[j+1][i-1] == mapEmpty || myGD->mapState[j+1][i-1] == mapOutline) &&
+			   (myGD->mapState[j+1][i+1] == mapEmpty || myGD->mapState[j+1][i+1] == mapOutline))
 			{
 				FeverCoin* t_fc = FeverCoin::create(IntPoint(j,i), this, callfuncO_selector(FeverCoinParent::addGetCoinList));
 				addChild(t_fc);

@@ -1477,6 +1477,17 @@ void PlayUI::counting ()
 	countingCnt++;
 	use_time++;
 	
+	if(mySGD->draw_button_tutorial_ing > 0)
+	{
+		mySGD->draw_button_tutorial_ing++;
+		if(mySGD->draw_button_tutorial_ing >= draw_button_tutorial_show)
+		{
+			myGD->communication("Main_showDrawButtonTutorial");
+			mySGD->draw_button_tutorial_ing = 0;
+			draw_button_tutorial_show += 10;
+		}
+	}
+	
 	if(mySGD->is_write_replay)
 	{
 		if(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_isChangedMap)].asBool())
@@ -1878,6 +1889,18 @@ void PlayUI::myInit ()
 	combo_cnt = 0;
 	
 	clearPercentage = 1;
+	
+	if(mySD->getSilType() == 1 && !myDSH->getIntegerForKey(kDSH_Key_isDisableDrawButton))
+	{
+		mySGD->is_draw_button_tutorial = true;
+		mySGD->draw_button_tutorial_ing = 1;
+		draw_button_tutorial_show = 11;
+	}
+	else
+	{
+		mySGD->is_draw_button_tutorial = false;
+		mySGD->draw_button_tutorial_ing = 0;
+	}
 	
 	ui_case = CCSprite::create("ui_back.png");
 	if(myGD->gamescreen_type == kGT_leftUI)			ui_case->setPosition(ccp(25,myDSH->ui_center_y));
