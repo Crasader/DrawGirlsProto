@@ -702,9 +702,128 @@ void ClearPopup::checkChallengeOrHelp()
 		mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = 0;
 		/////////////////// ksks
 		//		mySGD->getAcceptChallengeId(), mySGD->getAcceptChallengeNick(), mySGD->getAcceptChallengeScore();
-		addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
-									   ChallengeCategory::kRequestReply, [=](){closePopup();}),
-				 kZ_CP_popup);
+		
+		if(mySGD->getAcceptChallengeScore() < mySGD->getScore())
+		{
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			CCNode* t_container = CCNode::create();
+			t_popup->setContainerNode(t_container);
+			addChild(t_popup, kZ_CP_popup);
+			
+			CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+			case_back->setPosition(CCPointZero);
+			t_container->addChild(case_back);
+			
+			case_back->setContentSize(CCSizeMake(245, 220));
+			
+			CCSprite* title_img = CCSprite::create("message_title_challenge_success.png");
+			title_img->setPosition(ccp(0, 80));
+			t_container->addChild(title_img);
+			
+			CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+			content_back->setPosition(CCPointZero);
+			t_container->addChild(content_back);
+			
+			content_back->setContentSize(CCSizeMake(220, 100));
+			
+			CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님을\n이겼습니다.", mySGD->getMeChallengeTargetNick().c_str())->getCString(),
+														mySGD->getFont().c_str(), 13);
+			ment_label->setPosition(CCPointZero);
+			t_container->addChild(ment_label);
+			
+			CCSprite* n_close = CCSprite::create("popup4_orange_button.png");
+			CCLabelTTF* n_label = CCLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+			n_label->setPosition(ccp(n_close->getContentSize().width/2.f, n_close->getContentSize().height/2.f));
+			n_close->addChild(n_label);
+			CCSprite* s_close = CCSprite::create("popup4_orange_button.png");
+			s_close->setColor(ccGRAY);
+			CCLabelTTF* s_label = CCLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+			s_label->setPosition(ccp(s_close->getContentSize().width/2.f, s_close->getContentSize().height/2.f));
+			s_close->addChild(s_label);
+			
+			CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																				{
+																					addChild(ChallengeSend::create(mySGD->getMeChallengeTarget(), mySGD->getMeChallengeTargetNick(), mySGD->getScore(),
+																												   ChallengeCategory::kRequestReply, [=](){closePopup();}),
+																							 kZ_CP_popup);
+																					checkMiniGame();
+																					t_popup->removeFromParent();
+																				});
+			
+			CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+			close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+			close_menu->setPosition(ccp(0,-80));
+			t_container->addChild(close_menu);
+		}
+		else
+		{
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			CCNode* t_container = CCNode::create();
+			t_popup->setContainerNode(t_container);
+			addChild(t_popup, kZ_CP_popup);
+			
+			CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+			case_back->setPosition(CCPointZero);
+			t_container->addChild(case_back);
+			
+			case_back->setContentSize(CCSizeMake(245, 220));
+			
+			CCSprite* title_img = CCSprite::create("message_title_challenge_fail.png");
+			title_img->setPosition(ccp(0, 80));
+			t_container->addChild(title_img);
+			
+			CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+			content_back->setPosition(CCPointZero);
+			t_container->addChild(content_back);
+			
+			content_back->setContentSize(CCSizeMake(220, 100));
+			
+			CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님의 기록을\n넘지 못했습니다.", mySGD->getMeChallengeTargetNick().c_str())->getCString(),
+														mySGD->getFont().c_str(), 13);
+			ment_label->setPosition(CCPointZero);
+			t_container->addChild(ment_label);
+			
+			CCSprite* n_close = CCSprite::create("popup4_orange_button.png");
+			CCLabelTTF* n_label = CCLabelTTF::create("확인", mySGD->getFont().c_str(), 13);
+			n_label->setPosition(ccp(n_close->getContentSize().width/2.f, n_close->getContentSize().height/2.f));
+			n_close->addChild(n_label);
+			CCSprite* s_close = CCSprite::create("popup4_orange_button.png");
+			s_close->setColor(ccGRAY);
+			CCLabelTTF* s_label = CCLabelTTF::create("확인", mySGD->getFont().c_str(), 13);
+			s_label->setPosition(ccp(s_close->getContentSize().width/2.f, s_close->getContentSize().height/2.f));
+			s_close->addChild(s_label);
+			
+			CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																				{
+																					checkMiniGame();
+																					t_popup->removeFromParent();
+																				});
+			
+			CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+			close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+			close_menu->setPosition(ccp(0,-80));
+			t_container->addChild(close_menu);
+		}
 	}
 	else
 	{
