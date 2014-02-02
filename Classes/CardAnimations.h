@@ -15,7 +15,7 @@
 #include "KSUtil.h"
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
-
+#include "GDWebSprite.h";
 using namespace cocos2d::extension;
 using namespace std;
 
@@ -1179,22 +1179,26 @@ public:
 	//	CREATE_FUNC(TakeCardAnimation);
 	//CC_SYNTHESIZE(CCNode*, m_contentNode, ContentNode);
 	
-	static ChangeRankAnimation* create(CCSprite* winner_picture,int winner_point, int winner_rank, string winner_name,CCSprite* loser_picture,int loser_point, int loser_rank, string loser_name, int _touch_priority){
+	static ChangeRankAnimation* create(string winner_picture_url,int winner_point, int winner_rank, string winner_name,string loser_picture_url,int loser_point, int loser_rank, string loser_name, int _touch_priority){
 		ChangeRankAnimation* ret = new ChangeRankAnimation();
-		ret->init(winner_picture,winner_point,winner_rank,winner_name,loser_picture,loser_point,loser_rank,loser_name,_touch_priority);
+		ret->init(winner_picture_url,winner_point,winner_rank,winner_name,loser_picture_url,loser_point,loser_rank,loser_name,_touch_priority);
 		ret->autorelease();
 		return ret;
 	}
 	
-	bool init(CCSprite* winner_picture,int winner_point, int winner_rank, string winner_name,CCSprite* loser_picture,int loser_point, int loser_rank, string loser_name, int _touch_priority){
+	bool init(string winner_picture_url,int winner_point, int winner_rank, string winner_name,string loser_picture_url,int loser_point, int loser_rank, string loser_name, int _touch_priority){
 		if(CCLayer::init()==false)return false;
+		
+		CCSprite* winner_picture = GDWebSprite::create(winner_picture_url, "ending_noimg.png");
+		
+		CCSprite* loser_picture = GDWebSprite::create(loser_picture_url, "ending_noimg.png");
 		
 		isOpening=true;
 		touch_priority=_touch_priority;
 		setTouchEnabled(true);
 		kScale = 56/winner_picture->getContentSize().width;
 		
-		
+	
 		
 		auto back = KS::loadCCBI<CCLayer*>(this, "gameresult_rankchange_back.ccbi");
 
@@ -1589,15 +1593,19 @@ public:
 	//	CREATE_FUNC(TakeCardAnimation);
 	//CC_SYNTHESIZE(CCNode*, m_contentNode, ContentNode);
 	
-	static FightResultAnimation* create(CCSprite* my_picture,int my_point, string my_name,CCSprite* other_picture,int other_point, string other_name, int _touch_priority){
+	static FightResultAnimation* create(string my_picture_url,int my_point, string my_name,string other_picture_url,int other_point, string other_name, int _touch_priority){
 		FightResultAnimation* ret = new FightResultAnimation();
-		ret->init(my_picture,my_point,my_name,other_picture,other_point,other_name,_touch_priority);
+		ret->init(my_picture_url,my_point,my_name,other_picture_url,other_point,other_name,_touch_priority);
 		ret->autorelease();
 		return ret;
 	}
 	
-	bool init(CCSprite* winner_picture,int winner_point, string winner_name,CCSprite* loser_picture,int loser_point, string loser_name, int _touch_priority){
+	bool init(string winner_picture_url,int winner_point, string winner_name,string loser_picture_url,int loser_point, string loser_name, int _touch_priority){
 		if(CCLayer::init()==false)return false;
+		
+		CCSprite* winner_picture = GDWebSprite::create(winner_picture_url, "ending_noimg.png");
+		CCSprite* loser_picture = GDWebSprite::create(loser_picture_url, "ending_noimg.png");
+		
 		
 		isOpening=true;
 		touch_priority=_touch_priority;
