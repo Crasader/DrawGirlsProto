@@ -14,6 +14,7 @@
 #include "cocos-ext.h"
 #include "KSUtil.h"
 #include "DataStorageHub.h"
+#include "StarGoldData.h"
 
 using namespace cocos2d::extension;
 using namespace std;
@@ -162,19 +163,20 @@ public:
 	void close(){
 		isOpening=true;
 		
-		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3,0)));
+		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
 		
 		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
+		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
+		
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(0.3,0),
+											   CCScaleTo::create(0.4f,0.01f),
 											   CCCallFunc::create(this, callfunc_selector(TakeCardAnimation::closeStep2)),
 											   NULL
 											   )
 							);
-		roundSmall->runAction(CCScaleTo::create(0.3f,0));
 		
-		if(closeFunc)closeFunc();
+		
 		
 	}
 							
@@ -191,6 +193,7 @@ public:
 	void closeStep3(){
 		isOpening=false;
 		this->removeFromParent();
+		if(closeFunc)closeFunc();
 	}
 	
 	void registerWithTouchDispatcher ()
@@ -363,19 +366,20 @@ public:
 	void close(){
 		isOpening=true;
 		
-		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3,0)));
+		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
 		
 		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
+		
+		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
+		
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(0.3,0),
+											   CCScaleTo::create(0.4f,0.01f),
 											   CCCallFunc::create(this, callfunc_selector(DownCardAnimation::closeStep2)),
 											   NULL
 											   )
 							);
-		roundSmall->runAction(CCScaleTo::create(0.3f,0));
 		
-		if(closeFunc)closeFunc();
 	}
 	
 	void closeStep2(){
@@ -391,6 +395,7 @@ public:
 	void closeStep3(){
 		isOpening=false;
 		this->removeFromParent();
+		if(closeFunc)closeFunc();
 	}
 	
 	void registerWithTouchDispatcher ()
@@ -726,18 +731,18 @@ public:
 	void close(){
 		isOpening=true;
 		
-		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3,0)));
+		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3,0.01f)));
 		
 		
 		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
+		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(0.3,0),
+											   CCScaleTo::create(0.4f,0.01f),
 											   CCCallFunc::create(this, callfunc_selector(RemoveCardAnimation::closeStep2)),
 											   NULL
 											   )
 							);
-		roundSmall->runAction(CCScaleTo::create(0.3f,0));
 		
 	}
 	
@@ -827,7 +832,7 @@ public:
 		card->setScale(kScale*0.7);
 		this->addChild(card,3);
 		
-		optionLbl = CCLabelTTF::create("", "", 15);
+		optionLbl = CCLabelTTF::create("", mySGD->getFont().c_str(), 15);
 		optionLbl->setPosition(ccp(240,40));
 		optionLbl->setScale(0);
 		this->addChild(optionLbl,4);
@@ -1078,20 +1083,19 @@ public:
 	void close(){
 		isOpening=true;
 		
-		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3,0)));
-		optionLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3,0)));
+		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
+		optionLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
 		
 		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
+		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(0.3,0),
+											   CCScaleTo::create(0.4f,0.01f),
 											   CCCallFunc::create(this, callfunc_selector(StrengthCardAnimation::closeStep2)),
 											   NULL
 											   )
 							);
-		roundSmall->runAction(CCScaleTo::create(0.3f,0));
 		
-		if(closeFunc)closeFunc();
 		
 	}
 	
@@ -1108,6 +1112,7 @@ public:
 	void closeStep3(){
 		isOpening=false;
 		this->removeFromParent();
+		if(closeFunc)closeFunc();
 	}
 	
 	void registerWithTouchDispatcher ()
@@ -1133,5 +1138,1017 @@ public:
 	}
 	
 };
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// 위너(사진,등수,점수)
+
+class ChangeRankAnimation : public CCLayer{
+	CCSprite* gray;
+
+	CCSprite* title;
+	int touch_priority;
+	bool isOpening;
+	float kScale;
+	
+	CCLayer* backRolling;
+	CCSprite* backLayer;
+	
+	CCSprite* winnerBack;
+	CCSprite* loserBack;
+	
+	CCLabelTTF* winnerLbl;
+	CCLabelTTF* loserLbl;
+	
+	CCLabelTTF* winnerPointLbl;
+	CCLabelTTF* loserPointLbl;
+	
+	CCControlButton* closeBtn;
+	CCControlButton* sendBtn;
+	
+	CCLabelTTF* msgLbl;
+	
+	CCSprite* winnerArrow;
+	CCSprite* loserArrow;
+	
+public:
+	//	CREATE_FUNC(TakeCardAnimation);
+	//CC_SYNTHESIZE(CCNode*, m_contentNode, ContentNode);
+	
+	static ChangeRankAnimation* create(CCSprite* winner_picture,int winner_point, int winner_rank, string winner_name,CCSprite* loser_picture,int loser_point, int loser_rank, string loser_name, int _touch_priority){
+		ChangeRankAnimation* ret = new ChangeRankAnimation();
+		ret->init(winner_picture,winner_point,winner_rank,winner_name,loser_picture,loser_point,loser_rank,loser_name,_touch_priority);
+		ret->autorelease();
+		return ret;
+	}
+	
+	bool init(CCSprite* winner_picture,int winner_point, int winner_rank, string winner_name,CCSprite* loser_picture,int loser_point, int loser_rank, string loser_name, int _touch_priority){
+		if(CCLayer::init()==false)return false;
+		
+		isOpening=true;
+		touch_priority=_touch_priority;
+		setTouchEnabled(true);
+		kScale = 56/winner_picture->getContentSize().width;
+		
+		
+		
+		auto back = KS::loadCCBI<CCLayer*>(this, "gameresult_rankchange_back.ccbi");
+
+		backRolling = back.first;
+
+		//backRolling->setPosition(ccp(240,160));
+		
+		backRolling->setScale(1);
+		
+		
+		this->addChild(backRolling,2);
+		
+		
+		backLayer = CCSprite::create("rankchange_back.png");
+		backLayer->setScale(2);
+		backLayer->setAnchorPoint(ccp(0.5,0.5));
+		backLayer->setPosition(ccp(240,160));
+		this->addChild(backLayer,3);
+		
+		backLayer->setScale(0);
+		
+		/// winner ///////////////////////////////////////////////////////////////////////
+		
+		winnerBack = CCSprite::create("puzzle_right_ranklist_me.png");
+		winnerBack->setPosition(ccp(220/2, 42/2)); //CGMakePoint(209, 42);
+		winnerBack->setScale(0.5f);
+		backLayer->addChild(winnerBack,4);
+		
+		winner_picture->setAnchorPoint(ccp(0.5f,0.5f));
+		winner_picture->setPosition(ccp(21,21));
+		winner_picture->setScale(0.8f);
+		winnerBack->addChild(winner_picture,1);
+		
+		winnerLbl = CCLabelTTF::create(winner_name.c_str(), mySGD->getFont().c_str(), 12);
+		winnerLbl->setPosition(ccp(80,27));
+		winnerBack->addChild(winnerLbl,4);
+		
+		
+		winnerPointLbl = CCLabelTTF::create(CCString::createWithFormat("%d",winner_point)->getCString(), mySGD->getFont().c_str(), 15);
+		winnerPointLbl->setPosition(ccp(80,12));
+		winnerBack->addChild(winnerPointLbl,4);
+		
+		
+		/// loser ///////////////////////////////////////////////////////////////////////
+		
+		if(loser_rank==1){
+			loserBack = CCSprite::create("puzzle_right_ranklist_gold.png");
+			
+		}else if(loser_rank==2){
+			loserBack = CCSprite::create("puzzle_right_ranklist_silver.png");
+			
+		}else if(loser_rank==3){
+			loserBack = CCSprite::create("puzzle_right_ranklist_bronze.png");
+			
+		}else{
+			loserBack = CCSprite::create("puzzle_right_ranklist_normal.png");
+		}
+		loserBack->setScale(0.5f);
+		loserBack->setPosition(ccp(160/2, 110/2)); //CGMakePoint(158, 114);
+		
+		
+		loser_picture->setPosition(ccp(21,21));
+		loser_picture->setAnchorPoint(ccp(0.5f,0.5f));
+		loser_picture->setScale(0.8f);
+		loserBack->addChild(loser_picture,1);
+		
+		
+		loserLbl = CCLabelTTF::create(loser_name.c_str(), mySGD->getFont().c_str(), 15);
+		loserLbl->setPosition(ccp(80,27));
+		loserBack->addChild(loserLbl,4);
+		
+		backLayer->addChild(loserBack,4);
+		
+		
+		loserPointLbl = CCLabelTTF::create(CCString::createWithFormat("%d",loser_point)->getCString(), mySGD->getFont().c_str(), 15);
+		loserPointLbl->setPosition(ccp(80,12));
+		loserBack->addChild(loserPointLbl,4);
+		
+		
+		
+		
+		winnerArrow = CCSprite::create("rankchange_arrow_up.png");
+		winnerArrow->setPosition(ccp(loserBack->getPositionX()+50,loserBack->getPositionY()));
+		winnerArrow->setScale(0.5f);
+		winnerArrow->runAction(CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,-10)),CCMoveBy::create(0.5f,ccp(0,10)),NULL)));
+		backLayer->addChild(winnerArrow);
+		
+		
+		loserArrow = CCSprite::create("rankchange_arrow_down.png");
+		loserArrow->setPosition(ccp(winnerBack->getPositionX()-50,winnerBack->getPositionY()));
+		loserArrow->setScale(0.5f);
+		loserArrow->runAction(CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,10)),CCMoveBy::create(0.5f,ccp(0,-10)),NULL)));
+		backLayer->addChild(loserArrow);
+		
+		
+		//cardchange_cancel
+		
+		closeBtn = CCControlButton::create("닫기","",20);
+		closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::closeByBtn), CCControlEventTouchUpInside);
+		closeBtn->setPosition(ccp(770/2,560/2));
+		closeBtn->setTouchPriority(touch_priority-1);
+		closeBtn->setScale(0);
+		addChild(closeBtn,9);
+										   
+										   
+		sendBtn = CCControlButton::create("도전하기","",20);
+		sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
+		sendBtn->setPosition(ccp(240,85/2));
+		sendBtn->setTouchPriority(touch_priority-1);
+		sendBtn->setScale(0);
+		addChild(sendBtn,9);
+		
+		msgLbl = CCLabelTTF::create("친구에게 도전메세지를 전송합니다.", mySGD->getFont().c_str(), 10);
+		msgLbl->setPosition(ccp(240,70));
+		msgLbl->setScale(0);
+		addChild(msgLbl,4);
+		
+//		kScale = 141/_card->getContentSize().width;
+//		
+//		
+//		card=_card;
+//		card->setPosition(ccp(240,155));
+//		card->setVisible(false);
+//		card->setScale(kScale*0.7);
+//		
+//		this->addChild(card,3);
+//
+		title = CCSprite::create("rankchange_title.png");
+		title->setPosition(ccp(240,276));
+		title->setScale(0);
+		this->addChild(title,2);
+//
+
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+
+		gray = CCSprite::create("back_gray.png");
+		gray->setOpacity(0);
+		gray->setPosition(ccp(240,160));
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+		addChild(gray, 1);
+		
+		
+//
+//		auto ret = KS::loadCCBI<CCLayer*>(this, "roundBlue1.ccbi");
+//		roundBig = ret.first;
+//		roundBig->setPosition(ccp(0,-95));
+//		roundBig->setScale(0);
+//		this->addChild(roundBig,2);
+//		
+//		auto ret2 = KS::loadCCBI<CCLayer*>(this, "roundBlue2.ccbi");
+//		roundSmall = ret2.first;
+//		roundSmall->setPosition(ccp(0,-95));
+//		roundSmall->setScale(0);
+//		this->addChild(roundSmall,2);
+//		
+//		cardLight = CCSprite::create("cardLightCoverBlue.png");
+//		cardLight->setScale(0.7);
+//		cardLight->setPosition(ccp(240,500));
+//		
+//		this->addChild(cardLight,4);
+		
+		return true;
+	}
+
+	std::function<void(void)> closeFunc;
+	
+	void setCloseFunc(std::function<void(void)> func){
+		closeFunc = func;
+	}
+	
+	std::function<void(void)> cancelFunc;
+	
+	void setCancelFunc(std::function<void(void)> func){
+		cancelFunc = func;
+	}
+	
+	
+	std::function<void(void)> sendFunc;
+	
+	void setSendFunc(std::function<void(void)> func){
+		sendFunc = func;
+	}
+	
+	
+	void closeByBtn(CCObject*, CCControlEvent){
+		this->close();
+		if(cancelFunc)cancelFunc();
+	}
+	void sendMsgByBtn(CCObject*, CCControlEvent){
+		this->close();
+		if(sendFunc)sendFunc();
+	}
+	void start(){
+		isOpening=true;
+		gray->runAction(CCSequence::create(
+										   CCFadeIn::create(0.5f),
+										   CCCallFunc::create(this, callfunc_selector(ThisClassType::step2)),
+										   NULL
+										   )
+						);
+		
+		
+		
+		
+	}
+	void step2(){
+		
+		backRolling->runAction(CCScaleTo::create(0.3f,2));
+		backLayer->runAction(CCScaleTo::create(0.3f,2));
+			
+		title->runAction(
+							CCSequence::create(
+											   CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
+											   CCDelayTime::create(1.f),
+											   CCCallFunc::create(this, callfunc_selector(ThisClassType::step3))
+											   ,NULL
+											   )
+							);
+//
+//		roundSmall->runAction(CCScaleTo::create(8/60.f, 1, 0.2f));
+		
+		
+	}
+	
+	void step3(){
+		
+		winnerArrow->runAction(CCMoveBy::create(0.3,ccp(0,200)));
+		loserArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
+		
+		CCPoint wPo = winnerBack->getPosition();
+		CCPoint lPo = loserBack->getPosition();
+		
+		loserBack->runAction(CCMoveTo::create(0.3f, wPo));
+		
+		winnerBack->runAction(
+							  CCSequence::create(
+												 CCMoveTo::create(0.3f, lPo),
+												 CCCallFunc::create(this, callfunc_selector(ThisClassType::step4))
+												 ,NULL
+												 )
+		);
+		
+		
+		
+	}
+	
+	void step4(){
+		
+		winnerArrow->setVisible(false);
+		loserArrow->setVisible(false);
+		
+		closeBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		msgLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		sendBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+//		
+//		title->runAction(CCEaseBounceOut::create(CCScaleTo::create(0.3,1)));
+//		
+//		cardLight->runAction(
+//							 CCFadeOut::create(16/30.f)
+//							 );
+//		card->setVisible(true);
+//		card->runAction(
+//						CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,5)),CCMoveBy::create(0.5f,ccp(0,-5)),NULL))
+//						);
+		
+		isOpening=false;
+	}
+	
+	void close(){
+		isOpening=true;
+		
+		backRolling->runAction(CCScaleTo::create(0.3f,0.01f));
+		backLayer->runAction(CCScaleTo::create(0.3f,0.01f));
+		msgLbl->runAction(CCScaleTo::create(0.3f,0.01f));
+		closeBtn->runAction(CCScaleTo::create(0.3f,0.01f));
+		sendBtn->runAction(CCScaleTo::create(0.3f,0.01f));
+		title->runAction(CCScaleTo::create(0.3f,0.01f));
+		
+		this->runAction(
+							CCSequence::create(
+											   CCDelayTime::create(0.4f),
+											   CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep2)),
+											   NULL
+											   )
+							);
+		
+//		
+//		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
+//		
+//		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
+//		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
+//		
+//		roundBig->runAction(
+//							CCSequence::create(
+//											   CCScaleTo::create(0.4f,0.01f),
+//											   CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep2)),
+//											   NULL
+//											   )
+//							);
+//
+		
+		
+	}
+	
+	void closeStep2(){
+		gray->runAction(
+						CCSequence::create(
+										   CCFadeOut::create(0.3f),
+										   CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep3)),
+										   NULL
+										   )
+						);
+	}
+	
+	void closeStep3(){
+		isOpening=false;
+		this->removeFromParent();
+		if(closeFunc)closeFunc();
+	}
+	
+	void registerWithTouchDispatcher ()
+	{
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, touch_priority, true);
+		
+	}
+	
+	
+	bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
+		if(isOpening==false)this->close();
+		return true;
+	}
+	void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent){
+		return;
+	}
+	void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
+		return;
+	}
+	void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent){
+		return;
+	}
+	
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+// 위너(사진,등수,점수)
+
+class FightResultAnimation : public CCLayer{
+	CCSprite* gray;
+	
+	CCSprite* title;
+	int touch_priority;
+	bool isOpening;
+	float kScale;
+	
+	CCLayer* backRolling;
+	CCSprite* backLayer;
+	
+	CCSprite* winnerBack;
+	CCSprite* loserBack;
+	
+	CCLabelTTF* winnerLbl;
+	CCLabelTTF* loserLbl;
+	
+	CCLabelTTF* winnerPointLbl;
+	CCLabelTTF* loserPointLbl;
+	
+	CCControlButton* closeBtn;
+	CCControlButton* sendBtn;
+	CCControlButton* confirmBtn;
+	
+	CCLabelTTF* msgLbl;
+	
+	CCSprite* winnerArrow;
+	CCSprite* loserArrow;
+	
+	int winnerPoint;
+	int loserPoint;
+	
+	int pointCnt;
+public:
+	//	CREATE_FUNC(TakeCardAnimation);
+	//CC_SYNTHESIZE(CCNode*, m_contentNode, ContentNode);
+	
+	static FightResultAnimation* create(CCSprite* my_picture,int my_point, string my_name,CCSprite* other_picture,int other_point, string other_name, int _touch_priority){
+		FightResultAnimation* ret = new FightResultAnimation();
+		ret->init(my_picture,my_point,my_name,other_picture,other_point,other_name,_touch_priority);
+		ret->autorelease();
+		return ret;
+	}
+	
+	bool init(CCSprite* winner_picture,int winner_point, string winner_name,CCSprite* loser_picture,int loser_point, string loser_name, int _touch_priority){
+		if(CCLayer::init()==false)return false;
+		
+		isOpening=true;
+		touch_priority=_touch_priority;
+		setTouchEnabled(true);
+		kScale = 56/winner_picture->getContentSize().width;
+		
+		winnerPoint = winner_point;
+		loserPoint = loser_point;
+		pointCnt = 0;
+		
+		auto back = KS::loadCCBI<CCLayer*>(this, "gameresult_rankchange_back.ccbi");
+		
+		backRolling = back.first;
+		
+		//backRolling->setPosition(ccp(240,160));
+		
+		backRolling->setScale(1);
+		
+		
+		this->addChild(backRolling,2);
+		
+		
+		backLayer = CCSprite::create("rankchange_back.png");
+		backLayer->setScale(2);
+		backLayer->setAnchorPoint(ccp(0.5,0.5));
+		backLayer->setPosition(ccp(240,160));
+		this->addChild(backLayer,3);
+		
+		backLayer->setScale(0);
+		
+		/// winner ///////////////////////////////////////////////////////////////////////
+		
+		winnerBack = CCSprite::create("puzzle_right_ranklist_me.png");
+		winnerBack->setPosition(ccp(220/2, 42/2)); //CGMakePoint(209, 42);
+		winnerBack->setScale(0.5f);
+		backLayer->addChild(winnerBack,4);
+		
+		winner_picture->setAnchorPoint(ccp(0.5f,0.5f));
+		winner_picture->setPosition(ccp(21,21));
+		winner_picture->setScale(0.8f);
+		winnerBack->addChild(winner_picture,1);
+		
+		winnerLbl = CCLabelTTF::create(winner_name.c_str(), mySGD->getFont().c_str(), 12);
+		winnerLbl->setPosition(ccp(80,27));
+		winnerBack->addChild(winnerLbl,4);
+		
+		
+		winnerPointLbl = CCLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+		winnerPointLbl->setPosition(ccp(80,12));
+		winnerBack->addChild(winnerPointLbl,4);
+		
+		
+		/// loser ///////////////////////////////////////////////////////////////////////
+		
+
+		loserBack = CCSprite::create("puzzle_right_ranklist_normal.png");
+	
+		loserBack->setScale(0.5f);
+		loserBack->setPosition(ccp(160/2, 110/2)); //CGMakePoint(158, 114);
+		
+		
+		loser_picture->setPosition(ccp(21,21));
+		loser_picture->setAnchorPoint(ccp(0.5f,0.5f));
+		loser_picture->setScale(0.8f);
+		loserBack->addChild(loser_picture,1);
+		
+		
+		loserLbl = CCLabelTTF::create(loser_name.c_str(), mySGD->getFont().c_str(), 15);
+		loserLbl->setPosition(ccp(80,27));
+		loserBack->addChild(loserLbl,4);
+		
+		backLayer->addChild(loserBack,4);
+		
+		
+		loserPointLbl = CCLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+		loserPointLbl->setPosition(ccp(80,12));
+		loserBack->addChild(loserPointLbl,4);
+		
+		
+		
+		
+		winnerArrow = CCSprite::create("rankchange_arrow_up.png");
+		winnerArrow->setPosition(ccp(loserBack->getPositionX()+50,loserBack->getPositionY()));
+		winnerArrow->setScale(0.5f);
+		winnerArrow->runAction(CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,-10)),CCMoveBy::create(0.5f,ccp(0,10)),NULL)));
+		backLayer->addChild(winnerArrow);
+		
+		
+		loserArrow = CCSprite::create("rankchange_arrow_down.png");
+		loserArrow->setPosition(ccp(winnerBack->getPositionX()-50,winnerBack->getPositionY()));
+		loserArrow->setScale(0.5f);
+		loserArrow->runAction(CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,10)),CCMoveBy::create(0.5f,ccp(0,-10)),NULL)));
+		backLayer->addChild(loserArrow);
+		
+		
+		//cardchange_cancel
+		
+		closeBtn = CCControlButton::create("닫기","",20);
+		closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::closeByBtn), CCControlEventTouchUpInside);
+		closeBtn->setPosition(ccp(770/2,560/2));
+		closeBtn->setTouchPriority(touch_priority-1);
+		closeBtn->setScale(0);
+		addChild(closeBtn,9);
+		
+		
+		sendBtn = CCControlButton::create("확인","",20);
+		sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
+		sendBtn->setPosition(ccp(240,85/2));
+		sendBtn->setTouchPriority(touch_priority-1);
+		sendBtn->setScale(0);
+		addChild(sendBtn,9);
+		
+		confirmBtn = CCControlButton::create("확인","",20);
+		confirmBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
+		confirmBtn->setPosition(ccp(240,85/2));
+		confirmBtn->setTouchPriority(touch_priority-1);
+		confirmBtn->setScale(0);
+		addChild(confirmBtn,9);
+		
+		msgLbl = CCLabelTTF::create("친구에게 도전메세지를 전송합니다.", mySGD->getFont().c_str(), 10);
+		msgLbl->setPosition(ccp(240,70));
+		msgLbl->setScale(0);
+		addChild(msgLbl,4);
+		
+		//		kScale = 141/_card->getContentSize().width;
+		//
+		//
+		//		card=_card;
+		//		card->setPosition(ccp(240,155));
+		//		card->setVisible(false);
+		//		card->setScale(kScale*0.7);
+		//
+		//		this->addChild(card,3);
+		//
+		title = CCSprite::create("rankchange_title.png");
+		title->setPosition(ccp(240,276));
+		title->setScale(0);
+		this->addChild(title,2);
+		//
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		gray = CCSprite::create("back_gray.png");
+		gray->setOpacity(0);
+		gray->setPosition(ccp(240,160));
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+		addChild(gray, 1);
+		
+		
+		//
+		//		auto ret = KS::loadCCBI<CCLayer*>(this, "roundBlue1.ccbi");
+		//		roundBig = ret.first;
+		//		roundBig->setPosition(ccp(0,-95));
+		//		roundBig->setScale(0);
+		//		this->addChild(roundBig,2);
+		//
+		//		auto ret2 = KS::loadCCBI<CCLayer*>(this, "roundBlue2.ccbi");
+		//		roundSmall = ret2.first;
+		//		roundSmall->setPosition(ccp(0,-95));
+		//		roundSmall->setScale(0);
+		//		this->addChild(roundSmall,2);
+		//
+		//		cardLight = CCSprite::create("cardLightCoverBlue.png");
+		//		cardLight->setScale(0.7);
+		//		cardLight->setPosition(ccp(240,500));
+		//
+		//		this->addChild(cardLight,4);
+		
+		return true;
+	}
+	
+	std::function<void(void)> closeFunc;
+	
+	void setCloseFunc(std::function<void(void)> func){
+		closeFunc = func;
+	}
+	
+	std::function<void(void)> cancelFunc;
+	
+	void setCancelFunc(std::function<void(void)> func){
+		cancelFunc = func;
+	}
+	
+	
+	std::function<void(void)> sendFunc;
+	
+	void setSendFunc(std::function<void(void)> func){
+		sendFunc = func;
+	}
+	
+	
+	std::function<void(void)> confirmFunc;
+	
+	void setConfirmFunc(std::function<void(void)> func){
+		confirmFunc = func;
+	}
+	
+	
+	void closeByBtn(CCObject*, CCControlEvent){
+		this->close();
+		if(cancelFunc)cancelFunc();
+	}
+	void sendMsgByBtn(CCObject*, CCControlEvent){
+		this->close();
+		if(sendFunc)sendFunc();
+	}
+	
+	void startLose(){
+		isOpening=true;
+		gray->runAction(CCSequence::create(
+										   CCFadeIn::create(0.5f),
+										   CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep1)),
+										   NULL
+										   )
+						);
+		
+	}
+	
+	void loseStep1(){
+		backRolling->runAction(CCScaleTo::create(0.3f,2));
+		backLayer->runAction(CCScaleTo::create(0.3f,2));
+		
+		title->runAction(
+						 CCSequence::create(
+											CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
+											CCDelayTime::create(1.f),
+											CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep2))
+											,NULL
+											)
+						 );
+	}
+	
+	void loseStep2(){
+		
+		
+		winnerPointLbl->addChild(KSGradualValue<float>::create(0, (float)loserPoint, 1.5f,
+											   [=](float t)
+											   {
+												   winnerPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+												   
+												   loserPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+												   
+											   },
+											   [=](float t)
+											   {
+												   
+												   this->addChild(KSTimer::create(1.f, [=](){
+													   
+												   this->loseStep3();
+												   winnerPointLbl->addChild(KSGradualValue<float>::create((float)loserPoint, (float)winnerPoint, 1.0f,
+																						[=](float t)
+																						{
+																							loserPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																						},[=](float t){
+																						
+																						
+																						}));
+												   }));
+											   }));
+	}
+	
+	void loseStep3(){        
+		
+		winnerArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
+		loserArrow->runAction(
+							  CCSequence::create(
+												 CCMoveBy::create(0.3,ccp(0,200)),
+												 CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep4)),
+												 NULL)
+							  );
+		
+//		CCPoint wPo = winnerBack->getPosition();
+//		CCPoint lPo = loserBack->getPosition();
+//		
+//		loserBack->runAction(CCMoveTo::create(0.3f, wPo));
+//		
+//		winnerBack->runAction(
+//							  CCSequence::create(
+//												 CCMoveTo::create(0.3f, lPo),
+//												 CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep4))
+//												 ,NULL
+//												 )
+//							  );
+		
+		
+		
+	}
+	
+	void loseStep4(){
+		
+		winnerArrow->setVisible(false);
+		loserArrow->setVisible(false);
+		
+		closeBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		//msgLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		confirmBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+
+		
+		isOpening=false;
+	}
+	
+	void startWin(){
+		isOpening=true;
+		gray->runAction(CCSequence::create(
+										   CCFadeIn::create(0.5f),
+										   CCCallFunc::create(this, callfunc_selector(ThisClassType::winStep1)),
+										   NULL
+										   )
+						);
+		
+	}
+	
+	void winStep1(){
+		backRolling->runAction(CCScaleTo::create(0.3f,2));
+		backLayer->runAction(CCScaleTo::create(0.3f,2));
+		
+		title->runAction(
+						 CCSequence::create(
+											CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
+											CCDelayTime::create(1.f),
+											CCCallFunc::create(this, callfunc_selector(ThisClassType::winStep2))
+											,NULL
+											)
+						 );
+	}
+	
+	void winStep2(){
+		
+		
+		winnerPointLbl->addChild(KSGradualValue<float>::create(0, (float)loserPoint, 1.5f,
+															   [=](float t)
+															   {
+																   winnerPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																   
+																   loserPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																   
+															   },
+															   [=](float t)
+															   {
+																   
+																   this->addChild(KSTimer::create(1.f, [=](){
+																	   
+																	   this->winStep3();
+																	   winnerPointLbl->addChild(KSGradualValue<float>::create((float)loserPoint, (float)winnerPoint, 1.0f,
+																															  [=](float t)
+																															  {
+																																  winnerPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																															  },[=](float t){
+																																  
+																																  
+																															  }));
+																   }));
+															   }));
+	}
+	
+	void winStep3(){
+		
+		winnerArrow->runAction(CCMoveBy::create(0.3,ccp(0,200)));
+		loserArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
+
+		
+				CCPoint wPo = winnerBack->getPosition();
+				CCPoint lPo = loserBack->getPosition();
+		
+				loserBack->runAction(CCMoveTo::create(0.3f, wPo));
+		
+				winnerBack->runAction(
+									  CCSequence::create(
+														 CCMoveTo::create(0.3f, lPo),
+														 CCCallFunc::create(this, callfunc_selector(ThisClassType::winStep4))
+														 ,NULL
+														 )
+									  );
+		
+		
+		
+	}
+	
+	void winStep4(){
+		
+		winnerArrow->setVisible(false);
+		loserArrow->setVisible(false);
+		
+		closeBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		msgLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		sendBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		
+		
+		isOpening=false;
+	}
+	
+	void start(){
+		isOpening=true;
+		gray->runAction(CCSequence::create(
+										   CCFadeIn::create(0.5f),
+										   CCCallFunc::create(this, callfunc_selector(ThisClassType::step2)),
+										   NULL
+										   )
+						);
+		
+		
+		
+		
+	}
+	void step2(){
+		
+		backRolling->runAction(CCScaleTo::create(0.3f,2));
+		backLayer->runAction(CCScaleTo::create(0.3f,2));
+		
+		title->runAction(
+						 CCSequence::create(
+											CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
+											CCDelayTime::create(1.f),
+											CCCallFunc::create(this, callfunc_selector(ThisClassType::step3))
+											,NULL
+											)
+						 );
+		//
+		//		roundSmall->runAction(CCScaleTo::create(8/60.f, 1, 0.2f));
+		
+		
+	}
+	
+	void step3(){
+		
+		winnerArrow->runAction(CCMoveBy::create(0.3,ccp(0,200)));
+		loserArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
+		
+		CCPoint wPo = winnerBack->getPosition();
+		CCPoint lPo = loserBack->getPosition();
+		
+		loserBack->runAction(CCMoveTo::create(0.3f, wPo));
+		
+		winnerBack->runAction(
+							  CCSequence::create(
+												 CCMoveTo::create(0.3f, lPo),
+												 CCCallFunc::create(this, callfunc_selector(ThisClassType::step4))
+												 ,NULL
+												 )
+							  );
+		
+		
+		
+	}
+	
+	void step4(){
+		
+		winnerArrow->setVisible(false);
+		loserArrow->setVisible(false);
+		
+		closeBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		msgLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		sendBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+		//
+		//		title->runAction(CCEaseBounceOut::create(CCScaleTo::create(0.3,1)));
+		//
+		//		cardLight->runAction(
+		//							 CCFadeOut::create(16/30.f)
+		//							 );
+		//		card->setVisible(true);
+		//		card->runAction(
+		//						CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,5)),CCMoveBy::create(0.5f,ccp(0,-5)),NULL))
+		//						);
+		
+		isOpening=false;
+	}
+	
+	void close(){
+		isOpening=true;
+		
+		backRolling->runAction(CCScaleTo::create(0.3f,0.01f));
+		backLayer->runAction(CCScaleTo::create(0.3f,0.01f));
+		msgLbl->runAction(CCScaleTo::create(0.3f,0.01f));
+		closeBtn->runAction(CCScaleTo::create(0.3f,0.01f));
+		confirmBtn->runAction(CCScaleTo::create(0.3f,0.01f));
+		sendBtn->runAction(CCScaleTo::create(0.3f,0.01f));
+		title->runAction(CCScaleTo::create(0.3f,0.01f));
+		
+		this->runAction(
+						CCSequence::create(
+										   CCDelayTime::create(0.4f),
+										   CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep2)),
+										   NULL
+										   )
+						);
+		
+		//
+		//		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
+		//
+		//		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
+		//		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
+		//
+		//		roundBig->runAction(
+		//							CCSequence::create(
+		//											   CCScaleTo::create(0.4f,0.01f),
+		//											   CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep2)),
+		//											   NULL
+		//											   )
+		//							);
+		//
+		
+		
+	}
+	
+	void closeStep2(){
+		gray->runAction(
+						CCSequence::create(
+										   CCFadeOut::create(0.3f),
+										   CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep3)),
+										   NULL
+										   )
+						);
+	}
+	
+	void closeStep3(){
+		isOpening=false;
+		this->removeFromParent();
+		if(closeFunc)closeFunc();
+	}
+	
+	void registerWithTouchDispatcher ()
+	{
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, touch_priority, true);
+		
+	}
+	
+	
+	bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
+		if(isOpening==false)this->close();
+		return true;
+	}
+	void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent){
+		return;
+	}
+	void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent){
+		return;
+	}
+	void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent){
+		return;
+	}
+	
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 #endif /* defined(__DGproto__TakeCardAnimation__) */
