@@ -59,8 +59,7 @@ bool AchievePopup::init()
 	addChild(gray, kAchievePopupZorder_gray);
 	
 	main_case = CCSprite::create("achievement_back.png");
-	main_case->setAnchorPoint(CCPointZero);
-	main_case->setPosition(ccp(0,-320));
+	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kAchievePopupZorder_back);
 	
 	recent_code = kAchievePopupListCode_all;
@@ -113,7 +112,7 @@ void AchievePopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(AchievePopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -132,7 +131,7 @@ void AchievePopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,-320));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(AchievePopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
