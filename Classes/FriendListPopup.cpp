@@ -392,14 +392,14 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	
 	
 	
-	title = CCLabelTTF::create("","Helvetica",12);
+	title = CCLabelTTF::create("",mySGD->getFont().c_str(),12);
 	title->setPosition(ccp(75,20));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kUserNickName);
 	cell->addChild(title,2);
 	
 	
-	score = CCLabelTTF::create("","Helvetica",19);
+	score = CCLabelTTF::create("",mySGD->getFont().c_str(),19);
 	score->setPosition(ccp(75,1));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kLastConnectDate);

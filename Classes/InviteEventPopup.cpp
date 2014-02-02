@@ -309,20 +309,20 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	sendBtn->setTag(kInviteTagSend);
 	_menu->addChild(sendBtn,2);
 
-	title = CCLabelTTF::create("","Helvetica",12);
+	title = CCLabelTTF::create("",mySGD->getFont().c_str(),12);
 	title->setPosition(ccp(45,20));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kInviteTagTitle);
 	cell->addChild(title,2);
 
 
-	score = CCLabelTTF::create("","Helvetica",14);
+	score = CCLabelTTF::create("",mySGD->getFont().c_str(),14);
 	score->setPosition(ccp(45,2));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kInviteTagScore);
 	cell->addChild(score,2);
 
-	rank = CCLabelTTF::create("","Helvetica",25);
+	rank = CCLabelTTF::create("",mySGD->getFont().c_str(),25);
 	rank->setPosition(ccp(10,10));
 	rank->setAnchorPoint(CCPointZero);
 	rank->setTag(kInviteTagRank);

@@ -333,7 +333,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 
 
-		title = CCLabelTTF::create((contentObj["nick"].asString() + "님의").c_str(), "Helvetica",12);
+		title = CCLabelTTF::create((contentObj["nick"].asString() + "님의").c_str(), mySGD->getFont().c_str(),12);
 		title->setPosition(ccp(38 + 5,28));
 		title->setAnchorPoint(CCPointZero);
 		title->setTag(kMP_MT_title);
@@ -1081,7 +1081,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				///
 		}
 
-		score = CCLabelTTF::create(comment.c_str(),"Helvetica", 12.f);
+		score = CCLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 12.f);
 		score->setPosition(ccp(45,5));
 		score->setAnchorPoint(CCPointZero);
 		score->setTag(kMP_MT_score);

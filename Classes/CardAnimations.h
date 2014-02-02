@@ -553,14 +553,14 @@ public:
 		particle->setVisible(false);
 		addChild(particle, 100);
 		
-		repairBtn = CCControlButton::create("고치기", "", 20);
+		repairBtn = CCControlButton::create("고치기", mySGD->getFont().c_str(), 20);
 		repairBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RemoveCardAnimation::stopRemove), CCControlEventTouchUpInside);
 		repairBtn->setPosition(ccp(200,40));
 		repairBtn->setTouchPriority(touch_priority-1);
 		repairBtn->setScale(0);
 		addChild(repairBtn,9);
 		
-		skipBtn = CCControlButton::create("스킵","",20);
+		skipBtn = CCControlButton::create("스킵",mySGD->getFont().c_str(),20);
 		skipBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RemoveCardAnimation::skip), CCControlEventTouchUpInside);
 		skipBtn->setPosition(ccp(280,40));
 		skipBtn->setTouchPriority(touch_priority-1);
@@ -1262,7 +1262,7 @@ public:
 		loserBack->addChild(loser_picture,1);
 		
 		
-		loserLbl = CCLabelTTF::create(loser_name.c_str(), mySGD->getFont().c_str(), 15);
+		loserLbl = CCLabelTTF::create(loser_name.c_str(), mySGD->getFont().c_str(), 12);
 		loserLbl->setPosition(ccp(80,27));
 		loserBack->addChild(loserLbl,4);
 		
@@ -1292,7 +1292,7 @@ public:
 		
 		//cardchange_cancel
 		
-		closeBtn = CCControlButton::create("닫기","",20);
+		closeBtn = CCControlButton::create("닫기",mySGD->getFont().c_str(),20);
 		closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::closeByBtn), CCControlEventTouchUpInside);
 		closeBtn->setPosition(ccp(770/2,560/2));
 		closeBtn->setTouchPriority(touch_priority-1);
@@ -1300,7 +1300,7 @@ public:
 		addChild(closeBtn,9);
 										   
 										   
-		sendBtn = CCControlButton::create("도전하기","",20);
+		sendBtn = CCControlButton::create("도전하기",mySGD->getFont().c_str(),20);
 		sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
 		sendBtn->setPosition(ccp(240,85/2));
 		sendBtn->setTouchPriority(touch_priority-1);
@@ -1665,7 +1665,7 @@ public:
 		loserBack->addChild(loser_picture,1);
 		
 		
-		loserLbl = CCLabelTTF::create(loser_name.c_str(), mySGD->getFont().c_str(), 15);
+		loserLbl = CCLabelTTF::create(loser_name.c_str(), mySGD->getFont().c_str(), 12);
 		loserLbl->setPosition(ccp(80,27));
 		loserBack->addChild(loserLbl,4);
 		
@@ -1695,7 +1695,7 @@ public:
 		
 		//cardchange_cancel
 		
-		closeBtn = CCControlButton::create("닫기","",20);
+		closeBtn = CCControlButton::create("닫기",mySGD->getFont().c_str(),20);
 		closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::closeByBtn), CCControlEventTouchUpInside);
 		closeBtn->setPosition(ccp(770/2,560/2));
 		closeBtn->setTouchPriority(touch_priority-1);
@@ -1703,14 +1703,14 @@ public:
 		addChild(closeBtn,9);
 		
 		
-		sendBtn = CCControlButton::create("확인","",20);
+		sendBtn = CCControlButton::create("확인",mySGD->getFont().c_str(),20);
 		sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
 		sendBtn->setPosition(ccp(240,85/2));
 		sendBtn->setTouchPriority(touch_priority-1);
 		sendBtn->setScale(0);
 		addChild(sendBtn,9);
 		
-		confirmBtn = CCControlButton::create("확인","",20);
+		confirmBtn = CCControlButton::create("확인",mySGD->getFont().c_str(),20);
 		confirmBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
 		confirmBtn->setPosition(ccp(240,85/2));
 		confirmBtn->setTouchPriority(touch_priority-1);

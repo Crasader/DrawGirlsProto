@@ -288,13 +288,13 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	sendBtn->setTag(kTagGameFriendSend);
 	_menu->addChild(sendBtn, kZorderJoinGameFriendSend);
 	
-	title = CCLabelTTF::create("","Helvetica",12);
+	title = CCLabelTTF::create("",mySGD->getFont().c_str(),12);
 	title->setPosition(ccp(40,20));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kTagGameFriendNickname);
 	cell->addChild(title, 2);
 	
-	score = CCLabelTTF::create("","Helvetica",10);
+	score = CCLabelTTF::create("",mySGD->getFont().c_str(),10);
 	score->setPosition(ccp(40,8));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kTagGameFriendLastDate);

@@ -619,20 +619,20 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	decoInfo->setPosition(ccp(190, 20));
 	cell->addChild(decoInfo, kRP_Z_back + 1);
 
-	userName = CCLabelTTF::create("","Helvetica",12);
+	userName = CCLabelTTF::create("",mySGD->getFont().c_str(),12);
 	userName->setPosition(ccp(75,20));
 	userName->setAnchorPoint(CCPointZero);
 	userName->setTag(kRP_RT_title);
 	cell->addChild(userName,2);
 	
 	
-	score = CCLabelTTF::create("","Helvetica",19);
+	score = CCLabelTTF::create("",mySGD->getFont().c_str(),19);
 	score->setPosition(ccp(75,1));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kRP_RT_score);
 	cell->addChild(score,2);
 	
-	rank = CCLabelTTF::create("","Helvetica",25);
+	rank = CCLabelTTF::create("",mySGD->getFont().c_str(),25);
 	rank->setPosition(ccp(10,10));
 	rank->setAnchorPoint(CCPointZero);
 	rank->setTag(kRP_RT_rank);
