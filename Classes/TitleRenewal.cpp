@@ -16,7 +16,6 @@
 #include <chrono>
 #include "MainFlowScene.h"
 #include "TutorialFlowStep.h"
-#include "RankChange.h"
 
 CCScene* TitleRenewalScene::scene()
 {

@@ -965,17 +965,17 @@ void FeverCoin::myInit(IntPoint t_point, CCObject* t_add, SEL_CallFuncO d_add) /
 	target_add = t_add;
 	delegate_add = d_add;
 	my_point = IntPoint(t_point.x, t_point.y);
-	int start_cut = ((my_point.y-15)/17 + (my_point.x-4)/17)%12/2;
+	int start_cut = ((my_point.y-4)/9 + (my_point.x-4)/9)%6;
 	
 	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin.png");
-	initWithTexture(t_texture, CCRectMake(start_cut*31, 0, 31, 31));
+	initWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
 	CCAnimation* t_animation = CCAnimation::create();
 	t_animation->setDelayPerUnit(0.1f);
 	int add_count = 0;
 	for(int i=start_cut;add_count < 6;i=(i+1)%6)
 	{
 		add_count++;
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*31, 0, 31, 31));
+		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
 	}
 	CCAnimate* t_animate = CCAnimate::create(t_animation);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);

@@ -272,13 +272,15 @@ public:
 			me_challenge_target_user_id = "";
 			me_challenge_target_user_nick = "";
 			me_challenge_target_user_score = 0.f;
+			me_challenge_target_user_profile = "";
 		}
 	}
-	void setMeChallengeTarget(string t_target, const std::string& t_nickname, float t_score)
+	void setMeChallengeTarget(string t_target, const std::string& t_nickname, float t_score, string t_profile)
 	{
 		me_challenge_target_user_id = t_target.c_str();
 		me_challenge_target_user_nick = t_nickname;
 		me_challenge_target_user_score = t_score;
+		me_challenge_target_user_profile = t_profile;
 	}
 	string getMeChallengeTarget()
 	{
@@ -291,6 +293,10 @@ public:
 	float getMeChallengeTargetScore()
 	{
 		return me_challenge_target_user_score;
+	}
+	string getMeChallengeTargetProfile()
+	{
+		return me_challenge_target_user_profile;
 	}
 	
 	bool getIsAcceptChallenge()
@@ -306,14 +312,16 @@ public:
 			accept_challenge_target_user_nick = "";
 			accept_challenge_target_score = 0.f;
 			resetReplayPlayingInfo();
+			accept_challenge_target_profile = "";
 		}
 	}
-	void setAcceptChallengeTarget(string t_id, string t_nick, float t_score, Json::Value t_replay)
+	void setAcceptChallengeTarget(string t_id, string t_nick, float t_score, Json::Value t_replay, string t_profile)
 	{
 		accept_challenge_target_user_id = t_id.c_str();
 		accept_challenge_target_user_nick = t_nick.c_str();
 		accept_challenge_target_score = t_score;
 		setReplayPlayingInfo(t_replay);
+		accept_challenge_target_profile = t_profile;
 	}
 	string getAcceptChallengeId()
 	{
@@ -326,6 +334,10 @@ public:
 	float getAcceptChallengeScore()
 	{
 		return accept_challenge_target_score;
+	}
+	string getAcceptChallengeProfile()
+	{
+		return accept_challenge_target_profile;
 	}
 	
 	bool getIsAcceptHelp()
@@ -561,11 +573,13 @@ private:
 	string me_challenge_target_user_id;
 	string me_challenge_target_user_nick;
 	float me_challenge_target_user_score;
+	string me_challenge_target_user_profile;
 	
 	bool is_accept_challenge;
 	string accept_challenge_target_user_id;
 	string accept_challenge_target_user_nick;
 	float accept_challenge_target_score;
+	string accept_challenge_target_profile;
 	
 	bool is_accept_help;
 	string accept_help_target_user_id;

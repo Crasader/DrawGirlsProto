@@ -613,6 +613,7 @@ void JM_BasicMissile::moving ()
 		particlePosition = ccpAdd(particlePosition, moveVector);
 		
 		mainImg->setPosition(particlePosition);
+		streak_img->setPosition(particlePosition);
 		
 		if(is_spin)				mainImg->setRotation(mainImg->getRotation()-6);
 		else					mainImg->setRotation((mainImg->getRotation()-(directionAngle-90))/2.f);
@@ -872,6 +873,11 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	directionAngle += 180.f + rand()%31 - 15.f;
 	if(directionAngle >= 180.f)
 		directionAngle -= 360.f;
+	
+	streak_img = CCMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+	streak_img->setPosition(particlePosition);
+	addChild(streak_img);
+	
 	addChild(particle);
 	
 	int animation_cnt = 0;
@@ -905,7 +911,7 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 		else
 			animation_cnt = 3;
 	}
-
+	
 	CCTexture2D* missile_main_texture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat((type_name + "%d_main.png").c_str(), element_level)->getCString());
 	
 	CCSize animation_cut_size = CCSizeMake(missile_main_texture->getContentSize().width/animation_cnt, missile_main_texture->getContentSize().height);
