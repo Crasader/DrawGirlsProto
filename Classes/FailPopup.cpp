@@ -84,7 +84,7 @@ bool FailPopup::init()
 	p1_data["allhighscore"] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
 	Json::FastWriter p1_data_writer;
 	p1["data"] = p1_data_writer.write(p1_data);
-	hspConnector::get()->command("setweeklyscore", p1, NULL);
+	hspConnector::get()->command("addweeklyscore", p1, NULL);
 	
 	
 	if(mySGD->save_stage_rank_stageNumber == mySD->getSilType())
@@ -98,7 +98,7 @@ bool FailPopup::init()
 	p["memberID"]=hspConnector::get()->getKakaoID();
 	p["score"]=int(mySGD->getScore());
 	p["stageNo"]=mySD->getSilType();
-	hspConnector::get()->command("addStageScore",p,NULL);
+	hspConnector::get()->command("setStageScore",p,NULL);
 	
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
