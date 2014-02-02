@@ -683,10 +683,10 @@ public:
 		card->runAction(
 						CCRepeatForever::create(CCSequence::create(CCTintTo::create(5/30.f, 255, 100, 100),CCTintTo::create(5/30.f, 255, 255, 255),CCMoveBy::create(0.5f,ccp(0,5)),CCMoveBy::create(0.5f,ccp(0,-5)),NULL))
 						);
-		this->runAction(CCSequence::create(CCDelayTime::create(0.1),CCCallFunc::create(this, callfunc_selector(RemoveCardAnimation::step5)),NULL));
+		this->runAction(CCSequence::create(CCDelayTime::create(0.1),CCCallFunc::create(this, callfunc_selector(RemoveCardAnimation::removeContinue)),NULL));
 	}
 	
-	void step5(){
+	void removeContinue(){
 		particle->setVisible(true);
 		isOpening=false;
 		
