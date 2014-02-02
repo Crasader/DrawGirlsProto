@@ -11,7 +11,6 @@
 #include "AlertEngine.h"
 #include "MyLocalization.h"
 #include "StarGoldData.h"
-#include "PausePopupLayer.h"
 #include "StartMapGacha.h"
 #include "SearchEye.h"
 #include "ASPopupView.h"
@@ -22,6 +21,8 @@
 #include "PuzzleScene.h"
 #include "MainFlowScene.h"
 #include "AchieveNoti.h"
+#include "PauseContent.h"
+#include "StartSettingScene.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -85,6 +86,7 @@ bool Maingame::init()
 	myGD->V_V["Main_hideThumb"] = std::bind(&Maingame::hideThumb, this);
 	myGD->V_V["Main_showDrawButtonTutorial"] = std::bind(&Maingame::showDrawButtonTutorial, this);
 	myGD->V_V["Main_hideDrawButtonTutorial"] = std::bind(&Maingame::hideDrawButtonTutorial, this);
+	myGD->V_V["Main_showPause"] = std::bind(&Maingame::showPause, this);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -210,7 +212,7 @@ void Maingame::finalSetting()
 	myMS->scanMap();
 	myGD->communication("VS_setSceneNode", this);
 	
-	myUI->setControlTD(this, callfunc_selector(Maingame::setControlGesture), callfunc_selector(Maingame::setControlButton), callfunc_selector(Maingame::setControlJoystick), callfunc_selector(Maingame::startControl));
+//	myUI->setControlTD(this, callfunc_selector(Maingame::setControlGesture), callfunc_selector(Maingame::setControlButton), callfunc_selector(Maingame::setControlJoystick), callfunc_selector(Maingame::startControl));
 	
 	search_eye = SearchEye::create();
 	search_eye->setPosition(CCPointZero);
@@ -1557,4 +1559,73 @@ void Maingame::hideThumb()
 	{
 		replay_all_node->setVisible(false);
 	}
+}
+
+void Maingame::showPause()
+{
+	CCNode* exit_target = this;
+	exit_target->onExit();
+	
+	ASPopupView* t_popup = ASPopupView::create(-200);
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+	t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+	t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+	
+	PauseContent* t_container = PauseContent::create(t_popup->getTouchPriority(), [=]()
+	{
+		cancelHome();
+		mControl->isStun = false;
+		exit_target->onEnter();
+		t_popup->removeFromParent();
+	}, [=](){t_popup->removeFromParent();goHome();}, [=](){t_popup->removeFromParent();goReplay();});
+	
+	t_popup->setContainerNode(t_container);
+	exit_target->getParent()->addChild(t_popup);
+	t_container->startShow();
+}
+void Maingame::goHome ()
+{
+	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
+	
+	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+	AudioEngine::sharedInstance()->stopAllEffects();
+	AudioEngine::sharedInstance()->stopSound();
+	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
+	
+	mySGD->is_paused = false;
+	AudioEngine::sharedInstance()->setAppFore();
+	CCDirector::sharedDirector()->resume();
+	gameover();
+}
+void Maingame::goReplay ()
+{
+	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, 0);
+	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
+	
+	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+	AudioEngine::sharedInstance()->stopAllEffects();
+	AudioEngine::sharedInstance()->stopSound();
+	
+	mySGD->is_paused = false;
+	AudioEngine::sharedInstance()->setAppFore();
+	CCDirector::sharedDirector()->resume();
+	mySGD->gameOver(0, 0, 0);
+	mySGD->resetLabels();
+	myGD->resetGameData();
+	
+	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stageSetting);
+	CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+}
+void Maingame::cancelHome ()
+{
+	startControl();
+	mySGD->is_paused = false;
+	AudioEngine::sharedInstance()->setAppFore();
+	CCDirector::sharedDirector()->resume();
 }

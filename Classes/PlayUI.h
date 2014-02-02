@@ -10,7 +10,6 @@
 #include "AudioEngine.h"
 #include "AlertEngine.h"
 #include "MyLocalization.h"
-#include "PausePopupLayer.h"
 #include "CountingBMLabel.h"
 #include "BossLifeGage.h"
 #include "AreaGage.h"
@@ -231,7 +230,7 @@ public:
 	void keepBossLife ();
 	void checkBossLife ();
 	int getGameTime ();
-	void setControlTD (CCObject * t_main, SEL_CallFunc d_gesture, SEL_CallFunc d_button, SEL_CallFunc d_joystick, SEL_CallFunc d_startControl);
+//	void setControlTD (CCObject * t_main, SEL_CallFunc d_gesture, SEL_CallFunc d_button, SEL_CallFunc d_joystick, SEL_CallFunc d_startControl);
 	void showPause ();
 	void showContinuePopup (CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue);
 	void addGameTime30Sec ();
@@ -246,11 +245,11 @@ public:
 private:
 	KSProtectVar<float> score_value;
 	int percentage_decrease_cnt;
-	CCObject * target_main;
-	SEL_CallFunc delegate_gesture;
-	SEL_CallFunc delegate_button;
-	SEL_CallFunc delegate_joystick;
-	SEL_CallFunc delegate_startControl;
+//	CCObject * target_main;
+//	SEL_CallFunc delegate_gesture;
+//	SEL_CallFunc delegate_button;
+//	SEL_CallFunc delegate_joystick;
+//	SEL_CallFunc delegate_startControl;
 	CCObject * target_continue;
 	SEL_CallFunc delegate_continue;
 	float bossLife;
@@ -313,9 +312,9 @@ private:
 	void closeCondition ();
 	void closeShutter ();
 	void endCloseShutter ();
-	void goHome ();
-	void goReplay ();
-	void cancelHome ();
+//	void goHome ();
+//	void goReplay ();
+//	void cancelHome ();
 	void alertAction (int t1, int t2);
 	
 	void writeMap();

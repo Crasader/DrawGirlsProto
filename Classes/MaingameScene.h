@@ -264,6 +264,12 @@ private:
 	
 	void showDrawButtonTutorial();
 	void hideDrawButtonTutorial();
+	
+	void showPause();
+	void goHome ();
+	void goReplay ();
+	void cancelHome ();
+
 };
 
 #endif

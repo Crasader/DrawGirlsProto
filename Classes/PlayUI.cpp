@@ -1238,19 +1238,21 @@ int PlayUI::getGameTime ()
 {
 	return countingCnt;
 }
-void PlayUI::setControlTD (CCObject * t_main, SEL_CallFunc d_gesture, SEL_CallFunc d_button, SEL_CallFunc d_joystick, SEL_CallFunc d_startControl)
-{
-	target_main = t_main;
-	delegate_gesture = d_gesture;
-	delegate_button = d_button;
-	delegate_joystick = d_joystick;
-	delegate_startControl = d_startControl;
-}
+//void PlayUI::setControlTD (CCObject * t_main, SEL_CallFunc d_gesture, SEL_CallFunc d_button, SEL_CallFunc d_joystick, SEL_CallFunc d_startControl)
+//{
+//	target_main = t_main;
+//	delegate_gesture = d_gesture;
+//	delegate_button = d_button;
+//	delegate_joystick = d_joystick;
+//	delegate_startControl = d_startControl;
+//}
 void PlayUI::showPause ()
 {
 	mySGD->is_paused = true;
-	PausePopupLayer* t_ppl = PausePopupLayer::create(this, callfunc_selector(PlayUI::goHome), this, callfunc_selector(PlayUI::cancelHome), target_main, delegate_gesture, delegate_button, delegate_joystick, this, callfunc_selector(PlayUI::goReplay));
-	addChild(t_ppl);
+	
+	myGD->communication("Main_showPause");
+//	PausePopupLayer* t_ppl = PausePopupLayer::create(this, callfunc_selector(PlayUI::goHome), this, callfunc_selector(PlayUI::cancelHome), target_main, delegate_gesture, delegate_button, delegate_joystick, this, callfunc_selector(PlayUI::goReplay));
+//	addChild(t_ppl);
 }
 void PlayUI::showContinuePopup (CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue)
 {
@@ -2373,43 +2375,43 @@ void PlayUI::endCloseShutter ()
 {
 	myGD->communication("Main_gameover");
 }
-void PlayUI::goHome ()
-{
-	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
-	
-	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
-	AudioEngine::sharedInstance()->stopAllEffects();
-	AudioEngine::sharedInstance()->stopSound();
-	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
-	closeShutter();
-}
-void PlayUI::goReplay ()
-{
-	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, 0);
-	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
-	
-	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
-	AudioEngine::sharedInstance()->stopAllEffects();
-	AudioEngine::sharedInstance()->stopSound();
-	
-	mySGD->is_paused = false;
-	AudioEngine::sharedInstance()->setAppFore();
-	CCDirector::sharedDirector()->resume();
-	mySGD->gameOver(0, 0, 0);
-	mySGD->resetLabels();
-	myGD->resetGameData();
-	
-	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stageSetting);
-//	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-	CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
-}
-void PlayUI::cancelHome ()
-{
-	(target_main->*delegate_startControl)();
-	mySGD->is_paused = false;
-	AudioEngine::sharedInstance()->setAppFore();
-	CCDirector::sharedDirector()->resume();
-}
+//void PlayUI::goHome ()
+//{
+//	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
+//	
+//	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+//	AudioEngine::sharedInstance()->stopAllEffects();
+//	AudioEngine::sharedInstance()->stopSound();
+//	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
+//	closeShutter();
+//}
+//void PlayUI::goReplay ()
+//{
+//	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, 0);
+//	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
+//	
+//	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+//	AudioEngine::sharedInstance()->stopAllEffects();
+//	AudioEngine::sharedInstance()->stopSound();
+//	
+//	mySGD->is_paused = false;
+//	AudioEngine::sharedInstance()->setAppFore();
+//	CCDirector::sharedDirector()->resume();
+//	mySGD->gameOver(0, 0, 0);
+//	mySGD->resetLabels();
+//	myGD->resetGameData();
+//	
+//	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stageSetting);
+////	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+//	CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+//}
+//void PlayUI::cancelHome ()
+//{
+//	(target_main->*delegate_startControl)();
+//	mySGD->is_paused = false;
+//	AudioEngine::sharedInstance()->setAppFore();
+//	CCDirector::sharedDirector()->resume();
+//}
 void PlayUI::alertAction (int t1, int t2)
 {
 	
