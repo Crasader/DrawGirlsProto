@@ -1129,14 +1129,17 @@ void TitleRenewalScene::endingCheck()
 	
 	if(nick == "")
 	{
-		state_label->setString("닉네임을 입력해주세요.");
+		state_label->setString("");
 		
 		nick_back = CCSprite::create("nickname_back.png");
-		nick_back->setPosition(ccp(240,130));
+		nick_back->setPosition(ccp(240,160));
 		addChild(nick_back);
 		
-		input_text = CCEditBox::create(CCSizeMake(210, 30), CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-		input_text->setPosition(ccp(197,113));
+		CCScale9Sprite* t_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		t_back->setOpacity(0);
+		
+		input_text = CCEditBox::create(CCSizeMake(210, 30), t_back);
+		input_text->setPosition(ccp(195,145));
 		input_text->setPlaceHolder("입력해주세요.");
 		input_text->setReturnType(kKeyboardReturnTypeDone);
 		input_text->setFont(mySGD->getFont().c_str(), 20);
@@ -1152,7 +1155,7 @@ void TitleRenewalScene::endingCheck()
 		ok_item->setTag(kTitleRenewal_MT_nick);
 		
 		CCMenu* ok_menu = CCMenu::createWithItem(ok_item);
-		ok_menu->setPosition(ccp(370,130));
+		ok_menu->setPosition(ccp(363,160));
 		addChild(ok_menu, 0, kTitleRenewal_MT_nick);
 		
 		is_menu_enable = true;

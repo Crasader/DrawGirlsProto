@@ -196,6 +196,7 @@ public:
 	void writeParamForKey (Json::Value & data, SaveUserData_Key t_key);
 	void saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector);
 	void saveAllUserData (jsonSelType t_saved);
+	void clear();
 	void resetDSH ();
 	bool isCheatKeyEnable ();
 	int getPuzzleMapSceneShowType ();

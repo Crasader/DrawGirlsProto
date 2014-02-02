@@ -508,6 +508,12 @@ void DataStorageHub::saveAllUserData (jsonSelType t_saved)
 {
 	hspConnector::get()->command("updateUserData", getSaveAllUserDataParam(), t_saved);
 }
+
+void DataStorageHub::clear()
+{
+	myDefault->resetData(kSDF_myDSH);
+}
+
 void DataStorageHub::resetDSH ()
 {
 	setIntegerForKey(kDSH_Key_savedStar, default_ruby, false);

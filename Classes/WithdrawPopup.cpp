@@ -60,6 +60,7 @@ void WithdrawPopup::resultDropoutuser(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		myDSH->clear();
 		myDSH->resetDSH();
 		CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 	}

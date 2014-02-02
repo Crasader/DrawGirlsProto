@@ -87,6 +87,7 @@ void LogoutPopup::resultLogoutAction (Json::Value result_data)
 	CCLog("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["error"]["isSuccess"].asBool())
 	{
+		myDSH->clear();
 		myDSH->resetDSH();
 		CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 	}

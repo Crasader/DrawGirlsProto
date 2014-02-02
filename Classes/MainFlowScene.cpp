@@ -792,7 +792,6 @@ void MainFlowScene::menuAction(CCObject* sender)
 			addChild(t_pp, kMainFlowZorder_popup);
 			
 			postbox_count_case->setVisible(false);
-			postbox_count_label->setVisible(false);
 		}
 		else if(tag == kMainFlowMenuTag_option)
 		{
