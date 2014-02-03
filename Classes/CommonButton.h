@@ -29,12 +29,26 @@ enum CommonButtonType {
 	CommonButtonClose
 	};
 
+enum PriceType{
+	PriceTypeGold,
+	PriceTypeRuby,
+	PriceTypeSocial,
+	PriceTypeCoin,
+	PriceTypeMoney,
+	PriceTypeNone
+};
+
+
 class CommonButton : public CCNode {
 	CCControlButton* m_btn;
 	std::function<void(CCObject*)> m_func;
 	CCLabelTTF* m_btnTitle;
 	CCScale9Sprite* m_btnBack;
 	CommonButtonType m_btnType;
+	int m_price;
+	PriceType m_priceType;
+	CCSprite* m_priceTypeSprite;
+	CCLabelTTF* m_priceLbl;
 public:
 	
 	void setFunction(std::function<void(CCObject*)> func){
@@ -84,6 +98,12 @@ public:
 			return false;
 		}
 		
+		m_priceType = PriceTypeNone;
+		m_price=0;
+		
+		m_priceTypeSprite = NULL;
+		m_priceLbl = NULL;
+		
 		this->setAnchorPoint(ccp(0.5f,0.5f));
 		m_btnTitle = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), fontSize);
 		
@@ -99,7 +119,7 @@ public:
 		else if(btnType==CommonButtonOrange) btnBackImg = "commonButtonOrange.png";
 		else if(btnType==CommonButtonClose) btnBackImg = "commonButtonClose.png";
 		
-		m_btnBack= CCScale9Sprite::create(btnBackImg.c_str());
+		m_btnBack = CCScale9Sprite::create(btnBackImg.c_str());
 		
 		
 		m_btn = CCControlButton::create(m_btnTitle, m_btnBack);
@@ -114,7 +134,7 @@ public:
 		m_btn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::callFunc), CCControlEventTouchUpInside);
 		m_btn->setPosition(m_btn->getContentSize().width/2, m_btn->getContentSize().height/2);
 		if(touchPriority!=0)m_btn->setTouchPriority(touchPriority);
-		addChild(m_btn,1000);
+		addChild(m_btn,2);
 		
 		this->setContentSize(m_btn->getContentSize());
 		
@@ -185,10 +205,42 @@ public:
 		m_btn->setTitleColorForState(color,state);
 	}
 	
-	void setPrice(int priceType, int price){
+	void setPrice(PriceType priceType, int price){
+		m_priceType=priceType;
+		m_price = price;
 		
+		
+		if(m_priceLbl==NULL){
+			m_priceLbl=CCLabelTTF::create(CCString::createWithFormat("%d",m_price)->getCString(), mySGD->getFont().c_str(), 13);
+			m_priceLbl->setAnchorPoint(ccp(0.5,0));
+			m_priceLbl->setPosition(ccp(this->getContentSize().width/2+5,7));
+			m_btnTitle->setPositionY(m_btnTitle->getPositionY()+8);
+			addChild(m_priceLbl,10);
+		}else{
+			m_priceLbl->setString(CCString::createWithFormat("%d",m_price)->getCString());
+		}
+		
+		if(m_priceTypeSprite==NULL && m_priceType!=PriceTypeNone){
+			string priceTypeImg = "commonButtonGold";
+			if(m_priceType == PriceTypeCoin)priceTypeImg="commonButtonCoin.png";
+			else if(m_priceType == PriceTypeGold)priceTypeImg="commonButtonGold.png";
+			else if(m_priceType == PriceTypeSocial)priceTypeImg="commonButtonSocial.png";
+			else if(m_priceType == PriceTypeRuby)priceTypeImg="commonButtonRuby.png";
+			
+			m_priceTypeSprite = CCSprite::create(priceTypeImg.c_str());
+			m_priceTypeSprite->setScale(0.9);
+			m_priceTypeSprite->setPosition(ccp(m_priceLbl->getPositionX()-m_priceLbl->getContentSize().width/2-10+2,m_priceLbl->getPositionY()+m_priceLbl->getContentSize().height/2));
+			addChild(m_priceTypeSprite,11);
+		}
 	}
 	
+	int getPrice(){
+		return m_price;
+	}
+	
+	PriceType getPriceType(){
+		return m_priceType;
+	}
 	
 	
 	
