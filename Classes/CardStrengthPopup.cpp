@@ -926,6 +926,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 	{
 		if(mySGD->getStar() >= mySGD->getCardUpgradeRubyFee() && offering_card_number > 0)
 		{
+			save_offering_number = offering_card_number;
 			mySGD->setStar(mySGD->getStar() - mySGD->getCardUpgradeRubyFee());
 			
 			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
@@ -1119,6 +1120,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 		{
 			mySGD->setGold(mySGD->getGold() - mySGD->getCardUpgradeGoldFee());
 			
+			save_offering_number = offering_card_number;
 			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 			CCLog("strength_rate : %.3f", strength_rate);
 			
@@ -1207,13 +1209,16 @@ void CardStrengthPopup::resultStrength(Json::Value result_data)
 		int strength_stage = NSDS_GI(kSDS_CI_int1_stage_i, strength_card_number);
 		int strength_grade = NSDS_GI(kSDS_CI_int1_grade_i, strength_card_number);
 		
+		int offering_stage = NSDS_GI(kSDS_CI_int1_stage_i, save_offering_number);
+		int offering_grade = NSDS_GI(kSDS_CI_int1_grade_i, save_offering_number);
+		
 		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",strength_stage,strength_grade)->getCString());
 		CardCase* cardCase = CardCase::create(strength_card_number);
 		card->addChild(cardCase);
 		
 		
-		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",strength_stage,strength_grade)->getCString());
-		CardCase* cardCase2 = CardCase::create(strength_card_number);
+		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",offering_stage,offering_grade)->getCString());
+		CardCase* cardCase2 = CardCase::create(save_offering_number);
 		card2->addChild(cardCase2);
 		
 		

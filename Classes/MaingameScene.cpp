@@ -1625,7 +1625,19 @@ void Maingame::showPause()
 		mControl->isStun = false;
 		exit_target->onEnter();
 		t_popup->removeFromParent();
-	}, [=](){t_popup->removeFromParent();goHome();}, [=](){t_popup->removeFromParent();goReplay();});
+	}, [=]()
+	{
+		mControl->isStun = false;
+		exit_target->onEnter();
+		t_popup->removeFromParent();
+		goHome();
+	}, [=]()
+	{
+		mControl->isStun = false;
+		exit_target->onEnter();
+		t_popup->removeFromParent();
+		goReplay();
+	});
 	
 	t_popup->setContainerNode(t_container);
 	exit_target->getParent()->addChild(t_popup);

@@ -179,15 +179,15 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_wasTutorialPopupCrashArea)			return_value = "wtpca";
 	
 	else if(t_name == kDSH_Key_controlJoystickDirection)			return_value = "cjd";
-	else if(t_name == kDSH_Key_isDisableIrregularDirection)			return_value = "idid";
+	else if(t_name == kDSH_Key_isEnableIrregularDirection)			return_value = "idid";
 	else if(t_name == kDSH_Key_isDisableDrawButton)					return_value = "iddb";
-	else if(t_name == kDSH_Key_isAlwaysVisibleJoystick)				return_value = "iavj";
+	else if(t_name == kDSH_Key_isAlwaysInvisibleJoystick)				return_value = "iavj";
 	else if(t_name == kDSH_Key_isAlwaysCenterCharacter)				return_value = "iacc";
-	else if(t_name == kDSH_Key_isEnableLineOver)					return_value = "idlo";
+	else if(t_name == kDSH_Key_isDisableLineOver)					return_value = "idlo";
 	else if(t_name == kDSH_Key_isJoystickCenterNotFixed)			return_value = "ijcnf";
 	
 	else if(t_name == kDSH_Key_hasShowTutorial_int1)				return_value = "hst%d";
-	else if(t_name == kDSH_Key_isControlJoystickFixed)				return_value = "icjf";
+	else if(t_name == kDSH_Key_isControlJoystickNotFixed)				return_value = "icjf";
 	
 	else if(t_name == kDSH_Key_selectedCharacter)					return_value = "scharacter";
 	else if(t_name == kDSH_Key_isCharacterUnlocked_int1)			return_value = "icu%d";

@@ -983,12 +983,10 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			myGD->communication("CP_startDieAnimation");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
-			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-			CCBReader* reader = new CCBReader(nodeLoader);
-			result_sprite = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_stageclear.ccbi",this));
-			result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
-			addChild(result_sprite);
-			reader->release();
+			CCDelayTime* t_delay = CCDelayTime::create(1.5f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::addResultClearCCB));
+			CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+			runAction(t_seq);
 			
 			endGame(t_p < 1.f && t_p > 0.99f);
 		}
@@ -1004,17 +1002,28 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
-			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-			CCBReader* reader = new CCBReader(nodeLoader);
-			result_sprite = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_missonfair.ccbi",this));
-			result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
-			addChild(result_sprite);
-			reader->release();
+			addResultCCB("ui_missonfair.ccbi");
 			
 			endGame(false);
 		}
 	}
 }
+
+void PlayUI::addResultClearCCB()
+{
+	addResultCCB("ui_stageclear.ccbi");
+}
+
+void PlayUI::addResultCCB(string ccb_filename)
+{
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	result_sprite = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile(ccb_filename.c_str(),this));
+	result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
+	addChild(result_sprite);
+	reader->release();
+}
+
 void PlayUI::conditionClear ()
 {
 //	removeChildByTag(kCT_UI_clrCdtLabel);
@@ -1052,12 +1061,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
-			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-			CCBReader* reader = new CCBReader(nodeLoader);
-			result_sprite = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_missonfair.ccbi",this));
-			result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
-			addChild(result_sprite);
-			reader->release();
+			addResultCCB("ui_missonfair.ccbi");
 			
 			endGame(false);
 			return;
@@ -1481,7 +1485,7 @@ void PlayUI::counting ()
 	countingCnt++;
 	use_time++;
 	
-	if(mySGD->draw_button_tutorial_ing > 0)
+	if(mySGD->is_draw_button_tutorial && mySGD->draw_button_tutorial_ing > 0)
 	{
 		mySGD->draw_button_tutorial_ing++;
 		if(mySGD->draw_button_tutorial_ing >= draw_button_tutorial_show)
@@ -1703,7 +1707,7 @@ void PlayUI::endGame (bool is_show_reason)
 			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
 			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
 			CCFiniteTimeAction* nextScene2;
-			if(mySGD->getGold() >= 500)
+			if(mySGD->getStar() >= mySGD->getGachaOnePercentFee())
 			{
 				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
 			}
@@ -1750,7 +1754,7 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 {
 	vector<SaveUserData_Key> save_userdata_list;
 	
-	save_userdata_list.push_back(kSaveUserData_Key_gold);
+	save_userdata_list.push_back(kSaveUserData_Key_star);
 	
 	myDSH->saveUserData(save_userdata_list, nullptr);
 	
@@ -1894,7 +1898,7 @@ void PlayUI::myInit ()
 	
 	clearPercentage = 1;
 	
-	if(mySD->getSilType() == 1 && !myDSH->getIntegerForKey(kDSH_Key_isDisableDrawButton))
+	if(mySD->getSilType() == 1 && !myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton))
 	{
 		mySGD->is_draw_button_tutorial = true;
 		mySGD->draw_button_tutorial_ing = 1;

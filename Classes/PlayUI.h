@@ -315,6 +315,8 @@ private:
 //	void goReplay ();
 //	void cancelHome ();
 	void alertAction (int t1, int t2);
+	void addResultClearCCB();
+	void addResultCCB(string ccb_filename);
 	
 	void writeMap();
 	void checkMapTimeVector();

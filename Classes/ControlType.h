@@ -236,14 +236,16 @@ private:
 	
 	bool isButtonAction;
 	
+	bool keep_is_draw_button_tutorial_on;
+	
 	CCBAnimationManager* button_ani;
 	
-	bool isDisableIrregularDirection;
-	bool isControlJoystickFixed;
-	bool isAlwaysVisibleJoystick;
+	bool isEnableIrregularDirection;
+	bool isControlJoystickNotFixed;
+	bool isAlwaysInvisibleJoystick;
 	int controlJoystickDirection;
 	bool isDisableDrawButton;
-	bool isEnableLineOver;
+	bool isDisableLineOver;
 	bool isJoystickCenterNotFixed;
 	
 	
