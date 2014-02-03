@@ -24,6 +24,7 @@
 #include "PauseContent.h"
 #include "ContinueContent.h"
 #include "StartSettingScene.h"
+#include "AcceptChallengeAniContent.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -406,6 +407,41 @@ void Maingame::startScene()
 	startCounting();
 }
 
+void Maingame::checkAcceptChallenge()
+{
+	if(mySGD->getIsAcceptChallenge())
+	{
+		CCNode* exit_target = this;
+		exit_target->onExit();
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		AcceptChallengeAniContent* t_container = AcceptChallengeAniContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																				   {
+																					   checkFriendCard();
+																					   mControl->isStun = false;
+																					   exit_target->onEnter();
+																					   t_popup->removeFromParent();
+																				   }, hspConnector::get()->getKakaoProfileURL(), hspConnector::get()->getKakaoNickname(),
+																				   hspConnector::get()->getKakaoProfileURL(), hspConnector::get()->getKakaoNickname());
+		t_popup->setContainerNode(t_container);
+		exit_target->getParent()->addChild(t_popup);
+	}
+	else
+	{
+		checkFriendCard();
+	}
+}
+
 void Maingame::checkFriendCard()
 {
 	if(mySGD->isUsingItem(kIC_rentCard) && mySGD->getSelectedFriendCardData().card_number != 0)
@@ -447,7 +483,7 @@ void Maingame::startCounting()
 	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.1f);
-	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(Maingame::checkFriendCard));
+	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(Maingame::checkAcceptChallenge));
 	CCDelayTime* t_delay1 = CCDelayTime::create(0.65f);
 	CCCallFunc* t_ms_startGame = CCCallFunc::create(myMS, callfunc_selector(MapScanner::startGame));
 	CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
