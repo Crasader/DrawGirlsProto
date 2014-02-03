@@ -28,7 +28,7 @@ void ComboView::setPercentage (float t_percent)
 void ComboView::myInit (int combo)
 {
 	initWithFile("combo_back.png");
-	setPosition(ccp(30,myDSH->ui_top-60));
+	setPosition(ccp(30,myDSH->ui_top-78));
 	
 	combo_timer = CCProgressTimer::create(CCSprite::create("combo_front.png"));
 	combo_timer->setType(kCCProgressTimerTypeBar);
