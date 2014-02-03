@@ -9,9 +9,9 @@
 #endif
 namespace KS
 {
-	
 	string insert_separator(const string& s, char separator, int width)
 	{
+
 		string ss = s;
 		string::iterator i = ss.end() - width;
 		while (i > ss.begin())

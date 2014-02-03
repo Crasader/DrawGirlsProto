@@ -15,6 +15,7 @@
 #include "HorseGacha.h"
 #include "SlotMachine.h"
 #include "Roulette.h"
+#include "MainFlowScene.h"
 
 enum GachaPurchaseZorder{
 	kGachaPurchaseZorder_gray = 1,
@@ -90,13 +91,12 @@ bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(v
 		addChild(gray, kGachaPurchaseZorder_gray);
 		
 		main_case = CCSprite::create("gacha_purchase_back.png");
-		main_case->setOpacity(0);
+		main_case->setOpacity(255);
 		main_case->setPosition(ccp(240,-160));
 		addChild(main_case, kGachaPurchaseZorder_back);
 		
-		
-		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+		CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
+		CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
 		s_close->setColor(ccGRAY);
 		
 		CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(GachaPurchase::menuAction));
@@ -110,12 +110,12 @@ bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(v
 		
 		CCSprite* n_ruby = CCSprite::create("gacha_purchase_ruby.png");
 		CCLabelTTF* n_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
-		n_ruby_price->setPosition(ccp(n_ruby->getContentSize().width/2.f+20, 25));
+		n_ruby_price->setPosition(ccp(n_ruby->getContentSize().width/2.f, 22));
 		n_ruby->addChild(n_ruby_price);
 		CCSprite* s_ruby = CCSprite::create("gacha_purchase_ruby.png");
 		s_ruby->setColor(ccGRAY);
 		CCLabelTTF* s_ruby_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
-		s_ruby_price->setPosition(ccp(s_ruby->getContentSize().width/2.f+20, 25));
+		s_ruby_price->setPosition(ccp(s_ruby->getContentSize().width/2.f, 22));
 		s_ruby->addChild(s_ruby_price);
 		
 		CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(GachaPurchase::menuAction));
@@ -128,12 +128,12 @@ bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(v
 		
 		CCSprite* n_gold = CCSprite::create("gacha_purchase_gold.png");
 		CCLabelTTF* n_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
-		n_gold_price->setPosition(ccp(n_gold->getContentSize().width/2.f+20, 25));
+		n_gold_price->setPosition(ccp(n_gold->getContentSize().width/2.f, 22));
 		n_gold->addChild(n_gold_price);
 		CCSprite* s_gold = CCSprite::create("gacha_purchase_gold.png");
 		s_gold->setColor(ccGRAY);
 		CCLabelTTF* s_gold_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaGoldFee())->getCString(), mySGD->getFont().c_str(), 15);
-		s_gold_price->setPosition(ccp(s_gold->getContentSize().width/2.f+20, 25));
+		s_gold_price->setPosition(ccp(s_gold->getContentSize().width/2.f, 22));
 		s_gold->addChild(s_gold_price);
 		
 		CCMenuItem* gold_item = CCMenuItemSprite::create(n_gold, s_gold, this, menu_selector(GachaPurchase::menuAction));
@@ -146,12 +146,12 @@ bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(v
 		
 		CCSprite* n_candy = CCSprite::create("gacha_purchase_candy.png");
 		CCLabelTTF* n_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
-		n_candy_price->setPosition(ccp(n_candy->getContentSize().width/2.f+20, 25));
+		n_candy_price->setPosition(ccp(n_candy->getContentSize().width/2.f, 22));
 		n_candy->addChild(n_candy_price);
 		CCSprite* s_candy = CCSprite::create("gacha_purchase_candy.png");
 		s_candy->setColor(ccGRAY);
 		CCLabelTTF* s_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
-		s_candy_price->setPosition(ccp(s_candy->getContentSize().width/2.f+20, 25));
+		s_candy_price->setPosition(ccp(s_candy->getContentSize().width/2.f, 22));
 		s_candy->addChild(s_candy_price);
 		
 		CCMenuItem* candy_item = CCMenuItemSprite::create(n_candy, s_candy, this, menu_selector(GachaPurchase::menuAction));
@@ -330,13 +330,13 @@ CCPoint GachaPurchase::getContentPosition(int t_tag)
 	CCPoint return_value;
 	
 	if(t_tag == kGachaPurchaseMenuTag_close)
-		return_value = ccp(180,85);
+		return_value = ccp(165,73);
 	else if(t_tag == kGachaPurchaseMenuTag_ruby)
-		return_value = ccp(-127,-18);
+		return_value = ccp(-113,-13);
 	else if(t_tag == kGachaPurchaseMenuTag_gold)
-		return_value = ccp(0,-18);
+		return_value = ccp(0,-13);
 	else if(t_tag == kGachaPurchaseMenuTag_candy)
-		return_value = ccp(127,-18);
+		return_value = ccp(112,-13);
 	
 	return_value = ccpAdd(return_value, ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height/2.f));
 	
@@ -497,7 +497,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
 					}, recent_mode, GachaCategory::kRubyGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 				else if(0)
 				{
@@ -510,7 +510,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
 					}, recent_mode, GachaCategory::kGoldGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 				else 
 				{
@@ -523,7 +523,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
 					}, recent_mode, GachaCategory::kSocialGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 			}
 				break;
@@ -544,7 +544,7 @@ void GachaPurchase::visibling()
 							},
 							//																						 {},
 							recent_mode, GachaCategory::kRubyGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 				else if(0)
 				{
@@ -561,7 +561,7 @@ void GachaPurchase::visibling()
 							},
 							//																						 {},
 							recent_mode, GachaCategory::kGoldGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 				else
 				{
@@ -578,7 +578,7 @@ void GachaPurchase::visibling()
 							},
 							//																						 {},
 							recent_mode, GachaCategory::kSocialGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 			}
 				break;
@@ -598,7 +598,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							}
 							, recent_mode, GachaCategory::kRubyGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 				else if(0)
 				{
@@ -613,7 +613,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							}
 							, recent_mode, GachaCategory::kGoldGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 				else
 				{
@@ -628,7 +628,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							}
 							, recent_mode, GachaCategory::kSocialGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 			}
 				break;
@@ -648,7 +648,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							},
 							recent_mode, GachaCategory::kRubyGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 				else if(0)
 				{
@@ -664,7 +664,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							},
 							recent_mode, GachaCategory::kGoldGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 				else 
 				{
@@ -680,7 +680,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							},
 							recent_mode, GachaCategory::kSocialGacha);
-					getParent()->addChild(p, kPMS_Z_popup);
+					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
 			}
 		}

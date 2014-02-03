@@ -12,6 +12,8 @@
 #include "Dodge.h"
 #include "SlidingPuzzle.h"
 #include "CardMatching.h"
+#include "GoldClicker.h"
+
 
 enum MiniGameZorder{
 	kMiniGameZorder_game = 1,
@@ -179,38 +181,34 @@ void MiniGamePopup::menuAction(CCObject *pSender)
 	
 	is_menu_enable = false;
 	miniGameStart = nullptr;
-	if(game_code == kMiniGameCode_counting)
-	{
-		// counting_game = counting_game(-180, bind(&MiniGamePopup::hidePopup, this));
-		// addChild(counting_game, kMiniGameZorder_game);
-		CountingGame* game = CountingGame::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
-		miniGameStart = bind(&CountingGame::startSchedule, game);
-		addChild(game, kMiniGameZorder_game);
-	}
-	else if(game_code == kMiniGameCode_slidingPuzzle)
-	{
-		// sliding_puzzle = sliding_puzzle(-180, bind(&MiniGamePopup::hidePopup, this));
-		// addChild(sliding_puzzle, kMiniGameZorder_game);
-		SlidingPuzzle* slidingPuzzle = SlidingPuzzle::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
-		miniGameStart = bind(&SlidingPuzzle::startSchedule, slidingPuzzle);
-		addChild(slidingPuzzle, kMiniGameZorder_game);
-	}
-	else if(game_code == kMiniGameCode_cardMatch)
-	{
-		// card_match = card_match(-180, bind(&MiniGamePopup::hidePopup, this));
-		// addChild(card_match, kMiniGameZorder_game);
-		
-		CardMatching* card = CardMatching::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
-		miniGameStart = bind(&CardMatching::scheduleUpdate, card);
-		addChild(card, kMiniGameZorder_game);
-	}
-	else if(game_code == kMiniGameCode_dodge)
-	{
-		Dodge* dodge = Dodge::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
-		addChild(dodge, kMiniGameZorder_game);
-		// dodge = dodge(-180, bind(&MiniGamePopup::hidePopup, this));
-		// addChild(dodge, kMiniGameZorder_game);
-	}
+
+	GoldClicker* goldClicker = GoldClicker::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
+	miniGameStart = bind(&GoldClicker::startSchedule, goldClicker);
+	addChild(goldClicker, kMiniGameZorder_game);
+
+	//if(game_code == kMiniGameCode_counting)
+	//{
+		//CountingGame* game = CountingGame::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
+		//miniGameStart = bind(&CountingGame::startSchedule, game);
+		//addChild(game, kMiniGameZorder_game);
+	//}
+	//else if(game_code == kMiniGameCode_slidingPuzzle)
+	//{
+		//SlidingPuzzle* slidingPuzzle = SlidingPuzzle::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
+		//miniGameStart = bind(&SlidingPuzzle::startSchedule, slidingPuzzle);
+		//addChild(slidingPuzzle, kMiniGameZorder_game);
+	//}
+	//else if(game_code == kMiniGameCode_cardMatch)
+	//{
+		//CardMatching* card = CardMatching::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
+		//miniGameStart = bind(&CardMatching::scheduleUpdate, card);
+		//addChild(card, kMiniGameZorder_game);
+	//}
+	//else if(game_code == kMiniGameCode_dodge)
+	//{
+		//Dodge* dodge = Dodge::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
+		//addChild(dodge, kMiniGameZorder_game);
+	//}
 	
 	CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(-80,160));
 	left_curtain->runAction(left_move);

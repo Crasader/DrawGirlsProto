@@ -163,7 +163,8 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 										RewardKind kind = i.first->m_reward->m_kind;
 										int selectedItemValue = i.first->m_reward->m_value;
 										std::function<void(void)> replayFunction;
-
+										
+										CCNode* parentPointer = getParent();
 										if(m_gachaMode == kGachaPurchaseStartMode_select){ // 선택으로 들어온 거라면 다시 하기가 가능함.
 											replayFunction = [=]() {
 												// 선택으로 들어온 거라면 다시 하기가 가능함.
@@ -181,7 +182,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 													for(auto i : m_rewards) {
 														rewards.push_back(RewardSprite::create(tempKind, value, spriteStr, weight));
 													}
-													getParent()->addChild(HatGachaSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
+													parentPointer->addChild(HatGachaSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
 															this->getZOrder());
 													this->removeFromParent();
 												}

@@ -102,6 +102,7 @@ void KSCumberBase::randomMoving(float dt)
 {
 	m_scale.timer += 1/60.f;
 	
+
 	
 	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
 	{
@@ -2149,7 +2150,7 @@ float KSCumberBase::getCumberScale()
 void KSCumberBase::onCanceledCasting()
 {
 	m_castingCancelCount++;
-	myGD->communication("Main_showDetailMessage", std::string("warning_108.ccbi")); // 말은 캐스팅 캔슬 됐다고 알려줌.
+	myGD->communication("Main_showDetailMessage", std::string("warning_boss.ccbi")); // 말은 캐스팅 캔슬 됐다고 알려줌.
 }
 
 void KSCumberBase::settingScale( float startScale, float minScale, float maxScale )
