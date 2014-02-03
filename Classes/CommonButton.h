@@ -31,13 +31,13 @@ enum CommonButtonType {
 
 class CommonButton : public CCNode {
 	CCControlButton* m_btn;
-	std::function<void(void)> m_func;
+	std::function<void(CCObject*)> m_func;
 	CCLabelTTF* m_btnTitle;
 	CCScale9Sprite* m_btnBack;
 	CommonButtonType m_btnType;
 public:
 	
-	void setFunction(std::function<void(void)> func){
+	void setFunction(std::function<void(CCObject*)> func){
 		m_func=func;
 	}
 	
@@ -133,8 +133,7 @@ public:
 		}
 	}
 	void callFunc(CCObject* obj, CCControlEvent event){
-		
-		if(m_func)m_func();
+		if(m_func)m_func((CCObject*)this);
 	}
 	
 	void setTouchPriority(int touchPriority){
@@ -157,6 +156,40 @@ public:
 		this->setContentSize(size);
 		m_btn->setPosition(m_btn->getContentSize().width/2, m_btn->getContentSize().height/2);
 	}
+	
+	void setEnabled(bool isEnabled){
+		m_btn->setEnabled(isEnabled);
+	}
+	
+	bool isEnabled(){
+		return m_btn->isEnabled();
+	}
+	
+	void setSelected(bool isSelected){
+		m_btn->setSelected(isSelected);
+	}
+	
+	bool isSelected(){
+		return m_btn->isSelected();
+	}
+	
+	void setTitleForState(cocos2d::CCString *title, CCControlState state){
+		m_btn->setTitleForState(title, state);
+	}
+	
+	void setBackgroundSpriteForState(cocos2d::extension::CCScale9Sprite *sprite, CCControlState state){
+		m_btn->setBackgroundSpriteForState(sprite, state);
+	}
+	
+	void setTitleColorForState(ccColor3B color, CCControlState state){
+		m_btn->setTitleColorForState(color,state);
+	}
+	
+	void setPrice(int priceType, int price){
+		
+	}
+	
+	
 	
 	
 };
