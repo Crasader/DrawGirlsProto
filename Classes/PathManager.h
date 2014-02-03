@@ -70,6 +70,9 @@ private:
 		pathImg->setScaleX(pathScale);
 		addChild(pathImg);
 		setPosition(ccp((myPointVector.origin.x-1)*pixelSize+1, (myPointVector.origin.y-1)*pixelSize+1));
+		
+		CCSprite* path_edge = CCSprite::create("path_edge_empty.png");
+		addChild(path_edge);
 	}
 };
 

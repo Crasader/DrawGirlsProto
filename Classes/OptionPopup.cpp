@@ -524,7 +524,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_joystickMoving)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isControlJoystickFixed, !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
+		myDSH->setBoolForKey(kDSH_Key_isControlJoystickNotFixed, !myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed));
 		resetJoystickMovingMenu();
 		is_menu_enable = true;
 	}
@@ -534,7 +534,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_testIrregularDirection)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isDisableIrregularDirection, !myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection));
+		myDSH->setBoolForKey(kDSH_Key_isEnableIrregularDirection, !myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection));
 		resetIrregularDirection();
 		is_menu_enable = true;
 	}
@@ -546,7 +546,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_testShowJoystick)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isAlwaysVisibleJoystick, !myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
+		myDSH->setBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick, !myDSH->getBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick));
 		resetShowJoystick();
 		is_menu_enable = true;
 	}
@@ -558,7 +558,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_testLineOver)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isEnableLineOver, !myDSH->getBoolForKey(kDSH_Key_isEnableLineOver));
+		myDSH->setBoolForKey(kDSH_Key_isDisableLineOver, !myDSH->getBoolForKey(kDSH_Key_isDisableLineOver));
 		resetLineOver();
 		is_menu_enable = true;
 	}
@@ -667,7 +667,7 @@ void OptionPopup::resetJoystickMovingMenu()
 	
 	string filename;
 	CCPoint img_position;
-	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+	if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed))
 	{
 		filename = "option_mode_lock.png";
 		img_position = ccp(-20,0);
@@ -692,7 +692,7 @@ void OptionPopup::resetIrregularDirection()
 	}
 	
 	string filename;
-	if(myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+	if(!myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection))
 		filename = "test_option_off.png";
 	else
 		filename = "test_option_on.png";
@@ -744,7 +744,7 @@ void OptionPopup::resetShowJoystick()
 	}
 	
 	string filename;
-	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick))
+	if(myDSH->getBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick))
 		filename = "test_option_off.png";
 	else
 		filename = "test_option_on.png";
@@ -796,7 +796,7 @@ void OptionPopup::resetLineOver()
 	}
 	
 	string filename;
-	if(!myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+	if(myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 		filename = "test_option_off.png";
 	else
 		filename = "test_option_on.png";
