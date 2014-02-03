@@ -243,7 +243,7 @@ bool ClearPopup::init()
 	
 	int take_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level);
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number) > 0)
+	if(mySGD->is_ingame_before_have_stage_cards[take_card_number-1])
 	{
 		// 강화
 		

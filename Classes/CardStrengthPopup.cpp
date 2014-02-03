@@ -73,8 +73,8 @@ bool CardStrengthPopup::init()
 	addChild(gray, kCardStrengthPopupZorder_gray);
 	
 	main_case = CCSprite::create("cardstrength_back.png");
-	main_case->setAnchorPoint(ccp(0,0));
-	main_case->setPosition(ccp(0,-320));
+	main_case->setAnchorPoint(ccp(0.5,0.5));
+	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kCardStrengthPopupZorder_back);
 	
 	
@@ -180,16 +180,16 @@ bool CardStrengthPopup::init()
 	
 	
 	CCSprite* strength_tab = CCSprite::create("cardstrength_tab_strength.png");
-	strength_tab->setPosition(ccp(135,225));
+	strength_tab->setPosition(ccp(135,222));
 	main_case->addChild(strength_tab, kCardStrengthPopupZorder_highContent);
 	
 	CCSprite* offering_tab = CCSprite::create("cardstrength_tab_offering.png");
-	offering_tab->setPosition(ccp(229,225));
+	offering_tab->setPosition(ccp(229,222));
 	main_case->addChild(offering_tab, kCardStrengthPopupZorder_highContent);
 	
 	
 	CCSprite* plus_mark = CCSprite::create("cardstrength_plus.png");
-	plus_mark->setPosition(ccp(198.5f,175));
+	plus_mark->setPosition(ccp(198.5f,172));
 	main_case->addChild(plus_mark, kCardStrengthPopupZorder_highContent);
 	
 	
@@ -203,7 +203,7 @@ bool CardStrengthPopup::init()
 	setOfferingList();
 	
 	CCSize table_size = CCSizeMake(341, 78);
-	CCPoint table_position = ccp(29, 20);
+	CCPoint table_position = ccp(29, 17);
 	
 //	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //	temp_back->setOpacity(100);
@@ -242,13 +242,13 @@ void CardStrengthPopup::setTableTab()
 	if(strength_card_number == 0)
 	{
 		table_tab = CCSprite::create("cardstrength_table_tab_strength.png");
-		table_tab->setPosition(ccp(60,101));
+		table_tab->setPosition(ccp(60,98));
 		main_case->addChild(table_tab, kCardStrengthPopupZorder_highContent);
 	}
 	else
 	{
 		table_tab = CCSprite::create("cardstrength_table_tab_offering.png");
-		table_tab->setPosition(ccp(60,101));
+		table_tab->setPosition(ccp(60,98));
 		main_case->addChild(table_tab, kCardStrengthPopupZorder_highContent);
 	}
 }
@@ -266,7 +266,7 @@ void CardStrengthPopup::setStrengthNode(int t_card_number)
 	if(strength_card_number == 0)
 	{
 		strength_node = CCSprite::create("cardstrength_frame.png");
-		strength_node->setPosition(ccp(152,174));
+		strength_node->setPosition(ccp(152,171));
 		main_case->addChild(strength_node, kCardStrengthPopupZorder_content);
 		
 		CCSprite* tip = CCSprite::create("cardstrength_tip_strength.png");
@@ -281,7 +281,7 @@ void CardStrengthPopup::setStrengthNode(int t_card_number)
 		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, strength_card_number);
 		
 		strength_node = CCNode::create();
-		strength_node->setPosition(ccp(152,174));
+		strength_node->setPosition(ccp(152,171));
 		main_case->addChild(strength_node, kCardStrengthPopupZorder_content);
 		
 		CCSprite* n_strength = CCSprite::create("cardstrength_frame.png");
@@ -418,7 +418,7 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 	if(offering_card_number == 0)
 	{
 		offering_node = CCSprite::create("cardstrength_frame.png");
-		offering_node->setPosition(ccp(246,174));
+		offering_node->setPosition(ccp(246,171));
 		main_case->addChild(offering_node, kCardStrengthPopupZorder_content);
 		
 		if(strength_card_number != 0)
@@ -436,7 +436,7 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_card_number);
 		
 		offering_node = CCNode::create();
-		offering_node->setPosition(ccp(246,174));
+		offering_node->setPosition(ccp(246,171));
 		main_case->addChild(offering_node, kCardStrengthPopupZorder_content);
 		
 		CCSprite* n_offering = CCSprite::create("cardstrength_frame.png");
@@ -553,7 +553,7 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 		}
 		
 		strength_probability = CCSprite::create("cardsetting_probability.png");
-		strength_probability->setPosition(ccp(198.5,150));
+		strength_probability->setPosition(ccp(198.5,147));
 		main_case->addChild(strength_probability, kCardStrengthPopupZorder_highContent);
 		
 		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
@@ -781,7 +781,7 @@ void CardStrengthPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardStrengthPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -808,7 +808,7 @@ void CardStrengthPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,-320));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardStrengthPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -825,11 +825,11 @@ CCPoint CardStrengthPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kCardStrengthPopupMenuTag_close)						return_value = ccp(452,259);
-	else if(t_tag == kCardStrengthPopupMenuTag_highStrength)			return_value = ccp(415,204);
-	else if(t_tag == kCardStrengthPopupMenuTag_normalStrength)			return_value = ccp(415,150);
-	else if(t_tag == kCardStrengthPopupMenuTag_alignRank)				return_value = ccp(416,78);
-	else if(t_tag == kCardStrengthPopupMenuTag_alignTake)				return_value = ccp(416,39);
+	if(t_tag == kCardStrengthPopupMenuTag_close)						return_value = ccp(452,256);
+	else if(t_tag == kCardStrengthPopupMenuTag_highStrength)			return_value = ccp(415,201);
+	else if(t_tag == kCardStrengthPopupMenuTag_normalStrength)			return_value = ccp(415,147);
+	else if(t_tag == kCardStrengthPopupMenuTag_alignRank)				return_value = ccp(416,75);
+	else if(t_tag == kCardStrengthPopupMenuTag_alignTake)				return_value = ccp(416,36);
 	
 	return return_value;
 }
