@@ -558,6 +558,9 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 		
 		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 		
+		if(strength_rate > 1.f)
+			strength_rate = 1.f;
+		
 		CCLabelTTF* probability_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", strength_rate*100.f)->getCString(), mySGD->getFont().c_str(), 10);
 		probability_label->setAnchorPoint(ccp(1.f,0.5f));
 		probability_label->setPosition(ccp(strength_probability->getContentSize().width-17, strength_probability->getContentSize().height/2.f-2));

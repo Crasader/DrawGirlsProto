@@ -24,6 +24,7 @@
 #include "PauseContent.h"
 #include "ContinueContent.h"
 #include "StartSettingScene.h"
+#include "AcceptChallengeAniContent.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -228,10 +229,10 @@ void Maingame::finalSetting()
 	
 	thumb_texture = CCRenderTexture::create(320, 430);
 	thumb_texture->setScale(thumb_scale);
-	thumb_texture->setPosition(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale));
+	thumb_texture->setPosition(ccp(58-160.f*thumb_scale,myDSH->ui_top-90-215.f*thumb_scale));
 	addChild(thumb_texture, myUIZorder);
 	
-	thumb_base_position = ccp(58-320.f*thumb_scale,myDSH->ui_top-70-430.f*thumb_scale);
+	thumb_base_position = ccp(58-320.f*thumb_scale,myDSH->ui_top-90-430.f*thumb_scale);
 	
 	CCDelayTime* thumb_delay = CCDelayTime::create(0.3f);
 	CCCallFunc* thumb_call = CCCallFunc::create(this, callfunc_selector(Maingame::refreshThumb));
@@ -262,7 +263,7 @@ void Maingame::finalSetting()
 		{
 			replay_thumb_texture = CCRenderTexture::create(320, 430);
 			replay_thumb_texture->setScale(thumb_scale);
-			replay_thumb_texture->setPosition(ccpAdd(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale), ccp(320.f*thumb_scale + 2, 0)));
+			replay_thumb_texture->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale));
 			replay_all_node->addChild(replay_thumb_texture);
 			
 			myGD->V_I["Main_refreshReplayThumb"] = std::bind(&Maingame::refreshReplayThumb, this, _1);
@@ -271,13 +272,13 @@ void Maingame::finalSetting()
 			replay_boss = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 3, 3));
 			replay_boss->setColor(ccRED);
 			replay_boss->setVisible(false);
-			replay_boss->setPosition(ccpAdd(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale), ccp(320.f*thumb_scale + 2, 0)));
+			replay_boss->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale));
 			replay_all_node->addChild(replay_boss);
 			
 			replay_character = CCSprite::create("whitePaper.png", CCRectMake(0,0,2,2));
 			replay_character->setColor(ccGREEN);
 			replay_character->setVisible(false);
-			replay_character->setPosition(ccpAdd(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale), ccp(320.f*thumb_scale + 2, 0)));
+			replay_character->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale));
 			replay_all_node->addChild(replay_character);
 			
 			replay_sub = new CCArray(1);
@@ -289,11 +290,15 @@ void Maingame::finalSetting()
 		{
 			replay_score = CCLabelBMFont::create("0", "etc_font.fnt");
 			replay_score->setScale(0.7f);
-			replay_score->setPosition(ccpAdd(ccp(58-160.f*thumb_scale,myDSH->ui_top-70-215.f*thumb_scale), ccp(320.f*thumb_scale + 2, 215.f*thumb_scale+4)));
+			replay_score->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale - 215.f*thumb_scale+10));
 			replay_all_node->addChild(replay_score);
 			
 			myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		}
+		
+		CCLabelTTF* replay_nick = CCLabelTTF::create(mySGD->getAcceptChallengeNick().c_str(), mySGD->getFont().c_str(), 10);
+		replay_nick->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale + 215.f*thumb_scale-10));
+		replay_all_node->addChild(replay_nick);
 	}
 	
 	CCArray* sub_array = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
@@ -402,6 +407,41 @@ void Maingame::startScene()
 	startCounting();
 }
 
+void Maingame::checkAcceptChallenge()
+{
+	if(mySGD->getIsAcceptChallenge())
+	{
+		CCNode* exit_target = this;
+		exit_target->onExit();
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		AcceptChallengeAniContent* t_container = AcceptChallengeAniContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																				   {
+																					   checkFriendCard();
+																					   mControl->isStun = false;
+																					   exit_target->onEnter();
+																					   t_popup->removeFromParent();
+																				   }, hspConnector::get()->getKakaoProfileURL(), hspConnector::get()->getKakaoNickname(),
+																				   mySGD->getAcceptChallengeProfile(), mySGD->getAcceptChallengeNick());
+		t_popup->setContainerNode(t_container);
+		exit_target->getParent()->addChild(t_popup);
+	}
+	else
+	{
+		checkFriendCard();
+	}
+}
+
 void Maingame::checkFriendCard()
 {
 	if(mySGD->isUsingItem(kIC_rentCard) && mySGD->getSelectedFriendCardData().card_number != 0)
@@ -443,7 +483,7 @@ void Maingame::startCounting()
 	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.1f);
-	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(Maingame::checkFriendCard));
+	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(Maingame::checkAcceptChallenge));
 	CCDelayTime* t_delay1 = CCDelayTime::create(0.65f);
 	CCCallFunc* t_ms_startGame = CCCallFunc::create(myMS, callfunc_selector(MapScanner::startGame));
 	CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
@@ -1416,7 +1456,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 	if(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)].size() <= temp_time)
 		return;
 	
-	CCPoint replay_base_position = ccpAdd(thumb_base_position, ccp(320.f*replay_thumb_texture->getScale() + 2, 0));
+	CCPoint replay_base_position = ccpAdd(replay_thumb_texture->getPosition(), ccp(-160.f*replay_thumb_texture->getScale(), -215.f*replay_thumb_texture->getScale()));
 	
 	Json::Value position_data = mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_timeStamp)][temp_time];
 	
@@ -1461,7 +1501,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 	
 	if(position_data[mySGD->getReplayKey(kReplayKey_timeStamp_isDie)].asBool())
 	{
-		CCLabelTTF* die_label = CCLabelTTF::create("Die!!", mySGD->getFont().c_str(), 10);
+		CCLabelTTF* die_label = CCLabelTTF::create("Life -1", mySGD->getFont().c_str(), 10);
 		die_label->setScale(0.5f);
 		die_label->setColor(ccRED);
 		die_label->setPosition(replay_character->getPosition());
@@ -1477,7 +1517,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 	
 	if(position_data[mySGD->getReplayKey(kReplayKey_timeStamp_isImageChange)].asBool())
 	{
-		CCLabelTTF* change_label = CCLabelTTF::create("CHANGE", mySGD->getFont().c_str(), 14);
+		CCLabelTTF* change_label = CCLabelTTF::create("체인지", mySGD->getFont().c_str(), 14);
 		change_label->setColor(ccYELLOW);
 		change_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()+10)));
 		replay_all_node->addChild(change_label);
@@ -1486,7 +1526,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 	int game_info = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_gameInfo)].asInt();
 	if(game_info == 1)
 	{
-		CCLabelTTF* clear_label = CCLabelTTF::create("CLEAR", mySGD->getFont().c_str(), 14);
+		CCLabelTTF* clear_label = CCLabelTTF::create("클리어", mySGD->getFont().c_str(), 14);
 		clear_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()-10)));
 		replay_all_node->addChild(clear_label);
 		
@@ -1501,7 +1541,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 	}
 	else if(game_info == -1)
 	{
-		CCLabelTTF* game_over_label = CCLabelTTF::create("GAME OVER", mySGD->getFont().c_str(), 12);
+		CCLabelTTF* game_over_label = CCLabelTTF::create("게임오버", mySGD->getFont().c_str(), 12);
 		game_over_label->setColor(ccBLACK);
 		game_over_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()-10)));
 		replay_all_node->addChild(game_over_label);
@@ -1521,14 +1561,14 @@ void Maingame::refreshReplayPosition(int temp_time)
 		replay_continue_count++;
 		if(!replay_continue_label)
 		{
-			replay_continue_label = CCLabelTTF::create("continue : 1", mySGD->getFont().c_str(), 8);
+			replay_continue_label = CCLabelTTF::create("이어하기 : 1", mySGD->getFont().c_str(), 8);
 			replay_continue_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), -5)));
 			replay_all_node->addChild(replay_continue_label);
 		}
 		else
-			replay_continue_label->setString(CCString::createWithFormat("continue : %d", replay_continue_count)->getCString());
+			replay_continue_label->setString(CCString::createWithFormat("이어하기 : %d", replay_continue_count)->getCString());
 		
-		CCLabelTTF* continue_label = CCLabelTTF::create("Continue!!", mySGD->getFont().c_str(), 10);
+		CCLabelTTF* continue_label = CCLabelTTF::create("이어하기!!", mySGD->getFont().c_str(), 10);
 		continue_label->setScale(0.5f);
 		continue_label->setColor(ccMAGENTA);
 		continue_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));

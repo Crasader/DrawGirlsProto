@@ -106,6 +106,7 @@ private:
 	void randomingRectView();
 	void finalSetting();
 	void startScene();
+	void checkAcceptChallenge();
 	void checkFriendCard();
 	
 	void setControlGesture();

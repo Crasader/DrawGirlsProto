@@ -89,6 +89,52 @@ bool FailPopup::init()
 	
 	if(mySGD->save_stage_rank_stageNumber == mySD->getSilType())
 	{
+		string my_id = hspConnector::get()->getKakaoID();
+		
+		vector<RankFriendInfo>::iterator iter = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
+		if(iter != mySGD->save_stage_rank_list.end())
+		{
+			if((*iter).score < mySGD->getScore())
+			{
+				(*iter).score = mySGD->getScore();
+				struct t_FriendSort{
+					bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
+					{
+						return a.score > b.score;
+					}
+				} pred;
+				
+				sort(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), pred);
+				
+				for(int i=0;i<mySGD->save_stage_rank_list.size();i++)
+					mySGD->save_stage_rank_list[i].rank = i+1;
+			}
+		}
+		else
+		{
+			Json::Value my_kakao = hspConnector::get()->myKakaoInfo;
+			
+			RankFriendInfo fInfo;
+			fInfo.nickname = my_kakao["nickname"].asString();
+			fInfo.img_url = my_kakao["profile_image_url"].asString();
+			fInfo.user_id = my_kakao["user_id"].asString();
+			fInfo.score = mySGD->getScore();
+			fInfo.is_play = true;
+			mySGD->save_stage_rank_list.push_back(fInfo);
+			
+			struct t_FriendSort{
+				bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
+				{
+					return a.score > b.score;
+				}
+			} pred;
+			
+			sort(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), pred);
+			
+			for(int i=0;i<mySGD->save_stage_rank_list.size();i++)
+				mySGD->save_stage_rank_list[i].rank = i+1;
+		}
+		
 		friend_list = mySGD->save_stage_rank_list;
 		is_loaded_list = true;
 	}

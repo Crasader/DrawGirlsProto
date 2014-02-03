@@ -150,17 +150,27 @@ private:
 		gohome_menu->setTouchPriority(touch_priority-1);
 		
 		
-		CCSprite* n_replay = CCSprite::create("pause_popup_replay.png");
-		CCSprite* s_replay = CCSprite::create("pause_popup_replay.png");
-		s_replay->setColor(ccGRAY);
-		
-		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(PauseContent::menuAction));
-		replay_item->setTag(kPauseContentMenuTag_replay);
-		
-		CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
-		replay_menu->setPosition(0,-51);
-		addChild(replay_menu);
-		replay_menu->setTouchPriority(touch_priority-1);
+		if(mySGD->getIsMeChallenge() || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
+		{
+			CCSprite* d_replay = CCSprite::create("pause_popup_replay.png");
+			d_replay->setColor(ccc3(70,70,70));
+			d_replay->setPosition(ccp(0,-51));
+			addChild(d_replay);
+		}
+		else
+		{
+			CCSprite* n_replay = CCSprite::create("pause_popup_replay.png");
+			CCSprite* s_replay = CCSprite::create("pause_popup_replay.png");
+			s_replay->setColor(ccGRAY);
+			
+			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(PauseContent::menuAction));
+			replay_item->setTag(kPauseContentMenuTag_replay);
+			
+			CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+			replay_menu->setPosition(0,-51);
+			addChild(replay_menu);
+			replay_menu->setTouchPriority(touch_priority-1);
+		}
 	}
 };
 

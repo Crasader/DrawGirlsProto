@@ -152,10 +152,54 @@ bool ClearPopup::init()
 		else
 		{
 			CCLog("not found myKakaoID");
+			
+			Json::Value p;
+			p["memberID"]=hspConnector::get()->getKakaoID();
+			p["score"]=int(mySGD->getScore());
+			p["stageNo"]=mySD->getSilType();
+			hspConnector::get()->command("setStageScore",p,NULL);
+			
+			Json::Value my_kakao = hspConnector::get()->myKakaoInfo;
+			
+			RankFriendInfo fInfo;
+			fInfo.nickname = my_kakao["nickname"].asString();
+			fInfo.img_url = my_kakao["profile_image_url"].asString();
+			fInfo.user_id = my_kakao["user_id"].asString();
+			fInfo.score = mySGD->getScore();
+			fInfo.is_play = true;
+			mySGD->save_stage_rank_list.push_back(fInfo);
+			
+			struct t_FriendSort{
+				bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
+				{
+					return a.score > b.score;
+				}
+			} pred;
+			
+			sort(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), pred);
+			
+			for(int i=0;i<mySGD->save_stage_rank_list.size();i++)
+				mySGD->save_stage_rank_list[i].rank = i+1;
+			
+			vector<RankFriendInfo>::iterator iter2 = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
+			if((*iter2).rank < mySGD->save_stage_rank_list.size())
+			{
+				is_rank_changed = true;
+				recent_my_rank = (*iter2).rank;
+				next_rank_info = (*(iter2+1));
+			}
 		}
 		
 		friend_list = mySGD->save_stage_rank_list;
 		is_loaded_list = true;
+	}
+	else
+	{
+		Json::Value p;
+		p["memberID"]=hspConnector::get()->getKakaoID();
+		p["score"]=int(mySGD->getScore());
+		p["stageNo"]=mySD->getSilType();
+		hspConnector::get()->command("setStageScore",p,NULL);
 	}
     
 	main_case = CCSprite::create("ending_back.png");
