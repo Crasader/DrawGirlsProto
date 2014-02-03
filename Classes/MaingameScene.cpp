@@ -432,7 +432,7 @@ void Maingame::checkAcceptChallenge()
 																					   exit_target->onEnter();
 																					   t_popup->removeFromParent();
 																				   }, hspConnector::get()->getKakaoProfileURL(), hspConnector::get()->getKakaoNickname(),
-																				   hspConnector::get()->getKakaoProfileURL(), hspConnector::get()->getKakaoNickname());
+																				   mySGD->getAcceptChallengeProfile(), mySGD->getAcceptChallengeNick());
 		t_popup->setContainerNode(t_container);
 		exit_target->getParent()->addChild(t_popup);
 	}

@@ -153,6 +153,12 @@ bool ClearPopup::init()
 		{
 			CCLog("not found myKakaoID");
 			
+			Json::Value p;
+			p["memberID"]=hspConnector::get()->getKakaoID();
+			p["score"]=int(mySGD->getScore());
+			p["stageNo"]=mySD->getSilType();
+			hspConnector::get()->command("setStageScore",p,NULL);
+			
 			Json::Value my_kakao = hspConnector::get()->myKakaoInfo;
 			
 			RankFriendInfo fInfo;
@@ -186,6 +192,14 @@ bool ClearPopup::init()
 		
 		friend_list = mySGD->save_stage_rank_list;
 		is_loaded_list = true;
+	}
+	else
+	{
+		Json::Value p;
+		p["memberID"]=hspConnector::get()->getKakaoID();
+		p["score"]=int(mySGD->getScore());
+		p["stageNo"]=mySD->getSilType();
+		hspConnector::get()->command("setStageScore",p,NULL);
 	}
     
 	main_case = CCSprite::create("ending_back.png");
