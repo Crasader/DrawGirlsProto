@@ -231,6 +231,17 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_minigame_int1_stageNumber)			return_value = "mngm_%d_sn";
 	else if(t_name == kDSH_Key_minigame_int1_isPlayed)				return_value = "mngm_%d_ip";
 	
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_achievement)	return_value = "wotd_a";
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_cardchange)	return_value = "wotd_cc";
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_cardsetting)	return_value = "wotd_cset";
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_cardstrength)	return_value = "wotd_cstr";
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_friendoption_invite)		return_value = "wotd_fi";
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_friendoption_list)			return_value = "wotd_fl";
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_friendoption_surch)		return_value = "wotd_fs";
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_main)						return_value = "wotd_m";
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_rank)						return_value = "wotd_r";
+	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_startsetting)				return_value = "wotd_s";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()
