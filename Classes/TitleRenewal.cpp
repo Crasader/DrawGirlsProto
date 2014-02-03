@@ -46,8 +46,13 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 	
+	CCSprite* title_img = CCSprite::create("temp_title.png");
+	title_img->setPosition(ccp(240,160));
+	addChild(title_img);
+	
 	state_label = CCLabelTTF::create("까똑 로그인 ing...", mySGD->getFont().c_str(), 20);
-	state_label->setPosition(ccp(240,290));
+	state_label->setColor(ccBLACK);
+	state_label->setPosition(ccp(240,160));
 	addChild(state_label);
 	
 	Json::Value param;
@@ -80,48 +85,48 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		
 		receive_cnt = 0;
 		
-		CCLabelTTF* common_setting_label = CCLabelTTF::create("start getcommonsetting", mySGD->getFont().c_str(), 10);
-		common_setting_label->setPosition(ccp(40, myDSH->ui_top-30));
-		addChild(common_setting_label);
+//		CCLabelTTF* common_setting_label = CCLabelTTF::create("start getcommonsetting", mySGD->getFont().c_str(), 10);
+//		common_setting_label->setPosition(ccp(40, myDSH->ui_top-30));
+//		addChild(common_setting_label);
 		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 		
-		CCLabelTTF* noticelist_label = CCLabelTTF::create("start getnoticelist", mySGD->getFont().c_str(), 10);
-		noticelist_label->setPosition(ccp(440, myDSH->ui_top-30));
-		addChild(noticelist_label);
+//		CCLabelTTF* noticelist_label = CCLabelTTF::create("start getnoticelist", mySGD->getFont().c_str(), 10);
+//		noticelist_label->setPosition(ccp(440, myDSH->ui_top-30));
+//		addChild(noticelist_label);
 		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 		
-		CCLabelTTF* character_label = CCLabelTTF::create("start getcharacterlist", mySGD->getFont().c_str(), 10);
-		character_label->setPosition(ccp(120, myDSH->ui_top-30));
-		addChild(character_label);
+//		CCLabelTTF* character_label = CCLabelTTF::create("start getcharacterlist", mySGD->getFont().c_str(), 10);
+//		character_label->setPosition(ccp(120, myDSH->ui_top-30));
+//		addChild(character_label);
 		Json::Value character_param;
 		character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
 		command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
 		
-		CCLabelTTF* monster_label = CCLabelTTF::create("start getmonsterlist", mySGD->getFont().c_str(), 10);
-		monster_label->setPosition(ccp(240, myDSH->ui_top-45));
-		addChild(monster_label);
+//		CCLabelTTF* monster_label = CCLabelTTF::create("start getmonsterlist", mySGD->getFont().c_str(), 10);
+//		monster_label->setPosition(ccp(240, myDSH->ui_top-45));
+//		addChild(monster_label);
 		Json::Value monster_param;
 		monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
 		command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
 		
-		CCLabelTTF* userdata_label = CCLabelTTF::create("start getuserdata", mySGD->getFont().c_str(), 10);
-		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
-		addChild(userdata_label);
+//		CCLabelTTF* userdata_label = CCLabelTTF::create("start getuserdata", mySGD->getFont().c_str(), 10);
+//		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
+//		addChild(userdata_label);
 		Json::Value userdata_param;
 		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
 		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 		
-		CCLabelTTF* puzzlelist_label = CCLabelTTF::create("start getpuzzlelist", mySGD->getFont().c_str(), 10);
-		puzzlelist_label->setPosition(ccp(280, myDSH->ui_top-30));
-		addChild(puzzlelist_label);
+//		CCLabelTTF* puzzlelist_label = CCLabelTTF::create("start getpuzzlelist", mySGD->getFont().c_str(), 10);
+//		puzzlelist_label->setPosition(ccp(280, myDSH->ui_top-30));
+//		addChild(puzzlelist_label);
 		Json::Value puzzlelist_param;
 		puzzlelist_param["puzzlelistversion"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 		puzzlelist_param["eventstagelistversion"] = NSDS_GI(kSDS_GI_eventListVersion_i);
 		command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
 		
-		CCLabelTTF* loadfriends_label = CCLabelTTF::create("start kLoadFriends", mySGD->getFont().c_str(), 10);
-		loadfriends_label->setPosition(ccp(360, myDSH->ui_top-30));
-		addChild(loadfriends_label);
+//		CCLabelTTF* loadfriends_label = CCLabelTTF::create("start kLoadFriends", mySGD->getFont().c_str(), 10);
+//		loadfriends_label->setPosition(ccp(360, myDSH->ui_top-30));
+//		addChild(loadfriends_label);
 		must_be_load_friends = true;
 		
 		startCommand();

@@ -231,7 +231,7 @@ bool FailPopup::init()
 	addChild(gray, kZ_FP_gray);
 	
 	main_case = CCSprite::create("ending_back.png");
-	main_case->setAnchorPoint(ccp(0,0));
+	main_case->setAnchorPoint(ccp(0.5f,0.5f));
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kZ_FP_back);
 	
@@ -241,7 +241,7 @@ bool FailPopup::init()
 		int stage_number = mySD->getSilType();
 		
 		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 10);
-		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height-68));
+		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height+40-68));
 		main_case->addChild(stage_number_label);
 		
 		mySGD->is_before_selected_event_stage = false;
@@ -253,7 +253,7 @@ bool FailPopup::init()
 		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 10);
-		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height-68));
+		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height+40-68));
 		main_case->addChild(piece_number_label);
 	}
 	
@@ -1081,8 +1081,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	}
 	
 	CCSprite* bg;
-//	if((*member).user_id == hspConnector::get()->getKakaoID())
-	if(0)
+	if((*member).user_id == hspConnector::get()->getKakaoID())
 	{
 		bg = CCSprite::create("ending_cell_me.png");
 		bg->setPosition(CCPointZero);
@@ -1179,13 +1178,9 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	cell->addChild(score_label,kFFC_Z_img);
 	
 	
-//	if((*member).user_id == hspConnector::get()->getKakaoID())
-	if(0)
+	if((*member).user_id == hspConnector::get()->getKakaoID())
 	{
-//		CCSprite* meBack = CCSprite::create("ending_cell_selected.png");
-//		meBack->setPosition(ccp(meBack->getContentSize().width - bg->getContentSize().width, 0));
-//		meBack->setAnchorPoint(CCPointZero);
-//		cell->addChild(meBack,kFFC_Z_case);
+		
 	}
 	else
 	{

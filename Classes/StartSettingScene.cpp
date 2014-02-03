@@ -126,7 +126,7 @@ void StartSettingScene::setMain()
 		stage_number = mySD->getSilType();
 		
 		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		stage_number_label->setPosition(ccp(49, main_case->getContentSize().height-67));
+		stage_number_label->setPosition(ccp(49, main_case->getContentSize().height+40-67));
 		main_case->addChild(stage_number_label);
 		
 		is_before_selected_event_stage = true;
@@ -139,7 +139,7 @@ void StartSettingScene::setMain()
 		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		piece_number_label->setPosition(ccp(49, main_case->getContentSize().height-67));
+		piece_number_label->setPosition(ccp(49, main_case->getContentSize().height+40-67));
 		main_case->addChild(piece_number_label);
 		
 		is_before_selected_event_stage = false;
@@ -152,7 +152,7 @@ void StartSettingScene::setMain()
 	
 	LabelTTFMarquee* mission_label = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 230, 22, mySD->getConditionContent(stage_number).c_str());
 	mission_label->setAnchorPoint(ccp(0.5,0.5));
-	mission_label->setPosition(ccp(main_case->getContentSize().width/2.f+80, main_case->getContentSize().height-65));
+	mission_label->setPosition(ccp(main_case->getContentSize().width/2.f+80, main_case->getContentSize().height+40-65));
 	main_case->addChild(mission_label);
 	mission_label->setFontSize(13);
 	mission_label->startMarquee();
@@ -179,7 +179,7 @@ void StartSettingScene::setMain()
 	back_item->setTag(kStartSettingMenuTag_back);
 	
 	CCMenu* back_menu = CCMenu::createWithItem(back_item);
-	back_menu->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height-65));
+	back_menu->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height+40-65));
 	main_case->addChild(back_menu);
 	
 	CCSprite* n_card_turn = CCSprite::create("startsetting_cardturn.png");

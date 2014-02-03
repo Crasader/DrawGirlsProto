@@ -217,7 +217,7 @@ bool ClearPopup::init()
 		int stage_number = mySD->getSilType();
 		
 		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 10);
-		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height-68));
+		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height+40-68));
 		main_case->addChild(stage_number_label, kZ_CP_img);
 		
 		mySGD->is_before_selected_event_stage = false;
@@ -229,7 +229,7 @@ bool ClearPopup::init()
 		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 10);
-		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height-68));
+		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height+40-68));
 		main_case->addChild(piece_number_label, kZ_CP_img);
 	}
 	
