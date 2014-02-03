@@ -269,7 +269,10 @@ private:
 	void goHome ();
 	void goReplay ();
 	void cancelHome ();
-
+	
+	void showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue);
+	void continueAction();
+	
 };
 
 #endif

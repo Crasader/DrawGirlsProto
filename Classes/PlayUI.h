@@ -13,7 +13,6 @@
 #include "CountingBMLabel.h"
 #include "BossLifeGage.h"
 #include "AreaGage.h"
-#include "ContinuePopup.h"
 #include "PuzzleMapScene.h"
 #include "ConditionPopup.h"
 #include "ServerDataSave.h"

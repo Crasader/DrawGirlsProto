@@ -22,6 +22,7 @@
 #include "MainFlowScene.h"
 #include "AchieveNoti.h"
 #include "PauseContent.h"
+#include "ContinueContent.h"
 #include "StartSettingScene.h"
 //#include "ScreenSide.h"
 
@@ -87,6 +88,7 @@ bool Maingame::init()
 	myGD->V_V["Main_showDrawButtonTutorial"] = std::bind(&Maingame::showDrawButtonTutorial, this);
 	myGD->V_V["Main_hideDrawButtonTutorial"] = std::bind(&Maingame::hideDrawButtonTutorial, this);
 	myGD->V_V["Main_showPause"] = std::bind(&Maingame::showPause, this);
+	myGD->V_TDTD["Main_showContinue"] = std::bind(&Maingame::showContinue, this, _1, _2, _3, _4);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -1600,7 +1602,6 @@ void Maingame::goHome ()
 	
 	mySGD->is_paused = false;
 	AudioEngine::sharedInstance()->setAppFore();
-	CCDirector::sharedDirector()->resume();
 	gameover();
 }
 void Maingame::goReplay ()
@@ -1614,7 +1615,6 @@ void Maingame::goReplay ()
 	
 	mySGD->is_paused = false;
 	AudioEngine::sharedInstance()->setAppFore();
-	CCDirector::sharedDirector()->resume();
 	mySGD->gameOver(0, 0, 0);
 	mySGD->resetLabels();
 	myGD->resetGameData();
@@ -1627,5 +1627,52 @@ void Maingame::cancelHome ()
 	startControl();
 	mySGD->is_paused = false;
 	AudioEngine::sharedInstance()->setAppFore();
-	CCDirector::sharedDirector()->resume();
+}
+void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue)
+{
+	CCNode* exit_target = this;
+	exit_target->onExit();
+	
+	ASPopupView* t_popup = ASPopupView::create(-200);
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+	t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+	t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+	
+	ContinueContent* t_container = ContinueContent::create(t_popup->getTouchPriority(), [=]()
+														   {
+															   t_popup->removeFromParent();
+															   mControl->isStun = false;
+															   exit_target->onEnter();
+															   mySGD->is_paused = false;
+															   AudioEngine::sharedInstance()->setAppFore();
+															   (t_end->*d_end)();
+														   }, [=]()
+														   {
+															   t_popup->removeFromParent();
+															   mControl->isStun = false;
+															   exit_target->onEnter();
+															   (t_continue->*d_continue)();
+															   continueAction();
+														   });
+	
+	t_popup->setContainerNode(t_container);
+	exit_target->getParent()->addChild(t_popup);
+	t_container->startShow();
+}
+void Maingame::continueAction()
+{
+	myLog->addLog(kLOG_action_continue, -1);
+	
+	mySGD->setStar(mySGD->getStar() - mySGD->getPlayContinueFee());
+	myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
+	
+	startControl();
+	mySGD->is_paused = false;
+	AudioEngine::sharedInstance()->setAppFore();
 }

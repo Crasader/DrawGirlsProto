@@ -1248,6 +1248,7 @@ int PlayUI::getGameTime ()
 //}
 void PlayUI::showPause ()
 {
+	AudioEngine::sharedInstance()->setAppBack();
 	mySGD->is_paused = true;
 	
 	myGD->communication("Main_showPause");
@@ -1258,9 +1259,10 @@ void PlayUI::showContinuePopup (CCObject * t_end, SEL_CallFunc d_end, CCObject *
 {
 	target_continue = t_continue;
 	delegate_continue = d_continue;
+	AudioEngine::sharedInstance()->setAppBack();
+	mySGD->is_paused = true;
 	
-	ContinuePopup* t_cpl = ContinuePopup::create(t_end, d_end, this, callfunc_selector(PlayUI::continueAction));
-	addChild(t_cpl);
+	myGD->communication("Main_showContinue", t_end, d_end, this, callfunc_selector(PlayUI::continueAction));
 }
 void PlayUI::addGameTime30Sec ()
 {
