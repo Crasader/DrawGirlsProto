@@ -302,39 +302,42 @@ bool OptionPopup::init()
 	
 	is_menu_enable = false;
 
-	//KHAlertView* av = KHAlertView::create();
-	//av->setTitleFileName("msg_challenge.png");
-	//av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
-				//[=](CCObject*){
+	KHAlertView* av = KHAlertView::create(); av->setTitleFileName("msg_challenge.png");
+	av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+				[=](CCObject*){
+				}
+																									 ));
+	av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+	av->setWidth(240);
+	av->setHeight(240);
+	av->setTitleHeight(10);
+	av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+	av->setCenterY(150);
 
-					//av->removeFromParent();	 
-				//}
-																									 //));
-	//av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-	//av->setWidth(240);
-	//av->setHeight(240);
-	//av->setTitleHeight(40);
-	//av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
-	//av->setCenterY(150);
-
-	//auto ttf = CCLabelTTF::create("asdasda", "", 12.f); 
-	//ttf->setColor(ccc3(0, 0, 0));
-	//av->setContentNode(
-			//ttf
-			//);
-	//av->setContentSize(ttf->getDimensions());
-	//av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
-								//[=](CCObject* e)
-								//{
-									//CCLog("거절!!");
-								//});
-	//av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
-								//[=](CCObject* e)
-								//{
-									//CCLog("ok!!");
-								//});
-	//addChild(av, 99999999);
-	//av->show();
+	CCNode* emptyNode = CCNode::create();
+	auto ttf = CCLabelTTF::create("asdasda", "", 12.f); 
+	ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+	//	con->setAnchorPoint(ccp(0, 0));
+	//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+	ttf->setColor(ccc3(255, 255, 255));
+	ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() + 10));
+	emptyNode->addChild(ttf);
+	av->setContentNode(
+		emptyNode
+			);
+	av->setContentSize(ttf->getDimensions());
+	av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+								[=](CCObject* e)
+								{
+									CCLog("거절!!");
+								});
+	av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+								[=](CCObject* e)
+								{
+									CCLog("ok!!");
+								});
+	addChild(av, 99999999);
+	av->show();
 	
 #if 0 // 심플 예제
 	KSAlertView* av = KSAlertView::create();

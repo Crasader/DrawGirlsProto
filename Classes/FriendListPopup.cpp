@@ -189,7 +189,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	cell->init();
 	cell->autorelease();
 	
-	CCPoint sendBtnPosition = ccp(106, -17);
+	CCPoint sendBtnPosition = ccp(213, 24);
 	
 	
 	std::string cellBackFile = "friendlist_list.png";
@@ -200,7 +200,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,0);
 	
-	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "ending_take_particle.png");
+	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "no_img.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kProfileImg);
 	profileImg->setPosition(ccp(51, 20));
@@ -214,8 +214,8 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	_menu->setTouchPriority(-300);
 	_menu->setTag(kFriendTableTagMenu);
 	cell->addChild(_menu, 1);
-	
-	if(::getHeartIsSendable( (*member).userId, mySGD->getHeartSendCoolTime() ))
+	int remainTime = ::getHeartSendingRemainTime( (*member).userId, mySGD->getHeartSendCoolTime()	);
+	if(remainTime <= 0)
 	{
 		sendBtn = CCMenuItemImageLambda::create
 		("friendlist_coinsend.png", "friendlist_coinsend.png",
@@ -263,11 +263,15 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 																			::setHeartSendTime((*member).userId);
 																			obj->removeFromParent(); // 버튼 삭제.
 																			
-																			CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("friendlist_coinsend.png", "friendlist_coinsend.png",
-																																																			[](CCObject*){});
-																			sendBtn1->setPosition(sendBtnPosition);
-																			sendBtn1->setColor(ccc3(100, 100, 100));
-																			_menu->addChild(sendBtn1,2);
+																			//CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("friendlist_coinsend.png", "friendlist_coinsend.png",
+																																																			//[](CCObject*){});
+																			//sendBtn1->setPosition(sendBtnPosition);
+																			//sendBtn1->setColor(ccc3(100, 100, 100));
+																			//_menu->addChild(sendBtn1,2);
+																			std::string remainStr = ::getRemainTimeMsg( remainTime );
+																			CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
+																			remainFnt->setPosition(sendBtnPosition);
+																			cell->addChild(remainFnt, 1);
 																			////////////////////////////////
 																			// ¬ ¡ˆ∫∏≥ª±‚ - ƒ´ƒ´ø¿
 																			////////////////////////////////
@@ -285,12 +289,19 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	else
 	{
 		sendBtn = CCMenuItemImageLambda::create("friendlist_coinsend.png", "friendlist_coinsend.png",
-																						[](CCObject*){});
+																						[](CCObject*){
+																							CCLog("not send");
+																						});
+		sendBtn->setColor(ccc3(100, 100, 100));
+		sendBtn->setVisible(false);
+		std::string remainStr = ::getRemainTimeMsg( remainTime );
+		CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
+		remainFnt->setPosition(sendBtnPosition);
+		cell->addChild(remainFnt, 1);
 	}
 	
 	
 	sendBtn->setPosition(sendBtnPosition);
-	sendBtn->setColor(ccc3(100, 100, 100));
 	sendBtn->setTag(kFriendSendHeart);
 	sendBtn->setUserData((void *)idx);
 	_menu->addChild(sendBtn,2);
@@ -420,8 +431,13 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	}else{
 		sendBtn->setVisible(true);
 	}
+	
 	title->setString((*member).nick.c_str());
-	score->setString("최종접속 : ...");
+	
+	
+	int month, day, hour, minute;
+	::timeSpliter(member->lastDate, 0, &month, &day, &hour, &minute, 0);
+	score->setString(boost::str(boost::format("%||/%|| %||:%||") % month % day % hour % minute).c_str());
 	//rank->setString((*member)["rankingGrade"].asString().c_str());
 	
 	return cell;

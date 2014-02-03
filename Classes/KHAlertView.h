@@ -69,7 +69,17 @@ public:
 	void setCloseButton(CCMenuItemLambda* item); // 우측 상단 닫기 버튼을 설정함
 	void show(std::function<void(void)> closeFunc);
 	void show(); // 창을 띄움, 창을 띄우기 전에 모든게 세팅이 되어야 함.
-	
+	CCRect getContentRect()
+	{
+		int contentMargin = 1<<3;
+		float contentBorderMargin = contentMargin >> 1;
+		float buttonHeight = m_buttonHeight;
+		float titleHeight = m_titleHeight;
+		CCRect contentRect = CCRectMake(contentMargin, buttonHeight,
+				m_width-contentMargin*2, m_height - titleHeight - buttonHeight);
+		contentRect = rtSetScale(contentRect, m_borderScale);
+		return contentRect;
+	}	
 	CCSize getViewSize()
 	{
 		int contentMargin = 1<<3;

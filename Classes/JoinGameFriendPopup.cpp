@@ -445,7 +445,12 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 }
 void JoinGameFriendPopup::editBoxReturn(CCEditBox* editBox)
 {
-//	this->searchById(editBox->getText());
+	std::string input = editBox->getText();
+	long long _id = KS::strToLongLong(input);
+	std::ostringstream oss;
+	oss << _id;
+	std::string strId = oss.str();
+	this->searchById(strId);
 }
 
 

@@ -1,6 +1,5 @@
 // RankPopup.h
 //
-
 #ifndef LZZ_RankPopup_h
 #define LZZ_RankPopup_h
 #include "cocos2d.h"
@@ -82,7 +81,8 @@ enum RankCategory
 {
 	kTotalFriend,
 	kUnknownFriend,
-	kKnownFriend
+	kKnownFriend,
+	kRealTotalFriend
 };
 class RankPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
