@@ -20,6 +20,7 @@
 #include "StageImgLoader.h"
 #include "CardCase.h"
 #include "CardAnimations.h"
+#include "StartSettingScene.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -208,7 +209,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	if(recent_shop_code == kSC_character)
 	{
 		CCSize table_size = CCSizeMake(423, 208);
-		CCPoint table_position = ccp(241-table_size.width/2.f, 25);
+		CCPoint table_position = ccp(241-table_size.width/2.f, 22);
 //		CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //		temp_back->setOpacity(100);
 //		temp_back->setAnchorPoint(CCPointZero);
@@ -323,9 +324,9 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	}
 	else
 	{
-		setCardBuyMenu(ccp(100,128), kSP_MT_cardHigh, "shop_card_high.png", "price_ruby_img.png", card_price_high.getV());
-		setCardBuyMenu(ccp(240,128), kSP_MT_cardMid, "shop_card_mid.png", "price_gold_img.png", card_price_mid.getV());
-		setCardBuyMenu(ccp(380,128), kSP_MT_cardLow, "shop_card_low.png", "price_candy_img.png", card_price_low.getV());
+		setCardBuyMenu(ccp(100,125), kSP_MT_cardHigh, "shop_card_high.png", "price_ruby_img.png", card_price_high.getV());
+		setCardBuyMenu(ccp(240,125), kSP_MT_cardMid, "shop_card_mid.png", "price_gold_img.png", card_price_mid.getV());
+		setCardBuyMenu(ccp(380,125), kSP_MT_cardLow, "shop_card_low.png", "price_candy_img.png", card_price_low.getV());
 	}
 }
 
@@ -583,8 +584,8 @@ bool ShopPopup::init()
 	is_menu_enable = false;
 	
 	main_case = CCSprite::create("shop_back.png");
-	main_case->setAnchorPoint(CCPointZero);
-	main_case->setPosition(ccp(0,-320));
+	main_case->setAnchorPoint(ccp(0.5,0.5));
+	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kSP_Z_back);
 	
 	
@@ -788,7 +789,7 @@ void ShopPopup::setHeartMenu()
 void ShopPopup::showPopup()
 {
 	setTouchEnabled(true);
-	CCMoveTo* main_move = CCMoveTo::create(0.3f, ccp(0,0));
+	CCMoveTo* main_move = CCMoveTo::create(0.3f, ccp(240,160));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ShopPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -803,7 +804,7 @@ void ShopPopup::hidePopup()
 {
 	is_menu_enable = false;
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,-320));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ShopPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -821,29 +822,29 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 	CCPoint return_value;
 	
 	if(t_tag == kSP_MT_close)
-		return_value = ccp(453,260);
+		return_value = ccp(453,257);
 	else if(t_tag == kSP_MT_character)
-		return_value = ccp(59,259);
+		return_value = ccp(59,256);
 	else if(t_tag == kSP_MT_card)
-		return_value = ccp(141.5f,259);
+		return_value = ccp(141.5f,256);
 	else if(t_tag == kSP_MT_ruby)
-		return_value = ccp(224,259);
+		return_value = ccp(224,256);
 	else if(t_tag == kSP_MT_gold)
-		return_value = ccp(306,259);
+		return_value = ccp(306,256);
 	else if(t_tag == kSP_MT_heart)
-		return_value = ccp(388.5f,259);
+		return_value = ccp(388.5f,256);
 	else if(t_tag == kSP_MT_content1)
-		return_value = ccp(100,180);
+		return_value = ccp(100,177);
 	else if(t_tag == kSP_MT_content2)
-		return_value = ccp(240,180);
+		return_value = ccp(240,177);
 	else if(t_tag == kSP_MT_content3)
-		return_value = ccp(380,180);
+		return_value = ccp(380,177);
 	else if(t_tag == kSP_MT_content4)
-		return_value = ccp(100,75);
+		return_value = ccp(100,72);
 	else if(t_tag == kSP_MT_content5)
-		return_value = ccp(240,75);
+		return_value = ccp(240,72);
 	else if(t_tag == kSP_MT_content6)
-		return_value = ccp(380,75);
+		return_value = ccp(380,72);
 	
 	return return_value;
 }
@@ -965,6 +966,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_puzzle)
 					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_startsetting)
+					((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -1044,6 +1047,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_puzzle)
 					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_startsetting)
+					((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -1123,6 +1128,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_puzzle)
 					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_startsetting)
+					((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -1202,6 +1209,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_puzzle)
 					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_startsetting)
+					((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -1281,6 +1290,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_puzzle)
 					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_startsetting)
+					((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
@@ -1360,6 +1371,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 					((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				else if(before_code == kShopBeforeCode_puzzle)
 					((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+				else if(before_code == kShopBeforeCode_startsetting)
+					((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
