@@ -323,15 +323,16 @@ bool OptionPopup::init()
 			//ttf
 			//);
 	//av->setContentSize(ttf->getDimensions());
-
-	//av->addButton(CCMenuItemImageLambda::create
-			//(
-			 //"ui_common_ok.png",
-			 //"ui_common_ok.png",
-			 //[=](CCObject* e){
-				 
-			 //}
-			//));
+	//av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+								//[=](CCObject* e)
+								//{
+									//CCLog("거절!!");
+								//});
+	//av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+								//[=](CCObject* e)
+								//{
+									//CCLog("ok!!");
+								//});
 	//addChild(av, 99999999);
 	//av->show();
 	

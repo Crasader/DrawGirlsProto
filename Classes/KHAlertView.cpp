@@ -1,5 +1,5 @@
 //
-//  KHAlerView.cpp
+//  KHAlertView.cpp
 //  DGproto
 //
 //  Created by ksoo k on 2013. 11. 13..
@@ -10,24 +10,24 @@
 
 
 
-bool KHAlerView::ccTouchBegan( CCTouch *touch, CCEvent *event )
+bool KHAlertView::ccTouchBegan( CCTouch *touch, CCEvent *event )
 {
 	return false;
 }
 
-void KHAlerView::scrollViewDidScroll( CCScrollView* view )
+void KHAlertView::scrollViewDidScroll( CCScrollView* view )
 {
 	if(m_scrollBar != NULL) m_scrollBar->setBarRefresh();
 }
 
-void KHAlerView::scrollViewDidZoom( CCScrollView* view )
+void KHAlertView::scrollViewDidZoom( CCScrollView* view )
 {
 
 }
 
-KHAlerView* KHAlerView::create()
+KHAlertView* KHAlertView::create()
 {
-	KHAlerView* newO = new KHAlerView();
+	KHAlertView* newO = new KHAlertView();
 	newO->init();
 
 	newO->autorelease();
@@ -35,28 +35,36 @@ KHAlerView* KHAlerView::create()
 	return newO;
 }
 
-bool KHAlerView::init()
+bool KHAlertView::init()
 {
 	CCNode::init();
 	return true;
 }
 
-void KHAlerView::addButton( CCMenuItemLambda* item )
+void KHAlertView::addButton(CommonButton* item, std::function<void(CCObject*)> actionOnPress )
 {
 	m_menuItems.push_back(item);
+	auto aop = actionOnPress;
+	auto totalAction = [=](CCObject* obj){
+		aop(obj);
+		if(this->m_closeOnPress) {
+			this->removeFromParent();
+		}
+	};
+	item->setFunction(totalAction);
 }
 
-void KHAlerView::setCloseButton(CCMenuItemLambda* item)
+void KHAlertView::setCloseButton(CCMenuItemLambda* item)
 {
 	m_closeItem = item;
 }
 
-void KHAlerView::show(std::function<void(void)> closeFunc)
+void KHAlertView::show(std::function<void(void)> closeFunc)
 {
 	m_customCloseFunction = closeFunc;
 	show();
 }
-void KHAlerView::show()
+void KHAlertView::show()
 {
 	KSCoverLayer* cover = KSCoverLayer::create();
 	addChild(cover, INT_MAX);
@@ -82,32 +90,29 @@ void KHAlerView::show()
 	float contentBorderMargin = contentMargin >> 1;
 	btnBg->setPosition(ccp(m_centerX, m_centerY));
 	btnBg->setContentSize(CCSizeMake(m_width, m_height));
-
-	CCMenuLambda* _menu = CCMenuLambda::create();
-	_menu->setTouchPriority(INT_MIN);
+	
+	KSNode* _menu = new KSNode();
+	_menu->init();
+	_menu->autorelease();
+	//CCMenuLambda* _menu = CCMenuLambda::create();
+	//_menu->setTouchPriority(INT_MIN);
 	btnBg->addChild(_menu);
 	_menu->setPosition(ccp(m_width / 2, buttonHeight / 2.f + m_buttonOffsetY));
-//	_menu->setPosition(btnBg->convertToNodeSpace(ccp(m_centerX, bottom + buttonHeight / 2.f)));
-	//		_menu->setPosition();
-	
-	
-	
-	//		_menu->alignItemsHorizontallyWithPadding(10.f);
 
 	for(auto it : m_menuItems)
 	{
 		_menu->addChild(it);
-		if(m_closeOnPress)
-		{
-			it->m_afterSelector = [=](CCObject*)
-			{
-				removeFromParent();
-			};
-		}
+//		if(m_closeOnPress)
+//		{
+//			it->m_afterSelector = [=](CCObject*)
+//			{
+//				removeFromParent();
+//			};
+//		}
 		
 	}
 	// 아래쪽 버튼만 넣고 정렬 때림.
-	_menu->alignItemsHorizontally();
+	_menu->alignItemsHorizontallyWithPadding(m_buttonPadding);
 	
 	CCMenuLambda* _closeMenu = CCMenuLambda::create();
 	_closeMenu->setTouchPriority(INT_MIN);
@@ -130,12 +135,16 @@ void KHAlerView::show()
 			};
 		}
 	}
-	if(m_titleStr != "")
+	if(m_titleFileName != "")
 	{
-		CCLabelTTF* t = CCLabelTTF::create(m_titleStr.c_str(), "", 14.f);
-		t->setAnchorPoint(ccp(0.5, 1.0));
-		t->setPosition(ccp(m_width / 2, m_height));
-		btnBg->addChild(t);
+		CCSprite* titleSprite = CCSprite::create(m_titleFileName.c_str());
+		titleSprite->setAnchorPoint(ccp(0.5, 0.5));
+		titleSprite->setPosition(ccp(m_width / 2.f, m_height - 20));
+		btnBg->addChild(titleSprite);
+		//CCLabelTTF* t = CCLabelTTF::create(m_titleFileName.c_str(), "", 14.f);
+		//t->setAnchorPoint(ccp(0.5, 1.0));
+		//t->setPosition(ccp(m_width / 2, m_height));
+		//btnBg->addChild(t);
 	}
 
 //	CCAssert(m_contentNode != NULL, "not null");
@@ -192,7 +201,7 @@ void KHAlerView::show()
 	btnBg->addChild(sv, 2);
 	
 	CCRect transformedRect = rtSetScale(contentRect,
-		(contentRect.size.height + 8)/ (contentRect.size.height),
+		(contentRect.size.height)/ (contentRect.size.height),
 		ccp(0.5f, 0.5f));
 //	if(m_contentBorder == 0)
 //	{
