@@ -844,6 +844,10 @@ void StartSettingScene::menuAction(CCObject* sender)
 			else
 				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 		}
+		else if(tag == kStartSettingMenuTag_tip)
+		{
+			is_menu_enable = true;
+		}
 		else if(tag == kStartSettingMenuTag_start)
 		{
 			callStart();

@@ -188,6 +188,22 @@ bool CardSettingPopup::init()
 	take_card_count->setPosition(ccp(398,255));
 	main_case->addChild(take_card_count, kCSS_Z_content);
 	
+	
+	
+	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
+	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
+	s_tip->setColor(ccGRAY);
+	
+	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip, s_tip, this, menu_selector(CardSettingPopup::menuAction));
+	tip_item->setTag(kCSS_MT_tip);
+	
+	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
+	tip_menu->setPosition(ccp(465,(myDSH->puzzle_ui_top-320.f)/2.f+320.f-3 -13));
+	addChild(tip_menu, kCSS_Z_content);
+	
+	tip_menu->setTouchPriority(-185);
+	
+	
     return true;
 }
 
@@ -222,6 +238,23 @@ void CardSettingPopup::endShowPopup()
 		tutorial_node = t_tutorial;
 		
 		card_table->setTouchEnabled(false);
+	}
+	else
+	{
+//		if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardsetting))
+//		{
+//			myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardsetting, true);
+//			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+//			t_suction->target_touch_began = t_suction;
+//			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+//			t_suction->setTouchEnabled(true);
+//			
+//			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardsetting.png");
+//			dimed_tip->setPosition(ccp(240,160));
+//			t_suction->addChild(dimed_tip);
+//			
+//			addChild(t_suction, kCSS_Z_popup);
+//		}
 	}
 	
 	is_menu_enable = true;
@@ -368,6 +401,21 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			
 			target_final = NULL;
 			hidePopup();
+		}
+		else if(tag == kCSS_MT_tip)
+		{
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+			t_suction->target_touch_began = t_suction;
+			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+			t_suction->setTouchEnabled(true);
+			
+			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardsetting.png");
+			dimed_tip->setPosition(ccp(240,160));
+			t_suction->addChild(dimed_tip);
+			
+			addChild(t_suction, kCSS_Z_popup);
+			
+			is_menu_enable = true;
 		}
 		else if(tag >= kCSS_MT_cardMenuBase && tag < kCSS_MT_noCardBase)
 		{

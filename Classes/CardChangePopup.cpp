@@ -15,6 +15,7 @@
 #include "JackMissileShow.h"
 #include "CardStrengthPopup.h"
 #include "StartSettingScene.h"
+#include "TouchSuctionLayer.h"
 
 enum CardChangePopupZorder{
 	kCardChangePopupZorder_gray = 1,
@@ -32,7 +33,8 @@ enum CardChangePopupMenuTag{
 	kCardChangePopupMenuTag_release,
 	kCardChangePopupMenuTag_alignRank,
 	kCardChangePopupMenuTag_alignTake,
-	kCardChangePopupMenuTag_strength
+	kCardChangePopupMenuTag_strength,
+	kCardChangePopupMenuTag_tip
 };
 
 void CardChangePopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
@@ -151,6 +153,22 @@ bool CardChangePopup::init()
 	have_card_table->setDelegate(this);
 	main_case->addChild(have_card_table, kCardChangePopupZorder_content);
 	have_card_table->setTouchPriority(base_touch_priority);
+	
+	
+	
+	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
+	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
+	s_tip->setColor(ccGRAY);
+	
+	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip, s_tip, this, menu_selector(CardChangePopup::menuAction));
+	tip_item->setTag(kCardChangePopupMenuTag_tip);
+	
+	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
+	tip_menu->setPosition(ccp(465,(myDSH->puzzle_ui_top-320.f)/2.f+320.f-3 -13));
+	addChild(tip_menu, kCardChangePopupZorder_content);
+	
+	tip_menu->setTouchPriority(base_touch_priority+1);
+	
 	
     return true;
 }
@@ -665,6 +683,23 @@ void CardChangePopup::endShowPopup()
 		
 		tutorial_node = t_tutorial;
 	}
+	else
+	{
+//		if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardchange))
+//		{
+//			myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardchange, true);
+//			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+//			t_suction->target_touch_began = t_suction;
+//			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+//			t_suction->setTouchEnabled(true);
+//			
+//			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardchange.png");
+//			dimed_tip->setPosition(ccp(240,160));
+//			t_suction->addChild(dimed_tip);
+//			
+//			addChild(t_suction, kCardChangePopupZorder_popup);
+//		}
+	}
 	
 	is_menu_enable = true;
 }
@@ -860,6 +895,21 @@ void CardChangePopup::menuAction(CCObject* pSender)
 			
 			target_final = NULL;
 			hidePopup();
+		}
+		else if(tag == kCardChangePopupMenuTag_tip)
+		{
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+			t_suction->target_touch_began = t_suction;
+			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+			t_suction->setTouchEnabled(true);
+			
+			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardchange.png");
+			dimed_tip->setPosition(ccp(240,160));
+			t_suction->addChild(dimed_tip);
+			
+			addChild(t_suction, kCardChangePopupZorder_popup);
+			
+			is_menu_enable = true;
 		}
 	}
 }
