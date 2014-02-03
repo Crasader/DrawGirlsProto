@@ -18,8 +18,7 @@
 #include "MiniGamePopup.h"
 #include "cocos-ext.h"
 #include "StageImgLoader.h"
-#include "KSAlertView.h"
-
+#include "KHAlertView.h"
 #include "TutorialScene.h"
 #include "MinsuScene.h"
 #include "KSUtil.h"
@@ -74,8 +73,9 @@ bool OptionPopup::init()
 	
 	setTouchEnabled(true);
 	
-//	MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
-//	addChild(t_popup, 4);
+	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
+	//addChild(t_popup, 4);
+
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -302,6 +302,39 @@ bool OptionPopup::init()
 	
 	is_menu_enable = false;
 
+	//KHAlertView* av = KHAlertView::create();
+	//av->setTitleFileName("msg_challenge.png");
+	//av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+				//[=](CCObject*){
+
+					//av->removeFromParent();	 
+				//}
+																									 //));
+	//av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+	//av->setWidth(240);
+	//av->setHeight(240);
+	//av->setTitleHeight(40);
+	//av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+	//av->setCenterY(150);
+
+	//auto ttf = CCLabelTTF::create("asdasda", "", 12.f); 
+	//ttf->setColor(ccc3(0, 0, 0));
+	//av->setContentNode(
+			//ttf
+			//);
+	//av->setContentSize(ttf->getDimensions());
+
+	//av->addButton(CCMenuItemImageLambda::create
+			//(
+			 //"ui_common_ok.png",
+			 //"ui_common_ok.png",
+			 //[=](CCObject* e){
+				 
+			 //}
+			//));
+	//addChild(av, 99999999);
+	//av->show();
+	
 #if 0 // 심플 예제
 	KSAlertView* av = KSAlertView::create();
 	
