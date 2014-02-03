@@ -408,6 +408,8 @@ public:
 	void update (float dt);
 protected:
 	bool m_1TO2;
+	int m_numberAtOnce;
+	int m_frameInterval;
 	CCPoint m_sourcePosition;
 	int m_step;
 	int m_frame;

@@ -70,7 +70,9 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 		CCSprite* nSprite = CCSprite::create(CCString::createWithFormat("gacha_3_number_%d.png", i + 1)->getCString());
 		horse->addChild(nSprite, 1);
 
-		CCSprite* horseSprite = KS::loadCCBI<CCSprite*>(this, "horse_1.ccbi").first;
+		auto horseCCBI = KS::loadCCBI<CCSprite*>(this, "horse_1.ccbi");
+		CCSprite* horseSprite = horseCCBI.first;
+		horse->setUserData(horseCCBI.second);
 		horse->addChild(horseSprite);
 		horse->setPosition(m_horsePositions[i] + ccp(0, 300));
 		//horse->getCamera()->setEyeXYZ(0, 0.4f, 0.5f);
@@ -244,6 +246,8 @@ void HorseGachaSub::update(float dt)
 			else if(horse->m_arrive == false)
 			{
 				horse->m_arrive = true;
+				CCBAnimationManager* manager = (CCBAnimationManager*)horse->getUserData();
+				manager->runAnimationsForSequenceNamed("stop");
 				CCSprite* rankSprite = CCSprite::create(CCString::createWithFormat("gacha_3_ranking_%d.png", m_rankCounter++)->getCString());
 				horse->addChild(rankSprite, 2);
 			}
@@ -261,7 +265,7 @@ void HorseGachaSub::update(float dt)
 		RewardKind kind = m_rewards[ m_alreadyDeterminantOrder ]->m_kind;
 		int selectedItemValue = m_rewards[ m_alreadyDeterminantOrder ]->m_value;
 		std::function<void(void)> replayFunction;
-
+		CCNode* parentPointer = getParent();
 		if(m_gachaMode == kGachaPurchaseStartMode_select){ // 선택으로 들어온 거라면 다시 하기가 가능함.
 			replayFunction = [=]() {
 				// 선택으로 들어온 거라면 다시 하기가 가능함.
@@ -276,7 +280,7 @@ void HorseGachaSub::update(float dt)
 					for(auto i : m_rewards) {
 						rewards.push_back(RewardSprite::create(i->m_kind, i->m_value, i->m_spriteStr, i->m_weight));
 					}
-					getParent()->addChild(HorseGachaSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
+					parentPointer->addChild(HorseGachaSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
 							this->getZOrder());
 					this->removeFromParent();
 				}
@@ -289,8 +293,7 @@ void HorseGachaSub::update(float dt)
 			replayFunction = nullptr;
 		}
 		GachaShowReward* gachaShowReward = GachaShowReward::create(replayFunction,
-				[=]() { // 보상을 받음.
-				},
+				m_callback,
 				CCSprite::create(m_rewards[ m_alreadyDeterminantOrder ]->m_spriteStr.c_str()),
 				CCString::createWithFormat("%d", m_rewards[m_alreadyDeterminantOrder]->m_value)->getCString(),
 				kind,

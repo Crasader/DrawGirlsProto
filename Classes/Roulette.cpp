@@ -64,7 +64,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 	m_gachaMode = gsm;
 
 
-	m_parent = av;
+	m_parentDialog = av;
 	m_callback = callback;
 	//		setContentSize(av->getViewSize());
 
@@ -76,7 +76,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 
 
 	CCSprite* m_guide = CCSprite::create("gacha1_tip.png");
-	m_guide->setPosition(ccp(240, 160));
+	m_guide->setPosition(ccp(240, 142));
 	addChild(m_guide, 1);
 
 
@@ -120,7 +120,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 	m_menu->addChild(stopBtn);
 
 	m_rotationBoard = CCNode::create();
-	m_rotationBoard->setPosition(ccp(240, 185));
+	m_rotationBoard->setPosition(ccp(240, 150));
 	addChild(m_rotationBoard);
 
 	m_circleBoard = CCSprite::create("gacha1_roulette.png");
@@ -129,7 +129,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 
 	CCSprite* arrow = CCSprite::create("gacha1_arrow.png");
 	addChild(arrow);
-	arrow->setPosition(ccp(240, 292));
+	arrow->setPosition(ccp(240, 245));
 	float sourceDegree = 0;
 	int degreeCount = 0;
 	for(auto i : rs)
@@ -177,7 +177,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 
 			});
 
-	startBtn->setPosition(ccp(240, 190));
+	startBtn->setPosition(ccp(240, 150));
 	m_menu->addChild(startBtn);
 	return true;
 }
@@ -222,7 +222,7 @@ void RouletteSub::update(float dt)
 			RewardKind kind = resultReward->m_kind;
 			int selectedItemValue = resultReward->m_value;
 			std::function<void(void)> replayFunction;
-
+			CCNode* parentPointer = getParent();
 			if(m_gachaMode == kGachaPurchaseStartMode_select){ // 선택으로 들어온 거라면 다시 하기가 가능함.
 				replayFunction = [=]() {
 					// 선택으로 들어온 거라면 다시 하기가 가능함.
@@ -237,7 +237,7 @@ void RouletteSub::update(float dt)
 						for(auto i : m_rewards) {
 							rewards.push_back(RewardSprite::create(i.second->m_kind, i.second->m_value, i.second->m_spriteStr, i.second->m_weight));
 						}
-						getParent()->addChild(RouletteSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
+						parentPointer->addChild(RouletteSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
 								this->getZOrder());
 						this->removeFromParent();
 					}
