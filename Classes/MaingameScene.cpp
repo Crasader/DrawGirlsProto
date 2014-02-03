@@ -1605,6 +1605,8 @@ void Maingame::hideThumb()
 
 void Maingame::showPause()
 {
+	bool t_jack_stun = myJack->isStun;
+	
 	CCNode* exit_target = this;
 	exit_target->onExit();
 	
@@ -1621,19 +1623,22 @@ void Maingame::showPause()
 	
 	PauseContent* t_container = PauseContent::create(t_popup->getTouchPriority(), [=]()
 	{
-		cancelHome();
 		mControl->isStun = false;
+		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		t_popup->removeFromParent();
+		cancelHome();
 	}, [=]()
 	{
 		mControl->isStun = false;
+		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		t_popup->removeFromParent();
 		goHome();
 	}, [=]()
 	{
 		mControl->isStun = false;
+		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		t_popup->removeFromParent();
 		goReplay();
@@ -1682,6 +1687,8 @@ void Maingame::cancelHome ()
 }
 void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue)
 {
+	bool t_jack_stun = myJack->isStun;
+	
 	CCNode* exit_target = this;
 	exit_target->onExit();
 	
@@ -1700,6 +1707,7 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 														   {
 															   t_popup->removeFromParent();
 															   mControl->isStun = false;
+															   myJack->isStun = t_jack_stun;
 															   exit_target->onEnter();
 															   mySGD->is_paused = false;
 															   AudioEngine::sharedInstance()->setAppFore();
@@ -1708,6 +1716,7 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 														   {
 															   t_popup->removeFromParent();
 															   mControl->isStun = false;
+															   myJack->isStun = t_jack_stun;
 															   exit_target->onEnter();
 															   (t_continue->*d_continue)();
 															   continueAction();

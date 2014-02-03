@@ -111,7 +111,19 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_minigame_playedCnt,
 	kDSH_Key_minigame_int1_stageNumber, // int1 : playedCnt loop number 1 ~ playedCnt
-	kDSH_Key_minigame_int1_isPlayed // int1 : stage_number
+	kDSH_Key_minigame_int1_isPlayed, // int1 : stage_number
+	
+	kDSH_Key_was_opened_tutorial_dimed_achievement,
+	kDSH_Key_was_opened_tutorial_dimed_cardchange,
+	kDSH_Key_was_opened_tutorial_dimed_cardsetting,
+	kDSH_Key_was_opened_tutorial_dimed_cardstrength,
+	kDSH_Key_was_opened_tutorial_dimed_friendoption_invite,
+	kDSH_Key_was_opened_tutorial_dimed_friendoption_list,
+	kDSH_Key_was_opened_tutorial_dimed_friendoption_surch,
+	kDSH_Key_was_opened_tutorial_dimed_main,
+	kDSH_Key_was_opened_tutorial_dimed_rank,
+	kDSH_Key_was_opened_tutorial_dimed_startsetting
+	
 }DSH_Key;
 
 enum SpecialTutorialCode{

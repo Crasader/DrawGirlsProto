@@ -17,7 +17,8 @@ enum AchievePopupMenuTag{
 	kAchievePopupMenuTag_success,
 	kAchievePopupMenuTag_ing,
 	kAchievePopupMenuTag_reward,
-	kAchievePopupMenuTag_allReward
+	kAchievePopupMenuTag_allReward,
+	kAchievePopupMenuTag_tip
 };
 
 enum AchievePopupZorder{
@@ -105,6 +106,20 @@ bool AchievePopup::init()
 	achieve_table = NULL;
 	setAchieveTable();
 	
+	
+	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
+	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
+	s_tip->setColor(ccGRAY);
+	
+	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip, s_tip, this, menu_selector(AchievePopup::menuAction));
+	tip_item->setTag(kAchievePopupMenuTag_tip);
+	
+	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
+	tip_menu->setPosition(ccp(465,(myDSH->puzzle_ui_top-320.f)/2.f+320.f-3 -13));
+	addChild(tip_menu, kAchievePopupZorder_menu);
+	
+	tip_menu->setTouchPriority(-190);
+	
     return true;
 }
 
@@ -121,6 +136,21 @@ void AchievePopup::showPopup()
 
 void AchievePopup::endShowPopup()
 {
+//	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_achievement))
+//	{
+//		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_achievement, true);
+//		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+//		t_suction->target_touch_began = t_suction;
+//		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+//		t_suction->setTouchEnabled(true);
+//		
+//		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_achievement.png");
+//		dimed_tip->setPosition(ccp(240,160));
+//		t_suction->addChild(dimed_tip);
+//		
+//		addChild(t_suction, kAchievePopupZorder_popup);
+//	}
+	
 	is_menu_enable = true;
 }
 
@@ -243,6 +273,21 @@ void AchievePopup::menuAction(CCObject* pSender)
 			setAchieveTable();
 			all_reward_menu->setVisible(true);
 		}
+		is_menu_enable = true;
+	}
+	else if(tag == kAchievePopupMenuTag_tip)
+	{
+		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+		t_suction->target_touch_began = t_suction;
+		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+		t_suction->setTouchEnabled(true);
+		
+		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_achievement.png");
+		dimed_tip->setPosition(ccp(240,160));
+		t_suction->addChild(dimed_tip);
+		
+		addChild(t_suction, kAchievePopupZorder_popup);
+		
 		is_menu_enable = true;
 	}
 }

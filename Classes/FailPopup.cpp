@@ -231,8 +231,8 @@ bool FailPopup::init()
 	addChild(gray, kZ_FP_gray);
 	
 	main_case = CCSprite::create("ending_back.png");
-	main_case->setAnchorPoint(ccp(0,0));
-	main_case->setPosition(ccp(0,-320));
+	main_case->setAnchorPoint(ccp(0.5f,0.5f));
+	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kZ_FP_back);
 	
 	
@@ -241,7 +241,7 @@ bool FailPopup::init()
 		int stage_number = mySD->getSilType();
 		
 		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 10);
-		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height-65));
+		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height+40-68));
 		main_case->addChild(stage_number_label);
 		
 		mySGD->is_before_selected_event_stage = false;
@@ -253,7 +253,7 @@ bool FailPopup::init()
 		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 10);
-		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height-65));
+		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height+40-68));
 		main_case->addChild(piece_number_label);
 	}
 	
@@ -262,19 +262,19 @@ bool FailPopup::init()
 	if(fail_code == kFC_gameover)
 	{
 		CCSprite* title = CCSprite::create("ending_gameover.png");
-		title->setPosition(ccp(131,233.5f));
+		title->setPosition(ccp(131,230.5f));
 		main_case->addChild(title, kZ_FP_img);
 	}
 	else if(fail_code == kFC_timeover)
 	{
 		CCSprite* title = CCSprite::create("ending_timeover.png");
-		title->setPosition(ccp(131,233.5f));
+		title->setPosition(ccp(131,230.5f));
 		main_case->addChild(title, kZ_FP_img);
 	}
 	else if(fail_code == kFC_missionfail)
 	{
 		CCSprite* title = CCSprite::create("ending_missionfail.png");
-		title->setPosition(ccp(131,233.5f));
+		title->setPosition(ccp(131,230.5f));
 		main_case->addChild(title, kZ_FP_img);
 		
 		//		CLEAR_CONDITION clr_cdt = mySD->getClearCondition();
@@ -334,19 +334,19 @@ bool FailPopup::init()
 	
 	score_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
 	score_label->setAnchorPoint(ccp(1.f,0.5));
-	score_label->setPosition(ccp(230,81));
+	score_label->setPosition(ccp(230,78));
 	score_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(score_label, kZ_FP_img);
 	
 	gold_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
 	gold_label->setAnchorPoint(ccp(1.f,0.5));
-	gold_label->setPosition(ccp(230,109));
+	gold_label->setPosition(ccp(230,106));
 	gold_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(gold_label, kZ_FP_img);
 	
 	time_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
 	time_label->setAnchorPoint(ccp(1.f,0.5));
-	time_label->setPosition(ccp(230,135));
+	time_label->setPosition(ccp(230,132));
 	time_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(time_label, kZ_FP_img);
 	
@@ -380,7 +380,7 @@ bool FailPopup::init()
 	
 	main_menu = CCMenu::createWithItem(main_item);
 	main_menu->setVisible(false);
-	main_menu->setPosition(ccp(348.5f,41));
+	main_menu->setPosition(ccp(348.5f,38));
 	main_case->addChild(main_menu, kZ_FP_menu);
 	
 	
@@ -395,7 +395,7 @@ bool FailPopup::init()
 		
 		replay_menu = CCMenu::createWithItem(replay_item);
 		replay_menu->setVisible(false);
-		replay_menu->setPosition(ccp(130,41));
+		replay_menu->setPosition(ccp(130,38));
 		main_case->addChild(replay_menu, kZ_FP_menu);
 	}
 	else
@@ -411,7 +411,7 @@ bool FailPopup::init()
 			
 			replay_menu = CCMenu::createWithItem(replay_item);
 			replay_menu->setVisible(false);
-			replay_menu->setPosition(ccp(130,41));
+			replay_menu->setPosition(ccp(130,38));
 			main_case->addChild(replay_menu, kZ_FP_menu);
 		}
 		else
@@ -496,7 +496,7 @@ void FailPopup::showPopup()
 //	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 //	gray->runAction(gray_fade);
 
-	main_case->setPosition(ccp(0,0));
+	main_case->setPosition(ccp(240,160));
 	endShowPopup();
 //	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
 //	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(FailPopup::endShowPopup));
@@ -517,7 +517,7 @@ void FailPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,-320));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(FailPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -686,7 +686,7 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 			rankTableView->setAnchorPoint(CCPointZero);
 			rankTableView->setDirection(kCCScrollViewDirectionVertical);
 			rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
-			rankTableView->setPosition(ccp(243, 62.5f));
+			rankTableView->setPosition(ccp(243, 59.5f));
 			
 			rankTableView->setDelegate(this);
 			main_case->addChild(rankTableView, kZ_FP_menu);
@@ -789,7 +789,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 				if(mySGD->getScore() < score_list[i]["score"].asFloat())
 				{
 					CCSprite* high_score_img = CCSprite::create("ending_highscore.png");
-					high_score_img->setPosition(ccp(105, 81));
+					high_score_img->setPosition(ccp(105, 78));
 					main_case->addChild(high_score_img, kZ_FP_img);
 				}
 			}
@@ -835,7 +835,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		rankTableView->setAnchorPoint(CCPointZero);
 		rankTableView->setDirection(kCCScrollViewDirectionVertical);
 		rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
-		rankTableView->setPosition(ccp(243, 62.5f));
+		rankTableView->setPosition(ccp(243, 59.5f));
 		
 		rankTableView->setDelegate(this);
 		main_case->addChild(rankTableView, kZ_FP_menu);
@@ -861,7 +861,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		}
 		
 		suction = TouchSuctionLayer::create(kCCMenuHandlerPriority+1);
-		suction->setNotSwallowRect(CCRectMake(243, 62.5f, 208, 199));
+		suction->setNotSwallowRect(CCRectMake(243, 59.5f, 208, 199));
 		suction->setTouchEnabled(true);
 		main_case->addChild(suction);
 		
@@ -887,8 +887,8 @@ CCPoint FailPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kMT_FP_main)			return_value = ccp(100,70);
-	else if(t_tag == kMT_FP_replay)		return_value = ccp(240,70);
+	if(t_tag == kMT_FP_main)			return_value = ccp(100,67);
+	else if(t_tag == kMT_FP_replay)		return_value = ccp(240,67);
 	//	else if(t_tag == kMT_FP_help)		return_value = ccp(380,70);
 	
 	return return_value;
@@ -1081,8 +1081,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	}
 	
 	CCSprite* bg;
-//	if((*member).user_id == hspConnector::get()->getKakaoID())
-	if(0)
+	if((*member).user_id == hspConnector::get()->getKakaoID())
 	{
 		bg = CCSprite::create("ending_cell_me.png");
 		bg->setPosition(CCPointZero);
@@ -1179,13 +1178,9 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	cell->addChild(score_label,kFFC_Z_img);
 	
 	
-//	if((*member).user_id == hspConnector::get()->getKakaoID())
-	if(0)
+	if((*member).user_id == hspConnector::get()->getKakaoID())
 	{
-//		CCSprite* meBack = CCSprite::create("ending_cell_selected.png");
-//		meBack->setPosition(ccp(meBack->getContentSize().width - bg->getContentSize().width, 0));
-//		meBack->setAnchorPoint(CCPointZero);
-//		cell->addChild(meBack,kFFC_Z_case);
+		
 	}
 	else
 	{

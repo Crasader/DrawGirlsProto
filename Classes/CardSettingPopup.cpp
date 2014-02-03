@@ -72,8 +72,8 @@ bool CardSettingPopup::init()
 	addChild(gray, kCSS_Z_gray);
 	
 	main_case = CCSprite::create("cardsetting_back.png");
-	main_case->setAnchorPoint(ccp(0,0));
-	main_case->setPosition(ccp(0,-320));
+	main_case->setAnchorPoint(ccp(0.5,0.5));
+	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kCSS_Z_back);
 	
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
@@ -93,7 +93,7 @@ bool CardSettingPopup::init()
 	default_align_number_of_cell = (total_stage_cnt-1)/2 + 1;
 	
 	CCSize table_size = CCSizeMake(392, 180);
-	CCPoint table_position = ccp(34, 55);
+	CCPoint table_position = ccp(34, 52);
 	
 //	CCSprite* temp_table = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //	temp_table->setAnchorPoint(CCPointZero);
@@ -137,7 +137,7 @@ bool CardSettingPopup::init()
 	strength_item->setTag(kCSS_MT_strength);
 	
 	CCMenu* strength_menu = CCMenu::createWithItem(strength_item);
-	strength_menu->setPosition(ccp(78,34));
+	strength_menu->setPosition(ccp(78,31));
 	main_case->addChild(strength_menu, kCSS_Z_content);
 	strength_menu->setTouchPriority(-185);
 	
@@ -150,7 +150,7 @@ bool CardSettingPopup::init()
 	align_default_item->setTag(kCSS_MT_alignDefault);
 	
 	CCMenu* align_default_menu = CCMenu::createWithItem(align_default_item);
-	align_default_menu->setPosition(ccp(248,34));
+	align_default_menu->setPosition(ccp(248,31));
 	main_case->addChild(align_default_menu, kCSS_Z_alignButton);
 	align_default_menu->setTouchPriority(-185);
 	
@@ -163,7 +163,7 @@ bool CardSettingPopup::init()
 	align_take_item->setTag(kCSS_MT_alignTake);
 	
 	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
-	align_take_menu->setPosition(ccp(330,34));
+	align_take_menu->setPosition(ccp(330,31));
 	main_case->addChild(align_take_menu, kCSS_Z_alignButton);
 	align_take_menu->setTouchPriority(-185);
 	
@@ -176,17 +176,33 @@ bool CardSettingPopup::init()
 	align_rank_item->setTag(kCSS_MT_alignRank);
 	
 	CCMenu* align_rank_menu = CCMenu::createWithItem(align_rank_item);
-	align_rank_menu->setPosition(ccp(412,34));
+	align_rank_menu->setPosition(ccp(412,31));
 	main_case->addChild(align_rank_menu, kCSS_Z_alignButton);
 	align_rank_menu->setTouchPriority(-185);
 	
 	CCSprite* title_case = CCSprite::create("cardsetting_title.png");
-	title_case->setPosition(ccp(240,259));
+	title_case->setPosition(ccp(240,256));
 	main_case->addChild(title_case, kCSS_Z_content);
 	
 	CCLabelTTF* take_card_count = CCLabelTTF::create(CCString::createWithFormat("%d 장", mySGD->getHasGottenCardsSize())->getCString(), mySGD->getFont().c_str(), 10);
-	take_card_count->setPosition(ccp(398,258));
+	take_card_count->setPosition(ccp(398,255));
 	main_case->addChild(take_card_count, kCSS_Z_content);
+	
+	
+	
+	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
+	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
+	s_tip->setColor(ccGRAY);
+	
+	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip, s_tip, this, menu_selector(CardSettingPopup::menuAction));
+	tip_item->setTag(kCSS_MT_tip);
+	
+	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
+	tip_menu->setPosition(ccp(465,(myDSH->puzzle_ui_top-320.f)/2.f+320.f-3 -13));
+	addChild(tip_menu, kCSS_Z_content);
+	
+	tip_menu->setTouchPriority(-185);
+	
 	
     return true;
 }
@@ -203,7 +219,7 @@ void CardSettingPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardSettingPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -223,6 +239,23 @@ void CardSettingPopup::endShowPopup()
 		
 		card_table->setTouchEnabled(false);
 	}
+	else
+	{
+//		if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardsetting))
+//		{
+//			myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardsetting, true);
+//			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+//			t_suction->target_touch_began = t_suction;
+//			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+//			t_suction->setTouchEnabled(true);
+//			
+//			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardsetting.png");
+//			dimed_tip->setPosition(ccp(240,160));
+//			t_suction->addChild(dimed_tip);
+//			
+//			addChild(t_suction, kCSS_Z_popup);
+//		}
+	}
 	
 	is_menu_enable = true;
 }
@@ -234,7 +267,7 @@ void CardSettingPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,-320));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardSettingPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -251,8 +284,8 @@ CCPoint CardSettingPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kCSS_MT_close)			return_value = ccp(452,259);
-	else if(t_tag == kCSS_MT_cardBase)	return_value = ccp(245,213);
+	if(t_tag == kCSS_MT_close)			return_value = ccp(452,256);
+	else if(t_tag == kCSS_MT_cardBase)	return_value = ccp(245,210);
 	
 	return return_value;
 }
@@ -368,6 +401,21 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			
 			target_final = NULL;
 			hidePopup();
+		}
+		else if(tag == kCSS_MT_tip)
+		{
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+			t_suction->target_touch_began = t_suction;
+			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+			t_suction->setTouchEnabled(true);
+			
+			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardsetting.png");
+			dimed_tip->setPosition(ccp(240,160));
+			t_suction->addChild(dimed_tip);
+			
+			addChild(t_suction, kCSS_Z_popup);
+			
+			is_menu_enable = true;
 		}
 		else if(tag >= kCSS_MT_cardMenuBase && tag < kCSS_MT_noCardBase)
 		{

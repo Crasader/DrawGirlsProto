@@ -33,6 +33,18 @@ public:
 		m_state = (CUMBERSTATEMOVING);
 	}
 	
+	void removeFromParent()
+	{
+		KSCumberBase::removeFromParent();
+		CCLog("nonono1");
+	}
+	
+	void removeFromParentAndCleanup(bool cleanup)
+	{
+		KSCumberBase::removeFromParentAndCleanup(cleanup);
+		CCLog("nonono2");
+	}
+	
 	virtual ~KSSnakeBase();
 	
 	virtual void onStartMoving();

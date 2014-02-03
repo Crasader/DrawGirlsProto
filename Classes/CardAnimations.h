@@ -15,7 +15,7 @@
 #include "KSUtil.h"
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
-#include "GDWebSprite.h";
+#include "GDWebSprite.h"
 using namespace cocos2d::extension;
 using namespace std;
 
@@ -61,7 +61,7 @@ public:
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		title = CCSprite::create("ending_take_card.png");
+		title = CCSprite::create("ani_title_takecard.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
@@ -74,13 +74,15 @@ public:
 		addChild(gray, 1);
 		
 		auto ret = KS::loadCCBI<CCLayer*>(this, "roundBlue1.ccbi");
-		roundBig = ret.first;
+		roundBig = CCLayer::create();
+		roundBig->addChild(ret.first);
 		roundBig->setPosition(ccp(0,-95));
 		roundBig->setScale(0);
 		this->addChild(roundBig,2);
 		
 		auto ret2 = KS::loadCCBI<CCLayer*>(this, "roundBlue2.ccbi");
-		roundSmall = ret2.first;
+		roundSmall = CCLayer::create();
+		roundSmall->addChild(ret2.first);
 		roundSmall->setPosition(ccp(0,-95));
 		roundSmall->setScale(0);
 		this->addChild(roundSmall,2);
@@ -103,8 +105,7 @@ public:
 		isOpening=true;
 		gray->runAction(CCSequence::create(
 										   CCFadeIn::create(0.5f),
-										   CCCallFunc::create(this, callfunc_selector(TakeCardAnimation::step2)),
-										   CCDelayTime::create(0.2f)
+										   CCCallFunc::create(this, callfunc_selector(TakeCardAnimation::step2))
 										   ,NULL
 										   )
 						);
@@ -128,8 +129,7 @@ public:
 							);
 		
 		roundSmall->runAction(CCScaleTo::create(8/60.f, 1, 0.2f));
-
-		
+			
 	}
 	
 	void step3(){
@@ -163,14 +163,14 @@ public:
 	void close(){
 		isOpening=true;
 		
-		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
+		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.f)));
 		
 		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
-		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
+		roundSmall->runAction(CCScaleTo::create(0.3f,0.f));
 		
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(0.4f,0.01f),
+											   CCScaleTo::create(0.4f,0),
 											   CCCallFunc::create(this, callfunc_selector(TakeCardAnimation::closeStep2)),
 											   NULL
 											   )
@@ -265,7 +265,7 @@ public:
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		title = CCSprite::create("ending_decrease_durability.png");
+		title = CCSprite::create("ani_title_downcard.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
@@ -278,13 +278,15 @@ public:
 		addChild(gray, 1);
 		
 		auto ret = KS::loadCCBI<CCLayer*>(this, "roundRed1.ccbi");
-		roundBig = ret.first;
+		roundBig = CCLayer::create();
+		roundBig->addChild(ret.first);
 		roundBig->setPosition(ccp(0,-95));
 		roundBig->setScale(0);
 		this->addChild(roundBig,2);
 		
 		auto ret2 = KS::loadCCBI<CCLayer*>(this, "roundRed2.ccbi");
-		roundSmall = ret2.first;
+		roundSmall = CCLayer::create();
+		roundSmall->addChild(ret2.first);
 		roundSmall->setPosition(ccp(0,-95));
 		roundSmall->setScale(0);
 		this->addChild(roundSmall,2);
@@ -366,15 +368,15 @@ public:
 	void close(){
 		isOpening=true;
 		
-		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
+		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
 		
 		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
 		
-		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
+		roundSmall->runAction(CCScaleTo::create(0.3f,0));
 		
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(0.4f,0.01f),
+											   CCScaleTo::create(0.4f,0),
 											   CCCallFunc::create(this, callfunc_selector(DownCardAnimation::closeStep2)),
 											   NULL
 											   )
@@ -484,7 +486,7 @@ public:
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		title = CCSprite::create("ending_remove_card.png");
+		title = CCSprite::create("ani_title_removecard.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
@@ -496,14 +498,16 @@ public:
 		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 		addChild(gray, 1);
 		
-		auto ret = KS::loadCCBI<CCLayer*>(this, "roundRed1.ccbi");
-		roundBig = ret.first;
+		auto ret = KS::loadCCBI<CCLayer*>(this, "roundBlue1.ccbi");
+		roundBig = CCLayer::create();
+		roundBig->addChild(ret.first);
 		roundBig->setPosition(ccp(0,-95));
 		roundBig->setScale(0);
 		this->addChild(roundBig,2);
 		
 		auto ret2 = KS::loadCCBI<CCLayer*>(this, "roundRed2.ccbi");
-		roundSmall = ret2.first;
+		roundSmall = CCLayer::create();
+		roundSmall->addChild(ret2.first);
 		roundSmall->setPosition(ccp(0,-95));
 		roundSmall->setScale(0);
 		this->addChild(roundSmall,2);
@@ -731,14 +735,14 @@ public:
 	void close(){
 		isOpening=true;
 		
-		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3,0.01f)));
+		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3,0)));
 		
 		
 		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
-		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
+		roundSmall->runAction(CCScaleTo::create(0.3f,0));
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(0.4f,0.01f),
+											   CCScaleTo::create(0.4f,0),
 											   CCCallFunc::create(this, callfunc_selector(RemoveCardAnimation::closeStep2)),
 											   NULL
 											   )
@@ -850,7 +854,7 @@ public:
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		title = CCSprite::create("ending_take_card.png");
+		title = CCSprite::create("ani_title_strength.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
@@ -863,13 +867,15 @@ public:
 		addChild(gray, 1);
 		
 		auto ret = KS::loadCCBI<CCLayer*>(this, "roundBlue1.ccbi");
-		roundBig = ret.first;
+		roundBig = CCLayer::create();
+		roundBig->addChild(ret.first);
 		roundBig->setPosition(ccp(0,-95));
 		roundBig->setScale(0);
 		this->addChild(roundBig,2);
 		
 		auto ret2 = KS::loadCCBI<CCLayer*>(this, "roundBlue2.ccbi");
-		roundSmall = ret2.first;
+		roundSmall = CCLayer::create();
+		roundSmall->addChild(ret2.first);
 		roundSmall->setPosition(ccp(0,-95));
 		roundSmall->setScale(0);
 		this->addChild(roundSmall,2);
@@ -1083,14 +1089,14 @@ public:
 	void close(){
 		isOpening=true;
 		
-		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
-		optionLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
+		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
+		optionLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
 		
 		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
-		roundSmall->runAction(CCScaleTo::create(0.3f,0.01f));
+		roundSmall->runAction(CCScaleTo::create(0.3f,0));
 		roundBig->runAction(
 							CCSequence::create(
-											   CCScaleTo::create(0.4f,0.01f),
+											   CCScaleTo::create(0.4f,0),
 											   CCCallFunc::create(this, callfunc_selector(StrengthCardAnimation::closeStep2)),
 											   NULL
 											   )
@@ -1326,7 +1332,7 @@ public:
 //		
 //		this->addChild(card,3);
 //
-		title = CCSprite::create("rankchange_title.png");
+		title = CCSprite::create("ani_title_changerank.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
@@ -1474,12 +1480,12 @@ public:
 	void close(){
 		isOpening=true;
 		
-		backRolling->runAction(CCScaleTo::create(0.3f,0.01f));
-		backLayer->runAction(CCScaleTo::create(0.3f,0.01f));
-		msgLbl->runAction(CCScaleTo::create(0.3f,0.01f));
-		closeBtn->runAction(CCScaleTo::create(0.3f,0.01f));
-		sendBtn->runAction(CCScaleTo::create(0.3f,0.01f));
-		title->runAction(CCScaleTo::create(0.3f,0.01f));
+		backRolling->runAction(CCScaleTo::create(0.3f,0));
+		backLayer->runAction(CCScaleTo::create(0.3f,0));
+		msgLbl->runAction(CCScaleTo::create(0.3f,0));
+		closeBtn->runAction(CCScaleTo::create(0.3f,0));
+		sendBtn->runAction(CCScaleTo::create(0.3f,0));
+		title->runAction(CCScaleTo::create(0.3f,0));
 		
 		this->runAction(
 							CCSequence::create(
@@ -1584,6 +1590,9 @@ class FightResultAnimation : public CCLayer{
 	
 	CCSprite* winnerArrow;
 	CCSprite* loserArrow;
+	
+	CCSprite* titleWin;
+	CCSprite* titleLose;
 	
 	int winnerPoint;
 	int loserPoint;
@@ -1719,7 +1728,7 @@ public:
 		addChild(sendBtn,9);
 		
 		confirmBtn = CCControlButton::create("확인",mySGD->getFont().c_str(),20);
-		confirmBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
+		confirmBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::ConfirmByBtn), CCControlEventTouchUpInside);
 		confirmBtn->setPosition(ccp(240,85/2));
 		confirmBtn->setTouchPriority(touch_priority-1);
 		confirmBtn->setScale(0);
@@ -1740,10 +1749,21 @@ public:
 		//
 		//		this->addChild(card,3);
 		//
-		title = CCSprite::create("rankchange_title.png");
+		title = CCSprite::create("ani_title_fight.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
+		
+		titleWin = CCSprite::create("ani_title_win.png");
+		titleWin->setPosition(ccp(240,276));
+		titleWin->setScale(0);
+		this->addChild(titleWin,2);
+		
+		
+		titleLose = CCSprite::create("ani_title_lose.png");
+		titleLose->setPosition(ccp(240,276));
+		titleLose->setScale(0);
+		this->addChild(titleLose,2);
 		//
 		
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -1817,6 +1837,11 @@ public:
 		if(sendFunc)sendFunc();
 	}
 	
+	void ConfirmByBtn(CCObject*, CCControlEvent){
+		this->close();
+		if(confirmFunc)confirmFunc();
+	}
+	
 	void startLose(){
 		isOpening=true;
 		gray->runAction(CCSequence::create(
@@ -1857,7 +1882,9 @@ public:
 											   {
 												   
 												   this->addChild(KSTimer::create(1.f, [=](){
-													   
+														 titleLose->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+														 
+														 title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
 												   this->loseStep3();
 												   winnerPointLbl->addChild(KSGradualValue<float>::create((float)loserPoint, (float)winnerPoint, 1.0f,
 																						[=](float t)
@@ -1951,7 +1978,9 @@ public:
 															   {
 																   
 																   this->addChild(KSTimer::create(1.f, [=](){
-																	   
+																	   titleWin->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+																		 
+																	   title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
 																	   this->winStep3();
 																	   winnerPointLbl->addChild(KSGradualValue<float>::create((float)loserPoint, (float)winnerPoint, 1.0f,
 																															  [=](float t)
@@ -2080,13 +2109,14 @@ public:
 	void close(){
 		isOpening=true;
 		
-		backRolling->runAction(CCScaleTo::create(0.3f,0.01f));
-		backLayer->runAction(CCScaleTo::create(0.3f,0.01f));
-		msgLbl->runAction(CCScaleTo::create(0.3f,0.01f));
-		closeBtn->runAction(CCScaleTo::create(0.3f,0.01f));
-		confirmBtn->runAction(CCScaleTo::create(0.3f,0.01f));
-		sendBtn->runAction(CCScaleTo::create(0.3f,0.01f));
-		title->runAction(CCScaleTo::create(0.3f,0.01f));
+		backRolling->runAction(CCScaleTo::create(0.3f,0));
+		backLayer->runAction(CCScaleTo::create(0.3f,0));
+		msgLbl->runAction(CCScaleTo::create(0.3f,0));
+		closeBtn->runAction(CCScaleTo::create(0.3f,0));
+		confirmBtn->runAction(CCScaleTo::create(0.3f,0));
+		sendBtn->runAction(CCScaleTo::create(0.3f,0));
+		titleLose->runAction(CCScaleTo::create(0.3f,0));
+		titleWin->runAction(CCScaleTo::create(0.3f,0));
 		
 		this->runAction(
 						CCSequence::create(
