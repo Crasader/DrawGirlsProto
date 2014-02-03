@@ -1294,7 +1294,7 @@ void KSCumberBase::cumberAttack(float dt)
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
 				m_furyCnt = -400;
 
-				myGD->communication("Main_showTextMessage", std::string("거리 분노룰.."));
+				//myGD->communication("Main_showTextMessage", std::string("거리 분노룰.."));
 
 
 			}

@@ -7,6 +7,7 @@
 #include "KSGeometry.h"
 #include "ScrollBar.h"
 #include "KSCoverLayer.h"
+#include "CommonButton.h"
 USING_NS_CC;
 USING_NS_CC_EXT;
 
@@ -14,10 +15,11 @@ USING_NS_CC_EXT;
 
 
 
-class KHAlerView : public CCNode, public CCScrollViewDelegate, public CCTouchDelegate
+class KHAlertView : public CCNode, public CCScrollViewDelegate, public CCTouchDelegate
 {
 public:
-	std::vector<CCMenuItemLambda*> m_menuItems;
+	//std::vector<CCMenuItemLambda*> m_menuItems;
+	std::vector<CCNode*> m_menuItems;
 	CCMenuItemLambda* m_closeItem;
 	std::function<void(void)> m_customCloseFunction;
 	
@@ -26,7 +28,7 @@ public:
 //		(this, INT_MIN, true);
 //	}
 	virtual bool ccTouchBegan(CCTouch *touch, CCEvent *event);
-	KHAlerView() :
+	KHAlertView() :
 	m_width(350),
 	m_height(300),
 	m_shown(false),
@@ -38,7 +40,7 @@ public:
 //	m_buttonFile("ui_common_9_button_brown.png"),
 //	m_closeButtonFile("ui_common_close.png"),
 //	m_contentBorderFile("popup_back2.png"),
-	m_titleStr(""),
+	m_titleFileName(""),
 	m_hScroll(NULL),
 	m_vScroll(NULL),
 	m_contentNode(NULL),
@@ -54,16 +56,16 @@ public:
 	m_customCloseFunction(nullptr),
 	m_titleOffsetX(0),
 	m_titleOffsetY(0),
-	m_buttonOffsetY(0)
+	m_buttonOffsetY(0),
+	m_buttonPadding(15)
 	{
 		
 	}
-	
 	void scrollViewDidScroll(CCScrollView* view);
 	void scrollViewDidZoom(CCScrollView* view);
-	static KHAlerView* create();
+	static KHAlertView* create();
 	bool init();
-	void addButton(CCMenuItemLambda* item); // 버튼을 추가함
+	void addButton(CommonButton* item, std::function<void(CCObject*)> actionOnPress); // 버튼을 추가함
 	void setCloseButton(CCMenuItemLambda* item); // 우측 상단 닫기 버튼을 설정함
 	void show(std::function<void(void)> closeFunc);
 	void show(); // 창을 띄움, 창을 띄우기 전에 모든게 세팅이 되어야 함.
@@ -91,7 +93,7 @@ public:
 	CC_SYNTHESIZE(bool, m_horizonScroll, HorizonScroll);   // 알 필요없음
 	CC_SYNTHESIZE(bool, m_verticalScroll, VerticalScroll); // 알 필요없음
 	
-	CC_SYNTHESIZE(std::string, m_titleStr, TitleStr); // 타이틀 문자열, 있으면 위에서 여백이 생김
+	CC_SYNTHESIZE(std::string, m_titleFileName, TitleFileName); // 타이틀 문자열, 있으면 위에서 여백이 생김
 
 	
 	CC_SYNTHESIZE(CCScale9Sprite*, m_contentBorder, ContentBorder); // 내용물 테두리
@@ -105,5 +107,6 @@ public:
 	CC_SYNTHESIZE(int, m_titleOffsetY, TitleOffsetY); //
 	
 	CC_SYNTHESIZE(int, m_buttonOffsetY, ButtonOffsetY); //
+	CC_SYNTHESIZE(int, m_buttonPadding, ButtonPadding); //
 };
 
