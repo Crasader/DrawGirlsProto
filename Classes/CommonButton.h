@@ -21,12 +21,12 @@ using namespace std;
 
 
 enum CommonButtonType {
-	 CommonButtonYellow,
-	CommonButtonGray,
-	CommonButtonBlue,
-	CommonButtonGreen,
-	CommonButtonOrange,
-	CommonButtonClose
+		CommonButtonYellow,
+		CommonButtonGray,
+		CommonButtonBlue,
+		CommonButtonGreen,
+		CommonButtonOrange,
+		CommonButtonClose
 	};
 
 enum PriceType{
@@ -111,13 +111,13 @@ public:
 		
 		m_btnType = btnType;
 		
-		if(btnType==CommonButtonYellow) btnBackImg = "commonButtonYellow.png";
-		else if(btnType==CommonButtonYellow) btnBackImg = "commonButtonYellow.png";
-		else if(btnType==CommonButtonGray) btnBackImg = "commonButtonGray.png";
-		else if(btnType==CommonButtonBlue) btnBackImg = "commonButtonBlue.png";
-		else if(btnType==CommonButtonGreen) btnBackImg = "commonButtonGreen.png";
-		else if(btnType==CommonButtonOrange) btnBackImg = "commonButtonOrange.png";
-		else if(btnType==CommonButtonClose) btnBackImg = "commonButtonClose.png";
+		if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
+		else if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
+		else if(btnType==CommonButtonGray) btnBackImg = "common_button_gray.png";
+		else if(btnType==CommonButtonBlue) btnBackImg = "common_button_blue.png";
+		else if(btnType==CommonButtonGreen) btnBackImg = "common_button_green.png";
+		else if(btnType==CommonButtonOrange) btnBackImg = "common_button_orange.png";
+		else if(btnType==CommonButtonClose) btnBackImg = "common_button_close.png";
 		
 		m_btnBack = CCScale9Sprite::create(btnBackImg.c_str());
 		
@@ -221,11 +221,11 @@ public:
 		}
 		
 		if(m_priceTypeSprite==NULL && m_priceType!=PriceTypeNone){
-			string priceTypeImg = "commonButtonGold";
-			if(m_priceType == PriceTypeCoin)priceTypeImg="commonButtonCoin.png";
-			else if(m_priceType == PriceTypeGold)priceTypeImg="commonButtonGold.png";
-			else if(m_priceType == PriceTypeSocial)priceTypeImg="commonButtonSocial.png";
-			else if(m_priceType == PriceTypeRuby)priceTypeImg="commonButtonRuby.png";
+			string priceTypeImg = "common_button_gold.png";
+			if(m_priceType == PriceTypeCoin)priceTypeImg="common_button_coin.png";
+			else if(m_priceType == PriceTypeGold)priceTypeImg="common_button_gold.png";
+			else if(m_priceType == PriceTypeSocial)priceTypeImg="common_button_social.png";
+			else if(m_priceType == PriceTypeRuby)priceTypeImg="common_button_ruby.png";
 			
 			m_priceTypeSprite = CCSprite::create(priceTypeImg.c_str());
 			m_priceTypeSprite->setScale(0.9);
