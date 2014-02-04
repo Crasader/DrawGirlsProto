@@ -87,6 +87,21 @@ bool StartSettingScene::init()
 		tutorial_node = t_tutorial;
 	}
 	
+	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_startsetting))
+	{
+		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_startsetting, true);
+		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+		t_suction->target_touch_began = t_suction;
+		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+		t_suction->setTouchEnabled(true);
+		
+		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_startsetting.png");
+		dimed_tip->setPosition(ccp(240,160));
+		t_suction->addChild(dimed_tip);
+		
+		addChild(t_suction, kStartSettingZorder_popup);
+	}
+	
 	return true;
 }
 
@@ -846,6 +861,17 @@ void StartSettingScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kStartSettingMenuTag_tip)
 		{
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+			t_suction->target_touch_began = t_suction;
+			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+			t_suction->setTouchEnabled(true);
+			
+			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_startsetting.png");
+			dimed_tip->setPosition(ccp(240,160));
+			t_suction->addChild(dimed_tip);
+			
+			addChild(t_suction, kStartSettingZorder_popup);
+			
 			is_menu_enable = true;
 		}
 		else if(tag == kStartSettingMenuTag_start)
