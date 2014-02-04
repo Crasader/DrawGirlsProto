@@ -621,9 +621,8 @@ private:
 				
 				if(is_found)
 				{
-					CCSprite* n_piece = GDWebSprite::create(found_url.c_str(), "piece_ranker_noimg.png");
+					CCSprite* n_piece = GDWebSprite::create(found_url.c_str(), "piece_noimg.png");
 					n_piece->setAnchorPoint(ccp(0.5,0.5));
-					n_piece->setScale(58.f / n_piece->getContentSize().width);
 					//						CCSprite* s_piece = GDWebSprite::create(found_url.c_str(), "piece_ranker_noimg.png");
 					//						s_piece->setScale(58.f / s_piece->getContentSize().width);
 					//						s_piece->setColor(ccGRAY);
