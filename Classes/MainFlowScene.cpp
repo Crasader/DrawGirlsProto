@@ -510,6 +510,12 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
 	
+	if(puzzle_number == is_unlock_puzzle)
+	{
+		if(NSDS_GI(puzzle_number, kSDS_PZ_point_i) <= 0 || NSDS_GI(puzzle_number, kSDS_PZ_ticket_i) <= 0)
+			myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+	}
+	
 	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
 //	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{

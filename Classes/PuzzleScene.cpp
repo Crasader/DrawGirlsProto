@@ -1868,7 +1868,7 @@ void PuzzleScene::setRank()
 		for(auto i : UnknownFriends::getInstance()->getFriends())
 		{
 			RankFriendInfo fInfo;
-			fInfo.nickname = i.nick + "[unknown]";
+			fInfo.nickname = i.nick;
 			fInfo.img_url = "";
 			fInfo.user_id = i.userId;
 			fInfo.score = 0;
