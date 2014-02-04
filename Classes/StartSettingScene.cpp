@@ -695,6 +695,20 @@ void StartSettingScene::itemAction(CCObject *sender)
 				cnt_label->setColor(ccBLACK);
 				cnt_label->setPosition(ccp(0, -19));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+				
+				string item_currency = mySD->getItemCurrency(t_ic);
+				string buy_type_filename;
+				if(item_currency == "gold")
+					buy_type_filename = "price_gold_img.png";
+				else if(item_currency == "ruby")
+					buy_type_filename = "price_ruby_img.png";
+				else if(item_currency == "social")
+					buy_type_filename = "price_candy_img.png";
+				
+				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
+				buy_type->setScale(0.5f);
+				buy_type->setPosition(ccp(-13, -19));
+				item_parent->addChild(buy_type);
 			}
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");

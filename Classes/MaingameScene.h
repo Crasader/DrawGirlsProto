@@ -88,6 +88,8 @@ private:
 	PathManager* myPM;
 	CumberParent* myCP;
 	
+	CCParticleSystemQuad* line_particle;
+	
 	CCLayer* condition_spr;
 	CCSprite* touch_img;
 	
@@ -100,6 +102,8 @@ private:
 	
 	MainInitState init_state;
 	GameNodeMovingDirection gamenode_moving_direction;
+	
+	void setLineParticle(bool t_b);
 	
 	void movingGameNode();
 	int ignore_cnt;

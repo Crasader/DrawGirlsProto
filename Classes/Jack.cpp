@@ -1573,11 +1573,15 @@ void Jack::setJackState( jackState t_s )
 			jack_ccb_manager->runAnimationsForSequenceNamed("move");
 //		jackImg->setColor(ccWHITE);
 //		jackImg->setVisible(true);
+		line_edge->setVisible(false);
+		myGD->communication("Main_setLineParticle", false);
 		if(!is_hard && !jack_barrier->isVisible())
 			jack_barrier->setVisible(true);
 	}
 	else if(myState == jackStateDrawing)
 	{
+		line_edge->setVisible(true);
+		myGD->communication("Main_setLineParticle", true);
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
 			jack_ccb_manager->runAnimationsForSequenceNamed("draw");
 //		jackImg->setVisible(false);
@@ -1586,6 +1590,8 @@ void Jack::setJackState( jackState t_s )
 	}
 	else if(myState == jackStateBackTracking)
 	{
+		line_edge->setVisible(false);
+		myGD->communication("Main_setLineParticle", false);
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("rewind"))
 			jack_ccb_manager->runAnimationsForSequenceNamed("rewind");
 //		jackImg->setColor(ccGRAY);
@@ -1858,6 +1864,29 @@ void Jack::myInit()
 	myState = jackStateNormal;
 	afterState = jackStateNormal;
 
+	string path_color;
+	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+	if(path_color_code == 1)
+		path_color = "life";
+	else if(path_color_code == 2)
+		path_color = "fire";
+	else if(path_color_code == 3)
+		path_color = "water";
+	else if(path_color_code == 4)
+		path_color = "wind";
+	else if(path_color_code == 5)
+		path_color = "lightning";
+	else if(path_color_code == 6)
+		path_color = "plasma";
+	else
+		path_color = "empty";
+	
+	line_edge = CCSprite::create("jack_drawing_point.png");//("path_edge_" + path_color + ".png").c_str());
+	line_edge->setVisible(false);
+//	line_edge->setScale(myGD->game_scale);
+	addChild(line_edge, kJackZ_line);
+	
+	
 	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1) + ".ccbi");
 	
 	jackImg = t_pair.first;
