@@ -1057,8 +1057,8 @@ CCPoint Maingame::getObjectToGameNodePosition( CCPoint t_p )
 	float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
 	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
 	{
-		if(x_value > myGD->boarder_value+50)														x_value = myGD->boarder_value+50;
-		else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f-50)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f-50;
+		if(x_value > myGD->boarder_value+80)														x_value = myGD->boarder_value+80;
+		else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f-80)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f-80;
 	}
 
 	CCPoint after_position;

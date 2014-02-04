@@ -390,8 +390,9 @@ enum CharacterCellZorder
 {
 	kCharacterCellZorder_back = 1,
 	kCharacterCellZorder_content,
+	kCharacterCellZorder_selected,
+	kCharacterCellZorder_tab,
 	kCharacterCellZorder_lock,
-	kCharacterCellZorder_selected
 };
 
 void ShopPopup::cellAction(CCObject* sender)
@@ -489,7 +490,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 	
 	CCSprite* t_tab = CCSprite::create("shop_tab.png");
 	t_tab->setPosition(ccp(94,192));
-	cell->addChild(t_tab, kCharacterCellZorder_content);
+	cell->addChild(t_tab, kCharacterCellZorder_tab);
 	
 	if(idx > 0 && !myDSH->getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, idx))
 	{

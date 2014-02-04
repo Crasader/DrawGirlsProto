@@ -437,19 +437,33 @@ void CardCase::myInit( int t_selected_card_number )
 {
 	is_show_passive_content = false;
 	selected_card_number = t_selected_card_number;
-	CCSprite* top_case = CCSprite::create("card_case_top.png");
+	
+	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
+	string grade_filename;
+	if(card_grade == 2)
+		grade_filename = "silver";
+	else if(card_grade == 3)
+		grade_filename = "gold";
+	else
+		grade_filename = "bronze";
+	
+	CCSprite* top_case = CCSprite::create(("card_case_" + grade_filename + "_top.png").c_str());
+//	CCSprite* top_case = CCSprite::create("card_case_top.png");
 	top_case->setPosition(ccp(160,430));
 	addChild(top_case, kCARDCASE_Z_sideCase);
 
-	CCSprite* bottom_case = CCSprite::create("card_case_bottom.png");
+	CCSprite* bottom_case = CCSprite::create(("card_case_" + grade_filename + "_bottom.png").c_str());
+//	CCSprite* bottom_case = CCSprite::create("card_case_bottom.png");
 	bottom_case->setPosition(ccp(160,0));
 	addChild(bottom_case, kCARDCASE_Z_sideCase);
 
-	CCSprite* left_case = CCSprite::create("card_case_left.png");
+	CCSprite* left_case = CCSprite::create(("card_case_" + grade_filename + "_left.png").c_str());
+//	CCSprite* left_case = CCSprite::create("card_case_left.png");
 	left_case->setPosition(ccp(0,200));
 	addChild(left_case, kCARDCASE_Z_sideCase);
 
-	CCSprite* right_case = CCSprite::create("card_case_right.png");
+	CCSprite* right_case = CCSprite::create(("card_case_" + grade_filename + "_right.png").c_str());
+//	CCSprite* right_case = CCSprite::create("card_case_right.png");
 	right_case->setPosition(ccp(320,200));
 	addChild(right_case, kCARDCASE_Z_sideCase);
 
