@@ -445,10 +445,6 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 																 {
 																	 
 																	 KHAlertView* av = KHAlertView::create(); 
-																	 av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
-																																										[=](CCObject*){
-																																										}
-																																									 ));
 																	 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 																	 av->setWidth(240);
 																	 av->setHeight(240);
@@ -487,10 +483,6 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 																			 return;
 																		 }	
 																		 KHAlertView* av = KHAlertView::create(); 
-																		 av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
-																																											[=](CCObject*){
-																																											}
-																																										 ));
 																		 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 																		 av->setWidth(240);
 																		 av->setHeight(240);

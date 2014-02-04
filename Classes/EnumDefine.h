@@ -411,4 +411,5 @@ enum class GachaCategory
 	kGoldGacha = 2,
 	kSocialGacha = 3
 };
+
 #endif
