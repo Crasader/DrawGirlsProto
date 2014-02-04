@@ -60,7 +60,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 	m_fakeRewards = rs;
 	setTouchEnabled(true);
 	CCSprite* dimed = CCSprite::create();
-	dimed->setTextureRect(CCRectMake(0, 0, 520, 320));
+	dimed->setTextureRect(CCRectMake(0, 0, 600, 400));
 	dimed->setColor(ccc3(0, 0, 0));
 	dimed->setOpacity(180);
 	dimed->setPosition(ccp(240, 160));
@@ -119,7 +119,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 			centerPosition = ccp(m_parent->getViewSize().width / 2.f, m_parent->getViewSize().height / 2.f) +
 			ccp(0, 50);
 				 else
-			centerPosition = ccp(240, 160) + ccp(0, 30);
+			centerPosition = ccp(240, 160);
 		this->addChild(KSGradualValue<CCPoint>::create
 			(m_selectedHat->getPosition(),
 			 centerPosition,
@@ -194,12 +194,25 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 										}else{
 											replayFunction = nullptr;
 										};
+										std::string againFileName;
+										if(m_gachaCategory == GachaCategory::kRubyGacha)
+										{
+											againFileName = "gacha_popup_again.png";
+										}
+										else if(m_gachaCategory == GachaCategory::kGoldGacha)
+										{
+											againFileName = "gacha_popup_again.png";
+										}
+										else if(m_gachaCategory == GachaCategory::kSocialGacha)
+										{
+											againFileName = "gacha_popup_again.png";
+										}
 										GachaShowReward* gachaShowReward = GachaShowReward::create(replayFunction,
 												m_callback,
 												CCSprite::create(i.first->m_reward->m_spriteStr.c_str()),
 												CCString::createWithFormat("%d", i.first->m_reward->m_value)->getCString(),
 												kind,
-												selectedItemValue
+												selectedItemValue, againFileName
 												);
 										addChild(gachaShowReward, 30);
 

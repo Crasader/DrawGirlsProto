@@ -25,7 +25,7 @@ public:
 	virtual ~GachaShowReward();
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual bool init(const std::function<void(void)>& replayFunction, const std::function<void(void)>& obtainFunction, CCSprite* rewardImg, 
-			const std::string& descStr, RewardKind kind, int value)
+			const std::string& descStr, RewardKind kind, int value, const std::string& againImageName)
 	{
 		CCLayer::init();
 
@@ -103,7 +103,7 @@ public:
 		_menu->addChild(obtainItem);
 	
 
-		CCMenuItemLambda* replayItem = CCMenuItemImageLambda::create("gacha_popup_again.png", "gacha_popup_again.png",
+		CCMenuItemLambda* replayItem = CCMenuItemImageLambda::create(againImageName.c_str(), againImageName.c_str(),
 				[=](CCObject*)
 				{
 					prevObtain();
@@ -122,10 +122,10 @@ public:
 	}
 
 	static GachaShowReward* create(const std::function<void(void)>& replayFunction, const std::function<void(void)>& obtainFunction, CCSprite* rewardImg, 
-			const std::string& descStr, RewardKind kind, int value)
+			const std::string& descStr, RewardKind kind, int value, const std::string& againImageName)
 	{
 		GachaShowReward* t = new GachaShowReward();
-		t->init(replayFunction, obtainFunction, rewardImg, descStr, kind, value);
+		t->init(replayFunction, obtainFunction, rewardImg, descStr, kind, value, againImageName);
 		t->autorelease();
 		return t;
 	}

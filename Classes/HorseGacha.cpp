@@ -9,7 +9,7 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 	m_gachaCategory = gc;
 	m_rewards = rs;
 	CCSprite* dimed = CCSprite::create();
-	dimed->setTextureRect(CCRectMake(0, 0, 520, 320));
+	dimed->setTextureRect(CCRectMake(0, 0, 600, 400));
 	dimed->setColor(ccc3(0, 0, 0));
 	dimed->setOpacity(180);
 	dimed->setPosition(ccp(240, 160));
@@ -46,18 +46,17 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 	m_horsePositions = {ccp(80, 100 + 20*6), ccp(80, 100 + 20*5), ccp(80, 100 + 20*4), ccp(80, 100 + 20*3), ccp(80, 100+20*2), ccp(80, 100+20*1), ccp(80, 100)};
 	std::vector<std::string> horseFiles = {"gacha3_horse1.png", "gacha3_horse2.png", "gacha3_horse3.png",
 		"gacha3_horse4.png", "gacha3_horse5.png", "gacha3_horse6.png", "gacha3_horse7.png"};
-	std::vector<CCPoint> rewardPositions = {ccp(121, 36), ccp(121 + 38*1, 36), ccp(121 + 38*2, 36), ccp(121 + 38*3, 36),
-		ccp(121 + 38*4, 36), ccp(121 + 38*5, 36), ccp(121 + 38*6, 36)};
+	std::vector<CCPoint> rewardPositions = {ccp(126, 37), ccp(164, 37), ccp(202, 37), ccp(240, 38),
+		ccp(278, 37), ccp(316, 37), ccp(354, 37)};
 	CCPoint horseToReward = ccp(450, 0);
 
 	int i=0;
 	for(auto& reward : m_rewards)
 	{
 		reward->setPosition(rewardPositions[i]);
-		reward->setAnchorPoint(ccp(0.5f, 0.0f));
-		CCLabelBMFont* value = CCLabelBMFont::create(CCString::createWithFormat("%d", reward->m_value)->getCString(), "mb_white_font.fnt");
-		reward->addChild(value);
-//		m_rewards.push_back(hrs);
+		reward->setScale(0.7f);
+		//CCLabelBMFont* value = CCLabelBMFont::create(CCString::createWithFormat("%d", reward->m_value)->getCString(), "mb_white_font.fnt");
+		//reward->addChild(value);
 		addChild(reward);
 		i++;
 	}
@@ -99,7 +98,7 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 	addChild(m_menu);
 	
 	CCMenuItemImageLambda* startBtn = CCMenuItemImageLambda::create("gacha_start.png", "gacha_start.png");
-	startBtn->setPosition(ccp(240, 40));
+	startBtn->setPosition(ccp(240, 160));
 	startBtn->setVisible(false);
 	startBtn->setTarget([=](CCObject*)
 											{
@@ -205,14 +204,14 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 
 		CCMenuItemLambda* m0 =
 			CCMenuItemImageLambda::create
-			("gacha3_horse_selectbox.png", "gacha3_horse_selectbox.png",
+			("gacha3_horse_selectbox.png", "gacha3_horse_over.png",
 			 [=](CCObject* t)
 			 {
 				 retFunction(i);
 			 });
 
 		m0->setPosition(horseSelectPositions[i]);
-		m0->setOpacity(0);
+		//m0->setOpacity(0);
 		CCSprite* horse = CCSprite::create(horseFiles[i].c_str());
 		horse->setPosition(ccp(m0->getContentSize().width / 2.f, m0->getContentSize().height / 2.f));
 		m0->addChild(horse);
@@ -292,12 +291,25 @@ void HorseGachaSub::update(float dt)
 		}else{
 			replayFunction = nullptr;
 		}
+		std::string againFileName;
+		if(m_gachaCategory == GachaCategory::kRubyGacha)
+		{
+			againFileName = "gacha_popup_again.png";
+		}
+		else if(m_gachaCategory == GachaCategory::kGoldGacha)
+		{
+			againFileName = "gacha_popup_again.png";
+		}
+		else if(m_gachaCategory == GachaCategory::kSocialGacha)
+		{
+			againFileName = "gacha_popup_again.png";
+		}
 		GachaShowReward* gachaShowReward = GachaShowReward::create(replayFunction,
 				m_callback,
 				CCSprite::create(m_rewards[ m_alreadyDeterminantOrder ]->m_spriteStr.c_str()),
 				CCString::createWithFormat("%d", m_rewards[m_alreadyDeterminantOrder]->m_value)->getCString(),
 				kind,
-				selectedItemValue
+				selectedItemValue, againFileName
 				);
 		addChild(gachaShowReward, 3);
 		
