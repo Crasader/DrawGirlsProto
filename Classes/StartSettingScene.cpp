@@ -52,6 +52,8 @@ bool StartSettingScene::init()
         return false;
     }
 	
+	mySGD->selectFriendCard();
+	
 	setKeypadEnabled(true);
 	
 	item_title_label = NULL;

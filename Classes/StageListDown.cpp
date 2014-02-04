@@ -8,6 +8,7 @@
 
 #include "StageListDown.h"
 #include "PuzzleCache.h"
+#include "LoadingTipScene.h"
 
 void StageListDown::addDownlist(string t_key, const Json::Value& result_data)
 {
@@ -705,16 +706,15 @@ StageListDown* StageListDown::create( CCObject* t_success, SEL_CallFunc d_succes
 
 void StageListDown::myInit( CCObject* t_success, SEL_CallFunc d_success, int t_puzzle )
 {
-	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-	if(screen_scale_x < 1.f)
-		screen_scale_x = 1.f;
+	tip_img = LoadingTipScene::getLoadingTipImage();
+	tip_img->setPosition(ccp(240,160));
+	addChild(tip_img, kSLD_Z_back);
 	
-	gray = CCSprite::create("back_gray.png");
-	gray->setPosition(ccp(240,160));
-	gray->setScaleX(screen_scale_x);
-	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
-	addChild(gray);
+	CCDelayTime* t_delay = CCDelayTime::create(7);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StageListDown::changeTipImage));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+	
+	tip_img->runAction(t_seq);
 	
 	setTouchEnabled(true);
 	
@@ -732,6 +732,21 @@ void StageListDown::myInit( CCObject* t_success, SEL_CallFunc d_success, int t_p
 	is_downloading = false;
 
 	startGetStageList();
+}
+
+void StageListDown::changeTipImage()
+{
+	tip_img->removeFromParent();
+	
+	tip_img = LoadingTipScene::getLoadingTipImage();
+	tip_img->setPosition(ccp(240,160));
+	addChild(tip_img, kSLD_Z_back);
+	
+	CCDelayTime* t_delay = CCDelayTime::create(7);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StageListDown::changeTipImage));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+	
+	tip_img->runAction(t_seq);
 }
 
 void StageListDown::startGetStageList()

@@ -56,7 +56,7 @@ bool TitleRenewalScene::init()
 	
 	state_label = CCLabelTTF::create("까똑 로그인 ing...", mySGD->getFont().c_str(), 20);
 	state_label->setColor(ccBLACK);
-	state_label->setPosition(ccp(240,160));
+	state_label->setPosition(ccp(240,100));
 	addChild(state_label);
 	
 	Json::Value param;
