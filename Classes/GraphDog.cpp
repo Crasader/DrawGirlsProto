@@ -513,7 +513,7 @@ void* GraphDog::t_function(void *_insertIndex)
 
 void GraphDog::removeCommand(cocos2d::CCObject *target)
 {
-    
+  
     return;
 	//GDDelegator::getInstance()->removeCommand(target);
 //	pthread_mutex_lock(&cmdsMutex);

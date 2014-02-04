@@ -47,7 +47,7 @@ public:
 		p["limitDay"] = mySGD->getMsgRemoveDay();
 		// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 
-		hspConnector::get()->command("getmessagelist",p,[this](Json::Value r)
+		hspConnector::get()->command("getmessagelist",p,this,[this](Json::Value r)
 				{
 				GraphDogLib::JsonToLog("getmessagelist", r);
 				if(r["result"]["code"].asInt() != GDSUCCESS)
@@ -77,7 +77,7 @@ public:
 
 		//기준점 0,0
 		// 좌표 수동으로 잡느라 이리 됨
-		m_mailTableView->setPosition(ccp(37, 320 - 297));
+		m_mailTableView->setPosition(ccp(29, 24));
 
 		//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 		m_mailTableView->setDelegate(this);
@@ -104,15 +104,15 @@ public:
 		
 		Json::Reader reader;
 		reader.parse(mail["content"].asString(), contentObj);
-		CCLabelTTF* nickFnt = CCLabelTTF::create(contentObj["nick"].asString().c_str(), "", 14.f);
+		CCLabelTTF* nickFnt = CCLabelTTF::create(contentObj["nick"].asString().c_str(), "", 12);
 		realCell->addChild(nickFnt);
-		nickFnt->setPosition(ccp(40, 20));
+		nickFnt->setPosition(ccp(60, 20));
 		
 			
 		CCSprite* profileImg = GDWebSprite::create(contentObj["profile_url"].asString(), "no_img.png");
 		profileImg->setAnchorPoint(ccp(0.5, 0.5));
-		profileImg->setPosition(ccp(22, 22));
-		profileImg->setScale(35.f / profileImg->getContentSize().width);
+		profileImg->setPosition(ccp(22, 21));
+		profileImg->setScale(28.f / profileImg->getContentSize().width);
 
 		realCell->addChild(profileImg);
 
@@ -191,7 +191,7 @@ public:
 																			 });
 			 });
 		_menu->addChild(accept);
-		accept->setPosition(ccp(90, 30));
+		accept->setPosition(ccp(140, 22));
 		
 		
 		CCMenuItemLambda* reject = CCMenuItemImageLambda::create("friendsearch_no.png", "friendsearch_no.png",
@@ -210,7 +210,7 @@ public:
 //																																 });
 																														 });
 		_menu->addChild(reject);
-		reject->setPosition(ccp(120, 30));
+		reject->setPosition(ccp(185, 22));
 		return realCell;
 	}
 
@@ -231,7 +231,7 @@ public:
 	}
 	virtual CCSize cellSizeForTable (CCTableView * table)
 	{
-		return CCSizeMake(188, 37);
+		return CCSizeMake(188, 38);
 	}
 	virtual unsigned int numberOfCellsInTableView (CCTableView * table)
 	{
@@ -245,7 +245,7 @@ public:
 		p["no"] = mailNo;
 		p["memberID"] = memberID;
 		// 도전장 삭제요청
-		hspConnector::get()->command( "removemessage",p, [=](Json::Value r) {
+		hspConnector::get()->command( "removemessage",p, this,[=](Json::Value r) {
 		Json::Value newMailList;
 		if(r["result"]["code"].asInt() != GDSUCCESS)
 		{

@@ -16,6 +16,7 @@
 #include "StarGoldData.h"
 #include "DimmedPopup.h"
 #include "CommonButton.h"
+#include "GivenFriendList.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -162,7 +163,7 @@ public:
 protected:
 	
 	Json::Value m_randomList;
-	
+	GivenFriendList* givenFriendList;
 	JoinFriendTableView* rankTableView;
 	CCEditBox* m_searchIdEditBox;
 	bool is_menu_enable;
