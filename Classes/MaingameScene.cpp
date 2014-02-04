@@ -224,7 +224,7 @@ void Maingame::finalSetting()
 	line_particle->setEmissionRate(100);
 	line_particle->setAngle(0.0);
 	line_particle->setAngleVar(360.0);
-	ccBlendFunc blendFunc = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
+	ccBlendFunc blendFunc = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA}; //GL_SRC_ALPHA, GL_ONE
 	line_particle->setBlendFunc(blendFunc);
 	line_particle->setDuration(-1);
 	line_particle->setEmitterMode(kCCParticleModeGravity);

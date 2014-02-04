@@ -795,7 +795,7 @@ void StarGoldData::selectFriendCard()
 	for(int i=0;i<known_list.size();i++)
 	{
 		int t_card_number = known_list[i].userData[myDSH->getKey(kDSH_Key_selectedCard)].asInt();
-		if(t_card_number != 0)
+		if(t_card_number != 0 && NSDS_GI(kSDS_CI_int1_stage_i, t_card_number) > 0)
 		{
 			FriendCardData t_data;
 			
@@ -815,7 +815,7 @@ void StarGoldData::selectFriendCard()
 	for(int i=0;i<unknown_list.size();i++)
 	{
 		int t_card_number = unknown_list[i].userData[myDSH->getKey(kDSH_Key_selectedCard)].asInt();
-		if(t_card_number != 0)
+		if(t_card_number != 0 && NSDS_GI(kSDS_CI_int1_stage_i, t_card_number) > 0)
 		{
 			FriendCardData t_data;
 			
