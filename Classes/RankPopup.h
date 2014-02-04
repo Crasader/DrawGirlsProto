@@ -17,7 +17,8 @@
 #include "CardCase.h"
 #include "DownloadFile.h"
 #include "StarGoldData.h"
-
+#include "DimmedPopup.h"
+#include "CommonButton.h";
 USING_NS_CC;
 
 #define SAFE_REMOVECHILD(X) do{if(X){ X->removeFromParentAndCleanup(true); X = 0;}}while(0);
@@ -84,7 +85,7 @@ enum RankCategory
 	kKnownFriend,
 	kRealTotalFriend
 };
-class RankPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
+class RankPopup : public DimmedPopup, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
   static RankPopup * create (CCObject * t_close, SEL_CallFunc d_close);
@@ -124,13 +125,13 @@ public:
   virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
   virtual void registerWithTouchDispatcher ();
 	void touchCellIndex(int idx);
+		
+	
 protected:
   Json::Value m_scoreList;
   RankTableView * rankTableView;
   bool is_menu_enable;
   int touched_number;
-  CCObject * target_close;
-  SEL_CallFunc delegate_close;
   RankPopupState my_state;
   CCControlButton * closeBtn;
   CCSprite * m_currentSelectSprite;
@@ -138,9 +139,9 @@ protected:
 	CCLabelBMFont* m_highScore;
 	
 	
-	CCMenuItemLambda* m_onlyKatok;
-	CCMenuItemLambda* m_totalFriend;
-	CCMenuItemLambda* m_onlyGameFriend;
+	CommonButton* m_onlyKatok;
+	CommonButton* m_totalFriend;
+	CommonButton* m_onlyGameFriend;
 	
 	RankCategory m_rankCategory;
 };

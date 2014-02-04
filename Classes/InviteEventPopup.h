@@ -14,6 +14,8 @@
 #include "CardCase.h"
 #include "DownloadFile.h"
 #include "StarGoldData.h"
+#include "DimmedPopup.h"
+#include "CommonButton.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -50,7 +52,9 @@ class InviteTableView : public CCTableView
 public:
 	static InviteTableView* create(CCTableViewDataSource* dataSource, CCSize size, CCNode *container);
 };
-class InviteEventPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
+
+
+class InviteEventPopup : public DimmedPopup, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
 	static InviteEventPopup* create(CCObject* t_close, SEL_CallFunc d_close);
@@ -154,9 +158,7 @@ protected:
 	bool is_menu_enable;
 	
 	int touched_number;
-	CCObject* target_close;
-	SEL_CallFunc delegate_close;
-	CCControlButton *closeBtn;
+	CommonButton *closeBtn;
 	
 	CCSprite* m_currentSelectSprite;
 	ScrollBar* m_scrollBar;

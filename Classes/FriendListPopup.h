@@ -15,6 +15,8 @@
 #include "DownloadFile.h"
 #include "StarGoldData.h"
 #include "FriendData.h"
+#include "DimmedPopup.h"
+#include "CommonButton.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -47,7 +49,7 @@ class FriendListTableView : public CCTableView
 public:
 	static FriendListTableView* create(CCTableViewDataSource* dataSource, CCSize size, CCNode *container);
 };
-class FriendListPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
+class FriendListPopup : public DimmedPopup, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
 	static FriendListPopup* create(CCObject* t_close, SEL_CallFunc d_close);
@@ -141,8 +143,6 @@ protected:
 	
 	int touched_number;
 	CCObject* target_close;
-	SEL_CallFunc delegate_close;
-	CCControlButton *closeBtn;
 	
 	CCSprite* m_currentSelectSprite;
 	ScrollBar* m_scrollBar;

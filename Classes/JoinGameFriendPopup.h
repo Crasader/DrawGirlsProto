@@ -14,6 +14,8 @@
 #include "CardCase.h"
 #include "DownloadFile.h"
 #include "StarGoldData.h"
+#include "DimmedPopup.h"
+#include "CommonButton.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -53,7 +55,7 @@ class JoinFriendTableView : public CCTableView
 public:
 	static JoinFriendTableView* create(CCTableViewDataSource* dataSource, CCSize size, CCNode *container);
 };
-class JoinGameFriendPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate, public CCEditBoxDelegate
+class JoinGameFriendPopup : public DimmedPopup, public CCTableViewDataSource, public CCTableViewDelegate, public CCEditBoxDelegate
 {
 public:
 	virtual void editBoxEditingDidBegin(CCEditBox* editBox)
@@ -166,9 +168,7 @@ protected:
 	bool is_menu_enable;
 	
 	int touched_number;
-	CCObject* target_close;
-	SEL_CallFunc delegate_close;
-	CCControlButton *closeBtn;
+	CommonButton *closeBtn;
 	
 	CCSprite* m_currentSelectSprite;
 	ScrollBar* m_scrollBar;
