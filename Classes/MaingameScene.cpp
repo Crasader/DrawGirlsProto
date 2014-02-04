@@ -1300,8 +1300,16 @@ void Maingame::setUnlimitMap()
 			}
 		}
 	}
-	changing_game_step_frame = 0;
-	schedule(schedule_selector(Maingame::changingGameStep));
+	
+	if(myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
+	{
+		changing_game_step_frame = 0;
+		schedule(schedule_selector(Maingame::changingGameStep));
+	}
+	else
+	{
+		myGD->game_step = kGS_unlimited;
+	}
 }
 
 void Maingame::changingGameStep()
@@ -1585,6 +1593,8 @@ void Maingame::refreshReplayPosition(int temp_time)
 
 void Maingame::hideThumb()
 {
+	mControl->setVisible(false);
+	
 	search_eye->setVisible(false);
 	thumb_texture->setVisible(false);
 	character_thumb->setVisible(false);
