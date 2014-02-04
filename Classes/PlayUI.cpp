@@ -1680,7 +1680,7 @@ void PlayUI::endGame (bool is_show_reason)
 		{
 			if(jack_life > 0)
 			{
-				CCDelayTime* t_delay = CCDelayTime::create(2.f);
+				CCDelayTime* t_delay = CCDelayTime::create(4.f);
 				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
 				CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 				runAction(t_seq);
@@ -1715,7 +1715,7 @@ void PlayUI::endGame (bool is_show_reason)
 			{
 				if(jack_life > 0)
 				{
-					CCDelayTime* t_delay = CCDelayTime::create(2.f);
+					CCDelayTime* t_delay = CCDelayTime::create(4.f);
 					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
 					nextScene2 = CCSequence::createWithTwoActions(t_delay, t_call);
 				}
