@@ -36,7 +36,8 @@ enum CardStrengthPopupMenuTag{
 	kCardStrengthPopupMenuTag_highStrength,
 	kCardStrengthPopupMenuTag_normalStrength,
 	kCardStrengthPopupMenuTag_alignRank,
-	kCardStrengthPopupMenuTag_alignTake
+	kCardStrengthPopupMenuTag_alignTake,
+	kCardStrengthPopupMenuTag_tip
 };
 
 void CardStrengthPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
@@ -227,6 +228,21 @@ bool CardStrengthPopup::init()
 	
 	table_tab = NULL;
 	setTableTab();
+	
+	
+	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
+	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
+	s_tip->setColor(ccGRAY);
+	
+	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip, s_tip, this, menu_selector(CardStrengthPopup::menuAction));
+	tip_item->setTag(kCardStrengthPopupMenuTag_tip);
+	
+	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
+	tip_menu->setPosition(ccp(465,(myDSH->puzzle_ui_top-320.f)/2.f+320.f-3 -13));
+	addChild(tip_menu, kCardStrengthPopupZorder_content);
+	
+	tip_menu->setTouchPriority(-183);
+	
 	
     return true;
 }
@@ -797,6 +813,23 @@ void CardStrengthPopup::endShowPopup()
 		t_tutorial->initStep(kTutorialFlowStep_upgradeScript);
 		addChild(t_tutorial, kCardStrengthPopupZorder_popup);
 	}
+	else
+	{
+		if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardstrength))
+		{
+			myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardstrength, true);
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+			t_suction->target_touch_began = t_suction;
+			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+			t_suction->setTouchEnabled(true);
+			
+			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardstrength.png");
+			dimed_tip->setPosition(ccp(240,160));
+			t_suction->addChild(dimed_tip);
+			
+			addChild(t_suction, kCardStrengthPopupZorder_popup);
+		}
+	}
 	
 	is_menu_enable = true;
 }
@@ -1187,6 +1220,21 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 				addChild(ASPopupView::getCommonNoti(-210, "골드가 부족합니다."), kCardStrengthPopupZorder_popup);
 			is_menu_enable = true;
 		}
+	}
+	else if(tag == kCardStrengthPopupMenuTag_tip)
+	{
+		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+		t_suction->target_touch_began = t_suction;
+		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+		t_suction->setTouchEnabled(true);
+		
+		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardstrength.png");
+		dimed_tip->setPosition(ccp(240,160));
+		t_suction->addChild(dimed_tip);
+		
+		addChild(t_suction, kCardStrengthPopupZorder_popup);
+		
+		is_menu_enable = true;
 	}
 }
 
