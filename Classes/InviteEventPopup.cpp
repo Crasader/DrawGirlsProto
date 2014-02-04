@@ -17,9 +17,11 @@
 static CCSize cellSize3 = CCSizeMake(238, 38);
 void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
+	DimmedPopup::init();
+	this->setHideFinalAction(t_close, d_close);
+	this->setBackground("friendoption_back.png");
+	
 	setTouchEnabled(true);
-	target_close = t_close;
-	delegate_close = d_close;
 	
 	m_currentInviteCount = myDSH->getUserIntForStr("invitecount", 0);
 	m_inviteCountFnt = CCLabelBMFont::create(CCString::createWithFormat("%d", m_currentInviteCount)->getCString(),
@@ -41,77 +43,125 @@ void InviteEventPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	//		gray->setContentSize(CCSizeMake(600, 400));
 	//		addChild(gray, kRP_Z_gray);
 	
-	CCSprite* back = CCSprite::create("friendoption_back.png");
-	back->setPosition(ccp(240,160));
-	addChild(back, kInvite_Z_back);
+//	CCSprite* back = CCSprite::create("friendoption_back.png");
+//	back->setAnchorPoint(ccp(0,0));
+//	back->setPosition(ccp(0,0));
+//	addChild(back, kInvite_Z_back);
 	
 	CCSprite* back2 = CCSprite::create("friendinvite_back.png");
 	back2->setPosition(ccp(241, 129));
 	addChild(back2, kInvite_Z_back);
 	
-	CCMenuLambda* _menu = CCMenuLambda::create();
-	_menu->setTouchPriority(-200);
-	back->addChild(_menu);
-	_menu->setPropaOnBegan(true);
-	_menu->setPosition(ccp(0, 0));
+//	CCMenuLambda* _menu = CCMenuLambda::create();
+//	_menu->setTouchPriority(-200);
+//	back2->addChild(_menu);
+//	_menu->setPropaOnBegan(true);
+//	_menu->setPosition(ccp(0, 0));
+	
+	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
+	closeBtn->setFunction([=](CCObject*){
+		this->hidePopup();
+	});
+	
+	closeBtn->setPosition(ccp(450, 255));
+	this->addChild(closeBtn);
 	
 	
-	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
-																														 "cardchange_cancel.png", "cardchange_cancel.png",
-																														 [=](CCObject*){
-																															 (target_close->*delegate_close)();
-																															 removeFromParent();
-																															 
-																														 });
-	closeBtn->setPosition(ccp(453, 258));
-	_menu->addChild(closeBtn);
+
 	
-	// 친구 초대 이벤트
-	auto inviteEventBtn = CCMenuItemImageLambda::create
-	(
-	 "friendoption_invite.png", "friendoption_invite.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 
-//		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
-//		 getParent()->addChild(t_rp, this->getZOrder());
-//		 removeFromParent();
-		 
-	 });
-	inviteEventBtn->setPosition(ccp(172, 258));
-	inviteEventBtn->setOpacity(255);
+//	// 친구 초대 이벤트
+//	auto inviteEventBtn = CCMenuItemImageLambda::create
+//	(
+//	 "friendoption_invite.png", "friendoption_invite.png",
+//	 [=](CCObject*){
+//		 //																																 (target_close->*delegate_close)();
+//		 
+////		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
+////		 getParent()->addChild(t_rp, this->getZOrder());
+////		 removeFromParent();
+//		 
+//	 });
+//	inviteEventBtn->setPosition(ccp(172, 258));
+//	inviteEventBtn->setOpacity(255);
+//	
+//	_menu->addChild(inviteEventBtn);
 	
-	_menu->addChild(inviteEventBtn);
+	
+	CommonButton* inviteEventBtn = CommonButton::create("친구초대이벤트", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	inviteEventBtn->setBackgroundTypeForDisabled(CommonButtonYellow);
+	inviteEventBtn->setTitleColor(ccc3(200, 200, 200));
+	inviteEventBtn->setTitleColorForDisable(ccc3(20, 0, 0));
+	inviteEventBtn->setFunction([=](CCObject*){
+
+	});
+	inviteEventBtn->setPosition(ccp(169, 255));
+	this->addChild(inviteEventBtn, kRP_Z_back+1);
+	
+	inviteEventBtn->setEnabled(false);
+	
+	
+
 	
 	// 친구목록
-	auto friendList = CCMenuItemImageLambda::create
-	(
-	 "friendoption_list.png", "friendoption_list.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 FriendListPopup* t_rp = FriendListPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-		 
-	 });
-	friendList->setPosition(ccp(275, 258));
-	friendList->setOpacity(0);
-	_menu->addChild(friendList);
+//	auto friendList = CCMenuItemImageLambda::create
+//	(
+//	 "friendoption_list.png", "friendoption_list.png",
+//	 [=](CCObject*){
+//		 //																																 (target_close->*delegate_close)();
+//		 FriendListPopup* t_rp = FriendListPopup::create(t_close, d_close);
+//		 getParent()->addChild(t_rp, this->getZOrder());
+//		 removeFromParent();
+//		 
+//	 });
+//	friendList->setPosition(ccp(275, 258));
+//	friendList->setOpacity(0);
+//	_menu->addChild(friendList);
+	
+	
+	CommonButton* friendList = CommonButton::create("친구 목록", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	friendList->setBackgroundTypeForDisabled(CommonButtonYellow);
+	friendList->setTitleColor(ccc3(200, 200, 200));
+	friendList->setTitleColorForDisable(ccc3(20, 0, 0));
+	friendList->setFunction([=](CCObject*){
+		FriendListPopup* t_rp = FriendListPopup::create(t_close, d_close);
+		t_rp->setOpenAnimation(false);
+		getParent()->addChild(t_rp, this->getZOrder());
+		removeFromParent();
+	});
+	friendList->setPosition(ccp(272, 255));
+	this->addChild(friendList, kRP_Z_back+1);
+	
+	
+	
 	
 	// 게임 친구맺기
-	auto joinGameFriend = CCMenuItemImageLambda::create
-	(
-	 "friendoption_surch.png", "friendoption_surch.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-		 
-	 });
-	joinGameFriend->setPosition(ccp(378, 258));
-	joinGameFriend->setOpacity(0);
-	_menu->addChild(joinGameFriend);
+//	auto joinGameFriend = CCMenuItemImageLambda::create
+//	(
+//	 "friendoption_surch.png", "friendoption_surch.png",
+//	 [=](CCObject*){
+//		 //																																 (target_close->*delegate_close)();
+//		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
+//		 getParent()->addChild(t_rp, this->getZOrder());
+//		 removeFromParent();
+//		 
+//	 });
+//	joinGameFriend->setPosition(ccp(378, 258));
+//	joinGameFriend->setOpacity(0);
+//	_menu->addChild(joinGameFriend);
+	
+	
+	CommonButton* joinGameFriend = CommonButton::create("게임친구맺기", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	joinGameFriend->setBackgroundTypeForDisabled(CommonButtonYellow);
+	joinGameFriend->setTitleColor(ccc3(200, 200, 200));
+	joinGameFriend->setTitleColorForDisable(ccc3(20, 0, 0));
+	joinGameFriend->setFunction([=](CCObject*){
+		JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
+		t_rp->setOpenAnimation(false);
+		getParent()->addChild(t_rp, this->getZOrder());
+		removeFromParent();
+	});
+	joinGameFriend->setPosition(ccp(375, 255));
+	this->addChild(joinGameFriend, kRP_Z_back+1);
 	
 	
 	
@@ -313,6 +363,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	title->setPosition(ccp(45,20));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kInviteTagTitle);
+	title->setColor(ccc3(20, 0, 0));
 	cell->addChild(title,2);
 
 
@@ -320,6 +371,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	score->setPosition(ccp(45,2));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kInviteTagScore);
+	score->setColor(ccc3(20, 0, 0));
 	cell->addChild(score,2);
 
 	rank = CCLabelTTF::create("",mySGD->getFont().c_str(),25);
