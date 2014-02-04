@@ -174,6 +174,28 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	if(t_code == recent_shop_code)
 		return;
 	
+	if(t_code == kSC_character)
+		tab_menu->getChildByTag(kSP_MT_character)->setVisible(false);
+	else if(t_code == kSC_card)
+		tab_menu->getChildByTag(kSP_MT_card)->setVisible(false);
+	else if(t_code == kSC_ruby)
+		tab_menu->getChildByTag(kSP_MT_ruby)->setVisible(false);
+	else if(t_code == kSC_gold)
+		tab_menu->getChildByTag(kSP_MT_gold)->setVisible(false);
+	else if(t_code == kSC_heart)
+		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(false);
+	
+	if(recent_shop_code == kSC_character)
+		tab_menu->getChildByTag(kSP_MT_character)->setVisible(true);
+	else if(recent_shop_code == kSC_card)
+		tab_menu->getChildByTag(kSP_MT_card)->setVisible(true);
+	else if(recent_shop_code == kSC_ruby)
+		tab_menu->getChildByTag(kSP_MT_ruby)->setVisible(true);
+	else if(recent_shop_code == kSC_gold)
+		tab_menu->getChildByTag(kSP_MT_gold)->setVisible(true);
+	else if(recent_shop_code == kSC_heart)
+		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(true);
+	
 	if(recent_shop_code == kSC_character)
 	{
 		character_table->removeFromParent();
@@ -199,12 +221,6 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	}
 	
 	recent_shop_code = t_code;
-	
-	setCharacterMenu();
-	setCardMenu();
-	setRubyMenu();
-	setGoldMenu();
-	setHeartMenu();
 	
 	if(recent_shop_code == kSC_character)
 	{
@@ -601,12 +617,67 @@ bool ShopPopup::init()
 	main_case->addChild(close_menu, kSP_Z_content);
 	
 	close_menu->setTouchPriority(-170-4);
+
+	tab_menu = CCMenu::create();
+	tab_menu->setPosition(CCPointZero);
+	main_case->addChild(tab_menu, kSP_Z_content);
+	tab_menu->setTouchPriority(-170-4);
 	
-	character_menu = NULL;
-	card_menu = NULL;
-	ruby_menu = NULL;
-	gold_menu = NULL;
-	heart_menu = NULL;
+	CCSprite* n_character = CCSprite::create("shop_character.png");
+	CCSprite* s_character = CCSprite::create("shop_character.png");
+	s_character->setColor(ccGRAY);
+	
+	CCMenuItem* character_item = CCMenuItemSprite::create(n_character, s_character, this, menu_selector(ShopPopup::menuAction));
+	character_item->setTag(kSP_MT_character);
+	character_item->setPosition(getContentPosition(kSP_MT_character));
+	
+	tab_menu->addChild(character_item);
+	
+	CCSprite* n_card = CCSprite::create("shop_card.png");
+	CCSprite* s_card = CCSprite::create("shop_card.png");
+	s_card->setColor(ccGRAY);
+	
+	CCMenuItem* card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(ShopPopup::menuAction));
+	card_item->setTag(kSP_MT_card);
+	card_item->setPosition(getContentPosition(kSP_MT_card));
+	
+	tab_menu->addChild(card_item);
+	
+	CCSprite* n_ruby = CCSprite::create("shop_ruby.png");
+	CCSprite* s_ruby = CCSprite::create("shop_ruby.png");
+	s_ruby->setColor(ccGRAY);
+	
+	CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(ShopPopup::menuAction));
+	ruby_item->setTag(kSP_MT_ruby);
+	ruby_item->setPosition(getContentPosition(kSP_MT_ruby));
+	
+	tab_menu->addChild(ruby_item);
+	
+	CCSprite* n_gold = CCSprite::create("shop_gold.png");
+	CCSprite* s_gold = CCSprite::create("shop_gold.png");
+	s_gold->setColor(ccGRAY);
+	
+	CCMenuItem* gold_item = CCMenuItemSprite::create(n_gold, s_gold, this, menu_selector(ShopPopup::menuAction));
+	gold_item->setTag(kSP_MT_gold);
+	gold_item->setPosition(getContentPosition(kSP_MT_gold));
+	
+	tab_menu->addChild(gold_item);
+	
+	CCSprite* n_heart = CCSprite::create("shop_heart.png");
+	CCSprite* s_heart = CCSprite::create("shop_heart.png");
+	s_heart->setColor(ccGRAY);
+	
+	CCMenuItem* heart_item = CCMenuItemSprite::create(n_heart, s_heart, this, menu_selector(ShopPopup::menuAction));
+	heart_item->setTag(kSP_MT_heart);
+	heart_item->setPosition(getContentPosition(kSP_MT_heart));
+	
+	tab_menu->addChild(heart_item);
+	
+//	character_menu = NULL;
+//	card_menu = NULL;
+//	ruby_menu = NULL;
+//	gold_menu = NULL;
+//	heart_menu = NULL;
 	
 	recent_shop_code = kSC_empty;
 	
@@ -659,131 +730,6 @@ bool ShopPopup::init()
 	showPopup();
 	
     return true;
-}
-
-void ShopPopup::setCharacterMenu()
-{
-	if(character_menu)
-	{
-		character_menu->removeFromParent();
-		character_menu = NULL;
-	}
-	
-	if(recent_shop_code != kSC_character)
-	{
-		CCSprite* n_character = CCSprite::create("shop_character.png");
-		CCSprite* s_character = CCSprite::create("shop_character.png");
-		s_character->setColor(ccGRAY);
-		
-		CCMenuItem* character_item = CCMenuItemSprite::create(n_character, s_character, this, menu_selector(ShopPopup::menuAction));
-		character_item->setTag(kSP_MT_character);
-		
-		character_menu = CCMenu::createWithItem(character_item);
-		character_menu->setPosition(getContentPosition(kSP_MT_character));
-		main_case->addChild(character_menu, kSP_Z_content);
-		
-		((CCMenu*)character_menu)->setTouchPriority(-170-4);
-	}
-}
-
-void ShopPopup::setCardMenu()
-{
-	if(card_menu)
-	{
-		card_menu->removeFromParent();
-		card_menu = NULL;
-	}
-	
-	if(recent_shop_code != kSC_card)
-	{
-		CCSprite* n_card = CCSprite::create("shop_card.png");
-		CCSprite* s_card = CCSprite::create("shop_card.png");
-		s_card->setColor(ccGRAY);
-		
-		CCMenuItem* card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(ShopPopup::menuAction));
-		card_item->setTag(kSP_MT_card);
-		
-		card_menu = CCMenu::createWithItem(card_item);
-		card_menu->setPosition(getContentPosition(kSP_MT_card));
-		main_case->addChild(card_menu, kSP_Z_content);
-		
-		((CCMenu*)card_menu)->setTouchPriority(-170-4);
-	}
-}
-
-void ShopPopup::setRubyMenu()
-{
-	if(ruby_menu)
-	{
-		ruby_menu->removeFromParent();
-		ruby_menu = NULL;
-	}
-	
-	if(recent_shop_code != kSC_ruby)
-	{
-		CCSprite* n_ruby = CCSprite::create("shop_ruby.png");
-		CCSprite* s_ruby = CCSprite::create("shop_ruby.png");
-		s_ruby->setColor(ccGRAY);
-		
-		CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(ShopPopup::menuAction));
-		ruby_item->setTag(kSP_MT_ruby);
-		
-		ruby_menu = CCMenu::createWithItem(ruby_item);
-		ruby_menu->setPosition(getContentPosition(kSP_MT_ruby));
-		main_case->addChild(ruby_menu, kSP_Z_content);
-		
-		((CCMenu*)ruby_menu)->setTouchPriority(-170-4);
-	}
-}
-
-void ShopPopup::setGoldMenu()
-{
-	if(gold_menu)
-	{
-		gold_menu->removeFromParent();
-		gold_menu = NULL;
-	}
-	
-	if(recent_shop_code != kSC_gold)
-	{
-		CCSprite* n_gold = CCSprite::create("shop_gold.png");
-		CCSprite* s_gold = CCSprite::create("shop_gold.png");
-		s_gold->setColor(ccGRAY);
-		
-		CCMenuItem* gold_item = CCMenuItemSprite::create(n_gold, s_gold, this, menu_selector(ShopPopup::menuAction));
-		gold_item->setTag(kSP_MT_gold);
-		
-		gold_menu = CCMenu::createWithItem(gold_item);
-		gold_menu->setPosition(getContentPosition(kSP_MT_gold));
-		main_case->addChild(gold_menu, kSP_Z_content);
-		
-		((CCMenu*)gold_menu)->setTouchPriority(-170-4);
-	}
-}
-
-void ShopPopup::setHeartMenu()
-{
-	if(heart_menu)
-	{
-		heart_menu->removeFromParent();
-		heart_menu = NULL;
-	}
-	
-	if(recent_shop_code != kSC_heart)
-	{
-		CCSprite* n_heart = CCSprite::create("shop_heart.png");
-		CCSprite* s_heart = CCSprite::create("shop_heart.png");
-		s_heart->setColor(ccGRAY);
-		
-		CCMenuItem* heart_item = CCMenuItemSprite::create(n_heart, s_heart, this, menu_selector(ShopPopup::menuAction));
-		heart_item->setTag(kSP_MT_heart);
-		
-		heart_menu = CCMenu::createWithItem(heart_item);
-		heart_menu->setPosition(getContentPosition(kSP_MT_heart));
-		main_case->addChild(heart_menu, kSP_Z_content);
-		
-		((CCMenu*)heart_menu)->setTouchPriority(-170-4);
-	}
 }
 
 void ShopPopup::showPopup()

@@ -17,6 +17,7 @@
 USING_NS_CC;
 using namespace std;
 
+class CommonButton;
 class ZoomScript : public CCLayer
 {
 public:
@@ -38,16 +39,19 @@ private:
 	
 	int ing_animation_frame;
 	
-	bool is_touched_menu;
+//	bool is_touched_menu;
 	bool is_actioned;
 	
 	CCSprite* first_img;
 	CCLabelTTF* script_label;
 	CCSprite* script_case;
-	CCMenu* next_button;
+	
+	CommonButton* next_button;
 	CCSprite* showtime_back;
 	CCSprite* second_img;
 	CCSprite* white_paper;
+	
+	CCSprite* zoom_img;
 	
 	
 	float minimum_scale;

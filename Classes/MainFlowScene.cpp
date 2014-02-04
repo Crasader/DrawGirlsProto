@@ -223,20 +223,20 @@ bool MainFlowScene::init()
 		}
 	}
 	
-	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main))
-	{
-		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main, true);
-		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
-		t_suction->target_touch_began = t_suction;
-		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
-		t_suction->setTouchEnabled(true);
-		
-		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_main.png");
-		dimed_tip->setPosition(ccp(240,160));
-		t_suction->addChild(dimed_tip);
-		
-		addChild(t_suction, kMainFlowZorder_popup);
-	}
+//	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main))
+//	{
+//		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main, true);
+//		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+//		t_suction->target_touch_began = t_suction;
+//		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+//		t_suction->setTouchEnabled(true);
+//		
+//		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_main.png");
+//		dimed_tip->setPosition(ccp(240,160));
+//		t_suction->addChild(dimed_tip);
+//		
+//		addChild(t_suction, kMainFlowZorder_popup);
+//	}
 	
 	return true;
 }
@@ -510,8 +510,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
 	
-//	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
-	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
+	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+//	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
 		CCSprite* n_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
 		CCSprite* s_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");

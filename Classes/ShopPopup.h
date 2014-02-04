@@ -85,19 +85,9 @@ private:
 	
 	void setCardBuyMenu(CCPoint t_point, int t_tag, string inner_filename, string type_filename, int price_value);
 	
-	CCNode* character_menu;
-	CCNode* card_menu;
-	CCNode* ruby_menu;
-	CCNode* gold_menu;
-	CCNode* heart_menu;
+	CCMenu* tab_menu;
 	
 	TouchSuctionLayer* suction;
-	
-	void setCharacterMenu();
-	void setCardMenu();
-	void setRubyMenu();
-	void setGoldMenu();
-	void setHeartMenu();
 	
 	int last_select_idx;
 	

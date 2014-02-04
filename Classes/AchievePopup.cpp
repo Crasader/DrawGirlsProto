@@ -136,20 +136,20 @@ void AchievePopup::showPopup()
 
 void AchievePopup::endShowPopup()
 {
-	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_achievement))
-	{
-		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_achievement, true);
-		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
-		t_suction->target_touch_began = t_suction;
-		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
-		t_suction->setTouchEnabled(true);
-		
-		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_achievement.png");
-		dimed_tip->setPosition(ccp(240,160));
-		t_suction->addChild(dimed_tip);
-		
-		addChild(t_suction, kAchievePopupZorder_popup);
-	}
+//	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_achievement))
+//	{
+//		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_achievement, true);
+//		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+//		t_suction->target_touch_began = t_suction;
+//		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+//		t_suction->setTouchEnabled(true);
+//		
+//		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_achievement.png");
+//		dimed_tip->setPosition(ccp(240,160));
+//		t_suction->addChild(dimed_tip);
+//		
+//		addChild(t_suction, kAchievePopupZorder_popup);
+//	}
 	
 	is_menu_enable = true;
 }
