@@ -728,12 +728,12 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 	// 카톡 마크 붙임.
 	
-	if(!KnownFriends::getInstance()->findById((*member)["user_id"].asString()) &&
+	if(KnownFriends::getInstance()->findById((*member)["user_id"].asString()) &&
 		 (*member)["user_id"].asString() != hspConnector::get()->myKakaoInfo["user_id"].asString())
 	{
-		CCSprite* katokMark = CCSprite::create("rank_kakao.png");
+		CCSprite* katokMark = CCSprite::create("puzzle_right_rank_kakao.png");
 		cell->addChild(katokMark, kRP_Z_profileImg);
-		katokMark->setPosition(ccp(49.5f, 22) - ccp(19, 19) + ccp(katokMark->getContentSize().width / 2.f, katokMark->getContentSize().height / 2.f));
+		katokMark->setPosition(ccp(45, 27));
 		
 	}
 	

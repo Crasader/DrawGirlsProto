@@ -1623,6 +1623,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 		}
 
 		score = CCLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 10);
+		score->setColor(ccc3(20, 0, 0));
 		score->setPosition(ccp(38,5));
 		score->setAnchorPoint(CCPointZero);
 		score->setTag(kMP_MT_score);
