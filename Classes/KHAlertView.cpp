@@ -81,7 +81,11 @@ void KHAlertView::show()
 		cover->addChild(m_back9);
 	}
 	CCScale9Sprite *btnBg = m_back9;
-
+	
+	if(m_titleFileName != "" || m_closeItem != NULL)
+	{
+		m_titleHeight = 40;
+	}
 	float top = m_centerY + m_height / 2.f;
 	float bottom = m_centerY - m_height / 2.f;
 	float titleHeight = m_titleHeight;
@@ -161,8 +165,9 @@ void KHAlertView::show()
 	sv->setDirection(CCScrollViewDirection::kCCScrollViewDirectionBoth);
 
 	if(m_contentNode)
+	{
 		sv->setContainer(m_contentNode);
-
+	}
 	sv->setContentOffset(ccp(0, sv->minContainerOffset().y));
 	sv->setDelegate(this);
 	sv->setTouchPriority(INT_MIN);
