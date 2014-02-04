@@ -231,10 +231,10 @@ enum MessageRecvType
 	kHeart = 1,
 	kChallengeRequest,
 	kChallengeResult,
-	kHelpRequest,
+	kHelpRequest = 4,
 	kHelpResult,
 	kTicketRequest,
-	kTicketResult,
+	kTicketResult = 7,
 	kInvite,
 	kNews,
 	kUnknownFriendRequest
