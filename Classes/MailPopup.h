@@ -92,6 +92,7 @@ class MailPopup : public CCLayer, public CCTableViewDataSource, public CCTableVi
 		void onReceiveStageFail();
 		void iHelpYou(int stage, long long user_id, const std::string& nick, Json::Value removeInfo);
 		void removeMessage(int mailNo, long long memberID, std::function<void(Json::Value)> f);
+		void removeMessageByList(vector<int> mailNo, long long memberID, std::function<void(Json::Value)> f);
 		void filterWithMailFilter();
 	protected:
 		std::function<void(void)> m_heartRefresh;
