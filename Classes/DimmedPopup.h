@@ -34,6 +34,10 @@ public:
 		this->showPopup();
 	}
 	
+	CCObject* getTarget(){
+		return m_target_final;
+	}
+
 	
 	static DimmedPopup* create(){
 		DimmedPopup* pop = DimmedPopup::create();

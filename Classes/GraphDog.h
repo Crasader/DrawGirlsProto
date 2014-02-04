@@ -105,11 +105,67 @@ public:
 //@    bool test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, JsonBox::Object result);
 //@    bool test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, string result);
     
-//@@    bool command(string action, const Json::Value param,CCObject *target,GDSelType selector);
+	//@@    bool command(string action, const Json::Value param,CCObject *target,GDSelType selector);
+
     bool command(string action, const Json::Value param,function<void(Json::Value)> func);
     bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, Json::Value result);
     bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, string result);
-    
+  
+	
+	
+	
+	
+
+	
+	std::vector<CCObject*> deleList;
+	
+	void addTarget(CCObject *obj){
+		CCLog("checkDelegator addTarget");
+		vector<CCObject*>::iterator it;
+		for (it=deleList.begin();it!=deleList.end();it++) {
+			if((*it)==obj)return;
+		}
+		
+		CCLog("checkDelegator addTarget ok");
+		deleList.push_back(obj);
+	}
+	
+	bool cehckTarget(CCObject *obj){
+		CCLog("checkDelegator");
+		if(obj==NULL)return false;
+		vector<CCObject*>::iterator it;
+		for (it=deleList.begin();it!=deleList.end();it++) {
+			if((*it)==obj){
+				CCLog("checkDelegator find ok");
+				return true;
+			}
+		}
+		CCLog("checkDelegator don't find");
+		return false;
+	}
+	
+	void removeTarget(CCObject *obj){
+		CCLog("checkDelegator removeTarget");
+		vector<CCObject*>::iterator it;
+
+		for (it=deleList.begin();it!=deleList.end();it++) {
+			if((*it)==obj){
+					deleList.erase(it);
+					CCLog("checkDelegator remove Target success");
+					return;
+			}
+		}
+	}
+	
+	bool command(string action, const Json::Value param,CCObject *target,function<void(Json::Value)> func){
+		addTarget(target);
+		function<void(Json::Value)> sFunc = [target,func](Json::Value value){
+			CCLog("checkDelegator sFunc call");
+			if(GraphDog::get()->cehckTarget(target))func(value);
+		};
+		
+		return command(action,param,sFunc);
+	}
     //닉네임저장
     void setNick(string nick);
     //플레그저장
