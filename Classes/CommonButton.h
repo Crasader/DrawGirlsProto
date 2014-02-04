@@ -26,6 +26,7 @@ enum CommonButtonType {
 		CommonButtonBlue,
 		CommonButtonGreen,
 		CommonButtonOrange,
+		CommonButtonPupple,
 		CommonButtonClose
 	};
 
@@ -117,6 +118,7 @@ public:
 		else if(btnType==CommonButtonBlue) btnBackImg = "common_button_blue.png";
 		else if(btnType==CommonButtonGreen) btnBackImg = "common_button_green.png";
 		else if(btnType==CommonButtonOrange) btnBackImg = "common_button_orange.png";
+		else if(btnType==CommonButtonPupple) btnBackImg = "common_button_pupple.png";
 		else if(btnType==CommonButtonClose) btnBackImg = "common_button_close.png";
 		
 		m_btnBack = CCScale9Sprite::create(btnBackImg.c_str());
