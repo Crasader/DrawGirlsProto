@@ -1659,6 +1659,7 @@ void RankPopup::touchCellIndex(int idx)
 			
 			CCLabelTTF* t_label = CCLabelTTF::create("카드 정보 로딩", mySGD->getFont().c_str(), 20);
 			t_label->setColor(ccBLACK);
+			t_label->setScale(2);
 			t_label->setPosition(ccp(160,215));
 			used_card_img->addChild(t_label);
 			
