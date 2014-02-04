@@ -77,7 +77,7 @@ bool ZoomScript::init()
 	addChild(script_case, kZS_Z_script_case);
 	
 	
-	next_button = CommonButton::create("확 인",15,CCSizeMake(80,50), CommonButtonOrange, -160);
+	next_button = CommonButton::create("확 인",15,CCSizeMake(80,50), CommonButtonYellow, -160);
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
 	next_button->setPosition(ccp(480-50,30));
 	next_button->setVisible(false);

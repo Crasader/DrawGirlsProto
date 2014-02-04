@@ -46,9 +46,13 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 	
-	CCSprite* title_img = CCSprite::create("temp_title.png");
+	CCSprite* title_img = CCSprite::create("temp_title_back.png");
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
+	
+	CCSprite* title_name = CCSprite::create("temp_title_name.png");
+	title_name->setPosition(ccp(240,210));
+	addChild(title_name);
 	
 	state_label = CCLabelTTF::create("까똑 로그인 ing...", mySGD->getFont().c_str(), 20);
 	state_label->setColor(ccBLACK);

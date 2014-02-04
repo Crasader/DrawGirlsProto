@@ -130,7 +130,7 @@ protected:
 		
 		dimmed_sprite = CCSprite::create("whitePaper.png");
 		dimmed_sprite->setPosition(base_position);
-		dimmed_sprite->setColor(ccc3(50, 50, 50));
+		dimmed_sprite->setColor(ccc3(0, 0, 0));
 		dimmed_sprite->setOpacity(100);
 		addChild(dimmed_sprite);
 	}
