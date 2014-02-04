@@ -222,6 +222,7 @@ public:
 	static FeverCoinParent* create();
 	void startFever();
 	void stopFever();
+	bool is_fevering;
 	
 private:
 	bool is_removing;
@@ -246,6 +247,8 @@ public:
 	void stopCoin();
 	
 	virtual void completedAnimationSequenceNamed (char const * name);
+	
+	bool getIsFevering();
 	
 private:
 	

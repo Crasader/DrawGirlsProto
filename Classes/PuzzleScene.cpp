@@ -77,7 +77,8 @@ bool PuzzleScene::init()
 		
 		for(int i=start_stage;i<start_stage+stage_count;i++)
 		{
-			if(!myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, i))
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, 1)) <= 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, 2)) <= 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, 3)) <= 0)
+//			if(!myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, i))
 			{
 				have_not_cleared_stage = true;
 				not_cleared_stage_list.push_back(i);

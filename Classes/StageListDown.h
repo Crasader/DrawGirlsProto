@@ -40,6 +40,7 @@ private:
 	CCObject* target_success;
 	SEL_CallFunc delegate_success;
 	
+	CCSprite* gray;
 	CCSprite* tip_img;
 	void changeTipImage();
 	

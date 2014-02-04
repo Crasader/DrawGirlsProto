@@ -112,7 +112,7 @@ bool Maingame::init()
 
 void Maingame::setLineParticle(bool t_b)
 {
-	if(t_b)
+	if(t_b && myGIM->getIsFevering() && myJack->getJackState() == jackStateDrawing)
 	{
 		line_particle->setStartSize(5);
 		line_particle->setStartSizeVar(3);

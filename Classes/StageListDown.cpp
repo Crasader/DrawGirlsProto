@@ -341,12 +341,31 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		
 		if(df_list.size() + sf_list.size() > 0) // need download
 		{
+			tip_img = LoadingTipScene::getLoadingTipImage();
+			tip_img->setPosition(ccp(240,160));
+			addChild(tip_img, kSLD_Z_back);
+			
+			CCDelayTime* t_delay = CCDelayTime::create(7);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StageListDown::changeTipImage));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			
+			tip_img->runAction(t_seq);
+			
+			gray->removeFromParent();
+			
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			CCBReader* reader = new CCBReader(nodeLoader);
+			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+			loading_progress_img->setPosition(ccp(240,50));
+			addChild(loading_progress_img, kSLD_Z_content);
+			reader->release();
+			
 			download_version = result_data["version"].asInt();
 			state_ment->setString("퍼즐 이미지를 다운로드 합니다.");
 			ing_download_cnt = 1;
 			ing_download_per = 0;
-			download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size() + sf_list.size()))->getCString(), "etc_font.fnt");
-			download_state->setPosition(ccp(240,130));
+			download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString(), "etc_font.fnt");
+			download_state->setPosition(ccp(240,50));
 			addChild(download_state, kSLD_Z_content);
 			is_downloading = true;
 			startDownload();
@@ -407,7 +426,7 @@ void StageListDown::menuAction(CCObject *sender)
 		removeChildByTag(kSLD_MT_redown);
 		state_ment->setString("퍼즐 이미지를 다운로드 합니다.");
 		ing_download_per = 0;
-		download_state->setString(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size() + sf_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		is_downloading = true;
 		startDownload();
 	}
@@ -422,7 +441,7 @@ void StageListDown::successAction()
 		SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		startDownload();
 	}
 	else if(ing_download_cnt == df_list.size())
@@ -580,7 +599,7 @@ void StageListDown::successAction()
 				mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
 			}
 			
-			download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
+			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 			state_ment->setString("퍼즐 이미지 다운로드 완료.");
 			(target_success->*delegate_success)();
 			removeFromParent();
@@ -589,7 +608,7 @@ void StageListDown::successAction()
 		{
 			ing_download_cnt++;
 			ing_download_per = 0.f;
-			download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
+			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 			startDownload();
 		}
 	}
@@ -598,7 +617,7 @@ void StageListDown::successAction()
 		SDS_SS(kSDF_cardInfo, sf_list[ing_download_cnt-df_list.size()-1].key, sf_list[ing_download_cnt-df_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		startDownload();
 	}
 	else
@@ -640,7 +659,7 @@ void StageListDown::successAction()
 			mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
 		}
 		
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		state_ment->setString("퍼즐 이미지 다운로드 완료.");
 		(target_success->*delegate_success)();
 		removeFromParent();
@@ -674,7 +693,7 @@ void StageListDown::downloadingAction()
 	
 	ing_download_per = t_per;
 	
-	download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()+sf_list.size()))->getCString());
+	download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 }
 
 void StageListDown::startDownload()
@@ -706,15 +725,16 @@ StageListDown* StageListDown::create( CCObject* t_success, SEL_CallFunc d_succes
 
 void StageListDown::myInit( CCObject* t_success, SEL_CallFunc d_success, int t_puzzle )
 {
-	tip_img = LoadingTipScene::getLoadingTipImage();
-	tip_img->setPosition(ccp(240,160));
-	addChild(tip_img, kSLD_Z_back);
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
 	
-	CCDelayTime* t_delay = CCDelayTime::create(7);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StageListDown::changeTipImage));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-	
-	tip_img->runAction(t_seq);
+	gray = CCSprite::create("back_gray.png");
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(gray);
 	
 	setTouchEnabled(true);
 	

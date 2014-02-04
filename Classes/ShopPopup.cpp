@@ -797,7 +797,12 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 
 void ShopPopup::resultSetUserData(Json::Value result_data)
 {
-	loading_layer->removeFromParent();
+	if(loading_layer)
+	{
+		loading_layer->removeFromParent();
+		loading_layer = NULL;
+	}
+	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		CCLog("userdata was save to server");
