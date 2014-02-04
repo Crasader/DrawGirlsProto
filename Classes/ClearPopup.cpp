@@ -44,6 +44,7 @@ typedef enum tZorderClearPopup{
 	kZ_CP_gray = 1,
 	kZ_CP_back,
 	kZ_CP_img,
+	kZ_CP_table,
 	kZ_CP_menu,
 	kZ_CP_popup
 }ZorderClearPopup;
@@ -536,7 +537,7 @@ void ClearPopup::showPopup()
 
 void ClearPopup::endShowPopup()
 {
-	is_menu_enable = true;
+	
 }
 
 void ClearPopup::hidePopup()
@@ -864,7 +865,7 @@ void ClearPopup::checkMiniGame()
 
 void ClearPopup::closePopup()
 {
-	
+	is_menu_enable = true;
 }
 
 void ClearPopup::checkRentCard()
@@ -1074,7 +1075,7 @@ void ClearPopup::resultGetStageScoreList(Json::Value result_data)
 		rankTableView->setPosition(ccp(243, 59.5f));
 		
 		rankTableView->setDelegate(this);
-		main_case->addChild(rankTableView, kZ_CP_menu);
+		main_case->addChild(rankTableView, kZ_CP_table);
 		rankTableView->setTouchPriority(-200);
 		
 		//		int myPosition = rankTableView->minContainerOffset().y;
@@ -1110,7 +1111,7 @@ void ClearPopup::resultSavedUserData(Json::Value result_data)
 			rankTableView->setPosition(ccp(243, 59.5f));
 			
 			rankTableView->setDelegate(this);
-			main_case->addChild(rankTableView, kZ_CP_menu);
+			main_case->addChild(rankTableView, kZ_CP_table);
 			rankTableView->setTouchPriority(-200);
 		}
 		else

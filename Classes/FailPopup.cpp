@@ -38,6 +38,7 @@ typedef enum tZorderFailPopup{
 	kZ_FP_gray = 1,
 	kZ_FP_back,
 	kZ_FP_img,
+	kZ_FP_table,
 	kZ_FP_menu,
 	kZ_FP_popup
 }ZorderFailPopup;
@@ -442,6 +443,7 @@ void FailPopup::endDecreaseCardDuration()
 		});
 		b->setCloseFunc([=](){
 			CCLog("창 다닫혔을때");
+			closePopup();
 		});
 		
 		addChild(b,kZ_FP_popup);
@@ -465,6 +467,7 @@ void FailPopup::endDecreaseCardDuration()
 		});
 		b->setCloseFunc([=](){
 			CCLog("창 다닫혔을때");
+			closePopup();
 		});
 		
 		addChild(b,kZ_FP_popup);
@@ -507,7 +510,7 @@ void FailPopup::showPopup()
 
 void FailPopup::endShowPopup()
 {
-	is_menu_enable = true;
+	
 }
 
 void FailPopup::hidePopup()
@@ -549,7 +552,7 @@ void FailPopup::startScoreAnimation()
 
 void FailPopup::closePopup()
 {
-	
+	is_menu_enable = true;
 }
 
 void FailPopup::scoreAnimation(float dt)
@@ -690,7 +693,7 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 			rankTableView->setPosition(ccp(243, 59.5f));
 			
 			rankTableView->setDelegate(this);
-			main_case->addChild(rankTableView, kZ_FP_menu);
+			main_case->addChild(rankTableView, kZ_FP_table);
 			rankTableView->setTouchPriority(kCCMenuHandlerPriority+1);
 		}
 		else
@@ -839,7 +842,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		rankTableView->setPosition(ccp(243, 59.5f));
 		
 		rankTableView->setDelegate(this);
-		main_case->addChild(rankTableView, kZ_FP_menu);
+		main_case->addChild(rankTableView, kZ_FP_table);
 		rankTableView->setTouchPriority(kCCMenuHandlerPriority);
 		
 		//		int myPosition = rankTableView->minContainerOffset().y;

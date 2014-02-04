@@ -63,6 +63,8 @@ private:
 	CCSprite* gacha_touch;
 	int gacha_cnt;
 	
+	int keep_price_type;
+	
 	bool is_touch_on;
 	bool is_menu_enable;
 	

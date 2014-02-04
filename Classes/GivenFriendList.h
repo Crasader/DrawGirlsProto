@@ -61,7 +61,7 @@ public:
 	void drawMail(Json::Value obj)
 	{
 		m_filteredMailList = obj["list"];
-		m_mailTableView = CCTableView::create(this, CCSizeMake(200, 174.f));
+		m_mailTableView = CCTableView::create(this, CCSizeMake(215, 179));
 
 		CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
 		m_scrollBar = ScrollBar::createScrollbar(m_mailTableView, -2 - 10, NULL, bar);
@@ -77,7 +77,7 @@ public:
 
 		//기준점 0,0
 		// 좌표 수동으로 잡느라 이리 됨
-		m_mailTableView->setPosition(ccp(37, 56));
+		m_mailTableView->setPosition(ccp(37, 320 - 297));
 
 		//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 		m_mailTableView->setDelegate(this);

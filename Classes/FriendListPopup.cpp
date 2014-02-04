@@ -12,11 +12,13 @@
 CCSize cellSize3 = CCSizeMake(238, 38);
 void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
-	setTouchEnabled(true);
-	target_close = t_close;
-	delegate_close = d_close;
 	
-
+	
+	DimmedPopup::init();
+	this->setHideFinalAction(t_close, d_close);
+	this->setBackground("friendoption_back.png");
+	
+	setTouchEnabled(true);
 	m_currentSelectSprite = NULL;
 	
 	used_card_img = NULL;
@@ -29,73 +31,111 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	//		gray->setContentSize(CCSizeMake(600, 400));
 	//		addChild(gray, kRP_Z_gray);
 	
-	CCSprite* back = CCSprite::create("friendoption_back.png");
-	back->setPosition(ccp(240,160));
-	addChild(back, 0);
-	
 	CCSprite* back2 = CCSprite::create("friendlist_back.png");
 	back2->setPosition(ccp(240, 129));
-	addChild(back2, 0);
-	CCMenuLambda* _menu = CCMenuLambda::create();
-	_menu->setTouchPriority(-200);
-	_menu->setPropaOnBegan(true);
-	addChild(_menu);
-	_menu->setPosition(ccp(0, 0));
+	addChild(back2, 1);
+
+	
+//	CCMenuLambda* _menu = CCMenuLambda::create();
+//	_menu->setTouchPriority(-200);
+//	_menu->setPropaOnBegan(true);
+//	addChild(_menu);
+//	_menu->setPosition(ccp(0, 0));
 	
 	
-	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
-																														 "cardchange_cancel.png", "cardchange_cancel.png",
-																														 [=](CCObject*){
-																															 (target_close->*delegate_close)();
-																															 removeFromParent();
-																															 
-																														 });
-	closeBtn->setPosition(ccp(450, 258));
-	_menu->addChild(closeBtn);
+	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
+	closeBtn->setFunction([=](CCObject*){
+		this->hidePopup();
+	});
+	
+	closeBtn->setPosition(ccp(450, 255));
+	this->addChild(closeBtn);
 	
 	
 	// 친구 초대 이벤트
-	auto inviteEventBtn = CCMenuItemImageLambda::create
-	(
-	 "friendoption_invite.png", "friendoption_invite.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 
-		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-		 
-	 });
-	inviteEventBtn->setPosition(ccp(172, 259));
-	inviteEventBtn->setOpacity(0);
+//	auto inviteEventBtn = CCMenuItemImageLambda::create
+//	(
+//	 "friendoption_invite.png", "friendoption_invite.png",
+//	 [=](CCObject*){
+//		 //																																 (target_close->*delegate_close)();
+//		 
+//		 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
+//		 getParent()->addChild(t_rp, this->getZOrder());
+//		 removeFromParent();
+//		 
+//	 });
+//	inviteEventBtn->setPosition(ccp(172, 259));
+//	inviteEventBtn->setOpacity(0);
+//	
+//	_menu->addChild(inviteEventBtn);
+
+	CommonButton* inviteEventBtn = CommonButton::create("친구초대이벤트", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	inviteEventBtn->setBackgroundTypeForDisabled(CommonButtonYellow);
+	inviteEventBtn->setTitleColor(ccc3(200, 200, 200));
+	inviteEventBtn->setTitleColorForDisable(ccc3(20, 0, 0));
+	inviteEventBtn->setFunction([=](CCObject*){
+				 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
+				 t_rp->setOpenAnimation(false);
+				 getParent()->addChild(t_rp, this->getZOrder());
+				 removeFromParent();
+	});
+	inviteEventBtn->setPosition(ccp(169, 255));
+	this->addChild(inviteEventBtn, kRP_Z_back+1);
 	
-	_menu->addChild(inviteEventBtn);
 	
-	// 친구목록
-	auto friendList = CCMenuItemImageLambda::create
-	(
-	 "friendoption_list.png", "friendoption_list.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-	 });
-	friendList->setPosition(ccp(275, 258));
-	friendList->setOpacity(255);
-	_menu->addChild(friendList);
 	
-	// 게임 친구맺기
-	auto joinGameFriend = CCMenuItemImageLambda::create
-	(
-	 "friendoption_surch.png", "friendoption_surch.png",
-	 [=](CCObject*){
-		 //																																 (target_close->*delegate_close)();
-		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
-		 getParent()->addChild(t_rp, this->getZOrder());
-		 removeFromParent();
-		 
-	 });
-	joinGameFriend->setPosition(ccp(378, 259));
-	joinGameFriend->setOpacity(0);
-	_menu->addChild(joinGameFriend);
+//	// 친구목록
+//	auto friendList = CCMenuItemImageLambda::create
+//	(
+//	 "friendoption_list.png", "friendoption_list.png",
+//	 [=](CCObject*){
+//		 //																																 (target_close->*delegate_close)();
+//	 });
+//	friendList->setPosition(ccp(275, 258));
+//	friendList->setOpacity(255);
+//	_menu->addChild(friendList);
+	
+	CommonButton* friendList = CommonButton::create("친구 목록", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	friendList->setBackgroundTypeForDisabled(CommonButtonYellow);
+	friendList->setTitleColor(ccc3(200, 200, 200));
+	friendList->setTitleColorForDisable(ccc3(20, 0, 0));
+	friendList->setFunction([=](CCObject*){
+
+	});
+	friendList->setPosition(ccp(272, 255));
+	this->addChild(friendList, kRP_Z_back+1);
+	friendList->setEnabled(false);
+	
+//	// 게임 친구맺기
+//	auto joinGameFriend = CCMenuItemImageLambda::create
+//	(
+//	 "friendoption_surch.png", "friendoption_surch.png",
+//	 [=](CCObject*){
+//		 //																																 (target_close->*delegate_close)();
+//		 JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
+//		 getParent()->addChild(t_rp, this->getZOrder());
+//		 removeFromParent();
+//		 
+//	 });
+//	joinGameFriend->setPosition(ccp(378, 259));
+//	joinGameFriend->setOpacity(0);
+//	_menu->addChild(joinGameFriend);
+
+	
+	CommonButton* joinGameFriend = CommonButton::create("게임친구맺기", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	joinGameFriend->setBackgroundTypeForDisabled(CommonButtonYellow);
+	joinGameFriend->setTitleColor(ccc3(200, 200, 200));
+	joinGameFriend->setTitleColorForDisable(ccc3(20, 0, 0));
+	joinGameFriend->setFunction([=](CCObject*){
+		JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
+		t_rp->setOpenAnimation(false);
+		getParent()->addChild(t_rp, this->getZOrder());
+		removeFromParent();
+	});
+	joinGameFriend->setPosition(ccp(375, 255));
+	this->addChild(joinGameFriend, kRP_Z_back+1);
+	
+	
 	
 	m_friendLimitFnt = CCLabelBMFont::create
 	(CCString::createWithFormat("%lu/%d", UnknownFriends::getInstance()->getFriends().size(), mySGD->getGameFriendMax())->getCString(),
@@ -152,7 +192,7 @@ void FriendListPopup::drawRank()
 	rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	
 	//±‚¡ÿ¡° 0,0
-	rankTableView->setPosition(ccp(33, 23));
+	rankTableView->setPosition(ccp(38, 23));
 	
 	//µ•¿Ã≈Õ∏¶ ∞°¡Æø¿∞Ì≥™ ≈Õƒ° ¿Ã∫•∆Æ∏¶ π›»Ø«ÿ¡Ÿ ¥Î∏Æ¿⁄∏¶ ¿Ã ≈¨∑°Ω∫∑Œ º≥¡§.
 	rankTableView->setDelegate(this);
@@ -189,7 +229,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	cell->init();
 	cell->autorelease();
 	
-	CCPoint sendBtnPosition = ccp(213, 24);
+	CCPoint sendBtnPosition = ccp(324, 18);
 	
 	
 	std::string cellBackFile = "friendlist_list.png";
@@ -203,8 +243,8 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "no_img.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kProfileImg);
-	profileImg->setPosition(ccp(51, 20));
-	profileImg->setScale(28.f / profileImg->getContentSize().width);
+	profileImg->setPosition(ccp(30, 20));
+	profileImg->setScale(29.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, 1);
 	
 	
@@ -414,7 +454,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 
 		 }
 		 );
-		deleteBtn->setPosition(ccp(350, 23));
+		deleteBtn->setPosition(ccp(380, 20));
 		deleteBtn->setTag(kZorderDeleteFriend);
 		deleteBtn->setUserData((void *)idx);
 		_menu->addChild(deleteBtn, 2);
@@ -423,17 +463,19 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	
 	
 	
-	title = CCLabelTTF::create("",mySGD->getFont().c_str(),12);
-	title->setPosition(ccp(75,20));
+	title = CCLabelTTF::create("",mySGD->getFont().c_str(),15);
+	title->setPosition(ccp(55,18));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kUserNickName);
+	title->setColor(ccc3(20, 0, 0));
 	cell->addChild(title,2);
 	
 	
-	score = CCLabelTTF::create("",mySGD->getFont().c_str(),19);
-	score->setPosition(ccp(75,1));
+	score = CCLabelTTF::create("",mySGD->getFont().c_str(),10);
+	score->setPosition(ccp(115,6));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kLastConnectDate);
+	score->setColor(ccc3(20, 0, 0));
 	cell->addChild(score,2);
 	
 

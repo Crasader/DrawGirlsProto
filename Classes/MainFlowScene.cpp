@@ -1084,8 +1084,8 @@ void MainFlowScene::setTop()
 	postbox_count_case->setVisible(false);
 	
 	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
-	postbox_count_label->setColor(ccRED);
-	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f, postbox_count_case->getContentSize().height/2.f));
+	postbox_count_label->setColor(ccc3(95, 60, 30));
+	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
 	countingMessage();

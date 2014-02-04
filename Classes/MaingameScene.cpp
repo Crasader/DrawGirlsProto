@@ -90,6 +90,7 @@ bool Maingame::init()
 	myGD->V_V["Main_hideDrawButtonTutorial"] = std::bind(&Maingame::hideDrawButtonTutorial, this);
 	myGD->V_V["Main_showPause"] = std::bind(&Maingame::showPause, this);
 	myGD->V_TDTD["Main_showContinue"] = std::bind(&Maingame::showContinue, this, _1, _2, _3, _4);
+	myGD->V_B["Main_setLineParticle"] = std::bind(&Maingame::setLineParticle, this, _1);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -107,6 +108,24 @@ bool Maingame::init()
 	game_node->addChild(myMS, myMSZorder);
 	
 	return true;
+}
+
+void Maingame::setLineParticle(bool t_b)
+{
+	if(t_b && myGIM->getIsFevering() && myJack->getJackState() == jackStateDrawing)
+	{
+		line_particle->setStartSize(5);
+		line_particle->setStartSizeVar(3);
+		line_particle->setEndSize(2);
+		line_particle->setEndSizeVar(1);
+	}
+	else
+	{
+		line_particle->setStartSize(0);
+		line_particle->setStartSizeVar(0);
+		line_particle->setEndSize(0);
+		line_particle->setEndSizeVar(0);
+	}
 }
 
 void Maingame::showDrawButtonTutorial()
@@ -197,9 +216,53 @@ void Maingame::finalSetting()
 	myCP = CumberParent::create();
 	game_node->addChild(myCP, myCPZorder);
 	
+	
+	line_particle = CCParticleSystemQuad::createWithTotalParticles(100);
+	line_particle->setPositionType(kCCPositionTypeRelative);
+	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("meteor_bomb.png");
+	line_particle->setTexture(texture);
+	line_particle->setEmissionRate(100);
+	line_particle->setAngle(0.0);
+	line_particle->setAngleVar(360.0);
+	ccBlendFunc blendFunc = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA}; //GL_SRC_ALPHA, GL_ONE
+	line_particle->setBlendFunc(blendFunc);
+	line_particle->setDuration(-1);
+	line_particle->setEmitterMode(kCCParticleModeGravity);
+	ccColor4F startColor = {1.00,1.00,1.00,1.00}; // 0.76 0.25 0.12
+	line_particle->setStartColor(startColor);
+	ccColor4F startColorVar = {0,0,0,0};
+	line_particle->setStartColorVar(startColorVar);
+	ccColor4F endColor = {1.00,1.00,1.00,1.00};
+	line_particle->setEndColor(endColor);
+	ccColor4F endColorVar = {0,0,0,0};
+	line_particle->setEndColorVar(endColorVar);
+	line_particle->setStartSize(0);
+	line_particle->setStartSizeVar(0);
+	line_particle->setEndSize(0);
+	line_particle->setEndSizeVar(0);
+	line_particle->setGravity(ccp(0,0));
+	line_particle->setRadialAccel(0.0);
+	line_particle->setRadialAccelVar(0.0);
+	line_particle->setSpeed(20);
+	line_particle->setSpeedVar(10);
+	line_particle->setTangentialAccel(0);
+	line_particle->setTangentialAccelVar(0);
+	line_particle->setTotalParticles(100);
+	line_particle->setLife(0.5);
+	line_particle->setLifeVar(0.2);
+	line_particle->setStartSpin(0.0);
+	line_particle->setStartSpinVar(360.f);
+	line_particle->setEndSpin(0.0);
+	line_particle->setEndSpinVar(360.f);
+	line_particle->setPosVar(ccp(0,0));
+	game_node->addChild(line_particle, myJackZorder);
+	
+	
 	myJack = Jack::create();
 	game_node->addChild(myJack, myJackZorder);
 	myJack->initStartPosition(game_node->getPosition());
+	
+	line_particle->setPosition(myJack->getPosition());
 	
 	game_node->setScale(myGD->game_scale);
 	
@@ -994,8 +1057,8 @@ CCPoint Maingame::getObjectToGameNodePosition( CCPoint t_p )
 	float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
 	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
 	{
-		if(x_value > myGD->boarder_value+50)														x_value = myGD->boarder_value+50;
-		else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f-50)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f-50;
+		if(x_value > myGD->boarder_value+80)														x_value = myGD->boarder_value+80;
+		else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f-80)						x_value = -320*myGD->game_scale-myGD->boarder_value+480.f-80;
 	}
 
 	CCPoint after_position;
@@ -1044,6 +1107,8 @@ CCPoint Maingame::getGameNodeToObjectPosition( CCPoint t_p )
 void Maingame::moveGamePosition( CCPoint t_p )
 {
 	//		if(!myGD->is_setted_jack)// || myGD->game_step == kGS_unlimited)
+	line_particle->setPosition(t_p);
+	
 	game_node->setPosition(getObjectToGameNodePosition(t_p));
 	if(character_thumb)
 		character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), thumb_texture->getScale())));
