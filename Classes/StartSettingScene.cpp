@@ -220,18 +220,6 @@ void StartSettingScene::setMain()
 	
 	changeCard();
 	
-//	float card_rate = 0.473f;
-//	
-//	CCSprite* n_card = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*card_rate, 430*card_rate));
-//	CCSprite* s_card = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*card_rate, 430*card_rate));
-//	
-//	CCMenuItem* card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(StartSettingScene::menuAction));
-//	card_item->setTag(kStartSettingMenuTag_card);
-//	
-//	CCMenu* card_menu = CCMenu::createWithItem(card_item);
-//	card_menu->setPosition(ccp(320*card_rate/2.f + 40, 430*card_rate/2.f + 28));
-//	main_case->addChild(card_menu);
-	
 	CCSprite* n_card_change = CCSprite::create("startsetting_cardchange.png");
 	CCSprite* s_card_change = CCSprite::create("startsetting_cardchange.png");
 	s_card_change->setColor(ccGRAY);

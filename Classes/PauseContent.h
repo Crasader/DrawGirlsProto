@@ -14,6 +14,7 @@
 #include "CCMenuLambda.h"
 #include "StarGoldData.h"
 #include "DataStorageHub.h"
+#include "CommonButton.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -115,6 +116,7 @@ private:
 		case_back->setContentSize(CCSizeMake(180, 190));
 		
 		CCLabelTTF* title_label = CCLabelTTF::create("일시정지", mySGD->getFont().c_str(), 15);
+		title_label->setColor(ccBLACK);
 		title_label->setPosition(ccp(0, 77));
 		addChild(title_label);
 		
@@ -124,53 +126,44 @@ private:
 		
 		content_back->setContentSize(CCSizeMake(160,140));
 		
-		CCSprite* n_resume = CCSprite::create("pause_popup_continue.png");
-		CCSprite* s_resume = CCSprite::create("pause_popup_continue.png");
-		s_resume->setColor(ccGRAY);
-		
-		CCMenuItem* resume_item = CCMenuItemSprite::create(n_resume, s_resume, this, menu_selector(PauseContent::menuAction));
-		resume_item->setTag(kPauseContentMenuTag_resume);
-		
-		CCMenu* resume_menu = CCMenu::createWithItem(resume_item);
-		resume_menu->setPosition(0,33);
+		CommonButton* resume_menu = CommonButton::create("계속하기", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);
+		resume_menu->setPosition(ccp(0,33));
+		resume_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kPauseContentMenuTag_resume);
+									 menuAction(t_node);
+								 });
 		addChild(resume_menu);
-		resume_menu->setTouchPriority(touch_priority-1);
 		
 		
-		CCSprite* n_gohome = CCSprite::create("pause_popup_home.png");
-		CCSprite* s_gohome = CCSprite::create("pause_popup_home.png");
-		s_gohome->setColor(ccGRAY);
-		
-		CCMenuItem* gohome_item = CCMenuItemSprite::create(n_gohome, s_gohome, this, menu_selector(PauseContent::menuAction));
-		gohome_item->setTag(kPauseContentMenuTag_gohome);
-		
-		CCMenu* gohome_menu = CCMenu::createWithItem(gohome_item);
-		gohome_menu->setPosition(0,-9);
+		CommonButton* gohome_menu = CommonButton::create("나가기", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);
+		gohome_menu->setPosition(ccp(0,-9));
+		gohome_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kPauseContentMenuTag_gohome);
+									 menuAction(t_node);
+								 });
 		addChild(gohome_menu);
-		gohome_menu->setTouchPriority(touch_priority-1);
 		
+		
+		CommonButton* replay_menu = CommonButton::create("재시작", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);
+		replay_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
+		replay_menu->setTitleColorForDisable(ccGRAY);
+		replay_menu->setPosition(ccp(0,-51));
+		replay_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kPauseContentMenuTag_replay);
+									 menuAction(t_node);
+								 });
+		addChild(replay_menu);
 		
 		if(mySGD->getIsMeChallenge() || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
-		{
-			CCSprite* d_replay = CCSprite::create("pause_popup_replay.png");
-			d_replay->setColor(ccc3(70,70,70));
-			d_replay->setPosition(ccp(0,-51));
-			addChild(d_replay);
-		}
+			replay_menu->setEnabled(false);
 		else
-		{
-			CCSprite* n_replay = CCSprite::create("pause_popup_replay.png");
-			CCSprite* s_replay = CCSprite::create("pause_popup_replay.png");
-			s_replay->setColor(ccGRAY);
-			
-			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(PauseContent::menuAction));
-			replay_item->setTag(kPauseContentMenuTag_replay);
-			
-			CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
-			replay_menu->setPosition(0,-51);
-			addChild(replay_menu);
-			replay_menu->setTouchPriority(touch_priority-1);
-		}
+			replay_menu->setEnabled(true);
 	}
 };
 

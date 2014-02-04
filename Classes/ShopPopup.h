@@ -39,6 +39,7 @@ enum ShopBeforeCode{
 class HeartTime;
 class LoadingLayer;
 class TouchSuctionLayer;
+class CommonButton;
 class ShopPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -85,7 +86,13 @@ private:
 	
 	void setCardBuyMenu(CCPoint t_point, int t_tag, string inner_filename, string type_filename, int price_value);
 	
-	CCMenu* tab_menu;
+	CommonButton* character_menu;
+	CommonButton* card_menu;
+	CommonButton* ruby_menu;
+	CommonButton* gold_menu;
+	CommonButton* heart_menu;
+	
+//	CCMenu* tab_menu;
 	
 	TouchSuctionLayer* suction;
 	
@@ -122,7 +129,7 @@ private:
 	string card_gacha_type;
 	void startCardGacha();
 	void resultCardGacha(Json::Value result_data);
-	CCMenu* replay_menu;
+	CommonButton* replay_menu;
 	void replayAction(CCObject* sender);
 	
 	vector<CommandParam> command_list;

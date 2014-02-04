@@ -10,6 +10,7 @@
 #include "DataStorageHub.h"
 #include "ScrollMenu.h"
 #include "TouchSuctionLayer.h"
+#include "CommonButton.h"
 
 enum AchievePopupMenuTag{
 	kAchievePopupMenuTag_close = 1,
@@ -66,19 +67,21 @@ bool AchievePopup::init()
 	
 	recent_code = kAchievePopupListCode_all;
 	
-	CCSprite* n_all_reward = CCSprite::create("achievement_allreward.png");
-	CCSprite* s_all_reward = CCSprite::create("achievement_allreward.png");
-	s_all_reward->setColor(ccGRAY);
 	
-	CCMenuItem* all_reward_item = CCMenuItemSprite::create(n_all_reward, s_all_reward, this, menu_selector(AchievePopup::takeAllReward));
-	all_reward_item->setTag(kAchievePopupMenuTag_allReward);
-	
-	all_reward_menu = CCMenu::createWithItem(all_reward_item);
-	all_reward_menu->setVisible(recent_code == kAchievePopupListCode_all || recent_code == kAchievePopupListCode_reward);
+	all_reward_menu = CommonButton::create("모든보상 받기", 13, CCSizeMake(120,40), CommonButtonGreen, -190);
+	all_reward_menu->setTitleColor(ccBLACK);
 	all_reward_menu->setPosition(ccp(390,30));
 	main_case->addChild(all_reward_menu, kAchievePopupZorder_menu);
-	all_reward_menu->setTouchPriority(-190);
+	all_reward_menu->setFunction([=](CCObject* sender)
+						  {
+							  CCNode* t_node = CCNode::create();
+							  t_node->setTag(kAchievePopupMenuTag_allReward);
+							  takeAllReward(t_node);
+						  });
 	
+	all_reward_menu->setVisible(recent_code == kAchievePopupListCode_all || recent_code == kAchievePopupListCode_reward);
+	
+		
 	all_menu = NULL;
 	setAllMenu();
 	
@@ -91,17 +94,15 @@ bool AchievePopup::init()
 	reward_menu = NULL;
 	setRewardMenu();
 	
-	CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
-	CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
-	s_close->setColor(ccGRAY);
-	
-	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(AchievePopup::menuAction));
-	close_item->setTag(kAchievePopupMenuTag_close);
-	
-	CCMenu* close_menu = CCMenu::createWithItem(close_item);
+	CommonButton* close_menu = CommonButton::createCloseButton(-190);
 	close_menu->setPosition(ccp(452,257));
+	close_menu->setFunction([=](CCObject* sender)
+							{
+								CCNode* t_node = CCNode::create();
+								t_node->setTag(kAchievePopupMenuTag_close);
+								menuAction(t_node);
+							});
 	main_case->addChild(close_menu, kAchievePopupZorder_menu);
-	close_menu->setTouchPriority(-190);
 	
 	achieve_table = NULL;
 	setAchieveTable();
@@ -678,119 +679,87 @@ void AchievePopup::registerWithTouchDispatcher ()
 
 void AchievePopup::setAllMenu()
 {
-	if(all_menu)
+	if(!all_menu)
 	{
-		all_menu->removeFromParent();
-		all_menu = NULL;
+		all_menu = CommonButton::create("전체보기", 13, CCSizeMake(100,38), CommonButtonYellow, -190);
+		all_menu->setTitleColor(ccBLACK);
+		all_menu->setPosition(ccp(70,256));
+		main_case->addChild(all_menu, kAchievePopupZorder_menu);
+		all_menu->setFunction([=](CCObject* sender)
+							  {
+								  CCNode* t_node = CCNode::create();
+								  t_node->setTag(kAchievePopupMenuTag_all);
+								  menuAction(t_node);
+							  });
+		
+		all_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
+		all_menu->setTitleColorForDisable(ccWHITE);
 	}
 	
-	if(recent_code == kAchievePopupListCode_all)
-	{
-		all_menu = CCSprite::create("achievement_all_on.png");
-		all_menu->setPosition(ccp(70,256));
-		main_case->addChild(all_menu, kAchievePopupZorder_menu);
-	}
-	else
-	{
-		CCSprite* n_all = CCSprite::create("achievement_all_off.png");
-		CCSprite* s_all = CCSprite::create("achievement_all_off.png");
-		s_all->setColor(ccGRAY);
-		
-		CCMenuItem* all_item = CCMenuItemSprite::create(n_all, s_all, this, menu_selector(AchievePopup::menuAction));
-		all_item->setTag(kAchievePopupMenuTag_all);
-		
-		all_menu = CCMenu::createWithItem(all_item);
-		all_menu->setPosition(ccp(70,256));
-		main_case->addChild(all_menu, kAchievePopupZorder_menu);
-		((CCMenu*)all_menu)->setTouchPriority(-190);
-	}
+	all_menu->setEnabled(recent_code != kAchievePopupListCode_all);
 }
 void AchievePopup::setSuccessMenu()
 {
-	if(success_menu)
+	if(!success_menu)
 	{
-		success_menu->removeFromParent();
-		success_menu = NULL;
+		success_menu = CommonButton::create("업적달성", 13, CCSizeMake(100,38), CommonButtonYellow, -190);
+		success_menu->setTitleColor(ccBLACK);
+		success_menu->setPosition(ccp(172,256));
+		main_case->addChild(success_menu, kAchievePopupZorder_menu);
+		success_menu->setFunction([=](CCObject* sender)
+							  {
+								  CCNode* t_node = CCNode::create();
+								  t_node->setTag(kAchievePopupMenuTag_success);
+								  menuAction(t_node);
+							  });
+		
+		success_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
+		success_menu->setTitleColorForDisable(ccWHITE);
 	}
 	
-	if(recent_code == kAchievePopupListCode_success)
-	{
-		success_menu = CCSprite::create("achievement_success_on.png");
-		success_menu->setPosition(ccp(172,256));
-		main_case->addChild(success_menu, kAchievePopupZorder_menu);
-	}
-	else
-	{
-		CCSprite* n_success = CCSprite::create("achievement_success_off.png");
-		CCSprite* s_success = CCSprite::create("achievement_success_off.png");
-		s_success->setColor(ccGRAY);
-		
-		CCMenuItem* success_item = CCMenuItemSprite::create(n_success, s_success, this, menu_selector(AchievePopup::menuAction));
-		success_item->setTag(kAchievePopupMenuTag_success);
-		
-		success_menu = CCMenu::createWithItem(success_item);
-		success_menu->setPosition(ccp(172,256));
-		main_case->addChild(success_menu, kAchievePopupZorder_menu);
-		((CCMenu*)success_menu)->setTouchPriority(-190);
-	}
+	success_menu->setEnabled(recent_code != kAchievePopupListCode_success);
 }
 void AchievePopup::setIngMenu()
 {
-	if(ing_menu)
+	if(!ing_menu)
 	{
-		ing_menu->removeFromParent();
-		ing_menu = NULL;
+		ing_menu = CommonButton::create("업적미완성", 13, CCSizeMake(100,38), CommonButtonYellow, -190);
+		ing_menu->setTitleColor(ccBLACK);
+		ing_menu->setPosition(ccp(274,256));
+		main_case->addChild(ing_menu, kAchievePopupZorder_menu);
+		ing_menu->setFunction([=](CCObject* sender)
+								  {
+									  CCNode* t_node = CCNode::create();
+									  t_node->setTag(kAchievePopupMenuTag_ing);
+									  menuAction(t_node);
+								  });
+		
+		ing_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
+		ing_menu->setTitleColorForDisable(ccWHITE);
 	}
 	
-	if(recent_code == kAchievePopupListCode_ing)
-	{
-		ing_menu = CCSprite::create("achievement_ing_on.png");
-		ing_menu->setPosition(ccp(274,256));
-		main_case->addChild(ing_menu, kAchievePopupZorder_menu);
-	}
-	else
-	{
-		CCSprite* n_ing = CCSprite::create("achievement_ing_off.png");
-		CCSprite* s_ing = CCSprite::create("achievement_ing_off.png");
-		s_ing->setColor(ccGRAY);
-		
-		CCMenuItem* ing_item = CCMenuItemSprite::create(n_ing, s_ing, this, menu_selector(AchievePopup::menuAction));
-		ing_item->setTag(kAchievePopupMenuTag_ing);
-		
-		ing_menu = CCMenu::createWithItem(ing_item);
-		ing_menu->setPosition(ccp(274,256));
-		main_case->addChild(ing_menu, kAchievePopupZorder_menu);
-		((CCMenu*)ing_menu)->setTouchPriority(-190);
-	}
+	ing_menu->setEnabled(recent_code != kAchievePopupListCode_ing);
 }
 void AchievePopup::setRewardMenu()
 {
-	if(reward_menu)
+	if(!reward_menu)
 	{
-		reward_menu->removeFromParent();
-		reward_menu = NULL;
+		reward_menu = CommonButton::create("업적보상", 13, CCSizeMake(100,38), CommonButtonYellow, -190);
+		reward_menu->setTitleColor(ccBLACK);
+		reward_menu->setPosition(ccp(376,256));
+		main_case->addChild(reward_menu, kAchievePopupZorder_menu);
+		reward_menu->setFunction([=](CCObject* sender)
+							  {
+								  CCNode* t_node = CCNode::create();
+								  t_node->setTag(kAchievePopupMenuTag_reward);
+								  menuAction(t_node);
+							  });
+		
+		reward_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
+		reward_menu->setTitleColorForDisable(ccWHITE);
 	}
 	
-	if(recent_code == kAchievePopupListCode_reward)
-	{
-		reward_menu = CCSprite::create("achievement_reward_on.png");
-		reward_menu->setPosition(ccp(376,256));
-		main_case->addChild(reward_menu, kAchievePopupZorder_menu);
-	}
-	else
-	{
-		CCSprite* n_reward = CCSprite::create("achievement_reward_off.png");
-		CCSprite* s_reward = CCSprite::create("achievement_reward_off.png");
-		s_reward->setColor(ccGRAY);
-		
-		CCMenuItem* reward_item = CCMenuItemSprite::create(n_reward, s_reward, this, menu_selector(AchievePopup::menuAction));
-		reward_item->setTag(kAchievePopupMenuTag_reward);
-		
-		reward_menu = CCMenu::createWithItem(reward_item);
-		reward_menu->setPosition(ccp(376,256));
-		main_case->addChild(reward_menu, kAchievePopupZorder_menu);
-		((CCMenu*)reward_menu)->setTouchPriority(-190);
-	}
+	reward_menu->setEnabled(recent_code != kAchievePopupListCode_reward);
 }
 
 void AchievePopup::takeAllReward(CCObject* sender)

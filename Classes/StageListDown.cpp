@@ -9,6 +9,7 @@
 #include "StageListDown.h"
 #include "PuzzleCache.h"
 #include "LoadingTipScene.h"
+#include "CommonButton.h"
 
 void StageListDown::addDownlist(string t_key, const Json::Value& result_data)
 {
@@ -397,17 +398,16 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 	{
 		state_ment->setString("퍼즐 정보를 받아오는데 실패하였습니다.");
 		
-		CCSprite* n_button = CCSprite::create("cardsetting_zoom.png");
-		CCSprite* s_button = CCSprite::create("cardsetting_zoom.png");
-		s_button->setColor(ccGRAY);
+		CommonButton* replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -201);
+		replay_menu->setPosition(ccp(300,100));
+		replay_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kSLD_MT_receive);
+									 menuAction(t_node);
+								 });
 		
-		CCMenuItem* button_item = CCMenuItemSprite::create(n_button, s_button, this, menu_selector(StageListDown::menuAction));
-		button_item->setTag(kSLD_MT_receive);
-		
-		CCMenu* button_menu = CCMenu::createWithItem(button_item);
-		button_menu->setPosition(ccp(300,100));
-		addChild(button_menu, kSLD_Z_content, kSLD_MT_receive);
-		button_menu->setTouchPriority(-200-1);
+		addChild(replay_menu, kSLD_Z_content, kSLD_MT_receive);
 	}
 }
 
@@ -671,17 +671,17 @@ void StageListDown::failAction()
 	unschedule(schedule_selector(StageListDown::downloadingAction));
 	state_ment->setString("퍼즐 이미지 다운로드에 실패하였습니다.");
 	is_downloading = false;
-	CCSprite* n_button = CCSprite::create("cardsetting_zoom.png");
-	CCSprite* s_button = CCSprite::create("cardsetting_zoom.png");
-	s_button->setColor(ccGRAY);
 	
-	CCMenuItem* button_item = CCMenuItemSprite::create(n_button, s_button, this, menu_selector(StageListDown::menuAction));
-	button_item->setTag(kSLD_MT_redown);
+	CommonButton* replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -201);
+	replay_menu->setPosition(ccp(300,100));
+	replay_menu->setFunction([=](CCObject* sender)
+							 {
+								 CCNode* t_node = CCNode::create();
+								 t_node->setTag(kSLD_MT_redown);
+								 menuAction(t_node);
+							 });
 	
-	CCMenu* button_menu = CCMenu::createWithItem(button_item);
-	button_menu->setPosition(ccp(300,100));
-	addChild(button_menu, kSLD_Z_content, kSLD_MT_redown);
-	button_menu->setTouchPriority(-200-1);
+	addChild(replay_menu, kSLD_Z_content, kSLD_MT_redown);
 }
 
 void StageListDown::downloadingAction()
