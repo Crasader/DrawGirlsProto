@@ -24,6 +24,7 @@ public:
 	
     // there's no 'id' in cpp, so we recommend to return the class instance pointer
     static cocos2d::CCScene* scene();
+	static CCSprite* getLoadingTipImage();
     
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(LoadingTipScene);
@@ -34,6 +35,10 @@ private:
 	CCLabelBMFont* progress_label;
 	int total_load_img;
 	int ing_load_img;
+	
+	bool is_minimum_time;
+	
+	void onMinimumTime();
 	
 	vector<string> sil_load_list;
 	vector<string> default_load_list;

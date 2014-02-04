@@ -32,10 +32,10 @@ public:
 	CCSprite* pathImg;
 	int pathScale;
 	
-	static PathNode* create(IntPointVector t_pv)
+	static PathNode* create(IntPointVector t_pv, string line_color)
 	{
 		PathNode* t_pn = new PathNode();
-		t_pn->myInit(t_pv);
+		t_pn->myInit(t_pv, line_color);
 		t_pn->autorelease();
 		return t_pn;
 	}
@@ -49,21 +49,11 @@ public:
 private:
 	CCSprite* pathEdge;
 	
-	void myInit(IntPointVector t_pv)
+	void myInit(IntPointVector t_pv, string line_color)
 	{
 		myPointVector = t_pv;
 		
-//		ElementCode elemental_type = ElementCode(DataStorageHub::sharedInstance()->getIntegerForKey(kDSH_Key_lastSelectedElement));
-//		string elemental_string;
-//		if(elemental_type == kElementCode_empty)			elemental_string = "path_empty.png";
-//		else if(elemental_type == kElementCode_life)		elemental_string = "path_life.png";
-//		else if(elemental_type == kElementCode_fire)		elemental_string = "path_fire.png";
-//		else if(elemental_type == kElementCode_water)		elemental_string = "path_water.png";
-//		else if(elemental_type == kElementCode_wind)		elemental_string = "path_wind.png";
-//		else if(elemental_type == kElementCode_lightning)	elemental_string = "path_lightning.png";
-//		else if(elemental_type == kElementCode_plasma)		elemental_string = "path_plasma.png";
-		
-		pathImg = CCSprite::create("path_empty.png");
+		pathImg = CCSprite::create(("path_" + line_color + ".png").c_str());
 		pathImg->setAnchorPoint(ccp(0.0, 0.5));
 		pathImg->setRotation(myPointVector.distance.getAngle());
 		pathScale = 1;
@@ -71,7 +61,7 @@ private:
 		addChild(pathImg);
 		setPosition(ccp((myPointVector.origin.x-1)*pixelSize+1, (myPointVector.origin.y-1)*pixelSize+1));
 		
-		CCSprite* path_edge = CCSprite::create("path_edge_empty.png");
+		CCSprite* path_edge = CCSprite::create(("path_edge_" + line_color + ".png").c_str());
 		addChild(path_edge);
 	}
 };
@@ -352,12 +342,14 @@ private:
 	
 	void newPathAdd(IntPointVector t_pv)
 	{
-		PathNode* t_pn = PathNode::create(t_pv);
+		PathNode* t_pn = PathNode::create(t_pv, path_color);
 		t_pn->setTag(childTagInPathParentPathNode);
 		addChild(t_pn, 1);
 		
 		myList.push_back(t_pn);
 	}
+	
+	string path_color;
 	
 	void myInit()
 	{
@@ -368,6 +360,22 @@ private:
 				overlap_map[i][j] = 0;
 			}
 		}
+		
+		int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+		if(path_color_code == 1)
+			path_color = "life";
+		else if(path_color_code == 2)
+			path_color = "fire";
+		else if(path_color_code == 3)
+			path_color = "water";
+		else if(path_color_code == 4)
+			path_color = "wind";
+		else if(path_color_code == 5)
+			path_color = "lightning";
+		else if(path_color_code == 6)
+			path_color = "plasma";
+		else
+			path_color = "empty";
 		
 		myGD->V_Ipv["PM_addPath"] = std::bind(&PathManager::addPath, this, _1);
 		myGD->V_V["PM_cleanPath"] = std::bind(&PathManager::cleanPath, this);

@@ -27,7 +27,8 @@
 #include "ASPopupView.h"
 #include "CardAnimations.h"
 #include "TouchSuctionLayer.h"
-
+#include "KHAlertView.h"
+#include "CommonButton.h"
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
 	kMT_FP_replay,
@@ -952,103 +953,110 @@ void FailPopup::cellAction( CCObject* sender )
 	//김현수 89987036974054944
 	std::string user_id = friend_list[tag].user_id;
 	KS::KSLog("% %" , friend_list[tag].nickname, friend_list[tag].user_id);
-	
-	KSAlertView* av = KSAlertView::create();
+
+	KHAlertView* av = KHAlertView::create(); 
+	// av->setTitleFileName("msg_challenge.png");
+	av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+																									 [=](CCObject*){
+																									 }
+																									));
+	av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+	av->setWidth(240);
+	av->setHeight(240);
+	av->setTitleHeight(10);
+	av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
 	av->setCenterY(150);
-	auto ttf = CCLabelTTF::create((friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...").c_str(), "", 12.f);
-	ttf->setColor(ccc3(0, 0, 0));
+
+	CCNode* emptyNode = CCNode::create();
+	auto ttf = CCLabelTTF::create((friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...").c_str(), mySGD->getFont().c_str(), 12.f); 
+	ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+	//	con->setAnchorPoint(ccp(0, 0));
+	//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+	ttf->setColor(ccc3(255, 255, 255));
+	ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+	emptyNode->addChild(ttf);
 	av->setContentNode(
-										 ttf
-										 );
+			emptyNode
+			);
 	av->setContentSize(ttf->getDimensions());
+	av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+								[=](CCObject* e) {
+									CCLog("ok!!");
+									Json::Value p;
+									Json::Value contentJson;
+
+									contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
+									contentJson["helpstage"] = mySD->getSilType();
+									contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+
+									KS::KSLog("%", hspConnector::get()->myKakaoInfo);
+									//				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+									p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+									std::string recvId = user_id;
+									recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
+									p["receiverMemberID"] = recvId;
+									p["senderMemberID"] = hspConnector::get()->getKakaoID();
+									p["type"] = kHelpRequest;
+									hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+																							 {
+																								 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+																								 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+																								 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+
+																								 //																		setHelpSendTime(recvId);
+																								 if(r["result"]["code"].asInt() != GDSUCCESS)
+										return;
+
+									setHelpSendTime(user_id);
+									friend_list.erase(friend_list.begin() + tag);
+									rankTableView->reloadData();
+									
+									 KHAlertView* av = KHAlertView::create(); 
+						 // av->setTitleFileName("msg_challenge.png");
+						 av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+																																					[=](CCObject*){
+																																					}
+																																				 ));
+						 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+						 av->setWidth(240);
+						 av->setHeight(240);
+						 av->setTitleHeight(10);
+						 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+						 av->setCenterY(150);
+
+						 CCNode* emptyNode = CCNode::create();
+						 auto ttf = CCLabelTTF::create("요청을 성공적으로 보냈습니다.", mySGD->getFont().c_str(), 12.f); 
+						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+						 //	con->setAnchorPoint(ccp(0, 0));
+						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+						 ttf->setColor(ccc3(255, 255, 255));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 emptyNode->addChild(ttf);
+						 av->setContentNode(
+								 emptyNode
+								 );
+						 av->setContentSize(ttf->getDimensions());
+						 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+													 [=](CCObject* e) {
+														 CCLog("ok!!");
+													 });
+
+						 addChild(av, kPMS_Z_helpRequest);
+						 av->show();
+
+
+						 //																		obj->removeFromParent();
+						 Json::Value p2;
+						 p2["receiver_id"] = recvId;
+						 p2["message"] = "도와주세염~";
+						 hspConnector::get()->kSendMessage
+							 (p2, [=](Json::Value r) {
+								 GraphDogLib::JsonToLog("kSendMessage", r);
+							 });
+																							 });
+								});
 	
-	//	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-	//																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-	//	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-	//																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-	//	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-	//																					[](CCObject* e){
-	//																						CCLog("press!!");
-	//																					});
-	//	av->addButton(m1);
-	av->addButton(CCMenuItemImageLambda::create
-								(
-								 "ticket_send.png",
-								 "ticket_send.png",
-								 [=](CCObject* e){
-									 {
-										 Json::Value p;
-										 Json::Value contentJson;
-										 
-										 contentJson["msg"] = (friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...");
-										 contentJson["helpstage"] = mySD->getSilType();
-										 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-										 
-										 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
-										 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-										 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-										 std::string recvId = user_id;
-										 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
-										 p["receiverMemberID"] = recvId;
-										 p["senderMemberID"] = hspConnector::get()->getKakaoID();
-										 p["type"] = kHelpRequest;
-										 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
-																									{
-																										//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-																										//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-																										//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-																										
-																										//																		setHelpSendTime(recvId);
-																										if(r["result"]["code"].asInt() != GDSUCCESS)
-																											return;
-																										
-																										setHelpSendTime(user_id);
-																										friend_list.erase(friend_list.begin() + tag);
-																										rankTableView->reloadData();
-																										
-																										KSAlertView* av = KSAlertView::create();
-																										av->setCenterY(150);
-																										auto ttf = CCLabelTTF::create
-																											(("요청을 성공적으로 보냈습니다."), "", 12.f);
-																										ttf->setColor(ccc3(0, 0, 0));
-																										av->setContentNode(
-																																			 ttf
-																																			 );
-																										av->setContentSize(ttf->getDimensions());
-																										
-																										//	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-																										//																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-																										//	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-																										//																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-																										//	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-																										//																					[](CCObject* e){
-																										//																						CCLog("press!!");
-																										//																					});
-																										//	av->addButton(m1);
-																										av->addButton(CCMenuItemImageLambda::create
-																																	(
-																																	 "ui_common_ok.png",
-																																	 "ui_common_ok.png",
-																																	 [=](CCObject* e){
-																																	 }
-																																	 ));
-																										addChild(av, kPMS_Z_helpRequest);
-																										av->show();
-																										GraphDogLib::JsonToLog("sendMessage", r);
-																										
-																										//																		obj->removeFromParent();
-																										Json::Value p2;
-																										p2["receiver_id"] = recvId;
-																										p2["message"] = "도와주세염~";
-																										hspConnector::get()->kSendMessage
-																										(p2, [=](Json::Value r)
-																										 {
-																											 GraphDogLib::JsonToLog("kSendMessage", r);
-																										 });
-																									});
-									 }
-								 }
-								 ));
+
 	addChild(av, kPMS_Z_helpRequest);
 	av->show();
 }

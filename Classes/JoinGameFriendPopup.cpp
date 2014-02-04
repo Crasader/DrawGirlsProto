@@ -443,28 +443,37 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 																 KS::KSLog("zz %", t);
 																 if(t["state"] == "error")
 																 {
-																	 KSAlertView* av = KSAlertView::create();
-																	 av->setCloseOnPress(true);
-																	 av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
 																	 
-																	 av->setBorderScale(0.9f);
+																	 KHAlertView* av = KHAlertView::create(); 
+																	 av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+																																										[=](CCObject*){
+																																										}
+																																									 ));
+																	 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+																	 av->setWidth(240);
+																	 av->setHeight(240);
+																	 av->setTitleHeight(10);
+																	 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
 																	 av->setCenterY(150);
-																	 
-																	 auto ttf = CCLabelTTF::create("아이디를 찾을 수 없습니다.", "", 12.f);
-																	 ttf->setColor(ccc3(0, 0, 0));
-																	 
+
+																	 CCNode* emptyNode = CCNode::create();
+																	 auto ttf = CCLabelTTF::create("아이디를 찾을 수 없습니다.", mySGD->getFont().c_str(), 12.f); 
+																	 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+																	 //	con->setAnchorPoint(ccp(0, 0));
+																	 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+																	 ttf->setColor(ccc3(255, 255, 255));
+																	 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																	 emptyNode->addChild(ttf);
 																	 av->setContentNode(
-																											ttf
-																											);
+																			 emptyNode
+																			 );
 																	 av->setContentSize(ttf->getDimensions());
-																	 
-																	 av->addButton(CCMenuItemImageLambda::create
-																								 (
-																									"ui_common_ok.png",
-																									"ui_common_ok.png",
-																									[=](CCObject* e){
-																									}
-																									));
+																	 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																								 [=](CCObject* e) {
+																									 CCLog("ok!!");
+																								 });
+			
+
 																	 addChild(av, kZorderPopup);
 																	 av->show();
 																	 return;
@@ -472,38 +481,44 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 
 																 
 																 hspConnector::get()->command
-																 ("sendMessage", p, [=](Json::Value r)
-																	{
-																		GraphDogLib::JsonToLog("sendMessage", r);
-																		if(r["result"]["code"].asInt() != GDSUCCESS)
-																			return;
-																		
-																		KSAlertView* av = KSAlertView::create();
-																		av->setCloseOnPress(true);
-																		av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-																		
-																		av->setBorderScale(0.9f);
-																		av->setCenterY(150);
-																		
-																		auto ttf = CCLabelTTF::create("신청하였습니다. 수락을 기다리세요.", "", 12.f);
-																		ttf->setColor(ccc3(0, 0, 0));
-																		
-																		av->setContentNode(
-																											 ttf
-																											 );
-																		av->setContentSize(ttf->getDimensions());
-																		
-																		av->addButton(CCMenuItemImageLambda::create
-																									(
-																									 "ui_common_ok.png",
-																									 "ui_common_ok.png",
-																									 [=](CCObject* e){
-																									 }
-																									 ));
-																		addChild(av, kZorderPopup);
-																		av->show();
-																		
-																	});
+																	 ("sendMessage", p, [=](Json::Value r) {
+																		 GraphDogLib::JsonToLog("sendMessage", r);
+																		 if(r["result"]["code"].asInt() != GDSUCCESS){
+																			 return;
+																		 }	
+																		 KHAlertView* av = KHAlertView::create(); 
+																		 av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+																																											[=](CCObject*){
+																																											}
+																																										 ));
+																		 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+																		 av->setWidth(240);
+																		 av->setHeight(240);
+																		 av->setTitleHeight(10);
+																		 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+																		 av->setCenterY(150);
+
+																		 CCNode* emptyNode = CCNode::create();
+																		 auto ttf = CCLabelTTF::create("신청했습니다. 수락을 기다리세요.", mySGD->getFont().c_str(), 12.f); 
+																		 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+																		 //	con->setAnchorPoint(ccp(0, 0));
+																		 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+																		 ttf->setColor(ccc3(255, 255, 255));
+																		 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																		 emptyNode->addChild(ttf);
+																		 av->setContentNode(
+																				 emptyNode
+																				 );
+																		 av->setContentSize(ttf->getDimensions());
+																		 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																									 [=](CCObject* e) {
+																										 CCLog("ok!!");
+																									 });
+
+																		 addChild(av, kZorderPopup);
+																		 av->show();
+
+																	 });
 															 });
 	
 	
