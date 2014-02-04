@@ -674,7 +674,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 emptyNode
 					 );
 			 av->setContentSize(ttf->getDimensions());
-			 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+			 av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 					 [=](CCObject* e) {
 						 CCLog("ok!!");
 						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
