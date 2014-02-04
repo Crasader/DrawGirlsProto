@@ -345,80 +345,71 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 
 			 param["memberID"] = hspConnector::get()->getKakaoID();
 			 param["friendID"] = (*member).userId;
-			 KSAlertView* av = KSAlertView::create();
+			 KHAlertView* av = KHAlertView::create(); 
 			 av->setCloseOnPress(false);
-			 av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-			 
-			 av->setBorderScale(0.9f);
+			 // av->setTitleFileName("msg_challenge.png");
+			 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+			 av->setWidth(240);
+			 av->setHeight(240);
+			 av->setTitleHeight(10);
+			 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
 			 av->setCenterY(150);
-			 
-			 auto ttf = CCLabelTTF::create("정말삭제하시겠습니까? 다시 못만날지도...", "", 12.f);
-			 ttf->setColor(ccc3(0, 0, 0));
-			 
+
+			 CCNode* emptyNode = CCNode::create();
+			 auto ttf = CCLabelTTF::create("정말삭제하시겠습니까? 다시 못만날지도...", mySGD->getFont().c_str(), 12.f); 
+			 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+			 //	con->setAnchorPoint(ccp(0, 0));
+			 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+			 ttf->setColor(ccc3(255, 255, 255));
+			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+			 emptyNode->addChild(ttf);
 			 av->setContentNode(
-													ttf
-													);
+					 emptyNode
+					 );
 			 av->setContentSize(ttf->getDimensions());
-			 
-			 av->addButton(CCMenuItemImageLambda::create
-										 (
-											"rank_cancel.png",
-											"rank_cancel.png",
-											[=](CCObject* e){
-												av->removeFromParent();
-											}
-											));
-			 
-			 av->addButton
-			 (
-				CCMenuItemImageLambda::create
-				(
-				 "ui_common_ok.png",
-				 "ui_common_ok.png",
-				 [=](CCObject* e){
-					 
-					 hspConnector::get()->command
-					 ("removefriendeach", param, [=](Json::Value r)
-						{
-							if(r["result"]["code"].asInt() != GDSUCCESS)
-							{
-								av->removeFromParent();
-								return;
-							}
-							av->removeFromParent();
-							
-							UnknownFriends::getInstance()->deleteById((*member).userId);
-							
-							int targetIndex = -1;
-							for(int i=0; i<m_scoreList.size(); i++)
-							{
-								if(m_scoreList[i].userId == (*member).userId)
-								{
-									targetIndex = i;
-									break;
-								}
-							}
-							
-							if(targetIndex != -1)
-							{
-								m_scoreList.erase(m_scoreList.begin() + targetIndex);
-//								removeFromIndex(m_scoreList, targetIndex);
-								UnknownFriends::getInstance()->deleteById((*member).userId);
-								rankTableView->reloadData();
-								m_friendLimitFnt->setString
-								(CCString::createWithFormat
-								 ("%lu.%d",
-									UnknownFriends::getInstance()->getFriends().size(),
-									mySGD->getGameFriendMax())->getCString());
-							}
-							// m_scoreList 에서 "user_id" 찾아서 지워서 reload  해야됨.
-							
-							//												 loadRank();
-						});
-				 }
-				 ));
+			 av->addButton(CommonButton::create("취소", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+										 [=](CCObject* e) {
+											 CCLog("ok!!");
+											 av->removeFromParent();
+										 });
+			 av->addButton(CommonButton::create("친구 삭제", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+										 [=](CCObject* e) {
+											 CCLog("ok!!");
+											 hspConnector::get()->command ("removefriendeach", param, 
+																										 [=](Json::Value r) {
+																											 if(r["result"]["code"].asInt() != GDSUCCESS) {
+																												 av->removeFromParent();
+																												 return;
+																											 }
+																											 av->removeFromParent();
+
+																											 UnknownFriends::getInstance()->deleteById((*member).userId);
+
+																											 int targetIndex = -1;
+																											 for(int i=0; i<m_scoreList.size(); i++) {
+																												 if(m_scoreList[i].userId == (*member).userId) {
+																													 targetIndex = i;
+																													 break;
+																												 }
+																											 }
+
+																											 if(targetIndex != -1) {
+																												 m_scoreList.erase(m_scoreList.begin() + targetIndex);
+																												 //								removeFromIndex(m_scoreList, targetIndex);
+																												 UnknownFriends::getInstance()->deleteById((*member).userId);
+																												 rankTableView->reloadData();
+																												 m_friendLimitFnt->setString
+																													 (CCString::createWithFormat
+																														("%lu.%d",
+																														 UnknownFriends::getInstance()->getFriends().size(),
+																														 mySGD->getGameFriendMax())->getCString());
+																											 }
+																										 });
+										 });
+
 			 addChild(av, kZorderPopup);
 			 av->show();
+
 			 
 			 
 		 }
