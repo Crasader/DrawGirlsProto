@@ -323,7 +323,7 @@ void SpinBasicMissile::myInit( string type_name, int elemental_level, CCPoint t_
 		if(elemental_level == 6 || elemental_level == 9)
 			animation_cnt = 4;
 		else if(elemental_level == 8)
-			animation_cnt = 5;
+			animation_cnt = 6;
 		else
 			animation_cnt = 3;
 	}

@@ -97,6 +97,7 @@ public:
 				[=](CCObject*)
 				{
 					prevObtain();
+					obtainFunction(); // 닫을 때 뒤에 터치를 활성화 하는 것. 이름과는 다름.
 				});
 		obtainItem->setPosition(ccp(320, 60));
 		_menu->addChild(obtainItem);

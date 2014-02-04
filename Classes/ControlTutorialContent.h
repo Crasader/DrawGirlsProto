@@ -51,8 +51,9 @@ public:
 		}
 		else if(t_name == "tutorial4")
 		{
-			close_menu->setVisible(true);
-			touch_menu->setVisible(false);
+			state_number = 7;
+//			close_menu->setVisible(true);
+//			touch_menu->setVisible(false);
 		}
 	}
 	
@@ -63,53 +64,56 @@ private:
 	
 	CCBAnimationManager* ani_manager;
 	
+	function<void(CCObject*)> end_selector;
+	
 	int state_number;
 	
 	void myInit(int t_touch_priority, function<void(CCObject*)> t_selector)
 	{
 		state_number = 0;
-		
+		end_selector = t_selector;
 		touch_priority = t_touch_priority;
-		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-		case_back->setPosition(CCPointZero);
-		addChild(case_back);
-		
-		case_back->setContentSize(CCSizeMake(330, 265));
-		
-		CCSprite *stencil = CCSprite::create("whitePaper.png");
-		stencil->setScale(0.65f);
-		stencil->setPosition( ccp(0, 0) );
-		
-		CCClippingNode *clipper = CCClippingNode::create(stencil);
-		clipper->setAnchorPoint(ccp(0.5,0.5));
-		clipper->setPosition( ccp(0, -15) );
-		clipper->setAlphaThreshold(0.1f);
-		addChild(clipper);
+//		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+//		case_back->setPosition(CCPointZero);
+//		addChild(case_back);
+//		
+//		case_back->setContentSize(CCSizeMake(330, 265));
+//		
+//		CCSprite *stencil = CCSprite::create("whitePaper.png");
+//		stencil->setScale(0.65f);
+//		stencil->setPosition( ccp(0, 0) );
+//		
+//		CCClippingNode *clipper = CCClippingNode::create(stencil);
+//		clipper->setAnchorPoint(ccp(0.5,0.5));
+//		clipper->setPosition( ccp(0, -15) );
+//		clipper->setAlphaThreshold(0.1f);
+//		addChild(clipper);
 		
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		CCSprite* control_tutorial = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("tutorial.ccbi",this));
 		ani_manager = reader->getAnimationManager();
 		ani_manager->setDelegate(this);
-		control_tutorial->setScale(0.65f);
+//		control_tutorial->setScale(0.65f);
 		control_tutorial->setPosition(ccp(0,0));
-		clipper->addChild(control_tutorial);
+//		clipper->addChild(control_tutorial);
+		addChild(control_tutorial);
 		
-		CCLabelTTF* title_label = CCLabelTTF::create("게임 설명", mySGD->getFont().c_str(), 15);
-		title_label->setPosition(ccp(0, 111));
-		addChild(title_label);
+//		CCLabelTTF* title_label = CCLabelTTF::create("게임 설명", mySGD->getFont().c_str(), 15);
+//		title_label->setPosition(ccp(0, 111));
+//		addChild(title_label);
 		
-		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-		s_close->setColor(ccGRAY);
-		
-		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, t_selector);
-		
-		close_menu = CCMenuLambda::createWithItem(close_item);
-		close_menu->setVisible(false);
-		close_menu->setTouchPriority(touch_priority-1);
-		close_menu->setPosition(ccp(140,112));
-		addChild(close_menu);
+//		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
+//		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
+//		s_close->setColor(ccGRAY);
+//		
+//		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, t_selector);
+//		
+//		close_menu = CCMenuLambda::createWithItem(close_item);
+//		close_menu->setVisible(false);
+//		close_menu->setTouchPriority(touch_priority-1);
+//		close_menu->setPosition(ccp(140,112));
+//		addChild(close_menu);
 		
 		CCSprite* n_touch = CCSprite::create("whitePaper.png");
 		n_touch->setOpacity(0);
@@ -139,6 +143,11 @@ private:
 		{
 			state_number = 6;
 			ani_manager->runAnimationsForSequenceNamed("tutorial4");
+		}
+		else if(state_number == 7)
+		{
+			touch_menu->setVisible(false);
+			end_selector(NULL);
 		}
 	}
 };

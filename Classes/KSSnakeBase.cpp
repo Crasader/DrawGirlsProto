@@ -22,7 +22,7 @@
 
 KSSnakeBase::~KSSnakeBase()
 {
-	
+	CCLog("~KSSnakeBase");
 }
 
 

@@ -60,12 +60,12 @@ typedef enum t_DSH_Key{
 	kDSH_Key_wasTutorialPopupMissileTrace,
 	kDSH_Key_wasTutorialPopupCrashArea,
 	kDSH_Key_controlJoystickDirection,
-	kDSH_Key_isControlJoystickFixed,
-	kDSH_Key_isDisableIrregularDirection,
+	kDSH_Key_isControlJoystickNotFixed,
+	kDSH_Key_isEnableIrregularDirection,
 	kDSH_Key_isDisableDrawButton,
-	kDSH_Key_isAlwaysVisibleJoystick,
+	kDSH_Key_isAlwaysInvisibleJoystick,
 	kDSH_Key_isAlwaysCenterCharacter,
-	kDSH_Key_isEnableLineOver,
+	kDSH_Key_isDisableLineOver,
 	kDSH_Key_isJoystickCenterNotFixed,
 	
 	kDSH_Key_hasShowTutorial_int1,
@@ -111,7 +111,19 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_minigame_playedCnt,
 	kDSH_Key_minigame_int1_stageNumber, // int1 : playedCnt loop number 1 ~ playedCnt
-	kDSH_Key_minigame_int1_isPlayed // int1 : stage_number
+	kDSH_Key_minigame_int1_isPlayed, // int1 : stage_number
+	
+	kDSH_Key_was_opened_tutorial_dimed_achievement,
+	kDSH_Key_was_opened_tutorial_dimed_cardchange,
+	kDSH_Key_was_opened_tutorial_dimed_cardsetting,
+	kDSH_Key_was_opened_tutorial_dimed_cardstrength,
+	kDSH_Key_was_opened_tutorial_dimed_friendoption_invite,
+	kDSH_Key_was_opened_tutorial_dimed_friendoption_list,
+	kDSH_Key_was_opened_tutorial_dimed_friendoption_surch,
+	kDSH_Key_was_opened_tutorial_dimed_main,
+	kDSH_Key_was_opened_tutorial_dimed_rank,
+	kDSH_Key_was_opened_tutorial_dimed_startsetting
+	
 }DSH_Key;
 
 enum SpecialTutorialCode{
@@ -196,6 +208,7 @@ public:
 	void writeParamForKey (Json::Value & data, SaveUserData_Key t_key);
 	void saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector);
 	void saveAllUserData (jsonSelType t_saved);
+	void clear();
 	void resetDSH ();
 	bool isCheatKeyEnable ();
 	int getPuzzleMapSceneShowType ();

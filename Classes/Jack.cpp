@@ -415,7 +415,7 @@ void Jack::moveTest()
 				jack_img_direction = directionRight;
 			}
 		}
-		else if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+		else if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 		{
 			if(s_dv.dx == 0 && s_dv.dy == 0)
 				stopMove();
@@ -581,13 +581,13 @@ void Jack::moveTest()
 		}
 		else if(myGD->mapState[afterPoint.x][afterPoint.y] == mapEmpty)
 		{
-			if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 				myGD->communication("PM_checkBeforeNewline", afterPoint);
 			myGD->mapState[afterPoint.x][afterPoint.y] = mapNewline;
 		}
-		else if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver) && myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
+		else if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver) && myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
 		{
-			if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 				myGD->communication("PM_checkBeforeNewline", afterPoint);
 		}
 		
@@ -719,7 +719,7 @@ void Jack::moveTest()
 		setPosition(ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1));
 		if(myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
 		{
-			if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+			if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 			{
 				if(myGD->getCommunicationBool("PM_checkRemoveNewline", afterPoint))
 					myGD->mapState[afterPoint.x][afterPoint.y] = mapEmpty;
@@ -1010,7 +1010,7 @@ void Jack::endBackTracking()
 		{
 			if(myGD->mapState[i][j] == mapNewline)
 			{
-				if(myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+				if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 				{
 					if(myGD->getCommunicationBool("PM_checkRemoveNewline", IntPoint(i,j)))
 						myGD->mapState[i][j] = mapEmpty;

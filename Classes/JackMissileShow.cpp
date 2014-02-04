@@ -837,7 +837,7 @@ void JM_BasicMissileShow::realInit (CCNode * t_target, int jm_type, float missil
 		if(element_level == 6 || element_level == 9)
 			animation_cnt = 4;
 		else if(element_level == 8)
-			animation_cnt = 5;
+			animation_cnt = 6;
 		else
 			animation_cnt = 3;
 	}

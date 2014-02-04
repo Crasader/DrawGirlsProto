@@ -87,6 +87,21 @@ bool StartSettingScene::init()
 		tutorial_node = t_tutorial;
 	}
 	
+	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_startsetting))
+	{
+		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_startsetting, true);
+		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+		t_suction->target_touch_began = t_suction;
+		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+		t_suction->setTouchEnabled(true);
+		
+		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_startsetting.png");
+		dimed_tip->setPosition(ccp(240,160));
+		t_suction->addChild(dimed_tip);
+		
+		addChild(t_suction, kStartSettingZorder_popup);
+	}
+	
 	return true;
 }
 
@@ -126,7 +141,7 @@ void StartSettingScene::setMain()
 		stage_number = mySD->getSilType();
 		
 		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		stage_number_label->setPosition(ccp(49, main_case->getContentSize().height-64));
+		stage_number_label->setPosition(ccp(49, main_case->getContentSize().height+40-67));
 		main_case->addChild(stage_number_label);
 		
 		is_before_selected_event_stage = true;
@@ -139,7 +154,7 @@ void StartSettingScene::setMain()
 		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		piece_number_label->setPosition(ccp(49, main_case->getContentSize().height-64));
+		piece_number_label->setPosition(ccp(49, main_case->getContentSize().height+40-67));
 		main_case->addChild(piece_number_label);
 		
 		is_before_selected_event_stage = false;
@@ -152,7 +167,7 @@ void StartSettingScene::setMain()
 	
 	LabelTTFMarquee* mission_label = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 230, 22, mySD->getConditionContent(stage_number).c_str());
 	mission_label->setAnchorPoint(ccp(0.5,0.5));
-	mission_label->setPosition(ccp(main_case->getContentSize().width/2.f+80, main_case->getContentSize().height-62));
+	mission_label->setPosition(ccp(main_case->getContentSize().width/2.f+80, main_case->getContentSize().height+40-65));
 	main_case->addChild(mission_label);
 	mission_label->setFontSize(13);
 	mission_label->startMarquee();
@@ -179,7 +194,7 @@ void StartSettingScene::setMain()
 	back_item->setTag(kStartSettingMenuTag_back);
 	
 	CCMenu* back_menu = CCMenu::createWithItem(back_item);
-	back_menu->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height-62));
+	back_menu->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height+40-65));
 	main_case->addChild(back_menu);
 	
 	CCSprite* n_card_turn = CCSprite::create("startsetting_cardturn.png");
@@ -190,7 +205,7 @@ void StartSettingScene::setMain()
 	card_turn_item->setTag(kStartSettingMenuTag_turn);
 	
 	card_turn_menu = CCMenu::createWithItem(card_turn_item);
-	card_turn_menu->setPosition(ccp(133,36));
+	card_turn_menu->setPosition(ccp(133,33));
 	card_turn_menu->setVisible(false);
 	main_case->addChild(card_turn_menu);
 	
@@ -216,7 +231,7 @@ void StartSettingScene::setMain()
 	card_change_item->setTag(kStartSettingMenuTag_card);
 	
 	CCMenu* card_menu = CCMenu::createWithItem(card_change_item);
-	card_menu->setPosition(ccp(64,36));
+	card_menu->setPosition(ccp(64,33));
 	main_case->addChild(card_menu);
 	
 	
@@ -265,7 +280,7 @@ void StartSettingScene::setMain()
 	{
 		ITEM_CODE t_ic = item_list[i];
 		
-		CCPoint item_position = ccp(203 + (i%4)*48.5f, 208 - (i/4)*57);
+		CCPoint item_position = ccp(203 + (i%4)*48.5f, 205 - (i/4)*57);
 		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);
 		if(iter == card_options.end()) // not same option card // enable item
@@ -405,7 +420,7 @@ void StartSettingScene::setMain()
 	start_item->setTag(kStartSettingMenuTag_start);
 	
 	CCMenu* start_menu = CCMenu::createWithItem(start_item);
-	start_menu->setPosition(ccp(316, 47));
+	start_menu->setPosition(ccp(316, 44));
 	main_case->addChild(start_menu);
 }
 
@@ -436,7 +451,7 @@ void StartSettingScene::changeCard()
 		int card_level = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
 		
 		card_img = CCNode::create();
-		card_img->setPosition(ccp(94, 147));
+		card_img->setPosition(ccp(94, 144));
 		main_case->addChild(card_img);
 		
 		CCSprite* real_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
@@ -694,7 +709,7 @@ void StartSettingScene::itemAction(CCObject *sender)
 		
 		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(250, 16), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		item_title_label->setAnchorPoint(ccp(0,1));
-		item_title_label->setPosition(ccp(192, 115));
+		item_title_label->setPosition(ccp(192, 112));
 		item_title_label->setColor(ccORANGE);
 		main_case->addChild(item_title_label);
 		
@@ -706,7 +721,7 @@ void StartSettingScene::itemAction(CCObject *sender)
 		
 		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 8, CCSizeMake(250, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		option_label->setAnchorPoint(ccp(0,1));
-		option_label->setPosition(ccp(192, 100));
+		option_label->setPosition(ccp(192, 97));
 		main_case->addChild(option_label);
 		
 		
@@ -843,6 +858,21 @@ void StartSettingScene::menuAction(CCObject* sender)
 			}
 			else
 				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+		}
+		else if(tag == kStartSettingMenuTag_tip)
+		{
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+			t_suction->target_touch_began = t_suction;
+			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+			t_suction->setTouchEnabled(true);
+			
+			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_startsetting.png");
+			dimed_tip->setPosition(ccp(240,160));
+			t_suction->addChild(dimed_tip);
+			
+			addChild(t_suction, kStartSettingZorder_popup);
+			
+			is_menu_enable = true;
 		}
 		else if(tag == kStartSettingMenuTag_start)
 		{

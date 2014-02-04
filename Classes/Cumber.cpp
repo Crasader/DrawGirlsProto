@@ -615,6 +615,7 @@ void CumberParent::myInit()
 	
 	MobHpGraph* main_hp = MobHpGraph::create(mainCumber, "monster_hp_bar.png");
 	addChild(main_hp);
+	main_hp->setMinimumRate();
 	hp_graphs.push_back(main_hp);
 	
 //	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));

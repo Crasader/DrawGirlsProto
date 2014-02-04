@@ -36,7 +36,8 @@ enum CardStrengthPopupMenuTag{
 	kCardStrengthPopupMenuTag_highStrength,
 	kCardStrengthPopupMenuTag_normalStrength,
 	kCardStrengthPopupMenuTag_alignRank,
-	kCardStrengthPopupMenuTag_alignTake
+	kCardStrengthPopupMenuTag_alignTake,
+	kCardStrengthPopupMenuTag_tip
 };
 
 void CardStrengthPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
@@ -73,8 +74,8 @@ bool CardStrengthPopup::init()
 	addChild(gray, kCardStrengthPopupZorder_gray);
 	
 	main_case = CCSprite::create("cardstrength_back.png");
-	main_case->setAnchorPoint(ccp(0,0));
-	main_case->setPosition(ccp(0,-320));
+	main_case->setAnchorPoint(ccp(0.5,0.5));
+	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kCardStrengthPopupZorder_back);
 	
 	
@@ -180,16 +181,16 @@ bool CardStrengthPopup::init()
 	
 	
 	CCSprite* strength_tab = CCSprite::create("cardstrength_tab_strength.png");
-	strength_tab->setPosition(ccp(135,225));
+	strength_tab->setPosition(ccp(135,222));
 	main_case->addChild(strength_tab, kCardStrengthPopupZorder_highContent);
 	
 	CCSprite* offering_tab = CCSprite::create("cardstrength_tab_offering.png");
-	offering_tab->setPosition(ccp(229,225));
+	offering_tab->setPosition(ccp(229,222));
 	main_case->addChild(offering_tab, kCardStrengthPopupZorder_highContent);
 	
 	
 	CCSprite* plus_mark = CCSprite::create("cardstrength_plus.png");
-	plus_mark->setPosition(ccp(198.5f,175));
+	plus_mark->setPosition(ccp(198.5f,172));
 	main_case->addChild(plus_mark, kCardStrengthPopupZorder_highContent);
 	
 	
@@ -203,7 +204,7 @@ bool CardStrengthPopup::init()
 	setOfferingList();
 	
 	CCSize table_size = CCSizeMake(341, 78);
-	CCPoint table_position = ccp(29, 20);
+	CCPoint table_position = ccp(29, 17);
 	
 //	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //	temp_back->setOpacity(100);
@@ -228,6 +229,21 @@ bool CardStrengthPopup::init()
 	table_tab = NULL;
 	setTableTab();
 	
+	
+	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
+	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
+	s_tip->setColor(ccGRAY);
+	
+	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip, s_tip, this, menu_selector(CardStrengthPopup::menuAction));
+	tip_item->setTag(kCardStrengthPopupMenuTag_tip);
+	
+	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
+	tip_menu->setPosition(ccp(465,(myDSH->puzzle_ui_top-320.f)/2.f+320.f-3 -13));
+	addChild(tip_menu, kCardStrengthPopupZorder_content);
+	
+	tip_menu->setTouchPriority(-183);
+	
+	
     return true;
 }
 
@@ -242,13 +258,13 @@ void CardStrengthPopup::setTableTab()
 	if(strength_card_number == 0)
 	{
 		table_tab = CCSprite::create("cardstrength_table_tab_strength.png");
-		table_tab->setPosition(ccp(60,101));
+		table_tab->setPosition(ccp(60,98));
 		main_case->addChild(table_tab, kCardStrengthPopupZorder_highContent);
 	}
 	else
 	{
 		table_tab = CCSprite::create("cardstrength_table_tab_offering.png");
-		table_tab->setPosition(ccp(60,101));
+		table_tab->setPosition(ccp(60,98));
 		main_case->addChild(table_tab, kCardStrengthPopupZorder_highContent);
 	}
 }
@@ -266,7 +282,7 @@ void CardStrengthPopup::setStrengthNode(int t_card_number)
 	if(strength_card_number == 0)
 	{
 		strength_node = CCSprite::create("cardstrength_frame.png");
-		strength_node->setPosition(ccp(152,174));
+		strength_node->setPosition(ccp(152,171));
 		main_case->addChild(strength_node, kCardStrengthPopupZorder_content);
 		
 		CCSprite* tip = CCSprite::create("cardstrength_tip_strength.png");
@@ -281,7 +297,7 @@ void CardStrengthPopup::setStrengthNode(int t_card_number)
 		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, strength_card_number);
 		
 		strength_node = CCNode::create();
-		strength_node->setPosition(ccp(152,174));
+		strength_node->setPosition(ccp(152,171));
 		main_case->addChild(strength_node, kCardStrengthPopupZorder_content);
 		
 		CCSprite* n_strength = CCSprite::create("cardstrength_frame.png");
@@ -418,7 +434,7 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 	if(offering_card_number == 0)
 	{
 		offering_node = CCSprite::create("cardstrength_frame.png");
-		offering_node->setPosition(ccp(246,174));
+		offering_node->setPosition(ccp(246,171));
 		main_case->addChild(offering_node, kCardStrengthPopupZorder_content);
 		
 		if(strength_card_number != 0)
@@ -436,7 +452,7 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_card_number);
 		
 		offering_node = CCNode::create();
-		offering_node->setPosition(ccp(246,174));
+		offering_node->setPosition(ccp(246,171));
 		main_case->addChild(offering_node, kCardStrengthPopupZorder_content);
 		
 		CCSprite* n_offering = CCSprite::create("cardstrength_frame.png");
@@ -553,10 +569,13 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 		}
 		
 		strength_probability = CCSprite::create("cardsetting_probability.png");
-		strength_probability->setPosition(ccp(198.5,150));
+		strength_probability->setPosition(ccp(198.5,147));
 		main_case->addChild(strength_probability, kCardStrengthPopupZorder_highContent);
 		
 		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+		
+		if(strength_rate > 1.f)
+			strength_rate = 1.f;
 		
 		CCLabelTTF* probability_label = CCLabelTTF::create(CCString::createWithFormat("%.1f", strength_rate*100.f)->getCString(), mySGD->getFont().c_str(), 10);
 		probability_label->setAnchorPoint(ccp(1.f,0.5f));
@@ -778,7 +797,7 @@ void CardStrengthPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardStrengthPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -794,6 +813,23 @@ void CardStrengthPopup::endShowPopup()
 		t_tutorial->initStep(kTutorialFlowStep_upgradeScript);
 		addChild(t_tutorial, kCardStrengthPopupZorder_popup);
 	}
+	else
+	{
+		if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardstrength))
+		{
+			myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardstrength, true);
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+			t_suction->target_touch_began = t_suction;
+			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+			t_suction->setTouchEnabled(true);
+			
+			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardstrength.png");
+			dimed_tip->setPosition(ccp(240,160));
+			t_suction->addChild(dimed_tip);
+			
+			addChild(t_suction, kCardStrengthPopupZorder_popup);
+		}
+	}
 	
 	is_menu_enable = true;
 }
@@ -805,7 +841,7 @@ void CardStrengthPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,-320));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardStrengthPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -822,11 +858,11 @@ CCPoint CardStrengthPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kCardStrengthPopupMenuTag_close)						return_value = ccp(452,259);
-	else if(t_tag == kCardStrengthPopupMenuTag_highStrength)			return_value = ccp(415,204);
-	else if(t_tag == kCardStrengthPopupMenuTag_normalStrength)			return_value = ccp(415,150);
-	else if(t_tag == kCardStrengthPopupMenuTag_alignRank)				return_value = ccp(416,78);
-	else if(t_tag == kCardStrengthPopupMenuTag_alignTake)				return_value = ccp(416,39);
+	if(t_tag == kCardStrengthPopupMenuTag_close)						return_value = ccp(452,256);
+	else if(t_tag == kCardStrengthPopupMenuTag_highStrength)			return_value = ccp(415,201);
+	else if(t_tag == kCardStrengthPopupMenuTag_normalStrength)			return_value = ccp(415,147);
+	else if(t_tag == kCardStrengthPopupMenuTag_alignRank)				return_value = ccp(416,75);
+	else if(t_tag == kCardStrengthPopupMenuTag_alignTake)				return_value = ccp(416,36);
 	
 	return return_value;
 }
@@ -923,6 +959,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 	{
 		if(mySGD->getStar() >= mySGD->getCardUpgradeRubyFee() && offering_card_number > 0)
 		{
+			save_offering_number = offering_card_number;
 			mySGD->setStar(mySGD->getStar() - mySGD->getCardUpgradeRubyFee());
 			
 			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
@@ -1116,6 +1153,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 		{
 			mySGD->setGold(mySGD->getGold() - mySGD->getCardUpgradeGoldFee());
 			
+			save_offering_number = offering_card_number;
 			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 			CCLog("strength_rate : %.3f", strength_rate);
 			
@@ -1183,6 +1221,21 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			is_menu_enable = true;
 		}
 	}
+	else if(tag == kCardStrengthPopupMenuTag_tip)
+	{
+		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+		t_suction->target_touch_began = t_suction;
+		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+		t_suction->setTouchEnabled(true);
+		
+		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardstrength.png");
+		dimed_tip->setPosition(ccp(240,160));
+		t_suction->addChild(dimed_tip);
+		
+		addChild(t_suction, kCardStrengthPopupZorder_popup);
+		
+		is_menu_enable = true;
+	}
 }
 
 void CardStrengthPopup::replayAction(CCObject* sender)
@@ -1204,13 +1257,16 @@ void CardStrengthPopup::resultStrength(Json::Value result_data)
 		int strength_stage = NSDS_GI(kSDS_CI_int1_stage_i, strength_card_number);
 		int strength_grade = NSDS_GI(kSDS_CI_int1_grade_i, strength_card_number);
 		
+		int offering_stage = NSDS_GI(kSDS_CI_int1_stage_i, save_offering_number);
+		int offering_grade = NSDS_GI(kSDS_CI_int1_grade_i, save_offering_number);
+		
 		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",strength_stage,strength_grade)->getCString());
 		CardCase* cardCase = CardCase::create(strength_card_number);
 		card->addChild(cardCase);
 		
 		
-		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",strength_stage,strength_grade)->getCString());
-		CardCase* cardCase2 = CardCase::create(strength_card_number);
+		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",offering_stage,offering_grade)->getCString());
+		CardCase* cardCase2 = CardCase::create(save_offering_number);
 		card2->addChild(cardCase2);
 		
 		

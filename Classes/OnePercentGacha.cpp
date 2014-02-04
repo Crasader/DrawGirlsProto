@@ -65,8 +65,7 @@ void OnePercentGacha::menuAction (CCObject * sender)
 	if(tag == kOnePercentGacha_MT_ok)
 	{
 		myLog->addLog(kLOG_gacha_onePercent, -1);
-		myDSH->setIntegerForKey(kDSH_Key_savedGold, myDSH->getIntegerForKey(kDSH_Key_savedGold) - 500);
-		mySGD->setKeepGold(mySGD->getKeepGold() - 500);
+		mySGD->setStar(mySGD->getStar() - mySGD->getGachaOnePercentFee());
 		gachaOn();
 		ok_menu->removeFromParent();
 		

@@ -223,6 +223,21 @@ bool MainFlowScene::init()
 		}
 	}
 	
+	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main))
+	{
+		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main, true);
+		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+		t_suction->target_touch_began = t_suction;
+		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+		t_suction->setTouchEnabled(true);
+		
+		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_main.png");
+		dimed_tip->setPosition(ccp(240,160));
+		t_suction->addChild(dimed_tip);
+		
+		addChild(t_suction, kMainFlowZorder_popup);
+	}
+	
 	return true;
 }
 
@@ -792,7 +807,6 @@ void MainFlowScene::menuAction(CCObject* sender)
 			addChild(t_pp, kMainFlowZorder_popup);
 			
 			postbox_count_case->setVisible(false);
-			postbox_count_label->setVisible(false);
 		}
 		else if(tag == kMainFlowMenuTag_option)
 		{
@@ -802,6 +816,17 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_tip)
 		{
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+			t_suction->target_touch_began = t_suction;
+			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+			t_suction->setTouchEnabled(true);
+			
+			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_main.png");
+			dimed_tip->setPosition(ccp(240,160));
+			t_suction->addChild(dimed_tip);
+			
+			addChild(t_suction, kMainFlowZorder_popup);
+			
 			is_menu_enable = true;
 		}
 		else if(tag == kMainFlowMenuTag_rank)

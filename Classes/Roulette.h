@@ -47,7 +47,7 @@ protected:
 	GachaCategory m_gachaCategory;
 	//	float m_itemTopY[3];
 public:
-	KSAlertView* m_parent;
+	KSAlertView* m_parentDialog;
 	std::function<void(void)> m_callback;
 	RouletteSub() : m_state(RouletteState::kPutBoard), m_timer(0)
 	{

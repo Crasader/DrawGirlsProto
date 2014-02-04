@@ -59,6 +59,7 @@ public:
 		m_text1->setPosition(ccp(m_text1->getContentSize().width*-1,height/2));
 		m_text1->setTag(-2);
 		
+		
 		m_text2 = CCLabelTTF::create(m_texts[0].c_str(), mySGD->getFont().c_str(), height);
 		m_text2->setAnchorPoint(ccp(0,0.5));
 		m_text2->setTag(0);

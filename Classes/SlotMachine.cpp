@@ -28,7 +28,7 @@ void SlotMachineSub::update(float dt)
 		RewardKind kind = m_rewards[ m_alreadyDeterminantOrder ]->m_kind;
 		int selectedItemValue = m_rewards[ m_alreadyDeterminantOrder ]->m_value;
 		std::function<void(void)> replayFunction;
-	 
+		CCNode* parentPointer = getParent();
 		if(m_gachaMode == kGachaPurchaseStartMode_select){ // 선택으로 들어온 거라면 다시 하기가 가능함.
 			replayFunction = [=]() {
 				 // 선택으로 들어온 거라면 다시 하기가 가능함.
@@ -38,12 +38,11 @@ void SlotMachineSub::update(float dt)
 
 					});
 
-
 					std::vector<RewardSprite*> rewards;
 					for(auto i : m_rewards) {
 						rewards.push_back(RewardSprite::create(i->m_kind, i->m_value, i->m_spriteStr, i->m_weight));
 					}
-					getParent()->addChild(SlotMachineSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
+					parentPointer->addChild(SlotMachineSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
 							this->getZOrder());
 					this->removeFromParent();
 				}
@@ -187,11 +186,11 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 	//		setContentSize(av->getViewSize());
 
 	CCSprite* back = CCSprite::create("gacha4_back.png");
-	back->setPosition(ccp(240, 189));
+	back->setPosition(ccp(240, 150));
 	addChild(back);
 
 	CCSprite* back2 = CCSprite::create("gacha4_back_2.png");
-	back2->setPosition(ccp(240, 189));
+	back2->setPosition(ccp(240, 135));
 	addChild(back2, 3);
 
 
@@ -200,10 +199,10 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 		CCDrawNode* shape = CCDrawNode::create();
 
 		CCPoint pts[4];
-		pts[0] = ccp( 0, 0);
-		pts[1] = ccp( 0, 230 - 98);
-		pts[2] = ccp( 179 - 113, 230 - 98);
-		pts[3] = ccp( 179 - 113, 0);
+		pts[0] = ccp( 0, 3);
+		pts[1] = ccp( 0, 114);
+		pts[2] = ccp( 179 - 113, 114);
+		pts[3] = ccp( 179 - 113, 3);
 
 		shape->drawPolygon(pts, 4, ccc4f(1, 1, 1, 1), 0, ccc4f(1, 0, 0, 1));
 
@@ -233,18 +232,18 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 
 		CCSprite* topGray = CCSprite::create("gacha4_shadow.png");
 		topGray->setAnchorPoint(ccp(0.5f, 1.f));
-		topGray->setPosition(ccp(33, 230 - 98));
+		topGray->setPosition(ccp(33, 121));
 		m_clipSlot[slot]->addChild(topGray);
 
 		CCSprite* bottomGray = CCSprite::create("gacha4_shadow.png");
 		bottomGray->setFlipY(true);
 		bottomGray->setAnchorPoint(ccp(0.5f, 0.f));
-		bottomGray->setPosition(ccp(33, 0));
+		bottomGray->setPosition(ccp(33, -1));
 		m_clipSlot[slot]->addChild(bottomGray);
 	}
-	m_clipSlot[0]->setPosition(ccp(113, 98));
-	m_clipSlot[1]->setPosition(ccp(206, 98));
-	m_clipSlot[2]->setPosition(ccp(299, 98));
+	m_clipSlot[0]->setPosition(ccp(138, 72));
+	m_clipSlot[1]->setPosition(ccp(209, 72));
+	m_clipSlot[2]->setPosition(ccp(279, 72));
 
 	m_menu = CCMenuLambda::create();
 	m_menu->setPosition(ccp(0, 0));

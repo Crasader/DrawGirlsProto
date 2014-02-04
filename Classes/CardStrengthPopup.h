@@ -77,6 +77,7 @@ private:
 	
 	StrengthCardAnimation* result_popup;
 	string result_string;
+	int save_offering_number;
 	bool is_success;
 	CCSprite* loading_img;
 	CCLabelTTF* loading_label;

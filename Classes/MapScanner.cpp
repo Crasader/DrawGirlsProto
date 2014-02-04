@@ -258,8 +258,6 @@ void MapScanner::resetRects(bool is_after_scanmap)
 	
 	myGD->communication("UI_setPercentage", float(drawCellCnt/mySD->must_cnt), is_after_scanmap);
 	
-	myGD->communication("Main_hideDrawButtonTutorial");
-	
 	if(mySGD->is_write_replay)
 	{
 		if(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
@@ -1261,8 +1259,8 @@ void VisibleParent::setMoveGamePosition( CCPoint t_p )
 		float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
 		if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
 		{
-			if(x_value > myGD->boarder_value)													x_value = myGD->boarder_value;
-			else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f)					x_value = -320*myGD->game_scale-myGD->boarder_value+480.f;
+			if(x_value > myGD->boarder_value+50)													x_value = myGD->boarder_value+50;
+			else if(x_value < -320*myGD->game_scale-myGD->boarder_value+480.f-50)					x_value = -320*myGD->game_scale-myGD->boarder_value+480.f-50;
 		}
 		
 

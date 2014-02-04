@@ -134,10 +134,11 @@ string StarGoldData::getFont()
 {
 	string font_name;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "AppleGothic";
+	font_name = "RixMGoB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	font_name = "";
+	font_name = "fonts/RixMGoB.ttf";
 #endif
+	
 	return font_name;
 }
 
@@ -939,6 +940,8 @@ void StarGoldData::myInit()
 
 	if(!myDSH->getBoolForKey(kDSH_Key_notFirstExe))
 	{
+		myDSH->setBoolForKey(kDSH_Key_isDisableDrawButton, true);
+		
 		myDSH->setBoolForKey(kDSH_Key_notFirstExe, true);
 		is_tutorial_cleared = false;
 		myDSH->setBoolForKey(kDSH_Key_bgmOff, false);

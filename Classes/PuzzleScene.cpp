@@ -1450,7 +1450,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
 				mySD->setSilType(selected_stage_number);
 				mySGD->setIsMeChallenge(true);
-				mySGD->setMeChallengeTarget(friend_list[selected_friend_idx].user_id, friend_list[selected_friend_idx].nickname, friend_list[selected_friend_idx].score);
+				mySGD->setMeChallengeTarget(friend_list[selected_friend_idx].user_id, friend_list[selected_friend_idx].nickname, friend_list[selected_friend_idx].score, friend_list[selected_friend_idx].img_url);
 				CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 			}
 			else

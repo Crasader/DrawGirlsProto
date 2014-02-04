@@ -333,7 +333,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 
 
-		title = CCLabelTTF::create((contentObj["nick"].asString() + "님의").c_str(), "Helvetica",12);
+		title = CCLabelTTF::create((contentObj["nick"].asString() + "님의").c_str(), mySGD->getFont().c_str(),12);
 		title->setPosition(ccp(38 + 5,28));
 		title->setAnchorPoint(CCPointZero);
 		title->setTag(kMP_MT_title);
@@ -343,7 +343,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 		switch(type)
 		{
 			case kHeart:
-				comment = "하트가 도착했어요.";
+				comment = "코인이 도착했어요.";
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_cell_receive.png", "postbox_cell_receive.png",
 					 [=](CCObject* sender)
@@ -363,7 +363,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 (mailNo, mail["memberID"].asInt64(),
 						[=](Json::Value r)
 						{
-						//하트올리기
+						//코인올리기
 						//						if(myDSH->getIntegerForKey(kDSH_Key_heartCnt)<5)
 						{
 							myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
@@ -472,7 +472,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 mySGD->setRemoveMessageMailNo(mailNo);
 						 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
 						 mySGD->setAcceptChallengeTarget(mail["friendID"].asString(), mail["nickname"].asString(),
-							 contentObj["score"].asFloat(), contentObj["replaydata"]);
+							 contentObj["score"].asFloat(), contentObj["replaydata"], mail["profile"].asString());
 						 mySD->setSilType(contentObj["challengestage"].asInt());
 						 mySGD->setIsAcceptChallenge(true);
 						 // ST 받고 성공시 창 띄움.. & sender->removeFromParent();
@@ -495,7 +495,6 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					av->show();
 					 }
 				);
-				sendBtn->setScale(0.5f);
 				sendBtn->setPosition(ccp(180, 22));
 
 				_menu->addChild(sendBtn,2);
@@ -579,7 +578,6 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 }
 					 }
 				);
-				sendBtn->setScale(0.5f);
 				sendBtn->setPosition(ccp(180, 22));
 
 				_menu->addChild(sendBtn,2);
@@ -589,7 +587,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				comment = "도움요청이 도착했어요.";
 
 				sendBtn = CCMenuItemImageLambda::create
-					("postbox_help_ok.png", "postbox_help_ok.png",
+					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 					 [=](CCObject*)
 					 {
 					 KSAlertView* av = KSAlertView::create();
@@ -648,7 +646,6 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					av->show();
 					 });
 				sendBtn->setPosition(ccp(180, 22));
-				sendBtn->setScale(0.5f);
 
 				_menu->addChild(sendBtn,2);
 				break;
@@ -732,7 +729,6 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 }
 				);
 				sendBtn->setPosition(ccp(180, 22));
-				sendBtn->setScale(0.5f);
 
 				_menu->addChild(sendBtn,2);
 				break;
@@ -813,7 +809,6 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 }
 				);
 				sendBtn->setPosition(ccp(180, 22));
-				sendBtn->setScale(0.5f);
 				_menu->addChild(sendBtn,2);
 				break;
 			case kTicketResult:
@@ -957,7 +952,6 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 }
 				);
 				sendBtn->setPosition(ccp(180, 22));
-				sendBtn->setScale(0.5f);
 
 				_menu->addChild(sendBtn,2);
 				break;
@@ -1046,7 +1040,6 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 });
 
 				sendBtn->setPosition(ccp(180, 22));
-				sendBtn->setScale(0.5f);
 
 				_menu->addChild(sendBtn,2);
 				break;
@@ -1059,7 +1052,6 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 });
 
 				sendBtn->setPosition(ccp(180, 22));
-				sendBtn->setScale(0.5f);
 
 				_menu->addChild(sendBtn,2);
 				break;
@@ -1081,7 +1073,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				///
 		}
 
-		score = CCLabelTTF::create(comment.c_str(),"Helvetica", 12.f);
+		score = CCLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 12.f);
 		score->setPosition(ccp(45,5));
 		score->setAnchorPoint(CCPointZero);
 		score->setTag(kMP_MT_score);

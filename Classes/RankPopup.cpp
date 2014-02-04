@@ -10,6 +10,7 @@
 #include "SendMessageUtil.h"
 
 #include <boost/format.hpp>
+#include "KHAlertView.h"
 #define LZZ_INLINE inline
 using namespace cocos2d::extension;
 using namespace std;
@@ -223,6 +224,18 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	("rank_friend_rank_3.png", "rank_friend_rank_3.png",
 	 [=](CCObject* t)
 	 {
+		 if(m_rankCategory != RankCategory::kRealTotalFriend) {
+			 m_rankCategory = RankCategory::kRealTotalFriend;
+			 if(rankTableView) {
+				 rankTableView->removeFromParent();
+				 rankTableView = nullptr;
+			 }
+			 m_currentSelectSprite = nullptr;
+			 loadRank();
+			 m_onlyKatok->setOpacity(0);
+			 m_onlyGameFriend->setOpacity(0);
+			 m_totalFriend->setOpacity(255);
+		 }
 		 //if(m_rankCategory != RankCategory::kTotalFriend)
 		 //{
 			 //m_rankCategory = RankCategory::kTotalFriend;
@@ -280,118 +293,207 @@ void RankPopup::loadRank ()
 	 },
 	 */
 	
-	Json::Value appfriends;
-	if(m_rankCategory != RankCategory::kUnknownFriend)
+	if(m_rankCategory == RankCategory::kRealTotalFriend)
 	{
-		for(auto i : KnownFriends::getInstance()->getFriends())
-		{
-			Json::Value v;
-			v["friends_nickname"] = i.nick;
-			v["hashed_talk_user_id"] = i.hashedTalkUserId;
-			v["message_blocked"] = i.messageBlocked;
-			v["nickname"] = i.nick;
-			v["profile_image_url"] = i.profileUrl;
-			v["user_id"] = i.userId;
-			appfriends.append(v);
-		}
+		Json::Value p;
+		p["memberID"] = hspConnector::get()->getKakaoID();
+		hspConnector::get()->command("getallweeklyscorelist",p,[=](Json::Value obj) {
+			if(obj["result"]["code"].asInt() != GDSUCCESS){
+				return;
+			}
+
+			KS::KSLog("%", obj);
+			Json::Value scorelist;
+			return;
+			//for(unsigned int i=0;i<appfriends.size();i++){
+				//string mid = appfriends[i]["user_id"].asString();
+				//scorelist[mid]=appfriends[i];
+			//}
+
+			for(unsigned int j=0;j<obj["list"].size();j++){
+				string mid = obj["list"][j]["memberID"].asString();
+				scorelist[mid]["scoreInfo"]=obj["list"][j];
+			}
+			GraphDogLib::JsonToLog("result", scorelist);
+			Json::Value scorearray;
+			for(auto iter = scorelist.begin(); iter != scorelist.end(); ++iter) {
+				Json::Value temp = scorelist[iter.key().asString()];
+				temp["user_id"] = iter.key().asString();
+				scorearray.append(temp);
+			}
+
+			// 정렬 함
+			// Selection Sort
+			int N = scorearray.size();
+			for (int i = 0; i < (N - 1); i++) {
+				int minIndex = i;
+
+				// Find the index of the minimum element
+				for (int j = i + 1; j < N; j++) {
+					if (scorearray[j]["scoreInfo"].get("score", -1).asInt() > scorearray[minIndex]["scoreInfo"].get("score", -1).asInt()) {
+						minIndex = j;
+					}
+				}
+
+				// Swap if i-th element not already smallest
+				if (minIndex > i) {
+					scorearray[i].swap(scorearray[minIndex]);
+					//            swap(a[i], a[minIndex]);
+				}
+			}
+
+//			{
+//				"friends_nickname" : "영호",
+//				"hashed_talk_user_id" : "AM1JWVlJzQA",
+//				"message_blocked" : false,
+//				"nickname" : "영호",
+//				"profile_image_url" : "http://th-p4.talk.kakao.co.kr/th/talkp/wkeGgMCyHT/CZWvl7uekgzKEBYHlBGkV1/ribpwj_110x110_c.jpg",
+//				"scoreInfo" :
+//				{
+//					"data" : "{\"allhighscore\":94707,\"selectedcard\":0}\n",
+//					"memberID" : 88741857374149376,
+//					"no" : 138,
+//					"regDate" : 20140203214344,
+//					"regWeek" : 2014006,
+//					"score" : 2158276
+//				},
+//				"user_id" : "88741857374149376"
+//			}
+			// 위 것들이 scorearray 임.
+			//결과 돌려줌
+			p1(scorearray);
+		});
 	}
-	if(m_rankCategory != RankCategory::kKnownFriend)
+	else
 	{
-		for(auto i : UnknownFriends::getInstance()->getFriends())
+		Json::Value appfriends;
+		if(m_rankCategory == RankCategory::kTotalFriend)
 		{
-			Json::Value v;
-			v["friends_nickname"] = i.nick;
-			v["hashed_talk_user_id"] = i.hashedTalkUserId;
-			v["message_blocked"] = i.messageBlocked;
-			v["nickname"] = i.nick;
-			v["profile_image_url"] = i.profileUrl;
-			v["user_id"] = i.userId;
-			appfriends.append(v);
+			for(auto i : KnownFriends::getInstance()->getFriends())
+			{
+				Json::Value v;
+				v["friends_nickname"] = i.nick;
+				v["hashed_talk_user_id"] = i.hashedTalkUserId;
+				v["message_blocked"] = i.messageBlocked;
+				v["nickname"] = i.nick;
+				v["profile_image_url"] = i.profileUrl;
+				v["user_id"] = i.userId;
+				appfriends.append(v);
+			}
+			for(auto i : UnknownFriends::getInstance()->getFriends())
+			{
+				Json::Value v;
+				v["friends_nickname"] = i.nick;
+				v["hashed_talk_user_id"] = i.hashedTalkUserId;
+				v["message_blocked"] = i.messageBlocked;
+				v["nickname"] = i.nick;
+				v["profile_image_url"] = i.profileUrl;
+				v["user_id"] = i.userId;
+				appfriends.append(v);
+			}
 		}
-	}
-	appfriends.append(hspConnector::get()->myKakaoInfo);
-	Json::Value p;
-	
-	
-	
-	if(m_rankCategory != RankCategory::kUnknownFriend)
-	{
-		for(auto i : KnownFriends::getInstance()->getFriends())
+		else if(m_rankCategory == RankCategory::kKnownFriend)
 		{
-			p["memberIDList"].append(i.userId);
+			for(auto i : KnownFriends::getInstance()->getFriends())
+			{
+				Json::Value v;
+				v["friends_nickname"] = i.nick;
+				v["hashed_talk_user_id"] = i.hashedTalkUserId;
+				v["message_blocked"] = i.messageBlocked;
+				v["nickname"] = i.nick;
+				v["profile_image_url"] = i.profileUrl;
+				v["user_id"] = i.userId;
+				appfriends.append(v);
+			}
 		}
-	}
-	if(m_rankCategory != RankCategory::kKnownFriend)
-	{
-		
-		for(auto i : UnknownFriends::getInstance()->getFriends())
+		appfriends.append(hspConnector::get()->myKakaoInfo);
+		Json::Value p;
+
+
+
+		if(m_rankCategory == RankCategory::kKnownFriend)
 		{
-			p["memberIDList"].append(i.userId);
+			for(auto i : KnownFriends::getInstance()->getFriends())
+			{
+				p["memberIDList"].append(i.userId);
+			}
 		}
+		else if(m_rankCategory == RankCategory::kTotalFriend)
+		{
+			for(auto i : KnownFriends::getInstance()->getFriends())
+			{
+				p["memberIDList"].append(i.userId);
+			}
+			for(auto i : UnknownFriends::getInstance()->getFriends())
+			{
+				p["memberIDList"].append(i.userId);
+			}
+		}
+
+
+		p["memberIDList"].append(hspConnector::get()->getKakaoID());
+		//step2 위클리스코어 목록 읽어옴
+		hspConnector::get()->command("getweeklyscorelist",p,[p1,appfriends,this](Json::Value obj) {
+			// 남은 초.... obj["remainTime"].asInt();
+			int remainSeconds = obj["remainTime"].asInt();
+			std::string remainStr = ::getRemainTimeMsg(remainSeconds);
+			
+			CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
+			remainFnt->setPosition(ccp(398, 223));
+			this->addChild(remainFnt, kRP_Z_rankTable);
+			CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
+
+
+			//step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
+			GraphDogLib::JsonToLog("friend1", appfriends);
+
+			if(obj["result"]["code"].asInt() != GDSUCCESS){
+				return;
+			}
+			Json::Value scorelist;
+
+			for(unsigned int i=0;i<appfriends.size();i++){
+				string mid = appfriends[i]["user_id"].asString();
+				scorelist[mid]=appfriends[i];
+			}
+
+			for(unsigned int j=0;j<obj["list"].size();j++){
+				string mid = obj["list"][j]["memberID"].asString();
+				scorelist[mid]["scoreInfo"]=obj["list"][j];
+			}
+			GraphDogLib::JsonToLog("result", scorelist);
+			Json::Value scorearray;
+			for(auto iter = scorelist.begin(); iter != scorelist.end(); ++iter) {
+				Json::Value temp = scorelist[iter.key().asString()];
+				temp["user_id"] = iter.key().asString();
+				scorearray.append(temp);
+			}
+
+			// 정렬 함
+			// Selection Sort
+			int N = scorearray.size();
+			for (int i = 0; i < (N - 1); i++) {
+				int minIndex = i;
+
+				// Find the index of the minimum element
+				for (int j = i + 1; j < N; j++) {
+					if (scorearray[j]["scoreInfo"].get("score", -1).asInt() > scorearray[minIndex]["scoreInfo"].get("score", -1).asInt()) {
+						minIndex = j;
+					}
+				}
+
+				// Swap if i-th element not already smallest
+				if (minIndex > i) {
+					scorearray[i].swap(scorearray[minIndex]);
+					//            swap(a[i], a[minIndex]);
+				}
+			}
+
+			KS::KSLog("%", scorearray);
+			//결과 돌려줌
+			p1(scorearray);
+		});
 	}
-	
-	
-	p["memberIDList"].append(hspConnector::get()->getKakaoID());
-	
-	//step2 위클리스코어 목록 읽어옴
-	hspConnector::get()->command("getweeklyscorelist",p,[p1,appfriends](Json::Value obj)
-															 {
-																 CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
-																 
-																 
-																 //step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
-																 GraphDogLib::JsonToLog("friend1", appfriends);
-																 
-																 if(obj["result"]["code"].asInt() != GDSUCCESS)
-																	 return;
-																 
-																 Json::Value scorelist;
-																 
-																 for(unsigned int i=0;i<appfriends.size();i++){
-																	 string mid = appfriends[i]["user_id"].asString();
-																	 scorelist[mid]=appfriends[i];
-																 }
-																 
-																 for(unsigned int j=0;j<obj["list"].size();j++){
-																	 string mid = obj["list"][j]["memberID"].asString();
-																	 scorelist[mid]["scoreInfo"]=obj["list"][j];
-																 }
-																 GraphDogLib::JsonToLog("result", scorelist);
-																 Json::Value scorearray;
-																 for(auto iter = scorelist.begin(); iter != scorelist.end(); ++iter)
-																 {
-																	 Json::Value temp = scorelist[iter.key().asString()];
-																	 temp["user_id"] = iter.key().asString();
-																	 scorearray.append(temp);
-																 }
-																 
-																 // 정렬 함
-																 // Selection Sort
-																 int N = scorearray.size();
-																 for (int i = 0; i < (N - 1); i++)
-																 {
-																	 int minIndex = i;
-																	 
-																	 // Find the index of the minimum element
-																	 for (int j = i + 1; j < N; j++)
-																	 {
-																		 if (scorearray[j]["scoreInfo"].get("score", -1).asInt() > scorearray[minIndex]["scoreInfo"].get("score", -1).asInt())
-																		 {
-																			 minIndex = j;
-																		 }
-																	 }
-																	 
-																	 // Swap if i-th element not already smallest
-																	 if (minIndex > i)
-																	 {
-																		 scorearray[i].swap(scorearray[minIndex]);
-																		 //            swap(a[i], a[minIndex]);
-																	 }
-																 }
-																 
-																 //결과 돌려줌
-																 p1(scorearray);
-															 });
 }
 void RankPopup::drawRank (Json::Value obj)
 {
@@ -541,73 +643,111 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	_menu->setTag(kRP_RT_menu);
 	cell->addChild(_menu, kRP_Z_send);
 	
-	if(::getHeartIsSendable( m_scoreList[idx]["user_id"].asString(), mySGD->getHeartSendCoolTime() ))
+	int remainTime = ::getHeartSendingRemainTime( m_scoreList[idx]["user_id"].asString(), mySGD->getHeartSendCoolTime() );
+	if(remainTime <= 0)
 	{
 		sendBtn = CCMenuItemImageLambda::create
 		("rank_cell_send.png", "rank_cell_send.png",
 		 [=](CCObject* sender){
-			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-			 int idx = (int)obj->getUserData();
-			 ////////////////////////////////
-			 // 쪽지보내기 - HSP
-			 ////////////////////////////////
-			 
-			 
-			 Json::Value p;
-			 Json::Value contentJson;
-			 
-			 contentJson["msg"] = "하트받으쇼~";
-			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
-			 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-			 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-			 std::string recvId = m_scoreList[idx]["user_id"].asString();
-			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' 제거
-			 p["receiverMemberID"] = recvId;
-			 p["senderMemberID"]=hspConnector::get()->getKakaoID();
-			 p["type"]=kHeart;
-			 p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-				 
-			 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
-										  {
-											  //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-											  //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-											  //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-											  GraphDogLib::JsonToLog("sendMessage", r);
-												if(r["result"]["code"].asInt() != GDSUCCESS)
-													return;
-												
-											  ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
-												
-												mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
-												myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
-																						{
-																							
-																						});
-												
-											  obj->removeFromParent();
-											  
-											  CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
-																											  [](CCObject*){});
-											  sendBtn1->setPosition(sendBtnPosition);
-											  _menu->addChild(sendBtn1,2);
-											  ////////////////////////////////
-											  // 쪽지보내기 - 카카오
-											  ////////////////////////////////
-											  Json::Value p2;
-											  p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
-											  p2["message"] = "하트받으세용!";
-											  hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
-																				{
-																					GraphDogLib::JsonToLog("kSendMessage", r);
-																					//																																						this->closePopup(0,0);
-																				});
-										  });
+
+			 KHAlertView* av = KHAlertView::create(); 
+			 av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+					 [=](CCObject*){
+					 }
+					 ));
+			 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+			 av->setWidth(240);
+			 av->setHeight(240);
+			 av->setTitleHeight(10);
+			 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+			 av->setCenterY(150);
+
+			 CCNode* emptyNode = CCNode::create();
+			 auto ttf = CCLabelTTF::create("코인을 보내겠습니까?", mySGD->getFont().c_str(), 12.f); 
+			 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+			 //	con->setAnchorPoint(ccp(0, 0));
+			 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+			 ttf->setColor(ccc3(255, 255, 255));
+			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+			 emptyNode->addChild(ttf);
+			 av->setContentNode(
+					 emptyNode
+					 );
+			 av->setContentSize(ttf->getDimensions());
+			 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+					 [=](CCObject* e) {
+						 CCLog("ok!!");
+						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
+						 int idx = (int)obj->getUserData();
+						 ////////////////////////////////
+						 // 쪽지보내기 - HSP
+						 ////////////////////////////////
+
+
+						 Json::Value p;
+						 Json::Value contentJson;
+
+						 contentJson["msg"] = "하트받으쇼~";
+						 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
+						 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+						 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+						 std::string recvId = m_scoreList[idx]["user_id"].asString();
+						 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' 제거
+						 p["receiverMemberID"] = recvId;
+						 p["senderMemberID"]=hspConnector::get()->getKakaoID();
+						 p["type"]=kHeart;
+						 p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+
+						 hspConnector::get()->command("sendMessage", p, [=](Json::Value r) {
+							 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+							 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+							 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+							 GraphDogLib::JsonToLog("sendMessage", r);
+							 if(r["result"]["code"].asInt() != GDSUCCESS){
+								 return;
+							 }
+							 ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
+
+							 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
+							 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+
+							 });
+
+							 obj->removeFromParent();
+							 std::string remainStr = ::getRemainTimeMsg( mySGD->getHeartSendCoolTime() );
+							 CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
+
+							 CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
+								 [](CCObject*){});
+							 sendBtn1->setPosition(sendBtnPosition);
+							 _menu->addChild(sendBtn1,2);
+							 sendBtn1->addChild(remainFnt);
+							 remainFnt->setPosition(ccp(sendBtn1->getContentSize().width / 2.f, sendBtn1->getContentSize().height / 2.f));
+							 ////////////////////////////////
+							 // 쪽지보내기 - 카카오
+							 ////////////////////////////////
+							 Json::Value p2;
+							 p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
+							 p2["message"] = "하트받으세용!";
+							 hspConnector::get()->kSendMessage(p2, [=](Json::Value r) {
+								 GraphDogLib::JsonToLog("kSendMessage", r);
+								 //																																						this->closePopup(0,0);
+							 });
+						 });
+					 });
+			 addChild(av, 99999999);
+			 av->show();
+
 		 });
 	}
 	else
 	{
 		sendBtn = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
 												[](CCObject*){});
+		std::string remainStr = ::getRemainTimeMsg( remainTime );
+		CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
+		remainFnt->setPosition(ccp(sendBtn->getContentSize().width / 2.f, sendBtn->getContentSize().height / 2.f));
+		sendBtn->addChild(remainFnt);
 	}
 	
 	
@@ -619,20 +759,20 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	decoInfo->setPosition(ccp(190, 20));
 	cell->addChild(decoInfo, kRP_Z_back + 1);
 
-	userName = CCLabelTTF::create("","Helvetica",12);
+	userName = CCLabelTTF::create("",mySGD->getFont().c_str(),12);
 	userName->setPosition(ccp(75,20));
 	userName->setAnchorPoint(CCPointZero);
 	userName->setTag(kRP_RT_title);
 	cell->addChild(userName,2);
 	
 	
-	score = CCLabelTTF::create("","Helvetica",19);
+	score = CCLabelTTF::create("",mySGD->getFont().c_str(),19);
 	score->setPosition(ccp(75,1));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kRP_RT_score);
 	cell->addChild(score,2);
 	
-	rank = CCLabelTTF::create("","Helvetica",25);
+	rank = CCLabelTTF::create("",mySGD->getFont().c_str(),25);
 	rank->setPosition(ccp(10,10));
 	rank->setAnchorPoint(CCPointZero);
 	rank->setTag(kRP_RT_rank);
@@ -643,13 +783,13 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	
 	
 	sendBtn->setUserData((void *)idx);
-	//sendBtn->setUserData((void *)&member);
-	//	if((*member)["user_id"].asString()==hspConnector::get()->getKakaoID()){
-	if(0)
-	{
-		sendBtn->setVisible(false);
-	}else{
-		sendBtn->setVisible(true);
+	if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID()){
+		if(1)
+		{
+			sendBtn->setVisible(false);
+		}else{
+			sendBtn->setVisible(true);
+		}
 	}
 	userName->setString((*member)["nickname"].asString().c_str());
 	score->setString((*member)["scoreInfo"].get("score","0").asString().c_str());

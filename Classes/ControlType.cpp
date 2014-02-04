@@ -367,7 +367,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < -180.f+(regular_spectrum+irregular_spectrum)/2.f)
 		{
-			if(!isDisableIrregularDirection)
+			if(isEnableIrregularDirection)
 			{
 				angleDirection = directionLeftDown;
 				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionDown;
@@ -382,7 +382,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < -180.f+regular_spectrum/2.f+irregular_spectrum)
 		{
-			if(!isDisableIrregularDirection)
+			if(isEnableIrregularDirection)
 			{
 				angleDirection = directionLeftDown;
 				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionLeft;
@@ -409,7 +409,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < -180.f+(regular_spectrum+irregular_spectrum)*3.f/2.f)
 		{
-			if(!isDisableIrregularDirection)
+			if(isEnableIrregularDirection)
 			{
 				angleDirection = directionRightDown;
 				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionRight;
@@ -424,7 +424,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < -180.f+regular_spectrum*3.f/2.f+irregular_spectrum*2.f)
 		{
-			if(!isDisableIrregularDirection)
+			if(isEnableIrregularDirection)
 			{
 				angleDirection = directionRightDown;
 				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionDown;
@@ -451,7 +451,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < regular_spectrum/2.f+irregular_spectrum/2.f)
 		{
-			if(!isDisableIrregularDirection)
+			if(isEnableIrregularDirection)
 			{
 				angleDirection = directionRightUp;
 				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionUp;
@@ -466,7 +466,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < regular_spectrum/2.f+irregular_spectrum)
 		{
-			if(!isDisableIrregularDirection)
+			if(isEnableIrregularDirection)
 			{
 				angleDirection = directionRightUp;
 				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionRight;
@@ -493,7 +493,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < (regular_spectrum+irregular_spectrum)*3.f/2.f)
 		{
-			if(!isDisableIrregularDirection)
+			if(isEnableIrregularDirection)
 			{
 				angleDirection = directionLeftUp;
 				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionLeft;
@@ -508,7 +508,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		else if(angle < regular_spectrum*3.f/2.f+irregular_spectrum*2.f)
 		{
-			if(!isDisableIrregularDirection)
+			if(isEnableIrregularDirection)
 			{
 				angleDirection = directionLeftUp;
 				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionUp;
@@ -604,10 +604,10 @@ void ControlJoystickButton::resetTouch()
 void ControlJoystickButton::invisibleControl()
 {
 	offButton();
-	control_ball->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
-	control_circle->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
+	control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
+	control_circle->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 	
-	if(isControlJoystickFixed || isAlwaysVisibleJoystick)
+	if(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick)
 	{
 		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
@@ -668,6 +668,9 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 			if(!button_touch && location.y < 100)
 			{
 				// button
+				myGD->communication("Main_hideDrawButtonTutorial");
+				keep_is_draw_button_tutorial_on = mySGD->is_draw_button_tutorial;
+				mySGD->is_draw_button_tutorial = false;
 				button_touch = touch;
 				myJack->isDrawingOn = true;
 				onButton();
@@ -682,7 +685,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					IntPoint jackPoint = myGD->getJackPoint();
 					if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
 					{
-						if(isEnableLineOver)
+						if(!isDisableLineOver)
 							myGD->communication("PM_checkBeforeNewline", jackPoint);
 						myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
 					}
@@ -725,7 +728,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
 						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
-					if(!isControlJoystickFixed)
+					if(isControlJoystickNotFixed)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
@@ -746,7 +749,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
 						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
-					if(!isControlJoystickFixed)
+					if(isControlJoystickNotFixed)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
@@ -776,7 +779,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				IntPoint jackPoint = myGD->getJackPoint();
 				if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
 				{
-					if(isEnableLineOver)
+					if(!isDisableLineOver)
 						myGD->communication("PM_checkBeforeNewline", jackPoint);
 					myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
 				}
@@ -795,7 +798,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
 						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
-					if(!isControlJoystickFixed)
+					if(isControlJoystickNotFixed)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
@@ -816,7 +819,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
 						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
-					if(!isControlJoystickFixed)
+					if(isControlJoystickNotFixed)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
@@ -901,7 +904,7 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					
 					if(!isJoystickCenterNotFixed) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
 					{
-						if(isControlJoystickFixed)
+						if(!isControlJoystickNotFixed)
 						{
 							CCPoint circle_position = after_circle_position;
 							if(circle_position.x < 480-55-100)
@@ -949,7 +952,7 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					
 					if(!isJoystickCenterNotFixed) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
 					{
-						if(isControlJoystickFixed)
+						if(!isControlJoystickNotFixed)
 						{
 							CCPoint circle_position = after_circle_position;
 							if(circle_position.x > 55+100)
@@ -1007,6 +1010,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 		
 		if(touch == button_touch)
 		{
+			mySGD->is_draw_button_tutorial = keep_is_draw_button_tutorial_on;
+			
 			myJack->isDrawingOn = false;
 			offButton();
 //			draw_button->setColor(ccWHITE);
@@ -1050,7 +1055,7 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				
 				if(!isJoystickCenterNotFixed) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
 				{
-					if(isControlJoystickFixed)
+					if(!isControlJoystickNotFixed)
 					{
 						CCPoint circle_position = after_circle_position;
 						if(circle_position.x < 480-55-100)
@@ -1098,7 +1103,7 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				
 				if(!isJoystickCenterNotFixed) // !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed) &&
 				{
-					if(isControlJoystickFixed)
+					if(!isControlJoystickNotFixed)
 					{
 						CCPoint circle_position = after_circle_position;
 						if(circle_position.x > 55+100)
@@ -1135,7 +1140,7 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			}
 			
 			touchAction(location, true);
-			if(!isControlJoystickFixed && !isAlwaysVisibleJoystick)
+			if(isControlJoystickNotFixed && isAlwaysInvisibleJoystick)
 			{
 				control_circle->setVisible(false);
 				control_ball->setVisible(false);
@@ -1202,7 +1207,7 @@ void ControlJoystickButton::setTouchEnabled( bool t_b )
 			if(controlJoystickDirection == kControlJoystickDirection_left)	control_circle->setPosition(ccp(55+myGD->boarder_value, 55));
 			else																								control_circle->setPosition(ccp(480-55-myGD->boarder_value, 55));
 
-			control_ball->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
+			control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, t_b);
 			joystick_touch = NULL;
 		}
@@ -1223,12 +1228,12 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	joystick_touch = NULL;
 	isBacking = false;
 
-	isDisableIrregularDirection = myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection);
-	isControlJoystickFixed = myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed);
-	isAlwaysVisibleJoystick = myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick);
+	isEnableIrregularDirection = myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection);
+	isControlJoystickNotFixed = myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed);
+	isAlwaysInvisibleJoystick = myDSH->getBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick);
 	controlJoystickDirection = myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection);
 	isDisableDrawButton = myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton);
-	isEnableLineOver = myDSH->getBoolForKey(kDSH_Key_isEnableLineOver);
+	isDisableLineOver = myDSH->getBoolForKey(kDSH_Key_isDisableLineOver);
 	isJoystickCenterNotFixed = myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed);
 	
 	
@@ -1236,15 +1241,15 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	beforeDirection = directionStop;
 	control_circle = CCSprite::create("control_joystick_big_circle.png");
 	control_circle->setScale(1.f);
-	control_circle->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
+	control_circle->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 	addChild(control_circle);
 
 	control_ball = CCSprite::create("control_joystick_big_ball.png");
 	control_ball->setScale(1.f);
-	control_ball->setVisible(isControlJoystickFixed || isAlwaysVisibleJoystick);
+	control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 	addChild(control_ball);
 	
-	if(isControlJoystickFixed || isAlwaysVisibleJoystick)
+	if(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick)
 	{
 		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{

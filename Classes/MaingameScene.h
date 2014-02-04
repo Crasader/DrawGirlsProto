@@ -106,6 +106,7 @@ private:
 	void randomingRectView();
 	void finalSetting();
 	void startScene();
+	void checkAcceptChallenge();
 	void checkFriendCard();
 	
 	void setControlGesture();
@@ -264,6 +265,15 @@ private:
 	
 	void showDrawButtonTutorial();
 	void hideDrawButtonTutorial();
+	
+	void showPause();
+	void goHome ();
+	void goReplay ();
+	void cancelHome ();
+	
+	void showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue);
+	void continueAction();
+	
 };
 
 #endif

@@ -57,8 +57,18 @@ public:
 	{
 		m_state = (CUMBERSTATEMOVING);
 	}
+	void removeFromParent()
+	{
+		CircleCCBPieceBase::removeFromParent();
+		CCLog("nonono1");
+	}
+	void removeFromParentAndCleanup(bool cleanup)
+	{
+		CircleCCBPieceBase::removeFromParentAndCleanup(cleanup);
+		CCLog("nonono2");
+	}
 	virtual ~KSCircleBase(){
-		
+		CCLog("~KSCircle");
 	}
 	
 	virtual void onStartMoving();

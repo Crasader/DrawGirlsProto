@@ -15,6 +15,8 @@
 #include "KSAlertView.h"
 #include <boost/format.hpp>
 #include "GivenFriendList.h"
+#include "UnknownFriends.h"
+#include "KnownFriend.h"
 static CCSize cellSize3 = CCSizeMake(238, 38);
 void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
@@ -156,12 +158,11 @@ void JoinGameFriendPopup::finishedOpen()
 
 void JoinGameFriendPopup::loadRank()
 {
-	std::function<void(Json::Value e)> p1 = bind(&ThisClassType::drawRank, this, std::placeholders::_1);
 	//step1 ƒ´ƒ´ø¿ƒ£±∏∏Ò∑œ ∑ŒµÂ
 	Json::Value param;
 	param["limit"] = 40;
 	hspConnector::get()->command("getuserlistbyrandom", param,
-															 p1);
+			bind(&ThisClassType::drawRank, this, std::placeholders::_1));
 }
 
 void JoinGameFriendPopup::drawRank( Json::Value obj )
@@ -169,7 +170,22 @@ void JoinGameFriendPopup::drawRank( Json::Value obj )
 	if(obj["result"]["code"].asInt() != GDSUCCESS)
 		return;
 	
-	m_randomList = obj["list"];
+	//m_randomList = obj["list"];
+	m_randomList.clear();
+	Json::Value listResult = obj["list"];
+	for(int i=0; i<listResult.size(); i++)
+	{
+		std::string memberId = listResult[i]["memberID"].asString();
+		auto ptr1 = UnknownFriends::getInstance()->findById(memberId);
+		auto ptr2 = KnownFriends::getInstance()->findById(memberId);
+		if(!ptr1 && !ptr2)
+		{
+			m_randomList.append(listResult[i]);
+		}
+	}
+
+		
+	KS::KSLog("%", m_randomList);
 	//≈◊¿Ã∫Ì ∫‰ ª˝º∫ Ω√¿€ /////////////////////////////////////////////////////////////////////////////////////////
 	
 	//320x320 ≈◊¿Ã∫Ì ∫‰ ª˝º∫
@@ -288,13 +304,13 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	sendBtn->setTag(kTagGameFriendSend);
 	_menu->addChild(sendBtn, kZorderJoinGameFriendSend);
 	
-	title = CCLabelTTF::create("","Helvetica",12);
+	title = CCLabelTTF::create("",mySGD->getFont().c_str(),12);
 	title->setPosition(ccp(40,20));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kTagGameFriendNickname);
 	cell->addChild(title, 2);
 	
-	score = CCLabelTTF::create("","Helvetica",10);
+	score = CCLabelTTF::create("",mySGD->getFont().c_str(),10);
 	score->setPosition(ccp(40,8));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kTagGameFriendLastDate);
@@ -445,7 +461,12 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 }
 void JoinGameFriendPopup::editBoxReturn(CCEditBox* editBox)
 {
-//	this->searchById(editBox->getText());
+	std::string input = editBox->getText();
+	long long _id = KS::strToLongLong(input);
+	std::ostringstream oss;
+	oss << _id;
+	std::string strId = oss.str();
+	this->searchById(strId);
 }
 
 

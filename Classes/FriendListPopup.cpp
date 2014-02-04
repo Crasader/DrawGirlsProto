@@ -8,7 +8,7 @@
 
 #include "KSAlertView.h"
 
-
+#include "KHAlertView.h"
 CCSize cellSize3 = CCSizeMake(238, 38);
 void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
@@ -189,7 +189,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	cell->init();
 	cell->autorelease();
 	
-	CCPoint sendBtnPosition = ccp(106, -17);
+	CCPoint sendBtnPosition = ccp(213, 24);
 	
 	
 	std::string cellBackFile = "friendlist_list.png";
@@ -200,7 +200,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,0);
 	
-	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "ending_take_particle.png");
+	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "no_img.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kProfileImg);
 	profileImg->setPosition(ccp(51, 20));
@@ -214,83 +214,123 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	_menu->setTouchPriority(-300);
 	_menu->setTag(kFriendTableTagMenu);
 	cell->addChild(_menu, 1);
-	
-	if(::getHeartIsSendable( (*member).userId, mySGD->getHeartSendCoolTime() ))
+	int remainTime = ::getHeartSendingRemainTime( (*member).userId, mySGD->getHeartSendCoolTime()	);
+	if(remainTime <= 0)
 	{
 		sendBtn = CCMenuItemImageLambda::create
 		("friendlist_coinsend.png", "friendlist_coinsend.png",
 		 [=](CCObject* sender){
-			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-			 int idx = (int)obj->getUserData();
-			 ////////////////////////////////
-			 // ¬ ¡ˆ∫∏≥ª±‚ - HSP
-			 ////////////////////////////////
-			 
-			 
-			 Json::Value p;
-			 Json::Value contentJson;
-			 
-			 contentJson["msg"] = "";
-			 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
-			 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-			 std::string recvId = (*member).userId;
-			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
-//			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
-			 p["receiverMemberID"] = recvId;
-			 p["senderMemberID"] = hspConnector::get()->getKakaoID();
-			 p["type"] = kHeart;
-			 
-			 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
-																		{
-																			//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-																			//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-																			//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-																			
-																			
-																			GraphDogLib::JsonToLog("sendMessage", r);
-																			if(r["result"]["code"].asInt() != GDSUCCESS)
-																				return;
-																			
-																			mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
-																			myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
-																													{
-																														
-																													});
-																			ostringstream oss;
-																			oss << (*member).userId;
-																			std::string userIdStr = oss.str();
-																			::setHeartSendTime((*member).userId);
-																			obj->removeFromParent(); // 버튼 삭제.
-																			
-																			CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("friendlist_coinsend.png", "friendlist_coinsend.png",
-																																																			[](CCObject*){});
-																			sendBtn1->setPosition(sendBtnPosition);
-																			sendBtn1->setColor(ccc3(100, 100, 100));
-																			_menu->addChild(sendBtn1,2);
-																			////////////////////////////////
-																			// ¬ ¡ˆ∫∏≥ª±‚ - ƒ´ƒ´ø¿
-																			////////////////////////////////
-																			Json::Value p2;
-																			p2["receiver_id"] = (*member).userId;
-																			p2["message"] = "하트 받아라.";
-																			hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
-																																				{
-																																					GraphDogLib::JsonToLog("kSendMessage", r);
-																																					setInviteSendTime((*member).userId);
-																																				});
-																		});
+			 KHAlertView* av = KHAlertView::create(); 
+			 // av->setTitleFileName("msg_challenge.png");
+			 av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+					 [=](CCObject*){
+					 }
+					 ));
+			 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+			 av->setWidth(240);
+			 av->setHeight(240);
+			 av->setTitleHeight(10);
+			 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+			 av->setCenterY(150);
+
+			 CCNode* emptyNode = CCNode::create();
+			 auto ttf = CCLabelTTF::create("코인을 보내시겠습니까?", mySGD->getFont().c_str(), 12.f); 
+			 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+			 //	con->setAnchorPoint(ccp(0, 0));
+			 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+			 ttf->setColor(ccc3(255, 255, 255));
+			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+			 emptyNode->addChild(ttf);
+			 av->setContentNode(
+					 emptyNode
+					 );
+			 av->setContentSize(ttf->getDimensions());
+			 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+					 [=](CCObject* e)
+					 {
+						 CCLog("ok!!");
+						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
+						 int idx = (int)obj->getUserData();
+						 ////////////////////////////////
+						 // ¬ ¡ˆ∫∏≥ª±‚ - HSP
+						 ////////////////////////////////
+
+
+						 Json::Value p;
+						 Json::Value contentJson;
+
+						 contentJson["msg"] = "";
+						 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+						 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
+						 //				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+						 std::string recvId = (*member).userId;
+						 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
+						 //			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
+						 p["receiverMemberID"] = recvId;
+						 p["senderMemberID"] = hspConnector::get()->getKakaoID();
+						 p["type"] = kHeart;
+
+						 hspConnector::get()->command("sendMessage", p, [=](Json::Value r) {
+							 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+							 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+							 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+
+
+							 GraphDogLib::JsonToLog("sendMessage", r);
+							 if(r["result"]["code"].asInt() != GDSUCCESS){
+								 return;
+							 }	
+							 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
+							 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+							 });
+							 ostringstream oss;
+							 oss << (*member).userId;
+							 std::string userIdStr = oss.str();
+							 ::setHeartSendTime((*member).userId);
+							 obj->removeFromParent(); // 버튼 삭제.
+
+							 //CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("friendlist_coinsend.png", "friendlist_coinsend.png",
+							 //[](CCObject*){});
+							 //sendBtn1->setPosition(sendBtnPosition);
+							 //sendBtn1->setColor(ccc3(100, 100, 100));
+							 //_menu->addChild(sendBtn1,2);
+							 std::string remainStr = ::getRemainTimeMsg( remainTime );
+							 CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
+							 remainFnt->setPosition(sendBtnPosition);
+							 cell->addChild(remainFnt, 1);
+							 ////////////////////////////////
+							 // ¬ ¡ˆ∫∏≥ª±‚ - ƒ´ƒ´ø¿
+							 ////////////////////////////////
+							 Json::Value p2;
+							 p2["receiver_id"] = (*member).userId;
+							 p2["message"] = "하트 받아라.";
+							 hspConnector::get()->kSendMessage(p2, [=](Json::Value r) {
+								 GraphDogLib::JsonToLog("kSendMessage", r);
+								 setInviteSendTime((*member).userId);
+							 });
+						 });
+					 });
+			 addChild(av, 99999999);
+			 av->show();
+
 		 });
 	}
 	else
 	{
 		sendBtn = CCMenuItemImageLambda::create("friendlist_coinsend.png", "friendlist_coinsend.png",
-																						[](CCObject*){});
+																						[](CCObject*){
+																							CCLog("not send");
+																						});
+		sendBtn->setColor(ccc3(100, 100, 100));
+		sendBtn->setVisible(false);
+		std::string remainStr = ::getRemainTimeMsg( remainTime );
+		CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
+		remainFnt->setPosition(sendBtnPosition);
+		cell->addChild(remainFnt, 1);
 	}
 	
 	
 	sendBtn->setPosition(sendBtnPosition);
-	sendBtn->setColor(ccc3(100, 100, 100));
 	sendBtn->setTag(kFriendSendHeart);
 	sendBtn->setUserData((void *)idx);
 	_menu->addChild(sendBtn,2);
@@ -392,14 +432,14 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	
 	
 	
-	title = CCLabelTTF::create("","Helvetica",12);
+	title = CCLabelTTF::create("",mySGD->getFont().c_str(),12);
 	title->setPosition(ccp(75,20));
 	title->setAnchorPoint(CCPointZero);
 	title->setTag(kUserNickName);
 	cell->addChild(title,2);
 	
 	
-	score = CCLabelTTF::create("","Helvetica",19);
+	score = CCLabelTTF::create("",mySGD->getFont().c_str(),19);
 	score->setPosition(ccp(75,1));
 	score->setAnchorPoint(CCPointZero);
 	score->setTag(kLastConnectDate);
@@ -420,8 +460,13 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	}else{
 		sendBtn->setVisible(true);
 	}
+	
 	title->setString((*member).nick.c_str());
-	score->setString("최종접속 : ...");
+	
+	
+	int month, day, hour, minute;
+	::timeSpliter(member->lastDate, 0, &month, &day, &hour, &minute, 0);
+	score->setString(boost::str(boost::format("%||/%|| %||:%||") % month % day % hour % minute).c_str());
 	//rank->setString((*member)["rankingGrade"].asString().c_str());
 	
 	return cell;

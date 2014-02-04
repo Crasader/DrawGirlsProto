@@ -2257,6 +2257,8 @@ void Firework::crashMapForPoint (IntPoint point, int radius)
 }
 void Firework::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
+	m_numberAtOnce = pattern.get("frameinterval", 15).asInt();
+	m_frameInterval = pattern.get("numberatonce", 18).asInt();
 	m_1TO2 = false;
 	m_step = 1;
 	m_bombFrame = 200;
@@ -2353,8 +2355,10 @@ void Firework::update (float dt)
 	{
 		m_frame++;
 		m_parentMissile->setPosition(m_parentMissileGoal.getValue());
-		if(m_frame % 5 == 0)
-			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
+
+		// 깎는 코드.	
+		//if(m_frame % 5 == 0)
+			//crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), 10);
 	}
 	
 	if(!r && m_step == 1 && m_1TO2 == false)
@@ -2367,7 +2371,7 @@ void Firework::update (float dt)
 	{
 		m_frame++;
 		
-		if(m_frame % 15 == 0)
+		if(m_frame % m_frameInterval == 0)
 		{
 			float bulletSpeed = 2.f;
 			int m_color = 1;
@@ -2379,7 +2383,7 @@ void Firework::update (float dt)
 				imgFileName = "cumber_missile1.png";
 			CCSize t_mSize = CCSize(4.f, 4.f);
 			
-			for(int i=0; i<=360; i+= 10)
+			for(int i=0; i<=360; i+=360.f / m_numberAtOnce)
 			{
 				MissileUnit* t_mu = MissileUnit::create(m_sourcePosition, i, bulletSpeed,
 																								imgFileName.c_str(), t_mSize,0, 0);

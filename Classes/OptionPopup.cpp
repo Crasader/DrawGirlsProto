@@ -18,10 +18,10 @@
 #include "MiniGamePopup.h"
 #include "cocos-ext.h"
 #include "StageImgLoader.h"
-#include "KSAlertView.h"
-
+#include "KHAlertView.h"
 #include "TutorialScene.h"
 #include "MinsuScene.h"
+#include "KSUtil.h"
 
 USING_NS_CC_EXT;
 
@@ -73,8 +73,9 @@ bool OptionPopup::init()
 	
 	setTouchEnabled(true);
 	
-//	MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
-//	addChild(t_popup, 4);
+	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
+	//addChild(t_popup, 4);
+
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -121,6 +122,11 @@ bool OptionPopup::init()
 	main_case->addChild(close_menu, kOP_Z_content);
 	close_menu->setTouchPriority(-171);
 	
+	
+	CCLabelTTF* my_id_label = CCLabelTTF::create(KS::longLongToStr(hspConnector::get()->myKakaoInfo.get("user_id", "").asInt64()).c_str(), mySGD->getFont().c_str(), 13);
+	my_id_label->setColor(ccBLACK);
+	my_id_label->setPosition(ccp(300,100));
+	main_case->addChild(my_id_label, kOP_Z_content);
 	
 	
 	CCSprite* n_help = CCSprite::create("option_help.png");
@@ -296,6 +302,43 @@ bool OptionPopup::init()
 	
 	is_menu_enable = false;
 
+	//KHAlertView* av = KHAlertView::create(); av->setTitleFileName("msg_challenge.png");
+	//av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+				//[=](CCObject*){
+				//}
+																									 //));
+	//av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+	//av->setWidth(240);
+	//av->setHeight(240);
+	//av->setTitleHeight(10);
+	//av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+	//av->setCenterY(150);
+
+	//CCNode* emptyNode = CCNode::create();
+	//auto ttf = CCLabelTTF::create("asdasda", "", 12.f); 
+	//ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+	////	con->setAnchorPoint(ccp(0, 0));
+	////ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+	//ttf->setColor(ccc3(255, 255, 255));
+	//ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() + 10));
+	//emptyNode->addChild(ttf);
+	//av->setContentNode(
+		//emptyNode
+			//);
+	//av->setContentSize(ttf->getDimensions());
+	//av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+								//[=](CCObject* e)
+								//{
+									//CCLog("거절!!");
+								//});
+	//av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+								//[=](CCObject* e)
+								//{
+									//CCLog("ok!!");
+								//});
+	//addChild(av, 99999999);
+	//av->show();
+	
 #if 0 // 심플 예제
 	KSAlertView* av = KSAlertView::create();
 	
@@ -484,7 +527,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_joystickMoving)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isControlJoystickFixed, !myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed));
+		myDSH->setBoolForKey(kDSH_Key_isControlJoystickNotFixed, !myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed));
 		resetJoystickMovingMenu();
 		is_menu_enable = true;
 	}
@@ -494,7 +537,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_testIrregularDirection)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isDisableIrregularDirection, !myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection));
+		myDSH->setBoolForKey(kDSH_Key_isEnableIrregularDirection, !myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection));
 		resetIrregularDirection();
 		is_menu_enable = true;
 	}
@@ -506,7 +549,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_testShowJoystick)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isAlwaysVisibleJoystick, !myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick));
+		myDSH->setBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick, !myDSH->getBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick));
 		resetShowJoystick();
 		is_menu_enable = true;
 	}
@@ -518,7 +561,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_testLineOver)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isEnableLineOver, !myDSH->getBoolForKey(kDSH_Key_isEnableLineOver));
+		myDSH->setBoolForKey(kDSH_Key_isDisableLineOver, !myDSH->getBoolForKey(kDSH_Key_isDisableLineOver));
 		resetLineOver();
 		is_menu_enable = true;
 	}
@@ -627,7 +670,7 @@ void OptionPopup::resetJoystickMovingMenu()
 	
 	string filename;
 	CCPoint img_position;
-	if(myDSH->getBoolForKey(kDSH_Key_isControlJoystickFixed))
+	if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed))
 	{
 		filename = "option_mode_lock.png";
 		img_position = ccp(-20,0);
@@ -652,7 +695,7 @@ void OptionPopup::resetIrregularDirection()
 	}
 	
 	string filename;
-	if(myDSH->getBoolForKey(kDSH_Key_isDisableIrregularDirection))
+	if(!myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection))
 		filename = "test_option_off.png";
 	else
 		filename = "test_option_on.png";
@@ -704,7 +747,7 @@ void OptionPopup::resetShowJoystick()
 	}
 	
 	string filename;
-	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysVisibleJoystick))
+	if(myDSH->getBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick))
 		filename = "test_option_off.png";
 	else
 		filename = "test_option_on.png";
@@ -756,7 +799,7 @@ void OptionPopup::resetLineOver()
 	}
 	
 	string filename;
-	if(!myDSH->getBoolForKey(kDSH_Key_isEnableLineOver))
+	if(myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 		filename = "test_option_off.png";
 	else
 		filename = "test_option_on.png";
