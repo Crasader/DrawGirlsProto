@@ -483,6 +483,10 @@ void FailPopup::endDecreaseCardDuration()
 		/// ksks
 		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), false, [=](){closePopup();}), kZ_FP_popup);
 	}
+	else
+	{
+		closePopup();
+	}
 }
 
 void FailPopup::onEnter()
