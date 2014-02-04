@@ -815,20 +815,20 @@ void CardStrengthPopup::endShowPopup()
 	}
 	else
 	{
-		if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardstrength))
-		{
-			myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardstrength, true);
-			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
-			t_suction->target_touch_began = t_suction;
-			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
-			t_suction->setTouchEnabled(true);
-			
-			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardstrength.png");
-			dimed_tip->setPosition(ccp(240,160));
-			t_suction->addChild(dimed_tip);
-			
-			addChild(t_suction, kCardStrengthPopupZorder_popup);
-		}
+//		if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardstrength))
+//		{
+//			myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_cardstrength, true);
+//			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+//			t_suction->target_touch_began = t_suction;
+//			t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+//			t_suction->setTouchEnabled(true);
+//			
+//			CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_cardstrength.png");
+//			dimed_tip->setPosition(ccp(240,160));
+//			t_suction->addChild(dimed_tip);
+//			
+//			addChild(t_suction, kCardStrengthPopupZorder_popup);
+//		}
 	}
 	
 	is_menu_enable = true;

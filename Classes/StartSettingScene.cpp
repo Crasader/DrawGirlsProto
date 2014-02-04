@@ -87,20 +87,20 @@ bool StartSettingScene::init()
 		tutorial_node = t_tutorial;
 	}
 	
-	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_startsetting))
-	{
-		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_startsetting, true);
-		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
-		t_suction->target_touch_began = t_suction;
-		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
-		t_suction->setTouchEnabled(true);
-		
-		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_startsetting.png");
-		dimed_tip->setPosition(ccp(240,160));
-		t_suction->addChild(dimed_tip);
-		
-		addChild(t_suction, kStartSettingZorder_popup);
-	}
+//	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_startsetting))
+//	{
+//		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_startsetting, true);
+//		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-200);
+//		t_suction->target_touch_began = t_suction;
+//		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+//		t_suction->setTouchEnabled(true);
+//		
+//		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_startsetting.png");
+//		dimed_tip->setPosition(ccp(240,160));
+//		t_suction->addChild(dimed_tip);
+//		
+//		addChild(t_suction, kStartSettingZorder_popup);
+//	}
 	
 	return true;
 }
@@ -130,9 +130,16 @@ enum StartSettingItemZorder{
 
 void StartSettingScene::setMain()
 {
+	float screen_height = myDSH->ui_top-320.f;
+	if(screen_height < 0.f)		screen_height = 0.f;
+	screen_height /= 4.f;
+	
+	
 	main_case = CCSprite::create("startsetting_back.png");
-	main_case->setPosition(ccp(240,160));
+	main_case->setAnchorPoint(ccp(0.5,0));
+	main_case->setPosition(ccp(240,3-screen_height));
 	addChild(main_case, kStartSettingZorder_main);
+	
 	
 	int stage_number;
 	
