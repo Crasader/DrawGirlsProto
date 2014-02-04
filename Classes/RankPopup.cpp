@@ -10,6 +10,7 @@
 #include "SendMessageUtil.h"
 
 #include <boost/format.hpp>
+#include "KHAlertView.h"
 #define LZZ_INLINE inline
 using namespace cocos2d::extension;
 using namespace std;
@@ -648,66 +649,95 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 		sendBtn = CCMenuItemImageLambda::create
 		("rank_cell_send.png", "rank_cell_send.png",
 		 [=](CCObject* sender){
-			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-			 int idx = (int)obj->getUserData();
-			 ////////////////////////////////
-			 // 쪽지보내기 - HSP
-			 ////////////////////////////////
-			 
-			 
-			 Json::Value p;
-			 Json::Value contentJson;
-			 
-			 contentJson["msg"] = "하트받으쇼~";
-			 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
-			 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-			 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-			 std::string recvId = m_scoreList[idx]["user_id"].asString();
-			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' 제거
-			 p["receiverMemberID"] = recvId;
-			 p["senderMemberID"]=hspConnector::get()->getKakaoID();
-			 p["type"]=kHeart;
-			 p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-				 
-			 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
-										  {
-											  //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-											  //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-											  //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-											  GraphDogLib::JsonToLog("sendMessage", r);
-												if(r["result"]["code"].asInt() != GDSUCCESS)
-													return;
-												
-											  ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
-												
-												mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
-												myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
-																						{
-																							
-																						});
-												
-											  obj->removeFromParent();
-												std::string remainStr = ::getRemainTimeMsg( mySGD->getHeartSendCoolTime() );
-												CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
 
-											  CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
-																											  [](CCObject*){});
-											  sendBtn1->setPosition(sendBtnPosition);
-											  _menu->addChild(sendBtn1,2);
-												sendBtn1->addChild(remainFnt);
-												remainFnt->setPosition(ccp(sendBtn1->getContentSize().width / 2.f, sendBtn1->getContentSize().height / 2.f));
-											  ////////////////////////////////
-											  // 쪽지보내기 - 카카오
-											  ////////////////////////////////
-											  Json::Value p2;
-											  p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
-											  p2["message"] = "하트받으세용!";
-											  hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
-																				{
-																					GraphDogLib::JsonToLog("kSendMessage", r);
-																					//																																						this->closePopup(0,0);
-																				});
-										  });
+			 KHAlertView* av = KHAlertView::create(); 
+			 av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+					 [=](CCObject*){
+					 }
+					 ));
+			 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+			 av->setWidth(240);
+			 av->setHeight(240);
+			 av->setTitleHeight(10);
+			 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+			 av->setCenterY(150);
+
+			 CCNode* emptyNode = CCNode::create();
+			 auto ttf = CCLabelTTF::create("코인을 보내겠습니까?", mySGD->getFont().c_str(), 12.f); 
+			 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+			 //	con->setAnchorPoint(ccp(0, 0));
+			 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+			 ttf->setColor(ccc3(255, 255, 255));
+			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+			 emptyNode->addChild(ttf);
+			 av->setContentNode(
+					 emptyNode
+					 );
+			 av->setContentSize(ttf->getDimensions());
+			 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+					 [=](CCObject* e) {
+						 CCLog("ok!!");
+						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
+						 int idx = (int)obj->getUserData();
+						 ////////////////////////////////
+						 // 쪽지보내기 - HSP
+						 ////////////////////////////////
+
+
+						 Json::Value p;
+						 Json::Value contentJson;
+
+						 contentJson["msg"] = "하트받으쇼~";
+						 KS::KSLog("%", hspConnector::get()->myKakaoInfo);
+						 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+						 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+						 std::string recvId = m_scoreList[idx]["user_id"].asString();
+						 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' 제거
+						 p["receiverMemberID"] = recvId;
+						 p["senderMemberID"]=hspConnector::get()->getKakaoID();
+						 p["type"]=kHeart;
+						 p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+
+						 hspConnector::get()->command("sendMessage", p, [=](Json::Value r) {
+							 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+							 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+							 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+							 GraphDogLib::JsonToLog("sendMessage", r);
+							 if(r["result"]["code"].asInt() != GDSUCCESS){
+								 return;
+							 }
+							 ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
+
+							 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
+							 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+
+							 });
+
+							 obj->removeFromParent();
+							 std::string remainStr = ::getRemainTimeMsg( mySGD->getHeartSendCoolTime() );
+							 CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
+
+							 CCMenuItemImageLambda* sendBtn1 = CCMenuItemImageLambda::create("rank_cell_notsend.png", "rank_cell_notsend.png",
+								 [](CCObject*){});
+							 sendBtn1->setPosition(sendBtnPosition);
+							 _menu->addChild(sendBtn1,2);
+							 sendBtn1->addChild(remainFnt);
+							 remainFnt->setPosition(ccp(sendBtn1->getContentSize().width / 2.f, sendBtn1->getContentSize().height / 2.f));
+							 ////////////////////////////////
+							 // 쪽지보내기 - 카카오
+							 ////////////////////////////////
+							 Json::Value p2;
+							 p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
+							 p2["message"] = "하트받으세용!";
+							 hspConnector::get()->kSendMessage(p2, [=](Json::Value r) {
+								 GraphDogLib::JsonToLog("kSendMessage", r);
+								 //																																						this->closePopup(0,0);
+							 });
+						 });
+					 });
+			 addChild(av, 99999999);
+			 av->show();
+
 		 });
 	}
 	else

@@ -15,6 +15,8 @@
 #include "KSAlertView.h"
 #include <boost/format.hpp>
 #include "GivenFriendList.h"
+#include "UnknownFriends.h"
+#include "KnownFriend.h"
 static CCSize cellSize3 = CCSizeMake(238, 38);
 void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
@@ -156,12 +158,11 @@ void JoinGameFriendPopup::finishedOpen()
 
 void JoinGameFriendPopup::loadRank()
 {
-	std::function<void(Json::Value e)> p1 = bind(&ThisClassType::drawRank, this, std::placeholders::_1);
 	//step1 ƒ´ƒ´ø¿ƒ£±∏∏Ò∑œ ∑ŒµÂ
 	Json::Value param;
 	param["limit"] = 40;
 	hspConnector::get()->command("getuserlistbyrandom", param,
-															 p1);
+			bind(&ThisClassType::drawRank, this, std::placeholders::_1));
 }
 
 void JoinGameFriendPopup::drawRank( Json::Value obj )
@@ -169,7 +170,22 @@ void JoinGameFriendPopup::drawRank( Json::Value obj )
 	if(obj["result"]["code"].asInt() != GDSUCCESS)
 		return;
 	
-	m_randomList = obj["list"];
+	//m_randomList = obj["list"];
+	m_randomList.clear();
+	Json::Value listResult = obj["list"];
+	for(int i=0; i<listResult.size(); i++)
+	{
+		std::string memberId = listResult[i]["memberID"].asString();
+		auto ptr1 = UnknownFriends::getInstance()->findById(memberId);
+		auto ptr2 = KnownFriends::getInstance()->findById(memberId);
+		if(!ptr1 && !ptr2)
+		{
+			m_randomList.append(listResult[i]);
+		}
+	}
+
+		
+	KS::KSLog("%", m_randomList);
 	//≈◊¿Ã∫Ì ∫‰ ª˝º∫ Ω√¿€ /////////////////////////////////////////////////////////////////////////////////////////
 	
 	//320x320 ≈◊¿Ã∫Ì ∫‰ ª˝º∫
