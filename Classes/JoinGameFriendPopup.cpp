@@ -290,7 +290,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,0);
 	
-	CCSprite* profileImg = GDWebSprite::create(member["profile_image_url"].asString(), "no_img.png");
+	CCSprite* profileImg = GDWebSprite::create(member["profile_image_url"].asString(), "ending_noimg.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kTagGameFriendProfileImg);
 	profileImg->setPosition(ccp(22, 21));

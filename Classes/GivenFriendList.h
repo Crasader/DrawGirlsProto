@@ -66,7 +66,7 @@ public:
 		CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
 		m_scrollBar = ScrollBar::createScrollbar(m_mailTableView, -2 - 10, NULL, bar);
 		m_scrollBar->setDynamicScrollSize(false);
-
+		m_scrollBar->setVisible(false);
 		m_mailTableView->setAnchorPoint(CCPointZero);
 
 		//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
@@ -109,7 +109,7 @@ public:
 		nickFnt->setPosition(ccp(60, 20));
 		
 			
-		CCSprite* profileImg = GDWebSprite::create(contentObj["profile_url"].asString(), "no_img.png");
+		CCSprite* profileImg = GDWebSprite::create(contentObj["profile_url"].asString(), "ending_noimg.png");
 		profileImg->setAnchorPoint(ccp(0.5, 0.5));
 		profileImg->setPosition(ccp(22, 21));
 		profileImg->setScale(28.f / profileImg->getContentSize().width);
