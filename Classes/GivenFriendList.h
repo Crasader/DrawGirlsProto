@@ -210,7 +210,7 @@ public:
 //																																 });
 																														 });
 		_menu->addChild(reject);
-		reject->setPosition(ccp(185, 22));
+		reject->setPosition(ccp(182, 22));
 		return realCell;
 	}
 
