@@ -393,39 +393,6 @@ CCLabelTTF* CardCase::getRecentDurabilityLabel()
 	return recent_durability_label;
 }
 
-CCLabelTTF* CardCase::getTotalDurabilityLabel()
-{
-	return total_durability_label;
-}
-
-void CardCase::startDecreaseDurability( CCObject* t_end, SEL_CallFunc d_end )
-{
-	recent_durability_label->setColor(ccRED);
-	CCScaleTo* t_scale = CCScaleTo::create(1.5f, 10.f);
-	CCFadeTo* t_fade1 = CCFadeTo::create(1.5f, 30);
-	CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_fade1);
-	CCCallFunc* t_call1 = CCCallFunc::create(recent_durability_label, callfunc_selector(CCLabelTTF::removeFromParent));
-	CCSequence* t_seq1 = CCSequence::createWithTwoActions(t_spawn, t_call1);
-	recent_durability_label->runAction(t_seq1);
-
-	CCLabelTTF* after_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number))->getCString(), mySGD->getFont().c_str(), 20);
-	after_durability_label->setOpacity(0);
-	after_durability_label->setColor(ccBLACK);
-	after_durability_label->setAnchorPoint(ccp(0.5,0.5));
-	after_durability_label->setPosition(ccp(20,25));
-	durability_case->addChild(after_durability_label, kCARDCASE_Z_data);
-	CCFadeTo* t_fade2 = CCFadeTo::create(1.5f, 255);
-	CCCallFuncO* t_call2 = CCCallFuncO::create(this, callfuncO_selector(CardCase::changeRecentDurabilityLabel), after_durability_label);
-	CCCallFunc* t_call3 = CCCallFunc::create(t_end, d_end);
-	CCSequence* t_seq2 = CCSequence::create(t_fade2, t_call2, t_call3, NULL);
-	after_durability_label->runAction(t_seq2);
-}
-
-void CardCase::changeRecentDurabilityLabel( CCObject* sender )
-{
-	recent_durability_label = (CCLabelTTF*)sender;
-}
-
 void CardCase::myInit(int t_selected_card_number, int t_level, string t_passive)
 {
 	card_level = t_level;
@@ -459,49 +426,48 @@ void CardCase::myInit( int t_selected_card_number )
 
 	CCSprite* left_case = CCSprite::create(("card_case_" + grade_filename + "_left.png").c_str());
 //	CCSprite* left_case = CCSprite::create("card_case_left.png");
-	left_case->setPosition(ccp(0,200));
+	left_case->setPosition(ccp(0,215));
 	addChild(left_case, kCARDCASE_Z_sideCase);
 
 	CCSprite* right_case = CCSprite::create(("card_case_" + grade_filename + "_right.png").c_str());
 //	CCSprite* right_case = CCSprite::create("card_case_right.png");
-	right_case->setPosition(ccp(320,200));
+	right_case->setPosition(ccp(320,215));
 	addChild(right_case, kCARDCASE_Z_sideCase);
 
-	CCSprite* rank_case = CCSprite::create("card_case_rank.png");
-	rank_case->setPosition(ccp(30,402));
-	addChild(rank_case, kCARDCASE_Z_innerCase);
-
-	CCLabelTTF* rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 30);
-	rank_label->setAnchorPoint(ccp(0.5,0.5));
-	rank_label->setPosition(ccp(rank_case->getContentSize().width/2.f, rank_case->getContentSize().height/2.f-3));
-	rank_case->addChild(rank_label, kCARDCASE_Z_data);
-
-	durability_case = CCSprite::create("card_case_durability.png");
-	durability_case->setPosition(ccp(287,417));
-	addChild(durability_case, kCARDCASE_Z_innerCase);
-
-	total_durability_label = CCLabelTTF::create(CCString::createWithFormat("/%d", myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
-	total_durability_label->setColor(ccBLACK);
-	total_durability_label->setAnchorPoint(ccp(1.f,0.5));
-	total_durability_label->setPosition(ccp(42,21));
-	durability_case->addChild(total_durability_label, kCARDCASE_Z_data);
+//	CCSprite* rank_case = CCSprite::create("card_case_rank.png");
+//	rank_case->setPosition(ccp(30,402));
+//	addChild(rank_case, kCARDCASE_Z_innerCase);
+//
+//	CCLabelTTF* rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 30);
+//	rank_label->setAnchorPoint(ccp(0.5,0.5));
+//	rank_label->setPosition(ccp(rank_case->getContentSize().width/2.f, rank_case->getContentSize().height/2.f-3));
+//	rank_case->addChild(rank_label, kCARDCASE_Z_data);
+//
+//	durability_case = CCSprite::create("card_case_durability.png");
+//	durability_case->setPosition(ccp(287,417));
+//	addChild(durability_case, kCARDCASE_Z_innerCase);
+//
+//	total_durability_label = CCLabelTTF::create(CCString::createWithFormat("/%d", myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 10);
+//	total_durability_label->setColor(ccBLACK);
+//	total_durability_label->setAnchorPoint(ccp(1.f,0.5));
+//	total_durability_label->setPosition(ccp(42,21));
+//	durability_case->addChild(total_durability_label, kCARDCASE_Z_data);
 
 	recent_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 20);
-	recent_durability_label->setColor(ccBLACK);
 	recent_durability_label->setAnchorPoint(ccp(0.5,0.5));
-	recent_durability_label->setPosition(ccp(20,25));
-	durability_case->addChild(recent_durability_label, kCARDCASE_Z_data);
+	recent_durability_label->setPosition(ccp(293,413));
+	addChild(recent_durability_label, kCARDCASE_Z_data);
 
 	if(card_level == -1)
 		card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number);
 	
 	CCSprite* option_case = CCSprite::create("card_case_option.png");
-	option_case->setPosition(ccpMult(ccp(65,28), 1.5f*1.5f));
-	option_case->setScale(1.5f*1.5f);
+	option_case->setPosition(ccp(265,80));
+	option_case->setScale(1.5f);
 	addChild(option_case, kCARDCASE_Z_innerCase);
 
 	CountingBMLabel* pow_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
-	pow_label->setPosition(ccp(200,85));//145,58));
+	pow_label->setPosition(ccp(75,15));//145,58));
 	pow_label->setColor(ccRED);
 	pow_label->setScale(1.8f);
 	addChild(pow_label, kCARDCASE_Z_data);
@@ -509,20 +475,20 @@ void CardCase::myInit( int t_selected_card_number )
 	pow_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, t_selected_card_number)*((card_level-1)*0.1f+1.f)))->getCString());
 
 	CountingBMLabel* dex_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
-	dex_label->setPosition(ccp(200,35));//145,26));
+	dex_label->setPosition(ccp(275,15));//145,26));
 	dex_label->setColor(ccGREEN);
 	dex_label->setScale(1.8f);
 	addChild(dex_label, kCARDCASE_Z_data);
 
 	dex_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, t_selected_card_number)*((card_level-1)*0.1f+1.f)))->getCString());
 
-	CountingBMLabel* spd_label = CountingBMLabel::create("0.00", "etc_font.fnt", 0.5f, "%.2f");
-	spd_label->setPosition(ccp(200,60));//180,42));
+	CountingBMLabel* spd_label = CountingBMLabel::create("0.0", "etc_font.fnt", 0.5f, "%.1f");
+	spd_label->setPosition(ccp(175,15));//180,42));
 	spd_label->setColor(ccBLUE);
 	spd_label->setScale(1.8f);
 	addChild(spd_label, kCARDCASE_Z_data);
 
-	spd_label->setString(CCString::createWithFormat("%.2f", NSDS_GD(kSDS_CI_int1_missile_speed_d, t_selected_card_number))->getCString());
+	spd_label->setString(CCString::createWithFormat("%.1f", NSDS_GD(kSDS_CI_int1_missile_speed_d, t_selected_card_number))->getCString());
 
 	//		CCProgressTimer* pow_progress = CCProgressTimer::create(CCSprite::create("card_damage_bar.png"));
 	//		pow_progress->setType(kCCProgressTimerTypeBar);
@@ -557,8 +523,8 @@ void CardCase::myInit( int t_selected_card_number )
 	//		CCProgressFromTo* dex_action = CCProgressFromTo::create(1.f, 0.f, 100.f);
 	//		dex_progress->runAction(dex_action);
 	
-	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", card_level)->getCString(), mySGD->getFont().c_str(), 20);
-	t_card_level_label->setPosition(ccp(238,412));
+	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("%d", card_level)->getCString(), mySGD->getFont().c_str(), 20);
+	t_card_level_label->setPosition(ccp(113,400));
 	addChild(t_card_level_label, kCARDCASE_Z_data);
 
 	if(original_passive_string == "-1")
@@ -632,12 +598,12 @@ void CardCase::myInit( int t_selected_card_number )
 
 	if(elemental_number == kElementCode_empty || elemental_number == kElementCode_fire || elemental_number == kElementCode_life || elemental_number == kElementCode_water)
 	{
-		SpinBasicMissile* missile_img = SpinBasicMissile::create(type_name.c_str(), level_number, ccp(18,18), false);
+		SpinBasicMissile* missile_img = SpinBasicMissile::create(type_name.c_str(), level_number, ccp(28,28), false);
 		option_case->addChild(missile_img, kCARDCASE_Z_data);
 	}
 	else
 	{
-		SpinUpgradeMissile* missile_img = SpinUpgradeMissile::create(type_name.c_str(), level_number, ccp(18,18), false);
+		SpinUpgradeMissile* missile_img = SpinUpgradeMissile::create(type_name.c_str(), level_number, ccp(28,28), false);
 		option_case->addChild(missile_img, kCARDCASE_Z_data);
 	}
 }

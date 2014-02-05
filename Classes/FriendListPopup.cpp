@@ -5,9 +5,6 @@
 #include "JoinGameFriendPopup.h"
 #include "UnknownFriends.h"
 #include "KnownFriend.h"
-
-#include "KSAlertView.h"
-
 #include "KHAlertView.h"
 CCSize cellSize3 = CCSizeMake(238, 38);
 void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
@@ -244,7 +241,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	bg->setAnchorPoint(CCPointZero);
 	cell->addChild(bg,0);
 	
-	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "no_img.png");
+	CCSprite* profileImg = GDWebSprite::create((*member).profileUrl, "ending_noimg.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kProfileImg);
 	profileImg->setPosition(ccp(30, 20));

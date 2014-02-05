@@ -90,7 +90,7 @@ private:
 	
 	CCParticleSystemQuad* line_particle;
 	
-	CCLayer* condition_spr;
+	CCSprite* condition_spr;
 	CCSprite* touch_img;
 	
 	GameItemManager* myGIM;

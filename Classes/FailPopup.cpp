@@ -12,7 +12,6 @@
 #include "FailHelpPopup.h"
 #include "LogData.h"
 #include "CountingBMLabel.h"
-#include "DecreaseCardDurabilityPopup.h"
 #include "DownloadFile.h"
 #include "StageSettingPopup.h"
 #include "PuzzleMapScene.h"
@@ -29,6 +28,8 @@
 #include "TouchSuctionLayer.h"
 #include "KHAlertView.h"
 #include "CommonButton.h"
+#include "CardCase.h"
+
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
 	kMT_FP_replay,
@@ -1067,7 +1068,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kFFC_T_img);
 	profileImg->setPosition(ccp(52, 22));
-	cell->addChild(profileImg, kFFC_Z_img);
+	cell->addChild(profileImg, -1);
 	
 	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
 	string cell_id = (*member).user_id;

@@ -18,7 +18,7 @@
 #include "DownloadFile.h"
 #include "StarGoldData.h"
 #include "DimmedPopup.h"
-#include "CommonButton.h";
+#include "CommonButton.h"
 USING_NS_CC;
 
 #define SAFE_REMOVECHILD(X) do{if(X){ X->removeFromParentAndCleanup(true); X = 0;}}while(0);

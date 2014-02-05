@@ -8,7 +8,6 @@
 
 #include "TitleRenewal.h"
 #include "StarGoldData.h"
-#include "TakeCardPopup.h"
 #include "utf8.h"
 #include "UnknownFriends.h"
 #include "KnownFriend.h"

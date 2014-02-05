@@ -539,7 +539,7 @@ void Maingame::startCounting()
 {
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
-	condition_spr = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile("ui_ready.ccbi",this));
+	condition_spr = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ui_ready.ccbi",this));
 	addChild(condition_spr, conditionLabelZorder);
 	reader->release();
 	

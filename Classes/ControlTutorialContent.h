@@ -39,18 +39,22 @@ public:
 		}
 		else if(t_name == "tutorial1")
 		{
+			click_animaition->setVisible(true);
 			state_number = 1;
 		}
 		else if(t_name == "tutorial2")
 		{
+			click_animaition->setVisible(true);
 			state_number = 3;
 		}
 		else if(t_name == "tutorial3")
 		{
+			click_animaition->setVisible(true);
 			state_number = 5;
 		}
 		else if(t_name == "tutorial4")
 		{
+			click_animaition->setVisible(true);
 			state_number = 7;
 //			close_menu->setVisible(true);
 //			touch_menu->setVisible(false);
@@ -63,6 +67,7 @@ private:
 	CCMenu* touch_menu;
 	
 	CCBAnimationManager* ani_manager;
+	CCSprite* click_animaition;
 	
 	function<void(CCObject*)> end_selector;
 	
@@ -115,6 +120,11 @@ private:
 //		close_menu->setPosition(ccp(140,112));
 //		addChild(close_menu);
 		
+		click_animaition = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("tutorial_next.ccbi",this));
+		click_animaition->setPosition(ccp(0,0));
+		addChild(click_animaition);
+		click_animaition->setVisible(false);
+		
 		CCSprite* n_touch = CCSprite::create("whitePaper.png");
 		n_touch->setOpacity(0);
 		CCSprite* s_touch = CCSprite::create("whitePaper.png");
@@ -131,21 +141,25 @@ private:
 	{
 		if(state_number == 1)
 		{
+			click_animaition->setVisible(false);
 			state_number = 2;
 			ani_manager->runAnimationsForSequenceNamed("tutorial2");
 		}
 		else if(state_number == 3)
 		{
+			click_animaition->setVisible(false);
 			state_number = 4;
 			ani_manager->runAnimationsForSequenceNamed("tutorial3");
 		}
 		else if(state_number == 5)
 		{
+			click_animaition->setVisible(false);
 			state_number = 6;
 			ani_manager->runAnimationsForSequenceNamed("tutorial4");
 		}
 		else if(state_number == 7)
 		{
+			click_animaition->setVisible(false);
 			touch_menu->setVisible(false);
 			end_selector(NULL);
 		}

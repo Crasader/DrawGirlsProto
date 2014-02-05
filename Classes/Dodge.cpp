@@ -94,7 +94,7 @@ bool Dodge::init(int priority, const std::function<void(CCObject*, SEL_CallFunc)
 	m_readyFnt->setPosition(dodgeScreenSize / 2.f);
 	addChild(m_readyFnt);
 
-	auto ready_go = KS::loadCCBI<CCLayer*>(this, "ui_ready.ccbi");
+	auto ready_go = KS::loadCCBI<CCSprite*>(this, "ui_ready.ccbi");
 	addChild(ready_go.first);
 	ready_go.first->setPosition(ccp(240, 160));
 	
