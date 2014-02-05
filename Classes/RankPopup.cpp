@@ -115,10 +115,10 @@ RankPopup::~ RankPopup ()
 {
 	StageImgLoader::sharedInstance()->removeTD();
 }
-void RankPopup::finishedOpen ()
-{
-	loadRank();
-}
+//void RankPopup::finishedOpen ()
+//{
+//	loadRank();
+//}
 
 
 void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
@@ -646,11 +646,11 @@ void RankPopup::drawRank (Json::Value obj)
 											  , 0.3f);
 	//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
 }
-void RankPopup::closePopup (CCControlButton * obj, CCControlEvent event)
-{
-	//		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
-	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedClose)),NULL));
-}
+//void RankPopup::closePopup (CCControlButton * obj, CCControlEvent event)
+//{
+//	//		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
+//	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedClose)),NULL));
+//}
 CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int idx)
 {
 	
@@ -692,7 +692,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	
 	
 	
-	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "ending_take_particle.png");
+	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "no_img.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kRP_RT_profileImg);
 	profileImg->setPosition(ccp(51, 20));

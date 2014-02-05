@@ -159,7 +159,7 @@ public:
 	
 	bool command(string action, const Json::Value param,CCObject *target,function<void(Json::Value)> func){
 		addTarget(target);
-		function<void(Json::Value)> sFunc = [target,func](Json::Value value){
+		function<void(Json::Value)> sFunc = [=](Json::Value value){
 			CCLog("checkDelegator sFunc call");
 			if(GraphDog::get()->cehckTarget(target))func(value);
 		};
