@@ -46,7 +46,7 @@ public:
 		return pop;
 	}
 	
-	bool init(){
+	virtual bool init(){
 		
 		if(CCLayer::init()==false)return false;
 		
