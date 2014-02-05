@@ -509,7 +509,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 		bg->setAnchorPoint(CCPointZero);
 		cell->addChild(bg,0);
 
-		CCSprite* profileImg = GDWebSprite::create((mail)["profile_image_url"].asString(), "ending_take_particle.png");
+		CCSprite* profileImg = GDWebSprite::create((mail)["profile_image_url"].asString(), "no_img.png");
 		profileImg->setAnchorPoint(ccp(0.5, 0.5));
 		profileImg->setTag(kMP_MT_profileImg);
 		profileImg->setPosition(ccp(20, 20));
