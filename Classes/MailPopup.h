@@ -70,12 +70,12 @@ class MailPopup : public DimmedPopup, public CCTableViewDataSource, public CCTab
 {
 	public:
 		static MailPopup * create (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh);
-		void finishedOpen ();
-		void finishedClose ();
+	//	void finishedOpen ();
+	//	void finishedClose ();
 		void myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh);
 		void loadMail ();
 		void drawMail (Json::Value obj);
-		void closePopup (CCControlButton * obj, CCControlEvent event);
+	//	void closePopup (CCControlButton * obj, CCControlEvent event);
 		void removeMail (CCObject * _obj);
 		virtual CCTableViewCell * tableCellAtIndex (CCTableView * table, unsigned int idx);
 		virtual void scrollViewDidScroll (CCScrollView * view);

@@ -42,10 +42,10 @@ MailPopup * MailPopup::create (CCObject * t_close, SEL_CallFunc d_close, std::fu
 	t_rp->autorelease();
 	return t_rp;
 }
-void MailPopup::finishedOpen ()
-{
-	loadMail();
-}
+//void MailPopup::finishedOpen ()
+//{
+//	loadMail();
+//}
 //void MailPopup::finishedClose ()
 //{
 //	
@@ -485,12 +485,12 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	
 	auto allInvisible = [=]()
 	{
-		giftFilter->setEnabled(false);
-		helpFilter->setEnabled(false);
-		ticketFilter->setEnabled(false);
-		challengeFilter->setEnabled(false);
-		coinFilter->setEnabled(false);
-		totalFilter->setEnabled(false);
+		giftFilter->setEnabled(true);
+		helpFilter->setEnabled(true);
+		ticketFilter->setEnabled(true);
+		challengeFilter->setEnabled(true);
+		coinFilter->setEnabled(true);
+		totalFilter->setEnabled(true);
 //		totalFilterOn->setVisible(false);
 //		coinFilterOn->setVisible(false);
 //		challengeFilterOn->setVisible(false);
@@ -527,7 +527,6 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	});
 	totalFilter->setPosition(ccp(53, 255));
 	this->addChild(totalFilter, 1);
-	totalFilter->setEnabled(false);
 	
 	
 	
@@ -700,6 +699,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	this->addChild(closeBtn);
 	
 	allInvisible();
+	totalFilter->setEnabled(false);
 	
 	//_menu->addChild(closeBtn, kMP_Z_close);
 	
@@ -781,10 +781,10 @@ void MailPopup::drawMail (Json::Value obj)
 	//else 
 		//if(m_mailFilter == MailFilter::kTotal)
 }
-void MailPopup::closePopup (CCControlButton * obj, CCControlEvent event)
-{
-	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(MailPopup::finishedClose)),NULL));
-}
+//void MailPopup::closePopup (CCControlButton * obj, CCControlEvent event)
+//{
+//	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(MailPopup::finishedClose)),NULL));
+//}
 void MailPopup::removeMail (CCObject * _obj)
 {
 	
