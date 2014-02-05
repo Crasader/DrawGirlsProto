@@ -93,8 +93,8 @@ bool CardSettingPopup::init()
 	
 	default_align_number_of_cell = (total_stage_cnt-1)/2 + 1;
 	
-	CCSize table_size = CCSizeMake(392, 180);
-	CCPoint table_position = ccp(34, 52);
+	CCSize table_size = CCSizeMake(410, 180);
+	CCPoint table_position = ccp(36, 52);
 	
 //	CCSprite* temp_table = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //	temp_table->setAnchorPoint(CCPointZero);
@@ -495,7 +495,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			for(int i=1;i<=3;i++)
 			{
 				int card_number = getSGDisHasGottenCards(found_stage1, i);
-				CCPoint card_position = ccp(32.f + (i-1)*(64.f+1.f), 43.f);
+				CCPoint card_position = ccp(32.f + (i-1)*(68.f+1.f), 43.f);
 				if(card_number > 0)
 				{
 					CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
@@ -605,7 +605,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				for(int i=1;i<=3;i++)
 				{
 					int card_number = getSGDisHasGottenCards(found_stage1, i);
-					CCPoint card_position = ccp(32.f + 3*(64.f+1.f) + (i-1)*(64.f+1.f), 43.f);
+					CCPoint card_position = ccp(32.f + 3*(68.f+1.f) + (i-1)*(68.f+1.f), 43.f);
 					if(card_number > 0)
 					{
 						CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
@@ -693,7 +693,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			int card_stage = getCardStage(card_number);
 			int card_grade = getCardGrade(card_number);
 			int card_durability = getCardDurability(card_number);
-			CCPoint card_position = ccp(32.f + (i-idx*6)*(64.f+1.f), 43.f);
+			CCPoint card_position = ccp(32.f + (i-idx*6)*(68.f+1.f), 43.f);
 			
 			CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
 			CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);

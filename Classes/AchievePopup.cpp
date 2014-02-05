@@ -355,8 +355,8 @@ void AchievePopup::setAchieveTable()
 		}
 	}
 	
-	CCSize table_size = CCSizeMake(410, 183);
-	CCPoint table_position = ccp(34, 49);
+	CCSize table_size = CCSizeMake(410, 180);
+	CCPoint table_position = ccp(34, 52);
 	
 //	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //	temp_back->setAnchorPoint(CCPointZero);

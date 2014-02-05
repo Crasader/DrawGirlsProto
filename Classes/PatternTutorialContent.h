@@ -78,7 +78,7 @@ private:
 		ing_close_cnt = 0;
 		
 		show_content = CCSprite::create(CCString::createWithFormat("pattern%d_tutorial.png", pattern_list[ing_close_cnt])->getCString());
-		show_content->setPosition(ccp(0, 0));
+		show_content->setPosition(ccp(0, -9));
 		addChild(show_content);
 		
 //		CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");

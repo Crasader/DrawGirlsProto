@@ -123,21 +123,21 @@ public:
 	static CardCase* create(int t_card_stage, int t_card_grade, int t_level, string t_passive);
 	
 	CCLabelTTF* getRecentDurabilityLabel();
-	CCLabelTTF* getTotalDurabilityLabel();
+//	CCLabelTTF* getTotalDurabilityLabel();
 	
-	void startDecreaseDurability(CCObject* t_end, SEL_CallFunc d_end);
+//	void startDecreaseDurability(CCObject* t_end, SEL_CallFunc d_end);
 	
 private:
 	CCLabelTTF* recent_durability_label;
-	CCLabelTTF* total_durability_label;
-	CCSprite* durability_case;
+//	CCLabelTTF* total_durability_label;
+//	CCSprite* durability_case;
 	int selected_card_number;
 	string original_passive_string;
 	string passive_content;
 	int card_level;
 	bool is_show_passive_content;
 	
-	void changeRecentDurabilityLabel(CCObject* sender);
+//	void changeRecentDurabilityLabel(CCObject* sender);
 	
 	void myInit(int t_selected_card_number);
 	void myInit(int t_selected_card_number, int t_level, string t_passive);

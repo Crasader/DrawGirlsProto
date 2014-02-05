@@ -14,7 +14,6 @@
 #include "LogData.h"
 #include "CardCase.h"
 #include "CountingBMLabel.h"
-#include "TakeCardPopup.h"
 #include "AlertEngine.h"
 #include "MyLocalization.h"
 #include "HeartTime.h"
@@ -1359,7 +1358,7 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kCFC_T_img);
 	profileImg->setPosition(ccp(52, 22));
-	cell->addChild(profileImg, kCFC_Z_img);
+	cell->addChild(profileImg, -1);
 	
 	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
 	string cell_id = (*member).user_id;
