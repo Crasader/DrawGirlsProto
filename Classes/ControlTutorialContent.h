@@ -120,7 +120,7 @@ private:
 //		close_menu->setPosition(ccp(140,112));
 //		addChild(close_menu);
 		
-		click_animaition = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("tutorial_next.ccbi",this));
+		click_animaition = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("tutorial_nextbutton.ccbi",this));
 		click_animaition->setPosition(ccp(0,0));
 		addChild(click_animaition);
 		click_animaition->setVisible(false);
