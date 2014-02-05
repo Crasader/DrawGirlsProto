@@ -266,7 +266,7 @@ private:
 	CCLabelBMFont * score_label;
 	CCLabelBMFont * percentageLabel;
 	CCLabelBMFont * countingLabel;
-	CCLayer * result_sprite;
+	CCSprite * result_sprite;
 	CCDictionary * exchange_dic;
 	bool is_exchanged;
 	bool is_show_exchange_coin;

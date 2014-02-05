@@ -1018,7 +1018,7 @@ void PlayUI::addResultCCB(string ccb_filename)
 {
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
-	result_sprite = dynamic_cast<CCLayer*>(reader->readNodeGraphFromFile(ccb_filename.c_str(),this));
+	result_sprite = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(ccb_filename.c_str(),this));
 	result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
 	addChild(result_sprite);
 	reader->release();
