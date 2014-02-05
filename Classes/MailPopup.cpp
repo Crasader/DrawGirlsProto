@@ -74,6 +74,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	
 	m_popupState = PostBoxState::kNoMenu;
 	setTouchEnabled(true);
+	isLoaded = false;
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
@@ -483,6 +484,10 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	CommonButton* coinFilter = CommonButton::create("코인함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
 	CommonButton* totalFilter = CommonButton::create("전체보기", 12, CCSizeMake(65,38), CommonButtonGray, -200);
 	
+	
+	
+	loadMail();
+	
 	auto allInvisible = [=]()
 	{
 		giftFilter->setEnabled(true);
@@ -519,6 +524,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	totalFilter->setTitleColor(ccc3(200, 200, 200));
 	totalFilter->setTitleColorForDisable(ccc3(20, 0, 0));
 	totalFilter->setFunction([=](CCObject*){
+		if(!this->isLoaded)return;
 		m_mailFilter = MailFilter::kTotal;
 		filterWithMailFilter();
 		this->mailTableView->reloadData();
@@ -550,6 +556,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	coinFilter->setTitleColor(ccc3(200, 200, 200));
 	coinFilter->setTitleColorForDisable(ccc3(20, 0, 0));
 	coinFilter->setFunction([=](CCObject*){
+		if(!this->isLoaded)return;
 		m_mailFilter = MailFilter::kHeart;
 		filterWithMailFilter();
 		this->mailTableView->reloadData();
@@ -581,6 +588,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	challengeFilter->setTitleColor(ccc3(200, 200, 200));
 	challengeFilter->setTitleColorForDisable(ccc3(20, 0, 0));
 	challengeFilter->setFunction([=](CCObject*){
+		if(!this->isLoaded)return;
 		m_mailFilter = MailFilter::kChallenge;
 		filterWithMailFilter();
 		this->mailTableView->reloadData();
@@ -610,6 +618,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	ticketFilter->setTitleColor(ccc3(200, 200, 200));
 	ticketFilter->setTitleColorForDisable(ccc3(20, 0, 0));
 	ticketFilter->setFunction([=](CCObject*){
+		if(!this->isLoaded)return;
 		m_mailFilter = MailFilter::kTicket;
 		filterWithMailFilter();
 		this->mailTableView->reloadData();
@@ -640,6 +649,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	helpFilter->setTitleColor(ccc3(200, 200, 200));
 	helpFilter->setTitleColorForDisable(ccc3(20, 0, 0));
 	helpFilter->setFunction([=](CCObject*){
+		if(!this->isLoaded)return;
 		m_mailFilter = MailFilter::kHelp;
 		filterWithMailFilter();
 		this->mailTableView->reloadData();
@@ -671,6 +681,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	giftFilter->setTitleColor(ccc3(200, 200, 200));
 	giftFilter->setTitleColorForDisable(ccc3(20, 0, 0));
 	giftFilter->setFunction([=](CCObject*){
+		if(!this->isLoaded)return;
 		m_mailFilter = MailFilter::kHelp;
 		filterWithMailFilter();
 		this->mailTableView->reloadData();
@@ -698,13 +709,13 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	closeBtn->setPosition(ccp(450, 255));
 	this->addChild(closeBtn);
 	
+	
 	allInvisible();
 	totalFilter->setEnabled(false);
 	
 	//_menu->addChild(closeBtn, kMP_Z_close);
 	
 	
-	loadMail();
 }
 void MailPopup::loadMail ()
 {
@@ -770,6 +781,8 @@ void MailPopup::drawMail (Json::Value obj)
 	this->addChild(mailTableView, kMP_Z_mailTable);
 	mailTableView->setTouchPriority(-200);
 
+	isLoaded=true;
+	
 	//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 필터한 json 을 생성함. m_mailFilter 에 따라 필터함.
