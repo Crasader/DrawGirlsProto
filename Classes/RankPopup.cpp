@@ -692,7 +692,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	
 	
 	
-	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "no_img.png");
+	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "ending_noimg.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kRP_RT_profileImg);
 	profileImg->setPosition(ccp(51, 20));

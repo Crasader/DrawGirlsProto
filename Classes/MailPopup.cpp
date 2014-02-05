@@ -752,7 +752,7 @@ void MailPopup::drawMail (Json::Value obj)
 	CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
 	m_scrollBar = ScrollBar::createScrollbar(mailTableView, -2 - 10, NULL, bar);
 	m_scrollBar->setDynamicScrollSize(false);
-	
+	m_scrollBar->setVisible(false);	
 	mailTableView->setAnchorPoint(CCPointZero);
 	
 	//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
@@ -823,7 +823,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 		bg->setAnchorPoint(CCPointZero);
 		cell->addChild(bg,0);
 
-		CCSprite* profileImg = GDWebSprite::create((mail)["profile_image_url"].asString(), "no_img.png");
+		CCSprite* profileImg = GDWebSprite::create((mail)["profile_image_url"].asString(), "ending_noimg.png");
 		profileImg->setAnchorPoint(ccp(0.5, 0.5));
 		profileImg->setTag(kMP_MT_profileImg);
 		profileImg->setPosition(ccp(20, 20));
