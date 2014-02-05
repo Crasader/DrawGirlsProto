@@ -42,7 +42,7 @@ public:
 		m_back->setOpacity(color.a);
 		m_back->setAnchorPoint(ccp(0.5,0.5));
 		m_back->setPosition(ccp(0,0));
-		this->addChild(m_back, 1);
+		//this->addChild(m_back, 1);
 		
 		
 		
@@ -51,7 +51,7 @@ public:
 		cNode->setAnchorPoint(ccp(0,0));
 		cNode->setPosition(ccp(0,0));
 		cNode->setStencil(m_back);
-		cNode->setAlphaThreshold(255);
+		cNode->setInverted(false);
 		this->addChild(cNode,1);
 		
 		m_text1 = CCLabelTTF::create("", mySGD->getFont().c_str(), height);

@@ -1683,6 +1683,7 @@ void Maingame::showPause()
 	bool t_jack_stun = myJack->isStun;
 	
 	CCNode* exit_target = this;
+	mControl->setTouchEnabled(false);
 	exit_target->onExit();
 	
 	ASPopupView* t_popup = ASPopupView::create(-200);
@@ -1701,6 +1702,7 @@ void Maingame::showPause()
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
+		mControl->setTouchEnabled(true);
 		t_popup->removeFromParent();
 		cancelHome();
 	}, [=]()
@@ -1765,6 +1767,7 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 	bool t_jack_stun = myJack->isStun;
 	
 	CCNode* exit_target = this;
+	mControl->setTouchEnabled(false);
 	exit_target->onExit();
 	
 	ASPopupView* t_popup = ASPopupView::create(-200);

@@ -863,7 +863,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 
 			InviteEventPopup* t_rp = InviteEventPopup::create(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
 
-			getParent()->addChild(t_rp, kMainFlowZorder_popup);
+			addChild(t_rp, kMainFlowZorder_popup);
 
 		}
 		else if(tag == kMainFlowMenuTag_gacha)

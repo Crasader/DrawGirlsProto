@@ -14,6 +14,8 @@
 #include "cocos-ext.h"
 #include "LabelTTFMarquee.h"
 #include "KSUtil.h"
+#include "CommonButton.h"
+
 using namespace cocos2d;
 using namespace std;
 using namespace cocos2d::extension;
@@ -26,9 +28,12 @@ public:
 	
 	CCMenu* m_menu;
 	
-	CCSprite* m_black_left;
-	CCSprite* m_black_center;
-	CCSprite* m_black_right;
+//	CCSprite* m_black_left;
+//	CCSprite* m_black_center;
+//	CCSprite* m_black_right;
+	CCSprite* m_btnBackRight;
+	
+	CCScale9Sprite* m_black;
 	LabelTTFMarquee* m_maqueeLbl;
 	
 	CCObject* m_openTarget;
@@ -69,27 +74,32 @@ public:
 		this->addChild(m_menu,3);
 		
 		
+		m_black = CommonButton::getBackgroundByType(CommonButtonGray);
+		
+		m_black->setPosition(ccp(0,0));
+		m_black->setContentSize(CCSizeMake(38,36));
+		this->addChild(m_black,1);
+		
+//		m_black_left = CCSprite::create("ui_mission_back_left.png");
+//		m_black_left->setAnchorPoint(ccp(0.5,0.5));
+//		m_black_left->setPosition(ccp(-11,0));
+//		this->addChild(m_black_left,1);
+//		
+//		m_black_center = CCSprite::create("ui_mission_back_center.png");
+//		m_black_center->setPosition(ccp(0,0));
+//		this->addChild(m_black_center,1);
+//		
+//		
+//		m_black_right = CCSprite::create("ui_mission_back_right.png");
+//		m_black_right->setAnchorPoint(ccp(0.5,0.5));
+//		m_black_right->setPosition(ccp(11,0));
+//		this->addChild(m_black_right,1);
 		
 		
-		m_black_left = CCSprite::create("ui_mission_back_left.png");
-		m_black_left->setAnchorPoint(ccp(0.5,0.5));
-		m_black_left->setPosition(ccp(-11,0));
-		this->addChild(m_black_left,1);
-		
-		m_black_center = CCSprite::create("ui_mission_back_center.png");
-		m_black_center->setPosition(ccp(0,0));
-		this->addChild(m_black_center,1);
-		
-		
-		m_black_right = CCSprite::create("ui_mission_back_right.png");
-		m_black_right->setAnchorPoint(ccp(0.5,0.5));
-		m_black_right->setPosition(ccp(11,0));
-		this->addChild(m_black_right,1);
-		
-		
-		CCSprite* m_btnBackRight = CCSprite::create("ui_mission_button_back.png");
-		m_btnBackRight->setPosition(ccp(-6,18));
-		m_black_right->addChild(m_btnBackRight,2);
+		m_btnBackRight = CCSprite::create("ui_mission_button_back.png");
+		m_btnBackRight->setAnchorPoint(ccp(0.5f,0.5f));
+		m_btnBackRight->setPosition(ccp(0,0));
+		this->addChild(m_btnBackRight,2);
 		
 		
 		// Setup scroll view
@@ -164,22 +174,26 @@ public:
 	void doOpen(){
 		if(m_isOpened==true)return;
 		
-		{
-			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(-90,0));
-			m_black_left->runAction(ani);
-		}
+		this->addChild(KSGradualValue<float>::create(38,218,0.3f,[=](float t){
+			m_black->setContentSize(ccp(t,36));
+		}));
+
+//		{
+//			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(-90,0));
+//			m_black_left->runAction(ani);
+//		}
 		{
 			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(-90,0));
 			m_openBtn->runAction(ani);
 		}
 		{
 			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(90,0));
-			m_black_right->runAction(ani);
+			m_btnBackRight->runAction(ani);
 		}
-		{
-			CCFiniteTimeAction* ani  = CCScaleTo::create(0.3, 15, 1);
-			m_black_center->runAction(ani);
-		}
+//		{
+//			CCFiniteTimeAction* ani  = CCScaleTo::create(0.3, 15, 1);
+//			m_black_center->runAction(ani);
+//		}
 		{
 			m_closeBtn->setVisible(true);
 			CCFiniteTimeAction* ani  = CCSpawn::create(CCMoveBy::create(0.3, ccp(95,0)),CCFadeIn::create(0.5),NULL);
@@ -201,22 +215,28 @@ public:
 	void doClose(){
 		if(m_isOpened==false)return;
 		
-		{
-			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(90,0));
-			m_black_left->runAction(ani);
-		}
+		
+		this->addChild(KSGradualValue<float>::create(218,38,0.3f,[=](float t){
+			m_black->setContentSize(ccp(t,36));
+		}));
+		
+//		{
+//			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(90,0));
+//			m_black_left->runAction(ani);
+//		}
 		{
 			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(90,0));
 			m_openBtn->runAction(ani);
 		}
+//		}
 		{
 			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(-90,0));
-			m_black_right->runAction(ani);
+			m_btnBackRight->runAction(ani);
 		}
-		{
-			CCFiniteTimeAction* ani  = CCScaleTo::create(0.3, 1, 1);
-			m_black_center->runAction(ani);
-		}
+//		{
+//			CCFiniteTimeAction* ani  = CCScaleTo::create(0.3, 1, 1);
+//			m_black_center->runAction(ani);
+//		}
 		{
 			m_maqueeLbl->setVisible(false);
 		}
