@@ -8,7 +8,8 @@
 #include "HatGacha.h"
 #include "SendMessageUtil.h"
 #include "GachaPurchase.h"
-
+#include "KHAlertView.h"
+#include "CommonButton.h"
 ChallengeSend::ChallengeSend()
 {
 	
@@ -75,44 +76,38 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																	 GraphDogLib::JsonToLog("sendMessage", r);
 																	 
 																	 //																		obj->removeFromParent();
-																	 KSAlertView* av = KSAlertView::create();
+																	
+																	 KHAlertView* av = KHAlertView::create(); 
+																	 // av->setTitleFileName("msg_challenge.png");
+																	 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+																	 av->setWidth(240);
+																	 av->setHeight(240);
+																	 av->setTitleHeight(10);
+																	 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
 																	 av->setCenterY(150);
-																	 auto ttf = CCLabelTTF::create((nickname + "님에게 도전을 하였습니다. 결과를 기다리세요!").c_str(), "", 12.f);
-																	 ttf->setColor(ccc3(0, 0, 0));
+
+																	 CCNode* emptyNode = CCNode::create();
+																	 auto ttf = CCLabelTTF::create((nickname + "님에게 도전을 하였습니다. 결과를 기다리세요!").c_str(), mySGD->getFont().c_str(), 12.f); 
+																	 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+																	 //	con->setAnchorPoint(ccp(0, 0));
+																	 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+																	 ttf->setColor(ccc3(255, 255, 255));
+																	 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																	 emptyNode->addChild(ttf);
 																	 av->setContentNode(
-																											ttf
-																											);
+																			 emptyNode
+																			 );
 																	 av->setContentSize(ttf->getDimensions());
-																	 
-																	 //	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-																	 //																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-																	 //	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-																	 //																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-																	 //	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-																	 //																					[](CCObject* e){
-																	 //																						CCLog("press!!");
-																	 //																					});
-																	 //	av->addButton(m1);
-																	 av->addButton(CCMenuItemImageLambda::create
-																								 (
-																									"ui_common_ok.png",
-																									"ui_common_ok.png",
-																									[=](CCObject* e){
-																										//																										removeFromParent();
-																										endFunction();
-																									}
-																									));
+																	 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																								 [=](CCObject* e) {
+																									 CCLog("ok!!");
+																									 endFunction();
+																								 });
+
 																	 addChild(av, 1);
 																	 av->show();
-																	 
-																	 Json::Value p2;
-																	 p2["receiver_id"] = recvId;
-																	 p2["message"] = "도전을 신청한다!!";
-																	 hspConnector::get()->kSendMessage
-																	 (p2, [=](Json::Value r)
-																		{
-																			GraphDogLib::JsonToLog("kSendMessage", r);
-																		});
+
+																	 ////////////////////////////////////
 																 });
 	}
 	else if(cc == ChallengeCategory::kRequestReply)
@@ -197,27 +192,37 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																													 
 																												 });
 																		 //												 						obj->removeFromParent();
-																		 KSAlertView* av = KSAlertView::create();
+																		 KHAlertView* av = KHAlertView::create(); 
+																		 // av->setTitleFileName("msg_challenge.png");
+																		 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+																		 av->setWidth(240);
+																		 av->setHeight(240);
+																		 av->setTitleHeight(10);
+																		 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
 																		 av->setCenterY(150);
-																		 auto ttf = CCLabelTTF::create((nickname + "에게 졌습니다...").c_str(), "", 12.f);
-																		 ttf->setColor(ccc3(0, 0, 0));
-																		  av->setContentNode(
-																												ttf
-																												);
-																		 av->setContentSize(ttf->getDimensions());
 
-																		 av->addButton(CCMenuItemImageLambda::create
-																									 (
-																										"ui_common_ok.png",
-																										"ui_common_ok.png",
-																										[=](CCObject* e){
-																											//																										removeFromParent();
-																											endFunction();
-																										}
-																										));
+																		 CCNode* emptyNode = CCNode::create();
+																		 auto ttf = CCLabelTTF::create((nickname + "에게 졌습니다...").c_str(), mySGD->getFont().c_str(), 12.f); 
+																		 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+																		 //	con->setAnchorPoint(ccp(0, 0));
+																		 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+																		 ttf->setColor(ccc3(255, 255, 255));
+																		 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																		 emptyNode->addChild(ttf);
+																		 av->setContentNode(
+																				 emptyNode
+																				 );
+																		 av->setContentSize(ttf->getDimensions());
+																		 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																									 [=](CCObject* e) {
+																										 CCLog("ok!!");
+																										 endFunction();
+																									 });
+
 																		 addChild(av, 1);
 																		 av->show();
-																		 
+
+
 																		 Json::Value p2;
 																		 p2["receiver_id"] = user_id;
 																		 // 여기서 당신은 지금 배틀한 상대방을 지칭

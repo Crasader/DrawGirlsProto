@@ -997,6 +997,8 @@ FeverCoinParent* FeverCoinParent::create()
 
 void FeverCoinParent::startFever()
 {
+	is_fevering = true;
+	myGD->communication("Main_setLineParticle", true);
 	for(int i=4;i<mapHeightInnerEnd;i+=9)
 	{
 		for(int j=4;j<mapWidthInnerEnd;j+=9)
@@ -1015,6 +1017,8 @@ void FeverCoinParent::startFever()
 
 void FeverCoinParent::stopFever()
 {
+	is_fevering = false;
+	myGD->communication("Main_setLineParticle", false);
 	int loop_cnt = getChildrenCount();
 	CCArray* my_childs = getChildren();
 	CCArray* delete_target_list = CCArray::createWithCapacity(1);
@@ -1075,6 +1079,7 @@ void FeverCoinParent::stopRemove()
 
 void FeverCoinParent::myInit()
 {
+	is_fevering = false;
 	initWithFile("fever_coin.png", kDefaultSpriteBatchCapacity);
 	is_removing = false;
 //	weight_value = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)/(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1.f)*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
@@ -1087,6 +1092,11 @@ GameItemManager* GameItemManager::create()
 	t_gim->myInit();
 	t_gim->autorelease();
 	return t_gim;
+}
+
+bool GameItemManager::getIsFevering()
+{
+	return fever_coin_parent->is_fevering;
 }
 
 void GameItemManager::startItemSetting()

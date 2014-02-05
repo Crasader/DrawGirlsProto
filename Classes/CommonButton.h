@@ -26,6 +26,7 @@ enum CommonButtonType {
 		CommonButtonBlue,
 		CommonButtonGreen,
 		CommonButtonOrange,
+		CommonButtonPupple,
 		CommonButtonClose
 	};
 
@@ -49,6 +50,10 @@ class CommonButton : public CCNode {
 	PriceType m_priceType;
 	CCSprite* m_priceTypeSprite;
 	CCLabelTTF* m_priceLbl;
+	float m_fontSize;
+	string m_title;
+	ccColor3B m_titleColorNomal;
+	ccColor3B m_titleColorDisable;
 public:
 	
 	void setFunction(std::function<void(CCObject*)> func){
@@ -97,6 +102,8 @@ public:
 		if(CCNode::init()==false){
 			return false;
 		}
+		m_titleColorNomal=ccc3(255,255,255);
+		m_titleColorDisable=ccc3(255,255,255);
 		
 		m_priceType = PriceTypeNone;
 		m_price=0;
@@ -104,30 +111,27 @@ public:
 		m_priceTypeSprite = NULL;
 		m_priceLbl = NULL;
 		
+		m_fontSize=fontSize;
+		m_title=title;
 		this->setAnchorPoint(ccp(0.5f,0.5f));
 		m_btnTitle = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), fontSize);
 		
-		string btnBackImg;
-		
 		m_btnType = btnType;
 		
-		if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
-		else if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
-		else if(btnType==CommonButtonGray) btnBackImg = "common_button_gray.png";
-		else if(btnType==CommonButtonBlue) btnBackImg = "common_button_blue.png";
-		else if(btnType==CommonButtonGreen) btnBackImg = "common_button_green.png";
-		else if(btnType==CommonButtonOrange) btnBackImg = "common_button_orange.png";
-		else if(btnType==CommonButtonClose) btnBackImg = "common_button_close.png";
-		
-		m_btnBack = CCScale9Sprite::create(btnBackImg.c_str());
+		m_btnBack = CommonButton::getBacgroundByType(btnType);
 		
 		
 		m_btn = CCControlButton::create(m_btnTitle, m_btnBack);
-		this->setButtonInset(btnType);
 		
+		if(btnType == CommonButtonClose){
+			this->setSize(CCSizeMake(36,36));
+		}
+
 		
 		if(size.height>0){
 			m_btn->setPreferredSize(size);
+		}else{
+			m_btn->setMargins(10, 5);
 		}
 		
 		m_btn->setAnchorPoint(ccp(0.5f,0.5f));
@@ -135,11 +139,33 @@ public:
 		m_btn->setPosition(m_btn->getContentSize().width/2, m_btn->getContentSize().height/2);
 		if(touchPriority!=0)m_btn->setTouchPriority(touchPriority);
 		addChild(m_btn,2);
-		
 		this->setContentSize(m_btn->getContentSize());
 		
 		
 		return true;
+	}
+	
+	static CCScale9Sprite* getBacgroundByType(CommonButtonType btnType){
+		string btnBackImg;
+		if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
+		else if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
+		else if(btnType==CommonButtonGray) btnBackImg = "common_button_gray.png";
+		else if(btnType==CommonButtonBlue) btnBackImg = "common_button_blue.png";
+		else if(btnType==CommonButtonGreen) btnBackImg = "common_button_green.png";
+		else if(btnType==CommonButtonOrange) btnBackImg = "common_button_orange.png";
+		else if(btnType==CommonButtonPupple) btnBackImg = "common_button_pupple.png";
+		else if(btnType==CommonButtonClose) btnBackImg = "common_button_close.png";
+		
+		CCScale9Sprite* back = CCScale9Sprite::create(btnBackImg.c_str());
+		
+		if(btnType != CommonButtonClose){
+			back->setInsetBottom(12);
+			back->setInsetTop(38-12*2);
+			back->setInsetLeft(9);
+			back->setInsetRight(38-9*2);
+		}
+		
+		return back;
 	}
 	
 	void setButtonInset(CommonButtonType type){
@@ -167,10 +193,7 @@ public:
 		m_btnTitle->setFontSize(size);
 	}
 	
-	void setTitleColor(ccColor3B color){
-		m_btnTitle->setFontFillColor(color);
-	}
-	
+
 	void setSize(CCSize size){
 		m_btn->setPreferredSize(size);
 		this->setContentSize(size);
@@ -179,6 +202,11 @@ public:
 	
 	void setEnabled(bool isEnabled){
 		m_btn->setEnabled(isEnabled);
+		if(isEnabled){
+			this->m_btnTitle->setColor(m_titleColorNomal);
+		}else{
+			this->m_btnTitle->setColor(m_titleColorDisable);
+		}
 	}
 	
 	bool isEnabled(){
@@ -197,12 +225,31 @@ public:
 		m_btn->setTitleForState(title, state);
 	}
 	
+	
 	void setBackgroundSpriteForState(cocos2d::extension::CCScale9Sprite *sprite, CCControlState state){
 		m_btn->setBackgroundSpriteForState(sprite, state);
 	}
 	
-	void setTitleColorForState(ccColor3B color, CCControlState state){
-		m_btn->setTitleColorForState(color,state);
+	void setBackgroundTypeForDisabled(CommonButtonType type){
+		this->setBackgroundTypeForState(type,CCControlStateDisabled);
+		
+	}
+	
+	void setBackgroundTypeForState(CommonButtonType type,CCControlState state){
+		CCScale9Sprite* back = CommonButton::getBacgroundByType(type);
+		this->setBackgroundSpriteForState(back,state);
+		
+	}
+
+	void setTitleColor(ccColor3B color){
+		m_titleColorNomal=color;
+		m_btnTitle->setColor(color);
+		if(m_priceLbl!=NULL)this->m_priceLbl->setColor(color);
+	}
+	
+	
+	void setTitleColorForDisable(ccColor3B color){
+		m_titleColorDisable=color;
 	}
 	
 	void setPrice(PriceType priceType, int price){
@@ -242,6 +289,9 @@ public:
 		return m_priceType;
 	}
 	
+	void setOpacity(float opacity){
+			m_btn->setOpacity(opacity);
+	}
 	
 	
 };

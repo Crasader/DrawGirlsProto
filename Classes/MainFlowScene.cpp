@@ -510,8 +510,14 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
 	
-//	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
-	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
+	if(puzzle_number == is_unlock_puzzle)
+	{
+		if(NSDS_GI(puzzle_number, kSDS_PZ_point_i) <= 0 || NSDS_GI(puzzle_number, kSDS_PZ_ticket_i) <= 0)
+			myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+	}
+	
+	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+//	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
 		CCSprite* n_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
 		CCSprite* s_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
@@ -857,7 +863,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 
 			InviteEventPopup* t_rp = InviteEventPopup::create(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
 
-			getParent()->addChild(t_rp, kMainFlowZorder_popup);
+			addChild(t_rp, kMainFlowZorder_popup);
 
 		}
 		else if(tag == kMainFlowMenuTag_gacha)
@@ -1078,8 +1084,8 @@ void MainFlowScene::setTop()
 	postbox_count_case->setVisible(false);
 	
 	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
-	postbox_count_label->setColor(ccRED);
-	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f, postbox_count_case->getContentSize().height/2.f));
+	postbox_count_label->setColor(ccc3(95, 60, 30));
+	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
 	countingMessage();

@@ -17,26 +17,21 @@ enum StartMapGachaMenuTag
   kSMG_MT_gacha = 1,
   kSMG_MT_cancel
 };
+class CommonButton;
 class StartMapGacha : public CCLayer
 {
 public:
   static StartMapGacha * create (CCObject * t_gacha, SEL_CallFunc d_gacha);
 private:
   bool is_menu_enable;
-  int touched_number;
   CCMenu * gacha_menu;
-  CCMenu * cancel_menu;
+  CommonButton * cancel_menu;
   CCObject * target_gacha;
   SEL_CallFunc delegate_gacha;
   CCSprite * back;
   void myInit (CCObject * t_gacha, SEL_CallFunc d_gacha);
   CCPoint getContentPosition (int t_tag);
   void menuAction (CCObject * sender);
-  virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent);
-  virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent);
-  virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent);
-  virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
-  virtual void registerWithTouchDispatcher ();
 };
 #undef LZZ_INLINE
 #endif

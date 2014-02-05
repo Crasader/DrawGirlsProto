@@ -44,6 +44,7 @@ typedef enum tZorderClearPopup{
 	kZ_CP_gray = 1,
 	kZ_CP_back,
 	kZ_CP_img,
+	kZ_CP_table,
 	kZ_CP_menu,
 	kZ_CP_popup
 }ZorderClearPopup;
@@ -536,7 +537,7 @@ void ClearPopup::showPopup()
 
 void ClearPopup::endShowPopup()
 {
-	is_menu_enable = true;
+	
 }
 
 void ClearPopup::hidePopup()
@@ -864,7 +865,7 @@ void ClearPopup::checkMiniGame()
 
 void ClearPopup::closePopup()
 {
-	
+	is_menu_enable = true;
 }
 
 void ClearPopup::checkRentCard()
@@ -991,7 +992,7 @@ void ClearPopup::resultLoadFriends(Json::Value result_data)
 		for(auto i : UnknownFriends::getInstance()->getFriends())
 		{
 			RankFriendInfo fInfo;
-			fInfo.nickname = i.nick + "[unknown]";
+			fInfo.nickname = i.nick;
 			fInfo.img_url = i.profileUrl;
 			fInfo.user_id = i.userId;
 			fInfo.score = 0;
@@ -1074,7 +1075,7 @@ void ClearPopup::resultGetStageScoreList(Json::Value result_data)
 		rankTableView->setPosition(ccp(243, 59.5f));
 		
 		rankTableView->setDelegate(this);
-		main_case->addChild(rankTableView, kZ_CP_menu);
+		main_case->addChild(rankTableView, kZ_CP_table);
 		rankTableView->setTouchPriority(-200);
 		
 		//		int myPosition = rankTableView->minContainerOffset().y;
@@ -1110,7 +1111,7 @@ void ClearPopup::resultSavedUserData(Json::Value result_data)
 			rankTableView->setPosition(ccp(243, 59.5f));
 			
 			rankTableView->setDelegate(this);
-			main_case->addChild(rankTableView, kZ_CP_menu);
+			main_case->addChild(rankTableView, kZ_CP_table);
 			rankTableView->setTouchPriority(-200);
 		}
 		else
@@ -1358,7 +1359,6 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kCFC_T_img);
 	profileImg->setPosition(ccp(52, 22));
-	profileImg->setScale(35.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kCFC_Z_img);
 	
 	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();

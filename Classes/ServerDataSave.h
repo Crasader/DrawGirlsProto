@@ -78,6 +78,7 @@ enum SDS_KEY
 	kSDS_GI_characterInfo_int1_statInfo_feverTime_i,
 	kSDS_GI_characterInfo_int1_statInfo_speed_d,
 	kSDS_GI_characterInfo_int1_statInfo_life_i,
+	kSDS_GI_characterInfo_int1_statInfo_lineColor_i, // 0~6
 	kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_imageID_s,

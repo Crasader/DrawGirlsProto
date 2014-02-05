@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include "CCMenuLambda.h"
 #include "EnumDefine.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -46,8 +47,7 @@ private:
 		
 		if(ing_close_cnt >= item_list.size())
 		{
-			is_menu_enable = false;
-			end_selector(NULL);
+			startHideAnimation();
 		}
 		else
 		{
@@ -58,25 +58,64 @@ private:
 		}
 	}
 	
+	void startShowAnimation()
+	{
+		setScale(0);
+		CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ShowItemContent::endShowAnimation));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		runAction(t_seq);
+	}
+	void endShowAnimation()
+	{
+		is_menu_enable = true;
+	}
+	
+	void startHideAnimation()
+	{
+		is_menu_enable = false;
+		CCScaleTo* t_scale = CCScaleTo::create(0.3f, 0.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ShowItemContent::endHideAnimation));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+		runAction(t_seq);
+	}
+	void endHideAnimation()
+	{
+		end_selector(NULL);
+	}
+	
 	void myInit(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_item_list)
 	{
+		is_menu_enable = false;
+		
 		touch_priority = t_touch_priority;
 		end_selector = t_selector;
 		
 		for(int i=0;i<t_item_list.size();i++)
 			item_list.push_back(t_item_list[i]);
 		
-		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-		case_back->setPosition(CCPointZero);
+		
+		CCSprite* back_light = CCSprite::create("newitem_back.png");
+		back_light->setScale(2.f);
+		back_light->setPosition(CCPointZero);
+		addChild(back_light);
+		
+		CCRotateBy* t_rotate = CCRotateBy::create(1.f, 100);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_rotate);
+		back_light->runAction(t_repeat);
+		
+		
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		case_back->setPosition(ccp(0,3));
 		addChild(case_back);
 		
-		case_back->setContentSize(CCSizeMake(290, 172));
+		case_back->setContentSize(CCSizeMake(120, 154));
 		
-		CCScale9Sprite* content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-		content_back->setPosition(ccp(0,0));
+		CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		content_back->setPosition(ccp(0,25));
 		addChild(content_back);
 		
-		content_back->setContentSize(CCSizeMake(260, 80));
+		content_back->setContentSize(CCSizeMake(100, 90));
 		
 		ing_close_cnt = 0;
 		
@@ -85,25 +124,35 @@ private:
 		addChild(show_content);
 		
 		CCSprite* title_img = CCSprite::create("newitem_title.png");
-		title_img->setPosition(ccp(0, 67));
+		title_img->setPosition(ccp(0, 115));
 		addChild(title_img);
 		
 		CCSprite* bonus_ment_img = CCSprite::create("newitem_bonus_ment.png");
-		bonus_ment_img->setPosition(ccp(0,-59));
+		bonus_ment_img->setPosition(ccp(0,-115));
 		addChild(bonus_ment_img);
 		
-		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-		s_close->setColor(ccGRAY);
+		CCSprite* t_tab = CCSprite::create("shop_tab.png");
+		t_tab->setPosition(ccp(30,71));
+		addChild(t_tab, 2);
+		
+		CCLabelTTF* new_label = CCLabelTTF::create("new", mySGD->getFont().c_str(), 10);
+		new_label->setPosition(ccp(t_tab->getContentSize().width/2.f, t_tab->getContentSize().height/2.f+5));
+		t_tab->addChild(new_label);
+		
+		
+		CCSprite* n_close = CCSprite::create("whitePaper.png");
+		n_close->setOpacity(0);
+		CCSprite* s_close = CCSprite::create("whitePaper.png");
+		s_close->setOpacity(0);
 		
 		CCMenuItemSprite* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(ShowItemContent::menuAction));
 		
 		close_menu = CCMenu::createWithItem(close_item);
 		close_menu->setTouchPriority(touch_priority-1);
-		close_menu->setPosition(ccp(120,68));
+		close_menu->setPosition(ccp(0,0));
 		addChild(close_menu);
 		
-		is_menu_enable = true;
+		startShowAnimation();
 	}
 };
 

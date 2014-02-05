@@ -50,6 +50,8 @@ CCObject * KSEaseBackOut::copyWithZone (CCZone * pZone)
     CC_SAFE_DELETE(pNewZone);
     return pCopy;
 }
+
+
 CCEaseBackOut * KSEaseBackOut::create (CCActionInterval * pAction)
 {
     CCEaseBackOut *pRet = new CCEaseBackOut();
@@ -68,6 +70,8 @@ CCEaseBackOut * KSEaseBackOut::create (CCActionInterval * pAction)
     return pRet;
 	
 }
+
+
 RankTableView * RankTableView::create (CCTableViewDataSource * dataSource, CCSize size, CCNode * container)
 {
     RankTableView *table = new RankTableView();
@@ -88,6 +92,18 @@ void RankTableView::setContentOffsetInDuration (CCPoint offset, float dt)
     m_pContainer->runAction(CCSequence::create(scroll, expire, NULL));
     this->schedule(schedule_selector(CCScrollView::performedAnimatedScroll));
 }
+
+
+
+
+
+
+
+
+
+
+
+
 RankPopup * RankPopup::create (CCObject * t_close, SEL_CallFunc d_close)
 {
 	RankPopup* t_rp = new RankPopup();
@@ -99,23 +115,18 @@ RankPopup::~ RankPopup ()
 {
 	StageImgLoader::sharedInstance()->removeTD();
 }
-void RankPopup::finishedOpen ()
-{
-	loadRank();
-}
-void RankPopup::finishedClose ()
-{
-	
-	(target_close->*delegate_close)();
-	
-	removeFromParent();
-}
+//void RankPopup::finishedOpen ()
+//{
+//	loadRank();
+//}
+
 
 void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 {
+	
+	DimmedPopup::init();//if(DimmedPopup::init()==false)
+	
 	setTouchEnabled(true);
-	target_close = t_close;
-	delegate_close = d_close;
 	m_currentSelectSprite = NULL;
 	m_highScore = NULL;
 	used_card_img = NULL;
@@ -123,80 +134,140 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	after_loading_card_number = 0;
 	last_selected_card_number = 0;
 	
-	//		gray = CCSprite::create("back_gray.png");
-	//		gray->setPosition(ccp(240,160));
-	//		gray->setContentSize(CCSizeMake(600, 400));
-	//		addChild(gray, kRP_Z_gray);
+	this->setHideFinalAction(t_close,d_close);
 	
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+
+	this->setBackground("rank_friend_rank_back.png");
 	//CCSprite* back = CCSprite::create("rank_back.png");
 	//back->setPosition(ccp(240,160));
 	//addChild(back, kRP_Z_back);
 	
-	CCSprite* back = CCSprite::create("rank_friend_rank_back.png");
-	back->setPosition(ccp(240, 160));
-	addChild(back, kRP_Z_back);
 	
-	CCMenuLambda* _menu = CCMenuLambda::create();
-	_menu->setTouchPriority(-200);
-	addChild(_menu, kRP_Z_back + 1);
-	_menu->setPosition(ccp(0, 0));
-	_menu->setPropaOnBegan(true);
-	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
-															   "cardchange_cancel.png", "cardchange_cancel.png",
-															   [=](CCObject*){
-																   (target_close->*delegate_close)();
-																   removeFromParent();
-															   });
-	closeBtn->setPosition(ccp(450, 258));
-	_menu->addChild(closeBtn);
 
+	
+//	CCMenuLambda* _menu = CCMenuLambda::create();
+//	_menu->setTouchPriority(-200);
+//	addChild(_menu, kRP_Z_back + 1);
+//	_menu->setPosition(ccp(0, 0));
+//	_menu->setPropaOnBegan(true);
+//	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
+//															   "cardchange_cancel.png", "cardchange_cancel.png",
+//															   [=](CCObject*){
+//																   (target_close->*delegate_close)();
+//																   removeFromParent();
+//															   });
+//	closeBtn->setPosition(ccp(450, 258));
+//	_menu->addChild(closeBtn);
+
+	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
+	closeBtn->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
+		this->hidePopup();
+	});
+	
+	closeBtn->setPosition(ccp(450, 255));
+	this->addChild(closeBtn);
+	
 
 	// 분류 지정.
 	
 	// 카톡 친구.
-	m_onlyKatok = CCMenuItemImageLambda::create
-	("rank_friend_rank_1.png", "rank_friend_rank_1.png",
-	 [=](CCObject* t)
-	 {
-		 if(m_rankCategory != RankCategory::kKnownFriend)
-		 {
-			 m_rankCategory = RankCategory::kKnownFriend;
-			 if(rankTableView)
-			 {
-				 rankTableView->removeFromParent();
-				 rankTableView = nullptr;
-			 }
-			 m_currentSelectSprite = nullptr;
-			 loadRank();
-			 m_onlyKatok->setOpacity(255);
-			 m_onlyGameFriend->setOpacity(0);
-			 m_totalFriend->setOpacity(0);
-		 }
-	 });
 	
-	m_onlyKatok->setPosition(ccp(275, 259));
-	_menu->addChild(m_onlyKatok, 3);
+	m_onlyKatok = CommonButton::create("카톡친구", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	m_onlyKatok->setBackgroundTypeForDisabled(CommonButtonYellow);
+	m_onlyKatok->setTitleColor(ccc3(200, 200, 200));
+	m_onlyKatok->setTitleColorForDisable(ccc3(20, 0, 0));
+	m_onlyKatok->setFunction([=](CCObject*){
+				 if(m_rankCategory != RankCategory::kKnownFriend)
+				 {
+					 m_rankCategory = RankCategory::kKnownFriend;
+					 if(rankTableView)
+					 {
+						 rankTableView->removeFromParent();
+						 rankTableView = nullptr;
+					 }
+					 m_currentSelectSprite = nullptr;
+					 loadRank();
+					 m_onlyKatok->setEnabled(false);
+					 m_onlyGameFriend->setEnabled(true);
+					 m_totalFriend->setEnabled(true);
+				 }
+	});
+	m_onlyKatok->setPosition(ccp(272, 255));
+	this->addChild(m_onlyKatok, kRP_Z_back+1);
+//	m_onlyKatok = CCMenuItemImageLambda::create
+//	("rank_friend_rank_1.png", "rank_friend_rank_1.png",
+//	 [=](CCObject* t)
+//	 {
+//		 if(m_rankCategory != RankCategory::kKnownFriend)
+//		 {
+//			 m_rankCategory = RankCategory::kKnownFriend;
+//			 if(rankTableView)
+//			 {
+//				 rankTableView->removeFromParent();
+//				 rankTableView = nullptr;
+//			 }
+//			 m_currentSelectSprite = nullptr;
+//			 loadRank();
+//			 m_onlyKatok->setOpacity(255);
+//			 m_onlyGameFriend->setOpacity(0);
+//			 m_totalFriend->setOpacity(0);
+//		 }
+//	 });
+//	
+//	m_onlyKatok->setPosition(ccp(275, 259));
+//	_menu->addChild(m_onlyKatok, 3);
+	
+	
+	m_onlyGameFriend = CommonButton::create("게임친구", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	m_onlyGameFriend->setBackgroundTypeForDisabled(CommonButtonYellow);
+	m_onlyGameFriend->setTitleColor(ccc3(200, 200, 200));
+	m_onlyGameFriend->setTitleColorForDisable(ccc3(20, 0, 0));
+	m_onlyGameFriend->setFunction([=](CCObject*){
+		if(m_rankCategory != RankCategory::kTotalFriend)
+		{
+			m_rankCategory = RankCategory::kTotalFriend;
+			if(rankTableView)
+			{
+				rankTableView->removeFromParent();
+				rankTableView = nullptr;
+			}
+			m_currentSelectSprite = nullptr;
+			loadRank();
+			m_onlyKatok->setEnabled(true);
+			m_onlyGameFriend->setEnabled(false);
+			m_totalFriend->setEnabled(true);
+		}
+	});
+	m_onlyGameFriend->setPosition(ccp(170, 255));
+	this->addChild(m_onlyGameFriend, kRP_Z_back+1);
 	
 	
 	// 게임 친구ㅇㅇㅇㅇ
-	m_onlyGameFriend = CCMenuItemImageLambda::create
-	("rank_friend_rank_2.png", "rank_friend_rank_2.png",
-	 [=](CCObject* t)
-	 {
-		 if(m_rankCategory != RankCategory::kTotalFriend)
-		 {
-			 m_rankCategory = RankCategory::kTotalFriend;
-			 if(rankTableView)
-			 {
-				 rankTableView->removeFromParent();
-				 rankTableView = nullptr;
-			 }
-			 m_currentSelectSprite = nullptr;
-			 loadRank();
-			 m_onlyKatok->setOpacity(0);
-			 m_onlyGameFriend->setOpacity(255);
-			 m_totalFriend->setOpacity(0);
-		 }
+//	m_onlyGameFriend = CCMenuItemImageLambda::create
+//	("rank_friend_rank_2.png", "rank_friend_rank_2.png",
+//	 [=](CCObject* t)
+//	 {
+//		 if(m_rankCategory != RankCategory::kTotalFriend)
+//		 {
+//			 m_rankCategory = RankCategory::kTotalFriend;
+//			 if(rankTableView)
+//			 {
+//				 rankTableView->removeFromParent();
+//				 rankTableView = nullptr;
+//			 }
+//			 m_currentSelectSprite = nullptr;
+//			 loadRank();
+//			 m_onlyKatok->setOpacity(0);
+//			 m_onlyGameFriend->setOpacity(255);
+//			 m_totalFriend->setOpacity(0);
+//		 }
 		// .. 오직 게임 유저만.
 		//
 		 //if(m_rankCategory != RankCategory::kUnknownFriend)
@@ -213,55 +284,85 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 			 //m_onlyGameFriend->setOpacity(255);
 			 //m_totalFriend->setOpacity(0);
 		 //}
-	 });
+//	 });
+//	
+//	m_onlyGameFriend->setPosition(ccp(172, 259));
+//	_menu->addChild(m_onlyGameFriend, 3);
+//	
 	
-	m_onlyGameFriend->setPosition(ccp(172, 259));
-	_menu->addChild(m_onlyGameFriend, 3);
-	
+	m_totalFriend = CommonButton::create("전체유저", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	m_totalFriend->setBackgroundTypeForDisabled(CommonButtonYellow);
+	m_totalFriend->setTitleColor(ccc3(200, 200, 200));
+	m_totalFriend->setTitleColorForDisable(ccc3(20, 0, 0));
+	m_totalFriend->setFunction([=](CCObject*){
+		if(m_rankCategory != RankCategory::kRealTotalFriend)
+		{
+			m_rankCategory = RankCategory::kRealTotalFriend;
+			if(rankTableView)
+			{
+				rankTableView->removeFromParent();
+				rankTableView = nullptr;
+			}
+			m_currentSelectSprite = nullptr;
+			loadRank();
+			
+			m_onlyKatok->setEnabled(true);
+			m_onlyGameFriend->setEnabled(true);
+			m_totalFriend->setEnabled(false);
+		}
+	});
+	m_totalFriend->setPosition(ccp(375, 255));
+	this->addChild(m_totalFriend, kRP_Z_back+1);
 	
 	// 전체 친구
-	m_totalFriend = CCMenuItemImageLambda::create
-	("rank_friend_rank_3.png", "rank_friend_rank_3.png",
-	 [=](CCObject* t)
-	 {
-		 if(m_rankCategory != RankCategory::kRealTotalFriend) {
-			 m_rankCategory = RankCategory::kRealTotalFriend;
-			 if(rankTableView) {
-				 rankTableView->removeFromParent();
-				 rankTableView = nullptr;
-			 }
-			 m_currentSelectSprite = nullptr;
-			 loadRank();
-			 m_onlyKatok->setOpacity(0);
-			 m_onlyGameFriend->setOpacity(0);
-			 m_totalFriend->setOpacity(255);
-		 }
-		 //if(m_rankCategory != RankCategory::kTotalFriend)
-		 //{
-			 //m_rankCategory = RankCategory::kTotalFriend;
-			 //if(rankTableView)
-			 //{
-				 //rankTableView->removeFromParent();
-				 //rankTableView = nullptr;
-			 //}
-			 //m_currentSelectSprite = nullptr;
-			 //loadRank();
-			 //m_onlyKatok->setOpacity(0);
-			 //m_onlyGameFriend->setOpacity(0);
-			 //m_totalFriend->setOpacity(255);
-		 //}
-	 });
-	
-	m_totalFriend->setPosition(ccp(378, 259));
-	_menu->addChild(m_totalFriend, 3);
+//	m_totalFriend = CCMenuItemImageLambda::create
+//	("rank_friend_rank_3.png", "rank_friend_rank_3.png",
+//	 [=](CCObject* t)
+//	 {
+//		 if(m_rankCategory != RankCategory::kRealTotalFriend) {
+//			 m_rankCategory = RankCategory::kRealTotalFriend;
+//			 if(rankTableView) {
+//				 rankTableView->removeFromParent();
+//				 rankTableView = nullptr;
+//			 }
+//			 m_currentSelectSprite = nullptr;
+//			 loadRank();
+//			 m_onlyKatok->setOpacity(0);
+//			 m_onlyGameFriend->setOpacity(0);
+//			 m_totalFriend->setOpacity(255);
+//		 }
+//		 //if(m_rankCategory != RankCategory::kTotalFriend)
+//		 //{
+//			 //m_rankCategory = RankCategory::kTotalFriend;
+//			 //if(rankTableView)
+//			 //{
+//				 //rankTableView->removeFromParent();
+//				 //rankTableView = nullptr;
+//			 //}
+//			 //m_currentSelectSprite = nullptr;
+//			 //loadRank();
+//			 //m_onlyKatok->setOpacity(0);
+//			 //m_onlyGameFriend->setOpacity(0);
+//			 //m_totalFriend->setOpacity(255);
+//		 //}
+//	 });
+//	
+//	m_totalFriend->setPosition(ccp(378, 259));
+//	_menu->addChild(m_totalFriend, 3);
 	
 	m_rankCategory = RankCategory::kTotalFriend;
 	
 	loadRank();
 	
-	m_onlyKatok->setOpacity(0);
-	m_onlyGameFriend->setOpacity(255);
-	m_totalFriend->setOpacity(0);
+//	m_onlyKatok->setOpacity(0);
+//	m_onlyGameFriend->setOpacity(255);
+//	m_totalFriend->setOpacity(0);
+	
+	
+	m_onlyKatok->setEnabled(true);
+	m_onlyGameFriend->setEnabled(false);
+	m_totalFriend->setEnabled(true);
+	
 	addChild(KSTimer::create(0.5f, [=]()
 													 {
 														 for(int i=0; i<m_scoreList.size(); i++)
@@ -297,7 +398,7 @@ void RankPopup::loadRank ()
 	{
 		Json::Value p;
 		p["memberID"] = hspConnector::get()->getKakaoID();
-		hspConnector::get()->command("getallweeklyscorelist",p,[=](Json::Value obj) {
+		hspConnector::get()->command("getallweeklyscorelist",p,this,[=](Json::Value obj) {
 			if(obj["result"]["code"].asInt() != GDSUCCESS){
 				return;
 			}
@@ -433,13 +534,13 @@ void RankPopup::loadRank ()
 
 		p["memberIDList"].append(hspConnector::get()->getKakaoID());
 		//step2 위클리스코어 목록 읽어옴
-		hspConnector::get()->command("getweeklyscorelist",p,[p1,appfriends,this](Json::Value obj) {
+		hspConnector::get()->command("getweeklyscorelist",p,this,[p1,appfriends,this](Json::Value obj) {
 			// 남은 초.... obj["remainTime"].asInt();
 			int remainSeconds = obj["remainTime"].asInt();
 			std::string remainStr = ::getRemainTimeMsg(remainSeconds);
 			
 			CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
-			remainFnt->setPosition(ccp(398, 223));
+			remainFnt->setPosition(ccp(408, 219));
 			this->addChild(remainFnt, kRP_Z_rankTable);
 			CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
 
@@ -517,7 +618,7 @@ void RankPopup::drawRank (Json::Value obj)
 	rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	
 	//기준점 0,0
-	rankTableView->setPosition(ccp(172, 23));
+	rankTableView->setPosition(ccp(172, 20));
 	
 	//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 	rankTableView->setDelegate(this);
@@ -545,11 +646,11 @@ void RankPopup::drawRank (Json::Value obj)
 											  , 0.3f);
 	//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
 }
-void RankPopup::closePopup (CCControlButton * obj, CCControlEvent event)
-{
-	//		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
-	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedClose)),NULL));
-}
+//void RankPopup::closePopup (CCControlButton * obj, CCControlEvent event)
+//{
+//	//		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
+//	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedClose)),NULL));
+//}
 CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int idx)
 {
 	
@@ -591,7 +692,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	
 	
 	
-	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "ending_take_particle.png");
+	CCSprite* profileImg = GDWebSprite::create((*member)["profile_image_url"].asString(), "no_img.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kRP_RT_profileImg);
 	profileImg->setPosition(ccp(51, 20));
@@ -627,12 +728,12 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 	// 카톡 마크 붙임.
 	
-	if(!KnownFriends::getInstance()->findById((*member)["user_id"].asString()) &&
+	if(KnownFriends::getInstance()->findById((*member)["user_id"].asString()) &&
 		 (*member)["user_id"].asString() != hspConnector::get()->myKakaoInfo["user_id"].asString())
 	{
-		CCSprite* katokMark = CCSprite::create("rank_kakao.png");
+		CCSprite* katokMark = CCSprite::create("puzzle_right_rank_kakao.png");
 		cell->addChild(katokMark, kRP_Z_profileImg);
-		katokMark->setPosition(ccp(49.5f, 22) - ccp(19, 19) + ccp(katokMark->getContentSize().width / 2.f, katokMark->getContentSize().height / 2.f));
+		katokMark->setPosition(ccp(45, 27));
 		
 	}
 	
@@ -674,7 +775,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 emptyNode
 					 );
 			 av->setContentSize(ttf->getDimensions());
-			 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+			 av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 					 [=](CCObject* e) {
 						 CCLog("ok!!");
 						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
@@ -698,7 +799,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 p["type"]=kHeart;
 						 p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 
-						 hspConnector::get()->command("sendMessage", p, [=](Json::Value r) {
+						 hspConnector::get()->command("sendMessage", p, this,[=](Json::Value r) {
 							 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
 							 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 							 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
@@ -978,7 +1079,7 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 				
 				Json::Value param;
 				param["noList"][0] = loading_card_number;
-				hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+				hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 			}
 			else
 				loading_card_number = 0;
@@ -1003,7 +1104,7 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 			
 			Json::Value param;
 			param["noList"][0] = loading_card_number;
-			hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+			hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 		}
 		else
 			loading_card_number = 0;
@@ -1063,7 +1164,7 @@ void RankPopup::successAction ()
 			
 			Json::Value param;
 			param["noList"][0] = loading_card_number;
-			hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+			hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 		}
 		else
 			loading_card_number = 0;
@@ -1086,7 +1187,7 @@ void RankPopup::failAction ()
 		
 		used_card_img = CCSprite::create("ending_take_card_back.png");
 		used_card_img->setScale(0.34f);
-		used_card_img->setPosition(ccp(99.f,156.f));
+		used_card_img->setPosition(ccp(95.f,144.f));
 		addChild(used_card_img, kRP_Z_usedCardImg);
 		
 		CCLabelTTF* t_label = CCLabelTTF::create("정보 로드 실패", mySGD->getFont().c_str(), 20);
@@ -1102,7 +1203,7 @@ void RankPopup::failAction ()
 		
 		Json::Value param;
 		param["noList"][0] = loading_card_number;
-		hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+		hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 	}
 	else
 		loading_card_number = 0;
@@ -1127,7 +1228,7 @@ void RankPopup::addCardImg (int t_card_number, int t_card_level, string t_passiv
 	
 	used_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_grade)->getCString());
 	used_card_img->setScale(0.34f);
-	used_card_img->setPosition(ccp(99.f,156.f));
+	used_card_img->setPosition(ccp(95.f,144.f));
 	addChild(used_card_img, kRP_Z_usedCardImg);
 	
 	if(card_grade == 3 && mySD->isAnimationStage(card_stage))
@@ -1554,11 +1655,12 @@ void RankPopup::touchCellIndex(int idx)
 		{
 			used_card_img = CCSprite::create("ending_take_card_back.png");
 			used_card_img->setScale(0.34f);
-			used_card_img->setPosition(ccp(99.f,156.f));
+			used_card_img->setPosition(ccp(95.f,144.f));
 			addChild(used_card_img, kRP_Z_usedCardImg);
 			
 			CCLabelTTF* t_label = CCLabelTTF::create("카드 정보 로딩", mySGD->getFont().c_str(), 20);
 			t_label->setColor(ccBLACK);
+			t_label->setScale(2);
 			t_label->setPosition(ccp(160,215));
 			used_card_img->addChild(t_label);
 			
@@ -1568,7 +1670,7 @@ void RankPopup::touchCellIndex(int idx)
 				
 				Json::Value param;
 				param["noList"][0] = loading_card_number;
-				hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+				hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 			}
 			else
 				after_loading_card_number = selectedCardIndex;
@@ -1618,7 +1720,7 @@ void RankPopup::touchCellIndex(int idx)
 	{
 		used_card_img = CCSprite::create("ending_take_card_back.png");
 		used_card_img->setScale(0.34f);
-		used_card_img->setPosition(ccp(99.f,156.f));
+		used_card_img->setPosition(ccp(95.f,144.f));
 		addChild(used_card_img, kRP_Z_usedCardImg);
 	}
 //	[a imageNamed:]
@@ -1634,7 +1736,7 @@ void RankPopup::touchCellIndex(int idx)
 	CCLabelBMFont::create(
 						  scoreStr.c_str(), "mb_white_font.fnt");
 	m_highScore->setScale(0.5f);
-	m_highScore->setPosition(ccp(125, 30));
+	m_highScore->setPosition(ccp(125, 27));
 	addChild(m_highScore, 3);
 	if(m_currentSelectSprite)
 	{

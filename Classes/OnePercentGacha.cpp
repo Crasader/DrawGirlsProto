@@ -2,6 +2,7 @@
 //
 
 #include "OnePercentGacha.h"
+#include "CommonButton.h"
 #define LZZ_INLINE inline
 using namespace std;
 OnePercentGacha * OnePercentGacha::create (CCObject * t_cancel, SEL_CallFunc d_cancel, CCObject * t_ok, SEL_CallFuncF d_ok, float t_recent_percent)
@@ -30,15 +31,31 @@ void OnePercentGacha::myInit (CCObject * t_cancel, SEL_CallFunc d_cancel, CCObje
 	
 	setBack();
 	
-	is_menu_enable = true;
+	is_menu_enable = false;
 	
 	touched_number = 0;
 	
 	setTouchEnabled(true);
+	
+	startShow();
+}
+void OnePercentGacha::startShow()
+{
+	CCMoveTo* title_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y+75));
+	CCMoveTo* back_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y-30));
+	CCCallFunc* back_call = CCCallFunc::create(this, callfunc_selector(OnePercentGacha::endShow));
+	CCSequence* back_seq = CCSequence::createWithTwoActions(back_move, back_call);
+	
+	title_img->runAction(title_move);
+	back_img->runAction(back_seq);
+}
+void OnePercentGacha::endShow()
+{
+	is_menu_enable = true;
 }
 void OnePercentGacha::gachaOn ()
 {
-	CCMoveTo* t_move1 = CCMoveTo::create(0.05f, ccpAdd(ccp(240, myDSH->ui_center_y+25.f), ccp(111,0)));
+	CCMoveTo* t_move1 = CCMoveTo::create(0.05f, ccpAdd(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height/2.f+30.f), ccp(111,0)));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(OnePercentGacha::repeatAction));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move1, t_call);
 	arrow_img->runAction(t_seq);
@@ -47,8 +64,8 @@ void OnePercentGacha::repeatAction ()
 {
 	is_menu_enable = true;
 	ok_menu->setEnabled(true);
-	CCMoveTo* t_move2 = CCMoveTo::create(0.1f, ccpAdd(ccp(240, myDSH->ui_center_y+25.f), ccp(-111,0)));
-	CCMoveTo* t_move3 = CCMoveTo::create(0.1f, ccpAdd(ccp(240, myDSH->ui_center_y+25.f), ccp(111,0)));
+	CCMoveTo* t_move2 = CCMoveTo::create(0.1f, ccpAdd(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height/2.f+30.f), ccp(-111,0)));
+	CCMoveTo* t_move3 = CCMoveTo::create(0.1f, ccpAdd(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height/2.f+30.f), ccp(111,0)));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_move2, t_move3);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
 	arrow_img->runAction(t_repeat);
@@ -66,23 +83,29 @@ void OnePercentGacha::menuAction (CCObject * sender)
 	{
 		myLog->addLog(kLOG_gacha_onePercent, -1);
 		mySGD->setStar(mySGD->getStar() - mySGD->getGachaOnePercentFee());
-		gachaOn();
+		
+		
 		ok_menu->removeFromParent();
 		
-		CCSprite* n_stop = CCSprite::create("one_percent_gacha_stop.png");
-		CCSprite* s_stop = CCSprite::create("one_percent_gacha_stop.png");
-		s_stop->setColor(ccGRAY);
-		
-		CCMenuItem* stop_item = CCMenuItemSprite::create(n_stop, s_stop, this, menu_selector(OnePercentGacha::menuAction));
-		stop_item->setTag(kOnePercentGacha_MT_stop);
-		
-		ok_menu = CCMenu::createWithItem(stop_item);
+		ok_menu = CommonButton::create("멈춰!", 12, CCSizeMake(100, 38), CommonButtonYellow, -180);
+		ok_menu->setFunction([=](CCObject* sender)
+							 {
+								 CCNode* t_node = CCNode::create();
+								 t_node->setTag(kOnePercentGacha_MT_stop);
+								 menuAction(t_node);
+							 });
+		ok_menu->setPosition(ccp(back_img->getContentSize().width/2.f+80, back_img->getContentSize().height/2.f-49.f));
+		back_img->addChild(ok_menu);
 		ok_menu->setEnabled(false);
-		ok_menu->setPosition(ccp(240, myDSH->ui_center_y-65.f));
-		addChild(ok_menu, kOnePercentGacha_Z_content);
 		
 		cancel_menu->setEnabled(false);
 		//			(target_ok->*delegate_ok)(recent_percent);
+		
+		CCSprite* stop_ment = CCSprite::create("one_percent_gacha_stop.png");
+		stop_ment->setPosition(ccpAdd(ok_menu->getPosition(), ccp(-stop_ment->getContentSize().width/2.f - 80,0)));
+		back_img->addChild(stop_ment);
+		
+		gachaOn();
 	}
 	else if(tag == kOnePercentGacha_MT_cancel)
 	{
@@ -120,80 +143,81 @@ void OnePercentGacha::changePercentLabel ()
 void OnePercentGacha::setBack ()
 {
 	back_img = CCSprite::create("one_percent_gacha_back.png");
-	back_img->setPosition(ccp(240,myDSH->ui_center_y));
+	back_img->setPosition(ccp(240-480,myDSH->ui_center_y-30));
 	addChild(back_img, kOnePercentGacha_Z_back);
 	
+	title_img = CCSprite::create("one_percent_gacha_title.png");
+	title_img->setPosition(ccp(240-480,myDSH->ui_center_y+75));
+	addChild(title_img, kOnePercentGacha_Z_back);
+	
 	percent_label = CountingBMLabel::create(CCString::createWithFormat("%.1f", recent_percent*100.f)->getCString(), "bb_white_font.fnt", 0.5f, "%.1f");
-	percent_label->setPosition(ccp(305, myDSH->ui_center_y+87.f));
-	addChild(percent_label, kOnePercentGacha_Z_content);
+	percent_label->setPosition(ccp(title_img->getContentSize().width/2.f + 65, title_img->getContentSize().height/2.f));
+	title_img->addChild(percent_label, kOnePercentGacha_Z_content);
 	
 	progress_img = CCProgressTimer::create(CCSprite::create("one_percent_gacha_graph.png"));
 	progress_img->setType(kCCProgressTimerTypeBar);
 	progress_img->setMidpoint(ccp(0,0));
 	progress_img->setBarChangeRate(ccp(1,0));
 	progress_img->setPercentage(0.f);
-	progress_img->setPosition(ccp(240, myDSH->ui_center_y+10.f));
-	addChild(progress_img, kOnePercentGacha_Z_content);
+	progress_img->setPosition(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height/2.f+18.f));
+	back_img->addChild(progress_img, kOnePercentGacha_Z_content);
+	
+	CCLabelTTF* left_percent = CCLabelTTF::create("0%", mySGD->getFont().c_str(), 14);
+	left_percent->setAnchorPoint(ccp(0,1));
+	left_percent->setPosition(ccpAdd(progress_img->getPosition(), ccp(-progress_img->getSprite()->getContentSize().width/2.f-10, -progress_img->getSprite()->getContentSize().height/2.f-2)));
+	back_img->addChild(left_percent, kOnePercentGacha_Z_content);
+	
+	CCLabelTTF* right_percent = CCLabelTTF::create(CCString::createWithFormat("%.1f%%", 100.f-recent_percent*100.f)->getCString(), mySGD->getFont().c_str(), 14);
+	right_percent->setAnchorPoint(ccp(1,1));
+	right_percent->setPosition(ccpAdd(progress_img->getPosition(), ccp(progress_img->getSprite()->getContentSize().width/2.f+20, -progress_img->getSprite()->getContentSize().height/2.f-2)));
+	back_img->addChild(right_percent, kOnePercentGacha_Z_content);
+	
 	
 	arrow_img = CCSprite::create("one_percent_gacha_arrow.png");
-	arrow_img->setPosition(ccp(240, myDSH->ui_center_y+25.f));
-	addChild(arrow_img, kOnePercentGacha_Z_content);
-	
-	CCSprite* n_ok = CCSprite::create("one_percent_gacha_button.png");
-	CCSprite* n_price_type = CCSprite::create("price_ruby_img.png");
-	n_price_type->setPosition(ccp(n_ok->getContentSize().width/2.f+15, n_ok->getContentSize().height/2.f));
-	n_ok->addChild(n_price_type);
-	CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 15);
-	n_price_label->setPosition(ccp(n_ok->getContentSize().width/2.f+40, n_ok->getContentSize().height/2.f));
-	n_ok->addChild(n_price_label);
-	
-	CCSprite* s_ok = CCSprite::create("one_percent_gacha_button.png");
-	s_ok->setColor(ccGRAY);
-	CCSprite* s_price_type = CCSprite::create("price_ruby_img.png");
-	s_price_type->setPosition(ccp(s_ok->getContentSize().width/2.f+15, s_ok->getContentSize().height/2.f));
-	s_ok->addChild(s_price_type);
-	CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 15);
-	s_price_label->setPosition(ccp(s_ok->getContentSize().width/2.f+40, s_ok->getContentSize().height/2.f));
-	s_ok->addChild(s_price_label);
-	
-	CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(OnePercentGacha::menuAction));
-	ok_item->setTag(kOnePercentGacha_MT_ok);
-	ok_menu = CCMenu::createWithItem(ok_item);
-	ok_menu->setPosition(ccp(240, myDSH->ui_center_y-65.f));
-	addChild(ok_menu, kOnePercentGacha_Z_content);
+	arrow_img->setPosition(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height/2.f+28.f));
+	back_img->addChild(arrow_img, kOnePercentGacha_Z_content);
 	
 	
-	CCSprite* n_cancel = CCSprite::create("one_percent_gacha_cancel.png");
-	CCSprite* s_cancel = CCSprite::create("one_percent_gacha_cancel.png");
-	s_cancel->setColor(ccGRAY);
+	ok_menu = CommonButton::create("", CommonButtonYellow);
+	ok_menu->setSize(CCSizeMake(100, 38));
+	ok_menu->setTouchPriority(-180);
+	ok_menu->setPrice(PriceTypeRuby, mySGD->getGachaOnePercentFee());
+	ok_menu->setFunction([=](CCObject* sender)
+						 {
+							 CCNode* t_node = CCNode::create();
+							 t_node->setTag(kOnePercentGacha_MT_ok);
+							 menuAction(t_node);
+						 });
+	ok_menu->setPosition(ccp(back_img->getContentSize().width/2.f+80, back_img->getContentSize().height/2.f-49.f));
+	back_img->addChild(ok_menu);
 	
-	CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, this, menu_selector(OnePercentGacha::menuAction));
-	cancel_item->setTag(kOnePercentGacha_MT_cancel);
-	cancel_menu = CCMenu::createWithItem(cancel_item);
-	cancel_menu->setPosition(ccp(385, myDSH->ui_center_y+55.f));
-	addChild(cancel_menu, kOnePercentGacha_Z_content);
+	
+	cancel_menu = CommonButton::createCloseButton();
+	cancel_menu->setTouchPriority(-180);
+	cancel_menu->setFunction([=](CCObject* sender)
+							 {
+								 CCNode* t_node = CCNode::create();
+								 t_node->setTag(kOnePercentGacha_MT_cancel);
+								 menuAction(t_node);
+							 });
+	cancel_menu->setPosition(ccp(back_img->getContentSize().width/2.f + 145, back_img->getContentSize().height/2.f + 70));
+	back_img->addChild(cancel_menu);
 }
 bool OnePercentGacha::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
 {
-	if(touched_number != 0)		return true;
-	if(cancel_menu->ccTouchBegan(pTouch, pEvent))				touched_number = kOnePercentGacha_MT_cancel;
-	else if(ok_menu->ccTouchBegan(pTouch, pEvent))				touched_number = kOnePercentGacha_MT_ok;
 	return true;
 }
 void OnePercentGacha::ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent)
 {
-	if(touched_number == kOnePercentGacha_MT_cancel)							cancel_menu->ccTouchMoved(pTouch, pEvent);
-	else if(touched_number == kOnePercentGacha_MT_ok)						ok_menu->ccTouchMoved(pTouch, pEvent);
+	
 }
 void OnePercentGacha::ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent)
 {
-	if(touched_number == kOnePercentGacha_MT_cancel){			cancel_menu->ccTouchEnded(pTouch, pEvent);		touched_number = 0;	}
-	else if(touched_number == kOnePercentGacha_MT_ok){			ok_menu->ccTouchEnded(pTouch, pEvent);			touched_number = 0;	}
+	
 }
 void OnePercentGacha::ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent)
 {
-	if(touched_number == kOnePercentGacha_MT_cancel){			cancel_menu->ccTouchCancelled(pTouch, pEvent);	touched_number = 0;	}
-	else if(touched_number == kOnePercentGacha_MT_ok){			ok_menu->ccTouchCancelled(pTouch, pEvent);		touched_number = 0;	}
+	
 }
 void OnePercentGacha::registerWithTouchDispatcher ()
 {

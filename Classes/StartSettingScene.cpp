@@ -52,6 +52,8 @@ bool StartSettingScene::init()
         return false;
     }
 	
+	mySGD->selectFriendCard();
+	
 	setKeypadEnabled(true);
 	
 	item_title_label = NULL;
@@ -218,18 +220,6 @@ void StartSettingScene::setMain()
 	
 	changeCard();
 	
-//	float card_rate = 0.473f;
-//	
-//	CCSprite* n_card = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*card_rate, 430*card_rate));
-//	CCSprite* s_card = CCSprite::create("cardsetting_cardmenu_big.png", CCRectMake(0, 0, 320*card_rate, 430*card_rate));
-//	
-//	CCMenuItem* card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(StartSettingScene::menuAction));
-//	card_item->setTag(kStartSettingMenuTag_card);
-//	
-//	CCMenu* card_menu = CCMenu::createWithItem(card_item);
-//	card_menu->setPosition(ccp(320*card_rate/2.f + 40, 430*card_rate/2.f + 28));
-//	main_case->addChild(card_menu);
-	
 	CCSprite* n_card_change = CCSprite::create("startsetting_cardchange.png");
 	CCSprite* s_card_change = CCSprite::create("startsetting_cardchange.png");
 	s_card_change->setColor(ccGRAY);
@@ -270,8 +260,8 @@ void StartSettingScene::setMain()
 			screen_scale_x = 1.f;
 		
 		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		t_popup->setBasePosition(ccp(240, 160));
 		
 		ShowItemContent* t_container = ShowItemContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
 															   {
@@ -695,6 +685,20 @@ void StartSettingScene::itemAction(CCObject *sender)
 				cnt_label->setColor(ccBLACK);
 				cnt_label->setPosition(ccp(0, -19));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+				
+				string item_currency = mySD->getItemCurrency(t_ic);
+				string buy_type_filename;
+				if(item_currency == "gold")
+					buy_type_filename = "price_gold_img.png";
+				else if(item_currency == "ruby")
+					buy_type_filename = "price_ruby_img.png";
+				else if(item_currency == "social")
+					buy_type_filename = "price_candy_img.png";
+				
+				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
+				buy_type->setScale(0.5f);
+				buy_type->setPosition(ccp(-13, -19));
+				item_parent->addChild(buy_type);
 			}
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");

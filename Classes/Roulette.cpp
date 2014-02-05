@@ -29,7 +29,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 
 	vector<int> ttt;
 	CCSprite* dimed = CCSprite::create();
-	dimed->setTextureRect(CCRectMake(0, 0, 520, 320));
+	dimed->setTextureRect(CCRectMake(0, 0, 600, 400));
 	dimed->setColor(ccc3(0, 0, 0));
 	dimed->setOpacity(180);
 	dimed->setPosition(ccp(240, 160));
@@ -76,7 +76,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 
 
 	CCSprite* m_guide = CCSprite::create("gacha1_tip.png");
-	m_guide->setPosition(ccp(240, 142));
+	m_guide->setPosition(ccp(240, 40));
 	addChild(m_guide, 1);
 
 
@@ -249,12 +249,25 @@ void RouletteSub::update(float dt)
 			}else{
 				replayFunction = nullptr;
 			}
+			std::string againFileName;
+			if(m_gachaCategory == GachaCategory::kRubyGacha)
+			{
+				againFileName = "gacha_popup_again.png";
+			}
+			else if(m_gachaCategory == GachaCategory::kGoldGacha)
+			{
+				againFileName = "gacha_popup_again.png";
+			}
+			else if(m_gachaCategory == GachaCategory::kSocialGacha)
+			{
+				againFileName = "gacha_popup_again.png";
+			}
 			GachaShowReward* gachaShowReward = GachaShowReward::create(replayFunction,
 				m_callback,
 					CCSprite::create(m_rewards[ m_alreadyDeterminantOrder ].second->m_spriteStr.c_str()),
 					CCString::createWithFormat("%d", m_rewards[m_alreadyDeterminantOrder].second->m_value)->getCString(),
 					kind,
-					selectedItemValue
+					selectedItemValue, againFileName
 					);
 			addChild(gachaShowReward, 3);
 		}));

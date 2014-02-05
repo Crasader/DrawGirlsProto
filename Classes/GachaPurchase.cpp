@@ -365,6 +365,7 @@ void GachaPurchase::menuAction(CCObject *pSender)
 		
 		if(is_gacha_enable)
 		{
+			keep_price_type = 1;
 			mySGD->setStar(mySGD->getStar() - mySGD->getGachaRubyFee());
 			myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 			
@@ -384,6 +385,7 @@ void GachaPurchase::menuAction(CCObject *pSender)
 		
 		if(is_gacha_enable)
 		{
+			keep_price_type = 2;
 			mySGD->setGold(mySGD->getGold() - mySGD->getGachaGoldFee());
 			myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
 			
@@ -403,6 +405,7 @@ void GachaPurchase::menuAction(CCObject *pSender)
 		
 		if(is_gacha_enable)
 		{
+			keep_price_type = 3;
 			mySGD->setFriendPoint(mySGD->getFriendPoint() - mySGD->getGachaSocialFee());
 			myDSH->saveUserData({kSaveUserData_Key_friendPoint}, nullptr);
 			
@@ -486,7 +489,7 @@ void GachaPurchase::visibling()
 			{
 				// 가차 종류에 따라 다른 상품 넣음.
 			
-				if(1)
+				if(keep_price_type == 1)
 				{
 					RouletteSub* p = RouletteSub::create(finalFunction, {
 						RewardSprite::create(RewardKind::kRuby, 20, "", 1),
@@ -499,7 +502,7 @@ void GachaPurchase::visibling()
 					}, recent_mode, GachaCategory::kRubyGacha);
 					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
-				else if(0)
+				else if(keep_price_type == 2)
 				{
 					RouletteSub* p = RouletteSub::create(finalFunction, {
 						RewardSprite::create(RewardKind::kRuby, 20, "", 1),
@@ -529,7 +532,7 @@ void GachaPurchase::visibling()
 				break;
 			case 1: // 
 			{
-				if(1)
+				if(keep_price_type == 1)
 				{
 					HatGachaSub* p = HatGachaSub::create(finalFunction,
 							{
@@ -546,7 +549,7 @@ void GachaPurchase::visibling()
 							recent_mode, GachaCategory::kRubyGacha);
 					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
-				else if(0)
+				else if(keep_price_type == 2)
 				{
 					HatGachaSub* p = HatGachaSub::create(finalFunction,
 							{
@@ -585,7 +588,7 @@ void GachaPurchase::visibling()
 			case 2:
 			{
 
-				if(1)
+				if(keep_price_type == 1)
 				{
 					HorseGachaSub* p = HorseGachaSub::create(finalFunction,
 							{
@@ -600,7 +603,7 @@ void GachaPurchase::visibling()
 							, recent_mode, GachaCategory::kRubyGacha);
 					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
-				else if(0)
+				else if(keep_price_type == 2)
 				{
 					HorseGachaSub* p = HorseGachaSub::create(finalFunction,
 							{
@@ -634,7 +637,7 @@ void GachaPurchase::visibling()
 				break;
 			case 3: // 빠ㅊ칭ㅋ코
 			{
-				if(1)
+				if(keep_price_type == 1)
 				{
 					SlotMachineSub* p = SlotMachineSub::create(finalFunction,
 							{
@@ -650,7 +653,7 @@ void GachaPurchase::visibling()
 							recent_mode, GachaCategory::kRubyGacha);
 					getParent()->addChild(p, kMainFlowZorder_popup - 1);
 				}
-				else if(0)
+				else if(keep_price_type == 2)
 				{
 					SlotMachineSub* p = SlotMachineSub::create(finalFunction,
 							{

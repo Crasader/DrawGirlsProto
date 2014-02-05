@@ -231,10 +231,10 @@ enum MessageRecvType
 	kHeart = 1,
 	kChallengeRequest,
 	kChallengeResult,
-	kHelpRequest,
+	kHelpRequest = 4,
 	kHelpResult,
 	kTicketRequest,
-	kTicketResult,
+	kTicketResult = 7,
 	kInvite,
 	kNews,
 	kUnknownFriendRequest
@@ -411,4 +411,5 @@ enum class GachaCategory
 	kGoldGacha = 2,
 	kSocialGacha = 3
 };
+
 #endif

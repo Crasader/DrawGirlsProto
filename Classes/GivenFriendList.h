@@ -14,6 +14,8 @@
 #include "CardCase.h"
 #include "DownloadFile.h"
 #include "StarGoldData.h"
+#include "KHAlertView.h"
+#include "CommonButton.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;
@@ -45,7 +47,7 @@ public:
 		p["limitDay"] = mySGD->getMsgRemoveDay();
 		// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 
-		hspConnector::get()->command("getmessagelist",p,[this](Json::Value r)
+		hspConnector::get()->command("getmessagelist",p,this,[this](Json::Value r)
 				{
 				GraphDogLib::JsonToLog("getmessagelist", r);
 				if(r["result"]["code"].asInt() != GDSUCCESS)
@@ -59,7 +61,7 @@ public:
 	void drawMail(Json::Value obj)
 	{
 		m_filteredMailList = obj["list"];
-		m_mailTableView = CCTableView::create(this, CCSizeMake(200, 174.f));
+		m_mailTableView = CCTableView::create(this, CCSizeMake(215, 179));
 
 		CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
 		m_scrollBar = ScrollBar::createScrollbar(m_mailTableView, -2 - 10, NULL, bar);
@@ -75,7 +77,7 @@ public:
 
 		//기준점 0,0
 		// 좌표 수동으로 잡느라 이리 됨
-		m_mailTableView->setPosition(ccp(37, 56));
+		m_mailTableView->setPosition(ccp(29, 24));
 
 		//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 		m_mailTableView->setDelegate(this);
@@ -102,15 +104,15 @@ public:
 		
 		Json::Reader reader;
 		reader.parse(mail["content"].asString(), contentObj);
-		CCLabelTTF* nickFnt = CCLabelTTF::create(contentObj["nick"].asString().c_str(), "", 14.f);
+		CCLabelTTF* nickFnt = CCLabelTTF::create(contentObj["nick"].asString().c_str(), "", 12);
 		realCell->addChild(nickFnt);
-		nickFnt->setPosition(ccp(40, 20));
+		nickFnt->setPosition(ccp(60, 20));
 		
 			
 		CCSprite* profileImg = GDWebSprite::create(contentObj["profile_url"].asString(), "no_img.png");
 		profileImg->setAnchorPoint(ccp(0.5, 0.5));
-		profileImg->setPosition(ccp(22, 22));
-		profileImg->setScale(35.f / profileImg->getContentSize().width);
+		profileImg->setPosition(ccp(22, 21));
+		profileImg->setScale(28.f / profileImg->getContentSize().width);
 
 		realCell->addChild(profileImg);
 
@@ -119,62 +121,77 @@ public:
 		_menu->setTouchPriority(-200);
 		realCell->addChild(_menu, 1);
 		
-		CCMenuItemLambda* accept = CCMenuItemImageLambda::create("friendsearch_ok.png", "friendsearch_ok.png",
-																														 [=](CCObject*)
-																														 {
-																															 CCLog("accept");
-																															 KS::KSLog("%", mail);
-																															 // 여기는 mailpopup 쪽 알아봄.
-																															 Json::Value param;
-																															 //						memberID : string or number, 내카카오아이디
-																															 //						-> friendID : string or number, 추가할 게임친구 카카오아이디
-																															 //						-> friendMax :
-																															 param["memberID"] = hspConnector::get()->getKakaoID();
-																															 param["friendID"] = mail["friendID"].asString();
-																															 param["friendMax"] = mySGD->getGameFriendMax(); // magic number
-																															 hspConnector::get()->command
-																															 ("addfriendeach", param,
-																																[=](Json::Value v)
-																																{
-																																	KS::KSLog("%", v);
-																																	std::string errorMessage;
-																																	/*
-																																	 errorCode 필드에 10030 값이 넘어오면 내친구인원이 초과
-																																	 errorCode 필드에 10031값이 넘어오면 상대방 친구인원이 초과
-																																	 */
-																																	if(v["result"]["code"].asInt() != GDSUCCESS)
-																																		return;
-																																	
-																																	
-																																	// 편.삭.
-																																	removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
-																																								[=](Json::Value r)
-																																								{
-																																									if(r["result"]["code"].asInt() != GDSUCCESS)
-																																									{
-																																										
-																																										KSAlertView* exceptionPopup = KSAlertView::create();
-																																										exceptionPopup->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-																																										auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", "", 12.f);
-																																										exceptionPopup->setContentNode(
-																																																									 ttf
-																																																									 );
-																																										this->addChild(exceptionPopup, 1);
-																																										exceptionPopup->show();
-																																										return;
-																																									}
-																																									FriendData ufd;
-																																									ufd.userId = v["friendInfo"]["memberID"].asString();
-																																									ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
-																																									ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
-																																									ufd.nick = v["friendInfo"]["nick"].asString();
-																																									UnknownFriends::getInstance()->add(ufd);
-																																								});
-																																	
-																																});
-																														 });
+		CCMenuItemLambda* accept = CCMenuItemImageLambda::create
+			("friendsearch_ok.png", "friendsearch_ok.png",
+			 [=](CCObject*)
+			 {
+				 CCLog("accept");
+				 KS::KSLog("%", mail);
+				 // 여기는 mailpopup 쪽 알아봄.
+				 Json::Value param;
+				 //						memberID : string or number, 내카카오아이디
+				 //						-> friendID : string or number, 추가할 게임친구 카카오아이디
+				 //						-> friendMax :
+				 param["memberID"] = hspConnector::get()->getKakaoID();
+				 param["friendID"] = mail["friendID"].asString();
+				 param["friendMax"] = mySGD->getGameFriendMax(); // magic number
+				 hspConnector::get()->command ("addfriendeach", param,
+																			 [=](Json::Value v) {
+																				 KS::KSLog("%", v);
+																				 std::string errorMessage;
+																				 /*
+																						errorCode 필드에 10030 값이 넘어오면 내친구인원이 초과
+																						errorCode 필드에 10031값이 넘어오면 상대방 친구인원이 초과
+																						*/
+																				 if(v["result"]["code"].asInt() != GDSUCCESS){
+																					 return;
+																				 }
+
+																				 // 편.삭.
+																				 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+																											 [=](Json::Value r) {
+																												 if(r["result"]["code"].asInt() != GDSUCCESS) {
+																													 KHAlertView* exceptionPopup = KHAlertView::create(); 
+																													 // av->setTitleFileName("msg_challenge.png");
+																													 exceptionPopup->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+																													 exceptionPopup->setWidth(240);
+																													 exceptionPopup->setHeight(240);
+																													 exceptionPopup->setTitleHeight(10);
+																													 exceptionPopup->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+																													 exceptionPopup->setCenterY(150);
+
+																													 CCNode* emptyNode = CCNode::create();
+																													 auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", mySGD->getFont().c_str(), 12.f); 
+																													 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+																													 //	con->setAnchorPoint(ccp(0, 0));
+																													 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+																													 ttf->setColor(ccc3(255, 255, 255));
+																													 ttf->setPosition(ccp(exceptionPopup->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																													 emptyNode->addChild(ttf);
+																													 exceptionPopup->setContentNode(
+																															 emptyNode
+																															 );
+																													 exceptionPopup->setContentSize(ttf->getDimensions());
+																													 exceptionPopup->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																																										 [=](CCObject* e) {
+																																											 CCLog("ok!!");
+																																										 });
+																													 addChild(exceptionPopup, 1);
+																													 exceptionPopup->show();																																									
+																													 return;
+																												 }
+				 FriendData ufd;
+				 ufd.userId = v["friendInfo"]["memberID"].asString();
+				 ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
+				 ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
+				 ufd.nick = v["friendInfo"]["nick"].asString();
+				 UnknownFriends::getInstance()->add(ufd);
+											 });
+
+																			 });
+			 });
 		_menu->addChild(accept);
-		accept->setPosition(ccp(90, 30));
+		accept->setPosition(ccp(140, 22));
 		
 		
 		CCMenuItemLambda* reject = CCMenuItemImageLambda::create("friendsearch_no.png", "friendsearch_no.png",
@@ -193,7 +210,7 @@ public:
 //																																 });
 																														 });
 		_menu->addChild(reject);
-		reject->setPosition(ccp(120, 30));
+		reject->setPosition(ccp(182, 22));
 		return realCell;
 	}
 
@@ -214,7 +231,7 @@ public:
 	}
 	virtual CCSize cellSizeForTable (CCTableView * table)
 	{
-		return CCSizeMake(188, 37);
+		return CCSizeMake(188, 38);
 	}
 	virtual unsigned int numberOfCellsInTableView (CCTableView * table)
 	{
@@ -228,7 +245,7 @@ public:
 		p["no"] = mailNo;
 		p["memberID"] = memberID;
 		// 도전장 삭제요청
-		hspConnector::get()->command( "removemessage",p, [=](Json::Value r) {
+		hspConnector::get()->command( "removemessage",p, this,[=](Json::Value r) {
 		Json::Value newMailList;
 		if(r["result"]["code"].asInt() != GDSUCCESS)
 		{

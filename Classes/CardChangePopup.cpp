@@ -16,6 +16,7 @@
 #include "CardStrengthPopup.h"
 #include "StartSettingScene.h"
 #include "TouchSuctionLayer.h"
+#include "CommonButton.h"
 
 enum CardChangePopupZorder{
 	kCardChangePopupZorder_gray = 1,
@@ -74,56 +75,51 @@ bool CardChangePopup::init()
 	addChild(main_case, kCardChangePopupZorder_back);
 	
 	
-	CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
-	CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
-	s_close->setColor(ccGRAY);
-	
-	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(CardChangePopup::menuAction));
-	close_item->setTag(kCardChangePopupMenuTag_close);
-	
-	CCMenu* close_menu = CCMenu::createWithItem(close_item);
-	close_menu->setPosition(ccp(453, 256));
+	CommonButton* close_menu = CommonButton::createCloseButton(base_touch_priority);
+	close_menu->setPosition(ccp(453,256));
+	close_menu->setFunction([=](CCObject* sender)
+							{
+								CCNode* t_node = CCNode::create();
+								t_node->setTag(kCardChangePopupMenuTag_close);
+								menuAction(t_node);
+							});
 	main_case->addChild(close_menu, kCardChangePopupZorder_content);
-	close_menu->setTouchPriority(base_touch_priority);
 	
 	
-	CCSprite* n_strength = CCSprite::create("cardchange_strength.png");
-	CCSprite* s_strength = CCSprite::create("cardchange_strength.png");
-	s_strength->setColor(ccGRAY);
-	
-	CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardChangePopup::menuAction));
-	strength_item->setTag(kCardChangePopupMenuTag_strength);
-	
-	CCMenu* strength_menu = CCMenu::createWithItem(strength_item);
+	CommonButton* strength_menu = CommonButton::create("카드강화", 12, CCSizeMake(80,38), CommonButtonYellow, base_touch_priority);
+	strength_menu->setTitleColor(ccBLACK);
 	strength_menu->setPosition(ccp(393,256));
 	main_case->addChild(strength_menu, kCardChangePopupZorder_content);
-	strength_menu->setTouchPriority(base_touch_priority);
+	strength_menu->setFunction([=](CCObject* sender)
+						  {
+							  CCNode* t_node = CCNode::create();
+							  t_node->setTag(kCardChangePopupMenuTag_strength);
+							  menuAction(t_node);
+						  });
 	
 	
-	CCSprite* n_align_rank = CCSprite::create("cardchange_align_rank.png");
-	CCSprite* s_align_rank = CCSprite::create("cardchange_align_rank.png");
-	s_align_rank->setColor(ccGRAY);
-	
-	CCMenuItem* align_rank_item = CCMenuItemSprite::create(n_align_rank, s_align_rank, this, menu_selector(CardChangePopup::menuAction));
-	align_rank_item->setTag(kCardChangePopupMenuTag_alignRank);
-	
-	CCMenu* align_rank_menu = CCMenu::createWithItem(align_rank_item);
-	align_rank_menu->setPosition(ccp(415, 75));
+	CommonButton* align_rank_menu = CommonButton::create("등급순", 14, CCSizeMake(75,45), CommonButtonYellow, base_touch_priority);
+	align_rank_menu->setTitleColor(ccBLACK);
+	align_rank_menu->setPosition(ccp(415,75));
 	main_case->addChild(align_rank_menu, kCardChangePopupZorder_content);
-	align_rank_menu->setTouchPriority(base_touch_priority);
+	align_rank_menu->setFunction([=](CCObject* sender)
+							   {
+								   CCNode* t_node = CCNode::create();
+								   t_node->setTag(kCardChangePopupMenuTag_alignRank);
+								   menuAction(t_node);
+							   });
 	
 	
-	CCSprite* n_align_take = CCSprite::create("cardchange_align_take.png");
-	CCSprite* s_align_take = CCSprite::create("cardchange_align_take.png");
-	s_align_take->setColor(ccGRAY);
-	
-	CCMenuItem* align_take_item = CCMenuItemSprite::create(n_align_take, s_align_take, this, menu_selector(CardChangePopup::menuAction));
-	align_take_item->setTag(kCardChangePopupMenuTag_alignTake);
-	
-	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
-	align_take_menu->setPosition(ccp(415, 37));
+	CommonButton* align_take_menu = CommonButton::create("획득순", 14, CCSizeMake(75,45), CommonButtonYellow, base_touch_priority);
+	align_take_menu->setTitleColor(ccBLACK);
+	align_take_menu->setPosition(ccp(415,37));
 	main_case->addChild(align_take_menu, kCardChangePopupZorder_content);
-	align_take_menu->setTouchPriority(base_touch_priority);
+	align_take_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kCardChangePopupMenuTag_alignTake);
+									 menuAction(t_node);
+								 });
 	
 	setMonster();
 	

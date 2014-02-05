@@ -42,7 +42,8 @@ enum KeepDirection{
 };
 
 enum jackZorder{
-	kJackZ_main = 1,
+	kJackZ_line = 1,
+	kJackZ_main,
 	kJackZ_defaultBarrier,
 	kJackZ_ActiveBarrier,
 	kJackZ_stunEffect
@@ -240,6 +241,8 @@ private:
 	CCSprite* joystickSpr_byJoystick;
 	
 	bool isReverse;
+	
+	CCSprite* line_edge;
 	
 	KeepDirection keep_direction; // rotary
 

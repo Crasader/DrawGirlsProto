@@ -40,9 +40,11 @@ private:
 	CCObject* target_success;
 	SEL_CallFunc delegate_success;
 	
-	int puzzle_number;
-	
 	CCSprite* gray;
+	CCSprite* tip_img;
+	void changeTipImage();
+	
+	int puzzle_number;
 	
 	CCLabelTTF* state_ment;
 	CCLabelBMFont* download_state;

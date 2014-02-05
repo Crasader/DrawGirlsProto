@@ -54,12 +54,25 @@ void SlotMachineSub::update(float dt)
 		}else{
 			replayFunction = nullptr;
 		}
+		std::string againFileName;
+		if(m_gachaCategory == GachaCategory::kRubyGacha)
+		{
+			againFileName = "gacha_popup_again.png";
+		}
+		else if(m_gachaCategory == GachaCategory::kGoldGacha)
+		{
+			againFileName = "gacha_popup_again.png";
+		}
+		else if(m_gachaCategory == GachaCategory::kSocialGacha)
+		{
+			againFileName = "gacha_popup_again.png";
+		}
 		GachaShowReward* gachaShowReward = GachaShowReward::create(replayFunction,
 			m_callback,
 			CCSprite::create(m_rewards[ m_alreadyDeterminantOrder ]->m_spriteStr.c_str()),
 			CCString::createWithFormat("%d", m_rewards[m_alreadyDeterminantOrder]->m_value)->getCString(),
 			kind,
-			selectedItemValue
+			selectedItemValue, againFileName
 				);
 		addChild(gachaShowReward, 3);
 
@@ -72,7 +85,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 	CCLayer::init();
 	m_gachaCategory = gc;
 	CCSprite* dimed = CCSprite::create();
-	dimed->setTextureRect(CCRectMake(0, 0, 520, 320));
+	dimed->setTextureRect(CCRectMake(0, 0, 600, 400));
 	dimed->setColor(ccc3(0, 0, 0));
 	dimed->setOpacity(180);
 	dimed->setPosition(ccp(240, 160));

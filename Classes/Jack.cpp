@@ -1200,27 +1200,28 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				t_popup->setContainerNode(t_container);
 				exit_target->getParent()->addChild(t_popup);
 				
-				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-				case_back->setPosition(CCPointZero);
-				t_container->addChild(case_back);
-				
-				case_back->setContentSize(CCSizeMake(348, 245));
+//				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+//				case_back->setPosition(CCPointZero);
+//				t_container->addChild(case_back);
+//				
+//				case_back->setContentSize(CCSizeMake(348, 245));
 				
 				CCSprite* content_back = CCSprite::create("tutorial_popup3.png");
-				content_back->setPosition(ccp(0,-15));
+				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
 				
-				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
-				title_img->setPosition(ccp(0, 102));
-				t_container->addChild(title_img);
+//				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+//				title_img->setPosition(ccp(0, 102));
+//				t_container->addChild(title_img);
 				
-				CCLabelTTF* content_label = CCLabelTTF::create("몬스터가 쏘는 미사일중에는\n획득영역을 지우는 것도 있어요.", mySGD->getFont().c_str(), 11);
-				content_label->setPosition(ccp(12,-65));
-				t_container->addChild(content_label);
+//				CCLabelTTF* content_label = CCLabelTTF::create("몬스터가 쏘는 미사일중에는\n획득영역을 지우는 것도 있어요.", mySGD->getFont().c_str(), 11);
+//				content_label->setPosition(ccp(12,-65));
+//				t_container->addChild(content_label);
 				
-				CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-				CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-				s_close->setColor(ccGRAY);
+				CCSprite* n_close = CCSprite::create("whitePaper.png");
+				n_close->setOpacity(0);
+				CCSprite* s_close = CCSprite::create("whitePaper.png");
+				s_close->setOpacity(0);
 				
 				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																					{
@@ -1231,7 +1232,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				
 				CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
 				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-				close_menu->setPosition(ccp(145,103));
+				close_menu->setPosition(ccp(0,0));
 				t_container->addChild(close_menu);
 			}
 		}
@@ -1259,28 +1260,29 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCNode* t_container = CCNode::create();
 				t_popup->setContainerNode(t_container);
 				exit_target->getParent()->addChild(t_popup);
-				
-				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-				case_back->setPosition(CCPointZero);
-				t_container->addChild(case_back);
-				
-				case_back->setContentSize(CCSizeMake(348, 245));
+
+//				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+//				case_back->setPosition(CCPointZero);
+//				t_container->addChild(case_back);
+//				
+//				case_back->setContentSize(CCSizeMake(348, 245));
 				
 				CCSprite* content_back = CCSprite::create("tutorial_popup2.png");
-				content_back->setPosition(ccp(0,-15));
+				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
 				
-				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
-				title_img->setPosition(ccp(0, 102));
-				t_container->addChild(title_img);
+//				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+//				title_img->setPosition(ccp(0, 102));
+//				t_container->addChild(title_img);
+//				
+//				CCLabelTTF* content_label = CCLabelTTF::create("몬스터가 쏜 미사일이\n선에 닿으면 불이 붙어요.", mySGD->getFont().c_str(), 13);
+//				content_label->setPosition(ccp(38,-61));
+//				t_container->addChild(content_label);
 				
-				CCLabelTTF* content_label = CCLabelTTF::create("몬스터가 쏜 미사일이\n선에 닿으면 불이 붙어요.", mySGD->getFont().c_str(), 13);
-				content_label->setPosition(ccp(38,-61));
-				t_container->addChild(content_label);
-				
-				CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-				CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-				s_close->setColor(ccGRAY);
+				CCSprite* n_close = CCSprite::create("whitePaper.png");
+				n_close->setOpacity(0);
+				CCSprite* s_close = CCSprite::create("whitePaper.png");
+				s_close->setOpacity(0);
 				
 				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																					{
@@ -1291,7 +1293,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				
 				CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
 				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-				close_menu->setPosition(ccp(145,103));
+				close_menu->setPosition(ccp(0,0));
 				t_container->addChild(close_menu);
 			}
 		}
@@ -1320,27 +1322,28 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				t_popup->setContainerNode(t_container);
 				exit_target->getParent()->addChild(t_popup);
 				
-				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-				case_back->setPosition(CCPointZero);
-				t_container->addChild(case_back);
-				
-				case_back->setContentSize(CCSizeMake(348, 245));
+//				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+//				case_back->setPosition(CCPointZero);
+//				t_container->addChild(case_back);
+//				
+//				case_back->setContentSize(CCSizeMake(348, 245));
 				
 				CCSprite* content_back = CCSprite::create("tutorial_popup1.png");
-				content_back->setPosition(ccp(0,-15));
+				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
 				
-				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
-				title_img->setPosition(ccp(0, 102));
-				t_container->addChild(title_img);
+//				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+//				title_img->setPosition(ccp(0, 102));
+//				t_container->addChild(title_img);
+//				
+//				CCLabelTTF* content_label = CCLabelTTF::create("선과 몬스터가 부딪히면\n충격파가 생겨요.", mySGD->getFont().c_str(), 13);
+//				content_label->setPosition(ccp(55,-60));
+//				t_container->addChild(content_label);
 				
-				CCLabelTTF* content_label = CCLabelTTF::create("선과 몬스터가 부딪히면\n충격파가 생겨요.", mySGD->getFont().c_str(), 13);
-				content_label->setPosition(ccp(55,-60));
-				t_container->addChild(content_label);
-				
-				CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-				CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-				s_close->setColor(ccGRAY);
+				CCSprite* n_close = CCSprite::create("whitePaper.png");
+				n_close->setOpacity(0);
+				CCSprite* s_close = CCSprite::create("whitePaper.png");
+				s_close->setOpacity(0);
 				
 				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																					{
@@ -1351,7 +1354,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				
 				CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
 				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-				close_menu->setPosition(ccp(145,103));
+				close_menu->setPosition(ccp(0,0));
 				t_container->addChild(close_menu);
 			}
 		}
@@ -1570,11 +1573,15 @@ void Jack::setJackState( jackState t_s )
 			jack_ccb_manager->runAnimationsForSequenceNamed("move");
 //		jackImg->setColor(ccWHITE);
 //		jackImg->setVisible(true);
+		line_edge->setVisible(false);
+		myGD->communication("Main_setLineParticle", false);
 		if(!is_hard && !jack_barrier->isVisible())
 			jack_barrier->setVisible(true);
 	}
 	else if(myState == jackStateDrawing)
 	{
+		line_edge->setVisible(true);
+		myGD->communication("Main_setLineParticle", true);
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
 			jack_ccb_manager->runAnimationsForSequenceNamed("draw");
 //		jackImg->setVisible(false);
@@ -1583,6 +1590,8 @@ void Jack::setJackState( jackState t_s )
 	}
 	else if(myState == jackStateBackTracking)
 	{
+		line_edge->setVisible(false);
+		myGD->communication("Main_setLineParticle", false);
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("rewind"))
 			jack_ccb_manager->runAnimationsForSequenceNamed("rewind");
 //		jackImg->setColor(ccGRAY);
@@ -1855,6 +1864,29 @@ void Jack::myInit()
 	myState = jackStateNormal;
 	afterState = jackStateNormal;
 
+	string path_color;
+	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+	if(path_color_code == 1)
+		path_color = "life";
+	else if(path_color_code == 2)
+		path_color = "fire";
+	else if(path_color_code == 3)
+		path_color = "water";
+	else if(path_color_code == 4)
+		path_color = "wind";
+	else if(path_color_code == 5)
+		path_color = "lightning";
+	else if(path_color_code == 6)
+		path_color = "plasma";
+	else
+		path_color = "empty";
+	
+	line_edge = CCSprite::create("jack_drawing_point.png");//("path_edge_" + path_color + ".png").c_str());
+	line_edge->setVisible(false);
+//	line_edge->setScale(myGD->game_scale);
+	addChild(line_edge, kJackZ_line);
+	
+	
 	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1) + ".ccbi");
 	
 	jackImg = t_pair.first;

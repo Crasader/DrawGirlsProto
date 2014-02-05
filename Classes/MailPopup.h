@@ -14,6 +14,9 @@ using namespace std;
 #include <map>
 #include "CCMenuLambda.h"
 #include "DownloadFile.h"
+#include "DimmedPopup.h"
+#include "CommonButton.h"
+
 #define LZZ_INLINE inline
 enum MailPopupZorder
 {
@@ -63,16 +66,16 @@ enum class MailFilter
 	kNews,
 	kUnknownFriendRequest
 };
-class MailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
+class MailPopup : public DimmedPopup, public CCTableViewDataSource, public CCTableViewDelegate
 {
 	public:
 		static MailPopup * create (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh);
-		void finishedOpen ();
-		void finishedClose ();
+	//	void finishedOpen ();
+	//	void finishedClose ();
 		void myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh);
 		void loadMail ();
 		void drawMail (Json::Value obj);
-		void closePopup (CCControlButton * obj, CCControlEvent event);
+	//	void closePopup (CCControlButton * obj, CCControlEvent event);
 		void removeMail (CCObject * _obj);
 		virtual CCTableViewCell * tableCellAtIndex (CCTableView * table, unsigned int idx);
 		virtual void scrollViewDidScroll (CCScrollView * view);
@@ -92,14 +95,13 @@ class MailPopup : public CCLayer, public CCTableViewDataSource, public CCTableVi
 		void onReceiveStageFail();
 		void iHelpYou(int stage, long long user_id, const std::string& nick, Json::Value removeInfo);
 		void removeMessage(int mailNo, long long memberID, std::function<void(Json::Value)> f);
+		void removeMessageByList(vector<int> mailNo, long long memberID, std::function<void(Json::Value)> f);
 		void filterWithMailFilter();
 	protected:
 		std::function<void(void)> m_heartRefresh;
 		Json::Value m_mailList; // 이 정보를 기반으로 뿌려줌. 
 		Json::Value m_filteredMailList; // 걸러진 데이터들
 		CCTableView * mailTableView;
-		CCObject * target_close;
-		SEL_CallFunc delegate_close;
 		ScrollBar * m_scrollBar;
 		MailFilter m_mailFilter;
 		PostBoxState m_popupState;

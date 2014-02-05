@@ -27,12 +27,13 @@
 #include "StarGoldData.h"
 #include "GachaPurchase.h"
 #include "StartSettingScene.h"
+#include "KHAlertView.h"
 #define LZZ_INLINE inline
 
 using namespace std;
 namespace
 {
-  CCSize mailCellSize = CCSizeMake(188, 37);
+  CCSize mailCellSize = CCSizeMake(188, 39);
 }
 MailPopup * MailPopup::create (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh)
 {
@@ -41,20 +42,24 @@ MailPopup * MailPopup::create (CCObject * t_close, SEL_CallFunc d_close, std::fu
 	t_rp->autorelease();
 	return t_rp;
 }
-void MailPopup::finishedOpen ()
-{
-	loadMail();
-}
-void MailPopup::finishedClose ()
-{
-	
-	(target_close->*delegate_close)();
-	removeFromParent();
-}
+//void MailPopup::finishedOpen ()
+//{
+//	loadMail();
+//}
+//void MailPopup::finishedClose ()
+//{
+//	
+//	(target_close->*delegate_close)();
+//	removeFromParent();
+//}
 void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh)
 {
-	target_close = t_close;
-	delegate_close = d_close;
+	DimmedPopup::init();
+	this->setHideFinalAction(t_close, d_close);
+	this->setBackground("postbox_back.png");
+	
+//	target_close = t_close;
+//	delegate_close = d_close;
 	m_heartRefresh = heartRefresh;
 	m_mailFilter = MailFilter::kTotal;	
 	
@@ -64,7 +69,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	Json::Value p;
 	p["memberID"] = hspConnector::get()->getKakaoID();
 	p["type"] = 0;
-	hspConnector::get()->command("removeallmessage",p,[](Json::Value r){});
+	hspConnector::get()->command("removeallmessage",p,this,[](Json::Value r){});
 #endif
 	
 	m_popupState = PostBoxState::kNoMenu;
@@ -73,129 +78,630 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setTouchPriority(-200);
 //	_menu->setTouchEnabled(false); // 임시...
-	CCSprite* back = CCSprite::create("postbox_back.png");
-	back->setPosition(ccp(240,160));
-	addChild(back, kMP_Z_back);
-	back->addChild(_menu);
-	_menu->setPosition(ccp(0, 0));
+//	CCSprite* back = CCSprite::create("postbox_back.png");
+//	back->setPosition(ccp(240,160));
+//	addChild(back, kMP_Z_back);
+//	back->addChild(_menu);
+//	_menu->setPosition(ccp(0, 0));
 	
-	CCSprite* totalFilterOn = CCSprite::create("postbox_all.png");
-	back->addChild(totalFilterOn);
-	totalFilterOn->setPosition(ccp(53, 258));	
+//	CCSprite* totalFilterOn = CCSprite::create("postbox_all.png");
+//	back->addChild(totalFilterOn);
+//	totalFilterOn->setPosition(ccp(53, 258));	
+//
+//	CCSprite* coinFilterOn = CCSprite::create("postbox_coin.png");
+//	back->addChild(coinFilterOn);
+//	coinFilterOn->setPosition(ccp(118, 258));	
+//
+//	CCSprite* challengeFilterOn = CCSprite::create("postbox_challenge.png");
+//	back->addChild(challengeFilterOn);
+//	challengeFilterOn->setPosition(ccp(182, 258));	
+//
+//	CCSprite* ticketFilterOn = CCSprite::create("postbox_ticket.png");
+//	back->addChild(ticketFilterOn);
+//	ticketFilterOn->setPosition(ccp(247, 258));	
+//
+//	CCSprite* helpFilterOn = CCSprite::create("postbox_help.png");
+//	back->addChild(helpFilterOn);
+//	helpFilterOn->setPosition(ccp(312, 258));	
+//
+//	CCSprite* giftFilterOn = CCSprite::create("postbox_gift.png");
+//	back->addChild(giftFilterOn);
+//	giftFilterOn->setPosition(ccp(377, 258));	
 
-	CCSprite* coinFilterOn = CCSprite::create("postbox_coin.png");
-	back->addChild(coinFilterOn);
-	coinFilterOn->setPosition(ccp(118, 258));	
+	
+	CommonButton* allReceive = CommonButton::create("모두받기", 12, CCSizeMake(100,40), CommonButtonGreen, -200);
+	allReceive->setTitleColor(ccc3(20, 0, 0));
+	allReceive->setFunction([=](CCObject*){
+			if(m_mailFilter == MailFilter::kHeart) {
+				std::vector<int> mailNumbers;
+				for(int i=0; i<m_mailList.size(); i++)
+				{
+					if(m_mailList[i]["type"].asInt() == MessageRecvType::kHeart)
+					{
+						mailNumbers.push_back(m_mailList[i]["no"].asInt());
+					}
+				}
+				this->removeMessageByList(mailNumbers, hspConnector::get()->myKakaoInfo["user_id"].asInt64(), [=](Json::Value){
+					//코인올리기
+					myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+mailNumbers.size());
+					m_heartRefresh();
+				});
+			}
+			else if(m_mailFilter == MailFilter::kTicket){
+				std::vector<int> mailNumbers;
+				KS::KSLog("%", m_mailList);
+				std::vector<int> ticketIndexs;
+				for(int i=0; i<m_mailList.size(); i++)
+				{
+					if(m_mailList[i]["type"].asInt() == MessageRecvType::kTicketResult)
+					{
+						mailNumbers.push_back(m_mailList[i]["no"].asInt());
+						ticketIndexs.push_back(i);
+					}
+				}
+				Json::Value puzzleTicket;
+				for(auto i : ticketIndexs)
+				{
+					Json::Value one;
+					Json::Reader reader;
+					Json::Value contentObj;
+					reader.parse(m_mailList[i]["content"].asString(), contentObj);
+					one["puzzlenumber"] = contentObj["puzzlenumber"].asInt();
+					one["friendID"] = m_mailList[i]["friendID"].asInt64();
+					puzzleTicket.append(one);
+				}
+				this->removeMessageByList(mailNumbers, hspConnector::get()->myKakaoInfo["user_id"].asInt64(), [=](Json::Value r){
+					// to do
+					if(r["result"]["code"].asInt() != GDSUCCESS){
+						return;
+					}
+					KS::KSLog("%", puzzleTicket);
+					// 영호 puzzleTicket 쓰면 됨. 이런 구조임.
+					/*
+					 [
+					 
+					 {
+					 "friendID" : 90280374354071376,
+					 "puzzlenumber" : 4
+					 },
+					 
+					 {
+					 "friendID" : 90280374354071376,
+					 "puzzlenumber" : 4
+					 },
+					 
+					 {
+					 "friendID" : 90280374354071376,
+					 "puzzlenumber" : 4
+					 }
+					 ]
+					 */
+					
+					for(int t_i = 0;t_i<puzzleTicket.size();t_i++)
+					{
+						string t_friend_id = puzzleTicket[t_i]["friendID"].asString();
+						int t_puzzle_number = puzzleTicket[t_i]["puzzlenumber"].asInt();
+						if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, t_puzzle_number-1) && myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+2 == t_puzzle_number) {
+							bool good_ticket = true;
+							int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
+							for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {
+								string ticket_user_id = myDSH->getStringForKey(kDSH_Key_ticketUserId_int1, i);
+								if(ticket_user_id == t_friend_id){
+									good_ticket = false;
+								}
+							}
+							
+							if(good_ticket && have_ticket_cnt < NSDS_GI(t_puzzle_number, kSDS_PZ_ticket_i)) {
+								int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt) + 1;
+								myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt);
+								myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, have_ticket_cnt, t_friend_id);
+								
+								int need_ticket_cnt = NSDS_GI(t_puzzle_number, kSDS_PZ_ticket_i);
+								
+								CCLabelTTF* ticket_cnt_label = (CCLabelTTF*)((PuzzleMapScene*)getTarget())->getChildByTag(kPMS_MT_ticketCnt);
+								if(ticket_cnt_label){
+									ticket_cnt_label->setString(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt),
+																																				 NSDS_GI(t_puzzle_number, kSDS_PZ_ticket_i))->getCString());
+								}
+								if(need_ticket_cnt <= have_ticket_cnt) {
+									// open 퍼즐
+									myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+									vector<SaveUserData_Key> save_userdata_list;
+									save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
+									myDSH->saveUserData(save_userdata_list, nullptr);
+									
+									((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_buyPuzzle);
+									((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_callTicket);
+									((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_ticketCnt);
+									((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_puzzleOpenTitle);
+									
+									((PuzzleMapScene*)getTarget())->openPuzzleAction(t_puzzle_number);
+									
+									for(int i=1;i<=have_ticket_cnt;i++){
+										myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, i, "");
+										myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, 0);
+										
+										ASPopupView* t_popup = ASPopupView::create(-200);
+										
+										CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+										float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+										if(screen_scale_x < 1.f)
+											screen_scale_x = 1.f;
+										
+										t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+										
+										CCNode* open_puzzle_container = CCNode::create();
+										t_popup->setContainerNode(open_puzzle_container);
+										
+										CCScale9Sprite* open_puzzle_case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+										open_puzzle_case_back->setPosition(CCPointZero);
+										open_puzzle_container->addChild(open_puzzle_case_back);
+										
+										open_puzzle_case_back->setContentSize(CCSizeMake(230, 250));
+										
+										CCScale9Sprite* open_puzzle_content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+										open_puzzle_content_back->setPosition(ccp(0,2));
+										open_puzzle_container->addChild(open_puzzle_content_back);
+										
+										open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
+										
+										CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("퍼즐 오픈", mySGD->getFont().c_str(), 20);
+										open_puzzle_title_label->setPosition(ccp(0, 102));
+										open_puzzle_container->addChild(open_puzzle_title_label);
+										
+										CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 퍼즐이\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
+										open_puzzle_content_label->setPosition(CCPointZero);
+										open_puzzle_container->addChild(open_puzzle_content_label);
+										
+										CCLabelTTF* loading_puzzle_label = CCLabelTTF::create("Loading...", mySGD->getFont().c_str(), 12);
+										loading_puzzle_label->setPosition(ccp(0,-95));
+										open_puzzle_container->addChild(loading_puzzle_label);
+										
+										CCSprite* n_op_ok = CCSprite::create("popup2_ok.png");
+										CCSprite* s_op_ok = CCSprite::create("popup2_ok.png");
+										s_op_ok->setColor(ccGRAY);
+										
+										CCMenuItemSpriteLambda* op_ok_item = CCMenuItemSpriteLambda::create(n_op_ok, s_op_ok, [=](CCObject* sender){
+											t_popup->removeFromParent();
+										});
+										
+										CCMenuLambda* op_ok_menu = CCMenuLambda::createWithItem(op_ok_item);
+										op_ok_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+										op_ok_menu->setVisible(false);
+										op_ok_menu->setPosition(ccp(0,-95));
+										open_puzzle_container->addChild(op_ok_menu);
+									}
+									break;
+								}
+								else {
+									// 가지고 있는 티켓
+								}
+								
+							}
+							else {
+								// 소용없는 티켓
+							}
+						}
+					}
+					
+				});
+			}
+	});
+	allReceive->setPosition(ccp(240, 32));
+	this->addChild(allReceive, 1);
+	
 
-	CCSprite* challengeFilterOn = CCSprite::create("postbox_challenge.png");
-	back->addChild(challengeFilterOn);
-	challengeFilterOn->setPosition(ccp(182, 258));	
-
-	CCSprite* ticketFilterOn = CCSprite::create("postbox_ticket.png");
-	back->addChild(ticketFilterOn);
-	ticketFilterOn->setPosition(ccp(247, 258));	
-
-	CCSprite* helpFilterOn = CCSprite::create("postbox_help.png");
-	back->addChild(helpFilterOn);
-	helpFilterOn->setPosition(ccp(312, 258));	
-
-	CCSprite* giftFilterOn = CCSprite::create("postbox_gift.png");
-	back->addChild(giftFilterOn);
-	giftFilterOn->setPosition(ccp(377, 258));	
-
+	
+	
+//	CCMenuItemLambda* allReceive = CCMenuItemImageLambda::create("postbox_allok.png", "postbox_allok.png",
+//			[=](CCObject*){
+//				if(m_mailFilter == MailFilter::kHeart) {
+//					std::vector<int> mailNumbers;
+//					for(int i=0; i<m_mailList.size(); i++)
+//					{
+//						if(m_mailList[i]["type"].asInt() == MessageRecvType::kHeart)
+//						{
+//							mailNumbers.push_back(m_mailList[i]["no"].asInt());
+//						}
+//					}
+//					this->removeMessageByList(mailNumbers, hspConnector::get()->myKakaoInfo["user_id"].asInt64(), [=](Json::Value){
+//						//코인올리기
+//						myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+mailNumbers.size());
+//						m_heartRefresh();
+//					});
+//				}
+//				else if(m_mailFilter == MailFilter::kTicket){
+//					std::vector<int> mailNumbers;
+//					KS::KSLog("%", m_mailList);
+//					std::vector<int> ticketIndexs;
+//					for(int i=0; i<m_mailList.size(); i++)
+//					{
+//						if(m_mailList[i]["type"].asInt() == MessageRecvType::kTicketResult)
+//						{
+//							mailNumbers.push_back(m_mailList[i]["no"].asInt());
+//							ticketIndexs.push_back(i);
+//						}
+//					}
+//					Json::Value puzzleTicket;
+//					for(auto i : ticketIndexs)
+//					{
+//						Json::Value one;
+//						Json::Reader reader;
+//						Json::Value contentObj;
+//						reader.parse(m_mailList[i]["content"].asString(), contentObj);
+//						one["puzzlenumber"] = contentObj["puzzlenumber"].asInt();
+//						one["friendID"] = m_mailList[i]["friendID"].asInt64();
+//						puzzleTicket.append(one);
+//					}
+//					this->removeMessageByList(mailNumbers, hspConnector::get()->myKakaoInfo["user_id"].asInt64(), [=](Json::Value r){
+//						// to do
+//						if(r["result"]["code"].asInt() != GDSUCCESS){
+//							return;
+//						}
+//						KS::KSLog("%", puzzleTicket);
+//						// 영호 puzzleTicket 쓰면 됨. 이런 구조임.
+//						/*
+//						 [
+//						 
+//						 {
+//						 "friendID" : 90280374354071376,
+//						 "puzzlenumber" : 4
+//						 },
+//						 
+//						 {
+//						 "friendID" : 90280374354071376,
+//						 "puzzlenumber" : 4
+//						 },
+//						 
+//						 {
+//						 "friendID" : 90280374354071376,
+//						 "puzzlenumber" : 4
+//						 }
+//						 ]
+//						 */
+//						
+//						for(int t_i = 0;t_i<puzzleTicket.size();t_i++)
+//						{
+//							string t_friend_id = puzzleTicket[t_i]["friendID"].asString();
+//							int t_puzzle_number = puzzleTicket[t_i]["puzzlenumber"].asInt();
+//							if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, t_puzzle_number-1) && myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+2 == t_puzzle_number) {
+//								bool good_ticket = true;
+//								int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
+//								for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {
+//									string ticket_user_id = myDSH->getStringForKey(kDSH_Key_ticketUserId_int1, i);
+//									if(ticket_user_id == t_friend_id){
+//										good_ticket = false;
+//									}
+//								}
+//								
+//								if(good_ticket && have_ticket_cnt < NSDS_GI(t_puzzle_number, kSDS_PZ_ticket_i)) {
+//									int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt) + 1;
+//									myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt);
+//									myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, have_ticket_cnt, t_friend_id);
+//									
+//									int need_ticket_cnt = NSDS_GI(t_puzzle_number, kSDS_PZ_ticket_i);
+//									
+//									CCLabelTTF* ticket_cnt_label = (CCLabelTTF*)((PuzzleMapScene*)m_target_close)->getChildByTag(kPMS_MT_ticketCnt);
+//									if(ticket_cnt_label){
+//										ticket_cnt_label->setString(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt),
+//																							   NSDS_GI(t_puzzle_number, kSDS_PZ_ticket_i))->getCString());
+//									}
+//									if(need_ticket_cnt <= have_ticket_cnt) {
+//										// open 퍼즐
+//										myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+//										vector<SaveUserData_Key> save_userdata_list;
+//										save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
+//										myDSH->saveUserData(save_userdata_list, nullptr);
+//										
+//										((PuzzleMapScene*)m_target_close)->removeChildByTag(kPMS_MT_buyPuzzle);
+//										((PuzzleMapScene*)m_target_close)->removeChildByTag(kPMS_MT_callTicket);
+//										((PuzzleMapScene*)m_target_close)->removeChildByTag(kPMS_MT_ticketCnt);
+//										((PuzzleMapScene*)m_target_close)->removeChildByTag(kPMS_MT_puzzleOpenTitle);
+//										
+//										((PuzzleMapScene*)m_target_close)->openPuzzleAction(t_puzzle_number);
+//										
+//										for(int i=1;i<=have_ticket_cnt;i++){
+//											myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, i, "");
+//											myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, 0);
+//											
+//											ASPopupView* t_popup = ASPopupView::create(-200);
+//											
+//											CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//											float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//											if(screen_scale_x < 1.f)
+//												screen_scale_x = 1.f;
+//											
+//											t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+//											
+//											CCNode* open_puzzle_container = CCNode::create();
+//											t_popup->setContainerNode(open_puzzle_container);
+//											
+//											CCScale9Sprite* open_puzzle_case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+//											open_puzzle_case_back->setPosition(CCPointZero);
+//											open_puzzle_container->addChild(open_puzzle_case_back);
+//											
+//											open_puzzle_case_back->setContentSize(CCSizeMake(230, 250));
+//											
+//											CCScale9Sprite* open_puzzle_content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//											open_puzzle_content_back->setPosition(ccp(0,2));
+//											open_puzzle_container->addChild(open_puzzle_content_back);
+//											
+//											open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
+//											
+//											CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("퍼즐 오픈", mySGD->getFont().c_str(), 20);
+//											open_puzzle_title_label->setPosition(ccp(0, 102));
+//											open_puzzle_container->addChild(open_puzzle_title_label);
+//											
+//											CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 퍼즐이\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
+//											open_puzzle_content_label->setPosition(CCPointZero);
+//											open_puzzle_container->addChild(open_puzzle_content_label);
+//											
+//											CCLabelTTF* loading_puzzle_label = CCLabelTTF::create("Loading...", mySGD->getFont().c_str(), 12);
+//											loading_puzzle_label->setPosition(ccp(0,-95));
+//											open_puzzle_container->addChild(loading_puzzle_label);
+//											
+//											CCSprite* n_op_ok = CCSprite::create("popup2_ok.png");
+//											CCSprite* s_op_ok = CCSprite::create("popup2_ok.png");
+//											s_op_ok->setColor(ccGRAY);
+//											
+//											CCMenuItemSpriteLambda* op_ok_item = CCMenuItemSpriteLambda::create(n_op_ok, s_op_ok, [=](CCObject* sender){
+//												t_popup->removeFromParent();
+//											});
+//											
+//											CCMenuLambda* op_ok_menu = CCMenuLambda::createWithItem(op_ok_item);
+//											op_ok_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+//											op_ok_menu->setVisible(false);
+//											op_ok_menu->setPosition(ccp(0,-95));
+//											open_puzzle_container->addChild(op_ok_menu);
+//										}
+//										break;
+//									}
+//									else {
+//										// 가지고 있는 티켓
+//									}
+//									
+//								}
+//								else {
+//									// 소용없는 티켓
+//								}
+//							}
+//						}
+//						
+//					});
+//				}
+//			}
+//			);
+//	allReceive->setPosition(ccp(375, 25));
+//	allReceive->setColor(ccc3(100, 100, 100));
+//	allReceive->setEnabled(false);
+//	_menu->addChild(allReceive, kMP_Z_close);
+	
+	CommonButton* giftFilter = CommonButton::create("티켓함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* helpFilter = CommonButton::create("도움함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* ticketFilter = CommonButton::create("티켓함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* challengeFilter = CommonButton::create("도전함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* coinFilter = CommonButton::create("코인함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* totalFilter = CommonButton::create("전체보기", 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	
 	auto allInvisible = [=]()
 	{
-		totalFilterOn->setVisible(false);
-		coinFilterOn->setVisible(false);
-		challengeFilterOn->setVisible(false);
-		ticketFilterOn->setVisible(false);
-		helpFilterOn->setVisible(false);
-		giftFilterOn->setVisible(false);
+		giftFilter->setEnabled(true);
+		helpFilter->setEnabled(true);
+		ticketFilter->setEnabled(true);
+		challengeFilter->setEnabled(true);
+		coinFilter->setEnabled(true);
+		totalFilter->setEnabled(true);
+//		totalFilterOn->setVisible(false);
+//		coinFilterOn->setVisible(false);
+//		challengeFilterOn->setVisible(false);
+//		ticketFilterOn->setVisible(false);
+//		helpFilterOn->setVisible(false);
+//		giftFilterOn->setVisible(false);
 	};
+	//allInvisible();
+	//totalFilterOn->setVisible(true);
+	
+	
+//	CCMenuItemLambda* totalFilter = CCMenuItemImageLambda::create("postbox_all_off.png", "postbox_all_off.png",
+//			[=](CCObject*)
+//			{
+//				m_mailFilter = MailFilter::kTotal;
+//				filterWithMailFilter();
+//				this->mailTableView->reloadData();
+//				allInvisible();
+//				totalFilterOn->setVisible(true);
+//				allReceive->setColor(ccc3(100, 100, 100));
+//			});
+//	totalFilter->setPosition(ccp(53, 258));
+//	_menu->addChild(totalFilter, kMP_Z_close);
+	
+	totalFilter->setBackgroundTypeForDisabled(CommonButtonYellow);
+	totalFilter->setTitleColor(ccc3(200, 200, 200));
+	totalFilter->setTitleColorForDisable(ccc3(20, 0, 0));
+	totalFilter->setFunction([=](CCObject*){
+		m_mailFilter = MailFilter::kTotal;
+		filterWithMailFilter();
+		this->mailTableView->reloadData();
+		allInvisible();
+		totalFilter->setEnabled(false);
+	});
+	totalFilter->setPosition(ccp(53, 255));
+	this->addChild(totalFilter, 1);
+	
+	
+	
+	
+	
+//	CCMenuItemLambda* coinFilter = CCMenuItemImageLambda::create("postbox_coin_off.png", "postbox_coin_off.png",
+//			[=](CCObject*)
+//			{
+//				m_mailFilter = MailFilter::kHeart;
+//				filterWithMailFilter();
+//				this->mailTableView->reloadData();
+//				allInvisible();
+//				coinFilterOn->setVisible(true);
+//				allReceive->setColor(ccc3(255, 255, 255));
+//				allReceive->setEnabled(true);
+//			});
+//	coinFilter->setPosition(ccp(118, 258));
+//	_menu->addChild(coinFilter, kMP_Z_close);
+
+	coinFilter->setBackgroundTypeForDisabled(CommonButtonYellow);
+	coinFilter->setTitleColor(ccc3(200, 200, 200));
+	coinFilter->setTitleColorForDisable(ccc3(20, 0, 0));
+	coinFilter->setFunction([=](CCObject*){
+		m_mailFilter = MailFilter::kHeart;
+		filterWithMailFilter();
+		this->mailTableView->reloadData();
+		allInvisible();
+		coinFilter->setEnabled(false);
+	});
+	coinFilter->setPosition(ccp(118, 255));
+	this->addChild(coinFilter, 1);
+	
+	
+	
+	
+	
+//	CCMenuItemLambda* challengeFilter = CCMenuItemImageLambda::create("postbox_challenge_off.png", "postbox_challenge_off.png",
+//			[=](CCObject*)
+//			{
+//				m_mailFilter = MailFilter::kChallenge;	
+//				filterWithMailFilter();
+//				this->mailTableView->reloadData();
+//				allInvisible();
+//				challengeFilterOn->setVisible(true);
+//				allReceive->setColor(ccc3(100, 100, 100));
+//				allReceive->setEnabled(false);
+//			});
+//	challengeFilter->setPosition(ccp(182, 258));
+//	_menu->addChild(challengeFilter, kMP_Z_close);
+
+	challengeFilter->setBackgroundTypeForDisabled(CommonButtonYellow);
+	challengeFilter->setTitleColor(ccc3(200, 200, 200));
+	challengeFilter->setTitleColorForDisable(ccc3(20, 0, 0));
+	challengeFilter->setFunction([=](CCObject*){
+		m_mailFilter = MailFilter::kChallenge;
+		filterWithMailFilter();
+		this->mailTableView->reloadData();
+		allInvisible();
+		challengeFilter->setEnabled(false);
+	});
+	challengeFilter->setPosition(ccp(182, 255));
+	this->addChild(challengeFilter, 1);
+	
+	
+	
+//	CCMenuItemLambda* ticketFilter = CCMenuItemImageLambda::create("postbox_ticket_off.png", "postbox_ticket_off.png",
+//			[=](CCObject*)
+//			{
+//
+//				m_mailFilter = MailFilter::kTicket;	
+//				filterWithMailFilter();
+//				this->mailTableView->reloadData();
+//				allInvisible();
+//				ticketFilterOn->setVisible(true);
+//				allReceive->setColor(ccc3(255, 255, 255));
+//				allReceive->setEnabled(true);
+//			});
+//	ticketFilter->setPosition(ccp(247, 258));
+//	_menu->addChild(ticketFilter, kMP_Z_close);
+	ticketFilter->setBackgroundTypeForDisabled(CommonButtonYellow);
+	ticketFilter->setTitleColor(ccc3(200, 200, 200));
+	ticketFilter->setTitleColorForDisable(ccc3(20, 0, 0));
+	ticketFilter->setFunction([=](CCObject*){
+		m_mailFilter = MailFilter::kTicket;
+		filterWithMailFilter();
+		this->mailTableView->reloadData();
+		allInvisible();
+		ticketFilter->setEnabled(false);
+	});
+	ticketFilter->setPosition(ccp(247, 255));
+	this->addChild(ticketFilter, 1);
+	
+	
+	
+	
+//	CCMenuItemLambda* helpFilter = CCMenuItemImageLambda::create("postbox_help_off.png", "postbox_help_off.png",
+//			[=](CCObject*)
+//			{
+//
+//				m_mailFilter = MailFilter::kHelp;	
+//				filterWithMailFilter();
+//				this->mailTableView->reloadData();
+//				allInvisible();
+//				helpFilterOn->setVisible(true);
+//				allReceive->setColor(ccc3(100, 100, 100));
+//				allReceive->setEnabled(false);
+//			});
+//	helpFilter->setPosition(ccp(312, 258));
+//	_menu->addChild(helpFilter, kMP_Z_close);
+	helpFilter->setBackgroundTypeForDisabled(CommonButtonYellow);
+	helpFilter->setTitleColor(ccc3(200, 200, 200));
+	helpFilter->setTitleColorForDisable(ccc3(20, 0, 0));
+	helpFilter->setFunction([=](CCObject*){
+		m_mailFilter = MailFilter::kHelp;
+		filterWithMailFilter();
+		this->mailTableView->reloadData();
+		allInvisible();
+		helpFilter->setEnabled(false);
+	});
+	helpFilter->setPosition(ccp(312, 255));
+	this->addChild(helpFilter, 1);
+	
+	
+	
+	
+//	CCMenuItemLambda* giftFilter = CCMenuItemImageLambda::create("postbox_gift_off.png", "postbox_gift_off.png",
+//			[=](CCObject*)
+//			{
+//				m_mailFilter = MailFilter::kNews;	
+//				filterWithMailFilter();
+//				this->mailTableView->reloadData();
+//				allInvisible();
+//				giftFilterOn->setVisible(true);
+//				allReceive->setColor(ccc3(100, 100, 100));
+//				allReceive->setEnabled(false);
+//			});
+//	giftFilter->setPosition(ccp(377, 258));	
+//	_menu->addChild(giftFilter, kMP_Z_close);
+
+	
+	giftFilter->setBackgroundTypeForDisabled(CommonButtonYellow);
+	giftFilter->setTitleColor(ccc3(200, 200, 200));
+	giftFilter->setTitleColorForDisable(ccc3(20, 0, 0));
+	giftFilter->setFunction([=](CCObject*){
+		m_mailFilter = MailFilter::kHelp;
+		filterWithMailFilter();
+		this->mailTableView->reloadData();
+		allInvisible();
+		giftFilter->setEnabled(false);
+	});
+	giftFilter->setPosition(ccp(377, 255));
+	this->addChild(giftFilter, 1);
+	
+	
+//	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
+//			"cardchange_cancel.png", "cardchange_cancel.png",
+//			[=](CCObject*){
+//				(target_close->*delegate_close)();
+//				removeFromParent();
+//			});
+//
+//	closeBtn->setPosition(ccp(451, 257));
+
+	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
+	closeBtn->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
+		this->hidePopup();
+	});
+	closeBtn->setPosition(ccp(450, 255));
+	this->addChild(closeBtn);
+	
 	allInvisible();
-	totalFilterOn->setVisible(true);
-	CCMenuItemLambda* totalFilter = CCMenuItemImageLambda::create("postbox_all_off.png", "postbox_all_off.png",
-			[=](CCObject*)
-			{
-				m_mailFilter = MailFilter::kTotal;
-				filterWithMailFilter();
-				this->mailTableView->reloadData();
-				allInvisible();
-				totalFilterOn->setVisible(true);
-			});
-	totalFilter->setPosition(ccp(53, 258));
-	_menu->addChild(totalFilter, kMP_Z_close);
-	CCMenuItemLambda* coinFilter = CCMenuItemImageLambda::create("postbox_coin_off.png", "postbox_coin_off.png",
-			[=](CCObject*)
-			{
-				m_mailFilter = MailFilter::kHeart;	
-				filterWithMailFilter();
-				this->mailTableView->reloadData();
-				allInvisible();
-				coinFilterOn->setVisible(true);
-			});
-	coinFilter->setPosition(ccp(118, 258));
-	_menu->addChild(coinFilter, kMP_Z_close);
-
-	CCMenuItemLambda* challengeFilter = CCMenuItemImageLambda::create("postbox_challenge_off.png", "postbox_challenge_off.png",
-			[=](CCObject*)
-			{
-				m_mailFilter = MailFilter::kChallenge;	
-				filterWithMailFilter();
-				this->mailTableView->reloadData();
-				allInvisible();
-				challengeFilterOn->setVisible(true);
-			});
-	challengeFilter->setPosition(ccp(182, 258));
-	_menu->addChild(challengeFilter, kMP_Z_close);
-
-	CCMenuItemLambda* ticketFilter = CCMenuItemImageLambda::create("postbox_ticket_off.png", "postbox_ticket_off.png",
-			[=](CCObject*)
-			{
-
-				m_mailFilter = MailFilter::kTicket;	
-				filterWithMailFilter();
-				this->mailTableView->reloadData();
-				allInvisible();
-				ticketFilterOn->setVisible(true);
-			});
-	ticketFilter->setPosition(ccp(247, 258));
-	_menu->addChild(ticketFilter, kMP_Z_close);
-	CCMenuItemLambda* helpFilter = CCMenuItemImageLambda::create("postbox_help_off.png", "postbox_help_off.png",
-			[=](CCObject*)
-			{
-
-				m_mailFilter = MailFilter::kHelp;	
-				filterWithMailFilter();
-				this->mailTableView->reloadData();
-				allInvisible();
-				helpFilterOn->setVisible(true);
-			});
-	helpFilter->setPosition(ccp(312, 258));
-	_menu->addChild(helpFilter, kMP_Z_close);
-	CCMenuItemLambda* giftFilter = CCMenuItemImageLambda::create("postbox_gift_off.png", "postbox_gift_off.png",
-			[=](CCObject*)
-			{
-
-				m_mailFilter = MailFilter::kNews;	
-				filterWithMailFilter();
-				this->mailTableView->reloadData();
-				allInvisible();
-				giftFilterOn->setVisible(true);
-			});
-	giftFilter->setPosition(ccp(377, 258));	
-	_menu->addChild(giftFilter, kMP_Z_close);
-
-	CCMenuItemLambda* closeBtn = CCMenuItemImageLambda::create(
-			"cardchange_cancel.png", "cardchange_cancel.png",
-			[=](CCObject*){
-			(target_close->*delegate_close)();
-			removeFromParent();
-
-			});
-
-	closeBtn->setPosition(ccp(451, 257));
-	_menu->addChild(closeBtn, kMP_Z_close);
+	totalFilter->setEnabled(false);
+	
+	//_menu->addChild(closeBtn, kMP_Z_close);
 	
 	
 	loadMail();
@@ -208,7 +714,7 @@ void MailPopup::loadMail ()
 	p["limitDay"] = mySGD->getMsgRemoveDay();
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 	
-	hspConnector::get()->command("getmessagelist",p,[this](Json::Value r)
+	hspConnector::get()->command("getmessagelist",p,this,[this](Json::Value r)
 															 {
 																 GraphDogLib::JsonToLog("getmessagelist", r);
 																 if(r["result"]["code"].asInt() != GDSUCCESS)
@@ -275,10 +781,10 @@ void MailPopup::drawMail (Json::Value obj)
 	//else 
 		//if(m_mailFilter == MailFilter::kTotal)
 }
-void MailPopup::closePopup (CCControlButton * obj, CCControlEvent event)
-{
-	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(MailPopup::finishedClose)),NULL));
-}
+//void MailPopup::closePopup (CCControlButton * obj, CCControlEvent event)
+//{
+//	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(MailPopup::finishedClose)),NULL));
+//}
 void MailPopup::removeMail (CCObject * _obj)
 {
 	
@@ -317,7 +823,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 		bg->setAnchorPoint(CCPointZero);
 		cell->addChild(bg,0);
 
-		CCSprite* profileImg = GDWebSprite::create((mail)["profile_image_url"].asString(), "ending_take_particle.png");
+		CCSprite* profileImg = GDWebSprite::create((mail)["profile_image_url"].asString(), "no_img.png");
 		profileImg->setAnchorPoint(ccp(0.5, 0.5));
 		profileImg->setTag(kMP_MT_profileImg);
 		profileImg->setPosition(ccp(20, 20));
@@ -334,7 +840,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 
 		title = CCLabelTTF::create((contentObj["nick"].asString() + "님의").c_str(), mySGD->getFont().c_str(),12);
-		title->setPosition(ccp(38 + 5,28));
+		title->setPosition(ccp(38,20));
+		title->setColor(ccc3(20, 0, 0));
 		title->setAnchorPoint(CCPointZero);
 		title->setTag(kMP_MT_title);
 		cell->addChild(title,2);
@@ -348,31 +855,32 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					("postbox_cell_receive.png", "postbox_cell_receive.png",
 					 [=](CCObject* sender)
 					 {
-					 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-					 int idx = (int)obj->getUserData();
+						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
+						 int idx = (int)obj->getUserData();
 
-					 Json::Value p;
-					 int mailNo = mail["no"].asInt();
+						 Json::Value p;
+						 int mailNo = mail["no"].asInt();
 
-					 p["no"] = mailNo;
-					 p["memberID"] = mail["memberID"].asInt64();
+						 p["no"] = mailNo;
+						 p["memberID"] = mail["memberID"].asInt64();
 
 
-					 //삭제요청
-					 this->removeMessage
-					 (mailNo, mail["memberID"].asInt64(),
-						[=](Json::Value r)
-						{
-						//코인올리기
-						//						if(myDSH->getIntegerForKey(kDSH_Key_heartCnt)<5)
-						{
-							myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
-							m_heartRefresh();
-						}
-						});
+						 //삭제요청
+						 this->removeMessage (mailNo, mail["memberID"].asInt64(),
+						 [=](Json::Value r)
+						 {
+							 if(r["error"]["code"].asInt() != GDSUCCESS) {
+								 return;
+							 }
+							 //코인올리기
+
+							 myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+							 m_heartRefresh();
+
+						 });
 					 }
 				);
-				sendBtn->setPosition(ccp(190, 22));
+				sendBtn->setPosition(ccp(155, 22));
 
 				_menu->addChild(sendBtn,2);
 
@@ -381,118 +889,125 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				comment = "도전장이 도착했어요.";
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-					 [=](CCObject* sender)
-					 {
-					 KSAlertView* av = KSAlertView::create();
-					 av->setCloseOnPress(false);
-					 //				 av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-					 //																							 CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-					 //				 av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-					 //																							 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
+					 [=](CCObject* sender) {
+						 KHAlertView* av = KHAlertView::create(); 
+						 av->setCloseOnPress(false);
+						 // av->setTitleFileName("msg_challenge.png");
+						 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+						 av->setWidth(240);
+						 av->setHeight(240);
+						 av->setTitleHeight(10);
+						 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+						 av->setCenterY(150);
 
-					 // 도망 버튼.
-					 auto m0 = CCMenuItemImageLambda::create
-					 ("postbox_deny.png", "postbox_deny.png",
-						[=](CCObject* e){
-						//																									 removeFromParent();
-						CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
-						// 도망에 대한 처리
-						Json::Value p;
-						int mailNo = mail["no"].asInt();;
-						p["no"] = mailNo;
-						p["memberID"] = mail["memberID"].asInt64();
-						// 도전장 삭제요청
-						this->removeMessage
-						(mailNo, mail["memberID"].asInt64(),
-						 [=](Json::Value r)
-						 {
-						 av->removeFromParent();
-						 Json::Value p;
-						 Json::Value contentJson;
-						 //		contentJson["msg"] = (nickname + "님에게 도전!");
-						 contentJson["challengestage"] = contentObj["challengestage"].asInt();
-						 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-						 p["receiverMemberID"] = mail["friendID"].asString();
-						 p["senderMemberID"] = hspConnector::get()->getKakaoID();
-						 p["type"] = kChallengeResult;
-						 contentJson["result"] = "win"; // 상대방을 win 으로 세링~
-						 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-						 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
-							 {
-							 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
-							 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
-							 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
-
-							 //																		setHelpSendTime(recvId);
-							 GraphDogLib::JsonToLog("sendMessage", r);
-							 if(r["result"]["code"].asInt() != GDSUCCESS)
-							 return;
-
-							 //												 						obj->removeFromParent();
-							 KSAlertView* av = KSAlertView::create();
-							 av->setCenterY(150);
-							 auto ttf = CCLabelTTF::create((std::string("?")+"에게 졌습니다...").c_str(), "", 12.f);
-							 ttf->setColor(ccc3(0, 0, 0));
-							 av->setContentNode(
-								 ttf
+						 CCNode* emptyNode = CCNode::create();
+						 auto ttf = CCLabelTTF::create("도전을 받아들이시겠습니까?", mySGD->getFont().c_str(), 12.f); 
+						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+						 //	con->setAnchorPoint(ccp(0, 0));
+						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+						 ttf->setColor(ccc3(255, 255, 255));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 emptyNode->addChild(ttf);
+						 av->setContentNode(
+								 emptyNode
 								 );
-							 av->setContentSize(ttf->getDimensions());
+						 av->setContentSize(ttf->getDimensions());
+						 av->addButton(CommonButton::create("도망가기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+													 [=](CCObject* e) {
+														 CCLog("ok!!");
+														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+														 // 도망에 대한 처리
+														 Json::Value p;
+														 int mailNo = mail["no"].asInt();;
+														 p["no"] = mailNo;
+														 p["memberID"] = mail["memberID"].asInt64();
+														 // 도전장 삭제요청
+														 this->removeMessage (mailNo, mail["memberID"].asInt64(),
+																									[=](Json::Value r) {
+																										av->removeFromParent();
+																										Json::Value p;
+																										Json::Value contentJson;
+																										//		contentJson["msg"] = (nickname + "님에게 도전!");
+																										contentJson["challengestage"] = contentObj["challengestage"].asInt();
+																										contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+																										p["receiverMemberID"] = mail["friendID"].asString();
+																										p["senderMemberID"] = hspConnector::get()->getKakaoID();
+																										p["type"] = kChallengeResult;
+																										contentJson["result"] = "win"; // 상대방을 win 으로 세링~
+																										p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+																										hspConnector::get()->command("sendMessage", p,this, [=](Json::Value r) {
+																											//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+																											//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+																											//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
 
-							 av->addButton(CCMenuItemImageLambda::create
-									 (
-										"ui_common_ok.png",
-										"ui_common_ok.png",
-										[=](CCObject* e){
-										//																										removeFromParent();
-										}
-									 ));
-							 addChild(av, kMP_Z_helpAccept);
-							 av->show();
+																											//																		setHelpSendTime(recvId);
+																											GraphDogLib::JsonToLog("sendMessage", r);
+																											if(r["result"]["code"].asInt() != GDSUCCESS){
+																												return;
+																											}
+																											//												 						obj->removeFromParent();
+																											///////////////////////////////////////////
+																											KHAlertView* av = KHAlertView::create(); 
+																											// av->setTitleFileName("msg_challenge.png");
+																											av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+																											av->setWidth(240);
+																											av->setHeight(240);
+																											av->setTitleHeight(10);
+																											av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+																											av->setCenterY(150);
 
-							 Json::Value p2;
-							 p2["receiver_id"] = mail["friendID"].asString();
-							 // 여기서 당신은 지금 배틀한 상대방을 지칭
-							 p2["message"] = "당신이 승리하였습니다. 보상을 받으세요 ^_^";
-							 hspConnector::get()->kSendMessage
-								 (p2, [=](Json::Value r)
-									{
-									GraphDogLib::JsonToLog("kSendMessage", r);
-									});
-							 });
-						 });
-						});
-					av->addButton(m0);
-					// 수락버튼.
-					auto m1 = CCMenuItemImageLambda::create
-						("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-						 [=](CCObject* e){
-						 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
-						 int mailNo = mail["no"].asInt();
+																											CCNode* emptyNode = CCNode::create();
+																											auto ttf = CCLabelTTF::create("졌습니다. ㅜ.ㅜ", mySGD->getFont().c_str(), 12.f); 
+																											ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+																											//	con->setAnchorPoint(ccp(0, 0));
+																											//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+																											ttf->setColor(ccc3(255, 255, 255));
+																											ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																											emptyNode->addChild(ttf);
+																											av->setContentNode(
+																													emptyNode
+																													);
+																											av->setContentSize(ttf->getDimensions());
+																											av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																																		[=](CCObject* e) {
+																																			CCLog("ok!!");
+																																		});
+																											addChild(av, kMP_Z_helpAccept);
+																											av->show();
 
-						 mySGD->setRemoveMessageMailNo(mailNo);
-						 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
-						 mySGD->setAcceptChallengeTarget(mail["friendID"].asString(), mail["nickname"].asString(),
-							 contentObj["score"].asFloat(), contentObj["replaydata"], mail["profile"].asString());
-						 mySD->setSilType(contentObj["challengestage"].asInt());
-						 mySGD->setIsAcceptChallenge(true);
-						 // ST 받고 성공시 창 띄움.. & sender->removeFromParent();
-						 addChild(StageInfoDown::create
-							 (this,
-								callfunc_selector(ThisClassType::onReceiveStageSuccess),
-								this, callfunc_selector(ThisClassType::onReceiveStageFail)));
+																											Json::Value p2;
+																											p2["receiver_id"] = mail["friendID"].asString();
+																											// 여기서 당신은 지금 배틀한 상대방을 지칭
+																											p2["message"] = "당신이 승리하였습니다. 보상을 받으세요 ^_^";
+																											hspConnector::get()->kSendMessage
+																												(p2, [=](Json::Value r) {
+																													GraphDogLib::JsonToLog("kSendMessage", r);
+																												});
+																										});
+																									});
+													 });
+						 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+													 [=](CCObject* e) {
+														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+														 int mailNo = mail["no"].asInt();
 
-						 });
-					av->addButton(m1);
+														 mySGD->setRemoveMessageMailNo(mailNo);
+														 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
+														 mySGD->setAcceptChallengeTarget(mail["friendID"].asString(), mail["nickname"].asString(),
+																														 contentObj["score"].asFloat(), contentObj["replaydata"], mail["profile"].asString());
+														 mySD->setSilType(contentObj["challengestage"].asInt());
+														 mySGD->setIsAcceptChallenge(true);
+														 // ST 받고 성공시 창 띄움.. & sender->removeFromParent();
+														 addChild(StageInfoDown::create
+																			(this,
+																			 callfunc_selector(ThisClassType::onReceiveStageSuccess),
+																			 this, callfunc_selector(ThisClassType::onReceiveStageFail)));
+														 CCLog("ok!!");
+													 });
 
-					auto ttf = CCLabelTTF::create("도전을 수락합니까?", "", 12.f);
-					ttf->setColor(ccc3(0, 0, 0));
-					av->setContentNode(
-							ttf
-							);
-
-					av->setCloseOnPress(false);
-					addChild(av, kMP_Z_helpAccept);
-					av->show();
+						 addChild(av, kMP_Z_helpAccept);
+						 av->show();
+						 ///////////////////////////////////////
 					 }
 				);
 				sendBtn->setPosition(ccp(180, 22));
@@ -503,79 +1018,72 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				comment = "도전결과!!";
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-					 [=](CCObject*)
-					 {
-					 if(contentObj["result"].asString() == "win")
-					 {
-					 // 메세지 삭제후 모자가차.
-					 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
-						 [=](Json::Value r)
-						 {
-						 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
-						 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
-							 {
+					 [=](CCObject*) {
+						 if(contentObj["result"].asString() == "win") {
+							 // 메세지 삭제후 모자가차.
+							 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+														 [=](Json::Value r) {
+															 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+															 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
 
-							 });
+															 });
 
-						 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
-								 [=](){
-								 CCLog("hat close");
+															 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
+																															[=](){
+																																CCLog("hat close");
+																															}
+																														 ), kMP_Z_helpAccept);
+														 });
+
+						 }
+						 else if(contentObj["result"].asString() == "lose") {
+							 // 메세지 삭제후 졌다는거 띄움.
+							 Json::Value p;
+							 int mailNo = mail["no"].asInt();
+							 p["no"] = mailNo;
+							 p["memberID"] = mail["memberID"].asInt64();
+							 // 도전장 삭제요청
+							 hspConnector::get()->command ( "removemessage",p, [=](Json::Value r) {
+								 if(r["result"]["code"].asInt() != GDSUCCESS){
+									 return;
 								 }
-								 ), kMP_Z_helpAccept);
-						 });
+								 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+								 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
 
-					 }
-					 else if(contentObj["result"].asString() == "lose")
-					 {
-						 // 메세지 삭제후 졌다는거 띄움.
-						 Json::Value p;
-						 int mailNo = mail["no"].asInt();
-						 p["no"] = mailNo;
-						 p["memberID"] = mail["memberID"].asInt64();
-						 // 도전장 삭제요청
-						 hspConnector::get()->command
-							 (
-								"removemessage",p,
-								[=](Json::Value r)
-								{
-								if(r["result"]["code"].asInt() != GDSUCCESS)
-								return;
+								 });
+								 KHAlertView* av = KHAlertView::create(); 
+								 // av->setTitleFileName("msg_challenge.png");
+								 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+								 av->setWidth(240);
+								 av->setHeight(240);
+								 av->setTitleHeight(10);
+								 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+								 av->setCenterY(150);
 
-								mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
-								myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
-									{
+								 CCNode* emptyNode = CCNode::create();
+								 auto ttf = CCLabelTTF::create("졌습니다.", mySGD->getFont().c_str(), 12.f); 
+								 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+								 //	con->setAnchorPoint(ccp(0, 0));
+								 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+								 ttf->setColor(ccc3(255, 255, 255));
+								 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+								 emptyNode->addChild(ttf);
+								 av->setContentNode(
+										 emptyNode
+										 );
+								 av->setContentSize(ttf->getDimensions());
+								 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+															 [=](CCObject* e) {
+																 CCLog("ok");
+															 });
 
-									});
+								 addChild(av, kMP_Z_helpAccept);
+								 av->show();
+								 ////////////////////////////////////////
 
-								KSAlertView* av = KSAlertView::create();
-								av->setCloseOnPress(false);
-								//				 av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-								//																							 CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-								//				 av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-								//																							 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-
-								// 확인
-								auto m1 = CCMenuItemImageLambda::create
-									("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-									 [=](CCObject* e){
-									 //																									 removeFromParent();
-									 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
-									 });
-								av->addButton(m1);
-
-								auto ttf = CCLabelTTF::create("졌어요... ㅜㅜ", "", 12.f);
-								ttf->setColor(ccc3(0, 0, 0));
-								av->setContentNode(
-										ttf
-										);
-
-								//							av->setCloseOnPress(false);
-								addChild(av, kMP_Z_helpAccept);
-								av->show();
-
-								}
-						 );
-					 }
+							 }
+							 );
+						 }
 					 }
 				);
 				sendBtn->setPosition(ccp(180, 22));
@@ -588,62 +1096,68 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-					 [=](CCObject*)
-					 {
-					 KSAlertView* av = KSAlertView::create();
-					 av->setCloseOnPress(false);
-					 auto m0 = CCMenuItemImageLambda::create("postbox_deny.png", "postbox_deny.png",
-						 [=](CCObject* e){
-						 //																									 removeFromParent();
-						 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
-							 [=](Json::Value r)
-							 {
-							 av->removeFromParent();
-							 });
-						 });
+					 [=](CCObject*) {
+						 ////////////////////////////////////////////
+						  KHAlertView* av = KHAlertView::create(); 
+							av->setCloseOnPress(false);
+						 // av->setTitleFileName("msg_challenge.png");
+						 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+						 av->setWidth(240);
+						 av->setHeight(240);
+						 av->setTitleHeight(10);
+						 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+						 av->setCenterY(150);
 
-					 av->addButton(m0);
+						 CCNode* emptyNode = CCNode::create();
+						 auto ttf = CCLabelTTF::create("상대방을 도와줍니다.", mySGD->getFont().c_str(), 12.f); 
+						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+						 //	con->setAnchorPoint(ccp(0, 0));
+						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+						 ttf->setColor(ccc3(255, 255, 255));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 emptyNode->addChild(ttf);
+						 av->setContentNode(
+								 emptyNode
+								 );
+						 av->setContentSize(ttf->getDimensions());
+						 av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																			 [=](CCObject* e) {
+																				 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+																											 [=](Json::Value r)
+																											 {
+																												 av->removeFromParent();
+																											 });
+																				 CCLog("ok!!");
+																			 });
+						av->addButton(CommonButton::create("수락", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																															 [=](CCObject* e) {
+																																 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+																																 int mailNo = mail["no"].asInt();
 
-					 // 도움 수락버튼.
-					 auto m1 = CCMenuItemImageLambda::create
-					 ("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-						[=](CCObject* e){
-						CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
-						int mailNo = mail["no"].asInt();
+																																 mySGD->setRemoveMessageMailNo(mailNo);
+																																 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
+																																 mySGD->setAcceptHelpTarget(mail["friendID"].asString(), mail["nickname"].asString());
+																																 mySD->setSilType(contentObj["helpstage"].asInt());
+																																 mySGD->setIsAcceptHelp(true);
+																																 // ST 받고 성공시 창 띄움.. & sender->removeFromParent();
+																																 addChild(StageInfoDown::create
+																																					(this,
+																																					 callfunc_selector(ThisClassType::onReceiveStageSuccess),
+																																					 this, callfunc_selector(ThisClassType::onReceiveStageFail)));
+																																 //																									 Json::Value p;
+																																 //																									 int mailNo = mail["no"].asInt();
+																																 //																									 p["no"] = mailNo;
+																																 //																									 p["memberID"] = mail["memberID"].asInt64();
+																																 //
+																																 //																									 iHelpYou(contentObj.get("helpstage", 0).asInt(),
+																																 //																														mail["friendID"].asInt64(), mail["nickname"].asString(),
+																																 //																														p);
+																																 CCLog("ok!!");
+																															 });
 
-						mySGD->setRemoveMessageMailNo(mailNo);
-						mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
-						mySGD->setAcceptHelpTarget(mail["friendID"].asString(), mail["nickname"].asString());
-						mySD->setSilType(contentObj["helpstage"].asInt());
-						mySGD->setIsAcceptHelp(true);
-						// ST 받고 성공시 창 띄움.. & sender->removeFromParent();
-						addChild(StageInfoDown::create
-							(this,
-							 callfunc_selector(ThisClassType::onReceiveStageSuccess),
-							 this, callfunc_selector(ThisClassType::onReceiveStageFail)));
-						//																									 Json::Value p;
-						//																									 int mailNo = mail["no"].asInt();
-						//																									 p["no"] = mailNo;
-						//																									 p["memberID"] = mail["memberID"].asInt64();
-						//
-						//																									 iHelpYou(contentObj.get("helpstage", 0).asInt(),
-						//																														mail["friendID"].asInt64(), mail["nickname"].asString(),
-						//																														p);
-
-
-
-						});
-					av->addButton(m1);
-
-					auto ttf = CCLabelTTF::create("도와줍니다.", "", 12.f);
-					ttf->setColor(ccc3(0, 0, 0));
-					av->setContentNode(
-							ttf
-							);
-
-
-					addChild(av, kMP_Z_helpAccept);
-					av->show();
+						 addChild(av, kMP_Z_helpAccept);
+						 av->show();
+/////////////////////////////////////////
 					 });
 				sendBtn->setPosition(ccp(180, 22));
 
@@ -653,79 +1167,88 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				comment = "상대방의 도움이 왔어요!";
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-					 [=](CCObject*)
-					 {
-					 Json::Value p;
-					 int mailNo = mail["no"].asInt();
+					 [=](CCObject*) {
+						 Json::Value p;
+						 int mailNo = mail["no"].asInt();
 
-					 p["no"] = mailNo;
-					 p["memberID"] = mail["memberID"].asInt64();
-					 //삭제요청
-					 removeMessage
-					 (mailNo, mail["memberID"].asInt64(),
-						[=](Json::Value r)
-						{
-						mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
-						myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
-							{
+						 p["no"] = mailNo;
+						 p["memberID"] = mail["memberID"].asInt64();
+						 //삭제요청
+						 removeMessage (mailNo, mail["memberID"].asInt64(),
+														[=](Json::Value r) {
+															mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+															myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
 
-							});
-						KSAlertView* av = KSAlertView::create();
+															});
+															////////////////////////////////////////////////////
 
-						auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, contentObj["cardnumber"].asInt());
+															KHAlertView* av = KHAlertView::create();
+															auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, contentObj["cardnumber"].asInt());
+															// 카드 정보 없음
+															if(retStr == "") {
+																download_card_number = contentObj["cardnumber"].asInt();
+																CCSprite* card_img = CCSprite::create("ending_take_card_back.png");
+																card_img->setScale(0.34f);
+																//							av->addChild(card_img);
 
-						if(retStr == "") // 카드 정보 없음
-						{
-						download_card_number = contentObj["cardnumber"].asInt();
-						CCSprite* card_img = CCSprite::create("ending_take_card_back.png");
-						card_img->setScale(0.34f);
-						//							av->addChild(card_img);
+																loading_card_img = card_img;
 
-						loading_card_img = card_img;
+																CCLabelTTF* t_label = CCLabelTTF::create("카드 정보 로딩", mySGD->getFont().c_str(), 20);
+																t_label->setColor(ccBLACK);
+																t_label->setPosition(ccp(160,215));
+																card_img->addChild(t_label);
 
-						CCLabelTTF* t_label = CCLabelTTF::create("카드 정보 로딩", mySGD->getFont().c_str(), 20);
-						t_label->setColor(ccBLACK);
-						t_label->setPosition(ccp(160,215));
-						card_img->addChild(t_label);
+																Json::Value param;
+																param["noList"][0] = contentObj["cardnumber"].asInt();
+																hspConnector::get()->command("getcardlist", param, this,json_selector(this, MailPopup::resultLoadedCardInfo));
+																av->setContentNode(card_img);
+															}
+															// 카드 정보 있음 
+															else {
+																if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt()) == 0) {
+																	myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+																	myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt(), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+																	myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), contentObj["cardnumber"].asInt());
 
-						Json::Value param;
-						param["noList"][0] = contentObj["cardnumber"].asInt();
-						hspConnector::get()->command("getcardlist", param, json_selector(this, MailPopup::resultLoadedCardInfo));
-						av->setContentNode(card_img);
-						}
-						else // 카드 정보 있음
-						{
-							if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt()) == 0)
-							{
-								myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-								myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt(), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
-								myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), contentObj["cardnumber"].asInt());
+																	mySGD->addHasGottenCardNumber(contentObj["cardnumber"].asInt());
+																}
 
-								mySGD->addHasGottenCardNumber(contentObj["cardnumber"].asInt());
-							}
+																myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
+																myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
+																myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, contentObj["cardnumber"].asInt(), 1);
+																myDSH->setStringForKey(kDSH_Key_cardPassive_int1, contentObj["cardnumber"].asInt(), NSDS_GS(kSDS_CI_int1_passive_s, contentObj["cardnumber"].asInt()));
+																av->setContentNode(addCardImg(contentObj["cardnumber"].asInt(), -1, "-1"));
+																//							av->addChild();
+															}
 
-							myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
-							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
-							myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, contentObj["cardnumber"].asInt(), 1);
-							myDSH->setStringForKey(kDSH_Key_cardPassive_int1, contentObj["cardnumber"].asInt(), NSDS_GS(kSDS_CI_int1_passive_s, contentObj["cardnumber"].asInt()));
-							av->setContentNode(addCardImg(contentObj["cardnumber"].asInt(), -1, "-1"));
-							//							av->addChild();
-						}
+															// av->setTitleFileName("msg_challenge.png");
+															av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+															av->setWidth(240);
+															av->setHeight(240);
+															av->setTitleHeight(10);
+															av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+															av->setCenterY(150);
 
-						// 도움 수락버튼.
-						auto m1 = CCMenuItemImageLambda::create
-							("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-							 [=](CCObject* e){
-							 });
-						av->addButton(m1);
+															CCNode* emptyNode = CCNode::create();
+															auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", mySGD->getFont().c_str(), 12.f); 
+															ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+															//	con->setAnchorPoint(ccp(0, 0));
+															//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+															ttf->setColor(ccc3(255, 255, 255));
+															ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+															emptyNode->addChild(ttf);
+															av->setContentNode(
+																	emptyNode
+																	);
+															av->setContentSize(ttf->getDimensions());
+															av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																						[=](CCObject* e) {
+																							CCLog("ok!!");
+																						});
 
-						//						auto ttf = CCLabelTTF::create("스테이지 획득!!", "", 12.f);
-						//						av->setContentNode(
-						//															 ttf
-						//															 );
-						addChild(av, kMP_Z_helpAccept);
-						av->show();
-						});
+															addChild(av, kMP_Z_helpAccept);
+															av->show();
+														});
 					 }
 				);
 				sendBtn->setPosition(ccp(180, 22));
@@ -736,75 +1259,72 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				comment = "티켓요청이 도착했어요.";
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-					 [=](CCObject*)
-					 {
-					 KSAlertView* av = KSAlertView::create();
+					 [=](CCObject*) {
+						 KHAlertView* av = KHAlertView::create(); 
+						 av->setCloseOnPress(false);
+						 // av->setTitleFileName("msg_challenge.png");
+						 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+						 av->setWidth(240);
+						 av->setHeight(240);
+						 av->setTitleHeight(10);
+						 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+						 av->setCenterY(150);
 
+						 CCNode* emptyNode = CCNode::create();
+						 auto ttf = CCLabelTTF::create("티켓요청이 도착. 티켓은 퍼즐을 열 때 필요합니다. 친구를 도와주세요!!", mySGD->getFont().c_str(), 12.f); 
+						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+						 //	con->setAnchorPoint(ccp(0, 0));
+						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+						 ttf->setColor(ccc3(255, 255, 255));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 emptyNode->addChild(ttf);
+						 av->setContentNode(
+								 emptyNode
+								 );
+						 av->setContentSize(ttf->getDimensions());
+						 av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+													 [=](CCObject* e) {
+														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+																					 [=](Json::Value r) {
+																						 av->removeFromParent();
+																					 });
+														 CCLog("ok!!");
+													 });
+						 av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+													 [=](CCObject* e) {
+														 CCLog("ok!!");
+														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+																					 [=](Json::Value r) {
+																						 Json::Value p;
+																						 Json::Value contentJson;
+																						 //		contentJson["msg"] = (nickname + "님에게 도전!");
+																						 contentJson["puzzlenumber"] = contentObj["puzzlenumber"].asInt(); // 받은거 그대로 넣음. puzzlenumber 들어감.
+																						 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+																						 p["receiverMemberID"] = mail["friendID"].asString();
+																						 p["senderMemberID"] = hspConnector::get()->getKakaoID();
+																						 p["type"] = kTicketResult;
+																						 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+																						 hspConnector::get()->command
+															 ("sendMessage", p, [=](Json::Value r) {
+																 if(r["result"]["code"].asInt() != GDSUCCESS)
+															 {
+																 av->removeFromParent();
+																 return;
+															 }
+															 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendTicket());
+															 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
 
-					 av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-					 //	av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-					 av->setBorderScale(0.9f);
-					 av->setCloseOnPress(false);
-					 //				 av->setButtonHeight(0);
-					 //	av->setTitleStr("지금 열기");
-					 auto ttf = CCLabelTTF::create("티켓요청이 도착. 티켓은 퍼즐을 열 때 필요합니다. 친구를 도와주세요!!", "", 12.f);
-					 ttf->setColor(ccc3(0, 0, 0));
-					 av->setContentNode(
-						 ttf
-						 );
+															 });
+															 av->removeFromParent();
+															 });
+																					 });
+													 });
 
-					 // 거절.
-					 auto m0 = CCMenuItemImageLambda::create("postbox_deny.png", "postbox_deny.png",
-						 [=](CCObject* e){
-						 //																									 removeFromParent();
-						 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
-							 [=](Json::Value r)
-							 {
-							 av->removeFromParent();
-							 });
-						 });
-					 av->addButton(m0);
-
-					 // 티켓보내기.
-					 auto m1 = CCMenuItemImageLambda::create
-						 ("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-							[=](CCObject* e){
-							CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
-							removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
-								[=](Json::Value r)
-								{
-								Json::Value p;
-								Json::Value contentJson;
-								//		contentJson["msg"] = (nickname + "님에게 도전!");
-								contentJson["puzzlenumber"] = contentObj["puzzlenumber"].asInt(); // 받은거 그대로 넣음. puzzlenumber 들어감.
-								contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-								p["receiverMemberID"] = mail["friendID"].asString();
-								p["senderMemberID"] = hspConnector::get()->getKakaoID();
-								p["type"] = kTicketResult;
-								p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-								hspConnector::get()->command
-								("sendMessage", p, [=](Json::Value r)
-								 {
-								 if(r["result"]["code"].asInt() != GDSUCCESS)
-								 {
-								 av->removeFromParent();
-								 return;
-								 }
-								 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendTicket());
-								 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
-									 {
-
-									 });
-								 av->removeFromParent();
-								 });
-								});
-							});
-					 av->addButton(m1);
-					 addChild(av, kMP_Z_helpAccept);
-
-					 //	con2->alignItemsVerticallyWithPadding(30);
-					 av->show();
-					 av->getContainerScrollView()->setTouchEnabled(false);
+						 addChild(av, kMP_Z_helpAccept);
+						 av->show();
+						 av->getContainerScrollView()->setTouchEnabled(false);
+						 /////////////////////////////////////
 
 					 }
 				);
@@ -815,140 +1335,139 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				comment = "티켓이 왔네요 어서 받으세요.";
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-					 [=](CCObject*)
-					 {
-					 KSAlertView* av = KSAlertView::create();
+					 [=](CCObject*) {
+						 KHAlertView* av = KHAlertView::create(); 
+						 av->setCloseOnPress(false);
+						 // av->setTitleFileName("msg_challenge.png");
+						 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+						 av->setWidth(240);
+						 av->setHeight(240);
+						 av->setTitleHeight(10);
+						 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+						 av->setCenterY(150);
 
+						 CCNode* emptyNode = CCNode::create();
+						 auto ttf = CCLabelTTF::create("티켓이 도착했습니다.", mySGD->getFont().c_str(), 12.f); 
+						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+						 //	con->setAnchorPoint(ccp(0, 0));
+						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+						 ttf->setColor(ccc3(255, 255, 255));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 emptyNode->addChild(ttf);
+						 av->setContentNode(
+								 emptyNode
+								 );
+						 av->setContentSize(ttf->getDimensions());
+						 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+													 [=](CCObject* e) {
+														 CCLog("ok!!");
+														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+																					 [=](Json::Value r) {
+																						 av->removeFromParent();
+																						 if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, contentObj["puzzlenumber"].asInt()-1) && myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+2 == contentObj["puzzlenumber"].asInt()) {
+																							 bool good_ticket = true;
+																							 int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
+																							 for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {
+																								 string ticket_user_id = myDSH->getStringForKey(kDSH_Key_ticketUserId_int1, i);
+																								 if(ticket_user_id == mail["friendID"].asString()){
+																									 good_ticket = false;
+																								 }
+																							 }
 
-					 av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-					 //	av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-					 av->setBorderScale(0.9f);
-					 av->setCloseOnPress(false);
-					 //				 av->setButtonHeight(0);
-					 //	av->setTitleStr("지금 열기");
-					 auto ttf = CCLabelTTF::create("티켓이 도착했습니다!!", "", 12.f);
-					 ttf->setColor(ccc3(0, 0, 0));
-					 av->setContentNode(
-						 ttf
-						 );
+																							 if(good_ticket) {
+																								 int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt) + 1;
+																								 myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt);
+																								 myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, have_ticket_cnt, mail["friendID"].asString());
 
-					 auto m0 = CCMenuItemImageLambda::create
-					 ("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-						[=](CCObject* e)
-						{
-						//																									 removeFromParent();
-						removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
-							[=](Json::Value r)
-							{
-							av->removeFromParent();
-							if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, contentObj["puzzlenumber"].asInt()-1) && myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+2 == contentObj["puzzlenumber"].asInt())
-							{
-							bool good_ticket = true;
-							int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
-							for(int i=1;i<=have_ticket_cnt && good_ticket;i++)
-							{
-							string ticket_user_id = myDSH->getStringForKey(kDSH_Key_ticketUserId_int1, i);
-							if(ticket_user_id == mail["friendID"].asString())
-							good_ticket = false;
-							}
+																								 int need_ticket_cnt = NSDS_GI(contentObj["puzzlenumber"].asInt(), kSDS_PZ_ticket_i);
 
-							if(good_ticket)
-							{
-							int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt) + 1;
-							myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt);
-							myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, have_ticket_cnt, mail["friendID"].asString());
+																								 CCLabelTTF* ticket_cnt_label = (CCLabelTTF*)((PuzzleMapScene*)getTarget())->getChildByTag(kPMS_MT_ticketCnt);
+																								 if(ticket_cnt_label){
+																									 ticket_cnt_label->setString(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt),
+																																																					NSDS_GI(contentObj["puzzlenumber"].asInt(), kSDS_PZ_ticket_i))->getCString());
+																								 }
+																								 if(need_ticket_cnt <= have_ticket_cnt) {
+																									 // open 퍼즐
+																									 myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+																									 vector<SaveUserData_Key> save_userdata_list;
+																									 save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
+																									 myDSH->saveUserData(save_userdata_list, nullptr);
 
-							int need_ticket_cnt = NSDS_GI(contentObj["puzzlenumber"].asInt(), kSDS_PZ_ticket_i);
+																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_buyPuzzle);
+																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_callTicket);
+																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_ticketCnt);
+																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_puzzleOpenTitle);
 
-							CCLabelTTF* ticket_cnt_label = (CCLabelTTF*)((PuzzleMapScene*)target_close)->getChildByTag(kPMS_MT_ticketCnt);
-							if(ticket_cnt_label)
-								ticket_cnt_label->setString(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt),
-											NSDS_GI(contentObj["puzzlenumber"].asInt(), kSDS_PZ_ticket_i))->getCString());
+																									 ((PuzzleMapScene*)getTarget())->openPuzzleAction(contentObj["puzzlenumber"].asInt());
 
-							if(need_ticket_cnt <= have_ticket_cnt)
-							{
-								// open 퍼즐
-								myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
-								vector<SaveUserData_Key> save_userdata_list;
-								save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-								myDSH->saveUserData(save_userdata_list, nullptr);
+																									 for(int i=1;i<=have_ticket_cnt;i++){
+																										 myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, i, "");
+																										 myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, 0);
 
-								((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_buyPuzzle);
-								((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_callTicket);
-								((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_ticketCnt);
-								((PuzzleMapScene*)target_close)->removeChildByTag(kPMS_MT_puzzleOpenTitle);
+																										 ASPopupView* t_popup = ASPopupView::create(-200);
 
-								((PuzzleMapScene*)target_close)->openPuzzleAction(contentObj["puzzlenumber"].asInt());
+																										 CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																										 float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																										 if(screen_scale_x < 1.f)
+																											 screen_scale_x = 1.f;
 
-								for(int i=1;i<=have_ticket_cnt;i++)
-									myDSH->setStringForKey(kDSH_Key_ticketUserId_int1, i, "");
-								myDSH->setIntegerForKey(kDSH_Key_haveTicketCnt, 0);
+																										 t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
 
-								ASPopupView* t_popup = ASPopupView::create(-200);
+																										 CCNode* open_puzzle_container = CCNode::create();
+																										 t_popup->setContainerNode(open_puzzle_container);
 
-								CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-								float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-								if(screen_scale_x < 1.f)
-									screen_scale_x = 1.f;
+																										 CCScale9Sprite* open_puzzle_case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+																										 open_puzzle_case_back->setPosition(CCPointZero);
+																										 open_puzzle_container->addChild(open_puzzle_case_back);
 
-								t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+																										 open_puzzle_case_back->setContentSize(CCSizeMake(230, 250));
 
-								CCNode* open_puzzle_container = CCNode::create();
-								t_popup->setContainerNode(open_puzzle_container);
+																										 CCScale9Sprite* open_puzzle_content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+																										 open_puzzle_content_back->setPosition(ccp(0,2));
+																										 open_puzzle_container->addChild(open_puzzle_content_back);
 
-								CCScale9Sprite* open_puzzle_case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-								open_puzzle_case_back->setPosition(CCPointZero);
-								open_puzzle_container->addChild(open_puzzle_case_back);
+																										 open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
 
-								open_puzzle_case_back->setContentSize(CCSizeMake(230, 250));
+																										 CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("퍼즐 오픈", mySGD->getFont().c_str(), 20);
+																										 open_puzzle_title_label->setPosition(ccp(0, 102));
+																										 open_puzzle_container->addChild(open_puzzle_title_label);
 
-								CCScale9Sprite* open_puzzle_content_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-								open_puzzle_content_back->setPosition(ccp(0,2));
-								open_puzzle_container->addChild(open_puzzle_content_back);
+																										 CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 퍼즐이\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
+																										 open_puzzle_content_label->setPosition(CCPointZero);
+																										 open_puzzle_container->addChild(open_puzzle_content_label);
 
-								open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
+																										 CCLabelTTF* loading_puzzle_label = CCLabelTTF::create("Loading...", mySGD->getFont().c_str(), 12);
+																										 loading_puzzle_label->setPosition(ccp(0,-95));
+																										 open_puzzle_container->addChild(loading_puzzle_label);
 
-								CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("퍼즐 오픈", mySGD->getFont().c_str(), 20);
-								open_puzzle_title_label->setPosition(ccp(0, 102));
-								open_puzzle_container->addChild(open_puzzle_title_label);
+																										 CCSprite* n_op_ok = CCSprite::create("popup2_ok.png");
+																										 CCSprite* s_op_ok = CCSprite::create("popup2_ok.png");
+																										 s_op_ok->setColor(ccGRAY);
 
-								CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 퍼즐이\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
-								open_puzzle_content_label->setPosition(CCPointZero);
-								open_puzzle_container->addChild(open_puzzle_content_label);
+																										 CCMenuItemSpriteLambda* op_ok_item = CCMenuItemSpriteLambda::create(n_op_ok, s_op_ok, [=](CCObject* sender){
+																											 t_popup->removeFromParent();
+																										 });
 
-								CCLabelTTF* loading_puzzle_label = CCLabelTTF::create("Loading...", mySGD->getFont().c_str(), 12);
-								loading_puzzle_label->setPosition(ccp(0,-95));
-								open_puzzle_container->addChild(loading_puzzle_label);
-
-								CCSprite* n_op_ok = CCSprite::create("popup2_ok.png");
-								CCSprite* s_op_ok = CCSprite::create("popup2_ok.png");
-								s_op_ok->setColor(ccGRAY);
-
-								CCMenuItemSpriteLambda* op_ok_item = CCMenuItemSpriteLambda::create(n_op_ok, s_op_ok, [=](CCObject* sender){
-										t_popup->removeFromParent();
-										});
-
-								CCMenuLambda* op_ok_menu = CCMenuLambda::createWithItem(op_ok_item);
-								op_ok_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-								op_ok_menu->setVisible(false);
-								op_ok_menu->setPosition(ccp(0,-95));
-								open_puzzle_container->addChild(op_ok_menu);
-							}
-							}
-							else
-							{
-								// 가지고 있는 티켓
-							}
-							}
-							else
-							{
-								// 소용없는 티켓
-							}
-							});
-						});
-					av->addButton(m0);
-					addChild(av, kMP_Z_helpAccept);
-					av->show();
+																										 CCMenuLambda* op_ok_menu = CCMenuLambda::createWithItem(op_ok_item);
+																										 op_ok_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+																										 op_ok_menu->setVisible(false);
+																										 op_ok_menu->setPosition(ccp(0,-95));
+																										 open_puzzle_container->addChild(op_ok_menu);
+																									 }
+																								 }
+																								 else {
+																									 // 가지고 있는 티켓
+																								 }
+																							 }
+																							 else {
+																								 // 소용없는 티켓
+																							 }
+																						 }
+																					 });
+													 });
+						 addChild(av, kMP_Z_helpAccept);
+						 av->show();
+						 /////////////////////////////////
 					 }
 				);
 				sendBtn->setPosition(ccp(180, 22));
@@ -961,82 +1480,112 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 					 [=](CCObject*)
 					 {
-					 KSAlertView* av = KSAlertView::create();
-					 av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-					 //	av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-					 av->setBorderScale(0.9f);
-					 av->setCloseOnPress(false);
-					 // 거절.
-					 auto m0 = CCMenuItemImageLambda::create("postbox_deny.png", "postbox_deny.png",
-						 [=](CCObject* e){
-						 //																									 removeFromParent();
-						 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
-							 [=](Json::Value r)
-							 {
-							 av->removeFromParent();
-							 });
-						 });
-					 av->addButton(m0);
+						 KHAlertView* av = KHAlertView::create(); 
+						 av->setCloseOnPress(false);
+						 // av->setTitleFileName("msg_challenge.png");
+						 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+						 av->setWidth(240);
+						 av->setHeight(240);
+						 av->setTitleHeight(10);
+						 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+						 av->setCenterY(150);
 
-					 // 친구 요청 수락.
-					 auto m1 = CCMenuItemImageLambda::create
-						 ("postbox_challenge_ok.png", "postbox_challenge_ok.png",
-							[=](CCObject* e){
-							CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
-							Json::Value param;
-							//						memberID : string or number, 내카카오아이디
-							//						-> friendID : string or number, 추가할 게임친구 카카오아이디
-							//						-> friendMax :
-							param["memberID"] = hspConnector::get()->getKakaoID();
-							param["friendID"] = mail["friendID"].asString();
-							param["friendMax"] = mySGD->getGameFriendMax(); // magic number
-							hspConnector::get()->command
-							("addfriendeach", param,
-							 [=](Json::Value v)
-							 {
-							 KS::KSLog("%", v);
-							 std::string errorMessage;
-							 /*
-									errorCode 필드에 10030 값이 넘어오면 내친구인원이 초과
-									errorCode 필드에 10031값이 넘어오면 상대방 친구인원이 초과
-									*/
-							 if(v["result"]["code"].asInt() != GDSUCCESS)
-							 return;
+						 CCNode* emptyNode = CCNode::create();
+						 auto ttf = CCLabelTTF::create(comment.c_str(), mySGD->getFont().c_str(), 10);
+						 
+						 ttf->setColor(ccc3(20, 0, 0));
+						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+						 //	con->setAnchorPoint(ccp(0, 0));
+						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+						 ttf->setColor(ccc3(255, 255, 255));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 emptyNode->addChild(ttf);
+						 av->setContentNode(
+								 emptyNode
+								 );
+						 av->setContentSize(ttf->getDimensions());
+						 av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+													 [=](CCObject* e) {
+														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+																					 [=](Json::Value r)
+																					 {
+																						 av->removeFromParent();
+																					 });
+														 CCLog("ok!!");
+													 });
+						 av->addButton(CommonButton::create("수락", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+													 [=](CCObject* e) {
+														 CCLog("ok!!");
+														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+														 Json::Value param;
+														 //						memberID : string or number, 내카카오아이디
+														 //						-> friendID : string or number, 추가할 게임친구 카카오아이디
+														 //						-> friendMax :
+														 param["memberID"] = hspConnector::get()->getKakaoID();
+														 param["friendID"] = mail["friendID"].asString();
+														 param["friendMax"] = mySGD->getGameFriendMax(); // magic number
+														 hspConnector::get()->command ("addfriendeach", param,
+																													 [=](Json::Value v) {
+																														 KS::KSLog("%", v);
+																														 std::string errorMessage;
+																														 /*
+																																errorCode 필드에 10030 값이 넘어오면 내친구인원이 초과
+																																errorCode 필드에 10031값이 넘어오면 상대방 친구인원이 초과
+																																*/
+																														 if(v["result"]["code"].asInt() != GDSUCCESS){
+																															 return;
+																														 }
 
+																														 // 편.삭.
+																														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
+																																					 [=](Json::Value r) {
+																																						 if(r["result"]["code"].asInt() != GDSUCCESS) {
+																																							 av->removeFromParent();
+																																							 KHAlertView* exceptionPopup = KHAlertView::create(); 
+																																							 // av->setTitleFileName("msg_challenge.png");
+																																							 exceptionPopup->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+																																							 exceptionPopup->setWidth(240);
+																																							 exceptionPopup->setHeight(240);
+																																							 exceptionPopup->setTitleHeight(10);
+																																							 exceptionPopup->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+																																							 exceptionPopup->setCenterY(150);
 
-							 // 편.삭.
-							 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
-								 [=](Json::Value r)
-								 {
-								 if(r["result"]["code"].asInt() != GDSUCCESS)
-								 {
-								 av->removeFromParent();
+																																							 CCNode* emptyNode = CCNode::create();
+																																							 auto ttf = CCLabelTTF::create("알 수 없는 명령입니다.", mySGD->getFont().c_str(), 12.f); 
+																																							 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+																																							 //	con->setAnchorPoint(ccp(0, 0));
+																																							 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+																																							 ttf->setColor(ccc3(255, 255, 255));
+																																							 ttf->setPosition(ccp(exceptionPopup->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																																							 emptyNode->addChild(ttf);
+																																							 exceptionPopup->setContentNode(
+																																									 emptyNode
+																																									 );
+																																							 exceptionPopup->setContentSize(ttf->getDimensions());
+																																							 exceptionPopup->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																																														 [=](CCObject* e) {
+																																															 CCLog("ok!!");
+																																														 });
 
-								 KSAlertView* exceptionPopup = KSAlertView::create();
-								 exceptionPopup->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-								 auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", "", 12.f);
-								 exceptionPopup->setContentNode(
-									 ttf
-									 );
-								 this->addChild(exceptionPopup, kMP_Z_helpAccept);
-								 exceptionPopup->show();
-								 return;
-								 }
-								 FriendData ufd;
-								 ufd.userId = v["friendInfo"]["memberID"].asString();
-								 ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
-								 ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
-								 ufd.nick = v["friendInfo"]["nick"].asString();
-								 UnknownFriends::getInstance()->add(ufd);
-								 av->removeFromParent();
-								 });
+																																							 addChild(exceptionPopup, kMP_Z_helpAccept);
+																																							 exceptionPopup->show();
+																																							 return;
+																																						 }
+																																						 FriendData ufd;
+																																						 ufd.userId = v["friendInfo"]["memberID"].asString();
+																																						 ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
+																																						 ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
+																																						 ufd.nick = v["friendInfo"]["nick"].asString();
+																																						 UnknownFriends::getInstance()->add(ufd);
+																																						 av->removeFromParent();
+																																					 });
 
-							 });
-							});
-					 av->addButton(m1);
-					 addChild(av, kMP_Z_helpAccept);
-					 av->setContentNode(NULL);
-					 av->show();
+																													 });
+													 });
+
+						 addChild(av, kMP_Z_helpAccept);
+						 av->setContentNode(NULL);
+						 av->show();
 					 });
 
 				sendBtn->setPosition(ccp(180, 22));
@@ -1073,13 +1622,15 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 				///
 		}
 
-		score = CCLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 12.f);
-		score->setPosition(ccp(45,5));
+		score = CCLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 10);
+		score->setColor(ccc3(20, 0, 0));
+		score->setPosition(ccp(38,5));
 		score->setAnchorPoint(CCPointZero);
 		score->setTag(kMP_MT_score);
 		cell->addChild(score,2);
 
 		sendBtn->setUserData((void *)idx);
+		sendBtn->setPosition(ccp(157, 22));
 
 		return cell;
 	};
@@ -1405,7 +1956,7 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 		myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
 		myDSH->setStringForKey(kDSH_Key_cardPassive_int1, download_card_number, NSDS_GS(kSDS_CI_int1_passive_s, download_card_number));
 		
-		(target_close->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
+		(getTarget()->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
 		
 		if(df_list.size() > 0) // need download
 		{
@@ -1516,7 +2067,6 @@ void MailPopup::startDownload ()
 void MailPopup::removeMessage(int mailNo, long long memberID, std::function<void(Json::Value)> userFunction)
 {
 	Json::Value p;
-//	int mailNo = mail["no"].asInt();
 	p["no"] = mailNo;
 	p["memberID"] = memberID;
 	// 도전장 삭제요청
@@ -1528,8 +2078,11 @@ void MailPopup::removeMessage(int mailNo, long long memberID, std::function<void
 	 {
 		 Json::Value newMailList;
 		 if(r["result"]["code"].asInt() != GDSUCCESS)
+		 {
+			 if(userFunction != nullptr)
+				 userFunction(r);
 			 return;
-
+		 }
 		 
 
 		 {
@@ -1551,6 +2104,45 @@ void MailPopup::removeMessage(int mailNo, long long memberID, std::function<void
 	 );
 }
 
+void MailPopup::removeMessageByList(vector<int> mailNo, long long memberID, std::function<void(Json::Value)> userFunction)
+{
+	Json::Value p;
+	for(auto no : mailNo)
+	{
+		p["noList"].append(no);
+	}
+	p["memberID"] = memberID;
+	// 도전장 삭제요청
+	hspConnector::get()->command
+		(
+		 "removemessagebylist",p,
+		 [=](Json::Value r)
+		 {
+			 Json::Value newMailList;
+			 if(r["result"]["code"].asInt() != GDSUCCESS){
+				 if(userFunction != nullptr)
+					 userFunction(r);
+				 return;
+			 }
+			 //테이블에서 없어진것 없애기
+			 for(int i=0;i<m_mailList.size();i++){
+				 int tempNo = m_mailList[i]["no"].asInt();
+				 if(std::find(mailNo.begin(), mailNo.end(), tempNo) == mailNo.end()){
+					 newMailList.append(m_mailList[i]);
+				 }
+			 }
+			 //테이블 리로드
+			 m_mailList = newMailList;
+			 this->filterWithMailFilter();
+			 this->mailTableView->reloadData();
+
+
+			 if(userFunction != nullptr){
+				 userFunction(r);
+			 }
+		 }
+	);
+}
 void MailPopup::filterWithMailFilter()
 {
 	KS::KSLog("%", m_mailList);

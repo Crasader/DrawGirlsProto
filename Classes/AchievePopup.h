@@ -25,7 +25,7 @@ enum AchievePopupListCode{
 	kAchievePopupListCode_ing,
 	kAchievePopupListCode_reward
 };
-
+class CommonButton;
 class AchievePopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -54,12 +54,12 @@ private:
 	
 	bool is_menu_enable;
 	
-	CCNode* all_menu;
-	CCNode* success_menu;
-	CCNode* ing_menu;
-	CCNode* reward_menu;
+	CommonButton* all_menu;
+	CommonButton* success_menu;
+	CommonButton* ing_menu;
+	CommonButton* reward_menu;
 	
-	CCMenu* all_reward_menu;
+	CommonButton* all_reward_menu;
 	
 	CCTableView* achieve_table;
 	

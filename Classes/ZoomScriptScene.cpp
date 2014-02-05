@@ -14,6 +14,7 @@
 #include "PuzzleScene.h"
 #include "utf8.h"
 #include "MainFlowScene.h"
+#include "CommonButton.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -62,29 +63,27 @@ bool ZoomScript::init()
 	first_img->setPosition(ccp(160,215));
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
+	zoom_img = CCSprite::create("ending_expand.png");
+	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
+	addChild(zoom_img, kZS_Z_script_case);
+	
 	script_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 18);
 	script_label->setPosition(ccp(210,30));
 	addChild(script_label, kZS_Z_script_label);
 	
-	script_case = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 0, 0));
-	script_case->setColor(ccc3(10, 40, 70));
-	script_case->setOpacity(175);
+	script_case = CCSprite::create("ending_script_case.png");
+	script_case->setVisible(false);
 	script_case->setPosition(ccp(210,30));
 	addChild(script_case, kZS_Z_script_case);
 	
 	
-	CCSprite* n_next = CCSprite::create("script_ok.png");
-	CCSprite* s_next = CCSprite::create("script_ok.png");
-	s_next->setColor(ccGRAY);
-	
-	CCMenuItem* next_item = CCMenuItemSprite::create(n_next, s_next, this, menu_selector(ZoomScript::menuAction));
-	
-	next_button = CCMenu::createWithItem(next_item);
-	next_button->setPosition(ccp(480-60,30));
+	next_button = CommonButton::create("확 인",15,CCSizeMake(80,50), CommonButtonYellow, -160);
+	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
+	next_button->setPosition(ccp(480-50,30));
 	next_button->setVisible(false);
 	addChild(next_button, kZS_Z_next_button);
 	
-	is_touched_menu = false;
+//	is_touched_menu = false;
 	is_actioned = true;
 	
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -129,7 +128,7 @@ void ZoomScript::typingAnimation()
 		string conver;
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
 		script_label->setString(conver.c_str());
-		script_case->setTextureRect(CCRectMake(0, 0, script_label->getContentSize().width+8, script_label->getContentSize().height+8));
+		script_case->setVisible(true);
 		
 		if(typing_frame == text_length)
 		{
@@ -214,7 +213,7 @@ void ZoomScript::showtimeFirstAction()
 	showtime_back->removeFromParent();
 	
 	script_label->setString("");
-	script_case->setTextureRect(CCRectMake(0, 0, 0, 0));
+	script_case->setVisible(false);
 	
 	string second_filename;
 	if(is_exchanged)
@@ -290,7 +289,7 @@ void ZoomScript::showtimeForthAction()
 {
 	is_actioned = false;
 	is_showtime = false;
-	is_touched_menu = false;
+//	is_touched_menu = false;
 	next_button->setVisible(true);
 	setTouchEnabled(true);
 }
@@ -397,10 +396,10 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 
 		if(multiTouchData.size() == 1)
 		{
-			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
-			{
-				is_touched_menu = true;
-			}
+//			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
+//			{
+//				is_touched_menu = true;
+//			}
 		}
 		else if(multiTouchData.size() == 2)
 		{
@@ -416,11 +415,11 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		}
 		else
 		{
-			if(is_touched_menu)
-			{
-				next_button->ccTouchCancelled(touch, pEvent);
-				is_touched_menu = false;
-			}
+//			if(is_touched_menu)
+//			{
+//				next_button->ccTouchCancelled(touch, pEvent);
+//				is_touched_menu = false;
+//			}
 		}
 	}
 }
@@ -442,10 +441,10 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			o_it->second = location;
 			if(multiTouchData.size() == 1)
 			{
-				if(is_touched_menu)
-				{
-					next_button->ccTouchMoved(touch, pEvent);
-				}
+//				if(is_touched_menu)
+//				{
+//					next_button->ccTouchMoved(touch, pEvent);
+//				}
 
 				this->moveListXY(ccpSub(touch_p, location));
 				touch_p = location;
@@ -542,11 +541,11 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 
 			if(multiTouchData.size() == 0)
 			{
-				if(is_touched_menu)
-				{
-					next_button->ccTouchEnded(touch, pEvent);
-					is_touched_menu = false;
-				}
+//				if(is_touched_menu)
+//				{
+//					next_button->ccTouchEnded(touch, pEvent);
+//					is_touched_menu = false;
+//				}
 
 				timeval time;
 				gettimeofday(&time, NULL);

@@ -286,7 +286,7 @@ void MissileUnit3::removeEffect ()
 																				 [=](float t)
 																				 {
 																					 
-																					 auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+																					 auto ret = KS::loadCCBI<CCSprite*>(this, "bomb_8_4.ccbi");
 																					 ret.first->setPosition(stoneSprite->getPosition());
 																					 addChild(ret.first, 2);
 																					 addChild(KSTimer::create(2.f, [=]()
@@ -3245,7 +3245,7 @@ void ReaverScarab::update (float dt)
 		m_parentMissile->removeFromParent();
 		schedule(schedule_selector(ThisClassType::selfRemove));
 		
-		auto bomb = KS::loadCCBI<CCSprite*>(this, "fx_bomb2.ccbi");
+		auto bomb = KS::loadCCBI<CCSprite*>(this, "bomb_8_7.ccbi");
 		addChild(bomb.first);
 		m_targetSprite->removeFromParent();
 		addChild(KSTimer::create(1.3f, [=](){

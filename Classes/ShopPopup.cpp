@@ -21,6 +21,8 @@
 #include "CardCase.h"
 #include "CardAnimations.h"
 #include "StartSettingScene.h"
+#include "CommonButton.h"
+#include "ScrollMenu.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -174,27 +176,38 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	if(t_code == recent_shop_code)
 		return;
 	
-	if(t_code == kSC_character)
-		tab_menu->getChildByTag(kSP_MT_character)->setVisible(false);
-	else if(t_code == kSC_card)
-		tab_menu->getChildByTag(kSP_MT_card)->setVisible(false);
-	else if(t_code == kSC_ruby)
-		tab_menu->getChildByTag(kSP_MT_ruby)->setVisible(false);
-	else if(t_code == kSC_gold)
-		tab_menu->getChildByTag(kSP_MT_gold)->setVisible(false);
-	else if(t_code == kSC_heart)
-		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(false);
-	
 	if(recent_shop_code == kSC_character)
-		tab_menu->getChildByTag(kSP_MT_character)->setVisible(true);
+		character_menu->setEnabled(true);
+	//		tab_menu->getChildByTag(kSP_MT_character)->setVisible(true);
 	else if(recent_shop_code == kSC_card)
-		tab_menu->getChildByTag(kSP_MT_card)->setVisible(true);
+		card_menu->setEnabled(true);
+	//		tab_menu->getChildByTag(kSP_MT_card)->setVisible(true);
 	else if(recent_shop_code == kSC_ruby)
-		tab_menu->getChildByTag(kSP_MT_ruby)->setVisible(true);
+		ruby_menu->setEnabled(true);
+	//		tab_menu->getChildByTag(kSP_MT_ruby)->setVisible(true);
 	else if(recent_shop_code == kSC_gold)
-		tab_menu->getChildByTag(kSP_MT_gold)->setVisible(true);
+		gold_menu->setEnabled(true);
+	//		tab_menu->getChildByTag(kSP_MT_gold)->setVisible(true);
 	else if(recent_shop_code == kSC_heart)
-		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(true);
+		heart_menu->setEnabled(true);
+	//		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(true);
+	
+	if(t_code == kSC_character)
+		character_menu->setEnabled(false);
+//		tab_menu->getChildByTag(kSP_MT_character)->setVisible(false);
+	else if(t_code == kSC_card)
+		card_menu->setEnabled(false);
+//		tab_menu->getChildByTag(kSP_MT_card)->setVisible(false);
+	else if(t_code == kSC_ruby)
+		ruby_menu->setEnabled(false);
+//		tab_menu->getChildByTag(kSP_MT_ruby)->setVisible(false);
+	else if(t_code == kSC_gold)
+		gold_menu->setEnabled(false);
+//		tab_menu->getChildByTag(kSP_MT_gold)->setVisible(false);
+	else if(t_code == kSC_heart)
+		heart_menu->setEnabled(false);
+//		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(false);
+	
 	
 	if(recent_shop_code == kSC_character)
 	{
@@ -390,8 +403,9 @@ enum CharacterCellZorder
 {
 	kCharacterCellZorder_back = 1,
 	kCharacterCellZorder_content,
+	kCharacterCellZorder_selected,
+	kCharacterCellZorder_tab,
 	kCharacterCellZorder_lock,
-	kCharacterCellZorder_selected
 };
 
 void ShopPopup::cellAction(CCObject* sender)
@@ -489,7 +503,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 	
 	CCSprite* t_tab = CCSprite::create("shop_tab.png");
 	t_tab->setPosition(ccp(94,192));
-	cell->addChild(t_tab, kCharacterCellZorder_content);
+	cell->addChild(t_tab, kCharacterCellZorder_tab);
 	
 	if(idx > 0 && !myDSH->getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, idx))
 	{
@@ -530,7 +544,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 		CCMenuItem* unlock_item = CCMenuItemSprite::create(n_unlock, s_unlock, this, menu_selector(ShopPopup::cellAction));
 		unlock_item->setTag(kSP_MT_characterUnlockBase+idx);
 		
-		CCMenu* unlock_menu = CCMenu::createWithItem(unlock_item);
+		ScrollMenu* unlock_menu = ScrollMenu::create(unlock_item, NULL);
 		unlock_menu->setPosition(ccp(62,23));
 		cell->addChild(unlock_menu, kCharacterCellZorder_selected);
 		
@@ -554,7 +568,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 			CCMenuItem* select_item = CCMenuItemSprite::create(n_select, s_select, this, menu_selector(ShopPopup::cellAction));
 			select_item->setTag(kSP_MT_characterBase+idx);
 			
-			CCMenu* select_menu = CCMenu::createWithItem(select_item);
+			ScrollMenu* select_menu = ScrollMenu::create(select_item, NULL);
 			select_menu->setPosition(ccp(62,23));
 			cell->addChild(select_menu, kCharacterCellZorder_selected);
 			
@@ -605,79 +619,138 @@ bool ShopPopup::init()
 	addChild(main_case, kSP_Z_back);
 	
 	
-	CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
-	CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
-	s_close->setColor(ccGRAY);
-	
-	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(ShopPopup::menuAction));
-	close_item->setTag(kSP_MT_close);
-	
-	CCMenu* close_menu = CCMenu::createWithItem(close_item);
+	CommonButton* close_menu = CommonButton::createCloseButton(-170-4);
 	close_menu->setPosition(getContentPosition(kSP_MT_close));
+	close_menu->setFunction([=](CCObject* sender)
+							{
+								CCNode* t_node = CCNode::create();
+								t_node->setTag(kSP_MT_close);
+								menuAction(t_node);
+							});
 	main_case->addChild(close_menu, kSP_Z_content);
-	
-	close_menu->setTouchPriority(-170-4);
 
-	tab_menu = CCMenu::create();
-	tab_menu->setPosition(CCPointZero);
-	main_case->addChild(tab_menu, kSP_Z_content);
-	tab_menu->setTouchPriority(-170-4);
 	
-	CCSprite* n_character = CCSprite::create("shop_character.png");
-	CCSprite* s_character = CCSprite::create("shop_character.png");
-	s_character->setColor(ccGRAY);
+	character_menu = CommonButton::create("캐릭터상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	character_menu->setTitleColor(ccWHITE);
+	character_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
+	character_menu->setTitleColorForDisable(ccBLACK);
+	character_menu->setPosition(getContentPosition(kSP_MT_character));
+	character_menu->setFunction([=](CCObject* sender)
+								{
+									CCNode* t_node = CCNode::create();
+									t_node->setTag(kSP_MT_character);
+									menuAction(t_node);
+								});
+	main_case->addChild(character_menu, kSP_Z_content);
 	
-	CCMenuItem* character_item = CCMenuItemSprite::create(n_character, s_character, this, menu_selector(ShopPopup::menuAction));
-	character_item->setTag(kSP_MT_character);
-	character_item->setPosition(getContentPosition(kSP_MT_character));
+	card_menu = CommonButton::create("카드상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	card_menu->setTitleColor(ccWHITE);
+	card_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
+	card_menu->setTitleColorForDisable(ccBLACK);
+	card_menu->setPosition(getContentPosition(kSP_MT_card));
+	card_menu->setFunction([=](CCObject* sender)
+								{
+									CCNode* t_node = CCNode::create();
+									t_node->setTag(kSP_MT_card);
+									menuAction(t_node);
+								});
+	main_case->addChild(card_menu, kSP_Z_content);
 	
-	tab_menu->addChild(character_item);
+	ruby_menu = CommonButton::create("루비상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	ruby_menu->setTitleColor(ccWHITE);
+	ruby_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
+	ruby_menu->setTitleColorForDisable(ccBLACK);
+	ruby_menu->setPosition(getContentPosition(kSP_MT_ruby));
+	ruby_menu->setFunction([=](CCObject* sender)
+								{
+									CCNode* t_node = CCNode::create();
+									t_node->setTag(kSP_MT_ruby);
+									menuAction(t_node);
+								});
+	main_case->addChild(ruby_menu, kSP_Z_content);
 	
-	CCSprite* n_card = CCSprite::create("shop_card.png");
-	CCSprite* s_card = CCSprite::create("shop_card.png");
-	s_card->setColor(ccGRAY);
+	gold_menu = CommonButton::create("골드상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	gold_menu->setTitleColor(ccWHITE);
+	gold_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
+	gold_menu->setTitleColorForDisable(ccBLACK);
+	gold_menu->setPosition(getContentPosition(kSP_MT_gold));
+	gold_menu->setFunction([=](CCObject* sender)
+						   {
+							   CCNode* t_node = CCNode::create();
+							   t_node->setTag(kSP_MT_gold);
+							   menuAction(t_node);
+						   });
+	main_case->addChild(gold_menu, kSP_Z_content);
 	
-	CCMenuItem* card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(ShopPopup::menuAction));
-	card_item->setTag(kSP_MT_card);
-	card_item->setPosition(getContentPosition(kSP_MT_card));
+	heart_menu = CommonButton::create("코인상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	heart_menu->setTitleColor(ccWHITE);
+	heart_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
+	heart_menu->setTitleColorForDisable(ccBLACK);
+	heart_menu->setPosition(getContentPosition(kSP_MT_heart));
+	heart_menu->setFunction([=](CCObject* sender)
+						   {
+							   CCNode* t_node = CCNode::create();
+							   t_node->setTag(kSP_MT_heart);
+							   menuAction(t_node);
+						   });
+	main_case->addChild(heart_menu, kSP_Z_content);
 	
-	tab_menu->addChild(card_item);
-	
-	CCSprite* n_ruby = CCSprite::create("shop_ruby.png");
-	CCSprite* s_ruby = CCSprite::create("shop_ruby.png");
-	s_ruby->setColor(ccGRAY);
-	
-	CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(ShopPopup::menuAction));
-	ruby_item->setTag(kSP_MT_ruby);
-	ruby_item->setPosition(getContentPosition(kSP_MT_ruby));
-	
-	tab_menu->addChild(ruby_item);
-	
-	CCSprite* n_gold = CCSprite::create("shop_gold.png");
-	CCSprite* s_gold = CCSprite::create("shop_gold.png");
-	s_gold->setColor(ccGRAY);
-	
-	CCMenuItem* gold_item = CCMenuItemSprite::create(n_gold, s_gold, this, menu_selector(ShopPopup::menuAction));
-	gold_item->setTag(kSP_MT_gold);
-	gold_item->setPosition(getContentPosition(kSP_MT_gold));
-	
-	tab_menu->addChild(gold_item);
-	
-	CCSprite* n_heart = CCSprite::create("shop_heart.png");
-	CCSprite* s_heart = CCSprite::create("shop_heart.png");
-	s_heart->setColor(ccGRAY);
-	
-	CCMenuItem* heart_item = CCMenuItemSprite::create(n_heart, s_heart, this, menu_selector(ShopPopup::menuAction));
-	heart_item->setTag(kSP_MT_heart);
-	heart_item->setPosition(getContentPosition(kSP_MT_heart));
-	
-	tab_menu->addChild(heart_item);
-	
-//	character_menu = NULL;
-//	card_menu = NULL;
-//	ruby_menu = NULL;
-//	gold_menu = NULL;
-//	heart_menu = NULL;
+//	tab_menu = CCMenu::create();
+//	tab_menu->setPosition(CCPointZero);
+//	main_case->addChild(tab_menu, kSP_Z_content);
+//	tab_menu->setTouchPriority(-170-4);
+//	
+//	
+//	
+//	CCSprite* n_character = CCSprite::create("shop_character.png");
+//	CCSprite* s_character = CCSprite::create("shop_character.png");
+//	s_character->setColor(ccGRAY);
+//	
+//	CCMenuItem* character_item = CCMenuItemSprite::create(n_character, s_character, this, menu_selector(ShopPopup::menuAction));
+//	character_item->setTag(kSP_MT_character);
+//	character_item->setPosition(getContentPosition(kSP_MT_character));
+//	
+//	tab_menu->addChild(character_item);
+//	
+//	CCSprite* n_card = CCSprite::create("shop_card.png");
+//	CCSprite* s_card = CCSprite::create("shop_card.png");
+//	s_card->setColor(ccGRAY);
+//	
+//	CCMenuItem* card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(ShopPopup::menuAction));
+//	card_item->setTag(kSP_MT_card);
+//	card_item->setPosition(getContentPosition(kSP_MT_card));
+//	
+//	tab_menu->addChild(card_item);
+//	
+//	CCSprite* n_ruby = CCSprite::create("shop_ruby.png");
+//	CCSprite* s_ruby = CCSprite::create("shop_ruby.png");
+//	s_ruby->setColor(ccGRAY);
+//	
+//	CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(ShopPopup::menuAction));
+//	ruby_item->setTag(kSP_MT_ruby);
+//	ruby_item->setPosition(getContentPosition(kSP_MT_ruby));
+//	
+//	tab_menu->addChild(ruby_item);
+//	
+//	CCSprite* n_gold = CCSprite::create("shop_gold.png");
+//	CCSprite* s_gold = CCSprite::create("shop_gold.png");
+//	s_gold->setColor(ccGRAY);
+//	
+//	CCMenuItem* gold_item = CCMenuItemSprite::create(n_gold, s_gold, this, menu_selector(ShopPopup::menuAction));
+//	gold_item->setTag(kSP_MT_gold);
+//	gold_item->setPosition(getContentPosition(kSP_MT_gold));
+//	
+//	tab_menu->addChild(gold_item);
+//	
+//	CCSprite* n_heart = CCSprite::create("shop_heart.png");
+//	CCSprite* s_heart = CCSprite::create("shop_heart.png");
+//	s_heart->setColor(ccGRAY);
+//	
+//	CCMenuItem* heart_item = CCMenuItemSprite::create(n_heart, s_heart, this, menu_selector(ShopPopup::menuAction));
+//	heart_item->setTag(kSP_MT_heart);
+//	heart_item->setPosition(getContentPosition(kSP_MT_heart));
+//	
+//	tab_menu->addChild(heart_item);
 	
 	recent_shop_code = kSC_empty;
 	
@@ -797,7 +870,12 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 
 void ShopPopup::resultSetUserData(Json::Value result_data)
 {
-	loading_layer->removeFromParent();
+	if(loading_layer)
+	{
+		loading_layer->removeFromParent();
+		loading_layer = NULL;
+	}
+	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		CCLog("userdata was save to server");
@@ -1688,17 +1766,16 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 	}
 	else
 	{
-		CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
-		CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
-		s_replay->setColor(ccGRAY);
-		
-		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ShopPopup::replayAction));
-		replay_item->setTag(1);
-		
-		replay_menu = CCMenu::createWithItem(replay_item);
+		replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -210);
 		replay_menu->setPosition(ccp(240,100));
+		replay_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(1);
+									 replayAction(t_node);
+								 });
+		
 		addChild(replay_menu, kSP_Z_popup);
-		replay_menu->setTouchPriority(-210);
 	}
 }
 
@@ -1844,17 +1921,17 @@ void ShopPopup::successAction()
 void ShopPopup::failAction()
 {
 	is_downloading = false;
-	CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
-	CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
-	s_replay->setColor(ccGRAY);
 	
-	CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ShopPopup::replayAction));
-	replay_item->setTag(2);
-	
-	replay_menu = CCMenu::createWithItem(replay_item);
+	replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -210);
 	replay_menu->setPosition(ccp(240,100));
+	replay_menu->setFunction([=](CCObject* sender)
+							 {
+								 CCNode* t_node = CCNode::create();
+								 t_node->setTag(2);
+								 replayAction(t_node);
+							 });
+	
 	addChild(replay_menu, kSP_Z_popup);
-	replay_menu->setTouchPriority(-210);
 }
 
 void ShopPopup::replayAction(CCObject* sender)

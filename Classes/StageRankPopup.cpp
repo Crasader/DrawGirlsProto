@@ -155,7 +155,7 @@ void StageRankPopup::resultLoadFriends(Json::Value result_data)
 	for(auto i : UnknownFriends::getInstance()->getFriends())
 	{
 		StageRankFriendInfo fInfo;
-		fInfo.nickname = i.nick + "[unknown]";
+		fInfo.nickname = i.nick;
 		fInfo.img_url = "";
 		fInfo.user_id = i.userId;
 		fInfo.score = 0;

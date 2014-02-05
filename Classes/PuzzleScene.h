@@ -24,8 +24,7 @@ class HeartTime;
 
 enum PuzzleRightCode{
 	kPuzzleRightCode_reward = 1,
-	kPuzzleRightCode_rank,
-	kPuzzleRightCode_monster
+	kPuzzleRightCode_rank
 };
 
 enum PuzzleZorder{

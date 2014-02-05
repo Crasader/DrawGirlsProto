@@ -16,6 +16,8 @@
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
 #include "GDWebSprite.h"
+#include "CommonButton.h"
+
 using namespace cocos2d::extension;
 using namespace std;
 
@@ -109,11 +111,6 @@ public:
 										   ,NULL
 										   )
 						);
-		
-
-		
-		
-		
 		
 	}
 	
@@ -441,8 +438,8 @@ class RemoveCardAnimation : public CCLayer{
 	CCParticleSystemQuad* particle;
 	float removeSpeed;
 	float kScale;
-	CCControlButton* skipBtn;
-	CCControlButton* repairBtn;
+	CommonButton* skipBtn;
+	CommonButton* repairBtn;
 	
 public:
 	//	CREATE_FUNC(TakeCardAnimation);
@@ -465,7 +462,7 @@ public:
 		
 		removeSpeed=0.2f;
 		card = _card;
-		card->setPosition(ccp(240,155));
+		card->setPosition(ccp(240,175));
 		card->setScale(kScale*0.7);
 		card->setVisible(false);
 		//this->addChild(card,3);
@@ -498,17 +495,17 @@ public:
 		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 		addChild(gray, 1);
 		
-		auto ret = KS::loadCCBI<CCLayer*>(this, "roundBlue1.ccbi");
+		auto ret = KS::loadCCBI<CCLayer*>(this, "roundRed1.ccbi");
 		roundBig = CCLayer::create();
 		roundBig->addChild(ret.first);
-		roundBig->setPosition(ccp(0,-95));
+		roundBig->setPosition(ccp(0,-75));
 		roundBig->setScale(0);
 		this->addChild(roundBig,2);
 		
 		auto ret2 = KS::loadCCBI<CCLayer*>(this, "roundRed2.ccbi");
 		roundSmall = CCLayer::create();
 		roundSmall->addChild(ret2.first);
-		roundSmall->setPosition(ccp(0,-95));
+		roundSmall->setPosition(ccp(0,-75));
 		roundSmall->setScale(0);
 		this->addChild(roundSmall,2);
 		
@@ -553,21 +550,26 @@ public:
 		particle->setEndSpin(360.0);
 		particle->setEndSpinVar(0.f);
 		particle->setPosVar(ccp(50,0));
-		particle->setPosition(ccp(240,220));		//
+		particle->setPosition(ccp(240,240));		//
 		particle->setVisible(false);
 		addChild(particle, 100);
 		
-		repairBtn = CCControlButton::create("고치기", mySGD->getFont().c_str(), 20);
-		repairBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RemoveCardAnimation::stopRemove), CCControlEventTouchUpInside);
-		repairBtn->setPosition(ccp(200,40));
-		repairBtn->setTouchPriority(touch_priority-1);
+		repairBtn = CommonButton::create("구원", 15, CCSizeMake(90,45), CommonButtonBlue, touch_priority-1);
+		repairBtn->setFunction([=](CCObject *){this->stopRemove();});
+		repairBtn->setPrice(PriceTypeRuby, 1);
+		repairBtn->setTitleColor(ccc3(0,0,0));
+//		repairBtn = CCControlButton::create("고치기", mySGD->getFont().c_str(), 20);
+//		repairBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RemoveCardAnimation::stopRemove), CCControlEventTouchUpInside);
+//		
+		repairBtn->setPosition(ccp(310,35));
 		repairBtn->setScale(0);
 		addChild(repairBtn,9);
 		
-		skipBtn = CCControlButton::create("스킵",mySGD->getFont().c_str(),20);
-		skipBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(RemoveCardAnimation::skip), CCControlEventTouchUpInside);
-		skipBtn->setPosition(ccp(280,40));
+		skipBtn = CommonButton::create("버리기", 15, CCSizeMake(90,45), CommonButtonYellow, touch_priority-1);
+		skipBtn->setFunction([=](CCObject *){this->skip();});
+		skipBtn->setPosition(ccp(170,35));
 		skipBtn->setTouchPriority(touch_priority-1);
+		skipBtn->setTitleColor(ccc3(0,0,0));
 		skipBtn->setScale(0);
 		addChild(skipBtn,9);
 		
@@ -663,8 +665,8 @@ public:
 		
 		cardLight->runAction(
 							 CCSequence::create(
-												CCMoveTo::create(7/30.f,ccp(240,150)),
-												CCMoveTo::create(7/30.f,ccp(240,155)),
+												CCMoveTo::create(7/30.f,ccp(240,170)),
+												CCMoveTo::create(7/30.f,ccp(240,175)),
 												CCCallFunc::create(this, callfunc_selector(RemoveCardAnimation::step4)),
 												NULL
 												)
@@ -806,10 +808,13 @@ class StrengthCardAnimation : public CCLayer{
 	CCSprite* card2;
 	CCSprite* cardLight;
 	CCSprite* title;
+	CCSprite* titleSuccess;
+	CCSprite* titleFail;
 	CCLabelTTF* optionLbl;
 	int touch_priority;
 	bool isOpening;
 	float kScale;
+	bool isSuccess;
 public:
 	//	CREATE_FUNC(TakeCardAnimation);
 	//CC_SYNTHESIZE(CCNode*, m_contentNode, ContentNode);
@@ -826,18 +831,18 @@ public:
 		
 		//141,188
 		kScale = 141/_card->getContentSize().width;
-		
+		isSuccess=true;
 		isOpening=true;
 		touch_priority=_touch_priority;
 		setTouchEnabled(true);
 		card=_card;
-		card->setPosition(ccp(240,155));
+		card->setPosition(ccp(240,175));
 		card->setVisible(false);
 		card->setScale(kScale*0.7);
 		this->addChild(card,3);
 		
 		optionLbl = CCLabelTTF::create("", mySGD->getFont().c_str(), 15);
-		optionLbl->setPosition(ccp(240,40));
+		optionLbl->setPosition(ccp(240,35));
 		optionLbl->setScale(0);
 		this->addChild(optionLbl,4);
 		
@@ -859,6 +864,16 @@ public:
 		title->setScale(0);
 		this->addChild(title,2);
 		
+		titleSuccess = CCSprite::create("ani_title_s_success.png");
+		titleSuccess->setPosition(ccp(240,276));
+		titleSuccess->setScale(0);
+		this->addChild(titleSuccess,2);
+		
+		titleFail = CCSprite::create("ani_title_s_fail.png");
+		titleFail->setPosition(ccp(240,276));
+		titleFail->setScale(0);
+		this->addChild(titleFail,2);
+		
 		gray = CCSprite::create("back_gray.png");
 		gray->setOpacity(0);
 		gray->setPosition(ccp(240,160));
@@ -869,14 +884,14 @@ public:
 		auto ret = KS::loadCCBI<CCLayer*>(this, "roundBlue1.ccbi");
 		roundBig = CCLayer::create();
 		roundBig->addChild(ret.first);
-		roundBig->setPosition(ccp(0,-95));
+		roundBig->setPosition(ccp(0,-75));
 		roundBig->setScale(0);
 		this->addChild(roundBig,2);
 		
 		auto ret2 = KS::loadCCBI<CCLayer*>(this, "roundBlue2.ccbi");
 		roundSmall = CCLayer::create();
 		roundSmall->addChild(ret2.first);
-		roundSmall->setPosition(ccp(0,-95));
+		roundSmall->setPosition(ccp(0,-75));
 		roundSmall->setScale(0);
 		this->addChild(roundSmall,2);
 		
@@ -897,6 +912,7 @@ public:
 	
 	void startSuccess(string option){
 		isOpening=true;
+		isSuccess=true;
 		optionLbl->setString(option.c_str());
 		gray->runAction(CCSequence::create(
 										   CCFadeIn::create(0.5f),
@@ -915,6 +931,7 @@ public:
 
 	void startFail(string option){
 		isOpening=true;
+		isSuccess=false;
 		optionLbl->setString(option.c_str());
 		gray->runAction(CCSequence::create(
 										   CCFadeIn::create(0.5f),
@@ -951,8 +968,8 @@ public:
 		
 		cardLight->runAction(
 							 CCSequence::create(
-												CCMoveTo::create(7/60.f,ccp(240,150)),
-												CCMoveTo::create(7/60.f,ccp(240,155)),
+												CCMoveTo::create(7/60.f,ccp(240,170)),
+												CCMoveTo::create(7/60.f,ccp(240,175)),
 												CCCallFunc::create(this, callfunc_selector(StrengthCardAnimation::step4)),
 												NULL
 												)
@@ -990,7 +1007,7 @@ public:
 		card2->runAction(
 						 CCSequence::create(
 											CCSpawn::create(
-															CCMoveTo::create(10/30.f, ccp(240,100)),
+															CCMoveTo::create(10/30.f, ccp(240,120)),
 															CCScaleTo::create(10/30.f, kScale*0.7),
 															NULL
 															),
@@ -1000,7 +1017,7 @@ public:
 															NULL
 															),
 											CCSpawn::create(
-															CCMoveTo::create(10/30.f, ccp(240,100)),
+															CCMoveTo::create(10/30.f, ccp(240,120)),
 															CCScaleTo::create(10/30.f, kScale*0.7),
 															NULL
 															),
@@ -1010,7 +1027,7 @@ public:
 															NULL
 															),
 											CCSpawn::create(
-															CCMoveTo::create(10/30.f, ccp(240,100)),
+															CCMoveTo::create(10/30.f, ccp(240,120)),
 															CCScaleTo::create(10/30.f, kScale*0.7),
 															NULL
 															),
@@ -1046,7 +1063,7 @@ public:
 	
 	void step55(){
 		card->setVisible(false);
-		cardLight->setPositionY(155);
+		cardLight->setPositionY(175);
 		
 		cardLight->runAction(
 							 CCSequence::create(
@@ -1072,10 +1089,17 @@ public:
 							 );
 							
 		optionLbl->runAction(CCEaseBounceOut::create(CCScaleTo::create(0.3,1)));
+		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
+		
+		if(isSuccess)
+			titleSuccess->runAction(CCEaseBounceOut::create(CCScaleTo::create(0.3f,1)));
+		else
+			titleFail->runAction(CCEaseBounceOut::create(CCScaleTo::create(0.3f,1)));
 	}
 	
 	void step7(){
-				card->runAction(
+		
+		card->runAction(
 								CCRepeatForever::create(
 														CCSequence::create(
 																		   CCMoveBy::create(0.5f,ccp(0,5)),
@@ -1089,7 +1113,8 @@ public:
 	void close(){
 		isOpening=true;
 		
-		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
+		titleFail->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
+		titleSuccess->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
 		optionLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
 		
 		card->runAction(CCMoveBy::create(0.2f,ccp(0,300)));
@@ -1173,8 +1198,8 @@ class ChangeRankAnimation : public CCLayer{
 	CCLabelTTF* winnerPointLbl;
 	CCLabelTTF* loserPointLbl;
 	
-	CCControlButton* closeBtn;
-	CCControlButton* sendBtn;
+	CommonButton* closeBtn;
+	CommonButton* sendBtn;
 	
 	CCLabelTTF* msgLbl;
 	
@@ -1302,19 +1327,23 @@ public:
 		
 		//cardchange_cancel
 		
-		closeBtn = CCControlButton::create("닫기",mySGD->getFont().c_str(),20);
-		closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::closeByBtn), CCControlEventTouchUpInside);
+		closeBtn = CommonButton::createCloseButton(touch_priority-1); //CCControlButton::create("닫기",mySGD->getFont().c_str(),20);
+		closeBtn->setFunction([=](CCObject *){this->closeByBtn();});
+		//closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::closeByBtn), CCControlEventTouchUpInside);
 		closeBtn->setPosition(ccp(770/2,560/2));
 		closeBtn->setTouchPriority(touch_priority-1);
 		closeBtn->setScale(0);
 		addChild(closeBtn,9);
 										   
 										   
-		sendBtn = CCControlButton::create("도전하기",mySGD->getFont().c_str(),20);
-		sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
-		sendBtn->setPosition(ccp(240,85/2));
+		sendBtn = CommonButton::create("도전하기", 15, CCSizeMake(90,45), CommonButtonBlue, touch_priority-1); //CCControlButton::create("도전하기",mySGD->getFont().c_str(),20);
+		
+		sendBtn->setFunction([=](CCObject*){this->sendMsgByBtn();});
+		//sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
+		sendBtn->setPosition(ccp(240,35));
 		sendBtn->setTouchPriority(touch_priority-1);
 		sendBtn->setScale(0);
+		sendBtn->setTitleColor(ccc3(0,0,0));
 		addChild(sendBtn,9);
 		
 		msgLbl = CCLabelTTF::create("친구에게 도전메세지를 전송합니다.", mySGD->getFont().c_str(), 10);
@@ -1393,11 +1422,11 @@ public:
 	}
 	
 	
-	void closeByBtn(CCObject*, CCControlEvent){
+	void closeByBtn(){
 		this->close();
 		if(cancelFunc)cancelFunc();
 	}
-	void sendMsgByBtn(CCObject*, CCControlEvent){
+	void sendMsgByBtn(){
 		this->close();
 		if(sendFunc)sendFunc();
 	}
@@ -1538,7 +1567,7 @@ public:
 	
 	
 	bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
-		if(isOpening==false)this->close();
+		//if(isOpening==false)this->close();
 		return true;
 	}
 	void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent){
@@ -1559,7 +1588,6 @@ public:
 
 
 
-
 // 위너(사진,등수,점수)
 
 class FightResultAnimation : public CCLayer{
@@ -1573,29 +1601,29 @@ class FightResultAnimation : public CCLayer{
 	CCLayer* backRolling;
 	CCSprite* backLayer;
 	
-	CCSprite* winnerBack;
-	CCSprite* loserBack;
+	CCSprite* myBack;
+	CCSprite* otherBack;
 	
-	CCLabelTTF* winnerLbl;
-	CCLabelTTF* loserLbl;
+	CCLabelTTF* myLbl;
+	CCLabelTTF* otherLbl;
 	
-	CCLabelTTF* winnerPointLbl;
-	CCLabelTTF* loserPointLbl;
+	CCLabelTTF* myPointLbl;
+	CCLabelTTF* otherPointLbl;
 	
-	CCControlButton* closeBtn;
-	CCControlButton* sendBtn;
-	CCControlButton* confirmBtn;
+	CommonButton* closeBtn;
+	CommonButton* sendBtn;
+	CommonButton* confirmBtn;
 	
 	CCLabelTTF* msgLbl;
 	
-	CCSprite* winnerArrow;
-	CCSprite* loserArrow;
+	CCSprite* myArrow;
+	CCSprite* otherArrow;
 	
 	CCSprite* titleWin;
 	CCSprite* titleLose;
 	
-	int winnerPoint;
-	int loserPoint;
+	int myPoint;
+	int otherPoint;
 	
 	int pointCnt;
 public:
@@ -1609,20 +1637,20 @@ public:
 		return ret;
 	}
 	
-	bool init(string winner_picture_url,int winner_point, string winner_name,string loser_picture_url,int loser_point, string loser_name, int _touch_priority){
+	bool init(string my_picture_url,int my_point, string my_name,string other_picture_url,int other_point, string other_name, int _touch_priority){
 		if(CCLayer::init()==false)return false;
 		
-		CCSprite* winner_picture = GDWebSprite::create(winner_picture_url, "ending_noimg.png");
-		CCSprite* loser_picture = GDWebSprite::create(loser_picture_url, "ending_noimg.png");
+		CCSprite* my_picture = GDWebSprite::create(my_picture_url, "ending_noimg.png");
+		CCSprite* other_picture = GDWebSprite::create(other_picture_url, "ending_noimg.png");
 		
 		
 		isOpening=true;
 		touch_priority=_touch_priority;
 		setTouchEnabled(true);
-		kScale = 56/winner_picture->getContentSize().width;
+		kScale = 56/my_picture->getContentSize().width;
 		
-		winnerPoint = winner_point;
-		loserPoint = loser_point;
+		myPoint = my_point;
+		otherPoint = other_point;
 		pointCnt = 0;
 		
 		auto back = KS::loadCCBI<CCLayer*>(this, "gameresult_rankchange_back.ccbi");
@@ -1645,92 +1673,99 @@ public:
 		
 		backLayer->setScale(0);
 		
-		/// winner ///////////////////////////////////////////////////////////////////////
+		/// my ///////////////////////////////////////////////////////////////////////
 		
-		winnerBack = CCSprite::create("puzzle_right_ranklist_me.png");
-		winnerBack->setPosition(ccp(220/2, 42/2)); //CGMakePoint(209, 42);
-		winnerBack->setScale(0.5f);
-		backLayer->addChild(winnerBack,4);
+		myBack = CCSprite::create("puzzle_right_ranklist_me.png");
+		myBack->setPosition(ccp(220/2, 42/2)); //CGMakePoint(209, 42);
+		myBack->setScale(0.5f);
+		backLayer->addChild(myBack,4);
 		
-		winner_picture->setAnchorPoint(ccp(0.5f,0.5f));
-		winner_picture->setPosition(ccp(21,21));
-		winner_picture->setScale(0.8f);
-		winnerBack->addChild(winner_picture,1);
+		my_picture->setAnchorPoint(ccp(0.5f,0.5f));
+		my_picture->setPosition(ccp(21,21));
+		my_picture->setScale(0.8f);
+		myBack->addChild(my_picture,1);
 		
-		winnerLbl = CCLabelTTF::create(winner_name.c_str(), mySGD->getFont().c_str(), 12);
-		winnerLbl->setPosition(ccp(80,27));
-		winnerBack->addChild(winnerLbl,4);
-		
-		
-		winnerPointLbl = CCLabelTTF::create("0", mySGD->getFont().c_str(), 15);
-		winnerPointLbl->setPosition(ccp(80,12));
-		winnerBack->addChild(winnerPointLbl,4);
+		myLbl = CCLabelTTF::create(my_name.c_str(), mySGD->getFont().c_str(), 12);
+		myLbl->setPosition(ccp(80,27));
+		myBack->addChild(myLbl,4);
 		
 		
-		/// loser ///////////////////////////////////////////////////////////////////////
-		
-
-		loserBack = CCSprite::create("puzzle_right_ranklist_normal.png");
-	
-		loserBack->setScale(0.5f);
-		loserBack->setPosition(ccp(160/2, 110/2)); //CGMakePoint(158, 114);
+		myPointLbl = CCLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+		myPointLbl->setPosition(ccp(80,12));
+		myBack->addChild(myPointLbl,4);
 		
 		
-		loser_picture->setPosition(ccp(21,21));
-		loser_picture->setAnchorPoint(ccp(0.5f,0.5f));
-		loser_picture->setScale(0.8f);
-		loserBack->addChild(loser_picture,1);
+		/// other ///////////////////////////////////////////////////////////////////////
 		
 		
-		loserLbl = CCLabelTTF::create(loser_name.c_str(), mySGD->getFont().c_str(), 12);
-		loserLbl->setPosition(ccp(80,27));
-		loserBack->addChild(loserLbl,4);
+		otherBack = CCSprite::create("puzzle_right_ranklist_normal.png");
 		
-		backLayer->addChild(loserBack,4);
-		
-		
-		loserPointLbl = CCLabelTTF::create("0", mySGD->getFont().c_str(), 15);
-		loserPointLbl->setPosition(ccp(80,12));
-		loserBack->addChild(loserPointLbl,4);
+		otherBack->setScale(0.5f);
+		otherBack->setPosition(ccp(160/2, 110/2)); //CGMakePoint(158, 114);
 		
 		
+		other_picture->setPosition(ccp(21,21));
+		other_picture->setAnchorPoint(ccp(0.5f,0.5f));
+		other_picture->setScale(0.8f);
+		otherBack->addChild(other_picture,1);
 		
 		
-		winnerArrow = CCSprite::create("rankchange_arrow_up.png");
-		winnerArrow->setPosition(ccp(loserBack->getPositionX()+50,loserBack->getPositionY()));
-		winnerArrow->setScale(0.5f);
-		winnerArrow->runAction(CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,-10)),CCMoveBy::create(0.5f,ccp(0,10)),NULL)));
-		backLayer->addChild(winnerArrow);
+		otherLbl = CCLabelTTF::create(other_name.c_str(), mySGD->getFont().c_str(), 12);
+		otherLbl->setPosition(ccp(80,27));
+		otherBack->addChild(otherLbl,4);
+		
+		backLayer->addChild(otherBack,4);
 		
 		
-		loserArrow = CCSprite::create("rankchange_arrow_down.png");
-		loserArrow->setPosition(ccp(winnerBack->getPositionX()-50,winnerBack->getPositionY()));
-		loserArrow->setScale(0.5f);
-		loserArrow->runAction(CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,10)),CCMoveBy::create(0.5f,ccp(0,-10)),NULL)));
-		backLayer->addChild(loserArrow);
+		otherPointLbl = CCLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+		otherPointLbl->setPosition(ccp(80,12));
+		otherBack->addChild(otherPointLbl,4);
+		
+		
+		
+		
+		myArrow = CCSprite::create("rankchange_arrow_up.png");
+		myArrow->setPosition(ccp(otherBack->getPositionX()+50,otherBack->getPositionY()));
+		myArrow->setScale(0.5f);
+		myArrow->runAction(CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,-10)),CCMoveBy::create(0.5f,ccp(0,10)),NULL)));
+		backLayer->addChild(myArrow);
+		
+		
+		otherArrow = CCSprite::create("rankchange_arrow_down.png");
+		otherArrow->setPosition(ccp(myBack->getPositionX()-50,myBack->getPositionY()));
+		otherArrow->setScale(0.5f);
+		otherArrow->runAction(CCRepeatForever::create(CCSequence::create(CCMoveBy::create(0.5f,ccp(0,10)),CCMoveBy::create(0.5f,ccp(0,-10)),NULL)));
+		backLayer->addChild(otherArrow);
 		
 		
 		//cardchange_cancel
 		
-		closeBtn = CCControlButton::create("닫기",mySGD->getFont().c_str(),20);
-		closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::closeByBtn), CCControlEventTouchUpInside);
+		//closeBtn = CCControlButton::create("닫기",mySGD->getFont().c_str(),20);
+		//closeBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::closeByBtn), CCControlEventTouchUpInside);
+		
+		closeBtn = CommonButton::createCloseButton(touch_priority-1);
+		closeBtn->setFunction([=](CCObject *){this->closeByBtn();});
 		closeBtn->setPosition(ccp(770/2,560/2));
-		closeBtn->setTouchPriority(touch_priority-1);
 		closeBtn->setScale(0);
 		addChild(closeBtn,9);
 		
 		
-		sendBtn = CCControlButton::create("확인",mySGD->getFont().c_str(),20);
-		sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
-		sendBtn->setPosition(ccp(240,85/2));
+		//sendBtn = CCControlButton::create("확인",mySGD->getFont().c_str(),20);
+		//sendBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::sendMsgByBtn), CCControlEventTouchUpInside);
+		sendBtn = CommonButton::create("확인", 15, CCSizeMake(90,45), CommonButtonBlue, touch_priority-1);
+		sendBtn->setFunction([=](CCObject *){this->sendMsgByBtn();});
+		sendBtn->setPosition(ccp(240,35));
+		sendBtn->setTitleColor(ccc3(0,0,0));
 		sendBtn->setTouchPriority(touch_priority-1);
 		sendBtn->setScale(0);
 		addChild(sendBtn,9);
 		
-		confirmBtn = CCControlButton::create("확인",mySGD->getFont().c_str(),20);
-		confirmBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::ConfirmByBtn), CCControlEventTouchUpInside);
-		confirmBtn->setPosition(ccp(240,85/2));
-		confirmBtn->setTouchPriority(touch_priority-1);
+//		confirmBtn = CCControlButton::create("확인",mySGD->getFont().c_str(),20);
+//		confirmBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::ConfirmByBtn), CCControlEventTouchUpInside);
+		confirmBtn = CommonButton::create("확인", 15, CCSizeMake(90,45), CommonButtonBlue, touch_priority-1);
+		confirmBtn->setFunction([=](CCObject *){this->ConfirmByBtn();});
+		confirmBtn->setPosition(ccp(240,35));
+		confirmBtn->setTitleColor(ccc3(0,0,0));
 		confirmBtn->setScale(0);
 		addChild(confirmBtn,9);
 		
@@ -1828,16 +1863,16 @@ public:
 	}
 	
 	
-	void closeByBtn(CCObject*, CCControlEvent){
+	void closeByBtn(){
 		this->close();
 		if(cancelFunc)cancelFunc();
 	}
-	void sendMsgByBtn(CCObject*, CCControlEvent){
+	void sendMsgByBtn(){
 		this->close();
 		if(sendFunc)sendFunc();
 	}
 	
-	void ConfirmByBtn(CCObject*, CCControlEvent){
+	void ConfirmByBtn(){
 		this->close();
 		if(confirmFunc)confirmFunc();
 	}
@@ -1845,11 +1880,11 @@ public:
 	void startLose(){
 		isOpening=true;
 		gray->runAction(CCSequence::create(
-										   CCFadeIn::create(0.5f),
-										   CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep1)),
-										   NULL
-										   )
-						);
+																			 CCFadeIn::create(0.5f),
+																			 CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep1)),
+																			 NULL
+																			 )
+										);
 		
 	}
 	
@@ -1858,68 +1893,68 @@ public:
 		backLayer->runAction(CCScaleTo::create(0.3f,2));
 		
 		title->runAction(
-						 CCSequence::create(
-											CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
-											CCDelayTime::create(1.f),
-											CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep2))
-											,NULL
-											)
-						 );
+										 CCSequence::create(
+																				CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
+																				CCDelayTime::create(1.f),
+																				CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep2))
+																				,NULL
+																				)
+										 );
 	}
 	
 	void loseStep2(){
 		
 		
-		winnerPointLbl->addChild(KSGradualValue<float>::create(0, (float)loserPoint, 1.5f,
-											   [=](float t)
-											   {
-												   winnerPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-												   
-												   loserPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-												   
-											   },
-											   [=](float t)
-											   {
-												   
-												   this->addChild(KSTimer::create(1.f, [=](){
-														 titleLose->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
-														 
-														 title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
-												   this->loseStep3();
-												   winnerPointLbl->addChild(KSGradualValue<float>::create((float)loserPoint, (float)winnerPoint, 1.0f,
-																						[=](float t)
-																						{
-																							loserPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																						},[=](float t){
-																						
-																						
-																						}));
-												   }));
-											   }));
+		myPointLbl->addChild(KSGradualValue<float>::create(0, (float)myPoint, 1.5f,
+																											 [=](float t)
+																											 {
+																												 myPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																												 
+																												 otherPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																												 
+																											 },
+																											 [=](float t)
+																											 {
+																												 
+																												 this->addChild(KSTimer::create(1.f, [=](){
+																													 titleLose->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+																													 
+																													 title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
+																													 this->loseStep3();
+																													 otherPointLbl->addChild(KSGradualValue<float>::create((float)myPoint, (float)otherPoint, 1.0f,
+																																																							[=](float t)
+																																																							{
+																																																								otherPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																																																							},[=](float t){
+																																																								
+																																																								
+																																																							}));
+																												 }));
+																											 }));
 	}
 	
-	void loseStep3(){        
+	void loseStep3(){
 		
-		winnerArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
-		loserArrow->runAction(
-							  CCSequence::create(
-												 CCMoveBy::create(0.3,ccp(0,200)),
-												 CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep4)),
-												 NULL)
-							  );
+		myArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
+		otherArrow->runAction(
+													CCSequence::create(
+																						 CCMoveBy::create(0.3,ccp(0,200)),
+																						 CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep4)),
+																						 NULL)
+													);
 		
-//		CCPoint wPo = winnerBack->getPosition();
-//		CCPoint lPo = loserBack->getPosition();
-//		
-//		loserBack->runAction(CCMoveTo::create(0.3f, wPo));
-//		
-//		winnerBack->runAction(
-//							  CCSequence::create(
-//												 CCMoveTo::create(0.3f, lPo),
-//												 CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep4))
-//												 ,NULL
-//												 )
-//							  );
+		//		CCPoint wPo = myBack->getPosition();
+		//		CCPoint lPo = otherBack->getPosition();
+		//
+		//		otherBack->runAction(CCMoveTo::create(0.3f, wPo));
+		//
+		//		myBack->runAction(
+		//							  CCSequence::create(
+		//												 CCMoveTo::create(0.3f, lPo),
+		//												 CCCallFunc::create(this, callfunc_selector(ThisClassType::loseStep4))
+		//												 ,NULL
+		//												 )
+		//							  );
 		
 		
 		
@@ -1927,13 +1962,13 @@ public:
 	
 	void loseStep4(){
 		
-		winnerArrow->setVisible(false);
-		loserArrow->setVisible(false);
+		myArrow->setVisible(false);
+		otherArrow->setVisible(false);
 		
 		closeBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
 		//msgLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
 		confirmBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
-
+		
 		
 		isOpening=false;
 	}
@@ -1941,11 +1976,11 @@ public:
 	void startWin(){
 		isOpening=true;
 		gray->runAction(CCSequence::create(
-										   CCFadeIn::create(0.5f),
-										   CCCallFunc::create(this, callfunc_selector(ThisClassType::winStep1)),
-										   NULL
-										   )
-						);
+																			 CCFadeIn::create(0.5f),
+																			 CCCallFunc::create(this, callfunc_selector(ThisClassType::winStep1)),
+																			 NULL
+																			 )
+										);
 		
 	}
 	
@@ -1954,64 +1989,64 @@ public:
 		backLayer->runAction(CCScaleTo::create(0.3f,2));
 		
 		title->runAction(
-						 CCSequence::create(
-											CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
-											CCDelayTime::create(1.f),
-											CCCallFunc::create(this, callfunc_selector(ThisClassType::winStep2))
-											,NULL
-											)
-						 );
+										 CCSequence::create(
+																				CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
+																				CCDelayTime::create(1.f),
+																				CCCallFunc::create(this, callfunc_selector(ThisClassType::winStep2))
+																				,NULL
+																				)
+										 );
 	}
 	
 	void winStep2(){
 		
 		
-		winnerPointLbl->addChild(KSGradualValue<float>::create(0, (float)loserPoint, 1.5f,
-															   [=](float t)
-															   {
-																   winnerPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																   
-																   loserPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																   
-															   },
-															   [=](float t)
-															   {
-																   
-																   this->addChild(KSTimer::create(1.f, [=](){
-																	   titleWin->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
-																		 
-																	   title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
-																	   this->winStep3();
-																	   winnerPointLbl->addChild(KSGradualValue<float>::create((float)loserPoint, (float)winnerPoint, 1.0f,
-																															  [=](float t)
-																															  {
-																																  winnerPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																															  },[=](float t){
-																																  
-																																  
-																															  }));
-																   }));
-															   }));
+		myPointLbl->addChild(KSGradualValue<float>::create(0, (float)otherPoint, 1.5f,
+																											 [=](float t)
+																											 {
+																												 myPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																												 
+																												 otherPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																												 
+																											 },
+																											 [=](float t)
+																											 {
+																												 
+																												 this->addChild(KSTimer::create(1.f, [=](){
+																													 titleWin->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+																													 
+																													 title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
+																													 this->winStep3();
+																													 myPointLbl->addChild(KSGradualValue<float>::create((float)otherPoint, (float)myPoint, 1.0f,
+																																																							[=](float t)
+																																																							{
+																																																								myPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+																																																							},[=](float t){
+																																																								
+																																																								
+																																																							}));
+																												 }));
+																											 }));
 	}
 	
 	void winStep3(){
 		
-		winnerArrow->runAction(CCMoveBy::create(0.3,ccp(0,200)));
-		loserArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
-
+		myArrow->runAction(CCMoveBy::create(0.3,ccp(0,200)));
+		otherArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
 		
-				CCPoint wPo = winnerBack->getPosition();
-				CCPoint lPo = loserBack->getPosition();
 		
-				loserBack->runAction(CCMoveTo::create(0.3f, wPo));
+		CCPoint wPo = myBack->getPosition();
+		CCPoint lPo = otherBack->getPosition();
 		
-				winnerBack->runAction(
-									  CCSequence::create(
-														 CCMoveTo::create(0.3f, lPo),
-														 CCCallFunc::create(this, callfunc_selector(ThisClassType::winStep4))
-														 ,NULL
-														 )
-									  );
+		otherBack->runAction(CCMoveTo::create(0.3f, wPo));
+		
+		myBack->runAction(
+											CCSequence::create(
+																				 CCMoveTo::create(0.3f, lPo),
+																				 CCCallFunc::create(this, callfunc_selector(ThisClassType::winStep4))
+																				 ,NULL
+																				 )
+											);
 		
 		
 		
@@ -2019,8 +2054,8 @@ public:
 	
 	void winStep4(){
 		
-		winnerArrow->setVisible(false);
-		loserArrow->setVisible(false);
+		myArrow->setVisible(false);
+		otherArrow->setVisible(false);
 		
 		closeBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
 		msgLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
@@ -2033,11 +2068,11 @@ public:
 	void start(){
 		isOpening=true;
 		gray->runAction(CCSequence::create(
-										   CCFadeIn::create(0.5f),
-										   CCCallFunc::create(this, callfunc_selector(ThisClassType::step2)),
-										   NULL
-										   )
-						);
+																			 CCFadeIn::create(0.5f),
+																			 CCCallFunc::create(this, callfunc_selector(ThisClassType::step2)),
+																			 NULL
+																			 )
+										);
 		
 		
 		
@@ -2049,13 +2084,13 @@ public:
 		backLayer->runAction(CCScaleTo::create(0.3f,2));
 		
 		title->runAction(
-						 CCSequence::create(
-											CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
-											CCDelayTime::create(1.f),
-											CCCallFunc::create(this, callfunc_selector(ThisClassType::step3))
-											,NULL
-											)
-						 );
+										 CCSequence::create(
+																				CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)),
+																				CCDelayTime::create(1.f),
+																				CCCallFunc::create(this, callfunc_selector(ThisClassType::step3))
+																				,NULL
+																				)
+										 );
 		//
 		//		roundSmall->runAction(CCScaleTo::create(8/60.f, 1, 0.2f));
 		
@@ -2064,21 +2099,21 @@ public:
 	
 	void step3(){
 		
-		winnerArrow->runAction(CCMoveBy::create(0.3,ccp(0,200)));
-		loserArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
+		myArrow->runAction(CCMoveBy::create(0.3,ccp(0,200)));
+		otherArrow->runAction(CCMoveBy::create(0.3,ccp(0,-200)));
 		
-		CCPoint wPo = winnerBack->getPosition();
-		CCPoint lPo = loserBack->getPosition();
+		CCPoint wPo = myBack->getPosition();
+		CCPoint lPo = otherBack->getPosition();
 		
-		loserBack->runAction(CCMoveTo::create(0.3f, wPo));
+		otherBack->runAction(CCMoveTo::create(0.3f, wPo));
 		
-		winnerBack->runAction(
-							  CCSequence::create(
-												 CCMoveTo::create(0.3f, lPo),
-												 CCCallFunc::create(this, callfunc_selector(ThisClassType::step4))
-												 ,NULL
-												 )
-							  );
+		myBack->runAction(
+											CCSequence::create(
+																				 CCMoveTo::create(0.3f, lPo),
+																				 CCCallFunc::create(this, callfunc_selector(ThisClassType::step4))
+																				 ,NULL
+																				 )
+											);
 		
 		
 		
@@ -2086,8 +2121,8 @@ public:
 	
 	void step4(){
 		
-		winnerArrow->setVisible(false);
-		loserArrow->setVisible(false);
+		myArrow->setVisible(false);
+		otherArrow->setVisible(false);
 		
 		closeBtn->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
 		msgLbl->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
@@ -2119,12 +2154,12 @@ public:
 		titleWin->runAction(CCScaleTo::create(0.3f,0));
 		
 		this->runAction(
-						CCSequence::create(
-										   CCDelayTime::create(0.4f),
-										   CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep2)),
-										   NULL
-										   )
-						);
+										CCSequence::create(
+																			 CCDelayTime::create(0.4f),
+																			 CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep2)),
+																			 NULL
+																			 )
+										);
 		
 		//
 		//		title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0.01f)));
@@ -2146,12 +2181,12 @@ public:
 	
 	void closeStep2(){
 		gray->runAction(
-						CCSequence::create(
-										   CCFadeOut::create(0.3f),
-										   CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep3)),
-										   NULL
-										   )
-						);
+										CCSequence::create(
+																			 CCFadeOut::create(0.3f),
+																			 CCCallFunc::create(this, callfunc_selector(ThisClassType::closeStep3)),
+																			 NULL
+																			 )
+										);
 	}
 	
 	void closeStep3(){
@@ -2169,7 +2204,6 @@ public:
 	
 	
 	bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent){
-		if(isOpening==false)this->close();
 		return true;
 	}
 	void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent){

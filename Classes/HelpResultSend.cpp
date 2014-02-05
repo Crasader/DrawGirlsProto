@@ -5,7 +5,8 @@
 #include "hspConnector.h"
 #include "HatGacha.h"
 #include "GachaPurchase.h"
-
+#include "KHAlertView.h"
+#include "CommonButton.h"
 HelpResultSend::HelpResultSend()
 {
 	
@@ -99,33 +100,37 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::funct
 	}
 	else
 	{
-		KSAlertView* av = KSAlertView::create();
-		auto ttf = CCLabelTTF::create((mySGD->getAcceptHelpNick() + "님에게 도움을 주지 못했습니다 OTL").c_str(), "", 12.f);
-		ttf->setColor(ccc3(0, 0, 0));
-		av->setContentNode(
-											 ttf
-											 );
-
-		av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-		av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-		av->setBorderScale(0.9f);
+		KHAlertView* av = KHAlertView::create(); 
 		av->setCloseOnPress(false);
-//		av->setButtonHeight(0);
-		//	av->setTitleStr("지금 열기");
-		
-		av->addButton(CCMenuItemImageLambda::create
-									(
-									 "ui_common_ok.png",
-									 "ui_common_ok.png",
-									 [=](CCObject* e){
-										 //																										removeFromParent();
-										 endFunction();
-										 removeFromParent();
-									 }
-									 ));
-		//	con2->alignItemsVerticallyWithPadding(30);
+		// av->setTitleFileName("msg_challenge.png");
+		av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+		av->setWidth(240);
+		av->setHeight(240);
+		av->setTitleHeight(10);
+		av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+		av->setCenterY(150);
+
+		CCNode* emptyNode = CCNode::create();
+		auto ttf = CCLabelTTF::create((mySGD->getAcceptHelpNick() + "님에게 도움을 주지 못했습니다 OTL").c_str(), mySGD->getFont().c_str(), 12.f); 
+		ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
+		//	con->setAnchorPoint(ccp(0, 0));
+		//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
+		ttf->setColor(ccc3(255, 255, 255));
+		ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+		emptyNode->addChild(ttf);
+		av->setContentNode(
+				emptyNode
+				);
+		av->setContentSize(ttf->getDimensions());
+		av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+									[=](CCObject* e) {
+										CCLog("ok!!");
+									});
+
+
 		addChild(av, 1);
 		av->show();
+		////////////////////////////
 		av->getContainerScrollView()->setTouchEnabled(false);
 
 		Json::Value p2;
