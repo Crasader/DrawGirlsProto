@@ -24,7 +24,7 @@ public:
 		m_odd = false;
 		m_priority = priority;
 		m_hideFunction = hideFunction;
-		m_remainTime = 30.f;
+		m_remainTime = 15.f;
 		m_startMine = false;
 		m_obtainGold = m_obtainRuby = m_obtainSocial = 0;
 		CCSprite* back = CCSprite::create("minigame_bg.png");

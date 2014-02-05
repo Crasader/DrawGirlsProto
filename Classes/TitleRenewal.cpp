@@ -54,7 +54,7 @@ bool TitleRenewalScene::init()
 	title_name->setPosition(ccp(240,210));
 	addChild(title_name);
 	
-	state_label = CCLabelTTF::create("까똑 로그인 ing...", mySGD->getFont().c_str(), 20);
+	state_label = CCLabelTTF::create("카카오 서버 접속중", mySGD->getFont().c_str(), 20);
 	state_label->setColor(ccBLACK);
 	state_label->setPosition(ccp(240,100));
 	addChild(state_label);
