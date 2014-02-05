@@ -3,6 +3,7 @@
 #include <random>
 #include <limits>
 #include "GachaShowReward.h"
+#include "CommonButton.h"
 const int marginPerItem = 60;
 
 std::map<RewardKind, std::string> kind2File =
@@ -79,11 +80,12 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 	m_guide->setPosition(ccp(240, 40));
 	addChild(m_guide, 1);
 
-
-	CCMenuItemImageLambda* stopBtn = CCMenuItemImageLambda::create("gacha4_stop.png", "gacha4_stop.png");
+	CommonButton* stopBtn = CommonButton::create("멈추기", 14.f, CCSizeMake(100, 400), CommonButtonGreen, INT_MIN);
+		
+	//CCMenuItemImageLambda* stopBtn = CCMenuItemImageLambda::create("gacha4_stop.png", "gacha4_stop.png");
 	stopBtn->setPosition(ccp(240, 40));
 	//		startBtn->setVisible(false);
-	stopBtn->setTarget([=](CCObject*)
+	stopBtn->setFunction([=](CCObject*)
 			{
 				if(m_state == RouletteState::kRotation)
 	{
