@@ -118,7 +118,7 @@ public:
 		
 		m_btnType = btnType;
 		
-		m_btnBack = CommonButton::getBacgroundByType(btnType);
+		m_btnBack = CommonButton::getBackgroundByType(btnType);
 		
 		
 		m_btn = CCControlButton::create(m_btnTitle, m_btnBack);
@@ -145,7 +145,7 @@ public:
 		return true;
 	}
 	
-	static CCScale9Sprite* getBacgroundByType(CommonButtonType btnType){
+	static CCScale9Sprite* getBackgroundByType(CommonButtonType btnType){
 		string btnBackImg;
 		if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
 		else if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
@@ -236,7 +236,7 @@ public:
 	}
 	
 	void setBackgroundTypeForState(CommonButtonType type,CCControlState state){
-		CCScale9Sprite* back = CommonButton::getBacgroundByType(type);
+		CCScale9Sprite* back = CommonButton::getBackgroundByType(type);
 		this->setBackgroundSpriteForState(back,state);
 		
 	}
