@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include "CCMenuLambda.h"
 #include "StarGoldData.h"
+#include "KSUtil.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -100,7 +101,7 @@ private:
 		ani_manager = reader->getAnimationManager();
 		ani_manager->setDelegate(this);
 //		control_tutorial->setScale(0.65f);
-		control_tutorial->setPosition(ccp(0,0));
+		control_tutorial->setPosition(ccp(180,-100));
 //		clipper->addChild(control_tutorial);
 		addChild(control_tutorial);
 		
@@ -120,10 +121,12 @@ private:
 //		close_menu->setPosition(ccp(140,112));
 //		addChild(close_menu);
 		
-		click_animaition = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("tutorial_nextbutton.ccbi",this));
+		click_animaition = KS::loadCCBI<CCSprite*>(this, "tutorial_nextbutton.ccbi").first;
 		click_animaition->setPosition(ccp(0,0));
 		addChild(click_animaition);
 		click_animaition->setVisible(false);
+		
+		reader->release();
 		
 		CCSprite* n_touch = CCSprite::create("whitePaper.png");
 		n_touch->setOpacity(0);
