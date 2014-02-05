@@ -101,7 +101,7 @@ private:
 		ani_manager = reader->getAnimationManager();
 		ani_manager->setDelegate(this);
 //		control_tutorial->setScale(0.65f);
-		control_tutorial->setPosition(ccp(180,-100));
+		control_tutorial->setPosition(ccp(0,0));
 //		clipper->addChild(control_tutorial);
 		addChild(control_tutorial);
 		
@@ -122,7 +122,7 @@ private:
 //		addChild(close_menu);
 		
 		click_animaition = KS::loadCCBI<CCSprite*>(this, "tutorial_nextbutton.ccbi").first;
-		click_animaition->setPosition(ccp(0,0));
+		click_animaition->setPosition(ccp(180,-100));
 		addChild(click_animaition);
 		click_animaition->setVisible(false);
 		
