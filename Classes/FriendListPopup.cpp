@@ -45,6 +45,7 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	
 	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
 	closeBtn->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
 		this->hidePopup();
 	});
 	
@@ -74,6 +75,7 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	inviteEventBtn->setTitleColor(ccc3(200, 200, 200));
 	inviteEventBtn->setTitleColorForDisable(ccc3(20, 0, 0));
 	inviteEventBtn->setFunction([=](CCObject*){
+			hspConnector::get()->removeTarget(this);
 				 InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
 				 t_rp->setOpenAnimation(false);
 				 getParent()->addChild(t_rp, this->getZOrder());
@@ -100,6 +102,7 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	friendList->setTitleColor(ccc3(200, 200, 200));
 	friendList->setTitleColorForDisable(ccc3(20, 0, 0));
 	friendList->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
 
 	});
 	friendList->setPosition(ccp(272, 255));
@@ -127,6 +130,7 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	joinGameFriend->setTitleColor(ccc3(200, 200, 200));
 	joinGameFriend->setTitleColorForDisable(ccc3(20, 0, 0));
 	joinGameFriend->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
 		JoinGameFriendPopup* t_rp = JoinGameFriendPopup::create(t_close, d_close);
 		t_rp->setOpenAnimation(false);
 		getParent()->addChild(t_rp, this->getZOrder());
@@ -310,7 +314,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 						 p["senderMemberID"] = hspConnector::get()->getKakaoID();
 						 p["type"] = kHeart;
 
-						 hspConnector::get()->command("sendMessage", p, [=](Json::Value r) {
+						 hspConnector::get()->command("sendMessage", p, this,[=](Json::Value r) {
 							 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
 							 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 							 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];

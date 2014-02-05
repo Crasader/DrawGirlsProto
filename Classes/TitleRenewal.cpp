@@ -16,6 +16,7 @@
 #include <chrono>
 #include "MainFlowScene.h"
 #include "TutorialFlowStep.h"
+#include "CommonButton.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -190,15 +191,15 @@ void TitleRenewalScene::checkReceive()
 		{
 			state_label->setString("정보 불러오기 실패");
 			
-			CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
-			CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
-			s_replay->setColor(ccGRAY);
-			
-			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleRenewalScene::menuAction));
-			replay_item->setTag(kTitleRenewal_MT_replay);
-			
-			CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+			CommonButton* replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
 			replay_menu->setPosition(ccp(240,160));
+			replay_menu->setFunction([=](CCObject* sender)
+									 {
+										 CCNode* t_node = CCNode::create();
+										 t_node->setTag(kTitleRenewal_MT_replay);
+										 menuAction(t_node);
+									 });
+			
 			addChild(replay_menu, 0, kTitleRenewal_MT_replay);
 			
 			is_menu_enable = true;
@@ -1157,16 +1158,17 @@ void TitleRenewalScene::endingCheck()
 		input_text->setDelegate(this);
 		addChild(input_text);
 		
-		CCSprite* n_ok = CCSprite::create("nickname_ok.png");
-		CCSprite* s_ok = CCSprite::create("nickname_ok.png");
-		s_ok->setColor(ccGRAY);
 		
-		CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(TitleRenewalScene::menuAction));
-		ok_item->setTag(kTitleRenewal_MT_nick);
-		
-		CCMenu* ok_menu = CCMenu::createWithItem(ok_item);
+		CommonButton* ok_menu = CommonButton::create("확인", 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
 		ok_menu->setPosition(ccp(363,160));
+		ok_menu->setFunction([=](CCObject* sender)
+							 {
+								 CCNode* t_node = CCNode::create();
+								 t_node->setTag(kTitleRenewal_MT_nick);
+								 menuAction(t_node);
+							 });
 		addChild(ok_menu, 0, kTitleRenewal_MT_nick);
+
 		
 		is_menu_enable = true;
 	}
@@ -1191,15 +1193,15 @@ void TitleRenewalScene::failDownloadAction()
 {
 	state_label->setString("이미지 받아오기 실패");
 	
-	CCSprite* n_replay = CCSprite::create("cardsetting_zoom.png");
-	CCSprite* s_replay = CCSprite::create("cardsetting_zoom.png");
-	s_replay->setColor(ccGRAY);
-	
-	CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(TitleRenewalScene::menuAction));
-	replay_item->setTag(kTitleRenewal_MT_redown);
-	
-	CCMenu* replay_menu = CCMenu::createWithItem(replay_item);
+	CommonButton* replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
 	replay_menu->setPosition(ccp(240,160));
+	replay_menu->setFunction([=](CCObject* sender)
+							 {
+								 CCNode* t_node = CCNode::create();
+								 t_node->setTag(kTitleRenewal_MT_redown);
+								 menuAction(t_node);
+							 });
+	
 	addChild(replay_menu, 0, kTitleRenewal_MT_redown);
 	
 	is_menu_enable = true;

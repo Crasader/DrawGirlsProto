@@ -79,17 +79,16 @@ bool CardStrengthPopup::init()
 	addChild(main_case, kCardStrengthPopupZorder_back);
 	
 	
-	CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
-	CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
-	s_close->setColor(ccGRAY);
-	
-	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(CardStrengthPopup::menuAction));
-	close_item->setTag(kCardStrengthPopupMenuTag_close);
-	
-	CCMenu* close_menu = CCMenu::createWithItem(close_item);
+	CommonButton* close_menu = CommonButton::createCloseButton(-184);
 	close_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_close));
+	close_menu->setFunction([=](CCObject* sender)
+							{
+								CCNode* t_node = CCNode::create();
+								t_node->setTag(kCardStrengthPopupMenuTag_close);
+								menuAction(t_node);
+							});
 	main_case->addChild(close_menu, kCardStrengthPopupZorder_content);
-	close_menu->setTouchPriority(-184);
+
 	
 	
 	CCSprite* n_high_strength = CCSprite::create("cardstrength_high_strength.png");
@@ -154,30 +153,29 @@ bool CardStrengthPopup::init()
 	normal_strength_menu->setTouchPriority(-184);
 	
 	
-	CCSprite* n_align_rank = CCSprite::create("cardstrength_align_rank.png");
-	CCSprite* s_align_rank = CCSprite::create("cardstrength_align_rank.png");
-	s_align_rank->setColor(ccGRAY);
 	
-	CCMenuItem* align_rank_item = CCMenuItemSprite::create(n_align_rank, s_align_rank, this, menu_selector(CardStrengthPopup::menuAction));
-	align_rank_item->setTag(kCardStrengthPopupMenuTag_alignRank);
-	
-	CCMenu* align_rank_menu = CCMenu::createWithItem(align_rank_item);
+	CommonButton* align_rank_menu = CommonButton::create("등급순", 14, CCSizeMake(75,45), CommonButtonYellow, -184);
+	align_rank_menu->setTitleColor(ccBLACK);
 	align_rank_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_alignRank));
 	main_case->addChild(align_rank_menu, kCardStrengthPopupZorder_content);
-	align_rank_menu->setTouchPriority(-184);
+	align_rank_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kCardStrengthPopupMenuTag_alignRank);
+									 menuAction(t_node);
+								 });
+
 	
-	
-	CCSprite* n_align_take = CCSprite::create("cardstrength_align_take.png");
-	CCSprite* s_align_take = CCSprite::create("cardstrength_align_take.png");
-	s_align_take->setColor(ccGRAY);
-	
-	CCMenuItem* align_take_item = CCMenuItemSprite::create(n_align_take, s_align_take, this, menu_selector(CardStrengthPopup::menuAction));
-	align_take_item->setTag(kCardStrengthPopupMenuTag_alignTake);
-	
-	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
+	CommonButton* align_take_menu = CommonButton::create("획득순", 14, CCSizeMake(75,45), CommonButtonYellow, -184);
+	align_take_menu->setTitleColor(ccBLACK);
 	align_take_menu->setPosition(getContentPosition(kCardStrengthPopupMenuTag_alignTake));
 	main_case->addChild(align_take_menu, kCardStrengthPopupZorder_content);
-	align_take_menu->setTouchPriority(-184);
+	align_take_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kCardStrengthPopupMenuTag_alignTake);
+									 menuAction(t_node);
+								 });
 	
 	
 	CCSprite* strength_tab = CCSprite::create("cardstrength_tab_strength.png");

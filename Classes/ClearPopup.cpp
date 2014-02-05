@@ -1359,7 +1359,6 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kCFC_T_img);
 	profileImg->setPosition(ccp(52, 22));
-	profileImg->setScale(35.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kCFC_Z_img);
 	
 	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();

@@ -22,6 +22,7 @@
 #include "CardStrengthPopup.h"
 #include "TutorialFlowStep.h"
 #include "TouchSuctionLayer.h"
+#include "CommonButton.h"
 
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -116,69 +117,64 @@ bool CardSettingPopup::init()
 	addChild(t_suction);
 	
 	
-	CCSprite* n_close = CCSprite::create("cardchange_cancel.png");
-	CCSprite* s_close = CCSprite::create("cardchange_cancel.png");
-	s_close->setColor(ccGRAY);
-	
-	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(CardSettingPopup::menuAction));
-	close_item->setTag(kCSS_MT_close);
-	
-	CCMenu* close_menu = CCMenu::createWithItem(close_item);
+	CommonButton* close_menu = CommonButton::createCloseButton(-185);
 	close_menu->setPosition(getContentPosition(kCSS_MT_close));
+	close_menu->setFunction([=](CCObject* sender)
+							{
+								CCNode* t_node = CCNode::create();
+								t_node->setTag(kCSS_MT_close);
+								menuAction(t_node);
+							});
 	main_case->addChild(close_menu, kCSS_Z_content);
-	close_menu->setTouchPriority(-185);
 	
 	
-	CCSprite* n_strength = CCSprite::create("cardsetting_strength.png");
-	CCSprite* s_strength = CCSprite::create("cardsetting_strength.png");
-	s_strength->setColor(ccGRAY);
-	
-	CCMenuItem* strength_item = CCMenuItemSprite::create(n_strength, s_strength, this, menu_selector(CardSettingPopup::menuAction));
-	strength_item->setTag(kCSS_MT_strength);
-	
-	CCMenu* strength_menu = CCMenu::createWithItem(strength_item);
+	CommonButton* strength_menu = CommonButton::create("카드강화", 12, CCSizeMake(100,40), CommonButtonYellow, -185);
+	strength_menu->setTitleColor(ccBLACK);
 	strength_menu->setPosition(ccp(78,31));
 	main_case->addChild(strength_menu, kCSS_Z_content);
-	strength_menu->setTouchPriority(-185);
+	strength_menu->setFunction([=](CCObject* sender)
+							   {
+								   CCNode* t_node = CCNode::create();
+								   t_node->setTag(kCSS_MT_strength);
+								   menuAction(t_node);
+							   });
 	
 	
-	CCSprite* n_align_default = CCSprite::create("cardstrength_align_default.png");
-	CCSprite* s_align_default = CCSprite::create("cardstrength_align_default.png");
-	s_align_default->setColor(ccGRAY);
-	
-	CCMenuItem* align_default_item = CCMenuItemSprite::create(n_align_default, s_align_default, this, menu_selector(CardSettingPopup::menuAction));
-	align_default_item->setTag(kCSS_MT_alignDefault);
-	
-	CCMenu* align_default_menu = CCMenu::createWithItem(align_default_item);
-	align_default_menu->setPosition(ccp(248,31));
+	CommonButton* align_default_menu = CommonButton::create("기본정렬", 12, CCSizeMake(75,42), CommonButtonGreen, -185);
+	align_default_menu->setTitleColor(ccBLACK);
+	align_default_menu->setPosition(ccp(254,31));
 	main_case->addChild(align_default_menu, kCSS_Z_alignButton);
-	align_default_menu->setTouchPriority(-185);
+	align_default_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kCSS_MT_alignDefault);
+									 menuAction(t_node);
+								 });
 	
 	
-	CCSprite* n_align_take = CCSprite::create("cardstrength_align_take.png");
-	CCSprite* s_align_take = CCSprite::create("cardstrength_align_take.png");
-	s_align_take->setColor(ccGRAY);
-	
-	CCMenuItem* align_take_item = CCMenuItemSprite::create(n_align_take, s_align_take, this, menu_selector(CardSettingPopup::menuAction));
-	align_take_item->setTag(kCSS_MT_alignTake);
-	
-	CCMenu* align_take_menu = CCMenu::createWithItem(align_take_item);
-	align_take_menu->setPosition(ccp(330,31));
+	CommonButton* align_take_menu = CommonButton::create("획득순", 12, CCSizeMake(75,42), CommonButtonGreen, -185);
+	align_take_menu->setTitleColor(ccBLACK);
+	align_take_menu->setPosition(ccp(333,31));
 	main_case->addChild(align_take_menu, kCSS_Z_alignButton);
-	align_take_menu->setTouchPriority(-185);
+	align_take_menu->setFunction([=](CCObject* sender)
+									{
+										CCNode* t_node = CCNode::create();
+										t_node->setTag(kCSS_MT_alignTake);
+										menuAction(t_node);
+									});
 	
 	
-	CCSprite* n_align_rank = CCSprite::create("cardstrength_align_rank.png");
-	CCSprite* s_align_rank = CCSprite::create("cardstrength_align_rank.png");
-	s_align_rank->setColor(ccGRAY);
-	
-	CCMenuItem* align_rank_item = CCMenuItemSprite::create(n_align_rank, s_align_rank, this, menu_selector(CardSettingPopup::menuAction));
-	align_rank_item->setTag(kCSS_MT_alignRank);
-	
-	CCMenu* align_rank_menu = CCMenu::createWithItem(align_rank_item);
+	CommonButton* align_rank_menu = CommonButton::create("등급순", 12, CCSizeMake(75,42), CommonButtonGreen, -185);
+	align_rank_menu->setTitleColor(ccBLACK);
 	align_rank_menu->setPosition(ccp(412,31));
 	main_case->addChild(align_rank_menu, kCSS_Z_alignButton);
-	align_rank_menu->setTouchPriority(-185);
+	align_rank_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kCSS_MT_alignRank);
+									 menuAction(t_node);
+								 });
+	
 	
 	CCSprite* title_case = CCSprite::create("cardsetting_title.png");
 	title_case->setPosition(ccp(240,256));

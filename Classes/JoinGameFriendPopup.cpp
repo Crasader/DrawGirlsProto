@@ -56,7 +56,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 //	back2->setContentSize(CCSizeMake(445, 260));
 //	addChild(back2, kZorderJoinGameFriendBack);
 
-	GivenFriendList* givenFriendList = GivenFriendList::create();
+	givenFriendList = GivenFriendList::create();
 	addChild(givenFriendList,kZorderJoinGameFriendContent);
 
 
@@ -79,6 +79,8 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 
 	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
 	closeBtn->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
+		hspConnector::get()->removeTarget(givenFriendList);
 		this->hidePopup();
 	});
 	
@@ -106,6 +108,8 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	inviteEventBtn->setTitleColor(ccc3(200, 200, 200));
 	inviteEventBtn->setTitleColorForDisable(ccc3(20, 0, 0));
 	inviteEventBtn->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
+		hspConnector::get()->removeTarget(givenFriendList);
 		InviteEventPopup* t_rp = InviteEventPopup::create(t_close, d_close);
 		t_rp->setOpenAnimation(false);
 		getParent()->addChild(t_rp, this->getZOrder());
@@ -134,6 +138,8 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	friendList->setTitleColor(ccc3(200, 200, 200));
 	friendList->setTitleColorForDisable(ccc3(20, 0, 0));
 	friendList->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
+		hspConnector::get()->removeTarget(givenFriendList);
 		FriendListPopup* t_rp = FriendListPopup::create(t_close, d_close);
 		t_rp->setOpenAnimation(false);
 		getParent()->addChild(t_rp, this->getZOrder());
@@ -164,6 +170,8 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	joinGameFriend->setTitleColor(ccc3(200, 200, 200));
 	joinGameFriend->setTitleColorForDisable(ccc3(20, 0, 0));
 	joinGameFriend->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
+		hspConnector::get()->removeTarget(givenFriendList);
 
 	});
 	joinGameFriend->setPosition(ccp(375, 255));
@@ -209,7 +217,7 @@ void JoinGameFriendPopup::loadRank()
 	//step1 ƒ´ƒ´ø¿ƒ£±∏∏Ò∑œ ∑ŒµÂ
 	Json::Value param;
 	param["limit"] = 40;
-	hspConnector::get()->command("getuserlistbyrandom", param,
+	hspConnector::get()->command("getuserlistbyrandom", param,this,
 			bind(&ThisClassType::drawRank, this, std::placeholders::_1));
 }
 
@@ -252,7 +260,7 @@ void JoinGameFriendPopup::drawRank( Json::Value obj )
 	rankTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	
 	//±‚¡ÿ¡° 0,0
-	rankTableView->setPosition(ccp(243, 320 - 297));
+	rankTableView->setPosition(ccp(243, 23));
 	
 	//µ•¿Ã≈Õ∏¶ ∞°¡Æø¿∞Ì≥™ ≈Õƒ° ¿Ã∫•∆Æ∏¶ π›»Ø«ÿ¡Ÿ ¥Î∏Æ¿⁄∏¶ ¿Ã ≈¨∑°Ω∫∑Œ º≥¡§.
 	rankTableView->setDelegate(this);
@@ -326,7 +334,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 			 p["senderMemberID"]=hspConnector::get()->getKakaoID();
 			 p["type"] = kUnknownFriendRequest;
 			 
-			 hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
+			 hspConnector::get()->command("sendMessage", p,this, [=](Json::Value r)
 																		{
 																			//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
 																			//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
@@ -437,7 +445,7 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 	
 	Json::Value param;
 	param["memberID"] = recvId;
-	hspConnector::get()->command("getUserData", param,
+	hspConnector::get()->command("getUserData", param,this,
 															 [=](Json::Value t)
 															 {
 																 KS::KSLog("zz %", t);

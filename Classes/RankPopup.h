@@ -90,12 +90,12 @@ class RankPopup : public DimmedPopup, public CCTableViewDataSource, public CCTab
 public:
   static RankPopup * create (CCObject * t_close, SEL_CallFunc d_close);
   virtual ~ RankPopup ();
-  void finishedOpen ();
-  void finishedClose ();
+  //void finishedOpen ();
+  //void finishedClose ();
   void myInit (CCObject * t_close, SEL_CallFunc d_close);
   void loadRank ();
   void drawRank (Json::Value obj);
-  void closePopup (CCControlButton * obj, CCControlEvent event);
+  //void closePopup (CCControlButton * obj, CCControlEvent event);
   virtual CCTableViewCell * tableCellAtIndex (CCTableView * table, unsigned int idx);
 
   virtual void scrollViewDidScroll (CCScrollView * view);

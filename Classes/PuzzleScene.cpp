@@ -26,6 +26,7 @@
 #include "TutorialFlowStep.h"
 #include "AlertEngine.h"
 #include "TouchSuctionLayer.h"
+#include "CommonButton.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -748,7 +749,6 @@ enum PuzzleMenuTag{
 	kPuzzleMenuTag_challenge,
 	kPuzzleMenuTag_rightReward,
 	kPuzzleMenuTag_rightRank,
-	kPuzzleMenuTag_rightMonster,
 	kPuzzleMenuTag_changeMode
 };
 
@@ -1428,13 +1428,6 @@ void PuzzleScene::menuAction(CCObject* sender)
 			setRightContent();
 			is_menu_enable = true;
 		}
-		else if(tag == kPuzzleMenuTag_rightMonster)
-		{
-			recent_right_code = kPuzzleRightCode_monster;
-			setRightHead();
-			setRightContent();
-			is_menu_enable = true;
-		}
 		else if(tag == kPuzzleMenuTag_start)
 		{
 			int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
@@ -1544,17 +1537,15 @@ void PuzzleScene::setRightHead()
 	
 	if(recent_right_code == kPuzzleRightCode_reward)
 	{
-//		CCSprite* n_monster = CCSprite::create("puzzle_right_monster_off.png");
-//		CCSprite* s_monster = CCSprite::create("puzzle_right_monster_off.png");
-//		s_monster->setColor(ccGRAY);
-//		
-//		CCMenuItem* monster_item = CCMenuItemSprite::create(n_monster, s_monster, this, menu_selector(PuzzleScene::menuAction));
-//		monster_item->setTag(kPuzzleMenuTag_rightMonster);
-//		
-//		CCMenu* monster_menu = CCMenu::createWithItem(monster_item);
-//		monster_menu->setPosition(ccp(n_monster->getContentSize().width-4, 0));
-//		right_head->addChild(monster_menu);
-		
+//		CommonButton* rank_menu = CommonButton::create("랭킹", 12, CCSizeMake(72, 42), CommonButtonPupple, kCCMenuHandlerPriority);
+//		rank_menu->setPosition(ccp(32, -11));
+//		rank_menu->setFunction([=](CCObject* sender)
+//							   {
+//								   CCNode* t_node = CCNode::create();
+//								   t_node->setTag(kPuzzleMenuTag_rightRank);
+//								   menuAction(t_node);
+//							   });
+//		right_head->addChild(rank_menu);
 		
 		CCSprite* n_rank = CCSprite::create("puzzle_right_rank_off.png");
 		CCSprite* s_rank = CCSprite::create("puzzle_right_rank_off.png");
@@ -1566,14 +1557,19 @@ void PuzzleScene::setRightHead()
 		CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
 		rank_menu->setPosition(ccp(32, -11));
 		right_head->addChild(rank_menu);
-		
-		
-//		CCSprite* reward_img = CCSprite::create("puzzle_right_reward_on.png");
-//		reward_img->setPosition(ccp(-33, -12));
-//		right_head->addChild(reward_img);
 	}
 	else if(recent_right_code == kPuzzleRightCode_rank)
 	{
+//		CommonButton* reward_menu = CommonButton::create("보상", 12, CCSizeMake(72, 42), CommonButtonPupple, kCCMenuHandlerPriority);
+//		reward_menu->setPosition(ccp(-33, -11));
+//		reward_menu->setFunction([=](CCObject* sender)
+//							   {
+//								   CCNode* t_node = CCNode::create();
+//								   t_node->setTag(kPuzzleMenuTag_rightReward);
+//								   menuAction(t_node);
+//							   });
+//		right_head->addChild(reward_menu);
+		
 		CCSprite* n_reward = CCSprite::create("puzzle_right_reward_off.png");
 		CCSprite* s_reward = CCSprite::create("puzzle_right_reward_off.png");
 		s_reward->setColor(ccGRAY);
@@ -1584,53 +1580,6 @@ void PuzzleScene::setRightHead()
 		CCMenu* reward_menu = CCMenu::createWithItem(reward_item);
 		reward_menu->setPosition(ccp(-33, -11));
 		right_head->addChild(reward_menu);
-		
-		
-//		CCSprite* n_monster = CCSprite::create("puzzle_right_monster_off.png");
-//		CCSprite* s_monster = CCSprite::create("puzzle_right_monster_off.png");
-//		s_monster->setColor(ccGRAY);
-//		
-//		CCMenuItem* monster_item = CCMenuItemSprite::create(n_monster, s_monster, this, menu_selector(PuzzleScene::menuAction));
-//		monster_item->setTag(kPuzzleMenuTag_rightMonster);
-//		
-//		CCMenu* monster_menu = CCMenu::createWithItem(monster_item);
-//		monster_menu->setPosition(ccp(n_monster->getContentSize().width-4, 0));
-//		right_head->addChild(monster_menu);
-		
-		
-//		CCSprite* rank_img = CCSprite::create("puzzle_right_rank_on.png");
-//		rank_img->setPosition(ccp(33,-12));
-//		right_head->addChild(rank_img);
-	}
-	else if(recent_right_code == kPuzzleRightCode_monster)
-	{
-		CCSprite* n_reward = CCSprite::create("puzzle_right_reward_off.png");
-		CCSprite* s_reward = CCSprite::create("puzzle_right_reward_off.png");
-		s_reward->setColor(ccGRAY);
-		
-		CCMenuItem* reward_item = CCMenuItemSprite::create(n_reward, s_reward, this, menu_selector(PuzzleScene::menuAction));
-		reward_item->setTag(kPuzzleMenuTag_rightReward);
-		
-		CCMenu* reward_menu = CCMenu::createWithItem(reward_item);
-		reward_menu->setPosition(ccp(-n_reward->getContentSize().width+4, 0));
-		right_head->addChild(reward_menu);
-		
-		
-		CCSprite* n_rank = CCSprite::create("puzzle_right_rank_off.png");
-		CCSprite* s_rank = CCSprite::create("puzzle_right_rank_off.png");
-		s_rank->setColor(ccGRAY);
-		
-		CCMenuItem* rank_item = CCMenuItemSprite::create(n_rank, s_rank, this, menu_selector(PuzzleScene::menuAction));
-		rank_item->setTag(kPuzzleMenuTag_rightRank);
-		
-		CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
-		rank_menu->setPosition(CCPointZero);
-		right_head->addChild(rank_menu);
-		
-		
-//		CCSprite* monster_img = CCSprite::create("puzzle_right_monster_on.png");
-//		monster_img->setPosition(ccp(monster_img->getContentSize().width-4, 0));
-//		right_head->addChild(monster_img);
 	}
 }
 
@@ -1658,14 +1607,6 @@ void PuzzleScene::setRightContent()
 		reward_node->setVisible(false);
 		rank_node->setVisible(true);
 //		monster_node->setVisible(false);
-	}
-	else if(recent_right_code == kPuzzleRightCode_monster)
-	{
-//		setMonster();
-		
-		reward_node->setVisible(false);
-		rank_node->setVisible(false);
-//		monster_node->setVisible(true);
 	}
 	if(start_menu)
 		start_menu->setTouchEnabled(reward_node->isVisible());
@@ -2023,7 +1964,6 @@ CCTableViewCell* PuzzleScene::tableCellAtIndex( CCTableView *table, unsigned int
 	CCSprite* profileImg = GDWebSprite::create((*member).img_url, "ending_noimg.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setPosition(ccp(21, 21));
-	profileImg->setScale(29.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg);
 	
 	if(my_id != cell_id && KnownFriends::getInstance()->findById(cell_id) != nullptr)

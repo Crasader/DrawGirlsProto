@@ -483,6 +483,10 @@ void FailPopup::endDecreaseCardDuration()
 		/// ksks
 		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), false, [=](){closePopup();}), kZ_FP_popup);
 	}
+	else
+	{
+		closePopup();
+	}
 }
 
 void FailPopup::onEnter()
@@ -937,16 +941,6 @@ void FailPopup::menuAction(CCObject* pSender)
 	}
 }
 
-void FailPopup::popupClose()
-{
-	is_menu_enable = true;
-}
-
-void FailPopup::closeReplayPopup()
-{
-	is_menu_enable = true;
-}
-
 void FailPopup::cellAction( CCObject* sender )
 {
 	//	int tag = ((CCNode*)sender)->getTag();
@@ -1073,7 +1067,6 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setTag(kFFC_T_img);
 	profileImg->setPosition(ccp(52, 22));
-	profileImg->setScale(35.f / profileImg->getContentSize().width);
 	cell->addChild(profileImg, kFFC_Z_img);
 	
 	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();

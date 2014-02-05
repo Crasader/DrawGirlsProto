@@ -187,6 +187,9 @@ public:
     bool command(const char* action, const Json::Value param,function<void(Json::Value)> func){
         return graphdog->command(action,param,func);
     }
+		bool command(const char* action, const Json::Value param,CCObject* obj,function<void(Json::Value)> func){
+			return graphdog->command(action,param,obj,func);
+		}
 	
 	bool command(const char* action, const char* param,function<void(Json::Value)> func){
 		Json::Reader r;
@@ -195,7 +198,9 @@ public:
         return graphdog->command(action,p,func);
     }
 	
-    
+	void removeTarget(CCObject* obj){
+		graphdog->removeTarget(obj);
+	}
     long long int getHSPMemberNo();
 	string getKakaoID();
     string getKakaoProfileURL();

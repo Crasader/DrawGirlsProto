@@ -115,10 +115,10 @@ RankPopup::~ RankPopup ()
 {
 	StageImgLoader::sharedInstance()->removeTD();
 }
-void RankPopup::finishedOpen ()
-{
-	loadRank();
-}
+//void RankPopup::finishedOpen ()
+//{
+//	loadRank();
+//}
 
 
 void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
@@ -167,6 +167,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 
 	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
 	closeBtn->setFunction([=](CCObject*){
+		hspConnector::get()->removeTarget(this);
 		this->hidePopup();
 	});
 	
@@ -397,7 +398,7 @@ void RankPopup::loadRank ()
 	{
 		Json::Value p;
 		p["memberID"] = hspConnector::get()->getKakaoID();
-		hspConnector::get()->command("getallweeklyscorelist",p,[=](Json::Value obj) {
+		hspConnector::get()->command("getallweeklyscorelist",p,this,[=](Json::Value obj) {
 			if(obj["result"]["code"].asInt() != GDSUCCESS){
 				return;
 			}
@@ -533,7 +534,7 @@ void RankPopup::loadRank ()
 
 		p["memberIDList"].append(hspConnector::get()->getKakaoID());
 		//step2 위클리스코어 목록 읽어옴
-		hspConnector::get()->command("getweeklyscorelist",p,[p1,appfriends,this](Json::Value obj) {
+		hspConnector::get()->command("getweeklyscorelist",p,this,[p1,appfriends,this](Json::Value obj) {
 			// 남은 초.... obj["remainTime"].asInt();
 			int remainSeconds = obj["remainTime"].asInt();
 			std::string remainStr = ::getRemainTimeMsg(remainSeconds);
@@ -645,11 +646,11 @@ void RankPopup::drawRank (Json::Value obj)
 											  , 0.3f);
 	//테이블 뷰 생성 끝/////////////////////////////////////////////////////////////////////////////////////////
 }
-void RankPopup::closePopup (CCControlButton * obj, CCControlEvent event)
-{
-	//		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
-	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedClose)),NULL));
-}
+//void RankPopup::closePopup (CCControlButton * obj, CCControlEvent event)
+//{
+//	//		gray->runAction(CCSpawn::create(CCFadeOut::create(0.5),CCMoveBy::create(0.5,CCPoint(0,400)),NULL));
+//	this->runAction(CCSequence::create(CCMoveBy::create(0.5, CCPoint(0,-400)),CCCallFunc::create(this, callfunc_selector(RankPopup::finishedClose)),NULL));
+//}
 CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int idx)
 {
 	
@@ -727,12 +728,12 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 	// 카톡 마크 붙임.
 	
-	if(!KnownFriends::getInstance()->findById((*member)["user_id"].asString()) &&
+	if(KnownFriends::getInstance()->findById((*member)["user_id"].asString()) &&
 		 (*member)["user_id"].asString() != hspConnector::get()->myKakaoInfo["user_id"].asString())
 	{
-		CCSprite* katokMark = CCSprite::create("rank_kakao.png");
+		CCSprite* katokMark = CCSprite::create("puzzle_right_rank_kakao.png");
 		cell->addChild(katokMark, kRP_Z_profileImg);
-		katokMark->setPosition(ccp(49.5f, 22) - ccp(19, 19) + ccp(katokMark->getContentSize().width / 2.f, katokMark->getContentSize().height / 2.f));
+		katokMark->setPosition(ccp(45, 27));
 		
 	}
 	
@@ -798,7 +799,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 p["type"]=kHeart;
 						 p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 
-						 hspConnector::get()->command("sendMessage", p, [=](Json::Value r) {
+						 hspConnector::get()->command("sendMessage", p, this,[=](Json::Value r) {
 							 //		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
 							 //		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
 							 //		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
@@ -1078,7 +1079,7 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 				
 				Json::Value param;
 				param["noList"][0] = loading_card_number;
-				hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+				hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 			}
 			else
 				loading_card_number = 0;
@@ -1103,7 +1104,7 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 			
 			Json::Value param;
 			param["noList"][0] = loading_card_number;
-			hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+			hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 		}
 		else
 			loading_card_number = 0;
@@ -1163,7 +1164,7 @@ void RankPopup::successAction ()
 			
 			Json::Value param;
 			param["noList"][0] = loading_card_number;
-			hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+			hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 		}
 		else
 			loading_card_number = 0;
@@ -1202,7 +1203,7 @@ void RankPopup::failAction ()
 		
 		Json::Value param;
 		param["noList"][0] = loading_card_number;
-		hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+		hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 	}
 	else
 		loading_card_number = 0;
@@ -1669,7 +1670,7 @@ void RankPopup::touchCellIndex(int idx)
 				
 				Json::Value param;
 				param["noList"][0] = loading_card_number;
-				hspConnector::get()->command("getcardlist", param, json_selector(this, RankPopup::resultLoadedCardInfo));
+				hspConnector::get()->command("getcardlist", param, this,json_selector(this, RankPopup::resultLoadedCardInfo));
 			}
 			else
 				after_loading_card_number = selectedCardIndex;

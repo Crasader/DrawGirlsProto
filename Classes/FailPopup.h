@@ -81,9 +81,6 @@ private:
 	
 	void endDecreaseCardDuration();
 	
-	void closeReplayPopup();
-	void popupClose();
-	
 	vector<RankFriendInfo> friend_list;
 	CCTableView* rankTableView;
 	
