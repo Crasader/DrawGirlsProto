@@ -71,7 +71,7 @@ bool CountingGame::init(int priority, const std::function<void(CCObject*, SEL_Ca
 	m_timeFnt->setPosition(ccp(420, 270));
 	addChild(m_timeFnt, 2);
 	
-	auto ready_go = KS::loadCCBI<CCLayer*>(this, "ui_ready.ccbi");
+	auto ready_go = KS::loadCCBI<CCSprite*>(this, "ui_ready.ccbi");
 	addChild(ready_go.first);
 	ready_go.first->setPosition(ccp(240, 160));
 //	addChild(KSTimer::create(3.f, [=]()

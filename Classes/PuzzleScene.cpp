@@ -1964,7 +1964,7 @@ CCTableViewCell* PuzzleScene::tableCellAtIndex( CCTableView *table, unsigned int
 	CCSprite* profileImg = GDWebSprite::create((*member).img_url, "ending_noimg.png");
 	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 	profileImg->setPosition(ccp(21, 21));
-	cell->addChild(profileImg);
+	cell->addChild(profileImg, -1);
 	
 	if(my_id != cell_id && KnownFriends::getInstance()->findById(cell_id) != nullptr)
 	{

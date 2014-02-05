@@ -67,10 +67,10 @@ private:
 		
 		CCLabelTTF* recent_durability_label = t_case->getRecentDurabilityLabel();
 		recent_durability_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_durability_i, mySGD->getSelectedFriendCardData().card_number))->getCString());
-		recent_durability_label->setPosition(ccpAdd(recent_durability_label->getPosition(), ccp(6,-1)));
+//		recent_durability_label->setPosition(ccpAdd(recent_durability_label->getPosition(), ccp(6,-1)));
 		recent_durability_label->setFontSize(recent_durability_label->getFontSize()+3);
 		
-		t_case->getTotalDurabilityLabel()->removeFromParent();
+//		t_case->getTotalDurabilityLabel()->removeFromParent();
 		
 		card_back = CCSprite::create("ending_take_card_back.png");
 		card_back->setVisible(false);

@@ -118,6 +118,8 @@ class MailPopup : public DimmedPopup, public CCTableViewDataSource, public CCTab
 		void failAction();
 		void startDownloadCardImage ();
 		void startDownload ();
+	
+	bool isLoaded;
 };
 #undef LZZ_INLINE
 #endif

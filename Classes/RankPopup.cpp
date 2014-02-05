@@ -1246,10 +1246,10 @@ void RankPopup::addCardImg (int t_card_number, int t_card_level, string t_passiv
 	
 	CCLabelTTF* recent_durability_label = t_case->getRecentDurabilityLabel();
 	recent_durability_label->setString(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_durability_i, t_card_number))->getCString());
-	recent_durability_label->setPosition(ccpAdd(recent_durability_label->getPosition(), ccp(6,-1)));
+//	recent_durability_label->setPosition(ccpAdd(recent_durability_label->getPosition(), ccp(6,-1)));
 	recent_durability_label->setFontSize(recent_durability_label->getFontSize()+3);
 	
-	t_case->getTotalDurabilityLabel()->removeFromParent();
+//	t_case->getTotalDurabilityLabel()->removeFromParent();
 }
 void RankPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 {

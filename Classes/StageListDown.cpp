@@ -363,6 +363,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			
 			download_version = result_data["version"].asInt();
 			state_ment->setString("퍼즐 이미지를 다운로드 합니다.");
+			state_ment->setPosition(ccp(240,80));
 			ing_download_cnt = 1;
 			ing_download_per = 0;
 			download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString(), "etc_font.fnt");
