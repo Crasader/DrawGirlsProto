@@ -269,9 +269,9 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 	
 	CCLog("parse data : %s", GraphDogLib::JsonObjectToString(data).c_str());
 	
-	setIntegerForKey(kDSH_Key_savedStar, data[getKey(kDSH_Key_savedStar)].asInt(), false);
-	setIntegerForKey(kDSH_Key_savedGold, data[getKey(kDSH_Key_savedGold)].asInt(), false);
-	setIntegerForKey(kDSH_Key_savedFriendPoint, data[getKey(kDSH_Key_savedFriendPoint)].asInt(), false);
+	setIntegerForKey(kDSH_Key_savedStar, data.get(getKey(kDSH_Key_savedStar), default_ruby).asInt(), false);
+	setIntegerForKey(kDSH_Key_savedGold, data.get(getKey(kDSH_Key_savedGold), default_gold).asInt(), false);
+	setIntegerForKey(kDSH_Key_savedFriendPoint, data.get(getKey(kDSH_Key_savedFriendPoint), default_social).asInt(), false);
 	
 	setIntegerForKey(kDSH_Key_heartCnt, data[getKey(kDSH_Key_heartCnt)].asInt(), false);
 	setIntegerForKey(kDSH_Key_heartTime, data[getKey(kDSH_Key_heartTime)].asInt(), false);
