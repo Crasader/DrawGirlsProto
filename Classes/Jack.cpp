@@ -20,15 +20,107 @@ void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 	
 	bool isFinded = false;
 	IntPoint findedPoint;
+	bool is_not_outline_found = false;
+	IntPoint not_outline_found_point;
 	
-	while(!bfsArray.empty() && !isFinded)
+	while(!bfsArray.empty() && !is_not_outline_found)//!isFinded)
 	{
 		IntMoveState t_ms = bfsArray.front();
 		bfsArray.pop();
 		if(myGD->mapState[t_ms.origin.x][t_ms.origin.y] == mapOldline)
 		{
-			isFinded = true;
-			findedPoint = t_ms.origin;
+			if(!isFinded)
+			{
+				isFinded = true;
+				findedPoint = t_ms.origin;
+			}
+			
+			if((t_ms.origin.x != mapWidthInnerBegin && t_ms.origin.x != mapWidthInnerEnd-1) && (t_ms.origin.y != mapHeightInnerBegin || t_ms.origin.y != mapHeightInnerEnd-1))
+			{
+				is_not_outline_found = true;
+				not_outline_found_point = t_ms.origin;
+			}
+			else
+			{
+				if(t_ms.direction == directionStop)
+				{
+					for(int i = directionLeftUp;i <= directionUp; i++)
+					{
+						IntVector t_v = IntVector::directionVector((IntDirection)i);
+						IntMoveState n_ms = IntMoveState(t_ms.origin.x+t_v.dx, t_ms.origin.y+t_v.dy, (IntDirection)i);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);
+					}
+				}
+				else if(t_ms.direction == directionLeftUp)
+				{
+					for(int i = directionLeftUp;i <= directionLeft; i++)
+					{
+						IntVector t_v = IntVector::directionVector((IntDirection)i);
+						IntMoveState n_ms = IntMoveState(t_ms.origin.x+t_v.dx, t_ms.origin.y+t_v.dy, (IntDirection)i);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);
+					}
+					
+					{	IntMoveState n_ms = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);}
+				}
+				else if(t_ms.direction == directionLeft)
+				{
+					{	IntMoveState n_ms = IntMoveState(t_ms.origin.x-1, t_ms.origin.y, directionLeft);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);}
+				}
+				else if(t_ms.direction == directionLeftDown)
+				{
+					for(int i = directionLeft;i <= directionDown; i++)
+					{
+						IntVector t_v = IntVector::directionVector((IntDirection)i);
+						IntMoveState n_ms = IntMoveState(t_ms.origin.x+t_v.dx, t_ms.origin.y+t_v.dy, (IntDirection)i);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);
+					}
+				}
+				else if(t_ms.direction == directionDown)
+				{
+					{	IntMoveState n_ms = IntMoveState(t_ms.origin.x, t_ms.origin.y-1, directionDown);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);}
+				}
+				else if(t_ms.direction == directionRightDown)
+				{
+					for(int i = directionDown;i <= directionRight; i++)
+					{
+						IntVector t_v = IntVector::directionVector((IntDirection)i);
+						IntMoveState n_ms = IntMoveState(t_ms.origin.x+t_v.dx, t_ms.origin.y+t_v.dy, (IntDirection)i);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);
+					}
+				}
+				else if(t_ms.direction == directionRight)
+				{
+					{	IntMoveState n_ms = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);}
+				}
+				else if(t_ms.direction == directionRightUp)
+				{
+					for(int i = directionRight;i <= directionUp; i++)
+					{
+						IntVector t_v = IntVector::directionVector((IntDirection)i);
+						IntMoveState n_ms = IntMoveState(t_ms.origin.x+t_v.dx, t_ms.origin.y+t_v.dy, (IntDirection)i);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);
+					}
+				}
+				else if(t_ms.direction == directionUp)
+				{
+					{	IntMoveState n_ms = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+						if(n_ms.origin.isInnerMap())
+							bfsArray.push(n_ms);}
+				}
+			}
 		}
 		else
 		{
@@ -113,10 +205,15 @@ void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 		}
 	}
 	
-	if(isFinded && !findedPoint.isNull())
+	if(is_not_outline_found && !not_outline_found_point.isNull())
+	{
+		myGD->setJackPoint(not_outline_found_point);
+		setPosition(not_outline_found_point.convertToCCP());
+	}
+	else if(isFinded && !findedPoint.isNull())
 	{
 		myGD->setJackPoint(findedPoint);
-		setPosition(ccp((findedPoint.x-1)*pixelSize+1, (findedPoint.y-1)*pixelSize+1));
+		setPosition(findedPoint.convertToCCP());
 	}
 	else // escape point not found
 	{
@@ -1777,6 +1874,32 @@ void Jack::escapeJack()
 			myGD->mapState[afterPoint.x+1][afterPoint.y] == mapOldget &&
 			myGD->mapState[afterPoint.x][afterPoint.y-1] == mapOldget &&
 			myGD->mapState[afterPoint.x][afterPoint.y+1] == mapOldget)
+		{
+			IntMoveState searchFirstMoveState = IntMoveState(afterPoint.x, afterPoint.y, directionStop);
+			searchAndMoveOldline(searchFirstMoveState);
+		}
+		
+		bool is_go_inner = (myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline ||
+							myGD->mapState[afterPoint.x-1][afterPoint.y] == mapNewline ||
+							myGD->mapState[afterPoint.x+1][afterPoint.y] == mapNewline ||
+							myGD->mapState[afterPoint.x][afterPoint.y-1] == mapNewline ||
+							myGD->mapState[afterPoint.x][afterPoint.y+1] == mapNewline);
+		for(int x = mapWidthInnerBegin+1;x < mapWidthInnerEnd-1 && !is_go_inner;x++)
+		{
+			if(!(myGD->mapState[x][mapHeightInnerBegin] == mapOldline && myGD->mapState[x][mapHeightInnerBegin+1] == mapOldget))
+				is_go_inner = true;
+			if(!(myGD->mapState[x][mapHeightInnerEnd-1] == mapOldline && myGD->mapState[x][mapHeightInnerEnd-1-1] == mapOldget))
+				is_go_inner = true;
+		}
+		for(int y = mapHeightInnerBegin+1;y < mapHeightInnerEnd-1 && !is_go_inner;y++)
+		{
+			if(!(myGD->mapState[mapWidthInnerBegin][y] == mapOldline && myGD->mapState[mapWidthInnerBegin+1][y] == mapOldget))
+				is_go_inner = true;
+			if(!(myGD->mapState[mapWidthInnerEnd-1][y] == mapOldline && myGD->mapState[mapWidthInnerEnd-1-1][y] == mapOldget))
+				is_go_inner = true;
+		}
+		
+		if(!is_go_inner)
 		{
 			IntMoveState searchFirstMoveState = IntMoveState(afterPoint.x, afterPoint.y, directionStop);
 			searchAndMoveOldline(searchFirstMoveState);

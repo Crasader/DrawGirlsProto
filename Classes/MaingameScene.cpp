@@ -1808,7 +1808,6 @@ void Maingame::continueAction()
 {
 	myLog->addLog(kLOG_action_continue, -1);
 	
-	mySGD->setStar(mySGD->getStar() - mySGD->getPlayContinueFee());
 	myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 	
 	startControl();

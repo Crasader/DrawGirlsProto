@@ -51,6 +51,7 @@ private:
 	function<void(void)> continue_selector;
 	
 	bool is_menu_enable;
+	bool is_continue;
 	
 	void menuAction(CCObject* sender)
 	{
@@ -69,6 +70,7 @@ private:
 		{
 			if(mySGD->getStar() >= mySGD->getPlayContinueFee())
 			{
+				is_continue = true;
 				mySGD->setStar(mySGD->getStar()-mySGD->getPlayContinueFee());
 				CCSprite* price_type = CCSprite::create("price_ruby_img.png");
 				price_type->setOpacity(0);
@@ -165,6 +167,7 @@ private:
 				
 				CCMenuItemLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
 				{
+					is_continue = true;
 					case_back->removeFromParent();
 					mySGD->setStar(mySGD->getStar()+10-mySGD->getPlayContinueFee());
 					CCSprite* price_type = CCSprite::create("price_ruby_img.png");
@@ -224,11 +227,15 @@ private:
 	}
 	void endHide()
 	{
-		continue_selector();
+		if(is_continue)
+			continue_selector();
+		else
+			end_selector();
 	}
 	
 	void myInit(int t_touch_priority, function<void(void)> t_end, function<void(void)> t_continue)
 	{
+		is_continue = false;
 		is_menu_enable = false;
 		
 		touch_priority = t_touch_priority;

@@ -301,6 +301,14 @@ public:
 	
 	void stopAllEffects()
 	{
+		while(loopEffects->count() > 0)
+		{
+			LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(0);
+			CCLog("StopEffect loop find : %s", target->filename.c_str());
+			mySAE->stopEffect(target->effectCode);
+			loopEffects->removeObject(target);
+		}
+		
 		CCLog("StopAllEffect loop");
 		mySAE->stopAllEffects();
 	}
