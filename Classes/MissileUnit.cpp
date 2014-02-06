@@ -3046,7 +3046,7 @@ bool ReaverScarab::processObject (IntPoint pointFrom, IntPoint pointTo, int dist
 			return true;
 	}
 	
-	bool found = false;
+//	bool found = false;
 	auto openedIter = m_openList.find(CoordAndCellInfo(pointTo.x, pointTo.y, 0, 0, 0, 0));
 	
 	auto closedIter = m_closeListMap.find(pointTo);

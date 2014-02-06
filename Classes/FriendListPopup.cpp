@@ -291,7 +291,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 					 {
 						 CCLog("ok!!");
 						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-						 int idx = (int)obj->getUserData();
+//						 int idx = (int)obj->getUserData();
 						 ////////////////////////////////
 						 // ¬ ¡ˆ∫∏≥ª±‚ - HSP
 						 ////////////////////////////////
@@ -380,8 +380,8 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 		deleteBtn = CCMenuItemImageLambda::create
 		("friendlist_delete.png", "friendlist_delete.png",
 		 [=](CCObject* sender){
-			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-			 int idx = (int)obj->getUserData();
+//			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
+//			 int idx = (int)obj->getUserData();
 			 Json::Value param;
 			 
 			 param["memberID"] = hspConnector::get()->getKakaoID();

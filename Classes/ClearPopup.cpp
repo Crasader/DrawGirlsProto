@@ -257,13 +257,13 @@ bool ClearPopup::init()
 		float result_value = uniform_dist(e1);
 		CCLog("result value : %.3f", result_value);
 		
-		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",stage_number,take_level)->getCString());
+		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
 		CardCase* cardCase = CardCase::create(take_card_number);
 		card->addChild(cardCase);
 		
 		
-		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",stage_number,take_level)->getCString());
-		CardCase* cardCase2 = CardCase::create(take_card_number);
+		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
+		CardCase* cardCase2 = CardCase::create(take_card_number, 1, NSDS_GS(kSDS_CI_int1_passive_s, take_card_number));
 		card2->addChild(cardCase2);
 		
 		
@@ -296,7 +296,7 @@ bool ClearPopup::init()
 	{
 		// 획득
 		
-		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",stage_number,take_level)->getCString());
+		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
 		CardCase* cardCase = CardCase::create(take_card_number);
 		card->addChild(cardCase);
 		

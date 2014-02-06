@@ -2177,7 +2177,7 @@ void KSCumberBase::assignBossData(Json::Value boss)
 	
 	int normalMovement = boss["movement"].get("normal",1).asInt();
 	int drawMovement = boss["movement"].get("draw", normalMovement).asInt();
-	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
+//	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
 	
 	float agi = MAX(boss.get("agi", 0).asDouble(), 0);
 	float ai = MAX(0, boss.get("ai", 0).asInt() );

@@ -158,10 +158,8 @@ bool FailPopup::init()
 		{
 			// 소멸
 			int cardNo = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			int cardStage = NSDS_GI(kSDS_CI_int1_stage_i,cardNo);
-			int cardGrade = NSDS_GI(kSDS_CI_int1_grade_i,cardNo);
 			
-			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",cardStage,cardGrade)->getCString());
+			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",cardNo)->getCString());
 			CardCase* cardCase = CardCase::create(cardNo);
 			card->addChild(cardCase);
 			
@@ -198,10 +196,8 @@ bool FailPopup::init()
 		{
 			// 내구 하락
 			int cardNo = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			int cardStage = NSDS_GI(kSDS_CI_int1_stage_i,cardNo);
-			int cardGrade = NSDS_GI(kSDS_CI_int1_grade_i,cardNo);
 			
-			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",cardStage,cardGrade)->getCString());
+			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",cardNo)->getCString());
 			CardCase* cardCase = CardCase::create(cardNo);
 			card->addChild(cardCase);
 			

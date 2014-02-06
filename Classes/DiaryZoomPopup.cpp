@@ -53,28 +53,24 @@ bool DiaryZoomPopup::init()
 	
 	int card_number = mySGD->selected_collectionbook;
 	
-	int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-	int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
-	
-	first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", stage_number, level_number)->getCString());
+	first_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 	first_img->setOpacity(0);
 	first_img->setPosition(ccp(160,215));
 	game_node->addChild(first_img, kDZP_Z_first_img);
 	
-	is_animation = false;
-	if(level_number == 3 && mySD->isAnimationStage(stage_number))
+	is_animation = NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, card_number);
+	if(is_animation)
 	{
-		is_animation = true;
-		eye_ani_size = mySD->getAnimationCutSize(stage_number);
-		loop_length = mySD->getAnimationLoopLength(stage_number);
+		eye_ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, card_number));
+		loop_length = NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, card_number);
 		
 		for(int i=0;i<loop_length;i++)
-			animation_frame.push_back(mySD->getAnimationLoopPoint(i));
+			animation_frame.push_back(NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, card_number, i));
 		
-		CCTexture2D* eye_texture = mySIL->addImage(CCString::createWithFormat("stage%d_level3_animation.png", stage_number)->getCString());
+		CCTexture2D* eye_texture = mySIL->addImage(CCString::createWithFormat("card%d_animation.png", card_number)->getCString());
 		
 		CCSprite* eye = CCSprite::createWithTexture(eye_texture, CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
-		eye->setPosition(mySD->getAnimationPosition());
+		eye->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, card_number)));
 		first_img->addChild(eye, 1, 1);
 	}
 	

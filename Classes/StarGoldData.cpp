@@ -307,37 +307,41 @@ void StarGoldData::setGameStart()
 	deque<int> card_options;
 	deque<int>::iterator iter;
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	mySD->setCardOptions(card_options, selected_card_number);
+	
+	int ability_cnt = NSDS_GI(kSDS_CI_int1_abilityCnt_i, selected_card_number);
+	
+	for(int i=0;i<ability_cnt;i++)
+		card_options.push_back(NSDS_GI(kSDS_CI_int1_ability_int2_type_i, selected_card_number, i));
 
 	doubleItem_value = 0;
 	if(isUsingItem(kIC_doubleItem))		doubleItem_value += mySD->getDoubleItemOption();
 	iter = find(card_options.begin(), card_options.end(), kIC_doubleItem);
-	if(iter != card_options.end())		doubleItem_value += mySD->getCardDoubleItemOption(selected_card_number);
+	if(iter != card_options.end())		doubleItem_value += NSDS_GI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, selected_card_number);
 
 	longTime_value = 0;
 	if(isUsingItem(kIC_longTime))		longTime_value += mySD->getLongTimeItemOption();
 	iter = find(card_options.begin(), card_options.end(), kIC_longTime);
-	if(iter != card_options.end())		longTime_value += mySD->getCardLongTimeItemOption(selected_card_number);
+	if(iter != card_options.end())		longTime_value += NSDS_GI(kSDS_CI_int1_abilityLongTimeOptionSec_i, selected_card_number);
 
 	bossLittleEnergy_value = 0;
 	if(isUsingItem(kIC_bossLittleEnergy))	bossLittleEnergy_value += mySD->getBossLittleEnergyItemOption();
 	iter = find(card_options.begin(), card_options.end(), kIC_bossLittleEnergy);
-	if(iter != card_options.end())			bossLittleEnergy_value += mySD->getCardBossLittleEnergyItemOption(selected_card_number);
+	if(iter != card_options.end())			bossLittleEnergy_value += NSDS_GI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, selected_card_number);
 
 	subSmallSize_value = 0;
 	if(isUsingItem(kIC_subSmallSize))	subSmallSize_value += mySD->getSubSmallSizeItemOption();
 	iter = find(card_options.begin(), card_options.end(), kIC_subSmallSize);
-	if(iter != card_options.end())		subSmallSize_value += mySD->getCardSubSmallSizeItemOption(selected_card_number);
+	if(iter != card_options.end())		subSmallSize_value += NSDS_GI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, selected_card_number);
 
 	smallArea_value = 0;
 	if(isUsingItem(kIC_smallArea))		smallArea_value += mySD->getSmallAreaItemOption();
 	iter = find(card_options.begin(), card_options.end(), kIC_smallArea);
-	if(iter != card_options.end())		smallArea_value += mySD->getCardSmallAreaItemOption(selected_card_number);
+	if(iter != card_options.end())		smallArea_value += NSDS_GI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, selected_card_number);
 
 	widePerfect_value = 0;
 	if(isUsingItem(kIC_widePerfect))	widePerfect_value += mySD->getWidePerfectItemOption();
 	iter = find(card_options.begin(), card_options.end(), kIC_widePerfect);
-	if(iter != card_options.end())		widePerfect_value += mySD->getCardWidePerfectItemOption(selected_card_number);
+	if(iter != card_options.end())		widePerfect_value += NSDS_GI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, selected_card_number);
 }
 
 void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, int t_game_time, int t_use_time, int t_total_time )

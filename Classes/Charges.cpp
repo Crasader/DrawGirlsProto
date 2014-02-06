@@ -255,7 +255,7 @@ void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<vo
 
 	actionFunction = func;
 
-	float chargeRate = t_frame/60.f;
+//	float chargeRate = t_frame/60.f;
 	
 	auto castImage = KS::loadCCBI<CCSprite*>(this, "fx_cast.ccbi");
 	particle = castImage;

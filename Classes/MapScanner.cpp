@@ -477,7 +477,7 @@ void MapScanner::exchangeMS()
 		invisibleImg = NULL;
 	}
 
-	invisibleImg = InvisibleSprite::create(CCString::createWithFormat("stage%d_level2_invisible.png",silType)->getCString(), false);
+	invisibleImg = InvisibleSprite::create(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), false);
 	invisibleImg->setPosition(CCPointZero);
 	addChild(invisibleImg, invisibleZorder);
 
@@ -490,7 +490,7 @@ void MapScanner::exchangeMS()
 		visibleImg = NULL;
 	}
 
-	visibleImg = VisibleParent::create(CCString::createWithFormat("stage%d_level2_visible.png",silType)->getCString(), false);
+	visibleImg = VisibleParent::create(CCString::createWithFormat("card%d_visible.png",NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), false);
 	visibleImg->setPosition(CCPointZero);
 	addChild(visibleImg, visibleZorder);
 
@@ -591,7 +591,7 @@ BackFilename MapScanner::getBackVisibleFilename()
 {
 	BackFilename r_value;
 
-	r_value.filename = CCString::createWithFormat("stage%d_level1_visible.png", silType)->getCString();
+	r_value.filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
 	r_value.isPattern = false;
 
 	return r_value;
@@ -601,7 +601,7 @@ BackFilename MapScanner::getBackInvisibleFilename()
 {
 	BackFilename r_value;
 
-	r_value.filename = CCString::createWithFormat("stage%d_level1_invisible.png", silType)->getCString();
+	r_value.filename = CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
 	r_value.isPattern = false;
 
 	return r_value;

@@ -868,8 +868,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					("postbox_cell_receive.png", "postbox_cell_receive.png",
 					 [=](CCObject* sender)
 					 {
-						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-						 int idx = (int)obj->getUserData();
+//						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
+//						 int idx = (int)obj->getUserData();
 
 						 Json::Value p;
 						 int mailNo = mail["no"].asInt();
@@ -928,7 +928,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->addButton(CommonButton::create("도망가기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 CCLog("ok!!");
-														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+//														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 // 도망에 대한 처리
 														 Json::Value p;
 														 int mailNo = mail["no"].asInt();;
@@ -1001,7 +1001,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 													 });
 						 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
-														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+//														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 int mailNo = mail["no"].asInt();
 
 														 mySGD->setRemoveMessageMailNo(mailNo);
@@ -1144,7 +1144,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																			 });
 						av->addButton(CommonButton::create("수락", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																															 [=](CCObject* e) {
-																																 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+//																																 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 																																 int mailNo = mail["no"].asInt();
 
 																																 mySGD->setRemoveMessageMailNo(mailNo);
@@ -1306,7 +1306,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 CCLog("ok!!");
-														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+//														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
 																						 Json::Value p;
@@ -1529,7 +1529,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->addButton(CommonButton::create("수락", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 CCLog("ok!!");
-														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
+//														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 Json::Value param;
 														 //						memberID : string or number, 내카카오아이디
 														 //						-> friendID : string or number, 추가할 게임친구 카카오아이디
@@ -1780,22 +1780,19 @@ void MailPopup::iHelpYou(int stage, long long user_id, const std::string& nick, 
 
 CCNode* MailPopup::addCardImg (int t_card_number, int t_card_level, string t_passive)
 {
-	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
-	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
-	
-	CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_grade)->getCString());
+	CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", t_card_number)->getCString());
 	card_img->setScale(0.34f);
 	
-	if(card_grade == 3 && mySD->isAnimationStage(card_stage))
+	if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, t_card_number))
 	{
-		CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-		CCSprite* t_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_grade)->getCString(),
+		CCSize ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card_number));
+		CCSprite* t_ani = mySIL->getLoadedImg(CCString::createWithFormat("card%d_animation.png", t_card_number)->getCString(),
 											  CCRectMake(0, 0, ani_size.width, ani_size.height));
-		t_ani->setPosition(mySD->getAnimationPosition(card_stage));
+		t_ani->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card_number)));
 		card_img->addChild(t_ani);
 	}
 	
-	CardCase* t_case = CardCase::create(card_stage, card_grade, t_card_level, t_passive);
+	CardCase* t_case = CardCase::create(t_card_number, t_card_level, t_passive);
 	t_case->setPosition(CCPointZero);
 	card_img->addChild(t_case);
 	
@@ -1877,14 +1874,14 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 				DownloadFile t_df;
 				t_df.size = t_imgInfo["size"].asInt();
 				t_df.img = t_imgInfo["img"].asString().c_str();
-				t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_df.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
 				t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
 				df_list.push_back(t_df);
 				// ================================
 				
 				CopyFile t_cf;
 				t_cf.from_filename = t_df.filename.c_str();
-				t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
 				cf_list.push_back(t_cf);
 				
 				is_add_cf = true;
@@ -1913,7 +1910,7 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 					DownloadFile t_df;
 					t_df.size = t_detail["size"].asInt();
 					t_df.img = t_detail["img"].asString().c_str();
-					t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_df.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 					t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
@@ -1929,7 +1926,7 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 					t_cf.position_x = t_detail["positionX"].asInt();
 					t_cf.position_y = t_detail["positionY"].asInt();
 					
-					t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 					
 					cf_list.push_back(t_cf);
 				}
@@ -1947,7 +1944,7 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 					DownloadFile t_df;
 					t_df.size = t_silImgInfo["size"].asInt();
 					t_df.img = t_silImgInfo["img"].asString().c_str();
-					t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_df.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
 					t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================

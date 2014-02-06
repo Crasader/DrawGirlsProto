@@ -64,7 +64,7 @@ void CardListViewer::setPositionY(float t_y)
 	for(int i=0;i<getChildrenCount();i++)
 	{
 		CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(i);
-		int tag = t_child->getTag();
+//		int tag = t_child->getTag();
 //		if(tag == kCSS_MT_selectedCheck || tag == kCSS_MT_checkMark)		continue;
 		((CLV_Node*)t_child)->viewCheck();
 	}
@@ -332,7 +332,7 @@ void CardListViewer::setPercentage( float t_p )
 	for(int i=0;i<getChildrenCount();i++)
 	{
 		CCNode* t_child = (CCNode*)getChildren()->objectAtIndex(i);
-		int tag = t_child->getTag();
+//		int tag = t_child->getTag();
 //		if(tag == kCSS_MT_selectedCheck || tag == kCSS_MT_checkMark)		continue;
 		((CLV_Node*)t_child)->viewCheck();
 	}
@@ -396,8 +396,8 @@ void CLV_Node::setChild()
 		{
 			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0;
 
-			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
-				NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_grade_i, card_number))->getCString()));
+			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+				card_number)->getCString()));
 			t_card->setScale(0.92f);
 			t_card->setPosition(CCPointZero);
 			addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+card_number);
@@ -410,7 +410,7 @@ void CLV_Node::setChild()
 			addChild(t_no, kCSS_Z_content);
 
 			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
-				mySD->getCardDurability(NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_grade_i, card_number)))->getCString(),
+				NSDS_GI(kSDS_CI_int1_durability_i, card_number))->getCString(),
 				mySGD->getFont().c_str(), 10);
 			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
 			t_durability->setColor(ccBLACK);
@@ -452,14 +452,15 @@ void CLV_Node::setChild()
 	}
 	else
 	{
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)) != 0)
+		int t_card_number = NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level);
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, t_card_number) != 0)
 		{
-			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)) > 0;
+			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number) > 0;
 
-			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_level)->getCString()));
+			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", t_card_number)->getCString()));
 			t_card->setScale(0.92f);
 			t_card->setPosition(CCPointZero);
-			addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level));
+			addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+t_card_number);
 
 			if(is_color)		t_card->setGray(false);
 			else				t_card->setGray(true);
@@ -468,8 +469,8 @@ void CLV_Node::setChild()
 			t_no->setPosition(CCPointZero);
 			addChild(t_no, kCSS_Z_content);
 
-			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)),
-				mySD->getCardDurability(card_stage, card_level))->getCString(),
+			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number),
+				NSDS_GI(kSDS_CI_int1_durability_i, t_card_number))->getCString(),
 				mySGD->getFont().c_str(), 10);
 			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
 			t_durability->setColor(ccBLACK);

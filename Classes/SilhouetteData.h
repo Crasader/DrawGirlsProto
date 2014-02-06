@@ -32,15 +32,15 @@ public:
 	
 	string getPassiveData();
 	
-	void setAnimationLoop(int t_type);
+//	void setAnimationLoop(int t_type);
 	
 	int getSilType();
 	
-	int getCardDurability(int stage, int level);
+//	int getCardDurability(int stage, int level);
 	
-	string getCardOptionScript(int stage, int level);
+//	string getCardOptionScript(int stage, int level);
 	
-	void setCardOptions(deque<int>& t_list, int card_number);
+//	void setCardOptions(deque<int>& t_list, int card_number);
 	
 	CLEAR_CONDITION getClearCondition();
 	CLEAR_CONDITION getClearCondition(int t_type); // stage;
@@ -84,42 +84,42 @@ public:
 	int getSilenceItemOption();
 	int getDoubleItemOption();
 	
-	int getCardDoubleItemOption(int card_number);
+//	int getCardDoubleItemOption(int card_number);
 	
 	int getLongTimeItemOption();
-	int getCardLongTimeItemOption(int card_number);
+//	int getCardLongTimeItemOption(int card_number);
 	
 	int getBossLittleEnergyItemOption();
-	int getCardBossLittleEnergyItemOption(int card_number);
+//	int getCardBossLittleEnergyItemOption(int card_number);
 	
 	int getSubSmallSizeItemOption();
-	int getCardSubSmallSizeItemOption(int card_number);
+//	int getCardSubSmallSizeItemOption(int card_number);
 	
 	int getSmallAreaItemOption();
-	int getCardSmallAreaItemOption(int card_number);
+//	int getCardSmallAreaItemOption(int card_number);
 	
 	int getWidePerfectItemOption();
-	int getCardWidePerfectItemOption(int card_number);
+//	int getCardWidePerfectItemOption(int card_number);
 	
-	bool isAnimationStage();
-	bool isAnimationStage(int t_type);
-	
-	CCSize getAnimationCutSize();
-	CCSize getAnimationCutSize(int t_type);
-	
-	int getAnimationCutLength();
-	int getAnimationCutLength(int t_type);
-	
-	CCPoint getAnimationPosition();
-	CCPoint getAnimationPosition(int t_type);
-	
-	int getAnimationLoopLength();
-	int getAnimationLoopLength(int t_type);
-	
-	int getAnimationLoopPoint(int t_frame);
-	
-	string getScriptString(int level);
-	string getScriptString(int t_type, int level);
+//	bool isAnimationStage();
+//	bool isAnimationStage(int t_type);
+//	
+//	CCSize getAnimationCutSize();
+//	CCSize getAnimationCutSize(int t_type);
+//	
+//	int getAnimationCutLength();
+//	int getAnimationCutLength(int t_type);
+//	
+//	CCPoint getAnimationPosition();
+//	CCPoint getAnimationPosition(int t_type);
+//	
+//	int getAnimationLoopLength();
+//	int getAnimationLoopLength(int t_type);
+//	
+//	int getAnimationLoopPoint(int t_frame);
+//	
+//	string getScriptString(int level);
+//	string getScriptString(int t_type, int level);
 	
 	void startSetting();
 	
@@ -128,7 +128,7 @@ public:
 	
 private:
 	int myType;
-	deque<int> animation_frame;
+//	deque<int> animation_frame;
 	
 	void myInit()
 	{

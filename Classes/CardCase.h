@@ -119,8 +119,8 @@ class CardCase : public CCNode
 public:
 	static CardCase* create(int t_selected_card_number);
 	
-	static CardCase* create(int t_card_stage, int t_card_grade);
-	static CardCase* create(int t_card_stage, int t_card_grade, int t_level, string t_passive);
+//	static CardCase* create(int t_card_stage, int t_card_grade);
+	static CardCase* create(int t_card_number, int t_level, string t_passive);
 	
 	CCLabelTTF* getRecentDurabilityLabel();
 //	CCLabelTTF* getTotalDurabilityLabel();

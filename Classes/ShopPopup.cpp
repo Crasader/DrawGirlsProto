@@ -1584,14 +1584,14 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 			DownloadFile t_df;
 			t_df.size = t_imgInfo["size"].asInt();
 			t_df.img = t_imgInfo["img"].asString().c_str();
-			t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+			t_df.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
 			t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
 			df_list.push_back(t_df);
 			// ================================
 			
 			CopyFile t_cf;
 			t_cf.from_filename = t_df.filename.c_str();
-			t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+			t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
 			cf_list.push_back(t_cf);
 			
 			is_add_cf = true;
@@ -1620,7 +1620,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 				DownloadFile t_df;
 				t_df.size = t_detail["size"].asInt();
 				t_df.img = t_detail["img"].asString().c_str();
-				t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_df.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 				t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
 				df_list.push_back(t_df);
 				// ================================
@@ -1635,7 +1635,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 				t_cf.cut_height = t_detail["cutHeight"].asInt();
 				t_cf.position_x = t_detail["positionX"].asInt();
 				t_cf.position_y = t_detail["positionY"].asInt();
-				t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 				cf_list.push_back(t_cf);
 			}
 		}
@@ -1652,7 +1652,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 				DownloadFile t_df;
 				t_df.size = t_silImgInfo["size"].asInt();
 				t_df.img = t_silImgInfo["img"].asString().c_str();
-				t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_df.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
 				t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
 				df_list.push_back(t_df);
 				// ================================
@@ -1673,9 +1673,6 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 		{
 			loading_layer->removeFromParent();
 			
-			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, gacha_card_number);
-			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, gacha_card_number);
-			
 			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number) > 0)
 			{
 				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
@@ -1691,13 +1688,13 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 				float result_value = uniform_dist(e1);
 				CCLog("result value : %.3f", result_value);
 				
-				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
 				CardCase* cardCase = CardCase::create(gacha_card_number);
 				card->addChild(cardCase);
 				
 				
-				CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
-				CardCase* cardCase2 = CardCase::create(gacha_card_number);
+				CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
+				CardCase* cardCase2 = CardCase::create(gacha_card_number, 1, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
 				card2->addChild(cardCase2);
 				
 				
@@ -1750,7 +1747,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 				}
 				
 				// 획득
-				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
 				CardCase* cardCase = CardCase::create(gacha_card_number);
 				card->addChild(cardCase);
 				
@@ -1826,9 +1823,6 @@ void ShopPopup::successAction()
 		// 완료
 		loading_layer->removeFromParent();
 		
-		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, gacha_card_number);
-		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, gacha_card_number);
-		
 		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number) > 0)
 		{
 			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
@@ -1844,17 +1838,17 @@ void ShopPopup::successAction()
 			float result_value = uniform_dist(e1);
 			CCLog("result value : %.3f", result_value);
 			
-			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
 			CardCase* cardCase = CardCase::create(gacha_card_number);
 			card->addChild(cardCase);
 			
 			
-			CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
-			CardCase* cardCase2 = CardCase::create(gacha_card_number);
+			CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
+			CardCase* cardCase2 = CardCase::create(gacha_card_number, 1, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
 			card2->addChild(cardCase2);
 			
 			
-			StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-190);
+			StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-220);
 			
 			b->setCloseFunc([this](){
 				CCLog("close Func");
@@ -1903,11 +1897,11 @@ void ShopPopup::successAction()
 			}
 			
 			// 획득
-			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",card_stage,card_grade)->getCString());
+			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
 			CardCase* cardCase = CardCase::create(gacha_card_number);
 			card->addChild(cardCase);
 			
-			TakeCardAnimation* b = TakeCardAnimation::create(card,-190);
+			TakeCardAnimation* b = TakeCardAnimation::create(card,-220);
 			b->setCloseFunc([this](){
 				CCLog("close Func");
 				this->is_menu_enable = true;
@@ -1922,7 +1916,7 @@ void ShopPopup::failAction()
 {
 	is_downloading = false;
 	
-	replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -210);
+	replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -220);
 	replay_menu->setPosition(ccp(240,100));
 	replay_menu->setFunction([=](CCObject* sender)
 							 {

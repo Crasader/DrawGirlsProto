@@ -444,30 +444,30 @@ void StartSettingScene::changeCard()
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 1, 2, 3 / 11, 12, 13 / 14, ...
 	if(selected_card_number > 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) > 0)
 	{
-		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number);
-		int card_level = NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number);
-		
 		card_img = CCNode::create();
 		card_img->setPosition(ccp(94, 144));
 		main_case->addChild(card_img);
 		
-		CCSprite* real_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_level)->getCString());
+		CCSprite* real_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", selected_card_number)->getCString());
 		real_card_img->setScale(card_rate);
 		card_img->addChild(real_card_img);
 		
-		if(card_level == 3 && mySD->isAnimationStage(card_stage))
+		if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, selected_card_number))
 		{
-			CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_level)->getCString(),
+			CCSize ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, selected_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, selected_card_number));
+			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("card%d_animation.png", selected_card_number)->getCString(),
 													 CCRectMake(0, 0, ani_size.width, ani_size.height));
-			card_ani->setPosition(mySD->getAnimationPosition(card_stage));
+			card_ani->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, selected_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, selected_card_number)));
 			real_card_img->addChild(card_ani);
 		}
 		
 		CCSprite* card_case = CCSprite::create("startsetting_cardframe.png");
 		card_img->addChild(card_case);
 		
-		mySD->setCardOptions(card_options, selected_card_number);
+		int ability_cnt = NSDS_GI(kSDS_CI_int1_abilityCnt_i, selected_card_number);
+		
+		for(int i=0;i<ability_cnt;i++)
+			card_options.push_back(NSDS_GI(kSDS_CI_int1_ability_int2_type_i, selected_card_number, i));
 		
 		card_turn_menu->setVisible(true);
 	}

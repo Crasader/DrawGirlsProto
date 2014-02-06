@@ -138,11 +138,11 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 							 {
 								 //테스트로 한번 붙여봅니다.
 								 CCTexture2D* _texture = new CCTexture2D;
-								 _texture->initWithImage(st);
-								 CCSprite* pps = CCSprite::createWithTexture(_texture);
-								 _texture->release();
-								 
-								 _texture = new CCTexture2D;
+//								 _texture->initWithImage(st);
+//								 CCSprite* pps = CCSprite::createWithTexture(_texture);
+//								 _texture->release();
+//								 
+//								 _texture = new CCTexture2D;
 								 _texture->initWithImage(st);
 								 CCSprite* pps2 = CCSprite::createWithTexture(_texture);
 								 
@@ -178,11 +178,11 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 						 {
 							 //테스트로 한번 붙여봅니다.
 							 CCTexture2D* _texture = new CCTexture2D;
-							 _texture->initWithImage(st);
-							 CCSprite* pps = CCSprite::createWithTexture(_texture);
-							 _texture->release();
-							 
-							 _texture = new CCTexture2D;
+//							 _texture->initWithImage(st);
+//							 CCSprite* pps = CCSprite::createWithTexture(_texture);
+//							 _texture->release();
+//							 
+//							 _texture = new CCTexture2D;
 							 _texture->initWithImage(st);
 							 CCSprite* pps2 = CCSprite::createWithTexture(_texture);
 							 

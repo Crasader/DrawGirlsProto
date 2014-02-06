@@ -552,7 +552,7 @@ void CumberParent::myInit()
 	mainCumbers.push_back(mainCumber);
 	addChild(mainCumber);
 	
-	int create_cnt;
+//	int create_cnt;
 	if(!mySGD->isUsingItem(kIC_subNothing))
 	
 	// 랜덤으로 생성 ㄴㄴ 정해준 숫자만큼만 생성.

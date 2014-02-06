@@ -500,8 +500,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				{
 					CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
 					CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);
-					GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
-																												  found_stage1, i)->getCString()));
+					GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
 					n_card->setScale(0.85f);
 					n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
 					n_card->setGray(getCardDurability(card_number) <= 0);
@@ -510,8 +510,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
 					s_no->setColor(ccGRAY);
 					
-					GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
-																												  found_stage1, i)->getCString()));
+					GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
 					s_card->setScale(0.85f);
 					s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
 					if(getCardDurability(card_number) <= 0)
@@ -610,8 +610,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					{
 						CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
 						CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);
-						GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
-																													  found_stage1, i)->getCString()));
+						GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																													  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
 						n_card->setScale(0.85f);
 						n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
 						n_card->setGray(getCardDurability(card_number) <= 0);
@@ -620,8 +620,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 						CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
 						s_no->setColor(ccGRAY);
 						
-						GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
-																													  found_stage1, i)->getCString()));
+						GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																													  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
 						s_card->setScale(0.85f);
 						s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
 						if(getCardDurability(card_number) <= 0)
@@ -690,15 +690,13 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 		for(int i=idx*6;i<idx*6+6 && i<mySGD->getHasGottenCardsSize();i++)
 		{
 			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-			int card_stage = getCardStage(card_number);
-			int card_grade = getCardGrade(card_number);
 			int card_durability = getCardDurability(card_number);
 			CCPoint card_position = ccp(32.f + (i-idx*6)*(68.f+1.f), 43.f);
 			
 			CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
 			CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);
-			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
-																										  card_stage, card_grade)->getCString()));
+			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																										  card_number)->getCString()));
 			n_card->setScale(0.85f);
 			n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
 			n_card->setGray(card_durability <= 0);
@@ -707,8 +705,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
 			s_no->setColor(ccGRAY);
 			
-			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png",
-																										  card_stage, card_grade)->getCString()));
+			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																										  card_number)->getCString()));
 			s_card->setScale(0.85f);
 			s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
 			if(card_durability <= 0)

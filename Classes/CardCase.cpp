@@ -241,7 +241,7 @@ void SpinBasicMissile::myInit( string type_name, int elemental_level, CCPoint t_
 	center_position = t_center_position;
 	angle = 179.8;
 
-	float particle_cnt = elemental_level*5;
+//	float particle_cnt = elemental_level*5;
 
 	string particle_filename;
 	if(type_name == "life")
@@ -372,18 +372,18 @@ CardCase* CardCase::create( int t_selected_card_number )
 	return t_cc;
 }
 
-CardCase* CardCase::create( int t_card_stage, int t_card_grade )
-{
-	CardCase* t_cc = new CardCase();
-	t_cc->myInit(NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_grade), -1, "-1");
-	t_cc->autorelease();
-	return t_cc;
-}
+//CardCase* CardCase::create( int t_card_stage, int t_card_grade )
+//{
+//	CardCase* t_cc = new CardCase();
+//	t_cc->myInit(NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_grade), -1, "-1");
+//	t_cc->autorelease();
+//	return t_cc;
+//}
 
-CardCase* CardCase::create(int t_card_stage, int t_card_grade, int t_level, string t_passive)
+CardCase* CardCase::create(int t_card_number, int t_level, string t_passive)
 {
 	CardCase* t_cc = new CardCase();
-	t_cc->myInit(NSDS_GI(t_card_stage, kSDS_SI_level_int1_card_i, t_card_grade), t_level, t_passive);
+	t_cc->myInit(t_card_number, t_level, t_passive);
 	t_cc->autorelease();
 	return t_cc;
 }

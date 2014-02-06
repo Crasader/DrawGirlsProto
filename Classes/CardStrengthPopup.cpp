@@ -291,22 +291,19 @@ void CardStrengthPopup::setStrengthNode(int t_card_number)
 	}
 	else
 	{
-		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, strength_card_number);
-		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, strength_card_number);
-		
 		strength_node = CCNode::create();
 		strength_node->setPosition(ccp(152,171));
 		main_case->addChild(strength_node, kCardStrengthPopupZorder_content);
 		
 		CCSprite* n_strength = CCSprite::create("cardstrength_frame.png");
-		CCSprite* n_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		CCSprite* n_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", strength_card_number)->getCString()));
 		n_card->setScale(1.2f);
 		n_card->setPosition(ccp(n_strength->getContentSize().width/2.f, n_strength->getContentSize().height/2.f));
 		n_strength->addChild(n_card, -1);
 		
 		CCSprite* s_strength = CCSprite::create("cardstrength_frame.png");
 		s_strength->setColor(ccGRAY);
-		CCSprite* s_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		CCSprite* s_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", strength_card_number)->getCString()));
 		s_card->setScale(1.2f);
 		s_card->setColor(ccGRAY);
 		s_card->setPosition(ccp(s_strength->getContentSize().width/2.f, s_strength->getContentSize().height/2.f));
@@ -446,22 +443,19 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 	}
 	else
 	{
-		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, offering_card_number);
-		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_card_number);
-		
 		offering_node = CCNode::create();
 		offering_node->setPosition(ccp(246,171));
 		main_case->addChild(offering_node, kCardStrengthPopupZorder_content);
 		
 		CCSprite* n_offering = CCSprite::create("cardstrength_frame.png");
-		CCSprite* n_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		CCSprite* n_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", offering_card_number)->getCString()));
 		n_card->setScale(1.2f);
 		n_card->setPosition(ccp(n_offering->getContentSize().width/2.f, n_offering->getContentSize().height/2.f));
 		n_offering->addChild(n_card, -1);
 		
 		CCSprite* s_offering = CCSprite::create("cardstrength_frame.png");
 		s_offering->setColor(ccGRAY);
-		CCSprite* s_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		CCSprite* s_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", offering_card_number)->getCString()));
 		s_card->setScale(1.2f);
 		s_card->setColor(ccGRAY);
 		s_card->setPosition(ccp(s_offering->getContentSize().width/2.f, s_offering->getContentSize().height/2.f));
@@ -654,10 +648,7 @@ CCTableViewCell* CardStrengthPopup::tableCellAtIndex(CCTableView *table, unsigne
 	cell->init();
 	cell->autorelease();
 	
-	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, offering_list[idx].card_number);
-	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_list[idx].card_number);
-	
-	CCSprite* offering_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+	CCSprite* offering_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", offering_list[idx].card_number)->getCString()));
 	offering_card->setScale(0.75f);
 	offering_card->setPosition(ccp(30, 39));
 	cell->addChild(offering_card);
@@ -1252,18 +1243,12 @@ void CardStrengthPopup::resultStrength(Json::Value result_data)
 		setStrengthNode(strength_card_number);
 		offering_table->reloadData();
 		
-		int strength_stage = NSDS_GI(kSDS_CI_int1_stage_i, strength_card_number);
-		int strength_grade = NSDS_GI(kSDS_CI_int1_grade_i, strength_card_number);
-		
-		int offering_stage = NSDS_GI(kSDS_CI_int1_stage_i, save_offering_number);
-		int offering_grade = NSDS_GI(kSDS_CI_int1_grade_i, save_offering_number);
-		
-		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",strength_stage,strength_grade)->getCString());
+		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",strength_card_number)->getCString());
 		CardCase* cardCase = CardCase::create(strength_card_number);
 		card->addChild(cardCase);
 		
 		
-		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png",offering_stage,offering_grade)->getCString());
+		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",save_offering_number)->getCString());
 		CardCase* cardCase2 = CardCase::create(save_offering_number);
 		card2->addChild(cardCase2);
 		

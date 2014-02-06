@@ -73,7 +73,7 @@ int CollectionBookPopup::getContentRotate(int t_tag)
 
 void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 {
-	CCLabelTTF* r_stage_script = CCLabelTTF::create(mySD->getScriptString(NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_grade_i, card_number)).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(180, 60), kCCTextAlignmentLeft);
+	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(180, 60), kCCTextAlignmentLeft);
 	r_stage_script->setPosition(ccp(25,175));
 	r_stage_script->setColor(ccBLACK);
 	r_stage_script->setVerticalAlignment(kCCVerticalTextAlignmentTop);
@@ -109,16 +109,17 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
     int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
     if(level_number == 1)
     {
-        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1)) != 0)
+		int check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1);
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
         {
-            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number+1)->getCString());
+            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
             second_img->setScale(mul_value);
 			second_img->setRotation(getContentRotate(kCBP_MT_second));
             second_img->setPosition(getContentPosition(kCBP_MT_second));
             target->addChild(second_img);
 			
 			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-			second_item->setTag(kCBP_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1));
+			second_item->setTag(kCBP_MT_cardBase + check_card_number);
 			second_item->setRotation(getContentRotate(kCBP_MT_second));
 			
 			CCMenu* second_menu = CCMenu::createWithItem(second_item);
@@ -127,9 +128,10 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			second_menu->setTouchPriority(-191);
         }
         
-        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+2)) != 0)
+		check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+2);
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
         {
-            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number+2)->getCString());
+            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
             third_img->setScale(mul_value);
 			third_img->setRotation(getContentRotate(kCBP_MT_third));
             third_img->setPosition(getContentPosition(kCBP_MT_third));
@@ -138,13 +140,13 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			//            if(mySD->isAnimationStage(stage_number))
 			//            {
 			//                CCSize ani_size = mySD->getAnimationCutSize(stage_number);
-			//                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, level_number+2)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
+			//                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_animation.png", stage_number, level_number+2)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
 			//                ani_img->setPosition(mySD->getAnimationPosition(stage_number));
 			//                third_img->addChild(ani_img);
 			//            }
 			
 			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-			third_item->setTag(kCBP_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+2));
+			third_item->setTag(kCBP_MT_cardBase + check_card_number);
 			third_item->setRotation(getContentRotate(kCBP_MT_third));
 			
 			CCMenu* third_menu = CCMenu::createWithItem(third_item);
@@ -155,16 +157,17 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
     }
     else if(level_number == 2)
     {
-        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1)) != 0)
+		int check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1);
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
         {
-            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number-1)->getCString());
+            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
             first_img->setScale(mul_value);
 			first_img->setRotation(getContentRotate(kCBP_MT_second));
             first_img->setPosition(getContentPosition(kCBP_MT_second));
             target->addChild(first_img);
 			
 			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-			second_item->setTag(kCBP_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1));
+			second_item->setTag(kCBP_MT_cardBase + check_card_number);
 			second_item->setRotation(getContentRotate(kCBP_MT_second));
 			
 			CCMenu* second_menu = CCMenu::createWithItem(second_item);
@@ -173,9 +176,10 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			second_menu->setTouchPriority(-191);
         }
         
-        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1)) != 0)
+		check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1);
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
         {
-            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number+1)->getCString());
+            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
             third_img->setScale(mul_value);
 			third_img->setRotation(getContentRotate(kCBP_MT_third));
             third_img->setPosition(getContentPosition(kCBP_MT_third));
@@ -184,13 +188,13 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			//            if(mySD->isAnimationStage(stage_number))
 			//            {
 			//                CCSize ani_size = mySD->getAnimationCutSize(stage_number);
-			//                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", stage_number, level_number+1)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
+			//                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_animation.png", stage_number, level_number+1)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
 			//                ani_img->setPosition(mySD->getAnimationPosition(stage_number));
 			//                third_img->addChild(ani_img);
 			//            }
 			
 			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-			third_item->setTag(kCBP_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1));
+			third_item->setTag(kCBP_MT_cardBase + check_card_number);
 			third_item->setRotation(getContentRotate(kCBP_MT_third));
 			
 			CCMenu* third_menu = CCMenu::createWithItem(third_item);
@@ -201,16 +205,17 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
     }
     else if(level_number == 3)
     {
-        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-2)) != 0)
+		int check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-2);
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
         {
-            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number-2)->getCString());
+            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
             first_img->setScale(mul_value);
 			first_img->setRotation(getContentRotate(kCBP_MT_second));
             first_img->setPosition(getContentPosition(kCBP_MT_second));
             target->addChild(first_img);
 			
 			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-			second_item->setTag(kCBP_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-2));
+			second_item->setTag(kCBP_MT_cardBase + check_card_number);
 			second_item->setRotation(getContentRotate(kCBP_MT_second));
 			
 			CCMenu* second_menu = CCMenu::createWithItem(second_item);
@@ -219,16 +224,17 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			second_menu->setTouchPriority(-191);
         }
         
-        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1)) != 0)
+		check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1);
+        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
         {
-            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_thumbnail.png", stage_number, level_number-1)->getCString());
+            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
             second_img->setScale(mul_value);
 			second_img->setRotation(getContentRotate(kCBP_MT_third));
             second_img->setPosition(getContentPosition(kCBP_MT_third));
             target->addChild(second_img);
 			
 			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-			third_item->setTag(kCBP_MT_cardBase + NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1));
+			third_item->setTag(kCBP_MT_cardBase + check_card_number);
 			third_item->setRotation(getContentRotate(kCBP_MT_third));
 			
 			CCMenu* third_menu = CCMenu::createWithItem(third_item);
@@ -249,15 +255,12 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 
 void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 {
-	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", NSDS_GI(kSDS_CI_int1_stage_i, card_number), NSDS_GI(kSDS_CI_int1_grade_i, card_number))->getCString());
+	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 	r_card_img->setScale(0.57);
 	r_card_img->setPosition(ccp(129,161));
 	target->addChild(r_card_img);
 	
-	int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-	int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
-	
-	if(level_number == 3 && mySD->isAnimationStage(stage_number))
+	if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, card_number))
 	{
 		CollectionAnimation* t_ca = CollectionAnimation::create(card_number);
 		r_card_img->addChild(t_ca);
@@ -1437,8 +1440,8 @@ CollectionAnimation* CollectionAnimation::create( int t_card_number )
 {
 	CollectionAnimation* t_ca = new CollectionAnimation();
 	t_ca->setAnimation(t_card_number);
-	t_ca->initWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_animation.png", t_ca->stage_number, t_ca->level_number)->getCString()), CCRectMake(0, 0, t_ca->ani_size.width, t_ca->ani_size.height));
-	t_ca->setPosition(mySD->getAnimationPosition(t_ca->stage_number));
+	t_ca->initWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_animation.png", t_card_number)->getCString()), CCRectMake(0, 0, t_ca->ani_size.width, t_ca->ani_size.height));
+	t_ca->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card_number)));
 	t_ca->autorelease();
 	t_ca->startAnimation();
 	return t_ca;
@@ -1448,13 +1451,12 @@ void CollectionAnimation::setAnimation( int t_card_number )
 {
 	stage_number = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
 	level_number = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
-	ani_size = mySD->getAnimationCutSize(stage_number);
+	ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card_number));
 
-	mySD->setAnimationLoop(stage_number);
-	loop_length = mySD->getAnimationLoopLength(stage_number);
+	loop_length = NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card_number);
 
 	for(int i=0;i<loop_length;i++)
-		animation_frame.push_back(mySD->getAnimationLoopPoint(i));
+		animation_frame.push_back(NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card_number, i));
 }
 
 void CollectionAnimation::startAnimation()

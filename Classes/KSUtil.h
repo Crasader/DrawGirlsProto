@@ -190,7 +190,7 @@ public:
 		va_list argptr;
 		va_start(argptr, _Format);
 		char buf[256];
-		int ret = vsprintf(buf, _Format, argptr);
+//		int ret = vsprintf(buf, _Format, argptr);
 		string str = buf;
 		
 		va_end(argptr);

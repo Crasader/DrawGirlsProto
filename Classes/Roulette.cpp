@@ -132,7 +132,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 	CCSprite* arrow = CCSprite::create("gacha1_arrow.png");
 	addChild(arrow);
 	arrow->setPosition(ccp(240, 245));
-	float sourceDegree = 0;
+//	float sourceDegree = 0;
 	int degreeCount = 0;
 	for(auto i : rs)
 	{

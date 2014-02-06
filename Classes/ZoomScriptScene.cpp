@@ -56,8 +56,8 @@ bool ZoomScript::init()
 	
 	string first_filename;
 	
-	if(is_exchanged)			first_filename = CCString::createWithFormat("stage%d_level2_visible.png", silType)->getCString();
-	else						first_filename = CCString::createWithFormat("stage%d_level1_visible.png", silType)->getCString();
+	if(is_exchanged)			first_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
+	else						first_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
 	
 	first_img = mySIL->getLoadedImg(first_filename.c_str());
 	first_img->setPosition(ccp(160,215));
@@ -106,7 +106,7 @@ void ZoomScript::onEnterTransitionDidFinish()
 
 void ZoomScript::startScript()
 {
-	save_text = mySD->getScriptString(is_exchanged ? 2 : 1);
+	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -217,9 +217,9 @@ void ZoomScript::showtimeFirstAction()
 	
 	string second_filename;
 	if(is_exchanged)
-		second_filename = CCString::createWithFormat("stage%d_level3_visible.png", silType)->getCString();
+		second_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString();
 	else
-		second_filename = CCString::createWithFormat("stage%d_level2_visible.png", silType)->getCString();
+		second_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
 	
 	second_img = mySIL->getLoadedImg(second_filename.c_str());
 	second_img->setPosition(ccp(160,215));
@@ -228,18 +228,20 @@ void ZoomScript::showtimeFirstAction()
 	game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
 	first_img->removeFromParentAndCleanup(true);
 	
-	if(is_exchanged && mySD->isAnimationStage())
+	int third_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3);
+	
+	if(is_exchanged && NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, third_card_number))
 	{
-		eye_ani_size = mySD->getAnimationCutSize();
-		loop_length = mySD->getAnimationLoopLength();
+		eye_ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, third_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, third_card_number));
+		loop_length = NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, third_card_number);
 		
 		for(int i=0;i<loop_length;i++)
-			animation_frame.push_back(mySD->getAnimationLoopPoint(i));
+			animation_frame.push_back(NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, third_card_number, i));
 		
-		CCTexture2D* eye_texture = mySIL->addImage(CCString::createWithFormat("stage%d_level3_animation.png", silType)->getCString());
+		CCTexture2D* eye_texture = mySIL->addImage(CCString::createWithFormat("card%d_animation.png", third_card_number)->getCString());
 		
 		CCSprite* eye = CCSprite::createWithTexture(eye_texture, CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
-		eye->setPosition(mySD->getAnimationPosition());
+		eye->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, third_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, third_card_number)));
 		second_img->addChild(eye, 1, 1);
 	}
 	
@@ -268,14 +270,14 @@ void ZoomScript::showtimeSecondAction()
 
 void ZoomScript::showtimeThirdAction()
 {
-	if(is_exchanged && mySD->isAnimationStage())
+	if(is_exchanged && NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3)))
 	{
 		startStageAnimation();
 	}
 	script_label->setVisible(true);
 	script_case->setVisible(true);
 	
-	save_text = mySD->getScriptString(is_exchanged ? 3 : 2);
+	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 3 : 2)));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));

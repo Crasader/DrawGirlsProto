@@ -77,10 +77,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 				}
 			}
 			
-			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
-			
-			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", card_number)->getCString()));
 			card_img->setScale(0.f);
 			card_img->setPosition(missile_position);
 			jack_missile_node->addChild(card_img);
@@ -120,10 +117,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 			int shoot_frame = t_missile_speed*3;
 			shoot_frame *= cmCnt;
 			
-			int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
-			
-			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", card_number)->getCString()));
 			card_img->setScale(0.f);
 			card_img->setPosition(missile_position);
 			jack_missile_node->addChild(card_img);
@@ -672,7 +666,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				int random_value = rand()%2 + 1;
+//				int random_value = rand()%2 + 1;
 				int radius = 80;//pattern.get("radius", 100).asInt();
 				int objcnt = patternData.get("totalframe", 240).asInt();
 				PrisonPattern* t_m28 = PrisonPattern::create(startFirePosition, radius, objcnt);

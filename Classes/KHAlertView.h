@@ -72,7 +72,7 @@ public:
 	CCRect getContentRect()
 	{
 		int contentMargin = 1<<3;
-		float contentBorderMargin = contentMargin >> 1;
+//		float contentBorderMargin = contentMargin >> 1;
 		float buttonHeight = m_buttonHeight;
 		float titleHeight = m_titleHeight;
 		CCRect contentRect = CCRectMake(contentMargin, buttonHeight,

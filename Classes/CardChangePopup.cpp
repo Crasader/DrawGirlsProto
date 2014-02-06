@@ -202,24 +202,21 @@ void CardChangePopup::setSelectedCard(int t_card_number)
 		return;
 	}
 	
-	int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
-	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
-	
-	selected_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_grade)->getCString());
+	selected_card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", t_card_number)->getCString());
 	selected_card->setScale(0.29f);
 	selected_card->setPosition(ccp(72,173));
 	main_case->addChild(selected_card, kCardChangePopupZorder_selectedCard);
 	
-	if(card_grade == 3 && mySD->isAnimationStage(card_stage))
+	if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, t_card_number))
 	{
-		CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-		CCSprite* t_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_grade)->getCString(),
+		CCSize ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card_number));
+		CCSprite* t_ani = mySIL->getLoadedImg(CCString::createWithFormat("card%d_animation.png", t_card_number)->getCString(),
 											  CCRectMake(0, 0, ani_size.width, ani_size.height));
-		t_ani->setPosition(mySD->getAnimationPosition(card_stage));
+		t_ani->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card_number)));
 		selected_card->addChild(t_ani);
 	}
 	
-	CardCase* t_case = CardCase::create(card_stage, card_grade);
+	CardCase* t_case = CardCase::create(t_card_number);
 	t_case->setPosition(CCPointZero);
 	selected_card->addChild(t_case);
 	
@@ -437,10 +434,7 @@ CCTableViewCell* CardChangePopup::tableCellAtIndex(CCTableView *table, unsigned 
 	}
 	else
 	{
-		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, have_card_list[idx-1].card_number);
-		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, have_card_list[idx-1].card_number);
-		
-		CCSprite* have_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", card_stage, card_grade)->getCString()));
+		CCSprite* have_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", have_card_list[idx-1].card_number)->getCString()));
 		have_card->setScale(0.73f);
 		have_card->setPosition(card_center_position);
 		cell->addChild(have_card, kCardChangeTableCellZorder_img);

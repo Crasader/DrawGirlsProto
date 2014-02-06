@@ -26,7 +26,7 @@ std::basic_string<char> stringEnc(string plainText)
 	 *************************************************************************
 	 */
 	unsigned char * lpKey1 = (unsigned char*)"JSHSKSYH";
-    unsigned char * lpKey2 = (unsigned char*)"22222222";
+//    unsigned char * lpKey2 = (unsigned char*)"22222222";
 	
 	
 	McbDES des;

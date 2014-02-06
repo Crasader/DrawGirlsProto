@@ -13,7 +13,7 @@ void SilhouetteData::startSetting()
 {
 	must_cnt = 0;
 	CCImage *tx = new CCImage;
-	tx->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"stage%d_level%d_invisible.png").c_str(), myType, 1)->getCString());
+	tx->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"card%d_invisible.png").c_str(), NSDS_GI(myType, kSDS_SI_level_int1_card_i, 1))->getCString());
 	
 	unsigned char* pData = (unsigned char*)tx->getData();    //원본 이미지 데이터
 	int imgByte = 3;
@@ -122,7 +122,7 @@ void SilhouetteData::exchangeSilhouette()
 {
 	must_cnt = 0;
 	CCImage *tx = new CCImage;
-	tx->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"stage%d_level%d_invisible.png").c_str(), myType, 2)->getCString());
+	tx->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"card%d_invisible.png").c_str(), NSDS_GI(myType, kSDS_SI_level_int1_card_i, 2))->getCString());
 	
 	unsigned char* pData = (unsigned char*)tx->getData();    //원본 이미지 데이터
 	int imgByte = 3;
@@ -213,14 +213,14 @@ void SilhouetteData::exchangeSilhouette()
 //	}
 }
 
-string SilhouetteData::getScriptString(int level)
-{
-	return getScriptString(myType, level);
-}
-string SilhouetteData::getScriptString(int t_type, int level)
-{
-	return NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, level));
-}
+//string SilhouetteData::getScriptString(int level)
+//{
+//	return getScriptString(myType, level);
+//}
+//string SilhouetteData::getScriptString(int t_type, int level)
+//{
+//	return NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, level));
+//}
 
 SilhouetteData* SilhouetteData::sharedSilhouetteData()
 {
@@ -237,10 +237,10 @@ void SilhouetteData::setSilType( int t1 )
 {
 	myType = t1;
 
-	if(isAnimationStage())
-	{
-		setAnimationLoop(myType);
-	}
+//	if(isAnimationStage())
+//	{
+//		setAnimationLoop(myType);
+//	}
 }
 
 std::string SilhouetteData::getPassiveData()
@@ -252,40 +252,40 @@ std::string SilhouetteData::getPassiveData()
 		return "{}";
 }
 
-void SilhouetteData::setAnimationLoop( int t_type )
-{
-	animation_frame.clear();
-	int loop_length = NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
-	for(int i=0;i<loop_length;i++)
-		animation_frame.push_back(NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3), i));
-}
+//void SilhouetteData::setAnimationLoop( int t_type )
+//{
+//	animation_frame.clear();
+//	int loop_length = NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
+//	for(int i=0;i<loop_length;i++)
+//		animation_frame.push_back(NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3), i));
+//}
 
 int SilhouetteData::getSilType()
 {
 	return myType;
 }
 
-int SilhouetteData::getCardDurability( int stage, int level )
-{
-	return NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(stage, kSDS_SI_level_int1_card_i, level));
-}
+//int SilhouetteData::getCardDurability( int stage, int level )
+//{
+//	return NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(stage, kSDS_SI_level_int1_card_i, level));
+//}
 
-std::string SilhouetteData::getCardOptionScript( int stage, int level )
-{
-	string return_value;
+//std::string SilhouetteData::getCardOptionScript( int stage, int level )
+//{
+//	string return_value;
+//
+//	return_value = "ㅁ니우라ㅓㅁ";
+//
+//	return return_value;
+//}
 
-	return_value = "ㅁ니우라ㅓㅁ";
-
-	return return_value;
-}
-
-void SilhouetteData::setCardOptions( deque<int>& t_list, int card_number )
-{
-	int ability_cnt = NSDS_GI(kSDS_CI_int1_abilityCnt_i, card_number);
-
-	for(int i=0;i<ability_cnt;i++)
-		t_list.push_back(NSDS_GI(kSDS_CI_int1_ability_int2_type_i, card_number, i));
-}
+//void SilhouetteData::setCardOptions( deque<int>& t_list, int card_number )
+//{
+//	int ability_cnt = NSDS_GI(kSDS_CI_int1_abilityCnt_i, card_number);
+//
+//	for(int i=0;i<ability_cnt;i++)
+//		t_list.push_back(NSDS_GI(kSDS_CI_int1_ability_int2_type_i, card_number, i));
+//}
 
 CLEAR_CONDITION SilhouetteData::getClearCondition()
 {
@@ -506,122 +506,122 @@ int SilhouetteData::getDoubleItemOption()
 	return NSDS_GI(myType, kSDS_SI_itemOptionDoubleItemPercent_i);
 }
 
-int SilhouetteData::getCardDoubleItemOption( int card_number )
-{
-	return NSDS_GI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, card_number);
-}
+//int SilhouetteData::getCardDoubleItemOption( int card_number )
+//{
+//	return NSDS_GI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, card_number);
+//}
 
 int SilhouetteData::getLongTimeItemOption()
 {
 	return NSDS_GI(myType, kSDS_SI_itemOptionLongTimeSec_i);
 }
 
-int SilhouetteData::getCardLongTimeItemOption( int card_number )
-{
-	return NSDS_GI(kSDS_CI_int1_abilityLongTimeOptionSec_i, card_number);
-}
+//int SilhouetteData::getCardLongTimeItemOption( int card_number )
+//{
+//	return NSDS_GI(kSDS_CI_int1_abilityLongTimeOptionSec_i, card_number);
+//}
 
 int SilhouetteData::getBossLittleEnergyItemOption()
 {
 	return NSDS_GI(myType, kSDS_SI_itemOptionBossLittleEnergyPercent_i);
 }
 
-int SilhouetteData::getCardBossLittleEnergyItemOption( int card_number )
-{
-	return NSDS_GI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, card_number);
-}
+//int SilhouetteData::getCardBossLittleEnergyItemOption( int card_number )
+//{
+//	return NSDS_GI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, card_number);
+//}
 
 int SilhouetteData::getSubSmallSizeItemOption()
 {
 	return NSDS_GI(myType, kSDS_SI_itemOptionSubSmallSizePercent_i);
 }
 
-int SilhouetteData::getCardSubSmallSizeItemOption( int card_number )
-{
-	return NSDS_GI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, card_number);
-}
+//int SilhouetteData::getCardSubSmallSizeItemOption( int card_number )
+//{
+//	return NSDS_GI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, card_number);
+//}
 
 int SilhouetteData::getSmallAreaItemOption()
 {
 	return NSDS_GI(myType, kSDS_SI_itemOptionSmallAreaPercent_i);
 }
 
-int SilhouetteData::getCardSmallAreaItemOption( int card_number )
-{
-	return NSDS_GI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, card_number);
-}
+//int SilhouetteData::getCardSmallAreaItemOption( int card_number )
+//{
+//	return NSDS_GI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, card_number);
+//}
 
 int SilhouetteData::getWidePerfectItemOption()
 {
 	return NSDS_GI(myType, kSDS_SI_itemOptionWidePerfectPercent_i);
 }
 
-int SilhouetteData::getCardWidePerfectItemOption( int card_number )
-{
-	return NSDS_GI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, card_number);
-}
+//int SilhouetteData::getCardWidePerfectItemOption( int card_number )
+//{
+//	return NSDS_GI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, card_number);
+//}
 
-bool SilhouetteData::isAnimationStage()
-{
-	return isAnimationStage(myType);
-}
+//bool SilhouetteData::isAnimationStage()
+//{
+//	return isAnimationStage(myType);
+//}
 
-bool SilhouetteData::isAnimationStage( int t_type )
-{
-	return NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
-}
+//bool SilhouetteData::isAnimationStage( int t_type )
+//{
+//	return NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
+//}
 
-CCSize SilhouetteData::getAnimationCutSize()
-{
-	return getAnimationCutSize(myType);
-}
+//CCSize SilhouetteData::getAnimationCutSize()
+//{
+//	return getAnimationCutSize(myType);
+//}
 
-CCSize SilhouetteData::getAnimationCutSize( int t_type )
-{
-	CCSize return_value;
+//CCSize SilhouetteData::getAnimationCutSize( int t_type )
+//{
+//	CCSize return_value;
+//
+//	return_value.width = NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
+//	return_value.height = NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
+//
+//	return return_value;
+//}
 
-	return_value.width = NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
-	return_value.height = NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
+//int SilhouetteData::getAnimationCutLength()
+//{
+//	return getAnimationCutLength(myType);
+//}
 
-	return return_value;
-}
+//int SilhouetteData::getAnimationCutLength( int t_type )
+//{
+//	return NSDS_GI(kSDS_CI_int1_aniInfoDetailCutLength_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
+//}
 
-int SilhouetteData::getAnimationCutLength()
-{
-	return getAnimationCutLength(myType);
-}
+//CCPoint SilhouetteData::getAnimationPosition()
+//{
+//	return getAnimationPosition(myType);
+//}
 
-int SilhouetteData::getAnimationCutLength( int t_type )
-{
-	return NSDS_GI(kSDS_CI_int1_aniInfoDetailCutLength_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
-}
+//CCPoint SilhouetteData::getAnimationPosition( int t_type )
+//{
+//	CCPoint return_value;
+//
+//	return_value.x = NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
+//	return_value.y = NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
+//
+//	return return_value;
+//}
 
-CCPoint SilhouetteData::getAnimationPosition()
-{
-	return getAnimationPosition(myType);
-}
+//int SilhouetteData::getAnimationLoopLength()
+//{
+//	return getAnimationLoopLength(myType);
+//}
 
-CCPoint SilhouetteData::getAnimationPosition( int t_type )
-{
-	CCPoint return_value;
+//int SilhouetteData::getAnimationLoopLength( int t_type )
+//{
+//	return NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
+//}
 
-	return_value.x = NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
-	return_value.y = NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
-
-	return return_value;
-}
-
-int SilhouetteData::getAnimationLoopLength()
-{
-	return getAnimationLoopLength(myType);
-}
-
-int SilhouetteData::getAnimationLoopLength( int t_type )
-{
-	return NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, NSDS_GI(t_type, kSDS_SI_level_int1_card_i, 3));
-}
-
-int SilhouetteData::getAnimationLoopPoint( int t_frame )
-{
-	return animation_frame[t_frame];
-}
+//int SilhouetteData::getAnimationLoopPoint( int t_frame )
+//{
+//	return animation_frame[t_frame];
+//}

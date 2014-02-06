@@ -713,7 +713,7 @@ void JM_BasicMissileShow::realInit (CCNode * t_target, int jm_type, float missil
 	
 	jm_type = jm_type%10;
 	
-	float particle_cnt = 3 + element_level*3;
+//	float particle_cnt = 3 + element_level*3;
 	string particle_string;
 	
 	particle_string = type_name + ".png";

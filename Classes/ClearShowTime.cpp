@@ -95,9 +95,9 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 	string ttt;
 
 	if(t_exchanged)
-		ttt = CCString::createWithFormat("stage%d_level2_visible.png", silType)->getCString();
+		ttt = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
 	else
-		ttt = CCString::createWithFormat("stage%d_level1_visible.png", silType)->getCString();
+		ttt = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
 
 	clear_img = mySIL->getLoadedImg(ttt.c_str());
 	clear_img->setPosition(ccp(160,215));

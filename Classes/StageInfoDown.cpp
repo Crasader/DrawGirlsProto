@@ -177,14 +177,14 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				DownloadFile t_df;
 				t_df.size = t_imgInfo["size"].asInt();
 				t_df.img = t_imgInfo["img"].asString().c_str();
-				t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_df.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
 				t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
 				df_list.push_back(t_df);
 				// ================================
 				
 				CopyFile t_cf;
 				t_cf.from_filename = t_df.filename.c_str();
-				t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
 				cf_list.push_back(t_cf);
 				
 				is_add_cf = true;
@@ -213,7 +213,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 					DownloadFile t_df;
 					t_df.size = t_detail["size"].asInt();
 					t_df.img = t_detail["img"].asString().c_str();
-					t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_df.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 					t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
@@ -229,7 +229,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 					t_cf.position_x = t_detail["positionX"].asInt();
 					t_cf.position_y = t_detail["positionY"].asInt();
 					
-					t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 					
 					cf_list.push_back(t_cf);
 				}
@@ -247,7 +247,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 					DownloadFile t_df;
 					t_df.size = t_silImgInfo["size"].asInt();
 					t_df.img = t_silImgInfo["img"].asString().c_str();
-					t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_df.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
 					t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
@@ -539,14 +539,14 @@ void StageInfoDown::resultLoadedCardData( Json::Value result_data )
 				DownloadFile t_df;
 				t_df.size = t_imgInfo["size"].asInt();
 				t_df.img = t_imgInfo["img"].asString().c_str();
-				t_df.filename = CCSTR_CWF("stage%d_level%d_visible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_df.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
 				t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
 				df_list.push_back(t_df);
 				// ================================
 				
 				CopyFile t_cf;
 				t_cf.from_filename = t_df.filename.c_str();
-				t_cf.to_filename = CCSTR_CWF("stage%d_level%d_thumbnail.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
 				cf_list.push_back(t_cf);
 				
 				is_add_cf = true;
@@ -575,7 +575,7 @@ void StageInfoDown::resultLoadedCardData( Json::Value result_data )
 					DownloadFile t_df;
 					t_df.size = t_detail["size"].asInt();
 					t_df.img = t_detail["img"].asString().c_str();
-					t_df.filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_df.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 					t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================
@@ -591,7 +591,7 @@ void StageInfoDown::resultLoadedCardData( Json::Value result_data )
 					t_cf.position_x = t_detail["positionX"].asInt();
 					t_cf.position_y = t_detail["positionY"].asInt();
 					
-					t_cf.ani_filename = CCSTR_CWF("stage%d_level%d_animation.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 					
 					cf_list.push_back(t_cf);
 				}
@@ -609,7 +609,7 @@ void StageInfoDown::resultLoadedCardData( Json::Value result_data )
 					DownloadFile t_df;
 					t_df.size = t_silImgInfo["size"].asInt();
 					t_df.img = t_silImgInfo["img"].asString().c_str();
-					t_df.filename = CCSTR_CWF("stage%d_level%d_invisible.png", t_card["stage"].asInt(), t_card["grade"].asInt())->getCString();
+					t_df.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
 					t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
 					df_list.push_back(t_df);
 					// ================================

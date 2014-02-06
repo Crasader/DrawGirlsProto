@@ -95,7 +95,7 @@ bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 void KSSnakeBase::setHeadAndBodies()
 {
 	SnakeTrace lastTrace = m_cumberTrace.back();
-	float tt = rad2Deg( lastTrace.directionRad );
+//	float tt = rad2Deg( lastTrace.directionRad );
 	//	CCLog("deg %f", tt);
 	//	m_headImg->setVisible(false);
 	m_headImg->setRotation(-rad2Deg( lastTrace.directionRad ));

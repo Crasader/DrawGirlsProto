@@ -45,23 +45,22 @@ private:
 		touch_priority = t_touch_priority;
 		end_selector = t_selector;
 		
-		int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, mySGD->getSelectedFriendCardData().card_number);
-		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, mySGD->getSelectedFriendCardData().card_number);
+		int card_number = mySGD->getSelectedFriendCardData().card_number;
 		
-		rent_card = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_visible.png", card_stage, card_grade)->getCString());
+		rent_card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 		rent_card->setScale(0.5f);
 		rent_card->setPosition(ccp(360,0));
 		addChild(rent_card);
 		
-		if(card_grade == 3 && mySD->isAnimationStage(card_stage))
+		if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, card_number))
 		{
-			CCSize ani_size = mySD->getAnimationCutSize(card_stage);
-			CCSprite* take_ani = mySIL->getLoadedImg(CCString::createWithFormat("stage%d_level%d_animation.png", card_stage, card_grade)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
-			take_ani->setPosition(mySD->getAnimationPosition(card_stage));
+			CCSize ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, card_number));
+			CCSprite* take_ani = mySIL->getLoadedImg(CCString::createWithFormat("card%d_animation.png", card_number)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
+			take_ani->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, card_number)));
 			rent_card->addChild(take_ani);
 		}
 		
-		CardCase* t_case = CardCase::create(card_stage, card_grade, mySGD->getSelectedFriendCardData().card_level, mySGD->getSelectedFriendCardData().card_passive);
+		CardCase* t_case = CardCase::create(card_number, mySGD->getSelectedFriendCardData().card_level, mySGD->getSelectedFriendCardData().card_passive);
 		t_case->setPosition(CCPointZero);
 		rent_card->addChild(t_case);
 		

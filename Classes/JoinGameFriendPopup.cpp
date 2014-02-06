@@ -313,7 +313,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 		("friendsearch_call.png", "friendsearch_call.png",
 		 [=](CCObject* sender){
 			 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-			 int idx = (int)obj->getUserData();
+//			 int idx = (int)obj->getUserData();
 			 ////////////////////////////////
 			 // ¬ ¡ˆ∫∏≥ª±‚ - HSP
 			 ////////////////////////////////

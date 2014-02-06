@@ -21,7 +21,7 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 		
 	// 시작하기도 전에 미리 등수를 지정함.
 	// 슬프다... ㅜ.ㅜ
-	int totalWeight = 0;
+//	int totalWeight = 0;
 	ProbSelector ps; // {1,1,1,3,3,3,10} 으로 입력됐다면,
 	for(auto i : m_rewards)
 	{
@@ -48,7 +48,7 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 		"gacha3_horse4.png", "gacha3_horse5.png", "gacha3_horse6.png", "gacha3_horse7.png"};
 	std::vector<CCPoint> rewardPositions = {ccp(126, 37), ccp(164, 37), ccp(202, 37), ccp(240, 38),
 		ccp(278, 37), ccp(316, 37), ccp(354, 37)};
-	CCPoint horseToReward = ccp(450, 0);
+//	CCPoint horseToReward = ccp(450, 0);
 
 	int i=0;
 	for(auto& reward : m_rewards)

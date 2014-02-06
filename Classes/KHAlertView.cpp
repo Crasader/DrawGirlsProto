@@ -86,12 +86,12 @@ void KHAlertView::show()
 	{
 		m_titleHeight = 40;
 	}
-	float top = m_centerY + m_height / 2.f;
-	float bottom = m_centerY - m_height / 2.f;
+//	float top = m_centerY + m_height / 2.f;
+//	float bottom = m_centerY - m_height / 2.f;
 	float titleHeight = m_titleHeight;
 	float buttonHeight = m_buttonHeight;
 	int contentMargin = 1<<3;
-	float contentBorderMargin = contentMargin >> 1;
+//	float contentBorderMargin = contentMargin >> 1;
 	btnBg->setPosition(ccp(m_centerX, m_centerY));
 	btnBg->setContentSize(CCSizeMake(m_width, m_height));
 	

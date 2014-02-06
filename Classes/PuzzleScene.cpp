@@ -1630,7 +1630,7 @@ void PuzzleScene::setReward()
 		CCSprite* card_img1;
 		if(is_have_card_list[0])
 		{
-			card_img1 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", selected_stage_number, 1)->getCString()));
+			card_img1 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
 			card_img1->setScale(58.f/card_img1->getContentSize().width);
 			reward_node->addChild(card_img1);
 		}
@@ -1652,11 +1652,11 @@ void PuzzleScene::setReward()
 		CCSprite* card_img3;
 		if(is_have_card_list[1])
 		{
-			card_img2 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", selected_stage_number, 2)->getCString()));
+			card_img2 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
 			card_img2->setScale(58.f/card_img2->getContentSize().width);
 			reward_node->addChild(card_img2);
 			
-			card_img3 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", selected_stage_number, 2)->getCString()));
+			card_img3 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
 			card_img3->setScale(58.f/card_img3->getContentSize().width);
 			reward_node->addChild(card_img3);
 		}
@@ -1685,7 +1685,7 @@ void PuzzleScene::setReward()
 		CCSprite* card_img4;
 		if(is_have_card_list[2])
 		{
-			card_img4 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("stage%d_level%d_thumbnail.png", selected_stage_number, 3)->getCString()));
+			card_img4 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
 			card_img4->setScale(58.f/card_img4->getContentSize().width);
 			reward_node->addChild(card_img4);
 		}
