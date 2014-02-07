@@ -365,7 +365,7 @@ protected:
 				
 				IntPoint centerPoint = ccp2ip(centerPosition);
 				if(mapLoopRange::mapWidthInnerBegin <= centerPoint.x &&
-				   centerPoint.y < mapLoopRange::mapWidthInnerEnd &&
+				   centerPoint.x < mapLoopRange::mapWidthInnerEnd &&
 				   mapLoopRange::mapHeightOutlineBegin <= centerPoint.y &&
 				   centerPoint.y < mapLoopRange::mapHeightOutlineEnd)
 				{				
@@ -404,7 +404,7 @@ protected:
 				
 				IntPoint centerPoint = ccp2ip(centerPosition);
 				if(mapLoopRange::mapWidthInnerBegin <= centerPoint.x &&
-				   centerPoint.y < mapLoopRange::mapWidthInnerEnd &&
+				   centerPoint.x < mapLoopRange::mapWidthInnerEnd &&
 				   mapLoopRange::mapHeightOutlineBegin <= centerPoint.y &&
 				   centerPoint.y < mapLoopRange::mapHeightOutlineEnd)
 				{
