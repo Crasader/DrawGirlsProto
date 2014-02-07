@@ -64,6 +64,7 @@ bool FailPopup::init()
 	
 	is_menu_enable = false;
 	is_loaded_list = false;
+	is_end_popup_animation = false;
 	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	myLog->addLog(kLOG_remainHeart_i, -1, myDSH->getIntegerForKey(kDSH_Key_heartCnt));
@@ -553,7 +554,18 @@ void FailPopup::startScoreAnimation()
 
 void FailPopup::closePopup()
 {
-	is_menu_enable = true;
+	is_end_popup_animation = true;
+	
+	if(is_end_popup_animation && is_saved_user_data && is_loaded_list)
+	{
+		main_menu->setVisible(true);
+		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) > 0)
+		{
+			if(replay_menu)
+				replay_menu->setVisible(true);
+		}
+		is_menu_enable = true;
+	}
 }
 
 void FailPopup::scoreAnimation(float dt)
@@ -877,7 +889,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 
 void FailPopup::endLoad()
 {
-	if(is_saved_user_data && is_loaded_list)
+	if(is_end_popup_animation && is_saved_user_data && is_loaded_list)
 	{
 		main_menu->setVisible(true);
 		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) > 0)
@@ -885,6 +897,7 @@ void FailPopup::endLoad()
 			if(replay_menu)
 				replay_menu->setVisible(true);
 		}
+		is_menu_enable = true;
 	}
 }
 

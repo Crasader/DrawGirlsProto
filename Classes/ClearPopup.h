@@ -65,6 +65,7 @@ private:
 	bool is_menu_enable;
 	bool is_saved_user_data;
 	bool is_loaded_list;
+	bool is_end_popup_animation;
 	
 	CCSprite* bronze_star;
 	CCSprite* silver_star;

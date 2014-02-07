@@ -16,6 +16,7 @@
 #include "MainFlowScene.h"
 #include "TutorialFlowStep.h"
 #include "CommonButton.h"
+#include "NewMainFlowScene.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -945,6 +946,7 @@ void TitleRenewalScene::endingAction()
 void TitleRenewalScene::changeScene()
 {
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+//	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 }
 

@@ -130,11 +130,11 @@ void FeverParent::addFeverGage (int count)
 	if(ing_fever)	return;
 	
 	keeping_count = 300;
-	if(!is_keeping)
-		startKeep();
+//	if(!is_keeping)
+//		startKeep();
 	
 	recent_count += count;
-	if(recent_count >= 10)
+	if(recent_count >= 15)
 	{
 		ing_fever = true;
 		entered_fever_cnt++;
@@ -163,7 +163,7 @@ void FeverParent::addFeverGage (int count)
 		}
 		
 		
-		recent_count = 10;
+		recent_count = 15;
 		
 		fever_top->setPercentage(100.f);
 		
@@ -228,7 +228,7 @@ void FeverParent::addFeverGage (int count)
 	}
 	else
 	{
-		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/10.f*100.f);
+		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/15.f*100.f);
 		fever_top->runAction(progress_to);
 	}
 }

@@ -71,6 +71,7 @@ bool ClearPopup::init()
 	
 	is_menu_enable = false;
 	is_loaded_list = false;
+	is_end_popup_animation = false;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -864,7 +865,15 @@ void ClearPopup::checkMiniGame()
 
 void ClearPopup::closePopup()
 {
-	is_menu_enable = true;
+	is_end_popup_animation = true;
+	if(is_end_popup_animation && is_saved_user_data && is_loaded_list)
+	{
+		ok_menu->setVisible(true);
+		if(replay_menu)
+			replay_menu->setVisible(true);
+		
+		is_menu_enable = true;
+	}
 }
 
 void ClearPopup::checkRentCard()
@@ -1128,11 +1137,13 @@ void ClearPopup::resultSavedUserData(Json::Value result_data)
 
 void ClearPopup::endLoad()
 {
-	if(is_saved_user_data && is_loaded_list)
+	if(is_end_popup_animation && is_saved_user_data && is_loaded_list)
 	{
 		ok_menu->setVisible(true);
 		if(replay_menu)
 			replay_menu->setVisible(true);
+		
+		is_menu_enable = true;
 	}
 }
 
