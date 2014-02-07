@@ -148,7 +148,7 @@ void MiniGamePopup::endShowPopup()
 	is_menu_enable = true;
 }
 
-void MiniGamePopup::hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector)
+void MiniGamePopup::hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector, int ruby, int gold, int social)
 {
 	left_curtain->setVisible(true);
 	right_curtain->setVisible(true);
@@ -182,7 +182,7 @@ void MiniGamePopup::menuAction(CCObject *pSender)
 	is_menu_enable = false;
 	miniGameStart = nullptr;
 
-	GoldClicker* goldClicker = GoldClicker::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2));
+	GoldClicker* goldClicker = GoldClicker::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2, _3, _4, _5));
 	miniGameStart = bind(&GoldClicker::startSchedule, goldClicker);
 	addChild(goldClicker, kMiniGameZorder_game);
 
