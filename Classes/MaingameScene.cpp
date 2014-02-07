@@ -96,7 +96,7 @@ bool Maingame::init()
 	is_line_die = false;
 	
 	game_node = CCNode::create();
-	game_node->setScale((480.f-myGD->boarder_value*2)/(320.f));
+	game_node->setScale((480.f-myGD->boarder_value*2)/(320.f)*myGD->game_scale);
 	if(myGD->gamescreen_type == kGT_leftUI)			game_node->setPosition(ccp(50+myGD->boarder_value,0));
 	else if(myGD->gamescreen_type == kGT_rightUI)	game_node->setPosition(ccp(myGD->boarder_value, 0));
 	else											game_node->setPosition(ccp(myGD->boarder_value,0));
