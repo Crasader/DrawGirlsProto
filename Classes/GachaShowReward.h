@@ -15,6 +15,8 @@ USING_NS_CC;
 #include "StarGoldData.h"
 #include "GachaPurchase.h"
 #include "GachaReward.h"
+#include "CommonButton.h"
+
 USING_NS_CC;
 
 
@@ -25,7 +27,7 @@ public:
 	virtual ~GachaShowReward();
 	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	virtual bool init(const std::function<void(void)>& replayFunction, const std::function<void(void)>& obtainFunction, CCSprite* rewardImg, 
-			const std::string& descStr, RewardKind kind, int value, const std::string& againImageName)
+			const std::string& descStr, RewardKind kind, int value, const std::string& againImageName, GachaCategory gc)
 	{
 		CCLayer::init();
 
@@ -93,24 +95,42 @@ public:
 			getParent()->removeFromParent();
 		};
 
-		CCMenuItemLambda* obtainItem = CCMenuItemImageLambda::create("gacha_popup_off.png", "gacha_popup_off.png",
-				[=](CCObject*)
-				{
-					prevObtain();
-					obtainFunction(); // 닫을 때 뒤에 터치를 활성화 하는 것. 이름과는 다름.
-				});
-		obtainItem->setPosition(ccp(320, 60));
-		_menu->addChild(obtainItem);
+		CommonButton* obtainItem = CommonButton::create("닫기", 16, CCSizeMake(80,52), CommonButtonGreen, INT_MIN);	
+		obtainItem->setFunction( [=](CCObject*) {
+			prevObtain();
+			obtainFunction(); // 닫을 때 뒤에 터치를 활성화 하는 것. 이름과는 다름.
+		});
+		obtainItem->setPosition(ccp(313, 70));
+		addChild(obtainItem);
 	
-
-		CCMenuItemLambda* replayItem = CCMenuItemImageLambda::create(againImageName.c_str(), againImageName.c_str(),
-				[=](CCObject*)
-				{
-					prevObtain();
-					replayFunction();
-				});
-		replayItem->setPosition(ccp(207, 60));
-		_menu->addChild(replayItem);
+		CommonButton* replayItem = CommonButton::create(againImageName.c_str(), 16, CCSizeMake(150,52), CommonButtonBlue, INT_MIN);	
+		if(gc == GachaCategory::kGoldGacha)
+		{
+			replayItem->setPrice(PriceTypeGold, mySGD->getGachaGoldFeeRetry());
+			replayItem->setTitle("골드");
+		}
+		else if(gc == GachaCategory::kRubyGacha)
+		{
+			replayItem->setPrice(PriceTypeRuby, mySGD->getGachaRubyFeeRetry());
+			replayItem->setTitle("루비");
+		}
+		else if(gc == GachaCategory::kSocialGacha)
+		{
+			replayItem->setPrice(PriceTypeSocial, mySGD->getGachaSocialFeeRetry());
+			replayItem->setTitle("소셜포인트");
+		}
+		replayItem->setFunction([=](CCObject*){
+			prevObtain();
+			replayFunction();
+		});
+		//CCMenuItemLambda* replayItem = CCMenuItemImageLambda::create(againImageName.c_str(), againImageName.c_str(),
+				//[=](CCObject*)
+				//{
+					//prevObtain();
+					//replayFunction();
+				//});
+		addChild(replayItem);
+		replayItem->setPosition(ccp(200, 70));
 			
 		addChild(rewardImg);
 		rewardImg->setPosition(ccp(240, 160));
@@ -122,10 +142,10 @@ public:
 	}
 
 	static GachaShowReward* create(const std::function<void(void)>& replayFunction, const std::function<void(void)>& obtainFunction, CCSprite* rewardImg, 
-			const std::string& descStr, RewardKind kind, int value, const std::string& againImageName)
+			const std::string& descStr, RewardKind kind, int value, const std::string& againImageName, GachaCategory gc)
 	{
 		GachaShowReward* t = new GachaShowReward();
-		t->init(replayFunction, obtainFunction, rewardImg, descStr, kind, value, againImageName);
+		t->init(replayFunction, obtainFunction, rewardImg, descStr, kind, value, againImageName, gc);
 		t->autorelease();
 		return t;
 	}

@@ -51,7 +51,7 @@ private:
 	void showPopup();
 	void endShowPopup();
 	
-	void hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector);
+	void hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector, int ruby, int gold, int social);
 	void endHidePopup();
 	
 	void startGame();

@@ -16,7 +16,7 @@ public:
 	virtual ~GoldClicker();
 	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
 	void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
+	virtual bool init(int priority, const std::function<void(CCObject*, SEL_CallFunc, int, int, int)>& hideFunction)
 	{
 		CCLayer::init();
 			
@@ -108,7 +108,7 @@ public:
 		setTouchEnabled(true);
 		return true;
 	}
-	static GoldClicker* create(int priority, const std::function<void(CCObject*, SEL_CallFunc)>& hideFunction)
+	static GoldClicker* create(int priority, const std::function<void(CCObject*, SEL_CallFunc, int, int, int)>& hideFunction)
 	{
 		GoldClicker* t = new GoldClicker();
 		t->init(priority, hideFunction);
@@ -139,14 +139,14 @@ public:
 		if(m_remainTime <= m_flowTime)
 		{
 			unscheduleUpdate();
-			m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
+//			m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent), m_obtainRuby, m_obtainGold, m_obtainSocial);
 			mySGD->setStar(mySGD->getStar() + m_obtainRuby);
 			mySGD->setGold(mySGD->getGold() + m_obtainGold);
 			mySGD->setFriendPoint(mySGD->getFriendPoint() + m_obtainSocial);
 			myDSH->saveUserData({kSaveUserData_Key_star, kSaveUserData_Key_gold, kSaveUserData_Key_friendPoint}, [=](Json::Value v)
 					{
 						addChild(KSTimer::create(3.f, [=](){
-							m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
+							m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent), m_obtainRuby, m_obtainGold, m_obtainSocial);
 							//m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 						}));
 					});
@@ -160,7 +160,7 @@ protected:
 	bool m_startMine;
 	int m_priority;
 	int m_obtainGold, m_obtainRuby, m_obtainSocial;
-	std::function<void(CCObject*, SEL_CallFunc)> m_hideFunction;
+	std::function<void(CCObject*, SEL_CallFunc, int, int, int)> m_hideFunction;
 	CCProgressTimer* m_timer1;
 	CCProgressTimer* m_timer2;
 	CCSprite* m_howToUse;

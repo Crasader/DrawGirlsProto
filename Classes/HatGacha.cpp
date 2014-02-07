@@ -167,13 +167,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 										CCNode* parentPointer = getParent();
 										if(m_gachaMode == kGachaPurchaseStartMode_select){ // 선택으로 들어온 거라면 다시 하기가 가능함.
 											replayFunction = [=]() {
-												// 선택으로 들어온 거라면 다시 하기가 가능함.
-												if(mySGD->getGold() >= 500) {
-													mySGD->setGold(mySGD->getGold() - 500);
-													myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v) {
-
-													});
-
+												auto retryGame = [=](){
 													auto tempKind = i.first->m_reward->m_kind;
 													auto value = i.first->m_reward->m_value;
 													auto spriteStr = i.first->m_reward->m_spriteStr;
@@ -183,11 +177,48 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 														rewards.push_back(RewardSprite::create(tempKind, value, spriteStr, weight));
 													}
 													parentPointer->addChild(HatGachaSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
-															this->getZOrder());
+																									this->getZOrder());
 													this->removeFromParent();
+												};
+												// 선택으로 들어온 거라면 다시 하기가 가능함.
+												if(m_gachaCategory == GachaCategory::kRubyGacha)
+												{
+													if(mySGD->getStar() >= mySGD->getGachaRubyFeeRetry()) {
+														mySGD->setStar(mySGD->getStar() - mySGD->getGachaRubyFeeRetry());
+														myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v) {
+
+														});
+														retryGame();
+													}
+													else {
+														CCLog("돈 없음");
+													}
 												}
-												else {
-													CCLog("돈 없음");
+												else if(m_gachaCategory == GachaCategory::kGoldGacha)
+												{
+													if(mySGD->getGold() >= mySGD->getGachaGoldFeeRetry()) {
+														mySGD->setGold(mySGD->getGold() - mySGD->getGachaGoldFeeRetry());
+														myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v) {
+
+														});
+														retryGame();
+													}
+													else {
+														CCLog("돈 없음");
+													}
+												}
+												else if(m_gachaCategory == GachaCategory::kSocialGacha)
+												{
+													if(mySGD->getFriendPoint() >= mySGD->getGachaSocialFeeRetry()) {
+														mySGD->setFriendPoint(mySGD->getFriendPoint() - mySGD->getGachaSocialFeeRetry());
+														myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+
+														});
+														retryGame();
+													}
+													else {
+														CCLog("돈 없음");
+													}
 												}
 
 											};
@@ -197,22 +228,22 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 										std::string againFileName;
 										if(m_gachaCategory == GachaCategory::kRubyGacha)
 										{
-											againFileName = "gacha_popup_again.png";
+											againFileName = "Ruby";
 										}
 										else if(m_gachaCategory == GachaCategory::kGoldGacha)
 										{
-											againFileName = "gacha_popup_again.png";
+											againFileName = "Gold";
 										}
 										else if(m_gachaCategory == GachaCategory::kSocialGacha)
 										{
-											againFileName = "gacha_popup_again.png";
+											againFileName = "Social"; 
 										}
 										GachaShowReward* gachaShowReward = GachaShowReward::create(replayFunction,
 												m_callback,
 												CCSprite::create(i.first->m_reward->m_spriteStr.c_str()),
 												CCString::createWithFormat("%d", i.first->m_reward->m_value)->getCString(),
 												kind,
-												selectedItemValue, againFileName
+												selectedItemValue, againFileName, m_gachaCategory
 												);
 										addChild(gachaShowReward, 30);
 

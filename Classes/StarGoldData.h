@@ -452,6 +452,9 @@ public:
 	void setGachaGoldFee(int t_data);
 	void setGachaRubyFee(int t_data);
 	void setGachaSocialFee(int t_data);
+	void setGachaGoldFeeRetry(int t_data);
+	void setGachaRubyFeeRetry(int t_data);
+	void setGachaSocialFeeRetry(int t_data);
 	void setCardUpgradeGoldFee(int t_data);
 	void setCardUpgradeRubyFee(int t_data);
 	void setHeartSendCoolTime(int t_data);
@@ -481,6 +484,9 @@ public:
 	int getGachaGoldFee();
 	int getGachaRubyFee();
 	int getGachaSocialFee();
+	int getGachaGoldFeeRetry();
+	int getGachaRubyFeeRetry();
+	int getGachaSocialFeeRetry();
 	int getCardUpgradeGoldFee();
 	int getCardUpgradeRubyFee();
 	int getHeartSendCoolTime();
@@ -643,6 +649,9 @@ private:
 	KSProtectVar<int> gacha_gold_fee; // 골드 가챠 가격(골드)
 	KSProtectVar<int> gacha_ruby_fee; // 루비 가챠 가격(루비)
 	KSProtectVar<int> gacha_social_fee; // 소셜 가챠 가격(소셜포인트)
+	KSProtectVar<int> gacha_gold_fee_retry; // 골드 가챠 가격(골드)
+	KSProtectVar<int> gacha_ruby_fee_retry; // 루비 가챠 가격(루비)
+	KSProtectVar<int> gacha_social_fee_retry; // 소셜 가챠 가격(소셜포인트)
 	KSProtectVar<int> card_upgrade_gold_fee; // 카드 일반강화 가격(골드)
 	KSProtectVar<int> card_upgrade_ruby_fee; // 카드 고급강화 가격(루비)
 	KSProtectVar<int> heart_send_cool_time; // 하트 보내기 쿨타임
