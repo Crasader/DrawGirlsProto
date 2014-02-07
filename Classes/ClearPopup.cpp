@@ -9,7 +9,6 @@
 #include "ClearPopup.h"
 
 #include "StageImgLoader.h"
-#include "StarGoldData.h"
 #include "SilhouetteData.h"
 #include "LogData.h"
 #include "CardCase.h"
@@ -32,6 +31,7 @@
 #include "AchieveNoti.h"
 #include "SendMessageUtil.h"
 #include "CardAnimations.h"
+#include "GDWebSprite.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,

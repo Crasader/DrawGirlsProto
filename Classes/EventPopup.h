@@ -4,11 +4,6 @@
 #ifndef LZZ_EventPopup_h
 #define LZZ_EventPopup_h
 #include "cocos2d.h"
-#include "ServerDataSave.h"
-#include "StageImgLoader.h"
-#include "StageInfoDown.h"
-#include "StageSettingPopup.h"
-#include "PuzzleMapScene.h"
 
 USING_NS_CC;
 #define LZZ_INLINE inline

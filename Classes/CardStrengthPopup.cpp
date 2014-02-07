@@ -20,6 +20,7 @@
 #include "CollectionBookPopup.h"
 #include "GraySprite.h"
 #include "CardAnimations.h"
+#include "StageImgLoader.h"
 
 enum CardStrengthPopupZorder{
 	kCardStrengthPopupZorder_gray = 1,

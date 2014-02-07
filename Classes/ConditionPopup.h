@@ -10,8 +10,6 @@
 #define __DGproto__ConditionPopup__
 
 #include "cocos2d.h"
-#include "StarGoldData.h"
-#include "SilhouetteData.h"
 
 USING_NS_CC;
 

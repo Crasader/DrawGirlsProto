@@ -10,10 +10,9 @@
 #define __DrawingJack__BossLifeGage__
 
 #include "cocos2d.h"
-#include "GageBar.h"
 
 USING_NS_CC;
-
+class GageBar;
 class BossLifeGage : public CCNode
 {
 public:

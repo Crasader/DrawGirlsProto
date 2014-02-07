@@ -30,6 +30,10 @@
 #include "CommonButton.h"
 #include "CardCase.h"
 
+#include "HeartTime.h"
+#include "MyLocalization.h"
+#include "GDWebSprite.h"
+
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
 	kMT_FP_replay,

@@ -10,8 +10,6 @@
 #define __DGproto__DurabilityNoti__
 
 #include "cocos2d.h"
-#include "StarGoldData.h"
-#include "StageSettingPopup.h"
 
 USING_NS_CC;
 using namespace std;

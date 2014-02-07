@@ -9,6 +9,7 @@
 #include "MapScanner.h"
 #include <chrono>
 #include <ctime>
+#include "DataStorageHub.h"
 
 void MapScanner::scanMap()
 {

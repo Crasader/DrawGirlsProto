@@ -11,6 +11,7 @@
 #include "StageImgLoader.h"
 #include "CollectionBookPopup.h"
 #include "PuzzleMapScene.h"
+#include "DataStorageHub.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f

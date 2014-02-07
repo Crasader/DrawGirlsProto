@@ -7,6 +7,10 @@
 //
 
 #include "CardCase.h"
+#include "ServerDataSave.h"
+#include "StarGoldData.h"
+#include "CountingBMLabel.h"
+#include "DataStorageHub.h"
 
 SpinUpgradeMissile* SpinUpgradeMissile::create( string t_type_name, int elemental_level, CCPoint t_center_position, bool is_popup )
 {

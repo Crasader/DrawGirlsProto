@@ -10,7 +10,6 @@
 #define DrawingJack_GameData_h
 
 #include "cocos2d.h"
-#include "DataStorageHub.h"
 #include "SelectorDefine.h"
 
 using namespace cocos2d;

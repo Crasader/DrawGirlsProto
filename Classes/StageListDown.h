@@ -11,12 +11,9 @@
 
 #include "cocos2d.h"
 //#include "GraphDog.h"
-#include "StarGoldData.h"
-#include "ServerDataSave.h"
-#include "StageImgLoader.h"
 #include "DownloadFile.h"
 #include "hspConnector.h"
-#include "LogData.h"
+
 
 USING_NS_CC;
 using namespace std;
@@ -30,6 +27,8 @@ enum SLD_MenuTag{
 	kSLD_MT_receive = 1,
 	kSLD_MT_redown
 };
+
+class IntPoint;
 
 class StageListDown : public CCLayer
 {

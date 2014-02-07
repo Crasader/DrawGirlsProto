@@ -4,9 +4,9 @@
 #ifndef LZZ_GageBar_h
 #define LZZ_GageBar_h
 #include "cocos2d.h"
-#include "DataStorageHub.h"
 
 USING_NS_CC;
+using namespace std;
 #define LZZ_INLINE inline
 class GageBar : public CCSprite
 {

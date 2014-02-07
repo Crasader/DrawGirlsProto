@@ -10,11 +10,8 @@
 #define __DGproto__FailPopup__
 
 #include "cocos2d.h"
-#include "MyLocalization.h"
 #include "hspConnector.h"
-#include "HeartTime.h"
 #include "cocos-ext.h"
-#include "GDWebSprite.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;

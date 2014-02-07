@@ -11,6 +11,7 @@
 #include "StarGoldData.h"
 #include "SilhouetteData.h"
 #include "CumberShowWindow.h"
+#include "DataStorageHub.h"
 
 StageInfoPopup* StageInfoPopup::create( CCObject* t_close, SEL_CallFunc d_close, int t_stage_number )
 {

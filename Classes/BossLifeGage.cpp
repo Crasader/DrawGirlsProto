@@ -7,6 +7,7 @@
 //
 
 #include "BossLifeGage.h"
+#include "GageBar.h"
 
 BossLifeGage* BossLifeGage::create()
 {

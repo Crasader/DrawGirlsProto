@@ -2,6 +2,7 @@
 //
 
 #include "GageBar.h"
+#include "DataStorageHub.h"
 #define LZZ_INLINE inline
 using namespace std;
 GageBar * GageBar::create (string filename, float t_per)

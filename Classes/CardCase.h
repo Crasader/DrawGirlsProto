@@ -10,10 +10,7 @@
 #define __DGproto__CardCase__
 
 #include "cocos2d.h"
-#include "ServerDataSave.h"
-#include "StarGoldData.h"
 #include "MissileDamageData.h"
-#include "CountingBMLabel.h"
 
 USING_NS_CC;
 

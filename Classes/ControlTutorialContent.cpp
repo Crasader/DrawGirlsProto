@@ -7,3 +7,6 @@
 //
 
 #include "ControlTutorialContent.h"
+
+#include "StarGoldData.h"
+

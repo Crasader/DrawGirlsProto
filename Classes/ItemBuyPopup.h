@@ -4,9 +4,8 @@
 #ifndef LZZ_ItemBuyPopup_h
 #define LZZ_ItemBuyPopup_h
 #include "cocos2d.h"
-#include "SilhouetteData.h"
-#include "StarGoldData.h"
-
+#include "EnumDefine.h"
+#include "SelectorDefine.h"
 USING_NS_CC;
 #define LZZ_INLINE inline
 enum IBP_MenuTag

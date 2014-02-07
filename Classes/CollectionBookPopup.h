@@ -10,9 +10,8 @@
 #define __DGproto__CollectionBookPopup__
 
 #include "cocos2d.h"
-#include "SilhouetteData.h"
-#include "StageImgLoader.h"
 #include "cocos-ext.h"
+#include <deque>
 
 USING_NS_CC;
 USING_NS_CC_EXT;

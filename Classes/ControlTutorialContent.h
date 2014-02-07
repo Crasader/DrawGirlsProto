@@ -11,9 +11,8 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
-#include "CCMenuLambda.h"
-#include "StarGoldData.h"
 #include "KSUtil.h"
+#include "CCMenuLambda.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;

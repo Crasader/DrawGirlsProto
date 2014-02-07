@@ -7,6 +7,7 @@
 #include "GachaPurchase.h"
 #include "KHAlertView.h"
 #include "CommonButton.h"
+#include "DataStorageHub.h"
 HelpResultSend::HelpResultSend()
 {
 	

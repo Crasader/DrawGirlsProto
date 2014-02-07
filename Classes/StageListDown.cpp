@@ -10,6 +10,12 @@
 #include "PuzzleCache.h"
 #include "LoadingTipScene.h"
 #include "CommonButton.h"
+#include "DataStorageHub.h"
+#include "LogData.h"
+
+#include "StarGoldData.h"
+#include "ServerDataSave.h"
+#include "StageImgLoader.h"
 
 void StageListDown::addDownlist(string t_key, const Json::Value& result_data)
 {

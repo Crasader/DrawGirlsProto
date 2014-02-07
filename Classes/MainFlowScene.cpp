@@ -32,6 +32,9 @@
 #include "PuzzleListShadow.h"
 #include "InviteEventPopup.h"
 #include "TouchSuctionLayer.h"
+#include "ScrollMenu.h"
+#include "MyLocalization.h"
+
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();

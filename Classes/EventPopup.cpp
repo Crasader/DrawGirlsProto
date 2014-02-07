@@ -12,6 +12,12 @@
 #include "CCMenuLambda.h"
 #include "StartSettingScene.h"
 
+#include "ServerDataSave.h"
+#include "StageImgLoader.h"
+#include "StageInfoDown.h"
+#include "StageSettingPopup.h"
+#include "PuzzleMapScene.h"
+
 #define LZZ_INLINE inline
 using namespace std;
 EventPopup * EventPopup::create ()

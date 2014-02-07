@@ -10,11 +10,6 @@
 #define __galsprototype__ClearShowTime__
 
 #include "cocos2d.h"
-#include "GameData.h"
-#include "AudioEngine.h"
-#include "SilhouetteData.h"
-#include "StarGoldData.h"
-#include "StageImgLoader.h"
 
 USING_NS_CC;
 

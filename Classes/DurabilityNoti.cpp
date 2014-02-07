@@ -7,6 +7,9 @@
 //
 
 #include "DurabilityNoti.h"
+#include "StarGoldData.h"
+#include "StageSettingPopup.h"
+#include "DataStorageHub.h"
 
 DurabilityNoti* DurabilityNoti::create( CCObject* t_cancel, SEL_MenuHandler d_cancel, CCObject* t_ok, SEL_MenuHandler d_ok )
 {

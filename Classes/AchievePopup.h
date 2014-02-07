@@ -13,7 +13,6 @@
 #include "cocos-ext.h"
 #include "AchieveData.h"
 #include "jsoncpp/json.h"
-#include "LoadingLayer.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -26,6 +25,7 @@ enum AchievePopupListCode{
 	kAchievePopupListCode_reward
 };
 class CommonButton;
+class LoadingLayer;
 class AchievePopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:

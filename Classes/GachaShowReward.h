@@ -16,6 +16,7 @@ USING_NS_CC;
 #include "GachaPurchase.h"
 #include "GachaReward.h"
 #include "CommonButton.h"
+#include "DataStorageHub.h"
 
 USING_NS_CC;
 

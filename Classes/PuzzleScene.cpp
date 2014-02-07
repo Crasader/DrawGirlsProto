@@ -27,6 +27,7 @@
 #include "AlertEngine.h"
 #include "TouchSuctionLayer.h"
 #include "CommonButton.h"
+#include "MyLocalization.h"
 
 CCScene* PuzzleScene::scene()
 {

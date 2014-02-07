@@ -2,6 +2,9 @@
 //
 
 #include "ItemBuyPopup.h"
+#include "DataStorageHub.h"
+#include "SilhouetteData.h"
+#include "StarGoldData.h"
 #define LZZ_INLINE inline
 using namespace std;
 ItemBuyPopup * ItemBuyPopup::create (ITEM_CODE t_item_type, int t_clicked_item_number, CCObject * t_buy, SEL_CallFuncII d_buy)

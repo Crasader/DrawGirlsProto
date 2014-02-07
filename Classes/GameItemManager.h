@@ -11,8 +11,8 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
-#include "GameData.h"
 #include <deque>
+#include "SelectorDefine.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;

@@ -10,7 +10,6 @@
 #define __DGproto__DiaryZoomPopup__
 
 #include "cocos2d.h"
-#include "DataStorageHub.h"
 #include <deque>
 
 USING_NS_CC;

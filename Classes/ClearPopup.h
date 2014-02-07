@@ -11,9 +11,8 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
-#include "GDWebSprite.h"
-#include "hspConnector.h"
 #include "StarGoldData.h"
+#include "hspConnector.h"
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
@@ -35,7 +34,6 @@ enum ClearFriendCell_Zorder
 	kCFC_Z_img
 };
 
-class RankFriendInfo;
 class ClearPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:

@@ -3,10 +3,7 @@
 
 #include "MissileUnit.h"
 
-
 #include "StarGoldData.h"
-
-
 #include "KSUtil.h"
 
 #include "ProbSelector.h"
@@ -16,6 +13,8 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "KSUtil.h"
+#include "GameData.h"
+#include "DataStorageHub.h"
 
 #define LZZ_INLINE inline
 

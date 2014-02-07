@@ -10,10 +10,9 @@
 #define __DrawingJack__ControlType__
 
 #include "cocos2d.h"
-#include "Jack.h"
-#include "DataStorageHub.h"
-#include "GameData.h"
 #include "cocos-ext.h"
+#include "IntSeries.h"
+
 USING_NS_CC_EXT;
 
 using namespace cocos2d;
@@ -27,6 +26,7 @@ typedef enum t_CT_Type{
 	kCT_Type_Joystick_button
 }CT_Type;
 
+class Jack;
 class ControlCommon : public CCLayer
 {
 public:

@@ -8,6 +8,7 @@
 
 #include "SilhouetteData.h"
 #include "StageImgLoader.h"
+#include "DataStorageHub.h"
 
 void SilhouetteData::startSetting()
 {

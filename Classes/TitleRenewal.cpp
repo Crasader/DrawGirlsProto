@@ -129,6 +129,8 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		puzzlelist_param["eventstagelistversion"] = NSDS_GI(kSDS_GI_eventListVersion_i);
 		command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
 		
+		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
+		
 //		CCLabelTTF* loadfriends_label = CCLabelTTF::create("start kLoadFriends", mySGD->getFont().c_str(), 10);
 //		loadfriends_label->setPosition(ccp(360, myDSH->ui_top-30));
 //		addChild(loadfriends_label);
@@ -927,6 +929,37 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 		puzzlelist_param["puzzlelistversion"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 		puzzlelist_param["eventstagelistversion"] = NSDS_GI(kSDS_GI_eventListVersion_i);
 		command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetPathInfo(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		Json::Value puzzle_list = result_data["puzzlelist"];
+		
+		for(int i=0;i<puzzle_list.size();i++)
+		{
+			Json::Value path_info = puzzle_list[i];
+			
+			int start_stage = path_info["stageStart"].asInt();
+			int puzzle_number = path_info["puzzleNo"].asInt();
+			
+			Json::Value path_list = path_info["path"];
+			
+			for(int j=0;j<path_list.size();j++)
+				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, start_stage + j, path_list[j].asInt(), false);
+			
+			mySDS->fFlush(puzzle_number, kSDS_PZ_base);
+		}
+	}
+	else
+	{
+		is_receive_fail = true;
+		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 	}
 	
 	receive_cnt--;

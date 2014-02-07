@@ -19,6 +19,7 @@
 #include "CommonButton.h"
 #include "CardStrengthPopup.h"
 #include "MainFlowScene.h"
+#include "StageImgLoader.h"
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,

@@ -17,6 +17,7 @@
 #include "StartSettingScene.h"
 #include "TouchSuctionLayer.h"
 #include "CommonButton.h"
+#include "CountingBMLabel.h"
 
 enum CardChangePopupZorder{
 	kCardChangePopupZorder_gray = 1,

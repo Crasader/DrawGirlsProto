@@ -7,6 +7,9 @@
 //
 
 #include "ConditionPopup.h"
+#include "StarGoldData.h"
+#include "SilhouetteData.h"
+#include "DataStorageHub.h"
 
 ConditionPopup* ConditionPopup::create( CCObject* t_close, SEL_CallFunc d_close )
 {

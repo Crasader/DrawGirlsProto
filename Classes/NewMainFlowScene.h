@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include <map>
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -23,6 +24,13 @@ enum NewMainFlowZorder{
 	kNewMainFlowZorder_uiButton,
 	kNewMainFlowZorder_right,
 	kNewMainFlowZorder_popup
+};
+
+class PuzzlePiecePath
+{
+public:
+	int piece_no;
+	int stage_no;
 };
 
 class CountingBMLabel;
@@ -63,7 +71,15 @@ private:
     virtual CCSize cellSizeForTable(CCTableView *table);
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
+	void pieceAction(int t_stage_number);
+	void buyPieceAction(int t_stage_number);
+	void lockPieceAction(int t_stage_number);
+	
+	vector<int> puzzle_piece_mode;
+	
 	vector<int> have_card_count_for_puzzle_index;
+	
+	map<int, vector<PuzzlePiecePath>> puzzle_piece_path;
 	
 	NewStageInfoView* new_stage_info_view;
 	

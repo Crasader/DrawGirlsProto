@@ -15,6 +15,7 @@
 #include <algorithm>
 #include "cocos-ext.h"
 #include "LogData.h"
+#include "DataStorageHub.h"
 
 using namespace cocos2d;
 using namespace std;

@@ -13,6 +13,7 @@
 #include "SilhouetteData.h"
 #include "StarGoldData.h"
 #include "ServerDataSave.h"
+#include "GameData.h"
 
 void GameItemBase::selfRemove()
 {

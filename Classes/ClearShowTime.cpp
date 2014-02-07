@@ -8,6 +8,13 @@
 
 #include "ClearShowTime.h"
 
+#include "GameData.h"
+#include "AudioEngine.h"
+#include "SilhouetteData.h"
+#include "StarGoldData.h"
+#include "StageImgLoader.h"
+#include "DataStorageHub.h"
+
 ClearShowTime* ClearShowTime::create( bool t_exchanged, bool t_is, CCNode* t_game_node, CCObject* t_changeScene, SEL_CallFunc d_changeScene )
 {
 	ClearShowTime* t_cst = new ClearShowTime();

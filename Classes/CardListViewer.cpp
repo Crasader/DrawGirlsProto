@@ -8,6 +8,14 @@
 
 #include "CardListViewer.h"
 
+#include "GraySprite.h"
+#include "ServerDataSave.h"
+
+#include "DataStorageHub.h"
+#include "StageImgLoader.h"
+
+#include "SilhouetteData.h"
+#include "StarGoldData.h"
 
 
 void CardListViewer::visit()

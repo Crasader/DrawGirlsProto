@@ -11,6 +11,7 @@
 #include "ScrollMenu.h"
 #include "TouchSuctionLayer.h"
 #include "CommonButton.h"
+#include "LoadingLayer.h"
 
 enum AchievePopupMenuTag{
 	kAchievePopupMenuTag_close = 1,

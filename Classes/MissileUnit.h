@@ -5,7 +5,7 @@
 #define LZZ_MissileUnit_h
 #include "cocos2d.h"
 #include "cocos-ext.h"
-#include "GameData.h"
+#include "hspConnector.h"
 #include "FromTo.h"
 #include "Well512.h"
 #include <unordered_map>
@@ -13,6 +13,7 @@
 #include <map>
 #include <functional>
 #include <set>
+#include "IntSeries.h"
 USING_NS_CC_EXT;
 USING_NS_CC;
 #define MAX_SCALE_X	10.f

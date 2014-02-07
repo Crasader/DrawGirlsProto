@@ -8,6 +8,7 @@
 
 #include "GameData.h"
 #include "SilhouetteData.h"
+#include "DataStorageHub.h"
 
 float deg2Rad(float x) { return x * M_PI / 180.f;}
 float rad2Deg(float x) { return x * 180.f / M_PI;}
