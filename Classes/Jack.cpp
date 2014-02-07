@@ -2054,7 +2054,7 @@ void Jack::myInit()
 
 	jack_barrier->runAction(t_repeat);
 	
-	setScale(NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d));
+	setScale(1/myGD->game_scale);//NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)
 }
 
 void Jack::setStartPosition()
