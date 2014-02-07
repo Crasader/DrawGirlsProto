@@ -28,11 +28,6 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	
 	setTouchEnabled(true);
 	
-	
-	
-	
-
-	
 	m_currentSelectSprite = NULL;
 	
 	used_card_img = NULL;
@@ -533,17 +528,6 @@ void JoinGameFriendPopup::editBoxReturn(CCEditBox* editBox)
 	std::string strId = oss.str();
 	this->searchById(strId);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 JoinFriendTableView* JoinFriendTableView::create( CCTableViewDataSource* dataSource, CCSize size, CCNode *container )

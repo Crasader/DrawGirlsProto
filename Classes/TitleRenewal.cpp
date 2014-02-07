@@ -223,6 +223,9 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setGachaGoldFee(result_data["gachaGoldFee"].asInt());
 		mySGD->setGachaRubyFee(result_data["gachaRubyFee"].asInt());
 		mySGD->setGachaSocialFee(result_data["gachaSocialFee"].asInt());
+		mySGD->setGachaGoldFeeRetry(result_data["gachaGoldFeeRetry"].asInt());
+		mySGD->setGachaRubyFeeRetry(result_data["gachaRubyFeeRetry"].asInt());
+		mySGD->setGachaSocialFeeRetry(result_data["gachaSocialFeeRetry"].asInt());
 		mySGD->setCardUpgradeGoldFee(result_data["cardUpgradeGoldFee"].asInt());
 		mySGD->setCardUpgradeRubyFee(result_data["cardUpgradeRubyFee"].asInt());
 		mySGD->setHeartSendCoolTime(result_data["heartSendCoolTime"].asInt());

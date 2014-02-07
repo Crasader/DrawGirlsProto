@@ -31,23 +31,55 @@ void SlotMachineSub::update(float dt)
 		CCNode* parentPointer = getParent();
 		if(m_gachaMode == kGachaPurchaseStartMode_select){ // 선택으로 들어온 거라면 다시 하기가 가능함.
 			replayFunction = [=]() {
-				 // 선택으로 들어온 거라면 다시 하기가 가능함.
-				if(mySGD->getGold() >= 500) {
-					mySGD->setGold(mySGD->getGold() - 500);
-					myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v) {
-
-					});
+				auto retryGame = [=](){
 
 					std::vector<RewardSprite*> rewards;
 					for(auto i : m_rewards) {
 						rewards.push_back(RewardSprite::create(i->m_kind, i->m_value, i->m_spriteStr, i->m_weight));
 					}
 					parentPointer->addChild(SlotMachineSub::create(m_callback, rewards, m_gachaMode, m_gachaCategory),
-							this->getZOrder());
+																	this->getZOrder());
 					this->removeFromParent();
+				};
+				 // 선택으로 들어온 거라면 다시 하기가 가능함.
+				if(m_gachaCategory == GachaCategory::kRubyGacha)
+				{
+					if(mySGD->getStar() >= mySGD->getGachaRubyFeeRetry()) {
+						mySGD->setStar(mySGD->getStar() - mySGD->getGachaRubyFeeRetry());
+						myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v) {
+
+						});
+						retryGame();
+					}
+					else {
+						CCLog("돈 없음");
+					}
 				}
-				else {
-					CCLog("돈 없음");
+				else if(m_gachaCategory == GachaCategory::kGoldGacha)
+				{
+					if(mySGD->getGold() >= mySGD->getGachaGoldFeeRetry()) {
+						mySGD->setGold(mySGD->getGold() - mySGD->getGachaGoldFeeRetry());
+						myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v) {
+
+						});
+						retryGame();
+					}
+					else {
+						CCLog("돈 없음");
+					}
+				}
+				else if(m_gachaCategory == GachaCategory::kSocialGacha)
+				{
+					if(mySGD->getFriendPoint() >= mySGD->getGachaSocialFeeRetry()) {
+						mySGD->setFriendPoint(mySGD->getFriendPoint() - mySGD->getGachaSocialFeeRetry());
+						myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+
+						});
+						retryGame();
+					}
+					else {
+						CCLog("돈 없음");
+					}
 				}
 
 			};
@@ -57,22 +89,22 @@ void SlotMachineSub::update(float dt)
 		std::string againFileName;
 		if(m_gachaCategory == GachaCategory::kRubyGacha)
 		{
-			againFileName = "gacha_popup_again.png";
+			againFileName = "Ruby";
 		}
 		else if(m_gachaCategory == GachaCategory::kGoldGacha)
 		{
-			againFileName = "gacha_popup_again.png";
+			againFileName = "Gold";
 		}
 		else if(m_gachaCategory == GachaCategory::kSocialGacha)
 		{
-			againFileName = "gacha_popup_again.png";
+			againFileName = "Social"; 
 		}
 		GachaShowReward* gachaShowReward = GachaShowReward::create(replayFunction,
 			m_callback,
 			CCSprite::create(m_rewards[ m_alreadyDeterminantOrder ]->m_spriteStr.c_str()),
 			CCString::createWithFormat("%d", m_rewards[m_alreadyDeterminantOrder]->m_value)->getCString(),
 			kind,
-			selectedItemValue, againFileName
+			selectedItemValue, againFileName, m_gachaCategory
 				);
 		addChild(gachaShowReward, 3);
 

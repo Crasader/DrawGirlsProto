@@ -1038,6 +1038,18 @@ void StarGoldData::setGachaSocialFee(int t_data)
 {
 	gacha_social_fee = t_data;
 }
+void StarGoldData::setGachaGoldFeeRetry(int t_data)
+{
+	gacha_gold_fee_retry = t_data;
+}
+void StarGoldData::setGachaRubyFeeRetry(int t_data)
+{
+	gacha_ruby_fee_retry = t_data;
+}
+void StarGoldData::setGachaSocialFeeRetry(int t_data)
+{
+	gacha_social_fee_retry = t_data;
+}
 void StarGoldData::setCardUpgradeGoldFee(int t_data)
 {
 	card_upgrade_gold_fee = t_data;
@@ -1150,6 +1162,18 @@ int StarGoldData::getGachaRubyFee()
 int StarGoldData::getGachaSocialFee()
 {
 	return gacha_social_fee.getV();
+}
+int StarGoldData::getGachaGoldFeeRetry()
+{
+	return gacha_gold_fee_retry.getV();
+}
+int StarGoldData::getGachaRubyFeeRetry()
+{
+	return gacha_ruby_fee_retry.getV();
+}
+int StarGoldData::getGachaSocialFeeRetry()
+{
+	return gacha_social_fee_retry.getV();
 }
 int StarGoldData::getCardUpgradeGoldFee()
 {
