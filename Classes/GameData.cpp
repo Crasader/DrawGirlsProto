@@ -365,7 +365,7 @@ void GameData::initUserSelectedStartRect( IntRect t_rect )
 	float scale_value = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d);
 	if(scale_value < 0.1f)
 		scale_value = 1.f;
-	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)*scale_value;
+	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);//*scale_value;
 	game_scale = (720.f*scale_value-boarder_value*2)/(320.f);
 	setInitRect(t_rect.origin, t_rect.size);
 }

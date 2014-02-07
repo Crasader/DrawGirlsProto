@@ -1601,6 +1601,7 @@ void Jack::takeSpeedUpItem()
 	{
 		speed_up_value += 0.1f;
 		changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
+		
 		myGD->communication("Main_takeSpeedUpEffect", int(roundf((0.8f - (2.f - myGD->jack_base_speed) + speed_up_value)/0.1f)));
 	}
 }
@@ -2053,7 +2054,7 @@ void Jack::myInit()
 
 	jack_barrier->runAction(t_repeat);
 	
-	setScale(1.f/myGD->game_scale);
+	setScale(NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d));
 }
 
 void Jack::setStartPosition()
