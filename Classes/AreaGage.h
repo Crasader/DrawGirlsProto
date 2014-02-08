@@ -28,7 +28,7 @@ private:
 	CCProgressTimer* gage_bar1;
 	CCProgressTimer* gage_bar2;
 	CCProgressTimer* gage_bar3;
-	CCSprite* gage_case;
+//	CCSprite* gage_case;
 	
 	CCSprite* star1;
 	CCSprite* star2;

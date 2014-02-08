@@ -54,17 +54,17 @@ ComboParent * ComboParent::create ()
 }
 void ComboParent::showCombo (int t_combo)
 {
-	if(getChildrenCount() > 0)
-	{
-		ComboView* t_cv = (ComboView*)getChildren()->randomObject();
-		t_cv->changeCombo(t_combo);
-	}
-	else
-	{
-		ComboView* t_cv = ComboView::create(t_combo);
-		t_cv->setScale(1.f/1.5f);
-		addChild(t_cv,0,1);// 1 : ComboView
-	}
+//	if(getChildrenCount() > 0)
+//	{
+//		ComboView* t_cv = (ComboView*)getChildren()->randomObject();
+//		t_cv->changeCombo(t_combo);
+//	}
+//	else
+//	{
+//		ComboView* t_cv = ComboView::create(t_combo);
+//		t_cv->setScale(1.f/1.5f);
+//		addChild(t_cv,0,1);// 1 : ComboView
+//	}
 	
 	keeping_frame = 500;
 	if(!is_keeping)
@@ -73,7 +73,7 @@ void ComboParent::showCombo (int t_combo)
 void ComboParent::stopKeep ()
 {
 	unschedule(schedule_selector(ComboParent::keeping));
-	removeChildByTag(1);
+//	removeChildByTag(1);
 	myGD->communication("UI_setComboCnt", 0);
 	is_keeping = false;
 }
@@ -105,7 +105,7 @@ void ComboParent::keeping ()
 	//			}
 	
 	keeping_frame--;
-	((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/500.f);
+//	((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/500.f);
 	
 	if(keeping_frame <= 0)
 	{
@@ -1135,13 +1135,14 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	
 	
 	CCSprite* new_coin_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", t_coin_number)->getCString());
+	new_coin_spr->setScale(0.7f);
 	new_coin_spr->setPosition(t_start_position);
 	addChild(new_coin_spr);
 	
 	CCPoint after_position;
-	if(myGD->gamescreen_type == kGT_leftUI)				after_position = ccp(260-32*3-16+t_coin_number*32,25);
-	else if(myGD->gamescreen_type == kGT_rightUI)		after_position = ccp(220-32*3-16+t_coin_number*32,25);
-	else												after_position = ccp(260-32*3-16+t_coin_number*32,25);
+	if(myGD->gamescreen_type == kGT_leftUI)				after_position = ccp(240-25*3.5f+t_coin_number*25,25);
+	else if(myGD->gamescreen_type == kGT_rightUI)		after_position = ccp(240-25*3.5f+t_coin_number*25,25);
+	else												after_position = ccp(240-25*3.5f+t_coin_number*25,25);
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.7f);
 	CCMoveTo* t_move = CCMoveTo::create(0.5f, after_position);
@@ -1203,7 +1204,7 @@ void PlayUI::setClearPercentage (float t_p)
 {
 	clearPercentage = t_p;
 	m_areaGage = AreaGage::create(clearPercentage);
-	m_areaGage->setPosition(ccp(240,myDSH->ui_top-30));
+	m_areaGage->setPosition(ccp(240,10));
 	addChild(m_areaGage);
 	m_areaGage->setPercentage(getPercentage());
 }
@@ -1939,8 +1940,8 @@ void PlayUI::myInit ()
 	m_areaGage = NULL;
 	
 	percentageLabel = CCLabelBMFont::create("0%%", "star_gage_font.fnt");
-	percentageLabel->setAnchorPoint(ccp(0, 0.5));
-	percentageLabel->setPosition(ccp(160,myDSH->ui_top-35));
+	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
+	percentageLabel->setPosition(ccp(158,5));
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 //	else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
@@ -2029,9 +2030,10 @@ void PlayUI::myInit ()
 	for(int i=1;i<=6;i++)
 	{
 		CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
-		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(220-32*3-16+i*32,25));
-		else									exchange_spr->setPosition(ccp(260-32*3-16+i*32,25));
+		exchange_spr->setScale(0.7f);
+		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-25*3.5f+i*25,25));
+		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-25*3.5f+i*25,25));
+		else									exchange_spr->setPosition(ccp(240-25*3.5f+i*25,25));
 		addChild(exchange_spr);
 		
 		exchange_spr->setVisible(false);

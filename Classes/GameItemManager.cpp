@@ -695,7 +695,7 @@ void ExchangeCoin::showCoin()
 	
 	setPosition(ccp(myPoint.x*pixelSize + 1, myPoint.y*pixelSize + 1));
 	
-	CCScaleTo* t_scale = CCScaleTo::create(0.5f, NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d));
+	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f/myGD->game_scale*0.7f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::startMoving));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 	
@@ -753,7 +753,7 @@ void ExchangeCoin::moving()
 		
 		back_img = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", myType)->getCString());
 		back_img->setVisible(false);
-		back_img->setScale(NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d));
+		back_img->setScale(1.f/myGD->game_scale*0.7f);
 		back_img->setPosition(CCPointZero);
 		addChild(back_img);
 		
@@ -864,24 +864,24 @@ void ExchangeCoin::cutionAction()
 	{
 		is_cution = true;
 		coin_img->stopAllActions();
-		coin_img->setScale(NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d));
+		coin_img->setScale(1.f/myGD->game_scale*0.7f);
 		
 		float first_x;
 		float first_y;
 		if(rand()%2 == 0)
 		{
-			first_x = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)*0.7f;
-			first_y = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)*1.1f;
+			first_x = 1.f/myGD->game_scale*0.7f*0.7f;
+			first_y = 1.f/myGD->game_scale*1.1f*0.7f;
 		}
 		else
 		{
-			first_x = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)*1.1f;
-			first_y = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)*0.7f;
+			first_x = 1.f/myGD->game_scale*1.1f*0.7f;
+			first_y = 1.f/myGD->game_scale*0.7f*0.7f;
 		}
 		
 		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, first_x, first_y);
 		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, first_y, first_x);
-		CCScaleTo* t_scale3 = CCScaleTo::create(0.1f, NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d));
+		CCScaleTo* t_scale3 = CCScaleTo::create(0.1f, 1.f/myGD->game_scale*0.7f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::endCutionAction));
 		CCSequence* t_seq = CCSequence::create(t_scale1, t_scale2, t_scale3, t_call, NULL);
 		
@@ -983,7 +983,7 @@ void FeverCoin::myInit(IntPoint t_point, CCObject* t_add, SEL_CallFuncO d_add) /
 	runAction(t_repeat);
 	
 	setPosition(my_point.convertToCCP());
-	setScale(NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d));
+	setScale(1.f/myGD->game_scale);
 	
 	startCheck();
 }

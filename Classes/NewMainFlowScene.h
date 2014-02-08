@@ -71,6 +71,9 @@ private:
     virtual CCSize cellSizeForTable(CCTableView *table);
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
+	int selected_puzzle_number;
+	int selected_stage_number;
+	
 	void pieceAction(int t_stage_number);
 	void buyPieceAction(int t_stage_number);
 	void lockPieceAction(int t_stage_number);
@@ -92,6 +95,8 @@ private:
 	void hideFailPopup();
 	
 	void setTable();
+	
+	CCMenu* ready_menu;
 	
 	void menuAction(CCObject* sender);
 	

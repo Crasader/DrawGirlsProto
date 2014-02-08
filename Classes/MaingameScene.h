@@ -182,24 +182,23 @@ private:
 	void moveToBossPosition();
 	
 	CCPoint getObjectToGameNodePosition(CCPoint t_p);
-	
 	CCPoint getObjectToGameNodePositionCoin(CCPoint t_p);
-	
 	CCPoint getGameNodePosition();
-	
 	CCPoint getGameNodeToObjectPosition(CCPoint t_p);
 	
 	void moveGamePosition(CCPoint t_p);
 	
 	void goldGettingEffect(CCPoint t_p, int t_i);
-	
 	void percentageGettingEffect(float t_f, bool t_b, CCPoint t_p);
-	
 	void takeSpeedUpEffect(int t_step);
 	
 	void showMissMissile(CCPoint t_position);
-	
 	void showDamageMissile(CCPoint t_position, int t_damage);
+	CCSprite* combo_string_img;
+	CCLabelBMFont* combo_value_img;
+	void showComboImage(CCPoint t_position, int t_combo_value);
+	void removeComboImage(CCObject* t_node);
+	
 	
 	bool is_line_die;
 	

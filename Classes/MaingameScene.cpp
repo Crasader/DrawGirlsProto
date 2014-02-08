@@ -51,6 +51,11 @@ bool Maingame::init()
 	replay_continue_count = 0;
 	replay_continue_label = NULL;
 	
+	
+	combo_string_img = NULL;
+	combo_value_img = NULL;
+	
+	
 	isCheckingBacking = false;
 	
 	init_state = kMIS_beforeInit;
@@ -91,6 +96,7 @@ bool Maingame::init()
 	myGD->V_V["Main_showPause"] = std::bind(&Maingame::showPause, this);
 	myGD->V_TDTD["Main_showContinue"] = std::bind(&Maingame::showContinue, this, _1, _2, _3, _4);
 	myGD->V_B["Main_setLineParticle"] = std::bind(&Maingame::setLineParticle, this, _1);
+	myGD->V_CCPI["Main_showComboImage"] = std::bind(&Maingame::showComboImage, this, _1, _2);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -1212,6 +1218,49 @@ void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 //	game_node->addChild(damage_label, goldZorder);
 //
 //	damage_label->startMyAction();
+}
+
+void Maingame::showComboImage(CCPoint t_position, int t_combo_value)
+{
+	if(combo_string_img || combo_value_img)
+	{
+		if(combo_string_img)
+			combo_string_img->getParent()->removeFromParent();
+		else if(combo_value_img)
+			combo_value_img->getParent()->removeFromParent();
+	}
+	
+	CCNode* container = CCNode::create();
+	container->setScale(1.f/myGD->game_scale);
+	container->setPosition(ccpAdd(t_position, ccp(0,20)));
+	game_node->addChild(container, goldZorder);
+	
+	combo_string_img = CCSprite::create("combo_front.png");
+	combo_value_img = CCLabelBMFont::create(CCString::createWithFormat("%d", t_combo_value)->getCString(), "combo.fnt");
+	combo_value_img->setAnchorPoint(ccp(0.5,0.5));
+	combo_string_img->setPosition(ccp(-combo_value_img->getContentSize().width/2.f, 0));
+	combo_value_img->setPosition(ccp(combo_string_img->getContentSize().width/2.f, 0));
+	container->addChild(combo_string_img);
+	container->addChild(combo_value_img);
+	
+	CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+	CCFadeTo* t_fade1 = CCFadeTo::create(0.5f, 0);
+	CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, NULL);
+	
+	CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
+	CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
+	CCCallFuncO* t_call2 = CCCallFuncO::create(this, callfuncO_selector(Maingame::removeComboImage), container);
+	CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, t_call2, NULL);
+	
+	combo_value_img->runAction(t_seq1);
+	combo_string_img->runAction(t_seq2);
+}
+
+void Maingame::removeComboImage(CCObject* t_node)
+{
+	combo_string_img = NULL;
+	combo_value_img = NULL;
+	((CCNode*)t_node)->removeFromParent();
 }
 
 void Maingame::showLineDiePosition( IntPoint t_p )
