@@ -60,7 +60,7 @@ public:
 	void endFever ();
 private:
 	CCParticleSystemQuad * fever_particle;
-	CCProgressTimer * fever_top;
+//	CCProgressTimer * fever_top;
 	int recent_count;
 	bool ing_fever;
 	int keeping_count;
@@ -262,7 +262,7 @@ private:
 	FeverParent * my_fp;
 	ComboParent * my_combo;
 	int combo_cnt;
-	GoldLabel * gold_label;
+//	GoldLabel * gold_label;
 	CCLabelBMFont * score_label;
 	CCLabelBMFont * percentageLabel;
 	CCLabelBMFont * countingLabel;
@@ -276,10 +276,14 @@ private:
 	bool is_hard;
 	int beforePercentage;
 	int playtime_limit;
+	int detail_counting_cnt;
+	bool is_urgent;
 	int countingCnt;
 	int use_time;
 	int total_time;
 	int jack_life;
+	int jack_life_hide_count;
+	CCNode* jack_life_node;
 	CCArray * jack_array;
 	bool is_cleared_cdt;
 	CLEAR_CONDITION clr_cdt_type;

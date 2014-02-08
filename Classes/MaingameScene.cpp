@@ -302,6 +302,23 @@ void Maingame::finalSetting()
 	thumb_texture->setPosition(ccp(58-160.f*thumb_scale,myDSH->ui_top-90-215.f*thumb_scale));
 	addChild(thumb_texture, myUIZorder);
 	
+	thumb_case_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
+	thumb_case_top->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(0,215*thumb_scale+1)));
+	addChild(thumb_case_top, myUIZorder);
+	
+	thumb_case_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
+	thumb_case_down->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(0,-215*thumb_scale-1)));
+	addChild(thumb_case_down, myUIZorder);
+	
+	thumb_case_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
+	thumb_case_left->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(-160*thumb_scale-1,0)));
+	addChild(thumb_case_left, myUIZorder);
+	
+	thumb_case_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
+	thumb_case_right->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(160*thumb_scale+1,0)));
+	addChild(thumb_case_right, myUIZorder);
+	
+	
 	thumb_base_position = ccp(58-320.f*thumb_scale,myDSH->ui_top-90-430.f*thumb_scale);
 	
 	CCDelayTime* thumb_delay = CCDelayTime::create(0.3f);
@@ -337,6 +354,23 @@ void Maingame::finalSetting()
 			replay_all_node->addChild(replay_thumb_texture);
 			
 			myGD->V_I["Main_refreshReplayThumb"] = std::bind(&Maingame::refreshReplayThumb, this, _1);
+			
+			
+			CCSprite* replay_case_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
+			replay_case_top->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215*thumb_scale+1)));
+			replay_all_node->addChild(replay_case_top);
+			
+			CCSprite* replay_case_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
+			replay_case_down->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215*thumb_scale-1)));
+			replay_all_node->addChild(replay_case_down);
+			
+			CCSprite* replay_case_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
+			replay_case_left->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(-160*thumb_scale-1,0)));
+			replay_all_node->addChild(replay_case_left);
+			
+			CCSprite* replay_case_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
+			replay_case_right->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(160*thumb_scale+1,0)));
+			replay_all_node->addChild(replay_case_right);
 			
 			
 			replay_boss = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 3, 3));
@@ -572,17 +606,11 @@ void Maingame::counting()
 	
 	if(countingCnt/60 >= 2)
 	{
-		setTag(1);
-		myJack->isStun = false;
 		condition_spr->removeFromParent();
 		unschedule(schedule_selector(Maingame::counting));
 //		setTouchEnabled(true);
 //		myCP->movingMainCumber();
-		myCP->onStartGame();
 //		myCP->movingSubCumbers();
-		myCP->startAutoAttacker();
-		myUI->startCounting();
-		myGD->setIsGameover(false);
 	}
 	else if(countingCnt/60 >= 1 && countingCnt%60 == 0)
 	{
@@ -591,6 +619,16 @@ void Maingame::counting()
 		{
 			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
 			addChild(t_smg, clearshowtimeZorder);
+		}
+		
+		if(countingCnt/60 == 1)
+		{
+			setTag(1);
+			myJack->isStun = false;
+			myCP->onStartGame();
+			myCP->startAutoAttacker();
+			myUI->startCounting();
+			myGD->setIsGameover(false);
 		}
 	}
 }
@@ -1721,6 +1759,11 @@ void Maingame::hideThumb()
 		CCSprite* t_sub = (CCSprite*)sub_thumbs->objectAtIndex(i);
 		t_sub->setVisible(false);
 	}
+	
+	thumb_case_top->setVisible(false);
+	thumb_case_down->setVisible(false);
+	thumb_case_left->setVisible(false);
+	thumb_case_right->setVisible(false);
 	
 	if(mySGD->is_play_replay && mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
 	{

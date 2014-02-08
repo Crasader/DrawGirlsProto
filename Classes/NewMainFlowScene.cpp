@@ -263,19 +263,19 @@ void NewMainFlowScene::setTable()
 	if(screen_scale_x < 1.f)
 		screen_scale_x = 1.f;
 	
-	CCSize table_size = CCSizeMake(480*screen_scale_x, 245);
+	CCSize table_size = CCSizeMake(480*screen_scale_x, 245); // 245
 	
-	//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
-	//	temp_back->setOpacity(100);
-	//	temp_back->setAnchorPoint(CCPointZero);
-	//	temp_back->setPosition(ccp(myDSH->ui_zero_point.x, 160-table_size.height/2.f));
-	//	addChild(temp_back, kMainFlowZorder_table);
+//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+//	temp_back->setOpacity(100);
+//	temp_back->setAnchorPoint(CCPointZero);
+//	temp_back->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 165-table_size.height/2.f));
+//	addChild(temp_back, kNewMainFlowZorder_table);
 	
 	puzzle_table = CCTableView::create(this, table_size);
 	puzzle_table->setAnchorPoint(CCPointZero);
 	puzzle_table->setDirection(kCCScrollViewDirectionHorizontal);
 	puzzle_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f));
+	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 165-table_size.height/2.f));
 	puzzle_table->setDelegate(this);
 	addChild(puzzle_table, kNewMainFlowZorder_table);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
@@ -474,36 +474,47 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 	cell->init();
 	cell->autorelease();
 	
+	float puzzle_width = 326.f;
+	float puzzle_width_half = puzzle_width/2.f;
+	float puzzle_height = 226.f;
+	float puzzle_height_half = puzzle_height/2.f;
+	float side_width = 38.f;
+	float piece_size = 50.f;
+	float piece_width_count = 6;
+	float piece_height_count = 4;
+	float margine_width = (piece_size - puzzle_width+piece_size*piece_width_count)/2.f;
+	
+	
 	if(idx == numberOfCellsInTableView(table)-1)
 	{
 		CCNode* puzzle_node = CCNode::create();
-		puzzle_node->setPosition(ccp(173.5f,111));
+		puzzle_node->setPosition(ccp(puzzle_width_half+margine_width,puzzle_height_half-4));
 		cell->addChild(puzzle_node);
 		
 		CCSprite* puzzle_left = CCSprite::create("temp_puzzle_stencil_left.png");
 		puzzle_left->setAnchorPoint(ccp(0,0.5));
-		puzzle_left->setPosition(ccp(-161,0));
+		puzzle_left->setPosition(ccp(-puzzle_width_half,0));
 		puzzle_node->addChild(puzzle_left);
 		
 		CCSprite* puzzle_right = CCSprite::create("temp_puzzle_stencil_right.png");
 		puzzle_right->setAnchorPoint(ccp(1,0.5));
-		puzzle_right->setPosition(ccp(161,0));
+		puzzle_right->setPosition(ccp(puzzle_width_half,0));
 		puzzle_node->addChild(puzzle_right);
 		
 		CCSprite* puzzle_top = CCSprite::create("temp_puzzle_stencil_top.png");
 		puzzle_top->setAnchorPoint(ccp(0.5,1));
-		puzzle_top->setPosition(ccp(0,111));
+		puzzle_top->setPosition(ccp(0,puzzle_height_half));
 		puzzle_node->addChild(puzzle_top);
 		
 		CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_stencil_bottom.png");
 		puzzle_bottom->setAnchorPoint(ccp(0.5,0));
-		puzzle_bottom->setPosition(ccp(0,-111));
+		puzzle_bottom->setPosition(ccp(0,-puzzle_height_half));
 		puzzle_node->addChild(puzzle_bottom);
 		
 		
-		for(int y = 0;y<4;y++)
+		for(int y = 0;y<piece_height_count;y++)
 		{
-			for(int x = 0;x<6;x++)
+			for(int x = 0;x<piece_width_count;x++)
 			{
 				string piece_type;
 				if((x+y)%2 == 0)
@@ -512,7 +523,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 					piece_type = "w";
 				
 				CCSprite* puzzle_piece = CCSprite::create(("temp_puzzle_back_p" + piece_type + ".png").c_str());
-				puzzle_piece->setPosition(ccp(-161+36+x*50, -111+36+150-y*50));
+				puzzle_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
 				puzzle_node->addChild(puzzle_piece);
 			}
 		}
@@ -522,7 +533,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		puzzle_node->addChild(update_ment);
 		
 		CCSprite* puzzle_before_bridge = CCSprite::create("temp_puzzle_bridge_front_ph.png");
-		puzzle_before_bridge->setPosition(ccp(-161+36-1*50, -111+36+150-0*50));
+		puzzle_before_bridge->setPosition(ccp(-puzzle_width_half+side_width-1*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-0*piece_size));
 		puzzle_node->addChild(puzzle_before_bridge);
 	}
 	else
@@ -540,7 +551,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		int puzzle_path_idx = 0;
 		
 		CCNode* puzzle_node = CCNode::create();
-		puzzle_node->setPosition(ccp(173.5f,111));
+		puzzle_node->setPosition(ccp(puzzle_width_half+margine_width,puzzle_height_half-4));
 		cell->addChild(puzzle_node);
 		
 		if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
@@ -548,30 +559,30 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		{
 			CCSprite* puzzle_left = CCSprite::create("temp_puzzle_stencil_left.png");
 			puzzle_left->setAnchorPoint(ccp(0,0.5));
-			puzzle_left->setPosition(ccp(-161,0));
+			puzzle_left->setPosition(ccp(-puzzle_width_half,0));
 			puzzle_node->addChild(puzzle_left);
 			
 			CCSprite* puzzle_right = CCSprite::create("temp_puzzle_stencil_right.png");
 			puzzle_right->setAnchorPoint(ccp(1,0.5));
-			puzzle_right->setPosition(ccp(161,0));
+			puzzle_right->setPosition(ccp(puzzle_width_half,0));
 			puzzle_node->addChild(puzzle_right);
 			
 			CCSprite* puzzle_top = CCSprite::create("temp_puzzle_stencil_top.png");
 			puzzle_top->setAnchorPoint(ccp(0.5,1));
-			puzzle_top->setPosition(ccp(0,111));
+			puzzle_top->setPosition(ccp(0,puzzle_height_half));
 			puzzle_node->addChild(puzzle_top);
 			
 			CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_stencil_bottom.png");
 			puzzle_bottom->setAnchorPoint(ccp(0.5,0));
-			puzzle_bottom->setPosition(ccp(0,-111));
+			puzzle_bottom->setPosition(ccp(0,-puzzle_height_half));
 			puzzle_node->addChild(puzzle_bottom);
 			
 			
-			for(int y = 0;y<4;y++)
+			for(int y = 0;y<piece_height_count;y++)
 			{
-				for(int x = 0;x<6;x++)
+				for(int x = 0;x<piece_width_count;x++)
 				{
-					int piece_number = y*6+x+1;
+					int piece_number = y*piece_width_count+x+1;
 					bool is_stage = false;
 					int stage_number = -1;
 					if(piece_number == puzzle_path[puzzle_path_idx].piece_no)
@@ -613,7 +624,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 						}
 						
 						NewPuzzlePiece* t_piece = NewPuzzlePiece::create(stage_number, clicked_func, (NewPuzzlePieceMode)puzzle_piece_mode[idx], is_buy, is_lock);
-						t_piece->setPosition(ccp(-161+36+x*50, -111+36+150-y*50));
+						t_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
 						puzzle_node->addChild(t_piece);
 					}
 					else
@@ -625,7 +636,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 							piece_type = "w";
 						
 						CCSprite* puzzle_piece = CCSprite::create(("temp_puzzle_stencil_p" + piece_type + ".png").c_str());
-						puzzle_piece->setPosition(ccp(-161+36+x*50, -111+36+150-y*50));
+						puzzle_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
 						puzzle_node->addChild(puzzle_piece);
 					}
 				}
@@ -633,12 +644,12 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			if(puzzle_number != 1)
 			{
 				CCSprite* puzzle_before_bridge = CCSprite::create("temp_puzzle_bridge_front_ph.png");
-				puzzle_before_bridge->setPosition(ccp(-161+36-1*50, -111+36+150-0*50));
+				puzzle_before_bridge->setPosition(ccp(-puzzle_width_half+side_width-1*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-0*piece_size));
 				puzzle_node->addChild(puzzle_before_bridge);
 			}
 			
 			CCSprite* puzzle_after_bridge = CCSprite::create("temp_puzzle_bridge_front_ph.png");
-			puzzle_after_bridge->setPosition(ccp(-161+36+6*50, -111+36+150-0*50));
+			puzzle_after_bridge->setPosition(ccp(-puzzle_width_half+side_width+piece_width_count*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-0*piece_size));
 			puzzle_node->addChild(puzzle_after_bridge);
 			
 			
@@ -650,7 +661,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			change_mode_item->setTag(kNewMainFlowMenuTag_changeMode);
 			
 			ScrollMenu* change_mode_menu = ScrollMenu::create(change_mode_item, NULL);
-			change_mode_menu->setPosition(ccp(-161+36+6*50, -111+36+150-50));
+			change_mode_menu->setPosition(ccp(-puzzle_width_half+side_width+piece_width_count*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-piece_size));
 			change_mode_menu->setTag(puzzle_number);
 			puzzle_node->addChild(change_mode_menu);
 		
@@ -692,30 +703,30 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		{
 			CCSprite* puzzle_left = CCSprite::create("temp_puzzle_stencil_left.png");
 			puzzle_left->setAnchorPoint(ccp(0,0.5));
-			puzzle_left->setPosition(ccp(-161,0));
+			puzzle_left->setPosition(ccp(-puzzle_width_half,0));
 			puzzle_node->addChild(puzzle_left);
 			
 			CCSprite* puzzle_right = CCSprite::create("temp_puzzle_stencil_right.png");
 			puzzle_right->setAnchorPoint(ccp(1,0.5));
-			puzzle_right->setPosition(ccp(161,0));
+			puzzle_right->setPosition(ccp(puzzle_width_half,0));
 			puzzle_node->addChild(puzzle_right);
 			
 			CCSprite* puzzle_top = CCSprite::create("temp_puzzle_stencil_top.png");
 			puzzle_top->setAnchorPoint(ccp(0.5,1));
-			puzzle_top->setPosition(ccp(0,111));
+			puzzle_top->setPosition(ccp(0,puzzle_height_half));
 			puzzle_node->addChild(puzzle_top);
 			
 			CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_stencil_bottom.png");
 			puzzle_bottom->setAnchorPoint(ccp(0.5,0));
-			puzzle_bottom->setPosition(ccp(0,-111));
+			puzzle_bottom->setPosition(ccp(0,-puzzle_height_half));
 			puzzle_node->addChild(puzzle_bottom);
 			
 			
-			for(int y = 0;y<4;y++)
+			for(int y = 0;y<piece_height_count;y++)
 			{
-				for(int x = 0;x<6;x++)
+				for(int x = 0;x<piece_width_count;x++)
 				{
-					int piece_number = y*6+x+1;
+					int piece_number = y*piece_width_count+x+1;
 					bool is_stage = false;
 					int stage_number = -1;
 					if(piece_number == puzzle_path[puzzle_path_idx].piece_no)
@@ -732,7 +743,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 						piece_type = "w";
 					
 					CCSprite* puzzle_piece = CCSprite::create(("temp_puzzle_back_p" + piece_type + ".png").c_str());
-					puzzle_piece->setPosition(ccp(-161+36+x*50, -111+36+150-y*50));
+					puzzle_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
 					puzzle_node->addChild(puzzle_piece);
 					
 					if(is_stage)
@@ -741,11 +752,11 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			}
 			
 			CCSprite* puzzle_before_bridge = CCSprite::create("temp_puzzle_bridge_front_ph.png");
-			puzzle_before_bridge->setPosition(ccp(-161+36-1*50, -111+36+150-0*50));
+			puzzle_before_bridge->setPosition(ccp(-puzzle_width_half+side_width-1*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-0*piece_size));
 			puzzle_node->addChild(puzzle_before_bridge);
 			
 			CCSprite* puzzle_after_bridge = CCSprite::create("temp_puzzle_bridge_front_ph.png");
-			puzzle_after_bridge->setPosition(ccp(-161+36+6*50, -111+36+150-0*50));
+			puzzle_after_bridge->setPosition(ccp(-puzzle_width_half+side_width+piece_width_count*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-0*piece_size));
 			puzzle_node->addChild(puzzle_after_bridge);
 			
 //		CCSprite* close_back = CCSprite::create("mainflow_puzzle_lock_back.png");
@@ -899,7 +910,7 @@ void NewMainFlowScene::scrollViewDidZoom(CCScrollView* view){}
 void NewMainFlowScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell){}
 CCSize NewMainFlowScene::cellSizeForTable(CCTableView *table)
 {
-	return CCSizeMake(347, 222);
+	return CCSizeMake(350, 226);
 }
 unsigned int NewMainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {

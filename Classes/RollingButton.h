@@ -75,7 +75,7 @@ public:
 		
 		
 		m_black = CommonButton::getBackgroundByType(CommonButtonGray);
-		
+		m_black->setAnchorPoint(ccp(0.5f,0.5f));
 		m_black->setPosition(ccp(0,0));
 		m_black->setContentSize(CCSizeMake(38,36));
 		this->addChild(m_black,1);
