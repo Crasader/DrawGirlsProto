@@ -1998,6 +1998,7 @@ void KSCumberBase::movingAndCrash( float dt )
 		
 		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
 		{
+			removeFromParentAndCleanup(true);
 			caughtAnimation();
 		}
 		else

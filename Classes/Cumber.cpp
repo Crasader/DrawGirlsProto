@@ -355,11 +355,12 @@ void CumberParent::createSubCumber(IntPoint s_p)
 		t_SC->applyPassiveData(mySD->getPassiveData());
 		t_SC->applyAutoBalance();
 		
-		IntPoint mapPoint;
-		bool finded;
-		t_SC->getRandomPosition(&mapPoint, &finded);
-		t_SC->setPosition(ip2ccp(mapPoint));
+//		IntPoint mapPoint;
+//		bool finded;
+//		t_SC->getRandomPosition(&mapPoint, &finded);
+//		t_SC->setPosition(ip2ccp(mapPoint));
 		t_SC->startAnimationNoDirection();
+		t_SC->onStartGame();
 		addChild(t_SC);
 		
 		subCumberArray->addObject(t_SC);
