@@ -373,41 +373,6 @@ void StageInfoDown::startDownload()
 	schedule(schedule_selector(StageInfoDown::downloadingAction));
 }
 
-
-bool StageInfoDown::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
-{
-	if(touch_number != 0)	return true;
-	
-	if(cancel_menu->ccTouchBegan(pTouch, pEvent))	touch_number = kSID_MT_cancel;
-	
-	return true;
-}
-void StageInfoDown::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
-{
-	if(touch_number == kSID_MT_cancel)		cancel_menu->ccTouchMoved(pTouch, pEvent);
-}
-void StageInfoDown::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
-{
-	if(touch_number == kSID_MT_cancel)
-	{
-		cancel_menu->ccTouchEnded(pTouch, pEvent);
-		touch_number = 0;
-	}
-}
-void StageInfoDown::ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
-{
-	if(touch_number == kSID_MT_cancel)
-	{
-		cancel_menu->ccTouchCancelled(pTouch, pEvent);
-		touch_number = 0;
-	}
-}
-
-void StageInfoDown::registerWithTouchDispatcher()
-{
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -180, true);
-}
-
 StageInfoDown* StageInfoDown::create( CCObject* t_success, SEL_CallFunc d_success, CCObject* t_cancel, SEL_CallFunc d_cancel )
 {
 	StageInfoDown* t_sid = new StageInfoDown();
@@ -437,6 +402,7 @@ void StageInfoDown::myInit( CCObject* t_success, SEL_CallFunc d_success, CCObjec
 	cancel_menu = CCMenu::createWithItem(cancel_item);
 	cancel_menu->setPosition(ccp(350, 240));
 	addChild(cancel_menu, kSID_Z_content);
+	cancel_menu->setTouchPriority(-210);
 
 	state_ment = CCLabelTTF::create("스테이지 정보를 받아오는 ing...", mySGD->getFont().c_str(), 20);
 	state_ment->setAnchorPoint(ccp(0.5,0.5));
@@ -709,20 +675,10 @@ void StageInfoDown::startGetStageInfo()
 
 	myLog->addLog(kLOG_getStageInfo_i, -1, stage_number);
 
-	if(stage_number < 10000)
-	{
-		Json::Value param;
-		param["no"] = stage_number;
-		param["version"] = NSDS_GI(stage_number, kSDS_SI_version_i);
-		hspConnector::get()->command("getstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
-	}
-	else // event stage
-	{
-		Json::Value param;
-		param["no"] = stage_number;
-		param["version"] = NSDS_GI(stage_number, kSDS_SI_version_i);
-		hspConnector::get()->command("geteventstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
-	}
+	Json::Value param;
+	param["no"] = stage_number;
+	param["version"] = NSDS_GI(stage_number, kSDS_SI_version_i);
+	hspConnector::get()->command("getstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
 }
 
 void StageInfoDown::menuAction( CCObject* sender )

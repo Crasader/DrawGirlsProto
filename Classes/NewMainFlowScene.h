@@ -36,6 +36,7 @@ public:
 class CountingBMLabel;
 class HeartTime;
 class NewStageInfoView;
+class StageInfoDown;
 class NewMainFlowScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -73,6 +74,8 @@ private:
 	
 	int selected_puzzle_number;
 	int selected_stage_number;
+	
+	int selected_stage_cell_idx;
 	
 	void pieceAction(int t_stage_number);
 	void buyPieceAction(int t_stage_number);
@@ -117,6 +120,13 @@ private:
 	void mailPopupClose();
 	void achievePopupClose();
 	void tutorialCardSettingClose();
+	
+	StageInfoDown* info_down_popup;
+	
+	void successStageInfoDown();
+	void startCancel();
+	
+	void successEventListDown();
 	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked();

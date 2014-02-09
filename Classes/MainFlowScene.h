@@ -41,8 +41,8 @@ public:
 	HeartTime* heart_time;
 private:
 	
-	int is_unlock_puzzle;
-	void endUnlockAnimation();
+//	int is_unlock_puzzle;
+//	void endUnlockAnimation();
 	
 	void heartRefresh();
 	

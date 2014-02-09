@@ -25,6 +25,7 @@
 #include "ContinueContent.h"
 #include "StartSettingScene.h"
 #include "AcceptChallengeAniContent.h"
+#include "NewMainFlowScene.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -1052,10 +1053,15 @@ void Maingame::endCloseShutter()
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 //		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-		if(mySD->getSilType() >= 10000 || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
-			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+		if(mySD->getSilType() > 10000)
+		{
+			if(mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
+				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			else
+				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+		}
 		else
-			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 	}
 }
 
@@ -1822,7 +1828,7 @@ void Maingame::goHome ()
 {
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
-	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
 	AudioEngine::sharedInstance()->stopAllEffects();
 	AudioEngine::sharedInstance()->stopSound();
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
@@ -1836,7 +1842,7 @@ void Maingame::goReplay ()
 	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, 0);
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
-	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
 	AudioEngine::sharedInstance()->stopAllEffects();
 	AudioEngine::sharedInstance()->stopSound();
 	

@@ -48,7 +48,6 @@ private:
 	CCSprite* gray;
 	
 	int server_puzzle_list_count;
-	int server_event_list_count;
 	vector<int> server_puzzle_list_no;
 	vector<int> server_puzzle_stage_count;
 	vector<int> server_puzzle_start_stage;

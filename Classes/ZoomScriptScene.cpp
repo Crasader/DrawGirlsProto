@@ -15,6 +15,7 @@
 #include "utf8.h"
 #include "MainFlowScene.h"
 #include "CommonButton.h"
+#include "NewMainFlowScene.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -200,10 +201,15 @@ void ZoomScript::menuAction(CCObject *sender)
 		{
 			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
 //			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-			if(mySD->getSilType() >= 10000 || mySGD->getIsAcceptHelp() || mySGD->getIsAcceptChallenge())
-				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			if(mySD->getSilType() > 10000)
+			{
+				if(mySGD->getIsAcceptHelp() || mySGD->getIsAcceptChallenge())
+					CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+				else
+					CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+			}
 			else
-				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+				CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 		}
 	}
 }

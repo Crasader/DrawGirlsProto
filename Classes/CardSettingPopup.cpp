@@ -40,18 +40,35 @@ bool CardSettingPopup::init()
         return false;
     }
 	
-	server_puzzle_list_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-	server_event_list_count = NSDS_GI(kSDS_GI_eventCount_i);
-	
-	server_puzzle_list_no.push_back(0);
-	server_puzzle_stage_count.push_back(0);
-	server_puzzle_start_stage.push_back(0);
-	for(int i=1;i<=server_puzzle_list_count;i++)
+	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000)
 	{
-		server_puzzle_list_no.push_back(NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i));
-		server_puzzle_stage_count.push_back(NSDS_GI(server_puzzle_list_no[i], kSDS_PZ_stageCount_i));
-		server_puzzle_start_stage.push_back(NSDS_GI(server_puzzle_list_no[i], kSDS_PZ_startStage_i));
+		server_puzzle_list_count = NSDS_GI(kSDS_GI_eventListCount_i);
+		
+		server_puzzle_list_no.push_back(0);
+		server_puzzle_stage_count.push_back(0);
+		server_puzzle_start_stage.push_back(0);
+		for(int i=1;i<=server_puzzle_list_count;i++)
+		{
+			server_puzzle_list_no.push_back(NSDS_GI(kSDS_GI_eventList_int1_no_i, i));
+			server_puzzle_stage_count.push_back(NSDS_GI(server_puzzle_list_no[i], kSDS_PZ_stageCount_i));
+			server_puzzle_start_stage.push_back(NSDS_GI(server_puzzle_list_no[i], kSDS_PZ_startStage_i));
+		}
 	}
+	else
+	{
+		server_puzzle_list_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+		
+		server_puzzle_list_no.push_back(0);
+		server_puzzle_stage_count.push_back(0);
+		server_puzzle_start_stage.push_back(0);
+		for(int i=1;i<=server_puzzle_list_count;i++)
+		{
+			server_puzzle_list_no.push_back(NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i));
+			server_puzzle_stage_count.push_back(NSDS_GI(server_puzzle_list_no[i], kSDS_PZ_stageCount_i));
+			server_puzzle_start_stage.push_back(NSDS_GI(server_puzzle_list_no[i], kSDS_PZ_startStage_i));
+		}
+	}
+	
 	
 	recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
 	recent_selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
@@ -77,19 +94,29 @@ bool CardSettingPopup::init()
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kCSS_Z_back);
 	
-	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-	
+	int puzzle_count = server_puzzle_list_count;
 	int total_stage_cnt = 0;
-	for(int i=1;i<=puzzle_count;i++)
-	{
-		int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
-		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
-		
-		total_stage_cnt += stage_count;
-	}
 	
-	int event_stage_count = NSDS_GI(kSDS_GI_eventCount_i);
-	total_stage_cnt += event_stage_count;
+	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000)
+	{
+		for(int i=1;i<=puzzle_count;i++)
+		{
+			int puzzle_number = NSDS_GI(kSDS_GI_eventList_int1_no_i, i);
+			int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+			
+			total_stage_cnt += stage_count;
+		}
+	}
+	else
+	{
+		for(int i=1;i<=puzzle_count;i++)
+		{
+			int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+			int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+			
+			total_stage_cnt += stage_count;
+		}
+	}
 	
 	default_align_number_of_cell = (total_stage_cnt-1)/2 + 1;
 	
@@ -481,14 +508,14 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				selected_cnt += stage_count;
 		}
 		
-		if(found_stage1 == -1)
-		{
-			int event_stage_count = server_event_list_count;
-			if(t_idx >= selected_cnt && t_idx < selected_cnt+event_stage_count)
-				found_stage1 = t_idx-selected_cnt+event_stage_count;
-			else
-				CCLog("not found stage");
-		}
+//		if(found_stage1 == -1)
+//		{
+//			int event_stage_count = server_event_list_count;
+//			if(t_idx >= selected_cnt && t_idx < selected_cnt+event_stage_count)
+//				found_stage1 = t_idx-selected_cnt+event_stage_count;
+//			else
+//				CCLog("not found stage");
+//		}
 		
 		if(found_stage1 != -1)
 		{
@@ -591,14 +618,14 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					selected_cnt += stage_count;
 			}
 			
-			if(found_stage1 == -1)
-			{
-				int event_stage_count = server_event_list_count;
-				if(t_idx >= selected_cnt && t_idx < selected_cnt+event_stage_count)
-					found_stage1 = t_idx-selected_cnt+event_stage_count;
-				else
-					CCLog("not found stage");
-			}
+//			if(found_stage1 == -1)
+//			{
+//				int event_stage_count = server_event_list_count;
+//				if(t_idx >= selected_cnt && t_idx < selected_cnt+event_stage_count)
+//					found_stage1 = t_idx-selected_cnt+event_stage_count;
+//				else
+//					CCLog("not found stage");
+//			}
 			
 			if(found_stage1 != -1)
 			{

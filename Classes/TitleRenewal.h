@@ -57,7 +57,6 @@ private:
 	
 	bool is_downloading;
 	int puzzlelist_download_version;
-	int eventstagelist_download_version;
 	
 	vector<int> card_data_load_list;
 	
@@ -114,9 +113,9 @@ private:
 	
 	void resultGetPuzzleList(Json::Value result_data);
 	vector<DownloadFile> puzzle_download_list;
-	vector<DownloadFile> event_download_list;
+	vector<int> puzzle_download_list_puzzle_number;
 	
-	void resultGetPathInfo(Json::Value result_data);
+//	void resultGetPathInfo(Json::Value result_data);
 	
 	
 	void endingCheck();
