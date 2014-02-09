@@ -78,7 +78,7 @@ bool FailPopup::init()
 	
 	hspConnector::get()->command("increaseStats", param, NULL);
 	
-	myLog->sendLog(CCString::createWithFormat("fail_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+	myLog->sendLog(CCString::createWithFormat("fail_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
 	
 	if(mySGD->getScore() > myDSH->getIntegerForKey(kDSH_Key_allHighScore))
 	{

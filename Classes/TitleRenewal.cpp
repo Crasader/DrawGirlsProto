@@ -85,7 +85,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	{
 		if(myLog->getLogCount() > 0)
 		{
-			myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStage))->getCString());
+			myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
 		}
 		
 		receive_cnt = 0;
@@ -125,11 +125,10 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 //		puzzlelist_label->setPosition(ccp(280, myDSH->ui_top-30));
 //		addChild(puzzlelist_label);
 		Json::Value puzzlelist_param;
-		puzzlelist_param["puzzlelistversion"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
-		puzzlelist_param["eventstagelistversion"] = NSDS_GI(kSDS_GI_eventListVersion_i);
+		puzzlelist_param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 		command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
 		
-		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
+//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 		
 //		CCLabelTTF* loadfriends_label = CCLabelTTF::create("start kLoadFriends", mySGD->getFont().c_str(), 10);
 //		loadfriends_label->setPosition(ccp(360, myDSH->ui_top-30));
@@ -851,74 +850,126 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		if(result_data["puzzlelistversion"] > NSDS_GI(kSDS_GI_puzzleListVersion_i))
+		if(result_data["version"] > NSDS_GI(kSDS_GI_puzzleListVersion_i))
 		{
-			Json::Value puzzle_list = result_data["puzzlelist"];
+			Json::Value puzzle_list = result_data["list"];
 			
 			NSDS_SI(kSDS_GI_puzzleListCount_i, puzzle_list.size(), false);
 			
 			int puzzle_cnt = puzzle_list.size();
 			for(int i=0;i<puzzle_cnt;i++)
 			{
-				NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_list[i]["no"].asInt(), false);
+				int puzzle_number = puzzle_list[i]["order"].asInt();
+				
+				NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_number, false);
 				NSDS_SS(kSDS_GI_puzzleList_int1_title_s, i+1, puzzle_list[i]["title"].asString().c_str(), false);
-				NSDS_SS(puzzle_list[i]["no"].asInt(), kSDS_PZ_title_s, puzzle_list[i]["title"].asString().c_str(), false);
-				NSDS_SI(kSDS_GI_puzzleList_int1_version_i, i+1, puzzle_list[i]["version"].asInt(), false);
-				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_startStage_i, puzzle_list[i]["startStage"].asInt(), false);
-				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_stageCount_i, puzzle_list[i]["stageCount"].asInt(), false);
-				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_point_i, puzzle_list[i]["point"].asInt(), false);
-				NSDS_SI(puzzle_list[i]["no"].asInt(), kSDS_PZ_ticket_i, puzzle_list[i]["ticket"].asInt(), false);
+				NSDS_SS(puzzle_number, kSDS_PZ_title_s, puzzle_list[i]["title"].asString().c_str(), false);
+//				NSDS_SI(kSDS_GI_puzzleList_int1_version_i, i+1, puzzle_list[i]["version"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_startStage_i, puzzle_list[i]["startStage"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_stageCount_i, puzzle_list[i]["stageCount"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_point_i, puzzle_list[i]["point"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, puzzle_list[i]["ticket"].asInt(), false);
+				
+				Json::Value path_info = puzzle_list[i]["pathInfo"];
+				Json::Value card_info = puzzle_list[i]["cardInfo"];
+				Json::Value reward_info = puzzle_list[i]["rewardInfo"];
+				Json::Value level_info = puzzle_list[i]["levelInfo"];
+				int start_stage = puzzle_list[i]["startStage"].asInt();
+				for(int j=0;j<path_info.size();j++)
+				{
+					NSDS_SI(start_stage+j, kSDS_SI_puzzle_i, puzzle_number, false);
+					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, start_stage + j, path_info[j].asInt(), false);
+					NSDS_SI(start_stage+j, kSDS_SI_level_i, level_info[j].asInt(), false);
+					Json::Value t_stage_cards = card_info[j];
+					for(int k=0;k<t_stage_cards.size();k++)
+					{
+						NSDS_SI(start_stage+j, kSDS_SI_level_int1_card_i, k+1, t_stage_cards[k].asInt(), false);
+						NSDS_SI(kSDS_CI_int1_reward_i, t_stage_cards[k].asInt(), reward_info[j][k].asInt(), false);
+					}
+					mySDS->fFlush(start_stage+j, kSDS_SI_base);
+				}
+				mySDS->fFlush(kSDS_CI_base);
+
+				if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+				{
+					if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != puzzle_list[i]["center"]["image"].asString())
+					{
+						// check, after download ----------
+						DownloadFile t_df;
+						t_df.size = puzzle_list[i]["center"]["size"].asInt();
+						t_df.img = puzzle_list[i]["center"]["image"].asString().c_str();
+						t_df.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "center")->getCString();
+						t_df.key = "center";
+						puzzle_download_list.push_back(t_df);
+						puzzle_download_list_puzzle_number.push_back(puzzle_number);
+						// ================================
+					}
+					if(NSDS_GS(puzzle_number, kSDS_PZ_original_s) != puzzle_list[i]["original"]["image"].asString())
+					{
+						DownloadFile t_cut;
+						t_cut.size = puzzle_list[i]["original"]["size"].asInt();
+						t_cut.img = puzzle_list[i]["original"]["image"].asString().c_str();
+						t_cut.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "original")->getCString();
+						t_cut.key = "original";
+						puzzle_download_list.push_back(t_cut);
+						puzzle_download_list_puzzle_number.push_back(puzzle_number);
+					}
+					if(NSDS_GS(puzzle_number, kSDS_PZ_face_s) != puzzle_list[i]["face"]["image"].asString())
+					{
+						DownloadFile t_cut;
+						t_cut.size = puzzle_list[i]["face"]["size"].asInt();
+						t_cut.img = puzzle_list[i]["face"]["image"].asString().c_str();
+						t_cut.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "face")->getCString();
+						t_cut.key = "face";
+						puzzle_download_list.push_back(t_cut);
+						puzzle_download_list_puzzle_number.push_back(puzzle_number);
+					}
+				}
+				
+				if(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number) == 0)
+				{
+					bool is_found = false;
+					int found_stage_number = -1;
+					int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+					for(int j = start_stage;j<start_stage+stage_count && !is_found;j++)
+					{
+						if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, j) == 0 && NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, j) == 0)
+						{
+							is_found = true;
+							found_stage_number = j;
+						}
+					}
+					
+					if(is_found)
+						myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, found_stage_number);
+					else
+						myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, start_stage);
+				}
+				
+//				Json::Value thumbnail = puzzle_list[i]["thumbnail"];
+//				if(NSDS_GS(kSDS_GI_puzzleList_int1_thumbnail_s, i+1) != thumbnail["image"].asString())
+//				{
+//					// check, after download ----------
+//					DownloadFile t_df;
+//					t_df.size = thumbnail["size"].asInt();
+//					t_df.img = thumbnail["image"].asString().c_str();
+//					t_df.filename = CCSTR_CWF("puzzleList%d_thumbnail.png", i+1)->getCString();
+//					t_df.key = CCSTR_CWF("puzzleList%d_thumbnail", i+1)->getCString();
+//					puzzle_download_list.push_back(t_df);
+//					// ================================
+//				}
 				
 				mySDS->fFlush(puzzle_list[i]["no"].asInt(), kSDS_PZ_base);
-				
-				Json::Value thumbnail = puzzle_list[i]["thumbnail"];
-				if(NSDS_GS(kSDS_GI_puzzleList_int1_thumbnail_s, i+1) != thumbnail["image"].asString())
-				{
-					// check, after download ----------
-					DownloadFile t_df;
-					t_df.size = thumbnail["size"].asInt();
-					t_df.img = thumbnail["image"].asString().c_str();
-					t_df.filename = CCSTR_CWF("puzzleList%d_thumbnail.png", i+1)->getCString();
-					t_df.key = CCSTR_CWF("puzzleList%d_thumbnail", i+1)->getCString();
-					puzzle_download_list.push_back(t_df);
-					// ================================
-				}
 			}
 			
 			if(puzzle_download_list.size() > 0)
-				puzzlelist_download_version = result_data["puzzlelistversion"].asInt();
+				puzzlelist_download_version = result_data["version"].asInt();
 			else
-				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["puzzlelistversion"].asInt(), false);
+				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["version"].asInt(), false);
 		}
 		
-		if(result_data["eventstagelistversion"] > NSDS_GI(kSDS_GI_eventListVersion_i))
-		{
-			Json::Value event_list = result_data["eventstagelist"];
-			int el_length = event_list.size();
-			NSDS_SI(kSDS_GI_eventCount_i, el_length, false);
-			for(int i=0;i<el_length;i++)
-			{
-				int event_code = event_list[i]["no"].asInt();
-				NSDS_SI(kSDS_GI_event_int1_code_i, i, event_code, false);
-				Json::Value thumbnail = event_list[i]["thumbnail"];
-				if(NSDS_GS(kSDS_GI_event_int1_thumbnail_s, i) != thumbnail["image"].asString())
-				{
-					// check, after download ----------
-					DownloadFile t_df;
-					t_df.size = thumbnail["size"].asInt();
-					t_df.img = thumbnail["image"].asString().c_str();
-					t_df.filename = CCSTR_CWF("event%d_thumbnail.png", i)->getCString();
-					t_df.key = CCSTR_CWF("event%d_thumbnail", i)->getCString();
-					event_download_list.push_back(t_df);
-					// ================================
-				}
-			}
-			
-			if(event_download_list.size() > 0) // need download
-				eventstagelist_download_version = result_data["eventstagelistversion"].asInt();
-			else
-				NSDS_SI(kSDS_GI_eventListVersion_i, result_data["eventstagelistversion"].asInt(), false);
-		}
+		if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) == 0)
+			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1));
 		
 		mySDS->fFlush(kSDS_GI_characterCount_i);
 	}
@@ -926,8 +977,7 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 	{
 		is_receive_fail = true;
 		Json::Value puzzlelist_param;
-		puzzlelist_param["puzzlelistversion"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
-		puzzlelist_param["eventstagelistversion"] = NSDS_GI(kSDS_GI_eventListVersion_i);
+		puzzlelist_param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 		command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
 	}
 	
@@ -935,36 +985,36 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 	checkReceive();
 }
 
-void TitleRenewalScene::resultGetPathInfo(Json::Value result_data)
-{
-	if(result_data["result"]["code"].asInt() == GDSUCCESS)
-	{
-		Json::Value puzzle_list = result_data["puzzlelist"];
-		
-		for(int i=0;i<puzzle_list.size();i++)
-		{
-			Json::Value path_info = puzzle_list[i];
-			
-			int start_stage = path_info["stageStart"].asInt();
-			int puzzle_number = path_info["puzzleNo"].asInt();
-			
-			Json::Value path_list = path_info["path"];
-			
-			for(int j=0;j<path_list.size();j++)
-				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, start_stage + j, path_list[j].asInt(), false);
-			
-			mySDS->fFlush(puzzle_number, kSDS_PZ_base);
-		}
-	}
-	else
-	{
-		is_receive_fail = true;
-		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
-	}
-	
-	receive_cnt--;
-	checkReceive();
-}
+//void TitleRenewalScene::resultGetPathInfo(Json::Value result_data)
+//{
+//	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//	{
+//		Json::Value puzzle_list = result_data["puzzlelist"];
+//		
+//		for(int i=0;i<puzzle_list.size();i++)
+//		{
+//			Json::Value path_info = puzzle_list[i];
+//			
+//			int start_stage = path_info["stageStart"].asInt();
+//			int puzzle_number = path_info["puzzleNo"].asInt();
+//			
+//			Json::Value path_list = path_info["path"];
+//			
+//			for(int j=0;j<path_list.size();j++)
+//				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, start_stage + j, path_list[j].asInt(), false);
+//			
+//			mySDS->fFlush(puzzle_number, kSDS_PZ_base);
+//		}
+//	}
+//	else
+//	{
+//		is_receive_fail = true;
+//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
+//	}
+//	
+//	receive_cnt--;
+//	checkReceive();
+//}
 
 void TitleRenewalScene::endingAction()
 {
@@ -981,8 +1031,8 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
-	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
-//	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+//	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 }
 
@@ -1024,16 +1074,6 @@ void TitleRenewalScene::startFileDownload()
 		
 		schedule(schedule_selector(TitleRenewalScene::downloadingFileAction));
 	}
-	else if(event_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size())
-	{
-		CCLog("%d : %s", ing_download_cnt, event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].filename.c_str());
-		StageImgLoader::sharedInstance()->downloadImg(event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img,
-													  event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].size,
-													  event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].filename,
-													  this, callfunc_selector(TitleRenewalScene::successDownloadAction), this, callfunc_selector(TitleRenewalScene::failDownloadAction));
-		
-		schedule(schedule_selector(TitleRenewalScene::downloadingFileAction));
-	}
 	else
 	{
 		endingCheck();
@@ -1049,7 +1089,7 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size())
@@ -1061,7 +1101,7 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size())
@@ -1070,7 +1110,7 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size())
@@ -1082,7 +1122,7 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size() + card_download_list.size())
@@ -1092,7 +1132,7 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size() + card_download_list.size())
@@ -1129,36 +1169,176 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
-	else if(ing_download_cnt <= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
+	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
 	{
 		SDS_SS(kSDF_gameInfo, puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].key,
 			   puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
-	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size())
+	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
 	{
-		SDS_SS(kSDF_gameInfo, event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].key,
-			   event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img, false);
+		SDS_SS(kSDF_gameInfo, puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].key,
+			   puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
-		startFileDownload();
-	}
-	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size())
-	{
-		SDS_SS(kSDF_gameInfo, event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].key,
-			   event_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-puzzle_download_list.size()-1].img, false);
+											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+		
+		for(int j=0;j<puzzle_download_list.size();j++)
+		{
+			CCImage *img = new CCImage;
+			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + puzzle_download_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
+			
+			CCImage *st_w = new CCImage;
+			st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
+			
+			CCImage *st_h = new CCImage;
+			st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
+			
+			
+			int puzzleCol=6,puzzleRow=4;
+			float puzzleColDis=100.f, puzzleRowDis=100.f, puzzleOffsetX=76.f, puzzleOffsetY=76.f;
+			float faceColDis=172.f, faceRowDis=172.f; //172, 172
+			float puzzleWidth=652.f,puzzleHeight=452.f;
+			
+			int puzzle_number = puzzle_download_list_puzzle_number[j];
+			
+			for(int i=0;i<puzzleCol*puzzleRow;i++){
+				//피스의 좌표를 구합니다. 퍼즐은 6*4 개로 이루어져있습니다.
+				int x = i%puzzleCol;
+				int y = i/puzzleCol;
+				
+				CCImage *st = st_h;
+//				if(i%2==0)st=st_w; //피스는 i가 짝수일때 st_w 이미지를 이용하여 자르고 홀수일때 st_h 이미지를 이용하여 자릅니다.
+				if((x+(puzzleRow-1-y))%2 == 1)
+					st=st_w;
+				
+				//저장할파일명을 지정합니다.
+				string filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, puzzle_download_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol)+1)->getCString();
+				
+				//원본파일에서 자를 위치를 계산합니다.
+				int cutx, cuty;
+				if(puzzle_download_list[j].key == "face")
+				{
+					cutx = x*faceColDis+puzzleOffsetX;
+					cuty = y*faceRowDis+puzzleOffsetY;
+				}
+				else if(puzzle_download_list[j].key == "original" || puzzle_download_list[j].key == "center")
+				{
+					cutx =x*puzzleColDis+puzzleOffsetX;
+					cuty =y*puzzleRowDis+puzzleOffsetY;
+				}
+				
+				//자르고 저장합니다.
+				bool isSuccess = PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				//실패했으면 한번더 자르게 해줍니다.
+				if(!isSuccess){
+					i--;
+					continue;
+				}
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			
+			st_w->release(); //가로 피스 메모리해제
+			st_h->release(); //세로 피스 메모리해제
+			
+			//가장자리 자르기
+			//위쪽부터 잘라봅니다.
+			{
+				CCImage *st = new CCImage;
+				st->initWithImageFile("temp_puzzle_stencil_top.png");
+				
+				int cutx =puzzleWidth/2;
+				int cuty =puzzleHeight-st->getHeight()/2;
+				
+				string filename =CCString::createWithFormat("puzzle%d_%s_top.png", puzzle_number, puzzle_download_list[j].key.c_str())->getCString();
+				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				st->release(); //메모리해제
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			
+			//아래쪽 잘라봅니다.
+			{
+				CCImage *st = new CCImage;
+				st->initWithImageFile("temp_puzzle_stencil_bottom.png");
+				
+				int cutx =puzzleWidth/2;
+				int cuty =st->getHeight()/2;
+				
+				string filename =CCString::createWithFormat("puzzle%d_%s_bottom.png", puzzle_number, puzzle_download_list[j].key.c_str())->getCString();
+				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				st->release(); //메모리해제
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			
+			//왼쪽 잘라봅니다.
+			{
+				CCImage *st = new CCImage;
+				st->initWithImageFile("temp_puzzle_stencil_left.png");
+				
+				int cutx =st->getWidth()/2;
+				int cuty =puzzleHeight/2;
+				
+				string filename =CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, puzzle_download_list[j].key.c_str())->getCString();
+				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				st->release(); //메모리해제
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			//오른쪽 잘라봅니다.
+			{
+				CCImage *st = new CCImage;
+				st->initWithImageFile("temp_puzzle_stencil_right.png");
+				
+				int cutx =puzzleWidth-st->getWidth()/2;
+				int cuty =puzzleHeight/2;
+				
+				string filename =CCString::createWithFormat("puzzle%d_%s_right.png", puzzle_number, puzzle_download_list[j].key.c_str())->getCString();
+				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				st->release(); //메모리해제
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			//메모리해제
+			img->release();
+		}
+		
 		
 		endingCheck();
 	}
@@ -1168,8 +1348,6 @@ void TitleRenewalScene::endingCheck()
 {
 	if(puzzle_download_list.size() > 0)
 		NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version, false);
-	if(event_download_list.size() > 0)
-		NSDS_SI(kSDS_GI_eventListVersion_i, eventstagelist_download_version, false);
 	
 	mySDS->fFlush(kSDS_GI_characterCount_i);
 	
@@ -1223,7 +1401,7 @@ void TitleRenewalScene::downloadingFileAction()
 	ing_download_per = t_per;
 	
 	download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
-										int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size() + event_download_list.size()))->getCString());
+										int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 }
 
 void TitleRenewalScene::failDownloadAction()

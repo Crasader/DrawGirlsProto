@@ -77,11 +77,29 @@ private:
 	void menuAction(CCObject* sender);
 	
 	
-	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual void ccTouchCancelled(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual void registerWithTouchDispatcher();
+	virtual void registerWithTouchDispatcher ()
+	{
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, -200, true);
+	}
+	
+	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		CCLog("touch swallow popup");
+		return true;
+	}
+    virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		
+	}
+    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		
+	}
+    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		
+	}
 };
 
 #endif /* defined(__DGproto__StageInfoDown__) */

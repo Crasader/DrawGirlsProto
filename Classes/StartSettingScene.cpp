@@ -31,6 +31,7 @@
 #include "LoadingTipScene.h"
 #include "LabelTTFMarquee.h"
 #include "TouchSuctionLayer.h"
+#include "NewMainFlowScene.h"
 
 CCScene* StartSettingScene::scene()
 {
@@ -195,16 +196,19 @@ void StartSettingScene::setMain()
 		mission_label->runAction(t_repeat);
 	}
 	
-	CCSprite* n_back = CCSprite::create("cardchange_cancel.png");
-	CCSprite* s_back = CCSprite::create("cardchange_cancel.png");
-	s_back->setColor(ccGRAY);
-	
-	CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, this, menu_selector(StartSettingScene::menuAction));
-	back_item->setTag(kStartSettingMenuTag_back);
-	
-	CCMenu* back_menu = CCMenu::createWithItem(back_item);
-	back_menu->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height+40-65));
-	main_case->addChild(back_menu);
+	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000)
+	{
+		CCSprite* n_back = CCSprite::create("cardchange_cancel.png");
+		CCSprite* s_back = CCSprite::create("cardchange_cancel.png");
+		s_back->setColor(ccGRAY);
+		
+		CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, this, menu_selector(StartSettingScene::menuAction));
+		back_item->setTag(kStartSettingMenuTag_back);
+		
+		CCMenu* back_menu = CCMenu::createWithItem(back_item);
+		back_menu->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height+40-65));
+		main_case->addChild(back_menu);
+	}
 	
 	CCSprite* n_card_turn = CCSprite::create("startsetting_cardturn.png");
 	CCSprite* s_card_turn = CCSprite::create("startsetting_cardturn.png");
@@ -313,14 +317,14 @@ void StartSettingScene::setMain()
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_mounted_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.53);
+				n_img->setScale(0.6);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_mounted_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.53);
+				s_img->setScale(0.6);
 				s_img->setColor(ccGRAY);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 				s_item_case->addChild(s_img);
@@ -349,14 +353,14 @@ void StartSettingScene::setMain()
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.53);
+				n_img->setScale(0.6);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.53);
+				s_img->setScale(0.6);
 				s_img->setColor(ccGRAY);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 				s_item_case->addChild(s_img);
@@ -516,14 +520,14 @@ void StartSettingScene::itemAction(CCObject *sender)
 			
 			CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 			CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			n_img->setScale(0.53);
+			n_img->setScale(0.6);
 			n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 			n_item_case->addChild(n_img);
 			
 			CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 			s_item_case->setColor(ccGRAY);
 			CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			s_img->setScale(0.53);
+			s_img->setScale(0.6);
 			s_img->setColor(ccGRAY);
 			s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 			s_item_case->addChild(s_img);
@@ -610,14 +614,14 @@ void StartSettingScene::itemAction(CCObject *sender)
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_mounted_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.53);
+				n_img->setScale(0.6);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_mounted_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.53);
+				s_img->setScale(0.6);
 				s_img->setColor(ccGRAY);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 				s_item_case->addChild(s_img);
@@ -649,14 +653,14 @@ void StartSettingScene::itemAction(CCObject *sender)
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.53);
+				n_img->setScale(0.6);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.53);
+				s_img->setScale(0.6);
 				s_img->setColor(ccGRAY);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 				s_item_case->addChild(s_img);
@@ -779,7 +783,10 @@ void StartSettingScene::menuAction(CCObject* sender)
 		
 		if(tag == kStartSettingMenuTag_cancel)
 		{
-			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000)
+				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			else
+				CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 		}
 		else if(tag == kStartSettingMenuTag_rubyShop)
 		{

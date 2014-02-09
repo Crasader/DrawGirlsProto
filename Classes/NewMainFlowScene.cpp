@@ -31,6 +31,10 @@
 #include "HeartTime.h"
 #include "MyLocalization.h"
 #include "CCMenuLambda.h"
+#include "StartSettingScene.h"
+#include "StageInfoDown.h"
+#include "EventListDown.h"
+#include "MainFlowScene.h"
 
 CCScene* NewMainFlowScene::scene()
 {
@@ -53,6 +57,11 @@ bool NewMainFlowScene::init()
     }
 	
 	setKeypadEnabled(true);
+	
+	selected_stage_cell_idx = -1;
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000)
+		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
 	
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	for(int i=1;i<=puzzle_count;i++)
@@ -106,6 +115,9 @@ bool NewMainFlowScene::init()
 //	is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
 //	mySGD->setIsUnlockPuzzle(0);
 	
+	selected_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, selected_puzzle_number);
+	
 	setTable();
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -125,6 +137,11 @@ bool NewMainFlowScene::init()
 	
 	setTop();
 	setBottom();
+	
+	new_stage_info_view = NewStageInfoView::create(-190);
+	addChild(new_stage_info_view, kNewMainFlowZorder_right);
+	
+	pieceAction(selected_stage_number);
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
 	{
@@ -217,13 +234,6 @@ bool NewMainFlowScene::init()
 //		}
 	}
 	
-	new_stage_info_view = NewStageInfoView::create(-190);
-	addChild(new_stage_info_view, kNewMainFlowZorder_right);
-	selected_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, selected_puzzle_number);
-	
-	pieceAction(selected_stage_number);
-//	new_stage_info_view->setClickedStage(selected_stage_number);
 	
 	return true;
 }
@@ -557,26 +567,29 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
 			//	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 		{
-			CCSprite* puzzle_left = CCSprite::create("temp_puzzle_stencil_left.png");
+			CCSprite* puzzle_left = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, "original")->getCString());
 			puzzle_left->setAnchorPoint(ccp(0,0.5));
 			puzzle_left->setPosition(ccp(-puzzle_width_half,0));
 			puzzle_node->addChild(puzzle_left);
 			
-			CCSprite* puzzle_right = CCSprite::create("temp_puzzle_stencil_right.png");
+			CCSprite* puzzle_right = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_right.png", puzzle_number, "original")->getCString());
 			puzzle_right->setAnchorPoint(ccp(1,0.5));
 			puzzle_right->setPosition(ccp(puzzle_width_half,0));
 			puzzle_node->addChild(puzzle_right);
 			
-			CCSprite* puzzle_top = CCSprite::create("temp_puzzle_stencil_top.png");
+			CCSprite* puzzle_top = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_top.png", puzzle_number, "original")->getCString());
 			puzzle_top->setAnchorPoint(ccp(0.5,1));
 			puzzle_top->setPosition(ccp(0,puzzle_height_half));
 			puzzle_node->addChild(puzzle_top);
 			
-			CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_stencil_bottom.png");
+			CCSprite* puzzle_bottom = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_bottom.png", puzzle_number, "original")->getCString());
 			puzzle_bottom->setAnchorPoint(ccp(0.5,0));
 			puzzle_bottom->setPosition(ccp(0,-puzzle_height_half));
 			puzzle_node->addChild(puzzle_bottom);
 			
+			bool is_selected_stage_puzzle = false;
+			CCPoint selected_stage_position;
+			string selected_stage_piece_type;
 			
 			for(int y = 0;y<piece_height_count;y++)
 			{
@@ -626,21 +639,26 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 						NewPuzzlePiece* t_piece = NewPuzzlePiece::create(stage_number, clicked_func, (NewPuzzlePieceMode)puzzle_piece_mode[idx], is_buy, is_lock);
 						t_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
 						puzzle_node->addChild(t_piece);
+						
+						if(stage_number == selected_stage_number)
+						{
+							is_selected_stage_puzzle = true;
+							if((x+y)%2 == 0)
+								selected_stage_piece_type = "h";
+							else
+								selected_stage_piece_type = "w";
+							selected_stage_position = ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size);
+						}
 					}
 					else
 					{
-						string piece_type;
-						if((x+y)%2 == 0)
-							piece_type = "h";
-						else
-							piece_type = "w";
-						
-						CCSprite* puzzle_piece = CCSprite::create(("temp_puzzle_stencil_p" + piece_type + ".png").c_str());
+						CCSprite* puzzle_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "original", piece_number)->getCString());
 						puzzle_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
 						puzzle_node->addChild(puzzle_piece);
 					}
 				}
 			}
+			
 			if(puzzle_number != 1)
 			{
 				CCSprite* puzzle_before_bridge = CCSprite::create("temp_puzzle_bridge_front_ph.png");
@@ -664,6 +682,15 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			change_mode_menu->setPosition(ccp(-puzzle_width_half+side_width+piece_width_count*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-piece_size));
 			change_mode_menu->setTag(puzzle_number);
 			puzzle_node->addChild(change_mode_menu);
+			
+			if(is_selected_stage_puzzle)
+			{
+				CCSprite* selected_img = CCSprite::create(CCString::createWithFormat("temp_piece_selected_%s.png", selected_stage_piece_type.c_str())->getCString());
+				selected_img->setPosition(selected_stage_position);
+				puzzle_node->addChild(selected_img);
+				
+				selected_stage_cell_idx = idx;
+			}
 		
 //		CCSprite* n_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
 //		CCSprite* s_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
@@ -850,6 +877,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 void NewMainFlowScene::pieceAction(int t_stage_number)
 {
 	CCLog("pieceAction : %d", t_stage_number);
+	
 	new_stage_info_view->setClickedStage(t_stage_number);
 	
 	CCPoint before_position = ready_menu->getPosition();
@@ -885,7 +913,32 @@ void NewMainFlowScene::pieceAction(int t_stage_number)
 	
 	selected_stage_number = t_stage_number;
 	selected_puzzle_number = NSDS_GI(selected_stage_number, kSDS_SI_puzzle_i);
-
+	
+	if(selected_stage_cell_idx != -1)
+	{
+		puzzle_table->updateCellAtIndex(selected_stage_cell_idx);
+		
+		bool is_found = false;
+		int found_idx = -1;
+		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+		for(int i=1;i<=puzzle_count && !is_found;i++)
+		{
+			if(selected_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i))
+			{
+				is_found = true;
+				found_idx = i-1;
+			}
+		}
+		
+		if(is_found)
+		{
+			puzzle_table->updateCellAtIndex(found_idx);
+		}
+		else
+		{
+			puzzle_table->reloadData();
+		}
+	}
 }
 void NewMainFlowScene::buyPieceAction(int t_stage_number)
 {
@@ -1084,14 +1137,22 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 	}
 	else if(tag == kNewMainFlowMenuTag_event)
 	{
-		is_menu_enable = true; // 임시
+		EventListDown* t_eld = EventListDown::create(this, callfunc_selector(NewMainFlowScene::successEventListDown));
+		addChild(t_eld, kNewMainFlowZorder_popup);
+		
 		//			EventPopup* t_popup = EventPopup::create();
 		//			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 		//			addChild(t_popup, kMainFlowZorder_popup);
 	}
 	else if(tag == kNewMainFlowMenuTag_ready)
 	{
-		is_menu_enable = true;
+		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, selected_puzzle_number);
+		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, selected_puzzle_number, selected_stage_number);
+		
+		mySD->setSilType(selected_stage_number);
+		
+		info_down_popup = StageInfoDown::create(this, callfunc_selector(NewMainFlowScene::successStageInfoDown), this, callfunc_selector(NewMainFlowScene::startCancel));
+		addChild(info_down_popup, kNewMainFlowZorder_popup);
 	}
 	else if(tag == kNewMainFlowMenuTag_changeMode)
 	{
@@ -1103,6 +1164,21 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 		
 		is_menu_enable = true;
 	}
+}
+
+void NewMainFlowScene::successEventListDown()
+{
+	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+}
+
+void NewMainFlowScene::successStageInfoDown()
+{
+	CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+}
+void NewMainFlowScene::startCancel()
+{
+	info_down_popup->removeFromParent();
+	is_menu_enable = true;
 }
 
 void NewMainFlowScene::setBottom()

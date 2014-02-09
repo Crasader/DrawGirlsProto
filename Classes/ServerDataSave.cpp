@@ -329,9 +329,11 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_puzzleList_int1_thumbnail_s)			rv = "puzzleList%d_thumbnail";
 	
 	else if(t_key == kSDS_GI_eventListVersion_i)		rv = "eventListVersion";
-	else if(t_key == kSDS_GI_eventCount_i)				rv = "eventCount";
-	else if(t_key == kSDS_GI_event_int1_code_i)			rv = "event%d_code";
-	else if(t_key == kSDS_GI_event_int1_thumbnail_s)	rv = "event%d_thumbnail";
+	else if(t_key == kSDS_GI_eventListCount_i)			rv = "eventListCount";
+	else if(t_key == kSDS_GI_eventList_int1_no_i)		rv = "eventList%d_no";
+	else if(t_key == kSDS_GI_eventList_int1_title_s)	rv = "eventList%d_title";
+	else if(t_key == kSDS_GI_eventList_int1_version_i)	rv = "eventList%d_version";
+	else if(t_key == kSDS_GI_eventList_int1_thumbnail_s)			rv = "eventList%d_thumbnail";
 	
 	else if(t_key == kSDS_GI_characterVersion_i)		rv = "characterVersion";
 	else if(t_key == kSDS_GI_characterCount_i)			rv = "characterCount";

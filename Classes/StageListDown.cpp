@@ -89,7 +89,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			{
 				save_version_list.push_back(IntPoint(stage_number, stage_list[i]["version"].asInt()));
 				
-				NSDS_SI(stage_number, kSDS_SI_puzzle_i, stage_list[i]["puzzle"].asInt(), false);
+				NSDS_SI(stage_number, kSDS_SI_puzzle_i, puzzle_number, false);
 				NSDS_SI(stage_number, kSDS_SI_playtime_i, stage_list[i]["playtime"].asInt(), false);
 				NSDS_SD(stage_number, kSDS_SI_scoreRate_d, stage_list[i]["scoreRate"].asDouble(), false);
 				NSDS_SD(stage_number, kSDS_SI_scale_d, stage_list[i]["scale"].asDouble(), false);
@@ -468,28 +468,38 @@ void StageListDown::successAction()
 			
 			
 			//지금부터 퍼즐 조각 잘라 저장하기를 시작하겠습니다.
-			for(int i=0;i<20;i++){
+//			int puzzleCol=5,puzzleRow=4;
+//			float puzzleColDis=100.f, puzzleRowDis=100.f, puzzleOffsetX=76.f, puzzleOffsetY=76.f;   //지금 120, 120, 86, 88
+//			float faceColDis=172.f, faceRowDis=172.f; //172, 172
+//			float puzzleWidth=652,puzzleHeight=536; //652, 536
+
+			int puzzleCol=5,puzzleRow=4;
+			float puzzleColDis=120.f, puzzleRowDis=120.f, puzzleOffsetX=86.f, puzzleOffsetY=88.f;   //지금 120, 120, 86, 88
+			float faceColDis=172.f, faceRowDis=172.f; //172, 172
+			float puzzleWidth=652,puzzleHeight=536; //652, 536
+			
+			for(int i=0;i<puzzleCol*puzzleRow;i++){
 				CCImage *st = st_h;
 				if(i%2==0)st=st_w; //피스는 i가 짝수일때 st_w 이미지를 이용하여 자르고 홀수일때 st_h 이미지를 이용하여 자릅니다.
 				
 				//피스의 좌표를 구합니다. 퍼즐은 5*4 개로 이루어져있습니다.
-				int x = i%5;
-				int y = i/5;
+				int x = i%puzzleCol;
+				int y = i/puzzleCol;
 				
 				//저장할파일명을 지정합니다.
-				string filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(3-y)*5))->getCString();
+				string filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol))->getCString();
 				
 				//원본파일에서 자를 위치를 계산합니다.
 				int cutx, cuty;
 				if(cut_list[j].key == "face")
 				{
-					cutx = x*172+86;
-					cuty = y*172+86;
+					cutx = x*faceColDis+puzzleOffsetX;
+					cuty = y*faceRowDis+puzzleOffsetY;
 				}
 				else if(cut_list[j].key == "original")
 				{
-					cutx =x*120+86;
-					cuty =y*120+88;
+					cutx =x*puzzleColDis+puzzleOffsetX;
+					cuty =y*puzzleRowDis+puzzleOffsetY;
 				}
 				
 				//자르고 저장합니다.
@@ -517,8 +527,8 @@ void StageListDown::successAction()
 				CCImage *st = new CCImage;
 				st->initWithImageFile("puzzle_stencil_1_top.png");
 				
-				int cutx =652/2;
-				int cuty =536-50/2;
+				int cutx =puzzleWidth/2;
+				int cuty =puzzleHeight-st->getHeight()/2;
 				
 				string filename =CCString::createWithFormat("puzzle%d_%s_top.png", puzzle_number, cut_list[j].key.c_str())->getCString();
 				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
@@ -537,8 +547,8 @@ void StageListDown::successAction()
 				CCImage *st = new CCImage;
 				st->initWithImageFile("puzzle_stencil_1_bottom.png");
 				
-				int cutx =652/2;
-				int cuty =50/2;
+				int cutx =puzzleWidth/2;
+				int cuty =st->getHeight()/2;
 				
 				string filename =CCString::createWithFormat("puzzle%d_%s_bottom.png", puzzle_number, cut_list[j].key.c_str())->getCString();
 				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
@@ -557,8 +567,8 @@ void StageListDown::successAction()
 				CCImage *st = new CCImage;
 				st->initWithImageFile("puzzle_stencil_1_left.png");
 				
-				int cutx =50/2;
-				int cuty =536/2;
+				int cutx =st->getWidth()/2;
+				int cuty =puzzleHeight/2;
 				
 				string filename =CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, cut_list[j].key.c_str())->getCString();
 				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
@@ -576,8 +586,8 @@ void StageListDown::successAction()
 				CCImage *st = new CCImage;
 				st->initWithImageFile("puzzle_stencil_1_right.png");
 				
-				int cutx =652-50/2;
-				int cuty =536/2;
+				int cutx =puzzleWidth-st->getWidth()/2;
+				int cuty =puzzleHeight/2;
 				
 				string filename =CCString::createWithFormat("puzzle%d_%s_right.png", puzzle_number, cut_list[j].key.c_str())->getCString();
 				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
@@ -799,7 +809,7 @@ void StageListDown::startGetStageList()
 	
 	Json::Value param;
 	param["version"] = NSDS_GI(puzzle_number, kSDS_PZ_version_i);
-	param["no"] = puzzle_number;
+	param["order"] = puzzle_number;
 	command_vector.push_back(CommandParam("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList)));
 //	hspConnector::get()->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
 	hspConnector::get()->command(command_vector);

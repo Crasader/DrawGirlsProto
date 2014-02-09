@@ -60,29 +60,39 @@ bool LoadingTipScene::init()
 
 CCSprite* LoadingTipScene::getLoadingTipImage()
 {
-	int total_loading_tip = 9;
+	int total_loading_tip = 14;
 	int selected_loading_tip = rand()%total_loading_tip;
 	
 	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 	string tip_filename = "loading_tip_";
 	if(selected_loading_tip == 0)
-		tip_filename += "bonusgame";
+		tip_filename += "achievement";
 	else if(selected_loading_tip == 1)
-		tip_filename += "bosstip1";
+		tip_filename += "bonusgame";
 	else if(selected_loading_tip == 2)
-		tip_filename += "bosstip2";
+		tip_filename += "bosstip1";
 	else if(selected_loading_tip == 3)
-		tip_filename += "challenge";
+		tip_filename += "bosstip2";
 	else if(selected_loading_tip == 4)
-		tip_filename += "change";
+		tip_filename += "cardsetting";
 	else if(selected_loading_tip == 5)
-		tip_filename += "clear";
+		tip_filename += "challenge";
 	else if(selected_loading_tip == 6)
-		tip_filename += "newitem1";
+		tip_filename += "change";
 	else if(selected_loading_tip == 7)
-		tip_filename += "newpuzzle";
+		tip_filename += "clear";
 	else if(selected_loading_tip == 8)
+		tip_filename += "continue";
+	else if(selected_loading_tip == 9)
+		tip_filename += "newitem1";
+	else if(selected_loading_tip == 10)
+		tip_filename += "newitem2";
+	else if(selected_loading_tip == 11)
+		tip_filename += "newpuzzle";
+	else if(selected_loading_tip == 12)
 		tip_filename += "option";
+	else if(selected_loading_tip == 13)
+		tip_filename += "shop";
 	else
 		tip_filename += "bonusgame";
 	

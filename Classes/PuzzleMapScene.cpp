@@ -1219,7 +1219,6 @@ void PuzzleMapScene::stageAction(CCObject* sender)
 		(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag)))))
 	{
 		mySD->setSilType(tag);
-		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStage, tag);
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, recent_puzzle_number);
 		
 		StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(PuzzleMapScene::showStageSettingPopup), this, callfunc_selector(PuzzleMapScene::stageCancel));
@@ -1712,9 +1711,9 @@ void PuzzleMapScene::showEventPopup()
 {
 	puzzleUiDisable();
 	
-	EventPopup* t_popup = EventPopup::create();
-	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::hideEventPopup));
-	addChild(t_popup, kPMS_Z_popup);
+//	EventPopup* t_popup = EventPopup::create();
+//	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::hideEventPopup));
+//	addChild(t_popup, kPMS_Z_popup);
 }
 
 void PuzzleMapScene::hideEventPopup()
