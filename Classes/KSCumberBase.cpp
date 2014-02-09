@@ -1598,14 +1598,20 @@ void KSCumberBase::cumberAttack(float dt)
 void KSCumberBase::speedAdjustment(float dt)
 {
 	int considerFrames = 60 * 7; // 초.
-	int maxCre = 15;
+	int maxCre = 7;
 	int cntPerSecond = MIN(count_if(m_damagedFrames.getSTL().begin(), m_damagedFrames.getSTL().end(),
 																	[=](int w){
 																		return w >= m_frameCount - considerFrames;
 																	}), maxCre);
-	float baseSpeed = m_minSpeed + (m_startSpeed - m_minSpeed) * getLife() / getTotalLife();
-	float finalSpeed = baseSpeed + cntPerSecond * (m_maxSpeed - baseSpeed) / maxCre;
-	m_speed = finalSpeed;
+	//static int t = 0;
+	//t++;
+	//if(t % 60)
+	//{
+		//myGD->communication("Main_showTextMessage", boost::str(boost::format("%||") % cntPerSecond));
+	//}
+	float baseSpeed = m_maxSpeed;
+	float finalSpeed = m_maxSpeed - (cntPerSecond) * (m_maxSpeed - m_minSpeed) / maxCre;
+	m_speed = clampf(finalSpeed, m_minSpeed, m_maxSpeed);
 }
 
 
@@ -2159,7 +2165,7 @@ void KSCumberBase::settingScale( float startScale, float minScale, float maxScal
 	m_minScale = minScale;
 	m_maxScale = maxScale;
 	
-	m_scale.SCALE_ADDER = m_scale.SCALE_SUBER = (m_maxScale - m_minScale) / 5.f;
+	m_scale.SCALE_ADDER = m_scale.SCALE_SUBER = (m_maxScale - m_minScale) / 10.f;
 	m_scale.scale.init(m_startScale, m_startScale, 0.f);
 }
 
