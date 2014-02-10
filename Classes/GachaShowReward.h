@@ -108,17 +108,17 @@ public:
 		if(gc == GachaCategory::kGoldGacha)
 		{
 			replayItem->setPrice(PriceTypeGold, mySGD->getGachaGoldFeeRetry());
-			replayItem->setTitle("골드");
+			replayItem->setTitle("다시뽑기");
 		}
 		else if(gc == GachaCategory::kRubyGacha)
 		{
 			replayItem->setPrice(PriceTypeRuby, mySGD->getGachaRubyFeeRetry());
-			replayItem->setTitle("루비");
+			replayItem->setTitle("다시뽑기");
 		}
 		else if(gc == GachaCategory::kSocialGacha)
 		{
 			replayItem->setPrice(PriceTypeSocial, mySGD->getGachaSocialFeeRetry());
-			replayItem->setTitle("소셜포인트");
+			replayItem->setTitle("다시뽑기");
 		}
 		replayItem->setFunction([=](CCObject*){
 			prevObtain();

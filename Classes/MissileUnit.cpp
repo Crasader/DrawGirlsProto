@@ -3292,15 +3292,15 @@ CloudBomb * CloudBomb::create (CCPoint cumberPosition, CCPoint jackPosition, Jso
 void CloudBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
 	m_step = 1;
-	m_bombProb = 0.001f;
+	m_bombProb = 0.004f;
 	m_pattern = pattern;
 	m_parentMissile = CCParticleSystemQuad::create("cloudbomb.plist");
 	m_parentMissile->setPositionType(kCCPositionTypeRelative);
-	m_parentMissile->setStartColor(ccc4f(166, 166, 166, 255)); //##
-	m_parentMissile->setEndColor(ccc4f(166, 166, 166, 255)); //##
+	m_parentMissile->setStartColor(ccc4f(0, 1, 1, 1)); //##
+	m_parentMissile->setEndColor(ccc4f(0, 1, 1, 1)); //##
 	
 	
-	m_parentMissile->setPosition(cumberPosition);
+	m_parentMissile->setPosition(jackPosition);
 	addChild(m_parentMissile);
 	
 	scheduleUpdate();
@@ -3317,15 +3317,21 @@ void CloudBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Valu
 }
 void CloudBomb::setTwoStep ()
 {
-	m_step = 2;
-	m_frame = 0;
-	m_sourcePosition = m_parentMissile->getPosition();
-	m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
-	m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
-	
-	m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCDelayTime::create(3.f)}));
-	
-	schedule(schedule_selector(ThisClassType::selfRemove));
+	addChild(KSGradualValue<float>::create(1.f, 0.f, 2.f, [=](float t){
+		m_parentMissile->setStartColor(ccc4f(1 - t, t, t, 1));
+		m_parentMissile->setEndColor(ccc4f(1 - t, t, t, 1));
+	},
+	[=](float t){
+		m_step = 2;
+		m_frame = 0;
+		m_sourcePosition = m_parentMissile->getPosition();
+		m_parentMissile->setStartColor(ccc4f(0, 0, 0, 0));
+		m_parentMissile->setEndColor(ccc4f(0, 0, 0, 0));
+
+		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCDelayTime::create(3.f)}));
+
+		schedule(schedule_selector(ThisClassType::selfRemove));
+	}));
 }
 void CloudBomb::selfRemove (float dt)
 {
@@ -3365,7 +3371,7 @@ void CloudBomb::update (float dt)
 		
 		int number = m_pattern.get("bulletnumber", 36).asInt();
 		float bulletSpeed = m_pattern.get("bulletspeed", 500.f).asFloat() / 100.f;
-		int m_color = 1;
+		int m_color = m_pattern.get("color", 1).asInt();
 		std::string imgFileName;
 		std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
 		if(KS::isExistFile(fileName))

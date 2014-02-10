@@ -560,6 +560,7 @@ protected:
 	int m_insertCount;
 	CCSprite* m_targetSprite;
 };
+
 class CloudBomb : public CCNode
 {
 public:
