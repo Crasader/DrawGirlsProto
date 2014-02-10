@@ -1836,7 +1836,8 @@ void Jack::endReviveJack()
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
 		jack_ccb_manager->runAnimationsForSequenceNamed("stop");
 	jack_barrier->setVisible(true);
-
+	
+	myGD->communication("UI_resumeCounting");
 	myGD->communication("GIM_dieCreateItem");
 	myGD->communication("Main_resetIsLineDie");
 	myGD->communication("Main_stopSpecialAttack");

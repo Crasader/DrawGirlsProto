@@ -696,13 +696,13 @@ void MapScanner::setTopBottomBlock()
 		{
 			CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture());
 			t_block->setAnchorPoint(ccp(0,0));
-			t_block->setPosition(ccp(i*32, top_y));
+			t_block->setPosition(ccp(i*32, top_y+2));
 			t_block->setTag(top_cnt*10+i);
 			top_block_manager->addChild(t_block);
 		}
 		CCSprite* t_line = CCSprite::createWithTexture(top_block_line_manager->getTexture());
 		t_line->setAnchorPoint(ccp(0.5,0));
-		t_line->setPosition(ccp(160,top_y));
+		t_line->setPosition(ccp(160,top_y+2));
 		t_line->setTag(top_cnt*10);
 		top_block_line_manager->addChild(t_line);
 		top_y += 32.f;
@@ -710,7 +710,7 @@ void MapScanner::setTopBottomBlock()
 	top_block_manager->setTag(top_cnt);
 	top_block_lock = CCSprite::create("temp_block_lock.png");
 	top_block_lock->setAnchorPoint(ccp(0.5,0));
-	top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
+	top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize+2));
 	addChild(top_block_lock, blockZorder);
 
 	
@@ -731,13 +731,13 @@ void MapScanner::setTopBottomBlock()
 		{
 			CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture());
 			t_block->setAnchorPoint(ccp(0,1.f));
-			t_block->setPosition(ccp(i*32, bottom_y));
+			t_block->setPosition(ccp(i*32, bottom_y-2));
 			t_block->setTag(bottom_cnt*10+i);
 			bottom_block_manager->addChild(t_block);
 		}
 		CCSprite* t_line = CCSprite::createWithTexture(bottom_block_line_manager->getTexture());
 		t_line->setAnchorPoint(ccp(0.5,1.f));
-		t_line->setPosition(ccp(160,bottom_y));
+		t_line->setPosition(ccp(160,bottom_y-2));
 		t_line->setTag(bottom_cnt*10);
 		bottom_block_line_manager->addChild(t_line);
 		bottom_y -= 32.f;
@@ -745,7 +745,7 @@ void MapScanner::setTopBottomBlock()
 	bottom_block_manager->setTag(bottom_cnt);
 	bottom_block_lock = CCSprite::create("temp_block_lock.png");
 	bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
-	bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2.f));
+	bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize-2));
 	addChild(bottom_block_lock, blockZorder);
 
 	random_device rd;

@@ -38,6 +38,7 @@ enum Mainzorder{
 	searchEyeZorder,
 	clearshowtimeZorder,
 	myUIZorder,
+	screenNodeZorder,
 	mControlZorder,
 	particleZorder,
 	shutterZorder
@@ -240,6 +241,8 @@ private:
 	void stopShake();
 	
 	SearchEye* search_eye;
+	
+	CCNode* screen_node;
 	
 	CCSprite* character_thumb;
 	CCSprite* boss_thumb;

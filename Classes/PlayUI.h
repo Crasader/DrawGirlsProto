@@ -292,6 +292,7 @@ private:
 	int ing_cdt_cnt;
 	float clr_cdt_per;
 	float clr_cdt_range;
+	int save_counting_value;
 	RollingButton* mission_button;
 	void takeCoinModeOn ();
 	void counting ();

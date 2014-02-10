@@ -1548,7 +1548,7 @@ void PlayUI::counting ()
 			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", true);
 		}
 		
-		if(countingCnt+1 >= playtime_limit)
+		if(countingCnt-1 >= playtime_limit)
 		{
 			t_is_die = true;
 			//			if(jack_life > 0)
@@ -1587,7 +1587,10 @@ void PlayUI::counting ()
 		if(!t_is_die)
 			countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 		else
+		{
 			countingLabel->setString(CCString::createWithFormat("%d.%d", 0, 0)->getCString());
+			stopCounting();
+		}
 	}
 	else
 	{
@@ -1595,7 +1598,7 @@ void PlayUI::counting ()
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
 		countingLabel->setPosition(ccp(240,myDSH->ui_top-25));
-		countingLabel->setString(CCString::createWithFormat("%d.", label_value)->getCString());
+		countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 	}
 	
 }

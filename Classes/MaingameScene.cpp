@@ -319,6 +319,33 @@ void Maingame::finalSetting()
 	thumb_case_right->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(160*thumb_scale+1,0)));
 	addChild(thumb_case_right, myUIZorder);
 	
+	screen_node = CCNode::create();
+	screen_node->setPosition(thumb_texture->getPosition());
+	addChild(screen_node, screenNodeZorder);
+	screen_node->setScale(1.4563f/myGD->game_scale);
+	
+	CCSize screen_data = CCSizeMake(320.f*thumb_scale, 0);
+	screen_data.height = screen_data.width/3.f*2.f*myDSH->ui_top/320.f;
+	
+	CCSprite* screen_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width, 1.5f));
+	screen_top->setColor(ccc3(150, 150, 150));
+	screen_top->setPosition(ccp(0,screen_data.height/2.f));
+	screen_node->addChild(screen_top);
+	CCSprite* screen_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width, 1.5f));
+	screen_down->setColor(ccc3(150, 150, 150));
+	screen_down->setPosition(ccp(0,-screen_data.height/2.f));
+	screen_node->addChild(screen_down);
+	CCSprite* screen_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height));
+	screen_left->setColor(ccc3(150, 150, 150));
+	screen_left->setPosition(ccp(-screen_data.width/2.f,0));
+	screen_node->addChild(screen_left);
+	CCSprite* screen_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height));
+	screen_right->setColor(ccc3(150, 150, 150));
+	screen_right->setPosition(ccp(screen_data.width/2.f,0));
+	screen_node->addChild(screen_right);
+	
+	myJack->setPosition(myJack->getPosition());
+	
 	
 	thumb_base_position = ccp(58-320.f*thumb_scale,myDSH->ui_top-90-430.f*thumb_scale);
 	
@@ -1161,6 +1188,15 @@ void Maingame::moveGamePosition( CCPoint t_p )
 	line_particle->setPosition(t_p);
 	
 	game_node->setPosition(getObjectToGameNodePosition(t_p));
+	if(thumb_texture)
+	{
+		CCPoint screen_position = ccp(fabsf(game_node->getPositionX()-myGD->boarder_value-480.f/2.f), fabsf(game_node->getPositionY()-myGD->boarder_value-myDSH->ui_top/2.f));
+		screen_position = ccpMult(screen_position, thumb_texture->getScale()/game_node->getScale());
+		screen_position = ccpAdd(screen_position, thumb_texture->getPosition());
+		screen_position = ccpSub(screen_position, ccp(320*thumb_texture->getScale()/2.f, 430*thumb_texture->getScale()/2.f));
+		screen_node->setPosition(screen_position);
+	}
+	
 	if(character_thumb)
 		character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), thumb_texture->getScale())));
 }
@@ -1758,6 +1794,7 @@ void Maingame::hideThumb()
 	thumb_texture->setVisible(false);
 	character_thumb->setVisible(false);
 	boss_thumb->setVisible(false);
+	screen_node->setVisible(false);
 	
 	int sub_loop = sub_thumbs->count();
 	for(int i=0;i<sub_loop;i++)
