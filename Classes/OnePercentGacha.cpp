@@ -116,7 +116,7 @@ void OnePercentGacha::menuAction (CCObject * sender)
 	{
 		ok_menu->setEnabled(false);
 		arrow_img->stopAllActions();
-		float position_value = (arrow_img->getPositionX() - 129.f)/222.f;
+		float position_value = (arrow_img->getPositionX()+back_img->getPositionX()-back_img->getContentSize().width/2.f - 129.f)/222.f;
 		recent_percent += position_value/100.f;
 		if(recent_percent > 1.f)
 			recent_percent = 1.f;
@@ -167,7 +167,7 @@ void OnePercentGacha::setBack ()
 	left_percent->setPosition(ccpAdd(progress_img->getPosition(), ccp(-progress_img->getSprite()->getContentSize().width/2.f-10, -progress_img->getSprite()->getContentSize().height/2.f-2)));
 	back_img->addChild(left_percent, kOnePercentGacha_Z_content);
 	
-	CCLabelTTF* right_percent = CCLabelTTF::create(CCString::createWithFormat("%.1f%%", 100.f-recent_percent*100.f)->getCString(), mySGD->getFont().c_str(), 14);
+	CCLabelTTF* right_percent = CCLabelTTF::create("1%", mySGD->getFont().c_str(), 14);
 	right_percent->setAnchorPoint(ccp(1,1));
 	right_percent->setPosition(ccpAdd(progress_img->getPosition(), ccp(progress_img->getSprite()->getContentSize().width/2.f+20, -progress_img->getSprite()->getContentSize().height/2.f-2)));
 	back_img->addChild(right_percent, kOnePercentGacha_Z_content);

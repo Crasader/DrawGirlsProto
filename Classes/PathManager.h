@@ -59,6 +59,7 @@ private:
 		pathImg->setRotation(myPointVector.distance.getAngle());
 		pathScale = 1;
 		pathImg->setScaleX(pathScale);
+		pathImg->setScaleY(0.5f);
 		addChild(pathImg);
 		setPosition(ccp((myPointVector.origin.x-1)*pixelSize+1, (myPointVector.origin.y-1)*pixelSize+1));
 		

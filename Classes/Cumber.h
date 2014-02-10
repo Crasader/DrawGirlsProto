@@ -39,6 +39,7 @@ public:
 	
 	virtual ~CumberParent()
 	{
+		CCLog("~CumberParent");
 		subCumberArray->release();
 	}
 	

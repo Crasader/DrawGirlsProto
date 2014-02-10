@@ -984,7 +984,7 @@ void StarGoldData::myInit()
 
 	if(!myDSH->getBoolForKey(kDSH_Key_notFirstExe))
 	{
-		myDSH->setBoolForKey(kDSH_Key_isDisableDrawButton, true);
+//		myDSH->setBoolForKey(kDSH_Key_isDisableDrawButton, true);
 		
 		myDSH->setBoolForKey(kDSH_Key_notFirstExe, true);
 		is_tutorial_cleared = false;
