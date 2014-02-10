@@ -1948,7 +1948,7 @@ void PlayUI::myInit ()
 //	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-15,9)));
 //	addChild(gold_img);
 	
-	score_label = CountingBMLabel::create("0", "timefont.fnt", 2.f, "%d");
+	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 	score_label->setAnchorPoint(ccp(0.5,0.5));
 	score_label->setPosition(ccp(55,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));

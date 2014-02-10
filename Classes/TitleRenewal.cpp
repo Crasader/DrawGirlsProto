@@ -1206,7 +1206,7 @@ void TitleRenewalScene::successDownloadAction()
 			
 			int puzzleCol=6,puzzleRow=4;
 			float puzzleColDis=100.f, puzzleRowDis=100.f, puzzleOffsetX=76.f, puzzleOffsetY=76.f;
-			float faceColDis=172.f, faceRowDis=172.f; //172, 172
+			float faceColDis=132.f, faceRowDis=132.f; //172, 172
 			float puzzleWidth=652.f,puzzleHeight=452.f;
 			
 			int puzzle_number = puzzle_download_list_puzzle_number[j];
