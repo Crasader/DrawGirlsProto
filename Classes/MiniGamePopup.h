@@ -15,7 +15,7 @@ USING_NS_CC;
 using namespace std;
 
 enum MiniGameCode{
-	kMiniGameCode_touchtouch = 0;
+	kMiniGameCode_touchtouch = 0
 };
 
 class MiniGamePopup : public CCLayer

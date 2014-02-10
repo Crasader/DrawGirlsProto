@@ -1162,20 +1162,14 @@ void NewMainFlowScene::pieceAction(int t_stage_number)
 	ready_menu = NULL;
 	
 	CCSprite* n_ready = CCSprite::create("mainflow_new_ready.png");
-	CCLabelTTF* n_ment = CCLabelTTF::create("준비하기", mySGD->getFont().c_str(), 17);
-	n_ment->setPosition(ccp(n_ready->getContentSize().width/2.f-2, n_ready->getContentSize().height/2.f+5));
-	n_ready->addChild(n_ment);
 	CCLabelTTF* n_stage_number = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", t_stage_number)->getCString(), mySGD->getFont().c_str(), 11);
-	n_stage_number->setPosition(ccp(n_ready->getContentSize().width/2.f-2, n_ready->getContentSize().height/2.f-15));
+	n_stage_number->setPosition(ccp(n_ready->getContentSize().width/2.f+16, n_ready->getContentSize().height/2.f-11));
 	n_ready->addChild(n_stage_number);
 	
 	CCSprite* s_ready = CCSprite::create("mainflow_new_ready.png");
 	s_ready->setColor(ccGRAY);
-	CCLabelTTF* s_ment = CCLabelTTF::create("준비하기", mySGD->getFont().c_str(), 17);
-	s_ment->setPosition(ccp(s_ready->getContentSize().width/2.f-2, s_ready->getContentSize().height/2.f+5));
-	s_ready->addChild(s_ment);
 	CCLabelTTF* s_stage_number = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", t_stage_number)->getCString(), mySGD->getFont().c_str(), 11);
-	s_stage_number->setPosition(ccp(s_ready->getContentSize().width/2.f-2, s_ready->getContentSize().height/2.f-15));
+	s_stage_number->setPosition(ccp(s_ready->getContentSize().width/2.f+16, s_ready->getContentSize().height/2.f-11));
 	s_ready->addChild(s_stage_number);
 	
 	
@@ -1471,7 +1465,7 @@ void NewMainFlowScene::setBottom()
 	rank_item->setTag(kNewMainFlowMenuTag_rank);
 	
 	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
-	rank_menu->setPosition(ccp(-212, n_rank->getContentSize().height/2.f));
+	rank_menu->setPosition(ccp(-215, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
 	
 	
@@ -1483,7 +1477,7 @@ void NewMainFlowScene::setBottom()
 	shop_item->setTag(kNewMainFlowMenuTag_shop);
 	
 	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
-	shop_menu->setPosition(ccp(-153, n_shop->getContentSize().height/2.f));
+	shop_menu->setPosition(ccp(-159, n_shop->getContentSize().height/2.f));
 	bottom_case->addChild(shop_menu);
 	
 	
@@ -1495,7 +1489,7 @@ void NewMainFlowScene::setBottom()
 	cardsetting_item->setTag(kNewMainFlowMenuTag_cardSetting);
 	
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
-	cardsetting_menu->setPosition(ccp(-94, n_cardsetting->getContentSize().height/2.f));
+	cardsetting_menu->setPosition(ccp(-103, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
 	
 	
@@ -1507,7 +1501,7 @@ void NewMainFlowScene::setBottom()
 	friendmanagement_item->setTag(kNewMainFlowMenuTag_friendManagement);
 	
 	CCMenu* friendmanagement_menu = CCMenu::createWithItem(friendmanagement_item);
-	friendmanagement_menu->setPosition(ccp(-35, n_friendmanagement->getContentSize().height/2.f));
+	friendmanagement_menu->setPosition(ccp(-47, n_friendmanagement->getContentSize().height/2.f));
 	bottom_case->addChild(friendmanagement_menu);
 	
 	
@@ -1519,7 +1513,7 @@ void NewMainFlowScene::setBottom()
 	gacha_item->setTag(kNewMainFlowMenuTag_gacha);
 	
 	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
-	gacha_menu->setPosition(ccp(24, n_gacha->getContentSize().height/2.f));
+	gacha_menu->setPosition(ccp(9, n_gacha->getContentSize().height/2.f));
 	bottom_case->addChild(gacha_menu);
 	
 	
@@ -1531,25 +1525,19 @@ void NewMainFlowScene::setBottom()
 	event_item->setTag(kNewMainFlowMenuTag_event);
 	
 	CCMenu* event_menu = CCMenu::createWithItem(event_item);
-	event_menu->setPosition(ccp(83, n_event->getContentSize().height/2.f));
+	event_menu->setPosition(ccp(65, n_event->getContentSize().height/2.f));
 	bottom_case->addChild(event_menu);
 	
 	
 	CCSprite* n_ready = CCSprite::create("mainflow_new_ready.png");
-	CCLabelTTF* n_ment = CCLabelTTF::create("준비하기", mySGD->getFont().c_str(), 17);
-	n_ment->setPosition(ccp(n_ready->getContentSize().width/2.f-2, n_ready->getContentSize().height/2.f+5));
-	n_ready->addChild(n_ment);
 	CCSprite* s_ready = CCSprite::create("mainflow_new_ready.png");
 	s_ready->setColor(ccGRAY);
-	CCLabelTTF* s_ment = CCLabelTTF::create("준비하기", mySGD->getFont().c_str(), 17);
-	s_ment->setPosition(ccp(s_ready->getContentSize().width/2.f-2, s_ready->getContentSize().height/2.f+5));
-	s_ready->addChild(s_ment);
 	
 	CCMenuItem* ready_item = CCMenuItemSprite::create(n_ready, s_ready, this, menu_selector(NewMainFlowScene::menuAction));
 	ready_item->setTag(kNewMainFlowMenuTag_ready);
 	
 	ready_menu = CCMenu::createWithItem(ready_item);
-	ready_menu->setPosition(ccp(178, n_ready->getContentSize().height/2.f));
+	ready_menu->setPosition(ccp(168, n_ready->getContentSize().height/2.f));
 	bottom_case->addChild(ready_menu);
 }
 
@@ -1648,8 +1636,8 @@ void NewMainFlowScene::setTop()
 	friend_point_menu->setPosition(ccp(316,top_case->getContentSize().height/2.f));
 	top_case->addChild(friend_point_menu);
 	
-	CCSprite* n_postbox = CCSprite::create("mainflow_postbox.png");
-	CCSprite* s_postbox = CCSprite::create("mainflow_postbox.png");
+	CCSprite* n_postbox = CCSprite::create("mainflow_new_postbox.png");
+	CCSprite* s_postbox = CCSprite::create("mainflow_new_postbox.png");
 	s_postbox->setColor(ccGRAY);
 	
 	CCMenuItem* postbox_item = CCMenuItemSprite::create(n_postbox, s_postbox, this, menu_selector(NewMainFlowScene::menuAction));
@@ -1699,8 +1687,8 @@ void NewMainFlowScene::setTop()
 	
 	
 	
-	CCSprite* n_option = CCSprite::create("mainflow_option.png");
-	CCSprite* s_option = CCSprite::create("mainflow_option.png");
+	CCSprite* n_option = CCSprite::create("mainflow_new_option.png");
+	CCSprite* s_option = CCSprite::create("mainflow_new_option.png");
 	s_option->setColor(ccGRAY);
 	
 	CCMenuItem* option_item = CCMenuItemSprite::create(n_option, s_option, this, menu_selector(NewMainFlowScene::menuAction));
