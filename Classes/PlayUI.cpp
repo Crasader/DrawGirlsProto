@@ -1595,7 +1595,7 @@ void PlayUI::counting ()
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
 		countingLabel->setPosition(ccp(240,myDSH->ui_top-25));
-		countingLabel->setString(CCString::createWithFormat("%d", label_value)->getCString());
+		countingLabel->setString(CCString::createWithFormat("%d.", label_value)->getCString());
 	}
 	
 }
@@ -1999,7 +1999,7 @@ void PlayUI::myInit ()
 //	else											time_back->setPosition(ccp(480.f*3.1f/4.f,myDSH->ui_top-25));
 //	addChild(time_back);
 	
-	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
+	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d.", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
 	countingLabel->setPosition(ccp(240,myDSH->ui_top-25));

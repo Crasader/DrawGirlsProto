@@ -2044,6 +2044,7 @@ void Jack::myInit()
 	jack_barrier = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(100, 0, 25, 25));
 //	jack_barrier->setScale(0.8f);
 	addChild(jack_barrier, kJackZ_defaultBarrier);
+	jack_barrier->setOpacity(0);
 
 	CCAnimation* t_animation = CCAnimation::create();
 	t_animation->setDelayPerUnit(0.1);
