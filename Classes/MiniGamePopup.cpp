@@ -83,25 +83,10 @@ bool MiniGamePopup::init(MiniGameCode t_code, function<void(void)> t_end_func)
 	string title_filename;
 	string content_filename;
 	
-	if(game_code == kMiniGameCode_counting)
+	if(game_code == kMiniGameCode_touchtouch)
 	{
-		title_filename = "bonusgame_bosscount.png";
-		content_filename = "bonusgame_tipbox_bosscount.png";
-	}
-	else if(game_code == kMiniGameCode_slidingPuzzle)
-	{
-		title_filename = "bonusgame_sliding.png";
-		content_filename = "bonusgame_tipbox_sliding.png";
-	}
-	else if(game_code == kMiniGameCode_cardMatch)
-	{
-		title_filename = "bonusgame_samecard.png";
-		content_filename = "bonusgame_tipbox_samecard.png";
-	}
-	else if(game_code == kMiniGameCode_dodge)
-	{
-		title_filename = "bonusgame_dodge.png";
-		content_filename = "bonusgame_tipbox_dodge.png";
+		title_filename = "minigame_start_touch.png";
+		content_filename = "minigame_start_tip.png";
 	}
 	
 	CCSprite* title_gamename = CCSprite::create(title_filename.c_str());

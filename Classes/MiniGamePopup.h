@@ -15,10 +15,7 @@ USING_NS_CC;
 using namespace std;
 
 enum MiniGameCode{
-	kMiniGameCode_counting = 0,
-	kMiniGameCode_slidingPuzzle,
-	kMiniGameCode_cardMatch,
-	kMiniGameCode_dodge
+	kMiniGameCode_touchtouch = 0;
 };
 
 class MiniGamePopup : public CCLayer

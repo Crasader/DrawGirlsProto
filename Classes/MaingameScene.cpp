@@ -328,13 +328,13 @@ void Maingame::finalSetting()
 	CCRepeatForever* thumb_repeat = CCRepeatForever::create(thumb_seq);
 	thumb_texture->runAction(thumb_repeat);
 	
-	boss_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 3, 3));
+	boss_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
 	boss_thumb->setColor(ccRED);
 	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
 	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_scale)));
 	addChild(boss_thumb, myUIZorder);
 	
-	character_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 2, 2));
+	character_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 	character_thumb->setColor(ccGREEN);
 	character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), thumb_scale)));
 	addChild(character_thumb, myUIZorder);
@@ -374,13 +374,13 @@ void Maingame::finalSetting()
 			replay_all_node->addChild(replay_case_right);
 			
 			
-			replay_boss = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 3, 3));
+			replay_boss = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
 			replay_boss->setColor(ccRED);
 			replay_boss->setVisible(false);
 			replay_boss->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale));
 			replay_all_node->addChild(replay_boss);
 			
-			replay_character = CCSprite::create("whitePaper.png", CCRectMake(0,0,2,2));
+			replay_character = CCSprite::create("whitePaper.png", CCRectMake(0,0,4,4));
 			replay_character->setColor(ccGREEN);
 			replay_character->setVisible(false);
 			replay_character->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale));
@@ -409,7 +409,7 @@ void Maingame::finalSetting()
 	CCArray* sub_array = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
 	for(int i=0;i<sub_array->count();i++)
 	{
-		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 2, 2));
+		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 		sub_position_img->setColor(ccYELLOW);
 		CCNode* sub_pointer = (CCNode*)sub_array->objectAtIndex(i);
 		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_scale)));
@@ -1576,7 +1576,7 @@ void Maingame::refreshThumb()
 	}
 	while (sub_thumbs->count() < sub_array->count())
 	{
-		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 2, 2));
+		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 		sub_position_img->setColor(ccYELLOW);
 		addChild(sub_position_img, myUIZorder);
 		
@@ -1650,7 +1650,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 	}
 	while(replay_sub->count() < monster_count)
 	{
-		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 2, 2));
+		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 		sub_position_img->setColor(ccYELLOW);
 		replay_all_node->addChild(sub_position_img);
 		

@@ -417,6 +417,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		}
 		else if(tag == kCSS_MT_strength)
 		{
+			mySGD->setStrengthTargetCardNumber(myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 			mySGD->setCardStrengthBefore(kCardStrengthBefore_cardSetting);
 			CardStrengthPopup* t_popup = CardStrengthPopup::create();
 			t_popup->setHideFinalAction(target_final, delegate_final);

@@ -507,8 +507,8 @@ void StageListDown::successAction()
 				puzzleRowDis=100.f;
 				puzzleOffsetX=76.f;
 				puzzleOffsetY=76.f;
-				faceColDis=172.f;
-				faceRowDis=172.f;
+				faceColDis=132.f;
+				faceRowDis=132.f;
 				puzzleWidth=652.f;
 				puzzleHeight=452.f;
 			}
