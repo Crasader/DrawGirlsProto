@@ -39,7 +39,19 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, result_data["ticket"].asInt(), false);
 		NSDS_SI(puzzle_number, kSDS_PZ_point_i, result_data["point"].asInt(), false);
 		
-		if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != result_data["center"]["image"].asString())		addDownlist("center", result_data);
+		if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != result_data["center"]["image"].asString())
+		{
+			addDownlist("center", result_data);
+			if(puzzle_number < 10000)
+			{
+				DownloadFile t_cut;
+				t_cut.size = result_data["center"]["size"].asInt();
+				t_cut.img = result_data["center"]["image"].asString().c_str();
+				t_cut.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "center")->getCString();
+				t_cut.key = "center";
+				cut_list.push_back(t_cut);
+			}
+		}
 		if(NSDS_GS(puzzle_number, kSDS_PZ_original_s) != result_data["original"]["image"].asString())
 		{
 			addDownlist("original", result_data);
@@ -461,33 +473,70 @@ void StageListDown::successAction()
 			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
 			
 			CCImage *st_w = new CCImage;
-			st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
-			
 			CCImage *st_h = new CCImage;
-			st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
 			
+			int puzzleCol,puzzleRow;
+			float puzzleColDis, puzzleRowDis, puzzleOffsetX, puzzleOffsetY;
+			float faceColDis, faceRowDis; //172, 172
+			float puzzleWidth,puzzleHeight;
 			
-			//지금부터 퍼즐 조각 잘라 저장하기를 시작하겠습니다.
-//			int puzzleCol=5,puzzleRow=4;
-//			float puzzleColDis=100.f, puzzleRowDis=100.f, puzzleOffsetX=76.f, puzzleOffsetY=76.f;   //지금 120, 120, 86, 88
-//			float faceColDis=172.f, faceRowDis=172.f; //172, 172
-//			float puzzleWidth=652,puzzleHeight=536; //652, 536
-
-			int puzzleCol=5,puzzleRow=4;
-			float puzzleColDis=120.f, puzzleRowDis=120.f, puzzleOffsetX=86.f, puzzleOffsetY=88.f;   //지금 120, 120, 86, 88
-			float faceColDis=172.f, faceRowDis=172.f; //172, 172
-			float puzzleWidth=652,puzzleHeight=536; //652, 536
+			if(puzzle_number > 10000)
+			{
+				st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
+				st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
+				
+				puzzleCol=5;
+				puzzleRow=4;
+				puzzleColDis=120.f;
+				puzzleRowDis=120.f;
+				puzzleOffsetX=86.f;
+				puzzleOffsetY=88.f;
+				faceColDis=172.f;
+				faceRowDis=172.f;
+				puzzleWidth=652;
+				puzzleHeight=536;
+			}
+			else
+			{
+				st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
+				st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
+				
+				puzzleCol=6;
+				puzzleRow=4;
+				puzzleColDis=100.f;
+				puzzleRowDis=100.f;
+				puzzleOffsetX=76.f;
+				puzzleOffsetY=76.f;
+				faceColDis=172.f;
+				faceRowDis=172.f;
+				puzzleWidth=652.f;
+				puzzleHeight=452.f;
+			}
+			
 			
 			for(int i=0;i<puzzleCol*puzzleRow;i++){
-				CCImage *st = st_h;
-				if(i%2==0)st=st_w; //피스는 i가 짝수일때 st_w 이미지를 이용하여 자르고 홀수일때 st_h 이미지를 이용하여 자릅니다.
-				
 				//피스의 좌표를 구합니다. 퍼즐은 5*4 개로 이루어져있습니다.
 				int x = i%puzzleCol;
 				int y = i/puzzleCol;
 				
+				CCImage *st = st_h;
+				if(puzzle_number > 10000)
+				{
+					if(i%2==0)
+						st=st_w; //피스는 i가 짝수일때 st_w 이미지를 이용하여 자르고 홀수일때 st_h 이미지를 이용하여 자릅니다.
+				}
+				else
+				{
+					if((x+(puzzleRow-1-y))%2 == 1)
+						st=st_w;
+				}
+				
 				//저장할파일명을 지정합니다.
-				string filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol))->getCString();
+				string filename;
+				if(puzzle_number > 10000)
+					filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol))->getCString();
+				else
+					filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol)+1)->getCString();
 				
 				//원본파일에서 자를 위치를 계산합니다.
 				int cutx, cuty;
@@ -496,7 +545,7 @@ void StageListDown::successAction()
 					cutx = x*faceColDis+puzzleOffsetX;
 					cuty = y*faceRowDis+puzzleOffsetY;
 				}
-				else if(cut_list[j].key == "original")
+				else if(cut_list[j].key == "original" || cut_list[j].key == "center")
 				{
 					cutx =x*puzzleColDis+puzzleOffsetX;
 					cuty =y*puzzleRowDis+puzzleOffsetY;
@@ -525,7 +574,10 @@ void StageListDown::successAction()
 			//위쪽부터 잘라봅니다.
 			{
 				CCImage *st = new CCImage;
-				st->initWithImageFile("puzzle_stencil_1_top.png");
+				if(puzzle_number > 10000)
+					st->initWithImageFile("puzzle_stencil_1_top.png");
+				else
+					st->initWithImageFile("temp_puzzle_stencil_top.png");
 				
 				int cutx =puzzleWidth/2;
 				int cuty =puzzleHeight-st->getHeight()/2;
@@ -545,7 +597,10 @@ void StageListDown::successAction()
 			//아래쪽 잘라봅니다.
 			{
 				CCImage *st = new CCImage;
-				st->initWithImageFile("puzzle_stencil_1_bottom.png");
+				if(puzzle_number > 10000)
+					st->initWithImageFile("puzzle_stencil_1_bottom.png");
+				else
+					st->initWithImageFile("temp_puzzle_stencil_bottom.png");
 				
 				int cutx =puzzleWidth/2;
 				int cuty =st->getHeight()/2;
@@ -565,7 +620,10 @@ void StageListDown::successAction()
 			//왼쪽 잘라봅니다.
 			{
 				CCImage *st = new CCImage;
-				st->initWithImageFile("puzzle_stencil_1_left.png");
+				if(puzzle_number > 10000)
+					st->initWithImageFile("puzzle_stencil_1_left.png");
+				else
+					st->initWithImageFile("temp_puzzle_stencil_left.png");
 				
 				int cutx =st->getWidth()/2;
 				int cuty =puzzleHeight/2;
@@ -584,7 +642,10 @@ void StageListDown::successAction()
 			//오른쪽 잘라봅니다.
 			{
 				CCImage *st = new CCImage;
-				st->initWithImageFile("puzzle_stencil_1_right.png");
+				if(puzzle_number > 10000)
+					st->initWithImageFile("puzzle_stencil_1_right.png");
+				else
+					st->initWithImageFile("temp_puzzle_stencil_right.png");
 				
 				int cutx =puzzleWidth-st->getWidth()/2;
 				int cuty =puzzleHeight/2;

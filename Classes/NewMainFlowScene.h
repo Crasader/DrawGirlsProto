@@ -128,6 +128,8 @@ private:
 	
 	void successEventListDown();
 	
+	void puzzleLoadSuccess();
+	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked();
 };

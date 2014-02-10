@@ -388,9 +388,16 @@ void StageInfoDown::myInit( CCObject* t_success, SEL_CallFunc d_success, CCObjec
 	target_cancel = t_cancel;
 	delegate_cancel = d_cancel;
 
-	CCSprite* t_back = CCSprite::create("back_gray.png");
-	t_back->setPosition(ccp(240,160));
-	addChild(t_back, kSID_Z_back);
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	gray = CCSprite::create("back_gray.png");
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(gray);
 
 	CCSprite* n_cancel = CCSprite::create("sspl_cancel.png");
 	CCSprite* s_cancel = CCSprite::create("sspl_cancel.png");

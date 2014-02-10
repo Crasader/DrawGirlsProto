@@ -271,11 +271,11 @@ void NewStageInfoView::resultGetStageScoreList(Json::Value result_data)
 		
 		CCSize table_size = CCSizeMake(130, 190);
 		
-		CCSprite* temp_table = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
-		temp_table->setAnchorPoint(CCPointZero);
-		temp_table->setPosition(ccp(-table_size.width/2.f, -table_size.height/2.f-15));
-		temp_table->setOpacity(100);
-		content_node->addChild(temp_table);
+//		CCSprite* temp_table = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+//		temp_table->setAnchorPoint(CCPointZero);
+//		temp_table->setPosition(ccp(-table_size.width/2.f, -table_size.height/2.f-15));
+//		temp_table->setOpacity(100);
+//		content_node->addChild(temp_table);
 		
 		rank_table = CCTableView::create(this, table_size);
 		rank_table->setAnchorPoint(CCPointZero);

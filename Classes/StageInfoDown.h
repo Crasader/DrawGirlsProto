@@ -42,6 +42,8 @@ private:
 	int touch_number;
 	bool is_menu_enable;
 	
+	CCSprite* gray;
+	
 	CCLabelTTF* state_ment;
 	CCMenu* cancel_menu;
 	CCLabelBMFont* download_state;
