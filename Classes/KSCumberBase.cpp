@@ -457,8 +457,25 @@ void KSCumberBase::followMoving(float dt)
 		if(m_follow.timer - m_follow.lastMapCollisionTime > 1.f)
 		{
 			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
-			dx = m_speed * cos(atan2(t.y, t.x));
-			dy = m_speed * sin(atan2(t.y, t.x));
+			CCLog("aiValue : %d", this->getAiValue());
+			t = ip2ccp(myGD->getJackPoint()) - getPosition();
+			float varRad = m_well512.GetFloatValue(deg2Rad(-30), deg2Rad(+30));
+			dx = m_speed * cos(atan2(t.y, t.x) + varRad);
+			dy = m_speed * sin(atan2(t.y, t.x) + varRad);
+			//ProbSelector ps = {this->getAiValue(), 125 - this->getAiValue()};
+			//int result = ps.getResult();
+			//if(result == 0)
+			//{
+				//t = ip2ccp(myGD->getJackPoint()) - getPosition();
+				//dx = m_speed * cos(atan2(t.y, t.x));
+				//dy = m_speed * sin(atan2(t.y, t.x));
+			//}
+			//else 
+			//{
+				//t = ccp(m_well512.GetFloatValue(-1, 1), m_well512.GetFloatValue(-1, 1));
+				//dx = m_speed * cos(atan2(t.y, t.x)) * 2.f;
+				//dy = m_speed * sin(atan2(t.y, t.x)) * 2.f;
+			//}
 		}
 		else
 		{
@@ -1902,20 +1919,22 @@ void KSCumberBase::getRandomPosition(IntPoint* ip, bool* finded)
 
 void KSCumberBase::onJackDrawLine()
 {
-	ProbSelector ps({getAiValue(), 100.f - getAiValue()});
-	int r = ps.getResult();
-	CCLog("%d %d", myGD->getJackPoint().x, myGD->getJackPoint().y);
-	CCLog("%f %f", getPosition().x, getPosition().y);
-	CCLog("distance = %f", ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition()));
-	float dis = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
-	if(r == 0 && dis >= 55.f) // 너무 가까우면 안따라가게 함.
-	{
-		m_drawMovement = FOLLOW_TYPE;
-	}
-	else
-	{
-		m_drawMovement = m_normalMovement;
-	}
+	//ProbSelector ps({getAiValue(), 100.f - getAiValue()});
+	//int r = ps.getResult();
+	//r = 0;
+	//CCLog("%d %d", myGD->getJackPoint().x, myGD->getJackPoint().y);
+	//CCLog("%f %f", getPosition().x, getPosition().y);
+	//CCLog("distance = %f", ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition()));
+	//float dis = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
+	//dis = 100.f;
+	//if(r == 0 && dis >= 55.f) // 너무 가까우면 안따라가게 함.
+	//{
+		//m_drawMovement = FOLLOW_TYPE;
+	//}
+	//else
+	//{
+		//m_drawMovement = m_normalMovement;
+	//}
 }
 
 bool KSCumberBase::init()
@@ -2076,6 +2095,23 @@ void KSCumberBase::movingAndCrash( float dt )
 	}
 }
 
+void KSCumberBase::followProcess(float dt)
+{
+
+	if(myGD->getJackState() == jackStateDrawing)
+	{
+		ProbSelector ps = {this->getAiValue() / 50.f, 125.f - this->getAiValue()};
+		if(ps.getResult() == 0)
+		{
+			CCLog("follow!!!");
+			m_drawMovement = FOLLOW_TYPE;
+		}
+	}
+	else
+	{
+		m_drawMovement = m_normalMovement;
+	}
+}
 void KSCumberBase::cumberFrame( float dt )
 {
 	m_frameCount++; // 쿰버의 프레임수를 잼.
