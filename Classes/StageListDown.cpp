@@ -79,8 +79,6 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		int loop_cnt = stage_list.size();
 		NSDS_SI(puzzle_number, kSDS_PZ_stageCount_i, loop_cnt, false);
 		
-		map<int, int> pieceNo_to_stageNo;
-		
 		for(int i=0;i<loop_cnt;i++)
 		{
 			int stage_number = stage_list[i]["no"].asInt();
@@ -88,12 +86,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number, stage_list[i]["level"].asInt(), false);
 			NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number, stage_list[i]["pieceNo"].asInt(), false);
 			
-			pieceNo_to_stageNo[stage_list[i]["pieceNo"].asInt()] = stage_number;
 			if(!stage_list[i]["condition"].isNull())
 			{
 				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number, stage_list[i]["condition"]["gold"].asInt(), false);
-				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number, stage_list[i]["condition"]["pieceNo"].asInt(), false);
-//				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number, stage_list[i]["condition"]["stageNo"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number, stage_list[i]["condition"]["no"].asInt(), false);
 			}
 			
 			CCLog("saved version : %d", NSDS_GI(stage_number, kSDS_SI_version_i));
@@ -349,14 +345,6 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				NSDS_SI(stage_number, kSDS_SI_autoBalanceTry_i, stage_list[i]["autoBalanceTry"].asInt(), false);
 			}
 		}
-		
-		for(int i=NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);i<NSDS_GI(puzzle_number, kSDS_PZ_startStage_i)+NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);i++)
-		{
-			int condition_piece_no = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i);
-			if(condition_piece_no > 0)
-				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i, pieceNo_to_stageNo[condition_piece_no]);
-		}
-		
 		
 		if(df_list.size() + sf_list.size() > 0) // need download
 		{

@@ -405,12 +405,12 @@ void NewStageInfoView::hiding()
 {
 	KS::setOpacity(back_img, opacity_value);
 	
-	if(opacity_value <= 30)
+	if(opacity_value <= 10)
 	{
 		endHideAction();
 	}
 	else
-		opacity_value-=5;
+		opacity_value-=10;
 }
 
 void NewStageInfoView::showing()
@@ -422,5 +422,5 @@ void NewStageInfoView::showing()
 		endShowAction();
 	}
 	else
-		opacity_value+=5;
+		opacity_value+=10;
 }
