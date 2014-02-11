@@ -161,6 +161,7 @@ public:
 	virtual void movingAndCrash(float dt);
 	
 	virtual void cumberAttack(float dt);
+	virtual void followProcess(float dt);
 	void speedAdjustment(float dt);
 	void selfHealing(float dt);
 	void cumberFrame(float dt);

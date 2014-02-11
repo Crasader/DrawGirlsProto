@@ -49,7 +49,7 @@ bool KSCircleBase::init(const string& ccbiName)
 	
 	schedule(schedule_selector(KSCircleBase::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	
+	schedule(schedule_selector(KSCumberBase::followProcess));	
 	schedule(schedule_selector(ThisClassType::update), 1/20.f);
 	//	m_headImg->m_7->setColor(ccc3(255, 0, 0));
 	return true;
