@@ -522,7 +522,7 @@ void GetPercentage::selfRemove ()
 void GetPercentage::myInit (float t_gp, bool is_item)
 {
 	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), "gain.fnt");
-	my_label->setScale(1.f/myGD->game_scale);
+	my_label->setScale(1.f/myGD->game_scale*0.7f);
 	my_label->setAlignment(kCCTextAlignmentRight);
 	addChild(my_label, kZorderGetPercentage_label);
 	
@@ -858,7 +858,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
-			if(t_p >= t_beforePercentage + 0.001f)
+			if(clr_cdt_type == kCLEAR_bigArea && t_p >= t_beforePercentage + 0.001f)
 			{
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
@@ -1598,7 +1598,7 @@ void PlayUI::counting ()
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
 		countingLabel->setPosition(ccp(240,myDSH->ui_top-25));
-		countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
+		countingLabel->setString(CCString::createWithFormat("%d", label_value)->getCString());
 	}
 	
 }
@@ -2002,7 +2002,7 @@ void PlayUI::myInit ()
 //	else											time_back->setPosition(ccp(480.f*3.1f/4.f,myDSH->ui_top-25));
 //	addChild(time_back);
 	
-	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d.", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
+	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
 	countingLabel->setPosition(ccp(240,myDSH->ui_top-25));
