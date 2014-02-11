@@ -317,14 +317,14 @@ void StartSettingScene::setMain()
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_mounted_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.6);
+				n_img->setScale(0.8);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_mounted_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.6);
+				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 				s_item_case->addChild(s_img);
@@ -353,14 +353,14 @@ void StartSettingScene::setMain()
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.6);
+				n_img->setScale(0.8);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.6);
+				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 				s_item_case->addChild(s_img);
@@ -520,14 +520,14 @@ void StartSettingScene::itemAction(CCObject *sender)
 			
 			CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 			CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			n_img->setScale(0.6);
+			n_img->setScale(0.8);
 			n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 			n_item_case->addChild(n_img);
 			
 			CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 			s_item_case->setColor(ccGRAY);
 			CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			s_img->setScale(0.6);
+			s_img->setScale(0.8);
 			s_img->setColor(ccGRAY);
 			s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 			s_item_case->addChild(s_img);
@@ -614,14 +614,14 @@ void StartSettingScene::itemAction(CCObject *sender)
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_mounted_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.6);
+				n_img->setScale(0.8);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_mounted_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.6);
+				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 				s_item_case->addChild(s_img);
@@ -653,14 +653,14 @@ void StartSettingScene::itemAction(CCObject *sender)
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.6);
+				n_img->setScale(0.8);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.6);
+				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
 				s_item_case->addChild(s_img);
