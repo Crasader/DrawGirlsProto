@@ -643,22 +643,22 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		puzzle_node->setPosition(ccp(puzzle_width_half+margine_width,puzzle_height_half-4));
 		cell->addChild(puzzle_node);
 		
-		CCSprite* puzzle_left = CCSprite::create("temp_puzzle_stencil_left.png");
+		CCSprite* puzzle_left = CCSprite::create("temp_puzzle_piece_left.png");
 		puzzle_left->setAnchorPoint(ccp(0,0.5));
 		puzzle_left->setPosition(ccp(-puzzle_width_half,0));
 		puzzle_node->addChild(puzzle_left);
 		
-		CCSprite* puzzle_right = CCSprite::create("temp_puzzle_stencil_right.png");
+		CCSprite* puzzle_right = CCSprite::create("temp_puzzle_piece_right.png");
 		puzzle_right->setAnchorPoint(ccp(1,0.5));
 		puzzle_right->setPosition(ccp(puzzle_width_half,0));
 		puzzle_node->addChild(puzzle_right);
 		
-		CCSprite* puzzle_top = CCSprite::create("temp_puzzle_stencil_top.png");
+		CCSprite* puzzle_top = CCSprite::create("temp_puzzle_piece_top.png");
 		puzzle_top->setAnchorPoint(ccp(0.5,1));
 		puzzle_top->setPosition(ccp(0,puzzle_height_half));
 		puzzle_node->addChild(puzzle_top);
 		
-		CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_stencil_bottom.png");
+		CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_piece_bottom.png");
 		puzzle_bottom->setAnchorPoint(ccp(0.5,0));
 		puzzle_bottom->setPosition(ccp(0,-puzzle_height_half));
 		puzzle_node->addChild(puzzle_bottom);
@@ -674,7 +674,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				else
 					piece_type = "w";
 				
-				CCSprite* puzzle_piece = CCSprite::create(("temp_puzzle_back_p" + piece_type + ".png").c_str());
+				CCSprite* puzzle_piece = CCSprite::create(("temp_piece_off_" + piece_type + ".png").c_str());
 				puzzle_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
 				puzzle_node->addChild(puzzle_piece);
 			}
@@ -908,22 +908,22 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			}
 			else
 			{
-				CCSprite* puzzle_left = CCSprite::create("temp_puzzle_stencil_left.png");
+				CCSprite* puzzle_left = CCSprite::create("temp_puzzle_piece_left.png");
 				puzzle_left->setAnchorPoint(ccp(0,0.5));
 				puzzle_left->setPosition(ccp(-puzzle_width_half,0));
 				puzzle_node->addChild(puzzle_left);
 				
-				CCSprite* puzzle_right = CCSprite::create("temp_puzzle_stencil_right.png");
+				CCSprite* puzzle_right = CCSprite::create("temp_puzzle_piece_right.png");
 				puzzle_right->setAnchorPoint(ccp(1,0.5));
 				puzzle_right->setPosition(ccp(puzzle_width_half,0));
 				puzzle_node->addChild(puzzle_right);
 				
-				CCSprite* puzzle_top = CCSprite::create("temp_puzzle_stencil_top.png");
+				CCSprite* puzzle_top = CCSprite::create("temp_puzzle_piece_top.png");
 				puzzle_top->setAnchorPoint(ccp(0.5,1));
 				puzzle_top->setPosition(ccp(0,puzzle_height_half));
 				puzzle_node->addChild(puzzle_top);
 				
-				CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_stencil_bottom.png");
+				CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_piece_bottom.png");
 				puzzle_bottom->setAnchorPoint(ccp(0.5,0));
 				puzzle_bottom->setPosition(ccp(0,-puzzle_height_half));
 				puzzle_node->addChild(puzzle_bottom);
@@ -949,12 +949,14 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 						else
 							piece_type = "w";
 						
-						CCSprite* puzzle_piece = CCSprite::create(("temp_puzzle_back_p" + piece_type + ".png").c_str());
+						CCSprite* puzzle_piece;
+						if(is_stage)
+							puzzle_piece = CCSprite::create(("temp_piece_lock_" + piece_type + ".png").c_str());
+						else
+							puzzle_piece = CCSprite::create(("temp_piece_off_" + piece_type + ".png").c_str());
+						
 						puzzle_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
 						puzzle_node->addChild(puzzle_piece);
-						
-						if(is_stage)
-							puzzle_piece->setColor(ccGREEN);
 					}
 				}
 				
@@ -1037,22 +1039,22 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		}
 		else
 		{
-			CCSprite* puzzle_left = CCSprite::create("temp_puzzle_stencil_left.png");
+			CCSprite* puzzle_left = CCSprite::create("temp_puzzle_piece_left.png");
 			puzzle_left->setAnchorPoint(ccp(0,0.5));
 			puzzle_left->setPosition(ccp(-puzzle_width_half,0));
 			puzzle_node->addChild(puzzle_left);
 			
-			CCSprite* puzzle_right = CCSprite::create("temp_puzzle_stencil_right.png");
+			CCSprite* puzzle_right = CCSprite::create("temp_puzzle_piece_right.png");
 			puzzle_right->setAnchorPoint(ccp(1,0.5));
 			puzzle_right->setPosition(ccp(puzzle_width_half,0));
 			puzzle_node->addChild(puzzle_right);
 			
-			CCSprite* puzzle_top = CCSprite::create("temp_puzzle_stencil_top.png");
+			CCSprite* puzzle_top = CCSprite::create("temp_puzzle_piece_top.png");
 			puzzle_top->setAnchorPoint(ccp(0.5,1));
 			puzzle_top->setPosition(ccp(0,puzzle_height_half));
 			puzzle_node->addChild(puzzle_top);
 			
-			CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_stencil_bottom.png");
+			CCSprite* puzzle_bottom = CCSprite::create("temp_puzzle_piece_bottom.png");
 			puzzle_bottom->setAnchorPoint(ccp(0.5,0));
 			puzzle_bottom->setPosition(ccp(0,-puzzle_height_half));
 			puzzle_node->addChild(puzzle_bottom);
@@ -1078,12 +1080,15 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 					else
 						piece_type = "w";
 					
-					CCSprite* puzzle_piece = CCSprite::create(("temp_puzzle_back_p" + piece_type + ".png").c_str());
+					CCSprite* puzzle_piece;
+					if(is_stage)
+						puzzle_piece = CCSprite::create(("temp_piece_lock_" + piece_type + ".png").c_str());
+					else
+						puzzle_piece = CCSprite::create(("temp_piece_off_" + piece_type + ".png").c_str());
+					
+					
 					puzzle_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
 					puzzle_node->addChild(puzzle_piece);
-					
-					if(is_stage)
-						puzzle_piece->setColor(ccGREEN);
 				}
 			}
 			

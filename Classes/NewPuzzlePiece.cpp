@@ -149,17 +149,17 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 	}
 	else
 	{
-		bool is_have = false;
-		is_have = is_have || myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1)) > 0;
-		is_have = is_have || myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 2)) > 0;
-		is_have = is_have || myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 3)) > 0;
-		
+//		bool is_have = false;
+//		is_have = is_have || myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1)) > 0;
+//		is_have = is_have || myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 2)) > 0;
+//		is_have = is_have || myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 3)) > 0;
+//		
 		if(t_mode == kNewPuzzlePieceMode_default)
 		{
 			CCSprite* n_piece;
 			CCSprite* s_piece;
 			
-			if(is_have)
+			if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, stage_number))
 			{
 				n_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "original", piece_no)->getCString());
 				s_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "original", piece_no)->getCString());

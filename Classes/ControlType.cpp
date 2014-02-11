@@ -319,7 +319,7 @@
 
 //////////////////////////////////////////////// Joystick Button ///////////////////////////////////////////////////////////////////////////////
 
-#define minimumDistanceJ	5.f
+#define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
 
 void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)

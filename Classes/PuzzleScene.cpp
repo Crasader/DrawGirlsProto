@@ -869,11 +869,17 @@ void PuzzleScene::setPuzzle()
 				
 				if(found_number >= 1 && found_number <= 3)
 				{
+					PieceType t_type;
+					if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, stage_number))
+						t_type = kPieceType_color;
+					else
+						t_type = kPieceType_empty;
+					
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_piece, stage_number);
 					t_piece->setTurnInfo(is_have_card[0], is_have_card[1], is_have_card[2]);
-					t_piece->initWithPieceInfo(piece_mode, kPieceType_color, piece_type);
+					t_piece->initWithPieceInfo(piece_mode, t_type, piece_type);
 					
 //					addShadow(piece_type, piece_position, stage_number);
 				}
