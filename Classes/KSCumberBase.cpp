@@ -1262,6 +1262,24 @@ void KSCumberBase::rushMoving(float dt)
 
 
 }
+
+
+/*
+ 땅이 n% 이하라면 부수기 공격 안하기
+일반공격을 n 초 안에는 안함. 
+n<m 인 부수기 공격은 m초 안에는 안함.
+같은 패턴은 n 초안에는 안쏨
+거리룰은 거리에 대해서만 적용함. (거리룰은 텔포1:크래시2 비율로 쏴야됨)
+
+선을 긋고 있을 땐, 공격확률 높임
+많이 많으면 공격확률 높임.
+부수기 공격을 해야하는데, 부수기 공격이 없으면 텔포
+가장자리 위주로 먹었다면 ai 를 고려하여 선따라가기 공격확률 높임
+보스가 갇히면 ai 를 고려하여 크래시 확률을 높임*
+ *
+ *
+ *
+ * */
 void KSCumberBase::cumberAttack(float dt)
 {
 	//	myJack->get
@@ -1270,7 +1288,7 @@ void KSCumberBase::cumberAttack(float dt)
 	m_reAttackCnt++;
 	m_furyCnt++;
 	
-	if(m_slience) // 침묵 상태면
+	if(m_slience && myGD->Fcommunication("UI_getMapPercentage") < 0.05f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
 	{
 		return;
 	}

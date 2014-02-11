@@ -112,6 +112,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	
 	CommonButton* allReceive = CommonButton::create("모두받기", 12, CCSizeMake(100,40), CommonButtonGreen, -200);
 	allReceive->setTitleColor(ccc3(20, 0, 0));
+	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 	allReceive->setFunction([=](CCObject*){
 			if(m_mailFilter == MailFilter::kHeart) {
 				std::vector<int> mailNumbers;
@@ -289,6 +290,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 			}
 	});
 	allReceive->setPosition(ccp(240, 32));
+	allReceive->setEnabled(false);
 	this->addChild(allReceive, 1);
 	
 
@@ -530,6 +532,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 		this->mailTableView->reloadData();
 		allInvisible();
 		totalFilter->setEnabled(false);
+		allReceive->setEnabled(false);
 	});
 	totalFilter->setPosition(ccp(53, 255));
 	this->addChild(totalFilter, 1);
@@ -562,6 +565,8 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 		this->mailTableView->reloadData();
 		allInvisible();
 		coinFilter->setEnabled(false);
+		allReceive->setEnabled(true);
+
 	});
 	coinFilter->setPosition(ccp(118, 255));
 	this->addChild(coinFilter, 1);
@@ -594,6 +599,8 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 		this->mailTableView->reloadData();
 		allInvisible();
 		challengeFilter->setEnabled(false);
+		allReceive->setEnabled(false);
+
 	});
 	challengeFilter->setPosition(ccp(182, 255));
 	this->addChild(challengeFilter, 1);
@@ -624,6 +631,8 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 		this->mailTableView->reloadData();
 		allInvisible();
 		ticketFilter->setEnabled(false);
+		allReceive->setEnabled(true);
+
 	});
 	ticketFilter->setPosition(ccp(247, 255));
 	this->addChild(ticketFilter, 1);

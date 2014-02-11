@@ -500,7 +500,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
 					}, recent_mode, GachaCategory::kRubyGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 				else if(keep_price_type == 2)
 				{
@@ -513,7 +513,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
 					}, recent_mode, GachaCategory::kGoldGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 				else 
 				{
@@ -526,7 +526,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
 					}, recent_mode, GachaCategory::kSocialGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 			}
 				break;
@@ -547,7 +547,7 @@ void GachaPurchase::visibling()
 							},
 							//																						 {},
 							recent_mode, GachaCategory::kRubyGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 				else if(keep_price_type == 2)
 				{
@@ -564,7 +564,7 @@ void GachaPurchase::visibling()
 							},
 							//																						 {},
 							recent_mode, GachaCategory::kGoldGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 				else
 				{
@@ -581,7 +581,7 @@ void GachaPurchase::visibling()
 							},
 							//																						 {},
 							recent_mode, GachaCategory::kSocialGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 			}
 				break;
@@ -601,7 +601,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							}
 							, recent_mode, GachaCategory::kRubyGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 				else if(keep_price_type == 2)
 				{
@@ -616,7 +616,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							}
 							, recent_mode, GachaCategory::kGoldGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 				else
 				{
@@ -631,7 +631,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							}
 							, recent_mode, GachaCategory::kSocialGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 			}
 				break;
@@ -651,7 +651,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							},
 							recent_mode, GachaCategory::kRubyGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 				else if(keep_price_type == 2)
 				{
@@ -667,7 +667,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							},
 							recent_mode, GachaCategory::kGoldGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 				else 
 				{
@@ -683,7 +683,7 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							},
 							recent_mode, GachaCategory::kSocialGacha);
-					getParent()->addChild(p, kMainFlowZorder_popup - 1);
+					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 			}
 		}
