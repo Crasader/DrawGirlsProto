@@ -523,6 +523,8 @@ public:
 	int save_stage_rank_stageNumber;
 	vector<RankFriendInfo> save_stage_rank_list;
 	
+	int suitable_stage;
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;

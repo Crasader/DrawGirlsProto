@@ -236,6 +236,9 @@ public:
 	bool isDie;
 	
 private:
+	
+	bool is_on_continue;
+	
 	CCSprite* touchPointSpr_byJoystick;
 	CCSprite* directionSpr_byJoystick;
 	CCSprite* joystickSpr_byJoystick;

@@ -1759,7 +1759,15 @@ void Jack::dieEffect()
 			}
 			else
 			{
-				myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
+				if(!is_on_continue)
+				{
+					is_on_continue = true;
+					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
+				}
+				else
+				{
+					endGame();
+				}
 			}
 		}
 	}
@@ -1944,6 +1952,7 @@ bool Jack::isDieJack()
 
 void Jack::myInit()
 {
+	is_on_continue = false;
 	before_x_direction = directionStop;
 	before_x_cnt = 0;
 	keep_direction = kKeepDirection_empty;
