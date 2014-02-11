@@ -270,6 +270,8 @@ void StarGoldData::setKeepGold( int t_gold )
 
 void StarGoldData::setGameStart()
 {
+	is_using_friend_card = false;
+	
 	is_write_replay = true;
 	
 	replay_write_info.clear();

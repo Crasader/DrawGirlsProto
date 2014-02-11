@@ -197,10 +197,20 @@ bool CardStrengthPopup::init()
 	offering_node = NULL;
 	strength_probability = NULL;
 	
+	
 	setStrengthNode(mySGD->getStrengthTargetCardNumber());
 	setOfferingNode(0);
 	
 	setOfferingList();
+	
+	for(int i=0;i<offering_list.size();i++)
+	{
+		if(strength_card_number == offering_list[i].card_number)
+		{
+			strength_idx = i;
+			break;
+		}
+	}
 	
 	CCSize table_size = CCSizeMake(341, 78);
 	CCPoint table_position = ccp(29, 17);
