@@ -218,7 +218,7 @@ bool NewMainFlowScene::init()
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
-		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+//		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(selected_card_number > 0)
 		{

@@ -60,7 +60,7 @@ public:
 	void endFever ();
 private:
 	CCParticleSystemQuad * fever_particle;
-//	CCProgressTimer * fever_top;
+	CCProgressTimer * fever_top;
 	int recent_count;
 	bool ing_fever;
 	int keeping_count;

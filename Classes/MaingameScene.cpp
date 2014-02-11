@@ -1056,7 +1056,19 @@ void Maingame::gameover()
 		AudioEngine::sharedInstance()->playEffect("sound_gameover_bgm.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("sound_gameover_ment.mp3", false);
 
-		closeShutter();
+		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+		
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		CCSprite* result_sprite = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ui_gameover.ccbi",this));
+		result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
+		myUI->addChild(result_sprite);
+		reader->release();
+		
+		CCDelayTime* t_delay = CCDelayTime::create(2.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+		runAction(t_seq);
 	}
 }
 

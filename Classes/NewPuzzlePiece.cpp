@@ -217,8 +217,8 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 				s_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "center", piece_no)->getCString());
 				s_piece->setColor(ccGRAY);
 			}
-			n_piece->setPosition(ccp(-12.5f,-12.5f));
-			s_piece->setPosition(ccp(-12.5f,-12.5f));
+			n_piece->setPosition(ccp(-(n_piece->getContentSize().width-50)/2.f,-(n_piece->getContentSize().height-50)/2.f));
+			s_piece->setPosition(ccp(-(s_piece->getContentSize().width-50)/2.f,-(s_piece->getContentSize().height-50)/2.f));
 			
 			CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(NewPuzzlePiece::menuAction));
 			piece_item->setContentSize(CCSizeMake(50, 50));
