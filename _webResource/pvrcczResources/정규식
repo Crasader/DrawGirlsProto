@@ -1,0 +1,3 @@
+<string></string>(\s+<string>\w+\.png</string>)
+
+<string>boss_metal1.plist</string>\1
