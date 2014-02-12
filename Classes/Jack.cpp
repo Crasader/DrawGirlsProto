@@ -1730,7 +1730,7 @@ void Jack::dieEffect()
 
 		if(myGD->getIsGameover())
 		{
-			//				endGame();
+			endGame();
 		}
 		else
 		{

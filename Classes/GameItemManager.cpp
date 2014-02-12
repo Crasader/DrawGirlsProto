@@ -103,7 +103,7 @@ void GameItemBase::startHide()
 {
 	keep_scale_value = item_img->getScale();
 	
-	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f,
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.5f, 0.5f,
 													 [=](float t)
 													 {
 														 item_img->setScale(keep_scale_value - t*(keep_scale_value - 0.f));
@@ -232,7 +232,7 @@ void GameItemAddTime::myInit(bool is_near)
 	starting_side_cnt = getSideCount();
 	
 	startFraming();
-	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.5f, 1.f, [=](float t)
 													 {
 														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
@@ -284,7 +284,7 @@ void GameItemSpeedUp::myInit(bool is_near)
 	starting_side_cnt = getSideCount();
 	
 	startFraming();
-	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.5f, 1.f, [=](float t)
 													 {
 														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
@@ -348,7 +348,7 @@ void GameItemFast::myInit(bool is_near)
 	starting_side_cnt = getSideCount();
 	
 	startFraming();
-	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.5f, 1.f, [=](float t)
 													 {
 														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
@@ -414,7 +414,7 @@ void GameItemAttack::myInit(bool is_near)
 	starting_side_cnt = getSideCount();
 	
 	startFraming();
-	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.5f, 1.f, [=](float t)
 													 {
 														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
@@ -635,7 +635,7 @@ void GameItemFire::myInit(bool is_near)
 	starting_side_cnt = getSideCount();
 	
 	startFraming();
-	item_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.5f, 1.f, [=](float t)
 													 {
 														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
