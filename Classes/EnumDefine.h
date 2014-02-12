@@ -24,7 +24,8 @@ enum mapLoopRange{
 enum DieType{
 	kDieType_other = 0,
 	kDieType_shockwave,
-	kDieType_missileToLine
+	kDieType_missileToLine,
+	kDieType_timeover
 };
 
 typedef enum t_ElementCode{

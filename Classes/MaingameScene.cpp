@@ -26,6 +26,7 @@
 #include "StartSettingScene.h"
 #include "AcceptChallengeAniContent.h"
 #include "NewMainFlowScene.h"
+#include "LoadingTipScene.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -98,6 +99,7 @@ bool Maingame::init()
 	myGD->V_TDTD["Main_showContinue"] = std::bind(&Maingame::showContinue, this, _1, _2, _3, _4);
 	myGD->V_B["Main_setLineParticle"] = std::bind(&Maingame::setLineParticle, this, _1);
 	myGD->V_CCPI["Main_showComboImage"] = std::bind(&Maingame::showComboImage, this, _1, _2);
+	myGD->B_V["Main_isFever"] = std::bind(&GameItemManager::getIsFevering, myGIM);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -300,7 +302,7 @@ void Maingame::finalSetting()
 	
 	thumb_texture = CCRenderTexture::create(320, 430);
 	thumb_texture->setScale(thumb_scale);
-	thumb_texture->setPosition(ccp(58-160.f*thumb_scale,myDSH->ui_top-90-215.f*thumb_scale));
+	thumb_texture->setPosition(ccp(58-160.f*thumb_scale,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
 	addChild(thumb_texture, myUIZorder);
 	
 	thumb_case_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
@@ -347,7 +349,7 @@ void Maingame::finalSetting()
 	myJack->setPosition(myJack->getPosition());
 	
 	
-	thumb_base_position = ccp(58-320.f*thumb_scale,myDSH->ui_top-90-430.f*thumb_scale);
+	thumb_base_position = ccp(58-320.f*thumb_scale,myDSH->ui_center_y-215.f*thumb_scale);
 	
 	CCDelayTime* thumb_delay = CCDelayTime::create(0.3f);
 	CCCallFunc* thumb_call = CCCallFunc::create(this, callfunc_selector(Maingame::refreshThumb));
@@ -378,7 +380,7 @@ void Maingame::finalSetting()
 		{
 			replay_thumb_texture = CCRenderTexture::create(320, 430);
 			replay_thumb_texture->setScale(thumb_scale);
-			replay_thumb_texture->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale));
+			replay_thumb_texture->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
 			replay_all_node->addChild(replay_thumb_texture);
 			
 			myGD->V_I["Main_refreshReplayThumb"] = std::bind(&Maingame::refreshReplayThumb, this, _1);
@@ -404,13 +406,13 @@ void Maingame::finalSetting()
 			replay_boss = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
 			replay_boss->setColor(ccRED);
 			replay_boss->setVisible(false);
-			replay_boss->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale));
+			replay_boss->setPosition(replay_thumb_texture->getPosition());
 			replay_all_node->addChild(replay_boss);
 			
 			replay_character = CCSprite::create("whitePaper.png", CCRectMake(0,0,4,4));
 			replay_character->setColor(ccGREEN);
 			replay_character->setVisible(false);
-			replay_character->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale));
+			replay_character->setPosition(replay_thumb_texture->getPosition());
 			replay_all_node->addChild(replay_character);
 			
 			replay_sub = new CCArray(1);
@@ -422,14 +424,14 @@ void Maingame::finalSetting()
 		{
 			replay_score = CCLabelBMFont::create("0", "etc_font.fnt");
 			replay_score->setScale(0.7f);
-			replay_score->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale - 215.f*thumb_scale+10));
+			replay_score->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215.f*thumb_scale+10)));
 			replay_all_node->addChild(replay_score);
 			
 			myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		}
 		
 		CCLabelTTF* replay_nick = CCLabelTTF::create(mySGD->getAcceptChallengeNick().c_str(), mySGD->getFont().c_str(), 10);
-		replay_nick->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_top-90-215.f*thumb_scale + 215.f*thumb_scale-10));
+		replay_nick->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215.f*thumb_scale-10)));
 		replay_all_node->addChild(replay_nick);
 	}
 	
@@ -1100,7 +1102,11 @@ void Maingame::endCloseShutter()
 				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 		}
 		else
-			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+		{
+			mySGD->setNextSceneName("newmainflow");
+			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
+//			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+		}
 	}
 }
 
@@ -1314,6 +1320,7 @@ void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 
 void Maingame::showComboImage(CCPoint t_position, int t_combo_value)
 {
+	return;
 	if(combo_string_img || combo_value_img)
 	{
 		if(combo_string_img)

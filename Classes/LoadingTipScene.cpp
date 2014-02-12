@@ -15,6 +15,7 @@
 #include "StageImgLoader.h"
 #include "SilhouetteData.h"
 #include "MaingameScene.h"
+#include "NewMainFlowScene.h"
 
 CCScene* LoadingTipScene::scene()
 {
@@ -107,6 +108,16 @@ CCSprite* LoadingTipScene::getLoadingTipImage()
 
 void LoadingTipScene::readyLoading()
 {
+	sil_load_list.clear();
+	default_load_list.clear();
+	
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+	loading_progress_img->setPosition(ccp(240,50));
+	addChild(loading_progress_img, kLoadingTipZorder_content);
+	reader->release();
+	
 	if(next_scene_name == "maingame")
 	{
 		sil_load_list.push_back(CCString::createWithFormat("card%d_visible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString());
@@ -118,21 +129,27 @@ void LoadingTipScene::readyLoading()
 		default_load_list.push_back("normal_frame_bottom.png");
 		default_load_list.push_back("normal_frame_left.png");
 		default_load_list.push_back("normal_frame_right.png");
-		
-		total_load_img = sil_load_list.size() + default_load_list.size();
-		ing_load_img = 0;
-		
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-		loading_progress_img->setPosition(ccp(240,50));
-		addChild(loading_progress_img, kLoadingTipZorder_content);
-		reader->release();
-		
-		progress_label = CCLabelBMFont::create(CCString::createWithFormat("%.0f", (100.f*ing_load_img)/total_load_img)->getCString(), "etc_font.fnt");
-		progress_label->setPosition(ccp(240,50));
-		addChild(progress_label, kLoadingTipZorder_content);
 	}
+	else if(next_scene_name == "newmainflow")
+	{
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		
+		sil_load_list.push_back(CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, "original")->getCString());
+		sil_load_list.push_back(CCString::createWithFormat("puzzle%d_%s_right.png", puzzle_number, "original")->getCString());
+		sil_load_list.push_back(CCString::createWithFormat("puzzle%d_%s_top.png", puzzle_number, "original")->getCString());
+		sil_load_list.push_back(CCString::createWithFormat("puzzle%d_%s_bottom.png", puzzle_number, "original")->getCString());
+		
+		default_load_list.push_back("mainflow_back_wall.png");
+		default_load_list.push_back("mainflow_back_shadow_left.png");
+		default_load_list.push_back("mainflow_back_shadow_right.png");
+	}
+	
+	total_load_img = sil_load_list.size() + default_load_list.size();
+	ing_load_img = 0;
+	
+	progress_label = CCLabelBMFont::create(CCString::createWithFormat("%.0f", (100.f*ing_load_img)/total_load_img)->getCString(), "etc_font.fnt");
+	progress_label->setPosition(ccp(240,50));
+	addChild(progress_label, kLoadingTipZorder_content);
 	
 	is_minimum_time = false;
 	CCDelayTime* t_delay = CCDelayTime::create(1.f);
@@ -151,6 +168,8 @@ void LoadingTipScene::onMinimumTime()
 		is_minimum_time = false;
 		if(next_scene_name == "maingame")
 			CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+		else if(next_scene_name == "newmainflow")
+			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 	}
 }
 
@@ -175,6 +194,8 @@ void LoadingTipScene::countingFunc(CCObject *sender)
 		is_minimum_time = false;
 		if(next_scene_name == "maingame")
 			CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+		else if(next_scene_name == "newmainflow")
+			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 	}
 }
 

@@ -187,6 +187,10 @@ bool FailPopup::init()
 					//복구하기
 					b->repair();
 				}
+				else
+				{
+					b->skip();
+				}
 			});
 			b->setCloseFunc([this](){
 				CCLog("close Func");
