@@ -933,10 +933,10 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 					{
 						CCSprite* n_bridge = CCSprite::create(("temp_puzzle_bridge_front_p" + last_piece_type + ".png").c_str());
 						n_bridge->setColor(ccGREEN);
-						n_bridge->setPosition(ccp(-12.5f,-12.5f));
+						n_bridge->setPosition(ccp(-12.f,-12.f));
 						CCSprite* s_bridge = CCSprite::create(("temp_puzzle_bridge_front_p" + last_piece_type + ".png").c_str());
 						s_bridge->setColor(ccGRAY);
-						s_bridge->setPosition(ccp(-12.5f,-12.5f));
+						s_bridge->setPosition(ccp(-12.f,-12.f));
 						
 						CCMenuItem* bridge_item = CCMenuItemSprite::create(n_bridge, s_bridge, this, menu_selector(NewMainFlowScene::cellAction));
 						bridge_item->setContentSize(CCSizeMake(50, 50));
@@ -1181,10 +1181,10 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			{
 				CCSprite* n_bridge = CCSprite::create(("temp_puzzle_bridge_front_p" + before_piece_type + ".png").c_str());
 				n_bridge->setColor(ccGREEN);
-				n_bridge->setPosition(ccp(-12.5f,-12.5f));
+				n_bridge->setPosition(ccp(-12.f,-12.f));
 				CCSprite* s_bridge = CCSprite::create(("temp_puzzle_bridge_front_p" + before_piece_type + ".png").c_str());
 				s_bridge->setColor(ccGRAY);
-				s_bridge->setPosition(ccp(-12.5f,-12.5f));
+				s_bridge->setPosition(ccp(-12.f,-12.f));
 				
 				CCMenuItem* bridge_item = CCMenuItemSprite::create(n_bridge, s_bridge, this, menu_selector(NewMainFlowScene::cellAction));
 				bridge_item->setContentSize(CCSizeMake(50, 50));
