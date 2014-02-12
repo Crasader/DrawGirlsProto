@@ -2405,59 +2405,90 @@ void KSCumberBase::applyAutoBalance()
 	
 	
 	CCLog("#################### autobalance ############################");
-	CCLog("clear : %d / try : %d / autoBalance Start : %d / puzzleNo : %d",clearCount,playCount,balPt,puzzleNo);
+	CCLog("clear : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",clearCount,playCount,autobalanceTry,puzzleNo);
 	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	
-	// 연속으로 잘 깰경우 몬스터 능력치 향상시키기
-	
-	
-	if(clearCount>1 && puzzleNo!=1){
-		
-		CCLog("UP monster abillity");
-		
-		if(balPt>10)balPt=10;
-		m_aiValue += balPt*10;
-		m_aiValue = MIN(100,m_aiValue);
-		
-		m_attackPercent *= 1+balPt/10.f;
-		m_attackPercent = MIN(0.4,m_attackPercent);
-		
-		m_maxSpeed *= 1+balPt/10.f;
-		m_minSpeed *= 1+balPt/10.f;
-		m_minSpeed = MIN(1, m_minSpeed);
-		m_maxSpeed = MIN(3, m_maxSpeed);
-		
-		CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
-		CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
-		
-		CCLog("#################### autobalance ############################");
-		//m_aiValue , m_attackPercent, m_maxSpeed , m_minSpeed
-	
-	// 계속 실패할경우 능력치 하향하기
-	}else{
-
-		if(autobalanceTry < playCount)
-		{
-			int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
-			float autoRate = downLimit * exceedPlay / balanceN;
-			m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
-			m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
-			
-			CCLog("DOWN monster abillity");
-			CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
-			if(autobalanceTry*2 < playCount){
-				float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
-				m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
-				m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
-				
-				CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
-			}
-			
-			
+	//오토벨런싱트라이 값까지는 어렵게
+	if(playCount<=autobalanceTry){
+		float per = 1.f-(float)playCount/(float)autobalanceTry;
+		//ai조절
+		if(m_aiValue>0){
+			int aiMax = m_aiValue*2;
+			if(aiMax>90)aiMax=90;
+			if(m_aiValue>aiMax)aiMax=m_aiValue;
+			if(aiMax<=70)aiMax=70;
+			m_aiValue = m_aiValue + (aiMax-m_aiValue)*per;
 		}
+		//attackterm조절
+		if(m_attackPercent>0){
+			float aiMax = m_attackPercent*2;
+			if(aiMax>0.4)aiMax=0.4;
+			if(m_attackPercent>aiMax)aiMax=m_attackPercent;
+			if(aiMax<=0.3)aiMax=0.3;
+			m_attackPercent = m_attackPercent + (aiMax-m_attackPercent)*per;
+		}
+	
+		CCLog("#################### Change Balnace ############################");
+		CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+	//오토벨런싱+2 판까지는 원래 벨런스로 플레이
+	}else if(playCount>autobalanceTry && playCount<=autobalanceTry+2){
 		
-		CCLog("#################### autobalance ############################");
+	//그다음부턴 50%까지 까임
+	}else{
+		
 	}
+					 
+	
+	CCLog("#################### autobalance ############################");
+					 
+	
+//	if(clearCount>1 && puzzleNo!=1){
+//		
+//		CCLog("UP monster abillity");
+//		
+//		if(balPt>10)balPt=10;
+//		m_aiValue += balPt*10;
+//		m_aiValue = MIN(100,m_aiValue);
+//		
+//		m_attackPercent *= 1+balPt/10.f;
+//		m_attackPercent = MIN(0.4,m_attackPercent);
+//		
+//		m_maxSpeed *= 1+balPt/10.f;
+//		m_minSpeed *= 1+balPt/10.f;
+//		m_minSpeed = MIN(1, m_minSpeed);
+//		m_maxSpeed = MIN(3, m_maxSpeed);
+//		
+//		CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
+//		CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+//		
+//		CCLog("#################### autobalance ############################");
+//		//m_aiValue , m_attackPercent, m_maxSpeed , m_minSpeed
+//	
+//	// 계속 실패할경우 능력치 하향하기
+//	}else{
+//
+//		if(autobalanceTry < playCount)
+//		{
+//			int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
+//			float autoRate = downLimit * exceedPlay / balanceN;
+//			m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
+//			m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
+//			
+//			CCLog("DOWN monster abillity");
+//			CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
+//			if(autobalanceTry*2 < playCount){
+//				float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
+//				m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
+//				m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
+//				
+//				CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+//			}
+//			
+//			
+//		}
+//		
+//		CCLog("#################### autobalance ############################");
+//	}
 }
 void KSCumberBase::settingAI( int ai )
 {

@@ -77,7 +77,7 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 			n_quantity_label->setAnchorPoint(ccp(0.5,0.5));
 			n_quantity_label->setPosition(ccp(n_piece->getContentSize().width/2.f+6, n_piece->getContentSize().height/2.f-13));
 			n_piece->addChild(n_quantity_label);
-		n_piece->setPosition(ccp(-12.5f,-12.5f));
+		n_piece->setPosition(ccp(-12.f,-12.f));
 			
 			CCSprite* s_piece = CCSprite::create(("temp_piece_buy_" + piece_direction + ".png").c_str());
 			s_piece->setColor(ccGRAY);
@@ -91,7 +91,7 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 			s_quantity_label->setAnchorPoint(ccp(0.5,0.5));
 			s_quantity_label->setPosition(ccp(s_piece->getContentSize().width/2.f+6, s_piece->getContentSize().height/2.f-13));
 			s_piece->addChild(s_quantity_label);
-		s_piece->setPosition(ccp(-12.5f,-12.5f));
+		s_piece->setPosition(ccp(-12.f,-12.f));
 			
 			CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(NewPuzzlePiece::menuAction));
 		piece_item->setContentSize(CCSizeMake(50, 50));
@@ -126,13 +126,13 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 		CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont().c_str(), 12);
 		n_stage->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f+5));
 		n_piece->addChild(n_stage);
-		n_piece->setPosition(ccp(-12.5f,-12.5f));
+		n_piece->setPosition(ccp(-12.f,-12.f));
 			CCSprite* s_piece = CCSprite::create(("temp_piece_gray_" + piece_direction + ".png").c_str());
 			s_piece->setColor(ccGRAY);
 		CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont().c_str(), 12);
 		s_stage->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f+5));
 		s_piece->addChild(s_stage);
-		s_piece->setPosition(ccp(-12.5f,-12.5f));
+		s_piece->setPosition(ccp(-12.f,-12.f));
 			
 			CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(NewPuzzlePiece::menuAction));
 		piece_item->setContentSize(CCSizeMake(50, 50));
@@ -183,7 +183,7 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 			n_stage->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f+5));
 			n_piece->addChild(n_stage);
 			setStageLevel(n_piece);
-			n_piece->setPosition(ccp(-12.5f,-12.5f));
+			n_piece->setPosition(ccp(-12.f,-12.f));
 			
 			CCSprite* s_piece = CCSprite::create(piece_filename.c_str());
 			s_piece->setColor(ccGRAY);
@@ -191,7 +191,7 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 			s_stage->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f+5));
 			s_piece->addChild(s_stage);
 			setStageLevel(s_piece);
-			s_piece->setPosition(ccp(-12.5f,-12.5f));
+			s_piece->setPosition(ccp(-12.f,-12.f));
 			
 			CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(NewPuzzlePiece::menuAction));
 			piece_item->setContentSize(CCSizeMake(50, 50));
