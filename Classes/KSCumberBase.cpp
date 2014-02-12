@@ -1305,7 +1305,7 @@ void KSCumberBase::cumberAttack(float dt)
 	m_reAttackCnt++;
 	m_furyCnt++;
 	
-	if(m_slience && myGD->Fcommunication("UI_getMapPercentage") < 0.05f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
+	if(m_slience || myGD->Fcommunication("UI_getMapPercentage") < 0.05f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
 	{
 		return;
 	}
@@ -2100,7 +2100,7 @@ void KSCumberBase::followProcess(float dt)
 
 	if(myGD->getJackState() == jackStateDrawing)
 	{
-		ProbSelector ps = {this->getAiValue() / 50.f, 125.f - this->getAiValue()};
+		ProbSelector ps = {this->getAiValue() / 75.f, 125.f - this->getAiValue()};
 		if(ps.getResult() == 0)
 		{
 			CCLog("follow!!!");
