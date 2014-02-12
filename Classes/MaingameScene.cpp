@@ -975,7 +975,7 @@ void Maingame::allStopSchedule()
 void Maingame::startSpecialAttack()
 {
 	myJack->changeDirection(directionStop, directionStop);
-	mControl->isStun = true;
+//	mControl->isStun = true;
 	//		mControl->setTouchEnabled(false);
 }
 

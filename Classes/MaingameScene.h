@@ -160,7 +160,7 @@ private:
 	
 	void stopSpecialAttack()
 	{
-		mControl->isStun = false;
+//		mControl->isStun = false;
 //		((ControlJoystickButton*)mControl)->resetTouch();
 //		mControl->setTouchEnabled(true);
 	}
