@@ -62,13 +62,13 @@ private:
 	int getCardLevel(int t_card_number);
 	
 	
-	map<int, int> save_SDS_CI_rank_int1;
-	int getCardRank(int t_card_number);
-	
-	map<int, int> save_SDS_CI_stage_int1;
-	int getCardStage(int t_card_number);
-	map<int, int> save_SDS_CI_grade_int1;
-	int getCardGrade(int t_card_number);
+//	map<int, int> save_SDS_CI_rank_int1;
+//	int getCardRank(int t_card_number);
+//	
+//	map<int, int> save_SDS_CI_stage_int1;
+//	int getCardStage(int t_card_number);
+//	map<int, int> save_SDS_CI_grade_int1;
+//	int getCardGrade(int t_card_number);
 	
 	
 	map<string, int> save_SGD_isHasGottenCards;

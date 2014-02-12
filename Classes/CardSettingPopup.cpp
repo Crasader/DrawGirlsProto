@@ -570,7 +570,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					mini_rank->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(12,12))));
 					cell->addChild(mini_rank);
 					
-					CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", getCardRank(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+					CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, card_number))->getCString(), mySGD->getFont().c_str(), 8);
 					t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 					mini_rank->addChild(t_rank);
 					
@@ -680,7 +680,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 						mini_rank->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(12,12))));
 						cell->addChild(mini_rank);
 						
-						CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", getCardRank(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+						CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, card_number))->getCString(), mySGD->getFont().c_str(), 8);
 						t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 						mini_rank->addChild(t_rank);
 						
@@ -765,7 +765,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			mini_rank->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(12,12))));
 			cell->addChild(mini_rank);
 			
-			CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", getCardRank(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+			CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, card_number))->getCString(), mySGD->getFont().c_str(), 8);
 			t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 			mini_rank->addChild(t_rank);
 			
@@ -868,41 +868,41 @@ int CardSettingPopup::getCardMaxDurability(int t_card_number)
 		return iter->second;
 }
 
-int CardSettingPopup::getCardRank(int t_card_number)
-{
-	map<int, int>::iterator iter = save_SDS_CI_rank_int1.find(t_card_number);
-	if(iter == save_SDS_CI_rank_int1.end())
-	{
-		save_SDS_CI_rank_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_rank_i, t_card_number);
-		return save_SDS_CI_rank_int1[t_card_number];
-	}
-	else
-		return iter->second;
-}
-
-int CardSettingPopup::getCardStage(int t_card_number)
-{
-	map<int, int>::iterator iter = save_SDS_CI_stage_int1.find(t_card_number);
-	if(iter == save_SDS_CI_stage_int1.end())
-	{
-		save_SDS_CI_stage_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
-		return save_SDS_CI_stage_int1[t_card_number];
-	}
-	else
-		return iter->second;
-}
-
-int CardSettingPopup::getCardGrade(int t_card_number)
-{
-	map<int, int>::iterator iter = save_SDS_CI_grade_int1.find(t_card_number);
-	if(iter == save_SDS_CI_grade_int1.end())
-	{
-		save_SDS_CI_grade_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
-		return save_SDS_CI_grade_int1[t_card_number];
-	}
-	else
-		return iter->second;
-}
+//int CardSettingPopup::getCardRank(int t_card_number)
+//{
+//	map<int, int>::iterator iter = save_SDS_CI_rank_int1.find(t_card_number);
+//	if(iter == save_SDS_CI_rank_int1.end())
+//	{
+//		save_SDS_CI_rank_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_rank_i, t_card_number);
+//		return save_SDS_CI_rank_int1[t_card_number];
+//	}
+//	else
+//		return iter->second;
+//}
+//
+//int CardSettingPopup::getCardStage(int t_card_number)
+//{
+//	map<int, int>::iterator iter = save_SDS_CI_stage_int1.find(t_card_number);
+//	if(iter == save_SDS_CI_stage_int1.end())
+//	{
+//		save_SDS_CI_stage_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
+//		return save_SDS_CI_stage_int1[t_card_number];
+//	}
+//	else
+//		return iter->second;
+//}
+//
+//int CardSettingPopup::getCardGrade(int t_card_number)
+//{
+//	map<int, int>::iterator iter = save_SDS_CI_grade_int1.find(t_card_number);
+//	if(iter == save_SDS_CI_grade_int1.end())
+//	{
+//		save_SDS_CI_grade_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
+//		return save_SDS_CI_grade_int1[t_card_number];
+//	}
+//	else
+//		return iter->second;
+//}
 
 int CardSettingPopup::getCardLevel(int t_card_number)
 {
