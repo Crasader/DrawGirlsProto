@@ -627,7 +627,7 @@ void AP_Missile11::myInit( CCPoint t_sp, int t_type, float t_speed, IntSize t_mS
 	else						throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + (rand()%31-15)/2;
 
 
-	ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, throwAngle, t_mSize);
+	ThrowObject* t_to = ThrowObject::create(t_sp, t_type, t_speed, throwAngle, t_mSize);
 	addChild(t_to);
 	//t_to->startMyAction();
 	stopMyAction();
