@@ -263,7 +263,9 @@ void StartSettingScene::setMain()
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+		float dimmed_height = myDSH->ui_top/myDSH->screen_convert_rate;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, dimmed_height));// /myDSH->screen_convert_rate));
 		t_popup->setDimmedPosition(ccp(240, 160));
 		t_popup->setBasePosition(ccp(240, 160));
 		

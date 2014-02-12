@@ -20,7 +20,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 	if(screen_scale_x < 1.f)
 		screen_scale_x = 1.f;
 	
-	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));// /myDSH->screen_convert_rate));
 	t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
 	t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
 	

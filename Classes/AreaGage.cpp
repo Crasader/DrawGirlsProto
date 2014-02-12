@@ -20,14 +20,17 @@ void AreaGage::setPercentage( float t_p )
 	
 	if(t_p < clear_percent)
 	{
+		gage_bar1->stopAllActions();
 		CCProgressTo* t_to1 = CCProgressTo::create(0.3f, t_p/clear_percent*100.f);
 		gage_bar1->runAction(t_to1);
 	}
 	else if(t_p < 1.f)
 	{
+		gage_bar1->stopAllActions();
 		CCProgressTo* t_to1 = CCProgressTo::create(0.2f, 100.f);
 		gage_bar1->runAction(t_to1);
 		
+		gage_bar2->stopAllActions();
 		CCDelayTime* t_delay2 = CCDelayTime::create(0.2f);
 		CCProgressTo* t_to2 = CCProgressTo::create(0.1f, (t_p-clear_percent)/(1.f-clear_percent)*100.f);
 		CCSequence* t_seq2 = CCSequence::createWithTwoActions(t_delay2, t_to2);
@@ -35,14 +38,17 @@ void AreaGage::setPercentage( float t_p )
 	}
 	else
 	{
+		gage_bar1->stopAllActions();
 		CCProgressTo* t_to1 = CCProgressTo::create(0.1f, 100.f);
 		gage_bar1->runAction(t_to1);
 		
+		gage_bar2->stopAllActions();
 		CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
 		CCProgressTo* t_to2 = CCProgressTo::create(0.1f, 100.f);
 		CCSequence* t_seq2 = CCSequence::createWithTwoActions(t_delay2, t_to2);
 		gage_bar2->runAction(t_seq2);
 		
+		gage_bar3->stopAllActions();
 		CCDelayTime* t_delay3 = CCDelayTime::create(0.2f);
 		CCProgressTo* t_to3 = CCProgressTo::create(0.1f, 100.f);
 		CCSequence* t_seq3 = CCSequence::createWithTwoActions(t_delay3, t_to3);
