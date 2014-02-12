@@ -61,9 +61,6 @@ bool NewMainFlowScene::init()
 	
 	selected_stage_cell_idx = -1;
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000)
-		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
-	
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	for(int i=1;i<=puzzle_count;i++)
 	{
@@ -91,6 +88,10 @@ bool NewMainFlowScene::init()
 			PuzzlePiecePath t_path;
 			t_path.piece_no = NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, j);
 			t_path.stage_no = j;
+			if(j == start_stage+stage_count-1)
+				t_path.next_stage_no = -1;
+			else
+				t_path.next_stage_no = j+1;
 			puzzle_path_info.push_back(t_path);
 		}
 		
@@ -131,6 +132,40 @@ bool NewMainFlowScene::init()
 	
 //	is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
 //	mySGD->setIsUnlockPuzzle(0);
+	
+	
+	bool is_suitable_stage = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)) == mySGD->suitable_stage;
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000 || myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init || is_suitable_stage)
+	{
+		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, t_puzzle_number);
+		
+		int t_puzzle_start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
+		int t_puzzle_stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
+		int last_stage_number = -1; // 플레이 할 수 있는
+		for(int i = t_puzzle_start_stage;i<t_puzzle_start_stage+t_puzzle_stage_count && last_stage_number == -1;i++)
+		{
+			int stage_number = i;
+			if((stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+			   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
+				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))))) && i+1 < t_puzzle_start_stage+t_puzzle_stage_count &&
+			   (i+1 == -1 ||
+				!((i+1 == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i+1) ||
+				   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i+1) == 0 &&
+					(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1) == 0 ||
+					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1))))))))
+			{
+				last_stage_number = stage_number;
+			}
+		}
+		
+		if(last_stage_number == -1)
+			last_stage_number = t_puzzle_start_stage;
+		
+		mySGD->suitable_stage = last_stage_number;
+		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, t_puzzle_number, last_stage_number);
+	}
 	
 	selected_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, selected_puzzle_number);
@@ -183,7 +218,7 @@ bool NewMainFlowScene::init()
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
-		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+//		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(selected_card_number > 0)
 		{
@@ -332,7 +367,10 @@ void NewMainFlowScene::setTable()
 	}
 	float xInitPosition = MAX(puzzle_table->minContainerOffset().x, -cellSizeForTable(puzzle_table).width*myPosition);
 	xInitPosition = MIN(0, xInitPosition);
-	puzzle_table->setContentOffsetInDuration(ccp(xInitPosition, 0), 0.3f);
+	
+	puzzle_table->setContentOffset(ccp(xInitPosition, 0));
+	
+//	puzzle_table->setContentOffsetInDuration(ccp(xInitPosition, 0), 0.3f);
 }
 
 void NewMainFlowScene::cellAction(CCObject* sender)
@@ -718,11 +756,28 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		puzzle_node->setPosition(ccp(puzzle_width_half+margine_width,puzzle_height_half-4));
 		cell->addChild(puzzle_node);
 		
-		if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+		if(idx == 0 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= idx+1)
 			//	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 		{
 			if(mySIL->addImage(CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, "original")->getCString()))
 			{
+				bool is_last_puzzle = false;
+				if(idx+1 < numberOfCellsInTableView(table)-1)
+				{
+					// 뒷 퍼즐이 있다
+					if(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 < idx+2)
+					{
+						// 다음 퍼즐이 잠겨있다
+						is_last_puzzle = true;
+					}
+					
+				}
+				else
+				{
+					// 뒷 퍼즐이 없다
+					is_last_puzzle = true;
+				}
+				
 				CCSprite* puzzle_left = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, "original")->getCString());
 				puzzle_left->setAnchorPoint(ccp(0,0.5));
 				puzzle_left->setPosition(ccp(-puzzle_width_half,0));
@@ -811,6 +866,21 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 									selected_stage_piece_type = "w";
 								selected_stage_position = ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size);
 							}
+							
+							if(is_last_puzzle && !is_buy && !is_lock && (puzzle_path[puzzle_path_idx-1].next_stage_no == -1 ||
+							   !((puzzle_path[puzzle_path_idx-1].next_stage_no == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, puzzle_path[puzzle_path_idx-1].next_stage_no) ||
+								(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, puzzle_path[puzzle_path_idx-1].next_stage_no) == 0 &&
+								(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, puzzle_path[puzzle_path_idx-1].next_stage_no) == 0 ||
+								myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, puzzle_path[puzzle_path_idx-1].next_stage_no))))))))
+							{
+								CCSprite* my_profile = GDWebSprite::create(hspConnector::get()->getKakaoProfileURL(), "temp_piece_frame_noimg.png");
+								my_profile->setAnchorPoint(ccp(0.5,0.5));
+								my_profile->setPosition(t_piece->getPosition());
+								puzzle_node->addChild(my_profile);
+								CCSprite* profile_frame = CCSprite::create("temp_piece_frame.png");
+								profile_frame->setPosition(t_piece->getPosition());
+								puzzle_node->addChild(profile_frame);
+							}
 						}
 						else
 						{
@@ -863,10 +933,13 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 					{
 						CCSprite* n_bridge = CCSprite::create(("temp_puzzle_bridge_front_p" + last_piece_type + ".png").c_str());
 						n_bridge->setColor(ccGREEN);
+						n_bridge->setPosition(ccp(-12.5f,-12.5f));
 						CCSprite* s_bridge = CCSprite::create(("temp_puzzle_bridge_front_p" + last_piece_type + ".png").c_str());
 						s_bridge->setColor(ccGRAY);
+						s_bridge->setPosition(ccp(-12.5f,-12.5f));
 						
 						CCMenuItem* bridge_item = CCMenuItemSprite::create(n_bridge, s_bridge, this, menu_selector(NewMainFlowScene::cellAction));
+						bridge_item->setContentSize(CCSizeMake(50, 50));
 						bridge_item->setTag(idx+2);
 						
 						ScrollMenu* bridge_menu = ScrollMenu::create(bridge_item, NULL);
@@ -1108,10 +1181,13 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			{
 				CCSprite* n_bridge = CCSprite::create(("temp_puzzle_bridge_front_p" + before_piece_type + ".png").c_str());
 				n_bridge->setColor(ccGREEN);
+				n_bridge->setPosition(ccp(-12.5f,-12.5f));
 				CCSprite* s_bridge = CCSprite::create(("temp_puzzle_bridge_front_p" + before_piece_type + ".png").c_str());
 				s_bridge->setColor(ccGRAY);
+				s_bridge->setPosition(ccp(-12.5f,-12.5f));
 				
 				CCMenuItem* bridge_item = CCMenuItemSprite::create(n_bridge, s_bridge, this, menu_selector(NewMainFlowScene::cellAction));
+				bridge_item->setContentSize(CCSizeMake(50, 50));
 				bridge_item->setTag(idx+1);
 				
 				ScrollMenu* bridge_menu = ScrollMenu::create(bridge_item, NULL);
@@ -1512,7 +1588,7 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 	{
 		int t_puzzle_number = ((CCNode*)sender)->getParent()->getTag();
 		
-		puzzle_piece_mode[t_puzzle_number-1] = (puzzle_piece_mode[t_puzzle_number-1]+1)%(kNewPuzzlePieceMode_ranker+1);
+		puzzle_piece_mode[t_puzzle_number-1] = (puzzle_piece_mode[t_puzzle_number-1]+1)%(kNewPuzzlePieceMode_thumbnail+1);
 		
 		puzzle_table->updateCellAtIndex(t_puzzle_number-1);
 		

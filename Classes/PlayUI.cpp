@@ -165,8 +165,8 @@ void FeverParent::addFeverGage (int count)
 		
 		recent_count = 15;
 		
-//		fever_top->setPercentage(100.f);
-//		fever_top->getSprite()->setColor(ccGREEN);
+		fever_top->setPercentage(100.f);
+		fever_top->getSprite()->setColor(ccGREEN);
 		
 		myLog->addLog(kLOG_show_fever, myGD->getCommunication("UI_getUseTime"));
 		myGD->communication("GIM_startFever");
@@ -222,13 +222,13 @@ void FeverParent::addFeverGage (int count)
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 		runAction(t_seq);
 		
-//		CCProgressFromTo* progress_to = CCProgressFromTo::create(NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1), 100.f, 0.f);
-//		fever_top->runAction(progress_to);
+		CCProgressFromTo* progress_to = CCProgressFromTo::create(NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1), 100.f, 0.f);
+		fever_top->runAction(progress_to);
 	}
 	else
 	{
-//		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/15.f*100.f);
-//		fever_top->runAction(progress_to);
+		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/15.f*100.f);
+		fever_top->runAction(progress_to);
 	}
 }
 void FeverParent::endFever ()
@@ -238,7 +238,7 @@ void FeverParent::endFever ()
 		ing_fever = false;
 		recent_count = 0;
 		
-//		fever_top->getSprite()->setColor(ccWHITE);
+		fever_top->getSprite()->setColor(ccWHITE);
 		
 		myGD->communication("GIM_stopFever");
 		
@@ -247,10 +247,10 @@ void FeverParent::endFever ()
 		fever_particle->setDuration(0.f);
 		fever_particle->setAutoRemoveOnFinish(true);
 		
-//		fever_top->stopAllActions();
-//		fever_top->setPercentage(0.f);
-		//			CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
-		//			fever_top->runAction(progress_to);
+		fever_top->stopAllActions();
+		fever_top->setPercentage(0.f);
+		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/20.f*100.f);
+		fever_top->runAction(progress_to);
 	}
 }
 void FeverParent::startKeep ()
@@ -270,8 +270,8 @@ void FeverParent::stopKeep ()
 	unschedule(schedule_selector(FeverParent::keeping));
 	is_keeping = false;
 	recent_count = 0;
-//	CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/10.f*100.f);
-//	fever_top->runAction(progress_to);
+	CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/10.f*100.f);
+	fever_top->runAction(progress_to);
 }
 void FeverParent::myInit ()
 {
@@ -280,17 +280,17 @@ void FeverParent::myInit ()
 	is_keeping = false;
 	entered_fever_cnt = 0;
 	
-//	CCSprite* fever_back = CCSprite::create("fever_gage_back.png");
-//	fever_back->setPosition(ccp(14,myDSH->ui_top-35));
-//	addChild(fever_back);
+	CCSprite* fever_back = CCSprite::create("fever_gage_back.png");
+	fever_back->setPosition(ccp(14,myDSH->ui_top-35));
+	addChild(fever_back);
 	
-//	fever_top = CCProgressTimer::create(CCSprite::create("fever_gage_top.png"));
-//	fever_top->setType(kCCProgressTimerTypeBar);
-//	fever_top->setMidpoint(ccp(0,0));
-//	fever_top->setBarChangeRate(ccp(0,1));
-//	fever_top->setPosition(fever_back->getPosition());
-//	fever_top->setPercentage(0.f);
-//	addChild(fever_top);
+	fever_top = CCProgressTimer::create(CCSprite::create("fever_gage_top.png"));
+	fever_top->setType(kCCProgressTimerTypeBar);
+	fever_top->setMidpoint(ccp(0,0));
+	fever_top->setBarChangeRate(ccp(0,1));
+	fever_top->setPosition(fever_back->getPosition());
+	fever_top->setPercentage(0.f);
+	addChild(fever_top);
 	
 	recent_count = 0;
 	

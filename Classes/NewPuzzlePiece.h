@@ -17,8 +17,8 @@ using namespace std;
 enum NewPuzzlePieceMode
 {
 	kNewPuzzlePieceMode_default = 0,
-	kNewPuzzlePieceMode_thumbnail,
-	kNewPuzzlePieceMode_ranker
+	kNewPuzzlePieceMode_thumbnail
+//	kNewPuzzlePieceMode_ranker
 };
 
 class ScrollMenu;
@@ -166,7 +166,7 @@ private:
 	}
 	
 	void setPieceImg(NewPuzzlePieceMode t_mode);
-	void createRanker();
+//	void createRanker();
 	void setStageLevel(CCSprite* piece_img);
 };
 

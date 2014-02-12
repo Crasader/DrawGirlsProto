@@ -31,6 +31,7 @@ class PuzzlePiecePath
 public:
 	int piece_no;
 	int stage_no;
+	int next_stage_no;
 };
 
 class CountingBMLabel;

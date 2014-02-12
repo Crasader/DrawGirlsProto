@@ -874,12 +874,15 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 				Json::Value card_info = puzzle_list[i]["cardInfo"];
 				Json::Value reward_info = puzzle_list[i]["rewardInfo"];
 				Json::Value level_info = puzzle_list[i]["levelInfo"];
+				Json::Value condition_info = puzzle_list[i]["conditionInfo"];
 				int start_stage = puzzle_list[i]["startStage"].asInt();
 				for(int j=0;j<path_info.size();j++)
 				{
 					NSDS_SI(start_stage+j, kSDS_SI_puzzle_i, puzzle_number, false);
 					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, start_stage + j, path_info[j].asInt(), false);
 					NSDS_SI(start_stage+j, kSDS_SI_level_i, level_info[j].asInt(), false);
+					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, start_stage+j, condition_info[j]["gold"].asInt(), false);
+					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, start_stage+j, condition_info[j]["no"].asInt(), false);
 					Json::Value t_stage_cards = card_info[j];
 					for(int k=0;k<t_stage_cards.size();k++)
 					{

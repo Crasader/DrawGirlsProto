@@ -933,6 +933,8 @@ void StarGoldData::resetNoticeList(Json::Value t_notice_list)
 
 void StarGoldData::myInit()
 {
+	suitable_stage = -1;
+	
 	save_stage_rank_stageNumber = 0;
 	save_stage_rank_list.clear();
 	
