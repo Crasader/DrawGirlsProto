@@ -682,8 +682,8 @@ void AchievePopup::setAllMenu()
 {
 	if(!all_menu)
 	{
-		all_menu = CommonButton::create("전체보기", 13, CCSizeMake(100,38), CommonButtonYellow, -190);
-		all_menu->setTitleColor(ccBLACK);
+		all_menu = CommonButton::create("전체보기", 13, CCSizeMake(100,38), CommonButtonPupple, -190);
+		all_menu->setTitleColor(ccWHITE);
 		all_menu->setPosition(ccp(70,256));
 		main_case->addChild(all_menu, kAchievePopupZorder_menu);
 		all_menu->setFunction([=](CCObject* sender)
@@ -693,8 +693,8 @@ void AchievePopup::setAllMenu()
 								  menuAction(t_node);
 							  });
 		
-		all_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
-		all_menu->setTitleColorForDisable(ccWHITE);
+		all_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
+		all_menu->setTitleColorForDisable(ccBLACK);
 	}
 	
 	all_menu->setEnabled(recent_code != kAchievePopupListCode_all);
@@ -703,8 +703,8 @@ void AchievePopup::setSuccessMenu()
 {
 	if(!success_menu)
 	{
-		success_menu = CommonButton::create("업적달성", 13, CCSizeMake(100,38), CommonButtonYellow, -190);
-		success_menu->setTitleColor(ccBLACK);
+		success_menu = CommonButton::create("업적달성", 13, CCSizeMake(100,38), CommonButtonPupple, -190);
+		success_menu->setTitleColor(ccWHITE);
 		success_menu->setPosition(ccp(172,256));
 		main_case->addChild(success_menu, kAchievePopupZorder_menu);
 		success_menu->setFunction([=](CCObject* sender)
@@ -714,8 +714,8 @@ void AchievePopup::setSuccessMenu()
 								  menuAction(t_node);
 							  });
 		
-		success_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
-		success_menu->setTitleColorForDisable(ccWHITE);
+		success_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
+		success_menu->setTitleColorForDisable(ccBLACK);
 	}
 	
 	success_menu->setEnabled(recent_code != kAchievePopupListCode_success);
@@ -724,8 +724,8 @@ void AchievePopup::setIngMenu()
 {
 	if(!ing_menu)
 	{
-		ing_menu = CommonButton::create("업적미완성", 13, CCSizeMake(100,38), CommonButtonYellow, -190);
-		ing_menu->setTitleColor(ccBLACK);
+		ing_menu = CommonButton::create("업적미완성", 13, CCSizeMake(100,38), CommonButtonPupple, -190);
+		ing_menu->setTitleColor(ccWHITE);
 		ing_menu->setPosition(ccp(274,256));
 		main_case->addChild(ing_menu, kAchievePopupZorder_menu);
 		ing_menu->setFunction([=](CCObject* sender)
@@ -735,8 +735,8 @@ void AchievePopup::setIngMenu()
 									  menuAction(t_node);
 								  });
 		
-		ing_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
-		ing_menu->setTitleColorForDisable(ccWHITE);
+		ing_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
+		ing_menu->setTitleColorForDisable(ccBLACK);
 	}
 	
 	ing_menu->setEnabled(recent_code != kAchievePopupListCode_ing);
@@ -745,8 +745,8 @@ void AchievePopup::setRewardMenu()
 {
 	if(!reward_menu)
 	{
-		reward_menu = CommonButton::create("업적보상", 13, CCSizeMake(100,38), CommonButtonYellow, -190);
-		reward_menu->setTitleColor(ccBLACK);
+		reward_menu = CommonButton::create("업적보상", 13, CCSizeMake(100,38), CommonButtonPupple, -190);
+		reward_menu->setTitleColor(ccWHITE);
 		reward_menu->setPosition(ccp(376,256));
 		main_case->addChild(reward_menu, kAchievePopupZorder_menu);
 		reward_menu->setFunction([=](CCObject* sender)
@@ -756,8 +756,8 @@ void AchievePopup::setRewardMenu()
 								  menuAction(t_node);
 							  });
 		
-		reward_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
-		reward_menu->setTitleColorForDisable(ccWHITE);
+		reward_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
+		reward_menu->setTitleColorForDisable(ccBLACK);
 	}
 	
 	reward_menu->setEnabled(recent_code != kAchievePopupListCode_reward);

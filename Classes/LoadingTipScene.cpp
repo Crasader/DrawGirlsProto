@@ -114,7 +114,7 @@ void LoadingTipScene::readyLoading()
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
 	CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-	loading_progress_img->setPosition(ccp(240,50));
+	loading_progress_img->setPosition(ccp(240,38));
 	addChild(loading_progress_img, kLoadingTipZorder_content);
 	reader->release();
 	
@@ -148,7 +148,7 @@ void LoadingTipScene::readyLoading()
 	ing_load_img = 0;
 	
 	progress_label = CCLabelBMFont::create(CCString::createWithFormat("%.0f", (100.f*ing_load_img)/total_load_img)->getCString(), "etc_font.fnt");
-	progress_label->setPosition(ccp(240,50));
+	progress_label->setPosition(ccp(240,38));
 	addChild(progress_label, kLoadingTipZorder_content);
 	
 	is_minimum_time = false;

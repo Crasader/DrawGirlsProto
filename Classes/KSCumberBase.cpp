@@ -546,7 +546,7 @@ void KSCumberBase::followMoving(float dt)
 				{
 					m_normalMovement = m_originalNormalMovement;
 					m_drawMovement = m_normalMovement;
-					KS::setColor(this, ccc3(255, 255, 255));
+					//KS::setColor(this, ccc3(255, 255, 255));
 				}
 			}
 			else if(collisionCode == kCOLLISION_MAP)
@@ -562,7 +562,7 @@ void KSCumberBase::followMoving(float dt)
 					m_normalMovement = m_originalNormalMovement;
 					m_drawMovement = m_normalMovement;
 					m_follow.lastMapCollisionTime = m_follow.timer;
-					KS::setColor(this, ccc3(255, 255, 255));
+					//KS::setColor(this, ccc3(255, 255, 255));
 				}
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
@@ -578,7 +578,7 @@ void KSCumberBase::followMoving(float dt)
 				{
 					m_normalMovement = m_originalNormalMovement;
 					m_drawMovement = m_normalMovement;
-					KS::setColor(this, ccc3(255, 255, 255));
+					//KS::setColor(this, ccc3(255, 255, 255));
 				}
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
@@ -2140,7 +2140,7 @@ void KSCumberBase::followProcess(float dt)
 			CCLog("follow!!!");
 			m_drawMovement = FOLLOW_TYPE;
 			m_normalMovement = FOLLOW_TYPE;
-			KS::setColor(this, ccc3(255, 0, 0));
+			//KS::setColor(this, ccc3(255, 0, 0));
 			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
 			m_follow.timer = 1.1f;
 			m_follow.lastMapCollisionTime = 0.f;
