@@ -544,9 +544,7 @@ void KSCumberBase::followMoving(float dt)
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				if(myGD->getJackState() == jackStateNormal)
 				{
-					m_normalMovement = m_originalNormalMovement;
-					m_drawMovement = m_normalMovement;
-					//KS::setColor(this, ccc3(255, 255, 255));
+					unAggroExec();
 				}
 			}
 			else if(collisionCode == kCOLLISION_MAP)
@@ -559,10 +557,8 @@ void KSCumberBase::followMoving(float dt)
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				if(myGD->getJackState() == jackStateNormal)
 				{
-					m_normalMovement = m_originalNormalMovement;
-					m_drawMovement = m_normalMovement;
+					unAggroExec();
 					m_follow.lastMapCollisionTime = m_follow.timer;
-					//KS::setColor(this, ccc3(255, 255, 255));
 				}
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
@@ -576,9 +572,7 @@ void KSCumberBase::followMoving(float dt)
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				if(myGD->getJackState() == jackStateNormal)
 				{
-					m_normalMovement = m_originalNormalMovement;
-					m_drawMovement = m_normalMovement;
-					//KS::setColor(this, ccc3(255, 255, 255));
+					unAggroExec();
 				}
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
@@ -2131,20 +2125,75 @@ void KSCumberBase::movingAndCrash( float dt )
 
 void KSCumberBase::followProcess(float dt)
 {
-
-	if(myGD->getJackState() == jackStateDrawing && m_drawMovement != FOLLOW_TYPE)
+	if(myGD->getJackState() == jackStateDrawing && m_drawMovement != FOLLOW_TYPE && m_normalMovement != MOVEMENT::FOLLOW_TYPE)
 	{
 		ProbSelector ps = {this->getAiValue() / 25.f, 125.f};
 		if(ps.getResult() == 0)
 		{
 			CCLog("follow!!!");
-			m_drawMovement = FOLLOW_TYPE;
-			m_normalMovement = FOLLOW_TYPE;
-			//KS::setColor(this, ccc3(255, 0, 0));
-			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
-			m_follow.timer = 1.1f;
-			m_follow.lastMapCollisionTime = 0.f;
-			m_follow.followDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetPlusMinus() * m_well512.GetFloatValue(60, 120);	
+			CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
+			KSCumberBase* mainCumber = dynamic_cast<KSCumberBase*>(myGD->getCommunicationNode("CP_getMainCumberPointer"));
+
+			int aggroCount = 0;
+			if(mainCumber->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
+				 mainCumber->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
+			{
+				aggroCount++;
+			}
+
+			for(int i=0;i<subCumberArray->count();i++)
+			{
+				KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+				if(t_sc->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
+					 t_sc->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
+				{
+					aggroCount++;
+				}
+			}
+			if(aggroCount < 2)
+			{
+				aggroExec();
+			}
+			else
+			{
+				KSCumberBase* farestMonster = nullptr;
+				float maxDistance = ccpLength(ip2ccp(myGD->getJackPoint()) - this->getPosition()); // 자기 자신의 거리.
+				
+				// 어그로 끌린 놈들중에 잭과의 거리가 가장 먼 애를 어그로 풀고 어그로 걸림.	
+				if(mainCumber->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
+					 mainCumber->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
+				{
+					if(maxDistance < ccpLength(ip2ccp(myGD->getJackPoint()) - mainCumber->getPosition()))
+					{
+						maxDistance = ccpLength(ip2ccp(myGD->getJackPoint()) - mainCumber->getPosition());
+						farestMonster = mainCumber;
+					}
+				}
+				
+				for(int i=0;i<subCumberArray->count();i++)
+				{
+					KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+					if(t_sc->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
+						 t_sc->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
+					{
+						if(maxDistance < ccpLength(ip2ccp(myGD->getJackPoint()) - t_sc->getPosition()))
+						{
+							maxDistance = ccpLength(ip2ccp(myGD->getJackPoint()) - t_sc->getPosition());
+							farestMonster = t_sc;
+						}
+					}
+				}
+				if(farestMonster)
+				{
+					// 어그로 풀고
+					farestMonster->unAggroExec();		
+
+					// 어그로 걸림.
+					aggroExec();
+
+				}
+			}
+
 		}
 	}
 	else

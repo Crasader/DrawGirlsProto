@@ -245,6 +245,34 @@ public:
 	int getAiValue();
 	float getAgility();
 	void setAgility(float ag);
+	void aggroExec()
+	{
+		m_drawMovement = FOLLOW_TYPE;
+		m_normalMovement = FOLLOW_TYPE;
+		//KS::setColor(this, ccc3(255, 0, 0));
+		CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
+		m_follow.timer = 1.1f;
+		m_follow.lastMapCollisionTime = 0.f;
+		m_follow.followDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetPlusMinus() * m_well512.GetFloatValue(60, 120);	
+	}
+	void unAggroExec()
+	{
+		m_normalMovement = m_originalNormalMovement;
+		m_drawMovement = m_normalMovement;
+		//KS::setColor(this, ccc3(255, 255, 255));
+	}
+public:
+	struct FollowMoving
+	{
+		FollowMoving() : timer(1.1f), lastMapCollisionTime(0){}
+		float lastMapCollisionTime;
+		float timer;
+		float followDegree;
+	}m_follow;
+	MOVEMENT m_normalMovement; // 평상시 움직임.
+	MOVEMENT m_originalNormalMovement;  // 평사시 움직임의 백업본.
+	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
+	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
 protected:
 	//선그을때 공격하는걸 제한하는 카운터
 	int m_adderCnt;
@@ -264,10 +292,6 @@ protected:
 	std::vector<Json::Value> m_attacks; // 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	CUMBER_STATE m_state;
-	MOVEMENT m_normalMovement; // 평상시 움직임.
-	MOVEMENT m_originalNormalMovement;  // 평사시 움직임의 백업본.
-	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
-	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
 //	Emotion* mEmotion;
 	Well512 m_well512;
 	int m_directionAngleDegree;
@@ -333,13 +357,6 @@ protected:
 		FromTo<float> scale; // 서서히 변하는것을 구현하기 위해.
 	}m_scale;
 	
-	struct FollowMoving
-	{
-		FollowMoving() : timer(1.1f), lastMapCollisionTime(0){}
-		float lastMapCollisionTime;
-		float timer;
-		float followDegree;
-	}m_follow;
 	
 	
 	struct CircleMoving
