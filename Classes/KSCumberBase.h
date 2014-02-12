@@ -337,6 +337,7 @@ protected:
 		FollowMoving() : timer(0.f){}
 		float lastMapCollisionTime;
 		float timer;
+		float followDegree;
 	}m_follow;
 	
 	
