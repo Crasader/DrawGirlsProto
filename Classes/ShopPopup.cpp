@@ -406,6 +406,7 @@ enum CharacterCellZorder
 	kCharacterCellZorder_selected,
 	kCharacterCellZorder_tab,
 	kCharacterCellZorder_lock,
+	kCharacterCellZorder_buy
 };
 
 void ShopPopup::cellAction(CCObject* sender)
@@ -546,7 +547,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 		
 		ScrollMenu* unlock_menu = ScrollMenu::create(unlock_item, NULL);
 		unlock_menu->setPosition(ccp(62,23));
-		cell->addChild(unlock_menu, kCharacterCellZorder_selected);
+		cell->addChild(unlock_menu, kCharacterCellZorder_buy);
 		
 		unlock_menu->setTouchPriority(-170-1);
 	}

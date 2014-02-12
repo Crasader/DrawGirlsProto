@@ -31,7 +31,7 @@ void ComboView::myInit (int combo)
 	setPosition(ccp(30,myDSH->ui_top-78));
 	
 	combo_str = CCSprite::create("combo_front.png");
-	combo_str->setPosition(ccp(getContentSize().width/2.f-10, getContentSize().height/2.f));
+	combo_str->setPosition(ccp(getContentSize().width/2.f-13, getContentSize().height/2.f));
 	addChild(combo_str);
 	
 //	combo_timer = CCProgressTimer::create(CCSprite::create("combo_front.png"));
@@ -44,7 +44,7 @@ void ComboView::myInit (int combo)
 	
 	combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
 	combo_label->setAnchorPoint(ccp(0,0.5));
-	combo_label->setPosition(ccp(80,15));
+	combo_label->setPosition(ccp(77,15));
 	addChild(combo_label);
 }
 ComboParent * ComboParent::create (CCNode* t_score_label)
@@ -76,8 +76,7 @@ void ComboParent::showCombo (int t_combo)
 void ComboParent::stopKeep ()
 {
 	unschedule(schedule_selector(ComboParent::keeping));
-	removeChild((CCNode*)(getChildren()->objectAtIndex(0)));
-//	removeChildByTag(1);
+	removeChildByTag(1);
 	myGD->communication("UI_setComboCnt", 0);
 	is_keeping = false;
 	score_label->setVisible(true);
@@ -1214,7 +1213,7 @@ void PlayUI::setClearPercentage (float t_p)
 {
 	clearPercentage = t_p;
 	m_areaGage = AreaGage::create(clearPercentage);
-	m_areaGage->setPosition(ccp(240,myDSH->ui_top-10));
+	m_areaGage->setPosition(ccp(240,myDSH->ui_top-25));
 	top_center_node->addChild(m_areaGage);
 	m_areaGage->setPercentage(getPercentage());
 }
@@ -1370,6 +1369,8 @@ int PlayUI::getUseTime ()
 }
 void PlayUI::takeCoinModeOn ()
 {
+	top_center_node->setPosition(ccpAdd(top_center_node->getPosition(), ccp(0,8)));
+	
 	is_show_exchange_coin = true;
 	taked_coin_cnt = 0;
 	for(int i=1;i<=6;i++)
@@ -1618,7 +1619,7 @@ void PlayUI::counting ()
 		countingLabel->setColor(ccWHITE);
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
-		countingLabel->setPosition(ccp(240,20));
+		countingLabel->setPosition(ccp(240,35));
 		countingLabel->setString(CCString::createWithFormat("%d", label_value)->getCString());
 	}
 	
@@ -1701,6 +1702,7 @@ void PlayUI::removeParticle (CCObject * sender)
 }
 void PlayUI::createBonusScore ()
 {
+	my_combo->stopKeep();
 	CCSprite* bonus_score = CCSprite::create("bonus_score.png");
 	bonus_score->setOpacity(0);
 	bonus_score->setPosition(ccp(240,myDSH->ui_center_y+50));
@@ -1974,7 +1976,7 @@ void PlayUI::myInit ()
 	
 	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 	score_label->setAnchorPoint(ccp(0.5,0.5));
-	score_label->setPosition(ccp(50,myDSH->ui_top-15));
+	score_label->setPosition(ccp(40,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											score_label->setPosition(ccp(240,myDSH->ui_top-15));
@@ -1987,7 +1989,7 @@ void PlayUI::myInit ()
 	
 	percentageLabel = CCLabelBMFont::create("0%%", "star_gage_font.fnt");
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
-	percentageLabel->setPosition(ccp(180,myDSH->ui_top-15));
+	percentageLabel->setPosition(ccp(185,myDSH->ui_top-30));
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 //	else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
@@ -2029,7 +2031,7 @@ void PlayUI::myInit ()
 	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
-	countingLabel->setPosition(ccp(240,20));
+	countingLabel->setPosition(ccp(240,35));
 	addChild(countingLabel);
 	
 	isFirst = true;
@@ -2080,9 +2082,9 @@ void PlayUI::myInit ()
 	{
 		CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
 		exchange_spr->setScale(0.5f);
-		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-25));
-		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-25));
-		else									exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-25));
+		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-40));
+		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-40));
+		else									exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-40));
 		top_center_node->addChild(exchange_spr);
 		
 		exchange_spr->setVisible(false);
