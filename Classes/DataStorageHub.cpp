@@ -17,42 +17,93 @@ DataStorageHub * DataStorageHub::sharedInstance ()
 }
 bool DataStorageHub::getBoolForKey (DSH_Key t_key)
 {
-	string bool_string = myDefault->getValue(kSDF_myDSH, getKey(t_key), "false");
-	if(bool_string == "false")		return false;
-	else							return true;
+	string c_key = getKey(t_key);
+	
+	iter_bool = dsh_cache_bool.find(c_key);
+	if(iter_bool != dsh_cache_bool.end())
+		return iter_bool->second;
+	
+	string bool_string = myDefault->getValue(kSDF_myDSH, c_key, "false");
+	if(bool_string == "false")
+	{
+		dsh_cache_bool[c_key] = false;
+		return false;
+	}
+	else
+	{
+		dsh_cache_bool[c_key] = true;
+		return true;
+	}
 }
 bool DataStorageHub::getBoolForKey (DSH_Key t_key, int key_val1)
 {
-	string bool_string = myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), "false");
-	if(bool_string == "false")		return false;
-	else							return true;
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
+	
+	iter_bool = dsh_cache_bool.find(c_key);
+	if(iter_bool != dsh_cache_bool.end())
+		return iter_bool->second;
+	
+	string bool_string = myDefault->getValue(kSDF_myDSH, c_key, "false");
+	if(bool_string == "false")
+	{
+		dsh_cache_bool[c_key] = false;
+		return false;
+	}
+	else
+	{
+		dsh_cache_bool[c_key] = true;
+		return true;
+	}
 }
 bool DataStorageHub::getBoolForKey (DSH_Key t_key, int key_val1, int key_val2)
 {
-	string bool_string = myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), "false");
-	if(bool_string == "false")		return false;
-	else							return true;
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString();
+	
+	iter_bool = dsh_cache_bool.find(c_key);
+	if(iter_bool != dsh_cache_bool.end())
+		return iter_bool->second;
+	
+	string bool_string = myDefault->getValue(kSDF_myDSH, c_key, "false");
+	if(bool_string == "false")
+	{
+		dsh_cache_bool[c_key] = false;
+		return false;
+	}
+	else
+	{
+		dsh_cache_bool[c_key] = true;
+		return true;
+	}
 }
 void DataStorageHub::setBoolForKey (DSH_Key t_key, bool t_b, bool diskWrite)
 {
 	string bool_string;
 	if(t_b)			bool_string = "true";
 	else			bool_string = "false";
-	myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), bool_string, diskWrite);
+	
+	string c_key = getKey(t_key);
+	myDefault->setKeyValue(kSDF_myDSH, c_key, bool_string, diskWrite);
+	dsh_cache_bool[c_key] = t_b;
 }
 void DataStorageHub::setBoolForKey (DSH_Key t_key, int key_val1, bool t_b, bool diskWrite)
 {
 	string bool_string;
 	if(t_b)			bool_string = "true";
 	else			bool_string = "false";
-	myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), bool_string, diskWrite);
+	
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
+	myDefault->setKeyValue(kSDF_myDSH, c_key, bool_string, diskWrite);
+	dsh_cache_bool[c_key] = t_b;
 }
 void DataStorageHub::setBoolForKey (DSH_Key t_key, int key_val1, int key_val2, bool t_b, bool diskWrite)
 {
 	string bool_string;
 	if(t_b)			bool_string = "true";
 	else			bool_string = "false";
-	myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), bool_string, diskWrite);
+	
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString();
+	myDefault->setKeyValue(kSDF_myDSH, c_key, bool_string, diskWrite);
+	dsh_cache_bool[c_key] = t_b;
 }
 int DataStorageHub::getUserIntForStr (string t_key, int t_default)
 {
@@ -72,43 +123,93 @@ void DataStorageHub::setUserStrForStr (string t_key, string t_val1, bool diskWri
 }
 int DataStorageHub::getIntegerForKey (DSH_Key t_key)
 {
-	return myDefault->getValue(kSDF_myDSH, getKey(t_key), 0);
+	string c_key = getKey(t_key);
+	
+	iter_int = dsh_cache_int.find(c_key);
+	if(iter_int != dsh_cache_int.end())
+		return iter_int->second;
+	
+	int return_value = myDefault->getValue(kSDF_myDSH, c_key, 0);
+	dsh_cache_int[c_key] = return_value;
+	return return_value;
 }
 int DataStorageHub::getIntegerForKey (DSH_Key t_key, int key_val1)
 {
-	return myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), 0);
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
+	
+	iter_int = dsh_cache_int.find(c_key);
+	if(iter_int != dsh_cache_int.end())
+		return iter_int->second;
+	
+	int return_value = myDefault->getValue(kSDF_myDSH, c_key, 0);
+	dsh_cache_int[c_key] = return_value;
+	return return_value;
 }
 int DataStorageHub::getIntegerForKey (DSH_Key t_key, int key_val1, int key_val2)
 {
-	return myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), 0);
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString();
+	
+	iter_int = dsh_cache_int.find(c_key);
+	if(iter_int != dsh_cache_int.end())
+		return iter_int->second;
+	
+	int return_value = myDefault->getValue(kSDF_myDSH, c_key, 0);
+	dsh_cache_int[c_key] = return_value;
+	return return_value;
 }
 void DataStorageHub::setIntegerForKey (DSH_Key t_key, int val1, bool diskWrite)
 {
-	myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), val1, diskWrite);
+	string c_key = getKey(t_key);
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
+	dsh_cache_int[c_key] = val1;
 }
 void DataStorageHub::setIntegerForKey (DSH_Key t_key, int key_val1, int val1, bool diskWrite)
 {
-	myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1, diskWrite);
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
+	dsh_cache_int[c_key] = val1;
 }
 string DataStorageHub::getStringForKey (DSH_Key t_key)
 {
-	return myDefault->getValue(kSDF_myDSH, getKey(t_key), "");
+	string c_key = getKey(t_key);
+	
+	iter_string = dsh_cache_string.find(c_key);
+	if(iter_string != dsh_cache_string.end())
+		return iter_string->second;
+	
+	string return_value = myDefault->getValue(kSDF_myDSH, c_key, "");
+	dsh_cache_string[c_key] = return_value;
+	return return_value;
 }
 void DataStorageHub::setStringForKey (DSH_Key t_key, string val1, bool diskWrite)
 {
-	myDefault->setKeyValue(kSDF_myDSH, getKey(t_key), val1.c_str(), diskWrite);
+	string c_key = getKey(t_key);
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
+	dsh_cache_string[c_key] = val1;
 }
 string DataStorageHub::getStringForKey (DSH_Key t_key, int key_val1)
 {
-	return myDefault->getValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), "");
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
+	
+	iter_string = dsh_cache_string.find(c_key);
+	if(iter_string != dsh_cache_string.end())
+		return iter_string->second;
+	
+	string return_value = myDefault->getValue(kSDF_myDSH, c_key, "");
+	dsh_cache_string[c_key] = return_value;
+	return return_value;
 }
 void DataStorageHub::setStringForKey (DSH_Key t_key, int key_val1, string val1, bool diskWrite)
 {
-	myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString(), val1.c_str(), diskWrite);
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
+	dsh_cache_string[c_key] = val1;
 }
 void DataStorageHub::setIntegerForKey (DSH_Key t_key, int key_val1, int key_val2, int val1, bool diskWrite)
 {
-	myDefault->setKeyValue(kSDF_myDSH, CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
+	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString();
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
+	dsh_cache_int[c_key] = val1;
 }
 CCSize DataStorageHub::getDesignResolutionSize ()
 {
@@ -521,6 +622,7 @@ void DataStorageHub::saveAllUserData (jsonSelType t_saved)
 
 void DataStorageHub::clear()
 {
+	removeCache();
 	myDefault->resetData(kSDF_myDSH);
 }
 
@@ -632,9 +734,16 @@ void DataStorageHub::setPuzzleMapSceneShowType (int t_type)
 }
 void DataStorageHub::fFlush ()
 {			myDefault->fFlush(kSDF_myDSH);		}
+void DataStorageHub::removeCache()
+{
+	dsh_cache_bool.clear();
+	dsh_cache_int.clear();
+	dsh_cache_string.clear();
+}
 
 void DataStorageHub::myInit ()
 {
+	removeCache();
 	myDefault = SaveData::sharedObject();
 	is_cheat_key_enabled = false;
 	puzzle_map_scene_show_type = kPuzzleMapSceneShowType_init;
