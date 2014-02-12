@@ -10,17 +10,26 @@
 #include <assert.h>
 #include "Well512.h"
 #include "cocos2d.h"
+#include <random>
 class ProbSelector
 {
 protected:
-	std::vector<float> m_probs;
+	std::vector<double> m_probs;
+
+	std::mt19937 m_rEngine; // 엔진
 public:
-	ProbSelector(std::initializer_list<float> s) : m_probs(s)
+	ProbSelector(std::initializer_list<double> s) : m_probs(s)
 	{
-		
+		std::random_device rd;	
+		m_rEngine.seed(rd());
 	}
-	ProbSelector(){}
-	void pushProb(float p)
+	ProbSelector()
+	{
+		std::random_device rd;
+		m_rEngine.seed(rd());
+	}
+
+	void pushProb(double p)
 	{
 		m_probs.push_back(p);
 	}
