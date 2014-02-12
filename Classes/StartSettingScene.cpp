@@ -722,7 +722,7 @@ void StartSettingScene::itemAction(CCObject *sender)
 //		title_rect->setPosition(ccp(192,115));
 //		main_case->addChild(title_rect);
 		
-		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(250, 16), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 14, CCSizeMake(250, 20), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		item_title_label->setAnchorPoint(ccp(0,1));
 		item_title_label->setPosition(ccp(192, 112));
 		item_title_label->setColor(ccORANGE);
@@ -734,9 +734,9 @@ void StartSettingScene::itemAction(CCObject *sender)
 //		option_rect->setPosition(ccp(192,100));
 //		main_case->addChild(option_rect);
 		
-		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 8, CCSizeMake(250, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(250, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		option_label->setAnchorPoint(ccp(0,1));
-		option_label->setPosition(ccp(192, 97));
+		option_label->setPosition(ccp(192, 93));
 		main_case->addChild(option_label);
 		
 		
