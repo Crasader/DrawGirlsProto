@@ -335,7 +335,7 @@ protected:
 	
 	struct FollowMoving
 	{
-		FollowMoving() : timer(0.f){}
+		FollowMoving() : timer(1.1f), lastMapCollisionTime(0){}
 		float lastMapCollisionTime;
 		float timer;
 		float followDegree;
