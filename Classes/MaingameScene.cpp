@@ -99,7 +99,6 @@ bool Maingame::init()
 	myGD->V_TDTD["Main_showContinue"] = std::bind(&Maingame::showContinue, this, _1, _2, _3, _4);
 	myGD->V_B["Main_setLineParticle"] = std::bind(&Maingame::setLineParticle, this, _1);
 	myGD->V_CCPI["Main_showComboImage"] = std::bind(&Maingame::showComboImage, this, _1, _2);
-	myGD->B_V["Main_isFever"] = std::bind(&GameItemManager::getIsFevering, myGIM);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -223,6 +222,8 @@ void Maingame::finalSetting()
 	myGIM = GameItemManager::create();
 	game_node->addChild(myGIM, attackItemZorder);
 	
+	myGD->B_V["Main_isFever"] = std::bind(&GameItemManager::getIsFevering, myGIM);
+	
 	myCP = CumberParent::create();
 	game_node->addChild(myCP, myCPZorder);
 	
@@ -302,7 +303,7 @@ void Maingame::finalSetting()
 	
 	thumb_texture = CCRenderTexture::create(320, 430);
 	thumb_texture->setScale(thumb_scale);
-	thumb_texture->setPosition(ccp(58-160.f*thumb_scale,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
+	thumb_texture->setPosition(ccp(40,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
 	addChild(thumb_texture, myUIZorder);
 	
 	thumb_case_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
@@ -349,7 +350,7 @@ void Maingame::finalSetting()
 	myJack->setPosition(myJack->getPosition());
 	
 	
-	thumb_base_position = ccp(58-320.f*thumb_scale,myDSH->ui_center_y-215.f*thumb_scale);
+	thumb_base_position = ccp(40-160.f*thumb_scale,myDSH->ui_center_y-215.f*thumb_scale);
 	
 	CCDelayTime* thumb_delay = CCDelayTime::create(0.3f);
 	CCCallFunc* thumb_call = CCCallFunc::create(this, callfunc_selector(Maingame::refreshThumb));
@@ -380,7 +381,7 @@ void Maingame::finalSetting()
 		{
 			replay_thumb_texture = CCRenderTexture::create(320, 430);
 			replay_thumb_texture->setScale(thumb_scale);
-			replay_thumb_texture->setPosition(ccp(480-(58-160.f*thumb_scale),myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
+			replay_thumb_texture->setPosition(ccp(480-40,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
 			replay_all_node->addChild(replay_thumb_texture);
 			
 			myGD->V_I["Main_refreshReplayThumb"] = std::bind(&Maingame::refreshReplayThumb, this, _1);
