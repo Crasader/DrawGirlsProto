@@ -1023,7 +1023,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 														 addChild(StageInfoDown::create
 																			(this,
 																			 callfunc_selector(ThisClassType::onReceiveStageSuccess),
-																			 this, callfunc_selector(ThisClassType::onReceiveStageFail)));
+																			 this, callfunc_selector(ThisClassType::onReceiveStageFail)), kMP_Z_popup);
 														 CCLog("ok!!");
 													 });
 
@@ -1165,7 +1165,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																																 addChild(StageInfoDown::create
 																																					(this,
 																																					 callfunc_selector(ThisClassType::onReceiveStageSuccess),
-																																					 this, callfunc_selector(ThisClassType::onReceiveStageFail)));
+																																					 this, callfunc_selector(ThisClassType::onReceiveStageFail)), kMP_Z_popup);
 																																 //																									 Json::Value p;
 																																 //																									 int mailNo = mail["no"].asInt();
 																																 //																									 p["no"] = mailNo;
@@ -1763,6 +1763,13 @@ void MailPopup::onReceiveStageSuccess()
 }
 void MailPopup::onReceiveStageFail()
 {
+	if(mySGD->getIsAcceptChallenge())
+		mySGD->setIsAcceptChallenge(false);
+	if(mySGD->getIsMeChallenge())
+		mySGD->setIsMeChallenge(false);
+	if(mySGD->getIsAcceptHelp())
+		mySGD->setIsAcceptHelp(false);
+	
 	mySGD->setRemoveMessageMemberId(0);
 	mySGD->setRemoveMessageMailNo(0);
 //	removeFromParent();

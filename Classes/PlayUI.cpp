@@ -874,7 +874,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
-			if(clr_cdt_type == kCLEAR_bigArea && t_p >= t_beforePercentage + 0.001f)
+			if((clr_cdt_type == kCLEAR_bigArea || clr_cdt_type == kCLEAR_perfect) && t_p >= t_beforePercentage + 0.001f)
 			{
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
@@ -1040,6 +1040,7 @@ void PlayUI::conditionClear ()
 {
 //	removeChildByTag(kCT_UI_clrCdtLabel);
 	is_cleared_cdt = true;
+	mission_button->doClose();
 //	((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
 	
 //	CCSprite* condition_clear = CCSprite::create("condition_clear.png");

@@ -89,7 +89,7 @@ bool FailPopup::init()
 	p1["score"] = int(mySGD->getScore());
 	Json::Value p1_data;
 	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	p1_data["allhighscore"] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	p1_data["allhighscore"] = mySGD->getScore();//myDSH->getIntegerForKey(kDSH_Key_allHighScore);
 	Json::FastWriter p1_data_writer;
 	p1["data"] = p1_data_writer.write(p1_data);
 	hspConnector::get()->command("addweeklyscore", p1, NULL);
@@ -811,7 +811,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		{
 			if(score_list[i]["memberID"].asString() == hspConnector::get()->getKakaoID())
 			{
-				if(mySGD->getScore() < score_list[i]["score"].asFloat())
+				if(mySGD->getScore() > score_list[i]["score"].asFloat())
 				{
 					CCSprite* high_score_img = CCSprite::create("ending_highscore.png");
 					high_score_img->setPosition(ccp(105, 78));

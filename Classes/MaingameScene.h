@@ -39,6 +39,7 @@ enum Mainzorder{
 	clearshowtimeZorder,
 	myUIZorder,
 	screenNodeZorder,
+	startGachaZorder,
 	mControlZorder,
 	particleZorder,
 	shutterZorder

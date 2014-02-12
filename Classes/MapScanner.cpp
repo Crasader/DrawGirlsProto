@@ -813,6 +813,7 @@ void MapScanner::showEmptyPoint( CCPoint t_point )
 	CCSprite* show_empty_point = CCSprite::create("show_empty_point.png");
 	show_empty_point->setAnchorPoint(ccp(0.5f,0.f));
 	show_empty_point->setPosition(t_point);
+	show_empty_point->setScale(1.f/myGD->game_scale);
 	addChild(show_empty_point, boarderZorder);
 
 	CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccpAdd(t_point, ccp(0,20)));

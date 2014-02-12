@@ -649,7 +649,7 @@ void Maingame::counting()
 		if(mySGD->getGold() >= mySGD->getGachaMapFee())
 		{
 			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
-			addChild(t_smg, clearshowtimeZorder);
+			addChild(t_smg, startGachaZorder);
 		}
 		
 		if(countingCnt/60 == 1)
@@ -1369,14 +1369,15 @@ void Maingame::showLineDiePosition( IntPoint t_p )
 	{
 		is_line_die = true;
 		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("line_die.png");
-		CCSprite* line_die = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 80, 90));
+		CCSprite* line_die = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 100, 100));
 		line_die->setPosition(ccp((t_p.x-1.f)*pixelSize+1.f, (t_p.y-1.f)*pixelSize+1.f));
+		line_die->setScale(1.f/myGD->game_scale);
 		game_node->addChild(line_die, goldZorder);
 
 		CCAnimation* t_animation = CCAnimation::create();
 		t_animation->setDelayPerUnit(0.1);
-		for(int i=0;i<5;i++)
-			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*80, 0, 80, 90));
+		for(int i=0;i<4;i++)
+			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*100, 0, 100, 100));
 		CCAnimate* t_animate = CCAnimate::create(t_animation);
 
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);

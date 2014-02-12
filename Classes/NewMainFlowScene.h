@@ -58,6 +58,16 @@ private:
 	
 	void heartRefresh();
 	
+	bool clear_is_empty_piece;
+	bool clear_is_stage_unlock;
+	int next_stage_number;
+	int clear_star_take_level;
+	bool clear_is_empty_star;
+	bool clear_is_first_puzzle_success;
+	bool clear_is_first_perfect;
+	
+	CCSprite* unlock_cover;
+	
 	bool is_menu_enable;
 	
 	CountingBMLabel* ruby_label;
@@ -95,6 +105,21 @@ private:
 	
 	void showClearPopup();
 	void hideClearPopup();
+	
+	int clear_found_puzzle_idx;
+	
+	void showGetPuzzle();
+	void createGetPuzzleParticle(CCNode* t_node, CCPoint t_point);
+	void endGetPuzzle();
+	void showGetStar();
+	void endGetStar();
+	void showSuccessPuzzleEffect();
+	void endSuccessPuzzleEffect();
+	void showPerfectPuzzleEffect();
+	void endPerfectPuzzleEffect();
+	void showUnlockEffect();
+	void endUnlockEffect();
+	
 	void showFailPopup();
 	void hideFailPopup();
 	

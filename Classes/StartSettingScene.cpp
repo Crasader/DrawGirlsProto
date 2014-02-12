@@ -689,7 +689,7 @@ void StartSettingScene::itemAction(CCObject *sender)
 			{
 				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
 				cnt_label->setColor(ccBLACK);
-				cnt_label->setPosition(ccp(0, -19));
+				cnt_label->setPosition(ccp(5, -19));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
 				
 				string item_currency = mySD->getItemCurrency(t_ic);

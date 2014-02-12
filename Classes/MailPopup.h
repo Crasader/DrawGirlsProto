@@ -26,7 +26,8 @@ enum MailPopupZorder
 	kMP_Z_content,
 	kMP_Z_mailTable,
 	kMP_Z_profileImg,
-	kMP_Z_helpAccept
+	kMP_Z_helpAccept,
+	kMP_Z_popup
 };
 enum MailTableViewTag
 {
