@@ -265,6 +265,7 @@ protected:
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	CUMBER_STATE m_state;
 	MOVEMENT m_normalMovement; // 평상시 움직임.
+	MOVEMENT m_originalNormalMovement;  // 평사시 움직임의 백업본.
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
 	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
 //	Emotion* mEmotion;
@@ -337,6 +338,7 @@ protected:
 		FollowMoving() : timer(0.f){}
 		float lastMapCollisionTime;
 		float timer;
+		float followDegree;
 	}m_follow;
 	
 	

@@ -459,9 +459,20 @@ void KSCumberBase::followMoving(float dt)
 			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
 			CCLog("aiValue : %d", this->getAiValue());
 			t = ip2ccp(myGD->getJackPoint()) - getPosition();
-			float varRad = m_well512.GetFloatValue(deg2Rad(-30), deg2Rad(+30));
-			dx = m_speed * cos(atan2(t.y, t.x) + varRad);
-			dy = m_speed * sin(atan2(t.y, t.x) + varRad);
+			float goalDegree = rad2Deg(atan2(t.y, t.x));
+			float deltaDegree = (goalDegree - m_follow.followDegree)/60.f;
+			m_follow.followDegree += deltaDegree;
+//			if(deltaDegree < 0)
+//			{
+//				m_follow.followDegree += 3;
+//			}
+//			else
+//			{
+//				m_follow.followDegree += -3;
+//			}	
+			//float varRad = deg2Rad(m_follow.followDegree);
+			dx = m_speed * cos(deg2Rad(m_follow.followDegree)) * 2.f;
+			dy = m_speed * sin(deg2Rad(m_follow.followDegree)) * 2.f;
 			//ProbSelector ps = {this->getAiValue(), 125 - this->getAiValue()};
 			//int result = ps.getResult();
 			//if(result == 0)
@@ -528,6 +539,12 @@ void KSCumberBase::followMoving(float dt)
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				if(myGD->getJackState() == jackStateNormal)
+				{
+					m_normalMovement = m_originalNormalMovement;
+					m_drawMovement = m_normalMovement;
+					//KS::setColor(this, ccc3(255, 255, 255));
+				}
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
@@ -537,6 +554,12 @@ void KSCumberBase::followMoving(float dt)
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				if(myGD->getJackState() == jackStateNormal)
+				{
+					m_normalMovement = m_originalNormalMovement;
+					m_drawMovement = m_normalMovement;
+					//KS::setColor(this, ccc3(255, 255, 255));
+				}
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
@@ -547,6 +570,12 @@ void KSCumberBase::followMoving(float dt)
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				if(myGD->getJackState() == jackStateNormal)
+				{
+					m_normalMovement = m_originalNormalMovement;
+					m_drawMovement = m_normalMovement;
+					//KS::setColor(this, ccc3(255, 255, 255));
+				}
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
@@ -572,7 +601,7 @@ void KSCumberBase::followMoving(float dt)
 				validPosition = true;
 			}
 		}
-		else
+		else // if(m_state == CUMBERSTATEFURY)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
@@ -1387,9 +1416,10 @@ void KSCumberBase::cumberAttack(float dt)
 		if(myGD->getJackState()==jackStateDrawing){
 			
 			m_adderCnt++;
+			float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
 			
-			//선긋기 시작한지 3초이후 부터 공격확률을 높임
-			if(m_adderCnt > 180){
+			//선긋기 시작한지 3초이후 && 멀리떨어지면 공격확률을 높임
+			if(m_adderCnt > 180 && distance > m_furyRule.userDistance / 2.f){
 				attackProb += 0.1;
 			}
 		}else{
@@ -2100,16 +2130,20 @@ void KSCumberBase::followProcess(float dt)
 
 	if(myGD->getJackState() == jackStateDrawing)
 	{
-		ProbSelector ps = {this->getAiValue() / 75.f, 125.f - this->getAiValue()};
+		ProbSelector ps = {this->getAiValue() * 3.f / 150.f, 125.f - this->getAiValue()};
 		if(ps.getResult() == 0)
 		{
 			CCLog("follow!!!");
 			m_drawMovement = FOLLOW_TYPE;
+			m_normalMovement = FOLLOW_TYPE;
+			//KS::setColor(this, ccc3(255, 0, 0));
+			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
+			m_follow.followDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetFloatValue(-30, 30);	
 		}
 	}
 	else
 	{
-		m_drawMovement = m_normalMovement;
+		//m_drawMovement = m_normalMovement;
 	}
 }
 void KSCumberBase::cumberFrame( float dt )
@@ -2256,6 +2290,7 @@ void KSCumberBase::assignBossData(Json::Value boss)
 	m_maxSpeed = maxSpeed;
 	
 	m_normalMovement = (enum MOVEMENT)normalMovement;
+	m_originalNormalMovement = m_normalMovement;
 	m_drawMovement = (enum MOVEMENT)drawMovement;
 	m_furyMovement = MOVEMENT::RUSH_TYPE;
 }
