@@ -1332,7 +1332,7 @@ void KSCumberBase::cumberAttack(float dt)
 	m_reAttackCnt++;
 	m_furyCnt++;
 	
-	if(m_slience || myGD->Fcommunication("UI_getMapPercentage") < 0.05f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
+	if(m_slience || myGD->Fcommunication("UI_getMapPercentage") < 0.03f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
 	{
 		return;
 	}
@@ -1354,7 +1354,7 @@ void KSCumberBase::cumberAttack(float dt)
 				crashAttack = true;
 				distanceFury = true;
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
-				m_furyCnt = -400;
+				m_furyCnt = -240;
 
 				//myGD->communication("Main_showTextMessage", std::string("거리 분노룰.."));
 
@@ -1645,7 +1645,7 @@ void KSCumberBase::cumberAttack(float dt)
 						attackBehavior(attackCode);
 						
 						//한번 공격후 3초간 재공격 하지 않음.
-						m_reAttackCnt = -180;
+						m_reAttackCnt = -120;
 					}
 				}
 			}
@@ -2387,9 +2387,19 @@ void KSCumberBase::settingFuryRule()
 
 void KSCumberBase::applyAutoBalance()
 {
+	
+	
+	bool isClear = myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType());
+	if(isClear){
+		
+		CCLog("############ clear stage, dont autobalance ################");
+		return;
+	}
+	
+	
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
-	int balanceN = 5;
-	float downLimit = 0.5f;
+	//int balanceN = 5;
+	//float downLimit = 0.5f;
 	
 	int clearCount = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt);
 	int puzzleNo = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
@@ -2401,7 +2411,9 @@ void KSCumberBase::applyAutoBalance()
 	std::string playcountKey = std::string("playcount_") + oss.str();
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
-	int balPt = clearCount-2;
+	
+	
+	//int balPt = clearCount-2;
 	
 	
 	CCLog("#################### autobalance ############################");
@@ -2428,14 +2440,29 @@ void KSCumberBase::applyAutoBalance()
 			m_attackPercent = m_attackPercent + (aiMax-m_attackPercent)*per;
 		}
 	
-		CCLog("#################### Change Balnace ############################");
+		CCLog("#################### Change Balnace1 ############################");
 		CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	//오토벨런싱+2 판까지는 원래 벨런스로 플레이
-	}else if(playCount>autobalanceTry && playCount<=autobalanceTry+2){
+	}else if(playCount>autobalanceTry && playCount<=autobalanceTry*2){
 		
 	//그다음부턴 50%까지 까임
 	}else{
+		float per = 1.5f-playCount/(float)(4*autobalanceTry); //1-(float)(playCount-autobalanceTry*4)/(float)autobalanceTry;
+		if(per>1)per=1;
+		if(per<0.5)per=0.5;
 		
+		//ai조절
+		if(m_aiValue>0){
+					m_aiValue = m_aiValue*per;
+		}
+		
+		//attackterm조절
+		if(m_attackPercent>0){
+			m_attackPercent = m_attackPercent*per;
+		}
+		
+		CCLog("#################### Change Balnace2 ############################");
+		CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	}
 					 
 	
