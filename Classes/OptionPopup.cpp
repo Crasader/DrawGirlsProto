@@ -22,6 +22,10 @@
 #include "TutorialScene.h"
 #include "MinsuScene.h"
 #include "KSUtil.h"
+#include "ASPopupView.h"
+#include "CommonButton.h"
+#include "hspConnector.h"
+#include "TitleRenewal.h"
 
 USING_NS_CC_EXT;
 
@@ -502,8 +506,100 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_logout)
 	{
-		LogoutPopup* t_lp = LogoutPopup::create(this, callfunc_selector(OptionPopup::popupClose));
-		addChild(t_lp, kOP_Z_popup);
+//		LogoutPopup* t_lp = LogoutPopup::create(this, callfunc_selector(OptionPopup::popupClose));
+//		addChild(t_lp, kOP_Z_popup);
+		
+		ASPopupView* t_popup = ASPopupView::create(-300);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		t_popup->setBasePosition(ccp(240, 160));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup, kOP_Z_popup);
+		
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		case_back->setPosition(ccp(0,0));
+		t_container->addChild(case_back);
+		
+		case_back->setContentSize(CCSizeMake(280, 250));
+		
+		CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		content_back->setPosition(ccp(0,25));
+		t_container->addChild(content_back);
+		
+		content_back->setContentSize(CCSizeMake(260, 180));
+		
+		CCLabelTTF* ment_label = CCLabelTTF::create("로그아웃 하시겠습니까?",	mySGD->getFont().c_str(), 15);
+		ment_label->setPosition(ccp(0,-5));
+		t_container->addChild(ment_label);
+		
+		
+		
+		CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
+		cancel_button->setPosition(ccp(-65,-95));
+		cancel_button->setFunction([=](CCObject* sender)
+								   {
+									   is_menu_enable = true;
+									   t_popup->removeFromParent();
+								   });
+		t_container->addChild(cancel_button);
+		
+		
+		CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+		ok_button->setPosition(ccp(65,-95));
+		ok_button->setFunction([=](CCObject* sender)
+							   {
+								   cancel_button->setEnabled(false);
+								   ok_button->setEnabled(false);
+								   
+								   cancel_button->setVisible(false);
+								   ok_button->setVisible(false);
+								   
+								   CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+								   CCBReader* reader = new CCBReader(nodeLoader);
+								   CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+								   loading_progress_img->setPosition(ccp(0,-95));
+								   t_container->addChild(loading_progress_img);
+								   reader->release();
+								   
+								   
+								   hspConnector::get()->logout([=](Json::Value result_data)
+															   {
+																   CCLog("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																   if(result_data["error"]["isSuccess"].asBool())
+																   {
+																	   myDSH->clear();
+																	   myDSH->resetDSH();
+																	   CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																   }
+																   else
+																   {
+																	   loading_progress_img->removeFromParent();
+																	   cancel_button->setEnabled(true);
+																	   ok_button->setEnabled(true);
+																	   
+																	   cancel_button->setVisible(true);
+																	   ok_button->setVisible(true);
+																	   
+																	   CCLog("fail logout");
+																   }
+															   });
+							   });
+		t_container->addChild(ok_button);
 	}
 	else if(tag == kOP_MT_noti)
 	{
@@ -512,8 +608,108 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_withdraw)
 	{
-		WithdrawPopup* t_wp = WithdrawPopup::create(this, callfunc_selector(OptionPopup::popupClose));
-		addChild(t_wp, kOP_Z_popup);
+//		WithdrawPopup* t_wp = WithdrawPopup::create(this, callfunc_selector(OptionPopup::popupClose));
+//		addChild(t_wp, kOP_Z_popup);
+		
+		ASPopupView* t_popup = ASPopupView::create(-300);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		t_popup->setBasePosition(ccp(240, 160));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup, kOP_Z_popup);
+		
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		case_back->setPosition(ccp(0,0));
+		t_container->addChild(case_back);
+		
+		case_back->setContentSize(CCSizeMake(280, 250));
+		
+		CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		content_back->setPosition(ccp(0,25));
+		t_container->addChild(content_back);
+		
+		content_back->setContentSize(CCSizeMake(260, 180));
+		
+		CCLabelTTF* ment1_label = CCLabelTTF::create("탈퇴시 게임을 이용하실 수 없으며",	mySGD->getFont().c_str(), 15);
+		ment1_label->setPosition(ccp(0,70));
+		t_container->addChild(ment1_label);
+		
+		CCLabelTTF* ment2_label = CCLabelTTF::create("모든 데이터가 영구적으로 삭제됩니다.",	mySGD->getFont().c_str(), 15);
+		ment2_label->setPosition(ccp(0,35));
+		t_container->addChild(ment2_label);
+		
+		CCLabelTTF* ment3_label = CCLabelTTF::create("정말 탈퇴하시겠습니까?",	mySGD->getFont().c_str(), 15);
+		ment3_label->setPosition(ccp(0,-15));
+		t_container->addChild(ment3_label);
+		
+		
+		
+		CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
+		cancel_button->setPosition(ccp(-65,-95));
+		cancel_button->setFunction([=](CCObject* sender)
+								   {
+									   is_menu_enable = true;
+									   t_popup->removeFromParent();
+								   });
+		t_container->addChild(cancel_button);
+		
+		
+		CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+		ok_button->setPosition(ccp(65,-95));
+		ok_button->setFunction([=](CCObject* sender)
+							   {
+								   cancel_button->setEnabled(false);
+								   ok_button->setEnabled(false);
+								   
+								   cancel_button->setVisible(false);
+								   ok_button->setVisible(false);
+								   
+								   CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+								   CCBReader* reader = new CCBReader(nodeLoader);
+								   CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+								   loading_progress_img->setPosition(ccp(0,-95));
+								   t_container->addChild(loading_progress_img);
+								   reader->release();
+								   
+								   Json::Value param;
+								   param["memberID"] = hspConnector::get()->myKakaoInfo["user_id"].asString();
+								   hspConnector::get()->command("dropoutuser", param, [=](Json::Value result_data)
+																{
+																	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																	{
+																		myDSH->clear();
+																		myDSH->resetDSH();
+																		CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																	}
+																	else
+																	{
+																		loading_progress_img->removeFromParent();
+																		cancel_button->setEnabled(true);
+																		ok_button->setEnabled(true);
+																		
+																		cancel_button->setVisible(true);
+																		ok_button->setVisible(true);
+																		
+																		CCLog("fail dropoutuser");
+																	}
+																});
+							   });
+		t_container->addChild(ok_button);
 	}
 	else if(tag == kOP_MT_joystickPositioning)
 	{

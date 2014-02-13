@@ -37,7 +37,13 @@ public:
 	{
 		recent_mode = t_mode;
 		
-		setPieceImg(recent_mode);
+//		setPieceImg(recent_mode);
+		CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.1f, 1.f, 0, 0, 90, 0, 0);
+		CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(NewPuzzlePiece::originalMode));
+		CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.1f, 1.f, 0, -90, 90, 0, 0);
+		CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, NULL);
+		
+		runAction(t_seq);
 	}
 	
 	void startGetPieceAnimation(function<void(CCPoint)> t_create_particle_func)

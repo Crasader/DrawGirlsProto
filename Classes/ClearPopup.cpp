@@ -346,83 +346,62 @@ bool ClearPopup::init()
 	myLog->sendLog(CCString::createWithFormat("clear_%d", stage_number)->getCString());
 	
 	
-	if(mySGD->is_ingame_before_have_stage_cards[0])
-	{
-		bronze_star = CCSprite::create("ending_star_bronze.png");
-		bronze_star->setPosition(ccp(89,170));
-		main_case->addChild(bronze_star, kZ_CP_img);
-	}
-	else
-		bronze_star = NULL;
-	
-	if(mySGD->is_ingame_before_have_stage_cards[1])
-	{
-		silver_star = CCSprite::create("ending_star_silver.png");
-		silver_star->setPosition(ccp(175,170));
-		main_case->addChild(silver_star, kZ_CP_img);
-	}
-	else
-		silver_star = NULL;
-	
-	if(mySGD->is_ingame_before_have_stage_cards[2])
-	{
-		gold_star = CCSprite::create("ending_star_gold.png");
-		gold_star->setPosition(ccp(132,174));
-		main_case->addChild(gold_star, kZ_CP_img);
-	}
-	else
-		gold_star = NULL;
-	
 	take_star_animation_node = NULL;
 	
-	if(!bronze_star && take_level == 1)
+	if(take_level == 1)
 	{
 		bronze_star = CCSprite::create("ending_star_bronze.png");
-		bronze_star->setPosition(ccp(89,170));
+		bronze_star->setPosition(ccp(132,174));
 		main_case->addChild(bronze_star, kZ_CP_img);
 		
-		bronze_star->setScale(0);
+		silver_star = NULL;
+		gold_star = NULL;
 		
+		bronze_star->setScale(0);
 		take_star_animation_node = bronze_star;
 	}
-	else if(!silver_star && take_level == 2)
+	else if(take_level == 2)
 	{
 		silver_star = CCSprite::create("ending_star_silver.png");
-		silver_star->setPosition(ccp(175,170));
+		silver_star->setPosition(ccp(132,174));
 		main_case->addChild(silver_star, kZ_CP_img);
 		
-		silver_star->setScale(0);
+		bronze_star = NULL;
+		gold_star = NULL;
 		
+		silver_star->setScale(0);
 		take_star_animation_node = silver_star;
 	}
-	else if(!gold_star && take_level == 3)
+	else if(take_level == 3)
 	{
 		gold_star = CCSprite::create("ending_star_gold.png");
 		gold_star->setPosition(ccp(132,174));
 		main_case->addChild(gold_star, kZ_CP_img);
 		
-		gold_star->setScale(0);
+		bronze_star = NULL;
+		silver_star = NULL;
 		
+		gold_star->setScale(0);
 		take_star_animation_node = gold_star;
 	}
 	
 	
-	score_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
+	score_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 12); // CCLabelBMFont::create("0", "mb_white_font.fnt");
+	score_label->setColor(ccc3(220, 190, 125));
 	score_label->setAnchorPoint(ccp(1,0.5));
 	score_label->setPosition(ccp(230,78));
-	score_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(score_label, kZ_CP_img);
 	
-	gold_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
+	gold_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 12); // CCLabelBMFont::create("0", "mb_white_font.fnt");
+	gold_label->setColor(ccc3(220, 190, 125));
 	gold_label->setAnchorPoint(ccp(1,0.5));
 	gold_label->setPosition(ccp(230,106));
-	gold_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(gold_label, kZ_CP_img);
 	
-	time_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
+	time_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 12); // CCLabelBMFont::create("0", "mb_white_font.fnt");
+	time_label->setColor(ccc3(220, 190, 125));
 	time_label->setAnchorPoint(ccp(1,0.5));
 	time_label->setPosition(ccp(230,132));
-	time_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(time_label, kZ_CP_img);
 	
 	string ok_filename;
@@ -887,9 +866,16 @@ void ClearPopup::checkRentCard()
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		t_popup->setBasePosition(ccp(240, 160));
 		
 		CCNode* t_container = CCNode::create();
 		t_popup->setContainerNode(t_container);

@@ -2390,7 +2390,23 @@ void PlayUI::continueAction ()
 	
 	myDSH->saveUserData(save_userdata_list, nullptr);
 	
-	addGameTime30Sec();
+	
+	if(countingCnt >= 130)
+	{
+		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+	}
+	
+	total_time += countingCnt;
+	
+	if(mySGD->isUsingItem(kIC_longTime))
+	{
+		countingCnt = -mySGD->getLongTimeValue();
+	}
+	else
+	{
+		countingCnt = 0;
+	}
+	
 	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	for(int i=0;i<jack_life;i++)
 	{
