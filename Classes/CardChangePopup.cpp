@@ -357,7 +357,7 @@ void CardChangePopup::setHaveCardList()
 		}
 	}
 	
-	alignHaveCardList(kCardChangeAlign_takeReverse);
+	alignHaveCardList(kCardChangeAlign_take);
 }
 
 void CardChangePopup::alignHaveCardList(CardChangeAlign t_align)

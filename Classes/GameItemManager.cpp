@@ -1290,7 +1290,7 @@ void GameItemManager::showTakeItemEffect(CCPoint t_p)
 	CCBReader* reader = new CCBReader(nodeLoader);
 	CCSprite* take_effect = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_item2.ccbi",this));
 	take_effect->setPosition(t_p);
-	take_effect->setScale(NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d));
+	take_effect->setScale(1.f/myGD->game_scale);
 	addChild(take_effect);
 	reader->getAnimationManager()->setDelegate(this);
 	

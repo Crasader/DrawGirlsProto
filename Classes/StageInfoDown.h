@@ -82,7 +82,7 @@ private:
 	virtual void registerWithTouchDispatcher ()
 	{
 		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-		pDispatcher->addTargetedDelegate(this, -200, true);
+		pDispatcher->addTargetedDelegate(this, -500, true);
 	}
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
