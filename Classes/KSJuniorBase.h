@@ -72,6 +72,7 @@ public:
 //	void assignJuniorData(Json::Value data);
 //	void applyPassiveData(const std::string& passive);
 //	void applyAutoBalance();
+	virtual void checkConfine(float dt);
 	virtual void startSpringCumber(float userdata){}
 	virtual void startAnimationNoDirection();
 	void damageReaction(float dt);

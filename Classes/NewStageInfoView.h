@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "hspConnector.h"
+#include <algorithm>
 
 USING_NS_CC;
 USING_NS_CC_EXT;
