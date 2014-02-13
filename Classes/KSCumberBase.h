@@ -123,6 +123,7 @@ public:
 	{
 		CCLog("huk hide.dfkfdjgfdsjgldfsjgldfjgldf!!!!!!!");
 	}
+	virtual void checkConfine(float dt) = 0;
 	virtual bool init();
 	
 	void startMoving();
