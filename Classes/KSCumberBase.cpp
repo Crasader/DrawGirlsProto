@@ -12,6 +12,7 @@
 #include "PlayUI.h"
 #include <chrono>
 
+class KSJuniorBase;
 template <class _Tp>
 struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
 {
@@ -2034,44 +2035,7 @@ void KSCumberBase::setGameover()
 
 void KSCumberBase::movingAndCrash( float dt )
 {
-	IntPoint mapPoint = m_mapPoint;
-	
-	// 갇혀있는지 검사함. 갇혀있으면 없앰.
-	if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
-		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
-		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
-		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
-		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty)
-	{
-		AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
-		
-		int rmCnt = 5;
-		
-		string missile_code;
-		if(mySGD->getIsUsingFriendCard())
-			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
-		else
-			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
-		
-		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
-		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-		
-		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
-		
-		myGD->communication("CP_removeSubCumber", this);
-		
-		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
-		{
-			removeFromParentAndCleanup(true);
-			caughtAnimation();
-		}
-		else
-		{
-			removeFromParentAndCleanup(true);
-		}
-		return;
-	}
+	checkConfine(dt);
 	
 	if(m_state == CUMBERSTATEFURY)
 	{
