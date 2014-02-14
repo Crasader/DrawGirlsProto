@@ -77,7 +77,7 @@ public:
 		m_black = CommonButton::getBackgroundByType(CommonButtonGray);
 		m_black->setAnchorPoint(ccp(0.5f,0.5f));
 		m_black->setPosition(ccp(0,0));
-		m_black->setContentSize(CCSizeMake(38,36));
+		m_black->setContentSize(CCSizeMake(15,15));
 		this->addChild(m_black,1);
 		
 //		m_black_left = CCSprite::create("ui_mission_back_left.png");
@@ -175,7 +175,7 @@ public:
 		if(m_isOpened==true)return;
 		
 		this->addChild(KSGradualValue<float>::create(38,218,0.3f,[=](float t){
-			m_black->setContentSize(ccp(t,36));
+			m_black->setContentSize(ccp(t,42));
 		}));
 
 //		{
@@ -216,8 +216,8 @@ public:
 		if(m_isOpened==false)return;
 		
 		
-		this->addChild(KSGradualValue<float>::create(218,38,0.3f,[=](float t){
-			m_black->setContentSize(ccp(t,36));
+		this->addChild(KSGradualValue<float>::create(218,15,0.3f,[=](float t){
+			m_black->setContentSize(ccp(t,15));
 		}));
 		
 //		{

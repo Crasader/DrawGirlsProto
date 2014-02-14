@@ -263,9 +263,14 @@ void StartSettingScene::setMain()
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		float dimmed_height = myDSH->ui_top/myDSH->screen_convert_rate;
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
 		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, dimmed_height));// /myDSH->screen_convert_rate));
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
 		t_popup->setDimmedPosition(ccp(240, 160));
 		t_popup->setBasePosition(ccp(240, 160));
 		
@@ -651,6 +656,8 @@ void StartSettingScene::itemAction(CCObject *sender)
 			{
 				if(getSelectedItemCount() >= 3)
 					addChild(ASPopupView::getCommonNoti(-210, "아이템은 최대 3개까지\n선택이 가능합니다."), kStartSettingZorder_popup);
+				else if(!is_price_usable)
+					addChild(ASPopupView::getCommonNoti(-210, item_currency + "가 부족합니다."), kStartSettingZorder_popup);
 				
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");

@@ -188,10 +188,10 @@ void StarGoldData::setStar( int t_star )
 		}
 	}
 	
-	myDSH->setIntegerForKey(kDSH_Key_savedStar, t_star);
-
-	if(star_label)
+	if(star_label && myDSH->getIntegerForKey(kDSH_Key_savedStar) != t_star)
 		star_label->setString(CCString::createWithFormat("%d", t_star)->getCString());
+	
+	myDSH->setIntegerForKey(kDSH_Key_savedStar, t_star);
 }
 
 void StarGoldData::setGoldLabel( CCLabelBMFont* t_label )
@@ -220,10 +220,10 @@ void StarGoldData::setGold( int t_gold , bool is_write/* = true */)
 		}
 	}
 	
-	myDSH->setIntegerForKey(kDSH_Key_savedGold, t_gold, is_write);
-
-	if(gold_label)
+	if(gold_label && myDSH->getIntegerForKey(kDSH_Key_savedGold) != t_gold)
 		gold_label->setString(CCString::createWithFormat("%d", t_gold)->getCString());
+	
+	myDSH->setIntegerForKey(kDSH_Key_savedGold, t_gold, is_write);
 }
 
 void StarGoldData::setFriendPointLabel(CCLabelBMFont* t_label)
@@ -252,10 +252,10 @@ void StarGoldData::setFriendPoint(int t_point)
 		}
 	}
 	
-	myDSH->setIntegerForKey(kDSH_Key_savedFriendPoint, t_point);
-	
-	if(friend_point_label)
+	if(friend_point_label && myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint) != t_point)
 		friend_point_label->setString(CCString::createWithFormat("%d", t_point)->getCString());
+	
+	myDSH->setIntegerForKey(kDSH_Key_savedFriendPoint, t_point);
 }
 
 int StarGoldData::getKeepGold()

@@ -116,6 +116,41 @@ bool Maingame::init()
 	myMS = MapScanner::create();
 	game_node->addChild(myMS, myMSZorder);
 	
+	if(mySD->getSilType() == 1)
+	{
+		if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
+		{
+			myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
+			CCNode* exit_target = this;
+			exit_target->onExit();
+			
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			ControlTutorialContent* t_container = ControlTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																				 {
+																					 exit_target->onEnter();
+																					 
+																					 CCMoveBy* t_move = CCMoveBy::create(0.5f, ccp(-480,0));
+																					 CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+																					 CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
+																					 t_popup->runAction(t_seq);
+																					 
+																					 //																					 t_popup->removeFromParent();
+																				 });
+			t_popup->setContainerNode(t_container);
+			exit_target->getParent()->addChild(t_popup);
+		}
+	}
+	
 	return true;
 }
 
@@ -158,7 +193,7 @@ void Maingame::onEnterTransitionDidFinish()
 	gamenode_moving_direction = kGNMD_up;
 	
 	touch_img = CCSprite::create("touch_before_start.png");
-	touch_img->setPosition(ccp(240,myDSH->ui_center_y));
+	touch_img->setPosition(ccp(240,myDSH->ui_center_y-50));
 	addChild(touch_img, myPMZorder);
 	
 	CCFadeTo* fade1 = CCFadeTo::create(1.f, 0);
@@ -448,43 +483,8 @@ void Maingame::finalSetting()
 		sub_thumbs->addObject(sub_position_img);
 	}
 	
-	if(mySD->getSilType() == 1)
-	{
-		if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
-		{
-			myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
-			CCNode* exit_target = this;
-			exit_target->onExit();
-			
-			ASPopupView* t_popup = ASPopupView::create(-200);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-			
-			ControlTutorialContent* t_container = ControlTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
-																				 {
-																					 mControl->isStun = false;
-																					 exit_target->onEnter();
-																					 
-																					 CCMoveBy* t_move = CCMoveBy::create(0.5f, ccp(-480,0));
-																					 CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
-																					 CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
-																					 t_popup->runAction(t_seq);
-																					 
-//																					 t_popup->removeFromParent();
-																				 });
-			t_popup->setContainerNode(t_container);
-			exit_target->getParent()->addChild(t_popup);
-		}
-	}
-	else
-	{
+//	else
+//	{
 		Json::Reader reader;
 		Json::Value root;
 		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
@@ -518,8 +518,6 @@ void Maingame::finalSetting()
 			
 			PatternTutorialContent* t_container = PatternTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
 																				 {
-																					 mControl->isStun = false;
-																					 
 																					 for(int i=0;i<pattern_code.size();i++)
 																						 myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, pattern_code[i], true);
 																					 
@@ -529,15 +527,13 @@ void Maingame::finalSetting()
 			t_popup->setContainerNode(t_container);
 			exit_target->getParent()->addChild(t_popup);
 		}
-	}
+//	}
 }
 
 void Maingame::startScene()
 {
 	AudioEngine::sharedInstance()->playSound("sound_back_maingame.mp3", true);
 	AudioEngine::sharedInstance()->preloadEffectScene("Maingame");
-	
-	setControlJoystickButton();
 	
 	startCounting();
 }
@@ -563,7 +559,6 @@ void Maingame::checkAcceptChallenge()
 		AcceptChallengeAniContent* t_container = AcceptChallengeAniContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
 																				   {
 																					   checkFriendCard();
-																					   mControl->isStun = false;
 																					   exit_target->onEnter();
 																					   t_popup->removeFromParent();
 																				   }, hspConnector::get()->getKakaoProfileURL(), hspConnector::get()->getKakaoNickname(),
@@ -598,13 +593,15 @@ void Maingame::checkFriendCard()
 		RentCardAniContent* t_container = RentCardAniContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
 																			 {
 																				 myUI->setUseFriendCard();
-																				 mControl->isStun = false;
 																				 exit_target->onEnter();
 																				 t_popup->removeFromParent();
 																			 });
 		t_popup->setContainerNode(t_container);
 		exit_target->getParent()->addChild(t_popup);
 	}
+	
+	setControlJoystickButton();
+	startControl();
 }
 
 void Maingame::startCounting()
@@ -628,7 +625,6 @@ void Maingame::startCounting()
 	countingCnt = 0;
 	
 	myJack->isStun = true;
-	startControl();
 }
 
 void Maingame::counting()
@@ -773,7 +769,8 @@ void Maingame::onEnter()
 void Maingame::onExit()
 {
 	touchEnd();
-	((ControlJoystickButton*)mControl)->invisibleControl();
+	if(mControl)
+		((ControlJoystickButton*)mControl)->invisibleControl();
 	CCLayer::onExit();
 }
 
@@ -798,11 +795,14 @@ void Maingame::keyBackClicked()
 void Maingame::touchEnd()
 {
 	myJack->isStun = true;
-	mControl->isStun = true;
+	if(mControl)
+	{
+		mControl->isStun = true;
 	//		mControl->setTouchEnabled(false);
 //	((ControlJoystickButton*)mControl)->stopMySchedule();
-	if(mControl->mType == kCT_Type_Joystick_button)
-		myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
+		if(mControl->mType == kCT_Type_Joystick_button)
+			myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
+	}
 	myJack->changeDirection(directionStop, directionStop);
 	if(myJack->getJackState() == jackStateDrawing)
 	{

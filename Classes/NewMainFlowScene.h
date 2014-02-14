@@ -51,9 +51,11 @@ public:
     CREATE_FUNC(NewMainFlowScene);
 	
 	HeartTime* heart_time;
+	
+	virtual ~NewMainFlowScene();
 private:
 	
-	int is_unlock_puzzle;
+//	int is_unlock_puzzle;
 	void endUnlockAnimation();
 	
 	void heartRefresh();
@@ -67,6 +69,8 @@ private:
 	bool clear_is_first_perfect;
 	
 	CCSprite* unlock_cover;
+	
+	int open_puzzle_number;
 	
 	bool is_menu_enable;
 	
@@ -105,6 +109,8 @@ private:
 	
 	void showClearPopup();
 	void hideClearPopup();
+	
+	void endChangeMode(CCObject* sender);
 	
 	int clear_found_puzzle_idx;
 	

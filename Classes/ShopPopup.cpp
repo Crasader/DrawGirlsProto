@@ -877,6 +877,8 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 		loading_layer = NULL;
 	}
 	
+	is_menu_enable = true;
+	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		CCLog("userdata was save to server");
@@ -965,6 +967,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1004,9 +1007,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
-		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_content2)
 	{
@@ -1046,6 +1049,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1085,9 +1089,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
-		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_content3)
 	{
@@ -1127,6 +1131,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1166,9 +1171,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
-		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_content4)
 	{
@@ -1208,6 +1213,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1247,9 +1253,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
-		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_content5)
 	{
@@ -1289,6 +1295,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1328,9 +1335,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
-		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_content6)
 	{
@@ -1370,6 +1377,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1409,9 +1417,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 			{
 				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
+				is_menu_enable = true;
 			}
 		}
-		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_cardHigh)
 	{

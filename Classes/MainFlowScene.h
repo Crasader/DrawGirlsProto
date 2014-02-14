@@ -39,6 +39,9 @@ public:
     CREATE_FUNC(MainFlowScene);
 	
 	HeartTime* heart_time;
+	
+	virtual ~MainFlowScene();
+	
 private:
 	
 //	int is_unlock_puzzle;

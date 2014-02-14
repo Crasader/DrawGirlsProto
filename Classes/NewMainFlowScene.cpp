@@ -226,9 +226,16 @@ bool NewMainFlowScene::init()
 		{
 			ASPopupView* t_popup = ASPopupView::create(-200);
 			
-			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			float height_value = 320.f;
+			if(myDSH->screen_convert_rate < 1.f)
+				height_value = 320.f/myDSH->screen_convert_rate;
+			
+			if(height_value < myDSH->ui_top)
+				height_value = myDSH->ui_top;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, 160));
+			t_popup->setBasePosition(ccp(240, 160));
 			
 			NoticeContent* t_container = NoticeContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
 															   {
@@ -563,6 +570,13 @@ void NewMainFlowScene::showSuccessPuzzleEffect()
 
 void NewMainFlowScene::endSuccessPuzzleEffect()
 {
+	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, clear_found_puzzle_idx+1);
+	if(mySIL->addImage(CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, "original")->getCString()))
+	{
+		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+		pieceAction(start_stage);
+	}
+	
 	is_menu_enable = true;
 	puzzle_table->setTouchEnabled(true);
 //	mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
@@ -740,7 +754,14 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 	if(screen_scale_x < 1.f)
 		screen_scale_x = 1.f;
 	
-	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+	float height_value = 320.f;
+	if(myDSH->screen_convert_rate < 1.f)
+		height_value = 320.f/myDSH->screen_convert_rate;
+	
+	if(height_value < myDSH->ui_top)
+		height_value = myDSH->ui_top;
+	
+	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));
 	
 	CCNode* t_container = CCNode::create();
 	t_popup->setContainerNode(t_container);
@@ -1090,11 +1111,11 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 		cell->setTag(puzzle_number);
 		
-		if(puzzle_number == is_unlock_puzzle)
-		{
-			if(NSDS_GI(puzzle_number, kSDS_PZ_point_i) <= 0 || NSDS_GI(puzzle_number, kSDS_PZ_ticket_i) <= 0)
-				myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
-		}
+//		if(puzzle_number == is_unlock_puzzle)
+//		{
+//			if(NSDS_GI(puzzle_number, kSDS_PZ_point_i) <= 0 || NSDS_GI(puzzle_number, kSDS_PZ_ticket_i) <= 0)
+//				myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+//		}
 		
 		vector<PuzzlePiecePath> puzzle_path = puzzle_piece_path[puzzle_number];
 		int puzzle_path_idx = 0;
@@ -1319,6 +1340,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				CCSprite* s_change_mode = CCSprite::create("puzzle_change_mode.png");
 				s_change_mode->setColor(ccGRAY);
 				
+				
 				CCMenuItem* change_mode_item = CCMenuItemSprite::create(n_change_mode, s_change_mode, this, menu_selector(NewMainFlowScene::menuAction));
 				change_mode_item->setTag(kNewMainFlowMenuTag_changeMode);
 				
@@ -1328,7 +1350,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				
 				ScrollMenu* change_mode_menu = ScrollMenu::create(change_mode_item, NULL);
 				change_mode_menu->setPosition(ccp(-puzzle_width_half+side_width+piece_width_count*piece_size, -puzzle_height_half+side_width+(piece_size*menu_y)-piece_size));
-				change_mode_menu->setTag(puzzle_number);
+				change_mode_menu->setTag(idx);
 				puzzle_node->addChild(change_mode_menu);
 				
 				if(is_selected_stage_puzzle)
@@ -1438,6 +1460,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				puzzle_open_button->setPosition(CCPointZero);
 				puzzle_open_button->setFunction([=](CCObject* sender)
 												{
+													open_puzzle_number = puzzle_number;
 													StageListDown* t_sld = StageListDown::create(this, callfunc_selector(NewMainFlowScene::puzzleLoadSuccess), puzzle_number);
 													addChild(t_sld, kNewMainFlowZorder_popup);
 												});
@@ -1678,6 +1701,9 @@ void NewMainFlowScene::puzzleLoadSuccess()
 	CCPoint t_point = puzzle_table->getContentOffset();
 	puzzle_table->reloadData();
 	puzzle_table->setContentOffset(t_point);
+	
+	int start_stage = NSDS_GI(open_puzzle_number, kSDS_PZ_startStage_i);
+	pieceAction(start_stage);
 }
 
 void NewMainFlowScene::pieceAction(int t_stage_number)
@@ -1825,7 +1851,7 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 		
 		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
 		CCSprite* stencil_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 78, 150));
-		stencil_node->setPosition(ccp(336,229+160.f*(screen_scale_y-1.f)));
+		stencil_node->setPosition(ccp(294,229+160.f*(screen_scale_y-1.f)));
 		CCClippingNode* cliping_node = CCClippingNode::create(stencil_node);
 		float change_scale = 1.f;
 		CCPoint change_origin = ccp(0,0);
@@ -1843,17 +1869,17 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 		t_suction->addChild(cliping_node);
 		
 		CCSprite* inner_img = CCSprite::create("candy_popup.png");
-		inner_img->setPosition(ccp(336,229+160.f*(screen_scale_y-1.f)+150));
+		inner_img->setPosition(ccp(294,229+160.f*(screen_scale_y-1.f)+150));
 		cliping_node->addChild(inner_img);
 		
-		CCMoveTo* t_move_down = CCMoveTo::create(0.3f, ccp(336,229+160.f*(screen_scale_y-1.f)));
+		CCMoveTo* t_move_down = CCMoveTo::create(0.3f, ccp(294,229+160.f*(screen_scale_y-1.f)));
 		inner_img->runAction(t_move_down);
 		
 		close_friend_point_action = [=](){
 			t_suction->target_touch_began = NULL;
 			t_suction->delegate_touch_began = NULL;
 			
-			CCMoveTo* t_move_up = CCMoveTo::create(0.3f, ccp(336,229+160.f*(screen_scale_y-1.f)+150));
+			CCMoveTo* t_move_up = CCMoveTo::create(0.3f, ccp(294,229+160.f*(screen_scale_y-1.f)+150));
 			CCCallFunc* t_call = CCCallFunc::create(t_suction, callfunc_selector(CCLayer::removeFromParent));
 			CCSequence* t_seq = CCSequence::create(t_move_up, t_call, NULL);
 			inner_img->runAction(t_seq);
@@ -1960,14 +1986,45 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 	}
 	else if(tag == kNewMainFlowMenuTag_changeMode)
 	{
-		int t_puzzle_number = ((CCNode*)sender)->getParent()->getTag();
+		CCNode* target_menu = ((CCNode*)sender)->getParent();
+		int t_idx = target_menu->getTag();
+		puzzle_piece_mode[t_idx] = (puzzle_piece_mode[t_idx]+1)%(kNewPuzzlePieceMode_thumbnail+1);
 		
-		puzzle_piece_mode[t_puzzle_number-1] = (puzzle_piece_mode[t_puzzle_number-1]+1)%(kNewPuzzlePieceMode_thumbnail+1);
+		CCTableViewCell* t_cell = puzzle_table->cellAtIndex(t_idx);
 		
-		puzzle_table->updateCellAtIndex(t_puzzle_number-1);
-		
-		is_menu_enable = true;
+		if(t_cell)
+		{
+			CCNode* t_puzzle_node = t_cell->getChildByTag(1);
+			
+			int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_idx+1);
+			
+			int t_start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
+			int t_stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
+			
+			for(int i=t_start_stage;i<t_start_stage+t_stage_count;i++)
+			{
+				NewPuzzlePiece* t_piece = (NewPuzzlePiece*)t_puzzle_node->getChildByTag(i);
+				t_piece->turnPiece((NewPuzzlePieceMode)puzzle_piece_mode[t_idx]);
+			}
+			
+			target_menu->setVisible(false);
+			
+			CCDelayTime* t_delay = CCDelayTime::create(0.3f);
+			CCCallFuncO* t_call = CCCallFuncO::create(this, callfuncO_selector(NewMainFlowScene::endChangeMode), target_menu);
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			target_menu->runAction(t_seq);
+			
+//			puzzle_table->updateCellAtIndex(t_puzzle_number-1);
+		}
+		else
+			is_menu_enable = true;
 	}
+}
+
+void NewMainFlowScene::endChangeMode(CCObject* sender)
+{
+	((CCNode*)sender)->setVisible(true);
+	is_menu_enable = true;
 }
 
 void NewMainFlowScene::successEventListDown()
@@ -2358,6 +2415,11 @@ void NewMainFlowScene::tutorialCardSettingClose()
 void NewMainFlowScene::closeFriendPoint()
 {
 	close_friend_point_action();
+}
+
+NewMainFlowScene::~NewMainFlowScene()
+{
+	hspConnector::get()->removeTarget(this);
 }
 
 void NewMainFlowScene::alertAction(int t1, int t2)

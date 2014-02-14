@@ -72,9 +72,9 @@ private:
 	CCMenu* ok_menu;
 	CCMenu* replay_menu;
 	
-	CCLabelBMFont* score_label;
-	CCLabelBMFont* gold_label;
-	CCLabelBMFont* time_label;
+	CCLabelTTF* score_label;
+	CCLabelTTF* gold_label;
+	CCLabelTTF* time_label;
 	
 	bool is_rank_changed;
 	int before_my_rank;

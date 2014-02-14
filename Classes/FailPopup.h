@@ -68,9 +68,9 @@ private:
 	CCMenu* replay_menu;
 	//	CCMenu* help_menu;
 	
-	CCLabelBMFont* score_label;
-	CCLabelBMFont* gold_label;
-	CCLabelBMFont* time_label;
+	CCLabelTTF* score_label;
+	CCLabelTTF* gold_label;
+	CCLabelTTF* time_label;
 //
 //	CCSprite* friend_point_popup;
 //	void closeFriendPointPopup();
