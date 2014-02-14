@@ -1333,7 +1333,11 @@ void KSCumberBase::cumberAttack(float dt)
 	m_reAttackCnt++;
 	m_furyCnt++;
 	
-	if(m_slience || myGD->Fcommunication("UI_getMapPercentage") < 0.03f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
+	//if(m_slience || myGD->Fcommunication("UI_getMapPercentage") < 0.05f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
+	//{
+		//return;
+	//}
+	if(m_slience || m_cumberTimer < 5.f) // 침묵 상태거나 시작한지 5초 이하면 공격 ㄴㄴ
 	{
 		return;
 	}
@@ -2174,6 +2178,7 @@ void KSCumberBase::onStartGame()
 {
 	m_isStarted = true;
 	schedule(schedule_selector(ThisClassType::cumberAttack));
+	schedule(schedule_selector(ThisClassType::timeMeasure));
 }
 
 void KSCumberBase::lightSmaller()

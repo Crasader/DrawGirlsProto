@@ -857,6 +857,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	_menu->addChild(sendBtn,2);
 	
 	CCSprite* decoInfo = CCSprite::create("rank_cardinfo.png");
+	decoInfo->setVisible(false);  // 정보보기 버튼 없앰. 
 	decoInfo->setPosition(ccp(190, 20));
 	cell->addChild(decoInfo, kRP_Z_back + 1);
 

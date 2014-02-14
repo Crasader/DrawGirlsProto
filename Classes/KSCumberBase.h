@@ -112,9 +112,8 @@ public:
 	KSCumberBase() : m_normalMovement(RANDOM_TYPE), m_drawMovement(FOLLOW_TYPE),
 	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0), /// 초당 변수만큼 충돌시 스케일 줄임.
 	m_castingCancelCount(0), m_isStarted(false), m_healingFrameCount(0),
-	m_damagedFrames(500), m_slience(false), m_adderCnt(0), m_reAttackCnt(0), m_furyCnt(0)
-	
-//		m_state(CUMBERSTATESTOP)
+	m_damagedFrames(500), m_slience(false), m_adderCnt(0), m_reAttackCnt(0), m_furyCnt(0),
+	m_cumberTimer(0)
 	{
 		
 	}
@@ -163,6 +162,10 @@ public:
 	
 	virtual void cumberAttack(float dt);
 	virtual void followProcess(float dt);
+	virtual void timeMeasure(float dt)
+	{
+		m_cumberTimer += 1/60.f;
+	}
 	void speedAdjustment(float dt);
 	void selfHealing(float dt);
 	void cumberFrame(float dt);
@@ -275,6 +278,7 @@ public:
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
 	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
 protected:
+	float m_cumberTimer;
 	//선그을때 공격하는걸 제한하는 카운터
 	int m_adderCnt;
 	//재공격카운터
@@ -437,7 +441,6 @@ protected:
 	}m_snake;
 	
 	
-//	LastPattern m_lastPattern;
 	CC_SYNTHESIZE(LastPattern, m_lastPattern, LastPattern);
 };
 

@@ -1841,6 +1841,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 	setPosition(myPosition);
 	
 	ticking_main = KS::loadCCBI<CCSprite*>(this, "pattern_timebomb1.ccbi").first;
+	ticking_main->setScale(0.5f);
 	//		ticking_main->setVisible(false);
 	ticking_main->setAnchorPoint(ccp(0.5f, 0.5f));
 	addChild(ticking_main);
@@ -1867,17 +1868,17 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 }
 void TickingTimeBomb::initParticle ()
 {
-	auto bomb = KS::loadCCBI<CCSprite*>(this, "fx_bomb5.ccbi");
+	auto bomb = KS::loadCCBI<CCSprite*>(this, "bomb_8_8.ccbi");
 	bomb.first->setPosition(CCPointZero);
 	addChild(bomb.first);
 //	addChild(KSTimer::create(2.0f, [=](){
 //		bomb.first->removeFromParent();})
 //					 ); // 1.3 초 후에 사라짐.
 }
-SightOut * SightOut::create ()
+SightOut * SightOut::create (int totalFrame)
 {
 	SightOut* t_so = new SightOut();
-	t_so->myInit();
+	t_so->myInit(totalFrame);
 	t_so->autorelease();
 	return t_so;
 }
@@ -1905,7 +1906,7 @@ void SightOut::myAction ()
 		setOpacity(opa_value);
 	}
 	
-	if(ingFrame >= 300)
+	if(ingFrame >= totalFrame)
 	{
 		stopAction();
 	}
@@ -1915,9 +1916,10 @@ void SightOut::stopAction ()
 	unschedule(schedule_selector(SightOut::myAction));
 	removeFromParentAndCleanup(true);
 }
-void SightOut::myInit ()
+void SightOut::myInit (int _totalFrame)
 {
 	initWithFile("sight_out.png");
+	totalFrame = _totalFrame;
 	setScale(0);
 	opa_value = 255;
 }
@@ -1948,11 +1950,11 @@ void BlindDrop::myAction ()
 {
 	ingFrame++;
 	
-	if(ingFrame <= blindFrame)
-	{
-		oilImg->setOpacity(oilImg->getOpacity()-(200/(blindFrame/2)));
-	}
-	if(ingFrame >= blindFrame)
+	//if(ingFrame <= blindFrame)
+	//{
+		//oilImg->setOpacity(oilImg->getOpacity()-(200/(blindFrame/2)));
+	//}
+	if(ingFrame + 1 == blindFrame)
 	{
 		stopAction();
 	}
@@ -1974,7 +1976,7 @@ void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_bli
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	reader = new CCBReader(nodeLoader);
-	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi",this));
+	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi", this));
 	addChild(oilImg);
 	oilImg->setScale(m_scale);
 	setPosition(t_fp); // t_sp
@@ -3313,7 +3315,6 @@ void CloudBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Valu
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 	
 	addChild(batchNode);
-	
 }
 void CloudBomb::setTwoStep ()
 {
@@ -3633,7 +3634,14 @@ void PoisonLine::myAction ()
 void PoisonLine::stopMyAction ()
 {
 	unschedule(schedule_selector(PoisonLine::myAction));
-	getParent()->removeFromParentAndCleanup(true);
+	
+	line->setEmissionRate(0.f);	
+	addChild(KSGradualValue<float>::create(255.f, 0.f, 0.4f, [=](float t){
+		//KS::setOpacity(line, t);
+	},
+	[=](float t){
+		getParent()->removeFromParentAndCleanup(true);
+	}));
 	//		removeFromParentAndCleanup(true);
 }
 void PoisonLine::myInit (IntPoint t_sp, int frame)
@@ -3642,8 +3650,9 @@ void PoisonLine::myInit (IntPoint t_sp, int frame)
 	mapPoint = t_sp;
 	
 	//		initWithFile("poison_line.png");
-	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_pollution4.ccbi");
-	CCSprite* line = ret.first;
+	auto ret = KS::loadCCBI<CCParticleSystemQuad*>(this, "fx_pollution5.ccbi");
+	line = ret.first;
+	line->setPositionType(kCCPositionTypeGrouped);
 	addChild(line);
 	CCPoint myPosition = ccp((t_sp.x-1)*pixelSize+1, (t_sp.y-1)*pixelSize+1);
 	setPosition(myPosition);
@@ -3669,14 +3678,20 @@ void PoisonDrop::myAction ()
 	
 	if(ingFrame <= movingFrame)
 	{
-		CCPoint afterPosition = ccpAdd(getPosition(), subPosition);
-		setPosition(afterPosition);
+		CCPoint afterPosition = ccpAdd(dropImg->getPosition(), subPosition);
+		dropImg->setPosition(afterPosition);
 		
 		if(ingFrame == movingFrame)
 		{
 			AudioEngine::sharedInstance()->playEffect("sound_threecusion_bomb.mp3",false);
 			initParticle();
-			
+			addChild(KSGradualValue<float>::create(255, 0, 0.4f, [=](float t){
+				if(targetImg){
+					KS::setOpacity(targetImg, t);
+				}
+			},
+			[=](float t){
+			}));
 			IntPoint basePoint = IntPoint((afterPosition.x-1)/pixelSize + 1, (afterPosition.y-1)/pixelSize + 1);
 			
 			for(int i=-m_area;i<=m_area;i++)
@@ -3704,15 +3719,11 @@ void PoisonDrop::myAction ()
 }
 void PoisonDrop::initParticle ()
 {
-	
-	
-	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_bomb1.ccbi");
+	auto ret = KS::loadCCBI<CCSprite*>(this, "bomb_8_9.ccbi");
 	CCSprite* particle = ret.first;
 	
-	
-	particle->setPosition(CCPointZero);
 	//		particle->setPosVar(CCPointZero);
-	addChild(particle);
+	dropImg->addChild(particle);
 }
 void PoisonDrop::stopAction ()
 {
@@ -3732,6 +3743,12 @@ void PoisonDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area
 {
 	m_area = area;
 	m_totalFrame = totalframe;
+	targetImg = KS::loadCCBI<CCSprite*>(this, "target5.ccbi").first;
+	targetImg->setPosition(t_fp);
+	addChild(targetImg);
+
+
+
 	subPosition = ccpSub(t_fp, t_sp);
 	subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
 	movingFrame = t_movingFrame;
@@ -3739,7 +3756,7 @@ void PoisonDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area
 	dropImg = KS::loadCCBI<CCSprite*>(this, "pattern_radioactivity_1.ccbi").first;
 	addChild(dropImg);
 	
-	setPosition(t_sp);
+	dropImg->setPosition(t_sp);
 }
 ReflectionLazer * ReflectionLazer::create (CCPoint t_sp, CCPoint t_fp, int t_frame, int t_type)
 {
