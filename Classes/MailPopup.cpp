@@ -230,7 +230,14 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 										if(screen_scale_x < 1.f)
 											screen_scale_x = 1.f;
 										
-										t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+										float height_value = 320.f;
+										if(myDSH->screen_convert_rate < 1.f)
+											height_value = 320.f/myDSH->screen_convert_rate;
+										
+										if(height_value < myDSH->ui_top)
+											height_value = myDSH->ui_top;
+										
+										t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));
 										
 										CCNode* open_puzzle_container = CCNode::create();
 										t_popup->setContainerNode(open_puzzle_container);
@@ -1012,18 +1019,18 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 													 [=](CCObject* e) {
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 int mailNo = mail["no"].asInt();
-
+														 
 														 mySGD->setRemoveMessageMailNo(mailNo);
 														 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
 														 mySGD->setAcceptChallengeTarget(mail["friendID"].asString(), mail["nickname"].asString(),
-																														 contentObj["score"].asFloat(), contentObj["replaydata"], mail["profile"].asString());
+																														 contentObj["score"].asFloat(), contentObj["replaydata"], contentObj["profile"].asString());
 														 mySD->setSilType(contentObj["challengestage"].asInt());
 														 mySGD->setIsAcceptChallenge(true);
 														 // ST 받고 성공시 창 띄움.. & sender->removeFromParent();
 														 addChild(StageInfoDown::create
 																			(this,
 																			 callfunc_selector(ThisClassType::onReceiveStageSuccess),
-																			 this, callfunc_selector(ThisClassType::onReceiveStageFail)));
+																			 this, callfunc_selector(ThisClassType::onReceiveStageFail)), kMP_Z_popup);
 														 CCLog("ok!!");
 													 });
 
@@ -1165,7 +1172,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																																 addChild(StageInfoDown::create
 																																					(this,
 																																					 callfunc_selector(ThisClassType::onReceiveStageSuccess),
-																																					 this, callfunc_selector(ThisClassType::onReceiveStageFail)));
+																																					 this, callfunc_selector(ThisClassType::onReceiveStageFail)), kMP_Z_popup);
 																																 //																									 Json::Value p;
 																																 //																									 int mailNo = mail["no"].asInt();
 																																 //																									 p["no"] = mailNo;
@@ -1432,8 +1439,15 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																										 float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 																										 if(screen_scale_x < 1.f)
 																											 screen_scale_x = 1.f;
+																										 
+																										 float height_value = 320.f;
+																										 if(myDSH->screen_convert_rate < 1.f)
+																											 height_value = 320.f/myDSH->screen_convert_rate;
+																										 
+																										 if(height_value < myDSH->ui_top)
+																											 height_value = myDSH->ui_top;
 
-																										 t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+																										 t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));
 
 																										 CCNode* open_puzzle_container = CCNode::create();
 																										 t_popup->setContainerNode(open_puzzle_container);
@@ -1763,6 +1777,13 @@ void MailPopup::onReceiveStageSuccess()
 }
 void MailPopup::onReceiveStageFail()
 {
+	if(mySGD->getIsAcceptChallenge())
+		mySGD->setIsAcceptChallenge(false);
+	if(mySGD->getIsMeChallenge())
+		mySGD->setIsMeChallenge(false);
+	if(mySGD->getIsAcceptHelp())
+		mySGD->setIsAcceptHelp(false);
+	
 	mySGD->setRemoveMessageMemberId(0);
 	mySGD->setRemoveMessageMailNo(0);
 //	removeFromParent();

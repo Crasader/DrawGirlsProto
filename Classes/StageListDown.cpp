@@ -363,17 +363,17 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 			CCBReader* reader = new CCBReader(nodeLoader);
 			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-			loading_progress_img->setPosition(ccp(240,50));
+			loading_progress_img->setPosition(ccp(240,38));
 			addChild(loading_progress_img, kSLD_Z_content);
 			reader->release();
 			
 			download_version = result_data["version"].asInt();
-			state_ment->setString("퍼즐 이미지를 다운로드 합니다.");
+			state_ment->setString("");//퍼즐 이미지를 다운로드 합니다.");
 			state_ment->setPosition(ccp(240,80));
 			ing_download_cnt = 1;
 			ing_download_per = 0;
 			download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString(), "etc_font.fnt");
-			download_state->setPosition(ccp(240,50));
+			download_state->setPosition(ccp(240,38));
 			addChild(download_state, kSLD_Z_content);
 			is_downloading = true;
 			startDownload();
@@ -666,7 +666,7 @@ void StageListDown::successAction()
 			}
 			
 			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
-			state_ment->setString("퍼즐 이미지 다운로드 완료.");
+			state_ment->setString("");//퍼즐 이미지 다운로드 완료.");
 			(target_success->*delegate_success)();
 			removeFromParent();
 		}
@@ -690,7 +690,7 @@ void StageListDown::successAction()
 	{
 		SDS_SS(kSDF_cardInfo, sf_list[ing_download_cnt-df_list.size()-1].key, sf_list[ing_download_cnt-df_list.size()-1].img, false);
 		
-		state_ment->setString("카드 섬네일 만드는 중...");
+		state_ment->setString("");//카드 섬네일 만드는 중...");
 		for(int i=0;i<cf_list.size();i++)
 		{
 			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
@@ -726,7 +726,7 @@ void StageListDown::successAction()
 		}
 		
 		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
-		state_ment->setString("퍼즐 이미지 다운로드 완료.");
+		state_ment->setString("");//퍼즐 이미지 다운로드 완료.");
 		(target_success->*delegate_success)();
 		removeFromParent();
 	}

@@ -12,6 +12,7 @@
 #include "PlayUI.h"
 #include <chrono>
 
+class KSJuniorBase;
 template <class _Tp>
 struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
 {
@@ -459,9 +460,23 @@ void KSCumberBase::followMoving(float dt)
 			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
 			CCLog("aiValue : %d", this->getAiValue());
 			t = ip2ccp(myGD->getJackPoint()) - getPosition();
-			float varRad = m_well512.GetFloatValue(deg2Rad(-30), deg2Rad(+30));
-			dx = m_speed * cos(atan2(t.y, t.x) + varRad);
-			dy = m_speed * sin(atan2(t.y, t.x) + varRad);
+			float goalDegree = rad2Deg(atan2(t.y, t.x));
+			float deltaDegree = (goalDegree - m_follow.followDegree)/1.f;
+			//m_follow.followDegree += deltaDegree;
+			CCLog("%f", deltaDegree);
+			m_follow.followDegree += clampf(deltaDegree, -5, 5);
+			//m_fo
+			//if(deltaDegree < 0)
+			//{
+				//m_follow.followDegree += MAX(-3, deltaDegree);
+			//}
+			//else
+			//{
+				//m_follow.followDegree += MIN(3, deltaDegree);
+			//}	
+			//float varRad = deg2Rad(m_follow.followDegree);
+			dx = m_speed * cos(deg2Rad(m_follow.followDegree)) * 2.f;
+			dy = m_speed * sin(deg2Rad(m_follow.followDegree)) * 2.f;
 			//ProbSelector ps = {this->getAiValue(), 125 - this->getAiValue()};
 			//int result = ps.getResult();
 			//if(result == 0)
@@ -528,15 +543,24 @@ void KSCumberBase::followMoving(float dt)
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				if(myGD->getJackState() == jackStateNormal)
+				{
+					unAggroExec();
+				}
 			}
 			else if(collisionCode == kCOLLISION_MAP)
 			{
 				m_crashCount++;
 				onceOutlineAndMapCollision = true;
-				m_follow.lastMapCollisionTime = m_follow.timer;
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
+				m_follow.lastMapCollisionTime = m_follow.timer;
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				if(myGD->getJackState() == jackStateNormal)
+				{
+					unAggroExec();
+					m_follow.lastMapCollisionTime = m_follow.timer;
+				}
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
@@ -547,6 +571,10 @@ void KSCumberBase::followMoving(float dt)
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				if(myGD->getJackState() == jackStateNormal)
+				{
+					unAggroExec();
+				}
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
@@ -572,7 +600,7 @@ void KSCumberBase::followMoving(float dt)
 				validPosition = true;
 			}
 		}
-		else
+		else // if(m_state == CUMBERSTATEFURY)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
@@ -1305,7 +1333,11 @@ void KSCumberBase::cumberAttack(float dt)
 	m_reAttackCnt++;
 	m_furyCnt++;
 	
-	if(m_slience || myGD->Fcommunication("UI_getMapPercentage") < 0.05f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
+	//if(m_slience || myGD->Fcommunication("UI_getMapPercentage") < 0.05f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
+	//{
+		//return;
+	//}
+	if(m_slience || m_cumberTimer < 5.f) // 침묵 상태거나 시작한지 5초 이하면 공격 ㄴㄴ
 	{
 		return;
 	}
@@ -1327,7 +1359,7 @@ void KSCumberBase::cumberAttack(float dt)
 				crashAttack = true;
 				distanceFury = true;
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
-				m_furyCnt = -400;
+				m_furyCnt = -240;
 
 				//myGD->communication("Main_showTextMessage", std::string("거리 분노룰.."));
 
@@ -1387,9 +1419,10 @@ void KSCumberBase::cumberAttack(float dt)
 		if(myGD->getJackState()==jackStateDrawing){
 			
 			m_adderCnt++;
+			float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
 			
-			//선긋기 시작한지 3초이후 부터 공격확률을 높임
-			if(m_adderCnt > 180){
+			//선긋기 시작한지 3초이후 && 멀리떨어지면 공격확률을 높임
+			if(m_adderCnt > 180 && distance > m_furyRule.userDistance / 2.f){
 				attackProb += 0.1;
 			}
 		}else{
@@ -1617,7 +1650,7 @@ void KSCumberBase::cumberAttack(float dt)
 						attackBehavior(attackCode);
 						
 						//한번 공격후 3초간 재공격 하지 않음.
-						m_reAttackCnt = -180;
+						m_reAttackCnt = -120;
 					}
 				}
 			}
@@ -2006,44 +2039,7 @@ void KSCumberBase::setGameover()
 
 void KSCumberBase::movingAndCrash( float dt )
 {
-	IntPoint mapPoint = m_mapPoint;
-	
-	// 갇혀있는지 검사함. 갇혀있으면 없앰.
-	if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
-		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
-		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
-		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
-		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty)
-	{
-		AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
-		
-		int rmCnt = 5;
-		
-		string missile_code;
-		if(mySGD->getIsUsingFriendCard())
-			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
-		else
-			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
-		
-		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
-		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-		
-		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
-		
-		myGD->communication("CP_removeSubCumber", this);
-		
-		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
-		{
-			removeFromParentAndCleanup(true);
-			caughtAnimation();
-		}
-		else
-		{
-			removeFromParentAndCleanup(true);
-		}
-		return;
-	}
+	checkConfine(dt);
 	
 	if(m_state == CUMBERSTATEFURY)
 	{
@@ -2097,19 +2093,80 @@ void KSCumberBase::movingAndCrash( float dt )
 
 void KSCumberBase::followProcess(float dt)
 {
-
-	if(myGD->getJackState() == jackStateDrawing)
+	if(myGD->getJackState() == jackStateDrawing && m_drawMovement != FOLLOW_TYPE && m_normalMovement != MOVEMENT::FOLLOW_TYPE)
 	{
-		ProbSelector ps = {this->getAiValue() / 75.f, 125.f - this->getAiValue()};
+		ProbSelector ps = {this->getAiValue() / 25.f, 125.f};
 		if(ps.getResult() == 0)
 		{
 			CCLog("follow!!!");
-			m_drawMovement = FOLLOW_TYPE;
+			CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
+			KSCumberBase* mainCumber = dynamic_cast<KSCumberBase*>(myGD->getCommunicationNode("CP_getMainCumberPointer"));
+
+			int aggroCount = 0;
+			if(mainCumber->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
+				 mainCumber->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
+			{
+				aggroCount++;
+			}
+
+			for(int i=0;i<subCumberArray->count();i++)
+			{
+				KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+				if(t_sc->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
+					 t_sc->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
+				{
+					aggroCount++;
+				}
+			}
+			if(aggroCount < 2)
+			{
+				aggroExec();
+			}
+			else
+			{
+				KSCumberBase* farestMonster = nullptr;
+				float maxDistance = ccpLength(ip2ccp(myGD->getJackPoint()) - this->getPosition()); // 자기 자신의 거리.
+				
+				// 어그로 끌린 놈들중에 잭과의 거리가 가장 먼 애를 어그로 풀고 어그로 걸림.	
+				if(mainCumber->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
+					 mainCumber->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
+				{
+					if(maxDistance < ccpLength(ip2ccp(myGD->getJackPoint()) - mainCumber->getPosition()))
+					{
+						maxDistance = ccpLength(ip2ccp(myGD->getJackPoint()) - mainCumber->getPosition());
+						farestMonster = mainCumber;
+					}
+				}
+				
+				for(int i=0;i<subCumberArray->count();i++)
+				{
+					KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
+					if(t_sc->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
+						 t_sc->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
+					{
+						if(maxDistance < ccpLength(ip2ccp(myGD->getJackPoint()) - t_sc->getPosition()))
+						{
+							maxDistance = ccpLength(ip2ccp(myGD->getJackPoint()) - t_sc->getPosition());
+							farestMonster = t_sc;
+						}
+					}
+				}
+				if(farestMonster)
+				{
+					// 어그로 풀고
+					farestMonster->unAggroExec();		
+
+					// 어그로 걸림.
+					aggroExec();
+
+				}
+			}
+
 		}
 	}
 	else
 	{
-		m_drawMovement = m_normalMovement;
+		//m_drawMovement = m_normalMovement;
 	}
 }
 void KSCumberBase::cumberFrame( float dt )
@@ -2121,6 +2178,7 @@ void KSCumberBase::onStartGame()
 {
 	m_isStarted = true;
 	schedule(schedule_selector(ThisClassType::cumberAttack));
+	schedule(schedule_selector(ThisClassType::timeMeasure));
 }
 
 void KSCumberBase::lightSmaller()
@@ -2256,6 +2314,7 @@ void KSCumberBase::assignBossData(Json::Value boss)
 	m_maxSpeed = maxSpeed;
 	
 	m_normalMovement = (enum MOVEMENT)normalMovement;
+	m_originalNormalMovement = m_normalMovement;
 	m_drawMovement = (enum MOVEMENT)drawMovement;
 	m_furyMovement = MOVEMENT::RUSH_TYPE;
 }
@@ -2297,9 +2356,19 @@ void KSCumberBase::settingFuryRule()
 
 void KSCumberBase::applyAutoBalance()
 {
+	
+	
+	bool isClear = myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType());
+	if(isClear){
+		
+		CCLog("############ clear stage, dont autobalance ################");
+		return;
+	}
+	
+	
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
-	int balanceN = 5;
-	float downLimit = 0.5f;
+	//int balanceN = 5;
+	//float downLimit = 0.5f;
 	
 	int clearCount = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt);
 	int puzzleNo = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
@@ -2311,63 +2380,111 @@ void KSCumberBase::applyAutoBalance()
 	std::string playcountKey = std::string("playcount_") + oss.str();
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
-	int balPt = clearCount-2;
+	
+	
+	//int balPt = clearCount-2;
 	
 	
 	CCLog("#################### autobalance ############################");
-	CCLog("clear : %d / try : %d / autoBalance Start : %d / puzzleNo : %d",clearCount,playCount,balPt,puzzleNo);
+	CCLog("clear : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",clearCount,playCount,autobalanceTry,puzzleNo);
 	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	
-	// 연속으로 잘 깰경우 몬스터 능력치 향상시키기
+	//오토벨런싱트라이 값까지는 어렵게
+	if(playCount<=autobalanceTry){
+		float per = 1.f-(float)playCount/(float)autobalanceTry;
+		//ai조절
+		if(m_aiValue>0){
+			int aiMax = m_aiValue*2;
+			if(aiMax>90)aiMax=90;
+			if(m_aiValue>aiMax)aiMax=m_aiValue;
+			if(aiMax<=70)aiMax=70;
+			m_aiValue = m_aiValue + (aiMax-m_aiValue)*per;
+		}
+		//attackterm조절
+		if(m_attackPercent>0){
+			float aiMax = m_attackPercent*2;
+			if(aiMax>0.4)aiMax=0.4;
+			if(m_attackPercent>aiMax)aiMax=m_attackPercent;
+			if(aiMax<=0.3)aiMax=0.3;
+			m_attackPercent = m_attackPercent + (aiMax-m_attackPercent)*per;
+		}
 	
-	
-	if(clearCount>1 && puzzleNo!=1){
+		CCLog("#################### Change Balnace1 ############################");
+		CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+	//오토벨런싱+2 판까지는 원래 벨런스로 플레이
+	}else if(playCount>autobalanceTry && playCount<=autobalanceTry*2){
 		
-		CCLog("UP monster abillity");
-		
-		if(balPt>10)balPt=10;
-		m_aiValue += balPt*10;
-		m_aiValue = MIN(100,m_aiValue);
-		
-		m_attackPercent *= 1+balPt/10.f;
-		m_attackPercent = MIN(0.4,m_attackPercent);
-		
-		m_maxSpeed *= 1+balPt/10.f;
-		m_minSpeed *= 1+balPt/10.f;
-		m_minSpeed = MIN(1, m_minSpeed);
-		m_maxSpeed = MIN(3, m_maxSpeed);
-		
-		CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
-		CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
-		
-		CCLog("#################### autobalance ############################");
-		//m_aiValue , m_attackPercent, m_maxSpeed , m_minSpeed
-	
-	// 계속 실패할경우 능력치 하향하기
+	//그다음부턴 50%까지 까임
 	}else{
-
-		if(autobalanceTry < playCount)
-		{
-			int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
-			float autoRate = downLimit * exceedPlay / balanceN;
-			m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
-			m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
-			
-			CCLog("DOWN monster abillity");
-			CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
-			if(autobalanceTry*2 < playCount){
-				float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
-				m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
-				m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
-				
-				CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
-			}
-			
-			
+		float per = 1.5f-playCount/(float)(4*autobalanceTry); //1-(float)(playCount-autobalanceTry*4)/(float)autobalanceTry;
+		if(per>1)per=1;
+		if(per<0.5)per=0.5;
+		
+		//ai조절
+		if(m_aiValue>0){
+					m_aiValue = m_aiValue*per;
 		}
 		
-		CCLog("#################### autobalance ############################");
+		//attackterm조절
+		if(m_attackPercent>0){
+			m_attackPercent = m_attackPercent*per;
+		}
+		
+		CCLog("#################### Change Balnace2 ############################");
+		CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	}
+					 
+	
+	CCLog("#################### autobalance ############################");
+					 
+	
+//	if(clearCount>1 && puzzleNo!=1){
+//		
+//		CCLog("UP monster abillity");
+//		
+//		if(balPt>10)balPt=10;
+//		m_aiValue += balPt*10;
+//		m_aiValue = MIN(100,m_aiValue);
+//		
+//		m_attackPercent *= 1+balPt/10.f;
+//		m_attackPercent = MIN(0.4,m_attackPercent);
+//		
+//		m_maxSpeed *= 1+balPt/10.f;
+//		m_minSpeed *= 1+balPt/10.f;
+//		m_minSpeed = MIN(1, m_minSpeed);
+//		m_maxSpeed = MIN(3, m_maxSpeed);
+//		
+//		CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
+//		CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+//		
+//		CCLog("#################### autobalance ############################");
+//		//m_aiValue , m_attackPercent, m_maxSpeed , m_minSpeed
+//	
+//	// 계속 실패할경우 능력치 하향하기
+//	}else{
+//
+//		if(autobalanceTry < playCount)
+//		{
+//			int exceedPlay = playCount - autobalanceTry; // 초과된 플레이.
+//			float autoRate = downLimit * exceedPlay / balanceN;
+//			m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
+//			m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
+//			
+//			CCLog("DOWN monster abillity");
+//			CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
+//			if(autobalanceTry*2 < playCount){
+//				float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
+//				m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
+//				m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
+//				
+//				CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+//			}
+//			
+//			
+//		}
+//		
+//		CCLog("#################### autobalance ############################");
+//	}
 }
 void KSCumberBase::settingAI( int ai )
 {

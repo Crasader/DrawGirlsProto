@@ -157,7 +157,6 @@ void KSCircleBase::damageReaction(float)
 			mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 			m_furyMode.furyFrameCount = m_furyMode.totalFrame;
 		}
-		
 	}
 }
 
@@ -165,7 +164,6 @@ void KSCircleBase::damageReaction(float)
 void KSCircleBase::animationNoDirection(float dt)
 {
 	m_noDirection.timer += 1.f/60.f;
-	
 	if(m_noDirection.state == 1)
 	{
 		//		/// 좀 돌았으면 돌아감.
@@ -181,7 +179,6 @@ void KSCircleBase::animationNoDirection(float dt)
 		unschedule(schedule_selector(KSCircleBase::animationNoDirection));
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
 	}
-	
 }
 
 void KSCircleBase::onPatternEnd()

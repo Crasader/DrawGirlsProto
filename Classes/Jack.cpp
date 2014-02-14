@@ -1455,6 +1455,10 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				t_container->addChild(close_menu);
 			}
 		}
+		else if(die_type == DieType::kDieType_timeover)
+		{
+			
+		}
 
 		myGD->communication("UI_endFever");
 		myGD->communication("UI_stopCombo");
@@ -1730,7 +1734,7 @@ void Jack::dieEffect()
 
 		if(myGD->getIsGameover())
 		{
-			//				endGame();
+			endGame();
 		}
 		else
 		{

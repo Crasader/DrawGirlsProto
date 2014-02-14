@@ -15,9 +15,23 @@ ServerDataSave * ServerDataSave::sharedInstance ()
 }
 bool ServerDataSave::getBoolForKey (SaveDataFile f_key, string r_key)
 {
+	string c_key = myDefault->getSyncKey(f_key)+r_key;
+	
+	iter_bool = sds_cache_bool.find(c_key);
+	if(iter_bool != sds_cache_bool.end())
+		return iter_bool->second;
+	
 	string bool_string = myDefault->getValue(f_key, r_key, "false");
-	if(bool_string == "false")		return false;
-	else							return true;
+	if(bool_string == "false")
+	{
+		sds_cache_bool[c_key] = false;
+		return false;
+	}
+	else
+	{
+		sds_cache_bool[c_key] = true;
+		return true;
+	}
 }
 bool ServerDataSave::gbfk (SDS_KEY fr_key)
 {
@@ -26,9 +40,23 @@ bool ServerDataSave::gbfk (SDS_KEY fr_key)
 }
 bool ServerDataSave::getBoolForKey (SaveDataFile f_key, string t_key, int key_val1)
 {
+	string c_key = myDefault->getSyncKey(f_key)+CCString::createWithFormat(t_key.c_str(), key_val1)->getCString();
+	
+	iter_bool = sds_cache_bool.find(c_key);
+	if(iter_bool != sds_cache_bool.end())
+		return iter_bool->second;
+	
 	string bool_string = myDefault->getValue(f_key, CCString::createWithFormat(t_key.c_str(), key_val1)->getCString(), "false");
-	if(bool_string == "false")		return false;
-	else							return true;
+	if(bool_string == "false")
+	{
+		sds_cache_bool[c_key] = false;
+		return false;
+	}
+	else
+	{
+		sds_cache_bool[c_key] = true;
+		return true;
+	}
 }
 bool ServerDataSave::gbfk (SDS_KEY fr_key, int key_val1)
 {
@@ -37,9 +65,23 @@ bool ServerDataSave::gbfk (SDS_KEY fr_key, int key_val1)
 }
 bool ServerDataSave::getBoolForKey (SaveDataFile f_key, int i1, string r_key)
 {
+	string c_key = myDefault->getSyncKey(f_key, i1)+r_key;
+	
+	iter_bool = sds_cache_bool.find(c_key);
+	if(iter_bool != sds_cache_bool.end())
+		return iter_bool->second;
+	
 	string bool_string = myDefault->getValue(f_key, i1, r_key, "false");
-	if(bool_string == "false")		return false;
-	else							return true;
+	if(bool_string == "false")
+	{
+		sds_cache_bool[c_key] = false;
+		return false;
+	}
+	else
+	{
+		sds_cache_bool[c_key] = true;
+		return true;
+	}
 }
 bool ServerDataSave::gbfk (int i1, SDS_KEY fr_key)
 {
@@ -48,9 +90,23 @@ bool ServerDataSave::gbfk (int i1, SDS_KEY fr_key)
 }
 bool ServerDataSave::getBoolForKey (SaveDataFile f_key, int i1, string t_key, int key_val1)
 {
+	string c_key = myDefault->getSyncKey(f_key, i1) + CCString::createWithFormat(t_key.c_str(), key_val1)->getCString();
+	
+	iter_bool = sds_cache_bool.find(c_key);
+	if(iter_bool != sds_cache_bool.end())
+		return iter_bool->second;
+	
 	string bool_string = myDefault->getValue(f_key, i1, CCString::createWithFormat(t_key.c_str(), key_val1)->getCString(), "false");
-	if(bool_string == "false")		return false;
-	else							return true;
+	if(bool_string == "false")
+	{
+		sds_cache_bool[c_key] = false;
+		return false;
+	}
+	else
+	{
+		sds_cache_bool[c_key] = true;
+		return true;
+	}
 }
 bool ServerDataSave::gbfk (int i1, SDS_KEY fr_key, int key_val1)
 {
@@ -63,6 +119,9 @@ void ServerDataSave::setBoolForKey (SaveDataFile f_key, string r_key, bool t_b, 
 	if(t_b)			bool_string = "true";
 	else			bool_string = "false";
 	myDefault->setKeyValue(f_key, r_key, bool_string, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key)+r_key;
+	sds_cache_bool[c_key] = t_b;
 }
 void ServerDataSave::sbfk (SDS_KEY fr_key, bool t_b, bool diskWrite)
 {
@@ -75,6 +134,9 @@ void ServerDataSave::setBoolForKey (SaveDataFile f_key, string r_key, int key_va
 	if(t_b)			bool_string = "true";
 	else			bool_string = "false";
 	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), bool_string, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key)+CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	sds_cache_bool[c_key] = t_b;
 }
 void ServerDataSave::sbfk (SDS_KEY fr_key, int key_val1, bool t_b, bool diskWrite)
 {
@@ -87,6 +149,9 @@ void ServerDataSave::setBoolForKey (SaveDataFile f_key, int i1, string r_key, bo
 	if(t_b)			bool_string = "true";
 	else			bool_string = "false";
 	myDefault->setKeyValue(f_key, i1, r_key, bool_string, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key, i1)+r_key;
+	sds_cache_bool[c_key] = t_b;
 }
 void ServerDataSave::sbfk (int i1, SDS_KEY fr_key, bool t_b, bool diskWrite)
 {
@@ -99,6 +164,9 @@ void ServerDataSave::setBoolForKey (SaveDataFile f_key, int i1, string r_key, in
 	if(t_b)			bool_string = "true";
 	else			bool_string = "false";
 	myDefault->setKeyValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), bool_string, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key, i1) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	sds_cache_bool[c_key] = t_b;
 }
 void ServerDataSave::sbfk (int i1, SDS_KEY fr_key, int key_val1, bool t_b, bool diskWrite)
 {
@@ -106,182 +174,377 @@ void ServerDataSave::sbfk (int i1, SDS_KEY fr_key, int key_val1, bool t_b, bool 
 	setBoolForKey(key_set.f_key, i1, key_set.r_key, key_val1, t_b, diskWrite);
 }
 int ServerDataSave::getIntegerForKey (SaveDataFile f_key, string r_key)
-{	return myDefault->getValue(f_key, r_key, 0);	}
+{
+	string c_key = myDefault->getSyncKey(f_key) + r_key;
+	
+	iter_int = sds_cache_int.find(c_key);
+	if(iter_int != sds_cache_int.end())
+		return iter_int->second;
+	
+	int return_value = myDefault->getValue(f_key, r_key, 0);
+	sds_cache_int[c_key] = return_value;
+	return return_value;
+}
 int ServerDataSave::gifk (SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getIntegerForKey(key_set.f_key, key_set.r_key);
 }
 int ServerDataSave::getIntegerForKey (SaveDataFile f_key, string r_key, int key_val1)
-{	return myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0);	}
+{
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+	iter_int = sds_cache_int.find(c_key);
+	if(iter_int != sds_cache_int.end())
+		return iter_int->second;
+	
+	int return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0);
+	sds_cache_int[c_key] = return_value;
+	return return_value;
+}
 int ServerDataSave::gifk (SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getIntegerForKey(key_set.f_key, key_set.r_key, key_val1);
 }
 int ServerDataSave::getIntegerForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2)
-{	return myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0);	}
+{
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+	
+	iter_int = sds_cache_int.find(c_key);
+	if(iter_int != sds_cache_int.end())
+		return iter_int->second;
+	
+	int return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0);
+	sds_cache_int[c_key] = return_value;
+	return return_value;
+}
 int ServerDataSave::gifk (SDS_KEY fr_key, int key_val1, int key_val2)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getIntegerForKey(key_set.f_key, key_set.r_key, key_val1, key_val2);
 }
 int ServerDataSave::getIntegerForKey (SaveDataFile f_key, int i1, string r_key)
-{	return myDefault->getValue(f_key, i1, r_key, 0);	}
+{
+	string c_key = myDefault->getSyncKey(f_key, i1) + r_key;
+	
+	iter_int = sds_cache_int.find(c_key);
+	if(iter_int != sds_cache_int.end())
+		return iter_int->second;
+	
+	int return_value = myDefault->getValue(f_key, i1, r_key, 0);
+	sds_cache_int[c_key] = return_value;
+	return return_value;
+}
 int ServerDataSave::gifk (int i1, SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getIntegerForKey(key_set.f_key, i1, key_set.r_key);
 }
 int ServerDataSave::getIntegerForKey (SaveDataFile f_key, int i1, string r_key, int key_val1)
-{	return myDefault->getValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0);	}
+{
+	string c_key = myDefault->getSyncKey(f_key, i1) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+	iter_int = sds_cache_int.find(c_key);
+	if(iter_int != sds_cache_int.end())
+		return iter_int->second;
+	
+	int return_value = myDefault->getValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0);
+	sds_cache_int[c_key] = return_value;
+	return return_value;
+}
 int ServerDataSave::gifk (int i1, SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getIntegerForKey(key_set.f_key, i1, key_set.r_key, key_val1);
 }
 void ServerDataSave::setIntegerForKey (SaveDataFile f_key, string r_key, int val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, r_key, val1, diskWrite);		}
+{
+	myDefault->setKeyValue(f_key, r_key, val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key) + r_key;
+	sds_cache_int[c_key] = val1;
+}
 void ServerDataSave::sifk (SDS_KEY fr_key, int val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setIntegerForKey(key_set.f_key, key_set.r_key, val1, diskWrite);
 }
 void ServerDataSave::setIntegerForKey (SaveDataFile f_key, string r_key, int key_val1, int val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);	}
+{
+	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	sds_cache_int[c_key] = val1;
+}
 void ServerDataSave::sifk (SDS_KEY fr_key, int key_val1, int val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setIntegerForKey(key_set.f_key, key_set.r_key, key_val1, val1, diskWrite);
 }
 void ServerDataSave::setIntegerForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2, int val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);	}
+{
+	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+	sds_cache_int[c_key] = val1;
+}
 void ServerDataSave::sifk (SDS_KEY fr_key, int key_val1, int key_val2, int val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setIntegerForKey(key_set.f_key, key_set.r_key, key_val1, key_val2, val1, diskWrite);
 }
 void ServerDataSave::setIntegerForKey (SaveDataFile f_key, int i1, string r_key, int val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, i1, r_key, val1, diskWrite);		}
+{
+	myDefault->setKeyValue(f_key, i1, r_key, val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key, i1) + r_key;
+	sds_cache_int[c_key] = val1;
+}
 void ServerDataSave::sifk (int i1, SDS_KEY fr_key, int val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setIntegerForKey(key_set.f_key, i1, key_set.r_key, val1, diskWrite);
 }
 void ServerDataSave::setIntegerForKey (SaveDataFile f_key, int i1, string r_key, int key_val1, int val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);	}
+{
+	myDefault->setKeyValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key, i1) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	sds_cache_int[c_key] = val1;
+}
 void ServerDataSave::sifk (int i1, SDS_KEY fr_key, int key_val1, int val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setIntegerForKey(key_set.f_key, i1, key_set.r_key, key_val1, val1, diskWrite);
 }
 double ServerDataSave::getDoubleForKey (SaveDataFile f_key, string r_key)
-{	return myDefault->getValue(f_key, r_key, 0.0);	}
+{
+	string c_key = myDefault->getSyncKey(f_key)+r_key;
+	
+	iter_double = sds_cache_double.find(c_key);
+	if(iter_double != sds_cache_double.end())
+		return iter_double->second;
+	
+	double return_value = myDefault->getValue(f_key, r_key, 0.0);
+	sds_cache_double[c_key] = return_value;
+	return return_value;
+}
 double ServerDataSave::gdfk (SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getDoubleForKey(key_set.f_key, key_set.r_key);
 }
 double ServerDataSave::getDoubleForKey (SaveDataFile f_key, string r_key, int key_val1)
-{	return myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0.0);	}
+{
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+	iter_double = sds_cache_double.find(c_key);
+	if(iter_double != sds_cache_double.end())
+		return iter_double->second;
+	
+	double return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0.0);
+	sds_cache_double[c_key] = return_value;
+	return return_value;
+}
 double ServerDataSave::gdfk (SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getDoubleForKey(key_set.f_key, key_set.r_key, key_val1);
 }
 double ServerDataSave::getDoubleForKey (SaveDataFile f_key, int i1, string r_key)
-{	return myDefault->getValue(f_key, i1, r_key, 0.0);	}
+{
+	string c_key = myDefault->getSyncKey(f_key, i1) + r_key;
+	
+	iter_double = sds_cache_double.find(c_key);
+	if(iter_double != sds_cache_double.end())
+		return iter_double->second;
+	
+	double return_value = myDefault->getValue(f_key, i1, r_key, 0.0);
+	sds_cache_double[c_key] = return_value;
+	return return_value;
+}
 double ServerDataSave::gdfk (int i1, SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getDoubleForKey(key_set.f_key, i1, key_set.r_key);
 }
 double ServerDataSave::getDoubleForKey (SaveDataFile f_key, int i1, string r_key, int key_val1)
-{	return myDefault->getValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0.0);	}
+{
+	string c_key = myDefault->getSyncKey(f_key, i1) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+	iter_double = sds_cache_double.find(c_key);
+	if(iter_double != sds_cache_double.end())
+		return iter_double->second;
+	
+	double return_value = myDefault->getValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0.0);
+	sds_cache_double[c_key] = return_value;
+	return return_value;
+}
 double ServerDataSave::gdfk (int i1, SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getDoubleForKey(key_set.f_key, i1, key_set.r_key, key_val1);
 }
 void ServerDataSave::setDoubleForKey (SaveDataFile f_key, string r_key, double val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, r_key, val1, diskWrite);		}
+{
+	myDefault->setKeyValue(f_key, r_key, val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key)+r_key;
+	sds_cache_double[c_key] = val1;
+}
 void ServerDataSave::sdfk (SDS_KEY fr_key, double val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setDoubleForKey(key_set.f_key, key_set.r_key, val1, diskWrite);
 }
 void ServerDataSave::setDoubleForKey (SaveDataFile f_key, string r_key, int key_val1, double val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);	}
+{
+	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	sds_cache_double[c_key] = val1;
+}
 void ServerDataSave::sdfk (SDS_KEY fr_key, int key_val1, double val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setDoubleForKey(key_set.f_key, key_set.r_key, key_val1, val1, diskWrite);
 }
 void ServerDataSave::setDoubleForKey (SaveDataFile f_key, int i1, string r_key, double val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, i1, r_key, val1, diskWrite);		}
+{
+	myDefault->setKeyValue(f_key, i1, r_key, val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key, i1) + r_key;
+	sds_cache_double[c_key] = val1;
+}
 void ServerDataSave::sdfk (int i1, SDS_KEY fr_key, double val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setDoubleForKey(key_set.f_key, i1, key_set.r_key, val1, diskWrite);
 }
 void ServerDataSave::setDoubleForKey (SaveDataFile f_key, int i1, string r_key, int key_val1, double val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);	}
+{
+	myDefault->setKeyValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key, i1) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	sds_cache_double[c_key] = val1;
+}
 void ServerDataSave::sdfk (int i1, SDS_KEY fr_key, int key_val1, double val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setDoubleForKey(key_set.f_key, i1, key_set.r_key, key_val1, val1, diskWrite);
 }
 string ServerDataSave::getStringForKey (SaveDataFile f_key, string r_key)
-{	return myDefault->getValue(f_key, r_key, "");	}
+{
+	string c_key = myDefault->getSyncKey(f_key) + r_key;
+	
+	iter_string = sds_cache_string.find(c_key);
+	if(iter_string != sds_cache_string.end())
+		return iter_string->second;
+	
+	string return_value = myDefault->getValue(f_key, r_key, "");
+	sds_cache_string[c_key] = return_value;
+	return return_value;
+}
 string ServerDataSave::gsfk (SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getStringForKey(key_set.f_key, key_set.r_key);
 }
 string ServerDataSave::getStringForKey (SaveDataFile f_key, string r_key, int key_val1)
-{	return myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), "");	}
+{
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+	iter_string = sds_cache_string.find(c_key);
+	if(iter_string != sds_cache_string.end())
+		return iter_string->second;
+	
+	string return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), "");
+	sds_cache_string[c_key] = return_value;
+	return return_value;
+}
 string ServerDataSave::gsfk (SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getStringForKey(key_set.f_key, key_set.r_key, key_val1);
 }
 string ServerDataSave::getStringForKey (SaveDataFile f_key, int i1, string r_key)
-{	return myDefault->getValue(f_key, i1, r_key, "");	}
+{
+	string c_key = myDefault->getSyncKey(f_key, i1) + r_key;
+	
+	iter_string = sds_cache_string.find(c_key);
+	if(iter_string != sds_cache_string.end())
+		return iter_string->second;
+	
+	string return_value = myDefault->getValue(f_key, i1, r_key, "");
+	sds_cache_string[c_key] = return_value;
+	return return_value;
+}
 string ServerDataSave::gsfk (int i1, SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getStringForKey(key_set.f_key, i1, key_set.r_key);
 }
 string ServerDataSave::getStringForKey (SaveDataFile f_key, int i1, string r_key, int key_val1)
-{	return myDefault->getValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), "");	}
+{
+	string c_key = myDefault->getSyncKey(f_key, i1) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+	iter_string = sds_cache_string.find(c_key);
+	if(iter_string != sds_cache_string.end())
+		return iter_string->second;
+	
+	string return_value = myDefault->getValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), "");
+	sds_cache_string[c_key] = return_value;
+	return return_value;
+}
 string ServerDataSave::gsfk (int i1, SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	return getStringForKey(key_set.f_key, i1, key_set.r_key, key_val1);
 }
 void ServerDataSave::setStringForKey (SaveDataFile f_key, string r_key, string val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, r_key, val1.c_str(), diskWrite);	}
+{
+	myDefault->setKeyValue(f_key, r_key, val1.c_str(), diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key) + r_key;
+	sds_cache_string[c_key] = val1;
+}
 void ServerDataSave::ssfk (SDS_KEY fr_key, string val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setStringForKey(key_set.f_key, key_set.r_key, val1.c_str(), diskWrite);
 }
 void ServerDataSave::setStringForKey (SaveDataFile f_key, string r_key, int key_val1, string val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1.c_str(), diskWrite);	}
+{
+	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1.c_str(), diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	sds_cache_string[c_key] = val1;
+}
 void ServerDataSave::ssfk (SDS_KEY fr_key, int key_val1, string val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setStringForKey(key_set.f_key, key_set.r_key, key_val1, val1.c_str(), diskWrite);
 }
 void ServerDataSave::setStringForKey (SaveDataFile f_key, int i1, string r_key, string val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, i1, r_key, val1.c_str(), diskWrite);	}
+{
+	myDefault->setKeyValue(f_key, i1, r_key, val1.c_str(), diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key, i1) + r_key;
+	sds_cache_string[c_key] = val1;
+}
 void ServerDataSave::ssfk (int i1, SDS_KEY fr_key, string val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setStringForKey(key_set.f_key, i1, key_set.r_key, val1.c_str(), diskWrite);
 }
 void ServerDataSave::setStringForKey (SaveDataFile f_key, int i1, string r_key, int key_val1, string val1, bool diskWrite)
-{	myDefault->setKeyValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1.c_str(), diskWrite);	}
+{
+	myDefault->setKeyValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1.c_str(), diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key, i1) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	sds_cache_string[c_key] = val1;
+}
 void ServerDataSave::ssfk (int i1, SDS_KEY fr_key, int key_val1, string val1, bool diskWrite)
 {
 	SDS_SET key_set = getKeySet(fr_key);
@@ -463,8 +726,19 @@ SaveDataFile ServerDataSave::getSDF (SDS_KEY t_key)
 	else if(t_key >= kSDS_CI_base && t_key <= kSDS_CI_end)				rv = kSDF_cardInfo;
 	return rv;
 }
+
+void ServerDataSave::removeCache()
+{
+	sds_cache_bool.clear();
+	sds_cache_int.clear();
+	sds_cache_float.clear();
+	sds_cache_double.clear();
+	sds_cache_string.clear();
+}
+
 void ServerDataSave::myInit ()
 {
+	removeCache();
 	myDefault = SaveData::sharedObject();
 }
 #undef LZZ_INLINE

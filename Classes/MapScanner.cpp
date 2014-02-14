@@ -642,18 +642,6 @@ void MapScanner::setMapImg()
 	blockParent = CCNode::create();
 	addChild(blockParent, blockZorder);
 
-	CCSprite* top_back = CCSprite::create("top_back.png");
-	top_back->setAnchorPoint(ccp(0.5,0));
-	top_back->setPosition(ccp(160,430));
-	top_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
-	addChild(top_back, topBottomZorder);
-
-	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
-	bottom_back->setAnchorPoint(ccp(0.5,1));
-	bottom_back->setPosition(ccp(160,0));
-	bottom_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
-	addChild(bottom_back, topBottomZorder);
-
 	top_boarder = CCSprite::create("normal_frame_top.png");
 	top_boarder->setAnchorPoint(ccp(0.5,0));
 	top_boarder->setPosition(ccp(160,430));
@@ -680,6 +668,33 @@ void MapScanner::setTopBottomBlock()
 	float top_y = (myGD->limited_step_top-1)*pixelSize;
 	float bottom_y = (myGD->limited_step_bottom-1)*pixelSize+2.f;
 
+	
+//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//	if(screen_scale_x < 1.f)
+//		screen_scale_x = 1.f;
+//	
+//	float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//	CCSprite* stencil_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 430, 320));
+//	stencil_node->setRotation(90);
+//	stencil_node->setPosition(ccp(160,215));
+//	CCClippingNode* cliping_node = CCClippingNode::create(stencil_node);
+//	float change_scale = 1.f;
+//	CCPoint change_origin = ccp(0,0);
+//	if(screen_scale_x > 1.f)
+//	{
+//		change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+//		change_scale = screen_scale_x;
+//	}
+//	if(screen_scale_y > 1.f)
+//		change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+//	CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+//	cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//	cliping_node->setAlphaThreshold(0.05f);
+//	cliping_node->setPosition(CCPointZero);
+//	addChild(cliping_node, blockZorder);
+	
+	
 	top_block_manager = CCSpriteBatchNode::create("temp_block.png");
 	top_block_manager->setPosition(CCPointZero);
 	addChild(top_block_manager, blockZorder);
@@ -692,13 +707,28 @@ void MapScanner::setTopBottomBlock()
 	while(top_y < 430)
 	{
 		top_cnt++;
-		for(int i=0;i<10;i++)
+		if(top_y+32.f >= 430)
 		{
-			CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture());
-			t_block->setAnchorPoint(ccp(0,0));
-			t_block->setPosition(ccp(i*32, top_y+2));
-			t_block->setTag(top_cnt*10+i);
-			top_block_manager->addChild(t_block);
+			float sub_value = top_y+32.f-430;
+			for(int i=0;i<10;i++)
+			{
+				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture(), CCRectMake(0, 0, 32, 32-sub_value));
+				t_block->setAnchorPoint(ccp(0,0));
+				t_block->setPosition(ccp(i*32, top_y+2));
+				t_block->setTag(top_cnt*10+i);
+				top_block_manager->addChild(t_block);
+			}
+		}
+		else
+		{
+			for(int i=0;i<10;i++)
+			{
+				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture());
+				t_block->setAnchorPoint(ccp(0,0));
+				t_block->setPosition(ccp(i*32, top_y+2));
+				t_block->setTag(top_cnt*10+i);
+				top_block_manager->addChild(t_block);
+			}
 		}
 		CCSprite* t_line = CCSprite::createWithTexture(top_block_line_manager->getTexture());
 		t_line->setAnchorPoint(ccp(0.5,0));
@@ -708,10 +738,22 @@ void MapScanner::setTopBottomBlock()
 		top_y += 32.f;
 	}
 	top_block_manager->setTag(top_cnt);
-	top_block_lock = CCSprite::create("temp_block_lock.png");
-	top_block_lock->setAnchorPoint(ccp(0.5,0));
-	top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize+2));
-	addChild(top_block_lock, blockZorder);
+	
+	if((myGD->limited_step_top-1)*pixelSize+2 + 21 > 430)
+	{
+		float sub_value = (myGD->limited_step_top-1)*pixelSize+2 + 21 - 430;
+		top_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, sub_value, 88, 21-sub_value));
+		top_block_lock->setAnchorPoint(ccp(0.5,0));
+		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize+2));
+		addChild(top_block_lock, blockZorder);
+	}
+	else
+	{
+		top_block_lock = CCSprite::create("temp_block_lock.png");
+		top_block_lock->setAnchorPoint(ccp(0.5,0));
+		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize+2));
+		addChild(top_block_lock, blockZorder);
+	}
 
 	
 	
@@ -727,13 +769,29 @@ void MapScanner::setTopBottomBlock()
 	while(bottom_y > 0)
 	{
 		bottom_cnt++;
-		for(int i=0;i<10;i++)
+		
+		if(bottom_y-32.f <= 0)
 		{
-			CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture());
-			t_block->setAnchorPoint(ccp(0,1.f));
-			t_block->setPosition(ccp(i*32, bottom_y-2));
-			t_block->setTag(bottom_cnt*10+i);
-			bottom_block_manager->addChild(t_block);
+			float sub_value = -(bottom_y-32.f);
+			for(int i=0;i<10;i++)
+			{
+				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture(), CCRectMake(0, 0, 32, 32-sub_value));
+				t_block->setAnchorPoint(ccp(0,1.f));
+				t_block->setPosition(ccp(i*32, bottom_y-2));
+				t_block->setTag(bottom_cnt*10+i);
+				bottom_block_manager->addChild(t_block);
+			}
+		}
+		else
+		{
+			for(int i=0;i<10;i++)
+			{
+				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture());
+				t_block->setAnchorPoint(ccp(0,1.f));
+				t_block->setPosition(ccp(i*32, bottom_y-2));
+				t_block->setTag(bottom_cnt*10+i);
+				bottom_block_manager->addChild(t_block);
+			}
 		}
 		CCSprite* t_line = CCSprite::createWithTexture(bottom_block_line_manager->getTexture());
 		t_line->setAnchorPoint(ccp(0.5,1.f));
@@ -743,10 +801,22 @@ void MapScanner::setTopBottomBlock()
 		bottom_y -= 32.f;
 	}
 	bottom_block_manager->setTag(bottom_cnt);
-	bottom_block_lock = CCSprite::create("temp_block_lock.png");
-	bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
-	bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize-2));
-	addChild(bottom_block_lock, blockZorder);
+	
+	if((myGD->limited_step_bottom-1)*pixelSize - 21 < 0)
+	{
+		float sub_value = -((myGD->limited_step_bottom-1)*pixelSize - 21);
+		bottom_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, 0, 88, 21-sub_value));
+		bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
+		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize));
+		addChild(bottom_block_lock, blockZorder);
+	}
+	else
+	{
+		bottom_block_lock = CCSprite::create("temp_block_lock.png");
+		bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
+		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize));
+		addChild(bottom_block_lock, blockZorder);
+	}
 
 	random_device rd;
 	default_random_engine e1(rd());
@@ -813,6 +883,7 @@ void MapScanner::showEmptyPoint( CCPoint t_point )
 	CCSprite* show_empty_point = CCSprite::create("show_empty_point.png");
 	show_empty_point->setAnchorPoint(ccp(0.5f,0.f));
 	show_empty_point->setPosition(t_point);
+	show_empty_point->setScale(1.f/myGD->game_scale);
 	addChild(show_empty_point, boarderZorder);
 
 	CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccpAdd(t_point, ccp(0,20)));
@@ -1253,8 +1324,8 @@ void VisibleParent::setMoveGamePosition( CCPoint t_p )
 		float y_value = -t_p.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
 		if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
 		{
-			if(y_value > 60)																	y_value = 60;
-			else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+			if(y_value > 80)																	y_value = 80;
+			else if(y_value < -430*myGD->game_scale+480*frame_size.height/frame_size.width - 60)		y_value = -430*myGD->game_scale+480*frame_size.height/frame_size.width - 60;
 		}
 		
 		float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
@@ -1286,8 +1357,8 @@ void VisibleParent::changingGameStep( int t_step )
 	float y_value = -jack_position.y*myGD->game_scale+480.f*frame_size.height/frame_size.width/2.f;// (160-t_p.y)*MY_SCALE-73.f+myDSH->bottom_base-myDSH->ui_jack_center_control;
 	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
 	{
-		if(y_value > 60)																	y_value = 60;
-		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)		y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+		if(y_value > 80)																	y_value = 80;
+		else if(y_value < -430*myGD->game_scale+480*frame_size.height/frame_size.width - 60)		y_value = -430*myGD->game_scale+480*frame_size.height/frame_size.width - 60;
 	}
 	
 	float x_value = -jack_position.x*myGD->game_scale+480.f/2.f;

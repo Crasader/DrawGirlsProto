@@ -89,7 +89,7 @@ bool FailPopup::init()
 	p1["score"] = int(mySGD->getScore());
 	Json::Value p1_data;
 	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	p1_data["allhighscore"] = myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	p1_data["allhighscore"] = mySGD->getScore();//myDSH->getIntegerForKey(kDSH_Key_allHighScore);
 	Json::FastWriter p1_data_writer;
 	p1["data"] = p1_data_writer.write(p1_data);
 	hspConnector::get()->command("addweeklyscore", p1, NULL);
@@ -162,10 +162,9 @@ bool FailPopup::init()
 		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) <= 0)
 		{
 			// 소멸
-			int cardNo = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 			
-			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",cardNo)->getCString());
-			CardCase* cardCase = CardCase::create(cardNo);
+			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",selected_card_number)->getCString());
+			CardCase* cardCase = CardCase::create(selected_card_number);
 			card->addChild(cardCase);
 			
 			RemoveCardAnimation* b = RemoveCardAnimation::create(card,-190);
@@ -173,24 +172,28 @@ bool FailPopup::init()
 			b->setSkipFunc([this](){
 				CCLog("skip Func");
 			});
-			b->setRepairFunc([b, this](){
+			b->setRepairFunc([=](){
 				CCLog("repair Func");
 				
 				if(mySGD->getStar() >= mySGD->getCardDurabilityUpFee())
 				{
 					mySGD->setStar(mySGD->getStar() - mySGD->getCardDurabilityUpFee());
-					int card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number));
+					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, selected_card_number));
 					
 					myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 					
 					//복구하기
 					b->repair();
 				}
+				else
+				{
+					b->skip();
+				}
 			});
-			b->setCloseFunc([this](){
+			b->setCloseFunc([=](){
 				CCLog("close Func");
-				myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) <= 0)
+					myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
 				this->endDecreaseCardDuration();
 			});
 			
@@ -263,13 +266,7 @@ bool FailPopup::init()
 	
 	FailCode fail_code = mySGD->fail_code;
 	
-	if(fail_code == kFC_gameover)
-	{
-		CCSprite* title = CCSprite::create("ending_gameover.png");
-		title->setPosition(ccp(131,230.5f));
-		main_case->addChild(title, kZ_FP_img);
-	}
-	else if(fail_code == kFC_timeover)
+	if(fail_code == kFC_timeover)
 	{
 		CCSprite* title = CCSprite::create("ending_timeover.png");
 		title->setPosition(ccp(131,230.5f));
@@ -335,23 +332,29 @@ bool FailPopup::init()
 		//			addChild(clr_cdt_label, kZ_FP_img);
 		//		}
 	}
+	else
+	{
+		CCSprite* title = CCSprite::create("ending_gameover.png");
+		title->setPosition(ccp(131,230.5f));
+		main_case->addChild(title, kZ_FP_img);
+	}
 	
-	score_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
+	score_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 12); // CCLabelBMFont::create("0", "mb_white_font.fnt");
+	score_label->setColor(ccc3(220, 190, 125));
 	score_label->setAnchorPoint(ccp(1.f,0.5));
 	score_label->setPosition(ccp(230,78));
-	score_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(score_label, kZ_FP_img);
 	
-	gold_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
+	gold_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 12); // CCLabelBMFont::create("0", "mb_white_font.fnt");
+	gold_label->setColor(ccc3(220, 190, 125));
 	gold_label->setAnchorPoint(ccp(1.f,0.5));
 	gold_label->setPosition(ccp(230,106));
-	gold_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(gold_label, kZ_FP_img);
 	
-	time_label = CCLabelBMFont::create("0", "mb_white_font.fnt");
+	time_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 12); // CCLabelBMFont::create("0", "mb_white_font.fnt");
+	time_label->setColor(ccc3(220, 190, 125));
 	time_label->setAnchorPoint(ccp(1.f,0.5));
 	time_label->setPosition(ccp(230,132));
-	time_label->setAlignment(kCCTextAlignmentRight);
 	main_case->addChild(time_label, kZ_FP_img);
 	
 	
@@ -807,7 +810,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		{
 			if(score_list[i]["memberID"].asString() == hspConnector::get()->getKakaoID())
 			{
-				if(mySGD->getScore() < score_list[i]["score"].asFloat())
+				if(mySGD->getScore() > score_list[i]["score"].asFloat())
 				{
 					CCSprite* high_score_img = CCSprite::create("ending_highscore.png");
 					high_score_img->setPosition(ccp(105, 78));
@@ -1202,7 +1205,8 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 		{
 			if(!(*member).is_message_blocked)
 			{
-				if(::getIsNotHelpableUser((*member).user_id.c_str(), mySGD->getHelpCoolTime()) <= 0)
+				int remain_time = ::getIsNotHelpableUser((*member).user_id.c_str(), mySGD->getHelpCoolTime());
+				if(remain_time <= 0)
 				{
 					CCSprite* n_help = CCSprite::create("ending_help_on.png");
 					CCSprite* s_help = CCSprite::create("ending_help_on.png");
@@ -1218,25 +1222,22 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 				}
 				else
 				{
-					CCSprite* not_help = CCSprite::create("ending_help_off.png");
-					not_help->setPosition(ccp(180,21));
-					cell->addChild(not_help, kFFC_Z_img);
+					CCSprite* d_help = CCSprite::create("ending_help_on.png");
+					d_help->setColor(ccGRAY);
+					d_help->setPosition(ccp(180,21));
+					cell->addChild(d_help, kFFC_Z_img);
+					
+					std::string remainStr = ::getRemainTimeMsg( remain_time );
+					CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
+					remainFnt->setPosition(ccp(d_help->getContentSize().width/2.f, d_help->getContentSize().height/2.f));
+					d_help->addChild(remainFnt);
 				}
-			}
-			else
-			{
-				CCSprite* not_help = CCSprite::create("ending_help_off.png");
-				not_help->setPosition(ccp(180,21));
-				cell->addChild(not_help, kFFC_Z_img);
 			}
 		}
 	}
 	
 	return cell;
 }
-
-
-
 
 void FailPopup::scrollViewDidScroll( CCScrollView* view )
 {

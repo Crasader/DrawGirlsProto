@@ -297,7 +297,7 @@ bool PuzzleScene::init()
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
-		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+//		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		if(selected_card_number > 0)
 		{
@@ -467,12 +467,12 @@ void PuzzleScene::showClearPopup()
 
 void PuzzleScene::hideClearPopup()
 {
-	if(mySD->getSilType() >= 10000)
-	{
-		is_menu_enable = true;
-	}
-	else
-	{
+//	if(mySD->getSilType() >= 10000)
+//	{
+//		is_menu_enable = true;
+//	}
+//	else
+//	{
 		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 		if(recent_step == kTutorialFlowStep_pieceType)
 		{
@@ -517,7 +517,7 @@ void PuzzleScene::hideClearPopup()
 					is_menu_enable = true;
 			}
 		}
-	}
+//	}
 }
 
 enum PuzzleNodeZorder{
@@ -1144,7 +1144,14 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top/myDSH->screen_convert_rate));
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));
 		
 		CCNode* t_container = CCNode::create();
 		t_popup->setContainerNode(t_container);

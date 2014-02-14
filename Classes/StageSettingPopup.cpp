@@ -13,7 +13,7 @@
 #include "ItemBuyPopup.h"
 #include "CardSettingPopup.h"
 #include "GachaPopup.h"
-#include "DurabilityNoti.h"
+//#include "DurabilityNoti.h"
 #include "CardCase.h"
 #include "DownloadFile.h"
 #include "ListViewerScroll.h"
@@ -159,9 +159,16 @@ bool StageSettingPopup::init()
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		t_popup->setBasePosition(ccp(240, 160));
 		
 		ShowItemContent* t_container = ShowItemContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
 		{
@@ -569,8 +576,8 @@ void StageSettingPopup::callStart()
 			else if(durability == 0)
 			{
 				is_menu_enable = true;
-				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
-				addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
+//				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
+//				addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
 			}
 			else // not selected card
 			{

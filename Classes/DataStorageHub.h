@@ -8,6 +8,7 @@
 #include "EnumDefine.h"
 #include "hspConnector.h"
 #include "ServerDataSave.h"
+#include <map>
 
 using namespace cocos2d;
 using namespace std;
@@ -213,7 +214,15 @@ public:
 	int getPuzzleMapSceneShowType ();
 	void setPuzzleMapSceneShowType (int t_type);
 	void fFlush ();
+	void removeCache();
 private:
+	map<string, bool> dsh_cache_bool;
+	map<string, bool>::iterator iter_bool;
+	map<string, int> dsh_cache_int;
+	map<string, int>::iterator iter_int;
+	map<string, string> dsh_cache_string;
+	map<string, string>::iterator iter_string;
+	
 	SaveData * myDefault;
 	float gold_get_rate;
 	bool is_cheat_key_enabled;

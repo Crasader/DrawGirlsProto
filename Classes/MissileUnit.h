@@ -328,14 +328,15 @@ private:
 class SightOut : public CCSprite
 {
 public:
-	static SightOut * create ();
+	static SightOut * create (int totalFrame);
 	void startAction ();
 private:
 	int ingFrame;
 	float opa_value;
+	int totalFrame;
 	void myAction ();
 	void stopAction ();
-	void myInit ();
+	void myInit (int totalFrame);
 };
 class BlindDrop : public CCNode, public CCBAnimationManagerDelegate
 {
@@ -603,6 +604,7 @@ public:
 	static PoisonLine * create (IntPoint t_sp, int frame);
 	void startMyAction ();
 private:
+	CCParticleSystemQuad* line;
 	IntPoint mapPoint;
 	int ingFrame;
 	int totalFrame;
@@ -623,6 +625,7 @@ private:
 	int ingFrame;
 	CCSprite * dropImg;
 	CCSprite * oilImg;
+	CCSprite* targetImg;
 	void myAction ();
 	void initParticle ();
 	void stopAction ();

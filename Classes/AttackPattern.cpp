@@ -627,7 +627,7 @@ void AP_Missile11::myInit( CCPoint t_sp, int t_type, float t_speed, IntSize t_mS
 	else						throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + (rand()%31-15)/2;
 
 
-	ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, throwAngle, t_mSize);
+	ThrowObject* t_to = ThrowObject::create(t_sp, t_type, t_speed, throwAngle, t_mSize);
 	addChild(t_to);
 	//t_to->startMyAction();
 	stopMyAction();
@@ -878,19 +878,21 @@ void AP_Missile14::myInit( CCPoint t_sp, int t_type, float t_speed, int t_tmCnt,
 	for(int i=1; i<=left; i++)
 	{
 		float t_angle = baseAngle - i*unitDegree;
+		if(t_type==14)t_angle=baseAngle;//105패턴은 조준사격
 		if(t_angle >= 180)		t_angle -= 360;
 		if(t_angle < -180)		t_angle += 360;
 
-		ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, t_angle, t_mSize);
+		ThrowObject* t_to = ThrowObject::create(t_sp, t_type, t_speed, t_angle, t_mSize);
 		addChild(t_to);
 		//t_to->startMyAction();
 	}
 	for (int i=0; i<right; i++) {
 		float t_angle = baseAngle + i*unitDegree;
+		if(t_type==14)t_angle=baseAngle; //105패턴은 조준사격
 		if(t_angle >= 180)		t_angle -= 360;
 		if(t_angle < -180)		t_angle += 360;
 
-		ThrowObject* t_to = ThrowObject::create(t_sp, t_type, 2.f, t_angle, t_mSize);
+		ThrowObject* t_to = ThrowObject::create(t_sp, t_type, t_speed, t_angle, t_mSize);
 		addChild(t_to);
 		//t_to->startMyAction();
 	}
@@ -1336,7 +1338,7 @@ void AP_Missile24::updateSightOut()
 {
 	ingFrame = 0;
 
-	SightOut* t_so = SightOut::create();
+	SightOut* t_so = SightOut::create(sightOutFrame);
 	t_so->setPosition(ccp(160,215));
 	addChild(t_so);
 	t_so->startAction();
@@ -1370,7 +1372,7 @@ void AP_Missile24::myInit( int t_frame )
 {
 	sightOutFrame = t_frame;
 
-	SightOut* t_so = SightOut::create();
+	SightOut* t_so = SightOut::create(sightOutFrame);
 	t_so->setPosition(ccp(160,215));
 	addChild(t_so);
 	t_so->startAction();
@@ -2821,13 +2823,27 @@ void KSTargetAttackPattern7::myAction()
 
 			addChild(lazer_main);
 
-
-			//				CCSprite* prev = ret2.first;
-			for(int i=0; i<10; i++)
+			
+			//레이저가 자연스럽게 시작하도록 붙여주는것
+			{
+			CCSprite* laser3 = CCSprite::create("pattern_laserpuple_back1.png");
+			laser3->setPosition(ccp(25, 0));
+			laser3->setScaleY(m_crashSize/12.f);
+			lazer_main->addChild(laser3,-1);
+			}
+			{
+				CCSprite* laser3 = CCSprite::create("pattern_laserpuple_back2.png");
+				laser3->setPosition(ccp(20, 0));
+				laser3->setScaleY(m_crashSize/12.f);
+				lazer_main->addChild(laser3,10);
+			}
+			
+			for(int i=1; i<10; i++)
 			{
 				auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_body.ccbi");
 				CCSprite* laser3 = ret2.first;
-				laser3->setPosition(ccp(74 + 44 * i, 0));
+				laser3->setPosition(ccp(20+44 * i, 0));
+				laser3->setScaleY(m_crashSize/12.f);
 				lazer_main->addChild(laser3);
 				//					prev = laser3;
 			}
@@ -2839,7 +2855,7 @@ void KSTargetAttackPattern7::myAction()
 
 			float t_scale = m_crashSize/30.f;
 
-			crashRect = CCRectMake(0, (-m_crashSize + 10*t_scale), 460, (m_crashSize + 10*t_scale));
+			crashRect = CCRectMake(-30, (-m_crashSize + 10*t_scale), 460, (m_crashSize + 10*t_scale)); //x좌표에 -30추가, 무조건 1자로 깍도록
 			//				crashRect = CCRectMake(0, -60/2 + 10, 460, +60/2 + 10);
 			lineCrashMap(c_sp, angle, 460, 60);
 		}
@@ -2982,7 +2998,7 @@ void KSTargetAttackPattern12::myInit( CCPoint t_sp, KSCumberBase* cb, const std:
 	reader.parse(patternData, pattern);
 
 	m_frame = 0;
-	m_totalFrame = pattern.get("number", 5).asInt() * 20;
+	m_totalFrame = pattern.get("number", 5).asInt() * 40;
 	m_pattern = pattern;
 	m_targetSprite = KS::loadCCBI<CCSprite*>(this, "target3.ccbi").first;
 	addChild(m_targetSprite);
@@ -3003,7 +3019,7 @@ void KSTargetAttackPattern12::stopMyAction()
 void KSTargetAttackPattern12::update( float dt )
 {
 	m_frame++;
-	if(m_frame % 20 == 0)
+	if(m_frame % 40 == 0)
 	{
 		// 쏨~
 		ThrowBomb* gun = ThrowBomb::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), m_pattern);

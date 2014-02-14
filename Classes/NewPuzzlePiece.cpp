@@ -77,7 +77,7 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 			n_quantity_label->setAnchorPoint(ccp(0.5,0.5));
 			n_quantity_label->setPosition(ccp(n_piece->getContentSize().width/2.f+6, n_piece->getContentSize().height/2.f-13));
 			n_piece->addChild(n_quantity_label);
-		n_piece->setPosition(ccp(-12.5f,-12.5f));
+		n_piece->setPosition(ccp(-12.f,-12.f));
 			
 			CCSprite* s_piece = CCSprite::create(("temp_piece_buy_" + piece_direction + ".png").c_str());
 			s_piece->setColor(ccGRAY);
@@ -91,7 +91,7 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 			s_quantity_label->setAnchorPoint(ccp(0.5,0.5));
 			s_quantity_label->setPosition(ccp(s_piece->getContentSize().width/2.f+6, s_piece->getContentSize().height/2.f-13));
 			s_piece->addChild(s_quantity_label);
-		s_piece->setPosition(ccp(-12.5f,-12.5f));
+		s_piece->setPosition(ccp(-12.f,-12.f));
 			
 			CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(NewPuzzlePiece::menuAction));
 		piece_item->setContentSize(CCSizeMake(50, 50));
@@ -126,13 +126,13 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 		CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont().c_str(), 12);
 		n_stage->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f+5));
 		n_piece->addChild(n_stage);
-		n_piece->setPosition(ccp(-12.5f,-12.5f));
+		n_piece->setPosition(ccp(-12.f,-12.f));
 			CCSprite* s_piece = CCSprite::create(("temp_piece_gray_" + piece_direction + ".png").c_str());
 			s_piece->setColor(ccGRAY);
 		CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont().c_str(), 12);
 		s_stage->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f+5));
 		s_piece->addChild(s_stage);
-		s_piece->setPosition(ccp(-12.5f,-12.5f));
+		s_piece->setPosition(ccp(-12.f,-12.f));
 			
 			CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(NewPuzzlePiece::menuAction));
 		piece_item->setContentSize(CCSizeMake(50, 50));
@@ -161,62 +161,12 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 	}
 	else
 	{
-		bool is_have[3] = {false,};
-		is_have[0] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1)) > 0;
-		is_have[1] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 2)) > 0;
-		is_have[2] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 3)) > 0;
-
-		if(t_mode == kNewPuzzlePieceMode_default)
+		if(stage_number == mySGD->suitable_stage)
 		{
-			string piece_filename;
-			if(is_have[2])
-				piece_filename = "temp_piece_gold_" + piece_direction + ".png";
-			else if(is_have[1])
-				piece_filename = "temp_piece_silver_" + piece_direction + ".png";
-			else if(is_have[0])
-				piece_filename = "temp_piece_bronze_" + piece_direction + ".png";
-			else
-				piece_filename = "temp_piece_normal_" + piece_direction + ".png";
-			
-			CCSprite* n_piece = CCSprite::create(piece_filename.c_str());
-			CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont().c_str(), 12);
-			n_stage->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f+5));
-			n_piece->addChild(n_stage);
-			setStageLevel(n_piece);
-			n_piece->setPosition(ccp(-12.5f,-12.5f));
-			
-			CCSprite* s_piece = CCSprite::create(piece_filename.c_str());
+			CCSprite* n_piece = CCSprite::create(CCString::createWithFormat("temp_piece_suitable_%s.png", piece_direction.c_str())->getCString());
+			CCSprite* s_piece = CCSprite::create(CCString::createWithFormat("temp_piece_suitable_%s.png", piece_direction.c_str())->getCString());
 			s_piece->setColor(ccGRAY);
-			CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont().c_str(), 12);
-			s_stage->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f+5));
-			s_piece->addChild(s_stage);
-			setStageLevel(s_piece);
-			s_piece->setPosition(ccp(-12.5f,-12.5f));
-			
-			CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(NewPuzzlePiece::menuAction));
-			piece_item->setContentSize(CCSizeMake(50, 50));
-			
-			piece_menu = ScrollMenu::create(piece_item, NULL);
-			piece_menu->setPosition(CCPointZero);
-			addChild(piece_menu);
-		}
-		else if(t_mode == kNewPuzzlePieceMode_thumbnail)
-		{
-			CCSprite* n_piece;
-			CCSprite* s_piece;
-			
-			if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, stage_number))
-			{
-				n_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "original", piece_no)->getCString());
-				s_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "original", piece_no)->getCString());
-				s_piece->setColor(ccGRAY);
-			}
-			else
-			{
-				n_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "center", piece_no)->getCString());
-				s_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "center", piece_no)->getCString());
-				s_piece->setColor(ccGRAY);
-			}
+
 			n_piece->setPosition(ccp(-(n_piece->getContentSize().width-50)/2.f,-(n_piece->getContentSize().height-50)/2.f));
 			s_piece->setPosition(ccp(-(s_piece->getContentSize().width-50)/2.f,-(s_piece->getContentSize().height-50)/2.f));
 			
@@ -226,6 +176,75 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 			piece_menu = ScrollMenu::create(piece_item, NULL);
 			piece_menu->setPosition(CCPointZero);
 			addChild(piece_menu);
+		}
+		else
+		{
+			bool is_have[3] = {false,};
+			is_have[0] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1)) > 0;
+			is_have[1] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 2)) > 0;
+			is_have[2] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 3)) > 0;
+			
+			if(t_mode == kNewPuzzlePieceMode_default)
+			{
+				string piece_filename;
+				if(is_have[2])
+					piece_filename = "temp_piece_gold_" + piece_direction + ".png";
+				else if(is_have[1])
+					piece_filename = "temp_piece_silver_" + piece_direction + ".png";
+				else if(is_have[0])
+					piece_filename = "temp_piece_bronze_" + piece_direction + ".png";
+				else
+					piece_filename = "temp_piece_normal_" + piece_direction + ".png";
+				
+				CCSprite* n_piece = CCSprite::create(piece_filename.c_str());
+				CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont().c_str(), 12);
+				n_stage->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f+5));
+				n_piece->addChild(n_stage);
+				setStageLevel(n_piece);
+				n_piece->setPosition(ccp(-12.f,-12.f));
+				
+				CCSprite* s_piece = CCSprite::create(piece_filename.c_str());
+				s_piece->setColor(ccGRAY);
+				CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont().c_str(), 12);
+				s_stage->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f+5));
+				s_piece->addChild(s_stage);
+				setStageLevel(s_piece);
+				s_piece->setPosition(ccp(-12.f,-12.f));
+				
+				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(NewPuzzlePiece::menuAction));
+				piece_item->setContentSize(CCSizeMake(50, 50));
+				
+				piece_menu = ScrollMenu::create(piece_item, NULL);
+				piece_menu->setPosition(CCPointZero);
+				addChild(piece_menu);
+			}
+			else if(t_mode == kNewPuzzlePieceMode_thumbnail)
+			{
+				CCSprite* n_piece;
+				CCSprite* s_piece;
+				
+				if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, stage_number))
+				{
+					n_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "original", piece_no)->getCString());
+					s_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "original", piece_no)->getCString());
+					s_piece->setColor(ccGRAY);
+				}
+				else
+				{
+					n_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "center", piece_no)->getCString());
+					s_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "center", piece_no)->getCString());
+					s_piece->setColor(ccGRAY);
+				}
+				n_piece->setPosition(ccp(-(n_piece->getContentSize().width-50)/2.f,-(n_piece->getContentSize().height-50)/2.f));
+				s_piece->setPosition(ccp(-(s_piece->getContentSize().width-50)/2.f,-(s_piece->getContentSize().height-50)/2.f));
+				
+				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(NewPuzzlePiece::menuAction));
+				piece_item->setContentSize(CCSizeMake(50, 50));
+				
+				piece_menu = ScrollMenu::create(piece_item, NULL);
+				piece_menu->setPosition(CCPointZero);
+				addChild(piece_menu);
+			}
 		}
 //		else if(t_mode == kNewPuzzlePieceMode_ranker)
 //		{
@@ -373,29 +392,69 @@ void NewPuzzlePiece::setStageLevel(CCSprite* piece_img)
 //	//			level_label->setColor(font_color);
 //	level_count->setColor(font_color);
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1)) > 0)
+	int star_cnt = 0;
+	
+	int card_durability[3] = {0,};
+	card_durability[0] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1));
+	card_durability[1] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 2));
+	card_durability[2] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 3));
+	
+	if(card_durability[0])		star_cnt++;
+	if(card_durability[1])		star_cnt++;
+	if(card_durability[2])		star_cnt++;
+	
+	
+	if(card_durability[0] > 0)
 	{
 		star1 = CCSprite::create("temp_piece_star_bronze.png");
 		star1->setScale(0.7f);
-		star1->setPosition(ccp(-11,-5));
+		CCPoint star_position;
+		if(star_cnt == 1)
+			star_position = ccp(0,-5);
+		else if(star_cnt == 2)
+			star_position = ccp(-5.5f,-5);
+		else if(star_cnt == 3)
+			star_position = ccp(-11,-5);
+		star1->setPosition(star_position);
 		t_node->addChild(star1);
 //		star1->setPosition(ccpAdd(ccp(level_label->getContentSize().width/2.f, level_label->getContentSize().height/2.f), ccp(-13,4)));
 //		level_label->addChild(star1);
 	}
-	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 2)) > 0)
+	if(card_durability[1] > 0)
 	{
 		star2 = CCSprite::create("temp_piece_star_silver.png");
 		star2->setScale(0.7f);
-		star2->setPosition(ccp(0,-5));
+		CCPoint star_position;
+		if(star_cnt == 1)
+			star_position = ccp(0,-5);
+		else if(star_cnt == 2)
+		{
+			if(card_durability[0] > 0)
+				star_position = ccp(5.5f,-5);
+			else
+				star_position = ccp(-5.5f,-5);
+		}
+		else if(star_cnt == 3)
+			star_position = ccp(0,-5);
+		star2->setPosition(star_position);
 		t_node->addChild(star2);
 //		star2->setPosition(ccpAdd(ccp(level_label->getContentSize().width/2.f, level_label->getContentSize().height/2.f), ccp(13,4)));
 //		level_label->addChild(star2);
 	}
-	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 3)) > 0)
+	if(card_durability[2] > 0)
 	{
 		star3 = CCSprite::create("temp_piece_star_gold.png");
 		star3->setScale(0.7f);
-		star3->setPosition(ccp(11,-5));
+		CCPoint star_position;
+		if(star_cnt == 1)
+			star_position = ccp(0,-5);
+		else if(star_cnt == 2)
+		{
+			star_position = ccp(5.5f,-5);
+		}
+		else if(star_cnt == 3)
+			star_position = ccp(11,-5);
+		star3->setPosition(star_position);
 		t_node->addChild(star3);
 //		star3->setPosition(ccpAdd(ccp(level_label->getContentSize().width/2.f, level_label->getContentSize().height/2.f), ccp(0,8)));
 //		level_label->addChild(star3);

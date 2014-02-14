@@ -23,48 +23,51 @@ void ComboView::changeCombo (int combo)
 }
 void ComboView::setPercentage (float t_percent)
 {
-	combo_timer->setPercentage(t_percent*100);
+//	combo_timer->setPercentage(t_percent*100);
 }
 void ComboView::myInit (int combo)
 {
 	initWithFile("combo_back.png");
 	setPosition(ccp(30,myDSH->ui_top-78));
 	
-	combo_timer = CCProgressTimer::create(CCSprite::create("combo_front.png"));
-	combo_timer->setType(kCCProgressTimerTypeBar);
-	combo_timer->setMidpoint(ccp(0,0));
-	combo_timer->setBarChangeRate(ccp(1,0));
-	combo_timer->setPercentage(100);
-	//		combo_timer->setReverseDirection(true);
-	//		combo_timer->setReverseProgress(true);
-	combo_timer->setPosition(ccp(getContentSize().width/2.f-5, getContentSize().height/2.f));
-	addChild(combo_timer);
+	combo_str = CCSprite::create("combo_front.png");
+	combo_str->setPosition(ccp(getContentSize().width/2.f-13, getContentSize().height/2.f));
+	addChild(combo_str);
+	
+//	combo_timer = CCProgressTimer::create(CCSprite::create("combo_front.png"));
+//	combo_timer->setType(kCCProgressTimerTypeBar);
+//	combo_timer->setMidpoint(ccp(0,0));
+//	combo_timer->setBarChangeRate(ccp(1,0));
+//	combo_timer->setPercentage(100);
+//	combo_timer->setPosition(ccp(getContentSize().width/2.f-5, getContentSize().height/2.f));
+//	addChild(combo_timer);
 	
 	combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
 	combo_label->setAnchorPoint(ccp(0,0.5));
-	combo_label->setPosition(ccp(80,15));
+	combo_label->setPosition(ccp(77,15));
 	addChild(combo_label);
 }
-ComboParent * ComboParent::create ()
+ComboParent * ComboParent::create (CCNode* t_score_label)
 {
 	ComboParent* t_cp = new ComboParent();
-	t_cp->myInit();
+	t_cp->myInit(t_score_label);
 	t_cp->autorelease();
 	return t_cp;
 }
 void ComboParent::showCombo (int t_combo)
 {
-//	if(getChildrenCount() > 0)
-//	{
-//		ComboView* t_cv = (ComboView*)getChildren()->randomObject();
-//		t_cv->changeCombo(t_combo);
-//	}
-//	else
-//	{
-//		ComboView* t_cv = ComboView::create(t_combo);
-//		t_cv->setScale(1.f/1.5f);
-//		addChild(t_cv,0,1);// 1 : ComboView
-//	}
+	if(getChildrenCount() > 0)
+	{
+		ComboView* t_cv = (ComboView*)getChildren()->objectAtIndex(0);// randomObject();
+		t_cv->changeCombo(t_combo);
+	}
+	else
+	{
+		ComboView* t_cv = ComboView::create(t_combo);
+		t_cv->setScale(1.f/1.5f);
+		t_cv->setPosition(score_label->getPosition());
+		addChild(t_cv,0,1);// 1 : ComboView
+	}
 	
 	keeping_frame = 500;
 	if(!is_keeping)
@@ -73,12 +76,14 @@ void ComboParent::showCombo (int t_combo)
 void ComboParent::stopKeep ()
 {
 	unschedule(schedule_selector(ComboParent::keeping));
-//	removeChildByTag(1);
+	removeChildByTag(1);
 	myGD->communication("UI_setComboCnt", 0);
 	is_keeping = false;
+	score_label->setVisible(true);
 }
 void ComboParent::startKeep ()
 {
+	score_label->setVisible(false);
 	is_keeping = true;
 	schedule(schedule_selector(ComboParent::keeping));
 }
@@ -113,15 +118,16 @@ void ComboParent::keeping ()
 	}
 	//		}
 }
-void ComboParent::myInit ()
+void ComboParent::myInit (CCNode* t_score_label)
 {
 	is_keeping = false;
+	score_label = t_score_label;
 	//		is_holding = false;
 }
-FeverParent * FeverParent::create ()
+FeverParent * FeverParent::create (CCNode* t_counting_label)
 {
 	FeverParent* t_fp = new FeverParent();
-	t_fp->myInit();
+	t_fp->myInit(t_counting_label);
 	t_fp->autorelease();
 	return t_fp;
 }
@@ -136,6 +142,12 @@ void FeverParent::addFeverGage (int count)
 	recent_count += count;
 	if(recent_count >= 15)
 	{
+		if(counting_label->getPositionY() < 70)
+			counting_label->setVisible(false);
+		
+		fever_back->setVisible(true);
+		fever_top->setVisible(true);
+		
 		ing_fever = true;
 		entered_fever_cnt++;
 		int total_fever_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_totalFeverCnt)+1;
@@ -166,7 +178,6 @@ void FeverParent::addFeverGage (int count)
 		recent_count = 15;
 		
 		fever_top->setPercentage(100.f);
-		fever_top->getSprite()->setColor(ccGREEN);
 		
 		myLog->addLog(kLOG_show_fever, myGD->getCommunication("UI_getUseTime"));
 		myGD->communication("GIM_startFever");
@@ -235,10 +246,12 @@ void FeverParent::endFever ()
 {
 	if(ing_fever)
 	{
+		counting_label->setVisible(true);
+		fever_back->setVisible(false);
+		fever_top->setVisible(false);
+		
 		ing_fever = false;
 		recent_count = 0;
-		
-		fever_top->getSprite()->setColor(ccWHITE);
 		
 		myGD->communication("GIM_stopFever");
 		
@@ -273,24 +286,27 @@ void FeverParent::stopKeep ()
 	CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/10.f*100.f);
 	fever_top->runAction(progress_to);
 }
-void FeverParent::myInit ()
+void FeverParent::myInit (CCNode* t_counting_label)
 {
+	counting_label = t_counting_label;
 	ing_fever = false;
 	keeping_count = 0;
 	is_keeping = false;
 	entered_fever_cnt = 0;
 	
-	CCSprite* fever_back = CCSprite::create("fever_gage_back.png");
-	fever_back->setPosition(ccp(14,myDSH->ui_top-35));
+	fever_back = CCSprite::create("fever_gage_back.png");
+	fever_back->setPosition(counting_label->getPosition());
 	addChild(fever_back);
+	fever_back->setVisible(false);
 	
 	fever_top = CCProgressTimer::create(CCSprite::create("fever_gage_top.png"));
 	fever_top->setType(kCCProgressTimerTypeBar);
 	fever_top->setMidpoint(ccp(0,0));
-	fever_top->setBarChangeRate(ccp(0,1));
+	fever_top->setBarChangeRate(ccp(1,0));
 	fever_top->setPosition(fever_back->getPosition());
 	fever_top->setPercentage(0.f);
 	addChild(fever_top);
+	fever_top->setVisible(false);
 	
 	recent_count = 0;
 	
@@ -858,7 +874,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
-			if(clr_cdt_type == kCLEAR_bigArea && t_p >= t_beforePercentage + 0.001f)
+			if((clr_cdt_type == kCLEAR_bigArea || clr_cdt_type == kCLEAR_perfect) && t_p >= t_beforePercentage + 0.001f)
 			{
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
@@ -884,6 +900,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per-item_value/100.f)
 			takeBigArea();
+		
+		mySGD->is_draw_button_tutorial = false;
+		myGD->communication("Main_offDrawButtonTutorial");
 		
 		if(t_p >= t_beforePercentage + 0.01f && t_p < clearPercentage)
 		{
@@ -1015,7 +1034,7 @@ void PlayUI::addResultCCB(string ccb_filename)
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
 	result_sprite = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(ccb_filename.c_str(),this));
-	result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
+	result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(result_sprite);
 	reader->release();
 }
@@ -1024,6 +1043,7 @@ void PlayUI::conditionClear ()
 {
 //	removeChildByTag(kCT_UI_clrCdtLabel);
 	is_cleared_cdt = true;
+	mission_button->doClose();
 //	((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
 	
 //	CCSprite* condition_clear = CCSprite::create("condition_clear.png");
@@ -1088,6 +1108,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	taked_coin_cnt++;
 	
 	CCSprite* t_coin_spr = (CCSprite*)exchange_dic->objectForKey(t_coin_number);
+	CCPoint after_position = t_coin_spr->getPosition();
 	t_coin_spr->removeFromParentAndCleanup(true);
 	exchange_dic->removeObjectForKey(t_coin_number);
 	
@@ -1131,14 +1152,8 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	
 	
 	CCSprite* new_coin_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", t_coin_number)->getCString());
-	new_coin_spr->setScale(0.7f);
 	new_coin_spr->setPosition(t_start_position);
-	addChild(new_coin_spr);
-	
-	CCPoint after_position;
-	if(myGD->gamescreen_type == kGT_leftUI)				after_position = ccp(240-25*3.5f+t_coin_number*25,25);
-	else if(myGD->gamescreen_type == kGT_rightUI)		after_position = ccp(240-25*3.5f+t_coin_number*25,25);
-	else												after_position = ccp(240-25*3.5f+t_coin_number*25,25);
+	top_center_node->addChild(new_coin_spr);
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.7f);
 	CCMoveTo* t_move = CCMoveTo::create(0.5f, after_position);
@@ -1200,8 +1215,8 @@ void PlayUI::setClearPercentage (float t_p)
 {
 	clearPercentage = t_p;
 	m_areaGage = AreaGage::create(clearPercentage);
-	m_areaGage->setPosition(ccp(240,10));
-	addChild(m_areaGage);
+	m_areaGage->setPosition(ccp(240,myDSH->ui_top-25));
+	top_center_node->addChild(m_areaGage);
 	m_areaGage->setPercentage(getPercentage());
 }
 void PlayUI::startCounting ()
@@ -1356,6 +1371,8 @@ int PlayUI::getUseTime ()
 }
 void PlayUI::takeCoinModeOn ()
 {
+	top_center_node->setPosition(ccpAdd(top_center_node->getPosition(), ccp(0,8)));
+	
 	is_show_exchange_coin = true;
 	taked_coin_cnt = 0;
 	for(int i=1;i<=6;i++)
@@ -1553,7 +1570,7 @@ void PlayUI::counting ()
 			t_is_die = true;
 			//			if(jack_life > 0)
 			//			{
-			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
 			//			}
 			//			else
 			//			{
@@ -1580,6 +1597,8 @@ void PlayUI::counting ()
 	
 	if(is_urgent)
 	{
+		countingLabel->setVisible(true);
+		
 		countingLabel->setColor(ccRED);
 		countingLabel->setOpacity(100);
 		countingLabel->setScale(4.f);
@@ -1594,10 +1613,15 @@ void PlayUI::counting ()
 	}
 	else
 	{
+		if(countingLabel->getOpacity() == 100 && myGD->getCommunicationBool("Main_isFever"))
+		{
+			countingLabel->setVisible(true);
+		}
+		
 		countingLabel->setColor(ccWHITE);
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
-		countingLabel->setPosition(ccp(240,myDSH->ui_top-25));
+		countingLabel->setPosition(ccp(240,35));
 		countingLabel->setString(CCString::createWithFormat("%d", label_value)->getCString());
 	}
 	
@@ -1680,6 +1704,7 @@ void PlayUI::removeParticle (CCObject * sender)
 }
 void PlayUI::createBonusScore ()
 {
+	my_combo->stopKeep();
 	CCSprite* bonus_score = CCSprite::create("bonus_score.png");
 	bonus_score->setOpacity(0);
 	bonus_score->setPosition(ccp(240,myDSH->ui_center_y+50));
@@ -1953,21 +1978,24 @@ void PlayUI::myInit ()
 	
 	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 	score_label->setAnchorPoint(ccp(0.5,0.5));
-	score_label->setPosition(ccp(55,myDSH->ui_top-25));
+	score_label->setPosition(ccp(40,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											score_label->setPosition(ccp(240,myDSH->ui_top-15));
 	addChild(score_label);
 	
+	top_center_node = CCNode::create();
+	addChild(top_center_node, 1);
+	
 	m_areaGage = NULL;
 	
-	percentageLabel = CCLabelBMFont::create("0%%", "star_gage_font.fnt");
+	percentageLabel = CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14); // CCLabelBMFont::create("0%%", "star_gage_font.fnt");
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
-	percentageLabel->setPosition(ccp(158,5));
+	percentageLabel->setPosition(ccp(185,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 //	else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
-	addChild(percentageLabel, 1);
+	top_center_node->addChild(percentageLabel, 1);
 	
 //	CCSprite* percentage_gain = CCSprite::create("ui_gain.png");
 //	percentage_gain->setAnchorPoint(ccp(0,0.5));
@@ -2005,7 +2033,7 @@ void PlayUI::myInit ()
 	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
-	countingLabel->setPosition(ccp(240,myDSH->ui_top-25));
+	countingLabel->setPosition(ccp(240,35));
 	addChild(countingLabel);
 	
 	isFirst = true;
@@ -2013,7 +2041,7 @@ void PlayUI::myInit ()
 	
 	
 	m_bossLifeGage = BossLifeGage::create();
-	m_bossLifeGage->setPosition(ccp(108,441));
+	m_bossLifeGage->setPosition(ccp(108,600));//441));
 	addChild(m_bossLifeGage);
 	
 	
@@ -2055,11 +2083,10 @@ void PlayUI::myInit ()
 	for(int i=1;i<=6;i++)
 	{
 		CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-		exchange_spr->setScale(0.7f);
-		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-25*3.5f+i*25,25));
-		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-25*3.5f+i*25,25));
-		else									exchange_spr->setPosition(ccp(240-25*3.5f+i*25,25));
-		addChild(exchange_spr);
+		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
+		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
+		else									exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
+		top_center_node->addChild(exchange_spr);
 		
 		exchange_spr->setVisible(false);
 		
@@ -2070,17 +2097,19 @@ void PlayUI::myInit ()
 	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
-	mission_button->setPosition(ccp(480-25, myDSH->ui_top-62));
+	mission_button->setPosition(ccp(480-70, myDSH->ui_top-25));
 	addChild(mission_button);
 	
 	mission_button->startMarquee();
 	
 	mission_button->setOpenFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(-215,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(-170,0)));
+		top_center_node->setVisible(false);
 	});
 	
 	mission_button->setCloseFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(215,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(170,0)));
+		top_center_node->setVisible(true);
 	});
 	
 //	CCPoint icon_menu_position;
@@ -2313,11 +2342,11 @@ void PlayUI::myInit ()
 //		addChild(icon_img, 0, kCT_UI_clrCdtIcon);
 	}
 	
-	my_combo = ComboParent::create();
+	my_combo = ComboParent::create(score_label);
 	my_combo->setPosition(CCPointZero);
 	addChild(my_combo);
 	
-	my_fp = FeverParent::create();
+	my_fp = FeverParent::create(countingLabel);
 	my_fp->setPosition(CCPointZero);
 	addChild(my_fp);
 	
@@ -2361,7 +2390,23 @@ void PlayUI::continueAction ()
 	
 	myDSH->saveUserData(save_userdata_list, nullptr);
 	
-	addGameTime30Sec();
+	
+	if(countingCnt >= 130)
+	{
+		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+	}
+	
+	total_time += countingCnt;
+	
+	if(mySGD->isUsingItem(kIC_longTime))
+	{
+		countingCnt = -mySGD->getLongTimeValue();
+	}
+	else
+	{
+		countingCnt = 0;
+	}
+	
 	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	for(int i=0;i<jack_life;i++)
 	{

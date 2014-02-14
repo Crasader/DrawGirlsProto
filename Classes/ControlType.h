@@ -212,6 +212,8 @@ public:
 	void showDrawButtonTutorial();
 	void hideDrawButtonTutorial();
 	
+	void offDrawButtonTutorial();
+	
 private:
 	bool is_show_draw_button_tutorial;
 	CCSprite* draw_button_tutorial_img;

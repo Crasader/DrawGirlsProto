@@ -82,7 +82,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 			card_img->setPosition(missile_position);
 			jack_missile_node->addChild(card_img);
 			
-			CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.3f);
+			CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.5f/myGD->game_scale);
 			CCDelayTime* t_delay = CCDelayTime::create(0.8f);
 			CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
 			CCCallFunc* t_call = CCCallFunc::create(card_img, callfunc_selector(CCSprite::removeFromParent));
@@ -122,7 +122,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 			card_img->setPosition(missile_position);
 			jack_missile_node->addChild(card_img);
 			
-			CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.3f);
+			CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.5f/myGD->game_scale);
 			CCDelayTime* t_delay = CCDelayTime::create(0.8f);
 			CCFadeTo* t_fade = CCFadeTo::create(shoot_frame/60.f+0.5f, 0);
 			CCCallFunc* t_call = CCCallFunc::create(card_img, callfunc_selector(CCSprite::removeFromParent));
@@ -143,7 +143,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	else
 	{
 		CCSprite* no_img = CCSprite::create("cardchange_noimg.png");
-		no_img->setScale(0.3f);
+		no_img->setScale(0.5f/myGD->game_scale);
 		no_img->setPosition(missile_position);
 		jack_missile_node->addChild(no_img);
 		

@@ -614,15 +614,20 @@ void ControlJoystickButton::invisibleControl()
 	{
 		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
-			control_circle->setPosition(ccp(480-55-myGD->boarder_value, 55));
-			control_ball->setPosition(ccp(480-55-myGD->boarder_value, 55));
+			control_circle->setPosition(ccp(480-40-myGD->boarder_value, 40));
+			control_ball->setPosition(ccp(480-40-myGD->boarder_value, 40));
 		}
 		else
 		{
-			control_circle->setPosition(ccp(55+myGD->boarder_value, 55));
-			control_ball->setPosition(ccp(55+myGD->boarder_value, 55));
+			control_circle->setPosition(ccp(40+myGD->boarder_value, 40));
+			control_ball->setPosition(ccp(40+myGD->boarder_value, 40));
 		}
 	}
+}
+
+void ControlJoystickButton::offDrawButtonTutorial()
+{
+	keep_is_draw_button_tutorial_on = false;
 }
 
 void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
@@ -735,7 +740,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x < 480-55-100 || after_circle_position.y > 55+100)
+						if(after_circle_position.x < 480-40-120 || after_circle_position.y > 40+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -756,7 +761,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x > 55+100 || after_circle_position.y > 55+100)
+						if(after_circle_position.x > 40+120 || after_circle_position.y > 40+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -805,7 +810,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x < 480-55-100 || after_circle_position.y > 55+100)
+						if(after_circle_position.x < 480-40-120 || after_circle_position.y > 40+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -826,7 +831,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x > 55+100 || after_circle_position.y > 55+100)
+						if(after_circle_position.x > 40+120 || after_circle_position.y > 40+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -910,10 +915,10 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						if(!isControlJoystickNotFixed)
 						{
 							CCPoint circle_position = after_circle_position;
-							if(circle_position.x < 480-55-100)
-								circle_position.x = 480-55-100;
-							if(circle_position.y > 55+100)
-								circle_position.y = 55+100;
+							if(circle_position.x < 480-40-120)
+								circle_position.x = 480-40-120;
+							if(circle_position.y > 40+120)
+								circle_position.y = 40+120;
 							
 							control_circle->setPosition(circle_position);
 							
@@ -958,10 +963,10 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						if(!isControlJoystickNotFixed)
 						{
 							CCPoint circle_position = after_circle_position;
-							if(circle_position.x > 55+100)
-								circle_position.x = 55+100;
-							if(circle_position.y > 55+100)
-								circle_position.y = 55+100;
+							if(circle_position.x > 40+120)
+								circle_position.x = 40+120;
+							if(circle_position.y > 40+120)
+								circle_position.y = 40+120;
 							
 							control_circle->setPosition(circle_position);
 							
@@ -1061,10 +1066,10 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 					if(!isControlJoystickNotFixed)
 					{
 						CCPoint circle_position = after_circle_position;
-						if(circle_position.x < 480-55-100)
-							circle_position.x = 480-55-100;
-						if(circle_position.y > 55+100)
-							circle_position.y = 55+100;
+						if(circle_position.x < 480-40-120)
+							circle_position.x = 480-40-120;
+						if(circle_position.y > 40+120)
+							circle_position.y = 40+120;
 						
 						control_circle->setPosition(circle_position);
 						
@@ -1109,10 +1114,10 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 					if(!isControlJoystickNotFixed)
 					{
 						CCPoint circle_position = after_circle_position;
-						if(circle_position.x > 55+100)
-							circle_position.x = 55+100;
-						if(circle_position.y > 55+100)
-							circle_position.y = 55+100;
+						if(circle_position.x > 40+120)
+							circle_position.x = 40+120;
+						if(circle_position.y > 40+120)
+							circle_position.y = 40+120;
 						
 						control_circle->setPosition(circle_position);
 						
@@ -1152,13 +1157,13 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			{
 				if(controlJoystickDirection == kControlJoystickDirection_right)
 				{
-					control_circle->setPosition(ccp(480-55-myGD->boarder_value, 55));
-					control_ball->setPosition(ccp(480-55-myGD->boarder_value, 55));
+					control_circle->setPosition(ccp(480-40-myGD->boarder_value, 40));
+					control_ball->setPosition(ccp(480-40-myGD->boarder_value, 40));
 				}
 				else
 				{
-					control_circle->setPosition(ccp(55+myGD->boarder_value, 55));
-					control_ball->setPosition(ccp(55+myGD->boarder_value, 55));
+					control_circle->setPosition(ccp(40+myGD->boarder_value, 40));
+					control_ball->setPosition(ccp(40+myGD->boarder_value, 40));
 				}
 			}
 			
@@ -1207,8 +1212,8 @@ void ControlJoystickButton::setTouchEnabled( bool t_b )
 
 		if(joystick_touch)
 		{
-			if(controlJoystickDirection == kControlJoystickDirection_left)	control_circle->setPosition(ccp(55+myGD->boarder_value, 55));
-			else																								control_circle->setPosition(ccp(480-55-myGD->boarder_value, 55));
+			if(controlJoystickDirection == kControlJoystickDirection_left)	control_circle->setPosition(ccp(40+myGD->boarder_value, 40));
+			else																								control_circle->setPosition(ccp(480-40-myGD->boarder_value, 40));
 
 			control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, t_b);
@@ -1256,13 +1261,13 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	{
 		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
-			control_circle->setPosition(ccp(480-55-myGD->boarder_value, 55));
-			control_ball->setPosition(ccp(480-55-myGD->boarder_value, 55));
+			control_circle->setPosition(ccp(480-40-myGD->boarder_value, 40));
+			control_ball->setPosition(ccp(480-40-myGD->boarder_value, 40));
 		}
 		else
 		{
-			control_circle->setPosition(ccp(55+myGD->boarder_value, 55));
-			control_ball->setPosition(ccp(55+myGD->boarder_value, 55));
+			control_circle->setPosition(ccp(40+myGD->boarder_value, 40));
+			control_ball->setPosition(ccp(40+myGD->boarder_value, 40));
 		}
 	}
 

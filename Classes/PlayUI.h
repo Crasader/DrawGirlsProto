@@ -36,13 +36,14 @@ public:
 private:
 	int hide_frame;
 	CCLabelBMFont * combo_label;
-	CCProgressTimer * combo_timer;
+	CCSprite* combo_str;
+//	CCProgressTimer * combo_timer;
 	void myInit (int combo);
 };
 class ComboParent : public CCNode
 {
 public:
-	static ComboParent * create ();
+	static ComboParent * create (CCNode* t_score_label);
 	void showCombo (int t_combo);
 	void stopKeep ();
 private:
@@ -50,17 +51,19 @@ private:
 	bool is_keeping;
 	void startKeep ();
 	void keeping ();
-	void myInit ();
+	CCNode* score_label;
+	void myInit (CCNode* t_score_label);
 };
 class FeverParent : public CCNode
 {
 public:
-	static FeverParent * create ();
+	static FeverParent * create (CCNode* t_counting_label);
 	void addFeverGage (int count);
 	void endFever ();
 private:
 	CCParticleSystemQuad * fever_particle;
 	CCProgressTimer * fever_top;
+	CCSprite* fever_back;
 	int recent_count;
 	bool ing_fever;
 	int keeping_count;
@@ -69,7 +72,8 @@ private:
 	void startKeep ();
 	void keeping ();
 	void stopKeep ();
-	void myInit ();
+	CCNode* counting_label;
+	void myInit (CCNode* t_counting_label);
 };
 class GoldLabel : public CCLabelBMFont
 {
@@ -263,8 +267,9 @@ private:
 	ComboParent * my_combo;
 	int combo_cnt;
 //	GoldLabel * gold_label;
+	CCNode* top_center_node;
 	CCLabelBMFont * score_label;
-	CCLabelBMFont * percentageLabel;
+	CCLabelTTF * percentageLabel;
 	CCLabelBMFont * countingLabel;
 	CCSprite * result_sprite;
 	CCDictionary * exchange_dic;
