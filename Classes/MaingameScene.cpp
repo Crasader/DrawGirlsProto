@@ -104,16 +104,6 @@ bool Maingame::init()
 	mControl = NULL;
 	is_line_die = false;
 	
-	CCSprite* top_back = CCSprite::create("top_back.png");
-	top_back->setAnchorPoint(ccp(0.5,1));
-	top_back->setPosition(ccp(240,myDSH->ui_top));
-	addChild(top_back, topBottomZorder);
-	
-	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
-	bottom_back->setAnchorPoint(ccp(0.5,0));
-	bottom_back->setPosition(ccp(240,0));
-	addChild(bottom_back, topBottomZorder);
-	
 	game_node = CCNode::create();
 	game_node->setScale((480.f-myGD->boarder_value*2)/(320.f));
 	//game_node->setScale((480.f-myGD->boarder_value*2)/(320.f)*myGD->game_scale);
@@ -197,6 +187,20 @@ void Maingame::hideDrawButtonTutorial()
 
 void Maingame::onEnterTransitionDidFinish()
 {
+	CCLayer* top_bottom_layer = CCLayer::create();
+	top_bottom_layer->setPosition(ccp(0, 0));
+	getParent()->addChild(top_bottom_layer, -1);
+	
+	CCSprite* top_back = CCSprite::create("top_back.png");
+	top_back->setAnchorPoint(ccp(0.5,1));
+	top_back->setPosition(ccp(240,myDSH->ui_top));
+	top_bottom_layer->addChild(top_back, topBottomZorder);
+	
+	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
+	bottom_back->setAnchorPoint(ccp(0.5,0));
+	bottom_back->setPosition(ccp(240,0));
+	top_bottom_layer->addChild(bottom_back, topBottomZorder);
+	
 	init_state = kMIS_movingGameNode;
 	
 	setTouchEnabled(true);
