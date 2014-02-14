@@ -277,6 +277,7 @@ public:
 	}
 	void setMeChallengeTarget(string t_target, const std::string& t_nickname, float t_score, string t_profile)
 	{
+		is_me_challenge = true;
 		me_challenge_target_user_id = t_target.c_str();
 		me_challenge_target_user_nick = t_nickname;
 		me_challenge_target_user_score = t_score;
@@ -317,6 +318,7 @@ public:
 	}
 	void setAcceptChallengeTarget(string t_id, string t_nick, float t_score, Json::Value t_replay, string t_profile)
 	{
+		is_accept_challenge = true;
 		accept_challenge_target_user_id = t_id.c_str();
 		accept_challenge_target_user_nick = t_nick.c_str();
 		accept_challenge_target_score = t_score;
@@ -355,6 +357,7 @@ public:
 	}
 	void setAcceptHelpTarget(string t_id, string t_nick)
 	{
+		is_accept_help = true;
 		accept_help_target_user_id = t_id.c_str();
 		accept_help_target_user_nick = t_nick.c_str();
 	}

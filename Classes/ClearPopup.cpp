@@ -351,7 +351,7 @@ bool ClearPopup::init()
 	if(take_level == 1)
 	{
 		bronze_star = CCSprite::create("ending_star_bronze.png");
-		bronze_star->setPosition(ccp(132,174));
+		bronze_star->setPosition(ccp(130,174));
 		main_case->addChild(bronze_star, kZ_CP_img);
 		
 		silver_star = NULL;
@@ -363,7 +363,7 @@ bool ClearPopup::init()
 	else if(take_level == 2)
 	{
 		silver_star = CCSprite::create("ending_star_silver.png");
-		silver_star->setPosition(ccp(132,174));
+		silver_star->setPosition(ccp(130,174));
 		main_case->addChild(silver_star, kZ_CP_img);
 		
 		bronze_star = NULL;
@@ -375,7 +375,7 @@ bool ClearPopup::init()
 	else if(take_level == 3)
 	{
 		gold_star = CCSprite::create("ending_star_gold.png");
-		gold_star->setPosition(ccp(132,174));
+		gold_star->setPosition(ccp(130,174));
 		main_case->addChild(gold_star, kZ_CP_img);
 		
 		bronze_star = NULL;

@@ -141,6 +141,8 @@ private:
 	void successAction();
 	void failAction();
 	
+	void createCheckBuyPopup(function<void()> buy_action);
+	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
     virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);

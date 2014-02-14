@@ -1020,10 +1020,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 int mailNo = mail["no"].asInt();
 
+														 CCLog("도전수락\nmail : %s\ncontent : %s", GraphDogLib::JsonObjectToString(mail).c_str(), GraphDogLib::JsonObjectToString(contentObj).c_str());
+														 
 														 mySGD->setRemoveMessageMailNo(mailNo);
 														 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
 														 mySGD->setAcceptChallengeTarget(mail["friendID"].asString(), mail["nickname"].asString(),
-																														 contentObj["score"].asFloat(), contentObj["replaydata"], mail["profile"].asString());
+																														 contentObj["score"].asFloat(), contentObj["replaydata"], contentObj["profile"].asString());
 														 mySD->setSilType(contentObj["challengestage"].asInt());
 														 mySGD->setIsAcceptChallenge(true);
 														 // ST 받고 성공시 창 띄움.. & sender->removeFromParent();

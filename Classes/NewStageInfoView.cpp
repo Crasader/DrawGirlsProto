@@ -14,9 +14,59 @@
 #include "StarGoldData.h"
 #include "GDWebSprite.h"
 #include "KSUtil.h"
+#include "TouchSuctionLayer.h"
+
+void NewStageInfoView::myInit(int t_touch_priority)
+{
+	is_show = true;
+	opacity_value = 255;
+	is_menu_enable = false;
+	touch_priority = t_touch_priority;
+	setTouchEnabled(true);
+	
+	recent_mode = kNewStageInfoView_Mode_reward;
+	
+	back_img = CCSprite::create("stageinfoview_back.png");
+	back_img->setPosition(ccp(410,170));
+	addChild(back_img);
+	
+	TouchSuctionLayer* suction = TouchSuctionLayer::create(touch_priority+1);
+	suction->setSwallowRect(back_img->boundingBox());
+	addChild(suction);
+	suction->setTouchEnabled(true);
+	
+	content_node = CCNode::create();
+	content_node->setPosition(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height/2.f));
+	back_img->addChild(content_node);
+	
+	reward_menu = NULL;
+	setRewardMenu();
+	
+	rank_menu = NULL;
+	setRankMenu();
+	
+	recent_stage = 0;
+	is_menu_enable = true;
+}
+
+RankFriendInfo NewStageInfoView::getSelectedIdxRankFriendInfo()
+{
+	return friend_list[selected_friend_idx];
+}
+
+void NewStageInfoView::setClickedStage(int t_stage)
+{
+	if(recent_stage != t_stage)
+	{
+		recent_stage = t_stage;
+		setContentNode();
+	}
+}
 
 void NewStageInfoView::setContentNode()
 {
+	selected_friend_idx = -1;
+	
 	if(recent_mode == kNewStageInfoView_Mode_reward)
 	{
 		content_node->removeAllChildren();
@@ -176,7 +226,6 @@ void NewStageInfoView::setContentNode()
 	}
 	else if(recent_mode == kNewStageInfoView_Mode_rank)
 	{
-		selected_friend_idx = -1;
 		friend_list.clear();
 		content_node->removeAllChildren();
 		rank_table = NULL;
@@ -265,7 +314,6 @@ void NewStageInfoView::resultGetStageScoreList(Json::Value result_data)
 		
 		mySGD->save_stage_rank_stageNumber = recent_stage;
 		mySGD->save_stage_rank_list = friend_list;
-		
 		
 		selected_friend_idx = -1;
 		

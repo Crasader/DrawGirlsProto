@@ -105,7 +105,7 @@ private:
 		remove_particle->setStartSpinVar(0.f);
 		remove_particle->setEndSpin(360.0);
 		remove_particle->setEndSpinVar(0.f);
-		remove_particle->setPosVar(ccp(0,40));
+		remove_particle->setPosVar(ccp(0,60));
 		remove_particle->setPosition(ccp(0,-10));
 		base_node->addChild(remove_particle);
 	}

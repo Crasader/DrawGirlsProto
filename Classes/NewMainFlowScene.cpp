@@ -1976,6 +1976,12 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 	}
 	else if(tag == kNewMainFlowMenuTag_ready)
 	{
+		if(new_stage_info_view->getSelectedIdx() != -1)
+		{
+			RankFriendInfo challenge_info = new_stage_info_view->getSelectedIdxRankFriendInfo();
+			mySGD->setMeChallengeTarget(challenge_info.user_id, challenge_info.nickname, challenge_info.score, challenge_info.img_url);
+		}
+		
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, selected_puzzle_number);
 		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, selected_puzzle_number, selected_stage_number);
 		

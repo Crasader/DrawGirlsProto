@@ -56,6 +56,7 @@ bool Maingame::init()
 	
 	combo_string_img = NULL;
 	combo_value_img = NULL;
+	myJack = NULL;
 	
 	
 	isCheckingBacking = false;
@@ -794,7 +795,16 @@ void Maingame::keyBackClicked()
 
 void Maingame::touchEnd()
 {
-	myJack->isStun = true;
+	if(myJack)
+	{
+		myJack->isStun = true;
+		myJack->changeDirection(directionStop, directionStop);
+		if(myJack->getJackState() == jackStateDrawing)
+		{
+			stunBackTracking();
+		}
+	}
+	
 	if(mControl)
 	{
 		mControl->isStun = true;
@@ -802,11 +812,6 @@ void Maingame::touchEnd()
 //	((ControlJoystickButton*)mControl)->stopMySchedule();
 		if(mControl->mType == kCT_Type_Joystick_button)
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
-	}
-	myJack->changeDirection(directionStop, directionStop);
-	if(myJack->getJackState() == jackStateDrawing)
-	{
-		stunBackTracking();
 	}
 }
 
