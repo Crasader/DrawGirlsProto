@@ -3634,12 +3634,14 @@ void PoisonLine::myAction ()
 void PoisonLine::stopMyAction ()
 {
 	unschedule(schedule_selector(PoisonLine::myAction));
-	addChild(KSGradualValue<float>::create(255, 0, 0.4f, [=](float t){
-		KS::setOpacity(this, t);
+	
+	line->setEmissionRate(0.f);	
+	addChild(KSGradualValue<float>::create(255.f, 0.f, 0.4f, [=](float t){
+		//KS::setOpacity(line, t);
 	},
-																				 [=](float t){
-																					 getParent()->removeFromParentAndCleanup(true);
-																				 }));
+	[=](float t){
+		getParent()->removeFromParentAndCleanup(true);
+	}));
 	//		removeFromParentAndCleanup(true);
 }
 void PoisonLine::myInit (IntPoint t_sp, int frame)
@@ -3648,8 +3650,9 @@ void PoisonLine::myInit (IntPoint t_sp, int frame)
 	mapPoint = t_sp;
 	
 	//		initWithFile("poison_line.png");
-	auto ret = KS::loadCCBI<CCSprite*>(this, "fx_pollution4.ccbi");
-	CCSprite* line = ret.first;
+	auto ret = KS::loadCCBI<CCParticleSystemQuad*>(this, "fx_pollution5.ccbi");
+	line = ret.first;
+	line->setPositionType(kCCPositionTypeGrouped);
 	addChild(line);
 	CCPoint myPosition = ccp((t_sp.x-1)*pixelSize+1, (t_sp.y-1)*pixelSize+1);
 	setPosition(myPosition);

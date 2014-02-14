@@ -604,6 +604,7 @@ public:
 	static PoisonLine * create (IntPoint t_sp, int frame);
 	void startMyAction ();
 private:
+	CCParticleSystemQuad* line;
 	IntPoint mapPoint;
 	int ingFrame;
 	int totalFrame;
