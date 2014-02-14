@@ -1336,7 +1336,7 @@ void AP_Missile24::updateSightOut()
 {
 	ingFrame = 0;
 
-	SightOut* t_so = SightOut::create();
+	SightOut* t_so = SightOut::create(sightOutFrame);
 	t_so->setPosition(ccp(160,215));
 	addChild(t_so);
 	t_so->startAction();
@@ -1370,7 +1370,7 @@ void AP_Missile24::myInit( int t_frame )
 {
 	sightOutFrame = t_frame;
 
-	SightOut* t_so = SightOut::create();
+	SightOut* t_so = SightOut::create(sightOutFrame);
 	t_so->setPosition(ccp(160,215));
 	addChild(t_so);
 	t_so->startAction();

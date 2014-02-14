@@ -56,6 +56,7 @@ public:
 bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, const vector<RewardSprite*>& rs, GachaPurchaseStartMode gsm, GachaCategory gc)
 {
 	CCLayer::init();
+	m_gachaCategory = gc;
 	m_gachaMode = gsm;
 	m_fakeRewards = rs;
 	setTouchEnabled(true);

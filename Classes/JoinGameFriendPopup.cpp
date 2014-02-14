@@ -71,6 +71,10 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 //																														 });
 //	closeBtn->setPosition(ccp(450, 258));
 //	_menu->addChild(closeBtn);
+	
+	CCSprite* addFriend = CCSprite::create("friendsearch_plus.png");
+	addFriend->setPosition(ccp(440, 235));
+	addChild(addFriend);
 
 	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
 	closeBtn->setFunction([=](CCObject*){

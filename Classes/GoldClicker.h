@@ -139,6 +139,8 @@ public:
 		if(m_remainTime <= m_flowTime)
 		{
 			unscheduleUpdate();
+
+			setTouchEnabled(false);
 //			m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent), m_obtainRuby, m_obtainGold, m_obtainSocial);
 			mySGD->setStar(mySGD->getStar() + m_obtainRuby);
 			mySGD->setGold(mySGD->getGold() + m_obtainGold);
