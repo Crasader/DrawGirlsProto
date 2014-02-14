@@ -61,6 +61,7 @@ public:
 	}
 	
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment);
+	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func);
 	
 protected:
 	CCSprite* dimmed_sprite;

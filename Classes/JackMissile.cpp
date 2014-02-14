@@ -626,26 +626,18 @@ void JM_BasicMissile::moving ()
 		float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
 		if(distance <= 1)
 		{
-			unschedule(schedule_selector(JM_BasicMissile::moving));
-			
-			float target_agi = ((KSCumberBase*)targetNode)->getAgility();
-			
-			float agi_rate = (target_agi-dex)/target_agi;
-			agi_rate = agi_rate < 0 ? 0 : agi_rate;
-			
-			agi_rate = agi_rate/100.f*85.f + 0.1f;
-			agi_rate *= 100.f;
-			
-			if(rand()%100 > agi_rate)
+			if(is_one_die)
 			{
+				unschedule(schedule_selector(JM_BasicMissile::moving));
+				
 				particlePosition.x += rand()%21 - 10;
 				particlePosition.y += rand()%21 - 10;
 				
 				myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0), directionAngle);
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
-				myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
+				myGD->communication("CP_startDamageReaction", targetNode, 999999.f, directionAngle);
 				
-				myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
+				myGD->communication("Main_showDamageMissile", particlePosition, int(999999));
 				
 				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 				combo_cnt++;
@@ -661,29 +653,65 @@ void JM_BasicMissile::moving ()
 			}
 			else
 			{
-				myGD->communication("Main_showMissMissile", particlePosition);
+				unschedule(schedule_selector(JM_BasicMissile::moving));
 				
-				int random_angle = directionAngle + rand()%21 - 10;
+				float target_agi = ((KSCumberBase*)targetNode)->getAgility();
 				
-				if(is_spin)				mainImg->setRotation(mainImg->getRotation()-6);
-				else					mainImg->setRotation((mainImg->getRotation()-(random_angle-90))/2.f);
+				float agi_rate = (target_agi-dex)/target_agi;
+				agi_rate = agi_rate < 0 ? 0 : agi_rate;
 				
-				CCPoint miss_position;
-				miss_position.x = 1.f;
-				miss_position.y = tanf(random_angle/180.f*M_PI);
+				agi_rate = agi_rate/100.f*85.f + 0.1f;
+				agi_rate *= 100.f;
 				
-				if(random_angle >= 90 && random_angle <= 270)
-					miss_position = ccpMult(miss_position, -1.f);
-				
-				miss_position = ccpMult(miss_position, 10.f*myJM_SPEED/sqrtf(powf(miss_position.x, 2.f) + powf(miss_position.y, 2.f)));
-				
-				CCMoveBy* move2 = CCMoveBy::create(10.f/60.f, miss_position);
-				CCCallFunc* call2 = CCCallFunc::create(this, callfunc_selector(JM_BasicMissile::removeFromParent));
-				CCSequence* t_seq2 = CCSequence::createWithTwoActions(move2, call2);
-				mainImg->runAction(t_seq2);
-				
-				CCMoveBy* move1 = CCMoveBy::create(10.f/60.f, miss_position);
-				particle->runAction(move1);
+				if(rand()%100 > agi_rate)
+				{
+					particlePosition.x += rand()%21 - 10;
+					particlePosition.y += rand()%21 - 10;
+					
+					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0), directionAngle);
+					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
+					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
+					
+					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
+					
+					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
+					combo_cnt++;
+					
+					int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+					myGD->communication("UI_addScore", addScore);
+					myGD->communication("UI_setComboCnt", combo_cnt);
+					myGD->communication("Main_showComboImage", particlePosition, combo_cnt);
+					
+					myGD->communication("Main_startShake", directionAngle);
+					
+					removeFromParentAndCleanup(true);
+				}
+				else
+				{
+					myGD->communication("Main_showMissMissile", particlePosition);
+					
+					int random_angle = directionAngle + rand()%21 - 10;
+					
+					if(is_spin)				mainImg->setRotation(mainImg->getRotation()-6);
+					else					mainImg->setRotation((mainImg->getRotation()-(random_angle-90))/2.f);
+					
+					CCPoint miss_position;
+					miss_position.x = 1.f;
+					miss_position.y = tanf(random_angle/180.f*M_PI);
+					
+					if(random_angle >= 90 && random_angle <= 270)
+						miss_position = ccpMult(miss_position, -1.f);
+					
+					miss_position = ccpMult(miss_position, 10.f*myJM_SPEED/sqrtf(powf(miss_position.x, 2.f) + powf(miss_position.y, 2.f)));
+					
+					CCMoveBy* move2 = CCMoveBy::create(10.f/60.f, miss_position);
+					CCCallFunc* call2 = CCCallFunc::create(this, callfunc_selector(JM_BasicMissile::removeFromParent));
+					CCSequence* t_seq2 = CCSequence::createWithTwoActions(move2, call2);
+					mainImg->runAction(t_seq2);
+					
+					CCMoveBy* move1 = CCMoveBy::create(10.f/60.f, miss_position);
+					particle->runAction(move1);
+				}
 			}
 		}
 		if(ing_miss_counting < 0)
@@ -748,6 +776,11 @@ void JM_BasicMissile::myInit (CCNode * t_target, int jm_type, float missile_spee
 }
 void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_speed)
 {
+	is_one_die = false;
+	
+	if(missile_speed > 99999.f)
+		is_one_die = true;
+	
 	ing_miss_counting = -1;
 	targetNode = t_target;
 //	particle = new CCParticleSystemQuad();

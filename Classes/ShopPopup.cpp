@@ -255,9 +255,9 @@ void ShopPopup::setShopCode(ShopCode t_code)
 		
 		character_table->setDelegate(this);
 		main_case->addChild(character_table, kSP_Z_content);
-		character_table->setTouchPriority(-170-3);
+		character_table->setTouchPriority(-300-3);
 		
-		suction = TouchSuctionLayer::create(-172);
+		suction = TouchSuctionLayer::create(-302);
 		suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
 		suction->setTouchEnabled(true);
 		addChild(suction);
@@ -348,7 +348,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			content_menu->setPosition(ccp(main_content->getContentSize().width/2.f, 17));
 			main_content->addChild(content_menu);
 			
-			content_menu->setTouchPriority(-170-4);
+			content_menu->setTouchPriority(-300-4);
 		}
 	}
 	else
@@ -396,7 +396,7 @@ void ShopPopup::setCardBuyMenu(CCPoint t_point, int t_tag, string inner_filename
 	CCMenu* t_buy_menu = CCMenu::createWithItem(t_buy_item);
 	t_buy_menu->setPosition(ccp(t_buy_back->getContentSize().width/2.f, t_buy_back->getContentSize().height/2.f-79));
 	t_buy_back->addChild(t_buy_menu);
-	t_buy_menu->setTouchPriority(-170-4);
+	t_buy_menu->setTouchPriority(-300-4);
 }
 
 enum CharacterCellZorder
@@ -457,12 +457,10 @@ void ShopPopup::cellAction(CCObject* sender)
 		else
 		{
 			if(condition_type == "gold")
-				addChild(ASPopupView::getCommonNoti(-210, "골드가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "골드가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 			else if(condition_type == "ruby")
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 			CCLog("not enough condition");
-			
-			is_menu_enable = true;
 		}
 	}
 	else // select
@@ -553,7 +551,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 		unlock_menu->setPosition(ccp(62,23));
 		cell->addChild(unlock_menu, kCharacterCellZorder_buy);
 		
-		unlock_menu->setTouchPriority(-170-1);
+		unlock_menu->setTouchPriority(-300-1);
 	}
 	else
 	{
@@ -577,7 +575,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 			select_menu->setPosition(ccp(62,23));
 			cell->addChild(select_menu, kCharacterCellZorder_selected);
 			
-			select_menu->setTouchPriority(-170-1);
+			select_menu->setTouchPriority(-300-1);
 		}
 	}
 	
@@ -624,7 +622,7 @@ bool ShopPopup::init()
 	addChild(main_case, kSP_Z_back);
 	
 	
-	CommonButton* close_menu = CommonButton::createCloseButton(-170-4);
+	CommonButton* close_menu = CommonButton::createCloseButton(-300-4);
 	close_menu->setPosition(getContentPosition(kSP_MT_close));
 	close_menu->setFunction([=](CCObject* sender)
 							{
@@ -635,7 +633,7 @@ bool ShopPopup::init()
 	main_case->addChild(close_menu, kSP_Z_content);
 
 	
-	character_menu = CommonButton::create("캐릭터상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	character_menu = CommonButton::create("캐릭터상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	character_menu->setTitleColor(ccWHITE);
 	character_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	character_menu->setTitleColorForDisable(ccBLACK);
@@ -648,7 +646,7 @@ bool ShopPopup::init()
 								});
 	main_case->addChild(character_menu, kSP_Z_content);
 	
-	card_menu = CommonButton::create("카드상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	card_menu = CommonButton::create("카드상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	card_menu->setTitleColor(ccWHITE);
 	card_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	card_menu->setTitleColorForDisable(ccBLACK);
@@ -661,7 +659,7 @@ bool ShopPopup::init()
 								});
 	main_case->addChild(card_menu, kSP_Z_content);
 	
-	ruby_menu = CommonButton::create("루비상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	ruby_menu = CommonButton::create("루비상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	ruby_menu->setTitleColor(ccWHITE);
 	ruby_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	ruby_menu->setTitleColorForDisable(ccBLACK);
@@ -674,7 +672,7 @@ bool ShopPopup::init()
 								});
 	main_case->addChild(ruby_menu, kSP_Z_content);
 	
-	gold_menu = CommonButton::create("골드상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	gold_menu = CommonButton::create("골드상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	gold_menu->setTitleColor(ccWHITE);
 	gold_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	gold_menu->setTitleColorForDisable(ccBLACK);
@@ -687,7 +685,7 @@ bool ShopPopup::init()
 						   });
 	main_case->addChild(gold_menu, kSP_Z_content);
 	
-	heart_menu = CommonButton::create("코인상점", 12, CCSizeMake(83,38), CommonButtonPupple, -170-4);
+	heart_menu = CommonButton::create("코인상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	heart_menu->setTitleColor(ccWHITE);
 	heart_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	heart_menu->setTitleColorForDisable(ccBLACK);
@@ -703,7 +701,7 @@ bool ShopPopup::init()
 //	tab_menu = CCMenu::create();
 //	tab_menu->setPosition(CCPointZero);
 //	main_case->addChild(tab_menu, kSP_Z_content);
-//	tab_menu->setTouchPriority(-170-4);
+//	tab_menu->setTouchPriority(-300-4);
 //	
 //	
 //	
@@ -971,9 +969,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1012,9 +1009,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 	}
@@ -1056,9 +1052,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1097,9 +1092,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 	}
@@ -1141,9 +1135,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1182,9 +1175,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 	}
@@ -1226,9 +1218,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1267,9 +1258,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 	}
@@ -1311,9 +1301,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1352,9 +1341,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 	}
@@ -1396,9 +1384,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1437,9 +1424,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLog("not enough ruby!!!");
-				is_menu_enable = true;
 			}
 		}
 	}
@@ -1473,8 +1459,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(-210, "루비가 부족합니다."), kSP_Z_popup);
-			is_menu_enable = true;
+			addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 		}
 	}
 	else if(tag == kSP_MT_cardMid)
@@ -1507,8 +1492,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(-210, "골드가 부족합니다."), kSP_Z_popup);
-			is_menu_enable = true;
+			addChild(ASPopupView::getCommonNoti(-310, "골드가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 		}
 	}
 	else if(tag == kSP_MT_cardLow)
@@ -1541,8 +1525,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(-210, "소셜 포인트가 부족합니다."), kSP_Z_popup);
-			is_menu_enable = true;
+			addChild(ASPopupView::getCommonNoti(-310, "소셜 포인트가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 		}
 	}
 }
@@ -2068,5 +2051,5 @@ void ShopPopup::ccTouchCancelled( CCTouch *pTouch, CCEvent *pEvent )
 void ShopPopup::registerWithTouchDispatcher()
 {
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-	pDispatcher->addTargetedDelegate(this, -170, true);
+	pDispatcher->addTargetedDelegate(this, -300, true);
 }

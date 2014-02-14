@@ -179,12 +179,11 @@ bool NewMainFlowScene::init()
 			int stage_number = i;
 			if((stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
 			   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
-				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))))) && i+1 < t_puzzle_start_stage+t_puzzle_stage_count &&
-			   (i+1 == -1 ||
-				!((i+1 == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i+1) ||
+				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))))) && (i+1 == t_puzzle_start_stage+t_puzzle_stage_count ||
+					(!((i+1 == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i+1) ||
 				   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i+1) == 0 &&
 					(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1) == 0 ||
-					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1))))))))
+					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1)))))))))
 			{
 				last_stage_number = stage_number;
 			}
@@ -356,7 +355,7 @@ bool NewMainFlowScene::init()
 //		}
 	}
 	
-	if(!clear_is_first_puzzle_success && !clear_is_first_perfect && clear_is_stage_unlock)
+	if(clear_is_first_puzzle_success || (!clear_is_first_perfect && clear_is_stage_unlock))
 	{
 		selected_stage_number = mySD->getSilType();
 		selected_puzzle_number = NSDS_GI(selected_stage_number, kSDS_SI_puzzle_i);
@@ -389,12 +388,20 @@ void NewMainFlowScene::showClearPopup()
 void NewMainFlowScene::hideClearPopup()
 {
 //	is_menu_enable = true;
-	
+	int get_puzzle_number = NSDS_GI(mySD->getSilType(), kSDS_SI_puzzle_i);
 	int open_puzzle_count = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1;
 	if(clear_is_first_puzzle_success)
 		open_puzzle_count--;
-	clear_found_puzzle_idx = open_puzzle_count;
-	
+	bool is_found = false;
+	clear_found_puzzle_idx = -1;
+	for(int i=0;i<open_puzzle_count && !is_found;i++)
+	{
+		if(get_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
+		{
+			is_found = true;
+			clear_found_puzzle_idx = i;
+		}
+	}
 	
 	if(clear_is_empty_piece)
 		showGetPuzzle();
@@ -561,7 +568,7 @@ void NewMainFlowScene::showSuccessPuzzleEffect()
 
 void NewMainFlowScene::endSuccessPuzzleEffect()
 {
-	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, clear_found_puzzle_idx+1);
+	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, clear_found_puzzle_idx+2);
 	if(mySIL->addImage(CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, "original")->getCString()))
 	{
 		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
@@ -714,8 +721,8 @@ void NewMainFlowScene::setTable()
 		}
 	}
 	
-//	if(clear_is_first_puzzle_success)
-//		myPosition--;
+	if(clear_is_first_puzzle_success)
+		myPosition--;
 	
 	float xInitPosition = MAX(puzzle_table->minContainerOffset().x, -cellSizeForTable(puzzle_table).width*myPosition);
 	xInitPosition = MIN(0, xInitPosition);

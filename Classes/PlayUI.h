@@ -327,6 +327,7 @@ private:
 	void alertAction (int t1, int t2);
 	void addResultClearCCB();
 	void addResultCCB(string ccb_filename);
+	KSProtectVar<float> keep_percentage;
 	
 	CCMenu* home_menu;
 	

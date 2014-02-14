@@ -48,6 +48,7 @@ bool Maingame::init()
 	setTag(0);
 	AudioEngine::sharedInstance()->startGame();
 	
+	is_gohome = false;
 	setKeypadEnabled(true);
 	
 	replay_continue_count = 0;
@@ -677,6 +678,9 @@ void Maingame::counting()
 
 void Maingame::gachaOn()
 {
+	if(is_gohome)
+		return;
+	
 	myLog->addLog(kLOG_gacha_startMap, -1);
 	mySGD->setGold(mySGD->getGold() - mySGD->getGachaMapFee());
 	myGD->resetGameData();
@@ -1091,7 +1095,11 @@ void Maingame::gameover()
 		CCDelayTime* t_delay = CCDelayTime::create(2.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-		runAction(t_seq);
+		
+		CCNode* t_node = CCNode::create();
+		addChild(t_node);
+		
+		t_node->runAction(t_seq);
 	}
 }
 
@@ -1903,6 +1911,7 @@ void Maingame::showPause()
 }
 void Maingame::goHome ()
 {
+	is_gohome = true;
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
 	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());

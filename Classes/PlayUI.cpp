@@ -986,6 +986,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				conditionFail();
 		}
 		
+		if(clr_cdt_type == kCLEAR_default)
+			conditionClear();
+		
 		if(is_cleared_cdt)
 		{
 			myGD->communication("MP_bombCumber", myGD->getCommunicationNode("CP_getMainCumberPointer"));
@@ -1014,6 +1017,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			stopCounting();
 			// timeover
 			isGameover = true;
+			myGD->communication("CP_setGameover");
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
@@ -1049,6 +1053,19 @@ void PlayUI::conditionClear ()
 //	CCSprite* condition_clear = CCSprite::create("condition_clear.png");
 //	condition_clear->setPosition(getChildByTag(kCT_UI_clrCdtIcon)->getPosition());
 //	addChild(condition_clear);
+	
+	CCNode* success_node = CCNode::create();
+	success_node->setPosition(ccp(480,myDSH->ui_top*0.67f));
+	addChild(success_node);
+	
+	
+	CCSprite* success_ccb = KS::loadCCBI<CCSprite*>(this, "ui_missonsuccess.ccbi").first;
+	success_node->addChild(success_ccb);
+	
+	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
+	CCCallFunc* t_call = CCCallFunc::create(success_node, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+	success_node->runAction(t_seq);
 }
 void PlayUI::conditionFail ()
 {
@@ -1686,9 +1703,9 @@ void PlayUI::lifeBonus ()
 	{
 		int grade_value = 1;
 		if(is_exchanged)				grade_value++;
-		if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+		if(keep_percentage.getV() >= 1.f)					grade_value++;
 		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, atoi(score_label->getString()), keep_percentage.getV(), countingCnt, use_time, total_time);
 		CCDelayTime* n_d = CCDelayTime::create(2.5f);
 		CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 		
@@ -1752,32 +1769,34 @@ void PlayUI::endGame (bool is_show_reason)
 		}
 		else
 		{
+			keep_percentage = getPercentage();
+			
 			CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
 			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
 			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
 			CCFiniteTimeAction* nextScene2;
-			if(mySGD->getStar() >= mySGD->getGachaOnePercentFee())
-			{
+//			if(mySGD->getStar() >= mySGD->getGachaOnePercentFee())
+//			{
 				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
-			}
-			else
-			{
-				if(jack_life > 0)
-				{
-					CCDelayTime* t_delay = CCDelayTime::create(2.f);
-					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
-					nextScene2 = CCSequence::createWithTwoActions(t_delay, t_call);
-				}
-				else
-				{
-					int grade_value = 1;
-					if(is_exchanged)				grade_value++;
-					if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
-					
-					mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
-					nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
-				}
-			}
+//			}
+//			else
+//			{
+//				if(jack_life > 0)
+//				{
+//					CCDelayTime* t_delay = CCDelayTime::create(2.f);
+//					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
+//					nextScene2 = CCSequence::createWithTwoActions(t_delay, t_call);
+//				}
+//				else
+//				{
+//					int grade_value = 1;
+//					if(is_exchanged)				grade_value++;
+//					if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+//					
+//					mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+//					nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+//				}
+//			}
 			
 			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
 			
@@ -1796,7 +1815,7 @@ void PlayUI::endGame (bool is_show_reason)
 }
 void PlayUI::showGachaOnePercent ()
 {
-	OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha), this, callfuncF_selector(PlayUI::gachaOnOnePercent), getPercentage());
+	OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha), this, callfuncF_selector(PlayUI::gachaOnOnePercent), keep_percentage.getV());
 	addChild(t_popup);
 }
 void PlayUI::gachaOnOnePercent (float t_percent)
@@ -1817,16 +1836,16 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 	else
 	{
 		int grade_value = 1;
-		if(is_exchanged && getPercentage() >= 1.f)		grade_value+=2;
+		if(is_exchanged && t_percent >= 1.f)		grade_value+=2;
 		else
 		{
-			if(getPercentage() >= 1.f)
+			if(t_percent >= 1.f)
 			{
 				grade_value++;
 			}
 		}
 		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), getPercentage(), countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, atoi(score_label->getString()), t_percent, countingCnt, use_time, total_time);
 		nextScene();
 	}
 }
@@ -1859,9 +1878,9 @@ void PlayUI::cancelOnePercentGacha ()
 	{
 		int grade_value = 1;
 		if(is_exchanged)				grade_value++;
-		if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+		if(keep_percentage.getV() >= 1.f)					grade_value++;
 		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, atoi(score_label->getString()), keep_percentage.getV(), countingCnt, use_time, total_time);
 		nextScene();
 	}
 }

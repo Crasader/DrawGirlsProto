@@ -278,6 +278,7 @@ private:
 	void showDrawButtonTutorial();
 	void hideDrawButtonTutorial();
 	
+	bool is_gohome;
 	void showPause();
 	void goHome ();
 	void goReplay ();

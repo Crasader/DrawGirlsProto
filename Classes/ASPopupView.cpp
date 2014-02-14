@@ -14,6 +14,11 @@
 
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 {
+	return getCommonNoti(t_touch_priority, t_comment, [](){});
+}
+
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func)
+{
 	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -24,7 +29,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 	float height_value = 320.f;
 	if(myDSH->screen_convert_rate < 1.f)
 		height_value = 320.f/myDSH->screen_convert_rate;
-		
+	
 	if(height_value < myDSH->ui_top)
 		height_value = myDSH->ui_top;
 	
@@ -55,6 +60,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 								  case_back->getContentSize().height/2.f-10));
 	close_button->setFunction([=](CCObject* sender)
 							  {
+								  close_func();
 								  t_popup->removeFromParent();
 							  });
 	t_container->addChild(close_button);
