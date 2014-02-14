@@ -10,6 +10,7 @@
 #include "StarGoldData.h"
 #include "CCMenuLambda.h"
 #include "DataStorageHub.h"
+#include "CommonButton.h"
 
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 {
@@ -34,35 +35,29 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 	CCNode* t_container = CCNode::create();
 	t_popup->setContainerNode(t_container);
 	
-	CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+	CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
 	case_back->setPosition(CCPointZero);
 	t_container->addChild(case_back);
 	
+	CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+	content_back->setPosition(CCPointZero);
+	t_container->addChild(content_back);
+	
 	CCLabelTTF* ment_label = CCLabelTTF::create(t_comment.c_str(), mySGD->getFont().c_str(), 15);
-	ment_label->setColor(ccBLACK);
-	ment_label->setPosition(ccp(0,-17));
+	ment_label->setPosition(ccp(0,0));
 	t_container->addChild(ment_label);
 	
-	case_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+40, ment_label->getContentSize().height + 70));
+	case_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+60, ment_label->getContentSize().height + 40));
+	content_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+40, ment_label->getContentSize().height + 20));
 	
-	CCLabelTTF* title_img = CCLabelTTF::create("알림", mySGD->getFont().c_str(), 17);
-	title_img->setPosition(ccp(0, case_back->getContentSize().height/2.f-22));
-	t_container->addChild(title_img);
-	
-	CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-	CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-	s_close->setColor(ccGRAY);
-	
-	CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																		{
-																			t_popup->removeFromParent();
-																		});
-	
-	CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
-	close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-	close_menu->setPosition(ccp(case_back->getContentSize().width/2.f-n_close->getContentSize().width/2.f+1,
-								case_back->getContentSize().height/2.f-n_close->getContentSize().height/2.f+2));
-	t_container->addChild(close_menu);
+	CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+	close_button->setPosition(ccp(case_back->getContentSize().width/2.f-10,
+								  case_back->getContentSize().height/2.f-10));
+	close_button->setFunction([=](CCObject* sender)
+							  {
+								  t_popup->removeFromParent();
+							  });
+	t_container->addChild(close_button);
 	
 	return t_popup;
 }

@@ -904,7 +904,87 @@ void StartSettingScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kStartSettingMenuTag_start)
 		{
-			callStart();
+			bool is_have_usable_card = false;
+			int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
+			for(int i=1;i<=card_take_cnt && !is_have_usable_card;i++)
+			{
+				int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+				int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
+				if(card_durability > 0)
+					is_have_usable_card = true;
+			}
+			
+			if(is_have_usable_card && myDSH->getIntegerForKey(kDSH_Key_selectedCard) == 0)
+			{
+				ASPopupView* t_popup = ASPopupView::create(-300);
+				
+				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+				if(screen_scale_x < 1.f)
+					screen_scale_x = 1.f;
+				
+				float height_value = 320.f;
+				if(myDSH->screen_convert_rate < 1.f)
+					height_value = 320.f/myDSH->screen_convert_rate;
+				
+				if(height_value < myDSH->ui_top)
+					height_value = myDSH->ui_top;
+				
+				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+				t_popup->setDimmedPosition(ccp(240, 160));
+				t_popup->setBasePosition(ccp(240, 160));
+				
+				CCNode* t_container = CCNode::create();
+				t_popup->setContainerNode(t_container);
+				addChild(t_popup, kStartSettingZorder_popup);
+				
+				CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+				case_back->setPosition(ccp(0,0));
+				t_container->addChild(case_back);
+				
+				case_back->setContentSize(CCSizeMake(260, 170));
+				
+				CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+				content_back->setPosition(ccp(0,25));
+				t_container->addChild(content_back);
+				
+				content_back->setContentSize(CCSizeMake(240, 100));
+				
+				CCLabelTTF* ment1_label = CCLabelTTF::create("카드가 장착되어있지 않습니다.",	mySGD->getFont().c_str(), 15);
+				ment1_label->setPosition(ccp(0,40));
+				t_container->addChild(ment1_label);
+				
+				CCLabelTTF* ment2_label = CCLabelTTF::create("계속하시겠습니까?", mySGD->getFont().c_str(), 15);
+				ment2_label->setPosition(ccp(0,10));
+				t_container->addChild(ment2_label);
+				
+				
+				CommonButton* cancel_button = CommonButton::create("장착하기", 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+				cancel_button->setPosition(ccp(-60,-55));
+				cancel_button->setFunction([=](CCObject* sender)
+										   {
+											   CardChangePopup* change_popup = CardChangePopup::create();
+											   change_popup->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupCloseCardSetting));
+											   addChild(change_popup, kStartSettingZorder_popup);
+
+											   t_popup->removeFromParent();
+										   });
+				t_container->addChild(cancel_button);
+				
+				
+				CommonButton* ok_button = CommonButton::create("그냥하기", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
+				ok_button->setPosition(ccp(60,-55));
+				ok_button->setFunction([=](CCObject* sender)
+									   {
+										   callStart();
+										   t_popup->removeFromParent();
+									   });
+				t_container->addChild(ok_button);
+			}
+			else
+			{
+				callStart();
+			}
 		}
 		else if(tag == kStartSettingMenuTag_card)
 		{
@@ -1165,12 +1245,80 @@ void StartSettingScene::callStart()
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(-210, "하트가 부족해요."), kStartSettingZorder_popup);
+			ASPopupView* t_popup = ASPopupView::create(-300);
 			
-			if(mySGD->getIsMeChallenge())
-				mySGD->setIsMeChallenge(false);
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
 			
-			is_menu_enable = true;
+			float height_value = 320.f;
+			if(myDSH->screen_convert_rate < 1.f)
+				height_value = 320.f/myDSH->screen_convert_rate;
+			
+			if(height_value < myDSH->ui_top)
+				height_value = myDSH->ui_top;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, 160));
+			t_popup->setBasePosition(ccp(240, 160));
+			
+			CCNode* t_container = CCNode::create();
+			t_popup->setContainerNode(t_container);
+			addChild(t_popup, kStartSettingZorder_popup);
+			
+			CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+			case_back->setPosition(ccp(0,0));
+			t_container->addChild(case_back);
+			
+			case_back->setContentSize(CCSizeMake(220, 190));
+			
+			CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+			content_back->setPosition(ccp(0,25));
+			t_container->addChild(content_back);
+			
+			content_back->setContentSize(CCSizeMake(200, 120));
+			
+			CCLabelTTF* ment1_label = CCLabelTTF::create("코인이 부족합니다.", mySGD->getFont().c_str(), 15);
+			ment1_label->setPosition(ccp(0,35));
+			t_container->addChild(ment1_label);
+			
+			CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
+			ment2_label->setPosition(ccp(0,15));
+			t_container->addChild(ment2_label);
+			
+			
+			
+			CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+			cancel_button->setPosition(ccp(100,85));
+			cancel_button->setFunction([=](CCObject* sender)
+									   {
+										   is_menu_enable = true;
+										   t_popup->removeFromParent();
+									   });
+			t_container->addChild(cancel_button);
+			
+			
+			CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+			ok_button->setPosition(ccp(0,-65));
+			ok_button->setFunction([=](CCObject* sender)
+								   {
+									   ShopPopup* t_shop = ShopPopup::create();
+									   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+									   t_shop->targetHeartTime(heart_time);
+									   t_shop->setShopCode(kSC_heart);
+									   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+									   addChild(t_shop, kStartSettingZorder_popup);
+									   t_popup->removeFromParent();
+								   });
+			t_container->addChild(ok_button);
+			
+			
+			
+//			addChild(ASPopupView::getCommonNoti(-210, "하트가 부족해요."), kStartSettingZorder_popup);
+			
+//			if(mySGD->getIsMeChallenge())
+//				mySGD->setIsMeChallenge(false);
 		}
 	}
 }

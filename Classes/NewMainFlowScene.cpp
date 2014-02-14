@@ -390,20 +390,11 @@ void NewMainFlowScene::hideClearPopup()
 {
 //	is_menu_enable = true;
 	
-	int get_puzzle_number = NSDS_GI(mySD->getSilType(), kSDS_SI_puzzle_i);
 	int open_puzzle_count = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1;
 	if(clear_is_first_puzzle_success)
 		open_puzzle_count--;
-	bool is_found = false;
-	clear_found_puzzle_idx = -1;
-	for(int i=0;i<open_puzzle_count && !is_found;i++)
-	{
-		if(get_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
-		{
-			is_found = true;
-			clear_found_puzzle_idx = i;
-		}
-	}
+	clear_found_puzzle_idx = open_puzzle_count;
+	
 	
 	if(clear_is_empty_piece)
 		showGetPuzzle();
@@ -1181,7 +1172,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 						int piece_number = y*piece_width_count+x+1;
 						bool is_stage = false;
 						int stage_number = -1;
-						if(piece_number == puzzle_path[puzzle_path_idx].piece_no)
+						if(puzzle_path_idx < puzzle_path.size() && piece_number == puzzle_path[puzzle_path_idx].piece_no)
 						{
 							is_stage = true;
 							stage_number = puzzle_path[puzzle_path_idx].stage_no;
@@ -1224,6 +1215,8 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 							{
 								clicked_func = [=](int t_stage_number){	pieceAction(t_stage_number);	};
 							}
+							
+							CCAssert(stage_number > 0 && stage_number < 100000, "what?");
 							
 							NewPuzzlePiece* t_piece = NewPuzzlePiece::create(stage_number, clicked_func, (NewPuzzlePieceMode)puzzle_piece_mode[idx], is_buy, is_lock);
 							t_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));

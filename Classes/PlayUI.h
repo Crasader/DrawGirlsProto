@@ -328,6 +328,8 @@ private:
 	void addResultClearCCB();
 	void addResultCCB(string ccb_filename);
 	
+	CCMenu* home_menu;
+	
 	void writeMap();
 	void checkMapTimeVector();
 	

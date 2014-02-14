@@ -165,7 +165,7 @@ void StartMapLuckyItem::speedUpAction ()
 				},
 				[=](float t)
 				{
-					main_img->removeFromParent();
+					removeFromParent();
 				}));
 			}));
 		}));
@@ -180,7 +180,17 @@ void StartMapLuckyItem::speedUp ()
 void StartMapLuckyItem::startRemoveAction ()
 {
 	main_img->stopAllActions();
-	main_img->runAction(CCSequence::createWithTwoActions(CCScaleTo::create(1.f, 0.f), CCCallFunc::create(this, callfunc_selector(StartMapLuckyItem::removeFromParent))));
+	main_img->addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f,
+													 [=](float t)
+													 {
+														 main_img->setScale(t);
+														 //					main_img->setScale(t*(1.9f-1.6f) + 1.6f);
+														 //					KS::setOpacity(main_img, 65 - t*(65-0));
+													 },
+													 [=](float t)
+													 {
+														 removeFromParent();
+													 }));
 }
 void StartMapLuckyItem::myInit (IntPoint t_point)
 {

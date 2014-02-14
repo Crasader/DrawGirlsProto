@@ -439,6 +439,7 @@ public:
 	void setGachaOnePercentFee(int t_data);
 	void setAiAdderOnDrewOrDamaged(float t_data);
 	void setFuryPercent(float t_data);
+	void setSPRentCardThanks(int t_data);
 	
 	int getHeartMax();
 	int getHeartCoolTime();
@@ -471,6 +472,7 @@ public:
 	int getGachaOnePercentFee();
 	float getAiAdderOnDrewOrDamaged();
 	float getFuryPercent();
+	int getSPRentCardThanks();
 	
 	bool is_before_selected_event_stage;
 	
@@ -638,6 +640,7 @@ private:
 	KSProtectVar<int> gacha_one_percent_fee; // 1프로 가챠 가격(루비)
 	KSProtectVar<float> ai_adder_on_drew_or_damaged; //
 	KSProtectVar<float> fury_percent; //
+	KSProtectVar<int> SP_rent_card_thanks; // 소셜포인트 획득량-카드빌리고 보답할때
 	
 	void myInit();
 	

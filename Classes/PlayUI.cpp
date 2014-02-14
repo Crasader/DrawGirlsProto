@@ -1498,6 +1498,7 @@ void PlayUI::counting ()
 	bool t_is_die = false;
 	if(detail_counting_cnt >= 60)
 	{
+		home_menu->setEnabled(true);
 		detail_counting_cnt = 0;
 		countingCnt++;
 		use_time++;
@@ -2052,11 +2053,12 @@ void PlayUI::myInit ()
 	CCMenuItem* home_item = CCMenuItemSprite::create(n_home, s_home, this, menu_selector(PlayUI::menuAction));
 	home_item->setTag(kMenuTagUI_home);
 	
-	CCMenu* home_menu = CCMenu::createWithItem(home_item);
+	home_menu = CCMenu::createWithItem(home_item);
 	home_menu->setPosition(ccp(480-25, myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)				home_menu->setPosition(ccp(25,myDSH->ui_top-25));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		home_menu->setPosition(ccp(480-25,myDSH->ui_top-25));
 //	else												home_menu->setPosition(ccp(25,myDSH->ui_top-25));
+	home_menu->setEnabled(false);
 	addChild(home_menu);
 	
 	

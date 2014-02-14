@@ -264,6 +264,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setBonusItemCnt(kIC_rentCard, result_data["bonusItemCntRentCard"].asInt());
 		mySGD->setAiAdderOnDrewOrDamaged(result_data["aiAdderOnDrewOrDamaged"].asFloat());
 		mySGD->setFuryPercent(result_data["furyPercent"].asFloat());
+		mySGD->setSPRentCardThanks(result_data["SPRentCardThanks"].asInt());
 	}
 	else
 	{
@@ -1034,6 +1035,7 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
+	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 //	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
