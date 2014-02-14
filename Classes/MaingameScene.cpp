@@ -104,6 +104,16 @@ bool Maingame::init()
 	mControl = NULL;
 	is_line_die = false;
 	
+	CCSprite* top_back = CCSprite::create("top_back.png");
+	top_back->setAnchorPoint(ccp(0.5,1));
+	top_back->setPosition(ccp(240,myDSH->ui_top));
+	addChild(top_back, topBottomZorder);
+	
+	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
+	bottom_back->setAnchorPoint(ccp(0.5,0));
+	bottom_back->setPosition(ccp(240,0));
+	addChild(bottom_back, topBottomZorder);
+	
 	game_node = CCNode::create();
 	game_node->setScale((480.f-myGD->boarder_value*2)/(320.f));
 	//game_node->setScale((480.f-myGD->boarder_value*2)/(320.f)*myGD->game_scale);
@@ -860,6 +870,7 @@ void Maingame::setControlJoystickButton()
 	mControl = ControlJoystickButton::create(this, callfunc_selector(Maingame::readyBackTracking), myJack);
 	((ControlJoystickButton*)mControl)->pauseBackTracking = callfunc_selector(Maingame::pauseBackTracking);
 	addChild(mControl, mControlZorder);
+	myGD->V_V["Main_offDrawButtonTutorial"] = std::bind(&ControlJoystickButton::offDrawButtonTutorial, (ControlJoystickButton*)mControl);
 }
 
 void Maingame::startControl()
@@ -1069,7 +1080,7 @@ void Maingame::gameover()
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		CCSprite* result_sprite = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ui_gameover.ccbi",this));
-		result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
+		result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 		myUI->addChild(result_sprite);
 		reader->release();
 		
@@ -1152,8 +1163,8 @@ CCPoint Maingame::getObjectToGameNodePosition( CCPoint t_p )
 	
 	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
 	{
-		if(y_value > 60)																		y_value = 60;
-		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)			y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+		if(y_value > 80)																		y_value = 80;
+		else if(y_value < -430*myGD->game_scale+480*frame_size.height/frame_size.width - 60)			y_value = -430*myGD->game_scale+480*frame_size.height/frame_size.width - 60;
 	}
 	
 	float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
@@ -1179,7 +1190,6 @@ CCPoint Maingame::getObjectToGameNodePositionCoin( CCPoint t_p )
 	float scale_value = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d);
 	if(scale_value < 0.1f)
 		scale_value = 1.f;
-	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float x_value = t_p.x/320.f*(720.f*scale_value-myGD->boarder_value*2.f);
 	float y_value = t_p.y/320.f*(720.f*scale_value-myGD->boarder_value*2.f);
 

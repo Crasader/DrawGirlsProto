@@ -901,6 +901,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per-item_value/100.f)
 			takeBigArea();
 		
+		mySGD->is_draw_button_tutorial = false;
+		myGD->communication("Main_offDrawButtonTutorial");
+		
 		if(t_p >= t_beforePercentage + 0.01f && t_p < clearPercentage)
 		{
 			int up_count = (t_p - t_beforePercentage)/0.01f;
@@ -1031,7 +1034,7 @@ void PlayUI::addResultCCB(string ccb_filename)
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
 	result_sprite = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(ccb_filename.c_str(),this));
-	result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
+	result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(result_sprite);
 	reader->release();
 }
@@ -1154,9 +1157,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.7f);
 	CCMoveTo* t_move = CCMoveTo::create(0.5f, after_position);
-	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.5f);
-	CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_move, t_scale);
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_spawn);
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_move);
 	new_coin_spr->runAction(t_seq);
 	
 	
@@ -1988,9 +1989,9 @@ void PlayUI::myInit ()
 	
 	m_areaGage = NULL;
 	
-	percentageLabel = CCLabelBMFont::create("0%%", "star_gage_font.fnt");
+	percentageLabel = CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 28); // CCLabelBMFont::create("0%%", "star_gage_font.fnt");
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
-	percentageLabel->setPosition(ccp(185,myDSH->ui_top-30));
+	percentageLabel->setPosition(ccp(185,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 //	else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
@@ -2082,10 +2083,9 @@ void PlayUI::myInit ()
 	for(int i=1;i<=6;i++)
 	{
 		CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-		exchange_spr->setScale(0.5f);
-		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-40));
-		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-40));
-		else									exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-40));
+		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
+		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
+		else									exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
 		top_center_node->addChild(exchange_spr);
 		
 		exchange_spr->setVisible(false);

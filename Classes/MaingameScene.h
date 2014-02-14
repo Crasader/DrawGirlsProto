@@ -26,7 +26,8 @@
 using namespace cocos2d;
 
 enum Mainzorder{
-	myMSZorder = 1,
+	topBottomZorder = 1,
+	myMSZorder,
 	myPMZorder,
 	attackItemZorder,
 	myCPZorder,

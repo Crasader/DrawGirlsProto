@@ -1019,8 +1019,6 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 													 [=](CCObject* e) {
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 int mailNo = mail["no"].asInt();
-
-														 CCLog("도전수락\nmail : %s\ncontent : %s", GraphDogLib::JsonObjectToString(mail).c_str(), GraphDogLib::JsonObjectToString(contentObj).c_str());
 														 
 														 mySGD->setRemoveMessageMailNo(mailNo);
 														 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());

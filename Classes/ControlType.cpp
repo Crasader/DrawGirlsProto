@@ -625,6 +625,11 @@ void ControlJoystickButton::invisibleControl()
 	}
 }
 
+void ControlJoystickButton::offDrawButtonTutorial()
+{
+	keep_is_draw_button_tutorial_on = false;
+}
+
 void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 {
 	if(isStun)

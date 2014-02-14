@@ -269,7 +269,7 @@ private:
 //	GoldLabel * gold_label;
 	CCNode* top_center_node;
 	CCLabelBMFont * score_label;
-	CCLabelBMFont * percentageLabel;
+	CCLabelTTF * percentageLabel;
 	CCLabelBMFont * countingLabel;
 	CCSprite * result_sprite;
 	CCDictionary * exchange_dic;

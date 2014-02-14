@@ -194,7 +194,7 @@ enum MSzorder{
 	invisibleZorder = 1,
 	visibleZorder,
 	blockZorder,
-	topBottomZorder,
+//	topBottomZorder,
 	boarderZorder
 };
 
