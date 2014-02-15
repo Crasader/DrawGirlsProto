@@ -29,6 +29,7 @@ enum SID_MenuTag{
 	kSID_MT_cancel = 1
 };
 
+class CommonButton;
 class StageInfoDown : public CCLayer
 {
 public:
@@ -45,7 +46,7 @@ private:
 	CCSprite* gray;
 	
 	CCLabelTTF* state_ment;
-	CCMenu* cancel_menu;
+	CommonButton* cancel_menu;
 	CCLabelBMFont* download_state;
 	
 	int ing_download_cnt;

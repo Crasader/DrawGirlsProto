@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 
 USING_NS_CC;
+using namespace std;
 
 class TouchSuctionLayer : public CCLayer
 {
@@ -21,6 +22,8 @@ public:
 	SEL_CallFunc delegate_touch_began;
 	void setNotSwallowRect(CCRect t_rect);
 	void setSwallowRect(CCRect t_rect);
+	void setSwallowMent(string t_ment);
+	virtual ~TouchSuctionLayer();
 private:
 	void myInit(int t_touch_priority);
 	int touch_priority;
@@ -28,6 +31,7 @@ private:
 	bool is_setted_not_swallow_rect;
 	CCRect swallow_rect;
 	bool is_setted_swallow_rect;
+	string swallow_ment;
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);

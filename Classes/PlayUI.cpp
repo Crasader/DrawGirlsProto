@@ -2010,6 +2010,7 @@ void PlayUI::myInit ()
 	m_areaGage = NULL;
 	
 	percentageLabel = CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14); // CCLabelBMFont::create("0%%", "star_gage_font.fnt");
+	percentageLabel->enableStroke(ccBLACK, 0.5f);
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
 	percentageLabel->setPosition(ccp(185,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));

@@ -50,7 +50,7 @@ CCPoint CollectionBookPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kCBP_MT_zoom)		return_value = ccp(55, 55);
+	if(t_tag == kCBP_MT_zoom)		return_value = ccp(55, 40);
 	else if(t_tag == kCBP_MT_pre)	return_value = ccp(120, 51);
 	else if(t_tag == kCBP_MT_next)	return_value = ccp(170, 51);
 	else if(t_tag == kCBP_MT_second)	return_value = ccp(93,222);
@@ -277,18 +277,28 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	target->addChild(right_bottom_paper);
 	
 	
-	
-	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
-	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
-	s_zoom->setColor(ccGRAY);
-	
-	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBookPopup::menuAction));
-	zoom_item->setTag(kCBP_MT_zoom);
-	
-	CCMenu* zoom_menu = CCMenu::createWithItem(zoom_item);
+	CommonButton* zoom_menu = CommonButton::create("확대", 11, CCSizeMake(50, 40), CommonButtonYellow, -191);
 	zoom_menu->setPosition(getContentPosition(kCBP_MT_zoom));
+	zoom_menu->setTag(kCBP_MT_zoom);
+	zoom_menu->setFunction([=](CCObject* sender)
+						   {
+							   CCNode* t_node = CCNode::create();
+							   t_node->setTag(kCBP_MT_zoom);
+							   menuAction(t_node);
+						   });
 	target->addChild(zoom_menu, 1, kCBP_MT_zoom);
-	zoom_menu->setTouchPriority(-191);
+	
+//	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
+//	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
+//	s_zoom->setColor(ccGRAY);
+//	
+//	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBookPopup::menuAction));
+//	zoom_item->setTag(kCBP_MT_zoom);
+//	
+//	CCMenu* zoom_menu = CCMenu::createWithItem(zoom_item);
+//	zoom_menu->setPosition(getContentPosition(kCBP_MT_zoom));
+//	target->addChild(zoom_menu, 1, kCBP_MT_zoom);
+//	zoom_menu->setTouchPriority(-191);
 }
 
 // on "init" you need to initialize your instance
@@ -399,7 +409,7 @@ bool CollectionBookPopup::init()
 		
 		setLeftPage(after_left_img, pre_number);
 		
-		((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+		((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 		
 		
 		after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
@@ -661,7 +671,7 @@ void CollectionBookPopup::startNextPage()
 		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
 	
 	
-	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
@@ -777,7 +787,7 @@ void CollectionBookPopup::startPreFullSelectedPage()
 	
 	setLeftPage(after_left_img, mySGD->selected_collectionbook);
 	
-	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	animation_angle = 0;
 	animation_img = recent_left_img;
@@ -795,7 +805,7 @@ void CollectionBookPopup::startPreSelectedPage()
 	after_left_img = NULL;
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
-	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 	
 	recent_card_number = mySGD->selected_collectionbook;
 	
@@ -888,7 +898,7 @@ void CollectionBookPopup::startNextSelectedPage()
 	if(recent_right_img->getChildByTag(kCBP_MT_third))
 		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
 	
-	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
@@ -964,7 +974,7 @@ void CollectionBookPopup::endNextPage()
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	setLeftPage(after_left_img, pre_number);
-	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
@@ -1031,7 +1041,7 @@ void CollectionBookPopup::endNextSelectedPage()
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	setLeftPage(after_left_img, pre_number);
-	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
 	
@@ -1088,7 +1098,7 @@ void CollectionBookPopup::startPrePage()
 	after_left_img = NULL;
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
-	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 	
 	recent_card_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
@@ -1190,7 +1200,7 @@ void CollectionBookPopup::endPrePage()
 	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
 	setLeftPage(after_left_img, pre_number);
-	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	
 	after_right_img->removeFromParent();
@@ -1265,7 +1275,7 @@ void CollectionBookPopup::endPreSelectedPage()
 	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
 	setLeftPage(after_left_img, pre_number);
-	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	
 	after_right_img->removeFromParent();

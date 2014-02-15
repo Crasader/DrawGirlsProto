@@ -32,6 +32,7 @@ void NewStageInfoView::myInit(int t_touch_priority)
 	
 	TouchSuctionLayer* suction = TouchSuctionLayer::create(touch_priority+1);
 	suction->setSwallowRect(back_img->boundingBox());
+	suction->setSwallowMent("NewStageInfoView suction touch swallow");
 	addChild(suction);
 	suction->setTouchEnabled(true);
 	

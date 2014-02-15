@@ -363,7 +363,7 @@ bool NewMainFlowScene::init()
 	
 	setTable();
 	
-	new_stage_info_view = NewStageInfoView::create(-190);
+	new_stage_info_view = NewStageInfoView::create(-150);
 	addChild(new_stage_info_view, kNewMainFlowZorder_right);
 	
 	pieceAction(selected_stage_number);

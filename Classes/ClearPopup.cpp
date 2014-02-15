@@ -441,6 +441,7 @@ bool ClearPopup::init()
 	ok_menu->setVisible(false);
 	ok_menu->setPosition(ccp(348.5f,38));
 	main_case->addChild(ok_menu, kZ_CP_menu);
+	ok_menu->setTouchPriority(-200);
 	
 	
 	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
@@ -456,6 +457,7 @@ bool ClearPopup::init()
 		replay_menu->setVisible(false);
 		replay_menu->setPosition(ccp(130,38));
 		main_case->addChild(replay_menu, kZ_CP_menu);
+		replay_menu->setTouchPriority(-200);
 	}
 	else
 	{
@@ -472,6 +474,7 @@ bool ClearPopup::init()
 			replay_menu->setVisible(false);
 			replay_menu->setPosition(ccp(130,38));
 			main_case->addChild(replay_menu, kZ_CP_menu);
+			replay_menu->setTouchPriority(-200);
 		}
 		else
 			replay_menu = NULL;
@@ -1475,6 +1478,7 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 	}
 	
 	nickname_label = CCLabelTTF::create((*member).nickname.c_str(), mySGD->getFont().c_str(), 12);
+	nickname_label->enableStroke(ccBLACK, 0.5f);
 	nickname_label->setPosition(ccp(130,28));
 	nickname_label->setTag(kCFC_T_nickname);
 	cell->addChild(nickname_label,kCFC_Z_img);
