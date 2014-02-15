@@ -13,7 +13,7 @@
 #include "SlidingPuzzle.h"
 #include "CardMatching.h"
 #include "GoldClicker.h"
-
+#include "CountingBMLabel.h"
 
 enum MiniGameZorder{
 	kMiniGameZorder_game = 1,
@@ -138,19 +138,96 @@ void MiniGamePopup::hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector, 
 	left_curtain->setVisible(true);
 	right_curtain->setVisible(true);
 	
+	keep_gold = gold;
+	keep_ruby = ruby;
+	keep_social = social;
+	
 	CCMoveTo* left_move1 = CCMoveTo::create(0.3f, ccp(240,160));
-	CCDelayTime* left_delay = CCDelayTime::create(1.f);
-	CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(-80,160));
-	CCSequence* left_seq = CCSequence::create(left_move1, left_delay, left_move, NULL);
-	left_curtain->runAction(left_seq);
+//	CCDelayTime* left_delay = CCDelayTime::create(1.f);
+//	CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(-80,160));
+//	CCSequence* left_seq = CCSequence::create(left_move1, left_delay, left_move, NULL);
+	left_curtain->runAction(left_move1);
 	
 	CCMoveTo* right_move1 = CCMoveTo::create(0.3f, ccp(240,160));
-	CCDelayTime* right_delay = CCDelayTime::create(1.f);
-	CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(560,160));
-	CCCallFunc* right_call = CCCallFunc::create(this, callfunc_selector(MiniGamePopup::endHidePopup));
-	CCCallFunc* middle_call = CCCallFunc::create(pSelectorTarget, selector);
-	CCSequence* right_seq = CCSequence::create(right_move1, right_delay, middle_call, right_move, right_call, NULL);
+	CCCallFunc* right_end = CCCallFunc::create(this, callfunc_selector(MiniGamePopup::startCalcAction));
+	CCCallFunc* remove_minigame = CCCallFunc::create(pSelectorTarget, selector);
+	CCSequence* right_seq = CCSequence::create(right_move1, right_end, remove_minigame, NULL);
+//	CCDelayTime* right_delay = CCDelayTime::create(1.f);
+//	CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(560,160));
+//	CCCallFunc* right_call = CCCallFunc::create(this, callfunc_selector(MiniGamePopup::endHidePopup));
+//	CCCallFunc* middle_call = CCCallFunc::create(pSelectorTarget, selector);
+//	CCSequence* right_seq = CCSequence::create(right_move1, right_delay, middle_call, right_move, right_call, NULL);
 	right_curtain->runAction(right_seq);
+}
+
+void MiniGamePopup::startCalcAction()
+{
+	reward_title = CCSprite::create("minigame_reward_title.png");
+	reward_title->setPosition(ccp(240,240+200));
+	addChild(reward_title, kMiniGameZorder_title);
+	
+	CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240,240));
+	reward_title->runAction(title_move);
+	
+	reward_case = CCSprite::create("minigame_reward_box.png");
+	reward_case->setPosition(ccp(240-480, 150));
+	addChild(reward_case, kMiniGameZorder_content);
+	
+	reward_gold = CountingBMLabel::create("0", "etc_font.fnt", 1.f, "%d");
+	reward_gold->setPosition(ccp(210,44+25));
+	reward_case->addChild(reward_gold);
+	
+	reward_ruby = CountingBMLabel::create("0", "etc_font.fnt", 1.f, "%d");
+	reward_ruby->setPosition(ccp(210,42.5f));
+	reward_case->addChild(reward_ruby);
+	
+	reward_social = CountingBMLabel::create("0", "etc_font.fnt", 1.f, "%d");
+	reward_social->setPosition(ccp(210,41-25));
+	reward_case->addChild(reward_social);
+	
+	CCMoveTo* case_move = CCMoveTo::create(0.3f, ccp(240,150));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MiniGamePopup::setCalcInfo));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(case_move, t_call);
+	reward_case->runAction(t_seq);
+}
+
+void MiniGamePopup::setCalcInfo()
+{
+	reward_gold->setString(CCString::createWithFormat("%d", keep_gold)->getCString());
+	reward_ruby->setString(CCString::createWithFormat("%d", keep_ruby)->getCString());
+	reward_social->setString(CCString::createWithFormat("%d", keep_social)->getCString());
+	
+	
+	CCSprite* n_ok = CCSprite::create("minigame_reward_conform.png");
+	CCSprite* s_ok = CCSprite::create("minigame_reward_conform.png");
+	s_ok->setColor(ccGRAY);
+	
+	CCMenuItemLambda* ok_item = CCMenuItemSpriteLambda::create(n_ok, s_ok, [=](CCObject* sender)
+															   {
+																   startOutAction();
+															   });
+	ok_menu = CCMenuLambda::createWithItem(ok_item);
+	ok_menu->setPosition(ccp(240,70));
+	addChild(ok_menu, kMiniGameZorder_menu);
+	ok_menu->setTouchPriority(-180);
+	
+	ok_menu->setVisible(false);
+	
+	CCDelayTime* t_delay = CCDelayTime::create(1.3f);
+	CCShow* t_show = CCShow::create();
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_show);
+	
+	ok_menu->runAction(t_seq);
+}
+
+void MiniGamePopup::startOutAction()
+{
+	ok_menu->setVisible(false);
+	reward_title->runAction(CCMoveTo::create(0.3f, ccp(240,240+200)));
+	reward_case->runAction(CCSequence::create(CCMoveTo::create(0.3f, ccp(240+480, 150)), CCCallFunc::create(this, callfunc_selector(MiniGamePopup::endHidePopup)), NULL));
+	
+	left_curtain->runAction(CCMoveTo::create(0.3f, ccp(-80,160)));
+	right_curtain->runAction(CCMoveTo::create(0.3f, ccp(560,160)));
 }
 
 void MiniGamePopup::endHidePopup()

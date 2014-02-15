@@ -18,6 +18,8 @@ enum MiniGameCode{
 	kMiniGameCode_touchtouch = 0
 };
 
+class CountingBMLabel;
+class CCMenuLambda;
 class MiniGamePopup : public CCLayer
 {
 public:
@@ -52,6 +54,22 @@ private:
 	void endHidePopup();
 	
 	void startGame();
+	
+	int keep_gold;
+	int keep_ruby;
+	int keep_social;
+	
+	CCSprite* reward_title;
+	CCSprite* reward_case;
+	CCMenuLambda* ok_menu;
+	
+	CountingBMLabel* reward_gold;
+	CountingBMLabel* reward_ruby;
+	CountingBMLabel* reward_social;
+	
+	void startCalcAction();
+	void setCalcInfo();
+	void startOutAction();
 	
 	virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent);
 	virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent);

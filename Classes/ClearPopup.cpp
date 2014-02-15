@@ -836,6 +836,7 @@ void ClearPopup::checkMiniGame()
 		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
 		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
 		myDSH->fFlush();
+		myDSH->saveUserData({kSaveUserData_Key_minigame}, nullptr);
 		MiniGamePopup* t_popup = MiniGamePopup::create(kMiniGameCode_touchtouch, bind(&ClearPopup::closePopup, this));
 		addChild(t_popup, kZ_CP_popup);
 	}
