@@ -76,6 +76,7 @@ public:
 	virtual ~ JM_BasicMissile ();
 	virtual void startMoving ();
 private:
+	bool is_one_die;
 	float directionAngle;
 	float myJM_SPEED;
 	float myJM_CHANGE_DIRECTION_VAL;

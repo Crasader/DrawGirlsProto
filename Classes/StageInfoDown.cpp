@@ -8,6 +8,7 @@
 
 #include "StageInfoDown.h"
 #include "DataStorageHub.h"
+#include "CommonButton.h"
 
 
 void StageInfoDown::resultGetStageInfo(Json::Value result_data)
@@ -399,17 +400,15 @@ void StageInfoDown::myInit( CCObject* t_success, SEL_CallFunc d_success, CCObjec
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray);
 
-	CCSprite* n_cancel = CCSprite::create("sspl_cancel.png");
-	CCSprite* s_cancel = CCSprite::create("sspl_cancel.png");
-	s_cancel->setColor(ccGRAY);
-	
-	CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, this, menu_selector(StageInfoDown::menuAction));
-	cancel_item->setTag(kSID_MT_cancel);
-
-	cancel_menu = CCMenu::createWithItem(cancel_item);
-	cancel_menu->setPosition(ccp(350, 240));
+	cancel_menu = CommonButton::createCloseButton(-510);
+	cancel_menu->setPosition(ccp(350,240));
+	cancel_menu->setFunction([=](CCObject* sender)
+							 {
+								 CCNode* t_node = CCNode::create();
+								 t_node->setTag(kSID_MT_cancel);
+								 menuAction(t_node);
+							 });
 	addChild(cancel_menu, kSID_Z_content);
-	cancel_menu->setTouchPriority(-210);
 
 	state_ment = CCLabelTTF::create("스테이지 정보를 받아오는 ing...", mySGD->getFont().c_str(), 20);
 	state_ment->setAnchorPoint(ccp(0.5,0.5));

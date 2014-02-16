@@ -351,7 +351,7 @@ bool ClearPopup::init()
 	if(take_level == 1)
 	{
 		bronze_star = CCSprite::create("ending_star_bronze.png");
-		bronze_star->setPosition(ccp(132,174));
+		bronze_star->setPosition(ccp(130,174));
 		main_case->addChild(bronze_star, kZ_CP_img);
 		
 		silver_star = NULL;
@@ -363,7 +363,7 @@ bool ClearPopup::init()
 	else if(take_level == 2)
 	{
 		silver_star = CCSprite::create("ending_star_silver.png");
-		silver_star->setPosition(ccp(132,174));
+		silver_star->setPosition(ccp(130,174));
 		main_case->addChild(silver_star, kZ_CP_img);
 		
 		bronze_star = NULL;
@@ -375,7 +375,7 @@ bool ClearPopup::init()
 	else if(take_level == 3)
 	{
 		gold_star = CCSprite::create("ending_star_gold.png");
-		gold_star->setPosition(ccp(132,174));
+		gold_star->setPosition(ccp(130,174));
 		main_case->addChild(gold_star, kZ_CP_img);
 		
 		bronze_star = NULL;
@@ -441,6 +441,7 @@ bool ClearPopup::init()
 	ok_menu->setVisible(false);
 	ok_menu->setPosition(ccp(348.5f,38));
 	main_case->addChild(ok_menu, kZ_CP_menu);
+	ok_menu->setTouchPriority(-200);
 	
 	
 	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
@@ -456,6 +457,7 @@ bool ClearPopup::init()
 		replay_menu->setVisible(false);
 		replay_menu->setPosition(ccp(130,38));
 		main_case->addChild(replay_menu, kZ_CP_menu);
+		replay_menu->setTouchPriority(-200);
 	}
 	else
 	{
@@ -472,6 +474,7 @@ bool ClearPopup::init()
 			replay_menu->setVisible(false);
 			replay_menu->setPosition(ccp(130,38));
 			main_case->addChild(replay_menu, kZ_CP_menu);
+			replay_menu->setTouchPriority(-200);
 		}
 		else
 			replay_menu = NULL;
@@ -833,6 +836,7 @@ void ClearPopup::checkMiniGame()
 		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
 		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
 		myDSH->fFlush();
+		myDSH->saveUserData({kSaveUserData_Key_minigame}, nullptr);
 		MiniGamePopup* t_popup = MiniGamePopup::create(kMiniGameCode_touchtouch, bind(&ClearPopup::closePopup, this));
 		addChild(t_popup, kZ_CP_popup);
 	}
@@ -881,54 +885,75 @@ void ClearPopup::checkRentCard()
 		t_popup->setContainerNode(t_container);
 		addChild(t_popup, kZ_CP_popup);
 		
-		CCScale9Sprite* case_back = CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+		CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
 		case_back->setPosition(CCPointZero);
 		t_container->addChild(case_back);
 		
-		case_back->setContentSize(CCSizeMake(330, 265));
+		case_back->setContentSize(CCSizeMake(260, 260));
 		
-		CCLabelTTF* title_img = CCLabelTTF::create("보답하기", mySGD->getFont().c_str(), 13);
-		title_img->setPosition(ccp(0, 111));
+		CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		content_back->setPosition(ccp(0,5));
+		t_container->addChild(content_back);
+		
+		content_back->setContentSize(CCSizeMake(240, 160));
+		
+		CCSprite* title_img = CCSprite::create("message_title_rentcard_thanks.png");
+		title_img->setPosition(ccp(0,107));
 		t_container->addChild(title_img);
 		
-		CCLabelTTF* ment_label = CCLabelTTF::create(CCString::createWithFormat("%s님의 카드가 도움이 되었나요?\n하트로 고마움을 표현하세요.", mySGD->getSelectedFriendCardData().nick.c_str())->getCString(),
-													mySGD->getFont().c_str(), 20);
-		ment_label->setPosition(CCPointZero);
-		t_container->addChild(ment_label);
+		CCLabelTTF* ment1_label = CCLabelTTF::create(CCString::createWithFormat("%s님의", mySGD->getSelectedFriendCardData().nick.c_str())->getCString(),
+													mySGD->getFont().c_str(), 15);
+		ment1_label->setPosition(ccp(0,55));
+		t_container->addChild(ment1_label);
 		
-		CCSprite* n_close = CCSprite::create("item_buy_popup_close.png");
-		CCSprite* s_close = CCSprite::create("item_buy_popup_close.png");
-		s_close->setColor(ccGRAY);
+		CCLabelTTF* ment2_label = CCLabelTTF::create("카드가 도움이 되었나요?", mySGD->getFont().c_str(), 15);
+		ment2_label->setPosition(ccp(0,25));
+		t_container->addChild(ment2_label);
 		
-		CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																			{
-																				checkChallengeOrHelp();
-																				t_popup->removeFromParent();
-																			});
+		CCLabelTTF* ment3_label = CCLabelTTF::create("코인으로 고마움을 표현하세요.", mySGD->getFont().c_str(), 15);
+		ment3_label->setPosition(ccp(0,-5));
+		t_container->addChild(ment3_label);
 		
-		CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
-		close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-		close_menu->setPosition(ccp(140,112));
-		t_container->addChild(close_menu);
+		CCLabelTTF* ment4_label = CCLabelTTF::create("(코인을 선물하면 ", mySGD->getFont().c_str(), 12);
+		ment4_label->setAnchorPoint(ccp(1,0.5));
+		ment4_label->setPosition(ccp(-10,-40));
+		t_container->addChild(ment4_label);
+		
+		CCLabelTTF* ment5_label = CCLabelTTF::create(CCString::createWithFormat("소셜포인트 +%d", mySGD->getSPRentCardThanks())->getCString(), mySGD->getFont().c_str(), 12);
+		ment5_label->setColor(ccYELLOW);
+		ment5_label->setAnchorPoint(ccp(0,0.5));
+		ment5_label->setPosition(ccp(-10,-40));
+		t_container->addChild(ment5_label);
+		
+		CCLabelTTF* ment6_label = CCLabelTTF::create(" 드려요.)", mySGD->getFont().c_str(), 12);
+		ment6_label->setAnchorPoint(ccp(0,0.5));
+		ment6_label->setPosition(ccp(ment5_label->getPositionX()+ment5_label->getContentSize().width,-40));
+		t_container->addChild(ment6_label);
 		
 		
-		CCSprite* n_send_heart = CCSprite::create("help_send.png");
-		CCSprite* s_send_heart = CCSprite::create("help_send.png");
-		s_send_heart->setColor(ccGRAY);
+		CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-1);
+		close_button->setPosition(ccp(111,107));
+		close_button->setFunction([=](CCObject* sender)
+								  {
+									  checkChallengeOrHelp();
+									  t_popup->removeFromParent();
+								  });
+		t_container->addChild(close_button);
 		
-		CCMenuItemSpriteLambda* send_heart_item = CCMenuItemSpriteLambda::create(n_send_heart, s_send_heart, [=](CCObject* sender)
-																				 {
-																					 // 경수
-																					 // 하트 보내기 작업
-																					 // 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
-																					 checkChallengeOrHelp();
-																					 t_popup->removeFromParent();
-																				 });
 		
-		CCMenuLambda* send_heart_menu = CCMenuLambda::createWithItem(send_heart_item);
-		send_heart_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-		send_heart_menu->setPosition(ccp(0,-100));
-		t_container->addChild(send_heart_menu);
+		CommonButton* send_coin_button = CommonButton::create("선물하기", 15, CCSizeMake(100,50), CommonButtonOrange, t_popup->getTouchPriority()-1);
+		send_coin_button->setPosition(ccp(0,-102));
+		send_coin_button->setFunction([=](CCObject* sender)
+									  {
+										  // 경수
+										  // 하트 보내기 작업
+										  // 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
+										  
+										  mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPRentCardThanks());
+										  checkChallengeOrHelp();
+										  t_popup->removeFromParent();
+									  });
+		t_container->addChild(send_coin_button);
 	}
 	else
 	{
@@ -1454,6 +1479,7 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 	}
 	
 	nickname_label = CCLabelTTF::create((*member).nickname.c_str(), mySGD->getFont().c_str(), 12);
+	nickname_label->enableStroke(ccBLACK, 0.5f);
 	nickname_label->setPosition(ccp(130,28));
 	nickname_label->setTag(kCFC_T_nickname);
 	cell->addChild(nickname_label,kCFC_Z_img);

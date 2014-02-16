@@ -1170,6 +1170,10 @@ void StarGoldData::setFuryPercent(float t_data)
 {
 	fury_percent = t_data;
 }
+void StarGoldData::setSPRentCardThanks(int t_data)
+{
+	SP_rent_card_thanks = t_data;
+}
 
 int StarGoldData::getHeartMax()
 {
@@ -1294,4 +1298,8 @@ float StarGoldData::getAiAdderOnDrewOrDamaged()
 float StarGoldData::getFuryPercent()
 {
 	return fury_percent.getV();
+}
+int StarGoldData::getSPRentCardThanks()
+{
+	return SP_rent_card_thanks.getV();
 }

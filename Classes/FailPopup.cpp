@@ -167,7 +167,7 @@ bool FailPopup::init()
 			CardCase* cardCase = CardCase::create(selected_card_number);
 			card->addChild(cardCase);
 			
-			RemoveCardAnimation* b = RemoveCardAnimation::create(card,-190);
+			RemoveCardAnimation* b = RemoveCardAnimation::create(card,-210);
 			
 			b->setSkipFunc([this](){
 				CCLog("skip Func");
@@ -209,7 +209,7 @@ bool FailPopup::init()
 			CardCase* cardCase = CardCase::create(cardNo);
 			card->addChild(cardCase);
 			
-			DownCardAnimation* b = DownCardAnimation::create(card,-190);
+			DownCardAnimation* b = DownCardAnimation::create(card,-210);
 			b->setCloseFunc([this](){
 				this->endDecreaseCardDuration();
 			});
@@ -389,6 +389,7 @@ bool FailPopup::init()
 	main_menu->setVisible(false);
 	main_menu->setPosition(ccp(348.5f,38));
 	main_case->addChild(main_menu, kZ_FP_menu);
+	main_menu->setTouchPriority(-190);
 	
 	
 	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
@@ -404,6 +405,7 @@ bool FailPopup::init()
 		replay_menu->setVisible(false);
 		replay_menu->setPosition(ccp(130,38));
 		main_case->addChild(replay_menu, kZ_FP_menu);
+		replay_menu->setTouchPriority(-190);
 	}
 	else
 	{
@@ -420,6 +422,7 @@ bool FailPopup::init()
 			replay_menu->setVisible(false);
 			replay_menu->setPosition(ccp(130,38));
 			main_case->addChild(replay_menu, kZ_FP_menu);
+			replay_menu->setTouchPriority(-190);
 		}
 		else
 			replay_menu = NULL;
@@ -442,7 +445,7 @@ void FailPopup::endDecreaseCardDuration()
 		hspConnector* t_hsp = hspConnector::get();
 		FightResultAnimation* b = FightResultAnimation::create(t_hsp->getKakaoProfileURL(),mySGD->getScore(),t_hsp->getKakaoNickname(),
 															   mySGD->getMeChallengeTargetProfile(),mySGD->getMeChallengeTargetScore(),mySGD->getMeChallengeTargetNick(),
-															   -200);
+															   -210);
 		b->setCancelFunc([](){
 			CCLog("닫기눌렀을때");
 		});
@@ -466,7 +469,7 @@ void FailPopup::endDecreaseCardDuration()
 		hspConnector* t_hsp = hspConnector::get();
 		FightResultAnimation* b = FightResultAnimation::create(t_hsp->getKakaoProfileURL(),mySGD->getScore(),t_hsp->getKakaoNickname(),
 															   mySGD->getAcceptChallengeProfile(),mySGD->getAcceptChallengeScore(),mySGD->getAcceptChallengeNick(),
-															   -200);
+															   -210);
 		b->setCancelFunc([](){
 			CCLog("닫기눌렀을때");
 		});
@@ -863,7 +866,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 		
 		rankTableView->setDelegate(this);
 		main_case->addChild(rankTableView, kZ_FP_table);
-		rankTableView->setTouchPriority(kCCMenuHandlerPriority);
+		rankTableView->setTouchPriority(-190);
 		
 		//		int myPosition = rankTableView->minContainerOffset().y;
 		//		for(int i=0; i<friend_list.size(); i++)
@@ -884,7 +887,7 @@ void FailPopup::resultGetStageScoreList(Json::Value result_data)
 			suction = NULL;
 		}
 		
-		suction = TouchSuctionLayer::create(kCCMenuHandlerPriority+1);
+		suction = TouchSuctionLayer::create(-190+1);
 		suction->setNotSwallowRect(CCRectMake(243, 59.5f, 208, 199));
 		suction->setTouchEnabled(true);
 		main_case->addChild(suction);
@@ -1185,6 +1188,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	}
 	
 	nickname_label = CCLabelTTF::create((*member).nickname.c_str(), mySGD->getFont().c_str(), 12);
+	nickname_label->enableStroke(ccBLACK, 0.5f);
 	nickname_label->setPosition(ccp(114,28));
 	nickname_label->setTag(kFFC_T_nickname);
 	cell->addChild(nickname_label,kFFC_Z_img);
@@ -1219,7 +1223,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 					ScrollMenu* help_menu = ScrollMenu::create(help_item, NULL);
 					help_menu->setPosition(ccp(180,21));
 					cell->addChild(help_menu, kFFC_Z_img);
-					help_menu->setTouchPriority(kCCMenuHandlerPriority+2);
+					help_menu->setTouchPriority(-190+2);
 				}
 				else
 				{

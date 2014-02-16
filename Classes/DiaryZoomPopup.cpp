@@ -12,6 +12,9 @@
 #include "CollectionBookPopup.h"
 #include "PuzzleMapScene.h"
 #include "DataStorageHub.h"
+#include "TouchSuctionLayer.h"
+#include "CommonButton.h"
+#include "TouchSwallowManagement.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -75,20 +78,16 @@ bool DiaryZoomPopup::init()
 		first_img->addChild(eye, 1, 1);
 	}
 	
-	
-	CCSprite* n_next = CCSprite::create("script_ok.png");
-	CCSprite* s_next = CCSprite::create("script_ok.png");
-	s_next->setColor(ccGRAY);
-	
-	CCMenuItem* next_item = CCMenuItemSprite::create(n_next, s_next, this, menu_selector(DiaryZoomPopup::menuAction));
-	
-	next_button = CCMenu::createWithItem(next_item);
+	next_button = CommonButton::createCloseButton(-252);
 	next_button->setPosition(ccp(480-60,30));
+	next_button->setFunction([=](CCObject* sender)
+							 {
+								 menuAction(sender);
+							 });
 	next_button->setVisible(false);
 	addChild(next_button, kDZP_Z_next_button);
-	next_button->setTouchPriority(-211);
 	
-	is_touched_menu = false;
+	
 	is_actioned = false;
 	
 	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.5f;
@@ -116,6 +115,8 @@ void DiaryZoomPopup::showPopup()
 
 void DiaryZoomPopup::endShowPopup()
 {
+	TouchSwallowManagement::sharedInstance()->offAllSwallow();
+	
 	is_actioned = true;
 	startTouchAction();
 	if(is_animation)
@@ -124,6 +125,7 @@ void DiaryZoomPopup::endShowPopup()
 
 void DiaryZoomPopup::hidePopup()
 {
+	TouchSwallowManagement::sharedInstance()->onAllSwallow();
 	setTouchEnabled(false);
 	next_button->setVisible(false);
 	is_actioned = false;
@@ -293,14 +295,7 @@ void DiaryZoomPopup::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 
 		isAnimated=false;
 
-		if(multiTouchData.size() == 1)
-		{
-			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
-			{
-				is_touched_menu = true;
-			}
-		}
-		else if(multiTouchData.size() == 2)
+		if(multiTouchData.size() == 2)
 		{
 			CCPoint sub_point = CCPointZero;
 			map<int, CCPoint>::iterator it;
@@ -311,14 +306,6 @@ void DiaryZoomPopup::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			}
 
 			zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
-		}
-		else
-		{
-			if(is_touched_menu)
-			{
-				next_button->ccTouchCancelled(touch, pEvent);
-				is_touched_menu = false;
-			}
 		}
 	}
 }
@@ -341,11 +328,6 @@ void DiaryZoomPopup::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			o_it->second = location;
 			if(multiTouchData.size() == 1)
 			{
-				if(is_touched_menu)
-				{
-					next_button->ccTouchMoved(touch, pEvent);
-				}
-
 				this->moveListXY(ccpSub(touch_p, location));
 				touch_p = location;
 			}
@@ -416,12 +398,6 @@ void DiaryZoomPopup::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 
 			if(multiTouchData.size() == 0)
 			{
-				if(is_touched_menu)
-				{
-					next_button->ccTouchEnded(touch, pEvent);
-					is_touched_menu = false;
-				}
-
 				timeval time;
 				gettimeofday(&time, NULL);
 				long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;

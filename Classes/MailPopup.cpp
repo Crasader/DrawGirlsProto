@@ -1019,11 +1019,11 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 													 [=](CCObject* e) {
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 int mailNo = mail["no"].asInt();
-
+														 
 														 mySGD->setRemoveMessageMailNo(mailNo);
 														 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
 														 mySGD->setAcceptChallengeTarget(mail["friendID"].asString(), mail["nickname"].asString(),
-																														 contentObj["score"].asFloat(), contentObj["replaydata"], mail["profile"].asString());
+																														 contentObj["score"].asFloat(), contentObj["replaydata"], contentObj["profile"].asString());
 														 mySD->setSilType(contentObj["challengestage"].asInt());
 														 mySGD->setIsAcceptChallenge(true);
 														 // ST 받고 성공시 창 띄움.. & sender->removeFromParent();

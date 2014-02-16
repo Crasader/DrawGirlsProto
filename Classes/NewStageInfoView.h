@@ -28,6 +28,7 @@ enum NewStageInfoView_Mode{
 	kNewStageInfoView_Mode_rank
 };
 
+class TouchSuctionLayer;
 class RankFriendInfo;
 class NewStageInfoView : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
@@ -40,14 +41,14 @@ public:
 		return t_nsiv;
 	}
 	
-	void setClickedStage(int t_stage)
+	void setClickedStage(int t_stage);
+	
+	int getSelectedIdx()
 	{
-		if(recent_stage != t_stage)
-		{
-			recent_stage = t_stage;
-			setContentNode();
-		}
+		return selected_friend_idx;
 	}
+	
+	RankFriendInfo getSelectedIdxRankFriendInfo();
 	
 private:
 	int touch_priority;
@@ -86,33 +87,7 @@ private:
 		return friend_list.size();
 	}
 	
-	void myInit(int t_touch_priority)
-	{
-		is_show = true;
-		opacity_value = 255;
-		is_menu_enable = false;
-		touch_priority = t_touch_priority;
-		setTouchEnabled(true);
-		
-		recent_mode = kNewStageInfoView_Mode_reward;
-		
-		back_img = CCSprite::create("stageinfoview_back.png");
-		back_img->setPosition(ccp(410,170));
-		addChild(back_img);
-		
-		content_node = CCNode::create();
-		content_node->setPosition(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height/2.f));
-		back_img->addChild(content_node);
-		
-		reward_menu = NULL;
-		setRewardMenu();
-		
-		rank_menu = NULL;
-		setRankMenu();
-		
-		recent_stage = 0;
-		is_menu_enable = true;
-	}
+	void myInit(int t_touch_priority);
 	
 	void menuAction(CCObject* sender)
 	{
@@ -222,18 +197,28 @@ private:
 	
 	int opacity_value;
 	vector<int> keep_touch_list;
+	vector<int> inner_touch_list;
 	
 	virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
 	{
 		CCPoint touchLocation = pTouch->getLocation();
 		CCPoint local = back_img->convertToNodeSpace(touchLocation);
 		
-		if(is_show && !back_img->boundingBox().containsPoint(local))
+		CCRect bounding_box = back_img->boundingBox();
+		bounding_box.origin = CCPointZero;
+		
+		if(bounding_box.containsPoint(local))
+		{
+			inner_touch_list.push_back((int)pTouch);
+			if(!is_show)
+				startShowAction();
+		}
+		else
 		{
 			keep_touch_list.push_back((int)pTouch);
-			startHideAction();
+			if(inner_touch_list.empty() && is_show)
+				startHideAction();
 		}
-		
 		return true;
 	}
 	virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent)
@@ -242,22 +227,48 @@ private:
 	}
 	virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent)
 	{
-		vector<int>::iterator iter = find(keep_touch_list.begin(), keep_touch_list.end(), (int)pTouch);
-		if(iter != keep_touch_list.end())
+		vector<int>::iterator iter_out = find(keep_touch_list.begin(), keep_touch_list.end(), (int)pTouch);
+		vector<int>::iterator iter_in = find(inner_touch_list.begin(), inner_touch_list.end(), (int)pTouch);
+		if(iter_out != keep_touch_list.end()) // 바깥 터치 가 떼졌을때
 		{
-			keep_touch_list.erase(iter);
-			if(keep_touch_list.size() <= 0)
+			keep_touch_list.erase(iter_out);
+			
+			if(keep_touch_list.empty() && !is_show)
 				startShowAction();
+		}
+		else if(iter_in != inner_touch_list.end()) // 안 터치가 떼졌을때
+		{
+			inner_touch_list.erase(iter_in);
+			
+			if(inner_touch_list.empty() && !keep_touch_list.empty() && is_show)
+				startHideAction();
+		}
+		else
+		{
+			CCLog("what?"); // 이럴 일이 있나?
 		}
 	}
 	virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent)
 	{
-		vector<int>::iterator iter = find(keep_touch_list.begin(), keep_touch_list.end(), (int)pTouch);
-		if(iter != keep_touch_list.end())
+		vector<int>::iterator iter_out = find(keep_touch_list.begin(), keep_touch_list.end(), (int)pTouch);
+		vector<int>::iterator iter_in = find(inner_touch_list.begin(), inner_touch_list.end(), (int)pTouch);
+		if(iter_out != keep_touch_list.end()) // 바깥 터치 가 떼졌을때
 		{
-			keep_touch_list.erase(iter);
-			if(keep_touch_list.size() <= 0)
+			keep_touch_list.erase(iter_out);
+			
+			if(keep_touch_list.empty() && !is_show)
 				startShowAction();
+		}
+		else if(iter_in != inner_touch_list.end()) // 안 터치가 떼졌을때
+		{
+			inner_touch_list.erase(iter_in);
+			
+			if(inner_touch_list.empty() && !keep_touch_list.empty() && is_show)
+				startHideAction();
+		}
+		else
+		{
+			CCLog("what?"); // 이럴 일이 있나?
 		}
 	}
 	virtual void registerWithTouchDispatcher ()

@@ -122,7 +122,15 @@ typedef enum t_DSH_Key{
 	kDSH_Key_was_opened_tutorial_dimed_friendoption_surch,
 	kDSH_Key_was_opened_tutorial_dimed_main,
 	kDSH_Key_was_opened_tutorial_dimed_rank,
-	kDSH_Key_was_opened_tutorial_dimed_startsetting
+	kDSH_Key_was_opened_tutorial_dimed_startsetting,
+	
+	kDSH_Key_mission_willNeverWatch_bossLifeZero,
+	kDSH_Key_mission_willNeverWatch_subCumberCatch,
+	kDSH_Key_mission_willNeverWatch_bigArea,
+	kDSH_Key_mission_willNeverWatch_itemCollect,
+	kDSH_Key_mission_willNeverWatch_perfect,
+	kDSH_Key_mission_willNeverWatch_timeLimit,
+	kDSH_Key_mission_willNeverWatch_sequenceChange
 	
 }DSH_Key;
 

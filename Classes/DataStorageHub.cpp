@@ -342,6 +342,14 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_rank)						return_value = "wotd_r";
 	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_startsetting)				return_value = "wotd_s";
 	
+	else if(t_name == kDSH_Key_mission_willNeverWatch_bossLifeZero)			return_value = "mswnw_blz";
+	else if(t_name == kDSH_Key_mission_willNeverWatch_subCumberCatch)		return_value = "mswnw_scc";
+	else if(t_name == kDSH_Key_mission_willNeverWatch_bigArea)				return_value = "mswnw_ba";
+	else if(t_name == kDSH_Key_mission_willNeverWatch_itemCollect)			return_value = "mswnw_ic";
+	else if(t_name == kDSH_Key_mission_willNeverWatch_perfect)				return_value = "mswnw_pf";
+	else if(t_name == kDSH_Key_mission_willNeverWatch_timeLimit)			return_value = "mswnw_tl";
+	else if(t_name == kDSH_Key_mission_willNeverWatch_sequenceChange)		return_value = "mswnw_sqc";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()

@@ -33,7 +33,7 @@ void AcceptChallengeAniContent::myInit(int t_touch_priority, function<void(CCObj
 	CCSprite* profile1_img = GDWebSprite::create(t_profile1, "ending_noimg.png");
 	profile1_img->setAnchorPoint(ccp(0.5,0.5));
 	profile1_img->setScale(2.f);
-	profile1_img->setPosition(ccp(nick1_label->getContentSize().width/2.f,nick1_label->getContentSize().height/2.f+30));
+	profile1_img->setPosition(ccp(nick1_label->getContentSize().width/2.f,nick1_label->getContentSize().height/2.f+50));
 	nick1_label->addChild(profile1_img);
 	
 	
@@ -44,7 +44,7 @@ void AcceptChallengeAniContent::myInit(int t_touch_priority, function<void(CCObj
 	CCSprite* profile2_img = GDWebSprite::create(t_profile2, "ending_noimg.png");
 	profile2_img->setAnchorPoint(ccp(0.5,0.5));
 	profile2_img->setScale(2.f);
-	profile2_img->setPosition(ccp(nick2_label->getContentSize().width/2.f,nick2_label->getContentSize().height/2.f+30));
+	profile2_img->setPosition(ccp(nick2_label->getContentSize().width/2.f,nick2_label->getContentSize().height/2.f+50));
 	nick2_label->addChild(profile2_img);
 	
 	startMyAnimation();

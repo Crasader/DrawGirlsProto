@@ -901,6 +901,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per-item_value/100.f)
 			takeBigArea();
 		
+		mySGD->is_draw_button_tutorial = false;
+		myGD->communication("Main_offDrawButtonTutorial");
+		
 		if(t_p >= t_beforePercentage + 0.01f && t_p < clearPercentage)
 		{
 			int up_count = (t_p - t_beforePercentage)/0.01f;
@@ -983,6 +986,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				conditionFail();
 		}
 		
+		if(clr_cdt_type == kCLEAR_default)
+			conditionClear();
+		
 		if(is_cleared_cdt)
 		{
 			myGD->communication("MP_bombCumber", myGD->getCommunicationNode("CP_getMainCumberPointer"));
@@ -1011,6 +1017,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			stopCounting();
 			// timeover
 			isGameover = true;
+			myGD->communication("CP_setGameover");
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
@@ -1031,7 +1038,7 @@ void PlayUI::addResultCCB(string ccb_filename)
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
 	result_sprite = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(ccb_filename.c_str(),this));
-	result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
+	result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(result_sprite);
 	reader->release();
 }
@@ -1046,6 +1053,19 @@ void PlayUI::conditionClear ()
 //	CCSprite* condition_clear = CCSprite::create("condition_clear.png");
 //	condition_clear->setPosition(getChildByTag(kCT_UI_clrCdtIcon)->getPosition());
 //	addChild(condition_clear);
+	
+	CCNode* success_node = CCNode::create();
+	success_node->setPosition(ccp(480,myDSH->ui_top*0.67f));
+	addChild(success_node);
+	
+	
+	CCSprite* success_ccb = KS::loadCCBI<CCSprite*>(this, "ui_missonsuccess.ccbi").first;
+	success_node->addChild(success_ccb);
+	
+	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
+	CCCallFunc* t_call = CCCallFunc::create(success_node, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+	success_node->runAction(t_seq);
 }
 void PlayUI::conditionFail ()
 {
@@ -1154,9 +1174,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.7f);
 	CCMoveTo* t_move = CCMoveTo::create(0.5f, after_position);
-	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.5f);
-	CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_move, t_scale);
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_spawn);
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_move);
 	new_coin_spr->runAction(t_seq);
 	
 	
@@ -1497,6 +1515,7 @@ void PlayUI::counting ()
 	bool t_is_die = false;
 	if(detail_counting_cnt >= 60)
 	{
+		home_menu->setEnabled(true);
 		detail_counting_cnt = 0;
 		countingCnt++;
 		use_time++;
@@ -1684,9 +1703,9 @@ void PlayUI::lifeBonus ()
 	{
 		int grade_value = 1;
 		if(is_exchanged)				grade_value++;
-		if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+		if(keep_percentage.getV() >= 1.f)					grade_value++;
 		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, atoi(score_label->getString()), keep_percentage.getV(), countingCnt, use_time, total_time);
 		CCDelayTime* n_d = CCDelayTime::create(2.5f);
 		CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 		
@@ -1750,32 +1769,34 @@ void PlayUI::endGame (bool is_show_reason)
 		}
 		else
 		{
+			keep_percentage = getPercentage();
+			
 			CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
 			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
 			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
 			CCFiniteTimeAction* nextScene2;
-			if(mySGD->getStar() >= mySGD->getGachaOnePercentFee())
-			{
+//			if(mySGD->getStar() >= mySGD->getGachaOnePercentFee())
+//			{
 				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
-			}
-			else
-			{
-				if(jack_life > 0)
-				{
-					CCDelayTime* t_delay = CCDelayTime::create(2.f);
-					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
-					nextScene2 = CCSequence::createWithTwoActions(t_delay, t_call);
-				}
-				else
-				{
-					int grade_value = 1;
-					if(is_exchanged)				grade_value++;
-					if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
-					
-					mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
-					nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
-				}
-			}
+//			}
+//			else
+//			{
+//				if(jack_life > 0)
+//				{
+//					CCDelayTime* t_delay = CCDelayTime::create(2.f);
+//					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
+//					nextScene2 = CCSequence::createWithTwoActions(t_delay, t_call);
+//				}
+//				else
+//				{
+//					int grade_value = 1;
+//					if(is_exchanged)				grade_value++;
+//					if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+//					
+//					mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+//					nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+//				}
+//			}
 			
 			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
 			
@@ -1794,7 +1815,7 @@ void PlayUI::endGame (bool is_show_reason)
 }
 void PlayUI::showGachaOnePercent ()
 {
-	OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha), this, callfuncF_selector(PlayUI::gachaOnOnePercent), getPercentage());
+	OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha), this, callfuncF_selector(PlayUI::gachaOnOnePercent), keep_percentage.getV());
 	addChild(t_popup);
 }
 void PlayUI::gachaOnOnePercent (float t_percent)
@@ -1815,16 +1836,16 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 	else
 	{
 		int grade_value = 1;
-		if(is_exchanged && getPercentage() >= 1.f)		grade_value+=2;
+		if(is_exchanged && t_percent >= 1.f)		grade_value+=2;
 		else
 		{
-			if(getPercentage() >= 1.f)
+			if(t_percent >= 1.f)
 			{
 				grade_value++;
 			}
 		}
 		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), getPercentage(), countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, atoi(score_label->getString()), t_percent, countingCnt, use_time, total_time);
 		nextScene();
 	}
 }
@@ -1857,9 +1878,9 @@ void PlayUI::cancelOnePercentGacha ()
 	{
 		int grade_value = 1;
 		if(is_exchanged)				grade_value++;
-		if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
+		if(keep_percentage.getV() >= 1.f)					grade_value++;
 		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, atoi(score_label->getString()), keep_percentage.getV(), countingCnt, use_time, total_time);
 		nextScene();
 	}
 }
@@ -1988,9 +2009,10 @@ void PlayUI::myInit ()
 	
 	m_areaGage = NULL;
 	
-	percentageLabel = CCLabelBMFont::create("0%%", "star_gage_font.fnt");
+	percentageLabel = CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14); // CCLabelBMFont::create("0%%", "star_gage_font.fnt");
+	percentageLabel->enableStroke(ccBLACK, 0.5f);
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
-	percentageLabel->setPosition(ccp(185,myDSH->ui_top-30));
+	percentageLabel->setPosition(ccp(185,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 //	else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
@@ -2051,11 +2073,12 @@ void PlayUI::myInit ()
 	CCMenuItem* home_item = CCMenuItemSprite::create(n_home, s_home, this, menu_selector(PlayUI::menuAction));
 	home_item->setTag(kMenuTagUI_home);
 	
-	CCMenu* home_menu = CCMenu::createWithItem(home_item);
+	home_menu = CCMenu::createWithItem(home_item);
 	home_menu->setPosition(ccp(480-25, myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)				home_menu->setPosition(ccp(25,myDSH->ui_top-25));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		home_menu->setPosition(ccp(480-25,myDSH->ui_top-25));
 //	else												home_menu->setPosition(ccp(25,myDSH->ui_top-25));
+	home_menu->setEnabled(false);
 	addChild(home_menu);
 	
 	
@@ -2082,10 +2105,9 @@ void PlayUI::myInit ()
 	for(int i=1;i<=6;i++)
 	{
 		CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-		exchange_spr->setScale(0.5f);
-		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-40));
-		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-40));
-		else									exchange_spr->setPosition(ccp(240-17*3.5f+i*17,myDSH->ui_top-40));
+		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
+		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
+		else									exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
 		top_center_node->addChild(exchange_spr);
 		
 		exchange_spr->setVisible(false);

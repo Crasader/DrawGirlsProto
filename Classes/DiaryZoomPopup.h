@@ -14,7 +14,7 @@
 
 USING_NS_CC;
 using namespace std;
-
+class CommonButton;
 class DiaryZoomPopup : public CCLayer
 {
 public:
@@ -34,12 +34,10 @@ private:
 	
 	int ing_animation_frame;
 	
-	bool is_touched_menu;
 	bool is_actioned;
 	
 	CCSprite* first_img;
-	CCMenu* next_button;
-	
+	CommonButton* next_button;
 	bool is_animation;
 	
 	float minimum_scale;

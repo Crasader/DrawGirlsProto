@@ -535,22 +535,22 @@ void OptionPopup::menuAction(CCObject* pSender)
 		case_back->setPosition(ccp(0,0));
 		t_container->addChild(case_back);
 		
-		case_back->setContentSize(CCSizeMake(280, 250));
+		case_back->setContentSize(CCSizeMake(240, 210));
 		
 		CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
 		content_back->setPosition(ccp(0,25));
 		t_container->addChild(content_back);
 		
-		content_back->setContentSize(CCSizeMake(260, 180));
+		content_back->setContentSize(CCSizeMake(220, 140));
 		
 		CCLabelTTF* ment_label = CCLabelTTF::create("로그아웃 하시겠습니까?",	mySGD->getFont().c_str(), 15);
-		ment_label->setPosition(ccp(0,-5));
+		ment_label->setPosition(ccp(0,25));
 		t_container->addChild(ment_label);
 		
 		
 		
-		CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
-		cancel_button->setPosition(ccp(-65,-95));
+		CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(100, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
+		cancel_button->setPosition(ccp(-55,-75));
 		cancel_button->setFunction([=](CCObject* sender)
 								   {
 									   is_menu_enable = true;
@@ -559,8 +559,8 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_container->addChild(cancel_button);
 		
 		
-		CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-		ok_button->setPosition(ccp(65,-95));
+		CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+		ok_button->setPosition(ccp(55,-75));
 		ok_button->setFunction([=](CCObject* sender)
 							   {
 								   cancel_button->setEnabled(false);
@@ -572,7 +572,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 								   CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 								   CCBReader* reader = new CCBReader(nodeLoader);
 								   CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-								   loading_progress_img->setPosition(ccp(0,-95));
+								   loading_progress_img->setPosition(ccp(0,-75));
 								   t_container->addChild(loading_progress_img);
 								   reader->release();
 								   

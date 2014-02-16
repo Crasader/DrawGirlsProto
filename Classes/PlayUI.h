@@ -269,7 +269,7 @@ private:
 //	GoldLabel * gold_label;
 	CCNode* top_center_node;
 	CCLabelBMFont * score_label;
-	CCLabelBMFont * percentageLabel;
+	CCLabelTTF * percentageLabel;
 	CCLabelBMFont * countingLabel;
 	CCSprite * result_sprite;
 	CCDictionary * exchange_dic;
@@ -327,6 +327,9 @@ private:
 	void alertAction (int t1, int t2);
 	void addResultClearCCB();
 	void addResultCCB(string ccb_filename);
+	KSProtectVar<float> keep_percentage;
+	
+	CCMenu* home_menu;
 	
 	void writeMap();
 	void checkMapTimeVector();

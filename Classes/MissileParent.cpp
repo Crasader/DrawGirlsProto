@@ -165,7 +165,7 @@ void MissileParent::subOneDie()
 	
 	if(subCumberArray->count() > 0)
 	{
-		JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->randomObject(), kElementCode_life, 999999.f);
+		JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->randomObject(), 80+kMyElementalLife, 999999.f);
 		addChild(t_jm);
 		t_jm->startMoving();
 	}

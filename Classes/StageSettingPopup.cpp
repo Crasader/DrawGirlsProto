@@ -13,7 +13,7 @@
 #include "ItemBuyPopup.h"
 #include "CardSettingPopup.h"
 #include "GachaPopup.h"
-#include "DurabilityNoti.h"
+//#include "DurabilityNoti.h"
 #include "CardCase.h"
 #include "DownloadFile.h"
 #include "ListViewerScroll.h"
@@ -576,8 +576,8 @@ void StageSettingPopup::callStart()
 			else if(durability == 0)
 			{
 				is_menu_enable = true;
-				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
-				addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
+//				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
+//				addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
 			}
 			else // not selected card
 			{

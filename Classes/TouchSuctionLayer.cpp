@@ -7,6 +7,7 @@
 //
 
 #include "TouchSuctionLayer.h"
+#include "TouchSwallowManagement.h"
 
 TouchSuctionLayer* TouchSuctionLayer::create(int t_touch_priority)
 {
@@ -22,12 +23,33 @@ void TouchSuctionLayer::setNotSwallowRect(CCRect t_rect)
 	is_setted_not_swallow_rect = true;
 }
 
+void TouchSuctionLayer::setSwallowRect(CCRect t_rect)
+{
+	swallow_rect = t_rect;
+	is_setted_swallow_rect = true;
+}
+
+void TouchSuctionLayer::setSwallowMent(string t_ment)
+{
+	swallow_ment = t_ment;
+}
+
+TouchSuctionLayer::~TouchSuctionLayer()
+{
+	TouchSwallowManagement::sharedInstance()->removeSwallowLayer(this);
+}
+
 void TouchSuctionLayer::myInit(int t_touch_priority)
 {
 	touch_priority = t_touch_priority;
 	target_touch_began = NULL;
 	delegate_touch_began = NULL;
 	is_setted_not_swallow_rect = false;
+	is_setted_swallow_rect = false;
+	
+	swallow_ment = "touch swallow : TouchSuctionLayer";
+	
+	TouchSwallowManagement::sharedInstance()->addSwallowLayer(this);
 }
 
 bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
@@ -44,7 +66,22 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 			if(target_touch_began && delegate_touch_began)
 				(target_touch_began->*delegate_touch_began)();
 			else
-				CCLog("touch swallow : TouchSuctionLayer");
+				CCLog("%s : %d", swallow_ment.c_str(), touch_priority);
+		}
+	}
+	else if(is_setted_swallow_rect)
+	{
+		CCPoint touchLocation = pTouch->getLocation();
+		CCPoint local = convertToNodeSpace(touchLocation);
+		
+		if(!swallow_rect.containsPoint(local))
+			return false;
+		else
+		{
+			if(target_touch_began && delegate_touch_began)
+				(target_touch_began->*delegate_touch_began)();
+			else
+				CCLog("%s : %d", swallow_ment.c_str(), touch_priority);
 		}
 	}
 	else
@@ -52,7 +89,7 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 		if(target_touch_began && delegate_touch_began)
 			(target_touch_began->*delegate_touch_began)();
 		else
-			CCLog("touch swallow : TouchSuctionLayer");
+			CCLog("%s : %d", swallow_ment.c_str(), touch_priority);
 	}
 	return true;
 }

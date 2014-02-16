@@ -179,12 +179,11 @@ bool NewMainFlowScene::init()
 			int stage_number = i;
 			if((stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
 			   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
-				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))))) && i+1 < t_puzzle_start_stage+t_puzzle_stage_count &&
-			   (i+1 == -1 ||
-				!((i+1 == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i+1) ||
+				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))))) && (i+1 == t_puzzle_start_stage+t_puzzle_stage_count ||
+					(!((i+1 == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i+1) ||
 				   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i+1) == 0 &&
 					(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1) == 0 ||
-					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1))))))))
+					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1)))))))))
 			{
 				last_stage_number = stage_number;
 			}
@@ -356,7 +355,7 @@ bool NewMainFlowScene::init()
 //		}
 	}
 	
-	if(!clear_is_first_puzzle_success && !clear_is_first_perfect && clear_is_stage_unlock)
+	if(clear_is_first_puzzle_success || (!clear_is_first_perfect && clear_is_stage_unlock))
 	{
 		selected_stage_number = mySD->getSilType();
 		selected_puzzle_number = NSDS_GI(selected_stage_number, kSDS_SI_puzzle_i);
@@ -364,7 +363,7 @@ bool NewMainFlowScene::init()
 	
 	setTable();
 	
-	new_stage_info_view = NewStageInfoView::create(-190);
+	new_stage_info_view = NewStageInfoView::create(-150);
 	addChild(new_stage_info_view, kNewMainFlowZorder_right);
 	
 	pieceAction(selected_stage_number);
@@ -389,7 +388,6 @@ void NewMainFlowScene::showClearPopup()
 void NewMainFlowScene::hideClearPopup()
 {
 //	is_menu_enable = true;
-	
 	int get_puzzle_number = NSDS_GI(mySD->getSilType(), kSDS_SI_puzzle_i);
 	int open_puzzle_count = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1;
 	if(clear_is_first_puzzle_success)
@@ -570,7 +568,7 @@ void NewMainFlowScene::showSuccessPuzzleEffect()
 
 void NewMainFlowScene::endSuccessPuzzleEffect()
 {
-	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, clear_found_puzzle_idx+1);
+	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, clear_found_puzzle_idx+2);
 	if(mySIL->addImage(CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, "original")->getCString()))
 	{
 		int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
@@ -723,8 +721,8 @@ void NewMainFlowScene::setTable()
 		}
 	}
 	
-//	if(clear_is_first_puzzle_success)
-//		myPosition--;
+	if(clear_is_first_puzzle_success)
+		myPosition--;
 	
 	float xInitPosition = MAX(puzzle_table->minContainerOffset().x, -cellSizeForTable(puzzle_table).width*myPosition);
 	xInitPosition = MIN(0, xInitPosition);
@@ -1181,7 +1179,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 						int piece_number = y*piece_width_count+x+1;
 						bool is_stage = false;
 						int stage_number = -1;
-						if(piece_number == puzzle_path[puzzle_path_idx].piece_no)
+						if(puzzle_path_idx < puzzle_path.size() && piece_number == puzzle_path[puzzle_path_idx].piece_no)
 						{
 							is_stage = true;
 							stage_number = puzzle_path[puzzle_path_idx].stage_no;
@@ -1224,6 +1222,8 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 							{
 								clicked_func = [=](int t_stage_number){	pieceAction(t_stage_number);	};
 							}
+							
+							CCAssert(stage_number > 0 && stage_number < 100000, "what?");
 							
 							NewPuzzlePiece* t_piece = NewPuzzlePiece::create(stage_number, clicked_func, (NewPuzzlePieceMode)puzzle_piece_mode[idx], is_buy, is_lock);
 							t_piece->setPosition(ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size));
@@ -1976,6 +1976,12 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 	}
 	else if(tag == kNewMainFlowMenuTag_ready)
 	{
+		if(new_stage_info_view->getSelectedIdx() != -1)
+		{
+			RankFriendInfo challenge_info = new_stage_info_view->getSelectedIdxRankFriendInfo();
+			mySGD->setMeChallengeTarget(challenge_info.user_id, challenge_info.nickname, challenge_info.score, challenge_info.img_url);
+		}
+		
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, selected_puzzle_number);
 		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, selected_puzzle_number, selected_stage_number);
 		

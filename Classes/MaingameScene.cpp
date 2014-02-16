@@ -48,6 +48,7 @@ bool Maingame::init()
 	setTag(0);
 	AudioEngine::sharedInstance()->startGame();
 	
+	is_gohome = false;
 	setKeypadEnabled(true);
 	
 	replay_continue_count = 0;
@@ -56,6 +57,7 @@ bool Maingame::init()
 	
 	combo_string_img = NULL;
 	combo_value_img = NULL;
+	myJack = NULL;
 	
 	
 	isCheckingBacking = false;
@@ -116,41 +118,6 @@ bool Maingame::init()
 	myMS = MapScanner::create();
 	game_node->addChild(myMS, myMSZorder);
 	
-	if(mySD->getSilType() == 1)
-	{
-		if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
-		{
-			myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
-			CCNode* exit_target = this;
-			exit_target->onExit();
-			
-			ASPopupView* t_popup = ASPopupView::create(-200);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-			
-			ControlTutorialContent* t_container = ControlTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
-																				 {
-																					 exit_target->onEnter();
-																					 
-																					 CCMoveBy* t_move = CCMoveBy::create(0.5f, ccp(-480,0));
-																					 CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
-																					 CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
-																					 t_popup->runAction(t_seq);
-																					 
-																					 //																					 t_popup->removeFromParent();
-																				 });
-			t_popup->setContainerNode(t_container);
-			exit_target->getParent()->addChild(t_popup);
-		}
-	}
-	
 	return true;
 }
 
@@ -186,6 +153,55 @@ void Maingame::hideDrawButtonTutorial()
 
 void Maingame::onEnterTransitionDidFinish()
 {
+	if(mySD->getSilType() == 1)
+	{
+		if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
+		{
+			myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
+			CCNode* exit_target = this;
+			exit_target->onExit();
+			
+			ASPopupView* t_popup = ASPopupView::create(-200);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+			
+			ControlTutorialContent* t_container = ControlTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																				 {
+																					 exit_target->onEnter();
+																					 
+																					 CCMoveBy* t_move = CCMoveBy::create(0.5f, ccp(-480,0));
+																					 CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+																					 CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
+																					 t_popup->runAction(t_seq);
+																					 
+																					 //																					 t_popup->removeFromParent();
+																				 });
+			t_popup->setContainerNode(t_container);
+			exit_target->getParent()->addChild(t_popup);
+		}
+	}
+	
+	CCLayer* top_bottom_layer = CCLayer::create();
+	top_bottom_layer->setPosition(ccp(0, 0));
+	getParent()->addChild(top_bottom_layer, -1);
+	
+	CCSprite* top_back = CCSprite::create("top_back.png");
+	top_back->setAnchorPoint(ccp(0.5,1));
+	top_back->setPosition(ccp(240,myDSH->ui_top));
+	top_bottom_layer->addChild(top_back, topBottomZorder);
+	
+	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
+	bottom_back->setAnchorPoint(ccp(0.5,0));
+	bottom_back->setPosition(ccp(240,0));
+	top_bottom_layer->addChild(bottom_back, topBottomZorder);
+	
 	init_state = kMIS_movingGameNode;
 	
 	setTouchEnabled(true);
@@ -662,6 +678,9 @@ void Maingame::counting()
 
 void Maingame::gachaOn()
 {
+	if(is_gohome)
+		return;
+	
 	myLog->addLog(kLOG_gacha_startMap, -1);
 	mySGD->setGold(mySGD->getGold() - mySGD->getGachaMapFee());
 	myGD->resetGameData();
@@ -794,7 +813,16 @@ void Maingame::keyBackClicked()
 
 void Maingame::touchEnd()
 {
-	myJack->isStun = true;
+	if(myJack)
+	{
+		myJack->isStun = true;
+		myJack->changeDirection(directionStop, directionStop);
+		if(myJack->getJackState() == jackStateDrawing)
+		{
+			stunBackTracking();
+		}
+	}
+	
 	if(mControl)
 	{
 		mControl->isStun = true;
@@ -802,11 +830,6 @@ void Maingame::touchEnd()
 //	((ControlJoystickButton*)mControl)->stopMySchedule();
 		if(mControl->mType == kCT_Type_Joystick_button)
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
-	}
-	myJack->changeDirection(directionStop, directionStop);
-	if(myJack->getJackState() == jackStateDrawing)
-	{
-		stunBackTracking();
 	}
 }
 
@@ -855,6 +878,7 @@ void Maingame::setControlJoystickButton()
 	mControl = ControlJoystickButton::create(this, callfunc_selector(Maingame::readyBackTracking), myJack);
 	((ControlJoystickButton*)mControl)->pauseBackTracking = callfunc_selector(Maingame::pauseBackTracking);
 	addChild(mControl, mControlZorder);
+	myGD->V_V["Main_offDrawButtonTutorial"] = std::bind(&ControlJoystickButton::offDrawButtonTutorial, (ControlJoystickButton*)mControl);
 }
 
 void Maingame::startControl()
@@ -1064,14 +1088,18 @@ void Maingame::gameover()
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		CCSprite* result_sprite = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ui_gameover.ccbi",this));
-		result_sprite->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
+		result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
 		myUI->addChild(result_sprite);
 		reader->release();
 		
 		CCDelayTime* t_delay = CCDelayTime::create(2.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-		runAction(t_seq);
+		
+		CCNode* t_node = CCNode::create();
+		addChild(t_node);
+		
+		t_node->runAction(t_seq);
 	}
 }
 
@@ -1147,8 +1175,8 @@ CCPoint Maingame::getObjectToGameNodePosition( CCPoint t_p )
 	
 	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
 	{
-		if(y_value > 60)																		y_value = 60;
-		else if(y_value < -490*myGD->game_scale+480*frame_size.height/frame_size.width)			y_value = -490*myGD->game_scale+480*frame_size.height/frame_size.width;
+		if(y_value > 80)																		y_value = 80;
+		else if(y_value < -430*myGD->game_scale+480*frame_size.height/frame_size.width - 60)			y_value = -430*myGD->game_scale+480*frame_size.height/frame_size.width - 60;
 	}
 	
 	float x_value = -t_p.x*myGD->game_scale+480.f/2.f;
@@ -1174,7 +1202,6 @@ CCPoint Maingame::getObjectToGameNodePositionCoin( CCPoint t_p )
 	float scale_value = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d);
 	if(scale_value < 0.1f)
 		scale_value = 1.f;
-	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float x_value = t_p.x/320.f*(720.f*scale_value-myGD->boarder_value*2.f);
 	float y_value = t_p.y/320.f*(720.f*scale_value-myGD->boarder_value*2.f);
 
@@ -1884,6 +1911,7 @@ void Maingame::showPause()
 }
 void Maingame::goHome ()
 {
+	is_gohome = true;
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
 	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());

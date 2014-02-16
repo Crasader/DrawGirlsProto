@@ -98,5 +98,5 @@ void LoadingLayer::ccTouchCancelled( CCTouch *pTouch, CCEvent *pEvent )
 void LoadingLayer::registerWithTouchDispatcher()
 {
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-	pDispatcher->addTargetedDelegate(this, -200, true);
+	pDispatcher->addTargetedDelegate(this, -500, true);
 }
