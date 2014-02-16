@@ -930,12 +930,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create("도전을 받아들이시겠습니까?", mySGD->getFont().c_str(), 12.f); 
+						 auto ttf = CCLabelTTF::create("도전을 받아들이시겠습니까?", mySGD->getFont().c_str(), 14.f); 
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 						 ttf->setColor(ccc3(255, 255, 255));
-						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 						 emptyNode->addChild(ttf);
 						 av->setContentNode(
 								 emptyNode
@@ -977,7 +977,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																											//												 						obj->removeFromParent();
 																											///////////////////////////////////////////
 																											KHAlertView* av = KHAlertView::create(); 
-																											// av->setTitleFileName("msg_challenge.png");
+																											av->setTitleFileName("msg_challenge_result.png");
 																											av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 																											av->setWidth(240);
 																											av->setHeight(240);
@@ -986,12 +986,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																											av->setCenterY(150);
 
 																											CCNode* emptyNode = CCNode::create();
-																											auto ttf = CCLabelTTF::create("졌습니다. ㅜ.ㅜ", mySGD->getFont().c_str(), 12.f); 
+																											auto ttf = CCLabelTTF::create("도전에 임하는 자세를 가집시다!!\n 도망으로간주, 패하셨습니다.", mySGD->getFont().c_str(), 14.f); 
 																											ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 																											//	con->setAnchorPoint(ccp(0, 0));
 																											//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 																											ttf->setColor(ccc3(255, 255, 255));
-																											ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																											ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 																											emptyNode->addChild(ttf);
 																											av->setContentNode(
 																													emptyNode
@@ -1081,7 +1081,8 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 								 });
 								 KHAlertView* av = KHAlertView::create(); 
-								 // av->setTitleFileName("msg_challenge.png");
+								 KS::KSLog("%", contentObj);
+								 av->setTitleFileName("msg_challenge_result.png");
 								 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 								 av->setWidth(240);
 								 av->setHeight(240);
@@ -1090,12 +1091,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 								 av->setCenterY(150);
 
 								 CCNode* emptyNode = CCNode::create();
-								 auto ttf = CCLabelTTF::create("졌습니다.", mySGD->getFont().c_str(), 12.f); 
+								 auto ttf = CCLabelTTF::create("졌습니다. 브레이크 포인트 필요함. 위에 contentObj", mySGD->getFont().c_str(), 14.f); 
 								 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 								 //	con->setAnchorPoint(ccp(0, 0));
 								 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 								 ttf->setColor(ccc3(255, 255, 255));
-								 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+								 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 								 emptyNode->addChild(ttf);
 								 av->setContentNode(
 										 emptyNode
@@ -1129,7 +1130,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 ////////////////////////////////////////////
 						  KHAlertView* av = KHAlertView::create(); 
 							av->setCloseOnPress(false);
-						 // av->setTitleFileName("msg_challenge.png");
+						 av->setTitleFileName("msg_help_request.png");
 						 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 						 av->setWidth(240);
 						 av->setHeight(240);
@@ -1138,12 +1139,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create("상대방을 도와줍니다.", mySGD->getFont().c_str(), 12.f); 
+						 auto ttf = CCLabelTTF::create("상대방을 도와줍니다.", mySGD->getFont().c_str(), 14.f); 
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 						 ttf->setColor(ccc3(255, 255, 255));
-						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 						 emptyNode->addChild(ttf);
 						 av->setContentNode(
 								 emptyNode
@@ -1212,6 +1213,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 															////////////////////////////////////////////////////
 
 															KHAlertView* av = KHAlertView::create();
+															av->setTitleFileName("msg_help_result.png");
 															auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, contentObj["cardnumber"].asInt());
 															// 카드 정보 없음
 															if(retStr == "") {
@@ -1259,12 +1261,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 															av->setCenterY(150);
 
 															CCNode* emptyNode = CCNode::create();
-															auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", mySGD->getFont().c_str(), 12.f); 
+															auto ttf = CCLabelTTF::create("도움을 받았습니다!!", mySGD->getFont().c_str(), 14.f); 
 															ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 															//	con->setAnchorPoint(ccp(0, 0));
 															//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 															ttf->setColor(ccc3(255, 255, 255));
-															ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+															ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 															emptyNode->addChild(ttf);
 															av->setContentNode(
 																	emptyNode
@@ -1291,7 +1293,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 [=](CCObject*) {
 						 KHAlertView* av = KHAlertView::create(); 
 						 av->setCloseOnPress(false);
-						 // av->setTitleFileName("msg_challenge.png");
+						 av->setTitleFileName("msg_ticket_req.png");
 						 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 						 av->setWidth(240);
 						 av->setHeight(240);
@@ -1300,12 +1302,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create("티켓요청이 도착. 티켓은 퍼즐을 열 때 필요합니다. 친구를 도와주세요!!", mySGD->getFont().c_str(), 12.f); 
+						 auto ttf = CCLabelTTF::create("티켓요청이 도착. 티켓은 퍼즐을 열 때 필요합니다. 친구를 도와주세요!!", mySGD->getFont().c_str(), 14.f); 
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 						 ttf->setColor(ccc3(255, 255, 255));
-						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 						 emptyNode->addChild(ttf);
 						 av->setContentNode(
 								 emptyNode
@@ -1367,7 +1369,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 					 [=](CCObject*) {
 						 KHAlertView* av = KHAlertView::create(); 
 						 av->setCloseOnPress(false);
-						 // av->setTitleFileName("msg_challenge.png");
+						 av->setTitleFileName("msg_ticket_req.png");
 						 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 						 av->setWidth(240);
 						 av->setHeight(240);
@@ -1376,18 +1378,18 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create("티켓이 도착했습니다.", mySGD->getFont().c_str(), 12.f); 
+						 auto ttf = CCLabelTTF::create("티켓이 도착했습니다. 티켓을 받으세요.", mySGD->getFont().c_str(), 12.f); 
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 						 ttf->setColor(ccc3(255, 255, 255));
-						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 						 emptyNode->addChild(ttf);
 						 av->setContentNode(
 								 emptyNode
 								 );
 						 av->setContentSize(ttf->getDimensions());
-						 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						 av->addButton(CommonButton::create("티켓 받기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 CCLog("ok!!");
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
@@ -1527,14 +1529,15 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create(comment.c_str(), mySGD->getFont().c_str(), 10);
+						 auto ttf = CCLabelTTF::create(comment.c_str(), mySGD->getFont().c_str(), 14);
+						 KS::KSLog("%", contentObj);
 						 
 						 ttf->setColor(ccc3(20, 0, 0));
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 						 ttf->setColor(ccc3(255, 255, 255));
-						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 						 emptyNode->addChild(ttf);
 						 av->setContentNode(
 								 emptyNode
@@ -1578,7 +1581,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																																						 if(r["result"]["code"].asInt() != GDSUCCESS) {
 																																							 av->removeFromParent();
 																																							 KHAlertView* exceptionPopup = KHAlertView::create(); 
-																																							 // av->setTitleFileName("msg_challenge.png");
+																																							 av->setTitleFileName("msg_error.png");
 																																							 exceptionPopup->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 																																							 exceptionPopup->setWidth(240);
 																																							 exceptionPopup->setHeight(240);
@@ -1587,12 +1590,12 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																																							 exceptionPopup->setCenterY(150);
 
 																																							 CCNode* emptyNode = CCNode::create();
-																																							 auto ttf = CCLabelTTF::create("알 수 없는 명령입니다.", mySGD->getFont().c_str(), 12.f); 
+																																							 auto ttf = CCLabelTTF::create("오류가 발생했습니다.", mySGD->getFont().c_str(), 14.f); 
 																																							 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 																																							 //	con->setAnchorPoint(ccp(0, 0));
 																																							 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 																																							 ttf->setColor(ccc3(255, 255, 255));
-																																							 ttf->setPosition(ccp(exceptionPopup->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																																							 ttf->setPosition(ccp(exceptionPopup->getContentRect().size.width / 2.f, -77));
 																																							 emptyNode->addChild(ttf);
 																																							 exceptionPopup->setContentNode(
 																																									 emptyNode
