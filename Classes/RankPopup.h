@@ -85,6 +85,7 @@ enum RankCategory
 	kKnownFriend,
 	kRealTotalFriend
 };
+
 class RankPopup : public DimmedPopup, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -95,7 +96,9 @@ public:
   void myInit (CCObject * t_close, SEL_CallFunc d_close);
   void loadRank ();
   void drawRank (Json::Value obj);
+	void drawTotalRank (Json::Value obj);
   //void closePopup (CCControlButton * obj, CCControlEvent event);
+		
   virtual CCTableViewCell * tableCellAtIndex (CCTableView * table, unsigned int idx);
 
   virtual void scrollViewDidScroll (CCScrollView * view);

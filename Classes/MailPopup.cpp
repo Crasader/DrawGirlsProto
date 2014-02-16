@@ -1004,14 +1004,16 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																											addChild(av, kMP_Z_helpAccept);
 																											av->show();
 
-																											Json::Value p2;
-																											p2["receiver_id"] = mail["friendID"].asString();
-																											// 여기서 당신은 지금 배틀한 상대방을 지칭
-																											p2["message"] = "당신이 승리하였습니다. 보상을 받으세요 ^_^";
-																											hspConnector::get()->kSendMessage
-																												(p2, [=](Json::Value r) {
-																													GraphDogLib::JsonToLog("kSendMessage", r);
-																												});
+																											
+																											// 카톡 메세지 전송																					
+																											// Json::Value p2;
+																											//p2["receiver_id"] = mail["friendID"].asString();
+																											//// 여기서 당신은 지금 배틀한 상대방을 지칭
+																											//p2["message"] = "당신이 승리하였습니다. 보상을 받으세요 ^_^";
+																											//hspConnector::get()->kSendMessage
+																												//(p2, [=](Json::Value r) {
+																													//GraphDogLib::JsonToLog("kSendMessage", r);
+																												//});
 																										});
 																									});
 													 });

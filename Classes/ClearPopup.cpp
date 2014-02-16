@@ -945,13 +945,29 @@ void ClearPopup::checkRentCard()
 		send_coin_button->setPosition(ccp(0,-102));
 		send_coin_button->setFunction([=](CCObject* sender)
 									  {
-										  // 경수
-										  // 하트 보내기 작업
-										  // 보낼 유저 id : mySGD->getSelectedFriendCardData().userId
-										  
-										  mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPRentCardThanks());
-										  checkChallengeOrHelp();
-										  t_popup->removeFromParent();
+											Json::Value p;
+											Json::Value contentJson;
+
+											contentJson["msg"] = "하트받으쇼~";
+											contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+											p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+											p["receiverMemberID"] = mySGD->getSelectedFriendCardData().userId;
+											p["senderMemberID"]=hspConnector::get()->getKakaoID();
+											p["type"]=kHeart;
+											p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
+
+											hspConnector::get()->command("sendMessage", p, this,[=](Json::Value r) {
+												//		NSString* receiverID =  [NSString stringWithUTF8String:param["receiver_id"].asString().c_str()];
+												//		NSString* message =  [NSString stringWithUTF8String:param["message"].asString().c_str()];
+												//		NSString* executeURLString = [NSString stringWithUTF8String:param["executeurl"].asString().c_str()];
+												GraphDogLib::JsonToLog("sendMessage", r);
+												if(r["result"]["code"].asInt() != GDSUCCESS){
+													return;
+												}
+												mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPRentCardThanks());
+												checkChallengeOrHelp();
+												t_popup->removeFromParent();
+											});
 									  });
 		t_container->addChild(send_coin_button);
 	}
