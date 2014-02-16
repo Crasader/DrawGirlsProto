@@ -1,4 +1,6 @@
+
 // MissileUnit.cpp
+//
 //
 
 #include "MissileUnit.h"
@@ -30,12 +32,15 @@ MissileUnit * MissileUnit::create (CCPoint t_sp, float t_angle, float t_distance
 		t_mu->autorelease();
 		return t_mu;
 	}
+
 	CC_SAFE_DELETE(t_mu);
+		
 	return NULL;
 }
 void MissileUnit::startMove ()
 {
 	schedule(schedule_selector(MissileUnit::move));
+		
 }
 void MissileUnit::stopMove ()
 {

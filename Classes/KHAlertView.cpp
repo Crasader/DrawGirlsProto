@@ -82,7 +82,7 @@ void KHAlertView::show()
 	}
 	CCScale9Sprite *btnBg = m_back9;
 	
-	if(m_titleFileName != "" || m_closeItem != NULL)
+	if(m_titleFileName != "") //  || m_closeItem != NULL)
 	{
 		m_titleHeight = 40;
 	}
@@ -121,7 +121,7 @@ void KHAlertView::show()
 	CCMenuLambda* _closeMenu = CCMenuLambda::create();
 	_closeMenu->setTouchPriority(INT_MIN);
 	_closeMenu->setPosition(ccp(0, 0));
-	btnBg->addChild(_closeMenu);
+	btnBg->addChild(_closeMenu, 2);
 	
 	// 닫기 버튼은 정렬 안함
 	if(m_closeItem)

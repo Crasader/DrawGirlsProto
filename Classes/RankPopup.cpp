@@ -248,48 +248,6 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	m_onlyGameFriend->setPosition(ccp(170, 255));
 	this->addChild(m_onlyGameFriend, kRP_Z_back+1);
 	
-	
-	// 게임 친구ㅇㅇㅇㅇ
-//	m_onlyGameFriend = CCMenuItemImageLambda::create
-//	("rank_friend_rank_2.png", "rank_friend_rank_2.png",
-//	 [=](CCObject* t)
-//	 {
-//		 if(m_rankCategory != RankCategory::kTotalFriend)
-//		 {
-//			 m_rankCategory = RankCategory::kTotalFriend;
-//			 if(rankTableView)
-//			 {
-//				 rankTableView->removeFromParent();
-//				 rankTableView = nullptr;
-//			 }
-//			 m_currentSelectSprite = nullptr;
-//			 loadRank();
-//			 m_onlyKatok->setOpacity(0);
-//			 m_onlyGameFriend->setOpacity(255);
-//			 m_totalFriend->setOpacity(0);
-//		 }
-		// .. 오직 게임 유저만.
-		//
-		 //if(m_rankCategory != RankCategory::kUnknownFriend)
-		 //{
-			 //m_rankCategory = RankCategory::kUnknownFriend;
-			 //if(rankTableView)
-			 //{
-				 //rankTableView->removeFromParent();
-				 //rankTableView = nullptr;
-			 //}
-			 //m_currentSelectSprite = nullptr;
-			 //loadRank();
-			 //m_onlyKatok->setOpacity(0);
-			 //m_onlyGameFriend->setOpacity(255);
-			 //m_totalFriend->setOpacity(0);
-		 //}
-//	 });
-//	
-//	m_onlyGameFriend->setPosition(ccp(172, 259));
-//	_menu->addChild(m_onlyGameFriend, 3);
-//	
-	
 	m_totalFriend = CommonButton::create("전체유저", 12, CCSizeMake(100,37), CommonButtonGray, -200);
 	m_totalFriend->setBackgroundTypeForDisabled(CommonButtonYellow);
 	m_totalFriend->setTitleColor(ccc3(200, 200, 200));
@@ -764,12 +722,12 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			 av->setCenterY(150);
 
 			 CCNode* emptyNode = CCNode::create();
-			 auto ttf = CCLabelTTF::create("코인을 보내겠습니까?", mySGD->getFont().c_str(), 12.f); 
+			 auto ttf = CCLabelTTF::create("코인을 보내겠습니까?", mySGD->getFont().c_str(), 14.f); 
 			 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 			 //	con->setAnchorPoint(ccp(0, 0));
 			 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 			 ttf->setColor(ccc3(255, 255, 255));
-			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 			 emptyNode->addChild(ttf);
 			 av->setContentNode(
 					 emptyNode

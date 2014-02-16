@@ -152,7 +152,7 @@ public:
 																											 [=](Json::Value r) {
 																												 if(r["result"]["code"].asInt() != GDSUCCESS) {
 																													 KHAlertView* exceptionPopup = KHAlertView::create(); 
-																													 // av->setTitleFileName("msg_challenge.png");
+																													 exceptionPopup->setTitleFileName("msg_error.png");
 																													 exceptionPopup->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 																													 exceptionPopup->setWidth(240);
 																													 exceptionPopup->setHeight(240);
@@ -161,12 +161,12 @@ public:
 																													 exceptionPopup->setCenterY(150);
 
 																													 CCNode* emptyNode = CCNode::create();
-																													 auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", mySGD->getFont().c_str(), 12.f); 
+																													 auto ttf = CCLabelTTF::create("상대방을 추가할 수 없습니다.", mySGD->getFont().c_str(), 14.f); 
 																													 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 																													 //	con->setAnchorPoint(ccp(0, 0));
 																													 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 																													 ttf->setColor(ccc3(255, 255, 255));
-																													 ttf->setPosition(ccp(exceptionPopup->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																													 ttf->setPosition(ccp(exceptionPopup->getContentRect().size.width / 2.f, -77));
 																													 emptyNode->addChild(ttf);
 																													 exceptionPopup->setContentNode(
 																															 emptyNode
