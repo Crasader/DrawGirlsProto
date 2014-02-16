@@ -1340,12 +1340,21 @@ bool PlayUI::beRevivedJack ()
 }
 void PlayUI::takeAddTimeItem ()
 {
-	int change_time = SDS_GI(kSDF_stageInfo, mySD->getSilType(), "itemOption_addTime_sec");
+	int change_time = NSDS_GI(mySD->getSilType(), kSDS_SI_itemOptionAddTimeSec_i);
 	countingCnt -= change_time;
 	total_time += change_time;
 	
-	if(countingCnt < -mySGD->getLongTimeValue())
-		countingCnt = -mySGD->getLongTimeValue();
+	CCLog("addtime value : %d", change_time);
+	if(mySGD->isUsingItem(kIC_longTime))
+	{
+		if(countingCnt < -mySGD->getLongTimeValue())
+			countingCnt = -mySGD->getLongTimeValue();
+	}
+	else
+	{
+		if(countingCnt < 0)
+			countingCnt = 0;
+	}
 }
 bool PlayUI::getIsExchanged ()
 {

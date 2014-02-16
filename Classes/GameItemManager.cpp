@@ -187,6 +187,7 @@ GameItemAddTime* GameItemAddTime::create(bool is_near)
 void GameItemAddTime::selfRemove()
 {
 	GameItemAddTime* recreate = GameItemAddTime::create(false);
+	recreate->setTakeEffectFunc(target_effect, delegate_effect);
 	getParent()->addChild(recreate);
 	
 	GameItemBase::selfRemove();
@@ -198,6 +199,7 @@ void GameItemAddTime::acting()
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "addTime");
 	
 	GameItemAddTime* recreate = GameItemAddTime::create(false);
+	recreate->setTakeEffectFunc(target_effect, delegate_effect);
 	getParent()->addChild(recreate);
 	
 	removeFromParent();
@@ -232,7 +234,7 @@ void GameItemAddTime::myInit(bool is_near)
 	starting_side_cnt = getSideCount();
 	
 	startFraming();
-	item_img->addChild(KSGradualValue<float>::create(0.f, 0.75f, 1.f, [=](float t)
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.75f, 1.f, [this](float t)
 													 {
 														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
