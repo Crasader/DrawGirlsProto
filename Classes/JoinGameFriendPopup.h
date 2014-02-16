@@ -154,6 +154,7 @@ public:
 	{
 		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 		pDispatcher->addTargetedDelegate(this, -170, true);
+		
 	}
 	
 	void searchById(const std::string& userId);

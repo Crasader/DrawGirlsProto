@@ -972,7 +972,7 @@ void FailPopup::cellAction( CCObject* sender )
 	KS::KSLog("% %" , friend_list[tag].nickname, friend_list[tag].user_id);
 
 	KHAlertView* av = KHAlertView::create(); 
-	// av->setTitleFileName("msg_challenge.png");
+	av->setTitleFileName("msg_help_request.png");
 	av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
 																									 [=](CCObject*){
 																									 }
@@ -985,12 +985,13 @@ void FailPopup::cellAction( CCObject* sender )
 	av->setCenterY(150);
 
 	CCNode* emptyNode = CCNode::create();
-	auto ttf = CCLabelTTF::create((friend_list[tag].nickname + "님~ 못깨겠다. 좀 도와도...").c_str(), mySGD->getFont().c_str(), 12.f); 
+	// friend_list[tag].nickname // 받을 친구의 닉네임.
+	auto ttf = CCLabelTTF::create("도움을 요청합니다.", mySGD->getFont().c_str(), 14.f); 
 	ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 	//	con->setAnchorPoint(ccp(0, 0));
 	//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 	ttf->setColor(ccc3(255, 255, 255));
-	ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+	ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 	emptyNode->addChild(ttf);
 	av->setContentNode(
 			emptyNode
@@ -1038,12 +1039,12 @@ void FailPopup::cellAction( CCObject* sender )
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create("요청을 성공적으로 보냈습니다.", mySGD->getFont().c_str(), 12.f); 
+						 auto ttf = CCLabelTTF::create("정상적으로 도움요청이 이루어졌습니다.\n친구분이 도와주길 기다리세요.^^", mySGD->getFont().c_str(), 12.f); 
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 						 ttf->setColor(ccc3(255, 255, 255));
-						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+						 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 						 emptyNode->addChild(ttf);
 						 av->setContentNode(
 								 emptyNode
@@ -1061,7 +1062,7 @@ void FailPopup::cellAction( CCObject* sender )
 						 //																		obj->removeFromParent();
 						 Json::Value p2;
 						 p2["receiver_id"] = recvId;
-						 p2["message"] = "도와주세염~";
+						 p2["message"] = "저를 도와주세요. 실력파인 당신이 저를 도와주시면 3대가 축복을 받으실거에요~^^";
 						 hspConnector::get()->kSendMessage
 							 (p2, [=](Json::Value r) {
 								 GraphDogLib::JsonToLog("kSendMessage", r);

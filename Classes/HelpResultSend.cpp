@@ -103,7 +103,7 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::funct
 	{
 		KHAlertView* av = KHAlertView::create(); 
 		av->setCloseOnPress(false);
-		// av->setTitleFileName("msg_challenge.png");
+		av->setTitleFileName("msg_help_result.png");
 		av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 		av->setWidth(240);
 		av->setHeight(240);
@@ -112,12 +112,12 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::funct
 		av->setCenterY(150);
 
 		CCNode* emptyNode = CCNode::create();
-		auto ttf = CCLabelTTF::create((mySGD->getAcceptHelpNick() + "님에게 도움을 주지 못했습니다 OTL").c_str(), mySGD->getFont().c_str(), 12.f); 
+		auto ttf = CCLabelTTF::create((mySGD->getAcceptHelpNick() + "님에게 도움을 주지 못했습니다 OTL").c_str(), mySGD->getFont().c_str(), 14.f); 
 		ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 		//	con->setAnchorPoint(ccp(0, 0));
 		//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 		ttf->setColor(ccc3(255, 255, 255));
-		ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+		ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 		emptyNode->addChild(ttf);
 		av->setContentNode(
 				emptyNode

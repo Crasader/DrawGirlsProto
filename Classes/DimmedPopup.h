@@ -62,7 +62,7 @@ public:
 		m_gray->setPosition(ccp(240,160));
 		m_gray->setScaleX(screen_scale_x);
 		m_gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
-		addChildOnDimmed(m_gray, 1);
+		addChildOnDimmed(m_gray, 0);
 		
 		return true;
 	}
@@ -79,7 +79,7 @@ public:
 		m_back = sprite;
 		m_back->setAnchorPoint(ccp(0.5,0.5));
 		m_back->setPosition(ccp(240,160+yOffset-450));
-		addChildOnDimmed(m_back,2);
+		addChildOnDimmed(m_back, 0);
 	}
 	
 	void setBackground(string backImg){

@@ -142,7 +142,6 @@ private:
 	CCPoint startFirePosition;
 	int slowAreaCnt;
 	
-	bool savedAP;
 	AttackPattern* saveAP;
 
 	Cobweb* keepAP23;

@@ -2574,9 +2574,16 @@ void KSCumberBase::settingAttackPercent( float ap )
 void KSCumberBase::decreaseLife( float damage )
 {
 	m_remainHp -= damage;
-	if(m_remainHp <= 0)
+	if (damage >= 900000)
 	{
-		myGD->communication("CP_removeSubCumber", this);
+		myGD->communication("UI_catchSubCumber");
+	}
+	else 
+	{
+		if(m_remainHp <= 0)
+		{
+			myGD->communication("CP_removeSubCumber", this);
+		}
 	}
 }
 

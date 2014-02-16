@@ -7,6 +7,9 @@
 #include "KnownFriend.h"
 #include "KHAlertView.h"
 CCSize cellSize3 = CCSizeMake(238, 38);
+
+
+using namespace boost;
 void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 {
 	
@@ -217,6 +220,8 @@ void FriendListPopup::drawRank()
 	//		yInitPosition = MIN(0, yInitPosition);
 	
 	//≈◊¿Ã∫Ì ∫‰ ª˝º∫ ≥°/////////////////////////////////////////////////////////////////////////////////////////
+	
+	
 }
 
 CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned int idx )
@@ -275,12 +280,12 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 av->setCenterY(150);
 
 			 CCNode* emptyNode = CCNode::create();
-			 auto ttf = CCLabelTTF::create("코인을 보내시겠습니까?", mySGD->getFont().c_str(), 12.f); 
+			 auto ttf = CCLabelTTF::create(str(format("'%||'님에게\n코인을 선물하고,\n카톡 메시지를 보내시겠습니까?\n(코인을 선물하면 소셜포인트 +%|| 드려요.") % member->nick % mySGD->getSPSendHeart()).c_str(), mySGD->getFont().c_str(), 12.f); 
 			 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 			 //	con->setAnchorPoint(ccp(0, 0));
 			 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 			 ttf->setColor(ccc3(255, 255, 255));
-			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 			 emptyNode->addChild(ttf);
 			 av->setContentNode(
 					 emptyNode
@@ -388,6 +393,11 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 param["friendID"] = (*member).userId;
 			 KHAlertView* av = KHAlertView::create(); 
 			 av->setCloseOnPress(false);
+			 av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
+																												[=](CCObject*){
+																													av->removeFromParent();
+																												}
+																											 ));
 			 // av->setTitleFileName("msg_challenge.png");
 			 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 			 av->setWidth(240);
@@ -397,22 +407,22 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 av->setCenterY(150);
 
 			 CCNode* emptyNode = CCNode::create();
-			 auto ttf = CCLabelTTF::create("정말삭제하시겠습니까? 다시 못만날지도...", mySGD->getFont().c_str(), 12.f); 
+			 auto ttf = CCLabelTTF::create(str(format("%|| 님을 정말 삭제하시겠습니까?\n인연은 소중합니다.") % member->nick).c_str(), mySGD->getFont().c_str(), 14.f); 
 			 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 			 //	con->setAnchorPoint(ccp(0, 0));
 			 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 			 ttf->setColor(ccc3(255, 255, 255));
-			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+			 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 			 emptyNode->addChild(ttf);
 			 av->setContentNode(
 					 emptyNode
 					 );
 			 av->setContentSize(ttf->getDimensions());
-			 av->addButton(CommonButton::create("취소", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
-										 [=](CCObject* e) {
-											 CCLog("ok!!");
-											 av->removeFromParent();
-										 });
+			 //av->addButton(CommonButton::create("취소", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+										 //[=](CCObject* e) {
+											 //CCLog("ok!!");
+											 //av->removeFromParent();
+										 //});
 			 av->addButton(CommonButton::create("친구 삭제", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 										 [=](CCObject* e) {
 											 CCLog("ok!!");

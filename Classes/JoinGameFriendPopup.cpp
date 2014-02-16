@@ -73,8 +73,8 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 //	_menu->addChild(closeBtn);
 	
 	CCSprite* addFriend = CCSprite::create("friendsearch_plus.png");
-	addFriend->setPosition(ccp(440, 235));
-	addChild(addFriend);
+	addFriend->setPosition(ccp(417, 202));
+	addChild(addFriend, kZorderJoinGameFriendIdInput);
 
 	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
 	closeBtn->setFunction([=](CCObject*){
@@ -183,7 +183,7 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	m_searchIdEditBox = CCEditBox::create(CCSizeMake(190, 25), CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 	m_searchIdEditBox->getBackgroundSprite()->setVisible(false);
 	m_searchIdEditBox->getBackgroundSprite()->setOpacity(0);
-	m_searchIdEditBox->setPosition(ccp(398, 218));
+	m_searchIdEditBox->setPosition(ccp(398, 201));
 	m_searchIdEditBox->setPlaceHolder("입력해주세요.");
 	m_searchIdEditBox->setTouchPriority(-200);
 	m_searchIdEditBox->setReturnType(kKeyboardReturnTypeDone);
@@ -244,7 +244,7 @@ void JoinGameFriendPopup::drawRank( Json::Value obj )
 	//≈◊¿Ã∫Ì ∫‰ ª˝º∫ Ω√¿€ /////////////////////////////////////////////////////////////////////////////////////////
 	
 	//320x320 ≈◊¿Ã∫Ì ∫‰ ª˝º∫
-	rankTableView = JoinFriendTableView::create(this, CCSizeMake(215, 179), NULL);
+	rankTableView = JoinFriendTableView::create(this, CCSizeMake(215, 165), NULL);
 	//		CCScale9Sprite* bar = CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
 	//																		1						 CCRectMake(10, 7, 53 - 10*2, 23 - 7*2));
 //	CCScale9Sprite* bar = CCScale9Sprite::create("card_scroll.png");
@@ -452,6 +452,7 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 																 {
 																	 
 																	 KHAlertView* av = KHAlertView::create(); 
+																	 av->setTitleFileName("msg_error.png");
 																	 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
 																	 av->setWidth(240);
 																	 av->setHeight(240);
@@ -460,12 +461,12 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 																	 av->setCenterY(150);
 
 																	 CCNode* emptyNode = CCNode::create();
-																	 auto ttf = CCLabelTTF::create("아이디를 찾을 수 없습니다.", mySGD->getFont().c_str(), 12.f); 
+																	 auto ttf = CCLabelTTF::create("아이디를 찾을 수 없습니다.", mySGD->getFont().c_str(), 14.f); 
 																	 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 																	 //	con->setAnchorPoint(ccp(0, 0));
 																	 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 																	 ttf->setColor(ccc3(255, 255, 255));
-																	 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																	 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 																	 emptyNode->addChild(ttf);
 																	 av->setContentNode(
 																			 emptyNode
@@ -498,12 +499,12 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 																		 av->setCenterY(150);
 
 																		 CCNode* emptyNode = CCNode::create();
-																		 auto ttf = CCLabelTTF::create("신청했습니다. 수락을 기다리세요.", mySGD->getFont().c_str(), 12.f); 
+																		 auto ttf = CCLabelTTF::create("신청했습니다. 수락을 기다리세요.", mySGD->getFont().c_str(), 14.f); 
 																		 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 																		 //	con->setAnchorPoint(ccp(0, 0));
 																		 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
 																		 ttf->setColor(ccc3(255, 255, 255));
-																		 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() - 15));
+																		 ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, -77));
 																		 emptyNode->addChild(ttf);
 																		 av->setContentNode(
 																				 emptyNode
