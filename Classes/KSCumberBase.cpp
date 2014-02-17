@@ -2099,7 +2099,7 @@ void KSCumberBase::followProcess(float dt)
 		if(ps.getResult() == 0)
 		{
 			CCLog("follow!!!");
-			KSCumberBase* mainCumber = dynamic_cast<KSCumberBase*>(myGD->getCommunicationNode("CP_getMainCumberPointer"));
+			KSCumberBase* mainCumber = this;
 
 			int aggroCount = 0;
 			if(mainCumber->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
