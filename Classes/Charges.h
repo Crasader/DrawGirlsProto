@@ -254,6 +254,10 @@ private:
 class CrashChargeNodeLambda : public ChargeParent
 {
 public:
+	virtual ~CrashChargeNodeLambda()
+	{
+		CCLog("~CrashChargeNodeLambda");
+	}
 	static CrashChargeNodeLambda* create(CCPoint t_position, int t_frame,
 																 std::function<void(CCObject*)> func,
 																			 CCObject* t_rt, const std::string& pattern);

@@ -219,6 +219,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
 			addChild(t_ccn);
 			t_ccn->startCharge();
+			CCLog("%x", t_ccn);
 			cb->setChargeParent(t_ccn);
 		}
 		else if(atype == "special")
