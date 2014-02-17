@@ -681,6 +681,7 @@ void Jack::moveTest()
 			if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 				myGD->communication("PM_checkBeforeNewline", afterPoint);
 			myGD->mapState[afterPoint.x][afterPoint.y] = mapNewline;
+			CCLog("draw after point x : %d, y : %d", afterPoint.x, afterPoint.y);
 		}
 		else if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver) && myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
 		{
@@ -799,8 +800,13 @@ void Jack::moveTest()
 			if(direction != afterDirection)
 			{
 				check_turn_cnt = 0;
-				IntPoint a_jp = myGD->getJackPoint();
+				IntPoint a_jp = afterPoint;
 				setPosition(ccp((a_jp.x-1)*pixelSize+1, (a_jp.y-1)*pixelSize+1));
+				CCLog("change direction x : %d , y : %d , before : %d , after : %d", a_jp.x, a_jp.y, direction, afterDirection);
+//				myGD->communication("PM_lastPathRemove");
+				IntVector t_vector = IntVector::directionVector(afterDirection);
+				IntPointVector t_pv = IntPointVector(afterPoint.x, afterPoint.y, t_vector.dx, t_vector.dy);
+				myGD->communication("PM_checkLastAddPath", t_pv);
 				before_x_direction = directionStop;
 				before_x_cnt = 0;
 				direction = afterDirection;
@@ -1954,6 +1960,11 @@ bool Jack::isDieJack()
 	return isDie;
 }
 
+CCNode* Jack::getJack()
+{
+	return this;
+}
+
 void Jack::myInit()
 {
 	is_on_continue = false;
@@ -1984,6 +1995,7 @@ void Jack::myInit()
 	myGD->F_V["Jack_getSpeedUpValue"] = std::bind(&Jack::getSpeedUpValue, this);
 	myGD->V_V["Jack_positionRefresh"] = std::bind(&Jack::positionRefresh, this);
 	myGD->B_V["Jack_isDie"] = std::bind(&Jack::isDieJack, this);
+	myGD->CCN_V["Jack_getJack"] = std::bind(&Jack::getJack, this);
 
 
 	isMoving = false;
@@ -2021,7 +2033,7 @@ void Jack::myInit()
 	
 	line_edge = CCSprite::create("jack_drawing_point.png");//("path_edge_" + path_color + ".png").c_str());
 	line_edge->setVisible(false);
-//	line_edge->setScale(myGD->game_scale);
+	line_edge->setScale(0.5f);
 	addChild(line_edge, kJackZ_line);
 	
 	

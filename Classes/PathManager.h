@@ -44,7 +44,7 @@ public:
 	void changeScaleImg(int changeValue)
 	{
 		pathScale += changeValue;
-		pathImg->setScaleX(pathScale);
+		pathImg->setScaleX(float(pathScale));
 	}
 	
 private:
@@ -61,9 +61,14 @@ private:
 		pathImg->setScaleX(pathScale);
 		pathImg->setScaleY(0.5f);
 		addChild(pathImg);
+		
+		CCLog("addPath x : %d , y : %d, direction : %d, %d", myPointVector.origin.x, myPointVector.origin.y, myPointVector.distance.dx, myPointVector.distance.dy);
+		
 		setPosition(ccp((myPointVector.origin.x-1)*pixelSize+1, (myPointVector.origin.y-1)*pixelSize+1));
+//		setPosition(myGD->getCommunicationNode("Jack_getJack")->getPosition());
 		
 		CCSprite* path_edge = CCSprite::create(("path_edge_" + line_color + ".png").c_str());
+		path_edge->setScale(0.6f);
 		addChild(path_edge);
 	}
 };
@@ -353,6 +358,40 @@ private:
 	
 	string path_color;
 	
+	void checkLastAddPath(IntPointVector t_pointvector)
+	{
+		if(myList.empty())
+			return;
+		PathNode* last_path_node = myList.back();
+		if(last_path_node->myPointVector.distance.getAngle() == t_pointvector.distance.getAngle() && last_path_node->pathScale == 1 &&
+		   (last_path_node->myPointVector.origin.x != t_pointvector.origin.x || last_path_node->myPointVector.origin.y != t_pointvector.origin.y))
+		{
+			if(myGD->mapState[t_pointvector.origin.x][t_pointvector.origin.y] != mapOldline)
+			{
+				t_pointvector.origin.x -= t_pointvector.distance.dx;
+				t_pointvector.origin.y -= t_pointvector.distance.dy;
+			}
+			
+			last_path_node->myPointVector = t_pointvector;
+			last_path_node->setPosition(t_pointvector.origin.convertToCCP());
+			last_path_node->changeScaleImg(-1);
+		}
+	}
+	
+	void lastPathRemove()
+	{
+		if(myList.empty())
+			return;
+		PathNode* last_path_node = myList.back();
+		if(last_path_node->pathScale == 1)
+		{
+			myList.pop_back();
+			last_path_node->removeFromParent();
+		}
+		else
+			last_path_node->changeScaleImg(-1);
+	}
+	
 	void myInit()
 	{
 		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -384,6 +423,8 @@ private:
 		myGD->V_Ip["PM_addPathBreaking"] = std::bind(&PathManager::addPathBreaking, this, _1);
 		myGD->V_Ip["PM_checkBeforeNewline"] = std::bind(&PathManager::checkBeforeNewline, this, _1);
 		myGD->B_Ip["PM_checkRemoveNewline"] = std::bind(&PathManager::checkRemoveNewline, this, _1);
+		myGD->V_Ipv["PM_checkLastAddPath"] = std::bind(&PathManager::checkLastAddPath, this, _1);
+		myGD->V_V["PM_lastPathRemove"] = std::bind(&PathManager::lastPathRemove, this);
 		setTag(pathBreakingStateFalse);
 	}
 };
