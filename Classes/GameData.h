@@ -129,17 +129,38 @@ public:
 		
 		return return_vector;
 	}
+	vector<CCNode*> getSubCumberCCNodeVector()
+	{
+		vector<KSCumberBase*> t_vector = getSubCumberVector();
+		vector<CCNode*> return_vector;
+		for(int i=0;i<t_vector.size();i++)
+			return_vector.push_back((CCNode*)t_vector[i]);
+		
+		return return_vector;
+	}
 	
 	int getMainCumberCount()
 	{
 		return getMainCumberVector().size();
 	}
-	
 	bool isValidMainCumber(CCNode* t_boss)
 	{
 		vector<CCNode*> boss_vector = getMainCumberCCNodeVector();
 		auto iter = find(boss_vector.begin(), boss_vector.end(), t_boss);
 		if(iter != boss_vector.end())
+			return true;
+		return false;
+	}
+	
+	int getSubCumberCount()
+	{
+		return getSubCumberVector().size();
+	}
+	bool isValidSubCumber(CCNode* t_monster)
+	{
+		vector<CCNode*> monster_vector = getSubCumberCCNodeVector();
+		auto iter = find(monster_vector.begin(), monster_vector.end(), t_monster);
+		if(iter != monster_vector.end())
 			return true;
 		return false;
 	}

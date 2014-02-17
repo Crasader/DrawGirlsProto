@@ -1481,7 +1481,7 @@ void PlayUI::writePosition()
 	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionX)] = boss_position.x;
 	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionY)] = boss_position.y;
 	
-	vector<CCNode*> subCumberArray = myGD->getSubCumberVector();
+	vector<CCNode*> subCumberArray = myGD->getSubCumberCCNodeVector();
 	int loop_cnt = subCumberArray.size();
 	for(int i=0;i<loop_cnt;i++)
 	{

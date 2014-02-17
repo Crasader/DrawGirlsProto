@@ -342,7 +342,7 @@ void Maingame::finalSetting()
 	
 //	myUI->setControlTD(this, callfunc_selector(Maingame::setControlGesture), callfunc_selector(Maingame::setControlButton), callfunc_selector(Maingame::setControlJoystick), callfunc_selector(Maingame::startControl));
 	
-	vector<CCNode*> main_cumber_vector = myGD->getMainCumberVector();
+	vector<CCNode*> main_cumber_vector = myGD->getMainCumberCCNodeVector();
 	search_eye_vector.clear();
 	
 	for(int i=0;i<main_cumber_vector.size();i++)
@@ -1149,7 +1149,9 @@ void Maingame::endCloseShutter()
 
 void Maingame::startMoveToBossPosition()
 {
-	startMoveToCCPoint(myGD->getMainCumberPoint().convertToCCP());
+	CCNode* boss_node = myGD->getMainCumberCCNodeVector()[0];
+	
+	startMoveToCCPoint(myGD->getMainCumberPoint(boss_node).convertToCCP());
 }
 
 void Maingame::startMoveToCCPoint( CCPoint t_point )
