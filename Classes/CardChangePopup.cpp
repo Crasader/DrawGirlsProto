@@ -435,32 +435,38 @@ CCTableViewCell* CardChangePopup::tableCellAtIndex(CCTableView *table, unsigned 
 	}
 	else
 	{
+		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, have_card_list[idx-1].card_number);
+		string case_type;
+		if(card_grade == 1)
+			case_type = "bronze";
+		else if(card_grade == 2)
+			case_type = "silver";
+		else if(card_grade == 3)
+			case_type = "gold";
+		
 		CCSprite* have_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", have_card_list[idx-1].card_number)->getCString()));
 		have_card->setScale(0.73f);
 		have_card->setPosition(card_center_position);
 		cell->addChild(have_card, kCardChangeTableCellZorder_img);
 		
-		CCSprite* no_img = CCSprite::create("cardchange_noimg.png");
-		no_img->setPosition(card_center_position);
-		cell->addChild(no_img, kCardChangeTableCellZorder_noimg);
+		CCSprite* card_case = CCSprite::create(CCString::createWithFormat("card_case_mini_%s.png", case_type.c_str())->getCString());
+		card_case->setPosition(ccp(have_card->getContentSize().width/2.f, have_card->getContentSize().height/2.f));
+		have_card->addChild(card_case);
 		
-		CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
-		mini_rank->setPosition(ccp(17,17));
-		no_img->addChild(mini_rank);
-		
-		CCLabelTTF* t_rank = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_rank_i, have_card_list[idx-1].card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
-		mini_rank->addChild(t_rank);
-		
-		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, have_card_list[idx-1].card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		t_card_level_label->setPosition(ccp(17,60));
+		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, have_card_list[idx-1].card_number))->getCString(), mySGD->getFont().c_str(), 6);
+		t_card_level_label->setPosition(ccp(45,61));
 		cell->addChild(t_card_level_label, kCardChangeTableCellZorder_noimg);
+		
+		CCLabelTTF* t_card_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, have_card_list[idx-1].card_number))->getCString(),
+																 mySGD->getFont().c_str(), 7);
+		t_card_durability_label->setPosition(ccp(47,10));
+		cell->addChild(t_card_durability_label, kCardChangeTableCellZorder_noimg);
 		
 		if(have_card_list[idx-1].card_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
 		{
-			CCSprite* small_selected_img = CCSprite::create("cardchange_selected.png");
-			small_selected_img->setPosition(card_center_position);
-			cell->addChild(small_selected_img, kCardChangeTableCellZorder_mounted);
+			CCSprite* small_selected_img = CCSprite::create("card_check.png");
+			small_selected_img->setPosition(card_case->getPosition());
+			have_card->addChild(small_selected_img);
 		}
 		else if(have_card_list[idx-1].card_number == clicked_card_number)
 		{
