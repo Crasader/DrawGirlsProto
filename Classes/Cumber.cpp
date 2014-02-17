@@ -106,12 +106,12 @@ void CumberParent::stopMovingMainCumber()
 		mainCumber->stopMoving();
 }
 
-CCNode* CumberParent::getMainCumberPointer()
-{
-	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	return *mainCumbers.begin();
-//	return mainCumber;
-}
+//CCNode* CumberParent::getMainCumberPointer()
+//{
+	////### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+	//return *mainCumbers.begin();
+////	return mainCumber;
+//}
 
 std::vector<KSCumberBase*>& CumberParent::getSubCumberArrayPointer()
 {
@@ -541,7 +541,7 @@ void CumberParent::myInit()
 		IntPoint mapPoint;
 		bool finded;
 		mainCumber->getRandomPosition(&mapPoint, &finded);
-		myGD->setMainCumberPoint(mapPoint);
+		myGD->setMainCumberPoint(mainCumber, mapPoint);
 		mainCumber->setPosition(ip2ccp(mapPoint));
 		mainCumber->startAnimationNoDirection();
 		mainCumbers.push_back(mainCumber);

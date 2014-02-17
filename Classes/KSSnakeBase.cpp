@@ -628,7 +628,7 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 
 	if(m_state != CUMBERSTATENODIRECTION) // 도는것이 아니라면
 	{
-		myGD->setMainCumberPoint(ccp2ip(t_sp));
+		myGD->setMainCumberPoint(this, ccp2ip(t_sp));
 		m_mapPoint = ccp2ip(t_sp);
 	}
 	setHeadAndBodies();

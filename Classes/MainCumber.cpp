@@ -1,4 +1,6 @@
-//
+/*
+ *
+ //
 //  MainCumber.cpp
 //  DrawingJack
 //
@@ -352,7 +354,7 @@ void MainCumber::moving()
 	}
 	
 	mapPoint = afterPoint; // unnecessary
-	myGD->setMainCumberPoint(afterPoint);
+	myGD->setMainCumberPoint(this, afterPoint);
 	setPosition(afterPosition);
 	
 	before_keep_frame_cnt++;
@@ -1385,4 +1387,4 @@ bool MainCumber::checkingFunc(IntPoint check_position, bool& is_not_position, in
 	return false;
 }
 
-
+*/

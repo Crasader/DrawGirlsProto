@@ -141,9 +141,10 @@ public:
 	void setJackPoint(IntPoint t_jp);
 	IntPoint getJackPoint();
 	
-	void setMainCumberPoint(IntPoint t_mcbp);
-	IntPoint getMainCumberPoint();
+	//void setMainCumberPoint(IntPoint t_mcbp);
+	//IntPoint getMainCumberPoint();
 	
+	void setMainCumberPoint(KSCumberBase* cb, IntPoint t_mcbp);
 	float getAlphaSpeed();
 	void setAlphaSpeed(float t_f);
 	
@@ -209,6 +210,8 @@ private:
 	int jackState;
 	IntPoint* jackPoint;
 	IntPoint* mainCumberPoint;
+
+	std::map<KSCumberBase*, IntPoint> mainCumberPoints;
 	CCArray* otherTargetPoints;
 	
 	CCObject* target_Main;
