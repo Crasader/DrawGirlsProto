@@ -18,6 +18,8 @@
 #include "Well512.h"
 #include "jsoncpp/json.h"
 #include <queue>
+#include "Charges.h"
+
 
 USING_NS_CC;
 
@@ -121,7 +123,7 @@ public:
 	m_castingCancelCount(0), m_isStarted(false), m_healingFrameCount(0),
 	m_damagedFrames(500), m_slience(false), m_adderCnt(0), m_reAttackCnt(0), m_furyCnt(0),
 	m_cumberTimer(0), m_attackPattern(nullptr), m_cobWebAttack(nullptr), m_freezeAttack(nullptr),
-	m_chaosAttack(nullptr), m_sightOutAttack(nullptr)
+	m_chaosAttack(nullptr), m_sightOutAttack(nullptr), m_chargeParent(nullptr)
 
 	{
 		
@@ -443,6 +445,8 @@ protected:
 	CC_SYNTHESIZE(FreezeAttack*, m_freezeAttack, FreezeAttack);
 	CC_SYNTHESIZE(ChaosAttack*, m_chaosAttack, ChaosAttack);
 	CC_SYNTHESIZE(SightOutAttack*, m_sightOutAttack, SightOutAttack);
+
+	CC_SYNTHESIZE(ChargeParent*, m_chargeParent, ChargeParent);
 };
 
 #endif /* defined(__DGproto__KSCumberBase__) */

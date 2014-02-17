@@ -10,9 +10,9 @@
 #define __DGproto__Charges__
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 #include "AudioEngine.h"
 #include "GameData.h"
-#include "KSCumberBase.h"
 USING_NS_CC;
 
 class CCN_InnerNode : public CCSprite
@@ -113,7 +113,7 @@ private:
 	
 	int charge_cnt;
 	
-	std::pair<CCSprite*, CCBAnimationManager*> particle;
+	std::pair<CCSprite*, cocos2d::extension::CCBAnimationManager*> particle;
 	
 	void charging();
 	
@@ -194,7 +194,7 @@ private:
 	
 	int charge_cnt;
 	
-	std::pair<CCSprite*, CCBAnimationManager*> particle;
+	std::pair<CCSprite*, cocos2d::extension::CCBAnimationManager*> particle;
 	
 	void charging();
 	

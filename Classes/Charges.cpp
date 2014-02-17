@@ -7,6 +7,7 @@
 //
 
 #include "Charges.h"
+#include "KSCumberBase.h"
 
 CCN_InnerNode* CCN_InnerNode::create( CCPoint t_fp, float t_distance, int t_moveFrame, ccColor4F t_color )
 {
@@ -242,7 +243,10 @@ void ChargeNodeLambda::charging()
 void ChargeNodeLambda::removeSelf()
 {
 	unschedule(schedule_selector(ChargeNodeLambda::charging));
-	myGD->communication("MP_removeChargeInArray", this);
+	KSCumberBase* cumber = (KSCumberBase*)real_target;
+	cumber->getChargeParent()->removeFromParent();
+	cumber->setChargeParent(nullptr);
+	//myGD->communication("MP_removeChargeInArray", this);
 	removeFromParentAndCleanup(true);
 }
 
@@ -447,7 +451,10 @@ void SpecialChargeNodeLambda::charging()
 void SpecialChargeNodeLambda::removeSelf()
 {
 	unschedule(schedule_selector(SpecialChargeNodeLambda::charging));
-	myGD->communication("MP_removeChargeInArray", this);
+	KSCumberBase* cumber = (KSCumberBase*)real_target;
+	cumber->getChargeParent()->removeFromParent();
+	cumber->setChargeParent(nullptr);
+	//myGD->communication("MP_removeChargeInArray", this);
 	removeFromParentAndCleanup(true);
 }
 
@@ -662,7 +669,10 @@ void CrashChargeNodeLambda::charging()
 void CrashChargeNodeLambda::removeSelf()
 {
 	unschedule(schedule_selector(CrashChargeNodeLambda::charging));
-	myGD->communication("MP_removeChargeInArray", this);
+	KSCumberBase* cumber = (KSCumberBase*)real_target;
+	cumber->getChargeParent()->removeFromParent();
+	cumber->setChargeParent(nullptr);
+	//myGD->communication("MP_removeChargeInArray", this);
 	removeFromParentAndCleanup(true);
 }
 

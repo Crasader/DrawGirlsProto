@@ -15,19 +15,23 @@
 
 void MissileParent::bombCumber( CCObject* target )
 {
+	KSCumberBase* cumber = (KSCumberBase*)target;
 	if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 	{
-		if(target == myGD->getCommunicationNode("CP_getMainCumberPointer"))
+		if(cumber->getChargeParent())
 		{
-			for(int i=0;i<chargeArray->count();i++)
-			{
-				ChargeParent* t_cn = (ChargeNode*)chargeArray->objectAtIndex(i);
-				t_cn->cancelCharge();
-			}
+			cumber->getChargeParent()->cancelCharge();
 		}
+		//if(target == myGD->getCommunicationNode("CP_getMainCumberPointer"))
+		//{
+			//for(int i=0;i<chargeArray->count();i++)
+			//{
+				//ChargeParent* t_cn = (ChargeNode*)chargeArray->objectAtIndex(i);
+				//t_cn->cancelCharge();
+			//}
+		//}
 	}
 	
-	KSCumberBase* cumber = (KSCumberBase*)target;
 	
 	if(cumber->getAttackPattern())
 	{
@@ -206,7 +210,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
 			addChild(t_ccn);
 			t_ccn->startCharge();
-			chargeArray->addObject(t_ccn);
+			cb->setChargeParent(t_ccn);
 		}
 		else if(atype == "special")
 		{
@@ -217,7 +221,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			addChild(t_ccn);
 			t_ccn->startCharge();
-			chargeArray->addObject(t_ccn);
+			cb->setChargeParent(t_ccn);
 		}
 		else // normal
 		{
@@ -228,7 +232,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			addChild(t_ccn);
 			t_ccn->startCharge();
-			chargeArray->addObject(t_ccn);
+			cb->setChargeParent(t_ccn);
 		}
 		myGD->communication("Main_showDetailMessage", warningFileName);
 	};
@@ -1010,20 +1014,20 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 
 
 
-void MissileParent::createSubCumberReplication( CCPoint s_p,
-											   CCObject* sender, SEL_CallFuncO d_startMoving )
-{
-	CreateSubCumberOtherAction* t_cscaa = CreateSubCumberOtherAction::create(IntPoint(int(round((s_p.x-1)/pixelSize+1)), int(round((s_p.y-1)/pixelSize+1))), sender, d_startMoving, sender, d_startMoving);
-	addChild(t_cscaa);
+//void MissileParent::createSubCumberReplication( CCPoint s_p,
+												 //CCObject* sender, SEL_CallFuncO d_startMoving )
+//{
+	//CreateSubCumberOtherAction* t_cscaa = CreateSubCumberOtherAction::create(IntPoint(int(round((s_p.x-1)/pixelSize+1)), int(round((s_p.y-1)/pixelSize+1))), sender, d_startMoving, sender, d_startMoving);
+	//addChild(t_cscaa);
 	
-	ChargeNode* t_cn = ChargeNode::create(s_p, 60*3, NULL, NULL,
-										  t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::afterAction),
-										  t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::cancelAction), sender);
-	addChild(t_cn);
-	t_cn->startCharge();
+	//ChargeNode* t_cn = ChargeNode::create(s_p, 60*3, NULL, NULL,
+											//t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::afterAction),
+											//t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::cancelAction), sender);
+	//addChild(t_cn);
+	//t_cn->startCharge();
 	
-	chargeArray->addObject(t_cn);
-}
+	//chargeArray->addObject(t_cn);
+//}
 
 void MissileParent::explosion( CCPoint bombPosition, ccColor4F t_color, float t_angle )
 {
@@ -1166,7 +1170,7 @@ void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color, floa
 
 void MissileParent::myInit( CCNode* boss_eye )
 {
-	chargeArray = new CCArray(1);
+	//chargeArray = new CCArray(1);
 	tickingArray = new CCArray(1);
 	
 	mySW = SW_Parent::create();
@@ -1185,7 +1189,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	//	myGD->V_CCPI["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2);
 	myGD->I_CCPStrCumberBaseB["MP_attackWithKSCode"] =
 	std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
-	myGD->V_CCPCCOCallfuncO["MP_createSubCumberReplication"] = std::bind(&MissileParent::createSubCumberReplication, this, _1, _2, _3);
+//	myGD->V_CCPCCOCallfuncO["MP_createSubCumberReplication"] = std::bind(&MissileParent::createSubCumberReplication, this, _1, _2, _3);
 	myGD->V_CCO["MP_removeChargeInArray"] = std::bind(&MissileParent::removeChargeInArray, this, _1);
 	myGD->V_IIFCCP["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3, _4);
 	myGD->V_CCO["MP_bombCumber"] = std::bind(&MissileParent::bombCumber, this, _1);
@@ -1213,7 +1217,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 
 void MissileParent::removeChargeInArray( CCObject* remove_charge )
 {
-	chargeArray->removeObject(remove_charge);
+//	chargeArray->removeObject(remove_charge);
 }
 
 void MissileParent::movingMainCumber()
