@@ -103,6 +103,7 @@ bool ClearPopup::init()
 	Json::Value p1_data;
 	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	p1_data["allhighscore"] = mySGD->getScore();//myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	p1_data["highstage"] = mySGD->suitable_stage;
 	Json::FastWriter p1_data_writer;
 	p1["data"] = p1_data_writer.write(p1_data);
 	hspConnector::get()->command("addweeklyscore", p1, NULL);
