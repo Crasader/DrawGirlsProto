@@ -117,8 +117,23 @@ public:
 	std::map<std::string, std::function<void(CCPoint, float)>> V_CCPF;
 
 	
-	std::function<std::vector<KSCumberBase*>&(void)> getMainCumberVector;
-	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
+	std::function<std::vector<CCNode*>&(void)> getMainCumberVector;
+	std::function<std::vector<CCNode*>&(void)> getSubCumberVector;
+	
+	int getMainCumberCount()
+	{
+		return getMainCumberVector().size();
+	}
+	
+	bool isValidMainCumber(CCNode* t_boss)
+	{
+		vector<CCNode*> boss_vector = getMainCumberVector();
+		auto iter = find(boss_vector.begin(), boss_vector.end(), t_boss);
+		if(iter != boss_vector.end())
+			return true;
+		return false;
+	}
+	
 	mapType mapState[162][217];
 	
 	static GameData* sharedGameData();
@@ -145,6 +160,10 @@ public:
 	//IntPoint getMainCumberPoint();
 	
 	void setMainCumberPoint(KSCumberBase* cb, IntPoint t_mcbp);
+	IntPoint getMainCumberPoint(CCNode* cb)
+	{
+		return mainCumberPoints[(KSCumberBase*)cb];
+	}
 	float getAlphaSpeed();
 	void setAlphaSpeed(float t_f);
 	
