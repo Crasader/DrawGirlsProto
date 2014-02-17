@@ -247,7 +247,6 @@ void ChargeNodeLambda::removeSelf()
 	cumber->getChargeParent()->removeFromParent();
 	cumber->setChargeParent(nullptr);
 	//myGD->communication("MP_removeChargeInArray", this);
-	removeFromParentAndCleanup(true);
 }
 
 void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
@@ -455,7 +454,6 @@ void SpecialChargeNodeLambda::removeSelf()
 	cumber->getChargeParent()->removeFromParent();
 	cumber->setChargeParent(nullptr);
 	//myGD->communication("MP_removeChargeInArray", this);
-	removeFromParentAndCleanup(true);
 }
 
 void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
@@ -621,6 +619,7 @@ void CrashChargeNodeLambda::cancelCharge()
 	AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 	//		if(cancel_target && cancel_delegate)
 	//			(cancel_target->*cancel_delegate)(real_target);
+	CCLog("crash cancelCharge");
 	removeSelf();
 }
 
@@ -651,6 +650,7 @@ void CrashChargeNodeLambda::charging()
 		AudioEngine::sharedInstance()->stopAllEffects();
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 		actionFunction(real_target);
+		CCLog("removeSelf call");
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
 		if(cb)
@@ -673,6 +673,8 @@ void CrashChargeNodeLambda::removeSelf()
 	cumber->getChargeParent()->removeFromParent();
 	cumber->setChargeParent(nullptr);
 	//myGD->communication("MP_removeChargeInArray", this);
+	
+	CCLog("crash removeFromParent1");
 	removeFromParentAndCleanup(true);
 }
 
