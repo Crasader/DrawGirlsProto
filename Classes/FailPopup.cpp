@@ -340,19 +340,19 @@ bool FailPopup::init()
 		main_case->addChild(title, kZ_FP_img);
 	}
 	
-	score_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 12); // CCLabelBMFont::create("0", "mb_white_font.fnt");
+	score_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 18); // CCLabelBMFont::create("0", "mb_white_font.fnt");
 	score_label->setColor(ccc3(220, 190, 125));
 	score_label->setAnchorPoint(ccp(1.f,0.5));
 	score_label->setPosition(ccp(230,78));
 	main_case->addChild(score_label, kZ_FP_img);
 	
-	gold_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 12); // CCLabelBMFont::create("0", "mb_white_font.fnt");
+	gold_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 18); // CCLabelBMFont::create("0", "mb_white_font.fnt");
 	gold_label->setColor(ccc3(220, 190, 125));
 	gold_label->setAnchorPoint(ccp(1.f,0.5));
 	gold_label->setPosition(ccp(230,106));
 	main_case->addChild(gold_label, kZ_FP_img);
 	
-	time_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 12); // CCLabelBMFont::create("0", "mb_white_font.fnt");
+	time_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 18); // CCLabelBMFont::create("0", "mb_white_font.fnt");
 	time_label->setColor(ccc3(220, 190, 125));
 	time_label->setAnchorPoint(ccp(1.f,0.5));
 	time_label->setPosition(ccp(230,132));
