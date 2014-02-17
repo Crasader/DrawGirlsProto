@@ -261,6 +261,8 @@ private:
 //	CCSpriteBatchNode* take_item_effects;
 	deque<CCSprite*> effect_que;
 	
+	bool is_on_addTime;
+	
 	void showTakeItemEffect(CCPoint t_p);
 	
 	vector<ITEM_CODE> creatable_list;

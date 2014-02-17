@@ -187,6 +187,7 @@ GameItemAddTime* GameItemAddTime::create(bool is_near)
 void GameItemAddTime::selfRemove()
 {
 	GameItemAddTime* recreate = GameItemAddTime::create(false);
+	recreate->setTakeEffectFunc(target_effect, delegate_effect);
 	getParent()->addChild(recreate);
 	
 	GameItemBase::selfRemove();
@@ -198,6 +199,7 @@ void GameItemAddTime::acting()
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "addTime");
 	
 	GameItemAddTime* recreate = GameItemAddTime::create(false);
+	recreate->setTakeEffectFunc(target_effect, delegate_effect);
 	getParent()->addChild(recreate);
 	
 	removeFromParent();
@@ -232,7 +234,7 @@ void GameItemAddTime::myInit(bool is_near)
 	starting_side_cnt = getSideCount();
 	
 	startFraming();
-	item_img->addChild(KSGradualValue<float>::create(0.f, 0.75f, 1.f, [=](float t)
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.75f, 1.f, [this](float t)
 													 {
 														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
@@ -1118,7 +1120,7 @@ void GameItemManager::startItemSetting()
 		}
 	}
 	
-	if(mySD->getClearCondition() == kCLEAR_timeLimit)
+	if(mySD->getClearCondition() == kCLEAR_timeLimit || is_on_addTime)
 	{
 		GameItemAddTime* t_giat = GameItemAddTime::create(false);
 		t_giat->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
@@ -1324,9 +1326,18 @@ void GameItemManager::myInit()
 	
 	child_base_cnt = getChildrenCount();
 	
+	is_on_addTime = false;
 	int defItems_cnt = SDS_GI(kSDF_stageInfo, mySD->getSilType(), "defItems_cnt");
 	for(int i=0;i<defItems_cnt;i++)
-		creatable_list.push_back(ITEM_CODE(SDS_GI(kSDF_stageInfo, mySD->getSilType(), CCString::createWithFormat("defItems_%d_type", i)->getCString())));
+	{
+		ITEM_CODE t_item = ITEM_CODE(SDS_GI(kSDF_stageInfo, mySD->getSilType(), CCString::createWithFormat("defItems_%d_type", i)->getCString()));
+		if(t_item == kIC_addTime)
+		{
+			is_on_addTime = true;
+		}
+		else
+			creatable_list.push_back(t_item);
+	}
 	
 	selected_item_cnt = 0;
 	

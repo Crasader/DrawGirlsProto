@@ -116,6 +116,8 @@ public:
 			t_end_func();
 	}
 	
+	virtual ~NewPuzzlePiece();
+	
 private:
 	int stage_number;
 	function<void(int)> clicked_func;

@@ -36,6 +36,7 @@
 #include "EventListDown.h"
 #include "MainFlowScene.h"
 #include "StageListDown.h"
+#include "NewPieceManager.h"
 
 CCScene* NewMainFlowScene::scene()
 {
@@ -61,7 +62,6 @@ bool NewMainFlowScene::init()
 	
 	unlock_cover = NULL;
 	
-	selected_stage_cell_idx = -1;
 	clear_is_first_puzzle_success = false;
 	clear_is_first_perfect = false;
 	
@@ -1165,8 +1165,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				puzzle_node->addChild(puzzle_bottom);
 				
 				bool is_selected_stage_puzzle = false;
-				CCPoint selected_stage_position;
-				string selected_stage_piece_type;
+				int is_selected_stage_number;
 				
 				bool is_next_selected_stage_puzzle = false;
 				CCPoint next_selected_stage_position;
@@ -1232,11 +1231,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 							if(stage_number == selected_stage_number)
 							{
 								is_selected_stage_puzzle = true;
-								if((x+y)%2 == 0)
-									selected_stage_piece_type = "h";
-								else
-									selected_stage_piece_type = "w";
-								selected_stage_position = ccp(-puzzle_width_half+side_width+x*piece_size, -puzzle_height_half+side_width+(piece_size*(piece_height_count-1))-y*piece_size);
+								is_selected_stage_number = selected_stage_number;
 							}
 							
 							if(stage_number == next_stage_number)
@@ -1355,11 +1350,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				
 				if(is_selected_stage_puzzle)
 				{
-					CCSprite* selected_img = CCSprite::create(CCString::createWithFormat("temp_piece_selected_%s.png", selected_stage_piece_type.c_str())->getCString());
-					selected_img->setPosition(selected_stage_position);
-					puzzle_node->addChild(selected_img);
-					
-					selected_stage_cell_idx = idx;
+					NewPieceManager::sharedInstance()->regiSelectedPiece(is_selected_stage_number);
 				}
 				
 				if(is_next_selected_stage_puzzle)
@@ -1740,35 +1731,37 @@ void NewMainFlowScene::pieceAction(int t_stage_number)
 	selected_stage_number = t_stage_number;
 	selected_puzzle_number = NSDS_GI(selected_stage_number, kSDS_SI_puzzle_i);
 	
-	if(selected_stage_cell_idx != -1)
-	{
-		puzzle_table->updateCellAtIndex(selected_stage_cell_idx);
-		
-		bool is_found = false;
-		int found_idx = -1;
-		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-		for(int i=1;i<=puzzle_count && !is_found;i++)
-		{
-			if(selected_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i))
-			{
-				is_found = true;
-				found_idx = i-1;
-			}
-		}
-		
-		if(is_found)
-		{
-			puzzle_table->updateCellAtIndex(found_idx);
-		}
-		else
-		{
-			puzzle_table->reloadData();
-		}
-	}
-	else
-	{
-		puzzle_table->updateCellAtIndex(0);
-	}
+	NewPieceManager::sharedInstance()->regiSelectedPiece(selected_stage_number);
+	
+//	if(selected_stage_cell_idx != -1)
+//	{
+//		puzzle_table->updateCellAtIndex(selected_stage_cell_idx);
+//		
+//		bool is_found = false;
+//		int found_idx = -1;
+//		int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+//		for(int i=1;i<=puzzle_count && !is_found;i++)
+//		{
+//			if(selected_puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i))
+//			{
+//				is_found = true;
+//				found_idx = i-1;
+//			}
+//		}
+//		
+//		if(is_found)
+//		{
+//			puzzle_table->updateCellAtIndex(found_idx);
+//		}
+//		else
+//		{
+//			puzzle_table->reloadData();
+//		}
+//	}
+//	else
+//	{
+//		puzzle_table->updateCellAtIndex(0);
+//	}
 }
 void NewMainFlowScene::buyPieceAction(int t_stage_number)
 {

@@ -90,7 +90,7 @@ private:
 	int selected_puzzle_number;
 	int selected_stage_number;
 	
-	int selected_stage_cell_idx;
+//	int selected_stage_cell_idx;
 	
 	void pieceAction(int t_stage_number);
 	void buyPieceAction(int t_stage_number);
