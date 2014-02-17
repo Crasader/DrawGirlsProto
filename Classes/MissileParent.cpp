@@ -76,11 +76,20 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 				}
 				else
 				{
-					random_value = rand()%cumberCnt;
-					
-					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray[random_value], jm_type, missile_speed, missile_position);
-					jack_missile_node->addChild(t_jm);
-					t_jm->startMoving();
+					if(cumberCnt == 0)
+					{
+						JackMissile* t_jm = JM_BasicMissile::create(myGD->getMainCumberCCNodeVector()[0], jm_type, missile_speed, missile_position);
+						jack_missile_node->addChild(t_jm);
+						t_jm->startMoving();
+					}
+					else
+					{
+						random_value = rand()%cumberCnt;
+						
+						JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray[random_value], jm_type, missile_speed, missile_position);
+						jack_missile_node->addChild(t_jm);
+						t_jm->startMoving();
+					}
 				}
 			}
 			
@@ -1089,10 +1098,19 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 			}
 			else
 			{
-				random_value = rand()%cumberCnt;
-				JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray[random_value], jm_type, damage_per, s_p);
-				addChild(t_jm);
-				t_jm->startMoving();
+				if(cumberCnt == 0)
+				{
+					JackMissile* t_jm = JM_BasicMissile::create(myGD->getMainCumberCCNodeVector()[0], jm_type, damage_per, s_p);
+					addChild(t_jm);
+					t_jm->startMoving();
+				}
+				else
+				{
+					random_value = rand()%cumberCnt;
+					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray[random_value], jm_type, damage_per, s_p);
+					addChild(t_jm);
+					t_jm->startMoving();
+				}
 			}
 		}
 	}
@@ -1312,10 +1330,19 @@ void UM_creator::creating()
 			int cumberCnt = subCumberArray.size();
 			int random_value;
 			
-			random_value = rand()%cumberCnt;
-			JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray[random_value], create_type, missile_speed);
-			getParent()->addChild(t_jm);
-			t_jm->startMoving();
+			if(cumberCnt == 0)
+			{
+				JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getMainCumberCCNodeVector()[0], create_type, missile_speed);
+				getParent()->addChild(t_jm);
+				t_jm->startMoving();
+			}
+			else
+			{
+				random_value = rand()%cumberCnt;
+				JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray[random_value], create_type, missile_speed);
+				getParent()->addChild(t_jm);
+				t_jm->startMoving();
+			}
 		}
 		ing_um_cnt++;
 	}
@@ -1344,10 +1371,19 @@ void UM_creator::petCreating()
 			int cumberCnt = subCumberArray.size();
 			int random_value;
 			
-			random_value = rand()%cumberCnt;
-			JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray[random_value], create_type, missile_speed, start_position);
-			getParent()->addChild(t_jm);
-			t_jm->startMoving();
+			if(cumberCnt == 0)
+			{
+				JackMissile* t_jm = JM_UpgradeMissile::create(myGD->getMainCumberCCNodeVector()[0], create_type, missile_speed, start_position);
+				getParent()->addChild(t_jm);
+				t_jm->startMoving();
+			}
+			else
+			{
+				random_value = rand()%cumberCnt;
+				JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray[random_value], create_type, missile_speed, start_position);
+				getParent()->addChild(t_jm);
+				t_jm->startMoving();
+			}
 		}
 		ing_um_cnt++;
 	}
