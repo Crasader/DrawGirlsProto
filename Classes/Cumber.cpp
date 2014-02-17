@@ -24,11 +24,9 @@ void CumberParent::onStartGame()
 		i->onStartGame();
 	}
 	
-	int loop_cnt = subCumberArray->count();
-	for(int i=0;i<loop_cnt;i++)
+	for(auto i : subCumberArray)
 	{
-		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
-		t_sc->onStartGame();
+		i->onStartGame();
 	}
 }
 void CumberParent::onPatternEnd()
@@ -57,13 +55,10 @@ void CumberParent::onJackDrawLine()
 	for(auto mainCumber : mainCumbers)
 		mainCumber->onJackDrawLine();
 	
-	int loop_cnt = subCumberArray->count();
-	for(int i=0;i<loop_cnt;i++)
+	for(auto sub : subCumberArray)
 	{
-		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
-		t_sc->onJackDrawLine();
-		//		t_sc->stopMoving();
-	}
+		sub->onJackDrawLine();
+	}	
 	
 	
 }
@@ -114,9 +109,15 @@ CCNode* CumberParent::getMainCumberPointer()
 //	return mainCumber;
 }
 
-CCArray* CumberParent::getSubCumberArrayPointer()
+std::vector<KSCumberBase*>& CumberParent::getSubCumberArrayPointer()
 {
 	return subCumberArray;
+}
+
+
+std::vector<KSCumberBase*>& CumberParent::getMainCumbers()
+{
+	return mainCumbers;
 }
 
 
@@ -135,18 +136,17 @@ bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle)
 
 void CumberParent::subCumberReplication()
 {
-	// 복제할 타입의 몬스터를 저장을 안해놔서 일단은 만약 쓰게 된다면 고쳐야됨.
-	// Bear 만 생성하게 해놈.
-	int cnt = subCumberArray->count();
-	for(int i = 0;i<cnt;i++)
-	{
-		KSCumberBase* t_sc = (KSJuniorBase*)subCumberArray->objectAtIndex(i);
-		CCPoint t_p = t_sc->getPosition();
-		KSJuniorBase* t_sc2 = KSJuniorBase::create("bear");
-		addChild(t_sc2);
-		t_sc2->setPosition(t_p);
-		subCumberArray->addObject(t_sc2);
-	}
+	// 미구현.
+	//int cnt = subCumberArray->count();
+	//for(int i = 0;i<cnt;i++)
+	//{
+		//KSCumberBase* t_sc = (KSJuniorBase*)subCumberArray->objectAtIndex(i);
+		//CCPoint t_p = t_sc->getPosition();
+		//KSJuniorBase* t_sc2 = KSJuniorBase::create("bear");
+		//addChild(t_sc2);
+		//t_sc2->setPosition(t_p);
+		//subCumberArray->addObject(t_sc2);
+	//}
 }
 
 void CumberParent::setGameover()
@@ -157,12 +157,9 @@ void CumberParent::setGameover()
 	for(auto mainCumber : mainCumbers)
 		mainCumber->setGameover();
 	
-	int loop_cnt = subCumberArray->count();
-	for(int i=0;i<loop_cnt;i++)
+	for(auto subCumber : subCumberArray)
 	{
-		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
-		t_sc->setGameover();
-//		t_sc->stopMoving();
+		subCumber->setGameover();
 	}
 	
 	for(int i=0;i<hp_graphs.size();i++)
@@ -296,24 +293,16 @@ void CumberParent::onJackDie()
 	for(auto mainCumber : mainCumbers)
 		mainCumber->onJackDie();
 	
-	int loop_cnt = subCumberArray->count();
-	for(int i=0;i<loop_cnt;i++)
-	{
-		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
-		t_sc->onJackDie();
-	}
+	for(auto subCumber : subCumberArray)
+		subCumber->onJackDie();
 }
 void CumberParent::onJackRevived()
 {
 	for(auto mainCumber : mainCumbers)
 		mainCumber->onJackRevived();
 	
-	int loop_cnt = subCumberArray->count();
-	for(int i=0;i<loop_cnt;i++)
-	{
-		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
-		t_sc->onJackRevived();
-	}
+	for(auto subCumber : subCumberArray)
+		subCumber->onJackRevived();
 }
 
 void CumberParent::changePassiveData(const std::string& passive_data)
@@ -324,18 +313,16 @@ void CumberParent::changePassiveData(const std::string& passive_data)
 		mainCumber->applyPassiveData(passive_data);
 		mainCumber->applyAutoBalance();
 	}
-	int loop_cnt = subCumberArray->count();
-	for(int i=0;i<loop_cnt;i++)
+	for(auto subCumber : subCumberArray)
 	{
-		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
-		t_sc->restoreBossData();
-		t_sc->applyPassiveData(passive_data);
-		t_sc->applyAutoBalance();
+		subCumber->restoreBossData();
+		subCumber->applyPassiveData(passive_data);
+		subCumber->applyAutoBalance();
 	}
 }
 int CumberParent::getSubCumberCount()
 {
-	return subCumberArray->count();
+	return subCumberArray.size();
 }
 
 void CumberParent::createSubCumber(IntPoint s_p)
@@ -362,8 +349,7 @@ void CumberParent::createSubCumber(IntPoint s_p)
 		t_SC->startAnimationNoDirection();
 		t_SC->onStartGame();
 		addChild(t_SC);
-		
-		subCumberArray->addObject(t_SC);
+		subCumberArray.push_back(t_SC);	
 		t_SC->setPosition(ip2ccp(s_p));
 
 	}
@@ -382,11 +368,8 @@ void CumberParent::slowItem(float ratio)
 	
 //	for(auto mainCumber : mainCumbers)
 //		mainCumber->changeSpeed(t_b);
-	for(int i=0;i<subCumberArray->count();i++)
-	{
-		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
-		t_sc->setSpeedRatio(ratio);
-	}
+	for(auto mainCumber : mainCumbers)
+		mainCumber->setSpeedRatio(ratio);
 }
 
 void CumberParent::silenceItem(bool t_b)
@@ -397,11 +380,10 @@ void CumberParent::silenceItem(bool t_b)
 		mainCumber->setSlience(t_b);
 	}
 	
-	for(int i=0;i<subCumberArray->count();i++)
+	for(auto i : subCumberArray)
 	{
-		KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
-		t_sc->setSlience(t_b);
-	}
+		i->setSlience(t_b);
+	}	
 }
 
 void CumberParent::setCasting(bool t_b)
@@ -414,7 +396,11 @@ void CumberParent::setCasting(bool t_b)
 
 void CumberParent::removeSubCumber(CCObject* r_sc)
 {
-	subCumberArray->removeObject(r_sc);
+	auto iter = std::find(subCumberArray.begin(), subCumberArray.end(), r_sc);
+	if(iter != subCumberArray.end())
+	{
+		subCumberArray.erase(iter);
+	}
 	
 	for(auto iter = hp_graphs.begin();iter!=hp_graphs.end();++iter)
 	{
@@ -457,7 +443,6 @@ void CumberParent::removeSubCumber(CCObject* r_sc)
 void CumberParent::myInit()
 {
 	is_die_animationing = false;
-	subCumberArray = new CCArray(1);
 	isGameover = false;
 	
 	
@@ -468,8 +453,9 @@ void CumberParent::myInit()
 	myGD->V_Ip["CP_createSubCumber"] = std::bind(&CumberParent::createSubCumber, this, _1);
 	myGD->V_I["CP_setMainCumberState"] = std::bind(&CumberParent::setMainCumberState, this, _1);
 	myGD->CCN_V["CP_getMainCumberPointer"] = std::bind(&CumberParent::getMainCumberPointer, this);
-	myGD->CCA_V["CP_getSubCumberArrayPointer"] = std::bind(&CumberParent::getSubCumberArrayPointer, this);
-	
+	//myGD->CCA_V["CP_getSubCumberArrayPointer"] = std::bind(&CumberParent::getSubCumberArrayPointer, this);
+	myGD->getMainCumberVector = std::bind(&CumberParent::getMainCumbers, this);
+	myGD->getSubCumberVector = std::bind(&CumberParent::getSubCumberArrayPointer, this);
 //	myGD->B_CCOFF["CP_decreaseLifeForSubCumber"] = std::bind(&CumberParent::decreaseLifeForSubCumber, this, _1, _2, _3);
 	
 	myGD->V_V["CP_setGameover"] = std::bind(&CumberParent::setGameover, this);
@@ -595,8 +581,7 @@ void CumberParent::myInit()
 			t_SC->startAnimationNoDirection();
 			addChild(t_SC);
 			
-			subCumberArray->addObject(t_SC);
-
+			subCumberArray.push_back(t_SC);
 		}
 	}
 //	initSubCumber();
@@ -607,9 +592,9 @@ void CumberParent::myInit()
 	myMFP = MapFragmentParent::create();
 	addChild(myMFP);
 	
-	for(int i=0;i<subCumberArray->count();i++)
+	for(int i=0;i<subCumberArray.size(); i++)
 	{
-		MobHpGraph* t_sub_hp = MobHpGraph::create(subCumberArray->objectAtIndex(i), "junior_hp_bar.png");
+		MobHpGraph* t_sub_hp = MobHpGraph::create(subCumberArray[i], "junior_hp_bar.png");
 		addChild(t_sub_hp);
 		hp_graphs.push_back(t_sub_hp);
 	}

@@ -2099,7 +2099,6 @@ void KSCumberBase::followProcess(float dt)
 		if(ps.getResult() == 0)
 		{
 			CCLog("follow!!!");
-			CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
 			KSCumberBase* mainCumber = dynamic_cast<KSCumberBase*>(myGD->getCommunicationNode("CP_getMainCumberPointer"));
 
 			int aggroCount = 0;
@@ -2109,14 +2108,14 @@ void KSCumberBase::followProcess(float dt)
 				aggroCount++;
 			}
 
-			for(int i=0;i<subCumberArray->count();i++)
+			for(auto i : myGD->getSubCumberVector())
 			{
-				KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
-				if(t_sc->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
-					 t_sc->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
+				if(i->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
+					 i->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
 				{
 					aggroCount++;
 				}
+
 			}
 			if(aggroCount < 2)
 			{
@@ -2138,9 +2137,8 @@ void KSCumberBase::followProcess(float dt)
 					}
 				}
 				
-				for(int i=0;i<subCumberArray->count();i++)
+				for(auto t_sc : myGD->getSubCumberVector())
 				{
-					KSCumberBase* t_sc = (KSCumberBase*)subCumberArray->objectAtIndex(i);
 					if(t_sc->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
 						 t_sc->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
 					{

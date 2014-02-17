@@ -486,13 +486,13 @@ void Maingame::finalSetting()
 		replay_nick->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215.f*thumb_scale-10)));
 		replay_all_node->addChild(replay_nick);
 	}
-	
-	CCArray* sub_array = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-	for(int i=0;i<sub_array->count();i++)
+
+	vector<KSCumberBase*> sub_array = myGD->getSubCumberVector();
+	for(int i=0;i<myGD->getSubCumberVector().size(); i++)
 	{
 		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 		sub_position_img->setColor(ccYELLOW);
-		CCNode* sub_pointer = (CCNode*)sub_array->objectAtIndex(i);
+		CCNode* sub_pointer = (CCNode*)sub_array[i];
 		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_scale)));
 		addChild(sub_position_img, myUIZorder);
 		
@@ -1651,14 +1651,14 @@ void Maingame::refreshThumb()
 	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
 	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_texture->getScale())));
 	
-	CCArray* sub_array = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-	while(sub_thumbs->count() > sub_array->count())
+	vector<KSCumberBase*> sub_array = myGD->getSubCumberVector();
+	while(sub_thumbs->count() > sub_array.size())
 	{
 		CCNode* sub_position_img = (CCNode*)sub_thumbs->lastObject();
 		sub_thumbs->removeObject(sub_position_img);
 		sub_position_img->removeFromParent();
 	}
-	while (sub_thumbs->count() < sub_array->count())
+	while (sub_thumbs->count() < sub_array.size())
 	{
 		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 		sub_position_img->setColor(ccYELLOW);
@@ -1667,10 +1667,10 @@ void Maingame::refreshThumb()
 		sub_thumbs->addObject(sub_position_img);
 	}
 	
-	for(int i=0;i<sub_array->count();i++)
+	for(int i=0;i<sub_array.size();i++)
 	{
 		CCNode* sub_position_img = (CCNode*)sub_thumbs->objectAtIndex(i);
-		CCNode* sub_pointer = (CCNode*)sub_array->objectAtIndex(i);
+		CCNode* sub_pointer = (CCNode*)sub_array[i];
 		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
 	}
 	

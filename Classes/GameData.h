@@ -106,6 +106,7 @@ public:
 	std::map<std::string, std::function<bool(IntPoint)>> B_Ip;
 	std::map<std::string, std::function<CCNode*(void)>> CCN_V;
 	std::map<std::string, std::function<CCArray*(void)>> CCA_V;
+	//std::map<std::string, std::function<std::vector<KSCumberBase*>&(void)>> CCA_V;
 	std::map<std::string, std::function<bool(CCObject*, float, float)>> B_CCOFF;
 	std::map<std::string, std::function<void(IntPoint, CCObject*, SEL_CallFuncI)>> V_IpCCOCallfunci;
 	std::map<std::string, std::function<void(IntPoint, int, int, int)>> V_IpIII;
@@ -116,6 +117,8 @@ public:
 	std::map<std::string, std::function<void(CCPoint, float)>> V_CCPF;
 
 	
+	std::function<std::vector<KSCumberBase*>&(void)> getMainCumberVector;
+	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
 	mapType mapState[162][217];
 	
 	static GameData* sharedGameData();

@@ -151,7 +151,6 @@ private:
 	CCArray* chargeArray;
 	CCArray* tickingArray;
 	
-	CCParticleSystem* particle;
 	CCSpriteBatchNode* explosion_node;
 	
 	CCNode* jack_missile_node;
