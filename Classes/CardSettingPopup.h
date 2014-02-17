@@ -52,28 +52,6 @@ private:
 	vector<int> server_puzzle_stage_count;
 	vector<int> server_puzzle_start_stage;
 	
-	map<int, int> save_DSH_cardDurability_int1;
-	int getCardDurability(int t_card_number);
-	
-	map<int, int> save_DSH_cardMaxDurability_int1;
-	int getCardMaxDurability(int t_card_number);
-	
-	map<int, int> save_DSH_cardLevel_int1;
-	int getCardLevel(int t_card_number);
-	
-	
-//	map<int, int> save_SDS_CI_rank_int1;
-//	int getCardRank(int t_card_number);
-//	
-//	map<int, int> save_SDS_CI_stage_int1;
-//	int getCardStage(int t_card_number);
-//	map<int, int> save_SDS_CI_grade_int1;
-//	int getCardGrade(int t_card_number);
-	
-	
-	map<string, int> save_SGD_isHasGottenCards;
-	int getSGDisHasGottenCards(int t_stage, int t_grade);
-	
 	int recent_selected_card_number;
 	
 	int recent_sort_type;
