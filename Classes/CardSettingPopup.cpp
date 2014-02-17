@@ -526,35 +526,42 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				CCPoint card_position = ccp(32.f + (i-1)*(68.f+1.f), 43.f);
 				if(card_number > 0)
 				{
-					CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
-					CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);
+					string case_type;
+					if(i == 1)
+						case_type = "bronze";
+					else if(i == 2)
+						case_type = "silver";
+					else if(i == 3)
+						case_type = "gold";
+					
 					GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-					n_card->setScale(0.85f);
-					n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
 					n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
-					n_no->addChild(n_card, -1);
-					
-					CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
-					s_no->setColor(ccGRAY);
+					CCSprite* n_case = CCSprite::create(CCString::createWithFormat("card_case_mini_%s.png", case_type.c_str())->getCString());
+					n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
+					n_card->addChild(n_case);
+					n_card->setScale(0.85f);
 					
 					GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-					s_card->setScale(0.85f);
-					s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
 					if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
 						s_card->setColor(ccc3(60, 60, 60));
 					else
 						s_card->setColor(ccGRAY);
-					s_no->addChild(s_card, -1);
+					CCSprite* s_case = CCSprite::create(CCString::createWithFormat("card_case_mini_%s.png", case_type.c_str())->getCString());
+					s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
+					s_card->addChild(s_case);
+					s_card->setScale(0.85f);
 					
-					CCMenuItem* t_card_item = CCMenuItemSprite::create(n_no, s_no, this, menu_selector(CardSettingPopup::menuAction));
+					CCMenuItem* t_card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(CardSettingPopup::menuAction));
 					t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
 					
 					ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 					t_card_menu->setPosition(card_position);
 					cell->addChild(t_card_menu);
 					t_card_menu->setTouchPriority(-180-3);
+					
+					CCPoint no_minus_half_size = ccp(-n_card->getContentSize().width/2.f, -n_card->getContentSize().height/2.f);
 					
 					CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
 																							 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
@@ -587,12 +594,17 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				}
 				else
 				{
-					CCSprite* t_no = CCSprite::create("cardsetting_noimg.png");
-					t_no->setPosition(card_position);
-					cell->addChild(t_no);
+					CCSprite* n_back = CCSprite::create("card_case_mini_back.png");
+					n_back->setPosition(ccp(-n_back->getContentSize().width*0.075f, -n_back->getContentSize().height*0.075f));
+					n_back->setScale(0.85f);
+					CCSprite* s_back = CCSprite::create("card_case_mini_back.png");
+					s_back->setPosition(ccp(-s_back->getContentSize().width*0.075f, -s_back->getContentSize().height*0.075f));
+					s_back->setScale(0.85f);
+					s_back->setColor(ccGRAY);
 					
-					CCMenuItem* t_card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CardSettingPopup::menuAction));
+					CCMenuItem* t_card_item = CCMenuItemSprite::create(n_back, s_back, this, menu_selector(CardSettingPopup::menuAction));
 					t_card_item->setTag(kCSS_MT_noCardBase+card_number);
+					t_card_item->setContentSize(CCSizeMake(n_back->getContentSize().width*0.85f, n_back->getContentSize().height*0.85f));
 					
 					ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 					t_card_menu->setPosition(card_position);
@@ -636,35 +648,42 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					CCPoint card_position = ccp(32.f + 3*(68.f+1.f) + (i-1)*(68.f+1.f), 43.f);
 					if(card_number > 0)
 					{
-						CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
-						CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);
+						string case_type;
+						if(i == 1)
+							case_type = "bronze";
+						else if(i == 2)
+							case_type = "silver";
+						else if(i == 3)
+							case_type = "gold";
+						
 						GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																													  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-						n_card->setScale(0.85f);
-						n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
 						n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
-						n_no->addChild(n_card, -1);
-						
-						CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
-						s_no->setColor(ccGRAY);
+						CCSprite* n_case = CCSprite::create(CCString::createWithFormat("card_case_mini_%s.png", case_type.c_str())->getCString());
+						n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
+						n_card->addChild(n_case);
+						n_card->setScale(0.85f);
 						
 						GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																													  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-						s_card->setScale(0.85f);
-						s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
 						if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
 							s_card->setColor(ccc3(60, 60, 60));
 						else
 							s_card->setColor(ccGRAY);
-						s_no->addChild(s_card, -1);
+						CCSprite* s_case = CCSprite::create(CCString::createWithFormat("card_case_mini_%s.png", case_type.c_str())->getCString());
+						s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
+						s_card->addChild(s_case);
+						s_card->setScale(0.85f);
 						
-						CCMenuItem* t_card_item = CCMenuItemSprite::create(n_no, s_no, this, menu_selector(CardSettingPopup::menuAction));
+						CCMenuItem* t_card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(CardSettingPopup::menuAction));
 						t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
 						
 						ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 						t_card_menu->setPosition(card_position);
 						cell->addChild(t_card_menu);
 						t_card_menu->setTouchPriority(-180-3);
+						
+						CCPoint no_minus_half_size = ccp(-n_card->getContentSize().width/2.f, -n_card->getContentSize().height/2.f);
 						
 						CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
 																								 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
@@ -697,12 +716,17 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					}
 					else
 					{
-						CCSprite* t_no = CCSprite::create("cardsetting_noimg.png");
-						t_no->setPosition(card_position);
-						cell->addChild(t_no);
+						CCSprite* n_back = CCSprite::create("card_case_mini_back.png");
+						n_back->setPosition(ccp(-n_back->getContentSize().width*0.075f, -n_back->getContentSize().height*0.075f));
+						n_back->setScale(0.85f);
+						CCSprite* s_back = CCSprite::create("card_case_mini_back.png");
+						s_back->setPosition(ccp(-s_back->getContentSize().width*0.075f, -s_back->getContentSize().height*0.075f));
+						s_back->setScale(0.85f);
+						s_back->setColor(ccGRAY);
 						
-						CCMenuItem* t_card_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CardSettingPopup::menuAction));
+						CCMenuItem* t_card_item = CCMenuItemSprite::create(n_back, s_back, this, menu_selector(CardSettingPopup::menuAction));
 						t_card_item->setTag(kCSS_MT_noCardBase+card_number);
+						t_card_item->setContentSize(CCSizeMake(n_back->getContentSize().width*0.85f, n_back->getContentSize().height*0.85f));
 						
 						ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 						t_card_menu->setPosition(card_position);
@@ -721,35 +745,44 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
 			CCPoint card_position = ccp(32.f + (i-idx*6)*(68.f+1.f), 43.f);
 			
-			CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
-			CCPoint no_minus_half_size = ccp(-n_no->getContentSize().width/2.f, -n_no->getContentSize().height/2.f);
+			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+			string case_type;
+			if(card_grade == 1)
+				case_type = "bronze";
+			else if(card_grade == 2)
+				case_type = "silver";
+			else if(card_grade == 3)
+				case_type = "gold";
+			
 			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
+			n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
+			CCSprite* n_case = CCSprite::create(CCString::createWithFormat("card_case_mini_%s.png", case_type.c_str())->getCString());
+			n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
+			n_card->addChild(n_case);
 			n_card->setScale(0.85f);
-			n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
-			n_card->setGray(card_durability <= 0);
-			n_no->addChild(n_card, -1);
-			
-			CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
-			s_no->setColor(ccGRAY);
 			
 			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
-			s_card->setScale(0.85f);
-			s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
-			if(card_durability <= 0)
+			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
 				s_card->setColor(ccc3(60, 60, 60));
 			else
 				s_card->setColor(ccGRAY);
-			s_no->addChild(s_card, -1);
+			CCSprite* s_case = CCSprite::create(CCString::createWithFormat("card_case_mini_%s.png", case_type.c_str())->getCString());
+			s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
+			s_card->addChild(s_case);
+			s_card->setScale(0.85f);
 			
-			CCMenuItem* t_card_item = CCMenuItemSprite::create(n_no, s_no, this, menu_selector(CardSettingPopup::menuAction));
+			
+			CCMenuItem* t_card_item = CCMenuItemSprite::create(n_card, s_card, this, menu_selector(CardSettingPopup::menuAction));
 			t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
 			
 			ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 			t_card_menu->setPosition(card_position);
 			cell->addChild(t_card_menu);
 			t_card_menu->setTouchPriority(-180-3);
+			
+			CCPoint no_minus_half_size = ccp(-n_card->getContentSize().width/2.f, -n_card->getContentSize().height/2.f);
 			
 			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", card_durability,
 																					 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
