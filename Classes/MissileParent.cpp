@@ -57,7 +57,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 		{
 			CCLog("base JackMissile");
 			vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
-			int cumberCnt = 1 + subCumberArray.size();
+			int cumberCnt = subCumberArray.size();
 			int random_value;
 			
 			int boss_count = myGD->getMainCumberCount();
@@ -1069,7 +1069,7 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 	if(jm_type >= 0 && jm_type <= 3)
 	{
 		vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
-		int cumberCnt = 1 + subCumberArray.size();
+		int cumberCnt = subCumberArray.size();
 
 		int random_value;
 		
@@ -1305,7 +1305,7 @@ void UM_creator::creating()
 		else
 		{
 			vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
-			int cumberCnt = 1 + subCumberArray.size();
+			int cumberCnt = subCumberArray.size();
 			int random_value;
 			
 			random_value = rand()%cumberCnt;
@@ -1337,7 +1337,7 @@ void UM_creator::petCreating()
 		else
 		{
 			vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
-			int cumberCnt = 1 + subCumberArray.size();
+			int cumberCnt = subCumberArray.size();
 			int random_value;
 			
 			random_value = rand()%cumberCnt;

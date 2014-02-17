@@ -65,11 +65,14 @@ void MapScanner::scanMap()
 		}
 	}
 	
+	
 //	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
 	
 	// locked main cumber then reverse
 	if(!is_found) // != mapScaningEmptySide
 	{
+		mainCumberPoint = myGD->getMainCumberPoint(myGD->getMainCumberCCNodeVector()[0]);
+		
 		if(myGD->game_step == kGS_limited)
 		{
 			for(int j=mapHeightInnerBegin;j < myGD->limited_step_bottom;j++)
