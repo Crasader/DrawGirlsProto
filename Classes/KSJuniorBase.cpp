@@ -12,6 +12,8 @@
 //#include "Jack.h"
 //#include "PlayUI.h"
 #include "MissileDamageData.h"
+#include "StarGoldData.h"
+
 bool KSJuniorBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();

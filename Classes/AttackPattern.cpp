@@ -6,7 +6,7 @@
 //
 //
 #include "AttackPattern.h"
-
+#include "SilhouetteData.h"
 
 void KSTargetAttackPattern8::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {

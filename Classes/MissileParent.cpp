@@ -11,6 +11,7 @@
 #include "KSCircleBase.h"
 #include "StageImgLoader.h"
 #include "AttackPattern.h"
+#include "StarGoldData.h"
 
 void MissileParent::bombCumber( CCObject* target )
 {
