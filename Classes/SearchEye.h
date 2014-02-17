@@ -13,15 +13,16 @@ USING_NS_CC;
 class SearchEye : public CCNode
 {
 public:
-	static SearchEye * create ();
+	static SearchEye * create (CCNode* t_boss);
 	void startSearch ();
 private:
+	CCNode* target_boss;
 	CCSprite* search_eye_arrow;
 	CCSprite* search_eye_boss;
 	CCSize frame_size;
 	int ing_frame;
 	void mainCumberSearching ();
-	void myInit ();
+	void myInit (CCNode* t_boss);
 };
 #undef LZZ_INLINE
 #endif

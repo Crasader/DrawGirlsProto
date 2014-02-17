@@ -242,7 +242,8 @@ private:
 	void shaking();
 	void stopShake();
 	
-	SearchEye* search_eye;
+	vector<SearchEye*> search_eye_vector;
+//	SearchEye* search_eye;
 	
 	CCNode* screen_node;
 	

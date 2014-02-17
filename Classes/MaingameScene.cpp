@@ -342,11 +342,19 @@ void Maingame::finalSetting()
 	
 //	myUI->setControlTD(this, callfunc_selector(Maingame::setControlGesture), callfunc_selector(Maingame::setControlButton), callfunc_selector(Maingame::setControlJoystick), callfunc_selector(Maingame::startControl));
 	
-	search_eye = SearchEye::create();
-	search_eye->setPosition(CCPointZero);
-	addChild(search_eye, searchEyeZorder);
+	vector<KSCumberBase*> main_cumber_vector = myGD->getMainCumberVector();
+	search_eye_vector.clear();
 	
-	search_eye->startSearch();
+	for(int i=0;i<main_cumber_vector.size();i++)
+	{
+		KSCumberBase* t_boss = main_cumber_vector[i];
+		
+		SearchEye* t_search_eye = SearchEye::create(t_boss);
+		t_search_eye->setPosition(CCPointZero);
+		addChild(t_search_eye, searchEyeZorder);
+		
+		t_search_eye->startSearch();
+	}
 	
 	startScene();
 	
@@ -1838,7 +1846,10 @@ void Maingame::hideThumb()
 {
 	mControl->setVisible(false);
 	
-	search_eye->setVisible(false);
+	for(int i=0;i<search_eye_vector.size();i++)
+	{
+		search_eye_vector[i]->setVisible(false);
+	}
 	thumb_texture->setVisible(false);
 	character_thumb->setVisible(false);
 	boss_thumb->setVisible(false);
