@@ -43,22 +43,23 @@ void JM_UpgradeMissile::moving ()
 {
 	bool isEnable = false;
 	
-	if(targetNode == myGD->getCommunicationNode("CP_getMainCumberPointer"))
+	if(myGD->isValidMainCumber(targetNode))
 		isEnable = true;
 	
-	if(!isEnable)
+	if(!isEnable && myGD->isValidSubCumber(targetNode))
 	{
-		int cumber_cnt = myGD->getSubCumberVector().size();	
-		for(int i=0; i<cumber_cnt; i++)
-		{
-			auto subCumber = myGD->getSubCumberVector()[i];
-
-			if(targetNode == subCumber)
-			{
-				isEnable = true;
-				break;
-			}
-		}
+		isEnable = true;
+//		int cumber_cnt = myGD->getSubCumberVector().size();	
+//		for(int i=0; i<cumber_cnt; i++)
+//		{
+//			auto subCumber = myGD->getSubCumberVector()[i];
+//
+//			if(targetNode == subCumber)
+//			{
+//				isEnable = true;
+//				break;
+//			}
+//		}
 	}
 	
 	if(isEnable)
@@ -428,19 +429,20 @@ void JM_BasicMissile::moving ()
 {
 	bool isEnable = false;
 	
-	if(targetNode == myGD->getCommunicationNode("CP_getMainCumberPointer"))
+	if(myGD->isValidMainCumber(targetNode))
 		isEnable = true;
 	
-	if(!isEnable && !myGD->getIsGameover())
+	if(!isEnable && !myGD->getIsGameover() && myGD->isValidSubCumber(targetNode))
 	{
-		for(auto i : myGD->getSubCumberVector())
-		{
-			if(targetNode == i)
-			{
-				isEnable = true;
-				break;
-			}
-		}
+		isEnable = true;
+//		for(auto i : myGD->getSubCumberVector())
+//		{
+//			if(targetNode == i)
+//			{
+//				isEnable = true;
+//				break;
+//			}
+//		}
 
 	}
 	

@@ -417,11 +417,13 @@ void Maingame::finalSetting()
 	CCRepeatForever* thumb_repeat = CCRepeatForever::create(thumb_seq);
 	thumb_texture->runAction(thumb_repeat);
 	
-	boss_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
-	boss_thumb->setColor(ccRED);
-	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
-	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_scale)));
-	addChild(boss_thumb, myUIZorder);
+	boss_thumbs = new CCArray(1);
+	
+//	boss_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
+//	boss_thumb->setColor(ccRED);
+//	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
+//	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_scale)));
+//	addChild(boss_thumb, myUIZorder);
 	
 	character_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 	character_thumb->setColor(ccGREEN);
@@ -463,11 +465,13 @@ void Maingame::finalSetting()
 			replay_all_node->addChild(replay_case_right);
 			
 			
-			replay_boss = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
-			replay_boss->setColor(ccRED);
-			replay_boss->setVisible(false);
-			replay_boss->setPosition(replay_thumb_texture->getPosition());
-			replay_all_node->addChild(replay_boss);
+//			replay_boss = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
+//			replay_boss->setColor(ccRED);
+//			replay_boss->setVisible(false);
+//			replay_boss->setPosition(replay_thumb_texture->getPosition());
+//			replay_all_node->addChild(replay_boss);
+			
+			replay_boss = new CCArray(1);
 			
 			replay_character = CCSprite::create("whitePaper.png", CCRectMake(0,0,4,4));
 			replay_character->setColor(ccGREEN);
@@ -495,17 +499,17 @@ void Maingame::finalSetting()
 		replay_all_node->addChild(replay_nick);
 	}
 
-	vector<KSCumberBase*> sub_array = myGD->getSubCumberVector();
-	for(int i=0;i<myGD->getSubCumberVector().size(); i++)
-	{
-		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
-		sub_position_img->setColor(ccYELLOW);
-		CCNode* sub_pointer = (CCNode*)sub_array[i];
-		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_scale)));
-		addChild(sub_position_img, myUIZorder);
-		
-		sub_thumbs->addObject(sub_position_img);
-	}
+//	vector<KSCumberBase*> sub_array = myGD->getSubCumberVector();
+//	for(int i=0;i<myGD->getSubCumberVector().size(); i++)
+//	{
+//		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
+//		sub_position_img->setColor(ccYELLOW);
+//		CCNode* sub_pointer = (CCNode*)sub_array[i];
+//		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_scale)));
+//		addChild(sub_position_img, myUIZorder);
+//		
+//		sub_thumbs->addObject(sub_position_img);
+//	}
 	
 //	else
 //	{
@@ -1658,8 +1662,33 @@ void Maingame::refreshThumb()
 	t_vs->visitForThumb();
 	thumb_texture->end();
 	
-	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
-	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_texture->getScale())));
+	
+	vector<KSCumberBase*> boss_array = myGD->getMainCumberVector();
+	while(boss_thumbs->count() > boss_array.size())
+	{
+		CCNode* boss_position_img = (CCNode*)boss_thumbs->lastObject();
+		boss_thumbs->removeObject(boss_position_img);
+		boss_position_img->removeFromParent();
+	}
+	while (boss_thumbs->count() < boss_array.size())
+	{
+		CCSprite* boss_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
+		boss_position_img->setColor(ccRED);
+		addChild(boss_position_img, myUIZorder);
+		
+		boss_thumbs->addObject(boss_position_img);
+	}
+	
+	for(int i=0;i<boss_array.size();i++)
+	{
+		CCNode* boss_position_img = (CCNode*)boss_thumbs->objectAtIndex(i);
+		CCNode* boss_pointer = (CCNode*)boss_array[i];
+		boss_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
+	}
+	
+	
+//	CCNode* boss_pointer = myGD->getCommunicationNode("CP_getMainCumberPointer");
+//	boss_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_texture->getScale())));
 	
 	vector<KSCumberBase*> sub_array = myGD->getSubCumberVector();
 	while(sub_thumbs->count() > sub_array.size())
@@ -1727,11 +1756,38 @@ void Maingame::refreshReplayPosition(int temp_time)
 	replay_character->setPosition(ccpAdd(replay_base_position, ccpMult(character_position, replay_thumb_texture->getScale())));
 	replay_character->setVisible(true);
 	
-	CCPoint boss_position;
-	boss_position.x = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionX)].asFloat();
-	boss_position.y = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionY)].asFloat();
-	replay_boss->setPosition(ccpAdd(replay_base_position, ccpMult(boss_position, replay_thumb_texture->getScale())));
-	replay_boss->setVisible(true);
+	int boss_count = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_boss)].size();
+	
+	while(replay_boss->count() > boss_count)
+	{
+		CCNode* boss_position_img = (CCNode*)replay_boss->lastObject();
+		replay_boss->removeObject(boss_position_img);
+		boss_position_img->removeFromParent();
+	}
+	while(replay_boss->count() < boss_count)
+	{
+		CCSprite* boss_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
+		boss_position_img->setColor(ccRED);
+		replay_all_node->addChild(boss_position_img);
+		
+		replay_boss->addObject(boss_position_img);
+	}
+	
+	for(int i=0;i<replay_boss->count();i++)
+	{
+		CCNode* boss_position_img = (CCNode*)replay_boss->objectAtIndex(i);
+		CCPoint cumber_position;
+		cumber_position.x = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_boss)][i][mySGD->getReplayKey(kReplayKey_timeStamp_boss_x)].asFloat();
+		cumber_position.y = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_boss)][i][mySGD->getReplayKey(kReplayKey_timeStamp_boss_y)].asFloat();
+		boss_position_img->setPosition(ccpAdd(replay_base_position, ccpMult(cumber_position, replay_thumb_texture->getScale())));
+		boss_position_img->setVisible(true);
+	}
+	
+//	CCPoint boss_position;
+//	boss_position.x = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionX)].asFloat();
+//	boss_position.y = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionY)].asFloat();
+//	replay_boss->setPosition(ccpAdd(replay_base_position, ccpMult(boss_position, replay_thumb_texture->getScale())));
+//	replay_boss->setVisible(true);
 	
 
 	int monster_count = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_monster)].size();
@@ -1758,6 +1814,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 		cumber_position.x = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_monster)][i][mySGD->getReplayKey(kReplayKey_timeStamp_monster_x)].asFloat();
 		cumber_position.y = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_monster)][i][mySGD->getReplayKey(kReplayKey_timeStamp_monster_y)].asFloat();
 		sub_position_img->setPosition(ccpAdd(replay_base_position, ccpMult(cumber_position, replay_thumb_texture->getScale())));
+		sub_position_img->setVisible(true);
 	}
 	
 	if(position_data[mySGD->getReplayKey(kReplayKey_timeStamp_isDie)].asBool())
@@ -1792,7 +1849,12 @@ void Maingame::refreshReplayPosition(int temp_time)
 		replay_all_node->addChild(clear_label);
 		
 		replay_character->setVisible(false);
-		replay_boss->setVisible(false);
+		
+		int replay_boss_loop = replay_boss->count();
+		for(int i=0;i<replay_boss_loop;i++)
+		{
+			((CCSprite*)replay_boss->objectAtIndex(i))->setVisible(false);
+		}
 		
 		int replay_sub_loop = replay_sub->count();
 		for(int i=0;i<replay_sub_loop;i++)
@@ -1808,7 +1870,12 @@ void Maingame::refreshReplayPosition(int temp_time)
 		replay_all_node->addChild(game_over_label);
 		
 		replay_character->setVisible(false);
-		replay_boss->setVisible(false);
+		
+		int replay_boss_loop = replay_boss->count();
+		for(int i=0;i<replay_boss_loop;i++)
+		{
+			((CCSprite*)replay_boss->objectAtIndex(i))->setVisible(false);
+		}
 		
 		int replay_sub_loop = replay_sub->count();
 		for(int i=0;i<replay_sub_loop;i++)
@@ -1854,7 +1921,14 @@ void Maingame::hideThumb()
 	}
 	thumb_texture->setVisible(false);
 	character_thumb->setVisible(false);
-	boss_thumb->setVisible(false);
+	
+	int boss_loop = boss_thumbs->count();
+	for(int i=0;i<boss_loop;i++)
+	{
+		CCSprite* t_boss = (CCSprite*)boss_thumbs->objectAtIndex(i);
+		t_boss->setVisible(false);
+	}
+	
 	screen_node->setVisible(false);
 	
 	int sub_loop = sub_thumbs->count();

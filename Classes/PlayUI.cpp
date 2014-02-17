@@ -991,7 +991,12 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(is_cleared_cdt)
 		{
-			myGD->communication("MP_bombCumber", myGD->getCommunicationNode("CP_getMainCumberPointer"));
+			int boss_count = myGD->getMainCumberCount();
+			for(int i=0;i<boss_count;i++)
+			{
+				myGD->communication("MP_bombCumber", myGD->getMainCumberCCNodeVector()[i]);
+			}
+			
 			isGameover = true;
 			myGD->setIsGameover(true);
 			myGD->communication("CP_setGameover");
@@ -1213,7 +1218,7 @@ void PlayUI::subBossLife (float t_life)
 	//			bossLife -= t_life;
 	
 	//		m_bossLifeGage->setPercentage(bossLife/maxBossLife);
-	KSCumberBase* cb = dynamic_cast<KSCumberBase*>(myGD->getCommunicationNode("CP_getMainCumberPointer"));
+	KSCumberBase* cb = dynamic_cast<KSCumberBase*>(myGD->getMainCumberCCNodeVector()[0]);
 	if(!is_cleared_cdt)
 		mission_button->setTextAtIndex(CCString::createWithFormat("%.1f%%", cb->getLife()/cb->getTotalLife()*100.f)->getCString(), 1);
 //		((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%.1f%%", cb->getLife()/cb->getTotalLife()*100.f)->getCString());
@@ -1476,14 +1481,26 @@ void PlayUI::writePosition()
 	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_characterPositionX)] = jack_position.x;
 	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_characterPositionY)] = jack_position.y;
 	
-	CCNode* boss_node = myGD->getCommunicationNode("CP_getMainCumberPointer");
-	CCPoint boss_position = boss_node->getPosition();
-	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionX)] = boss_position.x;
-	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionY)] = boss_position.y;
+	
+	vector<CCNode*> bossArray = myGD->getMainCumberCCNodeVector();
+	int loop_cnt1 = bossArray.size();
+	for(int i=0;i<loop_cnt1;i++)
+	{
+		CCNode* t_boss = (CCNode*)bossArray[i];
+		CCPoint t_position = t_boss->getPosition();
+		
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_boss)][i][mySGD->getReplayKey(kReplayKey_timeStamp_boss_x)] = t_position.x;
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_boss)][i][mySGD->getReplayKey(kReplayKey_timeStamp_boss_y)] = t_position.y;
+	}
+	
+//	CCNode* boss_node = myGD->getCommunicationNode("CP_getMainCumberPointer");
+//	CCPoint boss_position = boss_node->getPosition();
+//	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_boss)][i] = boss_position.x;
+//	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_boss)][i] = boss_position.y;
 	
 	vector<CCNode*> subCumberArray = myGD->getSubCumberCCNodeVector();
-	int loop_cnt = subCumberArray.size();
-	for(int i=0;i<loop_cnt;i++)
+	int loop_cnt2 = subCumberArray.size();
+	for(int i=0;i<loop_cnt2;i++)
 	{
 		CCNode* t_subCumber = (CCNode*)subCumberArray[i];
 		CCPoint t_position = t_subCumber->getPosition();

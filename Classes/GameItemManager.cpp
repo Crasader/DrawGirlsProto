@@ -14,6 +14,8 @@
 #include "StarGoldData.h"
 #include "ServerDataSave.h"
 #include "GameData.h"
+//#include "DataStorageHub.h"
+//#include "MissileDamageData.h"
 
 void GameItemBase::selfRemove()
 {
@@ -561,11 +563,15 @@ void GameItemFire::acting()
 
 void GameItemFire::attack(float t_damage)
 {
-	CCNode* mainCumber = myGD->getCommunicationNode("CP_getMainCumberPointer");
-	
-	myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 0, 0, 1.f), rand()%360-180.f);
-	myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
-	myGD->communication("CP_startDamageReaction", mainCumber, t_damage, rand()%360-180.f);
+	int boss_count = myGD->getMainCumberCount();
+	for(int i=0;i<boss_count;i++)
+	{
+		CCNode* mainCumber = myGD->getMainCumberCCNodeVector()[i];
+		
+		myGD->communication("MP_explosion", mainCumber->getPosition(), ccc4f(1.f, 0, 0, 1.f), rand()%360-180.f);
+		myGD->communication("MP_bombCumber", (CCObject*)mainCumber); // with startMoving
+		myGD->communication("CP_startDamageReaction", mainCumber, t_damage, rand()%360-180.f);
+	}
 
 	
 	int cumber_cnt = myGD->getSubCumberVector().size();

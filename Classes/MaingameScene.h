@@ -248,7 +248,7 @@ private:
 	CCNode* screen_node;
 	
 	CCSprite* character_thumb;
-	CCSprite* boss_thumb;
+	CCArray* boss_thumbs;
 	CCArray* sub_thumbs;
 	CCPoint thumb_base_position;
 	CCRenderTexture* thumb_texture;
@@ -265,7 +265,7 @@ private:
 	void refreshReplayScore(int temp_time);
 	
 	CCSprite* replay_character;
-	CCSprite* replay_boss;
+	CCArray* replay_boss;
 	CCArray* replay_sub;
 	void refreshReplayPosition(int temp_time);
 	
