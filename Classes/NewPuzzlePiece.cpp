@@ -15,8 +15,12 @@
 #include "hspConnector.h"
 #include "GDWebSprite.h"
 #include "StageImgLoader.h"
+#include "NewPieceManager.h"
 
-
+NewPuzzlePiece::~NewPuzzlePiece()
+{
+	NewPieceManager::sharedInstance()->removeNewPiece(stage_number, this);
+}
 
 void NewPuzzlePiece::myInit(int t_stage_number, function<void(int)> t_clicked_func, NewPuzzlePieceMode t_init_mode, bool t_is_buy, bool t_is_lock)
 {
@@ -41,6 +45,8 @@ void NewPuzzlePiece::myInit(int t_stage_number, function<void(int)> t_clicked_fu
 	
 	setPieceImg(recent_mode);
 	is_menu_enable = true;
+	
+	NewPieceManager::sharedInstance()->addNewPiece(stage_number, this);
 }
 
 void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)

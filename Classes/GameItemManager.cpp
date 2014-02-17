@@ -1120,7 +1120,7 @@ void GameItemManager::startItemSetting()
 		}
 	}
 	
-	if(mySD->getClearCondition() == kCLEAR_timeLimit)
+	if(mySD->getClearCondition() == kCLEAR_timeLimit || is_on_addTime)
 	{
 		GameItemAddTime* t_giat = GameItemAddTime::create(false);
 		t_giat->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
@@ -1326,9 +1326,18 @@ void GameItemManager::myInit()
 	
 	child_base_cnt = getChildrenCount();
 	
+	is_on_addTime = false;
 	int defItems_cnt = SDS_GI(kSDF_stageInfo, mySD->getSilType(), "defItems_cnt");
 	for(int i=0;i<defItems_cnt;i++)
-		creatable_list.push_back(ITEM_CODE(SDS_GI(kSDF_stageInfo, mySD->getSilType(), CCString::createWithFormat("defItems_%d_type", i)->getCString())));
+	{
+		ITEM_CODE t_item = ITEM_CODE(SDS_GI(kSDF_stageInfo, mySD->getSilType(), CCString::createWithFormat("defItems_%d_type", i)->getCString()));
+		if(t_item == kIC_addTime)
+		{
+			is_on_addTime = true;
+		}
+		else
+			creatable_list.push_back(t_item);
+	}
 	
 	selected_item_cnt = 0;
 	
