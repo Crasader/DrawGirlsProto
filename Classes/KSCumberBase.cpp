@@ -2192,7 +2192,7 @@ void KSCumberBase::lightSmaller()
 void KSCumberBase::endTeleport()
 {
 	startMoving();
-	myGD->communication("CP_onPatternEnd");
+	myGD->communication("CP_onPatternEndOf", this);
 }
 
 void KSCumberBase::startTeleport()

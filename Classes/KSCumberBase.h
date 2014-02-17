@@ -18,6 +18,7 @@
 #include "Jack.h"
 #include "jsoncpp/json.h"
 #include <queue>
+
 USING_NS_CC;
 
 struct SnakeTrace
@@ -106,6 +107,12 @@ struct LastPattern
 	std::string exePattern;
 };
 
+
+class AttackPattern;
+class CobWeb;
+class SightOutAttack;
+class FreezeAttack;
+class ChaosAttack;
 class KSCumberBase : public CCNode
 {
 public:
@@ -113,11 +120,12 @@ public:
 	LIMIT_COLLISION_PER_SEC(3), m_crashCount(0), /// 초당 변수만큼 충돌시 스케일 줄임.
 	m_castingCancelCount(0), m_isStarted(false), m_healingFrameCount(0),
 	m_damagedFrames(500), m_slience(false), m_adderCnt(0), m_reAttackCnt(0), m_furyCnt(0),
-	m_cumberTimer(0)
+	m_cumberTimer(0), m_attackPattern(nullptr), m_cobWebAttack(nullptr), m_freezeAttack(nullptr),
+	m_chaosAttack(nullptr), m_sightOutAttack(nullptr)
+
 	{
 		
 	}
-	
 	virtual ~KSCumberBase()
 	{
 		CCLog("huk hide.dfkfdjgfdsjgldfsjgldfjgldf!!!!!!!");
@@ -265,6 +273,7 @@ public:
 		m_drawMovement = m_normalMovement;
 		//KS::setColor(this, ccc3(255, 255, 255));
 	}
+
 public:
 	struct FollowMoving
 	{
@@ -442,6 +451,12 @@ protected:
 	
 	
 	CC_SYNTHESIZE(LastPattern, m_lastPattern, LastPattern);
+	CC_SYNTHESIZE(AttackPattern*, m_attackPattern, AttackPattern);
+
+	CC_SYNTHESIZE(CobWeb*, m_cobWebAttack, CobWebAttack);
+	CC_SYNTHESIZE(FreezeAttack*, m_freezeAttack, FreezeAttack);
+	CC_SYNTHESIZE(ChaosAttack*, m_chaosAttack, ChaosAttack);
+	CC_SYNTHESIZE(SightOutAttack*, m_sightOutAttack, SightOutAttack);
 };
 
 #endif /* defined(__DGproto__KSCumberBase__) */

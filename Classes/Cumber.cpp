@@ -29,6 +29,10 @@ void CumberParent::onStartGame()
 		i->onStartGame();
 	}
 }
+void CumberParent::onPatternEndOf(CCObject* cb)
+{
+	((KSCumberBase*)cb)->onPatternEnd();
+}
 void CumberParent::onPatternEnd()
 {
 	for(auto i : mainCumbers)
@@ -477,7 +481,8 @@ void CumberParent::myInit()
 	myGD->V_F["CP_changeMaxSize"] = std::bind(&CumberParent::changeMaxSize, this, _1);
 //	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
 	myGD->V_V["CP_onStartGame"] = std::bind(&CumberParent::onStartGame, this);
-	myGD->V_V["CP_onPatternEnd"] = std::bind(&CumberParent::onPatternEnd, this);
+	//myGD->V_V["CP_onPatternEnd"]= std::bind(&CumberParent::onPatternEnd, this);
+	myGD->V_CCO["CP_onPatternEndOf"] = std::bind(&CumberParent::onPatternEndOf, this, _1);
 	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
 	myGD->V_V["CP_onJackDie"] = std::bind(&CumberParent::onJackDie, this);
 	myGD->V_V["CP_onJackRevived"] = std::bind(&CumberParent::onJackRevived, this);
@@ -486,76 +491,71 @@ void CumberParent::myInit()
 	Json::Reader reader;
 	Json::Value root;
 	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
-	
-	Json::Value boss = root[0u];
 
-	std::string bossShape = boss.get("shape", "circle").asString();
-	std::string bossType = boss["type"].asString();
-	
-	
-	ostringstream oss;
-	oss << mySD->getSilType();
-	std::string playcountKey = std::string("playcount_") + oss.str();
-	myDSH->setUserIntForStr(playcountKey, myDSH->getUserIntForStr(playcountKey, 0) + 1);
-	
-	
-	KSCumberBase* mainCumber;
-	if(bossShape == "circle")
+	for (unsigned int i = 0; i < root.size(); ++i)
 	{
-		mainCumber = KSCircleBase::create(bossType);
-	}
-	else if(bossShape == "snake")
-	{
-		mainCumber = KSSnakeBase::create(bossType);
+		/* code */
+		Json::Value boss = root[i];
+
+		std::string bossShape = boss.get("shape", "circle").asString();
+		std::string bossType = boss["type"].asString();
+
+
+		ostringstream oss;
+		oss << mySD->getSilType();
+		std::string playcountKey = std::string("playcount_") + oss.str();
+		myDSH->setUserIntForStr(playcountKey, myDSH->getUserIntForStr(playcountKey, 0) + 1);
+
+
+		KSCumberBase* mainCumber;
+		if(bossShape == "circle")
+		{
+			mainCumber = KSCircleBase::create(bossType);
+		}
+		else if(bossShape == "snake")
+		{
+			mainCumber = KSSnakeBase::create(bossType);
+		}	
+
+		mainCumber->assignBossData(root[i]);
+		mainCumber->applyPassiveData(mySD->getPassiveData());
+		mainCumber->settingAttackPercent(boss["attackpercent"].asDouble());
+		mainCumber->applyAutoBalance();
+		//	mainCumber->settingPattern(boss["pattern"]);
+		//	mainCumber->settingPattern("{\"test\":123");
+		Json::Reader temp_reader;
+		Json::Value temp_root;
+		//	temp_reader.parse(R"(     [{"pattern":"5", "atype":"normal","percent":2,"perframe":10,"totalframe":60,"speed":250,"numberperframe":5,"color":5},
+		//							 {"pattern":"103", "atype":"crash", "percent":2,"perframe":10,"totalframe":60,"speed":200,"numberperframe":5},
+		//							 {"pattern":"105", "atype":"special", "percent":1}]           )", temp_root);
+
+
+		//	temp_reader.parse(R"(     [{"pattern":"108", "atype":"normal", "oneshot":5,"oneshotterm":10,"gunnumber":4,"targettype":1,"degreev":5,"color":1,"totalframe":200,"castframe":120,"path":[0,0,0,0,50,-50,100, 50, 150, -50, 200, 50, 250, -50, 300, 50, 350, -50],"percent":10},
+		//										{"pattern":"103", "atype":"crash", "percent":2,"perframe":10,"totalframe":60,"speed":200,"numberperframe":5},
+		//										{"pattern":"105", "atype":"special", "percent":1}]           )", temp_root);
+
+		//	temp_reader.parse(boss["pattern"])
+		mainCumber->settingPattern(boss["pattern"]);
+
+		//	);
+		IntPoint mapPoint;
+		bool finded;
+		mainCumber->getRandomPosition(&mapPoint, &finded);
+		myGD->setMainCumberPoint(mapPoint);
+		mainCumber->setPosition(ip2ccp(mapPoint));
+		mainCumber->startAnimationNoDirection();
+		mainCumbers.push_back(mainCumber);
+		addChild(mainCumber);
+
+		// 에너지 달음.
+		MobHpGraph* main_hp = MobHpGraph::create(mainCumber, "monster_hp_bar.png");
+		addChild(main_hp);
+		main_hp->setMinimumRate();
+		hp_graphs.push_back(main_hp);
 	}	
-
-	mainCumber->assignBossData(root[0u]);
-	mainCumber->applyPassiveData(mySD->getPassiveData());
-	mainCumber->settingAttackPercent(boss["attackpercent"].asDouble());
-	mainCumber->applyAutoBalance();
-//	mainCumber->settingPattern(boss["pattern"]);
-//	mainCumber->settingPattern("{\"test\":123");
-	Json::Reader temp_reader;
-	Json::Value temp_root;
-//	temp_reader.parse(R"(     [{"pattern":"5", "atype":"normal","percent":2,"perframe":10,"totalframe":60,"speed":250,"numberperframe":5,"color":5},
-//							 {"pattern":"103", "atype":"crash", "percent":2,"perframe":10,"totalframe":60,"speed":200,"numberperframe":5},
-//							 {"pattern":"105", "atype":"special", "percent":1}]           )", temp_root);
-	
-	
-//	temp_reader.parse(R"(     [{"pattern":"108", "atype":"normal", "oneshot":5,"oneshotterm":10,"gunnumber":4,"targettype":1,"degreev":5,"color":1,"totalframe":200,"castframe":120,"path":[0,0,0,0,50,-50,100, 50, 150, -50, 200, 50, 250, -50, 300, 50, 350, -50],"percent":10},
-//										{"pattern":"103", "atype":"crash", "percent":2,"perframe":10,"totalframe":60,"speed":200,"numberperframe":5},
-//										{"pattern":"105", "atype":"special", "percent":1}]           )", temp_root);
-	
-//	temp_reader.parse(boss["pattern"])
-	mainCumber->settingPattern(boss["pattern"]);
-		
-//	);
-	IntPoint mapPoint;
-	bool finded;
-	mainCumber->getRandomPosition(&mapPoint, &finded);
-	myGD->setMainCumberPoint(mapPoint);
-	mainCumber->setPosition(ip2ccp(mapPoint));
-	mainCumber->startAnimationNoDirection();
-	mainCumbers.push_back(mainCumber);
-	addChild(mainCumber);
 	
 //	int create_cnt;
 	if(!mySGD->isUsingItem(kIC_subNothing))
-	
-	// 랜덤으로 생성 ㄴㄴ 정해준 숫자만큼만 생성.
-//	if(mySD->getClearCondition() != kCLEAR_subCumberCatch)
-//	{
-//		 create_cnt = m_well512.GetValue(1, 2);
-//	}
-//	else
-//	{
-//		create_cnt = 2;
-//	}
-	
-	
-	// 부하몹 로드함.
-//	create_cnt = 1;
-//	for(int i=0;i<create_cnt;i++)
 	{
 		Json::Reader reader;
 		Json::Value root;
@@ -586,7 +586,8 @@ void CumberParent::myInit()
 	}
 //	initSubCumber();
 	
-	myMP = MissileParent::create(mainCumber->getBossEye());
+	//myMP = MissileParent::create(mainCumber->getBossEye());
+	myMP = MissileParent::create(nullptr);
 	addChild(myMP);
 	
 	myMFP = MapFragmentParent::create();
@@ -599,10 +600,6 @@ void CumberParent::myInit()
 		hp_graphs.push_back(t_sub_hp);
 	}
 	
-	MobHpGraph* main_hp = MobHpGraph::create(mainCumber, "monster_hp_bar.png");
-	addChild(main_hp);
-	main_hp->setMinimumRate();
-	hp_graphs.push_back(main_hp);
 	
 //	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
 //	addChild(myEP);

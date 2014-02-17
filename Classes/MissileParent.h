@@ -110,16 +110,16 @@ public:
 	
 	
 	
-	void deleteKeepAP23(){		keepAP23 = NULL;	}
-	void deleteKeepAP26(){		keepAP26 = NULL;	}
-	void protectedAP26(){		keepAP26->stopFrame();	}
+	//void deleteKeepAP23(){		keepAP23 = NULL;	}
+	//void deleteKeepAP26(){		keepAP26 = NULL;	}
+	//void protectedAP26(){		keepAP26->stopFrame();	}
 	
 
 	
-	void deleteKeepAP33(){		keepAP33 = NULL;	}
-	void protectedAP33(){		keepAP33->stopFrame();	}
+	//void deleteKeepAP33(){		keepAP33 = NULL;	}
+	//void protectedAP33(){		keepAP33->stopFrame();	}
 	
-	void deleteKeepAP24(){		keepAP24 = NULL;	}
+	//void deleteKeepAP24(){		keepAP24 = NULL;	}
 
 	
 	virtual ~MissileParent()
@@ -142,12 +142,12 @@ private:
 	CCPoint startFirePosition;
 	int slowAreaCnt;
 	
-	AttackPattern* saveAP;
+	//AttackPattern* saveAP;
 
-	Cobweb* keepAP23;
-	AP_Missile26* keepAP26;
-	AP_Missile33* keepAP33;
-	AP_Missile24* keepAP24;
+	//Cobweb* keepAP23; // 거미줄
+	//FreezeAttack* keepAP26; // 얼음
+	//ChaosAttack* keepAP33; // 반대 컨
+	//SightOutAttack* keepAP24; // 태양권
 	CCArray* chargeArray;
 	CCArray* tickingArray;
 	
