@@ -13,9 +13,9 @@
 //#include "CumberEmotion.h"
 #include "AudioEngine.h"
 #include "FromTo.h"
+#include "IntSeries.h"
 #include "ProbSelector.h"
 #include "Well512.h"
-#include "Jack.h"
 #include "jsoncpp/json.h"
 #include <queue>
 
@@ -257,22 +257,8 @@ public:
 	int getAiValue();
 	float getAgility();
 	void setAgility(float ag);
-	void aggroExec()
-	{
-		m_drawMovement = FOLLOW_TYPE;
-		m_normalMovement = FOLLOW_TYPE;
-		//KS::setColor(this, ccc3(255, 0, 0));
-		CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
-		m_follow.timer = 1.1f;
-		m_follow.lastMapCollisionTime = 0.f;
-		m_follow.followDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetPlusMinus() * m_well512.GetFloatValue(60, 120);	
-	}
-	void unAggroExec()
-	{
-		m_normalMovement = m_originalNormalMovement;
-		m_drawMovement = m_normalMovement;
-		//KS::setColor(this, ccc3(255, 255, 255));
-	}
+	void aggroExec();
+	void unAggroExec();
 
 public:
 	struct FollowMoving

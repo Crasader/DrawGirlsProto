@@ -10,6 +10,7 @@
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
+using namespace std::placeholders;
 ComboView * ComboView::create (int combo)
 {
 	ComboView* t_cv = new ComboView();
