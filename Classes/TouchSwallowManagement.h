@@ -10,6 +10,7 @@
 #define __DGproto__TouchSwallowManagement__
 
 #include "cocos2d.h"
+#include <algorithm>
 
 USING_NS_CC;
 using namespace std;
