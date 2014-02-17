@@ -117,8 +117,18 @@ public:
 	std::map<std::string, std::function<void(CCPoint, float)>> V_CCPF;
 
 	
-	std::function<std::vector<CCNode*>&(void)> getMainCumberVector;
-	std::function<std::vector<CCNode*>&(void)> getSubCumberVector;
+	std::function<std::vector<KSCumberBase*>&(void)> getMainCumberVector;
+	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
+	
+	vector<CCNode*> getMainCumberCCNodeVector()
+	{
+		vector<KSCumberBase*> t_vector = getMainCumberVector();
+		vector<CCNode*> return_vector;
+		for(int i=0;i<t_vector.size();i++)
+			return_vector.push_back((CCNode*)t_vector[i]);
+		
+		return return_vector;
+	}
 	
 	int getMainCumberCount()
 	{
@@ -127,7 +137,7 @@ public:
 	
 	bool isValidMainCumber(CCNode* t_boss)
 	{
-		vector<CCNode*> boss_vector = getMainCumberVector();
+		vector<CCNode*> boss_vector = getMainCumberCCNodeVector();
 		auto iter = find(boss_vector.begin(), boss_vector.end(), t_boss);
 		if(iter != boss_vector.end())
 			return true;
