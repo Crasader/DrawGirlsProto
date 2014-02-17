@@ -342,12 +342,12 @@ void Maingame::finalSetting()
 	
 //	myUI->setControlTD(this, callfunc_selector(Maingame::setControlGesture), callfunc_selector(Maingame::setControlButton), callfunc_selector(Maingame::setControlJoystick), callfunc_selector(Maingame::startControl));
 	
-	vector<KSCumberBase*> main_cumber_vector = myGD->getMainCumberVector();
+	vector<CCNode*> main_cumber_vector = myGD->getMainCumberVector();
 	search_eye_vector.clear();
 	
 	for(int i=0;i<main_cumber_vector.size();i++)
 	{
-		KSCumberBase* t_boss = main_cumber_vector[i];
+		CCNode* t_boss = main_cumber_vector[i];
 		
 		SearchEye* t_search_eye = SearchEye::create(t_boss);
 		t_search_eye->setPosition(CCPointZero);

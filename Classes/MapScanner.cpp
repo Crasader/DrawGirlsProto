@@ -50,7 +50,22 @@ void MapScanner::scanMap()
 //	CCLog("process step 2 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+	vector<CCNode*> main_cumber_vector = myGD->getMainCumberVector();
+	int main_cumber_count = main_cumber_vector.size();
+	bool is_found = false;
+	IntPoint mainCumberPoint = IntPoint();
+	for(int i=0;i<main_cumber_count && !is_found;i++)
+	{
+		CCNode* t_boss = main_cumber_vector[i];
+		IntPoint t_boss_point = myGD->getMainCumberPoint(t_boss);
+		if(!t_boss_point.isNull() && myGD->mapState[t_boss_point.x][t_boss_point.y] == mapEmpty)
+		{
+			is_found = true;
+			mainCumberPoint = t_boss_point;
+		}
+	}
+	
+//	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
 	
 	// locked main cumber then reverse
 	if(!mainCumberPoint.isNull() && myGD->mapState[mainCumberPoint.x][mainCumberPoint.y] == mapEmpty) // != mapScaningEmptySide
