@@ -58,7 +58,7 @@ void MapScanner::scanMap()
 	{
 		CCNode* t_boss = main_cumber_vector[i];
 		IntPoint t_boss_point = myGD->getMainCumberPoint(t_boss);
-		if(!t_boss_point.isNull() && myGD->mapState[t_boss_point.x][t_boss_point.y] != mapEmpty)
+		if(!t_boss_point.isNull() && myGD->mapState[t_boss_point.x][t_boss_point.y] == mapScaningEmptySide)
 		{
 			is_found = true;
 			mainCumberPoint = t_boss_point;
@@ -71,7 +71,17 @@ void MapScanner::scanMap()
 	// locked main cumber then reverse
 	if(!is_found) // != mapScaningEmptySide
 	{
-		mainCumberPoint = myGD->getMainCumberPoint(myGD->getMainCumberCCNodeVector()[0]);
+		for(int i=0;i<main_cumber_count;i++)
+		{
+			CCNode* t_boss = main_cumber_vector[i];
+			IntPoint t_boss_point = myGD->getMainCumberPoint(t_boss);
+			if(!t_boss_point.isNull() && myGD->mapState[t_boss_point.x][t_boss_point.y] == mapEmpty)
+			{
+				mainCumberPoint = t_boss_point;
+			}
+		}
+		
+		CCAssert(!mainCumberPoint.isNull(), "what?");
 		
 		if(myGD->game_step == kGS_limited)
 		{
