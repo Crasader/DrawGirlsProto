@@ -1,3 +1,4 @@
+/*
 //
 //  MainCumber.h
 //  DrawingJack
@@ -141,4 +142,7 @@ protected:
 };
 
 
-#endif /* defined(__DrawingJack__MainCumber__) */
+#endif 
+
+
+*/

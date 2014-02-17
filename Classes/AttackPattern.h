@@ -72,7 +72,7 @@ private:
 class AP_Missile6 : public AttackPattern
 {
 public:
-	static AP_Missile6* create(CCPoint t_sp, int t_type);
+	static AP_Missile6* create(CCPoint t_sp, KSCumberBase* cb, int t_type);
 	
 	virtual void stopMyAction();
 	
@@ -91,13 +91,13 @@ private:
 	void startMyAction();
 	void myAction();
 	
-	void myInit(CCPoint t_sp, int t_type);
+	void myInit(CCPoint t_sp, KSCumberBase* cb, int t_type);
 };
 
 class AP_Missile9 : public AttackPattern
 {
 public:
-	static AP_Missile9* create(int t_keepFrame, int t_shootFrame, float t_distance, CCSize mSize, int t_type);
+	static AP_Missile9* create(int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize mSize, int t_type);
 	
 	virtual void stopMyAction();
 	
@@ -120,7 +120,7 @@ private:
 	
 	void myAction();
 	
-	void myInit(int t_keepFrame, int t_shootFrame, float t_distance, CCSize t_mSize, int t_type);
+	void myInit(int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize t_mSize, int t_type);
 };
 
 class AP_Missile11 : public AttackPattern
@@ -141,7 +141,7 @@ private:
 class AP_Missile12 : public AttackPattern
 {
 public:
-	static AP_Missile12* create(CCPoint t_sp, int t_type, int t_targetingFrame, int t_shootFrame);
+	static AP_Missile12* create(CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame);
 	
 	virtual void stopMyAction();
 	
@@ -185,7 +185,7 @@ private:
 	void startMyAction();
 	
 	void myAction();
-	void myInit(CCPoint t_sp, int t_type, int t_targetingFrame, int t_shootFrame);
+	void myInit(CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame);
 };
 
 class AP_Missile14 : public AttackPattern
@@ -206,7 +206,7 @@ private:
 class AP_Missile15 : public AttackPattern // burn
 {
 public:
-	static AP_Missile15* create(CCPoint t_sp, int t_tmCnt, int t_burnFrame);
+	static AP_Missile15* create(CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_burnFrame);
 	
 	virtual void stopMyAction();
 	
@@ -240,7 +240,7 @@ private:
 	
 	void initParticle();
 	
-	void myInit(CCPoint t_sp, int t_tmCnt, int t_burnFrame);
+	void myInit(CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_burnFrame);
 };
 
 class AP_Missile16 : public AttackPattern
@@ -289,33 +289,33 @@ private:
 
 
 
-class AP_Missile23 : public AttackPattern // cobweb
-{
-public:
-	static AP_Missile23* create(int t_frame);
-	void updateCobweb();
-private:
+//class AP_Missile23 : public AttackPattern // cobweb
+//{
+//public:
+	//static AP_Missile23* create(int t_frame);
+	//void updateCobweb();
+//private:
 	
-	int slowFrame;
-	int ingFrame;
-	bool is_stop;
-	CCSprite* cobwebImg;
-	FromToWithDuration<float> m_scaleFromTo;
-	void startFrame();
+	//int slowFrame;
+	//int ingFrame;
+	//bool is_stop;
+	//CCSprite* cobwebImg;
+	//FromToWithDuration<float> m_scaleFromTo;
+	//void startFrame();
 	
-	void framing();
+	//void framing();
 	
-	void removeCobweb();
+	//void removeCobweb();
 	
-	void stopFrame();
+	//void stopFrame();
 	
-	void myInit(int t_frame);
-};
+	//void myInit(int t_frame);
+//};
 
-class AP_Missile24 : public AttackPattern // sight out
+class SightOutAttack : public AttackPattern // sight out
 {
 public:
-	static AP_Missile24* create(int t_frame);
+	static SightOutAttack* create(int t_frame, KSCumberBase* cb);
 	
 	void updateSightOut();
 	
@@ -330,13 +330,13 @@ private:
 	
 	void stopFrame();
 	
-	void myInit(int t_frame);
+	void myInit(int t_frame, KSCumberBase* cb);
 };
 
-class AP_Missile26 : public AttackPattern // freeze
+class FreezeAttack : public AttackPattern // freeze
 {
 public:
-	static AP_Missile26* create(int t_frame);
+	static FreezeAttack* create(int t_frame, KSCumberBase* cb);
 	
 	void updateFreeze();
 	
@@ -351,7 +351,7 @@ private:
 	
 	void framing();
 	
-	void myInit(int t_frame);
+	void myInit(int t_frame, KSCumberBase* cb);
 };
 
 
@@ -366,10 +366,10 @@ private:
 	void myInit();
 };
 
-class AP_Missile33 : public AttackPattern // chaos
+class ChaosAttack : public AttackPattern // chaos
 {
 public:
-	static AP_Missile33* create(int t_frame);
+	static ChaosAttack* create(int t_frame, KSCumberBase* cb);
 	
 	void updateChaos();
 	
@@ -384,7 +384,7 @@ private:
 	
 	void framing();
 	
-	void myInit(int t_frame);
+	void myInit(int t_frame, KSCumberBase* cb);
 };
 
 // 무작위 원형 던지기.
@@ -759,7 +759,6 @@ protected:
 	CCRect crashRect;
 	CCSprite* lazer_sub;
 	float dscale;
-	KSCumberBase* m_cumber;
 	
 	CCPoint jackPosition;
 	
@@ -822,7 +821,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 
@@ -839,7 +837,6 @@ public:
 	void update(float dt);
 protected:
 	Json::Value pattern;
-	KSCumberBase* m_cumber;
 };
 
 // 움직이는 해바라기
@@ -854,7 +851,6 @@ public:
 	void update(float dt);
 protected:
 	Json::Value m_pattern;
-	KSCumberBase* m_cumber;
 };
 
 // 폭탄 여러개 던지기
@@ -874,7 +870,6 @@ protected:
 	Json::Value m_pattern;
 	int m_frame;
 	int m_totalFrame;
-	KSCumberBase* m_cumber;
 	CCSprite* m_targetSprite;
 };
 
@@ -891,7 +886,6 @@ protected:
 	int m_frame;
 	int m_totalFrame;
 	Json::Value m_pattern;
-	KSCumberBase* m_cumber;
 };
 
 
@@ -905,7 +899,6 @@ public:
 	void update(float dt);
 protected:
 	CCPoint m_position;
-	KSCumberBase* m_cumber;
 	int m_totalFrame;
 	int m_scale;
 };
@@ -918,7 +911,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern3 : public AttackPattern
@@ -929,7 +921,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern4 : public AttackPattern
@@ -940,7 +931,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern5 : public AttackPattern
@@ -951,7 +941,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern6 : public AttackPattern
@@ -962,7 +951,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern7 : public AttackPattern
@@ -973,7 +961,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern8 : public AttackPattern
@@ -984,7 +971,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern9 : public AttackPattern
@@ -995,7 +981,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern10 : public AttackPattern
@@ -1006,7 +991,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 
@@ -1037,7 +1021,6 @@ public:
 	
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 	int totalFrame;
 	int type;
 	CCSprite* beamImg;
@@ -1055,7 +1038,6 @@ public:
 	void update(float dt);
 protected:
 	CCPoint m_position;
-	KSCumberBase* m_cumber;
 	int area;
 	int totalFrame;
 	int movingFrame;
@@ -1069,7 +1051,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern14 : public AttackPattern
@@ -1080,7 +1061,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern15 : public AttackPattern
@@ -1091,7 +1071,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern16 : public AttackPattern
@@ -1102,7 +1081,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern17 : public AttackPattern
@@ -1114,7 +1092,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 	int m_totalFrame;
 	int m_number;
 	float m_speed;
@@ -1129,7 +1106,6 @@ public:
 	void update(float dt);
 protected:
 	Json::Value m_pattern;
-	KSCumberBase* m_cumber;
 	Well512 m_well512;
 };
 
@@ -1141,7 +1117,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern20 : public AttackPattern
@@ -1152,7 +1127,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 class KSSpecialAttackPattern21 : public AttackPattern
@@ -1163,7 +1137,6 @@ public:
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
-	KSCumberBase* m_cumber;
 };
 
 
@@ -1194,18 +1167,17 @@ protected:
  KSCumberBase* m_cumber;
  };
  */
-class Cobweb : public AttackPattern // cobweb
+class CobWeb : public AttackPattern // cobweb
 {
 public:
 //	static Cobweb* create(int t_frame)
-	static Cobweb* create(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
+	static CobWeb* create(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	
-	void updateCobweb();
+	void updateCobWeb();
 	
 private:
 
 	Json::Value pattern;
-	KSCumberBase* cumber;
 	int slowFrame;
 	int ingFrame;
 	bool is_stop;
@@ -1216,7 +1188,7 @@ private:
 	
 	void framing();
 	
-	void removeCobweb();
+	void removeCobWeb();
 	
 	void stopFrame();
 	

@@ -291,18 +291,23 @@ IntPoint GameData::getJackPoint()
 	return r_p;
 }
 
-void GameData::setMainCumberPoint( IntPoint t_mcbp )
-{
-	mainCumberPoint->x = t_mcbp.x;
-	mainCumberPoint->y = t_mcbp.y;
-}
+//void GameData::setMainCumberPoint( IntPoint t_mcbp )
+//{
+	//mainCumberPoint->x = t_mcbp.x;
+	//mainCumberPoint->y = t_mcbp.y;
+//}
 
-IntPoint GameData::getMainCumberPoint()
-{
-	IntPoint r_p = IntPoint(mainCumberPoint->x, mainCumberPoint->y);
-	return r_p;
-}
+//IntPoint GameData::getMainCumberPoint()
+//{
+	//IntPoint r_p = IntPoint(mainCumberPoint->x, mainCumberPoint->y);
+	//return r_p;
+//}
 
+void GameData::setMainCumberPoint(KSCumberBase* cb, IntPoint t_mcbp)
+{
+	mainCumberPoints[cb].x = t_mcbp.x;
+	mainCumberPoints[cb].y = t_mcbp.y;
+}
 int GameData::getCommunication( string funcName )
 {
 	return I_V[funcName]();

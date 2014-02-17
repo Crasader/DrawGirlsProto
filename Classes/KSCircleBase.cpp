@@ -503,7 +503,7 @@ void KSCircleBase::setPosition( const CCPoint& t_sp )
 	//CCLog("setPos %f %f", t_sp.x, t_sp.y);
 	//		KSCumberBase::setPosition(t_sp);
 	m_headImg->setPosition(t_sp);
-	myGD->setMainCumberPoint(ccp2ip(t_sp));
+	myGD->setMainCumberPoint(this, ccp2ip(t_sp));
 	m_mapPoint = ccp2ip(t_sp);
 	//		myGD->communication("Main_moveGamePosition", t_sp);
 	//		myGD->communication("VS_setMoveGamePosition", t_sp);

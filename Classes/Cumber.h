@@ -46,11 +46,12 @@ public:
 	void onJackDrawLine();
 	void onStartGame();
 	void onPatternEnd();
+	void onPatternEndOf(CCObject* cb);
 	void allStopSchedule(); //  used
 	void tickingOn();
 	void movingMainCumber();
 	void stopMovingMainCumber();
-	CCNode* getMainCumberPointer();
+	//CCNode* getMainCumberPointer();
 	std::vector<KSCumberBase*>& getSubCumberArrayPointer();
 	std::vector<KSCumberBase*>& getMainCumbers();
 

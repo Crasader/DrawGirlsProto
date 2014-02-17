@@ -235,6 +235,8 @@ public:
 	
 	bool isDie;
 	
+	CCNode* getJack();
+	
 private:
 	
 	bool is_on_continue;

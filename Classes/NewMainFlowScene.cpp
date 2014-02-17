@@ -58,6 +58,8 @@ bool NewMainFlowScene::init()
         return false;
     }
 	
+	
+	
 	setKeypadEnabled(true);
 	
 	unlock_cover = NULL;
@@ -197,6 +199,11 @@ bool NewMainFlowScene::init()
 	}
 	
 	selected_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	if(selected_puzzle_number == 0)
+	{
+		selected_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1);
+		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, selected_puzzle_number);
+	}
 	selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, selected_puzzle_number);
 	
 	

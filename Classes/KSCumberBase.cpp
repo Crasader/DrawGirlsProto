@@ -2099,7 +2099,7 @@ void KSCumberBase::followProcess(float dt)
 		if(ps.getResult() == 0)
 		{
 			CCLog("follow!!!");
-			KSCumberBase* mainCumber = dynamic_cast<KSCumberBase*>(myGD->getCommunicationNode("CP_getMainCumberPointer"));
+			KSCumberBase* mainCumber = this;
 
 			int aggroCount = 0;
 			if(mainCumber->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
@@ -2192,7 +2192,7 @@ void KSCumberBase::lightSmaller()
 void KSCumberBase::endTeleport()
 {
 	startMoving();
-	myGD->communication("CP_onPatternEnd");
+	myGD->communication("CP_onPatternEndOf", this);
 }
 
 void KSCumberBase::startTeleport()
@@ -2620,7 +2620,7 @@ void KSCumberBase::setSlience( bool s )
 void KSCumberBase::caughtAnimation()
 {
 	myGD->communication("UI_catchSubCumber");
-	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
+	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(this));
 }
 
 bool KSCumberBase::bossIsClosed()
@@ -2662,6 +2662,22 @@ void KSCumberBase::setAgility( float ag )
 	m_agility = ag;
 }
 
+void KSCumberBase::aggroExec()
+{
+	m_drawMovement = FOLLOW_TYPE;
+	m_normalMovement = FOLLOW_TYPE;
+	//KS::setColor(this, ccc3(255, 0, 0));
+	CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
+	m_follow.timer = 1.1f;
+	m_follow.lastMapCollisionTime = 0.f;
+	m_follow.followDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetPlusMinus() * m_well512.GetFloatValue(60, 120);	
+}
+void KSCumberBase::unAggroExec()
+{
+	m_normalMovement = m_originalNormalMovement;
+	m_drawMovement = m_normalMovement;
+	//KS::setColor(this, ccc3(255, 255, 255));
+}
 template <typename T>
 void FixedSizeDeque<T>::push_back( const T& p )
 {

@@ -12,6 +12,8 @@
 //#include "Jack.h"
 //#include "PlayUI.h"
 #include "MissileDamageData.h"
+#include "StarGoldData.h"
+
 bool KSJuniorBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();
@@ -530,7 +532,7 @@ void KSJuniorBase::setScaleY( float y )
 void KSJuniorBase::endTeleport()
 {
 	startMoving();
-	myGD->communication("CP_onPatternEnd");
+	myGD->communication("CP_onPatternEndOf", this);
 }
 
 void KSJuniorBase::startTeleport()

@@ -119,6 +119,52 @@ public:
 	
 	std::function<std::vector<KSCumberBase*>&(void)> getMainCumberVector;
 	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
+	
+	vector<CCNode*> getMainCumberCCNodeVector()
+	{
+		vector<KSCumberBase*> t_vector = getMainCumberVector();
+		vector<CCNode*> return_vector;
+		for(int i=0;i<t_vector.size();i++)
+			return_vector.push_back((CCNode*)t_vector[i]);
+		
+		return return_vector;
+	}
+	vector<CCNode*> getSubCumberCCNodeVector()
+	{
+		vector<KSCumberBase*> t_vector = getSubCumberVector();
+		vector<CCNode*> return_vector;
+		for(int i=0;i<t_vector.size();i++)
+			return_vector.push_back((CCNode*)t_vector[i]);
+		
+		return return_vector;
+	}
+	
+	int getMainCumberCount()
+	{
+		return getMainCumberVector().size();
+	}
+	bool isValidMainCumber(CCNode* t_boss)
+	{
+		vector<CCNode*> boss_vector = getMainCumberCCNodeVector();
+		auto iter = find(boss_vector.begin(), boss_vector.end(), t_boss);
+		if(iter != boss_vector.end())
+			return true;
+		return false;
+	}
+	
+	int getSubCumberCount()
+	{
+		return getSubCumberVector().size();
+	}
+	bool isValidSubCumber(CCNode* t_monster)
+	{
+		vector<CCNode*> monster_vector = getSubCumberCCNodeVector();
+		auto iter = find(monster_vector.begin(), monster_vector.end(), t_monster);
+		if(iter != monster_vector.end())
+			return true;
+		return false;
+	}
+	
 	mapType mapState[162][217];
 	
 	static GameData* sharedGameData();
@@ -141,9 +187,14 @@ public:
 	void setJackPoint(IntPoint t_jp);
 	IntPoint getJackPoint();
 	
-	void setMainCumberPoint(IntPoint t_mcbp);
-	IntPoint getMainCumberPoint();
+	//void setMainCumberPoint(IntPoint t_mcbp);
+	//IntPoint getMainCumberPoint();
 	
+	void setMainCumberPoint(KSCumberBase* cb, IntPoint t_mcbp);
+	IntPoint getMainCumberPoint(CCNode* cb)
+	{
+		return mainCumberPoints[(KSCumberBase*)cb];
+	}
 	float getAlphaSpeed();
 	void setAlphaSpeed(float t_f);
 	
@@ -209,6 +260,8 @@ private:
 	int jackState;
 	IntPoint* jackPoint;
 	IntPoint* mainCumberPoint;
+
+	std::map<KSCumberBase*, IntPoint> mainCumberPoints;
 	CCArray* otherTargetPoints;
 	
 	CCObject* target_Main;

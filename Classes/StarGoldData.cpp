@@ -17,8 +17,9 @@ string StarGoldData::getReplayKey(ReplayKey t_key)
 	if(t_key == kReplayKey_timeStamp)									return_value = "ts";
 	else if(t_key == kReplayKey_timeStamp_characterPositionX)			return_value = "cpx";
 	else if(t_key == kReplayKey_timeStamp_characterPositionY)			return_value = "cpy";
-	else if(t_key == kReplayKey_timeStamp_bossPositionX)				return_value = "bpx";
-	else if(t_key == kReplayKey_timeStamp_bossPositionY)				return_value = "bpy";
+	else if(t_key == kReplayKey_timeStamp_boss)							return_value = "boss";
+	else if(t_key == kReplayKey_timeStamp_boss_x)						return_value = "bpx";
+	else if(t_key == kReplayKey_timeStamp_boss_y)						return_value = "bpy";
 	else if(t_key == kReplayKey_timeStamp_monster)						return_value = "mob";
 	else if(t_key == kReplayKey_timeStamp_monster_x)					return_value = "x";
 	else if(t_key == kReplayKey_timeStamp_monster_y)					return_value = "y";

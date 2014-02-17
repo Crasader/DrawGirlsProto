@@ -6,7 +6,7 @@
 //
 //
 #include "AttackPattern.h"
-
+#include "SilhouetteData.h"
 
 void KSTargetAttackPattern8::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
@@ -106,7 +106,7 @@ void KSTargetAttackPattern8::update(float dt)
 			for(auto& gun : pan)
 			{
 				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
-				CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
+				CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint(this));
 				float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
 				
 				float deg = rad2Deg(rad);
@@ -146,14 +146,14 @@ void KSTargetAttackPattern8::update(float dt)
 					
 					if(m_havePath)
 					{
-						MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(ip2ccp(myGD->getMainCumberPoint()), gun.degree.getValue(), gun.bulletSpeed,
+						MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
 																					  imgFileName.c_str(), t_mSize,
 																					  m_path, m_isCurve ? MathmaticalMissileUnit::CURVE : MathmaticalMissileUnit::RIGHTLINE);
 						batchNode->addChild(t_mu);
 					}
 					else
 					{
-						MissileUnit* t_mu = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint()), gun.degree.getValue(), gun.bulletSpeed,
+						MissileUnit* t_mu = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
 																																					imgFileName.c_str(), t_mSize,0, 0);
 						batchNode->addChild(t_mu);
 					}
@@ -188,8 +188,8 @@ void KSTargetAttackPattern8::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -219,7 +219,7 @@ void KSTargetAttackPattern8::initGuns()
 		for(auto& gun : pan)
 		{
 			CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
-			CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
+			CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint(m_cumber));
 			float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
 
 			float deg = rad2Deg(rad);
@@ -257,8 +257,8 @@ void KSTargetAttackPattern10::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
 	//		m_parentMissile->removeFromParentAndCleanup(true);
@@ -289,8 +289,8 @@ void KSTargetAttackPattern11::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
 	//		m_parentMissile->removeFromParentAndCleanup(true);
@@ -390,10 +390,10 @@ void SelfSpinMissile::myInit( CCPoint t_sp, CCPoint t_dv, int t_mCnt, float t_r,
 	startMove();
 }
 
-AP_Missile6* AP_Missile6::create( CCPoint t_sp, int t_type )
+AP_Missile6* AP_Missile6::create( CCPoint t_sp, KSCumberBase* cb, int t_type )
 {
 	AP_Missile6* t_m6 = new AP_Missile6();
-	t_m6->myInit(t_sp, t_type);
+	t_m6->myInit(t_sp, cb, t_type);
 	t_m6->autorelease();
 	return t_m6;
 }
@@ -407,8 +407,8 @@ void AP_Missile6::stopMyAction()
 		beamImg = 0;
 	}
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -417,8 +417,8 @@ void AP_Missile6::removeEffect()
 {
 	unschedule(schedule_selector(AP_Missile6::myAction));
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile6::selfRemove));
@@ -485,8 +485,9 @@ void AP_Missile6::myAction()
 	}
 }
 
-void AP_Missile6::myInit( CCPoint t_sp, int t_type )
+void AP_Missile6::myInit( CCPoint t_sp, KSCumberBase* cb, int t_type )
 {
+	m_cumber = cb;
 	type = t_type;
 	startPosition = t_sp;
 
@@ -510,10 +511,10 @@ void AP_Missile6::myInit( CCPoint t_sp, int t_type )
 	startMyAction();
 }
 
-AP_Missile9* AP_Missile9::create( int t_keepFrame, int t_shootFrame, float t_distance, CCSize mSize, int t_type )
+AP_Missile9* AP_Missile9::create( int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize mSize, int t_type )
 {
 	AP_Missile9* t_m9 = new AP_Missile9();
-	t_m9->myInit(t_keepFrame, t_shootFrame, t_distance, mSize, t_type);
+	t_m9->myInit(t_keepFrame, cb, t_shootFrame, t_distance, mSize, t_type);
 	t_m9->autorelease();
 	return t_m9;
 }
@@ -523,8 +524,8 @@ void AP_Missile9::stopMyAction()
 	AudioEngine::sharedInstance()->stopEffect("sound_rock_falling.mp3");
 	unschedule(schedule_selector(AP_Missile9::myAction));
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -536,8 +537,8 @@ void AP_Missile9::removeEffect()
 		AudioEngine::sharedInstance()->stopEffect("sound_rock_falling.mp3");
 		unschedule(schedule_selector(AP_Missile9::myAction));
 
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
+		m_cumber->setAttackPattern(nullptr);
+		myGD->communication("CP_onPatternEndOf", m_cumber);
 
 		CCDelayTime* t_delay = CCDelayTime::create(1.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile9::selfRemove));
@@ -575,8 +576,9 @@ void AP_Missile9::myAction()
 	}
 }
 
-void AP_Missile9::myInit( int t_keepFrame, int t_shootFrame, float t_distance, CCSize t_mSize, int t_type )
+void AP_Missile9::myInit( int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize t_mSize, int t_type )
 {
+	m_cumber = cb;
 	keepFrame = t_keepFrame;
 	shootFrame = t_shootFrame;
 	distance = t_distance;
@@ -633,10 +635,10 @@ void AP_Missile11::myInit( CCPoint t_sp, int t_type, float t_speed, IntSize t_mS
 	stopMyAction();
 }
 
-AP_Missile12* AP_Missile12::create( CCPoint t_sp, int t_type, int t_targetingFrame, int t_shootFrame )
+AP_Missile12* AP_Missile12::create( CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame )
 {
 	AP_Missile12* t_m12 = new AP_Missile12();
-	t_m12->myInit(t_sp, t_type, t_targetingFrame, t_shootFrame);
+	t_m12->myInit(t_sp, cb, t_type, t_targetingFrame, t_shootFrame);
 	t_m12->autorelease();
 	return t_m12;
 }
@@ -647,8 +649,8 @@ void AP_Missile12::stopMyAction()
 
 
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 	startSelfRemoveSchedule();
 	fadeFromToDuration.init(255, 0, 1.f);
 	schedule(schedule_selector(ThisClassType::hidingAnimation));
@@ -787,8 +789,9 @@ void AP_Missile12::myAction()
 	}
 }
 
-void AP_Missile12::myInit( CCPoint t_sp, int t_type, int t_targetingFrame, int t_shootFrame )
+void AP_Missile12::myInit( CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame )
 {
+	m_cumber = cb;
 	type = t_type;
 	targetingFrame = t_targetingFrame;
 	shootFrame = t_shootFrame;
@@ -900,10 +903,10 @@ void AP_Missile14::myInit( CCPoint t_sp, int t_type, float t_speed, int t_tmCnt,
 	stopMyAction();
 }
 
-AP_Missile15* AP_Missile15::create( CCPoint t_sp, int t_tmCnt, int t_burnFrame )
+AP_Missile15* AP_Missile15::create( CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_burnFrame )
 {
 	AP_Missile15* t_m15 = new AP_Missile15();
-	t_m15->myInit(t_sp, t_tmCnt, t_burnFrame);
+	t_m15->myInit(t_sp, cb, t_tmCnt, t_burnFrame);
 	t_m15->autorelease();
 	return t_m15;
 }
@@ -916,8 +919,8 @@ void AP_Missile15::stopMyAction()
 		unschedule(schedule_selector(AP_Missile15::myAction));
 		myParticle->setDuration(0);
 
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
+		m_cumber->setAttackPattern(nullptr);
+		myGD->communication("CP_onPatternEndOf", m_cumber);
 
 		CCDelayTime* t_delay = CCDelayTime::create(1.2f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile15::particleRemove));
@@ -938,8 +941,8 @@ void AP_Missile15::removeEffect()
 		unschedule(schedule_selector(AP_Missile15::myAction));
 		myParticle->setDuration(0);
 
-		myGD->communication("MP_endIngActionAP");
-		myGD->communication("CP_onPatternEnd");
+		m_cumber->setAttackPattern(nullptr);
+		myGD->communication("CP_onPatternEndOf", m_cumber);
 
 		CCDelayTime* t_delay = CCDelayTime::create(1.2f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile15::selfRemove));
@@ -1076,8 +1079,9 @@ void AP_Missile15::initParticle()
 	addChild(myParticle);
 }
 
-void AP_Missile15::myInit( CCPoint t_sp, int t_tmCnt, int t_burnFrame )
+void AP_Missile15::myInit( CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_burnFrame )
 {
+	m_cumber = cb;
 	is_remove_called = false;
 
 	mType = 1;
@@ -1245,96 +1249,96 @@ void AP_Missile21::myInit( CCPoint t_sp, int tf, int sc )
 	startSelfRemoveSchedule();
 }
 
-AP_Missile23* AP_Missile23::create( int t_frame )
+//AP_Missile23* AP_Missile23::create( int t_frame )
+//{
+	//AP_Missile23* t_m23 = new AP_Missile23();
+	//t_m23->myInit(t_frame);
+	//t_m23->autorelease();
+	//return t_m23;
+//}
+
+//void AP_Missile23::updateCobweb()
+//{
+	//if(!is_stop)
+		//ingFrame = 0;
+//}
+
+//void AP_Missile23::removeCobweb()
+//{
+	//cobwebImg->removeFromParent();
+	//startSelfRemoveSchedule();
+//}
+
+//void AP_Missile23::stopFrame()
+//{
+	//is_stop = true;
+	//unschedule(schedule_selector(AP_Missile23::framing));
+
+	//cobwebImg->stopAllActions();
+
+	//CCScaleTo* t_scale = CCScaleTo::create(0.3, 0.f);
+	//CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile23::removeCobweb));
+	//CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+	//cobwebImg->runAction(t_seq);
+
+	//myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
+	//myGD->communication("MP_deleteKeepAP23");
+//}
+
+//void AP_Missile23::myInit( int t_frame )
+//{
+	//is_stop = false;
+
+	//slowFrame = t_frame;
+
+
+	//CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	//CCBReader* reader = new CCBReader(nodeLoader);
+	//cobwebImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
+	//reader->release();
+
+	//cobwebImg->setPosition(ccp(160,215));
+	//cobwebImg->setScale(0.f);
+
+	//addChild(cobwebImg);
+	//m_scaleFromTo.init(0.0f, 1.0f, 0.3f);
+	////		CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.f);
+	////		cobwebImg->runAction(t_scale); // 나중에 수동으로 구현해야함.
+
+	//myGD->setAlphaSpeed(myGD->getAlphaSpeed()-0.5f);
+
+	//startFrame();
+//}
+
+//void AP_Missile23::startFrame()
+//{
+	//ingFrame = 0;
+	//schedule(schedule_selector(AP_Missile23::framing));
+//}
+
+//void AP_Missile23::framing()
+//{
+	//ingFrame++;
+
+	//m_scaleFromTo.step(1/60.f);
+	//cobwebImg->setScale(m_scaleFromTo.getValue());
+	//if(ingFrame >= slowFrame)
+	//{
+		//stopFrame();
+	//}
+//}
+
+
+
+SightOutAttack* SightOutAttack::create( int t_frame, KSCumberBase* cb )
 {
-	AP_Missile23* t_m23 = new AP_Missile23();
-	t_m23->myInit(t_frame);
-	t_m23->autorelease();
-	return t_m23;
-}
-
-void AP_Missile23::updateCobweb()
-{
-	if(!is_stop)
-		ingFrame = 0;
-}
-
-void AP_Missile23::removeCobweb()
-{
-	cobwebImg->removeFromParent();
-	startSelfRemoveSchedule();
-}
-
-void AP_Missile23::stopFrame()
-{
-	is_stop = true;
-	unschedule(schedule_selector(AP_Missile23::framing));
-
-	cobwebImg->stopAllActions();
-
-	CCScaleTo* t_scale = CCScaleTo::create(0.3, 0.f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile23::removeCobweb));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-	cobwebImg->runAction(t_seq);
-
-	myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
-	myGD->communication("MP_deleteKeepAP23");
-}
-
-void AP_Missile23::myInit( int t_frame )
-{
-	is_stop = false;
-
-	slowFrame = t_frame;
-
-
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	cobwebImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
-	reader->release();
-
-	cobwebImg->setPosition(ccp(160,215));
-	cobwebImg->setScale(0.f);
-
-	addChild(cobwebImg);
-	m_scaleFromTo.init(0.0f, 1.0f, 0.3f);
-	//		CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.f);
-	//		cobwebImg->runAction(t_scale); // 나중에 수동으로 구현해야함.
-
-	myGD->setAlphaSpeed(myGD->getAlphaSpeed()-0.5f);
-
-	startFrame();
-}
-
-void AP_Missile23::startFrame()
-{
-	ingFrame = 0;
-	schedule(schedule_selector(AP_Missile23::framing));
-}
-
-void AP_Missile23::framing()
-{
-	ingFrame++;
-
-	m_scaleFromTo.step(1/60.f);
-	cobwebImg->setScale(m_scaleFromTo.getValue());
-	if(ingFrame >= slowFrame)
-	{
-		stopFrame();
-	}
-}
-
-
-
-AP_Missile24* AP_Missile24::create( int t_frame )
-{
-	AP_Missile24* t_m24 = new AP_Missile24();
-	t_m24->myInit(t_frame);
+	SightOutAttack* t_m24 = new SightOutAttack();
+	t_m24->myInit(t_frame, cb);
 	t_m24->autorelease();
 	return t_m24;
 }
 
-void AP_Missile24::updateSightOut()
+void SightOutAttack::updateSightOut()
 {
 	ingFrame = 0;
 
@@ -1344,13 +1348,13 @@ void AP_Missile24::updateSightOut()
 	t_so->startAction();
 }
 
-void AP_Missile24::startFrame()
+void SightOutAttack::startFrame()
 {
 	ingFrame = 0;
-	schedule(schedule_selector(AP_Missile24::framing));
+	schedule(schedule_selector(SightOutAttack::framing));
 }
 
-void AP_Missile24::framing()
+void SightOutAttack::framing()
 {
 	ingFrame++;
 
@@ -1360,18 +1364,19 @@ void AP_Missile24::framing()
 	}
 }
 
-void AP_Missile24::stopFrame()
+void SightOutAttack::stopFrame()
 {
-	unschedule(schedule_selector(AP_Missile24::framing));
+	unschedule(schedule_selector(SightOutAttack::framing));
 
-	myGD->communication("MP_deleteKeepAP24");
+	m_cumber->setSightOutAttack(nullptr);
 	startSelfRemoveSchedule();
 }
 
-void AP_Missile24::myInit( int t_frame )
+void SightOutAttack::myInit( int t_frame, KSCumberBase* cb )
 {
 	sightOutFrame = t_frame;
 
+	m_cumber = cb;
 	SightOut* t_so = SightOut::create(sightOutFrame);
 	t_so->setPosition(ccp(160,215));
 	addChild(t_so);
@@ -1380,34 +1385,34 @@ void AP_Missile24::myInit( int t_frame )
 	startFrame();
 }
 
-AP_Missile26* AP_Missile26::create( int t_frame )
+FreezeAttack* FreezeAttack::create( int t_frame, KSCumberBase* cb )
 {
-	AP_Missile26* t_m26 = new AP_Missile26();
-	t_m26->myInit(t_frame);
+	FreezeAttack* t_m26 = new FreezeAttack();
+	t_m26->myInit(t_frame, cb);
 	t_m26->autorelease();
 	return t_m26;
 }
 
-void AP_Missile26::updateFreeze()
+void FreezeAttack::updateFreeze()
 {
 	myGD->communication("Jack_createFog");
 	ingFrame = 0;
 }
 
-void AP_Missile26::stopFrame()
+void FreezeAttack::stopFrame()
 {
-	unschedule(schedule_selector(AP_Missile26::framing));
-	myGD->communication("MP_deleteKeepAP26");
+	unschedule(schedule_selector(FreezeAttack::framing));
+	m_cumber->setFreezeAttack(nullptr);
 	removeFromParentAndCleanup(true);
 }
 
-void AP_Missile26::startFrame()
+void FreezeAttack::startFrame()
 {
 	ingFrame = 0;
-	schedule(schedule_selector(AP_Missile26::framing));
+	schedule(schedule_selector(FreezeAttack::framing));
 }
 
-void AP_Missile26::framing()
+void FreezeAttack::framing()
 {
 	ingFrame++;
 
@@ -1418,10 +1423,11 @@ void AP_Missile26::framing()
 	}
 }
 
-void AP_Missile26::myInit( int t_frame )
+void FreezeAttack::myInit( int t_frame, KSCumberBase* cb )
 {
 	freezingFrame = t_frame;
 
+	m_cumber = cb;
 	myGD->communication("Jack_createFog");
 	startFrame();
 }
@@ -1440,33 +1446,33 @@ void AP_Missile32::myInit()
 	startSelfRemoveSchedule();
 }
 
-AP_Missile33* AP_Missile33::create( int t_frame )
+ChaosAttack* ChaosAttack::create( int t_frame, KSCumberBase* cb )
 {
-	AP_Missile33* t_m33 = new AP_Missile33();
-	t_m33->myInit(t_frame);
+	ChaosAttack* t_m33 = new ChaosAttack();
+	t_m33->myInit(t_frame, cb);
 	t_m33->autorelease();
 	return t_m33;
 }
 
-void AP_Missile33::updateChaos()
+void ChaosAttack::updateChaos()
 {
 	ingFrame = 0;
 }
 
-void AP_Missile33::stopFrame()
+void ChaosAttack::stopFrame()
 {
-	unschedule(schedule_selector(AP_Missile33::framing));
-	myGD->communication("MP_deleteKeepAP33");
+	unschedule(schedule_selector(ChaosAttack::framing));
+	m_cumber->setChaosAttack(nullptr);
 	startSelfRemoveSchedule();
 }
 
-void AP_Missile33::startFrame()
+void ChaosAttack::startFrame()
 {
 	ingFrame = 0;
-	schedule(schedule_selector(AP_Missile33::framing));
+	schedule(schedule_selector(ChaosAttack::framing));
 }
 
-void AP_Missile33::framing()
+void ChaosAttack::framing()
 {
 	ingFrame++;
 
@@ -1477,10 +1483,11 @@ void AP_Missile33::framing()
 	}
 }
 
-void AP_Missile33::myInit( int t_frame )
+void ChaosAttack::myInit( int t_frame, KSCumberBase* cb )
 {
 	chaosFrame = t_frame;
 
+	m_cumber = cb;
 	myGD->communication("Jack_createChaos");
 	startFrame();
 }
@@ -1495,6 +1502,7 @@ void KSAttackPattern1::selfRemoveSchedule()
 
 void KSAttackPattern1::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	m_frameCnt = 0;
 	m_position = t_sp;
 
@@ -1556,8 +1564,8 @@ void KSAttackPattern1::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -1572,6 +1580,7 @@ void KSAttackPattern2::selfRemoveSchedule()
 
 void KSAttackPattern2::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -1642,8 +1651,8 @@ void KSAttackPattern2::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -1658,6 +1667,7 @@ void KSAttackPattern3::selfRemoveSchedule()
 
 void KSAttackPattern3::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -1706,8 +1716,8 @@ void KSAttackPattern3::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -1722,6 +1732,7 @@ void KSAttackPattern4::selfRemoveSchedule()
 
 void KSAttackPattern4::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -1750,8 +1761,8 @@ void KSAttackPattern4::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -1798,6 +1809,7 @@ void KSAttackPattern5::selfRemoveSchedule()
 
 void KSAttackPattern5::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -1826,8 +1838,8 @@ void KSAttackPattern5::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -1867,6 +1879,7 @@ void KSAttackPattern5::update( float dt )
 
 void KSAttackPattern6::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -1893,8 +1906,8 @@ void KSAttackPattern6::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -1942,6 +1955,7 @@ void KSAttackPattern7::selfRemoveSchedule()
 
 void KSAttackPattern7::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -1972,8 +1986,8 @@ void KSAttackPattern7::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -2037,6 +2051,7 @@ void KSAttackPattern8::selfRemoveSchedule()
 
 void KSAttackPattern8::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -2065,8 +2080,8 @@ void KSAttackPattern8::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -2125,8 +2140,8 @@ void KSAttackPattern9::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -2156,6 +2171,7 @@ void KSAttackPattern9::selfRemoveSchedule()
 
 void KSAttackPattern9::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	isRemoveEffect = false;
 	//		myGD->communication("EP_startCrashAction");
 
@@ -2225,8 +2241,8 @@ void KSTargetAttackPattern1::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -2315,8 +2331,8 @@ void KSTargetAttackPattern2::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -2417,8 +2433,8 @@ void KSTargetAttackPattern3::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -2522,8 +2538,8 @@ void KSTargetAttackPattern4::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -2605,7 +2621,7 @@ void KSTargetAttackPattern5::update( float dt )
 	AP_Missile11* t_m11 = AP_Missile11::create(mainCumberPosition, 11, speed, IntSize(round(crashsize),round(crashsize)));
 	addChild(t_m11);
 
-	//		myGD->communication("CP_onPatternEnd");
+	//		myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	stopMyAction();
 }
@@ -2614,8 +2630,8 @@ void KSTargetAttackPattern5::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -2636,15 +2652,15 @@ void KSTargetAttackPattern6::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
 
 void KSTargetAttackPattern6::update( float dt )
 {
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+	IntPoint mainCumberPoint = myGD->getMainCumberPoint(m_cumber);
 	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 	AP_Missile14* t_m14 = AP_Missile14::create(mainCumberPosition, 14, speed, number, IntSize(round(crashsize),round(crashsize)));
 	addChild(t_m14);
@@ -2657,8 +2673,8 @@ void KSTargetAttackPattern7::stopMyAction()
 {
 	unschedule(schedule_selector(ThisClassType::myAction));
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 
 
@@ -2977,8 +2993,8 @@ void KSTargetAttackPattern9::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3008,8 +3024,8 @@ void KSTargetAttackPattern12::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
 	//		m_parentMissile->removeFromParentAndCleanup(true);
@@ -3054,8 +3070,8 @@ void KSTargetAttackPattern13::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
 	//		m_parentMissile->removeFromParentAndCleanup(true);
@@ -3084,6 +3100,7 @@ void KSTargetAttackPattern13::update( float dt )
 
 void KSSpecialAttackPattern1::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -3098,8 +3115,8 @@ void KSSpecialAttackPattern1::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3125,8 +3142,8 @@ void KSSpecialAttackPattern2::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3149,8 +3166,8 @@ void KSSpecialAttackPattern3::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3173,8 +3190,8 @@ void KSSpecialAttackPattern4::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3202,8 +3219,8 @@ void KSSpecialAttackPattern5::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3221,8 +3238,8 @@ void KSSpecialAttackPattern6::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3245,8 +3262,8 @@ void KSSpecialAttackPattern7::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3269,8 +3286,8 @@ void KSSpecialAttackPattern8::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3293,8 +3310,8 @@ void KSSpecialAttackPattern9::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3306,6 +3323,7 @@ void KSSpecialAttackPattern9::update( float dt )
 
 void KSSpecialAttackPattern10::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -3317,8 +3335,8 @@ void KSSpecialAttackPattern10::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3337,8 +3355,8 @@ void KSSpecialAttackPattern11::stopMyAction()
 		beamImg = 0;
 	}
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3347,8 +3365,8 @@ void KSSpecialAttackPattern11::removeEffect()
 {
 	unschedule(schedule_selector(ThisClassType::myAction));
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ThisClassType::selfRemove));
@@ -3412,6 +3430,7 @@ void KSSpecialAttackPattern11::startMyAction()
 
 void KSSpecialAttackPattern11::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+	m_cumber = cb;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -3465,8 +3484,8 @@ void KSSpecialAttackPattern12::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3496,8 +3515,8 @@ void KSSpecialAttackPattern13::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3520,8 +3539,8 @@ void KSSpecialAttackPattern14::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3544,8 +3563,8 @@ void KSSpecialAttackPattern15::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3568,8 +3587,8 @@ void KSSpecialAttackPattern16::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3600,8 +3619,8 @@ void KSSpecialAttackPattern17::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3627,8 +3646,8 @@ void KSSpecialAttackPattern18::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3663,8 +3682,8 @@ void KSSpecialAttackPattern19::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3687,8 +3706,8 @@ void KSSpecialAttackPattern20::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3711,8 +3730,8 @@ void KSSpecialAttackPattern21::stopMyAction()
 {
 	unscheduleUpdate();
 
-	myGD->communication("MP_endIngActionAP");
-	myGD->communication("CP_onPatternEnd");
+	m_cumber->setAttackPattern(nullptr);
+	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -3722,27 +3741,27 @@ void KSSpecialAttackPattern21::update( float dt )
 
 }
 
-Cobweb* Cobweb::create( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
+CobWeb* CobWeb::create( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
-	Cobweb* t_m23 = new Cobweb();
+	CobWeb* t_m23 = new CobWeb();
 	t_m23->myInit(t_sp, cb, patternData);
 	t_m23->autorelease();
 	return t_m23;
 }
 
-void Cobweb::updateCobweb()
+void CobWeb::updateCobWeb()
 {
 	if(!is_stop)
 		ingFrame = 0;
 }
 
-void Cobweb::startFrame()
+void CobWeb::startFrame()
 {
 	ingFrame = 0;
-	schedule(schedule_selector(Cobweb::framing));
+	schedule(schedule_selector(CobWeb::framing));
 }
 
-void Cobweb::framing()
+void CobWeb::framing()
 {
 	ingFrame++;
 
@@ -3798,21 +3817,21 @@ void Cobweb::framing()
 	}
 }
 
-void Cobweb::removeCobweb()
+void CobWeb::removeCobWeb()
 {
 	cobwebImg->removeFromParent();
 	startSelfRemoveSchedule();
 }
 
-void Cobweb::stopFrame()
+void CobWeb::stopFrame()
 {
 	is_stop = true;
-	unschedule(schedule_selector(Cobweb::framing));
+	unschedule(schedule_selector(CobWeb::framing));
 
 	cobwebImg->stopAllActions();
 
 	CCScaleTo* t_scale = CCScaleTo::create(0.3, 0.f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Cobweb::removeCobweb));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CobWeb::removeCobWeb));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 	cobwebImg->runAction(t_seq);
 
@@ -3820,13 +3839,13 @@ void Cobweb::stopFrame()
 	{
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
 	}
-	myGD->communication("MP_deleteKeepAP23");
+	m_cumber->setCobWebAttack(nullptr);
 	state = kFrameTerminated;
 }
 
-void Cobweb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
+void CobWeb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
-	cumber = cb;
+	m_cumber = cb;
 	state = kElse;
 	is_stop = false;
 	Json::Reader reader;
@@ -3840,7 +3859,7 @@ void Cobweb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternD
 	cobwebImg = dynamic_cast<CCSprite*>(reader1->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
 	reader1->release();
 
-	cobwebImg->setPosition(cumber->getPosition());
+	cobwebImg->setPosition(m_cumber->getPosition());
 	cobwebImg->setScale(0.f);
 
 	addChild(cobwebImg);
