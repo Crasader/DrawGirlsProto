@@ -100,7 +100,7 @@ public:
 
 
 	
-	void createSubCumberReplication(CCPoint s_p, CCObject* sender, SEL_CallFuncO d_startMoving);
+	//void createSubCumberReplication(CCPoint s_p, CCObject* sender, SEL_CallFuncO d_startMoving);
 	
 	void explosion(CCPoint bombPosition, ccColor4F t_color, float t_angle);
 	
@@ -124,7 +124,7 @@ public:
 	
 	virtual ~MissileParent()
 	{
-		chargeArray->release();
+		//chargeArray->release();
 		tickingArray->release();
 	}
 	
@@ -148,7 +148,7 @@ private:
 	//FreezeAttack* keepAP26; // 얼음
 	//ChaosAttack* keepAP33; // 반대 컨
 	//SightOutAttack* keepAP24; // 태양권
-	CCArray* chargeArray;
+	//CCArray* chargeArray;
 	CCArray* tickingArray;
 	
 	CCSpriteBatchNode* explosion_node;
