@@ -794,7 +794,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			auto func = [=](CCObject* cb)
 			{
 				int totalFrame = patternData.get("totalframe", 60*3).asInt();
-				IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+				IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)cb);
 				CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 				AP_Missile15* t_m15 = AP_Missile15::create(mainCumberPosition, (KSCumberBase*)cb, 10, totalFrame);
 				addChild(t_m15);
@@ -818,7 +818,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				int shootFrame = patternData.get("shootframe", 180).asInt() / 2.f;
 				int random_value = rand()%2 + 1;
 				
-				IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+				IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)cb);
 				CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 				AP_Missile12* t_m12 = AP_Missile12::create(mainCumberPosition, (KSCumberBase*)cb, random_value, targetingFrame, shootFrame);
 				addChild(t_m12);

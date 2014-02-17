@@ -106,7 +106,7 @@ void KSTargetAttackPattern8::update(float dt)
 			for(auto& gun : pan)
 			{
 				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
-				CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
+				CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint(this));
 				float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
 				
 				float deg = rad2Deg(rad);
@@ -146,14 +146,14 @@ void KSTargetAttackPattern8::update(float dt)
 					
 					if(m_havePath)
 					{
-						MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(ip2ccp(myGD->getMainCumberPoint()), gun.degree.getValue(), gun.bulletSpeed,
+						MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
 																					  imgFileName.c_str(), t_mSize,
 																					  m_path, m_isCurve ? MathmaticalMissileUnit::CURVE : MathmaticalMissileUnit::RIGHTLINE);
 						batchNode->addChild(t_mu);
 					}
 					else
 					{
-						MissileUnit* t_mu = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint()), gun.degree.getValue(), gun.bulletSpeed,
+						MissileUnit* t_mu = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
 																																					imgFileName.c_str(), t_mSize,0, 0);
 						batchNode->addChild(t_mu);
 					}
@@ -219,7 +219,7 @@ void KSTargetAttackPattern8::initGuns()
 		for(auto& gun : pan)
 		{
 			CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
-			CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint());
+			CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint(m_cumber));
 			float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
 
 			float deg = rad2Deg(rad);
@@ -2660,7 +2660,7 @@ void KSTargetAttackPattern6::stopMyAction()
 
 void KSTargetAttackPattern6::update( float dt )
 {
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+	IntPoint mainCumberPoint = myGD->getMainCumberPoint(m_cumber);
 	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 	AP_Missile14* t_m14 = AP_Missile14::create(mainCumberPosition, 14, speed, number, IntSize(round(crashsize),round(crashsize)));
 	addChild(t_m14);

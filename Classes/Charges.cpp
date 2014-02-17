@@ -626,7 +626,7 @@ void CrashChargeNodeLambda::charging()
 {
 	charge_cnt++;
 
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+	IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)real_target);
 	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 
 	setPosition(ccpSub(mainCumberPosition, create_position));
@@ -717,7 +717,7 @@ void CrashChargeNode::charging()
 {
 	charge_cnt++;
 
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint();
+	IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)real_target);
 	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
 
 	setPosition(ccpSub(mainCumberPosition, create_position));

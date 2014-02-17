@@ -2620,7 +2620,7 @@ void KSCumberBase::setSlience( bool s )
 void KSCumberBase::caughtAnimation()
 {
 	myGD->communication("UI_catchSubCumber");
-	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint());
+	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(this));
 }
 
 bool KSCumberBase::bossIsClosed()
