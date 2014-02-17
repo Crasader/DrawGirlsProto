@@ -62,7 +62,7 @@ private:
 		pathImg->setScaleY(0.5f);
 		addChild(pathImg);
 		
-		CCLog("addPath x : %d , y : %d, direction : %d, %d", myPointVector.origin.x, myPointVector.origin.y, myPointVector.distance.dx, myPointVector.distance.dy);
+//		CCLog("addPath x : %d , y : %d, direction : %d, %d", myPointVector.origin.x, myPointVector.origin.y, myPointVector.distance.dx, myPointVector.distance.dy);
 		
 		setPosition(ccp((myPointVector.origin.x-1)*pixelSize+1, (myPointVector.origin.y-1)*pixelSize+1));
 //		setPosition(myGD->getCommunicationNode("Jack_getJack")->getPosition());

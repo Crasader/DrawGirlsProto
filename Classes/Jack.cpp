@@ -681,7 +681,7 @@ void Jack::moveTest()
 			if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 				myGD->communication("PM_checkBeforeNewline", afterPoint);
 			myGD->mapState[afterPoint.x][afterPoint.y] = mapNewline;
-			CCLog("draw after point x : %d, y : %d", afterPoint.x, afterPoint.y);
+//			CCLog("draw after point x : %d, y : %d", afterPoint.x, afterPoint.y);
 		}
 		else if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver) && myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
 		{
@@ -802,7 +802,7 @@ void Jack::moveTest()
 				check_turn_cnt = 0;
 				IntPoint a_jp = afterPoint;
 				setPosition(ccp((a_jp.x-1)*pixelSize+1, (a_jp.y-1)*pixelSize+1));
-				CCLog("change direction x : %d , y : %d , before : %d , after : %d", a_jp.x, a_jp.y, direction, afterDirection);
+//				CCLog("change direction x : %d , y : %d , before : %d , after : %d", a_jp.x, a_jp.y, direction, afterDirection);
 //				myGD->communication("PM_lastPathRemove");
 				IntVector t_vector = IntVector::directionVector(afterDirection);
 				IntPointVector t_pv = IntPointVector(afterPoint.x, afterPoint.y, t_vector.dx, t_vector.dy);

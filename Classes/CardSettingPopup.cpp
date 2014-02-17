@@ -522,7 +522,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 		{
 			for(int i=1;i<=3;i++)
 			{
-				int card_number = getSGDisHasGottenCards(found_stage1, i);
+				int card_number = mySGD->isHasGottenCards(found_stage1, i);
 				CCPoint card_position = ccp(32.f + (i-1)*(68.f+1.f), 43.f);
 				if(card_number > 0)
 				{
@@ -532,7 +532,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
 					n_card->setScale(0.85f);
 					n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
-					n_card->setGray(getCardDurability(card_number) <= 0);
+					n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
 					n_no->addChild(n_card, -1);
 					
 					CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
@@ -542,7 +542,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
 					s_card->setScale(0.85f);
 					s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
-					if(getCardDurability(card_number) <= 0)
+					if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
 						s_card->setColor(ccc3(60, 60, 60));
 					else
 						s_card->setColor(ccGRAY);
@@ -556,8 +556,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					cell->addChild(t_card_menu);
 					t_card_menu->setTouchPriority(-180-3);
 					
-					CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", getCardDurability(card_number),
-																							 getCardMaxDurability(card_number))->getCString(),
+					CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
+																							 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
 																  mySGD->getFont().c_str(), 9);
 					t_durability->setAnchorPoint(ccp(0.5f,0.5f));
 					t_durability->setColor(ccBLACK);
@@ -574,7 +574,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 					mini_rank->addChild(t_rank);
 					
-					CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", getCardLevel(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+					CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, card_number))->getCString(), mySGD->getFont().c_str(), 8);
 					t_card_level_label->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(17,69))));
 					cell->addChild(t_card_level_label);
 					
@@ -632,7 +632,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			{
 				for(int i=1;i<=3;i++)
 				{
-					int card_number = getSGDisHasGottenCards(found_stage1, i);
+					int card_number = mySGD->isHasGottenCards(found_stage1, i);
 					CCPoint card_position = ccp(32.f + 3*(68.f+1.f) + (i-1)*(68.f+1.f), 43.f);
 					if(card_number > 0)
 					{
@@ -642,7 +642,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 																													  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
 						n_card->setScale(0.85f);
 						n_card->setPosition(ccp(n_no->getContentSize().width/2.f, n_no->getContentSize().height/2.f));
-						n_card->setGray(getCardDurability(card_number) <= 0);
+						n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
 						n_no->addChild(n_card, -1);
 						
 						CCSprite* s_no = CCSprite::create("cardsetting_noimg.png");
@@ -652,7 +652,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 																													  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
 						s_card->setScale(0.85f);
 						s_card->setPosition(ccp(s_no->getContentSize().width/2.f, s_no->getContentSize().height/2.f));
-						if(getCardDurability(card_number) <= 0)
+						if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
 							s_card->setColor(ccc3(60, 60, 60));
 						else
 							s_card->setColor(ccGRAY);
@@ -666,8 +666,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 						cell->addChild(t_card_menu);
 						t_card_menu->setTouchPriority(-180-3);
 						
-						CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", getCardDurability(card_number),
-																								 getCardMaxDurability(card_number))->getCString(),
+						CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
+																								 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
 																	  mySGD->getFont().c_str(), 9);
 						t_durability->setAnchorPoint(ccp(0.5f,0.5f));
 						t_durability->setColor(ccBLACK);
@@ -684,7 +684,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 						t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 						mini_rank->addChild(t_rank);
 						
-						CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", getCardLevel(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+						CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, card_number))->getCString(), mySGD->getFont().c_str(), 8);
 						t_card_level_label->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(17,69))));
 						cell->addChild(t_card_level_label);
 						
@@ -718,7 +718,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 		for(int i=idx*6;i<idx*6+6 && i<mySGD->getHasGottenCardsSize();i++)
 		{
 			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-			int card_durability = getCardDurability(card_number);
+			int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
 			CCPoint card_position = ccp(32.f + (i-idx*6)*(68.f+1.f), 43.f);
 			
 			CCSprite* n_no = CCSprite::create("cardsetting_noimg.png");
@@ -752,7 +752,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			t_card_menu->setTouchPriority(-180-3);
 			
 			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", card_durability,
-																					 getCardMaxDurability(card_number))->getCString(),
+																					 myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number))->getCString(),
 														  mySGD->getFont().c_str(), 9);
 			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
 			t_durability->setColor(ccBLACK);
@@ -769,7 +769,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			t_rank->setPosition(ccp(mini_rank->getContentSize().width/2.f, mini_rank->getContentSize().height/2.f-1));
 			mini_rank->addChild(t_rank);
 			
-			CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", getCardLevel(card_number))->getCString(), mySGD->getFont().c_str(), 8);
+			CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, card_number))->getCString(), mySGD->getFont().c_str(), 8);
 			t_card_level_label->setPosition(ccpAdd(card_position, ccpAdd(no_minus_half_size, ccp(17,69))));
 			cell->addChild(t_card_level_label);
 			
@@ -842,89 +842,4 @@ void CardSettingPopup::registerWithTouchDispatcher ()
 {
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 	pDispatcher->addTargetedDelegate(this, -170, true);
-}
-
-int CardSettingPopup::getCardDurability(int t_card_number)
-{
-	map<int, int>::iterator iter = save_DSH_cardDurability_int1.find(t_card_number);
-	if(iter == save_DSH_cardDurability_int1.end())
-	{
-		save_DSH_cardDurability_int1[t_card_number] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number);
-		return save_DSH_cardDurability_int1[t_card_number];
-	}
-	else
-		return iter->second;
-}
-
-int CardSettingPopup::getCardMaxDurability(int t_card_number)
-{
-	map<int, int>::iterator iter = save_DSH_cardMaxDurability_int1.find(t_card_number);
-	if(iter == save_DSH_cardMaxDurability_int1.end())
-	{
-		save_DSH_cardMaxDurability_int1[t_card_number] = myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, t_card_number);
-		return save_DSH_cardMaxDurability_int1[t_card_number];
-	}
-	else
-		return iter->second;
-}
-
-//int CardSettingPopup::getCardRank(int t_card_number)
-//{
-//	map<int, int>::iterator iter = save_SDS_CI_rank_int1.find(t_card_number);
-//	if(iter == save_SDS_CI_rank_int1.end())
-//	{
-//		save_SDS_CI_rank_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_rank_i, t_card_number);
-//		return save_SDS_CI_rank_int1[t_card_number];
-//	}
-//	else
-//		return iter->second;
-//}
-//
-//int CardSettingPopup::getCardStage(int t_card_number)
-//{
-//	map<int, int>::iterator iter = save_SDS_CI_stage_int1.find(t_card_number);
-//	if(iter == save_SDS_CI_stage_int1.end())
-//	{
-//		save_SDS_CI_stage_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_stage_i, t_card_number);
-//		return save_SDS_CI_stage_int1[t_card_number];
-//	}
-//	else
-//		return iter->second;
-//}
-//
-//int CardSettingPopup::getCardGrade(int t_card_number)
-//{
-//	map<int, int>::iterator iter = save_SDS_CI_grade_int1.find(t_card_number);
-//	if(iter == save_SDS_CI_grade_int1.end())
-//	{
-//		save_SDS_CI_grade_int1[t_card_number] = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
-//		return save_SDS_CI_grade_int1[t_card_number];
-//	}
-//	else
-//		return iter->second;
-//}
-
-int CardSettingPopup::getCardLevel(int t_card_number)
-{
-	map<int, int>::iterator iter = save_DSH_cardLevel_int1.find(t_card_number);
-	if(iter == save_DSH_cardLevel_int1.end())
-	{
-		save_DSH_cardLevel_int1[t_card_number] = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, t_card_number);
-		return save_DSH_cardLevel_int1[t_card_number];
-	}
-	else
-		return iter->second;
-}
-
-int CardSettingPopup::getSGDisHasGottenCards(int t_stage, int t_grade)
-{
-	string t_key = CCString::createWithFormat("%d %d", t_stage, t_grade)->getCString();
-	map<string, int>::iterator iter = save_SGD_isHasGottenCards.find(t_key);
-	if(iter == save_SGD_isHasGottenCards.end())
-	{
-		save_SGD_isHasGottenCards[t_key] = mySGD->isHasGottenCards(t_stage, t_grade);
-		return save_SGD_isHasGottenCards[t_key];
-	}
-	else
-		return iter->second;
 }
