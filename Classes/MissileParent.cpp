@@ -47,8 +47,8 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 		if(jm_type%10 >= 0 && jm_type%10 <= 3)
 		{
 			CCLog("base JackMissile");
-			CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-			int cumberCnt = 1 + subCumberArray->count();
+			vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
+			int cumberCnt = 1 + subCumberArray.size();
 			int random_value;
 			
 			for(int i=0;i<cmCnt;i++)
@@ -70,7 +70,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 					}
 					else
 					{
-						JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), jm_type, missile_speed, missile_position);
+						JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray[(random_value-1)], jm_type, missile_speed, missile_position);
 						jack_missile_node->addChild(t_jm);
 						t_jm->startMoving();
 					}
@@ -161,11 +161,12 @@ int MissileParent::getJackMissileCnt()
 
 void MissileParent::subOneDie()
 {
-	CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-	
-	if(subCumberArray->count() > 0)
+	vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
+	std::mt19937 rEngine(std::random_device{}());
+	std::uniform_int_distribution<> r(0, subCumberArray.size() - 1);
+	if(subCumberArray.size() > 0)
 	{
-		JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->randomObject(), 80+kMyElementalLife, 999999.f);
+		JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray[r(rEngine)], 80+kMyElementalLife, 999999.f);
 		addChild(t_jm);
 		t_jm->startMoving();
 	}
@@ -1032,10 +1033,11 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 	AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 	if(jm_type >= 0 && jm_type <= 3)
 	{
-		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-		int cumberCnt = 1 + subCumberArray->count();
+		vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
+		int cumberCnt = 1 + subCumberArray.size();
+
 		int random_value;
-		
+			
 		for(int i=0;i<cmCnt;i++)
 		{
 			if(i == 0)
@@ -1055,7 +1057,7 @@ void MissileParent::shootPetMissile( int jm_type, int cmCnt, float damage_per, C
 				}
 				else
 				{
-					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), jm_type, damage_per, s_p);
+					JackMissile* t_jm = JM_BasicMissile::create((CCNode*)subCumberArray[(random_value-1)], jm_type, damage_per, s_p);
 					addChild(t_jm);
 					t_jm->startMoving();
 				}
@@ -1280,8 +1282,8 @@ void UM_creator::creating()
 		}
 		else
 		{
-			CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-			int cumberCnt = 1 + subCumberArray->count();
+			vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
+			int cumberCnt = 1 + subCumberArray.size();
 			int random_value;
 			
 			random_value = rand()%cumberCnt;
@@ -1293,7 +1295,7 @@ void UM_creator::creating()
 			}
 			else
 			{
-				JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), create_type, missile_speed);
+				JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray[(random_value-1)], create_type, missile_speed);
 				getParent()->addChild(t_jm);
 				t_jm->startMoving();
 			}
@@ -1321,8 +1323,8 @@ void UM_creator::petCreating()
 		}
 		else
 		{
-			CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-			int cumberCnt = 1 + subCumberArray->count();
+			vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
+			int cumberCnt = 1 + subCumberArray.size();
 			int random_value;
 			
 			random_value = rand()%cumberCnt;
@@ -1334,7 +1336,7 @@ void UM_creator::petCreating()
 			}
 			else
 			{
-				JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray->objectAtIndex(random_value-1), create_type, missile_speed, start_position);
+				JackMissile* t_jm = JM_UpgradeMissile::create((CCNode*)subCumberArray[(random_value-1)], create_type, missile_speed, start_position);
 				getParent()->addChild(t_jm);
 				t_jm->startMoving();
 			}

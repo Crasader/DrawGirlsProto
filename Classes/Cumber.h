@@ -40,7 +40,6 @@ public:
 	virtual ~CumberParent()
 	{
 		CCLog("~CumberParent");
-		subCumberArray->release();
 	}
 	
 	void setMainCumberState(int t_cs); // no used
@@ -52,7 +51,8 @@ public:
 	void movingMainCumber();
 	void stopMovingMainCumber();
 	CCNode* getMainCumberPointer();
-	CCArray* getSubCumberArrayPointer();
+	std::vector<KSCumberBase*>& getSubCumberArrayPointer();
+	std::vector<KSCumberBase*>& getMainCumbers();
 
 
 	void subCumberReplication();
@@ -93,10 +93,8 @@ private:
 //	MainCumber* mainCumber;
 	std::vector<KSCumberBase*> mainCumbers;
 //	MainCumberKS* mainCumber;
-	
 //	EmotionParent* myEP;
-	
-	CCArray* subCumberArray;
+	std::vector<KSCumberBase*> subCumberArray;
 	vector<MobHpGraph*> hp_graphs;
 	
 	bool isGameover;

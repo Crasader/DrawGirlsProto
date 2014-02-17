@@ -1472,11 +1472,11 @@ void PlayUI::writePosition()
 	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionX)] = boss_position.x;
 	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_bossPositionY)] = boss_position.y;
 	
-	CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-	int loop_cnt = subCumberArray->count();
+	vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
+	int loop_cnt = subCumberArray.size();
 	for(int i=0;i<loop_cnt;i++)
 	{
-		CCNode* t_subCumber = (CCNode*)subCumberArray->objectAtIndex(i);
+		CCNode* t_subCumber = (CCNode*)subCumberArray[i];
 		CCPoint t_position = t_subCumber->getPosition();
 		
 		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_monster)][i][mySGD->getReplayKey(kReplayKey_timeStamp_monster_x)] = t_position.x;

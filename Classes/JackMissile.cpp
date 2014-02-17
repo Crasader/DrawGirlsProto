@@ -48,10 +48,12 @@ void JM_UpgradeMissile::moving ()
 	
 	if(!isEnable)
 	{
-		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-		for(int i=0;i<subCumberArray->count();i++)
+		int cumber_cnt = myGD->getSubCumberVector().size();	
+		for(int i=0; i<cumber_cnt; i++)
 		{
-			if(targetNode == subCumberArray->objectAtIndex(i))
+			auto subCumber = myGD->getSubCumberVector()[i];
+
+			if(targetNode == subCumber)
 			{
 				isEnable = true;
 				break;
@@ -431,15 +433,15 @@ void JM_BasicMissile::moving ()
 	
 	if(!isEnable && !myGD->getIsGameover())
 	{
-		CCArray* subCumberArray = myGD->getCommunicationArray("CP_getSubCumberArrayPointer");
-		for(int i=0;i<subCumberArray->count();i++)
+		for(auto i : myGD->getSubCumberVector())
 		{
-			if(targetNode == subCumberArray->objectAtIndex(i))
+			if(targetNode == i)
 			{
 				isEnable = true;
 				break;
 			}
 		}
+
 	}
 	
 	if(isEnable)
