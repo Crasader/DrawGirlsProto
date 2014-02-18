@@ -548,10 +548,13 @@ void CumberParent::myInit()
 		addChild(mainCumber);
 
 		// 에너지 달음.
-		MobHpGraph* main_hp = MobHpGraph::create(mainCumber, "monster_hp_bar.png");
-		addChild(main_hp);
-		main_hp->setMinimumRate();
-		hp_graphs.push_back(main_hp);
+		if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_bossLifeZero)
+		{
+			MobHpGraph* main_hp = MobHpGraph::create(mainCumber, "monster_hp_bar.png");
+			addChild(main_hp);
+			main_hp->setMinimumRate();
+			hp_graphs.push_back(main_hp);
+		}
 	}	
 	
 //	int create_cnt;

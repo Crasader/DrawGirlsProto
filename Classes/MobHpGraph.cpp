@@ -119,5 +119,7 @@ void MobHpGraph::myInit (CCObject * t_target, string filename)
 	setPosition(ccpAdd(target_node->getPosition(), ccp(0,-20)));
 	
 	startGraph();
+	
+	setScale(1.f/myGD->game_scale);
 }
 #undef LZZ_INLINE

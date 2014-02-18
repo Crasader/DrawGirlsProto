@@ -131,6 +131,8 @@ private:
 	
 	void setTable();
 	
+	void changeButtonChallenge(bool t_b, int t_stage);
+	
 	CCMenu* ready_menu;
 	
 	void menuAction(CCObject* sender);
