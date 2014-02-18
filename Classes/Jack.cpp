@@ -2468,40 +2468,38 @@ IceFog* IceFog::create( CCObject* t_jack, SEL_CallFunc d_freeze )
 
 void IceFog::startAction()
 {
-	CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.0);
-
+	CCDelayTime* t_delay = CCDelayTime::create(0.2f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(IceFog::afterAction));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-
-	fogImg->runAction(t_seq);
+	runAction(t_seq);
 }
 
 void IceFog::showFog()
 {
-	fogImg = CCSprite::create("fog.png");
-	fogImg->setScale(0);
+	fogImg->removeFromParent();
+	stopAllActions();
+	
+	fogImg = KS::loadCCBI<CCSprite*>(this, "fx_freezing_1.ccbi").first;
 	addChild(fogImg);
-
-	CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.0);
-
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(IceFog::deleteFog));
-
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-
-	fogImg->runAction(t_seq);
 }
 
 void IceFog::selfRemove()
 {
 	myGD->communication("Jack_resetStopEffects");
 	myGD->communication("Main_touchOn");
-	removeFromParentAndCleanup(true);
+	
+	fog_manager->runAnimationsForSequenceNamed("stop");
+	CCDelayTime* t_delay = CCDelayTime::create(0.3f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_call);
+	runAction(t_seq);
+//	removeFromParentAndCleanup(true);
 }
 
 void IceFog::deleteFog()
 {
-	fogImg->removeFromParentAndCleanup(true);
+//	fogImg->removeFromParentAndCleanup(true);
 }
 
 void IceFog::afterAction()
@@ -2509,9 +2507,9 @@ void IceFog::afterAction()
 	AudioEngine::sharedInstance()->playEffect("sound_ice_hold.mp3", false);
 	(target_jack->*delegate_freeze)();
 
-	fogImg->removeFromParentAndCleanup(true);
-	iceImg = CCSprite::create("ice.png");
-	addChild(iceImg);
+//	fogImg->removeFromParentAndCleanup(true);
+//	iceImg = CCSprite::create("ice.png");
+//	addChild(iceImg);
 }
 
 void IceFog::myInit( CCObject* t_jack, SEL_CallFunc d_freeze )
@@ -2519,9 +2517,12 @@ void IceFog::myInit( CCObject* t_jack, SEL_CallFunc d_freeze )
 	target_jack = t_jack;
 	delegate_freeze = d_freeze;
 
-	fogImg = CCSprite::create("fog.png");
-	fogImg->setScale(0);
+	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_freezing_1.ccbi");
+	
+	fogImg = t_ccb.first;
 	addChild(fogImg);
+	
+	fog_manager = t_ccb.second;
 }
 
 Sleep* Sleep::create( CCObject* t_jack, SEL_CallFunc d_sleep )
