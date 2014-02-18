@@ -33,10 +33,10 @@ class RankFriendInfo;
 class NewStageInfoView : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
-	static NewStageInfoView* create(int t_touch_priority)
+	static NewStageInfoView* create(int t_touch_priority, function<void(bool, int)> t_change_button_challenge)
 	{
 		NewStageInfoView* t_nsiv = new NewStageInfoView();
-		t_nsiv->myInit(t_touch_priority);
+		t_nsiv->myInit(t_touch_priority, t_change_button_challenge);
 		t_nsiv->autorelease();
 		return t_nsiv;
 	}
@@ -52,6 +52,8 @@ public:
 	
 private:
 	int touch_priority;
+	
+	function<void(bool, int)> change_button_challenge;
 	
 	CCSprite* back_img;
 	CCNode* content_node;
@@ -87,7 +89,7 @@ private:
 		return friend_list.size();
 	}
 	
-	void myInit(int t_touch_priority);
+	void myInit(int t_touch_priority, function<void(bool, int)> t_change_button_challenge);
 	
 	void menuAction(CCObject* sender)
 	{

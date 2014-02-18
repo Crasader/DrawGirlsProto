@@ -370,7 +370,7 @@ bool NewMainFlowScene::init()
 	
 	setTable();
 	
-	new_stage_info_view = NewStageInfoView::create(-150);
+	new_stage_info_view = NewStageInfoView::create(-150, std::bind(&NewMainFlowScene::changeButtonChallenge, this, std::placeholders::_1, std::placeholders::_2));
 	addChild(new_stage_info_view, kNewMainFlowZorder_right);
 	
 	pieceAction(selected_stage_number);
@@ -1265,6 +1265,13 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 								profile_frame->setPosition(t_piece->getPosition());
 								puzzle_node->addChild(profile_frame);
 							}
+							
+							if(NSDS_GI(stage_number, kSDS_SI_missionType_i) != kCLEAR_default)
+							{
+								CCSprite* mission_img = CCSprite::create("puzzle_mission.png");
+								mission_img->setPosition(ccpAdd(t_piece->getPosition(), ccp(12,11)));
+								puzzle_node->addChild(mission_img);
+							}
 						}
 						else
 						{
@@ -1710,30 +1717,7 @@ void NewMainFlowScene::pieceAction(int t_stage_number)
 	
 	new_stage_info_view->setClickedStage(t_stage_number);
 	
-	CCPoint before_position = ready_menu->getPosition();
-	CCNode* before_parant = ready_menu->getParent();
-	
-	ready_menu->removeFromParent();
-	ready_menu = NULL;
-	
-	CCSprite* n_ready = CCSprite::create("mainflow_new_ready.png");
-	CCLabelTTF* n_stage_number = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", t_stage_number)->getCString(), mySGD->getFont().c_str(), 11);
-	n_stage_number->setPosition(ccp(n_ready->getContentSize().width/2.f+16, n_ready->getContentSize().height/2.f-11));
-	n_ready->addChild(n_stage_number);
-	
-	CCSprite* s_ready = CCSprite::create("mainflow_new_ready.png");
-	s_ready->setColor(ccGRAY);
-	CCLabelTTF* s_stage_number = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", t_stage_number)->getCString(), mySGD->getFont().c_str(), 11);
-	s_stage_number->setPosition(ccp(s_ready->getContentSize().width/2.f+16, s_ready->getContentSize().height/2.f-11));
-	s_ready->addChild(s_stage_number);
-	
-	
-	CCMenuItem* ready_item = CCMenuItemSprite::create(n_ready, s_ready, this, menu_selector(NewMainFlowScene::menuAction));
-	ready_item->setTag(kNewMainFlowMenuTag_ready);
-	
-	ready_menu = CCMenu::createWithItem(ready_item);
-	ready_menu->setPosition(before_position);
-	before_parant->addChild(ready_menu);
+	changeButtonChallenge(false, t_stage_number);
 	
 	selected_stage_number = t_stage_number;
 	selected_puzzle_number = NSDS_GI(selected_stage_number, kSDS_SI_puzzle_i);
@@ -1770,6 +1754,41 @@ void NewMainFlowScene::pieceAction(int t_stage_number)
 //		puzzle_table->updateCellAtIndex(0);
 //	}
 }
+
+void NewMainFlowScene::changeButtonChallenge(bool t_b, int t_stage)
+{
+	CCPoint before_position = ready_menu->getPosition();
+	CCNode* before_parant = ready_menu->getParent();
+	
+	ready_menu->removeFromParent();
+	ready_menu = NULL;
+	
+	string middle_str;
+	if(t_b)
+		middle_str = "challenge";
+	else
+		middle_str = "ready";
+	
+	CCSprite* n_ready = CCSprite::create(CCString::createWithFormat("mainflow_new_%s.png", middle_str.c_str())->getCString());
+	CCLabelTTF* n_stage_number = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", t_stage)->getCString(), mySGD->getFont().c_str(), 11);
+	n_stage_number->setPosition(ccp(n_ready->getContentSize().width/2.f+16, n_ready->getContentSize().height/2.f-11));
+	n_ready->addChild(n_stage_number);
+	
+	CCSprite* s_ready = CCSprite::create(CCString::createWithFormat("mainflow_new_%s.png", middle_str.c_str())->getCString());
+	s_ready->setColor(ccGRAY);
+	CCLabelTTF* s_stage_number = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", t_stage)->getCString(), mySGD->getFont().c_str(), 11);
+	s_stage_number->setPosition(ccp(s_ready->getContentSize().width/2.f+16, s_ready->getContentSize().height/2.f-11));
+	s_ready->addChild(s_stage_number);
+	
+	
+	CCMenuItem* ready_item = CCMenuItemSprite::create(n_ready, s_ready, this, menu_selector(NewMainFlowScene::menuAction));
+	ready_item->setTag(kNewMainFlowMenuTag_ready);
+	
+	ready_menu = CCMenu::createWithItem(ready_item);
+	ready_menu->setPosition(before_position);
+	before_parant->addChild(ready_menu);
+}
+
 void NewMainFlowScene::buyPieceAction(int t_stage_number)
 {
 	CCLog("buyPieceAction : %d", t_stage_number);

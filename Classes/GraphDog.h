@@ -157,6 +157,10 @@ public:
 		}
 	}
 	
+	long long int getTime(){
+		return (long long int)time(NULL);
+	}
+	
 	bool command(string action, const Json::Value param,CCObject *target,function<void(Json::Value)> func){
 		addTarget(target);
 		function<void(Json::Value)> sFunc = [=](Json::Value value){
@@ -185,8 +189,9 @@ public:
     
     bool isLogin;
     
-    int timestamp;
-    
+    long long int timestamp;
+		long long int localTimestamp;
+	
     string getNick();
     string getFlag();
     string getAuID();
@@ -278,9 +283,10 @@ private:
         errorCount=0;
         this->gdVersion = GRAPHDOG_VERSION;
 		this->deviceInfo = "";
-        this->timestamp = 9;
+			this->timestamp = 9;
+			this->localTimestamp = 0;
     }
-    
+  
     ~GraphDog(){
         curl_easy_cleanup(curl_handle);
 		curl_global_cleanup();

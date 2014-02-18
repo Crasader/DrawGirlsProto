@@ -491,18 +491,22 @@ void* GraphDog::t_function(void *_insertIndex)
 	
         //CCLog("t_function 14");
        //@ if(resultobj["timestamp"].getInt()<GraphDog::get()->timestamp){
-        if(resultobj["timestamp"].asInt()<GraphDog::get()->timestamp){
-            
-			CCLog("t_function error hack!!! %d,%d",resultobj["timestamp"].asInt(),GraphDog::get()->timestamp);
+        if(resultobj["timestamp"].asInt64()<GraphDog::get()->timestamp){
+          
+			CCLog("t_function error hack!!! %lld,%lld",resultobj["timestamp"].asInt64(),GraphDog::get()->timestamp);
 			resultCode=CURLE_CHUNK_FAILED;
             resultobj["state"]="error";
             resultobj["errorMsg"]="hack!!";
 			
 			resultobj["result"]["code"]=GDSECURITY;
             //@ GraphDog::get()->timestamp=resultobj["timestamp"].getInt();
-            GraphDog::get()->timestamp=resultobj["timestamp"].asInt();
+						
         }
-    
+	
+		GraphDog::get()->timestamp=resultobj["timestamp"].asInt64();
+		GraphDog::get()->localTimestamp=GraphDog::get()->getTime();
+	
+
 		command.result = resultobj;
 		command.chunk.resultCode = resultCode;
 //	}

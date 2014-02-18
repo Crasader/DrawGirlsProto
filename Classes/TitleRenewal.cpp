@@ -542,6 +542,9 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		card_data_load_list.clear();
 		myDSH->loadAllUserData(result_data, card_data_load_list);
 		
+		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard)) <= 0)
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+		
 		if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) != kTutorialFlowStep_puzzleClick)
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
 		

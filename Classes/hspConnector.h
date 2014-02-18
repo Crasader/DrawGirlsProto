@@ -201,6 +201,19 @@ public:
 	void removeTarget(CCObject* obj){
 		graphdog->removeTarget(obj);
 	}
+	
+	long long int getLastTimestampOnServer(){
+		return graphdog->timestamp;
+	}
+	
+	long long int getLastTimestampOnLocal(){
+		return graphdog->localTimestamp;
+	}
+	
+	long long int getCurrentTimestampOnLocal(){
+		return graphdog->getTime();
+	}
+	
     long long int getHSPMemberNo();
 	string getKakaoID();
     string getKakaoProfileURL();

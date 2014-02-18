@@ -16,8 +16,9 @@
 #include "KSUtil.h"
 #include "TouchSuctionLayer.h"
 
-void NewStageInfoView::myInit(int t_touch_priority)
+void NewStageInfoView::myInit(int t_touch_priority, function<void(bool, int)> t_change_button_challenge)
 {
+	change_button_challenge = t_change_button_challenge;
 	is_show = true;
 	opacity_value = 255;
 	is_menu_enable = false;
@@ -433,6 +434,7 @@ void NewStageInfoView::tableCellTouched(CCTableView* table, CCTableViewCell* cel
 		{
 			selected_friend_idx = cell->getIdx();
 			table->updateCellAtIndex(selected_friend_idx);
+			change_button_challenge(true, recent_stage);
 		}
 		else if (cell->getIdx() != selected_friend_idx)
 		{
@@ -446,6 +448,7 @@ void NewStageInfoView::tableCellTouched(CCTableView* table, CCTableViewCell* cel
 			int keep_idx = selected_friend_idx;
 			selected_friend_idx = -1;
 			table->updateCellAtIndex(keep_idx);
+			change_button_challenge(false, recent_stage);
 		}
 	}
 }

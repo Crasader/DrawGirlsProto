@@ -27,6 +27,7 @@ enum CardStrengthAlign{
 class CardSortInfo;
 class TouchSuctionLayer;
 class StrengthCardAnimation;
+class CommonButton;
 class CardStrengthPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -81,7 +82,7 @@ private:
 	bool is_success;
 	CCSprite* loading_img;
 	CCLabelTTF* loading_label;
-	CCMenu* replay_menu;
+	CommonButton* replay_menu;
 	
 	void replayAction(CCObject* sender);
 	

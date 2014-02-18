@@ -1783,7 +1783,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 				card2->addChild(cardCase2);
 				
 				
-				StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-190);
+				StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-350);
 				
 				b->setCloseFunc([this](){
 					CCLog("close Func");
@@ -1836,7 +1836,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 				CardCase* cardCase = CardCase::create(gacha_card_number);
 				card->addChild(cardCase);
 				
-				TakeCardAnimation* b = TakeCardAnimation::create(card,-190);
+				TakeCardAnimation* b = TakeCardAnimation::create(card,-350);
 				b->setCloseFunc([this](){
 					CCLog("close Func");
 					this->is_menu_enable = true;
@@ -1848,7 +1848,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 	}
 	else
 	{
-		replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -210);
+		replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -350);
 		replay_menu->setPosition(ccp(240,100));
 		replay_menu->setFunction([=](CCObject* sender)
 								 {
@@ -1933,7 +1933,7 @@ void ShopPopup::successAction()
 			card2->addChild(cardCase2);
 			
 			
-			StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-220);
+			StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-350);
 			
 			b->setCloseFunc([this](){
 				CCLog("close Func");
@@ -1986,7 +1986,7 @@ void ShopPopup::successAction()
 			CardCase* cardCase = CardCase::create(gacha_card_number);
 			card->addChild(cardCase);
 			
-			TakeCardAnimation* b = TakeCardAnimation::create(card,-220);
+			TakeCardAnimation* b = TakeCardAnimation::create(card,-350);
 			b->setCloseFunc([this](){
 				CCLog("close Func");
 				this->is_menu_enable = true;
@@ -2001,7 +2001,7 @@ void ShopPopup::failAction()
 {
 	is_downloading = false;
 	
-	replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -220);
+	replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -350);
 	replay_menu->setPosition(ccp(240,100));
 	replay_menu->setFunction([=](CCObject* sender)
 							 {

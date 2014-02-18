@@ -96,7 +96,8 @@ private:
 	SEL_CallFunc delegate_freeze;
 	
 	CCSprite* fogImg;
-	CCSprite* iceImg;
+	CCBAnimationManager* fog_manager;
+//	CCSprite* iceImg;
 	
 	void deleteFog();
 	

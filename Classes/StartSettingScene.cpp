@@ -473,8 +473,11 @@ void StartSettingScene::changeCard()
 			real_card_img->addChild(card_ani);
 		}
 		
-		CCSprite* card_case = CCSprite::create("startsetting_cardframe.png");
-		card_img->addChild(card_case);
+		CardCase* t_card_case = CardCase::create(selected_card_number);
+		real_card_img->addChild(t_card_case);
+		
+//		CCSprite* card_case = CCSprite::create("startsetting_cardframe.png");
+//		card_img->addChild(card_case);
 		
 		int ability_cnt = NSDS_GI(kSDS_CI_int1_abilityCnt_i, selected_card_number);
 		
