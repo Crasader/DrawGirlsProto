@@ -8,6 +8,7 @@
 
 #include "SendMessageUtil.h"
 
+#include "KSUtil.h"
 
 void setHelpSendTime( std::string userId )
 {
@@ -179,6 +180,25 @@ std::string getRemainTimeMsg(long long remainSeconds)
 	return remainStr;
 }
 
+std::string getPastTimeMsg(long long currentTimeStamp, long long pastTimeStamp)
+{
+	KS::KSLog("% %", currentTimeStamp, pastTimeStamp);
+	long long remainSeconds = currentTimeStamp - pastTimeStamp;
+	int days = remainSeconds / ( 60 * 60 * 24 );
+	int hours = remainSeconds / ( 60 * 60 );	
+	int minutes = remainSeconds / 60;
+	std::string remainStr;
+	if(days > 0){
+		remainStr = boost::str(boost::format("%|| 일 전") % days);
+	}
+	else if(hours > 0){
+		remainStr = boost::str(boost::format("%|| 시간 전") % hours);
+	}
+	else if(minutes > 0){
+		remainStr = boost::str(boost::format("%|| 분 전") % minutes);
+	}
+	return remainStr;
+}
 
 void timeSpliter(long long time, int* year, int* month, int* day, int* hour, int* minute, int* second)
 {

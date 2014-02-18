@@ -28,6 +28,10 @@ void UnknownFriends::putLastDate(int index, int64_t jd)
 {
 	m_friends[index].lastDate = jd;
 }
+void UnknownFriends::putLastTime(int index, int64_t jd)
+{
+	m_friends[index].lastTime = jd;
+}
 void UnknownFriends::putUserData(int index, Json::Value d)
 {
 	m_friends[index].userData = d;

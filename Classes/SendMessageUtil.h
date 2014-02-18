@@ -34,5 +34,6 @@ void setInviteSendTime( std::string userId );
 int getHeartSendingRemainTime (std::string userId, int base_s = 60 * 60 * 6);
 void setHeartSendTime (std::string userId);
 std::string getRemainTimeMsg(long long seconds);
+std::string getPastTimeMsg(long long currentTimeStamp, long long pastTimeStamp);
 void timeSpliter(long long time, int* year, int* month, int* day, int* hour, int* minute, int* second);
 #endif /* defined(__DGproto__SendMessageUtil__) */

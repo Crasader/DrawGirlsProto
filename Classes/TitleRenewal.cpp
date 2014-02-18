@@ -785,6 +785,7 @@ void TitleRenewalScene::resultGetKnownFriendUserData(Json::Value v)
 {
 	if(v["result"]["code"].asInt() == GDSUCCESS)
 	{
+		KS::KSLog("%", v);
 		for(int i=0; i<v["list"].size(); i++)
 		{
 			Json::Reader reader;
@@ -792,6 +793,7 @@ void TitleRenewalScene::resultGetKnownFriendUserData(Json::Value v)
 			reader.parse(v["list"][i]["data"].asString(), userData);
 			KnownFriends::getInstance()->putUserData(i, userData);
 			KnownFriends::getInstance()->putLastDate(i, v["list"][i]["lastDate"].asInt64());
+			KnownFriends::getInstance()->putLastTime(i, v["list"][i]["lastTime"].asInt64());
 			KnownFriends::getInstance()->putJoinDate(i, v["list"][i]["joinDate"].asInt64());
 		}
 	}
@@ -829,6 +831,7 @@ void TitleRenewalScene::resultGetUnknownFriendUserData(Json::Value v)
 			ufd.userData = userData;
 			ufd.joinDate = v["list"][i]["joinDate"].asInt64();
 			ufd.lastDate = v["list"][i]["lastDate"].asInt64();
+			ufd.lastTime = v["list"][i]["lastTime"].asUInt64();
 			ufd.userId = v["list"][i]["memberID"].asString();
 			ufd.nick = v["list"][i]["nick"].asString();
 			ufd.unknownFriend = true;

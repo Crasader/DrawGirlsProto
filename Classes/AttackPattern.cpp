@@ -59,7 +59,8 @@ void KSTargetAttackPattern8::myInit(CCPoint t_sp, KSCumberBase* cb, const std::s
 		batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
 	else
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-	
+		
+	batchNode->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
 	addChild(batchNode);
 	
 	scheduleUpdate();
