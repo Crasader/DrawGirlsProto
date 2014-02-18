@@ -2488,11 +2488,10 @@ void IceFog::selfRemove()
 {
 	myGD->communication("Jack_resetStopEffects");
 	myGD->communication("Main_touchOn");
-	
 	fog_manager->runAnimationsForSequenceNamed("stop");
 	CCDelayTime* t_delay = CCDelayTime::create(0.3f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
-	CCSequence* t_seq = CCSequence::create(t_delay, t_call);
+	CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
 	runAction(t_seq);
 //	removeFromParentAndCleanup(true);
 }
