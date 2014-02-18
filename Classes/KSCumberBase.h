@@ -265,8 +265,9 @@ public:
 public:
 	struct FollowMoving
 	{
-		FollowMoving() : timer(1.1f), lastMapCollisionTime(0){}
+		FollowMoving() : timer(1.1f), lastMapCollisionTime(0), collisionCount(0){}
 		float lastMapCollisionTime;
+		int collisionCount;
 		float timer;
 		float followDegree;
 	}m_follow;

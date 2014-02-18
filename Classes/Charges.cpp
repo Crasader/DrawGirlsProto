@@ -246,7 +246,7 @@ void ChargeNodeLambda::removeSelf()
 	KSCumberBase* cumber = (KSCumberBase*)real_target;
 	cumber->getChargeParent()->removeFromParent();
 	cumber->setChargeParent(nullptr);
-	myGD->communication("MP_removeChargeInArray", this);
+//	myGD->communication("MP_removeChargeInArray", this);
 }
 
 void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )

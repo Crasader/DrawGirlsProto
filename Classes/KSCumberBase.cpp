@@ -540,10 +540,11 @@ void KSCumberBase::followMoving(float dt)
 				if(myGD->getJackState() != jackStateNormal)
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				m_follow.lastMapCollisionTime = m_follow.timer;
+				m_follow.collisionCount++;
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-				if(myGD->getJackState() == jackStateNormal)
+				if(myGD->getJackState() == jackStateNormal || m_follow.collisionCount >= 4)
 				{
 					unAggroExec();
 				}
@@ -554,9 +555,10 @@ void KSCumberBase::followMoving(float dt)
 				onceOutlineAndMapCollision = true;
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				m_follow.lastMapCollisionTime = m_follow.timer;
+				m_follow.collisionCount++;
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-				if(myGD->getJackState() == jackStateNormal)
+				if(myGD->getJackState() == jackStateNormal || m_follow.collisionCount >= 4)
 				{
 					unAggroExec();
 					m_follow.lastMapCollisionTime = m_follow.timer;
@@ -568,10 +570,11 @@ void KSCumberBase::followMoving(float dt)
 				//			CCLog("collision!!");
 				onceOutlineAndMapCollision = true;
 				m_follow.lastMapCollisionTime = m_follow.timer;
+				m_follow.collisionCount++;
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-				if(myGD->getJackState() == jackStateNormal)
+				if(myGD->getJackState() == jackStateNormal || m_follow.collisionCount >= 4)
 				{
 					unAggroExec();
 				}
@@ -579,6 +582,7 @@ void KSCumberBase::followMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				m_follow.lastMapCollisionTime = m_follow.timer;
+				m_follow.collisionCount++;
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
 				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
@@ -2666,9 +2670,10 @@ void KSCumberBase::aggroExec()
 {
 	m_drawMovement = FOLLOW_TYPE;
 	m_normalMovement = FOLLOW_TYPE;
-	//KS::setColor(this, ccc3(255, 0, 0));
+	KS::setColor(this, ccc3(255, 0, 0));
 	CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
 	m_follow.timer = 1.1f;
+	m_follow.collisionCount = 0;
 	m_follow.lastMapCollisionTime = 0.f;
 	m_follow.followDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetPlusMinus() * m_well512.GetFloatValue(60, 120);	
 }
@@ -2676,7 +2681,7 @@ void KSCumberBase::unAggroExec()
 {
 	m_normalMovement = m_originalNormalMovement;
 	m_drawMovement = m_normalMovement;
-	//KS::setColor(this, ccc3(255, 255, 255));
+	KS::setColor(this, ccc3(255, 255, 255));
 }
 template <typename T>
 void FixedSizeDeque<T>::push_back( const T& p )
