@@ -525,7 +525,11 @@ void Maingame::finalSetting()
 		{
 			int t_code = patterns[i]["pattern"].asInt();
 			if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, t_code))
-				pattern_code.push_back(t_code);
+			{
+				vector<int>::iterator iter = find(pattern_code.begin(), pattern_code.end(), t_code);
+				if(iter == pattern_code.end())
+					pattern_code.push_back(t_code);
+			}
 		}
 		
 		if(pattern_code.size() > 0)
