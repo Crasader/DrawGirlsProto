@@ -202,15 +202,15 @@ public:
 		graphdog->removeTarget(obj);
 	}
 	
-	long long int getTimeStamp(){
+	long long int getLastTimestampOnServer(){
 		return graphdog->timestamp;
 	}
 	
-	long long int getLocalTimeStamp(){
+	long long int getLastTimestampOnLocal(){
 		return graphdog->localTimestamp;
 	}
 	
-	long long int getLocalTimeStampNow(){
+	long long int getCurrentTimestampOnLocal(){
 		return graphdog->getTime();
 	}
 	
