@@ -63,7 +63,7 @@ void EventListDown::resultGetEventList(Json::Value result_data)
 				state_ment->setPosition(ccp(240,80));
 				ing_download_cnt = 1;
 				ing_download_per = 0;
-				download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/df_list.size())->getCString(), "etc_font.fnt");
+				download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/df_list.size())->getCString(), "allfont.fnt");
 				download_state->setPosition(ccp(240,50));
 				addChild(download_state, kELD_Z_content);
 				is_downloading = true;

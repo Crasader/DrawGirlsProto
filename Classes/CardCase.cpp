@@ -470,7 +470,7 @@ void CardCase::myInit( int t_selected_card_number )
 	option_case->setScale(1.5f);
 	addChild(option_case, kCARDCASE_Z_innerCase);
 
-	CountingBMLabel* pow_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
+	CountingBMLabel* pow_label = CountingBMLabel::create("0", "allfont.fnt", 0.5f, "%d");
 	pow_label->setPosition(ccp(75,15));//145,58));
 	pow_label->setColor(ccRED);
 	pow_label->setScale(1.8f);
@@ -478,7 +478,7 @@ void CardCase::myInit( int t_selected_card_number )
 
 	pow_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, t_selected_card_number)*((card_level-1)*0.1f+1.f)))->getCString());
 
-	CountingBMLabel* dex_label = CountingBMLabel::create("0", "etc_font.fnt", 0.5f, "%d");
+	CountingBMLabel* dex_label = CountingBMLabel::create("0", "allfont.fnt", 0.5f, "%d");
 	dex_label->setPosition(ccp(275,15));//145,26));
 	dex_label->setColor(ccGREEN);
 	dex_label->setScale(1.8f);
@@ -486,7 +486,7 @@ void CardCase::myInit( int t_selected_card_number )
 
 	dex_label->setString(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, t_selected_card_number)*((card_level-1)*0.1f+1.f)))->getCString());
 
-	CountingBMLabel* spd_label = CountingBMLabel::create("0.0", "etc_font.fnt", 0.5f, "%.1f");
+	CountingBMLabel* spd_label = CountingBMLabel::create("0.0", "allfont.fnt", 0.5f, "%.1f");
 	spd_label->setPosition(ccp(175,15));//180,42));
 	spd_label->setColor(ccBLUE);
 	spd_label->setScale(1.8f);

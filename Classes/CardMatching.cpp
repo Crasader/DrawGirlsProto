@@ -119,7 +119,7 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 	std::random_device rd;
 	m_rEngine.seed(rd());
 	
-	m_timeFnt = CCLabelBMFont::create(CCString::createWithFormat("%.1f", m_remainTime)->getCString(), "etc_font.fnt");
+	m_timeFnt = CCLabelBMFont::create(CCString::createWithFormat("%.1f", m_remainTime)->getCString(), "allfont.fnt");
 	m_timeFnt->setPosition(ccp(420, 270));
 	addChild(m_timeFnt, 5);
 	

@@ -35,7 +35,7 @@ public:
 	void setPercentage (float t_percent);
 private:
 	int hide_frame;
-	CCLabelBMFont * combo_label;
+	CCLabelTTF * combo_label;
 	CCSprite* combo_str;
 //	CCProgressTimer * combo_timer;
 	void myInit (int combo);

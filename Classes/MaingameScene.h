@@ -261,7 +261,7 @@ private:
 	CCRenderTexture* replay_thumb_texture;
 	void refreshReplayThumb(int temp_time);
 	
-	CCLabelBMFont* replay_score;
+	CCLabelTTF* replay_score;
 	void refreshReplayScore(int temp_time);
 	
 	CCSprite* replay_character;

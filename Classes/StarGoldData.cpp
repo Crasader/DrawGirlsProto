@@ -135,9 +135,9 @@ string StarGoldData::getFont()
 {
 	string font_name;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "RixMGoB";
+	font_name = "RixJGoB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	font_name = "fonts/RixMGoB.ttf";
+	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
 	
 	return font_name;

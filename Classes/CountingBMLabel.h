@@ -22,8 +22,10 @@ public:
 	virtual void setString(const char* after_value);
 	virtual const char* getString();
 	virtual void setScale(float t_scale);
+	void onChangeScale(bool t_b);
 	
 private:
+	bool is_on_change_scale;
 	bool is_changing;
 	float sign_value;
 	float keep_value;

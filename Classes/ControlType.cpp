@@ -923,8 +923,8 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							control_circle->setPosition(circle_position);
 							
 							float t_distance = distanceValue;
-							if(distanceValue > 35)
-								t_distance = 35;
+							if(distanceValue > 20)
+								t_distance = 20;
 							
 							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 							
@@ -939,8 +939,8 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					else
 					{
 						float t_distance = distanceValue;
-						if(distanceValue > 35)
-							t_distance = 35;
+						if(distanceValue > 20)
+							t_distance = 20;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -971,8 +971,8 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							control_circle->setPosition(circle_position);
 							
 							float t_distance = distanceValue;
-							if(distanceValue > 35)
-								t_distance = 35;
+							if(distanceValue > 20)
+								t_distance = 20;
 							
 							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 							
@@ -987,8 +987,8 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					else
 					{
 						float t_distance = distanceValue;
-						if(distanceValue > 35)
-							t_distance = 35;
+						if(distanceValue > 20)
+							t_distance = 20;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1074,8 +1074,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(circle_position);
 						
 						float t_distance = distanceValue;
-						if(distanceValue > 35)
-							t_distance = 35;
+						if(distanceValue > 20)
+							t_distance = 20;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1090,8 +1090,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				else
 				{
 					float t_distance = distanceValue;
-					if(distanceValue > 35)
-						t_distance = 35;
+					if(distanceValue > 20)
+						t_distance = 20;
 					
 					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 					
@@ -1122,8 +1122,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(circle_position);
 						
 						float t_distance = distanceValue;
-						if(distanceValue > 35)
-							t_distance = 35;
+						if(distanceValue > 20)
+							t_distance = 20;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1138,8 +1138,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				else
 				{
 					float t_distance = distanceValue;
-					if(distanceValue > 35)
-						t_distance = 35;
+					if(distanceValue > 20)
+						t_distance = 20;
 					
 					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 					

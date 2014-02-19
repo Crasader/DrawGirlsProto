@@ -181,7 +181,7 @@ void TitleRenewalScene::checkReceive()
 			
 			if(!download_state)
 			{
-				download_state = CCLabelBMFont::create("", "etc_font.fnt");
+				download_state = CCLabelBMFont::create("", "allfont.fnt");
 				download_state->setPosition(ccp(240,130));
 				addChild(download_state);
 			}

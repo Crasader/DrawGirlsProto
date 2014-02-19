@@ -325,7 +325,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 		
 		std::string valueStr = CCString::createWithFormat("%d", temp_rs->m_value)->getCString();
 		valueStr = std::string("+") + KS::insert_separator(valueStr);
-		CCLabelBMFont* value = CCLabelBMFont::create(valueStr.c_str(), "mb_white_font.fnt");
+		CCLabelBMFont* value = CCLabelBMFont::create(valueStr.c_str(), "allfont.fnt");
 		rs->addChild(value);
 		value->setPosition(ccp(rs->getContentSize().width, rs->getContentSize().height) / 2.f);
 		
@@ -360,7 +360,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 			
 			std::string valueStr = CCString::createWithFormat("%d", temp_rs->m_value)->getCString();
 			valueStr = std::string("+") + KS::insert_separator(valueStr);
-			CCLabelBMFont* value = CCLabelBMFont::create(valueStr.c_str(), "mb_white_font.fnt");
+			CCLabelBMFont* value = CCLabelBMFont::create(valueStr.c_str(), "allfont.fnt");
 			fakeItem->addChild(value);
 			value->setPosition(ccp(rs->getContentSize().width, fakeItem->getContentSize().height) / 2.f);
 			
