@@ -115,7 +115,7 @@ bool Dodge::init(int priority, const std::function<void(CCObject*, SEL_CallFunc)
 //	back->setAnchorPoint(ccp(1.f, 0.5f));
 //	addChild(back, 100);
 	
-	m_flowTimeFnt = CCLabelBMFont::create("0", "etc_font.fnt");
+	m_flowTimeFnt = CCLabelBMFont::create("0", "allfont.fnt");
 	m_flowTimeFnt->setPosition(ccp(420, 270));
 	addChild(m_flowTimeFnt, 101);
 	

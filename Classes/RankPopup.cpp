@@ -733,7 +733,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	}
 	else
 	{
-		CCLabelBMFont* rankFnt = CCLabelBMFont::create(boost::str(boost::format("%||") % (idx + 1)).c_str(), "etc_font.fnt");
+		CCLabelBMFont* rankFnt = CCLabelBMFont::create(boost::str(boost::format("%||") % (idx + 1)).c_str(), "allfont.fnt");
 		cell->addChild(rankFnt);
 		rankFnt->setPosition(ccp(19, 19));
 	}
@@ -1768,14 +1768,14 @@ void RankPopup::touchCellIndex(int idx)
 	stageStr = KS::insert_separator(stageStr, ',', 3); // 3자리 마다 콤마찍기
 	m_highScore =
 	CCLabelBMFont::create(
-						  scoreStr.c_str(), "mb_white_font.fnt");
+						  scoreStr.c_str(), "allfont.fnt");
 	m_highScore->setScale(0.5f);
 	m_highScore->setPosition(ccp(125, 27));
 	addChild(m_highScore, 3);
 
 	m_highStage =
 		CCLabelBMFont::create(
-				stageStr.c_str(), "mb_white_font.fnt");
+				stageStr.c_str(), "allfont.fnt");
 	m_highStage->setScale(0.5f);
 	m_highStage->setPosition(ccp(125, 43));
 	addChild(m_highStage, 3);

@@ -173,15 +173,15 @@ void MiniGamePopup::startCalcAction()
 	reward_case->setPosition(ccp(240-480, 150));
 	addChild(reward_case, kMiniGameZorder_content);
 	
-	reward_gold = CountingBMLabel::create("0", "etc_font.fnt", 1.f, "%d");
+	reward_gold = CountingBMLabel::create("0", "allfont.fnt", 1.f, "%d");
 	reward_gold->setPosition(ccp(210,44+25));
 	reward_case->addChild(reward_gold);
 	
-	reward_ruby = CountingBMLabel::create("0", "etc_font.fnt", 1.f, "%d");
+	reward_ruby = CountingBMLabel::create("0", "allfont.fnt", 1.f, "%d");
 	reward_ruby->setPosition(ccp(210,42.5f));
 	reward_case->addChild(reward_ruby);
 	
-	reward_social = CountingBMLabel::create("0", "etc_font.fnt", 1.f, "%d");
+	reward_social = CountingBMLabel::create("0", "allfont.fnt", 1.f, "%d");
 	reward_social->setPosition(ccp(210,41-25));
 	reward_case->addChild(reward_social);
 	

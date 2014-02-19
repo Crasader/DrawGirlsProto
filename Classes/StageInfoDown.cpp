@@ -268,7 +268,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 			state_ment->setString("이미지 정보를 다운로드 합니다.");
 			ing_download_cnt = 1;
 			ing_download_per = 0;
-			download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString(), "etc_font.fnt");
+			download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f\t%d/%d", ing_download_per*100.f, ing_download_cnt, int(df_list.size()))->getCString(), "allfont.fnt");
 			download_state->setPosition(ccp(240,130));
 			addChild(download_state, kSID_Z_content);
 			is_downloading = true;

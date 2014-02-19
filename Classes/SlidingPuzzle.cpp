@@ -59,7 +59,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 	m_thiz->addChild(containerNode);
 	
 	
-	m_timeFnt = CCLabelBMFont::create("", "etc_font.fnt");
+	m_timeFnt = CCLabelBMFont::create("", "allfont.fnt");
 	m_timeFnt->setPosition(ccp(420, 270));
 	m_timeFnt->setString(CCString::createWithFormat("%.1f", m_remainTime)->getCString());
 	addChild(m_timeFnt);
