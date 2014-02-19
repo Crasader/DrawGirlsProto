@@ -86,3 +86,15 @@ bool KSLabelTTF::updateTexture()
 	//ok
 	return true;
 }
+
+void KSLabelTTF::setString(const char *string)
+{
+    CCAssert(string != NULL, "Invalid string");
+    
+    if (m_string.compare(string))
+    {
+        m_string = string;
+        
+        this->updateTexture();
+    }
+}

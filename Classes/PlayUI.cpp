@@ -2051,7 +2051,7 @@ void PlayUI::myInit ()
 	
 	m_areaGage = NULL;
 	
-	percentageLabel = KSLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
+	percentageLabel = KSLabelTTF::create("0%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
 	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
 	percentageLabel->setPosition(ccp(185,myDSH->ui_top-22));
