@@ -96,10 +96,10 @@ public:
 //		this->addChild(m_black_right,1);
 		
 		
-		m_btnBackRight = CCSprite::create("ui_mission_button_back.png");
-		m_btnBackRight->setAnchorPoint(ccp(0.5f,0.5f));
-		m_btnBackRight->setPosition(ccp(0,0));
-		this->addChild(m_btnBackRight,2);
+//		m_btnBackRight = CCSprite::create("ui_mission_button_back.png");
+//		m_btnBackRight->setAnchorPoint(ccp(0.5f,0.5f));
+//		m_btnBackRight->setPosition(ccp(0,0));
+//		this->addChild(m_btnBackRight,2);
 		
 		
 		// Setup scroll view
@@ -186,10 +186,10 @@ public:
 			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(-90,0));
 			m_openBtn->runAction(ani);
 		}
-		{
-			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(90,0));
-			m_btnBackRight->runAction(ani);
-		}
+//		{
+//			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(90,0));
+//			m_btnBackRight->runAction(ani);
+//		}
 //		{
 //			CCFiniteTimeAction* ani  = CCScaleTo::create(0.3, 15, 1);
 //			m_black_center->runAction(ani);
@@ -229,10 +229,10 @@ public:
 			m_openBtn->runAction(ani);
 		}
 //		}
-		{
-			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(-90,0));
-			m_btnBackRight->runAction(ani);
-		}
+//		{
+//			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(-90,0));
+//			m_btnBackRight->runAction(ani);
+//		}
 //		{
 //			CCFiniteTimeAction* ani  = CCScaleTo::create(0.3, 1, 1);
 //			m_black_center->runAction(ani);
