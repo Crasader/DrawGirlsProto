@@ -802,28 +802,22 @@ ChangeCard * ChangeCard::create ()
 	t_w->autorelease();
 	return t_w;
 }
-void ChangeCard::startAction ()
+void ChangeCard::startMyAction()
 {
-	CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
-	CCHide* t_hide = CCHide::create();
-	CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
-	CCShow* t_show = CCShow::create();
-	CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
-	CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
-	CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ChangeCard::selfRemove));
+	unschedule(schedule_selector(ChangeCard::startMyAction));
+	CCSprite* change_card = KS::loadCCBI<CCSprite*>(this, "ui_cardchange.ccbi").first;
+	addChild(change_card);
 	
-	runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
-}
-void ChangeCard::selfRemove ()
-{
-	removeFromParentAndCleanup(true);
+	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+	runAction(t_seq);
 }
 void ChangeCard::myInit ()
 {
-	initWithFile("card_change.png");
+	setPosition(ccp(480,myDSH->ui_top*0.67f));
 	
-	setPosition(ccp(640,myDSH->ui_center_y));
+	schedule(schedule_selector(ChangeCard::startMyAction));
 }
 PlayUI * PlayUI::create ()
 {
@@ -2400,7 +2394,7 @@ void PlayUI::myInit ()
 		{
 			CCNode* t_node = CCNode::create();
 			mission_button->addChild(t_node);
-			CCDelayTime* t_delay = CCDelayTime::create(2.f);
+			CCDelayTime* t_delay = CCDelayTime::create(4.f);
 			CCCallFunc* t_call1 = CCCallFunc::create(mission_button, callfunc_selector(RollingButton::doClose));
 			CCCallFunc* t_call2 = CCCallFunc::create(t_node, callfunc_selector(CCNode::removeFromParent));
 			CCSequence* t_seq = CCSequence::create(t_delay, t_call1, t_call2, NULL);

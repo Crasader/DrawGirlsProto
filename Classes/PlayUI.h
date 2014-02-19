@@ -189,13 +189,12 @@ private:
 	void showArrow ();
 	void myInit ();
 };
-class ChangeCard : public CCSprite
+class ChangeCard : public CCNode
 {
 public:
 	static ChangeCard * create ();
-	void startAction ();
 private:
-	void selfRemove ();
+	void startMyAction();
 	void myInit ();
 };
 enum MenuTagUI
