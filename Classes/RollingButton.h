@@ -26,6 +26,8 @@ public:
 	CCMenuItemImage* m_openBtn;
 	CCMenuItemImage* m_closeBtn;
 	
+	CCSprite* m_success;
+	
 	CCMenu* m_menu;
 	
 //	CCSprite* m_black_left;
@@ -68,13 +70,18 @@ public:
 		m_closeBtn->setOpacity(0);
 		m_closeBtn->setVisible(false);
 		
+		m_success = CCSprite::create("ui_mission_clear.png");
+		m_success->setAnchorPoint(ccp(0,0));
+		m_success->setPosition(ccp(0,0));
+		m_success->setVisible(false);
+		m_openBtn->addChild(m_success);
 		
 		m_menu = CCMenu::create(m_openBtn,m_closeBtn,NULL);
 		m_menu->setPosition(ccp(0,0));
 		this->addChild(m_menu,3);
 		
 		
-		m_black = CommonButton::getBackgroundByType(CommonButtonGray);
+		m_black = CommonButton::getBackgroundByType(CommonButtonGray2);
 		m_black->setAnchorPoint(ccp(0.5f,0.5f));
 		m_black->setPosition(ccp(0,0));
 		m_black->setContentSize(CCSizeMake(15,15));
@@ -104,7 +111,7 @@ public:
 		
 		// Setup scroll view
 		
-		m_maqueeLbl = LabelTTFMarquee::create(ccc4(170,0,0,0), 160, 18, text);
+		m_maqueeLbl = LabelTTFMarquee::create(ccc4(160,0,0,0), 160, 12, text);
 		m_maqueeLbl->setAnchorPoint(ccp(0.47,0.5));
 		m_maqueeLbl->setPosition(ccp(0,0));
 		m_maqueeLbl->setVisible(false);
@@ -171,11 +178,19 @@ public:
 		this->m_maqueeLbl->stopMarqueeAtIndex(index);
 	}
 	
+	void isSuccessed(bool isSuccessed){
+		if(isSuccessed){
+			m_success->setVisible(true);
+		}else{
+			m_success->setVisible(false);
+		}
+	}
+	
 	void doOpen(){
 		if(m_isOpened==true)return;
 		
 		this->addChild(KSGradualValue<float>::create(38,218,0.3f,[=](float t){
-			m_black->setContentSize(ccp(t,42));
+			m_black->setContentSize(ccp(t,30));
 		}));
 
 //		{

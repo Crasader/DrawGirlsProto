@@ -22,7 +22,8 @@ using namespace std;
 
 enum CommonButtonType {
 		CommonButtonYellow,
-		CommonButtonGray,
+	CommonButtonGray,
+	CommonButtonGray2,
 		CommonButtonBlue,
 		CommonButtonGreen,
 		CommonButtonOrange,
@@ -150,6 +151,7 @@ public:
 		if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
 		else if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
 		else if(btnType==CommonButtonGray) btnBackImg = "common_button_gray.png";
+		else if(btnType==CommonButtonGray2) btnBackImg = "common_button_gray2.png";
 		else if(btnType==CommonButtonBlue) btnBackImg = "common_button_blue.png";
 		else if(btnType==CommonButtonGreen) btnBackImg = "common_button_green.png";
 		else if(btnType==CommonButtonOrange) btnBackImg = "common_button_orange.png";
@@ -158,7 +160,13 @@ public:
 		
 		CCScale9Sprite* back = CCScale9Sprite::create(btnBackImg.c_str());
 		
-		if(btnType != CommonButtonClose){
+		if(btnType == CommonButtonGray2){
+			back->setInsetBottom(9);
+			back->setInsetTop(9);
+			back->setInsetLeft(9);
+			back->setInsetRight(9);
+			
+		}else if(btnType != CommonButtonClose){
 			back->setInsetBottom(12);
 			back->setInsetTop(38-12*2);
 			back->setInsetLeft(9);
