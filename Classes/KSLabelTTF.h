@@ -16,14 +16,15 @@ protected:
 	float m_outerStrokeSize;
 	ccColor3B m_outerStrokeColor;
 	bool m_outerIsStroke;
-	//CCSprite* m_outerSprite;
+	CCSprite* m_outerSprite;
 public:
-	KSLabelTTF() : m_outerIsStroke(false)//, m_outerSprite(nullptr)
+	KSLabelTTF() : m_outerIsStroke(false), m_outerSprite(nullptr)
 	{
 	}
 	void enableOuterStroke(const ccColor3B &strokeColor, float strokeSize, bool mustUpdateTexture = true);
 	void disableOuterStroke(bool mustUpdateTexture = true);
-	virtual void setString(const char *label);
+	bool updateTexture();
+	//virtual void setString(const char *label);
 	static KSLabelTTF * create()
 	{
 		KSLabelTTF * pRet = new KSLabelTTF();
