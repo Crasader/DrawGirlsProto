@@ -963,7 +963,7 @@ void StartSettingScene::menuAction(CCObject* sender)
 				
 				
 				CommonButton* cancel_button = CommonButton::create("장착하기", 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-				cancel_button->setPosition(ccp(-60,-55));
+				cancel_button->setPosition(ccp(60,-55));
 				cancel_button->setFunction([=](CCObject* sender)
 										   {
 											   CardChangePopup* change_popup = CardChangePopup::create();
@@ -976,7 +976,7 @@ void StartSettingScene::menuAction(CCObject* sender)
 				
 				
 				CommonButton* ok_button = CommonButton::create("그냥하기", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
-				ok_button->setPosition(ccp(60,-55));
+				ok_button->setPosition(ccp(-60,-55));
 				ok_button->setFunction([=](CCObject* sender)
 									   {
 										   callStart();

@@ -47,6 +47,11 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 	
+	if(myDSH->getStringForKey(kDSH_Key_nick) == "")
+	{
+		myDSH->clear();
+	}
+	
 	CCSprite* title_img = CCSprite::create("temp_title_back.png");
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
@@ -937,6 +942,8 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 					}
 				}
 				
+				mySDS->fFlush(puzzle_list[i]["order"].asInt(), kSDS_PZ_base);
+				
 				if(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number) == 0)
 				{
 					bool is_found = false;
@@ -969,8 +976,6 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 //					puzzle_download_list.push_back(t_df);
 //					// ================================
 //				}
-				
-				mySDS->fFlush(puzzle_list[i]["no"].asInt(), kSDS_PZ_base);
 			}
 			
 			if(puzzle_download_list.size() > 0)
@@ -979,10 +984,10 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["version"].asInt(), false);
 		}
 		
+		mySDS->fFlush(kSDS_GI_characterCount_i);
+		
 		if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) == 0)
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1));
-		
-		mySDS->fFlush(kSDS_GI_characterCount_i);
 	}
 	else
 	{
