@@ -1065,6 +1065,7 @@ void PlayUI::conditionClear ()
 //	removeChildByTag(kCT_UI_clrCdtLabel);
 	is_cleared_cdt = true;
 	mission_button->doClose();
+	mission_button->isSuccessed(true);
 //	((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
 	
 //	CCSprite* condition_clear = CCSprite::create("condition_clear.png");
