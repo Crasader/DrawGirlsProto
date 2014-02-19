@@ -45,16 +45,16 @@ void ComboView::myInit (int combo)
 //	addChild(combo_timer);
 	
 	CCLabelTTF* combo_ment = CCLabelTTF::create("콤보", mySGD->getFont().c_str(), 18);
-	combo_ment->setColor(ccGREEN);
+	combo_ment->setColor(ccc3(50,215,0));
 	combo_ment->setAnchorPoint(ccp(1,0.5));
-	combo_ment->setPosition(ccp(77,15));
+	combo_ment->setPosition(ccp(20,12));
 	addChild(combo_ment);
 	
 	
 	combo_label = CCLabelTTF::create(CCString::createWithFormat("%d", combo)->getCString(), mySGD->getFont().c_str(), 23);//CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
-	combo_label->setColor(ccGREEN);
+	combo_label->setColor(ccc3(50, 215, 0));
 	combo_label->setAnchorPoint(ccp(1,0.5));
-	combo_label->setPosition(ccp(40,15));
+	combo_label->setPosition(ccp(-17,12));
 	addChild(combo_label);
 }
 ComboParent * ComboParent::create (CCNode* t_score_label)
@@ -310,6 +310,7 @@ void FeverParent::myInit (CCNode* t_counting_label)
 	fever_back->setVisible(false);
 	
 	fever_top = CCProgressTimer::create(CCSprite::create("fever_gage_top.png"));
+	fever_top->getSprite()->setColor(ccc3(150, 0, 255));
 	fever_top->setType(kCCProgressTimerTypeBar);
 	fever_top->setMidpoint(ccp(0,0));
 	fever_top->setBarChangeRate(ccp(1,0));
@@ -1654,7 +1655,7 @@ void PlayUI::counting ()
 		countingLabel->setVisible(true);
 		
 		countingLabel->setColor(ccRED);
-		countingLabel->setOpacity(100);
+//		countingLabel->setOpacity(100);
 //		countingLabel->setScale(4.f);
 //		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
 		if(!t_is_die)
@@ -2033,8 +2034,9 @@ void PlayUI::myInit ()
 //	addChild(gold_img);
 	
 	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
-	score_label->setAnchorPoint(ccp(0.5,0.5));
-	score_label->setPosition(ccp(480-40,myDSH->ui_top-25));
+	((CountingBMLabel*)score_label)->onChangeScale(false);
+	score_label->setAnchorPoint(ccp(1,1));
+	score_label->setPosition(ccp(480-5,myDSH->ui_top-18));
 //	if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											score_label->setPosition(ccp(240,myDSH->ui_top-15));

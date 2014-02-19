@@ -486,8 +486,7 @@ void Maingame::finalSetting()
 		
 		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreTime)].size() > 0)
 		{
-			replay_score = CCLabelBMFont::create("0", "etc_font.fnt");
-			replay_score->setScale(0.7f);
+			replay_score = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
 			replay_score->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215.f*thumb_scale+10)));
 			replay_all_node->addChild(replay_score);
 			

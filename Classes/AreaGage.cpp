@@ -104,6 +104,7 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(gage_back);
 	
 	gage_bar1 = CCProgressTimer::create(CCSprite::create("star_gage_bar1.png"));
+	gage_bar1->getSprite()->setColor(ccc3(255, 0, 100));
 	gage_bar1->setType(kCCProgressTimerTypeBar);
 	gage_bar1->setMidpoint(ccp(0,0));
 	gage_bar1->setBarChangeRate(ccp(1,0));
@@ -113,6 +114,7 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(gage_bar1);
 	
 	gage_bar2 = CCProgressTimer::create(CCSprite::create("star_gage_bar2.png"));
+	gage_bar2->getSprite()->setColor(ccc3(255, 0, 100));
 	gage_bar2->setType(kCCProgressTimerTypeBar);
 	gage_bar2->setMidpoint(ccp(0,0));
 	gage_bar2->setBarChangeRate(ccp(1,0));
@@ -122,6 +124,7 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(gage_bar2);
 	
 	gage_bar3 = CCProgressTimer::create(CCSprite::create("star_gage_bar3.png"));
+	gage_bar3->getSprite()->setColor(ccc3(255, 0, 100));
 	gage_bar3->setType(kCCProgressTimerTypeBar);
 	gage_bar3->setMidpoint(ccp(0,0));
 	gage_bar3->setBarChangeRate(ccp(1,0));
