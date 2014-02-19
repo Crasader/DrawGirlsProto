@@ -2830,7 +2830,7 @@ void KSTargetAttackPattern7::myAction()
 		if(ingFrame == chargeFrame)
 		{
 			auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_head.ccbi");
-			//KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 			lazer_main = ret.first;
 
 			lazer_main->setAnchorPoint(ccp(0,0.5));
@@ -2864,7 +2864,7 @@ void KSTargetAttackPattern7::myAction()
 			{
 				auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_body.ccbi");
 				CCSprite* laser3 = ret2.first;
-				//KS::setBlendFunc(laser3, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+				KS::setBlendFunc(laser3, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 				laser3->setPosition(ccp(20+44 * i, 0));
 				laser3->setScaleY(m_crashSize/12.f);
 				lazer_main->addChild(laser3);
