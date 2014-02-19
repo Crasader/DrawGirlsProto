@@ -2394,6 +2394,14 @@ void PlayUI::myInit ()
 		}
 		else
 		{
+			CCNode* t_node = CCNode::create();
+			mission_button->addChild(t_node);
+			CCDelayTime* t_delay = CCDelayTime::create(2.f);
+			CCCallFunc* t_call1 = CCCallFunc::create(mission_button, callfunc_selector(RollingButton::doClose));
+			CCCallFunc* t_call2 = CCCallFunc::create(t_node, callfunc_selector(CCNode::removeFromParent));
+			CCSequence* t_seq = CCSequence::create(t_delay, t_call1, t_call2, NULL);
+			t_node->runAction(t_seq);
+			
 			mission_button->doOpen();
 		}
 		
