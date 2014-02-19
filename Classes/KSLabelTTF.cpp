@@ -5,26 +5,58 @@ void KSLabelTTF::enableOuterStroke(const ccColor3B &strokeColor, float strokeSiz
 	m_outerIsStroke = true;
 	m_outerStrokeColor = strokeColor;
 	m_outerStrokeSize = strokeSize;
-	setString(m_string.c_str());
+	updateTexture();
 }
 
 void KSLabelTTF::disableOuterStroke(bool mustUpdateTexture)
 {
 	m_outerIsStroke = false;
 }
-void KSLabelTTF::setString(const char *labelStr)
+bool KSLabelTTF::updateTexture()
 {
-	CCLabelTTF::setString(labelStr);
-	
-	CCLabelTTF* label = this;
-	auto oFlip = label->isFlipY();
-	auto oColor = label->getColor();
-	auto oPosition = label->getPosition();
-	if(m_outerIsStroke)
-	{
-		CCRenderTexture* rt = CCRenderTexture::create(label->getTexture()->getContentSize().width + m_outerStrokeSize*2 , label->getTexture()->getContentSize().height+m_outerStrokeSize*2);
+	CCTexture2D *tex;
+	tex = new CCTexture2D();
 
-		label->setFlipY(true);
+	if (!tex)
+		return false;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
+	ccFontDefinition texDef = _prepareTextDefinition(true);
+	tex->initWithString( m_string.c_str(), &texDef );
+
+#else
+
+	tex->initWithString( m_string.c_str(),
+											 m_pFontName->c_str(),
+											 m_fFontSize * CC_CONTENT_SCALE_FACTOR(),
+											 CC_SIZE_POINTS_TO_PIXELS(m_tDimensions),
+											 m_hAlignment,
+											 m_vAlignment);
+
+#endif
+
+	// set the texture
+	this->setTexture(tex);
+	// release it
+	tex->release();
+
+	CCRect rect =CCRectZero;
+	rect.size   = m_pobTexture->getContentSize();
+	this->setTextureRect(rect);
+
+	if(this->m_outerIsStroke)
+	{
+		CCLabelTTF* label = this;
+		auto oFlip = label->isFlipY();
+		auto oColor = label->getColor();
+		auto oPosition = label->getPosition();
+		if(m_outerSprite)
+			m_outerSprite->removeFromParent();	
+		
+		CCRenderTexture* rt = CCRenderTexture::create(tex->getContentSize().width + m_outerStrokeSize*2 , tex->getContentSize().height+m_outerStrokeSize*2);
+
+		label->setFlipY(!oFlip);
 		label->setColor(m_outerStrokeColor);
 
 		ccBlendFunc originalBlendFunc = label->getBlendFunc();
@@ -35,27 +67,22 @@ void KSLabelTTF::setString(const char *labelStr)
 
 		rt->begin();
 
-			for (int i=0; i<360; i++) // you should optimize that for your needs
-			{
-				label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
-				label->visit();
-			}
-
-			label->setPosition(bottomLeft);
-			label->setBlendFunc(originalBlendFunc);
-			label->setColor(m_textFillColor);
+		for (int i=0; i<360; i+=10) // you should optimize that for your needs
+		{
+			label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
 			label->visit();
+		}
 
 		rt->end();
 		label->setFlipY(oFlip);
-		//if(m_outerSprite)
-			//m_outerSprite->removeFromParent();
-		//m_outerSprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
-		//addChild(m_outerSprite);
-		//m_outerSprite->setPosition(bottomLeft + ccp(0, 0))
-		CCLabelTTF::setTextureRect(rt->getSprite()->getTextureRect());
-		CCLabelTTF::setTexture(rt->getSprite()->getTexture());
+		label->setColor(oColor);
+		label->setBlendFunc(originalBlendFunc);
+		m_outerSprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
+		addChild(m_outerSprite, -1);
+		m_outerSprite->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
 		label->setPosition(oPosition);
 	}
-	
+
+	//ok
+	return true;
 }
