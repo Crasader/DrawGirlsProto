@@ -261,6 +261,7 @@ void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<vo
 //	float chargeRate = t_frame/60.f;
 	
 	auto castImage = KS::loadCCBI<CCSprite*>(this, "fx_cast.ccbi");
+	KS::setBlendFunc(castImage.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	particle = castImage;
 	particle.first->setPosition(create_position);
 	addChild(castImage.first);
@@ -466,6 +467,7 @@ void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::func
 
 	ing_rps = 0;
 	auto castImage = KS::loadCCBI<CCSprite*>(this, "fx_cast.ccbi");
+	KS::setBlendFunc(castImage.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	particle = castImage;
 	particle.first->setPosition(create_position);
 	addChild(castImage.first);

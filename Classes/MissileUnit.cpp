@@ -1993,7 +1993,7 @@ void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_bli
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	reader = new CCBReader(nodeLoader);
 	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi", this));
-	KS::setBlendFunc(oilImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	KS::setBlendFunc(oilImg, ccBlendFunc{GL_ONE_MINUS_DST_COLOR, GL_ONE});
 	addChild(oilImg);
 	oilImg->setScale(m_scale);
 	setPosition(t_fp); // t_sp
@@ -2715,6 +2715,7 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 		pollution.alongPath.point = point;
 		pollution.alongPath.direction = direction;
 		pollution.spr = KS::loadCCBI<CCSprite*>(this, "fx_pollution5.ccbi").first;
+		KS::setBlendFunc(pollution.spr, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		pollution.goal = goal;
 		
 		m_pollutions.push_back(pollution);
@@ -3672,6 +3673,7 @@ void PoisonLine::myInit (IntPoint t_sp, int frame)
 	//		initWithFile("poison_line.png");
 	auto ret = KS::loadCCBI<CCParticleSystemQuad*>(this, "fx_pollution5.ccbi");
 	line = ret.first;
+	KS::setBlendFunc(line, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	line->setPositionType(kCCPositionTypeGrouped);
 	addChild(line);
 	CCPoint myPosition = ccp((t_sp.x-1)*pixelSize+1, (t_sp.y-1)*pixelSize+1);

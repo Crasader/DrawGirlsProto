@@ -1341,7 +1341,8 @@ void KSCumberBase::cumberAttack(float dt)
 	//{
 		//return;
 	//}
-	if(m_slience || m_cumberTimer < 5.f) // 침묵 상태거나 시작한지 5초 이하면 공격 ㄴㄴ
+	bool attackCondition = m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f; // 공격할 조건.
+	if(m_slience || !attackCondition) // 공격 못하는 조건이라면 패스.
 	{
 		return;
 	}
@@ -1355,7 +1356,7 @@ void KSCumberBase::cumberAttack(float dt)
 		float gainPercent = myGD->Fcommunication("UI_getMapPercentage") * 100.f;
 		float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
 		
-		if(m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance)
+		if((m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance))
 		{
 			float w = ProbSelector::sel(m_furyRule.percent, 1.0f - m_furyRule.percent, 0.0);
 			if(w == 0)
@@ -1363,11 +1364,43 @@ void KSCumberBase::cumberAttack(float dt)
 				crashAttack = true;
 				distanceFury = true;
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
-				m_furyCnt = -240;
+				m_furyCnt = -300;
 
 				//myGD->communication("Main_showTextMessage", std::string("거리 분노룰.."));
 
 
+			}
+		}
+		else if(bossIsClosed() && gainPercent <= 80.f)
+		{
+			ProbSelector teleportProb = {1,1};
+			if(teleportProb.getResult() == 0 && 0) // 무조건 안하기.
+			{
+				std::string patternData = R"({
+				"atype" : "special",
+				"pattern" : "1007",
+				"percent" : 1,
+				"target" : "no"})";
+				Json::Reader reader;
+				Json::Value attackCode;
+				reader.parse(patternData, attackCode);
+				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+				if(ret == 1)
+				{
+					attackBehavior(attackCode);
+				}
+				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
+				m_furyCnt = -300;
+				outlineCountRatio.clear();
+				return;
+			}
+			else
+			{
+				crashAttack = true;
+				distanceFury = true;
+				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
+				m_furyCnt = -300;
+				outlineCountRatio.clear();
 			}
 		}
 	}
@@ -1468,7 +1501,7 @@ void KSCumberBase::cumberAttack(float dt)
 				}
 			}
 		}
-		int s = 6; // 3초 동안
+		int s = 6; // s초 동안
 		outlineCountRatio.push_back(outlineCount);
 		if(outlineCountRatio.size() > 60 * s)
 		{
@@ -1600,6 +1633,8 @@ void KSCumberBase::cumberAttack(float dt)
 						float patternMin = i["percent"].asFloat();
 						if(bossIsClosed_) // 보스가 갇힘.
 						{
+							//myGD->communication("Main_showTextMessage", std::string("거리 분노룰.."));
+
 							if(patternMax >= patternMin)
 							{
 								probSel.pushProb(i["percent"].asFloat() + (patternMax - i["percent"].asFloat()) * getAiValue() / 100.f);
@@ -2045,6 +2080,16 @@ void KSCumberBase::setGameover()
 
 void KSCumberBase::movingAndCrash( float dt )
 {
+	bool bossIsClosed_ = bossIsClosed();
+	if(bossIsClosed_)
+	{
+		KS::setColor(this, ccc3(0, 255, 0));
+		myGD->communication("Main_showTextMessage", std::string("갇힘..!!!"));
+	}
+	else
+	{
+		KS::setColor(this, ccc3(255, 255, 255));
+	}
 	checkConfine(dt);
 	
 	if(m_state == CUMBERSTATEFURY)
@@ -2633,7 +2678,8 @@ bool KSCumberBase::bossIsClosed()
 {
 	int greaterNumber = count_if(outlineCountRatio.begin(), outlineCountRatio.end(), [](int i){return i >= 20;} );
 	bool closedBoss = false;
-	if((float)greaterNumber / (float)outlineCountRatio.size() >= 0.8f)
+	int s = 5;
+	if((float)greaterNumber / (float)outlineCountRatio.size() >= 0.8f && outlineCountRatio.size() > 60 * s)
 	{
 		closedBoss = true;
 	}
