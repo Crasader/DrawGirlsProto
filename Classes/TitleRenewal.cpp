@@ -539,7 +539,11 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS || result_data["result"]["code"].asInt() == GDDONTFIND)
 	{
-		if(result_data["data"][myDSH->getKey(kDSH_Key_nick)].asString() == "")
+		Json::Value data1;
+		Json::Reader reader1;
+		reader1.parse(result_data["data"].asString(), data1);
+		
+		if(data1[myDSH->getKey(kDSH_Key_nick)].asString() == "")
 			myDSH->clear();
 		
 		myDSH->resetDSH();

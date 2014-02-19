@@ -1541,7 +1541,7 @@ void PlayUI::writeContinue()
 
 void PlayUI::counting ()
 {
-	if(countingCnt >= 130)
+	if(countingCnt >= 120)
 		is_urgent = true;
 	else
 		is_urgent = false;
@@ -1652,7 +1652,15 @@ void PlayUI::counting ()
 	{
 		countingLabel->setVisible(true);
 		
-		countingLabel->setColor(ccRED);
+		if(detail_counting_cnt%20 == 0)
+		{
+			if(countingLabel->getColor().b > 50)
+				countingLabel->setColor(ccRED);
+			else
+				countingLabel->setColor(ccWHITE);
+		}
+		
+		
 //		countingLabel->setOpacity(100);
 //		countingLabel->setScale(4.f);
 //		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
