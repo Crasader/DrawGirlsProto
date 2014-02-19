@@ -64,7 +64,7 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 	is_menu_enable = true;
 	
 	CCMoveTo* t_move1 = CCMoveTo::create(0.6f, ccp(240,60));
-	CCDelayTime* t_delay = CCDelayTime::create(3.5f);
+	CCDelayTime* t_delay = CCDelayTime::create(1.5f);
 	CCMoveTo* t_move2 = CCMoveTo::create(0.6f, ccp(240,0));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartMapGacha::removeFromParent));
 	CCAction* t_seq = CCSequence::create(t_move1, t_delay, t_move2, t_call, NULL);
