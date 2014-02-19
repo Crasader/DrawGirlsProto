@@ -539,11 +539,11 @@ void GetPercentage::startFadeOut ()
 //	
 //	backImg->runAction(t_fadeout1);
 	
-	CCFadeOut* t_fadeout2 = CCFadeOut::create(1.f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GetPercentage::selfRemove));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fadeout2, t_call);
-	
-	my_label->runAction(t_seq);
+	t_value+=3;
+	if(t_value >= 255)
+		removeFromParent();
+	else
+		KS::setOpacity(my_label, 255-t_value);
 }
 void GetPercentage::selfRemove ()
 {
@@ -551,10 +551,13 @@ void GetPercentage::selfRemove ()
 }
 void GetPercentage::myInit (float t_gp, bool is_item)
 {
-	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), "gain.fnt");
-	my_label->setScale(1.f/myGD->game_scale*0.7f);
-	my_label->setAlignment(kCCTextAlignmentRight);
+	my_label = KSLabelTTF::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), mySGD->getFont().c_str(), 16);
+	// CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), "gain.fnt");
+	my_label->setColor(ccYELLOW);
+	my_label->enableOuterStroke(ccBLACK, 1.f);
 	addChild(my_label, kZorderGetPercentage_label);
+	
+	t_value = 0;
 	
 //	if(is_item)
 //	{
@@ -576,7 +579,8 @@ void GetPercentage::myInit (float t_gp, bool is_item)
 //	{
 //		backImg = CCSprite::create("get_percentage.png", CCRectMake(0, 0, 52.5, 24));
 //		addChild(backImg, kZorderGetPercentage_backImg);
-		startFadeOut();
+	schedule(schedule_selector(GetPercentage::startFadeOut));
+//		startFadeOut();
 //	}
 }
 TakeSpeedUp * TakeSpeedUp::create (int t_step)
@@ -2051,7 +2055,7 @@ void PlayUI::myInit ()
 	
 	m_areaGage = NULL;
 	
-	percentageLabel = KSLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
+	percentageLabel = KSLabelTTF::create("0%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
 	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
 	percentageLabel->setPosition(ccp(185,myDSH->ui_top-22));

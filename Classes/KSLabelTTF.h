@@ -21,9 +21,9 @@ public:
 	KSLabelTTF() : m_outerIsStroke(false), m_outerSprite(nullptr)
 	{
 	}
-	void enableOuterStroke(const ccColor3B &strokeColor, float strokeSize, bool mustUpdateTexture = true);
-	void disableOuterStroke(bool mustUpdateTexture = true);
-	bool updateTexture();
+	virtual void enableOuterStroke(const ccColor3B &strokeColor, float strokeSize, bool mustUpdateTexture = true);
+	virtual void disableOuterStroke(bool mustUpdateTexture = true);
+	virtual bool updateTexture();
 	//virtual void setString(const char *label);
 	static KSLabelTTF * create()
 	{
@@ -77,24 +77,24 @@ public:
 		return NULL;
 	}
 
-	bool init()
+	virtual bool init()
 	{
 		return this->initWithString("", "Helvetica", 12);
 	}
 
-	bool initWithString(const char *label, const char *fontName, float fontSize, 
+	virtual bool initWithString(const char *label, const char *fontName, float fontSize,
 																	const CCSize& dimensions, CCTextAlignment alignment)
 	{
 		return this->initWithString(label, fontName, fontSize, dimensions, alignment, kCCVerticalTextAlignmentTop);
 	}
 
-	bool initWithString(const char *label, const char *fontName, float fontSize)
+	virtual bool initWithString(const char *label, const char *fontName, float fontSize)
 	{
 		return this->initWithString(label, fontName, fontSize, 
 																CCSizeZero, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 	}
 
-	bool initWithString(const char *string, const char *fontName, float fontSize,
+	virtual bool initWithString(const char *string, const char *fontName, float fontSize,
 																	const cocos2d::CCSize &dimensions, CCTextAlignment hAlignment,
 																	CCVerticalTextAlignment vAlignment)
 	{
@@ -117,7 +117,7 @@ public:
 		return false;
 	}
 
-	bool initWithStringAndTextDefinition(const char *string, ccFontDefinition &textDefinition)
+	virtual bool initWithStringAndTextDefinition(const char *string, ccFontDefinition &textDefinition)
 	{
 		if (CCSprite::init())
 		{
@@ -138,4 +138,6 @@ public:
 			return false;
 		}
 	}
+	
+	virtual void setString(const char *string);
 };

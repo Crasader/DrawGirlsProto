@@ -50,6 +50,7 @@ void ShockWave::ingSW ()
 	if(ing_frame%15 == 0 && getChildrenCount() < 3)
 	{
 		CCSprite* t_sw = CCSprite::create("shock_wave.png");
+		t_sw->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		t_sw->setScale(0);
 		addChild(t_sw);
 	}
@@ -90,6 +91,7 @@ void ShockWave::myInit (IntPoint t_createPoint)
 	initWithTexture(texture_spr->getTexture(), kDefaultSpriteBatchCapacity);
 	radius = 0;
 	setPosition(ccp((t_createPoint.x-1)*pixelSize+1,(t_createPoint.y-1)*pixelSize+1));
+	setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	startSW();
 }
 SW_Parent * SW_Parent::create ()
