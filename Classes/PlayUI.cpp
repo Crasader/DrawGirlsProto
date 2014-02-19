@@ -29,11 +29,12 @@ void ComboView::setPercentage (float t_percent)
 void ComboView::myInit (int combo)
 {
 	initWithFile("combo_back.png");
-	setPosition(ccp(30,myDSH->ui_top-78));
+	setPosition(ccp(480-30,myDSH->ui_top-100));//78));
+	setOpacity(0);
 	
-	combo_str = CCSprite::create("combo_front.png");
-	combo_str->setPosition(ccp(getContentSize().width/2.f-13, getContentSize().height/2.f));
-	addChild(combo_str);
+//	combo_str = CCSprite::create("combo_front.png");
+//	combo_str->setPosition(ccp(getContentSize().width/2.f-13, getContentSize().height/2.f));
+//	addChild(combo_str);
 	
 //	combo_timer = CCProgressTimer::create(CCSprite::create("combo_front.png"));
 //	combo_timer->setType(kCCProgressTimerTypeBar);
@@ -43,9 +44,17 @@ void ComboView::myInit (int combo)
 //	combo_timer->setPosition(ccp(getContentSize().width/2.f-5, getContentSize().height/2.f));
 //	addChild(combo_timer);
 	
-	combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
-	combo_label->setAnchorPoint(ccp(0,0.5));
-	combo_label->setPosition(ccp(77,15));
+	CCLabelTTF* combo_ment = CCLabelTTF::create("콤보", mySGD->getFont().c_str(), 18);
+	combo_ment->setColor(ccGREEN);
+	combo_ment->setAnchorPoint(ccp(1,0.5));
+	combo_ment->setPosition(ccp(77,15));
+	addChild(combo_ment);
+	
+	
+	combo_label = CCLabelTTF::create(CCString::createWithFormat("%d", combo)->getCString(), mySGD->getFont().c_str(), 23);//CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
+	combo_label->setColor(ccGREEN);
+	combo_label->setAnchorPoint(ccp(1,0.5));
+	combo_label->setPosition(ccp(40,15));
 	addChild(combo_label);
 }
 ComboParent * ComboParent::create (CCNode* t_score_label)
@@ -66,7 +75,7 @@ void ComboParent::showCombo (int t_combo)
 	{
 		ComboView* t_cv = ComboView::create(t_combo);
 		t_cv->setScale(1.f/1.5f);
-		t_cv->setPosition(score_label->getPosition());
+		t_cv->setPosition(ccpAdd(score_label->getPosition(), ccp(20,-22)));
 		addChild(t_cv,0,1);// 1 : ComboView
 	}
 	
@@ -80,11 +89,11 @@ void ComboParent::stopKeep ()
 	removeChildByTag(1);
 	myGD->communication("UI_setComboCnt", 0);
 	is_keeping = false;
-	score_label->setVisible(true);
+//	score_label->setVisible(true);
 }
 void ComboParent::startKeep ()
 {
-	score_label->setVisible(false);
+//	score_label->setVisible(false);
 	is_keeping = true;
 	schedule(schedule_selector(ComboParent::keeping));
 }
@@ -143,7 +152,7 @@ void FeverParent::addFeverGage (int count)
 	recent_count += count;
 	if(recent_count >= 15)
 	{
-		if(counting_label->getPositionY() < 70)
+		if(((CCLabelTTF*)counting_label)->getColor().g > 150)
 			counting_label->setVisible(false);
 		
 		fever_back->setVisible(true);
@@ -296,7 +305,7 @@ void FeverParent::myInit (CCNode* t_counting_label)
 	entered_fever_cnt = 0;
 	
 	fever_back = CCSprite::create("fever_gage_back.png");
-	fever_back->setPosition(counting_label->getPosition());
+	fever_back->setPosition(ccpAdd(counting_label->getPosition(), ccp(0,-20)));
 	addChild(fever_back);
 	fever_back->setVisible(false);
 	
@@ -1646,8 +1655,8 @@ void PlayUI::counting ()
 		
 		countingLabel->setColor(ccRED);
 		countingLabel->setOpacity(100);
-		countingLabel->setScale(4.f);
-		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
+//		countingLabel->setScale(4.f);
+//		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
 		if(!t_is_die)
 			countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 		else
@@ -1667,7 +1676,7 @@ void PlayUI::counting ()
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
 		countingLabel->setPosition(ccp(240,35));
-		countingLabel->setString(CCString::createWithFormat("%d", label_value)->getCString());
+		countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 	}
 	
 }
@@ -2025,7 +2034,7 @@ void PlayUI::myInit ()
 	
 	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 	score_label->setAnchorPoint(ccp(0.5,0.5));
-	score_label->setPosition(ccp(40,myDSH->ui_top-25));
+	score_label->setPosition(ccp(480-40,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											score_label->setPosition(ccp(240,myDSH->ui_top-15));
@@ -2101,7 +2110,7 @@ void PlayUI::myInit ()
 	home_item->setTag(kMenuTagUI_home);
 	
 	home_menu = CCMenu::createWithItem(home_item);
-	home_menu->setPosition(ccp(480-25, myDSH->ui_top-25));
+	home_menu->setPosition(ccp(25, myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)				home_menu->setPosition(ccp(25,myDSH->ui_top-25));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		home_menu->setPosition(ccp(480-25,myDSH->ui_top-25));
 //	else												home_menu->setPosition(ccp(25,myDSH->ui_top-25));
@@ -2132,9 +2141,9 @@ void PlayUI::myInit ()
 	for(int i=1;i<=6;i++)
 	{
 		CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
-		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
-		else									exchange_spr->setPosition(ccp(240-19*3.5f+i*19,myDSH->ui_top-40));
+		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-40));
+		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-40));
+		else									exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-40));
 		top_center_node->addChild(exchange_spr);
 		
 		exchange_spr->setVisible(false);
@@ -2146,18 +2155,18 @@ void PlayUI::myInit ()
 	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
-	mission_button->setPosition(ccp(480-70, myDSH->ui_top-25));
+	mission_button->setPosition(ccp(70, myDSH->ui_top-25));
 	addChild(mission_button);
 	
 	mission_button->startMarquee();
 	
 	mission_button->setOpenFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(-170,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(170,0)));
 		top_center_node->setVisible(false);
 	});
 	
 	mission_button->setCloseFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(170,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(-170,0)));
 		top_center_node->setVisible(true);
 	});
 	
