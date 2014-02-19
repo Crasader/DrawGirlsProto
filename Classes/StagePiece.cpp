@@ -206,7 +206,7 @@ void StagePiece::myInit (string t_piece, int t_number, int t_level, CCPoint t_p,
 		level_label->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f-6));
 		piece_img->addChild(level_label);
 		
-		CCLabelBMFont* level_count = CCLabelBMFont::create(CCString::createWithFormat("%d", stage_level)->getCString(), "levelcount.fnt");
+		CCLabelBMFont* level_count = CCLabelBMFont::create(CCString::createWithFormat("%d", stage_level)->getCString(), "allfont.fnt");
 		level_count->setAnchorPoint(ccp(0.5,0.5));
 		level_count->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f+6));
 		piece_img->addChild(((CCLabelBMFont*)level_count));

@@ -145,7 +145,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 
 		if(i->m_kind == RewardKind::kGold || i->m_kind == RewardKind::kRuby)
 		{
-			CCLabelBMFont* m_value = CCLabelBMFont::create(CCString::createWithFormat("%d", i->m_value)->getCString(), "etc_font.fnt");
+			CCLabelBMFont* m_value = CCLabelBMFont::create(CCString::createWithFormat("%d", i->m_value)->getCString(), "allfont.fnt");
 			float degree = 360 / 7.f * degreeCount;
 			float rad = deg2Rad(-degree) + M_PI / 2.f;
 			m_value->setRotation(360 / 7.f * degreeCount);

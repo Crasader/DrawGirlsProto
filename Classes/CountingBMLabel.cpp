@@ -7,6 +7,7 @@
 //
 
 #include "CountingBMLabel.h"
+#include "KSUtil.h"
 
 CountingBMLabel* CountingBMLabel::create(string init_value, string font_filename, float t_duration, string t_format)
 {
@@ -36,10 +37,13 @@ void CountingBMLabel::startChanging(const char* after_value)
 	
 	is_changing = true;
 	
-	CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f*base_scale);
-	CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 1.f*base_scale);
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale1, t_scale2);
-	runAction(t_seq);
+	if(is_on_change_scale)
+	{
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f*base_scale);
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 1.f*base_scale);
+		CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale1, t_scale2);
+		runAction(t_seq);
+	}
 	
 	base_value = atof(keep_value_string.c_str()); // 원래 가지고 있던 골드
 	keep_value_string = after_value;
@@ -74,7 +78,7 @@ void CountingBMLabel::changing(float dt)
 				increase_value += decreaseUnit*sign_value;
 			}
 		}
-		CCLabelBMFont::setString(CCString::createWithFormat(show_format.c_str(),base_value+increase_value)->getCString());
+		CCLabelBMFont::setString(KS::insert_separator(CCString::createWithFormat(show_format.c_str(),base_value+increase_value)->getCString()).c_str());
 	}
 	else
 		stopChanging();
@@ -84,7 +88,7 @@ void CountingBMLabel::stopChanging()
 {
 	unschedule(schedule_selector(CountingBMLabel::changing));
 	is_changing = false;
-	CCLabelBMFont::setString(keep_value_string.c_str());
+	CCLabelBMFont::setString(KS::insert_separator(keep_value_string.c_str()).c_str());
 }
 
 void CountingBMLabel::setScale(float t_scale)
@@ -93,8 +97,14 @@ void CountingBMLabel::setScale(float t_scale)
 	CCLabelBMFont::setScale(t_scale);
 }
 
+void CountingBMLabel::onChangeScale(bool t_b)
+{
+	is_on_change_scale = t_b;
+}
+
 void CountingBMLabel::myInit(string init_value, string font_filename, float t_duration, string t_format)
 {
+	is_on_change_scale = true;
 	base_scale = -1;
 	is_changing = false;
 	duration = t_duration;
@@ -103,6 +113,6 @@ void CountingBMLabel::myInit(string init_value, string font_filename, float t_du
 		show_format = "%.0f";
 	else
 		show_format = t_format.c_str();
-	CCLabelBMFont::initWithString(init_value.c_str(), font_filename.c_str(), kCCLabelAutomaticWidth, kCCTextAlignmentLeft, CCPointZero);
+	CCLabelBMFont::initWithString(KS::insert_separator(init_value.c_str()).c_str(), font_filename.c_str(), kCCLabelAutomaticWidth, kCCTextAlignmentLeft, CCPointZero);
 	stopChanging();
 }

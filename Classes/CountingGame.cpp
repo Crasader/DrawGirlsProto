@@ -67,7 +67,7 @@ bool CountingGame::init(int priority, const std::function<void(CCObject*, SEL_Ca
 	m_menu->setPropaOnBegan(true);
 	addChild(m_menu, 1);
 	
-	m_timeFnt = CCLabelBMFont::create(CCString::createWithFormat("%d", m_remainTime)->getCString(), "etc_font.fnt");
+	m_timeFnt = CCLabelBMFont::create(CCString::createWithFormat("%d", m_remainTime)->getCString(), "allfont.fnt");
 	m_timeFnt->setPosition(ccp(420, 270));
 	addChild(m_timeFnt, 2);
 	
@@ -186,7 +186,7 @@ void CountingGame::createObject(float dt)
 																			addChild(resultMark, 10);
 																			
 																			CCLog("answer");
-																			CCLabelBMFont* result = CCLabelBMFont::create("ANSWER", "etc_font.fnt");
+																			CCLabelBMFont* result = CCLabelBMFont::create("ANSWER", "allfont.fnt");
 																			result->setPosition(ccp(240, 160));
 																			addChild(result);
 																			CCLog("correct!!");
@@ -228,7 +228,7 @@ void CountingGame::createObject(float dt)
 																			CCSprite* resultMark = CCSprite::create("bonusgame_bosscount_cancel.png");
 																			resultMark->setPosition(item->getPosition());
 																			addChild(resultMark, 10);
-																			CCLabelBMFont* result = CCLabelBMFont::create("WRONG", "etc_font.fnt");
+																			CCLabelBMFont* result = CCLabelBMFont::create("WRONG", "allfont.fnt");
 																			result->setPosition(ccp(240, 160));
 																			addChild(result);
 																			m_menu->setTouchEnabled(false);
