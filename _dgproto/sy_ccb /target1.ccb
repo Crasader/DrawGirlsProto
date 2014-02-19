@@ -241,9 +241,18 @@
 						<key>value</key>
 						<integer>150</integer>
 					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
+					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -410,6 +419,17 @@
 							<string>target_1.png</string>
 						</array>
 					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
+					</dict>
 				</array>
 			</dict>
 			<dict>
@@ -526,6 +546,17 @@
 						<key>value</key>
 						<integer>255</integer>
 					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
+					</dict>
 				</array>
 			</dict>
 			<dict>
@@ -641,6 +672,17 @@
 						<array>
 							<string></string>
 							<string>target_3.png</string>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
 						</array>
 					</dict>
 				</array>
@@ -810,6 +852,17 @@
 							<string>target_4.png</string>
 						</array>
 					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
+					</dict>
 				</array>
 			</dict>
 			<dict>
@@ -868,6 +921,17 @@
 						<array>
 							<string></string>
 							<string>target_6.png</string>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
 						</array>
 					</dict>
 				</array>

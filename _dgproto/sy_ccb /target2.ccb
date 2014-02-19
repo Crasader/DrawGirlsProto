@@ -90,8 +90,6 @@
 						<true/>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -469,9 +467,18 @@
 							<integer>0</integer>
 						</array>
 					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
+					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -811,9 +818,18 @@
 							<integer>0</integer>
 						</array>
 					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
+					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -1183,6 +1199,17 @@
 							<integer>0</integer>
 						</array>
 					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
+					</dict>
 				</array>
 				<key>seqExpanded</key>
 				<true/>
@@ -1412,6 +1439,17 @@
 							<integer>255</integer>
 							<integer>40</integer>
 							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
 						</array>
 					</dict>
 				</array>
