@@ -229,7 +229,7 @@ void MapScanner::scanMap()
 			}
 		}
 		
-		if(1.f*getted_cell/total_cell > 0.4f)
+		if(1.f*getted_cell/total_cell > 0.3f)
 			myGD->communication("Main_setUnlimitMap");
 	}
 	

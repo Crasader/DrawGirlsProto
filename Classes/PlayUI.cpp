@@ -1541,7 +1541,7 @@ void PlayUI::writeContinue()
 
 void PlayUI::counting ()
 {
-	if(countingCnt >= 120)
+	if(countingCnt-1 >= playtime_limit-30)
 		is_urgent = true;
 	else
 		is_urgent = false;
@@ -1603,17 +1603,17 @@ void PlayUI::counting ()
 		CCRotateBy* t_rotate = CCRotateBy::create(0.5, -180);
 		sand_clock->runAction(t_rotate);
 		
-		if(countingCnt == 50)
+		if(countingCnt-1 == playtime_limit/3)
 		{
 			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
 			if(myGD->game_step == kGS_limited)
 				myGD->communication("Main_setUnlimitMap");
 		}
-		else if(countingCnt == 100)
+		else if(countingCnt-1 == playtime_limit-50)
 		{
 			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
 		}
-		else if(countingCnt == 130)
+		else if(countingCnt-1 == playtime_limit-30)
 		{
 			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", true);
 		}

@@ -339,6 +339,9 @@ bool NewMainFlowScene::init()
 				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number));
 			}
 		}
+		
+		if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) == 0)
+			myDSH->setIntegerForKey(kDSH_Key_selectedCard, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 	}
 	
 	bool is_clear_popup = false;
