@@ -551,7 +551,7 @@ void GetPercentage::selfRemove ()
 }
 void GetPercentage::myInit (float t_gp, bool is_item)
 {
-	my_label = KSLabelTTF::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), mySGD->getFont().c_str(), 16);
+	my_label = KSLabelTTF::create(CCString::createWithFormat("+%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), mySGD->getFont().c_str(), 12);
 	// CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), "gain.fnt");
 	my_label->setColor(ccYELLOW);
 	my_label->enableOuterStroke(ccBLACK, 1.f);
@@ -583,10 +583,10 @@ void GetPercentage::myInit (float t_gp, bool is_item)
 //		startFadeOut();
 //	}
 }
-TakeSpeedUp * TakeSpeedUp::create (int t_step)
+TakeSpeedUp * TakeSpeedUp::create (int t_step, std::function<void()> t_end_func)
 {
 	TakeSpeedUp* t_g = new TakeSpeedUp();
-	t_g->myInit(t_step);
+	t_g->myInit(t_step, t_end_func);
 	t_g->autorelease();
 	return t_g;
 }
@@ -600,10 +600,12 @@ void TakeSpeedUp::startFadeOut ()
 }
 void TakeSpeedUp::selfRemove ()
 {
+	end_function();
 	removeFromParentAndCleanup(true);
 }
-void TakeSpeedUp::myInit (int t_step)
+void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 {
+	end_function = t_end_func;
 	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
 	
 	startFadeOut();
@@ -712,28 +714,22 @@ TakeCoin * TakeCoin::create ()
 	t_w->autorelease();
 	return t_w;
 }
-void TakeCoin::startAction ()
+void TakeCoin::startMyAction()
 {
-	CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
-	CCHide* t_hide = CCHide::create();
-	CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
-	CCShow* t_show = CCShow::create();
-	CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
-	CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
-	CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TakeCoin::selfRemove));
+	unschedule(schedule_selector(TakeCoin::startMyAction));
+	CCSprite* take_coin = KS::loadCCBI<CCSprite*>(this, "ui_change.ccbi").first;
+	addChild(take_coin);
 	
-	runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
-}
-void TakeCoin::selfRemove ()
-{
-	removeFromParentAndCleanup(true);
+	CCDelayTime* t_delay = CCDelayTime::create(3.f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+	runAction(t_seq);
 }
 void TakeCoin::myInit ()
 {
-	initWithFile("show_take_change.png");
+	setPosition(ccp(240,myDSH->ui_center_y));
 	
-	setPosition(ccp(640,myDSH->ui_center_y));
+	schedule(schedule_selector(TakeCoin::startMyAction));
 }
 AreaScroll * AreaScroll::create ()
 {

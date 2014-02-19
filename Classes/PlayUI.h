@@ -145,12 +145,13 @@ private:
 class TakeSpeedUp : public CCSprite
 {
 public:
-	static TakeSpeedUp * create (int t_step);
+	static TakeSpeedUp * create (int t_step, std::function<void()> t_end_func);
 private:
 	CCSprite * backImg;
+	std::function<void()> end_function;
 	void startFadeOut ();
 	void selfRemove ();
-	void myInit (int t_step);
+	void myInit (int t_step, std::function<void()> t_end_func);
 };
 class DetailWarning : public CCNode
 {
@@ -170,13 +171,12 @@ private:
 	void selfRemove ();
 	void myInit (int t1);
 };
-class TakeCoin : public CCSprite
+class TakeCoin : public CCNode
 {
 public:
 	static TakeCoin * create ();
-	void startAction ();
 private:
-	void selfRemove ();
+	void startMyAction ();
 	void myInit ();
 };
 class AreaScroll : public CCNode

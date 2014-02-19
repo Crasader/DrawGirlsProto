@@ -110,17 +110,33 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 	clear_img->setPosition(ccp(160,215));
 	addChild(clear_img, kCST_Z_clear);
 
-	CCSprite* top_back = CCSprite::create("top_back.png");
-	top_back->setAnchorPoint(ccp(0.5,0));
-	top_back->setPosition(ccp(160,430));
-	top_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
-	addChild(top_back);
-
-	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
-	bottom_back->setAnchorPoint(ccp(0.5,1));
-	bottom_back->setPosition(ccp(160,0));
-	bottom_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
-	addChild(bottom_back);
+	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern.png");
+	addChild(side_back);
+	
+	CCSize pattern_size = side_back->getTexture()->getContentSize();
+	
+	for(int i=0;i*pattern_size.width < 480;i++)
+	{
+		for(int j=0;j*pattern_size.height < myDSH->ui_top;j++)
+		{
+			CCSprite* t_pattern = CCSprite::createWithTexture(side_back->getTexture());
+			t_pattern->setAnchorPoint(ccp(0,0));
+			t_pattern->setPosition(ccp(i*pattern_size.width,j*pattern_size.height));
+			side_back->addChild(t_pattern);
+		}
+	}
+	
+//	CCSprite* top_back = CCSprite::create("top_back.png");
+//	top_back->setAnchorPoint(ccp(0.5,0));
+//	top_back->setPosition(ccp(160,430));
+//	top_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
+//	addChild(top_back);
+//
+//	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
+//	bottom_back->setAnchorPoint(ccp(0.5,1));
+//	bottom_back->setPosition(ccp(160,0));
+//	bottom_back->setScaleX((320.f+myGD->boarder_value*2.f)/480.f);
+//	addChild(bottom_back);
 
 	CCSprite* top_boarder = CCSprite::create("frame_top.png", CCRectMake(0, 0, 334, 7));
 	top_boarder->setAnchorPoint(ccp(0.5,0));

@@ -377,8 +377,8 @@ void LoadingTipScene::readyLoading()
 		sil_load_list.push_back(CCString::createWithFormat("card%d_visible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString());
 		sil_load_list.push_back(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString());
 		
-		default_load_list.push_back("top_back.png");
-		default_load_list.push_back("bottom_back.png");
+//		default_load_list.push_back("top_back.png");
+//		default_load_list.push_back("bottom_back.png");
 		default_load_list.push_back("normal_frame_top.png");
 		default_load_list.push_back("normal_frame_bottom.png");
 		default_load_list.push_back("normal_frame_left.png");
