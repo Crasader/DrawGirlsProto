@@ -16,6 +16,7 @@
 #include "cocos-ext.h"
 #include "LogData.h"
 #include "DataStorageHub.h"
+#include "KSUtil.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -157,6 +158,7 @@ private:
 					pre_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi",this));
 					pre_img->setPosition(t_p.convertToCCP());
 					addChild(pre_img);
+					KS::setBlendFunc(pre_img, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 				}
 				
 				if(i < plinked_list->size()-1)
@@ -164,6 +166,7 @@ private:
 					next_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi", this));
 					next_img->setPosition(t_p.convertToCCP());
 					addChild(next_img);
+					KS::setBlendFunc(next_img, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 				}
 				break;
 			}
