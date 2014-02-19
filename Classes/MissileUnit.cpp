@@ -291,6 +291,7 @@ void MissileUnit3::removeEffect ()
 																				 {
 																					 
 																					 auto ret = KS::loadCCBI<CCSprite*>(this, "bomb_8_4.ccbi");
+																					 KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 																					 ret.first->setPosition(stoneSprite->getPosition());
 																					 addChild(ret.first, 2);
 																					 addChild(KSTimer::create(2.f, [=]()
@@ -1225,6 +1226,7 @@ void FallMeteor::selfRemove ()
 void FallMeteor::initParticle ()
 {
 	auto ret = KS::loadCCBI<CCSprite*>(this, "bomb_8_4.ccbi");//"fx_bomb5.ccbi");
+	KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	CCSprite* particle = ret.first;
 	
 	if(meteor)
@@ -1666,6 +1668,7 @@ void ThreeCushion::initParticle ()
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
 	CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("bomb_8_8.ccbi",this));
+	KS::setBlendFunc(particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	reader->release();
 	particle->setPosition(baseNode->getPosition());
 	particle->setRotation(rand()%360);
@@ -1851,7 +1854,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 	setPosition(myPosition);
 	
 	ticking_main = KS::loadCCBI<CCSprite*>(this, "pattern_timebomb1.ccbi").first;
-	ticking_main->setScale(0.25f);
+	ticking_main->setScale(0.50f);
 	//		ticking_main->setVisible(false);
 	ticking_main->setAnchorPoint(ccp(0.5f, 0.5f));
 	addChild(ticking_main);
@@ -1865,7 +1868,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 		ticking_label = CCLabelAtlas::create(CCString::createWithFormat("%d",bombTimes)->getCString(), "tickingTimeBomb_number.png", 9, 11, '1');
 		ticking_label->setAnchorPoint(ccp(0.5f, 0.5f));
 		ticking_label->setPosition(ccp(0, 0));
-		ticking_label->setScale(0.5f);
+		ticking_label->setScale(0.7f);
 		addChild(ticking_label);
 	}
 	else if(rangeCode == 2)
@@ -1881,6 +1884,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 void TickingTimeBomb::initParticle ()
 {
 	auto bomb = KS::loadCCBI<CCSprite*>(this, "bomb_8_8.ccbi");
+	KS::setBlendFunc(bomb.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	bomb.first->setPosition(CCPointZero);
 	addChild(bomb.first);
 //	addChild(KSTimer::create(2.0f, [=](){
@@ -1989,7 +1993,7 @@ void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_bli
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	reader = new CCBReader(nodeLoader);
 	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi", this));
-	//KS::setBlendFunc(oilImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	KS::setBlendFunc(oilImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	addChild(oilImg);
 	oilImg->setScale(m_scale);
 	setPosition(t_fp); // t_sp
@@ -2953,6 +2957,7 @@ void ThrowBomb::update (float dt)
 	if(m_step == 2) // 폭발.
 	{
 		auto bomb = KS::loadCCBI<CCSprite*>(this, "bomb_8_7.ccbi");//"fx_bomb5.ccbi");
+		KS::setBlendFunc(bomb.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		bomb.first->setPosition(m_parentMissile->getPosition());
 		addChild(bomb.first);
 		addChild(KSTimer::create(1.3f, [=](){bomb.first->removeFromParent();})); // 1.3 초 후에 사라짐.
@@ -3260,6 +3265,7 @@ void ReaverScarab::update (float dt)
 		schedule(schedule_selector(ThisClassType::selfRemove));
 		
 		auto bomb = KS::loadCCBI<CCSprite*>(this, "bomb_8_7.ccbi");
+		KS::setBlendFunc(bomb.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		addChild(bomb.first);
 		m_targetSprite->removeFromParent();
 		addChild(KSTimer::create(1.3f, [=](){
@@ -3735,6 +3741,7 @@ void PoisonDrop::initParticle ()
 	auto ret = KS::loadCCBI<CCSprite*>(this, "bomb_8_9.ccbi");
 	CCSprite* particle = ret.first;
 	
+	KS::setBlendFunc(particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	//		particle->setPosVar(CCPointZero);
 	dropImg->addChild(particle);
 }

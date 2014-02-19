@@ -2481,6 +2481,7 @@ void IceFog::showFog()
 	stopAllActions();
 	
 	fogImg = KS::loadCCBI<CCSprite*>(this, "fx_freezing_1.ccbi").first;
+		KS::setBlendFunc(fogImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	addChild(fogImg);
 }
 
@@ -2519,6 +2520,7 @@ void IceFog::myInit( CCObject* t_jack, SEL_CallFunc d_freeze )
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_freezing_1.ccbi");
 	
 	fogImg = t_ccb.first;
+	KS::setBlendFunc(fogImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	addChild(fogImg);
 	
 	fog_manager = t_ccb.second;

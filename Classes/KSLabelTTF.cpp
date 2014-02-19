@@ -52,9 +52,10 @@ void KSLabelTTF::setString(const char *labelStr)
 			//m_outerSprite->removeFromParent();
 		//m_outerSprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
 		//addChild(m_outerSprite);
-		//m_outerSprite->setPosition(bottomLeft + ccp(0, 0));
+		//m_outerSprite->setPosition(bottomLeft + ccp(0, 0))
 		CCLabelTTF::setTextureRect(rt->getSprite()->getTextureRect());
 		CCLabelTTF::setTexture(rt->getSprite()->getTexture());
+		label->setPosition(oPosition);
 	}
 	
 }

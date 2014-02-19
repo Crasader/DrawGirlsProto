@@ -125,6 +125,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle)
 	{
 		myGD->communication("CP_removeSubCumber", this);
 		auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");
+		KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		
 		CCPoint t = getPosition();
 		ret.first->setPosition(t);

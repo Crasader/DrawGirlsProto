@@ -1726,6 +1726,7 @@ void KSCumberBase::bossDieBomb(float dt)
 		 != m_bossDie.m_bossDieBombFrameNumbers.end())
 	{
 		auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi");
+		KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		CCPoint t = getPosition();
 		t.x += m_well512.GetFloatValue(-100.f, 100.f);
 		t.y += m_well512.GetFloatValue(-100.f, 100.f);
@@ -1735,6 +1736,7 @@ void KSCumberBase::bossDieBomb(float dt)
 		if(maxValue == m_bossDie.m_bossDieFrameCount)
 		{
 			auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");
+			KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 			CCPoint t = getPosition();
 			ret.first->setPosition(t);
 			getParent()->addChild(ret.first, 11);
