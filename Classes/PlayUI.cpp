@@ -6,6 +6,7 @@
 #include "StartSettingScene.h"
 #include "AchieveNoti.h"
 #include "RollingButton.h"
+#include "KSLabelTTF.h"
 
 #define LZZ_INLINE inline
 using namespace cocos2d;
@@ -47,14 +48,14 @@ void ComboView::myInit (int combo)
 	CCLabelTTF* combo_ment = CCLabelTTF::create("콤보", mySGD->getFont().c_str(), 18);
 	combo_ment->setColor(ccc3(50,215,0));
 	combo_ment->setAnchorPoint(ccp(1,0.5));
-	combo_ment->setPosition(ccp(20,12));
+	combo_ment->setPosition(ccp(20,8));
 	addChild(combo_ment);
 	
 	
 	combo_label = CCLabelTTF::create(CCString::createWithFormat("%d", combo)->getCString(), mySGD->getFont().c_str(), 23);//CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
 	combo_label->setColor(ccc3(50, 215, 0));
 	combo_label->setAnchorPoint(ccp(1,0.5));
-	combo_label->setPosition(ccp(-17,12));
+	combo_label->setPosition(ccp(-17,8));
 	addChild(combo_label);
 }
 ComboParent * ComboParent::create (CCNode* t_score_label)
@@ -1248,7 +1249,7 @@ void PlayUI::setClearPercentage (float t_p)
 {
 	clearPercentage = t_p;
 	m_areaGage = AreaGage::create(clearPercentage);
-	m_areaGage->setPosition(ccp(240,myDSH->ui_top-25));
+	m_areaGage->setPosition(ccp(240,myDSH->ui_top-22));
 	top_center_node->addChild(m_areaGage);
 	m_areaGage->setPercentage(getPercentage());
 }
@@ -2036,7 +2037,7 @@ void PlayUI::myInit ()
 	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 	((CountingBMLabel*)score_label)->onChangeScale(false);
 	score_label->setAnchorPoint(ccp(1,1));
-	score_label->setPosition(ccp(480-5,myDSH->ui_top-18));
+	score_label->setPosition(ccp(480-8,myDSH->ui_top-13));
 //	if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											score_label->setPosition(ccp(240,myDSH->ui_top-15));
@@ -2047,10 +2048,10 @@ void PlayUI::myInit ()
 	
 	m_areaGage = NULL;
 	
-	percentageLabel = CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14); // CCLabelBMFont::create("0%%", "star_gage_font.fnt");
-	percentageLabel->enableStroke(ccBLACK, 0.5f);
+	percentageLabel = KSLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
-	percentageLabel->setPosition(ccp(185,myDSH->ui_top-25));
+	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
+	percentageLabel->setPosition(ccp(185,myDSH->ui_top-22));
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 //	else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
@@ -2112,7 +2113,7 @@ void PlayUI::myInit ()
 	home_item->setTag(kMenuTagUI_home);
 	
 	home_menu = CCMenu::createWithItem(home_item);
-	home_menu->setPosition(ccp(25, myDSH->ui_top-25));
+	home_menu->setPosition(ccp(25, myDSH->ui_top-22));
 //	if(myGD->gamescreen_type == kGT_leftUI)				home_menu->setPosition(ccp(25,myDSH->ui_top-25));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		home_menu->setPosition(ccp(480-25,myDSH->ui_top-25));
 //	else												home_menu->setPosition(ccp(25,myDSH->ui_top-25));
@@ -2143,9 +2144,9 @@ void PlayUI::myInit ()
 	for(int i=1;i<=6;i++)
 	{
 		CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-40));
-		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-40));
-		else									exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-40));
+		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-37));
+		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-37));
+		else									exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-37));
 		top_center_node->addChild(exchange_spr);
 		
 		exchange_spr->setVisible(false);
@@ -2157,7 +2158,7 @@ void PlayUI::myInit ()
 	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
-	mission_button->setPosition(ccp(70, myDSH->ui_top-25));
+	mission_button->setPosition(ccp(70, myDSH->ui_top-22));
 	addChild(mission_button);
 	
 	mission_button->startMarquee();
