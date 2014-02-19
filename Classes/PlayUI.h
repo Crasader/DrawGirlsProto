@@ -211,6 +211,7 @@ enum ChildTagInPlayUI
 	kCT_UI_clrCdtPopup
 };
 class RollingButton;
+class KSLabelTTF;
 class PlayUI : public CCNode
 {
 public:
@@ -269,7 +270,7 @@ private:
 //	GoldLabel * gold_label;
 	CCNode* top_center_node;
 	CCLabelBMFont * score_label;
-	CCLabelTTF * percentageLabel;
+	KSLabelTTF * percentageLabel;
 	CCLabelBMFont * countingLabel;
 	CCSprite * result_sprite;
 	CCDictionary * exchange_dic;
