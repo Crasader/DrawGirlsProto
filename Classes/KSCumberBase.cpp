@@ -2670,7 +2670,7 @@ void KSCumberBase::aggroExec()
 {
 	m_drawMovement = FOLLOW_TYPE;
 	m_normalMovement = FOLLOW_TYPE;
-	KS::setColor(this, ccc3(255, 0, 0));
+	//KS::setColor(this, ccc3(255, 0, 0));
 	CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
 	m_follow.timer = 1.1f;
 	m_follow.collisionCount = 0;
@@ -2681,7 +2681,7 @@ void KSCumberBase::unAggroExec()
 {
 	m_normalMovement = m_originalNormalMovement;
 	m_drawMovement = m_normalMovement;
-	KS::setColor(this, ccc3(255, 255, 255));
+	//KS::setColor(this, ccc3(255, 255, 255));
 }
 template <typename T>
 void FixedSizeDeque<T>::push_back( const T& p )
