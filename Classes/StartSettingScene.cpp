@@ -20,7 +20,7 @@
 #include "StageImgLoader.h"
 #include "CardCase.h"
 #include "ShowItemContent.h"
-#include "ItemBuyPopup.h"
+//#include "ItemBuyPopup.h"
 #include "LogData.h"
 #include "KSUtil.h"
 #include "LoadingLayer.h"
@@ -1001,9 +1001,9 @@ void StartSettingScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kStartSettingMenuTag_itemBuy)
 		{
-			ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_idx], clicked_item_idx, this, callfuncII_selector(StartSettingScene::buySuccessItem));
-			t_ibp->setCloseTargetDelegate(this, callfunc_selector(StartSettingScene::popupClose));
-			addChild(t_ibp, kStartSettingZorder_popup);
+//			ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_idx], clicked_item_idx, this, callfuncII_selector(StartSettingScene::buySuccessItem));
+//			t_ibp->setCloseTargetDelegate(this, callfunc_selector(StartSettingScene::popupClose));
+//			addChild(t_ibp, kStartSettingZorder_popup);
 		}
 	}
 }
