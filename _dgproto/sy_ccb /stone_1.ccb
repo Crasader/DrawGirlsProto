@@ -212,6 +212,31 @@
 				<dict>
 					<key>0</key>
 					<dict>
+						<key>opacity</key>
+						<dict>
+							<key>keyframes</key>
+							<array>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>opacity</string>
+									<key>time</key>
+									<real>0.0</real>
+									<key>type</key>
+									<integer>5</integer>
+									<key>value</key>
+									<integer>255</integer>
+								</dict>
+							</array>
+							<key>name</key>
+							<string>opacity</string>
+							<key>type</key>
+							<integer>5</integer>
+						</dict>
 						<key>position</key>
 						<dict>
 							<key>keyframes</key>
@@ -316,7 +341,19 @@
 							<string>stone_1_4.png</string>
 						</array>
 					</dict>
+					<dict>
+						<key>baseValue</key>
+						<integer>255</integer>
+						<key>name</key>
+						<string>opacity</string>
+						<key>type</key>
+						<string>Byte</string>
+						<key>value</key>
+						<integer>255</integer>
+					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -351,11 +388,11 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.26666668057441711</real>
+									<real>0.20000000298023224</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
-									<integer>0</integer>
+									<integer>100</integer>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -366,7 +403,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.5</real>
+									<real>0.43333333730697632</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -381,11 +418,11 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.76666665077209473</real>
+									<real>0.66666668653488159</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
-									<integer>0</integer>
+									<integer>100</integer>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -396,11 +433,26 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>1.0666667222976685</real>
+									<real>0.86666667461395264</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
 									<integer>255</integer>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>opacity</string>
+									<key>time</key>
+									<real>1.1000000238418579</real>
+									<key>type</key>
+									<integer>5</integer>
+									<key>value</key>
+									<integer>100</integer>
 								</dict>
 							</array>
 							<key>name</key>
@@ -525,9 +577,22 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>255</integer>
+						<integer>100</integer>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -774,6 +839,17 @@
 						<string>Byte</string>
 						<key>value</key>
 						<integer>0</integer>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
 					</dict>
 				</array>
 			</dict>
@@ -1023,6 +1099,17 @@
 						<key>value</key>
 						<integer>0</integer>
 					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
+					</dict>
 				</array>
 			</dict>
 			<dict>
@@ -1271,6 +1358,17 @@
 						<key>value</key>
 						<integer>0</integer>
 					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
+					</dict>
 				</array>
 			</dict>
 			<dict>
@@ -1518,6 +1616,17 @@
 						<string>Byte</string>
 						<key>value</key>
 						<integer>0</integer>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>blendFunc</string>
+						<key>type</key>
+						<string>Blendmode</string>
+						<key>value</key>
+						<array>
+							<integer>770</integer>
+							<integer>1</integer>
+						</array>
 					</dict>
 				</array>
 			</dict>
