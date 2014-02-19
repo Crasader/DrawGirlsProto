@@ -62,6 +62,7 @@ private:
 		pathImg->setScaleX(pathScale);
 		pathImg->setScaleY(0.5f);
 		addChild(pathImg);
+		pathImg->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		
 //		CCLog("addPath x : %d , y : %d, direction : %d, %d", myPointVector.origin.x, myPointVector.origin.y, myPointVector.distance.dx, myPointVector.distance.dy);
 		
@@ -71,6 +72,7 @@ private:
 		CCSprite* path_edge = CCSprite::create(("path_edge_" + line_color + ".png").c_str());
 		path_edge->setScale(0.6f);
 		addChild(path_edge);
+		path_edge->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	}
 };
 

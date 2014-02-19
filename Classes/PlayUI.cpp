@@ -539,11 +539,11 @@ void GetPercentage::startFadeOut ()
 //	
 //	backImg->runAction(t_fadeout1);
 	
-	CCFadeOut* t_fadeout2 = CCFadeOut::create(1.f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GetPercentage::selfRemove));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fadeout2, t_call);
-	
-	my_label->runAction(t_seq);
+	t_value+=3;
+	if(t_value >= 255)
+		removeFromParent();
+	else
+		KS::setOpacity(my_label, 255-t_value);
 }
 void GetPercentage::selfRemove ()
 {
@@ -551,10 +551,13 @@ void GetPercentage::selfRemove ()
 }
 void GetPercentage::myInit (float t_gp, bool is_item)
 {
-	my_label = CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), "gain.fnt");
-	my_label->setScale(1.f/myGD->game_scale*0.7f);
-	my_label->setAlignment(kCCTextAlignmentRight);
+	my_label = KSLabelTTF::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), mySGD->getFont().c_str(), 16);
+	// CCLabelBMFont::create(CCString::createWithFormat("%.1f%%", t_gp < 0.01f ? 0.f : t_gp)->getCString(), "gain.fnt");
+	my_label->setColor(ccYELLOW);
+	my_label->enableOuterStroke(ccBLACK, 1.f);
 	addChild(my_label, kZorderGetPercentage_label);
+	
+	t_value = 0;
 	
 //	if(is_item)
 //	{
@@ -576,7 +579,8 @@ void GetPercentage::myInit (float t_gp, bool is_item)
 //	{
 //		backImg = CCSprite::create("get_percentage.png", CCRectMake(0, 0, 52.5, 24));
 //		addChild(backImg, kZorderGetPercentage_backImg);
-		startFadeOut();
+	schedule(schedule_selector(GetPercentage::startFadeOut));
+//		startFadeOut();
 //	}
 }
 TakeSpeedUp * TakeSpeedUp::create (int t_step)
@@ -798,28 +802,22 @@ ChangeCard * ChangeCard::create ()
 	t_w->autorelease();
 	return t_w;
 }
-void ChangeCard::startAction ()
+void ChangeCard::startMyAction()
 {
-	CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
-	CCHide* t_hide = CCHide::create();
-	CCDelayTime* t_delay1 = CCDelayTime::create(0.05f);
-	CCShow* t_show = CCShow::create();
-	CCDelayTime* t_delay2 = CCDelayTime::create(0.1f);
-	CCRepeat* t_repeat = CCRepeat::create(CCSequence::create(t_hide, t_delay1, t_show, t_delay2, NULL), 4);
-	CCMoveTo* t_move2 = CCMoveTo::create(0.4f, ccp(-160,myDSH->ui_center_y));
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ChangeCard::selfRemove));
+	unschedule(schedule_selector(ChangeCard::startMyAction));
+	CCSprite* change_card = KS::loadCCBI<CCSprite*>(this, "ui_cardchange.ccbi").first;
+	addChild(change_card);
 	
-	runAction(CCSequence::create(t_move1, t_repeat, t_move2, t_call, NULL));
-}
-void ChangeCard::selfRemove ()
-{
-	removeFromParentAndCleanup(true);
+	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+	runAction(t_seq);
 }
 void ChangeCard::myInit ()
 {
-	initWithFile("card_change.png");
+	setPosition(ccp(480,myDSH->ui_top*0.67f));
 	
-	setPosition(ccp(640,myDSH->ui_center_y));
+	schedule(schedule_selector(ChangeCard::startMyAction));
 }
 PlayUI * PlayUI::create ()
 {
@@ -2051,7 +2049,7 @@ void PlayUI::myInit ()
 	
 	m_areaGage = NULL;
 	
-	percentageLabel = KSLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
+	percentageLabel = KSLabelTTF::create("0%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
 	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
 	percentageLabel->setPosition(ccp(185,myDSH->ui_top-22));
@@ -2161,18 +2159,18 @@ void PlayUI::myInit ()
 	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
-	mission_button->setPosition(ccp(70, myDSH->ui_top-22));
+	mission_button->setPosition(ccp(64, myDSH->ui_top-22));
 	addChild(mission_button);
 	
 	mission_button->startMarquee();
 	
 	mission_button->setOpenFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(170,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(176,0)));
 		top_center_node->setVisible(false);
 	});
 	
 	mission_button->setCloseFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(-170,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(-176,0)));
 		top_center_node->setVisible(true);
 	});
 	
@@ -2396,7 +2394,7 @@ void PlayUI::myInit ()
 		{
 			CCNode* t_node = CCNode::create();
 			mission_button->addChild(t_node);
-			CCDelayTime* t_delay = CCDelayTime::create(2.f);
+			CCDelayTime* t_delay = CCDelayTime::create(4.f);
 			CCCallFunc* t_call1 = CCCallFunc::create(mission_button, callfunc_selector(RollingButton::doClose));
 			CCCallFunc* t_call2 = CCCallFunc::create(t_node, callfunc_selector(CCNode::removeFromParent));
 			CCSequence* t_seq = CCSequence::create(t_delay, t_call1, t_call2, NULL);

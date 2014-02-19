@@ -23,7 +23,7 @@ public:
 	
 	CCLabelTTF* m_text1;
 	CCLabelTTF* m_text2;
-	CCLayerColor* m_back;
+	CCSprite* m_back;
 	vector<string> m_texts;
 	int m_strIndex;
 	int m_stopIndex;
@@ -38,9 +38,14 @@ public:
 		m_texts.push_back(text);
 		
 		this->setContentSize(CCSizeMake(width, height));
-		m_back = CCLayerColor::create(color,width,height);
-		m_back->setOpacity(color.a);
-		m_back->setAnchorPoint(ccp(0.5,0.5));
+//		m_back = CCLayerColor::create(color,width,height);
+//		m_back->setOpacity(color.a);
+//		m_back->setAnchorPoint(ccp(0.5,0.5));
+//		m_back->setPosition(ccp(0,0));
+
+		m_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, width, height));
+		//m_back->setOpacity(color.a);
+		m_back->setAnchorPoint(ccp(0,0));
 		m_back->setPosition(ccp(0,0));
 		//this->addChild(m_back, 1);
 		

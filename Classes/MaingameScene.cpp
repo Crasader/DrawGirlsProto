@@ -643,7 +643,7 @@ void Maingame::startCounting()
 	addChild(condition_spr, conditionLabelZorder);
 	reader->release();
 	
-	condition_spr->setPosition(ccp(240,myDSH->ui_center_y+myDSH->ui_top*0.1f));
+	condition_spr->setPosition(ccp(240,myDSH->ui_center_y));
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.1f);
 	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(Maingame::checkAcceptChallenge));
@@ -771,6 +771,18 @@ void Maingame::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 void Maingame::backTracking()
 {
 	IntPoint afterJackPoint = myPM->pathBackTracking();
+	
+	if(afterJackPoint.isNull())
+	{
+		stopBackTracking();
+		return;
+	}
+	else
+	{
+		myJack->backTrackingAtAfterMoving(afterJackPoint);
+	}
+	
+	afterJackPoint = myPM->pathBackTracking();
 	
 	if(afterJackPoint.isNull())
 	{
@@ -1491,7 +1503,6 @@ void Maingame::showChangeCard()
 {
 	ChangeCard* t_w = ChangeCard::create();
 	addChild(t_w, goldZorder);
-	t_w->startAction();
 }
 
 void Maingame::showCoin()

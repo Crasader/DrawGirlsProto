@@ -134,8 +134,10 @@ class GetPercentage : public CCNode
 public:
 	static GetPercentage * create (float t_gp, bool is_item);
 private:
-	CCLabelBMFont * my_label;
+	KSLabelTTF* my_label;
+//	CCLabelBMFont * my_label;
 //	CCSprite * backImg;
+	int t_value;
 	void startFadeOut ();
 	void selfRemove ();
 	void myInit (float t_gp, bool is_item);
@@ -187,13 +189,12 @@ private:
 	void showArrow ();
 	void myInit ();
 };
-class ChangeCard : public CCSprite
+class ChangeCard : public CCNode
 {
 public:
 	static ChangeCard * create ();
-	void startAction ();
 private:
-	void selfRemove ();
+	void startMyAction();
 	void myInit ();
 };
 enum MenuTagUI
