@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "SelectorDefine.h"
+#include <algorithm>
 
 using namespace cocos2d;
 using namespace std;
