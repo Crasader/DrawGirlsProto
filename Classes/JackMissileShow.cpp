@@ -596,6 +596,7 @@ void JM_BasicMissileShow::moving ()
 		particlePosition = ccpAdd(particlePosition, moveVector);
 		
 		mainImg->setPosition(particlePosition);
+		streak_img->setPosition(particlePosition);
 		
 		if(is_spin)				mainImg->setRotation(mainImg->getRotation()-6);
 		else					mainImg->setRotation((mainImg->getRotation()-(directionAngle-90))/2.f);
@@ -842,6 +843,12 @@ void JM_BasicMissileShow::realInit (CCNode * t_target, int jm_type, float missil
 	directionAngle += 180.f + rand()%31 - 15.f;
 	if(directionAngle >= 180.f)
 		directionAngle -= 360.f;
+	
+	streak_img = CCMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+	streak_img->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	streak_img->setPosition(particlePosition);
+	addChild(streak_img);
+	
 	addChild(particle);
 	
 	int animation_cnt = 0;

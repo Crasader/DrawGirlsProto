@@ -73,6 +73,7 @@ private:
 	float myJM_SPEED;
 	float myJM_CHANGE_DIRECTION_VAL;
 	CCSprite * mainImg;
+	CCMotionStreak* streak_img;
 	bool is_spin;
 	int ing_miss_counting;
 	void moving ();
