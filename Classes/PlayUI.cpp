@@ -45,17 +45,19 @@ void ComboView::myInit (int combo)
 //	combo_timer->setPosition(ccp(getContentSize().width/2.f-5, getContentSize().height/2.f));
 //	addChild(combo_timer);
 	
-	CCLabelTTF* combo_ment = CCLabelTTF::create("콤보", mySGD->getFont().c_str(), 18);
+	KSLabelTTF* combo_ment = KSLabelTTF::create("콤보", mySGD->getFont().c_str(), 18);
 	combo_ment->setColor(ccc3(50,215,0));
 	combo_ment->setAnchorPoint(ccp(1,0.5));
-	combo_ment->setPosition(ccp(20,8));
+	combo_ment->enableOuterStroke(ccBLACK, 1.f);
+	combo_ment->setPosition(ccp(20,6));
 	addChild(combo_ment);
 	
 	
-	combo_label = CCLabelTTF::create(CCString::createWithFormat("%d", combo)->getCString(), mySGD->getFont().c_str(), 23);//CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
+	combo_label = KSLabelTTF::create(CCString::createWithFormat("%d", combo)->getCString(), mySGD->getFont().c_str(), 23);//CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
 	combo_label->setColor(ccc3(50, 215, 0));
 	combo_label->setAnchorPoint(ccp(1,0.5));
-	combo_label->setPosition(ccp(-17,8));
+	combo_label->enableOuterStroke(ccBLACK, 1.f);
+	combo_label->setPosition(ccp(-17,6));
 	addChild(combo_label);
 }
 ComboParent * ComboParent::create (CCNode* t_score_label)
@@ -2392,6 +2394,14 @@ void PlayUI::myInit ()
 		}
 		else
 		{
+			CCNode* t_node = CCNode::create();
+			mission_button->addChild(t_node);
+			CCDelayTime* t_delay = CCDelayTime::create(2.f);
+			CCCallFunc* t_call1 = CCCallFunc::create(mission_button, callfunc_selector(RollingButton::doClose));
+			CCCallFunc* t_call2 = CCCallFunc::create(t_node, callfunc_selector(CCNode::removeFromParent));
+			CCSequence* t_seq = CCSequence::create(t_delay, t_call1, t_call2, NULL);
+			t_node->runAction(t_seq);
+			
 			mission_button->doOpen();
 		}
 		

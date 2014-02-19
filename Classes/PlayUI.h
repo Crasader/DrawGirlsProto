@@ -27,6 +27,7 @@
 #define MY_GRAVITY	-0.5
 #define t_tta 0xD9
 #define LZZ_INLINE inline
+class KSLabelTTF;
 class ComboView : public CCSprite
 {
 public:
@@ -35,7 +36,7 @@ public:
 	void setPercentage (float t_percent);
 private:
 	int hide_frame;
-	CCLabelTTF * combo_label;
+	KSLabelTTF * combo_label;
 	CCSprite* combo_str;
 //	CCProgressTimer * combo_timer;
 	void myInit (int combo);
@@ -211,7 +212,6 @@ enum ChildTagInPlayUI
 	kCT_UI_clrCdtPopup
 };
 class RollingButton;
-class KSLabelTTF;
 class PlayUI : public CCNode
 {
 public:
