@@ -47,11 +47,6 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 	
-	if(myDSH->getStringForKey(kDSH_Key_nick) == "")
-	{
-		myDSH->clear();
-	}
-	
 	CCSprite* title_img = CCSprite::create("temp_title_back.png");
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
@@ -96,6 +91,13 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		
 		receive_cnt = 0;
 		
+//		CCLabelTTF* userdata_label = CCLabelTTF::create("start getuserdata", mySGD->getFont().c_str(), 10);
+//		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
+//		addChild(userdata_label);
+		Json::Value userdata_param;
+		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
+		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+		
 //		CCLabelTTF* common_setting_label = CCLabelTTF::create("start getcommonsetting", mySGD->getFont().c_str(), 10);
 //		common_setting_label->setPosition(ccp(40, myDSH->ui_top-30));
 //		addChild(common_setting_label);
@@ -119,13 +121,6 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		Json::Value monster_param;
 		monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
 		command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
-		
-//		CCLabelTTF* userdata_label = CCLabelTTF::create("start getuserdata", mySGD->getFont().c_str(), 10);
-//		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
-//		addChild(userdata_label);
-		Json::Value userdata_param;
-		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
-		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 		
 //		CCLabelTTF* puzzlelist_label = CCLabelTTF::create("start getpuzzlelist", mySGD->getFont().c_str(), 10);
 //		puzzlelist_label->setPosition(ccp(280, myDSH->ui_top-30));
@@ -544,6 +539,9 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS || result_data["result"]["code"].asInt() == GDDONTFIND)
 	{
+		if(result_data["data"][myDSH->getKey(kDSH_Key_nick)].asString() == "")
+			myDSH->clear();
+		
 		myDSH->resetDSH();
 		card_data_load_list.clear();
 		myDSH->loadAllUserData(result_data, card_data_load_list);
