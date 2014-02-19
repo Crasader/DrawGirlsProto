@@ -2161,18 +2161,18 @@ void PlayUI::myInit ()
 	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
-	mission_button->setPosition(ccp(70, myDSH->ui_top-22));
+	mission_button->setPosition(ccp(64, myDSH->ui_top-22));
 	addChild(mission_button);
 	
 	mission_button->startMarquee();
 	
 	mission_button->setOpenFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(170,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(176,0)));
 		top_center_node->setVisible(false);
 	});
 	
 	mission_button->setCloseFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(-170,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(-176,0)));
 		top_center_node->setVisible(true);
 	});
 	
