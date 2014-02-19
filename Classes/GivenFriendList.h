@@ -184,6 +184,7 @@ public:
 				 ufd.userId = v["friendInfo"]["memberID"].asString();
 				 ufd.joinDate = v["friendInfo"]["joinDate"].asUInt64();
 				 ufd.lastDate = v["friendInfo"]["lastDate"].asUInt64();
+				 ufd.lastTime = v["friendInfo"]["lastTime"].asUInt64();
 				 ufd.nick = v["friendInfo"]["nick"].asString();
 				 UnknownFriends::getInstance()->add(ufd);
 											 });

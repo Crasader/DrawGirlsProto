@@ -59,7 +59,8 @@ void KSTargetAttackPattern8::myInit(CCPoint t_sp, KSCumberBase* cb, const std::s
 		batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
 	else
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
-	
+		
+	batchNode->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	addChild(batchNode);
 	
 	scheduleUpdate();
@@ -823,8 +824,9 @@ void AP_Missile12::myInit( CCPoint t_sp, KSCumberBase* cb, int t_type, int t_tar
 
 	//		auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_lightning_targeting.ccbi");
 	auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_lightning_targeting.ccbi");
-
+	//KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	targetingImg = ret.first;
+
 	targetingImg->setScale(2.7);
 
 	targetingImg->setPosition(jackPosition);
@@ -1016,6 +1018,7 @@ void AP_Missile15::initParticle()
 	myParticle->setEmissionRate(100.00);
 	myParticle->setAngle(minAngle);						//
 	myParticle->setAngleVar(0.0);
+	myParticle->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
 	myParticle->setBlendFunc(blendFunc);
 	myParticle->setDuration(-1.0);
@@ -2827,6 +2830,7 @@ void KSTargetAttackPattern7::myAction()
 		if(ingFrame == chargeFrame)
 		{
 			auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_head.ccbi");
+			//KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 			lazer_main = ret.first;
 
 			lazer_main->setAnchorPoint(ccp(0,0.5));
@@ -2843,12 +2847,14 @@ void KSTargetAttackPattern7::myAction()
 			//레이저가 자연스럽게 시작하도록 붙여주는것
 			{
 			CCSprite* laser3 = CCSprite::create("pattern_laserpuple_back1.png");
+			//laser3->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 			laser3->setPosition(ccp(25, 0));
 			laser3->setScaleY(m_crashSize/12.f);
 			lazer_main->addChild(laser3,-1);
 			}
 			{
 				CCSprite* laser3 = CCSprite::create("pattern_laserpuple_back2.png");
+				//laser3->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 				laser3->setPosition(ccp(20, 0));
 				laser3->setScaleY(m_crashSize/12.f);
 				lazer_main->addChild(laser3,10);
@@ -2858,6 +2864,7 @@ void KSTargetAttackPattern7::myAction()
 			{
 				auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_body.ccbi");
 				CCSprite* laser3 = ret2.first;
+				//KS::setBlendFunc(laser3, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 				laser3->setPosition(ccp(20+44 * i, 0));
 				laser3->setScaleY(m_crashSize/12.f);
 				lazer_main->addChild(laser3);
@@ -3445,6 +3452,7 @@ void KSSpecialAttackPattern11::myInit( CCPoint t_sp, KSCumberBase* cb, const std
 	if(type == 1) // lazer
 	{
 		beamImg = CCSprite::create("beam.png");
+		//KS::setBlendFunc(beamImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		beamImg->setAnchorPoint(ccp(0,0.5));
 		beamImg->setPosition(startPosition);
 		beamImg->setColor(ccRED);
@@ -3857,6 +3865,7 @@ void CobWeb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternD
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader1 = new CCBReader(nodeLoader);
 	cobwebImg = dynamic_cast<CCSprite*>(reader1->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
+	//KS::setBlendFunc(cobwebImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	reader1->release();
 
 	cobwebImg->setPosition(m_cumber->getPosition());
@@ -3938,6 +3947,7 @@ void PrisonPattern::myInit( CCPoint t_sp, float radius, int totalFrame ) /* crea
 	m_radius = radius;
 	m_totalFrame = totalFrame;
 	auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_prison.ccbi");
+	//KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	m_prisonSprite = ret.first;
 	m_prisonSprite->setPosition(m_initialJackPosition);
 	addChild(m_prisonSprite);

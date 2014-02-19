@@ -323,6 +323,7 @@ void MissileUnit3::move ()
 	{
 		shownWarning = true;
 		CCSprite* vertical = CCSprite::create("lazer_sub.png");
+		vertical->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		vertical->setColor(ccc3(255, 0, 0));
 		vertical->setScaleX(2.f);
 		vertical->setScaleY(0.25f);
@@ -371,6 +372,7 @@ void MissileUnit3::myInit (int t_type, float t_distance, CCSize t_mSize, CCObjec
 		
 		auto ret = KS::loadCCBI<CCSprite*>(this, "stone_1.ccbi");//"pattern_marble1.ccbi");
 		stoneSprite = ret.first;
+		//KS::setBlendFunc(stoneSprite, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		//CCSprite* stone = ret.first;
 		addChild(stoneSprite, 1);
 	}
@@ -851,6 +853,7 @@ void ThrowObject::myInit (CCPoint t_sp, int t_type, float t_speed, float t_angle
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw1.ccbi",this));
+		//KS::setBlendFunc(objImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		reader->release();
 		objects->addChild(objImg);
 		objImg->setVisible(false);
@@ -870,6 +873,7 @@ void ThrowObject::myInit (CCPoint t_sp, int t_type, float t_speed, float t_angle
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw4.ccbi",this));
+		//KS::setBlendFunc(objImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		reader->release();
 		objects->addChild(objImg);
 		objImg->setVisible(false);
@@ -1015,12 +1019,13 @@ void SatelliteBeam::myInit (CCPoint t_sp, int t_type, CCObject * t_removeEffect,
 	type = t_type;
 	setPosition(t_sp);
 	auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_lightning.ccbi");
-	
+	//KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	beam_main = ret.first;
 	//		beam_main->setAnchorPoint(ccp(0.5,0.036));
 	addChild(beam_main);
 	{
 		auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_lightning_targeting.ccbi");
+		//KS::setBlendFunc(ret2.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		beam_main->addChild(ret2.first, -1);
 	}
 	//		beam_main->setVisible(false);
@@ -1846,7 +1851,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 	setPosition(myPosition);
 	
 	ticking_main = KS::loadCCBI<CCSprite*>(this, "pattern_timebomb1.ccbi").first;
-	ticking_main->setScale(0.5f);
+	ticking_main->setScale(0.25f);
 	//		ticking_main->setVisible(false);
 	ticking_main->setAnchorPoint(ccp(0.5f, 0.5f));
 	addChild(ticking_main);
@@ -1860,6 +1865,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 		ticking_label = CCLabelAtlas::create(CCString::createWithFormat("%d",bombTimes)->getCString(), "tickingTimeBomb_number.png", 9, 11, '1');
 		ticking_label->setAnchorPoint(ccp(0.5f, 0.5f));
 		ticking_label->setPosition(ccp(0, 0));
+		ticking_label->setScale(0.5f);
 		addChild(ticking_label);
 	}
 	else if(rangeCode == 2)
@@ -1867,6 +1873,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 		ticking_label = CCLabelAtlas::create(CCString::createWithFormat("%d",bombTimes)->getCString(), "tickingTimeBomb_number.png", 9, 11, '1');
 		ticking_label->setPosition(ccp(13,13));
 		ticking_main->addChild(ticking_label);
+		ticking_label->setScale(0.5f);
 	}
 	
 	startMyAction();
@@ -1982,6 +1989,7 @@ void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_bli
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	reader = new CCBReader(nodeLoader);
 	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi", this));
+	//KS::setBlendFunc(oilImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	addChild(oilImg);
 	oilImg->setScale(m_scale);
 	setPosition(t_fp); // t_sp

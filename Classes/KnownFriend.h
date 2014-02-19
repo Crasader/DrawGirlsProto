@@ -31,6 +31,7 @@ public:
 	void deleteById(std::string kakaoId);
 	void putJoinDate(int index, int64_t jd);
 	void putLastDate(int index, int64_t jd);
+	void putLastTime(int index, int64_t jd);
 	void putUserData(int index, Json::Value d);
 	void putHashedTalkUserId(int index, const std::string hashId);
 	FriendData* findById(std::string kakaoId);

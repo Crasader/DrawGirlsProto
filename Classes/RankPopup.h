@@ -140,6 +140,7 @@ protected:
   CCSprite * m_currentSelectSprite;
   ScrollBar * m_scrollBar;
 	CCLabelBMFont* m_highScore;
+	CCLabelBMFont* m_highStage;
 	
 	
 	CommonButton* m_onlyKatok;

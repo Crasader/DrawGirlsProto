@@ -508,9 +508,10 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	title->setString((*member).nick.c_str());
 	
 	
-	int month, day, hour, minute;
-	::timeSpliter(member->lastDate, 0, &month, &day, &hour, &minute, 0);
-	score->setString(boost::str(boost::format("%||/%|| %||:%||") % month % day % hour % minute).c_str());
+	//int month, day, hour, minute;
+	//::timeSpliter(member->lastDate, 0, &month, &day, &hour, &minute, 0);
+	//score->setString(boost::str(boost::format("%||/%|| %||:%||") % month % day % hour % minute).c_str());
+	score->setString(::getPastTimeMsg(hspConnector::get()->getLastTimestampOnServer(), member->lastTime).c_str());
 	//rank->setString((*member)["rankingGrade"].asString().c_str());
 	
 	return cell;

@@ -20,6 +20,7 @@ struct FriendData
 	
 	int64_t joinDate;
 	int64_t lastDate;
+	int64_t lastTime; // 형식이 좀 다름.
 	std::string profileUrl;
 	bool messageBlocked;
 	Json::Value userData;
@@ -42,7 +43,7 @@ struct FriendData
 	}
 	FriendData()
 	{
-		joinDate = lastDate = 0;
+		joinDate = lastDate = lastTime = 0;
 		messageBlocked = false;
 		unknownFriend = false;
 	}

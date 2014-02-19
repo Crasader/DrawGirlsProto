@@ -129,6 +129,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 	setTouchEnabled(true);
 	m_currentSelectSprite = NULL;
 	m_highScore = NULL;
+	m_highStage = NULL;
 	used_card_img = NULL;
 	loading_card_number = 0;
 	after_loading_card_number = 0;
@@ -1641,14 +1642,16 @@ void RankPopup::touchCellIndex(int idx)
 	
 	int selectedCardIndex = 0;
 	int highScore = 0;
+	int highStage = 0;
 	// 나를 클릭함.
 	if(m_scoreList[idx]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
 	{
 		Json::Reader reader;
 		Json::Value data;
+
 		reader.parse(m_scoreList[idx]["scoreInfo"]["data"].asString(), data);
 		highScore = data.get("allhighscore", 0).asInt();
-		
+		highStage = data.get("highstage", 0).asInt();
 		selectedCardIndex = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 자기 카드 번호.
 	}
 	else
@@ -1660,6 +1663,7 @@ void RankPopup::touchCellIndex(int idx)
 		KS::KSLog("%", data);
 		selectedCardIndex = data.get("selectedcard", 0).asInt();
 		highScore = data.get("allhighscore", 0).asInt();
+		highStage = data.get("highstage", 0).asInt();
 	}
 	CCLog("card Number %d", selectedCardIndex);
 	auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, selectedCardIndex);
@@ -1753,14 +1757,28 @@ void RankPopup::touchCellIndex(int idx)
 		m_highScore->removeFromParent();
 		m_highScore = NULL;
 	}
+	if(m_highStage)
+	{
+		m_highStage->removeFromParent();
+		m_highStage = NULL;
+	}
 	std::string scoreStr = CCString::createWithFormat("%d", highScore)->getCString();
+	std::string stageStr = CCString::createWithFormat("%d", highStage)->getCString();
 	scoreStr = KS::insert_separator(scoreStr, ',', 3); // 3자리 마다 콤마찍기
+	stageStr = KS::insert_separator(stageStr, ',', 3); // 3자리 마다 콤마찍기
 	m_highScore =
 	CCLabelBMFont::create(
 						  scoreStr.c_str(), "mb_white_font.fnt");
 	m_highScore->setScale(0.5f);
 	m_highScore->setPosition(ccp(125, 27));
 	addChild(m_highScore, 3);
+
+	m_highStage =
+		CCLabelBMFont::create(
+				stageStr.c_str(), "mb_white_font.fnt");
+	m_highStage->setScale(0.5f);
+	m_highStage->setPosition(ccp(125, 43));
+	addChild(m_highStage, 3);
 	if(m_currentSelectSprite)
 	{
 		m_currentSelectSprite->removeFromParent();
