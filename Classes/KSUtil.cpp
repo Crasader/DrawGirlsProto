@@ -72,6 +72,32 @@ namespace KS
 			}
 		}
 	}
+	void setBlendFunc(CCObject* object, ccBlendFunc bf)
+	{
+		CCArray* childs = NULL;
+		CCObject* child = NULL;
+		CCNode* nodeObject = (CCNode*)object;
+		CCBlendProtocol* mine = dynamic_cast<CCBlendProtocol*>(nodeObject);
+		if(mine)
+			mine->setBlendFunc(bf);
+		if (nodeObject) {
+			childs = nodeObject->getChildren();
+		}
+		if (childs) {
+			CCARRAY_FOREACH(childs, child){
+				CCBlendProtocol *pRGBAProtocol = dynamic_cast<CCBlendProtocol*>(child);
+				if (pRGBAProtocol)
+				{
+					pRGBAProtocol->setBlendFunc(bf);
+					// pRGBAProtocol->setColor(ccc3(opaque, opaque, opaque));
+				}
+				CCNode* singleObject = (CCNode*)child;
+				if (singleObject && singleObject->getChildrenCount()>0) {
+					setBlendFunc(singleObject, bf);
+				}
+			}
+		}
+	}
 	string longLongToStr(long long t)
 	{
 		int radix = 26;

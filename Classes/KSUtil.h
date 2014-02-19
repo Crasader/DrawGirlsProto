@@ -110,6 +110,7 @@ namespace KS
 	bool isExistFile(const std::string& fileName);
 	void setOpacity(CCObject* object, GLubyte opaque);
 	void setColor(CCObject* object, const ccColor3B& color);
+	void setBlendFunc(CCObject* object, ccBlendFunc bf);
 	
 	template <typename NodeT>
 	pair<NodeT, CCBAnimationManager*> loadCCBI(CCObject* thiz, const std::string& fn)
