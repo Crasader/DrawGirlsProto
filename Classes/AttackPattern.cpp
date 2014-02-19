@@ -107,7 +107,7 @@ void KSTargetAttackPattern8::update(float dt)
 			for(auto& gun : pan)
 			{
 				CCPoint jackPoint = ip2ccp(myGD->getJackPoint());
-				CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint(this));
+				CCPoint mobPosition = ip2ccp(myGD->getMainCumberPoint(m_cumber));
 				float rad = atan2(jackPoint.y - mobPosition.y, jackPoint.x - mobPosition.x);
 				
 				float deg = rad2Deg(rad);

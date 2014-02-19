@@ -194,6 +194,9 @@ private:
 	void goldGettingEffect(CCPoint t_p, int t_i);
 	void percentageGettingEffect(float t_f, bool t_b, CCPoint t_p);
 	void takeSpeedUpEffect(int t_step);
+	int recent_take_speed_up_value;
+	CCNode* save_take_speed_up_effect;
+	void endTakeSpeedUpEffect();
 	
 	void showMissMissile(CCPoint t_position);
 	void showDamageMissile(CCPoint t_position, int t_damage);

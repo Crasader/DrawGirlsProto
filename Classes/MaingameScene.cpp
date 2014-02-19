@@ -54,6 +54,9 @@ bool Maingame::init()
 	replay_continue_count = 0;
 	replay_continue_label = NULL;
 	
+	recent_take_speed_up_value = -1;
+	save_take_speed_up_effect = NULL;
+	
 	
 	combo_string_img = NULL;
 	combo_value_img = NULL;
@@ -192,15 +195,31 @@ void Maingame::onEnterTransitionDidFinish()
 	top_bottom_layer->setPosition(ccp(0, 0));
 	getParent()->addChild(top_bottom_layer, -1);
 	
-	CCSprite* top_back = CCSprite::create("top_back.png");
-	top_back->setAnchorPoint(ccp(0.5,1));
-	top_back->setPosition(ccp(240,myDSH->ui_top));
-	top_bottom_layer->addChild(top_back, topBottomZorder);
+	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern.png");
+	top_bottom_layer->addChild(side_back, topBottomZorder);
 	
-	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
-	bottom_back->setAnchorPoint(ccp(0.5,0));
-	bottom_back->setPosition(ccp(240,0));
-	top_bottom_layer->addChild(bottom_back, topBottomZorder);
+	CCSize pattern_size = side_back->getTexture()->getContentSize();
+	
+	for(int i=0;i*pattern_size.width < 480;i++)
+	{
+		for(int j=0;j*pattern_size.height < myDSH->ui_top;j++)
+		{
+			CCSprite* t_pattern = CCSprite::createWithTexture(side_back->getTexture());
+			t_pattern->setAnchorPoint(ccp(0,0));
+			t_pattern->setPosition(ccp(i*pattern_size.width,j*pattern_size.height));
+			side_back->addChild(t_pattern);
+		}
+	}
+	
+//	CCSprite* top_back = CCSprite::create("top_back.png");
+//	top_back->setAnchorPoint(ccp(0.5,1));
+//	top_back->setPosition(ccp(240,myDSH->ui_top));
+//	top_bottom_layer->addChild(top_back, topBottomZorder);
+//	
+//	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
+//	bottom_back->setAnchorPoint(ccp(0.5,0));
+//	bottom_back->setPosition(ccp(240,0));
+//	top_bottom_layer->addChild(bottom_back, topBottomZorder);
 	
 	init_state = kMIS_movingGameNode;
 	
@@ -1313,23 +1332,38 @@ void Maingame::takeSpeedUpEffect( int t_step )
 {
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
 
-	CCPoint add_point;
-	if(jack_position.x < 30.f)
-		add_point = ccp(30.f, 20.f);
-	else if(jack_position.x > 290.f)
-		add_point = ccp(-30.f, 20.f);
-	else
+	if(recent_take_speed_up_value < t_step)
 	{
-		if(jack_position.y > 400.f)
-			add_point = ccp(30.f, -20.f);
-		else
+		if(save_take_speed_up_effect)
+			save_take_speed_up_effect->removeFromParent();
+		
+		recent_take_speed_up_value = t_step;
+		CCPoint add_point;
+		if(jack_position.x < 30.f)
 			add_point = ccp(30.f, 20.f);
+		else if(jack_position.x > 290.f)
+			add_point = ccp(-30.f, 20.f);
+		else
+		{
+			if(jack_position.y > 400.f)
+				add_point = ccp(30.f, -20.f);
+			else
+				add_point = ccp(30.f, 20.f);
+		}
+		
+		TakeSpeedUp* t_tsu = TakeSpeedUp::create(t_step, bind(&Maingame::endTakeSpeedUpEffect, this));
+		t_tsu->setScale(1.f/myGD->game_scale);
+		t_tsu->setPosition(ccpAdd(jack_position, add_point));
+		game_node->addChild(t_tsu, goldZorder);
+		
+		save_take_speed_up_effect = t_tsu;
 	}
-	
-	TakeSpeedUp* t_tsu = TakeSpeedUp::create(t_step);
-	t_tsu->setScale(1.f/myGD->game_scale);
-	t_tsu->setPosition(ccpAdd(jack_position, add_point));
-	game_node->addChild(t_tsu, goldZorder);
+}
+
+void Maingame::endTakeSpeedUpEffect()
+{
+	recent_take_speed_up_value = -1;
+	save_take_speed_up_effect = NULL;
 }
 
 void Maingame::showMissMissile( CCPoint t_position )
@@ -1491,7 +1525,6 @@ void Maingame::showTakeCoin()
 {
 	TakeCoin* t_w = TakeCoin::create();
 	addChild(t_w, goldZorder);
-	t_w->startAction();
 }
 
 CCNode* Maingame::gameNodePointer()
