@@ -1241,9 +1241,25 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 	mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = play_index+1;
 }
 
+void VisibleSprite::setLight()
+{
+	stopAllActions();
+	setColor(ccWHITE);
+	CCDelayTime* t_delay = CCDelayTime::create(0.1f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(VisibleSprite::setDark));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+	runAction(t_seq);
+}
+
+void VisibleSprite::setDark()
+{
+	setColor(ccGRAY);
+}
+
 void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects )
 {
 	initWithTexture(mySIL->addImage(filename));
+	setColor(ccGRAY);
 	setPosition(ccp(160,215));
 
 	is_set_scene_node = false;
@@ -1420,4 +1436,5 @@ void VisibleParent::myInit( const char* filename, bool isPattern )
 	addChild(myVS);
 
 	myGD->V_CCO["VS_setSceneNode"] = std::bind(&VisibleSprite::setSceneNode, myVS, _1);
+	myGD->V_V["VS_setLight"] = std::bind(&VisibleSprite::setLight, myVS);
 }

@@ -73,6 +73,12 @@ void JM_UpgradeMissileShow::moving ()
 				loadImg->setScaleX(loadImg->getScaleX() + 1.f);
 			
 			edge = CCSprite::create((type_name + "_edge.png").c_str());
+			
+			ccBlendFunc t_blend1;
+			t_blend1.src = GL_SRC_ALPHA;
+			t_blend1.dst = GL_ONE;
+			edge->setBlendFunc(t_blend1);
+			
 			edge->setPosition(ccp(loadImg->getContentSize().width,loadImg->getContentSize().height/2.f));
 			edge->setScaleX(1.f/loadImg->getScaleX());
 			loadImg->addChild(edge);
@@ -101,6 +107,12 @@ void JM_UpgradeMissileShow::moving ()
 			particle->setEndSpin(shootAngle+90);
 			
 			shootImg = CCSprite::create(temp_string.c_str());
+			
+			ccBlendFunc t_blend;
+			t_blend.src = GL_SRC_ALPHA;
+			t_blend.dst = GL_ONE;
+			shootImg->setBlendFunc(t_blend);
+			
 			shootImg->setAnchorPoint(ccp(1,0.5));
 			shootImg->setRotation(-shootAngle);
 			shootImg->setPosition(loadImg->getPosition());
@@ -304,7 +316,8 @@ void JM_UpgradeMissileShow::realInit (CCNode * t_target, int jm_type, float miss
 	particle->setEmissionRate(particle_cnt*2);
 	particle->setAngle(0.0);
 	particle->setAngleVar(360.0);
-	ccBlendFunc blendFunc = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
+//	ccBlendFunc blendFunc = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
+	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
 	particle->setBlendFunc(blendFunc);
 	particle->setDuration(-1.0);
 	particle->setEmitterMode(kCCParticleModeGravity);
@@ -344,6 +357,12 @@ void JM_UpgradeMissileShow::realInit (CCNode * t_target, int jm_type, float miss
 	string temp_string = type_name + ".png";
 	
 	loadImg = CCSprite::create(temp_string.c_str());
+	
+	ccBlendFunc t_blend1;
+	t_blend1.src = GL_SRC_ALPHA;
+	t_blend1.dst = GL_ONE;
+	loadImg->setBlendFunc(t_blend1);
+	
 	loadImg->setAnchorPoint(ccp(1,0.5));
 	loadImg->setRotation(-loadAngle);
 	loadImg->setPosition(particlePosition);
@@ -352,6 +371,12 @@ void JM_UpgradeMissileShow::realInit (CCNode * t_target, int jm_type, float miss
 	string main_string = type_name + CCString::createWithFormat("%d_main.png", element_level)->getCString();
 	
 	mainImg = CCSprite::create(main_string.c_str());
+	
+	ccBlendFunc t_blend;
+	t_blend.src = GL_SRC_ALPHA;
+	t_blend.dst = GL_ONE;
+	mainImg->setBlendFunc(t_blend);
+	
 	mainImg->setScale(1.f);
 	mainImg->setPosition(particlePosition);
 	addChild(mainImg, kZorderJMU_mainImg);
@@ -856,6 +881,12 @@ void JM_BasicMissileShow::realInit (CCNode * t_target, int jm_type, float missil
 	CCSize animation_cut_size = CCSizeMake(missile_main_texture->getContentSize().width/animation_cnt, missile_main_texture->getContentSize().height);
 	
 	mainImg = CCSprite::createWithTexture(missile_main_texture, CCRectMake(0, 0, animation_cut_size.width, animation_cut_size.height));
+	
+	ccBlendFunc t_blend;
+	t_blend.src = GL_SRC_ALPHA;
+	t_blend.dst = GL_ONE;
+	mainImg->setBlendFunc(t_blend);
+	
 	mainImg->setPosition(particlePosition);
 	mainImg->setScale(1.f);
 	addChild(mainImg);

@@ -140,6 +140,9 @@ public:
 	void replayVisitForThumb(int temp_time);
 	virtual void visit();
 	
+	void setLight();
+	void setDark();
+	
 private:
 	CCArray* drawRects;
 	
