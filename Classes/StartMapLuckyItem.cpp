@@ -95,6 +95,8 @@ void StartMapLuckyItem::speedUpAction ()
 	fx_lucky->setScale(0.7);
 	addChild(fx_lucky, kStartMapLuckyItem_Z_fx);
 	
+	KS::setBlendFunc(fx_lucky, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	
 //	CCDelayTime* t_delay = CCDelayTime::create(0.7f);
 //	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartMapLuckyItem::createParticle));
 //	CCSequence* particle_seq = CCSequence::createWithTwoActions(t_delay, t_call);

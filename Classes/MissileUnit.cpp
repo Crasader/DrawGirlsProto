@@ -1020,13 +1020,13 @@ void SatelliteBeam::myInit (CCPoint t_sp, int t_type, CCObject * t_removeEffect,
 	type = t_type;
 	setPosition(t_sp);
 	auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_lightning.ccbi");
-	//KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	beam_main = ret.first;
 	//		beam_main->setAnchorPoint(ccp(0.5,0.036));
 	addChild(beam_main);
 	{
 		auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_lightning_targeting.ccbi");
-		//KS::setBlendFunc(ret2.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		KS::setBlendFunc(ret2.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		beam_main->addChild(ret2.first, -1);
 	}
 	//		beam_main->setVisible(false);
@@ -2443,6 +2443,7 @@ void MovingSunflower::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json
 	m_step = 1;
 	m_bombFrame = 300;
 	m_parentMissile = KS::loadCCBI<CCSprite*>(this, "pattern_flame3.ccbi");
+	KS::setBlendFunc(m_parentMissile.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	m_pattern = pattern;
 	
 	m_parentMissile.first->setPosition(cumberPosition);
