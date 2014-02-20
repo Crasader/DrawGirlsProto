@@ -1501,7 +1501,7 @@ void KSCumberBase::cumberAttack(float dt)
 				}
 			}
 		}
-		int s = 6; // s초 동안
+		int s = m_closeRule.conditionSeconds; // s초 동안
 		outlineCountRatio.push_back(outlineCount);
 		if(outlineCountRatio.size() > 60 * s)
 		{
@@ -2678,7 +2678,7 @@ bool KSCumberBase::bossIsClosed()
 {
 	int greaterNumber = count_if(outlineCountRatio.begin(), outlineCountRatio.end(), [](int i){return i >= 20;} );
 	bool closedBoss = false;
-	int s = 5;
+	int s = m_closeRule.conditionSeconds - 1;
 	if((float)greaterNumber / (float)outlineCountRatio.size() >= 0.8f && outlineCountRatio.size() > 60 * s)
 	{
 		closedBoss = true;

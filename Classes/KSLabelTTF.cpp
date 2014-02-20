@@ -11,6 +11,7 @@ void KSLabelTTF::enableOuterStroke(const ccColor3B &strokeColor, float strokeSiz
 void KSLabelTTF::disableOuterStroke(bool mustUpdateTexture)
 {
 	m_outerIsStroke = false;
+	updateTexture();
 }
 bool KSLabelTTF::updateTexture()
 {
@@ -45,15 +46,17 @@ bool KSLabelTTF::updateTexture()
 	rect.size   = m_pobTexture->getContentSize();
 	this->setTextureRect(rect);
 
+	if(m_outerSprite)
+	{
+		m_outerSprite->removeFromParent();	
+		m_outerSprite = nullptr;
+	}	
 	if(this->m_outerIsStroke)
 	{
 		CCLabelTTF* label = this;
 		auto oFlip = label->isFlipY();
 		auto oColor = label->getColor();
 		auto oPosition = label->getPosition();
-		if(m_outerSprite)
-			m_outerSprite->removeFromParent();	
-		
 		CCRenderTexture* rt = CCRenderTexture::create(tex->getContentSize().width + m_outerStrokeSize*2 , tex->getContentSize().height+m_outerStrokeSize*2);
 
 		label->setFlipY(!oFlip);
@@ -82,9 +85,21 @@ bool KSLabelTTF::updateTexture()
 		m_outerSprite->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
 		label->setPosition(oPosition);
 	}
-
+	else
+	{
+	}
 	//ok
 	return true;
+}
+
+void KSLabelTTF::setEnableItalic(float value)
+{
+	this->setSkewX(value);
+}
+
+void KSLabelTTF::setDisableItalic()
+{
+	this->setSkewX(0.f);
 }
 
 void KSLabelTTF::setString(const char *string)

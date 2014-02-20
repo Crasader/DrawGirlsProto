@@ -24,6 +24,8 @@ public:
 	virtual void enableOuterStroke(const ccColor3B &strokeColor, float strokeSize, bool mustUpdateTexture = true);
 	virtual void disableOuterStroke(bool mustUpdateTexture = true);
 	virtual bool updateTexture();
+	virtual void setEnableItalic(float value = 30.f);
+	virtual void setDisableItalic();
 	//virtual void setString(const char *label);
 	static KSLabelTTF * create()
 	{

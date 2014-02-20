@@ -222,7 +222,14 @@ public:
 		float userDistance;
 		float percent;
 	}m_furyRule;
-	
+	struct CloseRule
+	{
+		int conditionSeconds;
+		CloseRule()
+		{
+			conditionSeconds = 6;
+		}
+	}m_closeRule;	
 	void restoreBossData()
 	{
 		assignBossData(m_properties);
