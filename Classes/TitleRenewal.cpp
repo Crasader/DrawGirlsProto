@@ -91,6 +91,13 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		
 		receive_cnt = 0;
 		
+//		CCLabelTTF* userdata_label = CCLabelTTF::create("start getuserdata", mySGD->getFont().c_str(), 10);
+//		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
+//		addChild(userdata_label);
+		Json::Value userdata_param;
+		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
+		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+		
 //		CCLabelTTF* common_setting_label = CCLabelTTF::create("start getcommonsetting", mySGD->getFont().c_str(), 10);
 //		common_setting_label->setPosition(ccp(40, myDSH->ui_top-30));
 //		addChild(common_setting_label);
@@ -114,13 +121,6 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		Json::Value monster_param;
 		monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
 		command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
-		
-//		CCLabelTTF* userdata_label = CCLabelTTF::create("start getuserdata", mySGD->getFont().c_str(), 10);
-//		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
-//		addChild(userdata_label);
-		Json::Value userdata_param;
-		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
-		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 		
 //		CCLabelTTF* puzzlelist_label = CCLabelTTF::create("start getpuzzlelist", mySGD->getFont().c_str(), 10);
 //		puzzlelist_label->setPosition(ccp(280, myDSH->ui_top-30));
@@ -539,6 +539,13 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS || result_data["result"]["code"].asInt() == GDDONTFIND)
 	{
+		Json::Value data1;
+		Json::Reader reader1;
+		reader1.parse(result_data["data"].asString(), data1);
+		
+		if(data1[myDSH->getKey(kDSH_Key_nick)].asString() == "")
+			myDSH->clear();
+		
 		myDSH->resetDSH();
 		card_data_load_list.clear();
 		myDSH->loadAllUserData(result_data, card_data_load_list);
@@ -937,6 +944,8 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 					}
 				}
 				
+				mySDS->fFlush(puzzle_list[i]["order"].asInt(), kSDS_PZ_base);
+				
 				if(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number) == 0)
 				{
 					bool is_found = false;
@@ -969,8 +978,6 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 //					puzzle_download_list.push_back(t_df);
 //					// ================================
 //				}
-				
-				mySDS->fFlush(puzzle_list[i]["no"].asInt(), kSDS_PZ_base);
 			}
 			
 			if(puzzle_download_list.size() > 0)
@@ -979,10 +986,10 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 				NSDS_SI(kSDS_GI_puzzleListVersion_i, result_data["version"].asInt(), false);
 		}
 		
+		mySDS->fFlush(kSDS_GI_characterCount_i);
+		
 		if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) == 0)
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1));
-		
-		mySDS->fFlush(kSDS_GI_characterCount_i);
 	}
 	else
 	{

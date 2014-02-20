@@ -20,7 +20,7 @@
 #include "StageImgLoader.h"
 #include "CardCase.h"
 #include "ShowItemContent.h"
-#include "ItemBuyPopup.h"
+//#include "ItemBuyPopup.h"
 #include "LogData.h"
 #include "KSUtil.h"
 #include "LoadingLayer.h"
@@ -963,7 +963,7 @@ void StartSettingScene::menuAction(CCObject* sender)
 				
 				
 				CommonButton* cancel_button = CommonButton::create("장착하기", 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-				cancel_button->setPosition(ccp(-60,-55));
+				cancel_button->setPosition(ccp(60,-55));
 				cancel_button->setFunction([=](CCObject* sender)
 										   {
 											   CardChangePopup* change_popup = CardChangePopup::create();
@@ -976,7 +976,7 @@ void StartSettingScene::menuAction(CCObject* sender)
 				
 				
 				CommonButton* ok_button = CommonButton::create("그냥하기", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
-				ok_button->setPosition(ccp(60,-55));
+				ok_button->setPosition(ccp(-60,-55));
 				ok_button->setFunction([=](CCObject* sender)
 									   {
 										   callStart();
@@ -1001,9 +1001,9 @@ void StartSettingScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kStartSettingMenuTag_itemBuy)
 		{
-			ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_idx], clicked_item_idx, this, callfuncII_selector(StartSettingScene::buySuccessItem));
-			t_ibp->setCloseTargetDelegate(this, callfunc_selector(StartSettingScene::popupClose));
-			addChild(t_ibp, kStartSettingZorder_popup);
+//			ItemBuyPopup* t_ibp = ItemBuyPopup::create(item_list[clicked_item_idx], clicked_item_idx, this, callfuncII_selector(StartSettingScene::buySuccessItem));
+//			t_ibp->setCloseTargetDelegate(this, callfunc_selector(StartSettingScene::popupClose));
+//			addChild(t_ibp, kStartSettingZorder_popup);
 		}
 	}
 }
