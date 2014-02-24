@@ -188,9 +188,6 @@ public:
 	void setJackPoint(IntPoint t_jp);
 	IntPoint getJackPoint();
 	
-	//void setMainCumberPoint(IntPoint t_mcbp);
-	//IntPoint getMainCumberPoint();
-	
 	void setMainCumberPoint(KSCumberBase* cb, IntPoint t_mcbp);
 	IntPoint getMainCumberPoint(CCNode* cb)
 	{

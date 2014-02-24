@@ -212,6 +212,7 @@ public:
 	void circleMoving(float dt); /// 원형 움직임.
 	void snakeMoving(float dt);  /// 뱀형 움직임
 	void rushMoving(float dt); /// 개돌 움직임. 
+	void earthwarmMoving(float dt); /// 지렁이 움직임
 	virtual void crashMapForPosition(CCPoint targetPt) = 0;
 	void settingScale(float startScale, float minScale, float maxScale);
 	struct FuryRule
@@ -444,7 +445,14 @@ protected:
 			}
 		}
 	}m_snake;
-	
+	struct EarthwarmMoving
+	{
+		EarthwarmMoving() : lastChangeDirectionTime(0)
+		{
+		}
+		float angleRad; // 지금 돌고 있는 각도.
+		float lastChangeDirectionTime; // 방향이 아예 바꼈을 때의 시간.
+	}m_earthwarm;	
 	
 	CC_SYNTHESIZE(LastPattern, m_lastPattern, LastPattern);
 	CC_SYNTHESIZE(AttackPattern*, m_attackPattern, AttackPattern);

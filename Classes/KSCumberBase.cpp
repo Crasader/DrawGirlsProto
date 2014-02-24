@@ -268,7 +268,8 @@ void KSCumberBase::straightMoving(float dt)
 	CCPoint afterPosition;
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
-	
+
+	// 낮은 확률로 방향 전환...	
 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
 	{
 		int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
@@ -395,6 +396,7 @@ void KSCumberBase::straightMoving(float dt)
 			if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
 			{
 				crashMapForPosition(afterPosition);
+				//myGD->setMainCumberPoint(this, ccp2ip(afterPosition));	
 			}
 		}
 		if(cnt >= 2)
@@ -419,7 +421,6 @@ void KSCumberBase::straightMoving(float dt)
 	}
 	if(onceOutlineAndMapCollision)
 	{
-		
 		if(m_scale.collisionCount == 0)
 		{
 			m_scale.collisionStartTime = m_scale.timer;
@@ -432,8 +433,6 @@ void KSCumberBase::straightMoving(float dt)
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
-	
-	
 }
 
 void KSCumberBase::followMoving(float dt)
@@ -1119,7 +1118,7 @@ void KSCumberBase::snakeMoving(float dt)
 			{
 				validPosition = true;
 			}
-			
+
 			if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
 			{
 				crashMapForPosition(afterPosition);
@@ -1173,6 +1172,164 @@ void KSCumberBase::snakeMoving(float dt)
 	m_snake.lastMovingTime = m_scale.timer;
 }
 
+void KSCumberBase::earthwarmMoving(float dt)
+{
+//	m_scale.timer += 1/60.f;
+//	if(m_scale.timer - m_earthwarm.lastChangeDirectionTime >= 3/60.f) // 3 프레임 이상 차이 나면 다시 설정.
+//	{
+//		m_earthwarm.setRelocation(m_well512);
+//	}
+//	
+//	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+//	{
+//		m_scale.collisionCount = 0;
+//		m_scale.collisionStartTime = m_scale.timer;
+//	}
+//	CCPoint afterPosition;
+//	IntPoint afterPoint;
+//	//	int check_loop_cnt = 0;
+//	
+//	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+//	{
+//		if(ProbSelector::sel(0.005, 1.0 - 0.005, 0.0) == 0)
+//		{
+//			// m_snake 변수를 재지정 ...
+//			m_earthwarm.setRelocation(m_well512);	
+//		}
+//	}
+//	
+//	bool validPosition = false;
+//	int cnt = 0;
+//	bool onceOutlineAndMapCollision = false;
+//	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
+//	while(!validPosition)
+//	{
+//		cnt++;
+//		
+//		float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
+//															pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
+//		
+//		// 쿰버위치에서 센터 위치까지의 각도.
+//		
+//		float theta = atan2f(m_snake.relocationPosition.y - m_snake.centerPosition.y,
+//												 m_snake.relocationPosition.x - m_snake.centerPosition.x);
+//		
+//		float a = circleRadius;
+//		float b = a * m_snake.shortRadianRatio;
+//		afterPosition = ccp(m_snake.centerPosition.x + a * cos(theta) * cos(m_snake.angleRad) - b * sin(theta) * sin(m_snake.angleRad),
+//												m_snake.centerPosition.y + a * cos(m_snake.angleRad) * sin(theta) + b * sin(m_snake.angleRad) * cos(theta));
+//		afterPoint = ccp2ip(afterPosition);
+//		IntPoint checkPosition;
+//		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
+//		if(m_state != CUMBERSTATEFURY)
+//		{
+//			if(collisionCode == kCOLLISION_JACK)
+//			{
+//				// 즉사 시킴.
+//				validPosition = true;
+//				if(myGD->getJackState() != jackStateNormal)
+//					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+//			}
+//			else if(collisionCode == kCOLLISION_MAP)
+//			{
+//				m_crashCount++;
+//				onceOutlineAndMapCollision = true;
+//				m_snake.setRelocation(getPosition(), m_well512);
+//			}
+//			else if(collisionCode == kCOLLISION_OUTLINE)
+//			{
+//				m_crashCount++;
+//				//			CCLog("collision!!");
+//				onceOutlineAndMapCollision = true;
+//				// m_snake 변수를 재지정 ...
+//				m_snake.setRelocation(getPosition(), m_well512);
+//				
+//			}
+//			else if(collisionCode == kCOLLISION_NEWLINE)
+//			{
+//				//			CCLog("collision!!");
+//				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+//				myGD->communication("SW_createSW", checkPosition);
+//				//									callfuncI_selector(MetalSnake::showEmotion)); //##
+//				
+//				// m_snake 변수를 재지정 ...
+//				m_snake.setRelocation(getPosition(), m_well512);
+//			}
+//			
+//			else if(collisionCode == kCOLLISION_NONE)
+//			{
+//				validPosition = true;
+//			}
+//			else
+//			{
+//				validPosition = true;
+//			}
+//		}
+//		else
+//		{
+//			if(collisionCode == kCOLLISION_OUTLINE)
+//			{
+//				m_crashCount++;
+//				// m_snake 변수를 재지정 ...
+//				m_snake.setRelocation(getPosition(), m_well512);
+//			}
+//			else
+//			{
+//				validPosition = true;
+//			}
+//
+//			if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
+//			{
+//				crashMapForPosition(afterPosition);
+//			}
+//		}
+//		if(cnt >= 3)
+//			CCLog("snakeMoving cnt !! = %d", cnt);
+//		if(cnt >= 30)
+//		{
+//			pathFound = false;
+//			validPosition = true;
+//		}
+//		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
+//		{
+//			validPosition = true;
+//		}
+//	}
+//	
+//	//	CCLog("cnt outer !! = %d", cnt);
+//	
+//	
+//	
+// 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+//	{
+//		if(pathFound)
+//		{
+//			float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
+//																pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
+//			m_snake.angleRad += m_speed * m_snake.sign / circleRadius;
+//			
+//			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
+//			setPosition(afterPosition);
+//		}
+//		
+//	}
+//	if(onceOutlineAndMapCollision)
+//	{
+//		if(m_scale.collisionCount == 0)
+//		{
+//			m_scale.collisionStartTime = m_scale.timer;
+//			
+//		}
+//		m_scale.collisionCount++;
+//		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
+//		{
+//			CCLog("decrese Size !!");
+//			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
+//		}
+//	}
+//	
+//	m_snake.lastMovingTime = m_scale.timer;
+}
 void KSCumberBase::rushMoving(float dt)
 {
 	//	CCLog("%f %f", getPosition().x, getPosition().y);
@@ -1275,6 +1432,7 @@ void KSCumberBase::rushMoving(float dt)
 		if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
 		{
 			crashMapForPosition(afterPosition);
+			myGD->setMainCumberPoint(this, ccp2ip(afterPosition)); // 에라 모르겠다. 깎을 때만 포지션 바꿈. ㄷ ㄷ ;
 		}
 
 		if(cnt >= 2)
@@ -1889,13 +2047,6 @@ void KSCumberBase::getRandomPositionToJack(IntPoint* ip, bool* finded)
 	{
 		*ip = mapPoint;
 		*finded = true;
-		//		CCLog("map point %d %d", mapPoint.x, mapPoint.y);
-		//		CCLog("scale %f", m_headImg->getScale());
-		//		CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
-		//		m_headImg->runAction(t_scale);
-		//		myGD->setMainCumberPoint(mapPoint);
-		//
-		//		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
 	}
 	else
 	{
@@ -1975,13 +2126,6 @@ void KSCumberBase::getRandomPosition(IntPoint* ip, bool* finded)
 	{
 		*ip = mapPoint;
 		*finded = true;
-		//		CCLog("map point %d %d", mapPoint.x, mapPoint.y);
-		//		CCLog("scale %f", m_headImg->getScale());
-		//		CCScaleTo* t_scale = CCScaleTo::create(0.5f, m_scale);
-		//		m_headImg->runAction(t_scale);
-		//		myGD->setMainCumberPoint(mapPoint);
-		//
-		//		setPosition(ccp((mapPoint.x-1)*pixelSize + 1,(mapPoint.y-1)*pixelSize + 1));
 	}
 	else
 	{

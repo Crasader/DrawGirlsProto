@@ -251,16 +251,10 @@ void KSCircleBase::randomPosition()
 	bool finded;
 	getRandomPositionToJack(&mapPoint, &finded);
 	
-	//	myGD->setMainCumberPoint(mapPoint);
 	setPosition(ip2ccp(mapPoint));
 	m_circle.setRelocation(getPosition(), m_well512);
 	m_snake.setRelocation(getPosition(), m_well512);
-//	CCScaleTo* t_scale = CCScaleTo::create(0.5f, 1.f); //##
-//	m_headImg->runAction(t_scale);
-	
-	
 	lightSmaller();
-	
 }
 
 void KSCircleBase::crashMapForPosition(CCPoint targetPt)
@@ -503,13 +497,16 @@ void KSCircleBase::setPosition( const CCPoint& t_sp )
 	//CCLog("setPos %f %f", t_sp.x, t_sp.y);
 	//		KSCumberBase::setPosition(t_sp);
 	m_headImg->setPosition(t_sp);
-	myGD->setMainCumberPoint(this, ccp2ip(t_sp));
-	m_mapPoint = ccp2ip(t_sp);
-	//		myGD->communication("Main_moveGamePosition", t_sp);
-	//		myGD->communication("VS_setMoveGamePosition", t_sp);
-	//		myGD->communication("Main_moveGamePosition", t_sp);
-	//		myGD->communication("Main_moveGamePosition", t_sp);
-	//		std::thread t1([](){;});
+	// 돌때랑 분노 모드일 땐 메인포인트 지정하면 안됨.
+	if(m_state == CUMBERSTATENODIRECTION || m_state == CUMBERSTATEFURY)
+	{
+		// black hole!! 
+	}
+	else
+	{
+		myGD->setMainCumberPoint(this, ccp2ip(t_sp));
+		m_mapPoint = ccp2ip(t_sp);
+	}
 }
 
 void KSCircleBase::setPositionX( float t_x )

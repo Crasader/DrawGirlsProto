@@ -80,11 +80,9 @@ void MapScanner::scanMap()
 				mainCumberPoint = t_boss_point;
 			}
 		}
-		
+		//CCAssert(!mainCumberPoint.isNull(), "what?");
 		if(!mainCumberPoint.isNull())
 		{
-//		CCAssert(!mainCumberPoint.isNull(), "what?");
-		
 			if(myGD->game_step == kGS_limited)
 			{
 				for(int j=mapHeightInnerBegin;j < myGD->limited_step_bottom;j++)

@@ -579,7 +579,6 @@ void CumberParent::myInit()
 			IntPoint mapPoint;
 			bool finded;
 			t_SC->getRandomPosition(&mapPoint, &finded);
-//			myGD->setMainCumberPoint(mapPoint);
 			t_SC->setPosition(ip2ccp(mapPoint));
 			t_SC->startAnimationNoDirection();
 			addChild(t_SC);

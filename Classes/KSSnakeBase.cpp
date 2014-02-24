@@ -625,8 +625,13 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 	{
 		m_cumberTrace.pop_front();
 	}
-
-	if(m_state != CUMBERSTATENODIRECTION) // 도는것이 아니라면
+	
+	// 돌때랑 분노 모드일 땐 메인포인트 지정하면 안됨.
+	if(m_state == CUMBERSTATENODIRECTION || m_state == CUMBERSTATEFURY)
+	{
+		// black hole!! 
+	}
+	else
 	{
 		myGD->setMainCumberPoint(this, ccp2ip(t_sp));
 		m_mapPoint = ccp2ip(t_sp);
@@ -712,7 +717,6 @@ void KSSnakeBase::randomPosition()
 	bool finded;
 	getRandomPositionToJack(&mapPoint, &finded);
 
-	//	myGD->setMainCumberPoint(mapPoint);
 	for(int i=0; i<350; i++)
 	{
 		setPosition(ip2ccp(mapPoint));
