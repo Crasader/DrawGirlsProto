@@ -711,5 +711,29 @@ protected:
 	float m_isChecking;
 	int m_frameCount;
 };
+class RunDownSaw : public CrashMapObject
+{
+public:
+	virtual ~RunDownSaw()
+	{
+		CCLog("RunDownSaw Destroy");
+	}
+	static RunDownSaw * create (CCPoint startPosition, float speed, float angleDegree, IntSize mSize, int runDown);
+	void startMyAction ();
+private:
+	float m_speed;
+	float m_angleDegree;
+	IntSize m_size;
+	CCPoint m_lastSawPosition;
+	CCSprite * m_objImg;
+	int m_runDown;
+	void jackDie ();
+	void lineDie (IntPoint t_p);
+	void removeEffect ();
+	void selfRemove ();
+	void stopMyAction ();
+	void myAction (float dt);
+	void myInit (CCPoint startPosition, float speed, float angleDegree, IntSize mSize, int runDown);
+};
 #undef LZZ_INLINE
 #endif

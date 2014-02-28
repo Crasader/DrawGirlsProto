@@ -256,7 +256,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile1* t = UnusedMissile1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -272,7 +272,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSAttackPattern2* t = KSAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile6* t = UnusedMissile6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 								KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -288,7 +288,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSAttackPattern3* t = KSAttackPattern3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile7* t = UnusedMissile7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -305,7 +305,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSAttackPattern4* t = KSAttackPattern4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile8* t = UnusedMissile8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -322,7 +322,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSAttackPattern5* t = KSAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile9* t = UnusedMissile9::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -339,7 +339,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSAttackPattern6* t = KSAttackPattern6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile10* t = UnusedMissile10::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -357,7 +357,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSAttackPattern7* t = KSAttackPattern7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile11* t = UnusedMissile11::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -375,7 +375,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSAttackPattern8* t = KSAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				Mugunghwa* t = Mugunghwa::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -393,7 +393,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSAttackPattern9* t = KSAttackPattern9::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				CaromWrapper* t = CaromWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -412,7 +412,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern1* t = KSTargetAttackPattern1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile1* t = UnusedMissile1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -430,7 +430,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern2* t = KSTargetAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile2* t = UnusedMissile2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -447,7 +447,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern3* t = KSTargetAttackPattern3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile3* t = UnusedMissile3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -463,7 +463,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern4* t = KSTargetAttackPattern4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				UnusedMissile4* t = UnusedMissile4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -481,7 +481,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern5* t = KSTargetAttackPattern5::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				SawWrapper* t = SawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -499,7 +499,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern6* t = KSTargetAttackPattern6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				SmallSawWrapper* t = SmallSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -516,7 +516,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern7* t = KSTargetAttackPattern7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				CrashLazerWrapper* t = CrashLazerWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -533,7 +533,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern8* t = KSTargetAttackPattern8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				CommonBulletPattern* t = CommonBulletPattern::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -565,7 +565,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern10* t = KSTargetAttackPattern10::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				FireWorkWrapper* t = FireWorkWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -581,7 +581,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern11* t = KSTargetAttackPattern11::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				MovingSunflowerWrapper* t = MovingSunflowerWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -599,7 +599,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern12* t = KSTargetAttackPattern12::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				ThrowBombWrapper* t = ThrowBombWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -616,7 +616,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSTargetAttackPattern13* t = KSTargetAttackPattern13::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				ScarabWrapper* t = ScarabWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -624,6 +624,21 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			};
 			castBranch(atype, func, warningFileName);
 			
+		}
+	}
+	else if(pattern == "114") // 닳는 톱니.
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				RunDownSawWrapper* t = RunDownSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				addChild(t);
+				KSCumberBase* cumber = (KSCumberBase*)cb;
+				cumber->setAttackPattern(t);
+			};
+			castBranch(atype, func, warningFileName);
 		}
 	}
 	else if(pattern == "1001")
@@ -634,7 +649,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			auto func = [=](CCObject* cb)
 			{
 				int totalFrame = patternData.get("totalframe", 400).asInt();
-				AP_Missile21* t_m21 = AP_Missile21::create(startFirePosition, totalFrame, 1.5f);
+				TornadoWrapper* t_m21 = TornadoWrapper::create(startFirePosition, totalFrame, 1.5f);
 				addChild(t_m21);
 				
 				myGD->communication("CP_onPatternEndOf", cb);
@@ -663,7 +678,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 					cumber->setSightOutAttack(t_m24);
 				}
 				myGD->communication("CP_onPatternEndOf", cb);
-				//		KSSpecialAttackPattern2* t = KSSpecialAttackPattern2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+				//		SightOutWrapper* t = SightOutWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
 				//		addChild(t);
 				//		
 			};
@@ -773,7 +788,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				AP_Missile32* t_m32 = AP_Missile32::create();
+				TeleportWrapper* t_m32 = TeleportWrapper::create();
 				addChild(t_m32);
 			};
 			castBranch(atype, func, warningFileName);
@@ -805,7 +820,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				int totalFrame = patternData.get("totalframe", 60*3).asInt();
 				IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)cb);
 				CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-				AP_Missile15* t_m15 = AP_Missile15::create(mainCumberPosition, (KSCumberBase*)cb, 10, totalFrame);
+				FlameWrapper* t_m15 = FlameWrapper::create(mainCumberPosition, (KSCumberBase*)cb, 10, totalFrame);
 				addChild(t_m15);
 				
 				KSCumberBase* cumber = (KSCumberBase*)cb;
@@ -829,7 +844,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				
 				IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)cb);
 				CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-				AP_Missile12* t_m12 = AP_Missile12::create(mainCumberPosition, (KSCumberBase*)cb, random_value, targetingFrame, shootFrame);
+				ThunderBoltWrapper* t_m12 = ThunderBoltWrapper::create(mainCumberPosition, (KSCumberBase*)cb, random_value, targetingFrame, shootFrame);
 				addChild(t_m12);
 				
 				KSCumberBase* cumber = (KSCumberBase*)cb;
@@ -848,7 +863,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSSpecialAttackPattern11* t_m6 = KSSpecialAttackPattern11::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				LazerScanWrapper* t_m6 = LazerScanWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t_m6);
 				
 				KSCumberBase* cumber = (KSCumberBase*)cb;
@@ -866,7 +881,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSSpecialAttackPattern12* t = KSSpecialAttackPattern12::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				RadioactivityWrapper* t = RadioactivityWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -885,7 +900,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				int mType = 1;
 				int number = patternData.get("number", 3).asInt();
 				
-				AP_Missile16* t_m16 = AP_Missile16::create(mType, number, 60, patternData.get("area", 50).asInt());
+				MeteorWrapper* t_m16 = MeteorWrapper::create(mType, number, 60, patternData.get("area", 50).asInt());
 				addChild(t_m16);
 				
 				KSCumberBase* cumber = (KSCumberBase*)cb;
@@ -908,7 +923,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				int totalframe = patternData.get("totalframe", 300).asInt();
 				int shootframe = patternData.get("shootframe", 30).asInt();
 				float speed = patternData.get("speed", 250.f).asDouble() / 100.f;
-				AP_Missile9* t_m9 = AP_Missile9::create(totalframe, (KSCumberBase*)cb, shootframe, speed, CCSizeMake(30, 30), 1);
+				FallingStoneWrapper* t_m9 = FallingStoneWrapper::create(totalframe, (KSCumberBase*)cb, shootframe, speed, CCSizeMake(30, 30), 1);
 				addChild(t_m9);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t_m9);
@@ -953,7 +968,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSSpecialAttackPattern17* t = KSSpecialAttackPattern17::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				AlongOfTheLineWrapper* t = AlongOfTheLineWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
@@ -970,11 +985,27 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				KSSpecialAttackPattern18* t = KSSpecialAttackPattern18::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				CloudWrapper* t = CloudWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t);
 				
+			};
+			castBranch(atype, func, warningFileName);
+			
+		}
+	}
+	else if(pattern == "1019") // 복어 공격.
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				int totalFrame = patternData.get("totalframe", 300).asInt();
+				float scale = patternData.get("scale", 2.f).asFloat();
+				((KSCumberBase*)cb)->startSwell(scale, totalFrame);
+				myGD->communication("CP_onPatternEndOf", cb);
 			};
 			castBranch(atype, func, warningFileName);
 			

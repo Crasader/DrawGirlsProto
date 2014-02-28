@@ -1829,6 +1829,10 @@ void KSCumberBase::cumberAttack(float dt)
 						searched = false;
 					if(attackCode["pattern"].asString() == "109" && m_state == CUMBERSTATEFURY)
 						searched = false;
+					if(attackCode["pattern"].asString() == "1019" && m_swell.isStartSwell)
+					{
+						searched = false;
+					}
 					if(searchCount >= 30)
 					{
 						searched = false;
@@ -2374,6 +2378,45 @@ void KSCumberBase::onStartGame()
 	schedule(schedule_selector(ThisClassType::timeMeasure));
 }
 
+void KSCumberBase::startSwell(float scale, int totalFrame)
+{
+	if(m_swell.isStartSwell == false)
+	{
+		m_swell.totalFrame = totalFrame;
+//		auto backupState = m_state;
+		m_state = CUMBERSTATESTOP;
+		addChild(KSGradualValue<float>::create(m_swell.scale, scale, 1.3f, 
+																					 [=](float t){
+																						 m_swell.scale = t;
+																						 crashMapForPosition(getPosition());
+																					 },
+																					 [=](float t){
+																						 m_swell.scale = t;
+																						 crashMapForPosition(getPosition());
+																						 myGD->communication("MS_resetRects", false);
+																						 schedule(schedule_selector(KSCumberBase::swelling));
+
+																						 m_state = CUMBERSTATEMOVING;
+																					 }));
+		m_swell.isStartSwell = true;
+	}
+}
+void KSCumberBase::swelling(float dt)
+{
+	m_swell.totalFrame--;
+	if(m_swell.totalFrame <= 0)
+	{
+		unschedule(schedule_selector(KSCumberBase::swelling));
+		addChild(KSGradualValue<float>::create(m_swell.scale, 1.f, 1.3f, 
+																					 [=](float t){
+																						 m_swell.scale = t;
+																					 },
+																					 [=](float t){
+																						 m_swell.scale = t;
+																						 m_swell.isStartSwell = false;
+																					 }));
+	}
+}
 void KSCumberBase::lightSmaller()
 {
 	addChild(KSTimer::create
@@ -2456,7 +2499,7 @@ void KSCumberBase::setCumberScale( float r )
 
 float KSCumberBase::getCumberScale()
 {
-	return m_scale.scale.getValue();
+	return m_scale.scale.getValue() * m_swell.scale;
 }
 
 void KSCumberBase::onCanceledCasting()

@@ -190,7 +190,7 @@ public:
 	{
 	}
 	virtual void startInvisible(int totalframe){} // = 0;
-	
+	virtual void startSwell(float scale, int totalFrame);	
 	virtual void lightSmaller();
 	virtual void onJackDie();
 	virtual void onJackRevived();
@@ -279,6 +279,42 @@ public:
 		float timer;
 		float followDegree;
 	}m_follow;
+	struct Scale
+	{
+		Scale() : SCALE_ADDER(0.1f), SCALE_SUBER(0.2f), scale(0.6f, 0.6f, 0.f),
+		timer(0), autoIncreaseTimer(0), collisionStartTime(0), increaseTime(0),
+		collisionCount(0)
+		{}
+		float SCALE_ADDER;
+		float SCALE_SUBER;
+		int collisionCount; // 초당 충돌횟수 세기 위해
+		float collisionStartTime;
+		float timer; //
+		
+		float increaseTime;
+		float autoIncreaseTimer;
+		FromTo<float> scale; // 서서히 변하는것을 구현하기 위해.
+	}m_scale;
+	struct Swell
+	{
+		Swell() : scale(1.f), isStartSwell(false), totalFrame(0)
+		{
+		}
+		//FromTo<float> swellScale;
+		float scale;
+		bool isStartSwell;
+		int totalFrame;
+	}m_swell;
+
+	void swelling(float dt);
+	struct Invisible
+	{
+		int invisibleFrame;
+		int VISIBLE_FRAME;
+		bool startInvisibleScheduler;
+		float invisibleValue;
+		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
+	}m_invisible;
 	MOVEMENT m_normalMovement; // 평상시 움직임.
 	MOVEMENT m_originalNormalMovement;  // 평사시 움직임의 백업본.
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
@@ -343,30 +379,7 @@ protected:
 		bool firstMoving; // 처음 분노를 시작했다면 true
 	}m_furyMode;
 
-	struct Invisible
-	{
-		int invisibleFrame;
-		int VISIBLE_FRAME;
-		bool startInvisibleScheduler;
-		float invisibleValue;
-		Invisible() : VISIBLE_FRAME(300), startInvisibleScheduler(false){}
-	}m_invisible;
 	
-	struct Scale
-	{
-		Scale() : SCALE_ADDER(0.1f), SCALE_SUBER(0.2f), scale(0.6f, 0.6f, 0.f),
-		timer(0), autoIncreaseTimer(0), collisionStartTime(0), increaseTime(0),
-		collisionCount(0){}
-		float SCALE_ADDER;
-		float SCALE_SUBER;
-		int collisionCount; // 초당 충돌횟수 세기 위해
-		float collisionStartTime;
-		float timer; //
-		
-		float increaseTime;
-		float autoIncreaseTimer;
-		FromTo<float> scale; // 서서히 변하는것을 구현하기 위해.
-	}m_scale;
 	
 	
 	

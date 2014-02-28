@@ -69,35 +69,11 @@ private:
 
 
 
-class AP_Missile6 : public AttackPattern
-{
-public:
-	static AP_Missile6* create(CCPoint t_sp, KSCumberBase* cb, int t_type);
-	
-	virtual void stopMyAction();
-	
-private:
-	
-	int type;
-	CCSprite* beamImg;
-	float beamBaseAngle;
-	int ingFrame;
-	CCPoint startPosition;
-	
-	void removeEffect();
-	
-	void selfRemove();
-	
-	void startMyAction();
-	void myAction();
-	
-	void myInit(CCPoint t_sp, KSCumberBase* cb, int t_type);
-};
 
-class AP_Missile9 : public AttackPattern
+class FallingStoneWrapper : public AttackPattern
 {
 public:
-	static AP_Missile9* create(int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize mSize, int t_type);
+	static FallingStoneWrapper* create(int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize mSize, int t_type);
 	
 	virtual void stopMyAction();
 	
@@ -123,10 +99,10 @@ private:
 	void myInit(int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize t_mSize, int t_type);
 };
 
-class AP_Missile11 : public AttackPattern
+class Saw : public AttackPattern
 {
 public:
-	static AP_Missile11* create(CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize);
+	static Saw* create(CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize);
 	
 	virtual void stopMyAction();
 	
@@ -138,10 +114,10 @@ private:
 	void myInit(CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize);
 };
 
-class AP_Missile12 : public AttackPattern
+class ThunderBoltWrapper : public AttackPattern
 {
 public:
-	static AP_Missile12* create(CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame);
+	static ThunderBoltWrapper* create(CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame);
 	
 	virtual void stopMyAction();
 	
@@ -153,7 +129,7 @@ public:
 	void hidingAnimation(float dt);
 //	void removeEffect()
 //	{
-//		unschedule(schedule_selector(AP_Missile12::myAction));
+//		unschedule(schedule_selector(ThunderBoltWrapper::myAction));
 //		myGD->communication("MP_endIngActionAP");
 //		myGD->communication("CP_onPatternEnd");
 //		
@@ -161,7 +137,7 @@ public:
 //		{
 //			CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
 //			CCCallFunc* t_call = CCCallFunc::create(this,
-//													callfunc_selector(AP_Missile12::removeFromParent));
+//													callfunc_selector(ThunderBoltWrapper::removeFromParent));
 //			CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade1, t_call);
 //			targetingImg->runAction(t_seq);
 //		}
@@ -188,10 +164,10 @@ private:
 	void myInit(CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame);
 };
 
-class AP_Missile14 : public AttackPattern
+class BigSaw : public AttackPattern
 {
 public:
-	static AP_Missile14* create(CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, IntSize t_mSize);
+	static BigSaw* create(CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, IntSize t_mSize);
 	
 	virtual void stopMyAction();
 	
@@ -203,10 +179,10 @@ private:
 	void myInit(CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, IntSize t_mSize);
 };
 
-class AP_Missile15 : public AttackPattern // burn
+class FlameWrapper : public AttackPattern // burn
 {
 public:
-	static AP_Missile15* create(CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_burnFrame);
+	static FlameWrapper* create(CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_burnFrame);
 	
 	virtual void stopMyAction();
 	
@@ -243,10 +219,10 @@ private:
 	void myInit(CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_burnFrame);
 };
 
-class AP_Missile16 : public AttackPattern
+class MeteorWrapper : public AttackPattern
 {
 public:
-	static AP_Missile16* create(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea);
+	static MeteorWrapper* create(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea);
 	
 	virtual void stopMyAction();
 	
@@ -276,10 +252,10 @@ private:
 };
 
 
-class AP_Missile21 : public AttackPattern // blind
+class TornadoWrapper : public AttackPattern // blind
 {
 public:
-	static AP_Missile21* create(CCPoint t_sp, int tf, int sc);
+	static TornadoWrapper* create(CCPoint t_sp, int tf, int sc);
 	
 private:
 	
@@ -355,10 +331,10 @@ private:
 };
 
 
-class AP_Missile32 : public AttackPattern // teleport
+class TeleportWrapper : public AttackPattern // teleport
 {
 public:
-	static AP_Missile32* create();
+	static TeleportWrapper* create();
 	
 private:
 	
@@ -388,10 +364,10 @@ private:
 };
 
 // 무작위 원형 던지기.
-class KSAttackPattern1 : public AttackPattern
+class UnusedMissile5 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSAttackPattern1);
+	CREATE_FUNC_CCP(UnusedMissile5);
 	virtual void selfRemoveSchedule();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	void update(float dt);
@@ -411,10 +387,10 @@ protected:
 };
 
 /// 골뱅이 패턴.
-class KSAttackPattern2 : public AttackPattern
+class UnusedMissile6 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSAttackPattern2);
+	CREATE_FUNC_CCP(UnusedMissile6);
 	virtual void selfRemoveSchedule();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	void update(float dt);
@@ -433,10 +409,10 @@ protected:
 };
 
 // 해바라기 패턴.
-class KSAttackPattern3 : public AttackPattern
+class UnusedMissile7 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSAttackPattern3);
+	CREATE_FUNC_CCP(UnusedMissile7);
 	virtual void selfRemoveSchedule();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	void update(float dt);
@@ -454,10 +430,10 @@ protected:
 };
 
 // 해바라기 패턴의 연속. 각도 변경 없음.
-class KSAttackPattern4 : public AttackPattern
+class UnusedMissile8 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSAttackPattern4);
+	CREATE_FUNC_CCP(UnusedMissile8);
 	virtual void selfRemoveSchedule();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
@@ -477,10 +453,10 @@ protected:
 };
 
 /// 해바라기 패턴인데 각도가 바뀜.
-class KSAttackPattern5 : public AttackPattern
+class UnusedMissile9 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSAttackPattern5);
+	CREATE_FUNC_CCP(UnusedMissile9);
 	virtual void selfRemoveSchedule();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
@@ -500,10 +476,10 @@ protected:
 };
 
 
-class KSAttackPattern6 : public AttackPattern
+class UnusedMissile10 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSAttackPattern6);
+	CREATE_FUNC_CCP(UnusedMissile10);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
@@ -520,11 +496,11 @@ protected:
 };
 
 /// 해바라긴데 각도를 달리하면서 쏨, 드르륵 쏘고 좀 쉬다가 드르륵...
-class KSAttackPattern7 : public AttackPattern
+class UnusedMissile11 : public AttackPattern
 {
 public:
 	virtual void selfRemoveSchedule();
-	CREATE_FUNC_CCP(KSAttackPattern7);
+	CREATE_FUNC_CCP(UnusedMissile11);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
@@ -546,10 +522,10 @@ protected:
 };
 
 // 무궁화 패턴
-class KSAttackPattern8 : public AttackPattern
+class Mugunghwa : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSAttackPattern8);
+	CREATE_FUNC_CCP(Mugunghwa);
 	virtual void selfRemoveSchedule();
 	
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
@@ -571,10 +547,10 @@ protected:
 };
 
 // 당구공.
-class KSAttackPattern9 : public AttackPattern
+class CaromWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSAttackPattern9);
+	CREATE_FUNC_CCP(CaromWrapper);
 	virtual void stopMyAction();
 
 	void removeEffect();
@@ -594,10 +570,10 @@ private:
 
 
 // 조준형1 : 부채꼴.
-class KSTargetAttackPattern1 : public AttackPattern
+class UnusedMissile1 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern1);
+	CREATE_FUNC_CCP(UnusedMissile1);
 	virtual void selfRemoveSchedule();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
@@ -616,10 +592,10 @@ protected:
 
 
 // 조준형 : 부채꼴의 연속, 캐릭터를 따라감.
-class KSTargetAttackPattern2 : public AttackPattern
+class UnusedMissile2 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern2);
+	CREATE_FUNC_CCP(UnusedMissile2);
 	virtual void selfRemoveSchedule();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
@@ -638,10 +614,10 @@ protected:
 };
 
 // 조준형 : 부채꼴의 연속, 캐릭터를 안 따라감.
-class KSTargetAttackPattern3 : public AttackPattern
+class UnusedMissile3 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern3);
+	CREATE_FUNC_CCP(UnusedMissile3);
 	virtual void selfRemoveSchedule();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
@@ -661,10 +637,10 @@ protected:
 };
 
 // 조준형 : 부채꼴의 연속, 중심각의 랜덤성을 부여.
-class KSTargetAttackPattern4 : public AttackPattern
+class UnusedMissile4 : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern4);
+	CREATE_FUNC_CCP(UnusedMissile4);
 	virtual void selfRemoveSchedule();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
@@ -684,10 +660,10 @@ protected:
 	CCSpriteBatchNode* batchNode;
 };
 
-class KSTargetAttackPattern5 : public AttackPattern
+class SawWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern5);
+	CREATE_FUNC_CCP(SawWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	
 	void update(float dt);
@@ -698,10 +674,10 @@ protected:
 	float crashsize;
 	Well512 m_well512;
 };
-class KSTargetAttackPattern6 : public AttackPattern
+class SmallSawWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern6);
+	CREATE_FUNC_CCP(SmallSawWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
@@ -714,10 +690,10 @@ protected:
 };
 
 // 태양 광선이 나에게로 ... ㅎㅎ
-class KSTargetAttackPattern7 : public AttackPattern
+class CrashLazerWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern7);
+	CREATE_FUNC_CCP(CrashLazerWrapper);
 	virtual void stopMyAction();
 	
 	
@@ -763,10 +739,10 @@ protected:
 	CCPoint jackPosition;
 	
 };
-class KSTargetAttackPattern8 : public AttackPattern
+class CommonBulletPattern : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern8);
+	CREATE_FUNC_CCP(CommonBulletPattern);
 	virtual void selfRemoveSchedule();
 	virtual void stopMyAction();
 	
@@ -813,10 +789,10 @@ public:
 
 
 
-class KSTargetAttackPattern9 : public AttackPattern
+class CrashingRush : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern9);
+	CREATE_FUNC_CCP(CrashingRush);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
@@ -826,10 +802,10 @@ protected:
 
 
 // 불꽃놀이
-class KSTargetAttackPattern10 : public AttackPattern
+class FireWorkWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern10);
+	CREATE_FUNC_CCP(FireWorkWrapper);
 	
 	
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
@@ -840,10 +816,10 @@ protected:
 };
 
 // 움직이는 해바라기
-class KSTargetAttackPattern11 : public AttackPattern
+class MovingSunflowerWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern11);
+	CREATE_FUNC_CCP(MovingSunflowerWrapper);
 	
 	
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
@@ -854,11 +830,11 @@ protected:
 };
 
 // 폭탄 여러개 던지기
-class KSTargetAttackPattern12 : public AttackPattern
+class ThrowBombWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern12);
-	virtual ~KSTargetAttackPattern12()
+	CREATE_FUNC_CCP(ThrowBombWrapper);
+	virtual ~ThrowBombWrapper()
 	{
 		CCLog("bomb throw destroy");
 	}
@@ -875,10 +851,10 @@ protected:
 
 
 // 리버 스크럽.
-class KSTargetAttackPattern13 : public AttackPattern
+class ScarabWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSTargetAttackPattern13);
+	CREATE_FUNC_CCP(ScarabWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
@@ -890,103 +866,51 @@ protected:
 
 
 
-class KSSpecialAttackPattern1 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern1);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-	CCPoint m_position;
-	int m_totalFrame;
-	int m_scale;
-};
 
-class KSSpecialAttackPattern2 : public AttackPattern
+class SightOutWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern2);
+	CREATE_FUNC_CCP(SightOutWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
 };
 
-class KSSpecialAttackPattern3 : public AttackPattern
+class SlowZoneWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern3);
+	CREATE_FUNC_CCP(SlowZoneWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
 };
 
-class KSSpecialAttackPattern4 : public AttackPattern
+class PrisonWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern4);
+	CREATE_FUNC_CCP(PrisonWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
 };
 
-class KSSpecialAttackPattern5 : public AttackPattern
+class FreezingWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern5);
+	CREATE_FUNC_CCP(FreezingWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
 };
 
-class KSSpecialAttackPattern6 : public AttackPattern
+class ChaosWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern6);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-};
-
-class KSSpecialAttackPattern7 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern7);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-};
-
-class KSSpecialAttackPattern8 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern8);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-};
-
-class KSSpecialAttackPattern9 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern9);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-};
-
-class KSSpecialAttackPattern10 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern10);
+	CREATE_FUNC_CCP(ChaosWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
@@ -994,10 +918,12 @@ protected:
 };
 
 
-class KSSpecialAttackPattern11 : public AttackPattern
+
+
+class LazerScanWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern11);
+	CREATE_FUNC_CCP(LazerScanWrapper);
 //	virtual void stopMyAction()
 //	{
 //		unscheduleUpdate();
@@ -1029,10 +955,10 @@ protected:
 	CCPoint startPosition;
 };
 
-class KSSpecialAttackPattern12 : public AttackPattern
+class RadioactivityWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern12);
+	CREATE_FUNC_CCP(RadioactivityWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
@@ -1043,51 +969,33 @@ protected:
 	int movingFrame;
 };
 
-class KSSpecialAttackPattern13 : public AttackPattern
+
+
+class WindMillWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern13);
+	CREATE_FUNC_CCP(WindMillWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
 };
 
-class KSSpecialAttackPattern14 : public AttackPattern
+class DynamiteWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern14);
+	CREATE_FUNC_CCP(DynamiteWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
 protected:
 };
 
-class KSSpecialAttackPattern15 : public AttackPattern
+class AlongOfTheLineWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern15);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-};
-
-class KSSpecialAttackPattern16 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern16);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-};
-
-class KSSpecialAttackPattern17 : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern17);
-	virtual ~KSSpecialAttackPattern17();
+	CREATE_FUNC_CCP(AlongOfTheLineWrapper);
+	virtual ~AlongOfTheLineWrapper();
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
@@ -1097,10 +1005,10 @@ protected:
 	float m_speed;
 };
 
-class KSSpecialAttackPattern18 : public AttackPattern
+class CloudWrapper : public AttackPattern
 {
 public:
-	CREATE_FUNC_CCP(KSSpecialAttackPattern18);
+	CREATE_FUNC_CCP(CloudWrapper);
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();
 	void update(float dt);
@@ -1141,10 +1049,10 @@ protected:
 
 
 /*
- class KSSpecialAttackPattern1 : public AttackPattern
+ class TornadoWrapper : public AttackPattern
  {
  public:
- CREATE_FUNC_CCP(KSSpecialAttackPattern1);
+ CREATE_FUNC_CCP(TornadoWrapper);
  void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
  {
  m_cumber = cb;
@@ -1221,7 +1129,31 @@ private:
 	FromToWithDuration<float> m_fadeFromToDuration;
 };
 
-
-
-
+class RunDownSawWrapper : public AttackPattern 
+{
+public:
+	CREATE_FUNC_CCP(RunDownSawWrapper);
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
+	void update(float dt);
+	virtual void stopMyAction();
+protected:
+	//float speed;
+	//float crashSize;
+	Well512 m_well512;
+	Json::Value m_pattern;
+};
+//class SawWrapper : public AttackPattern
+//{
+//public:
+	//CREATE_FUNC_CCP(SawWrapper);
+	//void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
+	
+	//void update(float dt);
+	//virtual void stopMyAction();
+	
+//protected:
+	//float speed;
+	//float crashsize;
+	//Well512 m_well512;
+//};
 #endif

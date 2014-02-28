@@ -804,6 +804,7 @@ void ThrowObject::removeEffect ()
 void ThrowObject::selfRemove ()
 {
 	removeFromParentAndCleanup(true);
+	myGD->communication("MS_resetRects", false);
 }
 void ThrowObject::stopMyAction ()
 {
@@ -1222,6 +1223,7 @@ void FallMeteor::fall ()
 void FallMeteor::selfRemove ()
 {
 	removeFromParentAndCleanup(true);
+	myGD->communication("MS_resetRects", false);
 }
 void FallMeteor::initParticle ()
 {
@@ -1457,6 +1459,7 @@ void ThreeCushion::myAction ()
 void ThreeCushion::selfRemove ()
 {
 	removeFromParentAndCleanup(true);
+	myGD->communication("MS_resetRects", false);
 }
 void ThreeCushion::jackDie ()
 {
@@ -1822,6 +1825,7 @@ void TickingTimeBomb::selfRemove ()
 {
 	tickingArray->removeObject(this);
 	removeFromParentAndCleanup(true);
+	myGD->communication("MS_resetRects", false);
 }
 void TickingTimeBomb::stopMyAction ()
 {
@@ -2884,6 +2888,7 @@ void ThrowBomb::selfRemove (float dt)
 	if(getChildrenCount() == 0)
 	{
 		removeFromParentAndCleanup(true);
+		myGD->communication("MS_resetRects", false);
 	}
 }
 void ThrowBomb::jackDie ()
@@ -3003,6 +3008,7 @@ void ReaverScarab::selfRemove (float dt)
 	if(getChildrenCount() == 0)
 	{
 		removeFromParentAndCleanup(true);
+		myGD->communication("MS_resetRects", false);
 	}
 }
 void ReaverScarab::jackDie ()
@@ -4253,5 +4259,137 @@ void MathmaticalMissileUnit::move (float dt)
 	m_frameCount++;
 	
 	
+}
+RunDownSaw * RunDownSaw::create (CCPoint t_sp, float t_speed, float t_angle, IntSize t_mSize, int runDown)
+{
+	RunDownSaw* t_to = new RunDownSaw();
+	t_to->myInit(t_sp, t_speed, t_angle, t_mSize, runDown);
+	t_to->autorelease();
+	return t_to;
+}
+void RunDownSaw::startMyAction ()
+{
+	AudioEngine::sharedInstance()->playEffect("sound_throw_obj_shot.mp3", false);
+	schedule(schedule_selector(RunDownSaw::myAction));
+}
+void RunDownSaw::jackDie ()
+{
+	unschedule(schedule_selector(RunDownSaw::myAction));
+	removeEffect();
+}
+void RunDownSaw::lineDie (IntPoint t_p)
+{
+	unschedule(schedule_selector(RunDownSaw::myAction));
+	myGD->communication("Main_showLineDiePosition", t_p);
+	removeEffect();
+}
+void RunDownSaw::removeEffect ()
+{
+	//		objImg->unscheduleAllSelectors();
+	m_objImg->stopAllActions();
+	CCScaleTo* t_fade = CCScaleTo::create(1.f, 0);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(RunDownSaw::selfRemove));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+	
+	m_objImg->runAction(t_seq);
+}
+void RunDownSaw::selfRemove ()
+{
+	removeFromParentAndCleanup(true);
+}
+void RunDownSaw::stopMyAction ()
+{
+	unschedule(schedule_selector(RunDownSaw::myAction));
+	myGD->communication("MS_resetRects", false);
+	addChild(KSTimer::create(0.5f, [=](){
+		addChild(KSGradualValue<float>::create(1, 0, 0.5f, [=](float t){
+			m_objImg->setScale(t);
+		}, [=](float t){
+			removeFromParentAndCleanup(true);
+		}));
+	}));
+}
+void RunDownSaw::myAction (float dt)
+{
+	//		objImg->setRotation(objImg->getRotation() + random_spin);
+	float dx = cos(m_angleDegree * M_PI / 180.f) * m_speed;
+	float dy = sin(m_angleDegree * M_PI / 180.f) * m_speed;
+	m_objImg->setPosition(m_objImg->getPosition() + ccp(dx, dy));
+	
+	CCPoint myPosition = m_objImg->getPosition();
+	CCPoint deltaPosition = myPosition - m_lastSawPosition;
+	//CCPoint subPosition = ccpSub(myPosition, b_c_p);
+	deltaPosition.x = fabsf(deltaPosition.x);
+	deltaPosition.y = fabsf(deltaPosition.y);
+	
+	if(deltaPosition.x > m_size.width || deltaPosition.y > m_size.height)
+	{
+		m_lastSawPosition = m_objImg->getPosition();
+		IntPoint myPoint = IntPoint((myPosition.x-1)/pixelSize + 1 - m_size.width/2, (myPosition.y-1)/pixelSize + 1 - m_size.height/2);
+		for(int i=0;i<m_size.height;i++)
+		{
+			for(int j=0;j<m_size.width;j++)
+			{
+				if(IntPoint(myPoint.x + j, myPoint.y + i).isInnerMap() && (myGD->mapState[myPoint.x + j][myPoint.y + i] == mapType::mapOldget ||
+					 myGD->mapState[myPoint.x + j][myPoint.y + i] == mapType::mapOldline))
+				{
+					m_runDown--;
+				}
+
+				crashMapForIntPoint(IntPoint(myPoint.x+j,myPoint.y+i));
+			}
+		}
+	}
+	
+	if(myPosition.x < -30 || myPosition.x > 350 || myPosition.y < -30 || myPosition.y > 460 ||
+		 m_runDown <= 0)
+	{
+		stopMyAction();
+	}
+}
+void RunDownSaw::myInit (CCPoint t_sp, float t_speed, float t_angle, IntSize t_mSize, int runDown)
+{
+	// t_sp 자리에서 부터 t_angle 각도로 던짐.
+	//
+	m_speed = t_speed;
+	m_size = t_mSize;
+	m_runDown = runDown;
+	m_angleDegree = t_angle;
+	pair<CCSprite*, CCBAnimationManager*> alreadyWarning, alreadyWarning2;
+
+	{
+		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+		CCBReader* reader = new CCBReader(nodeLoader);
+		m_objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw1.ccbi",this));
+		m_objImg->setPosition(t_sp);
+		m_lastSawPosition = m_objImg->getPosition();
+		//KS::setBlendFunc(objImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		reader->release();
+		addChild(m_objImg);
+		m_objImg->setVisible(false);
+
+		CCNode* guideNode = CCNode::create();
+		guideNode->setRotation(-t_angle);	
+		addChild(guideNode);
+		guideNode->setPosition(t_sp);
+		alreadyWarning = KS::loadCCBI<CCSprite*>(this, "signal1_1.ccbi");
+		alreadyWarning2 = KS::loadCCBI<CCSprite*>(this, "signal1_2.ccbi");
+		guideNode->addChild(alreadyWarning.first);
+		guideNode->addChild(alreadyWarning2.first);
+		alreadyWarning2.first->setPosition(ccp(55.f / 2.f, 0));
+	}
+	
+	addChild(KSTimer::create(0.7f, [=]()
+				{
+					AudioEngine::sharedInstance()->playEffect("sound_throw_obj_shot.mp3", false);
+					schedule(schedule_selector(RunDownSaw::myAction));
+					m_objImg->setVisible(true);
+					addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t)
+							{
+								KS::setOpacity(alreadyWarning.first, t);
+								KS::setOpacity(alreadyWarning2.first, t);
+								alreadyWarning2.first->setOpacity(t);
+							}));
+				}));
 }
 #undef LZZ_INLINE
