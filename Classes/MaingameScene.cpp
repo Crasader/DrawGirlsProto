@@ -1793,7 +1793,8 @@ void Maingame::showScreenSideWarning()
 }
 void Maingame::hideScreenSideWarning()
 {
-	warning_count--;
+	if(warning_count > 0)
+		warning_count--;
 	
 	if(warning_count == 0)
 	{
