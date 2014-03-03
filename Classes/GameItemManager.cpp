@@ -1277,6 +1277,85 @@ void GameItemManager::addItem()
 	}
 }
 
+void GameItemManager::showBeautyStone()
+{
+	for(int i=0;i<3;i++)
+	{
+		int random_value = rand()%creatable_list.size();
+		ITEM_CODE create_item = creatable_list[random_value];
+		
+		if(create_item == kIC_attack)
+		{
+			GameItemAttack* t_gia = GameItemAttack::create(true);
+			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_gia);
+			
+			beauty_stone_list.push_back(t_gia);
+		}
+		else if(create_item == kIC_speedUp)
+		{
+			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
+			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_gisu);
+			
+			beauty_stone_list.push_back(t_gisu);
+		}
+		else if(create_item == kIC_fast)
+		{
+			GameItemFast* t_fast = GameItemFast::create(true);
+			t_fast->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_fast);
+			
+			beauty_stone_list.push_back(t_fast);
+		}
+		else if(create_item == kIC_critical)
+		{
+			GameItemFire* t_fire = GameItemFire::create(true);
+			t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_fire);
+			
+			beauty_stone_list.push_back(t_fire);
+		}
+		else if(create_item == kIC_subOneDie)
+		{
+			GameItemSubOneDie* t_sod = GameItemSubOneDie::create(true);
+			t_sod->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_sod);
+			
+			beauty_stone_list.push_back(t_sod);
+		}
+		else if(create_item == kIC_silence)
+		{
+			GameItemSilence* t_silence = GameItemSilence::create(true);
+			t_silence->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_silence);
+			
+			beauty_stone_list.push_back(t_silence);
+		}
+	}
+}
+
+void GameItemManager::removeBeautyStone()
+{
+	while(!beauty_stone_list.empty())
+	{
+		CCNode* t_node = beauty_stone_list.back();
+		beauty_stone_list.pop_back();
+		
+		bool is_found = false;
+		CCArray* child_array = getChildren();
+		for(int i=0;i<child_array->count() && !is_found;i++)
+		{
+			CCNode* t_child = (CCNode*)child_array->objectAtIndex(i);
+			if(t_node == t_child)
+				is_found = true;
+		}
+		
+		if(is_found)
+			t_node->removeFromParent();
+	}
+}
+
 void GameItemManager::showTakeItemEffect(CCPoint t_p)
 {
 //	CCSprite* t_effect = CCSprite::createWithTexture(take_item_effects->getTexture(), CCRectMake(0, 0, 109, 109));
@@ -1362,6 +1441,9 @@ void GameItemManager::myInit()
 	myGD->V_V["GIM_startFever"] = std::bind(&FeverCoinParent::startFever, fever_coin_parent);
 	myGD->V_V["GIM_stopFever"] = std::bind(&FeverCoinParent::stopFever, fever_coin_parent);
 	myGD->V_V["GIM_stopCoin"] = std::bind(&GameItemManager::stopCoin, this);
+	
+	myGD->V_V["GIM_showBeautyStone"] = std::bind(&GameItemManager::showBeautyStone, this);
+	myGD->V_V["GIM_removeBeautyStone"] = std::bind(&GameItemManager::removeBeautyStone, this);
 }
 
 //class GameItemPlasma : public GameItemBase

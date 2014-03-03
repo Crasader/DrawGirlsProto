@@ -1332,6 +1332,11 @@ void Maingame::takeSpeedUpEffect( int t_step )
 {
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
 
+	if(t_step < 1)
+		t_step = 1;
+	else if(t_step > 8)
+		t_step = 8;
+	
 	if(recent_take_speed_up_value < t_step)
 	{
 		if(save_take_speed_up_effect)

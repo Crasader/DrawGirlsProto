@@ -9,10 +9,10 @@
 #include "CountingBMLabel.h"
 #include "KSUtil.h"
 
-CountingBMLabel* CountingBMLabel::create(string init_value, string font_filename, float t_duration, string t_format)
+CountingBMLabel* CountingBMLabel::create(string init_value, string font_filename, float t_duration, string t_format, bool t_is_comma)
 {
 	CountingBMLabel* t_cbml = new CountingBMLabel();
-	t_cbml->myInit(init_value, font_filename, t_duration, t_format);
+	t_cbml->myInit(init_value, font_filename, t_duration, t_format, t_is_comma);
 	t_cbml->autorelease();
 	return t_cbml;
 }
@@ -78,7 +78,10 @@ void CountingBMLabel::changing(float dt)
 				increase_value += decreaseUnit*sign_value;
 			}
 		}
-		CCLabelBMFont::setString(KS::insert_separator(CCString::createWithFormat(show_format.c_str(),base_value+increase_value)->getCString()).c_str());
+		if(is_comma)
+			CCLabelBMFont::setString(KS::insert_separator(CCString::createWithFormat(show_format.c_str(),base_value+increase_value)->getCString()).c_str());
+		else
+			CCLabelBMFont::setString(CCString::createWithFormat(show_format.c_str(),base_value+increase_value)->getCString());
 	}
 	else
 		stopChanging();
@@ -88,7 +91,10 @@ void CountingBMLabel::stopChanging()
 {
 	unschedule(schedule_selector(CountingBMLabel::changing));
 	is_changing = false;
-	CCLabelBMFont::setString(KS::insert_separator(keep_value_string.c_str()).c_str());
+	if(is_comma)
+		CCLabelBMFont::setString(KS::insert_separator(keep_value_string.c_str()).c_str());
+	else
+		CCLabelBMFont::setString(keep_value_string.c_str());
 }
 
 void CountingBMLabel::setScale(float t_scale)
@@ -102,8 +108,9 @@ void CountingBMLabel::onChangeScale(bool t_b)
 	is_on_change_scale = t_b;
 }
 
-void CountingBMLabel::myInit(string init_value, string font_filename, float t_duration, string t_format)
+void CountingBMLabel::myInit(string init_value, string font_filename, float t_duration, string t_format, bool t_is_comma)
 {
+	is_comma = t_is_comma;
 	is_on_change_scale = true;
 	base_scale = -1;
 	is_changing = false;
@@ -113,6 +120,9 @@ void CountingBMLabel::myInit(string init_value, string font_filename, float t_du
 		show_format = "%.0f";
 	else
 		show_format = t_format.c_str();
-	CCLabelBMFont::initWithString(KS::insert_separator(init_value.c_str()).c_str(), font_filename.c_str(), kCCLabelAutomaticWidth, kCCTextAlignmentLeft, CCPointZero);
+	if(is_comma)
+		CCLabelBMFont::initWithString(KS::insert_separator(init_value.c_str()).c_str(), font_filename.c_str(), kCCLabelAutomaticWidth, kCCTextAlignmentLeft, CCPointZero);
+	else
+		CCLabelBMFont::initWithString(init_value.c_str(), font_filename.c_str(), kCCLabelAutomaticWidth, kCCTextAlignmentLeft, CCPointZero);
 	stopChanging();
 }

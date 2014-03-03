@@ -250,6 +250,9 @@ public:
 	
 	bool getIsFevering();
 	
+	void showBeautyStone();
+	void removeBeautyStone();
+	
 private:
 	
 	int counting_value;
@@ -266,6 +269,7 @@ private:
 	void showTakeItemEffect(CCPoint t_p);
 	
 	vector<ITEM_CODE> creatable_list;
+	vector<CCNode*> beauty_stone_list;
 	int selected_item_cnt;
 	
 	int double_item_cnt;

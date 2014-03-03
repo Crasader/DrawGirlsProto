@@ -1676,6 +1676,8 @@ void Jack::initStartPosition( CCPoint t_p )
 
 void Jack::setJackState( jackState t_s )
 {
+	bool is_changed = t_s != myState;
+	
 	myState = t_s;
 	myGD->setJackState(myState);
 	if(myState == jackStateNormal)
@@ -1688,6 +1690,9 @@ void Jack::setJackState( jackState t_s )
 		myGD->communication("Main_setLineParticle", false);
 		if(!is_hard && !jack_barrier->isVisible())
 			jack_barrier->setVisible(true);
+		
+		if(is_changed)
+			myGD->communication("GIM_removeBeautyStone");
 	}
 	else if(myState == jackStateDrawing)
 	{
@@ -1698,6 +1703,9 @@ void Jack::setJackState( jackState t_s )
 //		jackImg->setVisible(false);
 		if(!is_hard && jack_barrier->isVisible())
 			jack_barrier->setVisible(false);
+		
+		if(is_changed)
+			myGD->communication("GIM_showBeautyStone");
 	}
 	else if(myState == jackStateBackTracking)
 	{
@@ -1708,6 +1716,9 @@ void Jack::setJackState( jackState t_s )
 //		jackImg->setColor(ccGRAY);
 		if(!is_hard && jack_barrier->isVisible())
 			jack_barrier->setVisible(false);
+		
+		if(is_changed)
+			myGD->communication("GIM_removeBeautyStone");
 	}
 }
 
