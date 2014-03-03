@@ -51,6 +51,8 @@ bool Maingame::init()
 	is_gohome = false;
 	setKeypadEnabled(true);
 	
+	warning_count = 0;
+	
 	replay_continue_count = 0;
 	replay_continue_label = NULL;
 	
@@ -104,6 +106,9 @@ bool Maingame::init()
 	myGD->V_TDTD["Main_showContinue"] = std::bind(&Maingame::showContinue, this, _1, _2, _3, _4);
 	myGD->V_B["Main_setLineParticle"] = std::bind(&Maingame::setLineParticle, this, _1);
 	myGD->V_CCPI["Main_showComboImage"] = std::bind(&Maingame::showComboImage, this, _1, _2);
+	myGD->V_CCP["Main_showThumbWarning"] = std::bind(&Maingame::showThumbWarning, this, _1);
+	myGD->V_V["Main_showScreenSideWarning"] = std::bind(&Maingame::showScreenSideWarning, this);
+	myGD->V_V["Main_hideScreenSideWarning"] = std::bind(&Maingame::hideScreenSideWarning, this);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -426,6 +431,11 @@ void Maingame::finalSetting()
 	screen_node->addChild(screen_right);
 	
 	myJack->setPosition(myJack->getPosition());
+	
+	
+	screen_side_warning_node = CCNode::create();
+	screen_side_warning_node->setPosition(CCPointZero);
+	addChild(screen_side_warning_node, screenNodeZorder);
 	
 	
 	thumb_base_position = ccp(40-160.f*thumb_scale,myDSH->ui_center_y-215.f*thumb_scale);
@@ -1705,6 +1715,104 @@ void Maingame::stopShake()
 {
 	unschedule(schedule_selector(Maingame::shaking));
 	shake_frame = 0;
+}
+
+void Maingame::showScreenSideWarning()
+{
+	if(warning_count == 0)
+	{
+		CCSprite* left_top = CCSprite::create("warning_edge.png");
+		left_top->setAnchorPoint(ccp(0,1));
+		left_top->setPosition(ccp(0,myDSH->ui_top));
+		screen_side_warning_node->addChild(left_top);
+		left_top->setOpacity(0);
+		
+		CCSprite* right_top = CCSprite::create("warning_edge.png");
+		right_top->setAnchorPoint(ccp(0,1));
+		right_top->setRotation(90);
+		right_top->setPosition(ccp(480,myDSH->ui_top));
+		screen_side_warning_node->addChild(right_top);
+		right_top->setOpacity(0);
+		
+		CCSprite* top_bar = CCSprite::create("warning_border.png");
+		top_bar->setAnchorPoint(ccp(0.5,1));
+		top_bar->setScaleX((480-left_top->getContentSize().width*2.f)/top_bar->getContentSize().width);
+		top_bar->setPosition(ccp(240,myDSH->ui_top));
+		screen_side_warning_node->addChild(top_bar);
+		top_bar->setOpacity(0);
+		
+		CCSprite* left_bottom = CCSprite::create("warning_edge.png");
+		left_bottom->setAnchorPoint(ccp(0,1));
+		left_bottom->setRotation(-90);
+		left_bottom->setPosition(ccp(0,0));
+		screen_side_warning_node->addChild(left_bottom);
+		left_bottom->setOpacity(0);
+		
+		CCSprite* left_bar = CCSprite::create("warning_border.png");
+		left_bar->setAnchorPoint(ccp(0.5,1));
+		left_bar->setRotation(-90);
+		left_bar->setScaleX((myDSH->ui_top-left_top->getContentSize().width*2.f)/left_bar->getContentSize().width);
+		left_bar->setPosition(ccp(0,myDSH->ui_center_y));
+		screen_side_warning_node->addChild(left_bar);
+		left_bar->setOpacity(0);
+		
+		CCSprite* right_bottom = CCSprite::create("warning_edge.png");
+		right_bottom->setAnchorPoint(ccp(0,1));
+		right_bottom->setRotation(180);
+		right_bottom->setPosition(ccp(480,0));
+		screen_side_warning_node->addChild(right_bottom);
+		right_bottom->setOpacity(0);
+		
+		CCSprite* right_bar = CCSprite::create("warning_border.png");
+		right_bar->setAnchorPoint(ccp(0.5,1));
+		right_bar->setRotation(90);
+		right_bar->setScaleX((myDSH->ui_top-left_top->getContentSize().width*2.f)/right_bar->getContentSize().width);
+		right_bar->setPosition(ccp(480,myDSH->ui_center_y));
+		screen_side_warning_node->addChild(right_bar);
+		right_bar->setOpacity(0);
+		
+		CCSprite* bottom_bar = CCSprite::create("warning_border.png");
+		bottom_bar->setAnchorPoint(ccp(0.5,1));
+		bottom_bar->setRotation(180);
+		bottom_bar->setScaleX((480-left_top->getContentSize().width*2.f)/bottom_bar->getContentSize().width);
+		bottom_bar->setPosition(ccp(240,0));
+		screen_side_warning_node->addChild(bottom_bar);
+		bottom_bar->setOpacity(0);
+		
+		left_top->runAction(CCFadeTo::create(0.5f, 255));
+		right_top->runAction(CCFadeTo::create(0.5f, 255));
+		top_bar->runAction(CCFadeTo::create(0.5f, 255));
+		left_bottom->runAction(CCFadeTo::create(0.5f, 255));
+		left_bar->runAction(CCFadeTo::create(0.5f, 255));
+		right_bottom->runAction(CCFadeTo::create(0.5f, 255));
+		right_bar->runAction(CCFadeTo::create(0.5f, 255));
+		bottom_bar->runAction(CCFadeTo::create(0.5f, 255));
+	}
+	
+	warning_count++;
+}
+void Maingame::hideScreenSideWarning()
+{
+	warning_count--;
+	
+	if(warning_count == 0)
+	{
+		screen_side_warning_node->removeAllChildren();
+	}
+}
+
+void Maingame::showThumbWarning(CCPoint t_point)
+{
+	CCNode* t_node = CCNode::create();
+	CCSprite* t_warning = KS::loadCCBI<CCSprite*>(this, "minimap_warning.ccbi").first;
+	t_warning->setPosition(ccpAdd(thumb_base_position, ccpMult(t_point, thumb_texture->getScale())));
+	t_node->addChild(t_warning);
+	addChild(t_node, myUIZorder);
+	
+	CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+	CCCallFunc* t_call = CCCallFunc::create(t_node, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+	t_node->runAction(t_seq);
 }
 
 void Maingame::refreshThumb()
