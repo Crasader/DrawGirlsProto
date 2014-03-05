@@ -12,7 +12,8 @@
 #include "StageImgLoader.h"
 #include "AttackPattern.h"
 #include "StarGoldData.h"
-
+#include "StoneMissile.h"
+#include "ks19937.h"
 void MissileParent::bombCumber( CCObject* target )
 {
 	KSCumberBase* cumber = (KSCumberBase*)target;
@@ -170,6 +171,48 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	}
 }
 
+void MissileParent::createJackMissileWithStone(const string& missileName, int grade, int level, float percent, CCPoint initPosition)
+{
+//CCNode* targetNode, CCPoint initPosition, float initSpeed, int power, bool cancelCasting, bool stiffen)
+	int r = rand() % (myGD->getMainCumberCount());
+	GuidedMissile* gm = GuidedMissile::create(myGD->getMainCumberCCNodeVector()[r], initPosition, 
+																						1.2f, 555, 60, AttackOption::kNoOption);
+	jack_missile_node->addChild(gm);
+	
+	//StraightMissile* sm = StraightMissile::create(initPosition, deg2Rad(45), 2.f, 5, true, true);
+	//jack_missile_node->addChild(sm);
+	
+	SpreadMissile* sm = SpreadMissile::create(myGD->getMainCumberVector()[r], initPosition,
+																						1.2f, 3.f, 3, AttackOption::kNoOption);
+	jack_missile_node->addChild(sm);
+	
+	
+	IntPoint mapPoint;
+	bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
+	if(found == true)
+	{
+		MineAttack* ma = MineAttack::create(initPosition, ip2ccp(mapPoint), 10, 33.f, AttackOption::kNoOption);
+		jack_missile_node->addChild(ma);	
+	}
+	
+
+	IntPoint mapPoint2;
+	bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);
+	if(found2 == true)
+	{
+		SpiritAttack* sa = SpiritAttack::create(initPosition, ip2ccp(mapPoint2), 50.f, 33.f, 1.2f, 10, AttackOption::kNoOption);
+		jack_missile_node->addChild(sa);	
+	}
+	
+	RangeAttack* ra = RangeAttack::create(initPosition, 50, 500, 33.f, 30, AttackOption::kNoOption);
+	addChild(ra);
+	
+	for(int i=0; i<=15; i++)
+	{
+		RandomBomb* rb = RandomBomb::create(100, 33.f, AttackOption::kNoOption);
+		addChild(rb);
+	}
+}
 int MissileParent::getJackMissileCnt()
 {
 	return jack_missile_node->getChildrenCount();
@@ -1232,33 +1275,15 @@ void MissileParent::myInit( CCNode* boss_eye )
 	jack_missile_node = CCNode::create();
 	addChild(jack_missile_node, 10);
 	
-	//	myGD->V_CCPB["MP_startFire"] = std::bind(&MissileParent::startFire, this, _1, _2);
-	
-	//	myGD->V_CCPI["MP_attackWithCode"] = std::bind(&MissileParent::attackWithCode, this, _1, _2);
-	
-	//	myGD->V_CCPI["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2);
 	myGD->I_CCPStrCumberBaseB["MP_attackWithKSCode"] =
 	std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
-//	myGD->V_CCPCCOCallfuncO["MP_createSubCumberReplication"] = std::bind(&MissileParent::createSubCumberReplication, this, _1, _2, _3);
 	myGD->V_CCO["MP_removeChargeInArray"] = std::bind(&MissileParent::removeChargeInArray, this, _1);
 	myGD->V_IIFCCP["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3, _4);
 	myGD->V_CCO["MP_bombCumber"] = std::bind(&MissileParent::bombCumber, this, _1);
+	myGD->createJackMissileWithStoneFunctor = std::bind(&MissileParent::createJackMissileWithStone, this,
+																											_1, _2, _3, _4, _5);
 	myGD->V_CCPCOLORF["MP_explosion"] = std::bind(&MissileParent::explosion, this, _1, _2, _3);
 	myGD->V_V["MP_endIngActionAP"] = std::bind(&MissileParent::endIngActionAP, this);
-//	myGD->V_IpIII["MP_createTickingTimeBomb"] = std::bind(&MissileParent::createTickingTimeBomb, this, _1, _2, _3, _4);
-	//	myGD->V_V["MP_deleteKeepAP25"] = std::bind(&MissileParent::deleteKeepAP25, this);
-	//myGD->V_V["MP_deleteKeepAP23"] = std::bind(&MissileParent::deleteKeepAP23, this);
-	//myGD->V_V["MP_deleteKeepAP26"] = std::bind(&MissileParent::deleteKeepAP26, this);
-	//	myGD->V_V["MP_deleteKeepAP27"] = std::bind(&MissileParent::deleteKeepAP27, this);
-	//myGD->V_V["MP_deleteKeepAP33"] = std::bind(&MissileParent::deleteKeepAP33, this);
-	//myGD->V_V["MP_deleteKeepAP24"] = std::bind(&MissileParent::deleteKeepAP24, this);
-	//	myGD->V_V["MP_deleteKeepAP34"] = std::bind(&MissileParent::deleteKeepAP34, this);
-	//	myGD->V_V["MP_protectedAP25"] = std::bind(&MissileParent::protectedAP25, this);
-	//myGD->V_V["MP_protectedAP26"] = std::bind(&MissileParent::protectedAP26, this);
-	//	myGD->V_V["MP_protectedAP27"] = std::bind(&MissileParent::protectedAP27, this);
-	//myGD->V_V["MP_protectedAP33"] = std::bind(&MissileParent::protectedAP33, this);
-	//	myGD->V_V["MP_deleteKeepAP35"] = std::bind(&MissileParent::deleteKeepAP35, this);
-	//	myGD->V_V["MP_stopAutoAttacker"] = std::bind(&MissileParent::stopAutoAttacker, this);
 	myGD->V_IIFCCP["MP_shootPetMissile"] = std::bind(&MissileParent::shootPetMissile, this, _1, _2, _3, _4);
 	myGD->V_V["MP_resetTickingTimeBomb"] = std::bind(&MissileParent::resetTickingTimeBomb, this);
 	myGD->V_V["MP_subOneDie"] = std::bind(&MissileParent::subOneDie, this);
@@ -1284,35 +1309,35 @@ MissileParent* MissileParent::create( CCNode* boss_eye )
 }
 
 
-CreateSubCumberOtherAction* CreateSubCumberOtherAction::create( IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel )
-{
-	CreateSubCumberOtherAction* t_CSCAA = new CreateSubCumberOtherAction();
-	t_CSCAA->myInit(c_p, t_after, d_after, t_cancel, d_cancel);
-	t_CSCAA->autorelease();
-	return t_CSCAA;
-}
+//CreateSubCumberOtherAction* CreateSubCumberOtherAction::create( IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel )
+//{
+	//CreateSubCumberOtherAction* t_CSCAA = new CreateSubCumberOtherAction();
+	//t_CSCAA->myInit(c_p, t_after, d_after, t_cancel, d_cancel);
+	//t_CSCAA->autorelease();
+	//return t_CSCAA;
+//}
 
-void CreateSubCumberOtherAction::afterAction( CCObject* cb )
-{
-	myGD->communication("CP_createSubCumber", createPoint);
-	(after_target->*after_delegate)(cb);
-	removeFromParentAndCleanup(true);
-}
+//void CreateSubCumberOtherAction::afterAction( CCObject* cb )
+//{
+	//myGD->communication("CP_createSubCumber", createPoint);
+	//(after_target->*after_delegate)(cb);
+	//removeFromParentAndCleanup(true);
+//}
 
-void CreateSubCumberOtherAction::cancelAction( CCObject* cb )
-{
-	(cancel_target->*cancel_delegate)(cb);
-	removeFromParentAndCleanup(true);
-}
+//void CreateSubCumberOtherAction::cancelAction( CCObject* cb )
+//{
+	//(cancel_target->*cancel_delegate)(cb);
+	//removeFromParentAndCleanup(true);
+//}
 
-void CreateSubCumberOtherAction::myInit( IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel )
-{
-	createPoint = c_p;
-	after_target = t_after;
-	after_delegate = d_after;
-	cancel_target = t_cancel;
-	cancel_delegate = d_cancel;
-}
+//void CreateSubCumberOtherAction::myInit( IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel )
+//{
+	//createPoint = c_p;
+	//after_target = t_after;
+	//after_delegate = d_after;
+	//cancel_target = t_cancel;
+	//cancel_delegate = d_cancel;
+//}
 
 UM_creator* UM_creator::create( int t_um_tcnt, int t_create_type, float t_missile_speed )
 {

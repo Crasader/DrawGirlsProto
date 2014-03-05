@@ -700,12 +700,19 @@ void JM_BasicMissile::moving ()
 				{
 					particlePosition.x += rand()%21 - 10;
 					particlePosition.y += rand()%21 - 10;
-					
+			
+					// directionAngle : Degree 단위.
+					// 피격에니메이션.
 					myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0), directionAngle);
+					// 화면 번쩍 번쩍
 					myGD->communication("VS_setLight");
+					// 캐스팅 캔슬.
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
-					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
 					
+					// 몬스터 리액션하라고.
+					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
+				
+					// 데미지 표시해주는 것. 데미지 숫자 뜸.
 					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
 					
 					int combo_cnt = myGD->getCommunication("UI_getComboCnt");

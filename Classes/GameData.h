@@ -121,6 +121,7 @@ public:
 	std::function<std::vector<KSCumberBase*>&(void)> getMainCumberVector;
 	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
 	
+	std::function<void(const string&, int grade, int level, float percent, CCPoint initPosition)> createJackMissileWithStoneFunctor;
 	vector<CCNode*> getMainCumberCCNodeVector()
 	{
 		vector<KSCumberBase*> t_vector = getMainCumberVector();
@@ -226,7 +227,6 @@ public:
 	void communication(string funcName, CCPoint t_p);
 	void communication(string funcName, CCObject* t_t1, SEL_CallFunc t_d1, CCObject* t_t2, SEL_CallFunc t_d2);
 	void communication(string funcName, string t_str);
-	
 	void setJackSpeed(float t_s);
 	void setJackState(int t_s);
 	int getJackState();
@@ -250,7 +250,8 @@ public:
 	int limited_step_top;
 	int limited_step_bottom;
 	bool is_setted_jack;
-	
+	bool getEmptyRandomPoint(IntPoint* point, float radius);
+
 private:
 	
 	SetMapType recent_map_type;

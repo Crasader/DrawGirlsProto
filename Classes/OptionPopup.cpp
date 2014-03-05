@@ -27,6 +27,8 @@
 #include "hspConnector.h"
 #include "TitleRenewal.h"
 
+#include "KSLabelTTF.h"
+
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -223,6 +225,15 @@ bool OptionPopup::init()
 	CCSprite* s_tutorial = CCSprite::create("option_tutorial.png");
 	s_tutorial->setColor(ccGRAY);
 	
+	KSLabelTTF* ttt = KSLabelTTF::create("the 테스트", mySGD->getFont().c_str(), 16.f);
+	ttt->setAnchorPoint(ccp(0.5f, 0.5f));
+	ttt->setPosition(ccp(20, 20));
+	ttt->setColor(ccc3(0, 255, 0));
+	ttt->enableOuterStroke(ccc3(255, 0, 0), 2.f);
+	ttt->setString("the 테스트");
+	ttt->setString("the 테스트");
+	
+	n_tutorial->addChild(ttt, 1000000);
 	CCMenuItem* tutorial_item = CCMenuItemSprite::create(n_tutorial, s_tutorial, this, menu_selector(OptionPopup::menuAction));
 	tutorial_item->setTag(kOP_MT_tutorial);
 	

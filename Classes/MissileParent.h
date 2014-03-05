@@ -28,60 +28,48 @@ using namespace std;
 
 
 
-class CreateSubCumberOtherAction : public CCNode
-{
-public:
-	static CreateSubCumberOtherAction* create(IntPoint c_p,
-											  CCObject* t_after, SEL_CallFuncO d_after,
-											  CCObject* t_cancel, SEL_CallFuncO d_cancel);
+//class CreateSubCumberOtherAction : public CCNode
+//{
+//public:
+	//static CreateSubCumberOtherAction* create(IntPoint c_p,
+												//CCObject* t_after, SEL_CallFuncO d_after,
+												//CCObject* t_cancel, SEL_CallFuncO d_cancel);
 	
-	void afterAction(CCObject* cb);
+	//void afterAction(CCObject* cb);
 	
-	void cancelAction(CCObject* cb);
+	//void cancelAction(CCObject* cb);
 	
-private:
+//private:
 	
-	CCObject* after_target;
-	SEL_CallFuncO after_delegate;
-	CCObject* cancel_target;
-	SEL_CallFuncO cancel_delegate;
-	IntPoint createPoint;
+	//CCObject* after_target;
+	//SEL_CallFuncO after_delegate;
+	//CCObject* cancel_target;
+	//SEL_CallFuncO cancel_delegate;
+	//IntPoint createPoint;
 	
-	void myInit(IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel);
-};
+	//void myInit(IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel);
+//};
 
 class UM_creator : public CCNode
 {
 public:
 	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_missile_speed);
-	
 	static UM_creator* create(int t_um_tcnt, int t_create_type, float t_missile_speed, CCPoint s_p);
-	
 	void startCreate();
-	
 	void startPetCreate();
-	
-private:
-	
+private: 
 	int ing_frame;
 	int um_tcnt;
 	int ing_um_cnt;
 	int create_type;
 	float missile_speed;
-	int shoot_frame;
-	
-	CCPoint start_position;
-	
-	void creating();
-	
-	void petCreating();
-	
-	void stopCreate();
-	
-	void stopPetCreate();
-	
-	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed);
-	
+	int shoot_frame; 
+	CCPoint start_position; 
+	void creating(); 
+	void petCreating(); 
+	void stopCreate(); 
+	void stopPetCreate(); 
+	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed); 
 	void myInit(int t_um_tcnt, int t_create_type, float t_missile_speed, CCPoint s_p);
 };
 
@@ -89,51 +77,23 @@ class MissileParent : public CCNode
 {
 public:
 	static MissileParent* create(CCNode* boss_eye);
-	
 	void bombCumber(CCObject* target);
-	
 	void createJackMissile(int jm_type, int cmCnt, float missile_speed, CCPoint missile_position);
-	
+	// 초기위치, 획득영역, 레벨, 등급, 미사일 타입.
+	void createJackMissileWithStone(const string& missileName, int grade, int level, float percent, CCPoint initPosition);
 	void subOneDie();
-	
 	void endIngActionAP();
-
-
-	
-	//void createSubCumberReplication(CCPoint s_p, CCObject* sender, SEL_CallFuncO d_startMoving);
-	
 	void explosion(CCPoint bombPosition, ccColor4F t_color, float t_angle);
-	
 	void createTickingTimeBomb(IntPoint t_point, int t_bombFrameOneTime, int t_bombTimes, int t_rangeCode);
-	
 	void resetTickingTimeBomb();
-	
-	
-	
-	//void deleteKeepAP23(){		keepAP23 = NULL;	}
-	//void deleteKeepAP26(){		keepAP26 = NULL;	}
-	//void protectedAP26(){		keepAP26->stopFrame();	}
-	
-
-	
-	//void deleteKeepAP33(){		keepAP33 = NULL;	}
-	//void protectedAP33(){		keepAP33->stopFrame();	}
-	
-	//void deleteKeepAP24(){		keepAP24 = NULL;	}
-
-	
 	virtual ~MissileParent()
 	{
 		//chargeArray->release();
 		tickingArray->release();
 	}
-	
 	void shootPetMissile(int jm_type, int cmCnt, float damage_per, CCPoint s_p);
-	
 	enum PATTERN_RET_CODE{INVALID=0, VALID=1, NOCAST=2};
-	
 	int attackWithKSCode(CCPoint startPosition, std::string pattern, KSCumberBase* cb, bool exe);
-	
 	int getJackMissileCnt();
 private:
 	
@@ -141,26 +101,12 @@ private:
 	
 	CCPoint startFirePosition;
 	int slowAreaCnt;
-	
-	//AttackPattern* saveAP;
-
-	//Cobweb* keepAP23; // 거미줄
-	//FreezeAttack* keepAP26; // 얼음
-	//ChaosAttack* keepAP33; // 반대 컨
-	//SightOutAttack* keepAP24; // 태양권
-	//CCArray* chargeArray;
 	CCArray* tickingArray;
-	
 	CCSpriteBatchNode* explosion_node;
-	
 	CCNode* jack_missile_node;
-	
 	void initParticle(CCPoint startPosition, ccColor4F t_color, float t_angle);
-	
 	void removeChargeInArray(CCObject* remove_charge);
-	
 	void movingMainCumber();
-
 	void myInit(CCNode* boss_eye);
 };
 

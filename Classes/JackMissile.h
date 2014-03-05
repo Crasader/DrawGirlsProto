@@ -90,5 +90,8 @@ private:
 	void myInit (CCNode * t_target, int jm_type, float missile_speed);
 	void realInit (CCNode * t_target, int jm_type, float missile_speed);
 };
+
+
+
 #undef LZZ_INLINE
 #endif

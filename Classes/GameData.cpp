@@ -9,7 +9,7 @@
 #include "GameData.h"
 #include "SilhouetteData.h"
 #include "DataStorageHub.h"
-
+#include "ks19937.h"
 float deg2Rad(float x) { return x * M_PI / 180.f;}
 float rad2Deg(float x) { return x * 180.f / M_PI;}
 
@@ -372,6 +372,71 @@ void GameData::setUItype( GAMESCREEN_TYPE t_type )
 	gamescreen_type = t_type;
 }
 
+bool GameData::getEmptyRandomPoint(IntPoint* point, float radius)
+{
+	bool isGoodPointed = false;
+	
+	IntPoint mapPoint;
+	std::vector<IntPoint> shuffledPositions;
+	for(int x = 1; x <= mapLoopRange::mapWidthInnerEnd - 1; x++)
+	{
+		for(int y = 1; y <= mapLoopRange::mapHeightInnerEnd - 1; y++)
+		{
+			if(mapState[x][y] == mapType::mapEmpty)
+			{
+				shuffledPositions.push_back(IntPoint(x, y));
+			}
+		}
+	}
+	
+	random_shuffle(shuffledPositions.begin(), shuffledPositions.end(), [=](int n){
+		//return 1;
+		return ks19937::getIntValue(0, n-1);
+	});
+	for(auto& mp : shuffledPositions)
+	{
+		mapPoint = mp;
+		
+		float myScale = 1.f;
+		if(mapPoint.isInnerMap() && mapState[mapPoint.x][mapPoint.y] == mapEmpty)
+		{
+			float half_distance = radius*myScale; // 20.f : radius for base scale 1.f
+			float calc_distance;
+			IntPoint check_position;
+			
+			bool is_not_position = false;
+			
+			for(int i=mapPoint.x-half_distance/2;i<=mapPoint.x+half_distance/2 && !is_not_position;i++)
+			{
+				for(int j=mapPoint.y-half_distance/2;j<=mapPoint.y+half_distance/2 && !is_not_position;j++)
+				{
+					calc_distance = sqrtf(powf((mapPoint.x - i)*pixelSize,2) + powf((mapPoint.y - j)*pixelSize, 2));
+					if(calc_distance < half_distance)
+					{
+						check_position = IntPoint(i,j);
+						if(!check_position.isInnerMap())
+						{
+							is_not_position = true;
+						}
+					}
+				}
+			}
+			if(!is_not_position)
+			{
+				isGoodPointed = true;
+				break;
+			}
+		}
+	}
+	
+	if(isGoodPointed == true)
+	{
+		point->x = mapPoint.x;
+		point->y = mapPoint.y;
+	}
+	
+	return isGoodPointed;
+}
 void GameData::myInit()
 {
 	boarder_value = 7.f;

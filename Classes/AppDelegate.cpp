@@ -27,7 +27,7 @@ USING_NS_CC;
 #include "SlidingPuzzle.h"
 #include "CardMatching.h"
 #include "KSProtect.h"
-
+#include "ks19937.h"
 
 //#include <boost/graph/graphviz.hpp>
 /*
@@ -87,7 +87,7 @@ struct AA
 bool AppDelegate::applicationDidFinishLaunching()
 {
 	
-	
+	ks19937::seed(std::random_device()());
 	// initialize director
 	CCDirector *pDirector = CCDirector::sharedDirector();
 	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
