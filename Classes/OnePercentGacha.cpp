@@ -258,7 +258,7 @@ void OnePercentGacha::setBack ()
 	title_img->setPosition(ccp(240-480,myDSH->ui_center_y+75));
 	addChild(title_img, kOnePercentGacha_Z_back);
 	
-	percent_label = CountingBMLabel::create(CCString::createWithFormat("%.1f%%", recent_percent*100.f)->getCString(), "one_percent_gacha_font.fnt", 0.5f, "%.1f%%");
+	percent_label = CountingBMLabel::create(CCString::createWithFormat("%.1f%%", recent_percent*100.f)->getCString(), "one_percent_gacha_font.fnt", 0.5f, "%.1f%%", false);
 	percent_label->setPosition(ccp(title_img->getContentSize().width/2.f + 65, title_img->getContentSize().height/2.f));
 	title_img->addChild(percent_label, kOnePercentGacha_Z_content);
 	

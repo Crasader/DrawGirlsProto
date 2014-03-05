@@ -215,7 +215,12 @@ private:
 	void resetIsLineDie();
 	
 	void showWarning(int t1);
-	void showDetailMessage(const std::string& fileName);	
+	void showDetailMessage(const std::string& fileName);
+	void showThumbWarning(CCPoint t_point);
+	int warning_count;
+	CCNode* screen_side_warning_node;
+	void showScreenSideWarning();
+	void hideScreenSideWarning();
 	void showTextMessage(const std::string& msg);	
 	void showTakeCoin();
 	CCNode* gameNodePointer();
