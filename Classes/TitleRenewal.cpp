@@ -318,6 +318,7 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_speed_d, i, character_list[i-1]["statInfo"]["speed"].asDouble(), false);
 			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_life_i, i, character_list[i-1]["statInfo"]["life"].asInt(), false);
 			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, i, character_list[i-1]["statInfo"]["color"].asInt(), false);
+			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i, character_list[i-1]["statInfo"]["slot"].asInt(), false);
 			NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
 			
 			if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s, i) != character_list[i-1]["resourceInfo"]["ccbi"].asString())
@@ -397,6 +398,9 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 		Json::Value monster_list = result_data["list"];
 		int monster_count = monster_list.size();
 		NSDS_SI(kSDS_GI_monsterCount_i, monster_count, false);
+		
+		vector<DownloadFile>::iterator iter;
+		
 		for(int i=1;i<=monster_count;i++)
 		{
 			NSDS_SI(kSDS_GI_monsterInfo_int1_no_i, i, monster_list[i-1]["no"].asInt(), false);
@@ -415,7 +419,10 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					t_df1.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + "_head.ccbi";
 					t_df1.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + "_head.ccbi";
 					t_df1.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
-					monster_download_list.push_back(t_df1);
+					
+					iter = find(monster_download_list.begin(), monster_download_list.end(), t_df1);
+					if(iter == monster_download_list.end())
+						monster_download_list.push_back(t_df1);
 					// ================================
 					
 					// check, after download ----------
@@ -424,7 +431,10 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					t_df2.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + "_body.ccbi";
 					t_df2.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + "_body.ccbi";
 					t_df2.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
-					monster_download_list.push_back(t_df2);
+					
+					iter = find(monster_download_list.begin(), monster_download_list.end(), t_df2);
+					if(iter == monster_download_list.end())
+						monster_download_list.push_back(t_df2);
 					// ================================
 					
 					// check, after download ----------
@@ -433,7 +443,10 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					t_df3.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + "_tail.ccbi";
 					t_df3.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + "_tail.ccbi";
 					t_df3.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
-					monster_download_list.push_back(t_df3);
+					
+					iter = find(monster_download_list.begin(), monster_download_list.end(), t_df3);
+					if(iter == monster_download_list.end())
+						monster_download_list.push_back(t_df3);
 					// ================================
 				}
 				
@@ -447,7 +460,10 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					t_df.img = monster_list[i-1]["resourceInfo"]["plist"].asString().c_str();
 					t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".plist";
 					t_df.key = CCSTR_CWF("mi%d_ri_plist", i)->getCString();
-					monster_download_list.push_back(t_df);
+					
+					iter = find(monster_download_list.begin(), monster_download_list.end(), t_df);
+					if(iter == monster_download_list.end())
+						monster_download_list.push_back(t_df);
 					// ================================
 				}
 				
@@ -459,7 +475,10 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					t_df.img = monster_list[i-1]["resourceInfo"]["pvrccz"].asString().c_str();
 					t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".pvr.ccz";
 					t_df.key = CCSTR_CWF("mi%d_ri_pvrccz", i)->getCString();
-					monster_download_list.push_back(t_df);
+					
+					iter = find(monster_download_list.begin(), monster_download_list.end(), t_df);
+					if(iter == monster_download_list.end())
+						monster_download_list.push_back(t_df);
 					// ================================
 				}
 				
@@ -475,7 +494,10 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					t_df.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + ".ccbi";
 					t_df.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + ".ccbi";
 					t_df.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
-					monster_download_list.push_back(t_df);
+					
+					iter = find(monster_download_list.begin(), monster_download_list.end(), t_df);
+					if(iter == monster_download_list.end())
+						monster_download_list.push_back(t_df);
 					// ================================
 				}
 				
@@ -489,7 +511,10 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					t_df.img = monster_list[i-1]["resourceInfo"]["plist"].asString().c_str();
 					t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".plist";
 					t_df.key = CCSTR_CWF("mi%d_ri_plist", i)->getCString();
-					monster_download_list.push_back(t_df);
+					
+					iter = find(monster_download_list.begin(), monster_download_list.end(), t_df);
+					if(iter == monster_download_list.end())
+						monster_download_list.push_back(t_df);
 					// ================================
 				}
 				
@@ -501,7 +526,10 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					t_df.img = monster_list[i-1]["resourceInfo"]["pvrccz"].asString().c_str();
 					t_df.filename = monster_list[i-1]["resourceInfo"]["imageID"].asString() + ".pvr.ccz";
 					t_df.key = CCSTR_CWF("mi%d_ri_pvrccz", i)->getCString();
-					monster_download_list.push_back(t_df);
+					
+					iter = find(monster_download_list.begin(), monster_download_list.end(), t_df);
+					if(iter == monster_download_list.end())
+						monster_download_list.push_back(t_df);
 					// ================================
 				}
 				

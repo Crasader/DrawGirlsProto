@@ -37,6 +37,7 @@
 #include "MainFlowScene.h"
 #include "StageListDown.h"
 #include "NewPieceManager.h"
+#include "BeautyStoneSetting.h"
 
 CCScene* NewMainFlowScene::scene()
 {
@@ -1955,10 +1956,15 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 	else if(tag == kNewMainFlowMenuTag_cardSetting)
 	{
 		puzzle_table->setTouchEnabled(false);
-		mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
-		CardSettingPopup* t_popup = CardSettingPopup::create();
+		BeautyStoneSettingPopup* t_popup = BeautyStoneSettingPopup::create();
 		t_popup->setHideFinalAction(this, callfunc_selector(NewMainFlowScene::tutorialCardSettingClose));
 		addChild(t_popup, kNewMainFlowZorder_popup);
+		
+//		puzzle_table->setTouchEnabled(false);
+//		mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
+//		CardSettingPopup* t_popup = CardSettingPopup::create();
+//		t_popup->setHideFinalAction(this, callfunc_selector(NewMainFlowScene::tutorialCardSettingClose));
+//		addChild(t_popup, kNewMainFlowZorder_popup);
 	}
 	else if(tag == kNewMainFlowMenuTag_friendManagement)
 	{

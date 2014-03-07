@@ -28,6 +28,14 @@ typedef enum t_DSH_Key{
 	kDSH_Key_selectedCardLevel,
 	kDSH_Key_selectedCardPassive,
 	
+	kDSH_Key_selectedCharacter_int1_weaponSlot_int2, // 0~(n-1)번째 캐릭터의 1~n번째 슬롯에 장착된 뷰티스톤의 id
+	kDSH_Key_selfBeautyStoneID, // 1~n 의 뷰티스톤의 id
+	kDSH_Key_haveBeautyStoneCnt, // 0~n 의 뷰티스톤 개수
+	kDSH_Key_haveBeautyStoneID_int1, // 1~haveBeautyStoneCnt 의 뷰티스톤 id
+	kDSH_Key_beautyStoneType_int1, // 1~selfBeautyStoneID 의 뷰티스톤 type
+	kDSH_Key_beautyStoneRank_int1, // 1~selfBeautyStoneID 의 뷰티스톤 rank
+	kDSH_Key_beautyStoneLevel_int1, // 1~selfBeautyStoneID 의 뷰티스톤 level
+	
 	kDSH_Key_cardLevel_int1,
 	kDSH_Key_cardMaxDurability_int1,
 	kDSH_Key_cardPassive_int1,
@@ -150,6 +158,7 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_friendPoint,
 	kSaveUserData_Key_heart,
 	kSaveUserData_Key_item,
+	kSaveUserData_Key_beautyStone,
 	kSaveUserData_Key_cardsInfo,
 	kSaveUserData_Key_highScore,
 	kSaveUserData_Key_selectedCard,

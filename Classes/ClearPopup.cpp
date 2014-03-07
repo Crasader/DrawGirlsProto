@@ -239,81 +239,80 @@ bool ClearPopup::init()
 	///////////////////////////// 딤드 로 팝업 띄움
 	int stage_number = mySD->getSilType();
 	int take_level;
-	if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
-	else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
-	else												take_level = 1;
+	if(mySGD->getPercentage() >= 1.f)			take_level = 3;
+	else if(mySGD->getPercentage() >= 0.95f)	take_level = 2;
+	else										take_level = 1;
+//	if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
+//	else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
+//	else												take_level = 1;
 	
-	int take_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level);
-	
-	if(mySGD->is_ingame_before_have_stage_cards[take_level-1])
-	{
-		// 강화
-		
-		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, take_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number));
-		CCLog("strength_rate : %.3f", strength_rate);
-		
-		random_device rd;
-		default_random_engine e1(rd());
-		uniform_real_distribution<float> uniform_dist(0.f, 1.f);
-		
-		float result_value = uniform_dist(e1);
-		CCLog("result value : %.3f", result_value);
-		
-		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
-		CardCase* cardCase = CardCase::create(take_card_number);
-		card->addChild(cardCase);
-		
-		
-		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
-		CardCase* cardCase2 = CardCase::create(take_card_number, 1, NSDS_GS(kSDS_CI_int1_passive_s, take_card_number));
-		card2->addChild(cardCase2);
-		
-		
-		StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-190);
-		
-		b->setCloseFunc([this](){
-			CCLog("close Func");
-			this->endTakeCard();
-		});
-		
-		if(result_value <= strength_rate)
-		{
-			CCLog("success");
-			
-			b->startSuccess("카드레벨 +1");
-			
-			myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number)+1);
-			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, nullptr);
-		}
-		else
-		{
-			CCLog("fail");
-			
-			b->startFail("강화 실패");
-		}
-		
-		addChild(b, kZ_CP_popup);
-	}
-	else
-	{
-		// 획득
-		
-		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
-		CardCase* cardCase = CardCase::create(take_card_number);
-		card->addChild(cardCase);
-		
-		TakeCardAnimation* b = TakeCardAnimation::create(card,-190);
-		b->setCloseFunc([this](){
-			CCLog("close Func");
-			this->endTakeCard();
-		});
-		b->start();
-		addChild(b, kZ_CP_popup);
-	}
-	
-//	TakeCardPopup* t_popup = TakeCardPopup::create(stage_number, take_level, this, callfunc_selector(ClearPopup::endTakeCard));
-//	addChild(t_popup, kZ_CP_popup);
-	/////////////////////////////////////////////
+//	int take_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level);
+//	
+//	if(mySGD->is_ingame_before_have_stage_cards[take_level-1])
+//	{
+//		// 강화
+//		
+//		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, take_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number));
+//		CCLog("strength_rate : %.3f", strength_rate);
+//		
+//		random_device rd;
+//		default_random_engine e1(rd());
+//		uniform_real_distribution<float> uniform_dist(0.f, 1.f);
+//		
+//		float result_value = uniform_dist(e1);
+//		CCLog("result value : %.3f", result_value);
+//		
+//		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
+//		CardCase* cardCase = CardCase::create(take_card_number);
+//		card->addChild(cardCase);
+//		
+//		
+//		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
+//		CardCase* cardCase2 = CardCase::create(take_card_number, 1, NSDS_GS(kSDS_CI_int1_passive_s, take_card_number));
+//		card2->addChild(cardCase2);
+//		
+//		
+//		StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-190);
+//		
+//		b->setCloseFunc([this](){
+//			CCLog("close Func");
+//			this->endTakeCard();
+//		});
+//		
+//		if(result_value <= strength_rate)
+//		{
+//			CCLog("success");
+//			
+//			b->startSuccess("카드레벨 +1");
+//			
+//			myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number)+1);
+//			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, nullptr);
+//		}
+//		else
+//		{
+//			CCLog("fail");
+//			
+//			b->startFail("강화 실패");
+//		}
+//		
+//		addChild(b, kZ_CP_popup);
+//	}
+//	else
+//	{
+//		// 획득
+//		
+//		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
+//		CardCase* cardCase = CardCase::create(take_card_number);
+//		card->addChild(cardCase);
+//		
+//		TakeCardAnimation* b = TakeCardAnimation::create(card,-190);
+//		b->setCloseFunc([this](){
+//			CCLog("close Func");
+//			this->endTakeCard();
+//		});
+//		b->start();
+//		addChild(b, kZ_CP_popup);
+//	}
 	
 	
 	int start_stage_number = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
@@ -346,6 +345,7 @@ bool ClearPopup::init()
 	
 	myLog->sendLog(CCString::createWithFormat("clear_%d", stage_number)->getCString());
 	
+	is_saved_user_data = false;
 	
 	take_star_animation_node = NULL;
 	
@@ -385,6 +385,388 @@ bool ClearPopup::init()
 		gold_star->setScale(0);
 		take_star_animation_node = gold_star;
 	}
+	
+	ASPopupView* t_popup = ASPopupView::create(-200);
+	
+	float height_value = 320.f;
+	if(myDSH->screen_convert_rate < 1.f)
+		height_value = 320.f/myDSH->screen_convert_rate;
+	
+	if(height_value < myDSH->ui_top)
+		height_value = myDSH->ui_top;
+	
+	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+	t_popup->setDimmedPosition(ccp(240, 160));
+	t_popup->setBasePosition(ccp(240, 160));
+	
+	CCNode* t_container = CCNode::create();
+	t_popup->setContainerNode(t_container);
+	addChild(t_popup, kZ_CP_popup);
+	
+	CCLabelTTF* title_label = CCLabelTTF::create("클리어 보상", mySGD->getFont().c_str(), 18);
+	title_label->setPosition(ccp(0,107));
+	t_container->addChild(title_label);
+	
+	
+	int random_value = rand()%1000;
+	int gold_get_rate = 500;
+	int gold_or_item_get_rate = gold_get_rate + 300;
+	int reward_type;
+	if(random_value < gold_get_rate)
+	{
+		// gold
+		reward_type = 1;
+	}
+	else if(random_value < gold_or_item_get_rate)
+	{
+		// gold or item
+		reward_type = 2;
+	}
+	else
+	{
+		// stone
+		reward_type = 3;
+	}
+	
+	int gold_or_item_value;
+	random_value = rand()%100;
+	if(random_value < 50)
+	{
+		// gold
+		gold_or_item_value = 1;
+	}
+	else
+	{
+		// item
+		gold_or_item_value = 2;
+	}
+	
+	
+	CommonButton* reward_first = CommonButton::create("보상1", 14, CCSizeMake(100, 70), CommonButtonYellow, t_popup->getTouchPriority()-1);
+	reward_first->setTitleColor(ccBLACK);
+	reward_first->setPosition(ccp(-150,0));
+	t_container->addChild(reward_first);
+	
+	CommonButton* reward_second = CommonButton::create("보상2", 14, CCSizeMake(100, 70), CommonButtonYellow, t_popup->getTouchPriority()-1);
+	reward_second->setTitleColor(ccBLACK);
+	reward_second->setPosition(ccp(0,0));
+	t_container->addChild(reward_second);
+	
+	CommonButton* reward_third = CommonButton::create("보상3", 14, CCSizeMake(100, 70), CommonButtonYellow, t_popup->getTouchPriority()-1);
+	reward_third->setTitleColor(ccBLACK);
+	reward_third->setPosition(ccp(150,0));
+	t_container->addChild(reward_third);
+	
+	reward_first->setFunction([=](CCObject* sender)
+							  {
+								  CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
+								  CCLabelTTF* item_gold_or_item;
+								  int random_item_code;
+								  if(gold_or_item_value == 1)
+									  item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
+								  else
+								  {
+									  item_gold_or_item = CCLabelTTF::create("아이템", mySGD->getFont().c_str(), 12);
+									  random_item_code = rand()%(kIC_rentCard-kIC_fast+1) + kIC_fast;
+									  CCSprite* random_item_img = CCSprite::create(CCString::createWithFormat("item%d.png", random_item_code)->getCString());
+									  random_item_img->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f,-30));
+									  item_gold_or_item->addChild(random_item_img);
+								  }
+								  int base_stone_rank = take_level;
+								  if(mySGD->is_exchanged)
+									  base_stone_rank++;
+								  
+								  if(base_stone_rank > 3)
+									  base_stone_rank = 3;
+								  CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
+								  
+								  CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", base_stone_rank)->getCString());
+								  beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
+								  item_stone->addChild(beautystone_img);
+								  
+								  int random_left_right = rand()%2;
+								  
+								  if(reward_type == 1)
+								  {
+									  mySGD->setGold(mySGD->getGold() + 100);
+									  item_gold->setPosition(ccp(-150,0));
+									  if(random_left_right == 0)
+									  {
+										  item_gold_or_item->setPosition(ccp(0,0));
+										  item_stone->setPosition(ccp(150,0));
+									  }
+									  else
+									  {
+										  item_gold_or_item->setPosition(ccp(150,0));
+										  item_stone->setPosition(ccp(0,0));
+									  }
+								  }
+								  else if(reward_type == 2)
+								  {
+									  if(gold_or_item_value == 1)
+										  mySGD->setGold(mySGD->getGold() + 200);
+									  else
+									  {
+										  myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
+									  }
+									  
+									  item_gold_or_item->setPosition(ccp(-150,0));
+									  if(random_left_right == 0)
+									  {
+										  item_gold->setPosition(ccp(0,0));
+										  item_stone->setPosition(ccp(150,0));
+									  }
+									  else
+									  {
+										  item_gold->setPosition(ccp(150,0));
+										  item_stone->setPosition(ccp(0,0));
+									  }
+								  }
+								  else
+								  {
+									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
+									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
+									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), rand()%7);
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
+									  
+									  item_stone->setPosition(ccp(-150,0));
+									  if(random_left_right == 0)
+									  {
+										  item_gold->setPosition(ccp(0,0));
+										  item_gold_or_item->setPosition(ccp(150,0));
+									  }
+									  else
+									  {
+										  item_gold->setPosition(ccp(150,0));
+										  item_gold_or_item->setPosition(ccp(0,0));
+									  }
+								  }
+								  t_container->addChild(item_gold);
+								  t_container->addChild(item_gold_or_item);
+								  t_container->addChild(item_stone);
+								  
+								  reward_first->setVisible(false);
+								  reward_second->setVisible(false);
+								  reward_third->setVisible(false);
+								  
+								  myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
+								  
+								  CCDelayTime* t_delay = CCDelayTime::create(2.f);
+								  CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(ClearPopup::endTakeCard));
+								  CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+								  CCSequence* t_seq = CCSequence::create(t_delay, t_call0, t_call, NULL);
+								  t_popup->runAction(t_seq);
+							  });
+	
+	
+	reward_second->setFunction([=](CCObject* sender)
+							  {
+								  CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
+								  CCLabelTTF* item_gold_or_item;
+								  int random_item_code;
+								  if(gold_or_item_value == 1)
+									  item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
+								  else
+								  {
+									  item_gold_or_item = CCLabelTTF::create("아이템", mySGD->getFont().c_str(), 12);
+									  random_item_code = rand()%(kIC_rentCard-kIC_fast+1) + kIC_fast;
+									  CCSprite* random_item_img = CCSprite::create(CCString::createWithFormat("item%d.png", random_item_code)->getCString());
+									  random_item_img->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f,-30));
+									  item_gold_or_item->addChild(random_item_img);
+								  }
+								  int base_stone_rank = take_level;
+								  if(mySGD->is_exchanged)
+									  base_stone_rank++;
+								  
+								  if(base_stone_rank > 3)
+									  base_stone_rank = 3;
+								  CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
+								  
+								  CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", base_stone_rank)->getCString());
+								  beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
+								  item_stone->addChild(beautystone_img);
+								  
+								  int random_left_right = rand()%2;
+								  
+								  if(reward_type == 1)
+								  {
+									  mySGD->setGold(mySGD->getGold() + 100);
+									  item_gold->setPosition(ccp(0,0));
+									  if(random_left_right == 0)
+									  {
+										  item_gold_or_item->setPosition(ccp(-150,0));
+										  item_stone->setPosition(ccp(150,0));
+									  }
+									  else
+									  {
+										  item_gold_or_item->setPosition(ccp(150,0));
+										  item_stone->setPosition(ccp(-150,0));
+									  }
+								  }
+								  else if(reward_type == 2)
+								  {
+									  if(gold_or_item_value == 1)
+										  mySGD->setGold(mySGD->getGold() + 200);
+									  else
+									  {
+										  myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
+									  }
+									  
+									  item_gold_or_item->setPosition(ccp(0,0));
+									  if(random_left_right == 0)
+									  {
+										  item_gold->setPosition(ccp(-150,0));
+										  item_stone->setPosition(ccp(150,0));
+									  }
+									  else
+									  {
+										  item_gold->setPosition(ccp(150,0));
+										  item_stone->setPosition(ccp(-150,0));
+									  }
+								  }
+								  else
+								  {
+									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
+									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
+									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), rand()%7);
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
+									  
+									  item_stone->setPosition(ccp(0,0));
+									  if(random_left_right == 0)
+									  {
+										  item_gold->setPosition(ccp(-150,0));
+										  item_gold_or_item->setPosition(ccp(150,0));
+									  }
+									  else
+									  {
+										  item_gold->setPosition(ccp(150,0));
+										  item_gold_or_item->setPosition(ccp(-150,0));
+									  }
+								  }
+								  t_container->addChild(item_gold);
+								  t_container->addChild(item_gold_or_item);
+								  t_container->addChild(item_stone);
+								  
+								  reward_first->setVisible(false);
+								  reward_second->setVisible(false);
+								  reward_third->setVisible(false);
+								  
+								  myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
+								  
+								  CCDelayTime* t_delay = CCDelayTime::create(2.f);
+								  CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(ClearPopup::endTakeCard));
+								  CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+								  CCSequence* t_seq = CCSequence::create(t_delay, t_call0, t_call, NULL);
+								  t_popup->runAction(t_seq);
+							  });
+	
+	
+	reward_third->setFunction([=](CCObject* sender)
+							  {
+								  CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
+								  CCLabelTTF* item_gold_or_item;
+								  int random_item_code;
+								  if(gold_or_item_value == 1)
+									  item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
+								  else
+								  {
+									  item_gold_or_item = CCLabelTTF::create("아이템", mySGD->getFont().c_str(), 12);
+									  random_item_code = rand()%(kIC_rentCard-kIC_fast+1) + kIC_fast;
+									  CCSprite* random_item_img = CCSprite::create(CCString::createWithFormat("item%d.png", random_item_code)->getCString());
+									  random_item_img->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f,-30));
+									  item_gold_or_item->addChild(random_item_img);
+								  }
+								  int base_stone_rank = take_level;
+								  if(mySGD->is_exchanged)
+									  base_stone_rank++;
+								  
+								  if(base_stone_rank > 3)
+									  base_stone_rank = 3;
+								  CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
+								  
+								  CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", base_stone_rank)->getCString());
+								  beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
+								  item_stone->addChild(beautystone_img);
+								  
+								  int random_left_right = rand()%2;
+								  
+								  if(reward_type == 1)
+								  {
+									  mySGD->setGold(mySGD->getGold() + 100);
+									  item_gold->setPosition(ccp(150,0));
+									  if(random_left_right == 0)
+									  {
+										  item_gold_or_item->setPosition(ccp(-150,0));
+										  item_stone->setPosition(ccp(0,0));
+									  }
+									  else
+									  {
+										  item_gold_or_item->setPosition(ccp(0,0));
+										  item_stone->setPosition(ccp(-150,0));
+									  }
+								  }
+								  else if(reward_type == 2)
+								  {
+									  if(gold_or_item_value == 1)
+										  mySGD->setGold(mySGD->getGold() + 200);
+									  else
+									  {
+										  myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
+									  }
+									  
+									  item_gold_or_item->setPosition(ccp(150,0));
+									  if(random_left_right == 0)
+									  {
+										  item_gold->setPosition(ccp(-150,0));
+										  item_stone->setPosition(ccp(0,0));
+									  }
+									  else
+									  {
+										  item_gold->setPosition(ccp(0,0));
+										  item_stone->setPosition(ccp(-150,0));
+									  }
+								  }
+								  else
+								  {
+									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
+									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
+									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), rand()%7);
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
+									  
+									  item_stone->setPosition(ccp(150,0));
+									  if(random_left_right == 0)
+									  {
+										  item_gold->setPosition(ccp(-150,0));
+										  item_gold_or_item->setPosition(ccp(0,0));
+									  }
+									  else
+									  {
+										  item_gold->setPosition(ccp(0,0));
+										  item_gold_or_item->setPosition(ccp(-150,0));
+									  }
+								  }
+								  t_container->addChild(item_gold);
+								  t_container->addChild(item_gold_or_item);
+								  t_container->addChild(item_stone);
+								  
+								  reward_first->setVisible(false);
+								  reward_second->setVisible(false);
+								  reward_third->setVisible(false);
+								  
+								  myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
+								  
+								  CCDelayTime* t_delay = CCDelayTime::create(2.f);
+								  CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(ClearPopup::endTakeCard));
+								  CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+								  CCSequence* t_seq = CCSequence::create(t_delay, t_call0, t_call, NULL);
+								  t_popup->runAction(t_seq);
+							  });
 	
 	
 	score_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 18); // CCLabelBMFont::create("0", "mb_white_font.fnt");
@@ -480,10 +862,6 @@ bool ClearPopup::init()
 		else
 			replay_menu = NULL;
 	}
-	
-	
-	is_saved_user_data = false;
-	myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
 	
     return true;
 }
