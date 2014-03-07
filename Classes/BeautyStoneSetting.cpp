@@ -165,7 +165,7 @@ bool BeautyStoneSettingPopup::init()
 				
 				slot_vector.push_back(slot_back);
 				
-				CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, slot_stone_id))->getCString());
+				CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, slot_stone_id), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, slot_stone_id))->getCString());
 				stone_img->setPosition(ccp(0, 0));
 				slot_back->addChild(stone_img);
 				
@@ -367,8 +367,8 @@ CCTableViewCell* BeautyStoneSettingPopup::tableCellAtIndex(CCTableView *table, u
 	{
 		CCPoint base_position = ccp(cellSizeForTable(table).width/8*((i-start_idx)*2+1),cellSizeForTable(table).height/2.f);
 		
-		CCSprite* n_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", have_stone_list[i].m_rank)->getCString());
-		CCSprite* s_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", have_stone_list[i].m_rank)->getCString());
+		CCSprite* n_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", have_stone_list[i].m_type, have_stone_list[i].m_rank)->getCString());
+		CCSprite* s_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", have_stone_list[i].m_type, have_stone_list[i].m_rank)->getCString());
 		s_img->setColor(ccGRAY);
 		
 		CCMenuItem* img_item = CCMenuItemSprite::create(n_img, s_img, this, menu_selector(BeautyStoneSettingPopup::menuAction));
@@ -379,10 +379,6 @@ CCTableViewCell* BeautyStoneSettingPopup::tableCellAtIndex(CCTableView *table, u
 		cell->addChild(img_menu);
 		
 		img_menu->setTouchPriority(-179);
-		
-//		CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", have_stone_list[i].m_rank)->getCString());
-//		beautystone_img->setPosition(base_position);
-//		cell->addChild(beautystone_img);
 		
 		CCLabelTTF* beautystone_type = CCLabelTTF::create(convertToTypeName(have_stone_list[i].m_type).c_str(), mySGD->getFont().c_str(), 10);
 		beautystone_type->setPosition(ccpAdd(base_position, ccp(0,-20)));
@@ -603,7 +599,7 @@ void BeautyStoneSettingPopup::menuAction(CCObject* pSender)
 		t_container->addChild(n_back);
 		
 		
-		CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, clicked_stone_info.m_id))->getCString());
+		CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, clicked_stone_info.m_type), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, clicked_stone_info.m_id))->getCString());
 		stone_img->setPosition(ccp(n_back->getContentSize().width/2.f, n_back->getContentSize().height/2.f));
 		n_back->addChild(stone_img);
 		
@@ -709,7 +705,7 @@ void BeautyStoneSettingPopup::menuAction(CCObject* pSender)
 										  
 										  slot_vector[found_idx] = slot_back;
 										  
-										  CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, clicked_stone_info.m_id))->getCString());
+										  CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, clicked_stone_info.m_type), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, clicked_stone_info.m_id))->getCString());
 										  stone_img->setPosition(ccp(0, 0));
 										  slot_back->addChild(stone_img);
 										  

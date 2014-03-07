@@ -324,7 +324,7 @@ void BeautyStoneStrengthPopup::setStrengthNode(int t_strength_idx)
 		slot_menu->setPosition(ccp(0,0));
 		strength_node->addChild(slot_menu);
 		
-		CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, strength_stone_id))->getCString());
+		CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, strength_stone_id), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, strength_stone_id))->getCString());
 		stone_img->setPosition(ccp(0, 0));
 		strength_node->addChild(stone_img);
 		
@@ -381,7 +381,7 @@ void BeautyStoneStrengthPopup::setOfferingNode(int t_offering_idx)
 		slot_menu->setPosition(ccp(0,0));
 		offering_node->addChild(slot_menu);
 		
-		CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, offering_stone_id))->getCString());
+		CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, offering_stone_id), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, offering_stone_id))->getCString());
 		stone_img->setPosition(ccp(0, 0));
 		offering_node->addChild(stone_img);
 		
@@ -491,8 +491,8 @@ CCTableViewCell* BeautyStoneStrengthPopup::tableCellAtIndex(CCTableView *table, 
 	
 	CCPoint base_position = ccp(25,40);
 	
-	CCSprite* n_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", offering_list[idx].m_rank)->getCString());
-	CCSprite* s_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", offering_list[idx].m_rank)->getCString());
+	CCSprite* n_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", offering_list[idx].m_type, offering_list[idx].m_rank)->getCString());
+	CCSprite* s_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", offering_list[idx].m_type, offering_list[idx].m_rank)->getCString());
 	s_img->setColor(ccGRAY);
 	
 	CCMenuItem* img_item = CCMenuItemSprite::create(n_img, s_img, this, menu_selector(BeautyStoneStrengthPopup::cellAction));

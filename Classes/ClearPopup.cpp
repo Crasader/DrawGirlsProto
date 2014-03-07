@@ -480,7 +480,9 @@ bool ClearPopup::init()
 									  base_stone_rank = 3;
 								  CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
 								  
-								  CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", base_stone_rank)->getCString());
+								  int beautystone_type = rand()%7;
+								  
+								  CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", beautystone_type, base_stone_rank)->getCString());
 								  beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
 								  item_stone->addChild(beautystone_img);
 								  
@@ -527,7 +529,7 @@ bool ClearPopup::init()
 									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
 									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
 									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
-									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), rand()%7);
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
 									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
 									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
 									  
@@ -584,7 +586,9 @@ bool ClearPopup::init()
 									  base_stone_rank = 3;
 								  CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
 								  
-								  CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", base_stone_rank)->getCString());
+								  int beautystone_type = rand()%7;
+								  
+								  CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", beautystone_type, base_stone_rank)->getCString());
 								  beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
 								  item_stone->addChild(beautystone_img);
 								  
@@ -631,7 +635,7 @@ bool ClearPopup::init()
 									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
 									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
 									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
-									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), rand()%7);
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
 									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
 									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
 									  
@@ -688,7 +692,9 @@ bool ClearPopup::init()
 									  base_stone_rank = 3;
 								  CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
 								  
-								  CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_0%d.png", base_stone_rank)->getCString());
+								  int beautystone_type = rand()%7;
+								  
+								  CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", beautystone_type, base_stone_rank)->getCString());
 								  beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
 								  item_stone->addChild(beautystone_img);
 								  
@@ -735,7 +741,7 @@ bool ClearPopup::init()
 									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
 									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
 									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
-									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), rand()%7);
+									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
 									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
 									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
 									  
