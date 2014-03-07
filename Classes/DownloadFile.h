@@ -23,6 +23,11 @@ public:
 	string img;
 	string filename;
 	string key;
+	
+	bool operator==(const DownloadFile& right) const
+	{
+		return img == right.img && filename == right.filename;
+	}
 };
 
 class CopyFile

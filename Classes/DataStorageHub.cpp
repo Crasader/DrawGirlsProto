@@ -239,6 +239,16 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_selectedPuzzleNumber)				return_value = "spn";
 	else if(t_name == kDSH_Key_lastSelectedStageForPuzzle_int1)		return_value = "lssfp%d";
 	
+	
+	else if(t_name == kDSH_Key_selectedCharacter_int1_weaponSlot_int2)		return_value = "sc%dws%d"; // 0~(n-1)번째 캐릭터의 1~n번째 슬롯에 장착된 뷰티스톤의 id
+	else if(t_name == kDSH_Key_selfBeautyStoneID)					return_value = "sbsid"; // 1~n 의 뷰티스톤의 id
+	else if(t_name == kDSH_Key_haveBeautyStoneCnt)					return_value = "hbscnt"; // 0~n 의 뷰티스톤 개수
+	else if(t_name == kDSH_Key_haveBeautyStoneID_int1)				return_value = "hbsid%d"; // 1~haveBeautyStoneCnt 의 뷰티스톤 id
+	else if(t_name == kDSH_Key_beautyStoneType_int1)				return_value = "bstype%d"; // 1~selfBeautyStoneID 의 뷰티스톤 type
+	else if(t_name == kDSH_Key_beautyStoneRank_int1)				return_value = "bsrank%d"; // 1~selfBeautyStoneID 의 뷰티스톤 rank
+	else if(t_name == kDSH_Key_beautyStoneLevel_int1)				return_value = "bslevel%d"; // 1~selfBeautyStoneID 의 뷰티스톤 level
+	
+	
 	else if(t_name == kDSH_Key_selectedCard)						return_value = "scard";
 	else if(t_name == kDSH_Key_selectedCardLevel)					return_value = "scardlevel";
 	else if(t_name == kDSH_Key_selectedCardPassive)					return_value = "scardpassive";
@@ -459,6 +469,26 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, t_unlocked, false);
 	}
 	
+	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+	{
+		int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+		for(int j=1;j<=slot_count;j++)
+			setIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j, data[getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j].asInt(), false);
+	}
+	
+	setIntegerForKey(kDSH_Key_selfBeautyStoneID, data[getKey(kDSH_Key_selfBeautyStoneID)].asInt(), false);
+	int have_beauty_stone_cnt = data[getKey(kDSH_Key_haveBeautyStoneCnt)].asInt();
+	setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, have_beauty_stone_cnt, false);
+	for(int i=1;i<=have_beauty_stone_cnt;i++)
+	{
+		int beauty_stone_id = data[getKey(kDSH_Key_haveBeautyStoneID_int1)][i].asInt();
+		setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i, beauty_stone_id, false);
+		setIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id, data[getKey(kDSH_Key_beautyStoneType_int1)][i].asInt(), false);
+		setIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id, data[getKey(kDSH_Key_beautyStoneRank_int1)][i].asInt(), false);
+		setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id, data[getKey(kDSH_Key_beautyStoneLevel_int1)][i].asInt(), false);
+	}
+	
+	
 	int achieve_data_cnt = data[getKey(kDSH_Key_achieveDataCnt)].asInt();
 	setIntegerForKey(kDSH_Key_achieveDataCnt, achieve_data_cnt);
 	for(int i=1;i<=achieve_data_cnt;i++)
@@ -502,6 +532,27 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 		{
 			data[getKey(kDSH_Key_haveItemCnt_int1)][i] = getIntegerForKey(kDSH_Key_haveItemCnt_int1, i); // 0
 			data[getKey(kDSH_Key_isShowItem_int1)][i] = getBoolForKey(kDSH_Key_isShowItem_int1, i);
+		}
+	}
+	else if(t_key == kSaveUserData_Key_beautyStone)
+	{
+		for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+		{
+			int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+			for(int j=1;j<=slot_count;j++)
+				data[getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
+		}
+		
+		data[getKey(kDSH_Key_selfBeautyStoneID)] = getIntegerForKey(kDSH_Key_selfBeautyStoneID);
+		int have_beauty_stone_cnt = getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+		data[getKey(kDSH_Key_haveBeautyStoneCnt)] = have_beauty_stone_cnt;
+		for(int i=1;i<=have_beauty_stone_cnt;i++)
+		{
+			int beauty_stone_id = getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
+			data[getKey(kDSH_Key_haveBeautyStoneID_int1)][i] = beauty_stone_id;
+			data[getKey(kDSH_Key_beautyStoneType_int1)][i] = getIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id);
+			data[getKey(kDSH_Key_beautyStoneRank_int1)][i] = getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id);
+			data[getKey(kDSH_Key_beautyStoneLevel_int1)][i] = getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id);
 		}
 	}
 	else if(t_key == kSaveUserData_Key_cardsInfo)
@@ -702,6 +753,25 @@ void DataStorageHub::resetDSH ()
 	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
 	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
+	
+	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+	{
+		int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+		for(int j=1;j<=slot_count;j++)
+			setIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j, 0, false);
+	}
+	
+	setIntegerForKey(kDSH_Key_selfBeautyStoneID, 0, false);
+	int have_beauty_stone_cnt = getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+	setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, 0, false);
+	for(int i=1;i<=have_beauty_stone_cnt;i++)
+	{
+		int beauty_stone_id = getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
+		setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i, 0, false);
+		setIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id, 0, false);
+		setIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id, 0, false);
+		setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id, 0, false);
+	}
 	
 	int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);
 	setIntegerForKey(kDSH_Key_achieveDataCnt, 0, false);

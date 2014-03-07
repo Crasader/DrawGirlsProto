@@ -2130,7 +2130,7 @@ void PlayUI::myInit ()
 	
 	jack_array = new CCArray(1);
 	jack_life_hide_count = 0;
-	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
+	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	
 	jack_life_node = CCNode::create();
 	jack_life_node->setPosition(ccp(20,myDSH->ui_top-60));
@@ -2483,7 +2483,7 @@ void PlayUI::continueAction ()
 		countingCnt = 0;
 	}
 	
-	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
+	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	for(int i=0;i<jack_life;i++)
 	{
 		CCSprite* jack_img = CCSprite::create("basic_character.png");

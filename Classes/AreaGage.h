@@ -28,10 +28,12 @@ private:
 	CCProgressTimer* gage_bar1;
 	CCProgressTimer* gage_bar2;
 	CCProgressTimer* gage_bar3;
+	CCProgressTimer* gage_bar4;
 //	CCSprite* gage_case;
 	
 	CCSprite* star1;
 	CCSprite* star2;
+	CCSprite* star3;
 	
 	float clear_percent;
 	float m_percentage;

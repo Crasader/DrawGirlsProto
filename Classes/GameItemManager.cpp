@@ -1352,7 +1352,12 @@ void GameItemManager::removeBeautyStone()
 		}
 		
 		if(is_found)
-			t_node->removeFromParent();
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(0.1f);
+			CCCallFunc* t_call = CCCallFunc::create(t_node, callfunc_selector(CCNode::removeFromParent));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			t_node->runAction(t_seq);
+		}
 	}
 }
 

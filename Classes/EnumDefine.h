@@ -413,4 +413,15 @@ enum class GachaCategory
 	kSocialGacha = 3
 };
 
+enum StoneType
+{
+	kStoneType_guided = 0,
+	kStoneType_spread,
+	kStoneType_laser,
+	kStoneType_mine,
+	kStoneType_recall,
+	kStoneType_area,
+	kStoneType_all
+};
+
 #endif
