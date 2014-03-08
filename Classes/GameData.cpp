@@ -94,12 +94,17 @@ int GameData::communication(string funcName, CCPoint t_p, std::string t_i, KSCum
 	return I_CCPStrCumberBaseB[funcName](t_p, t_i, cb, t_b);
 }
 
-bool GameData::communication(string funcName, CCObject* t_obj, float f_val, float f_val2)
-{
-	CCAssert(B_CCOFF.find(funcName) != B_CCOFF.end(), funcName.c_str());
-	return B_CCOFF[funcName](t_obj, f_val, f_val2);
-}
+//bool GameData::communication(string funcName, CCObject* t_obj, float f_val, float f_val2)
+//{
+	//CCAssert(B_CCOFF.find(funcName) != B_CCOFF.end(), funcName.c_str());
+	//return B_CCOFF[funcName](t_obj, f_val, f_val2);
+//}
 
+bool GameData::communication(string funcName, CCObject* t_obj, float f_val, float f_val2, bool b1, bool b2)
+{
+	CCAssert(B_CCOFFBB.find(funcName) != B_CCOFFBB.end(), funcName.c_str());
+	return B_CCOFFBB[funcName](t_obj, f_val, f_val2, b1, b2);
+}
 void GameData::communication(string funcName)
 {
 	CCAssert(V_V.find(funcName) != V_V.end(), funcName.c_str());

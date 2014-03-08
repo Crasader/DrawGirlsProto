@@ -111,7 +111,7 @@ public:
 	//	{
 	//		mEmotion = NULL;
 	//	}
-	bool startDamageReaction(float damage, float angle);
+	bool startDamageReaction(float damage, float angle, bool castCancel, bool stiffen);
 	virtual void attackBehavior(Json::Value _pattern);
 	virtual void startSpringCumber(float userdata){}
 	virtual void startAnimationNoDirection();

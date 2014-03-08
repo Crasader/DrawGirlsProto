@@ -128,13 +128,13 @@ std::vector<KSCumberBase*>& CumberParent::getMainCumbers()
 
 
 
-bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle)
+bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle, bool castCancel, bool stiffen)
 {
-	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
+//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
 //	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 //	mainCumber->startDamageReaction(userdata);
 	KSCumberBase* cbp = dynamic_cast<KSCumberBase*>(cb);
-	return cbp->startDamageReaction(damage, angle);
+	return cbp->startDamageReaction(damage, angle, castCancel, stiffen);
 }
 
 
@@ -466,8 +466,8 @@ void CumberParent::myInit()
 	myGD->V_V["CP_tickingOn"] = std::bind(&CumberParent::tickingOn, this);
 	myGD->V_V["CP_startTeleport"] = std::bind(&CumberParent::startTeleport, this);
 	myGD->V_V["CP_subCumberReplication"] = std::bind(&CumberParent::subCumberReplication, this);
-	myGD->B_CCOFF["CP_startDamageReaction"] =
-		std::bind(&CumberParent::startDamageReaction, this, _1, _2, _3);
+	myGD->B_CCOFFBB["CP_startDamageReaction"] =
+		std::bind(&CumberParent::startDamageReaction, this, _1, _2, _3, _4, _5);
 	myGD->I_V["CP_getMainCumberSheild"] = std::bind(&CumberParent::getMainCumberSheild, this);
 
 	myGD->V_B["CP_slowItem"] = std::bind(&CumberParent::slowItem, this, _1);

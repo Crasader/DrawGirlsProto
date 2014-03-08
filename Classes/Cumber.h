@@ -70,7 +70,7 @@ public:
 	void changeMaxSize(float t_p);
 	void onJackDie();
 	void onJackRevived();
-	bool startDamageReaction(CCObject* cb, float damage, float angle);
+	bool startDamageReaction(CCObject* cb, float damage, float angle, bool castCancel, bool stiffen);
 	void changePassiveData(const std::string& passive_data);
 //	float getNumberFromJsonValue(JsonBox::Value v)
 //	{

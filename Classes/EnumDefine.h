@@ -419,9 +419,9 @@ enum StoneType
 	kStoneType_spread,
 	kStoneType_laser,
 	kStoneType_mine,
-	kStoneType_recall,
-	kStoneType_area,
-	kStoneType_all
+	kStoneType_spirit,
+	kStoneType_range,
+	kStoneType_global
 };
 
 #endif

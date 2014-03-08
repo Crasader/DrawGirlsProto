@@ -123,7 +123,8 @@ public:
 	m_castingCancelCount(0), m_isStarted(false), m_healingFrameCount(0),
 	m_damagedFrames(500), m_slience(false), m_adderCnt(0), m_reAttackCnt(0), m_furyCnt(0),
 	m_cumberTimer(0), m_attackPattern(nullptr), m_cobWebAttack(nullptr), m_freezeAttack(nullptr),
-	m_chaosAttack(nullptr), m_sightOutAttack(nullptr), m_chargeParent(nullptr)
+	m_chaosAttack(nullptr), m_sightOutAttack(nullptr), m_chargeParent(nullptr),
+	m_speedRatioForStone(1.f), m_speedRatio(1.f)
 
 	{
 		
@@ -179,7 +180,7 @@ public:
 	void speedAdjustment(float dt);
 	void selfHealing(float dt);
 	void cumberFrame(float dt);
-	virtual bool startDamageReaction(float damage, float angle);
+	virtual bool startDamageReaction(float damage, float angle, bool castCancel, bool stiffen);
 	//	virtual void startSpringCumber(float userdata) = 0;
 	virtual void onStartMoving() = 0;
 	virtual void onStopMoving() = 0;
@@ -269,7 +270,7 @@ public:
 	void setAgility(float ag);
 	void aggroExec();
 	void unAggroExec();
-
+	float getSpeed();
 public:
 	struct FollowMoving
 	{
@@ -347,11 +348,13 @@ protected:
 	float m_startScale, m_minScale, m_maxScale;
 	float m_startSpeed, m_minSpeed, m_maxSpeed;
 //	FromTo<float> m_speed;
+	
 	float m_agility;
 	float m_speed;
 	float m_remainHp;
 	float m_totalHp;
 	float m_speedRatio;
+	float m_speedRatioForStone;
 	bool m_slience;
 	int m_crashCount;
 	int m_aiValue;

@@ -108,6 +108,7 @@ public:
 	std::map<std::string, std::function<CCNode*(void)>> CCN_V;
 	std::map<std::string, std::function<CCArray*(void)>> CCA_V;
 	//std::map<std::string, std::function<std::vector<KSCumberBase*>&(void)>> CCA_V;
+	std::map<std::string, std::function<bool(CCObject*, float, float, bool, bool)>> B_CCOFFBB;
 	std::map<std::string, std::function<bool(CCObject*, float, float)>> B_CCOFF;
 	std::map<std::string, std::function<void(IntPoint, CCObject*, SEL_CallFuncI)>> V_IpCCOCallfunci;
 	std::map<std::string, std::function<void(IntPoint, int, int, int)>> V_IpIII;
@@ -121,7 +122,7 @@ public:
 	std::function<std::vector<KSCumberBase*>&(void)> getMainCumberVector;
 	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
 	
-	std::function<void(const string&, int grade, int level, float percent, CCPoint initPosition)> createJackMissileWithStoneFunctor;
+	std::function<void(StoneType, int grade, int level, float percent, CCPoint initPosition)> createJackMissileWithStoneFunctor;
 	vector<CCNode*> getMainCumberCCNodeVector()
 	{
 		vector<KSCumberBase*> t_vector = getMainCumberVector();
@@ -205,8 +206,9 @@ public:
 	CCArray* getCommunicationArray(string funcName);
 	float Fcommunication(string funcName);
 	int communication(string funcName, CCPoint t_p, std::string t_i, KSCumberBase* cb, bool t_b);
-	bool communication(string funcName, CCObject* t_obj, float f_val, float f_val2);
+	//bool communication(string funcName, CCObject* t_obj, float f_val, float f_val2);
 	
+	bool communication(string funcName, CCObject* t_obj, float f_val, float f_val2, bool b1, bool b2);
 	void communication(string funcName);
 	void communication(string funcName, CCPoint t_p, int t_i);
 	void communication(string funcName, float t_f, bool t_b, CCPoint t_p);

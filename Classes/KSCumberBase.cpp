@@ -138,8 +138,8 @@ void KSCumberBase::randomMoving(float dt)
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * MAX(0.1f, m_speed)) - 1));
-		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * MAX(0.1f, m_speed)) - 1));
+		float speedX = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * MAX(0.1f, getSpeed())) - 1));
+		float speedY = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * MAX(0.1f, getSpeed())) - 1));
 		CCPoint cumberPosition = getPosition();
 		
 		afterPosition = cumberPosition + ccp(speedX, speedY);
@@ -287,8 +287,8 @@ void KSCumberBase::straightMoving(float dt)
 	while(!validPosition)
 	{
 		cnt++;
-		float speedX = m_speed * cos(deg2Rad(degree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-		float speedY = m_speed * sin(deg2Rad(degree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+		float speedX = getSpeed() * cos(deg2Rad(degree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
+		float speedY = getSpeed() * sin(deg2Rad(degree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 		
 		CCPoint cumberPosition = getPosition();
 		afterPosition = cumberPosition + ccp(speedX, speedY);
@@ -474,27 +474,27 @@ void KSCumberBase::followMoving(float dt)
 				//m_follow.followDegree += MIN(3, deltaDegree);
 			//}	
 			//float varRad = deg2Rad(m_follow.followDegree);
-			dx = m_speed * cos(deg2Rad(m_follow.followDegree)) * 2.f;
-			dy = m_speed * sin(deg2Rad(m_follow.followDegree)) * 2.f;
+			dx = getSpeed() * cos(deg2Rad(m_follow.followDegree)) * 2.f;
+			dy = getSpeed() * sin(deg2Rad(m_follow.followDegree)) * 2.f;
 			//ProbSelector ps = {this->getAiValue(), 125 - this->getAiValue()};
 			//int result = ps.getResult();
 			//if(result == 0)
 			//{
 				//t = ip2ccp(myGD->getJackPoint()) - getPosition();
-				//dx = m_speed * cos(atan2(t.y, t.x));
-				//dy = m_speed * sin(atan2(t.y, t.x));
+				//dx = getSpeed() * cos(atan2(t.y, t.x));
+				//dy = getSpeed() * sin(atan2(t.y, t.x));
 			//}
 			//else 
 			//{
 				//t = ccp(m_well512.GetFloatValue(-1, 1), m_well512.GetFloatValue(-1, 1));
-				//dx = m_speed * cos(atan2(t.y, t.x)) * 2.f;
-				//dy = m_speed * sin(atan2(t.y, t.x)) * 2.f;
+				//dx = getSpeed() * cos(atan2(t.y, t.x)) * 2.f;
+				//dy = getSpeed() * sin(atan2(t.y, t.x)) * 2.f;
 			//}
 		}
 		else
 		{
-			dx = m_speed * cos(deg2Rad(m_directionAngleDegree));
-			dy = m_speed * sin(deg2Rad(m_directionAngleDegree));
+			dx = getSpeed() * cos(deg2Rad(m_directionAngleDegree));
+			dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree));
 		}
 	}
 	
@@ -541,8 +541,8 @@ void KSCumberBase::followMoving(float dt)
 				m_follow.lastMapCollisionTime = m_follow.timer;
 				m_follow.collisionCount++;
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
-				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				dx = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
+				dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 				if(myGD->getJackState() == jackStateNormal || m_follow.collisionCount >= 4)
 				{
 					unAggroExec();
@@ -555,8 +555,8 @@ void KSCumberBase::followMoving(float dt)
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
 				m_follow.lastMapCollisionTime = m_follow.timer;
 				m_follow.collisionCount++;
-				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				dx = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
+				dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 				if(myGD->getJackState() == jackStateNormal || m_follow.collisionCount >= 4)
 				{
 					unAggroExec();
@@ -571,8 +571,8 @@ void KSCumberBase::followMoving(float dt)
 				m_follow.lastMapCollisionTime = m_follow.timer;
 				m_follow.collisionCount++;
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
-				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				dx = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
+				dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 				if(myGD->getJackState() == jackStateNormal || m_follow.collisionCount >= 4)
 				{
 					unAggroExec();
@@ -583,8 +583,8 @@ void KSCumberBase::followMoving(float dt)
 				m_follow.lastMapCollisionTime = m_follow.timer;
 				m_follow.collisionCount++;
 				m_directionAngleDegree = degreeSelector(cnt, m_directionAngleDegree);
-				dx = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-				dy = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+				dx = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
+				dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 								
 				//			CCLog("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
@@ -706,8 +706,8 @@ void KSCumberBase::rightAngleMoving(float dt)
 	{
 		cnt++;
 		
-		float speedX = m_speed * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
-		float speedY = m_speed * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * m_speed) - 1));
+		float speedX = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
+		float speedY = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 		CCPoint cumberPosition = getPosition();
 		afterPosition = cumberPosition + ccp(speedX, speedY);
 		afterPoint = ccp2ip(afterPosition);
@@ -985,7 +985,7 @@ void KSCumberBase::circleMoving(float dt)
 		{
 			float circleRadius = sqrt(pow((m_circle.centerPosition.x - m_circle.relocationPosition.x), 2) +
 																pow((m_circle.centerPosition.y - m_circle.relocationPosition.y), 2));
-			m_circle.angleRad += m_speed * m_circle.sign / circleRadius;
+			m_circle.angleRad += getSpeed() * m_circle.sign / circleRadius;
 			
 			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
 			setPosition(afterPosition);
@@ -1147,7 +1147,7 @@ void KSCumberBase::snakeMoving(float dt)
 		{
 			float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
 																pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
-			m_snake.angleRad += m_speed * m_snake.sign / circleRadius;
+			m_snake.angleRad += getSpeed() * m_snake.sign / circleRadius;
 			
 			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
 			setPosition(afterPosition);
@@ -1306,7 +1306,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //		{
 //			float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
 //																pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
-//			m_snake.angleRad += m_speed * m_snake.sign / circleRadius;
+//			m_snake.angleRad += getSpeed() * m_snake.sign / circleRadius;
 //			
 //			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
 //			setPosition(afterPosition);
@@ -1897,7 +1897,7 @@ void KSCumberBase::selfHealing(float dt)
 		m_healingFrameCount = 0;
 	}
 }
-bool KSCumberBase::startDamageReaction(float damage, float angle)
+bool KSCumberBase::startDamageReaction(float damage, float angle, bool castCancel, bool stiffen)
 {
 	m_damagedFrames.push_back(m_frameCount);
 	//	float t = (m_maxSpeed - m_minSpeed) * 0.3f;
@@ -2917,6 +2917,11 @@ void KSCumberBase::unAggroExec()
 	m_normalMovement = m_originalNormalMovement;
 	m_drawMovement = m_normalMovement;
 	//KS::setColor(this, ccc3(255, 255, 255));
+}
+
+float KSCumberBase::getSpeed()
+{
+	return m_speedRatio * m_speedRatioForStone * m_speed;
 }
 template <typename T>
 void FixedSizeDeque<T>::push_back( const T& p )

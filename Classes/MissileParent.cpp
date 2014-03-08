@@ -48,6 +48,8 @@ void MissileParent::bombCumber( CCObject* target )
 
 void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_speed, CCPoint missile_position )
 {
+
+	return;
 	CCLog("createJackMissile inner : %d, %d, %.2f", jm_type, cmCnt, missile_speed);
 	
 	int card_number;
@@ -171,47 +173,48 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	}
 }
 
-void MissileParent::createJackMissileWithStone(const string& missileName, int grade, int level, float percent, CCPoint initPosition)
+void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, int level, int missileNumbers, CCPoint initPosition)
 {
 //CCNode* targetNode, CCPoint initPosition, float initSpeed, int power, bool cancelCasting, bool stiffen)
 	int r = rand() % (myGD->getMainCumberCount());
 	GuidedMissile* gm = GuidedMissile::create(myGD->getMainCumberCCNodeVector()[r], initPosition, 
-																						1.2f, 555, 60, AttackOption::kNoOption);
+																						1.2f, 555, 60,
+																						AttackOption::kCancelCasting | AttackOption::kStiffen);
 	jack_missile_node->addChild(gm);
 	
 	//StraightMissile* sm = StraightMissile::create(initPosition, deg2Rad(45), 2.f, 5, true, true);
 	//jack_missile_node->addChild(sm);
 	
-	SpreadMissile* sm = SpreadMissile::create(myGD->getMainCumberVector()[r], initPosition,
-																						1.2f, 3.f, 3, AttackOption::kNoOption);
-	jack_missile_node->addChild(sm);
+	//SpreadMissile* sm = SpreadMissile::create(myGD->getMainCumberVector()[r], initPosition,
+																						//1.2f, 3.f, 3, AttackOption::kNoOption);
+	//jack_missile_node->addChild(sm);
 	
 	
-	IntPoint mapPoint;
-	bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
-	if(found == true)
-	{
-		MineAttack* ma = MineAttack::create(initPosition, ip2ccp(mapPoint), 10, 33.f, AttackOption::kNoOption);
-		jack_missile_node->addChild(ma);	
-	}
+	//IntPoint mapPoint;
+	//bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
+	//if(found == true)
+	//{
+		//MineAttack* ma = MineAttack::create(initPosition, ip2ccp(mapPoint), 10, 33.f, AttackOption::kNoOption);
+		//jack_missile_node->addChild(ma);	
+	//}
 	
 
-	IntPoint mapPoint2;
-	bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);
-	if(found2 == true)
-	{
-		SpiritAttack* sa = SpiritAttack::create(initPosition, ip2ccp(mapPoint2), 50.f, 33.f, 1.2f, 10, AttackOption::kNoOption);
-		jack_missile_node->addChild(sa);	
-	}
+	//IntPoint mapPoint2;
+	//bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);
+	//if(found2 == true)
+	//{
+		//SpiritAttack* sa = SpiritAttack::create(initPosition, ip2ccp(mapPoint2), 50.f, 33.f, 1.2f, 10, AttackOption::kNoOption);
+		//jack_missile_node->addChild(sa);	
+	//}
 	
-	RangeAttack* ra = RangeAttack::create(initPosition, 50, 500, 33.f, 30, AttackOption::kNoOption);
-	addChild(ra);
+	//RangeAttack* ra = RangeAttack::create(initPosition, 50, 500, 33.f, 30, AttackOption::kNoOption);
+	//addChild(ra);
 	
-	for(int i=0; i<=15; i++)
-	{
-		RandomBomb* rb = RandomBomb::create(100, 33.f, AttackOption::kNoOption);
-		addChild(rb);
-	}
+	//for(int i=0; i<=15; i++)
+	//{
+		//RandomBomb* rb = RandomBomb::create(100, 33.f, AttackOption::kNoOption);
+		//addChild(rb);
+	//}
 }
 int MissileParent::getJackMissileCnt()
 {

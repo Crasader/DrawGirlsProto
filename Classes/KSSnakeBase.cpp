@@ -254,9 +254,9 @@ void KSSnakeBase::animationDirection(float dt)
 		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 	}
 }
-bool KSSnakeBase::startDamageReaction(float damage, float angle)
+bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel, bool stiffen)
 {
-	KSCumberBase::startDamageReaction(damage, angle);
+	KSCumberBase::startDamageReaction(damage, angle, castCancel, stiffen);
 	m_remainHp -= damage;
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
 	CCLog("remain hp %f", m_remainHp);
@@ -266,20 +266,20 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle)
 	
 	
 	// 방사형으로 돌아가고 있는 중이라면
-	if(m_state == CUMBERSTATENODIRECTION)
+	if(m_state == CUMBERSTATENODIRECTION && castCancel)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 		
 	}
-	else if(m_state == CUMBERSTATEDIRECTION)
+	if(m_state == CUMBERSTATEDIRECTION && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATEDIRECTION");
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
 		m_state = CUMBERSTATEMOVING; //#!
 		
 	}
-	else if(m_state == CUMBERSTATEMOVING)
+	if(m_state == CUMBERSTATEMOVING && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
 		float rad = deg2Rad(angle);
@@ -291,7 +291,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSSnakeBase::damageReaction));
 	}
-	else if(m_state == CUMBERSTATESTOP)
+	if(m_state == CUMBERSTATESTOP && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATESTOP");
 		float rad = deg2Rad(angle);
@@ -303,7 +303,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSSnakeBase::damageReaction));
 	}
-	else if(m_state == CUMBERSTATEFURY)
+	if(m_state == CUMBERSTATEFURY && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
 		float rad = deg2Rad(angle);

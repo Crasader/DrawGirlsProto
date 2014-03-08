@@ -95,7 +95,7 @@ public:
 	//	}
 	void setHeadAndBodies();
 	virtual void attackBehavior(Json::Value pattern);
-	virtual bool startDamageReaction(float damage, float angle);
+	virtual bool startDamageReaction(float damage, float angle, bool castCancel, bool stiffen);
 	virtual void startAnimationNoDirection();
 	virtual void startAnimationDirection();
 	virtual void stopAnimationNoDirection();

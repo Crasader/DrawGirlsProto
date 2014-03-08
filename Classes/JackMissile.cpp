@@ -186,7 +186,7 @@ void JM_UpgradeMissile::moving ()
 				myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0), -shootImg->getRotation());
 				myGD->communication("VS_setLight");
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
-				myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation());
+				myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation(), true, true);
 				
 				myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
 				
@@ -668,7 +668,7 @@ void JM_BasicMissile::moving ()
 				myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0), directionAngle);
 				myGD->communication("VS_setLight");
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
-				myGD->communication("CP_startDamageReaction", targetNode, 999999.f, directionAngle);
+				myGD->communication("CP_startDamageReaction", targetNode, 999999.f, directionAngle, true, true);
 				
 				myGD->communication("Main_showDamageMissile", particlePosition, int(999999));
 				
@@ -710,7 +710,7 @@ void JM_BasicMissile::moving ()
 					myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 					
 					// 몬스터 리액션하라고.
-					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle);
+					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle, true, true);
 				
 					// 데미지 표시해주는 것. 데미지 숫자 뜸.
 					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));

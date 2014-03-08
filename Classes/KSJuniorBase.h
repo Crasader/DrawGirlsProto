@@ -64,7 +64,7 @@ public:
 	//	{
 	//		mEmotion = NULL;
 	//	}
-	bool startDamageReaction(float damage, float angle);
+	bool startDamageReaction(float damage, float angle, bool castCancel, bool stiffen);
 	virtual void attackBehavior(Json::Value pattern)
 	{
 		// nothing.

@@ -10,6 +10,8 @@
 #include "KSCumberBase.h"
 #include "KSUtil.h"
 #include "ks19937.h"
+#include "GameItemManager.h"
+#include "StarGoldData.h"
 
 enum AttackOption
 {
@@ -23,8 +25,8 @@ enum AttackOption
 	kPoisonedNiddle = 1 << 6,
 	kPlusScore = 1 << 7	
 };
-//inline AttackOption operator|(AttackOption a, AttackOption b)
-//{return static_cast<AttackOption>(static_cast<int>(a) | static_cast<int>(b));}
+inline AttackOption operator|(AttackOption a, AttackOption b)
+{return static_cast<AttackOption>(static_cast<int>(a) | static_cast<int>(b));}
 
 //inline AttackOption operator&(AttackOption a, AttackOption b)
 //{return static_cast<AttackOption>(static_cast<int>(a) & static_cast<int>(b));}
@@ -32,6 +34,68 @@ enum AttackOption
 // startReaction 쪽에서 경직이 될지 안될지 결정하는 인자를 받아야 할 듯 하다.
 class StoneAttack : public CCNode
 {
+public:
+	void executeOption(KSCumberBase* cumber, float damage, float direction, CCPoint damagePosition)
+	{
+		// 옵션에 대해서 수행함.
+		
+		// directionAngle : Degree 단위.
+		// 피격에니메이션.
+		myGD->communication("MP_explosion", damagePosition, ccc4f(0, 0, 0, 0), 0.f);
+		// 화면 번쩍 번쩍
+		myGD->communication("VS_setLight");
+
+		// 캐스팅 캔슬.
+
+		if(m_option & AttackOption::kCancelCasting)
+		{
+			myGD->communication("MP_bombCumber", (CCObject*)cumber); // with startMoving
+		}
+
+		// 몬스터 리액션하라고.
+		myGD->communication("CP_startDamageReaction", cumber, damage, direction, m_option & AttackOption::kCancelCasting,
+												m_option & AttackOption::kStiffen); // damage : 555
+
+		// 데미지 표시해주는 것. 데미지 숫자 뜸.
+		myGD->communication("Main_showDamageMissile", damagePosition, (int)damage);
+
+		int combo_cnt = myGD->getCommunication("UI_getComboCnt");
+		combo_cnt++;
+
+		int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+		if(m_option & AttackOption::kPlusScore)
+		{
+			addScore *= 1.1f;
+		}
+		myGD->communication("UI_addScore", addScore);
+		myGD->communication("UI_setComboCnt", combo_cnt);
+		myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
+
+		myGD->communication("Main_startShake", 0.f);
+		if((m_option & AttackOption::kGold))
+		{
+			FeverCoin* t_fc = FeverCoin::create(ccp2ip(cumber->getPosition()), nullptr, nullptr);
+			getParent()->addChild(t_fc, 5);
+			t_fc->startRemove();
+			mySGD->setGold(mySGD->getGold() + 1);
+		}
+		if(m_option & AttackOption::kMonsterSpeedDown)
+		{
+			// 몬스터 속도 하락시킴. n 초간 p% 감소하는 형태.
+		}
+		if(m_option & AttackOption::kPoisonedNiddle)
+		{
+			// 특정 간격으로 데미지를 깎는다. 부가 기능은  ㄴ ㄴ해.
+		}
+		if(m_option & AttackOption::kJackSpeedUp)
+		{
+			// 영역 생성하여 그 안에서는 잭의 속도가 빠름.
+		}
+		if(m_option & AttackOption::kUnbeatable)
+		{
+			// 영역 생성하여 그 안에서는 무적... 
+		}
+	}
 protected:
 	AttackOption m_option;
 };
@@ -103,34 +167,7 @@ public:
 			effectPosition.y += rand()%21 - 10;
 			
 			float damage = m_power;
-			// directionAngle : Degree 단위.
-			// 피격에니메이션.
-			myGD->communication("MP_explosion", effectPosition, ccc4f(0, 0, 0, 0), 0.f);
-			// 화면 번쩍 번쩍
-			myGD->communication("VS_setLight");
-
-			// 캐스팅 캔슬.
-			
-			if(m_option & AttackOption::kCancelCasting)
-			{
-				myGD->communication("MP_bombCumber", (CCObject*)m_targetNode); // with startMoving
-			}
-
-			// 몬스터 리액션하라고.
-			myGD->communication("CP_startDamageReaction", m_targetNode, damage, 0.f); // damage : 555
-
-			// 데미지 표시해주는 것. 데미지 숫자 뜸.
-			myGD->communication("Main_showDamageMissile", effectPosition, int(1.f));
-
-			int combo_cnt = myGD->getCommunication("UI_getComboCnt");
-			combo_cnt++;
-
-			int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-			myGD->communication("UI_addScore", addScore);
-			myGD->communication("UI_setComboCnt", combo_cnt);
-			myGD->communication("Main_showComboImage", effectPosition, combo_cnt);
-
-			myGD->communication("Main_startShake", 0.f);
+			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, 0.f, effectPosition);
 
 			removeFromParentAndCleanup(true);
 		}
@@ -273,30 +310,7 @@ public:
 			effectPosition.y += rand()%21 - 10;
 			
 			float damage = m_power;
-			// directionAngle : Degree 단위.
-			// 피격에니메이션.
-			myGD->communication("MP_explosion", effectPosition, ccc4f(0, 0, 0, 0), 0.f);
-			// 화면 번쩍 번쩍
-			myGD->communication("VS_setLight");
-			// 캐스팅 캔슬.
-			myGD->communication("MP_bombCumber", (CCObject*)minDistanceCumber); // with startMoving
-
-			// 몬스터 리액션하라고.
-			myGD->communication("CP_startDamageReaction", minDistanceCumber, damage, 0.f); // damage : 555
-
-			// 데미지 표시해주는 것. 데미지 숫자 뜸.
-			myGD->communication("Main_showDamageMissile", effectPosition, int(damage));
-
-			int combo_cnt = myGD->getCommunication("UI_getComboCnt");
-			combo_cnt++;
-
-			int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-			myGD->communication("UI_addScore", addScore);
-			myGD->communication("UI_setComboCnt", combo_cnt);
-			myGD->communication("Main_showComboImage", effectPosition, combo_cnt);
-
-			myGD->communication("Main_startShake", 0.f);
-
+			executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, 0.f, effectPosition);
 			removeFromParentAndCleanup(true);
 		}
 		else  // 거리가 멀면 진행 시킴.
@@ -488,29 +502,7 @@ public:
 			effectPosition.y += rand()%21 - 10;
 			
 			float damage = m_power;
-			// directionAngle : Degree 단위.
-			// 피격에니메이션.
-			myGD->communication("MP_explosion", effectPosition, ccc4f(0, 0, 0, 0), 0.f);
-			// 화면 번쩍 번쩍
-			myGD->communication("VS_setLight");
-			// 캐스팅 캔슬.
-			myGD->communication("MP_bombCumber", (CCObject*)minDistanceCumber); // with startMoving
-
-			// 몬스터 리액션하라고.
-			myGD->communication("CP_startDamageReaction", minDistanceCumber, damage, 0.f); // damage : 555
-
-			// 데미지 표시해주는 것. 데미지 숫자 뜸.
-			myGD->communication("Main_showDamageMissile", effectPosition, int(damage));
-
-			int combo_cnt = myGD->getCommunication("UI_getComboCnt");
-			combo_cnt++;
-
-			int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-			myGD->communication("UI_addScore", addScore);
-			myGD->communication("UI_setComboCnt", combo_cnt);
-			myGD->communication("Main_showComboImage", effectPosition, combo_cnt);
-
-			myGD->communication("Main_startShake", 0.f);
+			executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, 0.f, effectPosition);
 
 			removeFromParentAndCleanup(true);
 		}
@@ -647,29 +639,7 @@ public:
 				effectPosition.y += rand()%21 - 10;
 
 				float damage = m_power;
-				// directionAngle : Degree 단위.
-				// 피격에니메이션.
-				myGD->communication("MP_explosion", effectPosition, ccc4f(0, 0, 0, 0), 0.f);
-				// 화면 번쩍 번쩍
-				myGD->communication("VS_setLight");
-				// 캐스팅 캔슬.
-				myGD->communication("MP_bombCumber", (CCObject*)minDistanceCumber); // with startMoving
-
-				// 몬스터 리액션하라고.
-				myGD->communication("CP_startDamageReaction", minDistanceCumber, damage, 0.f); // damage : 555
-
-				// 데미지 표시해주는 것. 데미지 숫자 뜸.
-				myGD->communication("Main_showDamageMissile", effectPosition, int(damage));
-
-				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
-				combo_cnt++;
-
-				int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-				myGD->communication("UI_addScore", addScore);
-				myGD->communication("UI_setComboCnt", combo_cnt);
-				myGD->communication("Main_showComboImage", effectPosition, combo_cnt);
-
-				myGD->communication("Main_startShake", 0.f);
+				executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, 0.f, effectPosition);
 
 				//removeFromParentAndCleanup(true);
 			}
@@ -848,30 +818,7 @@ public:
 				effectPosition.y += rand()%21 - 10;
 
 				float damage = m_power;
-				// directionAngle : Degree 단위.
-				// 피격에니메이션.
-				myGD->communication("MP_explosion", effectPosition, ccc4f(0, 0, 0, 0), 0.f);
-				// 화면 번쩍 번쩍
-				myGD->communication("VS_setLight");
-				// 캐스팅 캔슬.
-				myGD->communication("MP_bombCumber", (CCObject*)iter); // with startMoving
-
-				// 몬스터 리액션하라고.
-				myGD->communication("CP_startDamageReaction", iter, damage, 0.f); // damage : 555
-
-				// 데미지 표시해주는 것. 데미지 숫자 뜸.
-				myGD->communication("Main_showDamageMissile", effectPosition, int(damage));
-
-				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
-				combo_cnt++;
-
-				int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-				myGD->communication("UI_addScore", addScore);
-				myGD->communication("UI_setComboCnt", combo_cnt);
-				myGD->communication("Main_showComboImage", effectPosition, combo_cnt);
-
-				myGD->communication("Main_startShake", 0.f);
-
+				executeOption(dynamic_cast<KSCumberBase*>(iter), damage, 0.f, effectPosition);
 				//removeFromParentAndCleanup(true);
 			}
 		}	
@@ -942,30 +889,7 @@ public:
 			effectPosition.y += rand()%21 - 10;
 
 			float damage = m_power;
-			// directionAngle : Degree 단위.
-			// 피격에니메이션.
-			myGD->communication("MP_explosion", effectPosition, ccc4f(0, 0, 0, 0), 0.f);
-			// 화면 번쩍 번쩍
-			myGD->communication("VS_setLight");
-			// 캐스팅 캔슬.
-			myGD->communication("MP_bombCumber", (CCObject*)iter); // with startMoving
-
-			// 몬스터 리액션하라고.
-			myGD->communication("CP_startDamageReaction", iter, damage, 0.f); // damage : 555
-
-			// 데미지 표시해주는 것. 데미지 숫자 뜸.
-			myGD->communication("Main_showDamageMissile", effectPosition, int(damage));
-
-			int combo_cnt = myGD->getCommunication("UI_getComboCnt");
-			combo_cnt++;
-
-			int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-			myGD->communication("UI_addScore", addScore);
-			myGD->communication("UI_setComboCnt", combo_cnt);
-			myGD->communication("Main_showComboImage", effectPosition, combo_cnt);
-
-			myGD->communication("Main_startShake", 0.f);
-
+			executeOption(dynamic_cast<KSCumberBase*>(iter), damage, 0.f, effectPosition);
 			//removeFromParentAndCleanup(true);
 		}
 		addChild(KSTimer::create(1.f, [=]()
@@ -980,3 +904,16 @@ protected:
 	int m_power;
 	CCSprite* m_rangeSprite;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+

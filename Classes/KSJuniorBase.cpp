@@ -66,9 +66,9 @@ bool KSJuniorBase::init(const string& ccbiName)
 
 
 
-bool KSJuniorBase::startDamageReaction(float damage, float angle)
+bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCancel, bool stiffen)
 {
-	KSCumberBase::startDamageReaction(damage, angle);
+	KSCumberBase::startDamageReaction(damage, angle, castCancel, stiffen);
 	m_remainHp -= damage;
 	CCLog("KSJuniorBase Hp %f", m_remainHp);
 	CCLog("damaga!!!");
@@ -77,13 +77,13 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle)
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
 	
 	
-	if(m_state == CUMBERSTATENODIRECTION)
+	if(m_state == CUMBERSTATENODIRECTION && castCancel)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 
 	}
-	else if(m_state == CUMBERSTATEMOVING)
+	if(m_state == CUMBERSTATEMOVING && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
 		float rad = deg2Rad(angle);
@@ -95,7 +95,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSJuniorBase::damageReaction));
 	}
-	else if(m_state == CUMBERSTATESTOP)
+	if(m_state == CUMBERSTATESTOP && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATESTOP");
 		float rad = deg2Rad(angle);
@@ -107,7 +107,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle)
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSJuniorBase::damageReaction));
 	}
-	else if(m_state == CUMBERSTATEFURY)
+	if(m_state == CUMBERSTATEFURY && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
 		float rad = deg2Rad(angle);
