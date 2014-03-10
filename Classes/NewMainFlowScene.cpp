@@ -1137,6 +1137,11 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			if(is_buy)
 			{
 				CCSprite* n_buy = CCSprite::create("stage_icon_back.png");
+				
+				CCSprite* n_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				n_stage_img->setPosition(ccp(n_buy->getContentSize().width/2.f-7, n_buy->getContentSize().height/2.f+1));
+				n_buy->addChild(n_stage_img);
+				
 				CCSprite* n_lock = CCSprite::create("stage_icon_lock.png");
 				n_lock->setPosition(ccp(n_buy->getContentSize().width/2.f-6, n_buy->getContentSize().height/2.f+5));
 				n_buy->addChild(n_lock);
@@ -1144,6 +1149,11 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				n_label->setPosition(ccp(n_buy->getContentSize().width/2.f+17, n_buy->getContentSize().height/2.f-8));
 				n_buy->addChild(n_label);
 				CCSprite* s_buy = CCSprite::create("stage_icon_back.png");
+				
+				CCSprite* s_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				s_stage_img->setPosition(ccp(s_buy->getContentSize().width/2.f-7, s_buy->getContentSize().height/2.f+1));
+				s_buy->addChild(s_stage_img);
+				
 				CCSprite* s_lock = CCSprite::create("stage_icon_lock.png");
 				s_lock->setPosition(ccp(s_buy->getContentSize().width/2.f-6, s_buy->getContentSize().height/2.f+5));
 				s_buy->addChild(s_lock);
@@ -1165,6 +1175,11 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			else if(is_lock)
 			{
 				CCSprite* n_buy = CCSprite::create("stage_icon_back.png");
+				
+				CCSprite* n_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				n_stage_img->setPosition(ccp(n_buy->getContentSize().width/2.f-7, n_buy->getContentSize().height/2.f+1));
+				n_buy->addChild(n_stage_img);
+				
 				CCSprite* n_lock = CCSprite::create("stage_icon_lock.png");
 				n_lock->setPosition(ccp(n_buy->getContentSize().width/2.f-6, n_buy->getContentSize().height/2.f+5));
 				n_buy->addChild(n_lock);
@@ -1172,6 +1187,11 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				n_label->setPosition(ccp(n_buy->getContentSize().width/2.f+17, n_buy->getContentSize().height/2.f-8));
 				n_buy->addChild(n_label);
 				CCSprite* s_buy = CCSprite::create("stage_icon_back.png");
+				
+				CCSprite* s_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				s_stage_img->setPosition(ccp(s_buy->getContentSize().width/2.f-7, s_buy->getContentSize().height/2.f+1));
+				s_buy->addChild(s_stage_img);
+				
 				CCSprite* s_lock = CCSprite::create("stage_icon_lock.png");
 				s_lock->setPosition(ccp(s_buy->getContentSize().width/2.f-6, s_buy->getContentSize().height/2.f+5));
 				s_buy->addChild(s_lock);
@@ -1193,10 +1213,20 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			else
 			{
 				CCSprite* n_stage = CCSprite::create("stage_icon_back.png");
+				
+				CCSprite* n_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				n_stage_img->setPosition(ccp(n_stage->getContentSize().width/2.f-7, n_stage->getContentSize().height/2.f+1));
+				n_stage->addChild(n_stage_img);
+				
 				CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
 				n_label->setPosition(ccp(n_stage->getContentSize().width/2.f+17, n_stage->getContentSize().height/2.f-8));
 				n_stage->addChild(n_label);
 				CCSprite* s_stage = CCSprite::create("stage_icon_back.png");
+				
+				CCSprite* s_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				s_stage_img->setPosition(ccp(s_stage->getContentSize().width/2.f-7, s_stage->getContentSize().height/2.f+1));
+				s_stage->addChild(s_stage_img);
+				
 				CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
 				s_label->setPosition(ccp(s_stage->getContentSize().width/2.f+17, s_stage->getContentSize().height/2.f-8));
 				s_stage->addChild(s_label);
@@ -1211,6 +1241,30 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				ScrollMenu* stage_menu = ScrollMenu::create(stage_item, NULL);
 				stage_menu->setPosition(ccp(x_position, y_position));
 				t_img->addChild(stage_menu);
+				
+				CCSprite* star_back = CCSprite::create("stage_icon_star_back.png");
+				star_back->setPosition(ccpAdd(stage_menu->getPosition(), ccp(-6.5f,16)));
+				t_img->addChild(star_back);
+				
+				int stage_clear_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, i);
+				if(stage_clear_rank >= 1)
+				{
+					CCSprite* star1 = CCSprite::create("stage_icon_star.png");
+					star1->setPosition(ccp(7,4));
+					star_back->addChild(star1);
+				}
+				if(stage_clear_rank >= 2)
+				{
+					CCSprite* star2 = CCSprite::create("stage_icon_star.png");
+					star2->setPosition(ccp(15,7));
+					star_back->addChild(star2);
+				}
+				if(stage_clear_rank >= 3)
+				{
+					CCSprite* star3 = CCSprite::create("stage_icon_star.png");
+					star3->setPosition(ccp(23,4));
+					star_back->addChild(star3);
+				}
 			}
 		}
 	}
