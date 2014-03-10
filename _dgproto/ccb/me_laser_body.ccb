@@ -45,8 +45,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.0</real>
 										<real>1</real>
+										<real>0.0</real>
 									</array>
 								</dict>
 								<dict>
@@ -274,8 +274,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
