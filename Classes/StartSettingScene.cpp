@@ -60,7 +60,7 @@ bool StartSettingScene::init()
 	
 	item_title_label = NULL;
 	option_label = NULL;
-	card_img = NULL;
+//	card_img = NULL;
 	
 	CCSprite* back_img = CCSprite::create("mainflow_back_wall.png");
 	back_img->setPosition(ccp(240,160));
@@ -211,30 +211,9 @@ void StartSettingScene::setMain()
 		main_case->addChild(back_menu);
 	}
 	
-	CCSprite* n_card_turn = CCSprite::create("startsetting_cardturn.png");
-	CCSprite* s_card_turn = CCSprite::create("startsetting_cardturn.png");
-	s_card_turn->setColor(ccGRAY);
 	
-	CCMenuItem* card_turn_item = CCMenuItemSprite::create(n_card_turn, s_card_turn, this, menu_selector(StartSettingScene::menuAction));
-	card_turn_item->setTag(kStartSettingMenuTag_turn);
-	
-	card_turn_menu = CCMenu::createWithItem(card_turn_item);
-	card_turn_menu->setPosition(ccp(133,33));
-	card_turn_menu->setVisible(false);
-	main_case->addChild(card_turn_menu);
-	
-	changeCard();
-	
-	CCSprite* n_card_change = CCSprite::create("startsetting_cardchange.png");
-	CCSprite* s_card_change = CCSprite::create("startsetting_cardchange.png");
-	s_card_change->setColor(ccGRAY);
-	
-	CCMenuItem* card_change_item = CCMenuItemSprite::create(n_card_change, s_card_change, this, menu_selector(StartSettingScene::menuAction));
-	card_change_item->setTag(kStartSettingMenuTag_card);
-	
-	CCMenu* card_menu = CCMenu::createWithItem(card_change_item);
-	card_menu->setPosition(ccp(64,33));
-	main_case->addChild(card_menu);
+	selected_friend_idx = -1;
+	setStageRank();
 	
 	
 	use_item_price_gold = KSProtectVar<int>(0);
@@ -285,11 +264,11 @@ void StartSettingScene::setMain()
 	
 	clicked_item_idx = -1;
 	
-	for(int i=0;i<item_list.size() && i < 8;i++)
+	for(int i=0;i<item_list.size() && i < 6;i++)
 	{
 		ITEM_CODE t_ic = item_list[i];
 		
-		CCPoint item_position = ccp(203 + (i%4)*48.5f, 205 - (i/4)*57);
+		CCPoint item_position = ccp(272.f + (i%3)*46.f, 205 - (i/3)*57);
 		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);
 		if(iter == card_options.end()) // not same option card // enable item
@@ -429,7 +408,7 @@ void StartSettingScene::setMain()
 	start_item->setTag(kStartSettingMenuTag_start);
 	
 	CCMenu* start_menu = CCMenu::createWithItem(start_item);
-	start_menu->setPosition(ccp(316, 44));
+	start_menu->setPosition(ccp(352, 44));
 	main_case->addChild(start_menu);
 }
 
@@ -443,54 +422,227 @@ int StartSettingScene::getSelectedItemCount()
 	return selected_item_cnt;
 }
 
-void StartSettingScene::changeCard()
+void StartSettingScene::setStageRank()
 {
-	if(card_img)
+	friend_list.clear();
+	rank_table = NULL;
+	
+	Json::Value p;
+	Json::Value my_info = hspConnector::get()->myKakaoInfo;
+	
+	RankFriendInfo t_my_info;
+	t_my_info.nickname = my_info["nickname"].asString();
+	t_my_info.img_url = my_info["profile_image_url"].asString();
+	t_my_info.user_id = my_info["user_id"].asString();
+	t_my_info.score = 0;
+	t_my_info.is_play = false;
+	t_my_info.is_message_blocked = my_info["message_blocked"].asBool();
+	friend_list.push_back(t_my_info);
+	
+	p["memberIDList"].append(t_my_info.user_id);
+	
+	for(auto i : KnownFriends::getInstance()->getFriends())
 	{
-		card_img->removeFromParent();
-		card_img = NULL;
+		RankFriendInfo t_friend_info;
+		t_friend_info.nickname = i.nick;
+		t_friend_info.img_url = i.profileUrl;
+		t_friend_info.user_id = i.userId;
+		t_friend_info.score = 0;
+		t_friend_info.is_play = false;
+		t_friend_info.is_message_blocked = i.messageBlocked;
+		friend_list.push_back(t_friend_info);
+		
+		p["memberIDList"].append(i.userId);
 	}
 	
-	float card_rate = 0.4f;
-	
-	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 1, 2, 3 / 11, 12, 13 / 14, ...
-	if(selected_card_number > 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) > 0)
+	for(auto i : UnknownFriends::getInstance()->getFriends())
 	{
-		card_img = CCNode::create();
-		card_img->setPosition(ccp(94, 144));
-		main_case->addChild(card_img);
+		RankFriendInfo fInfo;
+		fInfo.nickname = i.nick;
+		fInfo.img_url = "";
+		fInfo.user_id = i.userId;
+		fInfo.score = 0;
+		fInfo.is_play = false;
+		fInfo.is_message_blocked = false;
+		friend_list.push_back(fInfo);
 		
-		CCSprite* real_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", selected_card_number)->getCString());
-		real_card_img->setScale(card_rate);
-		card_img->addChild(real_card_img);
-		
-		if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, selected_card_number))
+		p["memberIDList"].append(i.userId);
+	}
+	
+	p["stageNo"] = mySD->getSilType();
+	hspConnector::get()->command("getstagescorelist",p,json_selector(this, StartSettingScene::resultGetStageScoreList));
+}
+
+void StartSettingScene::resultGetStageScoreList(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS && result_data["param"]["stageNo"].asInt() == mySD->getSilType() && !rank_table)
+	{
+		Json::Value score_list = result_data["list"];
+		for(int i=0;i<score_list.size();i++)
 		{
-			CCSize ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, selected_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, selected_card_number));
-			CCSprite* card_ani = mySIL->getLoadedImg(CCString::createWithFormat("card%d_animation.png", selected_card_number)->getCString(),
-													 CCRectMake(0, 0, ani_size.width, ani_size.height));
-			card_ani->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, selected_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, selected_card_number)));
-			real_card_img->addChild(card_ani);
+			vector<RankFriendInfo>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString());
+			if(iter != friend_list.end())
+			{
+				(*iter).score = score_list[i]["score"].asFloat();
+				(*iter).is_play = true;
+			}
+			else
+				CCLog("not found friend memberID : %s", score_list[i]["memberID"].asString().c_str());
 		}
 		
-		CardCase* t_card_case = CardCase::create(selected_card_number);
-		real_card_img->addChild(t_card_case);
+		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
+										{
+											return !t_info.is_play;
+										});
+		friend_list.erase(beginIter, friend_list.end());
 		
-//		CCSprite* card_case = CCSprite::create("startsetting_cardframe.png");
-//		card_img->addChild(card_case);
+		struct t_FriendSort{
+			bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
+			{
+				return a.score > b.score;
+			}
+		} pred;
 		
-		int ability_cnt = NSDS_GI(kSDS_CI_int1_abilityCnt_i, selected_card_number);
+		sort(friend_list.begin(), friend_list.end(), pred);
 		
-		for(int i=0;i<ability_cnt;i++)
-			card_options.push_back(NSDS_GI(kSDS_CI_int1_ability_int2_type_i, selected_card_number, i));
+		for(int i=0;i<friend_list.size();i++)
+			friend_list[i].rank = i+1;
 		
-		card_turn_menu->setVisible(true);
+		mySGD->save_stage_rank_stageNumber = mySD->getSilType();
+		mySGD->save_stage_rank_list = friend_list;
+		
+		selected_friend_idx = -1;
+		
+		CCSize table_size = CCSizeMake(198, 175);
+		CCPoint table_position = ccp(30,20);
+		
+//		CCSprite* temp_table = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+//		temp_table->setAnchorPoint(CCPointZero);
+//		temp_table->setPosition(table_position);
+//		temp_table->setOpacity(100);
+//		main_case->addChild(temp_table);
+		
+		rank_table = CCTableView::create(this, table_size);
+		rank_table->setAnchorPoint(CCPointZero);
+		rank_table->setDirection(kCCScrollViewDirectionVertical);
+		rank_table->setVerticalFillOrder(kCCTableViewFillTopDown);
+		rank_table->setPosition(table_position);
+		
+		rank_table->setDelegate(this);
+		main_case->addChild(rank_table);
+//		rank_table->setTouchPriority(touch_priority-1);
+	}
+}
+
+CCTableViewCell* StartSettingScene::tableCellAtIndex( CCTableView *table, unsigned int idx )
+{
+	RankFriendInfo* member = &friend_list[idx];
+	CCTableViewCell* cell = new CCTableViewCell();
+	cell->init();
+	cell->autorelease();
+	
+	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
+	string cell_id = (*member).user_id;
+	
+	CCSprite* back_img;
+	if(my_id == cell_id)
+		back_img = CCSprite::create("puzzle_right_ranklist_me.png");
+	else if(idx == 0)
+		back_img = CCSprite::create("puzzle_right_ranklist_gold.png");
+	else if(idx == 1)
+		back_img = CCSprite::create("puzzle_right_ranklist_silver.png");
+	else if(idx == 2)
+		back_img = CCSprite::create("puzzle_right_ranklist_bronze.png");
+	else
+		back_img = CCSprite::create("puzzle_right_ranklist_normal.png");
+	back_img->setPosition(CCPointZero);
+	back_img->setAnchorPoint(CCPointZero);
+	cell->addChild(back_img);
+	
+	CCSprite* profileImg = GDWebSprite::create((*member).img_url, "ending_noimg.png");
+	profileImg->setAnchorPoint(ccp(0.5, 0.5));
+	profileImg->setPosition(ccp(21, 21));
+	cell->addChild(profileImg);
+	
+	if(my_id != cell_id && KnownFriends::getInstance()->findById(cell_id) != nullptr)
+	{
+		CCSprite* kakao_sign = CCSprite::create("puzzle_right_rank_kakao.png");
+		kakao_sign->setPosition(ccp(10,28));
+		cell->addChild(kakao_sign);
+	}
+	
+	CCLabelTTF* nickname_label = CCLabelTTF::create((*member).nickname.c_str(), mySGD->getFont().c_str(), 10);
+	nickname_label->setPosition(ccp(89,27));
+	cell->addChild(nickname_label);
+	
+	CCLabelTTF* score_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", (*member).score)->getCString(), mySGD->getFont().c_str(), 8);
+	score_label->setColor(ccBLACK);
+	score_label->setPosition(ccp(89,12));
+	cell->addChild(score_label);
+	
+	if(idx == 0)
+	{
+		CCSprite* medal_img = CCSprite::create("puzzle_right_rank_gold.png");
+		medal_img->setPosition(ccp(50,20));
+		cell->addChild(medal_img);
+	}
+	else if(idx == 1)
+	{
+		CCSprite* medal_img = CCSprite::create("puzzle_right_rank_silver.png");
+		medal_img->setPosition(ccp(50,20));
+		cell->addChild(medal_img);
+	}
+	else if(idx == 2)
+	{
+		CCSprite* medal_img = CCSprite::create("puzzle_right_rank_bronze.png");
+		medal_img->setPosition(ccp(50,20));
+		cell->addChild(medal_img);
 	}
 	else
 	{
-		myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
-		
-		card_turn_menu->setVisible(false);
+		CCLabelTTF* rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", (*member).rank)->getCString(), mySGD->getFont().c_str(), 14);
+		rank_label->setPosition(ccp(50,20));
+		cell->addChild(rank_label);
+	}
+	
+	if(selected_friend_idx == idx)
+	{
+		CCSprite* selected_img = CCSprite::create("puzzle_right_rank_selected.png");
+		selected_img->setPosition(CCPointZero);
+		selected_img->setAnchorPoint(CCPointZero);
+		cell->addChild(selected_img);
+	}
+	
+	return cell;
+}
+
+void StartSettingScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
+{
+	CCLog("touched cell idx : %d", cell->getIdx());
+	
+	string touched_id = friend_list[cell->getIdx()].user_id;
+	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
+	
+	if(touched_id != my_id)
+	{
+		if(selected_friend_idx == -1)
+		{
+			selected_friend_idx = cell->getIdx();
+			table->updateCellAtIndex(selected_friend_idx);
+		}
+		else if (cell->getIdx() != selected_friend_idx)
+		{
+			int keep_idx = selected_friend_idx;
+			selected_friend_idx = cell->getIdx();
+			table->updateCellAtIndex(keep_idx);
+			table->updateCellAtIndex(selected_friend_idx);
+		}
+		else
+		{
+			int keep_idx = selected_friend_idx;
+			selected_friend_idx = -1;
+			table->updateCellAtIndex(keep_idx);
+		}
 	}
 }
 
@@ -737,7 +889,7 @@ void StartSettingScene::itemAction(CCObject *sender)
 		
 		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 14, CCSizeMake(250, 20), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		item_title_label->setAnchorPoint(ccp(0,1));
-		item_title_label->setPosition(ccp(192, 112));
+		item_title_label->setPosition(ccp(250, 112));
 		item_title_label->setColor(ccORANGE);
 		main_case->addChild(item_title_label);
 		
@@ -749,7 +901,7 @@ void StartSettingScene::itemAction(CCObject *sender)
 		
 		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(250, 23), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		option_label->setAnchorPoint(ccp(0,1));
-		option_label->setPosition(ccp(192, 93));
+		option_label->setPosition(ccp(251, 93));
 		main_case->addChild(option_label);
 		
 		
@@ -1544,7 +1696,7 @@ void StartSettingScene::popupClose()
 
 void StartSettingScene::popupCloseCardSetting()
 {
-	changeCard();
+//	changeCard();
 	is_menu_enable = true;
 }
 

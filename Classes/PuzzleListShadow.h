@@ -13,6 +13,52 @@
 
 USING_NS_CC;
 
+class ListScaler : public CCNode
+{
+public:
+	static ListScaler* create()
+	{
+		ListScaler* t_ls = new ListScaler();
+		t_ls->myInit();
+		t_ls->autorelease();
+		return t_ls;
+	}
+	
+	int puzzle_number;
+	
+	void startMyAction()
+	{
+		schedule(schedule_selector(ListScaler::myAction));
+	}
+	
+private:
+	
+	
+	void myAction()
+	{
+		if(getParent() && getParent()->getParent())
+		{
+			//CCLog("puzzle : %d ,  position x : %.1f", puzzle_number, getPositionX()+getParent()->getPositionX()+getParent()->getParent()->getPositionX());
+			float position_x = getPositionX()+getParent()->getPositionX()+getParent()->getParent()->getPositionX();
+			position_x -= 240.f;
+			position_x = fabsf(position_x);
+			
+			float scale_value;
+			if(position_x > 140.f)
+				scale_value = 0.7f;
+			else
+				scale_value = (140 - position_x)/140.f*0.3f + 0.7f;
+			
+			setScale(scale_value);
+		}
+	}
+	
+	void myInit()
+	{
+		setScale(0.7f);
+	}
+};
+
 class PuzzleListShadow : public CCNode
 {
 public:

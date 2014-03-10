@@ -79,6 +79,7 @@ private:
 	CountingBMLabel* friend_point_label;
 	
 	CCTableView* puzzle_table;
+	CCSize table_size;
 	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
 	virtual void scrollViewDidScroll(CCScrollView* view);
@@ -91,6 +92,8 @@ private:
 	int selected_stage_number;
 	
 //	int selected_stage_cell_idx;
+	
+	void goStartSetting(CCObject* sender);
 	
 	void pieceAction(int t_stage_number);
 	void buyPieceAction(int t_stage_number);

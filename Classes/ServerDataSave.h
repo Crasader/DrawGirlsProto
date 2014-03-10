@@ -41,6 +41,7 @@ enum SDS_KEY
 	kSDS_PZ_center_s,
 	kSDS_PZ_original_s,
 	kSDS_PZ_face_s,
+	kSDS_PZ_map_s,
 	kSDS_PZ_bottom_s,
 	kSDS_PZ_top_s,
 	kSDS_PZ_left_s,
