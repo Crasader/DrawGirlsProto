@@ -717,8 +717,8 @@
 											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<real>1.5</real>
-												<real>1.5</real>
+												<real>3</real>
+												<real>3</real>
 											</array>
 										</dict>
 									</array>
@@ -883,8 +883,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1.5</real>
-									<real>1.5</real>
+									<real>3</real>
+									<real>3</real>
 									<true/>
 									<integer>0</integer>
 								</array>
