@@ -936,8 +936,25 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 				}
 				mySDS->fFlush(kSDS_CI_base);
 
-				if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+				Json::Value coordinateInfo_list = puzzle_list[i]["coordinateInfo"];
+				for(int j=0;j<coordinateInfo_list.size();j++)
 				{
+					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_x_d, start_stage+j, coordinateInfo_list[j]["x"].asInt());
+					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_y_d, start_stage+j, coordinateInfo_list[j]["y"].asInt());
+				}
+				
+				if(1)//puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+				{
+					if(NSDS_GS(puzzle_number, kSDS_PZ_map_s) != puzzle_list[i]["map"]["image"].asString())
+					{
+						DownloadFile t_df;
+						t_df.size = puzzle_list[i]["map"]["size"].asInt();
+						t_df.img = puzzle_list[i]["map"]["image"].asString().c_str();
+						t_df.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "map")->getCString();
+						t_df.key = "map";
+						puzzle_download_list.push_back(t_df);
+						puzzle_download_list_puzzle_number.push_back(puzzle_number);
+					}
 					if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != puzzle_list[i]["center"]["image"].asString())
 					{
 						// check, after download ----------
@@ -1241,6 +1258,9 @@ void TitleRenewalScene::successDownloadAction()
 		
 		for(int j=0;j<puzzle_download_list.size();j++)
 		{
+			if(puzzle_download_list[j].key == "map")
+				continue;
+			
 			CCImage *img = new CCImage;
 			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + puzzle_download_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
 			

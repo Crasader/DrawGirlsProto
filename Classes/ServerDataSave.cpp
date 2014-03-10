@@ -568,6 +568,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_PZ_center_s)					rv = "center";
 	else if(t_key == kSDS_PZ_original_s)				rv = "original";
 	else if(t_key == kSDS_PZ_face_s)					rv = "face";
+	else if(t_key == kSDS_PZ_map_s)						rv = "map";
 	else if(t_key == kSDS_PZ_bottom_s)					rv = "bottom";
 	else if(t_key == kSDS_PZ_top_s)						rv = "top";
 	else if(t_key == kSDS_PZ_left_s)					rv = "left";

@@ -599,7 +599,7 @@ void BeautyStoneSettingPopup::menuAction(CCObject* pSender)
 		t_container->addChild(n_back);
 		
 		
-		CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, clicked_stone_info.m_id), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, clicked_stone_info.m_id))->getCString());
+		CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, clicked_stone_info.m_id ), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, clicked_stone_info.m_id))->getCString());
 		stone_img->setPosition(ccp(n_back->getContentSize().width/2.f, n_back->getContentSize().height/2.f));
 		n_back->addChild(stone_img);
 		

@@ -30,7 +30,8 @@ enum StartSettingZorder{
 class CountingBMLabel;
 class HeartTime;
 class LoadingLayer;
-class StartSettingScene : public CCLayer
+class RankFriendInfo;
+class StartSettingScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -44,6 +45,27 @@ public:
 	
 	HeartTime* heart_time;
 private:
+	
+	vector<RankFriendInfo> friend_list;
+	CCTableView* rank_table;
+	int selected_friend_idx;
+	
+	void resultGetStageScoreList(Json::Value result_data);
+	
+	virtual CCTableViewCell* tableCellAtIndex( CCTableView *table, unsigned int idx );
+	
+	virtual void scrollViewDidScroll(CCScrollView* view){}
+	virtual void scrollViewDidZoom(CCScrollView* view){}
+	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
+	virtual CCSize cellSizeForTable(CCTableView *table)
+	{
+		return CCSizeMake(180, 40);
+	}
+	virtual unsigned int numberOfCellsInTableView(CCTableView *table)
+	{
+		return friend_list.size();
+	}
+	
 	
 	bool is_menu_enable;
 	
@@ -59,10 +81,7 @@ private:
 	void setMain();
 	CCSprite* main_case;
 	
-	void changeCard();
-	CCNode* card_img;
-	
-	CCMenu* card_turn_menu;
+	void setStageRank();
 	
 	KSProtectVar<int> use_item_price_gold;
 	KSProtectVar<int> use_item_price_ruby;
