@@ -1059,6 +1059,24 @@ void NewMainFlowScene::goStartSetting(CCObject* sender)
 	addChild(info_down_popup, kNewMainFlowZorder_popup);
 }
 
+void NewMainFlowScene::lockedStage(CCObject* sender)
+{
+	if(!is_menu_enable)
+		return;
+	
+	
+	is_menu_enable = true;
+}
+
+void NewMainFlowScene::notBuyedStage(CCObject* sender)
+{
+	if(!is_menu_enable)
+		return;
+	
+	
+	is_menu_enable = true;
+}
+
 CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
 	CCTableViewCell* cell = new CCTableViewCell();
@@ -1092,27 +1110,108 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			int y_position = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_y_d, i);
 			
 			int piece_no = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i);
-			CCSprite* n_stage = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "center", piece_no)->getCString());
-			CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-			n_label->setColor(ccBLACK);
-			n_label->setPosition(ccp(n_stage->getContentSize().width/2.f, n_stage->getContentSize().height/2.f));
-			n_stage->addChild(n_label);
-			CCSprite* s_stage = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "center", piece_no)->getCString());
-			CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-			s_label->setColor(ccBLACK);
-			s_label->setPosition(ccp(s_stage->getContentSize().width/2.f, s_stage->getContentSize().height/2.f));
-			s_stage->addChild(s_label);
-			s_stage->setColor(ccGRAY);
-			n_stage->setPosition(ccp(-(n_stage->getContentSize().width-50)/2.f,-(n_stage->getContentSize().height-50)/2.f));
-			s_stage->setPosition(ccp(-(s_stage->getContentSize().width-50)/2.f,-(s_stage->getContentSize().height-50)/2.f));
 			
-			CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(NewMainFlowScene::goStartSetting));
-			stage_item->setContentSize(CCSizeMake(50, 50));
-			stage_item->setTag(i);
+			bool is_buy, is_lock;
+			if(i == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i) ||
+			   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 &&
+				(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == 0 ||
+				 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))))
+			{
+				is_buy = false;
+				is_lock = false;
+			}
+			else
+			{
+				if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))
+				{
+					is_buy = true;
+					is_lock = false;
+				}
+				else
+				{
+					is_buy = false;
+					is_lock = true;
+				}
+			}
 			
-			ScrollMenu* stage_menu = ScrollMenu::create(stage_item, NULL);
-			stage_menu->setPosition(ccp(x_position, y_position));
-			t_img->addChild(stage_menu);
+			if(is_buy)
+			{
+				CCSprite* n_buy = CCSprite::create("stage_icon_back.png");
+				CCSprite* n_lock = CCSprite::create("stage_icon_lock.png");
+				n_lock->setPosition(ccp(n_buy->getContentSize().width/2.f-6, n_buy->getContentSize().height/2.f+5));
+				n_buy->addChild(n_lock);
+				CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				n_label->setPosition(ccp(n_buy->getContentSize().width/2.f+17, n_buy->getContentSize().height/2.f-8));
+				n_buy->addChild(n_label);
+				CCSprite* s_buy = CCSprite::create("stage_icon_back.png");
+				CCSprite* s_lock = CCSprite::create("stage_icon_lock.png");
+				s_lock->setPosition(ccp(s_buy->getContentSize().width/2.f-6, s_buy->getContentSize().height/2.f+5));
+				s_buy->addChild(s_lock);
+				CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				s_label->setPosition(ccp(s_buy->getContentSize().width/2.f+17, s_buy->getContentSize().height/2.f-8));
+				s_buy->addChild(s_label);
+				s_buy->setColor(ccGRAY);
+				n_buy->setPosition(ccp(-(n_buy->getContentSize().width-50)/2.f,-(n_buy->getContentSize().height-50)/2.f));
+				s_buy->setPosition(ccp(-(s_buy->getContentSize().width-50)/2.f,-(s_buy->getContentSize().height-50)/2.f));
+				
+				CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(NewMainFlowScene::notBuyedStage));
+				buy_item->setContentSize(CCSizeMake(50, 50));
+				buy_item->setTag(i);
+				
+				ScrollMenu* buy_menu = ScrollMenu::create(buy_item, NULL);
+				buy_menu->setPosition(ccp(x_position, y_position));
+				t_img->addChild(buy_menu);
+			}
+			else if(is_lock)
+			{
+				CCSprite* n_buy = CCSprite::create("stage_icon_back.png");
+				CCSprite* n_lock = CCSprite::create("stage_icon_lock.png");
+				n_lock->setPosition(ccp(n_buy->getContentSize().width/2.f-6, n_buy->getContentSize().height/2.f+5));
+				n_buy->addChild(n_lock);
+				CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				n_label->setPosition(ccp(n_buy->getContentSize().width/2.f+17, n_buy->getContentSize().height/2.f-8));
+				n_buy->addChild(n_label);
+				CCSprite* s_buy = CCSprite::create("stage_icon_back.png");
+				CCSprite* s_lock = CCSprite::create("stage_icon_lock.png");
+				s_lock->setPosition(ccp(s_buy->getContentSize().width/2.f-6, s_buy->getContentSize().height/2.f+5));
+				s_buy->addChild(s_lock);
+				CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				s_label->setPosition(ccp(s_buy->getContentSize().width/2.f+17, s_buy->getContentSize().height/2.f-8));
+				s_buy->addChild(s_label);
+				s_buy->setColor(ccGRAY);
+				n_buy->setPosition(ccp(-(n_buy->getContentSize().width-50)/2.f,-(n_buy->getContentSize().height-50)/2.f));
+				s_buy->setPosition(ccp(-(s_buy->getContentSize().width-50)/2.f,-(s_buy->getContentSize().height-50)/2.f));
+				
+				CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(NewMainFlowScene::lockedStage));
+				buy_item->setContentSize(CCSizeMake(50, 50));
+				buy_item->setTag(i);
+				
+				ScrollMenu* buy_menu = ScrollMenu::create(buy_item, NULL);
+				buy_menu->setPosition(ccp(x_position, y_position));
+				t_img->addChild(buy_menu);
+			}
+			else
+			{
+				CCSprite* n_stage = CCSprite::create("stage_icon_back.png");
+				CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				n_label->setPosition(ccp(n_stage->getContentSize().width/2.f+17, n_stage->getContentSize().height/2.f-8));
+				n_stage->addChild(n_label);
+				CCSprite* s_stage = CCSprite::create("stage_icon_back.png");
+				CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
+				s_label->setPosition(ccp(s_stage->getContentSize().width/2.f+17, s_stage->getContentSize().height/2.f-8));
+				s_stage->addChild(s_label);
+				s_stage->setColor(ccGRAY);
+				n_stage->setPosition(ccp(-(n_stage->getContentSize().width-50)/2.f,-(n_stage->getContentSize().height-50)/2.f));
+				s_stage->setPosition(ccp(-(s_stage->getContentSize().width-50)/2.f,-(s_stage->getContentSize().height-50)/2.f));
+				
+				CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(NewMainFlowScene::goStartSetting));
+				stage_item->setContentSize(CCSizeMake(50, 50));
+				stage_item->setTag(i);
+				
+				ScrollMenu* stage_menu = ScrollMenu::create(stage_item, NULL);
+				stage_menu->setPosition(ccp(x_position, y_position));
+				t_img->addChild(stage_menu);
+			}
 		}
 	}
 

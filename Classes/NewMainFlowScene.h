@@ -93,6 +93,8 @@ private:
 	
 //	int selected_stage_cell_idx;
 	
+	void lockedStage(CCObject* sender);
+	void notBuyedStage(CCObject* sender);
 	void goStartSetting(CCObject* sender);
 	
 	void pieceAction(int t_stage_number);
