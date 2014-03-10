@@ -938,12 +938,14 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				t_jack_life = slot_cnt-1;
 
 			int beautystone_id = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1, slot_cnt-t_jack_life);
-			int beautystone_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beautystone_id);
-			int beautystone_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beautystone_id);
-			int beautystone_level = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beautystone_id);
-			myGD->createJackMissileWithStoneFunctor((StoneType)beautystone_type, beautystone_rank, beautystone_level, cmCnt, myGD->getJackPoint().convertToCCP()); 
-			//myGD->communication("MP_createJackMissile", missile_type, cmCnt, missile_speed, myGD->getJackPoint().convertToCCP());
-
+			if(beautystone_id > 0)
+			{
+				int beautystone_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beautystone_id);
+				int beautystone_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beautystone_id);
+				int beautystone_level = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beautystone_id);
+				myGD->createJackMissileWithStoneFunctor((StoneType)beautystone_type, beautystone_rank, beautystone_level, cmCnt, myGD->getJackPoint().convertToCCP());
+				//myGD->communication("MP_createJackMissile", missile_type, cmCnt, missile_speed, myGD->getJackPoint().convertToCCP());
+			}
 		}
 		
 		if(!is_exchanged && !is_show_exchange_coin && !isGameover && t_p < clearPercentage)
