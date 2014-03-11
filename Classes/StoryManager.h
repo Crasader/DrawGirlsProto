@@ -10,8 +10,10 @@
 #define __DGproto__StoryManager__
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 using namespace std;
 
 class StoryManager : public CCLayer
@@ -29,14 +31,36 @@ public:
 	CCNode* left_node;
 	CCNode* right_node;
 	CCNode* front_node;
+	bool is_delaying;
+	
+	void addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func);
 	
 private:
+	
+	bool is_menting;
+	function<void(void)> end_func;
+	string recent_ment;
+	CCLabelTTF* ment_label;
 	
 	int m_touch_priority;
 	CCNode* ment_node;
 	
+	int ing_ment_cnt;
+	void startMent()
+	{
+		ing_ment_cnt = 0;
+		is_menting = true;
+		
+		schedule(schedule_selector(StoryManager::mentAction));
+	}
+	
+	void mentAction();
+	
 	void myInit(int t_touch_priority)
 	{
+		is_delaying = false;
+		is_menting = false;
+		end_func = NULL;
 		m_touch_priority = t_touch_priority;
 		
 		setTouchEnabled(true);

@@ -36,7 +36,7 @@ public:
 
 class CountingBMLabel;
 class HeartTime;
-class NewStageInfoView;
+//class NewStageInfoView;
 class StageInfoDown;
 class NewMainFlowScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
@@ -107,7 +107,7 @@ private:
 	
 	map<int, vector<PuzzlePiecePath>> puzzle_piece_path;
 	
-	NewStageInfoView* new_stage_info_view;
+//	NewStageInfoView* new_stage_info_view;
 	
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();
