@@ -938,7 +938,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				t_jack_life = slot_cnt-1;
 
 			int beautystone_id = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1, slot_cnt-t_jack_life);
-			if(beautystone_id > 0)
+			//if(beautystone_id > 0)
 			{
 				int beautystone_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beautystone_id);
 				int beautystone_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beautystone_id);

@@ -22,6 +22,7 @@ void MissileParent::bombCumber( CCObject* target )
 		if(cumber->getChargeParent())
 		{
 			cumber->getChargeParent()->cancelCharge();
+			myGD->communication("Main_hideScreenSideWarning"); // 화면에 빨간 테두리 지우는 함수
 		}
 		//if(target == myGD->getCommunicationNode("CP_getMainCumberPointer"))
 		//{
@@ -177,44 +178,75 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 {
 //CCNode* targetNode, CCPoint initPosition, float initSpeed, int power, bool cancelCasting, bool stiffen)
 	int r = rand() % (myGD->getMainCumberCount());
-	GuidedMissile* gm = GuidedMissile::create(myGD->getMainCumberCCNodeVector()[r], initPosition, 
-																						1.2f, 555, 60,
-																						AttackOption::kCancelCasting | AttackOption::kStiffen);
-	jack_missile_node->addChild(gm);
+	stoneType = StoneType::kStoneType_laser;
+	level = level == 0 ? 1 : level;
+	if(stoneType == StoneType::kStoneType_guided)
+	{
+		string fileName = boost::str(boost::format("me_guide%||.ccbi") % level);
+		GuidedMissile* gm = GuidedMissile::create(myGD->getMainCumberCCNodeVector()[r], initPosition,
+																							fileName,
+																							1.2f, 1, 60,
+																							AttackOption::kCancelCasting | AttackOption::kStiffen | AttackOption::kMonsterSpeedDown 
+																							| AttackOption::kJackSpeedUp
+
+																						 );
+		jack_missile_node->addChild(gm);
+	}
+	else if(stoneType == StoneType::kStoneType_mine)
+	{
+		IntPoint mapPoint;
+		bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
+		if(found == true)
+		{
+			MineAttack* ma = MineAttack::create(initPosition, ip2ccp(mapPoint), 10, 33.f, AttackOption::kNoOption);
+			jack_missile_node->addChild(ma);	
+		}
+	}
+	else if(stoneType == StoneType::kStoneType_laser)
+	{
+		LaserAttack* la = LaserAttack::create(0, 400, 33.f, AttackOption::kNoOption);
+		jack_missile_node->addChild(la);
+	}
+
+	else if(stoneType == StoneType::kStoneType_range)
+	{
+		RangeAttack* ra = RangeAttack::create(initPosition, 50, 500, 33.f, 30, AttackOption::kNoOption);
+		addChild(ra);
+	}
+
+	else if(stoneType == StoneType::kStoneType_global)
+	{
+		for(int i=0; i<=15; i++)
+		{
+			RandomBomb* rb = RandomBomb::create(100, 33.f, AttackOption::kNoOption);
+			addChild(rb);
+		}
+	}
+	else if(stoneType == StoneType::kStoneType_spirit)
+	{
+		IntPoint mapPoint2;
+		bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);
+		if(found2 == true)
+		{
+			string fileName = boost::str(boost::format("me_pet%||.ccbi") % level);
+			SpiritAttack* sa = SpiritAttack::create(initPosition, ip2ccp(mapPoint2), fileName, 50.f, 33.f, 1.2f, 10, AttackOption::kNoOption);
+			jack_missile_node->addChild(sa);	
+		}
+	}
+	else if(stoneType == StoneType::kStoneType_spread)
+	{
+		string fileName = boost::str(boost::format("me_redial%||.ccbi") % level);
+		SpreadMissile* sm = SpreadMissile::create(myGD->getMainCumberVector()[r], initPosition,
+																							fileName,
+																							1.2f, 3.f, 3, AttackOption::kNoOption);
+		jack_missile_node->addChild(sm);
+	}
 	
-	//StraightMissile* sm = StraightMissile::create(initPosition, deg2Rad(45), 2.f, 5, true, true);
-	//jack_missile_node->addChild(sm);
-	
-	//SpreadMissile* sm = SpreadMissile::create(myGD->getMainCumberVector()[r], initPosition,
-																						//1.2f, 3.f, 3, AttackOption::kNoOption);
-	//jack_missile_node->addChild(sm);
 	
 	
-	//IntPoint mapPoint;
-	//bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
-	//if(found == true)
-	//{
-		//MineAttack* ma = MineAttack::create(initPosition, ip2ccp(mapPoint), 10, 33.f, AttackOption::kNoOption);
-		//jack_missile_node->addChild(ma);	
-	//}
 	
 
-	//IntPoint mapPoint2;
-	//bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);
-	//if(found2 == true)
-	//{
-		//SpiritAttack* sa = SpiritAttack::create(initPosition, ip2ccp(mapPoint2), 50.f, 33.f, 1.2f, 10, AttackOption::kNoOption);
-		//jack_missile_node->addChild(sa);	
-	//}
 	
-	//RangeAttack* ra = RangeAttack::create(initPosition, 50, 500, 33.f, 30, AttackOption::kNoOption);
-	//addChild(ra);
-	
-	//for(int i=0; i<=15; i++)
-	//{
-		//RandomBomb* rb = RandomBomb::create(100, 33.f, AttackOption::kNoOption);
-		//addChild(rb);
-	//}
 }
 int MissileParent::getJackMissileCnt()
 {
@@ -290,6 +322,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			t_ccn->startCharge();
 			cb->setChargeParent(t_ccn);
 		}
+		myGD->communication("Main_showScreenSideWarning"); // 화면에 빨간 테두리 만드는 함수
 		myGD->communication("Main_showDetailMessage", warningFileName);
 		myGD->communication("Main_showThumbWarning", startPosition);
 	};

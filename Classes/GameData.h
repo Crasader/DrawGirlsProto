@@ -253,7 +253,7 @@ public:
 	int limited_step_bottom;
 	bool is_setted_jack;
 	bool getEmptyRandomPoint(IntPoint* point, float radius);
-
+	
 private:
 	
 	SetMapType recent_map_type;
@@ -272,6 +272,9 @@ private:
 	void myInit();
 	
 	void setStartMap(SetMapType set_map_type);
+
+
+	CC_SYNTHESIZE(bool, m_jackIsUnbeatable, JackIsUnbeatable);
 };
 
 

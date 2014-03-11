@@ -2923,6 +2923,15 @@ float KSCumberBase::getSpeed()
 {
 	return m_speedRatio * m_speedRatioForStone * m_speed;
 }
+void KSCumberBase::setSpeedRatioForStone(CCNode* stonePointer, float speedRatio)
+{
+	m_slowStonePointer = stonePointer;
+	m_speedRatioForStone = speedRatio;
+}
+CCNode* KSCumberBase::getSlowStonePointer()
+{
+	return m_slowStonePointer;
+}
 template <typename T>
 void FixedSizeDeque<T>::push_back( const T& p )
 {

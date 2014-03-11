@@ -236,6 +236,7 @@ void ChargeNodeLambda::charging()
 			lp.exeTime = currentSecond;
 			lp.exePattern = m_pattern;
 			cb->setLastPattern(lp);
+			myGD->communication("Main_hideScreenSideWarning"); // 화면에 빨간 테두리 지우는 함수
 		}
 	}
 }
@@ -444,6 +445,7 @@ void SpecialChargeNodeLambda::charging()
 			lp.exeTime = currentSecond;
 			lp.exePattern = m_pattern;
 			cb->setLastPattern(lp);
+			myGD->communication("Main_hideScreenSideWarning"); // 화면에 빨간 테두리 지우는 함수
 		}
 	}
 }
@@ -664,6 +666,7 @@ void CrashChargeNodeLambda::charging()
 			lp.exeTime = currentSecond;
 			lp.exePattern = m_pattern;
 			cb->setLastPattern(lp);
+			myGD->communication("Main_hideScreenSideWarning"); // 화면에 빨간 테두리 지우는 함수
 		}
 	}
 }

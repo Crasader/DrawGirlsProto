@@ -271,6 +271,8 @@ public:
 	void aggroExec();
 	void unAggroExec();
 	float getSpeed();
+	void setSpeedRatioForStone(CCNode* stonePointer, float speedRatio);
+	CCNode* getSlowStonePointer();
 public:
 	struct FollowMoving
 	{
@@ -355,6 +357,7 @@ protected:
 	float m_totalHp;
 	float m_speedRatio;
 	float m_speedRatioForStone;
+	CCNode* m_slowStonePointer;
 	bool m_slience;
 	int m_crashCount;
 	int m_aiValue;

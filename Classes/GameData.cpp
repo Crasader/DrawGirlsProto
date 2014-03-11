@@ -462,6 +462,7 @@ void GameData::myInit()
 	mainCumberPoint = new IntPoint();
 	otherTargetPoints = new CCArray(1);
 	jackState = 0; // jackStateNormal
+	m_jackIsUnbeatable = false;
 	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
 //	int speed_tag = kJackBaseSpeedTag_level1;//myDSH->getIntegerForKey(kDSH_Key_jackBaseSpeed);
 //	if(speed_tag == kJackBaseSpeedTag_level2)
