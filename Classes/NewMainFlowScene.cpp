@@ -40,6 +40,7 @@
 #include "BeautyStoneSetting.h"
 #include "PuzzleListShadow.h"
 #include "StoryManager.h"
+#include "GraySprite.h"
 
 CCScene* NewMainFlowScene::scene()
 {
@@ -1221,7 +1222,8 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			{
 				CCSprite* n_buy = CCSprite::create("stage_icon_back.png");
 				
-				CCSprite* n_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				GraySprite* n_stage_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString()));
+				n_stage_img->setGray(true);
 				n_stage_img->setPosition(ccp(n_buy->getContentSize().width/2.f-7, n_buy->getContentSize().height/2.f+1));
 				n_buy->addChild(n_stage_img);
 				
@@ -1233,7 +1235,8 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				n_buy->addChild(n_label);
 				CCSprite* s_buy = CCSprite::create("stage_icon_back.png");
 				
-				CCSprite* s_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				GraySprite* s_stage_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString()));
+				s_stage_img->setGray(true);
 				s_stage_img->setPosition(ccp(s_buy->getContentSize().width/2.f-7, s_buy->getContentSize().height/2.f+1));
 				s_buy->addChild(s_stage_img);
 				
@@ -1259,7 +1262,8 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			{
 				CCSprite* n_buy = CCSprite::create("stage_icon_back.png");
 				
-				CCSprite* n_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				GraySprite* n_stage_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString()));
+				n_stage_img->setGray(true);
 				n_stage_img->setPosition(ccp(n_buy->getContentSize().width/2.f-7, n_buy->getContentSize().height/2.f+1));
 				n_buy->addChild(n_stage_img);
 				
@@ -1271,7 +1275,8 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				n_buy->addChild(n_label);
 				CCSprite* s_buy = CCSprite::create("stage_icon_back.png");
 				
-				CCSprite* s_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
+				GraySprite* s_stage_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString()));
+				s_stage_img->setGray(true);
 				s_stage_img->setPosition(ccp(s_buy->getContentSize().width/2.f-7, s_buy->getContentSize().height/2.f+1));
 				s_buy->addChild(s_stage_img);
 				
