@@ -1267,7 +1267,7 @@ void Jack::stopJack()
 void Jack::startDieEffect( int die_type ) /* after coding */
 {
 	//		return;
-	if(!isDie && !myGD->getIsGameover())
+	if(!isDie && !myGD->getJackIsUnbeatable() && !myGD->getIsGameover())
 	{
 		myGD->communication("UI_writeDie");
 		
