@@ -1292,7 +1292,7 @@ void GameItemManager::showBeautyStone()
 			
 			beauty_stone_list.push_back(t_gia);
 		}
-		else if(create_item == kIC_speedUp)
+		else// if(create_item == kIC_speedUp)
 		{
 			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
 			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
@@ -1300,38 +1300,38 @@ void GameItemManager::showBeautyStone()
 			
 			beauty_stone_list.push_back(t_gisu);
 		}
-		else if(create_item == kIC_fast)
-		{
-			GameItemFast* t_fast = GameItemFast::create(true);
-			t_fast->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-			addChild(t_fast);
-			
-			beauty_stone_list.push_back(t_fast);
-		}
-		else if(create_item == kIC_critical)
-		{
-			GameItemFire* t_fire = GameItemFire::create(true);
-			t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-			addChild(t_fire);
-			
-			beauty_stone_list.push_back(t_fire);
-		}
-		else if(create_item == kIC_subOneDie)
-		{
-			GameItemSubOneDie* t_sod = GameItemSubOneDie::create(true);
-			t_sod->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-			addChild(t_sod);
-			
-			beauty_stone_list.push_back(t_sod);
-		}
-		else if(create_item == kIC_silence)
-		{
-			GameItemSilence* t_silence = GameItemSilence::create(true);
-			t_silence->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-			addChild(t_silence);
-			
-			beauty_stone_list.push_back(t_silence);
-		}
+//		else if(create_item == kIC_fast)
+//		{
+//			GameItemFast* t_fast = GameItemFast::create(true);
+//			t_fast->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+//			addChild(t_fast);
+//			
+//			beauty_stone_list.push_back(t_fast);
+//		}
+//		else if(create_item == kIC_critical)
+//		{
+//			GameItemFire* t_fire = GameItemFire::create(true);
+//			t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+//			addChild(t_fire);
+//			
+//			beauty_stone_list.push_back(t_fire);
+//		}
+//		else if(create_item == kIC_subOneDie)
+//		{
+//			GameItemSubOneDie* t_sod = GameItemSubOneDie::create(true);
+//			t_sod->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+//			addChild(t_sod);
+//			
+//			beauty_stone_list.push_back(t_sod);
+//		}
+//		else if(create_item == kIC_silence)
+//		{
+//			GameItemSilence* t_silence = GameItemSilence::create(true);
+//			t_silence->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+//			addChild(t_silence);
+//			
+//			beauty_stone_list.push_back(t_silence);
+//		}
 	}
 }
 

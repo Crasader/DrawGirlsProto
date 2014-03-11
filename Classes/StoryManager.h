@@ -25,10 +25,14 @@ public:
 		return t_sm;
 	}
 	
+	CCNode* back_node;
+	CCNode* left_node;
+	CCNode* right_node;
+	CCNode* front_node;
+	
 private:
 	
 	int m_touch_priority;
-	CCNode* back_node;
 	CCNode* ment_node;
 	
 	void myInit(int t_touch_priority)
@@ -41,9 +45,21 @@ private:
 		back_node->setPosition(ccp(240,160));
 		addChild(back_node, 1);
 		
+		left_node = CCNode::create();
+		left_node->setPosition(ccp(0,0));
+		addChild(left_node, 2);
+		
+		right_node = CCNode::create();
+		right_node->setPosition(ccp(480,0));
+		addChild(right_node, 2);
+		
+		front_node = CCNode::create();
+		front_node->setPosition(ccp(240,160));
+		addChild(front_node, 3);
+		
 		ment_node = CCNode::create();
 		ment_node->setPosition(ccp(240,160));
-		addChild(ment_node, 2);
+		addChild(ment_node, 4);
 	}
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
