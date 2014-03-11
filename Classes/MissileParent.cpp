@@ -178,68 +178,100 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 {
 //CCNode* targetNode, CCPoint initPosition, float initSpeed, int power, bool cancelCasting, bool stiffen)
 	int r = rand() % (myGD->getMainCumberCount());
-	stoneType = StoneType::kStoneType_laser;
-	level = level == 0 ? 1 : level;
+	//stoneType = StoneType::kStoneType_spread;
+	//level = level == 0 ? 1 : level;
+	int power = grade * 20 + level * 10;
+	AttackOption ao = getAttackOption(stoneType, grade);
 	if(stoneType == StoneType::kStoneType_guided)
 	{
-		string fileName = boost::str(boost::format("me_guide%||.ccbi") % level);
-		GuidedMissile* gm = GuidedMissile::create(myGD->getMainCumberCCNodeVector()[r], initPosition,
-																							fileName,
-																							1.2f, 1, 60,
-																							AttackOption::kCancelCasting | AttackOption::kStiffen | AttackOption::kMonsterSpeedDown 
-																							| AttackOption::kJackSpeedUp
+		for(int i=0; i<missileNumbers; i++)
+		{
+			string fileName = boost::str(boost::format("me_guide%||.ccbi") % level);
+			GuidedMissile* gm = GuidedMissile::create(myGD->getMainCumberCCNodeVector()[r], initPosition,
+																								fileName,
+																								1.2f, power, 30 + 10 * grade,
+																								ao
 
-																						 );
-		jack_missile_node->addChild(gm);
+																							 );
+			jack_missile_node->addChild(gm);
+		}
 	}
 	else if(stoneType == StoneType::kStoneType_mine)
 	{
-		IntPoint mapPoint;
-		bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
-		if(found == true)
+		for(int i=0; i<missileNumbers; i++)
 		{
-			MineAttack* ma = MineAttack::create(initPosition, ip2ccp(mapPoint), 10, 33.f, AttackOption::kNoOption);
-			jack_missile_node->addChild(ma);	
+			IntPoint mapPoint;
+			bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
+			if(found == true)
+			{
+				MineAttack* ma = MineAttack::create(initPosition, ip2ccp(mapPoint), 10 + 3 * grade, power, ao);
+				jack_missile_node->addChild(ma);	
+			}
 		}
 	}
 	else if(stoneType == StoneType::kStoneType_laser)
 	{
-		LaserAttack* la = LaserAttack::create(0, 400, 33.f, AttackOption::kNoOption);
-		jack_missile_node->addChild(la);
+		//LaserAttack* la = LaserAttack::create(0, 400, 33.f, AttackOption::kNoOption);
+		LaserWrapper* lw = LaserWrapper::create(2 + (grade-1), 400 + missileNumbers * 50, 
+																						power, ao);
+		jack_missile_node->addChild(lw);
 	}
 
 	else if(stoneType == StoneType::kStoneType_range)
 	{
-		RangeAttack* ra = RangeAttack::create(initPosition, 50, 500, 33.f, 30, AttackOption::kNoOption);
+		RangeAttack* ra = RangeAttack::create(initPosition, 30 + missileNumbers * 10, 500 + 50 * grade,
+																				 	power, 30, ao);
 		addChild(ra);
 	}
 
 	else if(stoneType == StoneType::kStoneType_global)
 	{
-		for(int i=0; i<=15; i++)
+		for(int i=0; i<=7 + 3 * missileNumbers; i++)
 		{
-			RandomBomb* rb = RandomBomb::create(100, 33.f, AttackOption::kNoOption);
+			RandomBomb* rb = RandomBomb::create(70 + grade * 20, power, ao);
 			addChild(rb);
 		}
 	}
 	else if(stoneType == StoneType::kStoneType_spirit)
 	{
-		IntPoint mapPoint2;
-		bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);
-		if(found2 == true)
+		
+		for(int i=0; i<missileNumbers; i++)
 		{
-			string fileName = boost::str(boost::format("me_pet%||.ccbi") % level);
-			SpiritAttack* sa = SpiritAttack::create(initPosition, ip2ccp(mapPoint2), fileName, 50.f, 33.f, 1.2f, 10, AttackOption::kNoOption);
-			jack_missile_node->addChild(sa);	
+			IntPoint mapPoint2;
+			bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);
+			if(found2 == true)
+			{
+				string fileName = boost::str(boost::format("me_pet%||.ccbi") % level);
+				SpiritAttack* sa = SpiritAttack::create(initPosition, ip2ccp(mapPoint2), fileName, 
+																								30 + grade * 10, power, 1.2f, 20, ao);
+				jack_missile_node->addChild(sa);	
+			}
 		}
 	}
 	else if(stoneType == StoneType::kStoneType_spread)
 	{
-		string fileName = boost::str(boost::format("me_redial%||.ccbi") % level);
-		SpreadMissile* sm = SpreadMissile::create(myGD->getMainCumberVector()[r], initPosition,
-																							fileName,
-																							1.2f, 3.f, 3, AttackOption::kNoOption);
-		jack_missile_node->addChild(sm);
+		for(int i=0; i<missileNumbers; i++)
+		{
+			int adderForGrade = 0;
+			if(grade == 2)
+				adderForGrade = 1;
+			else if(grade == 3)
+				adderForGrade = 3;
+			else if(grade == 4)
+				adderForGrade = 7;
+			else if(grade == 5)
+				adderForGrade = 14;
+			else
+				adderForGrade = 0;
+			string fileName = boost::str(boost::format("me_redial%||.ccbi") % level);
+			addChild(KSIntervalCall::create(20, missileNumbers, [=](int seq){
+				SpreadMissile* sm = SpreadMissile::create(myGD->getMainCumberVector()[r], initPosition,
+																									fileName,
+																									1.2f, power, 4 + adderForGrade, AttackOption::kNoOption);
+				jack_missile_node->addChild(sm);
+
+			}));
+		}
 	}
 	
 	
@@ -247,6 +279,147 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 	
 
 	
+}
+AttackOption MissileParent::getAttackOption(StoneType st, int grade)
+{
+	
+	if(st == StoneType::kStoneType_guided)
+	{
+		switch(grade)
+		{
+			case 1:
+				return AttackOption::kNoOption;
+			case 2:
+				return AttackOption::kGold;
+			case 3:
+				return AttackOption::kCancelCasting;
+			case 4:
+				return AttackOption::kStiffen;
+			case 5:
+				return AttackOption::kPlusScore;
+			default:
+				
+				return AttackOption::kNoOption;
+		}
+	}
+	else if(st == StoneType::kStoneType_spread)
+	{
+		switch(grade)
+		{
+			case 1:
+				return AttackOption::kNoOption;
+			case 2:
+				return AttackOption::kGold;
+			case 3:
+				return AttackOption::kCancelCasting;
+			case 4:
+				return AttackOption::kStiffen;
+			case 5:
+				return AttackOption::kPlusScore;
+			default:
+				
+				return AttackOption::kNoOption;
+		}
+	}
+	else if(st == StoneType::kStoneType_laser)
+	{
+		switch(grade)
+		{
+			case 1:
+				return AttackOption::kNoOption;
+			case 2:
+				return AttackOption::kGold;
+			case 3:
+				return AttackOption::kCancelCasting;
+			case 4:
+				return AttackOption::kUnbeatable;
+			case 5:
+				return AttackOption::kPlusScore;
+			default:
+				
+				return AttackOption::kNoOption;
+		}
+	}
+	else if(st == StoneType::kStoneType_mine)
+	{
+		switch(grade)
+		{
+			case 1:
+				return AttackOption::kNoOption;
+			case 2:
+				return AttackOption::kGold;
+			case 3:
+				return AttackOption::kCancelCasting;
+			case 4:
+				return AttackOption::kMonsterSpeedDown;
+			case 5:
+				return AttackOption::kPlusScore;
+			default:
+				
+				return AttackOption::kNoOption;
+		}
+	}
+	else if(st == StoneType::kStoneType_spirit)
+	{
+		switch(grade)
+		{
+			case 1:
+				return AttackOption::kNoOption;
+			case 2:
+				return AttackOption::kGold;
+			case 3:
+				return AttackOption::kCancelCasting;
+			case 4:
+				return AttackOption::kJackSpeedUp;
+			case 5:
+				return AttackOption::kPlusScore;
+			default:
+				
+				return AttackOption::kNoOption;
+		}
+	}
+
+
+	else if(st == StoneType::kStoneType_range)
+	{
+		switch(grade)
+		{
+			case 1:
+				return AttackOption::kNoOption;
+			case 2:
+				return AttackOption::kGold;
+			case 3:
+				return AttackOption::kCancelCasting;
+			case 4:
+				return AttackOption::kJackSpeedUp;
+			case 5:
+				return AttackOption::kPlusScore;
+			default:
+				
+				return AttackOption::kNoOption;
+		}
+	}
+
+	else if(st == StoneType::kStoneType_global)
+	{
+		switch(grade)
+		{
+			case 1:
+				return AttackOption::kNoOption;
+			case 2:
+				return AttackOption::kGold;
+			case 3:
+				return AttackOption::kCancelCasting;
+			case 4:
+				return AttackOption::kPoisonedNiddle;
+			case 5:
+				return AttackOption::kPlusScore;
+			default:
+				
+				return AttackOption::kNoOption;
+		}
+	}
+	return AttackOption::kNoOption;
 }
 int MissileParent::getJackMissileCnt()
 {
