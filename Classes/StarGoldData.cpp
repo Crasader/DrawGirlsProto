@@ -271,6 +271,9 @@ void StarGoldData::setKeepGold( int t_gold )
 
 void StarGoldData::setGameStart()
 {
+	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
+		myDSH->setIntegerForKey(kDSH_Key_endPlayedStage, mySD->getSilType());
+	
 	is_using_friend_card = false;
 	
 	is_write_replay = true;
@@ -363,6 +366,18 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 	score = t_score + t_score*(stage_grade-1.f)*0.5f + t_score*(1.f-(t_use_time*1.f)/t_total_time);
 
 	game_time = t_game_time;
+	
+	int before_clear_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
+	int recent_clear_rank;
+	if(percentage == 1.f)
+		recent_clear_rank = 3;
+	else if(percentage >= 0.95f)
+		recent_clear_rank = 2;
+	else
+		recent_clear_rank = 1;
+	
+	if(before_clear_rank < recent_clear_rank)
+		myDSH->setIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType(), recent_clear_rank);
 	
 	if(!myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType()))
 	{

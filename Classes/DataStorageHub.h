@@ -36,6 +36,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_beautyStoneRank_int1, // 1~selfBeautyStoneID 의 뷰티스톤 rank
 	kDSH_Key_beautyStoneLevel_int1, // 1~selfBeautyStoneID 의 뷰티스톤 level
 	
+	kDSH_Key_endPlayedStage,
+	kDSH_Key_stageClearRank_int1,
+	
 	kDSH_Key_cardLevel_int1,
 	kDSH_Key_cardMaxDurability_int1,
 	kDSH_Key_cardPassive_int1,
@@ -161,6 +164,7 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_beautyStone,
 	kSaveUserData_Key_cardsInfo,
 	kSaveUserData_Key_highScore,
+	kSaveUserData_Key_stageRank,
 	kSaveUserData_Key_selectedCard,
 	kSaveUserData_Key_openPuzzle,
 	kSaveUserData_Key_haveTicket,

@@ -1801,6 +1801,8 @@ void PlayUI::endGame (bool is_show_reason)
 	{
 		if(!is_show_reason)
 		{
+			keep_percentage = getPercentage();
+			
 			if(jack_life > 0)
 			{
 				CCDelayTime* t_delay = CCDelayTime::create(4.f);

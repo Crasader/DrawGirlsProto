@@ -239,6 +239,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_selectedPuzzleNumber)				return_value = "spn";
 	else if(t_name == kDSH_Key_lastSelectedStageForPuzzle_int1)		return_value = "lssfp%d";
 	
+	else if(t_name == kDSH_Key_endPlayedStage)						return_value = "eps";
+	else if(t_name == kDSH_Key_stageClearRank_int1)					return_value = "scr%d";
 	
 	else if(t_name == kDSH_Key_selectedCharacter_int1_weaponSlot_int2)		return_value = "sc%dws%d"; // 0~(n-1)번째 캐릭터의 1~n번째 슬롯에 장착된 뷰티스톤의 id
 	else if(t_name == kDSH_Key_selfBeautyStoneID)					return_value = "sbsid"; // 1~n 의 뷰티스톤의 id
@@ -511,6 +513,11 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 	
 	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17, false);//data[getKey(kDSH_Key_tutorial_flowStep)].asInt(), false);
 	
+	int end_played_stage = data[getKey(kDSH_Key_endPlayedStage)].asInt();
+	setIntegerForKey(kDSH_Key_endPlayedStage, end_played_stage, false);
+	for(int i=1;i<=end_played_stage;i++)
+		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, data[getKey(kDSH_Key_stageClearRank_int1)][i].asInt(), false);
+	
 	fFlush();
 }
 void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_key)
@@ -655,6 +662,13 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	{
 		data[getKey(kDSH_Key_tutorial_flowStep)] = getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	}
+	else if(t_key == kSaveUserData_Key_stageRank)
+	{
+		int end_played_stage = getIntegerForKey(kDSH_Key_endPlayedStage);
+		data[getKey(kDSH_Key_endPlayedStage)] = end_played_stage;
+		for(int i=1;i<=end_played_stage;i++)
+			data[getKey(kDSH_Key_stageClearRank_int1)][i] = getIntegerForKey(kDSH_Key_stageClearRank_int1, i);
+	}
 }
 void DataStorageHub::saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector)
 {
@@ -795,6 +809,12 @@ void DataStorageHub::resetDSH ()
 	}
 	
 	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
+	
+	int end_played_stage = getIntegerForKey(kDSH_Key_endPlayedStage);
+	for(int i=1;i<=end_played_stage;i++)
+		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, 0, false);
+	setIntegerForKey(kDSH_Key_endPlayedStage, 0);
+	
 	
 	fFlush();
 }

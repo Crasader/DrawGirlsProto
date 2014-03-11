@@ -1264,11 +1264,24 @@ void TitleRenewalScene::successDownloadAction()
 			CCImage *img = new CCImage;
 			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + puzzle_download_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
 			
-			CCImage *st_w = new CCImage;
-			st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
+			CCImage *st_w, *st_h;
 			
-			CCImage *st_h = new CCImage;
-			st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
+			if(puzzle_download_list[j].key == "face")
+			{
+				st_w = new CCImage;
+				st_w->initWithImageFile("stage_scissor.png"); //피스조각(가로형)을 불러옵니다.
+				
+				st_h = new CCImage;
+				st_h->initWithImageFile("stage_scissor.png"); //피스조각(세로형)을 불러옵니다.
+			}
+			else
+			{
+				st_w = new CCImage;
+				st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
+				
+				st_h = new CCImage;
+				st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
+			}
 			
 			
 			int puzzleCol=6,puzzleRow=4;
