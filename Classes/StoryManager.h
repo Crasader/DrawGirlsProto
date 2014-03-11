@@ -28,13 +28,30 @@ public:
 private:
 	
 	int m_touch_priority;
+	CCNode* back_node;
+	CCNode* ment_node;
 	
 	void myInit(int t_touch_priority)
 	{
 		m_touch_priority = t_touch_priority;
 		
 		setTouchEnabled(true);
+		
+		back_node = CCNode::create();
+		back_node->setPosition(ccp(240,160));
+		addChild(back_node, 1);
+		
+		ment_node = CCNode::create();
+		ment_node->setPosition(ccp(240,160));
+		addChild(ment_node, 2);
 	}
+	
+	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
+	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
+    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent);
+	
+	virtual void registerWithTouchDispatcher();
 };
 
 #endif /* defined(__DGproto__StoryManager__) */

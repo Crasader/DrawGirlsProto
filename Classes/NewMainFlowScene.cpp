@@ -416,23 +416,23 @@ void NewMainFlowScene::hideClearPopup()
 		}
 	}
 	
-	if(clear_is_empty_piece)
-		showGetPuzzle();
-	else
-	{
-		if(clear_is_empty_star)
-			showGetStar();
-		else
-		{
-			if(clear_is_stage_unlock)
-				showUnlockEffect();
-			else
-			{
+//	if(clear_is_empty_piece)
+//		showGetPuzzle();
+//	else
+//	{
+//		if(clear_is_empty_star)
+//			showGetStar();
+//		else
+//		{
+//			if(clear_is_stage_unlock)
+//				showUnlockEffect();
+//			else
+//			{
 				is_menu_enable = true;
 				puzzle_table->setTouchEnabled(true);
-			}
-		}
-	}
+//			}
+//		}
+//	}
 }
 
 void NewMainFlowScene::showGetPuzzle()
