@@ -156,75 +156,72 @@ bool FailPopup::init()
 	hspConnector::get()->command("setStageScore",p,NULL);
 	
 	
-	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	
-	if(selected_card_number > 0)
-	{
-		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) <= 0)
-		{
-			// 소멸
-			
-			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",selected_card_number)->getCString());
-			CardCase* cardCase = CardCase::create(selected_card_number);
-			card->addChild(cardCase);
-			
-			RemoveCardAnimation* b = RemoveCardAnimation::create(card,-210);
-			
-			b->setSkipFunc([this](){
-				CCLog("skip Func");
-			});
-			b->setRepairFunc([=](){
-				CCLog("repair Func");
-				
-				if(mySGD->getStar() >= mySGD->getCardDurabilityUpFee())
-				{
-					mySGD->setStar(mySGD->getStar() - mySGD->getCardDurabilityUpFee());
-					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, selected_card_number));
-					
-					myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
-					
-					//복구하기
-					b->repair();
-				}
-				else
-				{
-					b->skip();
-				}
-			});
-			b->setCloseFunc([=](){
-				CCLog("close Func");
-				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) <= 0)
-					myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
-				this->endDecreaseCardDuration();
-			});
-			
-			b->start();
-			addChild(b, kZ_FP_popup);
-		}
-		else
-		{
-			// 내구 하락
-			int cardNo = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			
-			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",cardNo)->getCString());
-			CardCase* cardCase = CardCase::create(cardNo);
-			card->addChild(cardCase);
-			
-			DownCardAnimation* b = DownCardAnimation::create(card,-210);
-			b->setCloseFunc([this](){
-				this->endDecreaseCardDuration();
-			});
-			b->start();
-			addChild(b, kZ_FP_popup);
-		}
-		
-//		DecreaseCardDurabilityPopup* t_popup = DecreaseCardDurabilityPopup::create(NSDS_GI(kSDS_CI_int1_stage_i, selected_card_number), NSDS_GI(kSDS_CI_int1_grade_i, selected_card_number), this, callfunc_selector(FailPopup::endDecreaseCardDuration));
-//		addChild(t_popup, kZ_FP_popup);
-	}
-	else
-	{
+//	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+//	
+//	if(selected_card_number > 0)
+//	{
+//		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) <= 0)
+//		{
+//			// 소멸
+//			
+//			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",selected_card_number)->getCString());
+//			CardCase* cardCase = CardCase::create(selected_card_number);
+//			card->addChild(cardCase);
+//			
+//			RemoveCardAnimation* b = RemoveCardAnimation::create(card,-210);
+//			
+//			b->setSkipFunc([this](){
+//				CCLog("skip Func");
+//			});
+//			b->setRepairFunc([=](){
+//				CCLog("repair Func");
+//				
+//				if(mySGD->getStar() >= mySGD->getCardDurabilityUpFee())
+//				{
+//					mySGD->setStar(mySGD->getStar() - mySGD->getCardDurabilityUpFee());
+//					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, selected_card_number));
+//					
+//					myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
+//					
+//					//복구하기
+//					b->repair();
+//				}
+//				else
+//				{
+//					b->skip();
+//				}
+//			});
+//			b->setCloseFunc([=](){
+//				CCLog("close Func");
+//				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) <= 0)
+//					myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+//				this->endDecreaseCardDuration();
+//			});
+//			
+//			b->start();
+//			addChild(b, kZ_FP_popup);
+//		}
+//		else
+//		{
+//			// 내구 하락
+//			int cardNo = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+//			
+//			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",cardNo)->getCString());
+//			CardCase* cardCase = CardCase::create(cardNo);
+//			card->addChild(cardCase);
+//			
+//			DownCardAnimation* b = DownCardAnimation::create(card,-210);
+//			b->setCloseFunc([this](){
+//				this->endDecreaseCardDuration();
+//			});
+//			b->start();
+//			addChild(b, kZ_FP_popup);
+//		}
+//	}
+//	else
+//	{
 		this->endDecreaseCardDuration();
-	}
+//	}
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;

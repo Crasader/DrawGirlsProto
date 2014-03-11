@@ -375,9 +375,9 @@ bool NewMainFlowScene::init()
 	
 	setTable();
 	
-	new_stage_info_view = NewStageInfoView::create(-150, std::bind(&NewMainFlowScene::changeButtonChallenge, this, std::placeholders::_1, std::placeholders::_2));
-	addChild(new_stage_info_view, kNewMainFlowZorder_right);
-	new_stage_info_view->setVisible(false);
+//	new_stage_info_view = NewStageInfoView::create(-150, std::bind(&NewMainFlowScene::changeButtonChallenge, this, std::placeholders::_1, std::placeholders::_2));
+//	addChild(new_stage_info_view, kNewMainFlowZorder_right);
+//	new_stage_info_view->setVisible(false);
 	
 	pieceAction(selected_stage_number);
 	
@@ -1828,7 +1828,7 @@ void NewMainFlowScene::pieceAction(int t_stage_number)
 {
 	CCLog("pieceAction : %d", t_stage_number);
 	
-	new_stage_info_view->setClickedStage(t_stage_number);
+//	new_stage_info_view->setClickedStage(t_stage_number);
 	
 	changeButtonChallenge(false, t_stage_number);
 	
@@ -1905,12 +1905,12 @@ void NewMainFlowScene::changeButtonChallenge(bool t_b, int t_stage)
 void NewMainFlowScene::buyPieceAction(int t_stage_number)
 {
 	CCLog("buyPieceAction : %d", t_stage_number);
-	new_stage_info_view->setClickedStage(t_stage_number);
+//	new_stage_info_view->setClickedStage(t_stage_number);
 }
 void NewMainFlowScene::lockPieceAction(int t_stage_number)
 {
 	CCLog("lockPieceAction : %d", t_stage_number);
-	new_stage_info_view->setClickedStage(t_stage_number);
+//	new_stage_info_view->setClickedStage(t_stage_number);
 }
 
 //void MainFlowScene::endUnlockAnimation()
@@ -1929,7 +1929,7 @@ CCSize NewMainFlowScene::cellSizeForTable(CCTableView *table)
 }
 unsigned int NewMainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
-	return NSDS_GI(kSDS_GI_puzzleListCount_i)+1;
+	return NSDS_GI(kSDS_GI_puzzleListCount_i);//+1;
 }
 
 
@@ -2113,11 +2113,11 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 	}
 	else if(tag == kNewMainFlowMenuTag_ready)
 	{
-		if(new_stage_info_view->getSelectedIdx() != -1)
-		{
-			RankFriendInfo challenge_info = new_stage_info_view->getSelectedIdxRankFriendInfo();
-			mySGD->setMeChallengeTarget(challenge_info.user_id, challenge_info.nickname, challenge_info.score, challenge_info.img_url);
-		}
+//		if(new_stage_info_view->getSelectedIdx() != -1)
+//		{
+//			RankFriendInfo challenge_info = new_stage_info_view->getSelectedIdxRankFriendInfo();
+//			mySGD->setMeChallengeTarget(challenge_info.user_id, challenge_info.nickname, challenge_info.score, challenge_info.img_url);
+//		}
 		
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, selected_puzzle_number);
 		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, selected_puzzle_number, selected_stage_number);
