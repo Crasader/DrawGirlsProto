@@ -38,6 +38,8 @@ public:
 private:
 	
 	bool is_menting;
+	int touch_count;
+	bool is_boosting;
 	function<void(void)> end_func;
 	string recent_ment;
 	CCLabelTTF* ment_label;
@@ -46,11 +48,12 @@ private:
 	CCNode* ment_node;
 	
 	int ing_ment_cnt;
+	int ment_recent_length;
 	void startMent()
 	{
 		ing_ment_cnt = 0;
 		is_menting = true;
-		
+		ment_recent_length = 0;
 		schedule(schedule_selector(StoryManager::mentAction));
 	}
 	
@@ -58,6 +61,8 @@ private:
 	
 	void myInit(int t_touch_priority)
 	{
+		touch_count = 0;
+		is_boosting = false;
 		is_delaying = false;
 		is_menting = false;
 		end_func = NULL;

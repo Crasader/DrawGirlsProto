@@ -56,17 +56,24 @@ void StoryManager::mentAction()
 {
 	ing_ment_cnt++;
 	
-	if(ing_ment_cnt%6 == 0)
+	int frame_value;
+	if(is_boosting)
+		frame_value = 2;
+	else
+		frame_value = 6;
+	
+	if(ing_ment_cnt%frame_value == 0)
 	{
+		ment_recent_length++;
 		basic_string<wchar_t> result;
 		utf8::utf8to16(recent_ment.begin(), recent_ment.end(), back_inserter(result));
 		int ment_length = result.length();
-		result = result.substr(0, ing_ment_cnt/6);
+		result = result.substr(0, ment_recent_length);
 		string conver;
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
 		ment_label->setString(conver.c_str());
 		
-		if(ing_ment_cnt/6 == ment_length)
+		if(ment_recent_length >= ment_length)
 		{
 			unschedule(schedule_selector(StoryManager::mentAction));
 			is_menting = false;
@@ -77,6 +84,8 @@ void StoryManager::mentAction()
 
 bool StoryManager::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
+	touch_count++;
+	is_boosting = true;
 	if(!is_menting && !is_delaying)
 		end_func();
 	
@@ -90,12 +99,22 @@ void StoryManager::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
 
 void StoryManager::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 {
-	
+	touch_count--;
+	if(touch_count <= 0)
+	{
+		touch_count = 0;
+		is_boosting = false;
+	}
 }
 
 void StoryManager::ccTouchCancelled( CCTouch *pTouch, CCEvent *pEvent )
 {
-	
+	touch_count--;
+	if(touch_count <= 0)
+	{
+		touch_count = 0;
+		is_boosting = false;
+	}
 }
 
 void StoryManager::registerWithTouchDispatcher()

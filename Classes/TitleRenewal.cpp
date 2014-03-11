@@ -17,7 +17,7 @@
 #include "TutorialFlowStep.h"
 #include "CommonButton.h"
 #include "NewMainFlowScene.h"
-#include "StoryManager.h"
+#include "StoryView.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -61,64 +61,7 @@ bool TitleRenewalScene::init()
 	state_label->setColor(ccBLACK);
 	state_label->setPosition(ccp(240,130));
 	addChild(state_label);
-	
-//	StoryManager* t_sm = StoryManager::create(-200);
-//	addChild(t_sm);
-//	
-//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-//	if(screen_scale_x < 1.f)
-//		screen_scale_x = 1.f;
-//	
-//	CCSprite* gray = CCSprite::create("back_gray.png");
-//	gray->setOpacity(0);
-//	gray->setPosition(ccp(0,0));
-//	gray->setScaleX(screen_scale_x);
-//	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
-//	gray->runAction(CCFadeTo::create(0.5f, 255));
-//	t_sm->back_node->addChild(gray);
-//	
-//	CCSprite* ellebere = CCSprite::create("talk_char_princess.png");
-//	ellebere->setAnchorPoint(ccp(0.3f, 0));
-//	ellebere->setPosition(ccp(-100,0));
-//	ellebere->runAction(CCMoveTo::create(0.5f, ccp(0,0)));
-//	t_sm->left_node->addChild(ellebere);
-//	
-//	CCSprite* kei = CCSprite::create("talk_char_hero.png");
-//	kei->setAnchorPoint(ccp(0.8f,0));
-//	kei->setFlipX(true);
-//	kei->setPosition(ccp(100,0));
-//	kei->setVisible(false);
-//	t_sm->right_node->addChild(kei);
-//	
-//	CCSprite* snow = CCSprite::create("talk_char_dwarf.png");
-//	snow->setAnchorPoint(ccp(0.2f,0));
-//	snow->setPosition(ccp(-100,0));
-//	snow->setVisible(false);
-//	t_sm->left_node->addChild(snow);
-//	
-//	t_sm->addMent(true, "엘레베르", "talk_nametag_red.png", "이봐.. 일어나.. 일어나보라구..", [=]()
-//				  {
-//					  ellebere->runAction(CCScaleTo::create(0.2f, 0.7f));
-//					  kei->setVisible(true);
-//					  kei->runAction(CCMoveTo::create(0.5f, ccp(0,0)));
-//					  
-//					  t_sm->addMent(false, "케이", "talk_nametag_green.png", "음냐... 음.. 누.. 누구?", [=]()
-//									{
-//										kei->runAction(CCScaleTo::create(0.2f, 0.7f));
-//										ellebere->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(-100,0)), CCHide::create()));
-//										
-//										snow->setVisible(true);
-//										snow->runAction(CCMoveTo::create(0.5f, ccp(0,0)));
-//										
-//										
-//										t_sm->addMent(true, "스노우", "talk_nametag_red.png", "이제서야 깨어났군!!\n당신때문에 우리엄마가 마녀에게 납치당해버렸잖아!!", [=]()
-//													  {
-//														  t_sm->removeFromParent();
-//													  });
-//									});
-//				  });
-	
+		
 	Json::Value param;
 	param["ManualLogin"] = true;
 
@@ -1144,10 +1087,15 @@ void TitleRenewalScene::endingAction()
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	
-	CCDelayTime* t_delay = CCDelayTime::create(0.2f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-	runAction(t_seq);
+	StoryView* t_sv = StoryView::create();
+	t_sv->setFunc([=]()
+				  {
+					  CCDelayTime* t_delay = CCDelayTime::create(2.f);
+					  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
+					  CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+					  runAction(t_seq);
+				  });
+	addChild(t_sv);
 }
 
 void TitleRenewalScene::changeScene()
