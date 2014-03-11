@@ -1282,86 +1282,54 @@ void GameItemManager::addItem()
 
 void GameItemManager::showBeautyStone()
 {
-	for(int i=0;i<3;i++)
-	{
-		int random_value = rand()%creatable_list.size();
-		ITEM_CODE create_item = creatable_list[random_value];
-		
-		if(create_item == kIC_attack)
-		{
-			GameItemAttack* t_gia = GameItemAttack::create(true);
-			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-			addChild(t_gia);
-			
-			beauty_stone_list.push_back(t_gia);
-		}
-		else// if(create_item == kIC_speedUp)
-		{
-			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
-			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-			addChild(t_gisu);
-			
-			beauty_stone_list.push_back(t_gisu);
-		}
-//		else if(create_item == kIC_fast)
+//	for(int i=0;i<3;i++)
+//	{
+//		int random_value = rand()%creatable_list.size();
+//		ITEM_CODE create_item = creatable_list[random_value];
+//		
+//		if(create_item == kIC_attack)
 //		{
-//			GameItemFast* t_fast = GameItemFast::create(true);
-//			t_fast->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-//			addChild(t_fast);
+//			GameItemAttack* t_gia = GameItemAttack::create(true);
+//			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+//			addChild(t_gia);
 //			
-//			beauty_stone_list.push_back(t_fast);
+//			beauty_stone_list.push_back(t_gia);
 //		}
-//		else if(create_item == kIC_critical)
+//		else// if(create_item == kIC_speedUp)
 //		{
-//			GameItemFire* t_fire = GameItemFire::create(true);
-//			t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-//			addChild(t_fire);
+//			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
+//			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+//			addChild(t_gisu);
 //			
-//			beauty_stone_list.push_back(t_fire);
+//			beauty_stone_list.push_back(t_gisu);
 //		}
-//		else if(create_item == kIC_subOneDie)
-//		{
-//			GameItemSubOneDie* t_sod = GameItemSubOneDie::create(true);
-//			t_sod->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-//			addChild(t_sod);
-//			
-//			beauty_stone_list.push_back(t_sod);
-//		}
-//		else if(create_item == kIC_silence)
-//		{
-//			GameItemSilence* t_silence = GameItemSilence::create(true);
-//			t_silence->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-//			addChild(t_silence);
-//			
-//			beauty_stone_list.push_back(t_silence);
-//		}
-	}
+//	}
 }
 
 void GameItemManager::removeBeautyStone()
 {
-	while(!beauty_stone_list.empty())
-	{
-		CCNode* t_node = beauty_stone_list.back();
-		beauty_stone_list.pop_back();
-		
-		bool is_found = false;
-		CCArray* child_array = getChildren();
-		for(int i=0;i<child_array->count() && !is_found;i++)
-		{
-			CCNode* t_child = (CCNode*)child_array->objectAtIndex(i);
-			if(t_node == t_child)
-				is_found = true;
-		}
-		
-		if(is_found)
-		{
-			CCDelayTime* t_delay = CCDelayTime::create(0.1f);
-			CCCallFunc* t_call = CCCallFunc::create(t_node, callfunc_selector(CCNode::removeFromParent));
-			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-			t_node->runAction(t_seq);
-		}
-	}
+//	while(!beauty_stone_list.empty())
+//	{
+//		CCNode* t_node = beauty_stone_list.back();
+//		beauty_stone_list.pop_back();
+//		
+//		bool is_found = false;
+//		CCArray* child_array = getChildren();
+//		for(int i=0;i<child_array->count() && !is_found;i++)
+//		{
+//			CCNode* t_child = (CCNode*)child_array->objectAtIndex(i);
+//			if(t_node == t_child)
+//				is_found = true;
+//		}
+//		
+//		if(is_found)
+//		{
+//			CCDelayTime* t_delay = CCDelayTime::create(0.1f);
+//			CCCallFunc* t_call = CCCallFunc::create(t_node, callfunc_selector(CCNode::removeFromParent));
+//			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//			t_node->runAction(t_seq);
+//		}
+//	}
 }
 
 void GameItemManager::showTakeItemEffect(CCPoint t_p)
