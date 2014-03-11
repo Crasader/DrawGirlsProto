@@ -375,6 +375,27 @@ public:
 	{
 		// 옵션에 대해서 수행함.
 		
+		CCPoint cumberPosition = cumber->getPosition();
+		if(m_option & AttackOption::kPoisonedNiddle)
+		{
+			getParent()->addChild(PoisonedNiddle::create(cumber, 500, 20));
+			// 특정 간격으로 데미지를 깎는다. 부가 기능은  ㄴ ㄴ해.
+		}
+		if((m_option & AttackOption::kGold))
+		{
+			FeverCoin* t_fc = FeverCoin::create(ccp2ip(cumberPosition), nullptr, nullptr);
+			CCLog("%x getParent", this);
+			getParent()->addChild(t_fc, 5);
+			CCLog("%x %d", this, __LINE__);
+			t_fc->startRemove();
+			CCLog("%x %d", this, __LINE__);
+			mySGD->setGold(mySGD->getGold() + 1);
+		}
+		if(m_option & AttackOption::kMonsterSpeedDown)
+		{
+			// 몬스터 속도 하락시킴. n 초간 p% 감소하는 형태.
+			getParent()->addChild(MonsterSpeedDownZone::create(cumberPosition, 100, 500, 5));
+		}
 		// directionAngle : Degree 단위.
 		// 피격에니메이션.
 		myGD->communication("MP_explosion", damagePosition, ccc4f(0, 0, 0, 0), 0.f);
@@ -382,7 +403,6 @@ public:
 		myGD->communication("VS_setLight");
 
 		// 캐스팅 캔슬.
-
 		if(m_option & AttackOption::kCancelCasting)
 		{
 			myGD->communication("MP_bombCumber", (CCObject*)cumber); // with startMoving
@@ -403,28 +423,15 @@ public:
 		{
 			addScore *= 1.1f;
 		}
+		CCLog("%x %d", this, __LINE__);
 		myGD->communication("UI_addScore", addScore);
+		CCLog("%x %d", this, __LINE__);
 		myGD->communication("UI_setComboCnt", combo_cnt);
+		CCLog("%x %d", this, __LINE__);
 		myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
-
+		CCLog("%x %d", this, __LINE__);
 		myGD->communication("Main_startShake", 0.f);
-		if((m_option & AttackOption::kGold))
-		{
-			FeverCoin* t_fc = FeverCoin::create(ccp2ip(cumber->getPosition()), nullptr, nullptr);
-			getParent()->addChild(t_fc, 5);
-			t_fc->startRemove();
-			mySGD->setGold(mySGD->getGold() + 1);
-		}
-		if(m_option & AttackOption::kMonsterSpeedDown)
-		{
-			// 몬스터 속도 하락시킴. n 초간 p% 감소하는 형태.
-			getParent()->addChild(MonsterSpeedDownZone::create(cumber->getPosition(), 100, 500, 5));
-		}
-		if(m_option & AttackOption::kPoisonedNiddle)
-		{
-			getParent()->addChild(PoisonedNiddle::create(cumber, 500, 20));
-			// 특정 간격으로 데미지를 깎는다. 부가 기능은  ㄴ ㄴ해.
-		}
+		CCLog("%x %d", this, __LINE__);
 	}
 protected:
 	AttackOption m_option;
@@ -1108,6 +1115,10 @@ public:
 		obj->autorelease();
 		return obj;
 	}
+	virtual ~RangeAttack()
+	{
+		CCLog("~RangeAttack");
+	}
 	bool init(CCPoint initPosition, float radius, int durationFrame, int power, int jiggleInterval, AttackOption ao)
 	{
 		StoneAttack::init();
@@ -1115,6 +1126,7 @@ public:
 		m_radius = radius;
 		m_durationFrame = durationFrame;
 		m_power = power;
+		m_power = 1;
 		m_initJiggleInterval = jiggleInterval;
 		m_jiggleInterval = 0;
 		m_option = ao;
@@ -1129,17 +1141,20 @@ public:
 	}
 	void update(float dt)
 	{
+		CCLog("%x %d", this, __LINE__);
 		m_jiggleInterval = MAX(0, m_jiggleInterval - 1);
 		m_durationFrame--;
 		if(m_durationFrame <= 0)
 		{
 			removeFromParent();
+			CCLog("%x die!!", this);
 			return;
 		}
-
+		CCLog("%x %d", this, __LINE__);
 		
 		if(m_jiggleInterval == 0)
 		{
+			CCLog("%x %d", this, __LINE__);
 			m_jiggleInterval = m_initJiggleInterval;
 			// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
 			std::vector<KSCumberBase*> nearMonsters;
@@ -1161,7 +1176,8 @@ public:
 					nearMonsters.push_back(iter);
 				}
 			}	
-
+			
+			CCLog("%x %d", this, __LINE__);
 			for(auto iter : nearMonsters)
 			{
 				CCPoint effectPosition = iter->getPosition();
@@ -1172,7 +1188,9 @@ public:
 				executeOption(dynamic_cast<KSCumberBase*>(iter), damage, 0.f, effectPosition);
 				//removeFromParentAndCleanup(true);
 			}
-		}	
+			CCLog("%x %d", this, __LINE__);
+		}
+		CCLog("%x %d", this, __LINE__);
 	}
 protected:
 	float m_radius;
