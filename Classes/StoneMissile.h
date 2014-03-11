@@ -616,7 +616,7 @@ public:
 		{
 			CCPoint targetPosition = iter->getPosition();
 			float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-			if(distance < 2)
+			if(distance < 10)
 			{
 				minDistance = distance;
 				minDistanceCumber = iter;
@@ -630,7 +630,7 @@ public:
 			{
 				CCPoint targetPosition = iter->getPosition();
 				float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-				if(distance < 2)
+				if(distance < 10)
 				{
 					minDistance = distance;
 					minDistanceCumber = iter;
@@ -1204,49 +1204,54 @@ public:
 		CCPoint randomPosition = ip2ccp(IntPoint(ks19937::getIntValue(mapLoopRange::mapWidthInnerBegin, mapLoopRange::mapWidthInnerEnd - 1),
 																						 ks19937::getIntValue(mapLoopRange::mapHeightInnerBegin, mapLoopRange::mapHeightInnerEnd - 1)));
 
-		CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "fx_bossbomb.ccbi").first;
-		
-		spr->setPosition(randomPosition);
-		spr->setScale(1.f);
-		spr->setOpacity(100);
-		addChild(spr);
-		m_rangeSprite = spr;
+		CCPoint initPosition = randomPosition + ccp(0, 300);
+		CCSprite* arrow = KS::loadCCBI<CCSprite*>(this, "me_allattack_arrow.ccbi").first;
+		addChild(arrow);
+		addChild(KSGradualValue<CCPoint>::create(initPosition, randomPosition, 1.f,
+																						 [=](CCPoint t){
+																							 arrow->setPosition(t);
+																						 },
+																						 [=](CCPoint t){
+																							 arrow->removeFromParent();
+																							 CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "me_allattack_bomb.ccbi").first;
+
+																							 spr->setPosition(t);
+																							 spr->setScale(1.f);
+																							 spr->setOpacity(100);
+																							 addChild(spr);
+																							 m_rangeSprite = spr;
+																							 std::vector<KSCumberBase*> nearMonsters;
+																							 for(auto iter : myGD->getMainCumberVector()) {
+																								 CCPoint targetPosition = iter->getPosition();
+																								 float distance = ccpLength(targetPosition - m_rangeSprite->getPosition());
+																								 if(distance < m_radius) {
+																									 nearMonsters.push_back(iter);
+																								 }
+																							 }	
+																							 for(auto iter : myGD->getSubCumberVector()) {
+																								 CCPoint targetPosition = iter->getPosition();
+																								 float distance = ccpLength(targetPosition - m_rangeSprite->getPosition());
+																								 if(distance < m_radius) {
+																									 nearMonsters.push_back(iter);
+																								 }
+																							 }	
+
+																							 for(auto iter : nearMonsters) {
+																								 CCPoint effectPosition = iter->getPosition();
+																								 effectPosition.x += rand()%21 - 10;
+																								 effectPosition.y += rand()%21 - 10;
+
+																								 float damage = m_power;
+																								 executeOption(dynamic_cast<KSCumberBase*>(iter), damage, 0.f, effectPosition);
+																								 //removeFromParentAndCleanup(true);
+																							 }
+																							 addChild(KSTimer::create(1.f, [=]() {
+																								 removeFromParent();
+																							 }));
+																						 }
+		));
 
 		
-		std::vector<KSCumberBase*> nearMonsters;
-		for(auto iter : myGD->getMainCumberVector())
-		{
-			CCPoint targetPosition = iter->getPosition();
-			float distance = ccpLength(targetPosition - m_rangeSprite->getPosition());
-			if(distance < m_radius)
-			{
-				nearMonsters.push_back(iter);
-			}
-		}	
-		for(auto iter : myGD->getSubCumberVector())
-		{
-			CCPoint targetPosition = iter->getPosition();
-			float distance = ccpLength(targetPosition - m_rangeSprite->getPosition());
-			if(distance < m_radius)
-			{
-				nearMonsters.push_back(iter);
-			}
-		}	
-
-		for(auto iter : nearMonsters)
-		{
-			CCPoint effectPosition = iter->getPosition();
-			effectPosition.x += rand()%21 - 10;
-			effectPosition.y += rand()%21 - 10;
-
-			float damage = m_power;
-			executeOption(dynamic_cast<KSCumberBase*>(iter), damage, 0.f, effectPosition);
-			//removeFromParentAndCleanup(true);
-		}
-		addChild(KSTimer::create(1.f, [=]()
-														 {
-															 removeFromParent();
-														 }));
 		//scheduleUpdate();
 		return true;	
 	}
@@ -1280,16 +1285,16 @@ public:
 		
 		m_initJiggleInterval = 30;
 		m_jiggleInterval = 0;
-		m_radius = 20;
+		m_radius = 30;
 		CCNode* laserContainer = CCNode::create();
 		addChild(laserContainer);
 
 		// 레이저 구현중.
 		CCSprite* laserHead = KS::loadCCBI<CCSprite*>(this, "me_laser_head.ccbi").first;
-		laserHead->setPosition(ip2ccp(myGD->getJackPoint()));
-		m_startPosition = laserHead->getPosition();
 		laserContainer->addChild(laserHead);
-		
+		laserContainer->setPosition(ip2ccp(myGD->getJackPoint()));
+		m_startPosition = laserContainer->getPosition();
+		//KS::setBlendFunc(laserHead, {GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
 		for(int i=0; ; i++)
 		{
 			CCSprite* testBody = KS::loadCCBI<CCSprite*>(this, "me_laser_body.ccbi").first;
@@ -1366,13 +1371,47 @@ protected:
 	int m_durationFrame;
 	int m_radius;
 	CCPoint m_startPosition;
-	CCSprite* m_rangeSprite;
 	int m_jiggleInterval;
 	int m_initJiggleInterval;		
 };
 
 
 
+class LaserWrapper : public StoneAttack
+{
+public:
+	static LaserWrapper* create(int numbers, int durationFrame, int power, AttackOption ao)
+	{
+		LaserWrapper* obj = new LaserWrapper();
+		obj->init(numbers, durationFrame, power, ao);
+		obj->autorelease();
+		return obj;
+	}
+	bool init(int numbers, int durationFrame, int power, AttackOption ao)
+	{
+		StoneAttack::init();
+		float addRad = ks19937::getDoubleValue(0, M_PI * 2.f);
+		for(int r=0; r<numbers; r++)
+		{
+			float rad = deg2Rad(360.f / numbers * r);
+			rad += addRad;
+			addChild(LaserAttack::create(rad, durationFrame, power, ao));
+		}	
+		scheduleUpdate();
+		return true;	
+	}
+	void update(float dt)
+	{
+		if(getChildrenCount() <= 0)
+		{
+			removeFromParent();
+		}
+	}
+protected:
+	int m_numbers;
+	int m_power;
+	int m_durationFrame;
+};
 
 
 

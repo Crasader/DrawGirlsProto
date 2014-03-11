@@ -19,7 +19,7 @@
 #include "ShockWave.h"
 #include "KSCumberBase.h"
 #include "Charges.h"
-
+#include "StoneMissile.h"
 using namespace cocos2d;
 using namespace std;
 
@@ -81,6 +81,7 @@ public:
 	void createJackMissile(int jm_type, int cmCnt, float missile_speed, CCPoint missile_position);
 	// 초기위치, 획득영역, 레벨, 등급, 미사일 타입.
 	void createJackMissileWithStone(StoneType stoneType, int grade, int level, int missileNumbers, CCPoint initPosition);
+	AttackOption getAttackOption(StoneType st, int grade);
 	void subOneDie();
 	void endIngActionAP();
 	void explosion(CCPoint bombPosition, ccColor4F t_color, float t_angle);

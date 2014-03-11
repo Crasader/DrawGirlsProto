@@ -395,6 +395,49 @@ public:
 	}
 };
 
+class KSIntervalCall : public CCNode
+{
+protected:
+	std::function<void(int)> m_f;
+	int m_intervalFrame;
+	int m_tempIntervalFrame;
+	int m_numbers;
+	int m_sequence;
+public:
+	virtual ~KSIntervalCall(){
+	}
+	static KSIntervalCall* create(int intervalFrame, int numbers, std::function<void(int)> __f)
+	{
+		KSIntervalCall* newO = new KSIntervalCall;
+		newO->init(intervalFrame, numbers, __f);
+		newO->autorelease();
+		return newO;
+	}
+	bool init(int intervalFrame, int numbers, std::function<void(int)> __f)
+	{
+		m_intervalFrame = intervalFrame;
+		m_tempIntervalFrame = 0;
+		m_f = __f;
+		m_sequence = 1;
+		m_numbers = numbers;
+		scheduleUpdate();
+		return true;
+	}
+	void update(float dt)
+	{
+		m_tempIntervalFrame = MAX(0, m_tempIntervalFrame - 1);
+		if(m_tempIntervalFrame == 0)
+		{
+			m_tempIntervalFrame = m_intervalFrame;
+			m_f(m_sequence++);
+		}
+		if(m_sequence - 1 == m_numbers) // 마지막 조건.
+		{
+			removeFromParent();
+			unscheduleUpdate();
+		}
+	}
+};
 class KSNode : public CCNode
 {
 public:
