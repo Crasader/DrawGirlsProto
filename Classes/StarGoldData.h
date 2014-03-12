@@ -494,6 +494,7 @@ public:
 	string getNextSceneName();
 	
 	deque<bool> is_ingame_before_have_stage_cards;
+	int ingame_before_stage_rank;
 	bool getIsNotClearedStage();
 	int getIsUnlockPuzzle();
 	void setIsUnlockPuzzle(int t_i);

@@ -18,6 +18,7 @@
 #include "CommonButton.h"
 #include "NewMainFlowScene.h"
 #include "StoryView.h"
+#include "ASPopupView.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -61,7 +62,352 @@ bool TitleRenewalScene::init()
 	state_label->setColor(ccBLACK);
 	state_label->setPosition(ccp(240,130));
 	addChild(state_label);
-		
+
+	
+//	ASPopupView* t_popup = ASPopupView::create(-200);
+//	
+//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//	if(screen_scale_x < 1.f)
+//		screen_scale_x = 1.f;
+//	
+//	float height_value = 320.f;
+//	if(myDSH->screen_convert_rate < 1.f)
+//		height_value = 320.f/myDSH->screen_convert_rate;
+//	
+//	if(height_value < myDSH->ui_top)
+//		height_value = myDSH->ui_top;
+//	
+//	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+//	t_popup->setDimmedPosition(ccp(240, 160));
+//	t_popup->setBasePosition(ccp(240, 160));
+//	
+//	CCNode* t_container = CCNode::create();
+//	t_popup->setContainerNode(t_container);
+//	addChild(t_popup);
+//	
+//	CCLabelTTF* title_label = CCLabelTTF::create("클리어 보상", mySGD->getFont().c_str(), 18);
+//	title_label->setPosition(ccp(0,107));
+//	t_container->addChild(title_label);
+//	
+//	int take_level = 1;
+//	
+//	
+//	int random_value = rand()%1000;
+//	int gold_get_rate = 500;
+//	int gold_or_item_get_rate = gold_get_rate + 300;
+//	int reward_type;
+//	if(random_value < gold_get_rate)
+//	{
+//		// gold
+//		reward_type = 1;
+//	}
+//	else if(random_value < gold_or_item_get_rate)
+//	{
+//		// gold or item
+//		reward_type = 2;
+//	}
+//	else
+//	{
+//		// stone
+//		reward_type = 3;
+//	}
+//	
+//	int gold_or_item_value;
+//	random_value = rand()%100;
+//	if(random_value < 50)
+//	{
+//		// gold
+//		gold_or_item_value = 1;
+//	}
+//	else
+//	{
+//		// item
+//		gold_or_item_value = 2;
+//	}
+//	
+//	
+//	CommonButton* reward_first = CommonButton::create("보상1", 14, CCSizeMake(100, 70), CommonButtonYellow, t_popup->getTouchPriority()-1);
+//	reward_first->setTitleColor(ccBLACK);
+//	reward_first->setPosition(ccp(-150,0));
+//	t_container->addChild(reward_first);
+//	
+//	CommonButton* reward_second = CommonButton::create("보상2", 14, CCSizeMake(100, 70), CommonButtonYellow, t_popup->getTouchPriority()-1);
+//	reward_second->setTitleColor(ccBLACK);
+//	reward_second->setPosition(ccp(0,0));
+//	t_container->addChild(reward_second);
+//	
+//	CommonButton* reward_third = CommonButton::create("보상3", 14, CCSizeMake(100, 70), CommonButtonYellow, t_popup->getTouchPriority()-1);
+//	reward_third->setTitleColor(ccBLACK);
+//	reward_third->setPosition(ccp(150,0));
+//	t_container->addChild(reward_third);
+//	
+//	
+//	CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
+//	CCLabelTTF* item_gold_or_item;
+//	int random_item_code;
+//	if(gold_or_item_value == 1)
+//		item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
+//	else
+//	{
+//		item_gold_or_item = CCLabelTTF::create("아이템", mySGD->getFont().c_str(), 12);
+//		random_item_code = rand()%(kIC_rentCard-kIC_fast+1) + kIC_fast;
+//		CCSprite* random_item_img = CCSprite::create(CCString::createWithFormat("item%d.png", random_item_code)->getCString());
+//		random_item_img->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f,-30));
+//		item_gold_or_item->addChild(random_item_img);
+//	}
+//	int base_stone_rank = take_level;
+//	if(mySGD->is_exchanged)
+//		base_stone_rank++;
+//	
+//	if(base_stone_rank > 3)
+//		base_stone_rank = 3;
+//	CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
+//	
+//	int beautystone_type = rand()%7;
+//	
+//	CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", beautystone_type, base_stone_rank)->getCString());
+//	beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
+//	item_stone->addChild(beautystone_img);
+//	
+//	
+//	reward_first->setFunction([=](CCObject* sender)
+//							  {
+//								  int random_left_right = rand()%2;
+//								  
+//								  if(reward_type == 1)
+//								  {
+//									  mySGD->setGold(mySGD->getGold() + 100);
+//									  item_gold->setPosition(ccp(-150,0));
+//									  if(random_left_right == 0)
+//									  {
+//										  item_gold_or_item->setPosition(ccp(0,0));
+//										  item_stone->setPosition(ccp(150,0));
+//									  }
+//									  else
+//									  {
+//										  item_gold_or_item->setPosition(ccp(150,0));
+//										  item_stone->setPosition(ccp(0,0));
+//									  }
+//								  }
+//								  else if(reward_type == 2)
+//								  {
+//									  if(gold_or_item_value == 1)
+//										  mySGD->setGold(mySGD->getGold() + 200);
+//									  else
+//									  {
+//										  myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
+//									  }
+//									  
+//									  item_gold_or_item->setPosition(ccp(-150,0));
+//									  if(random_left_right == 0)
+//									  {
+//										  item_gold->setPosition(ccp(0,0));
+//										  item_stone->setPosition(ccp(150,0));
+//									  }
+//									  else
+//									  {
+//										  item_gold->setPosition(ccp(150,0));
+//										  item_stone->setPosition(ccp(0,0));
+//									  }
+//								  }
+//								  else
+//								  {
+//									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
+//									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
+//									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
+//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
+//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
+//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
+//									  
+//									  item_stone->setPosition(ccp(-150,0));
+//									  if(random_left_right == 0)
+//									  {
+//										  item_gold->setPosition(ccp(0,0));
+//										  item_gold_or_item->setPosition(ccp(150,0));
+//									  }
+//									  else
+//									  {
+//										  item_gold->setPosition(ccp(150,0));
+//										  item_gold_or_item->setPosition(ccp(0,0));
+//									  }
+//								  }
+//								  t_container->addChild(item_gold);
+//								  t_container->addChild(item_gold_or_item);
+//								  t_container->addChild(item_stone);
+//								  
+//								  reward_first->setVisible(false);
+//								  reward_second->setVisible(false);
+//								  reward_third->setVisible(false);
+//								  
+//								  myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
+//								  
+//								  CCDelayTime* t_delay = CCDelayTime::create(2.f);
+//								  CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(ClearPopup::endTakeCard));
+//								  CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+//								  CCSequence* t_seq = CCSequence::create(t_delay, t_call0, t_call, NULL);
+//								  t_popup->runAction(t_seq);
+//							  });
+//	
+//	
+//	reward_second->setFunction([=](CCObject* sender)
+//							   {
+//								   int random_left_right = rand()%2;
+//								   
+//								   if(reward_type == 1)
+//								   {
+//									   mySGD->setGold(mySGD->getGold() + 100);
+//									   item_gold->setPosition(ccp(0,0));
+//									   if(random_left_right == 0)
+//									   {
+//										   item_gold_or_item->setPosition(ccp(-150,0));
+//										   item_stone->setPosition(ccp(150,0));
+//									   }
+//									   else
+//									   {
+//										   item_gold_or_item->setPosition(ccp(150,0));
+//										   item_stone->setPosition(ccp(-150,0));
+//									   }
+//								   }
+//								   else if(reward_type == 2)
+//								   {
+//									   if(gold_or_item_value == 1)
+//										   mySGD->setGold(mySGD->getGold() + 200);
+//									   else
+//									   {
+//										   myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
+//									   }
+//									   
+//									   item_gold_or_item->setPosition(ccp(0,0));
+//									   if(random_left_right == 0)
+//									   {
+//										   item_gold->setPosition(ccp(-150,0));
+//										   item_stone->setPosition(ccp(150,0));
+//									   }
+//									   else
+//									   {
+//										   item_gold->setPosition(ccp(150,0));
+//										   item_stone->setPosition(ccp(-150,0));
+//									   }
+//								   }
+//								   else
+//								   {
+//									   myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
+//									   myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
+//									   myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
+//									   myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
+//									   myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
+//									   myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
+//									   
+//									   item_stone->setPosition(ccp(0,0));
+//									   if(random_left_right == 0)
+//									   {
+//										   item_gold->setPosition(ccp(-150,0));
+//										   item_gold_or_item->setPosition(ccp(150,0));
+//									   }
+//									   else
+//									   {
+//										   item_gold->setPosition(ccp(150,0));
+//										   item_gold_or_item->setPosition(ccp(-150,0));
+//									   }
+//								   }
+//								   t_container->addChild(item_gold);
+//								   t_container->addChild(item_gold_or_item);
+//								   t_container->addChild(item_stone);
+//								   
+//								   reward_first->setVisible(false);
+//								   reward_second->setVisible(false);
+//								   reward_third->setVisible(false);
+//								   
+//								   myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
+//								   
+//								   CCDelayTime* t_delay = CCDelayTime::create(2.f);
+//								   CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(ClearPopup::endTakeCard));
+//								   CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+//								   CCSequence* t_seq = CCSequence::create(t_delay, t_call0, t_call, NULL);
+//								   t_popup->runAction(t_seq);
+//							   });
+//	
+//	
+//	reward_third->setFunction([=](CCObject* sender)
+//							  {
+//								  int random_left_right = rand()%2;
+//								  
+//								  if(reward_type == 1)
+//								  {
+//									  mySGD->setGold(mySGD->getGold() + 100);
+//									  item_gold->setPosition(ccp(150,0));
+//									  if(random_left_right == 0)
+//									  {
+//										  item_gold_or_item->setPosition(ccp(-150,0));
+//										  item_stone->setPosition(ccp(0,0));
+//									  }
+//									  else
+//									  {
+//										  item_gold_or_item->setPosition(ccp(0,0));
+//										  item_stone->setPosition(ccp(-150,0));
+//									  }
+//								  }
+//								  else if(reward_type == 2)
+//								  {
+//									  if(gold_or_item_value == 1)
+//										  mySGD->setGold(mySGD->getGold() + 200);
+//									  else
+//									  {
+//										  myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
+//									  }
+//									  
+//									  item_gold_or_item->setPosition(ccp(150,0));
+//									  if(random_left_right == 0)
+//									  {
+//										  item_gold->setPosition(ccp(-150,0));
+//										  item_stone->setPosition(ccp(0,0));
+//									  }
+//									  else
+//									  {
+//										  item_gold->setPosition(ccp(0,0));
+//										  item_stone->setPosition(ccp(-150,0));
+//									  }
+//								  }
+//								  else
+//								  {
+//									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
+//									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
+//									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
+//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
+//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
+//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
+//									  
+//									  item_stone->setPosition(ccp(150,0));
+//									  if(random_left_right == 0)
+//									  {
+//										  item_gold->setPosition(ccp(-150,0));
+//										  item_gold_or_item->setPosition(ccp(0,0));
+//									  }
+//									  else
+//									  {
+//										  item_gold->setPosition(ccp(0,0));
+//										  item_gold_or_item->setPosition(ccp(-150,0));
+//									  }
+//								  }
+//								  t_container->addChild(item_gold);
+//								  t_container->addChild(item_gold_or_item);
+//								  t_container->addChild(item_stone);
+//								  
+//								  reward_first->setVisible(false);
+//								  reward_second->setVisible(false);
+//								  reward_third->setVisible(false);
+//								  
+//								  myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
+//								  
+//								  CCDelayTime* t_delay = CCDelayTime::create(2.f);
+//								  CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(ClearPopup::endTakeCard));
+//								  CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+//								  CCSequence* t_seq = CCSequence::create(t_delay, t_call0, t_call, NULL);
+//								  t_popup->runAction(t_seq);
+//							  });
+	
+	
 	Json::Value param;
 	param["ManualLogin"] = true;
 
@@ -944,7 +1290,7 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_y_d, start_stage+j, coordinateInfo_list[j]["y"].asInt());
 				}
 				
-				if(1)//puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+				if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
 				{
 					if(NSDS_GS(puzzle_number, kSDS_PZ_map_s) != puzzle_list[i]["map"]["image"].asString())
 					{
@@ -1087,15 +1433,15 @@ void TitleRenewalScene::endingAction()
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	
-	StoryView* t_sv = StoryView::create();
-	t_sv->setFunc([=]()
-				  {
+//	StoryView* t_sv = StoryView::create();
+//	t_sv->setFunc([=]()
+//				  {
 					  CCDelayTime* t_delay = CCDelayTime::create(2.f);
 					  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
 					  CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 					  runAction(t_seq);
-				  });
-	addChild(t_sv);
+//				  });
+//	addChild(t_sv);
 }
 
 void TitleRenewalScene::changeScene()

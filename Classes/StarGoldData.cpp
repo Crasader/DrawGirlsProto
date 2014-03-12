@@ -282,6 +282,7 @@ void StarGoldData::setGameStart()
 	replay_write_info[getReplayKey(kReplayKey_isChangedMap)] = true;
 	replay_write_info[getReplayKey(kReplayKey_isChangedScore)] = true;
 	
+	ingame_before_stage_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
 	is_not_cleared_stage = !myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType());
 	
 	mySD->startSetting();

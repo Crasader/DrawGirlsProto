@@ -60,7 +60,6 @@ private:
 	
 	void heartRefresh();
 	
-	bool clear_is_empty_piece;
 	bool clear_is_stage_unlock;
 	int next_stage_number;
 	int clear_star_take_level;
@@ -119,9 +118,9 @@ private:
 	
 	int clear_found_puzzle_idx;
 	
-	void showGetPuzzle();
-	void createGetPuzzleParticle(CCNode* t_node, CCPoint t_point);
-	void endGetPuzzle();
+//	void showGetPuzzle();
+//	void createGetPuzzleParticle(CCNode* t_node, CCPoint t_point);
+//	void endGetPuzzle();
 	void showGetStar();
 	void endGetStar();
 	void showSuccessPuzzleEffect();
