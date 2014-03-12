@@ -2272,7 +2272,6 @@ void KSCumberBase::movingAndCrash( float dt )
 				break;
 		}
 	};
-
 	if(m_state == CUMBERSTATEFURY)
 	{
 		movingBranch(m_furyMovement);

@@ -959,7 +959,10 @@ void FeverCoin::checking()
 	{
 		stopCheck();
 		is_stan_by = true;
-		(target_add->*delegate_add)(this);
+		if(target_add && delegate_add)
+		{
+			(target_add->*delegate_add)(this);
+		}
 	}
 }
 
