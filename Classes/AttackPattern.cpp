@@ -838,6 +838,7 @@ void FlameWrapper::removeEffect()
 void FlameWrapper::selfRemove()
 {
 	particleRemove();
+	m_cumber->setAttackPattern(nullptr);
 	removeFromParentAndCleanup(true);
 }
 
@@ -847,6 +848,7 @@ void FlameWrapper::selfRemoveSchedule()
 	{
 		//			myGD->communication("EP_stopCrashAction");
 		myGD->communication("MS_resetRects", false);
+		m_cumber->setAttackPattern(nullptr);
 		removeFromParentAndCleanup(true);
 	}
 }
@@ -2662,6 +2664,7 @@ void CrashLazerWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::strin
 
 void CrashLazerWrapper::selfRemove()
 {
+	m_cumber->setAttackPattern(nullptr);
 	removeFromParentAndCleanup(true);
 }
 
@@ -2670,6 +2673,7 @@ void CrashLazerWrapper::selfRemoveSchedule()
 	if(getChildrenCount() == 0)
 	{
 		//			myGD->communication("EP_stopCrashAction");
+		m_cumber->setAttackPattern(nullptr);
 		myGD->communication("MS_resetRects", false);
 		removeFromParentAndCleanup(true);
 	}

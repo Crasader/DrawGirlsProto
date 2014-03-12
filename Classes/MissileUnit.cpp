@@ -1256,12 +1256,16 @@ void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameS
 	CCBReader* reader = new CCBReader(nodeLoader);
 	meteor = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor3.ccbi",this));
 	meteor->setRotation(90 + 45);
+	//meteor->setScale(2.5f);
 	reader->release();
 	
 	
 	//		 = CCSprite::create(("meteor_stone_test" + imgFilename).c_str(), CCRectMake(0, 0, imgFrameSize.width, imgFrameSize.height));
 	meteor->setPosition(t_sp);
 	addChild(meteor, 1);
+	CCParticleSystemQuad* meteorBack = KS::loadCCBI<CCParticleSystemQuad*>(this, "pattern_meteor3_back.ccbi").first;
+	meteorBack->setPositionType(kCCPositionTypeRelative);
+	meteor->addChild(meteorBack, 0);
 	
 	int random_sign;
 	if(rand()%2)
