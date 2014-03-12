@@ -1436,7 +1436,7 @@ void StartSettingScene::callStart()
 			
 			content_back->setContentSize(CCSizeMake(200, 120));
 			
-			CCLabelTTF* ment1_label = CCLabelTTF::create("코인이 부족합니다.", mySGD->getFont().c_str(), 15);
+			CCLabelTTF* ment1_label = CCLabelTTF::create("하트가 부족합니다.", mySGD->getFont().c_str(), 15);
 			ment1_label->setPosition(ccp(0,35));
 			t_container->addChild(ment1_label);
 			
