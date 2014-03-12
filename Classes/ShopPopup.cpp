@@ -646,7 +646,7 @@ bool ShopPopup::init()
 								});
 	main_case->addChild(character_menu, kSP_Z_content);
 	
-	card_menu = CommonButton::create("스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	card_menu = CommonButton::create("뷰티스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	card_menu->setTitleColor(ccWHITE);
 	card_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	card_menu->setTitleColorForDisable(ccBLACK);
@@ -685,7 +685,7 @@ bool ShopPopup::init()
 						   });
 	main_case->addChild(gold_menu, kSP_Z_content);
 	
-	heart_menu = CommonButton::create("코인상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	heart_menu = CommonButton::create("하트상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	heart_menu->setTitleColor(ccWHITE);
 	heart_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	heart_menu->setTitleColorForDisable(ccBLACK);

@@ -58,9 +58,9 @@ void StoryManager::mentAction()
 	
 	int frame_value;
 	if(is_boosting)
-		frame_value = 2;
+		frame_value = 1;
 	else
-		frame_value = 6;
+		frame_value = 3;
 	
 	if(ing_ment_cnt%frame_value == 0)
 	{

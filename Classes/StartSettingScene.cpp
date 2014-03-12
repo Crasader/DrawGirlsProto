@@ -161,10 +161,10 @@ void StartSettingScene::setMain()
 	else
 	{
 		stage_number = mySD->getSilType();
-		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
-		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
+//		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
+//		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
-		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, piece_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 		piece_number_label->setPosition(ccp(49, main_case->getContentSize().height+40-67));
 		main_case->addChild(piece_number_label);
 		

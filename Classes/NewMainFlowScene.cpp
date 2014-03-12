@@ -63,6 +63,7 @@ bool NewMainFlowScene::init()
         return false;
     }
 	
+	warp_ani_manager.clear();
 	stage_node_manager.clear();
 	
 	setKeypadEnabled(true);
@@ -849,7 +850,14 @@ void NewMainFlowScene::endGetStar()
 
 void NewMainFlowScene::showSuccessPuzzleEffect()
 {
-	CCLog("success puzzle animation");
+	int t_puzzle_number = NSDS_GI(mySD->getSilType(), kSDS_SI_puzzle_i);
+	CCLog("success puzzle animation : %d", t_puzzle_number);
+	
+	map<int, CCBAnimationManager*>::iterator iter = warp_ani_manager.find(t_puzzle_number);
+	if(iter != warp_ani_manager.end())
+	{
+		(*iter).second->runAnimationsForSequenceNamed("open");
+	}
 	
 	puzzle_table->setContentOffsetInDuration(ccpAdd(puzzle_table->getContentOffset(), ccp(-cellSizeForTable(puzzle_table).width, 0)), 0.3f);
 	CCDelayTime* t_delay = CCDelayTime::create(0.3f);
@@ -1413,11 +1421,50 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				
 				t_ls->setCenterline();
 				
+				CCPoint start_warp_position = ccp(NSDS_GI(puzzle_number, kSDS_PZ_startWarp_x_d), NSDS_GI(puzzle_number, kSDS_PZ_startWarp_y_d));
+				auto start_warp_ccbi = KS::loadCCBI<CCSprite*>(this, "main_warp.ccbi");
+				start_warp_ccbi.first->setPosition(start_warp_position);
+				t_img->addChild(start_warp_ccbi.first);
+				
+				start_warp_ccbi.second->runAnimationsForSequenceNamed("opened");
+				
+				CCPoint end_warp_position = ccp(NSDS_GI(puzzle_number, kSDS_PZ_lastWarp_x_d), NSDS_GI(puzzle_number, kSDS_PZ_lastWarp_y_d));
+				auto end_warp_ccbi = KS::loadCCBI<CCSprite*>(this, "main_warp.ccbi");
+				end_warp_ccbi.first->setPosition(end_warp_position);
+				t_img->addChild(end_warp_ccbi.first);
+				
+				if(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= idx+2)
+					end_warp_ccbi.second->runAnimationsForSequenceNamed("opened");
+				else
+					end_warp_ccbi.second->runAnimationsForSequenceNamed("close");
+				
+				warp_ani_manager[puzzle_number] = end_warp_ccbi.second;
+				
+				
 				int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 				int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
 				
 				for(int i=start_stage;i<start_stage+stage_count;i++)
 				{
+					if(i < start_stage+stage_count-1)
+					{
+						CCPoint before_position = ccp(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_x_d, i), NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_y_d, i));
+						CCPoint recent_position = ccp(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_x_d, i+1), NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_y_d, i+1));
+						
+						CCPoint sub_position = ccpSub(recent_position, before_position);
+						float dist_value = sqrtf(powf(sub_position.x, 2.f) + powf(sub_position.y, 2.f));
+						int dot_cnt = dist_value/25 + 1;
+						
+						CCPoint d_position = ccpMult(sub_position, 1.f/dot_cnt);
+						dot_cnt--;
+						for(int j=0;j<dot_cnt;j++)
+						{
+							CCSprite* t_dot = CCSprite::create("stage_link_point.png");
+							t_dot->setPosition(ccpAdd(before_position, ccpMult(d_position, j+1)));
+							t_img->addChild(t_dot);
+						}
+					}
+					
 					bool is_buy, is_lock;
 					if(i == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i) ||
 					   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 &&

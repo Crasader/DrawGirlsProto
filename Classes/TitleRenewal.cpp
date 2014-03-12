@@ -1283,11 +1283,16 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 				}
 				mySDS->fFlush(kSDS_CI_base);
 
+				NSDS_SI(puzzle_number, kSDS_PZ_startWarp_x_d, puzzle_list[i]["startPosition"]["x"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_startWarp_y_d, puzzle_list[i]["startPosition"]["y"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_lastWarp_x_d, puzzle_list[i]["endPosition"]["x"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_lastWarp_y_d, puzzle_list[i]["endPosition"]["y"].asInt(), false);
+				
 				Json::Value coordinateInfo_list = puzzle_list[i]["coordinateInfo"];
 				for(int j=0;j<coordinateInfo_list.size();j++)
 				{
-					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_x_d, start_stage+j, coordinateInfo_list[j]["x"].asInt());
-					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_y_d, start_stage+j, coordinateInfo_list[j]["y"].asInt());
+					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_x_d, start_stage+j, coordinateInfo_list[j]["x"].asInt(), false);
+					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_y_d, start_stage+j, coordinateInfo_list[j]["y"].asInt(), false);
 				}
 				
 				if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)

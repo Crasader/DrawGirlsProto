@@ -584,6 +584,10 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_PZ_stage_int1_thumbnail_s)	rv = "stage%d_thumbnail";
 	else if(t_key == kSDS_PZ_stage_int1_condition_stage_i)	rv = "stage%d_condition_stage";
 	else if(t_key == kSDS_PZ_stage_int1_condition_gold_i)	rv = "stage%d_condition_gold";
+	else if(t_key == kSDS_PZ_startWarp_x_d)				rv = "swarp_x";
+	else if(t_key == kSDS_PZ_startWarp_y_d)				rv = "swarp_y";
+	else if(t_key == kSDS_PZ_lastWarp_x_d)				rv = "lwarp_x";
+	else if(t_key == kSDS_PZ_lastWarp_y_d)				rv = "lwarp_y";
 	
 	else if(t_key == kSDS_GI_puzzleListVersion_i)		rv = "puzzleListVersion";
 	else if(t_key == kSDS_GI_puzzleListCount_i)			rv = "puzzleListCount";
