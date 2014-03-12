@@ -39,6 +39,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, result_data["ticket"].asInt(), false);
 		NSDS_SI(puzzle_number, kSDS_PZ_point_i, result_data["point"].asInt(), false);
 		
+		if(NSDS_GS(puzzle_number, kSDS_PZ_map_s) != result_data["map"]["image"].asString())
+		{
+			addDownlist("map", result_data);
+		}
 		if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != result_data["center"]["image"].asString())
 		{
 			addDownlist("center", result_data);
@@ -468,11 +472,28 @@ void StageListDown::successAction()
 			float faceColDis, faceRowDis; //172, 172
 			float puzzleWidth,puzzleHeight;
 			
+			
+			if(cut_list[j].key == "face")
+			{
+				st_w->initWithImageFile("stage_scissor.png"); //피스조각(가로형)을 불러옵니다.
+				st_h->initWithImageFile("stage_scissor.png"); //피스조각(세로형)을 불러옵니다.
+			}
+			else
+			{
+				if(puzzle_number > 10000)
+				{
+					st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
+				}
+				else
+				{
+					st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
+				}
+			}
+			
 			if(puzzle_number > 10000)
 			{
-				st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
-				st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
-				
 				puzzleCol=5;
 				puzzleRow=4;
 				puzzleColDis=120.f;
@@ -486,9 +507,6 @@ void StageListDown::successAction()
 			}
 			else
 			{
-				st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
-				st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
-				
 				puzzleCol=6;
 				puzzleRow=4;
 				puzzleColDis=100.f;

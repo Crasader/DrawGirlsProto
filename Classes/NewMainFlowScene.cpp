@@ -41,6 +41,7 @@
 #include "PuzzleListShadow.h"
 #include "StoryManager.h"
 #include "GraySprite.h"
+#include "StageNode.h"
 
 CCScene* NewMainFlowScene::scene()
 {
@@ -62,7 +63,7 @@ bool NewMainFlowScene::init()
         return false;
     }
 	
-	
+	stage_node_manager.clear();
 	
 	setKeypadEnabled(true);
 	
@@ -588,22 +589,33 @@ void NewMainFlowScene::hideClearPopup()
 void NewMainFlowScene::showGetStar()
 {
 	CCLog("get star animation : %d", mySD->getSilType());
-	CCTableViewCell* t_cell = puzzle_table->cellAtIndex(clear_found_puzzle_idx);
 	
-	if(t_cell)
-	{
-		CCNode* t_puzzle_node = t_cell->getChildByTag(1);
-		
-		NewPuzzlePiece* new_piece = (NewPuzzlePiece*)t_puzzle_node->getChildByTag(mySD->getSilType());
-		new_piece->startGetStarAnimation(clear_star_take_level, [=]()
-										 {
-											 endGetStar();
-										 });
-	}
-	else
+	map<int, CCNode*>::iterator iter = stage_node_manager.find(mySD->getSilType());
+	if(iter == stage_node_manager.end() || iter->second == NULL)
 	{
 		endGetStar();
 	}
+	else
+	{
+		((StageNode*)(iter->second))->startGetStarAnimation([=](){endGetStar();});
+	}
+	
+//	CCTableViewCell* t_cell = puzzle_table->cellAtIndex(clear_found_puzzle_idx);
+//	
+//	if(t_cell)
+//	{
+//		CCNode* t_puzzle_node = t_cell->getChildByTag(1);
+//		
+//		NewPuzzlePiece* new_piece = (NewPuzzlePiece*)t_puzzle_node->getChildByTag(mySD->getSilType());
+//		new_piece->startGetStarAnimation(clear_star_take_level, [=]()
+//										 {
+//											 endGetStar();
+//										 });
+//	}
+//	else
+//	{
+//		endGetStar();
+//	}
 }
 
 void NewMainFlowScene::endGetStar()
@@ -704,19 +716,30 @@ void NewMainFlowScene::endPerfectPuzzleEffect()
 
 void NewMainFlowScene::showUnlockEffect()
 {
-	CCLog("unlock piece animation");
-	if(unlock_cover)
-	{
-		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(NewMainFlowScene::endUnlockEffect));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-		
-		unlock_cover->runAction(t_seq);
-	}
-	else
+	CCLog("unlock piece animation : %d", next_stage_number);
+	
+	map<int, CCNode*>::iterator iter = stage_node_manager.find(next_stage_number);
+	if(iter == stage_node_manager.end() || iter->second == NULL)
 	{
 		endUnlockEffect();
 	}
+	else
+	{
+		((StageNode*)(iter->second))->startUnlockAnimation([=](){endUnlockEffect();});
+	}
+	
+//	if(unlock_cover)
+//	{
+//		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+//		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(NewMainFlowScene::endUnlockEffect));
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+//		
+//		unlock_cover->runAction(t_seq);
+//	}
+//	else
+//	{
+//		endUnlockEffect();
+//	}
 }
 
 void NewMainFlowScene::endUnlockEffect()
@@ -1094,6 +1117,7 @@ enum NewMainFlowMenuTag{
 	kNewMainFlowMenuTag_tip,
 	kNewMainFlowMenuTag_rank,
 	kNewMainFlowMenuTag_shop,
+	kNewMainFlowMenuTag_beautystone,
 	kNewMainFlowMenuTag_cardSetting,
 	kNewMainFlowMenuTag_friendManagement,
 	kNewMainFlowMenuTag_gacha,
@@ -1191,11 +1215,6 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				
 				for(int i=start_stage;i<start_stage+stage_count;i++)
 				{
-					int x_position = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_x_d, i);
-					int y_position = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_y_d, i);
-					
-					int piece_no = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i);
-					
 					bool is_buy, is_lock;
 					if(i == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i) ||
 					   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 &&
@@ -1221,139 +1240,27 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 					
 					if(is_buy)
 					{
-						CCSprite* n_buy = CCSprite::create("stage_icon_back.png");
-						
-						GraySprite* n_stage_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString()));
-						n_stage_img->setGray(true);
-						n_stage_img->setPosition(ccp(n_buy->getContentSize().width/2.f-7, n_buy->getContentSize().height/2.f+1));
-						n_buy->addChild(n_stage_img);
-						
-						CCSprite* n_lock = CCSprite::create("stage_icon_lock.png");
-						n_lock->setPosition(ccp(n_buy->getContentSize().width/2.f-6, n_buy->getContentSize().height/2.f+5));
-						n_buy->addChild(n_lock);
-						CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-						n_label->setPosition(ccp(n_buy->getContentSize().width/2.f+17, n_buy->getContentSize().height/2.f-8));
-						n_buy->addChild(n_label);
-						CCSprite* s_buy = CCSprite::create("stage_icon_back.png");
-						
-						GraySprite* s_stage_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString()));
-						s_stage_img->setGray(true);
-						s_stage_img->setPosition(ccp(s_buy->getContentSize().width/2.f-7, s_buy->getContentSize().height/2.f+1));
-						s_buy->addChild(s_stage_img);
-						
-						CCSprite* s_lock = CCSprite::create("stage_icon_lock.png");
-						s_lock->setPosition(ccp(s_buy->getContentSize().width/2.f-6, s_buy->getContentSize().height/2.f+5));
-						s_buy->addChild(s_lock);
-						CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-						s_label->setPosition(ccp(s_buy->getContentSize().width/2.f+17, s_buy->getContentSize().height/2.f-8));
-						s_buy->addChild(s_label);
-						s_buy->setColor(ccGRAY);
-						n_buy->setPosition(ccp(-(n_buy->getContentSize().width-50)/2.f,-(n_buy->getContentSize().height-50)/2.f));
-						s_buy->setPosition(ccp(-(s_buy->getContentSize().width-50)/2.f,-(s_buy->getContentSize().height-50)/2.f));
-						
-						CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(NewMainFlowScene::notBuyedStage));
-						buy_item->setContentSize(CCSizeMake(50, 50));
-						buy_item->setTag(i);
-						
-						ScrollMenu* buy_menu = ScrollMenu::create(buy_item, NULL);
-						buy_menu->setPosition(ccp(x_position, y_position));
-						t_img->addChild(buy_menu);
+						StageNode* t_sn = StageNode::create(puzzle_number, i, this, menu_selector(NewMainFlowScene::notBuyedStage), [=](int t_int){ /*stage_node_manager[i] = NULL;*/ });
+						t_sn->setViewMode(kStageNodeViewMode_buy);
+						t_img->addChild(t_sn);
+						stage_node_manager[i] = t_sn;
 					}
 					else if(is_lock)
 					{
-						CCSprite* n_buy = CCSprite::create("stage_icon_back.png");
-						
-						GraySprite* n_stage_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString()));
-						n_stage_img->setGray(true);
-						n_stage_img->setPosition(ccp(n_buy->getContentSize().width/2.f-7, n_buy->getContentSize().height/2.f+1));
-						n_buy->addChild(n_stage_img);
-						
-						CCSprite* n_lock = CCSprite::create("stage_icon_lock.png");
-						n_lock->setPosition(ccp(n_buy->getContentSize().width/2.f-6, n_buy->getContentSize().height/2.f+5));
-						n_buy->addChild(n_lock);
-						CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-						n_label->setPosition(ccp(n_buy->getContentSize().width/2.f+17, n_buy->getContentSize().height/2.f-8));
-						n_buy->addChild(n_label);
-						CCSprite* s_buy = CCSprite::create("stage_icon_back.png");
-						
-						GraySprite* s_stage_img = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString()));
-						s_stage_img->setGray(true);
-						s_stage_img->setPosition(ccp(s_buy->getContentSize().width/2.f-7, s_buy->getContentSize().height/2.f+1));
-						s_buy->addChild(s_stage_img);
-						
-						CCSprite* s_lock = CCSprite::create("stage_icon_lock.png");
-						s_lock->setPosition(ccp(s_buy->getContentSize().width/2.f-6, s_buy->getContentSize().height/2.f+5));
-						s_buy->addChild(s_lock);
-						CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-						s_label->setPosition(ccp(s_buy->getContentSize().width/2.f+17, s_buy->getContentSize().height/2.f-8));
-						s_buy->addChild(s_label);
-						s_buy->setColor(ccGRAY);
-						n_buy->setPosition(ccp(-(n_buy->getContentSize().width-50)/2.f,-(n_buy->getContentSize().height-50)/2.f));
-						s_buy->setPosition(ccp(-(s_buy->getContentSize().width-50)/2.f,-(s_buy->getContentSize().height-50)/2.f));
-						
-						CCMenuItem* buy_item = CCMenuItemSprite::create(n_buy, s_buy, this, menu_selector(NewMainFlowScene::lockedStage));
-						buy_item->setContentSize(CCSizeMake(50, 50));
-						buy_item->setTag(i);
-						
-						ScrollMenu* buy_menu = ScrollMenu::create(buy_item, NULL);
-						buy_menu->setPosition(ccp(x_position, y_position));
-						t_img->addChild(buy_menu);
+						StageNode* t_sn = StageNode::create(puzzle_number, i, this, menu_selector(NewMainFlowScene::lockedStage), [=](int t_int){ /*stage_node_manager[i] = NULL;*/ });
+						t_sn->setViewMode(kStageNodeViewMode_lock);
+						t_img->addChild(t_sn);
+						stage_node_manager[i] = t_sn;
 					}
 					else
 					{
-						CCSprite* n_stage = CCSprite::create("stage_icon_back.png");
-						
-						CCSprite* n_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
-						n_stage_img->setPosition(ccp(n_stage->getContentSize().width/2.f-7, n_stage->getContentSize().height/2.f+1));
-						n_stage->addChild(n_stage_img);
-						
-						CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-						n_label->setPosition(ccp(n_stage->getContentSize().width/2.f+17, n_stage->getContentSize().height/2.f-8));
-						n_stage->addChild(n_label);
-						CCSprite* s_stage = CCSprite::create("stage_icon_back.png");
-						
-						CCSprite* s_stage_img = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number, piece_no)->getCString());
-						s_stage_img->setPosition(ccp(s_stage->getContentSize().width/2.f-7, s_stage->getContentSize().height/2.f+1));
-						s_stage->addChild(s_stage_img);
-						
-						CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%d", i)->getCString(), mySGD->getFont().c_str(), 10);
-						s_label->setPosition(ccp(s_stage->getContentSize().width/2.f+17, s_stage->getContentSize().height/2.f-8));
-						s_stage->addChild(s_label);
-						s_stage->setColor(ccGRAY);
-						n_stage->setPosition(ccp(-(n_stage->getContentSize().width-50)/2.f,-(n_stage->getContentSize().height-50)/2.f));
-						s_stage->setPosition(ccp(-(s_stage->getContentSize().width-50)/2.f,-(s_stage->getContentSize().height-50)/2.f));
-						
-						CCMenuItem* stage_item = CCMenuItemSprite::create(n_stage, s_stage, this, menu_selector(NewMainFlowScene::goStartSetting));
-						stage_item->setContentSize(CCSizeMake(50, 50));
-						stage_item->setTag(i);
-						
-						ScrollMenu* stage_menu = ScrollMenu::create(stage_item, NULL);
-						stage_menu->setPosition(ccp(x_position, y_position));
-						t_img->addChild(stage_menu);
-						
-						CCSprite* star_back = CCSprite::create("stage_icon_star_back.png");
-						star_back->setPosition(ccpAdd(stage_menu->getPosition(), ccp(-6.5f,16)));
-						t_img->addChild(star_back);
-						
-						int stage_clear_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, i);
-						if(stage_clear_rank >= 1)
-						{
-							CCSprite* star1 = CCSprite::create("stage_icon_star.png");
-							star1->setPosition(ccp(7,4));
-							star_back->addChild(star1);
-						}
-						if(stage_clear_rank >= 2)
-						{
-							CCSprite* star2 = CCSprite::create("stage_icon_star.png");
-							star2->setPosition(ccp(15,7));
-							star_back->addChild(star2);
-						}
-						if(stage_clear_rank >= 3)
-						{
-							CCSprite* star3 = CCSprite::create("stage_icon_star.png");
-							star3->setPosition(ccp(23,4));
-							star_back->addChild(star3);
-						}
+						StageNode* t_sn = StageNode::create(puzzle_number, i, this, menu_selector(NewMainFlowScene::goStartSetting), [=](int t_int){ /*stage_node_manager[i] = NULL;*/ });
+						if(clear_is_stage_unlock && next_stage_number == i)
+							t_sn->setViewMode(kStageNodeViewMode_lock);
+						else
+							t_sn->setViewMode(kStageNodeViewMode_open);
+						t_img->addChild(t_sn);
+						stage_node_manager[i] = t_sn;
 					}
 				}
 			}
@@ -1370,7 +1277,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				t_ls->addChild(t_img);
 				
 				CommonButton* puzzle_open_button = CommonButton::create("챕터 열기", 15, CCSizeMake(150,100), CommonButtonYellow, kCCMenuHandlerPriority);
-				puzzle_open_button->setPosition(CCPointZero);
+				puzzle_open_button->setPosition(ccp(t_img->getContentSize().width/2.f, t_img->getContentSize().height/2.f));
 				puzzle_open_button->setFunction([=](CCObject* sender)
 												{
 													open_puzzle_number = puzzle_number;
@@ -1964,7 +1871,7 @@ void NewMainFlowScene::pieceAction(int t_stage_number)
 	selected_stage_number = t_stage_number;
 	selected_puzzle_number = NSDS_GI(selected_stage_number, kSDS_SI_puzzle_i);
 	
-	NewPieceManager::sharedInstance()->regiSelectedPiece(selected_stage_number);
+//	NewPieceManager::sharedInstance()->regiSelectedPiece(selected_stage_number);
 	
 //	if(selected_stage_cell_idx != -1)
 //	{
@@ -2191,18 +2098,20 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 		t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
 		addChild(t_shop, kNewMainFlowZorder_popup);
 	}
-	else if(tag == kNewMainFlowMenuTag_cardSetting)
+	else if(tag == kNewMainFlowMenuTag_beautystone)
 	{
 		puzzle_table->setTouchEnabled(false);
 		BeautyStoneSettingPopup* t_popup = BeautyStoneSettingPopup::create();
 		t_popup->setHideFinalAction(this, callfunc_selector(NewMainFlowScene::tutorialCardSettingClose));
 		addChild(t_popup, kNewMainFlowZorder_popup);
-		
-//		puzzle_table->setTouchEnabled(false);
-//		mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
-//		CardSettingPopup* t_popup = CardSettingPopup::create();
-//		t_popup->setHideFinalAction(this, callfunc_selector(NewMainFlowScene::tutorialCardSettingClose));
-//		addChild(t_popup, kNewMainFlowZorder_popup);
+	}
+	else if(tag == kNewMainFlowMenuTag_cardSetting)
+	{
+		puzzle_table->setTouchEnabled(false);
+		mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
+		CardSettingPopup* t_popup = CardSettingPopup::create();
+		t_popup->setHideFinalAction(this, callfunc_selector(NewMainFlowScene::tutorialCardSettingClose));
+		addChild(t_popup, kNewMainFlowZorder_popup);
 	}
 	else if(tag == kNewMainFlowMenuTag_friendManagement)
 	{
@@ -2314,6 +2223,78 @@ void NewMainFlowScene::startCancel()
 	is_menu_enable = true;
 }
 
+void NewMainFlowScene::setBeautystoneMenu()
+{
+	beautystone_node->removeAllChildren();
+	
+	int character_number = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
+	
+	int slot_cnt = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, character_number+1);
+	
+	bool is_id = false;
+	vector<int> stone_id_vector;
+	for(int i=0;i<slot_cnt;i++)
+	{
+		int stone_id = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, character_number+1, i+1);
+		stone_id_vector.push_back(stone_id);
+		if(stone_id != 0)
+			is_id = true;
+	}
+	
+	if(is_id)
+	{
+		for(int i=0;i<stone_id_vector.size();i++)
+		{
+			if(stone_id_vector[i] == 0)
+			{
+				
+			}
+			else
+			{
+				CCPoint base_position = ccp(0, 10+(slot_cnt-0.5f-i)*45);
+				
+				int b_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, stone_id_vector[i]);
+				int b_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, stone_id_vector[i]);
+				int b_level = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, stone_id_vector[i]);
+				
+				CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", b_type, b_rank)->getCString());
+				beautystone_img->setScale(0.8f);
+				beautystone_img->setPosition(base_position);
+				beautystone_node->addChild(beautystone_img);
+				
+				CCLabelTTF* beautystone_level = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", b_level)->getCString(), mySGD->getFont().c_str(), 10);
+				beautystone_level->setPosition(ccpAdd(base_position, ccp(0,-15)));
+				beautystone_node->addChild(beautystone_level);
+			}
+		}
+		
+		
+		CCSprite* n_beautystone = CCSprite::create("mainflow_new_beautystone_on.png");
+		CCSprite* s_beautystone = CCSprite::create("mainflow_new_beautystone_on.png");
+		s_beautystone->setColor(ccGRAY);
+		
+		CCMenuItem* beautystone_item = CCMenuItemSprite::create(n_beautystone, s_beautystone, this, menu_selector(NewMainFlowScene::menuAction));
+		beautystone_item->setTag(kNewMainFlowMenuTag_beautystone);
+		
+		CCMenu* beautystone_menu = CCMenu::createWithItem(beautystone_item);
+		beautystone_menu->setPosition(ccp(0, n_beautystone->getContentSize().height/2.f));
+		beautystone_node->addChild(beautystone_menu);
+	}
+	else
+	{
+		CCSprite* n_beautystone = CCSprite::create("mainflow_new_beautystone_off.png");
+		CCSprite* s_beautystone = CCSprite::create("mainflow_new_beautystone_off.png");
+		s_beautystone->setColor(ccGRAY);
+		
+		CCMenuItem* beautystone_item = CCMenuItemSprite::create(n_beautystone, s_beautystone, this, menu_selector(NewMainFlowScene::menuAction));
+		beautystone_item->setTag(kNewMainFlowMenuTag_beautystone);
+		
+		CCMenu* beautystone_menu = CCMenu::createWithItem(beautystone_item);
+		beautystone_menu->setPosition(ccp(0, n_beautystone->getContentSize().height/2.f));
+		beautystone_node->addChild(beautystone_menu);
+	}
+}
+
 void NewMainFlowScene::setBottom()
 {
 	CCNode* bottom_case = CCNode::create();
@@ -2321,20 +2302,14 @@ void NewMainFlowScene::setBottom()
 	bottom_case->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+3));
 	addChild(bottom_case, kNewMainFlowZorder_uiButton);
 	
-	CCSprite* n_rank = CCSprite::create("mainflow_new_rank.png");
-	CCSprite* s_rank = CCSprite::create("mainflow_new_rank.png");
-	s_rank->setColor(ccGRAY);
+	beautystone_node = CCNode::create();
+	beautystone_node->setPosition(ccp(-215, 0));
+	bottom_case->addChild(beautystone_node);
 	
-	CCMenuItem* rank_item = CCMenuItemSprite::create(n_rank, s_rank, this, menu_selector(NewMainFlowScene::menuAction));
-	rank_item->setTag(kNewMainFlowMenuTag_rank);
+	setBeautystoneMenu();
 	
-	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
-	rank_menu->setPosition(ccp(-215, n_rank->getContentSize().height/2.f));
-	bottom_case->addChild(rank_menu);
-	
-	
-	CCSprite* n_shop = CCSprite::create("mainflow_new_shop.png");
-	CCSprite* s_shop = CCSprite::create("mainflow_new_shop.png");
+	CCSprite* n_shop = CCSprite::create("mainflow_new_character.png");
+	CCSprite* s_shop = CCSprite::create("mainflow_new_character.png");
 	s_shop->setColor(ccGRAY);
 	
 	CCMenuItem* shop_item = CCMenuItemSprite::create(n_shop, s_shop, this, menu_selector(NewMainFlowScene::menuAction));
@@ -2345,8 +2320,8 @@ void NewMainFlowScene::setBottom()
 	bottom_case->addChild(shop_menu);
 	
 	
-	CCSprite* n_cardsetting = CCSprite::create("mainflow_new_cardsetting.png");
-	CCSprite* s_cardsetting = CCSprite::create("mainflow_new_cardsetting.png");
+	CCSprite* n_cardsetting = CCSprite::create("mainflow_new_collection.png");
+	CCSprite* s_cardsetting = CCSprite::create("mainflow_new_collection.png");
 	s_cardsetting->setColor(ccGRAY);
 	
 	CCMenuItem* cardsetting_item = CCMenuItemSprite::create(n_cardsetting, s_cardsetting, this, menu_selector(NewMainFlowScene::menuAction));
@@ -2357,6 +2332,18 @@ void NewMainFlowScene::setBottom()
 	bottom_case->addChild(cardsetting_menu);
 	
 	
+	CCSprite* n_rank = CCSprite::create("mainflow_new_rank.png");
+	CCSprite* s_rank = CCSprite::create("mainflow_new_rank.png");
+	s_rank->setColor(ccGRAY);
+	
+	CCMenuItem* rank_item = CCMenuItemSprite::create(n_rank, s_rank, this, menu_selector(NewMainFlowScene::menuAction));
+	rank_item->setTag(kNewMainFlowMenuTag_rank);
+	
+	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
+	rank_menu->setPosition(ccp(-47, n_rank->getContentSize().height/2.f));//ccp(-215, n_rank->getContentSize().height/2.f));
+	bottom_case->addChild(rank_menu);
+	
+	
 	CCSprite* n_friendmanagement = CCSprite::create("mainflow_new_friendmanagement.png");
 	CCSprite* s_friendmanagement = CCSprite::create("mainflow_new_friendmanagement.png");
 	s_friendmanagement->setColor(ccGRAY);
@@ -2365,7 +2352,7 @@ void NewMainFlowScene::setBottom()
 	friendmanagement_item->setTag(kNewMainFlowMenuTag_friendManagement);
 	
 	CCMenu* friendmanagement_menu = CCMenu::createWithItem(friendmanagement_item);
-	friendmanagement_menu->setPosition(ccp(-47, n_friendmanagement->getContentSize().height/2.f));
+	friendmanagement_menu->setPosition(ccp(9, n_friendmanagement->getContentSize().height/2.f));//ccp(-47, n_friendmanagement->getContentSize().height/2.f));
 	bottom_case->addChild(friendmanagement_menu);
 	
 	
@@ -2377,20 +2364,8 @@ void NewMainFlowScene::setBottom()
 	gacha_item->setTag(kNewMainFlowMenuTag_gacha);
 	
 	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
-	gacha_menu->setPosition(ccp(9, n_gacha->getContentSize().height/2.f));
+	gacha_menu->setPosition(ccp(65, n_gacha->getContentSize().height/2.f));//ccp(9, n_gacha->getContentSize().height/2.f));
 	bottom_case->addChild(gacha_menu);
-	
-	
-	CCSprite* n_event = CCSprite::create("mainflow_new_event.png");
-	CCSprite* s_event = CCSprite::create("mainflow_new_event.png");
-	s_event->setColor(ccGRAY);
-	
-	CCMenuItem* event_item = CCMenuItemSprite::create(n_event, s_event, this, menu_selector(NewMainFlowScene::menuAction));
-	event_item->setTag(kNewMainFlowMenuTag_event);
-	
-	CCMenu* event_menu = CCMenu::createWithItem(event_item);
-	event_menu->setPosition(ccp(65, n_event->getContentSize().height/2.f));
-	bottom_case->addChild(event_menu);
 	
 	
 	CCSprite* n_ready = CCSprite::create("mainflow_new_ready.png");
@@ -2572,6 +2547,19 @@ void NewMainFlowScene::setTop()
 	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
 	tip_menu->setPosition(ccp(463,top_case->getContentSize().height/2.f));
 	top_case->addChild(tip_menu);
+	
+	
+	CCSprite* n_event = CCSprite::create("mainflow_new_event.png");
+	CCSprite* s_event = CCSprite::create("mainflow_new_event.png");
+	s_event->setColor(ccGRAY);
+	
+	CCMenuItem* event_item = CCMenuItemSprite::create(n_event, s_event, this, menu_selector(NewMainFlowScene::menuAction));
+	event_item->setTag(kNewMainFlowMenuTag_event);
+	
+	CCMenu* event_menu = CCMenu::createWithItem(event_item);
+	event_menu->setPosition(ccp(450,-n_event->getContentSize().height/2.f-5));
+	top_case->addChild(event_menu);
+
 }
 
 void NewMainFlowScene::countingMessage()
@@ -2682,6 +2670,7 @@ void NewMainFlowScene::tutorialCardSettingClose()
 	is_menu_enable = true;
 	puzzle_table->setTouchEnabled(true);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
+	setBeautystoneMenu();
 }
 
 void NewMainFlowScene::closeFriendPoint()
