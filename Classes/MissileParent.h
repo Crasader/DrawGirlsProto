@@ -80,7 +80,7 @@ public:
 	void bombCumber(CCObject* target);
 	void createJackMissile(int jm_type, int cmCnt, float missile_speed, CCPoint missile_position);
 	// 초기위치, 획득영역, 레벨, 등급, 미사일 타입.
-	void createJackMissileWithStone(StoneType stoneType, int grade, int level, int missileNumbers, CCPoint initPosition);
+	void createJackMissileWithStone(StoneType stoneType, int grade, int level, float missileNumbers, CCPoint initPosition);
 	AttackOption getAttackOption(StoneType st, int grade);
 	void subOneDie();
 	void endIngActionAP();
