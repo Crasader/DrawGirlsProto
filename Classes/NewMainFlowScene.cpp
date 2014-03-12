@@ -303,7 +303,7 @@ bool NewMainFlowScene::init()
 			kei->setVisible(true);
 			kei->runAction(CCMoveTo::create(0.5f, ccp(0,0)));
 						  
-			t_sm->addMent(true, "케이", "talk_nametag_green.png", "음냐... 음.. 누.. 누구?", [=]()
+			t_sm->addMent(true, myDSH->getStringForKey(kDSH_Key_nick), "talk_nametag_green.png", "음냐... 음.. 누.. 누구?", [=]()
 			{
 				kei->runAction(CCScaleTo::create(0.2f, 0.7f));
 				ellebere->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(100,0)), CCHide::create()));
@@ -316,7 +316,7 @@ bool NewMainFlowScene::init()
 					snow->runAction(CCScaleTo::create(0.2f, 0.7f));
 					kei->runAction(CCScaleTo::create(0.2f, 1.f));
 															  
-					t_sm->addMent(true, "케이", "talk_nametag_green.png", "뭐? 마녀?\n무슨 이야기인지 하나도 모르겠네..\n여긴 어디지?", [=]()
+					t_sm->addMent(true, myDSH->getStringForKey(kDSH_Key_nick), "talk_nametag_green.png", "뭐? 마녀?\n무슨 이야기인지 하나도 모르겠네..\n여긴 어디지?", [=]()
 					{
 						kei->runAction(CCScaleTo::create(0.2f, 0.7f));
 						snow->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(100,0)), CCHide::create()));
@@ -329,7 +329,7 @@ bool NewMainFlowScene::init()
 							{
 								ellebere->runAction(CCScaleTo::create(0.2f, 0.7f));
 								kei->runAction(CCScaleTo::create(0.2f, 1.f));
-								t_sm->addMent(true, "케이", "talk_nametag_green.png", "아... 생각났다.. 그때 그 이상한 책을 열고..\n그래! 어떤 여자를 봤어요. 무서운 눈매의...\n도무지 알수가... 이해하기 힘든 일들이...", [=]()
+								t_sm->addMent(true, myDSH->getStringForKey(kDSH_Key_nick), "talk_nametag_green.png", "아... 생각났다.. 그때 그 이상한 책을 열고..\n그래! 어떤 여자를 봤어요. 무서운 눈매의...\n도무지 알수가... 이해하기 힘든 일들이...", [=]()
 								{
 									kei->runAction(CCScaleTo::create(0.2f, 0.7f));
 								t_sm->addMent(false, "악령", "talk_nametag_red.png", "쿠오오오아아앙", [=]()
@@ -545,7 +545,7 @@ void NewMainFlowScene::hideClearPopup()
 					kei->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
 					ellebere_left->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(-100,0)), CCHide::create()));
 															  
-					t_sm->addMent(true, "케이", "talk_nametag_green.png", "저.. 저는 어떻게 해야 하죠?\n집으로 가는 길이 어떻게 되는건지..", [=]()
+					t_sm->addMent(true, myDSH->getStringForKey(kDSH_Key_nick), "talk_nametag_green.png", "저.. 저는 어떻게 해야 하죠?\n집으로 가는 길이 어떻게 되는건지..", [=]()
 					{
 						kei->runAction(CCScaleTo::create(0.2f, 0.7f));
 						ellebere_right->setVisible(true);
@@ -601,7 +601,7 @@ void NewMainFlowScene::hideClearPopup()
 		snow->setVisible(false);
 		t_sm->right_node->addChild(snow);
 		
-		t_sm->addMent(true, "케이", "talk_nametag_green.png", "여기 이상한 보석이 떨어졌어요. 이건 뭐죠?", [=]()
+		t_sm->addMent(true, myDSH->getStringForKey(kDSH_Key_nick), "talk_nametag_green.png", "여기 이상한 보석이 떨어졌어요. 이건 뭐죠?", [=]()
 		{
 			kei->runAction(CCScaleTo::create(0.2f, 0.7f));
 			snow->setVisible(true);
@@ -659,7 +659,7 @@ void NewMainFlowScene::hideClearPopup()
 			kei->setVisible(true);
 			kei->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
 						  
-			t_sm->addMent(true, "케이", "talk_nametag_green.png", "뷰티스톤을 더 강하게 만들수도 있나요?", [=]()
+			t_sm->addMent(true, myDSH->getStringForKey(kDSH_Key_nick), "talk_nametag_green.png", "뷰티스톤을 더 강하게 만들수도 있나요?", [=]()
 			{
 				kei->runAction(CCScaleTo::create(0.2f, 0.7f));
 				ellebere_right->runAction(CCScaleTo::create(0.2f, 1.f));
