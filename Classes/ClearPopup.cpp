@@ -1769,11 +1769,11 @@ void ClearPopup::checkRentCard()
 		ment2_label->setPosition(ccp(0,25));
 		t_container->addChild(ment2_label);
 		
-		CCLabelTTF* ment3_label = CCLabelTTF::create("코인으로 고마움을 표현하세요.", mySGD->getFont().c_str(), 15);
+		CCLabelTTF* ment3_label = CCLabelTTF::create("하트으로 고마움을 표현하세요.", mySGD->getFont().c_str(), 15);
 		ment3_label->setPosition(ccp(0,-5));
 		t_container->addChild(ment3_label);
 		
-		CCLabelTTF* ment4_label = CCLabelTTF::create("(코인을 선물하면 ", mySGD->getFont().c_str(), 12);
+		CCLabelTTF* ment4_label = CCLabelTTF::create("(하트을 선물하면 ", mySGD->getFont().c_str(), 12);
 		ment4_label->setAnchorPoint(ccp(1,0.5));
 		ment4_label->setPosition(ccp(-10,-40));
 		t_container->addChild(ment4_label);
