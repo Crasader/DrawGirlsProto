@@ -181,7 +181,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 
 	int r2 = rand() % (myGD->getSubCumberCount());
 	stoneType = StoneType::kStoneType_global;
-	grade = 1;
+	//grade = 3;
 	//level = level == 0 ? 1 : level;
 	int power = grade * 20 + level * 10;
 	AttackOption ao = getAttackOption(stoneType, grade);
@@ -1180,7 +1180,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				addChild(t_m16);
 				
 				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t_m16);
+//				cumber->setAttackPattern(t_m16);
 				
 				
 				myGD->communication("MP_endIngActionAP");
