@@ -346,13 +346,13 @@ bool ClearPopup::init()
 	myLog->sendLog(CCString::createWithFormat("clear_%d", stage_number)->getCString());
 	
 	is_saved_user_data = false;
-	
+	take_animation_level = take_level;
 	take_star_animation_node = NULL;
 	
 	if(take_level == 1)
 	{
-		bronze_star = CCSprite::create("ending_star_bronze.png");
-		bronze_star->setPosition(ccp(130,174));
+		bronze_star = CCSprite::create("ending_star_gold.png");
+		bronze_star->setPosition(ccp(130-45,174));
 		main_case->addChild(bronze_star, kZ_CP_img);
 		
 		silver_star = NULL;
@@ -363,25 +363,36 @@ bool ClearPopup::init()
 	}
 	else if(take_level == 2)
 	{
-		silver_star = CCSprite::create("ending_star_silver.png");
+		bronze_star = CCSprite::create("ending_star_gold.png");
+		bronze_star->setPosition(ccp(130-45,174));
+		main_case->addChild(bronze_star, kZ_CP_img);
+		
+		silver_star = CCSprite::create("ending_star_gold.png");
 		silver_star->setPosition(ccp(130,174));
 		main_case->addChild(silver_star, kZ_CP_img);
 		
-		bronze_star = NULL;
 		gold_star = NULL;
 		
+		bronze_star->setScale(0);
 		silver_star->setScale(0);
 		take_star_animation_node = silver_star;
 	}
 	else if(take_level == 3)
 	{
+		bronze_star = CCSprite::create("ending_star_gold.png");
+		bronze_star->setPosition(ccp(130-45,174));
+		main_case->addChild(bronze_star, kZ_CP_img);
+		
+		silver_star = CCSprite::create("ending_star_gold.png");
+		silver_star->setPosition(ccp(130,174));
+		main_case->addChild(silver_star, kZ_CP_img);
+		
 		gold_star = CCSprite::create("ending_star_gold.png");
-		gold_star->setPosition(ccp(130,174));
+		gold_star->setPosition(ccp(130+45,174));
 		main_case->addChild(gold_star, kZ_CP_img);
 		
-		bronze_star = NULL;
-		silver_star = NULL;
-		
+		bronze_star->setScale(0);
+		silver_star->setScale(0);
 		gold_star->setScale(0);
 		take_star_animation_node = gold_star;
 	}
@@ -1196,14 +1207,54 @@ void ClearPopup::checkChallengeOrHelp()
 void ClearPopup::endTakeCard()
 {
 	startCalcAnimation();
+	
 	if(take_star_animation_node)
 	{
-		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
-		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, t_call, NULL);
-		take_star_animation_node->runAction(t_seq);
+		if(take_animation_level == 1)
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+			CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
+			CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
+			CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, t_call, NULL);
+			bronze_star->runAction(t_seq);
+		}
+		else if(take_animation_level == 2)
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+			CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
+			CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
+			CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
+			bronze_star->runAction(t_seq);
+			
+			CCDelayTime* t_delay2 = CCDelayTime::create(0.7f);
+			CCScaleTo* t_scale3 = CCScaleTo::create(0.2f, 1.5f);
+			CCScaleTo* t_scale4 = CCScaleTo::create(0.2f, 1.f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
+			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_scale3, t_scale4, t_call, NULL);
+			silver_star->runAction(t_seq2);
+		}
+		else if(take_animation_level == 3)
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+			CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
+			CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
+			CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
+			bronze_star->runAction(t_seq);
+			
+			CCDelayTime* t_delay2 = CCDelayTime::create(0.7f);
+			CCScaleTo* t_scale3 = CCScaleTo::create(0.2f, 1.5f);
+			CCScaleTo* t_scale4 = CCScaleTo::create(0.2f, 1.f);
+			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_scale3, t_scale4, NULL);
+			silver_star->runAction(t_seq2);
+			
+			CCDelayTime* t_delay3 = CCDelayTime::create(0.9f);
+			CCScaleTo* t_scale5 = CCScaleTo::create(0.2f, 1.5f);
+			CCScaleTo* t_scale6 = CCScaleTo::create(0.2f, 1.f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
+			CCSequence* t_seq3 = CCSequence::create(t_delay3, t_scale5, t_scale6, t_call, NULL);
+			gold_star->runAction(t_seq3);
+		}
 	}
 	else
 	{

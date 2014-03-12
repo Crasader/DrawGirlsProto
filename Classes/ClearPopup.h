@@ -81,6 +81,7 @@ private:
 	int recent_my_rank;
 	RankFriendInfo next_rank_info;
 	
+	int take_animation_level;
 	CCSprite* take_star_animation_node;
 	
 	vector<RankFriendInfo> friend_list;

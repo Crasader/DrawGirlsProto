@@ -646,7 +646,7 @@ bool ShopPopup::init()
 								});
 	main_case->addChild(character_menu, kSP_Z_content);
 	
-	card_menu = CommonButton::create("카드상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	card_menu = CommonButton::create("스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	card_menu->setTitleColor(ccWHITE);
 	card_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	card_menu->setTitleColorForDisable(ccBLACK);
@@ -1437,11 +1437,79 @@ void ShopPopup::menuAction(CCObject* pSender)
 								{
 									mySGD->setStar(mySGD->getStar()-card_price_high.getV());
 									
+									int have_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+									have_stone_cnt++;
+									int self_stone_id = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
+									self_stone_id++;
+									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, have_stone_cnt);
+									myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, self_stone_id);
+									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, have_stone_cnt, self_stone_id);
+									
+									myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id, rand()%7);
+									myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id, 1);
+									
+									int random_value = rand()%1000;
+									int rank_value;
+									if(random_value < 500)
+										rank_value = 2;
+									else if(random_value < 800)
+										rank_value = 3;
+									else
+										rank_value = 4;
+									
+									myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id, rank_value);
+									
+									result_stone_layer = TouchSuctionLayer::create(-501);
+									CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+									float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+									if(screen_scale_x < 1.f)
+										screen_scale_x = 1.f;
+									
+									CCSprite* gray = CCSprite::create("back_gray.png");
+									gray->setPosition(ccp(240,160));
+									gray->setScaleX(screen_scale_x);
+									gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+									result_stone_layer->addChild(gray);
+									
+									CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id))->getCString());
+									stone_img->setPosition(ccp(240, 160));
+									result_stone_layer->addChild(stone_img);
+									
+									CCLabelTTF* stone_level = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id))->getCString(), mySGD->getFont().c_str(), 12);
+									stone_level->setAnchorPoint(ccp(1,0));
+									stone_level->setPosition(ccp(stone_img->getContentSize().width/2.f-3, -stone_img->getContentSize().height/2.f+3));
+									stone_img->addChild(stone_level);
+									result_stone_layer->target_touch_began = result_stone_layer;
+									result_stone_layer->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+									addChild(result_stone_layer, kSP_Z_popup);
+									result_stone_layer->setVisible(false);
+									
+									
 									Json::Value param;
 									param["memberID"] = hspConnector::get()->getKakaoID();
 									
 									Json::Value data;
 									data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
+									{
+										for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+										{
+											int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+											for(int j=1;j<=slot_count;j++)
+												data[myDSH->getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
+										}
+										
+										data[myDSH->getKey(kDSH_Key_selfBeautyStoneID)] = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
+										int have_beauty_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+										data[myDSH->getKey(kDSH_Key_haveBeautyStoneCnt)] = have_beauty_stone_cnt;
+										for(int i=1;i<=have_beauty_stone_cnt;i++)
+										{
+											int beauty_stone_id = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
+											data[myDSH->getKey(kDSH_Key_haveBeautyStoneID_int1)][i] = beauty_stone_id;
+											data[myDSH->getKey(kDSH_Key_beautyStoneType_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id);
+											data[myDSH->getKey(kDSH_Key_beautyStoneRank_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id);
+											data[myDSH->getKey(kDSH_Key_beautyStoneLevel_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id);
+										}
+									}
 									
 									Json::FastWriter writer;
 									param["data"] = writer.write(data);
@@ -1470,11 +1538,79 @@ void ShopPopup::menuAction(CCObject* pSender)
 								{
 									mySGD->setGold(mySGD->getGold()-card_price_mid.getV());
 									
+									int have_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+									have_stone_cnt++;
+									int self_stone_id = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
+									self_stone_id++;
+									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, have_stone_cnt);
+									myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, self_stone_id);
+									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, have_stone_cnt, self_stone_id);
+									
+									myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id, rand()%7);
+									myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id, 1);
+									
+									int random_value = rand()%1000;
+									int rank_value;
+									if(random_value < 500)
+										rank_value = 1;
+									else if(random_value < 800)
+										rank_value = 2;
+									else
+										rank_value = 3;
+									
+									myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id, rank_value);
+									
+									result_stone_layer = TouchSuctionLayer::create(-501);
+									CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+									float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+									if(screen_scale_x < 1.f)
+										screen_scale_x = 1.f;
+									
+									CCSprite* gray = CCSprite::create("back_gray.png");
+									gray->setPosition(ccp(240,160));
+									gray->setScaleX(screen_scale_x);
+									gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+									result_stone_layer->addChild(gray);
+									
+									CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id))->getCString());
+									stone_img->setPosition(ccp(240, 160));
+									result_stone_layer->addChild(stone_img);
+									
+									CCLabelTTF* stone_level = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id))->getCString(), mySGD->getFont().c_str(), 12);
+									stone_level->setAnchorPoint(ccp(1,0));
+									stone_level->setPosition(ccp(stone_img->getContentSize().width/2.f-3, -stone_img->getContentSize().height/2.f+3));
+									stone_img->addChild(stone_level);
+									result_stone_layer->target_touch_began = result_stone_layer;
+									result_stone_layer->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+									addChild(result_stone_layer, kSP_Z_popup);
+									result_stone_layer->setVisible(false);
+									
+									
 									Json::Value param;
 									param["memberID"] = hspConnector::get()->getKakaoID();
 									
 									Json::Value data;
 									data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
+									{
+										for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+										{
+											int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+											for(int j=1;j<=slot_count;j++)
+												data[myDSH->getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
+										}
+										
+										data[myDSH->getKey(kDSH_Key_selfBeautyStoneID)] = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
+										int have_beauty_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+										data[myDSH->getKey(kDSH_Key_haveBeautyStoneCnt)] = have_beauty_stone_cnt;
+										for(int i=1;i<=have_beauty_stone_cnt;i++)
+										{
+											int beauty_stone_id = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
+											data[myDSH->getKey(kDSH_Key_haveBeautyStoneID_int1)][i] = beauty_stone_id;
+											data[myDSH->getKey(kDSH_Key_beautyStoneType_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id);
+											data[myDSH->getKey(kDSH_Key_beautyStoneRank_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id);
+											data[myDSH->getKey(kDSH_Key_beautyStoneLevel_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id);
+										}
+									}
 									
 									Json::FastWriter writer;
 									param["data"] = writer.write(data);
@@ -1503,11 +1639,81 @@ void ShopPopup::menuAction(CCObject* pSender)
 								{
 									mySGD->setFriendPoint(mySGD->getFriendPoint()-card_price_low.getV());
 									
+									int have_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+									have_stone_cnt++;
+									int self_stone_id = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
+									self_stone_id++;
+									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, have_stone_cnt);
+									myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, self_stone_id);
+									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, have_stone_cnt, self_stone_id);
+									
+									myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id, rand()%7);
+									myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id, 1);
+									
+									int random_value = rand()%1000;
+									int rank_value;
+									if(random_value < 400)
+										rank_value = 1;
+									else if(random_value < 700)
+										rank_value = 2;
+									else if(random_value < 900)
+										rank_value = 3;
+									else
+										rank_value = 4;
+									
+									myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id, rank_value);
+									
+									result_stone_layer = TouchSuctionLayer::create(-501);
+									CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+									float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+									if(screen_scale_x < 1.f)
+										screen_scale_x = 1.f;
+									
+									CCSprite* gray = CCSprite::create("back_gray.png");
+									gray->setPosition(ccp(240,160));
+									gray->setScaleX(screen_scale_x);
+									gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+									result_stone_layer->addChild(gray);
+									
+									CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id))->getCString());
+									stone_img->setPosition(ccp(240, 160));
+									result_stone_layer->addChild(stone_img);
+									
+									CCLabelTTF* stone_level = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id))->getCString(), mySGD->getFont().c_str(), 12);
+									stone_level->setAnchorPoint(ccp(1,0));
+									stone_level->setPosition(ccp(stone_img->getContentSize().width/2.f-3, -stone_img->getContentSize().height/2.f+3));
+									stone_img->addChild(stone_level);
+									result_stone_layer->target_touch_began = result_stone_layer;
+									result_stone_layer->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+									addChild(result_stone_layer, kSP_Z_popup);
+									result_stone_layer->setVisible(false);
+									
+									
 									Json::Value param;
 									param["memberID"] = hspConnector::get()->getKakaoID();
 									
 									Json::Value data;
 									data[myDSH->getKey(kDSH_Key_savedFriendPoint)] = myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint);
+									{
+										for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+										{
+											int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+											for(int j=1;j<=slot_count;j++)
+												data[myDSH->getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
+										}
+										
+										data[myDSH->getKey(kDSH_Key_selfBeautyStoneID)] = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
+										int have_beauty_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+										data[myDSH->getKey(kDSH_Key_haveBeautyStoneCnt)] = have_beauty_stone_cnt;
+										for(int i=1;i<=have_beauty_stone_cnt;i++)
+										{
+											int beauty_stone_id = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
+											data[myDSH->getKey(kDSH_Key_haveBeautyStoneID_int1)][i] = beauty_stone_id;
+											data[myDSH->getKey(kDSH_Key_beautyStoneType_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id);
+											data[myDSH->getKey(kDSH_Key_beautyStoneRank_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id);
+											data[myDSH->getKey(kDSH_Key_beautyStoneLevel_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id);
+										}
+									}
 									
 									Json::FastWriter writer;
 									param["data"] = writer.write(data);
@@ -1608,243 +1814,248 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 	{
 		command_list.clear();
 		
-		Json::Value t_card = result_data["cardInfo"];
-		NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
-		NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
-		NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
-		NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
+		loading_layer->removeFromParent();
+		result_stone_layer->setVisible(true);
+		result_stone_layer->setTouchEnabled(true);
+		is_menu_enable = true;
 		
-		NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
-		NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt(), false);
-		NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
-		
-		Json::Value t_card_missile = t_card["missile"];
-		NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
-		NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt(), false);
-		NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt(), false);
-		NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble(), false);
-		
-		NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str(), false);
-		
-		Json::Value t_ability = t_card["ability"];
-		NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), int(t_ability.size()), false);
-		for(int j=0;j<t_ability.size();j++)
-		{
-			Json::Value t_abil = t_ability[j];
-			NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt(), false);
-			
-			Json::Value t_option;
-			if(!t_abil["option"].isObject())                    t_option["key"]="value";
-			else												t_option =t_abil["option"];
-			
-			if(t_abil["type"].asInt() == kIC_attack)
-				NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt(), false);
-			else if(t_abil["type"].asInt() == kIC_addTime)
-				NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-			else if(t_abil["type"].asInt() == kIC_fast)
-				NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-			else if(t_abil["type"].asInt() == kIC_silence)
-				NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-			else if(t_abil["type"].asInt() == kIC_doubleItem)
-				NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-			else if(t_abil["type"].asInt() == kIC_longTime)
-				NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-			else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
-				NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-			else if(t_abil["type"].asInt() == kIC_subSmallSize)
-				NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-			else if(t_abil["type"].asInt() == kIC_smallArea)
-				NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-			else if(t_abil["type"].asInt() == kIC_widePerfect)
-				NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-		}
-		
-		Json::Value t_imgInfo = t_card["imgInfo"];
-		
-		bool is_add_cf = false;
-		
-		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
-		{
-			// check, after download ----------
-			DownloadFile t_df;
-			t_df.size = t_imgInfo["size"].asInt();
-			t_df.img = t_imgInfo["img"].asString().c_str();
-			t_df.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
-			t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
-			df_list.push_back(t_df);
-			// ================================
-			
-			CopyFile t_cf;
-			t_cf.from_filename = t_df.filename.c_str();
-			t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-			cf_list.push_back(t_cf);
-			
-			is_add_cf = true;
-		}
-		
-		Json::Value t_aniInfo = t_card["aniInfo"];
-		NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool(), false);
-		if(t_aniInfo["isAni"].asBool())
-		{
-			Json::Value t_detail = t_aniInfo["detail"];
-			NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt(), false);
-			
-			Json::Value t_loopSeq = t_detail["loopSeq"];
-			for(int j=0;j<t_loopSeq.size();j++)
-				NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt(), false);
-			
-			NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt(), false);
-			NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt(), false);
-			NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt(), false);
-			NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt(), false);
-			NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt(), false);
-			
-			if(NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card["no"].asInt()) != t_detail["img"].asString())
-			{
-				// check, after download ----------
-				DownloadFile t_df;
-				t_df.size = t_detail["size"].asInt();
-				t_df.img = t_detail["img"].asString().c_str();
-				t_df.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
-				t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
-				df_list.push_back(t_df);
-				// ================================
-			}
-			
-			if(is_add_cf)
-			{
-				CopyFile t_cf = cf_list.back();
-				cf_list.pop_back();
-				t_cf.is_ani = true;
-				t_cf.cut_width = t_detail["cutWidth"].asInt();
-				t_cf.cut_height = t_detail["cutHeight"].asInt();
-				t_cf.position_x = t_detail["positionX"].asInt();
-				t_cf.position_y = t_detail["positionY"].asInt();
-				t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
-				cf_list.push_back(t_cf);
-			}
-		}
-		
-		NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
-		
-		Json::Value t_silImgInfo = t_card["silImgInfo"];
-		NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
-		if(t_silImgInfo["isSil"].asBool())
-		{
-			if(NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card["no"].asInt()) != t_silImgInfo["img"].asString())
-			{
-				// check, after download ----------
-				DownloadFile t_df;
-				t_df.size = t_silImgInfo["size"].asInt();
-				t_df.img = t_silImgInfo["img"].asString().c_str();
-				t_df.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
-				t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
-				df_list.push_back(t_df);
-				// ================================
-			}
-		}
-		
-		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
-		
-		gacha_card_number = t_card["no"].asInt();
-		
-		if(df_list.size() + cf_list.size() > 0) // need download
-		{
-			ing_download_cnt = 1;
-			is_downloading = true;
-			startDownload();
-		}
-		else
-		{
-			loading_layer->removeFromParent();
-			
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number) > 0)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
-				
-				// 강화
-				float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
-				CCLog("strength_rate : %.3f", strength_rate);
-				
-				random_device rd;
-				default_random_engine e1(rd());
-				uniform_real_distribution<float> uniform_dist(0.f, 1.f);
-				
-				float result_value = uniform_dist(e1);
-				CCLog("result value : %.3f", result_value);
-				
-				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
-				CardCase* cardCase = CardCase::create(gacha_card_number);
-				card->addChild(cardCase);
-				
-				
-				CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
-				CardCase* cardCase2 = CardCase::create(gacha_card_number, 1, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
-				card2->addChild(cardCase2);
-				
-				
-				StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-350);
-				
-				b->setCloseFunc([this](){
-					CCLog("close Func");
-					this->is_menu_enable = true;
-				});
-				
-				if(result_value <= strength_rate)
-				{
-					CCLog("success");
-					
-					b->startSuccess("카드레벨 +1");
-					
-					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number)+1);
-					myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, nullptr);
-				}
-				else
-				{
-					CCLog("fail");
-					
-					b->startFail("강화 실패");
-				}
-				
-				addChild(b, kSP_Z_popup);
-			}
-			else
-			{
-				if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, gacha_card_number) == 0)
-				{
-					myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-					myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
-					myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), gacha_card_number);
-					
-					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
-					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, 1);
-					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
-					myDSH->setStringForKey(kDSH_Key_cardPassive_int1, gacha_card_number, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
-					
-					mySGD->addHasGottenCardNumber(gacha_card_number);
-				}
-				else
-				{
-					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
-					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, 1);
-					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
-					myDSH->setStringForKey(kDSH_Key_cardPassive_int1, gacha_card_number, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
-				}
-				
-				// 획득
-				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
-				CardCase* cardCase = CardCase::create(gacha_card_number);
-				card->addChild(cardCase);
-				
-				TakeCardAnimation* b = TakeCardAnimation::create(card,-350);
-				b->setCloseFunc([this](){
-					CCLog("close Func");
-					this->is_menu_enable = true;
-				});
-				b->start();
-				addChild(b, kSP_Z_popup);
-			}
-		}
+//		Json::Value t_card = result_data["cardInfo"];
+//		NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
+//		NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
+//		NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
+//		NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
+//		
+//		NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
+//		NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt(), false);
+//		NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+//		
+//		Json::Value t_card_missile = t_card["missile"];
+//		NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
+//		NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt(), false);
+//		NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt(), false);
+//		NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble(), false);
+//		
+//		NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str(), false);
+//		
+//		Json::Value t_ability = t_card["ability"];
+//		NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), int(t_ability.size()), false);
+//		for(int j=0;j<t_ability.size();j++)
+//		{
+//			Json::Value t_abil = t_ability[j];
+//			NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt(), false);
+//			
+//			Json::Value t_option;
+//			if(!t_abil["option"].isObject())                    t_option["key"]="value";
+//			else												t_option =t_abil["option"];
+//			
+//			if(t_abil["type"].asInt() == kIC_attack)
+//				NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt(), false);
+//			else if(t_abil["type"].asInt() == kIC_addTime)
+//				NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+//			else if(t_abil["type"].asInt() == kIC_fast)
+//				NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+//			else if(t_abil["type"].asInt() == kIC_silence)
+//				NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+//			else if(t_abil["type"].asInt() == kIC_doubleItem)
+//				NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+//			else if(t_abil["type"].asInt() == kIC_longTime)
+//				NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+//			else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
+//				NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+//			else if(t_abil["type"].asInt() == kIC_subSmallSize)
+//				NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+//			else if(t_abil["type"].asInt() == kIC_smallArea)
+//				NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+//			else if(t_abil["type"].asInt() == kIC_widePerfect)
+//				NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+//		}
+//		
+//		Json::Value t_imgInfo = t_card["imgInfo"];
+//		
+//		bool is_add_cf = false;
+//		
+//		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
+//		{
+//			// check, after download ----------
+//			DownloadFile t_df;
+//			t_df.size = t_imgInfo["size"].asInt();
+//			t_df.img = t_imgInfo["img"].asString().c_str();
+//			t_df.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+//			t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
+//			df_list.push_back(t_df);
+//			// ================================
+//			
+//			CopyFile t_cf;
+//			t_cf.from_filename = t_df.filename.c_str();
+//			t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//			cf_list.push_back(t_cf);
+//			
+//			is_add_cf = true;
+//		}
+//		
+//		Json::Value t_aniInfo = t_card["aniInfo"];
+//		NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool(), false);
+//		if(t_aniInfo["isAni"].asBool())
+//		{
+//			Json::Value t_detail = t_aniInfo["detail"];
+//			NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt(), false);
+//			
+//			Json::Value t_loopSeq = t_detail["loopSeq"];
+//			for(int j=0;j<t_loopSeq.size();j++)
+//				NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt(), false);
+//			
+//			NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt(), false);
+//			NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt(), false);
+//			NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt(), false);
+//			NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt(), false);
+//			NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt(), false);
+//			
+//			if(NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card["no"].asInt()) != t_detail["img"].asString())
+//			{
+//				// check, after download ----------
+//				DownloadFile t_df;
+//				t_df.size = t_detail["size"].asInt();
+//				t_df.img = t_detail["img"].asString().c_str();
+//				t_df.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
+//				t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
+//				df_list.push_back(t_df);
+//				// ================================
+//			}
+//			
+//			if(is_add_cf)
+//			{
+//				CopyFile t_cf = cf_list.back();
+//				cf_list.pop_back();
+//				t_cf.is_ani = true;
+//				t_cf.cut_width = t_detail["cutWidth"].asInt();
+//				t_cf.cut_height = t_detail["cutHeight"].asInt();
+//				t_cf.position_x = t_detail["positionX"].asInt();
+//				t_cf.position_y = t_detail["positionY"].asInt();
+//				t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
+//				cf_list.push_back(t_cf);
+//			}
+//		}
+//		
+//		NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
+//		
+//		Json::Value t_silImgInfo = t_card["silImgInfo"];
+//		NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
+//		if(t_silImgInfo["isSil"].asBool())
+//		{
+//			if(NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card["no"].asInt()) != t_silImgInfo["img"].asString())
+//			{
+//				// check, after download ----------
+//				DownloadFile t_df;
+//				t_df.size = t_silImgInfo["size"].asInt();
+//				t_df.img = t_silImgInfo["img"].asString().c_str();
+//				t_df.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
+//				t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
+//				df_list.push_back(t_df);
+//				// ================================
+//			}
+//		}
+//		
+//		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+//		
+//		gacha_card_number = t_card["no"].asInt();
+//		
+//		if(df_list.size() + cf_list.size() > 0) // need download
+//		{
+//			ing_download_cnt = 1;
+//			is_downloading = true;
+//			startDownload();
+//		}
+//		else
+//		{
+//			loading_layer->removeFromParent();
+//			
+//			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number) > 0)
+//			{
+//				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
+//				
+//				// 강화
+//				float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
+//				CCLog("strength_rate : %.3f", strength_rate);
+//				
+//				random_device rd;
+//				default_random_engine e1(rd());
+//				uniform_real_distribution<float> uniform_dist(0.f, 1.f);
+//				
+//				float result_value = uniform_dist(e1);
+//				CCLog("result value : %.3f", result_value);
+//				
+//				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
+//				CardCase* cardCase = CardCase::create(gacha_card_number);
+//				card->addChild(cardCase);
+//				
+//				
+//				CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
+//				CardCase* cardCase2 = CardCase::create(gacha_card_number, 1, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
+//				card2->addChild(cardCase2);
+//				
+//				
+//				StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-350);
+//				
+//				b->setCloseFunc([this](){
+//					CCLog("close Func");
+//					this->is_menu_enable = true;
+//				});
+//				
+//				if(result_value <= strength_rate)
+//				{
+//					CCLog("success");
+//					
+//					b->startSuccess("카드레벨 +1");
+//					
+//					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number)+1);
+//					myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, nullptr);
+//				}
+//				else
+//				{
+//					CCLog("fail");
+//					
+//					b->startFail("강화 실패");
+//				}
+//				
+//				addChild(b, kSP_Z_popup);
+//			}
+//			else
+//			{
+//				if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, gacha_card_number) == 0)
+//				{
+//					myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
+//					myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, gacha_card_number, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
+//					myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), gacha_card_number);
+//					
+//					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+//					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, 1);
+//					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+//					myDSH->setStringForKey(kDSH_Key_cardPassive_int1, gacha_card_number, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
+//					
+//					mySGD->addHasGottenCardNumber(gacha_card_number);
+//				}
+//				else
+//				{
+//					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+//					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number, 1);
+//					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number, NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number));
+//					myDSH->setStringForKey(kDSH_Key_cardPassive_int1, gacha_card_number, NSDS_GS(kSDS_CI_int1_passive_s, gacha_card_number));
+//				}
+//				
+//				// 획득
+//				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
+//				CardCase* cardCase = CardCase::create(gacha_card_number);
+//				card->addChild(cardCase);
+//				
+//				TakeCardAnimation* b = TakeCardAnimation::create(card,-350);
+//				b->setCloseFunc([this](){
+//					CCLog("close Func");
+//					this->is_menu_enable = true;
+//				});
+//				b->start();
+//				addChild(b, kSP_Z_popup);
+//			}
+//		}
 	}
 	else
 	{

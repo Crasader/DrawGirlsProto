@@ -155,16 +155,16 @@ bool CardSettingPopup::init()
 	main_case->addChild(close_menu, kCSS_Z_content);
 	
 	
-	CommonButton* strength_menu = CommonButton::create("카드강화", 12, CCSizeMake(100,40), CommonButtonYellow, -185);
-	strength_menu->setTitleColor(ccBLACK);
-	strength_menu->setPosition(ccp(78,31));
-	main_case->addChild(strength_menu, kCSS_Z_content);
-	strength_menu->setFunction([=](CCObject* sender)
-							   {
-								   CCNode* t_node = CCNode::create();
-								   t_node->setTag(kCSS_MT_strength);
-								   menuAction(t_node);
-							   });
+//	CommonButton* strength_menu = CommonButton::create("카드강화", 12, CCSizeMake(100,40), CommonButtonYellow, -185);
+//	strength_menu->setTitleColor(ccBLACK);
+//	strength_menu->setPosition(ccp(78,31));
+//	main_case->addChild(strength_menu, kCSS_Z_content);
+//	strength_menu->setFunction([=](CCObject* sender)
+//							   {
+//								   CCNode* t_node = CCNode::create();
+//								   t_node->setTag(kCSS_MT_strength);
+//								   menuAction(t_node);
+//							   });
 	
 	
 	CommonButton* align_default_menu = CommonButton::create("기본정렬", 12, CCSizeMake(75,42), CommonButtonGreen, -185);

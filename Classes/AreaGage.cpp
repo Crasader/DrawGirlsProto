@@ -171,11 +171,11 @@ void AreaGage::myInit(float t_clear_percent)
 //	gage_case->setPosition(CCPointZero);
 //	addChild(gage_case);
 	
-	star1 = CCSprite::create("gage_star_bronze.png");
+	star1 = CCSprite::create("gage_star_gold.png");
 	star1->setPosition(ccp(gage_bar2->getPositionX(), 1));
 	addChild(star1);
 	
-	star2 = CCSprite::create("gage_star_silver.png");
+	star2 = CCSprite::create("gage_star_gold.png");
 	star2->setPosition(ccp(gage_bar3->getPositionX(), 1));
 	addChild(star2);
 	

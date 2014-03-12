@@ -102,7 +102,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 						  });
 	strength->setPosition(getContentPosition(kCBP_MT_strength));
 	target->addChild(strength, 1, kCBP_MT_strength);
-	strength->setVisible(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0);
+	strength->setVisible(false);//myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0);
 	
 	
 	float mul_value = 0.88f;

@@ -68,6 +68,7 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	LoadingLayer* loading_layer;
+	TouchSuctionLayer* result_stone_layer;
 	
 	vector<KSProtectVar<int>> index_to_ruby;
 	vector<KSProtectVar<int>> index_to_gold;
