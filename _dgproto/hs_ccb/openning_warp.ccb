@@ -19,7 +19,7 @@
 	<key>nodeGraph</key>
 	<dict>
 		<key>baseClass</key>
-		<string>CCLayer</string>
+		<string>CCSprite</string>
 		<key>children</key>
 		<array>
 			<dict>
@@ -144,25 +144,13 @@
 		<key>customClass</key>
 		<string></string>
 		<key>displayName</key>
-		<string>CCLayer</string>
+		<string>CCSprite</string>
 		<key>memberVarAssignmentName</key>
 		<string></string>
 		<key>memberVarAssignmentType</key>
 		<integer>0</integer>
 		<key>properties</key>
 		<array>
-			<dict>
-				<key>name</key>
-				<string>contentSize</string>
-				<key>type</key>
-				<string>Size</string>
-				<key>value</key>
-				<array>
-					<real>100</real>
-					<real>100</real>
-					<integer>1</integer>
-				</array>
-			</dict>
 			<dict>
 				<key>name</key>
 				<string>anchorPoint</string>
@@ -197,27 +185,16 @@
 			</dict>
 			<dict>
 				<key>name</key>
-				<string>touchEnabled</string>
-				<key>platform</key>
-				<string>iOS</string>
+				<string>displayFrame</string>
 				<key>type</key>
-				<string>Check</string>
+				<string>SpriteFrame</string>
 				<key>value</key>
-				<true/>
-			</dict>
-			<dict>
-				<key>name</key>
-				<string>mouseEnabled</string>
-				<key>platform</key>
-				<string>Mac</string>
-				<key>type</key>
-				<string>Check</string>
-				<key>value</key>
-				<true/>
+				<array>
+					<string></string>
+					<string>_block_hs.png</string>
+				</array>
 			</dict>
 		</array>
-		<key>selected</key>
-		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
@@ -229,13 +206,13 @@
 			<key>ext</key>
 			<string>iphone</string>
 			<key>height</key>
-			<integer>320</integer>
+			<integer>0</integer>
 			<key>name</key>
-			<string>iPhone Landscape</string>
+			<string>iPhone</string>
 			<key>scale</key>
 			<real>1</real>
 			<key>width</key>
-			<integer>480</integer>
+			<integer>0</integer>
 		</dict>
 	</array>
 	<key>sequences</key>
@@ -263,7 +240,7 @@
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>224.07162475585938</real>
+			<real>128</real>
 			<key>sequenceId</key>
 			<integer>0</integer>
 			<key>soundChannel</key>
@@ -276,6 +253,6 @@
 		</dict>
 	</array>
 	<key>stageBorder</key>
-	<integer>0</integer>
+	<integer>3</integer>
 </dict>
 </plist>
