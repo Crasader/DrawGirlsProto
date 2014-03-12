@@ -1278,21 +1278,21 @@ void StartSettingScene::callStart()
 	}
 	else
 	{
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int durability;
-		if(selected_card_number > 0)
-		{
-			durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
-		}
-		else
-		{
-			durability = -1;
-		}
+//		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+//		int durability;
+//		if(selected_card_number > 0)
+//		{
+//			durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
+//		}
+//		else
+//		{
+//			durability = -1;
+//		}
 		
 		if(heart_time->isStartable())
 		{
-			if(durability > 0)
-			{
+//			if(durability > 0)
+//			{
 				if(heart_time->startGame())
 					realStartAction();
 				else
@@ -1302,110 +1302,103 @@ void StartSettingScene::callStart()
 					
 					is_menu_enable = true;
 				}
-			}
-			else if(durability == 0)
-			{
-				is_menu_enable = true;
-				
-				
-				ASPopupView* t_popup = ASPopupView::create(-300);
-				
-				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-				if(screen_scale_x < 1.f)
-					screen_scale_x = 1.f;
-				
-				float height_value = 320.f;
-				if(myDSH->screen_convert_rate < 1.f)
-					height_value = 320.f/myDSH->screen_convert_rate;
-				
-				if(height_value < myDSH->ui_top)
-					height_value = myDSH->ui_top;
-				
-				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-				t_popup->setDimmedPosition(ccp(240, 160));
-				t_popup->setBasePosition(ccp(240, 160));
-				
-				CCNode* t_container = CCNode::create();
-				t_popup->setContainerNode(t_container);
-				addChild(t_popup, kStartSettingZorder_popup);
-				
-				CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-				case_back->setPosition(ccp(0,0));
-				t_container->addChild(case_back);
-				
-				case_back->setContentSize(CCSizeMake(260, 170));
-				
-				CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-				content_back->setPosition(ccp(0,25));
-				t_container->addChild(content_back);
-				
-				content_back->setContentSize(CCSizeMake(240, 100));
-				
-				CCLabelTTF* ment1_label = CCLabelTTF::create("장착된 카드가 ",	mySGD->getFont().c_str(), 15);
-				ment1_label->setAnchorPoint(ccp(1,0.5));
-				ment1_label->setPosition(ccp(-13,50));
-				t_container->addChild(ment1_label);
-				
-				CCLabelTTF* ment2_label = CCLabelTTF::create("마지막 내구도", mySGD->getFont().c_str(), 15);
-				ment2_label->setColor(ccc3(0, 255, 255));
-				ment2_label->setAnchorPoint(ccp(0,0.5));
-				ment2_label->setPosition(ccp(-13,50));
-				t_container->addChild(ment2_label);
-				
-				CCLabelTTF* ment3_label = CCLabelTTF::create("네요!", mySGD->getFont().c_str(), 15);
-				ment3_label->setAnchorPoint(ccp(0,0.5));
-				ment3_label->setPosition(ccp(ment2_label->getPositionX() + ment2_label->getContentSize().width, 50));
-				t_container->addChild(ment3_label);
-				
-				CCLabelTTF* ment4_label = CCLabelTTF::create("실패시에는 카드가 사라지니", mySGD->getFont().c_str(), 15);
-				ment4_label->setPosition(ccp(0,25));
-				t_container->addChild(ment4_label);
-				
-				CCLabelTTF* ment5_label = CCLabelTTF::create("신중하세요!", mySGD->getFont().c_str(), 15);
-				ment5_label->setPosition(ccp(0,0));
-				t_container->addChild(ment5_label);
-				
-				
-				CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-				cancel_button->setPosition(ccp(-60,-55));
-				cancel_button->setFunction([=](CCObject* sender)
-										   {
-											   durabilityCancelAction(sender);
-											   t_popup->removeFromParent();
-										   });
-				t_container->addChild(cancel_button);
-				
-				
-				CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
-				ok_button->setPosition(ccp(60,-55));
-				ok_button->setFunction([=](CCObject* sender)
-									   {
-										   durabilityOkAction(sender);
-										   t_popup->removeFromParent();
-									   });
-				t_container->addChild(ok_button);
-				
-				
-				
-				
-				
-				
-//				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StartSettingScene::durabilityCancelAction), this, menu_selector(StartSettingScene::durabilityOkAction));
-//				addChild(t_popup, kStartSettingZorder_popup, kStartSettingZorder_popup);
-			}
-			else // not selected card
-			{
-				if(heart_time->startGame())
-					realStartAction();
-				else
-				{
-					if(mySGD->getIsMeChallenge())
-						mySGD->setIsMeChallenge(false);
-					
-					is_menu_enable = true;
-				}
-			}
+//			}
+//			else if(durability == 0)
+//			{
+//				is_menu_enable = true;
+//				
+//				
+//				ASPopupView* t_popup = ASPopupView::create(-300);
+//				
+//				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//				if(screen_scale_x < 1.f)
+//					screen_scale_x = 1.f;
+//				
+//				float height_value = 320.f;
+//				if(myDSH->screen_convert_rate < 1.f)
+//					height_value = 320.f/myDSH->screen_convert_rate;
+//				
+//				if(height_value < myDSH->ui_top)
+//					height_value = myDSH->ui_top;
+//				
+//				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+//				t_popup->setDimmedPosition(ccp(240, 160));
+//				t_popup->setBasePosition(ccp(240, 160));
+//				
+//				CCNode* t_container = CCNode::create();
+//				t_popup->setContainerNode(t_container);
+//				addChild(t_popup, kStartSettingZorder_popup);
+//				
+//				CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//				case_back->setPosition(ccp(0,0));
+//				t_container->addChild(case_back);
+//				
+//				case_back->setContentSize(CCSizeMake(260, 170));
+//				
+//				CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//				content_back->setPosition(ccp(0,25));
+//				t_container->addChild(content_back);
+//				
+//				content_back->setContentSize(CCSizeMake(240, 100));
+//				
+//				CCLabelTTF* ment1_label = CCLabelTTF::create("장착된 카드가 ",	mySGD->getFont().c_str(), 15);
+//				ment1_label->setAnchorPoint(ccp(1,0.5));
+//				ment1_label->setPosition(ccp(-13,50));
+//				t_container->addChild(ment1_label);
+//				
+//				CCLabelTTF* ment2_label = CCLabelTTF::create("마지막 내구도", mySGD->getFont().c_str(), 15);
+//				ment2_label->setColor(ccc3(0, 255, 255));
+//				ment2_label->setAnchorPoint(ccp(0,0.5));
+//				ment2_label->setPosition(ccp(-13,50));
+//				t_container->addChild(ment2_label);
+//				
+//				CCLabelTTF* ment3_label = CCLabelTTF::create("네요!", mySGD->getFont().c_str(), 15);
+//				ment3_label->setAnchorPoint(ccp(0,0.5));
+//				ment3_label->setPosition(ccp(ment2_label->getPositionX() + ment2_label->getContentSize().width, 50));
+//				t_container->addChild(ment3_label);
+//				
+//				CCLabelTTF* ment4_label = CCLabelTTF::create("실패시에는 카드가 사라지니", mySGD->getFont().c_str(), 15);
+//				ment4_label->setPosition(ccp(0,25));
+//				t_container->addChild(ment4_label);
+//				
+//				CCLabelTTF* ment5_label = CCLabelTTF::create("신중하세요!", mySGD->getFont().c_str(), 15);
+//				ment5_label->setPosition(ccp(0,0));
+//				t_container->addChild(ment5_label);
+//				
+//				
+//				CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+//				cancel_button->setPosition(ccp(-60,-55));
+//				cancel_button->setFunction([=](CCObject* sender)
+//										   {
+//											   durabilityCancelAction(sender);
+//											   t_popup->removeFromParent();
+//										   });
+//				t_container->addChild(cancel_button);
+//				
+//				
+//				CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
+//				ok_button->setPosition(ccp(60,-55));
+//				ok_button->setFunction([=](CCObject* sender)
+//									   {
+//										   durabilityOkAction(sender);
+//										   t_popup->removeFromParent();
+//									   });
+//				t_container->addChild(ok_button);
+//				
+//			}
+//			else // not selected card
+//			{
+//				if(heart_time->startGame())
+//					realStartAction();
+//				else
+//				{
+//					if(mySGD->getIsMeChallenge())
+//						mySGD->setIsMeChallenge(false);
+//					
+//					is_menu_enable = true;
+//				}
+//			}
 		}
 		else
 		{

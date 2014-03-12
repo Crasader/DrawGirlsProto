@@ -418,25 +418,42 @@ bool ClearPopup::init()
 	title_label->setPosition(ccp(0,107));
 	t_container->addChild(title_label);
 	
-	
-	int random_value = rand()%1000;
-	int gold_get_rate = 500;
-	int gold_or_item_get_rate = gold_get_rate + 300;
 	int reward_type;
-	if(random_value < gold_get_rate)
+	int random_value;
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 2 && mySD->getSilType() == 1)
 	{
-		// gold
 		reward_type = 1;
 	}
-	else if(random_value < gold_or_item_get_rate)
+	else if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 3 && mySD->getSilType() == 2)
 	{
-		// gold or item
-		reward_type = 2;
+		reward_type = 3;
+	}
+	else if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 4 && mySD->getSilType() == 4)
+	{
+		reward_type = 3;
 	}
 	else
 	{
-		// stone
-		reward_type = 3;
+		random_value = rand()%1000;
+		int gold_get_rate = 500;
+		int gold_or_item_get_rate = gold_get_rate + 300;
+		
+		if(random_value < gold_get_rate)
+		{
+			// gold
+			reward_type = 1;
+		}
+		else if(random_value < gold_or_item_get_rate)
+		{
+			// gold or item
+			reward_type = 2;
+		}
+		else
+		{
+			// stone
+			reward_type = 3;
+		}
 	}
 	
 	int gold_or_item_value;

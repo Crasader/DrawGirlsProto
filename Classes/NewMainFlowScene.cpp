@@ -482,6 +482,197 @@ void NewMainFlowScene::showClearPopup()
 
 void NewMainFlowScene::hideClearPopup()
 {
+	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 2 && mySD->getSilType() == 1)
+	{
+		StoryManager* t_sm = StoryManager::create(-500);
+		addChild(t_sm, kNewMainFlowZorder_popup);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCSprite* gray = CCSprite::create("back_gray.png");
+		gray->setOpacity(0);
+		gray->setPosition(ccp(0,0));
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+		gray->runAction(CCFadeTo::create(0.5f, 255));
+		t_sm->back_node->addChild(gray);
+		
+		CCSprite* ellebere_left = CCSprite::create("talk_char_dwarf.png");
+		ellebere_left->setAnchorPoint(ccp(0.3f, 0));
+		ellebere_left->setPosition(ccp(-100,0));
+		ellebere_left->setVisible(false);
+		t_sm->left_node->addChild(ellebere_left);
+		
+		CCSprite* ellebere_right = CCSprite::create("talk_char_dwarf.png");
+		ellebere_right->setAnchorPoint(ccp(0.7f,0));
+		ellebere_right->setFlipX(true);
+		ellebere_right->setPosition(ccp(100,0));
+		ellebere_right->setVisible(false);
+		t_sm->right_node->addChild(ellebere_right);
+		
+		CCSprite* kei = CCSprite::create("talk_char_hero.png");
+		kei->setAnchorPoint(ccp(0.2f,0));
+		kei->setPosition(ccp(-100,0));
+		kei->setVisible(false);
+		t_sm->left_node->addChild(kei);
+		
+		CCSprite* snow = CCSprite::create("talk_char_princess.png");
+		snow->setAnchorPoint(ccp(0.8f,0));
+		snow->setFlipX(true);
+		snow->setPosition(ccp(100,0));
+		snow->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
+		t_sm->right_node->addChild(snow);
+		
+		t_sm->addMent(false, "스노우", "talk_nametag_red.png", "여기에 또 그림이...\n이건 분명 월터가 대장장이의 딸인데..\n신기하다 그림이 움직여..", [=]()
+		{
+			snow->runAction(CCScaleTo::create(0.2f, 0.7f));
+			ellebere_left->setVisible(true);
+			ellebere_left->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
+						  
+			t_sm->addMent(true, "엘레베르", "talk_nametag_red.png", "역시 이 그림에도 상당한 마법에너지가 느껴지는군요.\n마녀가 이 사람을 그림에 가둔것 같습니다.\n악령들은 이 그림에 기생해 마법에너지를 먹으며\n사람들에게 피해를 주는 것이죠.", [=]()
+			{
+				ellebere_left->runAction(CCScaleTo::create(0.2f, 0.7f));
+				snow->runAction(CCScaleTo::create(0.2f, 1.f));
+											
+				t_sm->addMent(false, "스노우", "talk_nametag_red.png", "이건 마녀의 짓이 분명해. 의도적으로 왕국의 곳곳에 그림을 숨겨놓고\n악령들을 불러모으고 있나봐. 어서 마녀를 잡아야해.", [=]()
+				{
+					snow->runAction(CCScaleTo::create(0.2f, 0.7f));
+					kei->setVisible(true);
+					kei->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
+					ellebere_left->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(-100,0)), CCHide::create()));
+															  
+					t_sm->addMent(true, "케이", "talk_nametag_green.png", "저.. 저는 어떻게 해야 하죠?\n집으로 가는 길이 어떻게 되는건지..", [=]()
+					{
+						kei->runAction(CCScaleTo::create(0.2f, 0.7f));
+						ellebere_right->setVisible(true);
+						ellebere_right->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
+						snow->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(100,0)), CCHide::create()));
+																				
+						t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "돌아가려면 마녀를 찾아야해.\n그전에 그림을 모두 회수 해야하고...    \n늦었어. 바로 출발하지.", [=]()
+						{
+							myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 3);
+							myDSH->saveAllUserData(nullptr);
+							t_sm->removeFromParent();
+						});
+					});
+				});
+			});
+		});
+	}
+	else if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 3 && mySD->getSilType() == 2)
+	{
+		StoryManager* t_sm = StoryManager::create(-500);
+		addChild(t_sm, kNewMainFlowZorder_popup);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCSprite* gray = CCSprite::create("back_gray.png");
+		gray->setOpacity(0);
+		gray->setPosition(ccp(0,0));
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+		gray->runAction(CCFadeTo::create(0.5f, 255));
+		t_sm->back_node->addChild(gray);
+		
+		CCSprite* ellebere_right = CCSprite::create("talk_char_dwarf.png");
+		ellebere_right->setAnchorPoint(ccp(0.7f,0));
+		ellebere_right->setFlipX(true);
+		ellebere_right->setPosition(ccp(100,0));
+		ellebere_right->setVisible(false);
+		t_sm->right_node->addChild(ellebere_right);
+		
+		CCSprite* kei = CCSprite::create("talk_char_hero.png");
+		kei->setAnchorPoint(ccp(0.2f,0));
+		kei->setPosition(ccp(-100,0));
+		kei->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
+		t_sm->left_node->addChild(kei);
+		
+		CCSprite* snow = CCSprite::create("talk_char_princess.png");
+		snow->setAnchorPoint(ccp(0.8f,0));
+		snow->setFlipX(true);
+		snow->setPosition(ccp(100,0));
+		snow->setVisible(false);
+		t_sm->right_node->addChild(snow);
+		
+		t_sm->addMent(true, "케이", "talk_nametag_green.png", "여기 이상한 보석이 떨어졌어요. 이건 뭐죠?", [=]()
+		{
+			kei->runAction(CCScaleTo::create(0.2f, 0.7f));
+			snow->setVisible(true);
+			snow->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
+						  
+			t_sm->addMent(false, "스노우", "talk_nametag_red.png", "우와!! 예쁘다!! 이거 나줘!!!", [=]()
+			{
+				snow->runAction(CCSequence::createWithTwoActions(CCSpawn::createWithTwoActions(CCMoveTo::create(0.3f, ccp(100,0)), CCScaleTo::create(0.3f, 0.7f)), CCHide::create()));
+				ellebere_right->setVisible(true);
+				ellebere_right->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
+											
+				t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "이건 뷰티스톤이라 부르는 마법의 돌이라네.\n가끔 악령들에게서 얻을 수 있는 것이지.\n무기에 장착해보게. 악령을 퇴치할때 요긴하게 사용할 수 있을게야.", [=]()
+				{
+					myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 4);
+					myDSH->saveAllUserData(nullptr);
+					t_sm->removeFromParent();
+				});
+			});
+		});
+	}
+	else if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 4 && mySD->getSilType() == 4)
+	{
+		StoryManager* t_sm = StoryManager::create(-500);
+		addChild(t_sm, kNewMainFlowZorder_popup);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCSprite* gray = CCSprite::create("back_gray.png");
+		gray->setOpacity(0);
+		gray->setPosition(ccp(0,0));
+		gray->setScaleX(screen_scale_x);
+		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+		gray->runAction(CCFadeTo::create(0.5f, 255));
+		t_sm->back_node->addChild(gray);
+		
+		CCSprite* ellebere_right = CCSprite::create("talk_char_dwarf.png");
+		ellebere_right->setAnchorPoint(ccp(0.7f,0));
+		ellebere_right->setFlipX(true);
+		ellebere_right->setPosition(ccp(100,0));
+		ellebere_right->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
+		t_sm->right_node->addChild(ellebere_right);
+		
+		CCSprite* kei = CCSprite::create("talk_char_hero.png");
+		kei->setAnchorPoint(ccp(0.2f,0));
+		kei->setPosition(ccp(-100,0));
+		kei->setVisible(false);
+		t_sm->left_node->addChild(kei);
+		
+		t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "점점 악령이 강해지는구만.\n더 강한 뷰티스톤을 만들어야겠어.", [=]()
+		{
+			ellebere_right->runAction(CCScaleTo::create(0.2f, 0.7f));
+			kei->setVisible(true);
+			kei->runAction(CCMoveTo::create(0.3f, ccp(0,0)));
+						  
+			t_sm->addMent(true, "케이", "talk_nametag_green.png", "뷰티스톤을 더 강하게 만들수도 있나요?", [=]()
+			{
+				kei->runAction(CCScaleTo::create(0.2f, 0.7f));
+				ellebere_right->runAction(CCScaleTo::create(0.2f, 1.f));
+											
+				t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "뷰티스톤은 다른 뷰티스톤으로 강화할 수 있다네.\n강화를 하면 뷰티스톤의 레벨이 올라가고 더 강력해지지.", [=]()
+				{
+					myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 5);
+					myDSH->saveAllUserData(nullptr);
+					t_sm->removeFromParent();
+				});
+			});
+		});
+	}
+	
 //	is_menu_enable = true;
 	int get_puzzle_number = NSDS_GI(mySD->getSilType(), kSDS_SI_puzzle_i);
 	int open_puzzle_count = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1;
