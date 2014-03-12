@@ -386,9 +386,7 @@ public:
 			FeverCoin* t_fc = FeverCoin::create(ccp2ip(cumberPosition), nullptr, nullptr);
 			CCLog("%x getParent", this);
 			getParent()->addChild(t_fc, 5);
-			CCLog("%x %d", this, __LINE__);
 			t_fc->startRemove();
-			CCLog("%x %d", this, __LINE__);
 			mySGD->setGold(mySGD->getGold() + 1);
 		}
 		if(m_option & AttackOption::kMonsterSpeedDown)
@@ -423,15 +421,10 @@ public:
 		{
 			addScore *= 1.1f;
 		}
-		CCLog("%x %d", this, __LINE__);
 		myGD->communication("UI_addScore", addScore);
-		CCLog("%x %d", this, __LINE__);
 		myGD->communication("UI_setComboCnt", combo_cnt);
-		CCLog("%x %d", this, __LINE__);
 		myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
-		CCLog("%x %d", this, __LINE__);
 		myGD->communication("Main_startShake", 0.f);
-		CCLog("%x %d", this, __LINE__);
 	}
 protected:
 	AttackOption m_option;
@@ -547,7 +540,8 @@ public:
 			else
 			{
 				float tt = atan2f(diffPosition.y, diffPosition.x);
-				m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
+				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
+				m_currentRad += (tt - m_currentRad); // , deg2Rad(-15), deg2Rad(15));
 				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * m_initSpeed * 2,
 																																					sin(m_currentRad) * m_initSpeed * 2));
 				m_missileSprite->setRotation(-rad2Deg(m_currentRad));
@@ -672,19 +666,6 @@ protected:
 	CCSprite* m_missileSprite; // 미사일 객체.
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 //SpreadMissile 적용할 차례.
 
 ////////////////////////////////////////////////////
@@ -716,7 +697,7 @@ public:
 		float rad = atan2f(diff.y, diff.x);
 		for(int i=0; i<directions; i++)
 		{
-			StraightMissile* sm = StraightMissile::create(initPosition, fileName, rad + i * deg2Rad(360 / directions), 2.f, 33.f, ao);
+			StraightMissile* sm = StraightMissile::create(initPosition, fileName, rad + i * deg2Rad(360 / directions), initSpeed, power, ao);
 			addChild(sm);
 		}
 		
@@ -1126,7 +1107,6 @@ public:
 		m_radius = radius;
 		m_durationFrame = durationFrame;
 		m_power = power;
-		m_power = 1;
 		m_initJiggleInterval = jiggleInterval;
 		m_jiggleInterval = 0;
 		m_option = ao;
@@ -1141,20 +1121,16 @@ public:
 	}
 	void update(float dt)
 	{
-		CCLog("%x %d", this, __LINE__);
 		m_jiggleInterval = MAX(0, m_jiggleInterval - 1);
 		m_durationFrame--;
 		if(m_durationFrame <= 0)
 		{
 			removeFromParent();
-			CCLog("%x die!!", this);
 			return;
 		}
-		CCLog("%x %d", this, __LINE__);
 		
 		if(m_jiggleInterval == 0)
 		{
-			CCLog("%x %d", this, __LINE__);
 			m_jiggleInterval = m_initJiggleInterval;
 			// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
 			std::vector<KSCumberBase*> nearMonsters;
@@ -1177,7 +1153,6 @@ public:
 				}
 			}	
 			
-			CCLog("%x %d", this, __LINE__);
 			for(auto iter : nearMonsters)
 			{
 				CCPoint effectPosition = iter->getPosition();
@@ -1188,9 +1163,7 @@ public:
 				executeOption(dynamic_cast<KSCumberBase*>(iter), damage, 0.f, effectPosition);
 				//removeFromParentAndCleanup(true);
 			}
-			CCLog("%x %d", this, __LINE__);
 		}
-		CCLog("%x %d", this, __LINE__);
 	}
 protected:
 	float m_radius;
@@ -1313,17 +1286,28 @@ public:
 		laserContainer->setPosition(ip2ccp(myGD->getJackPoint()));
 		m_startPosition = laserContainer->getPosition();
 		//KS::setBlendFunc(laserHead, {GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
-		for(int i=0; ; i++)
-		{
-			CCSprite* testBody = KS::loadCCBI<CCSprite*>(this, "me_laser_body.ccbi").first;
-			testBody->setPosition(laserHead->getPosition() + ccp(30 + i * 10, 0));
-			laserContainer->addChild(testBody);
+		CCSprite* testBody = KS::loadCCBI<CCSprite*>(this, "me_laser_body.ccbi").first;
+		testBody->setPosition(laserHead->getPosition() + ccp(30, 0));
+		laserContainer->addChild(testBody);
 
-			if(ccp2ip(testBody->getPosition()).isInnerMap() == false)
-				break;
-		}
+		CCPoint laserPosition = ccp(cos(m_rad)*ccpLength(testBody->getPosition()), 
+																sin(m_rad)*ccpLength(testBody->getPosition()));
 
 		laserContainer->setRotation(-rad2Deg(m_rad));
+		float laserLength = 0;
+		for(int i=0; ; i++)
+		{
+			CCPoint testBody = (laserHead->getPosition() + ccp(30 + i * 10, 0));
+			
+			CCPoint laserPosition = ccp(cos(m_rad)*ccpLength(testBody),
+																	sin(m_rad)*ccpLength(testBody));
+			if(ccp2ip(laserContainer->getPosition() + laserPosition ).isInnerMap() == false)
+			{
+				laserLength = ccpLength(laserPosition);
+				break;
+			}
+		}
+		testBody->setScaleX(laserLength/10.f);
 		scheduleUpdate();
 		return true;	
 	}
@@ -1343,7 +1327,7 @@ public:
 		if(m_jiggleInterval == 0)
 		{
 			m_jiggleInterval = m_initJiggleInterval;
-			for(int r=m_radius; ;r += 4)
+			for(int r=m_radius; ;r += 10)
 			{
 				CCPoint nextPosition = m_startPosition + ccp(cos(m_rad), sin(m_rad)) * r;
 				if(ccp2ip(nextPosition).isInnerMap() == false)
