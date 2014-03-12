@@ -920,7 +920,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f)
 		{
-			int cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f);
+			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f);
 			
 			//string missile_code;
 			//if(mySGD->getIsUsingFriendCard())
