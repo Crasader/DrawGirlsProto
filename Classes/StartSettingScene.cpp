@@ -151,7 +151,7 @@ void StartSettingScene::setMain()
 	{
 		stage_number = mySD->getSilType();
 		
-		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 		stage_number_label->setPosition(ccp(49, main_case->getContentSize().height+40-67));
 		main_case->addChild(stage_number_label);
 		
@@ -164,7 +164,7 @@ void StartSettingScene::setMain()
 //		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
 //		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
-		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 		piece_number_label->setPosition(ccp(49, main_case->getContentSize().height+40-67));
 		main_case->addChild(piece_number_label);
 		
@@ -624,6 +624,10 @@ void StartSettingScene::tableCellTouched(CCTableView* table, CCTableViewCell* ce
 		return;
 	
 	string touched_id = friend_list[cell->getIdx()].user_id;
+	string touched_nick = friend_list[cell->getIdx()].nickname;
+	float touched_score = friend_list[cell->getIdx()].score;
+	string touched_profile = friend_list[cell->getIdx()].img_url;
+	
 	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
 	
 	if(touched_id != my_id)
@@ -633,7 +637,7 @@ void StartSettingScene::tableCellTouched(CCTableView* table, CCTableViewCell* ce
 			selected_friend_idx = cell->getIdx();
 			table->updateCellAtIndex(selected_friend_idx);
 			
-			mySGD->setMeChallengeTarget(friend_list[cell->getIdx()].user_id, friend_list[cell->getIdx()].nickname, friend_list[cell->getIdx()].score, friend_list[cell->getIdx()].img_url);
+			mySGD->setMeChallengeTarget(touched_id, touched_nick, touched_score, touched_profile);
 		}
 		else if (cell->getIdx() != selected_friend_idx)
 		{
@@ -642,7 +646,7 @@ void StartSettingScene::tableCellTouched(CCTableView* table, CCTableViewCell* ce
 			table->updateCellAtIndex(keep_idx);
 			table->updateCellAtIndex(selected_friend_idx);
 			
-			mySGD->setMeChallengeTarget(friend_list[cell->getIdx()].user_id, friend_list[cell->getIdx()].nickname, friend_list[cell->getIdx()].score, friend_list[cell->getIdx()].img_url);
+			mySGD->setMeChallengeTarget(touched_id, touched_nick, touched_score, touched_profile);
 		}
 		else
 		{

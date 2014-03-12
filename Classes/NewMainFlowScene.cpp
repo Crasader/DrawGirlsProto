@@ -2495,14 +2495,16 @@ void NewMainFlowScene::setBeautystoneMenu()
 	{
 		for(int i=0;i<stone_id_vector.size();i++)
 		{
+			CCPoint base_position = ccp(0, 10+(slot_cnt-0.5f-i)*45);
 			if(stone_id_vector[i] == 0)
 			{
-				
+				CCSprite* beautystone_img = CCSprite::create("empty_beautystone.png");
+				beautystone_img->setScale(0.8f);
+				beautystone_img->setPosition(base_position);
+				beautystone_node->addChild(beautystone_img);
 			}
 			else
 			{
-				CCPoint base_position = ccp(0, 10+(slot_cnt-0.5f-i)*45);
-				
 				int b_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, stone_id_vector[i]);
 				int b_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, stone_id_vector[i]);
 				int b_level = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, stone_id_vector[i]);
@@ -2551,6 +2553,11 @@ void NewMainFlowScene::setBottom()
 	bottom_case->setAnchorPoint(ccp(0.5f,0.5f));
 	bottom_case->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+3));
 	addChild(bottom_case, kNewMainFlowZorder_uiButton);
+	
+	CCSprite* character_img = CCSprite::create("talk_char_hero.png");
+	character_img->setAnchorPoint(ccp(0.2f,0));
+	character_img->setPosition(ccp(-240,0));
+	bottom_case->addChild(character_img);
 	
 	beautystone_node = CCNode::create();
 	beautystone_node->setPosition(ccp(-215, 0));

@@ -994,7 +994,7 @@ void FeverCoin::myInit(IntPoint t_point, CCObject* t_add, SEL_CallFuncO d_add) /
 	runAction(t_repeat);
 	
 	setPosition(my_point.convertToCCP());
-	setScale(1.f/myGD->game_scale);
+	setScale(1.f/myGD->game_scale*0.8f);
 	
 	startCheck();
 }
