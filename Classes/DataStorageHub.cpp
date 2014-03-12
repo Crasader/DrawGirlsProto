@@ -362,6 +362,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_mission_willNeverWatch_timeLimit)			return_value = "mswnw_tl";
 	else if(t_name == kDSH_Key_mission_willNeverWatch_sequenceChange)		return_value = "mswnw_sqc";
 	
+	else if(t_name == kDSH_Key_storyReadPoint)								return_value = "srp";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()
@@ -518,6 +520,8 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 	for(int i=1;i<=end_played_stage;i++)
 		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, data[getKey(kDSH_Key_stageClearRank_int1)][i].asInt(), false);
 	
+	setIntegerForKey(kDSH_Key_storyReadPoint, data[getKey(kDSH_Key_storyReadPoint)].asInt(), false);
+	
 	fFlush();
 }
 void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_key)
@@ -661,6 +665,7 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	else if(t_key == kSaveUserData_Key_tutorial)
 	{
 		data[getKey(kDSH_Key_tutorial_flowStep)] = getIntegerForKey(kDSH_Key_tutorial_flowStep);
+		data[getKey(kDSH_Key_storyReadPoint)] = getIntegerForKey(kDSH_Key_storyReadPoint);
 	}
 	else if(t_key == kSaveUserData_Key_stageRank)
 	{

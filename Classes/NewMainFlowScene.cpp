@@ -258,86 +258,97 @@ bool NewMainFlowScene::init()
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		
-		StoryManager* t_sm = StoryManager::create(-500);
-//		addChild(t_sm, kNewMainFlowZorder_popup);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		
-		CCSprite* gray = CCSprite::create("back_gray.png");
-		gray->setOpacity(0);
-		gray->setPosition(ccp(0,0));
-		gray->setScaleX(screen_scale_x);
-		gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
-		gray->runAction(CCFadeTo::create(0.5f, 255));
-		t_sm->back_node->addChild(gray);
-		
-		CCSprite* ellebere = CCSprite::create("talk_char_dwarf.png");
-		ellebere->setAnchorPoint(ccp(0.3f, 0));
-		ellebere->setPosition(ccp(-100,0));
-		ellebere->runAction(CCMoveTo::create(0.5f, ccp(0,0)));
-		t_sm->left_node->addChild(ellebere);
-		
-		CCSprite* kei = CCSprite::create("talk_char_hero.png");
-		kei->setAnchorPoint(ccp(0.8f,0));
-		kei->setFlipX(true);
-		kei->setPosition(ccp(100,0));
-		kei->setVisible(false);
-		t_sm->right_node->addChild(kei);
-		
-		CCSprite* snow = CCSprite::create("talk_char_princess.png");
-		snow->setAnchorPoint(ccp(0.2f,0));
-		snow->setPosition(ccp(-100,0));
-		snow->setVisible(false);
-		t_sm->left_node->addChild(snow);
-		
-		t_sm->addMent(true, "엘레베르", "talk_nametag_red.png", "이봐.. 일어나.. 일어나보라구..", [=]()
+		if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 1)
 		{
+			StoryManager* t_sm = StoryManager::create(-500);
+			addChild(t_sm, kNewMainFlowZorder_popup);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			CCSprite* gray = CCSprite::create("back_gray.png");
+			gray->setOpacity(0);
+			gray->setPosition(ccp(0,0));
+			gray->setScaleX(screen_scale_x);
+			gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+			gray->runAction(CCFadeTo::create(0.5f, 255));
+			t_sm->back_node->addChild(gray);
+			
+			CCSprite* ellebere = CCSprite::create("talk_char_dwarf.png");
+			ellebere->setAnchorPoint(ccp(0.7f, 0));
+			ellebere->setFlipX(true);
+			ellebere->setPosition(ccp(100,0));
+			ellebere->runAction(CCMoveTo::create(0.5f, ccp(0,0)));
+			t_sm->right_node->addChild(ellebere);
+			
+			CCSprite* kei = CCSprite::create("talk_char_hero.png");
+			kei->setAnchorPoint(ccp(0.2f,0));
+			kei->setPosition(ccp(-100,0));
+			kei->setVisible(false);
+			t_sm->left_node->addChild(kei);
+			
+			CCSprite* snow = CCSprite::create("talk_char_princess.png");
+			snow->setAnchorPoint(ccp(0.8f,0));
+			snow->setFlipX(true);
+			snow->setPosition(ccp(100,0));
+			snow->setVisible(false);
+			t_sm->right_node->addChild(snow);
+		
+			t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "이봐.. 일어나.. 일어나보라구..", [=]()
+			{
 			ellebere->runAction(CCScaleTo::create(0.2f, 0.7f));
 			kei->setVisible(true);
 			kei->runAction(CCMoveTo::create(0.5f, ccp(0,0)));
 						  
-			t_sm->addMent(false, "케이", "talk_nametag_green.png", "음냐... 음.. 누.. 누구?", [=]()
+			t_sm->addMent(true, "케이", "talk_nametag_green.png", "음냐... 음.. 누.. 누구?", [=]()
 			{
 				kei->runAction(CCScaleTo::create(0.2f, 0.7f));
-				ellebere->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(-100,0)), CCHide::create()));
+				ellebere->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(100,0)), CCHide::create()));
 											
 				snow->setVisible(true);
 				snow->runAction(CCMoveTo::create(0.5f, ccp(0,0)));
 											
-				t_sm->addMent(true, "스노우", "talk_nametag_red.png", "이제서야 깨어났군!!\n당신때문에 우리엄마가 마녀에게 납치당해버렸잖아!!", [=]()
+				t_sm->addMent(false, "스노우", "talk_nametag_red.png", "이제서야 깨어났군!!\n당신때문에 우리엄마가 마녀에게 납치당해버렸잖아!!", [=]()
 				{
 					snow->runAction(CCScaleTo::create(0.2f, 0.7f));
 					kei->runAction(CCScaleTo::create(0.2f, 1.f));
 															  
-					t_sm->addMent(false, "케이", "talk_nametag_green.png", "뭐? 마녀?\n무슨 이야기인지 하나도 모르겠네..\n여긴 어디지?", [=]()
+					t_sm->addMent(true, "케이", "talk_nametag_green.png", "뭐? 마녀?\n무슨 이야기인지 하나도 모르겠네..\n여긴 어디지?", [=]()
 					{
 						kei->runAction(CCScaleTo::create(0.2f, 0.7f));
-						snow->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(-100,0)), CCHide::create()));
+						snow->runAction(CCSequence::createWithTwoActions(CCMoveTo::create(0.3f, ccp(100,0)), CCHide::create()));
 						ellebere->setVisible(true);
 						ellebere->runAction(CCSpawn::createWithTwoActions(CCScaleTo::create(0.2f, 1.f), CCMoveTo::create(0.3f, ccp(0,0))));
 																				
-						t_sm->addMent(true, "엘레베르", "talk_nametag_red.png", "아직 정신을 못차렸나보군. 이곳은 화이트왕국이라네.\n아름다운 소나무들이 자라는 곳으로 유명하지.\n하지만 사흘전 갑자기 나타난 마녀가 우리 왕비마마를 납치해간 이후\n왕국 곳곳엔 악령들이 득실되고 있어.", [=]()
+						t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "아직 정신을 못차렸나보군. 이곳은 화이트왕국이라네.\n아름다운 소나무들이 자라는 곳으로 유명하지.\n하지만 사흘전 갑자기 나타난 마녀가 우리 왕비마마를 납치해간 이후\n왕국 곳곳엔 악령들이 득실되고 있어.", [=]()
 						{
-							t_sm->addMent(true, "엘레베르", "talk_nametag_red.png", "(계속)\n이 사태를 해결하지 않으면 왕국자체가\n악의 소굴로 변할 태세라네.\n모든일이 자네가 마녀의 봉인을 해제하면서 일어난 일이라네.", [=]()
+							t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "(계속)\n이 사태를 해결하지 않으면 왕국자체가\n악의 소굴로 변할 태세라네.\n모든일이 자네가 마녀의 봉인을 해제하면서 일어난 일이라네.", [=]()
 							{
 								ellebere->runAction(CCScaleTo::create(0.2f, 0.7f));
-								t_sm->addMent(true, "악령", "talk_nametag_red.png", "쿠오오오아아앙", [=]()
+								kei->runAction(CCScaleTo::create(0.2f, 1.f));
+								t_sm->addMent(true, "케이", "talk_nametag_green.png", "아... 생각났다.. 그때 그 이상한 책을 열고..\n그래! 어떤 여자를 봤어요. 무서운 눈매의...\n도무지 알수가... 이해하기 힘든 일들이...", [=]()
+								{
+									kei->runAction(CCScaleTo::create(0.2f, 0.7f));
+								t_sm->addMent(false, "악령", "talk_nametag_red.png", "쿠오오오아아앙", [=]()
 								{
 								  ellebere->runAction(CCScaleTo::create(0.2f, 1.f));
-								  t_sm->addMent(true, "엘레베르", "talk_nametag_red.png", "이런 또 악령이 나타났구만.\n일단 악령을 처치한 후 이야기를 하지.", [=]()
+								  t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "이런 또 악령이 나타났구만.\n일단 악령을 처치한 후 이야기를 하지.\n악령이 있는곳엔 반드시 그림카드가 숨겨져있다네.\n악령을 피해 그걸 찾아야해! 이 마법붓을 이용하게!", [=]()
 								  {
+									  myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 2);
+									  myDSH->saveAllUserData(nullptr);
 									t_sm->removeFromParent();
 								  });
+								});
 								});
 							});
 						});
 					});
 				});
 			});
-		});
+			});
+		}
 
 	}
 	
@@ -1175,7 +1186,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 	if(idx == NSDS_GI(kSDS_GI_puzzleListCount_i))
 	{
 		ListScaler* t_ls = ListScaler::create();
-		t_ls->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
+		t_ls->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+10));
 		cell->addChild(t_ls);
 		
 		t_ls->startMyAction();
@@ -1199,7 +1210,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			if(t_texture)
 			{
 				ListScaler* t_ls = ListScaler::create();
-				t_ls->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
+				t_ls->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+10));
 				t_ls->puzzle_number = puzzle_number;
 				cell->addChild(t_ls);
 				
@@ -1209,6 +1220,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				t_img->setPosition(ccp(0,0));
 				t_ls->addChild(t_img);
 				
+				t_ls->setCenterline();
 				
 				int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 				int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
@@ -1267,7 +1279,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 			else // 정보를 받은적 없다.
 			{
 				ListScaler* t_ls = ListScaler::create();
-				t_ls->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
+				t_ls->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+10));
 				cell->addChild(t_ls);
 				
 				t_ls->startMyAction();
@@ -1290,7 +1302,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		else // 아직 열수 없는 퍼즐
 		{
 			ListScaler* t_ls = ListScaler::create();
-			t_ls->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
+			t_ls->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+10));
 			cell->addChild(t_ls);
 			
 			t_ls->startMyAction();

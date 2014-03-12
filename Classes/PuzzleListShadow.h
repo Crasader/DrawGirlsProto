@@ -31,8 +31,16 @@ public:
 		schedule(schedule_selector(ListScaler::myAction));
 	}
 	
+	void setCenterline()
+	{
+		center_line = CCSprite::create("map_center_shadow.png");
+		center_line->setScaleY(90.f);
+		addChild(center_line);
+	}
+	
 private:
 	
+	CCSprite* center_line;
 	
 	void myAction()
 	{
@@ -45,16 +53,22 @@ private:
 			
 			float scale_value;
 			if(position_x > 140.f)
-				scale_value = 0.7f;
+				scale_value = 0.65f;
 			else
-				scale_value = (140 - position_x)/140.f*0.3f + 0.7f;
+				scale_value = (140 - position_x)/140.f*0.35f + 0.65f;
 			
 			setScale(scale_value);
+			
+			if(center_line)
+			{
+				center_line->setOpacity(255-(scale_value-0.65f)/0.35f*254);
+			}
 		}
 	}
 	
 	void myInit()
 	{
+		center_line = NULL;
 		setScale(0.7f);
 	}
 };
