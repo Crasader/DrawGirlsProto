@@ -77,6 +77,10 @@ private:
 	CountingBMLabel* gold_label;
 	CountingBMLabel* friend_point_label;
 	
+	CCNode* beautystone_node;
+	
+	void setBeautystoneMenu();
+	
 	CCTableView* puzzle_table;
 	CCSize table_size;
 	void cellAction(CCObject* sender);
