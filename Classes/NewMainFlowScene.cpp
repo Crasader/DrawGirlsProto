@@ -261,6 +261,7 @@ bool NewMainFlowScene::init()
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 1)
 		{
+			character_img->setVisible(false);
 			StoryManager* t_sm = StoryManager::create(-500);
 			addChild(t_sm, kNewMainFlowZorder_popup);
 			
@@ -339,6 +340,7 @@ bool NewMainFlowScene::init()
 								  {
 									  myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 2);
 									  myDSH->saveAllUserData(nullptr);
+									  character_img->setVisible(true);
 									t_sm->removeFromParent();
 								  });
 								});
@@ -485,6 +487,7 @@ void NewMainFlowScene::hideClearPopup()
 {
 	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 2 && mySD->getSilType() == 1)
 	{
+		character_img->setVisible(false);
 		StoryManager* t_sm = StoryManager::create(-500);
 		addChild(t_sm, kNewMainFlowZorder_popup);
 		
@@ -554,6 +557,7 @@ void NewMainFlowScene::hideClearPopup()
 																				
 						t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "돌아가려면 마녀를 찾아야해.\n그전에 그림을 모두 회수 해야하고...    \n늦었어. 바로 출발하지.", [=]()
 						{
+							character_img->setVisible(true);
 							myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 3);
 							myDSH->saveAllUserData(nullptr);
 							t_sm->removeFromParent();
@@ -565,6 +569,7 @@ void NewMainFlowScene::hideClearPopup()
 	}
 	else if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 3 && mySD->getSilType() == 2)
 	{
+		character_img->setVisible(false);
 		StoryManager* t_sm = StoryManager::create(-500);
 		addChild(t_sm, kNewMainFlowZorder_popup);
 		
@@ -615,6 +620,7 @@ void NewMainFlowScene::hideClearPopup()
 											
 				t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "이건 뷰티스톤이라 부르는 마법의 돌이라네.\n가끔 악령들에게서 얻을 수 있는 것이지.\n무기에 장착해보게. 악령을 퇴치할때 요긴하게 사용할 수 있을게야.", [=]()
 				{
+					character_img->setVisible(true);
 					myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 4);
 					myDSH->saveAllUserData(nullptr);
 					t_sm->removeFromParent();
@@ -624,6 +630,7 @@ void NewMainFlowScene::hideClearPopup()
 	}
 	else if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 4 && mySD->getSilType() == 4)
 	{
+		character_img->setVisible(false);
 		StoryManager* t_sm = StoryManager::create(-500);
 		addChild(t_sm, kNewMainFlowZorder_popup);
 		
@@ -666,6 +673,7 @@ void NewMainFlowScene::hideClearPopup()
 											
 				t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "뷰티스톤은 다른 뷰티스톤으로 강화할 수 있다네.\n강화를 하면 뷰티스톤의 레벨이 올라가고 더 강력해지지.", [=]()
 				{
+					character_img->setVisible(true);
 					myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 5);
 					myDSH->saveAllUserData(nullptr);
 					t_sm->removeFromParent();
@@ -2554,7 +2562,7 @@ void NewMainFlowScene::setBottom()
 	bottom_case->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+3));
 	addChild(bottom_case, kNewMainFlowZorder_uiButton);
 	
-	CCSprite* character_img = CCSprite::create("talk_char_hero.png");
+	character_img = CCSprite::create("talk_char_hero.png");
 	character_img->setAnchorPoint(ccp(0.2f,0));
 	character_img->setPosition(ccp(-240,0));
 	bottom_case->addChild(character_img);

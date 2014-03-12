@@ -79,6 +79,8 @@ private:
 	
 	CCNode* beautystone_node;
 	
+	CCSprite* character_img;
+	
 	void setBeautystoneMenu();
 	
 	CCTableView* puzzle_table;
