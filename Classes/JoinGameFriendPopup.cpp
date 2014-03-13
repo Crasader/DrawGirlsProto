@@ -428,22 +428,16 @@ CCPoint JoinGameFriendPopup::getContentPosition( int t_tag )
 	
 	return return_value;
 }
-void JoinGameFriendPopup::searchById(const std::string& userId)
+void JoinGameFriendPopup::searchByIndex(int64_t userIndex)
 {
-	Json::Value p;
+	
 	Json::Value contentJson;
 	
 	contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 	//				 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
-	p["content"] = GraphDogLib::JsonObjectToString(contentJson);
-	std::string recvId = userId;
-	recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
-	p["receiverMemberID"] = recvId;
-	p["senderMemberID"] = hspConnector::get()->getKakaoID();
-	p["type"] = kUnknownFriendRequest;
 	
 	Json::Value param;
-	param["memberID"] = recvId;
+	param["userIndex"] = userIndex;
 	hspConnector::get()->command("getUserData", param,this,
 															 [=](Json::Value t)
 															 {
@@ -482,8 +476,13 @@ void JoinGameFriendPopup::searchById(const std::string& userId)
 																	 av->show();
 																	 return;
 																 }
-
-																 
+																 Json::Value p;
+																 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
+																 std::string recvId = t["memberID"].asString();
+																 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
+																 p["receiverMemberID"] = recvId;
+																 p["senderMemberID"] = hspConnector::get()->getKakaoID();
+																 p["type"] = kUnknownFriendRequest;
 																 hspConnector::get()->command
 																	 ("sendMessage", p, [=](Json::Value r) {
 																		 GraphDogLib::JsonToLog("sendMessage", r);
@@ -528,10 +527,11 @@ void JoinGameFriendPopup::editBoxReturn(CCEditBox* editBox)
 {
 	std::string input = editBox->getText();
 	long long _id = KS::strToLongLong(input);
-	std::ostringstream oss;
-	oss << _id;
-	std::string strId = oss.str();
-	this->searchById(strId);
+	this->searchByIndex(_id - 1000);
+//	std::ostringstream oss;
+//	oss << _id;
+//	std::string strId = oss.str();
+//	this->searchById(strId);
 }
 
 

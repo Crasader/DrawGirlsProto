@@ -157,7 +157,7 @@ public:
 		
 	}
 	
-	void searchById(const std::string& userId);
+	void searchByIndex(int64_t userIndex);
 	virtual void editBoxReturn(CCEditBox* editBox);
 	
 	

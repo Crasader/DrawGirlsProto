@@ -194,10 +194,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 			std::vector<KSCumberBase*> targets;
 			targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
 			targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
-			random_shuffle(targets.begin(), targets.end(), [=](int n){
-				return ks19937::getIntValue(0, n - 1);
-			});
-			target = targets[0];
+			target = targets[ks19937::getIntValue(0, targets.size() - 1)];
 			GuidedMissile* gm = GuidedMissile::create(target, initPosition,
 																								fileName,
 																								1.5f, power, 10 + 15 * grade,
@@ -285,10 +282,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 			std::vector<KSCumberBase*> targets;
 			targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
 			targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
-			random_shuffle(targets.begin(), targets.end(), [=](int n){
-				return ks19937::getIntValue(0, n - 1);
-			});
-			target = targets[0];
+			target = targets[ks19937::getIntValue(0, targets.size() - 1)];
 			SpreadMissile* sm = SpreadMissile::create(target, initPosition,
 																								fileName,
 																								2.2f + 0.3f * grade, power, adderForGrade, ao);

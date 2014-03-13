@@ -129,9 +129,9 @@ bool OptionPopup::init()
 	close_menu->setTouchPriority(-171);
 	
 	
-	CCLabelTTF* my_id_label = CCLabelTTF::create(KS::longLongToStr(hspConnector::get()->myKakaoInfo.get("user_id", "").asInt64()).c_str(), mySGD->getFont().c_str(), 13);
+	CCLabelTTF* my_id_label = CCLabelTTF::create(KS::longLongToStr(hspConnector::get()->myKakaoInfo.get("userIndex", 0).asInt64() + 1000).c_str(), mySGD->getFont().c_str(), 13);
 	my_id_label->setColor(ccBLACK);
-	my_id_label->setPosition(ccp(300,100));
+	my_id_label->setPosition(ccp(244,100));
 	main_case->addChild(my_id_label, kOP_Z_content);
 	
 	

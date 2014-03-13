@@ -912,8 +912,11 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 
 void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 {
+	KS::KSLog("%", result_data);
+	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS || result_data["result"]["code"].asInt() == GDDONTFIND)
 	{
+		hspConnector::get()->myKakaoInfo["userIndex"] = result_data["userIndex"].asInt64();
 		Json::Value data1;
 		Json::Reader reader1;
 		reader1.parse(result_data["data"].asString(), data1);
