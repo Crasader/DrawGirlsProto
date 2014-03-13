@@ -1461,7 +1461,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 						
 						CCPoint sub_position = ccpSub(recent_position, before_position);
 						float dist_value = sqrtf(powf(sub_position.x, 2.f) + powf(sub_position.y, 2.f));
-						int dot_cnt = dist_value/25 + 1;
+						int dot_cnt = dist_value/17 + 1;
 						
 						CCPoint d_position = ccpMult(sub_position, 1.f/dot_cnt);
 						dot_cnt--;
