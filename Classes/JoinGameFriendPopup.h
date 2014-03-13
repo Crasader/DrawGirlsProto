@@ -61,7 +61,7 @@ class JoinGameFriendPopup : public DimmedPopup, public CCTableViewDataSource, pu
 public:
 	virtual void editBoxEditingDidBegin(CCEditBox* editBox)
 	{
-		m_searchIdEditBox->getBackgroundSprite()->setVisible(false);
+//		m_searchIdEditBox->getBackgroundSprite()->setVisible(false);
 	}
 	static JoinGameFriendPopup* create(CCObject* t_close, SEL_CallFunc d_close);
 	

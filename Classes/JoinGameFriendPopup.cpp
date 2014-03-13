@@ -179,15 +179,17 @@ void JoinGameFriendPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 	this->addChild(joinGameFriend, kRP_Z_back+1);
 	joinGameFriend->setEnabled(false);
 	
-	
-	m_searchIdEditBox = CCEditBox::create(CCSizeMake(190, 25), CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-	m_searchIdEditBox->getBackgroundSprite()->setVisible(false);
-	m_searchIdEditBox->getBackgroundSprite()->setOpacity(0);
+	CCScale9Sprite* tempBack = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+	tempBack->setOpacity(0);
+	m_searchIdEditBox = CCEditBox::create(CCSizeMake(190, 25), tempBack);
+//	m_searchIdEditBox->getBackgroundSprite()->setVisible(false);
+//	m_searchIdEditBox->getBackgroundSprite()->setOpacity(0);
 	m_searchIdEditBox->setPosition(ccp(398, 201));
 	m_searchIdEditBox->setPlaceHolder("입력해주세요.");
 	m_searchIdEditBox->setTouchPriority(-200);
+	m_searchIdEditBox->setInputMode(kEditBoxInputModeSingleLine);
 	m_searchIdEditBox->setReturnType(kKeyboardReturnTypeDone);
-	m_searchIdEditBox->setFont(mySGD->getFont().c_str(), 10);
+	m_searchIdEditBox->setFont(mySGD->getFont().c_str(), 12);
 	m_searchIdEditBox->setInputMode(kEditBoxInputModeSingleLine);
 	m_searchIdEditBox->setDelegate(this);
 	addChild(m_searchIdEditBox, kZorderJoinGameFriendIdInput);

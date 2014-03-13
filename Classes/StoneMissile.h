@@ -424,7 +424,7 @@ public:
 		myGD->communication("UI_addScore", addScore);
 		myGD->communication("UI_setComboCnt", combo_cnt);
 		myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
-		myGD->communication("Main_startShake", 0.f);
+		myGD->communication("Main_startShake", ks19937::getFloatValue(0, 360)); // 일단은 완전 랜덤으로.
 	}
 protected:
 	AttackOption m_option;
@@ -869,18 +869,22 @@ public:
 		m_initCoolFrame = coolFrame;
 		m_coolFrame = 0; 
 		m_mine = KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_particle = CCParticleSystemQuad::create("jm_particle2_water.plist");
+		m_particle->setPositionType(kCCPositionTypeRelative);
 		m_option = ao;
 		addChild(m_mine);
+		addChild(m_particle);
 		addChild(KSGradualValue<CCPoint>::create(initPosition, goalPosition, 1.f,
 																				 [=](CCPoint t){
 																					 m_mine->setPosition(t);
+																					 m_particle->setPosition(t);
 																					 CCPoint diff = goalPosition - initPosition;
 																					 float rad = atan2f(diff.y, diff.x);
 																					 m_mine->setRotation(-rad2Deg(rad));
-																						
 																				 },
 																		[=](CCPoint t){
 																			m_mine->setPosition(t);
+																			m_particle->setPosition(t);
 																			CCPoint diff = goalPosition - initPosition;
 																			float rad = atan2f(diff.y, diff.x);
 																			m_mine->setRotation(-rad2Deg(rad));
@@ -1065,6 +1069,7 @@ public:
 			if(pathFound)
 			{
 				m_mine->setPosition(afterPosition);
+				m_particle->setPosition(afterPosition);
 				m_mine->setRotation(-rad2Deg(m_directionRad));
 			}
 	
@@ -1077,6 +1082,7 @@ protected:
 	float m_initTickCount;
 	int m_power;
 	CCSprite* m_mine;
+	CCParticleSystemQuad* m_particle;
 	float m_directionRad;
 	float m_speed;
 	int m_coolFrame; // 0 이어야 타격이 가능함. 공격할 때 initCoolFrame 으로 초기화되고 매 프레임당 -- 됨.

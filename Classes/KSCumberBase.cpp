@@ -2232,7 +2232,7 @@ void KSCumberBase::movingAndCrash( float dt )
 	if(bossIsClosed_)
 	{
 		KS::setColor(this, ccc3(0, 255, 0));
-		myGD->communication("Main_showTextMessage", std::string("갇힘..!!!"));
+		//myGD->communication("Main_showTextMessage", std::string("갇힘..!!!"));
 	}
 	else
 	{
