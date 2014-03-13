@@ -180,7 +180,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 	int r = rand() % (myGD->getMainCumberCount());
 
 	int r2 = rand() % (myGD->getSubCumberCount());
-	stoneType = StoneType::kStoneType_global;
+	
 	//grade = 3;
 	//level = level == 0 ? 1 : level;
 	int power = grade * 20 + level * 10;
@@ -200,7 +200,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 			target = targets[0];
 			GuidedMissile* gm = GuidedMissile::create(target, initPosition,
 																								fileName,
-																								1.2f, power, 10 + 15 * grade,
+																								1.5f, power, 10 + 15 * grade,
 																								ao
 
 																							 );
