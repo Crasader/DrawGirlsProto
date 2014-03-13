@@ -490,7 +490,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 	CommonButton* helpFilter = CommonButton::create("도움함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
 	CommonButton* ticketFilter = CommonButton::create("티켓함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
 	CommonButton* challengeFilter = CommonButton::create("도전함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* coinFilter = CommonButton::create("코인함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* coinFilter = CommonButton::create("하트함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
 	CommonButton* totalFilter = CommonButton::create("전체보기", 12, CCSizeMake(65,38), CommonButtonGray, -200);
 	
 	
@@ -879,7 +879,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 		switch(type)
 		{
 			case kHeart:
-				comment = "코인이 도착했어요.";
+				comment = "하트가 도착했어요.";
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_cell_receive.png", "postbox_cell_receive.png",
 					 [=](CCObject* sender)

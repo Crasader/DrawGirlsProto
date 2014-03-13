@@ -46,7 +46,7 @@ public:
 		CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(150);
 		t_particle->setPositionType(kCCPositionTypeRelative);
 		t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("get_piece_particle.png"));
-		t_particle->setEmissionRate(400);
+		t_particle->setEmissionRate(800);
 		t_particle->setAngle(90.0);
 		t_particle->setAngleVar(45.0);
 		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
@@ -75,7 +75,7 @@ public:
 		t_particle->setStartSpinVar(180);
 		t_particle->setEndSpin(0);
 		t_particle->setEndSpinVar(180);
-		t_particle->setPosVar(ccp(10,10));
+		t_particle->setPosVar(ccp(15,15));
 		t_particle->setPosition(ccp(0,0));
 		t_particle->setAutoRemoveOnFinish(true);
 		addChild(t_particle);

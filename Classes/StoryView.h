@@ -70,7 +70,7 @@ public:
 			}else if(nextAni=="op5"){
 				scriptLbl->setString(CCString::createWithFormat("마녀가 %s의 머리를 쓰다듬자\n %s는 자신도 모르게 깊은 잠에 빠져버렸습니다.",nick.c_str(),nick.c_str())->getCString());
 			}else if(nextAni=="op6"){
-				scriptLbl->setString("마녀는 시공간을 뛰어넘어 과거와 현재, 현실과 책속을 넘나들며\n 자신보다 아름다운 미녀들을 그림카드에 봉인했습니다.");
+				scriptLbl->setString("마녀는 과거와 현재, 현실과 책속을 넘나들며\n 자신보다 아름다운 미녀들을 그림카드에 봉인했습니다.");
 			}else if(nextAni=="op7"){
 				scriptLbl->setString("'이제 내가 가장 아름다운 사람이지 않을까? 호호호'");
 				this->addChild(KSTimer::create(3.f, [=](){
@@ -98,12 +98,21 @@ public:
 			
 		});
 		
-		scriptLbl = KSLabelTTF::create("",mySGD->getFont().c_str(), 15, CCSizeMake(450, 80), kCCTextAlignmentCenter);
+		scriptLbl = KSLabelTTF::create("",mySGD->getFont().c_str(), 18, CCSizeMake(450, 80), kCCTextAlignmentCenter);
 		scriptLbl->enableOuterStroke(ccBLACK, 1.f);
 		scriptLbl->setPosition(ccp(240,40));
 		scriptLbl->setString(CCString::createWithFormat("%s는 다락방에서 오래된 책을 한 권 발견했습니다.", myDSH->getStringForKey(kDSH_Key_nick).c_str())->getCString());
 		this->addChild(scriptLbl,3);
 		
+		//skip
+		CommonButton* skipBtn =CommonButton::create("skip", 15, CCSizeMake(60, 40), CommonButtonGray, -300);
+		skipBtn->setPosition(ccp(440,300));
+		this->addChild(skipBtn,3);
+		
+		skipBtn->setFunction([=](CCObject *btn){
+			if(mFunc)mFunc();
+			this->removeFromParentAndCleanup(true);
+		});
 		
 		return true;
 		

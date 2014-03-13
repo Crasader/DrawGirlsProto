@@ -1436,13 +1436,65 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				
 				start_warp_ccbi.second->runAnimationsForSequenceNamed("opened");
 				
+				if(idx == 0)
+				{
+					CCSprite* n_start_warp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+					n_start_warp->setOpacity(0);
+					CCSprite* s_start_warp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+					s_start_warp->setOpacity(0);
+					
+					CCMenuItemLambda* start_warp_item = CCMenuItemSpriteLambda::create(n_start_warp, s_start_warp, [=](CCObject* sender)
+																					   {
+																						   puzzle_table->setContentOffsetInDuration(ccp(0,0), 0.3f);
+																					   });
+					
+					CCMenuLambda* start_warp_menu = CCMenuLambda::createWithItem(start_warp_item);
+					start_warp_menu->setPosition(start_warp_position);
+					t_img->addChild(start_warp_menu);
+				}
+				else
+				{
+					CCSprite* n_start_warp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+					n_start_warp->setOpacity(0);
+					CCSprite* s_start_warp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+					s_start_warp->setOpacity(0);
+					
+					CCMenuItemLambda* start_warp_item = CCMenuItemSpriteLambda::create(n_start_warp, s_start_warp, [=](CCObject* sender)
+																					   {
+																						   CCLog("idx : %d", idx);
+																						   CCLog("go to x : %.1f", -(idx-1.f)*480.f);
+																						   puzzle_table->setContentOffsetInDuration(ccp(-(idx-1.f)*480.f,0), 0.3f);
+																					   });
+					
+					CCMenuLambda* start_warp_menu = CCMenuLambda::createWithItem(start_warp_item);
+					start_warp_menu->setPosition(start_warp_position);
+					t_img->addChild(start_warp_menu);
+				}
+				
 				CCPoint end_warp_position = ccp(NSDS_GI(puzzle_number, kSDS_PZ_lastWarp_x_d), NSDS_GI(puzzle_number, kSDS_PZ_lastWarp_y_d));
 				auto end_warp_ccbi = KS::loadCCBI<CCSprite*>(this, "main_warp.ccbi");
 				end_warp_ccbi.first->setPosition(end_warp_position);
 				t_img->addChild(end_warp_ccbi.first);
 				
 				if(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= idx+2)
+				{
 					end_warp_ccbi.second->runAnimationsForSequenceNamed("opened");
+					CCSprite* n_end_warp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+					n_end_warp->setOpacity(0);
+					CCSprite* s_end_warp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+					s_end_warp->setOpacity(0);
+					
+					CCMenuItemLambda* end_warp_item = CCMenuItemSpriteLambda::create(n_end_warp, s_end_warp, [=](CCObject* sender)
+																					   {
+																						   CCLog("idx : %d", idx);
+																						   CCLog("go to x : %.1f", -(idx+1.f)*480.f);
+																						   puzzle_table->setContentOffsetInDuration(ccp(-(idx+1.f)*480.f,0), 0.3f);
+																					   });
+					
+					CCMenuLambda* end_warp_menu = CCMenuLambda::createWithItem(end_warp_item);
+					end_warp_menu->setPosition(end_warp_position);
+					t_img->addChild(end_warp_menu);
+				}
 				else
 					end_warp_ccbi.second->runAnimationsForSequenceNamed("close");
 				
@@ -1461,7 +1513,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 						
 						CCPoint sub_position = ccpSub(recent_position, before_position);
 						float dist_value = sqrtf(powf(sub_position.x, 2.f) + powf(sub_position.y, 2.f));
-						int dot_cnt = dist_value/25 + 1;
+						int dot_cnt = dist_value/17 + 1;
 						
 						CCPoint d_position = ccpMult(sub_position, 1.f/dot_cnt);
 						dot_cnt--;
