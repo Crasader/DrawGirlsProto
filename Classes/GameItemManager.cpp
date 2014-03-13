@@ -994,7 +994,7 @@ void FeverCoin::myInit(IntPoint t_point, CCObject* t_add, SEL_CallFuncO d_add) /
 	runAction(t_repeat);
 	
 	setPosition(my_point.convertToCCP());
-	setScale(1.f/myGD->game_scale);
+	setScale(1.f/myGD->game_scale*0.8f);
 	
 	startCheck();
 }
@@ -1115,18 +1115,18 @@ void GameItemManager::startItemSetting()
 {
 	for(int i=0;i<2;i++)
 	{
-		if(rand()%2 == 0)
-		{
-			GameItemAttack* t_gia = GameItemAttack::create(true);
-			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-			addChild(t_gia);
-		}
-		else
-		{
+//		if(rand()%2 == 0)
+//		{
+//			GameItemAttack* t_gia = GameItemAttack::create(true);
+//			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+//			addChild(t_gia);
+//		}
+//		else
+//		{
 			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
 			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 			addChild(t_gisu);
-		}
+//		}
 	}
 	
 	if(mySD->getClearCondition() == kCLEAR_timeLimit || is_on_addTime)
@@ -1212,9 +1212,13 @@ void GameItemManager::counting()
 	
 	if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount()-child_base_cnt < 2)
 	{
-		GameItemAttack* t_gia = GameItemAttack::create(false);
-		t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-		addChild(t_gia);
+//		GameItemAttack* t_gia = GameItemAttack::create(false);
+//		t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+//		addChild(t_gia);
+		
+		GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(false);
+		t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+		addChild(t_gisu);
 		
 		create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
 		counting_value = 0;
@@ -1242,13 +1246,13 @@ void GameItemManager::addItem()
 	int random_value = rand()%creatable_list.size();
 	ITEM_CODE create_item = creatable_list[random_value];
 	
-	if(create_item == kIC_attack)
-	{
-		GameItemAttack* t_gia = GameItemAttack::create(rand()%2 == 0);
-		t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-		addChild(t_gia);
-	}
-	else if(create_item == kIC_speedUp)
+//	if(create_item == kIC_attack)
+//	{
+//		GameItemAttack* t_gia = GameItemAttack::create(rand()%2 == 0);
+//		t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+//		addChild(t_gia);
+//	}else
+	if(create_item == kIC_speedUp || create_item == kIC_attack)
 	{
 		GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(rand()%2 == 0);
 		t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));

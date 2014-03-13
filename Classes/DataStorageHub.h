@@ -141,7 +141,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_mission_willNeverWatch_itemCollect,
 	kDSH_Key_mission_willNeverWatch_perfect,
 	kDSH_Key_mission_willNeverWatch_timeLimit,
-	kDSH_Key_mission_willNeverWatch_sequenceChange
+	kDSH_Key_mission_willNeverWatch_sequenceChange,
+	
+	kDSH_Key_storyReadPoint
 	
 }DSH_Key;
 

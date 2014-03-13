@@ -780,7 +780,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			 av->setCenterY(150);
 
 			 CCNode* emptyNode = CCNode::create();
-			 auto ttf = CCLabelTTF::create("코인을 보내겠습니까?", mySGD->getFont().c_str(), 14.f); 
+			 auto ttf = CCLabelTTF::create("하트를 보내겠습니까?", mySGD->getFont().c_str(), 14.f); 
 			 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 			 //	con->setAnchorPoint(ccp(0, 0));
 			 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));

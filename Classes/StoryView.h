@@ -46,6 +46,7 @@ public:
 		nextAni="";
 		
 		
+		
 		//load ani
 		auto ret = KS::loadCCBI<CCLayer*>(this, "openning1.ccbi");
 		mAnimationManager1 = ret.second;
@@ -53,7 +54,6 @@ public:
 		addChild(opLayer1,2);
 		mAnimationManager1->setDelegate(this);
 
-		
 		//make button
 		nextBtn =CommonButton::create("다음", 15, CCSizeMake(60, 40), CommonButtonOrange, -300);
 		nextBtn->setPosition(ccp(440,20));
@@ -61,23 +61,25 @@ public:
 		
 		nextBtn->setFunction([=](CCObject *btn){
 			
+			string nick  = myDSH->getStringForKey(kDSH_Key_nick).c_str();
+			
 			if(nextAni=="op1"){
-				scriptLbl->setString("책에는 아름다움을 시기하는 마녀에 대한 이야기가 쓰여져 있었습니다.");
+				scriptLbl->setString("그 책은 아름다움을 시기하는 마녀에 대한 이야기 였습니다. ");
 			}else if(nextAni=="op2"){
-				scriptLbl->setString("재미있게 글을 읽던 케이가 마지막장을 펼치자\n 책에서 이상한 빛이 새어 나왔습니다.");
+				scriptLbl->setString(CCString::createWithFormat("책을 읽던 %s가 마지막장을 펼치자\n 책에서 이상한 빛이 새어 나왔습니다.",nick.c_str())->getCString());
 			}else if(nextAni=="op5"){
-				scriptLbl->setString("마녀가 케이의 머리를 쓰다듬자\n 케이은 자신도 모르게 깊은 잠에 빠져버렸습니다.");
+				scriptLbl->setString(CCString::createWithFormat("마녀가 %s의 머리를 쓰다듬자\n %s는 자신도 모르게 깊은 잠에 빠져버렸습니다.",nick.c_str(),nick.c_str())->getCString());
 			}else if(nextAni=="op6"){
-				scriptLbl->setString("그렇게 세상으로 나온 마녀는 시공간을 뛰어넘어\n 과거와 현재, 현실과 책속을 넘나들며\n 자신보다 아름다운 미녀들을 그림카드에 봉인했습니다.");
+				scriptLbl->setString("마녀는 시공간을 뛰어넘어 과거와 현재, 현실과 책속을 넘나들며\n 자신보다 아름다운 미녀들을 그림카드에 봉인했습니다.");
 			}else if(nextAni=="op7"){
 				scriptLbl->setString("'이제 내가 가장 아름다운 사람이지 않을까? 호호호'");
 				this->addChild(KSTimer::create(3.f, [=](){
-					scriptLbl->setString("그리고 책 앞으로 돌아온 마녀는 다시 고서적으로 사라졌습니다.");
+					scriptLbl->setString("세상의 아름다운 여자들을 모두 봉인한 마녀는\n 다시 책속으로 사라졌습니다. ");
 				}));
 			}else if(nextAni=="op8"){
-				scriptLbl->setString("그때 잠들었던 케이도 차원의 소용돌이에 휘말려 \n 책속 세상으로 빨려들어가고 말았습니다.");
+				scriptLbl->setString(CCString::createWithFormat("잠든 %s는 차원의 소용돌이에 휘말려 \n 책속 세상으로 빨려들어가고 말았습니다.",nick.c_str())->getCString());
 			}else if(nextAni=="end"){
-				scriptLbl->setString("케이는 어떻게 되는걸까요?");
+				scriptLbl->setString(CCString::createWithFormat("%s는 어떻게 되는걸까요?",nick.c_str())->getCString());
 			}
 			
 			
@@ -96,10 +98,10 @@ public:
 			
 		});
 		
-		
-		scriptLbl = KSLabelTTF::create("케이는 다락방에서 오래된 책을 한 권 발견했습니다.", mySGD->getFont().c_str(), 15, CCSizeMake(450, 50), kCCTextAlignmentCenter);
+		scriptLbl = KSLabelTTF::create("",mySGD->getFont().c_str(), 15, CCSizeMake(450, 80), kCCTextAlignmentCenter);
 		scriptLbl->enableOuterStroke(ccBLACK, 1.f);
 		scriptLbl->setPosition(ccp(240,40));
+		scriptLbl->setString(CCString::createWithFormat("%s는 다락방에서 오래된 책을 한 권 발견했습니다.", myDSH->getStringForKey(kDSH_Key_nick).c_str())->getCString());
 		this->addChild(scriptLbl,3);
 		
 		
@@ -145,7 +147,7 @@ public:
 			this->addChild(KSTimer::create(1.f, [=](){
 				mAnimationManager1->runAnimationsForSequenceNamed("op4");
 				
-				scriptLbl->setString("'호호호 이제야 좀 살것 같네.' \n 눈부신 빛과 함께 마녀가 실제로 나타났습니다.");
+				scriptLbl->setString("눈부신 빛과 함께 나타난 마녀는 \n '호호호 이제야 좀 살것 같네.'");
 			}));
 			
 			

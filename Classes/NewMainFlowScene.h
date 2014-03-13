@@ -79,6 +79,8 @@ private:
 	
 	CCNode* beautystone_node;
 	
+	CCSprite* character_img;
+	
 	void setBeautystoneMenu();
 	
 	CCTableView* puzzle_table;
@@ -97,6 +99,7 @@ private:
 //	int selected_stage_cell_idx;
 	
 	map<int, CCNode*> stage_node_manager;
+	map<int, CCBAnimationManager*> warp_ani_manager;
 	
 	void lockedStage(CCObject* sender);
 	void notBuyedStage(CCObject* sender);
