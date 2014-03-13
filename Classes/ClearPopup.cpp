@@ -515,7 +515,7 @@ bool ClearPopup::init()
 																		 
 																		 CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
 																		 CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
-																		 t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -30));
+																		 t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																		 item_gold->addChild(t_gold_img);
 																		 
 																		 CCLabelTTF* item_gold_or_item;
@@ -524,7 +524,7 @@ bool ClearPopup::init()
 																		 {
 																			 item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
 																			 CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
-																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -30));
+																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																			 item_gold_or_item->addChild(t_gold_img2);
 																		 }
 																		 else
@@ -653,7 +653,7 @@ bool ClearPopup::init()
 																		 
 																		 CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
 																		 CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
-																		 t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -30));
+																		 t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																		 item_gold->addChild(t_gold_img);
 																		 
 																		 CCLabelTTF* item_gold_or_item;
@@ -662,7 +662,7 @@ bool ClearPopup::init()
 																		 {
 																			 item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
 																			 CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
-																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -30));
+																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																			 item_gold_or_item->addChild(t_gold_img2);
 																		 }
 																		 else
@@ -791,7 +791,7 @@ bool ClearPopup::init()
 																		 
 																		 CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
 																		 CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
-																		 t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -30));
+																		 t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																		 item_gold->addChild(t_gold_img);
 																		 
 																		 CCLabelTTF* item_gold_or_item;
@@ -800,7 +800,7 @@ bool ClearPopup::init()
 																		 {
 																			 item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
 																			 CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
-																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -30));
+																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																			 item_gold_or_item->addChild(t_gold_img2);
 																		 }
 																		 else
