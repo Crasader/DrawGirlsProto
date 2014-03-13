@@ -280,7 +280,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 av->setCenterY(150);
 
 			 CCNode* emptyNode = CCNode::create();
-			 auto ttf = CCLabelTTF::create(str(format("'%||'님에게\n코인을 선물하고,\n카톡 메시지를 보내시겠습니까?\n(코인을 선물하면 소셜포인트 +%|| 드려요.") % member->nick % mySGD->getSPSendHeart()).c_str(), mySGD->getFont().c_str(), 12.f); 
+			 auto ttf = CCLabelTTF::create(str(format("'%||'님에게\n하트를 선물하고,\n카톡 메시지를 보내시겠습니까?\n(하트를 선물하면 소셜포인트 +%|| 드려요.") % member->nick % mySGD->getSPSendHeart()).c_str(), mySGD->getFont().c_str(), 12.f); 
 			 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 			 //	con->setAnchorPoint(ccp(0, 0));
 			 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));

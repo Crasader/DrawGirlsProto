@@ -633,7 +633,7 @@ bool ShopPopup::init()
 	main_case->addChild(close_menu, kSP_Z_content);
 
 	
-	character_menu = CommonButton::create("캐릭터상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	character_menu = CommonButton::create("무기상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	character_menu->setTitleColor(ccWHITE);
 	character_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	character_menu->setTitleColorForDisable(ccBLACK);
