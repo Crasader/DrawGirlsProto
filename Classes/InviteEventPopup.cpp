@@ -190,17 +190,21 @@ void InviteEventPopup::finishedOpen()
 void InviteEventPopup::loadRank()
 {
 	std::function<void(Json::Value e)> p1 = bind(&ThisClassType::drawRank, this, std::placeholders::_1);
-	//step1 ƒ´ƒ´ø¿ƒ£±∏∏Ò∑œ ∑ŒµÂ
-	hspConnector::get()->kLoadFriends(Json::Value(),[p1](Json::Value fInfo)
-																		{
-																			CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
-																			
-																			
-																			
-																			Json::Value appfriends = fInfo["friends_info"];
-																			p1(appfriends);
-																			
-																		});
+
+	Json::Value appfriends;
+	p1(appfriends);
+	
+	//	//step1 ƒ´ƒ´ø¿ƒ£±∏∏Ò∑œ ∑ŒµÂ
+//	hspConnector::get()->kLoadFriends(Json::Value(),[p1](Json::Value fInfo)
+//																		{
+//																			CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
+//																			
+//																			
+//																			
+//																			Json::Value appfriends = fInfo["friends_info"];
+//																			p1(appfriends);
+//																			
+//																		});
 }
 
 void InviteEventPopup::drawRank( Json::Value obj )
@@ -336,17 +340,17 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 					////////////////////////////////
 					// ¬ ¡ˆ∫∏≥ª±‚ - ƒ´ƒ´ø¿
 					////////////////////////////////
-					Json::Value p2;
-					p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
-					p2["message"] = "님을 초대합니다.";
-					hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
-					{
-						GraphDogLib::JsonToLog("kSendMessage", r);
-						setInviteSendTime(m_scoreList[idx]["user_id"].asString());
-						m_currentInviteCount++;
-						m_inviteCountFnt->setString(CCString::createWithFormat("%d", m_currentInviteCount)->getCString());
-
-					});
+//					Json::Value p2;
+//					p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
+//					p2["message"] = "님을 초대합니다.";
+//					hspConnector::get()->kSendMessage(p2, [=](Json::Value r)
+//					{
+//						GraphDogLib::JsonToLog("kSendMessage", r);
+//						setInviteSendTime(m_scoreList[idx]["user_id"].asString());
+//						m_currentInviteCount++;
+//						m_inviteCountFnt->setString(CCString::createWithFormat("%d", m_currentInviteCount)->getCString());
+//
+//					});
 				});
 		});
 	}

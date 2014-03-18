@@ -222,51 +222,35 @@ public:
 
     void login(Json::Value param,Json::Value callbackParam,jsonSelType func);
     void logout(jsonSelType func);
-	void loadMyInfo(Json::Value obj);
-    void loadMyProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
-    void loadFriendsProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
+		//void loadMyInfo(Json::Value obj);
+    //void loadMyProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
+    //void loadFriendsProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
     
-    void kLoadLocalUser(jsonSelType func);
-    void kLoadLocalUser(Json::Value callbackParam,jsonSelType func);
+    //void kLoadLocalUser(jsonSelType func);
+    //void kLoadLocalUser(Json::Value callbackParam,jsonSelType func);
     
-    void kLoadFriends(jsonSelType func);
-    void kLoadFriends(Json::Value callbackParam,jsonSelType func);
+    //void kLoadFriends(jsonSelType func);
+    //void kLoadFriends(Json::Value callbackParam,jsonSelType func);
     
-    void kSendMessage(Json::Value param,jsonSelType func);
-    void kSendMessage(Json::Value param,Json::Value callbackParam,jsonSelType func);
+    //void kSendMessage(Json::Value param,jsonSelType func);
+    //void kSendMessage(Json::Value param,Json::Value callbackParam,jsonSelType func);
     
-    void kLogout(jsonSelType func);
-    void kLogout(Json::Value callbackParam,jsonSelType func);
+    //void kLogout(jsonSelType func);
+    //void kLogout(Json::Value callbackParam,jsonSelType func);
     
-    void kUnregister(jsonSelType func);
-    void kUnregister(Json::Value callbackParam,jsonSelType func);
+    //void kUnregister(jsonSelType func);
+    //void kUnregister(Json::Value callbackParam,jsonSelType func);
     
     
     // void callFuncMainQueue(Json::Value param,Json::Value callbackParam,CCObject *target,hspSelType selector,void*resultDict);
-    void kLoadFriends(CCObject* target,hspSelType selector);
+    //void kLoadFriends(CCObject* target,hspSelType selector);
     // void kLoadFriendsStep2(Json::Value kakaoIds,int delekey);
-    void kLoadFriendsStep2(Json::Value obj);
-    void kLoadFriendsStep3(Json::Value obj);
+    //void kLoadFriendsStep2(Json::Value obj);
+    //void kLoadFriendsStep3(Json::Value obj);
     
-    void kSendMessage();
-    void kLoadRanking();
-    void reportGameUserData(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void loadMyDetailedProfile(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void loadServiceProperties(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void loadProfiles(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void loadDetailedProfiles(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void saveMemberData(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void loadMemberData(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void removeMemberData(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void loadRankings(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void reportRanking(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void queryHSPMemberNos(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void queryKakaoIds(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void queryFollowingMembers(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void queryFollowers(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void followMembers(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void blockMembers(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
-    void queryMembersRecommended(Json::Value param,Json::Value callbackParam,CCObject* target,hspSelType selector);
+    //void kSendMessage();
+    //void kLoadRanking();
+
     
     
 };

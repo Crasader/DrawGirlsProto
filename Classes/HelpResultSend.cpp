@@ -84,14 +84,14 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::funct
 			 GraphDogLib::JsonToLog("sendMessage", r);
 			 
 			 
-			 Json::Value p2;
-			 p2["receiver_id"] = mySGD->getAcceptHelpId();
-			 p2["message"] = "저에게 도움을 받으셨네요 축하합니다. 우편함으로 와서 도움결과를 받으세요!";
-			 hspConnector::get()->kSendMessage
-			 (p2, [=](Json::Value r)
-				{
-					GraphDogLib::JsonToLog("kSendMessage", r);
-				});
+//			 Json::Value p2;
+//			 p2["receiver_id"] = mySGD->getAcceptHelpId();
+//			 p2["message"] = "저에게 도움을 받으셨네요 축하합니다. 우편함으로 와서 도움결과를 받으세요!";
+//			 hspConnector::get()->kSendMessage
+//			 (p2, [=](Json::Value r)
+//				{
+//					GraphDogLib::JsonToLog("kSendMessage", r);
+//				});
 			 
 		 }
 		 );
@@ -134,14 +134,14 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::funct
 		////////////////////////////
 		av->getContainerScrollView()->setTouchEnabled(false);
 
-		Json::Value p2;
-		p2["receiver_id"] = mySGD->getAcceptHelpId();
-		p2["message"] = "저에게 도움을 못 받으셨네요. 좀 잘하는 사람한테 도움요청하세요 ㅋㅋㅋ";
-		hspConnector::get()->kSendMessage
-		(p2, [=](Json::Value r)
-		 {
-			 GraphDogLib::JsonToLog("kSendMessage", r);
-		 });
+//		Json::Value p2;
+//		p2["receiver_id"] = mySGD->getAcceptHelpId();
+//		p2["message"] = "저에게 도움을 못 받으셨네요. 좀 잘하는 사람한테 도움요청하세요 ㅋㅋㅋ";
+//		hspConnector::get()->kSendMessage
+//		(p2, [=](Json::Value r)
+//		 {
+//			 GraphDogLib::JsonToLog("kSendMessage", r);
+//		 });
 	}
 	
 	return true;

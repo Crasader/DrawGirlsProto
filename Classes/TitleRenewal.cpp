@@ -505,13 +505,17 @@ void TitleRenewalScene::startCommand()
 	
 	if(must_be_load_friends)
 	{
-//		Json::Value t_result_data;
-//		t_result_data["status"] = 0;
-//		resultGetKnownFriendList(t_result_data);
+		Json::Value t_result_data;
+		t_result_data["status"] = 0;
+		resultGetKnownFriendList(t_result_data);
 		
-		hspConnector::get()->kLoadFriends(Json::Value(),
-										  bind(&ThisClassType::resultGetKnownFriendList, this, std::placeholders::_1));
-		must_be_load_friends = false;
+		
+		
+		return;
+		
+//		hspConnector::get()->kLoadFriends(Json::Value(),
+//										  bind(&ThisClassType::resultGetKnownFriendList, this, std::placeholders::_1));
+//		must_be_load_friends = false;
 	}
 }
 

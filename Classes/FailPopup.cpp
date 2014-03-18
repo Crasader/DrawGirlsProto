@@ -1058,13 +1058,13 @@ void FailPopup::cellAction( CCObject* sender )
 
 
 						 //																		obj->removeFromParent();
-						 Json::Value p2;
-						 p2["receiver_id"] = recvId;
-						 p2["message"] = "저를 도와주세요. 실력파인 당신이 저를 도와주시면 3대가 축복을 받으실거에요~^^";
-						 hspConnector::get()->kSendMessage
-							 (p2, [=](Json::Value r) {
-								 GraphDogLib::JsonToLog("kSendMessage", r);
-							 });
+//						 Json::Value p2;
+//						 p2["receiver_id"] = recvId;
+//						 p2["message"] = "저를 도와주세요. 실력파인 당신이 저를 도와주시면 3대가 축복을 받으실거에요~^^";
+//						 hspConnector::get()->kSendMessage
+//							 (p2, [=](Json::Value r) {
+//								 GraphDogLib::JsonToLog("kSendMessage", r);
+//							 });
 																							 });
 								});
 	

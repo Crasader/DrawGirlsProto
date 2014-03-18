@@ -843,13 +843,13 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							 ////////////////////////////////
 							 // 쪽지보내기 - 카카오
 							 ////////////////////////////////
-							 Json::Value p2;
-							 p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
-							 p2["message"] = "하트받으세용!";
-							 hspConnector::get()->kSendMessage(p2, [=](Json::Value r) {
-								 GraphDogLib::JsonToLog("kSendMessage", r);
-								 //																																						this->closePopup(0,0);
-							 });
+//							 Json::Value p2;
+//							 p2["receiver_id"] = m_scoreList[idx]["user_id"].asString();
+//							 p2["message"] = "하트받으세용!";
+//							 hspConnector::get()->kSendMessage(p2, [=](Json::Value r) {
+//								 GraphDogLib::JsonToLog("kSendMessage", r);
+//								 //																																						this->closePopup(0,0);
+//							 });
 						 });
 					 });
 			 addChild(av, 99999999);

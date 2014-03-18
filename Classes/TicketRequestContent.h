@@ -310,7 +310,7 @@ private:
 		addChild(request_menu);
 		
 		
-		hspConnector::get()->kLoadFriends(json_selector(this, TicketRequestContent::resultLoadFriends));
+		//hspConnector::get()->kLoadFriends(json_selector(this, TicketRequestContent::resultLoadFriends));
 	}
 };
 
