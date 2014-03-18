@@ -1468,8 +1468,8 @@ void TitleRenewalScene::endingAction()
 void TitleRenewalScene::changeScene()
 {
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
-//	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
-	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+//	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 }
 
