@@ -1,0 +1,19 @@
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+<key>HSPSDK_VERSION</key>
+<string>2.22.2</string>
+<key>HSPCORE_VERSION</key>
+<string>2.22.11159</string>
+<key>HSPUIREFERENCE_VERSION</key>
+<string>2.22.11160</string>
+<key>HSPCGP_VERSION</key>
+<string>2.18.0.11061</string>
+<key>HSPPAYMENT_VERSION</key>
+<string>2.17.10932</string>
+<key>HSPPAYMENT_CHUKONG_VERSION</key>
+<string>2.16.10930</string>
+<key>HSPITEMDELIVERY_VERSION</key>
+<string>2.16.10937</string>
+</dict>
+</plist>

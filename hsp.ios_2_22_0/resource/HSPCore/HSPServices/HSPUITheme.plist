@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LOGIN</key>
+	<dict>
+		<key>TOAST_WELCOME_VIEW</key>
+		<dict>
+			<key>PORTRAIT_VIEW_BG</key>
+			<string></string>
+			<key>LANDSCAPE_VIEW_BG</key>
+			<string></string>
+			<key>PORTRAIT_VIEW_BG_WIDE</key>
+			<string></string>
+			<key>LANDSCAPE_VIEW_BG_WIDE</key>
+			<string></string>
+			<key>PORTRAIT_VIEW_BG_IPAD</key>
+			<string></string>
+			<key>LANDSCAPE_VIEW_BG_IPAD</key>
+			<string></string>
+			<key>EMAIL_REGISTER_GUIDE_TEXT_COLOR</key>
+			<dict>
+				<key>RED</key>
+				<integer>255</integer>
+				<key>GREEN</key>
+				<integer>255</integer>
+				<key>BLUE</key>
+				<integer>255</integer>
+				<key>ALPHA</key>
+				<integer>255</integer>
+			</dict>
+		</dict>
+	</dict>
+	<key>COMMON</key>
+	<dict>
+		<key>TOPBAR_VIEW</key>
+		<dict>
+			<key>TOP_LINECOLOR</key>
+			<dict>
+				<key>RED</key>
+				<integer>251</integer>
+				<key>GREEN</key>
+				<integer>100</integer>
+				<key>BLUE</key>
+				<integer>0</integer>
+				<key>ALPHA</key>
+				<integer>255</integer>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>

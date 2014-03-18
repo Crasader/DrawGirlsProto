@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<array>
+		<dict>
+			<key>OPEN_PRESENCE</key>
+			<string></string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>AUTOADD_ADDRESSBOOKFRIEND</key>
+			<string></string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>TWITTER</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>FACEBOOK</key>
+			<string></string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>ACCOUNT_ID</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>ACCOUNT_MEMBERNO</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>ACCOUNT_PASSWORD</key>
+			<string></string>
+		</dict>
+	</array>
+</array>
+</plist>

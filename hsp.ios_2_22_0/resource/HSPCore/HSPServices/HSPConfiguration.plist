@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>HSP_IMAGE_FORMAT</key>
+	<string>JPEG</string>
+	<key>HSP_DEBUG_LEVEL</key>
+	<string>LOW</string>
+	<key>HSP_ENABLE_ASSERTION</key>
+	<false/>
+	<key>HSP_LAUNCHING_ZONE</key>
+	<string>ALPHA-KR</string>
+	<key>HSP_RESEND_FAILED_DATA</key>
+	<true/>
+	<key>HSP_SHOW_UI_WELCOMEMESSAGE</key>
+	<true/>
+	<key>HSP_TIMEOUT_TCP</key>
+	<integer>20</integer>
+	<key>HSP_STYLE_POPOVER</key>
+	<false/>
+	<key>HSP_LAUNCHING_REFRESH_TIMEINTERVAL</key>
+	<integer>120</integer>
+	<key>HSP_TIMEOUT_HTTP</key>
+	<integer>20</integer>
+	<key>HSP_SHOW_UI_VERSIONCHECK</key>
+	<true/>
+	<key>HSP_SHOW_UI_MAINTENANCE</key>
+	<true/>
+	<key>HSP_HEARTBEAT_TIMEINTERVAL</key>
+	<integer>120</integer>
+	<key>HSP_MARKET</key>
+	<string>KA</string>
+	<key>HSP_USE_PUSH</key>
+	<false/>
+	<key>HSP_USE_AUTOSUSPEND</key>
+	<true/>
+	<key>HSP_ENFORCED_GUEST_LOGIN</key>
+	<false/>
+	<key>HSP_ENFORCED_DEVICE_LOGIN</key>
+	<false/>
+	<key>HSP_PAYMENT_GAMBLING</key>
+	<false/>
+	<key>HSP_SHOW_UI_PUNISHMENT</key>
+	<true/>
+	<key>HSP_ENABLE_LOGIN_UI_ANIMATION</key>
+	<true/>
+	<key>HSP_ENABLE_LINE_EMAIL_LOGIN</key>
+	<true/>
+	<key>HSP_USE_XCODE5_LATER</key>
+	<true/>
+</dict>
+</plist>
