@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <color name="hsp_toast_more_badge_text">#ffffff</color>
+    <color name="hsp_toast_new_more_item_text">#222222</color>
+	<color name="hsp_toast_new_profile_myprofile_modify_title">#565960</color>
+	<color name="hsp_toast_new_profile_myprofile_modify_contents">#2a303a</color>
+	<color name="hsp_toast_new_profile_myprofile_detail_basic_contents">#95969e</color>
+	<color name="hsp_toast_new_profile_myprofile_modify_input_contents">#2a303a</color>
+	<color name="hsp_toast_new_profile.myprofile_setting_input_length">#838383</color>
+    <color name="hsp_toast_new_profile_myprofile_setting_input_length_ok">#000000</color>
+    <color name="hsp_toast_new_profile_myprofile_setting_input_length_exceed">#ff1414</color>
+    <color name="hsp_toast_new_common_tab_selected">#2a303a</color>
+    <color name="hsp_toast_new_common_tab_unselected">#818188</color>
+     <color name="hsp_toast_new_listbackground">#33000000</color>
+     <color name="hsp_toast_new_list_divide">#66ffffff</color>
+
+</resources>

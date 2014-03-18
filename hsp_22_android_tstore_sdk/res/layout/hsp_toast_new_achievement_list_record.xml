@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/hsp.achievement.achievement.score"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="@color/hsp.common.white"
+        android:paddingLeft="13.3dp"
+        android:paddingRight="13.3dp"
+        android:tag="hsp.achievement.achievement.score" >
+
+        <ImageView
+            android:id="@+id/hsp.achievement.achievement.gameicon.imageview"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/hsp_toast_new_achievement_img"
+            android:tag="hsp.achievement.achievement.gameicon.imageview" />
+
+        <TextView
+            android:id="@+id/hsp.achievement.achievement.gametitle.textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/hsp.achievement.achievement.gameicon.imageview"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:tag="hsp.achievement.achievement.gametitle.textview"
+            android:textColor="@color/hsp.common.black"
+            android:textSize="16.6dp" />
+
+        <TextView
+            android:id="@+id/hsp.achievement.achievement.gamedetail.textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/hsp.achievement.achievement.gametitle.textview"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="60dp"
+            android:layout_toRightOf="@id/hsp.achievement.achievement.gameicon.imageview"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:tag="hsp.achievement.achievement.gamedetail.textview"
+            android:textColor="@color/hsp.common.description"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/hsp.achievement.achievement.score.textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:tag="hsp.achievement.achievement.score.textview"
+            android:textColor="@color/hsp.common.black"
+            android:textSize="16.6dp" />
+    </RelativeLayout>
+
+</LinearLayout>

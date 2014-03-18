@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:background="@color/hsp.common.white"
+    android:orientation="horizontal"
+     >
+    
+			<GridView 
+			    android:id="@+id/hsp.more.grid"
+			    android:layout_width="wrap_content"
+			    android:layout_height="fill_parent"
+			    android:background="@color/hsp.common.white"
+			    android:columnWidth="70.35dp"
+			    android:gravity="center"
+			    android:layout_gravity="center_horizontal"
+			    android:listSelector="@drawable/hsp_toast_new_list_color_clickable"
+			    android:numColumns="3"
+			    android:tag="hsp.more.grid"
+			    >
+			</GridView>
+</RelativeLayout>

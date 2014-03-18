@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="260dp"
+  android:layout_height="275dp"
+  android:layout_gravity="center"
+  android:background="@drawable/hsp_auth_toast_new_popup_shape"
+  >
+	<TextView 
+	    android:id="@+id/terms.title"
+	    android:layout_width="fill_parent"
+	    android:layout_height="40dp"
+	    android:layout_alignParentTop="true"
+	    android:shadowDy="1"
+	    android:shadowColor="@color/hsp.common.black"
+	    android:gravity="center"
+	    android:textSize="16dp"
+	    android:text="@string/hsp.toastnew.auth.welcome.agreement.terms.attention"
+	    android:textColor="@color/hsp.common.white"
+	    android:background="@drawable/hsp_auth_toast_new_popup_title_shape"/>
+	
+	<TextView 
+	    android:id="@+id/terms.content"
+	    android:layout_width="fill_parent"
+	    android:layout_height="113dp"
+	    android:layout_below="@+id/terms.title"
+	    android:layout_marginTop="25dp"
+	    android:layout_marginLeft="24dp"
+	    android:layout_marginRight="24dp"
+	    android:textSize="12dp"
+	    android:textColor="@color/hsp.common.black"
+	    android:gravity="center_horizontal"
+	    android:text="@string/hsp.toastnew.auth.welcome.agreement.alert"
+	    />
+	
+	<TextView 
+	    android:id="@+id/terms.idlogin"
+	    android:layout_below="@+id/terms.content"
+	    android:layout_width="fill_parent"
+	    android:layout_height="37dp"
+	    android:layout_marginLeft="24dp"
+	    android:layout_marginRight="24dp"
+	    android:gravity="center"
+	    android:text="@string/hsp.toastnew.auth.welcome.idp.login"
+	    android:textSize="13dp"
+	    android:textColor="@color/hsp.toast.topbar.background"
+	    android:background="@drawable/hsp_auth_toast_new_popup_default"
+	    android:tag="terms.idlogin"
+	    />
+	
+	<TextView
+	    android:id="@+id/terms.guestlogin"
+	    android:layout_below="@+id/terms.idlogin" 
+	    android:layout_width="fill_parent"
+	    android:layout_height="37dp"
+	    android:layout_marginTop="9dp"
+	    android:layout_marginLeft="24dp"
+	    android:layout_marginRight="24dp"
+	    android:gravity="center"
+	    android:text="@string/hsp.toastnew.auth.welcome.guest.login"
+	    android:textSize="13dp"
+	    android:textColor="#004dff"
+	    android:background="@drawable/hsp_auth_toast_new_popup_default"
+	    android:tag="terms.guestlogin"
+	    />
+
+</RelativeLayout>

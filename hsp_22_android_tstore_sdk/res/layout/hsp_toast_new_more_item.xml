@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" >
+
+        <ImageView
+            android:id="@+id/hsp.more.item.icon"
+            android:layout_width="70.35dp"
+            android:layout_height="70.35dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:tag="hsp.more.item.icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignRight="@id/hsp.more.item.icon"
+            android:layout_marginRight="2.68dp"
+            android:layout_marginTop="2.68dp"
+            android:background="@drawable/hsp_toast_new_gnb_more_badge"
+            android:gravity="center"
+            android:minWidth="19dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:tag="hsp.gnb.toast.more.badge.text"
+            android:textColor="@color/hsp_toast_more_badge_text"
+            android:textSize="13.33dp"
+            android:textStyle="bold"
+            android:text=""
+	        android:visibility="gone" 
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/hsp.toast.more.item.text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="6.7dp"
+        android:tag="hsp.toast.more.item.text"
+        android:textColor="@color/hsp_toast_new_more_item_text"
+        android:textSize="12.06dp" />
+
+</LinearLayout>

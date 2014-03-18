@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <color name="hsp.feed.length.default">#999999</color>
+    <color name="hsp.feed.length.excced">#ef5400</color>
+    <color name="hsp.feed.text">#222222</color>
+    <color name="hsp.feed.edittext.line">#d5d5d5</color>
+
+</resources>

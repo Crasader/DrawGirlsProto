@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="47dp"
+    android:background="@drawable/hsp_toast_new_list_color_clickable"
+    android:gravity="center_vertical"
+    android:minHeight="47dp"
+    android:paddingLeft="13.33dp"
+    android:paddingRight="13.33dp"
+    android:tag="hsp.profile.gameuserdata.item" >
+
+    <TextView
+        android:layout_width="140dp"
+        android:layout_height="fill_parent"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:tag="hsp.profile.gameuserdata.item.title"
+        android:textColor="@color/hsp.common.description"
+        android:textSize="16.6dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="158.6dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:tag="hsp.profile.gameuserdata.item.data"
+        android:textColor="@color/hsp.common.black"
+        android:textSize="16.6dp" />
+
+</RelativeLayout>

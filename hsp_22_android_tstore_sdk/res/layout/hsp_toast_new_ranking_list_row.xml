@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/hsp.ranking.list.row"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="@color/hsp.common.white"
+        android:paddingLeft="13.3dp"
+        android:paddingRight="13.3dp"
+        android:tag="hsp.ranking.list.row" >
+
+        <!-- 랭킹 이름 -->
+        <TextView
+            android:id="@+id/hsp.ranking.list.row.text.title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="140dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:tag="hsp.ranking.list.row.text.title"
+            android:textColor="@color/hsp.common.black"
+            android:textSize="16.6dp" />
+
+        <!-- 랭킹이동 버튼 -->
+        <ImageView
+            android:id="@+id/hsp.ranking.list.row.button"
+            android:layout_width="10dp"
+            android:layout_height="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/hsp_common_arrow"
+            android:tag="hsp.ranking.list.row.button" />
+
+        <!-- 랭킹 스코어 -->
+        <TextView
+            android:id="@+id/hsp.ranking.list.row.text.score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6.6dp"
+            android:layout_toLeftOf="@id/hsp.ranking.list.row.button"
+            android:tag="hsp.ranking.list.row.text.score"
+            android:textColor="@color/hsp.common.black"
+            android:textSize="16.6dp" />
+    </RelativeLayout>
+
+</LinearLayout>
