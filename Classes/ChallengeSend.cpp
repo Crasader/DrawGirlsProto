@@ -155,15 +155,15 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																																		), 1);
 
 																		 
-																		 Json::Value p2;
-																		 p2["receiver_id"] = user_id;
-																		 // 여기서 당신은 지금 배틀한 상대방을 지칭
-																		 p2["message"] = "당신이 패배하였습니다.";
-																		 hspConnector::get()->kSendMessage
-																		 (p2, [=](Json::Value r)
-																			{
-																				GraphDogLib::JsonToLog("kSendMessage", r);
-																			});
+//																		 Json::Value p2;
+//																		 p2["receiver_id"] = user_id;
+//																		 // 여기서 당신은 지금 배틀한 상대방을 지칭
+//																		 p2["message"] = "당신이 패배하였습니다.";
+//																		 hspConnector::get()->kSendMessage
+//																		 (p2, [=](Json::Value r)
+//																			{
+//																				GraphDogLib::JsonToLog("kSendMessage", r);
+//																			});
 																	 });
 		
 		}
@@ -227,11 +227,11 @@ bool ChallengeSend::init(const std::string& user_id, const std::string& nickname
 																		 p2["receiver_id"] = user_id;
 																		 // 여기서 당신은 지금 배틀한 상대방을 지칭
 																		 p2["message"] = "당신이 승리하였습니다. 보상을 받으세요 ^_^";
-																		 hspConnector::get()->kSendMessage
-																		 (p2, [=](Json::Value r)
-																			{
-																				GraphDogLib::JsonToLog("kSendMessage", r);
-																			});
+//																		 hspConnector::get()->kSendMessage
+//																		 (p2, [=](Json::Value r)
+//																			{
+//																				GraphDogLib::JsonToLog("kSendMessage", r);
+//																			});
 																	 });
 		}
 		

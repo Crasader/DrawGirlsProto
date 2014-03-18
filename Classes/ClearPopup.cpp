@@ -1455,14 +1455,14 @@ void ClearPopup::checkChallengeOrHelp()
 												 
 												 //																		obj->removeFromParent();
 												 
-												 Json::Value p2;
-												 p2["receiver_id"] = recvId;
-												 p2["message"] = "도전을 신청한다!!";
-												 hspConnector::get()->kSendMessage
-												 (p2, [=](Json::Value r)
-												  {
-													  GraphDogLib::JsonToLog("kSendMessage", r);
-												  });
+//												 Json::Value p2;
+//												 p2["receiver_id"] = recvId;
+//												 p2["message"] = "도전을 신청한다!!";
+//												 hspConnector::get()->kSendMessage
+//												 (p2, [=](Json::Value r)
+//												  {
+//													  GraphDogLib::JsonToLog("kSendMessage", r);
+//												  });
 											 });
 			});
 			
@@ -1543,14 +1543,14 @@ void ClearPopup::checkChallengeOrHelp()
 												 
 												 //																		obj->removeFromParent();
 												 
-												 Json::Value p2;
-												 p2["receiver_id"] = recvId;
-												 p2["message"] = "도전을 신청한다!!";
-												 hspConnector::get()->kSendMessage
-												 (p2, [=](Json::Value r)
-												  {
-													  GraphDogLib::JsonToLog("kSendMessage", r);
-												  });
+//												 Json::Value p2;
+//												 p2["receiver_id"] = recvId;
+//												 p2["message"] = "도전을 신청한다!!";
+//												 hspConnector::get()->kSendMessage
+//												 (p2, [=](Json::Value r)
+//												  {
+//													  GraphDogLib::JsonToLog("kSendMessage", r);
+//												  });
 											 });
 				
 				checkMiniGame();
@@ -1621,14 +1621,14 @@ void ClearPopup::checkChallengeOrHelp()
 												 
 												 //																		obj->removeFromParent();
 												 
-												 Json::Value p2;
-												 p2["receiver_id"] = recvId;
-												 p2["message"] = "도전을 신청한다!!";
-												 hspConnector::get()->kSendMessage
-												 (p2, [=](Json::Value r)
-												  {
-													  GraphDogLib::JsonToLog("kSendMessage", r);
-												  });
+//												 Json::Value p2;
+//												 p2["receiver_id"] = recvId;
+//												 p2["message"] = "도전을 신청한다!!";
+//												 hspConnector::get()->kSendMessage
+//												 (p2, [=](Json::Value r)
+//												  {
+//													  GraphDogLib::JsonToLog("kSendMessage", r);
+//												  });
 											 });
 			});
 			

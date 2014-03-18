@@ -347,13 +347,13 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 							 ////////////////////////////////
 							 // ¬ ¡ˆ∫∏≥ª±‚ - ƒ´ƒ´ø¿
 							 ////////////////////////////////
-							 Json::Value p2;
-							 p2["receiver_id"] = (*member).userId;
-							 p2["message"] = "하트 받아라.";
-							 hspConnector::get()->kSendMessage(p2, [=](Json::Value r) {
-								 GraphDogLib::JsonToLog("kSendMessage", r);
-								 setInviteSendTime((*member).userId);
-							 });
+//							 Json::Value p2;
+//							 p2["receiver_id"] = (*member).userId;
+//							 p2["message"] = "하트 받아라.";
+//							 hspConnector::get()->kSendMessage(p2, [=](Json::Value r) {
+//								 GraphDogLib::JsonToLog("kSendMessage", r);
+//								 setInviteSendTime((*member).userId);
+//							 });
 						 });
 					 });
 			 addChild(av, 99999999);
