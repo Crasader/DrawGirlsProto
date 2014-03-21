@@ -21,12 +21,12 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 
-import com.kakao.api.Kakao;
-import com.kakao.api.KakaoResponseHandler;
-import com.kakao.api.Logger;
-import com.kakao.api.StringKeySet;
-import com.kakao.api.Kakao.KakaoTokenListener;
-import com.kakao.api.Kakao.LogLevel;
+//import com.kakao.api.Kakao;
+//import com.kakao.api.KakaoResponseHandler;
+//import com.kakao.api.Logger;
+//import com.kakao.api.StringKeySet;
+//import com.kakao.api.Kakao.KakaoTokenListener;
+//import com.kakao.api.Kakao.LogLevel;
 //import com.kakao.api.KakaoLeaderboard;
 import android.os.Handler;
 
@@ -48,7 +48,7 @@ abstract class KRunnable implements Runnable
 
 public class hspConnector{
 	//public static KakaoLeaderboard kakaoLeaderboard;
-	public static Kakao kakao;
+	//public static Kakao kakao;
 	public static Cocos2dxGLSurfaceView mGLView;
 	public static Context AppContext;
 	public static Handler handler = new Handler();
@@ -86,7 +86,7 @@ public class hspConnector{
 		hspConnector.sPackageName = applicationInfo.packageName;
 		hspConnector.sFileDirectory = pContext.getFilesDir().getAbsolutePath();
 		hspConnector.sAssetManager = pContext.getAssets();
-		hspConnector.kakao = hspConnector.getKakao(aContext);
+		//hspConnector.kakao = hspConnector.getKakao(aContext);
 		
 		//kakaoLeaderboard = KakaoLeaderboard.getInstance();
 		
@@ -119,65 +119,65 @@ public class hspConnector{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public static Kakao getKakao(Context context) {
-		if (kakao != null) {
-			return kakao;
-		}
-		
-		try {
-			// using device id that was generated unique id
-			kakao = new Kakao(context, CLIENT_ID, CLIENT_SECRET, CLIENT_REDIRECT_URI);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		// 諛고��� Release濡�蹂�꼍.
-		kakao.setLogLevel(LogLevel.Debug);
-		
-		final SharedPreferences pref = context.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
-
-        KakaoTokenListener tokenListener = new KakaoTokenListener() {
-            public void onSetTokens(String accessToken, String refreshToken) {
-                // �ㅼ� ��������蹂댁���蹂댁���� 怨녹� ����댁� �⑸��� 
-                if(TextUtils.isEmpty(accessToken) || TextUtils.isEmpty(refreshToken)) { // accessToken��null�닿굅��鍮���몃�("")�대㈃ 濡�렇���
-                	// ����대��������吏����
-                    pref.edit().remove("access_token").remove("refresh_token").commit();
-
-                    // TODO kakaoStatus媛�STATUS_INVALID_GRANT �닿굅�� KakaoTokenListener��access token��null ��� 鍮�Ц���濡��ㅻ�寃쎌� logout | �댄� �ъ���| 醫��
-                } else {
-                    pref.edit().putString("access_token", accessToken).putString("refresh_token", refreshToken).commit();
-                }
-            }
-        };
-        kakao.setTokenListener(tokenListener);
-
-        String accessToken = pref.getString("access_token", null);
-        String refreshToken = pref.getString("refresh_token", null);
-        kakao.setTokens(accessToken, refreshToken);
-		
-		return kakao;
-	}
+//	public static Kakao getKakao(Context context) {
+//		if (kakao != null) {
+//			return kakao;
+//		}
+//		
+//		try {
+//			// using device id that was generated unique id
+//			kakao = new Kakao(context, CLIENT_ID, CLIENT_SECRET, CLIENT_REDIRECT_URI);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		// 諛고��� Release濡�蹂�꼍.
+//		kakao.setLogLevel(LogLevel.Debug);
+//		
+//		final SharedPreferences pref = context.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
+//
+//        KakaoTokenListener tokenListener = new KakaoTokenListener() {
+//            public void onSetTokens(String accessToken, String refreshToken) {
+//                // �ㅼ� ��������蹂댁���蹂댁���� 怨녹� ����댁� �⑸��� 
+//                if(TextUtils.isEmpty(accessToken) || TextUtils.isEmpty(refreshToken)) { // accessToken��null�닿굅��鍮���몃�("")�대㈃ 濡�렇���
+//                	// ����대��������吏����
+//                    pref.edit().remove("access_token").remove("refresh_token").commit();
+//
+//                    // TODO kakaoStatus媛�STATUS_INVALID_GRANT �닿굅�� KakaoTokenListener��access token��null ��� 鍮�Ц���濡��ㅻ�寃쎌� logout | �댄� �ъ���| 醫��
+//                } else {
+//                    pref.edit().putString("access_token", accessToken).putString("refresh_token", refreshToken).commit();
+//                }
+//            }
+//        };
+//        kakao.setTokenListener(tokenListener);
+//
+//        String accessToken = pref.getString("access_token", null);
+//        String refreshToken = pref.getString("refresh_token", null);
+//        kakao.setTokens(accessToken, refreshToken);
+//		
+//		return kakao;
+//	}
+//	
 	
-	
-	public static void onActivityResult(int requestCode, int resultCode, Intent data,Activity activity) {
-		KakaoResponseHandler loginResponseHandler = new KakaoResponseHandler(hspConnector.sContext){
-
-			@Override
-			protected void onComplete(int arg0, int arg1, JSONObject arg2) {
-				// TODO Auto-generated method stub
-				Log.i("litqoo","onactivity:"+arg2.toString());
-			}
-
-			@Override
-			protected void onError(int arg0, int arg1, JSONObject arg2) {
-				// TODO Auto-generated method stub
-				Log.i("litqoo","onactivity:"+arg2.toString());			
-			}
-			
-		};
-		
-		kakao.onActivityResult(requestCode, resultCode, data, activity, loginResponseHandler);
-	}
+//	public static void onActivityResult(int requestCode, int resultCode, Intent data,Activity activity) {
+////		KakaoResponseHandler loginResponseHandler = new KakaoResponseHandler(hspConnector.sContext){
+////
+////			@Override
+////			protected void onComplete(int arg0, int arg1, JSONObject arg2) {
+////				// TODO Auto-generated method stub
+////				Log.i("litqoo","onactivity:"+arg2.toString());
+////			}
+////
+////			@Override
+////			protected void onError(int arg0, int arg1, JSONObject arg2) {
+////				// TODO Auto-generated method stub
+////				Log.i("litqoo","onactivity:"+arg2.toString());			
+////			}
+////			
+////		};
+////		
+////		kakao.onActivityResult(requestCode, resultCode, data, activity, loginResponseHandler);
+//	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -208,15 +208,15 @@ public class hspConnector{
 	// Methodskakao.hasTokens()
 	// ===========================================================
 	
-	public static boolean kIsLogin(){
-		Log.i("litqoo","isLogin");
-		Log.i("litqoo","go to handler.post");
-		if(kakao.hasTokens()){
-			return true;
-		}else{
-			return false;
-		}
-	}
+//	public static boolean kIsLogin(){
+//		Log.i("litqoo","isLogin");
+//		Log.i("litqoo","go to handler.post");
+//		if(kakao.hasTokens()){
+//			return true;
+//		}else{
+//			return false;
+//		}
+//	}
 	
 	public static long getHSPMemberNo(){
 		return HSPCore.getInstance().getMemberNo();
@@ -241,6 +241,20 @@ public class hspConnector{
                 Log.d("litqoo", "BEGIN - HSPLoginCB");
                 JSONObject r= new JSONObject();
                 JSONObject error = new JSONObject();
+                
+                if (result.isSuccess() == false) {
+                    /* HSP 로그인에 실패한 경우다. */
+                    Log.i("litqoo", "HSP Login Error = " + result);
+                         
+                    // 상세 에러 코드를 확인하자.
+                    int errorCode = result.getCode();
+                    String errorDescription = result.getDetail();
+               
+                    Log.i("litqoo", "code = " + errorCode + ", message = " + errorDescription);
+                }else{
+                	 Log.i("litqoo", "success");
+                }
+                
                 try {
 					r.put("playable", isPlayable);
 	                error.put("code", result.getCode());
@@ -250,6 +264,7 @@ public class hspConnector{
 				} catch (JSONException e) {
 					
 				}
+
 
                 
                 mGLView.queueEvent(new KRunnable(_key,r.toString()) {
@@ -397,306 +412,306 @@ public class hspConnector{
 		HSPCore.getInstance().addAfterResetAccountListener(afterAccountListener);
 		return true;
 	}
-	
-	public static void kLogin(final int _key){
-		Log.i("litqoo","start login");
-		
-
-		Log.i("litqoo","go to handler.post");
-		
-		hspConnector.handler.post(
-				new Runnable(){
-					public void run() {
-						KakaoResponseHandler loginResponseHandler = new KakaoResponseHandler(hspConnector.sContext) {
-							@Override
-							public void onStart() {
-								super.onStart();
-								Log.i("litqoo","start ok");
-							}
-							
-							@Override
-							public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
-								Log.i("litqoo","oncomplete ok");
-								mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-					                public void run() {
-					                	hspConnector.SendResult(this.delekey,this.totalSource);
-					                }
-					            });
-								Log.i("litqoo","oncomplete" + result.toString());
-							}
-
-							@Override
-							public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
-								Log.i("litqoo","onerror ok");
-								mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-					                public void run() {
-					                	hspConnector.SendResult(this.delekey,this.totalSource);
-					                }
-					            });
-								Log.i("litqoo","onerror" + result.toString());
-							}
-
-						};
-						Log.i("litqoo","in runnable ok");
-						kakao.login((Activity)hspConnector.sContext, loginResponseHandler);
-					}
-		});
-		
-		
-	}
-	
-	public static void kLoadLocalUser(final int _key){
-		Log.i("litqoo","kLoadLocalUser jni");
-		hspConnector.handler.post(
-		new Runnable(){
-			public void run() {
-					kakao.localUser(new KakaoResponseHandler(hspConnector.AppContext) {
-
-					@Override
-					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
-						Log.i("litqoo","oncomplete ok");
-						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-			                public void run() {
-			                	hspConnector.SendResult(this.delekey,this.totalSource);
-			                }
-			            });
-						Log.i("litqoo","oncomplete" + result.toString());
-					}
-
-					@Override
-					public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
-						Log.i("litqoo","oncomplete ok");
-						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-			                public void run() {
-			                	hspConnector.SendResult(this.delekey,this.totalSource);
-			                }
-			            });
-						Log.i("litqoo","oncomplete" + result.toString());
-					}
-
-				});
-			}
-		}
-		);
-	}
-	
-	public static void kLoadFriends(final int _key){
-		hspConnector.handler.post(
-		new Runnable(){
-			public void run() {
-				kakao.friends(new KakaoResponseHandler(hspConnector.sContext) {
-					@Override
-					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
-						
-						// 移댁뭅�ㅽ� 移�뎄 以��대� �깆� �ъ���� 移�뎄 紐⑸�
-						JSONArray appFriendArray = result.optJSONArray(StringKeySet.app_friends_info);
-						JSONArray friendArray = result.optJSONArray(StringKeySet.friends_info);
-
-						Logger.getInstance().i("friends_count: " + result.optString("friends_count"));
-
-						Logger.getInstance().i("-------- app friends");
-						for (int i = 0, n = appFriendArray.length(); i < n; i++) {
-							JSONObject friend = appFriendArray.optJSONObject(i);
-							if (friend != null) {
-								try {
-									friend.put("user_id",friend.optString("user_id"));
-								} catch (JSONException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-							}
-						}
-						for (int i = 0, n = friendArray.length(); i < n; i++) {
-							JSONObject friend = friendArray.optJSONObject(i);
-							if (friend != null) {
-								try {
-									friend.put("user_id",friend.optString("user_id"));
-								} catch (JSONException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-							}
-						}
-						
-						Log.i("litqoo","oncomplete" + result.toString());
-						Log.i("litqoo","oncomplete" + result.toString().length());
-						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-			                public void run() {
-			                	hspConnector.SendResult(this.delekey,this.totalSource);
-			                }
-			            });
-						Log.i("litqoo","oncomplete" + result.toString());
-					}
-
-					@Override
-					public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
-						Log.i("litqoo","oncomplete ok");
-						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-			                public void run() {
-			                	hspConnector.SendResult(this.delekey,this.totalSource);
-			                }
-			            });
-						Log.i("litqoo","oncomplete" + result.toString());
-					}
-					
-				});
-			}
-		}
-		);
-	}
-
-	public static void kSendMessage(final int _key,final String paramString){
-		hspConnector.handler.post(
-		new Runnable(){
-			public void run() {
-				
-				
-				JSONObject param = null;
-				try {
-					param = new JSONObject(paramString);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				ArrayList<Map<String, String>> metaInfo = new ArrayList<Map<String, String>>();
-				
-				// excute url��kakao + client_id + :// 怨�媛�� ����쇰� 留���댁����.
-				// 移댁뭅�ㅽ���� ���깆� �ㅽ����湲������AndroidManifest.xml��custom scheme���ㅼ��댁����.
-				Map<String, String> metaInfoAndroid = new HashMap<String, String>();
-				metaInfoAndroid.put("os", "android");
-				metaInfoAndroid.put("executeurl", "");
-				metaInfo.add(metaInfoAndroid);
-
-				Map<String, String> metaInfoIos = new HashMap<String, String>();
-				metaInfoIos.put("os", "ios");
-				metaInfoIos.put("executeurl", "");
-				metaInfo.add(metaInfoIos);
-				
-					kakao.sendMessage(hspConnector.sContext, new KakaoResponseHandler(hspConnector.sContext) {
-
-						@Override
-						public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
-							Log.i("litqoo","oncomplete ok");
-							mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-					            public void run() {
-					            	hspConnector.SendResult(this.delekey,this.totalSource);
-					            }
-					        });
-							Log.i("litqoo","oncomplete" + result.toString());
-						}
-
-						@Override
-						public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
-						
-							Log.i("litqoo","oncomplete ok");
-							mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-					            public void run() {
-					            	hspConnector.SendResult(this.delekey,this.totalSource);
-					            }
-					        });
-							Log.i("litqoo","oncomplete" + result.toString());
-							
-						}
-
-					}, param.optString("receiver_id"), false, param.optString("message"), metaInfo);
-
-				
-			}
-		}
-		);
-	}
-	
-	public static void kLogout(final int _key){
-		hspConnector.handler.post(
-		new Runnable(){
-			public void run() {
-				kakao.logout(new KakaoResponseHandler(hspConnector.sContext) {
-
-					@Override
-					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
-						Log.i("litqoo","oncomplete ok");
-						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-			                public void run() {
-			                	hspConnector.SendResult(this.delekey,this.totalSource);
-			                }
-			            });
-						Log.i("litqoo","oncomplete" + result.toString());
-					}
-
-					@Override
-					public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
-						Log.i("litqoo","oncomplete ok");
-						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-			                public void run() {
-			                	hspConnector.SendResult(this.delekey,this.totalSource);
-			                }
-			            });
-						Log.i("litqoo","oncomplete" + result.toString());
-					}
-					
-				});
-			}
-		}
-		);
-	}
-	public static void kUnregister(final int _key){
-		hspConnector.handler.post(
-		new Runnable(){
-			public void run() {
-				kakao.unregister(new KakaoResponseHandler(hspConnector.sContext) {
-					
-					@Override
-					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
-						Log.i("litqoo","oncomplete ok");
-						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-			                public void run() {
-			                	hspConnector.SendResult(this.delekey,this.totalSource);
-			                }
-			            });
-						Log.i("litqoo","oncomplete" + result.toString());
-					}
-					
-					@Override
-					public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
-						Log.i("litqoo","oncomplete ok");
-						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
-			                public void run() {
-			                	hspConnector.SendResult(this.delekey,this.totalSource);
-			                }
-			            });
-						Log.i("litqoo","oncomplete" + result.toString());
-					}
-					
-				});
-				
-			}
-		}
-		);
-	}
-
-	
-	public static void kGetOldUser(final int _key){
-		hspConnector.handler.post(
-		new Runnable(){
-			public void run() {
-				
-				
-			}
-		}
-		);
-	}
-	public static void kShowStoryView(final int _key){
-		hspConnector.handler.post(
-		new Runnable(){
-			public void run() {
-				
-				
-			}
-		}
-		);
-	}
-	
+//	
+//	public static void kLogin(final int _key){
+//		Log.i("litqoo","start login");
+//		
+//
+//		Log.i("litqoo","go to handler.post");
+//		
+//		hspConnector.handler.post(
+//				new Runnable(){
+//					public void run() {
+//						KakaoResponseHandler loginResponseHandler = new KakaoResponseHandler(hspConnector.sContext) {
+//							@Override
+//							public void onStart() {
+//								super.onStart();
+//								Log.i("litqoo","start ok");
+//							}
+//							
+//							@Override
+//							public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
+//								Log.i("litqoo","oncomplete ok");
+//								mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//					                public void run() {
+//					                	hspConnector.SendResult(this.delekey,this.totalSource);
+//					                }
+//					            });
+//								Log.i("litqoo","oncomplete" + result.toString());
+//							}
+//
+//							@Override
+//							public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
+//								Log.i("litqoo","onerror ok");
+//								mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//					                public void run() {
+//					                	hspConnector.SendResult(this.delekey,this.totalSource);
+//					                }
+//					            });
+//								Log.i("litqoo","onerror" + result.toString());
+//							}
+//
+//						};
+//						Log.i("litqoo","in runnable ok");
+//						kakao.login((Activity)hspConnector.sContext, loginResponseHandler);
+//					}
+//		});
+//		
+//		
+//	}
+//	
+//	public static void kLoadLocalUser(final int _key){
+//		Log.i("litqoo","kLoadLocalUser jni");
+//		hspConnector.handler.post(
+//		new Runnable(){
+//			public void run() {
+//					kakao.localUser(new KakaoResponseHandler(hspConnector.AppContext) {
+//
+//					@Override
+//					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
+//						Log.i("litqoo","oncomplete ok");
+//						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//			                public void run() {
+//			                	hspConnector.SendResult(this.delekey,this.totalSource);
+//			                }
+//			            });
+//						Log.i("litqoo","oncomplete" + result.toString());
+//					}
+//
+//					@Override
+//					public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
+//						Log.i("litqoo","oncomplete ok");
+//						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//			                public void run() {
+//			                	hspConnector.SendResult(this.delekey,this.totalSource);
+//			                }
+//			            });
+//						Log.i("litqoo","oncomplete" + result.toString());
+//					}
+//
+//				});
+//			}
+//		}
+//		);
+//	}
+//	
+//	public static void kLoadFriends(final int _key){
+//		hspConnector.handler.post(
+//		new Runnable(){
+//			public void run() {
+//				kakao.friends(new KakaoResponseHandler(hspConnector.sContext) {
+//					@Override
+//					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
+//						
+//						// 移댁뭅�ㅽ� 移�뎄 以��대� �깆� �ъ���� 移�뎄 紐⑸�
+//						JSONArray appFriendArray = result.optJSONArray(StringKeySet.app_friends_info);
+//						JSONArray friendArray = result.optJSONArray(StringKeySet.friends_info);
+//
+//						Logger.getInstance().i("friends_count: " + result.optString("friends_count"));
+//
+//						Logger.getInstance().i("-------- app friends");
+//						for (int i = 0, n = appFriendArray.length(); i < n; i++) {
+//							JSONObject friend = appFriendArray.optJSONObject(i);
+//							if (friend != null) {
+//								try {
+//									friend.put("user_id",friend.optString("user_id"));
+//								} catch (JSONException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
+//							}
+//						}
+//						for (int i = 0, n = friendArray.length(); i < n; i++) {
+//							JSONObject friend = friendArray.optJSONObject(i);
+//							if (friend != null) {
+//								try {
+//									friend.put("user_id",friend.optString("user_id"));
+//								} catch (JSONException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
+//							}
+//						}
+//						
+//						Log.i("litqoo","oncomplete" + result.toString());
+//						Log.i("litqoo","oncomplete" + result.toString().length());
+//						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//			                public void run() {
+//			                	hspConnector.SendResult(this.delekey,this.totalSource);
+//			                }
+//			            });
+//						Log.i("litqoo","oncomplete" + result.toString());
+//					}
+//
+//					@Override
+//					public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
+//						Log.i("litqoo","oncomplete ok");
+//						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//			                public void run() {
+//			                	hspConnector.SendResult(this.delekey,this.totalSource);
+//			                }
+//			            });
+//						Log.i("litqoo","oncomplete" + result.toString());
+//					}
+//					
+//				});
+//			}
+//		}
+//		);
+//	}
+//
+//	public static void kSendMessage(final int _key,final String paramString){
+//		hspConnector.handler.post(
+//		new Runnable(){
+//			public void run() {
+//				
+//				
+//				JSONObject param = null;
+//				try {
+//					param = new JSONObject(paramString);
+//				} catch (JSONException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
+//				ArrayList<Map<String, String>> metaInfo = new ArrayList<Map<String, String>>();
+//				
+//				// excute url��kakao + client_id + :// 怨�媛�� ����쇰� 留���댁����.
+//				// 移댁뭅�ㅽ���� ���깆� �ㅽ����湲������AndroidManifest.xml��custom scheme���ㅼ��댁����.
+//				Map<String, String> metaInfoAndroid = new HashMap<String, String>();
+//				metaInfoAndroid.put("os", "android");
+//				metaInfoAndroid.put("executeurl", "");
+//				metaInfo.add(metaInfoAndroid);
+//
+//				Map<String, String> metaInfoIos = new HashMap<String, String>();
+//				metaInfoIos.put("os", "ios");
+//				metaInfoIos.put("executeurl", "");
+//				metaInfo.add(metaInfoIos);
+//				
+//					kakao.sendMessage(hspConnector.sContext, new KakaoResponseHandler(hspConnector.sContext) {
+//
+//						@Override
+//						public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
+//							Log.i("litqoo","oncomplete ok");
+//							mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//					            public void run() {
+//					            	hspConnector.SendResult(this.delekey,this.totalSource);
+//					            }
+//					        });
+//							Log.i("litqoo","oncomplete" + result.toString());
+//						}
+//
+//						@Override
+//						public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
+//						
+//							Log.i("litqoo","oncomplete ok");
+//							mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//					            public void run() {
+//					            	hspConnector.SendResult(this.delekey,this.totalSource);
+//					            }
+//					        });
+//							Log.i("litqoo","oncomplete" + result.toString());
+//							
+//						}
+//
+//					}, param.optString("receiver_id"), false, param.optString("message"), metaInfo);
+//
+//				
+//			}
+//		}
+//		);
+//	}
+//	
+//	public static void kLogout(final int _key){
+//		hspConnector.handler.post(
+//		new Runnable(){
+//			public void run() {
+//				kakao.logout(new KakaoResponseHandler(hspConnector.sContext) {
+//
+//					@Override
+//					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
+//						Log.i("litqoo","oncomplete ok");
+//						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//			                public void run() {
+//			                	hspConnector.SendResult(this.delekey,this.totalSource);
+//			                }
+//			            });
+//						Log.i("litqoo","oncomplete" + result.toString());
+//					}
+//
+//					@Override
+//					public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
+//						Log.i("litqoo","oncomplete ok");
+//						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//			                public void run() {
+//			                	hspConnector.SendResult(this.delekey,this.totalSource);
+//			                }
+//			            });
+//						Log.i("litqoo","oncomplete" + result.toString());
+//					}
+//					
+//				});
+//			}
+//		}
+//		);
+//	}
+//	public static void kUnregister(final int _key){
+//		hspConnector.handler.post(
+//		new Runnable(){
+//			public void run() {
+//				kakao.unregister(new KakaoResponseHandler(hspConnector.sContext) {
+//					
+//					@Override
+//					public void onComplete(int httpStatus, int kakaoStatus, JSONObject result) {
+//						Log.i("litqoo","oncomplete ok");
+//						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//			                public void run() {
+//			                	hspConnector.SendResult(this.delekey,this.totalSource);
+//			                }
+//			            });
+//						Log.i("litqoo","oncomplete" + result.toString());
+//					}
+//					
+//					@Override
+//					public void onError(int httpStatus, int kakaoStatus, JSONObject result) {
+//						Log.i("litqoo","oncomplete ok");
+//						mGLView.queueEvent(new KRunnable(_key,result.toString()) {
+//			                public void run() {
+//			                	hspConnector.SendResult(this.delekey,this.totalSource);
+//			                }
+//			            });
+//						Log.i("litqoo","oncomplete" + result.toString());
+//					}
+//					
+//				});
+//				
+//			}
+//		}
+//		);
+//	}
+//
+//	
+//	public static void kGetOldUser(final int _key){
+//		hspConnector.handler.post(
+//		new Runnable(){
+//			public void run() {
+//				
+//				
+//			}
+//		}
+//		);
+//	}
+//	public static void kShowStoryView(final int _key){
+//		hspConnector.handler.post(
+//		new Runnable(){
+//			public void run() {
+//				
+//				
+//			}
+//		}
+//		);
+//	}
+//	
 //	public static void loadGameInfo(final int _key){
 //		hspConnector.handler.post(
 //		new Runnable(){
