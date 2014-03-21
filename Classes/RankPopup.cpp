@@ -825,10 +825,10 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							 }
 							 ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
 
-							 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
-							 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
-
-							 });
+//							 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
+//							 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+//
+//							 });
 
 							 obj->removeFromParent();
 							 std::string remainStr = ::getRemainTimeMsg( mySGD->getHeartSendCoolTime() );

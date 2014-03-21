@@ -1992,28 +1992,6 @@ void PlayUI::takeItemCollect ()
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
 
-void PlayUI::setUseFriendCard()
-{
-	mySGD->setIsUsingFriendCard(true);
-	
-	myGD->communication("CP_chagePassiveData", mySGD->getSelectedFriendCardData().card_passive);
-	
-	jack_life++;
-	
-	CCSprite* jack_img = CCSprite::create("basic_character.png");
-	jack_img->setColor(ccGREEN);
-	jack_img->setOpacity(0);
-	jack_img->setPosition(ccp((jack_life-1)*20, 0));
-//	if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-(jack_life-1)*20));
-//	else if(myGD->gamescreen_type == kGT_rightUI)	jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-(jack_life-1)*20));
-//	else											jack_img->setPosition(ccp(80+(jack_life-1)*20, myDSH->ui_top-35));
-	jack_life_node->addChild(jack_img);
-	
-	jack_img->runAction(CCFadeTo::create(1.f, 255));
-	
-	jack_array->addObject(jack_img);
-}
-
 void PlayUI::myInit ()
 {
 	isGameover = false;

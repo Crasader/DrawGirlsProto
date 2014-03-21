@@ -76,11 +76,11 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::funct
 			 if(r["result"]["code"].asInt() != GDSUCCESS)
 				 return;
 			 
-			 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
-			 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
-													 {
-														 
-													 });
+//			 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+//			 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v)
+//													 {
+//														 
+//													 });
 			 GraphDogLib::JsonToLog("sendMessage", r);
 			 
 			 
@@ -112,7 +112,7 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::funct
 		av->setCenterY(150);
 
 		CCNode* emptyNode = CCNode::create();
-		auto ttf = CCLabelTTF::create((mySGD->getAcceptHelpNick() + "님에게 도움을 주지 못했습니다 OTL").c_str(), mySGD->getFont().c_str(), 14.f); 
+		auto ttf = CCLabelTTF::create("님에게 도움을 주지 못했습니다 OTL", mySGD->getFont().c_str(), 14.f);
 		ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 		//	con->setAnchorPoint(ccp(0, 0));
 		//ttf->setAnchorPoint(ccp(0.5f, 0.5f));

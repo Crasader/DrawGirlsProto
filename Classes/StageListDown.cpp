@@ -33,6 +33,8 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		CCLog("getPuzzleInfo : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		
 		state_ment->setString("퍼즐 정보를 받아오는ing...");
 		
 		NSDS_SS(puzzle_number, kSDS_PZ_title_s, result_data["title"].asString(), false);
@@ -482,30 +484,17 @@ void StageListDown::successAction()
 			{
 				if(puzzle_number > 10000)
 				{
-					st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
-					st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
+					st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
 				}
 				else
 				{
-					st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
-					st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
+					st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
 				}
 			}
 			
 			if(puzzle_number > 10000)
-			{
-				puzzleCol=5;
-				puzzleRow=4;
-				puzzleColDis=120.f;
-				puzzleRowDis=120.f;
-				puzzleOffsetX=86.f;
-				puzzleOffsetY=88.f;
-				faceColDis=172.f;
-				faceRowDis=172.f;
-				puzzleWidth=652;
-				puzzleHeight=536;
-			}
-			else
 			{
 				puzzleCol=6;
 				puzzleRow=4;
@@ -518,6 +507,19 @@ void StageListDown::successAction()
 				puzzleWidth=652.f;
 				puzzleHeight=452.f;
 			}
+			else
+			{
+				puzzleCol=5;
+				puzzleRow=4;
+				puzzleColDis=120.f;
+				puzzleRowDis=120.f;
+				puzzleOffsetX=86.f;
+				puzzleOffsetY=88.f;
+				faceColDis=172.f;
+				faceRowDis=172.f;
+				puzzleWidth=652;
+				puzzleHeight=536;
+			}
 			
 			
 			for(int i=0;i<puzzleCol*puzzleRow;i++){
@@ -528,21 +530,21 @@ void StageListDown::successAction()
 				CCImage *st = st_h;
 				if(puzzle_number > 10000)
 				{
-					if(i%2==0)
-						st=st_w; //피스는 i가 짝수일때 st_w 이미지를 이용하여 자르고 홀수일때 st_h 이미지를 이용하여 자릅니다.
+					if((x+(puzzleRow-1-y))%2 == 1)
+						st=st_w;
 				}
 				else
 				{
-					if((x+(puzzleRow-1-y))%2 == 1)
-						st=st_w;
+					if(i%2==0)
+						st=st_w; //피스는 i가 짝수일때 st_w 이미지를 이용하여 자르고 홀수일때 st_h 이미지를 이용하여 자릅니다.
 				}
 				
 				//저장할파일명을 지정합니다.
 				string filename;
 				if(puzzle_number > 10000)
-					filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol))->getCString();
-				else
 					filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol)+1)->getCString();
+				else
+					filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol))->getCString();
 				
 				//원본파일에서 자를 위치를 계산합니다.
 				int cutx, cuty;
@@ -581,9 +583,9 @@ void StageListDown::successAction()
 			{
 				CCImage *st = new CCImage;
 				if(puzzle_number > 10000)
-					st->initWithImageFile("puzzle_stencil_1_top.png");
-				else
 					st->initWithImageFile("temp_puzzle_stencil_top.png");
+				else
+					st->initWithImageFile("puzzle_stencil_1_top.png");
 				
 				int cutx =puzzleWidth/2;
 				int cuty =puzzleHeight-st->getHeight()/2;
@@ -604,9 +606,9 @@ void StageListDown::successAction()
 			{
 				CCImage *st = new CCImage;
 				if(puzzle_number > 10000)
-					st->initWithImageFile("puzzle_stencil_1_bottom.png");
-				else
 					st->initWithImageFile("temp_puzzle_stencil_bottom.png");
+				else
+					st->initWithImageFile("puzzle_stencil_1_bottom.png");
 				
 				int cutx =puzzleWidth/2;
 				int cuty =st->getHeight()/2;
@@ -627,9 +629,9 @@ void StageListDown::successAction()
 			{
 				CCImage *st = new CCImage;
 				if(puzzle_number > 10000)
-					st->initWithImageFile("puzzle_stencil_1_left.png");
-				else
 					st->initWithImageFile("temp_puzzle_stencil_left.png");
+				else
+					st->initWithImageFile("puzzle_stencil_1_left.png");
 				
 				int cutx =st->getWidth()/2;
 				int cuty =puzzleHeight/2;
@@ -649,9 +651,9 @@ void StageListDown::successAction()
 			{
 				CCImage *st = new CCImage;
 				if(puzzle_number > 10000)
-					st->initWithImageFile("puzzle_stencil_1_right.png");
-				else
 					st->initWithImageFile("temp_puzzle_stencil_right.png");
+				else
+					st->initWithImageFile("puzzle_stencil_1_right.png");
 				
 				int cutx =puzzleWidth-st->getWidth()/2;
 				int cuty =puzzleHeight/2;
@@ -859,20 +861,20 @@ void StageListDown::startGetStageList()
 
 	vector<CommandParam> command_vector;
 	
-	Json::Value rank_param;
-	rank_param["memberIDList"].append(hspConnector::get()->myKakaoInfo["user_id"].asString());
-	for(auto i : KnownFriends::getInstance()->getFriends())
-		rank_param["memberIDList"].append(i.userId);
-	for(auto i : UnknownFriends::getInstance()->getFriends())
-		rank_param["memberIDList"].append(i.userId);
-	
-	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
-	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
-	for(int i=start_stage;i<start_stage+stage_count;i++)
-		rank_param["stageNoList"].append(i);
-	
-	rank_param["limit"] = 1;
-	command_vector.push_back(CommandParam("getstageranklist", rank_param, json_selector(this, StageListDown::resultGetStageRankList)));
+//	Json::Value rank_param;
+//	rank_param["memberIDList"].append(hspConnector::get()->myKakaoInfo["user_id"].asString());
+//	for(auto i : KnownFriends::getInstance()->getFriends())
+//		rank_param["memberIDList"].append(i.userId);
+//	for(auto i : UnknownFriends::getInstance()->getFriends())
+//		rank_param["memberIDList"].append(i.userId);
+//	
+//	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+//	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+//	for(int i=start_stage;i<start_stage+stage_count;i++)
+//		rank_param["stageNoList"].append(i);
+//	
+//	rank_param["limit"] = 1;
+//	command_vector.push_back(CommandParam("getstageranklist", rank_param, json_selector(this, StageListDown::resultGetStageRankList)));
 	
 	Json::Value param;
 	param["version"] = NSDS_GI(puzzle_number, kSDS_PZ_version_i);
@@ -885,5 +887,5 @@ void StageListDown::startGetStageList()
 void StageListDown::resultGetStageRankList(Json::Value result_data)
 {
 //	CCLog("resultGetStageRankList : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	mySGD->temp_stage_ranker_list = result_data;
+//	mySGD->temp_stage_ranker_list = result_data;
 }

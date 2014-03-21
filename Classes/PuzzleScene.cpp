@@ -55,7 +55,6 @@ bool PuzzleScene::init()
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	
 	start_menu = NULL;
-	challenge_menu = NULL;
 	rank_table = NULL;
 	
 	selected_friend_idx = -1;
@@ -744,10 +743,8 @@ enum PuzzleMenuTag{
 	kPuzzleMenuTag_rubyShop,
 	kPuzzleMenuTag_goldShop,
 	kPuzzleMenuTag_heartShop,
-	kPuzzleMenuTag_friendPointContent,
 	kPuzzleMenuTag_tip,
 	kPuzzleMenuTag_start,
-	kPuzzleMenuTag_challenge,
 	kPuzzleMenuTag_rightReward,
 	kPuzzleMenuTag_rightRank,
 	kPuzzleMenuTag_changeMode
@@ -1373,57 +1370,6 @@ void PuzzleScene::menuAction(CCObject* sender)
 			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 			addChild(t_shop, kPuzzleZorder_popup);
 		}
-		else if(tag == kPuzzleMenuTag_friendPointContent)
-		{
-			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-300);
-			t_suction->setTouchEnabled(true);
-			t_suction->target_touch_began = this;
-			t_suction->delegate_touch_began = callfunc_selector(PuzzleScene::closeFriendPoint);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			CCSprite* stencil_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 78, 150));
-			stencil_node->setPosition(ccp(336+71,229+160.f*(screen_scale_y-1.f)));
-			CCClippingNode* cliping_node = CCClippingNode::create(stencil_node);
-			float change_scale = 1.f;
-			CCPoint change_origin = ccp(0,0);
-			if(screen_scale_x > 1.f)
-			{
-				change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
-				change_scale = screen_scale_x;
-			}
-			if(screen_scale_y > 1.f)
-				change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
-			CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-			cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
-			cliping_node->setAlphaThreshold(0.05f);
-			cliping_node->setPosition(CCPointZero);
-			t_suction->addChild(cliping_node);
-			
-			CCSprite* inner_img = CCSprite::create("candy_popup.png");
-			inner_img->setPosition(ccp(336+71,229+160.f*(screen_scale_y-1.f)+150));
-			cliping_node->addChild(inner_img);
-			
-			CCMoveTo* t_move_down = CCMoveTo::create(0.3f, ccp(336+71,229+160.f*(screen_scale_y-1.f)));
-			inner_img->runAction(t_move_down);
-			
-			close_friend_point_action = [=](){
-				t_suction->target_touch_began = NULL;
-				t_suction->delegate_touch_began = NULL;
-				
-				CCMoveTo* t_move_up = CCMoveTo::create(0.3f, ccp(336+71,229+160.f*(screen_scale_y-1.f)+150));
-				CCCallFunc* t_call = CCCallFunc::create(t_suction, callfunc_selector(CCLayer::removeFromParent));
-				CCSequence* t_seq = CCSequence::create(t_move_up, t_call, NULL);
-				inner_img->runAction(t_seq);
-			};
-			addChild(t_suction, kPuzzleZorder_top-1);
-			
-			is_menu_enable = true;
-		}
 		else if(tag == kPuzzleMenuTag_tip)
 		{
 			is_menu_enable = true;
@@ -1450,27 +1396,6 @@ void PuzzleScene::menuAction(CCObject* sender)
 			mySD->setSilType(selected_stage_number);
 			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 		}
-		else if(tag == kPuzzleMenuTag_challenge)
-		{
-			if(selected_friend_idx != -1)
-			{
-				int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
-				mySD->setSilType(selected_stage_number);
-				mySGD->setIsMeChallenge(true);
-				mySGD->setMeChallengeTarget(friend_list[selected_friend_idx].user_id, friend_list[selected_friend_idx].nickname, friend_list[selected_friend_idx].score, friend_list[selected_friend_idx].img_url);
-				CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
-			}
-			else
-			{
-				CCLog("not selected friend");
-				int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
-				
-				mySD->setSilType(selected_stage_number);
-				CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
-			}
-		}
 		else if(tag == kPuzzleMenuTag_changeMode)
 		{
 			int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
@@ -1483,11 +1408,6 @@ void PuzzleScene::menuAction(CCObject* sender)
 				have_card_cnt_case->setVisible(true);
 			}
 			else if(piece_mode == kPieceMode_thumb)
-			{
-				piece_mode = kPieceMode_ranker;
-				have_card_cnt_case->setVisible(false);
-			}
-			else if(piece_mode == kPieceMode_ranker)
 			{
 				piece_mode = kPieceMode_default;
 				have_card_cnt_case->setVisible(false);
@@ -1624,8 +1544,6 @@ void PuzzleScene::setRightContent()
 	}
 	if(start_menu)
 		start_menu->setTouchEnabled(reward_node->isVisible());
-	if(challenge_menu)
-		challenge_menu->setTouchEnabled(rank_node->isVisible());
 	if(rank_table)
 		rank_table->setTouchEnabled(rank_node->isVisible());
 //	if(monster_start_menu)
@@ -1789,245 +1707,164 @@ void PuzzleScene::setRank()
 {
 	if(rank_node->getTag() != selected_stage_number)
 	{
-		friend_list.clear();
+//		friend_list.clear();
 		rank_node->removeAllChildren();
 		rank_table = NULL;
 		
-		Json::Value p;
-		Json::Value my_info = hspConnector::get()->myKakaoInfo;
-		
-		RankFriendInfo t_my_info;
-		t_my_info.nickname = my_info["nickname"].asString();
-		t_my_info.img_url = my_info["profile_image_url"].asString();
-		t_my_info.user_id = my_info["user_id"].asString();
-		t_my_info.score = 0;
-		t_my_info.is_play = false;
-		t_my_info.is_message_blocked = my_info["message_blocked"].asBool();
-		friend_list.push_back(t_my_info);
-		
-		p["memberIDList"].append(t_my_info.user_id);
-		
-		for(auto i : KnownFriends::getInstance()->getFriends())
-		{
-			RankFriendInfo t_friend_info;
-			t_friend_info.nickname = i.nick;
-			t_friend_info.img_url = i.profileUrl;
-			t_friend_info.user_id = i.userId;
-			t_friend_info.score = 0;
-			t_friend_info.is_play = false;
-			t_friend_info.is_message_blocked = i.messageBlocked;
-			friend_list.push_back(t_friend_info);
-			
-			p["memberIDList"].append(i.userId);
-		}
-		
-		for(auto i : UnknownFriends::getInstance()->getFriends())
-		{
-			RankFriendInfo fInfo;
-			fInfo.nickname = i.nick;
-			fInfo.img_url = "";
-			fInfo.user_id = i.userId;
-			fInfo.score = 0;
-			fInfo.is_play = false;
-			fInfo.is_message_blocked = false;
-			friend_list.push_back(fInfo);
-			
-			p["memberIDList"].append(i.userId);
-		}
-		
-		p["stageNo"] = selected_stage_number;
-		hspConnector::get()->command("getstagescorelist",p,json_selector(this, PuzzleScene::resultGetStageScoreList));
-		
-		
-		
-		CCSprite* n_challenge = CCSprite::create("puzzle_right_ready.png");
-		CCSprite* s_challenge = CCSprite::create("puzzle_right_ready.png");
-		s_challenge->setColor(ccGRAY);
-		
-		CCMenuItem* challenge_item = CCMenuItemSprite::create(n_challenge, s_challenge, this, menu_selector(PuzzleScene::menuAction));
-		challenge_item->setTag(kPuzzleMenuTag_challenge);
-		
-		challenge_menu = CCMenu::createWithItem(challenge_item);
-		challenge_menu->setPosition(ccp(0, -112));
-		challenge_menu->setTouchEnabled(false);
-		rank_node->addChild(challenge_menu);
 		
 		rank_node->setTag(selected_stage_number);
 	}
 }
 
-void PuzzleScene::resultGetStageScoreList(Json::Value result_data)
-{
-	if(result_data["result"]["code"].asInt() == GDSUCCESS && result_data["param"]["stageNo"].asInt() == selected_stage_number && !rank_table)
-	{
-		Json::Value score_list = result_data["list"];
-		for(int i=0;i<score_list.size();i++)
-		{
-			vector<RankFriendInfo>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString());
-			if(iter != friend_list.end())
-			{
-				(*iter).score = score_list[i]["score"].asFloat();
-				(*iter).is_play = true;
-			}
-			else
-				CCLog("not found friend memberID : %s", score_list[i]["memberID"].asString().c_str());
-		}
-		
-		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
-										{
-											return !t_info.is_play;
-										});
-		friend_list.erase(beginIter, friend_list.end());
-		
-		struct t_FriendSort{
-			bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
-			{
-				return a.score > b.score;
-			}
-		} pred;
-		
-		sort(friend_list.begin(), friend_list.end(), pred);
-		
-		for(int i=0;i<friend_list.size();i++)
-			friend_list[i].rank = i+1;
-		
-		mySGD->save_stage_rank_stageNumber = selected_stage_number;
-		mySGD->save_stage_rank_list = friend_list;
-		
-//		float my_score = 0.f;
-//		
-//		vector<PuzzleRankFriendInfo>::iterator iter = find(friend_list.begin(), friend_list.end(), hspConnector::get()->myKakaoInfo["user_id"].asString());
-//		if(iter != friend_list.end())
+//void PuzzleScene::resultGetStageScoreList(Json::Value result_data)
+//{
+//	if(result_data["result"]["code"].asInt() == GDSUCCESS && result_data["param"]["stageNo"].asInt() == selected_stage_number && !rank_table)
+//	{
+//		Json::Value score_list = result_data["list"];
+//		for(int i=0;i<score_list.size();i++)
 //		{
-//			my_score = (*iter).score;
-//			friend_list.erase(iter);
+//			vector<RankFriendInfo>::iterator iter = find(friend_list.begin(), friend_list.end(), score_list[i]["memberID"].asString());
+//			if(iter != friend_list.end())
+//			{
+//				(*iter).score = score_list[i]["score"].asFloat();
+//				(*iter).is_play = true;
+//			}
+//			else
+//				CCLog("not found friend memberID : %s", score_list[i]["memberID"].asString().c_str());
 //		}
-//		else
-//			CCLog("not found my info");
+//		
+//		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
+//										{
+//											return !t_info.is_play;
+//										});
+//		friend_list.erase(beginIter, friend_list.end());
+//		
+//		struct t_FriendSort{
+//			bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
+//			{
+//				return a.score > b.score;
+//			}
+//		} pred;
+//		
+//		sort(friend_list.begin(), friend_list.end(), pred);
+//		
+//		for(int i=0;i<friend_list.size();i++)
+//			friend_list[i].rank = i+1;
 //		
 //		
-//		CCLabelTTF* my_score_title = CCLabelTTF::create("내 기록", mySGD->getFont().c_str(), 10);
-//		my_score_title->setPosition(ccp(0,85));
-//		rank_node->addChild(my_score_title);
+//		selected_friend_idx = -1;
 //		
-//		CCLabelTTF* my_score_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", my_score)->getCString(), mySGD->getFont().c_str(), 15);
-//		my_score_label->setPosition(ccp(0,71));
-//		rank_node->addChild(my_score_label);
-		
-		
-		selected_friend_idx = -1;
-		
-		CCSize table_size = CCSizeMake(130, 168);
-		
-//		CCSprite* temp_table = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
-//		temp_table->setAnchorPoint(CCPointZero);
-//		temp_table->setPosition(ccp(-table_size.width/2.f, -table_size.height/2.f+2));
-//		temp_table->setOpacity(100);
-//		rank_node->addChild(temp_table);
-		
-		rank_table = CCTableView::create(this, table_size);
-		rank_table->setAnchorPoint(CCPointZero);
-		rank_table->setDirection(kCCScrollViewDirectionVertical);
-		rank_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-		rank_table->setPosition(ccp(-table_size.width/2.f, -table_size.height/2.f+2));
-		
-		rank_table->setDelegate(this);
-		rank_node->addChild(rank_table);
-		rank_table->setTouchPriority(kCCMenuHandlerPriority+1);
-		
-		bool is_table_touch_enable = true;
-		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
-		if(recent_step == kTutorialFlowStep_pieceClick || recent_step == kTutorialFlowStep_readyClick || recent_step == kTutorialFlowStep_pieceType ||
-		   recent_step == kTutorialFlowStep_pieceClick2 || recent_step == kTutorialFlowStep_readyClick2)
-			is_table_touch_enable = false;
-		else if(recent_step == kTutorialFlowStep_backClick)
-		{
-			//if check
-			is_table_touch_enable = false;
-		}
-		
-		rank_table->setTouchEnabled(rank_node->isVisible() && is_table_touch_enable);
-	}
-}
+//		CCSize table_size = CCSizeMake(130, 168);
+//		
+////		CCSprite* temp_table = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+////		temp_table->setAnchorPoint(CCPointZero);
+////		temp_table->setPosition(ccp(-table_size.width/2.f, -table_size.height/2.f+2));
+////		temp_table->setOpacity(100);
+////		rank_node->addChild(temp_table);
+//		
+//		rank_table = CCTableView::create(this, table_size);
+//		rank_table->setAnchorPoint(CCPointZero);
+//		rank_table->setDirection(kCCScrollViewDirectionVertical);
+//		rank_table->setVerticalFillOrder(kCCTableViewFillTopDown);
+//		rank_table->setPosition(ccp(-table_size.width/2.f, -table_size.height/2.f+2));
+//		
+//		rank_table->setDelegate(this);
+//		rank_node->addChild(rank_table);
+//		rank_table->setTouchPriority(kCCMenuHandlerPriority+1);
+//		
+//		bool is_table_touch_enable = true;
+//		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+//		if(recent_step == kTutorialFlowStep_pieceClick || recent_step == kTutorialFlowStep_readyClick || recent_step == kTutorialFlowStep_pieceType ||
+//		   recent_step == kTutorialFlowStep_pieceClick2 || recent_step == kTutorialFlowStep_readyClick2)
+//			is_table_touch_enable = false;
+//		else if(recent_step == kTutorialFlowStep_backClick)
+//		{
+//			//if check
+//			is_table_touch_enable = false;
+//		}
+//		
+//		rank_table->setTouchEnabled(rank_node->isVisible() && is_table_touch_enable);
+//	}
+//}
 
 CCTableViewCell* PuzzleScene::tableCellAtIndex( CCTableView *table, unsigned int idx )
 {
-	RankFriendInfo* member = &friend_list[idx];
+//	RankFriendInfo* member = &friend_list[idx];
 	CCTableViewCell* cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	
-	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
-	string cell_id = (*member).user_id;
-	
-	CCSprite* back_img;
-	if(my_id == cell_id)
-		back_img = CCSprite::create("puzzle_right_ranklist_me.png");
-	else if(idx == 0)
-		back_img = CCSprite::create("puzzle_right_ranklist_gold.png");
-	else if(idx == 1)
-		back_img = CCSprite::create("puzzle_right_ranklist_silver.png");
-	else if(idx == 2)
-		back_img = CCSprite::create("puzzle_right_ranklist_bronze.png");
-	else
-		back_img = CCSprite::create("puzzle_right_ranklist_normal.png");
-	back_img->setPosition(CCPointZero);
-	back_img->setAnchorPoint(CCPointZero);
-	cell->addChild(back_img);
-	
-	CCSprite* profileImg = GDWebSprite::create((*member).img_url, "ending_noimg.png");
-	profileImg->setAnchorPoint(ccp(0.5, 0.5));
-	profileImg->setPosition(ccp(21, 21));
-	cell->addChild(profileImg, -1);
-	
-	if(my_id != cell_id && KnownFriends::getInstance()->findById(cell_id) != nullptr)
-	{
-		CCSprite* kakao_sign = CCSprite::create("puzzle_right_rank_kakao.png");
-		kakao_sign->setPosition(ccp(10,28));
-		cell->addChild(kakao_sign);
-	}
-	
-	CCLabelTTF* nickname_label = CCLabelTTF::create((*member).nickname.c_str(), mySGD->getFont().c_str(), 10);
-	nickname_label->setPosition(ccp(89,27));
-	cell->addChild(nickname_label);
-	
-	CCLabelTTF* score_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", (*member).score)->getCString(), mySGD->getFont().c_str(), 8);
-	score_label->setColor(ccBLACK);
-	score_label->setPosition(ccp(89,12));
-	cell->addChild(score_label);
-	
-	if(idx == 0)
-	{
-		CCSprite* medal_img = CCSprite::create("puzzle_right_rank_gold.png");
-		medal_img->setPosition(ccp(50,20));
-		cell->addChild(medal_img);
-	}
-	else if(idx == 1)
-	{
-		CCSprite* medal_img = CCSprite::create("puzzle_right_rank_silver.png");
-		medal_img->setPosition(ccp(50,20));
-		cell->addChild(medal_img);
-	}
-	else if(idx == 2)
-	{
-		CCSprite* medal_img = CCSprite::create("puzzle_right_rank_bronze.png");
-		medal_img->setPosition(ccp(50,20));
-		cell->addChild(medal_img);
-	}
-	else
-	{
-		CCLabelTTF* rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", (*member).rank)->getCString(), mySGD->getFont().c_str(), 14);
-		rank_label->setPosition(ccp(50,20));
-		cell->addChild(rank_label);
-	}
-	
-	if(selected_friend_idx == idx)
-	{
-		CCSprite* selected_img = CCSprite::create("puzzle_right_rank_selected.png");
-		selected_img->setPosition(CCPointZero);
-		selected_img->setAnchorPoint(CCPointZero);
-		cell->addChild(selected_img);
-	}
+//	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
+//	string cell_id = (*member).user_id;
+//	
+//	CCSprite* back_img;
+//	if(my_id == cell_id)
+//		back_img = CCSprite::create("puzzle_right_ranklist_me.png");
+//	else if(idx == 0)
+//		back_img = CCSprite::create("puzzle_right_ranklist_gold.png");
+//	else if(idx == 1)
+//		back_img = CCSprite::create("puzzle_right_ranklist_silver.png");
+//	else if(idx == 2)
+//		back_img = CCSprite::create("puzzle_right_ranklist_bronze.png");
+//	else
+//		back_img = CCSprite::create("puzzle_right_ranklist_normal.png");
+//	back_img->setPosition(CCPointZero);
+//	back_img->setAnchorPoint(CCPointZero);
+//	cell->addChild(back_img);
+//	
+//	CCSprite* profileImg = GDWebSprite::create((*member).img_url, "ending_noimg.png");
+//	profileImg->setAnchorPoint(ccp(0.5, 0.5));
+//	profileImg->setPosition(ccp(21, 21));
+//	cell->addChild(profileImg, -1);
+//	
+//	if(my_id != cell_id && KnownFriends::getInstance()->findById(cell_id) != nullptr)
+//	{
+//		CCSprite* kakao_sign = CCSprite::create("puzzle_right_rank_kakao.png");
+//		kakao_sign->setPosition(ccp(10,28));
+//		cell->addChild(kakao_sign);
+//	}
+//	
+//	CCLabelTTF* nickname_label = CCLabelTTF::create((*member).nickname.c_str(), mySGD->getFont().c_str(), 10);
+//	nickname_label->setPosition(ccp(89,27));
+//	cell->addChild(nickname_label);
+//	
+//	CCLabelTTF* score_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", (*member).score)->getCString(), mySGD->getFont().c_str(), 8);
+//	score_label->setColor(ccBLACK);
+//	score_label->setPosition(ccp(89,12));
+//	cell->addChild(score_label);
+//	
+//	if(idx == 0)
+//	{
+//		CCSprite* medal_img = CCSprite::create("puzzle_right_rank_gold.png");
+//		medal_img->setPosition(ccp(50,20));
+//		cell->addChild(medal_img);
+//	}
+//	else if(idx == 1)
+//	{
+//		CCSprite* medal_img = CCSprite::create("puzzle_right_rank_silver.png");
+//		medal_img->setPosition(ccp(50,20));
+//		cell->addChild(medal_img);
+//	}
+//	else if(idx == 2)
+//	{
+//		CCSprite* medal_img = CCSprite::create("puzzle_right_rank_bronze.png");
+//		medal_img->setPosition(ccp(50,20));
+//		cell->addChild(medal_img);
+//	}
+//	else
+//	{
+//		CCLabelTTF* rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", (*member).rank)->getCString(), mySGD->getFont().c_str(), 14);
+//		rank_label->setPosition(ccp(50,20));
+//		cell->addChild(rank_label);
+//	}
+//	
+//	if(selected_friend_idx == idx)
+//	{
+//		CCSprite* selected_img = CCSprite::create("puzzle_right_rank_selected.png");
+//		selected_img->setPosition(CCPointZero);
+//		selected_img->setAnchorPoint(CCPointZero);
+//		cell->addChild(selected_img);
+//	}
 	
 	return cell;
 }
@@ -2036,32 +1873,32 @@ void PuzzleScene::scrollViewDidScroll(CCScrollView* view){}
 void PuzzleScene::scrollViewDidZoom(CCScrollView* view){}
 void PuzzleScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 {
-	CCLog("touched cell idx : %d", cell->getIdx());
-	
-	string touched_id = friend_list[cell->getIdx()].user_id;
-	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
-	
-	if(touched_id != my_id)
-	{
-		if(selected_friend_idx == -1)
-		{
-			selected_friend_idx = cell->getIdx();
-			table->updateCellAtIndex(selected_friend_idx);
-		}
-		else if (cell->getIdx() != selected_friend_idx)
-		{
-			int keep_idx = selected_friend_idx;
-			selected_friend_idx = cell->getIdx();
-			table->updateCellAtIndex(keep_idx);
-			table->updateCellAtIndex(selected_friend_idx);
-		}
-		else
-		{
-			int keep_idx = selected_friend_idx;
-			selected_friend_idx = -1;
-			table->updateCellAtIndex(keep_idx);
-		}
-	}
+//	CCLog("touched cell idx : %d", cell->getIdx());
+//	
+//	string touched_id = friend_list[cell->getIdx()].user_id;
+//	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();
+//	
+//	if(touched_id != my_id)
+//	{
+//		if(selected_friend_idx == -1)
+//		{
+//			selected_friend_idx = cell->getIdx();
+//			table->updateCellAtIndex(selected_friend_idx);
+//		}
+//		else if (cell->getIdx() != selected_friend_idx)
+//		{
+//			int keep_idx = selected_friend_idx;
+//			selected_friend_idx = cell->getIdx();
+//			table->updateCellAtIndex(keep_idx);
+//			table->updateCellAtIndex(selected_friend_idx);
+//		}
+//		else
+//		{
+//			int keep_idx = selected_friend_idx;
+//			selected_friend_idx = -1;
+//			table->updateCellAtIndex(keep_idx);
+//		}
+//	}
 }
 CCSize PuzzleScene::cellSizeForTable(CCTableView *table)
 {
@@ -2069,7 +1906,7 @@ CCSize PuzzleScene::cellSizeForTable(CCTableView *table)
 }
 unsigned int PuzzleScene::numberOfCellsInTableView(CCTableView *table)
 {
-	return friend_list.size();
+	return 0;// friend_list.size();
 }
 
 //void PuzzleScene::setMonster()
@@ -2168,23 +2005,6 @@ void PuzzleScene::setTop()
 	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
 	ruby_menu->setPosition(ccp(287,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_menu);
-	
-	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(338,top_case->getContentSize().height/2.f-5));
-	top_case->addChild(friend_point_label);
-	
-	mySGD->setFriendPointLabel(friend_point_label);
-	
-	CCSprite* n_friend_point = CCSprite::create("mainflow_top_shop.png");
-	CCSprite* s_friend_point = CCSprite::create("mainflow_top_shop.png");
-	s_friend_point->setColor(ccGRAY);
-	
-	CCMenuItem* friend_point_item = CCMenuItemSprite::create(n_friend_point, s_friend_point, this, menu_selector(PuzzleScene::menuAction));
-	friend_point_item->setTag(kPuzzleMenuTag_friendPointContent);
-	
-	CCMenu* friend_point_menu = CCMenu::createWithItem(friend_point_item);
-	friend_point_menu->setPosition(ccp(362,top_case->getContentSize().height/2.f));
-	top_case->addChild(friend_point_menu);
 	
 	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
 	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");

@@ -30,7 +30,7 @@ enum StartSettingZorder{
 class CountingBMLabel;
 class HeartTime;
 class LoadingLayer;
-class RankFriendInfo;
+//class RankFriendInfo;
 class StartSettingScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -46,11 +46,11 @@ public:
 	HeartTime* heart_time;
 private:
 	
-	vector<RankFriendInfo> friend_list;
+//	vector<RankFriendInfo> friend_list;
 	CCTableView* rank_table;
 	int selected_friend_idx;
 	
-	void resultGetStageScoreList(Json::Value result_data);
+//	void resultGetStageScoreList(Json::Value result_data);
 	
 	virtual CCTableViewCell* tableCellAtIndex( CCTableView *table, unsigned int idx );
 	
@@ -63,7 +63,7 @@ private:
 	}
 	virtual unsigned int numberOfCellsInTableView(CCTableView *table)
 	{
-		return friend_list.size();
+		return 0;// friend_list.size();
 	}
 	
 	
@@ -73,10 +73,6 @@ private:
 	
 	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;
-	CountingBMLabel* friend_point_label;
-	
-	function<void(void)> close_friend_point_action;
-	void closeFriendPoint();
 	
 	void setMain();
 	CCSprite* main_case;
@@ -85,7 +81,6 @@ private:
 	
 	KSProtectVar<int> use_item_price_gold;
 	KSProtectVar<int> use_item_price_ruby;
-	KSProtectVar<int> use_item_price_social;
 	
 	bool is_before_selected_event_stage;
 	

@@ -326,9 +326,9 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 							 if(r["result"]["code"].asInt() != GDSUCCESS){
 								 return;
 							 }	
-							 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
-							 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
-							 });
+//							 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
+//							 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+//							 });
 							 ostringstream oss;
 							 oss << (*member).userId;
 							 std::string userIdStr = oss.str();

@@ -1024,10 +1024,10 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 														 
 														 mySGD->setRemoveMessageMailNo(mailNo);
 														 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
-														 mySGD->setAcceptChallengeTarget(mail["friendID"].asString(), mail["nickname"].asString(),
-																														 contentObj["score"].asFloat(), contentObj["replaydata"], contentObj["profile"].asString());
+//														 mySGD->setAcceptChallengeTarget(mail["friendID"].asString(), mail["nickname"].asString(),
+//																														 contentObj["score"].asFloat(), contentObj["replaydata"], contentObj["profile"].asString());
 														 mySD->setSilType(contentObj["challengestage"].asInt());
-														 mySGD->setIsAcceptChallenge(true);
+//														 mySGD->setIsAcceptChallenge(true);
 														 // ST 받고 성공시 창 띄움.. & sender->removeFromParent();
 														 addChild(StageInfoDown::create
 																			(this,
@@ -1054,10 +1054,10 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							 // 메세지 삭제후 모자가차.
 							 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 														 [=](Json::Value r) {
-															 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
-															 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
-
-															 });
+//															 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+//															 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+//
+//															 });
 
 															 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
 																															[=](){
@@ -1078,11 +1078,11 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 								 if(r["result"]["code"].asInt() != GDSUCCESS){
 									 return;
 								 }
-								 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
-								 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
-
-								 });
-								 KHAlertView* av = KHAlertView::create(); 
+//								 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+//								 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+//
+//								 });
+								 KHAlertView* av = KHAlertView::create();
 								 KS::KSLog("%", contentObj);
 								 av->setTitleFileName("msg_challenge_result.png");
 								 av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
@@ -1168,9 +1168,9 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 																																 mySGD->setRemoveMessageMailNo(mailNo);
 																																 mySGD->setRemoveMessageMemberId(mail["memberID"].asInt64());
-																																 mySGD->setAcceptHelpTarget(mail["friendID"].asString(), mail["nickname"].asString());
+//																																 mySGD->setAcceptHelpTarget(mail["friendID"].asString(), mail["nickname"].asString());
 																																 mySD->setSilType(contentObj["helpstage"].asInt());
-																																 mySGD->setIsAcceptHelp(true);
+//																																 mySGD->setIsAcceptHelp(true);
 																																 // ST 받고 성공시 창 띄움.. & sender->removeFromParent();
 																																 addChild(StageInfoDown::create
 																																					(this,
@@ -1208,10 +1208,10 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 //삭제요청
 						 removeMessage (mailNo, mail["memberID"].asInt64(),
 														[=](Json::Value r) {
-															mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
-															myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
-
-															});
+//															mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPFinishedChallenge());
+//															myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+//
+//															});
 															////////////////////////////////////////////////////
 
 															KHAlertView* av = KHAlertView::create();
@@ -1345,10 +1345,10 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																 av->removeFromParent();
 																 return;
 															 }
-															 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendTicket());
-															 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
-
-															 });
+//															 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendTicket());
+//															 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+//
+//															 });
 															 av->removeFromParent();
 															 });
 																					 });
@@ -1783,13 +1783,6 @@ void MailPopup::onReceiveStageSuccess()
 }
 void MailPopup::onReceiveStageFail()
 {
-	if(mySGD->getIsAcceptChallenge())
-		mySGD->setIsAcceptChallenge(false);
-	if(mySGD->getIsMeChallenge())
-		mySGD->setIsMeChallenge(false);
-	if(mySGD->getIsAcceptHelp())
-		mySGD->setIsAcceptHelp(false);
-	
 	mySGD->setRemoveMessageMemberId(0);
 	mySGD->setRemoveMessageMailNo(0);
 //	removeFromParent();

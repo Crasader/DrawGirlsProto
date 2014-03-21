@@ -23,9 +23,6 @@ void AchieveConditionReward::myInit()
 	data_map[kAchievementCode_heart1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
 	data_map[kAchievementCode_heart2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
 	data_map[kAchievementCode_heart3] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
-	data_map[kAchievementCode_social1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
-	data_map[kAchievementCode_social2] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
-	data_map[kAchievementCode_social3] = AchieveConditionRewardData(50, kAchieveRewardType_ruby, 1);
 	data_map[kAchievementCode_bonusGame1] = AchieveConditionRewardData(10, kAchieveRewardType_ruby, 1);
 	data_map[kAchievementCode_bonusGame2] = AchieveConditionRewardData(20, kAchieveRewardType_ruby, 1);
 	data_map[kAchievementCode_bonusGame3] = AchieveConditionRewardData(30, kAchieveRewardType_ruby, 1);
@@ -153,12 +150,6 @@ AchieveTitleContent AchieveTitleContent::getAchievementScript(AchievementCode t_
 	{	return_value.title = "바람둥이";return_value.content = "30하트보내기";	}
 	else if(t_code == kAchievementCode_heart3)
 	{	return_value.title = "카사노바";return_value.content = "50하트보내기";	}
-	else if(t_code == kAchievementCode_social1)
-	{	return_value.title = "스타";return_value.content = "10소셜포인트모으기";	}
-	else if(t_code == kAchievementCode_social2)
-	{	return_value.title = "탑스타";return_value.content = "30소셜포인트모으기";	}
-	else if(t_code == kAchievementCode_social3)
-	{	return_value.title = "월드스타";return_value.content = "50소셜포인트모으기";	}
 	else if(t_code == kAchievementCode_bonusGame1)
 	{	return_value.title = "보너스게임아마추어";return_value.content = "보너스게임 10회 성공";	}
 	else if(t_code == kAchievementCode_bonusGame2)
@@ -390,8 +381,6 @@ int AchieveConditionReward::getRecentValue(AchievementCode t_code) // -1 인지 
 	{	return_value = mySGD->getStar();	}
 	else if(t_code == kAchievementCode_heart1 || t_code == kAchievementCode_heart2 || t_code == kAchievementCode_heart3)
 	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_sendHeartCnt);	}
-	else if(t_code == kAchievementCode_social1 || t_code == kAchievementCode_social2 || t_code == kAchievementCode_social3)
-	{	return_value = mySGD->getFriendPoint();	}
 	else if(t_code == kAchievementCode_bonusGame1 || t_code == kAchievementCode_bonusGame2 || t_code == kAchievementCode_bonusGame3)
 	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_playBonusGameCnt);	}
 	else if(t_code == kAchievementCode_mapGacha1 || t_code == kAchievementCode_mapGacha2 || t_code == kAchievementCode_mapGacha3)

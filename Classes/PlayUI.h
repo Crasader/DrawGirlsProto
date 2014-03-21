@@ -246,7 +246,6 @@ public:
 	void setComboCnt (int t_combo);
 	int getUseTime ();
 	
-	void setUseFriendCard();
 private:
 	KSProtectVar<float> score_value;
 	int percentage_decrease_cnt;

@@ -120,9 +120,8 @@ private:
 	
 	void setRank();
 	CCNode* rank_node;
-	CCMenu* challenge_menu;
-	vector<RankFriendInfo> friend_list;
-	void resultGetStageScoreList(Json::Value result_data);
+//	vector<RankFriendInfo> friend_list;
+//	void resultGetStageScoreList(Json::Value result_data);
 	CCTableView* rank_table;
 	int selected_friend_idx;
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);

@@ -419,15 +419,15 @@ void StageInfoDown::myInit( CCObject* t_success, SEL_CallFunc d_success, CCObjec
 
 	is_downloading = false;
 
-	int selected_friend_card_number = mySGD->getSelectedFriendCardData().card_number;
-	if(selected_friend_card_number != 0 && NSDS_GS(kSDS_CI_int1_imgInfo_s, selected_friend_card_number) == "")
-	{
-		startGetCardsInfo();
-	}
-	else
-	{
+//	int selected_friend_card_number = mySGD->getSelectedFriendCardData().card_number;
+//	if(selected_friend_card_number != 0 && NSDS_GS(kSDS_CI_int1_imgInfo_s, selected_friend_card_number) == "")
+//	{
+//		startGetCardsInfo();
+//	}
+//	else
+//	{
 		startGetStageInfo();
-	}
+//	}
 
 	touch_number = 0;
 	is_menu_enable = true;
@@ -436,11 +436,11 @@ void StageInfoDown::myInit( CCObject* t_success, SEL_CallFunc d_success, CCObjec
 
 void StageInfoDown::startGetCardsInfo()
 {
-	myLog->addLog(kLOG_network_loadCardData, -1);
-	
-	Json::Value param;
-	param["noList"][0] = mySGD->getSelectedFriendCardData().card_number;
-	hspConnector::get()->command("getcardlist", param, json_selector(this, StageInfoDown::resultLoadedCardData));
+//	myLog->addLog(kLOG_network_loadCardData, -1);
+//	
+//	Json::Value param;
+//	param["noList"][0] = mySGD->getSelectedFriendCardData().card_number;
+//	hspConnector::get()->command("getcardlist", param, json_selector(this, StageInfoDown::resultLoadedCardData));
 }
 
 void StageInfoDown::resultLoadedCardData( Json::Value result_data )

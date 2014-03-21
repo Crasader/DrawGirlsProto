@@ -32,8 +32,7 @@ enum PieceZorder{
 
 enum PieceMode{
 	kPieceMode_default = 0,
-	kPieceMode_thumb,
-	kPieceMode_ranker
+	kPieceMode_thumb
 };
 
 enum PieceType{
@@ -269,10 +268,6 @@ private:
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu, kPieceZorder_menu);
 			}
-			else if(piece_mode == kPieceMode_ranker)
-			{
-				createRankImg();
-			}
 		}
 //		else if(piece_type == kPieceType_colorStroke)
 //		{
@@ -306,10 +301,6 @@ private:
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu);
-			}
-			else if(piece_mode == kPieceMode_ranker)
-			{
-				createRankImg();
 			}
 			else if(piece_mode == kPieceMode_thumb)
 			{
@@ -367,10 +358,6 @@ private:
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu);
 			}
-			else if(piece_mode == kPieceMode_ranker)
-			{
-				createRankImg();
-			}
 			else if(piece_mode == kPieceMode_thumb)
 			{
 				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
@@ -407,10 +394,6 @@ private:
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu);
-			}
-			else if(piece_mode == kPieceMode_ranker)
-			{
-				createRankImg();
 			}
 			else if(piece_mode == kPieceMode_thumb)
 			{
@@ -557,89 +540,6 @@ private:
 			
 			if(!is_gray)
 				star3 = star_img;
-		}
-	}
-	
-	void createRankImg()
-	{
-		if(mySGD->temp_stage_ranker_list["result"]["code"].asInt() == GDSUCCESS)
-		{
-			string stage_ranker_user_id;
-			for(int i=0;i<mySGD->temp_stage_ranker_list["list"].size();i++)
-			{
-				if(mySGD->temp_stage_ranker_list["list"][i][0]["stageNo"].asInt() == stage_number)
-				{
-					stage_ranker_user_id = mySGD->temp_stage_ranker_list["list"][i][0]["memberID"].asString();
-					break;
-				}
-			}
-			
-			if(!stage_ranker_user_id.empty())
-			{
-				bool is_found = false;
-				string found_nick;
-				string found_url;
-				
-				if(stage_ranker_user_id == hspConnector::get()->myKakaoInfo["user_id"].asString())
-				{
-					is_found = true;
-					found_nick = hspConnector::get()->myKakaoInfo["nickname"].asString();
-					found_url = hspConnector::get()->myKakaoInfo["profile_image_url"].asString();
-				}
-				
-				for(auto i : KnownFriends::getInstance()->getFriends())
-				{
-					if(!is_found)
-					{
-						if(i.userId == stage_ranker_user_id)
-						{
-							is_found = true;
-							found_nick = i.nick;
-							found_url = i.profileUrl;
-							break;
-						}
-					}
-					else
-						break;
-				}
-				
-				for(auto i : UnknownFriends::getInstance()->getFriends())
-				{
-					if(!is_found)
-					{
-						if(i.userId == stage_ranker_user_id)
-						{
-							is_found = true;
-							found_nick = i.nick;
-							found_url = i.profileUrl;
-							break;
-						}
-					}
-					else
-						break;
-				}
-				
-				if(is_found)
-				{
-					CCSprite* n_piece = GDWebSprite::create(found_url.c_str(), "piece_noimg.png");
-					n_piece->setAnchorPoint(ccp(0.5,0.5));
-					//						CCSprite* s_piece = GDWebSprite::create(found_url.c_str(), "piece_ranker_noimg.png");
-					//						s_piece->setScale(58.f / s_piece->getContentSize().width);
-					//						s_piece->setColor(ccGRAY);
-					
-					
-					CCNode *abc = CCNode::create();
-					CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, abc, this, menu_selector(PuzzlePiece::menuAction));
-					piece_menu = CCMenu::createWithItem(piece_item);
-					piece_menu->setPosition(CCPointZero);
-					addChild(piece_menu, kPieceZorder_menu);
-					
-					CCLabelTTF* nick_label = CCLabelTTF::create(found_nick.c_str(), mySGD->getFont().c_str(), 15);
-					nick_label->setColor(ccBLACK);
-					nick_label->setPosition(CCPointZero);
-					addChild(nick_label, kPieceZorder_nick);
-				}
-			}
 		}
 	}
 };

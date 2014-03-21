@@ -16,7 +16,6 @@ using namespace std;
 typedef enum t_DSH_Key{
 	kDSH_Key_savedStar,
 	kDSH_Key_savedGold,
-	kDSH_Key_savedFriendPoint,
 	kDSH_Key_notFirstExe,
 	kDSH_Key_bgmOff,
 	kDSH_Key_effectOff,
@@ -160,7 +159,6 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_base = 0,
 	kSaveUserData_Key_star,
 	kSaveUserData_Key_gold,
-	kSaveUserData_Key_friendPoint,
 	kSaveUserData_Key_heart,
 	kSaveUserData_Key_item,
 	kSaveUserData_Key_beautyStone,
@@ -254,7 +252,6 @@ private:
 	
 	CC_SYNTHESIZE(int, default_gold, DefaultGold); // 기본 골드
 	CC_SYNTHESIZE(int, default_ruby, DefaultRuby); // 기본 루비
-	CC_SYNTHESIZE(int, default_social, DefaultSocial); // 기본 소셜포인트
 	
 };
 #undef LZZ_INLINE

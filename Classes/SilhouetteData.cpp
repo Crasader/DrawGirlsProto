@@ -455,7 +455,6 @@ std::string SilhouetteData::getItemScript( ITEM_CODE t_code )
 	else if(t_code == kIC_smallArea)		return_value = "한번에 먹어야될 영역의 크기를 낮춘다.";
 	else if(t_code == kIC_widePerfect)		return_value = "기존 목표영역의 범위를 늘려준다.";
 	else if(t_code == kIC_randomChange)		return_value = "CHANGE를 순서와 상관없이 먹어도 클리어 된다.";
-	else if(t_code == kIC_rentCard)			return_value = "생명 하나를 추가하여 친구의 카드를 빌려씁니다.";
 	else									return_value = "아이템을 사용할 수 있습니다.";
 
 	return return_value;

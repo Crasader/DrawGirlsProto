@@ -19,7 +19,6 @@ enum class RewardKind
 	kSpecialAttack,
 	kDash,
 	kSlience,
-	kRentCard,
 	kSubMonsterOneKill,
 	kPower,
 	kMobLess,

@@ -1271,11 +1271,6 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	{
 		myGD->communication("UI_writeDie");
 		
-		if(mySGD->getIsUsingFriendCard())
-		{
-			mySGD->setIsUsingFriendCard(false);
-			myGD->communication("CP_chagePassiveData", myDSH->getStringForKey(kDSH_Key_cardPassive_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard)));
-		}
 		myGD->communication("CP_onJackDie");
 		
 		if(die_type == DieType::kDieType_other)
@@ -1599,10 +1594,7 @@ void Jack::takeSpeedUpItem()
 		myGD->communication("Main_takeSpeedUpEffect", int(roundf((0.8f - (2.f - myGD->jack_base_speed) + speed_up_value)/0.1f)));
 		
 		string missile_code;
-		if(mySGD->getIsUsingFriendCard())
-			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
-		else
-			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
 		
 		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));

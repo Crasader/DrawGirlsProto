@@ -160,10 +160,7 @@ private:
 								 });
 		addChild(replay_menu);
 		
-		if(mySGD->getIsMeChallenge() || mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
-			replay_menu->setEnabled(false);
-		else
-			replay_menu->setEnabled(true);
+		replay_menu->setEnabled(true);
 	}
 };
 

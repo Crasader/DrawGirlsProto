@@ -222,8 +222,7 @@ typedef enum t_ITEM_CODE{
 	kIC_subSmallSize,	// 12
 	kIC_smallArea,		// 13 // mission
 	kIC_widePerfect,	// 14 // mission
-	kIC_randomChange,	// 15 // mission
-	kIC_rentCard		// 16 // friend
+	kIC_randomChange	// 15 // mission
 }ITEM_CODE;
 
 
@@ -256,10 +255,6 @@ enum AchievementCode
 	kAchievementCode_heart1,//	큐피트 : 10하트보내기.
 	kAchievementCode_heart2,//	바람둥이 : 30하트보내기.
 	kAchievementCode_heart3,//	카사노바 : 50하트보내기.
-	
-	kAchievementCode_social1,//	스타: 10소셜포인트모으기. 완
-	kAchievementCode_social2,//	탑스타 : 30소셜포인트모으기. 완
-	kAchievementCode_social3,//	월드스타 : 50소셜포인트모으기. 완
 	
 	kAchievementCode_bonusGame1,//	보너스게임아마추어 : 보너스게임 10회 성공
 	kAchievementCode_bonusGame2,//	보너스게임프로 : 보너스게임 20회 성공
@@ -409,8 +404,7 @@ enum AchievementCode
 enum class GachaCategory
 {
 	kRubyGacha = 1,
-	kGoldGacha = 2,
-	kSocialGacha = 3
+	kGoldGacha = 2
 };
 
 enum StoneType

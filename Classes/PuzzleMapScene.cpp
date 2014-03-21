@@ -234,185 +234,69 @@ void PuzzleMapScene::startSceneSetting()
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
-		if(mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp() || mySD->getSilType() >= 10000)
+		is_from_call_map_mode = true;
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setTouchEnabled(false);
+		
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setEnabled(false);
+		
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+		
+		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 		{
-			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
-			is_gesturable_map_mode = false;
-			map_mode_state = kMMS_changeMode;
-			is_from_call_map_mode = false;
-			
-			resetStagePiece();
-			
-			for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
-			{
-				StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-				if(t_sp)
-					t_sp->mySetTouchEnable(false);
-			}
-			
-			this->unschedule(schedule_selector(PuzzleMapScene::moveAnimation));
-			isAnimated=false;
-			
-			((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
-			
-			if(((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->getPositionY() < -(myDSH->puzzle_ui_top-320.f)/2.f - 24.f)
-				showEventButton();
-			
-			float t_x, t_y, t_z;
-			map_node->getCamera()->getEyeXYZ(&t_x, &t_y, &t_z);
-			map_node->getCamera()->setEyeXYZ(t_x, t_y-1, t_z);
-			map_node->setScale(0.53f);
-			map_node->setPosition(ccp(240,180));
-			
-			CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
-			top_case->setPositionY(top_case->getPositionY() - 33.f);
-			
-			CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
-			bottom_case->setPositionY(bottom_case->getPositionY() + 65.f);
-			
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setTouchEnabled(true);
-			
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setEnabled(true);
-			
-			map_mode_state = kMMS_uiMode;
-			is_menu_enable = true;
-			
-			showClearPopup();
+			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+			if(t_sp)
+				t_sp->mySetTouchEnable(true);
 		}
-		else
-		{
-			is_from_call_map_mode = true;
-			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setTouchEnabled(false);
-			
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setEnabled(false);
-			
-			((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
-			
-			for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
-			{
-				StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-				if(t_sp)
-					t_sp->mySetTouchEnable(true);
-			}
-			
-			is_gesturable_map_mode = true;
-			map_mode_state = kMMS_default;
-			is_menu_enable = true;
-			
-			showClearPopup();
-		}
+		
+		is_gesturable_map_mode = true;
+		map_mode_state = kMMS_default;
+		is_menu_enable = true;
+		
+		showClearPopup();
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
 	{
-		if(mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp() || mySD->getSilType() >= 10000)
+		is_from_call_map_mode = true;
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setTouchEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setTouchEnabled(false);
+		
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setEnabled(false);
+		((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setEnabled(false);
+		
+		((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
+		
+		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
 		{
-			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
-			is_gesturable_map_mode = false;
-			map_mode_state = kMMS_changeMode;
-			is_from_call_map_mode = false;
-			
-			resetStagePiece();
-			
-			for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
-			{
-				StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-				if(t_sp)
-					t_sp->mySetTouchEnable(false);
-			}
-			
-			this->unschedule(schedule_selector(PuzzleMapScene::moveAnimation));
-			isAnimated=false;
-			
-			((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(false);
-			
-			if(((CCMenu*)main_node->getChildByTag(kPMS_MT_event))->getPositionY() < -(myDSH->puzzle_ui_top-320.f)/2.f - 24.f)
-				showEventButton();
-			
-			float t_x, t_y, t_z;
-			map_node->getCamera()->getEyeXYZ(&t_x, &t_y, &t_z);
-			map_node->getCamera()->setEyeXYZ(t_x, t_y-1, t_z);
-			map_node->setScale(0.53f);
-			map_node->setPosition(ccp(240,180));
-			
-			CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
-			top_case->setPositionY(top_case->getPositionY() - 33.f);
-			
-			CCSprite* bottom_case = (CCSprite*)main_node->getChildByTag(kPMS_MT_bottom);
-			bottom_case->setPositionY(bottom_case->getPositionY() + 65.f);
-			
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setTouchEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setTouchEnabled(true);
-			
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setEnabled(true);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setEnabled(true);
-			
-			map_mode_state = kMMS_uiMode;
-			is_menu_enable = true;
-			
-			showFailPopup();
+			StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
+			if(t_sp)
+				t_sp->mySetTouchEnable(true);
 		}
-		else
-		{
-			is_from_call_map_mode = true;
-			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setTouchEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setTouchEnabled(false);
-			
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_left))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_right))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_up))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_selectedCard))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_trophy))->setEnabled(false);
-			((CCMenu*)main_node->getChildByTag(kPMS_MT_memo))->setEnabled(false);
-			
-			((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
-			
-			for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
-			{
-				StagePiece* t_sp = (StagePiece*)map_node->getChildByTag(i);
-				if(t_sp)
-					t_sp->mySetTouchEnable(true);
-			}
-			
-			is_gesturable_map_mode = true;
-			map_mode_state = kMMS_default;
-			is_menu_enable = true;
-			
-			showFailPopup();
-		}
+		
+		is_gesturable_map_mode = true;
+		map_mode_state = kMMS_default;
+		is_menu_enable = true;
+		
+		showFailPopup();
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stageSetting)
 	{
@@ -853,13 +737,6 @@ void PuzzleMapScene::setUIs()
 	top_case->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
-	
-	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "allfont.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(427,top_case->getContentSize().height/2.f));
-	top_case->addChild(friend_point_label);
-	
-	mySGD->setFriendPointLabel(friend_point_label);
-	
 	
 	HeartTime* heart_time = HeartTime::create();
 	heart_time->setPosition(ccp(250,top_case->getContentSize().height/2.f));
@@ -1408,7 +1285,6 @@ void PuzzleMapScene::hideStageSettingPopup()
 {
 	mySGD->setStarLabel(ruby_label);
 	mySGD->setGoldLabel(gold_label);
-	mySGD->setFriendPointLabel(friend_point_label);
 	
 	is_gesturable_map_mode = true;
 	map_mode_state = kMMS_default;
@@ -1452,7 +1328,6 @@ void PuzzleMapScene::hideClearPopup()
 		map_mode_state = kMMS_uiMode;
 		mySGD->setStarLabel(ruby_label);
 		mySGD->setGoldLabel(gold_label);
-		mySGD->setFriendPointLabel(friend_point_label);
 		
 		is_menu_enable = true;
 		
@@ -1534,7 +1409,6 @@ void PuzzleMapScene::endGetPuzzle()
 {
 	mySGD->setStarLabel(ruby_label);
 	mySGD->setGoldLabel(gold_label);
-	mySGD->setFriendPointLabel(friend_point_label);
 	
 	is_gesturable_map_mode = true;
 	map_mode_state = kMMS_default;
@@ -1578,7 +1452,6 @@ void PuzzleMapScene::hideFailPopup()
 		map_mode_state = kMMS_uiMode;
 		mySGD->setStarLabel(ruby_label);
 		mySGD->setGoldLabel(gold_label);
-		mySGD->setFriendPointLabel(friend_point_label);
 		
 		is_menu_enable = true;
 		
@@ -1590,7 +1463,6 @@ void PuzzleMapScene::hideFailPopup()
 	
 		mySGD->setStarLabel(ruby_label);
 		mySGD->setGoldLabel(gold_label);
-		mySGD->setFriendPointLabel(friend_point_label);
 		
 		is_gesturable_map_mode = true;
 		map_mode_state = kMMS_default;
@@ -1684,7 +1556,6 @@ void PuzzleMapScene::puzzleUiEnable()
 {
 	mySGD->setStarLabel(ruby_label);
 	mySGD->setGoldLabel(gold_label);
-	mySGD->setFriendPointLabel(friend_point_label);
 	
 	CCSprite* top_case = (CCSprite*)getChildByTag(kPMS_MT_top);
 	CCMoveTo* top_move = CCMoveTo::create(0.3f, ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f));

@@ -80,12 +80,6 @@ public:
 						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
 					}
 					break;
-				case RewardKind::kRentCard:
-					{
-						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_rentCard);
-						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
-					}
-					break;
 				case RewardKind::kSubMonsterOneKill:
 					{
 						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_subOneDie);
@@ -113,11 +107,6 @@ public:
 		else if(gc == GachaCategory::kRubyGacha)
 		{
 			replayItem->setPrice(PriceTypeRuby, mySGD->getGachaRubyFeeRetry());
-			replayItem->setTitle("다시뽑기");
-		}
-		else if(gc == GachaCategory::kSocialGacha)
-		{
-			replayItem->setPrice(PriceTypeSocial, mySGD->getGachaSocialFeeRetry());
 			replayItem->setTitle("다시뽑기");
 		}
 		replayItem->setFunction([=](CCObject*){
