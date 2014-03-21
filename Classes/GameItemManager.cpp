@@ -1138,13 +1138,6 @@ void GameItemManager::startItemSetting()
 		addChild(t_fast);
 	}
 	
-	if(mySGD->isUsingItem(kIC_critical))
-	{
-		GameItemFire* t_fire = GameItemFire::create(false);
-		t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-		addChild(t_fire);
-	}
-	
 	if(mySGD->isUsingItem(kIC_subOneDie))
 	{
 		GameItemSubOneDie* t_sod = GameItemSubOneDie::create(false);
@@ -1258,12 +1251,6 @@ void GameItemManager::addItem()
 		GameItemFast* t_fast = GameItemFast::create(false);
 		t_fast->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_fast);
-	}
-	else if(create_item == kIC_critical)
-	{
-		GameItemFire* t_fire = GameItemFire::create(false);
-		t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-		addChild(t_fire);
 	}
 	else if(create_item == kIC_subOneDie)
 	{
@@ -1404,7 +1391,6 @@ void GameItemManager::myInit()
 	double_item_cnt = mySGD->getDoubleItemValue();
 	
 	if(mySGD->isUsingItem(kIC_fast)){		creatable_list.push_back(kIC_fast);			selected_item_cnt++;	}
-	if(mySGD->isUsingItem(kIC_critical)){	creatable_list.push_back(kIC_critical);		selected_item_cnt++;	}
 	if(mySGD->isUsingItem(kIC_subOneDie)){	creatable_list.push_back(kIC_subOneDie);	selected_item_cnt++;	}
 	if(mySGD->isUsingItem(kIC_silence)){	creatable_list.push_back(kIC_silence);		selected_item_cnt++;	}
 	

@@ -208,21 +208,24 @@ typedef enum t_CLEAR_CONDITION{
 }CLEAR_CONDITION;
 
 typedef enum t_ITEM_CODE{
-	kIC_attack = 1,
+	kIC_emptyBegin = 0,
+	kIC_attack,		// 1
 	kIC_speedUp,	// 2
 	kIC_addTime,	// 3
 	kIC_fast,		// 4
-	kIC_critical,	// 5
-	kIC_subOneDie,	// 6 // mission
-	kIC_doubleItem,	// 7
-	kIC_silence,	// 8
-	kIC_subNothing,	// 9
-	kIC_longTime,	// 10 // mission
-	kIC_bossLittleEnergy,	// 11 // mission
-	kIC_subSmallSize,	// 12
-	kIC_smallArea,		// 13 // mission
-	kIC_widePerfect,	// 14 // mission
-	kIC_randomChange	// 15 // mission
+//	kIC_critical,
+	kIC_subOneDie,	// 5
+	kIC_doubleItem,	// 6
+	kIC_silence,	// 7
+//	kIC_subNothing,
+	kIC_longTime,	// 8
+//	kIC_bossLittleEnergy,
+//	kIC_subSmallSize,
+//	kIC_smallArea,
+//	kIC_widePerfect,
+//	kIC_randomChange
+	kIC_baseSpeedUp, // 9
+	kIC_emptyEnd
 }ITEM_CODE;
 
 

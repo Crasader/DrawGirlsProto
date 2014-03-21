@@ -39,7 +39,7 @@ public:
 	void startShow()
 	{
 		setScale(0);
-		setPosition(ccp(480-25, myDSH->ui_top-25));
+		setPosition(ccp(25, myDSH->ui_top-25));
 		
 		CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.f);
 		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y));
@@ -88,7 +88,7 @@ private:
 	void startHide()
 	{
 		CCScaleTo* t_scale = CCScaleTo::create(0.3f, 0.f);
-		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(480-25, myDSH->ui_top-25));
+		CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(25, myDSH->ui_top-25));
 		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_move);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PauseContent::endHide));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
@@ -113,21 +113,21 @@ private:
 		case_back->setPosition(CCPointZero);
 		addChild(case_back);
 		
-		case_back->setContentSize(CCSizeMake(180, 190));
+		case_back->setContentSize(CCSizeMake(180, 230));
 		
 		CCLabelTTF* title_label = CCLabelTTF::create("일시정지", mySGD->getFont().c_str(), 15);
 		title_label->setColor(ccBLACK);
-		title_label->setPosition(ccp(0, 77));
+		title_label->setPosition(ccp(0, 97));
 		addChild(title_label);
 		
 		CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6));
 		content_back->setPosition(ccp(0,-10));
 		addChild(content_back);
 		
-		content_back->setContentSize(CCSizeMake(160,140));
+		content_back->setContentSize(CCSizeMake(160,180));
 		
 		CommonButton* resume_menu = CommonButton::create("계속하기", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);
-		resume_menu->setPosition(ccp(0,33));
+		resume_menu->setPosition(ccp(0,53));
 		resume_menu->setFunction([=](CCObject* sender)
 								 {
 									 CCNode* t_node = CCNode::create();
@@ -138,7 +138,7 @@ private:
 		
 		
 		CommonButton* gohome_menu = CommonButton::create("나가기", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);
-		gohome_menu->setPosition(ccp(0,-9));
+		gohome_menu->setPosition(ccp(0, 11));
 		gohome_menu->setFunction([=](CCObject* sender)
 								 {
 									 CCNode* t_node = CCNode::create();
@@ -151,7 +151,7 @@ private:
 		CommonButton* replay_menu = CommonButton::create("재시작", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);
 		replay_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
 		replay_menu->setTitleColorForDisable(ccGRAY);
-		replay_menu->setPosition(ccp(0,-51));
+		replay_menu->setPosition(ccp(0,-31));
 		replay_menu->setFunction([=](CCObject* sender)
 								 {
 									 CCNode* t_node = CCNode::create();
@@ -159,6 +159,29 @@ private:
 									 menuAction(t_node);
 								 });
 		addChild(replay_menu);
+		
+		CCLabelTTF* safety_label = CCLabelTTF::create("대중교통모드", mySGD->getFont().c_str(), 12);
+		safety_label->setPosition(ccp(-30,-70));
+		addChild(safety_label);
+		
+		bool is_safety = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
+		string on_off_str;
+		if(is_safety)
+			on_off_str = "on";
+		else
+			on_off_str = "off";
+		CommonButton* on_off = CommonButton::create(on_off_str, 14, CCSizeMake(60, 45), CommonButtonOrange, touch_priority-1);
+		on_off->setPosition(ccp(40,-70));
+		on_off->setFunction([=](CCObject* sender)
+							{
+								bool t_safety = !myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
+								myDSH->setBoolForKey(kDSH_Key_isSafetyMode, t_safety);
+								if(t_safety)
+									on_off->setTitle("on");
+								else
+									on_off->setTitle("off");
+							});
+		addChild(on_off);
 		
 		replay_menu->setEnabled(true);
 	}

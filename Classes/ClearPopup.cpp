@@ -456,19 +456,6 @@ bool ClearPopup::init()
 		}
 	}
 	
-	int gold_or_item_value;
-	random_value = rand()%100;
-	if(random_value < 50)
-	{
-		// gold
-		gold_or_item_value = 1;
-	}
-	else
-	{
-		// item
-		gold_or_item_value = 2;
-	}
-	
 	CCSprite* goldbox1 = CCSprite::create("goldbox_off.png");
 	goldbox1->setPosition(ccp(-150,0));
 	t_container->addChild(goldbox1);
@@ -519,22 +506,11 @@ bool ClearPopup::init()
 																		 item_gold->addChild(t_gold_img);
 																		 
 																		 CCLabelTTF* item_gold_or_item;
-																		 int random_item_code;
-																		 if(gold_or_item_value == 1)
-																		 {
 																			 item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
 																			 CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
 																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																			 item_gold_or_item->addChild(t_gold_img2);
-																		 }
-																		 else
-																		 {
-																			 item_gold_or_item = CCLabelTTF::create("아이템", mySGD->getFont().c_str(), 12);
-																			 random_item_code = rand()%(kIC_randomChange-kIC_fast+1) + kIC_fast;
-																			 CCSprite* random_item_img = CCSprite::create(CCString::createWithFormat("item%d.png", random_item_code)->getCString());
-																			 random_item_img->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f,-30));
-																			 item_gold_or_item->addChild(random_item_img);
-																		 }
+
 																		 int base_stone_rank = take_level;
 																		 if(mySGD->is_exchanged)
 																			 base_stone_rank++;
@@ -568,12 +544,7 @@ bool ClearPopup::init()
 																		 }
 																		 else if(reward_type == 2)
 																		 {
-																			 if(gold_or_item_value == 1)
-																				 mySGD->setGold(mySGD->getGold() + 200);
-																			 else
-																			 {
-																				 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
-																			 }
+																			 mySGD->setGold(mySGD->getGold() + 200);
 																			 
 																			 item_gold_or_item->setPosition(ccp(-150,0));
 																			 if(random_left_right == 0)
@@ -657,22 +628,11 @@ bool ClearPopup::init()
 																		 item_gold->addChild(t_gold_img);
 																		 
 																		 CCLabelTTF* item_gold_or_item;
-																		 int random_item_code;
-																		 if(gold_or_item_value == 1)
-																		 {
 																			 item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
 																			 CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
 																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																			 item_gold_or_item->addChild(t_gold_img2);
-																		 }
-																		 else
-																		 {
-																			 item_gold_or_item = CCLabelTTF::create("아이템", mySGD->getFont().c_str(), 12);
-																			 random_item_code = rand()%(kIC_randomChange-kIC_fast+1) + kIC_fast;
-																			 CCSprite* random_item_img = CCSprite::create(CCString::createWithFormat("item%d.png", random_item_code)->getCString());
-																			 random_item_img->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f,-30));
-																			 item_gold_or_item->addChild(random_item_img);
-																		 }
+
 																		 int base_stone_rank = take_level;
 																		 if(mySGD->is_exchanged)
 																			 base_stone_rank++;
@@ -706,12 +666,7 @@ bool ClearPopup::init()
 																		 }
 																		 else if(reward_type == 2)
 																		 {
-																			 if(gold_or_item_value == 1)
 																				 mySGD->setGold(mySGD->getGold() + 200);
-																			 else
-																			 {
-																				 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
-																			 }
 																			 
 																			 item_gold_or_item->setPosition(ccp(0,0));
 																			 if(random_left_right == 0)
@@ -795,22 +750,12 @@ bool ClearPopup::init()
 																		 item_gold->addChild(t_gold_img);
 																		 
 																		 CCLabelTTF* item_gold_or_item;
-																		 int random_item_code;
-																		 if(gold_or_item_value == 1)
-																		 {
+																		 
 																			 item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
 																			 CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
 																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																			 item_gold_or_item->addChild(t_gold_img2);
-																		 }
-																		 else
-																		 {
-																			 item_gold_or_item = CCLabelTTF::create("아이템", mySGD->getFont().c_str(), 12);
-																			 random_item_code = rand()%(kIC_randomChange-kIC_fast+1) + kIC_fast;
-																			 CCSprite* random_item_img = CCSprite::create(CCString::createWithFormat("item%d.png", random_item_code)->getCString());
-																			 random_item_img->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f,-30));
-																			 item_gold_or_item->addChild(random_item_img);
-																		 }
+																			 
 																		 int base_stone_rank = take_level;
 																		 if(mySGD->is_exchanged)
 																			 base_stone_rank++;
@@ -844,12 +789,7 @@ bool ClearPopup::init()
 																		 }
 																		 else if(reward_type == 2)
 																		 {
-																			 if(gold_or_item_value == 1)
 																				 mySGD->setGold(mySGD->getGold() + 200);
-																			 else
-																			 {
-																				 myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
-																			 }
 																			 
 																			 item_gold_or_item->setPosition(ccp(150,0));
 																			 if(random_left_right == 0)

@@ -903,10 +903,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			}
 		}
 		
-		
-		int item_value = mySGD->getSmallAreaValue();
-		
-		if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per-item_value/100.f)
+		if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per)
 			takeBigArea();
 		
 		mySGD->is_draw_button_tutorial = false;
@@ -986,10 +983,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 	
 	percentageLabel->setString(CCString::createWithFormat("%d%%", int(floorf(t_p*10000))/100)->getCString());
 	
-	int item_value = mySGD->getWidePerfectValue();
-	
-	if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && floorf(t_p*10000.f)/10000.f*100.f >= (clr_cdt_per-item_value/200.f)*100.f &&
-	   floorf(t_p*10000.f)/10000.f*100.f <= (clr_cdt_per+clr_cdt_range+item_value/200.f)*100.f)
+	if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && floorf(t_p*10000.f)/10000.f*100.f >= clr_cdt_per*100.f &&
+	   floorf(t_p*10000.f)/10000.f*100.f <= (clr_cdt_per+clr_cdt_range)*100.f)
 		conditionClear();
 	
 	if(m_areaGage)
@@ -1110,7 +1105,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	
 	if(clr_cdt_type == kCLEAR_sequenceChange && !isGameover)
 	{
-		if(!mySGD->isUsingItem(kIC_randomChange) && t_coin_number != ing_cdt_cnt)
+		if(t_coin_number != ing_cdt_cnt)
 		{
 			conditionFail();
 			
@@ -1131,22 +1126,14 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 		{
 			ing_cdt_cnt++;
 			
-			if(mySGD->isUsingItem(kIC_randomChange))
-			{
-				mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), 1);
-//				((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString());
-			}
-			else
-			{
-				mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), 1);
-//				removeChildByTag(kCT_UI_clrCdtLabel);
-//				if(ing_cdt_cnt <= 6)
-//				{
-//					CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
-//					clr_cdt_img->setPosition(ccpAdd(getChildByTag(kCT_UI_clrCdtIcon)->getPosition(), ccp(0,-5)));
-//					addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
-//				}
-			}
+			mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), 1);
+//			removeChildByTag(kCT_UI_clrCdtLabel);
+//			if(ing_cdt_cnt <= 6)
+//			{
+//				CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+//				clr_cdt_img->setPosition(ccpAdd(getChildByTag(kCT_UI_clrCdtIcon)->getPosition(), ccp(0,-5)));
+//				addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
+//			}
 		}
 	}
 	
@@ -1254,7 +1241,7 @@ void PlayUI::subBossLife (float t_life)
 void PlayUI::setMaxBossLife (float t_life)
 {
 	maxBossLife = t_life;
-	bossLife = maxBossLife*(100.f - mySGD->getBossLittleEnergyValue())/100.f;
+	bossLife = maxBossLife;
 }
 void PlayUI::setClearPercentage (float t_p)
 {
@@ -1974,9 +1961,7 @@ void PlayUI::takeBigArea ()
 	
 	ing_cdt_cnt++;
 	
-	int item_value = mySGD->getSmallAreaValue();
-	
-	mission_button->setTextAtIndex(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
+	mission_button->setTextAtIndex(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
 //	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
@@ -2198,7 +2183,7 @@ void PlayUI::myInit ()
 //		icon_menu->setPosition(icon_menu_position);
 //		addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 		
-		int start_percentage = 100 - mySGD->getBossLittleEnergyValue();
+		int start_percentage = 100;
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
 		mission_button->addText(CCString::createWithFormat("%d%%", start_percentage)->getCString());
@@ -2255,10 +2240,8 @@ void PlayUI::myInit ()
 		clr_cdt_cnt = mySD->getClearConditionBigAreaCnt();
 		ing_cdt_cnt = 0;
 		
-		int item_value = mySGD->getSmallAreaValue();
-		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-		mission_button->addText(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		mission_button->addText(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
 //		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -2337,24 +2320,12 @@ void PlayUI::myInit ()
 		
 		ing_cdt_cnt = 1;
 		
-		if(mySGD->isUsingItem(kIC_randomChange))
-		{
-			mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-			mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString());
-			
-//			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), mySGD->getFont().c_str(), 12);
-//			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
-//			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
-		}
-		else
-		{
-			mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-			mission_button->addText(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
-			
-//			CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
-//			clr_cdt_img->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
-//			addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
-		}
+		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+		mission_button->addText(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+		
+//		CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+//		clr_cdt_img->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
+//		addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
 	}
 	else if(clr_cdt_type == kCLEAR_timeLimit)
 	{

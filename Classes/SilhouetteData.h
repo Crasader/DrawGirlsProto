@@ -89,16 +89,18 @@ public:
 	int getLongTimeItemOption();
 //	int getCardLongTimeItemOption(int card_number);
 	
-	int getBossLittleEnergyItemOption();
+	int getBaseSpeedUpItemOption();
+	
+//	int getBossLittleEnergyItemOption();
 //	int getCardBossLittleEnergyItemOption(int card_number);
 	
-	int getSubSmallSizeItemOption();
+//	int getSubSmallSizeItemOption();
 //	int getCardSubSmallSizeItemOption(int card_number);
 	
-	int getSmallAreaItemOption();
+//	int getSmallAreaItemOption();
 //	int getCardSmallAreaItemOption(int card_number);
 	
-	int getWidePerfectItemOption();
+//	int getWidePerfectItemOption();
 //	int getCardWidePerfectItemOption(int card_number);
 	
 //	bool isAnimationStage();

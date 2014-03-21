@@ -296,30 +296,15 @@ void StarGoldData::setGameStart()
 	iter = find(card_options.begin(), card_options.end(), kIC_longTime);
 	if(iter != card_options.end())		longTime_value += NSDS_GI(kSDS_CI_int1_abilityLongTimeOptionSec_i, selected_card_number);
 
-	bossLittleEnergy_value = 0;
-	if(isUsingItem(kIC_bossLittleEnergy))	bossLittleEnergy_value += mySD->getBossLittleEnergyItemOption();
-	iter = find(card_options.begin(), card_options.end(), kIC_bossLittleEnergy);
-	if(iter != card_options.end())			bossLittleEnergy_value += NSDS_GI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, selected_card_number);
-
-	subSmallSize_value = 0;
-	if(isUsingItem(kIC_subSmallSize))	subSmallSize_value += mySD->getSubSmallSizeItemOption();
-	iter = find(card_options.begin(), card_options.end(), kIC_subSmallSize);
-	if(iter != card_options.end())		subSmallSize_value += NSDS_GI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, selected_card_number);
-
-	smallArea_value = 0;
-	if(isUsingItem(kIC_smallArea))		smallArea_value += mySD->getSmallAreaItemOption();
-	iter = find(card_options.begin(), card_options.end(), kIC_smallArea);
-	if(iter != card_options.end())		smallArea_value += NSDS_GI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, selected_card_number);
-
-	widePerfect_value = 0;
-	if(isUsingItem(kIC_widePerfect))	widePerfect_value += mySD->getWidePerfectItemOption();
-	iter = find(card_options.begin(), card_options.end(), kIC_widePerfect);
-	if(iter != card_options.end())		widePerfect_value += NSDS_GI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, selected_card_number);
+	baseSpeedUp_value = 0;
+	if(isUsingItem(kIC_baseSpeedUp))	baseSpeedUp_value += mySD->getBaseSpeedUpItemOption();
+	iter = find(card_options.begin(), card_options.end(), kIC_baseSpeedUp);
+	if(iter != card_options.end())			baseSpeedUp_value += NSDS_GI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, selected_card_number);
 }
 
 void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, int t_game_time, int t_use_time, int t_total_time )
 {
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		before_use_item[i] = is_using_item[i];
 		is_using_item[i] = false;
@@ -357,7 +342,7 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 
 void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time )
 {
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		before_use_item[i] = is_using_item[i];
 		is_using_item[i] = false;
@@ -708,25 +693,25 @@ int StarGoldData::getLongTimeValue()
 	return longTime_value;
 }
 
-int StarGoldData::getBossLittleEnergyValue()
+int StarGoldData::getBaseSpeedUpValue()
 {
-	return bossLittleEnergy_value;
+	return baseSpeedUp_value;
 }
 
-int StarGoldData::getSubSmallSizeValue()
-{
-	return subSmallSize_value;
-}
-
-int StarGoldData::getSmallAreaValue()
-{
-	return smallArea_value;
-}
-
-int StarGoldData::getWidePerfectValue()
-{
-	return widePerfect_value;
-}
+//int StarGoldData::getSubSmallSizeValue()
+//{
+//	return subSmallSize_value;
+//}
+//
+//int StarGoldData::getSmallAreaValue()
+//{
+//	return smallArea_value;
+//}
+//
+//int StarGoldData::getWidePerfectValue()
+//{
+//	return widePerfect_value;
+//}
 
 int StarGoldData::getStartMapGachaCnt()
 {
@@ -874,14 +859,14 @@ void StarGoldData::myInit()
 	before_use_item.push_back(false);
 	is_using_item.push_back(false);
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		before_use_item.push_back(false);
 		is_using_item.push_back(false);
 	}
 	
 	bonus_item_cnt.push_back(KSProtectVar<int>(0)); // empty
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		bonus_item_cnt.push_back(KSProtectVar<int>(0));
 
 

@@ -421,9 +421,9 @@ void StageSettingPopup::itemSetting()
 			
 			
 			string item_filename = "";
-			if(t_ic == kIC_subOneDie || t_ic == kIC_longTime || t_ic == kIC_bossLittleEnergy || t_ic == kIC_smallArea || t_ic == kIC_widePerfect || t_ic == kIC_randomChange) // mission
-				item_filename = "stagesetting_item_case_mission.png";
-			else
+//			if(t_ic == kIC_subOneDie || t_ic == kIC_longTime || t_ic == kIC_bossLittleEnergy || t_ic == kIC_smallArea || t_ic == kIC_widePerfect || t_ic == kIC_randomChange) // mission
+//				item_filename = "stagesetting_item_case_mission.png";
+//			else
 				item_filename = "stagesetting_item_case_normal.png";
 			
 			CCSprite* n_case = CCSprite::create(item_filename.c_str());
@@ -784,7 +784,7 @@ void StageSettingPopup::finalSetting()
 	deque<bool> is_using_item;
 	is_using_item.push_back(false);
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		is_using_item.push_back(false);
 	
 	for(int i=0;i<is_selected_item.size();i++)
@@ -797,7 +797,7 @@ void StageSettingPopup::finalSetting()
 		}
 	}
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
 }
 
@@ -841,7 +841,7 @@ void StageSettingPopup::cancelGame()
 		
 		deque<bool> is_using_item;
 		is_using_item.push_back(false);
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 			is_using_item.push_back(false);
 		
 		for(int i=0;i<is_selected_item.size();i++)
@@ -938,17 +938,11 @@ string StageSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_speedUp)			return_value = "speedUp";
 	else if(t_code == kIC_addTime)			return_value = "addTime";
 	else if(t_code == kIC_fast)				return_value = "fast";
-	else if(t_code == kIC_critical)			return_value = "critical";
 	else if(t_code == kIC_subOneDie)		return_value = "subOneDie";
 	else if(t_code == kIC_doubleItem)		return_value = "doubleItem";
 	else if(t_code == kIC_silence)			return_value = "silence";
-	else if(t_code == kIC_subNothing)		return_value = "subNothing";
 	else if(t_code == kIC_longTime)			return_value = "longTime";
-	else if(t_code == kIC_bossLittleEnergy)	return_value = "bossLittleEnergy";
-	else if(t_code == kIC_subSmallSize)		return_value = "subSmallSize";
-	else if(t_code == kIC_smallArea)		return_value = "smallArea";
-	else if(t_code == kIC_widePerfect)		return_value = "widePerfect";
-	else if(t_code == kIC_randomChange)		return_value = "randomChange";
+	else if(t_code == kIC_baseSpeedUp)		return_value = "baseSpeedUp";
 	
 	return return_value.c_str();
 }

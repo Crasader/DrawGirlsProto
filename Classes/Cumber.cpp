@@ -558,7 +558,6 @@ void CumberParent::myInit()
 	}	
 	
 //	int create_cnt;
-	if(!mySGD->isUsingItem(kIC_subNothing))
 	{
 		Json::Reader reader;
 		Json::Value root;
@@ -570,7 +569,7 @@ void CumberParent::myInit()
 			Json::Value boss = root[i];
 			KS::KSLog("%", boss);
 			std::string bossType = boss["type"].asString();
-
+			
 			KSJuniorBase* t_SC = KSJuniorBase::create(bossType);
 			t_SC->assignBossData(root[i]); // 주니어 정보 대입.
 			t_SC->applyPassiveData(mySD->getPassiveData());

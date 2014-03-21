@@ -363,6 +363,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	
 	else if(t_name == kDSH_Key_storyReadPoint)								return_value = "srp";
 	
+	else if(t_name == kDSH_Key_isSafetyMode)								return_value = "ism";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()
@@ -396,7 +398,7 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 	setIntegerForKey(kDSH_Key_heartCnt, data[getKey(kDSH_Key_heartCnt)].asInt(), false);
 	setIntegerForKey(kDSH_Key_heartTime, data[getKey(kDSH_Key_heartTime)].asInt(), false);
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt(), false);
 		setBoolForKey(kDSH_Key_isShowItem_int1, i, data[getKey(kDSH_Key_isShowItem_int1)][i].asBool(), false);
@@ -535,7 +537,7 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	}
 	else if(t_key == kSaveUserData_Key_item)
 	{
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		{
 			data[getKey(kDSH_Key_haveItemCnt_int1)][i] = getIntegerForKey(kDSH_Key_haveItemCnt_int1, i); // 0
 			data[getKey(kDSH_Key_isShowItem_int1)][i] = getBoolForKey(kDSH_Key_isShowItem_int1, i);
@@ -708,7 +710,7 @@ void DataStorageHub::resetDSH ()
 	setIntegerForKey(kDSH_Key_heartCnt, 0, false);
 	setIntegerForKey(kDSH_Key_heartTime, 0, false);
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0, false);
 		setBoolForKey(kDSH_Key_isShowItem_int1, i, false, false);

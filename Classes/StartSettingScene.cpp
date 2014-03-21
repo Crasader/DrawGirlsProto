@@ -1320,7 +1320,7 @@ void StartSettingScene::finalSetting()
 	deque<bool> is_using_item;
 	is_using_item.push_back(false);
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		is_using_item.push_back(false);
 		is_have_item.push_back(false);
@@ -1343,7 +1343,7 @@ void StartSettingScene::finalSetting()
 	mySGD->setGold(mySGD->getGold() - use_item_price_gold.getV());
 	mySGD->setStar(mySGD->getStar() - use_item_price_ruby.getV());
 	
-	for(int i=kIC_attack;i<=kIC_randomChange;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
 }
 
@@ -1394,7 +1394,7 @@ void StartSettingScene::cancelGame()
 		
 		deque<bool> is_using_item;
 		is_using_item.push_back(false);
-		for(int i=kIC_attack;i<=kIC_randomChange;i++)
+		for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 			is_using_item.push_back(false);
 		
 		for(int i=0;i<is_selected_item.size();i++)
@@ -1528,17 +1528,11 @@ string StartSettingScene::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_speedUp)			return_value = "SpeedUp";
 	else if(t_code == kIC_addTime)			return_value = "AddTime";
 	else if(t_code == kIC_fast)				return_value = "Fast";
-	else if(t_code == kIC_critical)			return_value = "Critical";
 	else if(t_code == kIC_subOneDie)		return_value = "SubOneDie";
 	else if(t_code == kIC_doubleItem)		return_value = "DoubleItem";
 	else if(t_code == kIC_silence)			return_value = "Silence";
-	else if(t_code == kIC_subNothing)		return_value = "SubNothing";
 	else if(t_code == kIC_longTime)			return_value = "LongTime";
-	else if(t_code == kIC_bossLittleEnergy)	return_value = "BossLittleEnergy";
-	else if(t_code == kIC_subSmallSize)		return_value = "SubSmallSize";
-	else if(t_code == kIC_smallArea)		return_value = "SmallArea";
-	else if(t_code == kIC_widePerfect)		return_value = "WidePerfect";
-	else if(t_code == kIC_randomChange)		return_value = "RandomChange";
+	else if(t_code == kIC_baseSpeedUp)		return_value = "BaseSpeedUp";
 	
 	return return_value.c_str();
 }

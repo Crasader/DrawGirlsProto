@@ -511,7 +511,7 @@ void MapScanner::exchangeMS()
 	invisibleImg->setPosition(CCPointZero);
 	addChild(invisibleImg, invisibleZorder);
 
-	CCArray* t_rect_array = new CCArray();;
+	CCArray* t_rect_array = new CCArray();
 
 	if(visibleImg)
 	{
@@ -520,7 +520,7 @@ void MapScanner::exchangeMS()
 		visibleImg = NULL;
 	}
 
-	visibleImg = VisibleParent::create(CCString::createWithFormat("card%d_visible.png",NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), false);
+	visibleImg = VisibleParent::create(CCString::createWithFormat("card%d_visible.png",NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), false, CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString());
 	visibleImg->setPosition(CCPointZero);
 	addChild(visibleImg, visibleZorder);
 
@@ -658,7 +658,7 @@ void MapScanner::setMapImg()
 		visibleImg = NULL;
 	}
 
-	visibleImg = VisibleParent::create(visible_filename.filename.c_str(), visible_filename.isPattern);
+	visibleImg = VisibleParent::create(visible_filename.filename.c_str(), visible_filename.isPattern, invisible_filename.filename);
 	visibleImg->setPosition(CCPointZero);
 	addChild(visibleImg, visibleZorder);
 
@@ -959,10 +959,10 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 	addChild(t_spr);
 }
 
-VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, CCArray* t_drawRects )
+VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
 {
 	VisibleSprite* t_v = new VisibleSprite();
-	t_v->myInit(filename, isPattern, t_drawRects);
+	t_v->myInit(filename, isPattern, t_drawRects, sil_filename);
 	t_v->autorelease();
 	return t_v;
 }
@@ -1020,6 +1020,8 @@ void VisibleSprite::visit()
 		{
 			glScissor(x,y,w,h);
 			draw();
+			if(myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
+				safety_img->draw();
 		}
 
 	}
@@ -1059,7 +1061,8 @@ void VisibleSprite::visitForThumb()
 		
 		glScissor(x,y,w,h);
 		draw();
-		
+		if(myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
+			safety_img->draw();
 	}
 	
 	glDisable(GL_SCISSOR_TEST);
@@ -1234,7 +1237,8 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 		
 		glScissor(x,y,w,h);
 		draw();
-		
+		if(myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
+			safety_img->draw();
 	}
 	
 	glDisable(GL_SCISSOR_TEST);
@@ -1257,7 +1261,7 @@ void VisibleSprite::setDark()
 	setColor(ccGRAY);
 }
 
-void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects )
+void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
 {
 	initWithTexture(mySIL->addImage(filename));
 	setColor(ccGRAY);
@@ -1270,12 +1274,77 @@ void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_dra
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
 	drawRects = t_drawRects;
+	
+	safety_img = CCSprite::createWithTexture(createSafetyImage(mySIL->getDocumentPath() + sil_filename));
+	safety_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
+	addChild(safety_img);
 }
 
-VisibleParent* VisibleParent::create( const char* filename, bool isPattern )
+CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
+	
+	CCImage* newImg = new CCImage();
+	newImg->initWithImageFileThreadSafe(fullpath.c_str());
+	
+	
+	
+	CCImage* img = new CCImage();
+	img->initWithImageData(newImg->getData(),
+						   newImg->getDataLen(),
+						   CCImage::kFmtRawData,
+						   newImg->getWidth(),
+						   newImg->getHeight(),
+						   8);
+	
+	newImg->release();
+	
+	
+	int imgByte = 3;
+	
+	if(img->hasAlpha())imgByte = 4;
+	
+	unsigned char* oData = img->getData();
+	
+	int oy = img->getHeight();
+	int ox = img->getWidth();
+	
+	unsigned char* oDataPos;
+	
+	int i;
+	for(int y=0;y<oy;y++){
+		for(int x=0;x<ox;x++){
+			i = (y*ox+x)*imgByte;
+			
+			oDataPos = &oData[i+3];
+			
+			if(oData[i+2]>10 || oData[i+1]>10 || oData[i]>10){
+				
+				*--oDataPos = 255;
+				*--oDataPos = 255;
+				*--oDataPos = 255;
+			}else{
+				*oDataPos = 0;
+				*--oDataPos = 0;
+				*--oDataPos = 0;
+				*--oDataPos = 0;
+			}
+		}
+	}
+	
+	
+	CCTexture2D* texture = new CCTexture2D;
+	texture->initWithImage(img);
+	texture->autorelease();
+	
+	img->release();
+	
+	return texture;
+	
+}
+
+VisibleParent* VisibleParent::create( const char* filename, bool isPattern, string sil_filename )
 {
 	VisibleParent* t_vp = new VisibleParent();
-	t_vp->myInit(filename, isPattern);
+	t_vp->myInit(filename, isPattern, sil_filename);
 	t_vp->autorelease();
 	return t_vp;
 }
@@ -1422,7 +1491,7 @@ void VisibleParent::changingGameStep( int t_step )
 	myVS->setMoveGamePosition(after_position);
 }
 
-void VisibleParent::myInit( const char* filename, bool isPattern )
+void VisibleParent::myInit( const char* filename, bool isPattern, string sil_filename )
 {
 	drawRects = new CCArray(1);
 	setPosition(CCPointZero);
@@ -1432,7 +1501,7 @@ void VisibleParent::myInit( const char* filename, bool isPattern )
 	myGD->V_V["VS_setLimittedMapPosition"] = std::bind(&VisibleParent::setLimittedMapPosition, this);
 	myGD->V_I["VS_changingGameStep"] = std::bind(&VisibleParent::changingGameStep, this, _1);
 
-	myVS = VisibleSprite::create(filename, isPattern, drawRects);
+	myVS = VisibleSprite::create(filename, isPattern, drawRects, sil_filename);
 	myVS->setPosition(CCPointZero);
 	addChild(myVS);
 

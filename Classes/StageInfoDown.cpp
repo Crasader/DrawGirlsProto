@@ -71,14 +71,8 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionDoubleItemPercent_i, t_option["percent"].asInt(), false);
 			else if(t_item["type"].asInt() == kIC_longTime)
 				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionLongTimeSec_i, t_option["sec"].asInt(), false);
-			else if(t_item["type"].asInt() == kIC_bossLittleEnergy)
-				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionBossLittleEnergyPercent_i, t_option["percent"].asInt(), false);
-			else if(t_item["type"].asInt() == kIC_subSmallSize)
-				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionSubSmallSizePercent_i, t_option["percent"].asInt(), false);
-			else if(t_item["type"].asInt() == kIC_smallArea)
-				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionSmallAreaPercent_i, t_option["percent"].asInt(), false);
-			else if(t_item["type"].asInt() == kIC_widePerfect)
-				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionWidePerfectPercent_i, t_option["percent"].asInt(), false);
+			else if(t_item["type"].asInt() == kIC_baseSpeedUp)
+				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionBaseSpeedUpUnit_i, t_option["unit"].asInt(), false);
 		}
 		
 		Json::Value defItems = result_data["defItems"];
@@ -104,14 +98,8 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionDoubleItemPercent_i, t_option["percent"].asInt(), false);
 			else if(t_item["type"].asInt() == kIC_longTime)
 				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionLongTimeSec_i, t_option["sec"].asInt(), false);
-			else if(t_item["type"].asInt() == kIC_bossLittleEnergy)
-				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionBossLittleEnergyPercent_i, t_option["percent"].asInt(), false);
-			else if(t_item["type"].asInt() == kIC_subSmallSize)
-				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionSubSmallSizePercent_i, t_option["percent"].asInt(), false);
-			else if(t_item["type"].asInt() == kIC_smallArea)
-				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionSmallAreaPercent_i, t_option["percent"].asInt(), false);
-			else if(t_item["type"].asInt() == kIC_widePerfect)
-				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionWidePerfectPercent_i, t_option["percent"].asInt(), false);
+			else if(t_item["type"].asInt() == kIC_baseSpeedUp)
+				NSDS_SI(mySD->getSilType(), kSDS_SI_itemOptionBaseSpeedUpUnit_i, t_option["unit"].asInt(), false);
 		}
 		
 		Json::Value cards = result_data["cards"];
@@ -158,14 +146,8 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_longTime)
 					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
-					NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_subSmallSize)
-					NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_smallArea)
-					NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_widePerfect)
-					NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+				else if(t_abil["type"].asInt() == kIC_baseSpeedUp)
+					NSDS_SI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, t_card["no"].asInt(), t_option["unit"].asInt(), false);
 			}
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
@@ -491,14 +473,8 @@ void StageInfoDown::resultLoadedCardData( Json::Value result_data )
 					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_longTime)
 					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
-					NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_subSmallSize)
-					NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_smallArea)
-					NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_widePerfect)
-					NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+				else if(t_abil["type"].asInt() == kIC_baseSpeedUp)
+					NSDS_SI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, t_card["no"].asInt(), t_option["unit"].asInt(), false);
 			}
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];

@@ -215,18 +215,9 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setSPGetHeart(result_data["SPGetHeart"].asInt());
 		mySGD->setGachaOnePercentFee(result_data["gachaOnePercentFee"].asInt());
 		
-		mySGD->setBonusItemCnt(kIC_fast, result_data["bonusItemCntFast"].asInt());
-		mySGD->setBonusItemCnt(kIC_critical, result_data["bonusItemCntCritical"].asInt());
-		mySGD->setBonusItemCnt(kIC_subOneDie, result_data["bonusItemCntSubOneDie"].asInt());
 		mySGD->setBonusItemCnt(kIC_doubleItem, result_data["bonusItemCntDoubleItem"].asInt());
-		mySGD->setBonusItemCnt(kIC_silence, result_data["bonusItemCntSilence"].asInt());
-		mySGD->setBonusItemCnt(kIC_subNothing, result_data["bonusItemCntSubNothing"].asInt());
 		mySGD->setBonusItemCnt(kIC_longTime, result_data["bonusItemCntLongTime"].asInt());
-		mySGD->setBonusItemCnt(kIC_bossLittleEnergy, result_data["bonusItemCntBossLittleEnergy"].asInt());
-		mySGD->setBonusItemCnt(kIC_subSmallSize, result_data["bonusItemCntSubSmallSize"].asInt());
-		mySGD->setBonusItemCnt(kIC_smallArea, result_data["bonusItemCntSmallArea"].asInt());
-		mySGD->setBonusItemCnt(kIC_widePerfect, result_data["bonusItemCntWidePerfect"].asInt());
-		mySGD->setBonusItemCnt(kIC_randomChange, result_data["bonusItemCntRandomChange"].asInt());
+		mySGD->setBonusItemCnt(kIC_baseSpeedUp, result_data["bonusItemCntBaseSpeedUp"].asInt());
 		mySGD->setAiAdderOnDrewOrDamaged(result_data["aiAdderOnDrewOrDamaged"].asFloat());
 		mySGD->setFuryPercent(result_data["furyPercent"].asFloat());
 		mySGD->setSPRentCardThanks(result_data["SPRentCardThanks"].asInt());
@@ -624,14 +615,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_longTime)
 					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
-					NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_subSmallSize)
-					NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_smallArea)
-					NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_widePerfect)
-					NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+				else if(t_abil["type"].asInt() == kIC_baseSpeedUp)
+					NSDS_SI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, t_card["no"].asInt(), t_option["unit"].asInt(), false);
 			}
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];

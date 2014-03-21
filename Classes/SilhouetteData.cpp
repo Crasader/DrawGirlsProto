@@ -444,17 +444,11 @@ std::string SilhouetteData::getItemScript( ITEM_CODE t_code )
 	else if(t_code == kIC_speedUp)			return_value = "획득시 유저의 속도가 올라간다.";
 	else if(t_code == kIC_addTime)			return_value = "획득시 남은 시간이 일정량 증가한다.";
 	else if(t_code == kIC_fast)				return_value = "획득시 일시적으로 빠르게 움직인다.";
-	else if(t_code == kIC_critical)			return_value = "획득시 전체 몬스터를 대상으로 공격을 가한다.";
 	else if(t_code == kIC_subOneDie)		return_value = "획득시 부하 몬스터 1마리를 제거한다.";
 	else if(t_code == kIC_doubleItem)		return_value = "아이템을 빠르게 생성한다.";
 	else if(t_code == kIC_silence)			return_value = "획득시 보스 몬스터가 일정시간동안 공격하지 않는다.";
-	else if(t_code == kIC_subNothing)		return_value = "부하 몬스터가 없이 게임을 시작한다.";
 	else if(t_code == kIC_longTime)			return_value = "게임시간을 증가시킨다.";
-	else if(t_code == kIC_bossLittleEnergy)	return_value = "보스 몬스터의 에너지를 낮춘다.";
-	else if(t_code == kIC_subSmallSize)		return_value = "부하 몬스터의 크기를 줄인다.";
-	else if(t_code == kIC_smallArea)		return_value = "한번에 먹어야될 영역의 크기를 낮춘다.";
-	else if(t_code == kIC_widePerfect)		return_value = "기존 목표영역의 범위를 늘려준다.";
-	else if(t_code == kIC_randomChange)		return_value = "CHANGE를 순서와 상관없이 먹어도 클리어 된다.";
+	else if(t_code == kIC_baseSpeedUp)		return_value = "유저 속도가 빠른상태로 시작한다.";
 	else									return_value = "아이템을 사용할 수 있습니다.";
 
 	return return_value;
@@ -521,9 +515,9 @@ int SilhouetteData::getLongTimeItemOption()
 //	return NSDS_GI(kSDS_CI_int1_abilityLongTimeOptionSec_i, card_number);
 //}
 
-int SilhouetteData::getBossLittleEnergyItemOption()
+int SilhouetteData::getBaseSpeedUpItemOption()
 {
-	return NSDS_GI(myType, kSDS_SI_itemOptionBossLittleEnergyPercent_i);
+	return NSDS_GI(myType, kSDS_SI_itemOptionBaseSpeedUpUnit_i);
 }
 
 //int SilhouetteData::getCardBossLittleEnergyItemOption( int card_number )
@@ -531,30 +525,30 @@ int SilhouetteData::getBossLittleEnergyItemOption()
 //	return NSDS_GI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, card_number);
 //}
 
-int SilhouetteData::getSubSmallSizeItemOption()
-{
-	return NSDS_GI(myType, kSDS_SI_itemOptionSubSmallSizePercent_i);
-}
+//int SilhouetteData::getSubSmallSizeItemOption()
+//{
+//	return NSDS_GI(myType, kSDS_SI_itemOptionSubSmallSizePercent_i);
+//}
 
 //int SilhouetteData::getCardSubSmallSizeItemOption( int card_number )
 //{
 //	return NSDS_GI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, card_number);
 //}
 
-int SilhouetteData::getSmallAreaItemOption()
-{
-	return NSDS_GI(myType, kSDS_SI_itemOptionSmallAreaPercent_i);
-}
+//int SilhouetteData::getSmallAreaItemOption()
+//{
+//	return NSDS_GI(myType, kSDS_SI_itemOptionSmallAreaPercent_i);
+//}
 
 //int SilhouetteData::getCardSmallAreaItemOption( int card_number )
 //{
 //	return NSDS_GI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, card_number);
 //}
 
-int SilhouetteData::getWidePerfectItemOption()
-{
-	return NSDS_GI(myType, kSDS_SI_itemOptionWidePerfectPercent_i);
-}
+//int SilhouetteData::getWidePerfectItemOption()
+//{
+//	return NSDS_GI(myType, kSDS_SI_itemOptionWidePerfectPercent_i);
+//}
 
 //int SilhouetteData::getCardWidePerfectItemOption( int card_number )
 //{

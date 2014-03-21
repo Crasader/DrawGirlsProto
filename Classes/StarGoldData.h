@@ -214,10 +214,11 @@ public:
 	
 	int getDoubleItemValue();
 	int getLongTimeValue();
-	int getBossLittleEnergyValue();
-	int getSubSmallSizeValue();
-	int getSmallAreaValue();
-	int getWidePerfectValue();
+	int getBaseSpeedUpValue();
+//	int getBossLittleEnergyValue();
+//	int getSubSmallSizeValue();
+//	int getSmallAreaValue();
+//	int getWidePerfectValue();
 	int getStartMapGachaCnt();
 	
 	void startMapGachaOn();
@@ -412,10 +413,7 @@ private:
 		   
 	int doubleItem_value;
 	int longTime_value;
-	int bossLittleEnergy_value;
-	int subSmallSize_value;
-	int smallArea_value;
-	int widePerfect_value;
+	int baseSpeedUp_value;
 	
 	deque<bool> before_use_item;
 	deque<bool> is_using_item;
