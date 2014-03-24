@@ -660,7 +660,7 @@ void StageInfoDown::startGetStageInfo()
 	Json::Value param;
 	param["no"] = stage_number;
 	param["version"] = NSDS_GI(stage_number, kSDS_SI_version_i);
-	hspConnector::get()->command("getstageinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
+	hspConnector::get()->command("getpieceinfo", param, json_selector(this, StageInfoDown::resultGetStageInfo));
 }
 
 void StageInfoDown::menuAction( CCObject* sender )

@@ -928,21 +928,30 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			
 			//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
 			//float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-			int slot_cnt = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
-
-			int t_jack_life = jack_life;
-			if(t_jack_life >= slot_cnt)
-				t_jack_life = slot_cnt-1;
-
-			int beautystone_id = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1, slot_cnt-t_jack_life);
-			if(beautystone_id > 0)
-			{
-				int beautystone_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beautystone_id);
-				int beautystone_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beautystone_id);
-				int beautystone_level = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beautystone_id);
-				myGD->createJackMissileWithStoneFunctor((StoneType)beautystone_type, beautystone_rank, beautystone_level, cmCnt, myGD->getJackPoint().convertToCCP());
-				//myGD->communication("MP_createJackMissile", missile_type, cmCnt, missile_speed, myGD->getJackPoint().convertToCCP());
-			}
+			
+//			int slot_cnt = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+//
+//			int t_jack_life = jack_life;
+//			if(t_jack_life >= slot_cnt)
+//				t_jack_life = slot_cnt-1;
+//
+//			int beautystone_id = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1, slot_cnt-t_jack_life);
+//			if(beautystone_id > 0)
+//			{
+//				int beautystone_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beautystone_id);
+//				int beautystone_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beautystone_id);
+//				int beautystone_level = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beautystone_id);
+//				myGD->createJackMissileWithStoneFunctor((StoneType)beautystone_type, beautystone_rank, beautystone_level, cmCnt, myGD->getJackPoint().convertToCCP());
+//				//myGD->communication("MP_createJackMissile", missile_type, cmCnt, missile_speed, myGD->getJackPoint().convertToCCP());
+//			}
+			
+			int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
+			int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
+			
+			int weapon_rank = weapon_level/5 + 1;
+			weapon_level = weapon_level%5 + 1;
+			
+			myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, cmCnt, myGD->getJackPoint().convertToCCP());
 		}
 		
 		if(!is_exchanged && !is_show_exchange_coin && !isGameover && t_p < clearPercentage)
@@ -1345,6 +1354,18 @@ bool PlayUI::beRevivedJack ()
 		CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(20,myDSH->ui_top-60));
 		jack_life_node->runAction(t_move);
 		jack_life_hide_count = 0;
+		
+		if(jack_life == 0 && mySGD->isUsingItem(kIC_heartUp))
+		{
+			CCLabelTTF* item_bonus_label = CCLabelTTF::create("부활 아이템!!!", mySGD->getFont().c_str(), 20);
+			item_bonus_label->setPosition(ccp(240,myDSH->ui_center_y));
+			addChild(item_bonus_label);
+			
+			CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(item_bonus_label, callfunc_selector(CCLabelTTF::removeFromParent));
+			CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+			item_bonus_label->runAction(t_seq);
+		}
 		
 		return true;
 	}
@@ -2108,6 +2129,9 @@ void PlayUI::myInit ()
 	jack_array = new CCArray(1);
 	jack_life_hide_count = 0;
 	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
+	
+	if(mySGD->isUsingItem(kIC_heartUp))
+		jack_life++;
 	
 	jack_life_node = CCNode::create();
 	jack_life_node->setPosition(ccp(20,myDSH->ui_top-60));

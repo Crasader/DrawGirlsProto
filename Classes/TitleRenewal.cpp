@@ -17,7 +17,6 @@
 #include "NewMainFlowScene.h"
 #include "StoryView.h"
 #include "ASPopupView.h"
-#include "PlayTutorial.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -947,10 +946,10 @@ void TitleRenewalScene::endingAction()
 void TitleRenewalScene::changeScene()
 {
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
-//	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-	CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
+//	CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
 }
 
 void TitleRenewalScene::startFileDownload()

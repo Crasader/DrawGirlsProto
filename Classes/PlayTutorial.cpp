@@ -13,7 +13,7 @@
 #include "ServerDataSave.h"
 #include "StoryManager.h"
 #include "StarGoldData.h"
-#include "MainFlowScene.h"
+#include "LoadingTipScene.h"
 
 #define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
@@ -1529,7 +1529,8 @@ void PlayTutorial::nextStep()
 					t_sm->addMent(true, "", "", "기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n월드맵으로 돌아갑니다.", [=]()
 					{
 						t_sm->removeFromParent();
-						CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+						mySGD->setNextSceneName("maingame");
+						CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
 					});
 				}, CCSizeMake(350,100), ccp(0,0), 12);
 			});

@@ -301,6 +301,7 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_isControlJoystickNotFixed)				return_value = "icjf";
 	
 	else if(t_name == kDSH_Key_selectedCharacter)					return_value = "scharacter";
+	else if(t_name == kDSH_Key_weaponLevelForCharacter_int1)		return_value = "wplfc%d";
 	else if(t_name == kDSH_Key_isCharacterUnlocked_int1)			return_value = "icu%d";
 	
 	else if(t_name == kDSH_Key_noticeViewDate_int1)					return_value = "ntcvdt%d";
@@ -472,6 +473,9 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 		bool t_unlocked = data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i].asBool();
 		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, t_unlocked, false);
 	}
+	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+		setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, i-1, data[getKey(kDSH_Key_weaponLevelForCharacter_int1)][i-1].asInt(), false);
+	
 	
 	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 	{
@@ -634,7 +638,10 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	{
 		data[getKey(kDSH_Key_selectedCharacter)] = getIntegerForKey(kDSH_Key_selectedCharacter);
 		for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+		{
 			data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i] = getBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i);
+			data[getKey(kDSH_Key_weaponLevelForCharacter_int1)][i-1] = getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, i-1);
+		}
 	}
 	else if(t_key == kSaveUserData_Key_achieve)
 	{
@@ -768,7 +775,10 @@ void DataStorageHub::resetDSH ()
 	
 	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
 	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+	{
 		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
+		setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, i-1, 0, false);
+	}
 	
 	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 	{

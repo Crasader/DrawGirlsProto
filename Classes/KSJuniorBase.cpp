@@ -195,14 +195,22 @@ void KSJuniorBase::checkConfine(float dt)
 		
 		int rmCnt = 5;
 		
-		string missile_code;
-		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+		int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
+		int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
 		
-		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
-		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		int weapon_rank = weapon_level/5 + 1;
+		weapon_level = weapon_level%5 + 1;
 		
-		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
+		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rmCnt, getPosition());
+		
+//		string missile_code;
+//		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+//		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+//		
+//		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
+//		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+//		
+//		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
 		
 		myGD->communication("CP_removeSubCumber", this);
 		
