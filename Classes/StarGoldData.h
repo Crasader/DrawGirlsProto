@@ -19,8 +19,6 @@
 #include <deque>
 #include <algorithm>
 #include <chrono>
-#include "KnownFriend.h"
-#include "UnknownFriends.h"
 #include <random>
 #include "SelectorDefine.h"
 #include "KSProtect.h"
@@ -70,35 +68,6 @@ enum CardSortType{
 	kCST_takeReverse,
 	kCST_gradeUp, // rank
 	kCST_gradeDown // rank
-};
-
-class RankFriendInfo
-{
-public:
-	string nickname;
-	string img_url;
-	string user_id;
-	float score;
-	int rank;
-	bool is_play;
-	bool is_message_blocked;
-	
-	bool operator==(string t_id)
-	{
-		return user_id == t_id;
-	};
-};
-
-class FriendCardData
-{
-public:
-	int card_number;
-	int card_level;
-	string card_passive;
-	std::string userId;
-	std::string nick;
-	std::string profileUrl;
-	bool messageBlocked;
 };
 
 class CardSortInfo{
@@ -153,10 +122,6 @@ public:
 	void setGoldLabel(CCLabelBMFont* t_label);
 	int getGold();
 	void setGold(int t_gold, bool is_write = true);
-	
-	void setFriendPointLabel(CCLabelBMFont* t_label);
-	int getFriendPoint();
-	void setFriendPoint(int t_point);
 	
 	int getKeepGold();
 	
@@ -249,10 +214,11 @@ public:
 	
 	int getDoubleItemValue();
 	int getLongTimeValue();
-	int getBossLittleEnergyValue();
-	int getSubSmallSizeValue();
-	int getSmallAreaValue();
-	int getWidePerfectValue();
+	int getBaseSpeedUpValue();
+//	int getBossLittleEnergyValue();
+//	int getSubSmallSizeValue();
+//	int getSmallAreaValue();
+//	int getWidePerfectValue();
 	int getStartMapGachaCnt();
 	
 	void startMapGachaOn();
@@ -261,115 +227,6 @@ public:
 	
 	void resetHasGottenCards();
 	
-	bool getIsMeChallenge()
-	{
-		return is_me_challenge;
-	}
-	void setIsMeChallenge(bool t_b)
-	{
-		is_me_challenge = t_b;
-		if(!is_me_challenge)
-		{
-			me_challenge_target_user_id = "";
-			me_challenge_target_user_nick = "";
-			me_challenge_target_user_score = 0.f;
-			me_challenge_target_user_profile = "";
-		}
-	}
-	void setMeChallengeTarget(string t_target, const std::string& t_nickname, float t_score, string t_profile)
-	{
-		is_me_challenge = true;
-		me_challenge_target_user_id = t_target.c_str();
-		me_challenge_target_user_nick = t_nickname;
-		me_challenge_target_user_score = t_score;
-		me_challenge_target_user_profile = t_profile;
-	}
-	string getMeChallengeTarget()
-	{
-		return me_challenge_target_user_id;
-	}
-	string getMeChallengeTargetNick()
-	{
-		return me_challenge_target_user_nick;
-	}
-	float getMeChallengeTargetScore()
-	{
-		return me_challenge_target_user_score;
-	}
-	string getMeChallengeTargetProfile()
-	{
-		return me_challenge_target_user_profile;
-	}
-	
-	bool getIsAcceptChallenge()
-	{
-		return is_accept_challenge;
-	}
-	void setIsAcceptChallenge(bool t_b)
-	{
-		is_accept_challenge = t_b;
-		if(!is_accept_challenge)
-		{
-			accept_challenge_target_user_id = "";
-			accept_challenge_target_user_nick = "";
-			accept_challenge_target_score = 0.f;
-			resetReplayPlayingInfo();
-			accept_challenge_target_profile = "";
-		}
-	}
-	void setAcceptChallengeTarget(string t_id, string t_nick, float t_score, Json::Value t_replay, string t_profile)
-	{
-		is_accept_challenge = true;
-		accept_challenge_target_user_id = t_id.c_str();
-		accept_challenge_target_user_nick = t_nick.c_str();
-		accept_challenge_target_score = t_score;
-		setReplayPlayingInfo(t_replay);
-		accept_challenge_target_profile = t_profile;
-	}
-	string getAcceptChallengeId()
-	{
-		return accept_challenge_target_user_id;
-	}
-	string getAcceptChallengeNick()
-	{
-		return accept_challenge_target_user_nick;
-	}
-	float getAcceptChallengeScore()
-	{
-		return accept_challenge_target_score;
-	}
-	string getAcceptChallengeProfile()
-	{
-		return accept_challenge_target_profile;
-	}
-	
-	bool getIsAcceptHelp()
-	{
-		return is_accept_help;
-	}
-	void setIsAcceptHelp(bool t_b)
-	{
-		is_accept_help = t_b;
-		if(!is_accept_help)
-		{
-			accept_help_target_user_id = "";
-			accept_help_target_user_nick = "";
-		}
-	}
-	void setAcceptHelpTarget(string t_id, string t_nick)
-	{
-		is_accept_help = true;
-		accept_help_target_user_id = t_id.c_str();
-		accept_help_target_user_nick = t_nick.c_str();
-	}
-	string getAcceptHelpId()
-	{
-		return accept_help_target_user_id;
-	}
-	string getAcceptHelpNick()
-	{
-		return accept_help_target_user_nick;
-	}
 	
 	void setClearRewardGold(int t_reward)
 	{
@@ -380,7 +237,6 @@ public:
 		return clear_reward_gold;
 	}
 	
-	void selectFriendCard();
 	void setBonusItemCnt(ITEM_CODE t_code, int t_cnt)
 	{
 		bonus_item_cnt[t_code] = t_cnt;
@@ -406,8 +262,6 @@ public:
 		reader.parse(decode_data, return_value);
 		return return_value;
 	}
-	
-	Json::Value temp_stage_ranker_list;
 	
 	void setHeartMax(int t_data);
 	void setHeartCoolTime(int t_data);
@@ -527,10 +381,10 @@ public:
 	
 	string getReplayKey(ReplayKey t_key);
 	
-	int save_stage_rank_stageNumber;
-	vector<RankFriendInfo> save_stage_rank_list;
-	
 	int suitable_stage;
+	
+	string getAppType();
+	int getAppVersion();
 	
 private:
 	bool is_not_cleared_stage;
@@ -545,22 +399,6 @@ private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* friend_point_label;
-	
-	bool is_me_challenge;
-	string me_challenge_target_user_id;
-	string me_challenge_target_user_nick;
-	float me_challenge_target_user_score;
-	string me_challenge_target_user_profile;
-	
-	bool is_accept_challenge;
-	string accept_challenge_target_user_id;
-	string accept_challenge_target_user_nick;
-	float accept_challenge_target_score;
-	string accept_challenge_target_profile;
-	
-	bool is_accept_help;
-	string accept_help_target_user_id;
-	string accept_help_target_user_nick;
 	
 	vector<KSProtectVar<int>> bonus_item_cnt;
 
@@ -578,10 +416,7 @@ private:
 		   
 	int doubleItem_value;
 	int longTime_value;
-	int bossLittleEnergy_value;
-	int subSmallSize_value;
-	int smallArea_value;
-	int widePerfect_value;
+	int baseSpeedUp_value;
 	
 	deque<bool> before_use_item;
 	deque<bool> is_using_item;
@@ -644,15 +479,14 @@ private:
 	KSProtectVar<float> fury_percent; //
 	KSProtectVar<int> SP_rent_card_thanks; // 소셜포인트 획득량-카드빌리고 보답할때
 	
+	string app_type;
+	int app_version;
+	
 	void myInit();
 	
 	
 	CC_SYNTHESIZE(long long, remove_message_member_id, RemoveMessageMemberId);
 	CC_SYNTHESIZE(int, remove_message_mail_no, RemoveMessageMailNo);
-	
-	CC_SYNTHESIZE(FriendCardData, selected_friend_card_data, SelectedFriendCardData);
-	CC_SYNTHESIZE(bool, is_using_friend_card, IsUsingFriendCard);
-	CC_SYNTHESIZE(bool, was_used_friend_card, WasUsedFriendCard);
 	
 };
 

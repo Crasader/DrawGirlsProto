@@ -28,7 +28,7 @@ enum GachaPurchaseMenuTag{
 	kGachaPurchaseMenuTag_close = 1,
 	kGachaPurchaseMenuTag_ruby,
 	kGachaPurchaseMenuTag_gold,
-	kGachaPurchaseMenuTag_candy,
+//	kGachaPurchaseMenuTag_candy,
 	kGachaPurchaseMenuTag_gachaBase = 10000
 };
 
@@ -143,24 +143,6 @@ bool GachaPurchase::init(GachaPurchaseStartMode start_mode, std::function<void(v
 		gold_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_gold));
 		main_case->addChild(gold_menu);
 		gold_menu->setTouchPriority(-171);
-		
-		CCSprite* n_candy = CCSprite::create("gacha_purchase_candy.png");
-		CCLabelTTF* n_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
-		n_candy_price->setPosition(ccp(n_candy->getContentSize().width/2.f, 22));
-		n_candy->addChild(n_candy_price);
-		CCSprite* s_candy = CCSprite::create("gacha_purchase_candy.png");
-		s_candy->setColor(ccGRAY);
-		CCLabelTTF* s_candy_price = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaSocialFee())->getCString(), mySGD->getFont().c_str(), 15);
-		s_candy_price->setPosition(ccp(s_candy->getContentSize().width/2.f, 22));
-		s_candy->addChild(s_candy_price);
-		
-		CCMenuItem* candy_item = CCMenuItemSprite::create(n_candy, s_candy, this, menu_selector(GachaPurchase::menuAction));
-		candy_item->setTag(kGachaPurchaseMenuTag_candy);
-		
-		CCMenu* candy_menu = CCMenu::createWithItem(candy_item);
-		candy_menu->setPosition(getContentPosition(kGachaPurchaseMenuTag_candy));
-		main_case->addChild(candy_menu);
-		candy_menu->setTouchPriority(-171);
 	}
 	else if(recent_mode == kGachaPurchaseStartMode_reward)
 	{
@@ -335,8 +317,6 @@ CCPoint GachaPurchase::getContentPosition(int t_tag)
 		return_value = ccp(-113,-13);
 	else if(t_tag == kGachaPurchaseMenuTag_gold)
 		return_value = ccp(0,-13);
-	else if(t_tag == kGachaPurchaseMenuTag_candy)
-		return_value = ccp(112,-13);
 	
 	return_value = ccpAdd(return_value, ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height/2.f));
 	
@@ -396,26 +376,26 @@ void GachaPurchase::menuAction(CCObject *pSender)
 		else
 			is_menu_enable = true;
 	}
-	else if(tag == kGachaPurchaseMenuTag_candy)
-	{
-		bool is_gacha_enable = false;
-		
-		if(mySGD->getFriendPoint() >= mySGD->getGachaSocialFee())
-			is_gacha_enable = true;
-		
-		if(is_gacha_enable)
-		{
-			keep_price_type = 3;
-			mySGD->setFriendPoint(mySGD->getFriendPoint() - mySGD->getGachaSocialFee());
-			myDSH->saveUserData({kSaveUserData_Key_friendPoint}, nullptr);
-			
-			if(target_out)
-				(target_out->*delegate_out)();
-			gachaListPopup();
-		}
-		else
-			is_menu_enable = true;
-	}
+//	else if(tag == kGachaPurchaseMenuTag_candy)
+//	{
+//		bool is_gacha_enable = false;
+//		
+//		if(mySGD->getFriendPoint() >= mySGD->getGachaSocialFee())
+//			is_gacha_enable = true;
+//		
+//		if(is_gacha_enable)
+//		{
+//			keep_price_type = 3;
+//			mySGD->setFriendPoint(mySGD->getFriendPoint() - mySGD->getGachaSocialFee());
+//			myDSH->saveUserData({kSaveUserData_Key_friendPoint}, nullptr);
+//			
+//			if(target_out)
+//				(target_out->*delegate_out)();
+//			gachaListPopup();
+//		}
+//		else
+//			is_menu_enable = true;
+//	}
 }
 
 void GachaPurchase::visibling()
@@ -497,7 +477,6 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kDash, 1, "", 3),
 						RewardSprite::create(RewardKind::kPower, 1, "", 4),
 						RewardSprite::create(RewardKind::kSlience, 1, "", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
 					}, recent_mode, GachaCategory::kRubyGacha);
 					addChild(p, kGachaPurchaseZorder_realGacha);
@@ -510,22 +489,8 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kDash, 1, "", 3),
 						RewardSprite::create(RewardKind::kPower, 1, "", 4),
 						RewardSprite::create(RewardKind::kSlience, 1, "", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
 					}, recent_mode, GachaCategory::kGoldGacha);
-					addChild(p, kGachaPurchaseZorder_realGacha);
-				}
-				else 
-				{
-					RouletteSub* p = RouletteSub::create(finalFunction, {
-						RewardSprite::create(RewardKind::kRuby, 20, "", 1),
-						RewardSprite::create(RewardKind::kGold, 500, "", 2),
-						RewardSprite::create(RewardKind::kDash, 1, "", 3),
-						RewardSprite::create(RewardKind::kPower, 1, "", 4),
-						RewardSprite::create(RewardKind::kSlience, 1, "", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "", 6),
-						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "", 7)
-					}, recent_mode, GachaCategory::kSocialGacha);
 					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 			}
@@ -541,7 +506,6 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
 						RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
 						RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5),
 						RewardSprite::create(RewardKind::kGold, 1000, "price_gold_img.png", 5)
 							},
@@ -558,29 +522,11 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
 						RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
 						RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5),
 						RewardSprite::create(RewardKind::kGold, 1000, "price_gold_img.png", 5)
 							},
 							//																						 {},
 							recent_mode, GachaCategory::kGoldGacha);
-					addChild(p, kGachaPurchaseZorder_realGacha);
-				}
-				else
-				{
-					HatGachaSub* p = HatGachaSub::create(finalFunction,
-							{
-								RewardSprite::create(RewardKind::kRuby, 20, "price_ruby_img.png", 1),
-						RewardSprite::create(RewardKind::kGold, 500, "price_gold_img.png", 2),
-						RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
-						RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
-						RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
-						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5),
-						RewardSprite::create(RewardKind::kGold, 1000, "price_gold_img.png", 5)
-							},
-							//																						 {},
-							recent_mode, GachaCategory::kSocialGacha);
 					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 			}
@@ -597,7 +543,6 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
 						RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
 						RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							}
 							, recent_mode, GachaCategory::kRubyGacha);
@@ -612,25 +557,9 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
 						RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
 						RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							}
 							, recent_mode, GachaCategory::kGoldGacha);
-					addChild(p, kGachaPurchaseZorder_realGacha);
-				}
-				else
-				{
-					HorseGachaSub* p = HorseGachaSub::create(finalFunction,
-							{
-								RewardSprite::create(RewardKind::kRuby, 20, "price_ruby_img.png", 1),
-						RewardSprite::create(RewardKind::kGold, 500, "price_gold_img.png", 2),
-						RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
-						RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
-						RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
-						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
-							}
-							, recent_mode, GachaCategory::kSocialGacha);
 					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 			}
@@ -646,7 +575,6 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
 						RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
 						RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							},
@@ -662,27 +590,10 @@ void GachaPurchase::visibling()
 						RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
 						RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
 						RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5),
 						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
 							},
 							recent_mode, GachaCategory::kGoldGacha);
-					addChild(p, kGachaPurchaseZorder_realGacha);
-				}
-				else 
-				{
-					SlotMachineSub* p = SlotMachineSub::create(finalFunction,
-							{
-								RewardSprite::create(RewardKind::kRuby, 20, "price_ruby_img.png", 1),
-						RewardSprite::create(RewardKind::kGold, 500, "price_gold_img.png", 2),
-						RewardSprite::create(RewardKind::kSpecialAttack, 1, "item1.png", 5),
-						RewardSprite::create(RewardKind::kDash, 1, "item4.png", 5),
-						RewardSprite::create(RewardKind::kSlience, 1, "item8.png", 5),
-						RewardSprite::create(RewardKind::kRentCard, 1, "item16.png", 5),
-						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5),
-						RewardSprite::create(RewardKind::kSubMonsterOneKill, 1, "item9.png", 5)
-							},
-							recent_mode, GachaCategory::kSocialGacha);
 					addChild(p, kGachaPurchaseZorder_realGacha);
 				}
 			}

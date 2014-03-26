@@ -33,7 +33,7 @@ public:
 	CCNode* front_node;
 	bool is_delaying;
 	
-	void addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func);
+	void addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func, CCSize t_size = CCSizeMake(350,100), CCPoint t_point = ccp(0,-110), int t_font_size = 12);
 	
 private:
 	
@@ -43,6 +43,7 @@ private:
 	function<void(void)> end_func;
 	string recent_ment;
 	CCLabelTTF* ment_label;
+	CCLabelTTF* next_label;
 	
 	int m_touch_priority;
 	CCNode* ment_node;

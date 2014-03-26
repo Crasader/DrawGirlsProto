@@ -61,7 +61,7 @@ private:
 	
 	bool is_menu_enable;
 	bool is_saved_user_data;
-	bool is_loaded_list;
+//	bool is_loaded_list;
 	bool is_end_popup_animation;
 	
 	CCMenu* main_menu;
@@ -79,7 +79,7 @@ private:
 	
 	void endDecreaseCardDuration();
 	
-	vector<RankFriendInfo> friend_list;
+//	vector<RankFriendInfo> friend_list;
 	CCTableView* rankTableView;
 	
 	void showPopup();
@@ -132,8 +132,8 @@ private:
 	
 	TouchSuctionLayer* suction;
 	
-	void resultLoadFriends(Json::Value result_data);
-	void resultGetStageScoreList(Json::Value result_data);
+//	void resultLoadFriends(Json::Value result_data);
+//	void resultGetStageScoreList(Json::Value result_data);
 	void resultSavedUserData(Json::Value result_data);
 };
 

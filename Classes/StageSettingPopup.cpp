@@ -221,8 +221,8 @@ bool StageSettingPopup::init()
 	info_menu->setPosition(getContentPosition(kSSP_MT_info));
 	main_case->addChild(info_menu, kSSP_Z_content);
 	
-	if(!mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
-	{
+//	if(!mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
+//	{
 		CCSprite* n_challenge = CCSprite::create("stagesetting_challenge.png");
 		CCSprite* s_challenge = CCSprite::create("stagesetting_challenge.png");
 		s_challenge->setColor(ccGRAY);
@@ -233,7 +233,7 @@ bool StageSettingPopup::init()
 		CCMenu* challenge_menu = CCMenu::createWithItem(challenge_item);
 		challenge_menu->setPosition(getContentPosition(kSSP_MT_challenge));
 		main_case->addChild(challenge_menu, kSSP_Z_content);
-	}
+//	}
 	
 	
 	CCSprite* n_start = CCSprite::create("stagesetting_start.png");
@@ -277,13 +277,6 @@ bool StageSettingPopup::init()
 	top_case->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
-	
-	CountingBMLabel* friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "allfont.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(427,top_case->getContentSize().height/2.f));
-	top_case->addChild(friend_point_label);
-	
-	mySGD->setFriendPointLabel(friend_point_label);
-	
 	
 	heart_time = HeartTime::create();
 	heart_time->setPosition(ccp(250,top_case->getContentSize().height/2.f));
@@ -428,9 +421,9 @@ void StageSettingPopup::itemSetting()
 			
 			
 			string item_filename = "";
-			if(t_ic == kIC_subOneDie || t_ic == kIC_longTime || t_ic == kIC_bossLittleEnergy || t_ic == kIC_smallArea || t_ic == kIC_widePerfect || t_ic == kIC_randomChange) // mission
-				item_filename = "stagesetting_item_case_mission.png";
-			else
+//			if(t_ic == kIC_subOneDie || t_ic == kIC_longTime || t_ic == kIC_bossLittleEnergy || t_ic == kIC_smallArea || t_ic == kIC_widePerfect || t_ic == kIC_randomChange) // mission
+//				item_filename = "stagesetting_item_case_mission.png";
+//			else
 				item_filename = "stagesetting_item_case_normal.png";
 			
 			CCSprite* n_case = CCSprite::create(item_filename.c_str());
@@ -511,26 +504,12 @@ void StageSettingPopup::itemSetting()
 			auto t_iter = find(show_item_popup.begin(), show_item_popup.end(), t_ic);
 			if(t_iter != show_item_popup.end())
 			{
-				if(t_ic == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0)
-				{
-					select_menu->setEnabled(false);
-					buy_menu->setEnabled(false);
-					is_selected_item.push_back(false);
-				}
-				else
-				{
-					is_selected_item.push_back(true);
-					selected_img->setVisible(true);
-				}
+				is_selected_item.push_back(true);
+				selected_img->setVisible(true);
 			}
 			else
 			{
 				is_selected_item.push_back(false);
-				if(t_ic == kIC_rentCard && mySGD->getSelectedFriendCardData().card_number == 0)
-				{
-					select_menu->setEnabled(false);
-					buy_menu->setEnabled(false);
-				}
 			}
 		}
 		else
@@ -542,12 +521,6 @@ void StageSettingPopup::itemSetting()
 
 void StageSettingPopup::callStart()
 {
-	if(mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
-	{
-		acceptStartAction();
-	}
-	else
-	{
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 		int durability;
 		if(selected_card_number > 0)
@@ -567,9 +540,6 @@ void StageSettingPopup::callStart()
 					realStartAction();
 				else
 				{
-					if(mySGD->getIsMeChallenge())
-						mySGD->setIsMeChallenge(false);
-					
 					is_menu_enable = true;
 				}
 			}
@@ -585,21 +555,14 @@ void StageSettingPopup::callStart()
 					realStartAction();
 				else
 				{
-					if(mySGD->getIsMeChallenge())
-						mySGD->setIsMeChallenge(false);
-					
 					is_menu_enable = true;
 				}
 			}
 		}
 		else
 		{
-			if(mySGD->getIsMeChallenge())
-				mySGD->setIsMeChallenge(false);
-			
 			is_menu_enable = true;
 		}
-	}
 }
 
 void StageSettingPopup::menuAction(CCObject* pSender)
@@ -620,10 +583,6 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	{
 		mySGD->resetLabels();
 		
-		mySGD->setIsMeChallenge(false);
-		mySGD->setIsAcceptChallenge(false);
-		mySGD->setIsAcceptHelp(false);
-		
 		hidePopup();
 	}
 	else if(tag == kSSP_MT_changeCard)
@@ -641,8 +600,8 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	else if(tag == kSSP_MT_challenge)
 	{
 		is_menu_enable = false;
-		StageRankPopup* t_sip = StageRankPopup::create(this, callfunc_selector(StageSettingPopup::popupClose), this, callfunc_selector(StageSettingPopup::callStart), selected_stage);
-		addChild(t_sip, kSSP_Z_popup);
+//		StageRankPopup* t_sip = StageRankPopup::create(this, callfunc_selector(StageSettingPopup::popupClose), this, callfunc_selector(StageSettingPopup::callStart), selected_stage);
+//		addChild(t_sip, kSSP_Z_popup);
 	}
 	else if(tag == kSSP_MT_gacha)
 	{
@@ -729,9 +688,6 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	else if(tag == kSSP_MT_noti_cancel)
 	{
 		removeChildByTag(kSSP_MT_noti);
-		
-		if(mySGD->getIsMeChallenge())
-			mySGD->setIsMeChallenge(false);
 		
 		is_menu_enable = true;
 	}
@@ -828,7 +784,7 @@ void StageSettingPopup::finalSetting()
 	deque<bool> is_using_item;
 	is_using_item.push_back(false);
 	
-	for(int i=kIC_attack;i<=kIC_rentCard;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		is_using_item.push_back(false);
 	
 	for(int i=0;i<is_selected_item.size();i++)
@@ -841,7 +797,7 @@ void StageSettingPopup::finalSetting()
 		}
 	}
 	
-	for(int i=kIC_attack;i<=kIC_rentCard;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
 }
 
@@ -885,7 +841,7 @@ void StageSettingPopup::cancelGame()
 		
 		deque<bool> is_using_item;
 		is_using_item.push_back(false);
-		for(int i=kIC_attack;i<=kIC_rentCard;i++)
+		for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 			is_using_item.push_back(false);
 		
 		for(int i=0;i<is_selected_item.size();i++)
@@ -898,9 +854,6 @@ void StageSettingPopup::cancelGame()
 		}
 		
 		mySGD->resetUsingItem();
-		
-		if(mySGD->getIsMeChallenge())
-			mySGD->setIsMeChallenge(false);
 		
 		is_menu_enable = true;
 	}
@@ -985,18 +938,11 @@ string StageSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_speedUp)			return_value = "speedUp";
 	else if(t_code == kIC_addTime)			return_value = "addTime";
 	else if(t_code == kIC_fast)				return_value = "fast";
-	else if(t_code == kIC_critical)			return_value = "critical";
 	else if(t_code == kIC_subOneDie)		return_value = "subOneDie";
 	else if(t_code == kIC_doubleItem)		return_value = "doubleItem";
 	else if(t_code == kIC_silence)			return_value = "silence";
-	else if(t_code == kIC_subNothing)		return_value = "subNothing";
 	else if(t_code == kIC_longTime)			return_value = "longTime";
-	else if(t_code == kIC_bossLittleEnergy)	return_value = "bossLittleEnergy";
-	else if(t_code == kIC_subSmallSize)		return_value = "subSmallSize";
-	else if(t_code == kIC_smallArea)		return_value = "smallArea";
-	else if(t_code == kIC_widePerfect)		return_value = "widePerfect";
-	else if(t_code == kIC_randomChange)		return_value = "randomChange";
-	else if(t_code == kIC_rentCard)			return_value = "rentCard";
+	else if(t_code == kIC_baseSpeedUp)		return_value = "baseSpeedUp";
 	
 	return return_value.c_str();
 }

@@ -62,36 +62,30 @@ public:
 
 					});
 					break;
-				case RewardKind::kSpecialAttack:
-					{
-						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_attack);
-						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
-					}
-					break;
-				case RewardKind::kDash:
-					{
-						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_fast);
-						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
-					}
-					break;
-				case RewardKind::kSlience:
-					{
-						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_silence);
-						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
-					}
-					break;
-				case RewardKind::kRentCard:
-					{
-						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_rentCard);
-						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
-					}
-					break;
-				case RewardKind::kSubMonsterOneKill:
-					{
-						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_subOneDie);
-						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
-					}
-					break;
+//				case RewardKind::kSpecialAttack:
+//					{
+//						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_attack);
+//						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+//					}
+//					break;
+//				case RewardKind::kDash:
+//					{
+//						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_fast);
+//						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+//					}
+//					break;
+//				case RewardKind::kSlience:
+//					{
+//						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_silence);
+//						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+//					}
+//					break;
+//				case RewardKind::kSubMonsterOneKill:
+//					{
+//						int currentValue = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_subOneDie);
+//						myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, ITEM_CODE::kIC_critical, currentValue + selectedItemValue);
+//					}
+//					break;
 			}
 			getParent()->removeFromParent();
 		};
@@ -113,11 +107,6 @@ public:
 		else if(gc == GachaCategory::kRubyGacha)
 		{
 			replayItem->setPrice(PriceTypeRuby, mySGD->getGachaRubyFeeRetry());
-			replayItem->setTitle("다시뽑기");
-		}
-		else if(gc == GachaCategory::kSocialGacha)
-		{
-			replayItem->setPrice(PriceTypeSocial, mySGD->getGachaSocialFeeRetry());
 			replayItem->setTitle("다시뽑기");
 		}
 		replayItem->setFunction([=](CCObject*){

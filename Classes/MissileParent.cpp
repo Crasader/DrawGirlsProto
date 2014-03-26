@@ -14,6 +14,8 @@
 #include "StarGoldData.h"
 #include "StoneMissile.h"
 #include "ks19937.h"
+#include <boost/format.hpp>
+
 void MissileParent::bombCumber( CCObject* target )
 {
 	KSCumberBase* cumber = (KSCumberBase*)target;
@@ -54,10 +56,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	CCLog("createJackMissile inner : %d, %d, %.2f", jm_type, cmCnt, missile_speed);
 	
 	int card_number;
-	if(mySGD->getIsUsingFriendCard())
-		card_number = mySGD->getSelectedFriendCardData().card_number;
-	else
-		card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	
 	if(card_number > 0)
 	{

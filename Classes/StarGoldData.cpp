@@ -227,38 +227,6 @@ void StarGoldData::setGold( int t_gold , bool is_write/* = true */)
 	myDSH->setIntegerForKey(kDSH_Key_savedGold, t_gold, is_write);
 }
 
-void StarGoldData::setFriendPointLabel(CCLabelBMFont* t_label)
-{
-	friend_point_label = t_label;
-}
-int StarGoldData::getFriendPoint()
-{
-	return myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint);
-}
-void StarGoldData::setFriendPoint(int t_point)
-{
-	if(myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint) < t_point)
-	{
-		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-		
-		for(int i=kAchievementCode_social1;i<=kAchievementCode_social3;i++)
-		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-			   t_point >= shared_acr->getCondition((AchievementCode)i))
-			{
-				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
-				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-			}
-		}
-	}
-	
-	if(friend_point_label && myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint) != t_point)
-		friend_point_label->setString(CCString::createWithFormat("%d", t_point)->getCString());
-	
-	myDSH->setIntegerForKey(kDSH_Key_savedFriendPoint, t_point);
-}
-
 int StarGoldData::getKeepGold()
 {
 	return keep_gold;
@@ -273,8 +241,6 @@ void StarGoldData::setGameStart()
 {
 	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
 		myDSH->setIntegerForKey(kDSH_Key_endPlayedStage, mySD->getSilType());
-	
-	is_using_friend_card = false;
 	
 	is_write_replay = true;
 	
@@ -330,31 +296,15 @@ void StarGoldData::setGameStart()
 	iter = find(card_options.begin(), card_options.end(), kIC_longTime);
 	if(iter != card_options.end())		longTime_value += NSDS_GI(kSDS_CI_int1_abilityLongTimeOptionSec_i, selected_card_number);
 
-	bossLittleEnergy_value = 0;
-	if(isUsingItem(kIC_bossLittleEnergy))	bossLittleEnergy_value += mySD->getBossLittleEnergyItemOption();
-	iter = find(card_options.begin(), card_options.end(), kIC_bossLittleEnergy);
-	if(iter != card_options.end())			bossLittleEnergy_value += NSDS_GI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, selected_card_number);
-
-	subSmallSize_value = 0;
-	if(isUsingItem(kIC_subSmallSize))	subSmallSize_value += mySD->getSubSmallSizeItemOption();
-	iter = find(card_options.begin(), card_options.end(), kIC_subSmallSize);
-	if(iter != card_options.end())		subSmallSize_value += NSDS_GI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, selected_card_number);
-
-	smallArea_value = 0;
-	if(isUsingItem(kIC_smallArea))		smallArea_value += mySD->getSmallAreaItemOption();
-	iter = find(card_options.begin(), card_options.end(), kIC_smallArea);
-	if(iter != card_options.end())		smallArea_value += NSDS_GI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, selected_card_number);
-
-	widePerfect_value = 0;
-	if(isUsingItem(kIC_widePerfect))	widePerfect_value += mySD->getWidePerfectItemOption();
-	iter = find(card_options.begin(), card_options.end(), kIC_widePerfect);
-	if(iter != card_options.end())		widePerfect_value += NSDS_GI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, selected_card_number);
+	baseSpeedUp_value = 0;
+	if(isUsingItem(kIC_baseSpeedUp))	baseSpeedUp_value += mySD->getBaseSpeedUpItemOption();
+	iter = find(card_options.begin(), card_options.end(), kIC_baseSpeedUp);
+	if(iter != card_options.end())			baseSpeedUp_value += NSDS_GI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, selected_card_number);
 }
 
 void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, int t_game_time, int t_use_time, int t_total_time )
 {
-	was_used_friend_card = is_using_item[kIC_rentCard];
-	for(int i=kIC_attack;i<=kIC_rentCard;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		before_use_item[i] = is_using_item[i];
 		is_using_item[i] = false;
@@ -392,8 +342,7 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 
 void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time )
 {
-	was_used_friend_card = is_using_item[kIC_rentCard];
-	for(int i=kIC_attack;i<=kIC_rentCard;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		before_use_item[i] = is_using_item[i];
 		is_using_item[i] = false;
@@ -744,25 +693,25 @@ int StarGoldData::getLongTimeValue()
 	return longTime_value;
 }
 
-int StarGoldData::getBossLittleEnergyValue()
+int StarGoldData::getBaseSpeedUpValue()
 {
-	return bossLittleEnergy_value;
+	return baseSpeedUp_value;
 }
 
-int StarGoldData::getSubSmallSizeValue()
-{
-	return subSmallSize_value;
-}
-
-int StarGoldData::getSmallAreaValue()
-{
-	return smallArea_value;
-}
-
-int StarGoldData::getWidePerfectValue()
-{
-	return widePerfect_value;
-}
+//int StarGoldData::getSubSmallSizeValue()
+//{
+//	return subSmallSize_value;
+//}
+//
+//int StarGoldData::getSmallAreaValue()
+//{
+//	return smallArea_value;
+//}
+//
+//int StarGoldData::getWidePerfectValue()
+//{
+//	return widePerfect_value;
+//}
 
 int StarGoldData::getStartMapGachaCnt()
 {
@@ -805,75 +754,6 @@ void StarGoldData::resetHasGottenCards()
 		}
 	}
 	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
-}
-
-void StarGoldData::selectFriendCard()
-{
-	vector<FriendData> known_list = KnownFriends::getInstance()->getFriends();
-	vector<FriendData> unknown_list = UnknownFriends::getInstance()->getFriends();
-	
-	
-	vector<FriendCardData> friends_card_data_list;
-	
-	for(int i=0;i<known_list.size();i++)
-	{
-		int t_card_number = known_list[i].userData[myDSH->getKey(kDSH_Key_selectedCard)].asInt();
-		if(t_card_number != 0 && NSDS_GI(kSDS_CI_int1_stage_i, t_card_number) > 0)
-		{
-			FriendCardData t_data;
-			
-			t_data.userId = known_list[i].userId;
-			t_data.nick = known_list[i].nick;
-			t_data.profileUrl = known_list[i].profileUrl;
-			t_data.messageBlocked = known_list[i].messageBlocked;
-			
-			t_data.card_number = t_card_number;
-			t_data.card_level = known_list[i].userData.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
-			t_data.card_passive = known_list[i].userData.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
-			
-			friends_card_data_list.push_back(t_data);
-		}
-	}
-	
-	for(int i=0;i<unknown_list.size();i++)
-	{
-		int t_card_number = unknown_list[i].userData[myDSH->getKey(kDSH_Key_selectedCard)].asInt();
-		if(t_card_number != 0 && NSDS_GI(kSDS_CI_int1_stage_i, t_card_number) > 0)
-		{
-			FriendCardData t_data;
-			
-			t_data.userId = unknown_list[i].userId;
-			t_data.nick = unknown_list[i].nick;
-			t_data.profileUrl = unknown_list[i].profileUrl;
-			t_data.messageBlocked = unknown_list[i].messageBlocked;
-			
-			t_data.card_number = t_card_number;
-			t_data.card_level = unknown_list[i].userData.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
-			t_data.card_passive = unknown_list[i].userData.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
-			
-			friends_card_data_list.push_back(t_data);
-		}
-	}
-	
-	if(!friends_card_data_list.empty())
-	{
-		random_device rd;
-		default_random_engine e1(rd());
-		uniform_int_distribution<int> uniform_dist(0, friends_card_data_list.size()-1);
-		
-		int selected_idx = uniform_dist(e1);
-		selected_friend_card_data.card_number = friends_card_data_list[selected_idx].card_number;
-		selected_friend_card_data.card_level = friends_card_data_list[selected_idx].card_level;
-		selected_friend_card_data.card_passive = friends_card_data_list[selected_idx].card_passive;
-		selected_friend_card_data.userId = friends_card_data_list[selected_idx].userId;
-		selected_friend_card_data.nick = friends_card_data_list[selected_idx].nick;
-		selected_friend_card_data.profileUrl = friends_card_data_list[selected_idx].profileUrl;
-		selected_friend_card_data.messageBlocked = friends_card_data_list[selected_idx].messageBlocked;
-	}
-	else
-	{
-		selected_friend_card_data.card_number = 0;
-	}
 }
 
 bool StarGoldData::isEmptyAchieveNotiQueue()
@@ -948,12 +828,21 @@ void StarGoldData::resetNoticeList(Json::Value t_notice_list)
 	}
 }
 
+string StarGoldData::getAppType()
+{
+	return app_type;
+}
+int StarGoldData::getAppVersion()
+{
+	return app_version;
+}
+
 void StarGoldData::myInit()
 {
-	suitable_stage = -1;
+	app_type = "light1";
+	app_version = 1;
 	
-	save_stage_rank_stageNumber = 0;
-	save_stage_rank_list.clear();
+	suitable_stage = -1;
 	
 	replay_write_info.clear();
 	replay_playing_info.clear();
@@ -982,14 +871,14 @@ void StarGoldData::myInit()
 	before_use_item.push_back(false);
 	is_using_item.push_back(false);
 	
-	for(int i=kIC_attack;i<=kIC_rentCard;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		before_use_item.push_back(false);
 		is_using_item.push_back(false);
 	}
 	
 	bonus_item_cnt.push_back(KSProtectVar<int>(0)); // empty
-	for(int i=kIC_attack;i<=kIC_rentCard;i++)
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		bonus_item_cnt.push_back(KSProtectVar<int>(0));
 
 
@@ -1023,10 +912,6 @@ void StarGoldData::myInit()
 		AudioEngine::sharedInstance()->setSoundOnOff(!myDSH->getBoolForKey(kDSH_Key_bgmOff));
 		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
 	}
-	
-	is_me_challenge = false;
-	is_accept_challenge = false;
-	is_accept_help = false;
 }
 
 bool StarGoldData::getIsNotClearedStage()

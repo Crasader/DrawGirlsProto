@@ -208,19 +208,6 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 														CCLog("돈 없음");
 													}
 												}
-												else if(m_gachaCategory == GachaCategory::kSocialGacha)
-												{
-													if(mySGD->getFriendPoint() >= mySGD->getGachaSocialFeeRetry()) {
-														mySGD->setFriendPoint(mySGD->getFriendPoint() - mySGD->getGachaSocialFeeRetry());
-														myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
-
-														});
-														retryGame();
-													}
-													else {
-														CCLog("돈 없음");
-													}
-												}
 
 											};
 										}else{
@@ -234,10 +221,6 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 										else if(m_gachaCategory == GachaCategory::kGoldGacha)
 										{
 											againFileName = "Gold";
-										}
-										else if(m_gachaCategory == GachaCategory::kSocialGacha)
-										{
-											againFileName = "Social"; 
 										}
 										GachaShowReward* gachaShowReward = GachaShowReward::create(replayFunction,
 												m_callback,

@@ -55,7 +55,7 @@ private:
 	
 	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;
-	CountingBMLabel* friend_point_label;
+//	CountingBMLabel* friend_point_label;
 	
 	CCTableView* puzzle_table;
 	void cellAction(CCObject* sender);

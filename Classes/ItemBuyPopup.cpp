@@ -110,14 +110,6 @@ void ItemBuyPopup::menuAction (CCObject * sender)
 				(target_buy->*delegate_buy)(clicked_item_number, 1);
 			}
 		}
-		else if(item_currency == "social")
-		{
-			if(mySD->getItemPrice(item_type) <= mySGD->getFriendPoint())
-			{
-				mySGD->setFriendPoint(mySGD->getFriendPoint()-mySD->getItemPrice(item_type));
-				(target_buy->*delegate_buy)(clicked_item_number, 1);
-			}
-		}
 	}
 	else if(tag == kIBP_MT_close)
 	{

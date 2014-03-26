@@ -2775,11 +2775,11 @@ void NewMainFlowScene::setTop()
 	ruby_menu->setPosition(ccp(246,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_menu);
 	
-	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(294,top_case->getContentSize().height/2.f-5));
-	top_case->addChild(friend_point_label);
+//	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
+//	friend_point_label->setPosition(ccp(294,top_case->getContentSize().height/2.f-5));
+//	top_case->addChild(friend_point_label);
 	
-	mySGD->setFriendPointLabel(friend_point_label);
+//	mySGD->setFriendPointLabel(friend_point_label);
 	
 	CCSprite* n_friend_point = CCSprite::create("mainflow_top_shop.png");
 	CCSprite* s_friend_point = CCSprite::create("mainflow_top_shop.png");

@@ -12,7 +12,6 @@ std::map<RewardKind, std::string> kind2File =
 	{RewardKind::kSpecialAttack, ""},
 	{RewardKind::kDash, "gacha1_item1.png"},
 	{RewardKind::kSlience, "gacha1_item5.png"},
-	{RewardKind::kRentCard, "gacha1_item13.png"},
 	{RewardKind::kSubMonsterOneKill, "gacha1_item3.png"},
 	{RewardKind::kPower, "gacha1_item2.png"},
 	{RewardKind::kMobLess, "gacha1_item6.png"},
@@ -264,19 +263,6 @@ void RouletteSub::update(float dt)
 							CCLog("돈 없음");
 						}
 					}
-					else if(m_gachaCategory == GachaCategory::kSocialGacha)
-					{
-						if(mySGD->getFriendPoint() >= mySGD->getGachaSocialFeeRetry()) {
-							mySGD->setFriendPoint(mySGD->getFriendPoint() - mySGD->getGachaSocialFeeRetry());
-							myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
-
-							});
-							retryGame();
-						}
-						else {
-							CCLog("돈 없음");
-						}
-					}
 
 				};
 			}else{
@@ -290,10 +276,6 @@ void RouletteSub::update(float dt)
 			else if(m_gachaCategory == GachaCategory::kGoldGacha)
 			{
 				againFileName = "Gold";
-			}
-			else if(m_gachaCategory == GachaCategory::kSocialGacha)
-			{
-				againFileName = "Social"; 
 			}
 			GachaShowReward* gachaShowReward = GachaShowReward::create(replayFunction,
 				m_callback,

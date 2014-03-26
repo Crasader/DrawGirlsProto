@@ -8,6 +8,7 @@
 #include "RollingButton.h"
 #include "KSLabelTTF.h"
 #include "EnumDefine.h"
+#include "GraySprite.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -149,111 +150,111 @@ void FeverParent::addFeverGage (int count)
 	if(ing_fever)	return;
 	
 	keeping_count = 300;
-//	if(!is_keeping)
+//	if(!is_keeping) 피버게이지를 일정 시간 지나면 초기화 하는거 대한 처리
 //		startKeep();
 	
-	recent_count += count;
-	if(recent_count >= 15)
-	{
-		if(((CCLabelTTF*)counting_label)->getColor().g > 150)
-			counting_label->setVisible(false);
-		
-		fever_back->setVisible(true);
-		fever_top->setVisible(true);
-		
-		ing_fever = true;
-		entered_fever_cnt++;
-		int total_fever_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_totalFeverCnt)+1;
-		myDSH->setIntegerForKey(kDSH_Key_achieve_totalFeverCnt, total_fever_cnt);
-		
-		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-		
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_feverMania1) == 0 &&
-		   entered_fever_cnt >= shared_acr->getCondition(kAchievementCode_feverMania1))
-		{
-			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_feverMania1, 1);
-			AchieveNoti* t_noti = AchieveNoti::create(kAchievementCode_feverMania1);
-			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-		}
-		
-		for(int i=kAchievementCode_feverMania2;i<=kAchievementCode_feverMania3;i++)
-		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-			   total_fever_cnt == shared_acr->getCondition((AchievementCode)i))
-			{
-				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
-				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-			}
-		}
-		
-		
-		recent_count = 15;
-		
-		fever_top->setPercentage(100.f);
-		
-		myLog->addLog(kLOG_show_fever, myGD->getCommunication("UI_getUseTime"));
-		myGD->communication("GIM_startFever");
-		
-		myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 1.5f);
-		
-		fever_particle = CCParticleSystemQuad::createWithTotalParticles(100);
-		fever_particle->setPositionType(kCCPositionTypeFree);
-		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("fever_particle.png");
-		fever_particle->setTexture(texture);
-		fever_particle->setEmissionRate(100);
-		fever_particle->setAngle(90.0);
-		fever_particle->setAngleVar(40.0);
-		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-		fever_particle->setBlendFunc(blendFunc);
-		fever_particle->setDuration(-1.0);
-		fever_particle->setEmitterMode(kCCParticleModeGravity);
-		ccColor4F startColor = {1.0,0.8,0.4,1.0}; // 0.76 0.25 0.12
-		fever_particle->setStartColor(startColor);
-		ccColor4F startColorVar = {0,0,0,0.3};
-		fever_particle->setStartColorVar(startColorVar);
-		ccColor4F endColor = {0.0,0.0,0.0,1.00};
-		fever_particle->setEndColor(endColor);
-		ccColor4F endColorVar = {0,0,0,0.3};
-		fever_particle->setEndColorVar(endColorVar);
-		fever_particle->setStartSize(10.0);
-		fever_particle->setStartSizeVar(10.0);
-		fever_particle->setEndSize(5.0);
-		fever_particle->setEndSizeVar(10.0);
-		fever_particle->setGravity(ccp(0,-400));
-		fever_particle->setRadialAccel(0.0);
-		fever_particle->setRadialAccelVar(0.0);
-		fever_particle->setSpeed(200);
-		fever_particle->setSpeedVar(50.0);
-		fever_particle->setTangentialAccel(0);
-		fever_particle->setTangentialAccelVar(0);
-		fever_particle->setTotalParticles(100);
-		fever_particle->setLife(1.0);
-		fever_particle->setLifeVar(0.0);
-		fever_particle->setStartSpin(0.0);
-		fever_particle->setStartSpinVar(360.f);
-		fever_particle->setEndSpin(0.0);
-		fever_particle->setEndSpinVar(360.f);
-		fever_particle->setPosition(ccp(240,140));
-		fever_particle->setPosVar(ccp(240,160));
-		addChild(fever_particle);
-		
-		unschedule(schedule_selector(FeverParent::keeping));
-		is_keeping = false;
-		
-		CCDelayTime* t_delay = CCDelayTime::create(NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(FeverParent::endFever));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-		runAction(t_seq);
-		
-		CCProgressFromTo* progress_to = CCProgressFromTo::create(NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1), 100.f, 0.f);
-		fever_top->runAction(progress_to);
-	}
-	else
-	{
-		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/15.f*100.f);
-		fever_top->runAction(progress_to);
-	}
+//	recent_count += count;
+//	if(recent_count >= 15)
+//	{
+//		if(((CCLabelTTF*)counting_label)->getColor().g > 150)
+//			counting_label->setVisible(false);
+//		
+//		fever_back->setVisible(true);
+//		fever_top->setVisible(true);
+//		
+//		ing_fever = true;
+//		entered_fever_cnt++;
+//		int total_fever_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_totalFeverCnt)+1;
+//		myDSH->setIntegerForKey(kDSH_Key_achieve_totalFeverCnt, total_fever_cnt);
+//		
+//		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+//		
+//		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_feverMania1) == 0 &&
+//		   entered_fever_cnt >= shared_acr->getCondition(kAchievementCode_feverMania1))
+//		{
+//			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_feverMania1, 1);
+//			AchieveNoti* t_noti = AchieveNoti::create(kAchievementCode_feverMania1);
+//			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+//		}
+//		
+//		for(int i=kAchievementCode_feverMania2;i<=kAchievementCode_feverMania3;i++)
+//		{
+//			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+//			   total_fever_cnt == shared_acr->getCondition((AchievementCode)i))
+//			{
+//				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+//				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+//				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+//			}
+//		}
+//		
+//		
+//		recent_count = 15;
+//		
+//		fever_top->setPercentage(100.f);
+//		
+//		myLog->addLog(kLOG_show_fever, myGD->getCommunication("UI_getUseTime"));
+//		myGD->communication("GIM_startFever");
+//		
+//		myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 1.5f);
+//		
+//		fever_particle = CCParticleSystemQuad::createWithTotalParticles(100);
+//		fever_particle->setPositionType(kCCPositionTypeFree);
+//		CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("fever_particle.png");
+//		fever_particle->setTexture(texture);
+//		fever_particle->setEmissionRate(100);
+//		fever_particle->setAngle(90.0);
+//		fever_particle->setAngleVar(40.0);
+//		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+//		fever_particle->setBlendFunc(blendFunc);
+//		fever_particle->setDuration(-1.0);
+//		fever_particle->setEmitterMode(kCCParticleModeGravity);
+//		ccColor4F startColor = {1.0,0.8,0.4,1.0}; // 0.76 0.25 0.12
+//		fever_particle->setStartColor(startColor);
+//		ccColor4F startColorVar = {0,0,0,0.3};
+//		fever_particle->setStartColorVar(startColorVar);
+//		ccColor4F endColor = {0.0,0.0,0.0,1.00};
+//		fever_particle->setEndColor(endColor);
+//		ccColor4F endColorVar = {0,0,0,0.3};
+//		fever_particle->setEndColorVar(endColorVar);
+//		fever_particle->setStartSize(10.0);
+//		fever_particle->setStartSizeVar(10.0);
+//		fever_particle->setEndSize(5.0);
+//		fever_particle->setEndSizeVar(10.0);
+//		fever_particle->setGravity(ccp(0,-400));
+//		fever_particle->setRadialAccel(0.0);
+//		fever_particle->setRadialAccelVar(0.0);
+//		fever_particle->setSpeed(200);
+//		fever_particle->setSpeedVar(50.0);
+//		fever_particle->setTangentialAccel(0);
+//		fever_particle->setTangentialAccelVar(0);
+//		fever_particle->setTotalParticles(100);
+//		fever_particle->setLife(1.0);
+//		fever_particle->setLifeVar(0.0);
+//		fever_particle->setStartSpin(0.0);
+//		fever_particle->setStartSpinVar(360.f);
+//		fever_particle->setEndSpin(0.0);
+//		fever_particle->setEndSpinVar(360.f);
+//		fever_particle->setPosition(ccp(240,140));
+//		fever_particle->setPosVar(ccp(240,160));
+//		addChild(fever_particle);
+//		
+//		unschedule(schedule_selector(FeverParent::keeping));
+//		is_keeping = false;
+//		
+//		CCDelayTime* t_delay = CCDelayTime::create(NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1));
+//		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(FeverParent::endFever));
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//		runAction(t_seq);
+//		
+//		CCProgressFromTo* progress_to = CCProgressFromTo::create(NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1), 100.f, 0.f);
+//		fever_top->runAction(progress_to);
+//	}
+//	else
+//	{
+//		CCProgressTo* progress_to = CCProgressTo::create(0.3f, recent_count/15.f*100.f);
+//		fever_top->runAction(progress_to);
+//	}
 }
 void FeverParent::endFever ()
 {
@@ -882,11 +883,17 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
-			if((clr_cdt_type == kCLEAR_bigArea || clr_cdt_type == kCLEAR_perfect) && t_p >= t_beforePercentage + 0.001f)
+			if(t_p >= t_beforePercentage + 0.001f)
 			{
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
-				myGD->communication("Main_percentageGettingEffect", floorf((t_p-t_beforePercentage)*10000.f)/10000.f*100.f, true, jackPosition);
+				
+				myGD->communication("Main_goldGettingEffect", jackPosition, int(floorf((t_p-t_beforePercentage)*200.f)));
+				
+				if(clr_cdt_type == kCLEAR_bigArea || clr_cdt_type == kCLEAR_perfect)
+				{
+					myGD->communication("Main_percentageGettingEffect", floorf((t_p-t_beforePercentage)*10000.f)/10000.f*100.f, true, jackPosition);
+				}
 			}
 		}
 		
@@ -903,10 +910,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			}
 		}
 		
-		
-		int item_value = mySGD->getSmallAreaValue();
-		
-		if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per-item_value/100.f)
+		if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per)
 			takeBigArea();
 		
 		mySGD->is_draw_button_tutorial = false;
@@ -931,21 +935,30 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			
 			//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
 			//float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-			int slot_cnt = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
-
-			int t_jack_life = jack_life;
-			if(t_jack_life >= slot_cnt)
-				t_jack_life = slot_cnt-1;
-
-			int beautystone_id = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1, slot_cnt-t_jack_life);
-			if(beautystone_id > 0)
-			{
-				int beautystone_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beautystone_id);
-				int beautystone_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beautystone_id);
-				int beautystone_level = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beautystone_id);
-				myGD->createJackMissileWithStoneFunctor((StoneType)beautystone_type, beautystone_rank, beautystone_level, cmCnt, myGD->getJackPoint().convertToCCP());
-				//myGD->communication("MP_createJackMissile", missile_type, cmCnt, missile_speed, myGD->getJackPoint().convertToCCP());
-			}
+			
+//			int slot_cnt = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+//
+//			int t_jack_life = jack_life;
+//			if(t_jack_life >= slot_cnt)
+//				t_jack_life = slot_cnt-1;
+//
+//			int beautystone_id = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1, slot_cnt-t_jack_life);
+//			if(beautystone_id > 0)
+//			{
+//				int beautystone_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beautystone_id);
+//				int beautystone_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beautystone_id);
+//				int beautystone_level = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beautystone_id);
+//				myGD->createJackMissileWithStoneFunctor((StoneType)beautystone_type, beautystone_rank, beautystone_level, cmCnt, myGD->getJackPoint().convertToCCP());
+//				//myGD->communication("MP_createJackMissile", missile_type, cmCnt, missile_speed, myGD->getJackPoint().convertToCCP());
+//			}
+			
+			int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
+			int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
+			
+			int weapon_rank = weapon_level/5 + 1;
+			weapon_level = weapon_level%5 + 1;
+			
+			myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, cmCnt, myGD->getJackPoint().convertToCCP());
 		}
 		
 		if(!is_exchanged && !is_show_exchange_coin && !isGameover && t_p < clearPercentage)
@@ -986,10 +999,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 	
 	percentageLabel->setString(CCString::createWithFormat("%d%%", int(floorf(t_p*10000))/100)->getCString());
 	
-	int item_value = mySGD->getWidePerfectValue();
-	
-	if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && floorf(t_p*10000.f)/10000.f*100.f >= (clr_cdt_per-item_value/200.f)*100.f &&
-	   floorf(t_p*10000.f)/10000.f*100.f <= (clr_cdt_per+clr_cdt_range+item_value/200.f)*100.f)
+	if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && floorf(t_p*10000.f)/10000.f*100.f >= clr_cdt_per*100.f &&
+	   floorf(t_p*10000.f)/10000.f*100.f <= (clr_cdt_per+clr_cdt_range)*100.f)
 		conditionClear();
 	
 	if(m_areaGage)
@@ -1110,7 +1121,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	
 	if(clr_cdt_type == kCLEAR_sequenceChange && !isGameover)
 	{
-		if(!mySGD->isUsingItem(kIC_randomChange) && t_coin_number != ing_cdt_cnt)
+		if(t_coin_number != ing_cdt_cnt)
 		{
 			conditionFail();
 			
@@ -1131,22 +1142,14 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 		{
 			ing_cdt_cnt++;
 			
-			if(mySGD->isUsingItem(kIC_randomChange))
-			{
-				mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), 1);
-//				((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString());
-			}
-			else
-			{
-				mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), 1);
-//				removeChildByTag(kCT_UI_clrCdtLabel);
-//				if(ing_cdt_cnt <= 6)
-//				{
-//					CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
-//					clr_cdt_img->setPosition(ccpAdd(getChildByTag(kCT_UI_clrCdtIcon)->getPosition(), ccp(0,-5)));
-//					addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
-//				}
-			}
+			mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), 1);
+//			removeChildByTag(kCT_UI_clrCdtLabel);
+//			if(ing_cdt_cnt <= 6)
+//			{
+//				CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+//				clr_cdt_img->setPosition(ccpAdd(getChildByTag(kCT_UI_clrCdtIcon)->getPosition(), ccp(0,-5)));
+//				addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
+//			}
 		}
 	}
 	
@@ -1254,7 +1257,7 @@ void PlayUI::subBossLife (float t_life)
 void PlayUI::setMaxBossLife (float t_life)
 {
 	maxBossLife = t_life;
-	bossLife = maxBossLife*(100.f - mySGD->getBossLittleEnergyValue())/100.f;
+	bossLife = maxBossLife;
 }
 void PlayUI::setClearPercentage (float t_p)
 {
@@ -1334,16 +1337,16 @@ void PlayUI::addGameTime30Sec ()
 	
 	countingCnt -= 30;
 	total_time += 30;
-	if(mySGD->isUsingItem(kIC_longTime))
-	{
-		if(countingCnt < -mySGD->getLongTimeValue())
-			countingCnt = -mySGD->getLongTimeValue();
-	}
-	else
-	{
+//	if(mySGD->isUsingItem(kIC_longTime))
+//	{
+//		if(countingCnt < -mySGD->getLongTimeValue())
+//			countingCnt = -mySGD->getLongTimeValue();
+//	}
+//	else
+//	{
 		if(countingCnt < 0)
 			countingCnt = 0;
-	}
+//	}
 }
 bool PlayUI::beRevivedJack ()
 {
@@ -1355,7 +1358,7 @@ bool PlayUI::beRevivedJack ()
 		jack_life_node->removeChild((CCNode*)jack_array->lastObject(), true);
 		jack_array->removeLastObject();
 		
-		CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(20,myDSH->ui_top-60));
+		CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_bottom+20));
 		jack_life_node->runAction(t_move);
 		jack_life_hide_count = 0;
 		
@@ -1363,9 +1366,39 @@ bool PlayUI::beRevivedJack ()
 	}
 	else
 	{
-		return false;
+		if(!is_used_heartUpItem && mySGD->isUsingItem(kIC_heartUp))
+		{
+			using_item_sprites[kIC_heartUp]->setGray(true);
+			
+			CCLabelTTF* item_bonus_label = CCLabelTTF::create("부활 아이템!!!", mySGD->getFont().c_str(), 20);
+			item_bonus_label->setPosition(ccp(240,myDSH->ui_center_y));
+			addChild(item_bonus_label);
+			
+			CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(item_bonus_label, callfunc_selector(CCLabelTTF::removeFromParent));
+			CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+			item_bonus_label->runAction(t_seq);
+			
+			is_used_heartUpItem = true;
+			return true;
+		}
+		else
+			return false;
 	}
 }
+
+void PlayUI::takeSilenceItem()
+{
+	CCLabelTTF* item_bonus_label = CCLabelTTF::create("침묵 아이템!!!", mySGD->getFont().c_str(), 20);
+	item_bonus_label->setPosition(ccp(240,myDSH->ui_center_y));
+	addChild(item_bonus_label);
+	
+	CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
+	CCCallFunc* t_call = CCCallFunc::create(item_bonus_label, callfunc_selector(CCLabelTTF::removeFromParent));
+	CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+	item_bonus_label->runAction(t_seq);
+}
+
 void PlayUI::takeAddTimeItem ()
 {
 	int change_time = NSDS_GI(mySD->getSilType(), kSDS_SI_itemOptionAddTimeSec_i);
@@ -1373,16 +1406,16 @@ void PlayUI::takeAddTimeItem ()
 	total_time += change_time;
 	
 	CCLog("addtime value : %d", change_time);
-	if(mySGD->isUsingItem(kIC_longTime))
-	{
-		if(countingCnt < -mySGD->getLongTimeValue())
-			countingCnt = -mySGD->getLongTimeValue();
-	}
-	else
-	{
+//	if(mySGD->isUsingItem(kIC_longTime))
+//	{
+//		if(countingCnt < -mySGD->getLongTimeValue())
+//			countingCnt = -mySGD->getLongTimeValue();
+//	}
+//	else
+//	{
 		if(countingCnt < 0)
 			countingCnt = 0;
-	}
+//	}
 }
 bool PlayUI::getIsExchanged ()
 {
@@ -1574,7 +1607,7 @@ void PlayUI::counting ()
 			jack_life_hide_count++;
 			if(jack_life_hide_count > 3)
 			{
-				CCMoveTo* t_move = CCMoveTo::create(1.f, ccp(20-200, myDSH->ui_top-60));
+				CCMoveTo* t_move = CCMoveTo::create(1.f, ccp(240, myDSH->ui_bottom-70));
 				jack_life_node->runAction(t_move);
 				jack_life_hide_count = -1;
 			}
@@ -1634,27 +1667,46 @@ void PlayUI::counting ()
 		
 		if(countingCnt-1 >= playtime_limit)
 		{
-			t_is_die = true;
-			//			if(jack_life > 0)
-			//			{
-			myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
-			//			}
-			//			else
-			//			{
-			//				stopCounting();
-			//				// timeover
-			//
-			//				mySGD->fail_code = kFC_timeover;
-			//
-			//				myGD->communication("Main_allStopSchedule");
-			//				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-			//				result_sprite = CCSprite::create("game_timeover.png");
-			//				result_sprite->setRotation(-25);
-			//				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
-			//				addChild(result_sprite);
-			//
-			//				endGame();
-			//			}
+			if(!is_used_longTimeItem && mySGD->isUsingItem(kIC_longTime))
+			{
+				is_used_longTimeItem = true;
+				countingCnt -= mySGD->getLongTimeValue();
+				
+				using_item_sprites[kIC_longTime]->setGray(true);
+				
+				CCLabelTTF* item_bonus_label = CCLabelTTF::create("시간 아이템!!!", mySGD->getFont().c_str(), 20);
+				item_bonus_label->setPosition(ccp(240,myDSH->ui_center_y));
+				addChild(item_bonus_label);
+				
+				CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
+				CCCallFunc* t_call = CCCallFunc::create(item_bonus_label, callfunc_selector(CCLabelTTF::removeFromParent));
+				CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+				item_bonus_label->runAction(t_seq);
+			}
+			else
+			{
+				t_is_die = true;
+				//			if(jack_life > 0)
+				//			{
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
+				//			}
+				//			else
+				//			{
+				//				stopCounting();
+				//				// timeover
+				//
+				//				mySGD->fail_code = kFC_timeover;
+				//
+				//				myGD->communication("Main_allStopSchedule");
+				//				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+				//				result_sprite = CCSprite::create("game_timeover.png");
+				//				result_sprite->setRotation(-25);
+				//				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
+				//				addChild(result_sprite);
+				//
+				//				endGame();
+				//			}
+			}
 		}
 	}
 	
@@ -1785,7 +1837,7 @@ void PlayUI::createBonusScore ()
 	bonus_score->setPosition(ccp(240,myDSH->ui_center_y+50));
 	addChild(bonus_score);
 	
-	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(20,myDSH->ui_top-60));
+	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_bottom+20));
 	jack_life_node->runAction(t_move);
 	
 	CCFadeTo* t_fade = CCFadeTo::create(1.f, 255);
@@ -1974,9 +2026,7 @@ void PlayUI::takeBigArea ()
 	
 	ing_cdt_cnt++;
 	
-	int item_value = mySGD->getSmallAreaValue();
-	
-	mission_button->setTextAtIndex(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
+	mission_button->setTextAtIndex(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
 //	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
@@ -1990,28 +2040,6 @@ void PlayUI::takeItemCollect ()
 	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
 //	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
-}
-
-void PlayUI::setUseFriendCard()
-{
-	mySGD->setIsUsingFriendCard(true);
-	
-	myGD->communication("CP_chagePassiveData", mySGD->getSelectedFriendCardData().card_passive);
-	
-	jack_life++;
-	
-	CCSprite* jack_img = CCSprite::create("basic_character.png");
-	jack_img->setColor(ccGREEN);
-	jack_img->setOpacity(0);
-	jack_img->setPosition(ccp((jack_life-1)*20, 0));
-//	if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-(jack_life-1)*20));
-//	else if(myGD->gamescreen_type == kGT_rightUI)	jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-(jack_life-1)*20));
-//	else											jack_img->setPosition(ccp(80+(jack_life-1)*20, myDSH->ui_top-35));
-	jack_life_node->addChild(jack_img);
-	
-	jack_img->runAction(CCFadeTo::create(1.f, 255));
-	
-	jack_array->addObject(jack_img);
 }
 
 void PlayUI::myInit ()
@@ -2097,7 +2125,7 @@ void PlayUI::myInit ()
 	sand_clock->setPosition(ccp(147,463));
 	addChild(sand_clock);
 	
-	countingCnt = -mySGD->getLongTimeValue();
+	countingCnt = 0;//-mySGD->getLongTimeValue();
 	detail_counting_cnt = 0;
 	is_urgent = false;
 	use_time = 0;
@@ -2146,13 +2174,31 @@ void PlayUI::myInit ()
 	jack_life_hide_count = 0;
 	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	
+	is_used_heartUpItem = false;
+	is_used_longTimeItem = false;
+	
+//	if(mySGD->isUsingItem(kIC_heartUp))
+//		jack_life++;
+	
 	jack_life_node = CCNode::create();
-	jack_life_node->setPosition(ccp(20,myDSH->ui_top-60));
+	jack_life_node->setPosition(ccp(240,myDSH->ui_bottom+20));
 	addChild(jack_life_node);
+	
+	CCNode* black_life_node = CCNode::create();
+	black_life_node->setPosition(CCPointZero);
+	jack_life_node->addChild(black_life_node,-1);
+	
+	CCPoint life_base_position = ccpMult(ccp(-50,0), (jack_life-1)/2.f);
+	
 	for(int i=0;i<jack_life;i++)
 	{
-		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(i*20, 0));
+		CCSprite* black_img = CCSprite::create("ingame_life.png");
+		black_img->setColor(ccBLACK);
+		black_img->setPosition(ccpAdd(life_base_position, ccp(i*50, 0)));
+		black_life_node->addChild(black_img);
+		
+		CCSprite* jack_img = CCSprite::create("ingame_life.png");
+		jack_img->setPosition(ccpAdd(life_base_position, ccp(i*50, 0)));
 		jack_life_node->addChild(jack_img);
 		
 		jack_array->addObject(jack_img);
@@ -2220,7 +2266,7 @@ void PlayUI::myInit ()
 //		icon_menu->setPosition(icon_menu_position);
 //		addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 		
-		int start_percentage = 100 - mySGD->getBossLittleEnergyValue();
+		int start_percentage = 100;
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
 		mission_button->addText(CCString::createWithFormat("%d%%", start_percentage)->getCString());
@@ -2277,10 +2323,8 @@ void PlayUI::myInit ()
 		clr_cdt_cnt = mySD->getClearConditionBigAreaCnt();
 		ing_cdt_cnt = 0;
 		
-		int item_value = mySGD->getSmallAreaValue();
-		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-		mission_button->addText(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		mission_button->addText(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
 //		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -2359,24 +2403,12 @@ void PlayUI::myInit ()
 		
 		ing_cdt_cnt = 1;
 		
-		if(mySGD->isUsingItem(kIC_randomChange))
-		{
-			mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-			mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString());
-			
-//			CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt-1, 6)->getCString(), mySGD->getFont().c_str(), 12);
-//			clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
-//			addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
-		}
-		else
-		{
-			mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-			mission_button->addText(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
-			
-//			CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
-//			clr_cdt_img->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
-//			addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
-		}
+		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
+		mission_button->addText(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+		
+//		CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+//		clr_cdt_img->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
+//		addChild(clr_cdt_img, 0, kCT_UI_clrCdtLabel);
 	}
 	else if(clr_cdt_type == kCLEAR_timeLimit)
 	{
@@ -2440,6 +2472,40 @@ void PlayUI::myInit ()
 	my_fp->setPosition(CCPointZero);
 	addChild(my_fp);
 	
+	using_item_sprites.clear();
+	int using_item_cnt = 0;
+	
+	vector<GraySprite*> using_item_vectors;
+	using_item_vectors.clear();
+	
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
+	{
+		if(mySGD->isUsingItem((ITEM_CODE)i))
+		{
+			using_item_cnt++;
+			
+			GraySprite* item_img = GraySprite::create(CCString::createWithFormat("item%d.png", i)->getCString());
+			item_img->setScale(0.5f);
+			addChild(item_img);
+			
+			CCSprite* item_case = CCSprite::create("ingame_itembox.png");
+			item_case->setPosition(ccp(item_img->getContentSize().width/2.f, item_img->getContentSize().height/2.f));
+			item_case->setScale(1.f/item_img->getScale());
+			item_img->addChild(item_case, -1);
+			
+			using_item_sprites[i] = item_img;
+			using_item_vectors.push_back(item_img);
+		}
+	}
+	
+	CCPoint item_base_position = ccpAdd(ccp(460, myDSH->ui_center_y), ccpMult(ccp(0,25), (using_item_cnt-1)/2.f));
+	
+	for(int i=0;i<using_item_vectors.size();i++)
+	{
+		using_item_vectors[i]->setPosition(ccpAdd(item_base_position, ccpMult(ccp(0,-25), i)));
+	}
+	
+	
 	myGD->V_I["UI_addScore"] = std::bind(&PlayUI::addScore, this, _1);
 	myGD->V_FB["UI_setPercentage"] = std::bind(&PlayUI::setPercentage, this, _1, _2);
 	myGD->V_F["UI_subBossLife"] = std::bind(&PlayUI::subBossLife, this, _1);
@@ -2467,6 +2533,7 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_writeImageChange"] = std::bind(&PlayUI::writeImageChange, this);
 	myGD->V_I["UI_writeGameOver"] = std::bind(&PlayUI::writeGameOver, this, _1);
 	myGD->V_V["UI_writeContinue"] = std::bind(&PlayUI::writeContinue, this);
+	myGD->V_V["UI_takeSilenceItem"] = std::bind(&PlayUI::takeSilenceItem, this);
 }
 bool PlayUI::isExchanged ()
 {
@@ -2488,20 +2555,23 @@ void PlayUI::continueAction ()
 	
 	total_time += countingCnt;
 	
-	if(mySGD->isUsingItem(kIC_longTime))
-	{
-		countingCnt = -mySGD->getLongTimeValue();
-	}
-	else
-	{
+//	if(mySGD->isUsingItem(kIC_longTime))
+//	{
+//		countingCnt = -mySGD->getLongTimeValue();
+//	}
+//	else
+//	{
 		countingCnt = 0;
-	}
+//	}
 	
 	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
+	
+	CCPoint life_base_position = ccpMult(ccp(-50,0), (jack_life-1)/2.f);
+	
 	for(int i=0;i<jack_life;i++)
 	{
-		CCSprite* jack_img = CCSprite::create("basic_character.png");
-		jack_img->setPosition(ccp(i*20, 0));
+		CCSprite* jack_img = CCSprite::create("ingame_life.png");
+		jack_img->setPosition(ccpAdd(life_base_position, ccp(i*50, 0)));
 //		if(myGD->gamescreen_type == kGT_leftUI)			jack_img->setPosition(ccp(25, myDSH->ui_center_y-30-i*20));
 //		else if(myGD->gamescreen_type == kGT_rightUI)		jack_img->setPosition(ccp(480-25,myDSH->ui_center_y-30-i*20));
 //		else									jack_img->setPosition(ccp(80+i*20,myDSH->ui_top-35));
@@ -2510,7 +2580,7 @@ void PlayUI::continueAction ()
 		jack_array->addObject(jack_img);
 	}
 	
-	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(20,myDSH->ui_top-60));
+	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_bottom+20));
 	jack_life_node->runAction(t_move);
 	
 	jack_life_hide_count = 0;

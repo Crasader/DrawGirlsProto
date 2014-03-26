@@ -50,14 +50,13 @@ private:
 	void showPopup();
 	void endShowPopup();
 	
-	void hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector, int ruby, int gold, int social);
+	void hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector, int ruby, int gold);
 	void endHidePopup();
 	
 	void startGame();
 	
 	int keep_gold;
 	int keep_ruby;
-	int keep_social;
 	
 	CCSprite* reward_title;
 	CCSprite* reward_case;
@@ -65,7 +64,6 @@ private:
 	
 	CountingBMLabel* reward_gold;
 	CountingBMLabel* reward_ruby;
-	CountingBMLabel* reward_social;
 	
 	void startCalcAction();
 	void setCalcInfo();

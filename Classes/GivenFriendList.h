@@ -16,6 +16,9 @@
 #include "StarGoldData.h"
 #include "KHAlertView.h"
 #include "CommonButton.h"
+#include "FriendData.h"
+#include "UnknownFriends.h"
+#include "KnownFriend.h"
 USING_NS_CC;
 
 using namespace cocos2d::extension;

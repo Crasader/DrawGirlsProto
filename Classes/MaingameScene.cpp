@@ -161,40 +161,40 @@ void Maingame::hideDrawButtonTutorial()
 
 void Maingame::onEnterTransitionDidFinish()
 {
-	if(mySD->getSilType() == 1)
-	{
-		if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
-		{
-			myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
-			CCNode* exit_target = this;
-			exit_target->onExit();
-			
-			ASPopupView* t_popup = ASPopupView::create(-200);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-			
-			ControlTutorialContent* t_container = ControlTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
-																				 {
-																					 exit_target->onEnter();
-																					 
-																					 CCMoveBy* t_move = CCMoveBy::create(0.5f, ccp(-480,0));
-																					 CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
-																					 CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
-																					 t_popup->runAction(t_seq);
-																					 
-																					 //																					 t_popup->removeFromParent();
-																				 });
-			t_popup->setContainerNode(t_container);
-			exit_target->getParent()->addChild(t_popup);
-		}
-	}
+//	if(mySD->getSilType() == 1)
+//	{
+//		if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
+//		{
+//			myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
+//			CCNode* exit_target = this;
+//			exit_target->onExit();
+//			
+//			ASPopupView* t_popup = ASPopupView::create(-200);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+//			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+//			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+//			
+//			ControlTutorialContent* t_container = ControlTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+//																				 {
+//																					 exit_target->onEnter();
+//																					 
+//																					 CCMoveBy* t_move = CCMoveBy::create(0.5f, ccp(-480,0));
+//																					 CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
+//																					 CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
+//																					 t_popup->runAction(t_seq);
+//																					 
+//																					 //																					 t_popup->removeFromParent();
+//																				 });
+//			t_popup->setContainerNode(t_container);
+//			exit_target->getParent()->addChild(t_popup);
+//		}
+//	}
 	
 	CCLayer* top_bottom_layer = CCLayer::create();
 	top_bottom_layer->setPosition(ccp(0, 0));
@@ -522,9 +522,9 @@ void Maingame::finalSetting()
 			myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		}
 		
-		CCLabelTTF* replay_nick = CCLabelTTF::create(mySGD->getAcceptChallengeNick().c_str(), mySGD->getFont().c_str(), 10);
-		replay_nick->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215.f*thumb_scale-10)));
-		replay_all_node->addChild(replay_nick);
+//		CCLabelTTF* replay_nick = CCLabelTTF::create(mySGD->getAcceptChallengeNick().c_str(), mySGD->getFont().c_str(), 10);
+//		replay_nick->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215.f*thumb_scale-10)));
+//		replay_all_node->addChild(replay_nick);
 	}
 
 //	vector<KSCumberBase*> sub_array = myGD->getSubCumberVector();
@@ -600,65 +600,65 @@ void Maingame::startScene()
 
 void Maingame::checkAcceptChallenge()
 {
-	if(mySGD->getIsAcceptChallenge())
-	{
-		CCNode* exit_target = this;
-		exit_target->onExit();
-		
-		ASPopupView* t_popup = ASPopupView::create(-200);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));
-		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-		
-		AcceptChallengeAniContent* t_container = AcceptChallengeAniContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
-																				   {
-																					   checkFriendCard();
-																					   exit_target->onEnter();
-																					   t_popup->removeFromParent();
-																				   }, hspConnector::get()->getKakaoProfileURL(), hspConnector::get()->getKakaoNickname(),
-																				   mySGD->getAcceptChallengeProfile(), mySGD->getAcceptChallengeNick());
-		t_popup->setContainerNode(t_container);
-		exit_target->getParent()->addChild(t_popup);
-	}
-	else
-	{
+//	if(mySGD->getIsAcceptChallenge())
+//	{
+//		CCNode* exit_target = this;
+//		exit_target->onExit();
+//		
+//		ASPopupView* t_popup = ASPopupView::create(-200);
+//		
+//		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//		if(screen_scale_x < 1.f)
+//			screen_scale_x = 1.f;
+//		
+//		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));
+//		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+//		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+//		
+//		AcceptChallengeAniContent* t_container = AcceptChallengeAniContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+//																				   {
+//																					   checkFriendCard();
+//																					   exit_target->onEnter();
+//																					   t_popup->removeFromParent();
+//																				   }, hspConnector::get()->getKakaoProfileURL(), hspConnector::get()->getKakaoNickname(),
+//																				   mySGD->getAcceptChallengeProfile(), mySGD->getAcceptChallengeNick());
+//		t_popup->setContainerNode(t_container);
+//		exit_target->getParent()->addChild(t_popup);
+//	}
+//	else
+//	{
 		checkFriendCard();
-	}
+//	}
 }
 
 void Maingame::checkFriendCard()
 {
-	if(mySGD->isUsingItem(kIC_rentCard) && mySGD->getSelectedFriendCardData().card_number != 0)
-	{
-		CCNode* exit_target = this;
-		exit_target->onExit();
-		
-		ASPopupView* t_popup = ASPopupView::create(-200);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));
-		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-		
-		RentCardAniContent* t_container = RentCardAniContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
-																			 {
-																				 myUI->setUseFriendCard();
-																				 exit_target->onEnter();
-																				 t_popup->removeFromParent();
-																			 });
-		t_popup->setContainerNode(t_container);
-		exit_target->getParent()->addChild(t_popup);
-	}
+//	if(mySGD->isUsingItem(kIC_rentCard) && mySGD->getSelectedFriendCardData().card_number != 0)
+//	{
+//		CCNode* exit_target = this;
+//		exit_target->onExit();
+//		
+//		ASPopupView* t_popup = ASPopupView::create(-200);
+//		
+//		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//		if(screen_scale_x < 1.f)
+//			screen_scale_x = 1.f;
+//		
+//		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));
+//		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+//		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+//		
+//		RentCardAniContent* t_container = RentCardAniContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+//																			 {
+//																				 myUI->setUseFriendCard();
+//																				 exit_target->onEnter();
+//																				 t_popup->removeFromParent();
+//																			 });
+//		t_popup->setContainerNode(t_container);
+//		exit_target->getParent()->addChild(t_popup);
+//	}
 	
 	setControlJoystickButton();
 	startControl();
@@ -1179,12 +1179,9 @@ void Maingame::endCloseShutter()
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 //		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-		if(mySD->getSilType() > 10000)
+		if(mySD->getSilType() <= 10000)
 		{
-			if(mySGD->getIsAcceptChallenge() || mySGD->getIsAcceptHelp())
-				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
-			else
-				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 		}
 		else
 		{

@@ -129,7 +129,7 @@ private:
 class VisibleSprite : public CCSprite
 {
 public:
-	static VisibleSprite* create(const char* filename, bool isPattern, CCArray* t_drawRects);
+	static VisibleSprite* create(const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename);
 	
 	void setMoveGamePosition(CCPoint t_p);
 	
@@ -153,13 +153,18 @@ private:
 	CCNode* scene_node;
 	bool is_set_scene_node;
 	
-	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects);
+	CCSprite* safety_img;
+	CCSprite* light_img;
+	
+	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename);
+	
+	CCTexture2D* createSafetyImage(string fullpath);
 };
 
 class VisibleParent : public CCNode
 {
 public:
-	static VisibleParent* create(const char* filename, bool isPattern);
+	static VisibleParent* create(const char* filename, bool isPattern, string sil_filename);
 	
 	void setDrawRects(CCArray* t_rects);
 	
@@ -190,7 +195,7 @@ private:
 	
 	void changingGameStep(int t_step);
 	
-	void myInit(const char* filename, bool isPattern);
+	void myInit(const char* filename, bool isPattern, string sil_filename);
 };
 
 enum MSzorder{

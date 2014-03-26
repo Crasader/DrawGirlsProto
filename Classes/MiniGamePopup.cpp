@@ -133,14 +133,13 @@ void MiniGamePopup::endShowPopup()
 	is_menu_enable = true;
 }
 
-void MiniGamePopup::hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector, int ruby, int gold, int social)
+void MiniGamePopup::hidePopup(CCObject* pSelectorTarget, SEL_CallFunc selector, int ruby, int gold)
 {
 	left_curtain->setVisible(true);
 	right_curtain->setVisible(true);
 	
 	keep_gold = gold;
 	keep_ruby = ruby;
-	keep_social = social;
 	
 	CCMoveTo* left_move1 = CCMoveTo::create(0.3f, ccp(240,160));
 //	CCDelayTime* left_delay = CCDelayTime::create(1.f);
@@ -181,10 +180,6 @@ void MiniGamePopup::startCalcAction()
 	reward_ruby->setPosition(ccp(210,42.5f));
 	reward_case->addChild(reward_ruby);
 	
-	reward_social = CountingBMLabel::create("0", "allfont.fnt", 1.f, "%d");
-	reward_social->setPosition(ccp(210,41-25));
-	reward_case->addChild(reward_social);
-	
 	CCMoveTo* case_move = CCMoveTo::create(0.3f, ccp(240,150));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MiniGamePopup::setCalcInfo));
 	CCSequence* t_seq = CCSequence::createWithTwoActions(case_move, t_call);
@@ -195,7 +190,6 @@ void MiniGamePopup::setCalcInfo()
 {
 	reward_gold->setString(CCString::createWithFormat("%d", keep_gold)->getCString());
 	reward_ruby->setString(CCString::createWithFormat("%d", keep_ruby)->getCString());
-	reward_social->setString(CCString::createWithFormat("%d", keep_social)->getCString());
 	
 	
 	CCSprite* n_ok = CCSprite::create("minigame_reward_conform.png");
@@ -244,7 +238,7 @@ void MiniGamePopup::menuAction(CCObject *pSender)
 	is_menu_enable = false;
 	miniGameStart = nullptr;
 
-	GoldClicker* goldClicker = GoldClicker::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2, _3, _4, _5));
+	GoldClicker* goldClicker = GoldClicker::create(-180, bind(&MiniGamePopup::hidePopup, this, _1, _2, _3, _4));
 	miniGameStart = bind(&GoldClicker::startSchedule, goldClicker);
 	addChild(goldClicker, kMiniGameZorder_game);
 
