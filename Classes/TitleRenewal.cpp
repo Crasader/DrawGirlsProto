@@ -928,27 +928,27 @@ void TitleRenewalScene::endingAction()
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 0)
-	{
-		StoryView* t_sv = StoryView::create();
-		t_sv->setFunc([=]()
-					  {
-						  myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 1);
-						  myDSH->saveAllUserData(nullptr);
-						  CCDelayTime* t_delay = CCDelayTime::create(2.f);
-						  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
-						  CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-						  runAction(t_seq);
-					  });
-		addChild(t_sv);
-	}
-	else
-	{
+//	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 0)
+//	{
+//		StoryView* t_sv = StoryView::create();
+//		t_sv->setFunc([=]()
+//					  {
+//						  myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 1);
+//						  myDSH->saveAllUserData(nullptr);
+//						  CCDelayTime* t_delay = CCDelayTime::create(2.f);
+//						  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
+//						  CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//						  runAction(t_seq);
+//					  });
+//		addChild(t_sv);
+//	}
+//	else
+//	{
 		CCDelayTime* t_delay = CCDelayTime::create(2.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 		runAction(t_seq);
-	}
+//	}
 }
 
 void TitleRenewalScene::changeScene()
