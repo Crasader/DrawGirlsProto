@@ -398,6 +398,10 @@ void LoadingTipScene::readyLoading()
 		default_load_list.push_back("mainflow_back_shadow_left.png");
 		default_load_list.push_back("mainflow_back_shadow_right.png");
 	}
+	else
+	{
+		default_load_list.push_back("mainflow_back_wall.png");
+	}
 	
 	total_load_img = sil_load_list.size() + default_load_list.size();
 	ing_load_img = 0;
