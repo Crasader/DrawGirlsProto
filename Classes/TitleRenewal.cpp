@@ -17,6 +17,8 @@
 #include "NewMainFlowScene.h"
 #include "StoryView.h"
 #include "ASPopupView.h"
+#include "AlertEngine.h"
+#include "MyLocalization.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -182,6 +184,12 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(mySGD->getAppVersion() < result_data[mySGD->getAppType()].asInt())
+		{
+			exit(1);
+			return;
+		}
+		
 		mySGD->setHeartMax(result_data["heartMax"].asInt());
 		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
 		mySGD->setGameFriendMax(result_data["gameFriendMax"].asInt());
@@ -1422,4 +1430,17 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
+}
+
+void TitleRenewalScene::alertAction(int t1, int t2)
+{
+	if(t1 == 1 && t2 == 0)
+	{
+		CCDirector::sharedDirector()->end();
+	}
+}
+
+void TitleRenewalScene::keyBackClicked()
+{
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
 }
