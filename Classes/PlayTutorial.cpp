@@ -1477,7 +1477,7 @@ void PlayTutorial::nextStep()
 			CCSequence* t_sequ = CCSequence::create(CCDelayTime::create(0.5f), CCShow::create(), NULL);
 			CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
 			CCRepeat* t_repeat = CCRepeat::create(t_seq, 3);
-			CCSequence* t_seqq = CCSequence::create(t_sequ, t_repeat);
+			CCSequence* t_seqq = CCSequence::create(t_sequ, t_repeat, NULL);
 			
 			ui_percent->runAction(t_seqq);
 			
