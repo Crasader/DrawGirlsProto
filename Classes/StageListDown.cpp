@@ -459,8 +459,16 @@ void StageListDown::successAction()
 			
 			if(cut_list[j].key == "face")
 			{
-				st_w->initWithImageFile("stage_scissor.png"); //피스조각(가로형)을 불러옵니다.
-				st_h->initWithImageFile("stage_scissor.png"); //피스조각(세로형)을 불러옵니다.
+				if(puzzle_number > 10000)
+				{
+					st_w->initWithImageFile("stage_scissor.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("stage_scissor.png"); //피스조각(세로형)을 불러옵니다.
+				}
+				else
+				{
+					st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
+				}
 			}
 			else
 			{
@@ -495,12 +503,12 @@ void StageListDown::successAction()
 				puzzleRow=4;
 				puzzleColDis=120.f;
 				puzzleRowDis=120.f;
-				puzzleOffsetX=86.f;
-				puzzleOffsetY=88.f;
+				puzzleOffsetX=92.f;
+				puzzleOffsetY=92.f;
 				faceColDis=172.f;
 				faceRowDis=172.f;
-				puzzleWidth=652;
-				puzzleHeight=536;
+				puzzleWidth=664;
+				puzzleHeight=544;
 			}
 			
 			
@@ -567,7 +575,7 @@ void StageListDown::successAction()
 				if(puzzle_number > 10000)
 					st->initWithImageFile("temp_puzzle_stencil_top.png");
 				else
-					st->initWithImageFile("puzzle_stencil_1_top.png");
+					st->initWithImageFile("puzzle_stencil_3_top.png");
 				
 				int cutx =puzzleWidth/2;
 				int cuty =puzzleHeight-st->getHeight()/2;
@@ -590,7 +598,7 @@ void StageListDown::successAction()
 				if(puzzle_number > 10000)
 					st->initWithImageFile("temp_puzzle_stencil_bottom.png");
 				else
-					st->initWithImageFile("puzzle_stencil_1_bottom.png");
+					st->initWithImageFile("puzzle_stencil_3_bottom.png");
 				
 				int cutx =puzzleWidth/2;
 				int cuty =st->getHeight()/2;
@@ -613,7 +621,7 @@ void StageListDown::successAction()
 				if(puzzle_number > 10000)
 					st->initWithImageFile("temp_puzzle_stencil_left.png");
 				else
-					st->initWithImageFile("puzzle_stencil_1_left.png");
+					st->initWithImageFile("puzzle_stencil_3_left.png");
 				
 				int cutx =st->getWidth()/2;
 				int cuty =puzzleHeight/2;
@@ -635,7 +643,7 @@ void StageListDown::successAction()
 				if(puzzle_number > 10000)
 					st->initWithImageFile("temp_puzzle_stencil_right.png");
 				else
-					st->initWithImageFile("puzzle_stencil_1_right.png");
+					st->initWithImageFile("puzzle_stencil_3_right.png");
 				
 				int cutx =puzzleWidth-st->getWidth()/2;
 				int cuty =puzzleHeight/2;

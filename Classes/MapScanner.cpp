@@ -993,6 +993,40 @@ void VisibleSprite::visit()
 	for(int i=0;i<loopCnt;i++)
 	{
 		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
+		
+		float wScale = viewport[2] / design_resolution_size.width;
+		float hScale = viewport[3] / design_resolution_size.height;
+		
+		float x, y, w, h;
+		
+		if(is_set_scene_node)
+		{
+			x = ((t_rect->origin.x-1)*game_node_scale+jack_position.x+scene_node->getPositionX())*wScale + viewport[0]-1;
+			y = ((t_rect->origin.y-1)*game_node_scale+jack_position.y+scene_node->getPositionY())*hScale + viewport[1]-1;
+			w = ((t_rect->size.width+2)*game_node_scale)*wScale+2;
+			h = ((t_rect->size.height+2)*game_node_scale)*hScale+2;
+		}
+		else
+		{
+			x = ((t_rect->origin.x-1)*game_node_scale+jack_position.x)*wScale + viewport[0]-1;
+			y = ((t_rect->origin.y-1)*game_node_scale+jack_position.y)*hScale + viewport[1]-1;
+			w = ((t_rect->size.width+2)*game_node_scale)*wScale+2;
+			h = ((t_rect->size.height+2)*game_node_scale)*hScale+2;
+		}
+		
+		if(y > screen_size.height || y+h < 0.f)
+			continue;
+		else
+		{
+			glScissor(x,y,w,h);
+			light_img->draw();
+		}
+		
+	}
+	
+	for(int i=0;i<loopCnt;i++)
+	{
+		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
 
 		float wScale = viewport[2] / design_resolution_size.width;
 		float hScale = viewport[3] / design_resolution_size.height;
@@ -1278,6 +1312,10 @@ void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_dra
 	safety_img = CCSprite::createWithTexture(createSafetyImage(mySIL->getDocumentPath() + sil_filename));
 	safety_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
 	addChild(safety_img);
+	
+	light_img = CCSprite::create("ingame_whiteback.png");
+	light_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
+	addChild(light_img, -1);
 }
 
 CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
