@@ -483,7 +483,7 @@ public:
 		m_imageRotationDegree = 0.f;
 		tex->retain();
 		texture = tex;//CCTextureCache::sharedTextureCache()->addImage("bmTest.png");
-
+		setContentSize(texture->getContentSize());
 		GLfloat halfWidth = texture->getPixelsWide()/2;
 		GLfloat halfHeight = texture->getPixelsHigh()/2;	
 		m_halfWidth = halfWidth;
