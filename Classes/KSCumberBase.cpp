@@ -2229,15 +2229,15 @@ void KSCumberBase::setGameover()
 void KSCumberBase::movingAndCrash( float dt )
 {
 	bool bossIsClosed_ = bossIsClosed();
-	if(bossIsClosed_)
-	{
-		KS::setColor(this, ccc3(0, 255, 0));
-		//myGD->communication("Main_showTextMessage", std::string("갇힘..!!!"));
-	}
-	else
-	{
-		KS::setColor(this, ccc3(255, 255, 255));
-	}
+//	if(bossIsClosed_)
+//	{
+//		KS::setColor(this, ccc3(0, 255, 0));
+//		//myGD->communication("Main_showTextMessage", std::string("갇힘..!!!"));
+//	}
+//	else
+//	{
+//		KS::setColor(this, ccc3(255, 255, 255));
+//	}
 	checkConfine(dt);
 	
 	if(m_state == CUMBERSTATEFURY)
