@@ -57,13 +57,13 @@ static inline Vertex3D Vertex3DMake(GLfloat inX,GLfloat inY, GLfloat inZ){
 }
 class Vertex{
 public:
- float x, y;
+ float x, y, extraData;
  Vertex(){ x=y=0.0f; }
  Vertex(const Vertex& v){
-  x=v.x; y=v.y;
+	 x=v.x; y=v.y; extraData = v.extraData;
  }
- Vertex(float _x, float _y){
-  x=_x; y=_y;
+ Vertex(float _x, float _y, float _extraData){
+	 x=_x; y=_y; extraData = _extraData;
  }
  bool operator==(const Vertex& v){
   return (x==v.x && y==v.y);
@@ -110,17 +110,18 @@ public:
 		return retValue;
 	}
 	DelaunayTriangulation(){
-		mVertices.push_back( Vertex(0, INIT_SUPERTRI_SIZE) );
-		mVertices.push_back( Vertex(-INIT_SUPERTRI_SIZE, -INIT_SUPERTRI_SIZE) );
-		mVertices.push_back( Vertex(INIT_SUPERTRI_SIZE, -INIT_SUPERTRI_SIZE) );
+		mVertices.push_back( Vertex(0, INIT_SUPERTRI_SIZE, 0) );
+		mVertices.push_back( Vertex(-INIT_SUPERTRI_SIZE, -INIT_SUPERTRI_SIZE, 0) );
+		mVertices.push_back( Vertex(INIT_SUPERTRI_SIZE, -INIT_SUPERTRI_SIZE, 0) );
 		mTriangles.push_back( Triangle(0,1,2) );
 	}
-	void PushVertex(float x, float y){
-		Vertex vt(x,y);
+	void PushVertex(float x, float y, float extraData){
+		Vertex vt(x,y, extraData);
 		mVertices.push_back( vt );
 		int iVtx = mVertices.size()-1;
 		int iTri = SearchCoverTriangle(vt);
-		while( iTri==-1 ){
+		while( iTri==-1 )
+		{
 			for(int i=0; i<3; i++){
 				mVertices[i].x*=2.0f;
 				mVertices[i].y*=2.0f;
@@ -245,10 +246,7 @@ public:
 	CCTexture2D *texture;
 	GLfloat m_halfWidth;
 	GLfloat m_halfHeight;
-	vector<ValidArea> m_valids;
 	int m_triCount;
-	int m_cnt;
-	bool m_dir;
 	CCPoint m_beganTouchPoint;
 	bool m_validTouch;
 	CCPoint m_validTouchPosition;
@@ -270,24 +268,6 @@ public:
 	{
 		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 		pDispatcher->addTargetedDelegate(this, 0, false);
-	}
-	void addValidArea(float x, float y, float r)
-	{
-		ValidArea va;
-		va.x = x;
-		va.y = y;
-		va.r = r;
-		m_valids.push_back(va);
-
-//		for(int i=0; i<m_triCount*3; i++)
-//		{
-//			CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
-//			if(ccpLength(t - ccp(x, y)) <= r*2)
-//			{
-//				m_vertices[i].z += clampf(500 / ccpLength(t - ccp(x, y)), 0, 50);
-////				m_textCoords[i].z += 500 / ccpLength(t - ccp(x, y));
-//			}
-//		}
 	}
 	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 	{
@@ -371,51 +351,50 @@ public:
 				
 
 		
-		if(1)
+		
+		m_validTouch = false;
+		//			local = m_validTouchPosition;
+		CCLog("%f %f", local.x, local.y);
+		m_waveRange = 100;
+		vector<Vertex3D*> movingVertices;
+		map<Vertex3D*, float> distance;
+		for(int i=0; i<m_triCount*3; i++)
 		{
-			m_validTouch = false;
-//			local = m_validTouchPosition;
-			CCLog("%f %f", local.x, local.y);
-			m_waveRange = 100;
-			vector<Vertex3D*> movingVertices;
-			map<Vertex3D*, float> distance;
-			for(int i=0; i<m_triCount*3; i++)
+			CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
+			if(ccpLength(t - local) <= m_waveRange)
 			{
-				CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
-				if(ccpLength(t - local) <= m_waveRange)
-				{
-					movingVertices.push_back(&m_vertices[i]);
-					distance[&m_vertices[i]] = ccpLength(t-local);
-				}
-			}
-			
-			for(auto i : movingVertices){
-				Vertex3D backup = m_backupVertices[i];
-				float r = distance[i];
-				float diffRad = atan2f(-1.f, 0.f); // 아래쪽으로.
-				//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-				CCPoint goalPosition = ccp(cosf(diffRad) * -200 / powf(r, 0.9f), sinf(diffRad) * -200 / powf(r, 0.9f));
-				goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
-				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.3f,
-																								 [=](CCPoint t){
-																									 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
-																									 //																								 i->y = backup.y + t;
-																								 },
-																								 [=](CCPoint t){
-																									 //for(auto i : movingVertices){
-																									 
-																									 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 1.f,
-																																														[=](CCPoint t){
-																																															*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
-																																														},
-																																														[=](CCPoint t){
-																																															*i = backup;
-																																														},
-																																														elasticOut));
-																									 //}
-																								 }));
+				movingVertices.push_back(&m_vertices[i]);
+				distance[&m_vertices[i]] = ccpLength(t-local);
 			}
 		}
+
+		for(auto i : movingVertices){
+			Vertex3D backup = m_backupVertices[i];
+			float r = distance[i];
+			float diffRad = atan2f(-1.f, 0.f); // 아래쪽으로.
+			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
+			CCPoint goalPosition = ccp(cosf(diffRad) * -200 / powf(r, 0.9f), sinf(diffRad) * -200 / powf(r, 0.9f));
+			goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
+			addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.3f,
+																							 [=](CCPoint t){
+																								 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																								 //																								 i->y = backup.y + t;
+																							 },
+																							 [=](CCPoint t){
+																								 //for(auto i : movingVertices){
+
+																								 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 1.f,
+																																													[=](CCPoint t){
+																																														*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																																													},
+																																													[=](CCPoint t){
+																																														*i = backup;
+																																													},
+																																													elasticOut));
+																								 //}
+																							 }));
+		}
+
 		
 		return true;
 	}
@@ -424,7 +403,7 @@ public:
 		DelaunayTriangulation delaunay;
 		for(auto i : points)
 		{
-			delaunay.PushVertex(i.x, i.y);
+			delaunay.PushVertex(i.x, i.y, i.z);
 		}
 		vector<Triangle> mTriangles2 = delaunay.getTriangles();
 		int nTri = mTriangles2.size();
@@ -444,21 +423,18 @@ public:
 		for(int i=0; i<nTri; i++){
 			for(int j=0; j<3; j++){
 				float ss = ks19937::getIntValue(0, 0);
-				//				CCLog("(%f, %f)", delaunay.getVertices()[mTriangles2[i].vt[j]].x, mVertices[mTriangles2[i].vt[j]].y);
-				Vertex3D temp = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x, delaunay.getVertices()[mTriangles2[i].vt[j]].y,
-																		 ss);
+				Vertex3D temp = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x, 
+																		 delaunay.getVertices()[mTriangles2[i].vt[j]].y,
+																		 0); // delaunay.getVertices()[mTriangles2[i].vt[j]].extraData);
+//				temp.z = points
 				m_vertices[i*3 + j] = temp;
-				//m_backupVertices[&m_vertices[i*3 + j]] = temp;
-				//				m_backupVertices[&vertices]
-				m_textCoords[i*3 + j] = Vertex3DMake((temp.x + m_halfWidth) / (2*m_halfWidth), (m_halfHeight - temp.y) / (2*m_halfHeight), ss);
+				m_textCoords[i*3 + j] = Vertex3DMake((temp.x) / (2*m_halfWidth),
+																						 1.f - (temp.y) / (2*m_halfHeight), temp.z);
 				m_colors[i*3 + j] = ccc4f(ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), 1.f);
 			}
 		}
 		
 		
-		
-		addValidArea(50, -13, 100);
-		addValidArea(-49, 7, 70);
 		
 		
 		for(int i=0; i<nTri; i++){
@@ -493,41 +469,71 @@ public:
 		m_vertices = nullptr;
 		m_colors = nullptr;
 		
-		m_points.push_back(Vertex3DMake(-halfWidth, halfHeight, 0));
-		m_points.push_back(Vertex3DMake(halfWidth, halfHeight, 0));
+//		m_points.push_back(Vertex3DMake(-halfWidth, halfHeight, 0));
+//		m_points.push_back(Vertex3DMake(halfWidth, halfHeight, 0));
+//		
+//		m_points.push_back(Vertex3DMake(-halfWidth, -halfHeight, 0));
+//		m_points.push_back(Vertex3DMake(halfWidth, -halfHeight, 0));
+		m_points.push_back(Vertex3DMake(0, halfHeight * 2, 0));
+		m_points.push_back(Vertex3DMake(halfWidth * 2, halfHeight * 2, 0));
 		
-		m_points.push_back(Vertex3DMake(-halfWidth, -halfHeight, 0));
-		m_points.push_back(Vertex3DMake(halfWidth, -halfHeight, 0));
+		m_points.push_back(Vertex3DMake(0, 0, 0));
+		m_points.push_back(Vertex3DMake(halfWidth * 2, 0, 0));
 
-		int hm = 10;
-		int wm = 10;
-		for(int y=-halfHeight + hm; y<=halfHeight - 20; y+=hm)
+		int hm = 30;
+		int wm = 30;
+		for(int y=0 + hm; y<=halfHeight * 2 - 20; y+=hm)
 		{
-			for(int x=-halfWidth + wm; x<=halfWidth - 20; x+=wm)
+			for(int x=0 + wm; x<=halfWidth * 2 - 20; x+=wm)
 			{
-				m_points.push_back(Vertex3DMake(x, y - ks19937::getIntValue(0, 0), 0));
+				m_points.push_back(Vertex3DMake(x, y, 0));
 			}
 		}
 		
-		
+		////////////////////
+		// 실루엣 z 정보 넣는 곳.
+#if 0
+		CCImage* img = new CCImage();
+		img->initWithImageFileThreadSafe(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str());
+		unsigned char* oData = img->getData();	
+		int height = img->getHeight();
+		int width = img->getWidth();
+
+		//for(int y=0;y<oy;y++){
+			//for(int x=0;x<ox;x++){
+				//i = (y*ox+x)*4;
+				//oData[i]; // r값
+				//oData[i+1]; //g값
+				//oData[i+2]; //b값
+				//oData[i+3]; //투명도
+			//}
+		//}
+		for(auto& point : m_points)
+		{
+			int i = ((height / 2 - point.y) * width + (point.x + width / 2))*4;
+			point.z = oData[i];
+		}
+		img->release();
+		/////////////////////
+#endif
 		triangulationWithPoints(m_points);
 		
 		
-//		CommonButton* cb = CommonButton::create("left", 20, CCSizeMake(100, 100), CommonButtonOrange,
-//																						0);
-//		addChild(cb, 1);
-//		cb->setPosition(ccp( 100, 100));
-//		cb->setFunction([=](CCObject* obj){
-//			m_imageRotationDegree -= 10;	
-//		});		
-//
-//		CommonButton* cb2 = CommonButton::create("right", 20, CCSizeMake(100, 100), CommonButtonOrange,
-//																						0);
-//		addChild(cb2, 1);
-//		cb2->setPosition(ccp( 100, 200));
-//		cb2->setFunction([=](CCObject* obj){
-//			m_imageRotationDegree += 10;	
-//		});		
+		CommonButton* cb = CommonButton::create("left", 20, CCSizeMake(100, 100), CommonButtonOrange,
+																						0);
+		addChild(cb, 1);
+		cb->setPosition(ccp( 100, 100));
+		cb->setFunction([=](CCObject* obj){
+			m_imageRotationDegree -= 10;	
+		});		
+
+		CommonButton* cb2 = CommonButton::create("right", 20, CCSizeMake(100, 100), CommonButtonOrange,
+																						0);
+		addChild(cb2, 1);
+		cb2->setPosition(ccp( 100, 200));
+		cb2->setFunction([=](CCObject* obj){
+			m_imageRotationDegree += 10;	
+		});		
 
 		return true;
 	}
@@ -561,41 +567,15 @@ public:
 
 		kmGLPushMatrix();
 		
-		
-//		kmMat4 transfrom4x4;
-//		
-//    // Convert 3x3 into 4x4 matrix
-//    CCAffineTransform tmpAffine = this->nodeToParentTransform();
-//    CGAffineToGL(&tmpAffine, transfrom4x4.mat);
-//		
-//    // Update Z vertex manually
-//    transfrom4x4.mat[14] = -zeye;
-//		kmGLLoadIdentity();
-//    kmGLMultMatrix( &transfrom4x4 );
-		
-		
-//		CCSize size = CCDirector::sharedDirector()->getWinSize();
-//		float zeye = CCDirector::sharedDirector()->getZEye();
-//		
-//		kmMat4 matrixPerspective, matrixLookup;
-//		kmGLMatrixMode(KM_GL_PROJECTION);
-//		kmGLLoadIdentity();
-//		kmMat4PerspectiveProjection( &matrixPerspective, 60, (GLfloat)size.width/size.height, 0.1f, zeye*2);
-//		kmGLMultMatrix(&matrixPerspective);
-//		
-//		kmGLMatrixMode(KM_GL_MODELVIEW);
-//		kmGLLoadIdentity();
-//		kmVec3 eye, center, up;
-//		kmVec3Fill( &eye, size.width/2, size.height/2, zeye);
-//		kmVec3Fill( &center, size.width/2, size.height/2, 0.f );
-//		kmVec3Fill( &up, 0.0f, 1.0f, 0.0f);
-//		kmMat4LookAt(&matrixLookup, &eye, &center, &up);
-//		matrixLookup.mat[12] = matrixLookup.mat[13] = 150.f;
-//		kmGLMultMatrix(&matrixLookup);
-//		
-//		kmGLGetMatrix(KM_GL_MODELVIEW, &mv2);
-
+		//CCAffineTransform tmpAffine = CCAffineTransformIdentity;
+		//kmMat4 glMat;
+		//CCAffineTransformTranslate(tmpAffine, -texture->getContentSizeInPixels().width, -texture->getContentSizeInPixels().height);
+		//CGAffineToGL(&tmpAffine, glMat.mat);
+		kmGLTranslatef(-texture->getContentSizeInPixels().width / 2.f, 
+									 -texture->getContentSizeInPixels().height / 2.f, 0);
 		kmGLRotatef(m_imageRotationDegree, 0, 1, 0);
+//		kmGLTranslatef(texture->getContentSizeInPixels().width / 2.f, 
+//									 texture->getContentSizeInPixels().height / 2.f, 0);
     //cocos2d::gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
 		
 		int verticesCount = m_triCount * 3;
