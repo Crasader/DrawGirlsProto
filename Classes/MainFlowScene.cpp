@@ -35,6 +35,7 @@
 #include "ScrollMenu.h"
 #include "MyLocalization.h"
 #include "NewMainFlowScene.h"
+#include "RankNewPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -844,7 +845,10 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_rank)
 		{
-			is_menu_enable = true;
+			RankNewPopup* t_popup = RankNewPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			addChild(t_popup, kMainFlowZorder_popup);
+			
 //			RankPopup* t_rp = RankPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
 //			addChild(t_rp, kMainFlowZorder_popup);
 		}

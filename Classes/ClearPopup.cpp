@@ -1019,22 +1019,19 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			CCPoint rank_position = ccp(13,13);
 			if(i == 0)
 			{
-				CCSprite* gold_medal = CCSprite::create("puzzle_right_rank_gold.png");
-				gold_medal->setScale(0.7f);
+				CCSprite* gold_medal = CCSprite::create("rank_gold.png");
 				gold_medal->setPosition(rank_position);
 				list_cell_case->addChild(gold_medal);
 			}
 			else if(i == 1)
 			{
-				CCSprite* silver_medal = CCSprite::create("puzzle_right_rank_silver.png");
-				silver_medal->setScale(0.7f);
+				CCSprite* silver_medal = CCSprite::create("rank_silver.png");
 				silver_medal->setPosition(rank_position);
 				list_cell_case->addChild(silver_medal);
 			}
 			else if(i == 2)
 			{
-				CCSprite* bronze_medal = CCSprite::create("puzzle_right_rank_bronze.png");
-				bronze_medal->setScale(0.7f);
+				CCSprite* bronze_medal = CCSprite::create("rank_bronze.png");
 				bronze_medal->setPosition(rank_position);
 				list_cell_case->addChild(bronze_medal);
 			}
