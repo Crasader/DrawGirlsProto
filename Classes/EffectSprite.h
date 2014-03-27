@@ -42,7 +42,26 @@ public:
 	{
 		m_currentMode = CurrentMode::kNone;
 	}
-	
+	static EffectSprite* createWithTexture(CCTexture2D *pTexture)
+	{
+    EffectSprite *pobSprite = new EffectSprite();
+    if (pobSprite && pobSprite->initWithTexture(pTexture))
+    {
+			pobSprite->autorelease();
+			return pobSprite;
+    }
+    CC_SAFE_DELETE(pobSprite);
+    return NULL;
+	}
+//	bool initWithTexture(CCTexture2D *pTexture)
+//	{
+//    CCAssert(pTexture != NULL, "Invalid texture for sprite");
+//		
+//    CCRect rect = CCRectZero;
+//    rect.size = pTexture->getContentSize();
+//    
+//    return initWithTexture(pTexture, rect);
+//	}
 	virtual ~EffectSprite()
 	{
 		
