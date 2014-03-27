@@ -339,50 +339,54 @@ class KSGradualValue : public CCNode
 protected:
 	std::function<void(T)> m_f;
 	std::function<void(T)> m_fFinish;
+	std::function<float(float)> m_timeFunctor;
 	T m_a;
 	T m_b;
 	T m_s;
 	FromToWithDuration2<T> fromTo;
+	float m_flowTime;
 public:
 	virtual ~KSGradualValue(){
 	}
-	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f)
+	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f, std::function<float(float)> tf = nullptr)
 	{
 		KSGradualValue* newO = new KSGradualValue;
-		newO->init(a, b, s, __f);
+		newO->init(a, b, s, __f, tf);
 		newO->autorelease();
 		return newO;
 	}
-	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish)
+	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish,
+																std::function<float(float)> tf = nullptr)
 	{
 		KSGradualValue* newO = new KSGradualValue;
-		newO->init(a, b, s, __f, __finish);
+		newO->init(a, b, s, __f, __finish, tf);
 		newO->autorelease();
 		return newO;
 	}
-	bool init(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish)
+	bool init(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish, std::function<float(float)> tf)
 	{
-		
+		m_flowTime = 0;
 		m_a = a;
 		m_b = b;
 		m_f = __f;
+		m_timeFunctor = tf;
 		m_fFinish = __finish;
 		
-		fromTo.init(m_a, m_b, s);
+		fromTo.init(m_a, m_b, s, tf);
 		
 		scheduleUpdate();
 		return true;
 	}
-	bool init(T a, T b, float s, std::function<void(T)> __f)
+	bool init(T a, T b, float s, std::function<void(T)> __f, std::function<float(float)> tf)
 	{
-		return init(a, b, s, __f, [](T t){});
+		return init(a, b, s, __f, [](T t){}, tf);
 	}
 	void update(float dt)
 	{
-		dt = 1/60.f;
+		m_flowTime += 1/60.f;
 		T val = fromTo.getValue();
 		m_f(val);
-		bool result = fromTo.step(dt);
+		bool result = fromTo.absStep(m_flowTime);
 		if(result)
 		{
 		}
