@@ -18,6 +18,13 @@
 #include "StarGoldData.h"
 #include "GDWebSprite.h"
 #include "CommonButton.h"
+#include "KSUtil.h"
+#include "ks19937.h"
+#include "EasingAction.h"
+#include "EffectSprite.h"
+#include "CCGL.h"
+#include "CommonButton.h"
+#include "support/TransformUtils.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -35,98 +42,593 @@ static inline Vertex2D Vertex2DMake(GLfloat inX,GLfloat inY){
 	return ret;
 }
 
-class MyNode : public CCNode{
+typedef struct {
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
+} Vertex3D;
+
+static inline Vertex3D Vertex3DMake(GLfloat inX,GLfloat inY, GLfloat inZ){
+	Vertex3D ret;
+	ret.x = inX;
+	ret.y = inY;
+	ret.z = inZ;
+	return ret;
+}
+class Vertex{
 public:
-  Vertex2D vertices[9];
-	Vertex2D textCoords[9];
-	CCTexture2D *texture;
-	int cnt;
-	bool dir;
-	bool init(){
-		if(!CCNode::init())return false;
-		
-		texture = CCTextureCache::sharedTextureCache()->addImage("bmTest.png");
-		
-		GLfloat size = texture->getPixelsWide()/2;
-		
-		//삼각형좌표들
-		vertices[0] = Vertex2DMake(-size,size);
-		vertices[1] = Vertex2DMake(size,size);
-		vertices[2] = Vertex2DMake(-size/2,size/2);
-		vertices[3] = Vertex2DMake(size/2,size/2);
-		vertices[4] = Vertex2DMake(-size/2,-size/2);
-		vertices[5] = Vertex2DMake(size/2,-size/2);
-		vertices[6] = Vertex2DMake(-size,-size);
-		vertices[7] = Vertex2DMake(size,-size);
-		vertices[8] = Vertex2DMake(size,size);
-		
-		//우측상단이 (0,0), 좌측하단이 (1,1)
-		textCoords[0] = Vertex2DMake(0,0);
-		textCoords[1] = Vertex2DMake(1,0);
-		textCoords[2] = Vertex2DMake(0.25,0.25);
-		textCoords[3] = Vertex2DMake(0.75,0.25);
-		textCoords[4] = Vertex2DMake(0.25,0.75);
-		textCoords[5] = Vertex2DMake(0.75,0.75);
-		textCoords[6] = Vertex2DMake(0,1);
-		textCoords[7] = Vertex2DMake(1,1);
-		textCoords[8] = Vertex2DMake(1,0);
-		
-		
-		cnt = 0;
-		dir = true;
+ float x, y;
+ Vertex(){ x=y=0.0f; }
+ Vertex(const Vertex& v){
+  x=v.x; y=v.y;
+ }
+ Vertex(float _x, float _y){
+  x=_x; y=_y;
+ }
+ bool operator==(const Vertex& v){
+  return (x==v.x && y==v.y);
+ }
+};
+
+class Triangle{
+public:
+ int vt[3];
+ Triangle(){ memset(vt, 0, sizeof(vt)); }
+ Triangle(const Triangle& t){ memcpy(vt, t.vt, sizeof(vt)); }
+ Triangle(int v1, int v2, int v3){
+  vt[0]=v1; vt[1]=v2; vt[2]=v3;
+ }
+};
+
+#define INIT_SUPERTRI_SIZE 99999.0f
+#define sqre(x) (x*x)
+class DelaunayTriangulation{
+private:
+	vector<Vertex> mVertices;
+	vector<Triangle> mTriangles;
+public:
+	vector<Vertex> getVertices(){return mVertices;}
+	vector<Triangle> getTriangles(){
+		vector<Triangle> retValue;
+		for(auto i : mTriangles)
+		{
+			if(fabsf(mVertices[i.vt[0]].x) == INIT_SUPERTRI_SIZE)
+				continue;
+			if(fabsf(mVertices[i.vt[0]].y) == INIT_SUPERTRI_SIZE)
+				continue;
+			if(fabsf(mVertices[i.vt[1]].x) == INIT_SUPERTRI_SIZE)
+				continue;
+			if(fabsf(mVertices[i.vt[1]].y) == INIT_SUPERTRI_SIZE)
+				continue;
+			if(fabsf(mVertices[i.vt[2]].x) == INIT_SUPERTRI_SIZE)
+				continue;
+			if(fabsf(mVertices[i.vt[2]].y) == INIT_SUPERTRI_SIZE)
+				continue;
+
+			retValue.push_back(i);
+		}
+		return retValue;
+	}
+	DelaunayTriangulation(){
+		mVertices.push_back( Vertex(0, INIT_SUPERTRI_SIZE) );
+		mVertices.push_back( Vertex(-INIT_SUPERTRI_SIZE, -INIT_SUPERTRI_SIZE) );
+		mVertices.push_back( Vertex(INIT_SUPERTRI_SIZE, -INIT_SUPERTRI_SIZE) );
+		mTriangles.push_back( Triangle(0,1,2) );
+	}
+	void PushVertex(float x, float y){
+		Vertex vt(x,y);
+		mVertices.push_back( vt );
+		int iVtx = mVertices.size()-1;
+		int iTri = SearchCoverTriangle(vt);
+		while( iTri==-1 ){
+			for(int i=0; i<3; i++){
+				mVertices[i].x*=2.0f;
+				mVertices[i].y*=2.0f;
+			}
+			iTri = SearchCoverTriangle(vt);
+		}
+		Triangle mainTri = mTriangles[iTri];
+		mTriangles.erase(mTriangles.begin()+iTri);
+		for(int i=0; i<3; i++){
+			recTriangulation(mainTri.vt[i], mainTri.vt[(i+1)%3], iVtx);
+		}
+	}
+	// print to consol
+	void PrintTriangles(){
+		vector<Triangle> mTriangles2 = getTriangles();
+		int nTri = mTriangles2.size(); 
+		for(int i=0; i<nTri; i++){
+			for(int j=0; j<3; j++){
+				CCLog("(%f, %f)", mVertices[mTriangles2[i].vt[j]].x, mVertices[mTriangles2[i].vt[j]].y);
+				//cout<<"("<<mVertices[mTriangles2[i].vt[j]].x<<","<<mVertices[mTriangles2[i].vt[j]].y<<")  ";
+			}
+			cout<<endl;
+		}
+	}
+	//void RenderVertices(){
+		//unsigned vtxCount = mVertices.size();
+		//glBegin(GL_POINTS);
+		//glColor3f(1, 0, 0);
+		//for(unsigned i=0; i<vtxCount; i++){
+			//glVertex2f(mVertices[i].x, mVertices[i].y);
+		//}
+		//glEnd();
+	//}
+	//void RenderTriangles(){
+		//unsigned triCount = mTriangles.size();
+		//glBegin(GL_TRIANGLES);
+		//for(unsigned i=0; i<triCount; i++){
+			//glColor3f((float)(i*2)/(float)triCount, 1.0f/(float)i, (float)i/(float)triCount);
+			//for(int k=0; k<3; k++)
+				//glVertex2f(mVertices[mTriangles[i].vt[k]].x, mVertices[mTriangles[i].vt[k]].y);
+		//}
+		//glEnd();
+	//}
+private:
+	void recTriangulation(int edgeVtx1, int edgeVtx2, int iVtx){
+		int iAdjTri, adjEdgeOrder;
+		iAdjTri = SearchAdjecentTriangle(edgeVtx2, edgeVtx1, &adjEdgeOrder);
+		if( iAdjTri!=-1 ){
+			if( InCircumcircle(mTriangles[iAdjTri], mVertices[iVtx]) ){
+				Triangle adjTri = mTriangles[iAdjTri];
+				mTriangles.erase(mTriangles.begin()+iAdjTri);
+				recTriangulation(adjTri.vt[adjEdgeOrder], adjTri.vt[(2+adjEdgeOrder)%3], iVtx);
+				recTriangulation(adjTri.vt[(1+adjEdgeOrder)%3], adjTri.vt[(2+adjEdgeOrder)%3], iVtx);
+				return;
+			}
+		}
+		if( TriangleAreaX2(mVertices[iVtx], mVertices[edgeVtx1], mVertices[edgeVtx2]) >= 0 )
+			mTriangles.push_back( Triangle(iVtx, edgeVtx1, edgeVtx2) );
+		else
+			mTriangles.push_back( Triangle(iVtx, edgeVtx2, edgeVtx1) );
+	}
+	// > 0 : ccw, < 0 : cw,  == 0 : on same line
+	float TriangleAreaX2(const Vertex& v1, const Vertex& v2, const Vertex& v3){
+		return (v2.x - v1.x)*(v3.y - v1.y) - (v2.y - v1.y)*(v3.x - v1.x);
+	}
+	bool IsIn(const Triangle& tri, const Vertex& vtx){
+		if( TriangleAreaX2(vtx, mVertices[tri.vt[0]], mVertices[tri.vt[1]]) < 0 )
+			return false;
+		if( TriangleAreaX2(vtx, mVertices[tri.vt[1]], mVertices[tri.vt[2]]) < 0 )
+			return false;
+		if( TriangleAreaX2(vtx, mVertices[tri.vt[2]], mVertices[tri.vt[0]]) < 0 )
+			return false;
 		return true;
 	}
-	
-	void draw(){
-		
-		
-		
-		//애니메이션을 위한 카운트값변경
-		GLfloat dt = 0.5;
-		if(dir)dt=-0.5;
-		
-		if(cnt>60){
-			dir=!dir;
-			cnt=0;
+	int SearchCoverTriangle(const Vertex& v){
+		for(int i=mTriangles.size()-1; i>=0; i--){
+			if( IsIn( mTriangles[i], v) )
+				return i;
 		}
-		if(cnt==0)dt=0;
-		cnt++;
-		
+		return -1;
+	}
+	// return triangle index. pOutEdgeOrder is important.
+	// triangle index set and edge order is; 0-1: 0, 1-2: 1, 2-0: 2
+	int SearchAdjecentTriangle(int iv1, int iv2, int* pOutEdgeOrder){
+		for(int i=mTriangles.size()-1; i>=0; i--){
+			for(int j=0; j<3; j++){
+				if( mTriangles[i].vt[j]==iv1 && mTriangles[i].vt[(j+1)%3]==iv2 ){
+					if( pOutEdgeOrder ) *pOutEdgeOrder = j;
+					return i;
+				}
+				if( mTriangles[i].vt[j]==iv2 && mTriangles[i].vt[(j+1)%3]==iv1 ){
+					if( pOutEdgeOrder ) *pOutEdgeOrder = j;
+					return i;
+				}
+			}
+		}
+		return -1;
+	}
+	bool InCircumcircle(const Triangle& tri, const Vertex& vtx){
+		return (sqre(mVertices[tri.vt[0]].x) + sqre(mVertices[tri.vt[0]].y)) * TriangleAreaX2(mVertices[tri.vt[1]], mVertices[tri.vt[2]], vtx) -
+			(sqre(mVertices[tri.vt[1]].x) + sqre(mVertices[tri.vt[1]].y)) * TriangleAreaX2(mVertices[tri.vt[0]], mVertices[tri.vt[2]], vtx) +
+			(sqre(mVertices[tri.vt[2]].x) + sqre(mVertices[tri.vt[2]].y)) * TriangleAreaX2(mVertices[tri.vt[0]], mVertices[tri.vt[1]], vtx) -
+			(sqre(vtx.x) + sqre(vtx.y)) * TriangleAreaX2(mVertices[tri.vt[0]], mVertices[tri.vt[1]], mVertices[tri.vt[2]]) > 0;
+	}
+};
 
-		//점이동 시키기 애니메이션
+
+struct ValidArea
+{
+	float x;
+	float y;
+	float r;
+};
+class MyNode : public CCLayer{
+public:
+	
+  Vertex3D* m_vertices;
+	map<Vertex3D*, Vertex3D> m_backupVertices;
+	Vertex3D* m_textCoords;
+	ccColor4F* m_colors;
+	vector<Vertex3D> m_points;
+	CCTexture2D *texture;
+	GLfloat m_halfWidth;
+	GLfloat m_halfHeight;
+	vector<ValidArea> m_valids;
+	int m_triCount;
+	int m_cnt;
+	bool m_dir;
+	CCPoint m_beganTouchPoint;
+	bool m_validTouch;
+	CCPoint m_validTouchPosition;
+	float m_waveRange;
+	float m_imageRotationDegree;	
+	///
+	
+	int colorRampUniformLocation;   // 1
+	CCTexture2D* colorRampTexture;  // 2
+	///////////////////
+	virtual ~MyNode()
+	{
+		delete [] m_textCoords;
+		delete [] m_vertices;
+		
+		texture->release();
+	}
+	virtual void registerWithTouchDispatcher ()
+	{
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, 0, false);
+	}
+	void addValidArea(float x, float y, float r)
+	{
+		ValidArea va;
+		va.x = x;
+		va.y = y;
+		va.r = r;
+		m_valids.push_back(va);
+
+//		for(int i=0; i<m_triCount*3; i++)
+//		{
+//			CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
+//			if(ccpLength(t - ccp(x, y)) <= r*2)
+//			{
+//				m_vertices[i].z += clampf(500 / ccpLength(t - ccp(x, y)), 0, 50);
+////				m_textCoords[i].z += 500 / ccpLength(t - ccp(x, y));
+//			}
+//		}
+	}
+	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+	{
+		return; // disable
+		CCPoint touchLocation = pTouch->getLocation();
+		CCPoint local = convertToNodeSpace(touchLocation);
+		
+		CCPoint diff = -(local - m_beganTouchPoint);
+		
+		if(m_validTouch && ccpLength(diff) > 30)
 		{
-		Vertex2D old2 = vertices[2];
-		vertices[2] = Vertex2DMake(old2.x, old2.y+dt*1);
+			m_validTouch = false;
+			local = m_validTouchPosition;
+			CCLog("%f %f", local.x, local.y);
+			
+			vector<Vertex3D*> movingVertices;
+			map<Vertex3D*, float> distance;
+			for(int i=0; i<m_triCount*3; i++)
+			{
+				CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
+				if(ccpLength(t - local) <= m_waveRange)
+				{
+					movingVertices.push_back(&m_vertices[i]);
+					distance[&m_vertices[i]] = ccpLength(t-local);
+				}
+			}
+			
+			for(auto i : movingVertices){
+				Vertex3D backup = m_backupVertices[i];
+				float r = distance[i];
+				float diffRad = atan2f(diff.y, diff.x);
+//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
+				CCPoint goalPosition = ccp(cosf(diffRad) * -200 / powf(r, 0.9f), sinf(diffRad) * -200 / powf(r, 0.9f));
+				goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
+				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.3f,
+																							 [=](CCPoint t){
+																								 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+//																								 i->y = backup.y + t;
+																							 },
+																							 [=](CCPoint t){
+																								 //for(auto i : movingVertices){
+																								 
+																								 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 1.f,
+																																												[=](CCPoint t){
+																																													*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																																												},
+																																												[=](CCPoint t){
+																																													*i = backup;
+																																												},
+																																												elasticOut));
+																								 //}
+																							 }));
+			}
 		}
+	}
+	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+	{
+#if 0
+		CCPoint touchLocation = pTouch->getLocation();
+		CCPoint local = convertToNodeSpace(touchLocation);
+		
+		m_validTouch = false;
+		for(auto validArea : m_valids)
 		{
-		Vertex2D old2 = vertices[3];
-			vertices[3] = Vertex2DMake(old2.x, old2.y+dt*1);
+			CCPoint point = ccp(validArea.x, validArea.y);
+			float distance = ccpLength(point - local);
+			if(distance <= validArea.r)
+			{
+				m_validTouchPosition = point;
+				m_beganTouchPoint = local;
+				m_validTouch = true;
+				m_waveRange = validArea.r;
+			}
 		}
+#endif
+		CCPoint touchLocation = pTouch->getLocation();
+		CCPoint local = convertToNodeSpace(touchLocation);
+		
+		m_validTouch = false;
+
+				
+
+		
+		if(1)
 		{
-		Vertex2D old2 = vertices[4];
-			vertices[4] = Vertex2DMake(old2.x, old2.y+dt*-1);
-		}
-		{
-		Vertex2D old2 = vertices[5];
-			vertices[5] = Vertex2DMake(old2.x, old2.y+dt*-1);
+			m_validTouch = false;
+//			local = m_validTouchPosition;
+			CCLog("%f %f", local.x, local.y);
+			m_waveRange = 100;
+			vector<Vertex3D*> movingVertices;
+			map<Vertex3D*, float> distance;
+			for(int i=0; i<m_triCount*3; i++)
+			{
+				CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
+				if(ccpLength(t - local) <= m_waveRange)
+				{
+					movingVertices.push_back(&m_vertices[i]);
+					distance[&m_vertices[i]] = ccpLength(t-local);
+				}
+			}
+			
+			for(auto i : movingVertices){
+				Vertex3D backup = m_backupVertices[i];
+				float r = distance[i];
+				float diffRad = atan2f(-1.f, 0.f); // 아래쪽으로.
+				//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
+				CCPoint goalPosition = ccp(cosf(diffRad) * -200 / powf(r, 0.9f), sinf(diffRad) * -200 / powf(r, 0.9f));
+				goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
+				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.3f,
+																								 [=](CCPoint t){
+																									 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																									 //																								 i->y = backup.y + t;
+																								 },
+																								 [=](CCPoint t){
+																									 //for(auto i : movingVertices){
+																									 
+																									 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 1.f,
+																																														[=](CCPoint t){
+																																															*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																																														},
+																																														[=](CCPoint t){
+																																															*i = backup;
+																																														},
+																																														elasticOut));
+																									 //}
+																								 }));
+			}
 		}
 		
+		return true;
+	}
+	void triangulationWithPoints(const vector<Vertex3D>& points)
+	{
+		DelaunayTriangulation delaunay;
+		for(auto i : points)
+		{
+			delaunay.PushVertex(i.x, i.y);
+		}
+		vector<Triangle> mTriangles2 = delaunay.getTriangles();
+		int nTri = mTriangles2.size();
+		m_triCount = nTri;
+		if(m_textCoords)
+		{
+			delete [] m_textCoords;
+		}
+		if(m_vertices)
+			delete [] m_vertices;
+		if(m_colors)
+			delete [] m_colors;
+		
+		m_textCoords = new Vertex3D[nTri * 3];
+		m_vertices = new Vertex3D[nTri * 3];
+		m_colors = new ccColor4F[nTri * 3];
+		for(int i=0; i<nTri; i++){
+			for(int j=0; j<3; j++){
+				float ss = ks19937::getIntValue(0, 0);
+				//				CCLog("(%f, %f)", delaunay.getVertices()[mTriangles2[i].vt[j]].x, mVertices[mTriangles2[i].vt[j]].y);
+				Vertex3D temp = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x, delaunay.getVertices()[mTriangles2[i].vt[j]].y,
+																		 ss);
+				m_vertices[i*3 + j] = temp;
+				//m_backupVertices[&m_vertices[i*3 + j]] = temp;
+				//				m_backupVertices[&vertices]
+				m_textCoords[i*3 + j] = Vertex3DMake((temp.x + m_halfWidth) / (2*m_halfWidth), (m_halfHeight - temp.y) / (2*m_halfHeight), ss);
+				m_colors[i*3 + j] = ccc4f(ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), 1.f);
+			}
+		}
+		
+		
+		
+		addValidArea(50, -13, 100);
+		addValidArea(-49, 7, 70);
+		
+		
+		for(int i=0; i<nTri; i++){
+			for(int j=0; j<3; j++){
+				m_backupVertices[&m_vertices[i*3 + j]] = m_vertices[i*3 + j];
+			}
+		}
+	}
+	static MyNode* create(CCTexture2D* tex)
+	{
+		MyNode* n = new MyNode();
+		
+		n->init(tex);
+		n->autorelease();
+		
+		return n;
+	}
+	bool init(CCTexture2D* tex){
+		if(!CCLayer::init())return false;
+		
+		setTouchEnabled(true);
+		m_imageRotationDegree = 0.f;
+		tex->retain();
+		texture = tex;//CCTextureCache::sharedTextureCache()->addImage("bmTest.png");
+		setContentSize(texture->getContentSize());
+		GLfloat halfWidth = texture->getPixelsWide()/2;
+		GLfloat halfHeight = texture->getPixelsHigh()/2;	
+		m_halfWidth = halfWidth;
+		m_halfHeight = halfHeight;
+		
+		m_textCoords = nullptr;
+		m_vertices = nullptr;
+		m_colors = nullptr;
+		
+		m_points.push_back(Vertex3DMake(-halfWidth, halfHeight, 0));
+		m_points.push_back(Vertex3DMake(halfWidth, halfHeight, 0));
+		
+		m_points.push_back(Vertex3DMake(-halfWidth, -halfHeight, 0));
+		m_points.push_back(Vertex3DMake(halfWidth, -halfHeight, 0));
+
+		int hm = 10;
+		int wm = 10;
+		for(int y=-halfHeight + hm; y<=halfHeight - 20; y+=hm)
+		{
+			for(int x=-halfWidth + wm; x<=halfWidth - 20; x+=wm)
+			{
+				m_points.push_back(Vertex3DMake(x, y - ks19937::getIntValue(0, 0), 0));
+			}
+		}
+		
+		
+		triangulationWithPoints(m_points);
+		
+		
+//		CommonButton* cb = CommonButton::create("left", 20, CCSizeMake(100, 100), CommonButtonOrange,
+//																						0);
+//		addChild(cb, 1);
+//		cb->setPosition(ccp( 100, 100));
+//		cb->setFunction([=](CCObject* obj){
+//			m_imageRotationDegree -= 10;	
+//		});		
+//
+//		CommonButton* cb2 = CommonButton::create("right", 20, CCSizeMake(100, 100), CommonButtonOrange,
+//																						0);
+//		addChild(cb2, 1);
+//		cb2->setPosition(ccp( 100, 200));
+//		cb2->setFunction([=](CCObject* obj){
+//			m_imageRotationDegree += 10;	
+//		});		
+
+		return true;
+	}
+	vector<Vertex3D*> findVertices(Vertex3D v)
+	{
+		vector<Vertex3D*> retValue;
+		for(int i=0; i<m_triCount*3; i++)
+		{
+			if(m_vertices[i].x == v.x && m_vertices[i].y == v.y)
+			{
+				retValue.push_back(&m_vertices[i]);
+			}
+		}
+		return retValue;
+	}	
+	void draw(){
+//		glEnable(GL_CULL_FACE);
+//    glCullFace(GL_BACK);
+		glEnable(GL_DEPTH_TEST);
+//		glEnable(GL_DEPTH_TEST);
+		//glLoadIdentity();
+//		kmGLLoadMatrix
+//		kmMat4 input;
+//		kmGLLoadMatrix(&input);
+//		kmGLMultMatrix(<#const kmMat4 *pIn#>)
+//		kmGLScalef(0.5f, 0.5f, 1.f);
+		CCSize size = CCDirector::sharedDirector()->getWinSize();
+		float zeye = CCDirector::sharedDirector()->getZEye();
+		kmMat4 mv, mv2;
+		kmGLGetMatrix(KM_GL_MODELVIEW, &mv);
+
+		kmGLPushMatrix();
+		
+		
+//		kmMat4 transfrom4x4;
+//		
+//    // Convert 3x3 into 4x4 matrix
+//    CCAffineTransform tmpAffine = this->nodeToParentTransform();
+//    CGAffineToGL(&tmpAffine, transfrom4x4.mat);
+//		
+//    // Update Z vertex manually
+//    transfrom4x4.mat[14] = -zeye;
+//		kmGLLoadIdentity();
+//    kmGLMultMatrix( &transfrom4x4 );
+		
+		
+//		CCSize size = CCDirector::sharedDirector()->getWinSize();
+//		float zeye = CCDirector::sharedDirector()->getZEye();
+//		
+//		kmMat4 matrixPerspective, matrixLookup;
+//		kmGLMatrixMode(KM_GL_PROJECTION);
+//		kmGLLoadIdentity();
+//		kmMat4PerspectiveProjection( &matrixPerspective, 60, (GLfloat)size.width/size.height, 0.1f, zeye*2);
+//		kmGLMultMatrix(&matrixPerspective);
+//		
+//		kmGLMatrixMode(KM_GL_MODELVIEW);
+//		kmGLLoadIdentity();
+//		kmVec3 eye, center, up;
+//		kmVec3Fill( &eye, size.width/2, size.height/2, zeye);
+//		kmVec3Fill( &center, size.width/2, size.height/2, 0.f );
+//		kmVec3Fill( &up, 0.0f, 1.0f, 0.0f);
+//		kmMat4LookAt(&matrixLookup, &eye, &center, &up);
+//		matrixLookup.mat[12] = matrixLookup.mat[13] = 150.f;
+//		kmGLMultMatrix(&matrixLookup);
+//		
+//		kmGLGetMatrix(KM_GL_MODELVIEW, &mv2);
+
+		kmGLRotatef(m_imageRotationDegree, 0, 1, 0);
+    //cocos2d::gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
+		
+		int verticesCount = m_triCount * 3;
 		//세팅
 		texture->getShaderProgram()->use();
 		
 		texture->getShaderProgram()->setUniformsForBuiltins();
 		
-		ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords );
+		ccGLBindTexture2D(texture->getName());
+//		ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords );
+//		
+//			
+////		//점배열설정
+////		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, textCoords);
+////		glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, vertices);
+////		
+////		//배열값이용해서 삼각형 그리기
+////		glDrawArrays(GL_TRIANGLES, 0, verticesCount);
 		
-		//점배열설정
-		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, textCoords);
-		glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, vertices);
+
+		ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords);
 		
-		//배열값이용해서 삼각형 그리기
-		glDrawArrays(GL_TRIANGLE_STRIP, 0,8);
+		glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
+		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 3, GL_FLOAT, GL_FALSE, 0, m_textCoords);
+//		glVertexAttribPointer(kCCVertexAttribFlag_Color, 4, GL_FLOAT, GL_FALSE, 0, m_colors);
+		glDrawArrays(GL_TRIANGLES, 0, verticesCount);
 		
+		kmGLPopMatrix();
 		
-		
+//		glDisable(GL_CULL_FACE);
+		glDisable(GL_DEPTH_TEST);
+//		CCDirector::sharedDirector()->setProjection(kCCDirectorProjection2D);
+
 	}
 };
 
