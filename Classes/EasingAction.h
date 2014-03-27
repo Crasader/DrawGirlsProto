@@ -8,7 +8,9 @@
 
 #ifndef DGproto_EasingAction_h
 #define DGproto_EasingAction_h
-
+float getTime(float t);
+float elasticOut(float time);
+float bounceOut(float time);
 
 
 #endif
