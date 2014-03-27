@@ -1,14 +1,18 @@
-//
-//  BlurVert.h
-//  DGproto
-//
-//  Created by ksoo k on 2014. 3. 24..
-//
-//
+R"(
 
-#ifndef DGproto_BlurVert_h
-#define DGproto_BlurVert_h
+attribute vec4 a_position;
+attribute vec2 a_texCoord;								
 
+#ifdef GL_ES											
+varying mediump vec2 v_texCoord;						
+#else													
+varying vec2 v_texCoord;								
+#endif													
 
+void main()												
+{														
+gl_Position = CC_MVPMatrix * a_position;			
+v_texCoord = a_texCoord;							
+}
 
-#endif
+)";

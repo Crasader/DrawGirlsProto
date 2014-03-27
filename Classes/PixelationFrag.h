@@ -1,14 +1,16 @@
-//
-//  PixelationFrag.h
-//  DGproto
-//
-//  Created by ksoo k on 2014. 3. 24..
-//
-//
+R"(
+																	
+varying vec2 v_texCoord;
 
-#ifndef DGproto_PixelationFrag_h
-#define DGproto_PixelationFrag_h
+uniform sampler2D CC_Texture0;
+uniform vec2 u_imageSize;
+void main()
+{
+	float dx = 10.*(1./u_imageSize.x);
+	float dy = 10.*(1./u_imageSize.y);
+	vec2 coord = vec2(dx*floor(v_texCoord.x/dx),
+										dy*floor(v_texCoord.y/dy));
+	gl_FragColor = texture2D(CC_Texture0, coord);
+}
 
-
-
-#endif
+)";
