@@ -50,6 +50,8 @@ public:
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
+	virtual ~FailPopup();
+	
 private:
 	
 	CCObject* target_final;
@@ -135,6 +137,10 @@ private:
 //	void resultLoadFriends(Json::Value result_data);
 //	void resultGetStageScoreList(Json::Value result_data);
 	void resultSavedUserData(Json::Value result_data);
+	
+	CCSprite* loading_img;
+	
+	void resultGetRank(Json::Value result_data);
 };
 
 #endif /* defined(__DGproto__FailPopup__) */
