@@ -658,10 +658,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_SI_itemOptionSilenceSec_i)	rv = "itemOption_silence_sec";
 	else if(t_key == kSDS_SI_itemOptionDoubleItemPercent_i)			rv = "itemOption_doubleItem_percent";
 	else if(t_key == kSDS_SI_itemOptionLongTimeSec_i)	rv = "itemOption_longTime_sec";
-	else if(t_key == kSDS_SI_itemOptionBossLittleEnergyPercent_i)	rv = "itemOption_bossLittleEnergy_percent";
-	else if(t_key == kSDS_SI_itemOptionSubSmallSizePercent_i)		rv = "itemOption_subSmallSize_percent";
-	else if(t_key == kSDS_SI_itemOptionSmallAreaPercent_i)			rv = "itemOption_smallArea_percent";
-	else if(t_key == kSDS_SI_itemOptionWidePerfectPercent_i)		rv = "itemOption_widePerfect_percent";
+	else if(t_key == kSDS_SI_itemOptionBaseSpeedUpUnit_i)	rv = "itemOption_baseSpeedUp_unit";
 	else if(t_key == kSDS_SI_level_int1_card_i)			rv = "level%d_card";
 	else if(t_key == kSDS_SI_level_i)					rv = "level";
 	else if(t_key == kSDS_SI_boss_s)					rv = "boss";
@@ -687,10 +684,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_CI_int1_abilitySilenceOptionSec_i)	rv = "%d_ability_silence_option_sec";
 	else if(t_key == kSDS_CI_int1_abilityDoubleItemOptionPercent_i)			rv = "%d_ability_doubleItem_option_percent";
 	else if(t_key == kSDS_CI_int1_abilityLongTimeOptionSec_i)				rv = "%d_ability_longTime_option_sec";
-	else if(t_key == kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i)	rv = "%d_ability_bossLittleEnergy_option_percent";
-	else if(t_key == kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i)		rv = "%d_ability_subSmallSize_option_percent";
-	else if(t_key == kSDS_CI_int1_abilitySmallAreaOptionPercent_i)			rv = "%d_ability_smallArea_option_percent";
-	else if(t_key == kSDS_CI_int1_abilityWidePerfectOptionPercent_i)		rv = "%d_ability_widePerfect_option_percent";
+	else if(t_key == kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i)	rv = "%d_ability_baseSpeedUp_option_unit";
 	else if(t_key == kSDS_CI_int1_imgInfo_s)					rv = "%d_imgInfo";
 	else if(t_key == kSDS_CI_int1_thumbnailInfo_s)				rv = "%d_thumbnailInfo";
 	else if(t_key == kSDS_CI_int1_aniInfoIsAni_b)				rv = "%d_aniInfo_isAni";

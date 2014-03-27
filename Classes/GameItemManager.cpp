@@ -308,7 +308,7 @@ void GameItemFast::acting()
 {
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "Fast");
 	
-	myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 10.f);
+	myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 1.9f);
 	
 	CCDelayTime* t_delay = CCDelayTime::create(SDS_GI(kSDF_stageInfo, mySD->getSilType(), "itemOption_fast_sec"));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemFast::ending));
@@ -319,7 +319,7 @@ void GameItemFast::acting()
 
 void GameItemFast::ending()
 {
-	myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 10.f);
+	myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 1.9f);
 	removeFromParentAndCleanup(true);
 }
 
@@ -372,17 +372,22 @@ void GameItemAttack::acting()
 {
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "attack");
 	
-	string missile_code;
-	if(mySGD->getIsUsingFriendCard())
-		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
-	else
-		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-	int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+	int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
+	int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
 	
-	//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
-	float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+	int weapon_rank = weapon_level/5 + 1;
+	weapon_level = weapon_level%5 + 1;
 	
-	myGD->communication("MP_createJackMissile", missile_type, rand()%3 + 1, missile_speed, myPoint.convertToCCP());
+	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 1, myPoint.convertToCCP());
+	
+//	string missile_code;
+//	missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+//	int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+//	
+//	//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
+//	float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+//	
+//	myGD->communication("MP_createJackMissile", missile_type, rand()%3 + 1, missile_speed, myPoint.convertToCCP());
 	removeFromParent();
 }
 
@@ -487,6 +492,7 @@ GameItemSilence* GameItemSilence::create(bool is_near)
 void GameItemSilence::acting()
 {
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "silence");
+	myGD->communication("UI_takeSilenceItem");
 	myGD->communication("CP_silenceItem", true);
 	CCDelayTime* t_delay = CCDelayTime::create(mySD->getSilenceItemOption());
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemSilence::finalAction));
@@ -648,9 +654,7 @@ void GameItemFire::myInit(bool is_near)
 														 item_img->setScale(t*0.5f);
 													 }, [](float t){}));
 	
-	if(mySGD->getIsUsingFriendCard())
-		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, mySGD->getSelectedFriendCardData().card_number)*((mySGD->getSelectedFriendCardData().card_level-1)*0.1f+1.f);
-	else if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
+	if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
 		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, myDSH->getIntegerForKey(kDSH_Key_selectedCard))*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard))-1)*0.1f+1.f);
 	else
 		damage = 1;
@@ -1115,18 +1119,18 @@ void GameItemManager::startItemSetting()
 {
 	for(int i=0;i<2;i++)
 	{
-//		if(rand()%2 == 0)
-//		{
-//			GameItemAttack* t_gia = GameItemAttack::create(true);
-//			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-//			addChild(t_gia);
-//		}
-//		else
-//		{
+		if(rand()%2 == 0)
+		{
+			GameItemAttack* t_gia = GameItemAttack::create(true);
+			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_gia);
+		}
+		else
+		{
 			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
 			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 			addChild(t_gisu);
-//		}
+		}
 	}
 	
 	if(mySD->getClearCondition() == kCLEAR_timeLimit || is_on_addTime)
@@ -1141,13 +1145,6 @@ void GameItemManager::startItemSetting()
 		GameItemFast* t_fast = GameItemFast::create(false);
 		t_fast->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_fast);
-	}
-	
-	if(mySGD->isUsingItem(kIC_critical))
-	{
-		GameItemFire* t_fire = GameItemFire::create(false);
-		t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-		addChild(t_fire);
 	}
 	
 	if(mySGD->isUsingItem(kIC_subOneDie))
@@ -1212,13 +1209,18 @@ void GameItemManager::counting()
 	
 	if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount()-child_base_cnt < 2)
 	{
-//		GameItemAttack* t_gia = GameItemAttack::create(false);
-//		t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-//		addChild(t_gia);
-		
-		GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(false);
-		t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-		addChild(t_gisu);
+		if(rand()%2 == 0)
+		{
+			GameItemAttack* t_gia = GameItemAttack::create(false);
+			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_gia);
+		}
+		else
+		{
+			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(false);
+			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_gisu);
+		}
 		
 		create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
 		counting_value = 0;
@@ -1246,13 +1248,13 @@ void GameItemManager::addItem()
 	int random_value = rand()%creatable_list.size();
 	ITEM_CODE create_item = creatable_list[random_value];
 	
-//	if(create_item == kIC_attack)
-//	{
-//		GameItemAttack* t_gia = GameItemAttack::create(rand()%2 == 0);
-//		t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-//		addChild(t_gia);
-//	}else
-	if(create_item == kIC_speedUp || create_item == kIC_attack)
+	if(create_item == kIC_attack)
+	{
+		GameItemAttack* t_gia = GameItemAttack::create(rand()%2 == 0);
+		t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+		addChild(t_gia);
+	}
+	else if(create_item == kIC_speedUp)
 	{
 		GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(rand()%2 == 0);
 		t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
@@ -1263,12 +1265,6 @@ void GameItemManager::addItem()
 		GameItemFast* t_fast = GameItemFast::create(false);
 		t_fast->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
 		addChild(t_fast);
-	}
-	else if(create_item == kIC_critical)
-	{
-		GameItemFire* t_fire = GameItemFire::create(false);
-		t_fire->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-		addChild(t_fire);
 	}
 	else if(create_item == kIC_subOneDie)
 	{
@@ -1409,7 +1405,6 @@ void GameItemManager::myInit()
 	double_item_cnt = mySGD->getDoubleItemValue();
 	
 	if(mySGD->isUsingItem(kIC_fast)){		creatable_list.push_back(kIC_fast);			selected_item_cnt++;	}
-	if(mySGD->isUsingItem(kIC_critical)){	creatable_list.push_back(kIC_critical);		selected_item_cnt++;	}
 	if(mySGD->isUsingItem(kIC_subOneDie)){	creatable_list.push_back(kIC_subOneDie);	selected_item_cnt++;	}
 	if(mySGD->isUsingItem(kIC_silence)){	creatable_list.push_back(kIC_silence);		selected_item_cnt++;	}
 	

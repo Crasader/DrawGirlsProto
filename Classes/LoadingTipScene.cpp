@@ -20,6 +20,7 @@
 #include "KSUtil.h"
 #include "CommonButton.h"
 #include "CCMenuLambda.h"
+#include "PlayTutorial.h"
 
 CCScene* LoadingTipScene::scene()
 {
@@ -397,6 +398,10 @@ void LoadingTipScene::readyLoading()
 		default_load_list.push_back("mainflow_back_shadow_left.png");
 		default_load_list.push_back("mainflow_back_shadow_right.png");
 	}
+	else
+	{
+		default_load_list.push_back("mainflow_back_wall.png");
+	}
 	
 	total_load_img = sil_load_list.size() + default_load_list.size();
 	ing_load_img = 0;
@@ -461,6 +466,8 @@ void LoadingTipScene::onMinimumTime()
 			CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 		else if(next_scene_name == "newmainflow")
 			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+		else if(next_scene_name == "playtutorial")
+			CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
 	}
 }
 
@@ -487,6 +494,8 @@ void LoadingTipScene::countingFunc(CCObject *sender)
 			CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 		else if(next_scene_name == "newmainflow")
 			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+		else if(next_scene_name == "playtutorial")
+			CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
 	}
 }
 

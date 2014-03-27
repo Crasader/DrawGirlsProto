@@ -825,10 +825,10 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 							 }
 							 ::setHeartSendTime(m_scoreList[idx]["user_id"].asString());
 
-							 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
-							 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
-
-							 });
+//							 mySGD->setFriendPoint(mySGD->getFriendPoint() + mySGD->getSPSendHeart());
+//							 myDSH->saveUserData({kSaveUserData_Key_friendPoint}, [=](Json::Value v) {
+//
+//							 });
 
 							 obj->removeFromParent();
 							 std::string remainStr = ::getRemainTimeMsg( mySGD->getHeartSendCoolTime() );
@@ -984,14 +984,8 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_longTime)
 					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
-					NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_subSmallSize)
-					NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_smallArea)
-					NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_widePerfect)
-					NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+				else if(t_abil["type"].asInt() == kIC_baseSpeedUp)
+					NSDS_SI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, t_card["no"].asInt(), t_option["unit"].asInt(), false);
 			}
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];

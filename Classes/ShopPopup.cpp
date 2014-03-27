@@ -644,6 +644,7 @@ bool ShopPopup::init()
 									t_node->setTag(kSP_MT_character);
 									menuAction(t_node);
 								});
+	character_menu->setVisible(false);
 	main_case->addChild(character_menu, kSP_Z_content);
 	
 	card_menu = CommonButton::create("뷰티스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
@@ -658,6 +659,7 @@ bool ShopPopup::init()
 									menuAction(t_node);
 								});
 	main_case->addChild(card_menu, kSP_Z_content);
+	card_menu->setVisible(false);
 	
 	ruby_menu = CommonButton::create("루비상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	ruby_menu->setTitleColor(ccWHITE);
@@ -1633,106 +1635,106 @@ void ShopPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSP_MT_cardLow)
 	{
-		if(mySGD->getFriendPoint() >= card_price_low.getV())
-		{
-			createCheckBuyPopup([=]()
-								{
-									mySGD->setFriendPoint(mySGD->getFriendPoint()-card_price_low.getV());
-									
-									int have_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
-									have_stone_cnt++;
-									int self_stone_id = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
-									self_stone_id++;
-									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, have_stone_cnt);
-									myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, self_stone_id);
-									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, have_stone_cnt, self_stone_id);
-									
-									myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id, rand()%7);
-									myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id, 1);
-									
-									int random_value = rand()%1000;
-									int rank_value;
-									if(random_value < 400)
-										rank_value = 1;
-									else if(random_value < 700)
-										rank_value = 2;
-									else if(random_value < 900)
-										rank_value = 3;
-									else
-										rank_value = 4;
-									
-									myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id, rank_value);
-									
-									result_stone_layer = TouchSuctionLayer::create(-501);
-									CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-									float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-									if(screen_scale_x < 1.f)
-										screen_scale_x = 1.f;
-									
-									CCSprite* gray = CCSprite::create("back_gray.png");
-									gray->setPosition(ccp(240,160));
-									gray->setScaleX(screen_scale_x);
-									gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
-									result_stone_layer->addChild(gray);
-									
-									CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id))->getCString());
-									stone_img->setPosition(ccp(240, 160));
-									result_stone_layer->addChild(stone_img);
-									
-									CCLabelTTF* stone_level = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id))->getCString(), mySGD->getFont().c_str(), 12);
-									stone_level->setAnchorPoint(ccp(1,0));
-									stone_level->setPosition(ccp(stone_img->getContentSize().width/2.f-3, -stone_img->getContentSize().height/2.f+3));
-									stone_img->addChild(stone_level);
-									result_stone_layer->target_touch_began = result_stone_layer;
-									result_stone_layer->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
-									addChild(result_stone_layer, kSP_Z_popup);
-									result_stone_layer->setVisible(false);
-									
-									
-									Json::Value param;
-									param["memberID"] = hspConnector::get()->getKakaoID();
-									
-									Json::Value data;
-									data[myDSH->getKey(kDSH_Key_savedFriendPoint)] = myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint);
-									{
-										for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
-										{
-											int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
-											for(int j=1;j<=slot_count;j++)
-												data[myDSH->getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
-										}
-										
-										data[myDSH->getKey(kDSH_Key_selfBeautyStoneID)] = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
-										int have_beauty_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
-										data[myDSH->getKey(kDSH_Key_haveBeautyStoneCnt)] = have_beauty_stone_cnt;
-										for(int i=1;i<=have_beauty_stone_cnt;i++)
-										{
-											int beauty_stone_id = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
-											data[myDSH->getKey(kDSH_Key_haveBeautyStoneID_int1)][i] = beauty_stone_id;
-											data[myDSH->getKey(kDSH_Key_beautyStoneType_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id);
-											data[myDSH->getKey(kDSH_Key_beautyStoneRank_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id);
-											data[myDSH->getKey(kDSH_Key_beautyStoneLevel_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id);
-										}
-									}
-									
-									Json::FastWriter writer;
-									param["data"] = writer.write(data);
-									param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-									
-									command_list.push_back(CommandParam("updateUserData", param, nullptr));
-									
-									loading_layer = LoadingLayer::create();
-									addChild(loading_layer, kSP_Z_popup);
-									
-									card_gacha_type = "social";
-									
-									startCardGacha();
-								});
-		}
-		else
-		{
-			addChild(ASPopupView::getCommonNoti(-310, "소셜 포인트가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-		}
+//		if(mySGD->getFriendPoint() >= card_price_low.getV())
+//		{
+//			createCheckBuyPopup([=]()
+//								{
+//									mySGD->setFriendPoint(mySGD->getFriendPoint()-card_price_low.getV());
+//									
+//									int have_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+//									have_stone_cnt++;
+//									int self_stone_id = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
+//									self_stone_id++;
+//									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, have_stone_cnt);
+//									myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, self_stone_id);
+//									myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, have_stone_cnt, self_stone_id);
+//									
+//									myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id, rand()%7);
+//									myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id, 1);
+//									
+//									int random_value = rand()%1000;
+//									int rank_value;
+//									if(random_value < 400)
+//										rank_value = 1;
+//									else if(random_value < 700)
+//										rank_value = 2;
+//									else if(random_value < 900)
+//										rank_value = 3;
+//									else
+//										rank_value = 4;
+//									
+//									myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id, rank_value);
+//									
+//									result_stone_layer = TouchSuctionLayer::create(-501);
+//									CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//									float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//									if(screen_scale_x < 1.f)
+//										screen_scale_x = 1.f;
+//									
+//									CCSprite* gray = CCSprite::create("back_gray.png");
+//									gray->setPosition(ccp(240,160));
+//									gray->setScaleX(screen_scale_x);
+//									gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+//									result_stone_layer->addChild(gray);
+//									
+//									CCSprite* stone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, self_stone_id), myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, self_stone_id))->getCString());
+//									stone_img->setPosition(ccp(240, 160));
+//									result_stone_layer->addChild(stone_img);
+//									
+//									CCLabelTTF* stone_level = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, self_stone_id))->getCString(), mySGD->getFont().c_str(), 12);
+//									stone_level->setAnchorPoint(ccp(1,0));
+//									stone_level->setPosition(ccp(stone_img->getContentSize().width/2.f-3, -stone_img->getContentSize().height/2.f+3));
+//									stone_img->addChild(stone_level);
+//									result_stone_layer->target_touch_began = result_stone_layer;
+//									result_stone_layer->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
+//									addChild(result_stone_layer, kSP_Z_popup);
+//									result_stone_layer->setVisible(false);
+//									
+//									
+//									Json::Value param;
+//									param["memberID"] = hspConnector::get()->getKakaoID();
+//									
+//									Json::Value data;
+//									data[myDSH->getKey(kDSH_Key_savedFriendPoint)] = myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint);
+//									{
+//										for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+//										{
+//											int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+//											for(int j=1;j<=slot_count;j++)
+//												data[myDSH->getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
+//										}
+//										
+//										data[myDSH->getKey(kDSH_Key_selfBeautyStoneID)] = myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID);
+//										int have_beauty_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+//										data[myDSH->getKey(kDSH_Key_haveBeautyStoneCnt)] = have_beauty_stone_cnt;
+//										for(int i=1;i<=have_beauty_stone_cnt;i++)
+//										{
+//											int beauty_stone_id = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
+//											data[myDSH->getKey(kDSH_Key_haveBeautyStoneID_int1)][i] = beauty_stone_id;
+//											data[myDSH->getKey(kDSH_Key_beautyStoneType_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id);
+//											data[myDSH->getKey(kDSH_Key_beautyStoneRank_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id);
+//											data[myDSH->getKey(kDSH_Key_beautyStoneLevel_int1)][i] = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id);
+//										}
+//									}
+//									
+//									Json::FastWriter writer;
+//									param["data"] = writer.write(data);
+//									param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+//									
+//									command_list.push_back(CommandParam("updateUserData", param, nullptr));
+//									
+//									loading_layer = LoadingLayer::create();
+//									addChild(loading_layer, kSP_Z_popup);
+//									
+//									card_gacha_type = "social";
+//									
+//									startCardGacha();
+//								});
+//		}
+//		else
+//		{
+//			addChild(ASPopupView::getCommonNoti(-310, "소셜 포인트가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//		}
 	}
 }
 

@@ -1423,10 +1423,7 @@ void ThreeCushion::myAction ()
 		int rmCnt = 3;
 		
 		string missile_code;
-		if(mySGD->getIsUsingFriendCard())
-			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
-		else
-			missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
 		
 		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));

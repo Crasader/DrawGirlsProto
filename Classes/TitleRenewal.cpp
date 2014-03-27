@@ -9,8 +9,6 @@
 #include "TitleRenewal.h"
 #include "StarGoldData.h"
 #include "utf8.h"
-#include "UnknownFriends.h"
-#include "KnownFriend.h"
 #include "KSUtil.h"
 #include <chrono>
 #include "MainFlowScene.h"
@@ -19,6 +17,8 @@
 #include "NewMainFlowScene.h"
 #include "StoryView.h"
 #include "ASPopupView.h"
+#include "AlertEngine.h"
+#include "MyLocalization.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -64,350 +64,6 @@ bool TitleRenewalScene::init()
 	addChild(state_label);
 
 	
-//	ASPopupView* t_popup = ASPopupView::create(-200);
-//	
-//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-//	if(screen_scale_x < 1.f)
-//		screen_scale_x = 1.f;
-//	
-//	float height_value = 320.f;
-//	if(myDSH->screen_convert_rate < 1.f)
-//		height_value = 320.f/myDSH->screen_convert_rate;
-//	
-//	if(height_value < myDSH->ui_top)
-//		height_value = myDSH->ui_top;
-//	
-//	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-//	t_popup->setDimmedPosition(ccp(240, 160));
-//	t_popup->setBasePosition(ccp(240, 160));
-//	
-//	CCNode* t_container = CCNode::create();
-//	t_popup->setContainerNode(t_container);
-//	addChild(t_popup);
-//	
-//	CCLabelTTF* title_label = CCLabelTTF::create("클리어 보상", mySGD->getFont().c_str(), 18);
-//	title_label->setPosition(ccp(0,107));
-//	t_container->addChild(title_label);
-//	
-//	int take_level = 1;
-//	
-//	
-//	int random_value = rand()%1000;
-//	int gold_get_rate = 500;
-//	int gold_or_item_get_rate = gold_get_rate + 300;
-//	int reward_type;
-//	if(random_value < gold_get_rate)
-//	{
-//		// gold
-//		reward_type = 1;
-//	}
-//	else if(random_value < gold_or_item_get_rate)
-//	{
-//		// gold or item
-//		reward_type = 2;
-//	}
-//	else
-//	{
-//		// stone
-//		reward_type = 3;
-//	}
-//	
-//	int gold_or_item_value;
-//	random_value = rand()%100;
-//	if(random_value < 50)
-//	{
-//		// gold
-//		gold_or_item_value = 1;
-//	}
-//	else
-//	{
-//		// item
-//		gold_or_item_value = 2;
-//	}
-//	
-//	
-//	CommonButton* reward_first = CommonButton::create("보상1", 14, CCSizeMake(100, 70), CommonButtonYellow, t_popup->getTouchPriority()-1);
-//	reward_first->setTitleColor(ccBLACK);
-//	reward_first->setPosition(ccp(-150,0));
-//	t_container->addChild(reward_first);
-//	
-//	CommonButton* reward_second = CommonButton::create("보상2", 14, CCSizeMake(100, 70), CommonButtonYellow, t_popup->getTouchPriority()-1);
-//	reward_second->setTitleColor(ccBLACK);
-//	reward_second->setPosition(ccp(0,0));
-//	t_container->addChild(reward_second);
-//	
-//	CommonButton* reward_third = CommonButton::create("보상3", 14, CCSizeMake(100, 70), CommonButtonYellow, t_popup->getTouchPriority()-1);
-//	reward_third->setTitleColor(ccBLACK);
-//	reward_third->setPosition(ccp(150,0));
-//	t_container->addChild(reward_third);
-//	
-//	
-//	CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
-//	CCLabelTTF* item_gold_or_item;
-//	int random_item_code;
-//	if(gold_or_item_value == 1)
-//		item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
-//	else
-//	{
-//		item_gold_or_item = CCLabelTTF::create("아이템", mySGD->getFont().c_str(), 12);
-//		random_item_code = rand()%(kIC_rentCard-kIC_fast+1) + kIC_fast;
-//		CCSprite* random_item_img = CCSprite::create(CCString::createWithFormat("item%d.png", random_item_code)->getCString());
-//		random_item_img->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f,-30));
-//		item_gold_or_item->addChild(random_item_img);
-//	}
-//	int base_stone_rank = take_level;
-//	if(mySGD->is_exchanged)
-//		base_stone_rank++;
-//	
-//	if(base_stone_rank > 3)
-//		base_stone_rank = 3;
-//	CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
-//	
-//	int beautystone_type = rand()%7;
-//	
-//	CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", beautystone_type, base_stone_rank)->getCString());
-//	beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
-//	item_stone->addChild(beautystone_img);
-//	
-//	
-//	reward_first->setFunction([=](CCObject* sender)
-//							  {
-//								  int random_left_right = rand()%2;
-//								  
-//								  if(reward_type == 1)
-//								  {
-//									  mySGD->setGold(mySGD->getGold() + 100);
-//									  item_gold->setPosition(ccp(-150,0));
-//									  if(random_left_right == 0)
-//									  {
-//										  item_gold_or_item->setPosition(ccp(0,0));
-//										  item_stone->setPosition(ccp(150,0));
-//									  }
-//									  else
-//									  {
-//										  item_gold_or_item->setPosition(ccp(150,0));
-//										  item_stone->setPosition(ccp(0,0));
-//									  }
-//								  }
-//								  else if(reward_type == 2)
-//								  {
-//									  if(gold_or_item_value == 1)
-//										  mySGD->setGold(mySGD->getGold() + 200);
-//									  else
-//									  {
-//										  myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
-//									  }
-//									  
-//									  item_gold_or_item->setPosition(ccp(-150,0));
-//									  if(random_left_right == 0)
-//									  {
-//										  item_gold->setPosition(ccp(0,0));
-//										  item_stone->setPosition(ccp(150,0));
-//									  }
-//									  else
-//									  {
-//										  item_gold->setPosition(ccp(150,0));
-//										  item_stone->setPosition(ccp(0,0));
-//									  }
-//								  }
-//								  else
-//								  {
-//									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
-//									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
-//									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
-//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
-//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
-//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
-//									  
-//									  item_stone->setPosition(ccp(-150,0));
-//									  if(random_left_right == 0)
-//									  {
-//										  item_gold->setPosition(ccp(0,0));
-//										  item_gold_or_item->setPosition(ccp(150,0));
-//									  }
-//									  else
-//									  {
-//										  item_gold->setPosition(ccp(150,0));
-//										  item_gold_or_item->setPosition(ccp(0,0));
-//									  }
-//								  }
-//								  t_container->addChild(item_gold);
-//								  t_container->addChild(item_gold_or_item);
-//								  t_container->addChild(item_stone);
-//								  
-//								  reward_first->setVisible(false);
-//								  reward_second->setVisible(false);
-//								  reward_third->setVisible(false);
-//								  
-//								  myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
-//								  
-//								  CCDelayTime* t_delay = CCDelayTime::create(2.f);
-//								  CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(ClearPopup::endTakeCard));
-//								  CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
-//								  CCSequence* t_seq = CCSequence::create(t_delay, t_call0, t_call, NULL);
-//								  t_popup->runAction(t_seq);
-//							  });
-//	
-//	
-//	reward_second->setFunction([=](CCObject* sender)
-//							   {
-//								   int random_left_right = rand()%2;
-//								   
-//								   if(reward_type == 1)
-//								   {
-//									   mySGD->setGold(mySGD->getGold() + 100);
-//									   item_gold->setPosition(ccp(0,0));
-//									   if(random_left_right == 0)
-//									   {
-//										   item_gold_or_item->setPosition(ccp(-150,0));
-//										   item_stone->setPosition(ccp(150,0));
-//									   }
-//									   else
-//									   {
-//										   item_gold_or_item->setPosition(ccp(150,0));
-//										   item_stone->setPosition(ccp(-150,0));
-//									   }
-//								   }
-//								   else if(reward_type == 2)
-//								   {
-//									   if(gold_or_item_value == 1)
-//										   mySGD->setGold(mySGD->getGold() + 200);
-//									   else
-//									   {
-//										   myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
-//									   }
-//									   
-//									   item_gold_or_item->setPosition(ccp(0,0));
-//									   if(random_left_right == 0)
-//									   {
-//										   item_gold->setPosition(ccp(-150,0));
-//										   item_stone->setPosition(ccp(150,0));
-//									   }
-//									   else
-//									   {
-//										   item_gold->setPosition(ccp(150,0));
-//										   item_stone->setPosition(ccp(-150,0));
-//									   }
-//								   }
-//								   else
-//								   {
-//									   myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
-//									   myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
-//									   myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
-//									   myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
-//									   myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
-//									   myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
-//									   
-//									   item_stone->setPosition(ccp(0,0));
-//									   if(random_left_right == 0)
-//									   {
-//										   item_gold->setPosition(ccp(-150,0));
-//										   item_gold_or_item->setPosition(ccp(150,0));
-//									   }
-//									   else
-//									   {
-//										   item_gold->setPosition(ccp(150,0));
-//										   item_gold_or_item->setPosition(ccp(-150,0));
-//									   }
-//								   }
-//								   t_container->addChild(item_gold);
-//								   t_container->addChild(item_gold_or_item);
-//								   t_container->addChild(item_stone);
-//								   
-//								   reward_first->setVisible(false);
-//								   reward_second->setVisible(false);
-//								   reward_third->setVisible(false);
-//								   
-//								   myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
-//								   
-//								   CCDelayTime* t_delay = CCDelayTime::create(2.f);
-//								   CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(ClearPopup::endTakeCard));
-//								   CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
-//								   CCSequence* t_seq = CCSequence::create(t_delay, t_call0, t_call, NULL);
-//								   t_popup->runAction(t_seq);
-//							   });
-//	
-//	
-//	reward_third->setFunction([=](CCObject* sender)
-//							  {
-//								  int random_left_right = rand()%2;
-//								  
-//								  if(reward_type == 1)
-//								  {
-//									  mySGD->setGold(mySGD->getGold() + 100);
-//									  item_gold->setPosition(ccp(150,0));
-//									  if(random_left_right == 0)
-//									  {
-//										  item_gold_or_item->setPosition(ccp(-150,0));
-//										  item_stone->setPosition(ccp(0,0));
-//									  }
-//									  else
-//									  {
-//										  item_gold_or_item->setPosition(ccp(0,0));
-//										  item_stone->setPosition(ccp(-150,0));
-//									  }
-//								  }
-//								  else if(reward_type == 2)
-//								  {
-//									  if(gold_or_item_value == 1)
-//										  mySGD->setGold(mySGD->getGold() + 200);
-//									  else
-//									  {
-//										  myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, random_item_code)+1);
-//									  }
-//									  
-//									  item_gold_or_item->setPosition(ccp(150,0));
-//									  if(random_left_right == 0)
-//									  {
-//										  item_gold->setPosition(ccp(-150,0));
-//										  item_stone->setPosition(ccp(0,0));
-//									  }
-//									  else
-//									  {
-//										  item_gold->setPosition(ccp(0,0));
-//										  item_stone->setPosition(ccp(-150,0));
-//									  }
-//								  }
-//								  else
-//								  {
-//									  myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
-//									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
-//									  myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
-//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
-//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
-//									  myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
-//									  
-//									  item_stone->setPosition(ccp(150,0));
-//									  if(random_left_right == 0)
-//									  {
-//										  item_gold->setPosition(ccp(-150,0));
-//										  item_gold_or_item->setPosition(ccp(0,0));
-//									  }
-//									  else
-//									  {
-//										  item_gold->setPosition(ccp(0,0));
-//										  item_gold_or_item->setPosition(ccp(-150,0));
-//									  }
-//								  }
-//								  t_container->addChild(item_gold);
-//								  t_container->addChild(item_gold_or_item);
-//								  t_container->addChild(item_stone);
-//								  
-//								  reward_first->setVisible(false);
-//								  reward_second->setVisible(false);
-//								  reward_third->setVisible(false);
-//								  
-//								  myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
-//								  
-//								  CCDelayTime* t_delay = CCDelayTime::create(2.f);
-//								  CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(ClearPopup::endTakeCard));
-//								  CCCallFunc* t_call = CCCallFunc::create(t_popup, callfunc_selector(CCNode::removeFromParent));
-//								  CCSequence* t_seq = CCSequence::create(t_delay, t_call0, t_call, NULL);
-//								  t_popup->runAction(t_seq);
-//							  });
-	
-	
 	Json::Value param;
 	param["ManualLogin"] = true;
 
@@ -438,50 +94,27 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		
 		receive_cnt = 0;
 		
-//		CCLabelTTF* userdata_label = CCLabelTTF::create("start getuserdata", mySGD->getFont().c_str(), 10);
-//		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
-//		addChild(userdata_label);
+		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+		
 		Json::Value userdata_param;
 		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
 		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 		
-//		CCLabelTTF* common_setting_label = CCLabelTTF::create("start getcommonsetting", mySGD->getFont().c_str(), 10);
-//		common_setting_label->setPosition(ccp(40, myDSH->ui_top-30));
-//		addChild(common_setting_label);
-		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
-		
-//		CCLabelTTF* noticelist_label = CCLabelTTF::create("start getnoticelist", mySGD->getFont().c_str(), 10);
-//		noticelist_label->setPosition(ccp(440, myDSH->ui_top-30));
-//		addChild(noticelist_label);
 		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 		
-//		CCLabelTTF* character_label = CCLabelTTF::create("start getcharacterlist", mySGD->getFont().c_str(), 10);
-//		character_label->setPosition(ccp(120, myDSH->ui_top-30));
-//		addChild(character_label);
 		Json::Value character_param;
 		character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
 		command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
 		
-//		CCLabelTTF* monster_label = CCLabelTTF::create("start getmonsterlist", mySGD->getFont().c_str(), 10);
-//		monster_label->setPosition(ccp(240, myDSH->ui_top-45));
-//		addChild(monster_label);
 		Json::Value monster_param;
 		monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
 		command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
 		
-//		CCLabelTTF* puzzlelist_label = CCLabelTTF::create("start getpuzzlelist", mySGD->getFont().c_str(), 10);
-//		puzzlelist_label->setPosition(ccp(280, myDSH->ui_top-30));
-//		addChild(puzzlelist_label);
 		Json::Value puzzlelist_param;
 		puzzlelist_param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 		command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
 		
 //		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
-		
-//		CCLabelTTF* loadfriends_label = CCLabelTTF::create("start kLoadFriends", mySGD->getFont().c_str(), 10);
-//		loadfriends_label->setPosition(ccp(360, myDSH->ui_top-30));
-//		addChild(loadfriends_label);
-		must_be_load_friends = true;
 		
 		startCommand();
 	}
@@ -498,25 +131,8 @@ void TitleRenewalScene::startCommand()
 {
 	is_receive_fail = false;
 	receive_cnt += command_list.size();
-	if(must_be_load_friends)
-		receive_cnt++;
 	hspConnector::get()->command(command_list);
 	command_list.clear();
-	
-	if(must_be_load_friends)
-	{
-		Json::Value t_result_data;
-		t_result_data["status"] = 0;
-		resultGetKnownFriendList(t_result_data);
-		
-		
-		
-		return;
-		
-//		hspConnector::get()->kLoadFriends(Json::Value(),
-//										  bind(&ThisClassType::resultGetKnownFriendList, this, std::placeholders::_1));
-//		must_be_load_friends = false;
-	}
 }
 
 void TitleRenewalScene::checkReceive()
@@ -524,7 +140,7 @@ void TitleRenewalScene::checkReceive()
 	CCLog("receive_cnt : %d", receive_cnt);
 	if(receive_cnt == 0)
 	{
-		if(command_list.empty() && !must_be_load_friends)
+		if(command_list.empty())
 		{
 			state_label->setString("이미지 정보를 받아옵니다.");
 			ing_download_cnt = 1;
@@ -568,6 +184,12 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(mySGD->getAppVersion() < result_data[mySGD->getAppType()].asInt())
+		{
+			exit(1);
+			return;
+		}
+		
 		mySGD->setHeartMax(result_data["heartMax"].asInt());
 		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
 		mySGD->setGameFriendMax(result_data["gameFriendMax"].asInt());
@@ -599,21 +221,10 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setSPGetTime(result_data["SPGetTime"].asInt());
 		mySGD->setSPGetHeart(result_data["SPGetHeart"].asInt());
 		mySGD->setGachaOnePercentFee(result_data["gachaOnePercentFee"].asInt());
-		myDSH->setDefaultSocial(result_data["defaultSocial"].asInt());
 		
-		mySGD->setBonusItemCnt(kIC_fast, result_data["bonusItemCntFast"].asInt());
-		mySGD->setBonusItemCnt(kIC_critical, result_data["bonusItemCntCritical"].asInt());
-		mySGD->setBonusItemCnt(kIC_subOneDie, result_data["bonusItemCntSubOneDie"].asInt());
 		mySGD->setBonusItemCnt(kIC_doubleItem, result_data["bonusItemCntDoubleItem"].asInt());
-		mySGD->setBonusItemCnt(kIC_silence, result_data["bonusItemCntSilence"].asInt());
-		mySGD->setBonusItemCnt(kIC_subNothing, result_data["bonusItemCntSubNothing"].asInt());
 		mySGD->setBonusItemCnt(kIC_longTime, result_data["bonusItemCntLongTime"].asInt());
-		mySGD->setBonusItemCnt(kIC_bossLittleEnergy, result_data["bonusItemCntBossLittleEnergy"].asInt());
-		mySGD->setBonusItemCnt(kIC_subSmallSize, result_data["bonusItemCntSubSmallSize"].asInt());
-		mySGD->setBonusItemCnt(kIC_smallArea, result_data["bonusItemCntSmallArea"].asInt());
-		mySGD->setBonusItemCnt(kIC_widePerfect, result_data["bonusItemCntWidePerfect"].asInt());
-		mySGD->setBonusItemCnt(kIC_randomChange, result_data["bonusItemCntRandomChange"].asInt());
-		mySGD->setBonusItemCnt(kIC_rentCard, result_data["bonusItemCntRentCard"].asInt());
+		mySGD->setBonusItemCnt(kIC_baseSpeedUp, result_data["bonusItemCntBaseSpeedUp"].asInt());
 		mySGD->setAiAdderOnDrewOrDamaged(result_data["aiAdderOnDrewOrDamaged"].asFloat());
 		mySGD->setFuryPercent(result_data["furyPercent"].asFloat());
 		mySGD->setSPRentCardThanks(result_data["SPRentCardThanks"].asInt());
@@ -947,15 +558,6 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 				card_param["noList"][i] = card_data_load_list[i];
 			command_list.push_back(CommandParam("getcardlist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
 		}
-		
-		Json::Value memberIDList;
-		Json::Reader reader;
-		reader.parse(result_data["friendList"].asString(), friendList);
-		
-		for(int i = 0; i<friendList.size(); i++)
-			memberIDList["memberIDList"].append(friendList[i].asString());
-		
-		command_list.push_back(CommandParam("getuserdatalist", memberIDList, bind(&ThisClassType::resultGetUnknownFriendUserData, this,	std::placeholders::_1)));
 	}
 	else
 	{
@@ -1020,14 +622,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
 				else if(t_abil["type"].asInt() == kIC_longTime)
 					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_bossLittleEnergy)
-					NSDS_SI(kSDS_CI_int1_abilityBossLittleEnergyOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_subSmallSize)
-					NSDS_SI(kSDS_CI_int1_abilitySubSmallSizeOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_smallArea)
-					NSDS_SI(kSDS_CI_int1_abilitySmallAreaOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_widePerfect)
-					NSDS_SI(kSDS_CI_int1_abilityWidePerfectOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+				else if(t_abil["type"].asInt() == kIC_baseSpeedUp)
+					NSDS_SI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, t_card["no"].asInt(), t_option["unit"].asInt(), false);
 			}
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
@@ -1125,118 +721,6 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		for(int i=0;i<card_data_load_list.size();i++)
 			card_param["noList"][i] = card_data_load_list[i];
 		command_list.push_back(CommandParam("getcardlist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
-	}
-	
-	receive_cnt--;
-	checkReceive();
-}
-
-void TitleRenewalScene::resultGetKnownFriendList(Json::Value fInfo)
-{
-	if(fInfo["status"].asInt() == 0)
-	{
-		Json::Value appFriends = fInfo["app_friends_info"];
-		
-		for(int i=0; i<appFriends.size(); i++)
-		{
-			FriendData kfd;
-			kfd.nick = appFriends[i]["nickname"].asString();
-			kfd.messageBlocked = appFriends[i]["message_blocked"].asInt();
-			kfd.profileUrl = appFriends[i]["profile_image_url"].asString();
-			kfd.userId = appFriends[i]["user_id"].asString();
-			kfd.hashedTalkUserId = appFriends[i]["hashed_talk_user_id"].asString();
-			kfd.unknownFriend = false;
-			KnownFriends::getInstance()->add(kfd);
-		}
-		
-		Json::Value memberIDList;
-		for(auto i : KnownFriends::getInstance()->getFriends())
-		{
-			memberIDList["memberIDList"].append(i.userId);
-		}
-		
-//		CCAssert(memberIDList.size() > 0, "friend count is zero?");
-		if(memberIDList.size() > 0)
-			command_list.push_back(CommandParam("getuserdatalist", memberIDList,
-												bind(&ThisClassType::resultGetKnownFriendUserData,
-													 this,	std::placeholders::_1)));
-	}
-	else
-	{
-		is_receive_fail = true;
-		must_be_load_friends = true;
-	}
-	
-	receive_cnt--;
-	checkReceive();
-}
-
-void TitleRenewalScene::resultGetKnownFriendUserData(Json::Value v)
-{
-	if(v["result"]["code"].asInt() == GDSUCCESS)
-	{
-		KS::KSLog("%", v);
-		for(int i=0; i<v["list"].size(); i++)
-		{
-			Json::Reader reader;
-			Json::Value userData;
-			reader.parse(v["list"][i]["data"].asString(), userData);
-			KnownFriends::getInstance()->putUserData(i, userData);
-			KnownFriends::getInstance()->putLastDate(i, v["list"][i]["lastDate"].asInt64());
-			KnownFriends::getInstance()->putLastTime(i, v["list"][i]["lastTime"].asInt64());
-			KnownFriends::getInstance()->putJoinDate(i, v["list"][i]["joinDate"].asInt64());
-		}
-	}
-	else
-	{
-		is_receive_fail = true;
-		Json::Value memberIDList;
-		for(auto i : KnownFriends::getInstance()->getFriends())
-		{
-			memberIDList["memberIDList"].append(i.userId);
-		}
-		
-		command_list.push_back(CommandParam("getuserdatalist", memberIDList,
-											bind(&ThisClassType::resultGetKnownFriendUserData,
-												 this,	std::placeholders::_1)));
-	}
-	
-	receive_cnt--;
-	checkReceive();
-}
-
-void TitleRenewalScene::resultGetUnknownFriendUserData(Json::Value v)
-{
-	if(v["result"]["code"].asInt() == GDSUCCESS || 1)
-	{
-		for(int i=0; i<v["list"].size(); i++)
-		{
-			
-			Json::Reader reader;
-			Json::Value userData;
-			reader.parse(v["list"][i]["data"].asString(), userData);
-			
-			FriendData ufd;
-			
-			ufd.userData = userData;
-			ufd.joinDate = v["list"][i]["joinDate"].asInt64();
-			ufd.lastDate = v["list"][i]["lastDate"].asInt64();
-			ufd.lastTime = v["list"][i]["lastTime"].asUInt64();
-			ufd.userId = v["list"][i]["memberID"].asString();
-			ufd.nick = v["list"][i]["nick"].asString();
-			ufd.unknownFriend = true;
-			
-			UnknownFriends::getInstance()->add(ufd);
-		}
-	}
-	else
-	{
-		is_receive_fail = true;
-		Json::Value memberIDList;
-		for(int i = 0; i<friendList.size(); i++)
-			memberIDList["memberIDList"].append(friendList[i].asString());
-		
-		command_list.push_back(CommandParam("getuserdatalist", memberIDList, bind(&ThisClassType::resultGetUnknownFriendUserData, this,	std::placeholders::_1)));
 	}
 	
 	receive_cnt--;
@@ -1370,18 +854,18 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 						myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, start_stage);
 				}
 				
-//				Json::Value thumbnail = puzzle_list[i]["thumbnail"];
-//				if(NSDS_GS(kSDS_GI_puzzleList_int1_thumbnail_s, i+1) != thumbnail["image"].asString())
-//				{
-//					// check, after download ----------
-//					DownloadFile t_df;
-//					t_df.size = thumbnail["size"].asInt();
-//					t_df.img = thumbnail["image"].asString().c_str();
-//					t_df.filename = CCSTR_CWF("puzzleList%d_thumbnail.png", i+1)->getCString();
-//					t_df.key = CCSTR_CWF("puzzleList%d_thumbnail", i+1)->getCString();
-//					puzzle_download_list.push_back(t_df);
-//					// ================================
-//				}
+				Json::Value thumbnail = puzzle_list[i]["thumbnail"];
+				if(NSDS_GS(kSDS_GI_puzzleList_int1_thumbnail_s, i+1) != thumbnail["image"].asString())
+				{
+					// check, after download ----------
+					DownloadFile t_df;
+					t_df.size = thumbnail["size"].asInt();
+					t_df.img = thumbnail["image"].asString().c_str();
+					t_df.filename = CCSTR_CWF("puzzleList%d_thumbnail.png", i+1)->getCString();
+					t_df.key = CCSTR_CWF("puzzleList%d_thumbnail", i+1)->getCString();
+					puzzle_download_list.push_back(t_df);
+					// ================================
+				}
 			}
 			
 			if(puzzle_download_list.size() > 0)
@@ -1440,33 +924,31 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 
 void TitleRenewalScene::endingAction()
 {
-	mySGD->selectFriendCard();
-	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 0)
-	{
-		StoryView* t_sv = StoryView::create();
-		t_sv->setFunc([=]()
-					  {
-						  myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 1);
-						  myDSH->saveAllUserData(nullptr);
-						  CCDelayTime* t_delay = CCDelayTime::create(2.f);
-						  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
-						  CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-						  runAction(t_seq);
-					  });
-		addChild(t_sv);
-	}
-	else
-	{
+//	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 0)
+//	{
+//		StoryView* t_sv = StoryView::create();
+//		t_sv->setFunc([=]()
+//					  {
+//						  myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 1);
+//						  myDSH->saveAllUserData(nullptr);
+//						  CCDelayTime* t_delay = CCDelayTime::create(2.f);
+//						  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
+//						  CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//						  runAction(t_seq);
+//					  });
+//		addChild(t_sv);
+//	}
+//	else
+//	{
 		CCDelayTime* t_delay = CCDelayTime::create(2.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 		runAction(t_seq);
-	}
+//	}
 }
 
 void TitleRenewalScene::changeScene()
@@ -1475,6 +957,7 @@ void TitleRenewalScene::changeScene()
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
+//	CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
 }
 
 void TitleRenewalScene::startFileDownload()
@@ -1947,4 +1430,17 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
+}
+
+void TitleRenewalScene::alertAction(int t1, int t2)
+{
+	if(t1 == 1 && t2 == 0)
+	{
+		CCDirector::sharedDirector()->end();
+	}
+}
+
+void TitleRenewalScene::keyBackClicked()
+{
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
 }

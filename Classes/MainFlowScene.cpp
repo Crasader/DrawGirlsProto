@@ -58,10 +58,10 @@ bool MainFlowScene::init()
 	
 	setKeypadEnabled(true);
 	
-	int puzzle_count = NSDS_GI(kSDS_GI_eventListCount_i);
+	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	for(int i=1;i<=puzzle_count;i++)
 	{
-		int t_puzzle_number = NSDS_GI(kSDS_GI_eventList_int1_no_i, i);
+		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
 		int have_card_cnt = 0;
 		int start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
 		int stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
@@ -200,11 +200,10 @@ bool MainFlowScene::init()
 		
 		if(recent_step == kTutorialFlowStep_puzzleClick)
 		{
-			if(mySGD->getStar() == 0 && mySGD->getGold() == 0 && mySGD->getFriendPoint() == 0)
+			if(mySGD->getStar() == 0 && mySGD->getGold() == 0)
 			{
 				mySGD->setStar(myDSH->getDefaultRuby());
 				mySGD->setGold(myDSH->getDefaultGold());
-				mySGD->setFriendPoint(myDSH->getDefaultSocial());
 			}
 			
 			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
@@ -515,7 +514,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	
 	CCSize table_size = CCSizeMake(480*screen_scale_x, 245);
 	
-	int puzzle_number = NSDS_GI(kSDS_GI_eventList_int1_no_i, idx+1);
+	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
 	
 //	if(puzzle_number == is_unlock_puzzle)
@@ -527,8 +526,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
 //	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
-		CCSprite* n_open_back = mySIL->getLoadedImg(CCString::createWithFormat("eventList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
-		CCSprite* s_open_back = mySIL->getLoadedImg(CCString::createWithFormat("eventList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
+		CCSprite* n_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
+		CCSprite* s_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
 		s_open_back->setColor(ccGRAY);
 		
 		CCMenuItem* open_item = CCMenuItemSprite::create(n_open_back, s_open_back, this, menu_selector(MainFlowScene::cellAction));
@@ -675,7 +674,7 @@ CCSize MainFlowScene::cellSizeForTable(CCTableView *table)
 }
 unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
-	return NSDS_GI(kSDS_GI_eventListCount_i);
+	return NSDS_GI(kSDS_GI_puzzleListCount_i);// eventListCount_i);
 }
 
 //	if(t_tag == kPMS_MT_event)				return_value = ccp(420,-(myDSH->puzzle_ui_top-320.f)/2.f - 100.f); // after move animation
@@ -845,15 +844,16 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_rank)
 		{
-			RankPopup* t_rp = RankPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
-			addChild(t_rp, kMainFlowZorder_popup);
+			is_menu_enable = true;
+//			RankPopup* t_rp = RankPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
+//			addChild(t_rp, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_shop)
 		{
 			ShopPopup* t_shop = ShopPopup::create();
 			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_character);
+			t_shop->setShopCode(kSC_ruby);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
 			addChild(t_shop, kMainFlowZorder_popup);
 		}
@@ -920,16 +920,16 @@ void MainFlowScene::setBottom()
 	rank_menu->setPosition(ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
 	
-	CCSprite* n_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
-	CCSprite* s_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
-	s_friendmanagement->setColor(ccGRAY);
-	
-	CCMenuItem* friendmanagement_item = CCMenuItemSprite::create(n_friendmanagement, s_friendmanagement, this, menu_selector(MainFlowScene::menuAction));
-	friendmanagement_item->setTag(kMainFlowMenuTag_friendManagement);
-	
-	CCMenu* friendmanagement_menu = CCMenu::createWithItem(friendmanagement_item);
-	friendmanagement_menu->setPosition(ccp(-139, n_friendmanagement->getContentSize().height/2.f));
-	bottom_case->addChild(friendmanagement_menu);
+//	CCSprite* n_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
+//	CCSprite* s_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
+//	s_friendmanagement->setColor(ccGRAY);
+//	
+//	CCMenuItem* friendmanagement_item = CCMenuItemSprite::create(n_friendmanagement, s_friendmanagement, this, menu_selector(MainFlowScene::menuAction));
+//	friendmanagement_item->setTag(kMainFlowMenuTag_friendManagement);
+//	
+//	CCMenu* friendmanagement_menu = CCMenu::createWithItem(friendmanagement_item);
+//	friendmanagement_menu->setPosition(ccp(-139, n_friendmanagement->getContentSize().height/2.f));
+//	bottom_case->addChild(friendmanagement_menu);
 	
 	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
 	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
@@ -953,16 +953,16 @@ void MainFlowScene::setBottom()
 	cardsetting_menu->setPosition(ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
 	
-	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
-	CCSprite* s_gacha = CCSprite::create("mainflow_gacha.png");
-	s_gacha->setColor(ccGRAY);
-	
-	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(MainFlowScene::menuAction));
-	gacha_item->setTag(kMainFlowMenuTag_gacha);
-	
-	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
-	gacha_menu->setPosition(ccp(59, n_gacha->getContentSize().height/2.f));
-	bottom_case->addChild(gacha_menu);
+//	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
+//	CCSprite* s_gacha = CCSprite::create("mainflow_gacha.png");
+//	s_gacha->setColor(ccGRAY);
+//	
+//	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(MainFlowScene::menuAction));
+//	gacha_item->setTag(kMainFlowMenuTag_gacha);
+//	
+//	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
+//	gacha_menu->setPosition(ccp(59, n_gacha->getContentSize().height/2.f));
+//	bottom_case->addChild(gacha_menu);
 	
 	CCSprite* n_achievement = CCSprite::create("mainflow_achievement.png");
 	CCSprite* s_achievement = CCSprite::create("mainflow_achievement.png");
@@ -972,7 +972,7 @@ void MainFlowScene::setBottom()
 	achievement_item->setTag(kMainFlowMenuTag_achievement);
 	
 	CCMenu* achievement_menu = CCMenu::createWithItem(achievement_item);
-	achievement_menu->setPosition(ccp(125, n_achievement->getContentSize().height/2.f));
+	achievement_menu->setPosition(ccp(-139, n_achievement->getContentSize().height/2.f));//ccp(125, n_achievement->getContentSize().height/2.f));
 	bottom_case->addChild(achievement_menu);
 	
 	CCSprite* n_event = CCSprite::create("mainflow_event.png");
@@ -1060,11 +1060,11 @@ void MainFlowScene::setTop()
 	ruby_menu->setPosition(ccp(287,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_menu);
 	
-	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	friend_point_label->setPosition(ccp(338,top_case->getContentSize().height/2.f-5));
-	top_case->addChild(friend_point_label);
-	
-	mySGD->setFriendPointLabel(friend_point_label);
+//	friend_point_label =  CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getFriendPoint())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
+//	friend_point_label->setPosition(ccp(338,top_case->getContentSize().height/2.f-5));
+//	top_case->addChild(friend_point_label);
+//	
+//	mySGD->setFriendPointLabel(friend_point_label);
 	
 	CCSprite* n_friend_point = CCSprite::create("mainflow_top_shop.png");
 	CCSprite* s_friend_point = CCSprite::create("mainflow_top_shop.png");

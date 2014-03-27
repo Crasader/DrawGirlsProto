@@ -10,6 +10,7 @@
 #include "SilhouetteData.h"
 #include "DataStorageHub.h"
 #include "ks19937.h"
+#include "StarGoldData.h"
 float deg2Rad(float x) { return x * M_PI / 180.f;}
 float rad2Deg(float x) { return x * 180.f / M_PI;}
 
@@ -366,6 +367,13 @@ void GameData::initUserSelectedStartRect( IntRect t_rect )
 	if(scale_value < 0.1f)
 		scale_value = 1.f;
 	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);//*scale_value;
+	
+	if(mySGD->isUsingItem(kIC_baseSpeedUp))
+	{
+		int t_unit = mySD->getBaseSpeedUpItemOption();
+		jack_base_speed += t_unit*0.1f;
+	}
+	
 	game_scale = (720.f*scale_value-boarder_value*2)/(320.f);
 	setInitRect(t_rect.origin, t_rect.size);
 }

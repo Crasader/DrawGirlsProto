@@ -73,7 +73,7 @@ private:
 	void resultLogin(Json::Value result_data);
 	
 	vector<CommandParam> command_list;
-	bool must_be_load_friends;
+//	bool must_be_load_friends;
 	int receive_cnt;
 	
 	bool is_receive_fail;
@@ -104,12 +104,12 @@ private:
 	vector<DownloadFile> card_download_list;
 	vector<CopyFile> card_reduction_list;
 	
-	void resultGetKnownFriendList(Json::Value result_data);
-	void startGetKnownFriendUserData();
-	void resultGetKnownFriendUserData(Json::Value result_data);
-	
-	void startGetUnknownFriendUserData();
-	void resultGetUnknownFriendUserData(Json::Value result_data);
+//	void resultGetKnownFriendList(Json::Value result_data);
+//	void startGetKnownFriendUserData();
+//	void resultGetKnownFriendUserData(Json::Value result_data);
+//	
+//	void startGetUnknownFriendUserData();
+//	void resultGetUnknownFriendUserData(Json::Value result_data);
 	
 	void resultGetPuzzleList(Json::Value result_data);
 	vector<DownloadFile> puzzle_download_list;
@@ -124,6 +124,9 @@ private:
 	
 	bool is_menu_enable;
 	void menuAction(CCObject* sender);
+	
+	void alertAction(int t1, int t2);
+	virtual void keyBackClicked();
 };
 
 #endif /* defined(__DGproto__TitleRenewal__) */

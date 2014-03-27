@@ -75,7 +75,7 @@ private:
 	
 	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;
-	CountingBMLabel* friend_point_label;
+//	CountingBMLabel* friend_point_label;
 	
 	CCNode* beautystone_node;
 	

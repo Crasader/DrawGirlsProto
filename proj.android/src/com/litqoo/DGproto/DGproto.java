@@ -39,7 +39,7 @@ import android.view.WindowManager;
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		if(com.litqoo.lib.hspConnector.setup(10226, "SKDRAWGIRLS", "1.0.0.KG")){
+		if(com.litqoo.lib.hspConnector.setup(10289, "SKDRAWGIRLSA", "1.0.0.KS")){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 		}else{
 			Log.i("com.litqoo.dgproto","hspcore create fail");
@@ -54,11 +54,11 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 //		mGLView.setCocos2dxEditText((Cocos2dxEditText)findViewById(R.id.textField));
 	}
 	
-//	public Cocos2dxGLSurfaceView onCreateGLSurfaceView() {
-//		return new LuaGLSurfaceView(this);
-//    }
+	public Cocos2dxGLSurfaceView onCreateGLSurfaceView() {
+		return new LuaGLSurfaceView(this);
+    }
 
-    static {
+    static { 
         System.loadLibrary("cocos2dlua");
     }
     
@@ -71,9 +71,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     	
     	return glSurfaceView;
     }
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-    	com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);
-    }
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+//    	com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);
+//    }
 }
 
 class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
