@@ -53,6 +53,7 @@ public:
   void addLog (LOG_KEY t_key, int t_time, int t_i1);
   void addLog (LOG_KEY t_key, int t_time, string t_str1);
   void sendLog (string t_category);
+	CommandParam getSendLogCommand(string t_category);
 private:
   SaveData * myDefault;
   string getLog (LOG_KEY t_key, int t_i);
