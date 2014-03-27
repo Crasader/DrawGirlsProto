@@ -499,8 +499,8 @@ public:
 		m_points.push_back(Vertex3DMake(-halfWidth, -halfHeight, 0));
 		m_points.push_back(Vertex3DMake(halfWidth, -halfHeight, 0));
 
-		int hm = 10;
-		int wm = 10;
+		int hm = 40;
+		int wm = 40;
 		for(int y=-halfHeight + hm; y<=halfHeight - 20; y+=hm)
 		{
 			for(int x=-halfWidth + wm; x<=halfWidth - 20; x+=wm)

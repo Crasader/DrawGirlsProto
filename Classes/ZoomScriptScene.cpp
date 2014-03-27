@@ -16,6 +16,7 @@
 #include "MainFlowScene.h"
 #include "CommonButton.h"
 #include "NewMainFlowScene.h"
+#include "bustMorphing.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -60,7 +61,7 @@ bool ZoomScript::init()
 	if(is_exchanged)			first_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
 	else						first_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
 	
-	first_img = mySIL->getLoadedImg(first_filename.c_str());
+	first_img = MyNode::create(mySIL->addImage(first_filename.c_str()));
 	first_img->setPosition(ccp(160,215));
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
@@ -224,7 +225,7 @@ void ZoomScript::showtimeFirstAction()
 	else
 		second_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
 	
-	second_img = mySIL->getLoadedImg(second_filename.c_str());
+	second_img = MyNode::create(mySIL->addImage(second_filename.c_str()));
 	second_img->setPosition(ccp(160,215));
 	game_node->addChild(second_img, kZS_Z_second_img);
 	game_node->setScale(1.5f);
