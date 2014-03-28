@@ -639,6 +639,7 @@ BackFilename MapScanner::getBackInvisibleFilename()
 
 void MapScanner::setMapImg()
 {
+	
 	if(invisibleImg)
 	{
 		invisibleImg->release();
@@ -648,10 +649,12 @@ void MapScanner::setMapImg()
 	BackFilename visible_filename = getBackVisibleFilename();
 	BackFilename invisible_filename = getBackInvisibleFilename();
 
+	
 	invisibleImg = InvisibleSprite::create(invisible_filename.filename.c_str(), invisible_filename.isPattern);
 	invisibleImg->setPosition(CCPointZero);
 	addChild(invisibleImg, invisibleZorder);
 
+	
 	if(visibleImg)
 	{
 		visibleImg->release();
@@ -662,6 +665,7 @@ void MapScanner::setMapImg()
 	visibleImg->setPosition(CCPointZero);
 	addChild(visibleImg, visibleZorder);
 
+	
 	if(blockParent)
 	{
 		blockParent->release();
@@ -671,6 +675,7 @@ void MapScanner::setMapImg()
 	blockParent = CCNode::create();
 	addChild(blockParent, blockZorder);
 
+	
 	top_boarder = CCSprite::create("normal_frame_top.png");
 	top_boarder->setAnchorPoint(ccp(0.5,0));
 	top_boarder->setPosition(ccp(160,430));
@@ -690,6 +695,7 @@ void MapScanner::setMapImg()
 	right_boarder->setAnchorPoint(ccp(0,0.5));
 	right_boarder->setPosition(ccp(320,215));
 	addChild(right_boarder, boarderZorder);
+	
 }
 
 void MapScanner::setTopBottomBlock()
@@ -925,10 +931,13 @@ void MapScanner::showEmptyPoint( CCPoint t_point )
 
 void MapScanner::myInit()
 {
+	
+	
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	screen_height = roundf(480*screen_size.height/screen_size.width/2.f);
 
 	silType = mySD->getSilType();
+	
 
 	random_rect_img = NULL;
 	invisibleImg = NULL;
@@ -941,7 +950,9 @@ void MapScanner::myInit()
 	myGD->V_V["MS_setTopBottomBlock"] = std::bind(&MapScanner::setTopBottomBlock, this);
 	myGD->V_V["MS_startRemoveBlock"] = std::bind(&MapScanner::startRemoveBlock, this);
 
+	
 	setMapImg();
+	
 }
 
 InvisibleSprite* InvisibleSprite::create( const char* filename, bool isPattern )
@@ -1297,43 +1308,57 @@ void VisibleSprite::setDark()
 
 void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
 {
+	
 	initWithTexture(mySIL->addImage(filename));
 	setColor(ccGRAY);
 	setPosition(ccp(160,215));
 
+	
 	is_set_scene_node = false;
 
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	design_resolution_size = CCEGLView::sharedOpenGLView()->getDesignResolutionSize();
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
+	
 	drawRects = t_drawRects;
 	
-	safety_img = CCSprite::createWithTexture(createSafetyImage(mySIL->getDocumentPath() + sil_filename));
+	
+	
+	string _filename = mySIL->getDocumentPath() + sil_filename;
+	
+	
+	CCTexture2D* _tex = createSafetyImage(_filename.c_str());
+	
+	safety_img = CCSprite::createWithTexture(_tex);
+	
+	
 	safety_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
+
 	addChild(safety_img);
+	
 	
 	light_img = CCSprite::create("ingame_whiteback.png");
 	light_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
 	addChild(light_img, -1);
+	
 }
 
 CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
 	
-	CCImage* newImg = new CCImage();
-	newImg->initWithImageFileThreadSafe(fullpath.c_str());
-	
-	
 	
 	CCImage* img = new CCImage();
-	img->initWithImageData(newImg->getData(),
-						   newImg->getDataLen(),
-						   CCImage::kFmtRawData,
-						   newImg->getWidth(),
-						   newImg->getHeight(),
-						   8);
+	img->initWithImageFileThreadSafe(fullpath.c_str());
 	
-	newImg->release();
+//	CCLog("fuckfuckfuck android %d,%d,%d,%d",newImg->getDataLen(), newImg->getWidth(), newImg->getHeight(), newImg->getBitsPerComponent());
+	
+//	CCImage* img = new CCImage();
+//	
+//	img->initWithImageData(newImg->getData(), newImg->getDataLen())
+//	
+	
+	
+//	newImg->release();
 	
 	
 	int imgByte = 3;
@@ -1348,6 +1373,8 @@ CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
 	unsigned char* oDataPos;
 	
 	int i;
+	
+	
 	for(int y=0;y<oy;y++){
 		for(int x=0;x<ox;x++){
 			i = (y*ox+x)*imgByte;
@@ -1355,15 +1382,15 @@ CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
 			oDataPos = &oData[i+3];
 			
 			if(oData[i+2]>10 || oData[i+1]>10 || oData[i]>10){
-				
-				*--oDataPos = 255;
-				*--oDataPos = 255;
-				*--oDataPos = 255;
+				if(imgByte==4)oData[i+3] = 255;
+				oData[i+2] = 255;
+				oData[i+1] = 255;
+				oData[i] = 255;
 			}else{
-				*oDataPos = 0;
-				*--oDataPos = 0;
-				*--oDataPos = 0;
-				*--oDataPos = 0;
+				if(imgByte==4)oData[i+3] = 0;
+				oData[i+2] = 0;
+				oData[i+1] = 0;
+				oData[i] = 0;
 			}
 		}
 	}
@@ -1374,6 +1401,7 @@ CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
 	texture->autorelease();
 	
 	img->release();
+	
 	
 	return texture;
 	
@@ -1531,7 +1559,7 @@ void VisibleParent::changingGameStep( int t_step )
 
 void VisibleParent::myInit( const char* filename, bool isPattern, string sil_filename )
 {
-	drawRects = new CCArray(1);
+		drawRects = new CCArray(1);
 	setPosition(CCPointZero);
 
 	myGD->V_Ip["VS_divideRect"] = std::bind(&VisibleParent::divideRect, this, _1);
@@ -1545,4 +1573,5 @@ void VisibleParent::myInit( const char* filename, bool isPattern, string sil_fil
 
 	myGD->V_CCO["VS_setSceneNode"] = std::bind(&VisibleSprite::setSceneNode, myVS, _1);
 	myGD->V_V["VS_setLight"] = std::bind(&VisibleSprite::setLight, myVS);
+	
 }
