@@ -4,6 +4,7 @@
 
 #include "StageImgLoader.h"
 #include "StarGoldData.h"
+#include "FormSetter.h"
 
 PopCake::PopCake()
 {
@@ -47,6 +48,7 @@ bool PopCake::init()
 	n->setScale(0.5);
 	n->setAnchorPoint(ccp(0.5, 0.5));
 	addChild(n);
+	FormSetter::get()->addObject("bobj",n);
 	
 	cb = CommonButton::create("load", 20, CCSizeMake(100, 100), CommonButtonOrange,
 																					0);
@@ -84,6 +86,8 @@ void PopCake::successOriginalAction()
 {
 	n->init(mySIL->addImage("morphing_img.png"));
 }
+
+
 
 void PopCake::failOriginalAction()
 {

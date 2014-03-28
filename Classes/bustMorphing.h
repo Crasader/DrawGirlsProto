@@ -235,7 +235,7 @@ struct ValidArea
 	float y;
 	float r;
 };
-class MyNode : public CCSprite{
+class MyNode : public CCLayer{
 public:
 	
   Vertex3D* m_vertices;
@@ -270,8 +270,8 @@ public:
 	}
 	virtual void registerWithTouchDispatcher ()
 	{
-//		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-//		pDispatcher->addTargetedDelegate(this, 0, false);
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, 0, false);
 	}
 	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 	{
@@ -358,7 +358,7 @@ public:
 		
 		m_validTouch = false;
 		//			local = m_validTouchPosition;
-		CCLog("%f %f", local.x, local.y);
+		CCLog("touch~~ %f %f", local.x, local.y);
 		m_waveRange = 100;
 		vector<Vertex3D*> movingVertices;
 		map<Vertex3D*, float> distance;
@@ -431,13 +431,13 @@ public:
 		for(int i=0; i<nTri; i++){
 			for(int j=0; j<3; j++){
 				float ss = ks19937::getIntValue(0, 0);
-				Vertex3D temp = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x, 
-																		 delaunay.getVertices()[mTriangles2[i].vt[j]].y,
+				Vertex3D temp = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x/2.f,					
+																		 delaunay.getVertices()[mTriangles2[i].vt[j]].y/2.f,
 																		 delaunay.getVertices()[mTriangles2[i].vt[j]].extraData);
 //				temp.z = points
 				m_vertices[i*3 + j] = temp;
-				m_textCoords[i*3 + j] = Vertex3DMake((temp.x) / (2*m_halfWidth),
-																						 1.f - (temp.y) / (2*m_halfHeight), temp.z);
+				m_textCoords[i*3 + j] = Vertex3DMake((temp.x) / (m_halfWidth),
+																						 1.f - (temp.y) / (m_halfHeight), temp.z);
 				m_colors[i*3 + j] = ccc4f(ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), 1.f);
 			}
 		}
@@ -471,16 +471,16 @@ public:
 	}
 	bool init()
 	{
-		CCSprite::init();
+		CCLayer::init();
 		
 		
 		return true;
 	}
 	bool init(CCTexture2D* tex){
-		if(!CCSprite::initWithTexture(tex))
+		if(!CCLayer::init())
 			return false;
-		
-//		setTouchEnabled(true);
+		ignoreAnchorPointForPosition(false);
+		setTouchEnabled(true);
 		m_imageRotationDegree = 0.f;
 		tex->retain();
 		texture = tex;//CCTextureCache::sharedTextureCache()->addImage("bmTest.png");
@@ -509,7 +509,7 @@ public:
 		CommonButton* cb = CommonButton::create("left", 20, CCSizeMake(100, 100), CommonButtonOrange,
 																						0);
 		addChild(cb, 1);
-		cb->setPosition(ccp( 300, 200));
+		cb->setPosition(ccp( 0, 200));
 		cb->setFunction([=](CCObject* obj){
 			m_imageRotationDegree -= 10;	
 		});		
@@ -517,7 +517,7 @@ public:
 		CommonButton* cb2 = CommonButton::create("right", 20, CCSizeMake(100, 100), CommonButtonOrange,
 																						0);
 		addChild(cb2, 1);
-		cb2->setPosition(ccp( 300, 100));
+		cb2->setPosition(ccp( 0, 100));
 		cb2->setFunction([=](CCObject* obj){
 			m_imageRotationDegree += 10;	
 		});		
@@ -584,7 +584,7 @@ public:
 		return retValue;
 	}	
 	void draw(){
-		CCSprite::draw();
+		CCLayer::draw();
 
 		if(texture == nullptr)
 			return;
@@ -612,16 +612,16 @@ public:
 		//CCAffineTransformTranslate(tmpAffine, -texture->getContentSizeInPixels().width, -texture->getContentSizeInPixels().height);
 		//CGAffineToGL(&tmpAffine, glMat.mat);
 		
-//		kmGLTranslatef(texture->getContentSizeInPixels().width/2.f,
-//									 texture->getContentSizeInPixels().height/2.f, 0);
-//		kmGLRotatef(m_imageRotationDegree, 0, 1, 0);
-//		kmGLTranslatef(-texture->getContentSizeInPixels().width/2.f,
-//									 -texture->getContentSizeInPixels().height/2.f, 0.f);
+		kmGLTranslatef(texture->getContentSizeInPixels().width/4.f,
+									 texture->getContentSizeInPixels().height/4.f, 0);
+		kmGLRotatef(m_imageRotationDegree, 0, 1, 0);
+		kmGLTranslatef(-texture->getContentSizeInPixels().width/4.f,
+									 -texture->getContentSizeInPixels().height/4.f, 0.f);
 		
 //		kmGLScalef(0.5f, 0.5f, 1.f);
 //		kmGLTranslatef(-texture->getContentSizeInPixels().width/2.f,
 //									 -texture->getContentSizeInPixels().height/2.f, 0.f);
-		
+//		
 	//	kmGLTranslatef(texture->getContentSizeInPixels().height / 2.f,
 	//								 texture->getContentSizeInPixels().width / 2.f, 0);
     //cocos2d::gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
@@ -643,7 +643,9 @@ public:
 ////		//배열값이용해서 삼각형 그리기
 ////		glDrawArrays(GL_TRIANGLES, 0, verticesCount);
 		
-
+		
+#define kQuadSize sizeof(m_sQuad.bl)
+		
 		ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords);
 		
 		glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
@@ -658,7 +660,9 @@ public:
 //		CCDirector::sharedDirector()->setProjection(kCCDirectorProjection2D);
 
 	}
+	
 };
+
 
 
 #endif /* defined(__DGproto__bustMorphing__) */
