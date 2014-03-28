@@ -89,6 +89,7 @@ public:
 	map<string,FormSetterData> m_list;
 	float m_delay;
 	std::function<void(void)> m_funcAtReceived;
+	std::function<void(void)> m_funcAtReceivedOnce;
 	
 	static FormSetter* get()
 	{
@@ -104,7 +105,7 @@ public:
 		m_is_sch=false;
 		m_delay = 1.f;
 		m_funcAtReceived = nullptr;
-		m_is_once=false;
+		m_funcAtReceivedOnce = nullptr;
 	}
 	
 	
@@ -116,14 +117,14 @@ public:
 		it = m_list.find(name);
 		
 		//받아온 데이터와 등록되어있는 오브젝트중 매칭이 되어있으면
-		if(it == m_list.end()){
+		if(it != m_list.end()){
 			(it->second).obj = obj;
 			(it->second).func = func;
 		}else{
 			FormSetterData newObj;
 			newObj.obj = obj;
 			newObj.func = func;
-			newObj.data = nullptr;
+			newObj.data = 0;
 			m_list[name] = newObj;
 		}
 			
@@ -172,22 +173,35 @@ public:
 	
 	
 	
-	//서버로 데이터를 요청한다.
-	void requestFormData(){
-		m_is_sch = true;
-		Json::Value param;
-		graphdog->command("getformsetter", param, this, json_selector(this, FormSetter::receivedFormData));
-	}
-	
-	//서버로 데이터를 요청한다. 한번만
-	void requestFormDataOnce(std::function<void(void)> receivedFunc){
-		if(receivedFunc)m_funcAtReceived = receivedFunc;
-		m_is_once=true;
-		this->requestFormData();
-	}
+
 	
 	//서버의 응답을 받아 등록된 오브젝트의 포지션과 스케일을 조절하고 펑션이 등록되어있다면 호출한다.
 	void receivedFormData(Json::Value p){
+		
+		this->matchRecedvedData(p);
+		//갱신후 부를 함수가 설정되어있다면 콜한다.
+		if(m_funcAtReceived)m_funcAtReceived();
+
+		//설정된 딜레이후 다시 데이터를 받아온다.
+		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(
+																															 schedule_selector(FormSetter::requestFormData),
+																															 this,
+																															 1.f,
+																															 0,
+																															 this->m_delay,
+																															 false);
+	}
+	
+	//한번만 부른다.
+	void receivedFormDataOnce(Json::Value p){
+		this->matchRecedvedData(p);
+		if(m_funcAtReceivedOnce){
+				m_funcAtReceivedOnce();
+				m_funcAtReceivedOnce=nullptr;
+		}
+	}
+	
+	void matchRecedvedData(Json::Value p){
 		//update data
 		Json::Value::Members m = p.getMemberNames();
 		
@@ -201,19 +215,19 @@ public:
 				//포지션과 스케일을 조절해준다.
 				(it->second).data = p[(*iter).c_str()];
 				
-				if(!(it->second).data["x"].isNull())
+				if((it->second).obj && !(it->second).data["x"].isNull())
 					((it->second).obj)->setPositionX((it->second).data.get("x", 0).asFloat());
 				
-				if(!(it->second).data["y"].isNull())
+				if((it->second).obj &&!(it->second).data["y"].isNull())
 					((it->second).obj)->setPositionY((it->second).data.get("y", 0).asFloat());
 				
-				if(!(it->second).data["scale"].isNull())
-				((it->second).obj)->setScale((it->second).data.get("scale", 1).asFloat());
+				if((it->second).obj &&!(it->second).data["scale"].isNull())
+					((it->second).obj)->setScale((it->second).data.get("scale", 1).asFloat());
 				
 				//펑션이 등록되어있으면 콜해준다.
 				if((it->second).func)(it->second).func(p[*iter]);
 				
-			//없으면
+				//없으면
 			}else{
 				FormSetterData newObj;
 				newObj.data = p[(*iter).c_str()];
@@ -223,27 +237,24 @@ public:
 				m_list[(*iter).c_str()] = newObj;
 			}
 		}
-		
-		//갱신후 부를 함수가 설정되어있다면 콜한다.
-		if(m_funcAtReceived)m_funcAtReceived();
-		
-		if(m_is_once){
-			m_is_once=false;
-			return;
-		}
-		CCLog(" ---- set Form!! ---- ");
-
-		//설정된 딜레이후 다시 데이터를 받아온다.
-		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(
-																															 schedule_selector(FormSetter::requestFormData),
-																															 this,
-																															 1.f,
-																															 0,
-																															 this->m_delay,
-																															 false);
-		
 	}
 	
+
+	
+	//서버로 데이터를 요청한다.
+	void requestFormData(){
+		m_is_sch = true;
+		Json::Value param;
+		graphdog->command("getformsetter", param, this, json_selector(this, FormSetter::receivedFormData));
+	}
+	
+	//서버로 데이터를 요청한다. 한번만
+	void requestFormDataOnce(std::function<void(void)> receivedFunc){
+		m_funcAtReceivedOnce = receivedFunc;
+		
+		Json::Value param;
+		graphdog->command("getformsetter", param, this, json_selector(this, FormSetter::receivedFormDataOnce));
+	}
 	
 };
 #endif /* defined(__DGproto__FormSetter__) */
