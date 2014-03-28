@@ -308,7 +308,7 @@ void GameItemFast::acting()
 {
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "Fast");
 	
-	myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 10.f);
+	myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 1.9f);
 	
 	CCDelayTime* t_delay = CCDelayTime::create(SDS_GI(kSDF_stageInfo, mySD->getSilType(), "itemOption_fast_sec"));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemFast::ending));
@@ -319,7 +319,7 @@ void GameItemFast::acting()
 
 void GameItemFast::ending()
 {
-	myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 10.f);
+	myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 1.9f);
 	removeFromParentAndCleanup(true);
 }
 
@@ -492,6 +492,7 @@ GameItemSilence* GameItemSilence::create(bool is_near)
 void GameItemSilence::acting()
 {
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "silence");
+	myGD->communication("UI_takeSilenceItem");
 	myGD->communication("CP_silenceItem", true);
 	CCDelayTime* t_delay = CCDelayTime::create(mySD->getSilenceItemOption());
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(GameItemSilence::finalAction));

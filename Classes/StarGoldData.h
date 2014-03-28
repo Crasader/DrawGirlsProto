@@ -383,6 +383,9 @@ public:
 	
 	int suitable_stage;
 	
+	string getAppType();
+	int getAppVersion();
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
@@ -475,6 +478,9 @@ private:
 	KSProtectVar<float> ai_adder_on_drew_or_damaged; //
 	KSProtectVar<float> fury_percent; //
 	KSProtectVar<int> SP_rent_card_thanks; // 소셜포인트 획득량-카드빌리고 보답할때
+	
+	string app_type;
+	int app_version;
 	
 	void myInit();
 	

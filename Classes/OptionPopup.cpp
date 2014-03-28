@@ -698,7 +698,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 								   reader->release();
 								   
 								   Json::Value param;
-								   param["memberID"] = hspConnector::get()->myKakaoInfo["user_id"].asString();
+								   param["memberID"] = hspConnector::get()->getKakaoID();// hspConnector::get()->myKakaoInfo["user_id"].asString(); 기능 제거한다고 하면서 그래프도그가 수정됨
 								   hspConnector::get()->command("dropoutuser", param, [=](Json::Value result_data)
 																{
 																	if(result_data["result"]["code"].asInt() == GDSUCCESS)

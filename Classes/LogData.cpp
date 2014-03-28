@@ -65,9 +65,29 @@ void LogData::sendLog (string t_category)
 		param["content"] = contents;
 		param["category"] = t_category.c_str();
 		
-		hspConnector::get()->command("writelog", param, NULL);
+		hspConnector::get()->command("writelog", param, nullptr);
 		myDefault->resetData(kSDF_log);
 	}
+CommandParam LogData::getSendLogCommand(string t_category)
+{
+	Json::Value param;
+	
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	
+	Json::Value contents;
+	int loop_cnt = getLogCount();
+	for(int i=1;i<=loop_cnt;i++)
+	{
+		contents[i-1] = getLog(kLOG_data, i);
+	}
+	
+	param["content"] = contents;
+	param["category"] = t_category.c_str();
+	
+	myDefault->resetData(kSDF_log);
+	return CommandParam("writelog", param, nullptr);
+}
+
 string LogData::getLog (LOG_KEY t_key, int t_i)
         {
 		return myDefault->getValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), t_i)->getCString(), "");

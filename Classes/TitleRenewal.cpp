@@ -17,6 +17,8 @@
 #include "NewMainFlowScene.h"
 #include "StoryView.h"
 #include "ASPopupView.h"
+#include "AlertEngine.h"
+#include "MyLocalization.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -92,11 +94,11 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		
 		receive_cnt = 0;
 		
+		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+		
 		Json::Value userdata_param;
 		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
 		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
-		
-		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 		
 		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 		
@@ -182,6 +184,12 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(mySGD->getAppVersion() < result_data[mySGD->getAppType()].asInt())
+		{
+			exit(1);
+			return;
+		}
+		
 		mySGD->setHeartMax(result_data["heartMax"].asInt());
 		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
 		mySGD->setGameFriendMax(result_data["gameFriendMax"].asInt());
@@ -920,27 +928,27 @@ void TitleRenewalScene::endingAction()
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 0)
-	{
-		StoryView* t_sv = StoryView::create();
-		t_sv->setFunc([=]()
-					  {
-						  myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 1);
-						  myDSH->saveAllUserData(nullptr);
-						  CCDelayTime* t_delay = CCDelayTime::create(2.f);
-						  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
-						  CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-						  runAction(t_seq);
-					  });
-		addChild(t_sv);
-	}
-	else
-	{
+//	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 0)
+//	{
+//		StoryView* t_sv = StoryView::create();
+//		t_sv->setFunc([=]()
+//					  {
+//						  myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 1);
+//						  myDSH->saveAllUserData(nullptr);
+//						  CCDelayTime* t_delay = CCDelayTime::create(2.f);
+//						  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
+//						  CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//						  runAction(t_seq);
+//					  });
+//		addChild(t_sv);
+//	}
+//	else
+//	{
 		CCDelayTime* t_delay = CCDelayTime::create(2.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 		runAction(t_seq);
-	}
+//	}
 }
 
 void TitleRenewalScene::changeScene()
@@ -1422,4 +1430,17 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
+}
+
+void TitleRenewalScene::alertAction(int t1, int t2)
+{
+	if(t1 == 1 && t2 == 0)
+	{
+		CCDirector::sharedDirector()->end();
+	}
+}
+
+void TitleRenewalScene::keyBackClicked()
+{
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
 }

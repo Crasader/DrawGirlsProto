@@ -35,6 +35,7 @@
 #include "ScrollMenu.h"
 #include "MyLocalization.h"
 #include "NewMainFlowScene.h"
+#include "RankNewPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -844,15 +845,19 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_rank)
 		{
-			RankPopup* t_rp = RankPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
-			addChild(t_rp, kMainFlowZorder_popup);
+			RankNewPopup* t_popup = RankNewPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			addChild(t_popup, kMainFlowZorder_popup);
+			
+//			RankPopup* t_rp = RankPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
+//			addChild(t_rp, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_shop)
 		{
 			ShopPopup* t_shop = ShopPopup::create();
 			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_character);
+			t_shop->setShopCode(kSC_ruby);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
 			addChild(t_shop, kMainFlowZorder_popup);
 		}
@@ -919,16 +924,16 @@ void MainFlowScene::setBottom()
 	rank_menu->setPosition(ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
 	
-	CCSprite* n_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
-	CCSprite* s_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
-	s_friendmanagement->setColor(ccGRAY);
-	
-	CCMenuItem* friendmanagement_item = CCMenuItemSprite::create(n_friendmanagement, s_friendmanagement, this, menu_selector(MainFlowScene::menuAction));
-	friendmanagement_item->setTag(kMainFlowMenuTag_friendManagement);
-	
-	CCMenu* friendmanagement_menu = CCMenu::createWithItem(friendmanagement_item);
-	friendmanagement_menu->setPosition(ccp(-139, n_friendmanagement->getContentSize().height/2.f));
-	bottom_case->addChild(friendmanagement_menu);
+//	CCSprite* n_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
+//	CCSprite* s_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
+//	s_friendmanagement->setColor(ccGRAY);
+//	
+//	CCMenuItem* friendmanagement_item = CCMenuItemSprite::create(n_friendmanagement, s_friendmanagement, this, menu_selector(MainFlowScene::menuAction));
+//	friendmanagement_item->setTag(kMainFlowMenuTag_friendManagement);
+//	
+//	CCMenu* friendmanagement_menu = CCMenu::createWithItem(friendmanagement_item);
+//	friendmanagement_menu->setPosition(ccp(-139, n_friendmanagement->getContentSize().height/2.f));
+//	bottom_case->addChild(friendmanagement_menu);
 	
 	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
 	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
@@ -952,16 +957,16 @@ void MainFlowScene::setBottom()
 	cardsetting_menu->setPosition(ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
 	
-	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
-	CCSprite* s_gacha = CCSprite::create("mainflow_gacha.png");
-	s_gacha->setColor(ccGRAY);
-	
-	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(MainFlowScene::menuAction));
-	gacha_item->setTag(kMainFlowMenuTag_gacha);
-	
-	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
-	gacha_menu->setPosition(ccp(59, n_gacha->getContentSize().height/2.f));
-	bottom_case->addChild(gacha_menu);
+//	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
+//	CCSprite* s_gacha = CCSprite::create("mainflow_gacha.png");
+//	s_gacha->setColor(ccGRAY);
+//	
+//	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(MainFlowScene::menuAction));
+//	gacha_item->setTag(kMainFlowMenuTag_gacha);
+//	
+//	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
+//	gacha_menu->setPosition(ccp(59, n_gacha->getContentSize().height/2.f));
+//	bottom_case->addChild(gacha_menu);
 	
 	CCSprite* n_achievement = CCSprite::create("mainflow_achievement.png");
 	CCSprite* s_achievement = CCSprite::create("mainflow_achievement.png");
@@ -971,7 +976,7 @@ void MainFlowScene::setBottom()
 	achievement_item->setTag(kMainFlowMenuTag_achievement);
 	
 	CCMenu* achievement_menu = CCMenu::createWithItem(achievement_item);
-	achievement_menu->setPosition(ccp(125, n_achievement->getContentSize().height/2.f));
+	achievement_menu->setPosition(ccp(-139, n_achievement->getContentSize().height/2.f));//ccp(125, n_achievement->getContentSize().height/2.f));
 	bottom_case->addChild(achievement_menu);
 	
 	CCSprite* n_event = CCSprite::create("mainflow_event.png");

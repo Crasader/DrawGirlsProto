@@ -1702,8 +1702,9 @@ void StartSettingScene::goToGame()
 	
 	mySGD->setGameStart();
 	
-	if(mySD->getSilType() == 1)
+	if(mySD->getSilType() == 1 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
 	{
+		myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
 		mySGD->setNextSceneName("playtutorial");
 		CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
 	}

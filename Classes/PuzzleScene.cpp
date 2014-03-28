@@ -752,17 +752,17 @@ enum PuzzleMenuTag{
 
 void PuzzleScene::setPuzzle()
 {
-	CCSize puzzle_size = CCSizeMake(326, 268);
+	CCSize puzzle_size = CCSizeMake(332, 272);
 	
 	puzzle_node = CCNode::create();
-	puzzle_node->setPosition(ccp(puzzle_size.width/2.f+8, puzzle_size.height/2.f+10));
+	puzzle_node->setPosition(ccp(puzzle_size.width/2.f+5, puzzle_size.height/2.f+8));
 	addChild(puzzle_node, kPuzzleZorder_puzzle);
 	
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
-	CCSprite* center = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_center.png", puzzle_number)->getCString());
-	center->setPosition(CCPointZero);
-	puzzle_node->addChild(center, kPuzzleNodeZorder_center);
+//	CCSprite* center = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_center.png", puzzle_number)->getCString());
+//	center->setPosition(CCPointZero);
+//	puzzle_node->addChild(center, kPuzzleNodeZorder_center);
 	
 	CCSprite* top = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_top.png", puzzle_number)->getCString());
 	top->setAnchorPoint(ccp(0.5, 1));
@@ -784,21 +784,21 @@ void PuzzleScene::setPuzzle()
 	right->setPosition(ccp(puzzle_size.width/2.f, 0));
 	puzzle_node->addChild(right, kPuzzleNodeZorder_puzzle);
 	
-	CCSprite* embo_top = CCSprite::create("puzzle_embo_top.png");
-	embo_top->setPosition(top->getPosition());
-	puzzle_node->addChild(embo_top, kPuzzleNodeZorder_puzzle);
-	
-	CCSprite* embo_bottom = CCSprite::create("puzzle_embo_bottom.png");
-	embo_bottom->setPosition(bottom->getPosition());
-	puzzle_node->addChild(embo_bottom, kPuzzleNodeZorder_puzzle);
-	
-	CCSprite* embo_left = CCSprite::create("puzzle_embo_left.png");
-	embo_left->setPosition(left->getPosition());
-	puzzle_node->addChild(embo_left, kPuzzleNodeZorder_puzzle);
-	
-	CCSprite* embo_right = CCSprite::create("puzzle_embo_right.png");
-	embo_right->setPosition(right->getPosition());
-	puzzle_node->addChild(embo_right, kPuzzleNodeZorder_puzzle);
+//	CCSprite* embo_top = CCSprite::create("puzzle_embo_top.png");
+//	embo_top->setPosition(top->getPosition());
+//	puzzle_node->addChild(embo_top, kPuzzleNodeZorder_puzzle);
+//	
+//	CCSprite* embo_bottom = CCSprite::create("puzzle_embo_bottom.png");
+//	embo_bottom->setPosition(bottom->getPosition());
+//	puzzle_node->addChild(embo_bottom, kPuzzleNodeZorder_puzzle);
+//	
+//	CCSprite* embo_left = CCSprite::create("puzzle_embo_left.png");
+//	embo_left->setPosition(left->getPosition());
+//	puzzle_node->addChild(embo_left, kPuzzleNodeZorder_puzzle);
+//	
+//	CCSprite* embo_right = CCSprite::create("puzzle_embo_right.png");
+//	embo_right->setPosition(right->getPosition());
+//	puzzle_node->addChild(embo_right, kPuzzleNodeZorder_puzzle);
 	
 	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
@@ -814,7 +814,7 @@ void PuzzleScene::setPuzzle()
 	
 	for(int i=0;i<20;i++)
 	{
-		CCPoint piece_position = ccpAdd(ccp(-puzzle_size.width/2.f, -puzzle_size.height/2.f), ccp((i%5*120+86)/2,((3-i/5)*120+88)/2));
+		CCPoint piece_position = ccpAdd(ccp(-puzzle_size.width/2.f, -puzzle_size.height/2.f), ccp((i%5*120+92)/2,((3-i/5)*120+92)/2));
 		
 		string piece_type;
 		if(i%2 == 0)

@@ -11,6 +11,7 @@
 
 
 #include <cmath>
+#include <functional>
 
 
 template <typename T>
@@ -26,9 +27,12 @@ private:
 	
 	float flowTime;
 	bool nextTurnIsFinish;
+	std::function<float(float)> m_timeFunctor;
 public:
-	FromToWithDuration2(){}
-	FromToWithDuration2(T _from, T _to, float _duration) : originFrom(_from), nextTurnIsFinish(false)
+	FromToWithDuration2(){
+		m_timeFunctor = nullptr;
+	}
+	FromToWithDuration2(T _from, T _to, float _duration, std::function<float(float)> tf = nullptr) : originFrom(_from), nextTurnIsFinish(false)
 	{
 		nextTurnIsFinish = false;
 		flowTime = 0.f;
@@ -36,10 +40,11 @@ public:
 		to = _to;
 		duration = _duration;
 		dx = (to - from) / duration;
+		m_timeFunctor = tf;
 		// positive
 	}
 	
-	void init(T _from, T _to, float _duration)
+	void init(T _from, T _to, float _duration, std::function<float(float)> tf = nullptr)
 	{
 		nextTurnIsFinish = false;
 		flowTime = 0.f;
@@ -49,6 +54,8 @@ public:
 		duration = _duration;
 		if(duration != 0)
 			dx = (to - from) / duration;
+		
+		m_timeFunctor = tf;
 		// positive
 		
 	}
@@ -59,6 +66,35 @@ public:
 		flowTime += dt;
 		if(duration)
 			from = from + dx * dt;
+		else
+			from = to;
+		if(duration <= flowTime)
+		{
+			from = to;
+			nextTurnIsFinish = true;
+		}
+		
+		return true;
+	}
+	bool absStep(float time)
+	{
+		if(nextTurnIsFinish)
+			return false; // finish
+		
+		
+		flowTime = time;
+		if(m_timeFunctor)
+			time = m_timeFunctor(time / duration) * duration;
+		else
+			time = time;
+//		time = time - 1;
+//		
+//		float overshoot = 1.70158f;
+//		
+//    
+//    time = (time * time * ((overshoot + 1) * time + overshoot) + 1);
+		if(duration)
+			from = originFrom + dx * time;
 		else
 			from = to;
 		if(duration <= flowTime)

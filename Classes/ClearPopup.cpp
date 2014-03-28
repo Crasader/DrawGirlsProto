@@ -32,6 +32,7 @@
 #include "SendMessageUtil.h"
 #include "CardAnimations.h"
 #include "GDWebSprite.h"
+#include "KSLabelTTF.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -87,10 +88,13 @@ bool ClearPopup::init()
 	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
+	vector<CommandParam> send_command_list;
+	send_command_list.clear();
+	
 	Json::Value param;
 	param["key"] = CCSTR_CWF("stage_clear_%d", mySD->getSilType())->getCString();
 	
-	hspConnector::get()->command("increaseStats", param, NULL);
+	send_command_list.push_back(CommandParam("increaseStats", param, nullptr));
 	
 	if(mySGD->getScore() > myDSH->getIntegerForKey(kDSH_Key_allHighScore))
 	{
@@ -106,8 +110,8 @@ bool ClearPopup::init()
 	p1_data["highstage"] = mySGD->suitable_stage;
 	Json::FastWriter p1_data_writer;
 	p1["data"] = p1_data_writer.write(p1_data);
-	hspConnector::get()->command("addweeklyscore", p1, NULL);
 	
+	send_command_list.push_back(CommandParam("addweeklyscore", p1, nullptr));
 	
 	is_rank_changed = false;
 //	if(mySGD->save_stage_rank_stageNumber == mySD->getSilType())
@@ -201,7 +205,9 @@ bool ClearPopup::init()
 		p["memberID"]=hspConnector::get()->getKakaoID();
 		p["score"]=int(mySGD->getScore());
 		p["stageNo"]=mySD->getSilType();
-		hspConnector::get()->command("setStageScore",p,NULL);
+	
+	send_command_list.push_back(CommandParam("setStageScore",p,nullptr));
+	
 //	}
     
 	main_case = CCSprite::create("ending_back.png");
@@ -209,7 +215,10 @@ bool ClearPopup::init()
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kZ_CP_back);
 	
-		
+	
+	
+	
+	
 	CCSprite* title = CCSprite::create("ending_clear.png");
 	title->setPosition(ccp(131,230.5f));
 	main_case->addChild(title, kZ_CP_img);
@@ -343,7 +352,7 @@ bool ClearPopup::init()
 	myLog->addLog(kLOG_puzzleAchievementMaximum_i, -1, 100*maximum_count/stage_count);
 	
 	
-	myLog->sendLog(CCString::createWithFormat("clear_%d", stage_number)->getCString());
+	send_command_list.push_back(myLog->getSendLogCommand(CCString::createWithFormat("clear_%d", stage_number)->getCString()));
 	
 	is_saved_user_data = false;
 	take_animation_level = take_level;
@@ -931,7 +940,151 @@ bool ClearPopup::init()
 //			replay_menu = NULL;
 //	}
 	
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	loading_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+	loading_img->setPosition(ccp(347,130));
+	main_case->addChild(loading_img, kZ_CP_img);
+	reader->release();
+	
+	Json::Value param2;
+	param2["myScore"]=int(mySGD->getScore());
+	param2["stageNo"]=mySD->getSilType();
+	
+	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, ClearPopup::resultGetRank)));
+	
+	hspConnector::get()->command(send_command_list);
+	
     return true;
+}
+
+ClearPopup::~ClearPopup()
+{
+	hspConnector::get()->removeTarget(this);
+}
+
+void ClearPopup::resultGetRank(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		int alluser = result_data["alluser"].asInt();
+		int myrank = result_data["myrank"].asInt();
+		
+		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
+		all_user_label->setColor(ccc3(255, 50, 50));
+		all_user_label->setAnchorPoint(ccp(1,0.5));
+		all_user_label->setPosition(ccp(main_case->getContentSize().width-40, 183));
+		main_case->addChild(all_user_label, kZ_CP_img);
+		
+		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 10);
+		my_rank_label->setAnchorPoint(ccp(1,0.5));
+		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
+		main_case->addChild(my_rank_label, kZ_CP_img);
+		
+		float rank_percent = 1.f*myrank/alluser;
+		
+		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
+		rank_percent_case->setAnchorPoint(ccp(0.5,0));
+		rank_percent_case->setPosition(ccp(250+196,197));
+		main_case->addChild(rank_percent_case, kZ_CP_img);
+		
+		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.1f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 10);
+		percent_label->enableOuterStroke(ccBLACK, 1);
+		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f, rank_percent_case->getContentSize().height/2.f+4));
+		rank_percent_case->addChild(percent_label, kZ_CP_img);
+		
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(250 + 196.f*rank_percent,197));
+		rank_percent_case->runAction(t_move);
+		
+		Json::Value user_list = result_data["list"];
+		
+		int limit_count = 3;
+		for(int i=0;i<user_list.size() && i<limit_count;i++)
+		{
+			string case_name;
+			if(myrank == i+1)
+			{
+				case_name = "gameresult_rank_me.png";
+				limit_count++;
+			}
+			else
+			{
+				case_name = "gameresult_rank_normal.png";
+			}
+			
+			CCSprite* list_cell_case = CCSprite::create(case_name.c_str());
+			list_cell_case->setPosition(ccp(348,158-i*26));
+			main_case->addChild(list_cell_case, kZ_CP_img);
+			
+			CCPoint rank_position = ccp(13,13);
+			if(i == 0)
+			{
+				CCSprite* gold_medal = CCSprite::create("rank_gold.png");
+				gold_medal->setPosition(rank_position);
+				list_cell_case->addChild(gold_medal);
+			}
+			else if(i == 1)
+			{
+				CCSprite* silver_medal = CCSprite::create("rank_silver.png");
+				silver_medal->setPosition(rank_position);
+				list_cell_case->addChild(silver_medal);
+			}
+			else if(i == 2)
+			{
+				CCSprite* bronze_medal = CCSprite::create("rank_bronze.png");
+				bronze_medal->setPosition(rank_position);
+				list_cell_case->addChild(bronze_medal);
+			}
+			else
+			{
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 11);
+				rank_label->enableOuterStroke(ccBLACK, 1);
+				rank_label->setPosition(rank_position);
+				list_cell_case->addChild(rank_label);
+			}
+			
+			KSLabelTTF* nick_label = KSLabelTTF::create(user_list[i]["nick"].asString().c_str(), mySGD->getFont().c_str(), 11);
+			nick_label->enableOuterStroke(ccBLACK, 1);
+			nick_label->setPosition(ccp(83,13));
+			list_cell_case->addChild(nick_label);
+			
+			CCLabelTTF* score_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			score_label->setColor(ccBLACK);
+			score_label->setPosition(ccp(168,13));
+			list_cell_case->addChild(score_label);
+		}
+		
+		if(myrank > 3)
+		{
+			CCSprite* list_cell_case = CCSprite::create("gameresult_rank_me.png");
+			list_cell_case->setPosition(ccp(348,80));
+			main_case->addChild(list_cell_case, kZ_CP_img);
+			
+			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 11);
+			rank_label->enableOuterStroke(ccBLACK, 1);
+			rank_label->setPosition(ccp(13,13));
+			list_cell_case->addChild(rank_label);
+			
+			
+			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 11);
+			nick_label->enableOuterStroke(ccBLACK, 1);
+			nick_label->setPosition(ccp(83,13));
+			list_cell_case->addChild(nick_label);
+			
+			CCLabelTTF* score_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			score_label->setColor(ccBLACK);
+			score_label->setPosition(ccp(168,13));
+			list_cell_case->addChild(score_label);
+		}
+	}
+	else
+	{
+		CCLabelTTF* fail_label = CCLabelTTF::create("랭킹 정보 확인 실패", mySGD->getFont().c_str(), 12);
+		fail_label->setPosition(loading_img->getPosition());
+		main_case->addChild(fail_label, kZ_CP_img);
+	}
+	
+	loading_img->removeFromParent();
 }
 
 void ClearPopup::showPopup()

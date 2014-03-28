@@ -230,16 +230,16 @@ private:
 			{
 				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-				CCSprite* n_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
-				n_embo->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f));
-				n_piece->addChild(n_embo);
-				setStageLevel(n_embo, false);
+//				CCSprite* n_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
+//				n_embo->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f));
+//				n_piece->addChild(n_embo);
+				setStageLevel(n_piece, false);
 				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-				CCSprite* s_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
-				s_embo->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f));
-				s_piece->addChild(s_embo);
-				setStageLevel(s_embo, true);
+//				CCSprite* s_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
+//				s_embo->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f));
+//				s_piece->addChild(s_embo);
+				setStageLevel(s_piece, true);
 				s_piece->setColor(ccGRAY);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
@@ -251,16 +251,16 @@ private:
 			{
 				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-				CCSprite* n_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
-				n_embo->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f));
-				n_piece->addChild(n_embo);
+//				CCSprite* n_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
+//				n_embo->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f));
+//				n_piece->addChild(n_embo);
 //				setHaveCardBase(n_piece, false);
 				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				s_piece->setColor(ccGRAY);
-				CCSprite* s_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
-				s_embo->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f));
-				s_piece->addChild(s_embo);
+//				CCSprite* s_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
+//				s_embo->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f));
+//				s_piece->addChild(s_embo);
 //				setHaveCardBase(s_piece, true);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
@@ -289,11 +289,11 @@ private:
 		{
 			if(piece_mode == kPieceMode_default)
 			{
-				CCSprite* n_piece = CCSprite::create(("piece_embo_" + WorH + ".png").c_str());
-				n_piece->setOpacity(0);
+				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_center_piece%d.png", puzzle_number,
+																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				setStageLevel(n_piece, false);
-				CCSprite* s_piece = CCSprite::create(("piece_embo_" + WorH + ".png").c_str());
-				s_piece->setOpacity(0);
+				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_center_piece%d.png", puzzle_number,
+																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				setStageLevel(s_piece, true);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));

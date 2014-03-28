@@ -15,6 +15,7 @@
 #include "TouchSuctionLayer.h"
 #include "CommonButton.h"
 #include "TouchSwallowManagement.h"
+#include "bustMorphing.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -57,8 +58,8 @@ bool DiaryZoomPopup::init()
 	
 	int card_number = mySGD->selected_collectionbook;
 	
-	first_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
-	first_img->setOpacity(0);
+	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+//	first_img->setOpacity(0);
 	first_img->setPosition(ccp(160,215));
 	game_node->addChild(first_img, kDZP_Z_first_img);
 	
@@ -107,7 +108,8 @@ void DiaryZoomPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCFadeTo* img_fade = CCFadeTo::create(0.5f, 255);
+	CCDelayTime* img_fade = CCDelayTime::create(0.5f);
+//	CCFadeTo* img_fade = CCFadeTo::create(0.5f, 255);
 	CCCallFunc* img_call = CCCallFunc::create(this, callfunc_selector(DiaryZoomPopup::endShowPopup));
 	CCSequence* img_seq = CCSequence::createWithTwoActions(img_fade, img_call);
 	first_img->runAction(img_seq);

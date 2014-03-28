@@ -421,7 +421,8 @@ void StageListDown::menuAction(CCObject *sender)
 		removeChildByTag(kSLD_MT_redown);
 		state_ment->setString("퍼즐 이미지를 다운로드 합니다.");
 		ing_download_per = 0;
-		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+		if(int(df_list.size()+sf_list.size()) > 0)
+			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		is_downloading = true;
 		startDownload();
 	}
@@ -436,7 +437,8 @@ void StageListDown::successAction()
 		SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[ing_download_cnt-1].key, df_list[ing_download_cnt-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+		if(int(df_list.size()+sf_list.size()) > 0)
+			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		startDownload();
 	}
 	else if(ing_download_cnt == df_list.size())
@@ -459,8 +461,16 @@ void StageListDown::successAction()
 			
 			if(cut_list[j].key == "face")
 			{
-				st_w->initWithImageFile("stage_scissor.png"); //피스조각(가로형)을 불러옵니다.
-				st_h->initWithImageFile("stage_scissor.png"); //피스조각(세로형)을 불러옵니다.
+				if(puzzle_number > 10000)
+				{
+					st_w->initWithImageFile("stage_scissor.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("stage_scissor.png"); //피스조각(세로형)을 불러옵니다.
+				}
+				else
+				{
+					st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
+				}
 			}
 			else
 			{
@@ -495,12 +505,12 @@ void StageListDown::successAction()
 				puzzleRow=4;
 				puzzleColDis=120.f;
 				puzzleRowDis=120.f;
-				puzzleOffsetX=86.f;
-				puzzleOffsetY=88.f;
+				puzzleOffsetX=92.f;
+				puzzleOffsetY=92.f;
 				faceColDis=172.f;
 				faceRowDis=172.f;
-				puzzleWidth=652;
-				puzzleHeight=536;
+				puzzleWidth=664;
+				puzzleHeight=544;
 			}
 			
 			
@@ -567,7 +577,7 @@ void StageListDown::successAction()
 				if(puzzle_number > 10000)
 					st->initWithImageFile("temp_puzzle_stencil_top.png");
 				else
-					st->initWithImageFile("puzzle_stencil_1_top.png");
+					st->initWithImageFile("puzzle_stencil_3_top.png");
 				
 				int cutx =puzzleWidth/2;
 				int cuty =puzzleHeight-st->getHeight()/2;
@@ -590,7 +600,7 @@ void StageListDown::successAction()
 				if(puzzle_number > 10000)
 					st->initWithImageFile("temp_puzzle_stencil_bottom.png");
 				else
-					st->initWithImageFile("puzzle_stencil_1_bottom.png");
+					st->initWithImageFile("puzzle_stencil_3_bottom.png");
 				
 				int cutx =puzzleWidth/2;
 				int cuty =st->getHeight()/2;
@@ -613,7 +623,7 @@ void StageListDown::successAction()
 				if(puzzle_number > 10000)
 					st->initWithImageFile("temp_puzzle_stencil_left.png");
 				else
-					st->initWithImageFile("puzzle_stencil_1_left.png");
+					st->initWithImageFile("puzzle_stencil_3_left.png");
 				
 				int cutx =st->getWidth()/2;
 				int cuty =puzzleHeight/2;
@@ -635,7 +645,7 @@ void StageListDown::successAction()
 				if(puzzle_number > 10000)
 					st->initWithImageFile("temp_puzzle_stencil_right.png");
 				else
-					st->initWithImageFile("puzzle_stencil_1_right.png");
+					st->initWithImageFile("puzzle_stencil_3_right.png");
 				
 				int cutx =puzzleWidth-st->getWidth()/2;
 				int cuty =puzzleHeight/2;
@@ -667,7 +677,8 @@ void StageListDown::successAction()
 				mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
 			}
 			
-			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			if(int(df_list.size()+sf_list.size()) > 0)
+				download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 			state_ment->setString("");//퍼즐 이미지 다운로드 완료.");
 			(target_success->*delegate_success)();
 			removeFromParent();
@@ -676,7 +687,8 @@ void StageListDown::successAction()
 		{
 			ing_download_cnt++;
 			ing_download_per = 0.f;
-			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			if(int(df_list.size()+sf_list.size()) > 0)
+				download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 			startDownload();
 		}
 	}
@@ -685,7 +697,8 @@ void StageListDown::successAction()
 		SDS_SS(kSDF_cardInfo, sf_list[ing_download_cnt-df_list.size()-1].key, sf_list[ing_download_cnt-df_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+		if(int(df_list.size()+sf_list.size()) > 0)
+			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		startDownload();
 	}
 	else
@@ -727,7 +740,8 @@ void StageListDown::successAction()
 			mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
 		}
 		
-		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+		if(int(df_list.size()+sf_list.size()) > 0)
+			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		state_ment->setString("");//퍼즐 이미지 다운로드 완료.");
 		(target_success->*delegate_success)();
 		removeFromParent();
@@ -761,7 +775,8 @@ void StageListDown::downloadingAction()
 	
 	ing_download_per = t_per;
 	
-	download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+	if(int(df_list.size()+sf_list.size()) > 0)
+		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 }
 
 void StageListDown::startDownload()

@@ -644,6 +644,7 @@ bool ShopPopup::init()
 									t_node->setTag(kSP_MT_character);
 									menuAction(t_node);
 								});
+	character_menu->setVisible(false);
 	main_case->addChild(character_menu, kSP_Z_content);
 	
 	card_menu = CommonButton::create("뷰티스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
@@ -658,6 +659,7 @@ bool ShopPopup::init()
 									menuAction(t_node);
 								});
 	main_case->addChild(card_menu, kSP_Z_content);
+	card_menu->setVisible(false);
 	
 	ruby_menu = CommonButton::create("루비상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	ruby_menu->setTitleColor(ccWHITE);

@@ -21,6 +21,10 @@
 #include "hspConnector.h"
 #include "MissileDamageData.h"
 #include "KSProtect.h"
+#include <map>
+
+using namespace std;
+USING_NS_CC;
 
 #define JM_CONDITION	0.02
 
@@ -213,6 +217,7 @@ enum ChildTagInPlayUI
 	kCT_UI_clrCdtPopup
 };
 class RollingButton;
+class GraySprite;
 class PlayUI : public CCNode
 {
 public:
@@ -245,6 +250,7 @@ public:
 	int getComboCnt ();
 	void setComboCnt (int t_combo);
 	int getUseTime ();
+	void takeSilenceItem();
 	
 private:
 	KSProtectVar<float> score_value;
@@ -329,6 +335,11 @@ private:
 	void addResultClearCCB();
 	void addResultCCB(string ccb_filename);
 	KSProtectVar<float> keep_percentage;
+	
+	bool is_used_heartUpItem;
+	bool is_used_longTimeItem;
+	
+	map<int, GraySprite*> using_item_sprites;
 	
 	CCMenu* home_menu;
 	

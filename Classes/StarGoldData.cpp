@@ -828,8 +828,20 @@ void StarGoldData::resetNoticeList(Json::Value t_notice_list)
 	}
 }
 
+string StarGoldData::getAppType()
+{
+	return app_type;
+}
+int StarGoldData::getAppVersion()
+{
+	return app_version;
+}
+
 void StarGoldData::myInit()
 {
+	app_type = "light1";
+	app_version = 1;
+	
 	suitable_stage = -1;
 	
 	replay_write_info.clear();
