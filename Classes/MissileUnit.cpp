@@ -912,7 +912,7 @@ void ThrowObject::myInit (CCPoint t_sp, int t_type, float t_speed, float t_angle
 								KS::setOpacity(alreadyWarning.first, t);
 								KS::setOpacity(alreadyWarning2.first, t);
 								alreadyWarning2.first->setOpacity(t);
-							}));
+							}, nullptr));
 				}));
 }
 SB_FallStar * SB_FallStar::create (int t_type)
@@ -4390,7 +4390,7 @@ void RunDownSaw::myInit (CCPoint t_sp, float t_speed, float t_angle, IntSize t_m
 								KS::setOpacity(alreadyWarning.first, t);
 								KS::setOpacity(alreadyWarning2.first, t);
 								alreadyWarning2.first->setOpacity(t);
-							}));
+							}, nullptr));
 				}));
 }
 #undef LZZ_INLINE

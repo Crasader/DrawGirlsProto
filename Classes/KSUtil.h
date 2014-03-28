@@ -348,13 +348,13 @@ protected:
 public:
 	virtual ~KSGradualValue(){
 	}
-	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f, std::function<float(float)> tf = nullptr)
-	{
-		KSGradualValue* newO = new KSGradualValue;
-		newO->init(a, b, s, __f, tf);
-		newO->autorelease();
-		return newO;
-	}
+//	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f, std::function<float(float)> tf = nullptr)
+//	{
+//		KSGradualValue* newO = new KSGradualValue;
+//		newO->init(a, b, s, __f, tf);
+//		newO->autorelease();
+//		return newO;
+//	}
 	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish,
 																std::function<float(float)> tf = nullptr)
 	{

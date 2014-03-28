@@ -191,7 +191,7 @@ public:
 		
 		this->addChild(KSGradualValue<float>::create(38,218,0.3f,[=](float t){
 			m_black->setContentSize(ccp(t,30));
-		}));
+		}, nullptr));
 
 //		{
 //			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(-90,0));
@@ -233,7 +233,7 @@ public:
 		
 		this->addChild(KSGradualValue<float>::create(218,15,0.3f,[=](float t){
 			m_black->setContentSize(ccp(t,15));
-		}));
+		}, nullptr));
 		
 //		{
 //			CCFiniteTimeAction* ani  = CCMoveBy::create(0.3, ccp(90,0));
