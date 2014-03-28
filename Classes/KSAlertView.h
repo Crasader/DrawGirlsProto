@@ -10,7 +10,62 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
+#if 0 // 심플 예제
+KSAlertView* av = KSAlertView::create();
 
+av->setContentNode(
+				   CCNode::create()
+				   );
+
+av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
+									  CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
+av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
+									  CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
+auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
+										[](CCObject* e){
+											CCLog("press!!");
+										});
+av->addButton(m1);
+av->addButton(CCMenuItemImageLambda::create("ticket_send.png", "ticket_send.png",
+											[](CCObject* e){
+												CCLog("press!!");
+											}));
+addChild(av, kPMS_Z_helpRequest);
+av->setCloseButton(CCMenuItemImageLambda::create("tutorial_common_cancel.png", "tutorial_common_cancel.png",
+												 [=](CCObject* sender){
+													 CCLog("close!!");
+												 }));
+av->show();
+#endif
+#if 0 // 가운데 정렬 예제
+KSAlertView* av = KSAlertView::create();
+CCNode* __con = CCNode::create();
+
+KSNode* con2 = new KSNode();
+con2->init();
+con2->autorelease();
+__con->addChild(con2);
+
+//	con->setAnchorPoint(ccp(0, 0));
+con2->addChild(CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오픈", 1)->getCString(), mySGD->getFont().c_str(), 25));
+con2->addChild(CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오zzz픈", 1)->getCString(), mySGD->getFont().c_str(), 25));
+
+av->setContentNode(__con);
+av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
+av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+av->setBorderScale(0.9f);
+//	av->setTitleStr("지금 열기");
+addChild(av, kPMS_Z_helpRequest);
+av->setCloseButton(CCMenuItemImageLambda::create("tutorial_common_cancel.png", "tutorial_common_cancel.png",
+												 [=](CCObject* sender){
+													 is_menu_enable = true;
+												 }));
+
+con2->setPosition(ccp((av->getViewSize() / 2.f).width,
+					  -(av->getViewSize() / 2.f).height));
+con2->alignItemsVerticallyWithPadding(30);
+av->show();
+#endif
 
 
 

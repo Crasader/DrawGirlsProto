@@ -51,11 +51,14 @@ private:
 	CCMenu* joystick_positioning_menu;
 	CCMenu* joystick_moving_menu;
 	
-//	CCMenuItem* joystick_right_item;
-//	CCMenuItem* joystick_left_item;
-//	
-//	CCMenuItem* joystick_fixed_item;
-//	CCMenuItem* joystick_move_item;
+	CCSprite* safety_img;
+	CCMenu* safety_menu;
+	
+	CCSprite* push_img;
+	CCMenu* push_menu;
+	
+	CCSprite* message_img;
+	CCMenu* message_menu;
 	
 	void showPopup();
 	void endShowPopup();
@@ -70,19 +73,10 @@ private:
 	void resetJoystickPositioningMenu();
 	void resetJoystickMovingMenu();
 	
-	CCMenu* irregular_direction_menu;
-	CCMenu* draw_button_menu;
-	CCMenu* show_joystick_menu;
-	CCMenu* center_character_menu;
-	CCMenu* line_over_menu;
-	CCMenu* joystick_center_fix_menu;
+	void resetSafetyMenu();
 	
-	void resetIrregularDirection();
-	void resetDrawButton();
-	void resetShowJoystick();
-	void resetCenterCharacter();
-	void resetLineOver();
-	void resetJoystickCenterFix();
+	void resetPushMenu();
+	void resetMessageMenu();
 	
 	void cheatAction(CCObject* sender);
 	

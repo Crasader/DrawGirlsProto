@@ -365,6 +365,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_storyReadPoint)								return_value = "srp";
 	
 	else if(t_name == kDSH_Key_isSafetyMode)								return_value = "ism";
+	else if(t_name == kDSH_Key_isPushOff)									return_value = "ipo";
+	else if(t_name == kDSH_Key_isMessageOff)								return_value = "imo";
 	
 	return return_value;
 }

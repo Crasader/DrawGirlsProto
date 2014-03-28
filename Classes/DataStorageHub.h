@@ -145,7 +145,9 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_storyReadPoint,
 	
-	kDSH_Key_isSafetyMode
+	kDSH_Key_isSafetyMode,
+	kDSH_Key_isPushOff,
+	kDSH_Key_isMessageOff
 	
 }DSH_Key;
 

@@ -52,14 +52,12 @@ enum OptionPopupMenuTag{
 	kOP_MT_joystickPositioning,
 	kOP_MT_joystickMoving,
 	kOP_MT_tutorial,
-	kOP_MT_testBack,
-	kOP_MT_testIrregularDirection,
-	kOP_MT_testDrawButton,
-	kOP_MT_testShowJoystick,
-	kOP_MT_testCenterCharacter,
-	kOP_MT_testLineOver,
-	kOP_MT_testJoystickCenterFix,
-	kOP_MT_minsu
+	kOP_MT_safety,
+	kOP_MT_push,
+	kOP_MT_message,
+	kOP_MT_coupon,
+	kOP_MT_community,
+	kOP_MT_tip
 };
 
 void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
@@ -96,7 +94,7 @@ bool OptionPopup::init()
 	
 	main_case = CCSprite::create("option_back.png");
 	main_case->setAnchorPoint(ccp(0.5,0.5));
-	main_case->setPosition(ccp(205,-160));
+	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kOP_Z_back);
 	
 	if(myDSH->isCheatKeyEnable())
@@ -109,69 +107,147 @@ bool OptionPopup::init()
 		CCMenuItemSprite* temp_item = CCMenuItemSprite::create(n_temp, s_temp, this, menu_selector(OptionPopup::cheatAction));
 		temp_item->setTag(1);
 		CCMenu* temp_menu = CCMenu::createWithItem(temp_item);
-		temp_menu->setPosition(ccpSub(ccp(15,305), ccp(240,160)));
+		temp_menu->setPosition(ccp(15,main_case->getContentSize().height+15));
 		main_case->addChild(temp_menu, kOP_Z_content);
 		temp_menu->setTouchPriority(-171);
 	}
 	
 	
 	
-	CCSprite* n_close = CCSprite::create("option_small_close.png");
-	CCSprite* s_close = CCSprite::create("option_small_close.png");
-	s_close->setColor(ccGRAY);
-	
-	CCMenuItem* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(OptionPopup::menuAction));
-	close_item->setTag(kOP_MT_close);
-	
-	CCMenu* close_menu = CCMenu::createWithItem(close_item);
+	CommonButton* close_menu = CommonButton::createCloseButton(-171);
 	close_menu->setPosition(getContentPosition(kOP_MT_close));
+	close_menu->setFunction([=](CCObject* sender)
+							{
+								CCNode* t_node = CCNode::create();
+								t_node->setTag(kOP_MT_close);
+								menuAction(t_node);
+							});
 	main_case->addChild(close_menu, kOP_Z_content);
-	close_menu->setTouchPriority(-171);
 	
 	
-	CCLabelTTF* my_id_label = CCLabelTTF::create(KS::longLongToStr(hspConnector::get()->myKakaoInfo.get("userIndex", 0).asInt64() + 1000).c_str(), mySGD->getFont().c_str(), 13);
-	my_id_label->setColor(ccBLACK);
-	my_id_label->setPosition(ccp(244,100));
+	CCSprite* n_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	n_bgm->setOpacity(0);
+	CCSprite* s_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	s_bgm->setOpacity(0);
+	
+	CCMenuItem* bgm_item = CCMenuItemSprite::create(n_bgm, s_bgm, this, menu_selector(OptionPopup::menuAction));
+	bgm_item->setTag(kOP_MT_bgm);
+	
+	bgm_menu = CCMenu::createWithItem(bgm_item);
+	bgm_menu->setPosition(getContentPosition(kOP_MT_bgm));
+	main_case->addChild(bgm_menu, kOP_Z_content);
+	bgm_menu->setTouchPriority(-171);
+	
+	bgm_img = NULL;
+	resetBgmMenu();
+	
+	
+	CCSprite* n_effect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	n_effect->setOpacity(0);
+	CCSprite* s_effect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	s_effect->setOpacity(0);
+	
+	CCMenuItem* effect_item = CCMenuItemSprite::create(n_effect, s_effect, this, menu_selector(OptionPopup::menuAction));
+	effect_item->setTag(kOP_MT_effect);
+	
+	effect_menu = CCMenu::createWithItem(effect_item);
+	effect_menu->setPosition(getContentPosition(kOP_MT_effect));
+	main_case->addChild(effect_menu, kOP_Z_content);
+	effect_menu->setTouchPriority(-171);
+	
+	effect_img = NULL;
+	resetEffectMenu();
+	
+	
+	CCSprite* n_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	n_joystick_positioning->setOpacity(0);
+	CCSprite* s_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	s_joystick_positioning->setOpacity(0);
+	
+	CCMenuItem* joystick_positioning_item = CCMenuItemSprite::create(n_joystick_positioning, s_joystick_positioning, this, menu_selector(OptionPopup::menuAction));
+	joystick_positioning_item->setTag(kOP_MT_joystickPositioning);
+	
+	joystick_positioning_menu = CCMenu::createWithItem(joystick_positioning_item);
+	joystick_positioning_menu->setPosition(getContentPosition(kOP_MT_joystickPositioning));
+	main_case->addChild(joystick_positioning_menu, kOP_Z_content);
+	joystick_positioning_menu->setTouchPriority(-171);
+	
+	joystick_positioning_img = NULL;
+	resetJoystickPositioningMenu();
+	
+	
+	CCSprite* n_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	n_joystick_moving->setOpacity(0);
+	CCSprite* s_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	s_joystick_moving->setOpacity(0);
+	
+	CCMenuItem* joystick_moving_item = CCMenuItemSprite::create(n_joystick_moving, s_joystick_moving, this, menu_selector(OptionPopup::menuAction));
+	joystick_moving_item->setTag(kOP_MT_joystickMoving);
+	
+	joystick_moving_menu = CCMenu::createWithItem(joystick_moving_item);
+	joystick_moving_menu->setPosition(getContentPosition(kOP_MT_joystickMoving));
+	main_case->addChild(joystick_moving_menu, kOP_Z_content);
+	joystick_moving_menu->setTouchPriority(-171);
+	
+	joystick_moving_img = NULL;
+	resetJoystickMovingMenu();
+	
+	
+	CCSprite* n_safety = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	n_safety->setOpacity(0);
+	CCSprite* s_safety = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	s_safety->setOpacity(0);
+	
+	CCMenuItem* safety_item = CCMenuItemSprite::create(n_safety, s_safety, this, menu_selector(OptionPopup::menuAction));
+	safety_item->setTag(kOP_MT_safety);
+	
+	safety_menu = CCMenu::createWithItem(safety_item);
+	safety_menu->setPosition(getContentPosition(kOP_MT_safety));
+	main_case->addChild(safety_menu, kOP_Z_content);
+	safety_menu->setTouchPriority(-171);
+	
+	safety_img = NULL;
+	resetSafetyMenu();
+	
+	
+	CCSprite* n_push = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	n_push->setOpacity(0);
+	CCSprite* s_push = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	s_push->setOpacity(0);
+	
+	CCMenuItem* push_item = CCMenuItemSprite::create(n_push, s_push, this, menu_selector(OptionPopup::menuAction));
+	push_item->setTag(kOP_MT_push);
+	
+	push_menu = CCMenu::createWithItem(push_item);
+	push_menu->setPosition(getContentPosition(kOP_MT_push));
+	main_case->addChild(push_menu, kOP_Z_content);
+	push_menu->setTouchPriority(-171);
+	
+	push_img = NULL;
+	resetPushMenu();
+	
+	
+	CCSprite* n_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	n_message->setOpacity(0);
+	CCSprite* s_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 75, 30));
+	s_message->setOpacity(0);
+	
+	CCMenuItem* message_item = CCMenuItemSprite::create(n_message, s_message, this, menu_selector(OptionPopup::menuAction));
+	message_item->setTag(kOP_MT_message);
+	
+	message_menu = CCMenu::createWithItem(message_item);
+	message_menu->setPosition(getContentPosition(kOP_MT_message));
+	main_case->addChild(message_menu, kOP_Z_content);
+	message_menu->setTouchPriority(-171);
+	
+	message_img = NULL;
+	resetMessageMenu();
+	
+	
+	CCLabelTTF* my_id_label = CCLabelTTF::create(KS::longLongToStr(hspConnector::get()->myKakaoInfo.get("userIndex", 0).asInt64() + 1000).c_str(), mySGD->getFont().c_str(), 11);
+	my_id_label->setAnchorPoint(ccp(0,0.5));
+	my_id_label->setPosition(ccp(78,50));
 	main_case->addChild(my_id_label, kOP_Z_content);
-	
-	
-	CCSprite* n_help = CCSprite::create("option_help.png");
-	CCSprite* s_help = CCSprite::create("option_help.png");
-	s_help->setColor(ccGRAY);
-	
-	CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(OptionPopup::menuAction));
-	help_item->setTag(kOP_MT_help);
-	
-	CCMenu* help_menu = CCMenu::createWithItem(help_item);
-	help_menu->setPosition(getContentPosition(kOP_MT_help));
-	main_case->addChild(help_menu, kOP_Z_content);
-	help_menu->setTouchPriority(-171);
-	
-	
-	CCSprite* n_logout = CCSprite::create("option_logout.png");
-	CCSprite* s_logout = CCSprite::create("option_logout.png");
-	s_logout->setColor(ccGRAY);
-	
-	CCMenuItem* logout_item = CCMenuItemSprite::create(n_logout, s_logout, this, menu_selector(OptionPopup::menuAction));
-	logout_item->setTag(kOP_MT_logout);
-	
-	CCMenu* logout_menu = CCMenu::createWithItem(logout_item);
-	logout_menu->setPosition(getContentPosition(kOP_MT_logout));
-	main_case->addChild(logout_menu, kOP_Z_content);
-	logout_menu->setTouchPriority(-171);
-	
-	
-	CCSprite* n_noti = CCSprite::create("option_noti.png");
-	CCSprite* s_noti = CCSprite::create("option_noti.png");
-	s_noti->setColor(ccGRAY);
-	
-	CCMenuItem* noti_item = CCMenuItemSprite::create(n_noti, s_noti, this, menu_selector(OptionPopup::menuAction));
-	noti_item->setTag(kOP_MT_noti);
-	
-	CCMenu* noti_menu = CCMenu::createWithItem(noti_item);
-	noti_menu->setPosition(getContentPosition(kOP_MT_noti));
-	main_case->addChild(noti_menu, kOP_Z_content);
-	noti_menu->setTouchPriority(-171);
 	
 	
 	CCSprite* n_withdraw = CCSprite::create("option_withdraw.png");
@@ -187,53 +263,75 @@ bool OptionPopup::init()
 	withdraw_menu->setTouchPriority(-171);
 	
 	
-	CCSprite* n_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 40));
-	n_joystick_positioning->setOpacity(0);
-	CCSprite* s_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 40));
-	s_joystick_positioning->setOpacity(0);
+	CCSprite* n_logout = CCSprite::create("option_logout.png");
+	CCSprite* s_logout = CCSprite::create("option_logout.png");
+	s_logout->setColor(ccGRAY);
 	
-	CCMenuItem* joystick_positioning_item = CCMenuItemSprite::create(n_joystick_positioning, s_joystick_positioning, this, menu_selector(OptionPopup::menuAction));
-	joystick_positioning_item->setTag(kOP_MT_joystickPositioning);
+	CCMenuItem* logout_item = CCMenuItemSprite::create(n_logout, s_logout, this, menu_selector(OptionPopup::menuAction));
+	logout_item->setTag(kOP_MT_logout);
 	
-	joystick_positioning_menu = CCMenu::createWithItem(joystick_positioning_item);
-	joystick_positioning_menu->setPosition(getContentPosition(kOP_MT_joystickPositioning));
-	main_case->addChild(joystick_positioning_menu, kOP_Z_content);
-	joystick_positioning_menu->setTouchPriority(-171);
-	
-	joystick_positioning_img = NULL;
-	resetJoystickPositioningMenu();
+	CCMenu* logout_menu = CCMenu::createWithItem(logout_item);
+	logout_menu->setPosition(getContentPosition(kOP_MT_logout));
+	main_case->addChild(logout_menu, kOP_Z_content);
+	logout_menu->setTouchPriority(-171);
 	
 	
-	CCSprite* n_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 40));
-	n_joystick_moving->setOpacity(0);
-	CCSprite* s_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 40));
-	s_joystick_moving->setOpacity(0);
+	CCSprite* n_coupon = CCSprite::create("option_coupon.png");
+	CCSprite* s_coupon = CCSprite::create("option_coupon.png");
+	s_coupon->setColor(ccGRAY);
 	
-	CCMenuItem* joystick_moving_item = CCMenuItemSprite::create(n_joystick_moving, s_joystick_moving, this, menu_selector(OptionPopup::menuAction));
-	joystick_moving_item->setTag(kOP_MT_joystickMoving);
+	CCMenuItem* coupon_item = CCMenuItemSprite::create(n_coupon, s_coupon, this, menu_selector(OptionPopup::menuAction));
+	coupon_item->setTag(kOP_MT_coupon);
 	
-	joystick_moving_menu = CCMenu::createWithItem(joystick_moving_item);
-	joystick_moving_menu->setPosition(getContentPosition(kOP_MT_joystickMoving));
-	main_case->addChild(joystick_moving_menu, kOP_Z_content);
-	joystick_moving_menu->setTouchPriority(-171);
+	CCMenu* coupon_menu = CCMenu::createWithItem(coupon_item);
+	coupon_menu->setPosition(getContentPosition(kOP_MT_coupon));
+	main_case->addChild(coupon_menu, kOP_Z_content);
+	coupon_menu->setTouchPriority(-171);
 	
-	joystick_moving_img = NULL;
-	resetJoystickMovingMenu();
+	
+	CCSprite* n_community = CCSprite::create("option_community.png");
+	CCSprite* s_community = CCSprite::create("option_community.png");
+	s_community->setColor(ccGRAY);
+	
+	CCMenuItem* community_item = CCMenuItemSprite::create(n_community, s_community, this, menu_selector(OptionPopup::menuAction));
+	community_item->setTag(kOP_MT_community);
+	
+	CCMenu* community_menu = CCMenu::createWithItem(community_item);
+	community_menu->setPosition(getContentPosition(kOP_MT_community));
+	main_case->addChild(community_menu, kOP_Z_content);
+	community_menu->setTouchPriority(-171);
+	
+	
+	CCSprite* n_help = CCSprite::create("option_help.png");
+	CCSprite* s_help = CCSprite::create("option_help.png");
+	s_help->setColor(ccGRAY);
+	
+	CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(OptionPopup::menuAction));
+	help_item->setTag(kOP_MT_help);
+	
+	CCMenu* help_menu = CCMenu::createWithItem(help_item);
+	help_menu->setPosition(getContentPosition(kOP_MT_help));
+	main_case->addChild(help_menu, kOP_Z_content);
+	help_menu->setTouchPriority(-171);
+	
+	
+	CCSprite* n_tip = CCSprite::create("option_gametip.png");
+	CCSprite* s_tip = CCSprite::create("option_gametip.png");
+	s_tip->setColor(ccGRAY);
+	
+	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip, s_tip, this, menu_selector(OptionPopup::menuAction));
+	tip_item->setTag(kOP_MT_tip);
+	
+	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
+	tip_menu->setPosition(getContentPosition(kOP_MT_tip));
+	main_case->addChild(tip_menu, kOP_Z_content);
+	tip_menu->setTouchPriority(-171);
 	
 	
 	CCSprite* n_tutorial = CCSprite::create("option_tutorial.png");
 	CCSprite* s_tutorial = CCSprite::create("option_tutorial.png");
 	s_tutorial->setColor(ccGRAY);
 	
-	KSLabelTTF* ttt = KSLabelTTF::create("the 테스트", mySGD->getFont().c_str(), 16.f);
-	ttt->setAnchorPoint(ccp(0.5f, 0.5f));
-	ttt->setPosition(ccp(20, 20));
-	ttt->setColor(ccc3(0, 255, 0));
-	ttt->enableOuterStroke(ccc3(255, 0, 0), 2.f);
-	ttt->setString("the 테스트");
-	ttt->setString("the 테스트");
-	
-	n_tutorial->addChild(ttt, 1000000);
 	CCMenuItem* tutorial_item = CCMenuItemSprite::create(n_tutorial, s_tutorial, this, menu_selector(OptionPopup::menuAction));
 	tutorial_item->setTag(kOP_MT_tutorial);
 	
@@ -242,174 +340,22 @@ bool OptionPopup::init()
 	main_case->addChild(tutorial_menu, kOP_Z_content);
 	tutorial_menu->setTouchPriority(-171);
 	
-	CCSprite* n_minsu = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
-	n_minsu->setOpacity(0);
-	CCSprite* s_minsu = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
-	s_minsu->setOpacity(0);
-	
-	CCMenuItem* minsu_item = CCMenuItemSprite::create(n_minsu, s_minsu, this, menu_selector(OptionPopup::menuAction));
-	minsu_item->setTag(kOP_MT_minsu);
-	
-	CCMenu* minsu_menu = CCMenu::createWithItem(minsu_item);
-	minsu_menu->setPosition(getContentPosition(kOP_MT_minsu));
-	main_case->addChild(minsu_menu, kOP_Z_content);
 	
 	
-	CCSprite* n_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 94, 40));
-	n_bgm->setOpacity(0);
-	CCSprite* s_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 94, 40));
-	s_bgm->setOpacity(0);
+//	CCSprite* n_noti = CCSprite::create("option_noti.png");
+//	CCSprite* s_noti = CCSprite::create("option_noti.png");
+//	s_noti->setColor(ccGRAY);
+//	
+//	CCMenuItem* noti_item = CCMenuItemSprite::create(n_noti, s_noti, this, menu_selector(OptionPopup::menuAction));
+//	noti_item->setTag(kOP_MT_noti);
+//	
+//	CCMenu* noti_menu = CCMenu::createWithItem(noti_item);
+//	noti_menu->setPosition(getContentPosition(kOP_MT_noti));
+//	main_case->addChild(noti_menu, kOP_Z_content);
+//	noti_menu->setTouchPriority(-171);
 	
-	CCMenuItem* bgm_item = CCMenuItemSprite::create(n_bgm, s_bgm, this, menu_selector(OptionPopup::menuAction));
-	bgm_item->setTag(kOP_MT_bgm);
-	
-	bgm_menu = CCMenu::createWithItem(bgm_item);
-	bgm_menu->setPosition(getContentPosition(kOP_MT_bgm));
-	main_case->addChild(bgm_menu, kOP_Z_content);
-	bgm_menu->setTouchPriority(-171);
-	
-	bgm_img = NULL;
-	resetBgmMenu();
-	
-	
-	CCSprite* n_effect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 94, 40));
-	n_effect->setOpacity(0);
-	CCSprite* s_effect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 94, 40));
-	s_effect->setOpacity(0);
-	
-	CCMenuItem* effect_item = CCMenuItemSprite::create(n_effect, s_effect, this, menu_selector(OptionPopup::menuAction));
-	effect_item->setTag(kOP_MT_effect);
-	
-	effect_menu = CCMenu::createWithItem(effect_item);
-	effect_menu->setPosition(getContentPosition(kOP_MT_effect));
-	main_case->addChild(effect_menu, kOP_Z_content);
-	effect_menu->setTouchPriority(-171);
-	
-	effect_img = NULL;
-	resetEffectMenu();
-	
-	CCSprite* test_option_back = CCSprite::create("test_option_back.png");
-	test_option_back->setPosition(getContentPosition(kOP_MT_testBack));
-	main_case->addChild(test_option_back, kOP_Z_content);
-	
-	irregular_direction_menu = NULL;
-	resetIrregularDirection();
-	
-	draw_button_menu = NULL;
-	resetDrawButton();
-	
-	show_joystick_menu = NULL;
-	resetShowJoystick();
-	
-	center_character_menu = NULL;
-	resetCenterCharacter();
-	
-	line_over_menu = NULL;
-	resetLineOver();
-	
-	CCLabelTTF* test_joystick_center_fix_label = CCLabelTTF::create("조이스틱 터치 후\n기준점 이동가능", mySGD->getFont().c_str(), 11);
-	test_joystick_center_fix_label->setColor(ccBLACK);
-	test_joystick_center_fix_label->setPosition(ccpAdd(getContentPosition(kOP_MT_testJoystickCenterFix), ccp(-80,0)));
-	main_case->addChild(test_joystick_center_fix_label, kOP_Z_content);
-	
-	joystick_center_fix_menu = NULL;
-	resetJoystickCenterFix();
 	
 	is_menu_enable = false;
-
-	//KHAlertView* av = KHAlertView::create(); av->setTitleFileName("msg_challenge.png");
-	//av->setCloseButton(CCMenuItemImageLambda::create("cardchange_cancel.png", "cardchange_cancel.png",
-				//[=](CCObject*){
-				//}
-																									 //));
-	//av->setBack9(CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-	//av->setWidth(240);
-	//av->setHeight(240);
-	//av->setTitleHeight(10);
-	//av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
-	//av->setCenterY(150);
-
-	//CCNode* emptyNode = CCNode::create();
-	//auto ttf = CCLabelTTF::create("asdasda", "", 12.f); 
-	//ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
-	////	con->setAnchorPoint(ccp(0, 0));
-	////ttf->setAnchorPoint(ccp(0.5f, 0.5f));
-	//ttf->setColor(ccc3(255, 255, 255));
-	//ttf->setPosition(ccp(av->getContentRect().size.width / 2.f, ttf->getPositionY() + 10));
-	//emptyNode->addChild(ttf);
-	//av->setContentNode(
-		//emptyNode
-			//);
-	//av->setContentSize(ttf->getDimensions());
-	//av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
-								//[=](CCObject* e)
-								//{
-									//CCLog("거절!!");
-								//});
-	//av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
-								//[=](CCObject* e)
-								//{
-									//CCLog("ok!!");
-								//});
-	//addChild(av, 99999999);
-	//av->show();
-	
-#if 0 // 심플 예제
-	KSAlertView* av = KSAlertView::create();
-	
-	av->setContentNode(
-										 CCNode::create()
-										 );
-	
-	av->setVScroll(CCScale9Sprite::create("popup_bar_v.png", CCRectMake(0, 0, 23, 53),
-																				CCRectMake(7, 7, 23 - 7*2, 53 - 7*2 - 4)));
-	av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23),
-																				CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
-	auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
-																					[](CCObject* e){
-																						CCLog("press!!");
-																					});
-	av->addButton(m1);
-	av->addButton(CCMenuItemImageLambda::create("ticket_send.png", "ticket_send.png",
-																							[](CCObject* e){
-																								CCLog("press!!");
-																							}));
-	addChild(av, kPMS_Z_helpRequest);
-	av->setCloseButton(CCMenuItemImageLambda::create("tutorial_common_cancel.png", "tutorial_common_cancel.png",
-																									 [=](CCObject* sender){
-																										 CCLog("close!!");
-																									 }));
-	av->show();
-#endif
-#if 0 // 가운데 정렬 예제
-	KSAlertView* av = KSAlertView::create();
-	CCNode* __con = CCNode::create();
-	
-	KSNode* con2 = new KSNode();
-	con2->init();
-	con2->autorelease();
-	__con->addChild(con2);
-	
-	//	con->setAnchorPoint(ccp(0, 0));
-	con2->addChild(CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오픈", 1)->getCString(), mySGD->getFont().c_str(), 25));
-	con2->addChild(CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오zzz픈", 1)->getCString(), mySGD->getFont().c_str(), 25));
-	
-	av->setContentNode(__con);
-	av->setBack9(CCScale9Sprite::create("popup2_case_back.png", CCRectMake(0,0, 150, 150), CCRectMake(13, 45, 122, 92)));
-	av->setContentBorder(CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0,0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
-	av->setBorderScale(0.9f);
-	//	av->setTitleStr("지금 열기");
-	addChild(av, kPMS_Z_helpRequest);
-	av->setCloseButton(CCMenuItemImageLambda::create("tutorial_common_cancel.png", "tutorial_common_cancel.png",
-																									 [=](CCObject* sender){
-																										 is_menu_enable = true;
-																									 }));
-	
-	con2->setPosition(ccp((av->getViewSize() / 2.f).width,
-												-(av->getViewSize() / 2.f).height));
-	con2->alignItemsVerticallyWithPadding(30);
-	av->show();
-#endif
 	
 	
 	return true;
@@ -426,7 +372,7 @@ void OptionPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(210,160));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(OptionPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -444,7 +390,7 @@ void OptionPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(210,-160));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(OptionPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -734,53 +680,43 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_joystickMoving)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isControlJoystickNotFixed, !myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed));
+		myDSH->setBoolForKey(kDSH_Key_isJoystickCenterNotFixed, !myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed));
 		resetJoystickMovingMenu();
 		is_menu_enable = true;
+		
+//		myDSH->setBoolForKey(kDSH_Key_isControlJoystickNotFixed, !myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed));
+//		resetJoystickMovingMenu();
+//		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_tutorial)
 	{
 		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
 	}
-	else if(tag == kOP_MT_testIrregularDirection)
+	else if(tag == kOP_MT_safety)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isEnableIrregularDirection, !myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection));
-		resetIrregularDirection();
+		myDSH->setBoolForKey(kDSH_Key_isSafetyMode, !myDSH->getBoolForKey(kDSH_Key_isSafetyMode));
+		resetSafetyMenu();
 		is_menu_enable = true;
 	}
-	else if(tag == kOP_MT_testDrawButton)
+	else if(tag == kOP_MT_push)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isDisableDrawButton, !myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton));
-		resetDrawButton();
 		is_menu_enable = true;
 	}
-	else if(tag == kOP_MT_testShowJoystick)
+	else if(tag == kOP_MT_message)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick, !myDSH->getBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick));
-		resetShowJoystick();
 		is_menu_enable = true;
 	}
-	else if(tag == kOP_MT_testCenterCharacter)
+	else if(tag == kOP_MT_coupon)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isAlwaysCenterCharacter, !myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter));
-		resetCenterCharacter();
 		is_menu_enable = true;
 	}
-	else if(tag == kOP_MT_testLineOver)
+	else if(tag == kOP_MT_community)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isDisableLineOver, !myDSH->getBoolForKey(kDSH_Key_isDisableLineOver));
-		resetLineOver();
 		is_menu_enable = true;
 	}
-	else if(tag == kOP_MT_testJoystickCenterFix)
+	else if(tag == kOP_MT_tip)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isJoystickCenterNotFixed, !myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed));
-		resetJoystickCenterFix();
 		is_menu_enable = true;
-	}
-	else if(tag == kOP_MT_minsu)
-	{
-		CCDirector::sharedDirector()->replaceScene(MinsuScene::scene());
 	}
 }
 
@@ -802,12 +738,12 @@ void OptionPopup::resetBgmMenu()
 	if(myDSH->getBoolForKey(kDSH_Key_bgmOff))
 	{
 		filename = "option_sound_off.png";
-		img_position = ccp(-20,0);
+		img_position = ccp(17,0);
 	}
 	else
 	{
 		filename = "option_sound_on.png";
-		img_position = ccp(20,0);
+		img_position = ccp(-17,0);
 	}
 	
 	bgm_img = CCSprite::create(filename.c_str());
@@ -828,12 +764,12 @@ void OptionPopup::resetEffectMenu()
 	if(myDSH->getBoolForKey(kDSH_Key_effectOff))
 	{
 		filename = "option_sound_off.png";
-		img_position = ccp(-20,0);
+		img_position = ccp(17,0);
 	}
 	else
 	{
 		filename = "option_sound_on.png";
-		img_position = ccp(20,0);
+		img_position = ccp(-17,0);
 	}
 	
 	effect_img = CCSprite::create(filename.c_str());
@@ -851,15 +787,15 @@ void OptionPopup::resetJoystickPositioningMenu()
 	
 	string filename;
 	CCPoint img_position;
-	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)
+	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
 	{
-		filename = "option_mode_left.png";
-		img_position = ccp(-20,0);
+		filename = "option_sound_off.png";
+		img_position = ccp(17,0);
 	}
 	else
 	{
-		filename = "option_mode_right.png";
-		img_position = ccp(20,0);
+		filename = "option_sound_on.png";
+		img_position = ccp(-17,0);
 	}
 	
 	joystick_positioning_img = CCSprite::create(filename.c_str());
@@ -877,15 +813,15 @@ void OptionPopup::resetJoystickMovingMenu()
 	
 	string filename;
 	CCPoint img_position;
-	if(!myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed))
+	if(myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))//ControlJoystickNotFixed))
 	{
-		filename = "option_mode_lock.png";
-		img_position = ccp(-20,0);
+		filename = "option_sound_off.png";
+		img_position = ccp(17,0);
 	}
 	else
 	{
-		filename = "option_mode_move.png";
-		img_position = ccp(20,0);
+		filename = "option_sound_on.png";
+		img_position = ccp(-17,0);
 	}
 	
 	joystick_moving_img = CCSprite::create(filename.c_str());
@@ -893,194 +829,112 @@ void OptionPopup::resetJoystickMovingMenu()
 	main_case->addChild(joystick_moving_img, kOP_Z_content);
 }
 
-void OptionPopup::resetIrregularDirection()
+void OptionPopup::resetSafetyMenu()
 {
-	if(irregular_direction_menu)
+	if(safety_img)
 	{
-		irregular_direction_menu->removeFromParent();
-		irregular_direction_menu = NULL;
+		safety_img->removeFromParent();
+		safety_img = NULL;
 	}
 	
 	string filename;
-	if(!myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection))
-		filename = "test_option_off.png";
+	CCPoint img_position;
+	if(!myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
+	{
+		filename = "option_sound_off.png";
+		img_position = ccp(17,0);
+	}
 	else
-		filename = "test_option_on.png";
+	{
+		filename = "option_sound_on.png";
+		img_position = ccp(-17,0);
+	}
 	
-	CCSprite* n_irregular = CCSprite::create(filename.c_str());
-	CCSprite* s_irregular = CCSprite::create(filename.c_str());
-	s_irregular->setColor(ccGRAY);
-	
-	CCMenuItem* irregular_item = CCMenuItemSprite::create(n_irregular, s_irregular, this, menu_selector(OptionPopup::menuAction));
-	irregular_item->setTag(kOP_MT_testIrregularDirection);
-	
-	irregular_direction_menu = CCMenu::createWithItem(irregular_item);
-	irregular_direction_menu->setPosition(getContentPosition(kOP_MT_testIrregularDirection));
-	main_case->addChild(irregular_direction_menu, kOP_Z_content);
-	irregular_direction_menu->setTouchPriority(-171);
+	safety_img = CCSprite::create(filename.c_str());
+	safety_img->setPosition(ccpAdd(getContentPosition(kOP_MT_safety), img_position));
+	main_case->addChild(safety_img, kOP_Z_content);
 }
-void OptionPopup::resetDrawButton()
+
+void OptionPopup::resetPushMenu()
 {
-	if(draw_button_menu)
+	if(push_img)
 	{
-		draw_button_menu->removeFromParent();
-		draw_button_menu = NULL;
+		push_img->removeFromParent();
+		push_img = NULL;
 	}
 	
 	string filename;
-	if(myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton))
-		filename = "test_option_off.png";
+	CCPoint img_position;
+	if(myDSH->getBoolForKey(kDSH_Key_isPushOff))
+	{
+		filename = "option_sound_off.png";
+		img_position = ccp(17,0);
+	}
 	else
-		filename = "test_option_on.png";
+	{
+		filename = "option_sound_on.png";
+		img_position = ccp(-17,0);
+	}
 	
-	CCSprite* n_draw_button = CCSprite::create(filename.c_str());
-	CCSprite* s_draw_button = CCSprite::create(filename.c_str());
-	s_draw_button->setColor(ccGRAY);
-	
-	CCMenuItem* draw_button_item = CCMenuItemSprite::create(n_draw_button, s_draw_button, this, menu_selector(OptionPopup::menuAction));
-	draw_button_item->setTag(kOP_MT_testDrawButton);
-	
-	draw_button_menu = CCMenu::createWithItem(draw_button_item);
-	draw_button_menu->setPosition(getContentPosition(kOP_MT_testDrawButton));
-	main_case->addChild(draw_button_menu, kOP_Z_content);
-	draw_button_menu->setTouchPriority(-171);
+	push_img = CCSprite::create(filename.c_str());
+	push_img->setPosition(ccpAdd(getContentPosition(kOP_MT_push), img_position));
+	main_case->addChild(push_img, kOP_Z_content);
 }
-void OptionPopup::resetShowJoystick()
+
+void OptionPopup::resetMessageMenu()
 {
-	if(show_joystick_menu)
+	if(message_img)
 	{
-		show_joystick_menu->removeFromParent();
-		show_joystick_menu = NULL;
+		message_img->removeFromParent();
+		message_img = NULL;
 	}
 	
 	string filename;
-	if(myDSH->getBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick))
-		filename = "test_option_off.png";
-	else
-		filename = "test_option_on.png";
-	
-	CCSprite* n_show_joystick = CCSprite::create(filename.c_str());
-	CCSprite* s_show_joystick = CCSprite::create(filename.c_str());
-	s_show_joystick->setColor(ccGRAY);
-	
-	CCMenuItem* show_joystick_item = CCMenuItemSprite::create(n_show_joystick, s_show_joystick, this, menu_selector(OptionPopup::menuAction));
-	show_joystick_item->setTag(kOP_MT_testShowJoystick);
-	
-	show_joystick_menu = CCMenu::createWithItem(show_joystick_item);
-	show_joystick_menu->setPosition(getContentPosition(kOP_MT_testShowJoystick));
-	main_case->addChild(show_joystick_menu, kOP_Z_content);
-	show_joystick_menu->setTouchPriority(-171);
-}
-void OptionPopup::resetCenterCharacter()
-{
-	if(center_character_menu)
+	CCPoint img_position;
+	if(myDSH->getBoolForKey(kDSH_Key_isMessageOff))
 	{
-		center_character_menu->removeFromParent();
-		center_character_menu = NULL;
+		filename = "option_sound_off.png";
+		img_position = ccp(17,0);
+	}
+	else
+	{
+		filename = "option_sound_on.png";
+		img_position = ccp(-17,0);
 	}
 	
-	string filename;
-	if(!myDSH->getBoolForKey(kDSH_Key_isAlwaysCenterCharacter))
-		filename = "test_option_off.png";
-	else
-		filename = "test_option_on.png";
-	
-	CCSprite* n_center_character = CCSprite::create(filename.c_str());
-	CCSprite* s_center_character = CCSprite::create(filename.c_str());
-	s_center_character->setColor(ccGRAY);
-	
-	CCMenuItem* center_character_item = CCMenuItemSprite::create(n_center_character, s_center_character, this, menu_selector(OptionPopup::menuAction));
-	center_character_item->setTag(kOP_MT_testCenterCharacter);
-	
-	center_character_menu = CCMenu::createWithItem(center_character_item);
-	center_character_menu->setPosition(getContentPosition(kOP_MT_testCenterCharacter));
-	main_case->addChild(center_character_menu, kOP_Z_content);
-	center_character_menu->setTouchPriority(-171);
-}
-void OptionPopup::resetLineOver()
-{
-	if(line_over_menu)
-	{
-		line_over_menu->removeFromParent();
-		line_over_menu = NULL;
-	}
-	
-	string filename;
-	if(myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
-		filename = "test_option_off.png";
-	else
-		filename = "test_option_on.png";
-	
-	CCSprite* n_line_over = CCSprite::create(filename.c_str());
-	CCSprite* s_line_over = CCSprite::create(filename.c_str());
-	s_line_over->setColor(ccGRAY);
-	
-	CCMenuItem* line_over_item = CCMenuItemSprite::create(n_line_over, s_line_over, this, menu_selector(OptionPopup::menuAction));
-	line_over_item->setTag(kOP_MT_testLineOver);
-	
-	line_over_menu = CCMenu::createWithItem(line_over_item);
-	line_over_menu->setPosition(getContentPosition(kOP_MT_testLineOver));
-	main_case->addChild(line_over_menu, kOP_Z_content);
-	line_over_menu->setTouchPriority(-171);
-}
-void OptionPopup::resetJoystickCenterFix()
-{
-	if(joystick_center_fix_menu)
-	{
-		joystick_center_fix_menu->removeFromParent();
-		joystick_center_fix_menu = NULL;
-	}
-	
-	string filename;
-	if(myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))
-		filename = "test_option_off.png";
-	else
-		filename = "test_option_on.png";
-	
-	CCSprite* n_joystick_center_fix = CCSprite::create(filename.c_str());
-	CCSprite* s_joystick_center_fix = CCSprite::create(filename.c_str());
-	s_joystick_center_fix->setColor(ccGRAY);
-	
-	CCMenuItem* joystick_center_fix_item = CCMenuItemSprite::create(n_joystick_center_fix, s_joystick_center_fix, this, menu_selector(OptionPopup::menuAction));
-	joystick_center_fix_item->setTag(kOP_MT_testJoystickCenterFix);
-	
-	joystick_center_fix_menu = CCMenu::createWithItem(joystick_center_fix_item);
-	joystick_center_fix_menu->setPosition(getContentPosition(kOP_MT_testJoystickCenterFix));
-	main_case->addChild(joystick_center_fix_menu, kOP_Z_content);
-	joystick_center_fix_menu->setTouchPriority(-171);
+	message_img = CCSprite::create(filename.c_str());
+	message_img->setPosition(ccpAdd(getContentPosition(kOP_MT_message), img_position));
+	main_case->addChild(message_img, kOP_Z_content);
 }
 
 CCPoint OptionPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kOP_MT_close)				return_value = ccp(400,279);
-	else if(t_tag == kOP_MT_bgm)			return_value = ccp(178,227);
-	else if(t_tag == kOP_MT_effect)			return_value = ccp(354,227);
-	else if(t_tag == kOP_MT_gameui_left)	return_value = ccp(143,113);
+	if(t_tag == kOP_MT_close)				return_value = ccp(448, 256);
+	
+	else if(t_tag == kOP_MT_gameui_left)	return_value = ccp(143, 113);
 	else if(t_tag == kOP_MT_gameui_full)	return_value = ccp(204, 113);
 	else if(t_tag == kOP_MT_gameui_right)	return_value = ccp(265, 113);
-	else if(t_tag == kOP_MT_help)			return_value = ccp(224,54);
-	else if(t_tag == kOP_MT_logout)			return_value = ccp(350, 54);
+	
+	else if(t_tag == kOP_MT_bgm)					return_value = ccp(137, 203);
+	else if(t_tag == kOP_MT_effect)					return_value = ccp(287, 203);
+	else if(t_tag == kOP_MT_joystickPositioning)	return_value = ccp(137, 173);
+	else if(t_tag == kOP_MT_joystickMoving)			return_value = ccp(287, 173);
+	else if(t_tag == kOP_MT_safety)					return_value = ccp(137, 143);
+	else if(t_tag == kOP_MT_push)					return_value = ccp(137, 89);
+	else if(t_tag == kOP_MT_message)				return_value = ccp(287, 89);
+	
+	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(177, 43);
+	else if(t_tag == kOP_MT_logout)			return_value = ccp(273, 43);
+	
+	else if(t_tag == kOP_MT_coupon)			return_value = ccp(400, 214);
+	else if(t_tag == kOP_MT_community)		return_value = ccp(400, 170);
+	else if(t_tag == kOP_MT_help)			return_value = ccp(400, 126);
+	else if(t_tag == kOP_MT_tip)			return_value = ccp(400, 82);
+	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(400, 38);
+	
 	else if(t_tag == kOP_MT_noti)			return_value = ccp(117, 54);
-	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(356, 120);
-	else if(t_tag == kOP_MT_joystickPositioning)	return_value = ccp(202, 135);
-	else if(t_tag == kOP_MT_joystickMoving)			return_value = ccp(202, 100);
-	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(200, 180);
-	
-	else if(t_tag == kOP_MT_testBack)		return_value = ccp(460,160);
-	else if(t_tag == kOP_MT_testIrregularDirection)	return_value = ccp(460,270);
-	else if(t_tag == kOP_MT_testDrawButton)			return_value = ccp(460,210);
-	else if(t_tag == kOP_MT_testShowJoystick)		return_value = ccp(460,150);
-	else if(t_tag == kOP_MT_testCenterCharacter)	return_value = ccp(460,90);
-	else if(t_tag == kOP_MT_testLineOver)			return_value = ccp(460,30);
-	
-	else if(t_tag == kOP_MT_testJoystickCenterFix)	return_value = ccp(377, 170);
-	
-	else if(t_tag == kOP_MT_minsu)			return_value = ccp(455,25);
-	
-	return_value = ccpSub(return_value, ccp(240,160));
-	return_value = ccpAdd(return_value, ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height/2.f));
 	
 	return return_value;
 }
