@@ -426,7 +426,7 @@ void KSJuniorBase::furyModeScheduler(float dt)
 					[=](float t)
 					{
 					KS::setColor(this, ccc3(255, t, t));
-					}));
+					}, nullptr));
 	}
 	else
 	{
