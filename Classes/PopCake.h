@@ -6,7 +6,8 @@
 
 USING_NS_CC;
 
-
+class MyNode;
+class CommonButton;
 class PopCake : public CCLayer
 {
 public:
@@ -37,6 +38,14 @@ public:
 		t->autorelease();
 		return t;
 	}
+	
+	MyNode* n;
+	CommonButton* cb;
+	CommonButton* cb2;
+	void successOriginalAction();
+	void failOriginalAction();
+	void successRgbAction();
+	void failRgbAction();
 	//virtual void registerWithTouchDispatcher();
 };
 

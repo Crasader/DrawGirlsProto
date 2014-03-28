@@ -28,6 +28,7 @@
 #include "TitleRenewal.h"
 
 #include "KSLabelTTF.h"
+#include "PopCake.h"
 
 USING_NS_CC_EXT;
 
@@ -112,7 +113,20 @@ bool OptionPopup::init()
 		temp_menu->setTouchPriority(-171);
 	}
 	
+	CCSprite* n_popcake = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+	n_popcake->setOpacity(100);
+	CCSprite* s_popcake = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+	s_popcake->setOpacity(100);
 	
+	CCMenuItemLambda* popcake_item = CCMenuItemSpriteLambda::create(n_popcake, s_popcake, [=](CCObject* sender)
+																	{
+																		CCDirector::sharedDirector()->replaceScene(PopCake::scene());
+																	});
+	
+	CCMenuLambda* popcake_menu = CCMenuLambda::createWithItem(popcake_item);
+	popcake_menu->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height+15));
+	main_case->addChild(popcake_menu, kOP_Z_content);
+	popcake_menu->setTouchPriority(-171);
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-171);
 	close_menu->setPosition(getContentPosition(kOP_MT_close));

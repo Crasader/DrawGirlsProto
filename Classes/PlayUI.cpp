@@ -1362,6 +1362,18 @@ bool PlayUI::beRevivedJack ()
 		jack_life_node->runAction(t_move);
 		jack_life_hide_count = 0;
 		
+		if(jack_life <= 0)
+		{
+			CCSprite* last_life_ccb = KS::loadCCBI<CCSprite*>(this, "warning_over_02.ccbi").first;
+			last_life_ccb->setPosition(ccp(240,myDSH->ui_center_y));
+			addChild(last_life_ccb);
+			
+			last_life_ccb->addChild(KSTimer::create(1.5f, [=]()
+			{
+				last_life_ccb->removeFromParent();
+			}));
+		}
+		
 		return true;
 	}
 	else
@@ -1706,6 +1718,15 @@ void PlayUI::counting ()
 				//
 				//				endGame();
 				//			}
+				
+				CCSprite* time_out_die = KS::loadCCBI<CCSprite*>(this, "warning_over_01.ccbi").first;
+				time_out_die->setPosition(ccp(240,myDSH->ui_center_y));
+				addChild(time_out_die);
+				
+				time_out_die->addChild(KSTimer::create(1.5f, [=]()
+														{
+															time_out_die->removeFromParent();
+														}));
 			}
 		}
 	}
