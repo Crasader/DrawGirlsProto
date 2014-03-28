@@ -852,11 +852,11 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 	else if(t_tag == kSP_MT_card)
 		return_value = ccp(141.5f,256);
 	else if(t_tag == kSP_MT_ruby)
-		return_value = ccp(224,256);
+		return_value = ccp(59,256);//ccp(224,256);
 	else if(t_tag == kSP_MT_gold)
-		return_value = ccp(306,256);
+		return_value = ccp(141.5f,256);//ccp(306,256);
 	else if(t_tag == kSP_MT_heart)
-		return_value = ccp(388.5f,256);
+		return_value = ccp(224,256);//ccp(388.5f,256);
 	else if(t_tag == kSP_MT_content1)
 		return_value = ccp(100,177);
 	else if(t_tag == kSP_MT_content2)

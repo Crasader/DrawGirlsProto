@@ -921,7 +921,7 @@ void MainFlowScene::setBottom()
 	rank_item->setTag(kMainFlowMenuTag_rank);
 	
 	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
-	rank_menu->setPosition(ccp(-205, n_rank->getContentSize().height/2.f));
+	rank_menu->setPosition(ccp(-200, n_rank->getContentSize().height/2.f));//ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
 	
 //	CCSprite* n_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
@@ -935,6 +935,18 @@ void MainFlowScene::setBottom()
 //	friendmanagement_menu->setPosition(ccp(-139, n_friendmanagement->getContentSize().height/2.f));
 //	bottom_case->addChild(friendmanagement_menu);
 	
+	CCSprite* n_achievement = CCSprite::create("mainflow_achievement.png");
+	CCSprite* s_achievement = CCSprite::create("mainflow_achievement.png");
+	s_achievement->setColor(ccGRAY);
+	
+	CCMenuItem* achievement_item = CCMenuItemSprite::create(n_achievement, s_achievement, this, menu_selector(MainFlowScene::menuAction));
+	achievement_item->setTag(kMainFlowMenuTag_achievement);
+	
+	CCMenu* achievement_menu = CCMenu::createWithItem(achievement_item);
+	achievement_menu->setPosition(ccp(-130, n_achievement->getContentSize().height/2.f));//ccp(-139, n_achievement->getContentSize().height/2.f));//ccp(125, n_achievement->getContentSize().height/2.f));
+	bottom_case->addChild(achievement_menu);
+	
+	
 	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
 	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
 	s_shop->setColor(ccGRAY);
@@ -943,7 +955,7 @@ void MainFlowScene::setBottom()
 	shop_item->setTag(kMainFlowMenuTag_shop);
 	
 	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
-	shop_menu->setPosition(ccp(-73, n_shop->getContentSize().height/2.f));
+	shop_menu->setPosition(ccp(-60, n_shop->getContentSize().height/2.f));//ccp(-73, n_shop->getContentSize().height/2.f));
 	bottom_case->addChild(shop_menu);
 	
 	CCSprite* n_cardsetting = CCSprite::create("mainflow_cardsetting.png");
@@ -954,7 +966,7 @@ void MainFlowScene::setBottom()
 	cardsetting_item->setTag(kMainFlowMenuTag_cardSetting);
 	
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
-	cardsetting_menu->setPosition(ccp(-7, n_cardsetting->getContentSize().height/2.f));
+	cardsetting_menu->setPosition(ccp(10, n_cardsetting->getContentSize().height/2.f));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
 	
 //	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
@@ -968,16 +980,6 @@ void MainFlowScene::setBottom()
 //	gacha_menu->setPosition(ccp(59, n_gacha->getContentSize().height/2.f));
 //	bottom_case->addChild(gacha_menu);
 	
-	CCSprite* n_achievement = CCSprite::create("mainflow_achievement.png");
-	CCSprite* s_achievement = CCSprite::create("mainflow_achievement.png");
-	s_achievement->setColor(ccGRAY);
-	
-	CCMenuItem* achievement_item = CCMenuItemSprite::create(n_achievement, s_achievement, this, menu_selector(MainFlowScene::menuAction));
-	achievement_item->setTag(kMainFlowMenuTag_achievement);
-	
-	CCMenu* achievement_menu = CCMenu::createWithItem(achievement_item);
-	achievement_menu->setPosition(ccp(-139, n_achievement->getContentSize().height/2.f));//ccp(125, n_achievement->getContentSize().height/2.f));
-	bottom_case->addChild(achievement_menu);
 	
 	CCSprite* n_event = CCSprite::create("mainflow_event.png");
 	CCSprite* s_event = CCSprite::create("mainflow_event.png");
