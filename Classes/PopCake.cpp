@@ -39,9 +39,11 @@ bool PopCake::init()
 //	n->setScale(0.5);
 //	n->setAnchorPoint(ccp(0.5, 0.5));
 //	addChild(n);
+	
+
 	n = MyNode::create(); // CCTextureCache::sharedTextureCache()->addImage("bmTest.png"));
-	n->setPosition(ccp(0, 0));
-	n->setContentSize(CCSizeMake(640, 860));
+	n->setPosition(ccp(160, 240));
+	//n->setContentSize(CCSizeMake(640, 860));
 	n->setScale(0.5);
 	n->setAnchorPoint(ccp(0.5, 0.5));
 	addChild(n);

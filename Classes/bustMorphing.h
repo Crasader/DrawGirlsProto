@@ -235,7 +235,7 @@ struct ValidArea
 	float y;
 	float r;
 };
-class MyNode : public CCLayer{
+class MyNode : public CCSprite{
 public:
 	
   Vertex3D* m_vertices;
@@ -270,8 +270,8 @@ public:
 	}
 	virtual void registerWithTouchDispatcher ()
 	{
-		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-		pDispatcher->addTargetedDelegate(this, 0, false);
+//		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+//		pDispatcher->addTargetedDelegate(this, 0, false);
 	}
 	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 	{
@@ -471,15 +471,16 @@ public:
 	}
 	bool init()
 	{
-		CCLayer::init();
+		CCSprite::init();
 		
 		
 		return true;
 	}
 	bool init(CCTexture2D* tex){
-		if(!CCLayer::init())return false;
+		if(!CCSprite::initWithTexture(tex))
+			return false;
 		
-		setTouchEnabled(true);
+//		setTouchEnabled(true);
 		m_imageRotationDegree = 0.f;
 		tex->retain();
 		texture = tex;//CCTextureCache::sharedTextureCache()->addImage("bmTest.png");
@@ -583,6 +584,8 @@ public:
 		return retValue;
 	}	
 	void draw(){
+		CCSprite::draw();
+
 		if(texture == nullptr)
 			return;
 		
@@ -608,22 +611,16 @@ public:
 		//kmMat4 glMat;
 		//CCAffineTransformTranslate(tmpAffine, -texture->getContentSizeInPixels().width, -texture->getContentSizeInPixels().height);
 		//CGAffineToGL(&tmpAffine, glMat.mat);
-		kmGLTranslatef(texture->getContentSizeInPixels().width/4.f,
-									 texture->getContentSizeInPixels().height/2.f, 0);
 		
+//		kmGLTranslatef(texture->getContentSizeInPixels().width/2.f,
+//									 texture->getContentSizeInPixels().height/2.f, 0);
+//		kmGLRotatef(m_imageRotationDegree, 0, 1, 0);
+//		kmGLTranslatef(-texture->getContentSizeInPixels().width/2.f,
+//									 -texture->getContentSizeInPixels().height/2.f, 0.f);
 		
-		kmGLGetMatrix(KM_GL_MODELVIEW, &mv);
-		
-		
-		
-		
-		kmGLRotatef(m_imageRotationDegree, 0, 1, 0);
-		kmGLTranslatef(-texture->getContentSizeInPixels().width/4.f,
-									 -texture->getContentSizeInPixels().height/2.f, 0.f);
-		
-		
-		kmGLTranslatef(-texture->getContentSizeInPixels().width/4.f,
-									 -texture->getContentSizeInPixels().height/2.f, 0.f);
+//		kmGLScalef(0.5f, 0.5f, 1.f);
+//		kmGLTranslatef(-texture->getContentSizeInPixels().width/2.f,
+//									 -texture->getContentSizeInPixels().height/2.f, 0.f);
 		
 	//	kmGLTranslatef(texture->getContentSizeInPixels().height / 2.f,
 	//								 texture->getContentSizeInPixels().width / 2.f, 0);
