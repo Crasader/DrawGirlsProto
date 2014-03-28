@@ -65,7 +65,16 @@
 	 ttt->runAction(CCMoveTo::create(ccp(0,endPo),5.f);
  }
  
-
+ 
+한번만 값 불러오고싶을땐
+ 
+ FormSetter::get()->requestFormDataOnce([](){
+	Json::Value v =  FormSetter::get()->getFormData("bustmorphing");
+	Json::FastWriter fw;
+	string a = fw.write(v);
+	CCLog("ttt data is %s",a.c_str());
+ });
+ 
 */
 class FormSetter : public CCNode{
 public:
@@ -76,6 +85,7 @@ public:
 	};
 	
 	bool m_is_sch;
+	bool m_is_once;
 	map<string,FormSetterData> m_list;
 	float m_delay;
 	std::function<void(void)> m_funcAtReceived;
@@ -94,17 +104,31 @@ public:
 		m_is_sch=false;
 		m_delay = 1.f;
 		m_funcAtReceived = nullptr;
+		m_is_once=false;
 	}
 	
 	
 	//정보를 갱신할 오브젝트를 등록한다.  이름, 오브젝트, 갱신시부를 펑션
 	void addObject(string name,CCNode* obj,std::function<void(Json::Value)> func){
-
-		FormSetterData newObj;
-		newObj.obj = obj;
-		newObj.func = func;
 		
-		m_list[name] = newObj;
+		
+		map<string,FormSetterData>::iterator it;
+		it = m_list.find(name);
+		
+		//받아온 데이터와 등록되어있는 오브젝트중 매칭이 되어있으면
+		if(it == m_list.end()){
+			(it->second).obj = obj;
+			(it->second).func = func;
+		}else{
+			FormSetterData newObj;
+			newObj.obj = obj;
+			newObj.func = func;
+			newObj.data = nullptr;
+			m_list[name] = newObj;
+		}
+			
+			
+
 		
 		if(m_is_sch==false)requestFormData();
 	}
@@ -146,11 +170,20 @@ public:
 		m_funcAtReceived=func;
 	}
 	
+	
+	
 	//서버로 데이터를 요청한다.
 	void requestFormData(){
 		m_is_sch = true;
 		Json::Value param;
 		graphdog->command("getformsetter", param, this, json_selector(this, FormSetter::receivedFormData));
+	}
+	
+	//서버로 데이터를 요청한다. 한번만
+	void requestFormDataOnce(std::function<void(void)> receivedFunc){
+		if(receivedFunc)m_funcAtReceived = receivedFunc;
+		m_is_once=true;
+		this->requestFormData();
 	}
 	
 	//서버의 응답을 받아 등록된 오브젝트의 포지션과 스케일을 조절하고 펑션이 등록되어있다면 호출한다.
@@ -180,14 +213,25 @@ public:
 				//펑션이 등록되어있으면 콜해준다.
 				if((it->second).func)(it->second).func(p[*iter]);
 				
+			//없으면
+			}else{
+				FormSetterData newObj;
+				newObj.data = p[(*iter).c_str()];
+				newObj.func = nullptr;
+				newObj.obj = nullptr;
+				
+				m_list[(*iter).c_str()] = newObj;
 			}
 		}
 		
 		//갱신후 부를 함수가 설정되어있다면 콜한다.
 		if(m_funcAtReceived)m_funcAtReceived();
 		
+		if(m_is_once){
+			m_is_once=false;
+			return;
+		}
 		CCLog(" ---- set Form!! ---- ");
-		
 
 		//설정된 딜레이후 다시 데이터를 받아온다.
 		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(
