@@ -80,7 +80,7 @@ public:
  }
 };
 
-#define INIT_SUPERTRI_SIZE 99999.0f
+#define INIT_SUPERTRI_SIZE 9999999.f
 #define sqre(x) (x*x)
 class DelaunayTriangulation{
 private:
@@ -256,6 +256,10 @@ public:
 	
 	int colorRampUniformLocation;   // 1
 	CCTexture2D* colorRampTexture;  // 2
+	MyNode()
+	{
+		texture = nullptr;
+	}
 	///////////////////
 	virtual ~MyNode()
 	{
@@ -398,6 +402,10 @@ public:
 		
 		return true;
 	}
+	void triangulationWithPoints()
+	{
+		triangulationWithPoints(m_points);
+	}
 	void triangulationWithPoints(const vector<Vertex3D>& points)
 	{
 		DelaunayTriangulation delaunay;
@@ -425,7 +433,7 @@ public:
 				float ss = ks19937::getIntValue(0, 0);
 				Vertex3D temp = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x, 
 																		 delaunay.getVertices()[mTriangles2[i].vt[j]].y,
-																		 0); // delaunay.getVertices()[mTriangles2[i].vt[j]].extraData);
+																		 delaunay.getVertices()[mTriangles2[i].vt[j]].extraData);
 //				temp.z = points
 				m_vertices[i*3 + j] = temp;
 				m_textCoords[i*3 + j] = Vertex3DMake((temp.x) / (2*m_halfWidth),
@@ -452,6 +460,22 @@ public:
 		
 		return n;
 	}
+	static MyNode* create()
+	{
+		MyNode* n = new MyNode();
+		
+		n->init();
+		n->autorelease();
+		
+		return n;
+	}
+	bool init()
+	{
+		CCLayer::init();
+		
+		
+		return true;
+	}
 	bool init(CCTexture2D* tex){
 		if(!CCLayer::init())return false;
 		
@@ -474,55 +498,17 @@ public:
 //		
 //		m_points.push_back(Vertex3DMake(-halfWidth, -halfHeight, 0));
 //		m_points.push_back(Vertex3DMake(halfWidth, -halfHeight, 0));
-		m_points.push_back(Vertex3DMake(0, halfHeight * 2, 0));
-		m_points.push_back(Vertex3DMake(halfWidth * 2, halfHeight * 2, 0));
+		putBasicInfomation();	 // 기본정보 들어가게.
 		
-		m_points.push_back(Vertex3DMake(0, 0, 0));
-		m_points.push_back(Vertex3DMake(halfWidth * 2, 0, 0));
+		//loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
 
-		int hm = 30;
-		int wm = 30;
-		for(int y=0 + hm; y<=halfHeight * 2 - 20; y+=hm)
-		{
-			for(int x=0 + wm; x<=halfWidth * 2 - 20; x+=wm)
-			{
-				m_points.push_back(Vertex3DMake(x, y, 0));
-			}
-		}
-		
-		////////////////////
-		// 실루엣 z 정보 넣는 곳.
-#if 0
-		CCImage* img = new CCImage();
-		img->initWithImageFileThreadSafe(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str());
-		unsigned char* oData = img->getData();	
-		int height = img->getHeight();
-		int width = img->getWidth();
-
-		//for(int y=0;y<oy;y++){
-			//for(int x=0;x<ox;x++){
-				//i = (y*ox+x)*4;
-				//oData[i]; // r값
-				//oData[i+1]; //g값
-				//oData[i+2]; //b값
-				//oData[i+3]; //투명도
-			//}
-		//}
-		for(auto& point : m_points)
-		{
-			int i = ((height / 2 - point.y) * width + (point.x + width / 2))*4;
-			point.z = oData[i];
-		}
-		img->release();
-		/////////////////////
-#endif
 		triangulationWithPoints(m_points);
 		
 		
 		CommonButton* cb = CommonButton::create("left", 20, CCSizeMake(100, 100), CommonButtonOrange,
 																						0);
 		addChild(cb, 1);
-		cb->setPosition(ccp( 100, 100));
+		cb->setPosition(ccp( 300, 200));
 		cb->setFunction([=](CCObject* obj){
 			m_imageRotationDegree -= 10;	
 		});		
@@ -530,12 +516,59 @@ public:
 		CommonButton* cb2 = CommonButton::create("right", 20, CCSizeMake(100, 100), CommonButtonOrange,
 																						0);
 		addChild(cb2, 1);
-		cb2->setPosition(ccp( 100, 200));
+		cb2->setPosition(ccp( 300, 100));
 		cb2->setFunction([=](CCObject* obj){
 			m_imageRotationDegree += 10;	
 		});		
 
 		return true;
+	}
+
+	void putBasicInfomation()
+	{
+		m_points.clear();
+		m_points.push_back(Vertex3DMake(0, texture->getPixelsHigh() - 1, 0));
+		m_points.push_back(Vertex3DMake(texture->getPixelsWide() - 1, texture->getPixelsHigh() - 1, 0));
+
+		m_points.push_back(Vertex3DMake(0, 0, 0));
+		m_points.push_back(Vertex3DMake(texture->getPixelsWide() - 1, 0, 0));
+
+		int hm = 20;
+		int wm = 20;
+		for(int y=0 + hm; y<texture->getPixelsHigh() - 20; y+=hm)
+		{
+			for(int x=0 + wm; x<texture->getPixelsWide() - 20; x+=wm)
+			{
+				m_points.push_back(Vertex3DMake(x, y, 0));
+			}
+		}
+	}
+	void loadRGB(const std::string& fullPath)
+	{
+#if 1
+		CCImage* img = new CCImage();
+		img->initWithImageFileThreadSafe(fullPath.c_str());
+		unsigned char* oData = img->getData();	
+		int height = img->getHeight();
+		int width = img->getWidth();
+
+		//		for(int y=0;y<height;y++){
+		//			for(int x=0;x<width;x++){
+		//				int i = (y*width+x)*4;
+		//				CCLog("i = %d", i);
+		//			}
+		//		}
+		int j = 0;
+		for(auto& point : m_points)
+		{
+			int i = ((height - 1 - point.y) * width + (point.x))*4;
+			//			CCLog("2. i = %d", i);
+			auto tt = (float)oData[i];
+			point.z = tt / 255.f * 100.f;
+		}
+		img->release();
+		/////////////////////
+#endif
 	}
 	vector<Vertex3D*> findVertices(Vertex3D v)
 	{
@@ -550,6 +583,9 @@ public:
 		return retValue;
 	}	
 	void draw(){
+		if(texture == nullptr)
+			return;
+		
 //		glEnable(GL_CULL_FACE);
 //    glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);
@@ -565,17 +601,32 @@ public:
 		kmMat4 mv, mv2;
 		kmGLGetMatrix(KM_GL_MODELVIEW, &mv);
 
+		kmGLMatrixMode(KM_GL_MODELVIEW);
 		kmGLPushMatrix();
-		
+//		kmGLLoadIdentity();
 		//CCAffineTransform tmpAffine = CCAffineTransformIdentity;
 		//kmMat4 glMat;
 		//CCAffineTransformTranslate(tmpAffine, -texture->getContentSizeInPixels().width, -texture->getContentSizeInPixels().height);
 		//CGAffineToGL(&tmpAffine, glMat.mat);
-		kmGLTranslatef(-texture->getContentSizeInPixels().width / 2.f, 
-									 -texture->getContentSizeInPixels().height / 2.f, 0);
+		kmGLTranslatef(texture->getContentSizeInPixels().width/4.f,
+									 texture->getContentSizeInPixels().height/2.f, 0);
+		
+		
+		kmGLGetMatrix(KM_GL_MODELVIEW, &mv);
+		
+		
+		
+		
 		kmGLRotatef(m_imageRotationDegree, 0, 1, 0);
-//		kmGLTranslatef(texture->getContentSizeInPixels().width / 2.f, 
-//									 texture->getContentSizeInPixels().height / 2.f, 0);
+		kmGLTranslatef(-texture->getContentSizeInPixels().width/4.f,
+									 -texture->getContentSizeInPixels().height/2.f, 0.f);
+		
+		
+		kmGLTranslatef(-texture->getContentSizeInPixels().width/4.f,
+									 -texture->getContentSizeInPixels().height/2.f, 0.f);
+		
+	//	kmGLTranslatef(texture->getContentSizeInPixels().height / 2.f,
+	//								 texture->getContentSizeInPixels().width / 2.f, 0);
     //cocos2d::gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
 		
 		int verticesCount = m_triCount * 3;
