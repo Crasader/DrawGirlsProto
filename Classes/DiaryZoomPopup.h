@@ -15,6 +15,7 @@
 USING_NS_CC;
 using namespace std;
 class CommonButton;
+class MyNode;
 class DiaryZoomPopup : public CCLayer
 {
 public:
@@ -36,7 +37,7 @@ private:
 	
 	bool is_actioned;
 	
-	CCSprite* first_img;
+	MyNode* first_img;
 	CommonButton* next_button;
 	bool is_animation;
 	
