@@ -424,7 +424,12 @@ void MyGold::moving ()
 	ing_frame++;
 	
 	setScale(getScale()*dscale);
-	setOpacity(getOpacity() - 4);
+	
+	if(ing_frame > 30)
+	{
+		setOpacity(getOpacity() - 8);
+	}
+	
 	after_position = ccpAdd(getPosition(), ccp(0, r_dy));
 	r_dy += MY_GRAVITY;
 	
@@ -449,8 +454,24 @@ void MyGold::moving ()
 }
 void MyGold::myInit ()
 {
-	initWithFile("gold.png");
+	int start_cut = rand()%6;
+	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin.png");
+	initWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
+	CCAnimation* t_animation = CCAnimation::create();
+	t_animation->setDelayPerUnit(0.1f);
+	int add_count = 0;
+	for(int i=start_cut;add_count < 6;i=(i+1)%6)
+	{
+		add_count++;
+		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
+	}
+	CCAnimate* t_animate = CCAnimate::create(t_animation);
+	CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+	runAction(t_repeat);
+	
+//	initWithFile("gold.png");
 	init_position = CCPointZero;
+	setScale(0.4f);
 	setPosition(init_position);
 	
 	i_dy = rand()%3+6;
@@ -523,7 +544,7 @@ void GetGold::myInit (CCPoint t_sp, int t_duration_frame)
 	
 	create_frame = duration_frame/60 + 1;
 	
-	batch_node = CCSpriteBatchNode::create("gold.png");
+	batch_node = CCSpriteBatchNode::create("fever_coin.png");//"gold.png");
 	batch_node->setPosition(t_sp);
 	addChild(batch_node);
 }
