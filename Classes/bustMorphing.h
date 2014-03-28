@@ -235,10 +235,10 @@ struct ValidArea
 	float y;
 	float r;
 };
-class MyNode : public CCSprite{
+class MyNode : public CCLayer{
 public:
-	
   Vertex3D* m_vertices;
+	Vertex3D* m_2xVertices;
 	map<Vertex3D*, Vertex3D> m_backupVertices;
 	Vertex3D* m_textCoords;
 	ccColor4F* m_colors;
@@ -251,7 +251,7 @@ public:
 	bool m_validTouch;
 	CCPoint m_validTouchPosition;
 	float m_waveRange;
-	float m_imageRotationDegree;	
+		
 	///
 	
 	int colorRampUniformLocation;   // 1
@@ -263,15 +263,24 @@ public:
 	///////////////////
 	virtual ~MyNode()
 	{
-		delete [] m_textCoords;
-		delete [] m_vertices;
+		if(m_textCoords)
+		{
+			delete [] m_textCoords;
+		}
+		if(m_vertices)
+			delete [] m_vertices;
+		if(m_2xVertices)
+			delete [] m_2xVertices;
+		if(m_colors)
+			delete [] m_colors;
+		
 		
 		texture->release();
 	}
 	virtual void registerWithTouchDispatcher ()
 	{
-//		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-//		pDispatcher->addTargetedDelegate(this, 0, false);
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, 0, false);
 	}
 	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 	{
@@ -422,22 +431,28 @@ public:
 		}
 		if(m_vertices)
 			delete [] m_vertices;
+		if(m_2xVertices)
+			delete [] m_2xVertices;
 		if(m_colors)
 			delete [] m_colors;
 		
 		m_textCoords = new Vertex3D[nTri * 3];
 		m_vertices = new Vertex3D[nTri * 3];
+		m_2xVertices = new Vertex3D[nTri * 3];
 		m_colors = new ccColor4F[nTri * 3];
 		for(int i=0; i<nTri; i++){
 			for(int j=0; j<3; j++){
 				float ss = ks19937::getIntValue(0, 0);
-				Vertex3D temp = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x, 
-																		 delaunay.getVertices()[mTriangles2[i].vt[j]].y,
+				Vertex3D temp = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x / 2.f,
+																		 delaunay.getVertices()[mTriangles2[i].vt[j]].y / 2.f,
 																		 delaunay.getVertices()[mTriangles2[i].vt[j]].extraData);
 //				temp.z = points
 				m_vertices[i*3 + j] = temp;
-				m_textCoords[i*3 + j] = Vertex3DMake((temp.x) / (2*m_halfWidth),
-																						 1.f - (temp.y) / (2*m_halfHeight), temp.z);
+				m_2xVertices[i * 3 + j] = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x,
+										 delaunay.getVertices()[mTriangles2[i].vt[j]].y,
+										 delaunay.getVertices()[mTriangles2[i].vt[j]].extraData);
+				m_textCoords[i*3 + j] = Vertex3DMake(m_2xVertices[i * 3 + j].x / (2 * m_halfWidth),
+																						 1.f - (m_2xVertices[i * 3 + j].y) / (2 * m_halfHeight), temp.z);
 				m_colors[i*3 + j] = ccc4f(ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), 1.f);
 			}
 		}
@@ -471,17 +486,20 @@ public:
 	}
 	bool init()
 	{
-		CCSprite::init();
+		CCLayer::init();
 		
 		
 		return true;
 	}
 	bool init(CCTexture2D* tex){
-		if(!CCSprite::initWithTexture(tex))
-			return false;
+		CCLayer::init();
+		ignoreAnchorPointForPosition(false);
+//		if(!CCSprite::initWithTexture(tex))
+//			return false;
 		
-//		setTouchEnabled(true);
+		setTouchEnabled(true);
 		m_imageRotationDegree = 0.f;
+		m_imageRotationDegreeX = 0.f;
 		tex->retain();
 		texture = tex;//CCTextureCache::sharedTextureCache()->addImage("bmTest.png");
 		setContentSize(texture->getContentSize());
@@ -493,35 +511,21 @@ public:
 		m_textCoords = nullptr;
 		m_vertices = nullptr;
 		m_colors = nullptr;
-		
+		m_2xVertices = nullptr;
 //		m_points.push_back(Vertex3DMake(-halfWidth, halfHeight, 0));
 //		m_points.push_back(Vertex3DMake(halfWidth, halfHeight, 0));
 //		
 //		m_points.push_back(Vertex3DMake(-halfWidth, -halfHeight, 0));
 //		m_points.push_back(Vertex3DMake(halfWidth, -halfHeight, 0));
+		CCLog("%d", __LINE__);
 		putBasicInfomation();	 // 기본정보 들어가게.
-		
+		CCLog("%d", __LINE__);
 		//loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
 
 		triangulationWithPoints(m_points);
+		CCLog("%d", __LINE__);
 		
 		
-		CommonButton* cb = CommonButton::create("left", 20, CCSizeMake(100, 100), CommonButtonOrange,
-																						0);
-		addChild(cb, 1);
-		cb->setPosition(ccp( 300, 200));
-		cb->setFunction([=](CCObject* obj){
-			m_imageRotationDegree -= 10;	
-		});		
-
-		CommonButton* cb2 = CommonButton::create("right", 20, CCSizeMake(100, 100), CommonButtonOrange,
-																						0);
-		addChild(cb2, 1);
-		cb2->setPosition(ccp( 300, 100));
-		cb2->setFunction([=](CCObject* obj){
-			m_imageRotationDegree += 10;	
-		});		
-
 		return true;
 	}
 
@@ -565,7 +569,7 @@ public:
 			int i = ((height - 1 - point.y) * width + (point.x))*4;
 			//			CCLog("2. i = %d", i);
 			auto tt = (float)oData[i];
-			point.z = tt / 255.f * 100.f;
+			point.z = tt / 255.f * 85.f;
 		}
 		img->release();
 		/////////////////////
@@ -584,7 +588,7 @@ public:
 		return retValue;
 	}	
 	void draw(){
-		CCSprite::draw();
+		CCLayer::draw();
 
 		if(texture == nullptr)
 			return;
@@ -603,28 +607,16 @@ public:
 		float zeye = CCDirector::sharedDirector()->getZEye();
 		kmMat4 mv, mv2;
 		kmGLGetMatrix(KM_GL_MODELVIEW, &mv);
-
 		kmGLMatrixMode(KM_GL_MODELVIEW);
 		kmGLPushMatrix();
-//		kmGLLoadIdentity();
-		//CCAffineTransform tmpAffine = CCAffineTransformIdentity;
-		//kmMat4 glMat;
-		//CCAffineTransformTranslate(tmpAffine, -texture->getContentSizeInPixels().width, -texture->getContentSizeInPixels().height);
-		//CGAffineToGL(&tmpAffine, glMat.mat);
 		
-//		kmGLTranslatef(texture->getContentSizeInPixels().width/2.f,
-//									 texture->getContentSizeInPixels().height/2.f, 0);
-//		kmGLRotatef(m_imageRotationDegree, 0, 1, 0);
-//		kmGLTranslatef(-texture->getContentSizeInPixels().width/2.f,
-//									 -texture->getContentSizeInPixels().height/2.f, 0.f);
+		kmGLTranslatef(texture->getContentSizeInPixels().width/4.f,
+									 texture->getContentSizeInPixels().height/4.f, 0);
+		kmGLRotatef(m_imageRotationDegree, 0, 1, 0);
+		kmGLRotatef(m_imageRotationDegreeX, 1, 0, 0);
+		kmGLTranslatef(-texture->getContentSizeInPixels().width/4.f,
+									 -texture->getContentSizeInPixels().height/4.f, 0.f);
 		
-//		kmGLScalef(0.5f, 0.5f, 1.f);
-//		kmGLTranslatef(-texture->getContentSizeInPixels().width/2.f,
-//									 -texture->getContentSizeInPixels().height/2.f, 0.f);
-		
-	//	kmGLTranslatef(texture->getContentSizeInPixels().height / 2.f,
-	//								 texture->getContentSizeInPixels().width / 2.f, 0);
-    //cocos2d::gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
 		
 		int verticesCount = m_triCount * 3;
 		//세팅
@@ -633,31 +625,20 @@ public:
 		texture->getShaderProgram()->setUniformsForBuiltins();
 		
 		ccGLBindTexture2D(texture->getName());
-//		ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords );
-//		
-//			
-////		//점배열설정
-////		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, textCoords);
-////		glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, vertices);
-////		
-////		//배열값이용해서 삼각형 그리기
-////		glDrawArrays(GL_TRIANGLES, 0, verticesCount);
-		
-
 		ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords);
-		
+	
+
 		glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
 		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 3, GL_FLOAT, GL_FALSE, 0, m_textCoords);
-//		glVertexAttribPointer(kCCVertexAttribFlag_Color, 4, GL_FLOAT, GL_FALSE, 0, m_colors);
 		glDrawArrays(GL_TRIANGLES, 0, verticesCount);
 		
 		kmGLPopMatrix();
 		
-//		glDisable(GL_CULL_FACE);
 		glDisable(GL_DEPTH_TEST);
-//		CCDirector::sharedDirector()->setProjection(kCCDirectorProjection2D);
-
 	}
+	
+	CC_SYNTHESIZE(float, m_imageRotationDegree, ImageRotationDegree);
+	CC_SYNTHESIZE(float, m_imageRotationDegreeX, ImageRotationDegreeX);
 };
 
 

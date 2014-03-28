@@ -40,18 +40,17 @@ bool PopCake::init()
 //	n->setAnchorPoint(ccp(0.5, 0.5));
 //	addChild(n);
 	
-
 	n = MyNode::create(); // CCTextureCache::sharedTextureCache()->addImage("bmTest.png"));
-	n->setPosition(ccp(160, 240));
+	n->setPosition(ccp(240, 160));
 	//n->setContentSize(CCSizeMake(640, 860));
-	n->setScale(0.5);
-	n->setAnchorPoint(ccp(0.5, 0.5));
+//	n->setScale(0.5);
+	n->setAnchorPoint(ccp(0.5f, .5f));
 	addChild(n);
 	
-	cb = CommonButton::create("load", 20, CCSizeMake(100, 100), CommonButtonOrange,
+	cb = CommonButton::create("load", 20, CCSizeMake(100, 30), CommonButtonOrange,
 																					0);
 	addChild(cb, 1);
-	cb->setPosition(ccp( 300, 200));
+	cb->setPosition(ccp( 420, 300));
 	cb->setFunction([=](CCObject* obj){
 		
 		FormSetter::get()->requestFormDataOnce([=](){
@@ -63,10 +62,11 @@ bool PopCake::init()
 		cb->setVisible(false);
 	});
 	
-	cb2 = CommonButton::create("load RGB", 20, CCSizeMake(100, 100), CommonButtonOrange,
+	CCLog("cb2");
+	cb2 = CommonButton::create("load RGB 11 ", 20, CCSizeMake(100, 35), CommonButtonOrange,
 																					 0);
 	addChild(cb2, 1);
-	cb2->setPosition(ccp( 300, 100));
+	cb2->setPosition(ccp( 420, 260));
 	cb2->setFunction([=](CCObject* obj){
 		
 		FormSetter::get()->requestFormDataOnce([=](){
@@ -77,6 +77,63 @@ bool PopCake::init()
 		
 		cb2->setVisible(false);
 	});
+	
+	{
+		CommonButton* cb = CommonButton::create("left", 20, CCSizeMake(100, 35), CommonButtonOrange,
+																						0);
+		addChild(cb, 1);
+		cb->setPosition(ccp( 420, 220));
+		cb->setFunction([=](CCObject* obj){
+			n->setImageRotationDegree(n->getImageRotationDegree() - 10);
+		});
+		
+		CommonButton* cb2 = CommonButton::create("right", 20, CCSizeMake(100, 35), CommonButtonOrange,
+																						 0);
+		addChild(cb2, 1);
+		cb2->setPosition(ccp( 420, 180));
+		cb2->setFunction([=](CCObject* obj){
+			n->setImageRotationDegree(n->getImageRotationDegree() + 10);
+		});
+	}
+	{
+		{
+			CommonButton* cb = CommonButton::create("up", 20, CCSizeMake(100, 35), CommonButtonOrange,
+																							0);
+			addChild(cb, 1);
+			cb->setPosition(ccp( 420, 140));
+			cb->setFunction([=](CCObject* obj){
+				n->setImageRotationDegreeX(n->getImageRotationDegreeX() - 10);
+			});
+			
+			CommonButton* cb2 = CommonButton::create("down", 20, CCSizeMake(100, 35), CommonButtonOrange,
+																							 0);
+			addChild(cb2, 1);
+			cb2->setPosition(ccp( 420, 100));
+			cb2->setFunction([=](CCObject* obj){
+				n->setImageRotationDegreeX(n->getImageRotationDegreeX() + 10);
+			});
+		}
+	}
+	{
+		{
+			CommonButton* cb = CommonButton::create("zoom in", 20, CCSizeMake(100, 35), CommonButtonOrange,
+																							0);
+			addChild(cb, 1);
+			cb->setPosition(ccp( 420, 60));
+			cb->setFunction([=](CCObject* obj){
+				n->setScale(n->getScale() + 0.1f);
+			});
+			
+			CommonButton* cb2 = CommonButton::create("zoom out", 20, CCSizeMake(100, 30), CommonButtonOrange,
+																							 0);
+			addChild(cb2, 1);
+			cb2->setPosition(ccp( 420, 20));
+			cb2->setFunction([=](CCObject* obj){
+				n->setScale(n->getScale() - 0.1f);
+
+			});
+		}
+	}
 	return true;
 }
 
@@ -104,7 +161,8 @@ void PopCake::successRgbAction()
 	cb2->setVisible(true);
 	
 	n->putBasicInfomation();	// 기본정보 들어가게.
-	n->loadRGB(mySIL->getDocumentPath() + "morphing_rgb.png"); // 실루엣 z 정보 넣는 곳.
+	n->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
+//	n->loadRGB(mySIL->getDocumentPath() + "morphing_rgb.png"); // 실루엣 z 정보 넣는 곳.
 	n->triangulationWithPoints();
 }
 
