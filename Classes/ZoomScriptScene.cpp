@@ -428,12 +428,17 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		else if(multiTouchData.size() == 2)
 		{
 			CCPoint sub_point = CCPointZero;
+			rotate_base_position = CCPointZero;
 			map<int, CCPoint>::iterator it;
 			for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
 			{
 				sub_point = ccpMult(sub_point, -1);
 				sub_point = ccpAdd(sub_point, it->second);
+				
+				rotate_base_position = ccpAdd(rotate_base_position, it->second);
 			}
+			
+			rotate_base_position = ccpMult(rotate_base_position, 1.f/2.f);
 
 			zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
 		}
@@ -476,12 +481,23 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			else if(multiTouchData.size() == 2)
 			{
 				CCPoint sub_point = CCPointZero;
+				CCPoint after_rotate_position = CCPointZero;
 				map<int, CCPoint>::iterator it;
 				for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
 				{
 					sub_point = ccpMult(sub_point, -1);
 					sub_point = ccpAdd(sub_point, it->second);
+					
+					after_rotate_position = ccpAdd(after_rotate_position, it->second);
 				}
+				
+				after_rotate_position = ccpMult(after_rotate_position, 1.f/2.f);
+				
+				CCPoint rotate_sub = ccpSub(after_rotate_position, rotate_base_position);
+				target_node->setImageRotationDegree(target_node->getImageRotationDegree() + rotate_sub.x/8.f);
+				target_node->setImageRotationDegreeX(target_node->getImageRotationDegreeX() - rotate_sub.y/8.f);
+				
+				rotate_base_position = after_rotate_position;
 
 				script_label->setVisible(false);
 				script_case->setVisible(false);

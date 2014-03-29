@@ -41,6 +41,8 @@ private:
 	CommonButton* next_button;
 	bool is_animation;
 	
+	CCPoint rotate_base_position;
+	
 	CCPoint save_position;
 	void moveChecking();
 	
