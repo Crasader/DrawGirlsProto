@@ -1373,22 +1373,16 @@ bool PlayTutorial::init()
 	gray->runAction(CCFadeTo::create(0.5f, 255));
 	t_sm->back_node->addChild(gray);
 	
-	t_sm->addMent(true, "", "", "조작방법에 대한 튜토리얼을 시작하겠습니다.", [=]()
+	t_sm->addMent(true, "", "", "조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.", [=]()
 	{
 		gray->runAction(CCFadeTo::create(0.3f, 0));
-		t_sm->addMent(true, "", "", "가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.", [=]()
+		controler->joystickSetVisible(true);
+		mark_img->setVisible(true);
+		t_sm->addMent(true, "", "", "먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
 		{
-			t_sm->addMent(true, "", "", "먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.", [=]()
-			{
-				controler->joystickSetVisible(true);
-				mark_img->setVisible(true);
-				t_sm->addMent(true, "", "", "오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
-				{
-					top_label->setString("캐릭터를 위로 이동시키기");
-					tutorial_step = 1;
-					t_sm->removeFromParent();
-				});
-			});
+			top_label->setString("캐릭터를 위로 이동시키기");
+			tutorial_step = 1;
+			t_sm->removeFromParent();
 		});
 	});
 	
@@ -1420,32 +1414,28 @@ void PlayTutorial::nextStep()
 		gray->runAction(CCFadeTo::create(0.5f, 255));
 		t_sm->back_node->addChild(gray);
 		
-		t_sm->addMent(true, "", "", "훌륭해요!\n다음에는 영역을 획득하는 방법을 알아보도록 해요.", [=]()
+		t_sm->addMent(true, "", "", "다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
 		{
 			gray->runAction(CCFadeTo::create(0.3f, 0));
 			controler->buttonSetVisible(true);
-			t_sm->addMent(true, "", "", "왼쪽 아래의 꾸욱 버튼이 보이시나요?\n꾸욱 버튼을 누르고 있으면 영역 바깥으로 나갈 수 있답니다.", [=]()
-			{
-				area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
-				CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
-				area_take_sample->addChild(t_ccbi);
-				area_take_sample->setPosition(ccp(240,220));
-				addChild(area_take_sample, 101);
-				t_sm->addMent(true, "", "", "보이는 것처럼 영역을 획득해보세요.                                                                  ", [=]()
-				{
-					controler->setTouchEnabled(true);
-					area_take_sample->removeFromParent();
-					mark_img->setPosition(ccp(80,myDSH->ui_center_y));
-					mark_img->setVisible(true);
-					
-					top_label->setString("영역 획득하기");
-					tutorial_step = 3;
-					
-					startCatching();
-					
-					t_sm->removeFromParent();
-				});
-			});
+			
+			area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
+			CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
+			area_take_sample->addChild(t_ccbi);
+			area_take_sample->setPosition(ccp(240,220));
+			addChild(area_take_sample, 101);
+			
+			controler->setTouchEnabled(true);
+			area_take_sample->removeFromParent();
+			mark_img->setPosition(ccp(80,myDSH->ui_center_y));
+			mark_img->setVisible(true);
+			
+			top_label->setString("영역 획득하기");
+			tutorial_step = 3;
+
+			startCatching();
+			
+			t_sm->removeFromParent();
 		});
 	}
 	else if(tutorial_step == 4)
@@ -1460,81 +1450,74 @@ void PlayTutorial::nextStep()
 		gray->setOpacity(0);
 		gray->setPosition(ccp(0,-160+myDSH->ui_center_y));
 		gray->setScaleY(myDSH->ui_top/320.f);
-		gray->runAction(CCFadeTo::create(0.5f, 255));
 		t_sm->back_node->addChild(gray);
 		
-		t_sm->addMent(true, "", "", "훌륭해요!\n기본적인 조작방법을 모두 익히셨습니다.               ", [=]()
-		{
-			gray->stopAllActions();
-			gray->runAction(CCFadeTo::create(0.3f, 0));
+		CCSprite* ui_percent = CCSprite::create("play_tutorial_gage.png");
+		ui_percent->setPosition(ccp(240,myDSH->ui_top-15));
+		addChild(ui_percent, 4);
+		
+		ui_percent->setVisible(false);
+		
+		CCSequence* t_sequ = CCSequence::create(CCDelayTime::create(0.5f), CCShow::create(), NULL);
+		CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
+		CCRepeat* t_repeat = CCRepeat::create(t_seq, 3);
+		CCSequence* t_seqq = CCSequence::create(t_sequ, t_repeat, NULL);
+		
+		ui_percent->runAction(t_seqq);
+		
+		view_img->startSilhouette();
 			
-			CCSprite* ui_percent = CCSprite::create("play_tutorial_gage.png");
-			ui_percent->setPosition(ccp(240,myDSH->ui_top-15));
-			addChild(ui_percent, 4);
-			
-			ui_percent->setVisible(false);
-			
-			CCSequence* t_sequ = CCSequence::create(CCDelayTime::create(0.5f), CCShow::create(), NULL);
-			CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
-			CCRepeat* t_repeat = CCRepeat::create(t_seq, 3);
-			CCSequence* t_seqq = CCSequence::create(t_sequ, t_repeat, NULL);
-			
-			ui_percent->runAction(t_seqq);
-			
-			view_img->startSilhouette();
-			
-			t_sm->addMent(true, "", "", "실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
-			{
-				view_img->stopSilhouette();
-				ui_percent->stopAllActions();
-				ui_percent->setVisible(true);
-				
-				CCSprite* clear_condition = CCSprite::create("play_tutorial_gage_guide.png");
-				clear_condition->setPosition(ccp(240,myDSH->ui_top-58));
-				addChild(clear_condition, 4);
-				
-				CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
-				CCRepeat* t_repeat = CCRepeat::create(t_seq, 3);
-				clear_condition->runAction(t_repeat);
-				
-				CCLabelBMFont* time_label = CCLabelBMFont::create("100", "timefont.fnt");
-				time_label->setPosition(ccp(240,35));
-				addChild(time_label, 4);
-				
-				CCSequence* t_seq2 = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
-				CCRepeat* t_repeat2 = CCRepeat::create(t_seq2, 3);
-				time_label->runAction(t_repeat2);
-				
-				CCSprite* time_case = CCSprite::create("play_tutorial_time_guide.png");
-				time_case->setPosition(ccp(240,52));
-				addChild(time_case, 4);
-				
-				CCSequence* t_seq3 = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
-				CCRepeat* t_repeat3 = CCRepeat::create(t_seq3, 3);
-				time_case->runAction(t_repeat3);
-				
-				t_sm->addMent(true, "", "", "제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
-				{
-					clear_condition->stopAllActions();
-					clear_condition->setVisible(true);
-					
-					time_label->stopAllActions();
-					time_label->setVisible(true);
-					
-					time_case->stopAllActions();
-					time_case->setVisible(true);
-					
-					mySGD->setGold(mySGD->getGold() + 5000);
-					
-					t_sm->addMent(true, "", "", "기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n월드맵으로 돌아갑니다.", [=]()
-					{
-						t_sm->removeFromParent();
-						mySGD->setNextSceneName("maingame");
-						CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
-					});
-				}, CCSizeMake(350,100), ccp(0,0), 12);
-			});
-		});
+		t_sm->addMent(true, "", "", "실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
+					  {
+						  view_img->stopSilhouette();
+						  ui_percent->stopAllActions();
+						  ui_percent->setVisible(true);
+						  
+						  CCSprite* clear_condition = CCSprite::create("play_tutorial_gage_guide.png");
+						  clear_condition->setPosition(ccp(240,myDSH->ui_top-58));
+						  addChild(clear_condition, 4);
+						  
+						  CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
+						  CCRepeat* t_repeat = CCRepeat::create(t_seq, 3);
+						  clear_condition->runAction(t_repeat);
+						  
+						  CCLabelBMFont* time_label = CCLabelBMFont::create("100", "timefont.fnt");
+						  time_label->setPosition(ccp(240,35));
+						  addChild(time_label, 4);
+						  
+						  CCSequence* t_seq2 = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
+						  CCRepeat* t_repeat2 = CCRepeat::create(t_seq2, 3);
+						  time_label->runAction(t_repeat2);
+						  
+						  CCSprite* time_case = CCSprite::create("play_tutorial_time_guide.png");
+						  time_case->setPosition(ccp(240,52));
+						  addChild(time_case, 4);
+						  
+						  CCSequence* t_seq3 = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
+						  CCRepeat* t_repeat3 = CCRepeat::create(t_seq3, 3);
+						  time_case->runAction(t_repeat3);
+						  
+						  t_sm->addMent(true, "", "", "제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
+										{
+											clear_condition->stopAllActions();
+											clear_condition->setVisible(true);
+											
+											time_label->stopAllActions();
+											time_label->setVisible(true);
+											
+											time_case->stopAllActions();
+											time_case->setVisible(true);
+											
+											mySGD->setGold(mySGD->getGold() + 5000);
+											
+											t_sm->addMent(true, "", "", "기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
+														  {
+															  t_sm->removeFromParent();
+															  mySGD->setNextSceneName("maingame");
+															  CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
+														  });
+										}, CCSizeMake(350,100), ccp(0,0), 12);
+					  });
 	}
 }
 
