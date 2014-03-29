@@ -311,19 +311,25 @@ void DiaryZoomPopup::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		if(multiTouchData.size() == 2)
 		{
 			CCPoint sub_point = CCPointZero;
-			rotate_base_position = CCPointZero;
 			map<int, CCPoint>::iterator it;
 			for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
 			{
 				sub_point = ccpMult(sub_point, -1);
 				sub_point = ccpAdd(sub_point, it->second);
-				
+			}
+
+			zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
+		}
+		else if(multiTouchData.size() == 3)
+		{
+			rotate_base_position = CCPointZero;
+			map<int, CCPoint>::iterator it;
+			for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
+			{
 				rotate_base_position = ccpAdd(rotate_base_position, it->second);
 			}
 			
-			rotate_base_position = ccpMult(rotate_base_position, 1.f/2.f);
-
-			zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
+			rotate_base_position = ccpMult(rotate_base_position, 1.f/3.f);
 		}
 	}
 }
@@ -352,23 +358,12 @@ void DiaryZoomPopup::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			else if(multiTouchData.size() == 2)
 			{
 				CCPoint sub_point = CCPointZero;
-				CCPoint after_rotate_position = CCPointZero;
 				map<int, CCPoint>::iterator it;
 				for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
 				{
 					sub_point = ccpMult(sub_point, -1);
 					sub_point = ccpAdd(sub_point, it->second);
-					
-					after_rotate_position = ccpAdd(after_rotate_position, it->second);
 				}
-				
-				after_rotate_position = ccpMult(after_rotate_position, 1.f/2.f);
-				
-				CCPoint rotate_sub = ccpSub(after_rotate_position, rotate_base_position);
-				first_img->setImageRotationDegree(first_img->getImageRotationDegree() + rotate_sub.x/8.f);
-				first_img->setImageRotationDegreeX(first_img->getImageRotationDegreeX() - rotate_sub.y/8.f);
-				
-				rotate_base_position = after_rotate_position;
 
 				float before_scale = game_node->getScale();
 
@@ -403,6 +398,23 @@ void DiaryZoomPopup::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 					game_node->setPositionY(-myDSH->ui_zero_point.y);
 				else if(game_node->getPositionY() < (-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y)
 					game_node->setPositionY((-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y);
+			}
+			else if(multiTouchData.size() == 3)
+			{
+				CCPoint after_rotate_position = CCPointZero;
+				map<int, CCPoint>::iterator it;
+				for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
+				{
+					after_rotate_position = ccpAdd(after_rotate_position, it->second);
+				}
+				
+				after_rotate_position = ccpMult(after_rotate_position, 1.f/3.f);
+				
+				CCPoint rotate_sub = ccpSub(after_rotate_position, rotate_base_position);
+				first_img->setImageRotationDegree(first_img->getImageRotationDegree() + rotate_sub.x/5.f);
+				first_img->setImageRotationDegreeX(first_img->getImageRotationDegreeX() - rotate_sub.y/5.f);
+				
+				rotate_base_position = after_rotate_position;
 			}
 		}
 	}
