@@ -50,7 +50,12 @@ private:
 	CommonButton* next_button;
 	CCSprite* showtime_back;
 	MyNode* second_img;
+	MyNode* target_node;
 	CCSprite* white_paper;
+	
+	CCPoint save_position;
+	void moveChecking();
+	
 	
 	CCSprite* zoom_img;
 	

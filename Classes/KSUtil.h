@@ -392,7 +392,8 @@ public:
 		}
 		else
 		{
-			m_fFinish(val);
+			if(m_fFinish != nullptr)
+				m_fFinish(val);
 			removeFromParent();
 			unscheduleUpdate();
 		}

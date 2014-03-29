@@ -41,6 +41,9 @@ private:
 	CommonButton* next_button;
 	bool is_animation;
 	
+	CCPoint save_position;
+	void moveChecking();
+	
 	float minimum_scale;
 	CCSize screen_size;
 	

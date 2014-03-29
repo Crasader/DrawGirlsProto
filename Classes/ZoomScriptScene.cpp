@@ -65,6 +65,8 @@ bool ZoomScript::init()
 	first_img->setPosition(ccp(160,215));
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
+	target_node = first_img;
+	
 	zoom_img = CCSprite::create("ending_expand.png");
 	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
 	addChild(zoom_img, kZS_Z_script_case);
@@ -150,12 +152,25 @@ void ZoomScript::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
+	
+	save_position = game_node->getPosition();
+	schedule(schedule_selector(ZoomScript::moveChecking));
+}
+
+void ZoomScript::moveChecking()
+{
+	CCPoint after_position = game_node->getPosition();
+	
+	target_node->movingDistance(ccpSub(after_position, save_position));
+	save_position = after_position;
 }
 
 void ZoomScript::menuAction(CCObject *sender)
 {
 	if(!is_actioned)
 	{
+		unschedule(schedule_selector(ZoomScript::moveChecking));
+		
 		is_actioned = true;
 		next_button->setVisible(false);
 		setTouchEnabled(false);
@@ -228,6 +243,9 @@ void ZoomScript::showtimeFirstAction()
 	second_img = MyNode::create(mySIL->addImage(second_filename.c_str()));
 	second_img->setPosition(ccp(160,215));
 	game_node->addChild(second_img, kZS_Z_second_img);
+	
+	target_node = second_img;
+	
 	game_node->setScale(1.5f);
 	game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
 	first_img->removeFromParentAndCleanup(true);

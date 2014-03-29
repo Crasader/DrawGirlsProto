@@ -153,12 +153,23 @@ void DiaryZoomPopup::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
+	
+	save_position = game_node->getPosition();
+	schedule(schedule_selector(DiaryZoomPopup::moveChecking));
+}
+
+void DiaryZoomPopup::moveChecking()
+{
+	CCPoint after_position = game_node->getPosition();
+	first_img->movingDistance(ccpSub(after_position, save_position));
+	save_position = after_position;
 }
 
 void DiaryZoomPopup::menuAction(CCObject *sender)
 {
 	if(!is_actioned)
 	{
+		unschedule(schedule_selector(DiaryZoomPopup::moveChecking));
 		is_actioned = true;
 		next_button->setVisible(false);
 		setTouchEnabled(false);
