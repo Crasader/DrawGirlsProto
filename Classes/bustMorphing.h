@@ -567,7 +567,7 @@ public:
 			int i = ((height - 1 - point.y) * width + (point.x))*4;
 			//			CCLog("2. i = %d", i);
 			auto tt = (float)oData[i];
-			point.z = tt / 255.f * 85.f;
+			point.z = tt / 255.f * 50.f;
 		}
 		img->release();
 		/////////////////////

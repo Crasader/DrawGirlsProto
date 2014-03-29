@@ -124,7 +124,7 @@ public:
 	m_castingCancelCount(0), m_isStarted(false), m_healingFrameCount(0),
 	m_damagedFrames(500), m_slience(false), m_adderCnt(0), m_reAttackCnt(0), m_furyCnt(0),
 	m_cumberTimer(0), m_attackPattern(nullptr), m_cobWebAttack(nullptr), m_freezeAttack(nullptr),
-	m_chaosAttack(nullptr), m_sightOutAttack(nullptr), m_chargeParent(nullptr),
+	m_chaosAttack(nullptr), m_sightOutAttack(nullptr),
 	m_speedRatioForStone(1.f), m_speedRatio(1.f)
 
 	{
@@ -422,7 +422,6 @@ protected:
 				{				
 					valid = true;
 				}
-				
 			}			
 		}
 	}m_circle;
@@ -481,8 +480,15 @@ protected:
 	CC_SYNTHESIZE(FreezeAttack*, m_freezeAttack, FreezeAttack);
 	CC_SYNTHESIZE(ChaosAttack*, m_chaosAttack, ChaosAttack);
 	CC_SYNTHESIZE(SightOutAttack*, m_sightOutAttack, SightOutAttack);
+	vector<ChargeParent*> m_charges;
+	vector<ChargeParent*>& getCharges()
+	{
+		return m_charges;
+	}
 
-	CC_SYNTHESIZE(ChargeParent*, m_chargeParent, ChargeParent);
+//	CC_SYNTHESIZE(vector<ChargeParent*>, m_charges, Charges);
+//	vector<ChargeParent*> m_charges;
+//	CC_SYNTHESIZE(ChargeParent*, m_chargeParent, ChargeParent);
 };
 
 #endif /* defined(__DGproto__KSCumberBase__) */

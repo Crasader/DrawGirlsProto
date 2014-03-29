@@ -21,11 +21,18 @@ void MissileParent::bombCumber( CCObject* target )
 	KSCumberBase* cumber = (KSCumberBase*)target;
 	if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 	{
-		if(cumber->getChargeParent())
+		bool canceled = false;
+		for(auto i : cumber->getCharges())
 		{
-			cumber->getChargeParent()->cancelCharge();
+			i->cancelCharge();
+			canceled = true;
+		}
+		
+		if(canceled)
+		{
 			myGD->communication("Main_hideScreenSideWarning"); // 화면에 빨간 테두리 지우는 함수
 		}
+
 		//if(target == myGD->getCommunicationNode("CP_getMainCumberPointer"))
 		//{
 			//for(int i=0;i<chargeArray->count();i++)
@@ -531,7 +538,10 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			addChild(t_ccn);
 			t_ccn->startCharge();
 			CCLog("%x", t_ccn);
-			cb->setChargeParent(t_ccn);
+			
+			cb->getCharges().push_back(t_ccn);
+//			m_charges.push_back(t_ccn);
+//			cb->setChargeParent(t_ccn);
 		}
 		else if(atype == "special")
 		{
@@ -542,7 +552,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			addChild(t_ccn);
 			t_ccn->startCharge();
-			cb->setChargeParent(t_ccn);
+			
+			cb->getCharges().push_back(t_ccn);
+//			cb->setChargeParent(t_ccn);
 		}
 		else // normal
 		{
@@ -553,7 +565,10 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			addChild(t_ccn);
 			t_ccn->startCharge();
-			cb->setChargeParent(t_ccn);
+			
+			cb->getCharges().push_back(t_ccn);
+
+//			cb->setChargeParent(t_ccn);
 		}
 		myGD->communication("Main_showScreenSideWarning"); // 화면에 빨간 테두리 만드는 함수
 		myGD->communication("Main_showDetailMessage", warningFileName);
@@ -1562,6 +1577,9 @@ void MissileParent::myInit( CCNode* boss_eye )
 
 void MissileParent::removeChargeInArray( CCObject* remove_charge )
 {
+//	auto iter = find(m_charges.begin(), m_charges.end(), remove_charge);
+//	if(iter != m_charges.end())
+//		m_charges.erase(iter);
 //	chargeArray->removeObject(remove_charge);
 }
 
