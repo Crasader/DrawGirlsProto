@@ -96,6 +96,10 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		
 		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 		
+		Json::Value shopdata_param;
+		shopdata_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
+		command_list.push_back(CommandParam("getshoplist", shopdata_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
+		
 		Json::Value userdata_param;
 		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
 		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
@@ -236,6 +240,63 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		common_setting_label->setPosition(ccp(40, myDSH->ui_top-60));
 		addChild(common_setting_label);
 		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetShopList(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		Json::Value result_list = result_data["list"];
+		
+		Json::Value list_ruby = result_list["ruby"];
+		for(int i=0;i<list_ruby.size();i++)
+		{
+			NSDS_SI(kSDS_GI_shopRuby_int1_count_i, i, list_ruby[i]["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_countName_s, i, list_ruby[i]["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopRuby_int1_price_i, i, list_ruby[i]["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_priceType_s, i, list_ruby[i]["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_sale_s, i, list_ruby[i]["sale"].asString(), false);
+		}
+		
+		Json::Value list_gold = result_list["gold"];
+		for(int i=0;i<list_gold.size();i++)
+		{
+			NSDS_SI(kSDS_GI_shopGold_int1_count_i, i, list_gold[i]["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopGold_int1_countName_s, i, list_gold[i]["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopGold_int1_price_i, i, list_gold[i]["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopGold_int1_priceType_s, i, list_gold[i]["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGold_int1_sale_s, i, list_gold[i]["sale"].asString(), false);
+		}
+		
+		Json::Value list_coin = result_list["coin"];
+		for(int i=0;i<list_coin.size();i++)
+		{
+			NSDS_SI(kSDS_GI_shopCoin_int1_count_i, i, list_coin[i]["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopCoin_int1_countName_s, i, list_coin[i]["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopCoin_int1_price_i, i, list_coin[i]["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopCoin_int1_priceType_s, i, list_coin[i]["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopCoin_int1_sale_s, i, list_coin[i]["sale"].asString(), false);
+		}
+		
+		NSDS_SI(kSDS_GI_shopVersion_i, result_data["version"].asInt());
+	}
+	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
+	{
+		
+	}
+	else
+	{
+		is_receive_fail = true;
+		CCLabelTTF* shop_label = CCLabelTTF::create("fail getshoplist", mySGD->getFont().c_str(), 10);
+		shop_label->setPosition(ccp(240, myDSH->ui_top-60));
+		addChild(shop_label);
+		Json::Value shop_param;
+		shop_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
+		command_list.push_back(CommandParam("getshoplist", shop_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
 	}
 	
 	receive_cnt--;

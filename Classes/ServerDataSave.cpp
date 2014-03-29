@@ -636,6 +636,23 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_monsterInfo_int1_resourceInfo_pvrccz_s)	rv = "mi%d_ri_pvrccz";
 	else if(t_key == kSDS_GI_monsterInfo_int1_resourceInfo_size_i)		rv = "mi%d_ri_size";
 	
+	else if(t_key == kSDS_GI_shopVersion_i)				rv = "shopVersion";
+	else if(t_key == kSDS_GI_shopRuby_int1_count_i)				rv = "sr%dcount";
+	else if(t_key == kSDS_GI_shopRuby_int1_countName_s)			rv = "sr%dcntName";
+	else if(t_key == kSDS_GI_shopRuby_int1_price_i)				rv = "sr%dprice";
+	else if(t_key == kSDS_GI_shopRuby_int1_priceType_s)			rv = "sr%dprcType";
+	else if(t_key == kSDS_GI_shopRuby_int1_sale_s)				rv = "sr%dsale";
+	else if(t_key == kSDS_GI_shopGold_int1_count_i)				rv = "sg%dcount";
+	else if(t_key == kSDS_GI_shopGold_int1_countName_s)			rv = "sg%dcntName";
+	else if(t_key == kSDS_GI_shopGold_int1_price_i)				rv = "sg%dprice";
+	else if(t_key == kSDS_GI_shopGold_int1_priceType_s)			rv = "sg%dprcType";
+	else if(t_key == kSDS_GI_shopGold_int1_sale_s)				rv = "sg%dsale";
+	else if(t_key == kSDS_GI_shopCoin_int1_count_i)				rv = "sc%dcount";
+	else if(t_key == kSDS_GI_shopCoin_int1_countName_s)			rv = "sc%dcntName";
+	else if(t_key == kSDS_GI_shopCoin_int1_price_i)				rv = "sc%dprice";
+	else if(t_key == kSDS_GI_shopCoin_int1_priceType_s)			rv = "sc%dprcType";
+	else if(t_key == kSDS_GI_shopCoin_int1_sale_s)				rv = "sc%dsale";
+	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";
 	else if(t_key == kSDS_SI_playtime_i)				rv = "playtime";
