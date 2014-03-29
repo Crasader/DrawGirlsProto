@@ -47,7 +47,6 @@ bool PopCake::init()
 //	n->setScale(0.5);
 	n->setAnchorPoint(ccp(0.5f, .5f));
 	addChild(n);
-	FormSetter::get()->addObject("bobj",n);
 	
 	cb = CommonButton::create("load", 20, CCSizeMake(100, 30), CommonButtonOrange,
 																					0);
@@ -165,8 +164,8 @@ void PopCake::successRgbAction()
 	cb2->setVisible(true);
 	
 	n->putBasicInfomation();	// 기본정보 들어가게.
-	n->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
-//	n->loadRGB(mySIL->getDocumentPath() + "morphing_rgb.png"); // 실루엣 z 정보 넣는 곳.
+//	n->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
+	n->loadRGB(mySIL->getDocumentPath() + "morphing_rgb.png"); // 실루엣 z 정보 넣는 곳.
 	n->triangulationWithPoints();
 }
 

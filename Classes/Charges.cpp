@@ -245,8 +245,17 @@ void ChargeNodeLambda::removeSelf()
 {
 	unschedule(schedule_selector(ChargeNodeLambda::charging));
 	KSCumberBase* cumber = (KSCumberBase*)real_target;
-	cumber->getChargeParent()->removeFromParent();
-	cumber->setChargeParent(nullptr);
+	removeFromParent();
+	
+	auto iter = find(cumber->getCharges().begin(), cumber->getCharges().end(), this);
+	
+	if(iter != cumber->getCharges().end())
+	{
+		cumber->getCharges().erase(iter);
+	}
+//	cumber->getChargeParent()->removeFromParent();
+//	cumber->setChargeParent(nullptr);
+	
 //	myGD->communication("MP_removeChargeInArray", this);
 }
 
@@ -454,9 +463,17 @@ void SpecialChargeNodeLambda::removeSelf()
 {
 	unschedule(schedule_selector(SpecialChargeNodeLambda::charging));
 	KSCumberBase* cumber = (KSCumberBase*)real_target;
-	cumber->getChargeParent()->removeFromParent();
-	cumber->setChargeParent(nullptr);
-	//myGD->communication("MP_removeChargeInArray", this);
+	removeFromParent();
+//	cumber->getChargeParent()->removeFromParent();
+//	cumber->setChargeParent(nullptr);
+	auto iter = find(cumber->getCharges().begin(), cumber->getCharges().end(), this);
+	
+	if(iter != cumber->getCharges().end())
+	{
+		cumber->getCharges().erase(iter);
+//		CCLog("%x remove", this);
+	}
+	myGD->communication("MP_removeChargeInArray", this);
 }
 
 void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
@@ -675,9 +692,18 @@ void CrashChargeNodeLambda::removeSelf()
 {
 	unschedule(schedule_selector(CrashChargeNodeLambda::charging));
 	KSCumberBase* cumber = (KSCumberBase*)real_target;
-	cumber->getChargeParent()->removeFromParent();
-	cumber->setChargeParent(nullptr);
-	//myGD->communication("MP_removeChargeInArray", this);
+	removeFromParent();
+	
+//	cumber->getChargeParent()->removeFromParent();
+//	cumber->setChargeParent(nullptr);
+	auto iter = find(cumber->getCharges().begin(), cumber->getCharges().end(), this);
+	
+	if(iter != cumber->getCharges().end())
+	{
+		cumber->getCharges().erase(iter);
+//		CCLog("%x remove", this);
+	}
+	myGD->communication("MP_removeChargeInArray", this);
 	
 	CCLog("crash removeFromParent1");
 }
