@@ -1237,7 +1237,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	isBacking = false;
 
 	isEnableIrregularDirection = myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection);
-	isControlJoystickNotFixed = myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed);
+	isControlJoystickNotFixed = true;// myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed);
 	isAlwaysInvisibleJoystick = myDSH->getBoolForKey(kDSH_Key_isAlwaysInvisibleJoystick);
 	controlJoystickDirection = myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection);
 	isDisableDrawButton = myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton);

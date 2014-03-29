@@ -1411,20 +1411,18 @@ void PlayTutorial::nextStep()
 		gray->setOpacity(0);
 		gray->setPosition(ccp(0,-160+myDSH->ui_center_y));
 		gray->setScaleY(myDSH->ui_top/320.f);
-		gray->runAction(CCFadeTo::create(0.5f, 255));
 		t_sm->back_node->addChild(gray);
+		
+		controler->buttonSetVisible(true);
+		
+		area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
+		CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
+		area_take_sample->addChild(t_ccbi);
+		area_take_sample->setPosition(ccp(240,220));
+		addChild(area_take_sample, 101);
 		
 		t_sm->addMent(true, "", "", "다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
 		{
-			gray->runAction(CCFadeTo::create(0.3f, 0));
-			controler->buttonSetVisible(true);
-			
-			area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
-			CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
-			area_take_sample->addChild(t_ccbi);
-			area_take_sample->setPosition(ccp(240,220));
-			addChild(area_take_sample, 101);
-			
 			controler->setTouchEnabled(true);
 			area_take_sample->removeFromParent();
 			mark_img->setPosition(ccp(80,myDSH->ui_center_y));
@@ -1467,7 +1465,7 @@ void PlayTutorial::nextStep()
 		
 		view_img->startSilhouette();
 			
-		t_sm->addMent(true, "", "", "실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
+		t_sm->addMent(true, "", "", "파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
 					  {
 						  view_img->stopSilhouette();
 						  ui_percent->stopAllActions();
