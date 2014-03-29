@@ -448,6 +448,10 @@ public:
 	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, AttackOption ao)
 	{
 		StoneAttack::init();
+		
+		m_particle = NULL;
+		m_streak = NULL;
+		
 		m_initSpeed = initSpeed;
 		m_option = ao;
 		m_power = power;
@@ -460,14 +464,76 @@ public:
 			//m_missileSprite->setRotationX(t);
 		//}));
 		addChild(m_missileSprite);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
 		m_missileSprite->setPosition(initPosition);
 		CCPoint diff = m_targetNode->getPosition() - initPosition;
-		m_initRad = atan2f(diff.y, diff.x);
+		
+		int random_value = rand()%21 - 10; // -10~10
+		float random_float = 1.f + random_value/100.f;
+		
+		m_initRad = atan2f(diff.y, diff.x) * random_float;
 		scheduleUpdate();
 
 
 		return true;
 	}
+	
+	void addStreak()
+	{
+		m_streak = CCMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+		m_streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		addChild(m_streak, -2);
+	}
+	
+	void addParticle(int particle_type)
+	{
+		string plist_name = "jm_particle1_empty.plist";
+		if(particle_type == 0)
+			plist_name = "jm_particle1_empty.plist"; // 노랑 불
+		else if(particle_type == 1)
+			plist_name = "jm_particle1_fire.plist"; // 붉은 불(주황)
+		else if(particle_type == 2)
+			plist_name = "jm_particle1_life.plist"; // 초록 불(노랑)
+		else if(particle_type == 3)
+			plist_name = "jm_particle1_water.plist"; // 파란 불(하양)
+		else if(particle_type == 4)
+			plist_name = "jm_particle2_empty.plist"; // 가시
+		else if(particle_type == 5)
+			plist_name = "jm_particle2_fire.plist";
+		else if(particle_type == 6)
+			plist_name = "jm_particle2_life.plist";
+		else if(particle_type == 7)
+			plist_name = "jm_particle2_water.plist";
+		else if(particle_type == 8)
+			plist_name = "jm_particle3_empty.plist"; // 반사빛/뽀샤시빛
+		else if(particle_type == 9)
+			plist_name = "jm_particle3_fire.plist";
+		else if(particle_type == 10)
+			plist_name = "jm_particle3_life.plist";
+		else if(particle_type == 11)
+			plist_name = "jm_particle3_water.plist";
+		else if(particle_type == 12)
+			plist_name = "jm_particle4_empty.plist"; // 심한 반짝임
+		else if(particle_type == 13)
+			plist_name = "jm_particle4_fire.plist";
+		else if(particle_type == 14)
+			plist_name = "jm_particle4_life.plist";
+		else if(particle_type == 15)
+			plist_name = "jm_particle4_water.plist";
+		else if(particle_type == 16)
+			plist_name = "jm_particle5_empty.plist"; // 둥근 파장까지
+		else if(particle_type == 17)
+			plist_name = "jm_particle5_fire.plist";
+		else if(particle_type == 18)
+			plist_name = "jm_particle5_life.plist";
+		else if(particle_type == 19)
+			plist_name = "jm_particle5_water.plist";
+		
+		m_particle = CCParticleSystemQuad::create(plist_name.c_str());
+		m_particle->setPositionType(kCCPositionTypeRelative);
+		addChild(m_particle, -1);
+	}
+	
 	void update(float dt)
 	{
 		bool isEnable = true;
@@ -546,6 +612,12 @@ public:
 																																					sin(m_currentRad) * m_initSpeed * 2));
 				m_missileSprite->setRotation(-rad2Deg(m_currentRad));
 		 	}
+			
+			if(m_particle)
+				m_particle->setPosition(m_missileSprite->getPosition());
+			
+			if(m_streak)
+				m_streak->setPosition(m_missileSprite->getPosition());
 		}
 	}
 protected:
@@ -557,6 +629,8 @@ protected:
 	int m_range; // 유도 범위.
 	CCNode* m_targetNode;
 	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	CCMotionStreak* m_streak;
 };
 
 
