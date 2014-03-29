@@ -42,8 +42,16 @@ public:
 		return t_pn;
 	}
 	
-	void changeScaleImg(int changeValue)
+	void changeScaleImg(int changeValue, IntPoint t_p = IntPoint())
 	{
+		if(!t_p.isNull())
+		{
+			int distance = abs(myPointVector.origin.x - t_p.x) + abs(myPointVector.origin.y - t_p.y);
+			
+			if(distance < pathScale + changeValue - 1)
+				return;
+		}
+		
 		pathScale += changeValue;
 		pathImg->setScaleX(float(pathScale));
 	}
@@ -204,7 +212,7 @@ public:
 		else if(myList.back()->myPointVector.distance.getAngle() != t_pv.distance.getAngle()) // differ last path
 			newPathAdd(t_pv);
 		else
-			originalExpansion();
+			originalExpansion(t_pv.origin);
 		
 		IntPoint t_p = IntPoint(t_pv.origin.x, t_pv.origin.y);
 		linked_list.push_back(t_p);
@@ -347,9 +355,9 @@ private:
 		}
 	}
 	
-	void originalExpansion()
+	void originalExpansion(IntPoint t_p)
 	{
-		myList.back()->changeScaleImg(1);
+		myList.back()->changeScaleImg(1, t_p);
 	}
 	
 	void newPathAdd(IntPointVector t_pv)
