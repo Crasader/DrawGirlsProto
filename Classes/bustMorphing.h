@@ -491,6 +491,9 @@ public:
 		
 		return true;
 	}
+	void movingDistance(CCPoint t) // 영호.
+	{
+	}
 	bool init(CCTexture2D* tex){
 		CCLayer::init();
 		ignoreAnchorPointForPosition(false);
@@ -517,15 +520,10 @@ public:
 //		
 //		m_points.push_back(Vertex3DMake(-halfWidth, -halfHeight, 0));
 //		m_points.push_back(Vertex3DMake(halfWidth, -halfHeight, 0));
-		CCLog("%d", __LINE__);
 		putBasicInfomation();	 // 기본정보 들어가게.
-		CCLog("%d", __LINE__);
 		//loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
 
 		triangulationWithPoints(m_points);
-		CCLog("%d", __LINE__);
-		
-		
 		return true;
 	}
 
