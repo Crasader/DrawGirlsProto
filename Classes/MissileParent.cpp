@@ -194,12 +194,56 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 			targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
 			targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
 			target = targets[ks19937::getIntValue(0, targets.size() - 1)];
+			
+			int random_value = rand()%7 - 3;
+			float random_float = random_value/10.f;
+			
 			GuidedMissile* gm = GuidedMissile::create(target, initPosition,
 																								fileName,
-																								1.5f, power, 10 + 15 * grade,
+																								1.5f+random_float, power, 10 + 15 * grade,
 																								ao
 
 																							 );
+			if(grade >= 3)
+				gm->addStreak();
+			
+			if(grade == 2)
+			{
+				if(level <= 2)
+					gm->addParticle(0);
+				else if(level <= 4)
+					gm->addParticle(2);
+				else
+					gm->addParticle(3);
+			}
+			else if(grade == 3)
+			{
+				if(level <= 2)
+					gm->addParticle(8);
+				else if(level <= 4)
+					gm->addParticle(10);
+				else
+					gm->addParticle(11);
+			}
+			else if(grade == 4)
+			{
+				if(level <= 2)
+					gm->addParticle(12);
+				else if(level <= 4)
+					gm->addParticle(14);
+				else
+					gm->addParticle(15);
+			}
+			else if(grade == 5)
+			{
+				if(level <= 2)
+					gm->addParticle(16);
+				else if(level <= 4)
+					gm->addParticle(18);
+				else
+					gm->addParticle(19);
+			}
+			
 			jack_missile_node->addChild(gm);
 		}
 	}

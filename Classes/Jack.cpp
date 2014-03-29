@@ -1746,6 +1746,7 @@ void Jack::dieEffect()
 
 		if(myGD->getIsGameover())
 		{
+			jackImg->setVisible(false);
 			endGame();
 		}
 		else
@@ -1782,6 +1783,7 @@ void Jack::dieEffect()
 				}
 				else
 				{
+					jackImg->setVisible(false);
 					endGame();
 				}
 			}
