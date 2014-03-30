@@ -311,6 +311,11 @@ void DiaryZoomPopup::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 
 		isAnimated=false;
 
+		if(multiTouchData.size() >= 1)
+		{
+			first_img->setTouchEnabled(false);
+		}
+		
 		if(multiTouchData.size() == 2)
 		{
 			CCPoint sub_point = CCPointZero;
@@ -439,9 +444,11 @@ void DiaryZoomPopup::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 		if(o_it != multiTouchData.end())
 		{
 			multiTouchData.erase((int)touch);
-
+			
 			if(multiTouchData.size() == 0)
 			{
+				first_img->setTouchEnabled(true);
+				
 				timeval time;
 				gettimeofday(&time, NULL);
 				long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;

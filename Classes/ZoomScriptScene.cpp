@@ -423,6 +423,11 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 
 		isAnimated=false;
 
+		if(multiTouchData.size() >= 1)
+		{
+			target_node->setTouchEnabled(false);
+		}
+		
 		if(multiTouchData.size() == 1)
 		{
 //			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
@@ -598,6 +603,8 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 
 			if(multiTouchData.size() == 0)
 			{
+				target_node->setTouchEnabled(true);
+				
 //				if(is_touched_menu)
 //				{
 //					next_button->ccTouchEnded(touch, pEvent);
