@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <chrono>
 #include <random>
+#include <map>
 #include "SelectorDefine.h"
 #include "KSProtect.h"
 
@@ -478,6 +479,8 @@ private:
 	KSProtectVar<float> ai_adder_on_drew_or_damaged; //
 	KSProtectVar<float> fury_percent; //
 	KSProtectVar<int> SP_rent_card_thanks; // 소셜포인트 획득량-카드빌리고 보답할때
+	
+	
 	
 	string app_type;
 	int app_version;

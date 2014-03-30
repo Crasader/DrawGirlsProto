@@ -63,6 +63,7 @@ bool ZoomScript::init()
 	
 	first_img = MyNode::create(mySIL->addImage(first_filename.c_str()));
 	first_img->setPosition(ccp(160,215));
+	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
 	target_node = first_img;
@@ -153,6 +154,8 @@ void ZoomScript::startTouchAction()
 	setTouchEnabled(true);
 	next_button->setVisible(true);
 	
+	target_node->setTouchEnabled(true);
+	
 	save_position = game_node->getPosition();
 	schedule(schedule_selector(ZoomScript::moveChecking));
 }
@@ -174,6 +177,7 @@ void ZoomScript::menuAction(CCObject *sender)
 		is_actioned = true;
 		next_button->setVisible(false);
 		setTouchEnabled(false);
+		target_node->setTouchEnabled(false);
 		unschedule(schedule_selector(ZoomScript::moveAnimation));
 		
 		if(is_showtime)
@@ -242,6 +246,7 @@ void ZoomScript::showtimeFirstAction()
 	
 	second_img = MyNode::create(mySIL->addImage(second_filename.c_str()));
 	second_img->setPosition(ccp(160,215));
+	second_img->setTouchEnabled(false);
 	game_node->addChild(second_img, kZS_Z_second_img);
 	
 	target_node = second_img;
@@ -437,6 +442,17 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 
 			zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
 		}
+		else if(multiTouchData.size() == 3)
+		{
+			rotate_base_position = CCPointZero;
+			map<int, CCPoint>::iterator it;
+			for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
+			{
+				rotate_base_position = ccpAdd(rotate_base_position, it->second);
+			}
+			
+			rotate_base_position = ccpMult(rotate_base_position, 1.f/3.f);
+		}
 		else
 		{
 //			if(is_touched_menu)
@@ -519,6 +535,23 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 					game_node->setPositionY(0);
 				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width)
 					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width);
+			}
+			else if(multiTouchData.size() == 3)
+			{
+				CCPoint after_rotate_position = CCPointZero;
+				map<int, CCPoint>::iterator it;
+				for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
+				{
+					after_rotate_position = ccpAdd(after_rotate_position, it->second);
+				}
+				
+				after_rotate_position = ccpMult(after_rotate_position, 1.f/3.f);
+				
+				CCPoint rotate_sub = ccpSub(after_rotate_position, rotate_base_position);
+				target_node->setImageRotationDegree(target_node->getImageRotationDegree() + rotate_sub.x/5.f);
+				target_node->setImageRotationDegreeX(target_node->getImageRotationDegreeX() - rotate_sub.y/5.f);
+				
+				rotate_base_position = after_rotate_position;
 			}
 		}
 	}

@@ -53,6 +53,8 @@ private:
 	MyNode* target_node;
 	CCSprite* white_paper;
 	
+	CCPoint rotate_base_position;
+	
 	CCPoint save_position;
 	void moveChecking();
 	
