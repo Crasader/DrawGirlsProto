@@ -63,6 +63,7 @@ bool ZoomScript::init()
 	
 	first_img = MyNode::create(mySIL->addImage(first_filename.c_str()));
 	first_img->setPosition(ccp(160,215));
+	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
 	target_node = first_img;
@@ -153,6 +154,8 @@ void ZoomScript::startTouchAction()
 	setTouchEnabled(true);
 	next_button->setVisible(true);
 	
+	target_node->setTouchEnabled(true);
+	
 	save_position = game_node->getPosition();
 	schedule(schedule_selector(ZoomScript::moveChecking));
 }
@@ -174,6 +177,7 @@ void ZoomScript::menuAction(CCObject *sender)
 		is_actioned = true;
 		next_button->setVisible(false);
 		setTouchEnabled(false);
+		target_node->setTouchEnabled(false);
 		unschedule(schedule_selector(ZoomScript::moveAnimation));
 		
 		if(is_showtime)
@@ -242,6 +246,7 @@ void ZoomScript::showtimeFirstAction()
 	
 	second_img = MyNode::create(mySIL->addImage(second_filename.c_str()));
 	second_img->setPosition(ccp(160,215));
+	second_img->setTouchEnabled(false);
 	game_node->addChild(second_img, kZS_Z_second_img);
 	
 	target_node = second_img;

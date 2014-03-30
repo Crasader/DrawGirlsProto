@@ -61,6 +61,7 @@ bool DiaryZoomPopup::init()
 	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
 //	first_img->setOpacity(0);
 	first_img->setPosition(ccp(160,215));
+	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kDZP_Z_first_img);
 	
 	is_animation = NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, card_number);
@@ -153,6 +154,7 @@ void DiaryZoomPopup::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
+	first_img->setTouchEnabled(true);
 	
 	save_position = game_node->getPosition();
 	schedule(schedule_selector(DiaryZoomPopup::moveChecking));
@@ -173,6 +175,7 @@ void DiaryZoomPopup::menuAction(CCObject *sender)
 		is_actioned = true;
 		next_button->setVisible(false);
 		setTouchEnabled(false);
+		first_img->setTouchEnabled(false);
 		unschedule(schedule_selector(DiaryZoomPopup::moveAnimation));
 		
 		CollectionBookPopup* t_popup = CollectionBookPopup::create();
