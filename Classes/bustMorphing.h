@@ -498,12 +498,12 @@ public:
 		
 		// t 에 반대쪽으로 m_vertices 를 조작함.
 		// 모든 m_vertices 에 대한 y, x 에 대한 RGB 값은 m_silColors[y][x] 로 참조하면 됨.
-		for(int i=0; i<m_triCount * 3; i++)
-		{
-			ccColor4B color = m_silColors[m_vertices[i].y][m_vertices[i].x];
-			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
-			
-		}
+//		for(int i=0; i<m_triCount * 3; i++)
+//		{
+//			ccColor4B color = m_silColors[m_vertices[i].y][m_vertices[i].x];
+//			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
+//			
+//		}
 	}
 	bool init(CCTexture2D* tex){
 		CCLayer::init();
