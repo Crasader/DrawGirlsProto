@@ -256,6 +256,7 @@ public:
 	
 	int colorRampUniformLocation;   // 1
 	CCTexture2D* colorRampTexture;  // 2
+	vector<vector<ccColor4B>> m_silColors; // y, x 의 컬러값. loadRGB 할 때 로드 함.
 	MyNode()
 	{
 		texture = nullptr;
@@ -493,6 +494,16 @@ public:
 	}
 	void movingDistance(CCPoint t) // 영호.
 	{
+		CCLog("%f %f", t.x, t.y);
+		
+		// t 에 반대쪽으로 m_vertices 를 조작함.
+		// 모든 m_vertices 에 대한 y, x 에 대한 RGB 값은 m_silColors[y][x] 로 참조하면 됨.
+		for(int i=0; i<m_triCount * 3; i++)
+		{
+			ccColor4B color = m_silColors[m_vertices[i].y][m_vertices[i].x];
+			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
+			
+		}
 	}
 	bool init(CCTexture2D* tex){
 		CCLayer::init();
@@ -548,19 +559,22 @@ public:
 	}
 	void loadRGB(const std::string& fullPath)
 	{
+		m_silColors.clear();
+
 #if 1
 		CCImage* img = new CCImage();
 		img->initWithImageFileThreadSafe(fullPath.c_str());
 		unsigned char* oData = img->getData();	
 		int height = img->getHeight();
 		int width = img->getWidth();
-
-		//		for(int y=0;y<height;y++){
-		//			for(int x=0;x<width;x++){
-		//				int i = (y*width+x)*4;
-		//				CCLog("i = %d", i);
-		//			}
-		//		}
+		m_silColors = vector<vector<ccColor4B> >(height, vector<ccColor4B>(width));	
+		for(int y=0;y<height;y++){
+			for(int x=0;x<width;x++){
+				int i = (y*width+x)*4;
+//				CCLog("i = %d", i);
+				m_silColors[y][x] = ccc4(oData[i], oData[i + 1], oData[i + 2], oData[i + 3]);
+			}
+		}
 		int j = 0;
 		for(auto& point : m_points)
 		{

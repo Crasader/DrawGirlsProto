@@ -55,7 +55,7 @@ bool PopCake::init()
 	cb->setFunction([=](CCObject* obj){
 		
 		FormSetter::get()->requestFormDataOnce([=](){
-			Json::Value v =  FormSetter::get()->getFormData("bustmorphing");
+			Json::Value v =  FormSetter::get()->getFormData("bustmorphing3");
 			
 			mySIL->downloadImg(v["original"].asString(), 999, "morphing_img.png", this, callfunc_selector(PopCake::successOriginalAction), this, callfunc_selector(PopCake::failOriginalAction));
 		});
@@ -71,7 +71,7 @@ bool PopCake::init()
 	cb2->setFunction([=](CCObject* obj){
 		
 		FormSetter::get()->requestFormDataOnce([=](){
-			Json::Value v =  FormSetter::get()->getFormData("bustmorphing");
+			Json::Value v =  FormSetter::get()->getFormData("bustmorphing3");
 			
 			mySIL->downloadImg(v["rgb"].asString(), 999, "morphing_rgb.png", this, callfunc_selector(PopCake::successRgbAction), this, callfunc_selector(PopCake::failRgbAction));
 		});

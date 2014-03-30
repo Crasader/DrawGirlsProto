@@ -896,7 +896,6 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 	else
 	{
 		//			t_p = 0.99f;
-		
 		myGD->communication("CP_changeMaxSize", t_p);
 		float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
 		if(t_b)

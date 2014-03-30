@@ -183,9 +183,10 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, int level, float missileNumbers, CCPoint initPosition)
 {
 //CCNode* targetNode, CCPoint initPosition, float initSpeed, int power, bool cancelCasting, bool stiffen)
-	int r = rand() % (myGD->getMainCumberCount());
 
-	int r2 = rand() % (myGD->getSubCumberCount());
+//	int r = rand() % (myGD->getMainCumberCount());
+//
+//	int r2 = rand() % (myGD->getSubCumberCount());
 	
 	//grade = 3;
 	//level = level == 0 ? 1 : level;
