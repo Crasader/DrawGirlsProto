@@ -156,6 +156,9 @@ void ZoomScript::startTouchAction()
 	
 	target_node->setTouchEnabled(true);
 	
+	is_scrolling = false;
+	is_before_scrolling = is_scrolling;
+	
 	save_position = game_node->getPosition();
 	schedule(schedule_selector(ZoomScript::moveChecking));
 }
@@ -164,7 +167,16 @@ void ZoomScript::moveChecking()
 {
 	CCPoint after_position = game_node->getPosition();
 	
-	target_node->movingDistance(ccpSub(after_position, save_position));
+	if(is_scrolling)
+	{
+		target_node->movingDistance(ccpSub(after_position, save_position));
+		is_before_scrolling = is_scrolling;
+	}
+	else if(is_before_scrolling)
+	{
+		is_before_scrolling = false;
+		target_node->movingDistance(CCPointZero);
+	}
 	save_position = after_position;
 }
 
@@ -430,6 +442,7 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		
 		if(multiTouchData.size() == 1)
 		{
+			is_scrolling = true;
 //			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
 //			{
 //				is_touched_menu = true;
@@ -437,6 +450,7 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		}
 		else if(multiTouchData.size() == 2)
 		{
+			is_scrolling = false;
 			CCPoint sub_point = CCPointZero;
 			map<int, CCPoint>::iterator it;
 			for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
@@ -449,6 +463,7 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		}
 		else if(multiTouchData.size() == 3)
 		{
+			is_scrolling = false;
 			rotate_base_position = CCPointZero;
 			map<int, CCPoint>::iterator it;
 			for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
@@ -460,6 +475,7 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		}
 		else
 		{
+			is_scrolling = false;
 //			if(is_touched_menu)
 //			{
 //				next_button->ccTouchCancelled(touch, pEvent);
@@ -601,6 +617,15 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 		{
 			multiTouchData.erase((int)touch);
 
+			if(multiTouchData.size() == 1)
+			{
+				is_scrolling = true;
+			}
+			else
+			{
+				is_scrolling = false;
+			}
+			
 			if(multiTouchData.size() == 0)
 			{
 				target_node->setTouchEnabled(true);

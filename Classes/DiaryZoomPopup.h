@@ -43,6 +43,9 @@ private:
 	
 	CCPoint rotate_base_position;
 	
+	bool is_scrolling;
+	bool is_before_scrolling;
+	
 	CCPoint save_position;
 	void moveChecking();
 	

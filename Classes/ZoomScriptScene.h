@@ -53,6 +53,9 @@ private:
 	MyNode* target_node;
 	CCSprite* white_paper;
 	
+	bool is_scrolling;
+	bool is_before_scrolling;
+	
 	CCPoint rotate_base_position;
 	
 	CCPoint save_position;

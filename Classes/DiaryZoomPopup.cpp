@@ -156,6 +156,9 @@ void DiaryZoomPopup::startTouchAction()
 	next_button->setVisible(true);
 	first_img->setTouchEnabled(true);
 	
+	is_scrolling = false;
+	is_before_scrolling = is_scrolling;
+	
 	save_position = game_node->getPosition();
 	schedule(schedule_selector(DiaryZoomPopup::moveChecking));
 }
@@ -163,7 +166,17 @@ void DiaryZoomPopup::startTouchAction()
 void DiaryZoomPopup::moveChecking()
 {
 	CCPoint after_position = game_node->getPosition();
-	first_img->movingDistance(ccpSub(after_position, save_position));
+	
+	if(is_scrolling)
+	{
+		first_img->movingDistance(ccpSub(after_position, save_position));
+		is_before_scrolling = is_scrolling;
+	}
+	else if(is_before_scrolling)
+	{
+		is_before_scrolling = false;
+		first_img->movingDistance(CCPointZero);
+	}
 	save_position = after_position;
 }
 
@@ -316,8 +329,13 @@ void DiaryZoomPopup::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			first_img->setTouchEnabled(false);
 		}
 		
-		if(multiTouchData.size() == 2)
+		if(multiTouchData.size() == 1)
 		{
+			is_scrolling = true;
+		}
+		else if(multiTouchData.size() == 2)
+		{
+			is_scrolling = false;
 			CCPoint sub_point = CCPointZero;
 			map<int, CCPoint>::iterator it;
 			for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
@@ -330,6 +348,7 @@ void DiaryZoomPopup::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		}
 		else if(multiTouchData.size() == 3)
 		{
+			is_scrolling = false;
 			rotate_base_position = CCPointZero;
 			map<int, CCPoint>::iterator it;
 			for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
@@ -338,6 +357,10 @@ void DiaryZoomPopup::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			}
 			
 			rotate_base_position = ccpMult(rotate_base_position, 1.f/3.f);
+		}
+		else
+		{
+			is_scrolling = false;
 		}
 	}
 }
@@ -444,6 +467,15 @@ void DiaryZoomPopup::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 		if(o_it != multiTouchData.end())
 		{
 			multiTouchData.erase((int)touch);
+			
+			if(multiTouchData.size() == 1)
+			{
+				is_scrolling = true;
+			}
+			else
+			{
+				is_scrolling = false;
+			}
 			
 			if(multiTouchData.size() == 0)
 			{
