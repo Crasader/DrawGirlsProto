@@ -28,12 +28,16 @@ static const GLchar* blurFrag =
 static const GLchar* brightenFrag =
 #include "BrightenFrag.h"
 
+static const GLchar* silCvtFrag =
+#include "SilhouetteConvertFrag.h"
+
 enum class CurrentMode
 {
 	kNone = 0,
 	kBlur,
 	kPixelation,
-	kBrighten
+	kBrighten,
+	kSilCvt
 };
 class EffectSprite : public CCSprite
 {
@@ -139,6 +143,24 @@ public:
 		}
 		
 	}
+	
+	void setSilhouetteConvert()
+	{
+		if(m_currentMode != CurrentMode::kSilCvt)
+		{
+			CCGLProgram* pProgram = new CCGLProgram();
+			pProgram->initWithVertexShaderByteArray(ccPositionTextureColor_vert, silCvtFrag);
+			setShaderProgram(pProgram);
+			pProgram->release();
+			m_currentMode = CurrentMode::kSilCvt;
+			afterEffect(pProgram);
+		}
+		else
+		{
+			getShaderProgram()->use();
+		}
+	}
+	
 	void setNonEffect()
 	{
 		if(m_currentMode != CurrentMode::kNone)

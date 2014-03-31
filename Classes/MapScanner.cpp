@@ -965,14 +965,19 @@ InvisibleSprite* InvisibleSprite::create( const char* filename, bool isPattern )
 
 void InvisibleSprite::myInit( const char* filename, bool isPattern )
 {
-	CCSprite* t_back = CCSprite::create("ingame_whiteback.png");
-	t_back->setColor(ccBLACK);
-	t_back->setPosition(ccp(160,215));
-	addChild(t_back);
+//	CCSprite* t_back = CCSprite::create("ingame_whiteback.png");
+//	t_back->setColor(ccBLACK);
+//	t_back->setPosition(ccp(160,215));
+//	addChild(t_back);
 	
-	CCSprite* t_spr = mySIL->getLoadedImg(filename);
+	EffectSprite* t_spr = EffectSprite::createWithTexture(mySIL->addImage(filename));
 	t_spr->setPosition(ccp(160,215));
+	t_spr->setSilhouetteConvert();
 	addChild(t_spr);
+	
+//	CCSprite* t_spr = mySIL->getLoadedImg(filename);
+//	t_spr->setPosition(ccp(160,215));
+//	addChild(t_spr);
 }
 
 VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
