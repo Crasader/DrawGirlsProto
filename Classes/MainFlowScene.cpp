@@ -311,8 +311,8 @@ void MainFlowScene::setTable()
 //	else
 		puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
-	if(puzzle_number == 0 || puzzle_number < 10000)
-		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, NSDS_GI(kSDS_GI_eventList_int1_no_i, 1));
+	if(puzzle_number == 0 || puzzle_number > 10000)
+		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1));
 	
 	int myPosition = puzzle_table->minContainerOffset().x;
 	for(int i=0; i<numberOfCellsInTableView(puzzle_table); i++)

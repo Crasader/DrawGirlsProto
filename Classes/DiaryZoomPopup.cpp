@@ -56,6 +56,8 @@ bool DiaryZoomPopup::init()
 	game_node->setScale(1.5f);
 	addChild(game_node, kDZP_Z_first_img);
 	
+	before_sub_position = CCPointZero;
+	
 	int card_number = mySGD->selected_collectionbook;
 	
 	
@@ -182,13 +184,23 @@ void DiaryZoomPopup::moveChecking()
 	
 	if(is_scrolling)
 	{
-		first_img->movingDistance(ccpSub(after_position, save_position));
+		CCPoint sub_position = ccpSub(after_position, save_position);
+		if(before_sub_position.x == 0.f && before_sub_position.y == 0.f && sub_position.x == 0.f && sub_position.y == 0.f)
+		{
+			
+		}
+		else
+		{
+			first_img->movingDistance(sub_position);
+			before_sub_position = sub_position;
+		}
 		is_before_scrolling = is_scrolling;
 	}
 	else if(is_before_scrolling)
 	{
 		is_before_scrolling = false;
 		first_img->movingDistance(CCPointZero);
+		before_sub_position = CCPointZero;
 	}
 	save_position = after_position;
 }

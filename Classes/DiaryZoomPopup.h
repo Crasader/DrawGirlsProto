@@ -46,6 +46,7 @@ private:
 	bool is_scrolling;
 	bool is_before_scrolling;
 	
+	CCPoint before_sub_position;
 	CCPoint save_position;
 	void moveChecking();
 	
