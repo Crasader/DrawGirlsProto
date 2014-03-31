@@ -257,6 +257,8 @@ public:
 	int colorRampUniformLocation;   // 1
 	CCTexture2D* colorRampTexture;  // 2
 	vector<vector<ccColor4B>> m_silColors; // y, x 의 컬러값. loadRGB 할 때 로드 함.
+	
+//	FromToWithDuration2
 	MyNode()
 	{
 		texture = nullptr;
@@ -493,10 +495,17 @@ public:
 		
 		return true;
 	}
+	void wave(float dt)
+	{
+		// 원래 대로 돌아가려는 힘.
+		
+		
+	}
 	void movingDistance(CCPoint t) // 영호.
 	{
 		CCLog("%f %f", t.x, t.y);
 		
+//		return;
 		// t 에 반대쪽으로 m_vertices 를 조작함.
 		// 모든 m_vertices 에 대한 y, x 에 대한 RGB 값은 m_silColors[y][x] 로 참조하면 됨.
 		for(int i=0; i<m_triCount * 3; i++)
@@ -512,6 +521,7 @@ public:
 			}
 			else
 			{
+//				return;
 				// 여기서 부터는 출렁 해야됨.
 				auto backupPosition = m_backupVertices[&m_vertices[i]];
 				
@@ -520,20 +530,22 @@ public:
 				auto goalPosition = m_backupVertices[&m_vertices[i]];
 				CCPoint ccpGoalPosition = ccp(goalPosition.x, goalPosition.y);
 				ccpGoalPosition = ccpGoalPosition - ccpStartPosition;
-
-				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), ccpGoalPosition, 0.5f,
-																								 [=](CCPoint t){
-																									 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
-																																								startPosition.y + t.y,
-																																								m_vertices[i].z);
-																									 //																								 i->y = backup.y + t;
-																								 },
-																								 [=](CCPoint t){
-																									 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
-																																								startPosition.y + t.y,
-																																								m_vertices[i].z);
-																								 },
-																								 elasticOut));
+				if(ccpLength(ccpGoalPosition) > 0.5f)
+				{
+					addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), ccpGoalPosition, 0.5f,
+																									 [=](CCPoint t){
+																										 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
+																																									startPosition.y + t.y,
+																																									m_vertices[i].z);
+																										 //																								 i->y = backup.y + t;
+																									 },
+																									 [=](CCPoint t){
+																										 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
+																																									startPosition.y + t.y,
+																																									m_vertices[i].z);
+																									 },
+																									 elasticOut));
+				}
 			}
 		}
 	}
