@@ -18,6 +18,7 @@
 #include <pthread.h>
 #include <random>
 #include "StartMapLuckyItem.h"
+#include "EffectSprite.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -126,7 +127,7 @@ private:
 //	}
 //};
 
-class VisibleSprite : public CCSprite
+class VisibleSprite : public EffectSprite
 {
 public:
 	static VisibleSprite* create(const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename);

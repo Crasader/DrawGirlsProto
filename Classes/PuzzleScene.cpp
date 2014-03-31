@@ -1435,13 +1435,13 @@ void PuzzleScene::setRight()
 	addChild(right_case, kPuzzleZorder_right);
 	
 	CCSprite* right_body = CCSprite::create("puzzle_right_body.png");
-	right_body->setPosition(ccp(-right_body->getContentSize().width/2.f-5, 7));
+	right_body->setPosition(ccp(-right_body->getContentSize().width/2.f-2, 7));
 	right_case->addChild(right_body);
 	
 	recent_right_code = kPuzzleRightCode_reward;
 	
 	right_head = CCNode::create();
-	right_head->setPosition(ccp(-right_body->getContentSize().width/2.f-5, 7+right_body->getContentSize().height/2.f-30));
+	right_head->setPosition(ccp(-right_body->getContentSize().width/2.f-2, 7+right_body->getContentSize().height/2.f-30));
 	right_case->addChild(right_head);
 	setRightHead();
 	
@@ -1467,64 +1467,50 @@ void PuzzleScene::setRight()
 
 void PuzzleScene::setRightHead()
 {
-	right_head->removeAllChildren();
-	
-	if(recent_right_code == kPuzzleRightCode_reward)
-	{
-//		CommonButton* rank_menu = CommonButton::create("랭킹", 12, CCSizeMake(72, 42), CommonButtonPupple, kCCMenuHandlerPriority);
+//	right_head->removeAllChildren();
+//	
+//	if(recent_right_code == kPuzzleRightCode_reward)
+//	{
+//		CCSprite* n_rank = CCSprite::create("puzzle_right_rank_off.png");
+//		CCSprite* s_rank = CCSprite::create("puzzle_right_rank_off.png");
+//		s_rank->setColor(ccGRAY);
+//		
+//		CCMenuItem* rank_item = CCMenuItemSprite::create(n_rank, s_rank, this, menu_selector(PuzzleScene::menuAction));
+//		rank_item->setTag(kPuzzleMenuTag_rightRank);
+//		
+//		CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
 //		rank_menu->setPosition(ccp(32, -11));
-//		rank_menu->setFunction([=](CCObject* sender)
-//							   {
-//								   CCNode* t_node = CCNode::create();
-//								   t_node->setTag(kPuzzleMenuTag_rightRank);
-//								   menuAction(t_node);
-//							   });
 //		right_head->addChild(rank_menu);
-		
-		CCSprite* n_rank = CCSprite::create("puzzle_right_rank_off.png");
-		CCSprite* s_rank = CCSprite::create("puzzle_right_rank_off.png");
-		s_rank->setColor(ccGRAY);
-		
-		CCMenuItem* rank_item = CCMenuItemSprite::create(n_rank, s_rank, this, menu_selector(PuzzleScene::menuAction));
-		rank_item->setTag(kPuzzleMenuTag_rightRank);
-		
-		CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
-		rank_menu->setPosition(ccp(32, -11));
-		right_head->addChild(rank_menu);
-	}
-	else if(recent_right_code == kPuzzleRightCode_rank)
-	{
-//		CommonButton* reward_menu = CommonButton::create("보상", 12, CCSizeMake(72, 42), CommonButtonPupple, kCCMenuHandlerPriority);
+//	}
+//	else if(recent_right_code == kPuzzleRightCode_rank)
+//	{
+//		CCSprite* n_reward = CCSprite::create("puzzle_right_reward_off.png");
+//		CCSprite* s_reward = CCSprite::create("puzzle_right_reward_off.png");
+//		s_reward->setColor(ccGRAY);
+//		
+//		CCMenuItem* reward_item = CCMenuItemSprite::create(n_reward, s_reward, this, menu_selector(PuzzleScene::menuAction));
+//		reward_item->setTag(kPuzzleMenuTag_rightReward);
+//		
+//		CCMenu* reward_menu = CCMenu::createWithItem(reward_item);
 //		reward_menu->setPosition(ccp(-33, -11));
-//		reward_menu->setFunction([=](CCObject* sender)
-//							   {
-//								   CCNode* t_node = CCNode::create();
-//								   t_node->setTag(kPuzzleMenuTag_rightReward);
-//								   menuAction(t_node);
-//							   });
 //		right_head->addChild(reward_menu);
-		
-		CCSprite* n_reward = CCSprite::create("puzzle_right_reward_off.png");
-		CCSprite* s_reward = CCSprite::create("puzzle_right_reward_off.png");
-		s_reward->setColor(ccGRAY);
-		
-		CCMenuItem* reward_item = CCMenuItemSprite::create(n_reward, s_reward, this, menu_selector(PuzzleScene::menuAction));
-		reward_item->setTag(kPuzzleMenuTag_rightReward);
-		
-		CCMenu* reward_menu = CCMenu::createWithItem(reward_item);
-		reward_menu->setPosition(ccp(-33, -11));
-		right_head->addChild(reward_menu);
-	}
+//	}
 }
 
 void PuzzleScene::setRightContent()
 {
 	right_head->removeChildByTag(999);
-	int puzzle_number = NSDS_GI(selected_stage_number, kSDS_SI_puzzle_i);
-	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, selected_stage_number))->getCString(),
+	
+	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", selected_stage_number)->getCString(),
 												 mySGD->getFont().c_str(), 12);
-	stage_label->setPosition(ccp(-28,14));
+	stage_label->setPosition(ccp(0,3));
 	right_head->addChild(stage_label, 0, 999);
+	
+//	int puzzle_number = NSDS_GI(selected_stage_number, kSDS_SI_puzzle_i);
+//	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d-%d", puzzle_number, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, selected_stage_number))->getCString(),
+//												 mySGD->getFont().c_str(), 12);
+//	stage_label->setPosition(ccp(-28,14));
+//	right_head->addChild(stage_label, 0, 999);
 	
 	if(recent_right_code == kPuzzleRightCode_reward)
 	{
@@ -1575,7 +1561,7 @@ void PuzzleScene::setReward()
 			condition->setPosition(ccp(card_img1->getContentSize().width/2.f, card_img1->getContentSize().height/2.f));
 			card_img1->addChild(condition);
 		}
-		card_img1->setPosition(ccp(-32, 44));
+		card_img1->setPosition(ccp(-32, 50));
 		
 		
 		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 2);
@@ -1608,8 +1594,8 @@ void PuzzleScene::setReward()
 			condition2->setPosition(ccp(card_img3->getContentSize().width/2.f, card_img3->getContentSize().height/2.f));
 			card_img3->addChild(condition2);
 		}
-		card_img2->setPosition(ccp(32, 44));
-		card_img3->setPosition(ccp(-32, -40));
+		card_img2->setPosition(ccp(32, 50));
+		card_img3->setPosition(ccp(-32, -37));
 		
 		
 		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 3);
@@ -1630,7 +1616,7 @@ void PuzzleScene::setReward()
 			condition->setPosition(ccp(card_img4->getContentSize().width/2.f, card_img4->getContentSize().height/2.f));
 			card_img4->addChild(condition);
 		}
-		card_img4->setPosition(ccp(32, -40));
+		card_img4->setPosition(ccp(32, -37));
 		
 		
 		

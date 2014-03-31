@@ -1072,16 +1072,16 @@ void MainFlowScene::setTop()
 //	
 //	mySGD->setFriendPointLabel(friend_point_label);
 	
-	CCSprite* n_friend_point = CCSprite::create("mainflow_top_shop.png");
-	CCSprite* s_friend_point = CCSprite::create("mainflow_top_shop.png");
-	s_friend_point->setColor(ccGRAY);
-	
-	CCMenuItem* friend_point_item = CCMenuItemSprite::create(n_friend_point, s_friend_point, this, menu_selector(MainFlowScene::menuAction));
-	friend_point_item->setTag(kMainFlowMenuTag_friendPointContent);
-	
-	CCMenu* friend_point_menu = CCMenu::createWithItem(friend_point_item);
-	friend_point_menu->setPosition(ccp(362,top_case->getContentSize().height/2.f));
-	top_case->addChild(friend_point_menu);
+//	CCSprite* n_friend_point = CCSprite::create("mainflow_top_shop.png");
+//	CCSprite* s_friend_point = CCSprite::create("mainflow_top_shop.png");
+//	s_friend_point->setColor(ccGRAY);
+//	
+//	CCMenuItem* friend_point_item = CCMenuItemSprite::create(n_friend_point, s_friend_point, this, menu_selector(MainFlowScene::menuAction));
+//	friend_point_item->setTag(kMainFlowMenuTag_friendPointContent);
+//	
+//	CCMenu* friend_point_menu = CCMenu::createWithItem(friend_point_item);
+//	friend_point_menu->setPosition(ccp(362,top_case->getContentSize().height/2.f));
+//	top_case->addChild(friend_point_menu);
 	
 	CCSprite* n_postbox = CCSprite::create("mainflow_postbox.png");
 	CCSprite* s_postbox = CCSprite::create("mainflow_postbox.png");

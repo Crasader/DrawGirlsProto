@@ -56,12 +56,18 @@ bool ZoomScript::init()
 	is_showtime = mySGD->is_showtime;
 	is_exchanged = mySGD->is_exchanged;
 	
-	string first_filename;
+	int card_number;
 	
-	if(is_exchanged)			first_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
-	else						first_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
+	if(is_exchanged)	card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2);
+	else				card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1);
 	
-	first_img = MyNode::create(mySIL->addImage(first_filename.c_str()));
+	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	first_img->putBasicInfomation();	// 기본정보 들어가게.
+	//	first_img->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
+	first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+	first_img->triangulationWithPoints();
+	
+//	first_img = MyNode::create(mySIL->addImage(first_filename.c_str()));
 	first_img->setPosition(ccp(160,215));
 	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kZS_Z_first_img);
@@ -154,7 +160,7 @@ void ZoomScript::startTouchAction()
 	setTouchEnabled(true);
 	next_button->setVisible(true);
 	
-	target_node->setTouchEnabled(true);
+//	target_node->setTouchEnabled(true);
 	
 	is_scrolling = false;
 	is_before_scrolling = is_scrolling;
@@ -250,13 +256,18 @@ void ZoomScript::showtimeFirstAction()
 	script_label->setString("");
 	script_case->setVisible(false);
 	
-	string second_filename;
-	if(is_exchanged)
-		second_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString();
-	else
-		second_filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
+	int card_number;
 	
-	second_img = MyNode::create(mySIL->addImage(second_filename.c_str()));
+	if(is_exchanged)		card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
+	else					card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2);
+	
+	second_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	second_img->putBasicInfomation();	// 기본정보 들어가게.
+	//	first_img->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
+	second_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+	second_img->triangulationWithPoints();
+	
+//	second_img = MyNode::create(mySIL->addImage(second_filename.c_str()));
 	second_img->setPosition(ccp(160,215));
 	second_img->setTouchEnabled(false);
 	game_node->addChild(second_img, kZS_Z_second_img);
@@ -628,7 +639,7 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 			
 			if(multiTouchData.size() == 0)
 			{
-				target_node->setTouchEnabled(true);
+//				target_node->setTouchEnabled(true);
 				
 //				if(is_touched_menu)
 //				{

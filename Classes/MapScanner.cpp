@@ -1299,7 +1299,8 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 void VisibleSprite::setLight()
 {
 	stopAllActions();
-	setColor(ccWHITE);
+	setBrighten(1.8f);
+//	setColor(ccWHITE);
 	CCDelayTime* t_delay = CCDelayTime::create(0.1f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(VisibleSprite::setDark));
 	CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
@@ -1308,14 +1309,15 @@ void VisibleSprite::setLight()
 
 void VisibleSprite::setDark()
 {
-	setColor(ccGRAY);
+	setBrighten(1.f);
+//	setColor(ccGRAY);
 }
 
 void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
 {
-	
 	initWithTexture(mySIL->addImage(filename));
-	setColor(ccGRAY);
+	setBrighten(1.f);
+//	setColor(ccGRAY);
 	setPosition(ccp(160,215));
 
 	

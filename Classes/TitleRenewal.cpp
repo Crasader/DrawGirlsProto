@@ -1356,6 +1356,8 @@ void TitleRenewalScene::endingCheck()
 	
 	if(nick == "")
 	{
+		myDSH->setBoolForKey(kDSH_Key_isJoystickCenterNotFixed, true);
+		
 		state_label->setString("");
 		
 		nick_back = CCSprite::create("nickname_back.png");

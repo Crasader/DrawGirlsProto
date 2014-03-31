@@ -62,10 +62,10 @@ bool DiaryZoomPopup::init()
 #if 1
 //	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
 	//	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
-	first_img = MyNode::create(CCTextureCache::sharedTextureCache()->addImage("bmTest.png"));
+	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
 	first_img->putBasicInfomation();	// 기본정보 들어가게.
-	first_img->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
-//	first_img->loadRGB(mySIL->getDocumentPath() + "morphing_rgb.png"); // 실루엣 z 정보 넣는 곳.
+//	first_img->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
+	first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 	first_img->triangulationWithPoints();
 #endif
 #if 0
@@ -492,7 +492,7 @@ void DiaryZoomPopup::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 			
 			if(multiTouchData.size() == 0)
 			{
-				first_img->setTouchEnabled(true);
+//				first_img->setTouchEnabled(true);
 				
 				timeval time;
 				gettimeofday(&time, NULL);
