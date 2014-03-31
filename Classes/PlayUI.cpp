@@ -983,26 +983,26 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(!is_exchanged && !is_show_exchange_coin && !isGameover && t_p < clearPercentage)
 		{
-			if(t_p >= t_beforePercentage + 0.2f) // 0.2
+			if(t_p >= t_beforePercentage + 0.15f) // 0.2
 			{
 				takeCoinModeOn();
 			}
-			else if(t_p >= t_beforePercentage + 0.15f)
+			else if(t_p >= t_beforePercentage + 0.1f)
 			{
 				if(rand()%10 < 7) // 70%
 					takeCoinModeOn();
 			}
-			else if(t_p >= t_beforePercentage + 0.1f)
+			else if(t_p >= t_beforePercentage + 0.08f)
 			{
 				if(rand()%2 == 0) // 50%
 					takeCoinModeOn();
 			}
-			else if(t_p >= t_beforePercentage + 0.08f)
+			else if(t_p >= t_beforePercentage + 0.06f)
 			{
 				if(rand()%20 < 7) // 35%
 					takeCoinModeOn();
 			}
-			else if(t_p >= t_beforePercentage + 0.06f)
+			else if(t_p >= t_beforePercentage + 0.04f)
 			{
 				if(rand()%5 == 0) // 20%
 					takeCoinModeOn();
@@ -1012,7 +1012,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		beforePercentage = (int(t_p*1000))^t_tta;
 	}
 	
-	if(t_p > 0.5f && !is_show_exchange_coin && t_p < clearPercentage)
+	if(t_p > 0.35f && !is_show_exchange_coin && t_p < clearPercentage)
 	{
 		takeCoinModeOn();
 	}

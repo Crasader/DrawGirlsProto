@@ -1561,7 +1561,7 @@ void PuzzleScene::setReward()
 			condition->setPosition(ccp(card_img1->getContentSize().width/2.f, card_img1->getContentSize().height/2.f));
 			card_img1->addChild(condition);
 		}
-		card_img1->setPosition(ccp(-32, 50));
+		card_img1->setPosition(ccp(-32, 54));
 		
 		
 		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 2);
@@ -1594,7 +1594,7 @@ void PuzzleScene::setReward()
 			condition2->setPosition(ccp(card_img3->getContentSize().width/2.f, card_img3->getContentSize().height/2.f));
 			card_img3->addChild(condition2);
 		}
-		card_img2->setPosition(ccp(32, 50));
+		card_img2->setPosition(ccp(32, 54));
 		card_img3->setPosition(ccp(-32, -37));
 		
 		
@@ -1619,11 +1619,21 @@ void PuzzleScene::setReward()
 		card_img4->setPosition(ccp(32, -37));
 		
 		
+		CCSprite* reward_back_left_top = CCSprite::create("puzzle_reward_back_bronze.png");
+		reward_back_left_top->setPosition(card_img1->getPosition());
+		reward_node->addChild(reward_back_left_top);
 		
-		CCSprite* reward_back = CCSprite::create("puzzle_reward_back.png");
-		reward_back->setPosition(ccp(0,2));
-		reward_node->addChild(reward_back);
+		CCSprite* reward_back_right_top = CCSprite::create("puzzle_reward_back_silver.png");
+		reward_back_right_top->setPosition(card_img2->getPosition());
+		reward_node->addChild(reward_back_right_top);
 		
+		CCSprite* reward_back_left_bottom = CCSprite::create("puzzle_reward_back_silver.png");
+		reward_back_left_bottom->setPosition(card_img3->getPosition());
+		reward_node->addChild(reward_back_left_bottom);
+		
+		CCSprite* reward_back_right_bottom = CCSprite::create("puzzle_reward_back_gold.png");
+		reward_back_right_bottom->setPosition(card_img4->getPosition());
+		reward_node->addChild(reward_back_right_bottom);
 		
 		
 		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 1);

@@ -54,8 +54,8 @@ bool TitleRenewalScene::init()
 	addChild(title_img);
 	
 	CCSprite* title_name = CCSprite::create("temp_title_name.png");
-	title_name->setAnchorPoint(ccp(0,0));
-	title_name->setPosition(ccp(0,10));//240,210));
+	title_name->setAnchorPoint(ccp(0.5,0));
+	title_name->setPosition(ccp(240,10));//240,210));
 	addChild(title_name);
 	
 	state_label = CCLabelTTF::create("카카오 서버 접속중", mySGD->getFont().c_str(), 20);
@@ -796,7 +796,8 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 		{
 			Json::Value puzzle_list = result_data["list"];
 			
-			NSDS_SI(kSDS_GI_puzzleListCount_i, puzzle_list.size(), false);
+//			NSDS_SI(kSDS_GI_puzzleListCount_i, puzzle_list.size(), false);
+			NSDS_SI(kSDS_GI_puzzleListCount_i, 3, false);
 			
 			int puzzle_cnt = puzzle_list.size();
 			for(int i=0;i<puzzle_cnt;i++)
