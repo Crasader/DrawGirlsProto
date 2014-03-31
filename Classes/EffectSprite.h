@@ -81,39 +81,60 @@ public:
 	}
 	void setBlur()
 	{
-		CCGLProgram* pProgram = new CCGLProgram();
-    pProgram->initWithVertexShaderByteArray(blurVert, blurFrag);
-    setShaderProgram(pProgram);
-    pProgram->release();
-
-//		pProgram->setUniformLocationWith1f(glGetUniformLocation( pProgram->getProgram(), "u_blurSize"),
-//																		 3);
-		m_currentMode = CurrentMode::kBlur;
-    afterEffect(pProgram);
-		
+		if(m_currentMode != CurrentMode::kBlur)
+		{
+			CCGLProgram* pProgram = new CCGLProgram();
+			pProgram->initWithVertexShaderByteArray(blurVert, blurFrag);
+			setShaderProgram(pProgram);
+			pProgram->release();
+			
+			//		pProgram->setUniformLocationWith1f(glGetUniformLocation( pProgram->getProgram(), "u_blurSize"),
+			//																		 3);
+			m_currentMode = CurrentMode::kBlur;
+			afterEffect(pProgram);
+		}
 	}
-	void setBrighten()
+	void setBrighten(float b = 1.2f)
 	{
-		CCGLProgram* pProgram = new CCGLProgram();
-    pProgram->initWithVertexShaderByteArray(blurVert, brightenFrag);
-    setShaderProgram(pProgram);
-    pProgram->release();
-		
-		//		pProgram->setUniformLocationWith1f(glGetUniformLocation( pProgram->getProgram(), "u_blurSize"),
-		//																		 3);
-		m_currentMode = CurrentMode::kBrighten;
-    afterEffect(pProgram);
-		
+		if(m_currentMode != CurrentMode::kBrighten)
+		{
+			CCGLProgram* pProgram = new CCGLProgram();
+			pProgram->initWithVertexShaderByteArray(blurVert, brightenFrag);
+			setShaderProgram(pProgram);
+			pProgram->release();
+			
+			//		pProgram->setUniformLocationWith1f(glGetUniformLocation( pProgram->getProgram(), "u_blurSize"),
+			//																		 3);
+			m_currentMode = CurrentMode::kBrighten;
+			
+			afterEffect(pProgram);
+		}
+		getShaderProgram()->setUniformLocationWith1f
+						(glGetUniformLocation(getShaderProgram()->getProgram(), "u_brighten"),
+																		 b);
 	}
 	void setPixelation()
 	{
-		CCGLProgram* pProgram = new CCGLProgram();
-    pProgram->initWithVertexShaderByteArray(ksVert, ksFrag);
-    setShaderProgram(pProgram);
-    pProgram->release();
+		if(m_currentMode != CurrentMode::kPixelation)
+		{
+			CCGLProgram* pProgram = new CCGLProgram();
+			pProgram->initWithVertexShaderByteArray(ksVert, ksFrag);
+			setShaderProgram(pProgram);
+			pProgram->release();
+			
+			m_currentMode = CurrentMode::kPixelation;
+			afterEffect(pProgram);
+		}
 		
-		m_currentMode = CurrentMode::kPixelation;
-    afterEffect(pProgram);
+		
+	}
+	void setNonEffect()
+	{
+		if(m_currentMode != CurrentMode::kNone)
+		{
+			setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor));
+			m_currentMode = CurrentMode::kNone;
+		}
 		
 	}
 	void afterEffect(CCGLProgram* shader)

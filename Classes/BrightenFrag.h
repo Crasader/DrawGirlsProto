@@ -9,12 +9,13 @@ varying vec2 v_texCoord;
 
 uniform sampler2D CC_Texture0;
 
+uniform float u_brighten;
 
 
 
 void main() {
 	vec4 sum = vec4(0.0);
-	sum += texture2D(CC_Texture0, v_texCoord) * 1.2;
+	sum += texture2D(CC_Texture0, v_texCoord) * u_brighten;
 	gl_FragColor = sum;
 }
 
