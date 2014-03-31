@@ -93,6 +93,10 @@ public:
 			m_currentMode = CurrentMode::kBlur;
 			afterEffect(pProgram);
 		}
+		else
+		{
+			getShaderProgram()->use();
+		}
 	}
 	void setBrighten(float b = 1.2f)
 	{
@@ -108,6 +112,10 @@ public:
 			m_currentMode = CurrentMode::kBrighten;
 			
 			afterEffect(pProgram);
+		}
+		else
+		{
+			getShaderProgram()->use();
 		}
 		getShaderProgram()->setUniformLocationWith1f
 						(glGetUniformLocation(getShaderProgram()->getProgram(), "u_brighten"),
@@ -125,7 +133,10 @@ public:
 			m_currentMode = CurrentMode::kPixelation;
 			afterEffect(pProgram);
 		}
-		
+		else
+		{
+			getShaderProgram()->use();
+		}
 		
 	}
 	void setNonEffect()
