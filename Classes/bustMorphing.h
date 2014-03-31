@@ -504,8 +504,7 @@ public:
 			Vertex3D original = m_2xVertices[i];
 			ccColor4B color = m_silColors[original.y][original.x];
 			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
-			CCPoint against = t * (float)color.r / 10.f / 12.f;// / 12.f; //  / 50.f; // / 30.f;
-//			CCLog("vv %f", against);
+			CCPoint against = t * (float)color.g / 10.f / 12.f;// / 12.f; //  / 50.f; // / 30.f;
 			if( !(against.x == 0.f && against.y == 0.f) )
 			{
 				m_vertices[i].x = m_backupVertices[&m_vertices[i]].x - against.x;
@@ -522,7 +521,7 @@ public:
 				CCPoint ccpGoalPosition = ccp(goalPosition.x, goalPosition.y);
 				ccpGoalPosition = ccpGoalPosition - ccpStartPosition;
 
-				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), ccpGoalPosition, 1.0f,
+				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), ccpGoalPosition, 0.5f,
 																								 [=](CCPoint t){
 																									 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
 																																								startPosition.y + t.y,
@@ -580,8 +579,8 @@ public:
 		m_points.push_back(Vertex3DMake(0, 0, 0));
 		m_points.push_back(Vertex3DMake(texture->getPixelsWide() - 1, 0, 0));
 
-		int hm = 20;
-		int wm = 20;
+		int hm = 30;
+		int wm = 30;
 		for(int y=0 + hm; y<texture->getPixelsHigh() - 20; y+=hm)
 		{
 			for(int x=0 + wm; x<texture->getPixelsWide() - 20; x+=wm)
