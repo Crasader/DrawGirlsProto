@@ -376,10 +376,10 @@ void ZoomScript::moveListXY(CCPoint t_p)
 			a_p.x = 480-320*game_node->getScale();
 	}
 	
-	if(a_p.y > 0)
-		a_p.y = 0;
-	if(a_p.y < -430*game_node->getScale()+480*screen_size.height/screen_size.width)
-		a_p.y = -430*game_node->getScale()+480*screen_size.height/screen_size.width;
+	if(a_p.y > 0+40.f)
+		a_p.y = 0+40.f;
+	if(a_p.y < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
+		a_p.y = -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f;
 	
 	game_node->setPosition(a_p);
 }
@@ -563,10 +563,10 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 
 				game_node->setPositionY(game_node->getPositionY() - 430*comp_scale/2.f);
 
-				if(game_node->getPositionY() > 0)
-					game_node->setPositionY(0);
-				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width)
-					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width);
+				if(game_node->getPositionY() > 0+40.f)
+					game_node->setPositionY(0+40.f);
+				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
+					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f);
 			}
 			else if(multiTouchData.size() == 3)
 			{

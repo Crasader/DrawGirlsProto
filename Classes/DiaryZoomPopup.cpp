@@ -255,10 +255,10 @@ void DiaryZoomPopup::moveListXY(CCPoint t_p)
 			a_p.x = (480-320*game_node->getScale())/myDSH->screen_convert_rate - myDSH->ui_zero_point.x;
 	}
 	
-	if(a_p.y > -myDSH->ui_zero_point.y)
-		a_p.y = -myDSH->ui_zero_point.y;
-	if(a_p.y < (-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y)
-		a_p.y = (-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y;
+	if(a_p.y > -myDSH->ui_zero_point.y+40.f)
+		a_p.y = -myDSH->ui_zero_point.y+40.f;
+	if(a_p.y < (-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y-40.f)
+		a_p.y = (-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y-40.f;
 	
 	game_node->setPosition(a_p);
 }
@@ -450,10 +450,10 @@ void DiaryZoomPopup::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 
 				game_node->setPositionY(((game_node->getPositionY()+myDSH->ui_zero_point.y)*myDSH->screen_convert_rate - 430*comp_scale/2.f)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y);
 
-				if(game_node->getPositionY() > -myDSH->ui_zero_point.y)
-					game_node->setPositionY(-myDSH->ui_zero_point.y);
-				else if(game_node->getPositionY() < (-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y)
-					game_node->setPositionY((-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y);
+				if(game_node->getPositionY() > -myDSH->ui_zero_point.y+40.f)
+					game_node->setPositionY(-myDSH->ui_zero_point.y+40.f);
+				else if(game_node->getPositionY() < (-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y-40.f)
+					game_node->setPositionY((-430*game_node->getScale()+480*screen_size.height/screen_size.width)/myDSH->screen_convert_rate - myDSH->ui_zero_point.y-40.f);
 			}
 			else if(multiTouchData.size() == 3)
 			{
