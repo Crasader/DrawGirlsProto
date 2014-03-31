@@ -1373,14 +1373,16 @@ bool PlayTutorial::init()
 	gray->runAction(CCFadeTo::create(0.5f, 255));
 	t_sm->back_node->addChild(gray);
 	
-	t_sm->addMent(true, "", "", "조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.", [=]()
+	t_sm->addMent(true, "", "", "操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。", [=]()
+				  //"조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.", [=]()
 	{
 		gray->runAction(CCFadeTo::create(0.3f, 0));
 		controler->joystickSetVisible(true);
 		mark_img->setVisible(true);
-		t_sm->addMent(true, "", "", "먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
+		t_sm->addMent(true, "", "", "まずは領域の線の上を移動してみましょう。\n右下にジョイスティックでキャラクターの方向を変えることができます。\nキャラクターを上に移動させてみましょう。", [=]()
+					  //"먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
 		{
-			top_label->setString("캐릭터를 위로 이동시키기");
+			top_label->setString("キャラクターを上に移動");//"캐릭터를 위로 이동시키기");
 			tutorial_step = 1;
 			t_sm->removeFromParent();
 		});
@@ -1421,14 +1423,14 @@ void PlayTutorial::nextStep()
 		area_take_sample->setPosition(ccp(240,220));
 		addChild(area_take_sample, 101);
 		
-		t_sm->addMent(true, "", "", "다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
+		t_sm->addMent(true, "", "", "次は領域を獲得する方法を調べてみましょう。\n左下のボタンを押したら\n領域の外に動けますよ。\n領域を獲得してみてください。", [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
 		{
 			controler->setTouchEnabled(true);
 			area_take_sample->removeFromParent();
 			mark_img->setPosition(ccp(80,myDSH->ui_center_y));
 			mark_img->setVisible(true);
 			
-			top_label->setString("영역 획득하기");
+			top_label->setString("領域獲得");//"영역 획득하기");
 			tutorial_step = 3;
 
 			startCatching();
@@ -1465,7 +1467,8 @@ void PlayTutorial::nextStep()
 		
 		view_img->startSilhouette();
 			
-		t_sm->addMent(true, "", "", "파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
+		t_sm->addMent(true, "", "", "青のシルエット領域を獲得することでゲームをクリアすることができます。", [=]()
+					  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
 					  {
 						  view_img->stopSilhouette();
 						  ui_percent->stopAllActions();
@@ -1495,7 +1498,8 @@ void PlayTutorial::nextStep()
 						  CCRepeat* t_repeat3 = CCRepeat::create(t_seq3, 3);
 						  time_case->runAction(t_repeat3);
 						  
-						  t_sm->addMent(true, "", "", "제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
+						  t_sm->addMent(true, "", "", "時間制限内に領域を85％以上獲得したらクリア！", [=]()
+										//"제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
 										{
 											clear_condition->stopAllActions();
 											clear_condition->setVisible(true);
@@ -1508,7 +1512,8 @@ void PlayTutorial::nextStep()
 											
 											mySGD->setGold(mySGD->getGold() + 5000);
 											
-											t_sm->addMent(true, "", "", "기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
+											t_sm->addMent(true, "", "", "基本チュートリアルが終わりました。\n5000ゴールドをプレゼントします。\n本ゲームに戻ります。", [=]()
+														  //"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
 														  {
 															  t_sm->removeFromParent();
 															  mySGD->setNextSceneName("maingame");
