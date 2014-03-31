@@ -503,7 +503,7 @@ public:
 			Vertex3D original = m_2xVertices[i];
 			ccColor4B color = m_silColors[original.y][original.x];
 			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
-			float against = (float)color.r / 10.f * t.y / 16.f; //  / 50.f; // / 30.f;
+			float against = (float)color.r / 10.f * t.y / 12.f; //  / 50.f; // / 30.f;
 //			CCLog("vv %f", against);
 			m_vertices[i].y = m_backupVertices[&m_vertices[i]].y - against;
 //			m_vertices[i].x = m_backupVertices[&m_vertices[i]].x - color.r / 10.f;

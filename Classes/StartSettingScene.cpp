@@ -302,6 +302,13 @@ void StartSettingScene::setMain()
 				n_mount->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
 				n_mount->setPosition(ccp(n_item_case->getContentSize().width/2.f, n_item_case->getContentSize().height/2.f));
 				n_item_case->addChild(n_mount);
+				
+				CCLabelTTF* n_mount_label = CCLabelTTF::create("장착", mySGD->getFont().c_str(), 9);
+				n_mount_label->setColor(ccRED);
+				n_mount_label->setAnchorPoint(ccp(1,1));
+				n_mount_label->setPosition(ccp(n_mount->getContentSize().width-6, n_mount->getContentSize().height-6));
+				n_mount->addChild(n_mount_label);
+				
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				n_img->setScale(0.8);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
@@ -313,6 +320,13 @@ void StartSettingScene::setMain()
 				s_mount->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
 				s_mount->setPosition(ccp(s_item_case->getContentSize().width/2.f, s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_mount);
+				
+				CCLabelTTF* s_mount_label = CCLabelTTF::create("장착", mySGD->getFont().c_str(), 9);
+				s_mount_label->setColor(ccRED);
+				s_mount_label->setAnchorPoint(ccp(1,1));
+				s_mount_label->setPosition(ccp(s_mount->getContentSize().width-6, s_mount->getContentSize().height-6));
+				s_mount->addChild(s_mount_label);
+				
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);
@@ -1076,6 +1090,13 @@ void StartSettingScene::itemAction(CCObject *sender)
 				n_mount->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
 				n_mount->setPosition(ccp(n_item_case->getContentSize().width/2.f, n_item_case->getContentSize().height/2.f));
 				n_item_case->addChild(n_mount);
+				
+				CCLabelTTF* n_mount_label = CCLabelTTF::create("장착", mySGD->getFont().c_str(), 9);
+				n_mount_label->setColor(ccRED);
+				n_mount_label->setAnchorPoint(ccp(1,1));
+				n_mount_label->setPosition(ccp(n_mount->getContentSize().width-6, n_mount->getContentSize().height-6));
+				n_mount->addChild(n_mount_label);
+				
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				n_img->setScale(0.8);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
@@ -1087,6 +1108,13 @@ void StartSettingScene::itemAction(CCObject *sender)
 				s_mount->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
 				s_mount->setPosition(ccp(s_item_case->getContentSize().width/2.f, s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_mount);
+				
+				CCLabelTTF* s_mount_label = CCLabelTTF::create("장착", mySGD->getFont().c_str(), 9);
+				s_mount_label->setColor(ccRED);
+				s_mount_label->setAnchorPoint(ccp(1,1));
+				s_mount_label->setPosition(ccp(s_mount->getContentSize().width-6, s_mount->getContentSize().height-6));
+				s_mount->addChild(s_mount_label);
+				
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);

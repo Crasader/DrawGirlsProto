@@ -507,8 +507,8 @@ void StageListDown::successAction()
 				puzzleRowDis=120.f;
 				puzzleOffsetX=92.f;
 				puzzleOffsetY=92.f;
-				faceColDis=152.f;
-				faceRowDis=152.f;
+				faceColDis=154.f;
+				faceRowDis=154.f;
 				puzzleWidth=664;
 				puzzleHeight=544;
 			}
@@ -542,8 +542,8 @@ void StageListDown::successAction()
 				int cutx, cuty;
 				if(cut_list[j].key == "face")
 				{
-					cutx = x*faceColDis+puzzleOffsetX;
-					cuty = y*faceRowDis+puzzleOffsetY;
+					cutx = x*faceColDis+faceColDis/2.f;
+					cuty = y*faceRowDis+faceRowDis/2.f;
 				}
 				else if(cut_list[j].key == "original" || cut_list[j].key == "center")
 				{

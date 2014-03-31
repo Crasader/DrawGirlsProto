@@ -54,8 +54,8 @@ bool TitleRenewalScene::init()
 	addChild(title_img);
 	
 	CCSprite* title_name = CCSprite::create("temp_title_name.png");
-	title_name->setAnchorPoint(ccp(0,0));
-	title_name->setPosition(ccp(0,10));//240,210));
+	title_name->setAnchorPoint(ccp(0.5,0));
+	title_name->setPosition(ccp(240,10));//240,210));
 	addChild(title_name);
 	
 	state_label = CCLabelTTF::create("카카오 서버 접속중", mySGD->getFont().c_str(), 20);
