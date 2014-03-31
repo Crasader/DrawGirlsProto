@@ -500,9 +500,13 @@ public:
 		// 모든 m_vertices 에 대한 y, x 에 대한 RGB 값은 m_silColors[y][x] 로 참조하면 됨.
 		for(int i=0; i<m_triCount * 3; i++)
 		{
-			ccColor4B color = m_silColors[m_vertices[i].y][m_vertices[i].x];
+			Vertex3D original = m_2xVertices[i];
+			ccColor4B color = m_silColors[original.y][original.x];
 			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
-			
+			float against = (float)color.r / 10.f * t.y / 16.f; //  / 50.f; // / 30.f;
+//			CCLog("vv %f", against);
+			m_vertices[i].y = m_backupVertices[&m_vertices[i]].y - against;
+//			m_vertices[i].x = m_backupVertices[&m_vertices[i]].x - color.r / 10.f;
 		}
 	}
 	bool init(CCTexture2D* tex){
@@ -570,7 +574,7 @@ public:
 		m_silColors = vector<vector<ccColor4B> >(height, vector<ccColor4B>(width));	
 		for(int y=0;y<height;y++){
 			for(int x=0;x<width;x++){
-				int i = (y*width+x)*4;
+				int i = ((height - 1 - y)*width+x)*4;
 //				CCLog("i = %d", i);
 				m_silColors[y][x] = ccc4(oData[i], oData[i + 1], oData[i + 2], oData[i + 3]);
 			}

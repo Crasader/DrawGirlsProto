@@ -58,7 +58,20 @@ bool DiaryZoomPopup::init()
 	
 	int card_number = mySGD->selected_collectionbook;
 	
+	
+#if 1
+//	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	//	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	first_img = MyNode::create(CCTextureCache::sharedTextureCache()->addImage("bmTest.png"));
+	first_img->putBasicInfomation();	// 기본정보 들어가게.
+	first_img->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
+//	first_img->loadRGB(mySIL->getDocumentPath() + "morphing_rgb.png"); // 실루엣 z 정보 넣는 곳.
+	first_img->triangulationWithPoints();
+#endif
+#if 0
 	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+#endif
+	
 //	first_img->setOpacity(0);
 	first_img->setPosition(ccp(160,215));
 	first_img->setTouchEnabled(false);
@@ -154,7 +167,7 @@ void DiaryZoomPopup::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
-	first_img->setTouchEnabled(true);
+//	first_img->setTouchEnabled(true);
 	
 	save_position = game_node->getPosition();
 	schedule(schedule_selector(DiaryZoomPopup::moveChecking));
