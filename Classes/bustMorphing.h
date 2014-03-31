@@ -251,7 +251,7 @@ public:
 	bool m_validTouch;
 	CCPoint m_validTouchPosition;
 	float m_waveRange;
-		
+	bool m_isWaving;
 	///
 	
 	int colorRampUniformLocation;   // 1
@@ -260,6 +260,7 @@ public:
 	MyNode()
 	{
 		texture = nullptr;
+		m_isWaving = false;
 	}
 	///////////////////
 	virtual ~MyNode()
@@ -503,10 +504,38 @@ public:
 			Vertex3D original = m_2xVertices[i];
 			ccColor4B color = m_silColors[original.y][original.x];
 			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
-			float against = (float)color.r / 10.f * t.y / 12.f; //  / 50.f; // / 30.f;
+			CCPoint against = t * (float)color.r / 10.f / 12.f;// / 12.f; //  / 50.f; // / 30.f;
 //			CCLog("vv %f", against);
-			m_vertices[i].y = m_backupVertices[&m_vertices[i]].y - against;
-//			m_vertices[i].x = m_backupVertices[&m_vertices[i]].x - color.r / 10.f;
+			if( !(against.x == 0.f && against.y == 0.f) )
+			{
+				m_vertices[i].x = m_backupVertices[&m_vertices[i]].x - against.x;
+				m_vertices[i].y = m_backupVertices[&m_vertices[i]].y - against.y;
+			}
+			else
+			{
+				// 여기서 부터는 출렁 해야됨.
+				auto backupPosition = m_backupVertices[&m_vertices[i]];
+				
+				auto startPosition = m_vertices[i];
+				CCPoint ccpStartPosition = ccp(startPosition.x, startPosition.y);
+				auto goalPosition = m_backupVertices[&m_vertices[i]];
+				CCPoint ccpGoalPosition = ccp(goalPosition.x, goalPosition.y);
+				ccpGoalPosition = ccpGoalPosition - ccpStartPosition;
+
+				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), ccpGoalPosition, 1.0f,
+																								 [=](CCPoint t){
+																									 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
+																																								startPosition.y + t.y,
+																																								m_vertices[i].z);
+																									 //																								 i->y = backup.y + t;
+																								 },
+																								 [=](CCPoint t){
+																									 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
+																																								startPosition.y + t.y,
+																																								m_vertices[i].z);
+																								 },
+																								 elasticOut));
+			}
 		}
 	}
 	bool init(CCTexture2D* tex){
