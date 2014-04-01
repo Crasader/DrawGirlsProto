@@ -56,7 +56,8 @@ private:
 	bool is_scrolling;
 	bool is_before_scrolling;
 	
-	CCPoint rotate_base_position;
+	bool is_spin_mode;
+	CommonButton* mode_button;
 	
 	CCPoint save_position;
 	void moveChecking();

@@ -154,7 +154,7 @@ private:
 	CCNode* scene_node;
 	bool is_set_scene_node;
 	
-	CCSprite* safety_img;
+	EffectSprite* safety_img;
 	CCSprite* light_img;
 	
 	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename);
