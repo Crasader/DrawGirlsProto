@@ -76,6 +76,9 @@ enum CUMBER_STATE{
 	CUMBERSTATEGAMEOVER = 1 << 10 // 게임오버.
 };
 
+
+
+
 enum MOVEMENT
 {
 	STRAIGHT_TYPE = 1,
@@ -354,8 +357,6 @@ protected:
 	
 	float m_agility;
 	float m_speed;
-	float m_remainHp;
-	float m_totalHp;
 	float m_speedRatio;
 	float m_speedRatioForStone;
 	CCNode* m_slowStonePointer;
@@ -480,6 +481,9 @@ protected:
 	CC_SYNTHESIZE(FreezeAttack*, m_freezeAttack, FreezeAttack);
 	CC_SYNTHESIZE(ChaosAttack*, m_chaosAttack, ChaosAttack);
 	CC_SYNTHESIZE(SightOutAttack*, m_sightOutAttack, SightOutAttack);
+	CC_SYNTHESIZE(float, m_damageMeasure, DamageMeasure);
+	CC_SYNTHESIZE(float, m_remainHp, RemainHp);
+	CC_SYNTHESIZE(float, m_totalHp, TotalHp);
 	vector<ChargeParent*> m_charges;
 	vector<ChargeParent*>& getCharges()
 	{

@@ -401,6 +401,13 @@ public:
 		myGD->communication("VS_setLight");
 
 		// 캐스팅 캔슬.
+		
+		cumber->setDamageMeasure(cumber->getDamageMeasure() + damage);
+		if(cumber->getDamageMeasure() > cumber->getTotalHp() * 0.1f) // 전체 피통의 10% 가 깎이면 캐스팅 취소함.
+		{
+			m_option = m_option | AttackOption::kCancelCasting; // 캐스팅 속성 추가.
+		}
+
 		if(m_option & AttackOption::kCancelCasting)
 		{
 			myGD->communication("MP_bombCumber", (CCObject*)cumber); // with startMoving
@@ -409,7 +416,6 @@ public:
 		// 몬스터 리액션하라고.
 		myGD->communication("CP_startDamageReaction", cumber, damage, direction, m_option & AttackOption::kCancelCasting,
 												m_option & AttackOption::kStiffen); // damage : 555
-
 		// 데미지 표시해주는 것. 데미지 숫자 뜸.
 		myGD->communication("Main_showDamageMissile", damagePosition, (int)damage);
 
@@ -569,7 +575,7 @@ public:
 			
 			float damage = m_power;
 			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, 0.f, effectPosition);
-
+			
 			removeFromParentAndCleanup(true);
 		}
 		else  // 거리가 멀면 몬스터 쪽으로 유도함.

@@ -421,7 +421,8 @@ void SpecialChargeNodeLambda::startCharge()
 void SpecialChargeNodeLambda::cancelCharge()
 {
 	auto p = dynamic_cast<KSCumberBase*>(real_target);
-	if(p) p->onCanceledCasting();
+	if(p) 
+		p->onCanceledCasting();
 	AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 	//		if(cancel_target && cancel_delegate)
 	//			(cancel_target->*cancel_delegate)(real_target);

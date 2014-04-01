@@ -340,7 +340,7 @@ public:
 			}
 		}
 	}
-	virtual bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 	{
 #if 0
 		CCPoint touchLocation = pTouch->getLocation();
@@ -400,7 +400,7 @@ public:
 																							 [=](CCPoint t){
 																								 //for(auto i : movingVertices){
 
-																								 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 1.f,
+																								 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 0.5f,
 																																													[=](CCPoint t){
 																																														*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
 																																													},
@@ -412,8 +412,37 @@ public:
 																							 }));
 		}
 
-		
-		return true;
+	/*	
+			else
+			{
+//				return;
+				// 여기서 부터는 출렁 해야됨.
+				auto backupPosition = m_backupVertices[&m_vertices[i]];
+				
+				auto startPosition = m_vertices[i];
+				CCPoint ccpStartPosition = ccp(startPosition.x, startPosition.y);
+				auto goalPosition = m_backupVertices[&m_vertices[i]];
+				CCPoint ccpGoalPosition = ccp(goalPosition.x, goalPosition.y);
+				ccpGoalPosition = ccpGoalPosition - ccpStartPosition;
+				if(ccpLength(ccpGoalPosition) > 0.5f)
+				{
+					addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), ccpGoalPosition, 0.5f,
+																									 [=](CCPoint t){
+																										 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
+																																									startPosition.y + t.y,
+																																									m_vertices[i].z);
+																										 //																								 i->y = backup.y + t;
+																									 },
+																									 [=](CCPoint t){
+																										 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
+																																									startPosition.y + t.y,
+																																									m_vertices[i].z);
+																									 },
+																									 elasticOut));
+				}
+			}
+			*/
+//		return true;
 	}
 	void triangulationWithPoints()
 	{

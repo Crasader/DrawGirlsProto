@@ -29,6 +29,7 @@
 
 #include "KSLabelTTF.h"
 #include "PopCake.h"
+#include "EffectSprite.h"
 
 USING_NS_CC_EXT;
 
@@ -75,7 +76,47 @@ bool OptionPopup::init()
     {
         return false;
     }
+//	EffectSprite* es = EffectSprite::create("bmTest.png");
+//	es->setPosition(ccp(240, 160));
+//	addChild(es, 999999);
+//
+//	for(int i=1;i<=50;i++)
+//	{
+//		float t_value;
+//		if(i%2 == 1)
+//		{
+//			t_value = 1.2f;
+//			
+//			addChild(KSTimer::create(0.1f*i, [=]()
+//															 {
+//																 es->setBrighten(t_value);
+//															 }));
+//			addChild(KSTimer::create(0.1f*i+0.01f, [=]()
+//															 {
+//																 es->setBrighten(t_value);
+//															 }));
+//		}
+//		else
+//		{
+//			t_value = 1.f;
+//			
+//			addChild(KSTimer::create(0.1f*i, [=]()
+//															 {
+//																 es->setBrighten(t_value);
+//															 }));
+//		}
+//		
+//		
+//	}
 	
+//	es->setBrighten(1.f);
+//	addChild(KSGradualValue<float>::create(1.f, 1.8f, 5.f, [=](float t){
+//		es->setBrighten(t);
+//		return true;
+//	},
+//																				 [=](float t){
+//		es->setBrighten(t);
+//																				 }));
 	setTouchEnabled(true);
 	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
