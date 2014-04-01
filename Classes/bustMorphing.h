@@ -263,6 +263,7 @@ public:
 	{
 		texture = nullptr;
 		m_isWaving = false;
+		m_isLoadedRGB = false;
 	}
 	///////////////////
 	virtual ~MyNode()
@@ -360,6 +361,8 @@ public:
 			}
 		}
 #endif
+		if(m_isLoadedRGB == false)
+			return;
 		CCPoint touchLocation = pTouch->getLocation();
 		CCPoint local = convertToNodeSpace(touchLocation);
 		
@@ -638,6 +641,7 @@ public:
 	}
 	void loadRGB(const std::string& fullPath)
 	{
+		m_isLoadedRGB = true;
 		m_silColors.clear();
 
 #if 1
@@ -727,7 +731,7 @@ public:
 		
 		glDisable(GL_DEPTH_TEST);
 	}
-	
+	bool m_isLoadedRGB;	
 	CC_SYNTHESIZE(float, m_imageRotationDegree, ImageRotationDegree);
 	CC_SYNTHESIZE(float, m_imageRotationDegreeX, ImageRotationDegreeX);
 };

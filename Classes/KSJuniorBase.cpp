@@ -83,6 +83,10 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 
 	}
+	if(m_state == CUMBERSTATESTOP && castCancel)
+	{
+		m_state = CUMBERSTATEMOVING;
+	}
 	if(m_state == CUMBERSTATEMOVING && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
@@ -95,6 +99,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSJuniorBase::damageReaction));
 	}
+	
 	if(m_state == CUMBERSTATESTOP && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATESTOP");
@@ -107,20 +112,23 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSJuniorBase::damageReaction));
 	}
-	if(m_state == CUMBERSTATEFURY && stiffen)
+	if(m_state == CUMBERSTATEFURY && castCancel)
 	{
-		CCLog("m_state == CUMBERSTATEMOVING");
-		float rad = deg2Rad(angle);
-		m_damageData.m_damageX = cos(rad);
-		m_damageData.m_damageY = sin(rad);
-		//	CCLog("%f %f", dx, dy);
-		m_state = CUMBERSTATEDAMAGING;
-		
-		m_damageData.timer = 0;
-		schedule(schedule_selector(KSJuniorBase::damageReaction));
 		crashMapForPosition(getPosition());
+		
+		m_state = CUMBERSTATEMOVING;
+		//		m_headImg->setColor(ccc3(255, 255, 255));
 		myGD->communication("MS_resetRects", false);
+		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
+		// 다시 벌겋게 만드는 코드.
+		
+		addChild(KSGradualValue<float>::create(m_furyMode.colorRef, 255, 0.5f,
+																					 [=](float t)
+																					 {
+																						 KS::setColor(this, ccc3(255, t, t));
+																					 }, nullptr));
 	}
+	
 	if(m_remainHp <= 0)
 	{
 		myGD->communication("CP_removeSubCumber", this);
@@ -139,43 +147,6 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		return false;
 }
 
-//void KSJuniorBase::assignJuniorData(Json::Value boss)
-//{
-//	float hp = MAX(boss["hp"].asInt(), 0);
-//	float minSpeed = MAX(boss["speed"]["min"].asDouble(), 0);
-//	float startSpeed = MAX(boss["speed"]["start"].asDouble(), 0); //getNumberFromJsonValue(speed["start"]);
-//	float maxSpeed = MAX(boss["speed"]["max"].asDouble(), 0);// getNumberFromJsonValue(speed["min"]);
-//	
-//	float minScale = MAX(boss["scale"]["min"].asDouble(), 0); // getNumberFromJsonValue(scale["min"]);
-//	float startScale = MAX(boss["scale"]["start"].asDouble(), 0); // getNumberFromJsonValue(scale["start"]);
-//	float maxScale = MAX(boss["scale"]["max"].asDouble(), 0); // getNumberFromJsonValue(scale["max"]);
-//	
-//	int normalMovement = boss["movement"].get("normal",1).asInt();
-//	int drawMovement = boss["movement"].get("draw", normalMovement).asInt();
-//	int furyMovement = boss["movement"].get("fury", normalMovement).asInt();
-//	
-//	float agi = MAX(boss.get("agi", 0).asDouble(), 0);
-//	float ai = MAX(0, boss.get("ai", 0).asInt() );
-//	
-//	m_totalHp = m_remainHp = hp;
-//	m_agility = agi;
-//	m_aiValue = ai;
-//	m_startScale = startScale;
-//	m_minScale = minScale;
-//	m_maxScale = maxScale;
-//	
-//	m_startSpeed = startSpeed;
-//	m_minSpeed = minSpeed;
-//	m_maxSpeed = maxSpeed;
-//	
-//	m_normalMovement = (enum MOVEMENT)normalMovement;
-//	m_drawMovement = (enum MOVEMENT)drawMovement;
-//	m_furyMovement = (enum MOVEMENT)furyMovement;
-//}
-//void KSJuniorBase::applyPassiveData(const std::string& passive)
-//{
-//	
-//}
 
 void KSJuniorBase::checkConfine(float dt)
 {
@@ -483,6 +454,7 @@ void KSJuniorBase::onStartMoving()
 void KSJuniorBase::onStopMoving()
 {
 	m_state = CUMBERSTATESTOP;
+	CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
 }
 
 void KSJuniorBase::setPosition( const CCPoint& t_sp )

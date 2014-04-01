@@ -2188,6 +2188,7 @@ void KSCumberBase::stopMoving()
 void KSCumberBase::setCumberState( int e )
 {
 	m_state = (CUMBER_STATE)e;
+	CCLog("%s %d ???", __FILE__, __LINE__);
 }
 
 CUMBER_STATE KSCumberBase::getCumberState()
@@ -2384,6 +2385,7 @@ void KSCumberBase::startSwell(float scale, int totalFrame)
 		m_swell.totalFrame = totalFrame;
 //		auto backupState = m_state;
 		m_state = CUMBERSTATESTOP;
+		CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
 		addChild(KSGradualValue<float>::create(m_swell.scale, scale, 1.3f, 
 																					 [=](float t){
 																						 m_swell.scale = t;
