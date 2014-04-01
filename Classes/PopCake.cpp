@@ -103,6 +103,7 @@ bool PopCake::init()
 			addChild(cb, 1);
 			cb->setPosition(ccp( 420, 140));
 			cb->setFunction([=](CCObject* obj){
+//				n->setPosition(n->getPosition() + ccp(0, 10));
 				n->setImageRotationDegreeX(n->getImageRotationDegreeX() - 10);
 			});
 			
@@ -111,6 +112,7 @@ bool PopCake::init()
 			addChild(cb2, 1);
 			cb2->setPosition(ccp( 420, 100));
 			cb2->setFunction([=](CCObject* obj){
+//				n->setPosition(n->getPosition() - ccp(0, 10));
 				n->setImageRotationDegreeX(n->getImageRotationDegreeX() + 10);
 			});
 		}
