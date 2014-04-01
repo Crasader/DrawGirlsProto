@@ -972,7 +972,7 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 	
 	EffectSprite* t_spr = EffectSprite::createWithTexture(mySIL->addImage(filename));
 	t_spr->setPosition(ccp(160,215));
-	t_spr->setSilhouetteConvert();
+	t_spr->setSilhouetteConvert(0);
 	addChild(t_spr);
 	
 //	CCSprite* t_spr = mySIL->getLoadedImg(filename);
@@ -1335,18 +1335,9 @@ void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_dra
 	
 	drawRects = t_drawRects;
 	
-	
-	
-	string _filename = mySIL->getDocumentPath() + sil_filename;
-	
-	
-	CCTexture2D* _tex = createSafetyImage(_filename.c_str());
-	
-	safety_img = CCSprite::createWithTexture(_tex);
-	
-	
+	safety_img = EffectSprite::createWithTexture(mySIL->addImage(sil_filename.c_str()));
+	safety_img->setSilhouetteConvert(1);
 	safety_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
-
 	addChild(safety_img);
 	
 	

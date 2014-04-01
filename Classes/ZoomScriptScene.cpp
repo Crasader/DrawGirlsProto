@@ -63,11 +63,10 @@ bool ZoomScript::init()
 	
 	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
 	first_img->putBasicInfomation();	// 기본정보 들어가게.
-	//	first_img->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
-	first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+	if(NSDS_GI(kSDS_CI_int1_grade_i, card_number) < 3)
+		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 	first_img->triangulationWithPoints();
 	
-//	first_img = MyNode::create(mySIL->addImage(first_filename.c_str()));
 	first_img->setPosition(ccp(160,215));
 	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kZS_Z_first_img);
@@ -93,6 +92,20 @@ bool ZoomScript::init()
 	next_button->setPosition(ccp(480-50,30));
 	next_button->setVisible(false);
 	addChild(next_button, kZS_Z_next_button);
+	
+	is_spin_mode = false;
+	mode_button = CommonButton::create("이동", 10, CCSizeMake(40, 30), CommonButtonOrange, -160);
+	mode_button->setPosition(ccp(480-50,myDSH->ui_top-30));
+	mode_button->setFunction([=](CCObject* sender)
+							 {
+								 is_spin_mode = !is_spin_mode;
+								 if(is_spin_mode)
+									 mode_button->setTitle("회전");
+								 else
+									 mode_button->setTitle("이동");
+							 });
+	mode_button->setVisible(false);
+	addChild(mode_button, kZS_Z_next_button);
 	
 //	is_touched_menu = false;
 	is_actioned = true;
@@ -159,6 +172,7 @@ void ZoomScript::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
+	mode_button->setVisible(true);
 	
 //	target_node->setTouchEnabled(true);
 	
@@ -194,6 +208,7 @@ void ZoomScript::menuAction(CCObject *sender)
 		
 		is_actioned = true;
 		next_button->setVisible(false);
+		mode_button->setVisible(false);
 		setTouchEnabled(false);
 		target_node->setTouchEnabled(false);
 		unschedule(schedule_selector(ZoomScript::moveAnimation));
@@ -263,11 +278,10 @@ void ZoomScript::showtimeFirstAction()
 	
 	second_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
 	second_img->putBasicInfomation();	// 기본정보 들어가게.
-	//	first_img->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
-	second_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+	if(NSDS_GI(kSDS_CI_int1_grade_i, card_number) < 3)
+		second_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 	second_img->triangulationWithPoints();
 	
-//	second_img = MyNode::create(mySIL->addImage(second_filename.c_str()));
 	second_img->setPosition(ccp(160,215));
 	second_img->setTouchEnabled(false);
 	game_node->addChild(second_img, kZS_Z_second_img);
@@ -343,6 +357,7 @@ void ZoomScript::showtimeForthAction()
 	is_showtime = false;
 //	is_touched_menu = false;
 	next_button->setVisible(true);
+	mode_button->setVisible(true);
 	setTouchEnabled(true);
 }
 
@@ -367,13 +382,18 @@ void ZoomScript::moveListXY(CCPoint t_p)
 	CCPoint a_p = ccpSub(game_node->getPosition(), t_p);
 	
 	if(game_node->getScale() <= 1.5f)
-		a_p.x = (480.f-320.f*game_node->getScale())/2.f;
+	{
+		if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
+			a_p.x = (480.f-320.f*game_node->getScale())/2.f+40.f;
+		else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
+			a_p.x = (480.f-320.f*game_node->getScale())/2.f-40.f;
+	}
 	else
 	{
-		if(a_p.x > 0)
-			a_p.x = 0;
-		else if(a_p.x < 480-320*game_node->getScale())
-			a_p.x = 480-320*game_node->getScale();
+		if(a_p.x > 40.f)
+			a_p.x = 40.f;
+		else if(a_p.x < 480-320*game_node->getScale()-40.f)
+			a_p.x = 480-320*game_node->getScale()-40.f;
 	}
 	
 	if(a_p.y > 0+40.f)
@@ -472,18 +492,6 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 
 			zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
 		}
-		else if(multiTouchData.size() == 3)
-		{
-			is_scrolling = false;
-			rotate_base_position = CCPointZero;
-			map<int, CCPoint>::iterator it;
-			for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
-			{
-				rotate_base_position = ccpAdd(rotate_base_position, it->second);
-			}
-			
-			rotate_base_position = ccpMult(rotate_base_position, 1.f/3.f);
-		}
 		else
 		{
 			is_scrolling = false;
@@ -517,8 +525,31 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 //				{
 //					next_button->ccTouchMoved(touch, pEvent);
 //				}
-
-				this->moveListXY(ccpSub(touch_p, location));
+				
+				if(is_spin_mode)
+				{
+					this->unschedule(schedule_selector(ZoomScript::moveAnimation));
+					moveSpeed_p = CCPointZero;
+					isAnimated = false;
+					
+					CCPoint rotate_sub = ccpSub(location, touch_p);
+					
+					float rotation_degree = target_node->getImageRotationDegree() + rotate_sub.x/5.f;
+					if(rotation_degree > 60.f)
+						rotation_degree = 60.f;
+					else if(rotation_degree < -60.f)
+						rotation_degree = -60.f;
+					target_node->setImageRotationDegree(rotation_degree);
+					
+					float rotation_degreeX = target_node->getImageRotationDegreeX() - rotate_sub.y/5.f;
+					if(rotation_degreeX > 60.f)
+						rotation_degreeX = 60.f;
+					else if(rotation_degreeX < -60.f)
+						rotation_degreeX = -60.f;
+					target_node->setImageRotationDegreeX(rotation_degreeX);
+				}
+				else
+					this->moveListXY(ccpSub(touch_p, location));
 				touch_p = location;
 			}
 			else if(multiTouchData.size() == 2)
@@ -543,19 +574,29 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				zoom_base_distance = changed_distance;
 				game_node->setScale(after_scale);
 
-				if(game_node->getScale() <= 1.5f)
-					game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f);
-				else
+				CCPoint a_p;
 				{
 					float comp_scale = before_scale < 1.5f ? 1.5f : before_scale;
 					comp_scale = game_node->getScale() - comp_scale;
+					
+					a_p.x = game_node->getPositionX() - 320*comp_scale/2.f;
+				}
+				
+				if(game_node->getScale() <= 1.5f)
+				{
+					if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
+						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f+40.f);
+					else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
+						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f-40.f);
+				}
+				else
+				{
+					game_node->setPositionX(a_p.x);
 
-					game_node->setPositionX(game_node->getPositionX() - 320*comp_scale/2.f);
-
-					if(game_node->getPositionX() > 0)
-						game_node->setPositionX(0);
-					else if(game_node->getPositionX() < 480-320*game_node->getScale())
-						game_node->setPositionX(480-320*game_node->getScale());
+					if(game_node->getPositionX() > 40.f)
+						game_node->setPositionX(40.f);
+					else if(game_node->getPositionX() < 480-320*game_node->getScale()-40.f)
+						game_node->setPositionX(480-320*game_node->getScale()-40.f);
 				}
 
 				float comp_scale = before_scale;
@@ -567,23 +608,6 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 					game_node->setPositionY(0+40.f);
 				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
 					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f);
-			}
-			else if(multiTouchData.size() == 3)
-			{
-				CCPoint after_rotate_position = CCPointZero;
-				map<int, CCPoint>::iterator it;
-				for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
-				{
-					after_rotate_position = ccpAdd(after_rotate_position, it->second);
-				}
-				
-				after_rotate_position = ccpMult(after_rotate_position, 1.f/3.f);
-				
-				CCPoint rotate_sub = ccpSub(after_rotate_position, rotate_base_position);
-				target_node->setImageRotationDegree(target_node->getImageRotationDegree() + rotate_sub.x/5.f);
-				target_node->setImageRotationDegreeX(target_node->getImageRotationDegreeX() - rotate_sub.y/5.f);
-				
-				rotate_base_position = after_rotate_position;
 			}
 		}
 	}
@@ -653,7 +677,7 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
 
 				float spd_value = sqrtf(powf(_spd.x, 2.f) + powf(_spd.y, 2.f));
-				if(isAnimated == false && fabsf(spd_value) > 2)
+				if(isAnimated == false && fabsf(spd_value) > 2 && !is_spin_mode)
 				{
 					moveSpeed_p = _spd;
 					this->schedule(schedule_selector(ZoomScript::moveAnimation));

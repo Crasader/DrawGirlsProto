@@ -41,10 +41,11 @@ private:
 	CommonButton* next_button;
 	bool is_animation;
 	
-	CCPoint rotate_base_position;
-	
 	bool is_scrolling;
 	bool is_before_scrolling;
+	
+	bool is_spin_mode;
+	CommonButton* mode_button;
 	
 	CCPoint before_sub_position;
 	CCPoint save_position;

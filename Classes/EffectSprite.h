@@ -144,7 +144,7 @@ public:
 		
 	}
 	
-	void setSilhouetteConvert()
+	void setSilhouetteConvert(int t_type)
 	{
 		if(m_currentMode != CurrentMode::kSilCvt)
 		{
@@ -159,6 +159,8 @@ public:
 		{
 			getShaderProgram()->use();
 		}
+		
+		getShaderProgram()->setUniformLocationWith1i(glGetUniformLocation(getShaderProgram()->getProgram(), "u_type"), t_type);
 	}
 	
 	void setNonEffect()
