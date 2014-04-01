@@ -61,17 +61,20 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 	CCLog("damaga!!!");
 	m_remainHp -= damage;
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
-	// 방사형으로 돌아가고 있는 중이라면
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
 	
 	m_attackCanceled = true;
 	
-	// 방사형으로 돌아가고 있는 중이라면
+
 	if(m_state == CUMBERSTATENODIRECTION && castCancel)
 	{
 		CCLog("m_state == CUMBERSTATENODIRECTION");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
+	}
+	if(m_state == CUMBERSTATESTOP && castCancel)
+	{
+		m_state = CUMBERSTATEMOVING;
 		
 	}
 	if(m_state == CUMBERSTATEMOVING && stiffen)
@@ -80,7 +83,6 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
-		//	CCLog("%f %f", dx, dy);
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
@@ -92,7 +94,6 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
-		//	CCLog("%f %f", dx, dy);
 		m_state = CUMBERSTATEDAMAGING;
 		
 		m_damageData.timer = 0;
@@ -103,19 +104,21 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 			m_castingCancelCount++;
 		}
 	}
-	if(m_state == CUMBERSTATEFURY && stiffen)
+	if(m_state == CUMBERSTATEFURY && castCancel)
 	{
-		CCLog("m_state == CUMBERSTATEMOVING");
-		float rad = deg2Rad(angle);
-		m_damageData.m_damageX = cos(rad);
-		m_damageData.m_damageY = sin(rad);
-		//	CCLog("%f %f", dx, dy);
-		m_state = CUMBERSTATEDAMAGING;
-		
-		m_damageData.timer = 0;
-		schedule(schedule_selector(KSCircleBase::damageReaction));
 		crashMapForPosition(getPosition());
+		
+		m_state = CUMBERSTATEMOVING;
+		//		m_headImg->setColor(ccc3(255, 255, 255));
 		myGD->communication("MS_resetRects", false);
+		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
+		// 다시 벌겋게 만드는 코드.
+		
+		addChild(KSGradualValue<float>::create(m_furyMode.colorRef, 255, 0.5f,
+																					 [=](float t)
+																					 {
+																						 KS::setColor(this, ccc3(255, t, t));
+																					 }, nullptr));
 	}
 	
 	if(m_remainHp <= 0)
@@ -479,6 +482,7 @@ void KSCircleBase::onStartMoving()
 void KSCircleBase::onStopMoving()
 {
 	m_state = CUMBERSTATESTOP;
+	CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
 }
 
 void KSCircleBase::stopCasting()
@@ -530,14 +534,17 @@ void KSCircleBase::attackBehavior( Json::Value _pattern )
 	if(pattern == "109")
 	{
 		m_state = CUMBERSTATESTOP;
+		CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
 	}
 	else if( pattern == "1007")
 	{
 		m_state = CUMBERSTATESTOP;
+		CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
 	}
 	else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 	{
 		m_state = CUMBERSTATESTOP;
+		CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
 		//			startAnimationNoDirection();
 	}
 	else

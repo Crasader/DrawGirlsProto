@@ -263,6 +263,7 @@ public:
 	{
 		texture = nullptr;
 		m_isWaving = false;
+		m_isLoadedRGB = false;
 	}
 	///////////////////
 	virtual ~MyNode()
@@ -360,6 +361,8 @@ public:
 			}
 		}
 #endif
+		if(m_isLoadedRGB == false)
+			return;
 		CCPoint touchLocation = pTouch->getLocation();
 		CCPoint local = convertToNodeSpace(touchLocation);
 		
@@ -539,7 +542,8 @@ public:
 	void movingDistance(CCPoint t) // 영호.
 	{
 		CCLog("%f %f", t.x, t.y);
-		
+		if(m_isLoadedRGB == false)
+			return;
 //		return;
 		// t 에 반대쪽으로 m_vertices 를 조작함.
 		// 모든 m_vertices 에 대한 y, x 에 대한 RGB 값은 m_silColors[y][x] 로 참조하면 됨.
@@ -638,6 +642,7 @@ public:
 	}
 	void loadRGB(const std::string& fullPath)
 	{
+		m_isLoadedRGB = true;
 		m_silColors.clear();
 
 #if 1
@@ -727,7 +732,7 @@ public:
 		
 		glDisable(GL_DEPTH_TEST);
 	}
-	
+	bool m_isLoadedRGB;	
 	CC_SYNTHESIZE(float, m_imageRotationDegree, ImageRotationDegree);
 	CC_SYNTHESIZE(float, m_imageRotationDegreeX, ImageRotationDegreeX);
 };

@@ -272,6 +272,10 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 		
 	}
+	if(m_state == CUMBERSTATESTOP && castCancel)
+	{
+		m_state = CUMBERSTATEMOVING;
+	}
 	if(m_state == CUMBERSTATEDIRECTION && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATEDIRECTION");
@@ -303,19 +307,21 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		m_damageData.timer = 0;
 		schedule(schedule_selector(KSSnakeBase::damageReaction));
 	}
-	if(m_state == CUMBERSTATEFURY && stiffen)
+	if(m_state == CUMBERSTATEFURY && castCancel)
 	{
-		CCLog("m_state == CUMBERSTATEMOVING");
-		float rad = deg2Rad(angle);
-		m_damageData.m_damageX = cos(rad);
-		m_damageData.m_damageY = sin(rad);
-		//	CCLog("%f %f", dx, dy);
-		m_state = CUMBERSTATEDAMAGING;
-		
-		m_damageData.timer = 0;
-		schedule(schedule_selector(KSSnakeBase::damageReaction));
 		crashMapForPosition(getPosition());
+		
+		m_state = CUMBERSTATEMOVING;
+		//		m_headImg->setColor(ccc3(255, 255, 255));
 		myGD->communication("MS_resetRects", false);
+		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
+		// 다시 벌겋게 만드는 코드.
+		
+		addChild(KSGradualValue<float>::create(m_furyMode.colorRef, 255, 0.5f,
+																					 [=](float t)
+																					 {
+																						 KS::setColor(this, ccc3(255, t, t));
+																					 }, nullptr));
 	}
 	
 	if(m_remainHp <= 0)
@@ -564,6 +570,7 @@ void KSSnakeBase::onStartMoving()
 void KSSnakeBase::onStopMoving()
 {
 	m_state = CUMBERSTATESTOP;
+	CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
 	CCLog("stop!!");
 }
 
@@ -675,10 +682,12 @@ void KSSnakeBase::attackBehavior( Json::Value pattern )
 	if(pattern["pattern"].asString() == "109")
 	{
 		m_state = CUMBERSTATESTOP;
+		CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
 	}
 	else if( pattern["pattern"].asString() == "1007")
 	{
 		m_state = CUMBERSTATESTOP;
+		CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
 	}
 	else
 	{
