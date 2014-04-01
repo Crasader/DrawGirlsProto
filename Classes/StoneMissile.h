@@ -356,6 +356,10 @@ protected:
 class StoneAttack : public CCNode
 {
 public:
+	static int getPower(int grade, int level)
+	{
+		return grade * 20 + level * 10;
+	}
 	bool init()
 	{
 		if(m_option & AttackOption::kJackSpeedUp)
@@ -451,6 +455,14 @@ public:
 
 		return object;
 	}
+	static GuidedMissile* createForShowWindow(const string& fileName)
+	{
+		GuidedMissile* object = new GuidedMissile();
+		object->initForShowWindow(fileName);
+		object->autorelease();
+		return object;
+	}
+	
 	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, AttackOption ao)
 	{
 		StoneAttack::init();
@@ -472,18 +484,81 @@ public:
 		addChild(m_missileSprite);
 		m_missileSprite->setScale(1.f/myGD->game_scale);
 		m_missileSprite->setPosition(initPosition);
-		CCPoint diff = m_targetNode->getPosition() - initPosition;
-		
-		int random_value = rand()%21 - 10; // -10~10
-		float random_float = 1.f + random_value/100.f;
-		
-		m_initRad = atan2f(diff.y, diff.x) * random_float;
-		scheduleUpdate();
+		m_showWindow.initPosition = initPosition;
+		if(targetNode)
+		{
+			CCPoint diff = m_targetNode->getPosition() - initPosition;
+			
+			int random_value = rand()%21 - 10; // -10~10
+			float random_float = 1.f + random_value/100.f;
+			
+			m_initRad = atan2f(diff.y, diff.x) * random_float;
+			scheduleUpdate();
+		}
 
 
 		return true;
 	}
 	
+	bool initForShowWindow(const string& fileName)
+	{
+		StoneAttack::init();
+		
+		m_particle = NULL;
+		m_streak = NULL;
+		m_missileSprite = KS::loadCCBI<CCSprite*>(this, fileName).first;
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+		//m_missileSprite->setRotationY(t);
+		//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite);
+		//		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(ccp(0, 0));
+		schedule(schedule_selector(GuidedMissile::showWindow));
+		return true;
+	}
+	void beautifier(int grade, int level)
+	{
+		if(grade >= 3)
+			addStreak();
+
+		if(grade == 2)
+		{
+			if(level <= 2)
+				addParticle(0);
+			else if(level <= 4)
+				addParticle(2);
+			else
+				addParticle(3);
+		}
+		else if(grade == 3)
+		{
+			if(level <= 2)
+				addParticle(8);
+			else if(level <= 4)
+				addParticle(10);
+			else
+				addParticle(11);
+		}
+		else if(grade == 4)
+		{
+			if(level <= 2)
+				addParticle(12);
+			else if(level <= 4)
+				addParticle(14);
+			else
+				addParticle(15);
+		}
+		else if(grade == 5)
+		{
+			if(level <= 2)
+				addParticle(16);
+			else if(level <= 4)
+				addParticle(18);
+			else
+				addParticle(19);
+		}
+	}	
 	void addStreak()
 	{
 		m_streak = CCMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
@@ -539,7 +614,22 @@ public:
 		m_particle->setPositionType(kCCPositionTypeRelative);
 		addChild(m_particle, -1);
 	}
-	
+	void showWindow(float dt)
+	{
+		float r = m_showWindow.rotationRadius;
+		m_missileSprite->setPosition(m_showWindow.initPosition + ccp(cos(m_showWindow.rotationRad) * r, sin(m_showWindow.rotationRad) * r));
+
+		m_missileSprite->setRotation(-rad2Deg(m_showWindow.rotationRad) + 90);
+
+		if(m_particle)
+			m_particle->setPosition(m_missileSprite->getPosition());
+
+		if(m_streak)
+			m_streak->setPosition(m_missileSprite->getPosition());
+
+		
+		m_showWindow.rotationRad += m_showWindow.rotationVelocityRad;
+	}	
 	void update(float dt)
 	{
 		bool isEnable = true;
@@ -626,17 +716,43 @@ public:
 				m_streak->setPosition(m_missileSprite->getPosition());
 		}
 	}
+	// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+		m_showWindow.rotationRadius = r;
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+		m_showWindow.rotationVelocityRad = r;
+	}
 protected:
 	float m_initSpeed; // 초기 속도.
 	float m_initRad; // 처음에 날아가는 각도.
 	float m_currentRad; // 범위내 들어왔을 때 현재 각도.
-	int m_power; // 파워.
+
 	bool m_guided; // 유도 모드인지 여부.
 	int m_range; // 유도 범위.
+	
 	CCNode* m_targetNode;
 	CCSprite* m_missileSprite; // 미사일 객체.
 	CCParticleSystemQuad* m_particle;
 	CCMotionStreak* m_streak;
+	struct ShowWindow
+	{
+		ShowWindow()
+		{
+			rotationRad = 0.f;
+			rotationRadius = 60.f;
+			rotationVelocityRad = M_PI / 180.f;
+		}
+		float rotationRad;
+		float rotationRadius;
+		float rotationVelocityRad;
+		CCPoint initPosition;
+	}m_showWindow;
+	
+	CC_SYNTHESIZE(int, m_power, Power); // 파워.
 };
 
 
