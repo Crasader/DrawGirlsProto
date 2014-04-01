@@ -844,12 +844,12 @@ void OptionPopup::resetJoystickPositioningMenu()
 	CCPoint img_position;
 	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
 	{
-		filename = "option_sound_off.png";
+		filename = "option_right.png";
 		img_position = ccp(17,0);
 	}
 	else
 	{
-		filename = "option_sound_on.png";
+		filename = "option_left.png";
 		img_position = ccp(-17,0);
 	}
 	
@@ -870,13 +870,13 @@ void OptionPopup::resetJoystickMovingMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))//ControlJoystickNotFixed))
 	{
-		filename = "option_sound_off.png";
-		img_position = ccp(17,0);
+		filename = "option_stop.png";
+		img_position = ccp(-17,0);
 	}
 	else
 	{
-		filename = "option_sound_on.png";
-		img_position = ccp(-17,0);
+		filename = "option_move.png";
+		img_position = ccp(17,0);
 	}
 	
 	joystick_moving_img = CCSprite::create(filename.c_str());
