@@ -532,21 +532,21 @@ void DiaryZoomPopup::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				timeval time;
 				gettimeofday(&time, NULL);
 				
-				CCLog("first : %d / last : %d , sub : %d", int(first_touch_time), int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec), int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time));
-				
 				if(int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 100000)
 				{
 					first_img->ccTouchEnded(touch, pEvent);
 				}
-				
-				long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
-				CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
-
-				float spd_value = sqrtf(powf(_spd.x, 2.f) + powf(_spd.y, 2.f));
-				if(isAnimated == false && fabsf(spd_value) > 2 && !is_spin_mode)
+				else
 				{
-					moveSpeed_p = _spd;
-					this->schedule(schedule_selector(DiaryZoomPopup::moveAnimation));
+					long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
+					CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
+					
+					float spd_value = sqrtf(powf(_spd.x, 2.f) + powf(_spd.y, 2.f));
+					if(isAnimated == false && fabsf(spd_value) > 2 && !is_spin_mode)
+					{
+						moveSpeed_p = _spd;
+						this->schedule(schedule_selector(DiaryZoomPopup::moveAnimation));
+					}
 				}
 			}
 		}

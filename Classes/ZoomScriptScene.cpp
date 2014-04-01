@@ -473,6 +473,7 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		
 		if(multiTouchData.size() == 1)
 		{
+			first_touch_time = touchStartTime;
 			is_scrolling = true;
 //			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
 //			{
@@ -673,14 +674,22 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 
 				timeval time;
 				gettimeofday(&time, NULL);
-				long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
-				CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
-
-				float spd_value = sqrtf(powf(_spd.x, 2.f) + powf(_spd.y, 2.f));
-				if(isAnimated == false && fabsf(spd_value) > 2 && !is_spin_mode)
+				
+				if(int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 100000)
 				{
-					moveSpeed_p = _spd;
-					this->schedule(schedule_selector(ZoomScript::moveAnimation));
+					target_node->ccTouchEnded(touch, pEvent);
+				}
+				else
+				{
+					long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
+					CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
+					
+					float spd_value = sqrtf(powf(_spd.x, 2.f) + powf(_spd.y, 2.f));
+					if(isAnimated == false && fabsf(spd_value) > 2 && !is_spin_mode)
+					{
+						moveSpeed_p = _spd;
+						this->schedule(schedule_selector(ZoomScript::moveAnimation));
+					}
 				}
 			}
 		}
