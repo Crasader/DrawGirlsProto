@@ -71,6 +71,8 @@ private:
 	
 	CCNode* tutorial_node;
 	
+	CCNode* missile_img;
+	
 	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;
 	
